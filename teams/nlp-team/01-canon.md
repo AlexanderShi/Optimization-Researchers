@@ -33,6 +33,21 @@ model-knowledge 条目**故意不写卷号页码**——写论文引用前核对
 | NLP-S17 | Armijo (1966); Wolfe (1969) | 线搜索条件出处 |
 | NLP-S18 | Bertsekas, *Nonlinear Programming*, Athena Scientific | 约束优化与对偶教科书 |
 
+## verified-web（联网核实，注明核实日期与一手页面）
+
+| ID | 文献 | 定位 | 本语料中的角色 |
+|----|------|------|---------------|
+| NLP-S19 | Duchi, Hazan, Singer (2011), "Adaptive Subgradient Methods for Online Learning and Stochastic Optimization", JMLR 12:2121–2159 | jmlr.org/papers/v12/duchi11a.html（核实 2026-10-09） | AdaGrad：按坐标自适应步长/动态 proximal function，regret 与事后最优可比，擅长稀疏梯度 |
+| NLP-S20 | Duchi, Agarwal, Wainwright, "Dual Averaging for Distributed Optimization: Convergence Analysis and Network Scaling"；期刊版 IEEE Trans. Autom. Control 57(3):592–606, 2012, DOI 10.1109/TAC.2011.2161027 | arXiv:1005.2012（abs 页核实 2026-10-09，期刊引用为该页所列） | 去中心化优化：优化收敛与网络效应分离，谱隙反比缩放，含下界 |
+| NLP-S21 | Duchi, Ruan, "Stochastic Methods for Composite and Weakly Convex Optimization Problems" (v3 2018)；期刊版 SIAM J. Optim.（model-knowledge，需核对——arXiv 页未列） | arXiv:1703.08570（abs 页核实 2026-10-09） | 随机 prox-linear/次梯度 → 复合与弱凸问题的一阶稳定点；非光滑 phase retrieval |
+| NLP-S22 | Duchi 等 (2008), "Efficient projections onto the l1-ball for learning in high dimensions", ICML | Scholar 个人页快照（2026-10-09；仅题目/venue/年份） | 高维投影原语 |
+
+## 具名研究者档案
+
+| 研究者 | 档案 | 核实基础 |
+|--------|------|---------|
+| John Duchi (Stanford) | `researchers/john-duchi.md` | Stanford 主页 + Scholar 页 + JMLR 页 + 2 篇 arXiv abs 页（2026-10-09）；DFO 侧另有档案 |
+
 ## 本地项目工件
 
 | ID | 工件 | 角色 |

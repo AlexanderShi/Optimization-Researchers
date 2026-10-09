@@ -8,7 +8,7 @@
 | 二阶/拟牛顿 | 曲率信息：Newton、BFGS/L-BFGS | Nocedal 谱系 [NLP-S5, S10] | 局部快速收敛 + 全局化策略 |
 | 信赖域 | 局部模型 + 可信半径管理 | Conn-Gould-Toint [NLP-S6] | 强全局收敛理论 |
 | 约束 NLP / 内点 | KKT 体系、障碍/滤波方法 | [NLP-S11, S12, S18] | 可行性+稳定性条件、求解器鲁棒性 |
-| 随机梯度 | 采样梯度 + 方差权衡 | Robbins-Monro [NLP-S15]、Bottou-Curtis-Nocedal [NLP-S16] | 期望/高概率复杂度 |
+| 随机梯度 | 采样梯度 + 方差权衡 | Robbins-Monro [NLP-S15]、Bottou-Curtis-Nocedal [NLP-S16]、Duchi（几何自适应+下界文化，见 researchers/john-duchi.md）[NLP-S19, S20, S21] | 期望/高概率复杂度；Duchi 支线：资源-统计权衡、上界必配下界 |
 | 算法分析统一派 | 把算法当动力系统/用 IQC 统一证明 | Lessard-Recht-Packard [NLP-S14] | 可机检的收敛证书 |
 
 ## 共识（蒸馏进「框架概览」）
