@@ -11,7 +11,7 @@ description: |
 
 **语料契约**：本 skill 的全部事实来自
 `C:\Users\sr881\repos\Optimization-Researchers\teams\nlp-team\`
-（蒸馏日期 2026-10-09，语料版本 b007570）。**只说语料里有的。**
+（蒸馏日期 2026-10-09，语料版本 add5d2e）。**只说语料里有的。**
 
 ## 回答工作流（最重要）
 
@@ -22,7 +22,8 @@ description: |
 3. **数学纪律**：一律 min f(x) 形式；收敛声明带四件套——什么量收敛、什么速率
    （定性）、什么假设、proved-vs-cited；**绝不给精确常数**（连 Nesterov 1983 的
    领先常数都在不同转述里不一致，本地条目自标 verify [NLP-S1]）；
-   局部结果与全局结果分开说。
+   局部结果与全局结果分开说；宣称某速率「最优」必须能给出匹配下界的出处
+   （Duchi 准则 [NLP-S20, DFO-S21]）。
 4. **语料外问题**：如实说「语料库（文献覆盖至约 2026-07）未覆盖 X」，
    绝不从模型记忆静默补全。需要新文献 → 按 `standards/grounding.md` 入库后重蒸馏。
 5. **算法对比类回答**：先伪代码 + 五步逐迭代手算示例，再谈结论；比较报告固定
@@ -50,7 +51,7 @@ description: |
 | 二阶/拟牛顿 | 曲率：Newton、BFGS/L-BFGS | Nocedal 谱系 [NLP-S5, S10] | 局部快速 + 全局化 |
 | 信赖域 | 局部模型 + 半径管理 | Conn-Gould-Toint [NLP-S6] | 强全局收敛理论 |
 | 约束/内点 | KKT、障碍/滤波 | [NLP-S11, S12, S18] | 稳定性条件 + 求解器鲁棒性 |
-| 随机梯度 | 采样梯度 + 方差权衡 | [NLP-S15, S16] | 期望复杂度 |
+| 随机梯度 | 采样梯度 + 方差权衡 | Robbins-Monro [NLP-S15]、Bottou-Curtis-Nocedal [NLP-S16]、Duchi（几何自适应+下界文化）[NLP-S19, S20, S21] | 期望复杂度；Duchi 支线：资源-统计权衡、上界必配下界 |
 | 统一分析派 | 算法当动力系统（IQC） | Lessard-Recht-Packard [NLP-S14] | 可机检收敛证书 |
 
 分歧（两边都如实说）：
@@ -84,6 +85,11 @@ description: |
 - **H6 与 DFO 对比的口径**：统一信息计费（梯度调用≠函数值调用 [DFO-S4]），
   声明 (d+1) 口径 [DFO-L1]；跨队问题两队语料都查。
 - **H7 报告规范**：见回答工作流第 5 条。
+- **H8 几何与结构优先（Duchi 支线）**：梯度稀疏/特征频率差异大 → 按坐标
+  自适应步长，让算法学 proximal 几何而非手调全局学习率 [NLP-S19]；
+  非凸但有结构（复合、弱凸）→ prox-linear/广义次梯度这类带稳定点保证的
+  方法，不盲目上 SGD [NLP-S21]；分布式/通信受限 → 把优化收敛与网络效应
+  分开分析报告（迭代数随谱隙反比缩放）[NLP-S20]。
 
 ## 关键结果速查
 
@@ -98,6 +104,9 @@ description: |
 | NLP-R7 | Newton 局部二次收敛 | Hessian Lipschitz、解处非奇异、初始点近 | cited [NLP-S5] |
 | NLP-R8 | 信赖域 lim‖∇f‖=0 全局收敛（一阶），有二阶加强版 | 光滑有下界、标准 TR 条件 (unanchored) | cited [NLP-S6] |
 | NLP-R9 | SGD：凸 O(1/√k)、强凸 O(1/k) 量级期望间隙；常步长到噪声球 | 无偏、方差有界、Robbins-Monro 步长 | cited [NLP-S15, S16] |
+| NLP-R10 | AdaGrad：按坐标累积梯度动态调 proximal function，regret 与事后最优 proximal 可比，免手调学习率，稀疏梯度占优 | 在线凸/次梯度设定（精确条件查原文） | verified-web [NLP-S19] |
+| NLP-R11 | 分布式 dual averaging：优化收敛与网络效应分离，迭代数随谱隙反比缩放，确定性+随机，含下界 | 分布式凸目标、本地计算+邻居通信 | verified-web [NLP-S20] |
+| NLP-R12 | 随机 prox-linear/广义次梯度 → 复合（非光滑凸∘光滑）与弱凸问题的一阶稳定点；应用非光滑 phase retrieval | 复合/弱凸结构、随机 oracle、温和条件（查原文） | verified-web [NLP-S21] |
 
 ## 绝不做（禁区清单，语料 05 全量移植）
 
@@ -120,9 +129,14 @@ description: |
 
 ## 诚实边界
 
-- 语料截止：蒸馏于 2026-10-09，语料版本 b007570；文献覆盖至约 2026-07。
-- 语料缺口：Adam 之后的深度学习优化器谱系（仅 [NLP-S16] 综述级）、非凸全局
-  优化、整数/组合、鲁棒优化、分布式/联邦优化。
+- 语料截止：蒸馏于 2026-10-09，语料版本 add5d2e；文献主体覆盖至约 2026-07，
+  Duchi 档案与 [NLP-S19–S22] 联网核实于 2026-10-09。
+- 语料缺口：Adam 及之后的深度学习优化器谱系（AdaGrad 本体已入库 [NLP-S19]，
+  其余仅 [NLP-S16] 综述级）、非凸全局优化、整数/组合、鲁棒优化（含 DRO）、
+  联邦学习；弱凸/复合 [NLP-S21] 与分布式 dual averaging [NLP-S20] 仅入口级
+  单点覆盖。
+- 研究者档案仅基于摘要与官方页面（未读全文）：regret 界、谱隙缩放、弱凸
+  收敛的精确表达式需查原文；[NLP-S21] 期刊版出处未核实。
 - 验证层级：cited / model-knowledge 结论写进论文前需核对元数据；
   verified-local 四条 momentum 文献带 URL 可直接引用。
 - 本 skill 不替代读原文；职责是把你引到正确的原文并防止编造。
@@ -132,6 +146,16 @@ description: |
 verified-local（URL 见语料 01-canon.md）：
 [NLP-S1] Nesterov 1983（本地完整机器区条目）· [NLP-S2] Sutskever 等 2013 ·
 [NLP-S3] Kidambi 等 2018 · [NLP-S4] Ganesh 等 2023
+
+verified-web（核实 2026-10-09，一手页面见语料 01-canon.md）：
+[NLP-S19] Duchi-Hazan-Singer AdaGrad, JMLR 12:2121–2159 (2011) ·
+[NLP-S20] Duchi-Agarwal-Wainwright 分布式 dual averaging, arXiv:1005.2012
+（期刊版 IEEE TAC 57(3):592–606, 2012）· [NLP-S21] Duchi-Ruan 复合/弱凸随机方法,
+arXiv:1703.08570（期刊版需核对）· [NLP-S22] Duchi 等 l1 球投影, ICML 2008
+（Scholar 快照）
+
+具名研究者档案：John Duchi（Stanford，随机梯度学派 + 统计×优化文化）→
+语料 `teams/nlp-team/researchers/john-duchi.md`（DFO 侧另有档案）
 
 model-knowledge（元数据需核对）：
 [NLP-S5] Nocedal-Wright 教材 · [NLP-S6] Conn-Gould-Toint 信赖域 · [NLP-S7] Polyak

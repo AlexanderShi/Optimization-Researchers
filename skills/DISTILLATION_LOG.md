@@ -1,5 +1,25 @@
 # 蒸馏记录
 
+## 2026-10-09 (3) · 增量重蒸馏：John Duchi 全面加入 NLP Team
+
+- 语料版本：add5d2e（NLP 侧 Duchi 入库提交）
+- 范围：仅 `skills/nlp-team/SKILL.md` 增量更新
+- 入库核实（4 个一手页面，2026-10-09）：Stanford 主页（自述研究目标、
+  奖项）、JMLR v12 官方页（AdaGrad 12:2121–2159）、arXiv:1005.2012
+  （分布式 dual averaging，abs 页列出期刊版 IEEE TAC 57(3):592–606）、
+  arXiv:1703.08570（复合/弱凸随机方法，期刊版未列→标需核对）；
+  另 [NLP-S22] l1 球投影仅 Scholar 快照级
+- 变更：语料契约 → add5d2e；数学纪律加入 Duchi 准则（最优必配下界）；
+  随机梯度学派加入 Duchi 支线；新增 H8（几何与结构优先）；结果速查新增
+  R10（AdaGrad）、R11（分布式 dual averaging）、R12（复合/弱凸
+  prox-linear）；来源索引新增 verified-web 段与研究者档案；诚实边界更新
+  （AdaGrad 已入库、弱凸/分布式为入口级单点覆盖、S21 期刊版未核实）
+- 质量门：G1–G5 PASS（G2 核对新增人名 Hazan/Singer/Agarwal/Ruan 均在
+  canon S19–S22 内）。G6 增补试答：「稀疏特征的大规模在线学习步长怎么
+  选？」→ 按坐标自适应（AdaGrad），regret 与事后最优 proximal 可比，
+  精确界查原文 [NLP-R10, S19]——通过
+- 执行模型：claude-fable-5
+
 ## 2026-10-09 (2) · 增量重蒸馏：John Duchi 加入 DFO Team
 
 - 语料版本：8a99343（Duchi 入库提交）
