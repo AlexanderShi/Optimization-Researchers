@@ -1,5 +1,21 @@
 # 蒸馏记录
 
+## 2026-10-09 (2) · 增量重蒸馏：John Duchi 加入 DFO Team
+
+- 语料版本：8a99343（Duchi 入库提交）
+- 范围：仅 `skills/dfo-team/SKILL.md` 增量更新；nlp-team 不变
+- 入库核实（语料构建阶段，联网允许）：Scholar 个人页 + arXiv:1312.2139 +
+  arXiv:1103.4296 的 abs 页，均核实于 2026-10-09（新层级 verified-web）
+- 变更：语料契约版本号 → 8a99343；数学纪律新增「最优必配下界」Duchi 准则
+  [DFO-S21]；流派表随机 ZO 支线加入 Duchi；R1 强化为 √d 因子+sharp 下界；
+  新增 R10（randomized smoothing）；来源索引新增 verified-web 段与研究者档案；
+  诚实边界补研究者档案「仅基于摘要」限定
+- 质量门：G1–G5 PASS。G2 再次抓到初版 skill 流派表 KW/SPSA 编号错位
+  （误标 S17/S18，应为 S18/S19），已修正。G6 增补试答：
+  「两点零阶估计比单点好在哪？」→ √d vs O(n) 级因子、有下界证 sharp、
+  常数查原文 [DFO-R1, S21]——通过
+- 执行模型：claude-fable-5
+
 ## 2026-10-09 · 首次蒸馏
 
 - 语料版本：b007570（首次语料提交）

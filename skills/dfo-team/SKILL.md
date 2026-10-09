@@ -11,7 +11,7 @@ description: |
 
 **语料契约**：本 skill 的全部事实来自
 `C:\Users\sr881\repos\Optimization-Researchers\teams\dfo-team\`
-（蒸馏日期 2026-10-09，语料版本 b007570）。**只说语料里有的。**
+（蒸馏日期 2026-10-09，语料版本 8a99343）。**只说语料里有的。**
 
 ## 回答工作流（最重要）
 
@@ -21,7 +21,8 @@ description: |
    （`teams/dfo-team/01-canon.md`、`04-results.md`）。
 3. **数学纪律**：一律 min f(x) 形式；速率必带假设与 proved-vs-cited；
    **绝不给精确常数**——正确答法：「常数需查原文 [ID]，语料记录的定性结论是…」；
-   zeroth-order 速率必须保留维度因子；引用噪声相关结论必须声明噪声模型。
+   zeroth-order 速率必须保留维度因子；引用噪声相关结论必须声明噪声模型；
+   宣称某速率「最优」时必须能给出匹配下界的出处（Duchi 准则 [DFO-S21]）。
 4. **语料外问题**：如实说「语料库（文献覆盖至约 2026-07）未覆盖 X」。可以给
    语料内最接近的已知结论，但必须划清分界。绝不从模型记忆静默补全。
    需要新文献 → 建议把检索结果按 `standards/grounding.md` 锚点规范加进语料库，
@@ -47,7 +48,7 @@ description: |
 |------|---------|------|---------|
 | 直接搜索 | 只比函数值不建模：NM [DFO-S9]、GPS [DFO-S12]、MADS [DFO-S14] | Torczon、Audet-Dennis | 全局收敛/Clarke 稳定性 |
 | 模型型信赖域 | 插值模型 + 信赖域 | Powell 谱系 [DFO-S15]、CSV [DFO-S16] | fully-linear 精度 + 收敛理论 |
-| 随机 zeroth-order | 随机方向差分 + 一阶框架 | KW [DFO-S17]、SPSA [DFO-S18]、[DFO-S20, S4, S5] | oracle 复杂度（含维度因子） |
+| 随机 zeroth-order | 随机方向差分 + 一阶框架 | KW [DFO-S18]、SPSA [DFO-S19]、Nesterov-Spokoiny [DFO-S20]、Ghadimi-Lan [DFO-S4]、Duchi（两点+下界）[DFO-S21, S23]、SMTP [DFO-S5] | oracle 复杂度（含维度因子）；Duchi 支线：上界必配下界 |
 | 进化策略 | 协方差自适应采样 | CMA-ES [DFO-S6, S8] | 基准表现；理论较弱 |
 
 分歧（两边都如实说）：
@@ -83,7 +84,7 @@ description: |
 
 | ID | 结论（定性，无常数） | 关键假设 | 状态 |
 |----|---------------------|---------|------|
-| DFO-R1 | ZO 付维度代价：单点高斯平滑 O(n) 级因子；两点估计凸随机可至 √n 级且阶最优（有下界） | 凸/声明的非凸度量、光滑、随机 oracle | cited [DFO-S20, S21, S4] |
+| DFO-R1 | ZO 付维度代价：单点高斯平滑 O(n) 级因子；两点估计相对随机梯度至多 √d 因子（光滑+非光滑、m≥2 推广），信息论下界证 sharp | 凸/声明的非凸度量、光滑或 Lipschitz、随机 oracle | cited [DFO-S20, S4]；verified-web [DFO-S21] |
 | DFO-R2 | 随机非凸 ZO 有到 ε-稳定点（E‖∇f‖² 意义）的多项式复杂度，含维度因子 | L-光滑、无偏有界方差 | cited [DFO-S4]，指数查原文 |
 | DFO-R3 | 模式搜索 lim inf ‖∇f(x_k)‖=0 型全局收敛 | f 连续可微、水平集有界 (unanchored) | cited [DFO-S12] |
 | DFO-R4 | MADS 对 Lipschitz 问题收敛到 Clarke 稳定点，可处理约束 | 局部 Lipschitz、网格/方向条件 (unanchored) | cited [DFO-S14] |
@@ -92,6 +93,7 @@ description: |
 | DFO-R7 | 噪声差分需平衡截断/测量误差；自适应区间可靠但费评估 | 声明噪声模型 | verified-local [DFO-S3] |
 | DFO-R8 | heavy-ball momentum 可并入随机 ZO（SMTP），非凸/凸/强凸均有收敛结果；≠优于无 momentum | — | verified-local [DFO-S5] |
 | DFO-R9 | profiles 暴露单一最终值排名掩盖的行为，双视角都要 | — | verified-local [DFO-S2, S8] |
+| DFO-R10 | 随机平滑+加速处理非光滑凸随机优化：方差依赖最优速率，期望+高概率双形式，可分布式 | 凸、非光滑、随机 oracle（精确假设查原文） | verified-web [DFO-S23] |
 
 ## 绝不做（禁区清单，语料 05 全量移植）
 
@@ -110,8 +112,11 @@ description: |
 
 ## 诚实边界
 
-- 语料截止：蒸馏于 2026-10-09，语料版本 b007570；文献覆盖至约 2026-07
-  （verified-local 工件 sources.json 采集于 2026-07-24）。
+- 语料截止：蒸馏于 2026-10-09，语料版本 8a99343；文献主体覆盖至约 2026-07
+  （verified-local 工件 sources.json 采集于 2026-07-24）；Duchi 档案与
+  [DFO-S21, S23] 联网核实于 2026-10-09。
+- 研究者档案仅基于论文摘要与 Scholar 页（未读全文）：√d 因子的精确常数、
+  假设细节需查原文；头衔/引用数是快照，会过时。
 - 语料缺口：贝叶斯优化、离散/组合黑盒、多目标 DFO、具体软件包工程细节。
 - 验证层级：标 cited / model-knowledge 的结论写进论文前需核对元数据；
   verified-local 的带 DOI/URL 可直接引用（见来源索引）。
@@ -132,8 +137,15 @@ model-knowledge（元数据需核对）：
 Audet-Dennis 2006 MADS · [DFO-S15] Powell 谱系 (COBYLA/UOBYQA/NEWUOA/BOBYQA) ·
 [DFO-S16] Conn-Scheinberg-Vicente 2009 · [DFO-S17] Audet-Hare 2017 教材 ·
 [DFO-S18] Kiefer-Wolfowitz 1952 · [DFO-S19] Spall 1992 SPSA ·
-[DFO-S20] Nesterov-Spokoiny 2017 · [DFO-S21] Duchi 等 2015 · [DFO-S22] Moré-Wild 2011
-ECNoise
+[DFO-S20] Nesterov-Spokoiny 2017 · [DFO-S22] Moré-Wild 2011 ECNoise
+
+verified-web（核实 2026-10-09，arXiv abs 页）：
+[DFO-S21] Duchi-Jordan-Wainwright-Wibisono 两点零阶最优速率 arXiv:1312.2139
+（期刊版 IEEE-IT 2015 据 Scholar）· [DFO-S23] Duchi-Bartlett-Wainwright
+Randomized Smoothing arXiv:1103.4296（期刊版 SIOPT 需核对）
+
+具名研究者档案：John Duchi（Stanford，随机 ZO 学派，上界必配下界）→
+语料 `teams/dfo-team/researchers/john-duchi.md`
 
 本地工件：[DFO-L1] autoresearch 审计 2026-07-25 · [DFO-L2] momentum-vs-DFO 实验
 
