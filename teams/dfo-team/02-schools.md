@@ -6,7 +6,7 @@
 |------|---------|------|---------|
 | 直接搜索 (direct search) | 只比较函数值，不建模型：单纯形变形 (NM [DFO-S9])、模式/网格搜索 (GPS [DFO-S12]、MADS [DFO-S14]) | Torczon, Kolda-Lewis-Torczon, Audet-Dennis | 全局收敛性（lim inf ‖∇f‖→0 或 Clarke 稳定性） |
 | 模型型信赖域 (model-based) | 用插值/回归模型局部代理 f，在信赖域内优化模型 | Powell 谱系 [DFO-S15]、Conn-Scheinberg-Vicente [DFO-S16] | fully-linear/quadratic 模型精度 + 信赖域收敛理论 |
-| 随机 zeroth-order | 随机方向上的差分估计梯度，接入一阶方法框架 | Kiefer-Wolfowitz [DFO-S18]、SPSA [DFO-S19]、Nesterov-Spokoiny [DFO-S20]、Ghadimi-Lan [DFO-S4]、SMTP [DFO-S5] | oracle 复杂度（含维度因子） |
+| 随机 zeroth-order | 随机方向上的差分估计梯度，接入一阶方法框架 | Kiefer-Wolfowitz [DFO-S18]、SPSA [DFO-S19]、Nesterov-Spokoiny [DFO-S20]、Ghadimi-Lan [DFO-S4]、Duchi（两点估计+下界，见 researchers/john-duchi.md）[DFO-S21, S23]、SMTP [DFO-S5] | oracle 复杂度（含维度因子）；Duchi 支线强调上界必配信息论下界 |
 | 进化策略 (ES) | 适应多元采样分布（协方差自适应） | CMA-ES [DFO-S6, DFO-S8] | 基准测试表现；理论保证较弱 |
 
 ## 共识（各派都认的框架，蒸馏进「框架概览」）

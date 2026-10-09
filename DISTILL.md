@@ -11,7 +11,9 @@
 ## Phase 1 — 读语料
 
 按编号顺序读目标团队目录全部六个文件：
-`00-charter → 01-canon → 02-schools → 03-heuristics → 04-results → 05-failure-modes`。
+`00-charter → 01-canon → 02-schools → 03-heuristics → 04-results → 05-failure-modes`，
+以及 `researchers/*.md`（若存在）——研究者档案的方法论立场进 skill 的
+对应学派/启发式部分，身份与贡献进来源索引。
 
 读的时候建三张工作表（内部使用）：
 - **ID 表**：全部 `[XXX-S*]`（来源）与 `[XXX-R*]`（结果）ID —— 之后 skill 里

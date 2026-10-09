@@ -5,12 +5,15 @@
 
 ## DFO-R1 零阶方法付维度代价
 - **结论**：zeroth-order 梯度估计把一阶复杂度乘上一个维度因子——高斯平滑
-  单点路线是 O(n) 级因子；两点估计在凸随机情形可降到 √n 级且该阶最优（有下界）。
+  单点路线是 O(n) 级因子；两点估计相对随机梯度方法的退化**至多 √d 因子**，
+  覆盖光滑与非光滑情形、推广到 m≥2 次评估，且有信息论下界证明该速率在
+  常数或对数因子内 sharp。
 - **假设**：凸（或声明的非凸期望稳定性度量）、L-光滑或 Lipschitz、随机 oracle。
-- **状态**：cited — [DFO-S20]（高斯平滑，凸）；[DFO-S21]（两点最优性+下界）；
-  [DFO-S4 content]「zeroth-order 估计引入维度与平滑依赖的代价，不能把梯度调用和
-  函数值调用当等价信息」(sources.json 原文, verified-local)。
-- **层级**：定性结论 verified-local / 精确形式 model-knowledge（需查原文）。
+- **状态**：cited — [DFO-S20]（高斯平滑，凸）；[DFO-S21]（两点 √d 因子+下界，
+  arXiv:1312.2139 abs 页核实 2026-10-09）；[DFO-S4 content]「zeroth-order 估计
+  引入维度与平滑依赖的代价，不能把梯度调用和函数值调用当等价信息」
+  (sources.json 原文, verified-local)。
+- **层级**：定性结论 verified-local + verified-web / 精确常数仍需查原文。
 
 ## DFO-R2 随机非凸 zeroth-order 的收敛
 - **结论**：随机非凸光滑情形下，随机平滑 zeroth-order 方法有到
@@ -68,3 +71,14 @@
   能暴露单一最终值排名掩盖的 solver 行为；两视角应同时报告。
 - **状态**：verified-local — [DFO-S2 content]、[DFO-S8 content]。
 - **层级**：verified-local。
+
+## DFO-R10 随机平滑处理非光滑随机凸优化
+- **结论**：随机平滑（对非光滑凸 f 做随机扰动平滑）+ 加速梯度法，得到对
+  梯度估计方差依赖最优的收敛保证，**期望与高概率两种形式都有**；
+  可与去中心化优化结合得到阶最优的分布式随机优化算法。
+- **假设**：凸、非光滑、随机 oracle（方差条件；精确假设查原文）。
+- **状态**：cited — [DFO-S23]（arXiv:1103.4296 abs 页核实 2026-10-09；
+  作者声称是非光滑情形首个 variance-dependent 速率）。
+- **层级**：定性 verified-web；速率表达式与常数需查原文。
+- 方法论注记：这是「随机化当一等工具、保证要期望+高概率双形式」的
+  Duchi 支线代表作（见 researchers/john-duchi.md）。

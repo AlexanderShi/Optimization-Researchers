@@ -33,8 +33,20 @@
 | DFO-S18 | Kiefer & Wolfowitz (1952), Ann. Math. Statist. | 随机逼近差分路线起点 |
 | DFO-S19 | Spall (1992), "…Simultaneous Perturbation Gradient Approximation" (SPSA), IEEE Trans. Autom. Control | 每步 2 次评估的随机扰动路线 |
 | DFO-S20 | Nesterov & Spokoiny (2017), "Random Gradient-Free Minimization of Convex Functions", Found. Comput. Math. | 高斯平滑随机无梯度方法，凸情形复杂度 |
-| DFO-S21 | Duchi, Jordan, Wainwright, Wibisono (2015), IEEE Trans. Inf. Theory | 两点估计的最优速率与下界 |
 | DFO-S22 | Moré & Wild (2011), "Estimating Computational Noise"（SIAM J. Sci. Comput.，需核对）| ECNoise：计算噪声估计 |
+
+## verified-web（联网核实，注明核实日期与一手页面）
+
+| ID | 文献 | 定位 | 本语料中的角色 |
+|----|------|------|---------------|
+| DFO-S21 | Duchi, Jordan, Wainwright, Wibisono, "Optimal rates for zero-order convex optimization: the power of two function evaluations"；期刊版 IEEE Trans. Inf. Theory 2015（venue 据 Scholar 个人页） | arXiv:1312.2139（abs 页核实 2026-10-09） | 两点估计 √d 退化因子 + 信息论下界 sharp；详见 researchers/john-duchi.md |
+| DFO-S23 | Duchi, Bartlett, Wainwright, "Randomized Smoothing for Stochastic Optimization" (2011/v2 2012)；期刊版 SIAM J. Optim.（model-knowledge，需核对——arXiv 页未列期刊引用） | arXiv:1103.4296（abs 页核实 2026-10-09） | 随机平滑：非光滑凸随机优化的方差最优速率（期望+高概率），可分布式 |
+
+## 具名研究者档案
+
+| 研究者 | 档案 | 核实基础 |
+|--------|------|---------|
+| John Duchi (Stanford) | `researchers/john-duchi.md` | Scholar 个人页 + 2 篇 arXiv abs 页（2026-10-09） |
 
 ## 本地项目工件（非文献，但可引用的证据）
 

@@ -39,6 +39,7 @@ skills/                   蒸馏产物落盘处（再复制到 ~/.claude/skills/
 | `03-heuristics.md` | 决策启发式（方法选型、基准测试纪律、报告规范） |
 | `04-results.md` | 关键定理/速率（带假设、proved-vs-cited、结果 ID） |
 | `05-failure-modes.md` | 已知胡说陷阱清单（蒸馏出的 skill 必须内置这些禁区） |
+| `researchers/*.md` | 具名研究者档案（可选，每人一档）：身份、学派位置、核心贡献、方法论立场，全部 verified-web/local 锚定 |
 
 ## 快速开始
 
