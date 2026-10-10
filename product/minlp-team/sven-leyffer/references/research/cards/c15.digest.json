@@ -1,0 +1,129 @@
+[
+  {
+    "id": "S134",
+    "year": "2025",
+    "title": "Switching time optimization for binary quantum optimal control",
+    "read_level": "full",
+    "contribution": "A relax-round-then-retime framework for binary quantum control: TV-penalized greedy rounding of a time-discretized relaxation, then switching-time optimization of the extracted controller sequence, with O(Δt) rounding-error bounds for α = 0 and a precomputation speed-up (read as arXiv v1).",
+    "problem_entry": "Fixed time discretization in quantum control costs variables and limits control quality; binary (bang-bang, optionally SOS1) control is re-posed so that switch times become variables (pp. 2-4).",
+    "key_idea": "Fix which controller runs via penalized rounding (objective-based Alg. 3 or cumulative-difference Alg. 4), merge intervals, then optimize interval lengths over a simplex with SLSQP; zero-length intervals delete switches (pp. 4-6, 12-14).",
+    "assumptions": "Closed unitary dynamics, equal-step piecewise-constant relaxation, bounded objectives; rounding theory only for α = 0 and under SOS1 relaxation, cumulative SOS1 violation, or quadratic SOS1 penalty with an SOS1-feasible (P); STO solved locally (pp. 2-3, 8-10, 14).",
+    "proof_devices": [
+      "Back-propagator precomputation and operation counting: O(N'T^2) to O(N'+T) exponentials (Props. 1-2, pp. 7-8)",
+      "Taylor expansion of the per-step propagator with singular-value lemmas to bound O(dt^2) terms (Lemmas 1-4, Thm. 1, pp. 8-9, 32-36)",
+      "Contradiction via convex-combination weighting by continuous controls to show a controller with nonpositive first-order change exists (pp. 33-38)",
+      "Quadratic-penalty contradiction forcing the L1 SOS1 violation to vanish as T grows (Cor. 1, pp. 10-11)",
+      "Lifting N non-SOS1 controllers to 2^N SOS1 subset-controllers with identical dynamics (Cor. 2, pp. 11-12)",
+      "Eigendecomposition of each Hermitian controller once for cheap propagators in STO (p. 15)"
+    ],
+    "experiments": "12 instances (energy 2/4/6 qubits, CNOT, NOT, UCCSD circuit compilation H2/LiH/BeH2) vs the coauthors' own TR+MT+ALB method; penalties tuned per instance on the comparison set; objective, TV-norm, CPU per phase; up to 16.3x acceleration; coarse grids match post-STO objective; TV-norm losses only in appendix Table 9; code on GitHub (pp. 15-27, 41).",
+    "positioning": "Extends the authors' own Fei et al. [18]; credits Logsdon-Biegler for simultaneous time-point optimization and Sager et al. for sum-up rounding; critiques time-discretized GRAPE/RL approaches for cost and limited quality (pp. 3-4, 12).",
+    "writing": "First/Second/Third contribution paragraph, theorems in text with proofs in appendix, strong 'significantly outperforms' in the conclusion next to a hedge that both rounding methods should be tried (pp. 4, 9, 21-22, 27).",
+    "limits_future": "Depends on penalty tuning; CPU grows exponentially in qubits; future: time evolution on quantum hardware and robust control under noise (pp. 22, 27).",
+    "method_links": [
+      {"method": "Method 2", "relation": "evidence", "note": "Quantum pulses re-cast as binary mixed-integer optimal control with SOS1 and TV switching penalty; sum-up rounding carried in from MIOC.", "pages": "pp. 2, 5, 12-13"},
+      {"method": "Method 5", "relation": "variant", "note": "Self-built baseline (own [18]) but penalties tuned per instance on the comparison set; TV-norm losses only in appendix; 'significantly outperforms' in conclusion.", "pages": "pp. 15-18, 27, 41"},
+      {"method": "Method 6", "relation": "evidence", "note": "The fixed time-grid formulation is blamed for cost and quality loss and replaced by a switching-time formulation before changing the algorithm.", "pages": "pp. 3, 13-14, 23-24"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Relax, round with structure, then polish continuously", "evidence": "Relaxation by GRAPE, TV-penalized rounding, then smooth optimization of switching times.", "pages": "pp. 4-5, 13-14"},
+      {"pattern": "Price the oracle first", "evidence": "Count matrix exponentials per greedy decision and precompute back propagators and eigendecompositions.", "pages": "pp. 7-8, 15, 25"}
+    ],
+    "transferable": [
+      "Fix the discrete sequence, then optimize switching durations over a simplex; zero-length intervals remove switches (p. 14).",
+      "Bound greedy rounding error by Taylor-expanding the per-step propagator and a convex-combination contradiction for the first-order term (pp. 33-36).",
+      "Lift a non-SOS1 control system to an equivalent SOS1 system over subsets of controllers to reuse SOS1 proofs (pp. 11-12).",
+      "Precompute back propagators and eigendecompositions so each candidate evaluation is one product (pp. 7-8, 15).",
+      "Use a physical acceptance threshold (first excited state energy) to select a penalty parameter (pp. 19-20)."
+    ],
+    "coauthors": "Xinyu Fei, Lucas T. Brady, Jeffrey Larson, Siqian Shen",
+    "quotes": [
+      {"text": "Our key idea is to balance the difference between continuous and binary controls and the number of switches.", "page": 5},
+      {"text": "Estimating control functions by piece-wise functions also leads to limitations in obtaining better control solutions.", "page": 3}
+    ]
+  },
+  {
+    "id": "S143",
+    "year": "2025",
+    "title": "Augmentation algorithms for total variation-regularized integer programs",
+    "read_level": "full",
+    "contribution": "Characterizes the Graver basis of TV-like integer programs on graphs as connected induced subgraphs, re-derives Kolmogorov-Shioura's exact augmentation, and gives a randomized-simplex Graver-sampling heuristic for the budget-constrained case that beats CPLEX on large image instances (read as arXiv v2).",
+    "problem_entry": "Budget-constrained integer programs with separable convex terms and a TV-like regularizer on a graph are little studied and NP-hard in general; the trust-region subproblem of the Leyffer-Manns SLIP method is a case (pp. 2-5).",
+    "key_idea": "Edges of the TU polytope are Graver multiples, so a primal simplex on the LP form of the augmentation subproblems is a Graver augmentation; randomize degenerate choices and budget-aware pricing to sample improving feasible moves, alternate up/down, polish to 2-optimality (pp. 9-10, 13-19).",
+    "assumptions": "Univariate convex F, G, H on {0..Q}^V; with the budget the Graver basis no longer certifies optimality (heuristic); path-existence result needs a start minimizing each H_v; complementarity of split variables follows from convexity of G (pp. 2, 13-14).",
+    "proof_devices": [
+      "Max-level-set connected-component lemma for conformal minimality (Lemma 2, Thm. 1, p. 9; Lemma 7, Thm. 8, pp. 11-12)",
+      "Total unimodularity implies polytope edges are Graver multiples (Remark 2, Cor. 6, pp. 8, 10)",
+      "Conformal decomposition ordered monotone in J plus convexity of H around its minimizer for a feasible improving path (Prop. 10, pp. 14-15)",
+      "Counting argument: basic solutions as rooted spanning forests (Prop. 11, pp. 15-16)",
+      "Generalized penalty approximation bound by noting the original proof uses no specific function form (Prop. 12, pp. 19-20)",
+      "Local optimality comparison: Graver-optimal implies 1-optimal, not 2-optimal (Prop. 9, p. 14)"
+    ],
+    "experiments": "288 image-reconstruction instances (6 images, N in {32,64,96}, binding budgets) and public Manns-Severitt TR subproblems; 6 configurations (3 starts x p in {0,1}) with best of up to 100 trials vs CPLEX default 600 s; best-count, MIP gap vs CPLEX lower bound before/after polish, time; CPLEX wins at N=32, 20 TR instances time out without improvement; phase transition in p (pp. 21-27).",
+    "positioning": "Recovers Kolmogorov-Shioura via Graver bases; places itself among Graver methods for N-fold and two-stage stochastic IPs; generalizes Manns-Severitt; admits min-cut is faster than its LP form and the connected-subgraph restriction weakens the iteration bound (pp. 3, 7, 10, 13, 19-20).",
+    "writing": "Section-by-section contribution outline, explicit hedges ('we hope', 'we do not have any proof'); naming slip between smallest and largest coefficient and an alpha mismatch between appendix text and figure caption (pp. 5-6, 14, 18, 22, 25, 32-33).",
+    "limits_future": "No pivot bound, no approximation guarantee, arbitrary up/down alternation, open choice of p; future: matching via alternating walks, multiple separable constraints, embedding in a trust-region method for nonlinear F (pp. 18, 27-28).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "Own randomized primal simplex instead of a faster min-cut black box, so simplex edges are reinterpreted as Graver moves and pivots can be rejected or biased by budget use.", "pages": "pp. 13, 15-18"},
+      {"method": "Method 5", "relation": "evidence", "note": "Calibrated claim 'competitive with and often outperforms'; losses reported in text (CPLEX best at N=32; 20 timeouts). Baseline is CPLEX at default settings, not self-built.", "pages": "pp. 1, 22, 25"},
+      {"method": "Method 4", "relation": "variant", "note": "Reuses a public instance repository from Manns-Severitt, but own image instances and code only available on request.", "pages": "p. 28"},
+      {"method": "Method 2", "relation": "variant", "note": "The carried-in toolkit is integer algebra (Graver bases, TU) rather than the NLP/filter base; Leyffer's SLIP line supplies the problem.", "pages": "pp. 4-5, 7"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Relax, round with structure, then polish", "evidence": "Rounded relaxation and penalized starts, randomized Graver augmentation, 2-opt polish.", "pages": "pp. 18-20"}
+    ],
+    "transferable": [
+      "Characterize the Graver basis of a structured matrix with a max-level-set connected-component lemma to get a certificate and an alternative proof of a known algorithm (pp. 9-10).",
+      "Prove a feasible monotone path to the optimum exists via ordered conformal decomposition plus convexity of the budget around the start (pp. 14-15).",
+      "Represent degenerate bases of a graph LP as rooted spanning forests to randomize starts and predict each pivot's budget change (pp. 15-17).",
+      "Weight reduced costs by (1 + predicted budget use)^p to interpolate pricing rules (p. 17).",
+      "Set test budgets as fractions of the unconstrained optimum's use so the constraint binds (p. 21).",
+      "Report heuristic gaps against the exact solver's lower bound before and after polishing (pp. 24, 26)."
+    ],
+    "coauthors": "Dominic Yang, Miles Bakenhus",
+    "quotes": [
+      {"text": "The absence of such a move is proof of global optimality.", "page": 7},
+      {"text": "Like other simplex methods, we do not have any proof that this algorithm will terminate in polynomial time.", "page": 18}
+    ]
+  },
+  {
+    "id": "S144",
+    "year": "2025",
+    "title": "A mixed-integer PDE-constrained optimization formulation for constructing electromagnetic cloaks with multiple materials",
+    "read_level": "full",
+    "contribution": "Extends the authors' MIPDECO cloaking model to several materials with SOS1 and a mass constraint, solved by a reduced-space relaxation, a single-MILP feasibility-pump-style rounding, a discrete steepest-descent trust-region method with MILP subproblems, and mesh sequencing.",
+    "problem_entry": "Generalizes the group's own single-material Helmholtz cloak MIPDECO along two named axes, multiple materials and an upper bound on mass (p. 3).",
+    "key_idea": "Relax in reduced space, project the relaxed permittivity onto the discrete materials by one l1 MILP with mass and SOS1, improve with a trust-region method whose subproblem is a linear MILP in the binaries, and warm-start finer control meshes from coarse integer solutions (pp. 10-12, 18).",
+    "assumptions": "2D Helmholtz with Robin boundary, box cloak on a control mesh, SOS1 per cell, mass as inequality; unique state for bounded nontrivial permittivity with k0 away from eigenfrequencies; nonconvex bilinear term, no valid outer approximation or lower bound (pp. 4-7, 11).",
+    "proof_devices": [
+      "No theorems; formal-Lagrangian adjoint derivation of the reduced gradient (pp. 7-8)",
+      "Gradient with p materials per cell needs only N integrals scaled by q_i (p. 9)",
+      "Trust-region ratio test with doubling on boundary hit and floor-halving on rejection (Alg. 1, p. 12)"
+    ],
+    "experiments": "One geometry, k0 = 6*pi, 2 and 4 materials, control meshes 20x20/40x40/80x80 on a 128x128 FEM mesh; FEniCS, SciPy trust-constr, CPLEX 12.8; objectives and mass per stage, CPU split by component; relaxation up to 1,729,093 s; mesh sequencing better, lighter, cheaper; only internal comparisons; code not public (pp. 13-23).",
+    "positioning": "Extends Haslinger's topology-optimization formulation and the authors' own MIPDECO; borrows from the feasibility pump literature; no critique of other methods (pp. 2-3, 11).",
+    "writing": "Two-extension contribution statement; modelling choices justified in place; overstated conclusion that cost does not depend on the number of materials and 'optimal cloak' wording despite local results; same prior work cited as [9] and [15] (pp. 3, 6, 8, 11, 16, 22).",
+    "limits_future": "Nonconvexity and no bounds, relaxation cost explodes with mesh size, mass constraint hardens the TR subproblem; future: a cost constraint (pp. 7, 14-17, 22).",
+    "method_links": [
+      {"method": "Method 2", "relation": "evidence", "note": "Feasibility pump, MILP-subproblem trust region and SOS1 carried into MIPDECO; carried-in PDE uniqueness assumption checked by choosing k0 away from eigenfrequencies.", "pages": "pp. 3, 11-12"},
+      {"method": "Method 6", "relation": "evidence", "note": "l1 rather than l2 so the rounding is an MILP; mass as inequality; reduced space because states are unique.", "pages": "pp. 6-7, 11"},
+      {"method": "Method 5", "relation": "variant", "note": "No external baseline, only own variants; conclusion overstates cost independence from the number of materials against Tables 2 and 4.", "pages": "pp. 14-20, 22"},
+      {"method": "Method 4", "relation": "contradiction", "note": "Code and instances not released to the public; reproduction relies on the paper's description.", "pages": "p. 23"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Relax, round with structure, then improve locally (with coarse-to-fine warm start)", "evidence": "Reduced-space relaxation, one l1 projection MILP, discrete trust region, mesh sequencing.", "pages": "pp. 10-12, 18"}
+    ],
+    "transferable": [
+      "Round a PDE-constrained relaxation by one l1 projection MILP onto the discrete material set with all non-PDE constraints (p. 11).",
+      "Discrete steepest-descent trust region with linear model, l1 radius and side constraints in an MILP subproblem (p. 12).",
+      "Mesh sequencing for integer controls: one relaxation on the coarsest control mesh, warm-start finer meshes from the coarse integer solution (p. 18).",
+      "Tabulate CPU per component (relaxation, PDEs, gradients, MIPs) to expose the bottleneck that motivates the next design (pp. 14, 16).",
+      "State when the relaxation is not a bound and why, and report relaxation values as references only (pp. 7, 15)."
+    ],
+    "coauthors": "Ryan H. Vogt, Todd Munson",
+    "quotes": [
+      {"text": "We prefer a polyhedral norm, however, because it allows us to rewrite (19) equivalently as an MILP.", "page": 11},
+      {"text": "We observe that the relaxation does not provide a lower bound relative to the final solution found by the trust-region method, a symptom of the noncovexity of the problem.", "page": 15}
+    ]
+  }
+]

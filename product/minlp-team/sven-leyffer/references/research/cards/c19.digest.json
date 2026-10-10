@@ -1,0 +1,109 @@
+[
+ {
+  "id": "S159",
+  "year": "2026",
+  "title": "Using Filter Methods to Guide Convergence for ADMM, with Applications to Nonnegative Matrix Factorization Problems",
+  "read_level": "partial",
+  "contribution": "Read in its ICCOPT 2022 slides version: an augmented-Lagrangian filter wrapped around multiblock ADMM/BCD for nonconvex problems with nonlinear equality constraints, with a three-outcome convergence theorem and NMF/NMFC/spectra applications.",
+  "problem_entry": "ADMM theory assumes linear constraints, fixed rho and a priori knowledge of the functions; direct multiblock ADMM can diverge for any rho (Chen et al. p=3 example); application: chemical spectrum fitting (S159 slides pp. 4-9).",
+  "key_idea": "A filter on (infeasibility, first-order error of the original problem) decides when to update multipliers and when restoration plus a rho increase is needed; inner block sweeps start with a Cauchy-type projected-gradient sweep (S159 slides pp. 13-16).",
+  "assumptions": "f, c in C2 (C1 for the theorem); ||c(x)|| -> inf replaced by finite bounds for compactness; block Lipschitz constants for the BCD lemma; bilinear coupling Z = XY in the applications (S159 slides pp. 3, 17, 19, 21).",
+  "proof_devices": [
+   "three-outcome convergence theorem: KKT / FJ point where LICQ fails / minimizer of infeasibility, stated without proof (S159 slides pp. 17-18)",
+   "BCD sufficient-decrease lemma via a generalized Cauchy point, after Beck-Tetruashvili Lemma 3.3 (S159 slides p. 19)"
+  ],
+  "experiments": "NMF and NMFC (50% missing) on a 225x225 image, rho-initialization tests, comparison with Ang-Gillis accelerated NMF, 22-Gaussian spectra inversion; results only as figures not in the text layer (S159 slides pp. 21-34).",
+  "positioning": "ADMM history from Douglas-Rachford to Wang et al.; Chen et al. counterexample as motivation; Vanaret-Leyffer AL filter as backbone (S159 slides pp. 6-7, 12).",
+  "writing": "Talk slides by the first author (Baraldi): research framed as questions, hedged conclusion ('seems able'), a notational sign slip and typos (S159 slides pp. 7, 9, 11, 18, 35).",
+  "limits_future": "Future: nonsmooth regularizers, filter convergence adjustment, accelerations, a real software package; no package at talk time (S159 slides p. 35). JOTA article not read.",
+  "method_links": [
+   {"method": "Method 2", "relation": "evidence", "note": "AL filter from the home toolkit carried into ADMM, whose standard theory assumes linear constraints and fixed rho", "pages": "S159 slides pp. 6-16"},
+   {"method": "Method 3", "relation": "evidence", "note": "redesign motivated by another group's smallest breaking example (p = 3 divergence for any rho)", "pages": "S159 slides p. 7"},
+   {"method": "Method 1", "relation": "variant", "note": "outer filter test interleaved with inner BCD sweeps as building blocks, but a new algorithm rather than built inside an owned solver; package still future work", "pages": "S159 slides pp. 16, 35"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "filter as automatic penalty-parameter selector", "evidence": "rho raised only on entry to restoration; conclusion that the filter seems able to select correct rho values; rho-trajectory tests", "pages": "S159 slides pp. 16, 24, 35"}
+  ],
+  "transferable": [
+   "Update ADMM multipliers only at filter-acceptable points and raise rho only on restoration entry (S159 slides pp. 13, 16).",
+   "Filter on stationarity of the original problem, with relative stopping test omega0(xk)/omega0(x0) <= eps (S159 slides pp. 13, 15).",
+   "First BCD sweep as projected block steepest descent with step 1/L_i to obtain a sufficient-decrease bound (S159 slides pp. 16, 19).",
+   "Split bilinear NMF with Z = XY so the nonlinearity sits in a monitored constraint (S159 slides pp. 21, 26)."
+  ],
+  "coauthors": "Robert Baraldi (first author, presenter, Sandia), Stefan Wild",
+  "quotes": [
+   {"text": "Monitors dual infeasibility error of the original problem while solving the augmented Lagrangian.", "page": 15},
+   {"text": "Filter seems able to select correct ρ values", "page": 35}
+  ]
+ },
+ {
+  "id": "S160",
+  "year": "2026",
+  "title": "Optimizing Paths for Adaptive Fly-Scan Microscopy",
+  "read_level": "full",
+  "contribution": "An iterative adaptive fly-scan framework for x-ray microscopy (gradient-based score function, uncertainty-plus-gradient acquisition objective optimized by ADAM, nearest-neighbour path, IDW completion) that reconstructs images from under 30% of raster measurements; read in the arXiv extended version.",
+  "problem_entry": "Raster fly-scans waste time in uniform regions, and adaptive scanning exists only for step-scans via data-hungry deep learning; claimed first adaptive fly-scan path work (S160 arXiv pp. 2-3, 8).",
+  "key_idea": "Per iteration: pick anchors by gradient score, move them by ADAM on -(alpha log U + log ||grad I||), connect them by greedy nearest neighbour instead of TSP, fly-scan, complete by IDW (S160 arXiv pp. 3-5).",
+  "assumptions": "Noise-free images, sigma = 1, simulated scan physics (1 nm/pixel, 1 nm/s, 0.5 s exposure, 0.02 s dead time), raster fly-scan as reference, no motor turning limits (S160 arXiv pp. 5-8).",
+  "proof_devices": [],
+  "experiments": "Four images (synthetic shapes, phantom, Cameraman, APS WSe2), 10 runs averaged, PSNR/SSIM against a same-budget random selection only (e.g. 23.7 vs 15.1 dB at 21.4%); one-at-a-time sensitivity in alpha and l on image 4; no timings, no TSP or learned baseline (S160 arXiv pp. 5-8).",
+  "positioning": "Claims priority for adaptive fly-scan; placed between raster/space-filling scans, learned adaptive step-scans and matrix completion; TSP set aside on cost (S160 arXiv pp. 3, 5, 8-9).",
+  "writing": "Early contribution bullets, promotional wording ('very smart'), generalization claims from four images, small numeric inconsistencies on initial sampling (7% / 6% / 7.1%), full limitations section (S160 arXiv pp. 3-9).",
+  "limits_future": "Random initial path can miss localized features, sharp path angles, no noise handling; future: self-adaptive initial scan, denoising, learned or unrolled acquisition, 3D ptycho-tomography (S160 arXiv pp. 8-9).",
+  "method_links": [
+   {"method": "Method 2", "relation": "variant", "note": "problem arrives through a facility collaboration (APS data, LDRD), but no home NLP/MINLP machinery is carried in: TSP recognised then replaced by a greedy heuristic, ADAM for anchors", "pages": "S160 arXiv pp. 3-5, 7, 9"},
+   {"method": "Method 5", "relation": "contradiction", "note": "only a same-budget random baseline, no TSP or learned competitor, no timing or failures, hyperparameters tuned on a reported test image; first-author paper with Leyffer last, so weak evidence on his own practice", "pages": "S160 arXiv pp. 5-8"},
+   {"method": "Method 6", "relation": "variant", "note": "a formulation argument (exact shortest path is not the right objective) leads to a heuristic, not a better formulation", "pages": "S160 arXiv p. 3"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "exploration-exploitation acquisition objective for adaptive measurement", "evidence": "objective combines distance-based uncertainty and reconstruction gradient, inspired by Bayesian-optimization acquisition functions", "pages": "S160 arXiv p. 4"}
+  ],
+  "transferable": [
+   "Two-term acquisition objective: log distance-based uncertainty plus log gradient magnitude of the current reconstruction (S160 arXiv p. 4).",
+   "Gradient-proportional sampling to initialise a local optimiser over measurement locations (S160 arXiv p. 4).",
+   "Same-budget random-selection control for adaptive-sampling claims (S160 arXiv pp. 5-6).",
+   "One-at-a-time hyperparameter sensitivity with the maximum spread reported in absolute and relative terms (S160 arXiv p. 8)."
+  ],
+  "coauthors": "Yu Lu (first author, UC Merced and Argonne), Thomas F. Lynn, Ming Du, Zichao Di (Argonne)",
+  "quotes": [
+   {"text": "However, solving the TSP is computationally expensive, and the true shortest path may not be optimal for our objective function, as will be discussed further in the next section.", "page": 3},
+   {"text": "This issue arises because the proposed framework focuses solely on path efficiency.", "page": 8}
+  ]
+ },
+ {
+  "id": "S162",
+  "year": "2026",
+  "title": "Correction: McCormick envelopes in mixed-integer PDE-constrained optimization",
+  "read_level": "full",
+  "contribution": "Corrects two mistakes in S096: adds the box constraint to the unique-solvability Assumption 2.7 2. (unbounded w can turn the PDE into an eigenvalue problem) and repairs the lim sup step of Proposition 2.14 by assuming feasibility of the projected optimum for the discretized McCormick problem.",
+  "problem_entry": "Self-correction of a published convergence result: an unrealistic assumption and a proof step that used feasibility for the wrong PDE (pp. 1-2).",
+  "key_idea": "Repair by restricting the assumption to admissible w in [w_l, w_u] and adding an explicit compatibility/feasibility hypothesis to Proposition 2.14; only the last proof step changes (pp. 1-2).",
+  "assumptions": "Assumption 2.12 parts 1 and 3 (content in S096, not read); box-restricted unique solvability; new hypothesis that (u_h, P_h w, P_h z) is feasible for (McChh) as h -> 0 (pp. 1-2).",
+  "proof_devices": [
+   "Gamma-convergence-style lim inf / lim sup argument, citing Braides Prop. 1.18 (p. 2)",
+   "Lebesgue differentiation theorem for P_h z -> z, with continuity of A^-1 and j, in the recovery-sequence step (p. 2)"
+  ],
+  "experiments": "n/a",
+  "positioning": "Cites only the original paper and Braides; no corrector credited (pp. 1-2).",
+  "writing": "Counts the mistakes in sentence one, gives the mechanism of the first error, prints the corrected statements in full, states which proof steps are unchanged (pp. 1-2).",
+  "limits_future": "Proposition 2.14 now conditional on a compatibility hypothesis with no sufficient condition given; impact on S096's certified example not addressed; no future work (pp. 1-2).",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "hypothesis check applied to his own theorem: assumption shown unrealistic via an eigenvalue-problem mechanism; faulty proof step located", "pages": "p. 1"},
+   {"method": "Method 2", "relation": "evidence", "note": "the carried-in unique PDE solvability assumption breaks and is fixed, as SKILL.md Method 2 limitations record", "pages": "p. 1"},
+   {"method": "Method 5", "relation": "evidence", "note": "step 8: claim narrowed (extra hypothesis on Proposition 2.14) rather than defended", "pages": "pp. 1-2"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "repair a broken proof step by an explicit added hypothesis", "evidence": "lim sup step fixed by assuming, rather than proving, feasibility of the projected optimum for (McChh)", "pages": "pp. 1-2"}
+  ],
+  "transferable": [
+   "Erratum template: count the mistakes, give the mechanism, print corrected statements in full, say which proof steps are unchanged (pp. 1-2).",
+   "Restrict 'for all controls' well-posedness assumptions to the admissible box and check whether unbounded controls create an eigenvalue problem (p. 1).",
+   "In a recovery-sequence step, check feasibility for the discretized constraint, not the continuous one; otherwise state it as a hypothesis (p. 2)."
+  ],
+  "coauthors": "Paul Manns (TU Dortmund)",
+  "quotes": [
+   {"text": "We correct two mistakes in the paper [S. Leyffer and P. Manns, Math. Prog. 2025].", "page": 1},
+   {"text": "In the proof of Proposition 2.14, the lim sup-inequality is incorrectly derived with a feasibility argument for the PDE (2) instead of the PDE constraining (McChh).", "page": 1}
+  ]
+ }
+]

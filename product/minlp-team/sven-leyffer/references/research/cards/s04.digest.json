@@ -1,0 +1,402 @@
+[
+ {
+  "id": "S149",
+  "year": "2010",
+  "title": "Experiments with MINLP branching techniques",
+  "read_level": "full",
+  "contribution": "Shows that strong branching in nonlinear B&B becomes competitive when child NLPs are replaced by single warm-started QPs (approximate strong branching, reliability branching), and that re-synchronized, hot-started QP factors cut the per-candidate cost by up to 40x. The paper also launches the DIWAL library of computer-science MINLPs.",
+  "problem_entry": "His own MINLPBB (depth-first, max-fractional) is simplistic. NLP strong branching cuts nodes but costs too much CPU, because NLP factors are stale after a solve and a basis does not determine an NLP iterate (pp. 4-6).",
+  "key_idea": "Use one SQP iteration (a single QP, warm-started from the active set) per strong-branching child, wrap it in reliability branching, and hot-start the QPs from factors re-synchronized by re-solving the parent's final QP (pp. 6-8).",
+  "assumptions": "MINLP (1.1) with polyhedral X, Y and C2 f, c, 'possibly convex'; trust-region filter SQP (filterSQP/BQPD) as the inner solver (pp. 3, 6).",
+  "proof_devices": [
+   "n/a: no theorem; a mechanism argument for why a Newton exit leaves outdated factors (p. 6)"
+  ],
+  "experiments": "Node and CPU performance profiles on an unnamed set of medium-sized problems (Figs. 1-4, pp. 5-7). Reliability branching beats BONMIN-Hybrid on CPU. Table 1 timings on 4 instances: a single QP is 2-3x and a hot QP up to 40x faster than a full NLP (p. 8).",
+  "positioning": "Imports MILP strong, pseudo-cost and reliability branching (Achterberg et al.) and positions nonlinear B&B against LP/NLP-based B&B (Quesada-Grossmann, Bonmin, FilMINT) (pp. 4-6).",
+  "writing": "Short workshop note. Self-critical opening about his own solver, 'preliminary' hedges (pp. 4, 6, 8); the figures carry the argument.",
+  "limits_future": "Preliminary; reliability parameters untuned. Proposes a QP-based tree search with occasional NLP bound updates that 'may become competitive' (pp. 7-8).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Reuses the inner SQP solver's final QP factors and active set for outer branching decisions, through a QP hot-start feature",
+    "pages": "pp. 6-8"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "States why the node comparison with BONMIN-Hybrid is less relevant (different counting) and calls his own MINLPBB simplistic and outperformed",
+    "pages": "pp. 4, 6-7"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Test set unnamed and its selection not described; no versions or failure taxonomy",
+    "pages": "pp. 4-7"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Starts the DIWAL library of computer-science MINLP applications",
+    "pages": "pp. 3-4, 8"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Applications 'require detailed reformulations to avoid or mitigate nonconvexities'",
+    "pages": "p. 4"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "cheap surrogate oracle for an expensive tree decision",
+    "evidence": "a single QP (hot-started from stored factors) replaces child NLP solves in strong branching",
+    "pages": "pp. 6-8"
+   }
+  ],
+  "transferable": [
+   "When a MILP technique fails to transfer to MINLP on cost, identify the LP property it relies on (a basis determines the iterate) and ask what the NLP solver can supply instead, e.g. factors re-synchronized by one extra QP solve (pp. 4, 6-7)",
+   "Report a per-instance timing table at three approximation levels (full NLP / single QP / hot QP) next to the performance profiles (p. 8)"
+  ],
+  "coauthors": "none (sole author)",
+  "quotes": [
+   {
+    "text": "Given a basis (or active set) is not sufficient to determine a starting point because the Jacobian also depends on the value of the variables, (x, y).",
+    "page": 4
+   },
+   {
+    "text": "These results show that the benefit obtained by solving just a single QP is only a factor of 2 or 3, whereas hot-started QPs are faster by a factor of up to 40.",
+    "page": 8
+   }
+  ]
+ },
+ {
+  "id": "S100",
+  "year": "2010",
+  "title": "Oil Spill Response Planning with MINLP",
+  "read_level": "full",
+  "contribution": "Integrates oil-weathering ODEs with discrete-time response planning in a mixed-integer dynamic optimization model. Orthogonal collocation turns it into a nonconvex MINLP, which is solved for a Deepwater Horizon case only after MILP-based initialization.",
+  "problem_entry": "The literature models response operations and oil weathering separately, although cleanup changes slick volume and area and thus weathering (p. 1).",
+  "key_idea": "One finite element per planning period, so that the continuous- and discrete-time grids coincide. Collocation turns the MIDO into an MINLP, and an ODE-decoupled MILP provides the starting point (pp. 5-6).",
+  "assumptions": "Known spill rate and duration, constant wind and current parameters, given drift thresholds area_{i,t}. A 3-D PDE slick model is rejected as beyond solver capability, and widely different rates are not treated (pp. 2, 4, 6).",
+  "proof_devices": [
+   "n/a: modelling paper, no theory"
+  ],
+  "experiments": "Deepwater Horizon case: 2,052 discrete and 11,482 continuous variables, 14,006 constraints; DICOPT + CPLEX 12.2 + KNITRO, 139 CPU s. The cold-start MINLP was reported 'infeasible' (pp. 6-7).",
+  "positioning": "Builds on the MIDO literature (Allgor-Barton, Bansal et al., Chachuat et al., Sager et al.) and on oil-spill models (Mackay, Reed). It is the short version of the AIChE-submitted preprint ANL/MCS-P1794-1010 (pp. 5, 7-8).",
+  "writing": "Newsletter-style overview: problem statement, full model, one case study, extensions. Data 'available upon request' (p. 6).",
+  "limits_future": "Stochastic or real-time MIDO for uncertainty; a multi-objective version with response time (a reviewer's suggestion). No global optimality claim (p. 7).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "The PDE model is dropped for solver capability; a MILP approximation initializes the nonconvex MINLP, which fails from a cold start",
+    "pages": "pp. 2, 6-7"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "The MINLP/MIDO toolkit is carried into environmental planning, driven by a postdoc (editor's note, H009 p. 9)",
+    "pages": "p. 1"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Model and data only 'available upon request', not published as a library instance",
+    "pages": "p. 6"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Couple continuous-time dynamics with discrete-time decisions by making each decision period one collocation finite element, so that one index serves both grids (pp. 5-6)",
+   "Initialize a nonconvex MINLP from the MILP obtained by decoupling its dynamics, and report the cold-start failure (pp. 6-7)"
+  ],
+  "coauthors": "Fengqi You (first author)",
+  "quotes": [
+   {
+    "text": "The reformulated MINLP is highly nonlinear and nonconvex, and requires careful initializations to avoid numerical difficulties.",
+    "page": 6
+   },
+   {
+    "text": "Our goal here is to present an approach that couples the ODE with the planning model.",
+    "page": 6
+   }
+  ]
+ },
+ {
+  "id": "H009",
+  "year": "2010",
+  "title": "SIAG/OPT Views-and-News, Volume 21, No. 2, December 2010: 'Environmental Optimization' (issue editor)",
+  "read_level": "full",
+  "contribution": "An issue edited by Leyffer with one article (S100). His editor's comments credit the postdoc author, offer the GAMS model on request, and explain that the thin issue went out to carry the election results and the OP11 announcements.",
+  "problem_entry": "Editorial: a one-article issue pushed out to announce the SIAG/OPT election results and SIAM OP11 (p. 9).",
+  "key_idea": "n/a (editorial)",
+  "assumptions": "n/a",
+  "proof_devices": [],
+  "experiments": "none",
+  "positioning": "The editor's voice appears only on p. 9. The Bulletin is unsigned (p. 9). The Chairman's Column is Ferris's voice (p. 10) and thanks 'our intrepid newsletter editor' (p. 10).",
+  "writing": "Self-deprecating editor's voice (the page-break aside) and explicit credit to a junior author (p. 9).",
+  "limits_future": "Promises larger, more substantive issues and asks for special-issue topics (p. 9).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Credits the junior contributor (step 4) but shares the model only on request instead of publishing it",
+    "pages": "p. 9"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [],
+  "coauthors": "n/a (editor); the article by Fengqi You and Sven Leyffer is carded as S100",
+  "quotes": [
+   {
+    "text": "The paper presented here is almost entirely the brainchild and work of one of Argonne’s talented postdocs",
+    "page": 9
+   },
+   {
+    "text": "Whilst this issue may be light on content (only one article)",
+    "page": 9
+   }
+  ]
+ },
+ {
+  "id": "H010",
+  "year": "2010",
+  "title": "SIAG/OPT Views-and-News, Volume 21, No. 1, October 2010 (issue editor)",
+  "read_level": "partial",
+  "contribution": "An issue edited by Leyffer with Toth's article on Python code generation for dynamical parameter estimation with IPOPT. His editor's comments answer Ferris's outreach challenge (SIAM on Twitter) and pitch the newsletter as a fast-review venue for short versions of journal papers.",
+  "problem_entry": "Editorial: answers the chair's call to reach online audiences and asks for submissions (p. 11).",
+  "key_idea": "n/a (editorial)",
+  "assumptions": "n/a",
+  "proof_devices": [],
+  "experiments": "none (from the editor)",
+  "positioning": "The editor's voice appears only in the signed 'Comments from the Editor' (p. 11). The article is by Bryan A. Toth (p. 1). The unsigned 'Code Generation' lead-in (p. 1) is not attributed. The Chairman's Column is Ferris's (p. 11).",
+  "writing": "Brief, informal editor's voice; a two-advantage pitch for publishing in the newsletter (p. 11).",
+  "limits_future": "n/a",
+  "method_links": [],
+  "new_pattern_candidates": [
+   {
+    "pattern": "newsletter as a fast short-version channel",
+    "evidence": "The editor pitches Views-and-News for short papers that summarize journal submissions: fast review, longer version later. S100 follows this pattern (it cites the full preprint P1794-1010).",
+    "pages": "p. 11; H009/S100 p. 8"
+   }
+  ],
+  "transferable": [],
+  "coauthors": "n/a (editor); article by Bryan A. Toth",
+  "quotes": [
+   {
+    "text": "There are two advantages to publishing in Views-and-News: papers are reviewed lightning fast",
+    "page": 11
+   }
+  ]
+ },
+ {
+  "id": "S054",
+  "year": "2010",
+  "title": "Proactive energy management for next-generation building systems",
+  "read_level": "full",
+  "contribution": "Proposes a proactive building energy-management framework built on scenario-based mixed-integer optimal control, solved on a moving horizon with forecasts and agent-based market models. It outlines MINLP solution strategies: warm starts across windows, and MILP linearization followed by an NLP polish.",
+  "problem_entry": "Current building energy management is reactive (EnergyPlus/TRNSYS practice). It cannot exploit storage, daily trends or forecasts as cogeneration and net metering add complexity (pp. 1-3).",
+  "key_idea": "A moving-horizon MIOCP (1) with binary on/off and continuous controls over Ns forecast scenarios. The MINLP is solved either by warm-starting across windows (shifted integers, reused pseudocosts, local branching) or by MILP linearization followed by an NLP with the binaries fixed (pp. 3, 7).",
+  "assumptions": "Disturbances are forecast by WRF and empirical models and sampled from a distribution P; DAE building models. Equilibrium market models are rejected in favour of the agent-based EMCAS (pp. 3, 5-6).",
+  "proof_devices": [
+   "n/a: framework paper, no theory"
+  ],
+  "experiments": "Only earlier continuous horizon studies. Reactive control costs up to 24% (HVAC) and 300% (PV-hydrogen-battery) more; a 1-day horizon is near-optimal for HVAC (pp. 3-4). The MINLP framework itself is untested.",
+  "positioning": "Contrasts the framework with logic-based energy management in EnergyPlus and with Sager's MIOCP methods, which do not exploit its structure. Cites Goux-Leyffer and FilMINT for MINLP (pp. 2, 6-7).",
+  "writing": "Position paper with explicit 'We claim' and 'We believe' statements (pp. 1, 3, 7).",
+  "limits_future": "Tree-search MINLP is 'unlikely to be successful' for many binaries or time steps. Simulators lack derivatives, so the paper calls for AD interfaces. A comprehensive case study is left to future work (pp. 7-8).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "The fallback strategy linearizes to a MILP, then fixes the binaries and solves the NLP (linear first)",
+    "pages": "p. 7"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "MINLP warm-start and pseudocost machinery is carried into building operation through collaborators",
+    "pages": "p. 7"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "For a moving-horizon MINLP, carry the shifted integer schedule over as an immediate upper bound and reuse pseudocosts between windows (p. 7)",
+   "Justify proactive control with a forecast-horizon sweep (relative cost against horizon) and explain where extra forecast information stops paying (pp. 3-4)"
+  ],
+  "coauthors": "Victor M. Zavala (first author), Jianhui Wang, Emil M. Constantinescu, Mihai Anitescu, Guenter Conzelmann",
+  "quotes": [
+   {
+    "text": "These methods have in common that they perform a tree search to resolve the combinatorial nature of the binary decision variables.",
+    "page": 7
+   },
+   {
+    "text": "With this, the building models can be treated only as black boxes by optimization solvers, forcing the user to rely on logic-based strategies, genetic algorithms, or derivative-free optimization.",
+    "page": 7
+   }
+  ]
+ },
+ {
+  "id": "S074",
+  "year": "2010",
+  "title": "Software for nonlinearly constrained optimization",
+  "read_level": "full",
+  "contribution": "An encyclopedia survey of NCO software. It decomposes every solver into approximate subproblem, globalization strategy, globalization mechanism and convergence test, groups 19 codes by subproblem (IPM, SLP/SQP, augmented Lagrangian), and adds a termination analysis and practical remedies.",
+  "problem_entry": "Encyclopedia entry: categorize and survey NCO software for problems with nonlinear and linear range constraints (p. 3).",
+  "key_idea": "Solvers 'are differentiated by how each of these key ingredients is implemented'. Each code gets an 'Algorithmic Methodology' block and a 'Software and Technical Details' block, plus a line in Table 1 (pp. 4-5).",
+  "assumptions": "f and c twice continuously differentiable; only nonconvex-capable solvers, with convex-only codes set aside (pp. 3-4).",
+  "proof_devices": [
+   "Termination taxonomy: KKT; Fritz-John (objective weight alpha -> 0 as multipliers diverge); local infeasibility certificate; unboundedness via a user lower bound (pp. 14-15)"
+  ],
+  "experiments": "none",
+  "positioning": "Even-handed: his own FilterSQP gets the same treatment as the competitors (p. 8). Weaknesses of other codes are cited from their own sources (Ipfilter p. 6, MINOS p. 13, PENNON p. 14).",
+  "writing": "Uniform two-block entries and one summary table. The preprint has unresolved cross-references '(??)' (pp. 4, 6).",
+  "limits_future": "Reference work; points to NEOS, COIN-OR, CUTEr, COPS and the NLP-FAQ (p. 16).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Every solver is decomposed into the same four interchangeable building blocks",
+    "pages": "p. 4"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "IEEE-exception remedy: replace log(x1^3+x2) by log(s) with a slack s >= 0, because an added nonlinear constraint may hold only in the limit; large multipliers are read as CQ failure",
+    "pages": "p. 15"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Survey a crowded solver field with one fixed component taxonomy, the same two blocks per code and a summary table (pp. 4-5)",
+   "When a function domain is violated at an iterate, move the nonlinear argument into a bounded slack variable instead of adding a nonlinear constraint (p. 15)"
+  ],
+  "coauthors": "Ashutosh Mahajan",
+  "quotes": [
+   {
+    "text": "Solvers for NCO are differentiated by how each of these key ingredients is implemented.",
+    "page": 4
+   },
+   {
+    "text": "It is often possible to reformulate the nonlinear constraints to avoid IEEE exceptions.",
+    "page": 15
+   }
+  ]
+ },
+ {
+  "id": "S118",
+  "year": "2010",
+  "title": "Foundations of constrained optimization",
+  "read_level": "full",
+  "contribution": "An encyclopedia chapter that presents nonlinear programming through one four-component framework (convergence test, approximate subproblem, globalization strategy, globalization mechanism). It surveys SQP/SLP/SLQP/SQQP, IPM, augmented Lagrangian, penalty, filter and funnel methods with their convergence results.",
+  "problem_entry": "Companion to S074: foundations of NCO (1.1), min f s.t. c(x)=0, x>=0, with the emphasis on general methods and key components (p. 3).",
+  "key_idea": "An Algorithm 1 framework with four components, each surveyed in turn. The funnel is presented as a filter with the single entry (U_k, -inf) (pp. 4, 13).",
+  "assumptions": "C2 functions. Theory is quoted with its hypotheses: exact Hessian, full-rank active Jacobian, CQ, SOSC and strict complementarity for SQP; bounded iterates and a rank condition for AL (pp. 7, 11).",
+  "proof_devices": [
+   "Barrier-to-primal-dual equivalence by eliminating dz (pp. 8-9)",
+   "The filter envelope gamma, beta excludes infeasible accumulation; the switching condition separates f-type and h-type iterates (pp. 12-13)",
+   "Maratos remedy by second-order correction or nonmonotone acceptance (p. 13)"
+  ],
+  "experiments": "none",
+  "positioning": "An implementation-oriented synthesis of the field. Fletcher-Leyffer filter acceptance is stated alongside penalty steering (Byrd et al.) and the Gould-Toint funnel (pp. 12-13).",
+  "writing": "Pseudo-code for each family (Algorithms 1-5) and a short theory paragraph after each method (pp. 4-15).",
+  "limits_future": "Expository. Flags that the trust-region subproblem can become inconsistent as the radius shrinks and names three remedies (p. 15). The preprint has unresolved cross-references (p. 13).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "A four-component building-block decomposition, explicitly implementation-oriented",
+    "pages": "p. 4"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "The home toolkit (filter, restoration, SLQP) is presented as standard components of the field, with filter acceptance stated in full",
+    "pages": "pp. 12-13"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Teach an algorithm family as a product of independent choices (test x subproblem x strategy x mechanism), so that any new method is placed by naming its choice in each slot (pp. 4, 14)",
+   "Give the infeasible case its own stopping test, from the KKT conditions of the feasibility problem with l1 multipliers in [-1, 1] (p. 5)"
+  ],
+  "coauthors": "Ashutosh Mahajan",
+  "quotes": [
+   {
+    "text": "Our presentation is implementation-oriented",
+    "page": 4
+   },
+   {
+    "text": "Filter and funnel methods provide an alternative to penalty methods that does not rely on the use of a penalty parameter.",
+    "page": 12
+   }
+  ]
+ },
+ {
+  "id": "S098",
+  "year": "2010",
+  "title": "Optimal control model of technology transition",
+  "read_level": "partial",
+  "contribution": "Formulates three continuous-time social-planner models of the transition to low-emission energy technology (learning-by-doing, adjustment cost, capital investment). They are solved directly as discretized NLPs in AMPL/KNITRO, and a smooth transition seen at coarse time steps turns out to be a discretization artifact.",
+  "problem_entry": "Economists solve stylized models analytically or iterate on optimality conditions ('notoriously slow and unreliable'), and they discretize annually on the assumption that period length does not matter (p. 4).",
+  "key_idea": "Write the models in continuous time, discretize them by explicit or implicit Euler and trapezoidal collocation, and solve the optimization directly. Cumulative output is written as an ODE for sparsity, and max{0, dq/dt} in inequality form (pp. 7-8, 10-12).",
+  "assumptions": "Constant marginal costs (I, II), the learning curve c_n(x), constant-elasticity demand with growth, Cobb-Douglas costs (III), a common calibration, and a finite horizon with a terminal capital credit (pp. 5-10, 17).",
+  "proof_devices": [
+   "n/a: no theorems; Appendix A derives the functional forms (p. 17)"
+  ],
+  "experiments": "Table 3: CPU time for 3 models x 3 schemes x h in {1, 0.5, 0.1}. Step length dominates and no scheme is fastest throughout. Explicit Euler fakes a smooth switch over 2-3 periods (pp. 12-13). A sensitivity sweep over zeta (p. 14).",
+  "positioning": "Positioned against diffusion and environmental-policy economics (Jensen, Geroski, Baumol-Oates) and against indirect Gauss-Jacobi/Seidel computation (pp. 3-4).",
+  "writing": "A two-sided contribution statement, economic then methodological (p. 4). The models are introduced in order of increasing detail (pp. 6-10).",
+  "limits_future": "Policy use needs more technologies, capital conversion, learning in equipment cost and adaptive mesh refinement (pp. 14-15). The AMPL code is online (p. 18).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Formulation choices made for solvability (ODE form for sparsity, inequality form of max) and solving the optimization rather than its optimality conditions",
+    "pages": "pp. 4, 7-8, 12"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "An attractive qualitative result (the smooth transition) is stress-tested by refining h and switching schemes, and turns out to be an artifact",
+    "pages": "p. 13"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "No winning discretization; a rule by class instead (implicit schemes for stiff ODE/DAE)",
+    "pages": "pp. 12-13"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "The AMPL code is published with a run file that switches scheme and step length",
+    "pages": "p. 18"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "discretization-convergence check",
+    "evidence": "Formulate in continuous time, discretize several ways, and shrink h until the schemes agree before interpreting the shape of the solution.",
+    "pages": "pp. 4, 13"
+   }
+  ],
+  "transferable": [
+   "Before interpreting a qualitative feature of a discretized control solution, re-solve with at least two schemes (one of them implicit) and a smaller step (pp. 4, 13)",
+   "Make the discretization scheme a switch in one published run file (pp. 10, 18)",
+   "Add a terminal value term to remove finite-horizon end effects, and say which correction was chosen among the alternatives (pp. 9-10)"
+  ],
+  "coauthors": "Donald A. Hanson (first author), Yaroslav Kryukov (corresponding author), Todd S. Munson",
+  "quotes": [
+   {
+    "text": "we formulate the model in continuous time, then discretize it using several discretization methods, and vary the period length until all discretization methods converge.",
+    "page": 4
+   },
+   {
+    "text": "Clearly, the “smooth” transition that we observe for larger period lengths is an artifact of the discretization.",
+    "page": 13
+   }
+  ]
+ }
+]

@@ -1,0 +1,176 @@
+[
+  {
+    "id": "S089",
+    "year": "2021",
+    "title": "MINLP formulations for continuous piecewise linear function fitting",
+    "read_level": "full",
+    "contribution": "Shows by two counterexamples that the coauthored 2014 MINLP for free-breakpoint linear-spline regression can fit a non-function, and proves three corrected formulations correct with equal optimal values, ordering constraints being fastest in Couenne.",
+    "problem_entry": "Error in the team's own earlier model [5]: MINLP (1) is incomplete for general data; hidden because [5] only fitted concave/convex data and all tested datasets happened to give functions (pp. 2-4).",
+    "key_idea": "Tiny synthetic counterexample (5 points, m=3) plus a real Titanium instance, then three repairs: assignment constraints (2), explicit breakpoint ordering (3), chained phi inequalities (4) (pp. 4-5).",
+    "assumptions": "Sufficiently large finite big-M constants with data-dependent bounds; m <= n for equal optimal values; p = 2 in experiments (pp. 3, 7-8).",
+    "proof_devices": [
+      "two-way correspondence proof between feasible points and continuous PL functions with explicit construction (6a)-(8) (Theorem 1, pp. 6-7)",
+      "feasible-region chain X_R ⊃ X_3, X_4 ⊃ X_S plus equal optimal values by moving an unassigned segment's breakpoint to the nearest data point (Theorem 2, p. 8)"
+    ],
+    "experiments": "JuMP + Couenne 0.5.6, 2-h limit, Titanium/Concrete/NHTemp, m=2-4, nodes and CPU time for all variants incl. the unrepaired model, LIMIT entries kept; ordering (3) usually fastest (pp. 9-10).",
+    "positioning": "Corrects Goldberg-Kim-Leyffer-Veselka 2014 [5]; borrows constraint (4) from Rebennack-Krasko's convex MILP [9] and ordering from [8] (pp. 3, 5).",
+    "writing": "Short correction note: abstract states the error plainly, two figures show the non-function fits, conclusion opens with 'We have pointed out an error' (pp. 1, 4-5, 10).",
+    "limits_future": "Three small datasets, one solver, m <= 4; suggests ordering-based constraints for larger models such as [9] (pp. 9-10).",
+    "method_links": [
+      {"method": "Method 3", "relation": "evidence", "note": "smallest breaking example plus real-data instance against the team's own published model, then redesign", "pages": "pp. 4-5, 10"},
+      {"method": "Method 6", "relation": "evidence", "note": "repair is in the formulation; formulation variant decides solvability", "pages": "pp. 5, 9-10"},
+      {"method": "Method 5", "relation": "evidence", "note": "time-outs kept as LIMIT in the comparison table", "pages": "p. 9"}
+    ],
+    "new_pattern_candidates": [],
+    "transferable": [
+      "When a model was validated only on a special case, check which constraints that case implied for free; they are candidates for what is missing in general (p. 3).",
+      "Pair a 5-point synthetic counterexample with one classic real dataset that also breaks (pp. 4-5).",
+      "For several repairs, prove a feasible-region chain and an optimal-value equality, then benchmark all variants including the unrepaired relaxation (pp. 8-9)."
+    ],
+    "coauthors": "Noam Goldberg (first), Steffen Rebennack (corresponding), Youngdae Kim, Vitaliy Krasko",
+    "quotes": [
+      {"text": "We have pointed out an error in the nonconvex MINLP for fitting piecewise linear functions proposed in [5].", "page": 10},
+      {"text": "In many real datasets including all of those experimented with in [5] and [9], the relaxed formulation (1) coincidentally computes a correct solution", "page": 4}
+    ]
+  },
+  {
+    "id": "S093",
+    "year": "2021",
+    "title": "A solution framework for linear PDE-constrained mixed-integer problems",
+    "read_level": "partial",
+    "contribution": "For linear MIPDECOs, replaces discretized PDE constraints by FEM-precomputed superposition of control-basis states and imposes the dense state bounds as lazy constraints, solving 160x160 grids where the finite-difference MILP fails beyond 20x20.",
+    "problem_entry": "Empirical bottleneck: discretize-then-optimize MILPs from finite differences are too large for CPLEX at useful accuracy; two-way coupling of PDE state and network decisions (pp. 1-3).",
+    "key_idea": "Superposition over a control basis (|N|+1 PDE solves via time shifting) removes mesh-scaling state variables; lazy-constraint callback adds one most-violated grid bound per time step at incumbents (pp. 23-26).",
+    "assumptions": "Linear well-posed PDE on a square domain, binary and L2 controls, linear bounded side constraints; time invariance used but not essential; chattering absence observed, not proved (pp. 4-6, 15-16).",
+    "proof_devices": [
+      "no convergence theorems; reformulation correctness via superposition principle and time-shift identity (pp. 23-24)",
+      "lazy-constraint validity: incumbent violating none of them is optimal for the full model (p. 25)"
+    ],
+    "experiments": "CPLEX 12.8 + oFEM, 20,000 s limit, wildfire and river-contamination models: FD direct model fails beyond 20x20/21x21, FEM basis model up to 160x160/90x90, callback speedup up to 200x, mesh-dependence tables (pp. 25-29).",
+    "positioning": "Within MIPDECO; contrasts with PDE-on-network work that has only one-way coupling; argues optimize-then-discretize unlikely for MIPDECO (p. 3).",
+    "writing": "Conclusions state plainly what the method cannot avoid (time-resolution scaling) and what is missing (convergence, regularization) (pp. 28-31).",
+    "limits_future": "Poor scaling in time resolution, no convergence analysis or regularization, sparse mesh-dependence evidence; future goal-oriented adaptive FEM (pp. 27-32).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "MILP solver used through lazy-constraint callbacks rather than as a black box", "pages": "pp. 25-26"},
+      {"method": "Method 6", "relation": "evidence", "note": "reformulation (eliminating mesh-scaling state variables) before algorithm change", "pages": "pp. 23-24, 31"},
+      {"method": "Method 2", "relation": "evidence", "note": "MIPDECO as a named class combining discrete optimization and PDE numerics", "pages": "pp. 2-3"}
+    ],
+    "new_pattern_candidates": [],
+    "transferable": [
+      "For linear PDE constraints, precompute states for a control basis and substitute the affine superposition into the MILP; with time invariance one PDE solve per control suffices by shifting (pp. 23-24).",
+      "Treat dense, largely redundant discretized state bounds as lazy constraints, adding only the most-violated grid point per time step at each incumbent (p. 26).",
+      "Report a mesh-dependence table (differing binaries and state distance to the finest grid) next to run times (pp. 27-29)."
+    ],
+    "coauthors": "Fabian Gnegel (first), Armin Fügenschuh, Michael Hagel, Marcus Stiemer",
+    "quotes": [
+      {"text": "This poor scaling with the resolution cannot be avoided by our methodology.", "page": 28},
+      {"text": "Our approach demonstrates that eliminating the PDE constraints and variables whose number scales with the discretization size seems to be a viable method for solving MIPDECO approximations with high accuracy.", "page": 31}
+    ]
+  },
+  {
+    "id": "S094",
+    "year": "2021",
+    "title": "A method for convex black-box integer global optimization",
+    "read_level": "partial",
+    "contribution": "Gives the first non-enumerative method (SUCIL) that certifies a global minimizer of a convex function evaluable only at integer points, using secant cuts valid on unions of cones, and shows certification is hard beyond n = 5.",
+    "problem_entry": "Gap: B&B, Benders and OA need relaxations or gradients; integer DFO methods reach only mesh-isolated points; no method besides enumeration for unrelaxable convex integer black boxes (arXiv pp. 1-3).",
+    "key_idea": "Secants through n+1 poised points underestimate f on a union of cones (conditional cuts); OA-like loop of lower-bound update and evaluation; enumerative look-up table plus trust region after the MILP encoding blew up (arXiv pp. 5, 9-12, 17).",
+    "assumptions": "f convex on finite bounded Omega in Z^n, no evaluation off Omega (Assumption 1); authors concede knowing convexity of a black box is rare (arXiv p. 1).",
+    "proof_devices": [
+      "finite termination + contradiction via valid pointwise lower bound (Theorem 1, arXiv pp. 10-11)",
+      "extension to reduced point sets provided one cut per remaining point (Theorem 2, arXiv p. 16)",
+      "2-D counterexample f = x1^2 - x1x2 + x2^2 showing unconditional secant cuts are invalid (arXiv p. 19)"
+    ],
+    "experiments": "24 instances on [-4,4]^n, n=3-5; four SUCIL variants incl. two idealized oracle versions; vs DFLINT(-M), NOMAD(-dm) 3.9.0, MATSuMoTo (20 reps, given the optimum); profiles on evaluations to termination and to first optimum; SUCIL best on >65% for certification, DFLINT-M finds optimum first on >85% (arXiv pp. 16-18).",
+    "positioning": "Frames Algorithm 1 as an outer-approximation analogue; contrasts with integer pattern search, direct search, model-based and surrogate B&B methods (arXiv pp. 3-4, 9).",
+    "writing": "Discussion says the section order retells how SUCIL was reached; comparison hedged with 'merely demonstrate' (arXiv p. 18).",
+    "limits_future": "Combinatorial growth of secant combinations, most cuts useless, binary domains need full enumeration, pruning-cut search posed as open Problem 1, storage limits (arXiv pp. 19-21).",
+    "method_links": [
+      {"method": "Method 2", "relation": "evidence", "note": "outer-approximation bound loop carried into derivative-free integer optimization", "pages": "arXiv p. 9"},
+      {"method": "Method 3", "relation": "evidence", "note": "minimal 2-D counterexample to unconditional cuts", "pages": "arXiv p. 19"},
+      {"method": "Method 5", "relation": "evidence", "note": "hedged comparison, favourable baseline settings, metric where SUCIL loses reported", "pages": "arXiv pp. 16-18"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "idealized-oracle variant as yardstick", "evidence": "SUCIL-ideal1/2 use true f values to give a best case for point selection", "pages": "arXiv pp. 16-18"},
+      {"pattern": "report the abandoned formulation", "evidence": "MILP model (CPF) and its blow-up data kept in the paper; discussion retells the path to SUCIL", "pages": "arXiv pp. 12, 18-19"}
+    ],
+    "transferable": [
+      "When cuts are valid only on regions, keep the lower bound pointwise in a look-up table instead of big-M binaries (arXiv pp. 11-13, 17).",
+      "Plot evaluations-to-first-optimum and additional evaluations-to-certificate separately (arXiv p. 20).",
+      "State an unsolved hard subproblem as a formal open 'Problem' (arXiv p. 21)."
+    ],
+    "coauthors": "Jeffrey Larson (first), Prashant Palkar, Stefan M. Wild",
+    "quotes": [
+      {"text": "Hence, our results merely demonstrate that SUCIL provably converges to a global optimum and uses fewer function evaluations", "page": 18},
+      {"text": "The order of results in this paper tells the story of how we arrived at the implementation of SUCIL.", "page": 18}
+    ]
+  },
+  {
+    "id": "S099",
+    "year": "2021",
+    "title": "A bilevel approach for identifying the worst contingencies for nonconvex alternating current power systems",
+    "read_level": "partial",
+    "contribution": "A branch-and-bound for the AC power-grid attacker-defender maximin that keeps the nonconvex AC equations, using a max-min swap for upper bounds and SDP for lower bounds, with a graded finite-termination guarantee, and shows SOC-relaxed approaches miss vulnerabilities.",
+    "problem_entry": "KKT/dual single-level reformulations need lower-level convexity and CQs, so the literature relaxes AC flow and gets false negatives; asks how much vulnerability is missed (preprint pp. 2-3).",
+    "key_idea": "Upper bound per node from the minimax (defender-as-leader) problem, rewritten single-level while keeping AC equations; lower bound from SDP relaxation; branch on the largest dual multiplier of x_l <= 1 (preprint pp. 10-13).",
+    "assumptions": "A1 consistent physical bounds, A2 W ⊇ W_AC; slacks make the lower level always feasible and its value concave in x; node subproblems solved only locally by Ipopt (preprint pp. 7-8, 12, 18).",
+    "proof_devices": [
+      "concavity of the value function as infimum of affine functions (Prop. 2.1, preprint p. 8)",
+      "minimax inequality bound phi(x_N) <= Phi_N <= Psi_N (Prop. 3.1, preprint p. 11)",
+      "case analysis over fathoming reasons giving SDP-optimality, AC-optimality or a vetted candidate list (Theorem 3.3, preprint pp. 12-14)"
+    ],
+    "experiments": "Julia MaximinOPF.jl/PowerModels.jl, Ipopt+MA57 and Mosek, IEEE 30/57/118/300, K=1-16, single core, 24 h; enumeration shows SOC/SDP zero values for attacks with positive AC value; ACBnB always slower than MISOC [53] but finds different candidate attacks on cases 57 and 300 (preprint pp. 14-20).",
+    "positioning": "Contrasts with relaxation-based single-level reformulations (KKT, Lagrangian dual, SOC [53]) and with heuristic/metaheuristic AC approaches (preprint pp. 2-3).",
+    "writing": "States in advance that the baseline will win on speed and that the experiment's purpose is accuracy; disclaims solver advocacy (preprint pp. 16-17).",
+    "limits_future": "Global optimality of node subproblems not verified; Pegase 1354/2869 too slow; branching rules primitive; many PSVA extensions listed (preprint pp. 21-22).",
+    "method_links": [
+      {"method": "Method 5", "relation": "evidence", "note": "expected loss on speed stated up front, customary measures reported, solver choice disclaimed", "pages": "preprint pp. 16-18"},
+      {"method": "Method 2", "relation": "evidence", "note": "slack-for-feasibility and exact-penalty reasoning carried into the lower level (weak)", "pages": "preprint p. 8"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "graded guarantee with vetted candidate list", "evidence": "Theorem 3.3 states the weaker certificate delivered when inner global optimality cannot be certified", "pages": "preprint pp. 12-14"}
+    ],
+    "transferable": [
+      "For a maximin with a nonconvex inner problem, swap max and min for a valid node upper bound, then dualize the inner linear max over the attack polytope to get a single-level problem (preprint pp. 10-11).",
+      "Branch on the largest dual multiplier of binary upper bounds when integrality-based rules do not apply (preprint p. 12).",
+      "Before the algorithm comparison, enumerate small instances under exact and relaxed lower levels to show which answers change (preprint pp. 14-16)."
+    ],
+    "coauthors": "Brian Dandurand (first), Kibaek Kim",
+    "quotes": [
+      {"text": "The solution approaches based on convex relaxations of the lower-level defender problem can be expected to yield “false negatives” in terms of of identifying power system vulnerabilities.", "page": 3},
+      {"text": "It must be emphasized that we do not expect—at this stage of development—for ACBnB to be competitive with MISOC with respect to computational performance", "page": 16}
+    ]
+  },
+  {
+    "id": "S121",
+    "year": "2021",
+    "title": "Compact representations of structured BFGS matrices",
+    "read_level": "partial",
+    "contribution": "Derives compact representations of the two structured BFGS updates of Petra et al. and builds limited-memory line-search methods (L-S-BFGS-M/P) that scale to large problems and need fewer iterations than unstructured L-BFGS.",
+    "problem_entry": "Structured BFGS updates combining known and approximated Hessian parts are dense and lack compact forms, so they do not scale (arXiv pp. 5-6).",
+    "key_idea": "Compact factored forms (Theorems 1-2), limited memory with four initializations, Sherman-Morrison-Woodbury solves, Moré-Thuente line search with extra condition s_k^T u_k > 0 (arXiv pp. 6-15).",
+    "assumptions": "f twice continuously differentiable; SPD of the M-update needs SPD B0 and s_k^T u_k > 0; P-update may be indefinite and is tested (arXiv pp. 4, 7, 13).",
+    "proof_devices": [
+      "relabeling reduction to the Byrd-Nocedal-Schnabel compact BFGS form (Theorem 1, arXiv p. 7)",
+      "induction on k with 2x2 block middle matrix (Theorem 2, arXiv pp. 8-9)"
+    ],
+    "experiments": "MATLAB; extended performance profiles on structured quadratics, 61/62 CUTEst problems vs full-memory S-BFGS, LIBSVM logistic regression, Poisson control, IPOPT L-BFGS on a quartic, ptychography n = 5,000 (arXiv pp. 17-30).",
+    "positioning": "Extends Petra-Chiang-Anitescu structured quasi-Newton [20] and Byrd-Nocedal-Schnabel compact representations [6] (arXiv pp. 4-6).",
+    "writing": "Contribution paragraph names the hard step (unwinding (6)) and the device (induction) (arXiv p. 6).",
+    "limits_future": "No convergence analysis in the parts read; initialization rankings depend on spectrum (arXiv pp. 30-31).",
+    "method_links": [
+      {"method": "Method 2", "relation": "evidence", "note": "continued work in the home continuous-NLP toolkit (weak)", "pages": "arXiv pp. 4, 13"},
+      {"method": "Method 5", "relation": "variant", "note": "own full-memory methods and IPOPT L-BFGS as baselines; fairness rule not stated beyond equal memory and tolerances", "pages": "arXiv pp. 21, 27-28"}
+    ],
+    "new_pattern_candidates": [],
+    "transferable": [
+      "To find a compact form for a modified quasi-Newton update, look for a shift that maps it onto the classical update and reuse the known representation (arXiv p. 7).",
+      "Extend a standard line search with the one extra curvature condition the update needs, citing an existence result for such a step (arXiv p. 13)."
+    ],
+    "coauthors": "Johannes J. Brust (first), Zichao (Wendy) Di, Cosmin G. Petra",
+    "quotes": [
+      {"text": "Unwinding the update formula in (6) is challenging, however by using an induction technique we are able to derive the explicit expression of the compact representation.", "page": 6},
+      {"text": "The structured methods typically require fewer total iterations than do the unstructured approaches.", "page": 31}
+    ]
+  }
+]

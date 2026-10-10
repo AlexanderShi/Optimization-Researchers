@@ -1,0 +1,193 @@
+[
+  {
+    "id": "S091",
+    "year": "2023",
+    "title": "Binary optimal control by trust-region steepest descent",
+    "read_level": "full",
+    "contribution": "A trust-region steepest-descent method that optimizes binary controls directly as measurable sets, using a gradient density from a signed-measure derivative, with a proof of finite termination at epsilon-stationarity under inexact gradients and steps, and ODE, PDE and topology-optimization proofs of concept.",
+    "problem_entry": "Binary optimal control recast as min J(U) over measurable sets of an atomless measure space; existing routes (maximum principle, DP, moment relaxations, CIA, first-discretize MINLP) lack a set-space descent method; closest relative Cea et al. [10], made generic as a trust-region method in a metric space (pp. 1-3).",
+    "key_idea": "Derivative as a finite signed measure with Radon-Nikodym density g_U; trust region measured by mu of the symmetric difference, so the subproblem is solved by a sublevel set of g_U found by bisection; classical ratio-test trust-region loop kept unchanged (pp. 5-8, 23-26).",
+    "assumptions": "Assumption 1 (bounded-variation vector measure, Frechet-differentiable outer functional, ||nu(D)|| <= C mu(D), atomless) p. 5; Lipschitz derivative over conv nu(Sigma) chosen for brevity over a geodesic argument pp. 8-9; ODE case C2, affine-in-w (via partial outer convexification), boundary distance p. 13-14; PDE case nested bounded-eccentricity meshes pp. 20-21.",
+    "proof_devices": [
+      "Signed-measure derivative via chain rule and tail bounds for sigma-additivity (Lemma 2, pp. 6-7)",
+      "First-order Taylor expansion in set space o(mu(D)) (Thm. 1, p. 7) and quadratic remainder LC^2 mu(D)^2/2 (Lemma 3, pp. 8-9)",
+      "Sublevel-set averaging lemma using atomlessness (Lemma 4, pp. 10-11)",
+      "Necessary optimality g_U >= 0 a.e. by contradiction (Lemma 5, pp. 11-12); instationarity measure and suboptimality bound (p. 12)",
+      "Gronwall bounds and costate Lagrangian Taylor expansion for Frechet differentiability in L1 (Lemmas 6-8, Thm. 2, pp. 14-19); Hamiltonian link (p. 20)",
+      "Lebesgue differentiation on refining meshes to approximate g from DOF gradients (p. 22)",
+      "Near-optimal bisection step within delta*Delta (Lemma 9, pp. 25-26)",
+      "Standard trust-region finite-termination argument with radius threshold and uniform decrease (Thm. 3, pp. 26-28); hypothesis (10) printed with a plus sign in the extracted text (p. 26), apparently a slip"
+    ],
+    "experiments": "Three proof-of-concept problems without competitors: Poisson source inversion in FEniCS (187 its, 167.79 CPU s, refinement 85.1% per Table 1 vs 87% in text, p. 32); Lotka-Volterra via CVODES adjoint callbacks with a time weight m(t) (90 its, 16.72 s, pp. 35-36); topology optimization with weighted sum and capped radius, failure modes reported (26 its, 484.94 s, pp. 39-42).",
+    "positioning": "Places itself among topology-optimization descent methods by object (sets not level sets) and step type (cumulative), absorbs the Competing Hamiltonian approach as a special case, cites the Acta Numerica MINLP survey as the discretize-first route (pp. 2-3, 20).",
+    "writing": "Caveats stated in the contribution paragraph (no iterate convergence, p. 3); outline promises answers to criticisms (p. 3); repeated 'proof of concept' labelling and an explicit reason for no comparison (p. 42).",
+    "limits_future": "No iterate convergence (p. 3), no constraints (p. 39), discretization error uncontrolled (p. 23), not competitive in topology optimization (p. 42); future: constrained and higher-order NLP theory in measure spaces, fast MIOC with ODE/PDE constraints (p. 42).",
+    "method_links": [
+      {"method": "Method 2", "relation": "evidence", "note": "Trust-region globalization and its convergence proof carried into binary control; proofs transferred from conventional NLP; also fits Heuristic 5 and Heuristic 8 (function space first; B&B on fine meshes at extreme disadvantage).", "pages": "pp. 3, 26-28, 42"},
+      {"method": "Method 5", "relation": "variant", "note": "Claims calibrated as proof of concept with losses reported, but no baseline is run at all because fair comparison is judged hard.", "pages": "pp. 41-42"},
+      {"method": "Method 1", "relation": "evidence", "note": "Gradient density extracted from an off-the-shelf integrator's adjoint callbacks (CVODES), inheriting its adaptive grid.", "pages": "pp. 20, 35"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "convex-combination-free descent on sets", "evidence": "Metric mu(A delta B) on control sets and sublevel-set steps of a gradient density instead of relaxing integrality.", "pages": "pp. 5, 10, 23-24"}
+    ],
+    "transferable": [
+      "Globalize on a non-vector space by choosing a (pseudo)metric whose ball makes the linear-model subproblem easy (sublevel-set selection under mu(A delta B) <= Delta).",
+      "Inexact-gradient trust-region proof: gradient tolerance proportional to omega*eps*Delta_i/mu(Omega), stationarity test at (1-omega/3)eps, radius threshold for acceptance, uniform decrease per accepted step (Thm. 3, pp. 26-28).",
+      "Ask the subproblem for a step size within a range and refine only candidate cells until the range is reachable (pp. 24-25).",
+      "Weight the measure (m(t) = 1 + t_f - t) so early and late control switches have comparable effect (p. 35).",
+      "Report per-component CPU time to locate where a new method's cost sits (Table 1, p. 32)."
+    ],
+    "coauthors": "Mirko Hahn (first), Sebastian Sager",
+    "quotes": [
+      {"text": "We present our work with the caveat that we do not prove ultimate convergence of the control sequence and that we do not even guarantee that it is a Cauchy sequence.", "page": 3},
+      {"text": "Outside of the field of topology optimization, where similar methods already exist, it is generally difficult to design fair comparisons to other methods.", "page": 42}
+    ]
+  },
+  {
+    "id": "S120",
+    "year": "2024",
+    "title": "Modeling and solving cascading failures across interdependent infrastructure systems",
+    "read_level": "full",
+    "contribution": "A robust bilevel interdiction model of multistage cascading failures in interdependent infrastructure, an exact mixed-binary LP reformulation of the follower via LP duality plus McCormick envelopes made exact by dual integrality, and a strengthened Benders-type decomposition, tested on networks generated from anonymized Puerto Rico data.",
+    "problem_entry": "Find the most severe contingencies when dependencies are known only between asset classes (uncertain arc weights) and prior optimization work focuses on power-grid followers (pp. 1-3).",
+    "key_idea": "Dualize the robust inner minimum, linearize the resulting bilinear dual-primal terms by McCormick envelopes that are exact because optimal duals are binary, then solve the bilevel problem by a Benders loop with precomputed damage coefficients and cuts strengthened by releasing one attacked asset at a time (pp. 6-11).",
+    "assumptions": "Synchronized cascade stages (p. 4), linear service degradation (p. 6), stage-invariant polytope of arc weights (p. 5); experiments use +-10% boxes around inverse-square-distance weights and frequency-inverse importance weights (p. 13).",
+    "proof_devices": [
+      "LP dualization of the robust inner min into the follower (Prop. 1, pp. 6-7)",
+      "Binary optimal duals from stationarity 1 - lambda - pi = 0 plus complementary slackness (Lemma 1, p. 8)",
+      "Case analysis showing McCormick exactness for binary lambda (Thm. 2, pp. 8-9); negative remark that continuous-lambda McCormick is not exact on some networks (p. 9)",
+      "Repeated master solution closes the gap (Lemma 2, pp. 11-12); finite termination by enumeration of leader solutions (Thm. 3, p. 12)"
+    ],
+    "experiments": "Julia/JuMP/Gurobi 9.5.1, 1 h limit, 1% gap, networks a128 and a210 (pp. 13-14); (P_mc) gives identical optima and attack sets to (P_nl), 68.17% faster (Table 4, p. 14); Benders-S fewer iterations but loses on easy instances (p. 16); scalability over Np and Nc with gaps up to 55% at Np=4 (Tables 5-6, pp. 17-18); instance analyses (pp. 18-20); Tang et al. baseline run and fails (pp. 20-21).",
+    "positioning": "Surveys non-optimization cascade studies and Stackelberg power-grid work, rejects single-level reformulation for size, concedes similarity of plain Benders to Salmeron-Wood and claims novelty for the strengthened cut (pp. 2-4, 20-21).",
+    "writing": "Named formulations compared head to head; negative observations (non-exact continuous McCormick, Benders-S losing on easy instances) written into the text (pp. 9, 16).",
+    "limits_future": "Time-limit gaps on hard instances (Table 5, p. 17), termination guaranteed only by enumeration (p. 12), synthetic networks (p. 13); future: stronger cuts, valid inequalities, symmetry (p. 21).",
+    "method_links": [
+      {"method": "Method 6", "relation": "evidence", "note": "Bilinear follower reformulated to an exact MILP before changing the algorithm; both formulations kept and compared on the same solver.", "pages": "pp. 8-9, 14"},
+      {"method": "Method 5", "relation": "evidence", "note": "Same-solver rule, stated gap and time limit, variant reported to lose on easy instances, literature baseline run and reported to fail.", "pages": "pp. 14, 16, 20-21"},
+      {"method": "Method 3", "relation": "evidence", "note": "Exactness bounded by observed counterexample networks for continuous lambda; hypothesis (binary lambda) made explicit.", "pages": "p. 9"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "exact relaxation via dual integrality", "evidence": "McCormick envelopes of dual-times-primal terms proved exact because the optimal duals are 0/1, then the binary restriction is imposed explicitly.", "pages": "pp. 8-9"}
+    ],
+    "transferable": [
+      "Dualize a robust max-with-zero constraint into the outer max; if duals are provably 0/1, linearize dual-primal products exactly by McCormick with binary duals (pp. 6-9).",
+      "Interdiction Benders: precompute per-asset damage bounds by a stage recursion over the dependency graph; strengthen each cut by re-solving with one attacked asset released (pp. 10-11).",
+      "Validate an exactness theorem by solving both formulations with the same solver and reporting identical optima (Table 4, p. 14).",
+      "Plot upper and lower bound trajectories to separate finding from proving optimality (Figs. 1-3, p. 15)."
+    ],
+    "coauthors": "Yijiang Li (first), Kibaek Kim, Matt Menickelly, Lawrence Paul Lewis, Joshua Bergerson",
+    "quotes": [
+      {"text": "This set of results empirically confirms the exactness proof in Theorem 2.", "page": 14},
+      {"text": "This observation suggests that the optimal solution and objective values are likely to be found early in the execution of the algorithm, while proving optimality is a much more challenging task.", "page": 15}
+    ]
+  },
+  {
+    "id": "S124",
+    "year": "2024",
+    "title": "Heuristic algorithms for placing geomagnetically induced current blocking devices",
+    "read_level": "full",
+    "contribution": "A reformulated MINLP for GIC blocking-device placement (rectangular AC power flow, complementarity form of absolute values) and a three-block ADMM heuristic with a closed-form binary block, compared with a stochastic-learning heuristic and with SCIP and Juniper on EPRI-21 and UIUC-150 (read as the arXiv:2310.09409v1 PSCC 2024 manuscript).",
+    "problem_entry": "Spatial B&B on the GIC-BDP MINLP is slow because of binaries, absolute-value equations and polar trigonometric trilinear terms (p. 1).",
+    "key_idea": "Repair the formulation first (rectangular form, abs value as smooth complementarity), then split by consensus copies into a binary block solved greedily in closed form plus DC and AC NLP blocks (3ADMM-B) (pp. 2-4).",
+    "assumptions": "Model (AC-rect) eqs. (1)-(10) (pp. 2-3); E-field direction fixed at 45 degrees and four magnitudes (p. 5); no convergence assumptions, the methods are heuristics (pp. 1, 3).",
+    "proof_devices": [
+      "Binary identity ||z||^2 = <1,z> turning the binary ADMM block into a sorted greedy knapsack (Remark 1, p. 4)",
+      "Normalized primal/dual residual stopping rule (p. 4); no convergence theorem (n/a)"
+    ],
+    "experiments": "EPRI-21 (V=3) and UIUC-150 (V=30), E in {5,10,15,20} V/km; SCIP and Juniper with 1 h limit; all solutions evaluated by fixing binaries and solving the NLP (p. 5); SCIP gaps large (Fig. 4, pp. 5-6); heuristics give lower objective, 3ADMM-B < 100 s, SL < 1000 s (Fig. 5, p. 6); NRB 73 -> 19 iterations (p. 6); SL sample-size study (pp. 6-7); no repeated SL runs or solver settings reported.",
+    "positioning": "Builds on the group's prior GMD work and Liang et al. branch-and-cut, departs from polar-form models, cites complementarity literature including Fletcher-Leyffer for the reformulation (pp. 1-3).",
+    "writing": "Numbered contributions; strong claims of superior quality and speed vs state-of-the-art MINLP solvers based on single 1 h runs (pp. 1-2, 6).",
+    "limits_future": "Only tuning of N discussed as a limit (p. 7); future: two-stage blocker placement plus line switching and ML-pretrained real-time recommendations (p. 7).",
+    "method_links": [
+      {"method": "Method 6", "relation": "evidence", "note": "Abs value replaced by smooth complementarity (citing the MPEC-as-NLP line) and polar by rectangular power flow, justified by solver failure and instability.", "pages": "pp. 2-3, 7"},
+      {"method": "Method 2", "relation": "evidence", "note": "MPEC reformulation and augmented-Lagrangian/ADMM splitting carried into a power-grid MINLP application.", "pages": "pp. 3-4"},
+      {"method": "Method 5", "relation": "contradiction", "note": "Outperformance claim over SCIP and Juniper rests on 1 h default-like runs, single runs of a stochastic method and no class-wise rule of thumb; only the common evaluation meter is fair.", "pages": "pp. 1, 5-6"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "consensus-copy splitting of binaries", "evidence": "Integer vector duplicated into a binary block with a closed-form greedy solution and a relaxed continuous block linked by ADMM consensus.", "pages": "pp. 3-4"}
+    ],
+    "transferable": [
+      "Replace |Theta| by s+ - s- = Theta, |Theta| = s+ + s-, s+- >= 0, s+ s- <= 0 to avoid nonsmooth kinks in NLP-based MINLP solvers (eq. (10), p. 3).",
+      "In ADMM with binaries and a cardinality budget, the binary block becomes a sorted greedy because ||z||^2 = sum z (Remark 1, p. 4).",
+      "Evaluate heuristics and exact solvers on one meter: fix each method's binaries and solve the remaining NLP (p. 5).",
+      "Adapt the ADMM penalty by normalized residual balancing and report the iteration savings (eq. (23), Fig. 6, p. 6)."
+    ],
+    "coauthors": "Minseok Ryu (first), Ahmed Attia, Arthur Barnes, Russell Bent, Adam Mate",
+    "quotes": [
+      {"text": "The absolute value in Eq. (8) is nonsmooth, which can cause convergence failure in MINLP solvers.", "page": 3},
+      {"text": "In contrast, we apply ADMM to a discrete optimization problem.", "page": 3}
+    ]
+  },
+  {
+    "id": "S135",
+    "year": "2024",
+    "title": "A bilevel optimization framework for imbalanced data classification",
+    "read_level": "full",
+    "contribution": "MUBO, a majority-undersampling algorithm whose accept/reject rule is motivated by a bilevel model (upper level: majority loss over majority subsets; lower level: training loss), with a lemma linking correct majority classification to lower majority loss and UCI results that beat SMOTE and GAN baselines on three of five datasets.",
+    "problem_entry": "Oversampling adds noise and overlap through synthetic data and random undersampling under-fits; reject real majority points that do not reduce majority loss, as GANs reject synthetic points (pp. 1-3).",
+    "key_idea": "Bilevel model min over majority subsets of majority loss at trained weights; solved heuristically by drawing micro-samples, retraining, and accepting only those that do not increase majority loss (pp. 6-7).",
+    "assumptions": "Softmax on scalar network output with binary cross-entropy (pp. 4-5); inner problem solved approximately by Adam to a gradient tolerance or epoch cap (pp. 7, 9); Definition 5 sums the false-majority loss over S_m in the extracted text, apparently a typo (p. 5).",
+    "proof_devices": [
+      "Lemma 1: correct majority classification iff p(y=0|x) >= 1/2 iff loss <= log 2, hence loss of correctly classified points is below that of misclassified ones (p. 8); converse acknowledged to need extra conditions (p. 8)"
+    ],
+    "experiments": "Five UCI datasets, 20% test, five seeded runs, baseline-aligned architecture (pp. 9-10); SMOTified-GAN numbers taken from publication (p. 9); MUBO best F1 on Gisette, Abalone, Connect4 and worst on Ionosphere (Table 1, p. 9); minority/majority breakdown vs GBO (Table 3, p. 10); imbalance-ratio range in text inconsistent with Table 2 (pp. 9-10); code public (p. 9).",
+    "positioning": "Data rebalancing vs model reweighting; long review of SMOTE and GAN hybrids; bilevel relatives AutoBalance and NAS share the lower level, novelty placed in the upper level (pp. 3-4).",
+    "writing": "ATLAS motivation (p. 1); abstract's 'up to 10% higher' F1 is the most favourable pairwise gap while the text says next best is 1-2% lower (pp. 1, 9-10); Ionosphere loss explained (p. 10).",
+    "limits_future": "Small datasets hinder the method (p. 10); additional conditions needed to link majority loss to F1 (p. 11); future: provable conditions and small-data performance (p. 11).",
+    "method_links": [
+      {"method": "Method 2", "relation": "evidence", "note": "Bilevel leader-follower frame carried into ML data selection, but only the frame travels, not the NLP machinery; weak evidence.", "pages": "pp. 6-7"},
+      {"method": "Method 5", "relation": "variant", "note": "Failures reported, seeds repeated, code public; but one baseline copied from publication and the abstract uses the most favourable gap.", "pages": "pp. 1, 9-11"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "bilevel-as-motivation", "evidence": "A bilevel model is written to justify a greedy accept/reject heuristic rather than solved; the guarantee gap is acknowledged.", "pages": "pp. 1, 6-8, 11"}
+    ],
+    "transferable": [
+      "Data subset selection: accept a random micro-batch only if the target-class loss does not increase after retraining, and shrink the micro-batch once the accepted set passes a threshold (Alg. 1, p. 7).",
+      "Report minority and majority F1, precision and recall separately next to the averages (Table 3, p. 10)."
+    ],
+    "coauthors": "Karen Medlin (first), Krishnan Raghavan",
+    "quotes": [
+      {"text": "Given that our method utilizes all available minority data, Ionosphere’s experimental results indicate that a small dataset size is a hindrance to our undersampling approach.", "page": 10},
+      {"text": "Additional conditions are required to formally prove experimental results showing improved majority loss implies improved average F1 score.", "page": 11}
+    ]
+  },
+  {
+    "id": "S152",
+    "year": "2024",
+    "title": "Population balance model-based dynamic multiobjective optimization of yeast cell manufacturing",
+    "read_level": "full",
+    "contribution": "A numerical-feasibility study of multiobjective optimal control for an oscillatory population-balance model of continuous yeast manufacturing: a discretization study, control vector parameterization with coarse-to-fine warm starts, weighted-sum Pareto sweeps via SLSQP, and tradeoff ratios between oscillatory and non-oscillatory Pareto policies.",
+    "problem_entry": "No optimal-control study had explored Pareto tradeoffs between tolerated process oscillation (from Hopf bifurcations) and economic profit; prior work used linear MPC and input-output linearization (pp. 2, 4).",
+    "key_idea": "Method-of-lines with WENO FDM chosen by an open-loop shoot-out, piecewise-linear CVP, weighted-sum objectives with input-smoothness regularization, and continuation from K to 2K control elements with multistarts (pp. 4-7).",
+    "assumptions": "Idealized reactor (single substrate, constant volume, negligible gas phase) (p. 3); S' unobservable (p. 4); nondimensionalized variables, CFL bound nu_max = 1, stiff BDF integration (pp. 4-5); near-perfect model (p. 7).",
+    "proof_devices": [
+      "CFL step bound and SSP/TVD properties of the time integrator (pp. 4-5, footnote 3)",
+      "Continuity of gradients under the regularized formulation (p. 6)",
+      "Epsilon-constraint verification of selected Pareto points, implementation not shown (p. 7)",
+      "Tradeoff ratios Lambda_{n,m} between two Pareto policies (eqs. (26)-(29), p. 7); no theorems (n/a)"
+    ],
+    "experiments": "Discretization shoot-out with wall times (Upwind 304 ms, WENO 2278 ms, OCoFE 339/1191 ms) and Runge artefacts in the earlier OCoFE (pp. 5-6); mesh study N_m = 300 (p. 5); 228 weight vectors, K = 512 Pareto cloud with non-convergence read from mixed-colour clusters (p. 6); 25,920 SLSQP runs (~3 h on 72 cores) per weight vector (p. 7); two verified Pareto policies, S_f saturates, Lambda ratios reported (p. 7).",
+    "positioning": "Extends Henson and Zhang-Henson controller studies and corrects Zhu et al.'s OCoFE numerics; Miettinen for multiobjective methods; lists MPC options for future work (pp. 2, 4-5, 8).",
+    "writing": "Limitations written into the results paragraph (may not converge to true Pareto points; rough heuristics), hedged practical implications (pp. 6-7).",
+    "limits_future": "Weighted sum finds only convex parts of the front (p. 5); no global optimality (p. 6); model-plant mismatch (p. 7); expensive MPC; choice of MPC scheme left as an open question (p. 8).",
+    "method_links": [
+      {"method": "Method 6", "relation": "evidence", "note": "Numerics read before optimizing: discretization schemes compared for positivity and dispersion, past Runge artefacts diagnosed, nondimensionalization; weak evidence because the voice is mainly the Braatz group's.", "pages": "pp. 4-6"},
+      {"method": "Method 5", "relation": "evidence", "note": "Non-convergence of the Pareto cloud reported, costs stated, claims hedged; but the delta study and epsilon-constraint verification are not shown.", "pages": "pp. 6-7"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "coarse-to-fine continuation in the control discretization", "evidence": "Warm-start the 2K-element problem from the bisected K-element optimum, K = 2 to 512/1024; parallels mesh refinement on demand in S091 (pp. 24-25, 31).", "pages": "pp. 5-6"}
+    ],
+    "transferable": [
+      "Run an open-loop discretization shoot-out (accuracy, positivity, diffusion, dispersion, median wall time) and a mesh study before optimizing a PDE-constrained model (pp. 5-6).",
+      "Warm-start high-resolution control parameterizations by bisecting converged coarse trajectories and multistart with Gaussian perturbations of decreasing variance (pp. 5-7).",
+      "Treat clusters where different weights map to the same objective point as a symptom of local (non-Pareto) solutions and verify selected points with the epsilon-constraint method (pp. 6-7).",
+      "Summarize Pareto tradeoffs between two verified policies by ratios of objective differences (eq. (26), p. 7)."
+    ],
+    "coauthors": "Krystian Ganko (first), Marc D. Berliner, Jinwook Rhyu, Liang Wu, Richard D. Braatz",
+    "quotes": [
+      {"text": "The weighting method only uncovers convex portions of the Pareto optimal set.", "page": 5},
+      {"text": "All discussions above are predicated upon a near-perfect model description of the yeast continuous manufacturing process.", "page": 7}
+    ]
+  }
+]

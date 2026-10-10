@@ -1,0 +1,91 @@
+[
+ {
+  "id": "S096",
+  "year": "2026",
+  "title": "McCormick envelopes in mixed-integer PDE-constrained optimization",
+  "read_level": "full",
+  "contribution": "Carries McCormick relaxations and optimization-based bound tightening into function space for a bilinear, TV-regularized MIPDECO class: cell-averaged relaxations with finitely many inequalities, a priori lower-bound estimates in the mesh size, Gamma-convergence to the pointwise envelope, OBBT validity, and 1D/2D computations (read in arXiv v5).",
+  "problem_entry": "Missing tool: McCormick relaxations are standard in MINLP B&B but unused in PDE-constrained optimization because the pointwise form gives infinitely many state constraints and OBBT becomes intractable (abstract p. 1; pp. 2, 8).",
+  "key_idea": "Average the nonlinearity first, uw -> (P_h u)(P_h w), so there are four McCormick inequalities per cell of a coarse partition, then also discretize w with a grid-consistent TV_h (McCh, McChh, pp. 8-11; Fig. 1 p. 8); run OBBT on per-cell bounds (Alg. 1 p. 16).",
+  "assumptions": "Elliptic A boundedly invertible, compact embedding U into L2, j Lipschitz on bounded sets, C convex bounded closed, BV controls (p. 5); a priori state bounds called 'quite strong' (p. 6); unique solvability of the averaged PDE and valid cell bounds (Assumption 2.7, p. 9); TV_h consistency and Gamma-convergence conditions (pp. 11-13); regularity chosen for cleaner presentation (p. 6).",
+  "proof_devices": [
+   "direct method of the calculus of variations for existence (Prop. 2.5, p. 7)",
+   "Lemma A.1: pointwise inequality passes to strong/weak L1 limits, by Egorov's theorem (pp. 33-34)",
+   "true minimizer plugged into the approximate relaxation as a feasible point, error charged to a Lipschitz constant times ||u - u_h|| (Thm. 2.8, pp. 9-10)",
+   "h^(1/2) control-averaging error via ||w - P_h w||_L1 <= h TV(w) (Thm. 2.11, pp. 11-12)",
+   "Gamma-convergence liminf/limsup argument; TV(P_h f) <= TV(f) in 1D (Prop. 2.14, Lemma 2.15, pp. 13-14)",
+   "OBBT preserves the assumption behind the error bound, so the bounds increase monotonically (Lemmas 2.16-2.17, Thms. 2.18-2.19, pp. 15-16)",
+   "Aubin-Nitsche duality with Galerkin-type orthogonality of cell averaging gives h^2 (Lemma 3.1, pp. 19-21)",
+   "explicit sharp embedding constants (Poincare pi^2, Sobolev 4) to certify all assumptions on the example (pp. 17-19)",
+   "Lipschitz and Frechet differentiability of the control-to-state map to verify SLIP assumptions (pp. 22-24)"
+  ],
+  "experiments": "1D elliptic example (2048 P1 elements): upper bounds by L-BFGS-B (Huber-smoothed TV) and SLIP; Gurobi lower bounds including an a-posteriori 'tightest' McC using monotonicity bounds (Table 1 p. 27); OBBT time 8.2 s to 1.08e4 s vs 2.14e4 s pointwise (Table 3 p. 29); a priori constant given as a conservative-to-tight range, certified bound beats 0 only on fine meshes (Tables 2, 4, pp. 28-29); OBBT safeguard of 1e-7 (p. 26). 2D convection-diffusion on 48x48 with 8 parallel OBBT rounds: 127 s vs 95,522 s and 400,780 s for similar bounds (pp. 30-32).",
+  "positioning": "Extends finite-dimensional McCormick and its ODE generalizations (Scott, Barton, Chachuat, Houska) to PDEs; separated from Buchheim et al.'s linear-PDE d=1 bounds; uses the OBBT literature (Gleixner et al.) for cost claims; ties itself to the authors' SLIP line (pp. 2, 6, 14, 22).",
+  "writing": "Self-described 'recipe' (p. 3); contribution section and roadmap figure (pp. 3, 8); first-person defence of restrictions (p. 3); the abstract already promises gaps, which the conclusion quantifies (pp. 1, 32); remarks on practicality after the theorems; a self-referencing slip in the proof of Thm. 2.19 (p. 16).",
+  "limits_future": "A priori bound beats trivial bounds only on fine meshes; needs higher-order ||u-u_h|| estimates and a better L_u (p. 32); L-infinity state bounds may be unavailable in several dimensions (p. 33); no 2D a priori analysis (p. 29); future: a posteriori estimates, function-space B&B with adaptive refinement, generalized McCormick for other nonlinearities (pp. 32-33).",
+  "method_links": [
+   {"method": "Method 2", "relation": "evidence", "note": "home MINLP tools (McCormick, OBBT, big-M equivalence) carried into PDE-constrained integer control; the carried-in assumptions (state bounds, unique solvability) are made explicit", "pages": "pp. 2-3, 6-7, 9"},
+   {"method": "Method 5", "relation": "evidence", "note": "a-posteriori oracle baseline flagged as unavailable in practice; conservative-to-tight constant range; failures to beat the trivial bound kept in Table 4", "pages": "pp. 27-29, 32"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "certify every assumption on a worked example with explicit constants", "evidence": "Section 3 verifies Assumptions 2.1, 2.7, 2.9 and 2.12 for a 1D elliptic PDE with sharp cited embedding constants before the experiments", "pages": "pp. 16-19"},
+   {"pattern": "oracle-information baseline used only a posteriori", "evidence": "exact state bounds from PDE monotonicity give the 'tightest' McCormick bound, used only to judge the approximate relaxations", "pages": "pp. 25, 27"},
+   {"pattern": "function space first, discretize second (Heuristic 8 evidence)", "evidence": "pointwise OBBT cost motivates a coarse-grid averaging analysed in function space; measured pointwise costs 2.14e4 s and 4.0e5 s", "pages": "pp. 7-8, 29, 32"}
+  ],
+  "transferable": [
+   "Aggregate a nonlinearity over a coarse partition before relaxing it, so that constraints and bound-tightening subproblems scale with the cells, not the nodes (pp. 8-9).",
+   "Approximate-relaxation lower bound = relaxed optimum minus Lipschitz constant times discretization error, proved by plugging the true minimizer into the approximation (pp. 9-10).",
+   "Use the Galerkin-type orthogonality of local averaging in a duality argument to gain an extra power of h (pp. 19-21).",
+   "OBBT soundness: show that shrinking the feasible set preserves the assumption behind the error bound (pp. 15-16); relax each computed bound by a small safety tolerance (pp. 26, 31).",
+   "Report a priori constants as a conservative-to-tight range and show at which mesh sizes the certified bound beats the trivial bound (pp. 28-29)."
+  ],
+  "coauthors": "Paul Manns",
+  "quotes": [
+   {"text": "Consequently, this article will be read as a recipe to first obtain a pointwise generalization of underestimators for nonconvexities as are known from finite-dimensional nonconvex optimization and then approximate this pointwise generalization with finitely many linear inequalities using approximation properties that are due to the PDE setting.", "page": 3},
+   {"text": "the a priori approximation quality of the lower bound only improves over trivial bounds when the mesh size is already quite fine and the involved constants can be estimated well.", "page": 32}
+  ]
+ },
+ {
+  "id": "S114",
+  "year": "2026",
+  "title": "A unified funnel restoration SQP algorithm",
+  "read_level": "full",
+  "contribution": "Restates funnel globalization as a filter with a single entry inside Uno's four-ingredient double-loop framework, gives trust-region and (first) line-search restoration funnel SQP methods, proves global convergence of the trust-region version by transferring filter-SQP lemmas, and shows on 278 CUTEst problems that the funnel slightly beats Uno's filter on constraint evaluations (read in arXiv v1).",
+  "problem_entry": "A framework claim (NCO solvers = four ingredients in a double loop) plus a method gap: funnels existed only for equality constraints, as an interior-point trust funnel, or as a tolerance tube without convergence analysis (pp. 2, 4).",
+  "key_idea": "A funnel is a filter of capacity one whose hmax bound is updated on h-type steps (p. 11); with the switching condition, Armijo on f-type steps and the funnel update tau <- (1-kappa)h + kappa*tau (pp. 8-9), and an always-feasible elastic l1 restoration QP (p. 7), the filter proofs and implementation can be reused (p. 2).",
+  "assumptions": "Compact iterate set, C2 functions, bounded Hessians (Assumption 1, p. 12); MFCQ for KKT (pp. 3-4); convergence to infeasible points not analysed (p. 7); global QP solution or a Cauchy-point substitute (Remark 1, p. 17); line-search global convergence not proved (p. 15).",
+  "proof_devices": [
+   "feasibility by a case split: infinitely many h-type steps give geometric funnel contraction theta = 1-(1-beta)(1-kappa); finitely many give a telescoping sum of the switching condition against f bounded below (Thm. 1, p. 14)",
+   "lemmas transferred from the filter-SQP convergence paper [14], one with an adjusted proof (Lemmas 1, 2, 4, pp. 15-16)",
+   "trust-region radius bound for funnel acceptability, Delta^2 <= 2*beta*tau/(mnM) (Lemma 3, p. 15)",
+   "finite termination of the inner loop by a case split on h^(k) > 0 vs h^(k) = 0 (Lemma 5, pp. 16-17)",
+   "radius-window contradiction: the f-type interval's upper end exceeds twice its lower end, so the inner loop finds a radius inside it (Thm. 2, pp. 17-18)"
+  ],
+  "experiments": "Uno on 278 small constrained CUTEst instances, funnel vs filter x trust region vs line search; same initial parameters and QP solver BQPD; kappa=0.5 picked as working well; performance profiles on constraint evaluations, scatter plots, step-type bars for the 49 diverging instances; convexification checked as the cause of line-search underperformance; powellbs and Maratos case studies; public logs; per-instance appendices (pp. 18-24, 27-37).",
+  "positioning": "Funnel examined 'through the lens of filter methods'; Gould-Toint, Curtis et al., Samadi and a 1995 Dundee tolerance-tube thesis credited; Fletcher-Leyffer-Toint and Wachter-Biegler filter proofs used as the baseline; rivals restated, not criticized (pp. 2-3, 9).",
+  "writing": "Numbered contributions (i)-(iv) with one 'to our knowledge' priority claim (p. 3); a modest 'slightly outperforms' (pp. 20, 24); a negative Maratos result about the new method stated plainly (p. 23); ingredient labels typeset beside the pseudocode (pp. 10-13).",
+  "limits_future": "No line-search convergence proof (p. 15); infeasible-point convergence not analysed (p. 7); needs SOC, watchdog or non-monotone steps for fast local convergence (p. 23); small CUTEst only; only baseline is the authors' own filter and kappa was tuned on the comparison set (p. 19, not stated as a limit by the authors); Uno to be extended to MPECs and robust optimization (p. 2).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "four swappable ingredients in a double loop; Uno presets mimic filterSQP, IPOPT and Byrd; funnel built by modifying the filter component", "pages": "pp. 2, 4, 12"},
+   {"method": "Method 2", "relation": "evidence", "note": "the filter base is rebuilt: the new globalization is read as a special filter and analysed with the filter proofs", "pages": "pp. 2-3, 11"},
+   {"method": "Method 3", "relation": "evidence", "note": "the authors' own new method is run on the Fletcher-Leyffer-Toint Maratos counterexample; the failure is reported with remedies", "pages": "pp. 23-24"},
+   {"method": "Method 5", "relation": "variant", "note": "same-solver, same-parameter fairness rule, per-instance failures and a 'slightly' claim, but the only baseline is the authors' own filter and kappa was chosen on the comparison set", "pages": "pp. 19-20, 27-37"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "reduce the new method to a degenerate case of an analysed one to reuse its proof", "evidence": "funnel interpreted as a filter with a single entry (N_F = 1), which allows a 'streamlined convergence proof' built from filter-SQP lemmas", "pages": "pp. 11, 15-16"},
+   {"pattern": "transfer proofs lemma by lemma (Heuristic 5 evidence)", "evidence": "Lemmas 1, 2, 4 taken from [14] with an adjusted proof where the problem format differs", "pages": "pp. 15-16"}
+  ],
+  "transferable": [
+   "Look for a parameter setting of an analysed acceptance test that reduces to the new one (funnel = filter with one entry) before writing a new convergence proof (p. 11).",
+   "Elastic l1 restoration QP with the trust region only on the original variables: always feasible, with LICQ from the elastic variables (p. 7).",
+   "Trust-region convergence via a radius window wider than the radius-reduction factor (pp. 17-18).",
+   "Feasibility proof by splitting on infinitely vs finitely many h-type steps (p. 14).",
+   "Report how many instances actually differ between methods and show step-type diagnostics only for those (pp. 21-22); test a suspected cause by moving that factor into the better configuration (p. 20)."
+  ],
+  "coauthors": "David Kiessling, Charlie Vanaret",
+  "quotes": [
+   {"text": "We can now interpret the funnel as a filter with a single entry, NF = 1, that corresponds to the upper bound on the constraint violation, and we update this upper bound on h-type iterations.", "page": 11},
+   {"text": "This demonstrates that the funnel method also suffers from the Maratos effect.", "page": 23}
+  ]
+ }
+]

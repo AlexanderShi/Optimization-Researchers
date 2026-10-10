@@ -1,0 +1,188 @@
+[
+  {
+    "id": "S145",
+    "year": "2025",
+    "title": "Binary quantum control optimization with uncertain Hamiltonians",
+    "read_level": "full",
+    "contribution": "A sample-based stochastic mixed-integer model for binary (SOS1) quantum pulse control under uncertain Hamiltonians with a mean/CVaR objective, solved by a penalized continuous relaxation (closed-form CVaR, gradients, L-BFGS-B or projected resampling Adam) and sum-up rounding on a finer grid, with rounding-gap bounds of order sqrt(dt), dt and o(dt)dt (read from arXiv v2, Jan 2024).",
+    "problem_entry": "Gap in the authors' own deterministic binary quantum control line and the GRAPE/CRAB/RL literature, which treat Hamiltonians as fixed; noise and inhomogeneous ensembles require robust controls (p. 2); stated as SP(S) with multiplicatively perturbed Hamiltonians and a risk measure (p. 5).",
+    "key_idea": "Penalize SOS1, relax, replace min over zeta in CVaR by a tail-sum closed form (Theorem 1) and differentiate away from ties (Theorem 2); solve the relaxation on a coarse grid and sum-up round on a C_SUR-times finer grid (pp. 7-12).",
+    "assumptions": "Known uncertainty distribution approximated by samples (pp. 4-5); F_X continuous, non-negative, bounded; SP(S) feasible (p. 12); for O(dt) an optimal SOS1 relaxation with zero objective (Assumption 3, p. 14); piecewise continuity of that control for o(dt)dt (p. 16); no ties for differentiability (p. 9).",
+    "proof_devices": [
+      "Two one-sided expansions around zeta* = F^{s*}(u) prove the CVaR closed form, pp. 7-8",
+      "Local invariance of the scenario ordering via omega = min gap and a continuity radius gives differentiability, pp. 9-10",
+      "Penalized optimum vs a feasible SOS1 point bounds F_L(u^con) <= F_UB; rest deferred to Fei et al. [19] and Sager-Bock-Diehl Cor. 8, p. 13",
+      "Cell-average control u^{d,SOS1} plus Sager-Zeile Theorem 2 gives F_L(u^con) <= C''dt/theta and the O(dt) bound, pp. 14-16",
+      "Smallest counterexample (T=1, S=1, explicit 4x4 Hamiltonians): relaxation 0.678 > rounded 0.673, so no lower bound across grids, pp. 16-17"
+    ],
+    "experiments": "Energy minimization (q=6, L-BFGS-B) and gmon circuit compilation (H2, LiH, modified Adam); out-of-sample 10x500 scenarios; in/out gap vs S (Table 1, p. 20), alpha sweep (pp. 20-21), % change vs the authors' deterministic model incl. unfavourable alpha=0 entries (Table 2, p. 23), CVaR calibration (Table 3, p. 23), equal-compute S x K comparison (p. 26), CPU tables (pp. 24, 29); the only baseline is the authors' deterministic model; Table 2 caption swaps the alpha labels relative to the text (pp. 22-23).",
+    "positioning": "Separates deterministic quantum control from robust and ensemble control (pp. 1-2); positioned as the binary stochastic extension of the authors' own [19], [20] (pp. 2-3); SUR theory cited from Sager et al., Sager-Zeile, Leyffer-Manns-Winckler, Manns-Kirches, noting that rounding on a different grid is new (p. 11).",
+    "writing": "First/Second/Third contribution list (p. 2); full proofs where new, deferred where reused (p. 13); numbered assumptions with a one-clause justification (p. 12); explicit counterexample remark (p. 16); usage rule by problem class in the conclusion (p. 30).",
+    "limits_future": "CPU time grows exponentially with qubits and with T and S (pp. 24, 29); future: time evolution on quantum hardware, model-free/RL methods for richer uncertainty (p. 30); realism of the zero-objective Assumption 3 not discussed (p. 14).",
+    "method_links": [
+      {"method": "Method 2", "relation": "evidence", "note": "Home class (mixed-integer optimal control with SUR and rounding-error theory) carried into quantum control; pulse problem recast as binary SOS1 control.", "pages": "pp. 3-5, 11-16"},
+      {"method": "Method 3", "relation": "evidence", "note": "Remark 4: smallest breaking instance (T=1, S=1, 4x4) shows the relaxation is not a lower bound for finer-grid rounding; it is run and both values are printed.", "pages": "pp. 16-17"},
+      {"method": "Method 5", "relation": "variant", "note": "Out-of-sample testing, an equal-compute rule, a rule of thumb by problem class and unfavourable entries kept; but the only baseline is the authors' own deterministic model and the cited robust-control methods are not run.", "pages": "pp. 2, 23, 26, 30"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Coarse-to-fine discretization (solve coarse, round or refine fine)", "evidence": "Relaxation solved on T steps, SUR on C_SUR*T steps; the bound shows C_SUR controls the dominant term.", "pages": "pp. 11, 16"},
+      {"pattern": "Collapse an inner optimization in closed form before gradient methods", "evidence": "The min over zeta in CVaR is replaced by a tail-sum formula, then differentiated away from ties.", "pages": "pp. 7-10"}
+    ],
+    "transferable": [
+      "Closed-form CVaR at the eta-tail threshold scenario, proved by two one-sided expansions, differentiable away from ties (pp. 7-10)",
+      "Separate the solve grid from the rounding grid and bound the SUR error with a term that shrinks with C_SUR (pp. 11-13, 16)",
+      "Refute a plausible bound with the smallest numerical counterexample and explicit matrices (p. 17)",
+      "Compare sample sizes for stochastic methods at a fixed scenarios x iterations budget (p. 26)",
+      "Check a risk model's calibration by the out-of-sample share below the in-sample (1-eta) percentile (Table 3, p. 23)"
+    ],
+    "coauthors": "Xinyu Fei (first), Lucas T. Brady, Jeffrey Larson, Siqian Shen",
+    "quotes": [
+      {"text": "Therefore, we solve the continuous relaxation using fewer time steps T and round the solutions using more time steps TR to achieve a balance between computational time and the difference between continuous and binary solutions.", "page": 11},
+      {"text": "In numerical studies we empirically show that L-BFGS-B is better for quantum problems aiming to minimize the energy of a quantum state, while Adam performs better on problems minimizing the infidelity compared with a target quantum operator.", "page": 10}
+    ]
+  },
+  {
+    "id": "S150",
+    "year": "2025",
+    "title": "Optimal Experimental Design of a Moving Sensor for Linear Bayesian Inverse Problems",
+    "read_level": "full",
+    "contribution": "Formulates A/D-optimal design of a continuously measuring mobile sensor for linear PDE-constrained Bayesian inverse problems as a control-parameterized, obstacle-constrained smooth NLP whose time discretization stays consistent as dt -> 0, derives trace/determinant gradients, and solves it with IPOPT and coarse-to-fine warm starts on a convection-diffusion pollutant model.",
+    "problem_entry": "Posterior uncertainty depends on the sensor path; existing work covers waypoint/real-time steering, stationary sensor selection and continuous paths for deterministic or filtering problems (pp. 1-2); stated as program (22) over controls and path (p. 8).",
+    "key_idea": "Linearity makes the posterior covariance data-independent, which removes the bilevel structure (p. 7); a control ODE for the path gives explicit constraints (pp. 4, 12-13); noise as an L2([0,T]) operator plus linear-in-time interpolation keeps the Fisher information consistent under refinement (pp. 9-11, 22).",
+    "assumptions": "Linear, well-defined PDE operator (p. 3); kernel bound (6) (p. 5); Gaussian prior and additive Gaussian noise with an SPD covariance operator (pp. 5-6); obstacles as ellipsoids/rectangles, smooth near feasibility (p. 8); Lipschitz kernel and either a C1 kernel or an H1 state with a ball kernel for the gradients, global C1 called a strong assumption (pp. 13-15).",
+    "proof_devices": [
+      "Continuity of G(p^h) via a Lipschitz kernel and the L1 <= sqrt|Omega| L2 bound (Prop. 1), pp. 9, 28-29",
+      "A/D gradients by chaining the scalar-by-matrix derivative, the derivative of an inverse and trace symmetry; trace/det are differentiable though eigenvalues are not (Prop. 2), pp. 13-14, 29-30",
+      "Leibniz rule / change of variables to B_r(0) for differentiability of G (Cor. 2-3), pp. 14-15, 31",
+      "No optimizer convergence proof: a stationary point is 'expected' (p. 13); dt-consistency shown numerically (pp. 21-22)"
+    ],
+    "experiments": "Convection-diffusion with Navier-Stokes velocity, 32,096 cubic FE dofs, ~70 s forward solve (p. 16); grid search over (theta0, omega0) shows nonconvexity, three starts (pp. 17-18); Table 1 reports per-start cost, A/D change, iterations, evaluations, time, termination code, constraint violation and NLP error, including a start that worsens the design and one 'acceptable' termination (pp. 19-20); linear convergence under dt refinement and warm-start halving down to 1 iteration (pp. 21-23); averaged-measurement radii (p. 24); M=25 PCA field, A-OED x0.859 (pp. 25-26); no competing design method.",
+    "positioning": "Between mobile-platform optimal control and PDE-constrained OED; sensor-selection approaches incl. combinatorial integral approximation cited as stationary alternatives (p. 2); Bayesian and deterministic settings called structural analogues (p. 3); no criticism of prior work.",
+    "writing": "Fig. 1 maps the nested OED structure (p. 3); running examples introduced before use (pp. 4-5); every numerical anomaly is explained (pp. 19-21, 24); moderate hedging ('we expect', p. 13).",
+    "limits_future": "Linear PDEs, a single sensor, fields only via PCA reduction (pp. 25, 27-28); future: expected information gain for nonlinear maps, infinite-dimensional parameters, multifidelity reduction, aleatoric robustness, cheaper initial guesses (pp. 27-28); the multi-sensor extension is called straightforward without demonstration (p. 27).",
+    "method_links": [
+      {"method": "Method 2", "relation": "evidence", "note": "Home NLP toolkit (interior point, quasi-Newton, warm starts with multipliers) carried into Bayesian OED; path design recast as a smooth control-parameterized NLP.", "pages": "pp. 2, 12-13, 22"},
+      {"method": "Method 6", "relation": "evidence", "note": "Formulation fixed first: linearity removes the bilevel structure, the ODE parameterization makes constraints explicit, obstacles are smooth near feasibility, and the noise operator is chosen for discretization consistency.", "pages": "pp. 4, 7-8, 10-11, 22"},
+      {"method": "Method 5", "relation": "variant", "note": "Failures and termination codes are kept per run (start 2 worsens the design, start 3 ends only 'acceptable'), but no competing design method is run. Also evidence for Heuristic 8: the cost extrapolation to >29 h justifies warm starts (p. 22).", "pages": "pp. 19-20, 22"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Coarse-to-fine continuation as cost device and consistency check", "evidence": "Grid halving with interpolated controls and multipliers cuts iterations from 142 to 1; pointwise -> averaged measurements used as a warm start.", "pages": "pp. 11-12, 21-24"},
+      {"pattern": "Collapse an inner optimization in closed form before optimizing", "evidence": "The data-independent linear-Gaussian posterior covariance replaces the bilevel inner inverse problem.", "pages": "p. 7"}
+    ],
+    "transferable": [
+      "For linear-Gaussian inverse problems, design directly on Sigma_post(p) and skip the bilevel formulation (pp. 6-7)",
+      "Parameterize a moving device's path by a control ODE so physical limits become control bounds and obstacles become explicit constraints (pp. 4, 8, 12-13)",
+      "Model the noise as an operator on L2([0,T]) so the information converges under time refinement; verify by refining dt (pp. 10-11, 21-22)",
+      "Differentiate trace/determinant criteria instead of eigenvalues, reducing each gradient entry to one trace (pp. 13, 29-30)",
+      "Run a cheap grid search over a reduced two-parameter control family to map the nonconvexity and pick several starts (pp. 17-18)",
+      "Warm-start each refinement level with interpolated controls and multipliers; report the falling iteration count and initial NLP error (pp. 22-23)"
+    ],
+    "coauthors": "Nicole Aretz (first), Thomas Lynn, Karen Willcox",
+    "quotes": [
+      {"text": "The fact that the forward model is linear implies that the posterior covariance matrix does not depend on observational data, or on the posterior mean. As such, we can solve the OED problem efficiently, which would otherwise be a bilevel optimization problem.", "page": 7},
+      {"text": "Because all functions (explicit and implicit) are smooth, we expect the nonlinear solvers to converge to a stationary point of (30).", "page": 13}
+    ]
+  },
+  {
+    "id": "S164",
+    "year": "2025",
+    "title": "An Alternating Direction Method of Multipliers for Topology Optimization",
+    "read_level": "full",
+    "contribution": "A short paper proposing ADMM for binary, TV-regularized, PDE-constrained heat-sink topology optimization: a continuous SIMP copy solved by IPOPT and a binary TV/budget copy solved by a randomized connected-region heuristic, with the fixed ADMM penalty replaced by a funnel accept/reject rule; one test problem and an appendix convergence argument.",
+    "problem_entry": "Heat-sink design with two materials; a binary design field with TV regularization because TO is ill-posed (p. 1); a discretized MINLP whose difficulties are integer variables, the nonsmooth TV term and nonconvex compliance (p. 2).",
+    "key_idea": "Split w into a continuous v (PDE, SIMP) and a binary w (TV, budget), dualize v = w, alternate Cont (IPOPT) and Disc (randomized heuristic after Yang [4]), and update the penalty with the funnel from funnel SQP [5] (pp. 3-4).",
+    "assumptions": "Piecewise-constant controls, edge-weighted TV (p. 2); block-Lipschitz augmented Lagrangian (Assumption 1, p. 7); Theorem 1 assumes L bounded below and iterates inside the funnel for all j, n (p. 7); Hessian lower bound in Claim 1 (p. 8).",
+    "proof_devices": [
+      "Two-case argument: finitely many penalty updates (funnel contraction) vs rho -> infinity, p. 7",
+      "Claim 1: Taylor expansion of F_w(v) about w plus Cauchy-Schwarz bounds ||v* - w|| by ||grad F_w||/(rho/2 + c), p. 8",
+      "Claim 2: the binary feasible set is finite, so G(w*) - G(w) is bounded and for large rho Disc minimizes ||v* - w||^2, pp. 8-9",
+      "Rigor caveat: the printed contraction chain ends '<= -zeta(1-beta)tau' with theta = zeta(1-beta), where the factor should be 1 - zeta(1-beta); the steps are labelled Claim/Argument, and the funnel hypothesis is close to the conclusion, pp. 4, 7"
+    ],
+    "experiments": "One unit-square problem, h = 1/32 (2048 elements), alpha = 5e-5; evolution plots and ||w-v||^2 (p. 5); a scatter over initial rho shows funnel acceptance for rho >~ 2.4e-2 (pp. 4-5); runtime vs mesh, 40 iterations, medians and quartiles (pp. 5-6); the claim of outperforming Gurobi rests only on Fig. 3, with no settings, gaps or solution-quality comparison (p. 5).",
+    "positioning": "Five references; ADMM for integer TV-regularized PDE-constrained TO; discrete subproblem from Yang [4], funnel from Kiessling-Leyffer-Vanaret [5] (pp. 3-6); no discussion of other MIPDECO methods or nonconvex ADMM theory.",
+    "writing": "Extended-abstract style with no contribution list; hedged abstract ('facilitating convergence under appropriate conditions', p. 1); theory relegated to an appendix titled 'asymptotic convergence bounds' (p. 6); the sign of lambda differs between (4) and (5)-(6) (pp. 3-4).",
+    "limits_future": "No limitations or future-work section; the only reported weakness is sensitivity to the initial penalty (p. 4).",
+    "method_links": [
+      {"method": "Method 2", "relation": "evidence", "note": "Home globalization (funnel from funnel SQP) carried into ADMM as a penalty-update rule; the continuous block is handed to an IPOPT-class NLP solver.", "pages": "pp. 3-4"},
+      {"method": "Method 1", "relation": "variant", "note": "Decomposition into separate continuous-NLP and discrete-combinatorial blocks, each with its own specialized solver, rather than integration at the iteration level.", "pages": "pp. 3-4"},
+      {"method": "Method 5", "relation": "contradiction", "note": "The claim of outperforming Gurobi rests on a runtime figure with no fairness rule, solver settings or solution quality. Also a Taste 3 variant: convergence is argued only at Claim/Argument level, with an algebra slip.", "pages": "pp. 5-9"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "NLP globalization acceptance tests transplanted to non-NLP outer loops", "evidence": "A funnel accept/reject test on the ADMM coupling residual drives penalty increases (compare S167 p. 5).", "pages": "p. 4"}
+    ],
+    "transferable": [
+      "Split a mixed-integer PDE design variable into a continuous SIMP copy that carries the PDE and a binary copy that carries the combinatorial regularizer, with the budget duplicated in both (p. 3)",
+      "Replace ADMM's fixed penalty with a funnel: accept if residual <= beta*tau, shrink tau by a convex combination, raise rho on rejection (p. 4)",
+      "Show penalty sensitivity as a scatter of runs coloured by the final/initial penalty ratio (Fig. 2, pp. 4-5)"
+    ],
+    "coauthors": "Harsh Choudhary (first, corresponding), Dominic Yang",
+    "quotes": [
+      {"text": "Unlike traditional ADMM methods that use a fixed penalty parameter, we adopt the funnel-based strategy in [5] to adaptively increase the penalty when constraint infeasibility is high.", "page": 4},
+      {"text": "The choice of initial penalty parameter is instrumental in the convergence", "page": 4}
+    ]
+  },
+  {
+    "id": "S165",
+    "year": "2025",
+    "title": "Optimizing Paths for Adaptive Fly-Scan Microscopy: An Extended Version",
+    "read_level": "full",
+    "contribution": "An analytic, iterative adaptive fly-scan framework for x-ray microscopy (surrogate uncertainty-plus-gradient loss optimized by ADAM, gradient-score initialization, nearest-neighbour routing, IDW completion) that reconstructs four test images from under 30% of raster samples and beats an equal-budget random-anchor baseline.",
+    "problem_entry": "Raster fly-scans waste time on uniform regions; adaptive methods exist only for step-scans and rely on data-hungry deep learning (pp. 2-3); stated as iterative anchor selection by a surrogate loss, because the true reconstruction error needs the unknown ground truth (pp. 3-4).",
+    "key_idea": "A loss -(alpha log U + log ||grad I||) that balances exploration and exploitation like a Bayesian-optimization acquisition function, ADAM on the anchor coordinates, gradient-proportional initialization, a greedy nearest-neighbour path instead of TSP, and IDW completion (pp. 4-5).",
+    "assumptions": "Noise-free images, sigma = 1 (pp. 7-8); simulated scan physics and timings (p. 5); random 30-anchor initial scan (p. 5); raster fly-scan used as ground truth (p. 6); hardware assumed able to follow sharp turns, flagged as a limitation (p. 8).",
+    "proof_devices": [],
+    "experiments": "Four images (synthetic, phantom, cameraman, APS WSe2), 10 runs each on an M3 MacBook Air (p. 5); PSNR/SSIM against the initial scan and equal-budget random anchors, e.g. 23.7 vs 15.1 dB and 28.3 vs 21.3 dB (Table I, p. 6); alpha and l sensitivity on WSe2 within 2-2.5 dB (pp. 7-8); no published adaptive-scan baseline; table/figure inconsistencies (262139 total samples for 256x256, Fig. 5(c) mislabel; pp. 6-8).",
+    "positioning": "Two-axis taxonomy raster/adaptive x fly/step (p. 3); claims to be the first adaptive fly-scan path work (pp. 8-9); positioned against deep-learning step-scan methods on data and cost grounds (pp. 2-3).",
+    "writing": "Three contribution bullets (p. 3), numbered experiment objectives (p. 5), concrete limitations with mechanisms (pp. 8-9), some promotional wording (p. 7).",
+    "limits_future": "A random initial path can miss small feature regions, sharp turns may be infeasible, and IDW can create false gradients from noise (pp. 8-9); future: self-adaptive initial scans, hardware-aware penalties, denoising, deep feature extractors, 3D ptycho-tomography (p. 9).",
+    "method_links": [
+      {"method": "Method 2", "relation": "variant", "note": "The area is entered through Argonne facility collaborators (APS data) but without the home NLP/MINLP toolkit; ADAM and greedy routing replace it. Also a mild contradiction of Heuristic 8: the exact TSP is dismissed as expensive without any size or time estimate.", "pages": "pp. 3-5, 7"},
+      {"method": "Method 5", "relation": "variant", "note": "An equal-budget random baseline isolates the loss and the limitations are concrete, but no published adaptive method is compared and the reference is the raster scan, not the true object.", "pages": "pp. 5-6, 8-9"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Surrogate acquisition objective when the true error is uncomputable", "evidence": "An uncertainty (exploration) plus image-gradient (exploitation) loss replaces the unavailable ||reconstruction - truth||.", "pages": "p. 4"}
+    ],
+    "transferable": [
+      "A log-sum surrogate of an uncertainty term and a signal-gradient term, with a single exploration/exploitation weight to study (pp. 4, 7-8)",
+      "Initialize a local optimizer by sampling points in proportion to the current reconstruction's gradient magnitude (p. 4)",
+      "Isolate a selection rule's value against uniform random selection at the same sample budget (Table I, p. 6)"
+    ],
+    "coauthors": "Yu Lu (first), Thomas F. Lynn, Ming Du, Zichao Di",
+    "quotes": [
+      {"text": "However, considering the dataset requirements and training time, we propose an analytical adaptive fly-scan framework rather than employing deep learning-based methods.", "page": 3},
+      {"text": "This issue arises because the proposed framework focuses solely on path efficiency.", "page": 8}
+    ]
+  },
+  {
+    "id": "S167",
+    "year": "2025",
+    "title": "Sampling Imbalanced Data with Multi-objective Bilevel Optimization",
+    "read_level": "full",
+    "contribution": "MOODS, a multi-objective bilevel sampling algorithm that grows a training set by SVM-SMOTE and majority draws, fully retrains, and accepts a change only if both minority and overall validation F1 improve, plus an epsilon/delta non-overlapping diversification metric based on the network's 1-D output; best or tied F1 on six of seven UCI datasets.",
+    "problem_entry": "Imbalanced two-class learning: reweighting overfits and naive resampling adds no diversity (p. 1); new samples must enhance minority diversity and avoid overlap, and no metric measures this (pp. 1, 3).",
+    "key_idea": "The upper level selects the training subset to minimize (1 - F1_min, 1 - F1) on validation data and the lower level trains the weights; outer accept/reject with probability halving for rejected synthetic points; the z_w* logit serves as a 1-D proxy for the overlap and variance metrics (pp. 4-7).",
+    "assumptions": "Two classes, binary cross-entropy, disjoint train/validation/test sets (pp. 3-4); fixed architecture for the z-proxy (p. 6); no convergence assumptions, and convergence explicitly not confirmed (p. 5).",
+    "proof_devices": [],
+    "experiments": "Seven UCI datasets, 335-376,640 points (Table 1, p. 8); identical architecture for all methods, 5 seeded runs (p. 7); baselines rerun except SMOTified-GAN, taken from its paper (p. 8); no hyperparameter tuning (p. 8); best or tied on six datasets, loses on Spambase (pp. 8, 10); per-class F1 mixed (Table 3, p. 9); inconsistencies: Spambase overlap 3 vs 10, Connect4 size 376,640 vs 176,640, integer-defined Delta-O reported as decimals (pp. 6, 8-10).",
+    "positioning": "Reviews SMOTE variants, overlap/diversity methods and GAN hybrids, criticizing GANs for instability and mode collapse (pp. 2-3); claims that it and the authors' own MUBO are the only bilevel methods that rebalance the training data; separated from AutoBalance/NAS bilevel methods (p. 3).",
+    "writing": "Two contributions in the abstract; 'state-of-the-art performance' headline (p. 1); candid about the unsatisfactory Pareto point and the missing convergence (p. 5); the authors' own metric is introduced to verify and explain the F1 gains (pp. 5, 8).",
+    "limits_future": "No convergence confirmation (p. 5), no hyperparameter tuning (p. 8), Spambase may need a richer model (p. 10); future: the multi-class case and alternative convergence criteria for the upper level (p. 10).",
+    "method_links": [
+      {"method": "Method 2", "relation": "evidence", "note": "Home bilevel/leader-follower modelling (MPEC line) carried into ML training-set selection; the training set is recast as an upper-level decision.", "pages": "pp. 4-5"},
+      {"method": "Method 5", "relation": "variant", "note": "A fairness rule (identical architecture), reruns, and disclosure of the non-rerun baseline and of the losing dataset; but ties are worded as wins, there are no version stamps, and the numbers are inconsistent across tables. The open convergence gap is written down (Workflow B checkpoint, p. 5).", "pages": "pp. 5, 7-10"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "NLP globalization acceptance tests transplanted to non-NLP outer loops", "evidence": "A dominance test (both objectives must improve) with reject-and-shrink acts like a filter acceptance test on training subsets (compare S164 p. 4).", "pages": "p. 5"}
+    ],
+    "transferable": [
+      "Turn resampling into a bilevel algorithm: propose a small training-set change, retrain fully, accept only if every validation objective improves, and down-weight rejected proposals (Algorithm 1, p. 5)",
+      "Evaluate a sampling method through the model: with a fixed architecture, use the logit as a 1-D proxy and report minority overlap across the threshold and the log10 variance gain (pp. 6-7)",
+      "When a competitor cannot be rerun, use its published numbers and say so in the experimental section (p. 8)"
+    ],
+    "coauthors": "Karen Medlin (first), Krishnan Raghavan",
+    "quotes": [
+      {"text": "Despite strong empirical findings, we did not find a Pareto front so have not yet confirmed convergence nor that the objective is being achieved.", "page": 5},
+      {"text": "Note also that there was no attempt made in this paper to optimize the hyper-parameters of the model.", "page": 8}
+    ]
+  }
+]

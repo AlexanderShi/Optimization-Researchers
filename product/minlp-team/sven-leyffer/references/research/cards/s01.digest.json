@@ -1,0 +1,257 @@
+[
+ {
+  "id": "S078",
+  "year": "1997",
+  "title": "Computing sparse Hessian and Jacobian approximations with optimal hereditary properties",
+  "read_level": "full",
+  "contribution": "Estimates a sparse Hessian (or Jacobian) as the least-squares fit to all m recent quasi-Newton conditions via a constrained Procrustes problem, gives near-tight uniqueness conditions without a non-sparse-diagonal assumption, and solves the resulting system by matrix-free CG; preliminary tests show no gain over L-BFGS.",
+  "problem_entry": "Dense quasi-Newton updates fill in, limited-memory updates ignore sparsity, and earlier sparse updates assume a non-sparse diagonal; seek a sparse B with B Gamma = Delta for the whole bundle of m difference pairs (pp. 2-3, 7).",
+  "key_idea": "Constrained Procrustes problem min ||B Gamma - Delta||_F with symmetry and sparsity; KKT gives a Lyapunov-type equation, vectorized to a Kronecker-sum system reduced to the free lower-triangular entries, solved by warm-started inexact CG (pp. 3-5, 11-12).",
+  "assumptions": "f in C2 or r in C1, symmetric sparsity pattern (p. 2); uniqueness needs the row-independence condition of Theorem 1 (p. 7); the converse needs a non-sparse diagonal and no LDL^T fill-in (p. 7).",
+  "proof_devices": [
+   "Column-by-column contradiction showing K positive definite on the sparse symmetric space (Theorem 1, p. 7)",
+   "Null-vector construction from the largest dependent index j0, kept sparse by the no-fill-in assumption (Theorem 2, pp. 7-8)",
+   "Block-diagonal reduction giving an iff condition for the Jacobian case (Theorem 3, p. 10)",
+   "Three-variable tridiagonal example showing column independence of Gamma is not sufficient (p. 6)"
+  ],
+  "experiments": "Matlab trust-region code on chained Rosenbrock and a boundary value problem (n = 10, 100) against L-BFGS (m = 2, 5) and Newton; iterations, gradient and function calls; no improvement over L-BFGS, flop cost per iteration an order of magnitude higher (pp. 12-13).",
+  "positioning": "Contrasted point by point with Toint (PSB-like, no quadratic termination), Fletcher 1995 (weighted norm, non-sparse diagonal) and Curtis-Powell-Reid / Powell-Toint (prescribed differencing directions, extra evaluations) (pp. 7, 9-10).",
+  "writing": "Plain admission of disappointment in the conclusion, with the reason the comparison meter is rough (p. 13).",
+  "limits_future": "No obvious sparsity in P^T K P, Theorem 1 hard to verify, disappointing numerics; future: make it efficient and embed it in a trust-region SQP (pp. 11, 13).",
+  "method_links": [
+   {"method": "Method 5", "relation": "evidence", "note": "Reports that the new method does not beat L-BFGS and flags that iteration counts are only a rough meter because iteration costs differ", "pages": "p. 13"},
+   {"method": "Method 3", "relation": "evidence", "note": "Small worked example marks the edge of a sufficient condition (column independence fails to ensure definiteness)", "pages": "pp. 6, 9"},
+   {"method": "Method 2", "relation": "evidence", "note": "Weak: the stated next step is to carry the update into an SQP method", "pages": "p. 13"}
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "When per-iteration costs differ, say iteration counts give only a rough comparison and report flops per iteration alongside (p. 13).",
+   "Warm-start the inner iterative solve from the previous outer iterate's answer and tighten its tolerance as the outer method converges (p. 11).",
+   "Pair a sufficient condition with a near-necessary one under a stated structural assumption, plus a tiny example where the weaker condition fails (pp. 6-8)."
+  ],
+  "coauthors": "Roger Fletcher, Andreas Grothey",
+  "quotes": [
+   {"text": "Overall, we have been rather disappointed by these preliminary experiments", "page": 13},
+   {"text": "It should not come as a surprise that Newton's method is the best of the three methods since it utilizes the most problem information (exact Hessian) of the three methods.", "page": 13}
+  ]
+ },
+ {
+  "id": "S075",
+  "year": "1998",
+  "title": "Comparison of certain MINLP algorithms when applied to a model structure determination and parameter estimation problem",
+  "read_level": "full",
+  "contribution": "Formulates joint model-structure selection and parameter estimation (AIC minimization) for FTIR calibration as a convex MIQP inside a covariance-relaxation loop and compares OA, ECP and QP-based B&B, finding opposite rankings by CPU time and by function evaluations.",
+  "problem_entry": "Application-driven: AIC minimization with binary switches per parameter is an MINLP; FTIR instance with up to 16,800 variables reduced to 600 and 1,200 (pp. 1-3, 7-8).",
+  "key_idea": "Solve the convex known-covariance objective J1 repeatedly and re-estimate the covariance in an outer relaxation loop instead of attacking the nonconvex J2; compare three convex-MINLP algorithms on it (pp. 4-6).",
+  "assumptions": "Linear model, normal i.i.d. residuals, convexity for OA/ECP global optimality (p. 5); the covariance relaxation has no convergence proof (p. 4).",
+  "proof_devices": [],
+  "experiments": "Two FTIR instances; bound curves versus CPU time and versus function evaluations (Figs 2-6); B&B fastest in CPU (15 s vs 60 s OA, 480 s ECP) but ECP fewest evaluations (65 vs ~2000, ~6000); B&B counts Hessian-vector products as a proxy (pp. 8-11).",
+  "positioning": "Places OA (Duran-Grossmann), ECP (Westerlund-Pettersson) and Fletcher-Leyffer MIQP B&B as interchangeable convex-MINLP solvers and does not crown one (pp. 5-6, 12).",
+  "writing": "Conclusion by bottleneck profile rather than winner; all methods 'can be recommended' (p. 12).",
+  "limits_future": "One application class; nonconvex J2 not treated; relaxation unproved (pp. 4, 12).",
+  "method_links": [
+   {"method": "Method 5", "relation": "evidence", "note": "Two meters with opposite rankings, a caveat on the B&B proxy counter, conclusion by bottleneck not winner", "pages": "pp. 8-9, 12"},
+   {"method": "Method 6", "relation": "evidence", "note": "Chooses the convex J1 formulation and moves the nonconvexity into an outer re-estimation loop", "pages": "pp. 4, 7"},
+   {"method": "Method 4", "relation": "evidence", "note": "Indirect: the model reappears as a large convex MIQP application in S039 (S039 p. 2)", "pages": "p. 6"}
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Plot bounds against two meters (CPU time and function evaluations) and say which bottleneck each exposes (pp. 8-9, 12).",
+   "When a solver cannot report the shared meter, name the proxy counted and what else it includes (p. 9).",
+   "Fix a nuisance parameter that makes the problem nonconvex, solve the convex problem globally, and update the parameter in an outer loop, stating that loop is unproved (p. 4)."
+  ],
+  "coauthors": "Hans Skrifvars, Tapio Westerlund",
+  "quotes": [
+   {"text": "In the case of the QPbased B&B method it is not possible to count function evaluations separately.", "page": 9},
+   {"text": "The ECP spends most of the time in solving the MILP, while the B&B again spends most time in solving the non-linear functions.", "page": 12}
+  ]
+ },
+ {
+  "id": "S109",
+  "year": "1998",
+  "title": "On the Global Convergance of an SLP-Filter Algorithm",
+  "read_level": "unreadable",
+  "contribution": "",
+  "problem_entry": "",
+  "key_idea": "",
+  "assumptions": "",
+  "proof_devices": [],
+  "experiments": "",
+  "positioning": "",
+  "writing": "",
+  "limits_future": "",
+  "method_links": [],
+  "new_pattern_candidates": [],
+  "transferable": [],
+  "coauthors": "Roger Fletcher, Philippe L. Toint",
+  "quotes": []
+ },
+ {
+  "id": "S026",
+  "year": "1999",
+  "title": "A bundle filter method for nonsmooth nonlinear optimization",
+  "read_level": "full",
+  "contribution": "Replaces the exact penalty in Kiwiel-type constrained bundle methods by a filter with envelope, giving an SLP trust-region bundle-filter method for convex nonsmooth constrained problems with a global convergence proof to nonsmooth Fritz-John points.",
+  "problem_entry": "Nonsmooth convex constrained problems arising as Benders master problems (stochastic NLP); Kiwiel's penalty approach suffers from subgradients of widely varying magnitude (pp. 1-2).",
+  "key_idea": "Keep the bundle LP with trust region; accept steps by a tilted-envelope filter with f-type/h-type sufficient reduction, null steps to enrich the bundle, and a restoration phase (pp. 4-9).",
+  "assumptions": "A1 bounded polyhedral X; A2 convex locally Lipschitz f, c; A3 one arbitrary subgradient per point (pp. 1-2); single constraint, extension asserted (p. 2).",
+  "proof_devices": [
+   "Nonsmooth Fritz-John conditions by contradiction via upper semicontinuity and the mean-value theorem (Lemma 2.1, p. 3)",
+   "Finite inner iteration by rescaling the LP by rho to a rho-independent LP over the tangent cone (Lemma 4.1, pp. 9-10)",
+   "Null steps change the LP by at least sigma2*Delta_l or beta*tau (Remark 4.2, pp. 10-11)",
+   "Four-case split A-D with one lemma per case (p. 11; Lemmas 4.3-4.5, Theorem 4.6, pp. 11-15)",
+   "LP consistency for rho in an interval [h/eps, kappa] via Lipschitz bound on shifted cuts (Lemma 4.4, pp. 12-13)"
+  ],
+  "experiments": "none",
+  "positioning": "Closest to Kiwiel 1987, differing only in the globalization; cites the smooth filter papers and Audet-Dennis pattern-search filter (pp. 2, 6).",
+  "writing": "Short report; advantages of filters asserted in the introduction (no penalty parameter, beneficial nonmonotonicity) without numbers (p. 2).",
+  "limits_future": "No numerical results; feasibility lemma relies on an unpublished Chin-Fletcher report (NA/XXX); multi-constraint case and restoration only sketched (pp. 2, 9, 11, 15).",
+  "method_links": [
+   {"method": "Method 2", "relation": "evidence", "note": "Home device (filter) carried into nonsmooth constrained optimization in place of the field's penalty; theory before numbers here, contrary to Heuristic 3", "pages": "pp. 2, 6-7"}
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "To carry a globalization device into a new class, keep the class's standard model (bundle LP) intact and swap only the acceptance test (pp. 4-7).",
+   "To prove an inner loop finite as the trust region shrinks, rescale the subproblem by the radius so its solution becomes radius-independent (pp. 9-10).",
+   "Organize a convergence proof by an exhaustive case split on the iteration's long-run behaviour, one lemma per case (p. 11)."
+  ],
+  "coauthors": "Roger Fletcher",
+  "quotes": [
+   {"text": "Instead the novel concept of a filter [6] is used to force global convergence.", "page": 2},
+   {"text": "Filter methods have several advantages over penalty function methods.", "page": 2}
+  ]
+ },
+ {
+  "id": "S055",
+  "year": "1999",
+  "title": "A note on feasibility in Benders decomposition",
+  "read_level": "full",
+  "contribution": "Gives a three-variable convex NLP on which Benders decomposition with standard feasibility cuts converges to a feasible non-stationary point, checks it against the hypotheses of the published convergence theorems, and repairs the method with a relaxed-subproblem optimality cut, admitting a residual gap in the proof.",
+  "problem_entry": "Published Benders convergence needs finite Y, all subproblems feasible, or finite dual sets, none of which hold for general NLP (p. 3); counterexample (P1) with two circles of radius sqrt(ln y) (pp. 3-4).",
+  "key_idea": "Feasibility cuts carry no objective information; when S(y) is infeasible also solve an enlarged NLP with constraints relaxed to m1*c+ (Slater holds) and add its optimality cut (pp. 6-7).",
+  "assumptions": "A1 convex C2 f, c; A2 compact polyhedral X, Y; A3 Slater (p. 2).",
+  "proof_devices": [
+   "Closed-form Benders recursion y(k+1) = (2 - ln y(k)) y(k) < e via substitution y = e*gamma and monotonicity (Lemma 2.1, p. 5)",
+   "Hypothesis check against Geoffrion Thm 2.5 and Flippo-Rinnooy Kan Thm 3.3 before claiming an error (section 2.1, p. 5)",
+   "Underestimating cut from aggregating outer-approximation linearizations with KKT multipliers and normal-cone element (Lemma 3.4, p. 9)",
+   "Bounded multipliers from Slater on the enlarged problem (Lemma 3.1, p. 8; Theorem 3.1, pp. 9-10)"
+  ],
+  "experiments": "none (analytic example only)",
+  "positioning": "Does not call Geoffrion or Flippo-Rinnooy Kan wrong: their assumptions exclude the example; relevance extended to bundle-based decomposition (pp. 5, 10).",
+  "writing": "Section 3.2 retains working-note voice ('This is Roger's approach', 'I am not sure...', a rhetorical question about decomposition) inside a numbered report (pp. 11-12).",
+  "limits_future": "Theorem 3.1 only excludes values above f* + eps1*m, and eps1*m can be O(1) (Remarks 3.1, 3.3, pp. 8, 10); penalty and augmented-Lagrangian alternatives left open (pp. 11-12).",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "Smallest convex counterexample, hypothesis check before claiming an error, redesign of the infeasible-subproblem step; the canonical case [03 E44]", "pages": "pp. 3-7"},
+   {"method": "Method 6", "relation": "evidence", "note": "Failure traced to how infeasible subproblems are formulated, not to Benders as such", "pages": "pp. 3, 6"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "Admit the residual gap of your own theorem in print", "evidence": "Remark 3.3 states the proof only excludes f-hat > f* + eps1*m and that this can be O(1); working notes on open alternatives left in the report", "pages": "pp. 10-12"}
+  ],
+  "transferable": [
+   "Build the counterexample so the iteration has a closed-form recursion and prove the limit with a one-variable monotonicity argument (pp. 4-5).",
+   "After a counterexample, check it against each cited theorem's hypotheses and name the violated one (p. 5).",
+   "State what your convergence theorem does not exclude and how large the residual gap can be (p. 10)."
+  ],
+  "coauthors": "Andreas Grothey, Ken I. M. McKinnon",
+  "quotes": [
+   {"text": "At a first glance, the example seems to indicate that there are errors in the various convergence results in the literature.", "page": 5},
+   {"text": "Is this maybe an argument against decomposition (at least at the NLP level)?", "page": 12}
+  ]
+ },
+ {
+  "id": "S039",
+  "year": "2002",
+  "title": "Solving large MINLPs on computational grids",
+  "read_level": "full",
+  "contribution": "Parallelizes SQP-based nonlinear branch-and-bound on a Condor grid with a master-worker scheme whose tasks are MINLP subtrees, with time limits, a recourse period and lazy best-first search, reaching up to 80% parallel efficiency on large MacMINLP instances.",
+  "problem_entry": "Large MINLPs with B&B trees up to 10^9 NLPs; computational grids of idle, heterogeneous, unreliable machines; MINLP-specific issues beyond parallel MILP (pp. 1-3, 13-14).",
+  "key_idea": "Task = MINLP subtree searched depth-first by a sequential filterSQP B&B worker, not a single NLP (which was too fast for the master); time limit plus recourse period to fathom small-gap nodes; lazy best-first with pool-size hysteresis at the master (pp. 8-10).",
+  "assumptions": "Compact X, Y; f, g twice continuously differentiable; no convexity assumed, global optimality only if each NLP is solved globally (pp. 2, 4).",
+  "proof_devices": [],
+  "experiments": "146 Condor machines, 10 MacMINLP problems; parallel efficiency (not speed-up, with reasons) up to 80%, mostly over 40%; trimlon7 ~10^9 NLPs; non-monotone lower bound on nonconvex trimlon7 reported (pp. 12-16).",
+  "positioning": "Differentiated from parallel MILP work (Eckstein CM-5, Chen-Ferris FATCOP, Laursen) and from OA/Benders, which need synchronization and two task types (pp. 3, 6).",
+  "writing": "Headline 'up to two orders of magnitude' faster than serial (pp. 14, 16), while Table 3 work-time/job-time ratios are at most about 66 (my computation, p. 13).",
+  "limits_future": "No guarantee on nonconvex instances; future: early branching (faster but less reliable on nonconvex problems) and parallel cut generation (pp. 4, 16-17).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "Own C++ B&B with pluggable NLP solver designed around filterSQP warm starts and feasibility-problem infeasibility detection", "pages": "pp. 5, 8"},
+   {"method": "Method 4", "relation": "evidence", "note": "Test set from his MacMINLP collection, AMPL models online", "pages": "pp. 13, 21"},
+   {"method": "Method 5", "relation": "variant", "note": "Meter choice justified (efficiency, not speed-up), but the 'two orders of magnitude' headline exceeds the Table 3 ratios", "pages": "pp. 12-14, 16"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "Size parallel tasks from the inner solver's measured cost", "evidence": "One-NLP tasks failed because warm-started NLPs took 1-2 QPs; tasks became MINLP subtrees with time limit and recourse period", "pages": "pp. 8-9, 14"}
+  ],
+  "transferable": [
+   "Where speed-up cannot be measured, report parallel efficiency = work-time / (average workers x wall time) and say why (pp. 12-13).",
+   "Give workers a recourse period to fathom small-gap nodes (g_rel <= 0.5) before returning, to enlarge returned tasks (p. 9).",
+   "Normalize heterogeneous workers with a benchmark task run on joining (p. 11).",
+   "List the inner-solver requirements the outer tree imposes (robust under degeneracy, reliable infeasibility detection, warm starts) before choosing the inner solver (p. 5)."
+  ],
+  "coauthors": "Jean-Pierre Goux",
+  "quotes": [
+   {"text": "Nevertheless, we have found branh-and-bound to work well in pratie even on nononvex examples.", "page": 4},
+   {"text": "In a rst implementation, eah worker was assigned a single NLP node.", "page": 8}
+  ]
+ },
+ {
+  "id": "S067",
+  "year": "2002",
+  "title": "The penalty interior point method fails to converge for mathematical programs with equilibrium constraints",
+  "read_level": "full",
+  "contribution": "Constructs a three-variable MPEC satisfying strict complementarity and nonsingularity on which PIPA converges to a non-stationary point, confirms it by an AMPL run, and traces the failure to a trust-region radius tied to infeasibility, with a detectable multiplier symptom.",
+  "problem_entry": "Counterexample to the published PIPA convergence theorem under [SC] and [NS] (Luo-Pang-Ralph Thm 6.1.17) (pp. 1-2).",
+  "key_idea": "The direction-finding bound ||dx||^2 <= rho(||F|| + y'w) shrinks as complementarity halves each step, so x moves only by a convergent geometric sum and stalls at a non-stationary limit (pp. 3-6).",
+  "assumptions": "Those of the theorem under test, [SC] and [NS], verified at the solution and at the spurious limit; simplified PIPA with fixed parameters (pp. 2-3, 6).",
+  "proof_devices": [
+   "Closed-form LP basis and multipliers of the direction-finding problem (pp. 3-4)",
+   "Step-size bound 5/9 <= alpha <= 1 via a Maple series expansion in w (p. 4)",
+   "Induction y(k+1)w(k+1) <= y(k)w(k)/2 and geometric-sum bounds on x and y (pp. 4-6)",
+   "Armijo acceptance and penalty never increased (p. 5); compactness gives a limit point satisfying [SC], [NS] (p. 6)"
+  ],
+  "experiments": "PIPA and the example coded with AMPL's looping extension; 10 iterates with actual and predicted reductions tabulated, confirming the bounds (p. 6).",
+  "positioning": "Directed at Luo-Pang-Ralph's PIPA; Pang thanked for reading an earlier version (pp. 1, 7).",
+  "writing": "Hedged in conclusion ('seems to contradict', p. 7) after 'contradicting Theorem 1.1' (pp. 2, 6); no faulty proof step located in this version.",
+  "limits_future": "Diagnosis: radius should reflect model agreement, not feasibility; symptom: multiplier of the radius constraint tends to 1 (p. 7). Remedy not developed here.",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "Smallest instance, hypotheses checked as satisfied, run in AMPL, symptom and cause named", "pages": "pp. 3-7"},
+   {"method": "Method 3", "relation": "variant", "note": "This 2002 report stops at 'seems to contradict'; pointing to the faulty proof step (step 3) appears only in the later version [03 E45], after Pang read a draft", "pages": "pp. 6-7"}
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Prove the counterexample analytically, then run it in a modelling language and tabulate iterates with actual and predicted reductions (p. 6).",
+   "End a failure report with a detectable symptom, e.g. a non-vanishing multiplier on the offending constraint (p. 7).",
+   "To break a method, look for a step or radius bound tied to the iterates rather than controlled by the algorithm (p. 7)."
+  ],
+  "coauthors": "none (sole author)",
+  "quotes": [
+   {"text": "This paper presents a small example for whih the Penalty Interior Point Method onverges to a non-stationary point.", "page": 1},
+   {"text": "Linking the trust-region radius to the feasibility of the problem is ounter intuitive.", "page": 7}
+  ]
+ },
+ {
+  "id": "H013",
+  "year": "2003",
+  "title": "Large Scale Nonconvex Optimization (SIAG/Optimization Views-and-News issue, editors)",
+  "read_level": "partial",
+  "contribution": "Guest-edited newsletter issue (with Nocedal) framing large-scale nonconvex optimization as NLP methods extending into DAE/PDE-constrained problems, MPCC and MINLP, with Leyffer's own MPCC survey (S057) inside.",
+  "problem_entry": "Editors' framing: the SQP/AL versus interior-method competition revitalized NLP; its methods now reach DAE/PDE, MPCC and MINLP, the last 'a wide open field' (pp. 1-2).",
+  "key_idea": "Curated tour from the NLP core outward with an explicit invitation to branch out (p. 2); his article overturns the 'numerically unsafe' verdict on MPCCs as NLPs (pp. 15-16).",
+  "assumptions": "n/a (editorial)",
+  "proof_devices": [],
+  "experiments": "n/a (his article reports others' numbers: SQP on 150+ MPCCs, IPMs ~80% with defaults, pp. 16-17)",
+  "positioning": "Introduction summarizes each contribution neutrally; his article positions NLP solvers against special-purpose MPCC methods (pp. 1-2, 15-16).",
+  "writing": "Two-paragraph framing signed by both editors (p. 2); the editor's thanks (p. 25) are Sturm's voice.",
+  "limits_future": "Editorial service, not research; open questions in his article: global convergence, B-stationarity, C-stationary points (p. 18).",
+  "method_links": [
+   {"method": "Method 2", "relation": "evidence", "note": "Editors frame the field as NLP expertise carried outward into MPCC, MINLP, DAE/PDE; his article re-casts MPCCs as NLPs", "pages": "pp. 1-2, 15-16"}
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "When guest-editing a thematic issue, write the introduction as a map from one core competence to neighbouring classes, one article each, and close with an invitation to branch out (pp. 1-2)."
+  ],
+  "coauthors": "Jorge Nocedal (co-guest editor)",
+  "quotes": [
+   {"text": "We hope that the five papers contained in this volume encourage researchers working in nonlinear optimization to branch out into some of these new emerging areas.", "page": 2},
+   {"text": "Recently, exciting new developments have demonstrated that the gloomy prognosis about the use of (2) may have been premature.", "page": 16}
+  ]
+ }
+]

@@ -1,0 +1,151 @@
+[
+ {
+  "id": "S146",
+  "year": "2021",
+  "title": "Concurrent optimization of capital cost and expected o&m",
+  "read_level": "partial",
+  "contribution": "NREL project report on design and O&M optimization of molten-salt power towers; its optimization-methods section proposes a mixed-integer derivative-free method that minimizes a MILP-encoded secant underestimator over integer points, with valid big-M/lambda constants, useful-point heuristics and an l-infinity trust region on the integers.",
+  "problem_entry": "Plant design minimizing PPA price is a mixed-integer, derivative-free problem under uncertainty (black-box SAM simulation of several minutes, expectation over weather and prices); model-based MINLP methods need algebraic functions and DFO methods assume deterministic continuous problems (pp. 15-19).",
+  "key_idea": "Piecewise-linear underestimator from secant hyperplanes through poised sets of n+1 evaluated integer points, minimized by a MILP master; tightened constants, useful-point heuristics, and an l-infinity trust region enlarged only when the model is infeasible; continuous subproblem at each integer point solved by BOBYQA/COBYLA (pp. 19-25).",
+  "assumptions": "Constraints are bounds on x with simulation constraints folded into the objective (p. 16); expectation risk measure (p. 18); a valid lower bound l_f on the bounded integer domain (p. 20).",
+  "proof_devices": [
+   "Integral-hyperplane lattice distance >= 1/||c||_2 gives a valid lambda (Proposition 3.2.1, p. 21)",
+   "Minimal-||c||_1 integral hyperplane through n points found by a small IP (P-hyp), then constants tightened by per-hyperplane optimization (eqs. 3.5-3.7, pp. 20-21)",
+   "No-good cuts or a binary-expanded valid inequality to stop repeated iterates (p. 21)",
+   "Global convergence of the trust-region variant asserted, not proved in the text read (p. 23)"
+  ],
+  "experiments": "Benchmark at n = 2-4: gap and wall-clock time with and without trust region; CPLEX master times out at n = 3, enumeration at n = 4 (Figs. 6-7, p. 24); one-at-a-time plant parameter studies with 15-20% PPA/LCOE improvement (pp. 109-110).",
+  "positioning": "Three solution classes for simulation-based mixed-integer design (evolutionary, pattern search, model-based); chooses model-based because it supports a posteriori sensitivity analysis; cites OA, GBD, ECP, Minotaur, Bonmin as inapplicable to non-algebraic functions (p. 18).",
+  "writing": "Project-report register: numbered deliverables, limits stated as flat verdicts (pp. 19, 112); no per-author attribution of sections in the text (pp. 4, 13).",
+  "limits_future": "Constant tightening does not make the master a competitive subproblem solver; useful points sometimes hard to find; model creation remains the bottleneck (p. 19); scatter in optimized designs needs better constraints and convergence criteria (p. 111); future: more market cases, data, public software (p. 112).",
+  "method_links": [
+   {"method": "Method 2", "relation": "evidence", "note": "Trust region plus MILP master carried from the MINLP/NLP toolkit into mixed-integer simulation-based DFO; Leyffer's authorship of this section is inferred, not stated", "pages": "pp. 18-23"},
+   {"method": "Method 6", "relation": "evidence", "note": "Valid big-M and lambda constants derived so the master stays a lower bound before speed-ups", "pages": "pp. 19-21"},
+   {"method": "Method 5", "relation": "evidence", "note": "Limits stated plainly; CPLEX and enumeration baselines shown timing out", "pages": "pp. 19, 24"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "trust region over integer decisions", "evidence": "l-infinity trust region on integer variables in a cutting-plane DFO method, radius increased only when the model is infeasible (also S065)", "pages": "pp. 22-23"}
+  ],
+  "transferable": [
+   "Get lambda for a big-M secant-underestimator MILP from the lattice distance 1/||c||_2 of an integral hyperplane, then tighten it by a small optimization problem per hyperplane (p. 21).",
+   "In a cutting-plane method over integer points, enlarge the l-infinity trust region only when the model inside it is infeasible; take null steps otherwise (Algorithm 1, p. 23).",
+   "Measure which cuts actually prune a promising point (useful cuts and points) before designing a cut-selection heuristic (Figs. 4-5, p. 22)."
+  ],
+  "coauthors": "Michael J. Wagner, Alexandra Newman, David Morton; 13 listed contributors including Jeffrey Larson (pp. 1, 4)",
+  "quotes": [
+   {"text": "Traditional derivative-free optimization techniques are designed for problems with deterministic simulations and continuous variables.", "page": 19},
+   {"text": "Tightening these bounds improves the solution time, but not to the level that makes it a competitive sub-problem solver.", "page": 19}
+  ]
+ },
+ {
+  "id": "S153",
+  "year": "2021",
+  "title": "Wave function analysis with a maximum flow algorithm",
+  "read_level": "full",
+  "contribution": "A max-min flow recursion with backtracking, density removal and a greedy fallback extracts the dominant CSFs of a graphically contracted wave function from arc densities alone, at cost independent of the CSF dimension, with a certified top-M' partition; demonstrated on three C2 states.",
+  "problem_entry": "GCF wave functions can have N_CSF > 10^200, so scanning all CSF coefficients is impractical, but arc densities on the Shavitt graph are cheap to compute (pp. 4-5).",
+  "key_idea": "Shavitt graph as a flow network with arc densities as capacities; level-ordered d_k = max_j min(d_j, rho_jk) bounds the largest walk density per node, backtracking gives a candidate walk, its density is removed and the process repeats; heap-ranked greedy deviation search when candidates repeat (pp. 6-9).",
+  "assumptions": "Arc densities available; candidate guaranteed correct only when its density exceeds half the unsaved density (Eq. 6, p. 7); one-dimensional irreps of D2h and subgroups (p. 10).",
+  "proof_devices": [
+   "Max-min recursion yields upper bounds on the walk density through each node (p. 7)",
+   "Monotone bounds d_head and d_tail partition generated walks into a certified top-M' set and an undetermined rest (p. 9)",
+   "Four-CSF worked example and a one-parameter family x(s) showing a wrong first extraction, self-correction, and many-to-one maps (pp. 18-19)"
+  ],
+  "experiments": "One proof-of-principle: three valence states of C2 dissociation (6-31G*), compared with literature full-CI curves; seven dominant CSFs analysed (pp. 11-17).",
+  "positioning": "Positioned against scanning and sorting the full CSF list and against approximate wave functions from reduced spaces, which can introduce artifacts (p. 5).",
+  "writing": "Chemistry-journal register; heuristic step openly labelled ad hoc (pp. 8-9); failure case worked out in an appendix (pp. 18-19).",
+  "limits_future": "Extraction order can be wrong and the greedy step is ad hoc (pp. 7-9); future extension to DMRG and coupled-cluster expansions (p. 18).",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "Smallest example on which the method extracts the wrong walk is built, run and explained; weak evidence because the paper is chemist-led and Leyffer's role is unstated", "pages": "pp. 7, 18-19"},
+   {"method": "Method 2", "relation": "evidence", "note": "Network-flow optimization device carried into a quantum-chemistry object; weak, role unstated", "pages": "pp. 5-7"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "certify part of a heuristic's output with monotone bounds", "evidence": "Upper bounds on all unextracted walks certify which generated walks are truly among the largest", "pages": "p. 9"}
+  ],
+  "transferable": [
+   "When a greedy extraction cannot guarantee order, maintain a monotone upper bound on everything not yet extracted and report only the items above it as certified (p. 9).",
+   "State the exact sufficient condition under which the greedy step is correct (majority of the remaining mass) and give a small worked example where it fails (pp. 7, 18-19)."
+  ],
+  "coauthors": "Ron Shepard, Scott R. Brozell, Jeffrey Larson, Paul Hovland",
+  "quotes": [
+   {"text": "the dominant CSFs are generated, but not necessarily in the correct order, and in this sense the algorithm has some capacity to self-correct.", "page": 8},
+   {"text": "No step in this novel procedure requires effort or storage that scales as NCSF, and the algorithm is applicable to wave function expansions of practically arbitrary size.", "page": 18}
+  ]
+ },
+ {
+  "id": "S064",
+  "year": "2022",
+  "title": "Modeling design and control problems involving neural network surrogates: D. Yang et al.",
+  "read_level": "full",
+  "contribution": "Shows that embedding trained ReLU networks directly in NLPs converges poorly, characterizes stationarity of that embedded model, and compares two lifted reformulations (convex MINLP via big-M, and an MPCC solved as an NLP, proved stationarity-equivalent) with training-data warm starts and convex-hull constraints on three applications (read as arXiv v1).",
+  "problem_entry": "Optimization over trained ReLU surrogates, min f(DNN(x),x) s.t. c(DNN(x),x) <= 0; entered from the observation that Ipopt fails to converge on the embedded formulation, with dual infeasibility staying high (pp. 1, 9).",
+  "key_idea": "Lift the network: one binary per ReLU gives a convex MINLP when f, c, X are convex (Proposition 4); complementarity 0 <= y perp s >= 0 with slacks and y^T s <= 0 gives an NLP-solvable MPCC; plus convex-hull-of-training-data constraints and a training-data warm start (pp. 4-6, 14-16).",
+  "assumptions": "f, c C2 and convex, X convex compact (Assumption 1, p. 2), convexity called the most restrictive; trained, fixed network (p. 2); general position of activation hyperplanes for Theorems 1-2 (pp. 12-13).",
+  "proof_devices": [
+   "Clarke generalized Jacobian of a piecewise-linear ReLU network as a convex hull of masked weight-matrix products under general position (Propositions 2-3, pp. 12-13)",
+   "KKT-type stationarity conditions for the embedded model (Theorem 1, p. 13)",
+   "Equivalence of embedded stationarity and MPCC strong stationarity via multiplier scaling factors (Proposition 5, Theorem 2, p. 16)",
+   "Per-neuron bound-tightening problems for big-M constants (p. 14)"
+  ],
+  "experiments": "CPLEX (MIP) and Ipopt (MPCC, embedded) at default options, single thread; engine design over 1/3/5-layer nets and time grids, 100 MNIST attacks on 10 architectures, oil-well networks with Bonmin; time to best, gap to best known, counts of optimal and feasible runs (pp. 16-21).",
+  "positioning": "Builds on Fischetti-Jo and Anderson et al. big-M and ideal formulations; differs from Cheon's OA-inspired method by exploiting convexity after lifting; the MPCC side rests on Fletcher-Leyffer 2004 and Fletcher-Leyffer-Ralph-Scholtes 2006 (pp. 3, 13, 15).",
+  "writing": "Each formulation gets an advantages-and-costs verdict, not a single winner (pp. 17-18, 22); an empirical failure motivates the theory section (pp. 9-10).",
+  "limits_future": "MIP limited to about 100 hidden nodes (p. 14); MPCC only locally optimal (p. 15); embedded ReLU model converges poorly, swish suggested (p. 22); convex-hull constraint keeps solutions near the data (pp. 4-5); embedded model not runnable on the oil-well MINLP in JuMP (p. 20).",
+  "method_links": [
+   {"method": "Method 6", "relation": "evidence", "note": "Solver log read first, a swish control run rules out the solver, formulation changed before any algorithm; convex-hull constraint repairs a negative-emissions model", "pages": "pp. 4, 9-10, 13"},
+   {"method": "Method 2", "relation": "evidence", "note": "ReLU networks recast as convex MINLP and as MPCC with his own slack formulation for complementarity", "pages": "pp. 14-16, 22-23"},
+   {"method": "Method 5", "relation": "variant", "note": "Same machine and failures counted, but solvers run at default options rather than at their best settings", "pages": "pp. 16, 19"}
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "When an NLP solver fails on a nonsmooth model, rerun with a smooth surrogate of the nonsmooth piece (swish for ReLU) to attribute the failure to the formulation rather than the solver (p. 10).",
+   "Constrain surrogate inputs to the convex hull of the training inputs and report what the unconstrained optimum looked like (p. 4).",
+   "Warm-start the lifted model from training data: pick constraint-satisfying training points of least cost and set every neuron variable to its activation there (Algorithm 1, pp. 5-6).",
+   "When proposing a reformulation of a nonsmooth model, prove that its stationary points coincide with those of the original (Theorem 2, p. 16)."
+  ],
+  "coauthors": "Dominic Yang, Prasanna Balaprakash",
+  "quotes": [
+   {"text": "In fact, in an earlier implementation without the convex hull constraint, we observed that the optimal design was obtained for an engine that produced negative emissions.", "page": 4},
+   {"text": "This observation makes the use of ReLU networks questionable as embedded constraints within optimization solvers that rely on differentiable problem functions.", "page": 10}
+  ]
+ },
+ {
+  "id": "S065",
+  "year": "2022",
+  "title": "Sequential linear integer programming for integer optimal control with total variation regularization",
+  "read_level": "full",
+  "contribution": "For TV-regularized integer optimal control, proves existence of minimizers, defines r-optimality in L1-neighbourhoods, and gives a function-space trust-region method with linear-IP subproblems (SLIP) whose iterates converge for d = 1 to L-stationary points; compared computationally with SCIP MIQP and CIA+SCARP (read as arXiv v3).",
+  "problem_entry": "Combinatorial integral approximation gives oscillating controls whose TV goes to infinity, and its theory fails with a TV term; global solves of the discretized problem do not scale to fine meshes (p. 2).",
+  "key_idea": "TV regularization yields minimizers; the trust-region subproblem linearizes F but keeps TV exact under an L1 radius and becomes a linear IP after DG0 discretization; reset-and-halve radius control with an ared/pred test (pp. 2-7).",
+  "assumptions": "F lsc and bounded below (Assumption 2.1, p. 3); for convergence d = 1 and F C2 with Hessian bounded in L1 x L1 (Assumption 4.1, p. 8), satisfied by least squares with K: L1 -> L2 bounded (Proposition 4.2, p. 8) and used only for Taylor's theorem (Remark 4.16, p. 12).",
+  "proof_devices": [
+   "BV boundedness, weak-* compactness and lower semicontinuity of TV for existence (Propositions 2.3, 3.2, pp. 3, 5)",
+   "Shrinking-ball construction showing every L1-neighbourhood of an integer control contains other feasible controls (Example 2.9, p. 4)",
+   "Auxiliary switching-location problem (L) and L-stationarity as the first-order condition (Theorem 4.14, p. 12)",
+   "TV of the iterates settles after finitely many steps, read as an active set settling down (Theorem 4.23, p. 14; Remark 4.26, p. 17)"
+  ],
+  "experiments": "1-D convolution tracking with five control levels, N = 32-2048, SCIP 7.0; four SLIP variants, SLIP vs MIQP (5 h limit) vs CIA+SCARP, 25 random starts x 8 values of alpha, local MINLP check of r-optimality (pp. 19-25).",
+  "positioning": "Contrasted with combinatorial integral approximation and its TV-aware rounding variants, with global solves of the discretized problem, and with a set-based method that lacks existence of stationary feasible points (p. 2).",
+  "writing": "Contributions paragraph frames the method as an NLP trust-region analogue (p. 2); the conclusion reports where it loses before the future work (p. 26).",
+  "limits_future": "MIQP better for N <= 128 and CIA better for N = 64, 128; computationally less attractive than CIA; analysis only for d = 1; faster doubling-radius variant unproved; future: use L-stationarity in the algorithm, adaptive grids, curvature, a rule for alpha (pp. 8, 19, 22, 26).",
+  "method_links": [
+   {"method": "Method 2", "relation": "evidence", "note": "NLP trust-region globalization and active-set reasoning carried into integer optimal control in function space", "pages": "pp. 2, 5-6, 17"},
+   {"method": "Method 5", "relation": "evidence", "note": "Reports losses to SCIP MIQP and CIA; clips relative differences at the solver tolerance for a fair comparison", "pages": "pp. 22, 25-26"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "trust region over integer decisions", "evidence": "L1 trust region on integer-valued controls with linear-IP subproblems (also S146)", "pages": "pp. 5-6"},
+   {"pattern": "regularize until the integer problem has minimizers, then descend on the feasible set", "evidence": "TV term gives existence and lets the algorithm stay integer-feasible instead of relaxing and rounding", "pages": "pp. 2-3"}
+  ],
+  "transferable": [
+   "In an integer trust-region subproblem, linearize only the smooth part and keep the nonsmooth regularizer exact, so the subproblem stays a linear IP and pred compares directly with ared (pp. 5-7).",
+   "Before proving convergence for a discretized integer method, show by a shrinking-ball construction that the finite-dimensional local-minimizer notion is empty in the limit, and define a meaningful neighbourhood (Example 2.9, Definition 2.8, p. 4).",
+   "Check r-optimality a posteriori by re-solving the MINLP in a small L1-ball around the returned point and reporting the relative gap clipped at the solver tolerance (pp. 23-25).",
+   "Report both a proven variant and a faster unproven one, labelled as such (pp. 21, 26)."
+  ],
+  "coauthors": "Paul Manns",
+  "quotes": [
+   {"text": "The topological restrictions induced by the discreteness constraint and the TV-regularizer are strong enough such that (P) admits optimal solutions.", "page": 2},
+   {"text": "However, the algorithmic framework is computationally less attractive than the combinatorial integral decomposition.", "page": 26}
+  ]
+ }
+]

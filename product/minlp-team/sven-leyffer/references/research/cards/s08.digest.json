@@ -1,0 +1,234 @@
+[
+ {
+  "id": "H001",
+  "year": "2017",
+  "title": "Design, Optimization, and Control of Complex Interconnected Systems (DocSis)",
+  "read_level": "full",
+  "contribution": "A DOE-ASCR white paper (Leyffer corresponding author) that names four new classes of optimization problems for DOE, among them mixed-integer PDE-constrained optimization, nonsmooth/discrete gene-network models and facility scheduling, with their challenges, and outlines synergies with UQ, AD and linear solvers.",
+  "problem_entry": "The shift from forward simulation to design and control produces problems outside traditional optimization paradigms; each class is entered through DOE applications and the failure of the standard algorithm (nonlinear B&B prohibitive for MIPDECO; commercial MIP too small for facility scheduling) (pp. 1-2).",
+  "key_idea": "Agenda, not a method: optimization as both user and provider of paradigms for UQ, AD and linear algebra (p. 2).",
+  "assumptions": "n/a",
+  "proof_devices": [],
+  "experiments": "none",
+  "positioning": "Cites Leyffer's own oil-spill MINLP and in-situ scheduling papers as instances of the classes (refs 16, 21-22, pp. 3-4).",
+  "writing": "One paragraph per class: applications with citations, why standard algorithms fail, what is unknown (pp. 1-2).",
+  "limits_future": "No concrete research plan beyond the class descriptions (pp. 1-2).",
+  "method_links": [
+   {"method": "Method 2", "relation": "evidence", "note": "Step 4: names new classes (MIPDECO, nonsmooth/discrete gene networks, facility scheduling) publicly with their challenges", "pages": "pp. 1-2"}
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "In an agenda document, pair each problem class with what the field's standard solver cannot do (nonlinear B&B for MIPDECO, commercial MIP for facility scheduling) (pp. 1-2)."
+  ],
+  "coauthors": "Mihai Anitescu, Todd Munson, Stefan Wild",
+  "quotes": [
+   {"text": "Very little is known about this challenging class of problems", "page": 1},
+   {"text": "huge discrete optimization problems that though linear are well beyond the capabilities of even the best commercial solvers", "page": 2}
+  ]
+ },
+ {
+  "id": "S036",
+  "year": "2017",
+  "title": "Optimal design and dispatch of a system of diesel generators, photovoltaics and batteries for remote locations",
+  "read_level": "partial",
+  "contribution": "Builds a nonconvex MINLP for joint year-long, hourly design and dispatch of hybrid diesel/PV/battery systems and replaces it by a MIP (exact linearization of binary-continuous products, McCormick under-estimators of continuous bilinear terms). With a warm-start heuristic, 14 real instances solve within 5% in at most 3 h; an a posteriori audit bounds the relaxation error.",
+  "problem_entry": "Separating design from dispatch is a restriction that can cost 50% more fuel; HOMER simulates fixed dispatch strategies and earlier MIPs shorten the horizon or omit battery detail (pp. 2-3).",
+  "key_idea": "Replace (P) by a MIP (U): drop the quadratic term (linear data), exact bound-based linearization of binary x continuous products, convex-envelope under-estimators for continuous bilinear terms, plus a heuristic that prunes technologies and builds a myopic warm-start dispatch feasible for (P) (pp. 15-19).",
+  "assumptions": "Deterministic inputs, year-long load variability as a proxy for robustness; battery banks as single units; bus and converter only through efficiencies (pp. 2, 4).",
+  "proof_devices": [
+   "No theorems; a posteriori audit: nonlinear power and lifecycle quantities recomputed at (U)'s solution and tabulated per instance (eqs. 26-29, Table 10, pp. 30-32)"
+  ],
+  "experiments": "BARON/Couenne/BONMIN at defaults on 24-h (P) (5% gap or 3 h; BARON 4/14, BONMIN 2/14, Couenne 0/14) vs (U) solved in under 1 s; year-long (U) in CPLEX 12.5.1, all 14 within 5% in at most 3 h with warm start (pp. 25-28).",
+  "positioning": "Positions against HOMER simulation and against MIPs with shortened horizons or no battery detail; the closest MINLP (SOFC) took days to reach an 8% gap (pp. 2-3).",
+  "writing": "Contribution sentence is quantitative: within 5% of optimality in hours for a year-long hourly forecast (p. 3).",
+  "limits_future": "Discharge overestimated by up to 2.8 kW per period (under 0.02% of demand), lifecycles over-approximated by about 25%; time aggregation failed; future minute-level dispatch with fixed design, rolling-horizon simulation with DFO, stochastic program (pp. 27, 31-34).",
+  "method_links": [
+   {"method": "Method 6", "relation": "evidence", "note": "Nonconvex MINLP rewritten as a MIP after MINLP solvers fail on small instances; exact linearization where possible, convex under-estimation elsewhere", "pages": "pp. 15-19, 26"},
+   {"method": "Method 5", "relation": "evidence", "note": "Three MINLP solvers at default settings with common gap and time limit, failures kept in Table 6; negative result of time aggregation reported", "pages": "pp. 26-27"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "a posteriori audit of a relaxation against the nonlinear model", "evidence": "Recompute nonlinear battery power and lifecycle at the MIP solution and tabulate worst-case errors as a share of demand; check that the MIP design admits a feasible completion of the MINLP on 24 h", "pages": "pp. 30-32"}
+  ],
+  "transferable": [
+   "After solving a linearized surrogate, recompute the original nonlinear quantities at its solution, tabulate the worst-case error per instance and express it as a share of a physical total (Table 10, pp. 31-32).",
+   "Check that the surrogate's discrete decisions admit a feasible completion in the nonlinear model on a short horizon (p. 32).",
+   "Before shrinking a time-indexed model by aggregation, test whether the aggregated design is robust at full resolution, and report it when it is not (p. 27)."
+  ],
+  "coauthors": "Michael S. Scioletti, Alexandra M. Newman, Johanna K. Goodman, Alexander J. Zolan",
+  "quotes": [
+   {"text": "The poor performance of these MINLP solvers on the majority of these small instances suggests that (P) is not a tractable formulation", "page": 26},
+   {"text": "our model over-approximates lifecycles consumed by roughly 25%. This is acceptable because lifecycles provide only a small contribution to the objective function value", "page": 32}
+  ]
+ },
+ {
+  "id": "S056",
+  "year": "2017",
+  "title": "Mixed-integer PDE-constrained optimal control of gas networks",
+  "read_level": "partial",
+  "contribution": "Models transient gas-network control with binary compressor switches and a flow-direction-free finite-volume Euler discretization (allowing flow reversal), and solves it with a modified Minotaur whose new node selection RLAD (cutoff-restricted diving with rebasing) beats best-then-dive in almost all of 12 instances.",
+  "problem_entry": "Prior gas-network models fix flow direction, simplify compressors or solve approximately; the target is extreme transitions such as flow reversal, solved to integer optimality (p. 1).",
+  "key_idea": "Orientation-symmetric finite-volume scheme (no flow-direction binaries, Remark 2.1 p. 6), arctan smoothing of the friction term (p. 3), general MINLP B&B because CIA cannot handle state-dependent control constraints (p. 12), and RLAD node selection with cutoff f_co = min{a f_ub + (1-a) f_lb, b f_lb} (pp. 12-13).",
+  "assumptions": "Valves only in compressor stations at junctions, no antiparallel arcs, global pressure/flow bounds (pp. 2-3); one mode per compressor, no pushing against flow in tests (p. 10); C1 PDE solutions cited (p. 4); Minotaur not global for this nonconvex model (p. 12).",
+  "proof_devices": [
+   "No theorems; RLAD argued geometrically as search restricted to a shrinking sublevel set of the objective (Fig. 4, p. 14)"
+  ],
+  "experiments": "Two networks x 6 randomized instances; 1-h horizon, 180 intervals, 10 integer control intervals; modified Minotaur 0.2.0 + IPOPT 3.12, single thread; 6 variants (best-then-dive/RLAD x 3 branching orders); 0.1% gap or 48 h; wall time (pp. 14-18).",
+  "positioning": "Builds on Zavala's stochastic gas-network model [15] and relaxes its fixed-direction assumption; RLAD contrasted with backtracking strategies surveyed in [8] that rebase immediately (pp. 2, 13).",
+  "writing": "Claims hedged ('we believe', 'appears to'); first-of-kind claim for flow reversal stated with 'to the best of our knowledge' (pp. 12, 14, 20).",
+  "limits_future": "RLAD wins except inversion-random02 (nonconvexity); time-ordered branching does not help; conclusion contradicts results paragraph on RLAD-branching interaction (pp. 18, 20); future: dynamic cutoffs, dedicated simulators, PETSc parallelism (p. 20).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "Default Minotaur node selection watched by hand, found to abandon near-optimal subtrees, redesigned as RLAD (Workflow D step 4)", "pages": "pp. 12-13"},
+   {"method": "Method 6", "relation": "evidence", "note": "Discretization chosen so that flow direction need not be fixed and no flow-splitting integers are needed; friction term smoothed for differentiability", "pages": "pp. 3, 6"},
+   {"method": "Method 2", "relation": "evidence", "note": "MINLP B&B carried into mixed-integer PDE-constrained control", "pages": "pp. 12, 20"},
+   {"method": "Method 5", "relation": "variant", "note": "Omitted run disclosed and wall time flagged unreliable, but conclusion contradicts the results paragraph on branching interaction", "pages": "pp. 17-18, 20"}
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Choose a discretization that is indifferent to the sign of an unknown flow, so the sign does not become a binary variable (Remark 2.1, p. 6).",
+   "When the solver abandons good subtrees, dive with lateral moves restricted to a cutoff between the bounds and rebase to the best deferred node when the restricted search is exhausted (pp. 12-14).",
+   "When dropping an instance from a plot, say why (subsolver hit its iteration limit, so node counts would mislead) (p. 18).",
+   "Build test networks that each test one capability (flow inversion) and randomize demands around a scripted mean profile (pp. 14-16)."
+  ],
+  "coauthors": "Mirko Hahn, Victor M. Zavala",
+  "quotes": [
+   {"text": "In preliminary experiments, we frequently observed Minotaur abandoning subtrees that could, through manual exploration, be shown to contain nearly optimal solutions, in favor of exploring other subtrees that branch off near the root of the branch-and-bound tree.", "page": 12},
+   {"text": "Although Minotaur is designed to solve convex MINLPs and is not guaranteed to globally solve problems using our gas network model, we believe the application of a theoretically correct optimization method (e.g., spatial branch-and-bound) to be computationally intractible.", "page": 12}
+  ]
+ },
+ {
+  "id": "S066",
+  "year": "2017",
+  "title": "Joint reconstruction of x-ray fluorescence and transmission tomography",
+  "read_level": "partial",
+  "contribution": "Couples XRF and XRT tomography through shared elemental concentrations in a joint Poisson maximum-likelihood problem. An outer loop freezes the self-absorption terms and an inner truncated-Newton solve handles the rest; on real APS data this reduces elemental crosstalk and corrects self-absorption compared with MAPS+TomoPy.",
+  "problem_entry": "Finite detector energy resolution and self-absorption limit XRF reconstructions; self-absorption corrections had not been combined with full-spectrum analysis (abstract, pp. 3-4).",
+  "key_idea": "Second modality sharing the same unknowns; joint Poisson likelihood with W >= 0 and weights b1, b2; alternating scheme with self-absorption frozen per outer iterate and bound-constrained TN inner solves (pp. 8-9).",
+  "assumptions": "Independent Poisson counts (p. 8, appendix p. 17); pencil-beam geometry (p. 3).",
+  "proof_devices": [
+   "None; convergence of Algorithm 1 deferred to future work (p. 9); maximum-likelihood objective derived in appendix (p. 17)"
+  ],
+  "experiments": "One real APS 2-ID-E dataset (glass rod with W and Au wires, 73 angles), one 2D slice, 800 energy channels; baselines MAPS+TomoPy MLEM and XRF-only; b1 by L-curve maximum curvature, insensitive on [0.25, 10]; 4,301 s plus hours for the forward map (pp. 10-11, 16).",
+  "positioning": "Extends Di, Leyffer and Wild (SIAM J. Imaging Sci. 2016) with a different self-absorption model and variability balancing (p. 5).",
+  "writing": "Benefit argued from prior knowledge of the sample (Si only in the rod) and a simulated-vs-measured spectrum overlay (pp. 11-12, 16).",
+  "limits_future": "Memory and self-absorption tensor cost, prototype code; future parallel TN, multilevel schemes, other acquisition designs (pp. 16-17).",
+  "method_links": [
+   {"method": "Method 2", "relation": "evidence", "note": "NLP formulation with a bound-constrained Newton-type solver carried into tomographic inversion (weak)", "pages": "pp. 8-9"}
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Choose a trade-off weight by the maximum curvature of the L-curve between two misfit terms, then show results over a range of weights to demonstrate insensitivity (pp. 11, 15).",
+   "Validate a reconstruction by pushing it through the forward model and overlaying simulated and measured spectra (p. 16).",
+   "Balance two data sources of different magnitude with a fixed scaling before tuning the trade-off weight (p. 11).",
+   "Freeze a hard nonlinear coupling term at the outer iterate and solve the inner problem inexactly with a fixed iteration budget (p. 9)."
+  ],
+  "coauthors": "Zichao Wendy Di, Si Chen, Young Pyo Hong, Chris Jacobsen, Stefan M. Wild",
+  "quotes": [
+   {"text": "Since the focus of this work is to show the potential of joint inversion with multimodal data, future work will address convergence analysis of Alg. 1.", "page": 9},
+   {"text": "This lack of sensitivity to precise balancing parameter values indicates robustness for practical utilization.", "page": 11}
+  ]
+ },
+ {
+  "id": "S095",
+  "year": "2017",
+  "title": "A mathematical programming-and simulation-based framework to evaluate cyberinfrastructure design choices",
+  "read_level": "partial",
+  "contribution": "A framework that solves a job-scheduling and resource-sizing MIP (slowdown percentile constraint) on representative time slices and evaluates the top-k designs in a discrete-event simulator; applied to on-demand computing for five DOE light sources, with open code.",
+  "problem_entry": "Light sources need on-demand HPC; choose among per-facility, central and distributed superfacility designs; full optimization is NP-complete and uses simplified models (pp. 1-2).",
+  "key_idea": "MIP (assignment by time interval, path choice, binary per job for slowdown <= S, percentile constraint, big-M, aggregate-slowdown objective) on small subsets, then ns-3 simulation of the top-k MIP solutions on the full problem (pp. 2-4, 8).",
+  "assumptions": "Discretized time; fixed path sets; new resources only at the three DOE HPC sites; facility demand data approximate (pp. 2, 6-7).",
+  "proof_devices": [],
+  "experiments": "Five DOE light sources, 2017 schedules: utilization 20.7% / 28.7% / 34% (after exhaustive whole-day shift search, ~1,000 core-hours) / 61% with 5% delayed jobs; MIP in AMPL/CPLEX on six 3-h periods, top 20 simulated, objective spread 1.6% (pp. 6-8).",
+  "positioning": "Simulation toolkits (SimGrid, MONARC) and scheduling MIPs studied algorithms or single-source workflows, not large-scale facility design (pp. 8-9).",
+  "writing": "Reasons for returning multiple solutions stated as a numbered pair (p. 8).",
+  "limits_future": "Commercial clouds not considered; future coupling of the simulator with derivative-free optimization (p. 9).",
+  "method_links": [
+   {"method": "Method 6", "relation": "evidence", "note": "Full-year model not solved; problem cut to representative periods a MIP can handle, rest left to simulation (weak)", "pages": "pp. 2, 8"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "optimize on representative subsets, validate the top-k in a simulator", "evidence": "MIP solved on six 3-hour periods, top 20 solutions evaluated by discrete-event simulation because the model misses constraints and near-optimal designs differ structurally", "pages": "pp. 2, 8"}
+  ],
+  "transferable": [
+   "Output the top-k solutions rather than one optimum when near-optimal designs differ structurally, and say why (p. 8).",
+   "Rule out simple design points by back-of-envelope utilization arithmetic before building the optimization model (pp. 6-7)."
+  ],
+  "coauthors": "Zhengchun Liu, Rajkumar Kettimuthu, Prashant Palkar, Ian Foster",
+  "quotes": [
+   {"text": "Second, we do not expect that even a good model will capture all design constraints.", "page": 8},
+   {"text": "Thus an apparently suboptimal design choice (i.e., one with a slightly different objective function value) may be subjectively more feasible in practice.", "page": 8}
+  ]
+ },
+ {
+  "id": "S180",
+  "year": "2017",
+  "title": "Event Generator Tuning Using HPC",
+  "read_level": "full",
+  "contribution": "A SciDAC poster (2018 PI meeting, FERMILAB-POSTER-18-030-CD) on HPC-scale event-generator tuning: polynomial surrogates per histogram bin, an inner chi-square fit and a proposed automated outer optimization of dataset weights, plus tuning to uncorrected search data.",
+  "problem_entry": "Generator predictions are expensive per parameter choice; dataset weights are adjusted by hand (p. 1).",
+  "key_idea": "Professor tuning (random samples, parallel runs, per-bin polynomial surrogates, iminuit) with an outer optimisation over observable weights (p. 1).",
+  "assumptions": "n/a",
+  "proof_devices": [],
+  "experiments": "Demonstrations only (Pythia8 scaling, di-jet search-data tune, jet-resolution tune); no protocol (p. 1).",
+  "positioning": "",
+  "writing": "",
+  "limits_future": "Future: adaptive tunes, design of experiments, robust surrogates, correlated systematics (p. 1).",
+  "method_links": [],
+  "new_pattern_candidates": [],
+  "transferable": [],
+  "coauthors": "A. Austin, P. Calafiura, X. Ju, J. Kowalkowski, Z. Marshall, S. Mrenna, J. Mueller, T. Peterka, H. Schulz",
+  "quotes": [
+   {"text": "Adjusting the weights has so far been a manual procedure: run the “inner optimization” and look at resulting plots", "page": 1},
+   {"text": "Main cost in tuning is generation of primary theory calculations used to construct cheap surrogates", "page": 1}
+  ]
+ },
+ {
+  "id": "S181",
+  "year": "2017",
+  "title": "Control and Design of Multiscale Systems",
+  "read_level": "full",
+  "contribution": "A DOE-ASCR white paper (file dated August 23, 2016; Leyffer first-listed) calling for an 'applied math stack' that integrates control/optimization, UQ, scale bridging, solvers and verification for multiscale DOE applications, with models built to be optimized (e.g. complementarity models of phase-field phenomena).",
+  "problem_entry": "Microscopic properties drive macroscopic performance and are in turn steered by macroscopic control and design: a multiscale feedback loop (p. 1).",
+  "key_idea": "Applied math stack; models built with solvers, adjoints and optimization in view; outer loops aware of inner-model approximations; goal-oriented UQ (pp. 1-2).",
+  "assumptions": "n/a",
+  "proof_devices": [],
+  "experiments": "none",
+  "positioning": "",
+  "writing": "",
+  "limits_future": "Programmatic; recommends grand-challenge applications and cross-institution groups, no concrete plan (p. 2).",
+  "method_links": [
+   {"method": "Method 6", "relation": "evidence", "note": "Stated: build models in a format more readily optimized, complementarity constraints as example (weak)", "pages": "p. 1"},
+   {"method": "Method 2", "relation": "evidence", "note": "Complementarity (home class) offered as modelling vehicle for phase-field physics (weak)", "pages": "p. 1"}
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [],
+  "coauthors": "Daniel R. Reynolds, Daniel M. Tartakovsky, Carol S. Woodward",
+  "quotes": [
+   {"text": "Similarly, these “outer” loops must be aware of the approximations and limitations of the inner models.", "page": 1},
+   {"text": "Ultimately, results and designs will only be trusted if we develop multiscale verification and validation techniques that “certify” the result of a simulation or design.", "page": 2}
+  ]
+ },
+ {
+  "id": "S211",
+  "year": "2017",
+  "title": "Exposing Latent Hierarchies for Large-Scale Design and Discovery",
+  "read_level": "full",
+  "contribution": "A DOE-ASCR white paper (Di first author) arguing that multilevel optimization needs hidden hierarchies to be exposed, with tomography and nonorthogonal configuration interaction as cases, and listing the open choices (solver, transfer operators, coarse model) and the need for theory.",
+  "problem_entry": "Data and model dimensions grow faster than computing; exploitable hierarchies are hidden or hard to construct (p. 1).",
+  "key_idea": "Tomography: consistent restriction/interpolation across sample and data spaces, with a solver that separates Hessian frequencies; ResHF: coarse models when the hierarchy is not obvious and derivatives are unavailable (p. 2).",
+  "assumptions": "n/a",
+  "proof_devices": [],
+  "experiments": "none",
+  "positioning": "Cites Nash's multilevel convergence work and Oh's multigrid inversion as the starting points (pp. 1-2).",
+  "writing": "",
+  "limits_future": "Agenda: choose solver, transfer operators and coarse model together; more rigorous theory needed (p. 2).",
+  "method_links": [
+   {"method": "Method 2", "relation": "evidence", "note": "Optimization method class (multilevel) proposed for two outside fields with challenges named; Leyffer second author, voice not separable (weak)", "pages": "pp. 1-2"}
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [],
+  "coauthors": "Zichao (Wendy) Di, Matthew Otten, Stefan Wild",
+  "quotes": [
+   {"text": "However, such an approach relies on existence of carefully designed hierarchical models of an underlying optimization problem.", "page": 1},
+   {"text": "Furthermore, more rigorous theoretical results would help to guide the performance of multilevel optimization on a broad class of problems.", "page": 2}
+  ]
+ }
+]

@@ -1,0 +1,451 @@
+[
+ {
+  "id": "S086",
+  "year": "2014",
+  "title": "Unsupervised cell identification on multidimensional X-ray fluorescence datasets",
+  "read_level": "partial",
+  "contribution": "A four-stage unsupervised pipeline (over-segmentation, likelihood-ratio merge/delete, wavelet-boundary fitting by gradient sampling with Gauss-Newton, pixel refinement) that identifies overlapping cells of several types from nine-element XFM maps without annotations.",
+  "problem_entry": "Application-driven: 'where are the whole cells' in multi-element XFM maps with no training annotations and overlapping cells, which optical-microscopy methods do not handle (pp. 2-3).",
+  "key_idea": "Chain of optimization subproblems; deliberate over-segmentation, then a GLR test restricted to one-group-fewer alternatives, then a nonsmooth boundary fit by gradient sampling with Gauss-Newton and a proximal term (pp. 3, 7-9).",
+  "assumptions": "Cells of a type share size/shape (ellipses) and total element content; independent truncated-Gaussian contents per element; a sample deliberately chosen with distinct cell types (pp. 3-5, 7, 12).",
+  "proof_devices": [],
+  "experiments": "One APS dataset (666x667 pixels, 9 elements); no ground truth, so validation by content distributions vs ROIs/literature, by four detector segments and by +-20% thresholds with ANOVA (pp. 4-5, 10-12).",
+  "positioning": "Extends cell-counting tools such as ImageJ 'analyze particles' by using all channels at once and modelling overlap (p. 12).",
+  "writing": "Application-paper style; limitations and the easy dataset stated openly in the conclusion (p. 12).",
+  "limits_future": "Runtime exponential in cells per region; easy dataset; no quantitative metric; future: feedback loop, parallelism, arbitrary shapes, non-Gaussian contents, full spectra (p. 12).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Optimization machinery (GLR, gradient sampling with Gauss-Newton, proximal term) carried into imaging, but as heuristic stages without convergence claims; first author's voice.",
+    "pages": "pp. 7-9"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "validation without ground truth by input perturbation and independent measurements",
+    "evidence": "Re-run on four detector segments and with +-20% thresholds; compare output distributions by ANOVA; report initial vs final count variation.",
+    "pages": "pp. 11-12"
+   }
+  ],
+  "transferable": [
+   "Without labels, validate an unsupervised pipeline by re-running on independent measurement channels and perturbing its sensitive input, then compare output distributions statistically (pp. 11-12).",
+   "Over-segment deliberately so that a likelihood-ratio search only merges or deletes, with alternatives restricted to one group fewer (pp. 3, 8)."
+  ],
+  "coauthors": "Siwei Wang, Jesse Ward, Stefan M. Wild, Chris Jacobsen, Stefan Vogt",
+  "quotes": [
+   {
+    "text": "Currently, each procedure can be viewed as solving an optimization problem, the solution of which is then passed as an input to the next procedure.",
+    "page": 3
+   },
+   {
+    "text": "We are aware that this test dataset contains cells with distinct elemental contents. This condition simplifies the initialization part of our cell identification.",
+    "page": 12
+   }
+  ]
+ },
+ {
+  "id": "S097",
+  "year": "2015",
+  "title": "An active-set method for second-order conic-constrained quadratic programming",
+  "read_level": "partial",
+  "contribution": "A two-phase active-set method (projected gradient with cone breakpoints, then Newton EQP steps) for convex QP over second-order cones, with finite active-set identification under strict complementarity, faster than SDPT3 and filterSQP on random instances (read in the ANL preprint version).",
+  "problem_entry": "Interior-point conic solvers cannot be warm-started inside branch-and-bound, and NLP solvers break on the cone apex: four tiny SOCPs give linear convergence or IEEE exceptions in SNOPT, MINOS, filterSQP and IPOPT (pp. 3-5).",
+  "key_idea": "Generalize Moré-Toraldo's bound-constrained two-phase active-set QP to second-order cones, using closed-form cone projections, a projected line search on the last segment, a step-size switching rule with halving, and termination checked in the projected-gradient phase (pp. 5-7, 15).",
+  "assumptions": "Convex QP (G PSD) over a product of SOCs; strict feasibility and strict complementarity for Proposition 1; linear constraints deferred to an augmented-Lagrangian wrapper (pp. 4, 6-7, 15).",
+  "proof_devices": [
+   "Calamai-Moré projected-gradient lemma specialised to the cone (Lemma 3, p. 15 preprint)",
+   "Finite identification argued by contradiction, reducing to Moré-Toraldo when all cones are one-dimensional (Proposition 1, p. 17 preprint)",
+   "Quadratic rate inherited from EQP/Newton theory by citation (p. 18 preprint)"
+  ],
+  "experiments": "Random instances N=100-2000, 30 runs per row, two conditioning levels, vs SDPT3 (via CVX, time included) and filterSQP; about 10x faster; no failure counts, no branch-and-bound test (pp. 18-19).",
+  "positioning": "Places itself among renewed first-order conic methods and against Vanderbei-Yurttan's NLP route, which 'resorts to solving perturbations' (pp. 3, 5).",
+  "writing": "Motivating counterexample table up front, high-level sketch before details, Example 2 used to justify a design rule (pp. 5-6, 15).",
+  "limits_future": "Advantage shrinks with conditioning; future: augmented Lagrangian for linear constraints, structured constraints in projections, nonconvex conic QPs (p. 19).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Four tiny SOCPs break four NLP solvers, run and tabulated; Example 2 is a smallest instance showing the bound-constrained switching criterion fails for cones.",
+    "pages": "pp. 5, 15, 20"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Failure traced to nondifferentiability at the apex and evaluation outside the square-root domain (IEEE exceptions) before a new method is proposed.",
+    "pages": "pp. 4-5"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Bound-constrained active-set toolkit and proofs carried into the second-order cone class.",
+    "pages": "pp. 5, 15, 17"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Designed as a warm-startable building block for branch-and-bound and an AL outer loop.",
+    "pages": "pp. 3, 6-7"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Baselines exist, but SDPT3 timing includes CVX, instances are random only, no failures reported.",
+    "pages": "pp. 18-19"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Motivate a specialised solver with a table of tiny instances run through every general solver, with a comment column per instance (p. 5).",
+   "Check termination in the globally convergent phase of a two-phase method, so the test also validates the active set (p. 6).",
+   "When generalizing an active-set switch rule to curved constraints, add a step-size condition and halve its threshold on each fallback (p. 15)."
+  ],
+  "coauthors": "Noam Goldberg",
+  "quotes": [
+   {
+    "text": "The examples illustrate that nonlinear solvers are not sufficiently robust to solve general conically constrained optimization problems and that IEEE errors may even result in failure.",
+    "page": 5
+   },
+   {
+    "text": "Verifying termination in the gradient-projection phase also serves to determine the correctness of the identified active set, and we have found it to be a more robust alternative to evaluating the sign of the Lagrange multipliers.",
+    "page": 6
+   }
+  ]
+ },
+ {
+  "id": "S111",
+  "year": "2015",
+  "title": "Optimal response to epidemics and cyber attacks in networks",
+  "read_level": "partial",
+  "contribution": "A probabilistic network-response integer program, a conservative quadratic (Hunter-bound) surrogate that is linearizable and feasible for the exact model, NP-hardness proofs, and cover inequalities for nonmonotone constraints (read in the 2012 ANL preprint version).",
+  "problem_entry": "Re-reads the authors' own deterministic Open Science Grid response MINLP (Altunay, Leyffer et al. 2011) in probabilistic terms, which gives a nonconvex multilinear INLP (pp. 6-8).",
+  "key_idea": "Replace the product infection-probability constraint by Hunter's spanning-tree bound, which is quadratic, conservative and independence-free, and extend cover inequalities to nonmonotone left-hand sides through a weaker-than-monotone lemma (pp. 9-13).",
+  "assumptions": "Single period; independent previous-period infection probabilities (removed by the Hunter model); propagation probabilities as in Altunay et al. (pp. 7-10, 17).",
+  "proof_devices": [
+   "NP-hardness by reduction from maximum independent set on a doubled graph (Propositions 1-3, pp. 7-11 preprint)",
+   "Tree structure bounding the number of quadratic terms to derive a one-sided increment bound (Lemma 4, pp. 12-13 preprint)",
+   "Linear-time testable sufficient condition for cover validity (Proposition 5, p. 13 preprint)"
+  ],
+  "experiments": "Exact (BARON 9.3.1) vs union/Hunter surrogates (CPLEX 12.3) on OSG-1; cuts and heuristic in CBC on Erdős–Rényi graphs (50-90 nodes), features added one at a time, 2-h limit, runs over the limit counted (pp. 10-11, 17-24).",
+  "positioning": "Contrasts with firefighter models (deterministic, iterative) and with knapsack/conic cover work that needs monotone constraints (pp. 5, 12).",
+  "writing": "Complexity results first, then surrogate, then computational techniques; the negative heuristic result reported with a reason (pp. 7-11, 20).",
+  "limits_future": "Cuts give moderate gains; heuristic gives no speed-up; single period only (multi-period via simulation suggested); small graphs; CBC preprocessing off (pp. 8, 19-20).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Hard multilinear INLP replaced by a conservative linearizable quadratic surrogate that MIP solvers handle while the global MINLP solver times out.",
+    "pages": "pp. 9-11"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Time-limit failures counted in a column, averages stated to exclude them; heuristic reported as giving no gain.",
+    "pages": "pp. 19-20"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Breaking device is a complexity reduction; the monotonicity hypothesis needed by standard covers is checked, found to fail, and replaced by a weaker condition.",
+    "pages": "pp. 7-12"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Own 2011 MINLP recast into a probabilistic class.",
+    "pages": "pp. 6-8"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "conservative tractable surrogate from a probability bound",
+    "evidence": "Hunter-bound quadratic constraint is feasible for the exact model, linearizable for MIP solvers, valid without independence.",
+    "pages": "pp. 9-11"
+   }
+  ],
+  "transferable": [
+   "Make a chance-type product constraint tractable with Hunter's spanning-tree Bonferroni bound: quadratic, conservative, valid without independence (pp. 9-10).",
+   "For nonmonotone constraints, prove a one-sided increment bound and derive an on-the-fly checkable cover-validity condition (pp. 12-13).",
+   "Report a '# over limit' column and state that averages exclude limit-hitting runs (p. 19)."
+  ],
+  "coauthors": "Noam Goldberg, Ilya Safro",
+  "quotes": [
+   {
+    "text": "Hence, in general gi(x) is not monotone in x and consequently it is not straightforward to apply standard cover inequalities to formulation (6).",
+    "page": 12
+   },
+   {
+    "text": "The reason may be that CBC heuristics were sufficiently effective in finding feasible solutions and that, in fact, the tightening of the upper bounds, rather than the global lower bound, dominated the computation running times.",
+    "page": 20
+   }
+  ]
+ },
+ {
+  "id": "S113",
+  "year": "2015",
+  "title": "Visualizing and improving the robustness of phase retrieval algorithms",
+  "read_level": "full",
+  "contribution": "Recasts Fienup's HIO as a saddle-point (Nash) iteration, generalizes it with optimal step pairs and L-BFGS/CG directions inside and outside the support, and maps convergence basins on a two-unknown instance (L-BFGS + HS reaches the global minimum from 99% of starts vs about 75% for optimal-step HIO).",
+  "problem_entry": "HIO, the experimentalists' workhorse, stagnates depending on the start, and solutions are picked by subjective criteria (pp. 3, 10).",
+  "key_idea": "HIO is the alpha=1 special case of a min-max two-step update; choose (alpha, beta) by an inertia-corrected Newton step and replace gradient directions with quasi-Newton or CG, resetting on wrong-sign directions (pp. 4-7).",
+  "assumptions": "One synthetic 16x16 real exit wave, three-pixel support known, one pixel fixed, so only two unknowns remain (pp. 6-7).",
+  "proof_devices": [],
+  "experiments": "81 inside/outside direction combinations x 441 grid starts; success fraction of reaching the global minimum; no timing, noise or realistic size (pp. 7-10).",
+  "positioning": "Builds on Bauschke-Combettes-Luke (HIO as Douglas-Rachford) and Marchesini's saddle-point view (pp. 3-4).",
+  "writing": "Short conference paper; contributions paragraph in §1; visual evidence carries the argument (pp. 3, 8-9).",
+  "limits_future": "One low-dimensional synthetic problem; fewer random starts for experimentalists is anticipated, not tested (p. 10).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "NLP toolkit (inertia-corrected Newton, L-BFGS, CG) carried into phase retrieval; the field's workhorse recast as a special case.",
+    "pages": "pp. 4-6"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Smallest instance used to see the whole landscape and its basins, not to break a method.",
+    "pages": "pp. 6-8"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "basin-of-attraction map on a reduced problem",
+    "evidence": "Two free unknowns keep the four symmetry minima; each of 441 starts coloured by the minimum reached; success fraction per variant.",
+    "pages": "pp. 7-9"
+   }
+  ],
+  "transferable": [
+   "Reduce a nonconvex problem to two unknowns that keep its symmetry minima, run variants from a grid of starts and report the fraction reaching the global minimum (pp. 7-9).",
+   "Write the field's heuristic as a special case of a parameterized optimization step and optimize the parameters per iteration (p. 4).",
+   "In min-max iterations with quasi-Newton or CG directions, check each directional derivative's sign and reset to the gradient step when wrong (p. 7)."
+  ],
+  "coauthors": "Ashish Tripathi, Todd Munson, Stefan M. Wild",
+  "quotes": [
+   {
+    "text": "HIO with optimal (α, β) can find the global minimum mG about 75% of the time out of all 441 starting points explored.",
+    "page": 7
+   },
+   {
+    "text": "Solutions obtained in this way are invariably different, and what are considered “good” solutions is sometimes left to more subjective, qualitative criteria.",
+    "page": 10
+   }
+  ]
+ },
+ {
+  "id": "S156",
+  "year": "2015",
+  "title": "Oscillation Mitigation in Electric Power Grids via Semidefinite Programming",
+  "read_level": "full",
+  "contribution": "For identical generators, the swing-system eigenvalues are explicit functions of the Laplacian eigenvalues, so placing the spectrum in a damping region becomes an SDP on line susceptances; shown on a 5-generator example.",
+  "problem_entry": "Inter-area oscillations precede blackouts; the literature analyses eigenvalues of a given system, and spectral constraints on nonsymmetric matrices are nonconvex and nonsmooth (pp. 2-3).",
+  "key_idea": "Assume identical generators, derive gamma = (-beta +- sqrt(beta^2 - 4 alpha lambda))/(2 alpha), and turn the region into a band on the Laplacian spectrum enforced by LMIs while minimizing total susceptance (pp. 3-4).",
+  "assumptions": "Linearized swing equation (negligible conductance, small angle differences, unit voltages); identical generators; alpha and beta chosen by hand before the SDP (pp. 3-4).",
+  "proof_devices": [
+   "Eigenvector elimination giving a quadratic in gamma (Proposition 3.1, p. 3)",
+   "Shift of the Laplacian's zero eigenvalue by c2 J with J = 11^T/N (Proposition 4.1, p. 4)"
+  ],
+  "experiments": "One 5-generator series network in YALMIP; designed system halves peak amplitude and oscillation length (p. 4).",
+  "positioning": "Moves from eigen-analysis of given systems (Kundur, Klein et al.) to design; cites eigenvalue-optimization nonconvexity (Burke-Henrion-Lewis-Overton) as the obstacle (pp. 2-3).",
+  "writing": "Short control-style note: proposition, algorithm, one example (pp. 3-4).",
+  "limits_future": "Identical-generator assumption, single tiny example, alpha and beta not optimized jointly; no future work stated (pp. 3-5).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Nonconvex nonsmooth spectral constraint made convex by a structural modelling assumption rather than by a new algorithm.",
+    "pages": "pp. 3-4"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Home tools here are conic/SDP modelling, not filter/SQP; likely first author's voice.",
+    "pages": "pp. 2-4"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "structural assumption that convexifies a spectral design constraint",
+    "evidence": "Identical generators make system eigenvalues explicit in Laplacian eigenvalues, so the region constraint becomes an LMI band.",
+    "pages": "pp. 3-4"
+   }
+  ],
+  "transferable": [
+   "For network dynamics design, find an assumption under which system eigenvalues are explicit in the Laplacian's, then express spectral regions as LMIs on L, using J = 11^T/N to step over the zero eigenvalue (pp. 3-4)."
+  ],
+  "coauthors": "Fu Lin",
+  "quotes": [
+   {
+    "text": "However, constraints on the spectrum of a generic A-matrix in (3) are hard constraints.",
+    "page": 3
+   },
+   {
+    "text": "For identical generators, we obtain an explicit relation between the spectrum of the linearized dynamics and the spectrum of the interconnection matrix.",
+    "page": 2
+   }
+  ]
+ },
+ {
+  "id": "S072",
+  "year": "2016",
+  "title": "A two-level approach to large mixed-integer programs with application to cogeneration in energy-efficient buildings",
+  "read_level": "partial",
+  "contribution": "A two-level method for two-stage MILPs with over a million second-stage binaries: a profile restriction (upper bound, exact with optimal profiles) plus constraint aggregation closed by row addition with an LP warm-start, solving 10-year building cogeneration models beyond CPLEX (read in the arXiv v1 version).",
+  "problem_entry": "Scale: 1.05 million hourly binaries with as many coupling constraints, so decomposition does not apply and short horizons bias the first-stage design (pp. 2, 17, 21).",
+  "key_idea": "Multigrid-style primal coarsening (choose among daily on/off profiles) and dual coarsening (sum constraints per day, add violated rows back), with the row set seeded by the LP relaxation because MILPs do not warm-start; profiles harvested from moving-horizon short solves (pp. 3, 5-9, 12-14).",
+  "assumptions": "m << N and m << M; no sparsity assumed; EnergyPlus demand for five buildings with interpolation and 2% noise (pp. 2, 14).",
+  "proof_devices": [
+   "Feasibility mapping: restricted model is a tightening, exact if optimal profiles are included (Proposition 2.2, pp. 7-8 arXiv)",
+   "Finite termination of row addition since finitely many rows (p. 9 arXiv)",
+   "Kronecker-product form of restriction and aggregation operators (p. 10 arXiv)"
+  ],
+  "experiments": "CPLEX 12.6.1/AMPL, 3-h limit, 1% gap; full model exponential in horizon (84 days >18% gap); semi-coarse 10-year solved in ~3,350 s; first coarse iterate within mu <= 0.05; LP warm-start cuts MILP re-solves 6 to 2 (pp. 14-21).",
+  "positioning": "Relates to Zipkin aggregation, surrogate constraints, bilevel MIP and multigrid optimization (Gelman-Mandel, Gratton et al., Wen-Goldfarb); claims novelty for MIPs with real coefficients (p. 3).",
+  "writing": "Numbered fourfold contribution paragraph; open problems stated precisely in the conclusion (pp. 4, 23).",
+  "limits_future": "Only an upper bound; lower bounds an open problem; profiles fixed (pricing suggested); multi-sweep cycles as in PDE multigrid (p. 23).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Formulation is restructured (profiles, aggregation, constraints embedded in profiles) before the algorithm; CPLEX logs read as diagnosis.",
+    "pages": "pp. 17-18"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "States that only an upper bound is obtained and that the lower bound is open.",
+    "pages": "p. 23"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Carried-in toolkit is multigrid from PDE solvers, not filter/SQP.",
+    "pages": "pp. 3-4, 23"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "multilevel coarsening for discrete/conic optimization",
+    "evidence": "Restriction to profiles gives an upper bound; aggregation gives a relaxation closed by row addition; same multigrid framing in S185.",
+    "pages": "pp. 3, 7-9, 23"
+   }
+  ],
+  "transferable": [
+   "Pair a variable restriction to precomputed patterns (upper bound, exact with the optimal pattern) with constraint aggregation closed by row addition (pp. 7-10).",
+   "Run the row-generation loop on the LP relaxation first to seed the MILP loop, and report re-solve counts with and without it (pp. 9, 21).",
+   "Harvest valid patterns from moving-horizon solves of short instances; select by frequency, extremes or k-means (pp. 12-14).",
+   "Show intractability and short-horizon bias in one horizon-length table of time, nodes, LP iterations and first-stage decisions (p. 17)."
+  ],
+  "coauthors": "Fu Lin, Todd Munson",
+  "quotes": [
+   {
+    "text": "Since the coarse model is a relaxation of the semi-coarse model, which itself is a tightening of the full model, the coarse model is not a relaxation of the original MILP.",
+    "page": 23
+   },
+   {
+    "text": "It is an open problem how to generate lower bounds using appropriate coarse MILPs.",
+    "page": 23
+   }
+  ]
+ },
+ {
+  "id": "S104",
+  "year": "2016",
+  "title": "Overcoming the power wall by exploiting inexactness and emerging cots architectural features: Trading precision for improving application quality",
+  "read_level": "full",
+  "contribution": "A RAPL-measured limit study and instruction-count energy model of IEEE double, single and half precision on a COTS Intel processor, finding a 3.98x energy saving from double to half precision, driven mainly by memory traffic.",
+  "problem_entry": "The exascale power wall; earlier inexact-precision gains required non-IEEE hardware, so the question is what COTS precision modes deliver (pp. 1-2).",
+  "key_idea": "Hand-built vector-FMA microbenchmarks per precision, energy measured by RAPL, explained by Cachegrind counts times measured EPIs, abstracted as virtual joules (pp. 2-5).",
+  "assumptions": "One i7-4770 workstation; RAPL underestimates main-memory cost; some EPIs from literature; half-to-single conversion cost unconfirmed (pp. 2, 5).",
+  "proof_devices": [],
+  "experiments": "Array sizes 32 to 2^28; asymptotic EPI 187/70/47 nJ/op; model ratios 2.92 and 1.19 vs measured 2.67 and 1.49 (pp. 3-5).",
+  "positioning": "Continues Palem's inexact-design programme and Duben et al. 2015 (p. 2).",
+  "writing": "Thesis-driven, with four research questions listed; ends with an exclamatory outlook (pp. 2, 6).",
+  "limits_future": "Energy model over/underestimates; reinvesting saved energy in algorithm quality is proposed, not tested (p. 6).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Paper-level evidence only (not Leyffer's voice): modelled and measured ratios reported side by side; no competitor baselines.",
+    "pages": "p. 5"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Report modelled and measured ratios side by side and name the cost entries taken from literature or unconfirmed (p. 5)."
+  ],
+  "coauthors": "Mike Fagan, Jeremy Schlachter, Kazutomo Yoshii, Krishna Palem, Marc Snir, Stefan M. Wild, Christian Enz",
+  "quotes": [
+   {
+    "text": "Note that the total savings when going from double precision to half precision are a factor of 3.98.",
+    "page": 4
+   },
+   {
+    "text": "The important lesson from this study is that the energy gains derived from reduced-precision computation have three sources:",
+    "page": 5
+   }
+  ]
+ },
+ {
+  "id": "S185",
+  "year": "2016",
+  "title": "A multilevel approach for a class of semidefinite programs",
+  "read_level": "full",
+  "contribution": "A multilevel method for diag-constrained SDPs on graphs: dual log-barrier, closed-form rank-1 coordinate descent at fine levels, Newton at the coarsest, algebraic-distance coarsening with Laplacian-preserving operators; within 1e-3 of SDPT3 at 25-75% of its time on complete graphs (read in the ANL preprint version).",
+  "problem_entry": "Large sparse graph SDPs (max-cut, phase retrieval); earlier coordinate-descent SDP methods use the dense primal, while the dual keeps the sparsity of L (pp. 2-3).",
+  "key_idea": "Multigrid V-cycle on the dual barrier: coordinate descent with Delta y_i = mu/b_i - 1/S_ii and Sherman-Morrison updates, coarsening by Ron-Safro-Brandt algebraic distance (pp. 5-7).",
+  "assumptions": "L a graph Laplacian, b >= 0; fixed barrier mu = 1e-3 rather than path following; each non-seed joins one seed (pp. 3, 7).",
+  "proof_devices": [
+   "Structure preservation: restriction R^T L R is a Laplacian; R characterized by disjoint covering supports (Lemma 3.1, Proposition 3.1, p. 3 preprint)",
+   "Prolongation keeps Laplacian property but can create negative edges (Lemma 3.2, Fig. 1, pp. 4-5 preprint)",
+   "Dual/primal feasibility preserved under restriction/prolongation (Lemmas 3.3-3.4, pp. 4-5 preprint)",
+   "Positive definiteness of the CD step via interlacing and the matrix determinant lemma (Lemma 4.1, p. 6 preprint)"
+  ],
+  "experiments": "Matlab prototype vs SDPT3; complete graphs n=250-4000: differences <1e-3, time 25% to 75% of SDPT3 as n grows; IEEE 118-bus single-level Newton 29.75% of SDPT3 time; forced coarsening not competitive (pp. 7-8).",
+  "positioning": "Builds on multilevel graph methods (Koren et al., Ron-Safro-Brandt, LAMG) and coordinate descent (Nesterov); differs from primal block-CD SDP methods (pp. 2, 6).",
+  "writing": "Control-conference format; prototype caveat stated; conclusion claims competitiveness for large problems (pp. 7-8).",
+  "limits_future": "Prototype; not competitive on small power network; time advantage shrinks with n; dense test graphs despite sparsity motivation; no overall convergence theory (pp. 3, 7-8).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Dual formulation chosen to keep graph sparsity before designing the algorithm.",
+    "pages": "pp. 2-3"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "States where it loses (118-bus coarsening) and labels code a prototype; conclusion's large-problem claim outruns a worsening trend.",
+    "pages": "pp. 7-8"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Solver assembled from swappable components (Newton, CD, coarsening), but no existing solver is modified.",
+    "pages": "p. 5"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "multilevel coarsening for discrete/conic optimization",
+    "evidence": "Restriction/prolongation operators with proven structure preservation, Newton at coarsest level, CD at fine levels; same multigrid framing as S072.",
+    "pages": "pp. 3-7"
+   }
+  ],
+  "transferable": [
+   "For a log-det barrier on Diag(y) - L, use the closed-form coordinate step with a Sherman-Morrison update and prove positive definiteness by interlacing plus the determinant lemma (p. 6).",
+   "When designing restriction/prolongation operators, prove which structure each preserves and show with a 3-node example what is lost (pp. 3-5)."
+  ],
+  "coauthors": "Fu Lin, Zichao Di",
+  "quotes": [
+   {
+    "text": "This allows us to exploit the sparsity structure of the underlying graphs.",
+    "page": 2
+   },
+   {
+    "text": "(For this small example, the multilevel approach is not as competitive as SDPT3, due to the slow convergence rate of coordinate descent and the additional computation of the algebraic distance and the coarsening scheme.)",
+    "page": 8
+   }
+  ]
+ }
+]

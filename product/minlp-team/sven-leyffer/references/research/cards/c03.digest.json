@@ -1,0 +1,245 @@
+[
+ {
+  "id": "S101",
+  "year": "2001",
+  "title": "Generalized outer approximation",
+  "read_level": "full",
+  "contribution": "An encyclopedia entry that reformulates convex MINLP exactly as one MILP master problem (projection onto the integers plus linearisations, with infeasible subproblems handled through a general feasibility problem that corrects Duran-Grossmann), and derives linear OA, quadratic OA, LP/NLP-based and the new QP/NLP-based branch-and-bound as relaxations of it, with finite termination.",
+  "problem_entry": "Convex MINLP under convexity, compactness and a CQ for every fixed-y NLP; entry by correcting the Duran-Grossmann/Yuan master problem, whose treatment of infeasible subproblems could cycle and admits an instance giving an incorrect master (pp. 1-2).",
+  "key_idea": "Exact MILP master M via projection and supporting hyperplanes, feasibility cuts from F(y^k) with a J/J-perp partition; algorithms are relaxations of M: linear OA with eta < UBD, quadratic OA with curvature in the objective only, LP/NLP-BB updating one tree, generalised to nonlinear-in-y, plus QP/NLP-BB (pp. 1-7).",
+  "assumptions": "(A1) f, g C2 and convex; (A2) X, Y compact convex polyhedral; (A3) CQ at every fixed-y NLP solution; |Y| finite for termination; claim that strongly active linearisations suffice stated without proof (pp. 1-4).",
+  "proof_devices": [
+   "Equivalence of P and M (Theorem 2, p. 3) by projection + supporting hyperplanes + Lemma 1 (proof deferred to [6]); stated as 'if and only if', the form later shown too strong by Bonami et al.",
+   "Finite termination by a strict upper bound eta < UBD that cuts off every visited assignment (Theorem 3, outline p. 4)",
+   "Same no-repeat argument transferred to the tree search (Corollary 4, p. 6)",
+   "Curvature term only in the master objective preserves the outer-approximation region and hence finiteness (pp. 4-5)"
+  ],
+  "experiments": "None new; reports thesis/NA151 results: curvature cuts OA iterations only with general integers, LP and QP versions of LP/NLP-BB often 2x faster than OA (pp. 5, 7).",
+  "positioning": "Explicit generalisation and correction of Duran-Grossmann OA and Quesada-Grossmann LP/NLP-BB, neutral tone ('an inaccuracy'); links the MINLP line to his NLP filter through the feasibility problem (pp. 1-3, 5).",
+  "writing": "Encyclopedia register; sections announce and motivate each other; proofs outlined and deferred to the 1994 paper; two diagrams carry the algorithms; evaluations labelled 'preliminary' (pp. 3-7).",
+  "limits_future": "QP/NLP-BB loses pruning since QPs give no lower bounds; quadratic OA helps only with general integers; detailed numerical comparison still outstanding (pp. 5, 7).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Predecessor's master problem tested against a breaking instance before replacement; worst-case example (OA visits all integer assignments) drives the redesign to quadratic OA.",
+    "pages": "pp. 2-5"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "LP/NLP-BB integrates NLP solves into a single MILP tree instead of alternating separate master solves.",
+    "pages": "pp. 5-7"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Rule of thumb by class (general integers vs binaries) and an explicit 'still outstanding' comparison.",
+    "pages": "pp. 5, 7"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Weak: the NLP feasibility filter (NA/171) enters the MINLP master as an admissible feasibility problem.",
+    "pages": "pp. 2-3"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "exact but impractical reformulation as design scaffold",
+    "evidence": "M is equivalent to P but needs every NLP solved; all algorithms are built as relaxations of M.",
+    "pages": "p. 3"
+   },
+   {
+    "pattern": "curvature only where it cannot break the guarantee",
+    "evidence": "Second-order Lagrangian term added to the master objective, not constraints, so finiteness survives.",
+    "pages": "pp. 4-5"
+   }
+  ],
+  "transferable": [
+   "State the exact impractical reformulation first and derive each algorithm as a relaxation; finiteness then follows because relaxations only tighten and never revisit an assignment (pp. 3-4).",
+   "Take infeasibility cuts from the feasibility problem the NLP solver actually solves (J/J-perp partition covering l1, l-infinity, filter phase I) (pp. 2-3).",
+   "Prove finiteness by a strict upper-bound constraint that cuts off the current assignment, bounding iterations by |Y| (p. 4).",
+   "In tree-based OA, do not fathom integer-feasible nodes; re-solve them after the new cuts (p. 6)."
+  ],
+  "coauthors": "none (sole author)",
+  "quotes": [
+   {
+    "text": "However, it is not difficult to derive an MINLP problem where this would lead to an incorrect master problem",
+    "page": 2
+   },
+   {
+    "text": "A detailed numerical comparison of the two approaches is still outstanding.",
+    "page": 7
+   }
+  ]
+ },
+ {
+  "id": "S001",
+  "year": "2002",
+  "title": "Nonlinear programming without a penalty function",
+  "read_level": "full",
+  "contribution": "Introduces the filter (accept an SQP trust-region step if its (f, h) pair is not dominated) as a penalty-free globalization, engineers it into the production code filterSQP with SOC steps, a phase-I-filter restoration built on the QP solver's phase I, unblocking and sufficient-reduction rules, and shows on CUTE that it is more reliable and usually faster than LANCELOT and a best-case Sl1QP, with no convergence proof yet.",
+  "problem_entry": "Penalty parameters force hard user decisions and fail both ways; users also need fast convergence to a best point when constraints are inconsistent (e.g. inadequate modelling); a no-penalty Dundee thesis worked without proof (pp. 1-2).",
+  "key_idea": "Bi-objective view of f and l1 violation h with a non-dominance filter replacing penalty descent; minimalist interference with SQP; restoration minimises h via the QP solver's phase I partition with second-order terms; heuristics (SOC, upper bound tube, unblocking, envelope, NW/SE corners) added only against named failures (pp. 2-17).",
+  "assumptions": "f, c C2 with exact second derivatives (AD available); linear constraints kept feasible by an initial LP; global convergence explicitly open; indefinite-QP and unblocking cases admitted as problematic but rare (pp. 1, 3, 7, 17).",
+  "proof_devices": [
+   "No theorem; heuristics framed as provisional ingredients of a future global convergence proof (pp. 7, 13)",
+   "Cycling excluded informally: upper bound acts as a filter entry with f = -infinity plus sufficient reduction (p. 12)",
+   "Byrd's oscillation scenario named and patched by the NW corner rule, later shown dispensable via the SLP-filter proof [10] (pp. 14-15)",
+   "Maratos-type example from Fletcher's book (unit step raises both f and h) used to justify SOC steps (pp. 7-8)"
+  ],
+  "experiments": "CUTE, exact Hessians, bqpd; vs LANCELOT defaults and own Sl1QP at its most favourable penalty; 127 of 186 small problems after removing differing minima (crashes 0/2/12; CPU 37.95/107.45/82.47), 159 large (23 vs 5 problems >100x faster), named failures with causes, safeguard firing tables and corner-rule switch-off, filter length statistics (pp. 17-24).",
+  "positioning": "SQP lineage Wilson-Han-Powell; penalty, augmented Lagrangian and watchdog as foil; Zoppke-Donaldson tolerance tube as inspiration; LANCELOT's wins explained structurally (CG on PDEs, large null spaces) and its losses too (pp. 2, 9, 20-21).",
+  "writing": "Idea in two definitions and a short algorithm, then an admitted very large step to production software with many messy details; visible self-correction across revisions (large-problem results less encouraging than an earlier subset suggested); concrete hedges (pp. 4-6, 20).",
+  "limits_future": "No global convergence proof; no scaling; EIGENC/QR3DBD crash from ill-conditioned QPs; corner rules may be violated during unblocking; verdicts depend on test-set mix; heuristics to be simplified guided by [10] (pp. 3, 7, 15, 21-23).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Self-built Sl1QP at its best penalty with the rule written down; crashes kept in Table 1; removed problems listed with reasons; losses explained by class; claim narrowed between revisions; test-set-mix caveat.",
+    "pages": "pp. 18-22"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Restoration and SOC exploit their own QP solver's phase I partition and hot starts; the basic algorithm needs no special-purpose QP solver.",
+    "pages": "pp. 6, 8-10"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Inconsistent constraints traced to modelling; large multipliers read as nearly dependent active constraints; per-instance diagnoses (scaling, unboundedness).",
+    "pages": "pp. 2, 17, 22"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Own method tested on Maratos-type examples; an example where the unit step increases f and h justifies SOC steps.",
+    "pages": "pp. 7-8"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "safeguard firing statistics",
+    "evidence": "Tables count how often each heuristic (upper bound, unblocking, NW/SE corners) acts per phase, plus a switch-off run of the corner rules.",
+    "pages": "pp. 23-24"
+   },
+   {
+    "pattern": "heuristics as provisional proof ingredients, trimmed once the proof exists",
+    "evidence": "Heuristics declared an indication of what a convergence proof needs; corner rules to be dropped after the SLP-filter proof.",
+    "pages": "pp. 7, 13, 15"
+   }
+  ],
+  "transferable": [
+   "Give a self-built baseline its most favourable parameter (penalty from optimal multipliers) and say so (p. 18).",
+   "Drop instances where solvers reach different local minima, report the count, keep crashes in the summary table (p. 18).",
+   "Explain each class where the competitor wins by a structural reason instead of averaging it away (p. 20).",
+   "Report how often each safeguard fires and the effect of switching it off (pp. 23-24).",
+   "Build restoration from the inner solver's phase I output and hot-start the next QP so restoration costs about one QP (p. 10)."
+  ],
+  "coauthors": "Roger Fletcher",
+  "quotes": [
+   {
+    "text": "The aim is to interfere as little as possible with the SQP iteration but to do enough to give a bias towards onvergene.",
+    "page": 2
+   },
+   {
+    "text": "Thus any heuristis that might be suggested to enable a global onvergene result to be proved should be heap to apply and rarely invoked.",
+    "page": 3
+   }
+  ]
+ },
+ {
+  "id": "S005",
+  "year": "2002",
+  "title": "On the global convergence of a filter--SQP algorithm",
+  "read_level": "unreadable",
+  "contribution": "",
+  "problem_entry": "",
+  "key_idea": "",
+  "assumptions": "",
+  "proof_devices": [],
+  "experiments": "",
+  "positioning": "",
+  "writing": "",
+  "limits_future": "",
+  "method_links": [],
+  "new_pattern_candidates": [],
+  "transferable": [],
+  "coauthors": "R Fletcher, PL Toint",
+  "quotes": []
+ },
+ {
+  "id": "S007",
+  "year": "2002",
+  "title": "Global convergence of a trust-region SQP-filter algorithm for general nonlinear programming",
+  "read_level": "full",
+  "contribution": "Proves first-order global convergence of a trust-region SQP-filter method that splits the step into normal and tangential parts, needs only a Cauchy-type decrease instead of a global QP solve, and uses a margin filter whose blocked region never shrinks, an f/theta switching test and a restoration phase.",
+  "problem_entry": "Earlier filter theory needed SLP subproblems or a global solve of a nonconvex (NP-hard) QP; remove that requirement and allow approximate subproblem solutions for general nonconvex NLP (pp. 2-3).",
+  "key_idea": "Composite step n_k + t_k with a compatibility test on ||n_k||, Cauchy-point decrease for t_k, restoration on the l-infinity violation, margin filter (2.17) with envelope-monotone removal (2.18), and an f-step/theta-step switch (2.19)-(2.20) (pp. 4-10).",
+  "assumptions": "AS1 C2 functions, AS2 bounded Hessian approximations, AS3 bounded iterates, normal-step assumption (2.10) justified by continuity under regularity at limit points; restoration assumed to succeed or reach an infeasible stationary point; AS3 later replaced by AS4 (pp. 4-7, 12, 22).",
+  "proof_devices": [
+   "Area counting: each filter addition blocks a gamma*rho square that stays blocked, so theta -> 0 on filter iterations (Lemma 3.3, pp. 13-14)",
+   "Chain of small-radius lemmas: theta growth O(Delta^2), model decrease, rho >= eta2, switching test, acceptability, compatibility (Lemmas 3.4-3.9, pp. 14-18)",
+   "Two-case split on infinitely vs finitely many filter additions (Lemmas 3.10-3.13, pp. 18-21; Theorem 3.14, pp. 21-22)",
+   "Finite restoration because feasible iterates never enter the filter (2.21) (pp. 10-11)",
+   "Criticality via theta plus convex measure chi_k with perturbation theory (Lemma 3.2, p. 13)"
+  ],
+  "experiments": "n/a (only preliminary numerical experiments said to match [18], no data; constants labelled provisional, pp. 9, 22).",
+  "positioning": "Builds on Fletcher-Leyffer [18] (S001), SLP-filter [19], filter-SQP [20] (S005) and the composite-step / Cauchy-point trust-region literature; Waechter-Biegler line-search filter acknowledged in a footnote (pp. 2-6).",
+  "writing": "SIAM theory style: algorithm, a page of design commentary, then lemmas; practical gaps named inside the analysis ((2.15) hard to verify, radius after restoration untested); conclusion frames theory as reassurance for a method that already works (pp. 10-11, 22).",
+  "limits_future": "Local convergence not treated; SOC likely needed against Maratos; second-order criticality open; alternative rho_k (3.15) may be needed; analysis assumes restoration succeeds (pp. 11-12, 22-23).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Removes an analysis-induced restriction (global QP solve required by the earlier proof) rather than a packaged-software one.",
+    "pages": "p. 3"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "The home method imports outside machinery (composite steps, Cauchy points) with its owners as coauthors, rather than carrying the home toolkit into a new class.",
+    "pages": "pp. 2, 4-6"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Example where the SQP step increases both f and theta used to name the missing local theory (SOC, Maratos).",
+    "pages": "p. 22"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Constants and radius rules declared provisional; numerical claim limited to 'similar to' [18].",
+    "pages": "pp. 9-10, 22"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "end-of-paper assumption audit",
+    "evidence": "'Can we dispense with AS3?': replaces AS1/AS3 by AS4 and states what is lost (existence of a limit point).",
+    "pages": "p. 22"
+   }
+  ],
+  "transferable": [
+   "Bound bad acceptances of a bi-criteria test by giving each accepted entry a fixed blocked box and counting boxes in a bounded region (pp. 13-14).",
+   "Make filter-entry removal envelope-monotone so the blocked region never shrinks, as the proof needs (pp. 8, 14).",
+   "Split the convergence proof on infinitely vs finitely many filter additions (pp. 18-21).",
+   "Replace an unverifiable exact subproblem solve by a Cauchy-point fraction of model decrease (p. 6).",
+   "Justify each technical assumption in the text from regularity at limit points, and after the theorem ask which assumption can be dropped (pp. 5, 22)."
+  ],
+  "coauthors": "R Fletcher, NIM Gould, PL Toint, A Waechter",
+  "quotes": [
+   {
+    "text": "but it is too early to know if these are even close to the best possible choices.",
+    "page": 9
+   },
+   {
+    "text": "Since the performance of the latter is excellent, the theory developed in this paper provides the reassurance that filter algorithms also have reasonable convergence properties, which then makes these methods very attractive.",
+    "page": 22
+   }
+  ]
+ }
+]

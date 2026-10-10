@@ -1,0 +1,82 @@
+[
+  {
+    "id": "S028",
+    "year": "2013",
+    "title": "On branching rules for convex mixed-integer nonlinear optimization",
+    "read_level": "full",
+    "contribution": "First systematic modern study of branching rules for NLP-based branch-and-bound in convex MINLP, showing MILP reliability branching transfers and that hot-started QP strong branching (QP-fullstrong) is a viable option on difficult problems; read in the 2011 Argonne TR version.",
+    "problem_entry": "Revisits B&B for convex MINLP, 'largely given up on' in favour of OA-based branch-and-cut, 25 years after Gupta-Ravindran's branching experiments; asks whether it can be made viable and gives three goals (TR p. 3).",
+    "key_idea": "Transfer MILP branching rules unchanged, then replace the strong-branching child NLPs by QPs built from the parent's (x*, y*, H*) so the KKT matrix is constant and BQPD can be hot-started from one stored factorization (TR pp. 6-8, 11-13); LP/ECP variants tried and found not to pay (TR pp. 15-16).",
+    "assumptions": "Convex C2 functions (TR p. 4); QP/LP value equals the NLP value only if a CQ holds at x* (TR pp. 12, 15); QP infeasibility is valid for fixing/fathoming but QP values are not lower bounds, LP values are (TR pp. 12, 15); mu = 0.7/0.1 set without justification (TR p. 7).",
+    "proof_devices": [
+      "Convexity argument separating valid bounds (LP) from guides only (QP) for approximate child problems (TR pp. 12, 15)",
+      "Null-space account of BQPD hot starts: [A:V]=LU, Y, Z, reduced-Hessian LDL^T, block inverse of the KKT matrix via W, T, U; factorization stored and restored per candidate (TR p. 13)",
+      "Explicit statement that no theory justifies a branching rule, so the study is empirical (TR p. 5)"
+    ],
+    "experiments": "88 of about 150 instances (MacMINLP, MINLPLib, CMU-IBM) after removing too-easy (<1000 nodes for all) and too-hard (unsolved by all in 3 h) ones; all rules in Bonmin rev. 1714 with filterSQP and BQPD, heuristics off, best-bound node selection; performance profiles in CPU and nodes, scatter plots, per-instance tables with time-outs; QP strong branching up to 10x more nodes but less time, hot starts halve time per candidate, LP strong branching no gain, OA Hybrid fails on 27 of the B&B-filtered set (TR pp. 5, 9-18, 22-34).",
+    "positioning": "Continues Gupta-Ravindran 1985 and imports MILP branching work (Benichou, Applegate et al., Achterberg et al., Glankwamdee-Linderoth); concedes OA-based methods usually win, then frames NLP-BB as indispensable for some difficult MINLPs (TR pp. 3, 9, 18-19).",
+    "writing": "Numbered goals and roadmap up front (TR pp. 3-4); negative results stated flatly (TR pp. 15-16); hedged conclusion 'viable option and worth trying' (TR p. 18); preprint slips (32 MB RAM, four vs five problems, Fig. 8 caption) (TR pp. 5, 17, 18).",
+    "limits_future": "Stronger relaxations, heuristics and node selection out of scope (TR pp. 4-5); test-set bias toward B&B stated (TR p. 18); future: adapt QP-reliability to OA-based algorithms (TR p. 19).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "Speed-up comes from owning the inner solvers: storing/restoring BQPD KKT factors and reading the parent NLP's x*, y*, H* as the child model; confounding Bonmin features switched off.", "pages": "TR pp. 5, 11-13"},
+      {"method": "Method 5", "relation": "evidence", "note": "Same-framework baselines, CPU and node meters, time-outs kept in tables, filter and its bias stated, losses (LP, ECP, outliers) reported, hedged class-level conclusion.", "pages": "TR pp. 5, 9-18, 25-34"},
+      {"method": "Method 5", "relation": "variant", "note": "Parameters (k_rely=1, mu values) chosen on the same 88-instance comparison set, openly stated: the tuning/comparison overlap already recorded for FilMINT.", "pages": "TR pp. 7, 17"},
+      {"method": "Method 2", "relation": "variant", "note": "Transfer runs the other way: MILP branching toolbox into the NLP-based tree, with the SQP-style QP model as the home-toolkit ingredient. Also Heuristic 1 (plain baseline, revision recorded, TR p. 5), Heuristic 7 (active-set warm starts preferred, TR p. 4; measured, TR p. 14), Taste 2 (revives an abandoned method, TR p. 3).", "pages": "TR pp. 3-5, 11-14"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "cheap local model for look-ahead decisions", "evidence": "Expensive strong-branching NLPs replaced by QP/LP models built from the parent's derivatives, with explicit bookkeeping of which outputs are valid bounds (LP, infeasibility) and which are only guides (QP values).", "pages": "TR pp. 11-15"}
+    ],
+    "transferable": [
+      "Build strong-branching children as QPs from the parent solution and Hessian and hot-start an active-set QP solver from one stored KKT factorization; use QP infeasibility for fixing/fathoming but never QP values as bounds (TR pp. 11-13).",
+      "Before comparing search rules, switch off heuristics, fix node selection and record the solver revision so the rule is the only variable (TR p. 5).",
+      "Filter the test set by explicit too-easy/too-hard thresholds and state in the conclusion whom the filter favours when comparing with another method class (TR pp. 5, 18).",
+      "Report a work meter (nodes) and a time meter (CPU) for every comparison, plus a head-to-head scatter plot, so node-for-time trades are visible (TR pp. 9-16).",
+      "Measure a hot-start claim as average time per candidate with and without it (TR p. 14)."
+    ],
+    "coauthors": "Pierre Bonami, Jon Lee, Andreas Wächter",
+    "quotes": [
+      {"text": "Though largely given up on, there is the possibility that B&B can still be made viable for convex MINLP, and that is the subject of the present investigation.", "page": 3},
+      {"text": "Unfortunately, the efficiency of the dual simplex method for hot-starting LPs does not have an analogue for general convex NLPs.", "page": 11}
+    ]
+  },
+  {
+    "id": "S006",
+    "year": "2014",
+    "title": "Addressing failures in exascale computing",
+    "read_level": "full",
+    "contribution": "29-author DOE/ICiS workshop report (read in its 25 March 2013 version) that sets a resilience taxonomy, estimates exascale error rates, frames three design points and recommends measuring first; its optimization passages (attribution to Leyffer inferred) turn Newton merit-function tests and branch-and-bound trees into fault detection and recovery.",
+    "problem_entry": "Lists the four assumptions behind global checkpoint/restart and why each fails at exascale, then asks which of three design points (business as usual, system-level, application-level) to invest in (pp. 2-3, 7).",
+    "key_idea": "Do not choose yet: measure SDC and failure rates first, invest in technologies needed under every scenario, prefer generic application-level methods; algorithm-level ideas include Newton sufficient-reduction tests as error detectors, B&B recovery from the tree, and minimal algorithmic checkpoints (pp. 2-3, 30-33, 39-40, 49-52).",
+    "assumptions": "Avizienis fault/error/failure taxonomy (pp. 9-12); exponential i.i.d. failures called clearly false over long periods, Weibull/gamma fits (pp. 14-15); 11 nm hardware projections order-of-magnitude at best with stated exclusions (p. 19); single-fault assumption (p. 41); low-order mantissa errors tolerable in Newton, sign/exponent/sparsity errors not (p. 44).",
+    "proof_devices": [
+      "Renewal/epoch argument: utilization = E[Comp]/E[Time], exact and distribution-free (Appendix A, pp. 65-66)",
+      "Poisson specialization to the first-order condition e^{-tau} = 1 - tau + C and utilization 1 - tau + C - R (p. 66)",
+      "Three-term Taylor expansion giving tau_opt = sqrt(2CM) with validity condition C << M (p. 66)",
+      "A posteriori containment bound: error spread to at most ceil(n/k)^3 nodes after n nearest-neighbour iterations (p. 36)",
+      "Scale-invariance of utilization in checkpoint and recovery time relative to MTTF (p. 46)"
+    ],
+    "experiments": "No algorithm experiments; uses 382 days of Intrepid BG/P failure data (MTTI 7.5 days vs 7-day prediction, component split wrong) (pp. 17-18), FIT estimate tables (pp. 20-21) and utilization maps showing >80% utilization needs checkpoint 1-2% and recovery 2-5% of MTTF (pp. 46-47).",
+    "positioning": "Builds on seven recent resilience reports and the long history of fault tolerance (pp. 8-9); optimization passages cite Fletcher's textbook, Conn-Gould-Toint, Moré-Wild and Linderoth-Wright (pp. 30, 33, 40).",
+    "writing": "Executive summary with four numbered recommendations (pp. 2-3), section epigraphs (pp. 6, 9, 12), explicit hedging and stated uncertainty (pp. 2, 48), one joke (p. 26); optimization passages give one concrete mechanism each (pp. 33, 40, 44).",
+    "limits_future": "Estimates order-of-magnitude (p. 19); application-level techniques algorithm-specific (p. 49); checksums not generalized to multigrid (p. 33); open: hybrid Newton/Gauss-Jacobi analysis after failures (p. 40) and hardware error models in convergence analysis of sampling methods (p. 34).",
+    "method_links": [
+      {"method": "Method 2", "relation": "evidence", "note": "Home NLP toolkit carried into HPC resilience: merit-function sufficient reduction and trust-region fallback as fault detection/recovery, B&B tree as recovery state, noisy-simulation DFO as fault tolerance. Section authorship not stated; attribution to Leyffer (or Munson) inferred.", "pages": "pp. 30-31, 33, 39-40, 44"},
+      {"method": "Method 1", "relation": "variant", "note": "Algorithm-level checkpointing preferred to system-level checkpointing: the iteration-level-integration move set against the operating system rather than a packaged solver.", "pages": "p. 40"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "convergence safeguard as fault detector", "evidence": "Reuse the algorithm's existing acceptance test (sufficient reduction of ||F||^2) to detect corrupted Newton steps and trigger a reduced trust-region recompute; classify which numerical errors Newton tolerates.", "pages": "pp. 33, 44"},
+      {"pattern": "checkpoint the minimal algorithmic state", "evidence": "Store what the algorithm needs to restart (B&B root bounds as two binary vectors; computational graph of the functions), not machine state; resume Newton without message replay.", "pages": "p. 40"}
+    ],
+    "transferable": [
+      "Test each Newton step against the sufficient-reduction condition on ||F||^2: a negative predicted reduction flags a failed solve, a failed test triggers a reduced trust-region recompute (p. 33).",
+      "Classify which numerical errors your algorithm tolerates (low-order Jacobian digits, line-search residual norm) and which it must not (sparsity structure, the convergence-test norm, definiteness-breaking sign changes) before asking for protection from lower layers (p. 44).",
+      "In distributed branch-and-bound, checkpoint only each subtree root's bounds and recompute a lost node solve elsewhere from the tree (pp. 39-40).",
+      "Write utilization as expected useful work per epoch over expected time per epoch before choosing a failure distribution, then specialize to get sqrt(2CM) and its validity condition (pp. 65-66)."
+    ],
+    "coauthors": "Marc Snir, Robert W. Wisniewski, Jacob A. Abraham, Sarita V. Adve, Saurabh Bagchi, Pavan Balaji, Jim Belak, Pradip Bose, Franck Cappello, Bill Carlson, Andrew A. Chien, Paul Coteus, Nathan A. Debardeleben, Pedro C. Diniz, Christian Engelmann, Mattan Erez, Saverio Fazzari, Al Geist, Rinku Gupta, Fred Johnson, Sriram Krishnamoorthy, Dean Liberty, Subhasish Mitra, Todd Munson, Rob Schreiber, Jon Stearley, Eric Van Hensbergen",
+    "quotes": [
+      {"text": "We can use this condition to detect errors during the computation of the (approximate) Newton step.", "page": 33},
+      {"text": "Similarly, branch-and-bound schemes need only to checkpoint the root node of each distributed solve, which can be stored by using two binary vectors.", "page": 40}
+    ]
+  }
+]

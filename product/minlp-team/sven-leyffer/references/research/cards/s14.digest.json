@@ -1,0 +1,356 @@
+[
+ {
+  "id": "S088",
+  "year": "2023",
+  "title": "Binary control pulse optimization for quantum systems",
+  "read_level": "partial",
+  "contribution": "A relax-round-improve framework for binary quantum control with SOS1 and switching constraints: penalized GRAPE or TV-regularized ADMM for the relaxation, SUR/CIA rounding with an extended SUR error bound, and a trust-region approximate local-branching improvement step.",
+  "problem_entry": "Application-driven: GRAPE/CRAB handle only unconstrained continuous controls, while gate/QAOA settings need binary bang-bang controls with one active control and side constraints; B&B too slow, genetic algorithms poor (pp. 2-3).",
+  "key_idea": "Squared L2 exact penalty keeps GRAPE usable for SOS1; TV regularizer solved by ADMM; SUR or CIA rounding (min-up-time, max-switching); trust-region MILP local branching with ared/pred test (pp. 10-19).",
+  "assumptions": "F differentiable (p. 4); uniform piecewise-constant discretization (p. 4); Theorem 3 needs F bounded and DQCP feasible (p. 11); penalty exactness only for binary controls, cited from Sinclair 1986 (pp. 11-12).",
+  "proof_devices": [
+   "Proposition 1: lower bound showing SUR fails without SOS1 in the relaxed control (p. 13)",
+   "Theorem 4: Sager's SUR bound extended by an additive (2N-1)/N*eps(dt) term (p. 13)",
+   "Corollary 1: eps(dt) <= sqrt(t_f * l * dt) ties penalty residual to rounding error (p. 13)",
+   "Theorem 3: l <= 2C_F/rho by contradiction against a feasible point (p. 34)"
+  ],
+  "experiments": "NEOS baselines with versions and time limits on energy minimization q=2,6 (Table 2, p. 20); 12 instances in four classes (Table 3, p. 22); theory-validation plots (Figs. 6, 8, 9, pp. 22-24); objective vs TV scatter (Fig. 12, p. 27); code on GitHub (p. 22).",
+  "positioning": "Extends Vogt-Petersson trust region to constrained binary control and builds on Sager's SUR/CIA and Leyffer-Manns TV trust region [69] (pp. 2, 16, 18).",
+  "writing": "Four numbered contributions (p. 3); a framework figure and an acronym table (p. 8); closing advice by user goal (p. 27).",
+  "limits_future": "No global optimality for ADMM (p. 17); parameters need fine-tuning (p. 27); future: switching-time optimization and running time evolution on quantum hardware (pp. 25, 28).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Mixed-integer optimal-control toolkit (SUR/CIA, trust-region local branching of Leyffer-Manns) carried into quantum pulse design.",
+    "pages": "pp. 3, 16, 18"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Baselines named with versions and limits, but no baseline tuning reported, one problem class, and a broad 'cannot solve' conclusion; closing advice is a rule by goal (step 5).",
+    "pages": "pp. 20, 27"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Proposition 1 shows the known SUR guarantee fails once its SOS1 hypothesis is dropped, before an extended bound is proved.",
+    "pages": "pp. 12-13"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Relax, round with structure, then improve locally",
+    "evidence": "pGRAPE/ADMM relaxation, SUR/CIA rounding, ALB trust-region improvement",
+    "pages": "pp. 8, 12-19"
+   },
+   {
+    "pattern": "theory-quantity profile beside performance profiles",
+    "evidence": "plots of penalty residual vs rho and SUR error vs its bound",
+    "pages": "pp. 22-24"
+   }
+  ],
+  "transferable": [
+   "When the inner solver only handles bounds, move a side constraint into an exact squared penalty, bound its residual by O(1/rho), and extend the rounding theorem by an additive term in that residual (pp. 11-13).",
+   "Plot each theoretical bound against the measured quantity as dt or rho varies (Figs. 6, 8, 9, pp. 22-24).",
+   "Report an objective-vs-switching scatter before and after the improvement step and recommend a method per user goal (pp. 26-27).",
+   "Integer trust-region radius schedule: halve above a threshold, then decrease by one (Algorithm 3, p. 19)."
+  ],
+  "coauthors": "Xinyu Fei, Lucas T. Brady, Jeffrey Larson, Siqian Shen",
+  "quotes": [
+   {
+    "text": "We show that as long as the violation of the SOS1 constraint is small, the solution that is constructed via SUR still satisfies the strong convergence properties of SUR.",
+    "page": 12
+   },
+   {
+    "text": "Both cases require the use of the approximate local branching algorithm to improve final solutions.",
+    "page": 27
+   }
+  ]
+ },
+ {
+  "id": "S115",
+  "year": "2023",
+  "title": "On convergence of binary trust-region steepest descent",
+  "read_level": "partial",
+  "contribution": "Under a compactness assumption on the gradient borrowed from CIA theory, binary trust-region steepest descent (BTR) produces binary iterates converging weakly-* to stationary points of the continuous relaxation; experiments confirm near-optimality and show a regularizing effect exploited by a coarse-SUR + BTR hybrid.",
+  "problem_entry": "Theory gap: BTR known only to reach eps-stationarity, unlike CIA which has stationary limits under compactness (p. 2).",
+  "key_idea": "Import CIA's assumption (grad J weak-norm continuous) and show BTR's termination quantity is the primal-gap criticality measure, so binary iterates converge weakly-* to stationary points of (R) (pp. 3, 8-9).",
+  "assumptions": "Assumption 1.1: J bounded below, Frechet differentiable on L1, grad J Lipschitz L1->L2 and weak-norm continuous (p. 3); {0,1} values and no regularizer for concise presentation (pp. 1-2).",
+  "proof_devices": [
+   "criticality measure C equals the L1 norm of min{g,0} at characteristic functions (Proposition 4.3, p. 8)",
+   "for {-1,0,1}-valued steps the L2 norm is the square root of the L1 norm (p. 11)",
+   "liminf C = 0 by contradiction on a vanishing radius (pp. 11-12), then lim via [35, Theorem 6] over successful steps (p. 12)",
+   "weak lower semicontinuity of C under compactness (p. 13); weak continuity of J by mean value theorem (Proposition 2.1, p. 5)"
+  ],
+  "experiments": "One 2-D elliptic tracking problem, 256x256 mesh: relaxation, CIA (SUR, COR, SHG) and BTR from three starts compared on objective, gap, time, iterations, interface length (Table 1, p. 17); mesh-refinement and hybrid tables (pp. 17-18).",
+  "positioning": "Positions BTR [10] beside CIA [20, 28] and closes the theoretical gap between them; mentions SIMP as the topology-optimization alternative (p. 2).",
+  "writing": "Standing assumptions stated up front with a remark on their domain (p. 3); unexplained observations flagged as such (p. 15).",
+  "limits_future": "BTR slower than CIA (p. 15); implementation not mesh-independent (p. 17); SHG intractable, heuristic used (p. 14); regularizing effect unexplained; future: objective/interface trade-off and adaptive refinement in FindStep (pp. 14-15).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "NLP trust-region acceptance and radius rules carried to binary control functions; analysis follows a standard trust-region proof strategy.",
+    "pages": "pp. 6, 12"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Losses reported: BTR slower, not mesh-independent, no control dominates on both objective and interface length.",
+    "pages": "pp. 15, 17"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "borrow the sibling method's assumption to close a convergence gap",
+    "evidence": "CIA's compactness assumption imported to prove BTR stationarity of limits",
+    "pages": "pp. 2-3, 8"
+   },
+   {
+    "pattern": "Relax, round with structure, then improve locally (with coarse-to-fine warm start)",
+    "evidence": "SUR on coarse meshes then BTR on the fine mesh",
+    "pages": "pp. 17-18"
+   }
+  ],
+  "transferable": [
+   "To close a convergence gap for method A, adopt the assumption under which sibling method B converges and prove A reaches B's stationarity notion (pp. 2-3, 8).",
+   "Show that the algorithm's termination quantity equals a standard criticality measure so the stopping test becomes a first-order condition (Proposition 4.3, p. 8).",
+   "On uniform meshes, solve the binary trust-region subproblem as an equal-weight knapsack by sorting cell averages (p. 14).",
+   "Add a mesh-refinement table (gap, iterations, structural metric) to expose mesh dependence (Table 2, p. 17)."
+  ],
+  "coauthors": "Paul Manns, Mirko Hahn, Christian Kirches, Sebastian Sager",
+  "quotes": [
+   {
+    "text": "This lack of a convergence result is in contrast to CIA, which has stationary limits under a suitable compactness assumption.",
+    "page": 2
+   },
+   {
+    "text": "In particular, our implementation of the algorithm is clearly not mesh-independent.",
+    "page": 17
+   }
+  ]
+ },
+ {
+  "id": "S169",
+  "year": "2023",
+  "title": "Polytopic Superset Algorithm for Nonlinear Robust Optimization",
+  "read_level": "partial",
+  "contribution": "An inner-approximation algorithm for nonlinear robust optimization with constraints affine in the uncertainty: polytopic supersets dualized by LP duality, refined by cuts, giving feasible iterates, two-sided bounds, feasibility restoration and convergence, faster than Polak's algorithm when robust constraints are many.",
+  "problem_entry": "Polak's outer approximation gives infeasible iterates and only lower bounds; affine dependence on u enables an LP-duality reformulation (pp. 3, 5).",
+  "key_idea": "Replace the sample set by a polytopic superset of U, dualize to a finite NLP, shrink by Kelley, projection or gradient-free cuts; phase-I restoration (pp. 7-13).",
+  "assumptions": "g convex C1, f, h, b C1, U compact nonempty, F bounded (p. 2); affine in u (p. 3); MFCQ (p. 4); convex U as extra assumption vs Polak (pp. 15, 17).",
+  "proof_devices": [
+   "Theorem 2: KKT points of the nonconvex dual reformulation satisfy the first-order condition of the semi-infinite subproblem (p. 8)",
+   "Proposition 3: one contradiction with a case per cut type giving uniform separation r/L or r/2R, hence no Cauchy subsequence (pp. 15-16)",
+   "Theorem 3: projection gap and error measure vanish on a subsequence (p. 17)"
+  ],
+  "experiments": "Julia with filterSQP for all NLPs and Mosek for SDP (p. 17); robust asset allocation with T in {7,14,21} (Table 2, p. 19) and 27 production-cost instances on PJM data (pp. 20-22); CPU-time performance profiles.",
+  "positioning": "Places itself among discretization, exchange and local-reduction methods and benchmarks against Polak's exchange method (p. 3); extends robust-LP polytopic reformulation [13, 14] to structured NRO (p. 7).",
+  "writing": "Contrast with Polak stated as feasibility and bounds (pp. 14-15); headline win rate from the performance profile (p. 19); abstract says 'optimal solution' while Theorem 3 gives stationarity (p. 17).",
+  "limits_future": "Needs convex U and affine-in-u structure (pp. 15, 23); loses some short-horizon runs (Table 2, p. 19); future: relax the affine structure (p. 23).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Same NLP solver (filterSQP) under both algorithms; per-instance tables include losses.",
+    "pages": "pp. 17, 19"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Headline '92% of instances' winner framing, though tied to the many-robust-constraints regime.",
+    "pages": "pp. 19, 23"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Cutting-plane / outer-approximation machinery and phase-I feasibility restoration carried into robust optimization.",
+    "pages": "pp. 9-13"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "inner approximation for feasible iterates, outer problem for the bound",
+    "evidence": "superset iterates feasible (upper bound); projected points give a Polak-type lower-bound problem",
+    "pages": "pp. 7, 14"
+   },
+   {
+    "pattern": "one convergence proof with a case per cut type",
+    "evidence": "Proposition 3 covers Kelley, projection and gradient-free cuts so hybrids converge",
+    "pages": "pp. 15-16"
+   }
+  ],
+  "transferable": [
+   "When an exchange/OA method returns infeasible iterates, outer-approximate the uncertainty set by a polytope and dualize so every iterate is feasible; reuse projected points for a lower bound (pp. 7, 14).",
+   "Prefer supporting cuts at the projection over Kelley cuts at the violated point, shown on a 2-D example over three iterations (pp. 9-11).",
+   "Write one convergence proof with a case per cut type so mixed cut strategies inherit convergence (p. 15).",
+   "Use a phase-I problem with one scalar slack to separate 'problem infeasible' from 'initial approximation too conservative' (pp. 12-13)."
+  ],
+  "coauthors": "Bowen Li, Kibaek Kim",
+  "quotes": [
+   {
+    "text": "In other words, the NRO subproblem (8) can be seen as an inner approximation of (2), which is distinct from the classical outer approximation methods [7–9].",
+    "page": 7
+   },
+   {
+    "text": "Note that convexity is a sufficient condition for global optimality, which means that the two sets of assumptions are not significantly different.",
+    "page": 17
+   }
+  ]
+ },
+ {
+  "id": "S215",
+  "year": "—",
+  "title": "Mixed-Integer PDE-Constrained Optimization Sven Leyffer (Argonne National Laboratory)(joint work with Bart van Bloemen Waanders (Sandia National Laboratories), Mirko Hahn…",
+  "read_level": "full",
+  "contribution": "Oberwolfach extended abstract (2019 per work-list note) presenting a reduced-space trust-region improvement heuristic for MIPDECO with knapsack subproblems, shown on source inversion and electromagnetic cloaking, with open problems listed.",
+  "problem_entry": "Mesh-dependent binaries make commercial branch-and-cut prohibitively expensive; two applications (source inversion, cloak design) (p. 1).",
+  "key_idea": "Linearize the reduced objective, impose an integer L1 trust region (one affine constraint on binaries), solve a knapsack, accept by ActRed/PredRed, halve the radius on rejection (p. 2).",
+  "assumptions": "Unique PDE solution for each w (reduced space) (p. 1); quadrilateral finite elements (p. 1).",
+  "proof_devices": [],
+  "experiments": "Qualitative: IoU 82.3% for source inversion (p. 2); cloak figures (pp. 2-3); no baselines.",
+  "positioning": "Related to NLP trust-region methods and local-branching heuristics for MINLP (p. 1).",
+  "writing": "Gaps admitted before the closing claim of practical performance (p. 3).",
+  "limits_future": "Open: bounds-based stopping criterion, multigrid refinement, convergence analysis and mesh-refinement behaviour (p. 3).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "NLP trust-region globalization carried into MIPDECO; the unique-PDE-solvability assumption listed in Method 2 limitations appears explicitly.",
+    "pages": "pp. 1-2"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "NLP globalization acceptance tests transplanted to non-NLP outer loops",
+    "evidence": "ActRed/PredRed ratio and radius halving on a binary trust region",
+    "pages": "p. 2"
+   }
+  ],
+  "transferable": [
+   "With binary variables, write the L1 trust region as one affine constraint so the linearized subproblem becomes a knapsack (p. 2).",
+   "End a short report with numbered open problems that name the missing guarantees (p. 3)."
+  ],
+  "coauthors": "Bart van Bloemen Waanders, Mirko Hahn, Todd Munson, Lars Ruthotto, Meenarli Sharma, Ryan Vogt (joint work; Leyffer presenter)",
+  "quotes": [
+   {
+    "text": "The presence of mesh-dependent integer variables in these models makes the use of commercial branch-and-cut (see, e.g., [1]) prohibitively expensive (and impractical for 3D extensions of our models).",
+    "page": 1
+   },
+   {
+    "text": "Despite these gaps in its theoretical justification, the proposed trust-region scheme performs well in practice, and we are working on other applications that could benefit from this approach.",
+    "page": 3
+   }
+  ]
+ },
+ {
+  "id": "S216",
+  "year": "—",
+  "title": "Teaching PROFESSOR new math",
+  "read_level": "full",
+  "contribution": "CHEP 2018 proceedings (per work-list note) adding to the PROFESSOR event-generator tuning tool a bilevel formulation that replaces manual observable reweighting and a linear-algebra rational approximation that replaces polynomial surrogates.",
+  "problem_entry": "Manual trial-and-error weighting when the physics model cannot fit all data; polynomial surrogates fail on rational-like data (p. 2).",
+  "key_idea": "Upper level over simplex weights with mean + lambda*variance of per-observable misfit, lower level weighted chi^2 fit, upper level by RBF surrogate with multistart; rational fits via Vandermonde and SVD null space (pp. 2-6).",
+  "assumptions": "Surrogates stand in for MC runs (p. 2); invertible Vandermonde ('nicely' chosen points) (p. 5); 1-D presentation (p. 6).",
+  "proof_devices": [],
+  "experiments": "ATLAS underlying-event data with Pythia8, portfolio vs standard vs random shown only as plots (Fig. 2, p. 4); RBF convergence from two starts (Fig. 1, p. 4); 1-D toy rational vs polynomial (Fig. 3, p. 7).",
+  "positioning": "Improves the existing PROFESSOR tool [1] for Pythia8/Rivet tuning (pp. 1-2).",
+  "writing": "Hedged throughout: 'We would argue', 'seems promising', 'looks promising' (pp. 3, 7).",
+  "limits_future": "Multistart 'not ideal' (p. 3); no quantitative metrics; multi-D rational approximation deferred to an upcoming publication (p. 7).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Manual tuning recast as bilevel optimization, but the upper level is solved by an RBF surrogate with multistart, not his NLP toolkit.",
+    "pages": "pp. 2-3"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Surrogate functional form changed (rational instead of polynomial) to remove oscillation and nonphysical negative predictions.",
+    "pages": "p. 6"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Replace manual reweighting of data groups by a bilevel problem with upper objective mean + lambda*variance of per-group misfit (pp. 2-3).",
+   "Fit a rational approximant by linear algebra: square Vandermonde system, denominator from the null space of a small block via SVD (pp. 5-6)."
+  ],
+  "coauthors": "Anthony Austin, Steven Mrenna, Juliane Müller, Holger Schulz",
+  "quotes": [
+   {
+    "text": "We notice that the results have a dependence on the initial guess, which is why we apply a multi-start strategy.",
+    "page": 3
+   },
+   {
+    "text": "We would argue that in the presence of mis-modelling, the bi-level optimization is able to yield a balanced prediction without human intervention.",
+    "page": 3
+   }
+  ]
+ },
+ {
+  "id": "S222",
+  "year": "—",
+  "title": "The Heuristic Static Load-Balancing Algorithm Applied to CESM.",
+  "read_level": "full",
+  "contribution": "SC 2013 poster abstract (per work-list note) formulating static node allocation for the CESM climate code as an MINLP solved by MINOTAUR, reporting a 24% speed-up over a baseline guess on 32768 nodes.",
+  "problem_entry": "A few large tasks of diverse size: dynamic load balancing unsuitable, optimal static allocation NP-hard, practice is 'human optimization' (p. 1).",
+  "key_idea": "MINLP with nonlinear runtime-vs-processors functions and integer node counts, CESM layout constraints (sequencing, partitioning), solved by MINOTAUR from AMPL (p. 1).",
+  "assumptions": "Needs accurate benchmarking data and a correct model (p. 1).",
+  "proof_devices": [],
+  "experiments": "24% speed-up on 32768 nodes of Intrepid at 1/8 degree resolution vs a baseline guess (p. 1).",
+  "positioning": "Follows the FMO load-balancing paper (SC 2012) (pp. 1-2).",
+  "writing": "Poster abstract; says 'linear optimization technique' after formulating an MINLP (p. 1).",
+  "limits_future": "Plans a black-box tool, AMPL-to-C++ conversion and release, NCAR pipeline integration (p. 1).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Minotaur used as a solver engine callable from AMPL scripts or C++ code.",
+    "pages": "p. 1"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "MINLP modelling carried into HPC load balancing through a facility collaborator (weak).",
+    "pages": "p. 1"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Model processor allocation for a few large heterogeneous tasks as an MINLP whose runtime functions are fitted to benchmark timings, with code-structure requirements as constraints (p. 1)."
+  ],
+  "coauthors": "Yuri Alexeev, Sheri Mickelson, Robert Jacob, Anthony Craig",
+  "quotes": [
+   {
+    "text": "The MINLP approach provides a great flexibility in modeling the allocation problem realistically.",
+    "page": 1
+   },
+   {
+    "text": "By using HSLB, we improved the speed of CESM on 32768 nodes for 1/8°-degree resolution simulations by 24% compared to a baseline guess on intrepid.",
+    "page": 1
+   }
+  ]
+ },
+ {
+  "id": "S210",
+  "year": "—",
+  "title": "NAOV-2020 Conference Participants",
+  "read_level": "metadata",
+  "contribution": "Not a research work: conference participant list of NAO-V 2020 (Springer PROMS 354 back matter) recording Leyffer as an invited speaker.",
+  "problem_entry": "",
+  "key_idea": "",
+  "assumptions": "",
+  "proof_devices": [],
+  "experiments": "none",
+  "positioning": "",
+  "writing": "",
+  "limits_future": "",
+  "method_links": [],
+  "new_pattern_candidates": [],
+  "transferable": [],
+  "coauthors": "n/a",
+  "quotes": []
+ }
+]
