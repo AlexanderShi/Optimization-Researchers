@@ -14,6 +14,8 @@
 
 **Reading depth.** I read these full texts in part (introduction, numerics, conclusion, acknowledgments): Byrd–Curtis–Nocedal 2008 and 2010, Curtis 2012 (PIPAL), Curtis–Overton 2012, Curtis–Mitchell–Overton 2017, Curtis–Robinson–Samadi 2017, Bottou–Curtis–Nocedal 2018 (introduction only), and Berahas–Curtis–Robinson–Zhou arXiv v1 (2020). For every other paper I read only the arXiv abstract or the bibliographic record. I did not read any proofs.
 
+**Deep-reading update (2026-10-10).** The paragraph above describes the base-tier pass of 2026-09-28 and is kept as written. Since then every listed work was carded from its full text where one was open: 86 of the 96 distinct works were read in full (proofs and numerics included), 8 at abstract level, 1 at metadata level and 1 was unreadable (see §5 below, `07-paper-cards.md` and `08-deep-reading-synthesis.md`). Where §2's signature-work notes and the full texts disagree, the full texts win; the corrections are listed in §5.3 and in `09-evidence-ledger.md#corrections`.
+
 ---
 
 ## 0. A caveat on authorship order that changes how this file reads
@@ -153,7 +155,7 @@ Companions: Burke–Curtis–Wang SIOPT 2014 (10.1137/120880045); Burke–Curtis
   - IPOPT features (bound relaxation, initial-point modification) adopted "for the purpose of providing a fairer comparison".
   - Honest result on the standard set: "all three algorithms are robust, though PIPAL-a and especially IPOPT have an edge in terms of efficiency".
   - The claim is then tested on **constructed variants of Hock–Schittkowski**: degenerate (add −c_i(x)² ≤ 0, 120 problems) and infeasible (add c_i(x)² ≤ −1, 105 problems). On these IPOPT "fails for many of the remaining problems". In Curtis's words: "We admit that creating instances in this manner only produces a certain type of degeneracy, but these models are sufficient for illustrating the robustness of our software on certain rank-deficient problems."
-  - Resource limits: Matlab R2010b on an 8-core Opteron; problems whose initial Newton matrix had 20,000 or more nonzeros were removed "due to memory limitations in Matlab".
+  - Resource limits: Matlab release 2010b on an 8-core Opteron; problems whose initial Newton matrix had 20,000 or more nonzeros were removed "due to memory limitations in Matlab".
 - **Abandoned or open paths.**
   - [stated] (P) The conclusion hopes that "with a more sophisticated implementation, our algorithm has the potential to be a successful general-purpose solver". [practice] PIPAL stayed a Matlab prototype (PIPAL 1.0 and 1.1 on the software page; GitHub); I found no later PIPAL paper. [inferred] The general-solver ambition was not pursued.
   - [stated] (P) The research page describes "on-going work" on minimizing f subject to v(x) ≤ ε (controlled constraint violation) and calls it "surprisingly not widely explored". [practice] No paper with this formulation is in the CV, DBLP or OpenAlex lists as of 2026 [not found; may be unpublished or dropped].
@@ -248,6 +250,42 @@ These are **practice-level** patterns drawn from the works above. Whether Curtis
 | Long reviews | SQP-GS about 26 months (Dec 2009 → Feb 2012); TRACE about 19 months (Oct 2014 → May 2016); infeasibility SQP about 17 months (Oct 2008 → Mar 2010) | received/accepted lines on the papers | [practice] (P) |
 
 ---
+
+## 5. Full-text coverage (deep reading, 2026-10-10)
+
+Sources: `../sources/publications/works.json` and `scholar.md` (Google Scholar profile Zfd6irsAAAAJ harvested and audited 2026-10-10, cross-checked with DBLP pid 61/7604, the homepage publication pages, Crossref and the arXiv author listing); `../sources/papers/INDEX.md` (full-text status); `07-paper-cards.md` (cards). This section supersedes the Google Scholar row of §1.1, which recorded the profile as not read on 2026-09-28.
+
+### 5.1 The list
+
+| Item | Count |
+|---|---|
+| Google Scholar rows | 96 (3 of them duplicates of other rows: S080 → S003, S085 → S057, S095 → S040) |
+| Works found outside Scholar | 3: D001, D002 (DBLP only), H001 (homepage only); D003, on the arXiv listing only, is the preprint of S050 |
+| Distinct works (`works.json`, `dup_of` rows excluded) | 96 |
+| By kind | 68 journal articles, 15 preprints, 4 conference papers, 3 chapters, 2 books (the 2025 SIAM book S074; the edited MOPTA volume S079), 2 theses (S096 PhD 2007; S086 William & Mary 2003), 1 report (S094), 1 other |
+| By period | 2003–2007: 5; 2008–2012: 10; 2013–2017: 19; 2018–2022: 28; 2023–2026: 34 |
+| Identifiers | 76 with a DOI, 53 with an arXiv id |
+| Possible journal/preprint pairs indexed separately (unconfirmed; count once) | S045 ~ S037, S031 ~ D001, S072 ~ S069, S060 ~ S061, S063 ~ D002 |
+
+### 5.2 Read status (this member's row of `scripts/team_status.py --coverage`)
+
+| Scholar rows | Distinct works indexed | Open full text | Read in full | Read in part | Abstract only | Metadata only (incl. unreadable) | Skipped | Book material carded | Quotes verified |
+|---|---|---|---|---|---|---|---|---|---|
+| 96 | 96 | 87 | 86 | 0 | 8 | 2 | 0 | 0 | 180 |
+
+- Abstract only (no open full text): S031, S045, S055, S060, S072, S074, S078, S079. S074, the 2025 book *Practical Nonconvex Nonsmooth Optimization*, is known only from the publisher's description as reproduced by a retailer, a secondary source; nothing in the skill rests on it.
+- Metadata only: S084 (title only). Unreadable: S086 (2003 William & Mary thesis; garbled Type3 text layer, no OCR available; combinatorics, outside the skill's scope).
+- Full reads by period (full / carded): 2003–2007 4/5; 2008–2012 9/10; 2013–2017 19/19; 2018–2022 27/28; 2023–2026 27/34. Every signature work of §2 was read in full: SW1 [S006; S096], SW2 [S009; S033], SW3 [S003; S004], SW4 [S002], SW5 [S001; S007].
+
+### 5.3 What the full texts change in this note
+
+- **SW1** (inexact SQP): the 45–86 % against 100 % result is confirmed [S006 p. 17]; the dissertation's version of the experiment gives 50–86 % [S096 p. 52]. The scale claim attributed to 10.1137/090747634 (minutes per iteration) is not in that paper, which reports total CPU seconds per mesh level [S010 p. 25]; the full-text scale figure is in the implementation note, 6 days → 8.2 h, a speedup of 17.89 [S036 p. 17].
+- **SW2** (infeasibility, PIPAL): the 2010 numerics, marked "not read in detail" above, are five illustrations with full iteration tables and an ablation, and no benchmark set [S009 pp. 14–18]. The constructed infeasible and rank-deficient variants start in 2009 [S025 pp. 22–23] and the x₁-bounds infeasible copy of the HS set in 2014 [S022 p. 30].
+- **SW3** (nonsmooth line): the 2015 quasi-Newton paper is the first source of the termination-flag and CPU-time sentences attributed to the Que thesis [S008 pp. 24–25]; its design keeps plain BFGS in most iterations and wakes sampling only when tests fail [S008 pp. 2, 11, 13].
+- **SW4** (TRACE): confirmed theory-only, no numerical section [S002 pp. 4, 30–32].
+- **SW5** (survey → stochastic SQP): the event frequency 99.10–99.92 % and the 110× baseline are confirmed [S007 p. 27]; the outcome-based LICQ filter recurs in 2021 [S037 p. 23].
+- **Contradiction 2** (tuning time): confirmed in the full texts: no paper counts tuning time; equal tuning budgets appear in the stochastic and ML papers [S015 p. 18; S041 p. 22], while the deterministic papers choose parameters on the evaluation runs without a reported budget [S033 p. 21; S088 pp. 14, 22].
+- **Gaps** closed by the deep reading: the Google Scholar profile (now harvested), the dissertation text [S096], the 2010 infeasibility numerics [S009], the SIAM Review body [S001] and the ICML 2016 paper [S028] were read in full. Still open: the abstract-only works of §5.2 and the 2025 book's body.
 
 ## Contradictions (kept, not reconciled)
 

@@ -167,7 +167,7 @@ Claims made only once or twice appear in the layers below and are marked as sing
 **4.8 Tooling and release habits** [stated, primary]
 - ISE 403 teaches "Computing Skills (Linux, LaTeX, git, make)" and "on-campus (high performance) computing resources" (Teaching page; syllabi 2023-2025).
 - Research code is released as clearly labelled prototypes: "Note that this is only a prototype implementation. Please e-mail me if you use the code or with any bug reports, comments, or suggestions" (Software page, for SLQP-GS, StochasticSQP, SCBFGS, TRACE). NonOpt "is designed to be extensible. Ideas borrowed from Ipopt." (INFORMS 2021, slide 7/25).
-- Resource context: 2006-2012 prototypes were in Matlab (PIPAL ran on Matlab 7.11 R2010b, PIPAL 2012 p. 202) with large-scale runs in Ipopt with Pardiso (Research page; Curtis, Schenk & Wächter, *SIAM J. Sci. Comput.* 32(6) (2010) 3447-3475, DOI 10.1137/090747634). From 2019 onward he writes C++ (NonOpt). [practice]
+- Resource context: 2006-2012 prototypes were in Matlab (PIPAL ran on Matlab 7.11 (release 2010b), PIPAL 2012 p. 202) with large-scale runs in Ipopt with Pardiso (Research page; Curtis, Schenk & Wächter, *SIAM J. Sci. Comput.* 32(6) (2010) 3447-3475, DOI 10.1137/090747634). From 2019 onward he writes C++ (NonOpt). [practice]
 
 ---
 
