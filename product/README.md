@@ -2,7 +2,7 @@
 
 本目录是 **DFO Team / NLP Team 的逐人研究者 skill**，由仓库根的 team-kit
 （`scripts/` + `references/`，见 [TEAM-KIT.md](../TEAM-KIT.md)）生产与维护。
-与 `skills/` 下按 DISTILL.md 封闭语料蒸馏的团队级 skill 并列，两条流水线互不引用。
+与 `teams/<team>/SKILL.md`（按 DISTILL.md 从封闭语料蒸馏的团队级 skill）并列，两条流水线互不引用。
 
 | 目录 | 团队 | 内容 | 档位 |
 |------|------|------|------|
@@ -23,7 +23,7 @@
   `references/research/09-evidence-ledger.md`，论文卡片在 `references/research/cards/`。
 - **与本仓库语料的关系**：这批 skill **不是**按 `DISTILL.md` 的封闭语料协议蒸馏的，
   其事实性声明不带 `[DFO-S*]` / `[NLP-R*]` 语料 ID，出处以各自台账为准。
-  团队级 skill（`skills/<team>/SKILL.md`）仍以 `teams/` 语料为唯一依据。
+  团队级 skill（`teams/<team>/SKILL.md`）仍以同目录的语料为唯一依据。
   若要把某位研究者纳入语料，按 `standards/researcher-extraction.md` 另写
   `teams/<team>/researchers/<name>.md`（目前已有 Scheinberg、Duchi）。
 

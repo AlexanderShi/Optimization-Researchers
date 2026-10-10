@@ -1,5 +1,13 @@
 # 蒸馏记录
 
+## 2026-10-09 (7) · 取消 skills/ 目录，产物并入语料目录
+
+- `skills/dfo-team/SKILL.md` → `teams/dfo-team/SKILL.md`，`skills/nlp-team/SKILL.md` →
+  `teams/nlp-team/SKILL.md`，本记录 → `teams/DISTILLATION_LOG.md`（均 `git mv`，内容未改）
+- DISTILL.md Phase 3 的产物路径、README、TEAM-KIT.md、product/README.md、项目级 skill 同步改为
+  `teams/<team>/SKILL.md`；安装仍是只复制该文件到 `~/.claude/skills/<team>/`
+- 以下历史条目中的 `skills/...` 路径为当时位置，不再逐条改写
+
 ## 2026-10-09 (6) · 内置 team-kit（逐人研究者 skill 流水线）
 
 - 范围：从 AlexanderShi/nvwa-skill `eb012fa` 逐字节同步 `scripts/`（52 文件）、

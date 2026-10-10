@@ -32,9 +32,10 @@ standards/
   researcher-extraction.md 研究者档案提炼标准（nuwa 三重验证适配版）
   skill-template.md       团队 skill 的输出模板
 teams/
-  dfo-team/               DFO Team 语料（00-charter … 05-failure-modes）
-  nlp-team/               NLP Team 语料（同构）
-skills/                   DISTILL.md 蒸馏产物：团队级 skill（带语料 ID；再复制到 ~/.claude/skills/）
+  dfo-team/               DFO Team 语料（00-charter … 05-failure-modes、researchers/）
+    SKILL.md              由这份语料蒸馏出的团队级 skill（带语料 ID；复制到 ~/.claude/skills/dfo-team/）
+  nlp-team/               NLP Team 语料（同构）+ SKILL.md
+  DISTILLATION_LOG.md     每次蒸馏的记录（语料版本、质量门结果、试答）
 TEAM-KIT.md               逐人研究者 skill 流水线（team-kit）入口
 references/               team-kit 文档与模板：playbook、研究提炼框架、研究 skill 模板、
                           team-templates/；nuwa-SKILL.md 为冻结的 nuwa 根 skill 副本
@@ -61,9 +62,10 @@ product/                  team-kit 产物：逐人研究者 skill + 圆桌（dfo
 ```
 团队级 skill（封闭语料）           逐人研究者 skill / 圆桌（team-kit）
 1. 读 DISTILL.md                   1. 读 TEAM-KIT.md → references/research-team-playbook.md
-2. 按协议蒸馏 → skills/<team>/      2. 加成员：team.json + scripts/new_team.py --add-member；
+2. 按协议蒸馏 → teams/<team>/       2. 加成员：team.json + scripts/new_team.py --add-member；
    SKILL.md                            新团队：scripts/new_team.py --init
-3. 复制到 ~/.claude/skills/<team>/  3. 按 T1–T4 跑 scripts/workflows/，产物在 product/<team>/
+3. 只复制这个 SKILL.md 到            3. 按 T1–T4 跑 scripts/workflows/，产物在 product/<team>/
+   ~/.claude/skills/<team>/
 ```
 
 两条流水线所需的一切（协议、模板、脚本、语料、已蒸馏产物）都在本仓库内；在本仓库启动

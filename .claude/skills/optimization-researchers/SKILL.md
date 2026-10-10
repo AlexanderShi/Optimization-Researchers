@@ -14,7 +14,7 @@ description: |
 
 | 用户要的 | 流水线 | 入口 | 产物 |
 |---------|--------|------|------|
-| 团队级 skill（「DFO Team / NLP Team 怎么看…」，每条事实带语料 ID） | **语料蒸馏** | `DISTILL.md` | `skills/<team>/SKILL.md` |
+| 团队级 skill（「DFO Team / NLP Team 怎么看…」，每条事实带语料 ID） | **语料蒸馏** | `DISTILL.md` | `teams/<team>/SKILL.md` |
 | 往语料里加一位研究者 / 一篇文献 / 一条结果 | **语料维护** | `README.md`「语料维护」+ `standards/researcher-extraction.md` + `standards/grounding.md` | `teams/<team>/01-canon.md`、`04-results.md`、`researchers/<name>.md`，然后重跑 DISTILL.md |
 | 某位研究者本人的研究方法 skill（导师模式）、或把他加进圆桌团队 | **team-kit · 加成员** | `TEAM-KIT.md` → `references/research-team-playbook.md` 第八节 | `product/<team>/<member>/` |
 | 新领域的研究顾问团（几位研究者 + 圆桌） | **team-kit · 新团队** | `TEAM-KIT.md` → playbook 第一至七节 | `product/<new-team>/` |
@@ -28,9 +28,9 @@ skill？」前者走语料蒸馏，后者走 team-kit。
   `[DFO-S*]` / `[NLP-R*]` 等 ID，语料没有的写进诚实边界；**锚点规则**——没有出处定位的声明不进语料库。
 - 新增研究者档案走 `standards/researcher-extraction.md`（三重验证、矛盾处理、信息不足处理）并过
   `standards/grounding.md` 的验证层级；档案落 `teams/<team>/researchers/<name>.md`。
-- 改完语料后重跑 DISTILL.md Phase 0–5，质量门 G1–G6 全过才交付；产物写 `skills/<team>/SKILL.md`，
+- 改完语料后重跑 DISTILL.md Phase 0–5，质量门 G1–G6 全过才交付；产物写 `teams/<team>/SKILL.md`，
   再复制到 `~/.claude/skills/<team>/`。
-- 每次蒸馏在 `skills/DISTILLATION_LOG.md` 顶部记一条（语料版本、范围、质量门结果、试答）。
+- 每次蒸馏在 `teams/DISTILLATION_LOG.md` 顶部记一条（语料版本、范围、质量门结果、试答）。
 
 ## team-kit（TEAM-KIT.md）
 
@@ -45,11 +45,11 @@ skill？」前者走语料蒸馏，后者走 team-kit。
 - 新团队：`python3 scripts/new_team.py --init <slug> --field "…" --members "A;B;C"` →
   `python3 scripts/new_team.py product/<slug>/team.json [--base-tier]` → 按 playbook T1–T4 走。
 - 版权材料（PDF/全文 txt/private/）由根 `.gitignore` 忽略，不要 `git add -f`。
-- 完成后在 `skills/DISTILLATION_LOG.md` 记一条，注明是 team-kit 产物（不带语料 ID、不受 G1–G6 约束）。
+- 完成后在 `teams/DISTILLATION_LOG.md` 记一条，注明是 team-kit 产物（不带语料 ID、不受 G1–G6 约束）。
 
 ## 两条流水线的边界
 
-- `skills/<team>/SKILL.md` 只以 `teams/` 语料为依据；`product/` 里的研究者 skill 各自带证据台账。
+- `teams/<team>/SKILL.md` 只以 `teams/` 语料为依据；`product/` 里的研究者 skill 各自带证据台账。
   两边互不引用、互不抄写。要把 team-kit 蒸馏出的研究者纳入语料，必须另按
   `standards/researcher-extraction.md` 写档案并过锚点规则。
 - 本仓库不依赖外部 nuwa-skill / nvwa-skill 仓库：不要读 `~/.claude/skills/nuwa-skill`，不要 clone

@@ -48,7 +48,8 @@
 
 ## Phase 3 — 填模板
 
-按 `standards/skill-template.md` 生成 `skills/<team-slug>/SKILL.md`。
+按 `standards/skill-template.md` 生成 `teams/<team-slug>/SKILL.md`（产物放在它的语料旁边；
+安装时只复制这一个文件到 `~/.claude/skills/<team-slug>/SKILL.md`）。
 frontmatter description 控制在 300 字内：一句定位 + 触发词 + 一句防误触。
 
 ## Phase 4 — 质量门（全过才算蒸馏完成）

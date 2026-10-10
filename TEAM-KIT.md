@@ -7,7 +7,7 @@
 | | DISTILL.md | team-kit（本文件） |
 |---|---|---|
 | 输入 | `teams/<team>/` 封闭语料，禁联网 | 研究者公开发表（OpenAlex / DBLP / arXiv 全文）+ 网络调研 |
-| 产物 | `skills/<team>/SKILL.md`，每条事实带语料 ID | `product/<team>/<member>/`（SKILL.md + references/research 证据台账）+ 圆桌 skill |
+| 产物 | `teams/<team>/SKILL.md`（放在语料旁边），每条事实带语料 ID | `product/<team>/<member>/`（SKILL.md + references/research 证据台账）+ 圆桌 skill |
 | 质量门 | G1–G6 | `scripts/quality_check.py` 研究模式 + `scripts/team_check.py` + 摘录逐字核对 |
 | 入口 | DISTILL.md | `references/research-team-playbook.md` |
 
@@ -100,4 +100,4 @@ git -C <nvwa-skill> archive HEAD scripts references SKILL.md | tar -x -C <本仓
 mv SKILL.md references/nuwa-SKILL.md
 ```
 
-然后 `diff -rq` 核对、在 `skills/DISTILLATION_LOG.md` 记一条、提交信息注明源 commit。
+然后 `diff -rq` 核对、在 `teams/DISTILLATION_LOG.md` 记一条、提交信息注明源 commit。
