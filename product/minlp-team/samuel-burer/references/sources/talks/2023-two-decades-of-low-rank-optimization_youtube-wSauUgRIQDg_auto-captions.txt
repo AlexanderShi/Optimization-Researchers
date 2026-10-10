@@ -1,0 +1,412 @@
+# Transcript: Sam Burer, "Two Decades of Low-Rank Optimization" (University of Iowa talk, March 2023; he says he will give it "a couple of months from now at a conference", i.e. the SIAM OP23 prize lecture of 2023-06-02)
+# Source: https://www.youtube.com/watch?v=wSauUgRIQDg (channel 'Sam Burer'; uploaded 2023-09-09; 2648 s)
+# Method: YouTube English auto-generated captions downloaded with yt-dlp 2026.08.19 on 2026-10-10, cleaned with scripts/srt_to_transcript.py. No manual captions exist.
+# Caveat: machine transcription. Names and terms are often wrong (e.g. 'Montero' = Monteiro, 'sdb'/'STP' = SDP, 'ring'/'rain' = rank). Quote only with this caveat. The opening lines are the host's introduction, not Burer.
+
+foreign so the title of today's talk is two decades of low rank optimization so Sam chose a title that makes him sound old by saying two decades but I will say I have had the honor of working with and being colleagues with Sam since we went
+
+to grad school together so I've known him for 26 years so I outdate this paper so welcome Sam and thank you thank you thank you so much uh everybody for coming thank you for those who are online as well
+
+um yeah this this title is a bit uh gets you sort of in a reflective mood um I had a couple of goals for this talk let me see if I can get the clicker working a couple of goals for the talk um one is to provide a kind of an overview of an
+
+active area of research this is the area of what's called low rank optimization at the intersection of optimization and machine learning and I also because it's uh kind of tied in with this award I'll be giving this talk a little bit a
+
+couple of months from now at a conference I wanted to do a little retrospective on my thesis with Professor Renato Montero that Anne mentioned and because it's two decades and because you probably need some kind
+
+of joke or something to remember at the beginning of a talk I wanted to show you a picture from that time so that's uh that's my me on the left there and my advisor and I look at this and I think you know a lot really can change
+
+um so here's my outline um what is low rank uh why do we care we're going to talk a little bit about that kind of retrospective what we did as part of my thesis and then talk about substantial progress since that time in
+
+the last 20 years or so and then I'll finish up with a few conclusions so first off what is low rank well actually I need to Define what Marine kids so so imagine you have a matrix in them that's got M rows and N columns the rank of M
+
+is just the by definition the number of linearly independent columns arose in The Matrix M I think roughly speaking we can think about rain as sort of telling us how much information is in the Matrix so if you have very low rank you have
+
+just maybe one linear and independent column you just sort of got really one just one column and a bunch of copies of that but if it's a rich Matrix there's going to be high rank and so that's one of the reasons we care about rain
+
+um to to measure the rank you need the singular value decomposition and that essentially takes the Matrix M and it factors it into into three matrices U times a sigma times a v transpose the U and the V or are um are orthogonal
+
+matrices that basically give you some basis vectors to work with and the sigma in the middle is really what's important in terms of the Ring the sigma is the diagonal matrix and on that diagonal matrix you have a bunch of non-negative
+
+values the rank of them those values are called the singular values the rank of M is then just the number of positive singular values you can also do what's called a thin SVP which is basically you take just the number of columns you need
+
+in you call that utilda and just the positive singular values in Sigma and you can get this kind of smaller factorization now this factorization of the SVD is going to come back and we're going to see it a bunch
+
+now if you have a symmetric Matrix where m is equal to mm transpose you have a square symmetric Matrix then you can do a different type of decomposition spectral depend decomposition it's pretty similar except
+
+that V basically is equal to U so you have U times Lambda Lambda diagonal matrix and then you transpose the rank of M is just the number of non-zero eigenvalues of the Matrix the lambdas can also be negative in this case now
+
+this you can also have a thin spectral decomposition which basically just means that you look at just the positive eigenvalues and the positive eigenvectors and again this kind of factorization is something we'll see a
+
+lot in the talk today now what does low rank mean it basically just means that the rank of the Matrix the r is small relative to the m and the N you have relatively low rent and that means you have a lot of zero singular
+
+values or a lot of zero eigenvalues and what I think and this gets back to the comments about having a measuring amount of information it's a type of scarcity it's a type of interpretability in your Matrix symbol
+
+so why do we care um I I pulled a a kind of a famous paper a quote from a famous paper uh fazel and Perillo in 2010 they were working with low ranked matrices and they they had this these uh these good comments Notions such as order
+
+complexity or dimensionality can often be expressed by the means of the rank of an appropriate Matrix and they gave a few examples for example you could have a low ranked Matrix corresponding to a low degree statistical model for random
+
+process a low order realization of a linear system a low order controller for a plant or a low dimensional embedding of data and euclidean space and this is where we start to give some connection with machine learning because imagine
+
+you have a huge data Matrix and somehow it actually has low rank it means that somehow it doesn't have as it's it's existing in a big space but you could actually summarize it in a much easier way and that's one of the key key things
+
+that we're talking about um I want to also show this screenshot from a recent paper that really dug into why we see low rank matrices in practice so I highlighted a couple of uh items here Majors matrices of approximate low
+
+rank or pervasive in data science appearing in movie preferences text documents survey data medical records and genomics so we just see low rank matrices all over the place when we're Gathering data and this particular paper
+
+wanted to ask why in the world is that the case so what they did is they built a kind of a reasonable statistical model and came up with the following conclusion which you see down here hence any sufficiently large Matrix from such
+
+a latent variable model can be approximated up to a small entry-wise error by a low rank Matrix so we see them in practice and we also have good theory as to why they even appear in in practice now another reason that we care is that
+
+sometimes we want to optimize over matrices so so I'll show some examples in a couple of slides but essentially sometimes we're faced with the choice of uh we have a bunch of different matrices we could choose from and we need to find
+
+the best one and in particular if we're optimizing over symmetric variable X and you constrain the eigenvalues for example you constrain the eigenvalues to be non-negative then you'll often kind of magically get Optimal Solutions that
+
+have low rate and this can be for example in finance or statistics if you're optimizing over the set of correlation matrices correlation matrices are any positive semi-definite Matrix that is non-negative eigenvalues
+
+with ones on the diagonal and if you're trying to optimize over that you naturally get lowering Solutions and this actually if you think back to linear programming and I know a lot of people have taken that class
+
+if you think back to linear programming this is a generalization of the fact that when you're looking at a basic feasible solution you Rel you have lots of zeros and relatively few positive Matrix and there's a lot of theory that has
+
+been built up to understand when lowering matrices occur in anonymization problems these are three papers that I'll refer to a little bit later as well and um this is a picture to give you some kind of idea of what we're talking
+
+about now these two objects they look like a Samosa and a ravioli something like that these are these are feasible sets in three dimensions when you constrain the eigenvalues so they're not polytopes they're not they're not uh you
+
+know uh like like linear programming feasible Solutions or feasible sets but they have more of a Bend to them but the points that are at the corners here those are the lowering solutions that you might care about and when you
+
+optimize you might tend to go there and so that's why we care that's one of the reasons so just to kind of summarize what is lowering optimization mean it means that we're going to optimize over a variable
+
+X and we're just going to constrain it to be rank of X less than or equal to R and to summarize those two reasons are it's important for modeling low rank data and it's also useful when the low rank structure appears naturally
+
+irrespective of the data so those are the kind of the two reasons that we care I thought I would go ahead and connect it with more modern machine learning immediately so I went to chat GPT and I said in 25 words or less what is
+
+lowering optimization so this is this is the internet's version of what I'm talking about low Rec optimization is a mathematical framework for solving optimization problems that involve low rate matrices with applications and
+
+Signal processing and machine learning so that's another way to to think about it all right so let me get some examples here very first example that I imagine a lot of you know about is a principal component analysis VCA so you're given a
+
+data Matrix in you want to find the closest Matrix with rank at most R and so essentially what you want to do is minimize the distance between your variable and M and in this case we've got a squared Norm
+
+subject to the rank of X being less than or equal to R and X existing in the same same Dimension space there are different ways to think about this but essentially this is PCA where you're trying to get a
+
+lower Dimension version of that data set and this comes up all over the place this is one of the first uh Dimension uh reduction techniques that people learn in machine learning another one is robust PCA so this is the
+
+same problem but a slightly different version of it so you give it a data Matrix and and what you want to do is find matrices X and S such that M can be decomposed written as X Plus s and X is low rank and S is sparse now if
+
+the the S part is zero you're essentially back in the PCA case but if you allow some noise what that's the the S does here it has some a few entries that that corrupt the the signal so to speak then you get this robust PCA and
+
+here's one example of how you could use that so imagine you're doing video surveillance and you've got basically a static C in this case uh you know you're watching the railroad tracks and then you want to
+
+detect when there's actual movement across the railroad tracks and so what you want to do is be able to separate into the lowering part the part that stays fixed the part that doesn't have that much new information in it you want
+
+to fix that that's the X and then you want to catch the the noise the part that just indicates motion and so that's how you can do it so this would be the m equal the X plus the S and that's how you detect movement in the in the uh in
+
+the video so this is the kind of thing that we can do if we are able to use the low range condition on x another one is Matrix completion so imagine you're given a big data Matrix or rather I should say there is a big
+
+data Matrix and you know some of the entries in it but you don't know all of the entries this is typically a good example of this preferences of users with movies and what you want to do is find the best
+
+basically the best fit rank low rank Matrix that that matches on all the entries so you're given a bunch of entries I would say all unknown entries mij and you want to find the smallest rank Matrix that matches that exactly on
+
+those entries and this comes up in recommender systems there's a famous Netflix problem that that related to this other companies like Spotify would use it as well and you can even do it in things like
+
+wireless sensor localization where you have a bunch of Wireless sensors that are talking to one another they get partial information about what other sensors are close by but then you want to piece it back together to some kind
+
+of global picture using using an approach like this there's another example called non-negative Matrix Matrix factorization which is a little bit different I've written it here a little bit different than on some of the previous slides so
+
+here what we do is we're given a matrix M and then we go looking for other matrices u and v and we minimize the the norm of M minus UV transpose the norm squared and then we also want to make sure that the entries of u and v
+
+are all non-negative now this is this is a little different it's actually a low rank optimization problem but what we're doing here the variable is actually in the factorization or or I should say where the variables of the problem give
+
+us the explicit factorization and what you do is you force The Columns of u and v to have rank excuse me to have just R columns and what that does is it uh implicitly implies that the rank of this can never go above r and this is very
+
+similar to that SVD where we're not really we've got the U and the V transpose we're not really too worried about what the singular values are but if you have this kind of factorization you can guarantee that this guy never
+
+goes above rank r and so that's the thing to point out here is that the rank is extra is restricted explicitly just by construction and so you don't have to put in the constraint specifically this has applications and data clustering and
+
+feature extraction and things like Imaging and text analysis and so on now though the another type of problem that I've been working on over the years is something called quadratically constrained quadratic programming which
+
+just means that you're going to minimize a general quadratic function subject to a bunch of General quadratic constraints now this is a very broad class it models all sorts of things like integer linear
+
+programs and uh polynomial programs and all sorts of things so I'll just mentioned it kind of as a broad class but one thing you can do with this problem is by introducing a new variable capital x you can actually turn this
+
+into a rank one problem so a problem where it's you have linear objective and linear constraints and then you have one condition that says capital x has to equal a rank one Matrix so this this guy here is just a column Vector times a
+
+column Vector transpose or times its transpose and this is saying that the Matrix X has to be rank one so I won't go into the details here but essentially this guy can be represented using low rank optimization too
+
+now this gets me into a little bit of I want to take a little bit of detour to talk about how people think about optimization these days because it's relevant for the rest of the talk and if you're like me and you learned about
+
+optimization and kind of the standard way you first learn about linear optimization and then maybe your next class is non-linear optimization where you you're the first time first first look is everything's linear the second time you
+
+look at all sorts of non-linear things now um what's become more common in like the last two decades is not to focus so much on linear versus non-linear but to focus more on convex versus non-convex and here's a famous quote that a lot of
+
+people are familiar with Terry Rockefeller is one of the uh the big guys in convex optimization convex analysis I should say and what he wrote um back in 1993 was in fact the great Watershed optimization isn't between
+
+things that are linear and non-linear but between things that are convex and non-convex and so with that I wanted to show you some examples of convex functions so this is an example where you might have
+
+a single variable X and you're trying to find the minimum the global men of this this convex function context functions are bowl shaped and in a bowl if you're trying to if you imagine you're just like a little ant or a little drop of
+
+water or something like that in this bowl to get to the bottom you just go downhill you just let it you just let gravity take you down it'll so it's a not a linear function it's not even differentiable necessarily but you just
+
+kind of go down and you hit this global view convex functions are good this way non-convex functions are bad because you can get trapped in local Max you can get trapped in local mins if you're here and all you can see is locally around
+
+this looks great it's not clear how you would then jump over and get to there to actually get the global map so we like convex things we don't like non-convex things here's another example of something that
+
+is convex on the left and then something that's very non-convex on the right you have things like saddle points on the right as well where in One Direction it looks like your local minimizer and another it looks like there are maximum
+
+so a lot of weird things can happen if you go into non-convex unfortunately it turns out the rank function is non-convex and so low rank optimization is a non-convex problem in effect it didn't be hard you know which
+
+means essentially that it's uh it's one of the hardest problems out there but of course it's still important we'd like to be able to solve it so people are interested in trying to understand how to how to do that
+
+and so that gets us to to uh our contribution uh run out to Montero and I um and I will talk a little bit about how we got to this idea called the the low rank idea and it goes back to this quadratically constrained quadratic
+
+program that I showed you a couple of moments ago where essentially previously I I was saying that if you could solve this problem and set x equal to x x transpose then you could solve this this difficult thing called quadratically
+
+constrained quadratic programming so what people have done is they've turned uh they've relaxed that problem into what's called a semi-definite program this curly greater than or equal to essentially means that if you take the
+
+difference of capital x minus x x transpose that Matrix should have non-negative eigenvalues and that turns out to be convex so if you if you change that equality to this inequality you've got a convex problem
+
+that you can solve that is what's called SVP or semi-definite program and what we often do is turn it into some kind of standard form so I'd actually like to focus on this standard form a little bit separate from the
+
+first application I'd like to focus on this one here so what this is is you're just minimizing a linear function subject to a bunch of linear constraints the C and the AI or the data and the X has to be
+
+has to have non-negative eigen values now um in the 1990s research on this and the interest in it really exploded there were two main reasons for that one was that people figured out that you could solve these problems in polynomial time
+
+using interior Point methods so it was a good class of problems to try to study um It's actually kind of interesting because you tend to get these types of interior Point methods actually give you Solutions with high rank so that's a
+
+little bit of a contrast just as a quick footnote another thing that was important was this approximation algorithm by gomens and Williamson for the max cut problem this came out in 1995 and it really generated a lot of
+
+interest in optimization and the computer science field as well and so people started to try to solve bigger and bigger sdps and and they realized it was some kind of bottleneck with interior Point methods their polynomial
+
+time but they practically have some challenges and so um I I hope you like this phrase at the turn of the Millennium um that just means the year 2000 it sounds pretty Grand but around that time researchers were trying to solve bigger
+
+and bigger sdps most often using first order methods and the first order method just means that you're not going to ever take a second derivative you'll just be dealing with first order first order information first derivatives and also
+
+function values and there were a bunch of methods that tried to do this this dual scaling method here was actually uh developed here at the University of Iowa um there was a spectral bundle method another bundle method non-linear
+
+programming approaches I was involved in another method there were other all sorts of approaches that people were trying to solve bigger and bigger stps and then I in particular got into besides doing a little bit here I also
+
+got involved with What's called the factorization approach and just to give a little bit more of a history if you look at the that Goldman's Williamson Mexico sdp what they did is they said their their whole idea was essentially
+
+to take a matrix like this you you transpose and to replace it to realize that that Matrix could be replaced by a positive semi-definite Matrix X which is semi-definite and the you hear the you that they cared about in that
+
+application was Square so essentially it had full rank so you had a square Matrix times a square Matrix transpose and they replaced that with X being positive semi-definite and that was they're one of their Innovations I mean they they
+
+had a bigger innovation in terms of the analysis but that was one of the key ideas and then someone came along in 1997 Pine Auto and Homer and they said well if we want to solve even bigger problems why
+
+don't we just optimize in the U let's not worry about the X but let's just optimize in the U um and then we came along and said well you know actually because of the way positive semi-definite matrices were
+
+without loss of generality you can essentially Force the U to be lower triangular so it's still square but it only has injuries in the lower triangular part so you save roughly half the time something along those lines so
+
+this is how we got into this idea of factorization so the idea was essentially instead of working with the X you work with The UU transpose now these ideas seem to work in practice we were able to solve bigger problems
+
+but was it was weird because the the papers converted the convex sdp a nice problem into a non-convex problem The UU transposes a very non-convex sort of function and it worked it worked in practice but
+
+the question was why and we did have sort of one partial argument and essentially the argument was well at least we know that these two problems are completely equivalent to one another if you give me an X you can get a u if
+
+you give me U you can get an X and so you can go back and forth we have that kind of insight but it still wasn't very satisfying and so then finally or maybe finally it's not quite the right word but but we have this idea about how to
+
+use low rank approach and again we have this standard form problem that we just want to solve and then we realized that there was a there was a theorem that was relevant and basically it comes from the
+
+three papers that I showed you earlier the one that's sort of most relevant was phrased most clearly for sdp was the last one by Pataki and essentially um what Pataki said is that there exists an optimal solution to this problem
+
+whose rank is no bigger is strictly less than the square root of two times that so no matter what the size of the variable X is so X could be a huge Matrix if you have M constraints then you know that there's a low rank
+
+solution whose rank is no bigger than the square root of two times seven and that was the key thing that we put together and said well that means that you could replace it with u times U transpose where the U just has a few
+
+columns and that's what we did so essentially you write the big X as a thin U times its transpose and you can basically get a a more compact version of the X but you just have to be willing to work in the u space
+
+so that's what we're supposed to propose to do and what we did in particular was take you having the ceiling of the square root of 2 times n column so we just go high enough so that we make sure we have all the Optimal Solutions or
+
+excuse me we have at least one optimal solution of the STP we do cut off all of the high rate Solutions but at least we have an optimal solution according to that theorem okay so we knew that we would be
+
+equivalent to the sdb because we didn't cut off all the Optimal Solutions but we do have a very different feasible set for example we cut off all the high rank Solutions the potential Advantage was pretty clear to us maybe you could save
+
+time and Storage in terms of your algorithms but would it actually work in practice and I I don't remember the exact day that you know our discussion uh Montero was very nice to me I would go by all the time and would
+
+talk to me as much as I wanted to talk um we thought you know it couldn't hurt to try and I went back into my old emails which I actually still have and I dug up the first time we ever talked about it and it looks like the day was
+
+the 22nd of May 2000. and and uh basically I told oh and by the way the the time just for any graduate students in the room the time was about 11 pm and I you know I told him I did it I implemented it and convergence is good
+
+and of course the computation and memory requirements are less and then Freddie the faculty in the room my advisor wrote back right before midnight on the same day yeah and he said it's really good news
+
+um maybe we'll have some chance to compete with the the other residents on some ex-cut problems so we were very motivated by just sort of having a fast code and and then I wrote back another day later and I'd been able already to
+
+streamline it and get it roughly 30 times faster so so this was you know some quick stuff that we're doing just to get it the Prototype out there and then it turned out to be it turned out to work okay so I like that I'm not
+
+kidding yeah yeah I also told him I was a little bit bold I said you come to school this afternoon please drop by the computer line I was like calling into my office I probably shouldn't have done that but anyway
+
+um okay so what were the computational results we had success on on uh specific classes of large-scale sdps we look at Max Cut Max stable set and so forth we actually also developed a code for General sdps and as I mentioned before
+
+we only uh looked at first order methods we never did anything with the second or a second derivative of information if you do that you typically end up kind of uh you get faster convergence but you tend to slow down the iterations of your
+
+algorithm we also experimented with other things like dynamically updating the ring starting at small and increasing it a little bit we tried to heuristically solve some Envy hard problems using what we call Rank 2
+
+approaches where we force the rank to be two so there's all sorts of little things that we tried but in general it was it was successful and so to kind of summarize what is the low rank idea essentially says if you
+
+want to optimize over variable X and you want to force the ring to be relatively small for a given R then if your Matrix is symmetric and positive semi-definite then use The UU transpose change of variables if you have a general Matrix
+
+then you replace it with instead U times V transpose where the U and the V both have R columns so this can handle both the symmetric and the non-symmetric case uh pretty equally okay now again the question though is
+
+why should this work at all because it seems to be going against the whole idea of convex is better than non-convex because we're taking something that's convex and switching it to non-convex so why should it work at all and in the
+
+early 2000s really this did seem challenging to answer we didn't have much idea we did have one observation was that essentially if you're working in the U and the V Space you have a lot of degrees of freedom that allow you to
+
+move around in that space that do not affect what's happening in the X space and that's a kind of a mouthful but essentially it means that there's there's a a q q transpose of the identity Matrix written as an orthogonal
+
+Matrix times this transpose can be inserted in the middle without changing the product of the matrices but you change the matrices themselves now that actually can be seen in some pictures which I've got I went uh I scoured
+
+through papers that um that that talk about this and this is an example of a low range landscape that you're trying to minimize in about three dimensions it's hard to do much visualization but you can do some so
+
+this is a this imagine that you're sort of on the surface and you want to get to the bottom you essentially wherever you start even though the function is not convex you'll sort of fall into one of these basins and you'll get to the
+
+optimal solution and moreover you know you have to look at the three-dimensional picture but these guys actually have the same objective value so it does have a non-convex shape but it's pretty easy to fall down hill and
+
+get to the optimal solution this is very similar I kind of think of this as the bottom of a wine bottle you know how a wine bottle has the a little that little thing at the bottom so if you're trying to get to the bottom of a
+
+wine bottle you just kind of fall down and you won't get stuck here you'll you'll basically get stuck in that base um here's another one this is a very strange kind of wine bottle but it has that same sort of sort of shape
+
+um here's another one now it does turn out that you can have situations where the low landscape forces you to go down into one of these two Optimal Solutions but there are cases where you can kind of tweak it and you can get local
+
+minimum so the question is when do you get this versus when do you get this that's that's what people have wanted to try to understand this was actually another little artifact of my thesis this is a um this is a screen this is a screenshot
+
+from my job talk here in 2001 where I was looking at a low rank uh Rank 2 landscape and here we were maximizing but it had kind of a weird um property where essentially you could get to a local Max and get stuck here
+
+but using that QQ transpose idea you could rotate around and get here and then you could Escape out of that as a as a saddle point so there's lots of weird stuff going on and people have been interested in trying to understand
+
+what are these Landscapes actually look like so um we were able to prove I wanted to just mention very briefly what we were able to prove theoretically to try to explain what was going on and and I'm going to give you this theorem sort of
+
+in pieces here so imagine that the sdp feasible set is Compact and it has interior so it's a kind of a bounded well-behaved set um and consider the rate constrained sdp where you force the rank to be less than
+
+or equal to R where R is greater than the ceiling of the square root of 2 times the quantity n plus one and you may notice that this is a little different than what I talked about earlier it was square root of 2m
+
+and now square root of 2 times M plus 1.
+
+I'll mention why that is in just a second and then we said Well if you get a local minimum of the rank constrained sdp and if the rank is actually less than R so if you actually optimize you get a local Min and you get rank that's a
+
+little less than the r you're working with then you can actually prove that that's optimal for the original sdp and the reason we took M plus one is because we wanted to actually take a few more a little more rank so that we were more
+
+likely to get a little less ranked when we were optimizing and that's that's one of the reasons we did that and then we actually came up with an algorithm we we uh we look at the U problem we solved the factorized problem in U via the
+
+standard augmented LaGrange algorithm so we pull a a standard algorithm off the shelf but with one tweak we add a penalty term that is basically a very small Epsilon times the determinant of U transpose U this is a
+
+way to penalize high rank Solutions it's a you have to kind of go through the details but essentially this will this will prefer lower rank solutions by adding a very small penalty terms then and if you know the way augmented
+
+LaGrange and algorithms work if it any any step or if at every step we get an actual local Min of the unconstrained problem then our overall algorithm will converge to the global optimal solution so there's a mouthful here or it's you
+
+know that's a lot of what was going on and it wasn't a perfect result it's kind of a partial result some of the things that we wanted to really kind of understand better were things like this why did we really fundamentally have to
+
+take the rank a little bit higher and actually the things like the local men is a little bit of a problem because algorithms aren't actually guaranteed to go to local men's they're guaranteed to go to second order stationary points
+
+which are a little bit different because like a saddle point could be a stationary point but not actually a local map so we had some kind of strong assumptions here but this was the best variable to do at that time
+
+all right well that leads to a little bit of a con concept called benign non-convexity and it's a reminder that convexity or excuse me non-convexity is just not convex there's actually functions like this where if you just
+
+keep falling down hill it's not convex but you'll still get to the global solution so here you could keep falling down and it's not convex but things are working out you might have to you might have to get out of this saddle point
+
+but essentially you can keep getting downhill here's another example this is kind of like that wine bottle example where again but this is benignly non-convex because it is non-convex but if you just head anywhere downhill you'll get to the
+
+base and it reminds us that um there usually when people talk about non-convex they think about something like this you know a really terrifying line but it lion but it turns out that it's something more
+
+like you know um so this is kind of uh we didn't really mean it but this was part of what people started to call benign non-convexity all right so since then what kind of progress have we seen so just to give
+
+some idea you know this is all up to maybe around 2003 or 2004 and then there's uh progress since then I want to talk about some convex approaches uh some approaches that still look at the low rank problem and then
+
+ongoing work in benign not convexity okay so what have people done with convex optimization so people are still interested in low rank um uh they want to solve the lowering problem but there is a subset of the literature that only
+
+looks at convex optimization and for that one of the topics is this thing called the nuclear Norm the nuclear Norm of a matrix is really is just by definition it's the sum of the singular values of X the all the
+
+singular values are non-negative so this is just the sum of a bunch of non-negative numbers on the Matrix X and this turns out to be a norm so it has all the properties of a normal nuclear norm and moreover it turns out that x x
+
+star or the nuclear Norm is what they call the convex envelope of the rank the rank function so the rank function is very non-convex but you can underestimate it put underneath it a complex function and the nuclear Norm is
+
+the best such function the best such convex approximation when you restrict to just all the matrices that have nuclear Norm less than equal to one and so what people did is they took this nuclear Norm idea and they came up with
+
+guarantees that you could solve the convex problem with the nuclear Norm and yet you would get the Min rank solution that you want you get the low rank solution that you want so there's a number of of papers that follow along in
+
+this vein if you go into other types of problems people have looked at sparse PCA so that is PCA where you force zeros into into some of the the uh principal vectors um you can solve that with SCP there's
+
+another class of algorithms called sketching algorithms where actually they solve completely the convex sdp everything's convex but somehow they do it with storage that is equivalent to a low rank algorithm so they kind of get
+
+the best of both worlds is one way to think about it that's called sketching and then there's other links between low rank Matrix completion and what's happening in terms of the zeros of the Matrix so if the Matrix is very sparse
+
+you can sometimes connect that directly to low rank matrices but still using convex optimization so there's all sorts of techniques that one can do now in terms of still sticking with a low rank approach so really working in
+
+the in the factorization U um there is something called manifold optimization that can be used to solve STP manifold if you remember a manifold is something that essentially looks like euclidean space locally so it's not
+
+actually it's not actually euclidean space but locally it looks like it so you can do manifold optimization to solve scps and there are techniques for escaping saddle points which is kind of neat you know you'll be able to identify
+
+if you're in one of the saddle points and then be able to move out of it people have looked at optimization with orthogonal matrices that's a q times Q transpose equals the identity and one example of using that is to find the
+
+closest low ranked correlation Matrix so imagine you have a a big correlation Matrix from Finance or something like that and then to find a low rank approximation of that is is one technique um people have also practically solved
+
+huge Matrix completion problems using things like stochastic gradient this is another for people that are familiar with stochastic gradient this is a kind of an overlap area where first order methods and and these kind of stochastic
+
+methods are overlapping with low rank optimization but they're also able to get theoretical guarantees on convergence rates and things like that in fact that's another uh another uh type of thing that people have looked at
+
+in other cases convergence rates for convex functions of X and you can even do things like even if the even if the landscape has some non-convexity you can do things like cleverly initialize get some particular first point so that
+
+you're guaranteed to go to the global optimal solution so they even know ways for particular problems to avoid getting stuck in local Minima even though those local Minima exist people have proved that there actually knows what they call
+
+spurious local vinema and certain types of problems in the lowering space and there's also convergence rates for things like block coordinate descent where you might do optimization over one column of the U and then another and
+
+then another and then another and then keep doing that over and over again so people looked at all sorts of little aspects of of how the low rank approach can work now if we go back to standard form sdp
+
+remember that minimize c x a i x equal to bi X positive semi-definite back to that uh that's a that standard form problem here are the types of results that people have found since then and this was where we had the kind of
+
+limited theoretical results at the time so in 2016 bhumal oranitsky and Bandera proved that for almost all costs major CC the first and second order necessary optimality conditions are sufficient for Global optimality if you if you've
+
+studied non-linear programming you know that the first and second order necessary conditions for optimality are really important it tells you basically that your first derivative has to be zero and your second derivative has to
+
+be has to be concave shape for a local Min and usually that's not sufficient enough to tell you you have Global optimality but in this case it is sufficient and that and this is really I think to me this is one of the key
+
+results that really helps you understand what's happening in the low rank case because it says you just do your algorithm and if you satisfy the first and second order necessary conditions then in fact your Global model
+
+there's another type of analysis called Smooth analysis and and it's actually been proven in 2021 that the low rank approach actually solves stps in polynomial time up to any desired accuracy uh using this kind of analysis
+
+smooth analysis allows you to kind of perturb the scene perturb the objective function a little bit and to me this is an amazing result as well because it says I mean interior Point methods are one of the methods that people liked for
+
+STP because it worked in polynomial time it turns out the low rank method in this analysis also works in polynomial time and finally just in 2022 now you might have noticed in both of these results this is for almost all cost matrices C
+
+this is smooth analysis which allows you to kind of perturb the seat it turns out that there actually do is exist specifically such that the landscape does have some local minimum so that it doesn't turn out to be nice so there's
+
+some really weird things going on here basically the first two say it should work in most cases but there are some weird cases where it doesn't actually work so that's where we stand currently with this type of analysis
+
+well in the last couple of minutes let me mentioned some stuff about benign non-convexity because this has taken on a little bit of a uh a life of its own or a big life of its own I should say and um there's a web page by a guy named
+
+jusun at uh University of Minnesota CS Department as a matter of fact um and he has a big web page that he's been maintaining all the way up till December 2021 where he just lists all these papers that talk about benignon
+
+convexity and he breaks it down into about 21 different uh topics so I've just got them alphabetized here but you can just scan over and see some interesting topics so here's a set of here's a topic involving what we're
+
+talking about today there's also deep learning dictionary learning Faith retrieval numerical linear algebra all sorts of areas where things that are non-convex actually have guarantees as if they were convex problems
+
+um I also took a look at his web page and I looked at the years and how many papers he was reporting for each of those years in this benign non-convexity and you can see down in 2010 it was one or two and then it grew all the way up
+
+to around 250 in 2019. so a lot of interest in the non-convexity and then of course I mean not to undercut my own presentation but but he but then there seems to be this big drop off I actually think he got tired of collecting all
+
+this and he just doesn't do it anymore so I mean it's not updated anymore and I think this is a still a very active area and in fact that's a basically where I would like to stop just to um conclude to think about the goals I
+
+had I think the low rank idea has really turned out to be a you know pretty simple powerful and intriguing technique um intriguing you know why should it work and uh why how does this all look and so forth how fast do things converge
+
+there's lots of interesting applications and optimization and machine learning as well um benign non-convexity is an important idea I think it's something that could be a nice area to explore and then last
+
+but not least I'd like to thank say thank you for indulging me in this trip down memory lane so thank you very much and I'll take any questions online or offline or in person or on Zoom however it works
+
+hey Sam is there such thing as a lot of your organized Navy a duality theory yes absolutely um it has a very rich Duality Theory not quite as easy or as as nice as like linear programming Duality Theory but
+
+there's uh there's full full Duality Theory worked out for for SCP and in fact that's that's one of the key ways that you prove anything about low rank optimization in those cases is you have to somehow
+
+connected back to the Dual Solutions and and so that that really does play an important role theoretically asking also the example you said uh you don't talk about linear SBB I wonder how much on this pizza can be extend it with
+
+alternate comprehensional linear does it require any degree view on the on 3D function um so there is there is a little bit of uh work that's done with convex just convex functions so you may you uh optimize the convex function of X and
+
+then you only require that X be positive semi-definite so there are some conditions there um they basically try to uh try to look at just sort of the standard conditions that people look at with convex
+
+optimization strongly context and so forth now one of the things that might be missing in those cases is the existence of a low ring solution so so sometimes in a convex situation you might necessarily be optimizing and get
+
+a very high rank solution and so this may not apply but but there are there is some work on that yeah operating questions I will just point out hey I think this is the same room of your job talk uh I am I I remember I think it's in
+
+this room I well I remember being up in the big room because I was terrified so um and also the thing at the bottom of the wine bottle is called a punt oh okay I did not know that yeah you kind of Silence in something
+
+like that are specific see for which the conversion is about a person second order yeah do you have an idea about the cardinality of the set of those C's um I think it is infinite in the sense that uh it's parameterized just by some
+
+scale some scale a few scalars that you get to change around so so I believe my recollection is the way they constructed it I mean when you look in the paper anyway they just say here's a set of matrices C that have this property and
+
+there's a lot of room of flexible flexibility there but it's measure zero so in other words it doesn't take up space but it but actually there are an infinite number of them right I will say thank you once more to Sam

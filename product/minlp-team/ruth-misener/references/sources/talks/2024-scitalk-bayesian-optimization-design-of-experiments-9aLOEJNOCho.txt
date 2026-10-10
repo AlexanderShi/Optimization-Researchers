@@ -1,0 +1,449 @@
+so good afternoon everyone and Welcome to our March S Talk um it's a second talk in our 2024 Trilogy on artificial intelligence and its applications um today we're looking at uh basian optimization and the design of
+
+experiments um move the slides along um a reminder that all attendees uh to this webinar are in listen only mode but you can join in the conversation at any time during the talk by asking a question by the zoom question box and
+
+there'll be a Q&A session at the end of the talk for those who don't know me I'm Tim Reynolds and I'm chair of the sei's public evening lecture committee and also current acting chair of the uh se's College of Scholars committee but enough
+
+about me our speaker today it's Professor Ruth Meisner who holds the BASF Royal Academy of engineering research chair in datadriven optimization at Imperial College London uh in the department of computing uh
+
+Ruth previously held an epsrc early career fellowship and a Royal Academy of engineering research fellowship at Imperial as well um and the foundations of her research are in numerical optimization the comp computational
+
+software and our applications Focus uh on optimizing ation challenges arising in industry and in particular uh in chemical and bioprocessing challenges uh such as scheduling in manufacturing or experimental research
+
+design Ruth also works at the interface of operations uh research and machine learning uh and she received the 2017 Sir George McFarland medal as the overall winner of the Royal Academy of Engineers young engineer of the Year
+
+award uh Ruth is from America where she took her first degree in chemical engineering from MIT and then went on to get a PhD again in chemical engineering uh from Princeton uh today you should be talking about
+
+basing optimization um and how she's apply the problems in materials and chemical process research so over to you Ruth thank you very much great thanks a lot Tim for the kind introduction and I realized that when I'm asked for a h bio
+
+I should give Ruth as a person and then stop at that so that we don't have to have have this this boring bit but anyway um so delighted that everybody has uh joined today um just to have as a disclaimer I
+
+know what I'm going to say and I assure you similar material is available if you go to YouTube um and so what the real Advantage is is the the chance that we have to discuss here so please do uh ask questions I've got the Q&A uh open here
+
+and hopefully it'll be refreshed uh as as I speak um but Tim if I missed something maybe just give me a shout uh and let's let's talk about what uh the people on this call want to talk about because that's where the value can be um
+
+as uh Tim has already stated um my undergraduate and my PhD are uh both in chemical engineering uh small but embarrassing secret um all of my worst marks are in chemistry um and so it's really exciting for me to get to talk to
+
+an an audience like this who really knows their chemistry um so where you have to you know if if and when you're asking questions or participating in some way um my chemistry is actually quite weak um but I know enough
+
+chemistry to know that my chemistry is weak I I could watch people who are very smart do really good chemistry and when people who are who know their chemistry are good at chemistry it's beautiful to watch so I've got a lot to learn about
+
+chemistry please ask tons of questions um and uh or rather I don't know huge amount but please ask questions and also leave comments about um sort of either connections that maybe you thought I missed or connections that should be
+
+made um so yeah not a great chemist but somebody who really appreciates good chemistry at Imperial uh this whole I like chemistry though I'm not great at it has gotten me to a computer science department where I spend a lot of time
+
+collaborating with chemists who are very good at what they do uh at uh BSF um this is of course a very large chemicals company and um I specifically collaborate with their corporate R&D team um and so this is in kind of trying
+
+to design a new reaction kinetics or new molecules um and i' this has been a long collaboration for me and I and I really really like this collaboration just to speak a little bit more about this collaboration before I
+
+move on um my collaborators at BSF have done something that I find a really Forward Thinking and they got together with um people who are in Pharma this is Bing or engelheim and they got together with ionic so three big uh German
+
+companies and they said you know what we all have the same design of experiments problems we all have the same challenges and we wish that researchers would look at the same sort of experimental design
+
+and and basian optimization problems so this is a a um a quick shout out to their work to please go ahead and go on to uh their GitHub um it's uh github.com experimental designofire and what they are doing is
+
+that they are saying okay we' like to use these technologies that the academics are um are developing and indeed the everything that my team has developed is in this this code um or everything that my team has developed
+
+that is in line with what I'm presenting today um but we we really need something where we can then take it up into industry so if this kind of fits with your vision of where things should go um please uh go ahead and uh check this out
+
+um I think this is this is super great and a nice way for industry and Academia to collaborate okay for the first bit of my talk um I will focus on uh sort of the ideas surrounding sort of basian optimization and design of
+
+experiments and then I will only in the second half or so move into applications that I work on with BSF um what my assumption is and again please do feel free to correct me by um uh writing into the chat or into the Q&A um my
+
+assumption is that I'm talking to people who really know their chemistry but have seen Less in terms of uh what is the field that machine Learners are now calling Active Learning um so basically um basian optimization uh style
+
+techniques additionally what I will do is I will fairely I will shy away from really presenting um the um how to say I will shy away from presenting uh the mathematics so there are no equations on my slide there's a
+
+lot of mathematics that goes into this work if you want the mathematics at the end I'm going to put into the chat the YouTube videos you should go see um because my group makes YouTube videos for every research paper that we do the
+
+YouTube videos that we you should go see or the um uh papers you should go read if if I didn't make this mathematical for your interests okay with all those disclaimers moving on um what I'm going to do is I'm going to use um
+
+uh a number of different examples uh to think about how we already make use data to make good decisions um so with BSF what I do uh and what I think about a lot is how to choose the next chemistry experiment sort of how to um decide what
+
+is the next experiment to set up so that we understand uh what's going on in this reaction or what's going on in uh this flow setup uh or whatever but of course in our own everyday life one of the ways
+
+that I might use a very similar set of techniques is that I might be uh adapting recipes for instance uh from my friends feedback and so when I when I think about examples like this I'm almost thinking about chemistry the way
+
+I think about cooking right where you know I've got these things that I mix together and uh I want to do the best thing possible um I'm a big cycler uh if you're annoyed at a cyclist in London it might be me
+
+um and um basically you know another thing that we might think about when using data to make good decisions um would be whether or not I'm going to drive or cycle um based on travel time um is that maybe my cycle takes slightly
+
+longer but I get some nice exercise in there so definitely um I use data uh to make good decisions uh all the time and really um what some of the sort of key breakthroughs in machine learning have done in the last 10 years is to really
+
+just take the way I might uh make data uh make decisions spot from data uh and make this into a more um sort of uh very specific setup uh that comes with uh my knowledge of uh statistical machine learning so two of the key
+
+breakthroughs that I'm going to be talking about um and without mathematics there is a lot of mathematics and happy to push you on to some of that uh if that's interesting one is I'm going to be talking about um this tool called
+
+gasan processes this is a tool from uh statistics and basically what it is is that when I do some sort of regression I capture what is my belief about a system I say something like okay uh I think that with this trend line you
+
+know uh I you know I I spend more money and the the quality of something or other improves or something like this um what I really like about gassian processes is that they don't just give me my belief they also give me some sort
+
+of understanding of my uncertainty surrounding my belief um and this can be really useful in a design of experiments context um because I don't just have the regions of the search space where maybe you know I think it's going to be useful
+
+to query in here I also have the regions of the search space that I don't really understand much um basian optimiz is a global optimization algorithm it's um it's provably Global so that such that if I keep sampling I will
+
+eventually hit the absolute best uh solution and it uses um this idea of um the the underlying assumtion is that we have an expensive function to evaluate so basically um in there's a there's a lot of fields of optimization and I'm
+
+awfully interested in quite a number of them um but the specific assumption I will make in basian optimization is that getting any piece of data is is difficult and by that I mean you know it might take the chemists at BSF kind of a
+
+long time to set up an experiment um or um setting up an experiment might require some you know access uh to um a pilot plant that you know maybe I'm allowed to use it maybe I'm not or maybe it's expensive
+
+um so okay so these are the the sort of buzzwords that I'll be using today that are sort of maybe the ones that are uh drawn uh from machine learning okay so I've got all these uh ideas and my goal is to um think about
+
+developing an automated framework for optimal decision- making so I feel like now machine learning a presentation is complete without a human robot picture so here you go uh tick that's on um but another thing that I think happens often
+
+in uh machine learning presentations is that maybe we sometimes forget that the that the technology we're presenting is actually pretty old and it's been around for a while in the case of um basing optimization and gaussian
+
+processes um where the the first reference that I know of is from uh 1951 and this was in an MSC thesis which is extraordinary I can't believe this was an MSC thesis uh in in South Africa 1951 and what this guy C was thinking
+
+about is he was a geologist and he was thinking about draw drilling oil wells and what happens is you have some plane you think that oil is somewhere and you need to choose where are you going to drill next to see
+
+if you're going to be getting oil so you can drill here you can drill here you can drill here each drill each drilling activity is really difficult and so what you wish to do is you wish to have some sort of um algorithm that will choose
+
+for you the next place to drill that will somehow take advantage of the information you already have and so um I think you know mean there's been a ton of research you know in the last uh uh 70 plus years at this point uh
+
+especially in the last uh 10 or so however this is this is material that uh is you has been around for a while okay um some ways that uh these same ideas are used uh in in robotics uh would be something like uh when I wish
+
+to set up a robot and I wish to observe it walking um maybe I want to De develop my robot so that it Brocks as far as possible but I need to uh you know tune the various knobs on the robot and and have different settings on the robot um
+
+to see how far it walks based on whatever setup I have however every experiment I do is going to be expensive because uh every time the robot Falls over maybe I'm going to have to do some fixing of the robot
+
+which may or may not be annoying um depending on what happened to the robot in the last fall um and so this sort of phasing optimization design of experiments the way it started showing up the most often
+
+uh in machine learning was to start thinking about expensive to evaluate functions such as those in robotics we can start thinking about moving this to science experiments and indeed this is something that people
+
+have been doing uh for for quite some time at this point and uh it's you know there's there's there is lots of beautiful work I will more Focus um on the work that that we've been doing um but there's an awful lot of stuff uh
+
+going on so for instance uh if we would have um this uh sort of scaffold right here and we wish to create um uh tissue uh for instance in tissue engineering on uh a scaffold um we might have some sort of
+
+expensive uh computer simulation uh that would tell us whether or not tissue would grow on this scaffold nicely and we might uh be able uh using basian optimization to optimize uh some sort of flow rate through the reactor and or how
+
+often we might change the medium uh to feed the cells uh that we're grow okay so basically the goal in all of the um all of the items that I've discussed uh so far is to get the optimal outcome so I might want to get uh the the
+
+minimum of one of these uh crazy functions now that's in general um the goal of anything in optimization right is I either wish to get the very best or uh or I wish to get the very best or the least expensive or something like this
+
+um but the underlying assumptions in um uh this particular uh application are quite specific so what the applications have in common and where this could be useful for chemistry so this is this is key is
+
+that acquiring new data would be expensive um but we would have limited other knowledge and let me explain that a bit more in chemistry we often know things like if if I know this is a first order reaction and we have a going to B do not
+
+use these methods right because what's going on here is that if I know it's a first order reaction and I know a goes to B and I'm just trying to fit some sort of rate constant or something like this I know that that OD I know that
+
+ordinary differential equation all I need to do is I need to find the parameters you can do a lot better with traditional parameter fitting to get the the right answers right so don't use it for that um if acquiring new data is not
+
+expensive then the techniques that I'm going to be talking about or that I am talking about and have been talking about are too um are too much sort of trying to uh crack a nut with a hammer um there are
+
+other techniques if acquiring new data is inexpensive then I might want to use things like um uh derivatives or gradients in my optimization algorithm to suggest which way to go so for instance in what is common about all of
+
+these applications and about the applications that I'm looking at with BSF is that each individual experiment that needs to be run is quite expensive and you can't just run instantly two experiments right side by side to know
+
+where some sort of slope is to say okay well best is you know getting lowest cost and so we'll go downhill to go get lowest cost or something like that because we have so few experiments that we can run it is rather that what we're
+
+interested in is um having to have data points that we sample that are far away from one another just so that we actually make sure that we more or less fill the space um and then this limited knowledge is
+
+that well if you know it's a first sort of reaction then you don't you don't NE and you know what components go to what components you're not going to need a technique like this okay so what you know I've said all sorts of things about
+
+what I'm not doing what kind of things can we do um the geology ex uh example is um a prime example because there it's quite expensive to drill a single uh drilling operation is going to be very expensive into the middle of the Earth
+
+and we don't actually know what's going on with the Rocks uh in in the middle of the Earth maybe a geologist can say well if you've got this pattern for a while you know here it's kind of probably going to be similar other places but you
+
+don't really know like it's not um you don't have some nice a goes to B uh equation um another the other example that I gave with the robot well it's difficult to set up the robot so that's expensive and maybe for this particular
+
+example we don't have some sort of um uh physics based understanding for how the robot operates um with the with the tissue engineering example it was an expensive simulation takes a while while to run this uh this
+
+cftd ex uh simulation and the tissue Behavior itself is unknown I mentioned that um of course we um use data uh to make decisions in many areas of our life um but just to sort of emphasize at least with the with the algorithms I'm
+
+talking about today they really should only be used when acquiring new data is expensive and we have limited other knowledge that would mean for instance that this example about um uh my cycle route would not be the kind of uh
+
+problem where I would address the techniques that I'm talking about and the reason would be that for instance um if I know the roads to my destination um I'm going to use the fact that I know the roads to my destination to figure
+
+out what my optimal route should be um whereas um with the example that are up above I don't don't really have the same amount of information I just know that I'm searching within some sort of space okay so what basically what these
+
+techniques do and what they don't um so when is an application successful um first off just to mention dimensionality um these kind of surrogates where you know I I want to optimize so I want to say maximize yield
+
+or minimize cost or um maximiz selectivity or something like this all of these experiments um they're going to work for relatively few input uh Dimensions where you know the examples that I gave um with geology
+
+there's only two input Dimensions I choose where on the earth I'm going to drill right [Music] um and if I'm in a yeah and then on the the robot there's relatively few know uh knobs I can turn in the tissue engineering example um I'm
+
+changing flow rate and I'm changing uh the composition of the feeding material um in the the BSF examples that we often work with I can change uh input parameters I can change temperature uh in a flow reactor I might be able to
+
+change uh uh flow rate um so there's there's these things I can change but it's not something where I have a huge huge search space where I'm doing something like uh you know optim making a lot of choices on a supply chain or
+
+something like this um so these surrogates work for a relatively few number of Dimensions um any uh sort of basing optimization or Active Learning researcher who's on the call is probably shaking with rage at this point because
+
+basically the the truth is that people who sort of research these topics are very much trying to go to a higher number of Dimensions so um there's a lot of really lovely active research that's thinking about hey we can beat this you
+
+know this rule that that that I gave about fewer than 10 Dimensions um so that that it's definitely not a hard and fast Rule and people have found some ways around it but my sort of overarching understanding of most of
+
+this research is that what happens is that for people interested in going to a higher number of Dimensions they often end up find finding some sort of latent space embedding that is is lower dimensional or they end up finding um
+
+some smaller problem within the bigger problem so basically what the the the point is here is that if I'm taking uh sort of these these basing optimization um or active learning strategies off the shelf and expecting to just use them
+
+then you know 10 or fewer dimensions and we're we're fine more dimensions and it starts having asterisks with respect to um what we can do and it's it's certainly really interesting to look into okay all right another um things about
+
+what makes an application successful I already said that um we most find basing optimization and uh sort of active learning techniques useful when we know less about the underlying system if we really understand the underlying system
+
+probably we want to do parameter estimation and figure out what the par is on an ordinary differential equation are um but there are still areas within this field where people try uh to think about sort of how they can tune things
+
+to recapitulate the underlying function so as a as a small example basically what happens is that um you know I have some sort of guess about where the the oil fields are under under the Earth and I wish to decide where to drill there's
+
+going to be there's some underlying function that I have that's basically going to say um uh here's where I'm going to get good stuff or something like this and so if I have a uh a machine learning model or a data driven
+
+model that is going to somehow recapitulate the underlying function in a nice sort of way that is of course going to be an advantage um then I gave the example of uh this this robot um some of the parameters I might be able to tune with
+
+the robot they might be sort of knobs and knobs are sort of continuous other others might be switches sort of a decision yes or no um and whether or not I'm allowed to tune parameters that are continuous or yes no this is categorical
+
+um uh that will change sort of what my my underly surrogate model will be and then the other thing that people will often ask themselves is they'll ask themselves about these periodic function aspects so um uh for instance um I'm I'm
+
+giving in the picture the example of waves okay um I'm going to uh skip this because I'm going slower than normal um and a commonly used uh surrogate model or at least one that I like um are gaussian presses this is an extension of
+
+a normal distribution to an infinite number of Dimensions I really like uh how it has a really nice um uncertainty properties and I like um the sort of proofs that uh people uh work with uh related to Gin processes uh they do have
+
+some uh numerical difficulties sometimes uh which can be frustrating and then there's also a whole lot of other of these surrogate models um so with respect to our collaboration with uh BSF of course um a
+
+lot of the time what uh BSF is going to have to deal with is data that is somehow uh categorical they're going to have to choose which solvent to use for instance or they'll have to um uh choose you know for for some
+
+Catalyst pellet uh what what which of several standard shapes to use or something like this um and these this is badly modeled by these uh continuous models so what the BSF collaborators like to do is they like to
+
+have uh tree based models and make sort of branched decisions so basically well you know I either have uh my first solvent or my second solvent um and that's kind of nice because now I can take these categorical variables that
+
+aren't continuous like choosing uh which solvent for instance um the the downside is that we don't have embedded in uncertainty estimates so I have a little picture here showing how I might have uncertainty based on uh
+
+distance that may or not be useful depending on the particular application okay there's lots of others of these uh com of these surrogates a lot of them are very uh common there are uh stochastic processes there are
+
+regression functions um there's a ton of research into people thinking about what is good when um and it's a it's a fun area to get to be in as a researcher okay um just as an example as to how some of these algorithms work and let's
+
+say that I wish to recapitulate this function so um maybe my my input here so the x- axis would be something like uh a temperature and my output would be yield I know that this is not a reasonable function for that um but you know
+
+basically this is just a wiggly line but what I want to be showing here is just how the algorithms work and then once we've shown how the algorithms work I want to show you the particular ways that we're collaborating with
+
+BSF so um uh I have some sort of input that I get to choose and then uh we get some output and I wish to measure the output so maybe I wish to uh minimize uh the function the uh the red line is the mean
+
+of the function and the the um the Shaded region is some sort of uncertainty metric basically I don't quite know what is going to be coming out um this is a common assumption in basing optimization and definitely
+
+useful in chemistry uh where I may or may not be able to have a lot of um uh accuracy or Precision in in my measurements okay but I'm not gifted with this magical function I only have a few points of observation so I do not have
+
+the red line or the red shaded region I only have the red dots what these surrogate models will do is that they will come along and they will estimate a mean function so here's there here that is the blue uh dotted
+
+line um my blue dotted line is in this case matching uh the function at the red points um that is a specific Choice uh it wouldn't necessarily have to do that um and then on the the blue shaded region is
+
+telling me where I am uh uncertain in this particular model the underlying surrogate that I used and I just this is just an example from pyit learn so I just rigged up an example in there this is just a a gaussian process
+
+with an RBF kernel and the the only thing that's happening is that where we are we have the measurement there we're a bit more certain where we say okay you know that that seems like something we understand now and as we get away from
+
+the the measurement we are less certain and so what's going on here and what I like so much is that uh this is a a model a data driven model that is telling me one what I think I know and two giving me some evidence about what
+
+maybe I know less about um so just to sort of recap um and the red uh dotted line is what I wish I knew the red dots is what I actually have and the blue is my uh current mean function and my thoughts on the
+
+uncertainty so I mean it uh it's it's pretty good uh for for the few number of data points I have um but the question is how do we now use this let's say I wanted um to minimize this particular function well
+
+maybe on slide 20 is my dotted line similar which is SL to a bezier fit I'm embarrassed to say I don't know what a bezier fit is [Music] it's a curve fitting bzier fit looks like it's a curve fitting thing but I think it has
+
+no uncertainty right oh but you're asking about the dotted line yes then the answer would be yes thank you thank you and more questions always welcome and I will probably handle them badly again and sayy I don't even know
+
+what that word is okay um okay where were we um so I wish to minimize uh this particular uh function here maybe my answer is right here that would be an entirely exploitative type answer or maybe it's where I uh have not explored yet and
+
+it's just that I need to do more exploration other places the way that people in this field uh H handle things is using what is called an acquisition function so um this is now putting um the the the red
+
+on top is the um is the function I wish I knew the and I wish I was um minimizing the blue is my current belief and then the green is the new thing that I'm now talking about in basing optimization we talk about we call this
+
+uh an acquisition function and what an acquisition function does is it combines my knowledge of of what's there together with my um sort of not knowing what else is there and it tells me where I wish to
+
+take my next sample point so basically what's happening here and you can see that I've slightly changed the function from the previous slide to this slide there's there's fewer points just so that I could uh get get a better
+
+example um my my first uh sort of guess is well if I combine my my uncertainty with uh my sort of uh my my belief about the function probably I had better sample here um and this this uh particular um acquisition function that I am
+
+illustrating is what is called upper confidence bound where I am basically making a linear combination of the um expected value and how uncertain I am uh there are a lot of really interesting techniques for developing lots of
+
+different acquisition functions uh and there's a lot of beautiful work on that in the literature um so this is this is one example but there are many okay so maybe I sample here uh first then what happens is I take that sample and I
+
+update um my my blue function so I update my belief about uh what is going on both with respect to the mean function and with respect to um the um how to say the uncertainty take that point now I'm um recomputing the
+
+acquisition function because I am now much more certain about uh the region where I just took a um a measurement um now the acquisition function is saying okay sample where you really don't know anything um so okay I'm going to sample
+
+where I don't know anything um and that will improve my knowledge of the function uh further and I will continue so basically what happens is that my acquisition function sends to where to sample next then I do the sampling um
+
+then I update uh my my belief about what the underlying function is etc etc what's Nifty about basian optimization and um I I I find useful is that it's not just um space filling it is actually deciding
+
+[Music] um [Music] um it is deciding where to sample based on whatever it is my underlying goals are um so basically there are um two areas in active learning that are sort of separate but you know sort of somehow
+
+complimentary um the one that I have been using more often with BSF is this basian optimization where we have goals we wish to maximize yield we wish to maximize selectivity we wish to minimize cost you know we need we need to think
+
+about these sorts of things there's another area um that's called um basian quadrature which is more about sort of space filling trying to figure out what is happening in the entire space maybe I need to characterize a wide space rather
+
+than having a particular object okay um one thing just to mention uh in in passing and this is just how these algorithms go um so just to kind of give a a rough idea of how they go um this algorithm is guaranteed to converge
+
+but it's guaranteed to converge in the sense that you never stop evaluating and and you know uh sometime between now and infinity it will have found the global solution there are lots of people who are thinking and there is interesting
+
+research in specific cases about when you can be more specific and say I can stop now um and I have a good enough answer or I have a provably good enough answer um but the sort of the sort of plain vanilla case is um that you're you
+
+you need to sample until forever however my computational experiments or my computational experience and this is this is similar to the experience that I see in every paper so I I really don't think it's just me is that for whatever
+
+method you have basically you have these diminishing returns where you know maybe there was this very best answer that you never found but basically this uh zero to 300 you know maybe you don't have 300
+
+experiments you can you can do in some applications but in this particular application we were looking at maybe up to 300 experiments we're just running into sort of flatlining at a certain point um and that is at least my
+
+experience with these algorithms okay so um chemistry and cooking uh not good at chemistry not good at cooking um but basically one of my favorite papers uh is out of uh Google brain and it's called basing optimization for a better
+
+dessert and basically what happened is that they varied the ingredients and they varied the ranges of the ingredients and they asked human testers uh to compare control cookies um and so basically this is how I roughly think
+
+about uh basian optimization and uh chemistry which shows how little chemistry I know okay um but maybe some examples that are uh less silly and more uh optimiz and more chemistry is um there are um some really smart chemists
+
+at Imperial um I'm using um an example that was developed by a PhD student by the name of Linden trucker but there are other you know really nice Works uh in both the chemistry department and the chemical engineering department here at
+
+Imperial where basically um you might have something like a self-optimizing you want it to be self-optimizing um micro reactor system here in the system of lynon you are able to control control flow rate
+
+you're able to control uh kind of which components go in so you're able to decide you know the settings on your pumps and what you put in uh to the pump and you're able to control temperature then you're you're
+
+quantifying whatever is going on uh in in your output um people have been thinking about this type of application since approximately 2010 um and there's lots of ongoing work um both in uh both in industry and in uh
+
+Academia on these types of systems um there's tons of amazing work you can do uh on sort of setting up these systems setting them up really in a in a nice sort of way that's some of the stuff that that Lyndon did during his
+
+PhD what I like to think about um as somebody who's interested in uh datadriven optimization is I like to think about um what's what's going on from an optimization point of view um so in this particular case I've Illustrated um a
+
+droplet micro microf ftic system this could also be like a plug flow where you know each experiment is not inside of a single drop but you know you have some bit of the plug and then you've got an experiment in
+
+that um and what's super cool for me on something like this and this is something that we've been thinking about with the BSF team a lot is that if you've got some sort of micro reactor system well then you basically have a
+
+lot of experiments that are happening 1 2 3 4 5 six like right in a row but you've got all sorts of really cool uh mathematical properties that make this difficult so for one um I get to choose some sort of uh input chemical
+
+composition I get to choose uh temperature I get to choose uh uh flow rate I know that when I say I get to choose temperature it's actually just that I get to control the heating um but it's close enough that it's more or less
+
+like I get to control temperature um and then I have measurements I can take there are some measurements that are going to come back quickly um this would be something uh like uh fluoresence measurements or
+
+something um from microscopy or using an infrared camera and then there's some measurements that are going to come back more slowly like for instance in one of the applications we've been considering uh with BSF um there is an hplc high
+
+performance liquid chromatography unit that's attached but that particular unit at at least is going to take an hour uh to return its answers so for me somebody who's interested in active learning and basing optimization this is a really
+
+like a delicious challenge because we have all sorts of really fun um uh techniques that we have to start thinking about so first off there's this asynchronous batch aspect basically if I have not had my experiments one or two
+
+already measured and Quantified by The hplc Well I'm making my decision about my experiment n not knowing all of the information yet so basically there's this there's this time value of information where um I might be having
+
+to make my next choices without having full information about what's going on I've also got this multifidelity aspect um sometimes we can um uh do easier experiments uh or or get some experimental data so for instance I
+
+could get some uh fluoresence data in another one of the things that we're looking at I might be able to get uh a UV VI Spectra uh that may or may not be reliable um but I might not be able to get my hplc data uh at the same time
+
+I've got this path-based control aspect where I'm allowed to change flow rate but if I change the flow rate of drop late uh n then I'm actually changing the flow rate of everything else that's in the system as well right because all of
+
+a sudden it's pushing forward faster um I've got mixed features um this is really interesting in machine learning and it's basically that I get to choose what ingredients I'm going to put in and also what are their various levels um
+
+I've got hierarchical decisions so I might decide not to do a more expensive experiment if a cheaper experiment was failed and I've got input constraints for instance all of the chemical species are going to have to add to one so all
+
+sorts of super fun things um and one of the things that we have thought about uh with BSF is combining uh two of these aspects in particular um uh asynchronous batch and uh path-based control and what's going on is that you
+
+might have noticed that in the the basing optimization design of experiments examples I was giving um beforehand what happens in basing optimization is that we always assume that we're able to sample the space
+
+wherever we wish um at any one time so basically we hop around the space and we can always take the next sample wherever we wish this is of course not going to be this the case in many chemistry applications in many chemistry
+
+applications for instance um changing the temperature is going to be something that might take a while right is that if I have a big system it might take a while to get to some point kind of equilibrium and I
+
+might not want to have one experiment that you know requires things to be very warm and one experiment that requires things to be very cold and then go back and forth so one thing with my microfluidic um example is that I might
+
+want to make sure that I'm following some sort of um path-based uh optimization uh method and actually what we are able to do with that is of course Heating and Cooling uh I learned in chemical engineering school is they're
+
+different from one another right is that to heat a system is a lot easier and I can do it a lot faster than I can cool a system right and so actually what basian optimization algorithm has to take into
+
+account is the expensiveness of heating is different than the expensive of cooling um which I find very fun uh another thing that our um our basian optimization algorithm uh can take into account is that some variables
+
+are more easy to change uh than others uh so for instance in my um in my my fuic example I might be able to change the relative concentration of two things more quickly than I can change a flow rate or something like this and
+
+hope for quasi steady state okay now we also have been thinking about other applications uh with BSF and here what I'm going to be thinking about um is an application that we thought about uh in battery research
+
+and here what's going on is that um BSF would like to make these uh pouch batteries um but it's awfully cheap to make coin batteries coin cell batteries so these these pouch cell batteries they what they actually want to sell the coin
+
+sell batteries much easier to make much easier to do experiments on so the thing is is I can do a lot more of my experiments characterizing what is going on with these uh coin cell batteries than I can with these uh pouch
+
+cell batteries what we're going to end up doing is that um to to understand this what the previous literature said is basically why don't we construct a datadriven model in red for the High Fidelity that would be the pouch cell
+
+that would that would be the pouch battery where the one that I want to make and um in blue I can construct my data driven model for my low Fidelity example and then what I can do is I can somehow combine my belief about these
+
+two systems and that acquisition function where where I am told where to sample I can somehow where it figures out where to sample next it can somehow combine uh my two pieces of knowledge so this was the the prior work before we
+
+were working with BSF and then with BSF one of the things that we've been doing is developing an engineering contribution um where we give lots of different options for how to combine uh the the different fidelities and
+
+basically what the the point of this is is that even similar to basing optimization where I'm never quite sure unless I understand the application a bit better how to uh sort of uh combine methods we might not be in a situation
+
+where we can use the the very particular method that was developed in the very particular paper and so basically what we did and now have uh uh now have available in buire is these uh different options for combining uh fidelities in a
+
+different sort of way and so uh you know just thinking about it from a um a machine learning point of view I can combine Things based on variants um I can combine Things based on uh information uh and I mean in an
+
+information Theory Theory sort of way um and this will decide how much I'm going to sample my High versus my low fality okay so this is an ongoing sort of set of challenges that we get to look at with um our BSF collaborators this is
+
+certainly really interesting I'm happy to take more questions about this um we have a code uh OT that does a lot of this this is this is open source um and it connects with a lot of the stuff at BSF and just to close what I want to
+
+mention is um this bow fire tool that uh my BSF collaborators have have developed as a way for uh industry and Academia to um to sort of intersect um and to start sort of making sure that people are developing the kind of methods that are
+
+needed in industry uh in this particular area um so thanks a lot for uh uh listening today and happy to take any further questions okay thanks very much re um we had a question in the middle which I think
+
+I've answered yeah yeah yeah yeah yeah um has anyone got a question i' like to put I mean one thing I wondered I mean I know very little about AI in general but I things like the I guess what what you're trying to do what what you're
+
+doing here is is guiding experiments like say if the leonin um computer I mean he has that programming language I mean if you had an AI on top of it could it direct and optimize I I think he already does to be honest but um yeah so
+
+I mean basing optimization is common in a lot of chemistry applications right yeah um I wouldn't I personally would not want everything automated um at least my collaborators at BSF would not um and basically
+
+I um I think the reason is that we you know again I'm someone who's not great at chemistry and but I know that there are people who are and so at least at BSF what you're going to see is people wanting to really um yeah sure we take
+
+the advice from the algorithms but also we are very much involved with it um so yeah yeah keep it human in the loop yeah there's questions coming in here yeah so thanks everybody for the questions I'll
+
+get to as many as possible and then uh let's see so comparing to doe okay great so basically as um as Alex very clearly knows traditional design of experiments um is a set of statistical techniques that
+
+will indeed uh sample the space what your goal in these doe techniques is is to typically maximize um the the information something like the the Fisher information Matrix right um now that's nice to have what's going to
+
+happen in basing optimization and the way that it's going to be different whether or not it's useful is for for for you Alex to decide for your particular application the way that it's going to be different is that I'm going
+
+to be optimizing for a goal I'm going to be optimizing for something like I want to maximize yield and so what's going to happen is that uh rather than having my objective be um this statistical quantity it's going to be maximizing
+
+yield or something like that how robust is basing optimization to noise in the experimental data that's actually a really good point of basing optimization um I my my picture didn't do a great job of illustrating that but basically um
+
+output noise where you're not quite sure about whether your experiment was you know really giving you the answer or if there is a the answer basian optimization is brilliant what's a little bit more difficult with basian
+
+optimization is input noise so for instance if you're not quite sure about your controller um but there's been some really beautiful work in previous in recent years on robust optimization and basing optimization so people really
+
+have been thinking about that and it's starting to appear um I have a reasonable amount of screening data based on rate F reaction substrate enzyme type where do I start putting this into a model cool um I guess my first questions would be
+
+what do you already have do you already know if if you because it sounds like from this there might already be a the knowledge of what the reaction is if you're just fitting in od I would not use this technique as much as I love
+
+this technique um if you're thinking about if you're if you're thinking about input output then I would start wondering if you could already either go bow fire is built on bow torch that is the sort of the most typical um
+
+process tool if you can get it into something like that that'd be cool if uh but then it says reaction substrate enzyme type so it might be something is categorical basically this sounds like a super cool problem sorry um would have
+
+to know more how do Bas in optimization deal with non-normal distributions aha yep so um you my data has errors so you're right that there is this H approximation of an underlying normal somehow um but that is the Assumption of
+
+the Gan process that is not the Assumption of basin optimization so if you choose your probabilistic model correctly uh you should be fine um could The Continuous Gan surrogate model be used for mixed integer um gaussian process surrogates
+
+are used for mixed for mixed integer and people do do this I don't love that technique I'm actually obsessed with it in my research so um the um uh the techniques that that that I like are ones that we developed which which is
+
+that basically what we do is we use a a tree kernel for the gaussian process so we basically uh say well I you know I I don't want this uh underlying continuity I want uh what's called a tree kernel I really like that how is bow fire oh
+
+great question um B are different from a tool like axe yes so this this um this person knows um okay so B torch is made by meta and then um meta also makes axe which is active experimentation or something like this and it is similar in
+
+goal to both fire which is that they are both uh um basan optimization active learning tools um the we're we're working on this paper right now so we're actually exactly asking ourselves that question like why
+
+did we develop a whole new library we actually think we had a lot of good reasons um basically this is a highly configured version of almost of Axe so you could do anything that you can do in Bow fire you
+
+could also do in ax but you would have a day of headache every time you wanted to do something different in AXS that will um that bow fire will do for you so basically at least what my um industrial colleagues tell me and I tend to believe
+
+them because they do this all day every day um is that um they need a set of items things like uh that that example that I gave about you can't change your parameters too fast um that are going to specialize acts in very particular ways
+
+that it would be easier for them to just go ahead and develop it interestingly the axe people also have a list of reasons why you shouldn't use Axe and exactly this kind of stuff that we're doing where we really want to specialize
+
+in this way and that way and that way is a reason to not use axe um ax is a much more it's a it's it's a quite generic tool it's a really nice tool um but ours is more um specific to at least the challenges of these three companies that
+
+have gotten together can other companies join this development Consortium yes I'm so glad you asked please join um go to uh the bow fire website open up like a discussion or issues or some something like that they are trying to get more
+
+people on board um and you have multiobjective basing optimization yes this is some brilliant work that has been done in recent years I didn't present it too much in particular bow fire which I uh mentioned is really
+
+focused on multiobjective uh is there also a web app publicly available besides the python collabs not sure what that means um high dimension oh high Dimensions it's just so high Dimensions can be handled it's
+
+just that then you have to do you have to do more thinking and lots of people have done this uh you're just looking for a lower dimensional space you hope it's there and people have different techniques for this uh uh it's really
+
+cool available for participants uh I hope it will be well that's a that's a good point to uh to wrap it all up because it's about half past and I think uh we're pretty much um out of time but yes it will be available it is being
+
+recorded and it will be on theci um website at some point in the not too distant future in fact quite soon I hope just to conclude putting into the chat the technical versions of everything I presented okay yeah on your on the
+
+YouTube there so copy copy and paste and View at your leisure okay well um thanks very much oh yeah thanks very much uh Ruth for a great presentation um oh let share that screen um so thanks for talk and thanks
+
+very much for all those questions uh and thanks for those answers Ruth um so just to uh wrap up um if you aren't already a member of seci please consider signing up look at the options um I we'd love to
+
+get to know you better um and don't forget that we have our third Trilogy on on AI on in drug Discovery in around about month's time Wednesday 24th of April um and that's with John overington of EX senta who will talk about Ai and
+
+Drug Discovery um don't forget to register um and thanks again thanks to rof and we hope to see you again soon thanks a lot bye

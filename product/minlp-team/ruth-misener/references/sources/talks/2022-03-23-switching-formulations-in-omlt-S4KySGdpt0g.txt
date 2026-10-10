@@ -1,0 +1,171 @@
+hello my name is ruth meisner and this is the second of uh presentations regarding omlet which is the optimization and machine learning toolkit here i'm going to dive a bit more into formulations if you haven't seen the first video yet
+
+you'll find it linked below okay so this is the team we'd be delighted to have you join us and recall from our first video that the type of optimization problem we wish to solve are those that hybridize a
+
+mechanistic model based optimization that is optimization where i can write down uh the constraints and surrogate models learned from data so maybe there's some complicated uh reaction or something like this if i
+
+have an engineering application that i can model from data but i don't have equations describing it i want to hide um the complexity of going from the neural network to an optimization formulation this is
+
+exactly what omelette does we also work with gradient boosted trees of course and in the previous video i gave the example of this particular formulation i said it was pretty complicated and that what we're doing in omelette is
+
+we're hiding that to the best of our ability so that what you have to know is how to hook the inputs into the omelette block and the output of the gradient boosted tree from the omelette block but that you do not have to code yourself
+
+the gradient boosted tree formulation itself it's a bit of a waste of time if you're not actively doing research in the area okay but remember that neural networks have quite a lot of different activation
+
+functions this is a really great way of starting to talk about the way omelette makes switching between optimization formulations really very easy so here are a number of neural network activation functions these are of course
+
+functions that would operate at each node in a neural network i can think of a relu function this would be a rectified linear unit that is either equal to 0 or some linear function i can think of a linear activation function tan h
+
+soft plus quite a lot of other activation functions but within an omelet framework there are sort of two types of activation functions one are the non-smooth activation functions and the other set are the smooth
+
+activation functions and here by smooth versus non-smooth what we mean is that the activation function itself has some place where there is a discontinuity in the derivative of the function now what is really cool about omelet
+
+is that we have a number of different formulations that are available for each of the activation functions that we support for the rectified linear unit we have three competing activation functions so you will find papers in the
+
+literature that will compare or contrast sort of the big m formulation versus a complementarity formulation versus a partition formulation and this is really good research but the challenge for somebody who now
+
+wants to use this research is that you don't know which one to implement because it's quite problem specific which of these formulations is going to turn out to be the most useful similarly there are nice research
+
+papers that compare a full space formulation versus a reduced space formulation for the smooth activation functions and again omelette is going to let us switch between these different formulations very very easily
+
+so for a relu we have three types of formulations we have a big m formulation we have a complementarity formulation and we have a partition formulation for the smooth activation functions we have two formulations
+
+this is the full space smooth and the reduced space smooth the activation functions that we currently support that are smooth are linear tan h sigmoid soft plus and then a generic smooth monotonic function
+
+now one thing to note here is that we should pay attention to what is omelette introducing into the optimization formulation when we are using each of these types of formulations so if uh we are to use either
+
+the big m formulation or the relu partition formulation the omelet block that is produced by developing these formulations is a mixed integer linear formulation now the type of solvers that can be used
+
+for mixed integer linear optimization include cbc this is the open source version gerobi which is proprietary express which is proprietary c plex which is proprietary and quite a number of others the non-linear
+
+formulations that omelette has are relu complementarity full space smooth reduced space smooth etc etc now there are quite a number of non-linear optimization solvers these include ipyot which is under an open
+
+source license and quite a number of other solvers now the reason that i'm calling attention to this is that in omelet you can very easily combine different activation functions into one neural network or rather we take from
+
+onnx neural networks that combine both value and smooth activation functions the reason that there's a little bit of a hidden complexity there is that we recommend if you are using a full space smooth neural network formulation or a reduced
+
+space smooth neural network formulation on any of these non-linear activation functions including tan h and soft plus we recommend to use those smooth activation functions together with the relu complementarity
+
+formulation and the reason that we recommend to do this is that um then you end up with a non-linear optimization problem um i dearly love mixed integer nonlinear optimization problems i've actually even
+
+written a solver for one of them but it they are quite difficult problems to solve so basically if you mix mixed integer linear with a non-linear what you'll end up with is a different class of solver where you do have more difficulty
+
+working with the optimization problem so just something to keep in mind okay so i mentioned all of these different formulations i was mentioning full space smooth reduced space smooth blah blah blah blah now there's lots of research
+
+papers in this area but what omelette is trying to do is trying to show hey we can put these optimization formulations in competition and then the user can get whatever is the best without having to experiment with implementing every
+
+single one so the key idea here is that one optimization formulation may for one particular application be more effective than another and the optimization community already has algebraic modeling languages such as
+
+pyuma which make switching optimization solvers easy so i gave these optimization solver examples on the previous page you can just switch between them very easily and in payomo what onlet's doing is that we're making
+
+switching formulations as easy as changing a couple lines of code and i want to give an example let's say we have a neural network that is using relu activation functions and remember that a relu activation function
+
+is a non-smooth activation function so we either are equal to 0 or equal to this line um well the very well-known big m formulation is a formulation that is going to use binary variables and it's effectively going to aggregate
+
+all of these inputs x into the node uh in some way aggregate these together so that you have sort of one binary variable that you're turning things on and off and you have an output y in omelet saying that you want to use
+
+this relu big m formulation is exactly one line of code but what if you want to use this partition based formulation now i am a big fan of this partition based formulation because i am a co-author on this paper
+
+but i don't know if for a very particular application if this partition-based formulation is going to be better what happens in this partition-based formulation is that we have this parameter p in this case
+
+i'm saying that the parameter p is equal to 3 and what that parameter p is equal to 3 means is that i am somehow aggregating the inputs x into the node into three parts i do also have to define um a function
+
+for us defining which of the variables go into each of the partitions um but once i have done that i have only to say well i don't want to use this big m formulation again i just want to use this relu partition formulation
+
+so in omelet having to switch between relu big m and our proposed partition based formulation is as simple as defining this parameter p and then defining this split function i would have to define the split function
+
+elsewhere didn't have room for it on the slide but this is actually the most complicated switch in omelette between two different formulations it all gets easier from here so what we showed in this paper about
+
+these partition based formulations is that this parameter p is basically something that really affects the time of solving these particular type of optimization problems so this is time on a log scale on the
+
+on the x-axis and then on the y-axis we have the number of solved so over time each of the formulations is solving more and more and more and what i am showing here is that this p is equal to 1 this is equivalent to
+
+the big m formulation is always solving fewer than the other formulations and then the value p is equal to 2 seems to be nice at least for the easy problems it does get a bit slower than some of the other
+
+formulations for quite difficult problems and then what you'll notice is that when this parameter p gets quite large uh the performance is declining so for instance this value of p is equal to 10 is not
+
+very good neither is the value of p is equal to 7 8 or 9.
+
+um and so in our paper what one of the things that we propose doing is that's we say that for most problems we may want to sort of choose uh p is equal to two or p is equal to four um because these are values that tend to work for a
+
+large number of problems but the point of omelet of course is that you don't have to take our word for it just change the parameter p is equal to three to whatever else it is that you want for your own problem
+
+as an example and this example is a jupiter notebook that is in our omelette code base let's take uh this function that we have sampled quite a number of points from it so i'm not giving all of the code in the
+
+jupiter notebook if you want the rest of the code from the jupiter notebook please go to our jupiter notebook but basically the only thing we do at the beginning of this jupiter notebook is to read a csv file this csv file
+
+has one input x it has one output y it has 10 000 samples and the function itself is basically a quadratic that is being perturbed by a sign here is the original training data on the left-hand side i just plot it out
+
+and then the scaled training data is on the right-hand side for the scaled training data we've just made it so that the training data has mean zero and standard deviation equal to one okay so let's say that we wish to build a
+
+keras neural network so far we're not doing anything with omelette we're just using keras and we're going to first build a keras neural network with a relu activation function i would define the the architecture of the
+
+neural network itself i would define what optimizer i want to use to train the neural network i would define the loss function and i would define basically how i'm happy to fit the neural network and then
+
+we're going to run keras right so there's the original data and if you can see the orange dots on the left hand side basically this is how good this particular relu approximation does of approximating the function that we had
+
+okay i could build a similar keras neural network now with a sigmoid activation function so instead of having a relu activation function i could have a sigmoid activation function or i could develop a neural network that has a mixed
+
+activation function where some of the nodes are activated by the sigmoid function and some are activated by a relu activation okay so as we mentioned before this is just keras but now we're going to start using
+
+omelette so what happens is that after we have built the keras model we're going to say that we are going to load uh the keras model using the keras reader and this keras reader is in omelette and we have a
+
+neural network formulation now then what we're going to do and this is now payomo code we're going to say we have a concrete model and we're going to say that we have these variables x and then we have these
+
+variables y um so these are uh piomo variables and they're going to be part of our optimization problem then i'm going to say that my objective is in this case to minimize y so just to look at the function what i'm
+
+hoping is going to be the output is going to be something with x a bit less than 0 and y also less than zero but greater than negative one that's the point that i'm basically hoping to get out if i have uh
+
+formulations that are that are behaving in a reasonable sort of way okay so then um what i'm going to say is that i have a neural network that is an omelette block so this is where we have this abstraction um that is basically we
+
+only have to hook into the inputs of the omelette block and the outputs of the omelet block now i'm going to pick the formulation so if i am using a sigmoid activation function for instance um i have the choice we mentioned before
+
+between a full space smooth neural network formulation or a reduced space smooth neural network formulation the way to switch between the two of those is odd honestly just to take full space smooth neural network formulation and
+
+replace it with full reduced space smooth neural network formulation it's not even one line of code and then we're going to go ahead and build the formulation this is now an omelette command and now what happens is that we have
+
+this omelette block it has this neural network inside but we have to hook the inputs and the outputs of the omelette block to our optimization problem so that paimo knows what's going on that's what we're doing in these
+
+next two lines or next two sets of lines basically what we're saying is that the variable x that we had defined as a piomo variable is equal to the input of the neural network and the variable y which again we had
+
+defined previously is equal to the output of the neural network so these two sets of lines is basically what i meant when i said that we have to hook the inputs and outputs of the omelette block to the payomo formulation
+
+now we're going to use ipopt to solve the optimization problem and we want to examine the solution so here is is what we get i mentioned that it wasn't even one line of code to switch between this reduced space
+
+formulation and the full space formulation in this particular instance when we optimized using the reduced space formulation we got an answer to the optimization problem and remember the the optimization problem is just to
+
+minimize this function our answer was this black dot which is indeed a local optimum it's not the global solution and then the full space formulation um achieved this blue dot here at the bottom so in this
+
+particular case the full space formulation happened to work a bit better with ipop this is not the fault of the formulation it is not the formulation that is meaning that we are getting a local solution
+
+this is rather that we're solving difficult optimization problems we're using a solver that is not always guaranteed to be able to get out of local minimum and in this particular case we were not lucky enough to get out of the local
+
+minimum so these are both reasonable solutions um if i was to be consistently getting better solutions with the full space formulation i would just go ahead and use it um but there's an interesting trade-off
+
+here so you'll notice what the omelette block did when the omelet block created the formulation of the neural network for the full space smooth neural network formulation it added 209 variables and 208 constraints
+
+whereas the reduce space smooth neural network formulation only added six variables and five constraints so what's going on here basically this number of variables and number of constraints um that is different between these two formulations
+
+is exactly why researchers have studied these two formulations so basically what happens is in these full space uh formulations you end up introducing a new variable for every single one of the nodes in the neural network
+
+whereas in these reduced space formulations you end up introducing only a new expression for each node in the neural network now the trade-off is that the full space formulation is going to end up having
+
+quite a lot of variables and quite a lot of constraints however the reduce space neural network formulation is going to have very complicated expressions so it is of course a trade-off now in our particular case
+
+we also looked at in addition to a sigmoid activation function we looked at relu activation functions we found that um the complementarity big m and partition formulations all ended up in this case uh with a
+
+with the same output of the optimization problem and then our mixed relu slash sigmoid activations also got the the same answer however they all have a different number of variables and constraints and
+
+different types of variables and constraints that they are introducing in addition to this example which is available in its full glory on our github page our github page has quite a number of other jupyter notebook examples
+
+so for instance we have this example of an auto thermal reformer there's this really great code called deus pse that was used to build a process model of this auto thermal reformer and then what we did is we developed a
+
+neural network surrogate uh with data from a deus pse and uh one of the notebooks where actually two of the notebooks are looking at developing optimization problems on this auto thermal reformer we're looking at
+
+activation functions that are both smooth and also the relu activation function if you want even more notebook examples we have uh two notebooks where our point is to sort of show how to use omelette then we have an example
+
+that works with the mnist data set for looking for adversarial examples and we also have a bayesian optimization example that's looking at optimizing the rosenbrock function so remember to check out our github page
+
+what omelette is doing is that it's translating a trained neural network or gradient boosted tree model um so a machine learning model into piomo constraints we are achieving interoperability via the onnx interface
+
+and we can easily switch and compare optimization formulations thanks a lot for staying to the end and if you wish to join us find us on github we'd love to have you on board

@@ -1,0 +1,193 @@
+my name is ruth meisner and i'm part of the computational optimization group in the department of computing i myself am not an expert in an mpc and so what i'm doing is i'm presenting computational mixed integer nonlinear
+
+optimization hopefully this will aid conversations at the conference itself i'm going to talk about developing spatial branch and bound solvers and let's begin with talking about my definitions for what i'll talk about
+
+here and also solver software so mixed integer nonlinear optimization or mnlp is very difficult to solve this quote from 1979 i could say it today as well what i will assume is that i can write down the equations
+
+in my mi and lp problem none of the functions that are here are so called black boxes where i can only query a function and then maybe get out what is the function value instead i have the entire functional form
+
+i know if each of the f h's and g's are non-linear i know if there are exponential terms or if there are polynomial terms etcetera etcetera so what's going to happen in this minimization problem is that we're going
+
+to search over the continuous variables x and the discrete variables y and i'm going to assume that all of the x's and y's are bounded okay so first off it's worth it to say how are we going to represent am i nlp on a computer
+
+there's a lot of so-called modeling software where basically what happens is that it's mathematical software that i can basically write equations and then each of these solver packages that i'm illustrating at the top
+
+will then send the optimization problem to the solver software so what we will focus on today are specifically the solvers and what is the technology behind the solvers so here's a very wide array of solver software the solvers that i've
+
+highlighted here in red will manage non-convex non-linearities to global optimality so it's worth it to situate this presentation in the literature i will assume that everyone listening to this presentation
+
+knows a bit about mixed integer linear optimization non-linear optimization convexity and branch and bound i will use deterministic global optimization as a synonym to mi nlp a subclass of minop that's
+
+very very important that i will not cover so much is convex minop this is when all of the nonlinearities in the problem are convex and then the methods that i'll talk about today fall into the set of complete methods
+
+these are methods that if computations are exact then you're guaranteed to reach a global optimum within a given tolerance in finite time so it's worth it to say what is challenging about this particular class of optimization
+
+problems so in the upper right hand corner i'm giving four constraints so imagine that these four constraints in just two dimensions are the constraints of an minop what these constraints say is stay below
+
+this red line stay to the right of this red line stay to the left of this red line and stay above this red line in other words the constraints say to stay in these two red regions okay if i don't know how to solve
+
+over this particular space and really i don't then what am i going to do well what i ought to do is i ought to develop the so-called convex hull of this feasible space that convex hull is the smallest region that is convex
+
+and includes the entire feasible space in a new optimization problem so what has happened is i've made the feasible space bigger so all i have to do is calculate the convex hole of my feasible space the problem is that's not
+
+so easy all right so let's go back to our original constraints and now let's start thinking about what would happen if i develop a relaxation or a convex relaxation of each one of these individual constraints
+
+let's say instead of staying below that first red line instead i'm going to stay below this blue line that blue line on the variable bounce is the tightest representation of that particular nonlinear constraint similarly
+
+i would stay to the left of this new blue line again that blue line is the best convex relaxation of that particular constraint on the box stay to the left of this blue line and stay above this blue line
+
+so what you can see is just by taking the convex hull of each individual constraint on the box i got a relaxation that is much weaker than this convex hole that i actually was looking to achieve so even if i'm able
+
+to develop the convex hole of each individual constraint i am not developing the convex whole of the entire feasible space that's already annoying but there's really no guarantee that i'm going to even be taking the convex
+
+hole of each individual constraint because that's a difficult thing to do itself what happened there is that this was based on how big this box was this was based on sort of knowledge that x1 was say between 0 and 8 and x2
+
+was between 0 and 5. what if i didn't have that knowledge what if some reason um instead of knowing that x2 was between 0 and 5 i only knew that x 2 was between 0 and 20.
+
+well then instead of having this nice blue uh four-sided figure that's dark blue i would have instead had my relaxation be this cyan figure that is quite big indeed right here so what i'm emphasizing here is the
+
+importance of variable bounds on being able to develop a good convex relaxation in minop next let's mention the importance of branching decisions so as in mixed integer linear optimization we're going to develop a branch and
+
+bound solver and let's say i developed a branch at x1 is equal to 4. this would be a brilliant branch for this particular optimization problem or for this particular feasible set what if instead i wasn't so lucky and
+
+instead i ended up branching on x2 is equal to one well what you can see is that even if i was intelligent enough to get the convex hull of the new feasible sets which as we've mentioned before is not an easy thing to do
+
+i still wouldn't get that much of an improvement there would still be this big blue space in the middle that i would have to search over so where my branching decisions are is very very important primal
+
+heuristics that is finding where are good solutions is also very challenging in this particular space so so far what we've done is we've talked about what's challenging with respect to this particular type of
+
+optimization problem um now let's talk about what people do with respect to data structures to try to be able to manage the difficulties in these type of optimization problems first let's talk about a directed
+
+acyclic graph most solver software is going to use a directed acyclic graph internally to basically keep track of how the optimization problem is set up and so how this is going to work for instance is let's say we're
+
+minimizing over three variables x1 x2 x3 and i want to minimize over the sum of those three variables okay i've got x1 x2 and x3 saved then i have some sort of summation operator into which all of those variables go and
+
+that is my objective then i have this log constraint that incorporates variables x2 and x3 uh sums of them takes the log that's my first constraint and then i have a another constraint that basically does a number of other
+
+operations one of the things that you'll notice here is that in a directed acyclic graph we're going to reuse structures as much as possible so for instance both f1 and f2 share this x2 minus x3 term and they share this node as well
+
+what we also are going to tend to do is use these hard-coded expression types and basically what's going to happen is that these hard-coded expression types are going to be items that we can manage automatically with our solver so for
+
+instance we'll have an objective function we'll be able to handle division operators product operators sum operators and then we'll be able to manage a whole number of unary function operators another data structure that is quite
+
+common in mi lp is an undirected graph sometimes these undirected graphs are weighted and this is particularly for quadratic optimization which has a number of extremely important applications within minop
+
+it's actually so important that people usually have a special separate data structure for the quadratics basically what happens here is that what you do is you take any quadratic functions and you make a graph the vertices are
+
+the variables the edges are the bilinear terms and when people include weights um the weights are the coefficients that link a bilinear term together okay so so far we've talked about data structures the data structures are the things that
+
+we use to store minop now let's talk about recognizing and exploiting special structure in the minlp and our example par excellence is going to be this lmtd function this is a very complicated looking function
+
+that is very important in heat recovery networks but when you get right down to it things are actually very simple um this is the function that i've plotted out and it's really very well behaved so if i wanted to develop say a linear
+
+relaxation of this particular function i could just take some hyperplanes and then if on the right hand side i after solving a relaxation of the problem i ended up at this dot well then i could evaluate the function at that particular
+
+combination of x1 and x2 and i could develop a cutting plane that would eliminate that current feasible solution so this is actually a very well behaved function now contrast this uh important function with the automatic
+
+convexity detection rules that we have available to us so this first type this tree walking rules and the hessian computation these are the types of automatic convexity detection that are typically used in uh solver software and
+
+most global optimization software will have implemented these automatic detection rules but the problem with it is that this automatic convexity detection is brittle and the example that i'm going to use
+
+again is this reciprocal of lmtd and it's not going to be easy to find that we have a very simple convex structure here so what if we just hard coded it said basically this is a convex form well the problem
+
+is that that's brittle as well hard-coded rules are easily tricked what if my rule that i hard code into my solver knows that this is convex and then my user does a very reasonable transformation and just says well
+
+natural log of x1 divided by x2 well that's equal to natural log of x1 minus the natural log of x2 well that's going to completely mess up my hard-coded rule so am i going to have to also hard code this rule
+
+and think about every variation that a user is going to give me well even that's not going to be enough because legacy code is often going to assume different numerical strategies a possible solution i'd like to think
+
+about is something that's called disciplined convex programming so in this particular approach problems are convex by construction so what happens is that we impose a set of conventions or rules you've got this atom library that are
+
+the convex functions you recursively apply the expression rules and then you allow a user to add new atoms to the library so what i'd like to propose and what i think is really exciting is a hybrid between automatic detection
+
+and disciplined programming so what we've developed is we've developed this software that we call suspect and basically what suspect does is that it detects a special structure for biomo problems remember that payomo is an algebraic
+
+modeling language that will model minlp so what suspect is doing is that it's extending convexity and monotonicity detection with a plug-in based architecture and just as an example of suspect let's go back to our function that looks
+
+difficult but is actually very straightforward and easy to work with what we're going to do inside of suspect is that we're going to register the detector using setup tools and then what we're going to do is that
+
+we're going to register the rules for the convexity detector we're going to implement the rules returning convexity and monotonicity information but now let's talk about structure beyond convexity so in particular what
+
+we're going to do is we're going to talk about the pooling problem so what happens is that we have these inlets these inlets have known species concentrations the inlets combine in intermediate storage nodes
+
+or pools where we're going to combine the concentrations of things and then we're going to have these output species that have to follow requirements or laws what you end up in this particular optimization problem is you end up with
+
+basically concentrations times flows and you end up therefore with these non-convex non-linear terms x times y these are sometimes called bilinear terms if we go beyond these local structures and now we globally detect
+
+uh the structure of the pooling problem so that now we're looking at the entire network well then what we can do is similar to what the mixed integer linear optimization community has already done with respect to
+
+network optimization problems and in particular we can develop branching strategies primal heuristics and cutting planes that are all specifically relevant to this particular class of problems so what we're doing is that we're
+
+proposing a sort of disciplined programming that develops structure beyond convexity in particular this will be relevant in things like gas networks power grid problems and then there are an array of other really interesting
+
+problems that have very special structures now it's worth it to start thinking about what are the components of the branch and bound algorithm itself this is the meat of the silver the first thing that happens is we've got to think
+
+about relaxations so what happens is that for each one of the sort of special equations that we have understood are going to come into the minop solver software we're typically going to have a recognition of these functions
+
+say for instance a quadratic function a cubic function etc etc and we're going to have developed relaxations for each one of these common functions so that's common to every piece of solver software or most pieces
+
+and then what's going to happen is that we're going to recursively compose these functions in the auxiliary variable method what happens is that each time we run into an expression that we know how to handle we basically
+
+add a new variable so for instance if we did not know how to manage this reciprocal lmtd function which we discussed earlier and we might actually want to manage just as one block because it actually is convex
+
+if we weren't able to recognize it what we would do is we would develop a variable one that was equal to the x1 divided by x2 we would have a relaxation for that variable 1.
+
+we would develop a variable 2 that was equal to the natural log of v1 and again we would develop a relaxation for that etc etc so this is the auxiliary variable method another way of recursively composing the
+
+functions is to propagate subgradients there are a number of other relaxation schemes there are hierarchies for polynomials some of squares etcetera etcetera i don't have time to manage and talk about all of those
+
+now the goal with all of this is if only we could use all of these relaxations at once so these are two of my very favorite papers and what they basically say is any relaxation you have available you should be using
+
+all of the relaxations that i've talked about so far are over boxes and one of the things that i'm most interested in right now are in context relaxations that are beyond boxes so this discussion really started about
+
+15 years ago when tardella was talking about these edge concave functions where you only need to sort of know the vertices and then you can develop a relaxation but this has really exploded in recent years
+
+to include quite a number of different cases to my knowledge these are not so much in global optimization solvers at this point you know each solver might have implemented one or two of these but what the minop solvers need
+
+is they need generic data structures to be able to manage all of these new relaxations and this is actually the reason that i'm most excited to be giving this particular presentation at npc because you all actually have had
+
+this particular challenge for quite some time and for example the multi-parametric uh toolkit that you all have is basically something that i think offers us some hints with respect to how we could implement this kind of thing
+
+okay so we've talked about relaxations now let's talk about branching decisions the really interesting thing about branching in milp is that you're not necessarily going to cut off the current feasible point
+
+and this is one of the nasty examples so in this non-partitionable set again i can be in s1 s2 s3 and then this sort of convex enclosure around s1 s2 s3 um is the the convex hole of the shape now let's say that my relaxation point
+
+is this xl right here now there is no way that you can do a single branch and eliminate xl so for instance if i said now my branch is either going to be that i'm going to be in s2 or not in s2 well if i'm going to be in
+
+s2 i certainly have from one of the two branches i've eliminated xl but from the other one of the branches if i was to develop the convex hole between s1 and s3 what you'll notice is that point xl still falls in the feasible set
+
+between s1 and s3 and indeed if you're going to do binary branching that is that you're only going to have a split between two different choices there is no way in one step to get rid of this point xl more prosaically how shall we branch
+
+first off remember that in minp we have integer variables and there are these really great uh mip solvers that have been developed over the years one thing that we could do is that we could integrate directly
+
+into a mip solver so basically the minop solver could be directly inside the nip solver we could leave the discrete variables to a state-of-the-art mip solver we could say we don't feel like developing a
+
+state-of-the-art mip solver so we'll just pass some problems to them or we could effectively develop a mip solver together with an mi lp solver in addition to branching on the integer variables with minlp we will also be required to
+
+branch on continuous variables one of the most common strategies in milp right now is something that's known as reliability branching and basically what happens in reliability branching is that you say
+
+okay to begin with i'm going to do something that's called strong branching just because branching is so expensive i'm going to try branching on maybe x1 see what happens try branching on x2 see what happens try
+
+branching on x3 and then of x1 x2 x3 which is giving me the best improvement to the problem with respect to some metric so which is improving the objective value the most or something like this well let's say i'm going to select uh to
+
+branch on x3 okay now i'm going to think about maybe branching on x1 and x2 now this seems kind of crazy because this is a quite expensive operation to do this strong branching but what's advantageous about it
+
+is that when i'm going to do my strong branching i'm going to early on get a tree that's going to be relatively small but giving me big improvements once i've done the first few nodes of the branch and boundary i will continue
+
+on to this kind of branch and bound method where i just keep doing binary branching and just sort of come with may that's how i'm going to go and one of the things that i'm most excited about right now
+
+is this idea of branching to get a disjunction if and when they're able to branch to get this disjunction then you eliminate all this sort of white dotted space uh from the consideration which is really nice
+
+bounce tightening is extremely important in milp i mentioned earlier that good variable bounds mean that you can develop good relaxations basically because these good relaxations are based on variable bounds or the boxes
+
+so there are two types of bounce tightening that people typically use there's feasibility-based bounce tightening and there's optimality-based bounce tightening another item that's extremely important to get good solutions early on
+
+is primal heuristics and in particular i recommend you to two really excellent works if you want to know more about primal heuristics what i have learned from these jedi masters is that you ought to fail fast
+
+that that's the big idea with primal heuristics so now let's move on to challenges um i've talked a lot about sort of current research in the field but i want to mention a lot of the challenges that we as an minop community
+
+have for convex relaxations we do need to move beyond boxes we need to think about auxiliary variables and we need to think about managing symmetry for branching we have to think about branching to get disjunctions this
+
+is an area i'm quite excited about on bounce tightening we have to think about incorporating multiple constraints um and thinking about tighter integration with convex relaxations or branching so i'm really interested to hear
+
+anybody's questions from here i'm also interested in just sort of starting a dialogue here and so my question is what's missing on this list anything here easy to manage you'll definitely make my day if so

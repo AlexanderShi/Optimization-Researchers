@@ -1,0 +1,227 @@
+# Transcript (auto-generated YouTube captions, en-orig) -- research agent 02, retrieved 2026-10-10
+# Title: Santanu Dey: "Solving SDPs by using sparse PCA" (IPAM workshop Deep Learning and Combinatorial Optimization 2021)
+# Channel: Institute for Pure & Applied Mathematics (IPAM) YouTube channel
+# Date: 2021-03-04 (upload date)
+# URL: https://www.youtube.com/watch?v=yv0pHyrUZXo
+# Method: yt-dlp --write-auto-subs --sub-langs en-orig, then scripts/srt_to_transcript.py.
+# Caveat: machine speech recognition; names and technical terms are often misheard. Quote with care and with the timestamp from the video.
+
+all right thanks uh uh thanks kyle for the introduction thanks for the organizers for inviting me uh i do have to start with one apology if if you if you looked at the schedule a couple of days back i had a different
+
+talk planned uh unfortunately my mistake i did not request my partner's partner institutions for being able to release the data and talk and and and but anyways this gives me opportunity to present some
+
+really exciting work that we just posted the paper i believe like last week uh together with uh alex khaskov andrea lodi we all know very well and gonzalo munoz uh and and and and the way the connection is of this talk is that
+
+i'm going to be talking about solving stps which is uh related to solving common neutral optimization problems and and and and in a sense part pc is something that the statistic committee really has worked a lot on
+
+but also the machine learning community is interested in and and and my apologies in advance in the sense uh there is not going to be much learning involved in this talk but what we will see is that uh you know techniques can be taken from
+
+one area and applied in on that area not only necessarily at the mathematical level but also at a more computational level and that's what we'll see in this talk so we are very excited about this work all right so so let's let's let's
+
+let me start with the motivation we all know what sdps are but just you know terms of notation uh you know what we're trying to do is we have these matrix variables x capital x is always going to be available in this stock all matrices are
+
+going to be symmetric uh when you see them and you have a linear objective linear constraints and this matrix x is supposed to be a a st a segment a psd matrix right so these inner products are because
+
+these are all symmetric matrices these signal products they're just sort of the usual thing and and as we all know uh phd matrices are basically symmetric matrices where when you compute the quadratic form on them it's non-negative right for
+
+all all all all vectors uh equal the many characterizations of of this cone of matrices for example all the eigen values are non-negative all right so so the story is that you know there is beautiful the theory in convex
+
+optimization that says seven different programs can be solved in polynomial time but unfortunately uh sort of computationally uh you know there has been a challenge and and really if you use any of the general purpose
+
+solvers uh you know when and when and this n here which is representing the number of rows or number of columns is uh hits around hundred uh that's that's when you know even commercial solvers uh start
+
+struggling you know maybe we'll say special structures you can of course scale problems and solve much larger problems uh but that's been a challenge in a sense what we i'm interested in is in a slightly
+
+more sort of complicated challenge where imagine that this sdp is a relaxation of your favorite common neutral optimization problem or your favorite polynomial optimization problem and and what you're really
+
+trying to do is is you know we've seen all these really nice talks but we know the earlier uh you know just before that and in a previous talks where people were talking about branching boundaries where you're
+
+maintaining linear programming relaxations now you can do much better if you actually maintain sdp relaxation because that's much more powerful uh and you expect the tree to be smaller than but the challenge is
+
+just solving one sdp is so expensive if i were to solve sdps throughout the tree that would be super expensive right so what i want to do is i want to create a lightweight approximations in fact what i want to create is linear
+
+programming relaxations of these sdps that are lightweight and and i just sort of keep this linear programming relaxation throughout my branching boundary as a placeholder for sdp but it kind of has the quote-unquote strength of the sd
+
+so so it's it's not only that i want to solve these stps faster but i also want to create this and that's the goal of this project all right so one way to create linear program relaxations is of course to
+
+create a simple relaxation just ignore the fact that uh the matrix variable was supposed to be a psd so this is this is a linear program uh and and and and then of course you can what you can do is in order to
+
+retrieve back the strength of the sdp cone is you could do the following cutting plane scheme we've seen what cutting planes mean in multiple talks before and and what do i mean by doing cutting plane here is the following
+
+i saw the lp here so let let x tilde be the optimal solution of this lp now if this x tilde is is is already a psd matrix then then you know the the great that there's nothing in this direction really i i didn't really need to add
+
+this psd constraint just these linear constraints are good enough right otherwise what can i do i can take my my my my matrix x tilde and i can do an eigen decomposition and after i do this eigen decomposition
+
+uh you know basically i will have at least one of the eigenvalues negative because not uh it's not a positive seven definite matrix let's say the first eigenvalue was negative and so what what can do is and
+
+this is well known i can just take the outer product of the eigenvector corresponding to the first eigenvalue uh and and then it's easy to see this is a this itself is a rank one psd matrix so of course this times x was supposed
+
+to be non-negative for all phd matrices but in fact because this was the outer product of the eigenvector corresponding to the negative eigenvalue when actually compute this trace product i'll get negative
+
+and so what i can do is now append this linear inequality this cutting plane to this original system and what i get is a better approximation of my sdp uh of my original stp problem but this is still linear
+
+and of course i can repeat this uh step as many times as i want and every time i add a newer card i get a better and better tighter and tighter approximation of mess okay so that sounds like a great idea
+
+let's let's let's try it let's see what happens uh so a lot of the examples that we're going to talk about is this class of np-hard problems these are box qps uh all you're trying to do is minimize uh a a quadratic
+
+function over the zero box this problem would be hard because this matrix q is not necessarily a psd matrix so so this is a non-convex problem and and what is the classical way of writing the sdp relaxation
+
+well you observe that you can write this quadratic form as this trace inner product and then when you look at this x x transpose you sort of replace it with a new variable this is sort of going into higher dimension
+
+this is our capital x variable that we just discussed and so now this is a linear function this is linear all that nonlinearity is in this sort of red red equation and then you relax this again all very standard stuff uh you
+
+know using something called a short component you could write something like this and now this is your psg you can also append some other implied constraints there's a lot of other implications but these are very
+
+simple these are called the so-called mechanics and so this is sort of the sdp this is the stp relaxation of this problem i want to actually solve this problem but at my root node i want to solve this problem
+
+and and and and the running example is going to be this instance from from this uh library by uh sam viewer and others where the 125 n is 125 uh i don't by fooled by this number 125 that seems small but really
+
+you know when when i go to the squarespace i'm talking about 125 square hundred twenty five this is this is a large problem with number of variables uh and this 25 here represents the sparsity of this matrix key all
+
+right let's see what happens and this is what happens when we implement this cutting plane scheme that i just said this this simple idea where you know i i i solve the lp take the solution do i can decomposition and add cuts
+
+corresponding to the negative eigenvectors uh negative eigenvalues vectors corresponding to them initially we see a very nice improvement this is with respect to time and this is the gap clause but you see that there's a tailing of
+
+effect okay and and this is one reason why actually you don't use cutting plate methods to solve sdps uh by the way this method is great in terms of memory which is which is a good thing a lot of sd if if you have experience solving as
+
+deep it's all worse as if you saw it it was take a lot of memory uh which is great but you see this tailing off which is so not so nice and here's one reason that explains it if you see this gray curve this is the
+
+curve that is plotting the time to solve those lps as we keep adding cuts and you see that initially and the time is on the right hand side axis initially it was almost you know the lps that i was solving didn't take any time but as as
+
+time went on these lps took longer and longer so the the stalling is really because as you go further out in time you're solving far you're doing far fewer iterations in a period of time and so therefore you
+
+see the stalling that's at least part of the reason and and so that's that's that's that's what we want to resolve uh so how can we basically reduce these solve times of these lps in this sort of meta cutting plane uh algorithm
+
+that i i i mentioned so let's look at look at why this is becoming so difficult as i said n is 125 you know but it's a symmetric so if you remove the symmetries the lp has about 8 000 variables and remember at each step
+
+i was taking the sort of i can decomposition adding the cut corresponding to the most negative eigenvalue but as is well known in the statistics community and we say and that's the connection we'll see in a bit
+
+this eigenvector usually tends to be very dense in fact it tends to be non-zero in all the components and so the cut that you add this vector v remember v was the outer product of v1 uh v1 times v1 transpose outer product
+
+of v is a completely dense inequality and so what you're doing is you're solving you know it's this is not a very large scale lp we can solve far bigger lps with probably millions of variables but this
+
+is not small but you're adding constantly sequentially super dense cuts you're adding cuts with basically all the entries nonsense and and factors of natural is the reason we can solve really large scale lps
+
+is because lte solvers like sparsity most professional grade lp solvers will use sparsity uh you know whether you're using interior point codes or you're using simplex uh uh there's a lot of linearity protein that exploits the sparsity
+
+and when you start adding dumping these really dense cuts the lp solver dies on so that's that's that's what's happening all right so i think i've only 10 minutes uh into the talk so so the question is
+
+can we instead of adding these really dense cuts uh can we add sparse cuts the sparse limit programming not to be confused with this fascinating parang earlier in the day this is just saying linear programming with past constraints
+
+and so really what i want to do is is you know if i have this matrix x tilde which is not psd in these iterations what i want to do is i want to find a vector v which you know when i when i compute the
+
+quadratic form is is is negative but this is power okay so this is the standard notation prospectory and k is some predefined velocity level that i like and and and and really this talk is about two questions
+
+one is how do we find these sort of spar cycling vectors and and you could see why sparse pca is is a natural connection and then of course we want to see if we in fact do you know find these these these eigenvectors
+
+how well does it work and and so that's that's that's uh that's the point of the talk uh i should mention here that it's trying to specify these inequalities is something that people have tried before uh and in
+
+fact uh ruth meitmer and her group actually tried to use machine learning to try and select sparse inequalities uh uh uh in fact i think luhan cited her also in the previous talk uh but we're sort of skipping the learning
+
+bit and we're going to directly go to subspace pca uh and so these people try to specify using new other techniques all right so here comes our savior the sparse pca problem uh well studied in the sort of uh
+
+statistics machine learning community what is that you have a covariance matrix and really what you're trying to do is you're trying to get some sort of a dramatic uh sort of reduction in the size of your data right
+
+so what you really want is this one direction w star that captures as much as possible of the variance or the noise in your data not the noise pattern variance in your data and and and really that amounts to
+
+solving this problem here so maximize this quadratic form assuming w is uh to normal it is one you know as we all well know uh the the optimus objective function value of this is the largest eigen value of uh
+
+x bar uh and and and and and you know again what happens is is is that typically when people solve this problem this w star that corresponds to the eigenvector corresponding to the largest eigenvalue is dense and and and that causes all
+
+sorts of issues uh particularly interpretability so for example in the classic example is imagine this was a hundred by hundred matrix uh which was uh corresponding to 100 different medical tests that a doctor could do uh to predict a
+
+certain disease and and and and and you know if they got a w star vector that was dense they would have to do all those hundred tests take the entries of the vector w star put the weights on them and then decide
+
+you know uh and then you don't want to do that you probably want to do one or two or three tests at most and so what you really want to do is solve the sparse version of that problem and so this is the natural uh natural
+
+problem that you want to solve where you have basically the same thing going on as pca except now you want this w 0 all right so so this is well studied problem in in in in in the statistics machine learning
+
+community and let's see what we want to do remember we had this x tilde uh different from the x bar x tilde in our algorithm and what we wanted to find was vector v such that the quadratic form is negative
+
+and we wanted to do it in such a way that the it is sparse now also i'm saying the two numbers this is without loss of generality what is past pca trying to do it's actually trying to find the maximum eigenvalue in some sense except
+
+that the vector corresponding to it should be sparse so you can do some really simple algebra let me skip this but it's very easy to see that what you could do is you could take your this is x tilde is what i'm working with
+
+if you if you compute this matrix here and you find its parts pca and then you look at the optimal objective function value this it is less than this it means that there's no sparse inequality that separates
+
+x tilde and and if you solve this spca problem from this modified matrix starting from x delta and this value is larger than something else again this is almost this is a very straightforward proof uh you don't have to follow the details
+
+right now then in fact the optimal solution of this problem is going to be the out product of that is going to give you a spar separating and so so basically my goal of trying to separate my xtilder from
+
+the phd cone using a sparse inequality is equivalent to solving the sparse pca for a suitably appropriate matrix all right so now let's go to the solving spca okay how how easy or how difficult is spca to solve as it turns
+
+out sparse pca is essentially mathematically hopeless to solve if you really went through rigorous complexity right so now not only the problem is np hard it's inapproximable in fact the best known guarantee right now is n
+
+to the power one third all right uh um there is some more positive results in terms of fixed parameter tractability uh so if you fix the rank of the matrix this x bar then then you can get uh polynomial
+
+algorithms but unfortunate practice usually these experts have high rank and and so sort of true to the rank really uh does not help you and and and and in recent years so together with sub authors uh i have and also some other
+
+folks have actually developed math programming type techniques to solve uh sparse pca and we can scale up to thousand by thousand variables but in fact we just solve one instance we need few hours and remember
+
+i want to add one cut of time just to improve my lp approximation of the problem that's just far too expensive but as it turns out there are some fantastic heuristics that really work really well for for fast pc that was developed by
+
+the machine learning community i mentioned two papers here by the way this is this this this list of papers here is is far from complete right there's this this is it's a well studied problem and there are lots of papers and and lots of
+
+interesting results uh but i mentioned two of them and in particular i mentioned truncated power method which if you know how you compute eigenvalues uh using power method it's sort of an adaptation of that by truncating in
+
+every every step which is proposed by these folks and and this seems to work like a magic in practice and and in some spirit uh perhaps uh i don't want to offend anyone but you know when you use creative descent you know
+
+you're doing the second paper here is using sort of gradient ascent and and these things seem to work really well in terms of training uh but do they get all global optimum only under some statistical conditions
+
+and we want to use it in general but it seems to work very well since it's same spirit all right so let's let's let's uh so how much time do i have i think i have like seven minutes uh so so uh so let me let me present
+
+some experiments uh so this is our same instance where sparsity level was 25 and we added one type of iteration and bummer this is bad dents was stalling at around 75 percent and actually sparse is seeming to stall
+
+well it's not really stalling what we found is that for smaller instances eventually this is what happens okay but this is for smaller instances and and and and then we realized that adding one cut per iteration we were solving far
+
+too many algebras all right and and and this was becoming expensive so what we did is we revisited both the codes uh and and we started adding multiple sparse cards uh i don't think i have the time to go
+
+through the details but essentially the way to think about it is we find a sparse vector you know and then what we do is we remove sort of the mass the negative mass corresponding to this parts vector and
+
+this part its corresponding eigenvalue and then for the updated matrix we are able to find a new sparse vector and we do this repeatedly we collect the number of sparse vectors uh again the details if you are interested you can look at
+
+the paper and in fact this will prove that this is finite you can only do this finite times this is all the optimization problem exactly uh and and and and and and able to generate this uh list of five sparse cuts and now when
+
+you add a number of cuts at the same time in each iteration this is what you get okay and now you start seeing that in fact doing this helps you beat the debts but this is still not great the improvement is a little bit we would
+
+like to get much more improvement and notice one more thing here in the initial part of the algorithm the dense cuts make quite a bit of stab they make a lot of improvement and this cuts it takes a while to get to that and
+
+and we would really like to get rid of this uh by the way just you know just to mention here to get back to connect back to the older result though this addition of multiple cuts did slow down our lp solver but by not so much as
+
+you see here the dense cuts you know this rate at which the lp's become difficult to solve is much faster and and and and most of our experiment seems that you know with some minimal amount of cut management when we throw out some of the
+
+sparse cut this this time studies steadies out it doesn't really grow further and so so we are able to do a lot more nitrations and so we are getting this improvement but we would like to do better right now
+
+uh uh just again uh just a side side remark this is i'm not presenting this uh if you're interested i i have preferences right at the end of talk so together with some other quarters we actually formally try to
+
+understand the strength of solving the problem with all the cuts and only with sparse cuts which is actually related to saying uh how far away are matrices from the psd cone uh when these matrices where you only
+
+enforce that k packet principle sub interest is our psd and and so we have some analysis and not this is not the topic of the talk but this indicates that sort of in the worst case let's say we are working
+
+with 25 we are working with we are working with 25 uh sparsity in the worst case uh this guarantee here says that you could get 20 you could get bounds that are basically 35 off so you could lose quite
+
+a bit in in a sense and in fact before we had this result this is this is a very new result uh we had already observed that you know this phenomena and so you know it's uh the most natural thing to do engineering wise is
+
+why not add one round of dead skills all right let's make a compromise and so so that is uh what we did and and and so this is this is the hybrid and now you see that we more or less have the same performance as the dense
+
+cuts but after the first electrician as we start adding the sparse cuts we are actually doing much better and in fact you see that there's a slope here so this while the ends kind of stalls this if we run this hybrid for longer
+
+it keeps improving and and and again you see you know the cost of adding just one round of dance cut is shown not so much so the lp solves times remain basically the same as the sparse uh sketch we have and so this
+
+is really helping and and and and some more figures here just more explicit ones you know you know you can see that the hybrid actually performs much better than the dance in some instances here uh uh this is another instance
+
+hybrid is doing significantly better than dense uh and and let me go through some tables quickly since as it turns out i have the time i have couple of minutes here so this is sort of the box qp instances
+
+so we went up to about n equals to 250 these are really large scale problems okay if we were to solve these problems using commercial sdp solvers that seem like mosaic which is really good you need like 35 gb of memory
+
+and to solve these problems you you need well over one hour to solve and you see that just using these sparse cutting planes uh we we we get quite close we close about 85 percent of of the gap from the psd
+
+but look at the final product we get the final light lp we get using these parceling qualities it takes hardly it takes less than a you know this one for example takes less than a minute to solve in the 125 case and and gives you about
+
+almost 95 of the strength of of of of of of the sdp for the larger instances it drops to 85 84 but it still takes like you know the end product takes less than less than uh less than 10 minutes to solve
+
+which is still probably expensive but but but you know nothing like 35 gb of memory and and significantly much longer time to solve and we see similar results for so these problems actually have integers with them as well
+
+and we see similar performance and and and some more instances uh so i will stop here uh thank you very much again to the organizers this highlighted paper we just posted last week it is a reference to the material
+
+presented here and these two other papers if you're interested uh to understand and look at the theorem that i presented about strengths of the sort of this stp versus escape by case par 60p [Music] in a more theoretical way thank you
