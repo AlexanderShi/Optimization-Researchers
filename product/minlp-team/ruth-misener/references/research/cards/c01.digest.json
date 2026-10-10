@@ -1,0 +1,237 @@
+[
+ {
+  "id": "S012",
+  "year": "2010",
+  "title": "Piecewise-linear approximations of multidimensional functions",
+  "read_level": "full",
+  "contribution": "Explicit MILP formulations (box SOS1 + simplex selection by plane binaries or by an SOS2 diagonal index) for piecewise-linear interpolation of lookup-table functions in 2 and 3 dimensions, with an empirical approximation-error study on camelback, a multilinear function and the EPA Complex Emissions Model.",
+  "problem_entry": "Application-driven: gas-lift models use hydraulic lookup tables (non-analytic, piecewise-affine); her 1-D comparison recommended Keha et al., so extend explicit PWL formulations to n <= 3 and also use them to approximate generic NLPs by MILP (pp. 1-2).",
+  "key_idea": "Confine each point to one grid box (SOS1 per coordinate), then to one simplex (type-B triangulation with equal-volume simplices; plane binaries O(N^2), or SOS2 diagonal index O(N) in 2-D that allows irregular grids), and interpolate on the n+1 active vertices (pp. 6-22).",
+  "assumptions": "Dimension <= 3 per lookup table (justified by cube-triangulation counts 1,2,5 vs 16,67,308,1493, p. 4); higher dimensions only via separable sums or bilinear/trilinear products of tables (pp. 4-5); equal spacing for the binary-plane method (p. 15); approximation only, no error bound.",
+  "proof_devices": [
+   "Caratheodory-based uniqueness: n+2 equations in n+2 unknowns once n+1 vertices are active (pp. 5-6)",
+   "Table of vertices deactivated per plane binary; each pair lies on one edge, enabling edge-wise aggregated constraints (Table 1 p. 15; Eqs. 42-47 pp. 18-19)",
+   "Constraint/variable counting O(N^2) vs O(N) and 3 binaries vs 2(N1+N2+N3)+3 continuous (pp. 15-16, 21)"
+  ],
+  "experiments": "CPLEX 9.0.2/GAMS, Pentium 4; camelback (5 grids), 4-D multilinear (3 grids), 11-input EPA model (5 grids); error from 1e7 random samples (max/avg/std); optimisation results for the first two only; camelback lands in a non-global local minimum; no competitor formulation or solver (pp. 24-28).",
+  "positioning": "Generalises the 1-D Floudas / Nemhauser-Wolsey construction (p. 6), borrows box-then-simplex from Zhang-Wang and the 2-D diagonal from Kosmidis et al. (pp. 6, 16); additive, non-critical; no Vielma-Ahmed-Nemhauser work in the reference list (pp. 28-31).",
+  "writing": "Same contribution sentence in abstract and p. 2; constructive exposition with 10 figures and an implementer's equation summary (§5, pp. 22-24); two-sentence conclusion claiming good approximations for industrial models (p. 28).",
+  "limits_future": "Stated: n <= 3 (p. 4) and equal spacing for method (a) (p. 15); unstated: no error bound, approximation local minima (p. 25), untested choice rule between the two simplex methods (p. 21); no future work (p. 28).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "2010 precursor: a data-defined (lookup-table) function is written as MILP constraints exploiting its piecewise-linear structure; no partner model or toolkit interface.",
+    "pages": "pp. 1-2, 15-21"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Grid level is a swept knob with errors reported per level, but there are no two textbook extremes and the trade-off between the two simplex-selection formulations is asserted, not measured.",
+    "pages": "pp. 21, 25-28"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Pre-2012 practice: three examples, no competitor, no verification; consistent with the SKILL dating Method 5 from 2012.",
+    "pages": "pp. 24-28"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Dimension cap justified by a combinatorial count",
+    "evidence": "Lookup tables restricted to n <= 3 because cube triangulations need 16, 67, 308, 1493 simplices for n = 4-7.",
+    "pages": "p. 4"
+   },
+   {
+    "pattern": "Sampling-based approximation-error protocol",
+    "evidence": "1e7 random domain points per grid level; absolute/relative max, average, std reported next to optimisation results.",
+    "pages": "pp. 25-28"
+   },
+   {
+    "pattern": "Impact-weighted mesh refinement",
+    "evidence": "EPA-3 refines ETB/ETH only, because their acetaldehyde coefficients are about ten times larger; toxics error drops.",
+    "pages": "pp. 27-28"
+   }
+  ],
+  "transferable": [
+   "Use equal-volume (type B) triangulations so interpolation error is uniform; choose the orientation per function (pp. 10-12).",
+   "Tabulate which vertices each selection binary deactivates; if they share an edge, switch off whole edges with one aggregated constraint (pp. 15, 18-19).",
+   "SOS2 index over grid diagonals: O(N) constraints in 2-D and irregular grids finer where curvature is high (pp. 16, 19-21).",
+   "Estimate approximation quality with 1e7 random samples per grid level and refine only high-impact variables (pp. 25-28)."
+  ],
+  "coauthors": "Christodoulos A. Floudas",
+  "quotes": [
+   {
+    "text": "Noting the large number of simplices needed to partition hypercubes of dimension greater than three, this study restricts lookup tables to no more than three dimensions.",
+    "page": 4
+   },
+   {
+    "text": "Note that, in this case, the approximation algorithm finds one of the non-global local minima, which is generated quickly.",
+    "page": 25
+   }
+  ]
+ },
+ {
+  "id": "S025",
+  "year": "2010",
+  "title": "Mathematical modeling and global optimization of large-scale extended pooling problems with the (EPA) complex emissions constraints",
+  "read_level": "full",
+  "contribution": "A leaner, law-faithful MINLP of pooling with the EPA Complex Emissions Model appended, a term-by-term MILP relaxation (piecewise bilinear, McCormick, range-uniform outer approximation, shifted edge-concave envelope, recursive arithmetic) and a C++ branch-and-bound that solves small to large (1104 continuous, 150 binary, 640 nonlinear terms) cases to <= 0.5% gap.",
+  "problem_entry": "Regulation-driven: 40 CFR 80.45 fixes emissions formulas for reformulated gasoline; maximise blending profit on a pooling network under those limits; prior MINLP (Furman-Androulakis) single-fuel, redundant and partly unfaithful to the law (pp. 1-4).",
+  "key_idea": "First read the legal model for structure (bilinear-looking extensions are exactly piecewise linear, Taylor extensions, redundant TAME and segment binaries), then relax each term class with the tightest cheap device and embed in B&B with OBBT on a coarse relaxation and node solves on a fine one (pp. 2-3, 9-25).",
+  "assumptions": "Perfect mixing, linear blending except RVP (pp. 7-8); exact fuel qualities, uncertainty deferred (p. 8); summer case, additives blended at refinery, identical limits per product (pp. 25-26); law over spreadsheet (p. 3); N and N_OA fixed from experience on small/mid cases (p. 24).",
+  "proof_devices": [
+   "Component-wise concavity test via second partials to decide edge-concavity (Eqs. 156-158, p. 23)",
+   "Shift alpha'4 = alpha4 + 3 alpha6 RVP^L + alpha7 MTB^L making the remainder edge-concave; remainder relaxed by vertex-polyhedral facets, correction by recursive arithmetic; 22% tighter (-10.61 vs -13.56) (pp. 23-24)",
+   "Range-uniform tangent points for monotone convex exponentials t(n) = ln(e^tL + n/N (e^tU - e^tL)) (Eqs. 153-155, pp. 22-23)",
+   "Recognition that apparently bilinear legal extensions are exactly piecewise linear and that NOX extensions are first-order Taylor expansions at breakpoints (pp. 3, 13, 17-18)"
+  ],
+  "experiments": "Three cases (Table 3, p. 25) in EPA Regions 1 and 2; Core 2 Quad 2.83 GHz serial, CPLEX 11.0 + MINOS 5.51; 1-11 nodes, 0.2-0.5% gaps, 4.5 s to 5274 s (Table 5, p. 27); Fig. 6 caption (487 s) disagrees with Table 5 (292/263 s); no competitor solver, no ablation beyond the 22% edge-concave figure; all instance data in Appendices B-D.",
+  "positioning": "Generous pooling history (pp. 3-4); precise, example-backed criticism of Furman-Androulakis for disjunctions found in neither the law nor the spreadsheet (pp. 2-3); relaxation choice backed by the group's own comparative study (p. 21).",
+  "writing": "Numbered four-point justification of the new formulation in the introduction (pp. 2-3); size headline repeated in abstract, introduction and conclusion (pp. 1, 2, 29); equation-heavy (161 equations); no limits paragraph (p. 29).",
+  "limits_future": "Passing limits: no uncertainty (p. 8), simplified additive logistics (p. 25), parameters from small cases (p. 24); unstated: 0.5% tolerance, no competitors, Region 1 large case 13x slower than Region 2 unexplained (Table 5, p. 27); no future work.",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Reads the law's formulas for structure missed by the earlier model: exact piecewise-linear extensions, Taylor-expansion extensions, redundant TAME tracking and segment binaries, an edge-concave remainder; each structure is exploited in the relaxation.",
+    "pages": "pp. 2-3, 10, 13, 17-18, 23"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Piecewise relaxation of u*of terms dropped because it raised whole-solve time without changing the objective.",
+    "pages": "p. 22"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Partition levels N and N_OA are levers but fixed from experience on small/mid cases with no sweep; robustness only asserted for the large case.",
+    "pages": "p. 24"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Pre-2012 evaluation: no competitors, 0.5% tolerance, inconsistent CPU time between Fig. 6 and Table 5; public instance parameters are the one auditor-like element.",
+    "pages": "pp. 26-27, 35-38"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Primary-source fidelity audit of a predecessor model",
+    "evidence": "Diffs Furman-Androulakis against 40CFR80.45 and the EPA spreadsheet, lists invented disjunctions (Delta E200 at 65.52 vol%), follows the law where sources disagree.",
+    "pages": "p. 3"
+   },
+   {
+    "pattern": "Shift-to-edge-concave decomposition",
+    "evidence": "Subtract a bound-calibrated cubic term so the remainder is component-wise concave; 22% tighter lower bound than recursive arithmetic.",
+    "pages": "pp. 23-24"
+   },
+   {
+    "pattern": "Coarse relaxation for bound tightening, fine relaxation for node bounds",
+    "evidence": "OBBT with N = 1 (McCormick) and N_OA = 8; node solved with N = 16.",
+    "pages": "p. 24"
+   }
+  ],
+  "transferable": [
+   "Diff a predecessor's model of a standard against the primary legal text; follow the primary source where they disagree (p. 3).",
+   "Model k breakpoints with k disjunction binaries rather than k+1 segment binaries (pp. 2-3).",
+   "Place outer-approximation tangent points evenly over the function's range for steep exponentials (pp. 22-23).",
+   "Shift a non-edge-concave polynomial by a bound-calibrated term to obtain an edge-concave remainder with a vertex-polyhedral envelope (p. 23).",
+   "Run OBBT on a coarse relaxation and solve nodes on a fine one (p. 24).",
+   "Publish all instance parameters in appendices so the application instance becomes a benchmark (pp. 35-38)."
+  ],
+  "coauthors": "Chrysanthos E. Gounaris, Christodoulos A. Floudas",
+  "quotes": [
+   {
+    "text": "closer examination (Figure 1) shows that the function is, without approximation, piecewise-linear.",
+    "page": 13
+   },
+   {
+    "text": "significantly increased the problem solution time without notable change in the objective function",
+    "page": 22
+   }
+  ]
+ },
+ {
+  "id": "S009",
+  "year": "2011",
+  "title": "APOGEE: Global optimization of standard, generalized, and extended pooling problems via linear and logarithmic partitioning schemes",
+  "read_level": "full",
+  "contribution": "A logarithmic (base-2) MILP encoding of the piecewise McCormick relaxation of bilinear terms, compared with the linear nf4r scheme inside a full branch-and-bound on 25 pooling problems at 7 partition levels, plus the free APOGEE tool for standard, generalized and extended pooling; the linear scheme stays the default.",
+  "problem_entry": "Two prior large-scale pooling studies used piecewise relaxations with linearly many binaries; Vielma-Nemhauser's logarithmic PWL models suggested a port to relaxations; also unify three pooling classes in one tool (pp. 1-3).",
+  "key_idea": "Encode the active segment of disjunctive program (6) by ceil(log2 N_P) binaries with paired continuous copies and slacks so continuous variables also scale logarithmically, add a sharpening cut when N_P is not a power of two, and judge it inside the whole algorithm rather than at the root (pp. 14-23).",
+  "assumptions": "Uniform partitioning of one variable per bilinear term (p. 13); no specialised branching for the log encoding (p. 23); pool-pool cycles excluded in the generalized class (p. 4); minimum-flow semicontinuity (p. 13).",
+  "proof_devices": [
+   "Worked activation examples (N_P = 4, x = xL + 2.6a; N_P = 5, x = xL + 3.6a) in place of an equivalence proof (Figs. 6-9, pp. 17-20)",
+   "Redundancy by pairwise subtraction: segment constraint (8) implied by (10a)-(10d), and (11) by (14) (pp. 18, 21)",
+   "Closed-form size accounting per scheme (Tables 4-5, pp. 16, 23) explaining why N_P = 5 costs as much as N_P = 8 plus a cut (p. 29)"
+  ],
+  "experiments": "25 literature pooling problems with known optima (Table 3, p. 9) x N_P in {3,4,5,6,8,12,16} x {linear, log} inside Algorithm 1; Xeon E5520, CPLEX 12.1, SNOPT 5.3, 7200 s; tolerances 1e-6/1e-3/1e-2 (stated why); wins counted with a 10% tie rule; log wins for N_P >= 8, linear for small N_P, N_P = 4 best on 20/25; three non-converged runs listed; numerical difficulty on three large instances; no competitor solvers; Table 6 log rows for EPA Small/Med inconsistent (pp. 22-30).",
+  "positioning": "Broad generous survey (pp. 3-7); explicit consistent-vs-different statement against Vielma-Nemhauser (p. 19); Li et al. criticised as not sharp via Vielma et al. 2010b (pp. 6-7); frames results as robustness evidence for Vielma's claims beyond isolated MILPs (p. 29).",
+  "writing": "Judging principle stated before results (p. 23); balanced reading of Table 8 ending in a decision against her own novelty (pp. 29-30); hedged conjecture for other classes (p. 31); user-facing tool section (pp. 30-31); abstract slip on what the binaries scale with (p. 1).",
+  "limits_future": "Specific: novelty loses at the partition levels that work best for pooling; numerical difficulty on Meyer 10/15 and EPA Large R1; two EPA problems not solved to 1e-3 (pp. 29-30); future: classes needing finer partitions (p. 31).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Relaxations judged inside the APOGEE algorithm rather than at the root; verdict split by partition regime; stability makes the linear scheme the default against her own logarithmic novelty.",
+    "pages": "pp. 23, 29-31"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Partition-level family swept over 7 levels on 25 problems with both encodings; robustness claim that guessing the partition is not crucial; no selection rule beyond using N_P = 4.",
+    "pages": "pp. 28-30"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Weak: Algorithm 2 turns structural counts (bilinear terms of p vs q, variable-set sizes) into an automatic formulation and partition choice.",
+    "pages": "p. 25"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Large documented test set with known optima, exact hardware/versions, tie rule and listed failures, but no competitor solvers or independent verification; Table 6 anomaly unexplained.",
+    "pages": "pp. 9, 23, 26, 28-30"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Port a neighbouring community's formulation trick into relaxations and test its claim inside a full solver",
+    "evidence": "Vielma-Nemhauser logarithmic PWL models carried to piecewise McCormick relaxations; result presented as robustness evidence for their claim beyond isolated MILPs.",
+    "pages": "pp. 3, 19, 29"
+   },
+   {
+    "pattern": "10%-tie win counting over a problems x parameter x formulation grid",
+    "evidence": "Table 8 counts wins per formulation and per partition level, treating times within 10% of the best as ties.",
+    "pages": "pp. 28-29"
+   },
+   {
+    "pattern": "Explain anomalies by model-size accounting",
+    "evidence": "ceil(log2 5) = ceil(log2 8), so N_P = 5 carries N_P = 8's size plus a cut, explaining why log does better at powers of two.",
+    "pages": "p. 29"
+   }
+  ],
+  "transferable": [
+   "Base-2 encoding of the active partition in a piecewise McCormick relaxation, with logarithmically many continuous copies and slacks (pp. 18-22).",
+   "Prove a selection constraint redundant by pairwise subtraction of envelope inequalities and drop it (p. 18).",
+   "Evaluate a relaxation by swapping only that component inside the full B&B over a parameter grid; count wins with a 10% tie rule; list every non-converged run (pp. 22-30).",
+   "Choose formulation and partitioned variable set automatically from term counts (p. 25).",
+   "Release the solver with the test suite preloaded in a GUI and warn users about instance size and timing variability (pp. 23, 30-31)."
+  ],
+  "coauthors": "Jeffrey P. Thompson, Christodoulos A. Floudas",
+  "quotes": [
+   {
+    "text": "our goal is to design the best overall algorithm that can address any pooling problem",
+    "page": 23
+   },
+   {
+    "text": "Therefore, we will continue using the linear relaxation scheme to solve pooling problems.",
+    "page": 30
+   }
+  ]
+ }
+]

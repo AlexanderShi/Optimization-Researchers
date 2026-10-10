@@ -1,0 +1,126 @@
+[
+ {
+  "id": "S113",
+  "year": "2026",
+  "title": "Meta-learning for sample-efficient Bayesian optimisation of fed-batch processes",
+  "read_level": "full",
+  "contribution": "Uses SANODEP, a neural ODE process meta-trained on simulated trajectories, as the BayesOpt surrogate for few-shot optimisation of fed-batch recipes (initial conditions, feed, stopping time) and shows on a penicillin simulator that it beats GP-based BO in the low-data regime, on and off the training distribution, while GPs catch up with more data.",
+  "problem_entry": "Industrial fed-batch recipes face unmeasurable batch-to-batch kinetic fluctuations and costly experiments; GP-BO treats each batch as a new black box and a GP cannot represent several outputs for one (x0,t) input, so it cannot meta-learn (pp. 1-2, 5).",
+  "key_idea": "Replace the GP with SANODEP: latent-ODE neural process with x0 in the input, trained episodically on simulator data with a Bernoulli-switched bi-scenario loss (forecast vs interpolate); prior knowledge = candidate ODE models and parameter ranges (pp. 9-12).",
+  "assumptions": "ODE dynamics with task parameters k; black-box view during optimisation; meta-training from the true penicillin model with a +/-5% parameter window, called 'a strong assumption'; structural mismatch excluded; number of batches is the dominant cost (pp. 3, 13-15, 17-18).",
+  "proof_devices": [
+   "No theorems; NP ELBO with KL correction, eq. (10) (p. 6)",
+   "SANODEP ELBO with two KL terms for latent control and latent initial state (p. 11)",
+   "factorised predictive distribution, eq. (17) (p. 9)",
+   "GP consistency guarantees cited, not proved (p. 21)"
+  ],
+  "experiments": "Penicillin simulator only; baselines GP-Standard (zero-mean RBF GP + EI), GP-Exp (extra free intermediate samples), random; budgets 10 (SANODEP) vs 20 (others); per-task normalisation by one GP run with 50 samples; 5 repetitions, 5 on-task tasks; off-task ladder delta in {0, +/-0.04, +/-0.06, +/-0.5}; two cost axes (runs, runtime); no statistical test (pp. 14-20).",
+  "positioning": "PSE fed-batch optimisation (Cuthrell-Biegler) meets neural-process meta-learning (Garnelo, Norcliffe NODEP); NPs criticised as domain-agnostic; extends the group's own SANODEP (Qing et al. 2025); concedes GP-BO long-run reliability (pp. 2, 7, 11, 21).",
+  "writing": "Long tutorial background for a PSE audience; hedged contribution sentence (p. 3) but less hedged results prose ('significantly outperforms ... in all regimes', p. 20); ends with a switch-over recommendation (p. 21); typos and notational slips (pp. 8, 11, 14-15).",
+  "limits_future": "One simulated case study, no code link in text; strong prior assumption, no structural mismatch, higher per-step compute, training cost grows with prior complexity, weaker off-task; future: structural mismatch and experimental design (pp. 15, 17-18, 21).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "contradiction",
+    "note": "problem-agnostic GP baseline, unequal budgets 10 vs 20, normalisation by a single GP run, 5 repetitions and 'significantly outperforms' without a test; partly kept via GP-Exp, a second cost axis and the written loss at full budget (also Research Heuristic 7 evidence: use SANODEP first, switch to GPs in the high-data regime; per-step compute cost stated, pp. 17, 21)",
+    "pages": "pp. 14, 17-21"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "partner mechanistic knowledge enters as a simulated meta-training prior over candidate ODE models rather than as constraints (also Research Heuristic 1 evidence: GP-BO's fresh-black-box-per-task assumption collides with unmeasurable batch fluctuations, pp. 1-2, 5; Research Heuristic 2 variant: BASF co-authors and funding but a literature model, no stand-in release, pp. 1, 13, 21)",
+    "pages": "pp. 1-2, 5, 10, 13, 21"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "graded off-distribution test ladder for simulator-pretrained surrogates",
+    "evidence": "test priors on / almost-off / slightly-off / very-off relative to the training prior's upper and lower edges, with MSE and BO curves for each",
+    "pages": "pp. 15-20"
+   }
+  ],
+  "transferable": [
+   "State the prior as candidate models and parameter ranges, generate meta-training data by simulation, and train episodically with a mode indicator that matches downstream use (forecast vs interpolate) (pp. 10, 12).",
+   "Grade test distributions on / almost-off / slightly-off / very-off relative to the training prior's edges, upper and lower separately (Table 4 p. 15; Fig. 12 p. 20).",
+   "Report the same campaign against both cost axes the application might pay (experiments vs runtime), counting the baseline's initial-design cost (Fig. 10, p. 19).",
+   "Before proposing a new surrogate, argue structurally why the incumbent model class cannot represent the phenomenon (one output per input vs several tasks per input) (p. 5)."
+  ],
+  "coauthors": "Becky Langdon, Gabriel D. Patron, Chrysoula D. Kappatou (BASF), Robert M. Lee (BASF), Behrang Shafei (BASF), Jixiang Qing, Mark van der Wilk, Calvin Tsay (corresponding); Misener 7th of 9",
+  "quotes": [
+   {
+    "text": "While this is a strong assumption, we study the effect of the meta-learning dataset quality by testing on tasks outside of k, i.e., tasks the base model has never seen.",
+    "page": 15
+   },
+   {
+    "text": "SANODEP excels in scarce-data regimes, while GP-based methods catch up as data accumulate.",
+    "page": 21
+   }
+  ]
+ },
+ {
+  "id": "S126",
+  "year": "2026",
+  "title": "Amortized Structured Stochastic Variational Inference for Gaussian Process Latent Variable Models",
+  "read_level": "full",
+  "contribution": "Replaces the mean-field variational family of sparse GPLVMs with an amortised structured SVI family in which each latent variable's posterior is conditioned on sampled inducing variables, improving NLPD, CRPS and ELBO over amortised mean-field GPLVMs on four datasets at a memory cost.",
+  "problem_entry": "All GPLVM methods assume mean-field independence between latent positions and inducing variables, which underestimates epistemic uncertainty of the manifold; eq. (6) shows the exact posterior couples U and X (pp. 1, 3-4).",
+  "key_idea": "Hoffman-Blei SSVI: q(x_n|U) via an encoder h(y_n, U); ELBO splits into global KL plus local ELBOs estimated with K Monte Carlo samples of U; q(X|U)q(U) direction chosen to keep minibatching; encoder fed reparameterisation noise (pp. 4-5, 15-16).",
+  "assumptions": "Gaussian noise, N(0,I) latent prior, independent zero-mean GPs per output with ARD kernel, shared inducing inputs; diagonal-Gaussian q(x_n|U) and output-factorised q(U), admitted as restrictive (pp. 2-4, 10).",
+  "proof_devices": [
+   "No theorems; zero KL contribution of F by equal conditionals (pp. 3-4)",
+   "local/global ELBO decomposition, eqs. (10)-(13) (pp. 4-5)",
+   "psi-statistics closed-form kernel expectations, eqs. (22)-(27) (pp. 15-16)",
+   "reparameterisation u_pk = mu_p + L_p xi_pk, eq. (28) (p. 15)"
+  ],
+  "experiments": "Oilflow, qPCR, subsampled MNIST/FMNIST; baselines MF, A-MF, amortised IWVI-GPLVM; same init/hyperparameters, 5 seeds; ELBO, RMSE, NLPD, CRPS, 95% coverage; Welch t-tests A-MF vs A-S only; IWVI wins Oilflow RMSE; runtime 5.03->8.36 s and memory 29->599 MB; ablations on encoder width, inducing points, K (pp. 5-9, 16-18).",
+  "positioning": "Extends Titsias-Lawrence, Lalchand et al., Hensman SVI-GP with Hoffman-Blei SSVI; nearest work Ialongo et al. 2019 (GP state-space) separated by setting; IWVI, RFLVM, AIS as complementary; hedged novelty 'As far as we are aware' (pp. 1-7).",
+  "writing": "Contribution stated at p. 4; mixed results spelled out dataset by dataset; dedicated Limitations section; statistics appendix interprets which metrics moved (NLPD not RMSE) as evidence for the mechanism (pp. 4, 8-10, 17).",
+  "limits_future": "Monte Carlo memory overhead; restrictive variational family still off the exact posterior; GP approximation limits epistemic uncertainty; code for Oilflow only; future: informative/importance sampling of U and use in multiobjective BO (pp. 8, 10, 17-18).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "same init across models, 5 seeds with Welch t-tests, strongest rival route (IWVI) added as baseline, losses and non-significant results written in, cost measured (also Research Heuristic 7 evidence: Limitations section with concrete memory/time cost and remaining approximation gaps, p. 10)",
+    "pages": "pp. 8-10, 16-18"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "significance claims against IWVI in results and conclusion have no reported test table; Table 3 covers only A-MF vs A-S (also Research Heuristic 4 variant: no hierarchy proved; the better-posterior claim is labelled as an inference from metrics, pp. 9, 17)",
+    "pages": "pp. 9-10, 17"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "exploits the conditional-independence structure of the exact posterior, mirrored in the variational family: an inference analogue of structure exploitation",
+    "pages": "p. 4"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "capacity-control ablation",
+    "evidence": "encoder width varied for both A-MF and A-S; gains persist at small width, so they come from the structured family, not encoder capacity",
+    "pages": "p. 18"
+   }
+  ],
+  "transferable": [
+   "Derive the incumbent approximation's defect from the model's own conditional formula (eq. 6), then fix exactly that dependence (p. 4).",
+   "Choose the factorisation direction by which one keeps the local/global split needed for minibatched SVI (p. 5).",
+   "Feed a network the standardised reparameterisation noise instead of concentrated samples late in training (p. 15).",
+   "Add the strongest alternative route to the same goal (IWVI) as a baseline and write where it wins (pp. 8-9).",
+   "Run a capacity-matched ablation over encoder widths for baseline and new method (p. 18).",
+   "Measure overhead in the resource that grows (memory) and say the numbers describe the implementation, not an algorithmic constant (pp. 17-18)."
+  ],
+  "coauthors": "Maksym Tretiakov, Sarah Filippi, Vincent Fortuin, Ruby Sedgwick, James Odgers; Misener 4th of 6",
+  "quotes": [
+   {
+    "text": "Although the MF-GPLVM provides a tractable ELBO, which has been shown to achieve a good approximation of the latent space, the MF assumption is a strong and incorrect one.",
+    "page": 4
+   },
+   {
+    "text": "This supports our claim that the main benefit of the structured variational family is in improving the posterior approximation and predictive uncertainty, rather than merely shifting the predictive mean.",
+    "page": 17
+   }
+  ]
+ }
+]

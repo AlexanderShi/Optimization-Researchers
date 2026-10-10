@@ -1,0 +1,148 @@
+[
+  {
+    "id": "S023",
+    "year": "2021",
+    "title": "ENTMOOT: A framework for optimization over ensemble tree models",
+    "read_level": "full",
+    "contribution": "Tree-ensemble Bayesian optimisation with a distance-to-data uncertainty measure and an acquisition function solved to epsilon-global optimality as a MIP (Gurobi, or a tailored spatial B&B for very large ensembles), released as the ENTMOOT package (arXiv v3 read).",
+    "problem_entry": "Answers the two drawbacks of tree-based BO named by Shahriari et al. (unreliable uncertainty, no gradients for the acquisition) (pp. 2, 4, 6).",
+    "key_idea": "Uncertainty alpha(x) = distance to nearest data point (Equ. 2, p. 5) plus the Misic tree encoding (Equ. 4-5, p. 7) turns the LCB acquisition into a MIQP/MILP solved globally; the sign flip +kappa*alpha keeps decisions near data (Equ. 8, p. 10); k-means centres and a split bound scale it (pp. 11-12).",
+    "assumptions": "High distance means large model error (assumed p. 5, tested p. 15); linear or quadratic known constraints (p. 2); box bounds (p. 7); alpha_limit = zeta*Var(y) from preliminary studies (p. 8); black-box evaluations far costlier than an iteration (p. 28).",
+    "proof_devices": [
+      "explicit sufficiently large M for the nearest-data-point big-M selector (Equ. 9, p. 10)",
+      "valid distance lower bound by projecting cluster centres onto the B&B box, O(|K| n) (Equ. 11-12, Fig. 3, pp. 11-12)",
+      "feasible warm start: cluster centres have alpha = 0, take the best centre (Equ. 13, p. 12)",
+      "epsilon-global optimality via 0.01% solver gap, no theorems (pp. 8, 22)"
+    ],
+    "experiments": "Kappa sweep validating the uncertainty proxy on 20D rover (Fig. 5, p. 15); same-samples control ENTMOOT-RND vs SKOPT tree variants (pp. 16-17, 22); vs SKOPT-GP, BOHAMIANN, SMAC3, CMA-ES, BFGS, NM, random on rover 60D, fermentation 80D, Ackley 200D, robot 14D, 50 shared initial points, 300 evaluations, seeds 101-130, defaults for competitors, losses reported (pp. 14, 17-18, 22-24); ub/lb per hour vs Gurobi on a 4000-tree concrete model (Table 1, p. 19); run times in appendix (Table 2, p. 29).",
+    "positioning": "Extends Misic (2020) and Mistry et al. (2020) encodings into a full BO framework (p. 6); critiques SMAC/SKOPT uncertainty through Shahriari et al. (p. 4); credits Misic for further improvements (pp. 16, 19).",
+    "writing": "Numbered contributions (i)-(iii) in the abstract with strong 'no better solution exists' phrasing for an epsilon-gap result (p. 1); scoped concession that Gurobi is best at moderate size (p. 19); explicit disclaimer on large-model hyperparameters (p. 28).",
+    "limits_future": "Manhattan variant large and slow (p. 9, Table 2 p. 29); Gurobi struggles beyond 2000 trees, large-scale part a proof of concept (pp. 11, 18); future: constraints for domain knowledge and safety, tree-based BO in chemical engineering (p. 20).",
+    "method_links": [
+      {"method": "Method 3", "relation": "evidence", "note": "Trained tree ensemble as MIP constraints solved globally; tailored B&B for large models; concession that Gurobi is better at moderate size; public UCI stand-in with BASF coauthors; near-data penalty is a distance-to-data term, not the PCA subspace named in SKILL.md.", "pages": "pp. 1, 6-12, 18-19"},
+      {"method": "Method 4", "relation": "evidence", "note": "ENTMOOT-RND isolates the contribution of the global acquisition optimiser from the uncertainty measure.", "pages": "pp. 16-17, 22"},
+      {"method": "Method 5", "relation": "variant", "note": "Shared seeds and initial design, fixed hyperparameters, losses reported; but competitors at defaults, not strengthened, and run time only in an appendix.", "pages": "pp. 14, 17-18, 22-23, 29"},
+      {"method": "Method 2", "relation": "variant", "note": "Two hyperparameters admitted up front and held fixed, but kappa borrowed from SKOPT default and zeta justified only by preliminary studies; no robustness sweep in the BO comparison.", "pages": "pp. 2, 8, 14, 22"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "same-samples control", "evidence": "ENTMOOT-RND uses exactly the same random sampling points as SKOPT-GBRT/SKOPT-RF so that only one component differs.", "pages": "pp. 16-17, 22"}
+    ],
+    "transferable": [
+      "Validate a heuristic uncertainty proxy by flipping it into a penalty and showing model error falls as its weight rises (Fig. 5, p. 15; Equ. 15, p. 24).",
+      "Bound a two-part acquisition separately in B&B and fathom with the cheap distance bound first (pp. 11-12).",
+      "Replace per-data-point constraints by k-means centres; use alpha = 0 at centres for a free feasible start (pp. 11-12).",
+      "Tabulate ub and lb per hour for the tailored B&B and the commercial solver side by side (Table 1, p. 19)."
+    ],
+    "coauthors": "A Thebelt (corresponding), J Kronqvist, M Mistry, RM Lee (BASF), N Sudermann-Merx (BASF)",
+    "quotes": [
+      {"text": "While Gurobi 9 is still the best choice for small and moderate instances, i.e. instances that commonly occur in design of experiments, we want to highlight that algorithmic elements exploiting the underlying structure of tree-based models can help when scaling the optimization efforts.", "page": 19},
+      {"text": "We do not claim that these hyperparameters make sense for the particular dataset, the point is to show how tailored branch-and-bound algorithms can be used to make ENTMOOT more scalable.", "page": 28}
+    ]
+  },
+  {
+    "id": "S040",
+    "year": "2021",
+    "title": "Between steps: Intermediate relaxations between big-M and convex hull formulations",
+    "read_level": "full",
+    "contribution": "P-split formulations for disjunctions of convex additively separable constraints, with 1-split = big-M, n-split = convex hull in the linear case, a hierarchy for linear two-term disjunctions with independent bounds, and computations on clustering, P_ball and ReLU NN instances (arXiv v1 read).",
+    "problem_entry": "Big-M small but weak, extended hull sharp but heavy, plus the folklore that extended hulls perform worse than expected; target the space between, not the hull (pp. 1-2).",
+    "key_idea": "Split each constraint into P bounded partial sums, keep only the auxiliary-variable constraints in the disjunction and take their extended hull, so added variables scale with |D| and P, not n (Equ. 2-4, p. 3-4; Remark 1, p. 5).",
+    "assumptions": "Convex additively separable constraints and boundedness are validity assumptions; |C_l| << n is a favourable-structure assumption (pp. 2-3); hierarchy needs independent bounds, generally true for linear disjunctions over a box (Definition 2, p. 8).",
+    "proof_devices": [
+      "projection-equivalence lemma by contradiction (Lemma 1, p. 4)",
+      "Fourier-Motzkin elimination of disaggregated variables giving 1-split = big-M with smallest valid M (Theorem 1, pp. 5-6)",
+      "bijective linear map between x and split variables giving n-split = convex hull for affine functions (Theorem 2, pp. 6-7)",
+      "repeated Fourier-Motzkin with constraint doubling for a non-extended two-term realisation (Theorem 3, pp. 7-8)",
+      "constraint-containment argument for the (P+1) vs P hierarchy (Corollaries 1-2, p. 8)",
+      "4-variable worked example showing the hierarchy fails without independent bounds (ex-1, Fig. 1, pp. 8-9)"
+    ],
+    "experiments": "K-means (G2, MNIST), P_ball, ReLU NNs on Ackley/Rastrigin; Gurobi 9.0.3, 1800 s; parameters fixed across formulations, PreMIQCPForm=2 for the hull only; time and nodes for P from 2 to 392 vs both extremes; P-split beats big-M on all clustering/P_ball and the hull on time in all but one; big-M wins on time for two NN instances (pp. 10-13, Table 2).",
+    "positioning": "Separates itself from convex-hull computation and Balas/Sherali-Adams/Lovasz-Schrijver hierarchies ('our primary goal is not to generate the convex hull'); uses Anderson et al. as motivation and corroboration (pp. 2, 12).",
+    "writing": "Labels a trivial lemma as such (p. 4); keeps negative statements (1-split no advantage, Theorem 2 fails for nonlinear) (p. 6); results paragraph names the exception class (p. 12); one-paragraph conclusion (p. 13).",
+    "limits_future": "Hierarchy only for linear two-term disjunctions with independent bounds (p. 8); nonlinear n-split not the hull (pp. 6, 9); weak bounds hurt (pp. 3, 12); no rule for P or partition, ordered-index partitions only (p. 11); no future-work list.",
+    "method_links": [
+      {"method": "Method 2", "relation": "evidence", "note": "Core case: two extremes plus folklore, knob P, endpoints proved, conditional hierarchy, sweep across P and classes against both extremes, robustness claim.", "pages": "pp. 1-13"},
+      {"method": "Method 2", "relation": "variant", "note": "This version tests ordered-index partitions only, with no random or deliberately weak partition control and no rule for choosing P.", "pages": "pp. 11-12"},
+      {"method": "Method 5", "relation": "evidence", "note": "Strengthened baseline (PreMIQCPForm=2 for the hull only), harmonised solver settings, exact version and hardware, NN losses written in.", "pages": "pp. 11-13"},
+      {"method": "Method 4", "relation": "variant", "note": "Class-split verdict (clustering/P_ball vs NN) inside one MIP solver, but no default decision since it is a formulation.", "pages": "p. 12"},
+      {"method": "Method 3", "relation": "evidence", "note": "ReLU NN optimisation is one of the three target classes.", "pages": "pp. 10-11"}
+    ],
+    "new_pattern_candidates": [],
+    "transferable": [
+      "Prove endpoint equivalences by Fourier-Motzkin elimination, then use a tiny worked example to show which hypothesis breaks monotonicity (pp. 5-9).",
+      "Count added variables as a function of |D| and n to state when the new formulation is smaller than the extended hull (Remark 1, p. 5).",
+      "Fix solver parameters across formulations to remove strategy noise, and give the baseline any setting that helps only the baseline (p. 11).",
+      "Shade table cells where the intermediate formulation strictly beats both extremes (Table 2, p. 13)."
+    ],
+    "coauthors": "J Kronqvist (corresponding), C Tsay",
+    "quotes": [
+      {"text": "The default (automatic) parameter selection in Gurobi caused large variations in the results that were due to different solution strategies rather than differences between formulations.", "page": 11},
+      {"text": "Note that the P-split formulations are in general robust towards the choice of P.", "page": 12}
+    ]
+  },
+  {
+    "id": "S006",
+    "year": "2022",
+    "title": "OMLT: Optimization & machine learning toolkit",
+    "read_level": "full",
+    "contribution": "Open-source Pyomo toolkit that turns trained NNs (ONNX/Keras) and GBTs (ONNX) into optimisation blocks with switchable formulations (GBT big-M; full/reduced-space smooth NN; ReLU big-M, complementarity, partition).",
+    "problem_entry": "Hand-translating trained NNs and GBTs into solver formulations is tedious and error-prone; use cases in verification, BO acquisition and engineering surrogates (pp. 1-2).",
+    "key_idea": "ONNX input, Pyomo blocks that hide the surrogate behind inputs/outputs, and a NetworkDefinition intermediate representation that is the gateway to alternative formulations (pp. 2-3).",
+    "assumptions": "Activations ReLU, linear, softplus, sigmoid, tanh; dense and convolutional layers; user-supplied bounds and scaling where formulations need them; partition formulation dense layers only (pp. 3-4).",
+    "proof_devices": [],
+    "experiments": "none (one illustration: a ReLU notebook switches in one line between formulations with 248, 308 and 428 constraints, p. 2).",
+    "positioning": "Coverage comparison with MeLOn, JANOS, reluMIP, OptiCL, gurobi-machinelearning (p. 4); concedes Beta-CROWN-type verifiers for the MNIST notebooks while claiming adjacent tasks they cannot do (p. 2).",
+    "writing": "Eight-page JMLR software format; reframes rival formulations, including the authors' own partition formulation, as user-selectable alternatives (p. 4); itemised funding and partner credit (p. 5).",
+    "limits_future": "No computational comparison of the offered formulations and no selection guidance; partition formulation dense-only (p. 4); outlook only, no future-work list (p. 4).",
+    "method_links": [
+      {"method": "Method 3", "relation": "evidence", "note": "Step 7: one interface for NN and GBT with switchable formulations; Imperial-Sandia-CMU authorship with equal senior credit (external co-maintainers); ENTMOOT reuses the GBT formulation.", "pages": "pp. 1, 3-4"},
+      {"method": "Method 2", "relation": "evidence", "note": "Step 8: ReluPartitionFormulation shipped as a switch next to big-M and complementarity.", "pages": "p. 4"},
+      {"method": "Method 4", "relation": "evidence", "note": "The authors' own partition formulation is one alternative among competitors, not presented as the default.", "pages": "p. 4"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "concede the specialised tool's turf, claim the adjacent tasks", "evidence": "Dedicated verifiers (Beta-CROWN) could handle the MNIST verification notebooks; minimally distorted adversaries and lossless compression cannot be handled by them but can in OMLT.", "pages": "p. 2"}
+    ],
+    "transferable": [
+      "Put an intermediate representation between the ML file format and the optimisation formulations so each new formulation is written once (p. 3).",
+      "In a software paper, quantify the user-facing saving with one concrete count instead of a benchmark the paper cannot fairly run (p. 2).",
+      "Write related work as a coverage comparison across model types, input formats, formulations and solvers (p. 4)."
+    ],
+    "coauthors": "F Ceccon and J Jalving (equal first), J Haddad (Sandia), A Thebelt, C Tsay, CD Laird (CMU, equal senior with Misener)",
+    "quotes": [
+      {"text": "In OMLT, competing optimization formulations become alternatives: users can switch between the Section 3 formulations and find the best for a specific application.", "page": 4},
+      {"text": "OMLT 1.0 saves the time needed to code/debug each optimization formulation.", "page": 2}
+    ]
+  },
+  {
+    "id": "S014",
+    "year": "2022",
+    "title": "Maximizing information from chemical engineering data sets: Applications to machine learning",
+    "read_level": "full",
+    "contribution": "Review organising ML in chemical engineering by four data characteristics that break classical ML (high variance/low volume, low variance/high volume, noisy/corrupt/missing, restricted), with applications, literature responses and numbered open challenges for each (arXiv v1 read).",
+    "problem_entry": "Contrarian opening ('classical machine learning approaches may be weak') and a variance-volume 2x2 that excludes the quadrant where classical ML already works and the low/low quadrant (abstract, pp. 1-3).",
+    "key_idea": "Sort the literature by the data defect, explain how each defect arises in plants and labs (pp. 4-6), then list applications and approaches per defect (pp. 6-21); 'high' and 'low' are application-relative (p. 3).",
+    "assumptions": "n/a (review); framing distinguishes a data perspective (fix the data) from an uncertainty perspective (decide despite it) (pp. 15-16).",
+    "proof_devices": [],
+    "experiments": "none (review; two short real-world examples, PLS for powder composition and BASF catalyst optimisation over tree ensembles, p. 6).",
+    "positioning": "Complements earlier AI/ML/optimisation/surrogate reviews by the data-characteristic angle (p. 1); places the group's tree BO, GP-robust optimisation, NN verification and ANTIGONE among cited approaches (pp. 9, 17, 20-21).",
+    "writing": "Numbered challenge lists at the end of each application paragraph (pp. 7, 8, 10, 11, 15, 18); explicit admission of a gap ('not yet aware of any such applications', p. 19); one-paragraph thesis conclusion (p. 21).",
+    "limits_future": "No search protocol or quantitative synthesis; future directions dispersed as per-section challenge lists rather than a separate agenda (pp. 7-21).",
+    "method_links": [
+      {"method": "Method 3", "relation": "evidence", "note": "Section 6.2 states the programme: encode ReLU nets as MILPs, optimise GBTs and sigmoidal nets globally, hand the algebraic model to ANTIGONE/BARON/SCIP; BASF tree-ensemble example.", "pages": "pp. 6, 20-21"},
+      {"method": "Method 1", "relation": "variant", "note": "Insider information appears as domain knowledge entering data-driven models (hybrid models, physics-informed losses, chemical know-how), not automatic structure detection. Also evidence for Heuristic 10 (uncertainty perspective, pp. 16-17) and Heuristic 1 (organised by broken classical-ML assumptions, pp. 1-3).", "pages": "pp. 6, 9, 16-17, 19-20"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "taxonomy by broken input property with excluded cells", "evidence": "Variance-volume 2x2; the quadrant where classical ML works and the low/low quadrant are excluded with reasons; four data characteristics structure the review.", "pages": "pp. 1-3, Fig. 1"}
+    ],
+    "transferable": [
+      "End every application paragraph of a review with a numbered list of open challenges so the review doubles as an agenda (pp. 7-18).",
+      "Name a 'data' and an 'uncertainty' perspective on the same defect and sort the literature by which one it takes (pp. 15-16).",
+      "State which cells of the taxonomy are excluded and why (p. 2)."
+    ],
+    "coauthors": "A Thebelt and J Wiebe (co-first), J Kronqvist, C Tsay",
+    "quotes": [
+      {"text": "We do not discuss the low variance, low volume quadrant: such data are likely not useful for machine learning, and engineering methods should be used to generate additional data.", "page": 2},
+      {"text": "the challenge for researchers at the interface between chemical engineering and computer science is to increase the information gained from the resulting available data.", "page": 21}
+    ]
+  }
+]

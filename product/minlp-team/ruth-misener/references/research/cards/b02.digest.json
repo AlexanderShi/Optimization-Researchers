@@ -1,0 +1,90 @@
+[
+ {
+  "id": "S100",
+  "year": "2016",
+  "title": "Increasing energy efficiency in industrial plants: Optimising heat exchanger networks",
+  "read_level": "partial",
+  "contribution": "MEng report (Miten Mistry, supervised by Ruth Misener) proving that the reciprocal of the log mean temperature difference has a C2 extension and is strictly convex, and using this to build a binary-free tangent outer approximation inside an iteratively refined MILP relaxation of the Yee-Grossmann heat exchanger network MINLP, evaluated on three MINLPLib2 instances.",
+  "problem_entry": "LMTD in heat exchanger network synthesis is indeterminate at equal approach temperatures and is routinely replaced by the Chen approximation or an epsilon-shift that introduce error; the project removes that approximation and aims at a globally convergent MILP-based scheme (pp. 3, 12, 37-39).",
+  "key_idea": "Approximate the reciprocal m = ln(x/y)/(x-y) instead of LMTD (errors otherwise cascade through a denominator), prove m strictly convex, and refine a MILP (nf4r McCormick, PLF for A^beta, tangent OA for m) by adding mirrored tangents at the active exchangers' solution points (pp. 42, 61-62, 71-80).",
+  "assumptions": "x, y > 0 in per-exchanger boxes [dTmin, T_i^in - T_j^in]; the model pushes area and hence m downward so >= tangents are tight; exact global MILP solver and a priori partition counts fixed from an objective tolerance (pp. 42, 76-77, 79, 89).",
+  "proof_devices": [
+   "polar coordinates collapse the indeterminate line x = y to theta = pi/4; separable p(r)q1(theta)/q2(theta) plus L'Hopital gives lim m = 1/c (pp. 44-48)",
+   "C2 extension of m, grad m, Hessian m defined from the limits (Def. 3.1, pp. 48-49)",
+   "symmetry lemma m(x,y) = m(y,x) halves the domain (Lemma 3.1, p. 50)",
+   "directional derivative along (-1,1) and monotonicity give box bounds 1/u and 1/l on the diagonal (Prop. 3.1-3.3, pp. 51-56)",
+   "Hessian definiteness via leading principal minors in w = x/y with substitution w = e^n and sign arguments from derivatives at n = 0 (Prop. 3.4-3.5, pp. 56-62)",
+   "nf4r partitioned McCormick shown equivalent to McCormick on the active subinterval by substitution (p. 75)",
+   "non-termination counterexample sequence c + 1/i motivating epsilon-termination (p. 80)",
+   "error-cascade graph and convex-combination split of the objective tolerance to derive partition counts N*_beta, N*_A, N*_q (pp. 82, 89-93)"
+  ],
+  "experiments": "Gurobi 6.0.3 on one desktop; MINLPLib2 heatexch_gen1-3 with best-known solutions and LINDO/BARON/SCIP lower bounds; N in {1,10,...,50}; at most 10 iterations, Model 3 up to 32224 s; N=1 bounds beat solver lower bounds on Models 1-2; Model 2 bound exceeds the best-known solution (attributed to numerical error); heuristic sum_k z_ijk <= 1 cuts time 71%/82% on Models 1-2 only (pp. 66, 97-105).",
+  "positioning": "Builds on the Yee-Grossmann/Escobar-Grossmann stage-wise model (corrected against GAMS), criticises Chen and epsilon approaches, credits Zavala-Rio et al. for prior LMTD proofs, reuses Gounaris-Misener-Floudas nf4r and the APOGEE presentation (pp. 37-41, 73, 111, 116-118).",
+  "writing": "Student report: long textbook background, full algebraic proofs with plots before each property, bulleted contributions; abstract overclaims ('The first of its kind') while the evaluation states plainly that the algorithm fails to scale (pp. 3, 12-13, 15-31, 99).",
+  "limits_future": "A priori partitioning creates binaries that block scaling and equal-width partitions miss the global optimum; future work: adaptive refinement, spatial branch and bound, a convex formulation for MINLP solvers (pp. 99, 104, 107-108); unstated: convergence relies on exact MILP solves and an informal tangent step (pp. 89, 94).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Student voice: plot LMTD's reciprocal, see it looks convex, prove it, exploit it with tangent cuts; talk title 'Special Structure Detection'; concrete case behind Method 1 step 2.",
+    "pages": "pp. 13, 42, 56-62, 75-76, 108"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "PLF vs OA chosen by fit with the other relaxations in the full model (all under-estimators, no extra binaries, no reformulation per iteration), not by isolated quality; thin evidence (three instances, simplified model).",
+    "pages": "pp. 66, 68-69"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Partition count N interpolates from plain McCormick (N=1) to tighter relaxations and is swept with time cost reported, but one N for all relaxations, no selection rule beyond the a priori error budget, parameter not removed.",
+    "pages": "pp. 89-94, 99-100"
+   },
+   {
+    "method": "Method 5",
+    "relation": "contradiction",
+    "note": "Student voice: an invalid bound above the best-known solution on Model 2 is put down to numerical error without re-runs; no competitors run on the same hardware. In its favour: published model audited against GAMS and corrected; losses written in.",
+    "pages": "pp. 97, 99, 101, 116-118"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "reformulate before relaxing (approximate the reciprocal)",
+    "evidence": "Approximate 1/LMTD, which multiplies q, rather than LMTD, which divides it, so approximation error does not cascade through a denominator; the reciprocal turns out convex.",
+    "pages": "p. 42"
+   },
+   {
+    "pattern": "proved continuous extension instead of epsilon-shift",
+    "evidence": "Indeterminacy at x = y removed by proving limits of m and its derivatives and defining a C2 extension, replacing Chen/epsilon approaches that add error.",
+    "pages": "pp. 12, 44-49"
+   },
+   {
+    "pattern": "audit the published benchmark model",
+    "evidence": "Escobar-Grossmann model compared with its GAMS specification; sign, quantifier, inequality-direction and naming errors corrected with an equation-by-equation change log.",
+    "pages": "pp. 111, 116-118"
+   }
+  ],
+  "transferable": [
+   "Approximate the function whose error enters the model linearly and that the model pushes toward the side where tangent cuts are tight (p. 42).",
+   "Remove a removable singularity with polar coordinates and L'Hopital and ship the C2 extension instead of an epsilon-shift (pp. 44-49).",
+   "Prove 2x2 Hessian definiteness for a function of a ratio by reducing minors to functions of w = x/y and substituting w = e^n (pp. 56-61).",
+   "Seed an outer approximation with tangents at the diagonal box corners so cut bounds equal the function's exact bounds, and mirror tangent points to keep symmetry (pp. 76-78).",
+   "Keep all relaxations pointing the same way (all under-estimators) so every refinement raises the bound monotonically (p. 69).",
+   "Split an objective tolerance across term groups along an error-cascade graph to derive partition counts for a fixed-precision MILP relaxation (pp. 82, 89-93).",
+   "Evaluate a bounding algorithm on instances with both best-known solutions and published solver lower bounds, plotting objective by iteration against the best-known value (pp. 97, 102-103).",
+   "Keep an equation-by-equation change log when correcting a published model against its GAMS file (pp. 116-118)."
+  ],
+  "coauthors": "Miten Mistry (author, MEng student); Ruth Misener (supervisor); Panos Parpas (second marker)",
+  "quotes": [
+   {
+    "text": "We see from Figure 3.1 that the reciprocal of LMTD has a shape that looks convex (where defined, the epigraph looks convex), we will not only prove that this is true but we will use this to form a suitable approximation.",
+    "page": 42
+   },
+   {
+    "text": "We find that, as it stands, the algorithm fails to scale in the directions that we want it to scale.",
+    "page": 99
+   }
+  ]
+ }
+]

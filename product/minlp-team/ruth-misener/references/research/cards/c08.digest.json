@@ -1,0 +1,220 @@
+[
+ {
+  "id": "S068",
+  "year": "2020",
+  "title": "SUSPECT: MINLP special structure detector for Pyomo",
+  "read_level": "full",
+  "contribution": "Open-source, extensible Pyomo tool that builds a DAG of an MINLP and detects bounds, monotonicity and convexity by tree-walking rules with plug-in detectors, validated against MINLPLib 2 labels (1275 of 1392 processed instances matched, no false positives).",
+  "problem_entry": "Global solvers exploit convexity but keep detection internal; SUSPECT offers it as the first open-source stand-alone convexity detector for Pyomo models, for B&B variable reduction and solver selection (pp. 1-2, 10).",
+  "key_idea": "Merge Pyomo expression trees into a DAG, run forward/backward FBBT and chain-rule composition rules for monotonicity/convexity, and let third parties register extra convexity detectors via entry points (pp. 3-10).",
+  "assumptions": "Pyomo4 expression trees and the Fig. 4 operator set; unary/binary rules with n-ary folding; non-differentiable compositions unknown except |x| on sign-definite domains; no disjoint intervals; FBBT capped at 10 iterations; heuristic hashing without simplification (pp. 3-8).",
+  "proof_devices": [
+   "chain-rule derivation of monotonicity/convexity composition rules (p. 5; Tables 6-11 pp. 19-23)",
+   "depth-sorted DAG traversal replacing recursion, with change-driven revisiting (pp. 6, 8)",
+   "recursive expression hash with coefficient-agnostic buckets (pp. 6-7)",
+   "Bound interface isolating floating-point operations, arbitrary-precision default (p. 8; pp. 18, 24)"
+  ],
+  "experiments": "MINLPLib 2 (1527 problems, accessed 13 Dec 2017), AWS C5, Docker, Git tag v7, Pyomo 5.2; oracle = MINLPLib labels; 135 unreadable, 1003 of 1392 under 2 s, 1275 (91.6%) matched, 35 time-outs/exceptions, no false positives, misses listed by cause (53 eigenvalue numerics); no rival detector compared (pp. 10-11, 29-31).",
+  "positioning": "Extends Fourer et al./Dr.AMPL tree-walking convexity detection and DAG interval analysis; contrasts with disciplined convex programming tools that impose conventions; novelty claimed on stand-alone, open-source, extensible (pp. 2-3).",
+  "writing": "Short software paper: contributions paragraph, toy problem carried through figures, worked examples; shortcuts and numerical weaknesses stated where they occur with named alternatives (pp. 2, 4-9); minor 72% vs 70% inconsistency (pp. 10-11).",
+  "limits_future": "9% unreadable, eigenvalue numerics, 5-minute conversion limit on large pooling instances; future: convexity disproving, DC and pooling detection, OBBT, other modelling languages, solver integration for algorithm choice (pp. 10-11, 29).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Detector validated against labelled MINLPLib as oracle, every miss listed, no false positives; domain experts add detectors via plug-ins; confirms SKILL.md numbers.",
+    "pages": "pp. 2, 9-10, 29-31"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Stops at detection; the gain from exploiting the structure inside a solver (step 6) is not measured and is deferred to future work.",
+    "pages": "p. 11"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Partial: dated test-set access, frozen tool tag, Docker image, exact versions, full failure lists; no competitor comparison.",
+    "pages": "pp. 10, 29-31"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "isolate numerical risk behind a swappable interface",
+    "evidence": "All floating-point-sensitive bound operations go through a Bound interface (arbitrary-precision default, interval arithmetic possible); double-precision eigenvalues named as the main miss cause with pivoted Cholesky as the unimplemented fix.",
+    "pages": "pp. 8-10, 18, 24"
+   }
+  ],
+  "transferable": [
+   "Validate a structure detector against a labelled public library as oracle; report unreadable, timed-out and misclassified instances separately with instance lists and causes (pp. 10, 29-31).",
+   "Provide a plug-in API and demonstrate it with one non-trivial detector from your own application work (RecLMTD) (pp. 9-10, 25-28).",
+   "Run recursive rule systems as forward/backward scans over a depth-sorted DAG with change flags to avoid recursion and revisits (pp. 6, 8).",
+   "Freeze reproducibility metadata in the paper: library access date, tool Git tag and date, container, library versions (p. 10)."
+  ],
+  "coauthors": "Francesco Ceccon (Imperial), John D. Siirola (Sandia National Laboratories)",
+  "quotes": [
+   {
+    "text": "SUSPECT does not have false positives on the test set, this gives confidence in the implementation and makes it possible to use it for solver selection.",
+    "page": 10
+   },
+   {
+    "text": "The heuristic approach of hashing Pyomo expressions may not converge to the DAG with the fewest vertices, but it should obtain an acceptable DAG.",
+    "page": 6
+   }
+  ]
+ },
+ {
+  "id": "S013",
+  "year": "2021",
+  "title": "Partition-based formulations for mixed-integer optimization of trained ReLU neural networks",
+  "read_level": "full",
+  "contribution": "A hierarchy of MILP formulations for ReLU nodes, built by partitioning node inputs and forming the hull over partition sums, spanning big-M (N = 1) to the convex hull (N = number of inputs), with partitioning strategies and partitioned OBBT; solves 25% more verification/adversary instances than big-M.",
+  "problem_entry": "Big-M encodings of trained ReLU nets are weak, Anderson et al.'s convex-hull encodings are large, so big-M often wins in practice; the paper seeks formulations in between (pp. 1-2).",
+  "key_idea": "Treat each ReLU as a two-term disjunction, split its inputs into N groups, introduce one auxiliary sum per group and take the extended hull over the groups; choose groups with similar weight magnitudes (equal size / equal range) and tighten group bounds by OBBT (pp. 3-7).",
+  "assumptions": "Feed-forward ReLU nets with fixed weights; bounded inputs and partition sums; bounds by interval arithmetic or LP-relaxation OBBT; Prop. 4 strictness relies on cited facet-definingness of the hull inequalities (pp. 2-5, 16).",
+  "proof_devices": [
+   "Fourier-Motzkin projection of the N auxiliary variables to a 2^N-constraint non-lifted form (Prop. 1, p. 5; A.2 pp. 14-16)",
+   "endpoint identities: N = 1 equals big-M, N = eta equals the node's convex hull (Props. 2-3, p. 5; A.3 p. 16)",
+   "strict tightening under refinement by comparing representable index subsets (Prop. 4, p. 5)",
+   "4-input toy w = [1,1,100,100] comparing partitions through bounds and non-lifted constraints (pp. 6-7)"
+  ],
+  "experiments": "Gurobi 9.1, MIPFocus 3, 3600 s; MNIST/CIFAR-10 dense and CNN nets; 100 instances per setting; optimal adversary, verification, minimally distorted adversary; N = 1..10, four partition strategies incl. random and uneven controls, OBBT on/off, Anderson cuts at swept frequencies and as root cuts, lifted vs non-lifted; perturbations calibrated so some big-M problems solve; no repeated runs; OBBT time accounting not stated; cuts off for partition arms only in verification (pp. 7-10, 16-19).",
+  "positioning": "Exact MILP encodings vs faster but inexact relaxation verifiers; builds on Anderson et al. and the Kronqvist-Misener-Tsay hierarchy; differs by deriving a stronger compact formulation rather than adding cuts, and absorbs Anderson's separation as compatible cuts (pp. 1-2, 7).",
+  "writing": "Numbered contributions mapped to sections; headline number in intro and conclusion; short propositions with practical Remarks; explicit hedging ('We hypothesize', 'problem-dependent'); hierarchy shown in a figure (pp. 2, 4-6, 8, 10).",
+  "limits_future": "No rule for N (problem-dependent), large N degrades, hard minimally distorted problems only on small nets, OBBT cheap only if parallelised; future: parallel OBBT (pp. 8-10).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Endpoints and order proved (big-M at N = 1, hull at N = eta, strict refinement); N swept 1..10 with random and uneven controls; best N problem-dependent, no selection rule.",
+    "pages": "pp. 5, 7-9"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Trained ReLU network encoded exactly as MILP constraints, piecewise-linear structure exploited, code released.",
+    "pages": "pp. 2-3, 10"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Formulations judged inside full Gurobi B&B together with cuts and OBBT, not at the root.",
+    "pages": "pp. 8-9, 17-19"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Calibrated difficulty, tuned rival cut frequency, averages over commonly solved instances, losses reported; but no repeated runs, OBBT time accounting not stated, cut settings differ between arms in verification.",
+    "pages": "pp. 7-9, 16"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "partition the coupling, then tune the partition size",
+    "evidence": "Inputs of each ReLU node partitioned into N groups, hull formed over group sums; the same knob name N reappears for tree-ensemble partitions in S020.",
+    "pages": "pp. 3, 5"
+   }
+  ],
+  "transferable": [
+   "Interpolate two formulations by aggregating variables into N groups and forming the hull over the groups; prove both endpoints and monotonicity under merging (pp. 3, 5).",
+   "Project a lifted formulation to the original space to show which hull inequalities it keeps, and show computationally that the lifted form is the one to implement (p. 5; Table 4 p. 17).",
+   "Sweep the knob over a range with proposed strategies and deliberately weak controls (random, uneven) on the same instances, with and without the companion preprocessing (Fig. 3, p. 9).",
+   "Calibrate perturbation size so the baseline solves some instances, and average times only over instances all methods solve (pp. 7, 16).",
+   "Give the rival cutting-plane method its best cut frequency before comparing (Fig. 2 left, p. 8)."
+  ],
+  "coauthors": "Calvin Tsay (Imperial), Jan Kronqvist (KTH), Alexander Thebelt (Imperial, BASF-funded PhD)",
+  "quotes": [
+   {
+    "text": "The formulations are hierarchical: their relaxations start at a big-M equivalent and converge to the convex hull.",
+    "page": 1
+   },
+   {
+    "text": "While these formulations have tighter relaxations, they can perform worse than big-M due to having more difficult branch-and-bound subproblems.",
+    "page": 5
+   }
+  ]
+ },
+ {
+  "id": "S020",
+  "year": "2021",
+  "title": "Mixed-integer convex nonlinear optimization with gradient-boosted trees embedded",
+  "read_level": "full",
+  "contribution": "Convex-MINLP formulation for optimising a trained gradient-boosted tree ensemble plus a convex (PCA risk) penalty, with a custom spatial B&B using separable bounds, partition-based ensemble bounds, structure-based pseudocosts and cheap strong branching, tested on a public concrete instance and a BASF catalysis instance (read as arXiv v3).",
+  "problem_entry": "BASF's GBT models of catalysts must be optimised inside decisions; extends Misic (2017) by adding a convex penalty that keeps solutions near training data, needing a large-scale specialised B&B (pp. 1-3, 5).",
+  "key_idea": "Misic's GBT MILP linked to continuous x; B&B branching only on GBT splits, bounding convex and GBT parts separately, GBT part bounded by solving tree subsets with partition refinement down the tree, strong branching on the cheap convex bound (pp. 6-16).",
+  "assumptions": "Box domain, regression GBTs without categorical inputs, merged ensembles, non-strict linking inequalities, PCA-based convex quadratic penalty because CPLEX/Gurobi only handle quadratics; PCA penalty may fail on clustered data (pp. 3-7, 17-19).",
+  "proof_devices": [
+   "worst-case leaf-combination count 2^{d|T|} motivating split branching (p. 8)",
+   "Lemma 1 separable lower bound (p. 10)",
+   "Lemma 2 partition relaxation dropping inter-subset leaf consistency (p. 11)",
+   "Definition 2/Lemma 3 refinement partial order and monotone bounds under coarsening (p. 12)",
+   "leaf-cover weights as pseudocost initialisation (Eq. (6), p. 14)"
+  ],
+  "experiments": "UCI concrete (8 vars, 7,750 trees) and BASF catalysis (42 vars, 8,800 trees); CPLEX 12.7/Gurobi 7.5.2 default tolerances; bound vs partition size; lookahead 1 vs 100 and pseudocost vs 10 random orderings; lambda 1 and 1000; 24 h runs vs Gurobi; B&B 1 h + 1 h vs 3 h black-box; Gurobi better incumbents, B&B better bounds, >=22% gaps on concrete, optimality proved only at lambda = 1000 on catalysis; manual re-evaluation exposes a Gurobi objective error (pp. 18-26, 38-40).",
+  "positioning": "Closest to Misic (2017) with a two-point difference (convex penalty; specialised large-scale B&B); GBT MILP borrowed from Misic; 'native language' embedding per Lombardi-Milano; separated from predict-then-optimise training work as 'more focused on the optimization side' (pp. 2-3, 6, 27).",
+  "writing": "Abstract opens with a data property and an industrial example; risk framing kept in body; abstract says nonconvex while title says convex MINLP; a toy example after each device; results summarised per lambda regime with mechanisms (pp. 1, 4-5, 12, 14, 17, 25-26).",
+  "limits_future": "Remaining gaps, clustered split points weakening strong branching, decomposition weaker for shallow ensembles, PCA failure on clustered data, solver-tolerance errors; future: per-cluster instances, boosting-aware proximity measures, other convex penalties, a fixing method (pp. 17-18, 21-22, 25-27, 39).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Founding text: partner's GBT model written as constraints, structure exploited in B&B, PCA penalty keeps optimiser near data, public UCI stand-in next to BASF instance, Gurobi's heuristic strength conceded.",
+    "pages": "pp. 1, 5-18, 22"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Pseudocosts, lookahead and subsolver ablated inside the whole B&B on both instances; verdict split by lambda regime with mechanism.",
+    "pages": "pp. 20-26"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Competitor objective re-evaluated by hand, losses and gap at limit reported.",
+    "pages": "pp. 22, 25, 39"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Unequal budgets (1 h + 1 h custom B&B vs 3 h black-box) and 2017-era solver versions.",
+    "pages": "pp. 18, 21, 24"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Partition subset size N is a family of bounds with a monotonicity lemma, but N is chosen numerically per instance (70 vs 150 trees), no class-wide setting.",
+    "pages": "pp. 11-12, 20, 24"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "partition the coupling, then refine lazily",
+    "evidence": "Tree ensemble partitioned and inter-subset consistency dropped for a valid bound; subsets merged pairwise at child nodes under a time limit; parallels S013's input partitions with the same knob N.",
+    "pages": "pp. 11-13"
+   },
+   {
+    "pattern": "cheap-part strong branching",
+    "evidence": "Strong branching uses only the convex part's bound to find children prunable at once, deferring expensive GBT bound updates.",
+    "pages": "pp. 15-16"
+   }
+  ],
+  "transferable": [
+   "Bound a sum of a cheap convex part and an expensive combinatorial part separately; use the cheap part alone for strong branching (pp. 10, 15-16).",
+   "Partition a coupled combinatorial object, drop coupling across parts for a valid bound, prove monotonicity under coarsening, and coarsen lazily down the B&B tree (pp. 11-13).",
+   "Initialise pseudocosts from model structure (leaf cover of each split) and validate against several random orderings (pp. 14, 20).",
+   "Re-evaluate every solver's returned objective with your own code and report discrepancies (p. 39).",
+   "Pair a confidential industrial instance with a public instance of the same structure (p. 18)."
+  ],
+  "coauthors": "Miten Mistry, Dimitrios Letsios (Imperial); Gerhard Krennrich, Robert M. Lee (BASF SE)",
+  "quotes": [
+   {
+    "text": "The Gurobi heuristics generally outperform the B&B algorithm, but the B&B algorithm derives better lower bounds.",
+    "page": 22
+   },
+   {
+    "text": "In fact, both CPLEX 12.7 or Gurobi 7.5.2, may produce incorrect outputs due to solver tolerances, hence a specialized fixing method may be necessary.",
+    "page": 39
+   }
+  ]
+ }
+]

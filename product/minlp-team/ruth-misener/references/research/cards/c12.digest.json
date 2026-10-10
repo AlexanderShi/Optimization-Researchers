@@ -1,0 +1,128 @@
+[
+ {
+  "id": "S078",
+  "year": "2023",
+  "title": "Partial Lasserre relaxation for sparse Max-Cut",
+  "read_level": "full",
+  "contribution": "Strengthens the sparse first-level Lasserre relaxation of Max-Cut with level-2 PSD constraints on chordal-extension cliques of size at most r (partial) and on selected r-subsets of larger cliques (augmented, five selection heuristics), and shows that it beats BiqCrunch and CS-TSSOS on sparse graphs with small cliques and loses as cliques grow.",
+  "problem_entry": "Level 2 of even the sparse Lasserre hierarchy is unsolvable beyond about 30 nodes (the authors' own failed 300-node runs), while level 1 is weak; the entry point is the space between the two levels (pp. 2, 5-6).",
+  "key_idea": "Lift to level 2 only the cliques of the chordal extension with at most r nodes (Relaxation 6), optionally adding p heuristic r-subsets of larger cliques (Relaxation 7, heuristics H1-H5); cliques are chosen by graph pattern rather than by learned scores (pp. 3, 6-7).",
+  "assumptions": "Max-Cut as a +-1 POP with Laplacian objective; the sparse hierarchy depends only on graph sparsity; convergence results for the running-intersection property cited (Lasserre 2006); random instances from SparsePOP randomUnconst.m (pp. 2, 4-6, 8).",
+  "proof_devices": [
+   "Containment by citation: dense level 2 inside the metric polytope, Anjos-Wolkowicz proof transferred to Lasserre in a footnote (pp. 10-11)",
+   "For r <= 4, MET1st+ at least as tight as Relaxation (6) because metric-polytope vertices are cuts on 3-4 nodes (p. 12)",
+   "Numerical counterexample: an explicit point on a 5-clique in MET1st+ for which the level-2 PSD feasibility problem has no solution, so the sets differ for r >= 5 (footnote 2, p. 12)"
+  ],
+  "experiments": "240 random graphs (n = 300/500, u = 4-10, three weight sets), Biq Mac toroidal Ising grids, ten CS-TSSOS instances up to 5005 nodes; BiqCrunch time-to-match with the fastest of 4 (or 8) settings kept; time tables with and without the authors' clique construction; CS-TSSOS total vs IPM time; heuristic ranking with a random control; reference values not all certified; losses for dense graphs printed (pp. 8-20).",
+  "positioning": "Claims to be the first computational study of sparse intermediate Lasserre levels; credits Josz-Molzahn's multi-order relaxation as the same idea and reports that Chen et al. 2022 later generalised it; concedes that linear branch-and-cut beats Biq Mac on toroidal grids (pp. 2-3).",
+  "writing": "Short and table-driven (11 tables); claims scoped to sparse graphs with small cliques every time; specific hedging ('there is not a clear pattern'); own prototype code called improvable (pp. 3, 14-15, 20).",
+  "limits_future": "Loses power as density or clique size grows; how to choose r and p is left open, with multilevel techniques suggested (pp. 20-21).",
+  "method_links": [
+   {"method": "Method 2", "relation": "evidence", "note": "Family between Lasserre levels 1 and 2 indexed by r (and p); random control H1; parameter choice printed as open.", "pages": "pp. 6-7, 12-14, 20-21"},
+   {"method": "Method 5", "relation": "evidence", "note": "Four BiqCrunch settings, fastest kept (the T3 oracle practice); timings with and without own construction code; uncertified reference values flagged; losses by density printed.", "pages": "pp. 9, 11-15, 17, 20"},
+   {"method": "Method 4", "relation": "variant", "note": "The relaxation is not embedded in a B&B; the full exact solver (BiqCrunch) is the yardstick through time-to-match, not the host.", "pages": "pp. 11-12"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "numerical counterexample for relaxation non-containment", "evidence": "Explicit point in MET1st+ printed, with a numerically infeasible level-2 PSD feasibility problem, to show that two relaxations are not ordered.", "pages": "p. 12"}
+  ],
+  "transferable": [
+   "Show on your own hardware that the next hierarchy level fails at target size before proposing an intermediate relaxation (p. 6).",
+   "Give the specialised competitor several parameter settings and keep its best time per instance (p. 11).",
+   "Report time tables with and without your prototype preprocessing code (Tables 6-7, pp. 13-15).",
+   "Include a random selection rule as a control for selection heuristics and report its rank frequencies (Table 5, p. 14).",
+   "Time-to-match: measure how long the exact solver needs to reach your bound, using integrality to define 'as good as' (pp. 11, 15).",
+   "Report the structure statistic that drives tractability (clique sizes of the chordal extension) for every instance family (Tables 1, 8, 10)."
+  ],
+  "coauthors": "Juan S. Campos, Panos Parpas",
+  "quotes": [
+   {"text": "For each Max-Cut instance, our comparisons are with respect to the fastest time of these four implementations that reached the solution", "page": 11},
+   {"text": "Although the partial relaxation showed potential, there is still the question of how to select the parameters r and p in the partial relaxation.", "page": 20}
+  ]
+ },
+ {
+  "id": "S038",
+  "year": "2024",
+  "title": "Augmenting optimization-based molecular design with graph neural networks",
+  "read_level": "full",
+  "contribution": "Journal extension (read as arXiv v1) of the GNN-over-molecules MIP: a tighter big-M GNN encoding implemented in OMLT with a PyG interface, a fragment-based CAMD formulation with graph-isomorphism symmetry breaking and chemistry constraints, and odorant case studies solved to optimality up to 12 fragments and to feasibility up to about 25-40.",
+  "problem_entry": "GNN-based molecular design mostly evaluates the GNN inside GAs or BO instead of solving the inverse problem; the conference version stopped at N = 8 atoms and had no aromaticity (arXiv pp. 2, 17).",
+  "key_idea": "Encode each GNN layer with a variable adjacency through z = A x big-M constraints (tighter bounds than the conference version), wrap it as an OMLT GNNLayer, and replace atoms by fragments so that structural and symmetry-breaking constraints carry over (arXiv pp. 5-10, 15-17).",
+  "assumptions": "Fixed weights; linear sum/mean aggregation; GCNConv and mean aggregation unsupported with a non-fixed graph; nonlinear activations inadvisable; interval-arithmetic bounds; exactly N fragments in the experiments (arXiv pp. 4-5, 9-11).",
+  "proof_devices": [
+   "Feasible indexing under (S1)+(S3) for any graph with a chosen node 0, cited from Zhang et al. 2023 and illustrated by its indexing algorithm (arXiv pp. 15-16)",
+   "Universal-ordering-vector bijection (powers of 2) for the feature hierarchy (S2) and the neighbour ordering (C27) (arXiv p. 16)",
+   "Reordering the symmetry-breaking coefficients so that an existential chemistry requirement becomes a bound on node 0 (B1-B2) (arXiv pp. 18-20)"
+  ],
+  "experiments": "Sharma et al. odour data, banana (300 molecules) and garlic (262); 10 GNNs per odour; 5 Gurobi seeds x 10 models = 50 runs per N = 4-12, 10 h limit, quartiles and success counts (9/50 and 5/50 at N = 12); feasibility mode with MIPFocus=1 for N = 15-50, mostly negative objectives at N = 30-40 and 1/20 feasible beyond 40; no competing method (arXiv pp. 22-25).",
+  "positioning": "Credits McDonald et al. as first and generalises their big-M from GraphSAGE to all linear-aggregation GNNs; inherits the CAMD MIP literature; places itself in the optimisation-over-trained-models line, including her tree and ReLU work (arXiv pp. 2-3, 5).",
+  "writing": "Four contribution bullets over the conference paper; worked conversion examples for each layer type; each chemistry requirement stated, justified and then linearised; candid that requirements came from inspecting outputs (arXiv pp. 3, 7-8, 20-21).",
+  "limits_future": "Optimality only up to 12 fragments; the large-N failure is explained only as 'possible'; unsupported layers listed; no explicit future work; modest banana test accuracy (0.703) and no chemist evaluation of designs (not discussed by the paper) (arXiv pp. 10, 23, 25-27).",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "Trained GNN written as constraints, solved exactly, generalised into OMLT behind a PyG interface; BASF coauthors; public data set.", "pages": "arXiv pp. 5-10, 17"},
+   {"method": "Method 3", "relation": "variant", "note": "'Keep near the data' realised as data-set bounds on atom, bond and ring counts (C22-C25) and negative-class filtering, not a PCA penalty.", "pages": "arXiv pp. 14, 22"},
+   {"method": "Method 1", "relation": "evidence", "note": "Graph-isomorphism symmetry (N! indexings) identified as structure and removed by constraints that keep a feasible indexing.", "pages": "arXiv pp. 15-16"},
+   {"method": "Method 5", "relation": "variant", "note": "Careful run statistics (50 runs, quartiles, success counts) but no competitor; scaling study only.", "pages": "arXiv pp. 23-25"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "domain-expert constraint iteration", "evidence": "Chemistry requirements (no heteroatom chains, S only bonded to C, no allenes, no O-O, at most 2 aromatic rings) added after inspecting the optimiser's molecules, each with a stated chemical reason.", "pages": "arXiv pp. 17-18, 20-21"}
+  ],
+  "transferable": [
+   "Open a journal extension by listing the conference version's limits and mapping each new section to one (arXiv pp. 3, 17).",
+   "Change the unit of the decision graph (atoms to fragments) so that all structural and symmetry constraints carry over unchanged (arXiv p. 17).",
+   "Encode 'there exists a node with property P' by giving P top weight in the symmetry-breaking order, forcing it to index 0 (arXiv pp. 18-20).",
+   "Run each size with several trained models and solver seeds; report quartiles and success counts (Tables 6-7, arXiv p. 24).",
+   "When optimality stops scaling, switch to a declared feasibility protocol and report where even feasibility fails (arXiv pp. 23, 25).",
+   "Publish a supported/unsupported operation table for fixed and variable graph structure alongside worked layer conversions (arXiv pp. 7-10)."
+  ],
+  "coauthors": "Shiqiang Zhang, Juan S. Campos, Christian Feldmann, Frederik Sandfort, Miriam Mathea (BASF SE)",
+  "quotes": [
+   {"text": "These symmetric solutions significantly enlarge the search space and slow down the solving process.", "page": 15},
+   {"text": "This requirement is included as the optimization results showed a tendency to include a huge amount of connected heteroatoms in suggested structures.", "page": 20}
+  ]
+ },
+ {
+  "id": "S050",
+  "year": "2024",
+  "title": "Verifying message-passing neural networks via topology-based bounds tightening",
+  "read_level": "full",
+  "contribution": "Certifies robustness of ReLU message-passing GNNs against edge additions and removals under local and global budgets by MIP, with static and aggressive (in-tree, local-cut) topology-based bounds tightening in SCIP that makes SCIP about 3x faster and closes much of its gap to Gurobi.",
+  "problem_entry": "GNN certificates in the literature are restricted to one perturbation type or to GCNs; a MIP encoding admits adding and removing edges, global and local budgets, and feature changes, but is too large for convex-hull ReLU formulations, so the lever is the big-M bounds (pp. 1-2).",
+  "key_idea": "Compute pre-activation bounds from the original neighbours plus the k most negative budget-feasible changes (sbt, closed form by sorting), and recompute them in each B&B node on the graph modified by fixed adjacency variables with the remaining budget (abt), added as local cutting planes (pp. 4-7).",
+  "assumptions": "ReLU GraphSAGE-type MPNN with fixed weights; P1 (symmetric add/remove, global and local budgets) for graph classification, P2 (removal only, 2-hop neighbourhood) for node classification; only adjacency perturbations tested (pp. 3-4, 8).",
+  "proof_devices": [
+   "Property 3.2: split the neighbour sum into original, added, removed and inactive nodes, so the lower bound is sum of lb plus the best <= qv changes (Eqs. 17-19, pp. 5, 13)",
+   "Property 3.4 by reduction to Property 3.2 on the modified graph with reduced budget (Remark 3.5, pp. 6, 13)",
+   "Node-local validity handled by local cutting planes valid only in the subtree (pp. 7, 13-14)",
+   "Argument that FastLin/CROWN/DeepPoly fail because a binary adjacency breaks inter-layer linearity; OBBT is the only existing method that transfers (p. 6)"
+  ],
+  "experiments": "SCIP 8.0.4 single-thread on a shared cluster; ENZYMES, MUTAG (graph), Cora, CiteSeer (node); s in {2,3,4}, global budget 1-10% of edges; SCIPbasic/sbt/abt and GRBbasic/sbt; avg time, shifted geometric mean, number solved, on all and on robust instances; consensus ground truth, inconsistent instances excluded; Gurobi bug reported, buggy version kept with an RHS shift; OBBT control on 44 robust MUTAG instances; sbt about 3x faster than basic, abt not better on average (pp. 6-9, 13-14).",
+  "positioning": "Divides prior work into attacks and certificates; builds on the group's GNN encoding and Anderson et al.'s ReLU big-M; adopts aggressive bounds tightening from Belotti et al. 2016; notes PySCIPOpt-ML as an alternative host; cites Badilla et al. for tighter-bounds-can-slow results (pp. 1-6, 9).",
+  "writing": "Three numbered key outcomes in the introduction; a toy figure showing all three bounding schemes on one node; negative results kept; a sbt/abt label swap on p. 6; the 'factor of 10 to 3' claim is not derived in the text (pp. 2, 6, 9).",
+  "limits_future": "abt does not dominate sbt; node classification too easy to discriminate; feature perturbations untested; no future directions; recommends running sbt and abt in parallel instead of choosing a default (pp. 4, 7, 9).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "Graph topology and perturbation budgets used as structure that interval arithmetic ignores; 3x speed-up.", "pages": "pp. 4-5, 9"},
+   {"method": "Method 3", "relation": "evidence", "note": "Verification as a MIP over the trained MPNN reusing the group's GNN encoding; the OMLT GNN pull request used to debug the SCIP code.", "pages": "pp. 2-3, 6"},
+   {"method": "Method 4", "relation": "variant", "note": "Judged inside full SCIP/Gurobi B&B and split by answer type, but no default chosen: sbt and abt recommended in parallel.", "pages": "pp. 7-9"},
+   {"method": "Method 5", "relation": "evidence", "note": "Consensus ground truth, inconsistent instances excluded, solver bug found and reported, three metrics on two subsets, OBBT control; lapse: buggy Gurobi version kept for lack of time and its infeasible answers dropped rather than counted as failures.", "pages": "pp. 7-9, 13-14"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "consensus ground truth across solvers", "evidence": "An instance is labelled robust only if every method says so except time-outs; inconsistent instances are excluded.", "pages": "pp. 9, 13"},
+   {"pattern": "portfolio instead of default", "evidence": "Neither sbt nor abt dominates, so running both in parallel is recommended, citing MIP portfolio practice.", "pages": "p. 9"}
+  ],
+  "transferable": [
+   "When the strongest formulation is too large, tighten big-M coefficients and say why the hull formulation was not used (p. 2).",
+   "Derive a closed form ('take the k most negative changes') for budgeted bounds so tightening can run in every B&B node (pp. 5, 13).",
+   "Prove the in-tree bound by reduction to the root bound on a modified instance with reduced budget (p. 13).",
+   "Label instances only where all solvers agree when ground truth is unknowable; drop inconsistent ones (pp. 9, 13).",
+   "Split results by answer type (robust vs non-robust); tightening helps proofs and can hurt counterexample search (pp. 7, 9).",
+   "Use OBBT as a tightest-affordable-bounds control and report its cost and per-layer relative bound tightness (p. 14).",
+   "Implement branching-dependent bounds as local cuts in a separator callback (pp. 7, 13-14).",
+   "Stop the MIP once the sign question is answered instead of solving to optimality (p. 7)."
+  ],
+  "coauthors": "Christopher Hojny (TU Eindhoven), Shiqiang Zhang, Juan S. Campos",
+  "quotes": [
+   {"text": "We cannot know the ground truth of a robust instance without complete enumeration or relying on a solver’s numerical tolerances", "page": 9},
+   {"text": "we found and reported a small bug in Gurobi wherein several instances were declared infeasible despite having a feasible solution found by SCIP.", "page": 13}
+  ]
+ }
+]

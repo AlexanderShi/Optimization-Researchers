@@ -1,0 +1,296 @@
+[
+ {
+  "id": "S117",
+  "year": "2019",
+  "title": "A practical analysis of optimisation and recovery under uncertainty",
+  "read_level": "partial",
+  "contribution": "Supervised MEng thesis (Suraj G, student's voice) that remodels Royal Mail van scheduling as a Variable Size Bin Packing Problem, scores schedules by a normalised disturbance measure in a plan-perturb-recover frame, studies integer-program recovery against LPT, and proposes light recoverable robustness.",
+  "problem_entry": "Royal Mail partner problem (minimise vans per delivery office under same-day delivery and in-day perturbations); entry by critiquing a prior model that does not record which van runs which itinerary (pp. 7-8).",
+  "key_idea": "Common 3-step frame (plan, uncertainty realisation, recovery) plus a weighted disturbance score normalised by optimal vans; recovery as an IP; LRRP = recoverable robustness with minimised slack and a price-factor cap on the objective (pp. 49, 52-54, 84).",
+  "assumptions": "Single uncertainty realisation at one arbitrary time; no itinerary starts earlier than planned; perturbation types 4-6 ignored; Pr and D fixed by hand (pp. 49-50, 86-87).",
+  "proof_devices": [
+   "LRRP generalises recoverable robustness: fix slacks to 0 and Pr = 1, argue by contradiction (pp. 85-86)"
+  ],
+  "experiments": "Royal Mail data from three delivery offices; IP recovery vs LPT recovery baseline, only model #5 beats LPT on alpha and gamma; parameters varied one at a time; Chapter 6 models not run (pp. 96, 98, 107).",
+  "positioning": "Builds on Letsios and Misener's LexOpt recovery result for makespan scheduling and on Liebchen et al. recoverable robustness and Fischetti-Monaci light robustness (pp. 72, 83-84).",
+  "writing": "Student thesis with bullet contributions, 'to the best of our knowledge' novelty claims, and an explicit self-criticism section (pp. 8-9, 98).",
+  "limits_future": "Final models unevaluated for size; LRRP constants Pr and D need multi-objective treatment; symmetry-breaking cuts and multistage settings proposed (pp. 107-108).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "student's voice: losses and evaluation limits written in, but one-at-a-time parameter changes and unevaluated final models",
+    "pages": "pp. 96, 98, 107"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Industrial line through a student project",
+    "evidence": "Royal Mail problem first explored in a supervised MEng thesis with partner data; the group paper S135 cites the thesis",
+    "pages": "S117 pp. 3, 8; S135 arXiv p. 20"
+   }
+  ],
+  "transferable": [
+   "Fix one plan-perturb-recover frame and one normalised score before comparing scheduling strategies under uncertainty (pp. 49, 52-54).",
+   "When the full model is too large, write an approximate model, name what it drops, and identify the classical problem it becomes (VSBPP) (pp. 8, 97, 105)."
+  ],
+  "coauthors": "Suraj G (author); Ruth Misener (supervisor); Aldo Faisal (second marker)",
+  "quotes": [
+   {
+    "text": "To what extent can we measure the efficacy of, and then design schedules which are both robust to and recoverable from uncertainty?",
+    "page": 8
+   },
+   {
+    "text": "Due to time constraints, the models in the very last chapter could not successfully evaluated with the framework we set up (perturbation generation, disturbance scoring, etc.).",
+    "page": 107
+   }
+  ]
+ },
+ {
+  "id": "S135",
+  "year": "2019",
+  "title": "Approximating Bounded Job Start Scheduling with Application in Royal Mail Deliveries Under Uncertainty",
+  "read_level": "partial",
+  "contribution": "Defines bounded job start scheduling from a Royal Mail exit-gate constraint, proves strong NP-hardness and an O(log n) integrality gap, gives LPT (2, 5/3 long, optimal short) and Long-Short Mixing (1.985) guarantees, and a two-stage lexicographic robust approach tested on 300 Royal Mail instances (read in the extended arXiv:1912.06862 version).",
+  "problem_entry": "Operational detail (a van exit gate limits departures per time unit) generalises P||Cmax into a new class with no approximation literature (arXiv pp. 1-3).",
+  "key_idea": "Split instances by the mechanism causing idle time (long vs short jobs), prove per-class LPT ratios, then run long and short jobs in parallel on reserved machine groups (mL = ceil(5m/6)); robust stage 1 minimises machines plus exponentially weighted completion times, stage 2 fixes starts and reassigns machines (arXiv pp. 3, 13, 18-19).",
+  "assumptions": "Integer processing times, non-preemptive identical machines; g = 1 in the improved analyses via discretisation; m >= 7 for LSM; perturbation factors in [1/F, F]; theta set empirically (arXiv pp. 3-4, 12, 17-18).",
+  "proof_devices": [
+   "3-Partition reduction with scaled processing times for strong NP-hardness at g = 1 (arXiv pp. 4-5)",
+   "Integrality-gap instance for the time-indexed IP (arXiv p. 6)",
+   "Exchange argument for an optimal compact schedule plus idle-time lower bound m(m-1)/2 (Lemma 1, arXiv p. 8)",
+   "Concave relaxation bounding idle machine time for the 5/3 ratio (arXiv p. 3)"
+  ],
+  "experiments": "300 Royal Mail instances from three delivery offices, Pyomo + CPLEX 12.8: nominal optima save at least 10/25/10 vehicles per day vs historical schedules; lower characteristic value goes with fewer final vehicles (arXiv pp. 20-22).",
+  "positioning": "Relates BJSP to scheduling with forbidden sets, precedence constraints and forbidden start times, where better-than-2 or constant ratios are ruled out (arXiv p. 3); uses LexOpt robustness from Letsios-Misener (arXiv p. 16).",
+  "writing": "Contributions-and-organisation paragraph mapping results to sections; open questions closing the paper; an unresolved inconsistency between 'decreased by a factor fj = 0.5' and 'doubling itinerary durations' (arXiv pp. 3-4, 21, 23).",
+  "limits_future": "Ratio below 2 without augmentation open; price of robustness unanalysed; multi-office vehicle sharing proposed (arXiv pp. 23-24).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "structure (long vs short instances, from where idle time arises) exploited in approximation proofs and algorithm design, not as a solver detector",
+    "pages": "arXiv pp. 3, 12-13"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "LSM interpolates between long-first and short-first greedy orders with knob mL fixed by analysis; theta chosen empirically without reported sweep",
+    "pages": "arXiv pp. 3, 13, 18"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Industrial constraint -> named problem class -> approximation theory",
+    "evidence": "Van exit gate becomes BJSP with NP-hardness, integrality gap and approximation ratios, then checked on partner data",
+    "pages": "arXiv pp. 2-3, 20-21"
+   }
+  ],
+  "transferable": [
+   "Motivate a new class by showing the obvious relaxation can be Omega(m) off and that rho-approximations transfer as 2rho (arXiv pp. 2-3).",
+   "Compute the integrality gap of the natural time-indexed formulation on a trivial instance before attempting LP rounding (arXiv p. 6).",
+   "Split instances by the mechanism that causes waste and prove a ratio per class before mixing them (arXiv pp. 3, 12-13)."
+  ],
+  "coauthors": "Dimitrios Letsios, Jeremy T. Bradley (Royal Mail), Suraj G, Natasha Page",
+  "quotes": [
+   {
+    "text": "distinction comes from the observation that idle time occurs mainly because of (i) simultaneous job completions for long jobs and (ii) limited allowable parallel job executions for short jobs.",
+    "page": 3
+   },
+   {
+    "text": "This finding is a strong indication that more efficient fleet management might be possible in Royal Mail delivery offices.",
+    "page": 21
+   }
+  ]
+ },
+ {
+  "id": "S069",
+  "year": "2020",
+  "title": "Approximation algorithms for process systems engineering",
+  "read_level": "partial",
+  "contribution": "Position survey arguing that approximation algorithms apply to PSE in modelling, problem classification, method design and uncertainty, with complexity and approximation surveys for pooling, process scheduling and heat exchanger network synthesis and six open questions.",
+  "problem_entry": "Bridge between TCS and PSE: five listed intellectual differences, then the claim that they are surface-level (pp. 1-2).",
+  "key_idea": "Use worst-case guarantees as a lens on PSE problems: relaxation quality, classification of heuristics, certified methods for huge instances, structure of robust solutions (pp. 4-6).",
+  "assumptions": "Standard approximation definitions under P != NP (pp. 2-4).",
+  "proof_devices": [
+   "Lower-bound matching template C_A <= rho*C_LB (Figure 1, pp. 3-4)",
+   "Pooling complexity table by subcase with reduction source (Table 1, p. 11)"
+  ],
+  "experiments": "none",
+  "positioning": "Positions the group (Letsios et al. 2018 heat exchanger heuristics, Letsios and Misener 2018 LexOpt, Baltean-Lugojan and Misener 2018 pooling) inside both communities; cites Dey-Gupte and Haugland lines for pooling complexity (pp. 6, 11).",
+  "writing": "Numbered contrasts, definitions, one example per application, per-problem complexity sections, numbered open questions each ending with a question (pp. 1-6, 22-23).",
+  "limits_future": "Concedes guarantees cannot fully address highly inapproximable industrial problems and PTAS are often not competitive; six open questions on pooling, scheduling and heat exchanger networks (pp. 2, 4, 22-23).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "structure used to delimit tractable subcases (complexity classification) rather than detected inside a solver",
+    "pages": "pp. 5, 11"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Numbered open-question list as the paper's deliverable",
+    "evidence": "Conclusion turns each surveyed gap into a question; S135 and S099 also end with specific next steps",
+    "pages": "pp. 22-23"
+   }
+  ],
+  "transferable": [
+   "Structure a cross-community position paper as: numbered differences, needed definitions, four uses with one published example each, complexity tables, numbered open questions (pp. 1-6, 11, 22-23).",
+   "Summarise a problem's complexity landscape as subcase / P or NP-hard / reduction source; gaps become research questions (Table 1, p. 11)."
+  ],
+  "coauthors": "Dimitrios Letsios, Radu Baltean-Lugojan, Francesco Ceccon, Miten Mistry, Johannes Wiebe",
+  "quotes": [
+   {
+    "text": "This paper argues that, contrary to the aforementioned, surface-level distinctions, approximation algorithms are deeply applicable to PSE.",
+    "page": 2
+   },
+   {
+    "text": "Approximation algorithms exploit special structure and expose tractable optimization problem subcases.",
+    "page": 5
+   }
+  ]
+ },
+ {
+  "id": "S073",
+  "year": "2020",
+  "title": "AI-assisted schedule explainer for nurse rostering",
+  "read_level": "full",
+  "contribution": "Demonstration system that couples a makespan-scheduling solver with an abstract-argumentation layer and a nurse-rostering GUI to give ranked, actionable explanations of why a schedule is or is not good.",
+  "problem_entry": "Solvers are black boxes to lay users, and the earlier ArgOpt paradigm existed only in principle (p. 1).",
+  "key_idea": "Encode feasibility, single/pairwise-exchange efficiency and fixed decisions as argumentation frameworks; explanations are violation paths, ranked by importance and time saved, each with an applicable action (pp. 1-2).",
+  "assumptions": "P||Cmax with nurses as machines and procedures as jobs; 'good' = efficient (no improving single or pairwise exchange) rather than optimal (p. 2).",
+  "proof_devices": [],
+  "experiments": "30+ informal usability surveys (not statistically significant), one urgent care manager's qualitative feedback, under 1 s for mn <= 1000 (p. 2).",
+  "positioning": "Implements the AAAI 2019 ArgOpt paradigm (Cyras, Letsios, Misener, Toni) and claims a first-of-a-kind system (pp. 1-2).",
+  "writing": "Two-page demo: problem, components, discussion with explicit limits; public code and video (pp. 1-2).",
+  "limits_future": "GUI not for real scenarios; surveys lack significance; extend to scheduling variants and evaluate with domain experts (p. 2).",
+  "method_links": [],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Explainability layer between solver and lay user",
+    "evidence": "Optimiser embedded in an argumentation-based explanation system with a checkable local goodness criterion",
+    "pages": "pp. 1-2"
+   }
+  ],
+  "transferable": [
+   "Define 'good' via a local, actionable property (no improving single or pairwise exchange) and generate explanations as ranked violations of it (p. 2).",
+   "State a demo's evaluation limits next to its positive feedback (p. 2)."
+  ],
+  "coauthors": "Kristijonas Cyras, Amin Karamlou, Myles Lee, Dimitrios Letsios, Francesca Toni",
+  "quotes": [
+   {
+    "text": "While the survey results do not present statistically significant results, we found that Schedule Explainer’s backend was largely usable and the explanations comprehensible and manageable.",
+    "page": 2
+   },
+   {
+    "text": "GUI is not intended to handle real scenaria or depict how the system would appear to the user, e.g. the shift-lead.",
+    "page": 2
+   }
+  ]
+ },
+ {
+  "id": "S087",
+  "year": "2020",
+  "title": "GALINI: An extensible mixed-integer quadratically-constrained optimization solver.",
+  "read_level": "partial",
+  "contribution": "Open-source Python/Pyomo MIQCQP branch-and-cut solver built for algorithm and solver developers, with runtime plug-ins for cuts, heuristics, branching, node selection and relaxations, reusing SUSPECT and Coramin, and benchmarked on MINLPLib 2 and QPLIB.",
+  "problem_entry": "Of about 30 MIQCQP solvers only SCIP and MINOTAUR target developers; GALINI lets developers extend a solver at runtime without modifying it (pp. 2-3).",
+  "key_idea": "Generic BranchAndBoundAlgorithm with seven abstract methods plus entry-point plug-ins; structure detection (convexity via SUSPECT, convex quadratic components via graph connectivity) feeds relaxations and OA cuts (pp. 4, 7-13).",
+  "assumptions": "Bounded variables needed for convergence, no artificial bounds imposed; OBBT root only, FBBT per node capped; branching on max nonlinear infeasibility at lambda = 0.25 (pp. 1-2, 4, 12).",
+  "proof_devices": [],
+  "experiments": "761 MINLPLib 2 and 453 QPLIB instances, 300 s, gap 1e-6, overshoot >5% unsolved; vs Gurobi 9.1 beta, ANTIGONE, BARON, Couenne, SCIP (GAMS 31.1); all single/pair/triple cut combinations; time and remaining-gap profiles; no solution re-check described (pp. 16-18).",
+  "positioning": "Positioned against SCIP plug-ins and the MINOTAUR toolkit as a standalone package with runtime extension (p. 3).",
+  "writing": "Software-architecture paper with interfaces, listing and defaults; figure numbering in text (8, 9) differs from captions (6, 7) (pp. 9, 16-18).",
+  "limits_future": "Slower than mature solvers with comparable 5-minute gap, by design; specialised cuts for separable nonconvex QPs and pooling proposed (pp. 15-17).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "SUSPECT convexity/monotonicity detection at every node with measured negligible cost; convex quadratic components detected by graph connectivity for OA cuts",
+    "pages": "pp. 4, 13"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "cut classes ablated inside the full branch-and-cut: each alone, every pair, all three, on the whole library",
+    "pages": "p. 16"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "versions, two libraries, overshoot rule, time and gap profiles, loss written in; no feasibility re-check of returned points described",
+    "pages": "pp. 16-17"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "one interface with switchable components applied to solver components rather than trained models",
+    "pages": "pp. 3, 11"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Ablate solver components combinatorially (each alone, every pair, all) on the full library with time and remaining-gap profiles (p. 16).",
+   "Write the bound-honesty rule into a solver paper: no convergence guarantee without bounds; artificial bounds may yield feasible but not globally optimal points (pp. 1-2).",
+   "Give an extensible solver a paranoid mode, rich tensor logging and a B&B dashboard (pp. 15-16)."
+  ],
+  "coauthors": "Francesco Ceccon, Radu Baltean-Lugojan, Michael L. Bynum, Can Li",
+  "quotes": [
+   {
+    "text": "Time spent computing special structure is negligible compared to FBBT, so GALINI recomputes special structure at every node without any code optimization.",
+    "page": 4
+   },
+   {
+    "text": "We can see that activating all cuts generators is the best choice for perforamnce since it has no performance impact.",
+    "page": 16
+   }
+  ]
+ },
+ {
+  "id": "S099",
+  "year": "2020",
+  "title": "Design of Experiments for Verifying Biomolecular Networks",
+  "read_level": "full",
+  "contribution": "Sequential design of experiments for accepting or rejecting designed biomolecular networks: a GP model of model-experiment discrepancy, standard BO acquisition, and a probabilistic RMSE-based stopping criterion, tested on simulated logic-gate networks.",
+  "problem_entry": "Validating designed networks with fixed predetermined experiment grids is costly; the task is an accept/reject decision with few experiments (pp. 1-2).",
+  "key_idea": "Sample the GP discrepancy posterior, compute RMSE per sample over a grid, stop when P(RMSE < expert threshold) crosses accept/reject levels after n_min experiments (pp. 2-3).",
+  "assumptions": "Simulated noiseless data, SE kernel with gamma priors and MAP hyperparameters, n_min guard against MAP over-confidence, expert threshold 0.2 (pp. 2-3).",
+  "proof_devices": [],
+  "experiments": "4 BO criteria vs grid/random/Sobol on 8 surfaces (no single winner); 12 simulated networks x 10 runs; sensitivity/specificity over n_min and certainty; n_min = 8; one inconclusive run of 120 reported (pp. 3-4, 7).",
+  "positioning": "Borrows discrepancy modelling and sequential design from computer-model calibration (Kennedy-O'Hagan) and surrogate modelling literature (pp. 1-2).",
+  "writing": "Workshop format; main contribution stated as the stopping criterion, design criterion conceded as standard (p. 1).",
+  "limits_future": "Bayesian-quadrature acquisition; remove n_min by integrating over GP hyperparameters (p. 4).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "parameter n_min introduced, swept, set at the knee, and its removal planned",
+    "pages": "pp. 3-4"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "inconclusive run reported and explained, but simulated noiseless test bed and fewer runs for BO criteria than baselines",
+    "pages": "pp. 4, 7"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Turn 'enough experiments?' into a probabilistic stopping test on surrogate posterior samples against an expert threshold (pp. 2-3).",
+   "Apply a stopping rule retrospectively to recorded runs so all settings are compared on the same data (p. 3).",
+   "Report the run that never terminated and explain why (p. 4)."
+  ],
+  "coauthors": "Ruby Sedgwick, John Goertz, Molly Stevens, Mark van der Wilk",
+  "quotes": [
+   {
+    "text": "We use standard Bayesian optimization design criteria to select the next experimental point, although this element of our method could be improved.",
+    "page": 1
+   },
+   {
+    "text": "We also aim to eliminate the need for the minimum number of experiments parameter by integrating over the Gaussian process hyperparameters.",
+    "page": 4
+   }
+  ]
+ }
+]
