@@ -10,102 +10,102 @@
 
 | # | ID | Year | Title | Venue | Cites | Kind | Source | Full text | Pages | Role | Read |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| 1 | S001 | 2014 | ANTIGONE: algorithms for continuous/integer global optimization of nonlinear equations | Journal of Global Optimization | 742 | journal | — | no-oa |  | supplement | — |
+| 1 | S001 | 2014 | ANTIGONE: algorithms for continuous/integer global optimization of nonlinear equations | Journal of Global Optimization | 742 | journal | manual | txt | 31 | supplement | — |
 | 2 | S002 | 2021 | Process systems engineering–the generation next? | Computers & Chemical Engineering | 332 | journal | — | no-oa |  | supplement | — |
-| 3 | S003 | 2016 | Global optimization advances in mixed-integer nonlinear programming, MINLP, and constrained derivative-free optimization, CDFO | European Journal of Operational Research | 326 | journal | — | no-oa |  | supplement | — |
-| 4 | S004 | 2013 | GloMIQO: Global mixed-integer quadratic optimizer | Journal of Global Optimization | 280 | journal | — | no-oa |  | supplement | — |
+| 3 | S003 | 2016 | Global optimization advances in mixed-integer nonlinear programming, MINLP, and constrained derivative-free optimization, CDFO | European Journal of Operational Research | 326 | journal | manual | txt | 105 | supplement | — |
+| 4 | S004 | 2013 | GloMIQO: Global mixed-integer quadratic optimizer | Journal of Global Optimization | 280 | journal | manual | txt | 49 | supplement | — |
 | 5 | S005 | 2020 | Efficient verification of relu-based neural networks via dependency analysis | Proceedings of the AAAI Conference on Artificial Intelligence | 248 | conference | unpaywall | txt | 9 | supplement | — |
 | 6 | S006 | 2022 | OMLT: Optimization & machine learning toolkit | Journal of Machine Learning Research | 232 | journal | arXiv | txt | 8 | supplement | — |
 | 7 | S007 | 2009 | Advances for the pooling problem: Modeling, global optimization, and computational studies | Applied and Computational Mathematics | 215 | journal | — | no-oa |  | supplement | — |
 | 8 | S008 | 2009 | Computational comparison of piecewise− linear relaxations for pooling problems | Industrial & Engineering Chemistry Research | 196 | journal | — | no-oa |  | supplement | — |
-| 9 | S009 | 2011 | APOGEE: Global optimization of standard, generalized, and extended pooling problems via linear and logarithmic partitioning schemes | Computers & Chemical Engineering | 185 | journal | — | no-oa |  | supplement | — |
+| 9 | S009 | 2011 | APOGEE: Global optimization of standard, generalized, and extended pooling problems via linear and logarithmic partitioning schemes | Computers & Chemical Engineering | 185 | journal | manual | txt | 38 | supplement | — |
 | 10 | S010 | 2019 | QPLIB: a library of quadratic programming instances | Mathematical Programming Computation | 172 | journal | unpaywall | txt | 42 | supplement | — |
-| 11 | S011 | 2012 | Global optimization of mixed-integer quadratically-constrained quadratic programs (MIQCQP) through piecewise-linear and edge-concave relaxations | Mathematical Programming | 165 | journal | — | no-oa |  | supplement | — |
-| 12 | S012 | 2010 | Piecewise-linear approximations of multidimensional functions | Journal of optimization theory and applications | 150 | journal | — | no-oa |  | supplement | — |
+| 11 | S011 | 2012 | Global optimization of mixed-integer quadratically-constrained quadratic programs (MIQCQP) through piecewise-linear and edge-concave relaxations | Mathematical Programming | 165 | journal | manual | txt | 29 | supplement | — |
+| 12 | S012 | 2010 | Piecewise-linear approximations of multidimensional functions | Journal of optimization theory and applications | 150 | journal | manual | txt | 31 | supplement | — |
 | 13 | S013 | 2021 | Partition-based formulations for mixed-integer optimization of trained ReLU neural networks | Advances in Neural Information Processing Systems | 146 | conference | arXiv | txt | 19 | supplement | — |
 | 14 | S014 | 2022 | Maximizing information from chemical engineering data sets: Applications to machine learning | Chemical Engineering Science | 143 | journal | arXiv | txt | 34 | supplement | — |
-| 15 | S015 | 2023 | Formulating data-driven surrogate models for process optimization | Computers & Chemical Engineering | 122 | journal | — | no-oa |  | supplement | — |
+| 15 | S015 | 2023 | Formulating data-driven surrogate models for process optimization | Computers & Chemical Engineering | 122 | journal | manual | txt | 6 | supplement | — |
 | 16 | S016 | 2012 | Continuous‐time modeling and global optimization approach for scheduling of crude oil operations | AIChE Journal | 117 | journal | — | no-oa |  | supplement | — |
 | 17 | S017 | 2019 | Argumentation for explainable scheduling | AAAI | 114 | conference | arXiv | txt | 9 | supplement | — |
 | 18 | S018 | 2010 | Global optimization of large-scale generalized pooling problems: quadratically constrained MINLP models | Industrial & Engineering Chemistry Research | 103 | journal | — | no-oa |  | supplement | — |
 | 19 | S019 | 2012 | Global optimization of a MINLP process synthesis model for thermochemical based conversion of hybrid coal, biomass, and natural gas to liquid fuels | Computers & Chemical Engineering | 100 | journal | — | no-oa |  | supplement | — |
 | 20 | S020 | 2021 | Mixed-integer convex nonlinear optimization with gradient-boosted trees embedded | INFORMS Journal on Computing | 99 | journal | arXiv | txt | 40 | supplement | — |
-| 21 | S021 | 2019 | Scoring positive semidefinite cutting planes for quadratic optimization via trained neural networks | — | 97 | preprint | — | no-oa |  | supplement | — |
+| 21 | S021 | 2019 | Scoring positive semidefinite cutting planes for quadratic optimization via trained neural networks | — | 97 | preprint | manual | txt | 41 | supplement | — |
 | 22 | S022 | 2009 | Global optimization of gas lifting operations: A comparative study of piecewise linear formulations | Industrial & Engineering Chemistry Research | 88 | journal | — | no-oa |  | supplement | — |
 | 23 | S023 | 2021 | ENTMOOT: A framework for optimization over ensemble tree models | Computers & Chemical Engineering | 80 | journal | arXiv | txt | 33 | supplement | — |
-| 24 | S024 | 2016 | Optimising heat exchanger network synthesis using convexity properties of the logarithmic mean temperature difference | Computers & Chemical Engineering | 74 | journal | — | no-oa |  | supplement | — |
-| 25 | S025 | 2010 | Mathematical modeling and global optimization of large-scale extended pooling problems with the (EPA) complex emissions constraints | Computers & chemical engineering | 72 | journal | — | no-oa |  | supplement | — |
+| 24 | S024 | 2016 | Optimising heat exchanger network synthesis using convexity properties of the logarithmic mean temperature difference | Computers & Chemical Engineering | 74 | journal | manual | txt | 36 | supplement | — |
+| 25 | S025 | 2010 | Mathematical modeling and global optimization of large-scale extended pooling problems with the (EPA) complex emissions constraints | Computers & chemical engineering | 72 | journal | manual | txt | 38 | supplement | — |
 | 26 | S026 | 2015 | Dynamically generated cutting planes for mixed-integer quadratically constrained quadratic programs and their incorporation into GloMIQO 2 | Optimization Methods and Software | 69 | journal | — | no-oa |  | supplement | — |
 | 27 | S027 | 2012 | Scheduling of crude oil operations under demand uncertainty: A robust optimization framework coupled with global optimization | AIChE journal | 68 | journal | — | no-oa |  | supplement | — |
-| 28 | S028 | 2025 | Cross-disciplinary perspectives on the potential for artificial intelligence across chemistry | Chemical Society Reviews | 65 | journal | — | no-oa |  | supplement | — |
+| 28 | S028 | 2025 | Cross-disciplinary perspectives on the potential for artificial intelligence across chemistry | Chemical Society Reviews | 65 | journal | manual | txt | 37 | supplement | — |
 | 29 | S029 | 2016 | Bayesian optimization with dimension scheduling: Application to biological systems | Computer Aided Chemical Engineering | 63 | conference | arXiv | txt | 7 | supplement | — |
 | 30 | S030 | 2018 | Maximizing neotissue growth kinetics in a perfusion bioreactor: an in silico strategy using model reduction and Bayesian optimization | Biotechnology and bioengineering | 62 | journal | unpaywall | txt | 25 | supplement | — |
 | 31 | S031 | 2023 | Combining multi-fidelity modelling and asynchronous batch Bayesian Optimization | Computers & Chemical Engineering | 60 | journal | arXiv | txt | 27 | supplement | — |
-| 32 | S032 | 2014 | A framework for globally optimizing mixed-integer signomial programs | Journal of Optimization Theory and Applications | 49 | journal | — | no-oa |  | supplement | — |
+| 32 | S032 | 2014 | A framework for globally optimizing mixed-integer signomial programs | Journal of Optimization Theory and Applications | 49 | journal | manual | txt | 32 | supplement | — |
 | 33 | S033 | 2018 | Data-driven optimization of processes with degrading equipment | Industrial & Engineering Chemistry Research | 47 | journal | arXiv | txt | 51 | supplement | — |
 | 34 | S034 | 2019 | Bayesian multiobjective optimisation with mixed analytical and black-box functions: application to tissue engineering | IEEE Transactions on Biomedical Engineering | 45 | journal | unpaywall | txt | 13 | supplement | — |
 | 35 | S035 | 2022 | Multi-objective constrained optimization for energy applications via tree ensembles | Applied Energy | 44 | journal | arXiv | txt | 36 | supplement | — |
 | 36 | S036 | 2012 | A Generalization of the Classical αBB Convex Underestimation via Diagonal and Nondiagonal Quadratic Terms | Journal of Optimization Theory and Applications | 42 | journal | — | no-oa |  | supplement | — |
-| 37 | S037 | 2015 | Towards unravelling the kinetics of an acute myeloid leukaemia model system under oxidative and starvation stress: a comparison between two-and three-dimensional cultures | Bioprocess and biosystems engineering | 35 | journal | — | no-oa |  | supplement | — |
+| 37 | S037 | 2015 | Towards unravelling the kinetics of an acute myeloid leukaemia model system under oxidative and starvation stress: a comparison between two-and three-dimensional cultures | Bioprocess and biosystems engineering | 35 | journal | manual | txt | 32 | supplement | — |
 | 38 | S038 | 2024 | Augmenting optimization-based molecular design with graph neural networks | Computers & Chemical Engineering | 31 | journal | arXiv | txt | 35 | supplement | — |
 | 39 | S039 | 2022 | SnAKe: Bayesian optimization with pathwise exploration | Advances in Neural Information Processing Systems | 31 | conference | arXiv | txt | 39 | supplement | — |
 | 40 | S040 | 2021 | Between steps: Intermediate relaxations between big-M and convex hull formulations | International conference on integration of constraint programming... | 30 | conference | arXiv | txt | 16 | supplement | — |
 | 41 | S041 | 2019 | GPdoemd: A Python package for design of experiments for model discrimination | Computers & Chemical Engineering | 30 | journal | arXiv | txt | 47 | supplement | — |
-| 42 | S042 | 2015 | A systematic framework for the design, simulation and optimization of personalized healthcare: making and healing blood | Computers & Chemical Engineering | 30 | journal | — | no-oa |  | supplement | — |
-| 43 | S043 | 2015 | A mathematical model of subpopulation kinetics for the deconvolution of leukaemia heterogeneity | Journal of the Royal Society Interface | 30 | journal | — | no-oa |  | supplement | — |
+| 42 | S042 | 2015 | A systematic framework for the design, simulation and optimization of personalized healthcare: making and healing blood | Computers & Chemical Engineering | 30 | journal | manual | txt | 38 | supplement | — |
+| 43 | S043 | 2015 | A mathematical model of subpopulation kinetics for the deconvolution of leukaemia heterogeneity | Journal of the Royal Society Interface | 30 | journal | manual | txt | 25 | supplement | — |
 | 44 | S044 | 2025 | BoFire: Bayesian optimization framework intended for real experiments | Journal of Machine Learning Research | 28 | journal | arXiv | txt | 6 | supplement | — |
-| 45 | S045 | 2014 | Global superstructure optimisation of red blood cell production in a parallelised hollow fibre bioreactor | Computers & Chemical Engineering | 28 | journal | — | no-oa |  | supplement | — |
+| 45 | S045 | 2014 | Global superstructure optimisation of red blood cell production in a parallelised hollow fibre bioreactor | Computers & Chemical Engineering | 28 | journal | manual | txt | 48 | supplement | — |
 | 46 | S046 | 2026 | P-split formulations: a class of intermediate formulations between big-M and convex hull for disjunctive constraints | Mathematical Programming | 27 | journal | arXiv | txt | 33 | supplement | — |
 | 47 | S047 | 2022 | Tree ensemble kernels for Bayesian optimization with known constraints over mixed-feature spaces | Advances in Neural Information Processing Systems | 26 | conference | arXiv | txt | 27 | supplement | — |
 | 48 | S048 | 2019 | Robust optimization for the pooling problem | Industrial & Engineering Chemistry Research | 25 | journal | arXiv | txt | 30 | supplement | — |
-| 49 | S049 | 2018 | Piecewise parametric structure in the pooling problem: from sparse strongly-polynomial solutions to NP-hardness | Journal of Global Optimization | 24 | journal | — | no-oa |  | supplement | — |
+| 49 | S049 | 2018 | Piecewise parametric structure in the pooling problem: from sparse strongly-polynomial solutions to NP-hardness | Journal of Global Optimization | 24 | journal | manual | txt | 36 | supplement | — |
 | 50 | S050 | 2024 | Verifying message-passing neural networks via topology-based bounds tightening | International Conference on Machine Learning (ICML 2024), PMLR 235 | 23 | conference | arXiv | txt | 26 | supplement | — |
 | 51 | S051 | 2023 | Optimizing over trained GNNs via symmetry breaking | Advances in Neural Information Processing Systems 36 | 22 | conference | arXiv | txt | 27 | supplement | — |
 | 52 | S052 | 2021 | Exact lexicographic scheduling and approximate rescheduling | European Journal of Operational Research 290 (2) | 22 | journal | arXiv | txt | 48 | supplement | — |
-| 53 | S053 | 2017 | A quantitative three-dimensional image analysis tool for maximal acquisition of spatial heterogeneity data | Tissue Engineering Part C: Methods 23 (2) | 22 | journal | — | no-oa |  | supplement | — |
-| 54 | S054 | 2014 | A framework for the design, modeling and optimization of biomedical systems | Computer Aided Chemical Engineering 34 | 22 | conference | — | no-oa |  | supplement | — |
+| 53 | S053 | 2017 | A quantitative three-dimensional image analysis tool for maximal acquisition of spatial heterogeneity data | Tissue Engineering Part C: Methods 23 (2) | 22 | journal | manual | txt | 30 | supplement | — |
+| 54 | S054 | 2014 | A framework for the design, modeling and optimization of biomedical systems | Computer Aided Chemical Engineering 34 | 22 | conference | manual | txt | 12 | supplement | — |
 | 55 | S055 | 2022 | A robust approach to warped Gaussian process-constrained optimization | Mathematical Programming 196 (1) | 20 | journal | arXiv | txt | 39 | supplement | — |
-| 56 | S056 | 2023 | An optimization approach coupling preprocessing with model regression for enhanced chemometrics | Industrial & Engineering Chemistry Research 62 (15) | 19 | journal | — | no-oa |  | supplement | — |
+| 56 | S056 | 2023 | An optimization approach coupling preprocessing with model regression for enhanced chemometrics | Industrial & Engineering Chemistry Research 62 (15) | 19 | journal | manual | txt | 18 | supplement | — |
 | 57 | S057 | 2022 | ROmodel: modeling robust optimization problems in Pyomo | Optimization and Engineering 23 (4) | 19 | journal | arXiv | txt | 19 | supplement | — |
-| 58 | S058 | 2018 | Satisfiability modulo theories for process systems engineering | Computers & Chemical Engineering 113 | 19 | journal | — | no-oa |  | supplement | — |
+| 58 | S058 | 2018 | Satisfiability modulo theories for process systems engineering | Computers & Chemical Engineering 113 | 19 | journal | manual | txt | 17 | supplement | — |
 | 59 | S059 | 2024 | Transition constrained Bayesian optimization via Markov decision processes | Advances in Neural Information Processing Systems 37 | 18 | conference | arXiv | txt | 34 | supplement | — |
 | 60 | S060 | 2018 | Stem cell biomanufacturing under uncertainty: a case study in optimizing red blood cell production | AIChE Journal 64 (8) | 18 | journal | unpaywall | txt | 12 | supplement | — |
 | 61 | S061 | 2018 | Heuristics with performance guarantees for the minimum number of matches problem in heat recovery network design | Computers & Chemical Engineering 113 | 17 | journal | arXiv | txt | 61 | supplement | — |
 | 62 | S062 | 2012 | Global optimization of mixed-integer models with quadratic and signomial functions: a review | Applied and Computational Mathematics | 16 | journal | — | no-oa |  | supplement | — |
-| 63 | S063 | 2021 | A disjunctive cut strengthening technique for convex MINLP | Optimization and Engineering 22 (3) | 15 | journal | — | no-oa |  | supplement | — |
+| 63 | S063 | 2021 | A disjunctive cut strengthening technique for convex MINLP | Optimization and Engineering 22 (3) | 15 | journal | manual | txt | 27 | supplement | — |
 | 64 | S064 | 2016 | Using functional programming to recognize named structure in an optimization problem: application to pooling | AIChE Journal 62 (9) | 15 | journal | — | no-oa |  | supplement | — |
-| 65 | S065 | 2016 | A personalized framework for dynamic modeling of disease trajectories in chronic lymphocytic leukemia | IEEE Transactions on Biomedical Engineering 63 (11) | 15 | journal | — | no-oa |  | supplement | — |
-| 66 | S066 | 2023 | Probabilistic predictions for partial least squares using bootstrap | AIChE Journal 69 (7) | 13 | journal | — | no-oa |  | supplement | — |
+| 65 | S065 | 2016 | A personalized framework for dynamic modeling of disease trajectories in chronic lymphocytic leukemia | IEEE Transactions on Biomedical Engineering 63 (11) | 15 | journal | manual | txt | 17 | supplement | — |
+| 66 | S066 | 2023 | Probabilistic predictions for partial least squares using bootstrap | AIChE Journal 69 (7) | 13 | journal | manual | txt | 16 | supplement | — |
 | 67 | S067 | 2026 | BoGrape: Bayesian optimization over graphs with shortest-path encoded | International Conference on Learning Representations 2026 | 12 | conference | arXiv | txt | 30 | supplement | — |
 | 68 | S068 | 2020 | SUSPECT: MINLP special structure detector for Pyomo | Optimization Letters 14 (4) | 12 | journal | unpaywall | txt | 31 | supplement | — |
 | 69 | S069 | 2020 | Approximation algorithms for process systems engineering | Computers & Chemical Engineering 132 | 12 | journal | arXiv | txt | 35 | supplement | — |
-| 70 | S070 | 2015 | Selecting a differential equation cell cycle model for simulating leukemia treatment | Industrial & Engineering Chemistry Research 54 (36) | 12 | journal | — | no-oa |  | supplement | — |
+| 70 | S070 | 2015 | Selecting a differential equation cell cycle model for simulating leukemia treatment | Industrial & Engineering Chemistry Research 54 (36) | 12 | journal | manual | txt | 37 | supplement | — |
 | 71 | S071 | 2023 | Data augmentation driven by optimization for membrane separation process synthesis | Computers & Chemical Engineering 177 | 11 | journal | unpaywall | txt | 19 | supplement | — |
 | 72 | S072 | 2022 | Solving the pooling problem at scale with extensible solver GALINI | Computers & Chemical Engineering 159 | 11 | journal | arXiv | txt | 42 | supplement | — |
 | 73 | S073 | 2020 | AI-assisted schedule explainer for nurse rostering | Proceedings of the 19th International Conference on Autonomous Agents and... | 11 | conference | url | txt | 3 | supplement | — |
 | 74 | S074 | 2018 | Design of experiments for model discrimination using Gaussian process surrogate models | Computer aided chemical engineering 44 | 11 | conference | — | no-oa |  | supplement | — |
 | 75 | S075 | 2018 | Design of Experiments for Model Discrimination Hybridising Analytical and Data-Driven Approaches | ICML '18: Proceedings of the International Conference on Machine Learning... | 10 | conference | arXiv | txt | 11 | supplement | — |
 | 76 | S076 | 2017 | Detecting symmetry in designing heat exchanger networks | Proceedings of the Foundations of Computer Aided Process Operations Conference (FOCAPO/CPC 2017), Tucson, Arizona | 10 | conference | arXiv | txt | 6 | supplement | — |
-| 77 | S077 | 2024 | Dependence in constrained Bayesian optimization | Optimization Letters 18 (6) | 8 | journal | — | no-oa |  | supplement | — |
-| 78 | S078 | 2023 | Partial Lasserre relaxation for sparse Max-Cut | Optimization and Engineering 24 (3) | 8 | journal | — | no-oa |  | supplement | — |
+| 77 | S077 | 2024 | Dependence in constrained Bayesian optimization | Optimization Letters 18 (6) | 8 | journal | manual | txt | 17 | supplement | — |
+| 78 | S078 | 2023 | Partial Lasserre relaxation for sparse Max-Cut | Optimization and Engineering 24 (3) | 8 | journal | manual | txt | 22 | supplement | — |
 | 79 | S079 | 2021 | Approximate and robust bounded job start scheduling for Royal Mail delivery offices | Journal of Scheduling 24 (2) | 8 | journal | arXiv | txt | 35 | supplement | — |
 | 80 | S080 | 2021 | Design of dynamic experiments for black-box model discrimination | arXiv preprint arXiv:2102.03782 | 8 | preprint | arXiv | txt | 26 | supplement | — |
 | 81 | S081 | 2025 | BARK: A fully Bayesian tree kernel for black-box optimization | International Conference on Machine Learning (ICML 2025), PMLR 267 | 7 | conference | arXiv | txt | 28 | supplement | — |
 | 82 | S082 | 2025 | Transfer learning Bayesian optimization for competitor DNA molecule design for use in diagnostic assays | Biotechnology and Bioengineering 122 (1) | 7 | journal | arXiv | txt | 36 | supplement | — |
 | 83 | S083 | 2023 | Practical path-based Bayesian optimization | arXiv preprint arXiv:2312.00622 | 7 | conference | arXiv | txt | 12 | supplement | — |
 | 84 | S084 | 2020 | Global optimization with ensemble machine learning models | Computer Aided Chemical Engineering 48 | 7 | conference | — | no-oa |  | supplement | — |
-| 85 | S085 | 2014 | Robust superstructure optimisation of a bioreactor that produces red blood cells | Computer Aided Chemical Engineering 33 | 7 | conference | — | no-oa |  | supplement | — |
+| 85 | S085 | 2014 | Robust superstructure optimisation of a bioreactor that produces red blood cells | Computer Aided Chemical Engineering 33 | 7 | conference | manual | txt | 6 | supplement | — |
 | 86 | S086 | 2025 | System-aware neural ODE processes for few-shot Bayesian optimization | Transactions on Machine Learning Research | 6 | journal | arXiv | txt | 28 | supplement | — |
-| 87 | S087 | 2020 | GALINI: An extensible mixed-integer quadratically-constrained optimization solver. | Optimization Online Repository | 6 | preprint | — | no-oa |  | supplement | — |
-| 88 | S088 | 2019 | A multilevel analysis of the Lasserre hierarchy | European Journal of Operational Research 277 (1) | 6 | journal | — | no-oa |  | supplement | — |
+| 87 | S087 | 2020 | GALINI: An extensible mixed-integer quadratically-constrained optimization solver. | Optimization Online Repository | 6 | preprint | manual | txt | 26 | supplement | — |
+| 88 | S088 | 2019 | A multilevel analysis of the Lasserre hierarchy | European Journal of Operational Research 277 (1) | 6 | journal | manual | txt | 30 | supplement | — |
 | 89 | S089 | 2015 | Global Sensitivity Analysis for a Model of B-Cell Chronic Lymphocytic Leukemia Disease Trajectories | Computer Aided Chemical Engineering 37 | 6 | conference | — | no-oa |  | supplement | — |
 | 90 | S090 | 2025 | Limeade: Let integer molecular encoding aid | Computers & Chemical Engineering 199 | 5 | journal | arXiv | txt | 32 | supplement | — |
-| 91 | S091 | 2019 | Symmetry detection for quadratic optimization using binary layered graphs | Processes 7 (11) | 5 | journal | — | no-oa |  | supplement | — |
+| 91 | S091 | 2019 | Symmetry detection for quadratic optimization using binary layered graphs | Processes 7 (11) | 5 | journal | manual | txt | 12 | supplement | — |
 | 92 | S092 | 2012 | Novel global optimization methods: theoretical and computational studies on pooling problems with environmental constraints | Princeton University | 5 | thesis | — | no-oa |  | supplement | — |
 | 93 | S093 | 2025 | Global optimization of graph acquisition functions for neural architecture search | arXiv preprint arXiv:2505.23640 | 4 | preprint | arXiv | txt | 19 | supplement | — |
 | 94 | S094 | 2017 | In vitro Studies: Acute Myeloid Leukaemia | Modelling Optimization and Control of Biomedical Systems | 4 | chapter | — | no-oa |  | supplement | — |
 | 95 | S095 | 2017 | Bayesian multi-objective optimisation of neotissue growth in a perfusion bioreactor set-up | Computer Aided Chemical Engineering 40 | 4 | conference | url | txt | 6 | supplement | — |
-| 96 | S096 | 2014 | Key environmental stress biomarker candidates for the optimisation of chemotherapy treatment of leukaemia | Malta Journal of Health Sciences | 4 | journal | — | no-oa |  | supplement | — |
+| 96 | S096 | 2014 | Key environmental stress biomarker candidates for the optimisation of chemotherapy treatment of leukaemia | Malta Journal of Health Sciences | 4 | journal | manual | txt | 6 | supplement | — |
 | 97 | S097 | 2025 | The catechol benchmark: Time-series solvent selection data for few-shot machine learning | Advances in Neural Information Processing Systems 38 | 3 | conference | arXiv | txt | 22 | supplement | — |
 | 98 | S098 | 2023 | Gaussian processes for monitoring air-quality in Kampala | arXiv preprint arXiv:2311.16625 | 3 | conference | arXiv | txt | 8 | supplement | — |
 | 99 | S099 | 2020 | Design of Experiments for Verifying Biomolecular Networks | arXiv preprint arXiv:2011.10575 | 3 | conference | arXiv | txt | 8 | supplement | — |
@@ -116,21 +116,21 @@
 | 104 | S104 | 2025 | Molecular design using graph Bayesian optimization with shortest-path kernels | ICLR 2025 Workshop on Generative and Experimental Perspectives for… | 2 | conference | — | no-oa |  | supplement | — |
 | 105 | S105 | 2022 | Machine learning surrogates with OMLT and IDAES for improved design and analysis of energy systems | Sandia National Laboratories (SNL-NM), Albuquerque, NM (United States) | 2 | talk | — | no-oa |  | skip | — |
 | 106 | S107 | 2018 | Algorithms for mixed-integer optimization constrained by partial differential equations | Computer Aided Chemical Engineering 44, 799-804 | 2 | conference | — | no-oa |  | supplement | — |
-| 107 | S109 | 2015 | Development of a hematopoietic microenvironment for the production of red blood cells (RBCs) in a novel 3D hollow fibre bioreactor | 4th TERMIS World Congress | 2 | conference | — | no-oa |  | supplement | — |
+| 107 | S109 | 2015 | Development of a hematopoietic microenvironment for the production of red blood cells (RBCs) in a novel 3D hollow fibre bioreactor | 4th TERMIS World Congress | 2 | conference | manual | txt | 1 | supplement | — |
 | 108 | S110 | 2015 | Chemotherapy optimization in leukemia: selecting the right mathematical models for the right biological processes∗ | IFAC-PapersOnLine 48 (20), 534-539 | 2 | conference | — | no-oa |  | supplement | — |
 | 109 | S111 | 2014 | Evolution of an AML model system under oxidative & starvation stress: a comparison between two and three dimensional cultures | Journal of Tissue Engineering and Regenerative Medicine 8, 383-383 | 2 | conference | — | no-oa |  | supplement | — |
 | 110 | S112 | 2014 | Development and experimental validation of a cyclin-based population balance model of the cell cycle in leukemia cell lines | Journal of Tissue Engineering and Regenerative Medicine 8 (IKEEART-2023-226… | 2 | conference | — | no-oa |  | supplement | — |
 | 111 | S113 | 2026 | Meta-learning for sample-efficient Bayesian optimisation of fed-batch processes | arXiv preprint arXiv:2605.05382 | 1 | preprint | arXiv | txt | 24 | supplement | — |
 | 112 | S114 | 2025 | Improving Deep Optimisation for the Multi-dimensional Knapsack Problem using Elastic Weight Consolidation | Proceedings of the Genetic and Evolutionary Computation Conference Companion… | 1 | conference | — | no-oa |  | supplement | — |
 | 113 | S115 | 2025 | Weighted-Sum of Gaussian Process Latent Variable Models | International Conference on Artificial Intelligence and Statistics (AISTATS 2025), PMLR 258 | 1 | conference | arXiv | txt | 25 | supplement | — |
-| 114 | S116 | 2023 | Competitive Amplification Networks enable molecular pattern recognition with PCR | bioRxiv, 2023.06. 29.546934 | 1 | preprint | — | no-oa |  | supplement | — |
-| 115 | S117 | 2019 | A practical analysis of optimisation and recovery under uncertainty | Master's thesis, Imperial College London. https://www. imperial. ac. uk… | 1 | thesis | — | no-oa |  | supplement | — |
+| 114 | S116 | 2023 | Competitive Amplification Networks enable molecular pattern recognition with PCR | bioRxiv, 2023.06. 29.546934 | 1 | preprint | manual | txt | 32 | supplement | — |
+| 115 | S117 | 2019 | A practical analysis of optimisation and recovery under uncertainty | Master's thesis, Imperial College London. https://www. imperial. ac. uk… | 1 | thesis | manual | txt | 120 | supplement | — |
 | 116 | S118 | 2019 | The robust pooling problem | Computer Aided Chemical Engineering 46, 907-912 | 1 | conference | — | no-oa |  | supplement | — |
-| 117 | S119 | 2018 | Designing and implementing algorithms for mixedinteger nonlinear optimization | Report from Dagstuhl Seminar 18081 | 1 | report | — | no-oa |  | supplement | — |
+| 117 | S119 | 2018 | Designing and implementing algorithms for mixedinteger nonlinear optimization | Report from Dagstuhl Seminar 18081 | 1 | report | manual | txt | 24 | supplement | — |
 | 118 | S120 | 2017 | Symmetry Detection for Quadratically Constrained Quadratic Programs Using Binary Layered Graphs | arXiv preprint arXiv:1712.05222 | 1 | preprint | arXiv | txt | 21 | supplement | — |
-| 119 | S121 | 2016 | Spatiotemporal mapping of erythroid, stromal, and osteogenic niche formation to support physiologic red cell production in a three-dimensional hollow fibre perfusion bioreactor | Blood, The Journal of the American Society of Hematology | 1 | conference | — | no-oa |  | supplement | — |
+| 119 | S121 | 2016 | Spatiotemporal mapping of erythroid, stromal, and osteogenic niche formation to support physiologic red cell production in a three-dimensional hollow fibre perfusion bioreactor | Blood, The Journal of the American Society of Hematology | 1 | conference | manual | txt | 3 | supplement | — |
 | 120 | S122 | 2015 | Development of an ex vivo bone marrow mimicry microenvironment in a novel 3D hollow fibre bioreactor | Experimental Hematology | 1 | conference | — | no-oa |  | supplement | — |
-| 121 | S123 | 2014 | Mixed-integer nonlinear optimization problems: ANTIGONE 1.0 test suite | — | 1 | report | — | no-oa |  | supplement | — |
+| 121 | S123 | 2014 | Mixed-integer nonlinear optimization problems: ANTIGONE 1.0 test suite | — | 1 | report | manual | txt | 66 | supplement | — |
 | 122 | S124 | 2010 | Global Optimization and Parametric Analysis of Large-Scale Extended Pooling Problems | Computer Aided Chemical Engineering | 1 | conference | — | no-oa |  | supplement | — |
 | 123 | S125 | 2009 | Advances in Global Optimization for Standard, Generalized, and Extended Pooling Problems with the (EPA) Complex Emissions Model Constraints | Design for Energy and the Environment: Proceedings of FOCAPD | 1 | conference | — | no-oa |  | supplement | — |
 | 124 | S126 | 2026 | Amortized Structured Stochastic Variational Inference for Gaussian Process Latent Variable Models | arXiv preprint arXiv:2610.03647 | — | preprint | arXiv | txt | 25 | supplement | — |
@@ -139,11 +139,11 @@
 | 127 | S131 | 2023 | The 4th IMA and OR Society conference on the mathematics of operational research: thoughts from the committee | — | — | other | — | no-oa |  | supplement | — |
 | 128 | S132 | 2023 | The mathematics of operational research | — | — | other | — | no-oa |  | supplement | — |
 | 129 | S133 | 2020 | GALINI: An extensible MIQCQP solver. | Sandia National Laboratories (SNL-NM), Albuquerque, NM (United States) | — | talk | — | no-oa |  | skip | — |
-| 130 | S135 | 2019 | Approximating Bounded Job Start Scheduling with Application in Royal Mail Deliveries Under Uncertainty | International Conference on Combinatorial Optimization and Applications | — | conference | — | no-oa |  | supplement | — |
+| 130 | S135 | 2019 | Approximating Bounded Job Start Scheduling with Application in Royal Mail Deliveries Under Uncertainty | International Conference on Combinatorial Optimization and Applications | — | conference | manual | txt | 27 | supplement | — |
 | 131 | S136 | 2018 | Online Generation Via Offline Selection of Strong Linear Cuts from a Semidefinite Programming Relaxation | 2018 AIChE Annual Meeting | — | conference | — | no-oa |  | supplement | — |
 | 132 | S138 | 2018 | Approximation Algorithms for Process Systems Engineering | Computer Aided Chemical Engineering | — | conference | arXiv | txt | 35 | supplement | — |
 | 133 | S140 | 2017 | An Integrated Platform for the Study of Leukaemia | Modelling Optimization and Control of Biomedical Systems | — | chapter | — | no-oa |  | supplement | — |
-| 134 | S142 | 2017 | Designing Energy-Efficient Heat Recovery Networks using Mixed-Integer Nonlinear Optimisation | 16th International Symposium on Experimental Algorithms (SEA 2017) | — | conference | — | no-oa |  | supplement | — |
+| 134 | S142 | 2017 | Designing Energy-Efficient Heat Recovery Networks using Mixed-Integer Nonlinear Optimisation | 16th International Symposium on Experimental Algorithms (SEA 2017) | — | conference | manual | txt | 1 | supplement | — |
 | 135 | S143 | 2016 | In memoriam: Christodoulos Achilleus Floudas | SIAG/OPT Views News | — | essay | url | txt | 20 | supplement | — |
 | 136 | S144 | 2015 | Use of Mathematical Modelling Indicates That Patients Treated for Acute Myeloid Leukaemia (AML) Are Undertreated When Ideal Body Weight Is Used to Dose Chemotherapy | Blood | — | conference | — | no-oa |  | supplement | — |
 | 137 | S145 | 2014 | Deterministic Global optimisation at CPSE: Models, Algorithms, and Software | — | — | essay | url | txt | 6 | supplement | — |
@@ -156,6 +156,6 @@
 | 144 | S155 | 2017 | Integrating Mixed-Integer Optimisation and Satisfiability Modulo Theories: Application to Scheduling | Proceedings of the Foundations of Computer Aided Process Operations Conference (FOCAPO/CPC 2017), Tucson, Arizona | — | conference | url | txt | 6 | supplement | — |
 | 145 | D001 | 2016 | Using functional programming to recognize named structure in an optimization problem: Application to pooling | Computing and Systems Technology Division 2016 - Core Programming Area at the 2016 AIChE Annual Meeting, pp. 363-365 | — | conference | — | no-oa |  | supplement | — |
 | 146 | H001 | 2021 | ROmodel: A Python Robust Optimization Modeling Toolbox | Computer Aided Chemical Engineering 50 (31st European Symposium on Computer Aided Process Engineering), pp. 683-688 | — | conference | — | no-oa |  | supplement | — |
-| 147 | H002 | 2014 | Optimisation under uncertainty for a bioreactor that produces red blood cells | J. Tissue Eng. Regen. Med. 8, pp. 481-482 | — | conference | — | no-oa |  | supplement | — |
+| 147 | H002 | 2014 | Optimisation under uncertainty for a bioreactor that produces red blood cells | J. Tissue Eng. Regen. Med. 8, pp. 481-482 | — | conference | manual | txt | 1 | supplement | — |
 
-147 works · txt 61 · pdf 0 · no-oa 86
+147 works · txt 102 · pdf 0 · no-oa 45
