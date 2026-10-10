@@ -96,7 +96,7 @@ def plan(skill: Path, a, rnd: int, exclude: list[Path]) -> dict:
     papers = skill / "references/sources/papers"
     index = papers / "INDEX.md"
     rows, pre, post = read_rows(index)
-    works = {w["id"]: w for w in json.loads((skill / "references/sources/publications/works.json").read_text())["works"]}
+    works = {w["id"]: w for w in json.loads((skill / "references/sources/publications/works.json").read_text(encoding="utf-8"))["works"]}
     skill_raw = (skill / "SKILL.md").read_text(encoding="utf-8").lower()
     skill_norm = norm(skill_raw)
     txt_files = {p.name.split("-")[0]: p for p in (papers / "txt").glob("*.txt")}
@@ -110,14 +110,14 @@ def plan(skill: Path, a, rnd: int, exclude: list[Path]) -> dict:
     done, carded = set(), set()  # 已有全文卡片或已分派的论文；已有任何卡片的论文
     for dj in (skill / "references/research/cards").glob("*.digest.json"):
         try:
-            cards = json.loads(dj.read_text())
+            cards = json.loads(dj.read_text(encoding="utf-8"))
             done |= {d["id"] for d in cards if d.get("read_level") not in ("abstract", "metadata")}
             carded |= {d["id"] for d in cards}
         except (json.JSONDecodeError, KeyError):
             pass
     for f in exclude:
         try:
-            batches = json.loads(f.read_text())["batches"]
+            batches = json.loads(f.read_text(encoding="utf-8"))["batches"]
         except FileNotFoundError:
             warn(f"--exclude {f}: file not found, ignored (finished rounds are skipped through their cards anyway)")
             continue
