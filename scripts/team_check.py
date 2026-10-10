@@ -27,7 +27,9 @@
     citations       深读档：check_citations.py 0 problems（SKILL.md、账本、技术目录、学生模式文件、01–09 里的每条
                     [card S012 pp. …] 都指向真实存在、确实读过、页码在范围内的卡片；团队级一项查圆桌的 [<slug> card …]）
 
---tier auto（默认）：有任何成员写了卡片（references/research/cards/*.digest.json）就按深读档查，否则按轻量档。
+--tier auto（默认）：按成员判档——写了卡片（references/research/cards/*.digest.json）的成员按深读档查，其余按轻量档查；
+有成员深读过就查团队级的深读项（覆盖表、圆桌引用闭包）。混合档团队（只给部分成员做了深读）里，圆桌每条 fault line
+至少引两位成员，深读过的那一方必须是卡片证据。--tier deep / base 对全体成员强制一个档。
 """
 
 from __future__ import annotations
@@ -97,7 +99,7 @@ def digest_ids(member_dir: Path) -> set[str]:
     return ids
 
 
-def check_roundtable(rep: Report, team: Path, cfg: dict, deep: bool):
+def check_roundtable(rep: Report, team: Path, cfg: dict, deep: bool, deep_members: set[str] | None = None):
     slugs = [m["slug"] for m in cfg["members"]]
     rt = team / cfg["roundtable"] / "SKILL.md"
     if not rt.exists():
@@ -131,10 +133,23 @@ def check_roundtable(rep: Report, team: Path, cfg: dict, deep: bool):
     if not 3 <= len(items) <= 6:
         probs.append(f"{len(items)} documented fault lines (3–6 expected)")
     ids = {s: digest_ids(team / s) for s in slugs} if deep else {}
+    dm = set(slugs) if deep_members is None else deep_members
+    mixed = deep and dm != set(slugs)  # 混合档：只有部分成员深读过
     for title, body in items:
         cites = [(s, t) for s, t in CITE.findall(body) if s in slugs]
         sides = {s for s, _ in cites}
-        if deep:
+        if mixed:
+            # 混合档：至少两位成员有据；深读过的成员那一方必须是卡片证据，卡片 ID 存在
+            if len(sides) < 2:
+                probs.append(f"fault line '{title[:50]}': cites {len(sides)} member(s) as [<slug> …], 2 needed")
+            uncarded = sorted(s for s in sides & dm if not any(s2 == s and re.match(r"cards?", t) for s2, t in cites))
+            if uncarded:
+                probs.append(f"fault line '{title[:50]}': deep-read member(s) {', '.join(uncarded)} cited without card evidence")
+            miss = sorted({f"{s} {i}" for s, t in cites if re.match(r"cards?", t) for i in CARD_ID.findall(t)
+                           if i not in ids.get(s, set())})
+            if miss:
+                probs.append(f"fault line '{title[:50]}': card ids not in the digests: {', '.join(miss[:8])}")
+        elif deep:
             card_sides = {s for s, t in cites if re.match(r"cards?\b", t)}
             if len(card_sides) < 2:
                 probs.append(f"fault line '{title[:50]}': card evidence from {len(card_sides)} member(s), 2 needed")
@@ -228,8 +243,12 @@ def main():
     unknown = [x for x in only if x not in {m["slug"] for m in cfg["members"]}]
     if unknown:
         sys.exit(f"❌ --member: not in team.json: {', '.join(unknown)}")
-    deep = a.tier == "deep" or (a.tier == "auto" and any(
-        any((team / m["slug"] / "references/research/cards").glob("*.digest.json")) for m in cfg["members"]))
+    carded = {m["slug"] for m in cfg["members"] if any((team / m["slug"] / "references/research/cards").glob("*.digest.json"))}
+    # auto：按成员判档——写了卡片的成员按深读档查，其余按轻量档查（混合档团队：只给部分成员做了深读）
+    deep_members = {m["slug"] for m in cfg["members"]} if a.tier == "deep" else (carded if a.tier == "auto" else set())
+    deep = bool(deep_members)
+    tier_label = "base" if not deep else ("deep" if deep_members == {m["slug"] for m in cfg["members"]} else
+                                          f"mixed (deep: {', '.join(sorted(deep_members))})")
     sts = {m["slug"]: ts.member_status(team, m, False) for m in cfg["members"]}
 
     rc, out = run([sys.executable, str(HERE / "check_links.py"), str(team)])
@@ -257,7 +276,7 @@ def main():
     rep.add("team", "readme", readme.exists() and not unlinked,
             "README.md missing" if not readme.exists() else
             (f"member rows missing: {', '.join(unlinked)}" if unlinked else "links every member"))
-    check_roundtable(rep, team, cfg, deep)
+    check_roundtable(rep, team, cfg, deep, deep_members)
     if deep:
         rc, out = run([sys.executable, str(HERE / "check_citations.py"), str(team), "--roundtable", "--show-warnings", "0"])
         rep.add("team", "citations", rc == 0, next((l.strip() for l in out.splitlines() if l.startswith(("✅", "❌")) and "roundtable" in l),
@@ -274,14 +293,14 @@ def main():
         rep.add("team", "coverage", not probs, "; ".join(probs) or "DEEP-READING.md and README.md match team_status.py")
     for m in cfg["members"]:
         if not only or m["slug"] in only:
-            check_member(rep, team, m, deep, a.skip_quality, sts[m["slug"]])
+            check_member(rep, team, m, m["slug"] in deep_members, a.skip_quality, sts[m["slug"]])
 
     if a.json:
-        print(json.dumps({"team": cfg["team"], "tier": "deep" if deep else "base", "checks": rep.rows,
+        print(json.dumps({"team": cfg["team"], "tier": tier_label, "checks": rep.rows,
                           "failed": len(rep.failed)}, ensure_ascii=False, indent=1))
     else:
         mark = {"pass": "✓", "fail": "✗", "skip": "—"}
-        print(f"team_check {team} · {'deep' if deep else 'base'} tier")
+        print(f"team_check {team} · {tier_label} tier")
         for r in rep.rows:
             print(f"  {mark[r['status']]} {r['scope']:<22} {r['check']:<11} {r['detail']}")
         n = len(rep.failed)
