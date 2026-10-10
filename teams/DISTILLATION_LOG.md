@@ -1,5 +1,37 @@
 # 蒸馏记录
 
+## 2026-10-10 (9) · MINLP Team 立队与深读（进行中，因用量上限暂停）
+
+- 用户请求：「我需要一个MINLP team 在这些研究者中选六个 进行彻底蒸馏」。按本仓库惯例做两件产物：
+  team-kit 深读档 `product/minlp-team/`（六人研究 skill + `minlp-roundtable`），以及封闭语料
+  `teams/minlp-team/` + 团队级 `minlp-team` skill（DISTILL.md）。分支 `minlp-team`，未推送、未合入 main
+- 成员（理由：两两之间有可对证的分歧，覆盖凸 MINLP、非凸全局求解、MIQCQP 松弛三条主线）：
+  Grossmann ↔ Leyffer（多树分解 vs NLP 分支定界）、Sahinidis ↔ Misener（factorable/BARON vs αBB/ANTIGONE）、
+  Burer ↔ Dey（锥松弛 vs 割平面）。team.json 的 Scholar id 取自 DBLP 人员记录、ORCID 与主页（Scholar 作者搜索现需登录）
+- 暂停时的进度（`python3 -X utf8 scripts/team_status.py product/minlp-team` 可随时重算）：
+
+| 成员 | T1 skill | T3.1 | T3.2 全文/作品 | T3.3 | T3.5 读卡 | T3.6 |
+|---|---|---|---|---|---|---|
+| Dey | 12/12 | ✓ | 123/156 | ✓ | 完成（154 张，0 未读） | 挖卡完成，SKILL.md 未改 |
+| Burer | 12/12 | ✓ | 67/71 | ✓ | 完成（73 张，0 未读） | 挖卡完成，SKILL.md 未改 |
+| Leyffer | 12/12 | ✓ | 162/211 | ✓ | 第 1 轮完成；第 2 轮（摘要）部分 | — |
+| Misener | 12/12 | ✓ | 101/147 | ✓ | 第 1 轮完成；第 2 轮（摘要）部分 | — |
+| Sahinidis | 12/12 | ✓ | 28/381 | 进行中被停 | — | — |
+| Grossmann | 12/12 | ✓ | 获取中（180/1312 时） | — | — | — |
+
+- 续跑（同一会话可用 `resumeFromRunId`；新会话用 make_args.mjs 重新生成参数，读卡用 `overwrite: false` 跳过已有卡片）：
+  1. Dey、Burer：`team-synthesize.js`（runId wf_01f11165-82a、wf_705e7fc1-1af）
+  2. Leyffer、Misener：`team-read.js` round 2（runId wf_3b31ef0e-d73、wf_5e72e2e4-7e9），之后 T3.6
+  3. Sahinidis：`team-chase.js`（runId wf_588a3df1-b1c）→ 切批 → 读卡 → T3.6
+  4. Grossmann：重跑 `acquire_fulltexts.py product/minlp-team/ignacio-e-grossmann --delay 10`（会跳过已下载的）→ 补搜 → 读卡 → T3.6
+  5. 全体 T3.6 之后：T2 `team-layer.js`（全体，T3.6 运行中不要跑，会互相改 SKILL.md）→ 各人 T3.7 / 声明抽审 → T3.8 `team-integrate.js` → `team_check.py`
+  6. 封闭语料：续跑工作流 minlp-corpus-build（runId wf_7f245ead-5af；91 条文献核实完成、五份研究者档案已提交，
+     缺 canon/results、Leyffer 档案、00/02/03/05 与三视角复核），之后按 DISTILL.md 蒸馏 `teams/minlp-team/SKILL.md`，
+     G6 试答改用 MINLP 题（选型、OA 用于非凸的陷阱、SDP 与 RLT 强弱的分寸）
+- 已知限制：本机没有 tesseract，文字层乱码的扫描件无法 OCR（Leyffer 6 篇、Misener 1 篇），退到摘要级；
+  Windows 下脚本须设 `PYTHONUTF8=1`（或 `PYTHONIOENCODING=utf-8`），否则 cp1252 控制台会让 acquire / team_status 崩溃
+- 执行模型：claude-opus-5-5
+
 ## 2026-10-10 (8) · team-kit 研究 Skill 蒸馏：补两道证据闸门（引用闭包 + 声明抽审）
 
 - 范围：team-kit（逐人研究者 skill 流水线）的质量门；`teams/` 语料与团队级 SKILL.md 未改动，G1–G6 不涉及
