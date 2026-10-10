@@ -141,7 +141,7 @@
 | 129 | S133 | 2020 | GALINI: An extensible MIQCQP solver. | Sandia National Laboratories (SNL-NM), Albuquerque, NM (United States) | — | talk | — | no-oa |  | skip | — |
 | 130 | S135 | 2019 | Approximating Bounded Job Start Scheduling with Application in Royal Mail Deliveries Under Uncertainty | International Conference on Combinatorial Optimization and Applications | — | conference | manual | txt | 27 | supplement | skimmed |
 | 131 | S136 | 2018 | Online Generation Via Offline Selection of Strong Linear Cuts from a Semidefinite Programming Relaxation | 2018 AIChE Annual Meeting | — | conference | — | no-oa |  | supplement | — |
-| 132 | S138 | 2018 | Approximation Algorithms for Process Systems Engineering | Computer Aided Chemical Engineering | — | conference | arXiv | txt | 35 | supplement | unreadable |
+| 132 | S138 | 2018 | Approximation Algorithms for Process Systems Engineering | Computer Aided Chemical Engineering | — | conference | — | no-oa |  | supplement | unreadable |
 | 133 | S140 | 2017 | An Integrated Platform for the Study of Leukaemia | Modelling Optimization and Control of Biomedical Systems | — | chapter | — | no-oa |  | supplement | — |
 | 134 | S142 | 2017 | Designing Energy-Efficient Heat Recovery Networks using Mixed-Integer Nonlinear Optimisation | 16th International Symposium on Experimental Algorithms (SEA 2017) | — | conference | manual | txt | 1 | supplement | carded |
 | 135 | S143 | 2016 | In memoriam: Christodoulos Achilleus Floudas | SIAG/OPT Views News | — | essay | url | txt | 20 | core | carded |
@@ -158,4 +158,4 @@
 | 146 | H001 | 2021 | ROmodel: A Python Robust Optimization Modeling Toolbox | Computer Aided Chemical Engineering 50 (31st European Symposium on Computer Aided Process Engineering), pp. 683-688 | — | conference | — | no-oa |  | supplement | — |
 | 147 | H002 | 2014 | Optimisation under uncertainty for a bioreactor that produces red blood cells | J. Tissue Eng. Regen. Med. 8, pp. 481-482 | — | conference | manual | txt | 1 | supplement | carded |
 
-147 works · txt 102 · pdf 0 · no-oa 45
+147 works · txt 101 · pdf 0 · no-oa 46
