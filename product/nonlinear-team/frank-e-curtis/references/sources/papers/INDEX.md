@@ -40,7 +40,7 @@
 | 28 | S028 | 2016 | A self-correcting variable-metric algorithm for stochastic optimization | Proceedings of The 33rd International Conference on Machine Learning | 52 | conference | url | txt | 12 | core | carded |
 | 29 | S029 | 2014 | An inexact sequential quadratic optimization algorithm for nonlinear optimization | SIAM Journal on Optimization | 52 | journal | url | txt | 34 | core | carded |
 | 30 | S030 | 2024 | Sequential quadratic optimization for stochastic optimization with deterministic nonlinear inequality and equality constraints | SIAM Journal on Optimization | 51 | journal | arXiv | txt | 27 | core | carded |
-| 31 | S031 | 2020 | Adaptive stochastic optimization: a framework for analyzing stochastic optimization algorithms | IEEE Signal Processing Magazine | 50 | journal | — | no-oa |  | supplement | — |
+| 31 | S031 | 2020 | Adaptive stochastic optimization: a framework for analyzing stochastic optimization algorithms | IEEE Signal Processing Magazine | 50 | journal | — | no-oa |  | supplement | abstract |
 | 32 | S032 | 2008 | Flexible penalty functions for nonlinear constrained optimization | IMA Journal of Numerical Analysis | 49 | journal | manual | txt | 21 | core | carded |
 | 33 | S033 | 2012 | A penalty-interior-point algorithm for nonlinear constrained optimization | Mathematical Programming Computation | 48 | journal | manual | txt | 29 | core | carded |
 | 34 | S034 | 2025 | Stochastic optimization approaches for an operating room and anesthesiologist scheduling problem | Operations research | 47 | journal | manual | txt | 122 | core | carded |
@@ -54,7 +54,7 @@
 | 42 | S042 | 2016 | Handling nonpositive curvature in a limited memory steepest descent method | IMA Journal of Numerical Analysis | 25 | journal | manual | txt | 26 | core | carded |
 | 43 | S043 | 2023 | Worst-case complexity of trace with inexact subproblem solutions for nonconvex smooth optimization | SIAM Journal on Optimization | 24 | journal | manual | txt | 27 | core | carded |
 | 44 | S044 | 2025 | A stochastic-gradient-based interior-point algorithm for solving smooth bound-constrained optimization problems | SIAM Journal on Optimization | 23 | journal | manual | txt | 30 | core | carded |
-| 45 | S045 | 2024 | A stochastic inexact sequential quadratic optimization algorithm for nonlinear equality-constrained optimization | INFORMS Journal on Optimization | 23 | journal | — | no-oa |  | core | — |
+| 45 | S045 | 2024 | A stochastic inexact sequential quadratic optimization algorithm for nonlinear equality-constrained optimization | INFORMS Journal on Optimization | 23 | journal | — | no-oa |  | core | abstract |
 | 46 | S046 | 2018 | R-Linear Convergence of Limited Memory Steepest Descent | IMA Journal of Numerical Analysis | 20 | journal | manual | txt | 19 | core | carded |
 | 47 | S047 | 2007 | Steplength selection in interior-point methods for quadratic programming | Applied Mathematics Letters | 20 | journal | manual | txt | 8 | core | carded |
 | 48 | S048 | 2021 | Practical optimal control of a wave-energy converter in regular wave environments | Renewable Energy | 19 | journal | manual | txt | 24 | core | carded |
@@ -64,12 +64,12 @@
 | 52 | S052 | 2018 | FaRSA for ℓ1-regularized convex optimization: local convergence and numerical experience | Optimization Methods and Software | 17 | journal | manual | txt | 21 | core | carded |
 | 53 | S053 | 2022 | A subspace acceleration method for minimization involving a group sparsity-inducing regularizer | SIAM Journal on Optimization | 15 | journal | manual | txt | 28 | core | carded |
 | 54 | S054 | 2025 | Almost-sure convergence of iterates and multipliers in stochastic sequential quadratic optimization | Journal of Optimization Theory and Applications | 14 | journal | manual | txt | 24 | core | carded |
-| 55 | S055 | 2024 | Fair machine learning through constrained stochastic optimization and an ε-constraint method | Optimization Letters | 12 | journal | — | no-oa |  | core | — |
+| 55 | S055 | 2024 | Fair machine learning through constrained stochastic optimization and an ε-constraint method | Optimization Letters | 12 | journal | — | no-oa |  | core | abstract |
 | 56 | S056 | 2021 | An accelerated communication-efficient primal-dual optimization framework for structured machine learning | Optimization Methods and Software | 12 | journal | manual | txt | 20 | core | carded |
 | 57 | S057 | 2020 | Inexact sequential quadratic optimization with penalty parameter updates within the QP solver | SIAM Journal on Optimization | 11 | journal | manual | txt | 38 | core | carded |
 | 58 | S058 | 2004 | Central groupoids, central digraphs, and zero-one matrices A satisfying A^2 = J | Journal of Combinatorial Theory, Series A | 11 | journal | manual | txt | 16 | core | carded |
 | 59 | S059 | 2025 | An interior-point algorithm for continuous nonlinearly constrained optimization with noisy function and derivative evaluations | arXiv preprint arXiv:2502.11302 | 10 | preprint | manual | txt | 39 | core | carded |
-| 60 | S060 | 2023 | A decomposition algorithm with fast identification of critical contingencies for large-scale security-constrained AC-OPF | Operations Research | 10 | journal | — | no-oa |  | supplement | — |
+| 60 | S060 | 2023 | A decomposition algorithm with fast identification of critical contingencies for large-scale security-constrained AC-OPF | Operations Research | 10 | journal | — | no-oa |  | supplement | abstract |
 | 61 | S061 | 2021 | A decomposition algorithm for large-scale security-constrained AC optimal power flow | arXiv preprint arXiv:2110.01737 | 10 | preprint | manual | txt | 23 | core | carded |
 | 62 | S062 | 2021 | Regional complexity analysis of algorithms for nonconvex smooth optimization | Mathematical Programming | 10 | journal | manual | txt | 30 | core | carded |
 | 63 | S063 | 2026 | A single-loop stochastic feasible interior-point algorithm for nonlinear inequality-constrained optimization | Mathematical Programming | 9 | journal | manual | txt | 38 | core | carded |
@@ -81,18 +81,18 @@
 | 69 | S069 | 2024 | Using synthetic data to mitigate unfairness and preserve privacy in collaborative machine learning | arXiv preprint arXiv:2409.09532 | 4 | preprint | manual | txt | 14 | core | carded |
 | 70 | S070 | 2023 | A variance-reduced and stabilized proximal stochastic gradient method with support identification guarantees for structured optimization | International Conference on Artificial Intelligence and Statistics | 4 | conference | manual | txt | 36 | core | carded |
 | 71 | S071 | 2018 | Fast market clearing algorithms | Energy Markets and Responsive Grids: Modeling, Control, and Optimization… | 4 | chapter | manual | txt | 24 | core | carded |
-| 72 | S072 | 2026 | A Bilevel Optimization Approach for Computing Synthetic Data to Mitigate Unfairness in Collaborative Machine Learning | INFORMS Journal on Optimization | 3 | journal | — | no-oa |  | core | — |
+| 72 | S072 | 2026 | A Bilevel Optimization Approach for Computing Synthetic Data to Mitigate Unfairness in Collaborative Machine Learning | INFORMS Journal on Optimization | 3 | journal | — | no-oa |  | core | abstract |
 | 73 | S073 | 2025 | Equity-promoting integer programming approaches for medical resident rotation scheduling | Health Care Management Science | 3 | journal | manual | txt | 40 | core | carded |
-| 74 | S074 | 2025 | Practical Nonconvex Nonsmooth Optimization | Society for Industrial and Applied Mathematics | 3 | book | — | no-oa |  | core | — |
+| 74 | S074 | 2025 | Practical Nonconvex Nonsmooth Optimization | Society for Industrial and Applied Mathematics | 3 | book | — | no-oa |  | core | abstract |
 | 75 | S075 | 2024 | Derivative-free bound-constrained optimization for solving structured problems with surrogate models | Optimization Methods and Software | 3 | journal | manual | txt | 37 | core | carded |
 | 76 | S076 | 2024 | Incremental quasi-Newton algorithms for solving a nonconvex, nonsmooth, finite-sum optimization problem | Optimization Methods and Software | 3 | journal | manual | txt | 22 | core | carded |
 | 77 | S077 | 2016 | Accelerating convergence to competitive equilibrium in electricity markets | 2016 IEEE Power and Energy Society General Meeting (PESGM) | 3 | conference | manual | txt | 7 | core | carded |
-| 78 | S078 | 2024 | Insights and innovations from the SSMCDAT 2023: bridging solid-state materials chemistry and data science | Chemistry of Materials | 2 | journal | — | no-oa |  | core | — |
-| 79 | S079 | 2012 | Modeling and Optimization: Theory and Applications; Selected Contributions from the MOPTA 2010 Conference | Springer | 2 | book | — | no-oa |  | supplement | — |
+| 78 | S078 | 2024 | Insights and innovations from the SSMCDAT 2023: bridging solid-state materials chemistry and data science | Chemistry of Materials | 2 | journal | — | no-oa |  | core | abstract |
+| 79 | S079 | 2012 | Modeling and Optimization: Theory and Applications; Selected Contributions from the MOPTA 2010 Conference | Springer | 2 | book | — | no-oa |  | supplement | abstract |
 | 80 | S081 | 2006 | Determinant optimization on binary matrices | American Journal of Mathematical and Management Sciences | 2 | journal | manual | txt | 26 | core | carded |
 | 81 | S082 | 2025 | A Proximal-Gradient Method for Solving Regularized Optimization Problems with General Constraints | arXiv preprint arXiv:2512.23166 | 1 | preprint | manual | txt | 33 | core | carded |
 | 82 | S083 | 2025 | Fair supervised learning through constraints on smooth nonconvex unfairness-measure surrogates | arXiv preprint arXiv:2505.15788 | 1 | preprint | manual | txt | 31 | core | carded |
-| 83 | S084 | 2025 | Informed Machine Learning with a Stochastic-Gradient-based Algorithm for Training with Hard Constraints | — | 1 | other | — | no-oa |  | core | — |
+| 83 | S084 | 2025 | Informed Machine Learning with a Stochastic-Gradient-based Algorithm for Training with Hard Constraints | — | 1 | other | — | no-oa |  | core | metadata |
 | 84 | S086 | 2003 | Special classes of zero-one matrices | College of William and Mary | 1 | thesis | manual | txt | 62 | core | unreadable |
 | 85 | S087 | 2026 | A Local-Linearly Convergent Algorithm for Nonconvex Equality-Constrained Optimization | arXiv preprint arXiv:2608.12665 | — | preprint | manual | txt | 28 | core | carded |
 | 86 | S088 | 2026 | NonOpt: Nonconvex, Nonsmooth Optimizer | Mathematical Programming Computation | — | journal | manual | txt | 27 | core | carded |
