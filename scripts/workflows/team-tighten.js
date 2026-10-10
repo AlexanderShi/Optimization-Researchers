@@ -115,7 +115,7 @@ Your job (TIGHTEN, lossless): bring SKILL.md to at most ~${TARGET} words without
 4. Do NOT change: ${protectedList(m)}. Do not add new claims.
 5. Every quotation left in SKILL.md stays verbatim. Every card id in SKILL.md exists in 07-paper-cards.md.
 6. Link the ledger from the sources appendix.
-7. Gates: python3 ${REPO}/scripts/quality_check.py ${SK}/SKILL.md → 12/12 (the checker counts method headings, steps, say–do marks, taste items, workflows with checkpoints, anatomies, honest-boundary items, tensions and verifiable ids — keep enough of each); python3 ${REPO}/scripts/check_ledger.py ${SK} --before ${backup(m)} (no --allow: tightening changes neither the frontmatter nor Activation Rules) → lossless (card ids, page references and quotes of the pre-tighten copy all in SKILL.md or the ledger; frontmatter, Activation Rules, Research Integrity Rules${m.student_mode ? ', Student Mode' : ''} byte-identical) and every anchor resolves; python3 ${REPO}/scripts/check_links.py ${SK} → 0 broken. Report words before/after (wc -w).
+7. Gates: python3 ${REPO}/scripts/quality_check.py ${SK}/SKILL.md → 12/12 (the checker counts method headings, steps, say–do marks, taste items, workflows with checkpoints, anatomies, honest-boundary items, tensions and verifiable ids — keep enough of each); python3 ${REPO}/scripts/check_ledger.py ${SK} --before ${backup(m)} (no --allow: tightening changes neither the frontmatter nor Activation Rules) → lossless (card ids, page references and quotes of the pre-tighten copy all in SKILL.md or the ledger; frontmatter, Activation Rules, Research Integrity Rules${m.student_mode ? ', Student Mode' : ''} byte-identical) and every anchor resolves; python3 ${REPO}/scripts/check_citations.py ${SK} → 0 problems (card citations moved into the ledger still resolve); python3 ${REPO}/scripts/check_links.py ${SK} → 0 broken. Report words before/after (wc -w).
 Edit only SKILL.md and 09-evidence-ledger.md.`
 }
 
@@ -127,7 +127,7 @@ SKILL.md has just been tightened (report: ${JSON.stringify(t)}); the pre-tighten
 Check with scripts, not by eye:
 1. Lossless: python3 ${REPO}/scripts/check_ledger.py ${SK} --before ${backup(m)} (no --allow; every "✗" line it prints is a finding, none is excused by judgement): every card id, page reference and quotation in the pre-tighten copy appears in the new SKILL.md or in the ledger, and every SKILL.md → ledger anchor resolves. Every ✗/⚠ correction still appears somewhere, and each method's corrections are at least mentioned in SKILL.md.
 2. Frontmatter, Activation Rules, Research Integrity Rules${m.student_mode ? ' and Student Mode' : ''} are byte-identical to the pre-tighten copy (check_ledger.py --before checks this; the equivalent headings in another language count); the method numbering and headings, the Honest Boundary facts and coverage numbers and the Roundtable Card are unchanged in substance, and How to Use changed at most by a pointer (diff them).
-3. python3 ${REPO}/scripts/quality_check.py ${SK}/SKILL.md is 12/12; wc -w ≤ ${MAXW}; python3 ${REPO}/scripts/check_links.py ${SK} is clean; every 09-evidence-ledger.md#anchor linked from SKILL.md exists.
+3. python3 ${REPO}/scripts/quality_check.py ${SK}/SKILL.md is 12/12; wc -w ≤ ${MAXW}; python3 ${REPO}/scripts/check_links.py ${SK} is clean; every 09-evidence-ledger.md#anchor linked from SKILL.md exists; python3 ${REPO}/scripts/check_citations.py ${SK} reports 0 problems.
 4. Usefulness: read the new SKILL.md end to end. Is each method still executable (steps intact), and is the strongest evidence still visible next to each claim? Is anything important now only in the ledger that should be back in SKILL.md?
 Report findings with severity (blocker = information lost or a protected section changed; major = gate failing or a method no longer usable; minor = polish) and a concrete fix each.`
 }
@@ -140,6 +140,7 @@ SKILL.md was tightened (evidence moved to ${ledger(m)}; pre-tighten copy at ${ba
 Your job (FIX${round > 1 ? ', round ' + round : ''}): verify each finding, apply the ones you confirm (blockers and majors always); restore anything lost from the pre-tighten copy (into SKILL.md or the ledger); restore protected sections byte for byte. Do not modify the pre-tighten copy.
 Then run every gate and report each in gates (name, command, passed, detail):
 - lossless: python3 ${REPO}/scripts/check_ledger.py ${SK} --before ${backup(m)} (no --allow) → no problems
+- citations: python3 ${REPO}/scripts/check_citations.py ${SK} → 0 problems
 - quality_check: python3 ${REPO}/scripts/quality_check.py ${SK}/SKILL.md → 12/12
 - links: python3 ${REPO}/scripts/check_links.py ${SK} → 0 broken
 - words: wc -w ${SK}/SKILL.md → ≤ ${MAXW}

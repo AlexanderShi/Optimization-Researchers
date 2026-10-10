@@ -39,7 +39,8 @@ teams/
 TEAM-KIT.md               逐人研究者 skill 流水线（team-kit）入口
 references/               team-kit 文档与模板：playbook、研究提炼框架、研究 skill 模板、
                           team-templates/；nuwa-SKILL.md 为冻结的 nuwa 根 skill 副本
-scripts/                  team-kit 脚本：发表全表、全文、读卡、台账、团队状态；workflows/ 为 T1–T4
+scripts/                  team-kit 脚本：发表全表、全文、读卡、台账、团队状态；workflows/ 为 T1–T4；
+                          本仓库新增 check_citations.py（引用闭包）、audit_claims.py（声明抽审，协议 references/claim-audit.md）
 product/                  team-kit 产物：逐人研究者 skill + 圆桌（dfo-team、nonlinear-team = NLP Team）
 .claude/skills/
   optimization-researchers/ 项目级 skill：在本仓库内把蒸馏请求分流到 DISTILL.md / TEAM-KIT.md

@@ -42,6 +42,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import subprocess
 import sys
@@ -87,9 +88,10 @@ def index_rows(path: Path) -> list[dict]:
 def quality(skill: Path) -> str:
     if not skill.exists():
         return "—"
-    try:
+    try:  # 子进程强制 UTF-8：Windows 控制台默认 cp1252 时 quality_check.py 打印 ✅ 会报错，这里就只剩 "?"
         out = subprocess.run([sys.executable, str(HERE / "quality_check.py"), str(skill)],
-                             capture_output=True, text=True, timeout=120).stdout
+                             capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=120,
+                             env={**os.environ, "PYTHONUTF8": "1", "PYTHONIOENCODING": "utf-8"}).stdout or ""
     except (OSError, subprocess.TimeoutExpired):
         return "?"
     m = re.findall(r"(\d+)\s*/\s*(\d+)\s*通过", out)

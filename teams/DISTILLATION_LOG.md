@@ -1,5 +1,45 @@
 # 蒸馏记录
 
+## 2026-10-10 (8) · team-kit 研究 Skill 蒸馏：补两道证据闸门（引用闭包 + 声明抽审）
+
+- 范围：team-kit（逐人研究者 skill 流水线）的质量门；`teams/` 语料与团队级 SKILL.md 未改动，G1–G6 不涉及
+- 缺口：T3 深读的证据链里，摘录有 `verify_card_quotes.py` 逐字核对，但 SKILL.md、账本、技术目录、学生模式文件和
+  圆桌里成百上千条 `[card S012 pp. 20–21]` 式引用没有任何机械闸门——卡片是否存在、页码是否落在读过全文的卡片上、
+  是否超过文件页数，都没人查；四重验证也只是 agent 的口头断言，没有一条声明被回头对照过它所引的卡片
+- 新增 `scripts/check_citations.py`（引用闭包，确定性）：扫 SKILL.md、`references/*.md`、`research/01–09`（07 除外，
+  它是 digest 的投影）；✗ = unknown-id / no-card / page-on-unread / page-range / version / roundtable；⚠ = skip-mention /
+  roundtable-bare；`--methods` 报每个核心方法在卡片 `method_links` 里的证据数与该节引用的不同作品数。新约定
+  **版本引用**：读的是替代版本（报告版、预印本、后一版手册）就写 `[S025 TR pp. 3–12]`、`[S133 v2.0 p. 1]`，卡片正文写明
+  （规则写进 `references/paper-reading-card.md` §四「引用规则」）
+- 新增 `scripts/audit_claims.py` + `references/claim-audit.md`（声明→证据抽审）：`--sample` 抽 N 条带页码的声明，
+  配上所引卡片全文（`cards/<批次>.md` 整张卡片 + 批次头 + digest 的 read_level / quotes + INDEX 页数）成审计包；
+  一个零上下文 agent 只读包判定 supported / partial / unsupported / uncheckable；`--report` 追加到
+  `<M>/references/research/10-claim-audit.md`，unsupported > 0 退出码 1
+- 接入：`team_check.py` 每位成员新增 `citations`、团队级新增圆桌 `citations`（深读档）；`team-synthesize.js`
+  （编辑闸门、fidelity 复核员第 4 项、修复闸门）、`team-tighten.js`、`team-increment.js`、`team-integrate.js`（圆桌闸门）
+  的闸门清单加 `check_citations.py`；playbook §三/§四/§五/§九、workflows README、extraction-framework §十一、
+  fidelity-scorecard、TEAM-KIT.md（本地修改表）、README、项目级 skill 同步
+- 首跑 dfo-team（五人 + 圆桌，约 16,000 条卡片引用、10,000 条带页码）：解析器迭代两轮后剩 6 个真问题，全部是
+  **替代版本**：Audet S025（37 处，`[S025 TR pp. …]`，卡片说明文件实为 1998 Rice 报告 CRPC-TR98779、OCR 全读，但按
+  kit 语义登记为 unreadable）、Scheinberg S133（5 处，v1.2 手册行下读的是 v2.0 手册）。处理：承认版本引用为合法写法
+  （卡片必须提到该版本），S133 的 5 处补上 `v2.0` 标记（其中 3 处本来就写着 "v2.0 manual" / "substitute"，2 处裸引用改为
+  `[S133 v2.0 pp. 1–3]`）；**没有改 coverage 数字**——这两篇在覆盖表里仍算未读，是 kit 现有语义（文件 ≠ 命名作品 →
+  unreadable）造成的已知不一致，更规范的做法是把替代版本登记成自己的 R/D 作品行再读，留作后续
+- 声明抽审实测（Scheinberg，SKILL.md，20 条 / 池 269，seed 1，全部命中 full 级卡片；审计 agent = 同模型的独立子 agent，
+  只读审计包）：**第一遍** 18 supported / 1 partial / 1 unsupported——两条「不支持」都因为审计包把卡片截在 9,000 字符、
+  切掉了 D8 与方法关联行；去掉截断（上限 60,000 字符）重判这 15 条后 **20/20 supported**，审计 agent 在 reason 里保留了
+  三处措辞比卡片强的提示（k=8 "rarely known" 比原文软、k=15 "而不是梯度容差" 是 skill 的措辞、k=16 ε_F 子句来自
+  共引的 S012）。报告：`product/dfo-team/katya-scheinberg/references/research/10-claim-audit.md`。
+  教训已写进脚本：审计包必须给整张卡片
+- Windows 修复：`team_check.py` / `team_status.py` 的子进程改为强制 UTF-8（`PYTHONUTF8=1` + 解码 errors=replace）。
+  此前只用 `python3 -X utf8` 不设环境变量时，quality_check 一列全是 `?`、新脚本输出的 `…` 还会让 team_check 崩溃
+- 验证（Windows 11，Python 3.13，Node 24）：`check_citations.py product/dfo-team` 0 problems（6 位成员级报告 + 圆桌）、
+  `product/nonlinear-team` 0（轻量档不适用，只报 DOI 计数）；`team_check.py product/dfo-team` 38 项 0 失败 5 跳过
+  （比此前多 6 项 citations）、`product/nonlinear-team` 16 项 0 失败；`workflows/selftest.sh product/dfo-team` 全部通过；
+  `check_links.py references/` 只剩 nuwa 原有的 2 条指向 CONTRIBUTING/COMMUNITY 的断链（本仓库没有这两个文件，与本次无关）
+- 提交：本条随上述改动一起提交（分支 `team-kit-evidence-gates`，fast-forward 合入 `main`）
+- 执行模型：claude-fable-5-1
+
 ## 2026-10-09 (7) · 取消 skills/ 目录，产物并入语料目录
 
 - `skills/dfo-team/SKILL.md` → `teams/dfo-team/SKILL.md`，`skills/nlp-team/SKILL.md` →

@@ -16,7 +16,7 @@
 | **Full text read** | **78** (64 full, 14 partial) | read-level column of `07-paper-cards.md` |
 | Abstract-level | 19 | a2-01, a2-02 |
 | Metadata-only | 21 | a2-01, a2-02 |
-| Unreadable | 1 (S133; the DFO v2.0 manual was carded as a substitute) [S133 pp. 1–3] | s2-01 |
+| Unreadable | 1 (S133; the DFO v2.0 manual was carded as a substitute) [S133 v2.0 pp. 1–3] | s2-01 |
 | Skipped | 8 (3 patents, 4 talks, D002 where Scheinberg is an author only on arXiv v1) | INDEX.md Role = skip |
 
 Full-text reads by period (full + partial / all carded works with a year): 1996–2000 3/13; 2001–2005 5/8; 2006–2010 14/24; 2011–2015 13/17; 2016–2020 25/32; 2021–2026 18/22. The pre-2000 interior-point work is therefore known almost only from abstracts [S027, S040, S045 abstract cards; S039, S034, S091, S134 metadata cards], while the DFO and stochastic-analysis lines are read nearly completely.
@@ -442,7 +442,7 @@ Overall most frequent: Goldfarb 14 (1998–2014), Conn 12 (1997–2010), Vicente
   - **(k01)** Narrowed, not closed: the organization is now known at title level from the table of contents [B001 pp. 1–3], two proofs and several constants from the errata and the addendum [B002 pp. 1–3; B003 p. 1; B004 pp. 1–2], and the peer reading from two reviews [B005 pp. 1–3; B006 pp. 1–2]. The chapters themselves (convergence analyses, the software appendix) are still unread (§13).
 - **Her own short statements**: the SIAM News essay "Knowing What to Know in Stochastic Optimization" [S113 metadata], the randomized finite-difference position piece [S044 abstract], the MOR 50th-anniversary editorial [S105 metadata] and the IISE stochastic-gradients perspective [S081 abstract] were not read. The stated side of M1 and M5 therefore rests on the tutorial, the overview and the survey chapter [S031; S047; S046] rather than on these.
 - **Interior-point years** (1996–2000): only abstracts and metadata [S027; S040; S045; S034; S091; S039; S134], so the first turn (IPM → DFO) cannot be analysed from texts.
-- **Original DFO code documentation**: the v1.2 manual (2000) is unreadable and the v2.0 manual (2003) stands in for it [S133 pp. 1–3]; the 2000 McMaster report is metadata only [S065].
+- **Original DFO code documentation**: the v1.2 manual (2000) is unreadable and the v2.0 manual (2003) stands in for it [S133 v2.0 pp. 1–3]; the 2000 McMaster report is metadata only [S065].
 - **Earlier versions**: the 2011 line-search and 2012 "large steps" versions of the backtracking paper are not in the corpus [S067; S101]; the published SIOPT version of the stochastic line search may add experiments that arXiv v1 lacks [S015 p. 1]; the 2025 journal version of the zero-one-loss paper was not read [S106].
 - **Applied IBM work** where Scheinberg's role is not identifiable from the text or abstract [S020; S038; S128; S124].
 - **Sparse Markov network line with Rish**: only S049 in full; S042, S064, S079, S096, S142 at abstract or metadata level.

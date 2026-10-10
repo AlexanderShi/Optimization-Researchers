@@ -235,6 +235,11 @@ python3 scripts/plan_reading_batches.py $T/$M --out-dir $S --no-abstract --rerea
 # T3.6 之后
 python3 scripts/quality_check.py $T/$M/SKILL.md   # 12/12
 python3 scripts/check_ledger.py $T/$M             # 不带 --before：只查 SKILL.md 指向账本的锚点，必须 ✅
+python3 scripts/check_citations.py $T/$M          # 引用闭包：每条卡片引用都指向存在、读过、页码在范围内的卡片，0 problems
+# 声明抽审（第四节「声明抽审」，协议 references/claim-audit.md）：抽 20 条 → 交给一个新 agent 判定 → 写报告
+python3 scripts/audit_claims.py $T/$M --sample --n 20 --seed 1 --out $S/audit-$M.json --list
+#   （新 agent 只读 $S/audit-$M.json，写 $S/verdicts-$M.json）
+python3 scripts/audit_claims.py $T/$M --report $S/verdicts-$M.json --packet $S/audit-$M.json   # unsupported 必须为 0
 # 和汇总前对比（工作流的复核员已跑过，人工复核时再跑）：汇总按设计会改 front matter（researched 日期、description 里的数字）
 # 和首次激活的免责声明，--allow 放行这两处，打印成「~ allowed」；剩下的每一行 ✗ 都是问题
 python3 scripts/check_ledger.py $T/$M --before $S/$M-SKILL.before-synth-<date>.md --allow frontmatter,activation-disclaimer
@@ -253,6 +258,7 @@ python3 scripts/team_status.py $T                 # 各人进度
 python3 scripts/team_status.py $T --coverage          # 11 列全表，原样是 DEEP-READING.md 的 Coverage
 python3 scripts/team_status.py $T --coverage --short  # 5 列摘要，原样是 README 诚实边界里的表（由全表相加，不手算）
 python3 scripts/check_links.py $T                 # 0 broken
+python3 scripts/check_citations.py $T             # 全体 + 圆桌的引用闭包，0 problems（圆桌 fault line 的 [<slug> card …] 也查页码）
 grep -rn --include='*.md' -e '{{' -e '\[TODO' $T  # 必须为空；还有输出就照每条 TODO 写的来源补上（数字只取脚本输出）
 python3 scripts/team_check.py $T                  # 交付闸门：第四节的检查一次跑完（含 fault line 两边的卡片 ID），退出码 0
 bash scripts/team_commit.sh $T "docs(<team>): integrate the deep reading"
@@ -276,6 +282,8 @@ bash scripts/team_commit.sh $T/$M "increment($M): <label>"   # 之后带全体�
 | 摘录逐字 | `verify_card_quotes.py <M>` | 全部通过，NOT FOUND = 0 | 每轮读卡之后；汇总之前 |
 | 读完 | `mark_read_from_cards.py <M>`，再 `team_status.py <team>` | 未读行 = 0 | 最后一轮（不带 `--no-abstract`）读卡之后；中间轮次不查 |
 | 账本锚点 | `check_ledger.py <M>`（不带 `--before`） | SKILL.md 指向 `09-evidence-ledger.md` 的锚点都能解析 | T3.6 之后 |
+| 引用闭包 | `check_citations.py <M>`（团队目录：全体 + 圆桌；`--roundtable` 只查圆桌；`--methods` 另报每个方法的证据数） | 0 problems：SKILL.md、账本、技术目录、学生模式文件、01–09 里每条 `[card S012 pp. …]` 都指向真实存在的卡片；页码只出现在读过全文（full / partial）的卡片上，且不超过 INDEX.md 的页数；读的是替代版本就写成版本引用（`[S025 TR pp. 3–12]`、`[S133 v2.0 p. 1]`，卡片正文写明）；圆桌的 `[<slug> card …]` 同样。⚠ 只是提醒（提到 skip 行、圆桌里的裸 ID） | T3.6、T3.7、T4 之后；T3.8 之后查圆桌；交付之前（`team_check.py` 含） |
+| 声明抽审 | `audit_claims.py <M> --sample` → 零上下文 agent 判定 → `audit_claims.py <M> --report`（协议见 [claim-audit.md](claim-audit.md)） | unsupported = 0；partial 逐条人看；报告追加在 `<M>/references/research/10-claim-audit.md`。卡片是证据层：它证明的是「SKILL.md 的话是卡片撑得住的」 | T3.6 之后、T3.8 之前（每位成员 20 条）；T4 之后 |
 | 精简无损 | `check_ledger.py <M> --before <scratch>/<slug>-SKILL.before-tighten-<date>.md`（不加 `--allow`） | 精简前的卡片 ID、「ID + 页码」引用和引文都还在 SKILL.md 或账本里；指向账本的锚点都能解析；front matter 和激活规则、诚信规则、学生模式各节逐字不变 | T3.7 之后（只有跑了 T3.7 的成员）。备份不在了就用 `git show <精简前的提交>:<M>/SKILL.md` 取回 |
 | 汇总、增量没删东西 | T3.6：`check_ledger.py <M> --before <scratch>/<slug>-SKILL.before-synth-<date>.md --allow frontmatter,activation-disclaimer`；T4：`… --before <scratch>/<slug>-SKILL.before-<label>.md --allow frontmatter-date,activation-numbers` | 按设计会变的地方（front matter、免责声明或其中的数字）打印成 `~ allowed`；没有任何 ✗ 行 | T3.6、T4 之后（工作流的复核员已跑；人工复核时再跑） |
 | 链接 | `check_links.py <team>` | 0 broken | T2、T3.8 之后；交付之前 |
@@ -325,6 +333,9 @@ bash scripts/team_commit.sh $T/$M "increment($M): <label>"   # 之后带全体�
 | 改了 `only` / `only_chunks` 却把所有批次都重跑了 | 映射的键（成员 slug）拼错，这一位成员等于没有 `only` | 现在工作流发现键不是这次运行的成员、且有成员没对应的键时直接停下；`dry_run.mjs` 也警告。用 `make_args.mjs --set` 生成参数，slug 不对当场报错 |
 | 书的正文读不到 | 正文不开放 | 读合法开放的部分（目录、勘误、增补、前言、已发表书评），作为 `B###` 条目，用 `team-increment.js`（`find: ["book-parts"]`）；批次名接着已有轮次编（如 `c5-01`；DFO 当时是手工读的，批次叫 `k01`）。书评按书评人的话写。不用影子图书馆 |
 | WebSearch 突然全部失败 | 每个会话约 200 次的预算用完了（所有 agent 共用） | 工作流的 `search_budget` 把次数分到每个 agent 的 prompt 里（默认值见第六节的分配）；按第六节分会话跑：T1 一个会话，T3 另一个；补搜先用 curl 查 `chase_hints` 里的已知仓库，WebSearch 留给难找的。已经用完就在新会话里接着跑（工作流可续跑） |
+| `check_citations.py` 报 page-on-unread | 卡片按 unreadable / abstract 级登记，但读卡 agent 其实读了替代版本（报告版、预印本、后一版手册）并引了它的页码（DFO 的 Audet S025 = 1998 Rice 报告、Scheinberg S133 = v2.0 手册） | 引用写成版本引用 `[S025 TR pp. 3–12]`、`[S133 v2.0 p. 1]`（卡片正文要写明读的是哪个版本）；更规范的是把替代版本登记成自己的作品行（R/D 条目）再读。页码只在 full / partial 卡片上直接引 |
+| `check_citations.py` 报 unknown-id / no-card | 卡片 ID 笔误；或引用了没写卡片的作品（INDEX 里 Role=skip 或未读） | 改成正确的 ID；要引就先读、写卡片（T4 增量）；只是说明「这些行被排除」的提法不带页码即可（脚本只给 ⚠） |
+| 声明抽审报 unsupported | 汇总把卡片的 variant / contradiction 写成了 evidence，或声明比卡片强 | 改声明或改引用，换 `--seed` 再抽一轮；partial 逐条人看 |
 | fault line 只有一方的证据 | 圆桌从成员简介拼出来 | 每条都要双方的卡片证据；成员简介指向各人的 technique catalog 和 08 |
 | `merge_chase.py` 退出码 1，留下了一个补搜文件 | 文件里有 `works.json` / INDEX.md 里没有的 ID（例如写了 DOI、标题或自造的 ID），或者值不是字符串 | 整份文件留下、其余文件照常并入。把键改成这一块里的作品 ID 后重跑 `merge_chase.py` |
 | 担心同一天重跑 chase 覆盖没合并的摘要 | — | 不会：文件名是 `abstracts-chase-<date>-r<run>-<块>.json`，计划 agent 取当天已有的最大 run 加 1，名字已存在时再加 `-b`、`-c` |
@@ -432,7 +443,7 @@ DFO 深读档的实测：5 人，Scholar 935 行，421 篇开放全文，795 张
 - [ ] 每位成员 `quality_check.py` 12/12，都有 `## Roundtable Card`（圆桌不跑 `quality_check.py`，按第四节最后一行检查）
 - [ ] 每条 fault line 都有双方的证据；深读档要有双方的卡片证据
 - [ ] 历史人物和在世成员的时间边界、调研日期写进了诚实边界；`private/` 下只有 `README.md` 被 git 跟踪
-- [ ] 深读档：`validate_works.py` 0 errors，条目数与 Scholar 总数（没有主页时与 DBLP 记录数和 CV）对得上；`verify_card_quotes.py` 全部通过；最后一轮读卡之后 `team_status.py` 显示没有未读行；每人 `check_ledger.py` 锚点通过，跑过 T3.7 的成员 `check_ledger.py --before <精简前的备份>`（不加 `--allow`）通过
+- [ ] 深读档：`validate_works.py` 0 errors，条目数与 Scholar 总数（没有主页时与 DBLP 记录数和 CV）对得上；`verify_card_quotes.py` 全部通过；最后一轮读卡之后 `team_status.py` 显示没有未读行；每人 `check_ledger.py` 锚点通过，跑过 T3.7 的成员 `check_ledger.py --before <精简前的备份>`（不加 `--allow`）通过；每人 `check_citations.py` 0 problems；每人 `10-claim-audit.md` 最近一次抽审 unsupported = 0
 - [ ] `team_status.py --coverage` 的表原样贴进了 DEEP-READING.md；README 诚实边界的 5 列摘要原样是 `team_status.py --coverage --short` 的输出
 - [ ] `check_links.py product/<team>` 0 broken；`grep -rn --include='*.md' -e '{{' -e '\[TODO' product/<team>` 没有输出（轻量档也一样：DEEP-READING.md 和 RESOURCES.md 里给深读档留的项按模板的轻量档写法改掉了）
 - [ ] 每次提交都用了 `scripts/team_commit.sh`：git 里没有任何文件夹下的 PDF、PostScript、DjVu、EPUB，没有 `txt/`，`private/` 下只有 `README.md`（`git ls-files product/<team> | grep -Ei '\.(pdf|ps|ps\.gz|djvu|epub)$|/txt/|/private/'` 只列出 `private/README.md`）；每一步都已 commit

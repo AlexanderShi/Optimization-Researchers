@@ -41,7 +41,9 @@ skill？」前者走语料蒸馏，后者走 team-kit。
 - 加成员：先写进 `product/<team>/team.json` → `python3 scripts/new_team.py product/<team>/team.json
   --add-member <slug>` → 只为他跑 T1（`scripts/workflows/team-base-skills.js`）→ 带全体成员重跑
   `team-layer.js` → 深读档再跑 T3 → `team-integrate.js`。闸门：`quality_check.py --mode research`
-  12/12、`check_links.py` 0 断链、`team_check.py` 0 failed。
+  12/12、`check_links.py` 0 断链、`team_check.py` 0 failed。深读档另加两道证据闸门：`check_citations.py` 0 problems
+  （引用闭包：每条 `[card S012 pp. …]` 指向存在、读过、页码在范围内的卡片；替代版本写成 `[ID TR pp. …]`）和
+  `audit_claims.py` 声明抽审 unsupported = 0（零上下文 agent 判定，协议 `references/claim-audit.md`）。
 - 新团队：`python3 scripts/new_team.py --init <slug> --field "…" --members "A;B;C"` →
   `python3 scripts/new_team.py product/<slug>/team.json [--base-tier]` → 按 playbook T1–T4 走。
 - 版权材料（PDF/全文 txt/private/）由根 `.gitignore` 忽略，不要 `git add -f`。

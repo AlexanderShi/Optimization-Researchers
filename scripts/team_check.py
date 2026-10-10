@@ -24,6 +24,8 @@
     quotes          深读档：verify_card_quotes.py NOT FOUND = 0（本地没有 txt/ 时跳过：PDF 和 txt 不进 git，新容器里要先重跑
                     acquire_fulltexts.py）
     ledger          深读档：check_ledger.py 指向 09-evidence-ledger.md 的锚点都能解析
+    citations       深读档：check_citations.py 0 problems（SKILL.md、账本、技术目录、学生模式文件、01–09 里的每条
+                    [card S012 pp. …] 都指向真实存在、确实读过、页码在范围内的卡片；团队级一项查圆桌的 [<slug> card …]）
 
 --tier auto（默认）：有任何成员写了卡片（references/research/cards/*.digest.json）就按深读档查，否则按轻量档。
 """
@@ -32,6 +34,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import subprocess
 import sys
@@ -62,11 +65,13 @@ class Report:
 
 
 def run(cmd: list[str], cwd: Path | None = None) -> tuple[int, str]:
+    # 子进程强制 UTF-8（Windows 控制台默认 cp1252：✓、… 这类字符会让子脚本报错或让这里解码失败），解码错误替换而不是抛出
+    env = {**os.environ, "PYTHONUTF8": "1", "PYTHONIOENCODING": "utf-8"}
     try:
-        p = subprocess.run(cmd, capture_output=True, text=True, cwd=cwd, timeout=600)
+        p = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace", cwd=cwd, timeout=600, env=env)
     except (OSError, subprocess.TimeoutExpired) as e:
         return 99, str(e)
-    return p.returncode, (p.stdout + p.stderr).strip()
+    return p.returncode, ((p.stdout or "") + (p.stderr or "")).strip()
 
 
 def last_line(out: str) -> str:
@@ -195,6 +200,10 @@ def check_member(rep: Report, team: Path, m: dict, deep: bool, skip_quality: boo
         rep.add(scope, "quotes", rc == 0, head + extra)
     rc, out = run([sys.executable, str(HERE / "check_ledger.py"), str(sk)])
     rep.add(scope, "ledger", rc == 0, last_line(out))
+    rc, out = run([sys.executable, str(HERE / "check_citations.py"), str(team), "--member", m["slug"], "--no-roundtable",
+                   "--show-warnings", "0"])
+    rep.add(scope, "citations", rc == 0, next((l.strip() for l in out.splitlines() if l.startswith(("✅", "❌")) and m["slug"] in l),
+                                              last_line(out)))
 
 
 def main():
@@ -250,6 +259,9 @@ def main():
             (f"member rows missing: {', '.join(unlinked)}" if unlinked else "links every member"))
     check_roundtable(rep, team, cfg, deep)
     if deep:
+        rc, out = run([sys.executable, str(HERE / "check_citations.py"), str(team), "--roundtable", "--show-warnings", "0"])
+        rep.add("team", "citations", rc == 0, next((l.strip() for l in out.splitlines() if l.startswith(("✅", "❌")) and "roundtable" in l),
+                                                   last_line(out)))
         ordered = [sts[m["slug"]] for m in cfg["members"]]
         dr = team / "DEEP-READING.md"
         full, short = ts.coverage_md(ordered), ts.coverage_short_md(ordered)

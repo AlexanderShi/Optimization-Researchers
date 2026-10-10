@@ -95,7 +95,7 @@ const RULES = `House rules (non-negotiable):
 - Attribution: nothing written by a coauthor, a reviewer, an interviewer or a newsletter/column author is attributed to a member; reviews are the reviewer's voice.
 - Privacy: never open, read or quote anything under a references/sources/private/ folder; only say that such folders are git-ignored and never read.
 - Templates: README.md, DEEP-READING.md and the roundtable SKILL.md came from ${REPO}/references/team-templates/; their [TODO: …] items each name the step that resolves them. This step (team-integrate.js, T3.8) resolves every one that names team-integrate.js or T3.8, and after it no [TODO and no {{ may remain in the team's .md files (a member still in progress keeps the TODO items of its own folder).
-- The roundtable is not a research-craft skill: never run scripts/quality_check.py on it (its persona-mode score, about 2/6, means nothing here). Its gates are: check_links.py 0 broken; every seated member has a complete Roundtable Card; every fault line cites card evidence from both sides; no [TODO or {{ left.
+- The roundtable is not a research-craft skill: never run scripts/quality_check.py on it (its persona-mode score, about 2/6, means nothing here). Its gates are: check_links.py 0 broken; every seated member has a complete Roundtable Card; every fault line cites card evidence from both sides (python3 scripts/check_citations.py <team> --roundtable → 0 problems: each [<slug> card S012 pp. …] names that member's existing card, read at those pages); no [TODO or {{ left.
 - Scope: edit only the files this step names as its outputs; scratch files go under ${SCR}/. Do not git commit, push, stash, reset or checkout (the operator commits after the stage).`
 
 function ctx(status) {

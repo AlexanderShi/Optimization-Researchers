@@ -168,3 +168,14 @@ references/research/
 - 每写完一批，就跑 `python3 scripts/verify_card_quotes.py <skill目录>`。脚本比较前会统一 Unicode、连字、行末断词、引号、破折号和空白。
 - 报 `NOT FOUND` 的摘录，要么改成原文，要么去掉引号改为转述。
 - **全部通过才进入第三节的汇总。** DFO团队的1,139条摘录全部逐字通过。
+
+### 引用规则（硬性）
+
+SKILL.md、`09-evidence-ledger.md`、`technique-catalog.md`、学生模式文件和 `08` 里引用卡片的写法，以及 `scripts/check_citations.py` 查什么：
+
+- 写法：`[S012 p. 9]`、`[S012 pp. 3, 8–9]`、`[card S012, pp. 20–21]`、`[cards S023, pp. 17–19; S104, pp. 26–30]`；圆桌里带成员：`[michael-powell card S093 pp. 3–4]`。页码是读的那个文件的 `[[page N]]` 页。
+- **页码只引自读过全文的卡片**（read_level `full` / `partial`）。摘要级、元数据级、unreadable 的卡片只能引 ID，不能引页。
+- **页码不超过** INDEX.md 的 Pages（读的就是那个文件）。
+- **读的是替代版本**（技术报告版、预印本、后一版手册；索引里那个文件读不了或不是这篇）时写成**版本引用**：`[S025 TR pp. 3–12]`、`[S133 v2.0 p. 1]`、`[S012 arXiv pp. 4–5]`，卡片正文要写明读的是哪个版本（同一个词）。更规范的做法是把替代版本登记成自己的作品行（`R`、`D` 条目）再读。
+- 引用的 ID 必须有卡片。只是说明「哪些行被排除」可以提 Role=skip 的 ID，但不带页码。
+- 每次改动这些文件之后跑 `python3 scripts/check_citations.py <skill目录>`，0 problems 才往下走（`team_check.py` 的交付闸门里也查）。它证明的是「引得到」；「卡片真这么说」靠抽审：`scripts/audit_claims.py`，协议见 [claim-audit.md](claim-audit.md)。

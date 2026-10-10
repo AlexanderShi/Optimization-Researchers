@@ -8,7 +8,7 @@
 |---|---|---|
 | 输入 | `teams/<team>/` 封闭语料，禁联网 | 研究者公开发表（OpenAlex / DBLP / arXiv 全文）+ 网络调研 |
 | 产物 | `teams/<team>/SKILL.md`（放在语料旁边），每条事实带语料 ID | `product/<team>/<member>/`（SKILL.md + references/research 证据台账）+ 圆桌 skill |
-| 质量门 | G1–G6 | `scripts/quality_check.py` 研究模式 + `scripts/team_check.py` + 摘录逐字核对 |
+| 质量门 | G1–G6 | `scripts/quality_check.py` 研究模式 + `scripts/team_check.py` + 摘录逐字核对 + 引用闭包（`check_citations.py`）+ 声明抽审（`audit_claims.py`，`references/claim-audit.md`） |
 | 入口 | DISTILL.md | `references/research-team-playbook.md` |
 
 ## 来源
@@ -50,7 +50,9 @@ kit 文档里的「[skill目录]」「女娲仓库根目录」即**本仓库根�
 python3 scripts/team_status.py product/dfo-team                  # 每人到了哪一步
 python3 scripts/team_status.py product/dfo-team --coverage       # 覆盖表（可贴进 DEEP-READING.md）
 python3 scripts/check_links.py product/nonlinear-team            # 相对链接与锚点
-python3 scripts/team_check.py product/dfo-team                   # 团队整体检查（含 quality_check）
+python3 scripts/team_check.py product/dfo-team                   # 团队整体检查（含 quality_check、引用闭包）
+python3 scripts/check_citations.py product/dfo-team --methods    # 引用闭包：每条 [card S012 pp. …] 都指向存在、读过、页码在范围内的卡片；另报每个方法的证据数
+python3 scripts/audit_claims.py product/dfo-team/<member> --sample --n 20 --out $S/audit-<member>.json   # 声明抽审包（零上下文 agent 判定后 --report）
 python3 scripts/new_team.py product/<new-team>/team.json         # 按 team.json 铺新团队
 python3 scripts/new_team.py product/<team>/team.json --add-member <slug>
 bash scripts/workflows/selftest.sh product/dfo-team              # kit 自检（以 dfo-team 为已完成样例）
@@ -74,8 +76,14 @@ bash scripts/workflows/selftest.sh product/dfo-team              # kit 自检（
 |------|------|------|
 | `scripts/workflows/team-*.js`（9 个文件，各 2 处） | `args.repo` / `args.scratch` 的绝对路径检查由 `startsWith('/')` 改为同时接受 `C:\…` 的正则 `/^(?:[A-Za-z]:[\\/]\|\/)/` | 原检查只认 POSIX 路径，Windows 上 Node 解析出 `C:\…` 导致全部工作流在本机拒绝启动；`args.team` 的「必须是相对路径」检查未动 |
 
+| `scripts/check_citations.py`（新增，2026-10-10） | 研究Skill的引用闭包检查：SKILL.md、账本、技术目录、学生模式文件、01–09 里每条 `[card S012 pp. …]` 必须指向存在的卡片，页码只在 full / partial 卡片上且不超过 INDEX 页数，替代版本写成版本引用；圆桌的 `[<slug> card …]` 同样；`--methods` 报每个方法的证据数 | 此前只有摘录逐字核对，卡片 ID / 页码没有闸门。首跑在 dfo-team 上抓到：Audet S025（37 处引 1998 报告版页码，卡片却登记为 unreadable）、Scheinberg S133（同类，5 处）——前者已是 `TR` 版本引用，后者补上 `v2.0` 标记 |
+| `scripts/audit_claims.py` + `references/claim-audit.md`（新增，2026-10-10） | 声明→证据抽样审计：抽 N 条带页码的声明配上所引卡片全文成审计包，交零上下文 agent 判定 supported / partial / unsupported / uncheckable，报告追加到 `<M>/references/research/10-claim-audit.md` | 引用闭包只证明「引得到」，这一层证明「卡片真这么说」；两个 agent 分离（SkillLens：自评准确率 46.4%） |
+| `scripts/team_check.py` | 每位成员新增 `citations` 一项（深读档），团队级新增圆桌的 `citations` | 交付闸门含引用闭包 |
+| `scripts/workflows/team-synthesize.js`、`team-tighten.js`、`team-increment.js`、`team-integrate.js` | 闸门清单里加 `check_citations.py`（synthesize 的 fidelity 复核员第 4 项改用脚本） | 每次改 SKILL.md / 账本的步骤都过引用闭包 |
+| `references/research-team-playbook.md`、`scripts/workflows/README.md`、`references/research-extraction-framework.md` §十一、`references/paper-reading-card.md` §四、`references/fidelity-scorecard.md` | 相应的闸门行、命令、失败模式与引用规则 | 文档同步 |
+
 除此之外 `scripts/`、`references/` 与 nvwa-skill `eb012fa` 逐字节一致。再从 nvwa 同步时注意
-不要覆盖掉这处修改（或同步后重跑 `selftest.sh` 确认）。
+不要覆盖掉这些修改（或同步后重跑 `selftest.sh` 和 `check_citations.py product/dfo-team` 确认）。
 
 ## 在 Claude Code 里的入口
 
