@@ -1,0 +1,128 @@
+[
+  {
+    "id": "S067",
+    "year": "2026",
+    "title": "Sensitivity analysis for mixed binary quadratic programming",
+    "read_level": "full",
+    "contribution": "Proves that approximating the change in optimal value of an MBQP under rhs changes is NP-hard even when z(b) is known, characterises when strong duality holds between Burer's completely positive reformulation and its copositive dual (bounded P or PSD Q; counterexample otherwise; non-attainment in general) with a closed-form near-optimal dual, and turns the structure of the near-optimal dual face into an SDP method that gives tighter sensitivity dual bounds than Shor relaxations on small synthetic instances (read: arXiv v2).",
+    "problem_entry": "Repeated MBQPs with a fixed constraint matrix and changing rhs; solvers find primal solutions but not matching dual bounds (App. A, p. 40); Cook et al.-type IP sensitivity bounds are trivial for binaries (p. 2).",
+    "key_idea": "Use the copositive dual of Burer's CPP reformulation as a sensitivity certificate; since the epsilon-optimal dual set is never a singleton and adding KK_i blocks worsens the bound by (Delta b_i)^2, search the near-optimal dual face for a dual with small KK contribution, using an S+ + SP restriction and weights equal to the average bound over the target Delta b range (pp. 4-12).",
+    "assumptions": "Assumption (A): the linear constraints imply 0<=x_j<=1 for binaries (p. 4); strong duality needs P bounded or Q PSD and a known lower bound l (p. 5); computations replace COP by S+ + SP without a guarantee (pp. 11, 36).",
+    "proof_devices": [
+      "Hardness of two-sided approximation by a one-unit rhs change in an edge-colouring binary program on cubic graphs (Vizing + Holyer) (pp. 3, 16-18)",
+      "Strict copositivity of H via a recession-direction contradiction with Assumption (A) (Lemma 1, pp. 18-19)",
+      "Local stability: finite decomposition by binary patterns, an LP threshold freezing the non-empty patterns, Vavasis's QP characterisation giving a piecewise-quadratic Lipschitz lower bound (Theorem 4, pp. 19-23)",
+      "Copositivity of a closed-form dual by a three-case split of the orthant with one PSD penalty block per violated constraint type (Theorems 12-13, pp. 24-33)",
+      "Charnes-Cooper transformation to bound a linear-fractional constant (p. 26)",
+      "Counterexample min x1^2 - x2^2 with infeasible COP dual (p. 8), and non-attainment on the 6-clique stable-set COP dual by a sequence of test vectors (pp. 33-36)"
+    ],
+    "experiments": "Five synthetic classes (COMB, KBQP, SSLP, SSQP, PACK; n<=100) vs Shor1, Shor2, Cont; ground truth by solving each perturbed MBQP; relative gap normalised to Shor1; Julia/Gurobi/Mosek on a PC; claims the tightest bounds in all cases, but Table 1 shows 1.28 at Delta k=1 for COMB, worse than Shor1 and Cont (pp. 12-16, 40-43).",
+    "positioning": "Extends IP sensitivity (Cook et al. and successors) to MBQP via Burer's CPP; credits Guo-Bodur-Taylor for CPP shadow prices and Brown et al. for part (a); parts (b)-(d) claimed new (pp. 2, 5).",
+    "writing": "All results in Section 2 before the proofs; positive and negative parts in one theorem; hedged 'preliminary computations' but an unhedged 'tightest ... in all cases' (pp. 3, 5, 10, 14).",
+    "limits_future": "SDP solver limits instance size; no guarantee for the S+ + SP restriction; loose constants; future: generalised copositive QCQP reformulations, scalable SDP, cutting planes using the part (b) structure (pp. 28, 36-37).",
+    "method_links": [
+      {"method": "Method 4", "relation": "evidence", "note": "Theorem 3 bundles sufficient conditions, a counterexample when both are dropped, and non-attainment; Remark 2 says the local-stability conditions cannot be relaxed; the hardness result comes first", "pages": "pp. 3, 5, 8"},
+      {"method": "Method 5", "relation": "evidence", "note": "the deliverable is a dual bound for every Delta b from one tractable SDP, motivated by solvers' missing dual bounds; amortised cost reported", "pages": "pp. 2, 11, 16, 40"},
+      {"method": "Method 3", "relation": "variant", "note": "MILP-list move (IP sensitivity theorems) applied to MBQP, but answered by conic reformulation and duality, not substructure convexification", "pages": "p. 2"},
+      {"method": "Method 2", "relation": "variant", "note": "exact z(b+Delta b) as ground truth, but the metric is normalised to a baseline relaxation and there is no stripped instrument", "pages": "p. 14"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "pick the dual for its downstream use", "evidence": "epsilon-optimal duals are non-unique and differ in sensitivity quality; optimise the downstream bound over the near-optimal dual face", "pages": "pp. 9-12"}
+    ],
+    "transferable": [
+      "Penalty-block copositivity proof: one PSD block per constraint type, three-case orthant split, stability lemma for the near-feasible case (pp. 24-33)",
+      "Two-sided approximation definition for sensitivity, defended against 'cheating' outputs (p. 3)",
+      "Optimise over the epsilon-optimal dual face with weights equal to the average predicted bound over the target perturbation range (pp. 9-12)",
+      "Reset the rhs to Ax* - e when random instances show no sensitivity, and say why (p. 13)",
+      "An appendix table showing the claimed solver gap (primal early, dual stuck) before proposing a method (p. 40)"
+    ],
+    "coauthors": "Diego Cifuentes, Jingye Xu",
+    "quotes": [
+      {"text": "Therefore, part (b) of Theorem 3 is the best we can hope for, as an optimal solution is not always achievable.", "page": 5},
+      {"text": "In particular, the closed-form solutions will typically not provide the best dual bounds.", "page": 9}
+    ]
+  },
+  {
+    "id": "S080",
+    "year": "2026",
+    "title": "Regularized MIP model for integrating energy storage systems and its application for solving a trilevel interdiction problem",
+    "read_level": "full",
+    "contribution": "Adds an l1 penalty on battery charging and discharging to the DC-OPF-with-storage MIP, proves zero integrality gap with its LP relaxation above an efficiency-dependent threshold (sharp by examples), bounds the loss against the original model, and uses the regularised LP as the inner level of a trilevel battery-siting / N-k interdiction problem whose plans are certified by a relaxation-restriction sandwich (read: arXiv v2; Theorem 1 case analysis and Appendix A proofs skimmed).",
+    "problem_entry": "LP relaxations of storage models allow simultaneous charging and discharging (Arroyo et al.); the exact MIP makes a trilevel N-k battery-siting problem intractable (the Zeng-An bilevel algorithm does not converge in 6 h on IEEE 14) (pp. 2, 18).",
+    "key_idea": "Treat complementarity as sparsity and add an l1 regulariser; if E^min_c = E^min_d = 0 and lambda_c + eta_c eta_d lambda_d >= 1 - eta_c eta_d, the regularised MIP equals its LP relaxation, so the inner level can be dualised with bounded duals and linearised exactly (pp. 3, 6, 18, 34).",
+    "assumptions": "DC OPF, identical constant battery parameters, eta_c <= 1/eta_d, zero minimum charge/discharge rates ('standard'), slack costs normalised to 1; the trilevel model drops Ohm's law and generator cost (pp. 4-5, 9, 17).",
+    "proof_devices": [
+      "Exchange argument netting simultaneous charge and discharge, with a four-case objective comparison (Theorem 1, pp. 6-9)",
+      "Two-bus two-period examples showing each Theorem 1 assumption is necessary (Examples 1-2, pp. 9-10)",
+      "Degeneracy baseline: lambda >= e equals the no-battery problem (Proposition 1, p. 11)",
+      "Exactness via the gap to the second-best objective value (Proposition 2, p. 14)",
+      "Worst-case loss bound T Nb max{E^max_c lambda_c, E^max_d lambda_d} and the lambda minimising it (Theorem 3, Proposition 3, p. 15)",
+      "Sandwich z^LP <= z^OPT <= z^REG and an optimality-gap certificate for the regularised plan (Proposition 4, pp. 18-19)",
+      "Bounded third-level duals making McCormick exact (Proposition 5, p. 34)"
+    ],
+    "experiments": "MATPOWER IEEE/PEGASE/RTE networks with 14-1888 buses, 24-hour EIA-shaped loads with noise, Julia/Gurobi 10, 64 GB; DCOPF regularised vs exact MIP optimality gap <= 0.33% (Table 2, p. 21); trilevel solution-gap near 0 on small networks but 18-23% average on the two largest for b=5, k=10, attributed to the lower bounds (pp. 19-23).",
+    "positioning": "Organises the storage-modelling literature (lossless, losses without complementarity, MIP, Pozo LP relaxations, Arroyo counterexamples); credits Singh-Knueven for the perturbation idea; places complexity between Bakhshi-Ostrowski and Bansal-Gunluk; claims the first N-k battery-siting study (pp. 2-3, 9, 24).",
+    "writing": "Three bold-led contribution bullets; every theorem followed by a toy two-bus example; the conclusion's 'near-optimal solutions in most cases' is stronger than the large-network gaps (pp. 2-3, 9-16, 22, 24).",
+    "limits_future": "Properties depend on the objective and constraint structure; other objectives open; NP-hardness of the lossy battery problem with fixed bounds open (p. 24); unstated: transport model in the trilevel problem, large-network plans uncertified, single-instance baseline (pp. 17-18, 22).",
+    "method_links": [
+      {"method": "Method 5", "relation": "evidence", "note": "certified gap from LP/VCH lower bounds and the regularised plan's upper bound (Proposition 4); hardware and time limits named", "pages": "pp. 18-19, 21-22"},
+      {"method": "Method 4", "relation": "evidence", "note": "each Theorem 1 assumption shown necessary ('the best that we may expect'); degenerate lambda range marked; worst-case bound plotted against the empirical gap", "pages": "pp. 9-11, 17"},
+      {"method": "Method 2", "relation": "variant", "note": "exact MIP ground truth only for the single-level DCOPF test; the trilevel yardstick is a non-converging relaxation; no stripped instrument", "pages": "pp. 21-22"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "regularise to make the relaxation exact", "evidence": "an l1 penalty with an efficiency-dependent threshold gives zero integrality gap, traded against a bounded loss in the original objective", "pages": "pp. 3, 6, 15"},
+      {"pattern": "restriction-relaxation sandwich to certify a multilevel solution", "evidence": "inner level replaced by a restriction (plan and upper bound) and by relaxations (lower bounds) to certify the plan's gap", "pages": "pp. 18-19"}
+    ],
+    "transferable": [
+      "Exchange argument for zero integrality gap of a complementarity-penalised LP (pp. 6-9)",
+      "Sharpness examples on a two-bus two-period network for each hypothesis (pp. 9-10)",
+      "Worst-case quality bound plus the parameter minimising it, then the empirical gap plotted against the bound (pp. 15-17)",
+      "Prove explicit dual bounds so that the McCormick linearisation of dual-binary products is exact (p. 34)",
+      "Report the algorithm's convergence gap and the plan's certified gap separately (pp. 21-23)"
+    ],
+    "coauthors": "Dahye Han, Nan Jiang, Weijun Xie",
+    "quotes": [
+      {"text": "Even for the smallest instance of the IEEE 14-bus system and with the first-stage decision x fixed, solving the bilevel max - min problem using the state-of-the-art algorithm proposed by Zeng and An (2014) does not converge in 6 hours.", "page": 18},
+      {"text": "Note that this is an exact reformulation of the bilinear terms, not a relaxation.", "page": 34}
+    ]
+  },
+  {
+    "id": "S081",
+    "year": "2026",
+    "title": "Non-monotonicity of branching rules with respect to linear relaxations",
+    "read_level": "full",
+    "contribution": "Defines monotonicity of a branching rule (a tighter relaxation never gives a larger tree), proves every fractional-only rule is non-monotonic and that one cut can blow up full-strong-branching trees exponentially, and measures prevalence on random knapsacks with cover cuts and on MIPLIB 2017 with SCIP root cuts, giving a 20%-gap-closed rule of thumb (read: arXiv v1).",
+    "problem_entry": "Branch-and-cut assumes tighter formulations give smaller trees, but branching rules use local LP information; made precise after removing dual degeneracy and fixing best-bound node selection (pp. 1-2).",
+    "key_idea": "Explicit small polytopes where the tighter formulation makes a variable integral at all vertices (so a fractional-only rule loses a good split), and a 2-D gadget replicated n times and coupled through one auxiliary variable so that a single cut tightens all copies and flips FSB's choices (pp. 3-8).",
+    "assumptions": "Integer programs with nested LP relaxations having the same integer points; non-degenerate objectives; best-bound node selection; FSB with product, linear (mu = 1/6) or ratio score (pp. 2-3).",
+    "proof_devices": [
+      "4-D polytope from three vertex sets related to the cross-polytope; the tighter Q is the lift-and-project closure of P in x4; trees of 11 vs 15 nodes (Theorem 1, pp. 4-5)",
+      "2-D gadget with a vertex table and hand-computed FSB-P scores (Table 1, pp. 6-7)",
+      "n copies coupled by an auxiliary variable in a redundant constraint so that one cut acts as n cuts (pp. 6-7)",
+      "Upper bound by the recursion T(n) <= 4 + T(n-1); lower bound by counting complete gadgets before pruning by bound, >= 6(2^floor(0.75n/6.75) - 1) (pp. 7-8)",
+      "Monotone extremes (a-priori order; #P-hard optimal branching) bounding the open question (p. 13)"
+    ],
+    "experiments": "100 random MKPs (n=20, m=50) with exact cover separation in a Python naive B&B with FSB as an oracle (19.8% of single cuts enlarge trees; weak correlation with gap closed and depth); 21 filtered MIPLIB 2017 instances in stripped SCIP 8 with the optimal value supplied, 3 seeds, 0-10 cut rounds; no tree growth beyond 20% gap closed (pp. 8-12).",
+    "positioning": "Places itself in branch-and-cut history and recent branching-vs-cutting trade-off studies (Basu et al.; Kazachkov-Le Bodic-Sankaranarayanan); builds on his own FSB, random-IP and cut-selection papers; uses the Gamrath-Schubert fair node-counting protocol (pp. 1, 9, 13).",
+    "writing": "Formal definition before results; the insight sentence repeated in abstract, contributions and experiments; 'Contrary to expectation', 'surprisingly common'; the conclusion guards against over-reading and disclaims evaluating SCIP (pp. 2-3, 9, 11-13).",
+    "limits_future": "Dual degeneracy uncontrolled in MIPLIB and confounding the zero-gap instances; open whether a good, efficient, monotone rule exists; unstated: small instance sets, only FSB-P, threshold read from scatter plots (pp. 10, 12-13).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "a solver regularity (cuts sometimes increase node counts) made into a well-defined property after removing confounders, proved, then returned to practice as a rule of thumb; 'engineering vs mathematical' framing", "pages": "pp. 2, 12-13"},
+      {"method": "Method 2", "relation": "evidence", "note": "naive B&B with FSB as an oracle for fair node counting; stripped SCIP with the optimal value and seeds; instance ladder from random instances to filtered MIPLIB", "pages": "pp. 8-11"},
+      {"method": "Method 4", "relation": "evidence", "note": "a general negative theorem, an exponential worst case, and monotone extremes naming the open gap", "pages": "pp. 3-8, 13"}
+    ],
+    "new_pattern_candidates": [],
+    "transferable": [
+      "Remove confounders (dual degeneracy, node selection) before defining the property (p. 2)",
+      "Couple n copies through one auxiliary variable in a redundant constraint so that one cut acts as n cuts (pp. 6-7)",
+      "Tree-size lower bound by counting complete gadgets until pruning by bound becomes possible (p. 8)",
+      "Two-instrument design: a fully controlled synthetic study, then a stripped solver on a filtered benchmark with seeds, stating what it cannot control (pp. 8-11)",
+      "Group benchmark results by a measured outcome band (gap closed) rather than by instance family (pp. 11-12)"
+    ],
+    "coauthors": "Prachi Shah, Marco Molinaro",
+    "quotes": [
+      {"text": "Contrary to expectation, 19.8% of the cuts led to an increase in tree size.", "page": 9},
+      {"text": "Through this work, we show that such aberrant behaviour may not always be because of engineering reasons like the addition of cuts leading to a change in some default parameters or other random tie-breaking, but the problem may in fact be mathematical in nature.", "page": 12}
+    ]
+  }
+]

@@ -1,0 +1,163 @@
+[
+ {
+  "id": "S129",
+  "year": "2025",
+  "title": "Convexification of a Separable Function over a Polyhedral Ground Set",
+  "read_level": "full",
+  "contribution": "For S^k = {(x,y): x in G, y_j = x_j^k}, proves NP-hardness, builds a ladder of power-cone/RLT/SOC/SDP/RPT relaxations (SDP adds nothing to P; RLT+SDP is strictly stronger), gives hull results for k = 2 on the simplex at n = 2, 3, matching distance bounds, and shows the weakest relaxation P is exact with probability -> 1 as n grows; 108,000-instance comparison against BARON (read: arXiv v1).",
+  "problem_entry": "One nonconvex set covers separable standard QP (k = 2) and node substructures of gas and water networks (pp. 1-2); prior hull results cover only k = 2 and are intractable or implicit (Burer, Bomze-Locatelli, Gokmen-Yildirim, p. 2).",
+  "key_idea": "Rank relaxations of y = x^k over a polytope by theorem and experiment: single-row power cone P, lifted X with RLT/SDP/SOC linked by X_jj = y_j^(2/k) (eq. (5), p. 4), plus RPT power-cone cuts (p. 18); SDP alone is redundant on P (Prop. 2, p. 5), RLT is what helps.",
+  "assumptions": "k > 1, G a polytope in [0,1]^n (p. 1); all results beyond NP-hardness for G = simplex (p. 5); hull and DNN-exactness only for k = 2 (pp. 8-10); probabilistic theorem for iid Unif(-1,1) objectives only (pp. 15-17); extension to convex nondecreasing functions asserted without proof (p. 24).",
+  "proof_devices": [
+   "SUBSET-SUM reduction for NP-hardness of linear optimization over S^k (Prop. 1, p. 3)",
+   "Extreme points of P have y_j in {x_j, x_j^k}; complete X = xx^T + D with diagonal D to show SDP/SOC add nothing (Lemma 1, Prop. 2, Cor. 1, p. 5)",
+   "Explicit small points in simplex(2), simplex(3) with hand-computed minors/determinant for strict containments (Props. 5-7, p. 7)",
+   "Explicit convex-combination decomposition for the n = 2 hull; DNN = CP up to 4x4 (Maxfield-Minc) for n = 3 (Thm 1, Cor. 2, pp. 8-9)",
+   "Optimal-solution perturbation by a diagonally dominant 2x2 shift preserving row sums, Schur complement, explicit CP decomposition: primal-only proof of DNN exactness for three sign patterns of beta (Thm 3, pp. 9-10)",
+   "Matching distance bounds: feasible-point substitution for the upper bound on P, Lagrangian relaxation plus one-variable calculus lemma for the same lower bound on conv(S^k) (Props. 8-9, Lemma 3, pp. 11-12)",
+   "Exact probability of an exactness case by conditioning on |J+| and an integration-by-parts recursion; limit via binomial-identity bounds (7/8)^n, (3/8)^n (Prop. 11, Thm 4, pp. 15-17)",
+   "RPT: multiply sum x_j = 1 by x_i^k and rewrite terms as power-cone perspectives (Prop. 13, pp. 18-19)"
+  ],
+  "experiments": "Simplex ground set; 2 distributions x 6 values of k x n = 2..10, 1,000 objectives per setting (108,000 instances), BARON 25.7.29 for the exact NON model vs 9 relaxations in MOSEK 10.0.40 on a named Xeon workstation; metrics cumulative gap, cumulative time, count exact (gap <= 1e-4); 4 MOSEK UNKNOWN instances excluded; PRS exact at k = 2 in every run, RPT relaxations costlier than BARON at n = 10 (pp. 19-23).",
+  "positioning": "Extends the k = 2 literature (Burer, Bomze-Locatelli, Gokmen-Yildirim), contrasting its primal-only proof with [15]'s conic duality (p. 10); tools from RLT (Sherali-Adams) and RPT (Zhen-de Moor-den Hertog, Bertsimas et al., Dey-Khajavirad); application refs largely in-group (pp. 2, 18, 25).",
+  "writing": "Contribution list by section (p. 3); 'Interestingly' flags each surprise (pp. 3, 5, 15, 20, 22, 24); conjectures explicitly derived from experiments (pp. 10, 21); conclusion ranks relaxations with use advice (pp. 21, 23-24).",
+  "limits_future": "Open: Conjecture 1 (PRS exact for k = 2), Conjecture 2 (PRs3 = PRS), multiple exponents, k < 1, other ground sets (p. 24). Unstated: theory and experiments beyond NP-hardness only on the simplex although the title promises polyhedral ground sets; the gas and water motivation is never tested.",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "Joint convexification of a recurring nonconvex substructure chosen from applications; low-dimensional hull results; cheap single-row relaxation tested against the hull", "pages": "pp. 1-2, 8, 11-17"},
+   {"method": "Method 4", "relation": "evidence", "note": "NP-hardness, strictness of each containment by explicit points, matching upper/lower distance bounds, closed-form inexact case, open conjectures stated", "pages": "pp. 3, 7, 10-14, 21"},
+   {"method": "Method 5", "relation": "evidence", "note": "Power-cone/SOC relaxation is the right first object (SDP adds nothing on it, exact w.h.p.); heavier layers recommended only under a time budget", "pages": "pp. 5, 17, 21, 23"},
+   {"method": "Method 2", "relation": "evidence", "note": "Global-solver ground truth on small n (BARON, n <= 10), exact-instance counts; experiments feed conjectures", "pages": "pp. 10, 19-21"},
+   {"method": "Method 1", "relation": "variant", "note": "Random-instance model explains why the weak relaxation works on average, but the explained object is the authors' own relaxation, not a solver habit", "pages": "pp. 14-17"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "rule out the heavier relaxation by an equivalence theorem", "evidence": "SDP and 2x2-minor SOC constraints add nothing to the power-cone relaxation P (second instance after S105 Prop. 1 in c16)", "pages": "p. 5"},
+   {"pattern": "simulate the exactness condition, then prove the dominant case analytically", "evidence": "10^6-sample Monte Carlo of closed-form exactness cases (Tables 1-2) leads to an exact formula (Prop. 11, Table 3) and a limit theorem (Thm 4)", "pages": "pp. 14-17"}
+  ],
+  "transferable": [
+   "Extreme-point characterisation plus diagonal completion to prove an SDP layer is redundant on a separable relaxation (p. 5)",
+   "Pair an upper distance bound for the relaxation with the same lower bound for the convex hull to show the relaxation is not the bottleneck (pp. 11-12)",
+   "Link lifted X to y by the exact identity X_jj = y_j^(2/k) written as a convex inequality pair per case of k (eq. (5), p. 4)",
+   "Monte Carlo over objectives to estimate how often closed-form exactness conditions hold, then compute the dominant case exactly (pp. 14-17)",
+   "Gap-vs-time scatter with exact-instance counts next to each point to prune dominated relaxations (Fig. 3, p. 21)"
+  ],
+  "coauthors": "Burak Kocuk (Sabanci University)",
+  "quotes": [
+   {"text": "Interestingly, adding the SDP constraint (3) to the P relaxation does not further strengthen this relaxation as proven below.", "page": 5},
+   {"text": "Interestingly, this weakest relaxation we consider is tight with high probability when the dimension n is sufficiently large, as proven in Theorem 4.", "page": 3}
+  ]
+ },
+ {
+  "id": "S130",
+  "year": "2025",
+  "title": "Improving Full Strong Branching Decisions by Incorporating Additional Information",
+  "read_level": "full",
+  "contribution": "Diagnoses two shortcomings of full strong branching (LP gains overestimate progress when a child can be pruned; myopia about infeasibility and integrality) and fixes them with efficacious (gap-capped) gains, a reweighted product score (0.3/0.7) and last-assignment asymmetry exponents, tuned on 14 random problem classes and tested on 51 filtered MIPLIB 2017 instances in a textbook B&B, with an extension to reliability branching (read: arXiv v1).",
+  "problem_entry": "FSB trees are still 25-75% larger than optimal trees by the authors' own earlier study [14]; the goal is to close that gap, counting nodes not time, because FSB serves as the expert that ML branching imitates (p. 2).",
+  "key_idea": "Cap each LP gain at the primal-dual gap, then reweight the product score toward the larger gain (q_min^0.3 q_max^0.7); add exponents a0/a1 from a global count of whether the last branching before infeasible or integral leaves fixed 0 or 1, switched by a 5% leaf-fraction threshold (pp. 5, 8, 13-14, 20).",
+  "assumptions": "Mixed-binary LPs, best-bound order, no presolve or cuts, FSB as exact oracle (pp. 3-4); incumbent given at 0/2/5/10% primal gap (p. 5); the last-assignment rule motivated for pure packing/covering (p. 13) and assumes similar variables (p. 27).",
+  "proof_devices": [
+   "Two-variable toy examples exposing each failure mode and checking each fix (Examples 1-4, pp. 4, 5-7, 31)",
+   "Minimal-infeasible-subsystem argument: the last branch is in every MIS, and for pure packing/covering all MIS branchings fix the same value, so only the last assignment is recorded (p. 13; knapsack counterexample App. B, pp. 31-33)",
+   "Subtree-size recursion T(n,k) = T(n-1,k) + T(n-1,k-1) + 1 ~ C(n,k) giving branch weights (n-k)/n and k/n for cardinality constraints (App. C, pp. 33-34)"
+  ],
+  "experiments": "Python 3.10 textbook B&B with Gurobi 11 LPs, FSB as non-interfering oracle for fair node counts (pp. 3-4); 20 random instances x 14 classes for design and grid-search tuning (in-sample gains 13.3% -> 7.4% for Eff-SB (3,7), pp. 7-10); held-out MIPLIB 2017 (51 instances, 3 seeds, 20,000-node limit): 20.5-35.4% fewer nodes on 10 solved and 3.1-6.0% less gap on 32 unsolved (pp. 23-24); RB extension mixed for Eff-RB, better for PA-LA-RB (p. 25); no running times reported.",
+  "positioning": "Builds on own [14] (FSB vs optimal trees) and [40]; product score lineage Applegate et al., Achterberg; alternatives (pseudocost/reliability, lookahead, SAT-style, hybrid, information-based, backdoors) surveyed without criticism; difference: global asymmetry trends, not per-variable distinctions (pp. 2-3, 14); 'first systematic study' with a hedge (p. 11).",
+  "writing": "Numbered insights after each table (pp. 5, 7-8, 14-15, 18-20, 23); toy example before each formula; parameter-bearing rule names; headline numbers inconsistent across abstract (22-35%), contributions (15-26%) and Section 5.1 (20.5-35.4%) and for RB (pp. 1, 3, 23, 25).",
+  "limits_future": "Stated: best parameters vary by structure, RB gains smaller since pseudocost gains are inaccurate, the last-assignment rule may not be the best asymmetry detector, assumes similar variables; future: primal-gap-dependent exponents, other asymmetry metrics, variable- and structure-specific scores (p. 27). Unstated: no time evaluation; random-bed results are in-sample.",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "Solver habit (FSB product score) diagnosed via a proxy (tree size, reasons given) and step 8 closed with concrete rules", "pages": "pp. 2, 8, 20"},
+   {"method": "Method 2", "relation": "evidence", "note": "Stripped textbook B&B, FSB as oracle for fair node counting, presolve/cuts off, random families then filtered MIPLIB", "pages": "pp. 3-4, 23"},
+   {"method": "Method 2", "relation": "variant", "note": "No optimal-tree ceiling computed here; the ceiling is borrowed from [14]", "pages": "p. 2"},
+   {"method": "Method 4", "relation": "variant", "note": "Failure modes shown by examples and per-class losses tabulated, but no tightness claim and per-instance MIPLIB losses not discussed", "pages": "pp. 5-6, 17, 24"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "control the incumbent: report every branching result at fixed primal gaps", "evidence": "All tables at 0/2/5/10% primal gap; robustness to incumbent quality is a measured axis on random and MIPLIB sets", "pages": "pp. 5, 23, 25"},
+   {"pattern": "toy example per failure mode before each formula change", "evidence": "Examples 1-4 motivate efficacious gains, the 0.3/0.7 reweighting and the rejection of the pruning-focused rule", "pages": "pp. 4-7, 31"}
+  ],
+  "transferable": [
+   "Cap LP gains at the primal-dual gap before scoring, then re-tune the product exponents; check that the re-tuning alone does not help (pp. 5, 8, 10-11)",
+   "Record only the last branching before each infeasible or integral leaf to detect 0/1 asymmetry (p. 13, Algorithm 1 p. 14)",
+   "Switch between two rules by a threshold on a measured tree statistic chosen from where each rule wins (p. 20)",
+   "Give every branching experiment a known incumbent at fixed primal gaps (p. 5)",
+   "Tune on structured random families whose behaviour you can explain, then evaluate once on a filtered public benchmark with seeds and a node limit (pp. 4, 23)"
+  ],
+  "coauthors": "Prachi Shah (Amazon)",
+  "quotes": [
+   {"text": "Therefore, one of the motivations for this paper is to discover simple rules that can improve over FSB, which can then be used as expert for machine learning algorithms to imitate.", "page": 2},
+   {"text": "Our results indicate that asymmetry plays a critical role in many problems, yet the last assignment rule may not be the most effective approach for detecting and addressing it.", "page": 27}
+  ]
+ },
+ {
+  "id": "S133",
+  "year": "2025",
+  "title": "Hyperconnected Facility Location Contracting",
+  "read_level": "full",
+  "contribution": "Formulates a multi-period MIP for contracting capacity modules in open Physical-Internet fulfillment centres and routing multi-product demand within a coverage radius, and shows on real retailer data that it beats a static full-lease benchmark (profit, cost, revenue) while runtime grows more than linearly with facility count.",
+  "problem_entry": "Application-driven: hyperconnected fulfillment lets retailers rent capacity by contract, but Physical Internet work studies using open networks, not constructing them, and dynamic facility-location models fix facility counts and cannot price per-use contracts (pp. 1-3).",
+  "key_idea": "One MIP with a binary per contract (facility, start, end, capacity module), activity binaries z, demand shares x, at most one active contract per facility-period, and module capacity limits; objective revenue minus contract cost (pp. 6-7).",
+  "assumptions": "Single retailer, unbreakable contracts, discrete capacity modules, coverage-radius service (pp. 4-5); contract-cost function form not given (pp. 4, 6); x defined as a proportion but bounded by demand d (pp. 6-7, as extracted).",
+  "proof_devices": [],
+  "experiments": "Real data: 44 products, 98 three-digit-zip segments, 12 monthly periods of 2020; 10/45/115-facility density scenarios by metro population tier; vs static full-lease benchmark: -14.2% cost, +8.4% revenue, profit reported +29.2% (Table 1 implies +41.3% on the benchmark base); runtimes 600/2,656/9,523 s mean over 25 runs (pp. 7-9); solver, hardware and optimality gap not stated.",
+  "positioning": "Physical Internet literature (Montreuil and coauthors) as setting; facility-location classics each named for the feature generalised; unhedged first-framework claim (pp. 2-4); none of Dey's own work cited.",
+  "writing": "Industry-conference register with company figures (p. 2) and promotional adjectives (p. 9); contribution placed in the formulation's uniqueness (p. 2); scalability limit stated plainly (p. 9).",
+  "limits_future": "Stated: scalability as facilities grow; future: Benders decomposition and product clustering (pp. 9-10). Unstated: no optimality certificate or gap, deterministic demand, scenario of Table 1 unspecified, inconsistent profit percentage.",
+  "method_links": [
+   {"method": "Method 5", "relation": "variant", "note": "Application MIP solved without any reported dual bound, gap or certificate", "pages": "pp. 7-9"},
+   {"method": "Method 2", "relation": "variant", "note": "Comparison against an industry-practice static model, not an exact ceiling or stripped instrument", "pages": "p. 7"},
+   {"method": "Method 1", "relation": "variant", "note": "Only the stop-rule spirit: negative scalability result reported as a finding with a named next step (decomposition); no solver habit explained", "pages": "pp. 9-10"}
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Model contracts as one binary per (start, end, module) with a covering-sum overlap constraint, so length and timing are decisions without sequencing variables (constraints (2)-(5), pp. 6-7)",
+   "Build facility-density scenarios from metro population tiers (1/2/5 facilities per tier) for meaningful scaling tests (p. 7)"
+  ],
+  "coauthors": "Jiachen Shi (corresponding author), Benoit Montreuil",
+  "quotes": [
+   {"text": "To the best of our knowledge, this is the first systematic modeling framework to integrate PI concepts and facility location modeling.", "page": 2},
+   {"text": "These observations demonstrate that our original proposed formulation may face challenges from the standpoint of computational efficiency and problem scalability.", "page": 9}
+  ]
+ },
+ {
+  "id": "D005",
+  "year": "2026",
+  "title": "Random projection with linear equalities and inequalities",
+  "read_level": "full",
+  "contribution": "Recasts random-projection error as the supremum of a random process via Lagrangian duality and bounds it by generic chaining, giving shorter and sometimes sharper guarantees for general convex feasible sets and objectives, and extends random projection to linear inequalities by projecting the dual certificate as 2G+lambda, which preserves the dual bound with an extra gamma_1 term (read: arXiv v1).",
+  "problem_entry": "Existing guarantees for random projection of Ax = b rely on JL and simplex-contained feasible regions (pp. 1-2); with inequalities a signed Gaussian projection is neither a relaxation nor a restriction, so no ordering seems possible (p. 3).",
+  "key_idea": "Weak duality with a projected certificate turns the error into sup over AS - b of a random bilinear deviation (p. 8); what the proof needs is unbiasedness E[G^T G] = I, not JL, so for inequalities use the dual-feasible certificate 2G+lambda* with E[2(G+)^T G] = I (p. 8).",
+  "assumptions": "f convex, S closed convex, strong duality with optimal multiplier (nonnegative for inequalities) (pp. 1, 8); G iid N(0,1/k); bounds scale with ||lambda*||_1, ||lambda*||_2, rad(AS), ||b|| and unspecified universal constants (pp. 4, 10, 12); biased variant assumes 0 in S, f(0) = 0 (p. 14).",
+  "proof_devices": [
+   "Orthogonal decomposition of Gaussian rows along lambda/||lambda||: Bernstein for the chi-square term, conditional Gaussian process plus Gaussian comparison and concentration for the cross term (Lemma 3.1, Lemma 2.7, pp. 8-10, 15)",
+   "Weak duality with certificate G lambda* and translation invariance of gamma_2 (Thm 3.2, pp. 10-11)",
+   "Mixed-tail process: centering via E[(g)_j (g)_j^+] = 1/(2k), sub-exponential increments by the product of sub-Gaussians, Dirksen's mixed-tail generic chaining, Bernstein for the base point (Lemma 3.3, pp. 11-12)",
+   "Dual feasibility of 2G+lambda* and the singleton-set trick for the b-term (Thm 3.4, pp. 12-13)",
+   "Vertex restriction for linear objectives to shrink gamma_1 (Remark 3.5, p. 13)",
+   "Singleton counterexample: P(Gr >= 0) = 2^-k, so simultaneous primal-dual preservation fails (p. 14)",
+   "gamma_1(simplex) ~ sqrt(n) via Schutt entropy numbers (upper) and a Varshamov-Gilbert packing (lower) (Prop. A.1, pp. 15-16)"
+  ],
+  "experiments": "none",
+  "positioning": "Generalises Vu-Poirion-Liberti [13] (matches on the simplex, sharper on l2-ball cap orthant, p. 3); rereads [1] and [5] as implicitly chaining-based (p. 2); links random embedding as the dual-side twin (p. 2); contrasts Poirion-Lourenco-Takeda's nonnegative projection that keeps primal feasibility but loses the dual property (p. 14).",
+  "writing": "'Shorter proofs and sharper guarantees' framing (abstract, p. 2); anticipates the reader's doubt ('At first glance ... counterintuitive', p. 3); principle section before proofs (Sec. 2.2) and a table of chaining-functional orders (p. 4); some typos and an omitted proof for the biased variant (pp. 3, 8, 15).",
+  "limits_future": "Stated open question: when simultaneous primal-dual preservation with vanishing error is possible for inequalities (p. 15). Unstated: bounds depend on unknown ||lambda*||, no lower bounds on the k-rate, Sec. 3.3 only sketched, no experiments; intro statement omits rad(AS) terms of Thm 3.4 as extracted (pp. 3, 12).",
+  "method_links": [
+   {"method": "Method 5", "relation": "evidence", "note": "The dual bound is the deliverable; a feasible projected dual certificate preserves it even when primal feasibility is lost", "pages": "pp. 1, 8, 12-13"},
+   {"method": "Method 4", "relation": "evidence", "note": "Singleton counterexample marks where two-sided guarantees fail; comparison with [13] marks match vs sharper; open question stated; no tightness example for k-rates", "pages": "pp. 3, 14-15"},
+   {"method": "Method 1", "relation": "variant", "note": "Explains why a practice works, but the practice is a theoretical preprocessing technique, not an unexplained solver habit", "pages": "pp. 1-2"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "find the one property the classical proof uses, then redesign the object to keep it", "evidence": "JL replaced by the unbiasedness identity; dual certificate redesigned as 2G+lambda* to keep feasibility and E[2(G+)^T G] = I", "pages": "p. 8"}
+  ],
+  "transferable": [
+   "Turn an approximation guarantee into a supremum of a random process through weak duality with a random certificate (p. 8)",
+   "Use a positive-part dual certificate 2G+lambda for sign-constrained multipliers under a symmetric Gaussian projection (pp. 8, 12-13)",
+   "Split a quadratic-form deviation by orthogonally decomposing Gaussian rows along a fixed vector (pp. 8-10)",
+   "Show a two-sided guarantee is impossible with a one-point feasible set before weakening the claim (p. 14)",
+   "Restrict to vertices for linear objectives to sharpen the gamma_1 term (Remark 3.5, p. 13)"
+  ],
+  "coauthors": "Jingye Xu",
+  "quotes": [
+   {"text": "Although randomly projected inequality constraints generally define neither a relaxation nor a restriction of the original feasible region, we show that random projection can nevertheless approximately preserve the dual bound.", "page": 1},
+   {"text": "Our key observation is that the JL lemma itself is not essential for preserving bilinear structures.", "page": 8}
+  ]
+ }
+]

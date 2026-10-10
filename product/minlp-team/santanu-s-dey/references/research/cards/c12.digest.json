@@ -1,0 +1,161 @@
+[
+ {
+  "id": "S071",
+  "year": "2022",
+  "title": "On obtaining the convex hull of quadratic inequalities via aggregations",
+  "read_level": "full",
+  "contribution": "Under a positive-definite-linear-combination (PDLC) condition, the convex hull of three quadratic inequalities is the intersection of (possibly infinitely many) aggregations with at most one negative eigenvalue, and counterexamples show the result does not extend to four quadratics or to the case without PDLC.",
+  "problem_entry": "Aggregation is complete for linear systems (Farkas) and for two quadratics (Yildiran); the paper asks whether it still gives the hull for three or more quadratics (pp. 1-2).",
+  "key_idea": "Prove a new symmetric three-quadratic S-lemma by SDP duality plus Pataki/Barvinok rank reduction, then go from a separating hyperplane, through homogenization, to faux-separation of a semi-convex cone (Thm 2 p. 4; Lemma 1 p. 3; pp. 10-15).",
+  "assumptions": "n >= 3, strict inequalities, PDLC, conv(S) != R^n; the closed case adds 'no low-dimensional components', which the authors call not easy to verify (pp. 4, 7-9).",
+  "proof_devices": [
+   "SDP duality + rank reduction with a dimension case split (Barvinok if bounded, Pataki otherwise) for the symmetric S-lemma (pp. 10-11)",
+   "separating hyperplane -> homogenize -> restrict quadratics to the hyperplane -> S-lemma (Lemmas 2-3, pp. 12-13)",
+   "Yildiran's semi-convex cone / faux-separating hyperplane + Cauchy interlacing to get nu <= 1 (pp. 12, 14)",
+   "interior of an infinite intersection lemma + Modaresi-Vielma lemma for the closed case (pp. 15-16)",
+   "counterexamples: orthant-wise eigenvalue bound giving box [-8,8]^3, LP infeasibility certificate checked in exact arithmetic, polytope slicing, SDP-not-tight example, an infinite family of aggregations (pp. 17-24)"
+  ],
+  "experiments": "none as a section; numerical exploration only: plots, the true box estimated at [-1.23,1.23]^3, and a search that found no PDLC example needing infinitely many aggregations (pp. 6-9, 18)",
+  "positioning": "Follows Yildiran's presentation and proof strategy and Modaresi-Vielma for the closed case; set apart from SDP-tightness results (Wang-Kilinc-Karzan) by an example where aggregations give the hull but the SDP is not tight (pp. 1-2, 7-8, 21-22).",
+  "writing": "All results, examples, counterexamples and open questions come before the proofs; the demarcation is itself advertised as the contribution; specific hedges about the finiteness of Omega (pp. 2-9).",
+  "limits_future": "Open: whether Omega is finite under PDLC, relaxing the no-low-dimensional-components condition, the role of PDLC; four or more constraints unlikely without more structure (p. 9).",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "several quadratics convexified jointly via aggregation; tests when the cheap practice (aggregation) already gives the hull", "pages": "pp. 1-5"},
+   {"method": "Method 4", "relation": "evidence", "note": "a counterexample for each dropped hypothesis (PDLC, three -> four constraints), finiteness left explicitly open, simple rigorous bounding box", "pages": "pp. 5-9, 17-24"},
+   {"method": "Method 1", "relation": "variant", "note": "the practice studied is a cutting-plane technique; the question is completeness, not why solvers succeed", "pages": "p. 1"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "prove the lemma variant your proof needs", "evidence": "the existing three-quadratic S-lemma is asymmetric, so a symmetric version is proved directly", "pages": "pp. 3-4, 10-11"}
+  ],
+  "transferable": [
+   "SDP duality + rank reduction template for S-lemma variants (Barvinok when a PD combination makes the face bounded)",
+   "hull-to-infeasibility route: separating hyperplane, homogenize, restrict to the subspace, apply the S-lemma",
+   "for a restrictive hypothesis, give both a counterexample without it and an example that survives without it (sufficient, not necessary)",
+   "when solvers cannot certify a nonconvex claim, prove a loose but simple analytic bound and give the LP certificate for exact checking"
+  ],
+  "coauthors": "Gonzalo Muñoz, Felipe Serrano",
+  "quotes": [
+   {"text": "We also show, via examples, that this result provides a reasonable demarcation of conditions that allow obtaining the convex hull of quadratic constraints via aggregated constraints.", "page": 2},
+   {"text": "We just focus on a box whose validity proof is simple and rigorous.", "page": 18}
+  ]
+ },
+ {
+  "id": "S098",
+  "year": "2022",
+  "title": "Exploiting instance and variable similarity to improve learning-enhanced branching",
+  "read_level": "full",
+  "contribution": "For operational MILPs re-solved with slightly changing data (SCUC), training separate strong-branching-score regressors per variable or per variable group brings learned branching much closer to strong branching than a single model trained on the same data.",
+  "problem_entry": "SCUC must be solved daily in 15-30 minutes; ML finds good solutions, but proving optimality still needs B&B; instances share size, structure and variable identities (pp. 1-2).",
+  "key_idea": "Replace the single ExtraTrees model of Alvarez et al. with per-variable or per-group models (per generator, time or name), with fallback to the single model when data are scarce (pp. 4-7).",
+  "assumptions": "Fixed problem structure across instances; 5 MATPOWER-based SCUC networks x 50 randomized variations (40 train / 10 test), up to about 413k variables (pp. 2, 5-6).",
+  "proof_devices": [
+   "n/a (no proofs); evaluation design: textbook Julia B&B without cuts, given the optimal primal value, best-bound with plunging, RB:100:inf oracle, log strong-branching score labels (pp. 4-6)"
+  ],
+  "experiments": "5-fold CV MSE (one network shown); relative MIP gap after 1,000 nodes (ML:PV 0.40% vs ML:ET 0.54% vs RB 0.31%) and after 10,000 nodes (0.29% vs 0.45%); fallback rates; robustness with presolved test instances; no running times (pp. 8-12).",
+  "positioning": "Modifies Alvarez-Louveaux-Wehenkel ML:ET; GNN advantage judged unclear for fixed structure; GPU strong branching orthogonal; cites own group's B&B theory (pp. 3, 6, 12).",
+  "writing": "Framed as a 'simple modification'; labelling cost called negligible; skipping timing justified as 'self-evident, in our opinion' (pp. 1-2, 8).",
+  "limits_future": "Names the accuracy-vs-coverage trade-off; future: other ML branching methods, train small / test large, cuts and primal heuristics, other operational problems such as OTS; SCUC only and no wall-clock evidence (pp. 10, 12-13).",
+  "method_links": [
+   {"method": "Method 2", "relation": "evidence", "note": "stripped textbook B&B where only the branching rule varies, optimal primal value given, expensive oracle used as ceiling and results reported relative to it", "pages": "pp. 5, 8-10"},
+   {"method": "Method 2", "relation": "variant", "note": "overheads not counted: per-node cost asserted 'self-evident' without timing (the Heuristic 6 tension already in SKILL.md [03 C5])", "pages": "p. 8"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "recurring operational instances as the problem source", "evidence": "the method is built on instances re-solved daily with the same structure; D004 starts from the same setting", "pages": "S098 p. 2; D004 p. 2"}
+  ],
+  "transferable": [
+   "per-entity or per-group surrogate models for re-solved operational models, with a general fallback model and the fallback rate reported",
+   "regress the log of strong-branching scores because they span orders of magnitude",
+   "test robustness to an unseen pipeline step (presolve on test instances only) by feeding original-problem static features"
+  ],
+  "coauthors": "Xiaoyi Gu, Álinson S. Xavier, Feng Qiu",
+  "quotes": [
+   {"text": "We do not focus on total running time since this metric depends heavily on the quality of the software implementation, instead of simply on the fundamental properties of the branching rule.", "page": 8},
+   {"text": "It is also self-evident, in our opinion, that all evaluated ML-based branching rules, if carefully implemented, would require significantly less computational effort per node than strong branching", "page": 8}
+  ]
+ },
+ {
+  "id": "D003",
+  "year": "2023",
+  "title": "Branch-and-bound solves random binary IPs in poly(n)-time",
+  "read_level": "full",
+  "contribution": "With best-bound node selection and any variable-branching choice, branch-and-bound solves random packing binary IPs with a fixed number of constraints in polynomially many nodes with good probability; a deterministic corollary bounds the tree for any well-behaved 0/1 IP.",
+  "problem_entry": "Variable-branching B&B works well in practice despite exponential worst cases; avoid the worst case by analysing random instances, as smoothed analysis did for simplex (pp. 1-2).",
+  "key_idea": "Tree size <= 2|G|n+1, where G is the set of 0/1 points with reduced-cost gap <= IPGap (deterministic); then count G on random data using the small integrality gap and few columns near the Lagrangian hyperplane (Thm 3 p. 7; Thm 1 pp. 2-3).",
+  "assumptions": "A, c i.i.d. uniform [0,1], m fixed, b = beta*n with beta < 1/2, packing form, best-bound node selection, any fractional variable, only pruning by bound counted (pp. 2-3).",
+  "proof_devices": [
+   "best-bound never branches below IP* (Lemma 1, pp. 4-5)",
+   "at most m fractional coordinates at an LP vertex (Lemma 2, p. 5)",
+   "node -> good-point charging, injective along root paths via a lowest-common-ancestor argument (Lemmas 4-5, pp. 7-8)",
+   "reduced-cost gap bounded below by column distance to the hyperplane, distances bucketed in powers of 2 (Lemmas 6-7, pp. 8-10)",
+   "uniform slab bound via epsilon-net + Bernstein + Ball cube slicing + union bound (Thm 4, pp. 11-13)",
+   "Dyer-Frieze integrality gap O(log^2 n / n) (Thm 2, p. 5)"
+  ],
+  "experiments": "none",
+  "positioning": "Contrasted with Lenstra / Pataki-Tural-Wong basis reduction (heavy machinery rarely used in practice) and custom enumeration schemes (Lueker, Goldberg-Marchetti-Spaccamela, Beier-Vocking, Dyer-Frieze) that are not standard B&B; cites follow-ups Borst et al. and Frieze (p. 3).",
+  "writing": "Claims a first result for standard B&B but calls its practical reading an 'indication'; lists reasons practice should do better than the theorem; version paragraph quantifies the improvement over SODA (pp. 1, 3-4).",
+  "limits_future": "Corollary 3 defines 'well-behaved' IPs (small integrality gap, few columns near a hyperplane); limits: m fixed, uniform packing data, best-bound only, no tightness or lower-bound discussion, no future-work section (pp. 2-3, 15).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "solver practice (variable branching, small trees) turned into a proxy theorem on random instances because the worst case is exponential; the amount of practice explained is stated as an 'indication'", "pages": "pp. 1-3"},
+   {"method": "Method 4", "relation": "variant", "note": "no tight example or hypothesis-dropping counterexample inside the paper; the boundary is outsourced to cited follow-up work (ATSP exponential lower bound)", "pages": "p. 3"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "deterministic charging bound, randomness only in the count", "evidence": "Theorem 3 and Lemma 7 hold for every 0/1 IP; probability enters only to bound |G|; Corollary 3 restates this deterministically", "pages": "pp. 6-7, 10, 15"}
+  ],
+  "transferable": [
+   "charge each B&B node to a near-optimal integer point and bound the charging multiplicity by root-path depth",
+   "prove concentration uniformly over a net of all candidate hyperplanes when the relevant hyperplane depends on the data",
+   "state the deterministic corollary separately so that other instance distributions can be plugged in",
+   "write a version paragraph saying what changed from the conference version and by how much"
+  ],
+  "coauthors": "Yatharth Dubey, Marco Molinaro",
+  "quotes": [
+   {"text": "We believe that this result provides an indication as to why branch-and-bound with variable branching works so well in practice.", "page": 1},
+   {"text": "We note that most of the above arguments hold not only for random problems but actually for every 0/1 IP.", "page": 15}
+  ]
+ },
+ {
+  "id": "D004",
+  "year": "2024",
+  "title": "Sensitivity Analysis for Mixed Binary Quadratic Programming",
+  "read_level": "full",
+  "contribution": "Approximating the change in the optimal MBQP value under rhs changes is NP-hard; strong duality for Burer's CPP reformulation and its copositive dual holds when P is bounded or Q is PSD (with a closed-form epsilon-optimal dual, a gap example otherwise and non-attainment in general); choosing a good epsilon-optimal dual via a DNN restriction gives better rhs-sensitivity bounds than Shor-type duals.",
+  "problem_entry": "Operational MBQPs are re-solved with a changing rhs; solvers find primal solutions fast but not dual bounds; IP sensitivity (Cook et al.) is trivial for binaries (pp. 2, 40).",
+  "key_idea": "Use copositive dual solutions as rhs-parametric bounds; since the epsilon-optimal dual set is never a singleton and KK_i blocks worsen the bound by (Delta b_i)^2, search the epsilon-optimal face for a dual with small KK_i weight (Thm 3 p. 5; Prop 5 and Remark 3, pp. 9-10; eqs. 9-12, pp. 10-12).",
+  "assumptions": "Standard form with x >= 0 and assumption (A) (the linear constraints imply 0 <= x_j <= 1 for binaries); strong duality needs P bounded or Q PSD; local stability (Thm 4) is the hinge and fails when Q is not PSD and P is unbounded (pp. 4-8).",
+  "proof_devices": [
+   "two-sided (Gamma1, Gamma2) approximation definition plus reduction from 3-edge-colourability of cubic graphs (pp. 3, 16-18)",
+   "strict copositivity of H gives a Slater point (pp. 18-19)",
+   "local stability via a finite polyhedral decomposition and Vavasis's QP characterization, giving a piecewise-quadratic value function (pp. 19-23)",
+   "penalty building blocks KK_i, G_j acting like augmented-Lagrangian penalties, three-case copositivity split (pp. 23-33)",
+   "positive constants from auxiliary LPs and a Charnes-Cooper linear-fractional LP (pp. 25-27)",
+   "non-attainment on the 6-clique stable-set dual via test vectors and epsilon sandwiching (pp. 33-36)"
+  ],
+  "experiments": "Five generated classes (COMB, KBQP, SSLP, SSQP, PACK); baselines Shor1, Shor2, Cont; relative gap to the exact z(b+Delta b) normalized by Shor1; Julia/Gurobi/Mosek on a PC; the 'tightest in all cases' claim fails at Delta k = 1 for COMB (1.28 vs Shor1 = 1, Cont 0.90) (pp. 12-16, 40-43).",
+  "positioning": "Builds on Burer's CPP reformulation and Guo-Bodur-Taylor's shadow-price use; part (a) credited to Brown et al.; parts (b)-(d) claimed new; IP sensitivity literature shown inadequate for binaries (pp. 2, 5).",
+  "writing": "Results with proof sketches first, full proofs later; a notation table for constants; each part of the theorem followed by a 'cannot be improved' remark; computations labelled preliminary; an introduction claim backed by an appendix table (pp. 3, 5, 8, 18, 40).",
+  "limits_future": "Size limited by the SDP solver; no guarantee for replacing COP by S+ + SP; loose constants; future: generalized copositive reformulations of QCQPs, scalable SDP, cutting planes using the Thm 3(b) structure (pp. 28, 36-37).",
+  "method_links": [
+   {"method": "Method 5", "relation": "evidence", "note": "motivation is dual bounds or certificates under rhs change, not primal solutions; appendix shows the solver's dual gap remaining above 10%", "pages": "pp. 2, 40"},
+   {"method": "Method 5", "relation": "variant", "note": "workhorse is a DNN/SDP restriction of a copositive dual rather than an LP/SOCP relaxation", "pages": "pp. 11, 13-14"},
+   {"method": "Method 4", "relation": "evidence", "note": "hardness of approximation, constructive positive result, a gap example when both hypotheses fail, non-attainment, 'cannot be further relaxed' remarks", "pages": "pp. 3-8, 16-18, 33-36"},
+   {"method": "Method 3", "relation": "evidence", "note": "imports the IP sensitivity / dual question into MBQP via a convex reformulation", "pages": "p. 2"},
+   {"method": "Method 2", "relation": "evidence", "note": "every bound scored against the exact z(b+Delta b)", "pages": "p. 14"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "choose the dual solution inside the epsilon-optimal face for its downstream use", "evidence": "non-unique duals give different sensitivity bounds; a secondary objective, weighted to the target Delta b range, selects the dual", "pages": "pp. 9-12"},
+   {"pattern": "recurring operational instances as the problem source", "evidence": "the same constraint matrix is re-solved with a changing rhs; cites S098", "pages": "D004 p. 2; S098 p. 2"}
+  ],
+  "transferable": [
+   "two-sided approximation definition to block trivial answers when approximating a change",
+   "penalty-block construction of conic-dual feasible points with a near/far-feasibility case split",
+   "secondary-objective weights equal to the average of the downstream quantity over the target perturbation range",
+   "normalize all methods by one baseline's gap to the ground truth",
+   "prove non-attainment of a conic dual with a few hand-built test vectors and epsilon sandwiching"
+  ],
+  "coauthors": "Diego Cifuentes, Jingye Xu",
+  "quotes": [
+   {"text": "Therefore, part (b) of Theorem 3 is the best we can hope for, as an optimal solution is not always achievable.", "page": 5},
+   {"text": "We observe that our method provides the tightest sensitivity bounds in all cases.", "page": 14}
+  ]
+ }
+]

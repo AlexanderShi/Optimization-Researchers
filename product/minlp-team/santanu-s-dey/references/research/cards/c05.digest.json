@@ -1,0 +1,89 @@
+[
+  {
+    "id": "S001",
+    "year": "2016",
+    "title": "Strong SOCP relaxations for the optimal power flow problem",
+    "read_level": "full",
+    "contribution": "Ranks McCormick, SOCP and SDP relaxations of two AC-OPF formulations and strengthens the classic SOCP with cycle-based McCormick cuts, arctangent envelopes and cycle-SDP separation cuts, certifying near-SDP bounds an order of magnitude faster (3375-bus case within 0.13% in 157.20 s).",
+    "problem_entry": "OPF is solved every few minutes on large nonconvex networks; DC OPF and local IPMs give no certificate and SDP is costly and exact only under restrictive conditions, so convexify the arctangent angle constraints that the classic SOCP drops (pp. 1-3).",
+    "key_idea": "Strengthen the cheapest strong relaxation (classic SOCP) with valid linear inequalities derived from per-cycle angle conditions: triangulated bilinear cycle constraints + McCormick, polyhedral arctangent envelopes, and separation from the SDP cone restricted to cycles (pp. 15-24).",
+    "assumptions": "Linear/convex quadratic generation cost; voltages near 1 p.u.; a given cycle basis; c > 0 and good bounds on c, s for the envelope and McCormick methods; angle-difference bounds deliberately not exploited (pp. 5, 18, 22, 25, 30).",
+    "proof_devices": [
+      "comparison of relaxations in the common projected (p, q) space, Theorem 3.1 (p. 11)",
+      "inclusion by explicit lifting maps, e.g. e = f = 0 embedding (Prop 3.1, pp. 11-12) and Z = zz^T + diagonal correction (Prop 3.4, p. 12)",
+      "strictness by examples: 9-bus instance with BARON optimum, hand-built 2-bus point, case6ww (pp. 13-14)",
+      "exact 3- and 4-cycle reformulations via sine and cosine sum formulas (Props 4.1-4.2, pp. 16-18)",
+      "cycle triangulation into 3-/4-cycles with artificial edges, validity by summing 3-cycle identities (Props 4.3-4.4, pp. 18-20)",
+      "LP separation over McCormick relaxation via dual system (39) (p. 21) and conic separation (48) with strong duality from strict feasibility W = I (p. 24)",
+      "incomparability with SDP shown by computed NESTA instances (Props 4.5, 4.8; Table 5, p. 33)",
+      "plane envelopes of arctan shifted by max violation found by KKT-point enumeration (Props 4.6-4.7, p. 22)"
+    ],
+    "experiments": "MATPOWER 6-3375 bus and NESTA 0.3.0 (typical/congested/small-angle); C#, MOSEK 7.1, i7 laptop 8 GB; baselines OPF Solver SDP (authors' penalty parameters, tuning time excluded) and QC numbers copied from Coffrin et al. 2015; metrics LB ratio to SDP, %gap with IPOPT upper bound, total time; 5% load-perturbation robustness and infeasibility detection; SDP tight on 14/19 vs SSDP 8/19 reported (pp. 26-34).",
+    "positioning": "Extends Jabr's alternative formulation and classic SOCP; restates SDP line (Lavaei-Low, Madani et al.) via its restricted exactness conditions and rank-recovery cost; joins the LP/SOCP trend (Coffrin-Van Hentenryck, Bienstock-Munoz); relies on Taylor (2015) for real/complex SDP equality (pp. 2-3, 9, 29-30).",
+    "writing": "Headline certificate in the abstract (0.13%, 157.20 s, modest PC), numbered contribution list with sub-items, strong superlatives ('consistently outperforms') hedged in the body, and a selective average for the small-angle class (pp. 1, 3-4, 31-32).",
+    "limits_future": "SDP still tighter on most instances; bound preprocessing is a sizable cost; IPOPT reaches the same solution from flat start, so the warm-start value is limited; future: spatial branch-and-bound, OTS and multiperiod OPF, verifiable sufficient conditions for SOCP exactness (pp. 27-28, 30, 34-35).",
+    "method_links": [
+      {"method": "Method 5", "relation": "evidence", "note": "Rank relaxations, strengthen the tractable SOCP with structure, pair with IPOPT, report certified gap at 3375 buses with hardware; stated aim to avoid SDP.", "pages": "pp. 1, 4, 14, 26-29"},
+      {"method": "Method 3", "relation": "evidence", "note": "Nonconvexity located in per-cycle angle conditions and convexified jointly over each cycle of a cycle basis.", "pages": "pp. 15-24"},
+      {"method": "Method 4", "relation": "variant", "note": "All inclusions of Theorem 3.1 shown strict, but strictness and SDP incomparability are demonstrated by computed instances rather than constructed tight examples.", "pages": "pp. 13-14, 21, 33"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "proof of incomparability by computed benchmark instances", "evidence": "Props 4.5 and 4.8 (relaxation neither dominates nor is dominated by SDP) are proved by gaps on three NESTA instances.", "pages": "pp. 21, 23, 33"},
+      {"pattern": "rank all relaxations before strengthening one", "evidence": "Theorem 3.1 orders six relaxations in projected space and Section 3.3 uses the ordering to choose which relaxation to strengthen.", "pages": "pp. 11-14"}
+    ],
+    "transferable": [
+      "Rank candidate relaxations in one projected space as a theorem with strictness examples before choosing which to strengthen (pp. 11-14).",
+      "Separate a cheap relaxation's point from the SDP cone restricted to small substructures (cycles of a cycle basis), adding only linear cuts (pp. 23-24).",
+      "Reduce a degree-|C| polynomial cycle constraint to O(|C|) bilinear equations by triangulating with artificial edges, then McCormick (pp. 18-20).",
+      "Bound tightening by solving the base relaxation on an r-hop neighbourhood of each edge (r = 2), in parallel (p. 25).",
+      "Envelope planes through box corners shifted by the maximum violation found by KKT enumeration (p. 22)."
+    ],
+    "coauthors": "Burak Kocuk, X. Andy Sun",
+    "quotes": [
+      {"text": "Overall, the proposed strong SOCP relaxations provide a practical approach to obtain feasible OPF solutions with extremely good quality within a time framework that is compatible with the real-time operation in the current industry practice.", "page": 1},
+      {"text": "We note that our SOCP based relaxations are not as successful according to this comparison.", "page": 30}
+    ]
+  },
+  {
+    "id": "S004",
+    "year": "2016",
+    "title": "Improving the integer L-shaped method",
+    "read_level": "full",
+    "contribution": "Speeds up the integer L-shaped method for two-stage stochastic integer programs by screening candidates with the LP recourse before exact MIP evaluation (alternating cuts) and by history-aware optimality cuts from a cut-generating LP built on a disjunctive extended formulation of conv(S(V)).",
+    "problem_entry": "The Laporte-Louveaux optimality cut needs costly exact Q(x) evaluations and depends only on the point cut off, ignoring other evaluated solutions; each weakness gets one fix (p. 4).",
+    "key_idea": "Use QLP(x) <= Q(x) as a cheap proxy to reject candidates, and generate cuts valid for conv(S(V)) = conv(PQ(V) U PL(V)), with conv({0,1}^n minus V) given by an O(n|V|) forbidden-vertices extended formulation, separated by a Farkas-derived CGLP normalized to be tight at x* (pp. 4-13).",
+    "assumptions": "Binary first stage; Q(x) computable with reasonable effort for given x; lower bound L; finitely many scenarios; S(V) drops X, partly restored by adding Ax + Cz <= b and lower-bound cuts (pp. 1-2, 11).",
+    "proof_devices": [
+      "Lemma 1: Balas disjunctive programming for union of polyhedra with common recession cone (p. 6)",
+      "forbidden-vertices recursion for {0,1}^{j+1} minus V^{j+1} with worked n = 3 example (p. 8)",
+      "Proposition 3 by induction on j applying Lemma 1 at each step (pp. 8-11)",
+      "Farkas' lemma to derive the cut-generating system (p. 12)",
+      "tightness equality + normalization beta = 1 for finite termination; standard cut (6) shows CGLP feasible (Prop 4, p. 13)",
+      "incremental row update, at most n operations per new point (pp. 14-15, Algorithm 5)"
+    ],
+    "experiments": "CPLEX 12.5.0.1 callbacks, 3.33 GHz PC, 0.01% gap, 7200 s; 2x2 design {standard, alternating} x {standard, CGLP cut}; SSLP from SIPLIB (n = 10, 15, five replications) and 30 generated stochastic multiple knapsack instances (n = 120, 20 scenarios) released in SIPLIB, grouped Easy/Medium/Hard; tables split LP vs MIP evaluation counts and times and CGLP overhead (pp. 15-20).",
+    "positioning": "Builds on Laporte-Louveaux and Benders/L-shaped; contrasts with sequential-approximation schemes (Sen-Higle, Gade et al., Kucukyavuz-Zhang, Qi-Sen) whose convergence can be very slow; uses the authors' own forbidden-vertices paper as engine (pp. 2, 4, 8).",
+    "writing": "Generic (IP) before the stochastic special case; full pseudocode of each callback variant so changes show line by line; 2-D figures for conv(S(V)); hedged attribution; numbered conditional conclusions (pp. 1-7, 19-20).",
+    "limits_future": "Gains of the two modifications do not combine; CGLP overhead grows with |V|; no guarantee on number/order of evaluated solutions; future: CGLP with approximate Q values, nonconvex easy-to-evaluate Q, black-box Q (pp. 20-21).",
+    "method_links": [
+      {"method": "Method 3", "relation": "variant", "note": "Imports MILP polyhedral machinery (disjunctive programming, extended formulations) into a stochastic-IP decomposition rather than QCQP/MINLP; substructure is the epigraph over evaluated points.", "pages": "pp. 5-13"},
+      {"method": "Method 2", "relation": "evidence", "note": "Speed-up decomposed into LP vs MIP evaluation counts and times, and CGLP overhead, to attribute gains; no ground-truth ceiling computed.", "pages": "pp. 17-20"},
+      {"method": "Method 4", "relation": "variant", "note": "Demarcation is empirical: conclusions state when each modification pays (evaluation-bound vs master-bound problems), without a theorem.", "pages": "p. 20"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "recycle own polyhedral theorem as an algorithm's engine", "evidence": "The forbidden-vertices extended formulation of Angulo, Ahmed, Dey, Kaibel becomes the core of the CGLP for optimality cuts.", "pages": "pp. 4, 8, 21"},
+      {"pattern": "cheap-oracle screening before exact evaluation", "evidence": "Alternating cuts check the LP recourse value first and evaluate the MIP recourse only when the LP check passes, cutting average MIP evaluations on SSLP from 99.4-310.6 (standard) to 3.0-6.0 (alternating) per instance class (Table 2).", "pages": "pp. 4-5, 18"}
+    ],
+    "transferable": [
+      "Screen candidates with a cheap valid relaxation oracle before the exact oracle, keeping two visited lists so each point costs at most one of each (Algorithm 3, p. 5).",
+      "History-aware cuts: convex hull of the union of known epigraph points and the trivial bound elsewhere via disjunctive programming and a CGLP (pp. 6-13).",
+      "Make a cut LP a feasibility problem by imposing tightness at the current point and normalizing, with a known feasible cut guaranteeing feasibility (p. 13).",
+      "Factorial variant design plus per-component time tables to attribute a speed-up to its cause (Tables 1-5, pp. 18-20)."
+    ],
+    "coauthors": "Gustavo Angulo, Shabbir Ahmed",
+    "quotes": [
+      {"text": "The key idea is to use QLP(x) as a proxy for Q(x) to check feasibility of a candidate solution, preventing unnecessary, and more costly, computations of Q(x).", "page": 4},
+      {"text": "We would like to conclude that these improvements are due to the fact that CGLP-based cuts help to explore the master tree. However, at this point, that is not completely clear, as for example, time reductions could be consequence of less evaluations of Q(x) and not because of the strength of the new cuts.", "page": 19}
+    ]
+  }
+]

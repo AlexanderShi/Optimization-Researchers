@@ -1,0 +1,203 @@
+[
+ {
+  "id": "S105",
+  "year": "2024",
+  "title": "Solving sparse separable bilinear programs using lifted bilinear cover inequalities",
+  "read_level": "full",
+  "contribution": "Computational study (read as arXiv v1) showing that lifted bilinear cover cuts, separated by a simple randomized guess-and-repair heuristic at the root, substantially raise the gap Gurobi closes on sparse separable bilinear programs, after proving that adding the SDP constraint to McCormick gives no improvement on this class.",
+  "problem_entry": "The lifted bilinear cover cuts of their 2022 paper had never been tested computationally (p. 4); exact hulls are exponential (p. 2); test design copied from Crowder-Johnson-Padberg's sparse lifted-cover experiments (pp. 1, 9).",
+  "key_idea": "Clear the SDP alternative (McCormick+SDP = McCormick, Prop. 1, pp. 5-7), then separate SOC-representable lifted cover cuts by guessing a partition from x_i y_i values and randomly repairing whichever minimal-cover condition fails (Alg. 2, pp. 7-9), in a root cutting loop before Gurobi (Alg. 1, p. 7).",
+  "assumptions": "Variables in [0,1], one bilinear term per variable pair per row; random sparse instances with m,n in {100,250,500}, p in {0.01,0.02,0.05}, np in [5,20], non-negative and mixed-sign rows (pp. 9-10).",
+  "proof_devices": [
+   "Explicit PSD completion of an optimal McCormick point as rank-one matrix plus sparse correction, with Gershgorin's theorem reducing PSD-ness to n scalar inequalities checked in four McCormick extreme cases (Prop. 1, pp. 5-7)"
+  ],
+  "experiments": "Gurobi 9.5.0 (NonConvex=2) with vs without root cuts, 1,800 s each plus separate timing of the heuristic (seconds); metric relative gap closed vs best primal found; Delta rho positive for most/all instances, about 60% root gap closed on non-negative classes, gain shrinking with density; MT cut (7) much weaker (pp. 10-18).",
+  "positioning": "Follow-up to own [12]; against SDP strengthening of McCormick (Burer) and the Tawarmalani-Richard-Chung cut (7); inspired by MILP lifting/cover literature (pp. 1, 4, 10).",
+  "writing": "Three-bullet contribution list (p. 4); SDP result flagged as surprising; conclusions hedge to 'most conclusive for sparser problems' (p. 19); heuristic framed as 'basic' evidence for the cuts (p. 9).",
+  "limits_future": "Separation complexity open (conjectured NP-hard), randomized heuristic, root-node only, extension to general QCQPs via separable relaxation (pp. 19, 22); unstated: synthetic instances only, z_opt not a proven optimum (p. 11).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Lifting and cover inequalities imported from 0-1 knapsack MILP into the separable bilinear substructure; Crowder-Johnson-Padberg sparse test design copied",
+    "pages": "pp. 1-2, 9"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "SOC-representable cuts strengthen a cheap relaxation; heavier SDP shown to add nothing on the class; deliverable is dual-bound gap closed",
+    "pages": "pp. 4-7, 11"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Open separation complexity stated as an explicit conjecture",
+    "pages": "p. 19"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "No ground-truth ceiling: comparison against default Gurobi with z_opt = best primal of either arm",
+    "pages": "p. 11"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Rule out the heavier relaxation by an equivalence theorem before offering cheap cuts",
+    "evidence": "Prop. 1: McCormick+SDP equals McCormick for separable bilinear QCQPs, used to motivate SOC cuts",
+    "pages": "pp. 4-7"
+   }
+  ],
+  "transferable": [
+   "Gershgorin-based PSD completion to prove SDP adds nothing to an LP relaxation on a structured class (pp. 5-7)",
+   "Guess-and-repair randomized separation with one repair rule per violated definitional condition (pp. 7-9)",
+   "Equal solver time for both arms plus separate timing plots for the add-on separation step (pp. 10, 13)",
+   "Report gap closed at the root by the cuts alone and at the time limit inside the solver (pp. 11, 13)",
+   "Fix the band of expected row support (np in [5,20]) so sparsity means the same at every size (p. 10)"
+  ],
+  "coauthors": "Xiaoyi Gu, Jean-Philippe P. Richard",
+  "quotes": [
+   {
+    "text": "We show that, surprisingly, for the class of separable instances, the SDP relaxation gives a bound equal to that of the McCormick relaxation.",
+    "page": 4
+   },
+   {
+    "text": "We developed a heuristic for separation since we could not design a polynomial-time exact separation routine.",
+    "page": 19
+   }
+  ]
+ },
+ {
+  "id": "S075",
+  "year": "2025",
+  "title": "Optimizing the design and operation of water networks: Two decomposition approaches",
+  "read_level": "full",
+  "contribution": "Joint design-and-operation MINLP for produced-water networks plus two primal heuristics (a CVXNLP budget/no-good decomposition reused from gas networks and a time decomposition on the peak-production prefix) that warm-start SCIP and give feasible solutions with small certified gaps where SCIP alone finds none (read as the Aug 2024 preprint).",
+  "problem_entry": "Produced-water application (decreasing production, elevations, limited pumps, p. 2); preliminary BARON/SCIP runs improve dual bounds but cannot find feasible points, so the paper targets the primal side (pp. 1, 11).",
+  "key_idea": "Solve the design on the first T~ high-production periods, fix diameters and pump locations, check the remaining periods as a feasibility problem with min-up/down state hand-over, sweep T~ and accuracy, then warm-start SCIP (Algs. 2-4, pp. 16-23); alternative CVXNLP master with budget doubling and no-good cuts (pp. 13-16).",
+  "assumptions": "Steady-state Hazen-Williams flow (eta=0.852), bidirectional flow via binaries, discrete diameters, one-variable min-up/down, relief valve on every pipe, fixed source pressures, pipe construction cost only; time decomposition needs monotonically decreasing production (pp. 7-11, 17, 19).",
+  "proof_devices": [],
+  "experiments": "One PARETO-derived network (58 pipes), T in {24,53}, five stress levels, SCIP via GAMS for 5 h vs heuristic + SCIP; time decomposition finds primal points everywhere with gaps <= 13.53%, CVXNLP up to 94.77% or none, SCIP alone none at T=53 (Tables 3-4, pp. 22-25).",
+  "positioning": "Hydraulic water-network design literature (Bragalli et al., Raghunathan, Pecci et al., Ghaddar et al., Bonvin et al.), unit-commitment min-up/down polytopes, rolling horizon; neutral description, novelty = unified model + two decompositions (pp. 3-6).",
+  "writing": "Two numbered contributions (p. 3); model in blocks with a summary table and subproblems written as block-wise edits (pp. 12-15); anomalies explained with 'We believe' (p. 24).",
+  "limits_future": "Pump/valve costs not modelled (p. 26); restricted problem may be too slow for bigger networks or horizons (p. 25); non-monotone production needs a new fixing procedure (p. 19); unstated: one network, one run, no time-to-first-solution numbers.",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Certified gap still the deliverable, but dual bound comes from SCIP and the contribution is on the primal side; no own relaxation",
+    "pages": "pp. 11, 24-25"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Baseline is the full solver for 5 hours; no ground truth or stripped instrument",
+    "pages": "pp. 22-23"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Diagnose the stalled side (primal vs dual) with off-the-shelf solvers, then build only for that side and feed it back",
+    "evidence": "Preliminary BARON/SCIP runs show good dual bounds but no feasible points; heuristics warm-start SCIP",
+    "pages": "pp. 1, 11, 23"
+   },
+   {
+    "pattern": "Reuse your own decomposition across application domains",
+    "evidence": "CVXNLP decomposition from the gas-network paper adapted to water networks",
+    "pages": "pp. 3, 11"
+   }
+  ],
+  "transferable": [
+   "Time decomposition: solve design on the peak-demand prefix, check the tail by feasibility, sweep prefix length and accuracy (pp. 16-21)",
+   "Min-up/min-down state hand-over procedure when splitting a horizon (Alg. 2, p. 20)",
+   "Budget-doubling loop with integer no-good cuts around a convex master and a feasibility subproblem (pp. 13-16)",
+   "Stress factors on a base scenario to make an instance ladder from one real network (p. 22)",
+   "Report primal bound, dual bound and gap for both arms in the same time budget (p. 24)"
+  ],
+  "coauthors": "Yijiang Li, Nikolaos V. Sahinidis, Naresh Susarla, Miguel A. Zamarripa, Markus G. Drouven",
+  "quotes": [
+   {
+    "text": "In the preliminary study, we noticed that both solvers are able to improve the dual bounds consistently but have trouble obtaining primal (feasible) solutions.",
+    "page": 11
+   },
+   {
+    "text": "Moreover, our results show that state-of-the-art solvers struggle to find a feasible solution within the same amount of computational time.",
+    "page": 3
+   }
+  ]
+ },
+ {
+  "id": "S104",
+  "year": "2025",
+  "title": "Lagrangian dual for integer optimization with zero duality gap that admits decomposition",
+  "read_level": "full",
+  "contribution": "Two reformulations of block-coupled MIPs by primal-redundant, dual-separable constraints (monomial-based M-Lagrangian hierarchy and vertex-based V-Lagrangian) whose Lagrangian duals have zero duality gap yet still decompose, with multiplicative hierarchy bounds for packing/covering, a generalisation via tree decompositions, and preliminary computations beating classical Lagrangian and Gurobi dual bounds (read as arXiv:2411.12085v1).",
+  "problem_entry": "Classical Lagrangian decomposition of coupled MIPs is decomposable but gapped, a monolithic solve is exact but not decomposable, DP gives no bound until it ends, augmented Lagrangian is not separable: can one get both zero gap and decomposition? (pp. 2-3).",
+  "key_idea": "Add constraints redundant in the primal but separable after dualising (eq. (4), p. 3); affine ones cannot help (Prop. 1, p. 4), so use monomial equalities over subsets (RLT-like hierarchy, separable unlike RLT, p. 5) or vertex indicator products (no-good-cut subproblems, Alg. 1, p. 7); general MIPs via tree decomposition of the intersection graph (p. 9).",
+  "assumptions": "Binary coupling variables, rational data; down-closed monomial families; relatively complete recourse for packing bounds (enforceable by adding constraints); non-negative data for the SDA comparison (pp. 2, 6, 8, 10).",
+  "proof_devices": [
+   "Geoffrion primal characterization of the Lagrangian dual (pp. 5, 17-18)",
+   "Affine independence of 0-1 monomial vectors via a maximal-support argument (Prop. 14, pp. 19-20) and convex-hull gluing via the simplex lemma (Prop. 13, pp. 18-19)",
+   "Induction removing a leaf of the tree decomposition for strong duality (Lemma 2, Thm. 8, pp. 20-22)",
+   "Three-block cycle counterexample where even the all-monomial dual has a gap (p. 9)",
+   "Fractional covering LP over good / k-good variable subsets for multiplicative packing/covering bounds, technique adapted from Dey-Molinaro-Wang [14] (Thms. 3-4, 9-10, pp. 6, 11, 22-28)",
+   "Symmetry reduction of the covering LP to two variables for two-stage problems (Cor. 1, pp. 28-29)",
+   "Small worst-case examples to probe tightness (Remark 2, pp. 12, 30)",
+   "Subgradient bound via multiplier-norm bounds and an exponential lower-bound instance for SDA (Props. 6-7, 15-17, pp. 8, 31-37)"
+  ],
+  "experiments": "Preliminary: 10+10 instances of 10-block maximum stable set coupled as star or path; Gurobi vs classical L, quadratic M-Lagrangian QL, V-Lagrangian VL, SDA; bundle methods warm-started from 600 s of L, 1,200 s limit, sequential subproblems; gaps STAR 10.0/6.0/4.4/3.9/8.6% and PATH 10.8/3.5/1.2% (pp. 12-13); node count 100 (p. 12) vs 75 (p. 37) inconsistent.",
+  "positioning": "Builds on Geoffrion, strengthens Lemarechal-Renaud (p. 4), contrasts with Adams-Sherali RLT (p. 5), relates to Burer and own reformulations and Minoux-Ouzia DRL* (p. 5), compares with Ahmed's SDA (pp. 7-8, 12-13), cites exact and decomposable augmented Lagrangian work (p. 3); cautions that more sophisticated two-stage methods exist (p. 13).",
+  "writing": "Main question posed as a question and contributions enumerated (1.)-(5.) with section pointers (pp. 2-3); all proofs in appendices; explicit hedges ('Preliminary', 'naive implementation', 'encouraging') (pp. 12-13); appendix-label and O(2^n)-vs-lower-bound slips (pp. 5, 8, 18, 37).",
+  "limits_future": "Zero gap costs subproblems with nonlinear objectives, so best for many small subproblems; open: decomposable zero-gap duals with easier subproblems, tightness of Thms. 9-10, engineering and general tree-decomposition instances (MIPLIB) (pp. 12-13); V-Lagrangian hard to extend beyond star structures (p. 8).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Lagrangian route chosen over exact DP for anytime dual bounds; results reported as dual-bound gaps",
+    "pages": "pp. 2, 13"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "No-gain proposition for affine constraints, cycle counterexample, tightness probed and left open, exponential lower bound for competitor SDA",
+    "pages": "pp. 4, 8-9, 12, 36-37"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Reverse direction: polynomial lifting (monomials, RLT/copositive style) brought back into MIP Lagrangian decomposition",
+    "pages": "pp. 5, 9"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Reuse your own approximation-ratio device in a new line",
+    "evidence": "Packing/covering multiplicative bounds via fractional covering by good subsets, 'techniques similar to those presented in [14]' (sparse cutting planes paper)",
+    "pages": "pp. 6, 22-29"
+   },
+   {
+    "pattern": "Rule out the cheap version by a no-gain proposition before building the expensive one",
+    "evidence": "Prop. 1: affine primal-redundant constraints leave the dual unchanged, motivating nonlinear ones",
+    "pages": "p. 4"
+   }
+  ],
+  "transferable": [
+   "Primal-redundant, dual-separable constraints as a general way to tighten Lagrangian duals without losing decomposition (pp. 3-5)",
+   "Affine independence of 0-1 monomial vectors plus leaf induction to prove exactness along a tree decomposition (pp. 18-22)",
+   "Fractional covering LP over good subsets to get multiplicative bounds of a relaxation hierarchy on packing/covering problems (pp. 11, 22-29)",
+   "Small cycle example to show why tree-structured coupling is needed (p. 9)",
+   "Warm-start each richer dual from the classical dual solution with appended zero multipliers and equal time limits (p. 12)"
+  ],
+  "coauthors": "Diego Cifuentes, Jingye Xu",
+  "quotes": [
+   {
+    "text": "However, DP suffers from the disadvantage that we do not obtain any information on bounds until the algorithm terminates.",
+    "page": 2
+   },
+   {
+    "text": "We caution the reader that there are significantly more sophisticated methods for star (2-stage stochastic) problems [23].",
+    "page": 13
+   }
+  ]
+ }
+]

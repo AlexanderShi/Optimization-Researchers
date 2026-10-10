@@ -1,0 +1,92 @@
+[
+  {
+    "id": "S124",
+    "year": "2026",
+    "title": "Mixed-Integer Programming for Change-point Detection",
+    "read_level": "full",
+    "contribution": "Replaces the segment-assignment block of the two existing contiguous-segmentation MIPs for piecewise-linear change-point detection with nested cumulative binaries whose LP relaxation projects integrally onto the assignment variables, proves both benchmarks non-integral, and shows faster global solves on 375 of 600 stock-price settings (arXiv v2, retitled 'Change-Point Detection via Piecewise Linear Fitting Using MIP').",
+    "problem_entry": "Existing PWL-fitting MIPs (Goldberg et al. 2021 'Basic', Rebennack-Krasko 2020 'Alternative') have weak LP relaxations with fractional segment assignments that cause excessive branch-and-bound effort, and statistical penalization methods cannot handle continuous fits or shared multi-dimensional segmentation (pp. 1-4).",
+    "key_idea": "Swap only the assignment block: X_{j,t}=1 iff t is in the first j segments, nested and monotone, with delta as differences; the block is TU, so its projection is integral, and it plugs into both base models unchanged (pp. 7-11).",
+    "assumptions": "1-D domain, mostly uniform time index; fixed K (or upper bound with l0 penalty); l1/l2 loss; data-driven parameter box and big-M copied from Rebennack-Krasko; continuity optional (bilinear or linearized); no continuity in the multi-dimensional case; DP alternative for the discontinuous case acknowledged but not run (pp. 3, 5-10, 18-19).",
+    "proof_devices": [
+      "TU by rows with at most two opposite-sign nonzeros plus identity block, then integral projection (Prop. 1, Cor. 1, pp. 10-11)",
+      "total-variation invariant TV(delta_j) <= 2 on the extended projection vs an oscillating fractional point feasible for the Basic LPR (Lemma 1, Prop. 2, pp. 11-12; feasibility completion App. C, pp. 20-21)",
+      "fractional extreme point of the Alternative block certified by 24 linearly independent tight constraints (Prop. 3, pp. 12-13)",
+      "contiguity by backward propagation of non-contiguity to segment 1 (Remark 1, p. 6)",
+      "feasible-region equivalence/strict containment with explicit unused-segment counterexample, and coincidence of optimal (m,c,yhat) by segment splitting (Remarks 3-5, pp. 8-9)"
+    ],
+    "experiments": "Gurobi 13.0.2, Apple M3, single thread, 3 seeds, 2000 s limit, minimal tuning, code+outputs on GitHub; yfinance stock prices; 600 settings (T up to 500, K up to 6, D up to 10); win counts (Extended 375/600) and cumulative runtime with time-outs at 2000 s (171,884 s vs 216,380 s and 246,307 s); Basic wins 42/100 in continuity-l1 and Extended is not lowest in multi-dimensional l2 cumulative time; no detection-accuracy evaluation (pp. 14-16, 22-24).",
+    "positioning": "Positions against non-contiguous (Bertsimas-Shioda), fixed-grid (Toriello-Vielma), non-global (Cui et al.) and penalization methods; builds directly on the PWL MIP line and uses Warwicker-Rebennack to pick the benchmark; hedges with own non-monotonicity paper (Shah, Dey, Molinaro 2026) (pp. 2-3, 10, 13).",
+    "writing": "Three-bullet contributions, change-point vs breakpoint terminology note, named formulations, Remarks for feasibility relations, explicit caveat that polyhedral strength is not conclusive for run time; superlatives ('consistently') stronger than the tables in places (pp. 1-2, 6-9, 13, 15-16).",
+    "limits_future": "Future: decomposition for scalability, online variants (p. 16); unstated: small T (<=500, <=180 with continuity), big-M blocks untouched, Extended Alternative relaxes Alternative's feasible region, no DP baseline, single data family (pp. 4-5, 8-10, 14).",
+    "method_links": [
+      {"method": "Method 3", "relation": "evidence", "note": "IP-style joint convexification of a recurring substructure (assignment block) via an extended formulation with integral projection, inside formulations that also carry bilinear continuity constraints", "pages": "pp. 5, 7-11"},
+      {"method": "Method 4", "relation": "evidence", "note": "positive integrality result paired with non-integrality of both benchmarks via explicit points and an explicit caveat that LP strength is not conclusive for run time", "pages": "pp. 11-13, 20-21"},
+      {"method": "Method 2", "relation": "variant", "note": "no ground-truth ceiling or stripped instrument; full Gurobi, run time only, single thread and three seeds", "pages": "p. 14"},
+      {"method": "Method 5", "relation": "variant", "note": "deliverable is a globally optimal fit reached faster, not a cheap relaxation used as the certificate", "pages": "pp. 1, 15-16"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Hedge a formulation-strength claim with your own non-monotonicity theorem", "evidence": "Shah, Dey, Molinaro 2026 cited to say tighter LP relaxation need not mean faster solves; polyhedral comparison called not conclusive", "pages": "pp. 10, 13"},
+      {"pattern": "Cumulative nested-monotone reformulation of ordered assignment binaries to obtain a TU block", "evidence": "X_{j,t} nested vectors with delta as differences; Prop. 1 TU proof; modular swap into two formulations", "pages": "pp. 7-11"}
+    ],
+    "transferable": [
+      "Nested cumulative binaries with delta_{j,t} = X_{j,t} - X_{j-1,t} and two monotonicity families, proved TU by opposite-sign two-nonzero rows plus identity block (pp. 7-11)",
+      "Separate two projected LP relaxations by a functional bounded on one (total variation) and an explicit violating point of the other, with the feasible completion in an appendix (pp. 11-12, 20-21)",
+      "Certify a fractional vertex by n linearly independent tight constraints that determine it uniquely (pp. 12-13)",
+      "Modular block swap into each competing formulation for a clean 2x2 comparison (pp. 8, 14)",
+      "Report instance-wise win counts and cumulative time with time-outs charged at the limit; single thread, three seeds, minimal tuning, released code and raw outputs (pp. 14-16)"
+    ],
+    "coauthors": "Apoorva Narula, Yao Xie",
+    "quotes": [
+      {"text": "We establish that the projection of the linear programming relaxation onto the space of these extended segment-assignment variables is integral, yielding a tighter relaxation.", "page": 1},
+      {"text": "As a result, the polyhedral comparisons in this section are not necessarily conclusive with respect to overall computational performance (also see Shah et al. [2026]), which is therefore assessed empirically in Section 4.", "page": 13}
+    ]
+  },
+  {
+    "id": "S125",
+    "year": "2026",
+    "title": "Asymptotically tight Lagrangian dual of smooth nonconvex problems via improved error bound of Shapley-Folkman Lemma",
+    "read_level": "full",
+    "contribution": "Gives a face-dimension proof of the Shapley-Folkman Lemma, a refined error bound by randomized rounding, and the first bound under which the nonconvexity of a Minkowski sum vanishes as the number of summands grows (smooth hidden convex components at extreme points), yielding asymptotic tightness of the Lagrangian dual of block-structured smooth nonconvex problems with sparsity constraints.",
+    "problem_entry": "Strong duality of the Lagrangian dual of a block-structured nonconvex program needs only convexity of the image set P in (objective, constraint) space; classical Shapley-Folkman bounds on its nonconvexity do not vanish, so ask whether they can vanish as k grows (pp. 1-5).",
+    "key_idea": "Write each point of conv(sum A_i) as a sum of faces with total dimension <= n, round the few nonzero-dimensional pieces randomly (variances add), and absorb the error into the growing sum of smooth convex 'hidden components' (balls) at extreme points; epigraphs of L-smooth functions supply balls of radius 1/L, carried through B by a projection factor (pp. 8-23).",
+    "assumptions": "OPT_L = DUAL (regularity, pathological cases excluded); conv(A_i) closed and pointed; bounded inner radius Xi <= beta; f 1-coercive, closed, proper, f(0) finite, L-smooth; projection factor L_s(B) >= omega > 0 (needs s >= m, generic); smoothness can be local (pp. 8-9, 19, 21-23). Reader notes: Theorem 6 bounds DUAL between OPT(b+E1)-E and OPT(b), so the gap vanishes only with continuity of OPT in b, not discussed; Claims 5-6 call f convex though only the quadratic upper bound is used (pp. 21-23).",
+    "proof_devices": [
+      "gap formula Delta <= E + OPT(b) - OPT(b+E1) via primal characterization of the Lagrangian dual (Theorem 3, pp. 8-9)",
+      "face-dimension reduction: rank-nullity directions summing to zero, move until a relative boundary, pointedness (Claims 1-2, Lemma 4, pp. 10-11)",
+      "face heredity of inner radius Xi(A cap F) <= Xi(A) (Claim 4, p. 11)",
+      "Caratheodory distribution with variance <= Xi^2 and additive variances under independence, existence by averaging (Lemmas 5-6, p. 12; Theorem 4, p. 13)",
+      "L-smooth squared gauge of the hidden-component sum applied to random rounding error (Lemma 7, pp. 15-16; Theorem 5, p. 16)",
+      "explicit inscribed ball of radius 1/L in the epigraph of an L-smooth function (Claim 5, p. 21) and inscribed ball of an ellipsoid via singular-value ratio (Lemma 11, Claim 6, p. 22)",
+      "closedness/pointedness of conv(epi) by 1-coercivity and a pigeonhole on a Caratheodory representation; Rockafellar Thm 9.1 for linear images (Lemmas 8-10, pp. 19-20)",
+      "necessity examples: {0,1}^n singletons (p. 14), l1-ball hollow persists vs p>1 (Remark 2, p. 17), components needed only at extreme points (Remark 3, p. 17)"
+    ],
+    "experiments": "none",
+    "positioning": "Starr 1969 -> optimization duality-gap uses (Aubin-Ekeland, Bertsekas et al., Udell-Boyd) -> refinements (Bi-Tang, Kerdreux et al., Nguyen-Vohra) and a discrete analogue (Murota-Tamura); claims first vanishing bound; image-convexity view linked to S-Lemma/Dines and hidden convexity; own Lagrangian-dual papers as context (pp. 2-4, 8, 11, 23-25).",
+    "writing": "Abstract poses a yes/no geometric question and answers it affirmatively; dual optimization/economics framing; informal main application in the intro; one-sentence key-insight flag; a Remark with figure-backed example per hypothesis; no conclusion section; typos remain in v2 (pp. 1-5, 13, 17).",
+    "limits_future": "Theory only; non-pursued extensions are p-th power gauges/other measures (Remark 1, p. 17) and local smoothness (Remark 5, p. 23); no rate for the gap itself, no tightness examples for Theorems 4-6, no computation of how large k must be; paper ends without a conclusion (p. 23).",
+    "method_links": [
+      {"method": "Method 5", "relation": "evidence", "note": "conditions under which the cheap decomposable Lagrangian dual bound becomes asymptotically exact for smooth nonconvex blocks", "pages": "pp. 2-3, 22-23"},
+      {"method": "Method 4", "relation": "evidence", "note": "each hypothesis demarcated by a failure example (singletons, l1 balls, missing components at extreme points); no tight example for the bounds themselves", "pages": "pp. 14, 17"},
+      {"method": "Method 3", "relation": "variant", "note": "convexity read off a local substructure (hidden convex components at extreme points), but with convex-geometry/probability tools rather than MILP closures", "pages": "pp. 13-14"},
+      {"method": "Method 1", "relation": "variant", "note": "no solver habit to explain; question posed from the foundational standing of a classical lemma, practice only as motivation", "pages": "pp. 1-2"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Re-prove the classical lemma with a structural device, then push the device past the classical bound", "evidence": "face-dimension proof of Shapley-Folkman (Lemma 4) feeds the refined Theorem 4 and the vanishing Theorem 5", "pages": "pp. 10-16"},
+      {"pattern": "Probabilistic rounding over Caratheodory distributions as a bounding device", "evidence": "Lemmas 5-7 bound distances by expected squared error with additive variances", "pages": "pp. 12-16"}
+    ],
+    "transferable": [
+      "Turn any bound on image-set nonconvexity Phi(P) into a duality-gap bound via Delta <= Phi(P) + OPT(b) - OPT(b + Phi(P) 1) (Theorem 3, pp. 8-9)",
+      "Face-dimension counting plus a kernel-direction move to prove Shapley-Folkman/Caratheodory-type statements (Claims 1-2, Lemma 4, pp. 10-11)",
+      "Random rounding with additive variances, then absorb the error into a growing convex body whose squared gauge is L-smooth (Lemmas 5-7, pp. 12-16)",
+      "Explicit ball of radius 1/L inside the epigraph of an L-smooth function through every graph point (Claim 5, p. 21)",
+      "Projection factor (singular-value ratio over column subsets) to carry a ball through a sparse linear map (Def. 6, Claim 6, pp. 20-22)",
+      "Show a smoothness hypothesis is needed with a two-point set plus k p-norm balls, hollow persists for p = 1 (Remark 2, p. 17)"
+    ],
+    "coauthors": "Jingye Xu",
+    "quotes": [
+      {"text": "Is it possible for the nonconvexity of the Minkowski sum of n-dimensional nonconvex sets to vanish asymptotically, rather than merely converge to a constant, as the number of summands increases?", "page": 1},
+      {"text": "To the best of our knowledge, this is the first result establishing an asymptotically vanishing nonconvexity measure for Minkowski sums of nonconvex sets within the framework of the Shapley–Folkman Lemma.", "page": 4}
+    ]
+  }
+]
