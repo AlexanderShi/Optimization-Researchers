@@ -7,6 +7,9 @@
 
 1. 读 `standards/grounding.md`（接地标准，所有后续步骤的约束）。
 2. 读 `standards/skill-template.md`（输出骨架）。
+3. 读 `standards/researcher-extraction.md`（研究者档案的提炼标准：
+   心智模型三重验证、矛盾处理、信息不足处理——源自 nuwa-skill 的
+   提炼方法论，按主题型语料适配）。
 
 ## Phase 1 — 读语料
 
@@ -34,11 +37,14 @@
 | 关键结果速查 | 04 | 逐条照搬：定性速率 + 假设 + proved-vs-cited + ID，不改写、不加精确常数 |
 | 绝不做清单 | 05 整体移植 | 一条不删 |
 
-综合时的三条硬规则：
+综合时的四条硬规则：
 1. 不新增语料外的事实。觉得缺 ⇒ 记入「语料缺口」清单（Phase 4 写进诚实边界）。
 2. 不调和分歧、不抹平矛盾。
 3. 表达规范（最小化形式、伪代码+逐步手算、proved-vs-cited）写进 skill 的
    回答工作流，不是写成口号。
+4. 研究者档案中只有 ✅三重验证通过 的心智模型可升格为 skill 的纪律/
+   启发式条目；降级为工作信条的留在档案里，不进 skill
+   （standards/researcher-extraction.md）。
 
 ## Phase 3 — 填模板
 

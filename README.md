@@ -22,6 +22,7 @@ README.md                 本文件
 DISTILL.md                蒸馏协议（自包含，从这里开始）
 standards/
   grounding.md            接地标准：锚点规则、验证层级、数学声明纪律
+  researcher-extraction.md 研究者档案提炼标准（nuwa 三重验证适配版）
   skill-template.md       团队 skill 的输出模板
 teams/
   dfo-team/               DFO Team 语料（00-charter … 05-failure-modes）

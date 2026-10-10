@@ -41,12 +41,14 @@
 |----|------|------|---------------|
 | DFO-S21 | Duchi, Jordan, Wainwright, Wibisono, "Optimal rates for zero-order convex optimization: the power of two function evaluations"；期刊版 IEEE Trans. Inf. Theory 2015（venue 据 Scholar 个人页） | arXiv:1312.2139（abs 页核实 2026-10-09） | 两点估计 √d 退化因子 + 信息论下界 sharp；详见 researchers/john-duchi.md |
 | DFO-S23 | Duchi, Bartlett, Wainwright, "Randomized Smoothing for Stochastic Optimization" (2011/v2 2012)；期刊版 SIAM J. Optim.（model-knowledge，需核对——arXiv 页未列期刊引用） | arXiv:1103.4296（abs 页核实 2026-10-09） | 随机平滑：非光滑凸随机优化的方差最优速率（期望+高概率），可分布式 |
+| DFO-S24 | Bandeira, Scheinberg, Vicente, "Convergence of trust-region methods based on probabilistic models" (2013)；期刊版 SIAM J. Optim.（model-knowledge，需核对——arXiv 页未列） | arXiv:1304.2808（abs 页核实 2026-10-09） | 随机模型信赖域：模型以概率≥1/2 足够准即可（非期望正确），鞅论证几乎必然收敛；函数值无噪声 |
 
 ## 具名研究者档案
 
 | 研究者 | 档案 | 核实基础 |
 |--------|------|---------|
 | John Duchi (Stanford) | `researchers/john-duchi.md` | Scholar 个人页 + 2 篇 arXiv abs 页（2026-10-09） |
+| Katya Scheinberg (Georgia Tech) | `researchers/katya-scheinberg.md` | Georgia Tech 主页 + 2 篇 arXiv abs 页（2026-10-09）；NLP 侧另有支线档案 |
 
 ## 本地项目工件（非文献，但可引用的证据）
 
