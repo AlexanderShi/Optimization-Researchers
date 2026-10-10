@@ -1,0 +1,164 @@
+[
+ {
+  "id": "S014",
+  "year": "2001",
+  "title": "A projected gradient algorithm for solving the maxcut SDP relaxation",
+  "read_level": "full",
+  "contribution": "Solves the maxcut SDP by a projected gradient method on the lower-triangular factorization X = LL^T, faster and using less memory than Benson et al. and Homer-Peinado at moderate (0.2%) accuracy.",
+  "problem_entry": "The Goemans-Williamson SDP step does not scale: Newton-based IPMs are expensive, and first-order methods win when only moderate accuracy is needed (p. 2).",
+  "key_idea": "Restrict Homer-Peinado's factor to be lower triangular; projected gradient with row normalization and an Armijo search; a greedy vertex reordering lowers the per-iteration cost m(G) (pp. 5-13).",
+  "assumptions": "Nonnegative weights for the 0.87856 guarantee; L may have a negative diagonal so there are no inequalities (chosen after limited testing, p. 5); no global-convergence theorem, and non-global limit points are called unlikely (p. 8).",
+  "proof_devices": [
+   "Prop. 3.2: a dual slack S = Diag(lambda) - C >= 0 at a stationary point certifies global optimality, because SX is strictly upper triangular (p. 8)",
+   "Prop. 3.1: the projected gradient is zero iff the point is stationary, with explicit multipliers (p. 7)",
+   "flop counts in terms of the ordering measure m(G) (pp. 10-12)",
+   "Armijo trial steps cost O(|E|) via the quadratic-in-alpha expansion (7) (pp. 11-12)",
+   "the projected-gradient and unconstrained steepest-ascent directions coincide (p. 9)"
+  ],
+  "experiments": "21-27 rudy G-set graphs, n = 800-7000; baselines byz (dual-scaling IPM) and Homer-Peinado, run with the authors' own codes; stop at 0.2% and 0.02% of a reference value solved to a 1e-6 gap; reports times, iterations, memory and the best of n random cuts; losses (weaker cuts, slow tail) printed (pp. 13-19).",
+  "positioning": "A variant of Homer-Peinado, measured against Benson-Ye-Zhang; the comparison with Helmberg-Rendl's spectral bundle method is left open as unclear (pp. 2, 20).",
+  "writing": "A running-theme sentence in the introduction, a three-point list of main conclusions before Section 2, and specific hedges on effects the authors cannot explain (pp. 2-3, 17).",
+  "limits_future": "Slow asymptotic convergence and weaker cuts than the IPM; future work: parallelize, add second-order information, extend to other SDPs (pp. 17, 20).",
+  "method_links": [
+   {"method": "Method 5", "relation": "evidence", "note": "A variant of an existing code, benchmarked against the best codes the authors could obtain; step size and stopping rule set by experiment; the global-convergence gap is stated.", "pages": "pp. 8, 13, 18, 20"},
+   {"method": "Method 3", "relation": "variant", "note": "The claim that iterates never converge to a non-global point is labelled as an observation (unlikely, always observed) and is not certified.", "pages": "p. 8"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "dual certificate for a factored nonconvex reformulation", "evidence": "Prop. 3.2 builds the SDP dual slack from the stationarity multipliers of the factored problem and certifies global optimality when it is PSD.", "pages": "p. 8"}
+  ],
+  "transferable": [
+   "Derive an a-posteriori global certificate S = Diag(lambda) - C >= 0 from the stationarity multipliers of a factored SDP (p. 8).",
+   "Express the per-iteration cost through a graph quantity, reorder the input to reduce it, and report the measured ratio (pp. 10-13).",
+   "Run every competitor to the same relative-error target, computed from a high-accuracy reference solve, at two accuracy levels (pp. 14-16)."
+  ],
+  "coauthors": "Renato D.C. Monteiro",
+  "quotes": [
+   {"text": "a running theme of this paper is that the speed of first-order methods make them attractive choices for solving the maxcut SDP relaxation, particularly when one desires a solution of only moderate accuracy.", "page": 2},
+   {"text": "We currently are unable to give a reasonable explanation as to why this occurs", "page": 17}
+  ]
+ },
+ {
+  "id": "S006",
+  "year": "2002",
+  "title": "Rank-two relaxation heuristics for max-cut and other binary quadratic programs",
+  "read_level": "full",
+  "contribution": "Replaces the Goemans-Williamson SDP by a nonconvex rank-two (angular) relaxation and builds the code CirCut, which finds better cuts than SDP-based codes in a fraction of the time but gives no upper bound.",
+  "problem_entry": "Asks whether GW-type SDP approaches can become competitive on large problems; answers no for lower bounds, because the SDP does not scale (p. 2).",
+  "key_idea": "Unit vectors in R^2 instead of R^n give the unconstrained problem min f(theta) = 1/2 W.cos(T(theta)); a deterministic sweep over all half-circle cuts; the rounded cut (a saddle point) is perturbed and the search restarted (pp. 4-9).",
+  "assumptions": "The relaxation is nonconvex with many local minima; the GW bound holds only relative to psi(theta), which is not an upper bound, so there is no performance guarantee (pp. 4-5, 8).",
+  "proof_devices": [
+   "Prop. 3.1: every cut is a stationary point of f (p. 6)",
+   "Lemma 3.3: x is a maximum cut iff M(x) is nonnegatively summable, via q(x) - q(xbar) = 2 delta^T M delta (p. 6)",
+   "Theorem 3.4: the Hessian at a cut equals M(x); a cut that is a local minimum is a maximum cut, and all other cuts are saddle points (p. 7)",
+   "K3 counterexample to the converse (p. 7)",
+   "the GW analysis carried over to rank two: gamma(x*) >= 0.878 psi(theta) (p. 8)"
+  ],
+  "experiments": "CirCut (Fortran90, minimization stopped loosely at 1e-4) against SBmethod at default parameters on 4 DIMACS torus graphs; against DSDP times as reported by Choi-Ye on 27 G-set graphs up to n = 20000 (a different machine, with reasons given); against Hartmann's spin-glass heuristic on 20 cubic lattices; MAX-BISECTION on 13 graphs; losses (G50, Hartmann's H2) printed (pp. 9-17).",
+  "positioning": "Builds on Goemans-Williamson but argues that the SDP relaxation holds little promise for producing lower bounds; warns that the SDP codes also give upper bounds (pp. 2, 9, 11, 18).",
+  "writing": "A rhetorical question with a hedged partial answer, a paragraph giving the geometric interpretation, and numbered factors behind the performance (pp. 2, 9, 17).",
+  "limits_future": "No upper bound; MIN-BISECTION with positive weights unresolved; carrying the method to other problems needs case-by-case study; MAX-CLIQUE named as the next candidate (pp. 1, 15, 17-18).",
+  "method_links": [
+   {"method": "Method 5", "relation": "evidence", "note": "A known relaxation plus a rank restriction, implemented and benchmarked against the best public SDP codes at their default parameters; the missing guarantee is stated.", "pages": "pp. 8, 10"},
+   {"method": "Method 1", "relation": "variant", "note": "The direction is reversed: the paper leaves the convex lifted object for a nonconvex low-rank formulation, because the goal is primal solutions, not a bound. This contrasts with his later taste for a single strong bound.", "pages": "pp. 2, 4"},
+   {"method": "Method 4", "relation": "variant", "note": "No engineered hard pool: standard libraries plus an external physics family, with the family where CirCut loses kept in the tables.", "pages": "pp. 10-15"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "classify local optima of a continuous formulation combinatorially, then escape saddles", "evidence": "Theorem 3.4 shows that cuts other than maximum cuts are saddle points of f; Algorithm 1 restarts from perturbed cuts.", "pages": "pp. 7-9"}
+  ],
+  "transferable": [
+   "Round exhaustively and deterministically at rank two: sort the angles and sweep all half-circle cuts (pp. 7-8).",
+   "Restart from a slight perturbation of the rounded discrete point, since the theory makes it a saddle point unless it is optimal (pp. 7-9).",
+   "When a competitor cannot be rerun, list the reasons and compare only where the gaps are orders of magnitude (p. 11).",
+   "Compute the relaxation's Hessian at discrete points and match it to a combinatorial optimality condition (pp. 6-7)."
+  ],
+  "coauthors": "Renato D.C. Monteiro, Yin Zhang",
+  "quotes": [
+   {"text": "Since these codes produce both an upper bound and a lower bound, while our code only gives the latter, the comparisons should not be taken at face value.", "page": 9},
+   {"text": "CirCut does not seem to be able to achieve the same cut values as H2 even if CirCut is allowed to search for a very long time.", "page": 15}
+  ]
+ },
+ {
+  "id": "S017",
+  "year": "2002",
+  "title": "Solving a class of semidefinite programs via nonlinear programming",
+  "read_level": "full",
+  "contribution": "Turns a class of linear and nonlinear SDPs into NLPs over an orthant (a square-slack Cholesky substitution followed by an elimination), gives gradient formulas through a dual estimate, and proves global convergence of a first-order log-barrier method for linear SDPs.",
+  "problem_entry": "Interior-point methods are limited at large scale by dense Newton systems; the goal is fewer constraints and methods that use only gradients (p. 2).",
+  "key_idea": "Write S = LL^T, then eliminate the off-diagonal entries of L by a recursion in Cholesky order, so that the SDP becomes min f(L_I, y) over R^n_++ x R^N, a space whose dimension equals that of the feasible set (pp. 2, 6-9).",
+  "assumptions": "The class NLSDP with D in I in K (maxcut, two Lovasz theta forms, PSD completion); for the algorithm, I = D, g linear, H affine, a strictly feasible dual and linear independence; the NLP generally has no optimal solution, because the optima lie on the boundary (pp. 4-5, 18).",
+  "proof_devices": [
+   "Lemma 1: unique recursive elimination in Cholesky order (pp. 7-8)",
+   "Lemma 2 / Theorem 1: a homeomorphism between the orthant and int F_sdp, with equal optimal values (pp. 8-9)",
+   "Lemma 3 / Theorem 2: a dual estimate X, from a triangular linear system, gives the gradient 2 pi(XL) (pp. 9-11)",
+   "Lemma 5 / Theorem 5: dual feasibility and the duality gap are read off the gradient (p. 19)",
+   "Prop. 8 (a variant of Monteiro-Pang): level sets are compact (pp. 20-21)",
+   "Theorem 7: the transformed log-barrier problem has a unique stationary point, via XS = nu I, so the transformation adds no spurious stationary points (pp. 23-24)",
+   "flop and space counts for the dense, sparse and mixed cases (pp. 12-16)"
+  ],
+  "experiments": "none (numerics deferred to the companion reports [3] and [4], p. 25)",
+  "positioning": "Follows Helmberg-Rendl, Homer-Peinado and Burer-Monteiro (S014); reads their substitutions as matrix square slacks and turns the known weakness of square slacks into a first step (pp. 2, 6).",
+  "writing": "Admits heavy notation, tells the reader to assume the diagonal case, gives the main ideas before the formal statements, and uses five examples to show the scope (pp. 3-6).",
+  "limits_future": "Convergence for nonlinear SDPs is harder; gradient methods give only moderate accuracy; generic NLP solvers are unlikely to work without exploiting structure; extensions are in companion papers (pp. 24-25).",
+  "method_links": [
+   {"method": "Method 1", "relation": "variant", "note": "An exact reformulation of the whole problem, with a bijection and equal optimal values, but into a nonconvex NLP over an orthant instead of a convex cone.", "pages": "pp. 8-9"},
+   {"method": "Method 5", "relation": "variant", "note": "The theory paper comes first and the computation is split into companion reports; the maxcut prototype came earlier, in S014.", "pages": "pp. 2, 25"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "dual certificate for a factored nonconvex reformulation", "evidence": "The dual estimate X(w,y) yields the gradient, a dual-feasibility test and the duality gap; stationarity of the barrier problem maps to XS = nu I.", "pages": "pp. 19, 23-24"}
+  ],
+  "transferable": [
+   "Follow a square-slack substitution with an elimination that leaves a simple orthant domain, and prove a bijection with the interior of the original feasible set (pp. 6-9).",
+   "Prove that the transformed barrier problem has a unique stationary point by mapping stationarity to XS = nu I; any convergent gradient method then suffices (pp. 23-24).",
+   "Define a dual estimate as the solution of a triangular system attached to the current factor, and read the gradient and dual feasibility from it (pp. 9-11, 19)."
+  ],
+  "coauthors": "Renato D.C. Monteiro, Yin Zhang",
+  "quotes": [
+   {"text": "This paper is heavy in notation.", "page": 3},
+   {"text": "The square slack substitution is an old idea in nonlinear programming that has not been regarded as practically useful in general, in part because it can turn a convex feasibility set into a nonconvex one.", "page": 6}
+  ]
+ },
+ {
+  "id": "S025",
+  "year": "2002",
+  "title": "Maximum stable set formulations and heuristics based on continuous optimization",
+  "read_level": "full",
+  "contribution": "Shows that the rank-one and rank-two restrictions of the Lovasz theta SDP are exact nonconvex formulations of the stability number, classifies their local maxima, and builds escape-based heuristics (Max-AO) that find maximum stable sets on most DIMACS benchmarks.",
+  "problem_entry": "Can the theta SDP give large stable sets without an SDP being solved? The strategy that worked for max-cut (S006) is carried over (pp. 2-3).",
+  "key_idea": "Restrict X to rank one and to rank two; both have optimal value alpha(G). At a stable set that is not maximum, the rank-two canonical points are not local maxima, so local search can escape. Rank three is not exact (pentagon) (pp. 4-13).",
+  "assumptions": "Simple graphs; both NLPs are NP-hard, so only local solutions can be expected; the augmented Lagrangian converges to stationary points under mild conditions; escapes have no guarantee (pp. 1, 13, 15, 18).",
+  "proof_devices": [
+   "Lemma 1: Cauchy-Schwarz gives (e^T x)^2 <= |S|, with equality only at the canonical vector (p. 4)",
+   "Theorem 2: the rank-one local maximizers are exactly the maximal stable sets, via an auxiliary problem restricted to the support (pp. 5-6)",
+   "Lemma 4: the support of a rank-two feasible point induces a bipartite subgraph (pp. 9-10)",
+   "Theorem 3(b): a chain of triangle, Pythagoras and Cauchy-Schwarz inequalities (9)-(13) (p. 9)",
+   "Lemma 5 / Prop. 1: a monotone feasible path between points along orthogonal directions shows that canonical points are not local maxima (pp. 11-12)",
+   "pentagon counterexample at rank three (p. 13)",
+   "Prop. 2: the support thresholded at eps^(1/2), B^I_z, is bipartite, so stable sets can be extracted from infeasible iterates (p. 16)",
+   "Appendix A: first-order conditions plus a contradiction by a rotated path (pp. 21-28); Appendix B: a local maximizer whose induced stable set is not maximal (pp. 28-29)"
+  ],
+  "experiments": "Max-AO (ANSI C; augmented Lagrangian with L-BFGS, a spherical line search and a tailored 0.01 stopping rule) on 64 DIMACS clique complements; three heuristics, ten runs each; success rates 42/65/75% on the 55 graphs with known alpha; the DIMACS machine-calibration benchmark; quality compared with Balas-Niehaus and Benson-Ye; the weak brock instances are named (pp. 15-21).",
+  "positioning": "Extends the low-rank path of S006; credits Gruber-Rendl for alpha_1 = alpha(G); places itself in the continuous Motzkin-Straus line; keeps the value of the theta bound itself (pp. 3-4, 21).",
+  "writing": "Announces a surprising result, uses a question as a section heading, recasts an apparent disadvantage as an advantage, and lists numbered claims in the overview (pp. 3, 6, 12-13).",
+  "limits_future": "Rank-two local maxima are only partly characterized; escapes sometimes fail; weak on the brock instances; future work: the weighted case, a trust-region solver, hybrids with discrete heuristics, more reliable escapes (pp. 11, 18-19, 21).",
+  "method_links": [
+   {"method": "Method 2", "relation": "evidence", "note": "Stops generalizing at the first rank where exactness fails and publishes the boundary with an explicit small counterexample (pentagon, rank three).", "pages": "p. 13"},
+   {"method": "Method 3", "relation": "evidence", "note": "Keeps theory and observation apart (no theory for escapes; termination observed in practice) and states the incomplete classification, with a counterexample.", "pages": "pp. 11, 17-18, 28-29"},
+   {"method": "Method 5", "relation": "evidence", "note": "A strategy carried over from max-cut, prototyped with off-the-shelf NLP components; the adaptations are presented as open to improvement.", "pages": "pp. 3, 15"},
+   {"method": "Method 1", "relation": "variant", "note": "An exact reformulation of the whole problem, obtained by restricting the rank rather than by convexifying.", "pages": "pp. 4, 10"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "classify local optima of a continuous formulation combinatorially, then escape saddles", "evidence": "Rank-one local maxima are exactly the maximal stable sets; at a stable set that is not maximum, the rank-two canonical points are not local maxima; the heuristic restarts from perturbed canonical points.", "pages": "pp. 5-6, 10-12, 17-18"}
+  ],
+  "transferable": [
+   "Find the largest rank at which a low-rank restriction of an SDP stays exact, and certify failure at the next rank with the smallest counterexample (p. 13).",
+   "Show that a point is not a local maximizer with an explicit feasible path along orthogonal directions on which the objective is strictly monotone (pp. 11-12).",
+   "Round approximately feasible iterates with a support threshold eps^(1/2) taken from the largest constraint violation, and prove the property you need is preserved (p. 16).",
+   "When heuristics cannot be timed on the same machine, report the community's machine-calibration benchmark (p. 20)."
+  ],
+  "coauthors": "Renato D.C. Monteiro, Yin Zhang",
+  "quotes": [
+   {"text": "A surprising result that we will show in this section is that the optimal values of the two formulations are equal even though the feasible region of the rank-two problem is strictly larger than that of the rank-one problem.", "page": 6},
+   {"text": "In fact, although “escapes” were often observed in our experiments, sometimes the algorithm did fail to escape from a non-maximum stable set.", "page": 18}
+  ]
+ }
+]

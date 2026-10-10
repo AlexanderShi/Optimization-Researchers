@@ -1,0 +1,305 @@
+[
+ {
+  "id": "S059",
+  "year": "2017",
+  "title": "A branch-and-bound algorithm for instrumental variable quantile regression",
+  "read_level": "full",
+  "contribution": "Formulates instrumental variable quantile regression as a convex QP with complementarity constraints and solves it globally with a special-purpose B&B that branches on complementarities, beating Couenne and a big-M CPLEX MIQP on random instances.",
+  "problem_entry": "A statistics problem supplied by Belloni (p. 24): choose x1 so that x2 = 0 is optimal in an l1 regression LP, a partial inverse optimization; the existing enumeration works only for n1 = 1 (pp. 3-4).",
+  "key_idea": "Write the LP optimality conditions with complementary slackness, minimize ||x2||^2, drop complementarities at the root (bounded below by 0, so no variable bounds needed) and branch on one complementarity by fixing either factor to zero (pp. 5-7, 12); bi-priority node selection with threshold 0 (pp. 14-15).",
+  "assumptions": "Median quantile u = 1/2, m > n2 >= n1 (pp. 2-3); bounds x3 <= 5||b||_inf for the competitor's big-M are only asymptotic (light- and heavy-tailed examples) and may cut off optima for finite m (pp. 8-11).",
+  "proof_devices": [
+   "LP strong duality for feasibility of the CQPCC (Proposition 1, p. 6)",
+   "union bound plus triangle inequality (Lemma 1, pp. 8, 24-25)",
+   "Azuma's inequality plus Gaussian tail bounds for maxima (Example 1, pp. 9-10)",
+   "Hoelder plus Markov for heavy tails (Example 2, pp. 10-11)"
+  ],
+  "experiments": "500/300/100 random instances (m = 50/100/150, n1 = n2 = 5) from Belloni's generator; faster than Couenne on 454/500, 283/300, 99/100 and than CPLEX big-M MIQP on 343/500, with CPLEX optimal on only 159/300 and 17/100; big-M sensitivity M to 10M; failed branching and node rules reported (pp. 16-23).",
+  "positioning": "Partial inverse optimization and LPCC literature (pp. 3-4); the general CQPCC code of Bai et al. was tested and found not competitive (p. 4).",
+  "writing": "Plain roadmap introduction (pp. 3-4); results reported as win counts and log-log scatter plots (pp. 17-22); short conclusion with two concrete future directions (p. 24).",
+  "limits_future": "Only the 2-norm objective (1- or inf-norm would give LP subproblems) and no study of the norm versus estimation-error trade-off (p. 24); the m > n2 > n1 case is said to give the same results but is not shown (p. 16).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "benchmarks against the best public global codes (Couenne, CPLEX) and prints the variants that failed and why",
+    "pages": "pp. 17-23"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "'solved' cross-verified by independent algorithms to relative 1e-6 (two signals)",
+    "pages": "p. 15"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "size ladder of unfiltered random instances from a domain generator; no hardness filter",
+    "pages": "p. 16"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "fair-comparison handicap",
+    "evidence": "derives bounds that the CPLEX big-M model needs, imposes the same bounds on its own B&B 'for a fair comparison', then studies the competitor's sensitivity to M",
+    "pages": "pp. 19, 21-22"
+   },
+   {
+    "pattern": "threshold-based bi-priority node selection",
+    "evidence": "depth-first below a threshold set to the known typical optimal value (0), best-bound otherwise",
+    "pages": "pp. 14-15"
+   }
+  ],
+  "transferable": [
+   "Branch on complementarity pairs with linear equalities instead of a big-M MIP, so no a priori variable bounds are needed (pp. 7, 12).",
+   "Use a known typical optimal value as the threshold of a two-list node selection (pp. 14-15).",
+   "Give a competitor the bounds it needs, impose them on your own code too, and report its sensitivity to big-M (pp. 19-22).",
+   "Declare an instance solved only when independent solvers agree on the optimal value to a stated relative accuracy (p. 15)."
+  ],
+  "coauthors": "Guanglin Xu (problem and generator from Alexandre Belloni, acknowledged)",
+  "quotes": [
+   {
+    "text": "However, we have found by testing code supplied by the authors that this general-purpose algorithm was not competitive with the special-purpose algorithm that we will present in this paper.",
+    "page": 4
+   },
+   {
+    "text": "In other words, when an algorithm claims to have solved an instance optimally, it is independently verified by the other algorithms up to six significant figures.",
+    "page": 15
+   }
+  ]
+ },
+ {
+  "id": "S036",
+  "year": "2018",
+  "title": "Quadratic programs with hollows",
+  "read_level": "full",
+  "contribution": "Shows that deleting disjoint ellipsoidal hollows from a bounded quadratic set preserves SDP tightness and that the lifted convex hull changes only by the corresponding linear constraints, and uses the picture to settle the open hull MIQ(1,n2) for one integer variable.",
+  "problem_entry": "Is optimizing a quadratic over F minus ellipsoidal hollows harder than over F? A simple intuition (an interior optimum inside a hollow forces convexity and an equality TRS on its boundary) is formalized through SDP relaxations (pp. 2-3).",
+  "key_idea": "Theorem 1: a tight valid SDP relaxation R(F) stays tight after adding l linear constraints from the hollows (pp. 5-6); Theorem 2: tight for all q iff R(F) = C(F) (p. 6); hence C(G) = C(F) intersect L(H) (Corollary 1, p. 7); elongated hollows suggest that MIQ(1,n2) = PSD plus one-variable splits, proved directly (Theorem 3, pp. 11-12).",
+  "assumptions": "F bounded, full-dimensional, possibly nonconvex; hollows inside F with disjoint interiors, checkable by lm + l(l+1)/2 TRSs; both conditions shown necessary by counterexamples (pp. 2, 5, 8-10).",
+  "proof_devices": [
+   "extreme points of C(F) are rank one, so linear objectives are exact (Proposition 1, p. 4)",
+   "separation lemma for the only-if direction (Theorem 2, p. 6)",
+   "Sturm-Zhang rank-one decomposition plus induction on the number of hollows (pp. 7-8)",
+   "Pataki rank bound for extreme points (p. 12)",
+   "explicit 2-D counterexamples with computed values (pp. 8-10)"
+  ],
+  "experiments": "none",
+  "positioning": "Unifies the TRS-extension literature (GTRS, TRS with cuts, two-ellipsoid results), strengthens Burer & Yang 2015 to cuts meeting on the boundary, and closes an open case of Burer & Letchford (pp. 4-5, 7, 10-11).",
+  "writing": "Short communication: intuition in the introduction, two main results stated in words before the theorems (p. 4), two proofs of the corollary, counterexamples section, and an 'addendum' application (pp. 5, 7-11).",
+  "limits_future": "A proof of the integer result via the hollow theorems is blocked by unboundedness of Z x R; the authors believe it should be possible (p. 11).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "the result is a statement about one convex object, the lifted hull C(.) = conv{(x, xx^T)}",
+    "pages": "pp. 4, 7"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "explicit non-disjunctive hull of a small mixed-integer substructure (MIQ(1,n2)); boundary marked by certified counterexamples",
+    "pages": "pp. 8-12"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "regularity stated as a conjecture from a picture, then proved directly; the uncompleted route is named",
+    "pages": "p. 11"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "analogy across areas",
+    "evidence": "a geometric limit (hollows elongated into slabs) used to guess the hull in a seemingly unrelated mixed-integer problem",
+    "pages": "pp. 10-11"
+   }
+  ],
+  "transferable": [
+   "Turn objective-wise tightness into a set identity with the equivalence 'tight for all quadratic objectives iff R = C' (Theorem 2, p. 6).",
+   "Give a second constructive proof via rank-one decomposition to connect with the standard hull toolkit (pp. 7-8).",
+   "Pair each theorem assumption with a minimal 2-D counterexample showing it is necessary (pp. 8-10)."
+  ],
+  "coauthors": "Boshi Yang, Kurt Anstreicher",
+  "quotes": [
+   {
+    "text": "Inspired by these results, we resolve a related question in a seemingly unrelated area, mixed-integer nonconvex quadratic programming.",
+    "page": 1
+   },
+   {
+    "text": "While we believe a proof based on Sect. 2 should be possible, we have instead opted to prove the generalization of this conjecture to arbitrary n2 using a direct approach that closely mimics the alternate proof of Corollary 1 presented in Sect. 2.",
+    "page": 11
+   }
+  ]
+ },
+ {
+  "id": "S044",
+  "year": "2018",
+  "title": "A data-driven distributionally robust bound on the expected optimal value of uncertain mixed 0-1 linear programming",
+  "read_level": "full",
+  "contribution": "Bounds the expected optimal value of a mixed 0-1 LP with random objective over a 2-Wasserstein ball around the empirical distribution by an exact copositive reformulation and a tractable SDP inner approximation, with a resampling rule for the radius (read as arXiv v1).",
+  "problem_entry": "Expected optimal value of a mixed 0-1 LP with unknown distribution seen only through samples; moment-based ambiguity sets do not converge as data grows, so use a Wasserstein ball (pp. 1-4).",
+  "key_idea": "Condition the transport plan on each sample, dualize to inf over lambda of lambda eps^2 + average of inner sups, reformulate each mixed 0-1 bilinear inner problem as a copositive program via Burer 2009, and replace the copositive cone by an SDP/RLT inner approximation to get an upper bound (pp. 10-14).",
+  "assumptions": "X nonempty and bounded; the 2009 key assumption 0 <= x_j <= 1 implied for binaries; support convex, closed, tractable, and bounded (needed only for exactness; otherwise still an upper bound) (pp. 9-13); light tails only for the theoretical radius (p. 7).",
+  "proof_devices": [
+   "max-min inequality plus strong duality for moment problems (pp. 10-11)",
+   "redundant ball constraint gives a Slater point for the copositive dual (p. 12)",
+   "term-by-term proof that the inner approximation is copositive (Lemma 2, p. 13)"
+  ],
+  "experiments": "Three small applications (n = 3 order statistic, 7-arc project network, 4-item knapsack), N = 10-1280, 100 trials, 100,000-sample Monte Carlo reference; Wasserstein bound tightens with N while the moment bound (given exact moments) stays flat; coverage >= 0.97; no convergence for the knapsack because the relaxation is not tight (pp. 14-25).",
+  "positioning": "Against moment-based bounds (Bertsimas et al., Natarajan et al. cross-moment CP model) and alongside Hanasusanto & Kuhn (max-max rather than max-min; natural SDP approximation rather than a hierarchy) (pp. 3-4).",
+  "writing": "Three competing desiderata (guarantee, tightness, complexity) laid out in the introduction (p. 3); observations stated before the sections (p. 4); conclusion is a summary only (p. 25).",
+  "limits_future": "Tiny test instances; bound does not converge for integer problems when the SDP relaxation is loose (pp. 15, 20, 23-24); no future directions given (p. 25).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "inner problem rewritten exactly over one cone CP(Xi x R^n_+), then approximated; the 2009 exactness hypothesis reused as Assumption 3",
+    "pages": "pp. 9, 11-14"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "no hard-pool engineering; instead the baseline is deliberately advantaged with exact moments",
+    "pages": "p. 14"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "fair-comparison handicap",
+    "evidence": "moment-based baseline given exact moments, 'this choice favors MB', so the data-convergence trend cannot be blamed on a weak baseline",
+    "pages": "p. 14"
+   }
+  ],
+  "transferable": [
+   "Per-sample conditioning plus Lagrangian duality turns a Wasserstein DRO bound into N deterministic inner problems, each open to a conic reformulation (pp. 10-11).",
+   "Add a redundant norm-ball constraint to obtain Slater for a conic dual (p. 12).",
+   "Choose a data-driven radius by train/validate resampling and report realized coverage on fresh trials (pp. 8-9, 18)."
+  ],
+  "coauthors": "Guanglin Xu",
+  "quotes": [
+   {
+    "text": "Actually, this choice favors MB, but the goal of our experiments is to demonstrate that our approach provides a valid upper bound",
+    "page": 14
+   },
+   {
+    "text": "This is due to the fact that problem (21) is a relaxation of problem (17) and the fact the relaxation is not tight in this example.",
+    "page": 24
+   }
+  ]
+ },
+ {
+  "id": "S062",
+  "year": "2019",
+  "title": "Three methods for robust grading",
+  "read_level": "full",
+  "contribution": "Proposes three ways to set letter-grade breakpoints under grade uncertainty (max gap, minimum borderline students via MILP, and a robust min-max solved by tailored spatial B&B) and shows on privacy-preserving synthetic instances that the simple methods are already fairly robust.",
+  "problem_entry": "From teaching: choose breakpoints so that final letter grades are not overly sensitive to uncertainty in assignment grades; little prior literature (pp. 1-2); uncertainty only raises grades (p. 2).",
+  "key_idea": "Replace the discontinuous borderline indicator by a continuous pseudo-borderline difference of two monotone pieces modelled as disjunctive MILPs (pp. 3-4); robust min-max by spatial B&B on the breakpoint rectangle with midpoint upper bounds and a 'bunch' of collected worst-case scenarios for lower bounds (p. 5).",
+  "assumptions": "Two breakpoints with separated ranges; compact MIP-representable uncertainty set with G >= nominal; 0-norm or 1-norm budget, each grade raised by at most 5 points (pp. 2, 5-6).",
+  "proof_devices": [],
+  "experiments": "50 synthetic instances sampled from a real course's empirical marginals (m = 41, n = 5), 8 parameter settings, Matlab + Gurobi single core; cross-evaluation of each method in the others' objectives with outlier instances shown; Robust takes up to about 5370 s; code, Excel and NEOS versions released (pp. 5-8).",
+  "positioning": "Claims little to no prior work on algorithmic grading; contrasts with statistical banding in HR/psychology (p. 2) and with Vielma et al. MIP models of lsc piecewise-linear functions (p. 3).",
+  "writing": "Application paper with a personal motivation ('authors' personal experience', p. 2), trend-then-exception reporting (pp. 6-8) and a practical recommendation in the conclusion (p. 8).",
+  "limits_future": "Robust may be impractical for large classes and needs optimization expertise; possible speed-up by Vielma-Nemhauser compact disjunctions; correlations between assignments ignored in instance generation (pp. 6, 8).",
+  "method_links": [],
+  "new_pattern_candidates": [
+   {
+    "pattern": "cross-evaluation of solutions across objectives",
+    "evidence": "each method's (a, b) plugged into the other methods' objectives, bubble plots plus exception instances",
+    "pages": "pp. 6-8"
+   },
+   {
+    "pattern": "privacy-preserving synthetic instances",
+    "evidence": "test data sampled from per-assignment empirical distributions of a real course; real data never used directly",
+    "pages": "p. 6"
+   },
+   {
+    "pattern": "scenario-bunch lower bound for min-max B&B",
+    "evidence": "worst-case f collected at upper-bound computations reused as a pool for node lower bounds",
+    "pages": "p. 5"
+   }
+  ],
+  "transferable": [
+   "Reuse inner-max solutions from upper-bound computations as a scenario pool whose max-min is a node lower bound in min-max spatial B&B (p. 5).",
+   "Model a discontinuous indicator that must be both maximized and minimized by a continuous delta-approximation written as a difference of disjunctive pieces (pp. 3-4).",
+   "Compare methods with different objectives by cross-evaluation and then show the exception instances one by one (pp. 6-8).",
+   "Generate test data from the empirical marginals of a private dataset and say what this ignores (p. 6)."
+  ],
+  "coauthors": "Veronica Piccialli",
+  "quotes": [
+   {
+    "text": "In particular, the original course data was not used to test the algorithms directly; it was simply the basis for randomly generating the test data.",
+    "page": 6
+   },
+   {
+    "text": "Results on realistic instances show that the MaxGap and Basic strategies are quite robust themselves, even though there are some cases for which explicitly computing the robust solution is worthwhile.",
+    "page": 8
+   }
+  ]
+ },
+ {
+  "id": "S038",
+  "year": "2021",
+  "title": "Quadratic optimization with switching variables: the convex hull for n = 2",
+  "read_level": "full",
+  "contribution": "Gives an exact representation of conv{(x, xx^T, yy^T) : 0 <= x <= y in {0,1}^2} using one 5x5 PSD condition plus linear constraints in a space lifted by alpha, reproves n = 1 as PSD + RLT, and conjectures that plain PSD + RLT captures the hull without y1y2 (read as arXiv v1).",
+  "problem_entry": "Switching variables are common in applications; n = 1 (perspective) is known, QPB is intractable in general, so attack the smallest open case n = 2 (pp. 1-2).",
+  "key_idea": "Start from a disjunctive hull over the four y values (Theorem 2), eliminate beta at the cost of four PSD conditions (Theorem 3), then show only the 5x5 condition is needed (Theorem 4); reinterpret it as the natural PSD matrix minus the y = 0 piece, leading to Conjecture 1 (pp. 3-20).",
+  "assumptions": "n = 2 only; separable objectives with cross term y1y2 often absent, so H' without y1y2 is treated separately (p. 2).",
+  "proof_devices": [
+   "CP = DNN for 4x4 matrices to reprove n = 1 (p. 4)",
+   "elimination of beta by monotonicity (pp. 8-9)",
+   "concave principal-minor determinants checked at interval endpoints (p. 11)",
+   "Schur complements and eigenvalue interlacing (pp. 10, 14)",
+   "contradiction via the maximizer of a concave determinant in alpha2 (pp. 16-18)"
+  ],
+  "experiments": "none reported; the conjecture is said to be supported by extensive numerical computations, details not given (pp. 3, 19).",
+  "positioning": "Extends the n = 1 perspective representation (Frangioni-Gentile, Guenluek-Linderoth) and the authors' 2010 QPB n = 2 hull; distinguishes itself from (x, y, t) epigraph convexifications such as Atamtuerk-Gomez (p. 2).",
+  "writing": "Stepwise roadmap of the derivation in the introduction (pp. 2-3); open admission that no general projection method exists (p. 3); conjecture clearly labelled as unproved (pp. 3, 20).",
+  "limits_future": "Final representation still lifted in alpha; Conjecture 1 for H' unproved; general n open (pp. 2, 18, 20).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "hull of a small recurring substructure in its smallest open dimension; known n = 1 case re-derived first in PSD/RLT machinery; proved for n = 2, conjectured beyond",
+    "pages": "pp. 3-5, 20"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "disjunctive formulation is the starting point and is only partly eliminated (alpha kept), so the description is a projection, not direct in the original variables",
+    "pages": "pp. 3, 18"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "computation-supported regularity printed as a conjecture that 'remains unproved'",
+    "pages": "pp. 3, 20"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "n = 1 proof through the CP representation and CP = DNN in dimension 4",
+    "pages": "p. 4"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Eliminate an auxiliary variable that appears only on a PSD matrix diagonal by setting it to the max of its lower bounds and splitting the max into cases (pp. 8-9).",
+   "Prove a PSD condition redundant by concavity of principal-minor determinants in the free entry and checking both interval endpoints (p. 11).",
+   "Read a surviving PSD condition as 'natural matrix minus one disjunct's piece' to generate a conjecture for the weaker hull (p. 19)."
+  ],
+  "coauthors": "Kurt M. Anstreicher",
+  "quotes": [
+   {
+    "text": "This conjecture is supported by extensive numerical computations but remains unproved.",
+    "page": 3
+   },
+   {
+    "text": "we are unaware of any general methodolgy for characterizing such a projection, and therefore our proof technique is tailored to the structure of H for n = 2.",
+    "page": 3
+   }
+  ]
+ }
+]

@@ -1,0 +1,289 @@
+[
+  {
+    "id": "S035",
+    "year": "2008",
+    "title": "On handling free variables in interior-point methods for conic linear optimization",
+    "read_level": "full",
+    "contribution": "A regularization strategy for free variables in infeasible primal-dual IPMs, with a δ-update rule backed by a global convergence proof and an SDPT3 implementation that matches or beats splitting, quadratic-cone and indefinite-system approaches in accuracy.",
+    "problem_entry": "Free variables make the Newton system indefinite, so Cholesky cannot be used; splitting loses interior and boundedness; Mészáros's LP regularization had only an ad hoc δ update without convergence theory (pp. 2-3, 9).",
+    "key_idea": "View the regularized direction as an inexact Newton step and accept it only if δ‖Δz‖ ≤ βσμ/2, halving δ otherwise; keep the Kojima-Megiddo-Mizuno framework (Algorithm 2, pp. 9-10).",
+    "assumptions": "Analysis in LP form (SOCP/SDP asserted as well known); A full row rank, E full column rank, interior feasibility, initial r_p = r_d1 = 0 for brevity (pp. 4, 6); experiments deliberately violate full column rank of E (p. 12).",
+    "proof_devices": [
+      "repair of one proposition: inexactness breaks r_α = (1-α)r, and the bound δ‖Δz‖ ≤ βσμ/2 restores the neighbourhood inequality with α* halved (Proposition 5.2, p. 11)",
+      "global convergence by a uniform positive step-size lower bound α* on a compact set (Theorem 3.1 proof, p. 7; Theorem 5.1, p. 10)"
+    ],
+    "experiments": "SDPT3 3.02, four free-variable treatments, 135 instances (DIMACS, modified SDPLIB with full and half rank E, quantum chemistry, moment relaxations); log10 of max DIMACS error; regularization equal or clearly better in accuracy, more iterations, less time per iteration (pp. 12-14).",
+    "positioning": "Revisits Mészáros (LP) and extends Kojima-Megiddo-Mizuno; chooses a convergent but non-polynomial scheme over inexact-IPM theory (Freund-Jarre-Mizuno, Zhou-Toh) because the latter was harder to implement and worked worse in their tests (pp. 8-9).",
+    "writing": "Explicit 'Some remarks' section stating what is not claimed and why SDPT3 was chosen (p. 3); closes with three criteria for a good regularization strategy (p. 9).",
+    "limits_future": "Not claimed best in all situations; only SDPT3 tested; SeDuMi already handles split variables well; no polynomial bound; open: regularization inside SeDuMi and an easy polynomial update rule (pp. 3-4, 14).",
+    "method_links": [
+      {"method": "Method 5", "relation": "evidence", "note": "Simple variant chosen because it works in code; an implemented theoretical alternative reported as worse; the failed nonincreasing-δ design recorded with its reason.", "pages": "pp. 9, 11"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Inexactness budget tied to the duality gap", "evidence": "Cheap regularized step admitted by bounding its error by the centring term βσμ/2, which lets a classical convergence proof go through with one proposition repaired.", "pages": "pp. 10-11"}
+    ],
+    "transferable": [
+      "Find the single inequality of a classical convergence proof that an approximate step breaks, and add an acceptance test (with a shrink loop) that restores it (p. 10).",
+      "Allow a control parameter to increase again from a best current guess rather than forcing monotonicity, and report the monotone design that failed (p. 11).",
+      "Compare methods with different stopping behaviour by the best log10 DIMACS error reached during the run (p. 13)."
+    ],
+    "coauthors": "Miguel F. Anjos",
+    "quotes": [
+      {"text": "We emphasize that free variables are a computational issue and not a theoretical one.", "page": 2},
+      {"text": "Ultimately, we believe that our analysis allows us to identify the essence of a good regularization strategy. It should (i) be convergent, (ii) be easy to implement, and (iii) work well in practice.", "page": 9}
+    ]
+  },
+  {
+    "id": "H002",
+    "year": "2009",
+    "title": "SDPLR 1.03-beta User's Guide (short version)",
+    "read_level": "full",
+    "contribution": "Installation, usage and input-format documentation for the SDPLR low-rank SDP solver, including a low-rank extension of the sparse SDPA format.",
+    "problem_entry": "Software documentation for a C package for large-scale SDP with source, binaries and a Matlab interface (p. 1).",
+    "key_idea": "Input format extends sparse SDPA with low-rank data blocks given as BDB^T; a reserved line will carry the primal trace for ±1 combinatorial SDPs to give dual bounds during the run (pp. 3-4).",
+    "assumptions": "n/a (software); build needs BLAS/LAPACK and the bundled GSL (pp. 1-2).",
+    "proof_devices": [],
+    "experiments": "none (installation test on vibra1.dat-s, p. 2).",
+    "positioning": "Lists Burer, Monteiro and Choi as developers (p. 1); builds on the community SDPA format (p. 3).",
+    "writing": "Terse step-by-step guide; worked example is the Lovász theta SDP of the 5-cycle (pp. 4-5).",
+    "limits_future": "Dual-bound feature for ±1 SDPs announced as in development (p. 4).",
+    "method_links": [
+      {"method": "Method 5", "relation": "evidence", "note": "The low-rank prototype of 2000 is maintained as public software with Matlab and command-line entry points.", "pages": "pp. 1-3"},
+      {"method": "Method 1", "relation": "evidence", "note": "Weak: the input format exposes low-rank structure of the data, the same structure the factorization method exploits.", "pages": "p. 4"}
+    ],
+    "new_pattern_candidates": [],
+    "transferable": [
+      "Ship a solver with a structure-aware input format defined as a small extension of the community standard, with a classic toy instance (theta of C5) as the format example (pp. 3-5).",
+      "Provide an interactive parameter-file generator with inline explanations (p. 3)."
+    ],
+    "coauthors": "Renato D. C. Monteiro, Changhui Choi",
+    "quotes": [
+      {"text": "SDPLR is a C software package for solving large-scale semidefinite programming problems.", "page": 1},
+      {"text": "The SDPLR format, which SDPLR is also capable of handling, is more or less an extension of sparse SDPA format which also allows low-rank data matrices to be specified easily.", "page": 3}
+    ]
+  },
+  {
+    "id": "S028",
+    "year": "2009",
+    "title": "The difference between 5×5 doubly nonnegative and completely positive matrices",
+    "read_level": "full",
+    "contribution": "Shows that every 5×5 DNN-but-not-CP matrix is a CP matrix plus a single extremely bad (rank-3 cyclic extreme) matrix, gives a finite CP-reduction procedure, and a sharp copositive cut separating extremely bad matrices from C5.",
+    "problem_entry": "D_n = C_n only for n ≤ 4, so n = 5 is the first gap; from optimization, C_n is the true domain and D_n only a tractable approximation (p. 3).",
+    "key_idea": "Parameterize extremely bad matrices as ΛRR^TΛ under 12 permutation classes, peel off rank-one CP pieces by LPs until irreducible, prove irreducible ⇔ extremely bad for n = 5, then separate with a scaled, permuted Horn matrix (pp. 4-13).",
+    "assumptions": "n ≥ 5 generally, n = 5 for the main results; extreme-ray characterization of D5 taken from Hamilton-Jester and Li (pp. 3-4).",
+    "proof_devices": [
+      "range-condition characterization of CP-reducibility (Theorem 4, p. 7)",
+      "potential rank + nonzero count strictly decreasing for finiteness (Theorem 5, pp. 8-9)",
+      "case analysis over permutation classes with scaling invariance (Lemma 3, Theorems 6-7, pp. 9-12)",
+      "Farkas alternatives for two index sets reduced to sign contradictions (pp. 11-12)",
+      "Horn-matrix cut K = P Diag(w) H Diag(w) P^T with w = -(P^T X P ∘ H)^{-1} e (Lemma 4, Theorem 8, pp. 12-13)"
+    ],
+    "experiments": "none; worked examples (Algorithm 1 iteration, p. 8; 5-cycle stable set where one cut closes the ϑ' gap, pp. 13-14).",
+    "positioning": "Builds on Burer 2009 copositive representation and on Berman-Xu, Xu, Johnson-Reams; notes their cut coincides with Bomze-Locatelli-Tardella's inequality derived differently (pp. 2-3, 14).",
+    "writing": "Coins 'bad' and 'extremely bad' matrices to keep the optimization perspective in view (p. 3); states the open problem plainly (pp. 12-13).",
+    "limits_future": "No separation for an arbitrary bad matrix (open, tied to an outer description of C5); Algorithm 1 is not polynomial and need not recover a CP factorization of CP input (pp. 8-9, 12-13).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "After packaging QP in the CP cone, the follow-up attacks that cone: its gap to the DNN approximation and a separating cut.", "pages": "pp. 2-3, 12-13"},
+      {"method": "Method 2", "relation": "evidence", "note": "Works in the smallest dimension where the question is nontrivial (n = 5), gives an explicit description, and publishes the boundary as an open problem.", "pages": "pp. 3, 12-13"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Decompose the relaxation's excess into good part plus one irreducible bad piece", "evidence": "Every point of D5 \\ C5 is CP plus a single extremely bad matrix, which is then cut off.", "pages": "pp. 9, 12-13"}
+    ],
+    "transferable": [
+      "Study the extreme rays of the tractable cone that lie outside the target cone, parameterize them explicitly, and show every point of the gap is target-cone plus one such ray (pp. 4-6, 12).",
+      "Prove finiteness of a peeling algorithm with a potential such as rank plus nonzero count that must drop at each line-search stop (pp. 8-9).",
+      "Test a new cut on the canonical gap instance (stable set on C5) and relate it to cuts derived elsewhere (p. 14)."
+    ],
+    "coauthors": "Kurt M. Anstreicher, Mirjam Dür",
+    "quotes": [
+      {"text": "This terminology reinforces the perspective from optimization applications involving CP matrices [5], where Cn is the true domain of interest and Dn serves only as a (tractable) approximation of Cn.", "page": 3},
+      {"text": "We have not been able to derive a separating inequality for an arbitrary bad matrix, but we show below how to separate an extremely bad matrix", "page": 12}
+    ]
+  },
+  {
+    "id": "S041",
+    "year": "2009",
+    "title": "A p-cone sequential relaxation procedure for 0-1 integer programs",
+    "read_level": "full",
+    "contribution": "A family of p-order-cone lift-and-project operators for 0-1 programs that contains Lovász-Schrijver (p = ∞) and Balas-Ceria-Cornuéjols (|J| = 1) as special cases, converges asymptotically to the integer hull, has the lowest iteration complexity at p = 2, but loses to the LP version in computation.",
+    "problem_entry": "All prior sequential lift-and-project procedures use LP or SDP in the lifted space; ask whether p-order-cone programming yields procedures with their own advantages (pp. 2-3).",
+    "key_idea": "Multiply each linear constraint by the p-ball constraint circumscribing {0,1}^J, linearize X = xx^T keeping only diag(X) = x, and project (pp. 5-6).",
+    "assumptions": "P ⊆ [0,1]^n compact convex, possibly semi-infinite; symmetry and PSD of X deliberately not imposed for the theory; complexity result for polytopes (pp. 5, 8, 14).",
+    "proof_devices": [
+      "monotonicity in the set and in p via a convexity lemma (Propositions 3.7, 3.9, Lemma 3.8, pp. 15-16)",
+      "barrier-parameter iteration bounds O(√|I|) at p = 2 (Corollary 3.6, p. 14)",
+      "escalating geometry: polytope (two proofs), then ball via n nearly-active perturbed constraints, Sherman-Morrison-Woodbury and θ → 0 Taylor expansion, then general convex set via a supporting ball (pp. 16-20)",
+      "asymptotic convergence by contradiction and a continuity argument (Theorem 4.1, pp. 21-22)",
+      "explicit polytope family P(a) requiring infinitely many rounds (Proposition 4.2, pp. 22-23)"
+    ],
+    "experiments": "p = 2 (MOSEK 5.0) vs p = ∞ (CPLEX 9.0 dual simplex, MOSEK IPM) on 8 DIMACS stable-set graphs and 7 small MIPLIB 2003 instances; the LP is faster with better bounds, refuting the stated hypothesis (pp. 23-25).",
+    "positioning": "Unifies Lovász-Schrijver, Balas-Ceria-Cornuéjols and relates to Kojima-Tunçel (whose asymptotic proof needs all rank-2 products, unlike theirs); distinguishes from Kim-Kojima SOCP relaxations derived from semidefiniteness (pp. 9-11, 21, 26).",
+    "writing": "States the computational hypothesis before the negative result ('We had hypothesized'); closes by calling the contribution theoretical with possible future computational gains (pp. 23, 25-26).",
+    "limits_future": "No finite convergence and no rate; SOCP not competitive; hope for better SOCP software (pp. 21-23, 25-26).",
+    "method_links": [
+      {"method": "Method 1", "relation": "variant", "note": "Lift then one parameterized cone family that contains the classical procedures as special cases (unification), rather than an exact reformulation.", "pages": "pp. 9-11"},
+      {"method": "Method 5", "relation": "contradiction", "note": "Order reversed: theory carries the paper and computation, run afterwards, refutes the computational hypothesis; printed openly (consistent with H8).", "pages": "pp. 23, 25"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Escalating-geometry proof (polytope → ball → general convex set)", "evidence": "Cut-off of fractional extreme points proved for polytopes, extended to balls by perturbed nearly-active constraints, then to any compact convex set through a supporting ball and monotonicity.", "pages": "pp. 16-20"}
+    ],
+    "transferable": [
+      "Generate a relaxation family by multiplying valid linear constraints by a norm-ball constraint circumscribing the 0-1 points; the norm p becomes a monotone strength/complexity dial (pp. 5, 14-16).",
+      "Justify a new operator by showing classical operators are parameter settings of it (pp. 9-11).",
+      "Extend a polytope argument to general convex sets by enclosing P in a ball that supports it at the extreme point, then apply monotonicity (pp. 18-20).",
+      "State the computational hypothesis before the experiment so a negative result reads as a test (p. 23)."
+    ],
+    "coauthors": "Jieqiu Chen",
+    "quotes": [
+      {"text": "Our hope is that, by introducing POCP relaxations, we might discover new lift-and-project procedures that have their own theoretical and computational advantages.", "page": 3},
+      {"text": "These results are a testament to the high quality of current LP software.", "page": 25}
+    ]
+  },
+  {
+    "id": "S047",
+    "year": "2011",
+    "title": "Relaxing the optimality conditions of box QP",
+    "read_level": "full",
+    "contribution": "SDP relaxations of box QP that encode first- and second-order necessary conditions via an index-free reformulation; they equal Shor's bounded relaxation at the root but reduce B&B nodes on subboxes, plus a fractional-times-longest-edge branching rule.",
+    "problem_entry": "Global box QP needs strong cheap relaxations; first-order KKT had been used before; the second-order condition depends on the unknown inactive set (pp. 2-4).",
+    "key_idea": "With w = x∘(e-x), local convexity Q_II ⪰ 0 becomes Q∘ww^T ⪰ 0; relax it, with complementarity, in one lifted PSD matrix (SDP12) or a lean version (SDP2) (pp. 4-7).",
+    "assumptions": "Q indefinite; bounded Shor relaxation with diag(X) ≤ x, since without it the SDP is unbounded (pp. 1, 5).",
+    "proof_devices": [
+      "extend-an-optimum lemma for equal optimal values (Lemma 4.1, p. 7)",
+      "dual complementary slackness gives Q_JJ ⪰ 0 on J = {X_ii < x_i} (Lemma 4.2, p. 8)",
+      "feasible paths and directional derivatives show SDP0 optima satisfy first-order inequalities (Propositions 4.4-4.6, Theorem 4.8, pp. 9-11)",
+      "explicit lifted point with large constant via Schur complement and null-space lemma (pp. 11-13)"
+    ],
+    "experiments": "B&B in MATLAB/YALMIP/SeDuMi, 100 random n = 20 instances; advanced branching −44% nodes and time; SDP2 −21% nodes but more CPU; switching scheme partly successful; SDP12 −65% nodes, slowest (pp. 15-20).",
+    "positioning": "Extends Vandenbussche-Nemhauser and Burer-Vandenbussche (first-order) to second-order; contrasts with Nesterov's smooth p-norm boxes (p. 2).",
+    "writing": "Announces the main theorem as 'surprising, somewhat negative' up front and pairs it with a positive B&B finding (p. 2); disclaims building a best B&B (p. 13).",
+    "limits_future": "Root equivalence; CPU loss; only small random instances; future: QP over the simplex, faster SDP software (pp. 18-20).",
+    "method_links": [
+      {"method": "Method 2", "relation": "variant", "note": "Strengthen Shor with more valid structure and test whether it goes strictly beyond; at the root it does not (equivalence), gains appear only on subdivided boxes.", "pages": "pp. 2, 13-20"},
+      {"method": "Method 4", "relation": "variant", "note": "Testbed is 100 unfiltered uniform random instances, before his later engineered hard pools.", "pages": "p. 17"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Relax the optimality conditions, not only the feasible set", "evidence": "Second-order condition written index-free and lifted into the SDP; continues first-order KKT relaxations and is proposed for other QP classes.", "pages": "pp. 2, 4-7, 20"},
+      {"pattern": "Root-equivalent relaxations can differ inside B&B", "evidence": "SDP0 = SDP2 = SDP12 in value at the root, yet SDP2/SDP12 cut nodes on subboxes.", "pages": "pp. 13, 18-20"}
+    ],
+    "transferable": [
+      "Encode a condition that depends on an unknown active set through a weight vector vanishing exactly on active indices (w = x∘(e-x)), giving one matrix inequality (pp. 4-5).",
+      "Prove equivalence of a strengthened relaxation by constructing a feasible point of it from an optimum of the weak one, filling extra blocks via a Schur complement with a large scalar (pp. 11-13).",
+      "Branch at the relaxation's solution coordinate weighted by edge length, since SDP enforces X = xx^T weakly in the interior (p. 16).",
+      "Show B&B comparisons as per-instance log-log scatter plots against y = x (pp. 17-19)."
+    ],
+    "coauthors": "Jieqiu Chen",
+    "quotes": [
+      {"text": "In Sect. 4, we prove the surprising, somewhat negative result that all three achieve the same optimal value.", "page": 2},
+      {"text": "Relaxing the standard second-order necessary optimality conditions is one of the main theoretical ideas of this paper. This task is non-trivial since it implicitly involves knowledge of the active/inactive constraint set at a general point.", "page": 20}
+    ]
+  },
+  {
+    "id": "S063",
+    "year": "2011",
+    "title": "A semidefinite programming approach to the hypergraph minimum bisection problem",
+    "read_level": "full",
+    "contribution": "The first exact mathematical program (a QCQP) for hypergraph minimum bisection via its complement, an SDP relaxation solved by SDPLR with tight bounds and METIS-competitive rounded solutions on circuit benchmarks, and partial results towards an approximation guarantee.",
+    "problem_entry": "HMB is NP-hard and served by heuristics, with no known equivalent mathematical program; work on the complement because only it has approximation results in the graph case (pp. 2-3).",
+    "key_idea": "Ternary hyperedge indicators y_i with y_i^2 - y_i x_j = 0 for j in E_i make max Σ w_i y_i^2 count uncut edges exactly; lift to an SDP and round with balanced Goemans-Williamson plus FM local search (pp. 4-5, 9).",
+    "assumptions": "n even, nonnegative hyperedge weights (p. 2).",
+    "proof_devices": [
+      "Gram-vector geometry: vertices of a hyperedge lie on a disc around the hyperedge vector (Proposition 4.1, Corollary 4.2, pp. 10-11)",
+      "Lagrangian stationary-point lemma for a hyperplane missing a disc (Lemma 4.3, pp. 11-12)",
+      "uncut-probability lower bound (Proposition 4.4, p. 13) shown to vanish as O((n+m)^-2) by an F-distribution and one-tailed Chebyshev argument (Proposition 4.6, pp. 14-15)"
+    ],
+    "experiments": "15 ISPD98 circuits, SDPLR 1.02 with loosened tolerance, against best of 100 METIS runs; mean SDP gap 1.97% (max 7.99%); competitive cuts at 45-55% balance; much slower (12 h vs 6 s on the largest) (pp. 7-9).",
+    "positioning": "Follows Goemans-Williamson, Ye-Zhang (0.602 for graph bisection complement) and Choi-Ye clique expansion; contrasts with METIS heuristics (pp. 3, 6).",
+    "writing": "Section titled 'Towards an approximation guarantee'; explicitly calls the theory 'somewhat disappointing' relative to computation (pp. 9, 15).",
+    "limits_future": "No approximation guarantee; tighter relaxation and faster SDPLR named as future work (p. 15).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "First move is an exact QCQP model so that one SDP relaxation exists.", "pages": "pp. 3-5"},
+      {"method": "Method 5", "relation": "evidence", "note": "Computation on real benchmarks carries the paper; missing theory stated.", "pages": "pp. 13, 15"},
+      {"method": "Method 3", "relation": "evidence", "note": "Partial result labelled 'towards'; its own limit proved and set against the computational evidence.", "pages": "pp. 9, 14-15"},
+      {"method": "Method 4", "relation": "variant", "note": "Benchmark filter (older, SDPLR-sized instances) and baseline balance limitation disclosed, but no engineered hard pool.", "pages": "pp. 7-8"}
+    ],
+    "new_pattern_candidates": [],
+    "transferable": [
+      "Encode 'hyperedge uncut' with a ternary indicator and products y_i(y_i - x_j) = 0 so the objective counts uncut edges exactly (pp. 4-5).",
+      "Read the geometry of an SDP's Gram vectors (equal angles to a hub vector, discs) before attempting a rounding analysis (pp. 10-11).",
+      "When an analysis falls short, prove where it falls short and report it next to the positive computational evidence (pp. 14-15)."
+    ],
+    "coauthors": "Changhui Choi",
+    "quotes": [
+      {"text": "We believe that having a mathematical model is a good starting point for studying the hypergraph minimum-bisection problem.", "page": 15},
+      {"text": "Although Proposition 4.6 makes sense from a theoretical point of view, it is inconsistent with our computational results in which our method seems to work well on large-scale circuit partitioning problems.", "page": 15}
+    ]
+  },
+  {
+    "id": "S042",
+    "year": "2012",
+    "title": "Robust rankings for college football",
+    "read_level": "full",
+    "contribution": "Measures the sensitivity of Colley Matrix top-25 rankings to switched inconsequential games and proposes CM+, a Γ-budget robust ranking computed from a min-max MINLP by constraint generation, which is empirically much less sensitive.",
+    "problem_entry": "A 2010 BCS data omission swapped two teams; ask whether Colley rankings (the only fully published BCS computer ranking) are sensitive to games between bottom teams (pp. 4-5, 8).",
+    "key_idea": "Minimize the worst-case residual ‖Cr - b'‖_2 over Γ switched inconsequential games; C is invariant, b' moves linearly; solve by a convex QP master plus an integer separation subproblem in CPLEX (pp. 12-13).",
+    "assumptions": "Win/loss data only; robustness only against switches among teams below 30% win rate with top t = 25; deterministic (no stochastic model); omitted games out of scope (pp. 5-6, 8).",
+    "proof_devices": [
+      "invariance C' = C so uncertainty sits only in the right-hand side (p. 12)",
+      "Γ ≥ N gives rankings invariant under any switches (p. 16)"
+    ],
+    "experiments": "Exhaustive enumeration of all 1- and 2-game switches for 2006-2011; switch measure for CM mean 5.1/max 20 (L = 1) vs CM+ (Γ = 5) mean 1.8/max 10; bubble plots per instance; solves under a minute (pp. 10-11, 14, 18-19).",
+    "positioning": "Builds on Colley, robust optimization (Bertsimas-Sim style Γ) and robust systems of equations; contrasts with Chartier et al.'s perfect-season stability analysis (pp. 5-6).",
+    "writing": "Opens with a press quote of the 2010 incident; repeatedly states the chosen definition of robustness and that others are possible (pp. 4-6).",
+    "limits_future": "No best a priori Γ; larger N, Γ may take hours; rankings hard to compare objectively across Γ; extensions to other sports and other inconsequential sets (pp. 6, 14, 20).",
+    "method_links": [
+      {"method": "Method 4", "relation": "variant", "note": "Incumbent stress-tested where it is fragile (all small perturbations of inconsequential games) and the fix judged on the same set; pool rule-based, not filtered for hardness.", "pages": "pp. 8-11, 16-19"},
+      {"method": "Method 3", "relation": "evidence", "note": "Footnote records that the first version used p = ∞ with many alternative optima and credits the referees for the switch to p = 2.", "pages": "pp. 12-13"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Diagnose the incumbent's sensitivity, then robustify with a budget that nests the incumbent", "evidence": "Switch-measure histograms for CM first; CM+ reduces to CM at Γ = 0 and is invariant for Γ ≥ N.", "pages": "pp. 6, 10-11, 16"}
+    ],
+    "transferable": [
+      "Quantify a base method's fragility by one scalar over all small perturbations and plot base and robust versions on identical scales (pp. 9-11, 18-19).",
+      "Solve min-max over a combinatorial uncertainty set by constraint generation: convex master over scenario cuts plus integer separation (p. 13).",
+      "Choose the uncertainty budget so Γ = 0 recovers the incumbent and large Γ yields provable invariance (pp. 6, 16)."
+    ],
+    "coauthors": "none (sole author)",
+    "quotes": [
+      {"text": "As far as we are aware, our study is the first explicit attempt to make football rankings robust.", "page": 2},
+      {"text": "We thank the anonymous referees for suggesting and encouraging a switch to a different p-norm.", "page": 13}
+    ]
+  },
+  {
+    "id": "S052",
+    "year": "2012",
+    "title": "Newsvendor games: convex optimization of centralized inventory operations",
+    "read_level": "partial",
+    "contribution": "A closed-form low-rank optimal correlation matrix for the Hartman-Dror SDP that minimizes centralized newsvendor cost, built from a balanced bi- or tri-partition of outlets, and a closed-form nucleolus of the resulting cost game.",
+    "problem_entry": "Hartman and Dror showed that choosing outlet demand correlations to minimize centralized cost is an SDP; study its structure and a fair (core/nucleolus) allocation (p. 3).",
+    "key_idea": "The SDP is optimization over the elliptope; Shapiro's theorem classifies cases by sign of v^Tσ; for v^Tσ < 0 solve n = 3 explicitly and lift to any n by a balanced partition, giving rank ≤ 2 (pp. 8-12).",
+    "assumptions": "Jointly normal demand, identical holding/penalty costs, correlations freely adjustable with fixed means and standard deviations (presented as a perfect-information-style assumption) (pp. 3, 7).",
+    "proof_devices": [
+      "factor R = VV^T with unit rows and σ^T V = 0 (p. 9)",
+      "rotation to V_1 = (1,0) for n = 3 uniqueness (pp. 10-11)",
+      "aggregation σ^T V* = σ̄^T V̄* = 0 over a balanced partition (Theorem 3.2, p. 12)",
+      "rank comparison with Pataki's √(2n) bound (p. 13)"
+    ],
+    "experiments": "none (three 6-outlet worked examples on pp. 13-15, not read).",
+    "positioning": "Extends Eppen and Hartman-Dror; imports Shapiro's minimum-trace-factor-analysis result from statistics; argues nucleolus over Shapley value because the game is not concave (pp. 3, 6-8).",
+    "writing": "A 'Comments on assumptions' subsection and a managerial-reading subsection that turns the low-rank structure into a grouping rule (pp. 7, 15-16).",
+    "limits_future": "Normality essential; no fair allocation under general costs; low rank lacks an a priori explanation; constrained correlation changes need a general SDP solver; other distributions open (pp. 7, 15, 17).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "Operational question packaged as one convex object (SDP over correlation matrices) and analysed there.", "pages": "pp. 8-9"},
+      {"method": "Method 2", "relation": "evidence", "note": "Smallest nontrivial case n = 3 solved exactly, general n reduced to it by aggregation.", "pages": "pp. 9-12"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Closed-form low-rank optimum as structural insight", "evidence": "Explicit rank-1/2 optimum reveals a grouping rule that a solver's high-rank interior solution would hide.", "pages": "pp. 12-16"}
+    ],
+    "transferable": [
+      "Solve the n = 3 case of a structured SDP explicitly, then reduce general n to it via a balanced partition whose aggregated data meet the n = 3 condition (pp. 11-12).",
+      "Search for a low-rank optimum through a unit-row factor V with a linear condition σ^T V = 0 (p. 9).",
+      "Check adjacent literatures (statistics: minimum-trace factor analysis) for theorems on the same SDP feasible set and credit the pointer (pp. 8, 17)."
+    ],
+    "coauthors": "Moshe Dror",
+    "quotes": [
+      {"text": "In this sense, solving (2) via a standard SDP solver does not reveal the structure of Theorem 3.2.", "page": 13},
+      {"text": "We unfortunately do not have a satisfactory a priori explanation, but it is interesting to understand the implications of this result.", "page": 15}
+    ]
+  }
+]

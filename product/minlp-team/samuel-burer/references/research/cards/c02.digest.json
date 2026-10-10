@@ -1,0 +1,167 @@
+[
+  {
+    "id": "S001",
+    "year": "2003",
+    "title": "A nonlinear programming algorithm for solving semidefinite programs via low-rank factorization",
+    "read_level": "full",
+    "contribution": "Introduces the low-rank factorization X = RR^T with rank sized by the Barvinok-Pataki bound, solved by an L-BFGS augmented Lagrangian that exploits sparsity, beating spectral bundle and DSDP on large theta, maxcut and bisection SDPs (up to about 500x on G81) without a convergence proof.",
+    "problem_entry": "Interior-point SDP is too time- and memory-intensive for large combinatorial relaxations; the paper joins the trend toward practically efficient, less theoretically guaranteed methods and frames three questions (size, method, nonconvexity) about the factorized reformulation (pp. 1-3).",
+    "key_idea": "Replace X >= 0 by a rectangular factor R with r(r+1)/2 <= m columns, so the nonconvex problem is equivalent to the SDP but has nr variables; solve it with a first-order augmented Lagrangian whose evaluations cost O(nonzeros * r) (pp. 3, 5, 8-12).",
+    "assumptions": "Linearly independent A_i, zero duality gap with attained optima (p. 4); an extreme point exists (Theorem 1, p. 5); regularity for Prop. 4, not guaranteed for theta, so dynamic rank is not used there (p. 14).",
+    "proof_devices": [
+      "Optimality conditions via S = C - sum y_i A_i with grad L = 2SR (Prop. 2, p. 6)",
+      "Orthogonal invariance R -> RQ rules out strict local minima (pp. 6-7)",
+      "Rank-independent sufficiency: stationary point with S PSD is SDP-optimal (Prop. 3, p. 7)",
+      "Zero-column injection into rank r+1 plus second-order conditions forces S PSD (Prop. 4, p. 7)",
+      "Flop/space counts for sparse and rank-one data as propositions (Props 5-8, pp. 11-12, 15)"
+    ],
+    "experiments": "ANSI C on SGI Origin2000, one processor; Lovasz theta (DIMACS hamming, Gset, 2nd DIMACS), maxcut (torus, Gset up to 20,000 vertices), minimum bisection; SB and DSDP at default parameters, 10-hour limits; accuracy via infeasibility and primal-dual relative difference columns; losses on hamming graphs explained; time-matched truncation of SB (Tables 1-20, pp. 13-26).",
+    "positioning": "Continues Homer-Peinado and the authors' own Cholesky/NLP SDP work (p. 2); distinguishes from Bentler and the theoretical Lu-Klein (p. 3); concedes dual methods are more valuable when a valid bound is needed (p. 13).",
+    "writing": "Q1-Q3 questions frame the paper (pp. 2-3); dense explicit hedging (experimental, largely experimental, we feel, pp. 1, 3, 14, 27); strong claims only where measured (p. 27); a warning subsection on gradient-preserved zero columns (pp. 12-13).",
+    "limits_future": "Slow AL subproblems for theta and bisection, no formal convergence proof, equality-form only; proposes a dual-feasibility safeguard, inequality constraints and a dual low-rank analogue via Pataki's bound on rank(S*) (p. 27).",
+    "method_links": [
+      {"method": "Method 5", "relation": "evidence", "note": "Known factorization combined with a rank theorem; practical claim carried by experiment with the theory gap printed; baselines at defaults; dynamic rank dropped on theta for weak theory and poor convergence.", "pages": "pp. 2-3, 14-16, 27"},
+      {"method": "Method 1", "relation": "variant", "note": "Lifted convex object collapsed to a nonconvex factor sized by a theorem; the reformulation serves computation rather than an exact hull.", "pages": "pp. 5, 27"},
+      {"method": "Method 3", "relation": "evidence", "note": "Accuracy declared on two signals (infeasibility plus primal-dual agreement with another code) and a bound-crossing check.", "pages": "pp. 14, 17"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Valid bound from an inexact first-order solver", "evidence": "Paper concedes a primal-only method gives no valid bound unless solved exactly; S003 and S013 later supply in-run dual bounds.", "pages": "p. 13"},
+      {"pattern": "Time-matched baseline truncation", "evidence": "Reports SB's objective at the moment LR terminated to separate slow-to-converge from slow-to-get-close.", "pages": "p. 26"}
+    ],
+    "transferable": [
+      "Size a factorized variable by a rank theorem (r(r+1)/2 <= m), not by trial (p. 5).",
+      "Rank escalation with a zero-column injection test as a certificate of SDP optimality (pp. 7-8).",
+      "Initialize away from structured zero patterns by perturbing with a small dense matrix, since gradients preserve zero columns (pp. 12-13, 15).",
+      "Add a primal-dual relative difference column and a bound-crossing check when the own method is primal-only (pp. 14, 17).",
+      "Report the baseline's value at the time your method stopped (p. 26)."
+    ],
+    "coauthors": "Renato D. C. Monteiro",
+    "quotes": [
+      {"text": "Nonetheless, after much experimentation, we feel that 10−5 is a reasonable amount of infeasibility to require.", "page": 14},
+      {"text": "Although we have some theoretical justification that explains the observed practical convergence, we do not currently have a formal convergence proof.", "page": 27}
+    ]
+  },
+  {
+    "id": "S003",
+    "year": "2005",
+    "title": "Local minima and convergence in low-rank semidefinite programming",
+    "read_level": "full",
+    "contribution": "Proves that X = RR^T adds no spurious local minima, classifies local minima of rank-constrained SDP (optimal unless on a flat face, for r >= r_{m+1}), proves convergence of a det-perturbed variant of the S001 algorithm, and adds in-run lower bounds with QAP SDPs up to size 40.",
+    "problem_entry": "Explains the observed but unproved global convergence of the experimental S001 algorithm and fixes its lack of in-run lower bounds (pp. 1, 3).",
+    "key_idea": "Classify local minima through faces of the SDP feasible set and force rank deficiency of subproblem minimizers by adding a vanishing mu_k det(R^T R) term, which gives asymptotic dual feasibility (pp. 4-11).",
+    "assumptions": "Primal interior point, attained zero gap (pp. 1-2); r >= r_{m+1} for classification (pp. 6-7), r > r_{m+1} and bounded iterates for Thm 5.3 (p. 11), r > r_{m+2} with a Frobenius ball for Thm 5.4 (p. 12); feasibility/boundedness of S^k not guaranteed, only observed (p. 12).",
+    "proof_devices": [
+      "RR^T = SS^T implies S = RQ, Q orthogonal (Lemma 2.1, p. 4)",
+      "No extraneous local minima by a subsequence argument (Prop. 2.3, p. 4)",
+      "Pataki rank reduction applied to a sequence, extremality of the limit forces the moves to vanish (Lemma 3.2, pp. 5-6)",
+      "Counting unknowns vs equations in system phi(R) gives the r_{m+1} threshold (p. 5)",
+      "Zero-column test directions give lim inf S^k . hh^T >= 0; boundedness of S^k by recession-direction contradiction (Thm 4.1, pp. 8-9)",
+      "det(I + delta Delta) has no local minimum at 0, used with a Cholesky reparametrization preserving inner products (Lemmas 5.1-5.2, pp. 10-11)"
+    ],
+    "experiments": "Same code as S001 on a Pentium 2.4 GHz; certificates primal infeasibility, ||SR||, lambda_min(S); lower bounds by lambda_min shift when trace is constant; 5 maxcut + 5 stable set (Tables 1-2) and QAPR1/QAPR2 for 17 QAPLIB instances, 30 <= l <= 40, up to 6.4 days; nug30 compared with Rendl-Sotirov on a named different machine; QAPR3 excluded with reasons (pp. 13-17).",
+    "positioning": "Places first-order NLP methods among three SDP method families (p. 2); takes S001 as its own ancestor and corrects its rank choice from r_m to r_{m+1} in print (p. 7); compares QAP bounds with Lin-Saigal, Zhao et al., Rendl-Sotirov (p. 16).",
+    "writing": "Theorems followed by roughly-speaking readings (p. 7) and named drawbacks (pp. 9, 12); states plainly that experiments use the unperturbed algorithm (p. 13); one proof left to the reader (p. 10).",
+    "limits_future": "Flat faces can harbour non-global minima (p. 7); det term not implementable stably (p. 13); unproved feasibility/boundedness (p. 12); weaker stable-set duals (p. 15); inequalities open (p. 16); long QAP times (p. 17).",
+    "method_links": [
+      {"method": "Method 5", "relation": "evidence", "note": "Theory follows the prototype: the convergence proof for S001 comes two years later and covers a slight variant that is not run.", "pages": "pp. 3, 13"},
+      {"method": "Method 3", "relation": "evidence", "note": "Claim narrowed in print: S001's r >= r_m shown insufficient for the local-minimum guarantee and the implementation changed; unproved conditions labelled as observed.", "pages": "pp. 7, 12"},
+      {"method": "Method 1", "relation": "variant", "note": "Hardness of the nonconvex reformulation located in flat faces of the SDP feasible set; aim is algorithm convergence, not an exact reformulation.", "pages": "pp. 6-7"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Valid bound from an inexact first-order solver", "evidence": "Lower bounds during the run by shifting the approximate dual slack by lambda_min when the identity is in the span of the A_i; scaling extends it to 0-1 QPs.", "pages": "pp. 3, 14-15"}
+    ],
+    "transferable": [
+      "Vanishing determinant perturbation to force rank deficiency in factorized subproblems (pp. 10-11).",
+      "Zero-column test directions to extract dual feasibility from second-order conditions (p. 8).",
+      "Replace assumed bounded iterates by a Frobenius-ball constraint at the price of one rank level (p. 12).",
+      "In-run certificate triple: primal infeasibility, ||SR||, lambda_min(S) (p. 13).",
+      "Turn an approximate dual slack into a valid bound by a lambda_min shift when the trace is constant (p. 14)."
+    ],
+    "coauthors": "Renato D. C. Monteiro",
+    "quotes": [
+      {"text": "In particular, we show that the change of variables does not introduce any extraneous local minima.", "page": 3},
+      {"text": "While it seems that the extra term is necessary for theoretical convergence, it does not appear to be necessary for practical convergence.", "page": 13}
+    ]
+  },
+  {
+    "id": "S005",
+    "year": "2006",
+    "title": "Ensemble Pruning Via Semi-definite Programming",
+    "read_level": "full",
+    "contribution": "Formulates ensemble pruning as a cardinality-constrained 0-1 QP over a normalized co-error matrix, maps it to max-cut-with-size-k, and solves the SDP relaxation with SDPLR plus randomized rounding, beating greedy pruning heuristics on 24 UCI sets and a 19-category marketing case study.",
+    "problem_entry": "Large ensembles cost memory and time and can overfit; existing pruning heuristics rely on greedy search without quality guarantees (pp. 1-2).",
+    "key_idea": "Write pruning as min x^T G x with sum x = k, transform to +-1 variables, homogenize with v0 into bordered matrices, relax to an SDP and round as for MC-k (pp. 4-8).",
+    "assumptions": "Ensemble error approximated by a linear combination of strength and pairwise co-error terms; the diversity term is ad hoc; cardinality constraint needed to avoid the empty solution; equivalence with MC-k holds for optimal sets, not values (pp. 4-7).",
+    "proof_devices": [
+      "n/a for theorems; derivation devices: x = (v+1)/2 substitution and homogenization with v0 into H and D (pp. 6-7)",
+      "Relaxing v0 in {-1,1} by sign symmetry, then V = vv^T and dropping rank one (p. 8)",
+      "Argument why the MC-k approximation guarantee does not transfer (optimal sets vs values; minimization form) (p. 7)"
+    ],
+    "experiments": "24 UCI data sets, AdaBoost with 100 C4.5 trees pruned to 25, five 10-fold CVs, W-L-T by mean and 95% t test vs diversity and Kappa pruning; timing up to 3,000 classifiers (about a day); DMEF catalog case study with 19 skewed categories, AUC, class-balanced G, Herfindahl index (pp. 9-21).",
+    "positioning": "Against greedy pruning (Margineantu-Dietterich, Prodromidis et al.) and evolutionary methods; distinct from weight-based ensemble optimization that lacks size control; SDP in ML beside sparse PCA and kernel learning (pp. 2-3).",
+    "writing": "Applied-ML motivation by examples (p. 2); hedged formulation and scaling claims (pp. 5, 11); table cross-references in the text mismatch the captions (pp. 9-11, 17).",
+    "limits_future": "No approximation guarantee (p. 7); ad hoc normalization and weights to tune; seek an objective without the cardinality constraint (p. 21); about a day for 3,000 classifiers (p. 11).",
+    "method_links": [
+      {"method": "Method 1", "relation": "variant", "note": "A lifted SDP object packages the combinatorial difficulty, but as a heuristic relaxation for rounding, with the guarantee explicitly lost.", "pages": "pp. 7-8"},
+      {"method": "Method 5", "relation": "evidence", "note": "Own public solver (SDPLR) used off the shelf in a new domain, with a timing study and no theory.", "pages": "pp. 8, 11"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Export the SDP tool into an applied collaborator's problem", "evidence": "An ML subset-selection problem is reformulated as a 0-1 QP and solved with the author's own SDPLR code; only paper in the batch showing this.", "pages": "pp. 5-8"}
+    ],
+    "transferable": [
+      "Homogenize a 0/1 quadratic with a cardinality constraint into a +-1 problem with bordered matrices, then relax to an SDP (pp. 6-8).",
+      "State whether a borrowed reformulation preserves optimal sets or optimal values before claiming a transferred guarantee (p. 7).",
+      "Choose baselines that can be forced to the same output size for a fair comparison (p. 9).",
+      "Combine class-specific selection matrices convexly when classes are highly skewed (p. 15)."
+    ],
+    "coauthors": "Yi Zhang, W. Nick Street (K. P. Bennett and E. Parrado-Hernandez are the issue editors, p. 1, not authors)",
+    "quotes": [
+      {"text": "Therefore, if we are able to transform the ensemble pruning formulation so that it fits into the framework of MC-k, we may obtain a good solution for the ensemble pruning problem.", "page": 6},
+      {"text": "In fact, it seems extremely difficult to derive directly any approximation guarantees for our problem.", "page": 7}
+    ]
+  },
+  {
+    "id": "S013",
+    "year": "2006",
+    "title": "Solving lift-and-project relaxations of binary integer programs",
+    "read_level": "full",
+    "contribution": "Decomposes the Lovasz-Schrijver N(K) and N+(K) relaxations with copy variables and solves them by an augmented Lagrangian with block coordinate descent and PSD projection, proves constant-penalty convergence for linear conic AL, and obtains the then-strongest QAPLIB bounds.",
+    "problem_entry": "Lift-and-project relaxations are strong in theory but almost never computed because of their size (over 1.7 million constraints); only Dash had studied them computationally (pp. 1-2).",
+    "key_idea": "Introduce Z = YQ (and U = Y for the PSD case) so constraints separate over columns, dualize only the linking equations, and use an augmented Lagrangian instead of subgradient (pp. 4-5, 11-13).",
+    "assumptions": "Generic 0-1 IP with Ax <= b; K replaced by K-hat = K intersect [0,1] (p. 4); Theorem 3.1 needs full row rank A and Slater points for primal and dual (p. 7); QAP structure removes Z (p. 16).",
+    "proof_devices": [
+      "Theorem 3.1: constant-penalty AL convergence for linear conic programs, extending Poljak-Tret'jakov from the nonnegative orthant to general cones (pp. 7, 9-11)",
+      "Monotonicity inequality for dual iterates (Lemma 3.2, p. 10) and exactness at a dual optimum (Lemma 3.3, p. 10)",
+      "Telescoping ||lambda^{k+1}-lambda*||^2 <= ||lambda^k-lambda*||^2 - sigma^2||b-Ay^k||^2 gives Ay^k -> b (Prop. 3.4, pp. 10-11)",
+      "Each iterate is exactly primal-dual optimal for the problem with right-hand side Ay^k (Lemma 3.5, p. 11)",
+      "AL step shown equal to a bundle step without the bundle approximation (eq. (25), pp. 8-9)",
+      "Projection of a nonsymmetric matrix onto the PSD cone equals projection of its symmetric part (p. 13)"
+    ],
+    "experiments": "ANSI C, Pentium 4 2.4 GHz, CPLEX 8.1 pivoting QP with warm starts, LAPACK (pp. 13-14); 26 DIMACS stable-set graphs, Erdos-Turan n = 60-150, generated markshare-type 0-1 instances, 91 QAPLIB instances; baselines CPLEX dual simplex (default and steepest edge, 15,000 s), tuned volume subgradient with surpass times, CSDP (memory failure), GLB/KCCEB/RSB and later Hahn level-2 RLT; losses printed (pp. 14-23).",
+    "positioning": "In the lift-and-project lineage (Balas, Sherali-Adams, Lovasz-Schrijver, Lasserre, Bienstock-Zuckerberg); AL for LP not new but computationally unexplored, AL for SDP presented for the first time (pp. 1-2); KCCEB equal in theory but QAP-specific, AL general (pp. 16, 23); N+ beats RSB (p. 23).",
+    "writing": "Anticipates the objection that an NLP method for linear conic problems may seem counterintuitive (p. 6); every implementation choice paired with theory and its practical override (pp. 14-15); claims kept at approximately solved (p. 19); late results added with provenance (p. 23).",
+    "limits_future": "N+ not optimized fully (p. 19); AL slower than subgradient on Erdos-Turan (pp. 17-18); no gain on markshare (p. 20); eigendecompositions dominate for QAP (pp. 23-24); future: special QP solvers, mixed binary-continuous and nonconvex QP relaxations, block-angular conic problems (p. 24).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "One lifted object Y = [1 x^T; x xx^T] carries the strength; work goes into attacking it with a tractable method; conclusion aims the machinery at mixed binary-continuous and nonconvex QP.", "pages": "pp. 3-5, 24"},
+      {"method": "Method 5", "relation": "evidence", "note": "Slow initial subgradient experiments motivated the AL choice; practice overrides theory with the override printed (sigma growth, one BCD cycle); best public codes as baselines.", "pages": "pp. 5, 14-15, 17"},
+      {"method": "Method 3", "relation": "evidence", "note": "Computed N+ above theta, which theory forbids at optimality, is read as incomplete optimization; theory-practice gaps with KCCEB attributed to numerics.", "pages": "pp. 19, 22-23"},
+      {"method": "Method 4", "relation": "variant", "note": "Uses a generator for small hard 0-1 programs (markshare type), but the pool is mainly public libraries and not filtered to baseline failures.", "pages": "pp. 15-16"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Valid bound from an inexact first-order solver", "evidence": "AL chosen partly because it yields primal and dual solutions as well as dual bounds; complements S001 p. 13 and S003 p. 14.", "pages": "p. 6"},
+      {"pattern": "Variable splitting by copies to decompose a lifted relaxation", "evidence": "Z = YQ makes the LS LP separable over columns; U = Y moves the PSD constraint into its own projection block.", "pages": "pp. 4-5, 12"}
+    ],
+    "transferable": [
+      "Copy-variable decomposition (Z = YQ, U = Y) and dualize only the copy equations (pp. 4-5, 12).",
+      "One block-coordinate cycle per AL subproblem with a warm-startable pivoting QP solver (pp. 13-14).",
+      "Project a nonsymmetric matrix onto the PSD cone via its symmetric part (p. 13).",
+      "Constant-penalty AL convergence by a telescoping residual argument (pp. 10-11).",
+      "Surpass-time columns in head-to-head bound tables, with the baseline tuned and the tuning disclosed (pp. 17-18)."
+    ],
+    "coauthors": "Dieter Vandenbussche",
+    "quotes": [
+      {"text": "The key idea is a restructuring of the relaxations, which isolates the complicating constraints and allows for a Lagrangian approach.", "page": 1},
+      {"text": "This demonstrates that lift-and-project operators are not always able to strengthen the LP relaxation of an IP.", "page": 20}
+    ]
+  }
+]

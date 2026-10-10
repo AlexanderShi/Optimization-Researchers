@@ -1,0 +1,414 @@
+[
+ {
+  "id": "S030",
+  "year": "2002",
+  "title": "Interior-point algorithms for semidefinite programming based on a nonlinear formulation",
+  "read_level": "partial",
+  "contribution": "Extends the Burer-Monteiro-Zhang Cholesky-factor transformation from fixed-diagonal to general linear SDPs and proves global convergence of a first-order log-barrier and a second-order potential-reduction method on the transformed NLP.",
+  "problem_entry": "Newton-based primal-dual IPMs are too costly in storage and computation for large SDPs (p. 2); generalize the authors' own fixed-diagonal transformation [5] to general SDPs at the cost of n nonlinear inequalities (p. 3).",
+  "key_idea": "Write S = LL^T with L = Diag(w) + L~ so the dual SDP becomes an NLP over w > 0, z(w,y) < 0 (Theorem 2.1 p. 6, (NLD) p. 7); any SDP fits after adding a redundant diag(X) >= d, d <= 0 (p. 5).",
+  "assumptions": "Primal-dual strict feasibility and linear independence of A_k only (p. 5); a stronger independence assumption that would give a PD Hessian is deliberately not used (p. 11).",
+  "proof_devices": [
+   "KKT conditions of a hypothetical boundary-extended problem shown to give optimality when satisfied in the limit (pp. 7, 17)",
+   "Theorem 3.3: limit conditions imply bounded iterates with optimal accumulation points (p. 17)",
+   "convergence of log-barrier framework via entry into neighbourhood N(nu) by any reasonable unconstrained method (p. 18)"
+  ],
+  "experiments": "First-order method only, 19 Lovasz theta SDPs (random n = 100 and DIMACS complements), L-BFGS with practical 1e-3 subproblem tolerance, accuracy vs the authors' own primal-code lower bounds; no competing solver (pp. 29-30).",
+  "positioning": "Places itself among gradient-based SDP methods (Helmberg-Rendl, Homer-Peinado, Vavasis, Vanderbei-Benson) as an extension of [5]; practical value of Vanderbei-Benson called yet to be determined (pp. 2-3).",
+  "writing": "Claims hedged as initial results and a mainly theoretical perspective for the second-order method; conclusion ends with a belief statement (pp. 3, 30).",
+  "limits_future": "Second-order method of mainly theoretical value; both methods worth more investigation and improvement (pp. 3, 28, 30).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "known factorization + previous theorem, initial computations, subproblem tolerance chosen for speed rather than theory, theory gap acknowledged",
+    "pages": "pp. 3, 29-30"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "one-object move in reverse: convex SDP rewritten as NLP over a simple set so the PSD constraint disappears into a change of variables",
+    "pages": "pp. 6-7"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Redundant constraint to reach a structured form",
+    "evidence": "adding diag(X) >= d with d <= 0 puts every standard-form SDP into the transformable class without changing strict feasibility",
+    "pages": "p. 5"
+   }
+  ],
+  "transferable": [
+   "Make a special-structure method general by adding a redundant constraint that puts every instance in the special form, then check strict feasibility is unchanged (p. 5).",
+   "State KKT of a boundary-extended hypothetical problem and prove that meeting them in the limit along interior iterates gives optimality (pp. 7, 17)."
+  ],
+  "coauthors": "Renato D.C. Monteiro, Yin Zhang",
+  "quotes": [
+   {
+    "text": "Despite this complication, the transformed problems still retain most of the desirable properties.",
+    "page": 1
+   },
+   {
+    "text": "We believe both methods are worth more investigation and improvement.",
+    "page": 30
+   }
+  ]
+ },
+ {
+  "id": "S029",
+  "year": "2003",
+  "title": "Semidefinite programming in the space of partial positive semidefinite matrices",
+  "read_level": "partial",
+  "contribution": "A primal-dual path-following SDP method defined entirely in the space of partial (chordal-pattern) matrices, with O(n log(1/eps)) iteration complexity and an implementation that exploits sparsity in all stages.",
+  "problem_entry": "No method has polynomial convergence, any-SDP applicability, a primal-dual framework and full sparsity at once (p. 2); the completion method of Fukuda et al. left open how to measure proximity of a partial solution to the central path (p. 2).",
+  "key_idea": "Re-express the central path via the max-determinant PSD completion and no-fill-in Cholesky factors on a chordal pattern, giving a square partial-matrix system H(X,S,y) = 0 whose Newton direction defines a new search direction and neighbourhood (pp. 6-7).",
+  "assumptions": "Standard linear independence and primal-dual interior point (p. 4); chordal pattern with perfect elimination ordering (p. 6); nonsingularity of H under Theorem 2.10 conditions (pp. 10, 33).",
+  "proof_devices": [
+   "max-determinant completion characterized by inverse in S^F (Theorem 2.1, p. 6)",
+   "neighbourhood-based path-following analysis giving O(n log(eps^-1)) iterations (Theorem 4.9, p. 22)"
+  ],
+  "experiments": "Infeasible practical variant without neighbourhood (pp. 22-23) vs SDPT3 3.0 on SDPLIB (selection by mf^2 + m^3 <= 1e9), a re-implemented completion method with CG, and the author's own BMZ code under a 5 h cap; losses vs SDPT3 on control, qap and some mcp printed (pp. 26-31).",
+  "positioning": "Builds on Fukuda et al. and Nakata et al., improving their completion method theoretically (polynomial) and practically (iterative Schur solve) (pp. 1-2).",
+  "writing": "Gap stated as a four-property wish list; conclusion lists concrete open questions tied to proof bottlenecks (pp. 2, 33).",
+  "limits_future": "Weaker nonsingularity conditions, wider neighbourhood, other directions, preconditioning BiCGSTAB near optimality (p. 33).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "theory comes in the same paper, but the implementation drops the theoretical neighbourhood for practical step sizes (H7)",
+    "pages": "pp. 22-23"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "dense X replaced by one object, the max-determinant completion, through which the central path is rewritten",
+    "pages": "pp. 6-7"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Select test problems by a stated cost heuristic for the direct linear-algebra step (mf^2 + m^3 <= 1e9) and say so (p. 26).",
+   "Re-implement a competitor's idea with an iterative solver when its released code cannot run at your scale, stating every design difference (p. 27).",
+   "Turn proof bottlenecks into explicit open questions in the conclusion (p. 33)."
+  ],
+  "coauthors": "none (sole author)",
+  "quotes": [
+   {
+    "text": "Third, in our implementation of Algorithm SDP, we do not bother to stay in the neighborhood N (γ), since our computational experience indicates that this does not yield a substantial practical improvement.",
+    "page": 22
+   },
+   {
+    "text": "On the other hand, SDPT3 significantly outperformed Algorithm SDP on the control and qap problems",
+    "page": 26
+   }
+  ]
+ },
+ {
+  "id": "S032",
+  "year": "2003",
+  "title": "A computational study of a gradient-based log-barrier algorithm for a class of large-scale SDPs",
+  "read_level": "partial",
+  "contribution": "Implementation and computational study of the first-order log-barrier method for fixed-diagonal SDPs based on the Cholesky-factor transformation, benchmarked against the spectral bundle method on maxcut, theta and frequency-assignment relaxations.",
+  "problem_entry": "Second-order methods are mostly discouraging on large SDPs (p. 2); the paper studies implementation issues of the algorithm proved convergent in [4] (p. 2).",
+  "key_idea": "L-BFGS on the transformed dual barrier subproblems with sparse symbolic Cholesky and Metis reordering, separate barrier parameters for w and u, and a practical gradient-norm neighbourhood (pp. 11-14).",
+  "assumptions": "Fixed-diagonal SDPs with optional inequality constraints; A.1 primal interior, A.2 independence of e_i e_i^T and A_j (p. 3).",
+  "proof_devices": [
+   "global convergence restated from [4] (Theorem 5, p. 11); no new proofs"
+  ],
+  "experiments": "13 maxcut, 31 theta and FAP instances vs SBmethod at default parameters, single processor, 10 h cap; SB better on most maxcut (fill-in explanation), BMZ stronger on FAP; two largest FAP instances deferred to Mittelmann's benchmark (pp. 14-20).",
+  "positioning": "Spectral bundle chosen as the only other broad first-order, dual-feasible descent code; second-order methods excluded as out of reach at this scale (p. 14).",
+  "writing": "Results discussed per class with a mechanism for each win or loss (pp. 15-20).",
+  "limits_future": "Effective mainly for problems with many constraints; extension to general SDPs [3] and a public software release planned (p. 20).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "benchmark against the best available public first-order code at its default parameters; theoretical neighbourhood replaced by a practical rule",
+    "pages": "pp. 13-14"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Explain wins and losses by one measurable instance statistic",
+    "evidence": "density of L vs density of S tabulated and used to explain where SB beats BMZ",
+    "pages": "pp. 14-15"
+   }
+  ],
+  "transferable": [
+   "Justify the single baseline in writing: same algorithm type and the only code covering the instance range, so objective values are directly comparable (p. 14).",
+   "Tabulate a structural statistic (fill-in) beside results to explain which instances favour which method (pp. 14-15).",
+   "Pick an initial parameter by minimizing an initial residual, with a safe fallback if the minimizer is infeasible (p. 13)."
+  ],
+  "coauthors": "Renato D.C. Monteiro, Yin Zhang",
+  "quotes": [
+   {
+    "text": "From the table, it is not difficult to see that, for most problems, SB achieves higher accuracy in less time than BMZ.",
+    "page": 15
+   },
+   {
+    "text": "Our numerical results have shown that the transformation introduced in [4] is indeed a viable approach to solving some large-scale SDPs from combinatorial optimization.",
+    "page": 20
+   }
+  ]
+ },
+ {
+  "id": "S051",
+  "year": "2003",
+  "title": "A general framework for establishing polynomial convergence of long-step methods for semidefinite programming",
+  "read_level": "partial",
+  "contribution": "A unified long-step path-following analysis for SDP central-path maps satisfying nine abstract assumptions, giving the first polynomial long-step bounds for the L_x^T S L_x and W^{1/2}XSW^{-1/2} maps and rederiving known bounds for two others.",
+  "problem_entry": "Long-step polynomiality was known for XS+SX and X^{1/2}SX^{1/2} but not for L_x^T S L_x and W^{1/2}XSW^{-1/2} (p. 2).",
+  "key_idea": "One long-step algorithm for any map Phi(PXP^T, P^-T S P^-1) - nu I = 0, with complexity in terms of a bound on a scaled norm of the second derivative of Phi (pp. 1-2).",
+  "assumptions": "Nine abstract assumptions on (Phi, C0): smoothness, homeomorphism, scaling invariance, finiteness/positivity of Pi, Theta, Omega (pp. 4-8); Assumption 4 not needed for gap convergence (p. 7).",
+  "proof_devices": [
+   "Theorem 3.3: mu_k <= [1 - eta(1-sigma)]^k mu_0 and O(Omega(gamma) L) iterations (p. 10)",
+   "per-map verification of Assumptions 1-9 then plug-in (Theorems 4.11, 4.22, 4.33, pp. 14, 19, 22)",
+   "X^{1/2}SX^{1/2} case argued by analogy (p. 19)"
+  ],
+  "experiments": "none",
+  "positioning": "Generalizes Monteiro-Zhang and Monteiro-Tsuchiya analyses; uses maps introduced in earlier work including Todd's study of search directions (pp. 2, 11).",
+  "writing": "Results announced as obtained for the first time; no conclusion section, main text ends on Theorem 4.33 (pp. 2, 22).",
+  "limits_future": "Unified bound slightly worse for X^{1/2}SX^{1/2} (O(n^2 L) vs O(n^{3/2} L)) (p. 2); no future work stated.",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "unification step (collect known special cases and show one framework covers them) applied to algorithm analysis rather than a convex set",
+    "pages": "pp. 2, 11"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Abstract-assumption framework: prove once, verify per instance",
+    "evidence": "Assumptions 1-9 and Theorem 3.3, then one subsection per map verifying each assumption",
+    "pages": "pp. 4-22"
+   }
+  ],
+  "transferable": [
+   "Prove one theorem under numbered abstract assumptions, then verify each assumption per concrete case and read off constants (pp. 4-22).",
+   "Rederive known results inside the new framework and state where the unified bound is worse (p. 2)."
+  ],
+  "coauthors": "Renato D.C. Monteiro",
+  "quotes": [
+   {
+    "text": "We show that the second and fourth maps also fit nicely into our general framework and hence obtain for the first time polynomially convergent feasible long-step algorithms for these maps",
+    "page": 2
+   },
+   {
+    "text": "We study them again here using our general framework of Sections 2 and 3 to illustrate the usefulness and generality of our approach.",
+    "page": 11
+   }
+  ]
+ },
+ {
+  "id": "S034",
+  "year": "2005",
+  "title": "DC versus copositive bounds for standard QP",
+  "read_level": "full",
+  "contribution": "Shows that the best d.c. bound for the standard QP is an SDP equal to the Shor relaxation plus X <= Diag(x), that it is dominated by the r = 0 copositive-approximation bound at comparable cost, and compares it with theta and theta' for stable set.",
+  "problem_entry": "Bomze's d.c. bounds were optimized through a surrogate; the paper asks whether the true d.c. bound can be maximized directly (p. 3), motivated by stable set and simplicial B&B (p. 1).",
+  "key_idea": "Write both d.c. terms as maximizations, optimize jointly over S (DQPSDC), and dualize: the optimal d.c. bound is Shor plus the constraint X <= Diag(x) (p. 4), which the DNN-type copositive bound dominates (p. 6).",
+  "assumptions": "Symmetric Q over the simplex; polytope extension needs the full extreme-point matrix W and is intractable in general (pp. 1, 7, 9).",
+  "proof_devices": [
+   "conic duality applied twice (pp. 3-4)",
+   "e^T(xx^T)e <= e^T X e <= e^T Diag(y) e = 1 forcing Xe = x = y (eq. (4), p. 4)",
+   "Gerschgorin for validity and domination (pp. 4-6)",
+   "3x3 separating example v_DC = -1/8 < 0 (p. 6)",
+   "range/null-space argument for Theorem 2 (pp. 8-9)",
+   "reformulation of theta as 1/v_E so three bounds differ by one constraint (Theorem 3, p. 11)"
+  ],
+  "experiments": "Four Bomze-de Klerk QPS instances and 20 self-generated random 12-vertex stable-set graphs in SeDuMi; v_DC between v1_LP and v0_CP, poor on random graphs; cost compared by cone sizes and Schur complement order (pp. 12-13).",
+  "positioning": "Builds directly on Bomze's d.c. bounds and the Bomze-de Klerk and de Klerk-Pasechnik copositive hierarchy; critique by dominance theorem, not by text (pp. 2, 5).",
+  "writing": "Short paper: each section one result; open comparison stated plainly as neither found nor proved (p. 11).",
+  "limits_future": "Open question whether v_DC <= v_E always holds; polytope extensions intractable unless p is small (pp. 9, 11).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "copositive relaxation is the reference object; bounds ordered as outer approximations of the same lifted problem",
+    "pages": "pp. 5-6, 11"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "bound family compared against the strongest known relaxation, with a small separating instance",
+    "pages": "p. 6"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "unresolved comparison written as an open question, not a claim",
+    "pages": "p. 11"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Dualize a bound family to read it as one constraint added to Shor",
+    "evidence": "optimal d.c. bound = Shor + X <= Diag(x), making dominance a one-line feasibility map",
+    "pages": "pp. 4, 6"
+   }
+  ],
+  "transferable": [
+   "Write all competing bounds as min Q.X over a common base set plus one constraint each, prove dominance by mapping feasible points (pp. 6, 11).",
+   "Multiply a sandwich inequality xx^T <= X <= Diag(y) by constraint vectors to force equalities (pp. 4, 8).",
+   "If a relaxation lacks a Slater point, name a solver that stays stable or give an equivalent nonsingular reformulation (p. 12)."
+  ],
+  "coauthors": "Kurt M. Anstreicher",
+  "quotes": [
+   {
+    "text": "The dual of DQPSDC has a surprisingly simple interpretation as a strengthening of the Shor relaxation SQPS.",
+    "page": 4
+   },
+   {
+    "text": "The resulting bounds on the max stable set were however quite poor; greater than 12 in all but one case.",
+    "page": 12
+   }
+  ]
+ },
+ {
+  "id": "S054",
+  "year": "2005",
+  "title": "Sharing classifiers among ensembles from related problem domains",
+  "read_level": "full",
+  "contribution": "Shows on a 19-category catalog dataset that sharing decision trees across related domains raises AUC, and that SDP-based ensemble pruning keeps most of the gain with 25 instead of 475 classifiers and reveals relations among domains.",
+  "problem_entry": "Bagging fails for categories with very low response rates (Category 10 AUC 0.51) (p. 3); can classifiers be shared among different but related domains (p. 1)?",
+  "key_idea": "Pool trees across categories after a schema transformation (p. 3), then select k classifiers per category by a 0-1 QP over a class-balanced error co-occurrence matrix, relaxed to an SDP with randomized rounding (pp. 4-5).",
+  "assumptions": "Identical or near-identical schemas across domains (p. 1); lambda = 0.5 class balance (p. 4).",
+  "proof_devices": [],
+  "experiments": "DMEF catalog data, C4.5 trees, AUC over five splits, win-loss-tie by mean and paired t test; sharing-all beats non-sharing 12-7-0; selective sharing recovers categories 15-16; SDP selection 2-4 minutes (pp. 3-6).",
+  "positioning": "Contrasts with same-domain classifier sharing and multi-task neural networks; greedy ensemble pruning replaced by SDP (pp. 1, 4).",
+  "writing": "Data-mining paper; interpretations of sharing structure marked as guesses where category identities are unknown (pp. 6-7).",
+  "limits_future": "Direct sharing might be too simple; applications to new-product marketing and peer-to-peer spam filtering (p. 8).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "off-field; standard lift-and-relax of a cardinality-constrained 0-1 QP (homogenize, H.yy^T, Y psd), no exactness claim",
+    "pages": "p. 5"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Encode accurate-and-diverse subset selection as a 0-1 QP with a normalized error co-occurrence matrix and a cardinality constraint, then relax by SDP (pp. 4-5).",
+   "Test whether a larger ensemble wins by size alone by pruning to the baseline size and checking the gain survives (p. 5)."
+  ],
+  "coauthors": "Yi Zhang (first author), W. Nick Street",
+  "quotes": [
+   {
+    "text": "Here, we use a newly invented method to select a fixed number of classifiers by semi-definite programming (SDP), which is able to produce good solutions based on theoretical and empirical studies.",
+    "page": 4
+   },
+   {
+    "text": "The strategy of directly sharing classifiers among domains might be too simple.",
+    "page": 8
+   }
+  ]
+ },
+ {
+  "id": "S026",
+  "year": "2006",
+  "title": "Computational enhancements in low-rank semidefinite programming",
+  "read_level": "partial",
+  "contribution": "Extends the Burer-Monteiro low-rank algorithm to block SDPs with per-block rank bounds and adds an exact quartic linesearch, dynamic rank reduction, a truncated-Newton variant and preconditioners, tested on a wide set of large SDPs.",
+  "problem_entry": "First-order SDP methods struggle with accuracy and were tested mostly on combinatorial relaxations; low-rank method defined only for single-block SDPs (pp. 2-3).",
+  "key_idea": "Per-block ranks from a per-block Barvinok-Pataki bound (Prop. 2.1, p. 4); exact linesearch on the quartic augmented Lagrangian (p. 5); rank reduction by pivoted LQ with a conservative rule (pp. 6-7); truncated Newton with structured Hessian (p. 3).",
+  "assumptions": "Feasibility and strong duality (pp. 1-2); rank bound valid at extreme points (p. 4); numerical rank detection reliable in practice but not in theory (p. 7).",
+  "proof_devices": [
+   "per-block rank bound by fixing other blocks at an extreme point (Prop. 2.1, p. 4)",
+   "Pataki bound read as generalization of the LP nonzero bound (p. 4)"
+  ],
+  "experiments": "Large SDPs in five classes on a 1 GB Pentium 4, 5 h cap; WP vs exact linesearch vs rank reduction, L-BFGS vs truncated Newton, eight preconditioners; optimality via lambda_min of S (ARPACK); SOMs not run (memory), Mittelmann's benchmark discussed (pp. 8-9, 18-19).",
+  "positioning": "Situates low-rank among SOMs, CG-based SOMs and first-order NLP methods; candid that SOMs win on small and medium instances (pp. 2, 19).",
+  "writing": "Main conclusions listed as bullets in the introduction, including negative ones (pp. 3-4).",
+  "limits_future": "Rank reduction reliability, preconditioning overhead, SOMs better on small/medium, polynomial and structural classes need many iterations; two failed enhancements reported (pp. 3-4, 19).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "rank sized by a theorem per block, pushed below the bound by dynamic reduction with a safeguard, failed variants printed, algorithm choice tied to SDP class",
+    "pages": "pp. 4, 6-7, 19"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "low-rank factor with rank fixed by a theorem as the single object carrying the PSD constraint",
+    "pages": "p. 2"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Turn an aggregate rank/support bound into per-block bounds by fixing other blocks at an extreme point (p. 4).",
+   "Replace inexact Wolfe linesearch by exact minimization through critical points when the merit function is a low-degree polynomial along the line (p. 5).",
+   "Reduce a rank parameter only to detected numerical rank plus one (p. 7).",
+   "List failed enhancements with their motivating hypothesis in the final remarks (p. 19)."
+  ],
+  "coauthors": "Changhui Choi",
+  "quotes": [
+   {
+    "text": "Overall, this informal comparison of the low-rank algorithm with SOMs illustrates what we believe to be the current state of SDP algorithms, namely, that the choice of algorithm should be strongly motivated by the type of SDP being solved.",
+    "page": 19
+   },
+   {
+    "text": "During the course of this study, we have considered other possible enhancements to the algorithm that unfortunately did not seem very promising in practice.",
+    "page": 19
+   }
+  ]
+ },
+ {
+  "id": "S031",
+  "year": "2007",
+  "title": "Solving maximum-entropy sampling problems using factored masks",
+  "read_level": "partial",
+  "contribution": "Makes Anstreicher and Lee's masked spectral bound practical by optimizing factored (low-rank) masks with simple descent, and embeds it in a branch-and-bound that beats fixed-mask bounding strategies and solves the n = 63, s = 31 instance with eigenvalue-based bounds for the first time.",
+  "problem_entry": "The masked spectral bound had no efficient evaluation and was never used in a complete branch-and-bound (p. 3); goal is combinatorial-bound strength via continuous optimization (p. 3).",
+  "key_idea": "Factor the mask X = VV^T with row normalization so PSD and unit diagonal are implicit, minimize by steepest descent accepting non-improving steps, and inside B&B pick orig/comp bound per (f,u) class, extrapolate fathoming by quadratic interpolation, warm start from a shared V (pp. 3-5, 13).",
+  "assumptions": "C positive definite (p. 1); nonconvexity and nondifferentiability accepted on stated empirical grounds (p. 3); gradient valid when lambda_s > lambda_{s+1} (p. 4).",
+  "proof_devices": [
+   "gradient via symmetric functions of eigenvalues (p. 4)",
+   "Proposition 1: -grad g is a descent direction, by angle decomposition (p. 5)",
+   "exact Hessian formulas for xi published for others (pp. 16-18)"
+  ],
+  "experiments": "n = 63 and n = 124 data; entropy gap to greedy + 2-opt heuristic; Matlab-vs-Matlab comparison with affine scaling; rank sweep k = 2..63; B&B gaps after a 3,600 s cap for four bounding strategies; s = 31 solved in 84 h vs 3,300 s for an NLP bound class in [2] (pp. 6-16).",
+  "positioning": "Builds on Anstreicher-Lee masked spectral bound and Lee's B&B; acknowledges a different NLP bound class [2] is faster on n = 63 (pp. 3, 14).",
+  "writing": "Explicit silver-bullet disclaimer and a section reporting failed second-order attempts for completeness (pp. 14, 16).",
+  "limits_future": "No rank guideline; Algorithm 2 better alone but worse in B&B; second-order variants failed; future: gradient sampling, exploiting low rank with second-order information (pp. 10, 14, 16, 18).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "known bound + own low-rank trick, simple descent justified by experience, warm start and interpolation tuned by experiment, failures printed",
+    "pages": "pp. 3-5, 13, 16"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "when hard instances cannot be solved, compare final gaps under equal time caps and state what this does not show",
+    "pages": "p. 14"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Same-language re-implementation for a fair baseline",
+    "evidence": "obtained the competitor's Matlab code and wrote Algorithm 1 in Matlab for the comparison; B&B in C",
+    "pages": "pp. 8, 12"
+   }
+  ],
+  "transferable": [
+   "In B&B, cache per node class which of two bounds was stronger the first time and compute only that one afterwards (p. 13).",
+   "Run two iterations of the bound optimizer, fit a quadratic, continue only if fathoming is predicted soon (p. 13).",
+   "When no method finishes, compare remaining gaps after a fixed time cap and state what this does not show (p. 14).",
+   "Report failed second-order variants with observed reasons and publish the formulas (p. 16)."
+  ],
+  "coauthors": "Jon Lee",
+  "quotes": [
+   {
+    "text": "In this sense, we cannot claim that optimizing the masked spectral bound is the “silver bullet” for solving extremely large and difficult instances.",
+    "page": 14
+   },
+   {
+    "text": "We include our experiences here in order to provide a complete picture of our efforts and a starting point for additional research.",
+    "page": 16
+   }
+  ]
+ }
+]

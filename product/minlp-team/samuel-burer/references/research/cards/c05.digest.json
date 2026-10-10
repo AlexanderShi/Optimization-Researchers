@@ -1,0 +1,207 @@
+[
+  {
+    "id": "S008",
+    "year": "2012",
+    "title": "Globally solving nonconvex quadratic programming problems via completely positive programming",
+    "read_level": "full",
+    "contribution": "Merges finite KKT-complementarity branch-and-bound with DNN relaxations of the completely positive reformulation into QuadprogBB, a public Matlab global QP solver that beats the authors' earlier BurVan code and beats Couenne on BoxQP, while losing to Couenne on most Globallib/RandQP/CUTEr instances (pp. 2-3, 11, 15-17).",
+    "problem_entry": "General nonconvex QP over linear constraints, also framed as a substructure of trust-region variants; the paper sets out to show that two existing ingredients (finite KKT branching, CP/DNN relaxations) combine well (pp. 2-3).",
+    "key_idea": "Keep the finite KKT branching tree but solve the DNN relaxation of the CP program, which lifts dual variables and complementarities into one DNN matrix, with Burer's decomposition algorithm. The reformulation keeps the number of complementarities minimal, and the dual variables are bounded by LPs (pp. 4-8, 10, 12-13).",
+    "assumptions": "H not PSD; bounded feasible set, interior point, full-row-rank A_eq (checked in preprocessing); finite variable bounds required by the DNN algorithm; finiteness/correctness for the new relaxation asserted ('the same types of results can be shown'), not proved (pp. 2, 4-5, 11).",
+    "proof_devices": [
+      "RLT-linearized x^T(stationarity)=0 identity (13)->(16) added to bound the duals (pp. 8-9)",
+      "recession-cone argument: residual cone R is the dual optimal face of LP max{0: x in P}; complementary slackness at an interior point plus full row rank gives R={0} (Prop. 3.1, p. 10)",
+      "existence proof turned into computation: min/max LPs (19) over the same valid constraints, warm-started (pp. 10-11)"
+    ],
+    "experiments": "243 instances (BoxQP 90, Globallib 83, CUTEr 6 after excluding 3, RandQP 64 from Leyffer's generator) against BurVan (co-author's earlier code, best configuration, CPLEX 9.1 because conversion failed) and Couenne 0.3; 1e-6 relative tolerance, 10 h / 1 GB limits; log-log scatter plots, failed-instance gap table, performance profiles on nontrivial (>10 s) instances; losses to Couenne printed; trust-region extension via Lagrangian bisection solved 31/33 vs 0/33 for Couenne (pp. 12-18).",
+    "positioning": "Builds on the authors' own CP, DNN and finite-B&B line; names BARON and Couenne as off-the-shelf solvers but benchmarks only Couenne; attributes the BoxQP advantage to SDP- vs LP-relaxation strength (pp. 2, 14, 16).",
+    "writing": "Main and secondary goals stated separately; warns of notation abuse; bulleted per-family interpretations including losses; failed design variant recorded in a footnote (pp. 3, 6, 11, 16).",
+    "limits_future": "Future work: better branching-variable choice and a better DNN subroutine, treated as a black box; visible but unstated limits: no BARON comparison, BurVan's CPLEX version could not be matched, finiteness not proved for the new relaxation (pp. 4, 13-14, 19).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "exact CP reformulation -> DNN relaxation -> public solver (Method 1 step 6)", "pages": "pp. 2-3, 5, 11"},
+      {"method": "Method 5", "relation": "evidence", "note": "theory asserted rather than proved; failed variant (bounding sums) recorded with reason; earlier code as first baseline at its best configuration, version mismatch disclosed (H5)", "pages": "pp. 4, 11, 13-14"},
+      {"method": "Method 4", "relation": "variant", "note": "BoxQP ladder reused (90 instances), but the filter removes trivial instances (<10 s for all) rather than keeping only baseline failures", "pages": "pp. 13-14, 16"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "finite KKT-complementarity branching instead of spatial branching", "evidence": "branching on complementarities gives a finite tree, unlike spatial B&B; contrasted with Couenne", "pages": "pp. 4, 14"},
+      {"pattern": "ship the global solver behind a familiar local-solver interface and demo it as a subroutine", "evidence": "quadprog syntax, only an LP solver needed; used inside Lagrangian bisection for a ball- and box-constrained QP", "pages": "pp. 3, 17-18"}
+    ],
+    "transferable": [
+      "Bound dual multipliers for a relaxation algorithm: add the RLT-linearized x^T(stationarity)=0 identity, show the residual recession cone is the dual optimal face of a trivial LP, kill it with an interior point plus full row rank, then compute the bounds by min/max LPs (pp. 8-10).",
+      "Form complementarities from the original KKT system before splitting or shifting variables, so that the finite B&B tree does not grow (p. 6).",
+      "Enforce implied complementarities at the child nodes without branching on them (pp. 7, 12).",
+      "Report out-of-resource runs as average gap at termination for each method and family, next to scatter plots and performance profiles restricted to nontrivial instances (pp. 14-17)."
+    ],
+    "coauthors": "Jieqiu Chen (Argonne MCS, first author)",
+    "quotes": [
+      {"text": "The BurVan code is not publicly available, but since the second author was a co-author of the BurVan code, the code was available to us.", "page": 13},
+      {"text": "We attribute the performance differences mainly to the relaxation differences: we use stronger SDP-based relaxations, while Couenne uses weaker LP relaxations.", "page": 16}
+    ]
+  },
+  {
+    "id": "S009",
+    "year": "2012",
+    "title": "Copositive programming",
+    "read_level": "full",
+    "contribution": "Generalizes the copositive representation of nonconvex QP to quadratic programs over any closed convex cone K. It proves the convex hull result R = clconv(L1) over matrices completely positive over R+ x K, and extends it to eliminating x, to quadratic constraints held at their extreme values, and to basic duality (pp. 2-12).",
+    "problem_entry": "Starts from the linear conic program and the rule that a new problem should be modelled over a well-understood cone K; targets the nonconvex quadratic conic program (8.2) (p. 2).",
+    "key_idea": "The optimization equivalence follows from a convex hull theorem in the lifted space (Theorem 8.1). Extensions: eliminate x to get a smaller cone that may have interior (Theorem 8.2), and capture a quadratic constraint fixed at its min/max over L exactly (Theorem 8.3), which covers complementarity and binarity (pp. 5-9).",
+    "assumptions": "K closed convex, L nonempty; Theorem 8.3 needs finite extreme values and x-bar with d^T(Fx-bar+f)=0 on recession directions (automatic if L bounded); full row rank of A for Prop. 8.4; semidefinite K vectorized (pp. 2-3, 8-9, 11).",
+    "proof_devices": [
+      "epsilon-perturbation absorbing recession directions into rank-one feasible terms (Prop. 8.1, p. 4)",
+      "equality case of Cauchy-Schwarz on a CP decomposition forcing Az^k = zeta^k delta (Prop. 8.2, pp. 4-5)",
+      "Gram-factor argument: MYM^T=0 iff MY=0, so R has no interior (Prop. 8.3, Cor. 8.1, pp. 5-6)",
+      "elimination of x via alpha = A^T y in K* (Theorem 8.2, pp. 6-7)",
+      "averaging: an atom-weighted sum equal to the extreme value forces every atom to attain it (Theorem 8.3, p. 9)",
+      "blockwise linear independence for full-row-rank property (Prop. 8.4, p. 11); checkable dual-interior condition (Prop. 8.5, p. 12)"
+    ],
+    "experiments": "none (n/a); reports others' computational ranges: interior-point limits near n >= 100, decomposition methods to n ~ 1,000, adaptive method to n = 10,000 (p. 14).",
+    "positioning": "Explicitly not a complete survey (points to Dur [17]); acknowledges concurrent Eichfelder-Povh result in a footnote; credits the first copositive representation to [7]; notes that the QAP derivation of [34] is not subsumed (pp. 2-3, 15).",
+    "writing": "Theorem-proof style with scope-and-bias remarks up front; lists what is unknown per cone ('Nothing is known when K is a semidefinite cone'); ends with chronological applications instead of conclusions (pp. 3, 13, 15-16).",
+    "limits_future": "C and C* intractable (co-NP-complete copositivity check); interior conditions for R0 'seem difficult'; hierarchies grow exponentially and there are O(n^5) 5x5 submatrices; future: cones for products of orthant, SOC and PSD cones (pp. 3, 8, 12-14).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "stated rule to model new problems over a well-understood K; exactness hypothesis written and widened from R^n_+ to general K; special cases collected (step 4)", "pages": "pp. 2-9, 15-16"},
+      {"method": "Method 2", "relation": "evidence", "note": "small-dimension exactness (DNN = CP iff n <= 3) used for explicit low-dimensional hulls, e.g. the 2-D box via slacks with n = 4; 5x5 boundary noted", "pages": "pp. 13-14, 16"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "quadratic held at its extreme value is captured exactly by its linearisation", "evidence": "Theorem 8.3: a constraint fixed at phi_* over L is exact in R; complementarity and binarity as instances; reused in S022", "pages": "pp. 8-9"}
+    ],
+    "transferable": [
+      "Prove that a lifted set equals a closed convex hull by two inclusions: absorb recession directions by epsilon-perturbation, and recover feasible atoms from any CP decomposition via the equality case of Cauchy-Schwarz (pp. 4-5).",
+      "Add a nonconvex quadratic equation to an exact conic model by writing it as 'quadratic = its extreme value over the linear slice'; every atom must then attain that value (p. 9).",
+      "Check whether the lifted model can have interior (MY = 0 rules it out); if not, eliminate variables to restore it, since interior governs strong duality and attainment (pp. 6-8, 12).",
+      "In an expository chapter, list what is unknown for each cone, so readers can see where the open problems are (p. 13)."
+    ],
+    "coauthors": "none (sole author; Dur and Povh thanked)",
+    "quotes": [
+      {"text": "When faced with a new optimization problem, it thus seems prudent to determine if that problem can be modeled as a linear conic program over some (hopefully) well understood K.", "page": 2},
+      {"text": "Instead, we intend only to give an introduction to some of the main results in the area, tainted with our own biases.", "page": 3}
+    ]
+  },
+  {
+    "id": "S022",
+    "year": "2012",
+    "title": "Representing quadratically constrained quadratic programs as generalized copositive programs",
+    "read_level": "full",
+    "contribution": "Shows that every bounded nonconvex QCQP is a linear conic program over a generalized completely positive cone, with two explicit constructions (over SOC products and over a PSD cone) and exact size counts; it also proposes the DNN-like outer cone D(K) (pp. 2-4).",
+    "problem_entry": "Solving QCQP is equivalent to characterising cl conv{(x, xx^T)}; earlier CP results covered only QP with special quadratic constraints, so the question is whether all bounded QCQPs admit a GCP representation (pp. 1-2).",
+    "key_idea": "Rewrite the feasible set as a bounded conic slice L intersected with quadratics held at their maximum over L, then apply the S009 theorem. SOC route: lift one coordinate so the unit ball becomes a sphere and write the shifted convex quadratics as SOCs. PSD route: PSD plus x_i^2 = X_ii, which sits at its maximum value 0 (pp. 2-3).",
+    "assumptions": "Feasible set nonempty and bounded, scaled into the unit ball; lambda_j large enough for P^j PSD; Theorem 1 is a simplified variant of S009's theorem (bounded L, several quadratics, max orientation); K encoded as vectors (p. 2).",
+    "proof_devices": [
+      "one-coordinate lift turning ball inequality into sphere equality with w_{n+1}^2 as slack (Prop. 1, p. 2)",
+      "Alizadeh-Goldfarb SOC representation of convex quadratics (Prop. 2, p. 3)",
+      "quadratic held at its extreme value: max <w,w> = 1 and max (x_i^2 - X_ii) = 0 (p. 3)",
+      "exact equation counting 2m + m' + 1 (Corollaries 1-2, p. 3)",
+      "C(K) contained in D(K) via rank-one extreme rays (Prop. 3, p. 4)"
+    ],
+    "experiments": "none (n/a)",
+    "positioning": "Complements Pena et al.'s higher-order CP approach ('a different generalization'); identifies its cones with Eichfelder-Jahn's set-semidefinite cones up to symmetry; credits the D(K) idea partly to the Burer-Anstreicher TRS manuscript (pp. 2, 4).",
+    "writing": "Very compact letter: key theorem up front with a candid note on how it differs from the original; every construction ends in a corollary with exact sizes; closing claims about D(K) tractability and C(K)=D(K) stated without proof 'for the sake of space' (pp. 2-4).",
+    "limits_future": "Little is known about approximating GCP cones; for PSD factors, tractability of D(K) and equality with C(K) are unknown; closes by calling for further study of these cones (pp. 3-4).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "difficulty 'focused' on one cone; all of bounded QCQP becomes one linear conic program; the one-coordinate lift (slight lift) appears already in 2012", "pages": "pp. 1-3"},
+      {"method": "Method 2", "relation": "evidence", "note": "results reported by dimension: C(K)=D(K) iff n1=1 or n1=n2=2", "pages": "p. 4"},
+      {"method": "Method 3", "relation": "variant", "note": "claims printed as established facts without proof and without a Conjecture label, departing from step 5 (write each claim at its level)", "pages": "p. 4"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "quadratic held at its extreme value", "evidence": "both GCP constructions hinge on equations that are maxima over L (sphere; x_i^2 - X_ii = 0); same device as S009 Theorem 8.3", "pages": "pp. 2-3"},
+      {"pattern": "generalize DNN through extreme rays of K*", "evidence": "D(K) = {X PSD : Xs in K for all extreme rays s of K*}, which reduces to DNN for the orthant", "pages": "p. 4"}
+    ],
+    "transferable": [
+      "Fit an inequality-constrained set to an exactness theorem that wants equations at extreme values: scale into the unit ball and add one coordinate, so the ball becomes the sphere <w,w> = 1, the maximum over the lifted convex set (pp. 2-3).",
+      "Force X = xx^T exactly by PSD plus x_i^2 = X_ii, noting that these equations sit at the maximum of a function bounded above by 0 (p. 3).",
+      "End every representation result with exact counts of variables and equality constraints (Corollaries 1-2, p. 3).",
+      "Approximate a new cone C(K) by the DNN analogue D(K) and prove containment via rank-one extreme rays (p. 4)."
+    ],
+    "coauthors": "Hongbo Dong (corresponding author; Wisconsin Institutes for Discovery)",
+    "quotes": [
+      {"text": "This approach focuses the difficulty of nonconvex QPs completely on the CP matrices.", "page": 1},
+      {"text": "For the sake of space, we do not prove these claims here.", "page": 4}
+    ]
+  },
+  {
+    "id": "S012",
+    "year": "2013",
+    "title": "Second-order-cone constraints for extended trust-region subproblems",
+    "read_level": "full",
+    "contribution": "Introduces SOC-RLT constraints. It proves that SDP plus one RLT and two SOC-RLT constraints is exact for TRS with two parallel cuts, gives an n = 3 counterexample when the cuts intersect, and gives a polynomial-time-separable SOC-RLT family for TTRS that closes most but not all of the SDP gap (author preprint, pp. 2-3, 8-17, 23).",
+    "problem_entry": "TRS is SDP-exact; the paper asks what happens with added constraints, prompted by Sturm-Zhang's unique SOC constraint for one cut and Ye-Zhang's open question about exact convex formulations, ordering four variants by the geometry of the feasible set (preprint pp. 2-3).",
+    "key_idea": "Linearize the product of a valid linear factor and a valid SOC constraint (SOC-RLT). This is exact for TRS2p. For TTRS, index SOC-RLT cuts by every supporting hyperplane of the ball, which is equivalent to all RLT products between the two ellipsoids, and separate them by solving a TRS (preprint pp. 2, 8, 14-15).",
+    "assumptions": "Orthogonal transformation puts cuts on x1 without changing the relaxation; l < u; full-dimensional second ellipsoid H PD; tractability to epsilon tolerance via the ellipsoid method (preprint pp. 4-5, 8, 14-15).",
+    "proof_devices": [
+      "Pataki rank bound for extreme points of block SDP systems giving a one-line TRS exactness proof (Prop. 2, Lemma 1, preprint p. 5)",
+      "3x3 principal-minor determinant plus a linear embedding of a lower-dimensional TRS (Lemma 2, preprint p. 6)",
+      "case split on active constraints (Theorems 1-2, preprint pp. 6-7, 11)",
+      "rank-one shift Y - eps(u-x1)^2 yy^T with y in Range(Y) contradicting extremality (Theorem 1, preprint p. 7)",
+      "explicit decomposition Y = (1-lambda)Y1 + lambda Y2 with PSD-diagonal remainder W (Lemma 4, preprint pp. 8-10; algebra in appendix pp. 24-27)",
+      "separation over supporting hyperplanes reduces to equality-constrained TRS; separation-optimization equivalence (Prop. 3, Cor. 3, preprint p. 15)",
+      "numerically certified counterexample, n = 3 intersecting TRS2, gap about 7% via Couenne (preprint p. 13)"
+    ],
+    "experiments": "Literature failure instances first (Yuan n=2 closed by one cut; three Ye-Zhang instances closed); a hand-built n=2 instance with 0.9% remaining gap; a Martinez-theorem generator (idea credited to Wolkowicz) with 1000 instances each for n=5,10,20; cut cap of 25 due to solver numerics; gap estimated from the relaxation's own x* (no exact v); rank measure lambda_n/lambda_{n-1} as a second signal; 'solved' = relative gap < 1e-4; basic SDP solves 92.2%/24.6%/4.1%, unsolved 4.1%/7.0%/10.4% (preprint pp. 16-23).",
+    "positioning": "Re-proves Sturm-Zhang to build machinery ('alternative proof ... of independent interest'); answers Ye-Zhang affirmatively for TRS2p and partially for TTRS; contrasts with tightness-condition papers (Peng-Yuan, Beck-Eldar, Ai-Zhang) by strengthening the SDP generally (preprint pp. 3-4).",
+    "writing": "Variants ordered by geometry; complexity takeaway stated explicitly; reader warned the convex combination is not intuitive; non-intersecting claim labelled a conjecture; experiments framed as showing both value and the work still needed (preprint pp. 3, 6, 13, 17).",
+    "limits_future": "Open: non-intersecting TRS2 conjecture, closing the intersecting-case gap, complexity of TTRS; up to 10.4% unsolved in Table 1; the gap estimate uses the relaxation's own x*, which the paper does not discuss as a limit (preprint pp. 3, 13, 19, 23).",
+    "method_links": [
+      {"method": "Method 2", "relation": "evidence", "note": "re-derives TRS1 to build machinery; exactness pushed to two parallel cuts, stopping at a certified n=3 counterexample for intersecting cuts; SOC x linear factor coined", "pages": "preprint pp. 2-4, 13"},
+      {"method": "Method 3", "relation": "evidence", "note": "random low-dimensional tests (n <= 10) printed as a conjecture; rank measure used as a second signal next to the gap", "pages": "preprint pp. 13, 19-21"},
+      {"method": "Method 4", "relation": "evidence", "note": "literature failure instances first, then a theorem-based generator credited to Wolkowicz; cut cap disclosed", "pages": "preprint pp. 16-19"},
+      {"method": "Method 4", "relation": "variant", "note": "the 2013 pool is not filtered for instances the basic SDP solves; Table 1 reports the basic SDP's share instead", "pages": "preprint p. 23"},
+      {"method": "Method 1", "relation": "evidence", "note": "TRS2p written exactly as one convex program in (x, X)", "pages": "preprint pp. 8-12"}
+    ],
+    "new_pattern_candidates": [],
+    "transferable": [
+      "Prove SDP-relaxation exactness by showing every extreme point has rank-one Y: Pataki's bound when cones are inactive, a rank-one shift along a Range(Y) vector when they are active (preprint pp. 5-7, 11-12).",
+      "Make conic cuts by multiplying a valid SOC constraint by a nonnegative linear factor and linearizing; index the semi-infinite family by supporting hyperplanes and separate it with a TRS (preprint pp. 2, 14-15).",
+      "Generate hard instances from a local-nonglobal-minimizer theorem: cut off the global minimizer while keeping the local one feasible (preprint p. 18).",
+      "Track the eigenvalue ratio of the lifted matrix as a second tightness certificate next to the gap (preprint pp. 19-21).",
+      "Order problem variants by the geometry of the feasible set and state where tractability flips (preprint p. 3)."
+    ],
+    "coauthors": "Kurt M. Anstreicher",
+    "quotes": [
+      {"text": "An important implication of our results is that the computational complexity of solving an extended trust-region problem is highly dependent on the geometry of the feasible set.", "page": 3},
+      {"text": "So we conjecture that the two values are equal when the cuts do not intersect.", "page": 13}
+    ]
+  },
+  {
+    "id": "S043",
+    "year": "2014",
+    "title": "Faster, but weaker, relaxations for quadratically constrained quadratic programs",
+    "read_level": "full",
+    "contribution": "Gives a mixed SOCP-SDP relaxation framework for QCQP whose block partition controls speed, plus a fast algorithm for minimally-PSD splittings that preserves bound quality; on 400 library instances it is up to about 2x faster than SDP, with bound loss controlled by the second shift and the full minimal-element sweep (pp. 2, 7-12, 15-18).",
+    "problem_entry": "SDP relaxations are tight but slow for interior-point methods, while SOCP relaxations in x are never tighter than SDP; the paper looks for relaxations 'between the two extremes' (pp. 2-4).",
+    "key_idea": "Split A_i = B_i - (B_i - A_i) with B_i PSD and the remainder block diagonal. Chordal completion keeps only the diagonal blocks of X. Choose B_i Loewner-minimal, which by monotonicity gives no worse bounds, using projection-based Algorithms 1-2 instead of an SDP (pp. 6-13).",
+    "assumptions": "QCQP assumed to contain all constraints of interest; variables in [0,1]^n with diag(X) <= x for boundedness; optimizing the B_i directly is nonconvex and as costly as the SDP, so it is replaced by the minimality heuristic (pp. 3, 5, 7-8).",
+    "proof_devices": [
+      "chordal arrow-structure matrix completion (Grone et al.) reducing full PSD to block PSD (Props. 2-3, pp. 5, 7)",
+      "Loewner monotonicity via (B - B')*(X - xx^T) >= 0 (Prop. 4, p. 8)",
+      "minimal element via an SDP with a PD objective, noted and rejected as too slow (p. 9)",
+      "range-inclusion plus orthonormal-complement lemma proving Algorithm 1 gives the minimum element (Lemma 1, Prop. 6, pp. 10-11)",
+      "induction with contradiction for Algorithm 2 minimality (Lemma 2, Theorem 1, pp. 11-12)"
+    ],
+    "experiments": "400 instances (199 MaxCut from Gset/BiqMac, 64 BiqMac BinQP, 36 GlobalLib; the listed groups sum to 299, unexplained), n from 16 to 800; nested partitions r=1,2,4,8 (r=1 = SDP); 2x2 ablation (first/second shift x stop/full Algorithm 2); default SeDuMi on one core; bound and time ratios to the SDP base case shown as box plots with a reading guide; 2Y best; at most about 2x speed-up; no SOCP baseline run (pp. 13-18).",
+    "positioning": "Places itself among alternatives to interior-point SDP (including Burer-Monteiro) and LP/SOCP relaxations; closest to Kim-Kojima, Saxena-Bonami-Lee and Zheng-Sun-Li; claims uniqueness in combining block structure with bound improvement; does not cite Bao-Sahinidis-Tawarmalani (pp. 2-4, 19).",
+    "writing": "Simple diagonal case before the general construction; drawbacks stated in the introduction; 'weaker' in the title; plot-reading guide; small typo in the partition description (pp. 2, 4-6, 14, 16).",
+    "limits_future": "No order-of-magnitude speed-up; simplistic partitions that ignore the data; large variation and outliers; future: data-driven partitions and overlapping blocks via chordal extensions (pp. 15, 18).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "stop rule: builds and costs a cheaper intermediate between SOCP and SDP", "pages": "pp. 2, 4, 18"},
+      {"method": "Method 1", "relation": "variant", "note": "the SKILL frames this paper as an answer to Bao-Sahinidis-Tawarmalani's DNN-cost finding, but the paper motivates by interior-point SDP cost, never mentions DNN and does not cite Bao et al.; that link is an inference", "pages": "pp. 2, 19"},
+      {"method": "Method 5", "relation": "evidence", "note": "framework shown working without theory predicting the effect of its choices; losses printed", "pages": "pp. 2, 18"},
+      {"method": "Method 4", "relation": "variant", "note": "public libraries used as given with no hard-pool filter, because the question is a speed/bound trade-off", "pages": "pp. 13-14"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "2x2 factorial ablation of design choices reported as ratios to the exact base case", "evidence": "variants 1N/1Y/2N/2Y on nested partitions r=1,2,4,8; beta_r and tau_r ratios with preprocessing included", "pages": "pp. 15-16"},
+      {"pattern": "turn an intractable optimal-parameter choice into a monotone order and pick a minimal element", "evidence": "Prop. 4 Loewner monotonicity, then minimal elements computed by Algorithms 1-2", "pages": "pp. 8-12"}
+    ],
+    "transferable": [
+      "Trade bound for speed in an SDP relaxation: choose a variable partition and keep only the blocks that the data touch; chordal completion makes dropping the off-block entries exact (pp. 5, 7).",
+      "When an optimal splitting is intractable, prove Loewner monotonicity of the bound and compute a minimal element with a cheap linear-algebra sweep instead of an SDP (pp. 8-12).",
+      "Isolate design choices with a 2x2 factorial of variants on nested partitions, reporting bound and time as ratios to the exact base case, with preprocessing included and near-zero denominators screened out (pp. 15-16).",
+      "Explain in the text how to read box plots, including the outlier rule (p. 16)."
+    ],
+    "coauthors": "Sunyoung Kim, Masakazu Kojima",
+    "quotes": [
+      {"text": "In this paper, we describe a “middle way” between SOCP and SDP relaxations.", "page": 2},
+      {"text": "In particular, we do not see a full order-of-magnitude speed up.", "page": 18}
+    ]
+  }
+]
