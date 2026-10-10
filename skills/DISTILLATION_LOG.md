@@ -1,14 +1,25 @@
 # 蒸馏记录
 
+## 2026-10-09 (6) · 内置 team-kit（逐人研究者 skill 流水线）
+
+- 范围：从 AlexanderShi/nvwa-skill `eb012fa` 逐字节同步 `scripts/`（52 文件）、
+  `references/`（13 文件）到仓库根，nuwa 根 `SKILL.md` 冻结为 `references/nuwa-SKILL.md`；
+  上一条的两个团队由 `skills/researchers/` 移到 `product/`，与 kit 默认布局一致
+- 验证：`team_status.py` 两队正常；`check_links.py` dfo-team 79 文件、nonlinear-team 105 文件
+  均 0 断链；`workflows/selftest.sh` 结果见提交信息
+- 新增根 `.gitignore`（kit 的版权材料规则）与入口文档 `TEAM-KIT.md`；README 目录树与
+  「与 nuwa-skill 的关系」同步更新。团队级 skill 与 `teams/` 语料未改动
+
 ## 2026-10-09 (5) · 同步逐人研究者 skill（非语料蒸馏，仅归档）
 
-- 范围：新增 `skills/researchers/dfo-team/`（5 人 + dfo-roundtable）与
-  `skills/researchers/nonlinear-team/`（10 人 + nonlinear-roundtable），共 539 个文件，
+- 范围：新增 `product/dfo-team/`（5 人 + dfo-roundtable）与
+  `product/nonlinear-team/`（10 人 + nonlinear-roundtable），共 539 个文件，
   逐字节同步自 AlexanderShi/nvwa-skill `eb012fa` 的 `product/dfo-team`、`product/nonlinear-team`
+  （首次落在 `skills/researchers/`，同日随第 6 条移到 `product/`）
 - 性质：nuwa team-kit 网络调研蒸馏（researched 2026-09-27），**不经 DISTILL.md 协议、
   不带语料 ID**，出处以各 skill 自带的 `09-evidence-ledger.md` 为准；团队级 skill 与
   `teams/` 语料未改动，质量门 G1–G6 不适用于本条
-- 说明文件：`skills/researchers/README.md`（来源、出处层级、安装方式）
+- 说明文件：`product/README.md`（来源、出处层级、安装方式）
 
 ## 2026-10-09 (4) · Katya Scheinberg 双队强化 + nuwa 提炼纪律入标
 

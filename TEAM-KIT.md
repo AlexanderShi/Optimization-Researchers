@@ -1,0 +1,78 @@
+# TEAM-KIT · 逐人研究者 Skill 流水线
+
+本仓库内置了 nuwa-skill 的**研究 Skill / 研究团队工具链**（team-kit），用于逐人蒸馏研究者的
+研究方法并组成圆桌团队。它与 [DISTILL.md](./DISTILL.md)（封闭语料 → 团队级 skill）是两条
+独立流水线：
+
+| | DISTILL.md | team-kit（本文件） |
+|---|---|---|
+| 输入 | `teams/<team>/` 封闭语料，禁联网 | 研究者公开发表（OpenAlex / DBLP / arXiv 全文）+ 网络调研 |
+| 产物 | `skills/<team>/SKILL.md`，每条事实带语料 ID | `product/<team>/<member>/`（SKILL.md + references/research 证据台账）+ 圆桌 skill |
+| 质量门 | G1–G6 | `scripts/quality_check.py` 研究模式 + `scripts/team_check.py` + 摘录逐字核对 |
+| 入口 | DISTILL.md | `references/research-team-playbook.md` |
+
+## 来源
+
+整体同步自 AlexanderShi/nvwa-skill 提交 `eb012fa`（kit 由 2026-09-27/28 的 team-kit 系列提交
+构建），2026-10-09 逐字节复制，零修改：
+
+| 本仓库路径 | nvwa-skill 原路径 | 说明 |
+|-----------|------------------|------|
+| `scripts/` | `scripts/` | 52 个文件：发表全表、全文获取、读卡、台账、团队状态；`workflows/` 为保存好的 T1–T4 工作流 |
+| `references/` | `references/` | playbook、研究提炼框架、研究 skill 模板、论文卡片、评分卡、`team-templates/` |
+| `references/nuwa-SKILL.md` | `SKILL.md`（nuwa 根 skill） | **冻结副本**，仅供 kit 文档中「SKILL.md 特殊场景 > 研究Skill / 研究团队Skill」等引用查阅；本仓库不把它当 skill 加载 |
+| `product/` | `product/` | 团队产物目录，名称保持一致，因此 kit 的默认路径与团队文档内的 `product/...` 链接原样有效 |
+
+kit 文档里的「[skill目录]」「女娲仓库根目录」即**本仓库根目录**。不依赖外部 nvwa-skill 仓库。
+
+## 阅读顺序
+
+1. `references/research-team-playbook.md` —— 团队模式总纲：T1 基础 skill → T2 团队层（圆桌座位、
+   fault lines）→ T3 全文深读（T3.1–T3.8）→ T4 增量维护；第八节是加/减成员与更新
+2. `references/research-extraction-framework.md` —— 单个研究者的 6 路调研分工、研究方法四重验证、
+   代表作解剖、阶段工作流重建；第十二节是全文深读工具链的步骤与参数
+3. `references/research-skill-template.md` —— 研究 skill 的输出模板（导师模式、研究诚信规则、任务路由）
+4. `references/paper-reading-card.md` —— 论文卡片格式；`references/fidelity-scorecard.md` 的「研究Skill变体」
+5. `scripts/workflows/README.md` —— T1–T4 工作流的参数、`dry_run.mjs` 预览与 `selftest.sh`
+6. `references/team-templates/` —— `new_team.py` 铺团队目录用的模板（README、DEEP-READING、圆桌 SKILL、team.json 示例）
+
+## 运行要求
+
+- Python 3（脚本只用标准库，无需 pip），从仓库根运行：`python3 scripts/<脚本> product/<team>[/<member>]`
+- Node（`scripts/workflows/dry_run.mjs`、`make_args.mjs`）；`team-*.js` 是 Claude Code Workflow 脚本
+- 联网：`fetch_publications.py`（OpenAlex）、`dblp_works.py`（DBLP SPARQL）、`acquire_fulltexts.py` /
+  `fetch_fulltexts.py`（arXiv 等开放全文）。只用开放来源，不绕付费墙
+- 下载的 PDF/全文/私人材料由根 `.gitignore` 忽略（规则与 `new_team.py` 打印的一致），不要 `git add -f`
+
+## 常用命令
+
+```
+python3 scripts/team_status.py product/dfo-team                  # 每人到了哪一步
+python3 scripts/team_status.py product/dfo-team --coverage       # 覆盖表（可贴进 DEEP-READING.md）
+python3 scripts/check_links.py product/nonlinear-team            # 相对链接与锚点
+python3 scripts/team_check.py product/dfo-team                   # 团队整体检查（含 quality_check）
+python3 scripts/new_team.py product/<new-team>/team.json         # 按 team.json 铺新团队
+python3 scripts/new_team.py product/<team>/team.json --add-member <slug>
+bash scripts/workflows/selftest.sh product/dfo-team              # kit 自检（以 dfo-team 为已完成样例）
+```
+
+2026-10-09 在本仓库验证：`team_status.py` 两队正常；`check_links.py` dfo-team 79 文件、
+nonlinear-team 105 文件均 0 断链。
+
+## 与语料流水线的命名区分
+
+- `standards/skill-template.md`（团队级 skill 模板，DISTILL.md 用）≠ `references/skill-template.md`
+  （nuwa 人物 skill 模板）≠ `references/research-skill-template.md`（研究 skill 模板，team-kit 用）
+- `standards/researcher-extraction.md` 是从 `references/extraction-framework.md` 移植的语料版；
+  team-kit 自己用 `references/research-extraction-framework.md`
+- 要把 team-kit 蒸馏出的研究者纳入封闭语料，仍需按 `standards/researcher-extraction.md` 另写
+  `teams/<team>/researchers/<name>.md` 并通过 `standards/grounding.md` 的锚点规则
+
+## 更新 kit
+
+```
+git -C <nvwa-skill> archive HEAD scripts references SKILL.md | tar -x -C <本仓库>
+mv SKILL.md references/nuwa-SKILL.md
+```
+
+然后 `diff -rq` 核对、在 `skills/DISTILLATION_LOG.md` 记一条、提交信息注明源 commit。

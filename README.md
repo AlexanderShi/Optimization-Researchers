@@ -12,8 +12,15 @@
 
 ## 与 nuwa-skill 的关系
 
-无依赖。nuwa 的「纯本地语料模式 + 主题Skill 变体」思想被吸收进 [DISTILL.md](./DISTILL.md)，
-但蒸馏协议、模板、质量门都在本 repo 内自带。删除 nuwa-skill 不影响本 repo 使用。
+不依赖外部 nuwa-skill 仓库，两条流水线都在本 repo 内自带：
+
+- **团队级 skill**：nuwa 的「纯本地语料模式 + 主题Skill 变体」思想被吸收进
+  [DISTILL.md](./DISTILL.md)，蒸馏协议、模板、质量门全在本 repo。
+- **逐人研究者 skill**：nuwa 的研究 Skill / 研究团队工具链（team-kit）已整体内置
+  （`scripts/`、`references/`、`product/`，逐字节同步自 AlexanderShi/nvwa-skill `eb012fa`），
+  入口见 [TEAM-KIT.md](./TEAM-KIT.md)。
+
+删除 nuwa-skill 不影响本 repo 使用。
 
 ## 目录结构
 
@@ -27,10 +34,12 @@ standards/
 teams/
   dfo-team/               DFO Team 语料（00-charter … 05-failure-modes）
   nlp-team/               NLP Team 语料（同构）
-skills/                   蒸馏产物落盘处（再复制到 ~/.claude/skills/）
-  dfo-team/ nlp-team/     团队级 skill（按 DISTILL.md 封闭语料蒸馏，带语料 ID）
-  researchers/            逐人研究者 skill（同步自 nvwa-skill product/，nuwa team-kit
-                          网络调研蒸馏，带各自证据台账；见其 README）
+skills/                   DISTILL.md 蒸馏产物：团队级 skill（带语料 ID；再复制到 ~/.claude/skills/）
+TEAM-KIT.md               逐人研究者 skill 流水线（team-kit）入口
+references/               team-kit 文档与模板：playbook、研究提炼框架、研究 skill 模板、
+                          team-templates/；nuwa-SKILL.md 为冻结的 nuwa 根 skill 副本
+scripts/                  team-kit 脚本：发表全表、全文、读卡、台账、团队状态；workflows/ 为 T1–T4
+product/                  team-kit 产物：逐人研究者 skill + 圆桌（dfo-team、nonlinear-team = NLP Team）
 ```
 
 每个团队目录六个文件，编号即阅读顺序：
