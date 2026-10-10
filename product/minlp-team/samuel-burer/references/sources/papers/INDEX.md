@@ -70,7 +70,7 @@
 | 58 | S058 | 2025 | On the semidefinite representability of continuous quadratic submodular minimization with applications to moment problems | arXiv preprint arXiv:2504.03996 | 4 | preprint | arXiv | txt | 49 | core | carded |
 | 59 | S059 | 2017 | A branch-and-bound algorithm for instrumental variable quantile regression | Mathematical Programming Computation | 4 | journal | url | txt | 27 | supplement | carded |
 | 60 | S060 | 2014 | A first-order smoothing technique for a class of large-scale linear programs | SIAM Journal on Optimization | 4 | journal | url | txt | 23 | supplement | skimmed |
-| 61 | S061 | 2021 | Correction to: Exact semidefinite formulations for a class of (random and non-random) nonconvex quadratic programs | Mathematical Programming | 3 | journal | manual | txt | 4 | core | abstract |
+| 61 | S061 | 2021 | Correction to: Exact semidefinite formulations for a class of (random and non-random) nonconvex quadratic programs | Mathematical Programming | 3 | journal | manual | txt | 4 | core | carded |
 | 62 | S062 | 2019 | Three methods for robust grading | European Journal of Operational Research | 2 | journal | url | txt | 8 | supplement | carded |
 | 63 | S063 | 2011 | A semidefinite programming approach to the hypergraph minimum bisection problem | Optimization | 2 | journal | url | txt | 16 | supplement | carded |
 | 64 | S065 | 2026 | Applications of the Lorentz positive cone in nonconvex quadratic optimization | arXiv preprint arXiv:2609.32017 | — | preprint | arXiv | txt | 22 | core | carded |
