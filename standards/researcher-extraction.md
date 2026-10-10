@@ -1,7 +1,7 @@
 # 研究者档案提炼标准（researcher-extraction.md）
 
-移植自 nuwa-skill `references/extraction-framework.md` 的提炼方法论，适配
-本 repo 的主题型团队语料。与 `grounding.md` 分工：**grounding 管事实有没有
+移植自本仓库 [`references/extraction-framework.md`](../references/extraction-framework.md)
+（nuwa 的提炼方法论，随 team-kit 内置）的提炼方法论，适配本 repo 的主题型团队语料。与 `grounding.md` 分工：**grounding 管事实有没有
 出处（锚点），本标准管思维框架是不是真框架（提炼质量）**。两关都过才入档。
 
 ## 1. 方法论立场的三重验证
@@ -56,6 +56,6 @@
 本标准自语料版本 add5d2e 之后生效。此前写入的 Duchi 档案（DFO/NLP 两侧）
 已按本标准补注验证状态；更早的档案如未标注，视为「验证状态未评估」。
 
-> 来源致谢：三重验证、矛盾处理、信息不足表均源自
-> [nuwa-skill](https://github.com/alchaincyf/nuwa-skill)
-> `references/extraction-framework.md`，按主题型语料库适配。
+> 来源致谢：三重验证、矛盾处理、信息不足表均源自 nuwa 的
+> `extraction-framework.md`（本仓库副本：[`references/extraction-framework.md`](../references/extraction-framework.md)；
+> 原出处 [alchaincyf/nuwa-skill](https://github.com/alchaincyf/nuwa-skill)），按主题型语料库适配。

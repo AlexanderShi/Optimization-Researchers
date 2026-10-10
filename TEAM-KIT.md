@@ -56,8 +56,33 @@ python3 scripts/new_team.py product/<team>/team.json --add-member <slug>
 bash scripts/workflows/selftest.sh product/dfo-team              # kit 自检（以 dfo-team 为已完成样例）
 ```
 
-2026-10-09 在本仓库验证：`team_status.py` 两队正常；`check_links.py` dfo-team 79 文件、
-nonlinear-team 105 文件均 0 断链。
+2026-10-09 在本仓库（Windows 11，Python 3.13，Node 24）验证：
+
+- `team_status.py` 两队正常；`check_links.py` dfo-team 79 文件、nonlinear-team 105 文件均 0 断链
+- `team_check.py product/dfo-team`：32 项检查 0 失败、5 跳过（摘录核对需先 `acquire_fulltexts.py` 下载全文）
+- `workflows/selftest.sh product/dfo-team`：全部通过（14 个工作流预览、9 个 `dry_run.mjs --team`、
+  脚本编译与交付闸门）
+- 扩展演练：`new_team.py --init` 起草 team.json + 按模板铺出新团队目录（README、DEEP-READING、
+  圆桌 SKILL.md、成员资源目录）全部在本仓库内完成，未读任何外部仓库
+
+**Windows 注意**：Python 脚本要用 `python3 -X utf8` 或设 `PYTHONUTF8=1`，否则控制台 cp1252
+编不了 ✓ 等字符会以退出码 1 失败；`selftest.sh` 也要在 `PYTHONUTF8=1` 下跑。
+
+## 本仓库对 kit 的本地修改（与 nvwa-skill 的差异）
+
+| 文件 | 修改 | 原因 |
+|------|------|------|
+| `scripts/workflows/team-*.js`（9 个文件，各 2 处） | `args.repo` / `args.scratch` 的绝对路径检查由 `startsWith('/')` 改为同时接受 `C:\…` 的正则 `/^(?:[A-Za-z]:[\\/]\|\/)/` | 原检查只认 POSIX 路径，Windows 上 Node 解析出 `C:\…` 导致全部工作流在本机拒绝启动；`args.team` 的「必须是相对路径」检查未动 |
+
+除此之外 `scripts/`、`references/` 与 nvwa-skill `eb012fa` 逐字节一致。再从 nvwa 同步时注意
+不要覆盖掉这处修改（或同步后重跑 `selftest.sh` 确认）。
+
+## 在 Claude Code 里的入口
+
+仓库自带项目级 skill `.claude/skills/optimization-researchers/SKILL.md`：在本仓库内启动 session
+（或从父目录启动后首次接触本仓库）时自动加载，把「蒸馏 X 加入 DFO team」「加成员」「搭新团队」
+「重跑蒸馏」这类请求分流到 DISTILL.md 或本文件，不需要安装 nuwa-skill。
+同名时个人 skill（`~/.claude/skills/`）优先于项目 skill，因此它的名字刻意不与任何已安装 skill 重合。
 
 ## 与语料流水线的命名区分
 

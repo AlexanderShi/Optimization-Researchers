@@ -6,7 +6,13 @@
   `references/`（13 文件）到仓库根，nuwa 根 `SKILL.md` 冻结为 `references/nuwa-SKILL.md`；
   上一条的两个团队由 `skills/researchers/` 移到 `product/`，与 kit 默认布局一致
 - 验证：`team_status.py` 两队正常；`check_links.py` dfo-team 79 文件、nonlinear-team 105 文件
-  均 0 断链；`workflows/selftest.sh` 结果见提交信息
+  均 0 断链；`team_check.py product/dfo-team` 32 项 0 失败 5 跳过；`workflows/selftest.sh`
+  在 Windows 下初次失败 24 项（工作流只认 POSIX 绝对路径），与 nvwa-skill 原仓库对照结果相同
+- 自包含加固（同日）：9 个 `scripts/workflows/team-*.js` 的 `args.repo`/`args.scratch` 路径检查改为
+  兼容 Windows，之后 `selftest.sh` 全部通过；`new_team.py --init` + 铺目录演练在本仓库内跑通；
+  全仓库路径引用扫描无指向外部仓库的悬空引用；`standards/researcher-extraction.md` 的出处改指
+  本仓库 `references/extraction-framework.md`；新增项目级 skill
+  `.claude/skills/optimization-researchers/`（蒸馏请求路由，不依赖 nuwa-skill）
 - 新增根 `.gitignore`（kit 的版权材料规则）与入口文档 `TEAM-KIT.md`；README 目录树与
   「与 nuwa-skill 的关系」同步更新。团队级 skill 与 `teams/` 语料未改动
 

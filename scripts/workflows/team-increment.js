@@ -68,7 +68,7 @@ need(['repo', 'team', 'scratch', 'date', 'members'])
 if (!Array.isArray(a.members) || !a.members.length) throw new Error('team-increment: args.members must be a non-empty array of team.json member objects')
 if (!/^\d{4}-\d{2}-\d{2}$/.test(String(a.date))) throw new Error('team-increment: args.date must be "YYYY-MM-DD"')
 a.members.forEach((m, i) => { if (!m || !/^[a-z0-9][a-z0-9-]*$/.test(m.slug || '') || !m.name) throw new Error(`team-increment: members[${i}] needs a kebab-case slug and a name`) })
-if (!String(a.repo).startsWith('/') || !String(a.scratch).startsWith('/')) throw new Error('team-increment: args.repo and args.scratch must be absolute paths')
+if (!/^(?:[A-Za-z]:[\\/]|\/)/.test(String(a.repo)) || !/^(?:[A-Za-z]:[\\/]|\/)/.test(String(a.scratch))) throw new Error('team-increment: args.repo and args.scratch must be absolute paths')
 if (String(a.team).startsWith('/')) throw new Error('team-increment: args.team must be relative to args.repo, e.g. "product/<team>"')
 const FIND_KINDS = ['book-parts', 'new-papers']
 const FIND = Array.isArray(a.find) ? a.find : (a.find ? [String(a.find)] : [])

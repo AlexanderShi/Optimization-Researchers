@@ -49,9 +49,9 @@ export const meta = {
 const ARGS = typeof args === 'string' ? JSON.parse(args) : args
 function need(ok, msg) { if (!ok) throw new Error(`team-layer args: ${msg}`) }
 need(ARGS && typeof ARGS === 'object', 'pass args as a JSON object')
-need(typeof ARGS.repo === 'string' && ARGS.repo.startsWith('/'), 'args.repo must be an absolute path')
+need(typeof ARGS.repo === 'string' && /^(?:[A-Za-z]:[\\/]|\/)/.test(ARGS.repo), 'args.repo must be an absolute path')
 need(typeof ARGS.team === 'string' && ARGS.team.length > 0 && !ARGS.team.startsWith('/'), 'args.team must be relative to args.repo, e.g. "product/<team>"')
-need(typeof ARGS.scratch === 'string' && ARGS.scratch.startsWith('/'), 'args.scratch must be an absolute path')
+need(typeof ARGS.scratch === 'string' && /^(?:[A-Za-z]:[\\/]|\/)/.test(ARGS.scratch), 'args.scratch must be an absolute path')
 need(/^\d{4}-\d{2}-\d{2}$/.test(ARGS.date || ''), 'args.date must be "YYYY-MM-DD"')
 need(Array.isArray(ARGS.members) && ARGS.members.length > 0, 'args.members must be a non-empty array copied from team.json')
 ARGS.members.forEach((m, i) => need(m && /^[a-z0-9][a-z0-9-]*$/.test(m.slug || '') && m.name, `args.members[${i}] needs a kebab-case slug and a name`))

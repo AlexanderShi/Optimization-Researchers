@@ -40,6 +40,8 @@ references/               team-kit 文档与模板：playbook、研究提炼框�
                           team-templates/；nuwa-SKILL.md 为冻结的 nuwa 根 skill 副本
 scripts/                  team-kit 脚本：发表全表、全文、读卡、台账、团队状态；workflows/ 为 T1–T4
 product/                  team-kit 产物：逐人研究者 skill + 圆桌（dfo-team、nonlinear-team = NLP Team）
+.claude/skills/
+  optimization-researchers/ 项目级 skill：在本仓库内把蒸馏请求分流到 DISTILL.md / TEAM-KIT.md
 ```
 
 每个团队目录六个文件，编号即阅读顺序：
@@ -57,10 +59,15 @@ product/                  team-kit 产物：逐人研究者 skill + 圆桌（dfo
 ## 快速开始
 
 ```
-1. 读 DISTILL.md
-2. 按协议蒸馏 → skills/<team>/SKILL.md
-3. 复制到 ~/.claude/skills/<team>/
+团队级 skill（封闭语料）           逐人研究者 skill / 圆桌（team-kit）
+1. 读 DISTILL.md                   1. 读 TEAM-KIT.md → references/research-team-playbook.md
+2. 按协议蒸馏 → skills/<team>/      2. 加成员：team.json + scripts/new_team.py --add-member；
+   SKILL.md                            新团队：scripts/new_team.py --init
+3. 复制到 ~/.claude/skills/<team>/  3. 按 T1–T4 跑 scripts/workflows/，产物在 product/<team>/
 ```
+
+两条流水线所需的一切（协议、模板、脚本、语料、已蒸馏产物）都在本仓库内；在本仓库启动
+Claude Code 时项目级 skill `optimization-researchers` 会自动把蒸馏/扩展请求分流到对应入口。
 
 ## 两条铁律
 
