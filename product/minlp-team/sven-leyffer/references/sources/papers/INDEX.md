@@ -180,5 +180,46 @@
 | 168 | S181 | 2017 | Control and Design of Multiscale Systems | — | — | report | manual | txt | 2 | supplement | — |
 | 169 | S182 | 2016 | Obituary: Roger Fletcher | Collections 49 (10) | — | essay | — | no-oa |  | supplement | — |
 | 170 | S185 | 2016 | A multilevel approach for a class of semidefinite programs | 2016 American Control Conference (ACC), 7153-7158 | — | conference | manual | txt | 9 | supplement | — |
+| 171 | S188 | 2013 | COAP 2012 Best Paper Prize | COMPUTATIONAL OPTIMIZATION AND APPLICATIONS 56 (3), 503-506 | — | other | — | no-oa |  | supplement | — |
+| 172 | S193 | 2011 | Recorder Summary Research Needs in Multi-Dimensional, Multi-Scale Modeling and Algorithms for Next Generation Electricity Grids | Computational Needs for the Next Generation Electric Grid | — | report | manual | txt | 3 | supplement | — |
+| 173 | S194 | 2010 | Oil Spill Response Planning with Consideration of Oil Transport and Weathering Process: A Multi-Objective Mixed-Integer Dynamic Optimization Approach | — | — | other | — | no-oa |  | supplement | — |
+| 174 | S196 | 2009 | Collaborative Research: Next-Generation Solvers for Mixed-Integer Nonlinear Programs: Structure, Search, and Implementation | NSF Award Number 0830035. Directorate for Computer and Information Science… | — | other | — | no-oa |  | supplement | — |
+| 175 | S197 | 2009 | Post-PHD Employment | Numer. Linear Algebra Appl 16, 192-221 | — | other | — | no-oa |  | supplement | — |
+| 176 | S199 | 2007 | A Filter Active-Set Trust-Region (FASTr) Framework | — | — | report | manual | txt | 15 | supplement | — |
+| 177 | S200 | 2005 | New Math | — | — | other | — | no-oa |  | supplement | — |
+| 178 | S201 | 2004 | Nonlinear programming: theory and practice | Mathematical Programming | — | other | — | no-oa |  | supplement | — |
+| 179 | S202 | 2004 | Large scale nonconvex optimization algorithms and applications | Mathematical programming | — | other | — | no-oa |  | supplement | — |
+| 180 | S203 | 1994 | On the solution of nonconvex MINLP | Univ. of Michigan, Ann Arbor, MI (United States) | — | talk | — | no-oa |  | skip | — |
+| 181 | S204 | — | TRUST REGION METHOD FOR BOUND-CONSTRAINED MPCCS WITH NONLINEAR OBJECTIVE | — | — | other | — | no-oa |  | supplement | — |
+| 182 | S206 | — | A Heuristic Augmentation Algorithm for Discrete Total-Variation Problems | 2025 Joint Mathematics Meetings (JMM 2025) | — | talk | — | no-oa |  | skip | — |
+| 183 | S207 | — | Efficient Heuristic Approaches to Binary Optimization: a Sensor Placement Application | 2024 Joint Mathematics Meetings (JMM 2024) | — | talk | — | no-oa |  | skip | — |
+| 184 | S208 | — | Nonlinear and Combinatorial Optimization | 2024 Joint Mathematics Meetings (JMM 2024) | — | talk | — | no-oa |  | skip | — |
+| 185 | S209 | — | PROVIDENCE, RHODE ISLAND USA ISSN 0025-5718 (print) ISSN 1088-6842 (online) | — | — | other | — | no-oa |  | supplement | — |
+| 186 | S210 | — | NAOV-2020 Conference Participants | Numerical Analysis and Optimization | — | other | manual | txt | 27 | supplement | — |
+| 187 | S211 | 2017 | Exposing Latent Hierarchies for Large-Scale Design and Discovery | — | — | report | manual | txt | 2 | supplement | — |
+| 188 | S212 | — | researchportal. unamur. be | — | — | other | — | no-oa |  | supplement | — |
+| 189 | S215 | — | Mixed-Integer PDE-Constrained Optimization Sven Leyffer (Argonne National Laboratory)(joint work with Bart van Bloemen Waanders (Sandia National Laboratories), Mirko Hahn… | — | — | conference | manual | txt | 4 | supplement | — |
+| 190 | S216 | — | Teaching PROFESSOR new math | — | — | conference | manual | txt | 7 | supplement | — |
+| 191 | S217 | — | Mixed-Integer Derivative Free Optimization | — | — | other | — | no-oa |  | supplement | — |
+| 192 | S219 | — | SIAG/OPT Views and News | — | — | other | — | no-oa |  | supplement | — |
+| 193 | S221 | — | SIAG/OPT Views-and-News | — | — | other | — | no-oa |  | supplement | — |
+| 194 | S222 | — | The Heuristic Static Load-Balancing Algorithm Applied to CESM. | — | — | conference | manual | txt | 2 | supplement | — |
+| 195 | S224 | — | Linear Programming-Based Algorithm for Computing Metabolic Pathways From Genome-Scale Networks | — | — | other | — | no-oa |  | supplement | — |
+| 196 | D001 | 2005 | The penalty interior-point method fails to converge | Optim. Methods Softw. 20(4-5): 559-568 | — | journal | manual | txt | 11 | supplement | — |
+| 197 | D002 | 2013 | Unsupervised cell identification on multidimensional X-ray fluorescence datasets | SIGGRAPH Posters: 88 | — | conference | — | no-oa |  | supplement | — |
+| 198 | H001 | 2017 | Design, Optimization, and Control of Complex Interconnected Systems (DocSis) | DOE-ASCR Applied Mathematics PI Meeting White Paper | — | report | manual | txt | 4 | supplement | — |
+| 199 | H002 | 2021 | Addressing Climate Change, Boosting Environmental Resilience, and Advancing Clean Energy | SIAM News, October 2021 | — | other | manual | txt | 1 | supplement | — |
+| 200 | H003 | 2021 | OR/MS Education and Quantum Computing | OR/MS Today, August 2021 | — | other | — | no-oa |  | supplement | — |
+| 201 | H004 | 2017 | Nonlinear Optimization and Beyond | INFORMS Optimization Society Newsletter 7(2):3-11 | — | other | manual | txt | 16 | supplement | — |
+| 202 | H005 | 2015 | It's to Solve Problems: An Interview with Roger Fletcher | OPTIMA 99, December 2015 | — | interview | manual | txt | 12 | supplement | — |
+| 203 | H006 | 2014 | Writing for Success: Applying for Funding | SIAM Blogs, November 2014 | — | essay | — | no-oa |  | supplement | — |
+| 204 | H007 | 2011 | SIAG/OPT Views-and-News, Volume 22, No. 2, May 2011: 'SIAM OP11' (issue editor) | SIAG/OPT Views-and-News 22(2) | — | other | manual | txt | 11 | supplement | — |
+| 205 | H008 | 2011 | SIAG/OPT Views-and-News, Volume 22, No. 1, March 2011: 'Integer and Nonlinear Optimization' (issue editor) | SIAG/OPT Views-and-News 22(1) | — | other | manual | txt | 14 | supplement | — |
+| 206 | H009 | 2010 | SIAG/OPT Views-and-News, Volume 21, No. 2, December 2010: 'Environmental Optimization' (issue editor) | SIAG/OPT Views-and-News 21(2) | — | other | manual | txt | 10 | supplement | — |
+| 207 | H010 | 2010 | SIAG/OPT Views-and-News, Volume 21, No. 1, October 2010 (issue editor) | SIAG/OPT Views-and-News 21(1) | — | other | manual | txt | 11 | supplement | — |
+| 208 | H011 | 2009 | SIAG/OPT Views-and-News 20(1), December 2009: 'The Public Side Of Optimization' (issue editor) | SIAG/OPT Views-and-News 20(1) | — | other | manual | txt | 15 | supplement | — |
+| 209 | H012 | 2008 | SIAG/OPT Views-and-News 19(2), December 2008: SIAM OP08 (issue editor) | SIAG/OPT Views-and-News 19(2) | — | other | manual | txt | 16 | supplement | — |
+| 210 | H013 | 2003 | Large Scale Nonconvex Optimization (SIAG/Optimization Views-and-News issue, editors) | SIAG/Optimization Views-and-News 14(1) | — | other | manual | txt | 25 | supplement | — |
+| 211 | H014 | 2020 | Compact Representations of BFGS Matrices | Argonne National Laboratory, MCS Division Preprint ANL/MCS-P9279-0120, January 2020 | — | preprint | manual | txt | 26 | supplement | — |
 
-170 works · txt 142 · pdf 0 · no-oa 28
+211 works · txt 162 · pdf 0 · no-oa 49
