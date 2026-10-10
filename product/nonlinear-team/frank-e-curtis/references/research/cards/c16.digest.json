@@ -1,0 +1,167 @@
+[
+ {
+  "id": "S015",
+  "year": "2019",
+  "title": "A stochastic trust region algorithm based on careful step normalization",
+  "read_level": "full",
+  "contribution": "TRish: an SG-like method that takes a normalized trust-region step when the stochastic-gradient norm lies in [1/gamma1, 1/gamma2] and a scaled SG step otherwise. Its convergence guarantees match SG's in six settings (PL or not, constant or diminishing steps, growing-sample variance decay), and it outperforms tuned SG on logistic regression and CNN training (arXiv v3 read).",
+  "problem_entry": "SG steps have no natural scaling (stepsize ~1/L). Always-normalized steps need strong assumptions [12], and stochastic trust-region methods need ratio tests and fully linear models (pp. 2-3).",
+  "key_idea": "A continuous three-regime step rule (SG / normalized / damped SG) that accepts every step. Example 2.1 shows that pure normalization can ascend in expectation, and the gamma interval prevents that (pp. 4-5).",
+  "assumptions": "L-smooth f bounded below, unbiased g with E||g||^2 <= M1 + M2||grad f||^2. Optional PL (Assumption 3.3), variance proportional to alpha_k (Assumption 3.4), or geometric variance decay (Assumption 3.5). Bounds on gamma1/gamma2. Theory values called too conservative (pp. 5-7, 12, 14, 17).",
+  "proof_devices": [
+   "Lemma 3.1: case split on the three regimes and on the event E_k = {grad f^T g >= 0}, giving one expected-decrease inequality (pp. 6-7)",
+   "Lemma 3.2: Jensen + a <= (1+a^2)/2 bound on P[E]E[grad f^T g|E], suggested by an anonymous referee (pp. 8, 24)",
+   "worked Gaussian Examples 3.1-3.6 showing the bounding constants (pp. 8-9, 13, 14)",
+   "contraction inequality for linear convergence to a neighborhood under PL (Theorem 3.1, pp. 9-10)",
+   "induction for the sublinear rate with gamma1-gamma2 proportional to alpha_k (Theorem 3.2, pp. 11-12)",
+   "telescoping sum for the average squared gradient without PL (Theorems 3.5-3.6, pp. 16-17)"
+  ],
+  "experiments": "Logistic regression on a1a, w1a and rcv1 and CNNs on mnist and cifar-10 against SG. 60 (36 for CNN) settings each over matched effective-stepsize ranges, tuned by best testing accuracy in the last ten iterations, 10 runs per configuration, per-dataset regime frequencies reported. TRish is better, with modest gains on convex problems; the Figure 6 caption says 'Average' while the text says mnist runs were not averaged (pp. 17-23).",
+  "positioning": "Builds on SG theory as summarized in Bottou-Curtis-Nocedal [2]. Explains why always-normalized steps [12] need extra assumptions, and separates TRish from stochastic trust-region methods [16, 5] and from adaptive/normalized online methods [7, 21] (pp. 3, 9-10).",
+  "writing": "Double hedge in the introduction ('reduce somewhat'). Every theorem is followed by a comparison paragraph with SG, and the authors explicitly do not recommend the parameter values used in that comparison (pp. 2, 9-10, 14, 16).",
+  "limits_future": "A larger numerical study is out of scope, stepsize-decrease schedules are not studied, and the theory values are too conservative. Future work: Hessian approximations, acceleration, momentum, and coupling gamma1-gamma2 = O(alpha) (pp. 17, 23).",
+  "method_links": [
+   {"method": "Method 5", "relation": "evidence", "note": "Tuning effort for TRish deliberately no larger than for SG; effective-stepsize grids matched so neither method had an advantage; 10 runs per configuration.", "pages": "pp. 18-19, 22"},
+   {"method": "Method 3", "relation": "variant", "note": "The deliberately broken case is a constructed unbiased two-point gradient distribution on which the normalized step ascends twice as often as it descends (theory, not a test set).", "pages": "pp. 4-5"},
+   {"method": "Method 2", "relation": "variant", "note": "One algorithm whose step rule moves continuously between SG and trust-region regimes without a separate phase, but the gamma parameters are fixed or scheduled, not updated from predicted progress.", "pages": "p. 5"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "match the incumbent's theorem, win in the experiments", "evidence": "Every TRish guarantee is proved under SG's assumptions and set next to the SG bound of [2]; the practical advantage is claimed only from experiments.", "pages": "pp. 3, 9-10, 23"}
+  ],
+  "transferable": [
+   "Build a two-point unbiased gradient distribution that breaks the pure stochastic version of a deterministic device, and use it to justify the safeguard (pp. 4-5).",
+   "Make a piecewise step rule continuous in ||g|| so that all regimes fold into one expected-decrease inequality by conditioning on the sign event g^T grad f >= 0 (pp. 5-7).",
+   "Couple the regime-width parameter to the stepsize (gamma1-gamma2 = O(alpha)) to recover the incumbent's sublinear rate (pp. 11-12, 23).",
+   "Give the baseline a grid that covers the same effective-stepsize range with the same number of settings, and report how often each step regime fires (pp. 18-23)."
+  ],
+  "coauthors": "Katya Scheinberg, Rui Shi",
+  "quotes": [
+   {"text": "We argue in this paper that employing normalized steps in all iterations cannot lead to general convergence guarantees, which perhaps explains the additional assumptions required for convergence by [12].", "page": 3},
+   {"text": "We took care to make sure that the tuning procedure for TRish did not require more effort than the tuning used for the SG method that we have for comparison purposes.", "page": 18}
+  ]
+ },
+ {
+  "id": "D001",
+  "year": "2020",
+  "title": "Adaptive Stochastic Optimization",
+  "read_level": "full",
+  "contribution": "A position/survey article arguing that SG's tuning cost calls for adaptive stochastic methods. It presents a new every-iteration-potential framework for deterministic trust-region, line-search and cubic-regularization complexity, its stochastic generalization (via Blanchet et al.) covering STORM and a stochastic line search, and open problems such as stochastic optimal-complexity methods and stochastic TRACE.",
+  "problem_entry": "SG and variance-reduced methods are nonadaptive (prescribed batch sizes and stepsizes). Tuning per application costs weeks or months, and adaptive deterministic devices are hard to transfer because noisy function comparisons mislead (pp. 1-2).",
+  "key_idea": "Analyse adaptive methods through a potential Phi_k = nu(f - f*) + (1 - nu)*(stepsize term) that decreases on every iteration (Condition 4.1). The stochastic version asks for success with probability > 1/2 when alpha is small and for decrease in expectation (Condition 5.1, Theorem 5.2) (pp. 3-8).",
+  "assumptions": "Lipschitz gradient, models first-order accurate, an extra alpha_k <= tau||grad f|| imposed for consistency (pp. 3-4). Stochastic: model and estimates accurate with probabilities 1-delta1 and 1-delta2 under Taylor-like, gradient-norm or stochastic-gradient-norm conditions. The line search adds a variance bound on the function estimates (pp. 7-11).",
+  "proof_devices": [
+   "every-iteration potential with weight nu near 1 for TR, LS and cubic regularization (pp. 4-6)",
+   "redefining the stopping time at x_{k+1} for cubic regularization (p. 6)",
+   "four-way good/bad model x good/bad estimates case analysis with decrease proportional to possible increase (Figure 3, p. 10)",
+   "measurability/stopping-time diagnosis of why optimal-complexity proofs fail stochastically (p. 12)",
+   "reciprocal and log potentials for convex and strongly convex cases (pp. 6, 15-16)"
+  ],
+  "experiments": "One illustration: l2-regularized logistic regression on MNIST (5 vs rest), mini-batch 64, 10 epochs. SG at alpha 1 reaches about 98% and at alpha 0.01 stagnates near 90%; the adaptive batch/stepsize method competes with the best SG run from every initial stepsize. Run count and charging of the extra data accesses are not stated (pp. 2-3).",
+  "positioning": "Builds on Cartis-Scheinberg [8] and Blanchet et al. [2] and claims the deterministic framework as new. Criticizes stochastic cubic methods [28, 30] as sample average approximation in disguise, the interpolation assumption [29] as unreasonably strong, prescribed growing batches as nonadaptive, and the probabilistic Wolfe search [18] as lacking guarantees (pp. 2-3, 8, 11-12).",
+  "writing": "Magazine register: 'dirty secret' opening and an energy analogy, illustration before framework, figures instead of stochastic proofs, deterministic proofs in a supplement, open questions organized by obstacle (pp. 1-3, 10, 12, 15-16).",
+  "limits_future": "Framework simplified, with full details delegated to [8, 2]. Open: stochastic method with optimal deterministic complexity, a valid stopping time, stochastic TRACE without exact multipliers, error bounds that improve work complexity, separate increase/decrease factors, practical batch/stepsize rules (pp. 7, 12).",
+  "method_links": [
+   {"method": "Method 5", "relation": "evidence", "note": "Stated: tuning effort is part of a method's cost; problems cannot be solved once.", "pages": "pp. 1-2"},
+   {"method": "Method 4", "relation": "evidence", "note": "Audits rival analyses for whether their assumptions or accuracy measures fit practice: the interpolation assumption, and per-iteration accuracy at level eps that reduces to the deterministic case.", "pages": "pp. 11-12"},
+   {"method": "Method 5", "relation": "variant", "note": "The article's own illustration is one dataset with no run count and no statement on whether the adaptive method's extra mini-batch evaluations are charged.", "pages": "p. 2"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "every-iteration potential (objective gap + stepsize term)", "evidence": "Instead of counting successful and unsuccessful iterations, a weighted potential decreases on every iteration for TR, LS and cubic regularization, and in expectation in the stochastic setting.", "pages": "pp. 3-8, 10-11"}
+  ],
+  "transferable": [
+   "Analyse adaptive methods with Phi_k = nu(f - f*) + (1 - nu)h(alpha_k, ||grad f||), choosing nu so that unsuccessful iterations also reduce Phi (pp. 3-6).",
+   "Classify accuracy conditions on stochastic estimates by whether they need an unknown quantity (||grad f||), and prefer conditions in alpha_k||g_k|| that can be enforced by a sample-size loop (pp. 8-9).",
+   "For a stochastic trust-region proof, enumerate the four good/bad model/estimate cases and show the bad-bad increase is proportional to the possible decrease (p. 10).",
+   "When a deterministic proof fails to transfer, check whether the stopping time is still a stopping time for the algorithm's filtration (p. 12)."
+  ],
+  "coauthors": "Katya Scheinberg",
+  "quotes": [
+   {"text": "Tuning these parameters means that problems cannot be solved once; they need to be solved numerous times", "page": 2},
+   {"text": "By contrast, in the framework presented here, the analysis is structured around a measure in which progress is made in all iterations.", "page": 3}
+  ]
+ },
+ {
+  "id": "S005",
+  "year": "2020",
+  "title": "Gradient sampling methods for nonsmooth optimization",
+  "read_level": "full",
+  "contribution": "A five-author review of gradient sampling (arXiv v1 read). It restates the algorithm with Kiwiel's modifications and a differentiability-only requirement, corrects the original theory (the set D must have full measure, with a counterexample to the key property), and surveys enhancements (adaptive sampling, quasi-Newton/BB, differentiability-check avoidance), extensions (Riemannian, SQP-GS, derivative-free) and applications.",
+  "problem_entry": "Steepest descent can converge to nonstationary points of nonsmooth f. Since practical nonsmooth functions are differentiable almost everywhere, sampled gradients suffice; the review emphasizes GS's simplicity (pp. 1-2).",
+  "key_idea": "Min-norm element of the convex hull of m >= n+1 gradients sampled in B(x_k, eps_k), as a stabilized steepest-descent direction with a line search; radius and target reduced on small ||g_k|| (pp. 2, 4).",
+  "assumptions": "f locally Lipschitz and continuously differentiable on an open full-measure set D (corrected from 'open dense'). Only differentiability is required at iterates and samples. The full-measure assumption usually holds for semialgebraic or tame f. The non-Lipschitz case is outside the theory (pp. 5-7, 13-16).",
+  "proof_devices": [
+   "adapted global convergence theorems from Kiwiel with the modifications listed (pp. 5-6)",
+   "Property 1 proved via Clarke's null-set-free characterization plus Caratheodory (pp. 13-14)",
+   "Example 1: Lipschitz function built from the indicator of an open dense set of small measure, breaking Property 1 without full measure (pp. 14-15)",
+   "explicit max-type function with positive probability of landing on a kink, showing the differentiability check is needed (p. 8)",
+   "Caratheodory argument for m >= n+1 samples (p. 9)"
+  ],
+  "experiments": "n/a (review; no new experiments. Reports others' results, e.g. BFGS-SQP faster than SQP-GS while SQP-GS finds better solutions given time, judged by relative minimization profiles, p. 12).",
+  "positioning": "Continuity with BLO02b/BLO05/Kiw07, Kiwiel's changes credited one by one, the founding oversight corrected openly with its discoverers named. Extensions surveyed neutrally, including a feasible two-phase SQP-GS variant (pp. 3, 5, 10-11).",
+  "writing": "A single theme of simplicity stated at start and end, numbered list of algorithm differences with reasons, technical corrections in appendices, the main weakness stated bluntly and followed by remedies (pp. 2-4, 6, 12-16).",
+  "limits_future": "Open: finite termination with a fixed radius, non-Lipschitz semialgebraic f, good behavior on high-multiplicity spectral problems, links to stochastic-gradient analysis of smoothed f and to model-based stochastic methods; caution that GS's line search is crucial in practice (pp. 6-7, 12-13).",
+  "method_links": [
+   {"method": "Method 2", "relation": "evidence", "note": "SQP-GS penalty update yields either feasible stationary limits or, with the penalty driven to zero, stationarity for a constraint-violation measure, all inside one algorithm.", "pages": "p. 10"},
+   {"method": "Method 4", "relation": "evidence", "note": "The BFGS-SQP vs SQP-GS verdict is given by relative minimization profiles (solution quality over time), not by speed alone.", "pages": "p. 12"},
+   {"method": "Method 3", "relation": "variant", "note": "The deliberately constructed breaking object is a counterexample to a proof property (Example 1), not a constructed test problem; the authors state they have no counterexample to convergence itself.", "pages": "pp. 12, 14-15"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "correct the founding proof in public", "evidence": "The review names the 12-year oversight and its discoverers, proves the needed property, gives a counterexample to the weaker assumption, and relaxes the algorithm requirement in appendices.", "pages": "pp. 5, 12-16"}
+  ],
+  "transferable": [
+   "In a review of your own line, list each deviation of the algorithm statement from the original papers with its reason and effect on the theorems (pp. 3-4).",
+   "Isolate the property a proof needs, prove it under the stronger assumption, give a counterexample to the property under the weaker one, and say separately whether convergence itself can fail (pp. 12-15).",
+   "Show that a theoretical safeguard is needed in practice with an explicit function and a positive-probability region of starting points (p. 8).",
+   "Write the subproblem as a primal-dual QP pair to identify its cost with a known method's subproblem and expose warm starts (pp. 4, 9)."
+  ],
+  "coauthors": "James V. Burke, Adrian S. Lewis, Michael L. Overton, Lucas E. A. Simoes",
+  "quotes": [
+   {"text": "This oversight went unnoticed for 12 years until J. Portegies and T. Mitchell brought it to our attention recently.", "page": 5},
+   {"text": "Its main weakness is its per-iteration cost, most notably due to the need to compute m ≥ n + 1 gradients in every iteration and solve a corresponding QP.", "page": 6}
+  ]
+ },
+ {
+  "id": "S018",
+  "year": "2020",
+  "title": "ADMM for multiaffine constrained optimization",
+  "read_level": "full",
+  "contribution": "Proves that plain multiblock ADMM on problems with multiaffine constraints and nonconvex/nonsmooth objectives converges, for sufficiently large penalty, to constrained stationary points (to a single point under the KL property), under assumptions whose tightness is discussed one by one. Gives closed-form-subproblem formulations for NMF, dictionary learning, risk parity, nonconvex reformulations and neural networks (arXiv v3 read).",
+  "problem_entry": "ADMM theory, including nonconvex multiblock results, assumes linear constraints. Multiaffine constraints are affine in each block when the others are fixed, and applications (NMF, dictionary learning, neural networks) lacked convergence proofs (pp. 2-3, 6).",
+  "key_idea": "Keep ADMM unchanged and identify the problem structure (P) under which it works: a final block whose linear part absorbs feasibility (Im Q contains Im A) and is smooth/strongly convex. Slack and splitting reformulations supply that structure (pp. 4, 7-11, 32-33).",
+  "assumptions": "Assumption 1: subproblems attain optima; Im(Q) contains Im(A); coercivity on the feasible set; structured final-block objective h + g1(strongly convex) + g2(Lipschitz differentiable). Assumption 2 adds a smooth coupling F plus separable terms and, per block, strengthened convexity or an injective linear appearance. Admittedly long; exact penalties excluded (pp. 7-11, 13, 31-32).",
+  "proof_devices": [
+   "layered general ADMM lemmas: smooth constraints, then multiaffine, then separable objective (pp. 15-20)",
+   "exact augmented-Lagrangian change through the block-linear term (Lemma 6.8, pp. 16-17)",
+   "absorbing sub-block condition giving a lower bound on the augmented Lagrangian for large rho (Lemma 6.12, pp. 17-18)",
+   "primal decrease dominating multiplier increase, then summability (Lemma 7.5, Corollary 7.8, pp. 21-23)",
+   "KL property via Attouch-Bolte-Svaiter H1-H2 for whole-sequence convergence (pp. 14-15, 24-25)",
+   "two-variable counterexample min x^2+y^2 s.t. xy=1 showing Im(Q) contains Im(A) is needed (Theorem 4.6, pp. 9, 28)",
+   "showing a rival assumption alone implies the conclusion (Remark 6.6, p. 16)"
+  ],
+  "experiments": "Appendix E: synthetic spherical blind deconvolution; ADMM-exact (violates A1.3) vs ADMM-slack (satisfies it), three noiseless and three noisy instances, objective over 60 s and kernel snapshots. Similar on noiseless data with a sublinear empirical rate; ADMM-exact diverges on noisy data as multipliers grow. No external baseline or run statistics (pp. 33-37).",
+  "positioning": "Extends nonconvex linearly-constrained ADMM [57, 33, 28, 25] with assumptions said to be no stronger. Uses the 3-block divergence example [9] for necessity; criticizes [6] (subproblems may lack solutions, per [11]) and [53] (no convergence proof); mentions but does not compare with monitored Lagrangian methods [4] (pp. 2-3, 6-7, 9).",
+  "writing": "Main results first, then a long assumption-by-assumption discussion of tightness, technical material quarantined in §5 and appendices, a table of assumptions, calibrated hedges ('we suspect', 'not tight') (pp. 7-12, 31-32).",
+  "limits_future": "Im(Q) contains Im(A) and smooth final-block terms are needed, so exact penalties are excluded; rho must be sufficiently large; ReLU needs smoothing or the Appendix B formulation; the alternative assumptions are not tight; no rate theory (pp. 6-7, 9-11, 34).",
+  "method_links": [
+   {"method": "Method 3", "relation": "variant", "note": "The deliberately broken object is a two-variable problem violating one assumption, used to prove the assumption is needed (theory), not a constructed benchmark set.", "pages": "pp. 9, 28"},
+   {"method": "Method 4", "relation": "evidence", "note": "Audits rival analyses' assumption (successive differences go to zero) by proving it alone implies stationarity of limit points.", "pages": "p. 16"},
+   {"method": "Method 5", "relation": "evidence", "note": "Weak form: the experiment varies exactly one component (slack reformulation) and reports where it matters (noisy data) and where it does not (noiseless).", "pages": "pp. 34-36"},
+   {"method": "Method 2", "relation": "variant", "note": "Counter-case: the penalty rho is fixed 'sufficiently large' with an analysis bound; there is no steering/update rule. Curtis is third author, so weak evidence for his own habits.", "pages": "pp. 7, 9"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "assumption tightness audit", "evidence": "Each assumption gets either a counterexample showing it is needed (Theorem 4.6, the [57] example) or an explicit 'not tight' statement with the reason it was kept (simplicity, checkability).", "pages": "pp. 9-11"}
+  ],
+  "transferable": [
+   "Organize a convergence paper as general facts under minimal assumptions, then specialization, so the general section is reusable (pp. 9, 15).",
+   "Tabulate many-case assumptions in an appendix (pp. 31-32).",
+   "For each assumption give a two-variable counterexample when it is necessary, or an explicit 'not tight' statement with the reason it was chosen (pp. 9-11).",
+   "Test a rival analysis's assumption by proving it alone yields the conclusion (p. 16).",
+   "When the theory forces an inexact reformulation, compare the theory-compliant and the natural formulation on data that violate the natural one's exactness (noise) (pp. 34-36)."
+  ],
+  "coauthors": "Wenbo Gao, Donald Goldfarb",
+  "quotes": [
+   {"text": "It would greatly broaden the scope of ADMM, and simplify modeling, if this condition could be relaxed, but unfortunately this condition is tight for general problems.", "page": 9},
+   {"text": "This suggests that for practical applications, where a certain amount of noise is unavoidable, the formulation (SBD1) with the slack variable Z is both more practical, as well as being provably convergent within our framework.", "page": 36}
+  ]
+ }
+]

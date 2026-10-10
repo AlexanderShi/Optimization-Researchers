@@ -1,0 +1,166 @@
+[
+  {
+    "id": "S068",
+    "year": "2026",
+    "title": "Projected stochastic momentum methods for nonlinear equality-constrained optimization for machine learning",
+    "read_level": "full",
+    "contribution": "Heavy-ball and Adam extensions of stochastic Newton-SQP for nonlinear equality constraints, with momentum taken over null-space-projected gradients, O(1/K)-to-noise-floor guarantees modelled on Defossez et al., and physics-informed learning experiments where projected Adam beats soft-constrained and projection-less Adam.",
+    "problem_entry": "Momentum methods dominate unconstrained ML; the stochastic SQP of Berahas-Curtis-Robinson-Zhou has none; a prior constrained Adam lacks guarantees and averages raw gradients (pp. 2-3, 5).",
+    "key_idea": "Split the step into a normal component and a null-space component and apply the momentum/Adam averages to P_k g_k, re-projecting the average, so J_k d_k = -rho_k c_k whatever the momentum (pp. 5, 9, 11).",
+    "assumptions": "Stochastic objective, deterministic C1 constraints; on a set containing the iterates: bounded f below, bounded c, grad f, J, Lipschitz grad f and J, sigma_min(J) >= sigma_min (LICQ); unbiased projected gradient with bounded variance; bounded ||u_k||_inf for Adam (pp. 3, 5-6, 11).",
+    "proof_devices": [
+      "Lipschitz continuity of P(x)grad f(x) via pseudoinverse algebra, Lemma 3.1 (p. 6)",
+      "analysis-only l1 merit phi = tau f + ||c||_1 with one-step bound (13) (p. 7)",
+      "geometric unrolling of momentum and Jensen on normalized weights, Lemma 3.4 (p. 7)",
+      "fresh-gradient / stale-drift / constraint split of grad f^T d with i-dependent Young weights, Lemma 3.5 (pp. 8-9)",
+      "orthogonality of normal and projected components to separate ||d||^2 (pp. 8, 10)",
+      "fixed tau chosen by (21) so objective and constraint coefficients coincide, Theorem 3.1 (p. 10)",
+      "Adam analysis borrowed term by term from Defossez et al. with modified bias correction and ordered parameter choice beta2 -> alpha -> K, Theorem 3.2 (pp. 11-18)"
+    ],
+    "experiments": "Four physics-informed problems (spring, 1-butene ODE, Burgers MLP; Darcy FNO) with 3-50 hard constraints; SQP-Heavyball, SQP-Adam vs soft-constrained Adam and projection-less Adam on the same objective; two learning rates each; mini-batch mean +- std over 5 runs; Burgers tie with Adam(unc) and poor heavy-ball printed (pp. 20-24).",
+    "positioning": "Extends his own stochastic SQP [2] and models the analysis on Defossez et al. [10]; distinguishes from Marquez-Neila et al. [21] and O'Neill's Adagrad-type SQP [24]; hard constraints at training time vs soft constraints and constraint-embedding layers (pp. 2-3, 19).",
+    "writing": "Priority claim ('first paper'), contribution ranked by practical performance, a reading paragraph after each theorem, hedged scale claims ending in a conjecture about larger networks (pp. 3, 11, 18-19, 24).",
+    "limits_future": "Non-vanishing alpha*C/tau floor; assumptions on the iterates; small networks, two learning rates, 5 runs; only future direction is the conjecture that gains carry to larger networks (pp. 11, 19-24).",
+    "method_links": [
+      {"method": "Method 5", "relation": "evidence", "note": "Same objective for all methods 'to ensure a fair comparison'; incumbent tie and heavy-ball failure printed; but only two learning rates and no rival tuning protocol.", "pages": "pp. 20-24"},
+      {"method": "Method 2", "relation": "variant", "note": "No steering: merit parameter fixed by constants in the analysis, no merit line search, balance set by user-chosen rho_min and h_max; methodology explicitly avoids penalty/augmented-Lagrangian solves (Tension 3).", "pages": "pp. 5, 10-11, 19"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Project before you average", "evidence": "Momentum and Adam moments are taken over null-space-projected stochastic gradients and re-projected, leaving the linearized constraint step exact; called critical theoretically and practically.", "pages": "pp. 3, 5, 9"}
+    ],
+    "transferable": [
+      "Average P_k g_k rather than g_k when adding momentum or Adam to an equality-constrained method, keeping the normal step separate (pp. 5, 9).",
+      "Choose an analysis-only merit parameter so that the objective and constraint coefficients in the summed descent bound coincide (p. 10).",
+      "Model a constrained analysis line by line on a clean unconstrained proof and cite each reused lemma (pp. 12-13).",
+      "For hard-vs-soft constrained training comparisons, give all methods the identical objective and let the constrained ones only add constraints (p. 20)."
+    ],
+    "coauthors": "Qi Wang, Christian Piermarini, Yunlang Zhu",
+    "quotes": [
+      {"text": "A critical feature of each extension is that the momentum terms are implemented with projected gradient estimates, rather than with the gradient estimates themselves.", "page": 2},
+      {"text": "Another key feature of this methodology is that one does not solve the hard-constrained training problem with a penalty-based (e.g., augmented Lagrangian) method.", "page": 19}
+    ]
+  },
+  {
+    "id": "S087",
+    "year": "2026",
+    "title": "A Local-Linearly Convergent Algorithm for Nonconvex Equality-Constrained Optimization",
+    "read_level": "full",
+    "contribution": "Shows that the Gradient-Eigenstep method on Fletcher's augmented Lagrangian reduces to linearly convergent gradient descent near strong second-order points, and uses this to prove that progressive sampling needs only N log(1/eps) full-sample gradient work in its epsilon-dependent term, versus O(N max{eps^-2, zeta^-3}) for a direct solve.",
+    "problem_entry": "Fletcher's AL is exact and smooth and Goyens-Eftekhari-Boumal's method has global second-order complexity, but its local behaviour was unknown; that local rate is what the authors' progressive-sampling scheme needs (pp. 2-3, 14).",
+    "key_idea": "With small fixed step and penalty above a threshold, the eigenstep branch never fires and the line search accepts the fixed step, so the method is gradient descent on F_rho with a linear rate; warm-started sampled stages then cost only logarithmically in eps (pp. 9-14, 24-25).",
+    "assumptions": "C2 f and c; compact sublevel set of ||c||; Jacobian singular values bounded below near it; Lipschitz Hessians of f + c^T y and ||c||^2; start near a strong second-order point, rho > rho_beta, small eps and t; for sampling, uniform bounds over subsamples, bounded sample variances and a strongly Morse full problem (pp. 4-5, 9, 15-16).",
+    "proof_devices": [
+      "Hessian of Fletcher's AL decomposed into null/range projections after differentiating the least-squares multiplier normal equations, giving separate curvature conditions, Lemma 2.1 (pp. 5-8)",
+      "three-invariant induction (iterate in C_R, gradient contraction, eigenvalue lower bound via Weyl-type perturbation) (pp. 10-12)",
+      "verification that the eigenstep test never fires and the Armijo test accepts the fixed step, so the algorithm reduces to gradient descent (pp. 13-14)",
+      "check of the cited method's assumptions A1-A5 one by one for sampled problems, Lemma 3.1 (pp. 17-18)",
+      "sign argument: strong Morse |d^T H d| >= beta plus approximate second-order stationarity gives d^T H d >= beta', Lemma 3.3 (pp. 19-22)",
+      "projection perturbation bounds from Stewart (p. 21)",
+      "monotonicity of the tolerance function in (b, kappa, rho) to obtain one uniform parameter interval, Lemma 3.4 (pp. 23-24)",
+      "geometric sum of per-stage sample costs, Theorem 3.1 (pp. 24-27)"
+    ],
+    "experiments": "none (theoretical; data statement p. 27; practical evidence delegated to [1], p. 22).",
+    "positioning": "Fletcher, Di Pillo-Grippo, Estrin-Friedlander-Orban-Saunders, Goyens-Eftekhari-Boumal; extends another group's algorithm rather than proposing a rival and completes the authors' own progressive-sampling paper [1] (pp. 3, 14, 16).",
+    "writing": "Twofold contribution repeated in abstract, introduction and conclusion; intuition paragraph on why rho must be large in the range space; explicit hedge that worst-case parameter rules are not needed in practice; performance measure justified before the theorem (pp. 2-3, 9, 22, 24, 27).",
+    "limits_future": "Local start required; thresholds depend on unknown constants; global strong-Morse assumption; no experiments; no future directions stated (pp. 9, 16, 22-23, 27).",
+    "method_links": [
+      {"method": "Method 2", "relation": "variant", "note": "Penalty parameter fixed above an assumed threshold or chosen in an interval; no update rule designed; builds on a smooth exact augmented Lagrangian (Tension 3).", "pages": "pp. 9, 25"},
+      {"method": "Method 4", "relation": "variant", "note": "Measure (individual gradient/Jacobian evaluations) stated and justified and worst-case parameter rules disowned for practice, yet a worst-case complexity gain is produced without measurement (Tension 1).", "pages": "pp. 22, 24"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Local rate as complexity lever", "evidence": "A local-linear rate for an existing global-complexity method turns warm-started progressive-sampling stages into a bound whose eps-dependent term is N log(1/eps).", "pages": "pp. 3, 24-27"},
+      {"pattern": "Analyse someone else's algorithm", "evidence": "Extends the analysis of Goyens-Eftekhari-Boumal's Gradient-Eigenstep method instead of proposing a new method.", "pages": "pp. 3, 13-14"}
+    ],
+    "transferable": [
+      "Decompose a penalty-function Hessian into null-space and range-space blocks to read off separate curvature conditions (pp. 7-8).",
+      "Prove that a complex method reduces to a simple one locally by verifying each branch test and line-search acceptance at the simple step (pp. 13-14).",
+      "Use strong Morse plus approximate second-order stationarity to upgrade curvature lower bounds via a sign argument (pp. 21-22).",
+      "Tie all per-stage tolerances and step sizes to one parameter mu in (0,1) so no stage is solved disproportionately tightly (p. 22)."
+    ],
+    "coauthors": "Lingjun Guo, Daniel P. Robinson",
+    "quotes": [
+      {"text": "In this case, the algorithm reduces to a gradient descent algorithm applied to minimize Fletcher’s augmented Lagrangian.", "page": 2},
+      {"text": "We emphasize, however, that for good practical performance, we do not expect these parameter requirements to be absolutely necessary.", "page": 22}
+    ]
+  },
+  {
+    "id": "S088",
+    "year": "2026",
+    "title": "NonOpt: Nonconvex, Nonsmooth Optimizer",
+    "read_level": "full",
+    "contribution": "Software paper (read as arXiv v1 / COR@L TR 25T-005) for NonOpt 2.0, a C++ framework unifying gradient sampling and proximal bundle with quasi-Newton models, adding a tailored predictor-corrector interior-point solver for the dual QP subproblems, with NonOpt-only experiments on synthetic QPs, 20 scalable test problems and large image denoising.",
+    "problem_entry": "Consolidate a decade of nonsmooth algorithms into one extensible open-source code; no other actively developed open-source general-purpose locally Lipschitz solver is known (pp. 2-3, 14).",
+    "key_idea": "One piecewise-quadratic model in an infinity-norm trust region covers both gradient sampling and bundle (only the point set differs), solved through its dual QP by a dual active-set or a new Mehrotra/Curtis-Nocedal interior-point solver chosen by subproblem size (pp. 5-6, 9-13, 17).",
+    "assumptions": "f locally Lipschitz on the interior of its domain for well-definedness; guarantees need real-valued f plus C1 on a full-measure open set (GS) or weak upper semismoothness (bundle); gradient strategy has no general guarantee (pp. 3-4, 8).",
+    "proof_devices": [
+      "no new theorems; guarantees cited (p. 4)",
+      "primal step recovered uniquely from a non-unique dual solution, d = -W(G omega + gamma) (pp. 5-6)",
+      "splitting gamma into positive and negative parts to get a standard-form QP (pp. 9-10)",
+      "G omega as approximate minimum-norm Clarke subgradient, with Caratheodory's n+1 bound explaining why exact stationarity tests are too costly (p. 18)"
+    ],
+    "experiments": "NonOpt-only (p. 14): 900 synthetic QPs built from prescribed solutions, DAS vs IPM CPU time by n, d* type and m (pp. 15-17); 20 scalable problems at n = 1000, three direction strategies, speed (~85 s total) vs accuracy (~580 s total) settings with iterations, evaluations, final f, CPU (pp. 19-20, Tables 2-3 pp. 26-27); 488,235-variable image denoising with four regularizers, parameters tuned against the clean image (pp. 20-22, Table 4 p. 27); single runs.",
+    "positioning": "Self-lineage of codes from Matlab to SVANO to NonOpt; DAS generalizes Kiwiel; step sizes from his own Curtis-Nocedal 2007; default behaviour likened to Lewis-Overton BFGS; heuristic termination as in LMBM and HANSO (pp. 2, 9, 11-12, 18-19).",
+    "writing": "User-manual register: per-module lists of most influential options with defaults; candid warnings about critical parameters and expensive cases; magic numbers attributed to extensive experimentation (pp. 7-9, 12, 14).",
+    "limits_future": "Heuristic termination; m << n not covered by the QP study; expensive re-solves when the trust region binds at large n; no external comparison; ground-truth tuning in denoising; future work implied via extensibility and swappable linear algebra (pp. 3, 14, 17-18, 22).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "QP solver tailored to the outer method: inexact termination tests from [7], IPM written for the specific dual, trust-region variables only when needed, DAS/IPM switch by size.", "pages": "pp. 3, 9, 14, 17"},
+      {"method": "Method 5", "relation": "evidence", "note": "Strategies as interchangeable objects (direction, line search, QP solver, Hessian storage, termination); prints that the simplest gradient strategy is often fastest.", "pages": "pp. 7-9, 12, 26"},
+      {"method": "Method 5", "relation": "variant", "note": "No external rival at all (justified by lack of maintained competitors); single runs; denoising parameters tuned on the ground truth (Tension 2).", "pages": "pp. 14, 22"},
+      {"method": "Method 4", "relation": "evidence", "note": "Ideal stationarity test discussed as impractical; results judged by final f against known f*, not termination flags.", "pages": "pp. 17-20, 26-27"},
+      {"method": "Method 3", "relation": "variant", "note": "Constructed QP instances with known solutions (not infeasible/degenerate variants), with the uncovered case m << n stated.", "pages": "pp. 15-17"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Speed vs accuracy twin runs", "evidence": "Same 20-problem set run with speed and accuracy tolerances, total wall times (85 s vs 580 s) reported to show the price of digits.", "pages": "pp. 15, 19-20"}
+    ],
+    "transferable": [
+      "Generate QP test instances backwards from a prescribed solution and KKT-consistent multipliers to control correctness and active-set difficulty (pp. 15-16).",
+      "In a software paper, document per module only the few options that most affect performance, with defaults (pp. 7-9).",
+      "Solve the reduced subproblem without rarely active constraints first and re-solve the full one only if the dropped constraint is violated (p. 14).",
+      "Run one test set under speed and accuracy settings and report total time for each (pp. 15, 20)."
+    ],
+    "coauthors": "Lara Zebiane",
+    "quotes": [
+      {"text": "Perhaps the most challenging issue when it comes to the implementation of a general-purpose algorithm for locally Lipschitz minimization is selecting effective termination criteria.", "page": 17},
+      {"text": "However, since NonOpt performed favorably in these comparisons, LMBM is no longer under active development", "page": 14}
+    ]
+  },
+  {
+    "id": "S089",
+    "year": "2026",
+    "title": "Robust Server Defense Against Unreliable Clients in One-Shot Fair Collaborative Machine Learning",
+    "read_level": "full",
+    "contribution": "A bilevel server-side reweighting of client proxy data with fairness penalties and a tiny trusted root dataset (read as arXiv v1), which keeps group fairness when unreliable clients are the majority, where loss-based robust weighting fails.",
+    "problem_entry": "One-shot collaborative learning removes iterative server correction; existing defenses are multi-round and assume unreliable clients are a minority (pp. 1-3).",
+    "key_idea": "Inner weighted logistic regression on proxy data, outer loss on a trusted root set with decision-boundary-covariance fairness constraints moved into penalties; hypergradients by implicit differentiation and simplex projection (pp. 4-5).",
+    "assumptions": "Linear logistic model; binary sensitive attribute and labels; root dataset of about 0.5% drawn from each client's distribution (admitted limitation); DBC fairness surrogate; no theory (pp. 4-5, 8).",
+    "proof_devices": [
+      "n/a (no theorems)",
+      "hypergradient through the inner Hessian linear system (13) (p. 5)",
+      "sort-based Euclidean projection onto the simplex, Algorithm 3 (p. 4)"
+    ],
+    "experiments": "Law School and Dutch, K = 5 clients, 20/40/60% unreliable, ideal and realistic scenarios, 5 seeds; accuracy, |SPD|, |EOD| on reliable clients' test data only; baselines unweighted, FedASL and FedNolowe adapted to one shot; fixed penalty schedule x10 every 400 iterations; fairness much better at 60% (e.g. 0.0403 vs 0.4948), rivals' higher accuracy printed, EO accuracy drop up to about 7 points (pp. 5-8).",
+    "positioning": "Against multi-round robust aggregation, anomaly filtering and trust weighting (root-dataset idea credited to FLTrust-type work) and multi-round fairness-aware FL; builds on the authors' bilevel synthetic-data paper [3] (pp. 2-3, 6, 8).",
+    "writing": "IEEE conference style with three bullet contributions; limitation sentence repeated verbatim; abstract's 'consistently outperforming' and 'little accuracy loss' framed on fairness while accuracy favours rivals (pp. 1-2, 4, 8).",
+    "limits_future": "Root-dataset dependence, linear model, two datasets, five clients, no theory, fixed penalty schedule; no future directions (pp. 4, 6, 8).",
+    "method_links": [
+      {"method": "Method 2", "relation": "contradiction", "note": "Fairness constraints handled by a penalty raised on a fixed timetable (x10 every 400 iterations), the classical schedule Method 2 opposes (Tension 3).", "pages": "p. 6"},
+      {"method": "Method 5", "relation": "evidence", "note": "Rivals adapted to the protocol with the adaptation described, same partitions, rivals' accuracy wins printed, rho_s = 0 ablation, 5-seed averages.", "pages": "pp. 6-8"},
+      {"method": "Method 3", "relation": "evidence", "note": "Scenarios constructed to break the rivals' majority assumption (60% unreliable) and an ideal scenario isolating the mechanism.", "pages": "pp. 6-7"},
+      {"method": "Method 4", "relation": "variant", "note": "Evaluation on reliable clients only is justified openly, but the abstract's accuracy claim glosses over the EO accuracy drop.", "pages": "pp. 1, 6, 8"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Trusted audit set as outer objective", "evidence": "A 0.5% trusted root dataset is the outer objective of a bilevel reweighting of untrusted client data.", "pages": "pp. 4-5"}
+    ],
+    "transferable": [
+      "Bilevel reweighting of untrusted data: inner weighted ERM, outer loss on a small trusted set, implicit-differentiation hypergradient, sort-based simplex projection (pp. 4-5).",
+      "In simulations, rank clients by their own metric to decide deterministically which are unreliable and push the unreliable fraction past 50% (p. 6).",
+      "Show learned weights in an idealized scenario as a mechanism check before headline metrics (p. 7).",
+      "Adapt rivals built for another protocol minimally, describe the adaptation and keep their published hyperparameters (p. 7)."
+    ],
+    "coauthors": "Chia-Yuan Wu, Daniel P. Robinson",
+    "quotes": [
+      {"text": "This reliance on a root dataset is a limitation that may not be feasible in all scenarios.", "page": 4},
+      {"text": "This adaptation ensures a fair comparison under the one-shot communication constraint.", "page": 7}
+    ]
+  }
+]

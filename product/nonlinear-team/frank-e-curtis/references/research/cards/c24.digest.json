@@ -1,0 +1,83 @@
+[
+  {
+    "id": "S075",
+    "year": "2024",
+    "title": "Derivative-free bound-constrained optimization for solving structured problems with surrogate models",
+    "read_level": "full",
+    "contribution": "A model-based trust-region DFO framework for box-constrained composite problems h(F(x)) that may use surrogate or history-based regression values at interpolation points, with accuracy tied to the trust-region radius, a bound-respecting interpolation-set routine and a convergence proof (arXiv v3 pp. 2, 11-13, 17-21).",
+    "problem_entry": "Black-box evaluations are the bottleneck; existing model-based DFO methods never use cheap approximate values at interpolation points, although surrogates or evaluations from related, previously solved instances exist (pp. 1-2, 5-7).",
+    "key_idea": "Keep the standard fully-linear trust-region DFO framework and let interpolation values be approximations with error at most kappa_app*delta_k, delta_k = c_app*Delta_k^2, while iterates and trial points are still evaluated exactly (pp. 4, 11-12).",
+    "assumptions": "Fi C1 with Lipschitz values/gradients, h C2 Lipschitz with bounded derivatives, f bounded below, noise-free sure accuracy, unrelaxable box; fully linear models every iteration assumed for simplicity (Remark 1) (pp. 7-9, 12-13, 19).",
+    "proof_devices": [
+      "Fully linear models from approximate interpolation values, adapting Wild's Theorem 4.1 with an extra kappa_app*Delta^2 term (Lemma 2.4, p. 10; pp. 29-30)",
+      "Standard trust-region DFO lemma chain B.1-B.7 to lim pi_k^f = 0 (Theorem 2.8, p. 13; pp. 33-37)",
+      "Explicit well-poisedness threshold xi for +/- null-space directions projected onto the box (Lemmas 3.1-3.4, Theorem 3.5, pp. 15-17)",
+      "Projection test equals the last pivot of a QR factorization (Lemma 3.6, p. 18)",
+      "Regression error bound via translation invariance and affine weights beta^T 1 = 1, then ||beta||_1 bound through sigma_min (Lemmas 4.2-4.3, Theorem 4.4, pp. 20-21)"
+    ],
+    "experiments": "Python implementation; AlgH vs in-framework ablation Alg-empty (no history) on the COPS methanol-to-hydrocarbons least-squares problem, T = 100 related instances, budget 2p(nx+1) = 252 evaluations, 100 macro replications with a 1.96 sigma/sqrt(N) band; other problems tested but not shown; no external DFO code run (pp. 22-25).",
+    "positioning": "Extends the convex-constrained trust-region DFO frameworks of Hough-Roberts [26] and Conejo et al. [10] and the structure-exploiting least-squares line (DFO-GN, POUNDERS, DFLS); credits Conn-Vicente for prior-value reuse without a mechanism (pp. 6-7, 11-12).",
+    "writing": "One 'distinguishing feature' sentence in abstract and conclusion; proofs moved to a supplement 'for completeness'; claim wording ('outperforms a state-of-the-art DFO algorithm') outruns the in-framework ablation actually run (pp. 1-2, 13, 22, 24-25).",
+    "limits_future": "Limits visible but uncollected: exact evaluations still needed at iterates/trial points, noise-free, fully linear models every iteration, box only, one problem shown; future: extension to closed convex sets conjectured (pp. 4, 7, 12, 23).",
+    "method_links": [
+      {"method": "Method 1", "relation": "variant", "note": "Accuracy of the cheap inner quantity (surrogate/regression value) is derived from what the trust-region globalization needs, delta_k = c_app*Delta_k^2, keeping fully linear models; inner object is a function-value surrogate, not a linear/QP solve.", "pages": "pp. 4, 10-11"},
+      {"method": "Method 5", "relation": "evidence", "note": "Rival built inside the same framework with one component switched off (Alg-empty); 100 macro replications with confidence band.", "pages": "pp. 2, 22, 24"},
+      {"method": "Method 5", "relation": "variant", "note": "No external code run although DFO-LS/POUNDERS discussed; one of several problems shown; abstract calls the in-framework ablation 'a state-of-the-art DFO algorithm'.", "pages": "pp. 1, 7, 23, 25"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "amortize evaluations across a sequence of related instances", "evidence": "History of black-box values from previously solved instances feeds a regression surrogate with a provable accuracy radius; gain grows with history size (over half the budget approximated by t ~ 10).", "pages": "pp. 5-6, 18-22, 24"}
+    ],
+    "transferable": [
+      "Tie the allowed error of cheap approximations to the square of the trust-region radius so fully linear theory applies unchanged (pp. 4, 11).",
+      "Bound a regression estimate's absolute error through affine weights (sum to one) and the l1 norm of the weight vector (pp. 20-21).",
+      "Replace a nonconvex geometry subproblem by +/- coordinate-direction projections onto the box and prove an explicit well-poisedness threshold (p. 17).",
+      "Identify a geometric well-poisedness test with a QR pivot so the code check and the proof quantity coincide (p. 18).",
+      "Plot the mechanism count (evaluations replaced by approximations) beside the cumulative-improvement curve with a confidence band over macro replications (p. 24)."
+    ],
+    "coauthors": "Shima Dezfulian, Andreas Wächter",
+    "quotes": [
+      {"text": "The main difference between our algorithm and other modern model-based DFO frameworks is that function value approximations may be used at interpolation points in place of exact function values.", "page": 12},
+      {"text": "Importantly, the actual value of κapp need not be known by our algorithmic framework.", "page": 4}
+    ]
+  },
+  {
+    "id": "S076",
+    "year": "2024",
+    "title": "Incremental quasi-Newton algorithms for solving a nonconvex, nonsmooth, finite-sum optimization problem",
+    "read_level": "full",
+    "contribution": "Five incremental BFGS variants (direct, DC, smoothed, locally convexified, strongly convexified) for the nonsmooth nonconvex transductive SVM objective, tested on 12 data sets against a bundle method (arXiv v1 pp. 2, 10-19).",
+    "problem_entry": "The TSVM objective is nonconvex and nonsmooth and the IQN/IBFGS method has guarantees only for convex smooth sums; the paper asks whether IQN strategies are nonetheless viable (pp. 2-3).",
+    "key_idea": "Keep the IBFGS skeleton and change only how the gradient displacement is formed (DC subgradient freeze, smoothing, weak-convexity shift 2*rho*s, regularizer redistribution) so curvature pairs stay positive and updates are not skipped (pp. 7, 10-13).",
+    "assumptions": "None for the tested methods (guarantees 'elusive'); locally Lipschitz objective with Clarke generalized gradients; a cited local superlinear guarantee holds only for a fixed strongly convex, Lipschitz-Hessian approximation with cyclic order (pp. 2, 9, 13-15).",
+    "proof_devices": [
+      "DC split max{0,1-|t|} = max{0,|t|-1} - (|t|-1) (p. 4)",
+      "Weak convexity of the smoothed objective from convex Lipschitz outer composed with smooth inner, explicit rho_i >= 2(||x_i||^2+1)/mu blowing up as mu -> 0 (Proposition 2.4, pp. 6-7)",
+      "Strong convexity plus Lipschitz gradient gives two-sided curvature bounds (Lemma 2.5, p. 8)",
+      "Local superlinear convergence cited from Mokhtari et al. (Lemmas 3.2-3.3, Theorem 3.4, pp. 14-15)"
+    ],
+    "experiments": "12 data sets, 10-100% labelled data, ten-fold CV on sets 1-8; baseline TSVM-Bundle with published parameters, same iteration limits and starts, Gurobi subproblems; average testing error table plus performance profile on a best-to-worst normalized objective measure; C1, C2 chosen by best testing-set results; timing only in passing (prototypes); runs per set not stated (pp. 15-19).",
+    "positioning": "Builds on IQN of Mokhtari, Eisen and Ribeiro and on his own nonsmooth BFGS work (Curtis-Que; Curtis-Robinson-Zhou); novelty claimed narrowly as no prior work on these IBFGS variants (pp. 2-3, 21).",
+    "writing": "Question-and-answer contribution paragraph ('Our answer is in the affirmative'); open about missing theory; per-variant motivation before pseudocode; a design caveat recorded; strong headline 'all outperform a state-of-the-art bundle method' (pp. 1-2, 10-13, 20).",
+    "limits_future": "Stated: no guarantees, prototype codes so no detailed timing, smoothing-parameter mixing caveat; unstated: one formulation, test-set hyperparameter selection, profile measure differs from table measure; no future directions (pp. 2, 12, 15-16, 20).",
+    "method_links": [
+      {"method": "Method 5", "relation": "evidence", "note": "External baseline given the same iteration limits, starting points and its published parameters; full per-instance table printed including rows where it wins.", "pages": "pp. 16-19"},
+      {"method": "Method 5", "relation": "contradiction", "note": "C1, C2 selected by best testing-set results; timing compared only in passing against a Gurobi-backed code; number of random runs not stated; 'all outperform' not narrowed although Table 2 shows the bundle method best in many rows.", "pages": "pp. 1, 15-18"},
+      {"method": "Method 4", "relation": "variant", "note": "Conclusion rests on a performance profile over a normalized objective-value measure while the application's testing-error table is mixed; whether the measure favours I-BFGS is not asked.", "pages": "pp. 16-19"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "repair the curvature pair through problem structure", "evidence": "Keep the quasi-Newton skeleton and modify only y (DC subgradient freeze, weak-convexity shift, strong-convexity redistribution) when the information model changes; close to Heuristic 10 at the level of the secant pair.", "pages": "pp. 7, 10-13"}
+    ],
+    "transferable": [
+      "Freeze the concave part's subgradient in a DC split to guarantee s^T y >= 0 for a BFGS update (pp. 11-12).",
+      "Shift y by 2*rho*s using an explicit weak-convexity modulus of a smoothed component (pp. 7, 13).",
+      "Distribute a common regularizer across finite-sum components so each is strongly convex and component-wise assumptions hold (p. 7).",
+      "Compute the weak-convexity modulus of a smoothed term as a function of mu to see why the unsmoothed term cannot be convexified (pp. 6-7).",
+      "Print the full per-instance outcome table beside the summary profile so readers see where the incumbent wins (pp. 16-19)."
+    ],
+    "coauthors": "Gulcin Dinc Yalcin",
+    "quotes": [
+      {"text": "Our main goal is to answer the question: Can IQN (such as IBFGS) strategies be effective and efficient when solving the nonconvex and nonsmooth problem (2)", "page": 2},
+      {"text": "Since ours are only prototype implementations of the methods, we do not provide detailed time comparisons of the runs.", "page": 16}
+    ]
+  }
+]

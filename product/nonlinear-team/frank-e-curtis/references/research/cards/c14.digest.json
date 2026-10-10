@@ -1,0 +1,169 @@
+[
+  {
+    "id": "S026",
+    "year": "2018",
+    "title": "Complexity analysis of a trust funnel algorithm for equality constrained optimization",
+    "read_level": "full",
+    "contribution": "A trust-funnel phase 1 for equality-constrained optimization that seeks objective decrease while reaching eps-feasibility and keeps the O(eps^-3/2) complexity of Cartis-Gould-Toint's two-phase ARC method, plus a TRACE-based phase 2 with the same complexity (read as arXiv v1; Theorem 36 p. 25, Appendix A pp. 30-35).",
+    "problem_entry": "Rival with the right bound but a nameable defect: the two-phase ARC method [8] whose phase 1 entirely ignores the objective, a departure from SQP practice that seeks feasibility and optimality together (Abstract; pp. 1-2).",
+    "key_idea": "Keep the two-phase structure but make phase 1 a trust funnel (normal step on 0.5||c||^2, tangential step in Null(J)) with TRACE acceptance (decrease/||s||^3) and lambda/||n|| ratio control; F- vs V-iterations chosen by conditions (15a)-(15f); tangential step discarded if (14) fails (pp. 3-8).",
+    "assumptions": "f, c in C^2 (A1, p. 2); iterates in compact set, H_k bounded (A2, p. 7); Lipschitz Hessians of v and f on the path (A22, p. 18); bound is on ||J^T c||, on ||c|| only under full rank (Cor. 37, p. 25); (15e)-(15f) admitted as needed for complexity (p. 6); code sets kappa_ht = kappa_hs = 1e20 (Table 1, p. 27).",
+    "proof_devices": [
+      "index-set partition F/V and S/C/E (Lemma 3, p. 8)",
+      "monotone funnel radius v_max as upper bound on v (Lemma 6, pp. 10-11) with decrease >= kappa_rho(1-kappa_v2)||s||^3 per success (Lemma 7, pp. 11-12)",
+      "finite termination by contradiction on |I| = infinity (Lemmas 16-20, Theorem 21, pp. 15-18)",
+      "step-norm lower bounds from lambda/||n|| <= sigma-bar ratio control (Lemmas 25-26, pp. 20-21)",
+      "at most one V-expansion between successes (Lemma 13, p. 14) and constant-factor growth of a critical ratio after contractions (Lemmas 29-30, 33-35, pp. 22-25)",
+      "product bound K(eps) = 1 + (K_sigma + K_Delta)(K_C^v + 1)K_C^f = O(eps^-3/2) (Theorem 36, p. 25)",
+      "tolerance coupling eps = eps_feas * eps_inf giving feasibility or infeasible stationarity (pp. 25-26)",
+      "lemma-by-lemma transfer of [8] and TRACE [15] results to a TRACE-based target-following phase 2 (Lemmas 39-46, Theorem 47, pp. 30-35)"
+    ],
+    "experiments": "Matlab; TF vs TF-V-only (same code with tangential step forced to zero, same phase-2 trust funnel, subproblems solved accurately) on CUTEst equality problems 190 -> 33 with named removals plus an uncounted one-hour 'neither terminated' filter (60 by subtraction); metrics #V, #F, f and dual infeasibility after phase 1, phase-2 iterations (Table 2, pp. 26-28); TF losses (BT5, HS27) not discussed.",
+    "positioning": "Continues and corrects Cartis-Gould-Toint's two-phase ARC [8], borrowing TRACE [15] and the Gould-Toint trust funnel [21]; claims parity of complexity, framed as 'a next step' (pp. 2, 28).",
+    "writing": "Contribution sentence in the abstract; one-line plain previews before each lemma; 47 numbered results vs one experiment table; moderate hedging ('typically', 'We do not claim ... guarantees', pp. 26, 28).",
+    "limits_future": "Stated: complexity for ||J^T c|| unless full rank (p. 25); the phase 2 used in experiments has no complexity guarantee (p. 26). Unstated: the tested configuration differs from the analysed one, no comparison with SQP codes or with [8]; no future work in the conclusion (p. 28).",
+    "method_links": [
+      {"method": "Method 2", "relation": "variant", "note": "Two-phase architecture kept for complexity; steering (F vs V iterations, funnel-radius updates) happens only inside phase 1; in tension with Taste 3.", "pages": "pp. 1-2, 6-7, 25"},
+      {"method": "Method 4", "relation": "contradiction", "note": "The premise that complexity-minded design improves practice (stated for convex) organizes the paper; practical value is checked only against an ablated copy; complexity-only conditions made near-inactive in code (inference). Contrasts with his later warning that better complexity has not meant better performance.", "pages": "pp. 1, 26-28"},
+      {"method": "Method 5", "relation": "evidence", "note": "Feasibility-only rival built in the same code by switching off one component, with identical phase 2 and subproblem accuracy; incumbent wins (BT5, HS27) not named in the text.", "pages": "pp. 26-28"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "graft-a-complexity-rule", "evidence": "Keep a practical framework (trust funnel) and add only the acceptance/ratio tests that carry the complexity proof, delegating proofs to the source lemmas of TRACE one by one.", "pages": "pp. 6, 13-19, 30-35"}
+    ],
+    "transferable": [
+      "Count successes through a monotone funnel quantity decreasing by >= kappa||s||^3 per success, then multiply by a constant bound on failures between successes (Lemmas 7, 13, 30, 35; Theorem 36, pp. 11-12, 14, 22-25).",
+      "Set the phase-1 tolerance eps = eps_feas * eps_inf so one stopping test certifies feasibility or infeasible stationarity (pp. 25-26).",
+      "Test the contribution with a one-switch ablation of your own code (tangential step forced to zero), holding phase 2 and subproblem accuracy fixed (pp. 26-27).",
+      "Allow a computed sub-step to be discarded when explicit compatibility tests fail, so the analysis sees only steps satisfying them (p. 5)."
+    ],
+    "coauthors": "Daniel P. Robinson, Mohammadreza Samadi",
+    "quotes": [
+      {"text": "This is due to the fact that, at least for convex optimization, algorithms designed with complexity bounds in mind have led to methods with improved practical performance.", "page": 1},
+      {"text": "However, we find this idea to be unsatisfactory since such an approach would entirely ignore the objective function.", "page": 3}
+    ]
+  },
+  {
+    "id": "S027",
+    "year": "2018",
+    "title": "A sequential algorithm for solving nonlinear optimization problems with chance constraints",
+    "read_level": "full",
+    "contribution": "An Sl1QP-style trust-region method for cardinality-constrained nonlinear problems (SAA of chance constraints) built on a new exact penalty, the minimum over scenario selections of l1 penalties, with MIQP subproblems over only the eps-critical selections, a global convergence proof to penalty stationarity, and a Matlab/Cplex prototype on a 2-D example and a cash-flow problem (pp. 4-26).",
+    "problem_entry": "Chance-constrained problems via SAA give |{i: c_i(x) <= 0}| >= M; convex approximations are conservative, MINLP may be intractable, MPCC reformulations can stall at spurious points, Luedtke's MILP methods are linear only; local search with a stationarity guarantee is accepted on purpose (pp. 1-4).",
+    "key_idea": "Exact penalty phi = rho f + <<c>>_M with <<w>>_M = min over size-M selections of l1 violation (= min_S phi_S); trust-region subproblem minimizes min over S in S_{M,k} of convex piecewise-quadratic models, with S_{M,k} containing at least the eps-critical selections; M = N recovers Sl1QP (pp. 4-11).",
+    "assumptions": "f, c_i Lipschitz with Lipschitz gradients on a bounded convex set containing the iterates, H_k bounded (A4, p. 10) and PSD (p. 8); rho and eps fixed (p. 8); CQ per critical selection for Lemma 3 (pp. 7-8); equal-probability scenarios (p. 3).",
+    "proof_devices": [
+      "local-minimizer equivalence of phi and all critical phi_S by finiteness and continuity (Lemma 1, pp. 6-7)",
+      "exact-penalty correspondence with (P) and with the violation measure (Lemmas 2-3, pp. 7-8)",
+      "criticality measure chi = max over critical S of classical l1 measures chi_S (eq. 20, Lemma 5, pp. 10-11)",
+      "SLQP-style global convergence following Byrd-Gould-Nocedal-Waltz [12]: Cauchy point per selection (Lemmas 10-11, pp. 12-13)",
+      "radius bounded below near non-stationary points via the TR reset delta_reset (Lemma 13, pp. 14-15)",
+      "summation contradiction for limit points (proof of Theorem 6, pp. 15-16)",
+      "local argument that a nearby better minimizer is accepted when (rho L_f + L_c + H_max) delta^2 is small (section 4.2, pp. 16-17)"
+    ],
+    "experiments": "Matlab R2015b + Cplex 12.6.2 big-M MIQP with disclosed heavy tuning and a 300 s limit (pp. 17-19); 2-D example with N = 5000, nine starts incl. a planted bad local minimizer, grid over rho and gamma (Tables 1-2, pp. 20-21); cash-flow problem (75 options, 20 periods, 5 random instances, N 100-5000, gamma 0.001-1) started at the robust solution, geometric means, relative improvement over robust (Tables 3-4, pp. 23-26); failures blamed on the subproblem solve (p. 24); global solvers tried at referee request, no numbers (footnote, p. 26).",
+    "positioning": "Extends Luedtke et al.'s linear chance-constrained ideas to nonlinear problems and Fletcher's Sl1QP to cardinality constraints; rivals (convex approximations, MINLP, MPCC regularization) characterized but not run (pp. 2-4, 8, 11).",
+    "writing": "Contribution in the first sentence of section 1; scope limit (stationarity only) stated in the introduction; 'we claim'/'we stress' hedges; non-proof section 4.2 on poor minimizers later tested by experiments; failures framed as not the algorithm's fault (pp. 1, 3, 16-17, 24).",
+    "limits_future": "Fixed rho needs an update rule and, unlike standard NLP, a too-small rho hurts solution quality (p. 26); big-M Cplex MIQP too slow, Luedtke branch-and-cut proposed (pp. 18, 26-27); scenario sampling for CCP left open (p. 4); recourse via implicit z_i => x in P_i (p. 27).",
+    "method_links": [
+      {"method": "Method 2", "relation": "variant", "note": "Penalty parameter fixed; the conclusion names a steering rule as missing, and the experiments show rho decides which local minimizer is reached, not only speed.", "pages": "pp. 8, 20-21, 26"},
+      {"method": "Method 1", "relation": "variant", "note": "Outer convergence theory dictates the minimum content of the inner MIQP (eps-critical selections); the rest is a cost-quality knob gamma; time-limited Cplex incumbents used as steps are outside the theory.", "pages": "pp. 8-10, 19-20, 24-26"},
+      {"method": "Method 3", "relation": "variant", "note": "A hard case is planted (start at a poor local minimizer x_bad) to test the section 4.2 claim, on a 2-D toy rather than a transformed test set.", "pages": "pp. 20-22"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "nest the classical method", "evidence": "M = N turns the cardinality penalty into the l1 penalty and Algorithm 3.1 into standard Sl1QP with its known convergence (Remark 8); keep-the-skeleton design in a combinatorial setting.", "pages": "pp. 8, 11"}
+    ],
+    "transferable": [
+      "Define a combinatorial exact penalty as the minimum over scenario selections of classical l1 penalties and prove local-minimizer equivalence selection by selection (eqs. 1, 6, 8; Lemma 1, pp. 4-7).",
+      "Include in the subproblem only the eps-critical part of the combinatorial structure needed by the proof, expose the rest as a scale-free fraction gamma, and tabulate quality vs time over gamma (pp. 8-10, 19-20; Table 3, p. 25).",
+      "Add a trust-region reset value after each successful step to obtain the radius-bounded-below lemma (Lemma 13, pp. 14-15).",
+      "Plant a known bad starting point in a small example and grid the two key parameters to see whether the method escapes (Tables 1-2, pp. 20-21).",
+      "Initialize at the robust (all-constraints) solution and report improvement relative to it, averaged only over instances solved under every setting (pp. 23-24)."
+    ],
+    "coauthors": "Andreas Waechter, Victor M. Zavala",
+    "quotes": [
+      {"text": "We emphasize that these outcomes do not represent a failure of the proposed algorithm, but rather are a consequence of the inefficient manner in which we are solving the subproblems", "page": 24},
+      {"text": "This is in contrast to standard nonlinear optimization, where a small value usually affects only the convergence speed, not the quality of the solution.", "page": 26}
+    ]
+  },
+  {
+    "id": "S035",
+    "year": "2018",
+    "title": "Concise complexity analyses for trust region methods",
+    "read_level": "full",
+    "contribution": "Short complexity proofs for trust-region methods whose radius is tied to ||g_k|| (O(eps_g^-2)) or, with a new update, to |lambda_k-| (O(max{eps_g^-2, eps_H^-3})), plus a fixed-radius O(eps^-3/2) variant whose practical costs are spelled out (read as arXiv v1; pp. 2-10).",
+    "problem_entry": "Results exist inside general frameworks (Fan-Yuan, Grapiglia-Yuan-Yuan, Toint); the paper isolates the simplest instance to show the essential components, adds a second-order update, and contrasts with a better-complexity strategy (p. 2).",
+    "key_idea": "Radius delta_k = gamma_k ||g_k|| or gamma_k |lambda_k-| (when ||g||^2 < |lambda-|^3), adapting only gamma_k; Cauchy decrease along -g or the leftmost eigenvector suffices; fixed radius sqrt(eps)/beta with exact solves for O(eps^-3/2) (pp. 3-9).",
+    "assumptions": "f in C^2 with L-Lipschitz Hessian, bounded below (A1.1, p. 2); ||H_k|| <= kappa on iterates (A2.1, p. 4); exact leftmost eigenpair used, its cost not discussed (pp. 2-3); the fixed-radius method needs beta = L/2 and exact subproblem solutions (p. 9).",
+    "proof_devices": [
+      "Cauchy decrease proportional to ||g||^2 or |lambda-|^3 because the radius is (Lemma 2.2, p. 4)",
+      "model error bound kappa gamma^2 ||g||^2 or (L/6) gamma^3 |lambda-|^3 (Lemma 2.3, p. 5)",
+      "induction lower bound gamma_min on the radius coefficient (Lemma 2.4, p. 5)",
+      "log bound on consecutive unsuccessful iterations independent of the radius rule (Lemma 2.6, p. 6)",
+      "telescoping f0 - f_inf over successes, multiplied by the failure bound (Theorems 2.9, 2.12, pp. 6-8)",
+      "two-case split on the trust-region multiplier xi_k vs sqrt(eps) for the fixed-radius method, after Ye's lecture notes (pp. 8-9)",
+      "direct lim ||g_k|| = 0 without a liminf-first argument (p. 10)"
+    ],
+    "experiments": "none",
+    "positioning": "Openly a special case of [5, 6, 8] with simpler proofs; cites ARC and his own TRACE and inexact regularized Newton framework as O(eps^-3/2) methods; credits Ye's notes (pp. 2, 8, 10).",
+    "writing": "Contributions immediately on p. 1; each strategy followed by a practical discussion (compatibility with the traditional update using typical values, p. 7; four costs of the better-complexity method, p. 9); open question stated plainly (p. 10); minor slips (Theorem 2.11 for Lemma 2.11, undefined K, pp. 8, 10).",
+    "limits_future": "No analysis for the traditional radius update (p. 10); the O(eps^-3/2) fixed-radius method needs L, exact solves, eps fixed in advance and takes tiny steps (p. 9); eigenpair cost unaddressed (p. 3).",
+    "method_links": [
+      {"method": "Method 4", "relation": "evidence", "note": "Section 2.5 asks what the better complexity class costs and concludes the O(eps^-3/2) method would likely behave very poorly in practice versus the O(eps^-2) strategies; an early written instance of Taste warning 3, contrasting with S026's premise.", "pages": "pp. 8-9"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "minimal-instance analysis", "evidence": "Strip a known general framework to the simplest instance that still yields the bound in order to expose the essential algorithm components.", "pages": "pp. 2, 10"}
+    ],
+    "transferable": [
+      "Three-lemma complexity template: decrease proportional to measure^p on successes; induction lower bound on the radius coefficient; log bound on consecutive failures; then telescope (Lemmas 2.2-2.8, pp. 4-8).",
+      "Tie the trust-region radius to the stationarity measure being driven to zero and adapt only its coefficient (Updates 2.7, 2.10, pp. 6-7).",
+      "Show exactly when a non-standard radius rule differs from the traditional one, using typical parameter values (p. 7).",
+      "Close any better-complexity variant with an explicit list of its practical costs (p. 9)."
+    ],
+    "coauthors": "Zachary Lubberts, Daniel P. Robinson",
+    "quotes": [
+      {"text": "This would likely lead to very poor behavior in practice compared to the strategies in Sections 2.3 and 2.4, which are much less conservative.", "page": 9},
+      {"text": "It is unclear how to establish similar complexity results when a traditional trust region radius update is used.", "page": 10}
+    ]
+  },
+  {
+    "id": "S046",
+    "year": "2018",
+    "title": "R-Linear Convergence of Limited Memory Steepest Descent",
+    "read_level": "full",
+    "contribution": "Proves that Fletcher's limited memory steepest descent method converges R-linearly on strongly convex quadratics for any history length m, extending Dai-Liao's m = 1 (BB) result, with spectrum-designed illustrations (read as COR@L TR 16T-010 / arXiv v1; Theorem 3.12, pp. 13-14).",
+    "problem_entry": "The rate of LMSD for m > 1 had not been analyzed, although BB (m = 1) was known to be R-linear and LMSD known to converge (pp. 2-3).",
+    "key_idea": "No new algorithm: extend the Dai-Liao eigencomponent proof by linking Ritz values of T_k to the gradient weights (theta = c^T Lambda c, ||c|| = 1) and inducting over eigencomponents with k-independent cycle counts (pp. 6-14).",
+    "assumptions": "Strongly convex quadratic with r distinct eigenvalues (A2.1, p. 4); no finite termination and G_k of full column rank with ||R_k^-1|| <= rho ||g_{k,1}||^-1 (A3.4, p. 8), adopted because variable-length cycles would be 'extremely cumbersome' (pp. 5-6).",
+    "proof_devices": [
+      "eigenbasis weights with recursion d_{k,j+1,i} = (1 - alpha lambda_i) d_{k,j,i} (Lemma 2.3, p. 6)",
+      "finite termination once all reciprocal eigenvalues are used as stepsizes (Theorem 2.4, pp. 6-7)",
+      "Cauchy interlacing bounds on Ritz values (Lemma 3.5, p. 8)",
+      "theta_{k,j} = c^T Lambda c with ||c|| = 1 linking Ritz values to weights (Lemma 3.6, p. 8)",
+      "per-component contraction constants Delta_i with Delta_1 < 1 (Lemmas 3.7-3.8, pp. 9-10)",
+      "induction over components with k-independent cycle counts (Lemmas 3.9-3.10, pp. 10-13)",
+      "halving in K cycles, then R-linear constants c1 = 2 Delta^(K-1), c2 = 2^(-1/K) (Lemma 3.11, Theorem 3.12, pp. 13-14)"
+    ],
+    "experiments": "Matlab, five n = 100 quadratics designed by spectrum (incl. a Q-linear case lambda_n < 2 lambda_1), m = 1 and 5, eps = 1e-8, random initial stepsizes; outer/inner iteration counts (Table 1, p. 15) and plots of the proof's own weights |d_{k,j,i}| and constants Delta_i (Figs. 1-10, pp. 15-19); illustration only, choice of m out of scope (p. 14).",
+    "positioning": "Extends Fletcher [3] and Dai-Liao [2] (with Raydan [5]); five references only (pp. 3, 19).",
+    "writing": "Limits the practical reach of the theorem up front (p. 3); proofs borrowed from the m = 1 case flagged 'for completeness' (p. 13); the introduction promises a closing discussion of why practice beats theory that the brief conclusion does not contain (pp. 3, 19).",
+    "limits_future": "Quadratics only; full-rank G_k assumed though column dropping is advocated, with a conjecture that the rate survives it (pp. 5-6, 8); theory does not explain the better observed behaviour (p. 3); no future work listed (p. 19).",
+    "method_links": [
+      {"method": "Method 4", "relation": "evidence", "note": "States before the theorem that the proved rate does not capture practical behaviour; experiments framed to show where practice beats the bound.", "pages": "pp. 3, 14-15"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "plot the proof's quantities", "evidence": "Experiments display the internal objects of the analysis (eigen-weights per component, contraction constants coloured < 1 or >= 1) rather than only convergence curves.", "pages": "pp. 15-19"},
+      {"pattern": "assumption becomes a run-time safeguard", "evidence": "The analysis bound ||R_k^-1|| <= rho ||g_{k,1}||^-1 is recast as a computable test for dropping old gradient columns (links to Heuristic 1).", "pages": "pp. 5-6, 8"}
+    ],
+    "transferable": [
+      "To extend an m = 1 proof to a cycle/block method, keep its skeleton and add one lemma tying the block quantities (Ritz values) to the same eigen-weights (Lemma 3.6, p. 8).",
+      "Design synthetic tests by the structural property the proof depends on (spectrum), including a case where a stronger result holds (pp. 14-15).",
+      "Plot the analysis quantities themselves next to iteration counts (pp. 15-19).",
+      "When an assumption is adopted for tractability, give a practical rule based on its violations and state the conjecture that the result survives it (Remark 2.2, pp. 5-6)."
+    ],
+    "coauthors": "Wei Guo",
+    "quotes": [
+      {"text": "Based on such evidence, we do not claim that the convergence results proved in this paper fully capture the practical behavior of LMSD methods.", "page": 3},
+      {"text": "It is not our goal to show the performance of Algorithm LMSD for various values of m, say to argue whether the performance improves or not as m is increased.", "page": 14}
+    ]
+  }
+]

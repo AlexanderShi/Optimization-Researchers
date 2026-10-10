@@ -1,0 +1,223 @@
+[
+ {
+  "id": "S023",
+  "year": "2023",
+  "title": "Recent developments in security-constrained AC optimal power flow: Overview of challenge 1 in the ARPA-E grid optimization competition",
+  "read_level": "full",
+  "contribution": "Joint organizer/top-team overview (read as arXiv:2206.07843 v1) of ARPA-E GO Challenge 1: the SC-AC-OPF formulation for OR readers, the history of power-system optimization, the competition's datasets, platform and scoring, and summaries of the three winning algorithms, including Curtis's GO-SNIP team.",
+  "problem_entry": "Entered from an external event (ARPA-E GO Challenge 1 and its special issue), not a method gap; the preventive SC-AC-OPF model (24) is introduced to OR readers around questions outsiders asked (pp. 1-3, 11).",
+  "key_idea": "No new algorithm; compares the winners: GO-SNIP = interior-point with iterative contingency enforcement, screening, complementarity heuristics and degeneracy-avoiding reformulation (p. 23); shared elements across teams listed (pp. 23-24).",
+  "assumptions": "Preventive model with complementarity constraints for voltage and droop control; soft constraints via penalized slacks; polar formulation; Code 1 / Code 2 split with 10/45-minute and 2 s per contingency limits (pp. 6-11, 19-20).",
+  "proof_devices": [
+   "n/a: no theorems; only an unshown remark that the two scoring rules are approximately equal under a monotone transformation (p. 21)"
+  ],
+  "experiments": "Competition evaluation: 352 problems (17 synthetic x 20 + 3 industrial x 4), 500-30,000 buses, fixed 144-core hardware, geometric-mean and performance-profile scoring, precomputed worst-case score for failures (pp. 16-22).",
+  "positioning": "History from economic dispatch to Carpentier's OPF, security constraints, Benders and NLP; approximations vs relaxations vs restrictions; other competitions lack timed fixed-hardware runs (pp. 11-16).",
+  "writing": "Tutorial problem section for outsiders; per-team percentages of best-known solutions; conclusion lists three advantages and three limitations of competition research (pp. 3-11, 22-26).",
+  "limits_future": "Scoring favours implementation over theory (no suboptimality bounds, infeasibility proofs, rates) and may hide better but less robust algorithms; no offline data use; secrecy; future: Challenges 2-3, uncertainty, stability, distributed methods (pp. 25-27).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Joint voice: audits the scoring yardstick (geometric mean rationale, constant objective term, near-equivalence of scoring rules) and admits implementation-weighted scoring may hide better algorithms.",
+    "pages": "pp. 21, 26"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Joint voice: common hardware, formulation and scoring named as the gap the competition fills.",
+    "pages": "p. 25"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Exact-penalty view of infeasibility built into the model and scoring (soft constraints), not into an algorithm's steering rule.",
+    "pages": "pp. 10-11, 20"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "GO-SNIP avoided degeneracies by reformulating the problem, the opposite of manufacturing degenerate variants.",
+    "pages": "p. 23"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Competition as benchmark protocol",
+    "evidence": "Unseen instances, fixed hardware, timed runs, precomputed worst-case fallback score for failed runs.",
+    "pages": "pp. 17-22"
+   }
+  ],
+  "transferable": [
+   "Precompute a feasible worst-case reference solution per instance and assign it to any failed run, so robustness costs score instead of disappearing (pp. 21-22).",
+   "Split a two-stage solver into a timed first-stage code and a separately timed recourse code (pp. 19-20).",
+   "Before claiming two aggregate scores reward different things, check whether one is a monotone transform of the other (p. 21).",
+   "Write the problem section for a neighbouring community around the questions outsiders actually asked (p. 3)."
+  ],
+  "coauthors": "I. Aravena, D. K. Molzahn, S. Zhang, C. G. Petra, S. Tu, A. Waechter, E. Wei, E. Wong, A. Gholami, K. Sun, X. A. Sun, S. T. Elbert, J. T. Holzer, A. Veeramany",
+  "quotes": [
+   {
+    "text": "From this perspective, any “infeasible” solution is not really infeasible, but only worse than a feasible one to some degree.",
+    "page": 20
+   },
+   {
+    "text": "Finally, since implementation quality was of utmost importance to avoid “worst-case” scores from code failures, the benchmark results from the competition may overlook alternative algorithms that could have performed better if they had more robust implementations or had better exploited the parallel computing resources.",
+    "page": 26
+   }
+  ]
+ },
+ {
+  "id": "S043",
+  "year": "2023",
+  "title": "Worst-case complexity of TRACE with inexact subproblem solutions for nonconvex smooth optimization",
+  "read_level": "full",
+  "contribution": "i-TRACE (read as arXiv:2204.11322 v1) replaces TRACE's exact trust-region solves by truncated Lanczos solves with residual tests derived from the complexity proof, keeping O(eps^-3/2) iteration/gradient complexity and local rates while bounding Hessian-vector products by O(eps^-3/2 min{n, log(1/eps)}), and matches or beats ARC on CUTEst.",
+  "problem_entry": "Closes the inexact-subproblem conjecture quoted from TRACE [12]; motivated by cubic regularization disappointing in practice versus traditional trust region and by Hessian-vector products dominating cost at scale (pp. 2-4).",
+  "key_idea": "Keep TRACE's ||s||^3 acceptance ratio and radius logic, nest a grow-the-Krylov-subspace loop around the fixed-subspace radius loop, and accept steps whose Lanczos residual passes (5a) or (5b)-(5c), checked cheaply in reduced form (pp. 5-9).",
+  "assumptions": "f C^2, bounded below, Lipschitz gradient and Hessian on a set containing iterates and trial points; g_k != 0; Hv bound needs a uniform conditioning bound (kappa, lambda); local rate needs H(x*) > 0; Delta_k-free analysis 'for the sake of brevity' (pp. 3-4, 9-10, 18-21).",
+  "proof_devices": [
+   "Lanczos identity ||r|| = gamma_{j+1}|e_{j+1}^T t| and r orthogonal to Q give (4a)-(4d) automatically (Lemmas 3.1-3.2, pp. 10-11)",
+   "Large-lambda decrease lemma: lambda >= (H_Lip + 2 eta)||t|| implies rho >= eta, via model decrease >= lambda||t||^2/2 using r^T s <= 0 (Lemma 3.6, p. 12)",
+   "Index-set counting in fds: at most one expansion, finitely many and uniformly bounded contractions by geometric growth of lambda/||t|| (Lemmas 3.7-3.10, 3.18, pp. 13-14, 20)",
+   "Step-to-next-gradient inequality ||s_k|| >= c||g_{k+1}||^{1/2} with inexact residual absorbed as O(||s||^2) (Lemma 3.14, p. 16), summed to O(eps^-3/2) (Theorem 3.1, pp. 16-17)",
+   "Inverting the Gould-Simoncini Lanczos residual bound to count inner iterations, log(1/eps) under bounded conditioning, n otherwise (Lemmas 3.16-3.17, Theorem 3.2, pp. 18-20)",
+   "Inexact-Newton local rate via forcing mu = o(||g||) or O(||g||^2) and Dembo-Eisenstat-Steihaug (Lemma 3.20, Theorem 3.4, pp. 21-22)"
+  ],
+  "experiments": "All 238 unconstrained CUTEst problems; i-TRACE (3 settings), TRACE and ARC (matched inexactness settings) in one Matlab package, 90 min / 8 GB; solved counts 214/218/219 vs TRACE 188 vs ARC 211/214/216; Dolan-More profiles of f-evals, g-evals and Hv products on commonly solved sets (pp. 22-25).",
+  "positioning": "Builds on TR O(eps^-2), Nesterov-Polyak/ARC O(eps^-3/2), concedes cubic methods can compete with complicated updates, credits Lanczos TR literature and Gould-Simoncini [22] as key (pp. 4-5).",
+  "writing": "Contribution sentence in Sec. 1.3; each assumption followed by a defence paragraph; repeated 'for the sake of brevity'; minor slips (pp. 3-5, 8, 15, 21).",
+  "limits_future": "Tested code keeps Delta_k that the analysis drops; log(1/eps) Hv bound rests on an unverifiable conditioning assumption; first-order complexity only; no CPU times; no future directions stated (pp. 4, 9, 20, 22, 25).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Inner Lanczos termination tests derived from what the complexity inequality needs; only small residuals are needed, not near-global subproblem solutions. Outer requirement is a complexity inequality, not a merit model.",
+    "pages": "pp. 6-7, 16-17"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "ARC built in the same Matlab package with matched inexactness rule and identical termination test; TRACE and i-TRACE share Delta_k for fairness; tuning effort not reported.",
+    "pages": "pp. 22-23"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Separate profiles for function evaluations, gradient evaluations and Hv products; the trade-off between them is presented as the result.",
+    "pages": "pp. 3, 23-24"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Inexactness as a user dial",
+    "evidence": "Inner-accuracy parameters presented as a knob trading derivative evaluations against Hessian-vector products, with both sides shown.",
+    "pages": "pp. 3, 23-24"
+   },
+   {
+    "pattern": "Tested algorithm differs from analyzed algorithm, disclosed",
+    "evidence": "Implementation includes the auxiliary sequence Delta_k omitted from the analysis, with a claim that guarantees are maintained.",
+    "pages": "pp. 9, 22"
+   },
+   {
+    "pattern": "Resolve your own published conjecture",
+    "evidence": "Opens by quoting the conjecture from TRACE [12] and says the result goes beyond it.",
+    "pages": "p. 2"
+   }
+  ],
+  "transferable": [
+   "Check inner termination in the reduced tridiagonal space with the Lanczos residual identity instead of forming the full-space residual (Lemma 3.1, p. 10; Algorithm 1, p. 7).",
+   "Offer an always-satisfiable step-norm residual test and an earlier-stopping gradient-relative test, and prove the same complexity for either (pp. 6-7, 18).",
+   "When converting an exact-solve complexity proof, design the inner test so the residual enters the step-to-next-gradient inequality as one more O(||s||^2) term (pp. 6, 16).",
+   "Count inner Krylov iterations by inverting a residual bound C*rho^j against the termination test (pp. 18-20).",
+   "Map the rival's inexactness parameter onto yours and sweep both at matched values, one profile per setting, after reporting solved counts (pp. 23-25)."
+  ],
+  "coauthors": "Qi Wang",
+  "quotes": [
+   {
+    "text": "Therefore, we contend that it is of interest to explore trust-region methods that do not deviate too much from traditional schemes, yet offer optimal worst-case complexity properties.",
+    "page": 4
+   },
+   {
+    "text": "In particular, with more exact subproblem solutions, our algorithm often requires fewer derivative evaluations at the expense of more Hessian-vector products, whereas with more inexact subproblem solutions, it often requires fewer Hessian-vector products at the expense of more derivative evaluations.",
+    "page": 3
+   }
+  ]
+ },
+ {
+  "id": "S070",
+  "year": "2023",
+  "title": "A variance-reduced and stabilized proximal stochastic gradient method with support identification guarantees for structured optimization",
+  "read_level": "full",
+  "contribution": "S-PStorm adds a one-line iterate stabilization to PStorm so a constant step size can be used, proving high-probability variance reduction of the Storm estimator, an O(sqrt(log k/k)) iterate rate and consistent support identification for group-sparse strongly convex stochastic problems without full gradients or gradient tables.",
+  "problem_entry": "Support identification enables subspace-accelerated Newton; proximal SG cannot identify supports, ProxSVRG/SAGA need full gradients or N x n storage and finite sums, RDA identifies only per iteration w.h.p. (pp. 2-3, Table 1).",
+  "key_idea": "Keep the Storm/PStorm estimator and add x_{k+1} = x_k + zeta*beta_k(y_k - x_k) after the prox step, which permits a constant step size needed by the identification proof (Algorithm 1, p. 5).",
+  "assumptions": "f strongly convex, per-sample L_g-Lipschitz gradients, almost-sure bounds on subgradients of r, gradient noise and ||d_k||, non-degeneracy delta* > 0; strong convexity only for explicit K (pp. 6-9).",
+  "proof_devices": [
+   "Estimator error as martingale endpoint plus Pinelis Azuma-Hoeffding bound in Banach spaces (Lemmas A.1-A.3, Theorem 3.4, pp. 7, 17-22)",
+   "Summable failure budget eta_k = eta_0/k^2 and union bound for all k >= k-bar (Corollary 3.5, p. 7; p. 22)",
+   "Deterministic one-prox-step identification lemma for group l1, both inclusions (Theorem 3.8, p. 9; Remark 5)",
+   "Consistent identification with K = max{(C41/delta*)^4, (C42/Delta*)^4, k-bar} (Theorem 3.9, p. 9; proof pp. 28-29)",
+   "Non-summable O(k^-1/4) RDA failure probabilities to show the weaker property only (Remark 6, p. 10; Lemma A.5, pp. 29-30)"
+  ],
+  "experiments": "Group-l1 logistic regression, 10 LIBSVM datasets by stated exclusion rules, 80 instances; baselines ProxSVRG, SAGA, RDA plus PStorm ablation; FaRSA-Group reference x*; 4 identification metrics, 3 runs, rank-score aggregation; raw tables in appendix; RDA gamma tuned on 32 of the 80 instances (pp. 10-13, 30-36).",
+  "positioning": "Extends Storm/PStorm; contrasts with Sun et al. 2019 and Lee-Wright 2012 identification results; supplies a missing high-probability variance-reduction result for Xu-Xu (pp. 2-5, 10).",
+  "writing": "Three numbered contributions; weaker property attributed to prior work and stronger one defined; remarks after each theorem; headline claim stronger than raw tables (pp. 3-5, 7-10, 13).",
+  "limits_future": "Open: linear rate without storage or full gradients (Remark 4); nonconvex extension; inexact prox for overlapping groups. Unstated: strong assumptions, (C/delta*)^4 constants, adaptive zeta outside theory, tuning on test instances (pp. 8, 11-12, 14).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Unmodified PStorm run as ablation of the one changed line; rival step size fine-tuned to be fair; 3 runs averaged for a randomized method.",
+    "pages": "pp. 11-12, 31"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "RDA's gamma tuned on 32 of the 80 evaluation instances, the tuning-on-test-set pattern of Tension 2.",
+    "pages": "p. 11"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Raw data published, but headline uses a self-designed rank score that turns near ties and SAGA memory failures into large margins; the first-consistent-identification metric does match the claimed property.",
+    "pages": "pp. 12-13, 33-35"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Tested algorithm differs from analyzed algorithm, disclosed",
+    "evidence": "Adaptive zeta not covered by the theory, with a cap that would restore coverage (also S043 Delta_k).",
+    "pages": "p. 12"
+   },
+   {
+    "pattern": "Sharpen the property, then show the rival only has the weak one",
+    "evidence": "Definition 1.3 (consistent identification) vs 1.2; Remark 6 shows RDA failure probabilities are not summable.",
+    "pages": "pp. 4-5, 10"
+   },
+   {
+    "pattern": "Overlay the theoretical rate on measured error curves",
+    "evidence": "Dotted O(sqrt(log k/k)) reference line against measured ||x_k - x*|| and estimator error.",
+    "pages": "pp. 13, 31-32"
+   }
+  ],
+  "transferable": [
+   "Use eta_k = eta_0/k^2 failure budgets and a union bound to turn per-iteration high-probability statements into an all-k >= K statement (p. 7, p. 22).",
+   "Write the error of a recursive momentum gradient estimator as a martingale endpoint and apply a vector Azuma-Hoeffding inequality (pp. 17-22).",
+   "Prove a deterministic 'one prox step identifies the support if close enough' lemma, then feed it probabilistic bounds (Theorems 3.8-3.9, p. 9).",
+   "Define metrics that separate first identification from first consistent identification to match the claimed property (p. 12).",
+   "Use a deterministic second-order solver to high accuracy for the reference solution and ground-truth support (p. 11).",
+   "Tabulate competitors on resource axes (exact gradients, storage) next to theoretical axes (Table 1, p. 3)."
+  ],
+  "coauthors": "Yutong Dai, Guanyi Wang, Daniel P. Robinson",
+  "quotes": [
+   {
+    "text": "Although this choice is not covered by the convergence theory, one could cap the number of adjustments made to ζ, in which case it is covered by the theory.",
+    "page": 12
+   },
+   {
+    "text": "We attribute this to a combination of the stabilization that we introduced and that the step size for PStorm was designed for nonconvex problems (for our tests, nonetheless, we fine-tuned the step size for PStorm to be fair).",
+    "page": 31
+   }
+  ]
+ }
+]

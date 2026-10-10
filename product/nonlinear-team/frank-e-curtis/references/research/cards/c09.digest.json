@@ -1,0 +1,132 @@
+[
+  {
+    "id": "S038",
+    "year": "2016",
+    "title": "A reduced-space algorithm for minimizing ℓ1-regularized convex functions",
+    "read_level": "full",
+    "contribution": "FaRSA, an active-set line-search method for l1-regularized convex problems that chooses between reduced-space subproblem steps and support-growing reduced ISTA steps by comparing two optimality measures, accepts inexact subproblem solutions under two inequalities, proves finite termination, and beats OBA on 26 of 31 scaled logistic-regression datasets (arXiv v1, pp. 1-18).",
+    "problem_entry": "Two incumbents win on different classes (LIBLINEAR when Hessians are diagonally dominant, OBA otherwise) and OBA needs an ISTA step every iteration; the goal is one framework that captures both (p. 2).",
+    "key_idea": "Optimality split into beta (zero variables) and phi (nonzero variables); the test ||beta|| <= gamma ||phi|| picks a reduced-space quadratic-model step or a reduced ISTA-like step; subproblem accuracy set by descent >= a Cauchy-like reference and model value <= 0, so Newton, Newton-CG or CD qualify; projected line search that accepts mere decrease when the support shrinks (pp. 3-7).",
+    "assumptions": "f convex, C2, bounded below on level set, Lipschitz gradient, Hessian uniformly positive definite and bounded (Assumption 3.1, p. 7); 1e-8 diagonal added in practice (p. 14).",
+    "proof_devices": [
+      "Lemma 2.1: limit point solves the problem iff beta and phi vanish, by component-wise case analysis (pp. 3-4)",
+      "partition of iterations into S_beta, S_phi^ADD, S_phi^SD, each shown finite to give finite termination (Lemmas 3.5, 3.6, 3.9; Theorem 3.10; pp. 9-12)",
+      "counting argument: at most n variables may become zero once S_beta has ended (Lemma 3.6, p. 9)",
+      "norm bound ||d|| <= (2/theta_min)||g|| for any step with m(d) <= m(0), via the largest-norm point of the model sublevel set (Lemma 3.7, p. 10)",
+      "two-case step-size lower bound for the projected line search giving decrease proportional to ||phi||^2 (Lemma 3.8, pp. 10-12)",
+      "whole-sequence convergence via strong-convexity level-set argument and monotone F (Theorem 3.11, pp. 12-13)",
+      "Lemma A.1: full ISTA step equals -(beta + phi) (pp. 19-21)"
+    ],
+    "experiments": "Preliminary Matlab code with CG subproblem solver and three CG stopping rules (residual, wrong-orthant count, step-norm cap; pp. 14-16); 31 binary datasets with named exclusions, 12 also unscaled (pp. 13-15); OBA run unmodified with same tolerance, 10-run averages (p. 16); FaRSA faster on 26/31 scaled (p. 16-17), solves 9/12 unscaled, OBA ascent failures not fixed (pp. 17-18); run time vs tolerance figures (p. 18); LIBLINEAR not run.",
+    "positioning": "Between proximal-Newton (LIBLINEAR/newGLMNET) and orthant-based (OBA) methods, treating both as complementary state of the art; origin credited to a bound-constrained QP reformulation solved with Dostal-type methods (pp. 2-3).",
+    "writing": "Numbered contributions ending in a state-of-the-art claim (pp. 2-3); line-by-line prose after each algorithm box (pp. 4-7); rival's wins named (pp. 16-17); unsupported forward claim of future competitiveness with LIBLINEAR (p. 18).",
+    "limits_future": "Preliminary implementation, LIBLINEAR expected to win on diagonally dominant Hessians (p. 18); strong convexity assumed (p. 7); no rate or complexity; future CD subproblem solver, subproblem-size control and a released solver (p. 18).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "subproblem accuracy conditions derived from the line-search analysis allow Newton, Newton-CG or CD; CG stopping tied to orthant and step size", "pages": "pp. 1, 5-6, 10-12, 15-16"},
+      {"method": "Method 2", "relation": "variant", "note": "one algorithm moves between shrinking and growing the support by the monitored test ||beta|| <= gamma ||phi||, but the trade-off is between optimality measures, not objective and feasibility, and gamma is fixed", "pages": "pp. 5, 14"},
+      {"method": "Method 5", "relation": "variant", "note": "rival run unmodified with same tolerance and 10-run averages, its wins named; but LIBLINEAR not run and OBA's fixable ascent failures not fixed", "pages": "pp. 16-18"},
+      {"method": "Method 3", "relation": "variant", "note": "harder instances by withholding standard data scaling (unscaled datasets) rather than constructed infeasible or degenerate variants", "pages": "pp. 13, 17-18"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "split-measure iteration choice", "evidence": "separate optimality measures for zero and nonzero variables decide the step type, and their sum equals the ISTA step", "pages": "pp. 3-5, 19-21"}
+    ],
+    "transferable": [
+      "Two-inequality inexactness test (descent at least that of a Cauchy-like reference, model no worse than zero) admitting Newton, truncated CG and coordinate descent (pp. 5-6)",
+      "Finite-termination proof by partitioning iterations by what happens to the support, with a counting argument for the support-shrinking set (pp. 9-12)",
+      "Bound inexact steps via the largest-norm point of the model sublevel set (Lemma 3.7, p. 10)",
+      "CG termination on too many components in the wrong orthant and on a step-norm cap acting as an implicit trust region (pp. 15-16)",
+      "Run scaled and unscaled versions of the same datasets and report them separately (pp. 13, 17-18)",
+      "Run-time-versus-requested-accuracy plots per problem (p. 18)"
+    ],
+    "coauthors": "Tianyi Chen, Daniel P. Robinson",
+    "quotes": [
+      {"text": "This indicates that FaRSA quickly identifies the orthant that contains the optimal solution.", "page": 16},
+      {"text": "Although simple adaptive strategies could be used to avoid such issues, we made no such attempts because we did not want to make any edits to their code.", "page": 17}
+    ]
+  },
+  {
+    "id": "S040",
+    "year": "2016",
+    "title": "Adaptive augmented Lagrangian methods: Algorithms and practical numerical experience",
+    "read_level": "full",
+    "contribution": "A line-search adaptive augmented Lagrangian method with penalty steering and a convexified AL model, with global convergence on par with the trust-region version, and an empirical study in Matlab (six variants, CUTEst, COPS, OPF) and in a steering-only modification of Lancelot showing steering improves efficiency and reliability while safeguarding it hurts (arXiv v1 Detailed Version, pp. 1-21).",
+    "problem_entry": "Traditional AL methods can make little progress or diverge early because of poor penalty or multiplier guesses; AL is attractive for extreme scale because it is matrix-free (pp. 1-2).",
+    "key_idea": "Steering step on the Gauss-Newton violation model in a radius proportional to the feasibility stationarity measure; mu reduced inside the iteration until the AL step predicts enough linearized-feasibility progress (16c); convexified AL model guarantees strict descent for the line search; multiplier updates via targets, not tied to penalty decisions (pp. 4-9).",
+    "assumptions": "f and c C2 at iterates (Assumption 2.1, p. 9); iterates and trial points in a convex compact set (Assumption 2.3, p. 9); no CQ, penalty boundedness not provable (pp. 20-21); Theorem 2.4 cites a nonexistent Assumption 2.2 (p. 9).",
+    "proof_devices": [
+      "limits as mu -> 0 of AL model, gradient, Cauchy step and predicted violation reduction to their feasibility counterparts, so the steering loop terminates (Lemma A.3, Lemma A.5; pp. 23-24, 27)",
+      "convexified model q-tilde gives grad L^T s <= -Delta q-tilde < 0, making the line search well posed (Lemma A.6, p. 27)",
+      "four-way case split: finitely or infinitely many multiplier updates times mu -> 0 or bounded away (Lemmas B.3-B.6, pp. 30-34; Theorem 2.4, pp. 9-10)",
+      "reuse of lemmas from the trust-region predecessor [15] with differences argued (pp. 2, 23); Dirichlet's test via [15] (p. 28)"
+    ],
+    "experiments": "Matlab: six variants in one package (BAL/AAL, LS/TR, -safe), CUTEst <= 1000 vars (383 -> 323 solved by some solver), COPS 17 problems (5 all-fail named and excluded), 28 OPF problems in four formulations; profiles truncated at 16 with failure counts, Morales outperforming factors, final-penalty tables by decade (pp. 10-17); Lancelot with only steering added, CUTEst <= 10,000 (457 -> 364), three settings (pp. 17-20); mixed results reported (pp. 15, 17, 20).",
+    "positioning": "Carries exact-penalty steering (Byrd-Nocedal-Waltz, Byrd-Lopez-Calva-Nocedal, Mongeau-Sartenaer) into AL and into Lancelot; traditional AL (Conn-Gould-Toint, Andreani et al., Birgin-Martinez) as baseline (pp. 1, 9-10, 20-21).",
+    "writing": "Detailed version with proofs and tables in appendices (p. 2); frequent 'we claim' for implementation equivalence (pp. 11-12, 23); practice argued to outweigh weaker theory (pp. 10, 20-21); hedges attached to specific results (p. 15).",
+    "limits_future": "Penalty boundedness unproved (pp. 20-21), inexact PCG subproblem without guarantee (p. 11), linear target decrease for simplicity (p. 9), success-filtered test sets (pp. 13, 19); future: steering for other AL codes (p. 21) and a growing decrease factor in Lancelot (p. 20).",
+    "method_links": [
+      {"method": "Method 2", "relation": "evidence", "note": "penalty reduced inside the step computation from predicted linearized-feasibility progress, multiplier update decoupled, transition to infeasible stationary points, final penalty values tabulated", "pages": "pp. 2, 4-9, 12, 14, 19"},
+      {"method": "Method 5", "relation": "evidence", "note": "six arms sharing most components in one package; production code changed only in steering to isolate its effect; mixed and counterintuitive results printed", "pages": "pp. 10, 15, 17-20"},
+      {"method": "Method 1", "relation": "evidence", "note": "steering tests use only Cauchy steps before the expensive direction solve; PCG direction replaced by the Cauchy step when it fails the decrease the analysis needs", "pages": "p. 11"},
+      {"method": "Method 4", "relation": "variant", "note": "weaker theoretical guarantee discounted on empirical grounds, but profiles on success-filtered sets are used without question", "pages": "pp. 10, 13, 20-21"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "safeguard-as-arm", "evidence": "the safeguard a cautious reader would want (steering off below mu = 1e-4) is run as its own variant in both codes and shown unnecessary or harmful", "pages": "pp. 13-14, 18-20"}
+    ],
+    "transferable": [
+      "Tabulate final parameter values by decade for every arm and compare the extreme bins (Tables 2-3, pp. 14, 19-20)",
+      "Run a proposed safeguard as a separate arm instead of adding it by default (pp. 13, 18)",
+      "Insert only the new rule into an existing production code to isolate its effect (Lancelot, pp. 17-18)",
+      "List implementation departures from the analysed algorithm and add a cheap runtime check restoring the theoretical condition (Cauchy-decrease sanity check, pp. 11-12)",
+      "Convexify the curvature term of the model when porting a trust-region method to a line search (p. 5; Lemma A.6, p. 27)",
+      "Declare infeasibility only after the penalty parameter has fallen below a threshold (p. 12)",
+      "Choose the efficiency measure per method type (function evaluations for line search, gradient evaluations for trust region) and say why (pp. 13-14)"
+    ],
+    "coauthors": "Nicholas I. M. Gould, Hao Jiang, Daniel P. Robinson",
+    "quotes": [
+      {"text": "In this manner, we were also able to isolate the effect that steering had on numerical performance", "page": 10},
+      {"text": "Across the board, our results indicate that safeguarding was not necessary and would typically degrade performance when compared to the unrestricted steering approach.", "page": 20}
+    ]
+  },
+  {
+    "id": "S042",
+    "year": "2016",
+    "title": "Handling nonpositive curvature in a limited memory steepest descent method",
+    "read_level": "full",
+    "contribution": "An LMSD method that, when nonpositive curvature is met, takes step sizes from a one-dimensional cubic model whose coefficients come from Ritz and harmonic-Ritz values, reduces to Fletcher's LMSD otherwise, comes with structural theorems guaranteeing a nonnegative cubic coefficient, and beats constant-step handling on 30 nonconvex CUTEst problems for m = 3, 5 (pp. 1-21).",
+    "problem_entry": "BB and Fletcher LMSD methods abandon their step-size model under nonconvexity and use a large constant or discard the sweep; the paper documents this per reference and maps the step-size rule over the gradient (pp. 2, 5-7).",
+    "key_idea": "Cubic model along -g with quadratic coefficient q-hat (harmonic) and cubic coefficient c(q-bar - q-hat)/||s|| when q-hat <= 0, derived from two criteria that agree up to a constant; generalized to m > 1 via symmetrized Fletcher matrices whose spectra interlace (pp. 8-15).",
+    "assumptions": "f continuously differentiable (p. 3); convergence only for the nonmonotone line-search variant, with f bounded below and Lipschitz gradient on an enlarged level set (Theorem 3.4, p. 16); quadratic-case motivation for the matrices, symmetrized heuristically otherwise (pp. 6-7, 13-14).",
+    "proof_devices": [
+      "Theorem 3.1: T_k well defined iff G_k has independent columns, invertible iff R^-1 Q^T g entries do not sum to 1, via a determinant-trace identity (pp. 14, 22-23)",
+      "Theorem 3.2: Hessenberg times upper triangular is Hessenberg, so symmetrization gives tridiagonal and pentadiagonal matrices (pp. 14, 23)",
+      "Theorem 3.3: interlacing of eigenvalues of T and (P^-1 T)^-1 via diagonal-plus-rank-one structure, so the cubic coefficient is nonnegative (pp. 14, 23-24)",
+      "global convergence taken as a special case of Zhang-Hager Theorem 2.2 (Theorem 3.4, p. 16)",
+      "derivation of the cubic coefficient from two independent criteria agreeing up to a constant (eqs. 3.6-3.11, pp. 9-10)"
+    ],
+    "experiments": "Matlab; cubic vs quad-ritz vs quad-hritz differing only in step-size computation, same Zhang-Hager line search (pp. 16-17); m in {1,3,5}; 30 CUTEst unconstrained problems filtered by >= 50 variables and by run outcomes (>= 5 s, nonpositive coefficient met, at least one success) (p. 17); function and gradient evaluations, Morales factors clipped to [-1,1] (p. 17); quad-hritz better on some problems at m = 1, cubic better on majority at m = 3, 5, best m = 5 (pp. 17, 20); per-problem tables (pp. 24-26); no CPU times, no L-BFGS.",
+    "positioning": "Extends Fletcher 2012 and the BB family; contrasts with the constant-step practice of Raydan, Dai-Yuan-Yuan, Xiao et al., Biglari-Solimanpur and with Kafaki-Fatemi; rejects Hermite-interpolation models; reinterprets Fletcher as a cubic model with zero cubic term (pp. 2, 5, 12).",
+    "writing": "Thesis in abstract and introduction paragraph 3 (p. 2); m = 1 then general m (pp. 8-15); before/after step-size maps (Figs. 1-2, pp. 6, 12); notation footnote (p. 9); referees credited with reshaping the numerical aims and scope (p. 21).",
+    "limits_future": "Excessive nonpositive curvature not overcome, larger m does not help (p. 20); small outcome-filtered test set (p. 17); convergence only with an added line search (p. 16); no future directions stated (pp. 20-21).",
+    "method_links": [
+      {"method": "Method 5", "relation": "evidence", "note": "rivals built in the same code with only the step-size rule varied and a shared line search; incumbent's wins at m = 1 acknowledged and tabulated", "pages": "pp. 16-17, 24-25"},
+      {"method": "Method 3", "relation": "variant", "note": "test set filtered to problems where nonpositive curvature occurs instead of constructing hard instances; the filter uses run outcomes", "pages": "p. 17"},
+      {"method": "Method 2", "relation": "variant", "note": "one step-size rule kept across convex and nonconvex regions (cubic term activates only when q-hat <= 0) instead of abandoning the model; no penalty or merit parameter", "pages": "pp. 2, 5, 7, 11"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "reduce-to-incumbent design", "evidence": "new mechanism active only in the failure case; with positive curvature the method is a variant of Fletcher's LMSD and with m = 1 reduces to the m = 1 rule", "pages": "pp. 2, 13"},
+      {"pattern": "map the incumbent's rule", "evidence": "contour plot of step size versus current gradient shows the BB rules carry no information when s^T y < 0; the same plot after the fix", "pages": "pp. 5-6, 11-12"}
+    ],
+    "transferable": [
+      "Contour map of a step-size rule over the current gradient for a fixed previous step, before and after the fix (Figs. 1-2, pp. 5-6, 11-12)",
+      "Derive a coefficient from two independent criteria and keep the common form with one constant (pp. 9-10)",
+      "Assign each degenerate case a named step size with a one-sentence rationale (pp. 10-11)",
+      "Drop the oldest history vectors until the factorization is valid instead of discarding the whole memory (Algorithm 2, p. 15)",
+      "Prove an interlacing inequality to certify the sign of a derived coefficient across a spectrum (pp. 23-24)"
+    ],
+    "coauthors": "Wei Guo",
+    "quotes": [
+      {"text": "Such a choice fails to capture any information from the objective function, which may be detrimental to performance.", "page": 5},
+      {"text": "The three implemented algorithms differed only in the manner in which step sizes were computed.", "page": 16}
+    ]
+  }
+]

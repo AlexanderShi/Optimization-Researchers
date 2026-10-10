@@ -1,0 +1,126 @@
+[
+  {
+    "id": "S021",
+    "year": "2024",
+    "title": "A stochastic sequential quadratic optimization algorithm for nonlinear-equality-constrained optimization with rank-deficient Jacobians",
+    "read_level": "full",
+    "contribution": "A step-decomposition (Byrd-Omojokun) stochastic SQP method without line searches for expectation objectives with equality constraints whose Jacobians may be rank deficient. Convergence in expectation is proved for each limiting behaviour of the adaptive merit parameter: to stationarity, to infeasible stationarity, and probability zero over all runs for a merit parameter that settles too large (arXiv v2 pp. 2-3, 10-25, 31-40).",
+    "problem_entry": "Drops the LICQ-at-every-iterate assumption of the authors' own 2021 stochastic SQP, because rank deficiency is unavoidable in practice; the target includes infeasible stationary points of ||c|| (pp. 2-3, 5).",
+    "key_idea": "The normal step only needs Cauchy decrease, so the tangential step comes from a consistent KKT system that Krylov methods can solve despite singularity. Adaptive chi/zeta classify directions as tangentially or normally dominated, and the step-size projection interval scales with tau only for tangential steps (pp. 5-9).",
+    "assumptions": "f, grad f, c, J bounded and Lipschitz on a set containing the iterates (conceded as 'admittedly not ideal', pp. 4-5); unbiased gradients with bounded variance (p. 6); H_k independent of g_k and positive definite on Null(J_k) (p. 6); deterministically bounded noise only in the vanishing-tau event (p. 19); Lipschitz constants L and Gamma known or estimated (pp. 10, 26).",
+    "proof_devices": [
+      "deterministic twin Theorem 1 sets the aims of the stochastic analysis (p. 10; Appendix A pp. 29-31)",
+      "adaptive chi, zeta, xi proved constant after finitely many iterations with bounds uniform over runs (Lemmas 2-3, pp. 11-12)",
+      "null-space representation u_k = Z_k w_k gives a conditionally unbiased tangential step under rank deficiency (Lemma 4, p. 12)",
+      "case split on merit-parameter events E_tau,low / E_tau,zero / E_tau,big plus complementary bad events (pp. 14-25)",
+      "tree of finite signatures plus multiplicative Chernoff bound for total probability zero over all runs (p. 24; Appendix B pp. 31-40)",
+      "uncovered diminishing-beta case argued detectable and fixable by switching to constant beta (p. 22)",
+      "reset beta_k whenever an adaptive parameter changes (p. 18)"
+    ],
+    "experiments": "Matlab, code on GitHub (p. 25). 67 CUTEst equality problems made degenerate by duplicating the last constraint, noise levels from 1e-8 to 1e-1, 10 seeds, 670 runs per level. Baseline is stochastic subgradient tuned per instance with 440x the iterations, box plots (pp. 26-27). 11 LIBSVM constrained logistic-regression sets with a duplicated constraint, 5 seeds, 95% CIs, baselines get 16x and 11x the epochs (pp. 28-30). Event tau_{k-1} <= tau_trial,true held in about 97-98% of iterations (pp. 27, 29).",
+    "positioning": "Extends [1] (Berahas-Curtis-Robinson-Zhou 2021) and the deterministic rank-deficient method [5] (Curtis-Nocedal-Waechter). Differentiates point by point from Na-Anitescu-Kolar [15] (LICQ assumed, line search with accurate estimates) and dismisses stochastic penalty and Frank-Wolfe approaches (pp. 3, 5).",
+    "writing": "The contribution sentence comes first in the abstract (p. 2). Theorem 1 serves as a roadmap with forward page references (pp. 10-11). Weak points are stated openly ('admittedly not ideal' p. 4, 'unfortunate case' p. 22, 'open question' p. 25). There are many parenthetical motivation remarks (p. 7).",
+    "limits_future": "Boundedness assumptions (pp. 4-5); diminishing-beta gap (p. 22); open question on vanishing tau with unbounded noise (p. 25); tau_min may be near zero, so practitioners should be wary (pp. 18-19); larger step rules via one-dimensional search are not tested (p. 26). No explicit future-work list (p. 29).",
+    "method_links": [
+      {"method": "Method 2", "relation": "evidence", "note": "One algorithm moves to minimizing constraint violation through the adaptive merit parameter; the analysis is organised by tau's limiting behaviour; infeasible stationary termination is built in", "pages": "pp. 5, 7, 10, 19, 22-25"},
+      {"method": "Method 3", "relation": "evidence", "note": "Degenerate instances made mechanically by duplicating the last constraint for CUTEst and the logistic-regression constraints; how narrow the construction is goes unstated, and no infeasible instances are used", "pages": "pp. 27-28"},
+      {"method": "Method 5", "relation": "evidence", "note": "Baseline tuned per instance and given 440x the iterations (16x/11x the epochs); same Lipschitz estimates for all; rival excluded for a stated regime mismatch; but 'regularly outperforms' glosses over table rows that favour the baseline", "pages": "pp. 25-30"},
+      {"method": "Method 1", "relation": "variant", "note": "Normal step accepted after any number >= 1 of CG/GLTR iterations through a Cauchy-decrease condition derived from the merit analysis, but no iterative-solver termination test is designed", "pages": "pp. 5-6"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "event-split analysis of adaptive parameters", "evidence": "Separate theorems for tau settling small, vanishing, settling too large (probability zero), and named pathological events argued observable or open", "pages": "pp. 11, 14, 19, 22, 24-25"},
+      {"pattern": "self-tuning monotone estimates of unknown constants", "evidence": "chi, zeta, xi sequences replace problem constants that exist but cannot be computed, and are proved to settle after finitely many iterations with run-uniform bounds", "pages": "pp. 7-8, 11-12"}
+    ],
+    "transferable": [
+      "Duplicate a constraint so that every instance violates LICQ without changing the feasible or stationary sets (p. 27)",
+      "Split the step-size projection interval by tangentially versus normally dominated directions so that feasibility progress survives a vanishing merit parameter (p. 9)",
+      "Tree of signatures plus Chernoff bound to show a total-probability-zero result over uncountably many runs (p. 24; Appendix B)",
+      "Reset the step-size schedule whenever an adaptive estimate changes (p. 18)",
+      "Log how often the analysed event held over all iterations and in the final window of every run (pp. 27, 29)",
+      "Report the best iterate using true-gradient least-squares multipliers that the algorithm never uses (pp. 25-26)"
+    ],
+    "coauthors": "Albert S. Berahas, Michael J. O'Neill, Daniel P. Robinson",
+    "quotes": [
+      {"text": "One finds that it is the adaptivity of our merit parameter (see (10) later on) that necessitates the aforementioned boundedness assumptions that we use in our analysis.", "page": 5},
+      {"text": "This provides evidence for our claim that the merit parameter not reaching a sufficiently small value is not an issue of practical concern.", "page": 27}
+    ]
+  },
+  {
+    "id": "S030",
+    "year": "2024",
+    "title": "Sequential quadratic optimization for stochastic optimization with deterministic nonlinear inequality and equality constraints",
+    "read_level": "full",
+    "contribution": "Extends adaptive stochastic SQP to equality plus bound (hence general inequality) constraints. Because the search directions are now biased, unbiasedness is replaced by a projection argument, and convergence in expectation is proved under the event that the merit parameter settles (arXiv v1 pp. 3, 6-8, 15-23).",
+    "problem_entry": "Almost no stochastic methods exist for nonlinear inequality constraints, and with inequalities the stochastic direction is automatically biased, which breaks the unbiasedness used in [1] (p. 3).",
+    "key_idea": "A regularized feasibility QP (7) whose zero solution certifies feasibility or infeasible stationarity; an optimality QP (8) that matches its linearized progress while keeping x >= 0; a merit and ratio parameter as in [1]; and a step size chosen in an interval with an upper end computed from a strongly convex function (pp. 6-8).",
+    "assumptions": "Smooth, bounded, Lipschitz f and c plus full row rank Jacobian over X (p. 5); unbiased gradients with variance <= rho_k (p. 5); SPD H_k with uniform bounds, so guarantees are first-order type (p. 6); event E that tau settles at a positive constant (Assumption 4, p. 16); rho_k <= iota*beta_k^2 for the diminishing case, stronger than [1] because of bias (p. 19).",
+    "proof_devices": [
+      "subproblem solutions as stationarity measures, zero iff feasible/infeasible-stationary or KKT (Lemmas 1-5, pp. 8-12)",
+      "every-run monotonicity and fixed-fraction decrease of tau and xi (Lemmas 6-13, pp. 12-16)",
+      "search direction as an H-norm projection, with the obtuse angle lemma bounding ||d_k - d_true|| by the gradient error (Lemmas 12 and 14, pp. 15, 17)",
+      "filtration of trace sigma-algebras conditioned on event E (p. 16)",
+      "Theorem 1: O(beta) limsup of averaged stationarity for constant beta; vanishing for diminishing beta with rho_k <= iota*beta_k^2 (pp. 19-21)",
+      "Theorem 2: tau does not vanish under uniformly bounded gradient error (p. 23)",
+      "deterministic Proposition 1 stated without proof, citing space (p. 23)"
+    ],
+    "experiments": "Matlab and Gurobi against the authors' Julia code for Na et al.'s active-set SQP [31] at default settings. 323 CUTEst inequality problems (one filter is f(x_k) >= -1e20 in all runs of the authors' own algorithm), 4 noise levels, 5 runs, budget of 1e4 samples or 12 h, same x0 and noise, a shared best-iterate rule. Head-to-head on 57 problems only, 266 shown for the authors' method alone; box plots; diminishing-step results left out for the page limit (pp. 24-25).",
+    "positioning": "Places SQP against penalty methods (ill-conditioning) and interior-point methods (best in deterministic practice; no stochastic IPM exists). Surveys the follow-ups to [1] and [32], including S021, and contrasts with [31], which refines estimates for near-deterministic guarantees (pp. 2-3).",
+    "writing": "Roadmap paragraph at the start of section 4 (p. 8); a paragraph that defends Assumption 4 in advance (p. 16); simplifications flagged (pp. 5-6); empirical claims hedged with 'can outperform' (pp. 2, 25) and 'comparatively good' (p. 24).",
+    "limits_future": "Full-rank Jacobians assumed (p. 5); Lipschitz constants needed and estimated in practice (pp. 24-25); probability zero for tau settling too large deferred to [1] (p. 23); deterministic result unproved (p. 23); small head-to-head set (p. 24). Future work: loosen the assumptions (p. 25); an almost-sure version of Theorem 1(b) may be possible (p. 21).",
+    "method_links": [
+      {"method": "Method 2", "relation": "evidence", "note": "Single algorithm with an adaptive merit parameter, infeasible-stationary termination, and a diagnosis of a vanishing tau as a sign of large gradient errors", "pages": "pp. 7-8, 23"},
+      {"method": "Method 5", "relation": "variant", "note": "External rival code run with default parameters, same x0, same noise and a shared best-iterate rule, with its authors consulted; but no tuning, no handicap in numbers, only 57 of 323 problems shared", "pages": "pp. 24-25"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "event-split analysis of adaptive parameters", "evidence": "Main theory under the event that tau settles; separate non-vanishing theorem; too-large case deferred to [1]", "pages": "pp. 8, 16, 21-23"},
+      {"pattern": "projection non-expansiveness instead of unbiasedness", "evidence": "Biased constrained directions handled by bounding the direction error through the H-norm projection and the obtuse angle lemma", "pages": "pp. 15, 17"}
+    ],
+    "transferable": [
+      "A regularized feasibility QP whose zero solution certifies feasibility or infeasible stationarity, with the optimality QP required to match its linearized progress (pp. 6, 8-9)",
+      "Bound the stochastic direction error by the gradient error through projection non-expansiveness (pp. 15, 17)",
+      "Choose the step size in an interval whose upper end is the root of a strongly convex merit-bound function, searching geometrically from the lower end (pp. 7, 24)",
+      "When the rival code covers only part of the test set, show the head-to-head comparison on the shared subset and report your method alone on the rest (p. 24)"
+    ],
+    "coauthors": "Daniel P. Robinson, Baoyu Zhou",
+    "quotes": [
+      {"text": "We remark in passing that interior-point methods often outperform SQP methods in the deterministic setting, but as far as we are aware there exists no interior-point method designed for the stochastic setting that we consider.", "page": 3},
+      {"text": "This discussion is meant to provide confidence to a user that our algorithm is based on one that has state-of-the-art convergence properties under common assumptions in the deterministic setting.", "page": 8}
+    ]
+  },
+  {
+    "id": "S069",
+    "year": "2024",
+    "title": "Using synthetic data to mitigate unfairness and preserve privacy in collaborative machine learning",
+    "read_level": "full",
+    "contribution": "A two-stage, single-transmission collaborative-ML pipeline. Each client learns fairness-penalized synthetic data through a bilevel problem solved with implicit differentiation, then passes it through DP-CTGAN, and the server trains a plain model on the pooled synthetic data. It is demonstrated on the Law School dataset (arXiv v2 pp. 2-3, 6-13).",
+    "problem_entry": "Fair federated-learning aggregation needs frequent communication and sends client statistics that may leak; fairness is moved into the client-side synthetic data instead (pp. 2, 5).",
+    "key_idea": "Bilevel problem: the inner problem trains a regularized logistic model on synthetic features; the outer problem chooses the features for low loss and a small fairness covariance on real data, using a fixed penalty rho_o. The gradient comes by implicit differentiation, followed by a DP generator, with one transmission (pp. 6-10).",
+    "assumptions": "Single binary sensitive feature, binary labels, linear predictor, decision-boundary covariance surrogate for SP/EO (pp. 4, 6); privacy inherited from DP-CTGAN through post-processing (pp. 6, 12); no convergence assumptions for the bilevel solve.",
+    "proof_devices": [
+      "n/a (no theorems); only a communication-cost comparison O(K*t*|theta|) against O(K*|D|) + O(K*|theta|) with a crossover condition (p. 9)"
+    ],
+    "experiments": "Law School dataset split into 2 clients, 80/20 train/test, rho_o swept over {0, 10, 100, 1000, 10000}; accuracy, covariance and |SPD|/|EOD| for stage-1 data and for stage-2 data at 100% and 10% size (Figs. 2-3, Tables 1-2, pp. 9-12). No repeated runs, no external baselines, rho_o chosen from test-set tables (pp. 11-12).",
+    "positioning": "Extends synthetic-data federated learning (Goetz-Tewari, FedSynth) from efficiency to fairness; criticises aggregation-based fair FL (FairFed, FAIR-FATE, FedGAN) on communication and leakage; hedged first-of-its-kind claim (pp. 3, 5-6).",
+    "writing": "Bulleted contributions with a flexibility bullet listing user knobs (p. 3); 'We stress' sentences for design decisions (pp. 6, 8); moderately hedged empirical claims (p. 13).",
+    "limits_future": "Limits are barely stated: few clients for demonstration (p. 9), single sensitive feature and binary task for simplicity (p. 6), stage-2 covariances not monotone (p. 12). No future directions in the conclusion (p. 13). Convergence of the bilevel solve and test-set selection are not addressed.",
+    "method_links": [
+      {"method": "Method 5", "relation": "contradiction", "note": "No external fair-FL baseline although such methods are discussed, one dataset, two clients, no repeated runs, penalty value chosen on test results", "pages": "pp. 5, 9-12"},
+      {"method": "Method 2", "relation": "variant", "note": "The penalty parameter is a fixed user knob swept over a grid for the fairness-accuracy trade-off, not steered adaptively", "pages": "pp. 3, 8-10"},
+      {"method": "Method 4", "relation": "variant", "note": "Full accuracy/fairness tables shown so the reader can weigh the trade-off, but the authors then pick the setting on test data", "pages": "pp. 11-12"},
+      {"method": "Method 1", "relation": "variant", "note": "Inner solve fixed at 100 L-BFGS iterations while the implicit gradient assumes inner optimality; inner accuracy is not tied to the outer method's needs", "pages": "pp. 8-9"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "push the constraint into the data", "evidence": "Fairness built into client synthetic data so that the server solves a standard unconstrained ML problem", "pages": "pp. 3, 8"}
+    ],
+    "transferable": [
+      "Regularize the inner problem of a bilevel formulation so that its minimizer is unique and the implicit gradient is well defined (p. 8)",
+      "State the communication-cost crossover condition of a one-shot scheme against the iterative baseline (p. 9)",
+      "Report each pipeline stage separately against a no-intervention baseline (Tables 1-2, p. 12)"
+    ],
+    "coauthors": "Chia-Yuan Wu, Daniel P. Robinson",
+    "quotes": [
+      {"text": "We stress that the server solves a standard ML problem to learn its model parameters, i.e., it does not make any attempt to account for fairness or privacy.", "page": 8},
+      {"text": "Our tests use a relatively small number of clients for our purpose of demonstration.", "page": 9}
+    ]
+  }
+]

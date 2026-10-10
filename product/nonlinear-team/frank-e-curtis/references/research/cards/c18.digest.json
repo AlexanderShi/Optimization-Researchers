@@ -1,0 +1,298 @@
+[
+ {
+  "id": "S020",
+  "year": "2021",
+  "title": "Trust-region Newton-CG with strong second-order complexity guarantees for nonconvex optimization",
+  "read_level": "full",
+  "contribution": "Adds an eps_H regularization, a strengthened truncated-CG residual test, a negative-curvature exit and an optional CG cap to classical trust-region Newton-CG, plus a randomized minimum-eigenvalue oracle called only on specific CG exit flags. This gives O(eps^-3/2) iterations and O~(eps^-7/4) Hessian-vector products to (eps, eps^1/2)-stationary points, while iteration and gradient profiles on 109 CUTEst problems stay close to the unmodified method.",
+  "problem_entry": "Methods with the best complexity bounds depart from what works in practice and have not been shown competitive with trust-region Newton-CG, so the question is whether the practitioners' method itself can reach the best bounds with minor modifications (abstract; p. 2).",
+  "key_idea": "Regularize the trust-region model by eps_H (2 eps_H for CG). Stop CG on ||r|| <= (zeta/2) min{||g||, ||s||}, exit on curvature <= -eps, optionally cap the iterations from CG bounds, and use CG's typed exit flags (bnd-neg, bnd-norm, int-res, int-max) to decide when to call a randomized Lanczos eigenvalue oracle. Everything else is a traditional trust-region method (pp. 4-5, 10-15).",
+  "assumptions": "f bounded below, C2 with Lipschitz gradient and Hessian along the steps (Assumption 1, p. 3). The MEO uses at most min{n, 1 + C eps_H^-1/2} Hessian-vector products (Assumption 2, p. 14). Implementation Strategy 4.1 reuses negative-curvature directions (p. 18). The regularization is admitted to be there for the analysis, with a possible practical downside (p. 4).",
+  "proof_devices": [
+   "Model decrease >= (1/2) eps_H ||s||^2 from trust-region optimality conditions (Lemma 1, p. 6); for CG steps via monotone CG decrease and conjugacy identities (31) at a negative-curvature exit (Lemma 8, pp. 11-13)",
+   "Small steps succeed, which gives a trust-radius floor delta_min proportional to eps_H/L_H (Lemma 2, p. 6)",
+   "Quadratic lower bound on ||s|| from the Hessian-Lipschitz bound plus the scalar inequality (12) from Royer-Wright (Lemma 3, p. 7)",
+   "Partition of successful iterations into S_L, S_GG, S_GL with |S_GL| <= |S_L| + 1 (Lemma 4, p. 8); unsuccessful iterations bounded by geometric radius shrinkage (Lemma 5, pp. 8-9)",
+   "CG iteration bound J(M, eps, zeta) = O~(eps^-1/2) from the condition number; an exceeded cap certifies H <= -eps I (Lemmas 6-7, p. 11)",
+   "Success probability >= (1 - xi)^K_S by induction on the number of oracle calls (Theorem 2, pp. 18-19; proof largely credited to Yue Xie, p. 22)",
+   "Operation complexity min{n, eps^-1/4} O~(eps^-3/2) Hessian-vector products (Theorem 3, pp. 19-20)"
+  ],
+  "experiments": "Matlab. Seven variants: exact, explicit cap and no cap, each with and without the eps_H regularization, plus TRACE. 109 CUTEst problems with n >= 100 (sizes near [100, 1000], a size filter set before the runs). Performance profiles of iterations, gradients and Hessian-vector products at two tolerances. All variants solve >= 101 of 109. The no-reg variants need fewer Hessian-vector products. The MEO was called only at the last iteration on all but three problems. No CPU times (pp. 20-23).",
+  "positioning": "Trust-region counterpart of the Royer-Wright line-search Newton-CG (inspired by [30], matching [30, Theorems 5-6]). Follows TRACE [11]. Contrasted with cubic regularization and with accelerated-gradient methods [1, 5, 6] that lack practical evidence against trust-region Newton-CG (pp. 2-4, 10).",
+  "writing": "Early 'Our chief contribution' sentence (p. 2). Candid admissions about the regularization downside and the MEO failure modes (pp. 4, 20). The conclusion's 'relatively minor' practical effect (p. 22) is softer than the reported 'noticeable effect' on Hessian-vector products (p. 21).",
+  "limits_future": "The MEO can fail with probability xi per call; regularization costs Hessian-vector products; moderate-size tests, no timings. Future: an implicit CG cap for a deterministic O~(eps^-7/4) first-order bound, 'significantly more delicate to implement' (pp. 20, 22).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Measures the cost of its own complexity device: the no-reg variants win on Hessian-vector products and the paper says they lack the guarantees; the regularization is called an analysis convenience with a practical downside. Conclusion softens this (Inner Tension 1).",
+    "pages": "pp. 4, 21-22"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "All variants in one Matlab framework with exactly one component toggled (regularization; cap); in-house TRACE as optimal-complexity rival; incumbent's Hessian-vector-product win printed. No external code, no timings.",
+    "pages": "pp. 21-22"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "CG residual test (27), negative-curvature threshold and cap are derived from what the outer complexity argument needs (decrease and next-gradient bounds), not from a merit-model reduction.",
+    "pages": "pp. 10-11, 16-17"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Equip the workhorse",
+    "evidence": "Minimal modifications to trust-region Newton-CG reach optimal complexity; each modification ablated to show its practical cost.",
+    "pages": "pp. 2, 4, 21-22"
+   },
+   {
+    "pattern": "Typed inner-solver exits route the outer safeguard",
+    "evidence": "CG returns bnd-neg, bnd-norm, int-res or int-max; only int-max, or int-res with small gradient, triggers the eigenvalue oracle; an exceeded cap is a curvature certificate.",
+    "pages": "pp. 10-15"
+   }
+  ],
+  "transferable": [
+   "Partition successful iterations into S_L, S_GG and S_GL with |S_GL| <= |S_L| + 1 to bound second-order iteration counts (p. 8).",
+   "Use -a + sqrt(a^2 + bt) >= (-a + sqrt(a^2 + b)) min{t, 1} to turn a quadratic bound on ||s|| into a min-type decrease bound (p. 7).",
+   "Reuse a rejected negative-curvature direction until the next success, so that oracle calls are bounded by |S| and success probability by (1 - xi)^K_S (pp. 18-19).",
+   "Ablate the analysis-motivated term in every variant and report the measure it inflates (pp. 21-22).",
+   "Analyze an exact-subproblem twin first, then mirror each lemma for the inexact version (pp. 4-18)."
+  ],
+  "coauthors": "Daniel P. Robinson, Clement W. Royer, Stephen J. Wright",
+  "quotes": [
+   {
+    "text": "The variants with no regularization term in the subproblems outperform the others in this respect; recall that these variants do not possess optimal complexity guarantees.",
+    "page": 22
+   },
+   {
+    "text": "we expect the “cap” of Algorithm 2 to be triggered only in rare cases, due to the conservative nature of the CG convergence bounds that gave rise to this cap.",
+    "page": 20
+   }
+  ]
+ },
+ {
+  "id": "S037",
+  "year": "2021",
+  "title": "Inexact sequential quadratic optimization for minimizing a stochastic objective function subject to deterministic nonlinear equality constraints",
+  "read_level": "full",
+  "contribution": "A stochastic inexact SQO method (SISQO) for stochastic objectives with deterministic equality constraints. Normal steps need only Cauchy decrease; tangential and dual steps come from an iterative KKT solve stopped by two merit-model termination tests whose residual bounds scale with the step-size sequence. An adaptive l2 merit parameter and a step-size interval complete the method. It gives SG-like convergence in expectation under a merit-parameter event and beats a work-matched exact-solve variant on 11 CUTEst problems and two optimal-control problems.",
+  "problem_entry": "Only three stochastic SQP methods with constrained-problem guarantees exist [2, 3, 24], all of which factorize a matrix every iteration; inexactness conditions for SQO are 'a challenging task with few solutions' (p. 3).",
+  "key_idea": "Step decomposition with Cauchy-decrease normal step (6). MINRES on the KKT system stopped by Termination Test 1 (model reduction (13) at the current tau, residuals <= kappa beta_k) or Test 2 (linearized feasibility (17) plus tau update (18)-(19)). Step size anywhere in [alpha_min, alpha_max] with alpha_max - alpha_min <= theta beta_k^2 (pp. 5-9).",
+  "assumptions": "C1 functions with Lipschitz bounded derivatives and a uniformly full-rank Jacobian; unbiased, bounded-variance gradients; H_k independent of g_k and positive definite on the null space; a convergent inner solver; c_k != 0 or g_k not in Range(J^T); bounded duals and residuals. The theorem is conditioned on event E_tau,low, and the other merit-parameter events are 'ignored' by reference to [3] (pp. 4-6, 10, 13, 17-18).",
+  "proof_devices": [
+   "Well-posedness of the termination tests by cases on ||c_k|| (Lemma 1, pp. 10-11)",
+   "Strongly convex step-size function phi(alpha) built from the piecewise-quadratic merit upper bound (21): phi(0) = phi(alpha_phi) = 0, so any alpha in the interval decreases the bound (Lemma 4, pp. 12-13)",
+   "Deterministic floor xi_min on the stochastic ratio sequence xi_k (Lemmas 7-9, p. 14)",
+   "Null-space representation of u_k - u_k^true with projector bound ||I - Z(Z^T H Z)^-1 Z^T H|| <= 1 via eig(AB) = eig(BA) (eqs. (34)-(36), p. 15)",
+   "Bias bounds O(beta_k) for inexact tangential steps by tying residuals to beta_k (Lemmas 11-13, pp. 15-17)",
+   "Sign split of grad f^T (d_k - d_k^true) using alpha_max - alpha_min <= theta beta_k^2 to control step/direction correlation (Lemma 14, pp. 18-19)",
+   "SG-type expected-average stationarity results for constant and diminishing beta_k (Theorem 1, pp. 20-21)"
+  ],
+  "experiments": "Matlab, CG normal step, MINRES tangential step. SISQO (kappa = 0.1 or 1e-4) against SISQO exact (kappa = 1e-7), with SISQO exact given SISQO's total MINRES count. 11 of 138 CUTEst equality problems after filters that include LICQ at all iterates of all runs and the objective above -1e50 over runs; Gaussian gradient noise at three levels; 5 runs, box plots. Two Poisson-type optimal-control problems, 10 runs, Tables 1-2. SISQO has lower feasibility error with more outer iterations; one Table 1 stationarity cell favours exact (pp. 21-25).",
+  "positioning": "Inexact extension of the exact stochastic SQP [2, 3]; contrasted with Na-Anitescu-Kolar's augmented-Lagrangian merit [24]; termination tests inspired by the deterministic inexact SQP tests [6, 7, 12]; result 'comparable' to [3] and to SG [5] (pp. 3, 7, 25).",
+  "writing": "Enumerated contributions (pp. 3-4). Assumptions defended with 'we contend' and 'mild' (pp. 10, 13, 17). Analysis-only quantities flagged 'for purposes of our analysis only' (pp. 6, 18). Two-sentence conclusion with no future work (pp. 24-25).",
+  "limits_future": "Theory only under E_tau,low; full-rank Jacobian everywhere; small, outcome-filtered test set; Lipschitz constants estimated by finite differences; no complexity bound; no future directions stated (pp. 5, 17, 23-25).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "MINRES stopped by tests derived from the merit-model reduction (13), with separate primal and dual residual bounds; new: tolerance tied to the step-size sequence beta_k.",
+    "pages": "pp. 6-7"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Merit parameter steered by Termination Test 2 and rule (18)-(19) with guaranteed fractional decrease; bad events argued away rather than removed.",
+    "pages": "pp. 7, 12, 17"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "In-framework rival varying only the MINRES tolerance; shared normal step to 'limit the variation attributable'; budgets matched in MINRES iterations.",
+    "pages": "p. 22"
+   },
+   {
+    "method": "Method 5",
+    "relation": "contradiction",
+    "note": "Test set filtered on run outcomes (LICQ at all iterates of each run; objective above -1e50), the Heuristic 7 anti-example; 5 runs; prose claims better stationarity across the board although one Table 1 cell favours the exact arm.",
+    "pages": "pp. 23-25"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Success judged by feasibility and a stationarity measure with least-squares multipliers computed only for measurement, independent of the algorithm's own tests.",
+    "pages": "p. 22"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Inner tolerance tied to the outer step-size schedule",
+    "evidence": "Residual bounds ||rho_k|| <= kappa_rho beta_k, ||r_k|| <= kappa_r beta_k make inexactness errors O(beta_k) and O(beta_k^2), like the SG step terms; same move in S056 (eps_t = a_t theta_t).",
+    "pages": "p. 7; pp. 15-19"
+   },
+   {
+    "pattern": "Work-matched inexact-vs-exact ablation",
+    "evidence": "The accurate arm receives the inexact arm's total MINRES iteration count as its budget; the best iterate is selected afterwards.",
+    "pages": "p. 22"
+   }
+  ],
+  "transferable": [
+   "Define the admissible step size as an interval with gap theta beta_k^2 and prove a sign-split lemma to control the correlation between random step and random direction (pp. 9, 18-19).",
+   "Represent the inexact tangential step in null-space coordinates and bound the oblique projector by 1 through eig(AB) = eig(BA) (pp. 15-16).",
+   "For a measure-zero degeneracy the analysis excludes, state the practical fallback: resample, or perturb with Gaussian noise so that it holds with probability one (p. 10).",
+   "Compare inexact and accurate variants at equal inner-solver work and judge both with independently computed least-squares multipliers (p. 22)."
+  ],
+  "coauthors": "Daniel P. Robinson, Baoyu Zhou",
+  "quotes": [
+   {
+    "text": "Our reason for comparing these two variants is to focus attention on the numerical gains obtained as a result of using inexact subproblem solutions.",
+    "page": 22
+   },
+   {
+    "text": "and (iv) the LICQ was satisfied at all iterates encountered in each run of our algorithm.",
+    "page": 23
+   }
+  ]
+ },
+ {
+  "id": "S048",
+  "year": "2021",
+  "title": "Practical optimal control of a wave-energy converter in regular wave environments",
+  "read_level": "full",
+  "contribution": "A time-domain optimal control model for a two-body point-absorber wave-energy converter. It adds a quadratic control-cost term, hard and soft force bounds, a displacement bound and a smoothness penalty, with coefficients identified from WEC-Sim runs. The model is solved by IPOPT and demonstrated in a receding-horizon loop that is real-time when the soft bound is inactive.",
+  "problem_entry": "WEC control models ignore the cost of applying control and device damage. With no incident wave the standard model still predicts positive energy (about 1e5), exposing the missing cost term (pp. 2, 6).",
+  "key_idea": "Augment the discretized energy-maximization model with lambda1 u^2 (control cost, derived from damping data), lambda2 (Delta u)^2 (smoothness), a linearized soft-bound penalty rho alpha_k, and hard bounds; identify the linear dynamics A, b, c by sequential least squares on WEC-Sim experiments (pp. 5-9).",
+  "assumptions": "Linear wave theory, no viscous drag, negligible mooring force, ideal power take-off, regular waves only, quadratic control cost as a proxy; the abstract calls the QP efficiently solvable, the conclusion calls its objective non-convex (pp. 1, 3-4, 7-8, 18).",
+  "proof_devices": [
+   "n/a: no theorems or proofs",
+   "(modeling, not proof) acceleration term approximated by xi z(t) via negative correlation of position and acceleration for a sinusoid (eq. (9), p. 4)",
+   "(modeling, not proof) control-cost order P ~ O(F^2) from a fitted model zdot^2 = 1330.2/(b + 9158.7), chosen by largest R^2 (Appendix A, pp. 22-24)"
+  ],
+  "experiments": "AMPL + IPOPT, 6 m / 4 s wave only shown (others 'similar'). lambda1, lambda2 chosen as the smallest giving a velocity period within 5% of the wave period, then the largest across waves (1e-6, 1e-6). Misspecification-ratio plot shows underestimation can make the objective negative. 2500-instance (eta, rho) grid solved to local optimality with multi-start agreement; CPU about 4x as eta -> 0. Receding horizon: 0.14 s per solve against a 0.4 s update horizon for eta = 1 (real time), about 0.5 s for eta = 0.1 (not). No baseline controllers (pp. 11-18).",
+  "positioning": "Within WEC constrained optimal control and MPC (Falnes, Hals et al., Cretel et al., Richter et al., Nielsen et al.); argues latching and phase control account for the cost only implicitly and are 'too simplistic' (pp. 2, 6).",
+  "writing": "Three contribution bullets (p. 3); a counterexample (energy from no wave) carries the argument (p. 6); sanity checks labelled (p. 11); abstract and conclusion disagree on convexity (pp. 1, 18); typos (pp. 4, 16).",
+  "limits_future": "Regular waves only; future: irregular waves with prediction and coefficient updates, multiple converters, a device-specific control-cost form (p. 19). Not stated: one wave shown, no baseline, real-time only for eta = 1.",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "A degenerate instance (zero incident wave) is built on purpose to break the standard model; what is broken is the formulation, not a solver.",
+    "pages": "p. 6"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Audits the literature's objective (energy without control cost), which rewards unphysical solutions; misspecification-ratio plot exposes the asymmetric risk. A modeling yardstick, not an evaluation one.",
+    "pages": "pp. 2, 6, 13"
+   },
+   {
+    "method": "Method 5",
+    "relation": "contradiction",
+    "note": "No rival controller run; latching and phase control dismissed by argument; results for two of three waves withheld as 'similar'.",
+    "pages": "pp. 6, 11"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Known-answer input as a model test",
+    "evidence": "Run the model with zero forcing, where the true net energy is trivially non-positive; a positive optimum reveals the missing cost term.",
+    "pages": "p. 6"
+   },
+   {
+    "pattern": "Physically anchored weight calibration",
+    "evidence": "Smallest lambda giving a velocity period within 5% of the wave period; the largest across wave conditions is taken, justified by an asymmetric misspecification study.",
+    "pages": "pp. 11-13"
+   }
+  ],
+  "transferable": [
+   "Zero-forcing sanity instance to expose a missing objective term (p. 6).",
+   "Sequential least-squares identification of surrogate dynamics, one coefficient block per experiment type (free decay, free floating, controlled) (p. 8).",
+   "Misspecification-ratio plot f_true(x(lambda))/f_true(x(lambda_true)) to decide which way to err when choosing a weight (p. 13).",
+   "Report solve time against the controller update horizon per parameter regime, so that 'real-time' is a measured claim with stated limits (pp. 14, 16, 18)."
+  ],
+  "coauthors": "Mertcan Yetkin, Sudharsan Kalidoss, Lawrence V. Snyder, Arindam Banerjee",
+  "quotes": [
+   {
+    "text": "Any optimization model that does not incorporate the cost of control will suffer from this same sort of error.",
+    "page": 6
+   },
+   {
+    "text": "We see from this experiment that it is arguably much worse to underestimate the cost coefficients than to overestimate them.",
+    "page": 13
+   }
+  ]
+ },
+ {
+  "id": "S056",
+  "year": "2021",
+  "title": "An accelerated communication-efficient primal-dual optimization framework for structured machine learning",
+  "read_level": "full",
+  "contribution": "AccCoCoA+, a Nesterov-accelerated version of the CoCoA+ distributed primal-dual framework. It proves an O(1/t^2) suboptimality rate (and a duality-gap rate) with constants in data-correlation quantities, for arbitrary, possibly randomized and inexact, local solvers and without strongly convex subproblems. Experiments against CoCoA+ on SVM and Lasso show gains, larger for small regularization.",
+  "problem_entry": "CoCoA and CoCoA+ get only O(1/t) for general convex problems. Catalyst cannot take randomized local solvers whose quality holds only in expectation, and accelerated rivals [11, 5] need strongly convex subproblems (p. 3).",
+  "key_idea": "Keep CoCoA+'s partition-aware local subproblem and one communicated vector per round; add coupling sequences (y_t, z_t) and a scalar theta_t recursion computed identically on every node; allow eps_t-inexact local solutions in expectation (pp. 4-6).",
+  "assumptions": "f, g_i closed convex; grad f Lipschitz (constant lambda, a symbol also used for the regularizer); g_i* L-Lipschitz; ||A_i|| <= 1; disjoint data partition; local solver error eps_t in expectation (Assumptions 1-2, pp. 2, 4-5). Strong convexity of the subproblems is not needed thanks to the structure of O_A (p. 8).",
+  "proof_devices": [
+   "theta_t recursion: positivity, monotonicity and theta_t <= 2/(t gamma + 2) by induction on a quadratic in 1/theta (Lemma 1, pp. 6-7)",
+   "alpha_t as an explicit convex combination of z_0..z_t, giving a convex upper bound g_hat_t of the separable part (Lemma 2, p. 7; eq. (23), p. 9)",
+   "Strong convexity of each subproblem in the data seminorm ||A(.)|| (Lemma 3, pp. 7-8)",
+   "Randomized estimate-sequence argument (after Fercoq-Richtarik) with Lyapunov quantity (1/theta^2) phi_t + (gamma lambda sigma'/2) r_t^2 unrolled; inexact-solve terms C1, C2 bounded via (29) and Jensen (Theorem 4, pp. 8-13)",
+   "Duality-gap rate from suboptimality via Dunner et al. [4, Theorem 4] (Theorem 5, p. 13)",
+   "Iteration bound sqrt(8L^2/(lambda eps)) against CoCoA+'s 8L^2/(lambda eps); inexact schedules eps_t = a_t theta_t (Corollary 6 and §3.2, pp. 14-15)"
+  ],
+  "experiments": "C++/MPI on EC2 m3.xlarge, K = 4, SDCA local solver (H = 5e5). url, rcv1.test, covtype, epsilon (news20 also appears in the figures but not in Table 2). AccCoCoA+ against CoCoA+ only, gamma in {1/K, 1}: duality gap against iterations and time for hinge-loss SVM, a lambda sweep, Lasso suboptimality, an H sweep showing a dataset-dependent time-optimal H, and scaling over K = 2-16. No repeated runs or variability reported. Code released (pp. 4, 16-20).",
+  "positioning": "Builds on CoCoA, CoCoA+ and DisDCA; contrasts with DiSCO and DANE Newton-type methods (a communication round per CG step) and with asynchronous shared-memory methods; claims constants free of subproblem Lipschitz constants, unlike CoCoA+; Lemmas adapted from Fercoq-Richtarik (pp. 2-3, 5, 7).",
+  "writing": "Four contribution bullets (pp. 3-4); interpretive subsections after the main theorem, including a pre-emptive answer to a likely misreading of eps_t ~ O(1/t) (p. 15); three-sentence conclusion (p. 18); notation slips (pp. 2, 4, 19).",
+  "limits_future": "Not stated in the text: only the authors' predecessor as baseline, no run-to-run variance, at most 16 nodes, duality-gap rate depends on an external theorem with a condition on eps; no future directions given (pp. 13, 16-18).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Local-solver accuracy scheduled by what the outer accelerated analysis needs: eps_t = a_t theta_t with summable a_t preserving O(1/t^2); convex distributed setting with an additive-error inner test instead of a merit-model test.",
+    "pages": "pp. 12, 15"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Rival CoCoA+ runs in the same C++/MPI code with the same SDCA local solver and H, so only acceleration differs.",
+    "pages": "p. 16"
+   },
+   {
+    "method": "Method 5",
+    "relation": "contradiction",
+    "note": "No external baselines (delegated to [10, 17]); no repeated runs reported for a randomized local solver (Inner Tension 2).",
+    "pages": "pp. 16-20"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Structure-specific acceleration over a generic wrapper",
+    "evidence": "Catalyst rejected because it cannot take randomized-in-expectation local solvers; the objective's structure is used to drop strong convexity of the subproblems.",
+    "pages": "pp. 3, 8"
+   },
+   {
+    "pattern": "Inner tolerance tied to the outer step schedule",
+    "evidence": "eps_t = a_t theta_t; summable a_t keeps the accelerated rate (shared with S037).",
+    "pages": "p. 15"
+   }
+  ],
+  "transferable": [
+   "Prove strong convexity of the subproblem in the data seminorm ||A(.)|| to run an estimate-sequence proof without strongly convex subproblems (pp. 7-8).",
+   "Write the accelerated iterate as an explicit convex combination of past z_l to build a convex upper bound for the nonsmooth part (pp. 7, 9).",
+   "Tabulate each rate constant with its worst case and K -> n limit to show when the bound beats the predecessor (Table 1, p. 14).",
+   "Sweep the inner-work knob H and plot outer iterations and wall time to locate the computation/communication optimum per dataset (pp. 16-17)."
+  ],
+  "coauthors": "Chenxin Ma, Martin Jaggi, Nathan Srebro, Martin Takac",
+  "quotes": [
+   {
+    "text": "However, for our purposes, this approach is less appealing since it does not allow the local solver to produce randomized solutions which might only have sufficient quality in expectation.",
+    "page": 3
+   },
+   {
+    "text": "This might create the impression that the local solver has to do more work as t increases",
+    "page": 15
+   }
+  ]
+ }
+]

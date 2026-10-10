@@ -1,0 +1,44 @@
+[
+  {
+    "id": "S047",
+    "year": "2007",
+    "title": "Steplength selection in interior-point methods for quadratic programming",
+    "read_level": "full",
+    "contribution": "Replaces the common equal step length of primal-dual IPMs for convex QP by three multipliers (alpha_x, alpha_y, alpha_z) chosen to minimize a KKT-residual merit function over a set that contains all equal-step choices, solved by two 2-D QPs, and shows fewer iterations than equal steps and Meszaros's rule on the Maros-Meszaros set (pp. 4-8).",
+    "problem_entry": "A literature-recommended conservative safeguard (equal step lengths under the fraction-to-the-boundary rule) is called unnecessarily conservative; eq. 2.8 shows why Q != 0 couples primal and dual steps and can make unequal steps diverge (pp. 2-3).",
+    "key_idea": "Minimize the merit function ||Ax-b||^2 + ||A^T y + z - Qx - c||^2 + x^T z over A1 (equal steps) union A2 (one bound pushed to its limit) with alpha_y free; inclusion of A1 makes it no worse than equal steps, and the subproblem is two 2-D bound-constrained QPs costing a handful of inner products (pp. 3-6).",
+    "assumptions": "Convex QP in standard form, Q PSD, A full row rank, infeasible primal-dual IPM from (x,z) > 0 (p. 1); Meszaros characterization assumes conditions on r_p, r_d, Q dx 'normally achieved in practice' (p. 4); stop at KKT residual < 1e-6, max 200 iterations (p. 6).",
+    "proof_devices": [
+      "residual-update algebra (2.8) and mu+(alpha) < mu for small common alpha, showing what equal steps guarantee (p. 3)",
+      "set inclusion A1 in A1 union A2, giving no-worse-than-equal-steps merit decrease by construction (p. 5)",
+      "Remark 4.1: reduction of the 3-variable step-length problem (4.15) to two 2-D bound-constrained QPs with explicit Q and c (pp. 5-6)",
+      "positive semidefiniteness of the A2 subproblem matrices, so that trial point solves a 2-D convex QP (p. 6)",
+      "global convergence asserted from merit decrease but not proved; no theorem in the paper (pp. 3, 6)"
+    ],
+    "experiments": "Matlab code, Maros-Meszaros convex QPs with AMPL models and < 10,000 variables (p. 6); three step-length rules in one code (eq., Meszaros, new), iteration counts only, Table 1 with 56 problems and relative differences, Dolan-More profile (pp. 6-7); Meszaros fails on qsierra as predicted (p. 6); new rule loses on qpcboei2 +25%, dual3 +22% without comment (p. 7); alpha_y = alpha_z ablation 'slightly less efficient', no numbers (p. 8).",
+    "positioning": "Corrects the equal-step practice of IPM texts/codes [1,4,11] and the bi-objective rule of Meszaros [8], restated exactly via its efficient set before criticism; borrows unequal-step precedent from LP (Mehrotra) and NLP codes (Byrd-Hribar-Nocedal, Vanderbei-Shanno, Waechter-Biegler) and conjectures transfer to convex QP (pp. 2, 4).",
+    "writing": "Eight-page letter; thesis in abstract and first intro paragraph; hedged ('We propose', 'We conjecture') yet asserts unproved global convergence (p. 3) and untested size-independence (p. 6); design reasons enumerated (p. 3); one-paragraph conclusion with no limitations (p. 8).",
+    "limits_future": "No convergence proof despite the claim (p. 3); small problems only, iteration counts only (p. 6); losses in Table 1 not discussed (p. 7); ablation without numbers (p. 8); no future work stated (p. 8).",
+    "method_links": [
+      {"method": "Method 5", "relation": "variant", "note": "Early form: incumbent and rival rules implemented in one Matlab code with only the step-length rule varied, one-component ablation (alpha_y = alpha_z), rival failure printed and explained; but the incumbent's wins in Table 1 are not named in the text and no tuning disclosure.", "pages": "pp. 6-8"},
+      {"method": "Method 2", "relation": "variant", "note": "Precursor: one merit function settles the infeasibility/complementarity trade-off inside each iteration, with the conservative equal-step choice kept as fallback set A1; no penalty/merit parameter update.", "pages": "pp. 3-5"},
+      {"method": "Method 4", "relation": "variant", "note": "Weak: argues the rival's step criterion omits complementarity and justifies iteration counts by costing per-iteration work; the performance profile itself is not questioned.", "pages": "pp. 4, 6-7"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "contain the incumbent's choice", "evidence": "The step-length search set A1 union A2 includes every equal-step choice, so the new rule decreases the merit function at least as much as the incumbent by inclusion, with no separate proof.", "pages": "pp. 4-5"},
+      {"pattern": "predict the rival's failure, then show it", "evidence": "Section 4 derives that Meszaros's rule can repeatedly choose (alpha_x, 0, 0) and stagnate; the experiments name qsierra, where it hits the 200-iteration limit for exactly this reason.", "pages": "pp. 4, 6"}
+    ],
+    "transferable": [
+      "Relax a conservative rule by optimizing a merit function over a set that contains the conservative choice; the no-worse guarantee follows by inclusion (pp. 4-5).",
+      "Restrict the search set so the step-selection subproblem is a pair of 2-D bound-constrained QPs with explicit data, and cost it in inner products already computed elsewhere (pp. 5-6).",
+      "Give a rival an exact restatement (its efficient set) and a predicted failure mode before running it, then name the instance where the prediction comes true (pp. 4, 6).",
+      "Implement rival rules as interchangeable components of one code, vary only that component, and ablate the new degree of freedom (pp. 6, 8).",
+      "Report per-problem relative differences against the incumbent in one table next to a performance profile (pp. 6-7)."
+    ],
+    "coauthors": "Jorge Nocedal",
+    "quotes": [
+      {"text": "Empirical evidence has shown, however, that this approach is unnecessarily conservative in numerous cases.", "page": 2},
+      {"text": "This myopic choice may stagnate the algorithm as no step is taken in the dual space.", "page": 4}
+    ]
+  }
+]

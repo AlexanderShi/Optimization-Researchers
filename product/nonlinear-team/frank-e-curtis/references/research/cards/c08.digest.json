@@ -1,0 +1,163 @@
+[
+ {
+  "id": "S024",
+  "year": "2015",
+  "title": "A globally convergent primal-dual active-set framework for large-scale convex quadratic optimization",
+  "read_level": "full",
+  "contribution": "Adds an auxiliary 'uncertain' index set to the Hintermüller–Ito–Kunisch primal-dual active-set method, which gives finite global convergence on every strictly convex QP while the set stays nearly empty in practice.",
+  "problem_entry": "The HIK PDAS method is fast but guaranteed only for M-matrix bound-constrained QPs and cycles on others; classical active-set methods are slow at scale; AL/SQO methods need a QP engine (pp. 2-3, 11).",
+  "key_idea": "The iterates are index partitions. An auxiliary set U of explicitly enforced bounds grows only through change counters (Alg. 5) or a nonmonotone KKT-residual watchdog (Alg. 6), so the method is HIK whenever U is empty (pp. 3, 6-7, 13-16).",
+  "assumptions": "H positive definite, A full row rank, l < u (by preprocessing); the QP is assumed feasible for the analysis; the HIK result needs a perturbed M-matrix (pp. 4-5, 11).",
+  "proof_devices": [
+   "lemma that a partition whose sets are subsets of the optimal ones yields the exact solution (Theorem 1, p. 8)",
+   "finite-state monotonicity: |U| or some counter strictly increases each iteration (Lemma 2 / Theorem 3, pp. 13-14)",
+   "nonmonotone watchdog: the max of the last p+1 residuals strictly decreases over finitely many partitions (Lemma 3 / Theorem 4, pp. 15-17)",
+   "minimal 3-variable cycling counterexample reused for all strategies (Example 1, Tables 1-3, pp. 11-17)",
+   "equivalence to semismooth Newton, with a correction of HIK's superlinear claim (Theorem 5, pp. 27-29; p. 11)"
+  ],
+  "experiments": "Matlab + CPLEX + qpOASES. Random BQPs with n up to 1e4 and cond(H) up to 1e6 (50 each), and n = 1e4 QPs with m in {10, 20}. Measures: iterations, linear solves, qpOASES iterations, use of U. HIK failures reported; qpOASES baseline comes with a caveat; q_max and p tuned on the test set (pp. 18-26).",
+  "positioning": "Calls itself a 'straightforward enhancement' of HIK that is still novel; contrasts in detail with Hager's DASA; corrects a claim in a HIK proof (pp. 3, 9-11).",
+  "writing": "The contribution is stated in the introduction, followed at once by the practical point that U is usually empty; the worst case is repeatedly 'never witnessed'; hedges are frequent (pp. 3, 14).",
+  "limits_future": "Weaker with equality constraints (cost of keeping partitions feasible, larger U); recommends classical active-set methods when there are few degrees of freedom; future work: inexact iterative subproblem solves (pp. 25, 27).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "Built as the QP engine for AL/SQO; inexact inner solves named as the next step", "pages": "pp. 2, 27"},
+   {"method": "Method 3", "relation": "evidence", "note": "Minimal hand-built counterexample (n = 3, because n <= 2 provably converges) reused across all strategies", "pages": "pp. 11-17"},
+   {"method": "Method 5", "relation": "evidence", "note": "Prints the incumbent's failures and its own weaker equality-constrained results; qpOASES comparison caveated; but q_max and p were tuned on the test set", "pages": "pp. 20, 24-25, 27"},
+   {"method": "Method 2", "relation": "variant", "note": "A single algorithm whose safeguard set grows only on monitored trouble, instead of switching to a classical active-set phase", "pages": "pp. 3, 13, 16"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "minimal-intervention safeguard", "evidence": "The fast unguarded HIK update is the default. The guarantee comes from a monotone finite-state device (U) that is nearly dormant (mu(Last-|U|) mostly 0) and grows by at most one index per iteration", "pages": "pp. 3, 18, 21-23"},
+   {"pattern": "equivalence-lemma reuse", "evidence": "Shows that the fast heuristic is a semismooth Newton method, to inherit its local theory and check claims made about it", "pages": "pp. 27-29"}
+  ],
+  "transferable": [
+   "Globalize a fast combinatorial iteration with an auxiliary set that only grows, or with a nonmonotone residual watchdog over a finite state space; convergence then follows from monotonicity or pigeonhole, with no merit function (pp. 13-17)",
+   "Prove first that a partition whose sets are subsets of the optimal ones gives the exact solution; each strategy then only needs to reach such a state (Theorem 1, p. 8)",
+   "Build the smallest counterexample to the incumbent (one dimension above the provably safe case) and run every variant on it, with iterate tables (Tables 1-3)",
+   "Tabulate how much the safeguard is used (average and final |U|, QP-solver iterations against plain linear solves) to show what the guarantee costs (Tables 5-7, 9-11)"
+  ],
+  "coauthors": "Zheng Han, Daniel P. Robinson",
+  "quotes": [
+   {"text": "We stress, however, that while the proof relies on such worst-case behavior, we have never witnessed such an occurrence in practice.", "page": 14},
+   {"text": "Variables that change index sets numerous times may be considered sensitive and are prime candidates for membership", "page": 12}
+  ]
+ },
+ {
+  "id": "S050",
+  "year": "2015",
+  "title": "Iterative reweighted linear least squares for exact penalty subproblems on product sets",
+  "read_level": "full",
+  "contribution": "Read in the arXiv v1 preprint ('Matrix-free solvers for exact penalty subproblems'). Proposes IRWA, a matrix-free iterative re-weighting method for convex exact-penalty subproblems over product sets, with global convergence and O(1/eps^2) complexity, and compares it with an ADAL method built for the same setting.",
+  "problem_entry": "Exact-penalty and convex-composite methods need large subproblems min g'x + x'Hx/2 + dist(Ax+b | C) solved matrix-free; the product structure of C is the entry point (arXiv pp. 1-2).",
+  "key_idea": "A weighted linear least-squares model with weights (dist^2 + eps_i^2)^(-1/2), solved by CG; the relaxation vector eps is reduced only when the step is small relative to the residual (arXiv pp. 4-5).",
+  "assumptions": "H positive semidefinite (the indefinite case is excluded); horizon-cone coercivity for cluster points; complexity only for X = R^n, H positive definite and fixed eps; ADAL needs a saddle point (arXiv pp. 2, 7-9, 13, 18).",
+  "proof_devices": [
+   "jointly convex eps-smoothing J(x, eps) and a majorization from the concavity of sqrt(t) that gives descent (Lemma 2.5, arXiv pp. 5-7)",
+   "horizon-cone characterization of compact level sets (Theorem 2.8, Corollary 2.9, arXiv pp. 7-9)",
+   "subsequence argument: either eps -> 0 or the step test eventually holds (Lemma 2.11, arXiv pp. 9-11)",
+   "1/eps Lipschitz bound plus 1/delta telescoping for O(1/eps^2) (Lemma 2.15 to Theorem 2.17, arXiv pp. 13-16)",
+   "ADAL rate imported from Wang-Banerjee with a notation-translation table (Remark 3.13, arXiv p. 23)"
+  ],
+  "experiments": "Python/SciPy, with CG stopped at a 10% relative residual for both methods. 500 random equality/inequality instances (efficiency curves of CG steps at 50-95% duality-gap reduction), 20 problems of growing size, 40 l1-SVM problems scored by support false positives, and accelerated against plain IRWA. Sensitivity to parameters is admitted (arXiv pp. 27-32).",
+  "positioning": "In the convex-composite / exact-penalty and IRLS lineage. ADAL is presented as standard technology 'adapted to this setting'. Other ADAL O(1/eps) results are reframed as relying on subproblems as hard as the original (arXiv pp. 1-2, 5, 18, 22).",
+  "writing": "Calibrated claims ('in certain cases' more reliable; 'perform similarly'); conjectures and open issues flagged as such; theorem-heavy with brief intuition (arXiv pp. 1, 24, 33).",
+  "limits_future": "No complexity result for the accelerated variants; parameter initialization left to future research; indefinite H excluded; complexity proved only for fixed eps; no test inside an outer loop (arXiv pp. 2, 13, 28, 33).",
+  "method_links": [
+   {"method": "Method 1", "relation": "variant", "note": "An inner solver designed for the subproblems of an outer exact-penalty method, matrix-free; but the inner CG uses a fixed 10% relative residual, not a test derived from the outer method, and no outer loop is run", "pages": "arXiv pp. 1-2, 28"},
+   {"method": "Method 2", "relation": "variant", "note": "The relaxation vector eps is updated by a progress test (step against residual), with the update rule as the design object, outside the penalty family", "pages": "arXiv p. 5"},
+   {"method": "Method 5", "relation": "evidence", "note": "The rival ADAL is implemented in the same Python code with the same CG solver and stopping rule; the similar results are printed", "pages": "arXiv pp. 16, 28-30, 33"},
+   {"method": "Method 4", "relation": "evidence", "note": "Checks other ADAL O(1/eps) claims against what their iterations cost (subproblems as hard as the original)", "pages": "arXiv p. 22"}
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Introduce a jointly convex eps-smoothing and show that the reweighted quadratic step is a majorize-minimize descent step on it, using the sqrt(t) concavity bound (arXiv pp. 5-7)",
+   "Drive the smoothing parameter down with a step-versus-residual test instead of a schedule, and prove that either eps -> 0 or the test eventually holds (arXiv pp. 5, 10)",
+   "Use horizon-cone conditions to get compact level sets, and list easy sufficient conditions (arXiv pp. 7-9)",
+   "Compare inner solvers with the same inner linear solver, tolerance and warm start; plot percent solved against total CG steps at several duality-gap reductions (arXiv p. 28)"
+  ],
+  "coauthors": "James V. Burke, Hao Wang, Jiashan Wang",
+  "quotes": [
+   {"text": "The primary novelty of our work is a newly proposed iterative re-weighting algorithm (IRWA) for solving such problems involving arbitrary convex sets of the form (1.3).", "page": 33},
+   {"text": "More principled methods for initializing and updating these parameters is the subject of future research.", "page": 28}
+  ]
+ },
+ {
+  "id": "S067",
+  "year": "2015",
+  "title": "Primal-dual active-set methods for isotonic regression and trend filtering",
+  "read_level": "full",
+  "contribution": "A block-form PDAS algorithm for isotonic regression with O(n) work, warm-starting and parallelizable merges, plus an adaptive-proportion safeguard (SF2) that makes PDAS reliable on trend filtering.",
+  "problem_entry": "PAV is O(n) but sequential and cannot be warm-started, which matters for online use and sequences of problems; plain PDAS cycles on trend filtering (pp. 1, 3, 5, 7).",
+  "key_idea": "The dual of IR is an M-matrix BQP, so HIK PDAS applies. Algorithm 2 runs it in block form with O(1) merges. SF2 moves only a fraction p of the violators and adapts p against the max of a FIFO queue of recent |V| values (pp. 3-4, 7-8).",
+  "assumptions": "Positive weights; TF with smooth convex f and l1 difference regularizers of order 1-2; SF2 convergence asserted by appeal to [20], not proved (pp. 2, 4-5, 8).",
+  "proof_devices": [
+   "equivalence transfer: the block algorithm generates the HIK PDAS iterates on the dual BQP (Theorem 3.2, p. 4)",
+   "work counting with running sums alpha, beta so that each merge is O(1), with at most n merges (p. 4)",
+   "cycling counterexample for TF (Example 4.1, Table 1, p. 7)",
+   "informal argument for SF2 that the reference value decreases monotonically (p. 8)"
+  ],
+  "experiments": "Python 2.7. IR: PDAS against the scikit-learn PAV, 10 instances per n up to 3.3e5, boxplots of time and merges, plus a warm-start perturbation protocol. TF: success rates of PDAS/SF1/SF2 (Table 2), and time and iterations against an IPM written in Matlab, with that handicap stated. Synthetic data only (pp. 8-12).",
+  "positioning": "Builds on HIK and the authors' own globalized and inexact PDAS; SF1 is taken from Kim-Park and Byrd et al.; PAV's strengths are stated before its drawbacks; the difficulty of warm-starting IPMs is cited (pp. 1, 3, 7, 10).",
+  "writing": "Workshop-length; argues against the incumbent in the first person; one tiny worked example; promotional conclusion; a typo in update (4) (pp. 3, 5, 7, 12).",
+  "limits_future": "Parallelism claimed but merges run sequentially; SF2 convergence not proved; synthetic data; cross-language comparison with the IPM; no explicit future work (pp. 8, 10, 12).",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "A constructed cycling instance for TF is shown before the safeguard is introduced", "pages": "p. 7"},
+   {"method": "Method 5", "relation": "variant", "note": "States the IPM's language handicap and concedes equal merge counts, but timings cross languages, there are 10 instances per size, and safeguard tuning is not reported", "pages": "pp. 8-10"},
+   {"method": "Method 2", "relation": "variant", "note": "Adapts its aggressiveness (the proportion p) from monitored progress instead of switching to a one-index fallback; applied outside the penalty family", "pages": "pp. 7-8"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "minimal-intervention safeguard", "evidence": "SF2 changes only a fraction p of the violators and shrinks p only when the queue's reference value fails to decrease", "pages": "pp. 7-8"},
+   {"pattern": "warm-start as an evaluation axis", "evidence": "A perturb-and-resolve protocol shows an advantage the incumbents (PAV, IPM) cannot have", "pages": "pp. 9-12"}
+  ],
+  "transferable": [
+   "Dualize a structured problem and check whether the dual falls in a class with a known guarantee (an M-matrix BQP); write the algorithm in the primal's structure to inherit the theorem (pp. 3-4)",
+   "Keep running sufficient statistics so that each merge costs O(1), and bound the number of merges by n, to prove linear work (p. 4)",
+   "Replace a hard switch after t_max failures with action on a fraction p of the violators, adapted against the max of a FIFO queue of recent values (p. 8)",
+   "Warm-start protocol: solve a base instance, perturb the data slightly, restart from the old solution, and count the work (pp. 9-10)"
+  ],
+  "coauthors": "Zheng Han",
+  "quotes": [
+   {"text": "However, we argue that the PAV algorithm does have critical drawbacks when it comes to solving large-scale problems of interest today.", "page": 3},
+   {"text": "This shows that our proposed safeguard, which allows more aggressive updates, can be more effective than a conservative safeguard.", "page": 10}
+  ]
+ },
+ {
+  "id": "S028",
+  "year": "2016",
+  "title": "A self-correcting variable-metric algorithm for stochastic optimization",
+  "read_level": "full",
+  "contribution": "A stochastic BFGS method whose damping weight is the smallest value that enforces the curvature bounds behind BFGS self-correction, with convergence theory, a noise-reduction subroutine derived from that theory, and a limited-memory variant.",
+  "problem_entry": "Stochastic quasi-Newton methods concentrate on the secant equation and need convexity, two gradients, heavy regularization or Hessian samples; BFGS works because of self-correction, which they ignore (pp. 1-2).",
+  "key_idea": "v_k = beta_k s_k + (1-beta_k) alpha_k y_k, with beta_k the smallest value in [0,1] satisfying the two Byrd-Nocedal curvature bounds (9); an optional subroutine checks surrogate versions of the analysis conditions (pp. 3-5).",
+  "assumptions": "Lipschitz gradient, f bounded below. The key conditions (13)-(14) on E[M_k g_k] are admitted to be unverifiable and are complicated by the dependence of M_k on g_k. Strong convexity is added for the rates (pp. 4-5).",
+  "proof_devices": [
+   "recursion for the Byrd-Nocedal potential gamma(H) = tr(H) - ln det(H) (eq. (8), p. 3)",
+   "order-statistic averaging: the bounds hold for at least ceil(pK) iterations (Theorem 1, pp. 3-4; proof pp. 10-11)",
+   "expected-decrease lemma and Robbins-Monro summability (Lemma 4, Theorem 5, pp. 4-5, 11)",
+   "convergence lemma for sequences with summable positive-part increments (Lemma 8, p. 11)",
+   "strongly convex case: linear convergence to a neighbourhood, and O(1/k) by induction (Theorem 6, pp. 5, 12)"
+  ],
+  "experiments": "Matlab. a1a and rcv1 logistic regression and a 3-layer sigmoid network on MNIST. SC, SC-s, SC-L and SC-L-s against SG and oBFGS/oLBFGS. Budget of max{n, 6400} sample accesses; the same grids for all methods; best-of-grid chosen by lowest final testing loss, from one starting point with single runs. Losses and CPU time tabulated; code public (pp. 6-8).",
+  "positioning": "Critiques oBFGS, SGD-QN, RES, SQN and SDBFGS by name and mechanism; builds on Powell and Byrd-Nocedal(-Yuan); borrows the SG analysis from Bottou and Bottou-Curtis-Nocedal (pp. 1-5, 11).",
+  "writing": "Five contribution bullets, opening with a provocative reframing; the theory is called 'motivating'; a practical-considerations subsection admits limits; claims stay within the three problems (pp. 2, 5, 8).",
+  "limits_future": "Assumptions cannot be verified; the subroutine needs at least two gradients; three test problems, selection on the test set, single runs. Future work: general conditions for adaptive gradient noise reduction (pp. 2, 5-6, 8).",
+  "method_links": [
+   {"method": "Method 5", "relation": "variant", "note": "The same tuning grids for all methods, SG included, but best-of-grid on test loss from one starting point and single runs", "pages": "p. 6"},
+   {"method": "Method 2", "relation": "variant", "note": "The damping weight beta_k is set each iteration as the smallest value satisfying a computable test, instead of a fixed regularization; the parameter rule is the contribution, outside the penalty family", "pages": "pp. 2-4"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "port the property, not the formula", "evidence": "Identifies self-correction, not the secant equation, as what makes BFGS work, and designs the stochastic method to preserve exactly the inequalities it needs", "pages": "pp. 2-4"},
+   {"pattern": "minimal-intervention safeguard", "evidence": "beta_k is the smallest value in [0,1] that restores the bounds, so the update is plain (scaled) BFGS whenever possible", "pages": "pp. 3-4"}
+  ],
+  "transferable": [
+   "When carrying a deterministic method to the stochastic setting, identify the proved property that makes it work and enforce exactly the inequalities that property needs, with the smallest correction (pp. 2-4)",
+   "Damp the curvature pair toward s_k (not H_k s_k) with a weight found by a one-dimensional search on [0,1], so the trace and determinant bounds hold by construction (p. 3)",
+   "Turn unverifiable analysis assumptions into runtime tests that use an independent mini-batch gradient as surrogate, within a budget, and skip the update when the budget runs out (p. 5)",
+   "Order-statistic step: a bounded average of nonnegative zeta_k implies that at least ceil(pK) of them are below a constant divided by (1-p) (pp. 10-11)"
+  ],
+  "coauthors": "none (single author; acknowledges Jorge Nocedal and Daniel P. Robinson)",
+  "quotes": [
+   {"text": "However, too much emphasis has been placed on this equation.", "page": 2},
+   {"text": "It is worthwhile to note that the assumption should not be taken lightly since each stochastic gradient influences the value of the corresponding inverse Hessian approximation", "page": 4}
+  ]
+ }
+]

@@ -1,0 +1,165 @@
+[
+ {
+  "id": "S064",
+  "year": "2016",
+  "title": "Globally convergent primal-dual active-set methods with inexact subproblem solves",
+  "read_level": "full",
+  "contribution": "Three primal-dual active-set methods for structured convex QPs whose reduced linear systems may be solved inexactly at every non-optimal partition: inexactness tests certify subsets of the exact violated sets (via an explicit or dynamically estimated bound on the reduced-Hessian inverse), with finite termination proved under P-/perturbed M-matrix conditions and fewer Krylov iterations on optimal-control QPs.",
+  "problem_entry": "A cost bottleneck in a fast method: PDAS converges in few iterations but each needs a reduced linear system solve, which at scale is done by Krylov methods; how much inexactness keeps global convergence? Reduction to a BQP rejected because it densifies sparse data (pp. 1-2).",
+  "key_idea": "Identity (7) writes the exact subspace solution as the inexact one plus residual terms, so residual-proportional bounds alpha_I, beta_A certify a nonempty subset of the true violated sets without the exact solve (Lemma 4, pp. 7-8); the needed constant ||R_II^-1|| is either bounded explicitly by an H-matrix procedure (Alg. 2) or replaced by a dynamic gamma raised when KKT progress stalls (Alg. 3); a naive shrinking tolerance (Alg. 4) gets only a weak guarantee (pp. 8-14).",
+  "assumptions": "Convex QP with equalities and upper bounds on a subset; A_EF invertible and reduced Hessian positive definite (Assumption 1, p. 3); finite termination needs R a P-matrix with extra conditions or R = M + E with M an M-matrix and small ||E|| (Theorem 3, p. 5); exact solves with A_EF (p. 6); inner residuals driven to zero (Theorem 5, p. 8).",
+  "proof_devices": [
+   "finite termination via strictly decreasing potential e^T x_B over finitely many partitions (Theorem 12, p. 20); O(||E||) perturbation for R = M + E (Theorem 13, p. 21)",
+   "residual identity (7) with Schur complements and Hoelder bounds (13) to build alpha_I, beta_A (pp. 7, 10)",
+   "continuity argument: residual below a partition-dependent epsilon identifies the exact violated sets (Lemma 4 proof, p. 8)",
+   "Varga H-matrix bound ||B^-1||_1 <= (min [Bw]_i)^-1 for w in P(B), computed by iteratively solving M(R_II)w ~ e (Lemmas 6-7, pp. 9-10)",
+   "contradiction on a growing parameter: if progress stalls forever gamma -> infinity and exceeds max ||R_II^-1|| (Theorem 8, pp. 12-13)",
+   "small counterexamples: Example 9 (||R^-1||_1 = 31/4 < 8 = ||R_II^-1||_1, p. 13) and Example 11 (naive tolerance needs exact zero residual, pp. 14-15)"
+  ],
+  "experiments": "One Python/cvxopt/MINRES package without preconditioner; exact-solve PDAS and an inexact semismooth Newton (SSN, [30]) reimplemented as rivals; two 2-D elliptic optimal-control QPs on grids 4-64 (n up to 8192), basic and deliberately degenerate instances; PDAS and total Krylov iterations reported (CPU said proportional); inexact variants cut Krylov totals roughly in half vs exact, SSN competitive; parameters 'merely ones that worked well' (pp. 15-19).",
+  "positioning": "Enhancement of Hintermueller-Ito-Kunisch PDAS [28], whose theorems are generalized (pp. 1, 19); contrasted with slow classical active-set methods (pp. 1-2); gentle comparison with Hintermueller-Stadler inexact SSN [30] (p. 19); builds on own COR@L report [13] (p. 22).",
+  "writing": "Contribution 'twofold' (p. 2); two anticipated objections answered as 'remarks to make at the outset' (p. 2); each algorithm followed by prose on costs and disadvantages (p. 14); hedged conclusion 'we believe' (p. 19).",
+  "limits_future": "Limits stated concretely: matrix-structure conditions (p. 5), weak guarantee and hard-to-choose parameters for Alg. 4 (p. 14), no preconditioner (p. 16), untuned parameters (p. 17); only two test problems and no CPU times; no explicit future direction (p. 19).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "Inner (Krylov) stopping test derived from what the active-set update must certify (a nonempty subset of the exact violated sets); inexactness allowed at all partitions except optimal ones.", "pages": "pp. 1, 7-9"},
+   {"method": "Method 2", "relation": "variant", "note": "Dynamic gamma raised by a windowed KKT-progress monitor (Alg. 3 step 13): an update rule on observed progress, but controlling inexactness rather than objective vs feasibility.", "pages": "p. 12"},
+   {"method": "Method 3", "relation": "evidence", "note": "Intentionally degenerate instances (half zero optimal multipliers, following [4]) reported separately; construction borrowed rather than a new mechanical rule.", "pages": "pp. 18-19"},
+   {"method": "Method 5", "relation": "evidence", "note": "Exact baseline differs only in solve accuracy and rival SSN implemented in the same software, same initial partitions; caveat: parameters hand-picked with tuning effort unreported.", "pages": "pp. 15, 17"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "counterexample that justifies the expensive mechanism", "evidence": "3x3 Examples 9 and 11 show why a global bound cannot initialize gamma and why the cheap shrinking-tolerance heuristic can need an exact solve", "pages": "pp. 13-15"},
+   {"pattern": "unknown-constant estimator that only grows when progress stalls", "evidence": "dynamic gamma replaces max ||R_II^-1||; proof shows it eventually dominates the true constant (also TRACE sigma_k in S002)", "pages": "pp. 12-13"}
+  ],
+  "transferable": [
+   "Make the inner stopping test 'the outer step is certified productive' (identify a subset of the true violated indices) using residual bounds from a computable bound on the inverse of the reduced matrix (pp. 7-10).",
+   "Replace an expensive problem constant by a monotone dynamic parameter raised only when a windowed progress test fails, and prove it eventually dominates the constant (pp. 12-13).",
+   "Certify ||R^-1||_1 by iteratively solving M(R)w ~ e until M(R)w > 0 and applying Varga's bound (pp. 9-10).",
+   "Before reformulating for easier theory (QP -> BQP), check whether it destroys sparsity; if so keep the original data (p. 2).",
+   "Answer the two obvious referee objections in the introduction as 'remarks at the outset' (p. 2)."
+  ],
+  "coauthors": "Zheng Han",
+  "quotes": [
+   {"text": "a simpler heuristic method that merely decreases a dynamic accuracy tolerance as the optimization process proceeds will not ensure convergence unless one imposes strong requirements on the employed linear system solver", "page": 2},
+   {"text": "the purpose of our numerical experiments is merely to illustrate the convergence behavior of our algorithms despite inexactness in the subspace solutions", "page": 16}
+  ]
+ },
+ {
+  "id": "S077",
+  "year": "2016",
+  "title": "Accelerating convergence to competitive equilibrium in electricity markets",
+  "read_level": "full",
+  "contribution": "A decentralized market-clearing scheme in which GenCos and DSOs return both their optimal responses and their sensitivities to price, letting the ISO solve an implicit complementarity problem by Fischer-Burmeister semismooth Newton; on IEEE 9-118-bus cases it needs at most 10 iterations and about four orders of magnitude fewer function evaluations than a subgradient method (read from MERL TR2016-095).",
+  "problem_entry": "Application gap: market research focused on design, little on algorithms; decentralized, privacy-preserving clearing by subgradient price updates is slow and costs many communication rounds (p. 3).",
+  "key_idea": "Keep the price-signal protocol but have each agent also return dP*/dlambda (analytic for 1-D bound-constrained problems, pp. 6); write the ISO KKT system with best responses substituted as an implicit complementarity problem and solve it by Fischer-Burmeister semismooth Newton with a merit line search (pp. 5-6), following Curtis-Raghunathan [13].",
+  "assumptions": "Strictly convex GenCo costs, strictly concave DSO utilities (p. 4); DC power flow, single-node DSOs with deferrable loads, price-taking agents who keep costs private (p. 3); strict complementarity of agent problems 'for simplicity' (p. 6); F only piecewise C1 (p. 5).",
+  "proof_devices": [
+   "Theorem 1: competitive equilibrium <-> ICP solution, via KKT conditions of the convex ISO problem (p. 5)",
+   "local superlinear convergence cited, not proved (Qi-Sun [18]; PC1 case in [13]) (p. 5)",
+   "generalized Jacobian H_k built from diagonal matrices and the agents' sensitivity matrix B_k, following De Luca-Facchinei-Kanzow [20] (p. 6)"
+  ],
+  "experiments": "IEEE 9/14/30/39/57/118-bus cases, random utilities and demands, 10 runs averaged, tolerance 1e-6, 100000-iteration cap; untuned 1/(k+1) subgradient baseline hits the cap on 5 of 6 cases while semismooth Newton needs 5-10 iterations, 16-83 function evaluations and 0.01-1.50 s vs 1.42-29.5 s (pp. 6-7).",
+  "positioning": "Placed in the electricity-equilibrium modelling literature (Hobbs, Baldick, Weber-Overbye, Wang et al.) as filling an algorithmic gap rather than criticizing it; only rival is Shor's subgradient method; method credited to own MERL report [13] (pp. 3, 5).",
+  "writing": "Short IEEE paper with 'Our Focus'/'Our Contribution' subsections and assumptions (a)-(d) up front (p. 3); headline 'several orders of magnitude speedup' (p. 3) quantified as about 4 orders in function evaluations (p. 7); 'robust' claimed on six cases (p. 7).",
+  "limits_future": "Stated limits: lumped DSO model, no distributed generation; future: DSO networks with distributed generation, AC power flow, SDP relaxation (p. 7). Not discussed: cost of the extra sensitivity messages, tuned first-order baselines.",
+  "method_links": [
+   {"method": "Method 1", "relation": "variant", "note": "The inner solvers (agents) are asked to return exactly what the outer Newton iteration needs (solution sensitivities): inner-serves-outer applied to information content rather than solve accuracy.", "pages": "pp. 3, 6"},
+   {"method": "Method 5", "relation": "variant", "note": "10 randomized runs averaged, but the baseline is an untuned 1/(k+1) subgradient method stopped by an iteration cap; no favoured or tuned baseline.", "pages": "pp. 6-7"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "sensitivity-returning decomposition", "evidence": "turn a price-coordination loop into semismooth Newton on the coordinator's complementarity system by asking subproblems for dP*/dlambda", "pages": "pp. 3, 5-6"}
+  ],
+  "transferable": [
+   "Write the coordinator's optimality conditions with the agents' best responses substituted as an implicit complementarity problem and apply Fischer-Burmeister semismooth Newton with a merit line search (pp. 5-6).",
+   "For one-dimensional bound-constrained agent problems, the solution sensitivity is 1/(second derivative) in the interior and 0 at a bound (p. 6).",
+   "Against a first-order coordination baseline, compare oracle calls (agent solves) as well as iterations and time, since communication rounds are the real cost (p. 7)."
+  ],
+  "coauthors": "Arvind U. Raghunathan (first author, MERL), Yusuke Takaguchi, Hiroyuki Hashimoto",
+  "quotes": [
+   {"text": "we impose that the agents also return the sensitivity of their solution to changes in the price", "page": 3},
+   {"text": "Still, the number of function evaluations is 4 orders of magnitude smaller than for the subgradient method.", "page": 7}
+  ]
+ },
+ {
+  "id": "S002",
+  "year": "2017",
+  "title": "A trust region algorithm with a worst-case iteration complexity of for nonconvex optimization",
+  "read_level": "full",
+  "contribution": "TRACE, a trust-region method with modified acceptance (decrease relative to ||s||^3), reject-and-expand steps and implicit contractions via quadratic regularization, which matches ARC's O(eps^-3/2) first-order and O(max{eps^-3, eps^-3/2}) second-order worst-case iteration bounds while keeping global convergence and Q-quadratic local convergence with Newton steps.",
+  "problem_entry": "Gap between traditions: nonconvex methods aimed at global and fast local convergence while worst-case complexity was overlooked; ARC attains O(eps^-3/2) vs O(eps^-2) for traditional trust region; can a trust-region method match ARC and keep its guarantees? (pp. 2-3)",
+  "key_idea": "Identify ARC's two proof-critical properties of accepted steps (2.4) and redesign the trust-region acceptance (rho_k = decrease/||s||^3) and radius update (reject-and-expand when lambda_k/||s_k|| > sigma_k; contraction by an implicit radius from a regularized subproblem allowing sublinear decrease; cap Delta_k) so that accepted steps satisfy analogues, while allowing unregularized Newton steps (pp. 6-9, 11).",
+  "assumptions": "f C2; bounded below; Lipschitz gradient and bounded gradients (Assumption 3.1, p. 12); Lipschitz Hessian along the iterate/step path for complexity (Assumption 3.15, p. 20); local: limit point with positive definite Hessian (Assumption 3.29, p. 28); exact Hessians and globally optimal subproblem solutions 'For simplicity', admitted impractical at large scale (pp. 3, 30).",
+  "proof_devices": [
+   "iteration taxonomy A (A_sigma, A_Delta), C, E with at most one expansion between accepted steps (Lemmas 3.7, 3.22, pp. 14-15, 24)",
+   "only-contractions implies delta -> 0, lambda -> infinity, then large dual variable forces acceptance (Lemmas 3.8-3.10, pp. 15-16)",
+   "bounded sigma_k via ratio bounds after contraction (Lemmas 3.17-3.18, pp. 21-22) and step-norm lower bound ||s_k|| >= (H_Lip + sigma_max)^-1/2 ||g_{k+1}||^1/2 (Lemma 3.19, pp. 22-23)",
+   "counting template: #good steps <= (f0 - fmin)/decrease-per-step; contractions between accepted steps bounded by geometric growth of lambda/||s|| to a cap (Lemmas 3.20-3.24, Theorem 3.25, pp. 23-26)",
+   "second-order count from lambda_k >= -xi_{k,1} (Lemma 3.27, Theorem 3.28, pp. 27-28)",
+   "eventual acceptance of Newton steps gives Q-quadratic rate (Lemma 3.31, Theorem 3.32, pp. 29-30)",
+   "eigen-decomposition lower bound on the regularized step norm in contract (Lemma 3.12, pp. 17-18)"
+  ],
+  "experiments": "none; the Appendix argues each iteration costs no more than traditional TR or ARC when contract is folded into the secular-equation Newton solve, and that contractions avoid the hard case (pp. 31-32).",
+  "positioning": "Built directly on ARC (Cartis-Gould-Toint), Nesterov-Polyak and Griewank (pp. 2-3); credits CGT discussions as 'inspirational' (p. 30); distinguishes rather than criticizes ARC (cubic term never 'off', no Newton steps) (pp. 3, 11).",
+  "writing": "Contribution in the third introduction paragraph (p. 3); a motivation subsection naming the rival's proof inequalities before the algorithm (§2.1, pp. 5-6); three modifications as bullets (p. 7); prose for each unusual step (p. 10); sharpness left explicitly open (p. 30).",
+  "limits_future": "Exact Hessians and global subproblem solutions; sharpness unconfirmed; no numerical evidence; inexact variants named as 'the subject of current research' (p. 30).",
+  "method_links": [
+   {"method": "Method 4", "relation": "variant", "note": "In 2017 the worst-case iteration-complexity yardstick is adopted as the design target and iterations are justified as the measure, without auditing it; the opposite side of his later 'grain of salt' stance.", "pages": "pp. 2-3"},
+   {"method": "Method 2", "relation": "variant", "note": "As in steering, the contribution is a parameter-update rule (radius contraction/expansion, sigma_k) driven by observed step quality, but trading step size against complexity rather than objective against feasibility.", "pages": "pp. 7-9"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "port the rival's proof-critical inequalities", "evidence": "list ARC's accepted-step inequalities (2.4) and redesign trust-region acceptance and radius rules until every accepted step satisfies an analogue", "pages": "pp. 6-7"},
+   {"pattern": "unknown-constant estimator that only grows when progress stalls", "evidence": "sigma_k estimates an upper bound for lambda_k/||s_k||, raised only when needed and proved bounded by sigma_max (also S064 gamma)", "pages": "p. 8; p. 22"}
+  ],
+  "transferable": [
+   "Measure decrease relative to ||s||^3 when targeting O(eps^-3/2); near a strict minimizer this still accepts Newton steps since s_k -> 0 (p. 11).",
+   "Use the trust-region dual variable as a signal: if lambda_k/||s_k|| is too large, reject and expand instead of accepting a too-short step (pp. 7-8, 10).",
+   "Contract the radius implicitly to ||s(lambda)|| for a chosen regularization lambda, allowing sublinear decrease and avoiding the hard case (pp. 7, 9, 32).",
+   "Complexity counting template: #good steps times (1 + bounded #bad steps between good ones) (Theorem 3.25, p. 26).",
+   "Write a motivation subsection that names the exact inequalities the rival's proof uses before presenting your algorithm (pp. 5-6)."
+  ],
+  "coauthors": "Daniel P. Robinson, Mohammadreza Samadi",
+  "quotes": [
+   {"text": "there are situations in which our algorithm may reject a step and expand the trust region", "page": 3},
+   {"text": "We expect that this is also the case for our algorithm, but this has not yet been confirmed.", "page": 30}
+  ]
+ },
+ {
+  "id": "S004",
+  "year": "2017",
+  "title": "A BFGS-SQP Method for Nonsmooth, Nonconvex, Constrained Optimization and its Evaluation using Relative Minimization Profiles",
+  "read_level": "full",
+  "contribution": "BFGS-SQP (GRANSO): a penalty-SQP method with BFGS Hessian approximations and Byrd-Nocedal-style penalty steering for nonsmooth, nonconvex constrained problems, without convergence guarantees, evaluated on a new 200-problem controller-design test set with newly introduced relative minimization profiles (RMPs and budget-relative beta-RMPs) that show objective quality, feasibility and cost trade-offs.",
+  "problem_entry": "Application pull from HIFOO controller design (SFPP fixed-penalty restarts used because gradient sampling is too costly; SQP-GS has guarantees but needs O(n) gradients per iteration) plus an evaluation gap (performance/data profiles need arbitrary binary success criteria) (pp. 3-5).",
+  "key_idea": "Replace the BFGS direction on the exact penalty by a penalty-SQP QP with BFGS matrix and steer mu by comparing predicted linearized violation reduction with a mu = 0 reference direction (Procedure 1, pp. 6-8); stop via a QP over gradients of recent nearby iterates (pp. 8-9); evaluate with RMPs (fraction of problems whose best feasible objective is within relative difference gamma of the best found) and beta-RMPs at multiples of the new method's per-problem cost (pp. 17-22).",
+  "assumptions": "f and c continuously differentiable almost everywhere; no convergence claims (pp. 2, 9); test problems spectral radius (non-Lipschitz) and pseudospectral radius (locally Lipschitz) (pp. 11, 14).",
+  "proof_devices": [
+   "n/a for convergence: no theorems; analytic work is definitional design of RMPs (relative differences instead of ratios, p. 19)",
+   "equivalence of beta-RMP and RMP for beta >= 1 when budgets come from the method under study (pp. 20-21)",
+   "rolling target set (26) maximizing separation per beta (p. 22); measurement-error discussion of the cost axis (pp. 21-22)"
+  ],
+  "experiments": "200 randomly generated controller-design problems (100 spectral, 100 pseudospectral), small sizes to accommodate SQP-GS; rivals SNOPT 7.5 (compiled-code speed advantage stated), SFPP, SQP-GS, BFGS-SQP; tolerances at machine precision and 500 iterations to decouple stopping rules; beta in {1,5,10,inf} relative to BFGS-SQP's per-problem time; spectral set: SQP-GS 78% vs 22% at beta = inf but 26.6x slower, BFGS-SQP 92% at beta = 1; pseudospectral: BFGS-SQP 59% vs 34% and 14.4x faster; regularization ablation over condition caps 10^{2j}; code and test set public (pp. 12-28).",
+  "positioning": "Continues Lewis-Overton BFGS, own SQP-GS and Byrd-Nocedal(-Waltz/-Lopez-Calva) steering (pp. 3, 6); praises performance profiles ('ingenuity', 'beautiful property') before showing their binary-success deficiency; draws on Moré-Wild data profiles and Birgin et al. (pp. 4-5, 16-20).",
+  "writing": "Threefold contribution (p. 4); absence of guarantees admitted in the abstract (p. 2); strong results language ('completely outclasses', 'remarkable outcome', p. 26) next to an honest report of SQP-GS wins at beta = inf (pp. 25-26); methodological advice addressed to evaluators (p. 18).",
+  "limits_future": "No convergence guarantees; small dimensions forced by SQP-GS; single application domain, other problem classes left for future work; regularization effect unexplained and called worth investigating; coarse cost axis (pp. 2, 21-23, 28).",
+  "method_links": [
+   {"method": "Method 2", "relation": "evidence", "note": "Steering moved into nonsmooth BFGS-SQP; SFPP's fixed schedule leaves the penalty too high for over 100 iterations while BFGS-SQP immediately progresses toward feasibility.", "pages": "pp. 6-8, 12"},
+   {"method": "Method 4", "relation": "evidence", "note": "Performance and data profiles audited for their arbitrary binary success criterion; RMPs and beta-RMPs built to show the objective/feasibility/budget trade-off and let the reader define success.", "pages": "pp. 4-5, 16-22"},
+   {"method": "Method 5", "relation": "evidence", "note": "SNOPT's compiled-code advantage stated, extra panels at the faster rivals' budgets, rival's wins printed with numbers, one-component regularization sweep; caveat: c_v, c_mu given without tuning account and infeasible-start check summarized without data.", "pages": "pp. 24-28"},
+   {"method": "Method 3", "relation": "variant", "note": "Hard instances come from a randomized application generator chosen for challenging properties, not mechanical infeasible/degenerate variants of a standard set.", "pages": "pp. 4, 23-24"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "budget-sliced comparison", "evidence": "beta-RMP panels rerun the comparison at budgets equal to multiples of the new method's per-problem cost, so a slower but better rival is judged at equal cost; ranking flips between beta = inf and beta = 1", "pages": "pp. 19-22, 25-26"}
+  ],
+  "transferable": [
+   "Steering for a nonsmooth penalty method: compute the mu = 0 reference direction only when predicted violation reduction is below c_v v(x_k), then shrink mu until the direction achieves a c_v fraction of the reference reduction (p. 8).",
+   "Cheap nonsmooth stationarity certificate: minimum-norm element of the penalty-weighted convex hull of gradients at recent nearby iterates, via a QP dual (pp. 8-9).",
+   "RMP protocol: tolerances at machine precision, full iterate histories, targets = best feasible values across codes, fraction within relative difference gamma on a log axis including gamma = inf (pp. 18, 22-24).",
+   "beta-RMP panel with budgets from the new method's own cost, always beta = 1 and beta = inf, targets re-set per beta; add panels from a faster rival's budgets (pp. 21-22, 26).",
+   "Report the rival's best case first with numbers, then the budgets at which the ranking flips (pp. 25-26)."
+  ],
+  "coauthors": "Tim Mitchell, Michael L. Overton",
+  "quotes": [
+   {"text": "evaluators should aim not to define success but present as much relevant benchmark data as possible in a concise and intuitive manner", "page": 18},
+   {"text": "the fact remains that SQP-GS actually took 26.6 times longer to run to obtain these better results", "page": 26}
+  ]
+ }
+]

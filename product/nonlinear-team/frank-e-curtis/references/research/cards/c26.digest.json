@@ -1,0 +1,134 @@
+[
+  {
+    "id": "S044",
+    "year": "2025",
+    "title": "A stochastic-gradient-based interior-point algorithm for solving smooth bound-constrained optimization problems",
+    "read_level": "full",
+    "contribution": "First stochastic-gradient interior-point method for nonconvex bound-constrained problems: prescribed barrier, neighborhood and step-size sequences replace stationarity tests, fraction-to-the-boundary and line search. It gives deterministic and almost-sure liminf guarantees and competes with projected (stochastic) gradient methods on 43 LIBSVM datasets (read as arXiv v3).",
+    "problem_entry": "No IPM was rigorously convergent with only stochastic gradients, and the one prior claim (Carbonetto et al.) overlooks step-size summability. Scope is narrowed to bounds because the non-Lipschitz barrier gradient is the obstacle every extension must cross (pp. 2-3, 15).",
+    "key_idea": "Prescribed barrier sequence {mu_k}, inner-neighborhood sequence {theta_k} and step sizes from a computable local Lipschitz bound, balanced through exponents (t_mu = t_theta, t_mu + t_alpha in [-1,0); in the stochastic case also t_mu < -1/2 and t_mu + 2t_alpha < -1), with no line search, stationarity test or fraction-to-boundary rule (pp. 3, 6, 9, 16-17).",
+    "assumptions": "f C^1 on an open superset of B, bounded below and (nonstandard) above, with Lipschitz bounded gradient (p. 5). Iterate distances to bounds are bounded by an unknown chi (p. 7). Unbiased gradient estimates with errors bounded almost surely by known sigma (p. 16), admitted as the main limitation (p. 4).",
+    "proof_devices": [
+      "shifted barrier phi-tilde bounded below by f_inf and monotone in mu, so decreases telescope across changing mu (Lemma 3.1, pp. 7-8)",
+      "point-pair local Lipschitz bound for the barrier gradient that diverges as theta -> 0 (Lemma 3.2, p. 8; Remark 3.2, p. 10)",
+      "lower bound on the neighborhood step fraction via sign case analysis, quadratic formula and mean value theorem on sqrt (Lemma 3.6, pp. 11-13)",
+      "exponent bookkeeping written out to show why t_mu = t_theta is forced (Corollary 3.1, pp. 14-15)",
+      "total-expectation split on the sign of the noise cross term, charging only the buffer step size (Lemma 3.10, p. 18)",
+      "summable noise O(k^2t_mu)+O(k^(t_mu+2t_alpha)) against unsummable decrease gives almost-sure liminf (Remark 3.4, pp. 16-17; Theorem 3.2, p. 21)",
+      "negative result: the projected simplified variant's recurrence u_{k+1} <= v_k u_k + e_k fails since e_k/(1-v_k) does not vanish (Section 4, pp. 22-23)"
+    ],
+    "experiments": "Matlab; 43 LIBSVM datasets with logistic regression and a one-hidden-layer network, bounds [-1,1] to activate many bounds. Constants estimated by a 500-iteration pre-run. PSGM rival with the same step-size schedule endpoints; relative [-1,1] measure on final objective and projected-gradient norm; 10 runs with box plots in the stochastic case. SIPM wins at small budgets and is comparable at large budgets; one PSGM win named; buffer formulas tuned ('worked best') (pp. 24-27).",
+    "positioning": "Continues the authors' stochastic SQP line and Bottou-Curtis-Nocedal SG theory. Drops the fraction-to-boundary rule of Byrd-Hribar-Nocedal and Waechter-Biegler. Gives a pointed technical correction of Carbonetto et al. (pp. 3, 15, 21).",
+    "writing": "Five numbered contributions, phrased as dependencies removed (no stationarity test, no fraction-to-boundary, no exact-function step acceptance), followed at once by a limitation paragraph. Remarks fence off generalizations (pp. 3-7).",
+    "limits_future": "Noise bounded by a known value; liminf not lim; bounds only; no rates. Future: combine with stochastic equality-constrained SQP toward general stochastic IPMs (pp. 4, 21, 27).",
+    "method_links": [
+      {"method": "Method 2", "relation": "variant", "note": "The barrier parameter is still the research object, but as a prescribed schedule balanced with neighborhood and step-size schedules, not an adaptive rule, because stationarity measures cannot be computed.", "pages": "pp. 3, 6, 9, 17"},
+      {"method": "Method 5", "relation": "variant", "note": "Baseline shares the step-schedule endpoints, 10 runs, incumbent win named; but buffer formulas were tuned on the test set without matching PSGM tuning, and the Section 4 variant's results were withheld.", "pages": "pp. 24-25"},
+      {"method": "Method 3", "relation": "variant", "note": "Hard feature manufactured by rule: bounds [-1,1] make many bounds active on standard ML data (active bounds, not infeasible or degenerate variants).", "pages": "p. 24"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "prescribed schedules replace uncomputable tests", "evidence": "Stationarity test, fraction-to-boundary and line search are replaced by prescribed sequences; the theorem is the admissible exponent region (Figure 1).", "pages": "pp. 3, 9, 16-17"},
+      {"pattern": "obstacle section for the obvious simpler method", "evidence": "Section 4 shows where the standard proof for a projected simplified variant breaks, even for strongly convex deterministic f.", "pages": "pp. 22-23"}
+    ],
+    "transferable": [
+      "Replace each test that the information model makes uncomputable by a prescribed sequence, and prove (and plot) the admissible region of sequence exponents (pp. 3, 16-17).",
+      "Bound the correlation between a random step size and gradient noise by splitting on the sign of the cross term and charging only the buffer above the deterministic minimum step (p. 18).",
+      "Add a section proving where the obvious simpler variant's analysis fails (pp. 22-23).",
+      "Estimate the step rule's problem constants with a short fixed pre-run and tabulate them per instance (pp. 24, 26).",
+      "Give a projected-gradient baseline the same step-size schedule endpoints so only the constraint mechanism differs (p. 25)."
+    ],
+    "coauthors": "Vyacheslav Kungurtsev, Daniel P. Robinson, Qi Wang",
+    "quotes": [
+      {"text": "This is significant since stationarity measures cannot be computed accurately in the stochastic setting that we consider.", "page": 3},
+      {"text": "Upon seeing our algorithm, a reader may wonder if a simpler variant has convergence guarantees.", "page": 3}
+    ]
+  },
+  {
+    "id": "S054",
+    "year": "2025",
+    "title": "Almost-sure convergence of iterates and multipliers in stochastic sequential quadratic optimization",
+    "read_level": "full",
+    "contribution": "For a simplified (fixed-merit-parameter) variant of the stochastic SQP method of Berahas-Curtis-Robinson-Zhou, proves almost-sure convergence of iterates (under a constrained PL-type condition), multipliers and a stationarity measure. Shows that multiplier error equals primal distance plus gradient noise, and that averaging removes the noise (read as arXiv v1).",
+    "problem_entry": "The stochastic-gradient subclass of stochastic SQP only had convergence of an expected stationarity measure, while unconstrained SG has almost-sure results. Multipliers matter for certificates and as subsolver output for inequality methods (pp. 2-3).",
+    "key_idea": "No new algorithm: freeze tau and xi, use unsummable square-summable steps, apply Robbins-Siegmund to the merit function, and treat the multiplier as a Lipschitz function of the iterate plus a noise term that averaging (windowed in practice) cancels (pp. 7, 9-10, 14-17, 21).",
+    "assumptions": "Full row rank Jacobian with uniformly bounded singular values, smooth bounded functions on a convex set containing the iterates; unbiased bounded-variance gradients; H_k positive definite on the null space (pp. 6, 8). Plus a local constrained PL inequality and an a.s. eventual-neighborhood hypothesis (p. 11); Lipschitz H(x), M(x) (p. 13); CLT-type conditions (30), 'admittedly nontrivial' (p. 18).",
+    "proof_devices": [
+      "Robbins-Siegmund almost-supermartingale theorem applied to the shifted merit value (Lemma 1.2, p. 4; Lemma 3.1, pp. 9-10)",
+      "null-space/range-space step decomposition bounding model reduction by squared reduced gradient plus constraint violation (Lemma 3.2, pp. 10-11)",
+      "constrained generalization of the Polyak-Lojasiewicz condition, with affine-constraint and flat-range special cases (Theorem 3.1, pp. 11-12)",
+      "three-term decomposition of the multiplier error (eq. (25), Theorem 4.1, pp. 14-15)",
+      "multidimensional martingale CLT for triangular arrays plus moment convergence to make the averaged noise vanish (Lemmas 1.3-1.4, p. 5; Lemma 4.1, pp. 16-17; Theorem 4.2, p. 17)",
+      "null-set bookkeeping for almost-sure convergence of true and averaged multipliers (Corollary 4.3, pp. 18-20)"
+    ],
+    "experiments": "Small demonstration: constrained logistic regression with ||x||^2 = 1 and 10 random linear constraints on four LIBSVM datasets chosen for large gradient noise. Public StochasticSQP Matlab code, H = I, mini-batch 16, beta_k tuned toward the known global solution. Verified tau and xi never moved. One 10^5-iteration run per plot (other seeds said consistent). Raw, true, full-average and windowed-average multiplier errors plotted (pp. 20-22).",
+    "positioning": "Continues [3] and related stochastic SQP works. Other stochastic SQP methods are set apart by their stronger gradient-estimate requirements; Na-Mahoney named as comparable. Averaging tied to Polyak-Juditsky and ergodic analysis, distinguished from dual averaging (p. 3).",
+    "writing": "Restates the unconstrained almost-sure theory (Robbins-Monro, Robbins-Siegmund, Bertsekas-Tsitsiklis) first. Follows each nonstandard assumption with a justification paragraph and names roads not taken (least-squares multipliers) (pp. 4-5, 13-14, 18).",
+    "limits_future": "Simplified variant with fixed merit parameter (conjecture for the full method); conditional hypotheses not supplied by the theory; nontrivial CLT conditions; tuned steps and single displayed runs. No explicit future-work statement (pp. 7, 11, 15, 18, 21-22).",
+    "method_links": [
+      {"method": "Method 4", "relation": "evidence", "note": "Questions the earlier guarantee's measure: the 'true' multiplier in [3]'s guarantee is not computed by the algorithm. Shows the computable multiplier carries a noise floor and builds the averaged estimator.", "pages": "pp. 14-16, 21-22"},
+      {"method": "Method 2", "relation": "variant", "note": "Merit parameter frozen for analysis rather than made the object; adaptive rule verified constant in runs.", "pages": "pp. 7, 21"},
+      {"method": "Method 5", "relation": "variant", "note": "Demonstration, not comparison: step sizes tuned per run toward the known solution and single runs shown, departing from the many-runs rule.", "pages": "p. 21"},
+      {"method": "Method 3", "relation": "variant", "note": "Datasets selected for large gradient noise; nonconvex sphere constraint added to standard data.", "pages": "p. 20"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "freeze-to-analyze, verify-in-runs", "evidence": "Adaptive merit and ratio parameters are fixed for the analysis, the full method is conjectured, and the runs are checked to keep tau = 0.1 and xi = 1.0 throughout.", "pages": "pp. 7, 21"},
+      {"pattern": "oracle beside estimator in plots", "evidence": "The uncomputable true multiplier is plotted beside raw, averaged and windowed multipliers.", "pages": "p. 21"}
+    ],
+    "transferable": [
+      "Apply Robbins-Siegmund to the merit function with the true-gradient model reduction as the decrease term to turn an in-expectation descent lemma into almost-sure limits (pp. 9-10).",
+      "Split an estimator's error into primal-distance and current-noise parts, then average the noise away with a martingale CLT on xi_{k,i} = M_i Delta_i / sqrt(k). In practice, average over a window of nearby iterates (pp. 14-17, 21).",
+      "Generalize PL to equality constraints with reduced gradient plus constraint violation and check its special cases (pp. 11-12).",
+      "Log the adaptive parameters of a released code and report that they stayed fixed when the theory covers only the frozen variant (p. 21)."
+    ],
+    "coauthors": "Xin Jiang, Qi Wang",
+    "quotes": [
+      {"text": "These datasets were selected as ones that led to relatively large errors in the stochastic gradient estimates.", "page": 20},
+      {"text": "The conditions in (30) in Lemma 4.1 are admittedly nontrivial, but upon closer inspection it is not surprising that conditions akin to these would be needed in order to draw any useful conclusions about an averaged Lagrange multiplier sequence.", "page": 18}
+    ]
+  },
+  {
+    "id": "S059",
+    "year": "2025",
+    "title": "An interior-point algorithm for continuous nonlinearly constrained optimization with noisy function and derivative evaluations",
+    "read_level": "full",
+    "contribution": "Extends the step-decomposition IPM of Curtis-Schenk-Waechter and the bound-constrained noisy IPM of Dezfulian-Waechter to nonlinear inequality constraints with bounded deterministic noise. For a fixed barrier subproblem it proves that a noiseless stationarity measure falls below a noise-dependent threshold, and shows on 137 CUTE problems that this happens in practice.",
+    "problem_entry": "IPMs (Ipopt, KNITRO) assume exact values. Deterministic-noise methods existed for unconstrained, bound and equality constraints but not nonlinear inequalities; the bound-constrained method fails to transfer because of Waechter-Biegler failure, rank deficiency and the need for a merit function (pp. 2-3).",
+    "key_idea": "Reuse the 2010 normal/tangential step IPM with slack reset, scaled derivatives and an adaptive merit parameter. Add a relaxed Armijo condition with slack (2+zeta)(tau f-noise + c-noise) and noisy termination tests; the merit-parameter strategy in noise is the declared main contribution (pp. 4, 8-11).",
+    "assumptions": "Smooth functions; noisy evaluations within known bounds (p. 5). W_k conditions also for noiseless quantities (p. 13). Bounded slacks, unprovable since the merit is not monotone (p. 13). Jacobian singular values above the Jacobian noise and close noisy/noiseless null spaces (pp. 13, 20). Single fixed barrier parameter; mu -> 0 not analyzed (p. 4).",
+    "proof_devices": [
+      "noisy/noiseless twin quantities (v-bar, u-bar, d-bar, tau-bar) with bounded differences (eq. (27), p. 14)",
+      "normal-step perturbation bound via change of variables to a common feasible set and summed variational inequalities (Lemma 4.5, pp. 16-18)",
+      "tangential steps as oblique projections, bounded with Stewart's oblique-projector perturbation theory (Lemmas 4.6, 4.9, pp. 18-21)",
+      "noiseless model reduction as a stationarity measure, with noisy-noiseless model gaps bounded (Lemmas 4.10, 4.12-4.13, pp. 22-24)",
+      "eventual constancy of the noiseless merit parameter under the Jacobian assumption (Lemma 4.19, p. 27)",
+      "contradiction: above-threshold stationarity forces a noiseless merit decrease of at least zeta*eps_k per step, violating boundedness below (Theorem 1, pp. 29-30)",
+      "weaker infeasibility-stationarity result without the Jacobian assumptions (Appendix A, pp. 38-39)"
+    ],
+    "experiments": "Matlab; 137 CUTE/AMPL problems by stated filters (at least one general constraint, l<u, at most 100 variables). Ipopt-style initial point and gradient scaling; More-Sorensen normal step; LDL inertia-based Hessian modification. mu in {1e-1,1e-4}; noise 1e-2 and 1e-6 with derivative noise at its square root; uniform noise preserving Jacobian sparsity. 2000 iterations or 1 hour with own termination disabled. Percentage of problems meeting thresholds for two stationarity measures, computed with noisy and noiseless values. No rival or ablation (pp. 31-35).",
+    "positioning": "Builds 'primarily upon' Dezfulian-Waechter and the Curtis-Schenk-Waechter step decomposition; analysis modeled on the noiseless results of [11] and [15]. Oztoprak-Byrd-Nocedal cited for the impossibility of exact convergence under deterministic noise. The authors' stochastic IPMs are the stochastic-noise counterpart; practical relevance argued through Ipopt/KNITRO compatibility (pp. 3-4, 12).",
+    "writing": "Declares the unanswered questions up front, gives a subsection on what the analysis can hope to prove, and follows the theorem with bulleted observations explaining each term; the barrier heuristic is offered as a proposal in the conclusion (pp. 4, 11-12, 30-31, 35).",
+    "limits_future": "Fixed barrier parameter only; Jacobian-noise assumptions; a non-vanishing tau_0*g_sup term (mitigated by a small tau_0); equality constraints omitted for simplicity; no comparison with other solvers. Future: a computable stopping test from (51) to drive barrier-parameter decreases (pp. 4-5, 13, 31, 35).",
+    "method_links": [
+      {"method": "Method 2", "relation": "evidence", "note": "One algorithm with an infeasible-stationary exit; merit-parameter update under noise is the declared main contribution; the merit parameter is isolated as the source of the non-vanishing error term.", "pages": "pp. 4, 6, 8, 11, 31"},
+      {"method": "Method 4", "relation": "evidence", "note": "Stationarity is reported against noiseless as well as noisy values, and the algorithm's own termination is disabled so its flags do not decide reported quality.", "pages": "pp. 33-35"},
+      {"method": "Method 3", "relation": "variant", "note": "Hard instances are manufactured by a stated rule, but the injected difficulty is noise at two levels, not infeasible or degenerate variants.", "pages": "pp. 32-33"},
+      {"method": "Method 1", "relation": "variant", "note": "Built on the inexact-step IPM of [15], but subproblems are solved exactly here; the outer-inner link survives only as the noise-sized Armijo relaxation.", "pages": "pp. 2-3, 10, 32"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "noisy/noiseless twin iteration", "evidence": "Every noisy step has a barred twin computed with exact values at the same point and matrix; the theory transfers through difference bounds and the experiments report both measures.", "pages": "pp. 7, 14, 33"},
+      {"pattern": "declare unanswered questions up front", "evidence": "The introduction states that the analysis covers one barrier subproblem only and that the mu -> 0 analysis would be questionable with deterministic noise.", "pages": "p. 4"}
+    ],
+    "transferable": [
+      "Relax the sufficient-decrease test by (2+zeta) times the known merit-function noise, then prove the noiseless merit must drop by zeta*eps_k whenever stationarity is above threshold (pp. 10, 30).",
+      "Define the exact-value twin of each noisy step at the same iterate and matrix and transfer the noiseless theory through difference bounds (pp. 14-24).",
+      "Bound noisy-versus-exact tangential steps with oblique-projection perturbation theory (pp. 18-21).",
+      "Report stationarity with both the algorithm's noisy values and the true values, and disable your own termination flags when benchmarking (p. 33).",
+      "Inject noise into a standard test set by a stated, reproducible rule (uniform balls, sparsity-preserving Jacobian noise, derivative noise at the square root of function noise) (pp. 32-33)."
+    ],
+    "coauthors": "Shima Dezfulian, Andreas Waechter",
+    "quotes": [
+      {"text": "We mention upfront that our proposed algorithm and analysis leave certain natural questions unanswered.", "page": 4},
+      {"text": "in the noisy setting there is not necessarily a benefit of reducing the barrier parameter too small", "page": 35}
+    ]
+  }
+]

@@ -1,0 +1,48 @@
+[
+  {
+    "id": "S066",
+    "year": "2017",
+    "title": "Solving nearly-separable quadratic optimization problems as nonsmooth equations",
+    "read_level": "full",
+    "contribution": "Recasts dual decomposition for QPs with linear coupling constraints as an implicit complementarity problem in the multipliers. Solves it by semismooth Newton on the Fischer-Burmeister reformulation, with merit or multidimensional-filter globalization and a proximal extension for convex and indefinite QPs. Proves a local Q-superlinear rate under subproblem LICQ, strict complementarity and SSOSC.",
+    "problem_entry": "Dual decomposition (subgradient, bundle, smoothing) is slow (O(1/eps^2) or O(1/eps)), recovers the primal only as a sublinear ergodic average, treats only coupling equalities, and needs convexity because it maximizes the dual (pp. 3-4).",
+    "key_idea": "Solve 0 <= F(lambda) _|_ lambda >= 0 with F(lambda) = b - sum A_i x_i(lambda) as a semismooth equation. The Newton step is one linear system that uses the subproblem active sets and sensitivities; each F evaluation stays N separable subproblem solves. Globalization is by merit function or multidimensional filter, and a gated proximal update handles convex and indefinite cases (pp. 4, 6-7, 11-17).",
+    "assumptions": "Polyhedral X_i. Local theory needs full-problem LICQ, strict complementarity and SSOSC in every subproblem, while the coupling constraints may be degenerate. The authors admit global convergence is not proved because F is only semismooth, not C1 (pp. 5, 9, 11-12).",
+    "proof_devices": [
+      "Reduction chain: Qi's semismooth Newton theorem at BD-regular roots <- b-/R-regularity of the ICP (De Luca-Facchinei-Kanzow) <- nonsingular reduced KKT matrices (Theorem 2.1, Lemma 2.1, Theorem 2.2; pp. 7, 9-11)",
+      "Contradiction: u^T Q u = 0 plus SSOSC gives u = 0, then LICQ gives zero multipliers, so the KKT-type matrices are nonsingular (Lemma 2.2, pp. 8-9)",
+      "Jacobian of the argmin map via implicit differentiation of the subproblem KKT system (7.15), giving grad F[sigma sigma] in Schur-complement form (Lemma 2.3, p. 9; Lemma 7.1, p. 40)",
+      "Positive definiteness of the Schur complement grad F[bb]/grad F[aa] via a chain of equivalences ending in u^T Q u > 0 on the null space of active constraints; a symmetric P-matrix gives R-regularity (pp. 10-11)",
+      "Semismoothness from PC1 subproblem solution maps (Ralph-Dempe) plus closure of semismooth functions under composition (p. 7; Lemma 7.2, p. 41)",
+      "Global convergence only sketched ('easily seen' for merit and filter line search); no theorem for Algorithm 2 (pp. 13-14, 16-17)"
+    ],
+    "experiments": "MATLAB with the MINQ subproblem solver. Planted-solution random QPs (strictly convex, convex, indefinite; nN = 100-400; 100 instances per configuration) compare merit, filter-2 and filter-5 arms against subgradient, prox-ADMM (its authors' parameters) and proximal-center, with 5000-iteration or 900-s caps; the baselines mostly solve 0/100. Own failures are reported for filter-5 and indefinite cases, and baselines are omitted for indefinite problems. Applications: MATPOWER electricity markets vs subgradient (2-3 orders of magnitude faster), water networks (no baseline), nonconvex newsvendor with the objective checked against IPOPT (pp. 18-36).",
+    "positioning": "Places itself in problem decomposition, as opposed to Schur-complement IPM decomposition that needs solver internals. Separates itself from first- and second-order dual-maximization methods (incl. Frasch-Sager-Diehl semismooth dual Newton) by handling inequality coupling, nonconvexity and no dual maximization. Notes that the NCP literature's C1 assumption fails here, and generalizes Bai-Raghunathan ACC 2013 (pp. 2-5, 7).",
+    "writing": "Contribution sentence opens Sec. 1.2 ('In contrast to existing approaches ...', p. 4); a plain-language paragraph follows Theorem 2.2 (p. 11); hedging is concentrated on globalization ('we claim ... should', p. 12); the results text is candid about weak arms (pp. 20, 29); the conclusion is short and modest (p. 36).",
+    "limits_future": "No global convergence proof and no theory for Algorithm 2. In nonconvex problems the method may not reach second-order KKT points of the full QP. Indefinite runs fail on some instances, and filter-5 is less robust. Not stated: small sizes, no second-order rival, no parallel timing. Only future step given: decomposition into sub-networks (pp. 6, 12, 16-17, 29, 34, 36).",
+    "method_links": [
+      {"method": "Method 2", "relation": "variant", "note": "The proximal-parameter update is gated on measured progress (||Phi|| <= kappa*mu and the proximal term not negligible), not scheduled. It trades regularization against the equation residual, not objective against feasibility, and has no proof. Algorithm 1 also has a monitored Newton-to-gradient fallback inside one algorithm.", "pages": "pp. 14-17"},
+      {"method": "Method 5", "relation": "variant", "note": "Merit, filter-2 and filter-5 run as arms of one algorithm on the same instances; prox-ADMM uses its authors' parameters; own weak arm and indefinite failures are printed. But the external rivals are capped first-order methods, the nearest second-order rival (Frasch-Sager-Diehl) is not run, and the applications compare only with subgradient or IPOPT objective values.", "pages": "pp. 4, 19-20, 29-36"},
+      {"method": "Method 4", "relation": "contradiction", "note": "Success is judged by the method's own semismooth-system residual below 1e-6; how the residual is computed for the baselines is not stated. An independent objective check against IPOPT appears only for the newsvendor problem.", "pages": "pp. 19-20, 36"},
+      {"method": "Method 1", "relation": "variant", "note": "Inner/outer coupling goes through subproblem sensitivities and active sets in the Newton system, not through inexact-solve termination tests. Subproblem solvers are deliberately black boxes and are solved exactly by MINQ.", "pages": "pp. 2, 11-12, 18"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Reformulate to shed a convexity requirement", "evidence": "Replaces dual maximization by an equation in the multipliers, so that the reduction to KKT points of the full QP needs no convex duality and nonconvex problems are admitted.", "pages": "pp. 4, 41"},
+      {"pattern": "Prove the local rate, argue the globalization", "evidence": "Q-superlinear local convergence is fully proved (Theorem 2.2). Global convergence of the merit and filter line searches is claimed to 'should' hold with informal arguments, and Algorithm 2 has no theorem.", "pages": "pp. 9-17"},
+      {"pattern": "Planted-solution instance generator", "evidence": "Random structured QPs are built from a prescribed primal-dual solution with controlled LICQ, SSOSC, strict complementarity, curvature class and number of active coupling constraints.", "pages": "pp. 18-19"}
+    ],
+    "transferable": [
+      "Recast a dual-decomposition fixed point as an implicit complementarity problem in the multipliers and solve it by semismooth Newton (Fischer-Burmeister). The subproblems stay separable and the primal comes out as x(lambda*) without ergodic averaging (pp. 4, 6-7, 11-12).",
+      "Prove BD-regularity by reducing it to b-/R-regularity and then to nonsingularity of reduced KKT matrices from subproblem sensitivities, using the 'SSOSC forces u = 0, LICQ forces multipliers = 0' contradiction (pp. 7-11).",
+      "Choose between semismooth operators by step cost: a linear system (Fischer-Burmeister) against an optimization problem (Minimum operator) (p. 11).",
+      "Gate proximal or penalty parameter updates on ||residual|| <= kappa*mu (Fiacco-McCormick style) and reset the filter after each parameter change (pp. 16-17).",
+      "Generate random structured test QPs from a planted primal-dual solution with prescribed regularity and active-set counts (pp. 18-19).",
+      "Run globalization mechanisms (merit vs filters with different block counts) as arms of one algorithm, count function evaluations (rounds of subproblem solves) as the expensive unit, and report where the permissive arm fails (pp. 13, 19-20, 29-31)."
+    ],
+    "coauthors": "Arvind U. Raghunathan (MERL)",
+    "quotes": [
+      {"text": "More importantly, this consequence does not rely on convex duality, which is an important observation when (1.1) is not convex.", "page": 4},
+      {"text": "Still, we claim that, under reasonable conditions, these mechanisms should offer such guarantees.", "page": 12}
+    ]
+  }
+]
