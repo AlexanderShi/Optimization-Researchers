@@ -41,70 +41,70 @@
 | 29 | S029 | 2014 | An inexact sequential quadratic optimization algorithm for nonlinear optimization | SIAM Journal on Optimization | 52 | journal | url | txt | 34 | supplement | — |
 | 30 | S030 | 2024 | Sequential quadratic optimization for stochastic optimization with deterministic nonlinear inequality and equality constraints | SIAM Journal on Optimization | 51 | journal | arXiv | txt | 27 | supplement | — |
 | 31 | S031 | 2020 | Adaptive stochastic optimization: a framework for analyzing stochastic optimization algorithms | IEEE Signal Processing Magazine | 50 | journal | — | no-oa |  | supplement | — |
-| 32 | S032 | 2008 | Flexible penalty functions for nonlinear constrained optimization | IMA Journal of Numerical Analysis | 49 | journal | url | txt | 21 | supplement | — |
-| 33 | S033 | 2012 | A penalty-interior-point algorithm for nonlinear constrained optimization | Mathematical Programming Computation | 48 | journal | url | txt | 29 | supplement | — |
-| 34 | S034 | 2025 | Stochastic optimization approaches for an operating room and anesthesiologist scheduling problem | Operations research | 47 | journal | arXiv | txt | 122 | supplement | — |
-| 35 | S035 | 2018 | Concise complexity analyses for trust region methods | Optimization Letters | 45 | journal | arXiv | txt | 10 | supplement | — |
-| 36 | S036 | 2012 | A note on the implementation of an interior-point algorithm for nonlinear optimization with inexact step computations | Mathematical Programming, Series B | 43 | journal | url | txt | 19 | supplement | — |
-| 37 | S037 | 2021 | Inexact sequential quadratic optimization for minimizing a stochastic objective function subject to deterministic nonlinear equality constraints | arXiv preprint arXiv:2107.03512 | 40 | preprint | arXiv | txt | 27 | supplement | — |
-| 38 | S038 | 2016 | A reduced-space algorithm for minimizing ℓ-regularized convex functions | SIAM Journal on Optimization | 35 | journal | arXiv | txt | 23 | supplement | — |
-| 39 | S039 | 2017 | An interior-point trust-funnel algorithm for nonlinear optimization | Mathematical Programming | 34 | journal | unpaywall | txt | 46 | supplement | — |
-| 40 | S040 | 2016 | Adaptive augmented Lagrangian methods: Algorithms and practical numerical experience | Optimization Methods and Software | 31 | journal | arXiv | txt | 46 | supplement | — |
-| 41 | S041 | 2022 | A fully stochastic second-order trust region method | Optimization Methods and Software | 26 | journal | arXiv | txt | 27 | supplement | — |
-| 42 | S042 | 2016 | Handling nonpositive curvature in a limited memory steepest descent method | IMA Journal of Numerical Analysis | 25 | journal | url | txt | 26 | supplement | — |
-| 43 | S043 | 2023 | Worst-case complexity of trace with inexact subproblem solutions for nonconvex smooth optimization | SIAM Journal on Optimization | 24 | journal | arXiv | txt | 27 | supplement | — |
-| 44 | S044 | 2025 | A stochastic-gradient-based interior-point algorithm for solving smooth bound-constrained optimization problems | SIAM Journal on Optimization | 23 | journal | arXiv | txt | 30 | supplement | — |
+| 32 | S032 | 2008 | Flexible penalty functions for nonlinear constrained optimization | IMA Journal of Numerical Analysis | 49 | journal | manual | txt | 21 | supplement | — |
+| 33 | S033 | 2012 | A penalty-interior-point algorithm for nonlinear constrained optimization | Mathematical Programming Computation | 48 | journal | manual | txt | 29 | supplement | — |
+| 34 | S034 | 2025 | Stochastic optimization approaches for an operating room and anesthesiologist scheduling problem | Operations research | 47 | journal | manual | txt | 122 | supplement | — |
+| 35 | S035 | 2018 | Concise complexity analyses for trust region methods | Optimization Letters | 45 | journal | manual | txt | 10 | supplement | — |
+| 36 | S036 | 2012 | A note on the implementation of an interior-point algorithm for nonlinear optimization with inexact step computations | Mathematical Programming, Series B | 43 | journal | manual | txt | 19 | supplement | — |
+| 37 | S037 | 2021 | Inexact sequential quadratic optimization for minimizing a stochastic objective function subject to deterministic nonlinear equality constraints | arXiv preprint arXiv:2107.03512 | 40 | preprint | manual | txt | 27 | supplement | — |
+| 38 | S038 | 2016 | A reduced-space algorithm for minimizing ℓ-regularized convex functions | SIAM Journal on Optimization | 35 | journal | manual | txt | 23 | supplement | — |
+| 39 | S039 | 2017 | An interior-point trust-funnel algorithm for nonlinear optimization | Mathematical Programming | 34 | journal | manual | txt | 46 | supplement | — |
+| 40 | S040 | 2016 | Adaptive augmented Lagrangian methods: Algorithms and practical numerical experience | Optimization Methods and Software | 31 | journal | manual | txt | 46 | supplement | — |
+| 41 | S041 | 2022 | A fully stochastic second-order trust region method | Optimization Methods and Software | 26 | journal | manual | txt | 27 | supplement | — |
+| 42 | S042 | 2016 | Handling nonpositive curvature in a limited memory steepest descent method | IMA Journal of Numerical Analysis | 25 | journal | manual | txt | 26 | supplement | — |
+| 43 | S043 | 2023 | Worst-case complexity of trace with inexact subproblem solutions for nonconvex smooth optimization | SIAM Journal on Optimization | 24 | journal | manual | txt | 27 | supplement | — |
+| 44 | S044 | 2025 | A stochastic-gradient-based interior-point algorithm for solving smooth bound-constrained optimization problems | SIAM Journal on Optimization | 23 | journal | manual | txt | 30 | supplement | — |
 | 45 | S045 | 2024 | A stochastic inexact sequential quadratic optimization algorithm for nonlinear equality-constrained optimization | INFORMS Journal on Optimization | 23 | journal | — | no-oa |  | supplement | — |
-| 46 | S046 | 2018 | R-Linear Convergence of Limited Memory Steepest Descent | IMA Journal of Numerical Analysis | 20 | journal | arXiv | txt | 19 | supplement | — |
-| 47 | S047 | 2007 | Steplength selection in interior-point methods for quadratic programming | Applied Mathematics Letters | 20 | journal | url | txt | 8 | supplement | — |
-| 48 | S048 | 2021 | Practical optimal control of a wave-energy converter in regular wave environments | Renewable Energy | 19 | journal | arXiv | txt | 24 | supplement | — |
-| 49 | S049 | 2020 | A self-correcting variable-metric algorithm framework for nonsmooth optimization | IMA Journal of Numerical Analysis | 19 | journal | arXiv | txt | 30 | supplement | — |
-| 50 | S050 | 2015 | Iterative reweighted linear least squares for exact penalty subproblems on product sets | SIAM Journal on Optimization | 19 | journal | arXiv | txt | 33 | supplement | — |
-| 51 | S051 | 2022 | Limited-memory BFGS with displacement aggregation | Mathematical Programming | 17 | journal | arXiv | txt | 30 | supplement | — |
-| 52 | S052 | 2018 | FaRSA for ℓ1-regularized convex optimization: local convergence and numerical experience | Optimization Methods and Software | 17 | journal | url | txt | 21 | supplement | — |
-| 53 | S053 | 2022 | A subspace acceleration method for minimization involving a group sparsity-inducing regularizer | SIAM Journal on Optimization | 15 | journal | arXiv | txt | 28 | supplement | — |
-| 54 | S054 | 2025 | Almost-sure convergence of iterates and multipliers in stochastic sequential quadratic optimization | Journal of Optimization Theory and Applications | 14 | journal | arXiv | txt | 24 | supplement | — |
+| 46 | S046 | 2018 | R-Linear Convergence of Limited Memory Steepest Descent | IMA Journal of Numerical Analysis | 20 | journal | manual | txt | 19 | supplement | — |
+| 47 | S047 | 2007 | Steplength selection in interior-point methods for quadratic programming | Applied Mathematics Letters | 20 | journal | manual | txt | 8 | supplement | — |
+| 48 | S048 | 2021 | Practical optimal control of a wave-energy converter in regular wave environments | Renewable Energy | 19 | journal | manual | txt | 24 | supplement | — |
+| 49 | S049 | 2020 | A self-correcting variable-metric algorithm framework for nonsmooth optimization | IMA Journal of Numerical Analysis | 19 | journal | manual | txt | 30 | supplement | — |
+| 50 | S050 | 2015 | Iterative reweighted linear least squares for exact penalty subproblems on product sets | SIAM Journal on Optimization | 19 | journal | manual | txt | 33 | supplement | — |
+| 51 | S051 | 2022 | Limited-memory BFGS with displacement aggregation | Mathematical Programming | 17 | journal | manual | txt | 30 | supplement | — |
+| 52 | S052 | 2018 | FaRSA for ℓ1-regularized convex optimization: local convergence and numerical experience | Optimization Methods and Software | 17 | journal | manual | txt | 21 | supplement | — |
+| 53 | S053 | 2022 | A subspace acceleration method for minimization involving a group sparsity-inducing regularizer | SIAM Journal on Optimization | 15 | journal | manual | txt | 28 | supplement | — |
+| 54 | S054 | 2025 | Almost-sure convergence of iterates and multipliers in stochastic sequential quadratic optimization | Journal of Optimization Theory and Applications | 14 | journal | manual | txt | 24 | supplement | — |
 | 55 | S055 | 2024 | Fair machine learning through constrained stochastic optimization and an ε-constraint method | Optimization Letters | 12 | journal | — | no-oa |  | supplement | — |
-| 56 | S056 | 2021 | An accelerated communication-efficient primal-dual optimization framework for structured machine learning | Optimization Methods and Software | 12 | journal | arXiv | txt | 20 | supplement | — |
-| 57 | S057 | 2020 | Inexact sequential quadratic optimization with penalty parameter updates within the QP solver | SIAM Journal on Optimization | 11 | journal | arXiv | txt | 38 | supplement | — |
-| 58 | S058 | 2004 | Central groupoids, central digraphs, and zero-one matrices A satisfying A^2 = J | Journal of Combinatorial Theory, Series A | 11 | journal | url | txt | 16 | supplement | — |
-| 59 | S059 | 2025 | An interior-point algorithm for continuous nonlinearly constrained optimization with noisy function and derivative evaluations | arXiv preprint arXiv:2502.11302 | 10 | preprint | arXiv | txt | 39 | supplement | — |
+| 56 | S056 | 2021 | An accelerated communication-efficient primal-dual optimization framework for structured machine learning | Optimization Methods and Software | 12 | journal | manual | txt | 20 | supplement | — |
+| 57 | S057 | 2020 | Inexact sequential quadratic optimization with penalty parameter updates within the QP solver | SIAM Journal on Optimization | 11 | journal | manual | txt | 38 | supplement | — |
+| 58 | S058 | 2004 | Central groupoids, central digraphs, and zero-one matrices A satisfying A^2 = J | Journal of Combinatorial Theory, Series A | 11 | journal | manual | txt | 16 | supplement | — |
+| 59 | S059 | 2025 | An interior-point algorithm for continuous nonlinearly constrained optimization with noisy function and derivative evaluations | arXiv preprint arXiv:2502.11302 | 10 | preprint | manual | txt | 39 | supplement | — |
 | 60 | S060 | 2023 | A decomposition algorithm with fast identification of critical contingencies for large-scale security-constrained AC-OPF | Operations Research | 10 | journal | — | no-oa |  | supplement | — |
-| 61 | S061 | 2021 | A decomposition algorithm for large-scale security-constrained AC optimal power flow | arXiv preprint arXiv:2110.01737 | 10 | preprint | arXiv | txt | 23 | supplement | — |
-| 62 | S062 | 2021 | Regional complexity analysis of algorithms for nonconvex smooth optimization | Mathematical Programming | 10 | journal | arXiv | txt | 30 | supplement | — |
-| 63 | S063 | 2026 | A single-loop stochastic feasible interior-point algorithm for nonlinear inequality-constrained optimization | Mathematical Programming | 9 | journal | — | no-oa |  | supplement | — |
-| 64 | S064 | 2016 | Globally convergent primal-dual active-set methods with inexact subproblem solves | SIAM Journal on Optimization | 8 | journal | url | txt | 23 | supplement | — |
-| 65 | S065 | 2022 | Gradient sampling methods with inexact subproblem solutions and gradient aggregation | INFORMS Journal on Optimization | 6 | journal | arXiv | txt | 27 | supplement | — |
-| 66 | S066 | 2017 | Solving nearly-separable quadratic optimization problems as nonsmooth equations | Computational Optimization and Applications | 6 | journal | url | txt | 44 | supplement | — |
-| 67 | S067 | 2015 | Primal-dual active-set methods for isotonic regression and trend filtering | arXiv preprint arXiv:1508.02452 | 6 | preprint | arXiv | txt | 13 | supplement | — |
-| 68 | S068 | 2026 | Projected stochastic momentum methods for nonlinear equality-constrained optimization for machine learning | arXiv preprint arXiv:2601.11795 | 4 | preprint | arXiv | txt | 27 | supplement | — |
-| 69 | S069 | 2024 | Using synthetic data to mitigate unfairness and preserve privacy in collaborative machine learning | arXiv preprint arXiv:2409.09532 | 4 | preprint | arXiv | txt | 14 | supplement | — |
-| 70 | S070 | 2023 | A variance-reduced and stabilized proximal stochastic gradient method with support identification guarantees for structured optimization | International Conference on Artificial Intelligence and Statistics | 4 | conference | arXiv | txt | 36 | supplement | — |
-| 71 | S071 | 2018 | Fast market clearing algorithms | Energy Markets and Responsive Grids: Modeling, Control, and Optimization… | 4 | chapter | — | no-oa |  | supplement | — |
+| 61 | S061 | 2021 | A decomposition algorithm for large-scale security-constrained AC optimal power flow | arXiv preprint arXiv:2110.01737 | 10 | preprint | manual | txt | 23 | supplement | — |
+| 62 | S062 | 2021 | Regional complexity analysis of algorithms for nonconvex smooth optimization | Mathematical Programming | 10 | journal | manual | txt | 30 | supplement | — |
+| 63 | S063 | 2026 | A single-loop stochastic feasible interior-point algorithm for nonlinear inequality-constrained optimization | Mathematical Programming | 9 | journal | manual | txt | 38 | supplement | — |
+| 64 | S064 | 2016 | Globally convergent primal-dual active-set methods with inexact subproblem solves | SIAM Journal on Optimization | 8 | journal | manual | txt | 23 | supplement | — |
+| 65 | S065 | 2022 | Gradient sampling methods with inexact subproblem solutions and gradient aggregation | INFORMS Journal on Optimization | 6 | journal | manual | txt | 27 | supplement | — |
+| 66 | S066 | 2017 | Solving nearly-separable quadratic optimization problems as nonsmooth equations | Computational Optimization and Applications | 6 | journal | manual | txt | 44 | supplement | — |
+| 67 | S067 | 2015 | Primal-dual active-set methods for isotonic regression and trend filtering | arXiv preprint arXiv:1508.02452 | 6 | preprint | manual | txt | 13 | supplement | — |
+| 68 | S068 | 2026 | Projected stochastic momentum methods for nonlinear equality-constrained optimization for machine learning | arXiv preprint arXiv:2601.11795 | 4 | preprint | manual | txt | 27 | supplement | — |
+| 69 | S069 | 2024 | Using synthetic data to mitigate unfairness and preserve privacy in collaborative machine learning | arXiv preprint arXiv:2409.09532 | 4 | preprint | manual | txt | 14 | supplement | — |
+| 70 | S070 | 2023 | A variance-reduced and stabilized proximal stochastic gradient method with support identification guarantees for structured optimization | International Conference on Artificial Intelligence and Statistics | 4 | conference | manual | txt | 36 | supplement | — |
+| 71 | S071 | 2018 | Fast market clearing algorithms | Energy Markets and Responsive Grids: Modeling, Control, and Optimization… | 4 | chapter | manual | txt | 24 | supplement | — |
 | 72 | S072 | 2026 | A Bilevel Optimization Approach for Computing Synthetic Data to Mitigate Unfairness in Collaborative Machine Learning | INFORMS Journal on Optimization | 3 | journal | — | no-oa |  | supplement | — |
-| 73 | S073 | 2025 | Equity-promoting integer programming approaches for medical resident rotation scheduling | Health Care Management Science | 3 | journal | — | no-oa |  | supplement | — |
+| 73 | S073 | 2025 | Equity-promoting integer programming approaches for medical resident rotation scheduling | Health Care Management Science | 3 | journal | manual | txt | 40 | supplement | — |
 | 74 | S074 | 2025 | Practical Nonconvex Nonsmooth Optimization | Society for Industrial and Applied Mathematics | 3 | book | — | no-oa |  | supplement | — |
-| 75 | S075 | 2024 | Derivative-free bound-constrained optimization for solving structured problems with surrogate models | Optimization Methods and Software | 3 | journal | arXiv | txt | 37 | supplement | — |
-| 76 | S076 | 2024 | Incremental quasi-Newton algorithms for solving a nonconvex, nonsmooth, finite-sum optimization problem | Optimization Methods and Software | 3 | journal | arXiv | txt | 22 | supplement | — |
-| 77 | S077 | 2016 | Accelerating convergence to competitive equilibrium in electricity markets | 2016 IEEE Power and Energy Society General Meeting (PESGM) | 3 | conference | — | no-oa |  | supplement | — |
+| 75 | S075 | 2024 | Derivative-free bound-constrained optimization for solving structured problems with surrogate models | Optimization Methods and Software | 3 | journal | manual | txt | 37 | supplement | — |
+| 76 | S076 | 2024 | Incremental quasi-Newton algorithms for solving a nonconvex, nonsmooth, finite-sum optimization problem | Optimization Methods and Software | 3 | journal | manual | txt | 22 | supplement | — |
+| 77 | S077 | 2016 | Accelerating convergence to competitive equilibrium in electricity markets | 2016 IEEE Power and Energy Society General Meeting (PESGM) | 3 | conference | manual | txt | 7 | supplement | — |
 | 78 | S078 | 2024 | Insights and innovations from the SSMCDAT 2023: bridging solid-state materials chemistry and data science | Chemistry of Materials | 2 | journal | — | no-oa |  | supplement | — |
 | 79 | S079 | 2012 | Modeling and Optimization: Theory and Applications; Selected Contributions from the MOPTA 2010 Conference | Springer | 2 | book | — | no-oa |  | supplement | — |
-| 80 | S081 | 2006 | Determinant optimization on binary matrices | American Journal of Mathematical and Management Sciences | 2 | journal | url | txt | 26 | supplement | — |
-| 81 | S082 | 2025 | A Proximal-Gradient Method for Solving Regularized Optimization Problems with General Constraints | arXiv preprint arXiv:2512.23166 | 1 | preprint | arXiv | txt | 33 | supplement | — |
-| 82 | S083 | 2025 | Fair supervised learning through constraints on smooth nonconvex unfairness-measure surrogates | arXiv preprint arXiv:2505.15788 | 1 | preprint | arXiv | txt | 31 | supplement | — |
+| 80 | S081 | 2006 | Determinant optimization on binary matrices | American Journal of Mathematical and Management Sciences | 2 | journal | manual | txt | 26 | supplement | — |
+| 81 | S082 | 2025 | A Proximal-Gradient Method for Solving Regularized Optimization Problems with General Constraints | arXiv preprint arXiv:2512.23166 | 1 | preprint | manual | txt | 33 | supplement | — |
+| 82 | S083 | 2025 | Fair supervised learning through constraints on smooth nonconvex unfairness-measure surrogates | arXiv preprint arXiv:2505.15788 | 1 | preprint | manual | txt | 31 | supplement | — |
 | 83 | S084 | 2025 | Informed Machine Learning with a Stochastic-Gradient-based Algorithm for Training with Hard Constraints | — | 1 | other | — | no-oa |  | supplement | — |
-| 84 | S086 | 2003 | Special classes of zero-one matrices | College of William and Mary | 1 | thesis | — | no-oa |  | supplement | — |
-| 85 | S087 | 2026 | A Local-Linearly Convergent Algorithm for Nonconvex Equality-Constrained Optimization | arXiv preprint arXiv:2608.12665 | — | preprint | arXiv | txt | 28 | supplement | — |
-| 86 | S088 | 2026 | NonOpt: Nonconvex, Nonsmooth Optimizer | Mathematical Programming Computation | — | journal | arXiv | txt | 27 | supplement | — |
-| 87 | S089 | 2026 | Robust Server Defense Against Unreliable Clients in One-Shot Fair Collaborative Machine Learning | arXiv preprint arXiv:2605.08616 | — | conference | arXiv | txt | 9 | supplement | — |
-| 88 | S090 | 2026 | Low-Order Explicit Hessian Imitation Method for Large-Scale Supervised Machine Learning | arXiv preprint arXiv:2605.06945 | — | preprint | arXiv | txt | 35 | supplement | — |
-| 89 | S091 | 2026 | A Gradient Sampling Algorithm for Noisy Nonsmooth Optimization | arXiv preprint arXiv:2604.00278 | — | preprint | arXiv | txt | 32 | supplement | — |
-| 90 | S092 | 2025 | Progressively Sampled Equality-Constrained Optimization | arXiv preprint arXiv:2510.00417 | — | preprint | arXiv | txt | 38 | supplement | — |
-| 91 | S093 | 2025 | Active-Set Identification in Noisy and Stochastic Optimization | arXiv preprint arXiv:2509.00888 | — | preprint | arXiv | txt | 27 | supplement | — |
-| 92 | S094 | 2022 | Hybrid Interior-Point/Active-Set SCOPF Algorithms Exploiting Power System Characteristics | Lehigh University, Bethlehem, PA (United States) | — | report | unpaywall | txt | 7 | supplement | — |
-| 93 | S096 | 2007 | Inexact sequential quadratic programming methods for large-scale nonlinear optimization | Northwestern University | — | thesis | url | txt | 115 | supplement | — |
-| 94 | D001 | 2020 | Adaptive Stochastic Optimization | CoRR | — | preprint | arXiv | txt | 16 | supplement | — |
-| 95 | D002 | 2024 | Single-Loop Deterministic and Stochastic Interior-Point Algorithms for Nonlinearly Constrained Optimization | CoRR | — | preprint | arXiv | txt | 31 | supplement | — |
-| 96 | H001 | 2019 | An Inexact Regularized Newton Framework with a Worst-Case Iteration Complexity of O(epsilon^-3/2) for Nonconvex Optimization | IMA Journal of Numerical Analysis, vol. 39, no. 3, pp. 1296–1327 | — | journal | arXiv | txt | 31 | supplement | — |
+| 84 | S086 | 2003 | Special classes of zero-one matrices | College of William and Mary | 1 | thesis | manual | txt | 62 | supplement | — |
+| 85 | S087 | 2026 | A Local-Linearly Convergent Algorithm for Nonconvex Equality-Constrained Optimization | arXiv preprint arXiv:2608.12665 | — | preprint | manual | txt | 28 | supplement | — |
+| 86 | S088 | 2026 | NonOpt: Nonconvex, Nonsmooth Optimizer | Mathematical Programming Computation | — | journal | manual | txt | 27 | supplement | — |
+| 87 | S089 | 2026 | Robust Server Defense Against Unreliable Clients in One-Shot Fair Collaborative Machine Learning | arXiv preprint arXiv:2605.08616 | — | conference | manual | txt | 9 | supplement | — |
+| 88 | S090 | 2026 | Low-Order Explicit Hessian Imitation Method for Large-Scale Supervised Machine Learning | arXiv preprint arXiv:2605.06945 | — | preprint | manual | txt | 35 | supplement | — |
+| 89 | S091 | 2026 | A Gradient Sampling Algorithm for Noisy Nonsmooth Optimization | arXiv preprint arXiv:2604.00278 | — | preprint | manual | txt | 32 | supplement | — |
+| 90 | S092 | 2025 | Progressively Sampled Equality-Constrained Optimization | arXiv preprint arXiv:2510.00417 | — | preprint | manual | txt | 38 | supplement | — |
+| 91 | S093 | 2025 | Active-Set Identification in Noisy and Stochastic Optimization | arXiv preprint arXiv:2509.00888 | — | preprint | manual | txt | 27 | supplement | — |
+| 92 | S094 | 2022 | Hybrid Interior-Point/Active-Set SCOPF Algorithms Exploiting Power System Characteristics | Lehigh University, Bethlehem, PA (United States) | — | report | manual | txt | 7 | supplement | — |
+| 93 | S096 | 2007 | Inexact sequential quadratic programming methods for large-scale nonlinear optimization | Northwestern University | — | thesis | manual | txt | 115 | supplement | — |
+| 94 | D001 | 2020 | Adaptive Stochastic Optimization | CoRR | — | preprint | manual | txt | 16 | supplement | — |
+| 95 | D002 | 2024 | Single-Loop Deterministic and Stochastic Interior-Point Algorithms for Nonlinearly Constrained Optimization | CoRR | — | preprint | manual | txt | 31 | supplement | — |
+| 96 | H001 | 2019 | An Inexact Regularized Newton Framework with a Worst-Case Iteration Complexity of O(epsilon^-3/2) for Nonconvex Optimization | IMA Journal of Numerical Analysis, vol. 39, no. 3, pp. 1296–1327 | — | journal | manual | txt | 31 | supplement | — |
 
-96 works · txt 82 · pdf 0 · no-oa 14
+96 works · txt 87 · pdf 0 · no-oa 9
