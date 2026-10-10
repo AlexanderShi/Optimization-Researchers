@@ -50,5 +50,176 @@
 | 38 | S039 | 2002 | Solving large MINLPs on computational grids | Optimization and Engineering | 50 | journal | — | no-oa |  | supplement | — |
 | 39 | S040 | 2012 | A nonmonotone filter method for nonlinear optimization | Computational Optimization and Applications | 49 | journal | — | no-oa |  | supplement | — |
 | 40 | S041 | 2008 | Branch-and-refine for mixed-integer nonconvex global optimization | Preprint ANL/MCS-P1547-0908, Mathematics and Computer Science Division... | 48 | preprint | — | no-oa |  | supplement | — |
+| 41 | S042 | 2007 | A globally convergent filter method for MPECs | Preprint ANL/MCS-P1457-0907, Argonne National Laboratory, Mathematics and... | 48 | preprint | — | no-oa |  | supplement | — |
+| 42 | S043 | 2010 | Modeling without categorical variables: a mixed-integer nonlinear program for the optimization of thermal insulation systems | Optimization and Engineering | 44 | journal | — | no-oa |  | supplement | — |
+| 43 | S044 | 2021 | Apprentice for event generator tuning | EPJ Web of Conferences | 43 | conference | arXiv | txt | 9 | supplement | — |
+| 44 | S045 | 2019 | Joint ptycho-tomography reconstruction through alternating direction method of multipliers | Optics express | 43 | journal | — | no-oa |  | supplement | — |
+| 45 | S046 | 2015 | Optimal scheduling of in-situ analysis for large-scale scientific simulations | Proceedings of the International Conference for High Performance Computing... | 43 | conference | — | no-oa |  | supplement | — |
+| 46 | S047 | 2009 | Optimization of 3D plasmonic crystal structures for refractive index sensing | The Journal of Physical Chemistry C | 43 | journal | unpaywall | txt | 7 | supplement | — |
+| 47 | S048 | 2006 | A trust-region algorithm for global optimization | Computational Optimization and Applications | 42 | journal | — | no-oa |  | supplement | — |
+| 48 | S049 | 2012 | Solving mixed-integer nonlinear programs by QP-diving | Preprint ANL/MCS-P2071-0312, Argonne National Laboratory | 40 | preprint | — | no-oa |  | supplement | — |
+| 49 | S050 | 1971 | The journals | — | 40 | other | — | no-oa |  | supplement | — |
+| 50 | S051 | 2009 | Mixed-integer support vector machine | NIPS workshop on optimization for machine learning | 38 | conference | url | txt | 6 | supplement | — |
+| 51 | S052 | 2021 | Practical algorithms for multivariate rational approximation | Computer Physics Communications | 37 | journal | arXiv | txt | 35 | supplement | — |
+| 52 | S053 | 2012 | Heuristic static load-balancing algorithm applied to the fragment molecular orbital method | SC'12: Proceedings of the International Conference on High Performance... | 37 | conference | — | no-oa |  | supplement | — |
+| 53 | S054 | 2010 | Proactive energy management for next-generation building systems | Fourth National Conference of IBPSA-USA | 36 | conference | — | no-oa |  | supplement | — |
+| 54 | S055 | 1999 | A note on feasibility in Benders decomposition | Numerical Analysis Report NA/188, Dundee University | 36 | report | — | no-oa |  | supplement | — |
+| 55 | S056 | 2017 | Mixed-integer PDE-constrained optimal control of gas networks | Preprint | 35 | preprint | — | no-oa |  | supplement | — |
+| 56 | S057 | 2003 | Mathematical programs with complementarity constraints | SIAG/OPT Views-and-News | 35 | other | url | txt | 25 | supplement | — |
+| 57 | S058 | 2019 | Photon-limited ptychography of 3D objects via Bayesian reconstruction | OSA Continuum | 33 | journal | — | no-oa |  | supplement | — |
+| 58 | S059 | 2014 | Non-negative matrix analysis for effective feature extraction in X-ray spectromicroscopy | Faraday discussions | 33 | journal | — | no-oa |  | supplement | — |
+| 59 | S060 | 2011 | Optimal response to attacks on the open science grid | Computer Networks | 33 | journal | — | no-oa |  | supplement | — |
+| 60 | S061 | 2003 | Constrained nonlinear programming for volatility estimation with GARCH models | SIAM review | 33 | journal | unpaywall | txt | 19 | supplement | — |
+| 61 | S062 | 2016 | Optimization-based approach for joint x-ray fluorescence and transmission tomographic inversion | SIAM Journal on Imaging Sciences | 32 | journal | — | no-oa |  | supplement | — |
+| 62 | S063 | 2009 | A complementarity constraint formulation of convex multiobjective optimization problems | INFORMS Journal on Computing | 32 | journal | — | no-oa |  | supplement | — |
+| 63 | S064 | 2022 | Modeling design and control problems involving neural network surrogates: D. Yang et al. | Computational Optimization and Applications | 31 | journal | arXiv | txt | 24 | supplement | — |
+| 64 | S065 | 2022 | Sequential linear integer programming for integer optimal control with total variation regularization | ESAIM: Control, Optimisation and Calculus of Variations | 31 | journal | arXiv | txt | 29 | supplement | — |
+| 65 | S066 | 2017 | Joint reconstruction of x-ray fluorescence and transmission tomography | Optics express | 31 | journal | unpaywall | txt | 18 | supplement | — |
+| 66 | S067 | 2002 | The penalty interior point method fails to converge for mathematical programs with equilibrium constraints | Numerical analysis report NA/208, Department of Math., University of Dundee | 31 | report | — | no-oa |  | supplement | — |
+| 67 | S068 | 2022 | Stochastic learning approach for binary optimization: Application to Bayesian optimal design of experiments | SIAM Journal on Scientific Computing | 30 | journal | arXiv | txt | 34 | supplement | — |
+| 68 | S069 | 2012 | A pivoting algorithm for linear programming with linear complementarity constraints | Optimization Methods and Software | 28 | journal | — | no-oa |  | supplement | — |
+| 69 | S070 | 2011 | Concrete structure design using mixed-integer nonlinear programming with complementarity constraints | SIAM Journal on Optimization | 28 | journal | — | no-oa |  | supplement | — |
+| 70 | S071 | 2008 | Global and finite termination of a two-phase augmented Lagrangian filter method for general quadratic programs | SIAM Journal on Scientific Computing | 27 | journal | — | no-oa |  | supplement | — |
+| 71 | S072 | 2016 | A two-level approach to large mixed-integer programs with application to cogeneration in energy-efficient buildings | Computational Optimization and Applications | 25 | journal | arXiv | txt | 34 | supplement | — |
+| 72 | S073 | 2013 | Fast response to infection spread and cyber attacks on large-scale networks | Journal of Complex Networks | 25 | journal | arXiv | txt | 13 | supplement | — |
+| 73 | S074 | 2010 | Software for nonlinearly constrained optimization | Preprint ANL/MCS-P1768-0610, Mathematics and Computer Science Division... | 25 | chapter | — | no-oa |  | supplement | — |
+| 74 | S075 | 1998 | Comparison of certain MINLP algorithms when applied to a model structure determination and parameter estimation problem | Computers & chemical engineering | 25 | journal | — | no-oa |  | supplement | — |
+| 75 | S076 | 2013 | TACO: a toolkit for AMPL control optimization | Mathematical Programming Computation | 24 | journal | — | no-oa |  | supplement | — |
+| 76 | S077 | 2005 | The return of the active set method | Oberwolfach Reports | 23 | conference | — | no-oa |  | supplement | — |
+| 77 | S078 | 1997 | Computing sparse Hessian and Jacobian approximations with optimal hereditary properties | Large-Scale Optimization with Applications: Part II: Optimal Design and... | 23 | chapter | — | no-oa |  | supplement | — |
+| 78 | S079 | 2013 | Regularizing bilevel nonlinear programs by lifting | Argonne National Laboratory, USA | 22 | preprint | — | no-oa |  | supplement | — |
+| 79 | S080 | 2021 | Joint ptycho-tomography with deep generative priors | Machine Learning: Science and Technology | 21 | journal | arXiv | txt | 20 | supplement | — |
+| 80 | S081 | 2015 | Machine-learning-based load balancing for Community Ice CodE component in CESM | International Conference on High Performance Computing for Computational... | 20 | conference | — | no-oa |  | supplement | — |
+| 81 | S082 | 2016 | Doing Moore with Less--Leapfrogging Moore's Law with Inexactness for Supercomputing | arXiv preprint arXiv:1610.02606 | 19 | preprint | arXiv | txt | 9 | supplement | — |
+| 82 | S083 | 2014 | Adaptively refined dynamic program for linear spline regression | Computational Optimization and Applications | 19 | journal | — | no-oa |  | supplement | — |
+| 83 | S084 | 2021 | Inversion of convection–diffusion equation with discrete sources: M. Sharma et al. | Optimization and Engineering | 18 | journal | — | no-oa |  | supplement | — |
+| 84 | S085 | 2021 | Convergence of sum-up rounding schemes for cloaking problems governed by the Helmholtz equation: S. Leyffer et al. | Computational Optimization and Applications | 17 | journal | unpaywall | txt | 29 | supplement | — |
+| 85 | S086 | 2014 | Unsupervised cell identification on multidimensional X-ray fluorescence datasets | Synchrotron Radiation | 17 | journal | — | no-oa |  | supplement | — |
+| 86 | S087 | 2023 | Learning symbolic expressions: Mixed-integer formulations, cuts, and heuristics | INFORMS Journal on Computing | 16 | journal | arXiv | txt | 24 | supplement | — |
+| 87 | S088 | 2023 | Binary control pulse optimization for quantum systems | Quantum | 16 | journal | arXiv | txt | 43 | supplement | — |
+| 88 | S089 | 2021 | MINLP formulations for continuous piecewise linear function fitting: N. Goldberg et al. | Computational Optimization and Applications | 16 | journal | unpaywall | txt | 11 | supplement | — |
+| 89 | S090 | 2019 | Optimization-based simultaneous alignment and reconstruction in multi-element tomography | Optics letters | 16 | journal | unpaywall | txt | 6 | supplement | — |
+| 90 | S091 | 2023 | Binary optimal control by trust-region steepest descent | Mathematical Programming | 15 | journal | — | no-oa |  | supplement | — |
+| 91 | S092 | 2022 | Sequential linearization method for bound-constrained mathematical programs with complementarity constraints | SIAM Journal on Optimization | 15 | journal | arXiv | txt | 33 | supplement | — |
+| 92 | S093 | 2021 | A solution framework for linear PDE-constrained mixed-integer problems: F. Gnegel et al. | Mathematical Programming | 15 | journal | — | no-oa |  | supplement | — |
+| 93 | S094 | 2021 | A method for convex black-box integer global optimization | Journal of Global Optimization | 15 | journal | arXiv | txt | 31 | supplement | — |
+| 94 | S095 | 2017 | A mathematical programming-and simulation-based framework to evaluate cyberinfrastructure design choices | 2017 IEEE 13th International Conference on e-Science (e-Science) | 15 | conference | — | no-oa |  | supplement | — |
+| 95 | S096 | 2026 | McCormick envelopes in mixed-integer PDE-constrained optimization: S. Leyffer, P. Manns | Mathematical Programming | 14 | journal | arXiv | txt | 38 | supplement | — |
+| 96 | S097 | 2015 | An active-set method for second-order conic-constrained quadratic programming | SIAM Journal on Optimization | 14 | journal | — | no-oa |  | supplement | — |
+| 97 | S098 | 2010 | Optimal control model of technology transition | International journal of global energy issues | 14 | journal | — | no-oa |  | supplement | — |
+| 98 | S099 | 2021 | A bilevel approach for identifying the worst contingencies for nonconvex alternating current power systems | SIAM Journal on Optimization | 13 | journal | — | no-oa |  | supplement | — |
+| 99 | S100 | 2010 | Oil Spill Response Planning with MINLP | SIAG/OPT Views-and-News | 13 | other | — | no-oa |  | supplement | — |
+| 100 | S101 | 2001 | Generalized outer approximation | Encyclopedia of Optimization | 13 | chapter | — | no-oa |  | supplement | — |
+| 101 | S102 | 2020 | Pufferscale: Rescaling HPC data services for high energy physics applications | 2020 20th IEEE/ACM International Symposium on Cluster, Cloud and Internet... | 12 | conference | unpaywall | txt | 11 | supplement | — |
+| 102 | S103 | 2019 | Simultaneous sensing error recovery and tomographic inversion using an optimization-based approach | SIAM Journal on Scientific Computing | 12 | journal | arXiv | txt | 25 | supplement | — |
+| 103 | S104 | 2016 | Overcoming the power wall by exploiting inexactness and emerging cots architectural features: Trading precision for improving application quality | 2016 29th IEEE International System-on-Chip Conference (SOCC) | 12 | conference | — | no-oa |  | supplement | — |
+| 104 | S107 | 2014 | The heuristic static load-balancing algorithm applied to the community earth system model | 2014 IEEE International Parallel & Distributed Processing Symposium... | 11 | conference | — | no-oa |  | supplement | — |
+| 105 | S108 | 2007 | A filter active-set trust-region method | Preprint ANL/MCS-P1456-0907, Mathematics and Computer Science Division... | 11 | preprint | — | no-oa |  | supplement | — |
+| 106 | S109 | 1998 | On the Global Convergance of an SLP-Filter Algorithm | Department of Mathematics and Computer Science, University of Dundee | 11 | report | — | no-oa |  | supplement | — |
+| 107 | S110 | 2020 | An augmented Lagrangian filter method: S. Leyffer, C. Vanaret | Mathematical Methods of Operations Research | 10 | journal | unpaywall | txt | 33 | supplement | — |
+| 108 | S111 | 2015 | Optimal response to epidemics and cyber attacks in networks | Networks | 10 | journal | — | no-oa |  | supplement | — |
+| 109 | S112 | 2015 | Mixed-integer PDE-constrained optimization | Mixed-integer Nonlinear Optimization: A Hatchery for Modern Mathematics... | 10 | conference | — | no-oa |  | supplement | — |
+| 110 | S113 | 2015 | Visualizing and improving the robustness of phase retrieval algorithms | Procedia Computer Science | 10 | conference | unpaywall | txt | 10 | supplement | — |
+| 111 | S114 | 2026 | A unified funnel restoration SQP algorithm: D. Kiessling et al. | Mathematical Programming | 9 | journal | arXiv | txt | 37 | supplement | — |
+| 112 | S115 | 2023 | On convergence of binary trust-region steepest descent | Journal of Nonsmooth Analysis and Optimization | 9 | journal | arXiv | txt | 26 | supplement | — |
+| 113 | S116 | 2012 | Modeling mixed-integer constrained optimal control problems in AMPL | IFAC Proceedings Volumes | 9 | conference | — | no-oa |  | supplement | — |
+| 114 | S117 | 2010 | Surrogate-based modeling of the optical response of metallic nanostructures | The Journal of Physical Chemistry C | 9 | journal | — | no-oa |  | supplement | — |
+| 115 | S118 | 2010 | Foundations of constrained optimization | Argonne National Laboratory | 9 | chapter | — | no-oa |  | supplement | — |
+| 116 | S119 | 2026 | Implementing a unified solver for nonlinearly constrained optimization | Mathematical Programming Computation | 8 | journal | arXiv | txt | 38 | supplement | — |
+| 117 | S120 | 2024 | Modeling and solving cascading failures across interdependent infrastructure systems | arXiv preprint arXiv:2407.16796 | 8 | preprint | arXiv | txt | 23 | supplement | — |
+| 118 | S121 | 2021 | Compact representations of structured BFGS matrices | Computational Optimization and Applications | 8 | journal | arXiv | txt | 33 | supplement | — |
+| 119 | S123 | 2025 | Robust A-optimal experimental design for sensor placement in Bayesian linear inverse problems | SIAM/ASA Journal on Uncertainty Quantification | 7 | journal | arXiv | txt | 25 | supplement | — |
+| 120 | S124 | 2024 | Heuristic algorithms for placing geomagnetically induced current blocking devices | Electric power systems research | 7 | journal | arXiv | txt | 8 | supplement | — |
+| 121 | S126 | 2026 | A globally convergent method for computing B-stationary points of mathematical programs with equilibrium constraints | Computational Optimization and Applications | 6 | journal | arXiv | txt | 47 | supplement | — |
+| 122 | S127 | 2022 | State elimination for mixed‐integer optimal control of partial differential equations by semigroup theory | Optimal Control Applications and Methods | 6 | journal | — | no-oa |  | supplement | — |
+| 123 | S128 | 2022 | A mixed-integer PDE-constrained optimization formulation for electromagnetic cloaking | SIAM Journal on Scientific Computing | 6 | journal | — | no-oa |  | supplement | — |
+| 124 | S129 | 2012 | Optimal design and dispatch of distributed generation systems | Preprint ANL/MCS-2004-0112, Mathematics and Computer Science Division... | 6 | preprint | — | no-oa |  | supplement | — |
+| 125 | S130 | 2004 | Biomolecule electrostatic optimization with an implicit Hessian | Modeling and Simulation of Microsystems (Nanotech) | 5 | conference | — | no-oa |  | supplement | — |
+| 126 | S131 | 2000 | Mathematical programs with equilibrium constraints | International Symposium on Mathematical Programming, Atlanta, GA | 5 | talk | — | no-oa |  | skip | — |
+| 127 | S132 | 2000 | On the convergence of a filter-SQP algorithm | FUNDP, Faculté des Sciences. Département de Mathématique. | 5 | report | — | no-oa |  | supplement | — |
+| 128 | S133 | 2025 | Basic research needs for inverse methods for complex systems under uncertainty | US Department of Energy (USDOE), Washington, DC (United States). Office of... | 4 | report | — | no-oa |  | supplement | — |
+| 129 | S134 | 2025 | Switching time optimization for binary quantum optimal control | ACM Transactions on Quantum Computing | 4 | journal | arXiv | txt | 41 | supplement | — |
+| 130 | S135 | 2024 | A bilevel optimization framework for imbalanced data classification | arXiv preprint arXiv:2410.11171 | 4 | preprint | arXiv | txt | 13 | supplement | — |
+| 131 | S136 | 2022 | BROOD: Bilevel and robust optimization and outlier detection for efficient tuning of high-energy physics event generators | SciPost Physics Core | 4 | journal | arXiv | txt | 87 | supplement | — |
+| 132 | S138 | 2019 | Design, analysis, and operations toolkit (DAO-Tk) | US Department of Energy (DOE) Software | 4 | other | — | no-oa |  | supplement | — |
+| 133 | S139 | 2013 | Models and algorithms for exascale computing pose challenges for applied mathematicians | SIAM News | 4 | other | — | no-oa |  | supplement | — |
+| 134 | S142 | 2013 | A new perspective on convex relaxations of sparse SVM | Proceedings of the 2013 SIAM International Conference on Data Mining | 3 | conference | — | no-oa |  | supplement | — |
+| 135 | S143 | 2025 | Augmentation algorithms for total variation-regularized integer programs | arXiv e-prints, arXiv: 2508.05822 | 2 | preprint | arXiv | txt | 33 | supplement | — |
+| 136 | S144 | 2025 | A mixed-integer PDE-constrained optimization formulation for constructing electromagnetic cloaks with multiple materials | Computational Optimization and Applications | 2 | journal | — | no-oa |  | supplement | — |
+| 137 | S145 | 2025 | Binary quantum control optimization with uncertain Hamiltonians | INFORMS Journal on Computing | 2 | journal | arXiv | txt | 38 | supplement | — |
+| 138 | S146 | 2021 | Concurrent optimization of capital cost and expected o&m | National Renewable Energy Laboratory (NREL), Golden, CO (United States) | 2 | report | — | no-oa |  | supplement | — |
+| 139 | S147 | 2018 | Convex Mixed-Integer Nonlinear Optimization, I | Proceedings of the Summer School on Optimization of Dynamical Systems... | 2 | chapter | — | no-oa |  | supplement | — |
+| 140 | S148 | 2011 | 2010 Copper Mountain Conference | SIAM Journal on Scientific Computing | 2 | other | — | no-oa |  | supplement | — |
+| 141 | S149 | 2010 | Experiments with MINLP branching techniques | European Workshop on Mixed Integer Nonlinear Programming | 2 | conference | — | no-oa |  | supplement | — |
+| 142 | S150 | 2025 | Optimal Experimental Design of a Moving Sensor for Linear Bayesian Inverse Problems | arXiv preprint arXiv:2509.15961 | 1 | preprint | arXiv | txt | 34 | supplement | — |
+| 143 | S152 | 2024 | Population balance model-based dynamic multiobjective optimization of yeast cell manufacturing | IFAC-PapersOnLine 58 (14), 860-867 | 1 | conference | — | no-oa |  | supplement | — |
+| 144 | S153 | 2021 | Wave function analysis with a maximum flow algorithm | Molecular Physics 119 (13), e1861351 | 1 | journal | unpaywall | txt | 29 | supplement | — |
+| 145 | S154 | 2020 | Deep priors for ptycho-tomography | Microscopy and Microanalysis 26 (S2), 2466-2466 | 1 | conference | — | no-oa |  | supplement | — |
+| 146 | S155 | 2019 | A Lagrangian dual approach for identifying the worst contingencies in power systems | Optimization Online | 1 | preprint | — | no-oa |  | supplement | — |
+| 147 | S156 | 2015 | Oscillation Mitigation in Electric Power Grids via Semidefinite Programming | Tech. rep., Argonne National Laboratory, mathematics and Computer Science | 1 | report | — | no-oa |  | supplement | — |
+| 148 | S157 | 2005 | Foreword: Special issue on deterministic global optimization and applications | Mathematical Programming 103 (2), 203 | 1 | other | — | no-oa |  | supplement | — |
+| 149 | S159 | 2026 | Using Filter Methods to Guide Convergence for ADMM, with Applications to Nonnegative Matrix Factorization Problems: R. Baraldi et al. | Journal of Optimization Theory and Applications 209 (2), 66 | — | journal | unpaywall | txt | 38 | supplement | — |
+| 150 | S160 | 2026 | Optimizing Paths for Adaptive Fly-Scan Microscopy | 2026 IEEE 23rd International Symposium on Biomedical Imaging (ISBI), 1-5 | — | conference | — | no-oa |  | supplement | — |
+| 151 | S162 | 2026 | Correction: McCormick envelopes in mixed-integer PDE-constrained optimization: S. Leyffer, P. Manns | Mathematical Programming, 1-2 | — | errata | — | no-oa |  | supplement | — |
+| 152 | S163 | 2026 | Rapport de Prospective du GDR Recherche Opérationnelle et Décision (ROD) | GDR ROD; CNRS | — | report | — | no-oa |  | supplement | — |
+| 153 | S164 | 2025 | An Alternating Direction Method of Multipliers for Topology Optimization | arXiv preprint arXiv:2509.19888 | — | preprint | manual | txt | 9 | supplement | — |
+| 154 | S165 | 2025 | Optimizing Paths for Adaptive Fly-Scan Microscopy: An Extended Version | arXiv preprint arXiv:2509.01869 | — | preprint | arXiv | txt | 11 | supplement | — |
+| 155 | S166 | 2025 | A Bilevel Optimization Framework for Dynamically Correcting Imbalance in Two-class Classification Problems | 2025 International Joint Conference on Neural Networks (IJCNN), 1-8 | — | conference | — | no-oa |  | supplement | — |
+| 156 | S167 | 2025 | Sampling Imbalanced Data with Multi-objective Bilevel Optimization | arXiv preprint arXiv:2506.11315 | — | preprint | arXiv | txt | 16 | supplement | — |
+| 157 | S168 | 2024 | Remark on Algorithm 1012: Computing Projections with Large Datasets | ACM Transactions on Mathematical Software 50 (2), 1-8 | — | journal | — | no-oa |  | supplement | — |
+| 158 | S169 | 2023 | Polytopic Superset Algorithm for Nonlinear Robust Optimization | arXiv preprint arXiv:2302.12306 | — | preprint | arXiv | txt | 25 | supplement | — |
+| 159 | S170 | 2023 | Towards Automation for γ-Ray Spectroscopy | APS Meeting Abstracts, L08. 001 | — | talk | — | no-oa |  | skip | — |
+| 160 | S171 | 2022 | Improving Earth System Predictability with Artificial Intelligence | Collections 55 (06) | — | other | — | no-oa |  | supplement | — |
+| 161 | S172 | 2022 | maestro | US Department of Energy (DOE) Software, 169 | — | other | — | no-oa |  | supplement | — |
+| 162 | S173 | 2021 | STreCH | US Department of Energy (DOE) Software, 191 | — | other | — | no-oa |  | supplement | — |
+| 163 | S175 | 2020 | Solving Combinatorial Optimization Problems on Quantum Computers | Collections 53 (06) | — | other | — | no-oa |  | supplement | — |
+| 164 | S176 | 2020 | Compact Representations of Structured Quasi-Newton Update Matrices | XXI Householder Symposium on Numerical Linear Algebra, 130 | — | talk | — | no-oa |  | skip | — |
+| 165 | S178 | 2019 | Apprentice | US Department of Energy (DOE) Software, 234 | — | other | — | no-oa |  | supplement | — |
+| 166 | S179 | 2018 | Derivative-Free Robust Optimization by Outer Approximations | — | — | other | — | no-oa |  | supplement | — |
+| 167 | S180 | 2017 | Event Generator Tuning Using HPC | Argonne National Laboratory (ANL), Argonne, IL (United States); Fermi… | — | report | — | no-oa |  | supplement | — |
+| 168 | S181 | 2017 | Control and Design of Multiscale Systems | — | — | report | — | no-oa |  | supplement | — |
+| 169 | S182 | 2016 | Obituary: Roger Fletcher | Collections 49 (10) | — | essay | — | no-oa |  | supplement | — |
+| 170 | S185 | 2016 | A multilevel approach for a class of semidefinite programs | 2016 American Control Conference (ACC), 7153-7158 | — | conference | — | no-oa |  | supplement | — |
+| 171 | S188 | 2013 | COAP 2012 Best Paper Prize | COMPUTATIONAL OPTIMIZATION AND APPLICATIONS 56 (3), 503-506 | — | other | — | no-oa |  | supplement | — |
+| 172 | S193 | 2011 | Recorder Summary Research Needs in Multi-Dimensional, Multi-Scale Modeling and Algorithms for Next Generation Electricity Grids | Computational Needs for the Next Generation Electric Grid | — | report | — | no-oa |  | supplement | — |
+| 173 | S194 | 2010 | Oil Spill Response Planning with Consideration of Oil Transport and Weathering Process: A Multi-Objective Mixed-Integer Dynamic Optimization Approach | — | — | other | — | no-oa |  | supplement | — |
+| 174 | S196 | 2009 | Collaborative Research: Next-Generation Solvers for Mixed-Integer Nonlinear Programs: Structure, Search, and Implementation | NSF Award Number 0830035. Directorate for Computer and Information Science… | — | other | — | no-oa |  | supplement | — |
+| 175 | S197 | 2009 | Post-PHD Employment | Numer. Linear Algebra Appl 16, 192-221 | — | other | — | no-oa |  | supplement | — |
+| 176 | S199 | 2007 | A Filter Active-Set Trust-Region (FASTr) Framework | — | — | report | — | no-oa |  | supplement | — |
+| 177 | S200 | 2005 | New Math | — | — | other | — | no-oa |  | supplement | — |
+| 178 | S201 | 2004 | Nonlinear programming: theory and practice | Mathematical Programming | — | other | — | no-oa |  | supplement | — |
+| 179 | S202 | 2004 | Large scale nonconvex optimization algorithms and applications | Mathematical programming | — | other | — | no-oa |  | supplement | — |
+| 180 | S203 | 1994 | On the solution of nonconvex MINLP | Univ. of Michigan, Ann Arbor, MI (United States) | — | talk | — | no-oa |  | skip | — |
+| 181 | S204 | — | TRUST REGION METHOD FOR BOUND-CONSTRAINED MPCCS WITH NONLINEAR OBJECTIVE | — | — | other | — | no-oa |  | supplement | — |
+| 182 | S206 | — | A Heuristic Augmentation Algorithm for Discrete Total-Variation Problems | 2025 Joint Mathematics Meetings (JMM 2025) | — | talk | — | no-oa |  | skip | — |
+| 183 | S207 | — | Efficient Heuristic Approaches to Binary Optimization: a Sensor Placement Application | 2024 Joint Mathematics Meetings (JMM 2024) | — | talk | — | no-oa |  | skip | — |
+| 184 | S208 | — | Nonlinear and Combinatorial Optimization | 2024 Joint Mathematics Meetings (JMM 2024) | — | talk | — | no-oa |  | skip | — |
+| 185 | S209 | — | PROVIDENCE, RHODE ISLAND USA ISSN 0025-5718 (print) ISSN 1088-6842 (online) | — | — | other | — | no-oa |  | supplement | — |
+| 186 | S210 | — | NAOV-2020 Conference Participants | Numerical Analysis and Optimization | — | other | — | no-oa |  | supplement | — |
+| 187 | S211 | 2017 | Exposing Latent Hierarchies for Large-Scale Design and Discovery | — | — | report | — | no-oa |  | supplement | — |
+| 188 | S212 | — | researchportal. unamur. be | — | — | other | — | no-oa |  | supplement | — |
+| 189 | S215 | — | Mixed-Integer PDE-Constrained Optimization Sven Leyffer (Argonne National Laboratory)(joint work with Bart van Bloemen Waanders (Sandia National Laboratories), Mirko Hahn… | — | — | conference | — | no-oa |  | supplement | — |
+| 190 | S216 | — | Teaching PROFESSOR new math | — | — | conference | — | no-oa |  | supplement | — |
+| 191 | S217 | — | Mixed-Integer Derivative Free Optimization | — | — | other | — | no-oa |  | supplement | — |
+| 192 | S219 | — | SIAG/OPT Views and News | — | — | other | — | no-oa |  | supplement | — |
+| 193 | S221 | — | SIAG/OPT Views-and-News | — | — | other | — | no-oa |  | supplement | — |
+| 194 | S222 | — | The Heuristic Static Load-Balancing Algorithm Applied to CESM. | — | — | conference | url | txt | 2 | supplement | — |
+| 195 | S224 | — | Linear Programming-Based Algorithm for Computing Metabolic Pathways From Genome-Scale Networks | — | — | other | — | no-oa |  | supplement | — |
+| 196 | D001 | 2005 | The penalty interior-point method fails to converge | Optim. Methods Softw. 20(4-5): 559-568 | — | journal | arXiv | txt | 11 | supplement | — |
+| 197 | D002 | 2013 | Unsupervised cell identification on multidimensional X-ray fluorescence datasets | SIGGRAPH Posters: 88 | — | conference | — | no-oa |  | supplement | — |
+| 198 | H001 | 2017 | Design, Optimization, and Control of Complex Interconnected Systems (DocSis) | DOE-ASCR Applied Mathematics PI Meeting White Paper | — | report | — | no-oa |  | supplement | — |
+| 199 | H002 | 2021 | Addressing Climate Change, Boosting Environmental Resilience, and Advancing Clean Energy | SIAM News, October 2021 | — | other | — | no-oa |  | supplement | — |
+| 200 | H003 | 2021 | OR/MS Education and Quantum Computing | OR/MS Today, August 2021 | — | other | — | no-oa |  | supplement | — |
+| 201 | H004 | 2017 | Nonlinear Optimization and Beyond | INFORMS Optimization Society Newsletter 7(2):3-11 | — | other | url | txt | 16 | supplement | — |
+| 202 | H005 | 2015 | It's to Solve Problems: An Interview with Roger Fletcher | OPTIMA 99, December 2015 | — | interview | url | txt | 12 | supplement | — |
+| 203 | H006 | 2014 | Writing for Success: Applying for Funding | SIAM Blogs, November 2014 | — | essay | — | no-oa |  | supplement | — |
+| 204 | H007 | 2011 | SIAG/OPT Views-and-News, Volume 22, No. 2, May 2011: 'SIAM OP11' (issue editor) | SIAG/OPT Views-and-News 22(2) | — | other | url | txt | 11 | supplement | — |
+| 205 | H008 | 2011 | SIAG/OPT Views-and-News, Volume 22, No. 1, March 2011: 'Integer and Nonlinear Optimization' (issue editor) | SIAG/OPT Views-and-News 22(1) | — | other | url | txt | 14 | supplement | — |
+| 206 | H009 | 2010 | SIAG/OPT Views-and-News, Volume 21, No. 2, December 2010: 'Environmental Optimization' (issue editor) | SIAG/OPT Views-and-News 21(2) | — | other | — | no-oa |  | supplement | — |
+| 207 | H010 | 2010 | SIAG/OPT Views-and-News, Volume 21, No. 1, October 2010 (issue editor) | SIAG/OPT Views-and-News 21(1) | — | other | — | no-oa |  | supplement | — |
+| 208 | H011 | 2009 | SIAG/OPT Views-and-News 20(1), December 2009: 'The Public Side Of Optimization' (issue editor) | SIAG/OPT Views-and-News 20(1) | — | other | — | no-oa |  | supplement | — |
+| 209 | H012 | 2008 | SIAG/OPT Views-and-News 19(2), December 2008: SIAM OP08 (issue editor) | SIAG/OPT Views-and-News 19(2) | — | other | — | no-oa |  | supplement | — |
+| 210 | H013 | 2003 | Large Scale Nonconvex Optimization (SIAG/Optimization Views-and-News issue, editors) | SIAG/Optimization Views-and-News 14(1) | — | other | url | txt | 25 | supplement | — |
+| 211 | H014 | 2020 | Compact Representations of BFGS Matrices | Argonne National Laboratory, MCS Division Preprint ANL/MCS-P9279-0120, January 2020 | — | preprint | — | no-oa |  | supplement | — |
 
-40 works · txt 4 · pdf 0 · no-oa 36
+211 works · txt 57 · pdf 0 · no-oa 154
