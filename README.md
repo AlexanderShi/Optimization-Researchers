@@ -28,6 +28,9 @@ teams/
   dfo-team/               DFO Team 语料（00-charter … 05-failure-modes）
   nlp-team/               NLP Team 语料（同构）
 skills/                   蒸馏产物落盘处（再复制到 ~/.claude/skills/）
+  dfo-team/ nlp-team/     团队级 skill（按 DISTILL.md 封闭语料蒸馏，带语料 ID）
+  researchers/            逐人研究者 skill（同步自 nvwa-skill product/，nuwa team-kit
+                          网络调研蒸馏，带各自证据台账；见其 README）
 ```
 
 每个团队目录六个文件，编号即阅读顺序：

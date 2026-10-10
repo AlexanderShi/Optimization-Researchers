@@ -1,5 +1,15 @@
 # 蒸馏记录
 
+## 2026-10-09 (5) · 同步逐人研究者 skill（非语料蒸馏，仅归档）
+
+- 范围：新增 `skills/researchers/dfo-team/`（5 人 + dfo-roundtable）与
+  `skills/researchers/nonlinear-team/`（10 人 + nonlinear-roundtable），共 539 个文件，
+  逐字节同步自 AlexanderShi/nvwa-skill `eb012fa` 的 `product/dfo-team`、`product/nonlinear-team`
+- 性质：nuwa team-kit 网络调研蒸馏（researched 2026-09-27），**不经 DISTILL.md 协议、
+  不带语料 ID**，出处以各 skill 自带的 `09-evidence-ledger.md` 为准；团队级 skill 与
+  `teams/` 语料未改动，质量门 G1–G6 不适用于本条
+- 说明文件：`skills/researchers/README.md`（来源、出处层级、安装方式）
+
 ## 2026-10-09 (4) · Katya Scheinberg 双队强化 + nuwa 提炼纪律入标
 
 - 语料版本：6e2011c
