@@ -1,0 +1,169 @@
+Transcript (YouTube auto-generated English captions, ASR; NOT checked against the audio)
+Talk: Lecture 27: Implementing LO/NLO-Based Branch-and-Cut, by Sven Leyffer. GIAN course, IIT Bombay, January 2024.
+Video: https://www.youtube.com/watch?v=Ww_EXSCGqbc (length 1321 s; playlist PLREyhbtkeBNpTZtDBfcwLigIsAAEGQ1iR)
+Retrieved: 2026-10-10 with yt-dlp 2026.08.19 (--write-auto-subs --sub-langs en); converted with scripts/srt_to_transcript.py
+Used in: ../../../research/02-methodology.md
+----
+um so in the last lecture I told you about this fantastic algorithm called linear optimization nonlinear optimization based branch and cut and um in this lecture I want to tell you how you can make this work really well so
+
+there's a number of implementation details that are very important um that may help you actually get a really good algorithm and this will also give you some hint as to where you could think about doing research in terms of or how
+
+to do research in terms of improving this algorithm even further so there's lots of open ideas there that one could um look at um so so just to recap again we're solving a mixed integer nine optimization problem and in this
+
+algorithm we have uh these the useful notation is that we have a set of points uh p and at which we have our outo approximation cuts and a heap of open linear optimization problems that are on the tree and then uh together with this
+
+notation there are these two sub problems that we keep solving in our algorithm one is the nullin optimization problem where we fixed the by the integer variables and that's the problem that we use to generate Cuts so this is
+
+the problem that helps us generate Auto approximation cuts and then while we're searching the tree we have this relaxation of the outer approximation Master problem which is this problem here so this is a linear optimization
+
+problem that depends on the set of points at which I have linearized my nonlinear function and and uh the the set of bounds that indicates way in the tree I'm solving this linear optimization problem and so we saw this
+
+algor them I just have it up here just to refresh our memory I'm sure you remember it it was only about 10 minutes ago um we we have these this doubly nested Loop in the outer loop we're managing our tree so that's where we add
+
+problems to the Heap or remove problems from the Heap and we're searching the branch and bound Tree on the inner loop that's where we're concentrating on one particular node in the tree and we keep looping and adding
+
+cuts um and so so one immediate thought is that you can probably add more Cuts as you're doing this because in practice you will see that there are not many Cuts added in in in this inner loop here typically there's just one cut
+
+added okay so here are some of the things that or here's how we can make this work so first of all when you're doing research do not reinvent the wheel um um so you don't want to rewrite everything from scratch in fact you want
+
+to reuse exist existing optimization software and Frameworks um so first the first implementation actually used MTO which was developed by nimous and Voli and we could reuse some of the tools that were
+
+in MTO which allowed us to immediately get a jump start and to produce a really good solver so for a while filment was the fastest mix into Joline solver that was out there because we had this advantage of building on a really good
+
+basis um there's other implementation in bondman and minor which is sort of developed at argon and I Bombay also has uh an approach like this and so I'll talk about one particular software framework namely minor which stands for
+
+mixed integer nonlinear optimization toolkit algorithms underestimators and relaxations and if you think that's a load of balone then our slogan is it's only ball so um and we have Todd mson who's one of
+
+the code developers to think thank for the slogan and for the nice sort of logo that we created okay so when you're developing software the most important part to do is to get a good logo and a good slogan you know it's nothing to do
+
+with whether you're using C++ or python or anything the good logo is very important um when we started out our goal was to not just Implement one algorithm but to have a range of algorithms we realize that non mixed
+
+integer nonlinear optimization problems are not solved by just a single method but you need to have a variety of method and you want to adapt these methods to specific problems so we wanted to have a fast usable mix in nonlinear solver but
+
+also the flexibility for developing new algorithms so make it easy for developers to use the tools and not reinvent the wheel um and another thing that was also important was we were also looking ahead towards non-convex
+
+problems so the algorithm that I showed for Mixon optimization works for convex problems but you can use the same techniques for non-convex problems so the idea then was when we if we do this right if we get this framework right we
+
+can leverage it for non-convex problems as well um so here are some of the things that minor has this there newer ones now um so it has interfaces for reading the input for example to ample um there are what we call engines
+
+those are the the tools that allow us to solve optimization problems so there's a tool for quadratic optimization called bqpd bound constraint quadratic programming under degeneracy it's a very robust QP solver we have a number of
+
+nonlinear optimization solvers and linear optimization solvers and already there are a number of algorithms implemented such as branch and bound outter approximation and kisada Grossman which is the l n Lo
+
+based branch and bound or branch and cut algorithm so so that's sort of useful in the sense that you can already uh if you pick up this package you can already use it to solve optimization problems but
+
+then you can also get into the guts of it and use some of the data structures and tools and utilities to Dev your own algorithm so this is all opened up so there's data structures for the problem the objective and the constraints and
+
+ashitosh actually implemented his own uh computational graph from from using ampul so that we can manipulate our own computational graph um so that also allows us then to get gradients jacobians Hans do modifications to the
+
+functions that allow us to develop underestimators and then there are very useful tools for searching the tree um and that allow us to sort of be competitive with commercial packages a little bit and then some utilities and
+
+and all of these you can basically because it's written in C++ you can add your own engine so if you have a good nonlinear optimization solver you should add it to minor because immediately it become it becomes faster and we can just
+
+build on that um if you have a different interface that you're interested in and solving problems you can do that and if you come up with a really smart algorithm for solving MLS then we would like you very much to implement this in
+
+minor so that we benefit from it too and so does the rest Community oh and I should say it's open source so um you don't need to pay us to download the software um you can I'm sure ashitosh appreciates any money that you give him
+
+but you don't need to do that um so and the approach that minow is that we're using is actually through handlers um that allow us to in into develop a number of branch and cut or branch and bound or branch and reduce
+
+algorithms um so there are handlers that relax the problem reformulate the problem um there's some presolve in minor that's actually I'll talk about that later that's very powerful for for certain classes of problems reduces the
+
+prze from thousands or tens of thousands of notes to just a handful of notes um there are separation routines uh tools for finding a branching variable and branching on a candidate um and the the handlers um sort of implement type
+
+specific methods and that's adopted from skip uh which is a constraint programming also mixed into a nonlinear programming solver that's developed at the suset center in Berlin and so there's a number of handlers there that
+
+allow us to handle integer variables linear constraints and so on so here is how you might Implement a branch and cut algorithm in minor so like uh this Lo n Lo based branch and bound algorithm um the algorithm is sort of
+
+given in the center here in the center of the picture you solve for relaxation uh if you can stop you return otherwise you you see whether you can add a cut if you generate the cut you go back to solving the relaxation if you
+
+can't generate the cut you Branch you add a problem to to and you pick a different problem uh that you need to solve so this is what's happening at a node uh and that's implemented in these two handlers
+
+here and then there's a number of other tools so there's not a lot that you need to implement in order to to get this to get this working um what I wanted to spend most of the time one is so to talk about
+
+algorithmic refinement so if you just implement the algorithm that we had earlier it will work it will converge but it won't be very fast and so um some of the things that are really important we found are exploiting the refinements
+
+that you get out of your mixed into linear optimization solver so you build on that infrastructure that already exists and so one of the things that's important is strong branching where you sol solving two linear optimization
+
+problems per potential branching variable and then base your decision on the degradation That You observe across all these branching variables to choose a a good branching variable um node selection strategies
+
+are very important the one that we found initially was most important was a cut management scheme and so that means you um you're generating AO approximation cuts and you can think of this as having uh a
+
+matrix um and initially you have your you have a single point around which you have your cuts x0 and y0 and and then you find another integer point and again you add a whole set of cuts about now Point X1 and
+
+y1 and then you find another one and so on and so each of these blocks uh there are m + one constraints and there are n variables they're very sparse potenti they're usually very sparse but but what happens is that the number
+
+the list that you have here grows very quickly and some of these then turn out to be quite weak and not very useful so what what what we're doing is what we're doing here is we we try to remove old Cuts so we try to just uh throw them
+
+away because then we have a smaller Matrix the factorization the linear algebra will be faster and the linear optimization will be faster and and so in particular we look at um all of these cuts that we have um
+
+have a corresponding right hand side and we just check that occasionally whether this right hand side is active whether this holds with equality or whether it's strictly less so if it's uh so if it's strictly less then we
+
+discard and if it's equal zero then we keep it um and and we do this occasionally uh we actually keep track of how often a cut becomes inactive um another really important thing is that you want to generate a lot of cuts
+
+early on and so the way we did this was to have Primal euristic those are urtic we'll talk about next week where you're finding integer Solutions really quickly so for example you set up your branch in
+
+Bound tree and you just dive down the tree in a sort of in a way that tries to find a good solution quickly and and so doing these Dives identifies integer feasible Solutions and those integer feasible Solutions can be used to
+
+generate these cuts that we have here on the right um and what we actually do is we we invoke these um primary tics something like every hundred nodes um to find more integer Solutions um and then we have a good NLP
+
+solver there as well so that helped but those are things that are already implemented so so we didn't have to implement any of this because we reused MTO and we were just using the software architecture that already existed we
+
+were just using it for our tools there's some new tools that you can do and so um one of the ideas is that you're not forced to generate cuts at integer points you can generate cuts at any point you like and so we were generating
+
+Cuts also at non- integer points and but the Cuts we were generating weren't the cuts where we were solving an optimization problem instead we were just generating Cuts about a a particular point so without
+
+actually optimizing the nonlinear optimization problem and in particular it's important to do this near the root node um something that's also important that helps of cut management is to only add the violated Cuts so when you're
+
+doing um outer approximation you might have uh two sets of constraints and if your if your point around which you want to um generate a cut is out here the white point then the only constraint that's violated here is the yellow constraint
+
+and so you would add a cut to cut off this point but there's no point adding a cut about the red one which would just be lying out there it would be quite weak and and so we don't generate only generated in sort of cuts around
+
+constraints that are infeasible and then another trick is that um you can compress the AO approximation cuts into vendor Cuts so rather than throwing these Cuts away these M plus1 Cuts away we can compress
+
+them into Benders cuts and we do that occasionally as well and all of this helps to um add fewer nodes to the branch and cut tree that we're generating and now it becomes much more like a branch and cut algorithm because now
+
+you're not just generating the One auto approximation cut but you have the potential of generating more Cuts especially at the top of the tree um to reduce the search space now this next observation is one
+
+that's comes from one of asos's students malali shama and she observed that very few nodes are integer feasible so when you're searching your your branch and bound tree if if I sort of continue this tree here
+
+somehow then um we only the standard LP NLP l l NL based branch in Bound only generates cuts at integer feasible nodes but she observed that you you get very very few of these integer nodes most of the tree you never see integer points
+
+and typically you only see them at the bottom of the tree so here are 250 plus instances that she looked at and what she plotted here are um the number of nodes that are being generated in blue and the nodes that are integer have a
+
+integer at the linear approximation and so you can see that this this is on a look this is on a lock scale so very very few nodes for some of these instances most of the nodes never generate a cut and and if you're not
+
+generating Cuts then you're not reducing the feasible set um this shows you the percentage of violated nonlinear constraints that you see at uh as you go um for for different instances and again this sort of shows
+
+that um you know this happens very rarely that's sort of a rare occasion that you see violated nonlinear constraints and so she also observed that that there's some special structure that you can exploit and so I call those
+
+mostly linear functions but um you you can think of those or those are really functions that have just a univariate continuous function so those are constraints where the nonlinearity just involves a single variable a single
+
+continuous variable XI and the the binary the integer variables are just out here and there's maybe a constant term so these are constraint which have very special structure the univariate constraints like this one here so
+
+there's just a a single uh just a single function and and the idea that she had was to say well for those functions I can just pick a number of points and linearize that function around those points so those
+
+are just points in XI those are not integer points those are continuous points and normally we would never linearize out approximation wouldn't necessarily linearize around those points so what she did is instead of just
+
+having a single linearization if I just had this one down here that would be quite a poor approximation because it would have all this area here on the right would be feasible but if you add a couple more constraints then you get a
+
+function that looks much much more like the original linear function and you can add more and more constraints that becomes now more expensive but you get you get back to the original nonlinear function and she had some clever tricks
+
+on balancing how where you want to put these points looking at make making sure that the angles for example between successive lines is is is similar um so there's there's questions about where you at these these constraints but
+
+there's a fundamental principle here that I think is really really important and that is when you're looking at these problems it's worthwhile to look at the structure of the problem that you're solving so in in mixing ning
+
+optimization when you study problems um look for problems where your solver doesn't do very well and try to understand the structure and try to tackle that structure so that's what malali did here she sort of thought okay
+
+there's this special structure what can I do about it I can just add these linearizations and the linearizations are cheap because she's not solving a nonlinear optimization problem to get them she just evaluates the
+
+linearizations around these points um and and so um this works really well she she can get sort of a significant Improvement there and and the takeaway points from this lecture are really that this is a great
+
+algorithm it works very well um you need to take advantage of tree search note selection and cut management techniques and there are lots of additional tricks that go into making this a really good solver such as adding these evaluation
+
+Cuts or studying the structure of specific constraints and developing cut generation techniques specifically to these constraints um so one of these example is this mostly linear uh univariate function so you
+
+have a function that depends on a whole number of integer variables but only a single uh continuous variable and in that case it's it's just an univariate function and so I have one more slide I'm going to show you this is this is a
+
+very complex slide I'm going to show you the software stack that that minor is built upon so this is sort of everything from the bottom up to the very top so here's minor software stack and I think this was taken when ashitosh was still
+
+in in Chicago um uh so there's a lot of younger people there than they are now but um some of us are still working on it so thank you very much um and I'm happy to have questions [Applause]

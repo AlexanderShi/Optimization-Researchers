@@ -1,0 +1,215 @@
+Transcript (YouTube auto-generated English captions, ASR; NOT checked against the audio)
+Talk: Lecture 49: Optimization Problems with Neural Network Constraints (Part 2), by Sven Leyffer. GIAN course, IIT Bombay, January 2024.
+Video: https://www.youtube.com/watch?v=j6GDiwkrbgI (length 1688 s; playlist PLREyhbtkeBNpTZtDBfcwLigIsAAEGQ1iR)
+Retrieved: 2026-10-10 with yt-dlp 2026.08.19 (--write-auto-subs --sub-langs en); converted with scripts/srt_to_transcript.py
+Used in: ../../../research/02-methodology.md
+----
+welcome back to the second part of solving optimization problems of neuron Network constraints so the the problem that I've been studying or we've been looking at is an optimization problem that has embedded in itself a trained neural
+
+network so a neural network that gives us a response for of a quantity of interest that we're interested in given some input variables X over which we now optimizing and these problems these class problems
+
+are becoming more and more prevalent um because we can often model complex physical phenomena with a neural network at a cost that is much much lower than running a expensive simulation and we saw in the uh last
+
+lecture that one of the one of the caveats here is that deep neural networks when they have reu activation functions these nested maximum of piece by linear functions then optimization solvers really suffer so optimization
+
+solvers that are built for problems with smooth continuously differentiable or twice continuously differentiable functions they no longer work because the the functions that we now get when we pluck the DNN with a relo activation
+
+function in there are no longer smooth and as a result you see slow convergence or non-convergence of these methods and we saw this example where ipop took 3,000 iterations but when we swapped out the activation function it suddenly went
+
+and solved the problem in under 30 iterations so 100 times faster okay so what what I want to do in this lecture is is talk about formulating these problems using integer variables and then I'll give you a
+
+second alternative formulation so this is the problem that that we studying um the functions the original functions f and g are smooth and maybe twice continuously differentiable there may be some additional constraints they could
+
+be integrality restrictions for example on some of the variables um and in my case the one example that I showed you the compression ratio is an integer variable for example um and DNN here is a uh machine learning ccate so the first
+
+trick we're going to use is a trick that you're now familiar with we've used this in the constraint disaggregation we've used it when we're rewriting optimization problems when we look at the computational graph we introduce
+
+additional variables and disentangle these nonlinearities so here what I did was just introduce a variable yl which is the prediction that comes from my neuron Network and just treat this as a slack variable for example and replace
+
+my neuron Network inside my nonlinear functions by this new variable and immediately there is a benefit because if the original functions were convex then um these new functions are now also convex so um I I have this benefit that
+
+um the function that I have up here is most likely not convex in X but when I do the substitutions now I have a convex function for my objective and my constraints potentially but I still have a non-convex constraint but I've now
+
+isolated the difficulties in separate part and so that's also a general theme of what we've been doing in this class so once I've done that then um there's a second trick that I'm going to use and I'm just going to rewrite my Max
+
+function using binary variables and that's also a well-known trick you've you might you've probably seen this before so in particular I'm going to introduce two sets of variables slacks and binary variables so the slacks are
+
+blue this s and there's one binary variable and I have one b inary variable per Max function that I'm operating on here and then I can uh rewrite what I do is I rewrite my um my function here uh in terms of this slack variable and I
+
+can quickly check that this formulation is correct so m is a positive large positive constant and if um Z is equal to zero then y uh is is equal to W then s is zero Y is equal to W transposed x + B and Y is
+
+non- negative so for uh Z equals to Z or Z equals to Z we're on this part of my Max Max function and if Z is equal to one then I'm in fact on this part of the max function I can quickly set check that if Z is equal to 1 then Y is equal
+
+to Zer and now minus s is W transpose X or plus b or S is minus W transpose x minus b s is non- negative so that means that what I have here is is in fact negative or non nonpositive and so this formulation is
+
+is exact this reformulation and what I now get is I now have a problem if I put all this together into my original problem I took out the um the part with the relo functions and I now have this system that's effectively a linear
+
+system of inequalities so this is a polyhedral set with some binary variables and some additional slack variables and if my original problem was convex then I now have a back a convex mixed integer nonlinear optimization
+
+problem so that's a very favorable and nice property um and this just follows immediately from all the results we've seen before of convexity of these nonlinear functions and the linearity of the mixed integer optimization set okay
+
+so so this seems like it's doing great um there there's some caveats here and one is that um I need to get ideally I want to get tight up a bounds these um M variables that I have here and I can potentially get them by doing bound
+
+tightening techniques similar to the optimality bound tightening techniques that we discussed a few lectures ago I can apply them to get good tight upper bounds on M but um that in itself is actually not enough and um there's been
+
+there's been a nice paper uh by Joey Anderson and some colleagues that give a stronger mixed integer optimization formulation where they actually find the the convex Hull of this mixed integer feasible set that I had on the previous
+
+slide so they find the convex Hull of this mixed integer set and this is actually quite quite hard to do but um in doing so once we find the convex Hull then we're guaranteed that if we optimize linear functions over this
+
+convex Hull we will find we will find good we will find integer we will find solutions that satisfy uh the constraints um the convex Sol is actually quite hard to find it's exponential in its in the in the size of
+
+these um this Max function or the D di menion of the max function but they have efficient separation routine so what you can do is you can um use that as a cut generation approach when you're solving this mixed integer nonlinear
+
+optimization sub problem to generate cuts that separate points that are not in the convex H from points that are in the convex H so we then have two kinds of cuts that we can add the traditional Al approximation cuts that we looked at
+
+and these new cuts that we could we could use okay so we we coded this up or Dominic coded this up we run it and we solved global warming I have great news for you we could design an engine that actually sucked CO2 out of the
+
+atmosphere um of course that's total nonsense um that engine doesn't exist what was happening was in fact that um we had our training data that was these each of these red dots corresponds to a training point so the training data is
+
+very very very dense um there's a lot of training data um the optimization solver was converging to this point down here so those are my iterates so I have absolutely no knowledge really about this function
+
+outside of the set of where I have the training data and as a consequence um I'm just predicting complete garbage and in this case I was predicting that my new machine would solve global warming um you can also see um on these lines
+
+here are you can see the training data so each each of those is a trajectory that we trained on and they overlay in red and in blue are the points that we generated that are outside the hull of these training data so they really
+
+clearly make no sense in terms of replicating the the true behavior of this engine at all okay but we can fix this problem um and by simply adding by simply finding the convex Hull of the training data so
+
+if you look big at this picture it's it's not hard to find the convex Hull of the red points and then we would simply restrict ourselves to lie inside the convex Hull of the training data um if you don't if if it's not possible to
+
+find the convex Hall then you probably have to go back and retrain your neural network if you find that you're getting non-physical Solutions such as these here but that's not something that that we considered in this example and so
+
+once we force ourselves to stay inside the convex H we find solutions that are sort of also within the convex Hull of the training data um but that give us slightly different compression ratios so we we simulated for these five different
+
+compression ratios and here we're sort of selecting a different one which is an indication that we're finding interesting solutions to the optimization problem um but we're not solving global warming anymore so that's
+
+that's the down side um there's other solutions to that um solving these problems is really really hard and so the we were using um clex to solve the mixed integer optimization formulations for this engine design problems um and
+
+uh it it really quickly ran out of out of time we had an upper time limit I think of three hours and so for if we just had a single layer so a very simple neural network with just a single layer we could go up to maybe a 100 or so time
+
+steps but for smaller problems we could only do a very small number of time steps until we ran out of steam just because the myips were too large um and this was largely due to the Big M formulation we didn't try the new
+
+formulation that the separating those cuts that might have helped in this case um so so then the question is okay now I've I've shown you this example of using binary variables so variables to remodel these reu activation functions
+
+but it doesn't seem to work for very large neural networks so what do I do instead so one approach would be to use better cutting planes another might be to use some of the ristics um what we did was we actually went back and tried
+
+a different nonlinear formulation and so we went back to this maximum function um and we formulated it this as a complementarity constraint and and so I haven't taugh about complimentarity constraints but we've seen the kkt
+
+conditions and these complimentarity constraints arise in the kkt conditions um so I can I can model my my Max function is saying either Y is equal to zero so I'm either here or Y is equal to W transposed X plus b and I'm on this
+
+Branch here and and this is how you interpret this notation here that you're either on one branch or on the other branch in other words either Y is equal to zero or Y is equal to this residual and then the inequalities will ensure
+
+that you're not generating points that are not feasible and so in addition to uh this disjunction you also have these two inequalities and this complementarity constraint for example arose when we were looking at Lan multipliers for our
+
+nonlinear optim ation problem either the constraint is active in which case the multiplier can be positive or if the constraint is inactive then the multiplier must be zero so you can think of this y as sort of being your
+
+multiplier and the right hand side here is being your constraint and then that's something that you've seen before okay so how do I model these complimentarity constraints um there there's again a simple trick and this works really well
+
+in practice you introduce Slack variables as before and by introducing these slack variables uh and having one linear equation I can now model the disjunction here with one nonline nonlinear inequality so I have a non
+
+negative slack and then this nonlinear inequality means that either a component Yi is positive or a component SI is positive but they can't both be positive because the sum overall Yi * SI has to be less than or equal to Z um and it's
+
+it's important for numerical reasons not to write equal to zero here so in typically when you see complimentarity constraints you see them written as equal to zero but that gives rise to some undesired properties numerically
+
+still this formulation violates constraint qualifications um so for the nonlinear solers you need to be a little bit careful but there's been a lot of progress on making sure that the nonlinear solvers work for these kind of
+
+problems and so IP op sorry Nitro for example has a feature that allows it to solve problems of this type by taking a penalty function approach uh we take a slightly different approach and we can still show Fast convergence under
+
+certain circumstances so this is a even though it violates a constraint qualification this is quite a mild violation of the constraint qualification it's very structured and you can take advantage of the structure
+
+when you're solving these problems numerically okay so then my I I end up with this uh tractable non-convex nonlinear optimization problem um where I have my original objective function and constraints then I have the
+
+representation of my neural network and I now model the disjunction that I modeled previously with my binary variable I now model it with this complementarity constraint here that ensures that um only one side of these
+
+two inequalities is positive at most at any given time and you you can make some nice statements you can show that um first order conditions of the two problems are equivalent in a certain sense this problem is much nicer because
+
+it's actually a smooth problem so we no longer have the non-s smoothness of the neural network constraint here we sort of handled this by explicitly modeling the max function uh using the the disjunction and we can solve this with
+
+large scale solvers so I just have some little results and I'm not going to go into too much detail here um on the x-axis are the number of time steps so we want to get as large number of time steps as possible I de to 1500 um we
+
+have three different solvers so the um MIP solvers are in blue they take they're running out of time basically for anything above um 50 time steps or so the nonlinear solver the nonlinear new nons smooth solvers that I showed in
+
+the last lecture are in green and these mpcc or complimentarity based solers are in red and so what should you take away from it the complimentarity based solvers work best um and the the question then is do they get good
+
+Solutions and the answer is they get reasonable Solutions so they maybe having a larger optimality Gap than the MIP solvers on some of the smaller problems but for the larger problems the MIP solvers don't get a good up
+
+um optimality Gap so this is the gap between what we know of a lower bound and the upper bound that we're Computing here or an estimate of that okay um one of the things that was important is finding good initial feasible points so
+
+uh we worked a little bit on that um and and this is sort the second example is looking at adversarial networks with NLP formulation I'm not going to go through the details here I wanted to just show you some uh results
+
+um and and this is just um one example out of 100 runs that Dominic did after 1 hour CPU time so you see the training data here of the 10 digits the MIP solution in the middle and the nonlinear optimization solution that we get on the
+
+right and so one of the advantages is that um the the MIP solution that we get because the MIP isn't solving to optimality it looks a lot worse and we're getting really good nonlinear programming Solutions so this is the
+
+solution that it will be every single digit here will be misclassified so we we we ask the optimization problem to classify basically the zero as a five the one as a six two is seven three is eight fours nine and then cycle back so
+
+this is a complete misclassification problem and you can see that by just adding a little bit of SMUD around the numbers you you misclassify all of them in this case okay so um I've I've looked at this
+
+optimization with de mural networks and um the the the takeway message is that if you're modeling these problems then you can take advantage of the pie torch and tensor flow uh technology for for computing gradients but you do that at
+
+the expense of possibly making the problem really nons smooth and nons smooth in such a way that the nonlinear solvers will not work so then it's important to think about reformulations and and so there are
+
+three optimization formulations the embedded formulation is the one that's nons smooth that directly uses pytorch or the the optimization or um tensor flow and its automatic differentiation um you can reformulate
+
+the relo function as a mixed integer optimization problem and that works well for relatively small networks um and you can potentially solve them to Global optimality um it's much more efficient to formulate them as complimentarity
+
+constraints and one thing we haven't tried here is to think about ways of combining these two and and that's maybe also an open open question where you generate smaller mips um if you do the mixed integer optimization formulation
+
+then I think it's also important to generate Cuts efficient cuts for these um uh relo function formulation um and and really this is just the first step towards using doing some form of rigorous optimization over
+
+machine learning surrogates and and there's a lot more work to be done in particular as you as you saw when I had the one example where the optimizer was wandering off and finding points that hadn't been trained on before you may
+
+have to have this inside a loop that actually retrains the neural network so the assumption that the neural network is there and given forever is not necessarily a realistic assumption and and so there's lots of
+
+things that that one can still do one big problem with neuron networks with large language models or any machine learning tool is that they are not necessarily good at predicting outside of the training data and so in my case I
+
+had very very dense training data if you remember that picture we had this this area and it was almost densely covered with with training points so of course that's a good predictor um but if you want to explore regions outside of the
+
+training data then you need to do something else um and in particular retraining neural networks is is one thing the there was there's some interesting papers recently by um by these authors here who were looking at
+
+adding an optimization layer to your neural network so you actually train the neural network to find an optimal solution and the the the layer that you're adding is essentially the first order conditions of the optimization
+
+problem that you want to solve so you can you can add these first order conditions and then somehow learn Optimal Solutions uh there there's a big issue in terms of how to overcome the scalability issues if we do these
+
+reformulations so we're um if you think about large language models they have billions or maybe trillions of parameters soon and and for those it would simply be prohibitive to add a binary variable for each of those little
+
+neurons that you have um so we need to find ways of making these algorithms more scalable uh and maybe finding ways of doing integer programming at scale there um and then there's questions about convexity convergence of solvers
+
+that that are quite challenging and overall um it's but it's really quite cool because you're dealing with non-convex functions he can often plot these functions much easier because he can explore these neuron networks very
+
+easily um but expanding them and making them into a tool that is predictive uh for science where you can also verify and validate the solution that's still an open question very much and something that we're working on at
+
+argon for example right to so to tune the parameters you have to solve an optimization problem the training problem um which which ones did you mean the I don't know I think those are interesting questions
+
+um I think now some of this may need to be cut out because I'm not sure this I'm allowed to say this but it's it's not clear to me that going to a trillion parameters is necessarily where we want to be it's not
+
+clear to me that we have the technology yet sorted out for the activation functions for example the're very simple activation functions and we make this connection to neurons in the brain but the neurons in our
+
+brain are more complicated functions than these simple function functions that we have here and so there's probably scope for having other forms of activation functions other forms of computer architectures on which to run
+
+this so it's not at the moment it's not clear to me that we're running this uh that this is going we're having neural networks that look the same in maybe 10 years time or so I think there there's a lot of uh new hardware architecture
+
+that's coming along that may be better suited to doing some of these training tasks some of these learning tasks um so so there's people looking at Quantum Quantum neural networks or Quantum machine learning um there's
+
+neuromorphic Computing so the different different much more esoteric computer architecture that have maybe a better chance of mimicking what we're trying to do here and and the the traditional architecture that works with bits is
+
+maybe not the best suited for the learning and the training tasks and the the sort of inference that we want to do afterwards but that's just me speculating I think there's some effort going into finding out what what the
+
+best architectures are yeah polarization so in order to address the scalability issue you mean yeah that's that's that's probably a good idea I think at some point we will need that um there have been some efforts we didn't
+
+talk about it much in terms of parallel branch and bound or branch and cut um they they they have themselves scalability issues in the sense that they don't scale to very large machines so they don't scale to the biggest
+
+machines that we have um uh so and again it's a question maybe of not having the right paradigms yet for doing a parallel br and cut research but that would help that would certainly be one aspect that would help um and the
+
+the training when you training these neural networks you're training them on high performance compute platform so so we're building um neural networks for science on sort of the Leading Edge compute platforms that we have at argon
+
+for example and that's all done in parallel so the training is done in parallel and the integer optimization could also be done in parallel to some extent but it's it's it's challenging that's that's certainly a
+
+challenge yes correct yeah yeah so I I I sort of brushed over that a little bit the formulation that I showed was there it was yeah it was for one neuron um yeah but I I would oh so I need a binary variable for every
+
+neuron and and that's what makes this expensive so on the next slide so if if you if you burn this into the back of your retina you will see it again on the next slide it's back here but now my binary variables are index they're now
+
+they now are vectors you have to think of those as vectors of variables at every level of my neural network I have a vector of variables and I have one variable per neuron in my neuron Network and that's that's again that's quite
+
+expensive um I think if you can if you can spfy your neural network when you train it that might help because then we have fewer integer variables um uh and that would certainly help this approach and then the cuts are really
+
+just for a again for a single each one of those a single one there's there's cuts and um the the cuts an exponential number of these cuts which makes it hard to write them all down but we can separate efficiently that's that's good

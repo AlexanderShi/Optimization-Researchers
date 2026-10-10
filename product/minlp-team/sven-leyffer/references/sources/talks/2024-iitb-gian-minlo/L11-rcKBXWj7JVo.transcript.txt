@@ -1,0 +1,209 @@
+Transcript (YouTube auto-generated English captions, ASR; NOT checked against the audio)
+Talk: Lecture 11: Modeling Optimization Problems: Case Study, by Sven Leyffer. GIAN course, IIT Bombay, January 2024.
+Video: https://www.youtube.com/watch?v=rcKBXWj7JVo (length 1748 s; playlist PLREyhbtkeBNpTZtDBfcwLigIsAAEGQ1iR)
+Retrieved: 2026-10-10 with yt-dlp 2026.08.19 (--write-auto-subs --sub-langs en); converted with scripts/srt_to_transcript.py
+Used in: ../../../research/02-methodology.md
+----
+what I wanted to do today is show you a case study so this is actually based on a real model example that people were solving but they were using simulation based optimization because they couldn't model the
+
+nonlinearities in a way that you could expose them to a modeling language so they had a simulation package that they had to call with binary variables and and all they could do is query the simulation package and we reformulated
+
+this um to together with a student I had at argon for for a summer um so the idea is to talk about a loadbearing thermal insulation system that has some interesting variables and then tell you a little bit about this so
+
+here's a description of the system um this is the application would be uh designing um an insulation system for the Large Hadron Collider that sits at at CERN in France and Switzerland so you have the ground and the the
+
+collider is sitting at the top and and there's heat generated and you want to insulate the Heat and what you can do is you can um reduce the heat from the top to the bottom surface um what we're going to do is we're going to put
+
+different types of material in between the top and the bottom and at these um at these channels here we're going to run cooling water for example to cool the surface surface and take heat out of the system so there's two objectives
+
+here in a sense one the system has to support the load so you can't just have very light material there because it's going to be crushed but at the same time you want to not heat the bottom up too much okay so the the goal of our system
+
+is to minimize the cooling power needed to run the system and there's active cooling at these intercepts meaning you have cooling water running through the intercepts so you have to provide the water you have to provide a heat
+
+exchanger you have to pump the water through it which costs money um and and the question is which materials do you place in between and these materials different properties for how much weight they can support and how
+
+they um conduct heat okay so here's uh a number of discrete design variables and and I start off by saying that this is not necessarily the right way to write the problem so this is how we found the problem was presented to us so we number
+
+the intercepts from 0 to n + one or this n is the number of intercepts that we have so uh one through um n um and that's an integer variable so little N is a variable here and we have Mi insulator materials and those those
+
+are categorical choices so there's these are the materials that they are considering there's steel which is uh very good for supporting structures uh but also conducts heat um aluminium carbon steel epoxy nylon and
+
+Teflon um and these materials differ in how well they support structures and how much they conduct heat but it's not that you can order them from left to right so it's not that the the the least conducting material would also be the
+
+one that's not not the strongest material so there's no natural ordering there's there's two dimensional properties of these materials and it's not clear how to order them uh and then we have luckily also
+
+some continuous variables so those are things we're happy with the length of the insulator uh the area of the insulator um we will model the heat flow from I minus one to I or from I to I minus one with this
+
+variable Qi the cooling temperature is TI here and Delta XI is the thermal expansion layer that's we were going to eliminate this later so the the layers will expand um the coold temperature is 4.3 de Kelvin so um that's not as warm as it is
+
+just now in Mumbai that's a lot cooler than Mumbai uh the hot temperature is 300 Kelvin uh so that's about Mumbai temperature right now very pleasant um so here's the problem that that was presented to us um at the top
+
+we're minimizing the cooling power so this is there's a coefficient there the CI of T and I will show you in a moment what this coefficient looks like it it depends on the temperature TI that's the temperature of the I intercept and then
+
+there's this nonlinear expression that's the hot divided by the current temperature minus one so that's sort of a a way of computing with the coefficient and then Qi + one and minus Qi is the heat flux between the two um
+
+next we have the definition of the heat flux which depends on the area and the thickness of The Intercept Ai and XI and we integrate from the cooler to the warmer surface a nonlinear function K Over T which also depends on the
+
+material property so different materials will have different functions that you have to put in there so that's an integral that's not something that you can do in umle um there are tricks for doing it but um that would be for example
+
+extension example and then there's the total mass we we want to have the total mass of the The Intercept that we're building so the area times the thickness times the density of the material can't be larger than Big
+
+M um and again the density depends on the material type different materials have different densities uh there's a stress limit that's a similar uh condition this is actually a semi infinite constraint because this stress limit so there's a
+
+lower bound F and then the area times the stress and the area times the Str stress is not allowed to go below F but this has to hold for all temperatures in this intercept so I I put in an intercept and the stress limit has to
+
+hold for all the temperatures that arise between the uh hotter and the cooler surface um there so there's an infinite number of these constraints uh then we have a constraint that's the thermal expansion
+
+limit uh some some simple bounds and linear constraints and then there are some tradeoffs between the different materials so why is this problem hard so what do you think is hard about this problem if you looked at this
+
+problem I told you um go ahead model this in umle or model this in gums or anything else what would be hard about this problem there's a number of things that are hard about it that's a hint anybody want to say something that's
+
+hard about the problem sorry go ahead Shout It Out integration integration is hard yes what else is hard the thermal expansion yeah that's hard why is that hard so this one is hard you say why is it hard Delta would be not necessar that's
+
+that's okay this is hard because this n one of our variables appears in the summation bound so quick quiz uh what is d by DN of the summation from I = 1 to n of UI XI so n is the variable that's one of our
+
+variables it's an integer variable so does anybody know how to differentiate that no you should not know how to differentiate this this is not differentiable this is a step function right I mean what what what is this if
+
+if I put n equals 6391 what does that mean for a summation do I do I sum up to six or to seven or do I sum up to seven but then only three I there there's ways of defining it but in this way this is not
+
+defined so this is actually nonsense so that we can't do that that's why this is hard this guy is hard that's why this guy is hard too so everything in red is hard that's basically what red means red means
+
+really hard so having the variable here these material tradeoffs which are they're not really values right I mean Teflon steel aluminium aluminium um I almost said it the American way it's aluminium not aluminum um so those are
+
+hard variables right how do you optimize over Teflon epoxy steel and aluminium I don't know um okay so we're going to go through these things one at a time and make the problem easier and I'm not sure that
+
+I'll get through all of these but the slides are there for you to look at um so um so we have this categorical variables here's another challenge and I didn't put this in red this term CI my coefficient is actually discontinuous as
+
+well so um it takes three different values depending on the value of TI your temperature it's five if you're below 4.2 Kelvin it's four between 4 .2 and 71 Kelvin and it's 2.5 above 71 Kelvin so that's a step function again
+
+this is not a nice objective function because your your function is going to look uh so five 4 2.5 and it has these intercepts so again there's these positions here points where we can't differentiate the
+
+function so we we don't I don't know how to solve these problems uh um and we have these constraint integr okay so but we found all of those so how do we model categorical variable so here's a a modeling trick and this this is the
+
+probably this is a nice trick so we have this indicator variable Yi indicates the existence of a layer so this is different to the one hot encoding in sos1 that I had yesterday so here we have a variable or set of variables Yi
+
+which are between zero and one and I indicate the number of layers I assume I have an upper bound capital n on the number of layers that I'm going to buildt this is a practical thing I'm going to build I'm not going to build
+
+more than a million layers that doesn't make any sense so I'm going to say n capital N is 10 that's as much as I'm going to build and uh what these constraints say the first constraint in blue says is that if layer I is zero
+
+then they are I + one I + 2 and so on they're also zero so the layers are ordered from bottom to top so if if I can have the first the second the third layer and so if I sum this up this gives me actually n+ one uh that's because I
+
+start at zero there's some weird thing going on there um and then if a layer exists or or doesn't exist um I have these uh thickness constraints so the layer um has a a thickness that's at most l so if Yi is
+
+zero then I can't have that thickness on the other hand if I have if my thickness uh also has to be if the layer exists then I need to put something there I can't just have a layer without thickness that's what this constraint is
+
+saying so if Li is one then XI better be of a nonzero thickness I don't want layers that are that are zero because that gives me degeneracy here right so that's why that constraints there uh and so this is eliminating
+
+spurious layers because you can create Solutions which are equivalent by having more of these yis that are one than you really need by having these layers that don't do anything when nothing is happening um and so we need to eliminate
+
+those okay and then there's a nice theorem that Jeff linderoth found is there's a convex Hull representation of this set of constraints that I showed you there so uh that's really beautiful so uh the inequalities um earlier we
+
+have um so we have these inequalities here the x i to lyi it turns out that if you actually sum up the layers from I to n+ one and put them in here you can strengthen this inequality and this gives you a facet which
+
+is um is a um is a side of the polytope um that defines so it's it's a full it's a full dimensional uh uh uh layer of the of the convex H um so that's a nice little theorem um so now we have we we can we
+
+now represent how how many layers we have so that was that was a little bit of a lift so now um we're going to pick the materials that we're going to put in each layer so um uh in so in particular we have a
+
+variable Z J that's one if we place material J in layer I and and J is just an arbitrary ordering of my materials remember there's no ordering of my materials they're just in any arbitrary order because they don't have properties that
+
+are strictly increasing or decreasing um and then we only want to put materials into layers that exist so Yi is one that's a layer that exists then I better pick a material that I put into this layer so this is now a special
+
+ordered set of type one on the other hand if Yi is equal to zero the layer does not exist then all the Z J in that layer are zero so I can't pick a material um and then the nice thing is now my this nonlinear function that I
+
+had that depended on the type of material can now be written expanded in this form using my special ordered set so MJ are the different materials that I can put in here and so I just go and sum them up and this is again the one one
+
+hot encoding or special order set of type one that will pick exactly one of those functions out that corresponds to the correct material that I'm placing there which I decided by this variable Z J so I got rid of this categorical
+
+variable that says pick a material out of this this set by using a special set of type one or a bunch of these special order sets um okay um uh so then uh there is also something about the the maximum length
+
+constraint um I can now write my one of those constraints was the length of the the total length of the layers that I'm putting in uh has to be equal to l that now becomes the total length of the layers up to n + one because for
+
+non-existing layers I put x i equal to zero so I now eliminated this issue of having a variable as a summation limit we got rid of that um we have the the maximum Mass constraint we use the same special ordered set constraint here
+
+so row of Mi is a mi is the categorical valuable the material that I have in layer I I replace that by row I row J which is the density of that particular material times Z J and that's it and so this is now a very simple constraint
+
+this is in fact well it's it's not that simple because uh Z J Ai and X I are still variables so There's a multi-linear constraint here but this is much much nicer than having uh a summ bound n that depends it's an integer
+
+that depends on the problem variables and some kind of lookup table that you have to implement there so this is a much nicer formulation um now one of the hard things was the integral I don't know who said the
+
+integral was hard excellent choice I kept the hardest for the last um okay so we have we have to deal with this integral there um there's a little trick you can just multiply by XI both sides um and then again I use this special
+
+ordered set of type one so I have my Z JS that I put inside the integral I use the fact that the integration is a linear operation so I can take the Z out of the integral and now I have something that looks much much nicer that just
+
+depends on data um except I also have the temperatures remember those temperature limits are also variables so this is also not yet a good constraint because the temperature limits are variables um so I need to do a little
+
+bit more work there um I can um I can potentially integrate this and and do a convex combination of materials but that's not what we did so we there's another little trick uh that you can use and and this is when you're faced with
+
+a continuous when you faced with a variable that's sort of a continuous variable that varies continuous at DT for example the way to deal with that is to discutie so we disti this integral into small uh parts and in fact what we do is
+
+we take we know there's a a temperature range that R ranges from uh the the t0 which is 4.3 Kelvin all the way way up to 300 Kelvin which is the hot temperature and we just discretize this into small steps and then we're going to precompute
+
+these integrals that's the trick that we're going to use wa no the integral is actually between variables so so the ti are variables I should have highlighted them in red here so you're going to pick a
+
+variable TI which could be here and here is M oh this is T minus one and here might be ti so we're going to have to actually discretize these decisions as well so at the moment um I just said I'm going to
+
+discretize the whole interval but I'm also going to restrict my temperatures that I'm going to choose for my design temperatures so that they coincide with my grid and then I'm going to pick temperatures in my optimization model
+
+for which I can actually compute the integrals the the alternative would be that if I wanted to do this I could compute these these pre these could be pre-computed but then I have to somehow clean up these parts there and that's
+
+possible to do but it's it's not easy because you you end up with um a more nonlinear equation so uh when you when you're faced with a variable that's in infinite Dimensions or a variable that's indic has an infinite number of indices
+
+you disti it that's a general Paradigm the reason is that it makes it makes your life a lot easier so I I introduce um again another special ordered set so diir so TR here are my my discretization so this is t0
+
+T1 up to TD the final temperature that's my discretization and then I say my my ti The Intercept temperature has to be one of those so this is a modeling approximation that I'm going to make I'm going to pay a price for that because if
+
+I have a very Co discritization I'm going to be further away from the solution if I have a very fine discretization then I'm going to be very very close to the solution and again our old friend sos1 is there um
+
+and there's there's a result that you can show that if you branch in the right way on sos1 sets you need at most logarithm of De branching levels okay so now we actually have a smooth objective function there's still
+
+issues to be dealt with um um so here's just an illustration of what one of the functions looks like um uh so we have a a pie Vice linear cubic spine and a piecewise linear with added points approximation there that you can
+
+do so this is the uh thermal conductivity versus temperature of Teflon so here's the temperature on the x-axis from 0 to 300 Kelvin on the Y AIS it's the thermal conductivity that's being computed and essentially what we're
+
+doing going to do is we're going to introduce a little variable VI that that sort of represents VI J that represents how much what the thermoconductivity integral is over that one of those integrals um and
+
+there's a uh there's a little trick um that we can we can now precompute um some of these integrals so in particular what we're going to do is we're going to precompute integrals from T1 sorry this should have been T1
+
+here we're going to precompute integrals from T1 on to the current temperature and we're going to call those uh we're going to give those names so this is going to be we're just going to pre-compute integrals that go from here
+
+to one of those break to all of those break points here those are the integrals we're going to precompute and then we use a trick from integration that says if you want to find out what this integral is you take this big
+
+integral and subtract the small integral so we can now do differences of integrals to tell us what these things are and by pre-computing them we make them into these constants here and and you can work out that um the the
+
+integral this integration that I have there from TI to TI + one can now be written as as this difference between special AIT sets multiplied by these integrals that go from zero to The Next Step okay that's integration so a lot of
+
+stuff goes into this um uh last one um we have this objective coefficient but we did this yesterday hey there's something that we did yesterday remember how we had a function a constant divided by a function that was we could express
+
+as a special ordered set the th by divided by TI we had something like that so now we express the ti with our special order set we pull the special ordered set up and look at that it's now a linear objective function well not
+
+quite because we also have the qis here but at least this part is now nice this was a discontinuous function a moment ago this is now a linear function it's not a perfect model but it's it's pretty good um okay what's the
+
+price that you pay um you introduce a lot of additional variables and constraints so there's a formulation that we have the discontinuous formulation at the very start um that's the smallest most compact formulation
+
+but you can't really solve it how are you going to differentiate with respect to n you have to do these simulations you have to write these simulations compute these integrals um or you can do these smooth
+
+re formulations um and so that's what we did and and you can convey the logic inherent in categorical variables to the solver in this way um so this is actually it's a large smooth mixed into gen programming model
+
+um the binary variables almost linearize the model so this a good chance of actually solving this and finding Global Solutions and you can play around with this a little bit now you can also say okay look um maybe initially I'm going
+
+to start by solving with a cause discretization of my temperatures not not maybe not three but maybe rather than a 100 or 300 you might choose 20 or 30 and then you could refine it right you can you can say oh
+
+I'm going to put some more here but you may only have to do that near the temperatures that that you're interested in you can maybe hot start the solver um there's lots of things that we didn't try but but those are
+
+techniques that um allow you to maybe get good solutions for a cause problem and then refine those Solutions um so this is kind of a cool model it's it's got a lot of stuff in it um um and a lot of tricks went into it
+
+and there's convex hols in there there's nonlinearities and it shows that if you if you play around with your models even though they look really hard initially in in real life um there's often tricks that you
+
+can do to make them more amable for solving them with our traditional solvers so that was that was a cool little experiment and that was done with a student of mine who's now a VP for research at United Airlines and uh he
+
+does Crew Scheduling and stuff like that for United Ain so pretty impressive guy thank you we'll take a break oh actually I should say if you have questions please ask questions I went really fast over this this was 20 slides
+
+in half an hour so that's much much more than I would normally like to do yeah yeah it it does create a problem but the the original problem the constraints are harder you you have to each time you evaluate the constraint you have to form
+
+an integral you have to integrate a function so the evaluation of the constraints the 400 constraints actually takes longer than the the evaluation of the 7,000 constraints or because we pre-compute all these
+
+integrals so there's there's a trade of there the and the original problem is discontinuous so I don't even know what it means if you're converging to a stationary point for these problems um so for the for the letter last problem
+
+we can we can have some confidence that we find a global solution maybe um for the first problem I have no idea but you're right there more constraints but there are tradeoffs and I I don't have the CPU times they might be in the paper
+
+I can show that to you afterwards good question anybody else if not you can all get up walk out that door come back in this door and we'll have another talk in five minutes thank you

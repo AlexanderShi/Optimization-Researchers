@@ -1,0 +1,175 @@
+Transcript (YouTube auto-generated English captions, ASR; NOT checked against the audio)
+Talk: Lecture 26: LO/NLO-Based Branch-and-Bound, by Sven Leyffer. GIAN course, IIT Bombay, January 2024.
+Video: https://www.youtube.com/watch?v=xkmgMHjap5c (length 1390 s; playlist PLREyhbtkeBNpTZtDBfcwLigIsAAEGQ1iR)
+Retrieved: 2026-10-10 with yt-dlp 2026.08.19 (--write-auto-subs --sub-langs en); converted with scripts/srt_to_transcript.py
+Used in: ../../../research/02-methodology.md
+----
+this next method is um a method that's maybe the method of choice for many problems it's not the method that will beat every method on on all problems but it's a pretty good method uh so l or linear optimization nonlinear
+
+optimization based branch and bound and so just as a reminder and so that the the slides are complete I've written down again the mixed integer nonlinear optimization problem here that we just saw a moment ago so nonlinear objective
+
+nonlinear constraints with these assumptions that the functions are smooth and convex we have a constraint qualification and the feasible set is bounded so the boundedness ensures that our algorithms will be finite as long as
+
+we don't go back to previously visited assignments um integer assignments and then the smoothness and constraint codification ensures we can actually solve sub problems of this form with our nonlinear optimization
+
+solvers right so the goal is um the the previous method that we looked at Benders decomposition and auto approximation they are multi-tree methods so they search multiple mixed integer linear optimization trees and
+
+that can quickly become the bottleneck because solving a mixed integer linear optimization problem is hard and each time you do it you're starting from scratch there's no information that you can reuse or very little information
+
+that you can reuse um that could actually be an interesting project um so we we learned also about branch and bound but that method suffers from the fact that the individual sub problems on the tree are very expensive to solve so
+
+even though you're only searching a single tree these problems are very expensive to solve so what we want to do is we want to avoid resolving the mixed integer linear optimization problems like we do for outer o imation and
+
+Bendis decomposition and instead somehow update our mixed integ the linear optimization data so we want to update the problem and do it in a way that ensures that we're still converging and the interesting part is
+
+that this method that I'm going to introduce here is can also be interpreted as a branch and cut approach and if you're familiar with mixed integer linear optimization then you know that branch and cut is the method
+
+of choice in fact by I used to have um a picture of the size of the largest traveling salesman problem that you could solve um in any given year and so this started sometime in the 1950s when people were solving
+
+tsps and so here's the size of the tsp that you can solve and here somewhere is along here is time and if you plot the size of problem that you can solve then it sort of goes up very gradually and then there's a huge jump
+
+it's it's really big and this is on a on a lock scale uh and this is when branch and cut what in was introduced to mix syger linear optimization it made a huge difference this idea by pck and raldi that you mixing two different
+
+optimization paradigms the The Cutting planes and the branching procedure um and so we're going to look at this method here and I'll just have a couple of slides to introduce the method a little little bit and then we'll go and
+
+look at it in in detail so we're going to um start off by um looking at our mixed integer nonlinear optimization problem that we're solving here and the idea is basically to set up an initial uh linear
+
+optimization problem so we're going to solve a relaxation uh over this poope where I've got a single linearization point here so I linearized all my constraints about this point and one feature of doing this is that uh the the
+
+the hyperplanes are only touching or tangent if the point lies on the boundary of the feasible set otherwise these these tend to be loose and then we're going to start searching our mix inteen linear programming branch and
+
+Boundary and so we will go to some integer assignment somewhere down here maybe and so when we do that um so we start here we might find uh that we we get to I think this point down here and at this point we we interrupt our branch
+
+and bound Tre search and we solve a nonlinear optimization problem which gets us back to this point here and then we can update we can add new cutting planes and update our branch and our optimization problem the linear
+
+optimization problem so we're creating new linearizations I have a slightly different way of looking at this so um you start off with a single cut that you generated about your initial starting point that's the blue cut here
+
+and you set up your branch inbound tree search and you go away and and mix into the linear optimization solver starts searching the tree um so you take this initial tree and then as you're searching the tree sooner or later you
+
+will find an integer feasible point and so when you do that in this case here and this Branch you have an integer feasible point you go back back and you evaluate uh the objective function at this point and you create the auto
+
+approximation cut for example or the vendor cut that's up to you that's a choice and what what you now need to do is you need to update all the nodes in your branch and boundry by adding this cut to the cut that you already had so
+
+I've indicated that the nodes are updated by putting a Green Dot into the center so you add the linearizations to the tree now now the good news is you will only ever store one copy of your linearizations in the tree you're not
+
+going to store separate copies of your linearizations in the tree so that just goes into a central memory which is which makes a division and then there's one carat and that's very important that you need to you need to continue
+
+searching the tree but the note that where you generated the cut has to be added back onto the tree so you can't eliminate it the reason is that even though it was integer feasible there could be other integer feasible points
+
+below this tree that might give you a better ninar objective value so in particular it could be that at at this point here we're integer feasible again and we find a much lower value so that's why you need to add this point back in
+
+and that's an important difference to branch and cut for the linear case in the linear case once you find an integer assignment and a in a particular point in the tree you know that it's optimal for the whole subtree so you don't need
+
+to do this in this case because we're only having a local approximation of our objective function so we're only approximating the nonlinear objective by these Cuts we need to make sure that there isn't a better nolinear
+
+Point um there's a number of algorithms that uh implement this um it was first developed at carel University by ignasio grman and ignasio kada um and they implemented initially in ample And We R did an implementation
+
+later on okay so this was the cartoon and at this point you can you can go to sleep because now I'm going to go into the details so if you're not interested in the details um you don't need to pay any more attention so here's some useful
+
+notation for um that we need in order to Define this algorithm formally so I'm going to have a set of points p X comma Y at which we have um optimality or feasibility cuts and I'm I'm just going to be loose about that uh at some of
+
+these points we might not have an optimality cut we only have a feasibility cut and the cuts that we're using for now are the outer approximation Cuts or the first order tailor expansion about the point x
+
+had so that's the set P of points I'm also going to have a set H that's the keep of open linear optimization sub problems that are on my tree and then I have one more little piece of notation which is R Min low
+
+which is the continuous relaxation of a mixed inter optimization problem uh but you don't need to remember that you need to remember P for points and H for Heap our Min low will only appear once and then there are two sub problems
+
+that I'm going to solve for which I need a bit little bit of notation so the first one is the traditional nonlinear optimization problem with the fixed integers and again we had this earlier in an exercise you can replace you can
+
+also minimize over y as long as you also add a constraint that Y is equal to Y hat and that could actually be advantageous it's much easier to implement than substituting the variables in the second problem that I'm
+
+going to look at is a node in my mixed integer linear optimization tree and this is now parameterized by three parameters so the nonlinear branch and bound we parameterized the nodes by the lower and the upper bounds
+
+that we had created during the tree search here we also parameterize it by P which is the set of points for which we have our polyhedral outer approximation of the continuous feasible set so this linear optimization problem is is looks
+
+a little bit like the Master problem that we have for the um Bender decomposition or ar approximation but there are no integrality constraints here instead we have these lower and upper bounds that indicate where in my
+
+tree this problem belongs so this L and U tells you where inside the tree this problem is being generated okay and this slide is a little bit dense um but I don't know a better way of wrri writing this so bear
+
+with me a little bit we'll go through this um this is basically the whole algorithm that you need to implement um but don't worry too much about implementing it because other people have done it and I show you in a moment
+
+how to do it even easier so you need an upper bound you keep track of your best solution that's you you have your set of points initially there's no points and you solve the relaxed mixed in nonlinear programming problem and then you add its
+
+solution to your set of points so you start off by generating a set of hyperplanes around the relaxation for example of your mixed integer nonlinear optimization problem and you now start your branch and bound mixed integ linear
+
+optimization branch and bound by adding your first linear optimization problem to the Heap so this linear optimization problem takes the P that we had that tells us what linearization it has and it takes in it lower and upper bounds
+
+which means we're still not unconstrained and then there's this double Loop um the the inner loop is a cut generation Loop and the outer loop Loops over extracting and adding problems to the Heap so the outer loop
+
+is the management of your branch and bound tree um so in the outer loop you start by picking a problem of this of the Heap so we just put one there we take it back out um and we go through this Inner Loop and if
+
+we ever pop out of this inner loop then we potentially branch on variables here so this is where we where we do the branching and we add new problems to our Heap here so we have a point a new point we do some branching we add it to the
+
+Heap so the outer loop is the Heap management or the management of the branch in boundary and in the Inner Loop you solve linear optimization problems so this is where you look at what's happening of on a on a node in your
+
+branch and Boundary so the inner loop is just staying at one node in your branch and Boundary and if the problem that you solve there is infeasible then you can prune this node um and you never need to look at it
+
+again because we created an outer approximation of our nonlinear feasible set if that outter approximation is infeasible which is a relaxation then the nonlinear problem is also INF feasible and we can just prune that note
+
+so that's cool because then once we once we prune a node we pop out of here and we can deal with we can do other nodes um um typically that's not the case if the point is integer feasible so that's the interesting case then we're going to
+
+solve a nonlinear optimization problem and we want to do that because we want to now generate AO approximation Cuts around the solution of my nonlinear optimiz ation problem or feasibility problem and and really you don't need to
+
+worry about this because the nonlinear optimization solvers tell you which Cuts you need to generate so you generate AO approximation Cuts here and add them to your set of points so in the Inner Loop you're updating the set of points you're
+
+adding cuts to your brand to your um linear optimization problem and then there's just a little bit of housekeeping that says did I find a better point so if this is if I solve this nonlinear optimization sub problem
+
+and the point is better then I want to keep track of it because that's my best point so far uh otherwise I don't need to do anything and I keep doing round this repeat loop as long as I can add points or as long as I can add new cuts
+
+to my to my problem okay so I'm going to pause here and ask if there are questions because um this is this slide has about 14 lines too many on it for my taste so um does has anybody implemented a branch
+
+and cut procedure ever if you have then you can you recognize this okay I saw a couple of people nodding in the audience very good so hopefully there were no mistakes here um okay let's just move on but but ask
+
+questions just just raise your hand if you want to go on correct we're adding we're only adding Global Cuts I'm not doing anything about local Cuts here yeah so that happens because I have I add them to all the open nodes because
+
+I have a single set of points p and so this set of points P gets updated and then anything that's on the Heap when I when I pop it out of the Heap will have that P in it oh now you're asking very so you're
+
+asking is it necessary to eat at the cut to all the notes in the tree and that's a really clever question because I so I have my branch in B tree I'm moving along I'm at this note here um let's make this a red
+
+note um I'm looking at this note here and I'm I'm doing my cut generation here and I could in principle now at the moment I'm adding the cuts everywhere so I'm distribut I make sure they go everywhere but I could just use them in
+
+this sub tree that I'm looking at here for example um so that that really those are algorithmic choices and other ideas that you can pursue afterwards and in the next lecture I'll talk a little bit about the
+
+implementation details of how to make this work this algorithm doesn't work very well so there there's a lot that you need to do and that comes in the next lecture um so just a couple of comments the initial implementation I believe was
+
+done on in gums so that's an algebraic modeling system and that shows you how cool these things are right you can implement this really complex algorithm in this modeling system and it worked um so kada Gosman did that um we did it in
+
+implementation using filter sqp yes they kept track of the tree themselves so yeah you do it for small problems it's okay um uh we did this using filter skp and MTO MTO is a mixed integer nonlinear optimization package by Martin
+
+salberg um uh this basic framework works okay but it's not very fast uh you need a range of additional features to make this work um and there are versions of it in bonman and minor which are much more recent um and you could in
+
+principle extend this to Global optimization branch and cut approaches and so on so there's lots of extensions there so but hang on a second I said said at one point I said um if we add cuts to this problem we need to we can't
+
+just delete it from our branch and bound treat why do we need to do this I just want to emphasize this because the once I add a cut to a to a note in my tree the integer assignment that I found there is no longer valid it's no longer
+
+a solution here but there could be other integer points for the nonlinear problem that I haven't visited yet that I may need to Vis revisit so to reemphasize that's a very important difference to Branch traditional branch and
+
+cut okay so this is arguably the best way of solving mixed null optimization problems it's not the one that will solve all problems the fastest but it's probably the one that solves most problems the fastest and there are
+
+various implementation to make it work you need additional features and I'll talk about this in the next on the next set of slides um what one thing that's clear is you want to reuse the the tools that go
+
+into it so when we implemented this using MTO we made use of all the tricks that MTO had that that made it actually an efficient solver um and the nice thing is you only have one tree that you need to search
+
+you don't lose the information of the research that you've done um the last point is is maybe a little bit of a a stretch to call it branch and cut and this will become clear in the next lecture because you will see that
+
+you generate these integer Solutions you generate very very few of them and so um you really want uh to make it more like a branch and cut algorithm you probably want to start generating cuts at other points that are
+
+not integer feasible as well and that's what's actually done as well in in some of these algorithms so with that this is the coolest algorithm for minow um but let me know if you have questions please yes oh there was some no he was
+
+up first no so the the reason is that the outter approximation card are outo approximations of the nonon of the of the convex functions so they they're always of the form where I have a I have some nonlinear
+
+constraint um and I I have variables X and Y um so why are my integers so those would be my my feasible sets and they're always of the form that um when I initially solve my my linear programming relaxation if I
+
+if I hit um an integer point I might hit it out here um I will I will linearize this nonlinear constraint here and by linearizing this nonlinear constraint I ensure that I never cut off I can never cut off points that's that's the nice
+
+thing about convexity that you're always creating a supporting hyperplane and it doesn't matter where in the tree you do this because the the nonlinear constraint is valid throughout the tree so what you're doing is you're you you
+
+have this nonlinear constraint that you you worry about but you're not looking at it while you're searching the tree you're only looking at at linearizations of it just occasionally you want to make sure that you want to tighten and get
+
+closer to the feasible set and it's I oh the reason why it's not cutting off is because the cut is always a cut in all my integer variables and all my continuous variables so it's always a global cut so my out
+
+approximation cuts are they're always Global Cuts because they involve all variables so even though I generate them in a point in the tree where some of the variables are fixed I take that fixing out before I generate the before I
+
+generate the cut that's that's the key part and I think that's that was your question because in branch and cut your your sort of fixed points you already here I already fixed when I get to this point I've already fixed two variables
+
+but I take that fixing out and then generate the cut that's why it is sorry I didn't understand your question correctly but now I think I have a better answer
