@@ -15,7 +15,7 @@
 | 3 | S003 | 2017 | Mixed-integer quadratic programming is in NP | Mathematical Programming | 205 | journal | arXiv | txt | 10 | core | carded |
 | 4 | S004 | 2016 | Improving the integer L-shaped method | INFORMS Journal on Computing | 204 | journal | url | txt | 26 | core | carded |
 | 5 | S005 | 2017 | New formulation and strong MISOCP relaxations for AC optimal transmission switching problem | IEEE Transactions on Power Systems | 202 | journal | arXiv | txt | 25 | core | carded |
-| 6 | S006 | 2016 | Inexactness of SDP relaxation and valid inequalities for optimal power flow | IEEE Transactions on Power Systems | 178 | journal | arXiv | txt | 25 | core | — |
+| 6 | S006 | 2016 | Inexactness of SDP relaxation and valid inequalities for optimal power flow | IEEE Transactions on Power Systems | 178 | journal | arXiv | txt | 25 | core | carded |
 | 7 | S007 | 2022 | Complexity of training ReLU neural network | Discrete Optimization | 117 | journal | arXiv | txt | 21 | core | carded |
 | 8 | S008 | 2018 | Matrix minor reformulation and SOCP-based spatial branch-and-cut method for the AC optimal power flow problem: B. Kocuk et al. | Mathematical Programming Computation | 98 | journal | arXiv | txt | 43 | core | carded |
 | 9 | S009 | 2016 | A cycle-based formulation and valid inequalities for DC power transmission problems with switching | Operations Research | 97 | journal | arXiv | txt | 33 | core | carded |
