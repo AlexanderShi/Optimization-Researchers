@@ -70,15 +70,15 @@
 | 58 | S058 | 2025 | On the semidefinite representability of continuous quadratic submodular minimization with applications to moment problems | arXiv preprint arXiv:2504.03996 | 4 | preprint | arXiv | txt | 49 | core | carded |
 | 59 | S059 | 2017 | A branch-and-bound algorithm for instrumental variable quantile regression | Mathematical Programming Computation | 4 | journal | url | txt | 27 | supplement | carded |
 | 60 | S060 | 2014 | A first-order smoothing technique for a class of large-scale linear programs | SIAM Journal on Optimization | 4 | journal | url | txt | 23 | supplement | skimmed |
-| 61 | S061 | 2021 | Correction to: Exact semidefinite formulations for a class of (random and non-random) nonconvex quadratic programs | Mathematical Programming | 3 | journal | arXiv | txt | 20 | core | unreadable |
+| 61 | S061 | 2021 | Correction to: Exact semidefinite formulations for a class of (random and non-random) nonconvex quadratic programs | Mathematical Programming | 3 | journal | manual | txt | 4 | core | abstract |
 | 62 | S062 | 2019 | Three methods for robust grading | European Journal of Operational Research | 2 | journal | url | txt | 8 | supplement | carded |
 | 63 | S063 | 2011 | A semidefinite programming approach to the hypergraph minimum bisection problem | Optimization | 2 | journal | url | txt | 16 | supplement | carded |
 | 64 | S065 | 2026 | Applications of the Lorentz positive cone in nonconvex quadratic optimization | arXiv preprint arXiv:2609.32017 | — | preprint | arXiv | txt | 22 | core | carded |
 | 65 | S067 | 2024 | Convex Hulls in Quadratic Space | Encyclopedia of Optimization | — | chapter | url | txt | 6 | core | carded |
-| 66 | S068 | 2006 | CAREER: Computation, Theory, and Applications for Nonconvex Quadratic and Conic Optimization | NSF Award Number 0545514 | — | other | — | no-oa |  | supplement | — |
-| 67 | S069 | 2002 | Collaborative Research: Theory and Implementation of Semidefinite Programming and Its Application to Combinatorial Optimization | NSF Award Number 0203426 | — | other | — | no-oa |  | supplement | — |
-| 68 | S070 | 2001 | New algorithmic approaches for semidefinite programming with applications to combinatorial optimization | Georgia Institute of Technology | — | thesis | — | no-oa |  | supplement | — |
-| 69 | D001 | 2017 | Editorial | Discrete Optimization | — | other | — | no-oa |  | supplement | — |
+| 66 | S068 | 2006 | CAREER: Computation, Theory, and Applications for Nonconvex Quadratic and Conic Optimization | NSF Award Number 0545514 | — | other | — | no-oa |  | supplement | abstract |
+| 67 | S069 | 2002 | Collaborative Research: Theory and Implementation of Semidefinite Programming and Its Application to Combinatorial Optimization | NSF Award Number 0203426 | — | other | — | no-oa |  | supplement | abstract |
+| 68 | S070 | 2001 | New algorithmic approaches for semidefinite programming with applications to combinatorial optimization | Georgia Institute of Technology | — | thesis | — | no-oa |  | supplement | metadata |
+| 69 | D001 | 2017 | Editorial | Discrete Optimization | — | other | — | no-oa |  | supplement | metadata |
 | 70 | H001 | 2010 | COAP 2009 best paper award | Computational Optimization and Applications | — | other | url | txt | 4 | core | carded |
 | 71 | H002 | 2009 | SDPLR 1.03-beta User's Guide (short version) | — | — | other | url | txt | 5 | supplement | carded |
 
