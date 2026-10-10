@@ -150,5 +150,21 @@
 | 138 | S143 | 2011 | Conference on Integer Programming and Combinatorial Optimization IPCO XV | Conference on Integer Programming and Combinatorial Optimization IPCO XV | — | other | — | no-oa |  | supplement | — |
 | 139 | S144 | 2011 | O-046 MSX genes direct embryo implantation by regulating the luminal epithelial cell polarity | Human Reproduction | — | other | — | no-oa |  | supplement | — |
 | 140 | S145 | 2011 | COMPANY SYMPOSIUM, MSD COMPANY SYMPOSIUM, Monday 4 July 2011 14: 00-15: 15, INVITED SESSION, SESSION 12: CELL-CELL COMMUNICATION, Monday 4 July 2011 14: 00-15: 00 | Human Reproduction | — | other | — | no-oa |  | supplement | — |
+| 141 | S146 | 2010 | Collaborative Research: Fundamentals of Convex Mixed Integer Nonlinear Programming | NSF Award Number 1030422 | — | other | — | no-oa |  | supplement | — |
+| 142 | S153 | — | New Proofs of Exact LP Reformulations for Binary Polynomial Optimization with Bounded Treewidth | — | — | preprint | manual | txt | 17 | supplement | — |
+| 143 | S154 | — | Charging Station Placement Optimization for Electric Vehicles Integrated with Public Transit | Available at SSRN 6637906 | — | preprint | — | no-oa |  | supplement | — |
+| 144 | S155 | — | Charging Station Placement Optimization for Electric Vehicles | Available at SSRN 6592362 | — | preprint | — | no-oa |  | supplement | — |
+| 145 | S157 | — | The Treewidth-Convex HullTheorem and DP for Cut Generation in MINLP | — | — | other | — | no-oa |  | supplement | — |
+| 146 | S158 | — | Combinatorial Optimization | — | — | other | — | no-oa |  | supplement | — |
+| 147 | S159 | — | OPTIMA | — | — | other | — | no-oa |  | supplement | — |
+| 148 | S160 | — | Aggregations of quadratic inequalities and hidden hyperplane convexity | 2023 Spring Southeastern Sectional Meeting | — | talk | — | no-oa |  | skip | — |
+| 149 | S161 | — | Row-sparse principal component analysis with guarantees | — | — | other | — | no-oa |  | supplement | — |
+| 150 | S166 | — | New MIP approaches to the floor layout problem | — | — | other | — | no-oa |  | supplement | — |
+| 151 | D001 | 2011 | On the Chvátal-Gomory Closure of a Compact Convex Set | IPCO | — | conference | manual | txt | 18 | supplement | — |
+| 152 | D002 | 2017 | Relaxations and discretizations for the pooling problem | J. Glob. Optim. 67(3) | — | journal | manual | txt | 28 | supplement | — |
+| 153 | D003 | 2023 | Branch-and-bound solves random binary IPs in poly(n)-time | Math. Program. 200(1) | — | journal | manual | txt | 17 | supplement | — |
+| 154 | D004 | 2024 | Sensitivity Analysis for Mixed Binary Quadratic Programming | IPCO | — | conference | manual | txt | 43 | supplement | — |
+| 155 | D005 | 2026 | Random projection with linear equalities and inequalities | arXiv preprint arXiv:2610.09324 | — | preprint | manual | txt | 17 | supplement | — |
+| 156 | H001 | — | Modeling and Solving the Large Scale EV Charger Location Planning Problem | — | — | preprint | manual | txt | 22 | supplement | — |
 
-140 works · txt 116 · pdf 0 · no-oa 24
+156 works · txt 123 · pdf 0 · no-oa 33
