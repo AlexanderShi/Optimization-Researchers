@@ -21,10 +21,10 @@
 | 9 | S009 | 2016 | A cycle-based formulation and valid inequalities for DC power transmission problems with switching | Operations Research | 97 | journal | arXiv | txt | 33 | core | carded |
 | 10 | S010 | 2014 | Covering linear programming with violations | INFORMS Journal on Computing | 96 | journal | url | txt | 22 | core | carded |
 | 11 | S011 | 2018 | Theoretical challenges towards cutting-plane selection: SS Dey, M. Molinaro | Mathematical Programming | 94 | journal | manual | txt | 36 | core | carded |
-| 12 | S012 | 2013 | Pooling problems: relaxations and discretizations | School of Industrial and Systems Engineering, Georgia Institute of Technology | 94 | report | — | no-oa |  | core | — |
+| 12 | S012 | 2013 | Pooling problems: relaxations and discretizations | School of Industrial and Systems Engineering, Georgia Institute of Technology | 94 | report | — | no-oa |  | core | metadata |
 | 13 | S013 | 2010 | Two row mixed-integer cuts via lifting | Mathematical Programming | 86 | journal | manual | txt | 32 | core | carded |
 | 14 | S014 | 2015 | Analysis of MILP techniques for the pooling problem | Operations Research | 82 | journal | manual | txt | 40 | core | carded |
-| 15 | S015 | 2008 | Lifting integer variables in minimal inequalities corresponding to lattice-free triangles | International Conference on Integer Programming and Combinatorial Optimization | 81 | conference | — | no-oa |  | core | — |
+| 15 | S015 | 2008 | Lifting integer variables in minimal inequalities corresponding to lattice-free triangles | International Conference on Integer Programming and Combinatorial Optimization | 81 | conference | — | no-oa |  | core | abstract |
 | 16 | S016 | 2010 | Constrained infinite group relaxations of MIPs | SIAM Journal on Optimization | 79 | journal | manual | txt | 23 | core | carded |
 | 17 | S017 | 2022 | Using ℓ1-Relaxation and Integer Programming to Obtain Dual Bounds for Sparse PCA | Operations Research | 64 | journal | manual | txt | 42 | core | carded |
 | 18 | S018 | 2011 | The split closure of a strictly convex body | Operations Research Letters | 64 | journal | manual | txt | 10 | core | carded |
@@ -39,7 +39,7 @@
 | 27 | S027 | 2021 | Using submodularity within column generation to solve the flight-to-gate assignment problem | Transportation Research Part C: Emerging Technologies | 41 | journal | manual | txt | 35 | supplement | carded |
 | 28 | S028 | 2015 | Approximating polyhedra with sparse inequalities | Mathematical Programming | 41 | journal | manual | txt | 22 | core | carded |
 | 29 | S029 | 2013 | Some properties of convex hulls of integer points contained in general convex sets | Mathematical Programming | 40 | journal | manual | txt | 21 | supplement | skimmed |
-| 30 | S030 | 2009 | The group-theoretic approach in mixed integer programming | 50 Years of Integer Programming 1958-2008: From the Early Years to the State of the Art | 40 | chapter | — | no-oa |  | supplement | — |
+| 30 | S030 | 2009 | The group-theoretic approach in mixed integer programming | 50 Years of Integer Programming 1958-2008: From the Early Years to the State of the Art | 40 | chapter | — | no-oa |  | supplement | abstract |
 | 31 | S031 | 2021 | Branch-and-bound solves random binary ips in polytime | Proceedings of the 2021 ACM-SIAM Symposium on Discrete Algorithms (SODA) | 38 | conference | manual | txt | 17 | core | carded |
 | 32 | S032 | 2020 | The convex hull of a quadratic constraint over a polytope | SIAM Journal on Optimization | 38 | journal | manual | txt | 14 | core | carded |
 | 33 | S033 | 2011 | Split rank of triangle and quadrilateral inequalities | Mathematics of Operations Research | 38 | journal | manual | txt | 39 | core | carded |
@@ -47,7 +47,7 @@
 | 35 | S035 | 2022 | Sparse PSD approximation of the PSD cone | Mathematical Programming | 36 | journal | manual | txt | 21 | core | carded |
 | 36 | S036 | 2012 | Two dimensional lattice-free cuts and asymmetric disjunctions for mixed-integer polyhedra | Mathematical Programming | 36 | journal | manual | txt | 29 | supplement | skimmed |
 | 37 | S037 | 2012 | A strong dual for conic mixed-integer programs | SIAM Journal on Optimization | 34 | journal | manual | txt | 15 | supplement | skimmed |
-| 38 | S038 | 2010 | Experiments with two row tableau cuts | International Conference on Integer Programming and Combinatorial Optimization | 34 | conference | — | no-oa |  | supplement | — |
+| 38 | S038 | 2010 | Experiments with two row tableau cuts | International Conference on Integer Programming and Combinatorial Optimization | 34 | conference | — | no-oa |  | supplement | abstract |
 | 39 | S039 | 2018 | Aggregation-based cutting-planes for packing and covering integer programs | Mathematical Programming | 33 | journal | manual | txt | 25 | supplement | skimmed |
 | 40 | S040 | 2020 | Optimization-driven scenario grouping | INFORMS Journal on Computing | 32 | journal | manual | txt | 36 | supplement | skimmed |
 | 41 | S041 | 2019 | New SOCP relaxation and branching rule for bipartite bilinear programs: SS Dey et al. | Optimization and Engineering | 32 | journal | manual | txt | 25 | supplement | carded |
@@ -63,7 +63,7 @@
 | 51 | S051 | 2020 | Convexifications of rank-one-based substructures in QCQPs and applications to the pooling problem | Journal of Global Optimization | 22 | journal | manual | txt | 33 | core | carded |
 | 52 | S052 | 2014 | On the practical strength of two-row tableau cuts | INFORMS Journal on Computing | 21 | journal | manual | txt | 30 | core | carded |
 | 53 | S053 | 2010 | Composite lifting of group inequalities and an application to two-row mixing inequalities | Discrete Optimization | 21 | journal | manual | txt | 19 | supplement | skimmed |
-| 54 | S054 | 2010 | The Chvátal-Gomory closure of an ellipsoid is a polyhedron | International conference on integer programming and combinatorial optimization | 21 | conference | — | no-oa |  | supplement | — |
+| 54 | S054 | 2010 | The Chvátal-Gomory closure of an ellipsoid is a polyhedron | International conference on integer programming and combinatorial optimization | 21 | conference | — | no-oa |  | supplement | abstract |
 | 55 | S055 | 2022 | Hyperbolic Relaxation of k-Locally Positive Semidefinite Matrices | SIAM Journal on Optimization | 20 | journal | manual | txt | 21 | supplement | skimmed |
 | 56 | S056 | 2019 | Nonunique lifting of integer variables in minimal inequalities | SIAM Journal on Discrete Mathematics | 20 | journal | manual | txt | 28 | core | carded |
 | 57 | S057 | 2023 | Solving sparse principal component analysis with global support | Mathematical Programming | 19 | journal | manual | txt | 38 | supplement | skimmed |
@@ -75,7 +75,7 @@
 | 63 | S063 | 2011 | On mixed-integer sets with two integer variables | Operations Research Letters | 14 | journal | manual | txt | 10 | supplement | carded |
 | 64 | S064 | 2023 | Variable selection for kernel two-sample tests | arXiv preprint arXiv:2302.07415 | 13 | preprint | manual | txt | 42 | supplement | skimmed |
 | 65 | S065 | 2015 | Some lower bounds on sparse outer approximations of polytopes | Operations Research Letters | 13 | journal | manual | txt | 11 | supplement | skimmed |
-| 66 | S066 | 2007 | Sequential-merge facets for two-dimensional group problems | International Conference on Integer Programming and Combinatorial Optimization | 13 | conference | — | no-oa |  | supplement | — |
+| 66 | S066 | 2007 | Sequential-merge facets for two-dimensional group problems | International Conference on Integer Programming and Combinatorial Optimization | 13 | conference | — | no-oa |  | supplement | abstract |
 | 67 | S067 | 2026 | Sensitivity analysis for mixed binary quadratic programming | Mathematical Programming | 12 | journal | manual | txt | 43 | core | carded |
 | 68 | S068 | 2020 | Subset selection in sparse matrices | SIAM Journal on Optimization | 12 | journal | manual | txt | 19 | supplement | skimmed |
 | 69 | S069 | 2018 | Strong mixed-integer formulations for the floor layout problem | INFOR: Information Systems and Operational Research | 12 | journal | manual | txt | 39 | supplement | skimmed |
@@ -83,7 +83,7 @@
 | 71 | S071 | 2022 | On obtaining the convex hull of quadratic inequalities via aggregations | SIAM Journal on Optimization | 11 | journal | manual | txt | 25 | core | carded |
 | 72 | S072 | 2009 | Linear-programming-based lifting and its application to primal cutting-plane algorithms | INFORMS Journal on Computing | 11 | journal | manual | txt | 32 | supplement | skimmed |
 | 73 | S073 | 2017 | Some cut-generating functions for second-order conic sets | Discrete Optimization | 10 | journal | manual | txt | 17 | supplement | skimmed |
-| 74 | S074 | 2007 | Strong cutting planes for unstructured mixed integer programs using multiple constraints | Purdue University | 10 | thesis | — | no-oa |  | supplement | — |
+| 74 | S074 | 2007 | Strong cutting planes for unstructured mixed integer programs using multiple constraints | Purdue University | 10 | thesis | — | no-oa |  | supplement | abstract |
 | 75 | S075 | 2025 | Optimizing the design and operation of water networks: Two decomposition approaches | Computers & Chemical Engineering | 9 | journal | manual | txt | 29 | core | carded |
 | 76 | S076 | 2024 | On sparse canonical correlation analysis | Advances in Neural Information Processing Systems 37 | 9 | conference | manual | txt | 24 | core | carded |
 | 77 | S077 | 2024 | Aggregations of quadratic inequalities and hidden hyperplane convexity | SIAM Journal on Optimization | 9 | journal | manual | txt | 27 | core | carded |
@@ -96,10 +96,10 @@
 | 84 | S084 | 2014 | How good are sparse cutting-planes? | International Conference on Integer Programming and Combinatorial Optimization | 8 | conference | manual | txt | 20 | core | carded |
 | 85 | S085 | 2023 | Lifting convex inequalities for bipartite bilinear programs | Mathematical Programming | 7 | journal | manual | txt | 26 | supplement | skimmed |
 | 86 | S086 | 2022 | Lower bound on size of branch-and-bound trees for solving lot-sizing problem | Operations Research Letters | 7 | journal | manual | txt | 6 | supplement | carded |
-| 87 | S087 | 2020 | MIPLearn: an extensible framework for learning-enhanced optimization | URL https://anl-ceeesa. github. io/MIPLearn | 7 | other | — | no-oa |  | supplement | — |
+| 87 | S087 | 2020 | MIPLearn: an extensible framework for learning-enhanced optimization | URL https://anl-ceeesa. github. io/MIPLearn | 7 | other | — | no-oa |  | supplement | abstract |
 | 88 | S088 | 2017 | Sparse principal component analysis and its ℓ1-relaxation | arXiv preprint arXiv:1712.00800 | 7 | preprint | manual | txt | 17 | supplement | skimmed |
 | 89 | S089 | 2016 | On a cardinality-constrained transportation problem with market choice | Operations Research Letters | 6 | journal | manual | txt | 15 | supplement | carded |
-| 90 | S090 | 2015 | Pooling problems: an overview | Optimization and Analytics in the Oil and Gas Industry | 6 | chapter | — | no-oa |  | supplement | — |
+| 90 | S090 | 2015 | Pooling problems: an overview | Optimization and Analytics in the Oil and Gas Industry | 6 | chapter | — | no-oa |  | supplement | metadata |
 | 91 | S091 | 2012 | Forbidding extreme points from the 0-1 hypercube | Optimization Online | 6 | preprint | manual | txt | 8 | supplement | carded |
 | 92 | S092 | 2026 | A second-order cone representable class of nonconvex quadratic programs | Mathematical Programming | 5 | journal | manual | txt | 29 | core | carded |
 | 93 | S093 | 2016 | Groves mechanisms and communication externalities | Review of Economic Design | 5 | journal | manual | txt | 37 | supplement | skimmed |
@@ -110,7 +110,7 @@
 | 98 | S098 | 2022 | Exploiting instance and variable similarity to improve learning-enhanced branching | arXiv preprint arXiv:2208.10028 | 3 | preprint | manual | txt | 16 | core | carded |
 | 99 | S099 | 2019 | Lower bounds on the lattice-free rank for packing and covering integer programs | SIAM Journal on Optimization | 3 | journal | manual | txt | 23 | supplement | carded |
 | 100 | S100 | 2018 | Beating the SDP bound for the floor layout problem: A simple combinatorial idea | INFOR: Information Systems and Operational Research | 3 | journal | manual | txt | 24 | supplement | carded |
-| 101 | S102 | — | Gomory functions | Personal communication | 3 | other | — | no-oa |  | supplement | — |
+| 101 | S102 | — | Gomory functions | Personal communication | 3 | other | — | no-oa |  | supplement | metadata |
 | 102 | S103 | 2026 | Aggregation of bilinear bipartite equality constraints and its application to structural model updating problem: S. Dey, D. Han, Y. Wang | Journal of Global Optimization | 2 | journal | manual | txt | 32 | core | carded |
 | 103 | S104 | 2025 | Lagrangian dual for integer optimization with zero duality gap that admits decomposition | International Conference on Integer Programming and Combinatorial... | 2 | conference | manual | txt | 38 | core | carded |
 | 104 | S105 | 2024 | Solving sparse separable bilinear programs using lifted bilinear cover inequalities | INFORMS Journal on Computing | 2 | journal | manual | txt | 23 | core | carded |
@@ -121,7 +121,7 @@
 | 109 | S111 | 2026 | Strengthening dual bounds for multicommodity capacitated network design with unsplittable flow constraints | European Journal of Operational Research | 1 | journal | manual | txt | 37 | core | carded |
 | 110 | S112 | 2026 | Geoffrion's theorem beyond finiteness and rationality | Operations Research Letters | 1 | journal | manual | txt | 9 | core | carded |
 | 111 | S113 | 2023 | Integer programming and combinatorial optimization (IPCO) 2021 | Mathematical Programming | 1 | other | manual | txt | 2 | supplement | carded |
-| 112 | S114 | 2022 | Combinatorial Optimization: 7th International Symposium, ISCO 2022, Virtual Event, May 18–20, 2022, Revised Selected Papers | Springer Nature | 1 | book | — | no-oa |  | supplement | — |
+| 112 | S114 | 2022 | Combinatorial Optimization: 7th International Symposium, ISCO 2022, Virtual Event, May 18–20, 2022, Revised Selected Papers | Springer Nature | 1 | book | — | no-oa |  | supplement | metadata |
 | 113 | S115 | 2018 | Guest Editorial Special Section on Optimization Techniques in Renewable Energy System Planning, Design, Operation, and Control | IEEE Transactions on Sustainable Energy | 1 | other | manual | txt | 3 | supplement | carded |
 | 114 | S116 | 2016 | Closedness of integer hulls of simple conic sets | SIAM Journal on Discrete Mathematics | 1 | journal | manual | txt | 25 | supplement | skimmed |
 | 115 | S117 | 2026 | Decomposition of Sparse Integer Programs via Nonlinear Edge Encodings and Column-and-Row Generation | arXiv preprint arXiv:2609.05665 | — | preprint | manual | txt | 35 | core | carded |
@@ -133,33 +133,33 @@
 | 121 | S123 | 2026 | Extreme strong branching for QCQPs | Operations Research Letters | — | journal | manual | txt | 12 | core | carded |
 | 122 | S124 | 2026 | Mixed-Integer Programming for Change-point Detection | arXiv preprint arXiv:2602.11947 | — | preprint | manual | txt | 24 | core | carded |
 | 123 | S125 | 2026 | Asymptotically tight Lagrangian dual of smooth nonconvex problems via improved error bound of Shapley-Folkman Lemma | arXiv preprint arXiv:2601.19003 | — | preprint | manual | txt | 25 | core | carded |
-| 124 | S126 | 2026 | Preface:: Combinatorial Optimization ISCO 2022 | — | — | other | — | no-oa |  | core | — |
-| 125 | S127 | 2026 | Integer Programming and Combinatorial Optimization | Lecture Notes in Computer Science | — | book | — | no-oa |  | core | — |
-| 126 | S128 | 2025 | Combined Bound Tightening on McCormick Relaxations of AC Optimal Power Flow | 2025 57th North American Power Symposium (NAPS) | — | conference | — | no-oa |  | core | — |
+| 124 | S126 | 2026 | Preface:: Combinatorial Optimization ISCO 2022 | — | — | other | — | no-oa |  | core | metadata |
+| 125 | S127 | 2026 | Integer Programming and Combinatorial Optimization | Lecture Notes in Computer Science | — | book | — | no-oa |  | core | metadata |
+| 126 | S128 | 2025 | Combined Bound Tightening on McCormick Relaxations of AC Optimal Power Flow | 2025 57th North American Power Symposium (NAPS) | — | conference | — | no-oa |  | core | abstract |
 | 127 | S129 | 2025 | Convexification of a Separable Function over a Polyhedral Ground Set | arXiv preprint arXiv:2510.16595 | — | preprint | manual | txt | 26 | core | carded |
 | 128 | S130 | 2025 | Improving Full Strong Branching Decisions by Incorporating Additional Information | arXiv preprint arXiv:2507.09455 | — | preprint | manual | txt | 39 | core | carded |
-| 129 | S131 | 2025 | Improving Dual Bounds for the Unsplittable Multicommodity Capacitated Network Design Problem | — | — | other | — | no-oa |  | core | — |
-| 130 | S132 | 2025 | Charging Station Placement Optimization for Electric Vehicles Integrated with Rail Transit | IISE Annual Conference. Proceedings | — | conference | — | no-oa |  | core | — |
+| 129 | S131 | 2025 | Improving Dual Bounds for the Unsplittable Multicommodity Capacitated Network Design Problem | — | — | other | — | no-oa |  | core | metadata |
+| 130 | S132 | 2025 | Charging Station Placement Optimization for Electric Vehicles Integrated with Rail Transit | IISE Annual Conference. Proceedings | — | conference | — | no-oa |  | core | abstract |
 | 131 | S133 | 2025 | Hyperconnected Facility Location Contracting | Georgia Institute of Technology | — | conference | manual | txt | 10 | core | carded |
 | 132 | S134 | 2021 | Trilevel Programming for Network Segmentation of Power System Cyber-Physical System. | Sandia National Laboratories (SNL-NM) | — | talk | — | no-oa |  | skip | — |
 | 133 | S135 | 2021 | Lifting Convex Inequalities for Bipartite Bilinear Programs | Integer Programming and Combinatorial Optimization: 22nd International… | — | conference | manual | txt | 26 | supplement | skimmed |
-| 134 | S138 | 2016 | Sparse Integer Programming | NSF Award Number 1562578 | — | other | — | no-oa |  | supplement | — |
-| 135 | S139 | 2015 | Selective Optimization | — | — | other | — | no-oa |  | supplement | — |
-| 136 | S140 | 2013 | A polynomial-time algorithm to check closedness of simple second order mixed-integer sets | International Conference on Integer Programming and Combinatorial… | — | conference | — | no-oa |  | supplement | — |
-| 137 | S141 | 2012 | CAREER: Non-traditional Cutting-Plane Algorithms for Mixed-Integer Programs | NSF Award Number 1149400 | — | other | — | no-oa |  | supplement | — |
-| 138 | S143 | 2011 | Conference on Integer Programming and Combinatorial Optimization IPCO XV | Conference on Integer Programming and Combinatorial Optimization IPCO XV | — | other | — | no-oa |  | supplement | — |
-| 139 | S144 | 2011 | O-046 MSX genes direct embryo implantation by regulating the luminal epithelial cell polarity | Human Reproduction | — | other | — | no-oa |  | supplement | — |
-| 140 | S145 | 2011 | COMPANY SYMPOSIUM, MSD COMPANY SYMPOSIUM, Monday 4 July 2011 14: 00-15: 15, INVITED SESSION, SESSION 12: CELL-CELL COMMUNICATION, Monday 4 July 2011 14: 00-15: 00 | Human Reproduction | — | other | — | no-oa |  | supplement | — |
-| 141 | S146 | 2010 | Collaborative Research: Fundamentals of Convex Mixed Integer Nonlinear Programming | NSF Award Number 1030422 | — | other | — | no-oa |  | supplement | — |
+| 134 | S138 | 2016 | Sparse Integer Programming | NSF Award Number 1562578 | — | other | — | no-oa |  | supplement | abstract |
+| 135 | S139 | 2015 | Selective Optimization | — | — | other | — | no-oa |  | supplement | metadata |
+| 136 | S140 | 2013 | A polynomial-time algorithm to check closedness of simple second order mixed-integer sets | International Conference on Integer Programming and Combinatorial… | — | conference | — | no-oa |  | supplement | abstract |
+| 137 | S141 | 2012 | CAREER: Non-traditional Cutting-Plane Algorithms for Mixed-Integer Programs | NSF Award Number 1149400 | — | other | — | no-oa |  | supplement | abstract |
+| 138 | S143 | 2011 | Conference on Integer Programming and Combinatorial Optimization IPCO XV | Conference on Integer Programming and Combinatorial Optimization IPCO XV | — | other | — | no-oa |  | supplement | metadata |
+| 139 | S144 | 2011 | O-046 MSX genes direct embryo implantation by regulating the luminal epithelial cell polarity | Human Reproduction | — | other | — | no-oa |  | supplement | metadata |
+| 140 | S145 | 2011 | COMPANY SYMPOSIUM, MSD COMPANY SYMPOSIUM, Monday 4 July 2011 14: 00-15: 15, INVITED SESSION, SESSION 12: CELL-CELL COMMUNICATION, Monday 4 July 2011 14: 00-15: 00 | Human Reproduction | — | other | — | no-oa |  | supplement | metadata |
+| 141 | S146 | 2010 | Collaborative Research: Fundamentals of Convex Mixed Integer Nonlinear Programming | NSF Award Number 1030422 | — | other | — | no-oa |  | supplement | abstract |
 | 142 | S153 | — | New Proofs of Exact LP Reformulations for Binary Polynomial Optimization with Bounded Treewidth | — | — | preprint | manual | txt | 17 | supplement | carded |
-| 143 | S154 | — | Charging Station Placement Optimization for Electric Vehicles Integrated with Public Transit | Available at SSRN 6637906 | — | preprint | — | no-oa |  | supplement | — |
-| 144 | S155 | — | Charging Station Placement Optimization for Electric Vehicles | Available at SSRN 6592362 | — | preprint | — | no-oa |  | supplement | — |
-| 145 | S157 | — | The Treewidth-Convex HullTheorem and DP for Cut Generation in MINLP | — | — | other | — | no-oa |  | supplement | — |
-| 146 | S158 | — | Combinatorial Optimization | — | — | other | — | no-oa |  | supplement | — |
-| 147 | S159 | — | OPTIMA | — | — | other | — | no-oa |  | supplement | — |
+| 143 | S154 | — | Charging Station Placement Optimization for Electric Vehicles Integrated with Public Transit | Available at SSRN 6637906 | — | preprint | — | no-oa |  | supplement | abstract |
+| 144 | S155 | — | Charging Station Placement Optimization for Electric Vehicles | Available at SSRN 6592362 | — | preprint | — | no-oa |  | supplement | abstract |
+| 145 | S157 | — | The Treewidth-Convex HullTheorem and DP for Cut Generation in MINLP | — | — | other | — | no-oa |  | supplement | metadata |
+| 146 | S158 | — | Combinatorial Optimization | — | — | other | — | no-oa |  | supplement | metadata |
+| 147 | S159 | — | OPTIMA | — | — | other | — | no-oa |  | supplement | metadata |
 | 148 | S160 | — | Aggregations of quadratic inequalities and hidden hyperplane convexity | 2023 Spring Southeastern Sectional Meeting | — | talk | — | no-oa |  | skip | — |
-| 149 | S161 | — | Row-sparse principal component analysis with guarantees | — | — | other | — | no-oa |  | supplement | — |
-| 150 | S166 | — | New MIP approaches to the floor layout problem | — | — | other | — | no-oa |  | supplement | — |
+| 149 | S161 | — | Row-sparse principal component analysis with guarantees | — | — | other | — | no-oa |  | supplement | metadata |
+| 150 | S166 | — | New MIP approaches to the floor layout problem | — | — | other | — | no-oa |  | supplement | metadata |
 | 151 | D001 | 2011 | On the Chvátal-Gomory Closure of a Compact Convex Set | IPCO | — | conference | manual | txt | 18 | supplement | skimmed |
 | 152 | D002 | 2017 | Relaxations and discretizations for the pooling problem | J. Glob. Optim. 67(3) | — | journal | manual | txt | 28 | core | carded |
 | 153 | D003 | 2023 | Branch-and-bound solves random binary IPs in poly(n)-time | Math. Program. 200(1) | — | journal | manual | txt | 17 | core | carded |
