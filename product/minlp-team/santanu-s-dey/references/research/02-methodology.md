@@ -383,3 +383,11 @@ Claims made once or twice appear below and are marked as single statements.
 83. Georgia Tech ARC profile (undated), https://tlwarc.hg.gatech.edu/node/71321
 84. MIT ORC seminar speaker bio, spring 2012, https://web.mit.edu/orc/www/archive/seminars/2012s/bio/Dey_bio.html
 85. Georgia Tech ECE news, D. Watson, "ENVELOPE Project Aims to Revolutionize Management and Optimization of Large-Scale Electricity Systems", 2024-11-07, https://ece.gatech.edu/news/2024/11/envelope-project-aims-revolutionize-management-and-optimization-large-scale (no quote from Dey; role only)
+
+---
+
+## Top-up (2026-10-10)
+
+Added at the Phase 1.5 review checkpoint. Identifier check only; no new search was run and the note was not otherwise changed.
+
+- Source 62 had "DOI not checked". Crossref (api.crossref.org, bibliographic query, 2026-10-10) returns doi:10.1007/s10898-016-0434-4: "Relaxations and discretizations for the pooling problem", Journal of Global Optimization 67, 631-669 (online 2016-04-27). Crossref lists the authors as Gupte, Ahmed, Dey, Cheon; source 62 gives Gupte, Ahmed, Cheon, Dey. The author order is left as a discrepancy, not resolved here.
