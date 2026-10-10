@@ -1,5 +1,31 @@
 # 蒸馏记录
 
+## 2026-10-09 (4) · Katya Scheinberg 双队强化 + nuwa 提炼纪律入标
+
+- 语料版本：6e2011c
+- 范围：双队 SKILL.md 增量更新 + 新标准 `standards/researcher-extraction.md`
+- 新标准：移植 nuwa-skill extraction-framework 的心智模型三重验证
+  （跨域复现/生成力/排他性）、矛盾处理、信息不足处理，适配主题型语料；
+  DISTILL.md Phase 0 增加必读、Phase 2 增加硬规则 4（仅三重通过的心智
+  模型可进 skill）
+- 入库核实（3 个一手页面，2026-10-09）：Georgia Tech 主页（Coca-Cola
+  Foundation Chair、MathOR 主编、MOS 主席、Lagrange/Farkas Prize）、
+  arXiv:1304.2808（随机模型信赖域）、arXiv:1807.07994（随机 Armijo
+  线搜索）；两篇期刊版均未在 arXiv 页列出 → 标需核对；生平据 Wikipedia
+  （次级来源，已标注）
+- 三重验证结果：Scheinberg 5 条候选立场 → 2 条通过（概率质量标准而非
+  期望标准；经典骨架的概率化改造），3 条降级为工作信条。Duchi 两侧档案
+  追溯补注（通过：上界必配下界、资源-统计权衡）
+- skill 变更：双队数学纪律新增 Scheinberg 准则（概率 vs 期望假设必须
+  说清）；DFO 流派表模型型支线 + R11；NLP 随机梯度支线 + H9（随机情形
+  的全局化）+ R13；来源索引 S24/S23 + 研究者名册；语料契约与诚实边界
+  → 6e2011c
+- 质量门：G1–G5 PASS（G2 新人名 Bandeira/Vicente/Paquette 均在 canon 内
+  ——Vicente 经 S14/S16 已在）。G6 增补试答：「模型不准还能用信赖域吗？」
+  → 能，模型以概率≥1/2 足够准即几乎必然收敛，但该结果限函数值无噪声
+  [DFO-R11, S24]，带噪函数值不迁移——通过
+- 执行模型：claude-fable-5
+
 ## 2026-10-09 (3) · 增量重蒸馏：John Duchi 全面加入 NLP Team
 
 - 语料版本：add5d2e（NLP 侧 Duchi 入库提交）

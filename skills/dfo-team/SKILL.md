@@ -11,7 +11,7 @@ description: |
 
 **语料契约**：本 skill 的全部事实来自
 `C:\Users\sr881\repos\Optimization-Researchers\teams\dfo-team\`
-（蒸馏日期 2026-10-09，语料版本 8a99343）。**只说语料里有的。**
+（蒸馏日期 2026-10-09，语料版本 6e2011c）。**只说语料里有的。**
 
 ## 回答工作流（最重要）
 
@@ -22,7 +22,9 @@ description: |
 3. **数学纪律**：一律 min f(x) 形式；速率必带假设与 proved-vs-cited；
    **绝不给精确常数**——正确答法：「常数需查原文 [ID]，语料记录的定性结论是…」；
    zeroth-order 速率必须保留维度因子；引用噪声相关结论必须声明噪声模型；
-   宣称某速率「最优」时必须能给出匹配下界的出处（Duchi 准则 [DFO-S21]）。
+   宣称某速率「最优」时必须能给出匹配下界的出处（Duchi 准则 [DFO-S21]）；
+   引用随机方法结论必须说清假设是「以概率 ≥ p 准确」还是「仅期望正确」
+   ——两者保证本质不同（Scheinberg 准则 [DFO-S24]）。
 4. **语料外问题**：如实说「语料库（文献覆盖至约 2026-07）未覆盖 X」。可以给
    语料内最接近的已知结论，但必须划清分界。绝不从模型记忆静默补全。
    需要新文献 → 建议把检索结果按 `standards/grounding.md` 锚点规范加进语料库，
@@ -47,7 +49,7 @@ description: |
 | 流派 | 核心思想 | 代表 | 理论货币 |
 |------|---------|------|---------|
 | 直接搜索 | 只比函数值不建模：NM [DFO-S9]、GPS [DFO-S12]、MADS [DFO-S14] | Torczon、Audet-Dennis | 全局收敛/Clarke 稳定性 |
-| 模型型信赖域 | 插值模型 + 信赖域 | Powell 谱系 [DFO-S15]、CSV [DFO-S16] | fully-linear 精度 + 收敛理论 |
+| 模型型信赖域 | 插值模型 + 信赖域 | Powell 谱系 [DFO-S15]、CSV [DFO-S16]；随机模型支线：Scheinberg [DFO-S24] | fully-linear 精度 + 收敛理论；随机模型支线用「概率≥1/2 足够准」+鞅论证替代确定性精度 |
 | 随机 zeroth-order | 随机方向差分 + 一阶框架 | KW [DFO-S18]、SPSA [DFO-S19]、Nesterov-Spokoiny [DFO-S20]、Ghadimi-Lan [DFO-S4]、Duchi（两点+下界）[DFO-S21, S23]、SMTP [DFO-S5] | oracle 复杂度（含维度因子）；Duchi 支线：上界必配下界 |
 | 进化策略 | 协方差自适应采样 | CMA-ES [DFO-S6, S8] | 基准表现；理论较弱 |
 
@@ -94,6 +96,7 @@ description: |
 | DFO-R8 | heavy-ball momentum 可并入随机 ZO（SMTP），非凸/凸/强凸均有收敛结果；≠优于无 momentum | — | verified-local [DFO-S5] |
 | DFO-R9 | profiles 暴露单一最终值排名掩盖的行为，双视角都要 | — | verified-local [DFO-S2, S8] |
 | DFO-R10 | 随机平滑+加速处理非光滑凸随机优化：方差依赖最优速率，期望+高概率双形式，可分布式 | 凸、非光滑、随机 oracle（精确假设查原文） | verified-web [DFO-S23] |
+| DFO-R11 | 随机模型信赖域：模型以概率≥1/2 足够准（非期望正确）即几乎必然收敛（鞅论证）；⚠️ 设定为函数值无噪声、不确定性只在模型，与带噪函数值世界不迁移 | f 光滑、函数值精确、模型概率精度条件（查原文） | verified-web [DFO-S24] |
 
 ## 绝不做（禁区清单，语料 05 全量移植）
 
@@ -112,9 +115,9 @@ description: |
 
 ## 诚实边界
 
-- 语料截止：蒸馏于 2026-10-09，语料版本 8a99343；文献主体覆盖至约 2026-07
-  （verified-local 工件 sources.json 采集于 2026-07-24）；Duchi 档案与
-  [DFO-S21, S23] 联网核实于 2026-10-09。
+- 语料截止：蒸馏于 2026-10-09，语料版本 6e2011c；文献主体覆盖至约 2026-07
+  （verified-local 工件 sources.json 采集于 2026-07-24）；Duchi/Scheinberg
+  档案与 [DFO-S21, S23, S24] 联网核实于 2026-10-09。
 - 研究者档案仅基于论文摘要与 Scholar 页（未读全文）：√d 因子的精确常数、
   假设细节需查原文；头衔/引用数是快照，会过时。
 - 语料缺口：贝叶斯优化、离散/组合黑盒、多目标 DFO、具体软件包工程细节。
@@ -142,10 +145,15 @@ Audet-Dennis 2006 MADS · [DFO-S15] Powell 谱系 (COBYLA/UOBYQA/NEWUOA/BOBYQA) 
 verified-web（核实 2026-10-09，arXiv abs 页）：
 [DFO-S21] Duchi-Jordan-Wainwright-Wibisono 两点零阶最优速率 arXiv:1312.2139
 （期刊版 IEEE-IT 2015 据 Scholar）· [DFO-S23] Duchi-Bartlett-Wainwright
-Randomized Smoothing arXiv:1103.4296（期刊版 SIOPT 需核对）
+Randomized Smoothing arXiv:1103.4296（期刊版 SIOPT 需核对）·
+[DFO-S24] Bandeira-Scheinberg-Vicente 随机模型信赖域 arXiv:1304.2808
+（期刊版 SIOPT 需核对）
 
-具名研究者档案：John Duchi（Stanford，随机 ZO 学派，上界必配下界）→
-语料 `teams/dfo-team/researchers/john-duchi.md`
+具名研究者档案（心智模型经三重验证，见 standards/researcher-extraction.md）：
+John Duchi（Stanford，随机 ZO 学派，上界必配下界）→
+语料 `teams/dfo-team/researchers/john-duchi.md` ·
+Katya Scheinberg（Georgia Tech，模型型学派随机模型支线：概率质量标准、
+经典骨架概率化）→ 语料 `teams/dfo-team/researchers/katya-scheinberg.md`
 
 本地工件：[DFO-L1] autoresearch 审计 2026-07-25 · [DFO-L2] momentum-vs-DFO 实验
 
