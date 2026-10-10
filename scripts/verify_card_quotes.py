@@ -40,6 +40,9 @@ def squash(s: str) -> str:
 
 
 def main():
+    for _s in (sys.stdout, sys.stderr):  # Windows: redirected output defaults to cp1252; titles carry ℓ, ε, …
+        if hasattr(_s, "reconfigure"):
+            _s.reconfigure(encoding="utf-8", errors="replace")
     ap = argparse.ArgumentParser()
     ap.add_argument("skill_dir")
     ap.add_argument("--show", type=int, default=20)

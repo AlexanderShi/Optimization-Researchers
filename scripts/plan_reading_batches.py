@@ -203,6 +203,9 @@ def members_of(target: Path, only: list[str]) -> list[Path]:
 
 
 def main():
+    for _s in (sys.stdout, sys.stderr):  # Windows: redirected output defaults to cp1252; titles carry ℓ, ε, …
+        if hasattr(_s, "reconfigure"):
+            _s.reconfigure(encoding="utf-8", errors="replace")
     ap = argparse.ArgumentParser(description="为全文深读分配角色并切分阅读批次")
     ap.add_argument("skill_dir", help="成员目录；与 --out-dir 一起用时也可以是团队目录（含 team.json）")
     ap.add_argument("--core-top", type=int, default=25)

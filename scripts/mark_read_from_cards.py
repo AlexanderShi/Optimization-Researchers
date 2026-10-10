@@ -20,6 +20,9 @@ MAP = {"full": "carded", "partial": "skimmed", "abstract": "abstract", "metadata
 
 
 def main():
+    for _s in (sys.stdout, sys.stderr):  # Windows: redirected output defaults to cp1252; titles carry ℓ, ε, …
+        if hasattr(_s, "reconfigure"):
+            _s.reconfigure(encoding="utf-8", errors="replace")
     sk = Path(sys.argv[1])
     index = sk / "references/sources/papers/INDEX.md"
     level = {}

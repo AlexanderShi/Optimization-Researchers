@@ -501,6 +501,9 @@ def run(skill_dir: Path, works_path: Path, delay: float, only: set[str], recheck
 
 
 def main():
+    for _s in (sys.stdout, sys.stderr):  # Windows: redirected output defaults to cp1252; titles carry ℓ, ε, …
+        if hasattr(_s, "reconfigure"):
+            _s.reconfigure(encoding="utf-8", errors="replace")
     global OCR_LANG
     ap = argparse.ArgumentParser(description="为研究Skill收集开放获取全文并维护论文索引")
     ap.add_argument("skill_dir")

@@ -180,6 +180,9 @@ def strip_date(text: str) -> str:
 
 
 def main():
+    for _s in (sys.stdout, sys.stderr):  # Windows: redirected output defaults to cp1252; titles carry ℓ, ε, …
+        if hasattr(_s, "reconfigure"):
+            _s.reconfigure(encoding="utf-8", errors="replace")
     ap = argparse.ArgumentParser(description="由卡片摘要生成 07-paper-cards.md")
     ap.add_argument("member_dir")
     ap.add_argument("--date", default=datetime.date.today().isoformat())
