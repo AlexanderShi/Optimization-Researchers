@@ -736,3 +736,63 @@ Accessed 2026-10-10 unless a date is given. P = primary, S = secondary.
 
 *G. Cross-reference*
 - S57. Research notes 01 (publications), 02 (methodology) and 04 (mentorship) from this run, in product/minlp-team/santanu-s-dey/references/research/. Used only for items marked "per note 0X", which were not re-verified here (S)
+
+
+## Update 2026-10-10 (full-text pass, T3.6)
+
+Source: `08-deep-reading-synthesis.md` §8–§9, built from the paper cards (`07-paper-cards.md`; 123 cards read in full or in part = 116 distinct works). Citations like [S014 pp. 14–16] point to the card and the page of the version it read. The earlier sections of this note stay as the web-research record; where the full texts change the picture, this section says so.
+
+### 8. Topics by period (full or partial cards / all cards; from 08 §8.1)
+
+| Topic | 2007–2010 | 2011–2015 | 2016–2020 | 2021–2026 | undated |
+|---|---|---|---|---|---|
+| MILP group relaxations, lifting, multi-row cuts | 8/13 | 4/4 | 1/1 | — | 0/1 |
+| Closures of convex and conic integer sets | 0/2 | 10/12 | 2/2 | 1/1 | — |
+| Sparse cuts, cut selection, aggregation closures | — | 3/3 | 5/6 | 2/2 | — |
+| Pooling and bilinear programs | — | 2/4 | 5/5 | 5/5 | — |
+| QCQP convexification and conic relaxations | — | — | 1/1 | 7/7 | 1/2 |
+| Power systems (OPF, switching, security) | — | — | 7/7 | 5/6 | — |
+| B&B theory, branching, primal-heuristic theory | — | — | 1/1 | 8/8 | — |
+| Statistics and ML through MIP | — | — | 4/5 | 9/9 | 0/1 |
+| Duality, decomposition, stochastic IP | — | — | 4/4 | 10/10 | — |
+| Network design and other OR applications | — | 5/6 | 3/3 | 6/8 | 1/4 |
+| Editorials, out-of-field, misattributed | — | 0/3 | 1/1 | 2/5 | 0/2 |
+
+Topic tags by title and card content, one tag per card [08 §8.1].
+
+### 9. Turns, as the full texts show them
+
+1. **From group-relaxation theory to closures of convex sets (2010–2014).** The MILP closure question is asked of strictly convex and then compact convex sets, each step naming the obstacle the next removes [S018 p. 2; S042 pp. 1–2; S025 pp. 2–3; D001 p. 2]. This confirms T4 on the texts.
+2. **Exit from computational multi-row cuts (2014).** "However such a goal was too ambitious and we have had to considerably restrict it." [S052 p. 2]; type 2 triangle cuts not competitive with split cuts for typical instances [S052 p. 25]; density already named as the obstacle in 2009: "Another practical difficulty with this class of cutting planes is that they tend to be dense." [S079 p. 8]. Confirms T3.
+3. **Pooling (2013–2017), back in 2020–2026 as rank-one and QCQP convexification.** [S002 pp. 2, 8–12; S014 pp. 1, 5–6; D002 pp. 2, 12–15] → [S051 pp. 1–9; S032 p. 2; S071 pp. 1–5; S077 pp. 1–2; S129 pp. 1–2]; the 2026 water-network paper continues the pooling line [S109 pp. 2, 10–14]. Links T5 and T9.
+4. **Power systems twice (2016–2018, 2022–2026).** [S006 pp. 1–3; S001 pp. 1–4; S009 p. 3; S005 p. 2; S008 pp. 5–18] → [S062 pp. 2, 4–11; S058 pp. 1, 11; S047 pp. 3, 9–11; S080 pp. 2–3]. T6 ends in 2018 for OPF relaxations, but power-system work resumes in 2022.
+5. **Worst case → random instances (2020–2026).** "In order to avoid worst-case lower bounds, a standard idea is to consider random instances." [S031 p. 2; D003 pp. 1–3]; carried to dual decomposition [S120 p. 1]. Refines T8.
+6. **Cut theory → solver rules (2018, 2024–2025).** A feasibility-pump rule implemented and recommended in 2018 [S061 pp. 12–13]; branching rules meant as experts for imitation: "one of the motivations for this paper is to discover simple rules that can improve over FSB, which can then be used as expert for machine learning algorithms to imitate." [S130 p. 2]; the GMIC heuristic [S082 p. 6].
+7. **Facets as yardstick → doubt about yardsticks (2010 → 2018–2026).** [S019 pp. 6, 20] → [S011 pp. 18–19; S117 p. 32; S122 p. 22].
+8. **Re-solved operational instances (2020–2026).** A new line not in §3: the same model re-solved with new data, with a proved carry-over license and reuse aimed at the dual side [S044 pp. 1–3, 18; S098 pp. 1–2; S082 pp. 1–2, 6, 16–17; S067 pp. 2, 7, 40]. It became Method 6 of SKILL.md (08 §4).
+9. **Duality and decomposition with a student (2024–2026).** [S097 pp. 2–5; S117 p. 2; S120 pp. 1–4; S125 pp. 1–4; D005 pp. 1–2; S112 pp. 1–5]. Confirms T12.
+10. **Network design with Sahinidis (2024–2026).** Primal-side frameworks with the dual bound from a global solver [S059 pp. 9–15; S075 pp. 1, 11, 23; S109 pp. 2, 17–19].
+
+### 10. What stayed constant
+
+- Demarcation of each theorem, in every period [S013 pp. 8–9; S033 pp. 4–5; S014 pp. 6–20; S003 pp. 2–3; S071 pp. 5–9; S118 pp. 2–4].
+- MILP ideas as the template for each new class [S018 p. 2; S037 pp. 2–3; S003 pp. 3–4; S041 p. 2; S105 pp. 1–2; S122 pp. 2–5].
+- Sparsity and decomposability as the structure to analyse [S024 pp. 5–9; S061 pp. 3, 12; S104 pp. 2, 9; S122 p. 22].
+- The dual bound as the thing missing in applications [S017 p. 1; S060 p. 27; S083 p. 1; S111 p. 2; S067 p. 2].
+
+### 11. Collaboration pattern (from 08 §9)
+
+| Period | Main coauthors (cards) | Pattern |
+|---|---|---|
+| 2007–2010 | Richard 4; Wolsey 3 | Advisor and postdoc host; group-relaxation theory |
+| 2011–2015 | Vielma 5 and Dadush 4 (closures); Ahmed 5; Molinaro 3; Morán 3; Angulo 3 | A closure-theory partnership, the junior-faculty mentor on applied IP, the start of the Molinaro partnership |
+| 2016–2020 | Molinaro 8; Kocuk 6 and X. A. Sun 5 (OPF); Ahmed 6; Del Pia 4; G. Wang 4; Santana 4 | Theory with Molinaro; applications carried by students co-advised with a domain colleague; Ahmed is marked deceased at submission on the 2020 heuristic paper [S044 p. 1] |
+| 2021–2026 | Molinaro 8; Xu 8; Shah 5; Dubey 4; Blekherman 4; Muñoz 4; Gu 4; Cifuentes 4; Sahinidis 5; Qiu and Xavier 3 | Molinaro the constant theory partner (19 cards, 2014–2026); students lead the duality (Xu), branching (Shah, Dubey) and QCQP/FEM (Han, Y. Wang) lines; former students return as coauthors (Kocuk [S129; S119]; Morán [S112; S118]; Angulo [S117]) |
+
+### 12. Corrections to earlier sections
+
+- **§2.2 / T2 (Wolsey at CORE)**: the other side's voice confirms it: "Later when Santanu Dey came to Core, my main concern was how to deal with integer non-basic variables, which again led him far beyond what was initially asked." [S079 p. 9].
+- **§3 T6 (OPF)**: the qualification "not as successful" against SDP is already in the November 2015 arXiv v4 of the 2016 paper [S001 p. 30] and repeated in the March 2017 preprint of the 2018 MPC paper [S008 p. 31]; journal texts not read.
+- **§3 T8 and §6 (cut theory never reached solver rules)**: two published rules exist [S014 pp. 14–16; S061 pp. 12–13]; the 2024–25 rules are preprints [S130 pp. 8, 20; S082 p. 6].
+- **§4 and §6 (reuse across re-solves "preliminary")**: four full texts over 2020–2026 build on recurring instances (turn 8 above).
+- **§5 Latest**: the random-instance analysis of dual decomposition (arXiv:2604.23383) is read [S120 pp. 1–4]; extreme strong branching for QCQPs (doi:10.1016/j.orl.2026.107446) is read [S123 pp. 1–8].

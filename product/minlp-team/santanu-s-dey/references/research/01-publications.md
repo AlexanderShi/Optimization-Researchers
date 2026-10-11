@@ -308,3 +308,63 @@ Primary unless marked. Accessed 2026-10-10. Author-posted PDFs were downloaded f
 37. Del Pia, Dey, Molinaro, slides "Integer Quadratic Programming is in NP" (undated), https://www2.isye.gatech.edu/~sdey30/IQPNP.pdf (primary)
 38. Kocuk, Dey, Sun, slides "New Formulation and Valid Inequalities for the Optimal Power Flow Problem" (undated), https://www2.isye.gatech.edu/~sdey30/ACOPFlast.pdf (primary)
 39. Dey, slides "Introduction to cutting planes for mixed integer linear (nonlinear) programs", MIP 2024, June 2024, https://www2.isye.gatech.edu/~sdey30/CPMIP2024b.pdf (primary)
+
+
+## Update 2026-10-10 (full-text pass, T3.6): coverage from the Google Scholar list
+
+The publication list is now complete at the level of the Google Scholar profile, and most works after 2010 were read in full. Sources: `../sources/publications/scholar.md` (Google Scholar profile https://scholar.google.com/citations?user=8Je5mV4AAAAJ, cross-checked with DBLP 13/5858, Crossref, arXiv and the homepage; machine-readable in `works.json`), the full-text index `../sources/papers/INDEX.md`, the paper cards indexed in `07-paper-cards.md`, and the synthesis `08-deep-reading-synthesis.md`. Citations like [S014 pp. 14–16] point to a card and the page of the version it read.
+
+### Coverage
+
+| Item | Count | Note |
+|---|---|---|
+| Google Scholar rows | 169 | 19 marked duplicate or junk (`dup_of` in `works.json`) |
+| Distinct works indexed | 156 | Scholar rows plus 4 DBLP-only (D001–D004), 1 arXiv-only (D005), 1 homepage-only (H001) |
+| Works with an open full text | 123 | `txt` in INDEX.md; 33 are `no-oa` |
+| Card entries / works with a card | 154 / 154 | |
+| **Read in full text** | **123 cards = 116 distinct works** | 93 in full, 30 in part; seven version pairs count once: S031 = D003, S084 → S028, S096 = S095, D001 = S025, S135 = S085, S097 = S104, D004 = S067 |
+| Abstract-level | 15 | including the PhD thesis [S074], the IPCO 2008 lifting paper [S015], the 2009 survey chapter [S030] and MIPLearn [S087] |
+| Metadata-only | 16 | including two rows of a different S. Dey [S144; S145] and proceedings front matter |
+| Skipped | 2 | not his work or not research (INDEX Role = skip) |
+| Card quotes verified | 258 | 257 exact, 1 after spacing normalisation, 0 not found |
+
+Full-text reads by period (full or partial cards / all cards with a year): 2007–2010 8/15; 2011–2015 24/32; 2016–2020 34/36; 2021–2026 55/61; undated 2/10 [08 §1]. The group-relaxation years before 2010 are known partly from abstracts; everything after 2015 is read almost completely. Most works were read as arXiv or author preprints; journal-version changes were not read [08 §1].
+
+### Research lines in the full list (full or partial cards / all cards, from 08 §8.1)
+
+| Line | 2007–2010 | 2011–2015 | 2016–2020 | 2021–2026 | undated |
+|---|---|---|---|---|---|
+| MILP group relaxations, lifting, multi-row cuts | 8/13 | 4/4 | 1/1 | — | 0/1 |
+| Closures of convex and conic integer sets | 0/2 | 10/12 | 2/2 | 1/1 | — |
+| Sparse cuts, cut selection, aggregation closures | — | 3/3 | 5/6 | 2/2 | — |
+| Pooling and bilinear programs | — | 2/4 | 5/5 | 5/5 | — |
+| QCQP convexification and conic relaxations | — | — | 1/1 | 7/7 | 1/2 |
+| Power systems (OPF, switching, security) | — | — | 7/7 | 5/6 | — |
+| B&B theory, branching, primal-heuristic theory | — | — | 1/1 | 8/8 | — |
+| Statistics and ML through MIP | — | — | 4/5 | 9/9 | 0/1 |
+| Duality, decomposition, stochastic IP | — | — | 4/4 | 10/10 | — |
+| Network design and other OR applications | — | 5/6 | 3/3 | 6/8 | 1/4 |
+| Editorials, out-of-field, misattributed | — | 0/3 | 1/1 | 2/5 | 0/2 |
+
+Two lines are visible only in the full list: re-solved operational instances (2020–2026: transmission switching, learning-enhanced branching, GMIC closure from historical data, MBQP sensitivity [S044; S098; S082; S067]), which became Method 6 of SKILL.md, and gas and water network design with Sahinidis (2024–2026 [S059; S075; S109]).
+
+### Leads from §4 now resolved by the full texts
+
+| Lead (§4) | Resolution | Card |
+|---|---|---|
+| "Approximating Polyhedra with Sparse Inequalities" read only to page 1 | Read in part; measure fixed first, ratio discarded [S028 p. 2] | S028 |
+| "The convex hull of a quadratic constraint over a polytope" read only to page 1 | Read in full; the SOCr hull needs exponentially many variables [S032 p. 2] | S032 |
+| "Branch-and-Bound Solves Random Binary Packing IPs in Polytime" read only to page 1 | Read in full in both versions; random instances "to avoid worst-case lower bounds" [S031 p. 2] | S031 = D003 |
+| "Lower Bounds on the Size of General Branch-and-Bound Trees" read only to page 1 | Read in full [S034 pp. 7–11, 14] | S034 |
+| Wolsey as postdoc mentor (unverified relation) | Wolsey's own account in the Optima 80 discussion column: "Later when Santanu Dey came to Core, my main concern was how to deal with integer non-basic variables, which again led him far beyond what was initially asked." [S079 p. 9] | S079 |
+
+### Corrections to §2
+
+- **§2.4 / §2.7 row 4 (strong branching)**: the naive Python B&B, the stripped SCIP protocol and the non-monotonicity result are in the IJOC paper (doi:10.1287/ijoc.2024.0709, arXiv:2402.05213) [S081 pp. 8–11], not in doi:10.1007/s10107-023-01977-x, whose arXiv v2 text has the DP-optimal trees and the vertex-cover theorem [S020 pp. 6, 11–13].
+- **§2.6 P1–P5**: confirmed on the full texts and kept as SKILL.md Methods 1–5 with card evidence (08 §2); P3's "rank relaxations" is often done by theorem [S100 pp. 9–10; S105 p. 4; S129 p. 5]; P6 (applications through students and domain co-PIs) is confirmed in the collaboration pattern [08 §9].
+- **§2.1 (OPF)**: the qualification against SDP is already in the November 2015 arXiv v4 of the 2016 paper [S001 p. 30], not only in the March 2017 preprint of the 2018 paper; journal texts not read.
+- **Tension 1**: dated on the cards: extremality and a merit index as yardsticks in 2010 [S019 pp. 6, 20], doubt from 2018 [S011 pp. 7–8].
+
+### Signature-work anatomies
+
+SKILL.md now carries full-text versions of the five anatomies of §2 plus two more: MIQP is in NP [S003] and sensitivity analysis for mixed binary quadratic programs [D004 = S067]. Their full rows and the earlier web-research versions are in `09-evidence-ledger.md`. §2 is kept as the web-research record.
