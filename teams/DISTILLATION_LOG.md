@@ -30,6 +30,7 @@
      G6 试答改用 MINLP 题（选型、OA 用于非凸的陷阱、SDP 与 RLT 强弱的分寸）
 - 已知限制：本机没有 tesseract，文字层乱码的扫描件无法 OCR（Leyffer 6 篇、Misener 1 篇），退到摘要级；
   Windows 下脚本须设 `PYTHONUTF8=1`（或 `PYTHONIOENCODING=utf-8`），否则 cp1252 控制台会让 acquire / team_status 崩溃
+- 更新（同日，低用量收尾）：Leyffer、Misener 读卡全部完成（204 / 146 张，0 未读）；Dey、Burer 的 T3.6 汇总、闸门与声明抽审完成（Dey 17/3/0/0、Burer 15/5/0/0，partial 已按卡片收窄），两人深读档完整，T3.7 不需要（均低于 13000 词）。调研笔记里的 MATLAB 版本号（R2015b 等）会被 check_citations 误认作作品 ID，已改写成行内代码；一次 acquire 崩溃曾把 Leyffer 的 INDEX.md 截到 30 行并进入 7949d35，已从 eb7b6e5 恢复。续跑清单更新为：Leyffer、Misener 的 T3.6；Sahinidis、Grossmann 的补搜→读卡→T3.6；T2；T3.8；封闭语料与团队级 skill。
 - 执行模型：claude-opus-5-5
 
 ## 2026-10-10 (8) · team-kit 研究 Skill 蒸馏：补两道证据闸门（引用闭包 + 声明抽审）
