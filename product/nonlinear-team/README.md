@@ -10,7 +10,7 @@ This selection follows the smooth NLP solver tradition (interior-point and SQP /
 
 | Member | Lens · known for | Status |
 |--------|------------------|--------|
-| [Frank E. Curtis](frank-e-curtis/SKILL.md) | **Lens:** make the inner solve and the penalty or merit update serve the globalization, and prove it on instances built to break the solver.<br>**Known for:** [inexact SQP](https://doi.org/10.1137/060674004) and [infeasibility-detecting SQP](https://doi.org/10.1137/080738222) with Byrd and Nocedal; the penalty-interior-point code [PIPAL](https://doi.org/10.1007/s12532-012-0041-4); [SQP-GS](https://doi.org/10.1137/090780201) → [BFGS-SQP with relative minimization profiles](https://doi.org/10.1080/10556788.2016.1208749) (2018 INFORMS Computing Society Prize); the [TRACE](https://doi.org/10.1007/s10107-016-1026-2) trust region; [NonOpt](https://doi.org/10.1007/s12532-026-00322-5); co-author of the [SIAM Review survey on optimization for large-scale machine learning](https://doi.org/10.1137/16M1080173). | T1 base skill · base tier done |
+| [Frank E. Curtis](frank-e-curtis/SKILL.md) | **Lens:** make the inner solve and the penalty or merit update serve the globalization, and prove it on instances built to break the solver.<br>**Known for:** [inexact SQP](https://doi.org/10.1137/060674004) and [infeasibility-detecting SQP](https://doi.org/10.1137/080738222) with Byrd and Nocedal; the penalty-interior-point code [PIPAL](https://doi.org/10.1007/s12532-012-0041-4); [SQP-GS](https://doi.org/10.1137/090780201) → [BFGS-SQP with relative minimization profiles](https://doi.org/10.1080/10556788.2016.1208749) (2018 INFORMS Computing Society Prize); the [TRACE](https://doi.org/10.1007/s10107-016-1026-2) trust region; [NonOpt](https://doi.org/10.1007/s12532-026-00322-5); co-author of the [SIAM Review survey on optimization for large-scale machine learning](https://doi.org/10.1137/16M1080173). | T3 deep tier done ([DEEP-READING.md](DEEP-READING.md)) |
 | [Jorge Nocedal](jorge-nocedal/SKILL.md) | **Lens:** put the solver's received wisdom on trial with handicapped, method-level benchmarks; keep the classical engine and repair only the failing component, driven by an explicit estimate and a recovery path.<br>**Known for:** [L-BFGS](https://doi.org/10.1007/BF01589116) and L-BFGS-B ([2011 Remark](https://doi.org/10.1145/2049662.2049669)); [KNITRO](https://doi.org/10.1007/0-387-30065-1_4) with Byrd and Waltz; [*Numerical Optimization*](https://doi.org/10.1007/978-0-387-40065-5) with S. J. Wright; the [*Acta Numerica* 1992 theory survey](https://doi.org/10.1017/S0962492900002270); quasi-Newton methods for noisy functions ([2019](https://doi.org/10.1137/18M1177718)). | T1 base skill · base tier done |
 | [Stephen J. Wright](stephen-j-wright/SKILL.md) | **Lens:** find where solver behaviour and theory disagree (degeneracy, finite precision, warm starts), show it on the smallest instance with heuristics off, borrow the fix from a neighbouring method class, and keep only safeguards that beat a no-safeguard twin on a fair benchmark.<br>**Known for:** [*Primal-Dual Interior-Point Methods*](https://doi.org/10.1137/1.9781611971453); *Numerical Optimization* with Nocedal; [stabilized SQP for degenerate solutions](https://doi.org/10.1023/A:1018665102534); [finite-precision analysis of interior-point methods](https://doi.org/10.1137/S1052623498347438); the LP/QP codes [PCx](https://doi.org/10.1080/10556789908805757) and [OOQP](https://doi.org/10.1145/641876.641880); [trust-region Newton-CG with complexity guarantees](https://doi.org/10.1137/19M130563X); [*Optimization for Data Analysis*](https://doi.org/10.1017/9781009004282) with Recht. | T1 base skill · base tier done |
 | [Yinyu Ye](yinyu-ye/SKILL.md) | **Lens:** an LP interior-point theorist's lens: make the solver certify its own failures (homogenize or go one-phase), swap the costly inner step for a cheaper provable primitive, settle trusted heuristics by proof or smallest counterexample.<br>**Known for:** the [homogeneous self-dual LP algorithm](https://doi.org/10.1287/moor.19.1.53) with Todd and Mizuno; the books [*Interior Point Algorithms*](https://doi.org/10.1002/9781118032701) and [*Linear and Nonlinear Programming*](https://doi.org/10.1007/978-3-030-85450-8) (with Luenberger); [strongly polynomial simplex and policy iteration for fixed-discount MDPs](https://doi.org/10.1287/moor.1110.0516); the [one-phase nonconvex IPM](https://arxiv.org/abs/1801.03072) with Hinder; the [DRSOM](https://arxiv.org/abs/2208.00208) → [HSODM](https://doi.org/10.1287/moor.2023.0132) second-order line. | T1 base skill · base tier done |
@@ -83,6 +83,8 @@ Cost: one agent call per member per turn — about 3 per round with default seat
 
 Say "exit" or "end roundtable" to return to normal mode.
 
+Curtis's skill is deep-read: for the proof devices, algorithm-design moves and experiment protocols behind his methods, each with paper-card pages, read [his technique catalog](frank-e-curtis/references/technique-catalog.md).
+
 ## Resources
 
 Each researcher has a folder that keeps track of the resources behind that skill:
@@ -116,15 +118,30 @@ Each researcher has a folder that keeps track of the resources behind that skill
         └── private/                     # git-ignored; only its README is tracked
 ```
 
-The technique catalog, `cards/`, 07–09, `publications/works.json` and `scholar.md`, and `papers/` come from the deep reading. **This team is base tier: no deep reading has been done, so those files are absent** (see [DEEP-READING.md](DEEP-READING.md)). Each skill has `SKILL.md`, the notes 01–06 and `RESOURCES.md`; its `publications/` folder holds the OpenAlex pull the notes started from (`publications.md`, `abstracts.md`): raw material, not an audited publication list. Five members also have saved talk transcripts or interview notes under `talks/` (Nocedal, Wright, Gill, Toint, Fletcher). A member with a student mode would also have `proof-playbook.md`, `open-problems.md` and `reading-path.md` under `references/`; none has one yet. No `private/` folder is ever published.
+The technique catalog, `cards/`, 07–09, `publications/works.json` and `scholar.md`, and `papers/` come from the deep reading. **This is a mixed-tier team: only Frank E. Curtis has been deep-read, so only his folder has those files** (plus the claim audit `research/10-claim-audit.md`); the other nine members are base tier, with no deep reading (see [DEEP-READING.md](DEEP-READING.md)). Each skill has `SKILL.md`, the notes 01–06 and `RESOURCES.md`; a base-tier member's `publications/` folder holds the OpenAlex pull the notes started from (`publications.md`, `abstracts.md`): raw material, not an audited publication list. Five members also have saved talk transcripts or interview notes under `talks/` (Nocedal, Wright, Gill, Toint, Fletcher). A member with a student mode would also have `proof-playbook.md`, `open-problems.md` and `reading-path.md` under `references/`; none has one yet. No `private/` folder is ever published.
 
-To add a resource later, add a row to that researcher's `RESOURCES.md` and drop the file into the matching folder. If the resource changes a method, update the research note and `SKILL.md`. To add full texts and paper cards, run the deep tier (stages T3.1–T3.8 of the [research-team playbook](../../references/research-team-playbook.md)); [DEEP-READING.md](DEEP-READING.md) then becomes the record of it.
+To add a resource later, add a row to that researcher's `RESOURCES.md` and drop the file into the matching folder. If the resource changes a method, update the research note and `SKILL.md`. To add full texts and paper cards for another member, run the deep tier for that member (stages T3.1–T3.8 of the [research-team playbook](../../references/research-team-playbook.md)) and record it in [DEEP-READING.md](DEEP-READING.md).
 
 This team is configured by [team.json](team.json). To build another team like it, or to update this one, use the generic kit in this repository (`scripts/new_team.py`, the saved workflows in `scripts/workflows/`): see the [research-team playbook](../../references/research-team-playbook.md).
 
 ## Honest Boundary
 
 - These are simulated lenses built from public work, not the researchers' own views.
-- The research was done from web search results in September 2026, without full-text reading of the members' publication lists (single papers, theses, slides and transcripts were opened where the notes needed them); each skill's Honest Boundary lists its gaps and `RESOURCES.md` marks unverified leads ⚠️.
+- The research started from web search results in September 2026. On 2026-10-10 Frank E. Curtis's skill was deepened by reading his publications in full wherever an open copy exists; the other nine members are base tier, with no deep reading of their publication lists (single papers, theses, slides and transcripts were opened where the notes needed them), so their rows below are zero. Coverage, from each `papers/INDEX.md` (details in [DEEP-READING.md](DEEP-READING.md)):
+
+  | Researcher | Works indexed | Read in full / in part | Abstract or metadata only (incl. unreadable) | Skipped (not the author's, or not research) |
+  |---|---|---|---|---|
+  | Curtis | 96 | 86 / 0 | 10 | 0 |
+  | Nocedal | 0 | 0 / 0 | 0 | 0 |
+  | Wright | 0 | 0 / 0 | 0 | 0 |
+  | Ye | 0 | 0 / 0 | 0 | 0 |
+  | Wächter | 0 | 0 / 0 | 0 | 0 |
+  | Gill | 0 | 0 / 0 | 0 | 0 |
+  | Toint | 0 | 0 / 0 | 0 | 0 |
+  | Gould | 0 | 0 / 0 | 0 | 0 |
+  | Fletcher | 0 | 0 / 0 | 0 | 0 |
+  | Nesterov | 0 | 0 / 0 | 0 | 0 |
+
+  Each skill's Honest Boundary lists its gaps and `RESOURCES.md` marks unverified leads ⚠️.
 - Fletcher (d. 2016) is a historical lens; the skill reflects work up to then.
 - Treat every recommendation as a hypothesis to test on your problem.
