@@ -344,7 +344,7 @@ Techniques named in the steps by catalog id (P, D, E, W): [technique catalog](re
 **Input**: the cut family, branching rule, relaxation or heuristic to evaluate.
 
 **Steps**:
-1. Compute the ceiling and decide from it (→ Method 2 steps 1-2); for spatial (continuous) branching there is none, so use the Method 2 spatial-B&B variant [S123 pp. 5–7].
+1. Compute the ceiling and decide from it (→ Method 2 steps 1-2); his spatial (continuous) branching work computed no exact ceiling, so there use the Method 2 spatial-B&B variant [S123 pp. 5–7].
 2. Build the stripped instrument or switch the solver's other parts off (→ Method 2 step 3); run two instruments, synthetic then stripped solver (E6), and say what the second cannot control [S081 pp. 8–11].
 3. Instance ladder with exclusions in code; make hard instances if public ones are too easy (Heuristic 1); drop benchmark instances the baseline already solves, and say so [S051 p. 17].
 4. Give the strongest baseline its best shot (Heuristic 2).
@@ -422,8 +422,8 @@ Ten heuristics; the former Heuristic 10 (design the cut first) is now a Method 3
 5. **Start from a result better than it should be.** Sparse SDP bounds near the full SDP [S035 pp. 1–3]; an MILP restriction that beat a global solver's primal side, far better than its own guarantee [S014 pp. 24–28]; treat it as a Method 1 candidate.
 6. **Count every overhead before claiming a speed-up; when you do not, say why.** Full timing with collection cost [S082 pp. 9–12]. Tension: a per-node saving called "self-evident" and not timed [S098 p. 8].
 7. **Follow a theory paper with a measurement-only paper.** Two-row cuts [S052 pp. 1–2]; lifted bilinear cover: theory [S085 pp. 1–7], then a computational paper [S105 p. 4].
-8. **Bring in the specialist for the step you cannot do; credit the student who leads.** Blekherman for the real-algebraic steps [S077 pp. 1–2; S119 p. 1; S055 p. 7]; 9 of 17 theses co-advised [04 H1, H2].
-9. **Borrow one tool from a neighbouring field.** WalkSAT for feasibility-pump randomisation [S061 p. 4]; Shapley–Folkman [S125 pp. 10–16]; Gaussian random projection [D005 p. 8].
+8. **Bring in the specialist for the step you cannot do; credit the student who leads.** Blekherman for the real-algebraic steps [S077 pp. 1–2; S055 p. 7]; 9 of 17 theses co-advised [04 H1, H2].
+9. **Borrow one tool from a neighbouring field.** WalkSAT for feasibility-pump randomisation [S061 p. 4]; Shapley–Folkman [S125 pp. 10–16]; generic chaining and mixed-tail process bounds, applied to Gaussian random projections [D005 pp. 2, 5–7].
 10. **Re-prove the classical lemma you lean on by a route that exposes the one property you use, then push past the classical statement.** "Our key observation is that the JL lemma itself is not essential for preserving bilinear structures." [D005 p. 8]; a symmetric S-lemma [S071 pp. 3–4]; Shapley–Folkman pushed to a vanishing bound [S125 p. 4]. Fails exclusivity, so not a method.
 
 ## Signature Work Anatomy
