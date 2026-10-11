@@ -259,6 +259,45 @@
 
 ---
 
+## 9. Trajectory as seen in the full texts (added 2026-10-10)
+
+Added at the deep-reading synthesis (stage T3.6) from [08-deep-reading-synthesis.md](08-deep-reading-synthesis.md) §§8–9 and the paper cards indexed in [07-paper-cards.md](07-paper-cards.md): 71 works, 52 read in full and 15 in part. Sections 1–8 above were written from web research and are kept unchanged; where the full texts change a date, the change is listed in §9.3 and the earlier wording stays where it is.
+
+### 9.1 Topics per period (works carded)
+
+| Period | Works carded | Main topics (cards) |
+|---|---|---|
+| 2000–04 | 11 | SDP algorithms by change of variables: projected gradient on a factor, rank-two max-cut, Cholesky elimination, rank-one/two stable set, low-rank SDPLR, partial matrices, long-step framework [S014, S006, S017, S025, S030, S001, S029, S032, S051] |
+| 2005–09 | 17 | Low-rank theory and enhancements [S003, S026, S031, H002]; lift-and-project bounds for 0-1 IP [S013, S041]; finite SDP B&B for QP [S007, S018]; copositive representation and CP/DNN [S004, S034, S028]; box-QP polyhedra [S011]; applied (ensembles, seed supply chain) [S005, S054, S015] |
+| 2010–14 | 18 | CP/DNN computation and QuadprogBB [S020, S008, S047, H001]; hulls, cones and TRS with cuts [S010, S009, S022, S040, S037, S012]; MIQCP framing and survey [S016, S002]; "middle way" relaxations [S043]; analytics side papers [S042, S052, S053, S060, S063] |
+| 2015–19 | 12 | TRS and quadratic hulls with Yang and Kılınç-Karzan [S021, S024, S033, S027, S036]; copositive robust/DRO and statistics with Xu [S045, S023, S044, S059]; applied [S046, S062] |
+| 2020–24 | 7 | SDP exactness and its correction [S019, S061]; hulls of switching and bounded products [S038, S039, S067]; strengthened SDPs (OPF substructure, Stiefel) [S050, S055] |
+| 2025–26 | 6 | Ball constraints, TTRS, Lorentz-positive cone [S049, S065]; submodular QP [S058]; Stiefel certificate [S048]; constraint learning and trained networks [S057, S056] |
+
+### 9.2 Turns visible in the texts
+
+1. **From algorithms for convex SDP to bounds for nonconvex and integer problems, about 2005–06** (T2 above): the 0-1 lift-and-project paper names mixed binary-continuous and nonconvex QP as next targets [S013 p. 24]; the award note describes the shift away from IPs [H001 p. 2].
+2. **From finite B&B solvers to a single strong relaxation as the product** (new): [inferred] the single-strong-relaxation aim is stated by 2011/12, "We are also not specifically concerned with the global optimization of (MIQCP)." [S016 preprint p. 2], and pursued in the hull papers from 2009 [S011; S010]; it ran alongside the KKT-branching line (2008–2012) [S007; S018; S008; S047], after which the cards hold no new global QP solver; restated in 2023, "In this paper, however, we seek a relaxation that is strong irrespective of the data." [S049 arXiv p. 2].
+3. **Applied and analytics papers with Iowa colleagues and students, 2012–2019** (T6, T7 above) [S042, S052, S053, S060, S046, S045, S023, S044, S059, S062].
+4. **ML-adjacent work with students and colleagues from 2025** (T9 above) [S048, S057, S056].
+5. **A return of the low-rank line through certificates, 2025** (new): a cheap LMI certificate for the output of any Stiefel-manifold solver [S048 arXiv pp. 5-7, 14], the pattern of the 2001–2006 factorization papers (Method 6 in SKILL.md), absent from the cards between 2007 and 2024.
+
+What stayed constant: the lifted matrix [1 xᵀ; x X] from the ensemble-pruning SDP [S005 pp. 7-8] to the Lorentz cone [S065 pp. 2-7]; the Pataki rank bound from 2003 [S001 p. 5] to 2026 [S065 p. 10]; losses printed with a hypothesis from 2001 [S014 preprint p. 17] to 2026 [S056 arXiv pp. 13-15]; claims graded by level from 2002 [S025 pp. 17-18] to 2026 [S065 pp. 10, 14, 16].
+
+### 9.3 Dates that the full texts change (earlier wording kept above)
+
+- **Low-rank exit** (§5 table "around 2004–2006"; §6 item 6 "after 2006"; §8 H4): algorithm papers continue to 2007 [S026 pp. 4-7, 19; S031 pp. 3-5]; SDPLR is documented as software in 2009 [H002 pp. 1-4] and used in a 2011 application [S063 pp. 7-8]; the line returns in 2025 [S048 arXiv pp. 5-7, 14].
+- **Robust optimization** (T7 "2014–2018"; §5 table "2018"; §6 item 6 "after 2018"): the robust/applied period runs to 2019 [S062 pp. 5-8].
+- **Exact certificates** (§8 H6 "from 2026"): an explicit rational counterexample point already appears in 2009 [S011 pp. 15-16] (rational counterexample data in 2010 [S010 p. 8]); certification in exact arithmetic is documented in 2025 [S058 pp. 43-44]; the 2026 counterexamples are certified by exhaustive stationary-point enumeration and a second solver, not in exact arithmetic [S065 p. 16] (⚠, downgraded from ✗ on review).
+- **KKT B&B line** (not dated above): 2008–2012 [S007; S018; S008; S047].
+- **Heuristics**: no heuristic paper in the core nonconvex-QP line after 2002, but heuristics recur in coauthored applied papers (2006 [S005 pp. 7-8], 2011 [S063 pp. 4-5, 9], 2026 [S056 arXiv pp. 6-9, 15]).
+
+### 9.4 Collaboration pattern in the cards
+
+Monteiro coauthors 8 of the 11 carded works of 2000–04 and Yin Zhang 5; Kurt Anstreicher coauthors 8 works from 2005 to 2026 [S034, S028, S010, S012, S036, S038, S039, S065], supplies the observation behind the 2025 main theorem [S049 arXiv p. 24] and a conjecture credited in 2009 [S011 p. 14]. Students appear as coauthors by line: Chen [S041, S047, S008, S060], Choi [S026, H002, S063], Dong [S022, S040], Yang [S021, S033, S036, S067], Xu [S045, S059, S023, S044], Park [S039, S055], Zhu [S057, S056]; student lines tend to carry the toolkit into a new domain. The founding CP theory is sole-authored [S004; S009; S020; S024], its solver went to a student [S008]. No full text states why any line ended (§6 above stays the reference for the web-research view).
+
+---
+
 ## Contradictions (kept, not reconciled)
 
 1. **Dates of the collaborative NSF grant.** The CV says "$255,818, 2000-05". The NSF record for award 0203426 gives 06/15/2002 → 05/31/2006.

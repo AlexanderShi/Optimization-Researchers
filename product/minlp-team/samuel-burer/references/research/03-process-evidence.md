@@ -49,7 +49,7 @@
 | `ttrs` | 2016-05-12 → 2016-05-16 | 3 | Lifted-RLT code, cluster-submission scripts, instances and results for Section 5.4 | At publication of Yang & Burer (2016) |
 | `grades` | 2018-04-10 | 4 | Robust-grading code (MATLAB, Gurobi), a verification script, and an AMPL "Basic" version runnable on NEOS | At submission; the README says "submitted to *European Journal on Operational Research*" |
 | `BoxQP_instances` | 2019-01-30 | 4 | The 99 box-QP benchmark instances in three generations with optimal values, the seeded generator, SDPA files of two relaxations, and an `.lp` converter "Written by Tobias Achterberg (2019-01-30)" | 10–14 years after the instances were created |
-| `ttrsn2` | 2024-06-06 | 4 | Re-run of the 2016 lifted-RLT code with MATLAB R2022b and MOSEK 10 | 8 years after the paper; purpose not stated |
+| `ttrsn2` | 2024-06-06 | 4 | Re-run of the 2016 lifted-RLT code with MATLAB `R2022b` and MOSEK 10 | 8 years after the paper; purpose not stated |
 | `sdplr` | 2023-10-05 → 2026-03-23 | 27 | SDPLR 1.03-beta C code: merged outside fixes (2023), then a hardening sprint with a test suite (2026) | 20 years after the 2003 paper, in the year of the 2023 Test of Time award |
 | `ballconstraints` | 2023-10-28 → 2026-08-28 | 4 | Python/MOSEK experiments, a massive instance search, results, and an exact verifier for counterexamples found after publication; tag `paper_v1` | Same day as arXiv 2303.01624v2 (28 Oct 2023) |
 | `submodular-tests` | 2025-11-28 → 2026-08-26 | 18 | Instance search for tightness, counterexample verification (exact and MOSEK), one script per paper table and figure | Created between arXiv v1 (Apr 2025) and v2 (Apr 2026); rebuilt in the week before v3 (Aug 2026) |
@@ -498,9 +498,9 @@ What changed in the paper:
 |---|---|---|
 | 2000–2003 | PhD student; advisor Monteiro, with Y. Zhang | ANSI C; SGI Origin2000 (300 MHz processors), one processor per code; baselines SBmethod 1.1.1 and DSDP 3.2; DIMACS and Gset graphs; fixed seed 925 |
 | 2002–2009 | Assistant, then associate professor in a business-school department; co-author Vandenbussche (UIUC, then Axioma) | Augmented-Lagrangian SDP code with a CPLEX 9.x QP subsolver (not public); Pentium 4 at 2.4 GHz under Linux; time limits up to 45,000 s |
-| 2008–2013 | Associate professor; student, then Argonne postdoc, J. Chen; Anstreicher | MATLAB R2008a / R2009a / R2012a with C-MEX; CPLEX 12.2–12.3 MATLAB interface; SeDuMi 1.3 and YALMIP; Couenne 0.3 with Clp; BARON 9.3.1 via GAMS on an Argonne license; Pentium D at 3.2 GHz; departmental git server |
+| 2008–2013 | Associate professor; student, then Argonne postdoc, J. Chen; Anstreicher | MATLAB `R2008a` / `R2009a` / `R2012a` with C-MEX; CPLEX 12.2–12.3 MATLAB interface; SeDuMi 1.3 and YALMIP; Couenne 0.3 with Clp; BARON 9.3.1 via GAMS on an Argonne license; Pentium D at 3.2 GHz; departmental git server |
 | 2013–2019 | Full professor; students Yang and Xu; directing master's programs | YALMIP with MOSEK 7.1; SGE cluster (`qsub`); CPLEX 12.4 and Couenne 0.4; Gurobi; AMPL and NEOS |
-| 2023–2024 | Chaired professor; visitor Eltved; student Park | Python with MOSEK Fusion 10.0.37 on an M2 MacBook Air (24 GB); R scripts; MATLAB R2022b with MOSEK 10 |
+| 2023–2024 | Chaired professor; visitor Eltved; student Park | Python with MOSEK Fusion 10.0.37 on an M2 MacBook Air (24 GB); R scripts; MATLAB `R2022b` with MOSEK 10 |
 | 2025–2026 | Department chair (DEO); co-authors at SUTD; Anstreicher (retired 2023) | Python with MOSEK 11.2.2 and Gurobi 13.0.2 on a Mac mini M4; exact rational arithmetic in Python; GitHub Copilot, Claude Sonnet 4.6, Claude Opus 5, Codex |
 
 Tools: [practice, P] from the papers and code. Seniority and students: CV [practice, P]. Anstreicher's retirement: 2023 "Happy Retirement, Kurt!" slides [stated, P].

@@ -252,8 +252,8 @@ Other counts:
 | Period | Seniority and setting | Funding acknowledged or listed | Tools seen in the papers | Team pattern |
 |---|---|---|---|---|
 | 2001–05 | PhD student at Georgia Tech until Aug 2001, then assistant professor, Management Sciences, Iowa (CV) | NSF CCR-0203426, acknowledged in the 2005 paper. The CV lists the collaborative grant ($255,818, "2000-05") | ANSI C. The 2003 runs used an SGI Origin2000 with 16 300 MHz R12000 processors, but "each code uses only one processor" (2003, p. 341). The 2005 runs used a Pentium at 2.4 GHz with 1 GB RAM. Competitors' codes were freely available (2003, p. 356) | the advisor plus one Rice collaborator; then Iowa colleagues and external peers |
-| 2006–10 | assistant → associate professor (Jul 2007); visits to CMU (Jan–May 2007) and Sapienza (Apr–May 2009) (CV) | NSF CAREER CCF-0545514 (2006–12), acknowledged in 2008–2013 papers | ILOG CPLEX 9 for convex-QP subproblems, on a Pentium 4 at 2.4 GHz under Linux (2008); MATLAB R2008a on a Linux PC (OptDNN); SeDuMi | 2-author papers with peers; the first students (Choi, Chen, Dong) |
-| 2011–15 | associate → full professor (Jul 2012). In 2011 he held six associate editorships plus the *Optima* co-editorship (CV) | CAREER to 2012; **no later external research grant in the CV** | SeDuMi 1.3 under MATLAB R2012a on an Intel Core 2 Quad (SOC-TRS); the global solver Couenne used to verify a counterexample | Anstreicher, Letchford, Kim–Kojima, Kılınç-Karzan; students Yang and Xu |
+| 2006–10 | assistant → associate professor (Jul 2007); visits to CMU (Jan–May 2007) and Sapienza (Apr–May 2009) (CV) | NSF CAREER CCF-0545514 (2006–12), acknowledged in 2008–2013 papers | ILOG CPLEX 9 for convex-QP subproblems, on a Pentium 4 at 2.4 GHz under Linux (2008); MATLAB `R2008a` on a Linux PC (OptDNN); SeDuMi | 2-author papers with peers; the first students (Choi, Chen, Dong) |
+| 2011–15 | associate → full professor (Jul 2012). In 2011 he held six associate editorships plus the *Optima* co-editorship (CV) | CAREER to 2012; **no later external research grant in the CV** | SeDuMi 1.3 under MATLAB `R2012a` on an Intel Core 2 Quad (SOC-TRS); the global solver Couenne used to verify a counterexample | Anstreicher, Letchford, Kim–Kojima, Kılınç-Karzan; students Yang and Xu |
 | 2016–20 | full professor; faculty director of analytics master's programs 2014–2020 (CV) | none listed | OO and arXiv preprints | students Xu and Park, visitor Eltved; Ye; Anstreicher |
 | 2021–26 | chaired professor; Director of Graduate Studies 2023–25; DEO 2025– (CV) | none listed | code released with papers; recent tooling is in `06-trajectory.md` and was not re-checked here | Anstreicher; students Park and Zhu; departmental colleague Serra; SUTD (Natarajan, Willemsen); Michigan (Gilman, Balzano) |
 
@@ -484,7 +484,7 @@ Other counts:
 **Why then** [inferred]:
 - Both authors were at Iowa and had just finished joint convex-hull work (Anstreicher & Burer 2010, §1.3 #10).
 - The CAREER grant is acknowledged.
-- Resources: SeDuMi 1.3 under MATLAB R2012a on a quad-core desktop (preprint). [practice, P]
+- Resources: SeDuMi 1.3 under MATLAB `R2012a` on a quad-core desktop (preprint). [practice, P]
 
 **Key insight**:
 - Multiply a valid second-order-cone constraint by a nonnegative linear factor and linearize the product in the lifted space (x, X). This gives an exact SDP + SOC representation of TRS with two parallel cuts, and a polynomial-time separable family of cuts that strengthens the SDP relaxation of the two-trust-region subproblem (TTRS). [stated-joint, P]
@@ -640,6 +640,30 @@ All DOIs were resolved through Crossref in this run, and all arXiv ids on arxiv.
 | 2025-04 | F | S. Burer, K. Natarajan, R. Willemsen (from v3) | On the Semidefinite Representability of Continuous Quadratic Submodular Minimization With Applications to Pricing and Moment Problems | arXiv preprint, v1 2025, v3 31 Aug 2026 | arXiv 2504.03996 |
 | 2025-12 | I | J. Tong, Y. Zhu, T. Serra, S. Burer | Optimization over Trained Neural Networks: Going Large with Gradient-Based Algorithms | CPAIOR 2026, Lecture Notes in Computer Science:596-613, 2026 | DOI 10.1007/978-3-032-27242-3_35; arXiv 2512.24295 |
 | 2026-09 | F | S. Burer, K. Anstreicher | Applications of the Lorentz positive cone in nonconvex quadratic optimization | arXiv preprint, 2026 | arXiv 2609.32017 |
+
+---
+
+## 6. Full-text coverage of the publication list (deep reading, added 2026-10-10)
+
+Added at the deep-reading synthesis (stage T3.6). Sources: `../sources/publications/works.json` and `scholar.md` (the harvest, audited 2026-10-10), `../sources/papers/INDEX.md`, the paper cards indexed in [07-paper-cards.md](07-paper-cards.md) and the synthesis [08-deep-reading-synthesis.md](08-deep-reading-synthesis.md). Sections 1–5 above were written from web research before any full text was read; they are kept unchanged, and where the full texts correct them the correction is listed below rather than made in place.
+
+**The harvested list.** 70 Google Scholar rows plus one DBLP-only item (D001) and two homepage-only items (H001, the 2010 award note; H002, the SDPLR user's guide) give 73 records; two Scholar rows are duplicates (S064 of S002, S066 of S058), leaving **71 distinct works**: 58 journal articles, 3 book chapters, 2 conference papers, 2 preprints, 1 thesis and 5 other items (two NSF award records, the award note, the software guide, an editorial). 63 have a DOI and 15 distinct arXiv ids appear (16 arXiv fields; the 2020 article and its 2021 correction share 1802.02688). By first year: 2000–04 11 works, 2005–09 17, 2010–14 18, 2015–19 12, 2020–24 7, 2025–26 6. This list (71) is wider than the 64-work corpus of §5, which was assembled from DBLP, Crossref and the CV before the harvest; the harvest adds the NSF records, the thesis, the award note and the SDPLR guide, among others.
+
+**Open full texts.** 67 of the 71 works have an open full text, extracted to `papers/txt/` (git-ignored): 51 from author-hosted copies (mostly the numbered archive on sburer.github.io), 15 from arXiv and 1 supplied by hand. No open text was found for 4: the 2006 CAREER and 2002 collaborative NSF award records [S068; S069], the 2001 thesis [S070] and the 2017 editorial with Atamtürk [D001].
+
+**Read levels** (`team_status.py --coverage`, 2026-10-10): 52 works read in full (full D1–D8 cards), 15 read in part (short supplement cards), 2 at abstract level (S068, S069), 2 at metadata level (S070, D001), 0 skipped. 73 card entries cover the 71 works (S061, the 2021 correction, has three: abstract, unreadable because the file held the 2020 article, then full). 138 quotations on the cards were checked verbatim against the texts (`verify_card_quotes.py`: 137 exact, 1 equal up to spacing and symbols, 0 not found). Works carded per period follow the publication curve above.
+
+**Versions read** (bounding every page reference): 18 works were read from a substitute version, not the published text (preprint: S012, S014, S016, S024, S051; arXiv: S019, S023, S027, S038, S039, S044, S045, S048, S049, S050, S055, S056, S057; every card citation to them carries the version word). Among them: S012 (2013 SOC-RLT paper) and S016 (MILP road to MIQCP) as preprints; S019 as arXiv v2; S048 as arXiv v3; S049 (ball constraints) as arXiv v2, not the published text and not v1, which the web-research quotes in §2 S5 and in SKILL.md come from; S058 (submodular minimization) as arXiv v3 only, so the v1 → v2 narrowing is known from web research alone [card headers].
+
+**Corrections to §§1–5 from the full texts** (details and cards: [09-evidence-ledger.md#corrections](09-evidence-ledger.md#corrections)):
+- §2 S1 and §3 (exit after the July 2004 posting): low-rank algorithm papers continue to 2007 [S026 pp. 4-7, 19; S031 pp. 3-5], SDPLR is documented as software in 2009 [H002 pp. 1-4], and the line returns in 2025 through a global certificate for nonconvex solvers [S048 arXiv pp. 5-7, 14].
+- Period dating (SKILL.md and note 06): the applied and robust-optimization period runs to 2019 (robust grading [S062 pp. 5-8]).
+- SKILL.md and note 03 (⚠ on review): an explicit rational counterexample point already appears in 2009 [S011 pp. 15-16]; certification in exact arithmetic is documented in 2025 [S058 pp. 43-44], not first in 2026.
+- SKILL.md (Method 1 stop rule; not in §§1–5): the 2014 "Faster, but weaker" paper is motivated by interior-point SDP cost and does not cite Bao, Sahinidis and Tawarmalani [S043 pp. 2, 19].
+- Contradiction 2 below (heuristics): none in the core nonconvex-QP line after 2002, but heuristics appear in coauthored applied papers of 2006, 2011 and 2026 [S005 pp. 7-8; S063 pp. 4-5, 9; S056 arXiv pp. 6-9, 15].
+- Code release: SDPLR and QuadprogBB were public by 2009–2012 [H002 pp. 1-3; S008 p. 11].
+
+**Gaps that remain**: the four works without open text; the published versions of the 18 works read from a substitute version (preprint: S012, S014, S016, S024, S051; arXiv: S019, S023, S027, S038, S039, S044, S045, S048, S049, S050, S055, S056, S057); S058 and S065 exist only on arXiv; whether arXiv 1802.02688 was updated after the 2021 correction is checked only by web research (2026-10-10, v2 unchanged, `03` 5.5), not by a card; 15 works read only in part.
 
 ---
 
