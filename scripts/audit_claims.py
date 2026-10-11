@@ -180,7 +180,8 @@ def write_report(mem: Member, packet: dict, verdicts: dict, date: str) -> tuple[
         else:
             verdict, reason = v["verdict"], str(v.get("reason") or "").replace("|", "\\|").replace("\n", " ")
             counts[verdict] += 1
-        claim = it["claim"].replace("|", "\\|")
+        # 声明里的 markdown 链接只留文字：锚点在报告文件里不存在，会被 check_links.py 判成断链
+        claim = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", it["claim"]).replace("|", "\\|")
         rows.append(f"| {k} | {it['file']}:{it['line']} | {claim[:160]}{'…' if len(claim) > 160 else ''} "
                     f"| {it['cite']['id']} {'TR ' if it['cite'].get('tr') else ''}pp. {it['cite']['pages']} "
                     f"| {it['card'].get('read_level') or '?'} | **{verdict}** | {reason[:220]} |")

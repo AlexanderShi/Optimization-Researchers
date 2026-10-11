@@ -142,10 +142,10 @@ def check_roundtable(rep: Report, team: Path, cfg: dict, deep: bool, deep_member
             # 混合档：至少两位成员有据；深读过的成员那一方必须是卡片证据，卡片 ID 存在
             if len(sides) < 2:
                 probs.append(f"fault line '{title[:50]}': cites {len(sides)} member(s) as [<slug> …], 2 needed")
-            uncarded = sorted(s for s in sides & dm if not any(s2 == s and re.match(r"cards?", t) for s2, t in cites))
+            uncarded = sorted(s for s in sides & dm if not any(s2 == s and re.match(r"cards?\b", t) for s2, t in cites))
             if uncarded:
                 probs.append(f"fault line '{title[:50]}': deep-read member(s) {', '.join(uncarded)} cited without card evidence")
-            miss = sorted({f"{s} {i}" for s, t in cites if re.match(r"cards?", t) for i in CARD_ID.findall(t)
+            miss = sorted({f"{s} {i}" for s, t in cites if re.match(r"cards?\b", t) for i in CARD_ID.findall(t)
                            if i not in ids.get(s, set())})
             if miss:
                 probs.append(f"fault line '{title[:50]}': card ids not in the digests: {', '.join(miss[:8])}")
