@@ -1,5 +1,39 @@
 # 蒸馏记录
 
+## 2026-10-10 (10) · Frank E. Curtis 深读档（nonlinear-team 成为混合档团队）
+
+- 用户请求：「强化一下Frank E Curtis skill」，选完整深读档（T3.1–T3.8）。只深读 Curtis；其余九人保持轻量档，
+  不计划深读。分支 `curtis-deep-read`（独立 worktree，与 MINLP 会话隔离），fast-forward 合入 `main`
+- 产物（`product/nonlinear-team/frank-e-curtis/`）：
+  - 发表全表：96 个不同作品（S 96 · D 3 · H 1，4 条 `dup_of`），`validate_works.py` 0 错误。
+  - 87 篇开放全文，分 30 个核心批次 + 1 个摘要批次写成 96 张卡片（全读 86，摘要 8，元数据 1，不可读 1，S086 文本层乱码）；
+    180 条摘录逐字通过 `verify_card_quotes.py`。
+  - 07–09、`technique-catalog.md`，SKILL.md 改写：
+    - 核心方法仍是 5 个；提议的 M6「守住现任、让保证休眠」在团队层排他性不成立（Wright、Fletcher、Toint、Wächter 共享这一做法），
+      降为 Heuristic 5 的扩展。
+    - 新增 Heuristic 11；纠正 C1–C12。
+  - 声明抽审 `10-claim-audit.md`：60 条，41 条支持、19 条部分支持、0 条不支持。19 条全部按卡片收窄或改引用后，
+    由零上下文核查员复判：16 条支持、3 条部分支持，这 3 条按核查员的卡片读法再收紧（最后一步未再复判）。
+- 团队层（T3.8）：DEEP-READING.md 写成混合档记录，覆盖表原样取自 `team_status.py --coverage`；
+  README 加入 `--coverage --short` 五列摘要，Curtis 状态改为深读档；圆桌第 1、3、5 条 fault line 中 Curtis 一方改为卡片证据，
+  其余九人一方仍引研究笔记。
+- kit 改动：
+  - `team_check.py` 按成员判档（`deep_members`，混合档圆桌规则）。
+  - 修复同一脚本两处正则里的 `\b` 被写成退格字节（0x08），它让混合档圆桌规则看不见卡片引用。
+  - `audit_claims.py` 报告里去掉声明中的 markdown 链接（锚点在报告里断链）。
+  - 5 个脚本加 UTF-8 输出重配置；`plan_reading_batches.py` 显式 `encoding="utf-8"`。
+- 运行教训：
+  - 深读档跨了三个用量窗口，子 agent 约 1,200 万 token，其中读卡约 660 万、抽审约 260 万、汇总约 150 万。
+  - 被用量上限打断的 workflow 会留下半写的文件（这次的 DEEP-READING、圆桌），续跑前先 `git diff` 审阅再决定重跑或补完。
+  - worktree 里 `core.autocrlf=true` 检出的 CRLF 脚本会被 Workflow 工具拒绝，需转 LF（不入库）。
+- 验证（Windows 11，Python 3.13）：
+  - `team_check.py product/nonlinear-team` 23 项 0 失败。
+  - `quality_check.py` 12/12。
+  - `check_citations.py`：2655 条卡片引用，0 问题。
+  - `check_links.py` 112 文件 0 断链。
+  - `workflows/selftest.sh product/nonlinear-team` 全部通过。
+- 全文 PDF 与 `txt/`（git 忽略）已从 worktree 复制到主 checkout 同一路径，worktree 随后删除。
+
 ## 2026-10-10 (8) · team-kit 研究 Skill 蒸馏：补两道证据闸门（引用闭包 + 声明抽审）
 
 - 范围：team-kit（逐人研究者 skill 流水线）的质量门；`teams/` 语料与团队级 SKILL.md 未改动，G1–G6 不涉及

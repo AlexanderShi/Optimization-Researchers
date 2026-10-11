@@ -80,7 +80,7 @@
 | W5 | Obstacle section for the obvious simpler method | Show why the simpler variant a reader will propose lacks guarantees. | [S044 pp. 3, 22–23] | M3 |
 | W6 | Bracket each nonstandard assumption | Give a case where it holds and one where it fails or is needed; measure its constants on a 2-D instance. | [D002 pp. 21–24; S018 pp. 9–11; S092 pp. 19–20; S093 pp. 19–22] | H1 |
 | W7 | List the fixes not made | When the theory is weaker than the incumbent's, list the fixes and why they were not made. | [S019 p. 33] | H1 |
-| W8 | Disclose and cap the theory–code gap | In the implementation section, list each departure from the analysed algorithm with its reason; cap it so the theory still covers it, or check in runs that it stayed inactive. | [S070 p. 12; S053 p. 22; S082 p. 27; S008 p. 20; S029 pp. 28–29] | H1 |
+| W8 | Disclose and cap the theory–code gap | In the implementation section, list each departure from the analysed algorithm with its reason; cap it so the theory still covers it, or check in runs that it stayed inactive. | [S070 p. 12; S053 p. 22; S082 p. 27; S029 pp. 28–29]; disclosure only, no cap: [S008 p. 20] | H1 |
 | W9 | Public correction of a founding proof | Publish the corrected statement and name who found the gap. | [S005 p. 5] | Workflow E |
 | W10 | Map a field around its workhorse | Organize a survey around the workhorse method and its trade-offs, not around benchmark verdicts. | [S001 pp. 4, 20–21, 40] | Taste 5 |
 | W11 | Match the incumbent's theorem, win in experiments | Claim a guarantee comparable to the incumbent's and show the practical gain separately. | [S015 pp. 3, 9–10, 23; S090 pp. 3, 7, 11; S030 p. 8] | M4 |
