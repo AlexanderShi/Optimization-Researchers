@@ -70,7 +70,7 @@
 | 58 | S061 | 2004 | On the convergence of Newton iterations to non-stationary points | Mathematical Programming 99 (1), 127-148, 2004 | 90 | journal | url | txt | 25 | core | carded |
 | 59 | S062 | 2009 | On the geometry phase in model-based algorithms for derivative-free optimization | Optimization Methods & Software 24 (1), 145-154, 2009 | 86 | journal | url | txt | 10 | core | carded |
 | 60 | S063 | 2003 | KNITRO user’s manual | Northwestern University, Evanston, Illinois, Technical Report OTC-2003/5, 2003 | 79 | report | manual | txt | 44 | supplement | metadata |
-| 61 | S064 | 2016 | A family of second-order methods for convex \-regularized optimization | Mathematical Programming 159 (1), 435-467, 2016 | 77 | journal | manual | txt | 27 | supplement | abstract |
+| 61 | S064 | 2016 | A family of second-order methods for convex ℓ1-regularized optimization | Mathematical Programming 159 (1), 435-467, 2016 | 77 | journal | manual | txt | 27 | supplement | abstract |
 | 62 | S066 | 2004 | Knitro 2.0 user’s manual | Ziena Optimization, Inc.[en ligne] disponible sur http://www. ziena. com…, 2004 | 76 | report | — | no-oa |  | supplement | metadata |
 | 63 | S067 | 2000 | Numerical experience with a reduced Hessian method for large scale constrained optimization | Computational Optimization and Applications 15 (1), 45-67, 2000 | 73 | journal | url | txt | 23 | supplement | carded |
 | 64 | S068 | 2010 | An inexact Newton method for nonconvex equality constrained optimization | Mathematical programming 122 (2), 273-299, 2010 | 71 | journal | url | txt | 23 | supplement | carded |
@@ -131,12 +131,12 @@
 | 119 | S150 | 2026 | A feasible method for constrained derivative-free optimization | Operations Research Letters 65, 107398, 2026 | 1 | journal | arXiv | txt | 25 | core | carded |
 | 120 | S152 | 2013 | Second order methods for optimizing convex matrix functions and sparse covariance clustering | IEEE transactions on audio, speech, and language processing 21 (11), 2244-2254, 2013 | 1 | journal | — | no-oa |  | supplement | abstract |
 | 121 | S154 | 2009 | An Algorithm for Linear Complementarity and its Application in American Options Pricing | AIP Conference Proceedings 1168 (1), 1400-1402, 2009 | 1 | conference | — | no-oa |  | supplement | metadata |
-| 122 | S155 | 2008 | Enjeux �thiques de la diff�rence dans l'approche du genre | Les Politiques Sociales, 2008 | 1 | other | — | no-oa |  | supplement | metadata |
+| 122 | S155 | 2008 | Enjeux �thiques de la diff�rence dans l'approche du genre | Les Politiques Sociales, 2008 | 1 | other | — | no-oa |  | skip | metadata |
 | 123 | S160 | 1996 | Nonlinear Programming. | Mathematics of Computation 65 (214), 884-884, 1996 | 1 | review | manual | txt | 1 | supplement | carded |
 | 124 | S162 | 1978 | Properties of Conjugate Gradient Methods with Inexact Linear Searches. | — | 1 | report | — | no-oa |  | supplement | abstract |
 | 125 | S163 | — | L-BFGS | — | 1 | other | — | no-oa |  | supplement | metadata |
-| 126 | S164 | 2026 | Package ‘rIsing’ | — | — | other | — | no-oa |  | core | metadata |
-| 127 | S165 | 2026 | Package ‘ldt’ | — | — | other | — | no-oa |  | core | metadata |
+| 126 | S164 | 2026 | Package ‘rIsing’ | — | — | other | — | no-oa |  | skip | metadata |
+| 127 | S165 | 2026 | Package ‘ldt’ | — | — | other | — | no-oa |  | skip | metadata |
 | 128 | S166 | 2024 | An Iterative Approach for Solving the SCOPF Problem Applying LP, SOCP, and NLP Subproblems | Northwestern University, 2024 | — | other | — | no-oa |  | core | abstract |
 | 129 | S167 | 2020 | Zero-Order and Stochastic Methods for Large-Scale Optimization | NSF Award Number 2011494. Directorate for Mathematical and Physical Sciences…, 2020 | — | other | — | no-oa |  | supplement | abstract |
 | 130 | S168 | 2020 | Package ‘lbfgsb3c’ | — | — | other | — | no-oa |  | supplement | metadata |
@@ -172,9 +172,9 @@
 | 160 | S205 | 1985 | On the Numerical Solution of Inverse Eigenvalue Problems | Northwestern University, Department of Electrical Engineering and Computer… | — | report | — | no-oa |  | supplement | metadata |
 | 161 | S206 | 1984 | Numerical Methods For Nonlinear Optimization | NSF Award Number 8401903. Directorate for Computer and Information Science… | — | other | — | no-oa |  | supplement | metadata |
 | 162 | S210 | — | Two Approaches for Nonlinear Programming | — | — | other | — | no-oa |  | supplement | metadata |
-| 163 | S214 | — | SIAM/ASA Donald Estep, Max Gunzburger, James Berger J. Uncertainty Quantification | — | — | other | — | no-oa |  | supplement | metadata |
-| 164 | S215 | — | Stochastik und Finanzmathematik | fsmathe@ math. uni-saarland. de http://math. fs. uni-saarland. de, 45, 0 | — | other | — | no-oa |  | supplement | metadata |
-| 165 | S218 | — | SPECIAL SECTION ON LARGE-SCALE OPTIMIZATION FOR AUDIO, SPEECH, AND LANGUAGE PROCESSING | — | — | other | — | no-oa |  | supplement | metadata |
+| 163 | S214 | — | SIAM/ASA Donald Estep, Max Gunzburger, James Berger J. Uncertainty Quantification | — | — | other | — | no-oa |  | skip | metadata |
+| 164 | S215 | — | Stochastik und Finanzmathematik | fsmathe@ math. uni-saarland. de http://math. fs. uni-saarland. de, 45, 0 | — | other | — | no-oa |  | skip | metadata |
+| 165 | S218 | — | SPECIAL SECTION ON LARGE-SCALE OPTIMIZATION FOR AUDIO, SPEECH, AND LANGUAGE PROCESSING | — | — | other | — | no-oa |  | skip | metadata |
 | 166 | S219 | — | JOS E LUlS MORALES lnstituto Tecnol ogico Aut onomo de M exico a nd | — | — | other | — | no-oa |  | supplement | metadata |
 | 167 | S221 | — | Computer Science Department University of Colorado at Boulder Boulder Colorado 80309 | Computer Science 2, 1, 0 | — | other | — | no-oa |  | supplement | metadata |
 
