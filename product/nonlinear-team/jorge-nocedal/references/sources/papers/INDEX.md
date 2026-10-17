@@ -51,7 +51,7 @@
 | 39 | S040 | 2002 | Wedge trust region methods for derivative free optimization | Mathematical programming 91 (2), 289-305, 2002 | 153 | journal | url | txt | 19 | core | carded |
 | 40 | S041 | 2020 | An investigation of Newton-sketch and subsampled Newton methods | Optimization Methods and Software 35 (4), 661-680, 2020 | 149 | journal | arXiv | txt | 36 | core | carded |
 | 41 | S042 | 2008 | Steering exact penalty methods for nonlinear programming | Optimization Methods and Software 23 (2), 197-213, 2008 | 146 | journal | url | txt | 24 | core | carded |
-| 42 | S043 | 2012 | Newton-like methods for sparse inverse covariance estimation | Advances in neural information processing systems 25, 2012 | 143 | conference | manual | txt | 9 | supplement | abstract |
+| 42 | S043 | 2012 | Newton-like methods for sparse inverse covariance estimation | Advances in neural information processing systems 25, 2012 | 143 | conference | manual | txt | 9 | core | abstract |
 | 43 | S044 | 1992 | On the behavior of Broyden’s class of quasi-Newton methods | SIAM Journal on Optimization 2 (4), 533-557, 1992 | 138 | journal | — | no-oa |  | supplement | abstract |
 | 44 | S045 | 2008 | An inexact SQP method for equality constrained optimization | SIAM Journal on Optimization 19 (1), 351-369, 2008 | 137 | journal | url | txt | 20 | supplement | carded |
 | 45 | S046 | 1997 | On the local behavior of an interior point method for nonlinear programming | Numerical analysis 1997, 37-56, 1997 | 133 | chapter | url | txt | 19 | supplement | skimmed |
@@ -70,7 +70,7 @@
 | 58 | S061 | 2004 | On the convergence of Newton iterations to non-stationary points | Mathematical Programming 99 (1), 127-148, 2004 | 90 | journal | url | txt | 25 | core | carded |
 | 59 | S062 | 2009 | On the geometry phase in model-based algorithms for derivative-free optimization | Optimization Methods & Software 24 (1), 145-154, 2009 | 86 | journal | url | txt | 10 | core | carded |
 | 60 | S063 | 2003 | KNITRO user’s manual | Northwestern University, Evanston, Illinois, Technical Report OTC-2003/5, 2003 | 79 | report | manual | txt | 44 | supplement | metadata |
-| 61 | S064 | 2016 | A family of second-order methods for convex ℓ1-regularized optimization | Mathematical Programming 159 (1), 435-467, 2016 | 77 | journal | manual | txt | 27 | supplement | abstract |
+| 61 | S064 | 2016 | A family of second-order methods for convex ℓ1-regularized optimization | Mathematical Programming 159 (1), 435-467, 2016 | 77 | journal | manual | txt | 27 | core | abstract |
 | 62 | S066 | 2004 | Knitro 2.0 user’s manual | Ziena Optimization, Inc.[en ligne] disponible sur http://www. ziena. com…, 2004 | 76 | report | — | no-oa |  | supplement | metadata |
 | 63 | S067 | 2000 | Numerical experience with a reduced Hessian method for large scale constrained optimization | Computational Optimization and Applications 15 (1), 45-67, 2000 | 73 | journal | url | txt | 23 | supplement | carded |
 | 64 | S068 | 2010 | An inexact Newton method for nonconvex equality constrained optimization | Mathematical programming 122 (2), 273-299, 2010 | 71 | journal | url | txt | 23 | supplement | carded |
