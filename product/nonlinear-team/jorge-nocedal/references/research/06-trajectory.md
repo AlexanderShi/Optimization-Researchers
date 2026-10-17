@@ -7,6 +7,7 @@
 - **Local corpus**: `references/sources/papers/`, `essays/` and `software/` hold only `.gitkeep` files, so **no user-supplied material exists** and nothing here is marked "from user-supplied material". Research agent 02 saved the talk and interview transcripts in `../sources/talks/` earlier in this run. They are YouTube captions, mostly automatic speech recognition (ASR) that nobody has checked by hand. Quotes from them are verbatim *captions* with the block timestamp `[h:mm:ss]`, marked "caption-derived". ASR errors stay as they are, with the intended word in square brackets. `private/` was not opened.
 - **WebSearch calls used**: 2 of 2 (the 2024 SIAM prize; a third edition of the book).
 - **Division of labour**: the publication landscape and signature works are in `01-publications.md`, stated method in `02-methodology.md`, process evidence in `03-process-evidence.md`, and students and supervision in `04-mentorship.md`. This file adds four things: the dated timeline, the causes of each turn and their timing, a topic-by-period matrix built from the CV, and the latest activity. It cross-references the other files rather than repeating them. Where I re-cite a paper, I re-checked its identifier with Crossref, arXiv or zbMATH in this run.
+- **Deep-reading update (2026-10-17)**: §9 below re-reads the trajectory from the full texts (97 of 167 listed works read in full or in part; cards in `07-paper-cards.md`, synthesis `08-deep-reading-synthesis.md` §§8–9). The sections above and below are the base-tier record of 2026-09-28 and are kept as written; where §9 corrects them, it says so (main correction: T6 starts in 1989–90, not c. 1992).
 
 **Labels.** Each item carries one of:
 - [stated]: Nocedal said or wrote it;
@@ -233,6 +234,7 @@ Each turn gives the trigger in his words where one exists, the dated record, and
 - **Kind of trigger**: a new result by another researcher (Powell) opens a question that a two-person team can extend. [inferred]
 
 ### T6. Weather forecasting and data assimilation (c. 1992–2009)
+- **Deep-reading correction (2026-10-17)**: the start is 1989–90, not c. 1992: the 1989–90 DOE progress report already names meteorology and oceanography as L-BFGS applications and plans 4-D assimilation [S197 pp. 2, 4]; the 1990 and 1991 award abstracts name meteorology and variational data assimilation [S198; S196]. When the ECMWF contact itself began is not dated by any card. See §9.
 - **Trigger** [stated, I26 [1:15:39]]: "the reason why they contacted me is because by that time LBFGS was well known … and they said how can we use LBFGS here which by the way in the future this is also what led me into machine learning". His own answer was Gauss–Newton: "when the problem has a structure like a nonlinearly square structure, you have to exploit it" [1:16:12].
 - **Record** [practice]:
   - grants 1992–98 (meteorology, climate modeling, weather forecasting) and NSF "Improved Minimization Techniques in Meteorological Data Assimilation" 2001–03 (CV18);
@@ -425,6 +427,65 @@ Consolidated from the turns above, with cross-references to 01 §4, 02 §9 and 0
 | Geometry phase (2009) → finite differences (2018+) → model-based again (2024) | 2009–2024 | Reversal and partial return on DFO method choice | [practice] |
 | Unmet expectation for the book | 1999 | "we thought, well, maybe this book will be known for five years or so. uh maybe we'll send two sell 2,000 copies" [1:08:27] (ASR; the sense is "sell 2,000 copies") | [stated] |
 | Rejected or retracted papers | — | **None found** in any public record | Gap |
+
+---
+
+## 9. The trajectory in the full texts (deep reading, 2026-10-17)
+
+Sources: the paper cards (`07-paper-cards.md`) and the synthesis (`08-deep-reading-synthesis.md` §§8–9). Citation form `[S012 p. 9]` = card S012, page of the file read; `[S080 arXiv p. N]` and similar name the version on the card; a bare id is an abstract- or metadata-level card. Coverage: 97 of 167 listed works read in full (76) or in part (21); the 1980s are thin (3 works in full text).
+
+### 9.1 Topics by period (full or partial reads)
+
+| Period | Works | Main topics (cards) |
+|---|---|---|
+| 1978–79 | 2 | CG and variable-storage methods: S120 (with Nazareth), S138 (thesis) |
+| 1980–84 | 1 | limited-storage BFGS, sole author: S007 |
+| 1985–89 | 3 | Broyden-class theory with Byrd and Yuan: S020; L-BFGS study with Liu: S002; inverse eigenvalue problems: S026 |
+| 1990–94 | 9 | CG and quasi-Newton theory: S012 S019 S054; L-BFGS linear algebra and software: S014 S115 S143; reduced Hessian theory: S039; PI reports with meteorology: S197 S193 |
+| 1995–99 | 13 | bound constraints: S003 S005; large unconstrained: S049 S088 S024 S101; constrained and interior (NITRO): S028 S046 S034 S118 S008; service and teaching: S160 S090 |
+| 2000–04 | 18 | interior and active-set solvers, KNITRO, SLIQUE: S009 S067 S021 S111 S075 S061 S078 S085 S063 S035 S179 S188; preconditioning and enriched methods: S030 S098 S077; S057; DFO: S040; iNEOS: S119 |
+| 2005–09 | 13 | KNITRO, penalty and barrier rules: S058 S011 S013 S042 S105 S029 S027 S110; inexact SQP and flexible penalties with Curtis: S045 S081; LCP: S076; ECMWF case study: S047; DFO geometry: S062 |
+| 2010–14 | 14 | infeasibility and inexact Newton: S052 S068 S073 S053; penalty and PLA active-set: S051 S060 S114 S139; L-BFGS-B Remark: S016; ML sampling: S023 S018; sparse inverse covariance: S043; LCP and finance: S092 S113 |
+| 2015–19 | 12 | ℓ1 second-order methods: S087 S064 S050 S089; stochastic and ML methods: S006 S015 S033 S004 S031 S036 S032; noisy DFO: S038 |
+| 2020–24 | 9 | noise: S072 S071 S091 S080 S082 S084 S124; sampling: S041 S102 |
+| 2025–26 | 2 | noise design guidelines: S128; feasible constrained DFO: S150 |
+
+### 9.2 Turns, as the full texts show them
+
+- **1978–80, from CG to limited memory** (T2): the variable-storage family between CG and BFGS [S120 pp. 23–24, 27; S138 pp. 7, 77–79] becomes the update that never discards the matrix wholesale [S007 p. 1].
+- **1987, theory with Byrd** (T5): the family-wide analysis that singles out DFP [S020 pp. 1, 19], generalizing Powell's 1976 BFGS result [S020 pp. 1, 6].
+- **1989–90, meteorology as the application** (T6, corrected): L-BFGS in meteorology and oceanography and 4-D assimilation planned [S197 pp. 2, 4]; award abstracts 1990–92 [S198; S196; S195]; about one CRAY hour per simulation in 1993 [S193 p. 2]; a 2001 award with NCEP [S186]; the ECMWF case study with practitioners in 2009 [S047 p. 1].
+- **c. 1995–2004, constrained solvers** (T7): reduced Hessian SQP [S039; S028; S067], interior methods [S046; S118; S008; S009], then KNITRO and the 2002 active-set code [S035 report pp. 17–18; S011]; teaching and service in the same years [S090; S160]. The penalty-parameter problem is already named in 1993 [S193 p. 4]; the first steering rule is in SLIQUE, 2002 [S035 report pp. 14–16].
+- **2008–2013, a side line in complementarity and option pricing** with Morales, Feng and Linetsky [S076; S092; S113] (T8; not in the SKILL table before 2026-10-17).
+- **2011, machine learning through Google data** (T9) [S023 pp. 1, 14; S018 p. 18], then Intel collaborators [S006; S031] and the field map [S004]; the shared design of the period, curvature on its own cheap sample, is the skill's Method 7 [S023 p. 3; S015 p. 5; S033 p. 3].
+- **2019, noise** (T10): the noisy-DFO programme opens [S038 p. 1] and runs to the 2025 design guidelines [S128].
+- **2024–26, back to model-based DFO for constraints** [S150 pp. 1–3], the endpoint of the moving verdict on interpolation methods [S040; S062; S080 arXiv pp. 6, 15; S150 p. 5], which starts in 2002 with the wedge method [S040 pp. 2–3, 15].
+
+### 9.3 What stayed constant
+
+- **The quasi-Newton engine**: from the 1980 update [S007] to noise-tolerant BFGS [S071] and KNITRO's L-BFGS inside the 2026 baseline [S150 p. 7].
+- **Benchmarking hygiene**: rivals run as their authors recommend and the same answer checked (1989) [S002 p. 8] to aligned termination through the baseline's options (2026) [S150 p. 7].
+- **Failure modes and open choices written into the paper** [S019 pp. 17, 21–22; S035 report pp. 7, 29, 31; S080 arXiv pp. 7, 15–16, 32].
+- **Numbers given as defaults** [S098 p. 4; S042 p. 13; S038 p. 12; S139 p. 14].
+- **The Byrd partnership**: Byrd co-authors 37 of the 96 distinct works read in full or in part, from 1987 [S020] to 2024 [S102], in every five-year period 1985–2024; no 2025–26 work lists him [S128; S150].
+
+### 9.4 Collaboration by period (full or partial reads)
+
+| Period | Works | Most frequent co-authors (works) |
+|---|---|---|
+| 1978–89 | 6 | Nazareth (S120), Byrd (S020), Yuan (S020), Liu (S002), Friedland and Overton (S026); sole author S007, S138 |
+| 1990–94 | 9 | Byrd 3 (S014 S039 S143), Gilbert 2 (S012 S115), Zhu and Lu (S143), Schnabel (S014), Yuan (S054); sole author S019; PI reports S197 S193 |
+| 1995–99 | 13 | Byrd 6 (S003 S005 S008 S046 S088 S118), Zhu 3, Lu 2, Hribar (S008), Biegler and Schmid (S028), Yuan (S024), Lalee and Plantenga (S034); sole author S049, S160 |
+| 2000–04 | 18 | Waltz 5, Byrd 5, Gould 4 (S021 S035 S179 S188), Morales 4 (S030 S098 S077 S078), Marazzi 3 (S040 S061 S111), Hribar 2 |
+| 2005–09 | 13 | Waltz 6, Byrd 4 (S011 S042 S045 S058), Morales 3, Curtis 3 (S110 S045 S081), Wächter (S029), Fisher, Trémolet and Wright (S047) |
+| 2010–14 | 14 | Byrd 7, Wu 4 (S018 S060 S114 S139), Morales 3, Waltz 3, Curtis 3 (S052 S068 S073), Oztoprak 2 |
+| 2015–19 | 12 | Byrd 7, Oztoprak 3, Bollapragada 3 (S031 S036 S032), Berahas 2 (S033 S038), Intel co-authors (S006 S031) |
+| 2020–26 | 11 | Byrd 4 (S071 S072 S084 S102), Xie 4 (S071 S072 S091 S102), Shi 3 (S071 S080 S091), Sun 3 (S082 S124 S128), Xuan 3 (S080 S091 S150), Bollapragada 2 (S041 S102), Oztoprak 2 (S080 S084), Berahas 1 (S041) |
+
+### 9.5 Gaps the full texts close or leave
+
+- Closed: the Google Scholar list (harvested 2026-10-16); the dating of the meteorology turn (1989–90); the 1980 paper, the 1987 theory paper, Byrd–Gilbert–Nocedal 2000, the ECMWF paper and the 2011 Remark.
+- Still open: the reasons for each exit (the full texts carry no origin or exit stories); when the ECMWF contact began; the 1980s beyond three works; *Numerical Optimization* [S001]; whether the declared pause holds (no card after the 2026 DFO letter [S150]).
 
 ---
 

@@ -13,6 +13,8 @@
 
 **How quotes were taken.** Quotes from pre-2000 papers come from the author-posted PostScript-to-PDF preprints on his homepage. The text extraction breaks up words ("No cedal"), and I restored only the spacing, never the wording. Page numbers are the PDF page of that preprint file, not the journal page. Quotes from arXiv abstracts, press releases and the speech are copied as they appear.
 
+**Deep-reading update (2026-10-17).** Everything above and in §§0–6 is the base-tier pass of 2026-09-28 and is kept as written. Since then the Google Scholar profile was harvested (223 rows, 167 distinct works, audited 2026-10-16; `../sources/publications/scholar.md`, `works.json`) and every work with an open full text was carded: 97 of the 167 works were read in full (76) or in part (21), 39 at abstract level and 23 at metadata level; 8 rows are skipped (§7 below, `07-paper-cards.md`, `08-deep-reading-synthesis.md`). Where §3's signature-work notes and the full texts disagree, the full texts win; the changes are listed in §7.3 and in `09-evidence-ledger.md#corrections`. The Google Scholar row of §0 and Gap 1 are superseded by §7.
+
 ---
 
 ## 0. Data sources and coverage caveats (read before using any count)
@@ -561,6 +563,48 @@ Based on the publication record. Reasons for leaving are **not stated** in any s
 8. **Exhaust alternatives, then commit, and tolerate the "fog of uncertainty"**. Evidence: thesis → L-BFGS (2026 interview); "after trying everything else … going back to Quasi-Newton methods" (Simons 2017) [stated, caption-derived]; the 1989 paper's reported negative results on scalings.
 9. **Exploit structure even against your own method**. Evidence: Gauss–Newton over L-BFGS at ECMWF; "don't use LBFGS here" at Google (2026 interview) [stated, caption-derived]; the 1989 paper recommending partitioned QN when element structure is available [practice].
 10. **Enter fields through practitioners' problems**. Evidence: the Google/IBM/Intel ML period; EDF/DOE/Synopsys in the interior period; weather forecasting and data assimilation.
+
+---
+
+## 7. Full-text coverage (deep reading, 2026-10-17)
+
+Sources: `../sources/publications/works.json` and `scholar.md` (Google Scholar profile gGNxMZ0AAAAJ, harvested 2026-10-16 over 5 pages of 50 and audited the same day; cross-checked with DBLP pid n/JorgeNocedal, the homepage publication list, Crossref and arXiv); `../sources/papers/INDEX.md` (full-text status); `07-paper-cards.md` (cards); `08-deep-reading-synthesis.md` (synthesis). This section supersedes the Google Scholar row of §0 and Gap 1, which recorded the profile as not read on 2026-09-28.
+
+### 7.1 The list
+
+| Item | Count |
+|---|---|
+| Google Scholar rows | 223, of which 56 are marked `dup_of` another row (duplicates or junk) |
+| Distinct works (`works.json`, `dup_of` rows excluded) | 167 |
+| Works outside Scholar | 0: DBLP's 83 records and the homepage's 69 entries all match Scholar rows |
+| By kind | 83 journal articles, 15 chapters, 15 reports, 10 conference papers, 2 books (*Numerical Optimization*, two editions), 2 talks, 1 preprint, 1 thesis, 1 review, 37 "other" (NSF award records, software and R-package pages, scanned title pages) |
+| By period (year in `works.json`) | 1978–84: 10; 1985–89: 15; 1990–94: 21; 1995–99: 18; 2000–04: 24; 2005–09: 23; 2010–14: 20; 2015–19: 13; 2020–24: 12; 2025–26: 4; undated: 7 |
+| Identifiers | 101 with a DOI (all resolved at doi.org and matched to Crossref titles), 22 with an arXiv id |
+| Profile (Scholar, 2026-10-16) | 121,899 citations (52,634 since 2021), h-index 68, i10-index 123 |
+| Full texts (`INDEX.md`) | 97 `txt` (open full text, extracted locally, not committed), 0 `pdf`, 70 `no-oa` |
+
+### 7.2 Read status (this member's row of `scripts/team_status.py --coverage`)
+
+| Scholar rows | Distinct works indexed | Open full text | Read in full | Read in part | Abstract only | Metadata only (incl. unreadable) | Skipped | Book material carded | Quotes verified |
+|---|---|---|---|---|---|---|---|---|---|
+| 223 | 167 | 97 | 76 | 21 | 39 | 23 | 8 | 0 | 284 |
+
+- Card entries: 181 (full 79, partial 28, abstract 44, metadata 30) for 165 works. After counting S126 (2006 report) with S042 and S056 with S143, and leaving out the skip rows (S155, not by Nocedal; S164, S165, S214, S215, S218, non-research; the talks S146 and S175, no card), 157 distinct research works carry cards.
+- Every open full text was read in full or in part. Full or partial reads by period (distinct works): 1978–79 2; 1980–84 1; 1985–89 3; 1990–94 9; 1995–99 13; 2000–04 18; 2005–09 13; 2010–14 14; 2015–19 12; 2020–24 9; 2025–26 2 (96 in all).
+- Abstract level: 39 works, 15 of them NSF award abstracts (S167 S169 S173 S174 S176 S178 S184 S186 S187 S189 S190 S192 S195 S196 S198 S202 S206 are award records; they date interests and are weak method evidence). Among the abstract- or metadata-only works: *Numerical Optimization* [S001] and its 1999 edition [S010], the 1989 analysis tool [S017], the negative-φ Broyden paper [S044], column scaling [S108], the 1990–91 numerical studies [S100; S025] and most 1980s work.
+- Ten works were carded twice from one text (S030 S067 S098 S111 S040 S057 S077 S119 S035 S075): round 1 read text layers without digits, round 2 the OCR text; numbers come from the round-2 cards only. The 1989 L-BFGS study [S002] and the 2003 benchmark [S078] have unreadable digits.
+- Quotes: 284 card quotes, 257 exact and 27 matching after normalisation, 0 not found (`verify_card_quotes.py`).
+
+### 7.3 What the full texts change in this note
+
+- **SW1** (limited-memory BFGS): the 1980 paper is read in full; its entry is the wholesale discard of the quasi-Newton matrix by variable-storage methods [S007 p. 1], and the product form makes dropping the oldest correction trivial [S007 pp. 2–3]. The 1989 study is read in part (prose only): rivals run as their authors recommend, a same-solution check, losses in the abstract [S002 pp. 2, 7–8]; Gill–Murray scaling dropped [S002 p. 15]; partitioned quasi-Newton recommended [S002 p. 24]. L-BFGS-B [S003; S005] and the 2011 Remark [S016 preprint pp. 1–2] are read.
+- **SW2** (quasi-Newton theory and Acta Numerica): the 1987 Broyden-class paper [S020] and the survey [S019] are read in full; the 1989 tool paper only in abstract [S017]. The Powell proof that prompted the family-wide analysis is Powell (1976), which the 1987 paper generalizes [S020 pp. 1, 6]; the match to the proof he recalls in the interview is inferred. Dai's 2002 BFGS example was acknowledged in 2016, and Li–Fukushima cautious updating was adopted for that paper's nonconvex analysis [S033 p. 6].
+- **SW3** (interior methods and KNITRO): Byrd–Gilbert–Nocedal 2000 [S009], Waltz et al. 2006 [S013] and the package paper [S011] are read in full. The infeasibility arrow (2006 limitation → later papers) is partly documented by the 2014 paper [S053 p. 4]; the barrier arrow stays inferred [S029 pp. 2, 17–21].
+- **SW4** (machine learning): the 2011 stochastic-Hessian paper [S023], the SQN paper [S015], the multi-batch and progressive-batching papers [S033; S031], subsampled Newton [S032 arXiv] and the SIAM Review survey [S004] are read; their shared design (curvature on its own cheap sample) became Method 7 of the skill.
+- **SW5** (noise programme): every listed noise paper is read in full [S038; S072; S071; S091 arXiv; S080 arXiv; S082; S084; S124; S128]. In the version read (arXiv:2102.09762 v1) the loss to NEWUOA is in the §1.2 contribution list, not in the abstract [S080 arXiv pp. 1, 6].
+- **SW6** (data assimilation): meteorology is already an application in the 1989–90 DOE progress report [S197 pp. 2, 4] and in the 1990–91 award abstracts [S198; S196], earlier than the c. 1992 start of §3; the 2009 case study is read [S047]: Gauss–Newton over quasi-Newton because of least-squares structure [S047 pp. 7–8], the multilevel method credited to Courtier et al. [S047 p. 13], and no statement of which parts are the authors' own [S047 pp. 1, 16].
+- **§6 candidate patterns**: patterns 1–3, 7 and 9 are the skill's Methods 5, 1, 3, 2 and 6; 4, 5, 8 and 10 are Heuristics 5, 7, 4 and 9; pattern 6 is part of Method 6. The full texts add Method 7 and Heuristics 11–12 (`08-deep-reading-synthesis.md` §§4–5).
+- **Gaps closed**: Gap 1 (Google Scholar, now harvested); Gap 3's bodies, except *Numerical Optimization* [S001] and the 1989 theory paper [S017].
 
 ---
 
