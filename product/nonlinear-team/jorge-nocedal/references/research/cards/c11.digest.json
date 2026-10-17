@@ -1,0 +1,93 @@
+[
+  {
+    "id": "S072",
+    "year": "2020",
+    "title": "Analysis of the BFGS method with errors",
+    "read_level": "full",
+    "contribution": "Proves that BFGS with an unmodified Armijo-Wolfe line search, changed only by lengthening the differencing interval (l > 2ε_g/m), converges R-linearly to a noise-determined neighbourhood on strongly convex functions with bounded errors in f and g, and that its Hessian approximation is not corrupted there (arXiv v1 pp. 4, 12, 20-23).",
+    "problem_entry": "Theory gap: the classical quasi-Newton analysis assumes exact f and gradient. Each prior line avoids the hard part by an assumption (noise diminished at will, local start, controlled gradient differences, gradient method only), and the paper removes those assumptions (pp. 1-2). The concrete mechanism is that short steps let ε_g contaminate y_k (pp. 3-4).",
+    "key_idea": "Keep BFGS and the standard Armijo-Wolfe search unchanged. If the accepted step is shorter than l, recompute the curvature pair at x_k + l·p_k/‖p_k‖ (one extra gradient), even after a failed line search. Skipping, Powell damping and Armijo relaxation are rejected, each with a reason (pp. 2, 4-5).",
+    "assumptions": "φ bounded below and C² (C² admitted to be only for proof convenience), M-Lipschitz gradient; uniformly bounded errors ε_f and ε_g (Gaussian noise excluded, a 'benign setting' first); m-strong convexity; ε_g and m assumed known (pp. 5, 12, 26). The estimation procedures promised for Section 4 (p. 19) do not appear there (p. 24).",
+    "proof_devices": [
+      "Two-oracle perturbation lemma with an affine-Lipschitz slack Λ, applied true→noisy (Λ=0, Thm 3.4) and noisy→true (Λ=2ε_g, Thm 3.5); angles left as free parameters at first (Lemma 3.3, pp. 6-11)",
+      "Spectral-ball characterization: y = Hs with λ(H) in [µ,L] iff ‖y − (L+µ)/2·s‖ ≤ (L−µ)/2·‖s‖, converse proved with a reflector Q = 2eeᵀ − I; gives m̂ = m − 2ε_g/l and M̂ = M + 2ε_g/l (Lemmas 3.7-3.8, pp. 12-13; App. pp. 26-27)",
+      "Reuse of the Byrd–Nocedal 1989 good-iterates theorem: a fraction q of iterates have cos Θ ≥ β1(q), avoiding a cond(B_k) bound (Lemma 3.9, Cor. 3.10, pp. 13-14)",
+      "Angle transfer: ε/‖g2‖ ≤ β/4 implies cos ϑ2 ≥ β/2 (Lemma 3.11, pp. 14-15)",
+      "Running-minimum sequence ξ_k with φ(x_k) ≤ ξ_k + 2ε_f, giving an R-linear rate (1 − mζ)^q to 2ε_f, finite entry into N1 by contradiction, and confinement to the 2ε_f band N2 (Thms 3.15-3.18, pp. 19-22)",
+      "Lengthening is inactive on good iterates far from N1 (Thm 3.19, p. 23)"
+    ],
+    "experiments": "One 4-D quadratic (eigenvalues 1e-2 to 1e4), uniform bounded noise with ε_f = ε_g = 1, l = 4ε_g/m, bisection Armijo-Wolfe (c1 = 0.01, c2 = 0.5), 20 runs. Plots of true gap and true gradient with the noise level and first lengthening (k = 8) marked, plus cond(H^{1/2}∇²φH^{1/2}). No baseline; the runs are designed to 'verify only the behavior predicted by the theory' (pp. 23-26).",
+    "positioning": "Extends the Byrd–Nocedal 1989 tool ('one of the hallmark results of BFGS') and Powell's Armijo-Wolfe stability result; framed along the lines of Nedic–Bertsekas. It restates prior work, including the group's own [2] and the stochastic quasi-Newton papers [3], as having assumed controlled gradient differences (pp. 2, 25-26).",
+    "writing": "The intro's fifth sentence names the single modification and everything that stays unchanged (p. 1). Each theorem gets a plain paragraph on what is established and what is still open (pp. 8, 11, 17, 22-23). Hedging is placed where the scope narrows ('this result is preliminary', p. 8; benign setting, p. 5).",
+    "limits_future": "Strong convexity, bounded noise, known ε_g and m; no superlinear rate, which would need rapidly vanishing errors. A separate paper is promised with adaptive l, nonconvexity and limited memory (pp. 25-26), later delivered as S071.",
+    "method_links": [
+      {"method": "Method 3", "relation": "evidence", "note": "Classical BFGS and line search kept; failing component named (curvature pairs from a too-short differencing interval) and replaced by an ε_g-driven lengthening; convergence to a noise-determined neighbourhood; practical version announced as a separate paper (Method 3 step 6).", "pages": "pp. 1-4, 12, 19-22, 26"},
+      {"method": "Method 3", "relation": "variant", "note": "The theory paper knowingly depends on the strong-convexity constant m, assumed known (the Method 3 checkpoint in SKILL.md on constants users cannot know), and has no recovery path or exit flag beyond α = 0 and a 30-failure stop; the checkpoint is met only by the companion paper S071.", "pages": "pp. 4, 19, 24, 26"},
+      {"method": "Method 5", "relation": "evidence", "note": "Analyses the unmodified Armijo-Wolfe search people run ('as this has practical advantages') and proves an R-linear rate, not just convergence.", "pages": "pp. 2, 20-21"},
+      {"method": "Method 5", "relation": "variant", "note": "No bound-versus-run plot: Fig. 4.1 draws the noise level, not the theorem's neighbourhood N1 or its rate.", "pages": "p. 24"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Extend your own classical analysis tool to the new regime", "evidence": "The Byrd–Nocedal 1989 good-iterates theorem is the backbone of the noisy-BFGS analysis; S071 reuses it again for BFGS and L-BFGS.", "pages": "pp. 3, 13-14, 25; S071 pp. 7, 10-11"},
+      {"pattern": "Benign setting first, as declared staging", "evidence": "Bounded noise, strong convexity and known constants first, analysis of unbounded errors explicitly deferred, the practical nonconvex limited-memory version promised for a later paper.", "pages": "pp. 5, 26"}
+    ],
+    "transferable": [
+      "Lengthened differencing: if ‖α_k p_k‖ < l, recompute y at x_k + l·p_k/‖p_k‖; with l > 2ε_g/m the ratios yᵀs/sᵀs ≥ m − 2ε_g/l and yᵀy/yᵀs ≤ M + 2ε_g/l hold (pp. 4, 12-13)",
+      "Two-oracle perturbation lemma with an affine-Lipschitz slack Λ, used in both directions to transfer Armijo-Wolfe conditions between noisy and true functions (pp. 6-11)",
+      "Ball characterization of y = Hs with a bounded spectrum, to turn a perturbation bound on y into curvature-ratio bounds (p. 12; App. pp. 26-27)",
+      "Running minimum of the true objective, to prove linear convergence to a 2ε_f band when only the noisy objective is monotone (pp. 19-21)",
+      "Plot cond(H_k^{1/2}∇²φH_k^{1/2}) against iterations to show the quasi-Newton matrix is not corrupted by noise (p. 24)"
+    ],
+    "coauthors": "Yuchen Xie (Northwestern IEMS), Richard H. Byrd (Colorado)",
+    "quotes": [
+      {"text": "We prefer to retain the standard Armijo-Wolfe line search without any modification, as this has practical advantages.", "page": 2},
+      {"text": "The numerical results presented here are designed to verify only the behavior predicted by the theory.", "page": 26}
+    ]
+  },
+  {
+    "id": "S071",
+    "year": "2022",
+    "title": "A noise-tolerant quasi-Newton algorithm for unconstrained optimization",
+    "read_level": "full",
+    "contribution": "Turns S072's theoretical lengthening into practical BFGS-E and L-BFGS-E methods. A noise control condition needing only the gradient-noise bound replaces the unknowable m, and a two-phase line search with a relaxed Armijo rule handles the step. The methods converge linearly to a noise neighbourhood for strongly convex functions, are tested on 41 noisy CUTEst problems, and are released on GitHub (arXiv v3 pp. 4-6, 10-16, 17-25).",
+    "problem_entry": "Practical gap left by S072: it needs the strong-convexity constant m, 'which is normally not known', and has no practical line search (pp. 1, 4). The motivation is computational, low-precision and statistical noise (PDE solves, Monte Carlo, finite-difference DFO, p. 2). The paper opens with a failure demo on the easy ARWHEAD problem, where κ(H_k) blows up only under noise (pp. 2-3).",
+    "key_idea": "Noise control condition (2.9) on a separate lengthening parameter β: (g(x+βp) − g(x))ᵀp ≥ 2(1+c3)ε_g‖p‖. The paper adds a two-phase line search (bisection with α = β, splitting into Armijo backtracking for α and doubling for β when the noise test fails or after N_split trials), a relaxed Armijo rule, best-α reuse and a local curvature seed for β. The design reduces to standard Armijo-Wolfe at zero noise (pp. 4-6, 12-16).",
+    "assumptions": "Analysis: m-strongly convex with an M-Lipschitz gradient (no C² needed); bounded errors with known or estimated bounds ε_f and ε_g (the algorithm 'has access' to them); line-search success assumed on good iterates outside N1. Unbounded or x-dependent noise 'cannot be directly applied'. The algorithm is aimed at general nonlinear problems (pp. 1-2, 6-7, 12).",
+    "proof_devices": [
+      "Lemma 3.3: noise control with c > 2 gives sᵀy/sᵀs ≥ c/(c+2)·m and yᵀy/sᵀy ≤ c/(c−2)·M, via co-coercivity (Bertsekas Prop. 6.1.9(b)) for the spectral ball, a lower bound ‖s‖ ≥ (c−2)ε_g/M, and a two-case split; constants independent of l and of the noise level (pp. 8-10)",
+      "Lemma 3.4: a fraction of good iterates for BFGS via Byrd–Nocedal 1989; for L-BFGS every iterate is good, via ψ(B) = tr B − log det B and κ(B_k) ≤ exp[(d+t)(M̂ − log m̂)] (pp. 10-11)",
+      "Theorem 3.5 proved by reduction to S072: only the update and lengthening differ, so S072's line-search results and Thms 3.16-3.18 carry over with γ* in place of β1 (pp. 11-12)"
+    ],
+    "experiments": "Six methods (BFGS, L-BFGS, the two Skips variants, BFGS-E, L-BFGS-E), all with bisection; 41 CUTEst problems (d = 30-110) with injected uniform noise. Staged runs: gradient noise only first, then f and g noise. Also a ×1/10 to ×10 misspecification sweep of ε_g, intermittent noise, skipping against lengthening (skipping wins on easy ENGVAL1), and Morales log2-ratio profiles over 5 seeds at one noise level. No rival-community codes (pp. 16-25).",
+    "positioning": "Builds directly on S072 and Byrd–Nocedal 1989. Restates the group's own stochastic quasi-Newton papers [7, 9, 10] as having assumed controlled gradient differences. Links the relaxed Armijo rule to Berahas–Cao–Scheinberg and the profile to Morales–Nocedal; dismisses Powell damping by argument (pp. 3, 6-7, 15, 23, 26).",
+    "writing": "Numbered contributions (p. 3); Remarks 1-2 answer in advance the reviewer's question of why a simpler design was not used (pp. 6, 13-14); surprising plots are explained in the text (pp. 19, 21); scoped hedging ('certain classes', pp. 3, 24). Tension: the abstract says the line search guarantees Armijo-Wolfe 'under most reasonable conditions' (p. 1), while the theorem assumes line-search success (p. 12) and p. 13 admits it may fail.",
+    "limits_future": "Printed: unbounded or x-dependent noise excluded; failure in noise-dominated or flat directions handled by an iteration cap; underestimated noise hurts; skipping is cheaper on easy problems (pp. 2, 13, 20-21, 25). Unprinted: synthetic uniform noise only, one noise level in the aggregate, and no analysis of the Algorithm 4.3 heuristics (pp. 12, 15, 17, 25). No explicit future-work list.",
+    "method_links": [
+      {"method": "Method 3", "relation": "evidence", "note": "Failing update and line search named and shown failing on an easy problem; repair driven by the noise estimate ε_g; recovery logic (split phase, N_split cap, best-α reuse, relaxed Armijo); checked against classical BFGS and skipping; misestimated noise measured. S072's unknowable m is removed and estimated only to seed β, which matches the Method 3 checkpoint in SKILL.md (estimate what can be estimated).", "pages": "pp. 1-6, 13-16, 18-23"},
+      {"method": "Method 3", "relation": "variant", "note": "Two components are replaced (update and line search), and the new line search abandons S072's stated preference for an unmodified Armijo-Wolfe search.", "pages": "pp. 12-16; S072 p. 2"},
+      {"method": "Method 1", "relation": "evidence", "note": "Step 7: typical-behaviour problems plus aggregate Morales profiles, gradient evaluations counted, losses printed (skipping wins on easy problems, restated in the final remarks).", "pages": "pp. 17-19, 21, 23-25"},
+      {"method": "Method 1", "relation": "variant", "note": "Baselines are only the classical methods and a skipping variant, all with the same simplified bisection search; no rival-community code.", "pages": "pp. 16-17"},
+      {"method": "Method 2", "relation": "evidence", "note": "The cheap dismissed option (update skipping) is built from the paper's own test and run, and where it wins is printed.", "pages": "pp. 16-17, 21"},
+      {"method": "Method 2", "relation": "variant", "note": "Powell damping, the textbook safeguard, is dismissed as 'somewhat dangerous' by argument, not by experiment.", "pages": "p. 6"},
+      {"method": "Method 5", "relation": "variant", "note": "The theorem covers outline Algorithm 2.1 under an assumed line-search success, not the shipped Algorithm 4.3 with its heuristics; no bound-versus-run plot; rates proved for both BFGS and L-BFGS.", "pages": "pp. 10-12, 15"},
+      {"method": "Method 4", "relation": "evidence", "note": "Step 1: failure modes are written into the paper (unbounded or x-dependent noise, flat directions, noise underestimation).", "pages": "pp. 2, 13, 20"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Zero-noise collapse", "evidence": "The noise-aware variant reduces exactly to standard (L-)BFGS with Armijo-Wolfe when ε_g = 0, and costs no more than the classical method where that method works.", "pages": "pp. 13, 25"},
+      {"pattern": "Modular proof by reduction to the companion theory paper", "evidence": "Only the update-specific curvature-pair lemma is re-proved; the line-search and rate chain is inherited from S072.", "pages": "p. 12"},
+      {"pattern": "Extend your own classical analysis tool to the new regime", "evidence": "The Byrd–Nocedal 1989 good-iterates theorem is reused for BFGS, and its ψ-function technique for L-BFGS (shared with S072).", "pages": "pp. 7, 10-11"}
+    ],
+    "transferable": [
+      "Noise control test on a separate lengthening parameter β: accept the pair only if (g(x+βp) − g(x))ᵀp ≥ 2(1+c3)ε_g‖p‖, which needs only the noise bound (pp. 4-6, 10)",
+      "Two-phase line search: bisection with α = β, splitting into Armijo backtracking (factor 10) for α and doubling for β when the noise test fails; reduces to standard Armijo-Wolfe at zero noise (pp. 12-14)",
+      "Gradient-reliability switch in Armijo: if gᵀp ≥ −ε_g‖p‖, require only simple decrease, and add 2ε_f after the first failure (p. 15)",
+      "Seed the expensive search with a cheap local estimate (minimum of the last h curvature estimates); in the paper's tests this cut lengthening to 1-3 extra gradient evaluations (p. 16)",
+      "Experiment protocol: misspecification sweep of the estimated noise level from ×1/10 to ×10, an intermittent-noise recovery test, and a comparison against the cheapest safeguard (skipping) reporting where it wins (pp. 20-22)",
+      "L-BFGS analysis: bound κ(B_k) through ψ(B) = tr B − log det B over t updates from the scaled initial matrix, so every iterate is good (pp. 10-11)"
+    ],
+    "coauthors": "Hao-Jun Michael Shi, Yuchen Xie (Northwestern IEMS), Richard H. Byrd (Colorado)",
+    "quotes": [
+      {"text": "Another possibility is to use Powell damping [27, chapter 18], but we consider this to be somewhat dangerous, as it would involve repeatedly introducing spurious information in the Hessian approximation without much safeguard.", "page": 6},
+      {"text": "In general, we found that methods that employ update skipping can be a strong alternative to lengthening if the problem is fairly well-conditioned and the Hessian does not change much, using much fewer gradient evaluations than the two-phase line search.", "page": 21}
+    ]
+  }
+]

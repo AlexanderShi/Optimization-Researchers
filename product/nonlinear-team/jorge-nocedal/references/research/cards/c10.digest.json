@@ -1,0 +1,248 @@
+[
+ {
+  "id": "S031",
+  "year": "2018",
+  "title": "A progressive batching L-BFGS method for machine learning",
+  "read_level": "full",
+  "contribution": "A progressive-batching L-BFGS method for machine learning that combines an inner-product quasi-Newton sample-size test, a stochastic Armijo line search whose first trial step is set from a sample variance-to-gradient ratio, and overlap-based curvature pairs, with linear (strongly convex) and sublinear (nonconvex) expected-rate theory for a fixed-step version; competitive on logistic regression, similar test accuracy but more gradient evaluations than SG/Adam on neural networks.",
+  "problem_entry": "Received wisdom that L-BFGS is a batch method unfit for ML and that stochastic line searches are inappropriate (abstract; pp. 1, 4); entry by refusing the full-batch / highly-stochastic dichotomy and growing the sample (abstract; p. 1).",
+  "key_idea": "Keep L-BFGS (two-loop, m = 10, skip if y^T s <= 1e-2 ||s||^2) and make three components sample-aware: IPQN test on the angle with the true quasi-Newton direction (5)-(9) (pp. 3-4), initial step alpha = (1 + Var/(|S| ||g||^2))^-1 from the expected-decrease inequality (11)-(14) (p. 4), curvature pairs from batch overlap (19) instead of full overlap (18) (pp. 4-5).",
+  "assumptions": "Theory freezes the line search (fixed alpha), assumes bounded H_k eigenvalues and the exact-variance IPQN test, and adds an orthogonality test (22)/(32) not in Algorithm 1; strongly convex (23) or nonconvex bounded below with Hessian <= LI (26) (pp. 5-6, 11-12).",
+  "proof_devices": [
+   "Lipschitz descent with second moment = squared mean + variance, giving the W_k matrix behind the initial step (Lemma A.1, p. 11)",
+   "variance split: orthogonality test bounds the part orthogonal to H grad F, IPQN test bounds the part along it, E||H g_S||^2 <= (1+theta^2+nu^2)||H grad F||^2 (Lemma B.3, (35)-(42), pp. 12-13)",
+   "gradient-dominance inequality ||grad F||^2 >= 2 mu (F - F*) for linear rate rho = 1 - mu Lambda1 alpha (Theorem B.4, pp. 13-14)",
+   "telescoping sum for E||grad F||^2 -> 0 and min-gradient O(1/T) bound (Theorem B.5, p. 14)"
+  ],
+  "experiments": "Logistic regression on 8 data sets, PBQN-MB/FO untuned (theta = 0.9, |S0| = 512) vs SG and SVRG with steps tuned over 2^j, j in {-10..10}, cost in full gradient evaluations, with batch-size and steplength traces (pp. 6, 15-19); ConvNet/AlexNet/ResNet18 without batch norm or dropout vs SG and Adam (development-based step decay), theta tuned over {0.9, 2, 3}: similar test accuracy, more gradient evaluations; Table 1 over 5 runs (pp. 7-8); idealized parallel performance model only (p. 24).",
+  "positioning": "Extends the group's own inner product test and multi-batch overlap (p. 2); Schraudolph et al. as the straightforward adaptation that is outperformed (p. 2); ML large-batch literature as motivation (p. 2); no comparison with other stochastic quasi-Newton methods listed on p. 2 (observation).",
+  "writing": "Thesis as a postulate (p. 1); contribution list (p. 2); optimism beyond the NN evidence (potential to lead deep learning, almost no tuning, no free parameters; pp. 2, 8) while theta is tuned for NNs (p. 5) and the NN loss is absent from the abstract; main-text cross-references point to supplement numbering (pp. 5-7).",
+  "limits_future": "Fast NN performance still underway, finer small-batch sample control needed, batch norm/dropout incompatible with curvature-pair consistency, parallel implementation only briefly explored (pp. 3, 7); future: robust batching, redesigned BN/dropout, parallel implementation (p. 8).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Puts on trial that L-BFGS is not a method of choice for ML and that stochastic line searches are inappropriate, testing a progressive-batching L-BFGS.",
+    "pages": "abstract; pp. 1, 4, 6-8"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "L-BFGS engine kept; sample size, initial step and curvature pairs repaired from explicit sample-variance estimates; thin recovery (halving, skipped updates, moving-window fallback).",
+    "pages": "pp. 3-5"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Own method untuned on all logistic-regression sets while SG/SVRG step sizes tuned per problem over a 21-point grid.",
+    "pages": "p. 6"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Step 7 only partly: the NN loss (more gradient evaluations) is in the body and Table 1, not the abstract; theta tuned lightly for NNs.",
+    "pages": "pp. 7-8; abstract"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Analysed iteration (fixed step, extra orthogonality test) is not the shipped algorithm; no bound-versus-run comparison; theory called supporting.",
+    "pages": "pp. 5, 12; abstract"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "component-isolating analysis on a simplified iteration",
+    "evidence": "Theory isolates progressive sampling by fixing the steplength, bounding H_k and adding an orthogonality test absent from Algorithm 1; the gap is stated.",
+    "pages": "p. 5"
+   },
+   {
+    "pattern": "idealized performance model to argue untested parallel speedup",
+    "evidence": "Appendix D extends the performance model of Keskar et al. (cost ratio 4/3, SG parallel efficiency 0.2, batch ratio 4) to claim potential lower training time without a parallel implementation.",
+    "pages": "p. 24"
+   }
+  ],
+  "transferable": [
+   "Initial trial step for a stochastic Armijo search from the expected-decrease inequality: alpha = (1 + sample variance / (|S| ||g_S||^2))^-1, equal to 1 in the noise-free limit (pp. 4, 11)",
+   "Angle-based sample-size test for preconditioned stochastic directions (acute angle with the true quasi-Newton direction), one extra H-vector product (pp. 3-4)",
+   "Curvature pairs from the overlap of consecutive batches (25%) at no extra gradient cost (pp. 5-6)",
+   "Parallel/orthogonal variance split to bound the second moment of a stochastic direction (pp. 12-13)",
+   "Run own method at one default setting on all data sets against per-problem grid-tuned baselines, and plot the adaptive internals (batch size, accepted step) beside the error curves (pp. 6, 15-23)"
+  ],
+  "coauthors": "Raghu Bollapragada, Dheevatsa Mudigere, Hao-Jun Michael Shi, Ping Tak Peter Tang",
+  "quotes": [
+   {
+    "text": "we postulate that the most efficient algorithms for machine learning may not reside entirely in the highly stochastic or full batch regimes",
+    "page": 1
+   },
+   {
+    "text": "We observe from our results that the PBQN method achieves a similar test accuracy as SG and Adam, but requires more gradient evaluations.",
+    "page": 7
+   }
+  ]
+ },
+ {
+  "id": "S038",
+  "year": "2019",
+  "title": "Derivative-free optimization of noisy functions via quasi-Newton methods",
+  "read_level": "full",
+  "contribution": "A finite-difference L-BFGS method for noisy black-box functions that sets the differencing interval from an ECnoise estimate of the noise level, relaxes the Armijo test by the noise level and adds a five-case Recovery procedure, with linear convergence to a noise-determined neighbourhood for fixed-step and relaxed-backtracking gradient iterations, and tests showing it roughly comparable to a function-interpolating trust-region code in evaluations while scaling to n = 5000.",
+  "problem_entry": "Finite differences under noise considered problematic, so DFO turned to direct search and interpolation, which do not scale (p. 1); entry: L-BFGS models cost O(n) and FD-BFGS is a non-mainstream favourite for smooth DFO (pp. 1-2); non-decaying noise of unknown level, unlike implicit filtering and Barton (p. 3).",
+  "key_idea": "Keep BFGS/L-BFGS; compute h from an estimated noise level (3.3)-(3.4) via Hamming/ECnoise tables (pp. 6-8); relax Armijo by 2 eps_f after the unit step fails (3.11) (p. 8); use line-search failure as a diagnostic for a Recovery tree (re-estimate h along d_k, small step, best stencil point, re-estimate along a random direction) (pp. 9-11).",
+  "assumptions": "f = phi + eps(x), phi C^2, noise distribution independent of x (p. 6); theory: i.i.d. bounded noise, strong convexity A.1, bounded gradient error A.2, bounded function noise A.3 (pp. 13, 15); H_k = I and plain backtracking with relaxation 2 eps_A for simplicity (pp. 12, 19); noise-estimate guarantee needs i.i.d. noise (p. 2).",
+  "proof_devices": [
+   "descent lemma plus completed square giving phi(x+) <= phi(x) - (alpha/2)||grad phi||^2 + (alpha/2)||e||^2, then gradient dominance for Q-linear convergence to phi* + eps_g^2/(2 mu) (Theorem 4.1, (4.5)-(4.7), pp. 13-14)",
+   "relaxed Armijo always satisfiable for small alpha when A > eps_f (4.16) (p. 15)",
+   "case split on beta_k = ||e||/||grad phi||: Case 1 deterministic-like step alpha_k > tau/L; Case 2 add-and-subtract and bound ||grad phi||^2 by ||e||^2/beta^2 into a constant eta (4.17)-(4.25) (pp. 15-17)",
+   "shift by eta/(1-rho) to get a contraction toward phi* + eta-bar; beta = 1 - 4 c1 gives rho = 1 - 32 mu tau c1^3 / L (4.14), (4.28) (pp. 15, 17-18)",
+   "optimal-h chaining ||e|| <= Lh/2 + 2 eps_f/h = 2 sqrt(L eps_f), so the accuracy is proportional to eps_f times L/mu (4.30)-(4.33) (p. 18)"
+  ],
+  "experiments": "Noise-free first: FDLM (FD, CD) vs DFOtr and NOMAD on 4 Hock-Schittkowski problems, FDLM-only CPU table on extended Rosenbrock up to n = 5000 because DFOtr is O(n^6) (pp. 4-5); then 49 HS problems, 100n evaluations and 30 CPU minutes, 4 noise types x 4 levels (2 shown), performance profiles (More-Wild test, tau = 1e-5) on 392 instances plus data profiles; roughly comparable in evaluations; ablation without Recovery deteriorates substantially (pp. 19-24).",
+  "positioning": "Contrarian against the DFO mainstream with Powell's 1972 remark as foil (p. 6); concedes interpolation robustness (More-Wild), faster O(n^4) Powell codes and inconclusiveness (pp. 3, 5); chose DFOtr for transparency (p. 4); credits implicit filtering and Barton (p. 3).",
+  "writing": "Strong opening claim for BFGS, generalized to the power of quasi-Newton methods (pp. 1-2); hedged verdicts (competitive, roughly comparable; pp. 2, 21); interpretation of accuracy constants after theorems (pp. 14, 18-19).",
+  "limits_future": "Noise-estimate guarantee only for i.i.d. noise (p. 2); analysis only for H_k = I and backtracking (pp. 12, 19); FI comparison not conclusive (p. 5); open: algorithmically sound FD-to-CD switching (p. 22) and higher-order differences (pp. 11, 21).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Names the comparison DFO rarely makes (FD-BFGS vs direct search/interpolation), uses Powell 1972 as received wisdom, and reports a result contrary to conventional wisdom.",
+    "pages": "pp. 6, 21"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "BFGS engine kept; differencing interval from an explicit noise estimate, Armijo relaxed by 2 eps_f, Recovery tree, and an ablation showing the recovery earns its cost.",
+    "pages": "pp. 6-11, 21"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Uses the rival community's own benchmarking protocol (More-Wild test, performance/data profiles, 100n budget) and declines CPU comparison against an O(n^6) code.",
+    "pages": "pp. 5, 19-21"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Step 1: the baseline is not the strongest rival code (DFOtr chosen for transparency; faster Powell codes acknowledged); the verdict is scoped instead.",
+    "pages": "pp. 4-5"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Theory analyses an H_k = I gradient iteration with plain backtracking, not the shipped L-BFGS/Armijo-Wolfe method, and concedes the provable quasi-Newton rate would be no better than steepest descent; no bound-versus-run plot.",
+    "pages": "pp. 12, 14, 19"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Undecided choices recorded as options or open questions: two stopping tests usable alone or combined, FD-to-CD switching, higher-order differences.",
+    "pages": "pp. 11, 21-22"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "component-isolating analysis on a simplified iteration",
+    "evidence": "Analysis takes H_k = I and plain backtracking with relaxation 2 eps_A to isolate the noisy line search, stating that the general case is longer and the provable rate would be closer to 1.",
+    "pages": "pp. 12, 14, 19"
+   }
+  ],
+  "transferable": [
+   "Set the finite-difference interval from an estimated noise level (ECnoise, 4 evaluations for stochastic and 6 for deterministic noise) and re-estimate it when the line search fails (pp. 7-12)",
+   "Relax the Armijo test by twice the noise level only after the unit step fails, and cap the number of backtracks (p. 8)",
+   "Recovery tree: first test whether the noise estimate is stale (compare new h-bar with h), then cheap moves (step of size h, best stencil point), then re-sample the noise along a random direction (p. 10)",
+   "In noisy line-search proofs, split iterations by the relative gradient error beta_k and absorb the noisy case into a constant (pp. 15-17)",
+   "Three-stage protocol: noise-free comparison, noisy profiles with the rival community's tools, ablation of the new safeguard (pp. 3-5, 19-22)",
+   "When the rival code is not built for speed, compare evaluations only and add a scalability table on a family the rival cannot reach (p. 5)"
+  ],
+  "coauthors": "Albert S. Berahas, Richard H. Byrd",
+  "quotes": [
+   {
+    "text": "It is rare to find in the derivative-free optimization (DFO) literature comparisons between the finite difference BFGS method and direct search or function interpolating trust region methods, even when testing smooth objective functions without noise.",
+    "page": 6
+   },
+   {
+    "text": "where the provable convergence rate for L-BFGS is no better than for steepest descent, even though L-BFGS is superior in practice.",
+    "page": 14
+   }
+  ]
+ },
+ {
+  "id": "S041",
+  "year": "2020",
+  "title": "An investigation of Newton-sketch and subsampled Newton methods",
+  "read_level": "full",
+  "contribution": "A numerical and theoretical comparison of Newton-Sketch (Hadamard) and subsampled Newton methods with inexact inner solves on finite-sum logistic regression, showing CG beats a stochastic-gradient inner solver, the two Hessian approximations perform on par in effective gradient evaluations, and giving a local linear-rate and work-complexity result for SSN-CG that uses CG's eigenvalue-gap bound instead of its worst case.",
+  "problem_entry": "Newton-Sketch analysed with exact solves and no comparison with Hessian subsampling (p. 2); tradeoffs not investigated (abstract); is a stochastic-gradient inner solver better than CG, and do stochastic second-order methods offer anything given first-order popularity (p. 2).",
+  "key_idea": "Exact gradient to isolate the Hessian approximation (p. 3); compare Hadamard Newton-Sketch with CG (cost ignored, most optimistic for it; p. 6), SSN-CG Hessian-free and SSN-SGI (LiSSA-like) inside one inexact Newton framework with Armijo backtracking (pp. 3-7).",
+  "assumptions": "Finite sum of smooth convex components (p. 2); A.1 component Hessians in [mu, L], A.2 Lipschitz Hessian, A.3 bounded Hessian variance, A.4 bounded moments (pp. 11-12); constant sample size, unit step, local start (pp. 11-12); implicit n > kappa^2 (p. 16).",
+  "proof_devices": [
+   "error split into exact subsampled-Newton step (Term 1) and CG residual (Term 2) (5.9)-(5.13) (pp. 12-13)",
+   "Term 1 via [2] and sample size T >= 64 sigma^2/mu^2 giving a 1/8 contraction share (5.6), (5.10)-(5.11) (pp. 12-13)",
+   "Term 2 via CG's eigenvalue-gap bound (5.1) instead of worst case, A-norm to Euclidean at cost sqrt(kappa), CG steps r_k chosen so the ratio is <= 1/(8 kappa^1.5) (5.7), (5.12) (pp. 11, 13)",
+   "induction with the bounded-moment assumption A.4 for linear rate 1/2 (pp. 13-14)",
+   "work complexity O((n + r-bar sigma^2/mu^2) d log(1/eps)) vs Newton-Sketch O((n + kappa^4 d^2) d log(1/eps)) from [16] (Corollary 5.2, (5.15), pp. 14, 16)",
+   "spectra of true, subsampled and sketched Hessians (10 replications, error bars, T = m_NS) to show r-bar << d (Fig. 2, pp. 15, 32-33)"
+  ],
+  "experiments": "Logistic regression on 4 synthetic and 12 ML data sets vs SVRG (pp. 7-8, 20, 23); effective gradient evaluations counting Hessian-vector products (p. 8); equal iteration budget b over 9 values with all tuning-parameter combinations for every method (p. 8); SSN-SGI not competitive with SSN-CG, second-order much faster on ill-conditioned sets, SVRG sweet-spot, Newton-Sketch on par with SSN-CG in evaluations (CPU advantage asserted, not shown) (pp. 8-9, 21, 23); sensitivity with divergent runs excluded and flagged (p. 27).",
+  "positioning": "Corrects Pilanci-Wainwright (no numerics, no subsampling comparison, direct solvers) and LiSSA (no detailed numerics) (pp. 2, 5, 7); refines the group's own worst-case analysis [2] (p. 11); answers first-order popularity (p. 2).",
+  "writing": "Framed as an investigation; surprise recorded (not known at the outset, not easily predictable; pp. 7-8); hedged conclusion (generally more efficient than SVRG on some problems; p. 17); CPU-time advantage asserted without a CPU table (pp. 9, 16-17).",
+  "limits_future": "Convex logistic regression only (p. 8); SVRG sweet-spot (p. 23); square-root Hessian needed and memory blocked cov (pp. 3, 23); local analysis with unit step and constant T (p. 12); n > kappa^2 (p. 16); no future directions stated (pp. 16-17).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Scales tipped against the favoured SSN-CG by ignoring Newton-Sketch's square-root and sketching cost; equal tuning grid for all methods; losses printed (rcv1, synthetic sets, SVRG sweet-spot).",
+    "pages": "pp. 6, 8-9, 21, 23"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Step 7: a CPU-time advantage is claimed three times without CPU data.",
+    "pages": "pp. 9, 16-17"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Tests the fashionable stochastic-gradient inner solver against the classical CG workhorse; CG wins, recorded as not predictable at the outset.",
+    "pages": "pp. 2, 7-8, 17"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Rejects the worst-case CG complexity as not indicative of practice and replaces it with an eigenvalue-dependent bound tied to plotted spectra; in the worst case the two methods' bounds are similar and the result is local.",
+    "pages": "pp. 11-16, 32-33"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Methods motivated by finite-sum and GLM square-root structure; concedes the first-order SVRG sweet-spot where curvature does not pay.",
+    "pages": "pp. 3-4, 9, 23"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "component-isolating analysis on a simplified iteration",
+    "evidence": "Exact gradient used so the Hessian approximation is studied alone; theorem assumes unit step, constant sample size and a local start, relying on A.1 to focus on the CG-solver interaction.",
+    "pages": "pp. 3, 11-12"
+   }
+  ],
+  "transferable": [
+   "Make every ingredient except the one under study exact (exact gradient) so the comparison isolates the Hessian approximation (p. 3)",
+   "Compare stochastic methods at an equal work budget b between full-gradient evaluations, sweeping b over a log grid and tuning each method's parameters for each b (p. 8)",
+   "Replace a worst-case Krylov bound by CG's eigenvalue-gap bound, leaving a data-dependent r-bar, and plot the test problems' spectra with error bars over replications (pp. 11, 14-15, 32-33)",
+   "Budget the per-iteration contraction of an inexact Newton analysis: exact-step error 1/8 via sample size plus inner residual 1/8 via CG iterations (pp. 12-13)",
+   "In sensitivity studies, state which (divergent) runs were excluded and that excluding them hides real differences (p. 27)"
+  ],
+  "coauthors": "Albert S. Berahas, Raghu Bollapragada",
+  "quotes": [
+   {
+    "text": "That analysis, however, underestimates the power of the SSN-CG method on problems with favorable eigenvalue distributions and yields complexity estimates that are not indicative of its practical performance.",
+    "page": 11
+   },
+   {
+    "text": "Therefore, the results we report in the next section are the most optimistic for Newton-Sketch.",
+    "page": 6
+   }
+  ]
+ }
+]

@@ -1,0 +1,60 @@
+[
+  {
+    "id": "S004",
+    "year": "2018",
+    "title": "Optimization methods for large-scale machine learning",
+    "read_level": "full",
+    "contribution": "A SIAM Review survey (with Bottou and Curtis) that frames large-scale ML optimization around SG, gives one unified convergence and work-complexity theory for a generalized SG covering mini-batch and scaled (quasi-Newton) directions, and maps the next generation along two axes, noise reduction and second-order methods (arXiv v3 pp. 20-24, 34-37, 82).",
+    "problem_entry": "Enters through the application field: three questions (p. 3) answered with two case studies, convex text classification on RCV1 and nonconvex DNNs (pp. 4-9), recast as expected vs empirical risk (pp. 9-15); the thesis is that classical nonlinear optimization typically falters in large-scale ML (p. 3).",
+    "key_idea": "A two-axis map with SG at the origin (Fig. 3.3, p. 20) and one generalized SG (Algorithm 4.1, (4.2), p. 22) whose direction can be a stochastic gradient, a mini-batch gradient or Hk times one; classical engines are kept and only the noise-sensitive part is adapted: the Hessian is subsampled more lightly than the gradient (p. 53), and L-BFGS pairs are formed with the same seed or from decoupled Hessian-vector products every 10-20 iterations (SQN, pp. 57-59).",
+    "assumptions": "L-smooth F (Assumption 4.1, p. 23); first- and second-moment limits with V[g] <= M + MV||grad F||^2 (Assumption 4.3, p. 24); strong convexity for all rates (Assumption 4.5, p. 26); independence of the seeds and results in expectation adopted for convenience (footnote 4, p. 22; Inset 4.2, p. 25); work complexity under the batch-favourable E ~ 1/n + eps (4.34, p. 36).",
+    "proof_devices": [
+      "Two fundamental lemmas (expected descent, Lemma 4.2 p. 23; moment-bounded form, Lemma 4.4 p. 24) from which all results are derived (p. 23)",
+      "Contraction inequality after subtracting the asymptotic noise floor alpha*L*M/(2c*mu): linear convergence to a neighbourhood (Theorem 4.6, (4.15)-(4.16), pp. 26-27)",
+      "Heuristic step-halving schedule giving O(1/k) (pp. 27-28, (4.17)-(4.18), Fig. 4.1)",
+      "Induction on nu/(gamma+k) with beta > 1/(c*mu); constant (2/mu^2)(L/c)(M/c) exposes conditioning (Theorem 4.7, pp. 28-29; (4.24), p. 30)",
+      "Mini-batch vs simple SG compared through the constants M/nmb and the stepsize cap (pp. 30-31)",
+      "Nonconvex: telescoping and weighted sums (Theorems 4.8, 4.10, pp. 32-33), lim inf (Theorem 4.9, p. 33), random-iterate convergence in probability via Markov (Corollary 4.11, p. 34), S+/S- convergent-sum argument for a full limit (Corollary 4.12, proof p. 84)",
+      "Work-complexity macroscopic problem: error split Eapp + Eest + Eopt (4.31) under a time budget (4.32), Table 4.1 (pp. 35-37); noisy-oracle Omega(1/k) lower bound (pp. 36-37)",
+      "Geometric variance decay gives a linear rate by induction (Theorem 5.1, pp. 41-42); geometric-sum count of total sample gradients O(1/eps) for nk = ceil(tau^(k-1)) (Theorem 5.3, pp. 43-44)",
+      "Descent test ||g - grad F|| <= chi||g|| (5.11) estimated by a sample-variance test (5.12) with a geometric backup (p. 45)",
+      "Same descent-lemma template reused for randomized coordinate descent (Theorem 7.1, p. 72) and proximal gradient (Theorem 8.1, pp. 75-76)",
+      "One-line counterexample |w| rules out the minimum-norm subgradient as an inexactness measure; ISTA-step norm adopted (footnote 9 and text, p. 80)"
+    ],
+    "experiments": "One illustrative experiment only: batch L-BFGS vs SG (fixed alpha = 4, tuned by repeated runs) on RCV1 logistic regression, cost in accessed data points over 10 epochs (Fig. 3.1, pp. 17-18); benchmarking is declined to avoid test-set and implementation bias (p. 4); no test set, profiles or failure counts; other practical claims are cited (pp. 47, 65).",
+    "positioning": "Against both communities: ML's view of SG as ideal is 'far from settled' (p. 40), while optimizers' batch preference is answered on intuitive, practical and theoretical grounds (pp. 15-19); historical credit to Robbins-Monro, Bertsekas, Bottou-Bousquet, Nemirovski-Yudin, Polyak-Juditsky (pp. 16-17, 35-37, 49); graded criticism, including of the group's own orthant code [30] (p. 82) and of general bound-constrained methods such as his own L-BFGS-B [163] (p. 78); 8 of 164 references have Nocedal as an author, none has Curtis; the SQN paragraph has no citation (p. 58).",
+    "writing": "Question-driven structure (p. 3), case studies first, one schematic reused as a road map (pp. 20, 40, 51), insets for history and caveats (pp. 16, 25, 39), a Commentary per method family (pp. 37-38, 49, 81-82), 'what can be learned' paragraphs after theorems (pp. 29-31), costs given as numbers (4md, 20x SG, batch >= 20 or 50, pp. 54, 57), small explicit examples (pp. 17, 52, 66), local calibrated hedging (pp. 45, 49, 55, 68, 71).",
+    "limits_future": "Synthesis and theory only (no new algorithm or software, p. 82); parallel/distributed, ADMM and EM not covered (p. 82); rates for strongly convex functions only (p. 25); open: rates of subsampled-Hessian Newton (p. 54), nonconvex Newton-CG (p. 55), stochastic quasi-Newton's potential (p. 58), momentum guarantees (p. 69), randomized CD in practice (p. 71); future: local-convexity adaptivity (p. 37), an SG-to-reduced-variance method (p. 45), noise reduction combined with second-order steps (pp. 21, 57).",
+    "method_links": [
+      {"method": "Method 6", "relation": "evidence", "note": "SG, not his own L-BFGS, is put at the centre because the ML problem structure favours it, and Fig. 3.1 shows SG beating batch L-BFGS early; structure-exploiting choices are preferred, including ell1-specific gradient projection over general bound-constrained techniques such as his own L-BFGS-B [163]. Also case evidence for Heuristic 9: the group's methods appear only as cells of the field map.", "pages": "pp. 3, 16-19, 34-37, 48, 72-73, 78-79"},
+      {"method": "Method 2", "relation": "variant", "note": "Received wisdom on trial on both sides (ML: SG is ideal; optimization: batch is natural), but the trial is by theory and cost accounting, not by building and testing the dismissed simple option.", "pages": "pp. 4, 15-19, 34-37, 40, 49"},
+      {"method": "Method 1", "relation": "variant", "note": "Same goal (methods, not implementations), reached by declining benchmarks to avoid test-set and implementation bias; the single plot discloses that the rival SG was tuned, but it is one problem called representative with no aggregate (against step 7's stop rule).", "pages": "pp. 4, 17-19"},
+      {"method": "Method 3", "relation": "evidence", "note": "L-BFGS kept as the engine; the failing component (curvature pairs corrupted by noisy gradient differences, with lingering bad updates) is repaired by same-sample differences or decoupled Hessian-vector-product pairs; dynamic sampling uses an estimate-driven variance test with a geometric backup as recovery; Newton-CG keeps its line search with a subsampled Hessian.", "pages": "pp. 45, 53, 57-58"},
+      {"method": "Method 5", "relation": "evidence", "note": "Work-complexity analysis separates SG from batch gradient (Table 4.1) and from gradient aggregation, is checked against practice (Fig. 3.1), ties the bound to conditioning via (L/c)(M/c), and places quasi-Newton's benefit in the constant rather than the rate.", "pages": "pp. 30, 36-37, 49, 56"},
+      {"method": "Method 5", "relation": "variant", "note": "Tension with Taste warning sign 3 and IT5: the summary credits SG's success to its superior work complexity guarantees, i.e. complexity as the reason to prefer a method, though a large gap between asymptotics and practice is stated.", "pages": "pp. 37, 82"},
+      {"method": "Method 4", "relation": "evidence", "note": "Weak: each method family closes with explicit open questions; any link from the p. 45 call for an SG-to-reduced-variance method to the group's later progressive-batching L-BFGS work (arXiv:1802.05374 in SKILL.md) is inferred from timing only, not checked.", "pages": "pp. 45, 49, 55, 58, 69, 71"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Prove once for an abstract direction", "evidence": "One generalized SG whose direction is a parameter (stochastic, mini-batch, or Hk-scaled), with all theorems derived from two lemmas; the same descent-lemma template is reused for noise reduction, coordinate descent and proximal gradient.", "pages": "pp. 22-24, 41, 72, 75"},
+      {"pattern": "Price devices in base-iteration units", "evidence": "Each enhancement is costed as a multiple of an SG iteration before any benefit is claimed: 4md (20x at m = 5), maxcg x factor x gcost + gcost, 2m + n per SVRG cycle, diagonal Gauss-Newton roughly twice SG.", "pages": "pp. 47, 54, 57, 65"},
+      {"pattern": "Allocate sample accuracy by component tolerance", "evidence": "The Hessian sample is smaller than the gradient sample because the iteration tolerates Hessian noise more; curvature pairs are computed on a larger sample, less often.", "pages": "pp. 53-54, 58"},
+      {"pattern": "Survey by trade-offs, not benchmarks", "evidence": "The review explicitly declines numerical comparisons to avoid test-set and implementation bias and compares methods through work complexity and theory instead (Method 1 variant for review papers).", "pages": "pp. 4, 34-37, 49"}
+    ],
+    "transferable": [
+      "Write one generalized algorithm whose search direction is a parameter and derive every theorem from two lemmas (expected descent plus a second-moment bound), so one proof covers SG, mini-batch SG and stochastic quasi-Newton (pp. 22-24).",
+      "State the variance bound as M + MV||grad F||^2: fixed-step theorems then show a noise floor, M = 0 recovers deterministic rates, and M zeta^(k-1) gives linear rates for noise-reducing schemes (pp. 24, 26-27, 41-42).",
+      "Compare methods by total work to eps under a time budget using Eapp + Eest + Eopt, assuming the statistical rate most favourable to the rival, and show your method still wins (pp. 35-37).",
+      "Prove a growing-sample method efficient by counting total sample gradients with a geometric sum, and pair the adaptive variance test with a preset geometric backup so the theorem stays valid (pp. 43-45).",
+      "For stochastic quasi-Newton, form curvature pairs from a separate, larger sample (same seed at both points, or a subsampled Hessian-vector product) and refresh them every 10-20 iterations (pp. 57-58).",
+      "In subsampled Newton-CG, subsample the Hessian more lightly than the gradient and cap CG so that maxcg x factor is about 1, making a step cost about one SG step (pp. 53-54).",
+      "Price every enhancement in base-iteration units before arguing for it (4md vs d; 2m + n per SVRG cycle) (pp. 47, 57).",
+      "Choose an inexactness measure for a nonsmooth subproblem that vanishes exactly at the minimizer and varies continuously; test candidates on |w| (p. 80).",
+      "In an illustrative plot, count cost in a unit fair to both sides (accessed data points), disclose which side was tuned and say where the ranking reverses (pp. 17-19)."
+    ],
+    "coauthors": "Léon Bottou (Facebook AI Research), Frank E. Curtis (Lehigh ISE)",
+    "quotes": [
+      {"text": "Rather than contrast SG and other methods based on the results of numerical experiments—which might bias our review toward a limited test set and implementation details—we focus our attention on fundamental computational trade-offs and theoretical properties of optimization methods.", "page": 4},
+      {"text": "have led many in the machine learning community to view SG as the ideal optimization approach for large-scale applications. We argue, however, that this is far from settled.", "page": 40}
+    ]
+  }
+]

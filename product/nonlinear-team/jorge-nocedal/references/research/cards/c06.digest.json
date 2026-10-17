@@ -1,0 +1,204 @@
+[
+  {
+    "id": "S029",
+    "year": "2009",
+    "title": "Adaptive barrier update strategies for nonlinear interior methods",
+    "read_level": "full",
+    "contribution": "Proposes a barrier-parameter rule that minimizes a linearized KKT 'quality function', a free/monotone globalization framework that makes any adaptive rule globally convergent, and a conditional Mehrotra corrector, tested in IPOPT and KNITRO; it shows that the MPC corrector is harmful, even in LP, without a starting-point strategy (preprint of 21 Jul 2008, pp. 1-25).",
+    "problem_entry": "Monotone Fiacco-McCormick µ rules converge but are sensitive to the starting point, initial µ and scaling (p. 4), while adaptive rules (Mehrotra, LOQO) are fast but unguarded (p. 2); entered empirically by comparing existing rules on 599 CUTEr problems with no globalization and IPOPT's line search off (pp. 2, 6-7).",
+    "key_idea": "Choose σ in µ = σxᵀz/n by golden-section minimization of the linearized KKT error at the fraction-to-the-boundary probing point, using ∆(σ) = ∆(0) + σ(∆(1) − ∆(0)) (two solves) and allowing σ > 1 for recovery (pp. 8-9); supervise it by a free mode with fallback to a monotone mode (Algorithm A, KKT-error test; Algorithm B, filter) (pp. 9-12); keep the primal-dual system and each code's merit or filter unchanged.",
+    "assumptions": "f, c twice continuously differentiable (p. 3); first-order stationarity only (p. 4); Theorem 5.1 assumes the monotone mode always terminates successfully, and for the filter version f bounded below and ‖c‖ bounded above (p. 12); q_L exact only for LP and assumed unimodal in practice (pp. 8-9).",
+    "proof_devices": [
+      "Algorithm A: Φ reduced by κ at least every l_max iterations ⇒ Φ_k → 0 (p. 12)",
+      "Algorithm B: filter-area contradiction (margin ε adds area ε² in a bounded box; filter monotone), after Fletcher et al. Lemma 3.3 (pp. 12-13)",
+      "Infeasible case by inheritance from the codes' monotone theory (KNITRO ℓ2 infeasibility stationarity, IPOPT restoration) (p. 13)",
+      "Geometric explanation of MPC failure: the corrector is a Newton step designed for the affine-scaling point but applied at the current point (pp. 18-19, Fig. 6)"
+    ],
+    "experiments": "IPOPT and KNITRO-Direct; 599 CUTEr problems with inequalities or bounds, with problems ending at different local solutions excluded (37/54); NETLIB LPs; Dolan-Moré profiles in evaluations and CPU; 3000 iterations / 1800 s; per-failure taxonomy (38 KNITRO, 39 IPOPT); PCx on NETLIB with the starting-point strategy off (90 → 28 of 94 solved) and conditional-MPC variants (pp. 6-7, 13-21).",
+    "positioning": "Credits LOQO's rule ('particularly noteworthy because of its success in practice', p. 5) and Mehrotra (p. 2); notes that most interior-method convergence theory ignores adaptive µ, except [11, 23, 24] (pp. 2, 4); credits Cartis for MPC failure analysis (p. 20); the two frameworks are the authors' own codes (Wächter co-author, p. 1).",
+    "writing": "Four-bullet contribution list (p. 2); design decisions tied to the §3 observations (pp. 2, 7); two-sided verdict and recorded surprise in the conclusion (p. 21); short theory placed after the algorithms.",
+    "limits_future": "Failures listed problem by problem (pp. 16-17); CPU gains less pronounced than evaluation gains (p. 14); fast local convergence not addressed, justified by practice (pp. 21-22); future: combine with Armand et al.'s µ strategies (p. 22).",
+    "method_links": [
+      {"method": "Method 4", "relation": "evidence", "note": "The open barrier-rule choice is studied in two frameworks (IPOPT, KNITRO), including the incumbent MPC heuristic's failures; the paper does not cite the Knitro option, so the 2006 → 2009 arrow stays inferred; both frameworks are the authors' own codes.", "pages": "pp. 2, 17-21"},
+      {"method": "Method 3", "relation": "evidence", "note": "Engine kept (system (2.5), fraction-to-the-boundary, merit/filter); only the µ rule replaced, driven by an explicit predicted KKT decrease, with recovery via the monotone mode and σ > 1; the estimate is a model prediction, not a noise level.", "pages": "pp. 3-4, 8-12"},
+      {"method": "Method 2", "relation": "evidence", "note": "The LP folklore that the corrector accelerates without hurting robustness is tested by removing its hidden ingredient (the starting point): PCx falls from 90 to 28 of 94; surprise recorded, verdict scoped.", "pages": "pp. 17, 20-21"},
+      {"method": "Method 1", "relation": "evidence", "note": "Method-level comparison of rules inside each code, the codes never ranked against each other; failures printed; no handicap of their own rule reported.", "pages": "pp. 6, 13-17"},
+      {"method": "Method 5", "relation": "contradiction", "note": "Theorem 5.1 holds for any µ rule (a safety net), so it cannot separate the rules; superiority rests on profiles, and the rate is deferred on practical grounds (fits Heuristic 6 rather than Method 5 steps 2-3).", "pages": "pp. 10-12, 22"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "extreme-value probe to set a trade-off parameter", "evidence": "Mehrotra probing solves at µ = 0 (the affine-scaling step); the quality function solves at σ = 0 and σ = 1 and interpolates; compare S052's ρ = 0 reference step and the steering rules' ν = ∞ LP.", "pages": "pp. 5, 8"}
+    ],
+    "transferable": [
+      "Measure raw, unglobalized steps first (line search off), then design the globalization to intervene only when progress stalls (pp. 6-7).",
+      "Two-mode supervision: any heuristic runs in a free mode, a nonmonotone KKT-error test or a filter decides the fallback to a provable monotone mode, and the fallback ends when progress returns (pp. 10-12).",
+      "Parameter search over a linearized merit when the step is affine in the parameter: two linear solves, then a bracketed golden-section search allowing values beyond 1 for recovery (pp. 8-9).",
+      "Filter-area contradiction proof for global convergence of filter-supervised schemes (pp. 12-13).",
+      "When profiling variants, drop the problems where they reach different local solutions and report the counts; end with a per-failure taxonomy naming each unresolved problem (pp. 7, 16-17).",
+      "Remove one hidden ingredient of an accepted method (here PCx's starting-point heuristic) and rerun the whole test set (p. 20)."
+    ],
+    "coauthors": "Andreas Wächter (IBM T. J. Watson), Richard A. Waltz (Northwestern); Richard Byrd acknowledged",
+    "quotes": [
+      {"text": "We have seen in this paper that, both for linear and nonlinear programming, classical barrier update strategies with global convergence guarantees are overly conservative, while strategies that are often fastest in practice are based on heuristic formulas and are not globally convergent.", "page": 21},
+      {"text": "This observation suggests that the globalization scheme that we propose in Section 5 should interfere minimally with the iteration; it should be active only when the algorithms appears to be making no progress.", "page": 7}
+    ]
+  },
+  {
+    "id": "S047",
+    "year": "2009",
+    "title": "Data assimilation in weather forecasting: a case study in PDE-constrained optimization",
+    "read_level": "full",
+    "contribution": "Explains, from the optimization side, why ECMWF's operational 4D-Var uses a multilevel inexact Gauss-Newton method on the reduced (NAND) formulation with Cholesky and Lanczos spectral preconditioning, deriving each choice from the application's size, time budget and derivative constraints (preprint of 18 Jan 2008, pp. 1-22).",
+    "problem_entry": "An operational application: strong-constraint 4D-Var with about 7 × 10⁹ variables, under two hours per cycle, inexact adjoints and no second derivatives, framed as how 'practical demands of the application dictate the various algorithmic choices' (pp. 1, 4-6).",
+    "key_idea": "Exploit least-squares structure (Gauss-Newton, not quasi-Newton; pp. 7-8); prove that GN-NAND equals a feasible GN-SAND variant, then choose NAND by storage, stability and cost (pp. 9-11); solve the GN subproblems at low resolution with simplified physics (credited to Courtier et al., p. 13), preconditioned by the background-covariance Cholesky factor and a Lanczos spectral preconditioner reused across outer iterations (pp. 14-17).",
+    "assumptions": "Perfect model over the window (called 'a questionable assumption', p. 20); D_x c uniformly nonsingular for a smooth x(x̄) (p. 8); approximate linearized operators (pp. 6, 13); a good initial guess makes the problem weakly nonlinear (p. 16); no line search, so no descent guarantee (p. 17).",
+    "proof_devices": [
+      "NAND/SAND Gauss-Newton equivalence by eliminating d and writing a null-space matrix Z (pp. 9-10)",
+      "Spectral argument: B-preconditioned Hessian = I + low-rank PSD ⇒ eigenvalues ≥ 1, many unit eigenvalues (p. 14)",
+      "Spectral preconditioner (19) reduces the condition number from λ1 to λ_{m+1} once the m leading Ritz pairs have converged (p. 15)",
+      "Lanczos orthogonalization speeds minimization, via Notay's duplicate-eigenvector result (p. 16)"
+    ],
+    "experiments": "No comparative benchmark: the leading 45 Ritz values (Fig. 1, p. 15); about 27% fewer iterations with the Lanczos preconditioner 'for a typical case' (Fig. 2, p. 17); runtime per operator evaluation by resolution on 1024 processors (Table 1, p. 18); operational settings K = 3, 70 Lanczos iterations, m = 25 (chosen empirically), about 30 CG iterations later (p. 17).",
+    "positioning": "Places 4D-Var within PDE-constrained optimization (p. 2); related work by Young et al. (NAND), Biros-Ghattas (SAND), Nabben-Vuik and Giraud-Gratton (pp. 18-19); credits the algorithm's ingredients to ECMWF work (Courtier et al. p. 13; Trémolet pp. 17, 20); own work appears only as the textbook and Morales-Nocedal preconditioning (p. 16).",
+    "writing": "Expository case study written 'from the perspective of numerical optimization' (p. 2); a numbered list of the problem's features (pp. 5-6); a three-criterion decision ending in a verdict sentence (pp. 10-11); concrete operational numbers (pp. 5, 17-18).",
+    "limits_future": "Growing nonlinearity will need more outer iterations (pp. 19-20); weak-constraint 4D-Var means SAND or a hybrid (p. 20); no line search, with descent failures studied in [15] (p. 17); the authors' own share of the algorithm is not stated.",
+    "method_links": [
+      {"method": "Method 6", "relation": "evidence", "note": "Least-squares structure leads to Gauss-Newton; (limited-memory) quasi-Newton, his own family, is rejected for 4D-Var. Confirms the reasons SKILL.md had marked 'not read'; the paper credits multilevel GN to Courtier et al. and does not tell the interview's story.", "pages": "pp. 7-8, 13"},
+      {"method": "Method 5", "relation": "variant", "note": "In the operational setting the authors accept no convergence guarantee ('theoretical guarantees of performance must be sacrificed'), with local-convergence reasoning only.", "pages": "pp. 2, 16-17"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "formulation choice by explicit criteria", "evidence": "SAND vs NAND vs hybrid decided by storage, stability and cost after proving when the GN steps coincide; strong vs weak constraint; this bears on the Roundtable Card's listed blind spot 'reformulation'.", "pages": "pp. 9-11, 20"}
+    ],
+    "transferable": [
+      "Open an application paper with a numbered list of the features that constrain the algorithm (size, time budget, evaluation cost, derivative accuracy) and derive each choice from it (pp. 5-6).",
+      "Weigh full-space against reduced-space formulations by first proving when the steps coincide, then by storage, stability and cost, keeping a hybrid in reserve (pp. 9-11).",
+      "Multilevel subproblem: solve the Gauss-Newton model at lower resolution with simplified physics and prolong the step (p. 13).",
+      "Change variables with the prior-covariance Cholesky factor so the Hessian is identity plus low rank, then precondition with capped Lanczos eigenpairs harvested from the first subproblem (µ_j = min(λ̂_j, 10)) (pp. 14-17)."
+    ],
+    "coauthors": "M. Fisher, Y. Trémolet (ECMWF), S. J. Wright (Wisconsin)",
+    "quotes": [
+      {"text": "This paper shows how practical demands of the application dictate the various algorithmic choices that are made in the nonlinear optimization solver, with particular reference to the system in operation at the European Centre for Medium-Range Weather Forecasts.", "page": 1},
+      {"text": "Moreover, a quasi-Newton approximation to (6) ignores the “least-squares” structure of this Hessian, namely, that the first term in (6) involves only first-derivative information.", "page": 8}
+    ]
+  },
+  {
+    "id": "S062",
+    "year": "2009",
+    "title": "On the geometry phase in model-based algorithms for derivative-free optimization",
+    "read_level": "full",
+    "contribution": "A numerical study showing that a simple full-quadratic interpolation trust-region method with no geometry phase matches NEWUOA and DFO, and beats the authors' own Wedge on evaluations, on 60 smooth problems with n = 2-15, despite ill-conditioned interpolation systems and poor gradient estimates (revised preprint of 12 Aug 2008, pp. 1-10).",
+    "problem_entry": "Contemporary model-based DFO includes a geometry phase whose only aim is the position of the interpolation set; asks what happens when it is dropped, because it 'adds substantial complexity' (p. 2).",
+    "key_idea": "Algorithm I, a deliberately simplest algorithm (monomial basis, model rebuilt each iteration, farthest-point replacement, no poisedness control; a simplification of Wedge), compared at equal information with codes that have geometry phases (pp. 3-4).",
+    "assumptions": "Smooth unconstrained problems, n = 2-15, full quadratic models with (n+1)(n+2)/2 points, no noise, no theory; a slight numerical advantage of Algorithm I is declared (pp. 1-4).",
+    "proof_devices": [
+      "No proofs; theory bounds with unknown Lipschitz constants replaced by measurement against exact AMPL gradients (p. 8)",
+      "Per-iteration condition-number traces with success/failure markers (pp. 6-8)",
+      "Conjectured self-correction mechanism: unproductive steps shrink the radius and act like a weak geometry phase; the low-dimensional-subspace cycle is left as an open question (pp. 7, 9)"
+    ],
+    "experiments": "60 unconstrained CUTEr problems with KNITRO reference values (Table 1); NEWUOA (with the same number of points) and DFO; stopping at 3 or 6 significant figures or 15,000 evaluations; only problems where all codes agree; performance profiles in evaluations; Wedge comparison of ill-conditioned iterations and evaluations (Table 2); diagnostics of cond(M̂), gradient cosine and gradient error (pp. 4-8).",
+    "positioning": "Argues with the Conn-Scheinberg-Vicente geometry theory (pp. 2, 6, 8) and Powell's codes; cites Moré-Wild's finding that NEWUOA is best by a wide margin (p. 9); the authors' own Wedge loses (p. 7).",
+    "writing": "Surprise stated three times (pp. 2, 5, 7); conjecture labelled as conjecture; a two-way recommendation (last resort, or a better geometry phase) (p. 9); short and data-led; code offered (p. 9).",
+    "limits_future": "Smooth problems, small n, full quadratic models; whether the observations hold for NEWUOA with 2n+1 points 'remains to be seen'; proving the self-correction tendency is an open question (p. 9).",
+    "method_links": [
+      {"method": "Method 2", "relation": "evidence", "note": "All steps: received practice written down, simplest version built, surprise recorded, verdict scoped, rival evidence cited; the body confirms SKILL.md's page citations.", "pages": "pp. 2, 4-5, 7, 9"},
+      {"method": "Method 1", "relation": "evidence", "note": "Equal information for NEWUOA, own numerical advantage declared, aggregate profiles plus typical problems; no tuning grids.", "pages": "pp. 4, 6-8"},
+      {"method": "Method 5", "relation": "evidence", "note": "Step 5: the observed mechanism is kept as a conjecture and an open question, and numerical experience is not presented as proof.", "pages": "pp. 6, 9"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "ground-truth instrumentation", "evidence": "The model gradient is measured against the exact gradient from AMPL (cosine, relative error) instead of relying on error bounds with unknown Lipschitz constants.", "pages": "p. 8"}
+    ],
+    "transferable": [
+      "Ablate a safeguard by building the simplest algorithm without it and comparing with established codes that have it, at equal information (pp. 3-4).",
+      "Plot an internal health measure (interpolation-system condition number) per iteration with success/failure markers, on a few problems run to high accuracy (pp. 6-8).",
+      "Measure model-gradient accuracy against exact gradients from a modelling language (p. 8).",
+      "Report the comparison with your own earlier method even when it loses (Wedge, Table 2, p. 7)."
+    ],
+    "coauthors": "Giovanni Fasano (Ca' Foscari Venice / INSEAN), José Luis Morales (ITAM)",
+    "quotes": [
+      {"text": "We find, to our surprise, that omitting the geometry phase does not seem to harm the efficiency and robustness of our algorithm", "page": 2},
+      {"text": "Therefore unproductive steps seem to play a role similar to the geometry phase used in other methods, although it exerts a very weak control on the poisedness of the interpolation set.", "page": 7}
+    ]
+  },
+  {
+    "id": "S052",
+    "year": "2010",
+    "title": "Infeasibility detection and SQP methods for nonlinear optimization",
+    "read_level": "full",
+    "contribution": "A penalty-SQP method whose model Hessian scales only the objective curvature by ρ, with a steering-type penalty update that forces ρ = O(error²), proved to converge quadratically (or superlinearly) to infeasible stationary points while staying efficient on feasible problems; illustrated on five examples (preprint of 16 Oct 2008, pp. 1-23).",
+    "problem_entry": "Fast methods can need a great number of function evaluations before declaring infeasibility, which matters in MINLP branch and bound and parametric studies; the switch approach (Fletcher-Leyffer, SNOPT) is criticized; the goal is a fast local rate whether the problem is feasible or infeasible (pp. 1-2, 5).",
+    "key_idea": "Keep Fletcher's Sℓ1QP engine; set W = ρ∇²f − Σλ∇²g so that the ρ = 0 model keeps constraint curvature (pp. 3, 16); update ρ by tests against a ρ = 0 reference step (linear feasibility, fraction ε1 of the attainable feasibility reduction, fraction ε2 of the model decrease) plus a cap ρ ≤ [E_k(0)/v_k]² (Algorithm II, pp. 14-16).",
+    "assumptions": "Twice continuously differentiable f, g; active-Jacobian full row rank; strict complementarity; second-order sufficiency for the auxiliary problem (3.6) (p. 7); unit steps via a watchdog or second-order correction (p. 5); exact Hessian or one satisfying (3.33) (pp. 13-14); inequality constraints only, equalities claimed 'without difficulty' (p. 2).",
+    "proof_devices": [
+      "Proof chain announced first: ‖z_{k+1} − ẑ‖ ≤ ‖z_{k+1} − z^ρ‖ + ‖z^ρ − ẑ‖ ≤ C‖z_k − ẑ‖² + O(ρ) (p. 8)",
+      "Lemma 3.1: penalty KKT points characterized by λ = 1 / 0 / (0,1) on violated / strictly satisfied / active constraints (p. 6)",
+      "Infeasible stationary points recast as KKT points of an equality-constrained auxiliary problem (3.6) (pp. 6-7)",
+      "Implicit function theorem on F(x, λ_A, ρ) ⇒ ‖z^ρ − ẑ‖ ≤ Cρ (Lemma 3.3, pp. 8-9)",
+      "Newton contraction uniform in ρ via Dennis-Schnabel Theorem 5.2.1 (Lemma 3.5, pp. 11-12); Theorem 3.6 rate conditions on ρ_k (p. 12)",
+      "n-active special case: x^ρ = x̂ for ρ < ρ_min, so ρ need not vanish (p. 13); quasi-Newton extension by the Boggs-Tolle-Wang / Powell characterization (p. 14)"
+    ],
+    "experiments": "MATLAB prototype with quadprog and stated parameters; five illustrative examples with per-iteration tables (unique, robot with an added constraint, isolated, batch and batch1 with an added bound, nactive); ablation of step f on nactive (Table 7); one comparison: KNITRO's interior method needs 42 iterations and 151 evaluations on unique; no aggregate test set (pp. 16-21).",
+    "positioning": "Contrasts the Fletcher-Leyffer switch (p. 2) and SNOPT's ℓ1 fallback, which 'makes no attempt to achieve a fast rate of convergence to stationary points in the infeasible case' (p. 5); credits Fletcher's Sℓ1QP (pp. 2, 4); repositions the authors' own steering rules as globally convergent but not fast when infeasible (p. 16); no self-dual infeasibility literature in the reference list (pp. 21-23).",
+    "writing": "Four-sentence abstract; proof roadmap stated before the lemmas (p. 8); a plain summary sentence after the theorem and two caveat subsections (pp. 13-14); limits written as scope statements (p. 16).",
+    "limits_future": "Local analysis only, nonconvex global question excluded (pp. 2-3); QP vs LP reference-step cost untested, as it needs 'a sophisticated software implementation' (p. 16); exact or carefully modified Hessian needed (pp. 13-14); future: detect the n-active case and skip the quadratic decrease of ρ (p. 21).",
+    "method_links": [
+      {"method": "Method 3", "relation": "evidence", "note": "Classical Sℓ1QP engine kept; the penalty component (update rule and Hessian scaling) rebuilt from an explicit estimate of the best attainable feasibility progress (the ρ = 0 subproblem); confirms SKILL.md's inferred link that the update builds on the steering rules.", "pages": "pp. 3, 14-16"},
+      {"method": "Method 5", "relation": "evidence", "note": "The analysis separates the structured model q_k from the standard Q_k: constraint curvature at ρ = 0 is crucial for the infeasible-case rate; it gives a rate, not only convergence.", "pages": "pp. 12, 16"},
+      {"method": "Method 4", "relation": "evidence", "note": "The authors' own KNITRO interior method is the slow example (42 iterations, 151 evaluations); the 2006 Knitro paper is cited but not its limitation sentence, so that arrow stays partly inferred.", "pages": "p. 18"},
+      {"method": "Method 1", "relation": "variant", "note": "Illustrative examples only, no aggregate, with the scope stated explicitly: a second instance of the exception named under Method 1's stop rule.", "pages": "pp. 16-21"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "extreme-value probe to set a trade-off parameter", "evidence": "The ρ = 0 subproblem gives the reference step d̄ that sets how far ρ must be decreased (compare S029's µ = 0 probe and σ = 0, 1 solves).", "pages": "p. 15"},
+      {"pattern": "one continuous parameter instead of a mode switch", "evidence": "A single penalty strategy moves between optimality and feasibility, against the Fletcher-Leyffer and SNOPT switches; counter-instance: S029's free/monotone modes.", "pages": "pp. 2, 5"}
+    ],
+    "transferable": [
+      "Scale only the objective's curvature by the penalty parameter so the model keeps constraint curvature at ρ = 0 (pp. 3, 16).",
+      "Set a trade-off parameter against a reference solve at its extreme value, then cap it by (error measure)² to obtain a quadratic rate (p. 15).",
+      "Rate proof for parameterized methods: triangle inequality through z^ρ, an implicit-function O(ρ) path bound and a Newton contraction uniform in ρ (pp. 8-12).",
+      "Make infeasible test instances by adding one inconsistent constraint or bound to a standard feasible problem, and run the original alongside (pp. 18-19).",
+      "Build one example per theorem case and ablate the rule the special case says is unnecessary (pp. 17-21)."
+    ],
+    "coauthors": "Richard H. Byrd (Colorado), Frank E. Curtis (Courant Institute, NYU)",
+    "quotes": [
+      {"text": "A numerical exploration of the tradeoffs of these two approaches is outside the scope of this paper as it requires a sophisticated software implementation of the SQP approach and exhaustive testing.", "page": 16},
+      {"text": "In summary, by using the structured Hessian approximation (2.4), a penalty-SQP method will achieve a fast rate of convergence simply by driving the penalty parameter to zero fast enough in a neighborhood of an infeasible stationary point.", "page": 13}
+    ]
+  },
+  {
+    "id": "S023",
+    "year": "2011",
+    "title": "On the use of stochastic hessian information in optimization methods for machine learning",
+    "read_level": "full",
+    "contribution": "Two batch (SAA) methods that put subsampled curvature into Newton-CG and L-BFGS (Hessian-vector products on a much smaller sample than the gradient; CG on the subsampled Hessian as the L-BFGS initial matrix), with convex global-convergence proofs and a Google speech-recognition test in which sub-sampled Newton is about twice as fast as L-BFGS (preprint of 13 Jan 2011, pp. 1-23).",
+    "problem_entry": "Asks whether Newton-CG and L-BFGS can exploit loss/expectation objectives; Newton-CG's outer-iteration savings do not pay for Hessian-vector costs, and L-BFGS's initial matrix carries little curvature; batch setting justified by distributed computing (pp. 2-4, 9).",
+    "key_idea": "Less accuracy is needed in the Hessian than in the gradient, so curvature comes from a subsample S ≪ X, with |S| and maxcg coordinated so that a step costs about one gradient (factor × maxcg ≈ 1); the L-BFGS initial matrix is replaced by a CG solve with the subsampled Hessian inside the two-loop recursion (pp. 3, 5-6, 9-10).",
+    "assumptions": "Smooth convex losses (p. 2); uniform convexity (via δ‖w‖²) and uniformly positive definite, bounded subsampled Hessians for the theory (p. 7); only the semi-stochastic case X_k = D analysed and tested (pp. 6, 10, 13).",
+    "proof_devices": [
+      "Krylov-subspace minimization property of CG with an orthonormal basis Q ⇒ angle bound γ1/γ2 and a step-length bound, then Zoutendijk (Theorem 2.1, pp. 7-8)",
+      "The CG output written as H0 q with H0 = Q[QᵀHQ]⁻¹Qᵀ + Q̄Q̄ᵀ, eigenvalues bounded, then the Liu-Nocedal L-BFGS theorem (Theorem 3.1, p. 11)"
+    ],
+    "experiments": "Deterministic sanity check on two n = 100 convex functions, reported as a loss in total CG work (Tables 1-2, pp. 12-13); one Google speech problem (m = 168,776, n = 10,191) with cost counted in accessed data points; baselines standard L-BFGS (t = 20 or 5) and classical Newton-CG; sweeps of maxcg and sample percentage for the new methods only; single data set, no repeated runs reported (pp. 13-18).",
+    "positioning": "Sets itself apart from Newton-like ML methods (Lin-Weng-Keerthi, Yu et al., Bottou) without comparing against them (p. 4); SAA language from stochastic programming (p. 2); avoids sampling second derivatives directly, citing Shapiro and Homem-de-Mello (p. 19); baseline justified by ML community use (p. 13).",
+    "writing": "A hedged thesis ('can be useful in some machine learning applications', p. 3) and a stronger conclusion (p. 19); motivation as lettered considerations a)-c) (pp. 4-5); speed-ups reported at a fixed accuracy level (p. 16).",
+    "limits_future": "Semi-stochastic case only (p. 6); preconditioning the inner CG unexplored (p. 19); one problem; dynamic sample sizes left to 'a future study' (p. 3).",
+    "method_links": [
+      {"method": "Method 6", "relation": "evidence", "note": "Exploits the loss's sum structure (Hessian-vector cost linear in sample size) and reports the sub-sampled Newton method twice as fast as his own L-BFGS on this problem.", "pages": "pp. 4, 16, 19"},
+      {"method": "Method 3", "relation": "variant", "note": "Classical engines kept and one component changed (Hessian sample; L-BFGS initial matrix), but the trigger is cost, not a failure, and there is no estimate-driven recovery.", "pages": "pp. 5, 10"},
+      {"method": "Method 1", "relation": "contradiction", "note": "Own parameters swept while the L-BFGS baseline runs at fixed settings, on one problem; consistent with Method 1 only in printing its own losing settings.", "pages": "pp. 12-17"},
+      {"method": "Method 5", "relation": "contradiction", "note": "Global convergence holds for any uniformly positive definite Hessian sample and any number of CG steps, so it would bless a steepest-descent-like variant equally; the superiority claim rests on one problem's numerics.", "pages": "pp. 5, 7, 11, 16"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "asymmetric accuracy (cheap curvature, accurate gradient)", "evidence": "Spend samples on the function and gradient and use a much smaller sample for curvature, because Newton-like methods tolerate Hessian errors.", "pages": "pp. 3, 5"}
+    ],
+    "transferable": [
+      "Write the step cost as maxcg × factor × gcost and choose the Hessian sample fraction so that factor × maxcg ≈ 1 (p. 6).",
+      "Replace the L-BFGS initial matrix by a few CG iterations on a subsampled Hessian inside the two-loop recursion (pp. 9-10).",
+      "Show that an inexact inner solve is a bounded SPD preconditioner by completing the Krylov projector with the identity on the orthogonal complement (p. 11).",
+      "Count work in data-point accesses across function, gradient and Hessian-vector products so methods with different inner loops share one axis (p. 16).",
+      "Test a stochastic idea first in its deterministic limit and report it if it loses there (p. 12)."
+    ],
+    "coauthors": "Richard H. Byrd (Colorado), Gillian M. Chin (Northwestern IEMS), Will Neveitt (Google Research)",
+    "quotes": [
+      {"text": "Our approach is based on the fact that less accuracy in the Hessian is required than in the gradient", "page": 3},
+      {"text": "The SLM method cannot, however, be considered successful in this deterministic setting (where Sk = Xk) because, as shown in the last column of Table 1, the total number of CG iterations is too expensive, even with the reduction observed in outer iterations.", "page": 12}
+    ]
+  }
+]

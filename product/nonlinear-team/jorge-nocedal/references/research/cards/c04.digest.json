@@ -1,0 +1,179 @@
+[
+  {
+    "id": "S009",
+    "year": "2000",
+    "title": "A trust region method based on interior point techniques for nonlinear programming",
+    "read_level": "full",
+    "contribution": "Applies the Byrd–Omojokun trust-region SQP method to a sequence of log-barrier problems, with a slack-scaled trust region, a fraction-to-the-boundary rule and Cauchy-decrease inexactness conditions, and proves a global convergence trichotomy whose failure outcomes are infeasibility stationarity or LICQ failure, both signalled by a diverging penalty parameter.",
+    "problem_entry": "SQP is iteration-cheap but QP-expensive at scale while interior methods won on large LPs; the entry is to view interior methods from the SQP perspective and shape the QP so steps avoid violating s > 0, with the barrier update explicitly left out (p. 2).",
+    "key_idea": "Keep the equality-constrained Byrd–Omojokun SQP engine (normal + tangential step, exact non-squared l2 merit) and change only the slack handling: S^-1 scaling in the trust region, fraction to the boundary, tightened normal-step bounds and a max-rule slack reset; the step reduces to primal or primal-dual Newton only under strict convexity, exact solve and inactive trust region (pp. 4–9, 17–18).",
+    "assumptions": "f, g differentiable with Lipschitz gradients/Jacobian on a convex set containing the iterates; f_k bounded below and gradients, constraints, Jacobians and B_k bounded (called the most restrictive assumption); no full-rank assumption on A_k by design; B_k and multipliers arbitrary bounded choices; primal version only; fixed mu in Algorithm I (pp. 8, 18, 20).",
+    "proof_devices": [
+      "generalised one-dimensional Powell lemma giving lower bounds on normal and tangential predicted reductions (pp. 12–13, 16)",
+      "range-space condition plus normal and tangential Cauchy-decrease conditions as inexactness criteria satisfied by Steihaug truncated CG (pp. 11–12, 15)",
+      "null-space bases with singular values bounded above and below, any basis allowed (pp. 14–15)",
+      "|pred − ared| quadratic model-accuracy bound and well-posedness proposition by contradiction (pp. 18–20)",
+      "slack boundedness from ln||s||/||s|| → 0 (pp. 22–23)",
+      "ball-leaving argument against a merit function bounded below (pp. 24–26, 31–32)",
+      "trichotomy theorem: infeasibility stationarity with nu → ∞ / LICQ failure with nu → ∞ / barrier stationarity with nu constant (p. 21; restated pp. 32–33)",
+      "outer-loop theorem: inner failure (A) or feasible KKT limit points under LICQ (B) (p. 34)"
+    ],
+    "experiments": "none in this paper; deferred to the Byrd–Hribar–Nocedal implementation and companion papers (pp. 2, 35).",
+    "positioning": "Extends the Byrd–Omojokun approach; credits Yamashita and others with the SQP–interior equivalence; separates itself from nine interior-for-NLP groups by not requiring a positive-definite Hessian, and from Plantenga by three listed differences; contrast, no criticism (pp. 5, 7–8).",
+    "writing": "Outline algorithm, then KKT/Newton connections, then precise algorithm and clarifications; theorem stated first and restated with a proof map; analysis presented as design justification with user-facing interpretation of each outcome (pp. 6–9, 16–17, 20–21, 32–33).",
+    "limits_future": "Rate of convergence, barrier-parameter update, subproblem accuracy, choice of B_k and multipliers, primal-dual analysis and Maratos-effect handling (second-order correction or watchdog) are left open (pp. 2, 8, 18, 33, 35).",
+    "method_links": [
+      {"method": "Method 4", "relation": "evidence", "note": "failure modes written into the main theorem as user-interpretable outcomes flagged by a diverging penalty parameter; undecided choices (barrier update, B_k, multipliers) listed", "pages": "pp. 2, 18, 20–21, 35"},
+      {"method": "Method 3", "relation": "variant", "note": "classical equality-constrained SQP engine kept and only the slack handling changed, but no estimate-driven repair or recovery path, and the regime is inequality constraints rather than noise", "pages": "pp. 4, 17–18, 35"},
+      {"method": "Method 5", "relation": "variant", "note": "analyses the method as run (inexact CG/dogleg steps under Cauchy decrease) but proves global convergence only; theory is used to justify design and classify failures, not to discriminate between methods", "pages": "pp. 11–15, 20, 33, 35"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "failure outcomes as theorem cases", "evidence": "global theorem enumerates outcomes; non-KKT outcomes are problem properties of interest to a user (no feasibility-improving direction, LICQ failure) and are flagged by nu → ∞", "pages": "pp. 20–21, 33–34"},
+      {"pattern": "map the new method onto known methods", "evidence": "exact conditions (strictly convex QP, exact solve, inactive trust region) under which the step equals primal or primal-dual interior Newton; local behaviour borrowed, global behaviour analysed", "pages": "pp. 7–9"}
+    ],
+    "transferable": [
+      "Specify subproblem inexactness as Cauchy-decrease conditions (plus a range-space condition for the normal step) that truncated CG or dogleg satisfy, so the theory covers the solver actually used (pp. 11–12, 15).",
+      "State the global theorem as an exhaustive list of outcomes in which every non-KKT outcome is a recognisable problem property flagged by a printable quantity such as a diverging penalty parameter (p. 21).",
+      "Leave constraint-rank assumptions out of the hypotheses so that their failure becomes a theorem outcome, and name your most restrictive remaining assumption (p. 20).",
+      "Scale bounded variables by their current values inside the trust region and keep them positive with a fraction-to-the-boundary rule rather than by shrinking the radius (p. 4).",
+      "Write down the exact conditions under which the new step equals the established Newton step, borrowing the local theory and analysing only the global behaviour (pp. 7–9)."
+    ],
+    "coauthors": "Richard H. Byrd, Jean Charles Gilbert",
+    "quotes": [
+      {"text": "The practical value of our analysis as we will show is that the situations under which Algorithm I can fail represent problem characteristics that are of interest to a user and that can be characterized in simple mathematical terms", "page": 20},
+      {"text": "In this paper we have focused on primal methods because they are easier to analyze and we have devoted much attention to their global convergence properties because the analysis provides important clues on how to design the algorithms", "page": 35}
+    ]
+  },
+  {
+    "id": "S021",
+    "year": "2001",
+    "title": "On the solution of equality constrained quadratic programming problems arising in optimization",
+    "read_level": "full",
+    "contribution": "Shows that projected CG for equality-constrained QPs without a null-space basis suffers cancellation-driven rounding errors, analyses them for normal-equations and augmented-system projections, and proposes iterative refinement and a residual update (project the Lagrangian gradient with least-squares multipliers) that restore accuracy at low cost; shipped in NITRO, GALAHAD and HSL QP modules.",
+    "problem_entry": "Avoid a null-space basis Z in the CG step of NLP solvers (one linear system instead of two, no dense reduced-Hessian preconditioning, no Z-induced ill-conditioning) and pay down the price this option carries: rounding errors that break Ax = b and make CG fail, e.g. CUTE ORTHREGA (pp. 2–3, 10).",
+    "key_idea": "Near the solution r = Hx + c approaches range(A^T) while its projection g → 0, so the projection cancels; exploit the invariance r → r − A^T y of CG to project the smallest representative (the Lagrangian gradient), add selective refinement triggered by a cosine test, and use numerators g^T g that cannot turn negative (pp. 8, 17–21).",
+    "assumptions": "A full row rank; H positive definite on the null space for convenience (not needed in trust-region use); error analysis with A scaled to unit norm, G = I, rounding only in the factor and solves; all examples with G = I; double precision only (pp. 2, 9–11, 14–15).",
+    "proof_devices": [
+      "roundoff bound for normal-equations projection, quadratic in cond(A) times ||r||/||Pr|| (pp. 11–12)",
+      "augmented-system bound linear in cond(A) with the same ratio (p. 12)",
+      "R-linear error contraction of multiple projections and least-squares perturbation comparison showing normal equations are not backward stable (pp. 14–15)",
+      "argument why fixed-precision refinement of the normal equations cannot help (Cholesky already backward stable; tested) (p. 15)",
+      "residual update read as iterative semi-refinement (p. 18)",
+      "cosine-to-rows-of-A diagnostic tied to the Arioli–Demmel–Duff backward error (pp. 9–10)",
+      "bound checked against a run and called pessimistic in general but tight in the example (p. 12)"
+    ],
+    "experiments": "Constructed ill-conditioned example and CUTE CVXEQP with residual and cosine per iteration, rerun for each remedy; main test on QPs harvested from the last iteration of the interior code on CUTE problems, unpreconditioned CG, stand/ir/update x augmented/normal, demanding tolerance, failure-type superscripts, CPU times, three unsolved problems; indirect test of function evaluations and projections inside the NLP code (pp. 8–10, 14, 16, 20–26); table values unreadable in the text layer.",
+    "positioning": "Respects the null-space approach and LUSOL, grants Coleman–Verma considerable merit and leaves the comparison open, traces projected CG to earlier work, declines Björck's shifted system; rests on Higham, Björck, Arioli–Demmel–Duff (pp. 2, 7, 9, 12, 15–16).",
+    "writing": "Examples before analysis; claim phrased 'We thus contend'; each remedy shown as a rerun of the same example with a figure; untested ideas flagged; conclusion ranks remedies (pp. 2, 8, 22, 25).",
+    "limits_future": "Preconditioners not evaluated; general-G residual update untested; three problems unsolved by any variant; comparison with Coleman–Verma open (pp. 7, 9, 22).",
+    "method_links": [
+      {"method": "Method 4", "relation": "evidence", "note": "the no-null-space-basis design is offered as an option for general-purpose codes and the remedies are shipped in NITRO, GALAHAD and HSL QP modules", "pages": "pp. 2, 22, 25"},
+      {"method": "Method 3", "relation": "evidence", "note": "rounding-error regime rather than noise: CG engine kept, failing component (projection under cancellation) named and repaired alone, repair triggered by an internal cosine diagnostic with refinement as recovery, repair ablated (reset once vs every iteration)", "pages": "pp. 8, 13–14, 17–21"},
+      {"method": "Method 5", "relation": "evidence", "note": "error bound compared with an observed CG run and its pessimism stated", "pages": "p. 12"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "pick the numerically best of mathematically equivalent forms", "evidence": "residual representative r − A^T y, symmetric steplength g^T g / p^T H p and stopping test on g^T g chosen for floating-point behaviour, not for exact-arithmetic differences", "pages": "pp. 17–21"},
+      {"pattern": "map the new method onto known methods", "evidence": "expanded-form CG shown equivalent to reduced-space PCG and independent of the choice of Z", "pages": "pp. 4–5"}
+    ],
+    "transferable": [
+      "When a projected iteration loses accuracy, find an invariance (r → r − A^T y leaves CG unchanged) and project the smallest-norm representative, the Lagrangian gradient with least-squares multipliers (pp. 17–18).",
+      "Attach a cheap per-iteration scalar diagnostic to an exact-arithmetic invariant (cosine between projected residual and rows of A) and trigger the costly fix only when it is violated (pp. 9–10, 20–21).",
+      "Prefer formulas whose numerators cannot change sign under rounding: alpha = g^T g / p^T H p and stopping on g^T g (pp. 20–21).",
+      "Evaluate a solver kernel on subproblems harvested from the real outer solver with a demanding tolerance and failure-type marks, then by the outer solver's own counts (pp. 22, 25).",
+      "Ablate how often a fix is applied (once at start vs every iteration) to show it must be repeated (pp. 18–19)."
+    ],
+    "coauthors": "Nicholas I. M. Gould, Mary E. Hribar",
+    "quotes": [
+      {"text": "We thus contend that it can be very useful for generalpurpose optimization codes to provide the option of not computing with a nullspace basis and the development of suitable methods is our goal in this paper", "page": 2},
+      {"text": "We believe it is reasonable to attribute the failure of the CG algorithm to the deviation of the iterates from the constraint manifold", "page": 9}
+    ]
+  },
+  {
+    "id": "S078",
+    "year": "2003",
+    "title": "Assessing the potential of interior methods for nonlinear optimization",
+    "read_level": "full",
+    "contribution": "Benchmarks two interior codes (LOQO, KNITRO) against two complementary active-set SQP codes (SNOPT, filterSQP) by problem class with aligned stopping tests and performance profiles, finds interior methods competitive but every code improvable, and turns the observations into concrete improvement items for KNITRO (preconditioning, adaptive initial barrier).",
+    "problem_entry": "Many interior methods for NLP had been proposed but few were publicly implemented; the question is whether LOQO and KNITRO are competitive with established large-scale codes and what their strengths, weaknesses and suitable problem classes are (pp. 1–2).",
+    "key_idea": "Compare methods, not brands: pick codes that differ along named algorithmic axes, split problems into unconstrained / equality / general classes, state what each code reduces to in each class, and attribute differences to the component active there (pp. 2–3, 7, 10–13).",
+    "assumptions": "Smooth CUTE problems in AMPL (Benson–Vanderbei) excluding LP, QP, feasibility and bound-only problems, default dimensions; default settings, stopping tests made as similar as possible (KNITRO's edited to match SNOPT's), same tolerance, CPU and iteration limits counted as failures; SNOPT first-order only; CPU reported only above a size threshold (pp. 2, 6–7); numeric values unreadable in the text layer.",
+    "proof_devices": [
+      "n/a (no proofs); analysis devices: Dolan–Moré log2 performance profiles of CPU time and function evaluations per class (p. 8)",
+      "robustness judged from evaluation profiles and solved counts because CPU profiles omit small problems (p. 9)",
+      "problem-by-problem reading of runs and solver output to attribute effects to components, with second-order corrections checked and excluded (pp. 9, 11)",
+      "accounting corrections: LOQO's extra evaluation discounted, LOQO's looser unconstrained stopping test, SNOPT's possible undercount with linear objectives (pp. 10, 14)",
+      "targeted follow-up at three growing dimensions to test a size artefact, null result reported (p. 14)",
+      "separate test of KNITRO's fixed initial barrier value (p. 15)"
+    ],
+    "experiments": "LOQO, KNITRO, SNOPT, filterSQP on CUTE/AMPL problems by class, Sun Ultra, defaults, failures counted; CPU and function-evaluation performance profiles per class, solved-count table including larger problems, KNITRO's own weaknesses reported (pp. 6–15).",
+    "positioning": "Explicitly not a ranking; LANCELOT, MINOS, CONOPT named as valid alternatives; rival developers (Leyffer, Gill, Vanderbei) thanked for help; LOQO's adaptive barrier credited as better early on; SNOPT's first-order performance called remarkable (pp. 2, 13, 15–16).",
+    "writing": "Self-critical verdict in the abstract; a 'what this study can and cannot achieve' paragraph; numbered observations per class; explicit caution flags; graded causal language ('almost certainly', 'more likely', 'remains to be established') (pp. 1–2, 9–15).",
+    "limits_future": "Few large problems ('It remains to be seen how interior methods perform on larger problems'); results tied to code releases; filter vs merit function unresolved and to be tested inside one code; KNITRO needs preconditioning and an adaptive initial barrier (pp. 2, 11, 15–16).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "method-level goal, stopping tests aligned by editing own code, defaults and failure limits, first-order disparity turned into a question, accounting corrections, own losses printed, few codes the authors know, one-code-base test proposed for filter vs merit; confirms SKILL.md's Method 1 wording but its numbers are unreadable in this file", "pages": "pp. 2, 6–7, 9–11, 14–15"},
+      {"method": "Method 4", "relation": "evidence", "note": "observations turned into named improvement items for the authors' own solver (preconditioner, adaptive initial barrier) and an open question on the filter", "pages": "pp. 9, 11, 15–16"},
+      {"method": "Method 6", "relation": "evidence", "note": "complementary approaches chosen deliberately; no uniform winner: interior competitive overall, first-order SNOPT strong on general constraints, filterSQP most economical in evaluations", "pages": "pp. 2, 13–15"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "map the new method onto known methods", "evidence": "in benchmarking: per problem class, state the algorithmic core each code reduces to (Newton, quasi-Newton, SQP variants) and attribute differences to the active component", "pages": "pp. 3, 7, 10, 12–13"}
+    ],
+    "transferable": [
+      "Split the test set by problem class, state per class which algorithmic core each code reduces to, and attribute differences only to components active in that class (pp. 3, 7, 10–13).",
+      "When a result contradicts expectation, run a targeted follow-up (same problems at growing dimension) and report a null result (p. 14).",
+      "Before attributing a CPU gap to an algorithmic feature, check the obvious implementation cause and say you checked (p. 11).",
+      "Report CPU time only above a size threshold and function evaluations for all problems; judge robustness from evaluations (pp. 6, 9).",
+      "Write a 'what this study can and cannot achieve' paragraph that forbids ranking and names release dependence (p. 2)."
+    ],
+    "coauthors": "José Luis Morales, Richard A. Waltz, Guanghui Liu, Jean-Pierre Goux",
+    "quotes": [
+      {"text": "Not only is such a ranking dubious given that it is based on a particular set of problems but even within this testing environment relative performance of the codes can change at any time", "page": 2},
+      {"text": "They should be taken with caution because the sample of problems is small", "page": 11}
+    ]
+  },
+  {
+    "id": "S061",
+    "year": "2004",
+    "title": "On the convergence of Newton iterations to non-stationary points",
+    "read_level": "full",
+    "contribution": "Characterises when line-search Newton iterations converge to singular nonstationary points: possible for nonlinear equations through the interaction of the Newton direction with the merit function, excluded in many cases for minimization, possible for primal-dual interior methods with a KKT-norm merit, excluded for a feasible primal-dual method with the barrier merit, and possible for infeasible methods even without bounds.",
+    "problem_entry": "Practical failures look like convergence to a spurious solution, so convergence to non-solution points is studied, entered through Powell's example, the Wächter–Biegler interior-method example and Fletcher's open question for minimization (pp. 2–4, 14).",
+    "key_idea": "Near the singular set Newton directions become long and nearly perpendicular to it, and local convexity of the merit function along them traps the line search; the sign of the second directional derivative of the merit along the null vector decides whether displacements shrink to zero (pp. 4–10).",
+    "assumptions": "F twice continuously differentiable; exact first-local-minimizer or first-Wolfe-interval line search (backtracking not covered); rank n−1 for simplicity; positive-definite Hessians at all iterates in minimization (an unfavourable case justified by practice); fixed barrier parameter, strictly feasible iterates and modified Hessians with bounded eigenvalues in the constrained positive result (pp. 3, 8–9, 16–17, 19–20).",
+    "proof_devices": [
+      "SVD of the Jacobian: Newton direction becomes arbitrarily long and parallel to the null vector (pp. 5–6)",
+      "merit function restricted to the normalised Newton ray, first local minimizer bounded by Taylor expansion with two sign cases (pp. 6–8)",
+      "grid plot of estimated step length |h'/h''| visualising the theorem (p. 9)",
+      "paired counterexamples showing necessity of the range condition (pp. 10–11)",
+      "contradiction from the curvature Wolfe condition and the mean-value theorem for minimization (pp. 15–16)",
+      "Zoutendijk-type argument on a barrier level set kept away from the boundary (pp. 20–22)",
+      "multiplier capping so the Hessian modification is inactive near a regular solution (p. 22)",
+      "affine-invariance change of variables reducing a constrained example to the equation example (p. 23)"
+    ],
+    "experiments": "Illustrations: Powell's example plotted; regularized Newton at several thresholds and SVD regularization stay inefficient; MINPACK LMDER trust region solves it quickly; primal-dual KKT-norm-merit run on a one-variable problem stalls (pp. 4, 9, 11–13, 17–18); table values unreadable in the text layer.",
+    "positioning": "Builds on Powell and Wächter–Biegler, adding constrained examples of a different kind (bounds play no role); answers Fletcher's textbook question in part; locates the cause in the merit function rather than in the interior-method class; trust regions presented as robust (pp. 2–3, 12, 14, 18, 22–24).",
+    "writing": "Open questions marked as open; theorem translated into implementation symptoms (step-size test or line-search failure); theorem–example–plot rhythm with an 'Example Revisited'; closing summary (pp. 8–9, 16, 18–19, 24).",
+    "limits_future": "Backtracking line searches not covered; higher rank deficiency in minimization not studied; primal-dual systems open; infeasible methods can still fail near dependent active constraints (pp. 8, 16, 18–19, 24).",
+    "method_links": [
+      {"method": "Method 4", "relation": "evidence", "note": "Wächter–Biegler counterexample and Fletcher's question treated as specifications: analyse the stall, build more examples, give a configuration that cannot fail; confirms SKILL.md's preprint p. 2 citation", "pages": "pp. 2, 14, 19–24"},
+      {"method": "Method 5", "relation": "evidence", "note": "theory separates practical variants: KKT-norm merit (fails) vs barrier merit (cannot fail); line search on ||F|| vs on f; regularized line search vs trust region", "pages": "pp. 11–13, 16–22"},
+      {"method": "Method 2", "relation": "evidence", "note": "the comforting view that Jacobian regularization removes the difficulty is stated, tested on the simplest example and refuted", "pages": "pp. 11–12"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "failure outcomes as theorem cases", "evidence": "a whole paper on conditions under which practical Newton iterations fail or cannot fail, with a positive result for the configuration a code should use", "pages": "pp. 2–3, 5–10, 14–24"},
+      {"pattern": "map the new method onto known methods", "evidence": "interior method with KKT-norm merit viewed as line-search Newton on a nonlinear system; affine change of variables maps a constrained example onto the equation example", "pages": "pp. 18, 23"}
+    ],
+    "transferable": [
+      "To analyse a stall, restrict the merit function to the normalised search ray and study the sign of its second directional derivative along the singular direction (pp. 5–8).",
+      "Show a hypothesis is needed with a pair of examples: one where its failure breaks the conclusion and one where the conclusion survives (pp. 10–11).",
+      "Use the affine invariance of Newton's method to reduce a new counterexample to a known one by a change of variables (p. 23).",
+      "Prove the positive result under the condition a practical code would enforce (positive-definite modified Hessians) and say why (p. 16).",
+      "Design Hessian safeguards (multiplier capping, modified Cholesky) that are provably inactive near a regular solution (p. 22).",
+      "On the failure example, run the common practical fix at several thresholds against an off-the-shelf alternative globalization (pp. 11–13)."
+    ],
+    "coauthors": "Richard H. Byrd, Marcelo Marazzi",
+    "quotes": [
+      {"text": "Therefore we consider convergence to a nonsolution point to be a failure of practical interest and in this paper we study conditions under which it can occur", "page": 2},
+      {"text": "Thus we are showing that even in an unfavorable situation convergence to a singular nonsationary point cannot take place", "page": 16}
+    ]
+  }
+]

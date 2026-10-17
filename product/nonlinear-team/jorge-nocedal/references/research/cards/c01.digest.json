@@ -1,0 +1,297 @@
+[
+ {
+  "id": "S007",
+  "year": "1980",
+  "title": "Updating quasi-Newton matrices with limited storage",
+  "read_level": "full",
+  "contribution": "Introduces the limited-storage ('special') BFGS update that keeps the last m (s, y) pairs, dropping the oldest at every iteration (the origin of L-BFGS, called SQN), proves positive definiteness, quadratic termination and a past-m secant property, and tests it in quasi-Newton and preconditioned-CG iterations (pp. 1-9).",
+  "problem_entry": "Quasi-Newton storage n(n+1)/2 is too large; variable-storage CG methods need no structure but discard the quasi-Newton matrix and restart, so the entry is to remove that wholesale discard (p. 1).",
+  "key_idea": "Write BFGS in product form H = v^T H v + rho s s^T so that dropping the oldest correction means v = I, rho s s^T = 0; keep the BFGS formula and line search unchanged (pp. 2-3).",
+  "assumptions": "Smooth unconstrained f; y^T s > 0 each step (accurate enough line search, p. 2); quadratic termination and the secant property assume a strictly convex quadratic, conjugate steps and exact line searches (pp. 3-6); nonlinear local convergence only sketched for asymptotically exact searches (p. 7).",
+  "proof_devices": [
+   "past-m secant equation H_k y_j = s_j from the identity v_i y_i = 0 (eqs. (6)-(7), pp. 3-4)",
+   "quadratic termination by showing SCG/SQN directions equal PCG with fixed preconditioner H0, induction from m+2 (eq. (14), pp. 5-6)",
+   "bounded condition number by transferring Fletcher's eigenvalue theorem (18): every special-update matrix is also a usual-BFGS matrix (pp. 6-7)",
+   "local convergence for nonlinear f asserted by analogy with Nazareth-Nocedal [9], not proved (p. 7)"
+  ],
+  "experiments": "Table I: function evaluations of CG, SCG (MSTORE 2/4/8), SQN (3/4/8), BFGS and Shanno on 6 Moré-type problems with n <= 20, same line search for all, competitors in the Shanno-Phua code; storage beyond BFGS run on purpose; SQN MSTORE=2 results withheld but declared (pp. 8-9).",
+  "positioning": "Extends the Perry/Shanno/Buckley/Nazareth variable-storage line, criticising only their restart discard; credits Matthies-Strang for the H*g recursion and Fletcher/Stoer for the theory (pp. 1, 7, 9-10).",
+  "writing": "Ten-page note; modest abstract ('some desirable properties'), unproved belief labelled as belief, conclusion slightly stronger than the 'few instances' caveat (pp. 1, 9).",
+  "limits_future": "No global convergence proof; local convergence only sketched; tests only n <= 20; weak SQN m=2 results withheld; no future work stated (pp. 7-9).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "classical engine (BFGS update, line search) kept and only the storage/updating component replaced, but driven by a storage limit, not an explicit estimate with recovery",
+    "pages": "pp. 1-2"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "weak: motivation contrasts structure-needing sparse updates with a method needing no structural knowledge (general method for unknown structure)",
+    "pages": "p. 1"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "same line search for all methods and competitors in their own code, but one weak configuration withheld rather than printed",
+    "pages": "p. 9"
+   },
+   {
+    "method": "Method 5",
+    "relation": "contradiction",
+    "note": "early-career: analysis covers quadratics with exact line searches while the tested version uses an inexact search; closed by S020/S002",
+    "pages": "pp. 5-6, 9"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "transfer the classical theorem through an equivalence",
+    "evidence": "special-update matrices are also usual-BFGS matrices, so Fletcher's eigenvalue result applies (S007); S002 uses the same move for its convergence proof",
+    "pages": "p. 7"
+   }
+  ],
+  "transferable": [
+   "Use the product (multiplicative) form of a rank-two update when you need to delete or reorder corrections (pp. 2-3).",
+   "Prove quadratic termination of a modified method by showing it generates the same directions as a known method with a fixed preconditioner (pp. 5-6).",
+   "Prove properties of a variant by showing each matrix it produces is one the classical method would produce from some start (p. 7).",
+   "In a memory-parameter study, include settings beyond practical use and flag them explicitly as diagnostic runs (p. 9)."
+  ],
+  "coauthors": "none (sole author, IIMAS-UNAM); thanks J. Dennis and L. Nazareth (p. 9)",
+  "quotes": [
+   {
+    "text": "A disadvantage of these methods is that after a certain number of iterations the quasi-Newton matrix is discarded",
+    "page": 1
+   },
+   {
+    "text": "For some values of MSTORE the limited storage methods are actually using more storage than the BFGS. In practice, one would of course never do this.",
+    "page": 9
+   }
+  ]
+ },
+ {
+  "id": "S020",
+  "year": "1987",
+  "title": "Global convergence of a class of quasi-Newton methods on convex problems",
+  "read_level": "full",
+  "contribution": "Extends Powell's BFGS global convergence result to the restricted Broyden class with phi in [0,1) under Wolfe line searches (global, R-linear and Q-superlinear on uniformly convex f; lim inf for convex f), excluding DFP, and explains DFP's inferiority by the missing self-correcting term in the trace equation (pp. 1, 10-19).",
+  "problem_entry": "Gap between theory and the methods as implemented: Powell's practical-line-search BFGS proof had not been extended to DFP or any other Broyden member; earlier results depend on the start matrix or on line searches no code uses (pp. 1-3).",
+  "key_idea": "Track trace (large eigenvalues) and determinant (small eigenvalues) of B_k: a trace term shifts eigenvalues left in proportion to lambda_k/cos^2 theta_k for phi < 1 and is absent for DFP, giving self-correction (pp. 7-10).",
+  "assumptions": "f twice continuously differentiable; uniformly convex on a convex level set (Assumption 2.1) for sections 3, 4, 6; convex, bounded below, bounded Hessian for section 5; Holder Hessian and unit step tried for superlinearity; Wolfe line search; any positive definite B1 (pp. 2-3, 14-15).",
+  "proof_devices": [
+   "angle-based step and decrease bounds valid for any positive definite quasi-Newton update (Lemma 2.1, pp. 4-6)",
+   "steplength as ratio of model to true curvature (Lemma 2.2, p. 6)",
+   "trace equation (3.2) with term-by-term bounds, Goldfarb's ||y||^2/y^T s <= M (Lemma 3.1, pp. 7-8)",
+   "determinant identity (Pearson) plus AM-GM: steplengths bounded below in geometric mean (Lemma 3.2, pp. 9-10)",
+   "contradiction: cos theta -> 0 would drive the trace negative (Theorem 3.1, pp. 10-11)",
+   "R-linear rate by AM-GM on products of cos^2 (Lemma 4.2, pp. 12-13)",
+   "change of variables G(x*) = I by invariance, summability, Griewank-Toint Prop. 4 and Dennis-More characterization for superlinearity (pp. 11, 14)",
+   "excess term eta_k -> 0 reduces the convex case to the BFGS trace equation (Theorem 5.1, pp. 15-16)"
+  ],
+  "experiments": "One chosen 2-D uniformly convex function after Powell (1986), B1 = diag(1, 10^4); iterations to ||g|| <= 1e-4||g1|| rise from 15 toward thousands as phi -> 1 (OCR alignment lost); BFGS trace 10^4 -> 3 in 10 iterations vs DFP trace 1100 after 3000; small-eigenvalue control shows no difficulty (p. 18).",
+  "positioning": "Generalizes Powell (1976); names the specific weakness of Dennis-More, Stoer, Ritter, Werner results; credits Xie Yuan-Fu's independent concurrent result; links to Powell's (1986) 2-D quadratic study (pp. 1-3, 17-18).",
+  "writing": "Five-sentence abstract (assumption, result, exception, generalization, insight); insight claimed as a main contribution; intuition passages before theorems; DFP left as a plainly stated open problem (pp. 1, 3, 8-10, 19).",
+  "limits_future": "Convexity needed and not known to be removable; rates not extended to the convex case; nonconvex result only local; DFP global convergence with practical line searches left open (pp. 3, 14, 19).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "strong: analyses the line search 'as implemented in practice', separates BFGS from DFP, confirms the predicted deterioration with a targeted run, and keeps DFP as an open question; this is the body SKILL.md cited as not read",
+    "pages": "pp. 1, 10, 17-19"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "trace-determinant bookkeeping",
+    "evidence": "trace equation controls large eigenvalues, determinant controls small ones (S020); S002 bounds trace and determinant for L-BFGS",
+    "pages": "pp. 7-10"
+   },
+   {
+    "pattern": "family-level theorem that locates the boundary member",
+    "evidence": "proof for the whole restricted Broyden class, with DFP the member where the key term vanishes (S020); S012 does the same for CG beta choices",
+    "pages": "pp. 1, 10, 19"
+   }
+  ],
+  "transferable": [
+   "Write the trace of the updated matrix as a sum of signed terms and identify the term that shifts eigenvalues to the left; the member lacking it is the suspect (pp. 7-8, 17).",
+   "Bound the geometric mean of the steplengths through the determinant and AM-GM when single steps cannot be bounded (pp. 9-10).",
+   "Get global convergence from a subsequence with cos theta bounded away from zero, obtained by contradiction from a positive quantity that would otherwise go negative (pp. 6, 10-11).",
+   "Assume G(x*) = I without loss of generality by affine invariance before a local-rate argument (p. 11).",
+   "Confirm a convergence-theory prediction with a one-function experiment that prints the quantity the proof tracks, plus the opposite case as a control (p. 18)."
+  ],
+  "coauthors": "Richard H. Byrd (Colorado), Ya-Xiang Yuan (Cambridge); thanks J. More and M. J. D. Powell (pp. 1, 19)",
+  "quotes": [
+   {
+    "text": "However there are some important gaps in what is understood about the behavior of these methods as implemented in practice.",
+    "page": 1
+   },
+   {
+    "text": "Nevertheless, we have seen in this paper that the DFP method can be much less efficient than the BFGS method, and that the reason for this is that it lacks the self-correcting property given by the fourth term on the right-hand side of equation (3.2).",
+    "page": 19
+   }
+  ]
+ },
+ {
+  "id": "S002",
+  "year": "1989",
+  "title": "On the limited memory BFGS method for large scale optimization",
+  "read_level": "partial",
+  "contribution": "Large-scale numerical study showing L-BFGS beats Buckley-LeNir and uses extra storage better, is greatly improved by simple dynamic scaling, competes with CG and (on CPU time) with partitioned quasi-Newton though PQN wins on evaluations when structure is supplied, plus an R-linear convergence proof on uniformly convex problems (pp. 2, 24-25).",
+  "problem_entry": "Limited-memory methods had been compared only with CG; nothing was known about them against Newton or partitioned quasi-Newton on large problems, nor which limited-memory implementation is best (p. 3).",
+  "key_idea": "Keep L-BFGS as close to BFGS as possible (unit step first, no forced interpolation, quadratic termination dropped) and add a cheap dynamic scaling of H0; then compare it head-to-head with the strongest neighbours (pp. 4-6, 13-15).",
+  "assumptions": "Smooth f with analytic gradient, n large; convergence theorem needs f twice continuously differentiable, convex level set, uniform convexity bounds and bounded seed matrices B_k^(0) and inverses; low-accuracy stopping test (pp. 2, 7, 22-23).",
+  "proof_devices": [
+   "every Hessian approximation is a bounded matrix updated at most m times by BFGS (p. 21)",
+   "uniform trace bound from ||y||^2/y^T s <= M2 over m updates (p. 23)",
+   "determinant lower bound via the Pearson/Powell formula (p. 23)",
+   "cos theta_k bounded below, then Powell-type decrease inequality gives R-linear rate for f and x (pp. 23-24)",
+   "theorem extended to backtracking line searches via Byrd-Nocedal and shown to cover Shanno-Phua and Buckley-LeNir as special cases (p. 24)"
+  ],
+  "experiments": "About 16 large test problems (Gill-Murray, More et al., Buckley-LeNir, Toint, Gilbert-Lemarechal, own matrix square root); competitors run at their authors' defaults; same-solution check; iterations/evaluations plus iteration/function/total time; win counts, speedup histograms, scaling rank tallies, very large runs on the Alliant FX/8; L-BFGS given a more accurate line search after diagnosing the rival's advantage; PQN with and without variable reduction; full data in companion report NAM 04; all digits lost in the text layer (pp. 6-20).",
+  "positioning": "Places limited memory between CG and quasi-Newton; criticises Buckley-LeNir with a mechanism while conceding a newer Buckley code narrows the gap (Gilbert-Lemarechal); strongly praises Griewank-Toint PQN (pp. 3-4, 11, 24).",
+  "writing": "Losses in the abstract; conclusions phrased as advice to users of the Harwell code; calibrated hedging; evidence explicitly bounded to the paper plus its companion report (pp. 2, 7, 15-18).",
+  "limits_future": "R-linear is the best rate possible for L-BFGS; benefit of storage on very large problems unexplained; Gill-Murray scaling erratic and unreported; dynamic scaling named as perhaps the most important future topic (pp. 15-16, 24).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "rivals run precisely as their authors recommend, same-solution check, losses in abstract, full data in companion report; variant detail: the alignment move upgrades their own line search rather than handicapping it",
+    "pages": "pp. 2, 7-8, 12"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "recommends Griewank-Toint partitioned quasi-Newton over their own method when structure information is available; L-BFGS kept for when it is not",
+    "pages": "p. 24"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "undecided line-search accuracy turned into two code options",
+    "pages": "p. 13"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "the convergence theorem covers the rival methods equally and concedes the rival can have a better rate; discrimination is left to experiments",
+    "pages": "p. 24"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "transfer the classical theorem through an equivalence",
+    "evidence": "convergence follows because every matrix is m BFGS updates of a bounded seed (S002); same move in S007",
+    "pages": "p. 21"
+   },
+   {
+    "pattern": "trace-determinant bookkeeping",
+    "evidence": "uniform trace and determinant bounds give a bounded condition number (S002); S020 uses the self-correcting version",
+    "pages": "p. 23"
+   },
+   {
+    "pattern": "cost-split reporting with a companion full-data report",
+    "evidence": "iteration time vs function time columns; representative tables in the paper and all runs in report NAM 04",
+    "pages": "pp. 6-8"
+   }
+  ],
+  "transferable": [
+   "Report iteration time and function time in separate columns so readers with cheap and expensive functions each get their answer (pp. 6, 8).",
+   "When the rival wins on a count, find the responsible ingredient, give it to your own method and compare again (p. 12).",
+   "Run each rival at its authors' recommended defaults, check all methods reach the same solution, and keep full tables in a companion report (pp. 7-8).",
+   "Test a structure-exploiting rival with and without the extra user input it needs (p. 19).",
+   "Include a problem that looks structured but is not, to show the cost of misapplying the structured method (p. 20).",
+   "For a memory-limited quasi-Newton method, bound trace and determinant uniformly using the bounded seed matrix instead of a self-correction argument (pp. 21-24)."
+  ],
+  "coauthors": "Dong C. Liu (Northwestern); thanks Griewank, Lemarechal, R. H. Byrd (suggested the scaling), J. More (p. 25)",
+  "quotes": [
+   {
+    "text": "Our aim is that the limited memory method resemble BFGS as much as possible and we disregard quadratic termination properties which are not very meaningful in general for large dimensional problems",
+    "page": 6
+   },
+   {
+    "text": "All other parameters in the code of Buckley and LeNir were set to their default values and therefore the method was tested precisely as they recommend",
+    "page": 8
+   }
+  ]
+ },
+ {
+  "id": "S012",
+  "year": "1992",
+  "title": "Global convergence properties of conjugate gradient methods for optimization",
+  "read_level": "full",
+  "contribution": "Proves global convergence (lim inf ||g|| = 0, nonconvex f, practical line searches, no restarts) for two families of nonlinear CG methods, |beta| <= beta_FR and nonnegative beta with Property (*) such as PR+, derives the PR-FR hybrid and a sufficient-descent line search, shows the conditions cannot be relaxed or combined, and confirms numerically that PR+ and PR-FR match PR while FR lags (pp. 4, 11-27).",
+  "problem_entry": "A paradox: the inefficient FR method has a satisfactory convergence theory while the preferred PR/HS methods can cycle under steps any practical line search would accept (pp. 5-6).",
+  "key_idea": "Keep the PR engine and change only beta and the line search's descent test: clip beta by beta_FR (PR-FR) or truncate it at zero (PR+), proving convergence for every method with the abstract Property (*) (pp. 11-12, 16, 20).",
+  "assumptions": "Bounded level set; f continuously differentiable with Lipschitz gradient nearby; no convexity; Wolfe, strong Wolfe with sigma2 < 1/2, or ideal line search; section 4 assumes sufficient descent and iterates in the level set (pp. 6-9, 14).",
+  "proof_devices": [
+   "Zoutendijk condition as hub and the template ||d_k||^2 grows at most linearly -> contradiction (Theorem 2.1 and section 2, pp. 7-8)",
+   "induction bound on <g,d>/||g||^2 with geometric sums of sigma2 (Lemma 3.1, p. 10)",
+   "sharpness via Powell's 1984 counterexample: |beta| <= c beta_FR with c > 1 fails (Proposition 3.3, pp. 12-13)",
+   "slowly changing directions: sum ||u_k - u_{k-1}||^2 < infinity (Lemma 4.1, pp. 15-16)",
+   "counting argument over windows of Delta steps: a fraction of steps not small (Lemma 4.2, pp. 17-18)",
+   "contradiction with bounded level set (Theorem 4.3, pp. 18-20)",
+   "intervals cannot be combined: modified Powell example and [-1,1] vs [0,inf) argument (pp. 20-21)",
+   "bump perturbation inside a ball avoided by the iterates gives a C-infinity strongly convex function with beta_PR < -beta_FR (Proposition 5.1, pp. 21-22)"
+  ],
+  "experiments": "Large test set (n >= 100, up to 10000); FR, PR-FR, PR, PR+ differing only in beta and line search; More-Thuente search with sigma2 = 0.1 chosen to satisfy Theorem 3.2, extended to enforce sufficient descent; same-solution filter; 'mod' column counting safeguard activations; PR+ best overall, FR clearly worst, restarts do not change the ranking; problem 45 shows FR's predicted tiny-step cycle (pp. 23-27; Tables 2-3 garbled).",
+  "positioning": "Recasts Polak-Ribiere, Zoutendijk, Powell and Al-Baali as one approach; results built on Al-Baali and slightly stronger than Touati-Ahmed and Storey; PR+ credited to Powell (1985); Powell's restart criterion reinterpreted (pp. 6, 9, 11, 13, 20).",
+  "writing": "Paradox stated in one sentence as motivation; scope exclusions up front; plain-words proof roadmap before lemmas; negative results beside positive ones (pp. 6, 12, 14, 20-22).",
+  "limits_future": "Only lim inf, no rates; |beta| <= c beta_FR case open; families cannot be merged; 1969 strongly convex PR result not recovered (pp. 6, 12, 20-22).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "strong: practical line searches and no restarts (the method as run); theory explains FR stalling vs PR recovering, confirmed on problem 45; experiment parameters set to the theorem's; unprovable cases kept as stated limits",
+    "pages": "pp. 4-6, 11-12, 24, 27"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "PR engine kept, only beta and the descent test of the line search repaired, with a fallback on FR; repair derived from a theorem rather than an explicit estimate",
+    "pages": "pp. 11-12, 20, 24"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "step 5: methods compared inside one code and line search, differing only in beta, with a same-solution filter",
+    "pages": "p. 24"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "family-level theorem that locates the boundary member",
+    "evidence": "two admissible beta families, sharpness shown at their edges and their union shown non-convergent (S012); same structure as S020's Broyden class excluding DFP",
+    "pages": "pp. 11-13, 16, 20-22"
+   },
+   {
+    "pattern": "sharpness by recycled counterexample",
+    "evidence": "Powell's 1984 example reused to show relaxed or combined conditions fail",
+    "pages": "pp. 12-13, 20-21"
+   },
+   {
+    "pattern": "safeguard-firing counts in result tables",
+    "evidence": "'mod' column counts iterations in which beta was modified",
+    "pages": "p. 25"
+   }
+  ],
+  "transferable": [
+   "Name the property that makes the good method behave well, prove the theorem for every method with it, then check which named methods have it (pp. 16-17).",
+   "Show a sufficient condition is sharp by reusing a published counterexample that satisfies the relaxed condition (pp. 12-13).",
+   "Build a counterexample from an explicit quadratic run perturbed only inside a ball the computed path avoids (p. 22).",
+   "Report how often the safeguard fires so readers see whether the convergent modification changes practice (p. 25).",
+   "Set line-search constants to the values the theorem needs so the tested code is the analysed algorithm (p. 24).",
+   "Enforce sufficient descent for nonnegative-beta CG by continuing the bracketing line search when the Wolfe point has positive directional derivative (pp. 14, 24)."
+  ],
+  "coauthors": "Jean Charles Gilbert (INRIA Rocquencourt) (p. 3)",
+  "quotes": [
+   {
+    "text": "This disconcerting state of affairs motivated the present study.",
+    "page": 6
+   },
+   {
+    "text": "It is reassuring that the modification (3.7), which falls back on the FR method to ensure global convergence, avoids the inefficiencies of this method.",
+    "page": 12
+   }
+  ]
+ }
+]

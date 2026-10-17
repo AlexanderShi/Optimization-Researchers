@@ -1,0 +1,426 @@
+[
+ {
+  "id": "S028",
+  "year": "1995",
+  "title": "A reduced Hessian method for large-scale constrained optimization",
+  "read_level": "partial",
+  "contribution": "A reduced-Hessian SQP method for equality-constrained problems with few degrees of freedom that keeps cheap elimination bases but corrects the dropped cross term Z^T W Y p_Y by a Broyden estimate (finite differences where the estimate is not good enough), with skipped BFGS updates, safeguards that switch off asymptotically, R-linear and one-step Q-superlinear convergence.",
+  "problem_entry": "Large n, small n-m, first derivatives only; dropping the cross term is adequate with orthonormal bases but not with elimination bases, where a companion 2-D example makes the error ratio arbitrarily large near the solution (pp. 2, 4, 7).",
+  "key_idea": "Keep the range/null-space SQP with BFGS on the reduced Hessian and the l1 merit function; add a damped correction w_k ~ Z^T W Y p_Y from a Broyden approximation of Z^T W, switching to finite differences only in the middle of three step-size regions; skip BFGS when p_Y dominates (pp. 4-6, 8-12, 16-17).",
+  "assumptions": "Semi-local: iterates in a convex set with bounded first and second derivatives (called 'rather strong'), full-rank A, bounded bases, ||w_k|| = O(||c_k||) (p. 18); local: second-order sufficiency, Lipschitz Hessians, a level-set line-search assumption no practical line search guarantees (pp. 21-22); unit steps assumed for superlinear rate, Maratos effect deferred (p. 30).",
+  "proof_devices": [
+   "No boundedness of B_k or S_k assumed (p. 17)",
+   "Byrd-Nocedal good-iterates result: at least half of updated iterates have cos(theta) bounded away from zero (pp. 12-13)",
+   "Rate tied to updating frequency |U_k|/k; condition number controlled by psi(B) = tr(B) - ln det(B) (p. 24)",
+   "R-linear convergence regardless of updating frequency (p. 29)",
+   "Bounded deterioration of Broyden's method shows S_k bounded and safeguards inactive asymptotically (pp. 29-30)",
+   "One-step Q-superlinear proof by case analysis over the three regions (pp. 32-33)"
+  ],
+  "experiments": "none; computational experience deferred to a companion paper (p. 34)",
+  "positioning": "Extends Nocedal-Overton, Xie and Byrd-Nocedal reduced-Hessian analyses (pp. 4, 17-18); finite-difference variant close to Coleman-Conn (pp. 8-9); contrasted with Gurwitz, Coleman-Fenyes and Tagliaferro updates (pp. 10-11).",
+  "writing": "Defends a crude-looking heuristic explicitly ('may appear to be a crude heuristic but we argue', p. 11); final remarks state the analysis was kept to results that helped the design (p. 34).",
+  "limits_future": "Constants, basis changes, damping computation, update criterion away from the solution, a possible fourth region and inequality constraints deferred to the companion paper (pp. 17, 34).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Engine kept, only the dropped cross term repaired from an explicit Broyden estimate with a finite-difference fallback where the estimate is not good enough; safeguards switch off asymptotically (pre-noise instance).",
+    "pages": "pp. 4, 10, 16, 30"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Theory separates one-step Q-superlinear (with correction) from two-step superlinear (without); analysis covers arbitrary update-skipping patterns; results chosen because they helped the design.",
+    "pages": "pp. 4, 34"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Instabilities of the group's earlier reduced-Hessian code are the stated motivation (weak).",
+    "pages": "p. 34"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "design-driving analysis",
+    "evidence": "Analysis without boundedness assumptions on B_k and S_k is said to have suggested safeguards useful in practice that keep the superlinear rate.",
+    "pages": "p. 34"
+   }
+  ],
+  "transferable": [
+   "Carry a cheap secant (Broyden) estimate of a costly correction term and switch to finite differences only in the step-size region where analysis shows the cheap estimate is not accurate enough (pp. 16-17).",
+   "Safeguard a possibly unbounded quasi-Newton estimate with a bound scaled by ||p_Y|| and a summable sequence, then prove the safeguard is inactive near the solution (pp. 10, 29-30).",
+   "State the theory with the uncomputable error ||e_k|| and give a computable surrogate of the same order (||Z^T g|| + ||c||) for the code (pp. 12, 17)."
+  ],
+  "coauthors": "Lorenz T. Biegler, Claudia Schmid",
+  "quotes": [
+   {
+    "text": "Skipping the BFGS update may appear to be a crude heuristic but we argue that it gives rise to a sound algorithm",
+    "page": 11
+   },
+   {
+    "text": "We have focused only on convergence results that helped us in the design of the algorithm and that revealed its main properties",
+    "page": 34
+   }
+  ]
+ },
+ {
+  "id": "S088",
+  "year": "1996",
+  "title": "Towards a discrete Newton method with memory for large-scale optimization",
+  "read_level": "partial",
+  "contribution": "Outlines DINEMO, which stores the curvature pairs generated inside the inner CG cycle of a discrete truncated-Newton step as limited-memory BFGS pairs for the following L-BFGS steps, and shows on a controlled quartic family that saving them helps and that the Hessian's eigenvalue distribution, not its condition number, decides the gain.",
+  "problem_entry": "Discrete truncated Newton spends many gradient evaluations per iteration and discards its inner curvature information; L-BFGS can be very slow on ill-conditioned problems (pp. 2-3).",
+  "key_idea": "View the inner CG cycle as a variable-metric method: the difference pairs satisfy the curvature condition (CG stops on negative curvature) and are stored as L-BFGS pairs, interleaving Newton and L-BFGS steps with storage split into inner and outer pairs (pp. 3, 5-7).",
+  "assumptions": "Strong Wolfe line search (p. 3); strongly convex test functions, so no negative-curvature test (p. 8); no convergence theory.",
+  "proof_devices": [],
+  "experiments": "L-BFGS vs DINEMO vs ALTERNATE (same schedule, inner pairs discarded) with a shared More-Thuente line search on a quartic family with controlled nonlinearity, condition number and eigenvalue distribution, stringent stopping test, function/gradient evaluations counted; table values lost in extraction (pp. 8-12).",
+  "positioning": "Combines the discrete truncated-Newton codes of Nash and Schlick-Fogelson with L-BFGS (pp. 3-5); reference list includes the Nash-Nocedal L-BFGS/truncated-Newton study (p. 13).",
+  "writing": "Open design choices listed as a numbered set of variations and explicitly not explored; a tempting conclusion is named and then overturned by the next experiment (pp. 7-8, 10).",
+  "limits_future": "Trigger criterion, choice of stored pairs, preconditioning, update order and scaling left open; all must be investigated before DINEMO could become a general-purpose algorithm (pp. 7, 12).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Two complementary methods combined rather than one crowned (algorithm-level variant).",
+    "pages": "p. 2"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Implementation effects controlled: ablation arm ALTERNATE differs only in discarding inner pairs; one line search for all codes.",
+    "pages": "p. 8"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Undecided design choices written into the paper and deferred as the next work.",
+    "pages": "pp. 7, 12"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "controlled spectral test family",
+    "evidence": "Synthetic quartic family varying condition number, eigenvalue distribution and nonlinearity one at a time; shows the eigenvalue distribution, not the condition number, decides.",
+    "pages": "pp. 9-11"
+   }
+  ],
+  "transferable": [
+   "Test whether saving information helps with an arm identical except that the information is discarded, with line search and step schedule fixed across arms (p. 8).",
+   "When a result seems to depend on conditioning, rerun at the same condition number with a different eigenvalue distribution (two clusters, then a widened middle cluster CG cannot resolve) (pp. 10-11).",
+   "With many interacting design choices, state them, test only the core hypothesis in a controlled experiment, and list the rest as open questions (pp. 7-8)."
+  ],
+  "coauthors": "Richard H. Byrd, Ciyou Zhu",
+  "quotes": [
+   {
+    "text": "The key idea is to preserve the information generated during the inner CG iteration to improve the quality of the limited memory matrix used in subsequent steps",
+    "page": 7
+   },
+   {
+    "text": "the distribution of eigenvalues plays a crucial role as we will show below",
+    "page": 10
+   }
+  ]
+ },
+ {
+  "id": "S160",
+  "year": "1996",
+  "title": "Nonlinear Programming.",
+  "read_level": "full",
+  "contribution": "Nocedal's short review (as reviewer) of the SIAM Classics reprint of Mangasarian's 1969 Nonlinear Programming, praising its lucid, rigorous, self-contained exposition of convexity, optimality, duality, theorems of the alternative and constraint qualifications, and recommending it to everyone in the field.",
+  "problem_entry": "SIAM republished in its Classics series Mangasarian's 1969 theory book, which had gone out of print (p. 1).",
+  "key_idea": "Reviewer's assessment: simple, concise exposition with complete and rigorous proofs of most results; a formative, self-contained book readable with multivariable calculus (p. 1).",
+  "assumptions": "n/a (book review)",
+  "proof_devices": [],
+  "experiments": "none",
+  "positioning": "Places the book as a foundation that remains central despite 25 years of work on convexity and duality (p. 1).",
+  "writing": "Short evaluative review ending with an explicit recommendation (p. 1).",
+  "limits_future": "Only limit named: the field's view of the foundations has changed since 1969 (p. 1).",
+  "method_links": [],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "In a review of a reissued classic, separate what has dated from what has not, then give an explicit verdict for the reader (p. 1)."
+  ],
+  "coauthors": "",
+  "quotes": [
+   {
+    "text": "Every person interested in nonlinear optimization should own this book.",
+    "page": 1
+   },
+   {
+    "text": "the theory developed in this book remains central to the foundations of nonlinear optimization",
+    "page": 1
+   }
+  ]
+ },
+ {
+  "id": "S046",
+  "year": "1997",
+  "title": "On the local behavior of an interior point method for nonlinear programming",
+  "read_level": "partial",
+  "contribution": "Gives sufficient conditions on the barrier-parameter update, the inexact-CG residual and the fraction-to-the-boundary parameter under which the Byrd-Hribar-Nocedal primal-dual interior trust-region method keeps slacks positive without backtracking, meets the next barrier stopping test in one step and converges superlinearly, and checks three practical parameter strategies against them.",
+  "problem_entry": "The algorithm of Byrd-Hribar-Nocedal was robust and competitive with LANCELOT in function evaluations but no attempt had been made to make it rapidly convergent (p. 2).",
+  "key_idea": "Treat the near-solution step as an inexact primal-dual Newton step whose Jacobian does not depend on mu; derive conditions on stopping tolerance, residual tolerance, fraction-to-boundary and mu update that jointly give slack positivity, one-step barrier test and fast rate; compare linear, mu-based and ||F(z)||-based mu strategies (pp. 5-6, 14-18).",
+  "assumptions": "Assumptions I: KKT point, locally Lipschitz Hessians, linearly independent active gradients, second-order sufficiency, strict complementarity (pp. 4-5); iterate already near the minimizer (p. 4); analysed iteration an idealization of the coded one (p. 5).",
+  "proof_devices": [
+   "Inexact-Newton perturbation bounds along the barrier path: superlinear when the new barrier parameter is o(||F(z)||) with a power-of-||F|| residual bound, quadratic under an O(.)-type version (Theorem, p. 8; symbols partly lost)",
+   "Corollary with least-squares multiplier resets bridging idealized and coded iteration (p. 10)",
+   "Admittedly non-rigorous heuristic showing why slacks may turn negative, then a theorem tying fraction-to-boundary and mu decrease to slack positivity (pp. 11-12)",
+   "One-step barrier stopping test fails if mu decreases quadratically (p. 14)"
+  ],
+  "experiments": "none",
+  "positioning": "Differs from earlier local IPM analyses (El-Bakry et al., Yamashita-Yabe) by keeping slacks positive without backtracking and handling an inner barrier stopping test (p. 18).",
+  "writing": "States the gap between analysed and implemented iteration and closes part of it with a corollary (pp. 5-6, 10); strategies presented as numbered alternatives (pp. 15-18).",
+  "limits_future": "Regularity assumed throughout; constants M, Q, L, C kept explicit for a future study of degeneracy and ill-conditioning (p. 18).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Rate analysis of the method as implemented (CG steps, fraction-to-boundary, inner stopping test), with the analysed/coded gap stated; theory shows linear mu decrease gives only a linear rate.",
+    "pages": "pp. 5-6, 16"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Undecided barrier-update and fraction-to-boundary choices made the subject of study and given as alternative strategies (link to later solver options inferred).",
+    "pages": "pp. 3, 15-18"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "design-driving analysis",
+    "evidence": "Local theorems converted into checkable parameter rules (three strategies) for the code.",
+    "pages": "pp. 14-18"
+   }
+  ],
+  "transferable": [
+   "List every property the near-solution step must have (slack positivity without backtracking, meeting the next inner stopping test, fast rate), derive each as an inequality on the same parameters, and check each candidate strategy against all of them (pp. 14-18).",
+   "Keep KKT-conditioning constants explicit in a local analysis so a later degeneracy study can reuse the proofs (p. 18).",
+   "Analyse an idealized iteration, then add the one implementation feature (least-squares multiplier resets) that closes most of the gap as a corollary (pp. 5-6, 10)."
+  ],
+  "coauthors": "Richard H. Byrd, Guanghui Liu",
+  "quotes": [
+   {
+    "text": "the goal of this paper is to develop the theoretical foundation for an implementation that gives a superlinear rate of convergence",
+    "page": 2
+   },
+   {
+    "text": "the results obtained here will be directly applicable to that algorithm",
+    "page": 5
+   }
+  ]
+ },
+ {
+  "id": "S090",
+  "year": "1997",
+  "title": "Mechanics in the engineering first curriculum at Northwestern University",
+  "read_level": "full",
+  "contribution": "Describes Northwestern's Engineering First core curriculum, a four-quarter MATLAB-based Engineering Analysis sequence integrating linear algebra and ODEs with mechanics and design analysis, and its pilot evaluation; Nocedal is one of nine authors with no stated individual role.",
+  "problem_entry": "An engineering core almost unchanged for three decades: no early design, student dissatisfaction, no computer skills in the first two years; an earlier fully integrated Block Program proved unsustainable (p. 1).",
+  "key_idea": "Partial integration of only linear algebra and ODEs with mechanics (EA1-EA4), MATLAB from the first quarter, design analysis in every course; full integration and first-year major courses rejected for named reasons (pp. 2-4).",
+  "assumptions": "n/a (curriculum report)",
+  "proof_devices": [],
+  "experiments": "Pre-pilots 1995-96 and a lottery-selected pilot of 80 students; questionnaires, instructor-free mid-course meetings, planned graded-exam comparisons with a control group; ratings such as 3.4/4.0; evaluation called primarily qualitative (pp. 11-13).",
+  "positioning": "Contrasted with Drexel and Rose-Hulman full integration and with Carnegie-Mellon and Pittsburgh first-year major courses (p. 2).",
+  "writing": "Design rationale given as explicit rejected alternatives with reasons (p. 2).",
+  "limits_future": "Course overload not fully avoided; risk of too little stress on theory; full roll-out after one pilot year; added teaching load and lab cost (pp. 12-13).",
+  "method_links": [],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "For an educational intervention, combine a lottery-selected pilot with a control group and embed the comparison questions in graded exams so that motivation does not bias them (pp. 12-13)."
+  ],
+  "coauthors": "T. Belytschko, A. Bayliss, C. Brinson, S. Carr, W. Kath, S. Krishnaswamy, B. Moran, M. Peshkin",
+  "quotes": [
+   {
+    "text": "Our attitude towards this program is that it is a continuous experiment.",
+    "page": 13
+   },
+   {
+    "text": "we have carefully watched the tendency of faculty to overreach in designing new courses by adding too much material or overburdening the freshmen",
+    "page": 13
+   }
+  ]
+ },
+ {
+  "id": "S034",
+  "year": "1998",
+  "title": "On the implementation of an algorithm for large-scale equality constrained optimization",
+  "read_level": "full",
+  "contribution": "A careful large-scale implementation (Algorithm ETR) of the Byrd-Omojokun trust-region SQP method for equality constraints, with dogleg/Steihaug subproblem solvers, direct or iterative linear algebra, elimination bases with a basis-change heuristic, L-BFGS fallback and penalty and second-order-correction rules, tested on hard CUTE problems and against LANCELOT.",
+  "problem_entry": "Many trust-region SQP methods for equality constraints had been analysed but, to the authors' knowledge, none carefully implemented; problems with a thousand or more unknowns; inequalities deliberately left out (pp. 1, 22).",
+  "key_idea": "Byrd-Omojokun vertical/horizontal split (Levenberg-Marquardt when n = m) solved by dogleg or ellipsoidal Steihaug CG, plus implementation devices: unscaled Steihaug with fall-back, MA28 elimination bases with Heuristic I, compact L-BFGS with Powell damping, non-squared l2 merit with penalty rule and Heuristic II, second-order correction, aggressive radius update (pp. 2-16).",
+  "assumptions": "f, c twice continuously differentiable, n >= m (p. 1); full column rank A (p. 2), said not intrinsic to the method (p. 24); approximate Cauchy step adequate if its error tends to zero as fast as ||Z^T g|| (p. 8).",
+  "proof_devices": [
+   "No new proofs; dogleg global and quadratic properties carry over by citation (p. 5)",
+   "Inner CG tolerance tied to ||Z^T g|| so that an approximate Cauchy step keeps global convergence (p. 8)",
+   "Algorithm 4.1 stop tolerance gives a Q-quadratic rate by an analysis similar to [11] (p. 9)"
+  ],
+  "experiments": "CUTE equality problems (some modified harder); each heuristic tested only where it changes the run (Tables 5.2-5.4); 102 hard starting points with 7 rank-deficiency failures; exact Hessian vs L-BFGS and three vertical-step options on large problems; LANCELOT A at the same 1e-5 tolerance with its best of 11 preconditioners, CPU losses printed (pp. 16-23).",
+  "positioning": "Chooses Byrd-Omojokun for simple subproblems and nonlinear-constraint handling; contrasted with LANCELOT's augmented Lagrangian, Fletcher's SL1QP and SNOPT's line-search SQP (pp. 3-4, 22).",
+  "writing": "Admits a small sample before adopting each heuristic and states where LANCELOT is more general, more robust or faster (pp. 18-19, 22).",
+  "limits_future": "Rank-deficient Jacobians (ORTHRGDS threshold), no preconditioners, horizontal subproblem up to 60% of time with L-BFGS; six numbered refinements and inequality constraints as the most pressing need (pp. 8, 22-24).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Rival run at the same stop tolerance and credited with its best of 11 preconditioners per measure; own code tabulated the same way; CPU losses printed.",
+    "pages": "p. 22"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Linear-algebra choice exposed as a user option because it depends on the constraints; rank-deficiency failure mode probed with a constructed problem; numbered refinements as next work.",
+    "pages": "pp. 20, 22-24"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Problem structure decides the solver option (ill-conditioned Jacobians ruin CG, fill-in ruins Cholesky).",
+    "pages": "p. 20"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "careful implementation of a theory-only method class",
+    "evidence": "Picks one of many analysed but never carefully implemented trust-region SQP methods to see whether it works in practice (S028 makes the same move for Coleman-Conn).",
+    "pages": "p. 22"
+   }
+  ],
+  "transferable": [
+   "Before a broad benchmark, test each heuristic only on the problems where it changes the run, say the sample is small, then adopt it (pp. 17-19).",
+   "Probe a known weakness with a problem family where it can be dialled up (ORTHRGDS: number of vanishing columns of A* chosen via the starting point) and report the failure threshold (p. 22).",
+   "When a rival code has many options, report its best result per measure over all options and tabulate your own code the same way (p. 22).",
+   "Use a cheap, unsafe inner-solver variant (unscaled Steihaug) only where it cannot change the outer iterates, with a fall-back to the safe variant (p. 10)."
+  ],
+  "coauthors": "Marucha Lalee, Todd Plantenga",
+  "quotes": [
+   {
+    "text": "it was unknown to us if they would perform well in practice",
+    "page": 22
+   },
+   {
+    "text": "We certainly do not yet consider our software to be as general or robust as LANCELOT, and our tests show that it sometimes requires much more CPU time.",
+    "page": 22
+   }
+  ]
+ },
+ {
+  "id": "S101",
+  "year": "1998",
+  "title": "The modified absolute-value factorization norm for trust-region minimization",
+  "read_level": "partial",
+  "contribution": "Proposes a trust-region norm built from a modified absolute-value (PL|B|L^T P^T) factorization of the model Hessian, so the subproblem is block-diagonal and solved with one factorization (a backtracking Newton line search in the convex case), proves norm equivalence for bounded L, releases it as an HSL code, and shows it pays off on hard ill-conditioned nonconvex CUTE problems.",
+  "problem_entry": "Trust-region theory works for any norm uniformly related to l2, yet little attention had been given to choosing the norm, although it affects every iteration (p. 2).",
+  "key_idea": "Approximate the ideal |H| norm (too costly spectrally) by M = PL|B|L^T P^T from a symmetric indefinite factorization, giving a trivially solvable block-diagonal subproblem (quartic root by Newton in the indefinite case, hard case covered) and a modified factorization for near-singular H (pp. 3-9).",
+  "assumptions": "Norm equivalence needs bounded H and bounded L; Bunch-Parlett, Fletcher and Duff-Reid factorizations bound L, Bunch-Kaufman and LAPACK may not (pp. 9-10).",
+  "proof_devices": [
+   "Eigenvalue bounds on M via Higham's theorem and entry bounds on L (pp. 9-10)",
+   "Convex case: radius reduction equals backtracking along the (quasi-)Newton direction (p. 6)"
+  ],
+  "experiments": "Standard trust-region algorithm with l2, absolute-value and Schnabel-Eskow modified-Cholesky norms on larger CUTE problems with frequent negative curvature, 30 CPU-minute limit; l2 best on easy, factor cost loses on dense, new norm wins on most hard problems; wasted evaluations traced to initial radius and pivot sign changes; table values lost in extraction (pp. 11-14).",
+  "positioning": "Builds on Greenstadt's absolute-value idea, Gill-Murray-Ponceleon-Saunders and Cheng-Higham; rejects Goldfarb's PLL^T P^T norm as ignoring problem scaling (pp. 4-5).",
+  "writing": "Scoped claim ('We do not pretend'), and a critic's objection to a related proposal (Fletcher on Goldfarb) applied to their own method (pp. 14-15).",
+  "limits_future": "Not uniformly appropriate; factorization may be too costly for dense Hessians; pivot-order changes can upset radius management, under investigation (pp. 12-15).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Recommendation tied to problem structure, with the category where each norm loses recorded.",
+    "pages": "pp. 12-14"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Costs printed with wins: wasted evaluations and their two causes (weak).",
+    "pages": "p. 14"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "One component of the classical trust-region method (the norm) replaced and the rest kept, but not regime-driven and with no estimate or recovery path.",
+    "pages": "p. 12"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Fletcher's objection to Goldfarb's related proposal applied to their own method and turned into ongoing work on radius adjustment (weak).",
+    "pages": "pp. 14-15"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Pick the trust-region norm from the factorization already computed for the step, so the subproblem becomes (block-)diagonal and needs no extra factorization (pp. 4-6).",
+   "When a convergence requirement rests on a numerical kernel (bounded L), check which library implementations meet it and name those that do not (p. 10).",
+   "Report results in categories of problem behaviour rather than one aggregate (pp. 12-14)."
+  ],
+  "coauthors": "Nicholas I. M. Gould",
+  "quotes": [
+   {
+    "text": "For problems involving a large number of variables this decomposition is likely out of the question",
+    "page": 4
+   },
+   {
+    "text": "are currently investigating more sophisticated schemes for trustregion management",
+    "page": 14
+   }
+  ]
+ },
+ {
+  "id": "S118",
+  "year": "1998",
+  "title": "Active set and interior methods for nonlinear optimization",
+  "read_level": "full",
+  "contribution": "An ICM 1998 survey that organizes constrained nonlinear optimization around transformation and approximation, explains exact penalties, SQP and primal-dual interior methods (primal-dual as a nonlinear transformation, ill-conditioning, predictor-corrector), and critically compares active-set and interior approaches, listing the open questions for large problems.",
+  "problem_entry": "Large constrained problems called the most important open problem; KKT system unsuited to direct computation (exponentially many active sets, maximizers) (pp. 1-2).",
+  "key_idea": "Survey structure: l1 exact penalty (simple but nonsmooth and penalty-sensitive), SQP as best active-set method, barrier problem with slacks and three advances (primal-dual transformation, coping with ill-conditioning, predictor-corrector), side-by-side final comparison (pp. 2-8).",
+  "assumptions": "n/a (survey; conclusions based on limited numerical experience, p. 8)",
+  "proof_devices": [],
+  "experiments": "none",
+  "positioning": "Cites Fletcher, Fletcher-Leyffer filter, Gill-Murray-Saunders SQP, Mehrotra, M. H. Wright and S. J. Wright on interior methods and ill-conditioning (pp. 3-9).",
+  "writing": "Organizes the field by two ideas (transformation, approximation) and reframes primal-dual by its key transformation (pp. 2, 6); open questions phrased directly in the text (pp. 3, 6, 8).",
+  "limits_future": "Open: penalty-parameter choice, merit-function acceptance, whether the primal-dual transformation is best, whether interior methods are as robust as active-set; predicts interior codes may switch to active-set iterations (pp. 3, 6, 8).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Neither approach crowned; each side's strengths and weaknesses listed and an interior-to-active-set switch anticipated.",
+    "pages": "p. 8"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Undecided choices written down as open questions (penalty parameter, merit acceptance, barrier rule); penalty question later answered by penalty steering (link inferred).",
+    "pages": "pp. 3, 7"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Theory of ill-conditioning turned into a design consequence: quasi-Newton variants should approximate the original Lagrangian Hessian, not the barrier Hessian (weak).",
+    "pages": "pp. 6-7"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "explain a method by its key transformation",
+    "evidence": "Primal-dual presented as a nonlinear transformation of the optimality conditions suited to Newton's method; the name called not very descriptive of the key idea.",
+    "pages": "p. 6"
+   }
+  ],
+  "transferable": [
+   "Close a survey with a side-by-side ledger of what each method family does well and badly at the subproblem level, stating the verdict rests on limited experience (p. 8).",
+   "Derive the primal-dual system by multiplying the rational complementarity equation by S so Newton's method sees a quadratic, and use it to explain why it beats the primal barrier step (pp. 5-6).",
+   "When a matrix becomes unbounded by construction (Sigma = Lambda S^-1 as mu -> 0), find the change of variables that sends it to the identity before applying CG, and state the price in CG cost (p. 7)."
+  ],
+  "coauthors": "Richard H. Byrd",
+  "quotes": [
+   {
+    "text": "it has not yet been firmly established whether the difficulty in choosing the penalty parameter is serious enough to prevent it from becoming a powerful technique for large-scale optimization",
+    "page": 3
+   },
+   {
+    "text": "future interior point codes may need to switch to an active set iteration, if necessary",
+    "page": 8
+   }
+  ]
+ }
+]

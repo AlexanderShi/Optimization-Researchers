@@ -1,0 +1,322 @@
+[
+ {
+  "id": "S011",
+  "year": "2006",
+  "title": "Knitro: An Integrated Package for Nonlinear Optimization",
+  "read_level": "full",
+  "contribution": "Describes Knitro 5.0. The package integrates two interior-point algorithms (a line-search primal-dual method with a trust-region fallback, and a trust-region projected-CG method) and an SLQP active-set method. They share a projected-CG kernel, update the penalty parameter at every iteration, reduce automatically on special problem classes, and offer the first interior-to-active crossover in a nonlinear code.",
+  "problem_entry": "The user's dilemma: no algorithm guarantees success, and each lives in its own package with a steep learning curve; integrated LP/MIP packages are the model (pp. 1-3).",
+  "key_idea": "Integrate complementary algorithms around shared modules: Interior/Direct with a trust-region fallback on inertia and step-length diagnostics, Interior/CG with a slack-scaled trust region, and SLQP active-set; add crossover and automatic special-case reduction (pp. 3-22).",
+  "assumptions": "f, c_E, c_I twice continuously differentiable (p. 2); local minimizers near the user's x0 (p. 19); G positive definite on the null space for PCG, Steihaug termination otherwise (pp. 16-17); LP/QP structure must be declared by the user (p. 20).",
+  "proof_devices": [
+   "No theorems; convergence cited: penalty update '[4]' (p. 15), Interior/CG [3, 6] (p. 6), Interior/Direct [38] (p. 5)",
+   "Inertia condition (3.6) implies descent for the merit function (p. 5)",
+   "sigma switch (3.18) guarantees a negative directional derivative (p. 11)",
+   "Projected CG equals reduced CG on Z^T G Z preconditioned by Z^T D Z, so no null-space basis is needed (p. 17)",
+   "Infeasibility heuristic from [3]: A_E^T c_E -> 0, A_I^T c_I^- -> 0 (p. 20)",
+   "Crossover LP radius (7.22) excludes the inactive constraints if the active-set estimate is correct (p. 22)"
+  ],
+  "experiments": "none (no numerical results; only experience claims: merit-function tolerance, p. 5, and cheap warm-started penalty LPs, p. 15)",
+  "positioning": "Surveys Snopt, FilterSQP, Minos, Lancelot, Conopt, Loqo, Barnlp, Ipopt, Mosek and Pennon (p. 2). Differs from line-search IPMs that modify the Hessian (p. 6), from fixed-penalty rules (p. 14), and from all nonlinear interior codes on crossover (p. 20). Answers the merit-function critics with the filter authors' own table (p. 5).",
+  "writing": "Figure first (p. 3), boxed algorithms (pp. 7-21), a one-sentence reason for each choice (p. 6); explicit hedges ('inevitably incomplete', pp. 3-4; 'not known at present', p. 5); no conclusion (the paper ends on p. 22).",
+  "limits_future": "Cannot distinguish an infeasible problem from an infeasible stationary point (p. 20); initial-point strategy only in Interior/Direct (p. 19); D = I preconditioner, with banded and incomplete Cholesky preconditioners for future releases (p. 17); a DIRECT active-set option foreseen (p. 3); no numerical evidence.",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Integrates interior and active-set algorithms with crossover, on the LP/MIP analogy; 'both be needed in the years to come'",
+    "pages": "pp. 2-3, 20-22"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "The undecided barrier rule is exposed as a user option; failure modes (infeasibility, preconditioning) are listed; S105 takes up the preconditioner promise",
+    "pages": "pp. 4-5, 17, 20"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "The primal-dual line-search engine is kept; explicit diagnostics (inertia, step length < alpha_min) trigger a trust-region fallback rather than a repaired component; the SLQP penalty update is the early form of steering",
+    "pages": "pp. 5-7, 14-15"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "The received view that nonsmooth merit functions interfere with fast progress is contested with experience and the rival's own table, not with a dedicated test",
+    "pages": "p. 5"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Special-case reduction as a design requirement",
+    "evidence": "The general solver must reduce automatically to trust-region Newton-CG (unconstrained), Levenberg-Marquardt (equations) and simplex (LP); S105 then benchmarks against specialists on bounds",
+    "pages": "pp. 2, 19-20"
+   },
+   {
+    "pattern": "Cite the rival's own data",
+    "evidence": "Merit-function tolerance is supported by Table 2 of Waechter and Biegler, a paper of the filter school",
+    "pages": "p. 5"
+   }
+  ],
+  "transferable": [
+   "Require a general solver to reduce automatically to the accepted special-purpose method on each simple class, and say so in the paper (pp. 19-20)",
+   "Use one shared projected-CG kernel with a constraint preconditioner; reuse its factorization for the normal step, the multipliers and an initial feasible point (pp. 15, 17)",
+   "Trigger a trust-region fallback on cheap explicit diagnostics (inertia count, small step length) instead of modifying the Hessian (pp. 5-7)",
+   "Crossover: a tolerance-based active-set estimate and one EQP step first; if that fails, an LP with radius min c_i/||grad c_i|| over the inactive constraints and nu0 = 10||(y,z)||_inf (pp. 21-22)",
+   "Evaluate the first Hessian with the original multipliers z0, not the shifted z1, to avoid artificial nonconvexity (p. 19)"
+  ],
+  "coauthors": "Richard H. Byrd, Richard A. Waltz",
+  "quotes": [
+   {
+    "text": "We prefer to revert to a trust region iteration because this permits us to compute a step using a null-space approach, without modifying the Hessian",
+    "page": 6
+   },
+   {
+    "text": "Although crossover techniques have received much attention in the context of linear programming [27], to the best of our knowledge, none of the nonlinear interior codes provide an option for it.",
+    "page": 20
+   }
+  ]
+ },
+ {
+  "id": "S013",
+  "year": "2006",
+  "title": "An interior algorithm for nonlinear optimization that combines line search and trust region steps",
+  "read_level": "full",
+  "contribution": "Knitro-Direct: a primal-dual line-search interior method that falls back to a globally convergent trust-region CG step when the inertia, step-to-boundary or backtracking tests fail. It hands state explicitly between the two kinds of step, updates the penalty parameter from a model decrease, and couples the barrier and NLP tolerances. On 968 CUTEr problems it matches Knitro-CG, and it is faster where CG is costly.",
+  "problem_entry": "Line-search IPMs must handle nonconvex models and rank deficiency, and each code does so differently; Knitro-CG is expensive on ill-conditioned Hessians; line-search iterations are known to converge to non-stationary points (pp. 1-4).",
+  "key_idea": "Always try the direct-factorization step first. If neig > l+m, the step to the boundary is too short, or backtracking fails (imax = 3), switch to trust-region CG steps, handing over Delta = 2 alpha ||d|| and alpha_T = min(1/2, Delta/||d||) (pp. 4-12).",
+  "assumptions": "f, h, g twice continuously differentiable (p. 2); exact or quasi-Newton Hessians (p. 1); A of full rank for the L-BFGS inversion, else trust-region fallback (p. 13); no assumptions are stated for convergence.",
+  "proof_devices": [
+   "No theorem; global convergence asserted 'similar to' FilterSQP and Knitro (p. 4)",
+   "Penalty rule (3.5)-(3.8): D phi <= -rho nu ||c||, which fails if sigma = 1 under negative curvature (p. 7)",
+   "Tolerance coupling (3.16)-(3.21): the barrier test implies the NLP test; mu_min = min(eps_opt, eps_feas)/100 (pp. 11-12)",
+   "Inertia criterion via [21, Lemma 16.3] (p. 4)",
+   "Sherman-Morrison-Woodbury for compact L-BFGS in the primal-dual matrix (p. 13)"
+  ],
+  "experiments": "Knitro-Direct vs Knitro-CG (the group's own previous release) on 968 CUTEr problems; 15 min or 3000 iterations counted as failure, tolerance 1e-6. Log2 profiles over evaluations (all problems) and CPU (the 420 with n+m >= 1000). Trust-region steps in 22.9% of iterations (15.9% for negative curvature). L-BFGS close to dense BFGS; exact Hessian solved 788 problems, L-BFGS 693. No external codes (pp. 14-17).",
+  "positioning": "Credits Loqo for convexification (p. 2); an alternative to the Hessian modification of Barnlp, Ipopt and Loqo (p. 4); answers the failures of Waechter-Biegler [26] and Byrd-Marazzi-Nocedal [7] (p. 4); rejects superlinear mu rules as hard to tune (p. 10); the nu rule comes from El-Hallabi [13] (p. 6).",
+  "writing": "Numbered 'two reasons' for design choices (pp. 4, 6); parameters given inline, 'In our tests we choose' (pp. 4-12); convergence promised (p. 2) but given only by analogy (p. 4); notation slip alpha_z^max vs alpha_lambda^max (pp. 5, 8); no conclusion.",
+  "limits_future": "Direct is slower when factorization dominates or negative curvature is frequent (p. 15); quasi-Newton versions less robust (693 vs 788 solved, p. 17); the FD option is costly in CPU if gradients are expensive (p. 17); no external comparison, no future-work section.",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "The classical primal-dual engine is kept; explicit diagnostics trigger a trust-region recovery path for that iteration; the repair is a fallback with a radius hand-off, not a component change",
+    "pages": "pp. 4-5, 8, 12"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Two complementary step computations in a unified algorithmic and software framework",
+    "pages": "p. 2"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "The rival's idea is credited (Loqo); known external failure examples are answered with a design",
+    "pages": "pp. 2, 4"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "The baseline is the group's own previous release, not a rival code; shared components control implementation effects; CPU only for n+m >= 1000",
+    "pages": "p. 14"
+   },
+   {
+    "method": "Method 5",
+    "relation": "contradiction",
+    "note": "In this paper, global convergence of the implemented hybrid is asserted by analogy, not analysed",
+    "pages": "pp. 2, 4"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Tolerance coupling",
+    "evidence": "Inner (barrier) tolerances are chosen so that inner success implies outer (NLP) success, with no oversolving; the floor on mu comes from the NLP tolerances",
+    "pages": "pp. 10-12"
+   },
+   {
+    "pattern": "Practice first, rationale later",
+    "evidence": "The nu rule, 'inspired by trust region methods', was adopted for efficiency; S042 derives it from its steering guidelines afterwards (pp. 18-20)",
+    "pages": "pp. 6-7"
+   }
+  ],
+  "transferable": [
+   "Hand state between step types: Delta = 2 alpha ||d|| after a line-search step; first backtrack min(1/2, Delta/||d||) after a trust-region step; stay with trust-region steps after a rejected one (pp. 8, 12)",
+   "Couple the inner and outer tolerances: eps_mu = max(theta mu, eps - mu), mu_min = min(eps_opt, eps_feas)/100 (pp. 10-12)",
+   "Scale the stopping tests by max(1, ||grad f||_inf) and by the initial infeasibility, and state which invariances each factor buys (pp. 9-10)",
+   "Try a second-order correction only when the rejection is due solely to constraint growth, reusing the factorization (pp. 8-9)",
+   "On a singularity message, raise the pivot tolerance from 1e-8 by factors of 10 up to 0.5; apply at most five iterative-refinement steps (p. 12)",
+   "Report the trigger shares of a safeguard and the internal time shares behind CPU differences (pp. 15-16)"
+  ],
+  "coauthors": "Richard A. Waltz, Jose Luis Morales, Dominique Orban",
+  "quotes": [
+   {
+    "text": "In this paper we describe a mechanism for stabilizing the line search iteration that is different from those proposed in the literature.",
+    "page": 2
+   },
+   {
+    "text": "We use instead the following simple strategy for updating µ that has performed as well in our tests as have more complicated superlinear rules.",
+    "page": 10
+   }
+  ]
+ },
+ {
+  "id": "S042",
+  "year": "2008",
+  "title": "Steering exact penalty methods for nonlinear programming",
+  "read_level": "full",
+  "contribution": "Generalizes the SLQP penalty update into guidelines that set the penalty parameter against the best attainable progress in linearized feasibility, measured by an auxiliary LP with nu = infinity. Implements them in Knitro-Active, relates them to normal-step trust-region SQP, and derives the line-search merit rule of Knitro-Interior/Direct from them.",
+  "problem_entry": "Sl1QP-type methods never reached production software, which the authors conjecture is due to the penalty choice; two toy examples show that too small a nu fails and that no fixed nu works from every start; multiplier-based and huge-nu rules fail too (pp. 2-7).",
+  "key_idea": "Steer nu by an auxiliary LP (nu = infinity): reach linear feasibility if attainable, else a fraction eps1 of the best reduction; then impose the margin condition (5.14), model decrease >= eps2 nu times the feasibility gain (pp. 8-11).",
+  "assumptions": "f, h, g twice continuously differentiable (p. 3); exact penalty theory, nu > ||lambda*||_inf near regular solutions (p. 7); in Section 7, W positive definite on the null space and equality constraints only (pp. 18-19).",
+  "proof_devices": [
+   "Two one-dimensional counterexamples with plots: the penalty function is monotone for nu < 1; for any nu there is no decreasing path from some start (pp. 6-8)",
+   "The examples revisited under Algorithm 5.1: nu > 3 x_k^2/(1 - eps2) enlarges the basin of attraction (pp. 13-14)",
+   "Descent derivation (7.28) => (7.31), invalid if sigma = 1 and d^T W d < 0 (pp. 19-20)",
+   "Theory by inclusion: the implemented condition (5.14) implies the weaker condition analysed in [7] (p. 13)"
+  ],
+  "experiments": "ADLITTLE: the fixed-nu failure is reproduced; Knitro-Active raises nu to 1e4 and solves it in 1 iteration (Delta0 = 1e10) or 6 (Delta0 = 10) (p. 15). Huge-nu ablation on 616 CUTEr problems: 485 solved -> 449 (nu = 1e5) -> 321 (nu = 1e10) (pp. 15-16). Extra LPs < 3% of simplex iterations (p. 13). The headline efficiency claims come without tables (pp. 13, 20).",
+  "positioning": "Extends [6]. Set against Fletcher's Sl1QP practice, multiplier-based rules, and Chen-Goldfarb and Leyffer et al. (who do not assess nu's effect on the step); similar to but distinct from Yuan. Recasts Byrd-Omojokun, Powell-Yuan and Celis-Dennis-Tapia as the same kind of relaxation. Cites Waechter's critique and his controlled comparison (pp. 2-20).",
+  "writing": "Three-stage history (p. 2); headline 'ceases to be a heuristic' (p. 1); conjecture flagged as such (p. 5); guidelines in words, then inequalities, then an algorithm (pp. 9-11); examples revisited (pp. 13-15); candid admission that penalty SQP is untested (p. 11); an open question and three-sentence final remarks (p. 20).",
+  "limits_future": "Penalty SQP not implemented, so its trade-offs are unknown (p. 11); extension to penalty line-search methods is open (p. 20); the variant needs eps1 -> 1 for a fast rate (p. 11); the main efficiency claims are unreported (pp. 13, 20).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "The penalty-SQP/SLQP engine is kept; only the nu update is replaced, driven by the best attainable feasibility progress (nu = infinity LP), with numerical defaults",
+    "pages": "pp. 8-13"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "The folk heuristic of a huge fixed nu is ablated at 1e5 and 1e10; the multiplier-based rule is dismissed",
+    "pages": "pp. 7, 15-16"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Fletcher's ADLITTLE example is used as a specification (failure reproduced, then solved) and acknowledged; the open question is recorded",
+    "pages": "pp. 14-15, 20"
+   },
+   {
+    "method": "Method 1",
+    "relation": "contradiction",
+    "note": "The headline efficiency claims for Algorithm 5.1 and the merit rule are given with no table, test set or tolerances",
+    "pages": "pp. 13, 20"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The coded rule is certified by showing it implies the weaker condition analysed in [7], not by analysing the code directly",
+    "pages": "p. 13"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Motivate-and-revisit toy examples",
+    "evidence": "Two 1-D counterexamples motivate the rule and are re-solved under it; ADLITTLE is shown before and after",
+    "pages": "pp. 6-8, 13-15"
+   },
+   {
+    "pattern": "Practice first, rationale later",
+    "evidence": "The merit rule of [41] 'was motivated by computational efficiency' and is derived afterwards from the guidelines",
+    "pages": "pp. 18-20"
+   },
+   {
+    "pattern": "Cite the rival's own data",
+    "evidence": "Waechter's controlled comparison with a filter line search supports the merit rule",
+    "pages": "p. 20"
+   }
+  ],
+  "transferable": [
+   "Set a parameter against an auxiliary ideal subproblem (the nu = infinity LP): demand a fraction of the best attainable progress, then add a margin condition so that the merit function rewards it (pp. 8-11)",
+   "Implement 'find nu+' as multiply by 10 and re-solve with a warm start; report the overhead as a share of simplex iterations (p. 13)",
+   "Ablate the folk alternative at two magnitudes on the same subset, report solved counts, and explain the failures mechanistically (pp. 15-16)",
+   "Show that your rule and the classical relaxations (Byrd-Omojokun, Powell-Yuan, Celis-Dennis-Tapia) are one principle (pp. 16-17)",
+   "Re-derive a rule that already works in practice from the new principle (pp. 18-20)"
+  ],
+  "coauthors": "Richard H. Byrd, Richard A. Waltz",
+  "quotes": [
+   {
+    "text": "The following example shows that it is not possible to prescribe in advance a value of the penalty parameter that is adequate at every iteration.",
+    "page": 7
+   },
+   {
+    "text": "We conclude that the risks of using excessively large penalty parameters are real indeed and that an adaptive strategy, such as the one described above is valuable in practice.",
+    "page": 16
+   }
+  ]
+ },
+ {
+  "id": "S105",
+  "year": "2008",
+  "title": "A numerical study of active-set and interior-point methods for bound constrained optimization",
+  "read_level": "full",
+  "contribution": "Benchmarks Knitro's SLQP and two interior methods against the gradient-projection specialists TRON and L-BFGS-B (and SNOPT) on 29 large bound-constrained CUTEr problems. Finds SLQP weaker at identifying the active set and CG preconditioning decisive, and designs incomplete Cholesky preconditioners for SLQP and for the barrier interior method.",
+  "problem_entry": "Mature interior-point and active-set methods make it 'an appropriate time to evaluate'; bound constraints are chosen to remove degeneracy, isolate ill-conditioning and face a strong specialist (pp. 1-2).",
+  "key_idea": "Compare like with like (both interior codes inside Knitro; quasi-Newton codes in a separate section), explain the profiles with internal counters, then build incomplete Cholesky preconditioners on the reduced Hessian and on the condensed system (pp. 2-17).",
+  "assumptions": "f smooth, bounds l <= u (p. 2); G positive definite on the null space, with trust-region and negative-curvature features ignored in the preconditioning analysis (pp. 9-10); central-path approximation Lambda ~ mu S^-1 behind mu S^-2 (p. 14).",
+  "proof_devices": [
+   "No theorems; equivalence of TRON's reduced CG and preconditioned projected CG (p. 11)",
+   "Block elimination (9) -> (10) -> (11), enabling incomplete Cholesky of grad^2 L + A_I^T D_s A_I (p. 13)",
+   "Dimension count n - t_k vs n, shown to explain only part of the CG gap (pp. 7-8)",
+   "Trust-region shape analysis (14) vs (15) and distortion of the barrier stop test, explaining cvxbqp1 (pp. 16-17)"
+  ],
+  "experiments": "Table 1: 29 problems (n 2000-100000), TRON 1.2 and Knitro 5.0 Direct/CG/Active at defaults, 10000-iteration limit; reports iter, feval, CPU, aveCG, endCG/n and failure codes, with profiles. Table 2: a MATLAB Knitro/CG on 7 small problems x 9 preconditioner options (e.g. total CG 3962 -> 44). Table 3: SNOPT, L-BFGS-B and the three Knitro codes with L-BFGS m = 20 (pp. 4-20).",
+  "positioning": "The Gould et al. survey is the map (p. 1); remedies point to the Byrd-Waltz parametric-LP SLQP [6] (p. 8); incomplete Cholesky from Lin-More [14] (p. 7); no external interior codes run, defended as controlling implementation effects (p. 3).",
+  "writing": "The abstract leads with the authors' own method losing (p. 1); observations under run-in heads, each with a mechanism (pp. 7-8); hedges 'we speculate' (p. 16) and 'more research is needed' (p. 8); ends with an 'In summation' paragraph (p. 20).",
+  "limits_future": "Preconditioning tested only in a MATLAB prototype on n <= 324 (p. 14); incomplete Cholesky results for Knitro/Active deferred (p. 11); stopping tests left at defaults (p. 4); bounds only. Future: SLQP active-set identification (p. 8) and improved quasi-Newton updating (p. 20).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Compares inside one code base to minimize implementation effects; like with like on Hessian information; losses in the abstract",
+    "pages": "pp. 1, 3"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Stopping tests and settings are left at defaults and only judged to give comparable accuracy, not aligned",
+    "pages": "p. 4"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "On the structured bound-constrained class the specialists TRON and L-BFGS-B beat the general-purpose solvers",
+    "pages": "pp. 7, 20"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Failure modes found (SLQP active-set identification, unpreconditioned CG, quasi-Newton updating) are turned into the next work; closes S011's preconditioner promise",
+    "pages": "pp. 8, 11, 20"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Specialist yardstick on an isolating class",
+    "evidence": "Bound constraints are chosen because they remove degeneracy and because specialized gradient projection 'places great demands' on general methods; cf. S011's special-case reduction",
+    "pages": "p. 2"
+   }
+  ],
+  "transferable": [
+   "Choose a problem class that switches off one difficulty and has a strong specialist, then benchmark the general methods against it (p. 2)",
+   "Hold back codes designed for other Hessian information to a separate section (p. 3)",
+   "For bounds, build the reduced-Hessian incomplete Cholesky by selecting rows and columns; for interior methods, condense to grad^2 L + A_I^T D_s A_I first (pp. 11, 13)",
+   "Run a factorial preconditioner study (Hessian option x barrier option), and check the outer iteration counts before reading CG counts as cost (pp. 14-16)",
+   "Tabulate internal counters (aveCG, endCG/n, active bounds) beside iterations, evaluations and CPU (pp. 4-5)"
+  ],
+  "coauthors": "Long Hei, Richard A. Waltz",
+  "quotes": [
+   {
+    "text": "We have chosen the two interior-point methods available in the knitro package, as opposed to other interior-point codes, to minimize the effect of implementation details.",
+    "page": 3
+   },
+   {
+    "text": "The use of preconditioning has helped bridge the gap in the exact Hessian case, but in the quasi-Newton case, improved updating procedures are clearly needed for general purpose methods.",
+    "page": 20
+   }
+  ]
+ }
+]

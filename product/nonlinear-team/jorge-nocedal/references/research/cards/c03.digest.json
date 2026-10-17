@@ -1,0 +1,131 @@
+[
+  {
+    "id": "S049",
+    "year": "1997",
+    "title": "Large scale unconstrained optimization",
+    "read_level": "full",
+    "contribution": "A single-author map of large-scale unconstrained optimization (1996 report of the 1997 IMA/OUP chapter), organised by problem structure (partial and group partial separability, AD) and by the Newton, quasi-Newton and CG classes, each closed by a list of open questions.",
+    "problem_entry": "Restricts the survey to large n (n > 500, p. 2) and opens with problem structure, because AD and automatic detection of partial separability are changing the trade-offs (pp. 1-2).",
+    "key_idea": "The right large-scale method depends on exploitable structure. Partial separability (more general than sparsity, p. 5) gives a compact representation, cheap AD and element-wise quasi-Newton (pp. 3-7, 13-14). Newton-CG trust region is the most reliable (p. 7); limited memory is for structureless problems (p. 13). Audit: the norm LANCELOT tests is not the one that grows monotonically under preconditioning (pp. 9-10).",
+    "assumptions": "Smooth f with gradient; the Hessian may be analytic, sparse FD or AD (p. 7). The CG results assume a bounded level set, a Lipschitz gradient and no restarts (p. 19). Element curvature conditions may fail, so SR1 or a BFGS-to-SR1 switch is used (pp. 13-14).",
+    "proof_devices": [
+      "Monotone norm growth of CG iterates from p0 = 0 justifies stopping at the trust-region boundary (p. 9)",
+      "First CG iterate = Cauchy step gives global convergence; residual test relative to ||g_k|| controls the local rate (pp. 8-9, 11)",
+      "Compact representation of BFGS matrices with a 2m x 2m inner matrix; useful for H_k A products and bounds (pp. 15-16)",
+      "Sparse quasi-Newton as min ||BS - Y||_F under symmetry and sparsity; uniqueness, minimum number of pairs, 2 pairs for an arrowhead matrix (pp. 17-18)",
+      "Nonlinear CG: PR may fail; beta = max{beta_PR, 0} and |beta_k| <= beta_FR converge, and the bound is tight (some c > 1 fails) (pp. 19-20); reported, not proved here"
+    ],
+    "experiments": "Three small illustrative tables, no aggregate: preconditioned Newton on Minpack-2 GL2/MSA up to n = 40,000 (p. 10); L-BFGS (m = 5) vs LANCELOT Newton (defaults) on four CUTE problems chosen to typify regimes, with nfg and time (p. 15); L-BFGS-B vs LANCELOT on four bound-constrained problems (pp. 16-17).",
+    "positioning": "Credits LANCELOT (preconditioner suite, partially separable QN nearly as good as Newton, pp. 9, 14). Ranks his own L-BFGS as less robust but more widely used (p. 13). Includes his own CG theory (Gilbert & Nocedal) among results without practical advance (p. 20).",
+    "writing": "First person singular with explicit uncertainty about his own knowledge (pp. 2, 10, 12). Each class ends with 'Current Research and Open Questions' (pp. 11-12, 17-18). One worked example (minimum surface) carries the structure concepts (pp. 3-4).",
+    "limits_future": "Open-question register: inner-CG stopping tests never compared (p. 11), Lanczos past negative curvature (pp. 11-12), dynamic and general-purpose preconditioners (p. 12), storage-halving LM (p. 17), whether sparse QN can compete (p. 18), scaling NLCG (p. 19). The limits of the survey itself are not stated; its tables are illustrative only.",
+    "method_links": [
+      {"method": "Method 6", "relation": "evidence", "note": "The survey is organised around structure. Limited memory is placed where structure is absent, and his own L-BFGS is shown losing to Newton and partially separable QN on reliability and evaluations.", "pages": "pp. 2-7, 13-15"},
+      {"method": "Method 5", "relation": "evidence", "note": "Convergence theory is judged by its practical effect: globally convergent PR variants give only marginal improvement, and the CG theory, his own included, did not lead to practical advances.", "pages": "pp. 19-20"},
+      {"method": "Method 4", "relation": "evidence", "note": "Step 1 only: the open-question subsections list the untested design choices of the Newton-CG and limited-memory codes. Later papers answering them are not shown here.", "pages": "pp. 11-12, 17-18"},
+      {"method": "Method 1", "relation": "variant", "note": "The rival code runs at default settings, but there is no stopping-test alignment or handicap; four illustrative problems per table and no aggregate, which is the gap Method 1 step 7 flags.", "pages": "pp. 15-16"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "monotone CG-iterate norm as a design invariant", "evidence": "Monotone growth of ||p_j|| justifies stopping at the TR boundary; under preconditioning the monotone quantity is ||Dp_j||, which exposes a LANCELOT inconsistency against Minpack-2 TRCG. Also S008 p. 15.", "pages": "pp. 9-10"}
+    ],
+    "transferable": [
+      "Choose four problems that each typify one observed regime (common, atypical win labelled atypical, ill-conditioned loss, few evaluations but slow) and report evaluations and time together (p. 15)",
+      "Check that the norm in which truncated CG grows monotonically is the norm the trust-region test uses; with preconditioner D it is ||Dp|| (pp. 9-10)",
+      "Use the compact 2m x 2m limited-memory representation when the method needs H_k A products with sparse A, or bounds (p. 16)",
+      "End each survey section with the concrete comparisons nobody has run, e.g. residual vs model-reduction vs angle tests for inner CG (p. 11)"
+    ],
+    "coauthors": "none (sole author per p. 1; the work list's Wright co-authorship is not borne out by the text)",
+    "quotes": [
+      {"text": "Limited memory methods require minimal input from the user and are best suited for problems that do not possess a structure that can be exploited economically", "page": 13},
+      {"text": "Their main contribution has been a better understanding of the crucial role played by line searches", "page": 20}
+    ]
+  },
+  {
+    "id": "S024",
+    "year": "1998",
+    "title": "Combining trust region and line search techniques",
+    "read_level": "full",
+    "contribution": "A trust-region method that, after a failed trial step, backtracks from the failed point instead of re-solving the subproblem, made safe by a subproblem solver that always returns a sufficient-descent step; global convergence and a Newton corollary as strong as for pure trust regions, with small-scale tests.",
+    "problem_entry": "Cost: re-solving the TR subproblem after a failure needs factorizations of B + lambda I for large n, while line searches are cheap. The two failure cases each mechanism handles well are analysed first (pp. 2-3).",
+    "key_idea": "Compute the TR step so it is always a sufficient-descent direction, then backtrack along a line or curved path only when f increases, shrinking the radius. Ratio test, radius update and B_k are unchanged (pp. 3, 10-12). Algorithm 2.6 uses only positive definite factorizations and avoids the hard case (pp. 10, 23).",
+    "assumptions": "Iterates in a bounded closed convex set; f twice differentiable with bounded Hessian (Assumptions 3.2, p. 13). B_k only needs sum 1/M_k = infinity with M_k = max_{i<=k} ||B_i|| (pp. 13, 17-19). Newton corollary with B_k = Hessian (p. 18).",
+    "proof_devices": [
+      "Trust-region solution characterization and generalized-inverse closed form (Lemma 2.1, pp. 4-5)",
+      "Powell's Cauchy-decrease bound (Lemma 2.2, p. 5) and a descent bound for the exact step (Lemmas 2.3-2.4, pp. 5-7)",
+      "Monotonicity in Delta of the cosine of the angle between d*(Delta) and -g, by three cases incl. the hard case (Lemma 2.5, pp. 7-8), which makes curved backtracking admissible (p. 11)",
+      "Inexact d(lambda) is the exact solution for radius ||d(lambda)||, so it inherits the decrease and descent bounds; an alternative lambda bound (2.33) drops the step-length lower bound (pp. 8-10)",
+      "Contradiction from ||g_k|| >= eps, summing model decrease over successful iterations, lower bounds Delta_k >= const/M_k for ratio failures and for backtracking (Lemmas 3.3-3.5, pp. 13-17)",
+      "Powell's sequence lemma (Lemma 3.6, p. 17) giving liminf ||g_k|| = 0 (Theorem 3.7, pp. 17-18); Newton corollary with quadratic rate (Corollary 3.8, pp. 18-19)"
+    ],
+    "experiments": "18 Moré-Garbow-Hillstrom problems (n 2-20) with four arms in one code: LS-BFGS, pure TR-BFGS, TR+BT-BFGS, TR+BT-SR1, same B1, Delta1 and stopping test (pp. 19-21). TR+BT and pure TR have similar evaluation counts (my sums 999 vs 986; LS-BFGS 1125); TR+BT needs fewer iterations on 13 of 18. A second set of medium problems (n 50-121) reverses BFGS vs SR1 (p. 22). No large-scale test.",
+    "positioning": "Builds on Fletcher, Gay, Moré-Sorensen, Powell, Sorensen (p. 3). Toint's every-iteration line search is the nearest prior work (p. 3). Concedes that the Schultz-Schnabel-Byrd restricted-subspace method has the same theory and claims only a practical edge (pp. 22-23).",
+    "writing": "Opens with cost and two concrete problematic cases before the design (pp. 2-3). The convergence claim is comparative, as strong as pure TR (p. 19); large-scale promise deferred (p. 21); the BFGS/SR1 reversal is marked 'Surprisingly' (p. 22). Lemma-heavy with short motivating paragraphs.",
+    "limits_future": "Specific limits: no efficient large-scale implementation, left as future research (pp. 21-22); no conclusion on BFGS vs SR1 (p. 22); a competing method has the same theory (p. 23).",
+    "method_links": [
+      {"method": "Method 3", "relation": "variant", "note": "Same move of keeping the engine and changing one component: only the response to a failed step changes (re-solve becomes backtrack), and TR robustness to noise and rounding is kept on purpose. The trigger is cost, not breakage in a new regime, and there is no estimate or recovery tree.", "pages": "pp. 2-3, 11-12"},
+      {"method": "Method 5", "relation": "evidence", "note": "The analysis covers the inexact algorithm actually coded. The theorem is positioned against what line-search QN theory needs: linear growth of ||B_k|| against condition-number or trace-determinant control.", "pages": "pp. 10-12, 19"},
+      {"method": "Method 1", "relation": "evidence", "note": "Step 5 (implementation control): all four arms run in one code with the same B1, Delta1, stopping test and curvature safeguards; evaluations are counted per arm.", "pages": "pp. 19-20"},
+      {"method": "Method 2", "relation": "variant", "note": "Step 5 habit only: the BFGS vs SR1 reversal is printed as a surprise with an explicit non-conclusion, but no received wisdom is on trial.", "pages": "p. 22"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "line-search / trust-region hybrid with a cheap fallback", "evidence": "The TR step is primary and backtracking is used only after a failure, under a sufficient-descent condition that keeps the TR convergence theory.", "pages": "pp. 3, 11-12, 19"},
+      {"pattern": "property-certifying subproblem solver", "evidence": "The inexact TR solver (Algorithm 2.6) is designed to deliver exactly the decrease and descent inequalities that the global analysis and the backtracking fallback need. Compare S008 pp. 10, 16.", "pages": "pp. 9-11"}
+    ],
+    "transferable": [
+      "Prove monotonicity in Delta of the angle between the exact TR step and -g (Lemma 2.5, pp. 7-8); exact steps at smaller radii then become admissible curved backtracking points (p. 11)",
+      "Use Powell's sequence lemma with M_k = max_{i<=k} ||B_i|| to get liminf ||g_k|| = 0 when ||B_k|| grows at most linearly (pp. 17-19)",
+      "Update lambda by a Newton step that accepts any ||d(lambda)|| in [Delta/tau, Delta]; only positive definite factorizations are needed and the hard case never arises (pp. 10, 23)",
+      "When comparing globalization variants, report iterations and function and gradient evaluations separately per arm (p. 20)",
+      "Before hybridising two mechanisms, write the failure case each handles well and require the hybrid to keep both (p. 3)"
+    ],
+    "coauthors": "Ya-xiang Yuan",
+    "quotes": [
+      {"text": "Note that we did not need to assume that the matrices Bk are bounded but only that their norms increase at most linearly with k", "page": 19},
+      {"text": "Surprisingly SR now clearly outperforms BFGS and we are unable to conclude that one updating formula is preferable to the other one", "page": 22}
+    ]
+  },
+  {
+    "id": "S008",
+    "year": "1999",
+    "title": "An interior point algorithm for large-scale nonlinear programming",
+    "read_level": "full",
+    "contribution": "NITRO: a barrier method whose subproblems are solved by a Byrd-Omojokun SQP trust-region iteration with a primal-dual slack model, a slack-scaled trust region, dogleg vertical steps and projected-CG horizontal steps sharing one augmented-system factorization; benchmarked against LANCELOT.",
+    "problem_entry": "Large nonconvex NLP with second derivatives. Existing interior methods are line-search ones, convex extensions of LP, local analyses, or KKT-modifying nonconvex methods too recent to judge (pp. 2-3). Entry: embed SQP and trust regions in a barrier method (p. 2).",
+    "key_idea": "Keep the Byrd-Omojokun SQP trust-region engine. Change only the slack model (Sigma = mu S^-2 or S^-1 Lambda, clipped to stay convex) and the trust-region shape (S^-1-scaled, fraction to the boundary tau = 0.995), because a straightforward application gives slack-violating primal steps (pp. 5, 7-10).",
+    "assumptions": "f, h, g smooth with first and second derivatives; nonconvex allowed (p. 2). No theorem in the paper; convergence inherited from Byrd-Gilbert-Nocedal with an admitted trust-region mismatch (p. 10). Linear barrier decrease; rate control deferred (p. 4).",
+    "proof_devices": [
+      "Equivalence of the subproblem's KKT system with Newton on the barrier KKT (primal) or perturbed KKT (primal-dual) conditions (pp. 7-8)",
+      "Monotone growth of the CG iterates' norm, so only the trust-region norm is tested in the loop and slack bounds are handled by a final truncation (pp. 15-16)",
+      "Projection preconditioner equivalent to an orthonormal null-space basis; ill-conditioning as mu -> 0 forms one tight eigenvalue cluster (p. 14)",
+      "Penalty rule pred >= rho nu sqrt(-m(v)) with rho = 0.3; nu monotone for fixed mu as the property needed for global convergence (pp. 16-17)",
+      "Sufficient reduction for small radius by the argument of ref. [8], cited not reproduced (p. 17)"
+    ],
+    "experiments": "14 varied CUTE problems (n up to 2001), small enough to know each run, against LANCELOT (second derivatives, defaults, both stopped at 1e-7), with f evals, CG iterations and CPU time (pp. 20-21). NITRO needs fewer evaluations on 9 of 14 but CPU splits 7-7, with large time losses (SVANBERG, OBSTCLAE). Also primal vs primal-dual in one code (p. 22), a last-iteration CG diagnostic (pp. 21-22), and Hock-Schittkowski for robustness, where NITRO is worse than LANCELOT (pp. 23-24).",
+    "positioning": "Offered as an alternative to active-set methods (p. 2). Credits Coleman-Li, Plantenga and Yamashita, with differences stated (p. 3), and the LP and Jarre-S. Wright, M. Wright and Conn-Gould-Toint arguments for primal-dual (pp. 7-8). Declines to mimic LP primal-dual methods (p. 23).",
+    "writing": "Novelty sentence early (p. 5). Steady hedging: 'holds much promise', 'appears to be robust', 'seem to indicate ... competitive on large problems' (pp. 2, 23). Design choices with reasons and rejected alternatives (pp. 10, 12). Small-problem losses stated with a diagnosis and a conjecture (p. 23). Robustness first: 'No attempt was made to obtain a rapidly convergent method' (p. 23).",
+    "limits_future": "Linear convergence by design (pp. 4, 23); worse than LANCELOT on small HS problems, not fully understood (p. 23); conservative iterative refinement inflates times (p. 23); only weakly primal-dual (p. 9). Future: higher-order corrections, superlinear barrier rules and cheaper linear-system refinement (p. 23).",
+    "method_links": [
+      {"method": "Method 3", "relation": "evidence", "note": "The trusted SQP trust-region engine is run on the barrier problem; the failing component (slack-violating primal steps cut by the trust region) is named and only the slack model and trust-region shape are changed. The estimate-and-recovery part of Method 3 is absent.", "pages": "pp. 4-5, 7-10"},
+      {"method": "Method 1", "relation": "evidence", "note": "Stopping tests aligned with LANCELOT at 1e-7, rival at defaults with second derivatives, options compared inside one code, small-problem losses printed. Gap: the large CPU-time losses in Table 2 go unremarked in the results paragraph.", "pages": "pp. 20-23"},
+      {"method": "Method 4", "relation": "evidence", "note": "Step 1: the undecided choices and failure modes are written into the paper (barrier and tolerance control deferred, barrier decrease overly conservative, conservative refinement, box trust region set aside). The later barrier-update study is linked only by timing (SKILL.md Method 4), not by this text.", "pages": "pp. 4, 10, 23"},
+      {"method": "Method 5", "relation": "variant", "note": "The shipped trust region does not match the analysed model, and the extension of the analysis is asserted, not carried out; this falls short of step 1, analyse the version people run.", "pages": "p. 10"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "small typified test set plus a broad robustness set", "evidence": "14 hand-picked varied problems, known run by run with internal diagnostics, then the full Hock-Schittkowski set for robustness with losses printed. Compare S049 p. 15.", "pages": "pp. 20-24"},
+      {"pattern": "monotone CG-iterate norm as a design invariant", "evidence": "Only the norm constraint is tested inside the projected-CG loop because ||w|| increases monotonically; slack bounds are handled after the loop. Compare S049 pp. 9-10.", "pages": "pp. 15-16"}
+    ],
+    "transferable": [
+      "Clip the primal-dual slack Hessian entry to mu/s^2 when a least-squares multiplier is negative, keeping the model convex in the slacks without forcing the multipliers positive (p. 9)",
+      "Lay out each iteration's linear algebra so that the multipliers, the Newton component and the projections share one augmented-system factorization; prefer it to the normal equations (p. 18)",
+      "Precondition projected CG by the orthogonal projection, computed through the augmented system, so it behaves as with an orthonormal null-space basis without forming Z (pp. 14-15, 18)",
+      "Choose the penalty parameter so that the predicted merit reduction is at least rho nu times the vertical feasibility decrease, keeping nu monotone for a fixed barrier problem (pp. 16-17)",
+      "Report a last-iteration diagnostic (CG iterations per dimension, step type) to show that the subproblems do not get harder as mu -> 0 (pp. 21-22)",
+      "Pair a small hand-picked set analysed run by run with a broad robustness set reported in full, losses included (pp. 20-24)"
+    ],
+    "coauthors": "Richard H. Byrd, Mary E. Hribar",
+    "quotes": [
+      {"text": "our test set is small enough to allow us to know each problem well and analyze each run in detail", "page": 20},
+      {"text": "Nevertheless its performance is not as good as that of LANCELOT and it appears that our strategy for decreasing the barrier parameter is overly conservative", "page": 23}
+    ]
+  }
+]

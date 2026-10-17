@@ -1,0 +1,136 @@
+[
+ {
+  "id": "S018",
+  "year": "2012",
+  "title": "Sample size selection in optimization methods for machine learning",
+  "read_level": "full",
+  "contribution": "A batch-type method that grows the gradient sample when a sample-variance test of the descent condition fails, with linear convergence in expectation and O(1/epsilon) total work for an idealized geometric-growth variant, a Newton-CG method whose CG stop test balances the residual against the estimated Hessian subsampling error, and a two-phase subsampled-Hessian Newton-CG method for L1 problems, tested on Google speech data (preprint pp. 4-6, 12-17, 22-25).",
+  "problem_entry": "Parallel computing changes the SGD-versus-batch trade-off; Bottou-Bousquet's 'SGD is to be preferred' analysis does not cover dynamic batches; [7] fixed the gradient sample and CG count; L1 models need second-order sparse methods (pp. 2-3, 6-7, 15, 21-22).",
+  "key_idea": "Replace the unavailable test ||grad J_S - grad J|| <= theta ||grad J_S|| by its variance form and size the next sample from it (3.9)-(3.12); stop CG when the residual reaches the variance-estimated Hessian sampling error (5.6); L1: OWL's orthant rule read as a gradient-projection step, Newton-CG on free variables, OWL's alignment step dropped (pp. 4-5, 15-17, 22-25).",
+  "assumptions": "Linear prediction w^T x, convex loss (p. 3); J twice differentiable and uniformly convex (4.2), admitted as a limitation for logistic loss (pp. 7, 10); fixed step because Armijo is 'more difficult to analyze' (p. 7); bounded per-sample variance omega (4.22) and imposed growth n_k = a^k (p. 11); N -> infinity / sampling with replacement (p. 5); fixed sample in the L1 part (p. 22).",
+  "proof_devices": [
+   "relative gradient-accuracy condition implies descent: grad J^T g >= (1-theta)||g||^2 (4.14), then Taylor with step (1-theta)/L gives J_{k+1} <= J_k - (beta/L)||grad J_k||^2 (4.16) (pp. 8-9)",
+   "gradient-dominance inequality ||grad J||^2 >= lambda (J - J*) from uniform convexity via the averaged Hessian H_k (4.3)-(4.5) (pp. 7-8)",
+   "deriving the analysable sample-growth rate: imposing the variance test with bound (4.12) forces n_k >= O((1-beta lambda/L)^-k), so geometric growth (4.23) is imposed (p. 11)",
+   "induction on E[J(w_k)-J*] <= C rho^k with rho = max{1-lambda/(4L), 1/a}, using E||g||^2 = ||grad J||^2 + ||Var(g)||_1 and Var(g) <= omega/n_k (Theorem 4.2, p. 12)",
+   "total work by summing a geometric series of sample sizes; choosing a <= (1-lambda/(4L))^-1 makes tau = 1; any overestimate of kappa suffices (Corollary 4.3, pp. 13-14)",
+   "bound comparison with Bottou-Bousquet under the approximation nu-bar ~ omega/lambda: kappa versus kappa^2 (Table 4.1, p. 14)"
+  ],
+  "experiments": "One Google speech problem (N = 168,776, m = 10,191): dynamic Algorithm 5.2 against its static predecessor at |S| = N and 0.05N, R = 0.1, S0 = 1%, theta = 0.5, x-axis accessed data points (pp. 18-19); estimator-versus-truth Table 5.1 over 17 iterations (p. 20); four theta values (pp. 20-21); L1 problem (N = 191,607, m = 30,315) against OWL from LibLBFGS at memory 5 and 20 (pp. 24-25); single runs, no SGD baseline; figure curves not in the text layer.",
+  "positioning": "Extends [7] (Byrd, Chin, Neveitt, Nocedal 2011) (pp. 2-3, 15); answers Bottou-Bousquet's preference for SGD with a competitive bound (pp. 6-7, 14); says OWL's convergence proof 'is not correct' (Proposition 4) and recasts OWL as gradient projection (pp. 24-27); dismisses Shapiro-Homem-de-Mello's confidence-ellipsoid rule as infeasible at scale; related work placed last (p. 27).",
+  "writing": "Three-part abstract (p. 1); practical algorithm and analysed variant separated explicitly (pp. 6, 15); measured hedges in the body ('reasonably accurate', 'only moderately faster', pp. 20, 25) but a stronger 'outperform' in the final remarks (p. 28); one-sentence justification for each design choice (pp. 15, 22); slip 'Theorem 6.1' for Theorem 4.1 (p. 11).",
+  "limits_future": "Stated: dynamic sampling for L1 deferred to 'a future paper' (pp. 22, 28); a better gradient-projection active-set search deferred as 'not simple' (p. 27); uniform convexity (p. 10). Unstated: theory covers only the idealized variant; no convergence result for the L1 method after the alignment safeguard is dropped; one data set, single runs, no SGD comparison (pp. 15, 18-27).",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "Classical gradient / Newton-CG engine with line search kept; only the sample-size decision and the CG stopping test are made regime-aware, each driven by an explicit sample-variance estimate. Recovery is missing: the sample only grows.", "pages": "pp. 4-6, 15-18"},
+   {"method": "Method 2", "relation": "evidence", "note": "Bottou-Bousquet's 'SGD is to be preferred' put on trial with a competitive bound for a dynamic batch method; OWL's convergence-motivated alignment step dropped because it slows the iteration.", "pages": "pp. 6-7, 14, 24"},
+   {"method": "Method 5", "relation": "variant", "note": "Theory is for an idealized variant (fixed step 1/L, imposed a^k growth), not the variance-test algorithm that is run; a complexity bound is used to argue competitiveness with SGD; no convergence result for the L1 method.", "pages": "pp. 6, 11, 14-15, 24, 27"},
+   {"method": "Method 1", "relation": "variant", "note": "Cost counted in accessed data points and the rival OWL run from a public third-party code at two memory sizes, but one problem, one run, no self-handicap, and the SGD rival absent from experiments.", "pages": "pp. 18-25"},
+   {"method": "Method 4", "relation": "evidence", "note": "Deferred items (dynamic sampling for L1, better active-set prediction) written down as future papers; later l1 second-order works S087 (2015) and S089 (2016) exist in INDEX.md; link inferred from titles only, those papers not read here.", "pages": "pp. 22, 27-28"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "Error balancing for inner solves", "evidence": "CG is stopped when its residual reaches the estimated Hessian subsampling error along the first CG direction, scaled by ||d_j||^2/||p_0||^2, since extra accuracy 'may not lead to an improved search direction'.", "pages": "pp. 15-17"},
+   {"pattern": "Re-derive a rival heuristic as a classical method", "evidence": "OWL's orthant selection recast as a gradient-projection step, which 'has the advantage of suggesting variants of the algorithm and mechanisms for establishing global convergence'.", "pages": "pp. 24-27"},
+   {"pattern": "Computable proxy for an unavailable quantity", "evidence": "Sample variance with finite-population correction stands in for the unavailable gradient error, and is validated against the truth in Table 5.1.", "pages": "pp. 4-5, 20"}
+  ],
+  "transferable": [
+   "Replace an unavailable relative-accuracy test ||g - grad J|| <= theta ||g|| by its variance form ||Var_S||_1/|S| <= theta^2 ||g||^2 and size the next sample from the same inequality (pp. 4-5).",
+   "Stop CG when ||r_j||^2 <= gamma ||d_j||^2, with gamma the per-sample variance of Hessian-vector products along p_0 over |H| ||p_0||^2, computed once per outer iteration (pp. 16-17).",
+   "Fix the Hessian/gradient sample ratio so that CG Hessian-vector cost stays below one gradient evaluation, removing a tuning parameter (p. 15).",
+   "To analyse a test-driven sampler, derive the growth rate the test forces under bounded variance and analyse the idealized variant imposing that rate; total work follows from a geometric sum (pp. 11-14).",
+   "Tabulate an estimator against the true quantity over a real run before relying on it (Table 5.1, p. 20).",
+   "Plot all methods against accessed data points (function, gradient and Hessian-vector products together) (p. 19)."
+  ],
+  "coauthors": "Richard H. Byrd, Gillian M. Chin, Yuchen Wu",
+  "quotes": [
+   {"text": "The focus of this section is on the development of a practical algorithm, not on establishing complexity bounds, and therefore our method is an extension of Algorithm 3.1 and not of the idealized variant given by (4.23)-(4.24).", "page": 15},
+   {"text": "The alignment is motivated by the need to achieve global convergence properties, but our computational experience indicates that it slows down the iteration.", "page": 24}
+  ]
+ },
+ {
+  "id": "S053",
+  "year": "2014",
+  "title": "An interior point method for nonlinear programming with infeasibility detection capabilities",
+  "read_level": "full",
+  "contribution": "Two-phase (optimality / feasibility) interior-point methods for NLP, built into KNITRO as extensions of knitro/cg and knitro/direct, that use the normal component of a step-decomposition step to decide when to switch to an l1 feasibility barrier problem, with hysteresis rules against cycling; infeasibility detection rises from 8/17 to 17/17 (CG) and 11/17 to 14/17 (line search) on small infeasible problems, with essentially unchanged termination on 430 CUTEr problems (manuscript pp. 5-17; counts mine).",
+  "problem_entry": "Infeasible NLPs arise in parameter sweeps and in branch-and-bound subproblems run thousands of times; a NEOS snapshot of ten solver/algorithm combinations shows the authors' own interior codes knitro/direct and knitro/cg 'quite poor' at detecting infeasibility (pp. 2-4).",
+  "key_idea": "The normal step of the Byrd-Omojokun-type step decomposition estimates the attainable first-order infeasibility reduction theta(x), which line-search primal-dual methods cannot measure; switch to a feasibility mode when the linearized residual is >= 0.9 ||c|| and back when <= 0.1 ||c||, keeping the knitro/cg engine, merit function and penalty update unchanged (pp. 2, 5-8).",
+  "assumptions": "Smooth f, g, h (p. 4); infeasibility measure w = (g+, h) (p. 4); the run starts assuming a feasible solution exists (p. 9); no convergence assumptions because no analysis is given (p. 16); constants delta, delta-bar and IPM initialization admitted as sensitive (pp. 10, 12).",
+  "proof_devices": [
+   "first-order characterization of an infeasible stationary point, ||w(x)|| > 0 and theta(x) = 0 for any trust radius (3.3), turned into the relative test theta(x_k) <= delta ||w(x_k)|| (p. 5)",
+   "termination by KKT residuals of the NLP and of the feasibility problem; ||w|| > 0 at a stationary point of (4.10) accepted as a certificate of local infeasibility (p. 9)",
+   "LICQ-failure exit relying on Theorem 3 of Byrd-Gilbert-Nocedal [3] (p. 9)",
+   "no theorems proved; convergence analysis deferred to a future study (p. 16)"
+  ],
+  "experiments": "Section 2: SNOPT, FILTER, KNITRO 7.0 (active/CG/direct), IPOPT, LANCELOT, MINOS on NEOS/AMPL defaults over 17 infeasible problems (LOQO, PENNON detected none); iteration units differ by solver (pp. 3-4). Section 5: KNITRO 8.0, alg=2, presolve=0, maxiter=3000, maxtime_real=500, bar_switchrule 1 vs 2; Table 4 detection 8/17 -> 17/17 (p. 13); Table 5 terminations on 430 CUTEr problems, Morales log2 iteration ratios on 391 (pp. 13-14). Section 6 line search: Table 6 11/17 -> 14/17 with a powellbs regression not discussed; Table 7 terminations (p. 17). No CPU time; full per-problem tables in Appendices A-B (pp. 20-35).",
+  "positioning": "Surveys infeasibility handling across SNOPT, FILTER, Gould-Robinson, Byrd-Curtis-Nocedal steering, Yamashita-Yabe, Chin-Fletcher, LOQO, IPOPT, Curtis, LANCELOT and MINOS; asserts it is 'distinct' without detailed argument; credits FILTER's restoration phase and judges IPOPT's 'not consistently successful'; one citation slip ('Curtis [2]' points to the Byrd-Curtis-Nocedal TR) (pp. 2, 4, 17).",
+  "writing": "Short pseudo-code-centred body; one-line verdicts ('It is clear that...', 'no loss of robustness') (p. 13); 'solid theoretical underpinning' claimed without proof (p. 12); plain self-criticism of the authors' own codes (p. 4); two-sentence final remarks (p. 16); constants introduced as delta-bar > delta but set 0.9 and 0.1 in the reverse order (p. 8).",
+  "limits_future": "Stated: convergence analysis left for a future study (p. 16); sensitivity to delta, delta-bar handled by extra rules (p. 12); IPM initialization sensitivity (p. 10). Future: a feasible interior method in feasibility mode that keeps satisfied inequalities satisfied and drops the relaxation variables (p. 17). Unstated: small infeasible test sets (n <= 251), iterations only, line-search losses left in tables (pp. 3, 17).",
+  "method_links": [
+   {"method": "Method 4", "relation": "evidence", "note": "KNITRO's known failure mode (no infeasibility handling in its interior algorithms, Tables 2-3) becomes the paper and ships as KNITRO extensions selected by the option bar_switchrule=2; the paper's own diagnosis restates the 2006 KNITRO limitation, supporting the timing-inferred arrow in SKILL.md.", "pages": "pp. 1, 3-4, 12-13"},
+   {"method": "Method 3", "relation": "evidence", "note": "Step-decomposition engine kept; mode control added, driven by an explicit estimate of the best attainable feasibility progress (normal-step linearized reduction versus ||c||), with a return-to-main recovery test and exits for infeasible stationary points and LICQ failure.", "pages": "pp. 5-6, 8-9, 12"},
+   {"method": "Method 1", "relation": "evidence", "note": "The snapshot prints the authors' own codes losing and credits FILTER; old and new compared inside one code base with identical options except the switch rule. Caveats: iteration units differ across solvers, line-search losses only in tables, no CPU time.", "pages": "pp. 3-4, 12-13, 17"},
+   {"method": "Method 6", "relation": "evidence", "note": "The line-search capability is built on knitro/direct's existing fallback to the knitro/cg step-decomposition algorithm; the integrated architecture makes the extension cheap.", "pages": "p. 15"},
+   {"method": "Method 5", "relation": "variant", "note": "Practice first: theory is a one-line stationarity characterization, convergence analysis promised for a future study.", "pages": "pp. 5, 12, 16"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "Hysteresis on mode switches", "evidence": "Minimal-progress test (zeta = 0.99), at least 3 main-mode iterations, two consecutive triggers, and a (1 - sigma) infeasibility decrease before returning, so that delta and delta-bar need no adjustment during the run.", "pages": "p. 12"},
+   {"pattern": "Self-exposing snapshot benchmark on a purpose-built failure set", "evidence": "A group-built collection of infeasible problems (Test Set 2, Curtis-Oztoprak TR [12]) run on all major codes, the authors' own included, before the method is proposed; own interior codes shown 'quite poor'.", "pages": "pp. 3-4"},
+   {"pattern": "Computable proxy for an unavailable quantity", "evidence": "The normal step's predicted linearized feasibility reduction stands in for the first-order stationarity measure theta(x) of the feasibility problem.", "pages": "pp. 5, 8"}
+  ],
+  "transferable": [
+   "Turn a stationarity characterization of the bad outcome into a relative switching test that the step computation evaluates for free (pp. 5, 8).",
+   "Choose the algorithm architecture whose by-products measure what the new feature needs (step decomposition rather than line-search primal-dual, because only it yields theta(x)) (pp. 2, 5).",
+   "Give every mode switch explicit warm-start rules: barrier parameter carried over, trust radius rescaled by sqrt(n+m+2t)/sqrt(n), penalty and multipliers inherited or recomputed by least squares (pp. 10, 12).",
+   "Protect a heuristic switch with dwell-time and two-consecutive-trigger rules (p. 12).",
+   "Show a robustness feature is harmless with a full old-by-new termination cross-table over the standard set, then compare iterations only where both runs reach the same objective (Tables 5, 7, pp. 13-14, 17).",
+   "For two-code comparisons use the per-problem log2 iteration ratio rather than performance profiles (p. 13)."
+  ],
+  "coauthors": "Figen Oztoprak, Richard A. Waltz",
+  "quotes": [
+   {"text": "The performance of the interior point methods knitro/direct and knitro/cg are quite poor, which may not be surprising since these two algorithms do not contain any features for handling infeasibility.", "page": 4},
+   {"text": "We have found that these additional switching rules prevent the algorithm from switching modes too rapidly, and also make it unnecessary to try to adjust the values of the constants", "page": 12}
+  ]
+ },
+ {
+  "id": "S006",
+  "year": "2016",
+  "title": "On large-batch training for deep learning: Generalization gap and sharp minima",
+  "read_level": "full",
+  "contribution": "An empirical study across six networks showing that large-batch ADAM reaches training accuracy similar to small-batch ADAM but lower testing accuracy, and that its solutions are 1-2 orders of magnitude sharper by a box-constrained sensitivity metric computed with a few L-BFGS-B iterations; warm-start, batch-size and distance probes attribute the gap to lack of exploration and gradient noise, and four remedies only partly help (arXiv v2 pp. 3-9, 13-16).",
+  "problem_entry": "Practitioners observe a generalization drop with larger batches, which blocks the parallelism that large batches would allow; the gap is measured at up to 5% and its cause is asked for (pp. 1-2).",
+  "key_idea": "Large-batch methods converge to sharp minimizers and small-batch methods to flat ones because gradient noise ejects iterates from sharp basins; tested with 1-D parametric plots, a sharpness metric, a batch-size sweep, warm-started large-batch runs and distance-from-x0 ratios against four enumerated conjectures (pp. 3-9).",
+  "assumptions": "Finite-sum nonconvex training (p. 1); SB = ADAM with 256 points, LB = ADAM with 10% of the data, trained until the loss stops improving (p. 4); 'minimizer' used loosely for the final iterate (p. 5); the sharpness-generalization link taken from flat-minima, MDL and Bayesian literature, not tested (p. 3); metric 'although imperfect', spectral reading for small epsilon (pp. 5-6).",
+  "proof_devices": [
+   "n/a (no theorems)",
+   "box-constrained sharpness metric with half-widths epsilon(|(A+x)_i| + 1) for invariance to dimension and sparsity, in full space and random 100-dimensional subspaces (pp. 5-6)",
+   "spectral interpretation: metric relates to the largest Hessian eigenvalue (A = I) or a projected Ritz value (random A) (p. 6)",
+   "idealized parallel performance model I_l/I_s < B_s/(f_s(P) B_l) (App. C, p. 13)"
+  ],
+  "experiments": "Six networks (MNIST, TIMIT, CIFAR-10/100; fully connected, AlexNet-like, VGG-like), 5 random starts with mean +/- std (p. 4); accuracy Table 2 (p. 4); sharpness Tables 3-4 with two epsilon values (pp. 6-7); parametric plots from one SB/LB pair (pp. 5-6, 14); batch-size sweep (pp. 7-8); warm-start from 100 SB epochs (p. 7-8); remedies: data augmentation (Table 6), conservative training (Table 7), adversarial and stability training (no benefit) (pp. 13-16). Claims for other optimizers and networks given without data (pp. 3-4).",
+  "positioning": "Builds on Hochreiter-Schmidhuber flat minima, MDL, MacKay and Chaudhari et al. (p. 3) and Goodfellow et al.'s visualization; sets aside Ferris's convex-analysis 'sharp minimum' (p. 5); reports alignment with loss-surface theory (p. 9); borrows remedies from ML practice and offers the group's own dynamic sampling (Byrd et al. 2012 = S018) as a prospective remedy (pp. 9, 15-16).",
+  "writing": "Boxed main observation (p. 3); asymmetric hedging between the abstract ('as is well known', p. 1) and the body ('loosely', 'apparently', 'only provided some numerical evidence', pp. 5, 7, 9); lettered open questions (p. 9); figures carry the argument; slips: conservative-training results said to be in 'Figure 7' (Table 7) and C2 described as 'The C3 network' (pp. 12, 15).",
+  "limits_future": "Stated: numerical evidence only (p. 9); remedies 'do not completely remedy the problem' (pp. 6, 9); performance model idealized (p. 13); open questions (a)-(e) on proof, density of minima, architectures, initialization and steering LB away from sharp minimizers (p. 9); dynamic sampling as a future remedy (p. 9). Unstated: second-order optimality never checked; parametric plots from one pair; augmented LB matching or beating SB on C2 and C4 played down (pp. 5, 13-14).",
+  "method_links": [
+   {"method": "Method 5", "relation": "evidence", "note": "In the body the work keeps what it cannot prove as lettered open questions and says it offers numerical evidence, not proof (step 5).", "pages": "p. 9"},
+   {"method": "Method 2", "relation": "variant", "note": "Four rival explanations are put on trial and over-fitting is ruled out with data, but the sharpness-generalization link is adopted as 'well known' and the study ends supporting 'a commonly held view'; context of SKILL.md warning sign 8.", "pages": "pp. 1, 3-5"},
+   {"method": "Method 1", "relation": "variant", "note": "Like-with-like comparison (one optimizer, 5 runs, mean +/- std), but claims about other optimizers and networks have no data and augmented-LB results that match or beat SB are played down in the text.", "pages": "pp. 3-4, 13-14"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "Hypothesis-discriminating numerical study", "evidence": "Numbered rival conjectures (i)-(iv), each experiment tied to the conjecture it supports or rules out (training/testing curves against over-fitting, warm-start probe, distance ratios).", "pages": "pp. 3-5, 7, 9"},
+   {"pattern": "Computable proxy for an unavailable quantity", "evidence": "Sharpness computed by a few L-BFGS-B iterations on a box-constrained maximization instead of Hessian eigenvalues, with a spectral interpretation; here a diagnostic only, unlike the algorithm-driving proxies of S018 and S053.", "pages": "pp. 5-6"}
+  ],
+  "transferable": [
+   "Measure sensitivity as the relative rise of f maximized over a box epsilon(|x_i| + 1) around the solution, in the full space and in random subspaces, solved inexactly by a fixed small number of L-BFGS-B iterations, at two epsilon values (pp. 5-7).",
+   "Rule out over-fitting before claiming another mechanism by showing testing accuracy has no peak-then-decay over epochs (pp. 4-5).",
+   "Probe a basin hypothesis with warm starts: run the competing regime from the other regime's iterate at each epoch and plot accuracy and the diagnostic against the warm-start epoch (pp. 7-8).",
+   "Sweep the controlling parameter and plot outcome and diagnostic on twin axes to locate a threshold (pp. 7-8).",
+   "Report the distance travelled from x0 by each regime as a cheap test of the nearest-minimizer conjecture (p. 9).",
+   "Report failed remedies with the same metrics as successful ones (pp. 15-16)."
+  ],
+  "coauthors": "Nitish Shirish Keskar, Dheevatsa Mudigere, Mikhail Smelyanskiy, Ping Tak Peter Tang",
+  "quotes": [
+   {"text": "The data presented in this paper supports the last two conjectures.", "page": 3},
+   {"text": "(In this paper, we only provided some numerical evidence.)", "page": 9}
+  ]
+ }
+]
