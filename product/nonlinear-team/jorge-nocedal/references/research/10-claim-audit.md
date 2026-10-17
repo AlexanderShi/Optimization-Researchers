@@ -84,3 +84,22 @@
 - k=34: SKILL.md:272 [S023 pp. 12] — The S023 card has the deterministic-limit check at p. 12 and reports SLM losing there, but the authors did not stop: SLM went on to the main test and was found to perform similarly to S-Newton (p. 18), so 'stop' is stronger than the card's 'report it if it loses there'.
 - k=47: SKILL.md:373 [S016 pp. 1–2] — The card supports a correction appearing 14 years after release, but of the 1997 L-BFGS-B code Algorithm 778 (dates on pp. 1, 4), not of L-BFGS or its 1990 Harwell release, which is how the row reads; poor reviews, Powell's dislike and the take-off are not in this card.
 - k=50: SKILL.md:387 [S013 pp. 4–5] — The card supports only the last clause, direct-factorization steps added to Knitro's first-release CG method (Algorithm 2.1, pp. 4-5; pp. 1-2); the 'very conservative' refinement and the deferred fast convergence appear nowhere in this S013 card, which is the only source cited.
+
+## Fixes and recheck 2026-10-17 · the 10 partial claims above
+
+Audit setup: the 60 claims were split into three packets of 20. Each packet went to two independent zero-context auditors, who agreed on 59 of the 60 items. The one disagreement (k = 30) went to a third auditor and was settled by majority vote (partial).
+
+All 10 partial claims (k = 4, 10, 13, 16, 30, 31, 32, 34, 47, 50) were rewritten to say only what the cited cards say. One agent per claim proposed a minimal edit, and a separate zero-context checker judged the new wording against the cited cards only:
+
+- k = 4: "sporadic" became "appears in some papers"; step 4 now cites S035 report p. 19 and S013 p. 14. The ledger no longer counts S040 as a self-handicap.
+- k = 10: the page is corrected from S150 p. 9 to p. 6, where the critique of the earlier evidence is.
+- k = 13: each classical method and failing component now cites its own card (S071, S082, S124, S091 arXiv). S128 p. 1 supports only the fragile-operations audit.
+- k = 16: "huge initial ν0" became the card's huge-fixed-ν heuristic (same counts), in SKILL.md and twice in the ledger.
+- k = 30: "the gradient decides descent" became the card's "less accuracy is needed in the Hessian than in the gradient".
+- k = 31: the geometric backup is attributed to the SIAM Review survey (S004 p. 45), not to S018. S018's fixed Hessian/gradient sample ratio is noted.
+- k = 32: the moving-window fallback serves the variance estimate when the sample is too small (S031 p. 4). Skipped updates handle bad curvature (p. 5).
+- k = 34: a loss in the deterministic limit is reported, not a stop. S023's L-BFGS variant lost there but performed like Newton-CG on the main test (pp. 12, 18).
+- k = 47: Powell's dislike and the poor reviews are attributed to the 2026 interview (research note 02 F2), and the take-off and Harwell release to note 06 T2. The 14-year correction is S016's, and it concerns the 1997 L-BFGS-B code (Algorithm 778). The ledger's Reception bullet now says so.
+- k = 50: the deferred fast convergence and the very conservative refinement are cited to S008 pp. 4, 23, and the quotation marks are dropped. The card paraphrases these points and does not quote them.
+
+First recheck: supported 9, partial 1, unsupported 0. The partial one, k = 50, was then rewritten to the checker's reading and judged by a further zero-context checker: supported. After the edits, `quality_check.py` passes 12/12 and `check_ledger.py` passes, including `--before` against the pre-synthesis copy (0 ✗). `check_citations.py` reports 0 problems and `check_links.py` 0 broken.
