@@ -1,0 +1,138 @@
+[
+  {
+    "id": "S016",
+    "year": "2011",
+    "title": "Remark on “Algorithm 778: L-BFGS-B: Fortran subroutines for large-scale bound constrained optimization”",
+    "read_level": "full",
+    "contribution": "A four-page revision of the 1997 L-BFGS-B code: the subspace step is projected onto the box and followed by backtracking (falling back to truncation when descent is not strong), and machine precision is taken from Fortran 90 EPSILON instead of the faulty dpmeps; tested old vs new on 38 large CUTEr problems (pp. 1-3).",
+    "problem_entry": "Two defects in a released code: truncated subspace steps that make negligible progress on some problems, and dpmeps underestimating machine precision by two orders of magnitude on some Linux compilers (pp. 1-2).",
+    "key_idea": "Project the subspace minimizer onto l <= x <= u and backtrack along d_k = xbar_{k+1} - x_k, reverting to truncation if d_k is not a direction of strong descent; minimal exploration (cut-back and projection points only) keeps the phase cheap; EPSILON(x) replaces dpmeps (p. 2).",
+    "assumptions": "Bound constraints only; 'strong descent' undefined; machine precision feeds a quasi-Newton safeguarding rule and a stop test; no theory (p. 2).",
+    "proof_devices": [
+      "n/a: no theorem; projection justified by the literature on exploring the feasible boundary (Lin-More [5], GALAHAD [4]) and an unreported test of a more elaborate boundary search (p. 2)"
+    ],
+    "experiments": "38 bound-constrained CUTEr/AMPL problems, n = 2,000-100,000, chosen large enough for reliable CPU timing; the old version given the correct machine precision so only the subspace change is measured; per-problem log2(FEVnew/FEVold) and log2(CPUnew/CPUold) plots with m = 20; verdict 'rather substantial' from the figures only (bars not recoverable from the text layer), no table, no dpmeps experiment, no other code (pp. 2-3).",
+    "positioning": "Self-referential (1995 algorithm [1], 1997 code [6]); credits Lin-More and GALAHAD for boundary exploration and calls the gain 'not surprising' (pp. 2, 4).",
+    "writing": "Three-sentence abstract stating both changes; four pages; unhedged verdict ('It is clear that the improvements in performance are rather substantial'); slips: keyword 'infeasibility', 'it it known' (pp. 1-3).",
+    "limits_future": "No limitations or future directions written; unwritten limits: one 38-problem set, no theory, figure-only results, dpmeps cost not measured (pp. 2-3).",
+    "method_links": [
+      {"method": "Method 3", "relation": "evidence", "note": "L-BFGS-B engine kept; only the subspace-step truncation replaced, with the old truncation kept as fallback when descent is not strong.", "pages": "p. 2"},
+      {"method": "Method 3", "relation": "variant", "note": "machine-precision estimate driving a safeguard and a stop test was wrong by two orders of magnitude and caused severe deterioration; repaired by a reliable source (EPSILON), not by a recovery path.", "pages": "p. 2"},
+      {"method": "Method 1", "relation": "evidence", "note": "accounting corrected in the old version's favour (correct machine precision); CPU reported only where timing is reliable, evaluations too. Also full-text evidence for Heuristic 7 (published correction of the 1997 code) and Heuristic 5 (minimal two-point exploration kept as cheapest adequate option).", "pages": "pp. 1-2"},
+      {"method": "Method 1", "relation": "variant", "note": "no losses discussed in the text, only the overall area of the per-problem plots.", "pages": "p. 3"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "two-phase active-set identification + second-order subspace step", "evidence": "the refinement of L-BFGS-B's subspace minimization phase is tied to faster identification of the optimal active set; same shape in S043 and S064", "pages": "pp. 1-2"}
+    ],
+    "transferable": [
+      "Port the bug fix into the old version before an old-vs-new comparison so the plot measures one change (p. 2).",
+      "Per-problem log2 ratios of function evaluations and CPU time, on problems large enough for reliable timing (pp. 2-3).",
+      "Projected subspace step with backtracking and automatic fallback to the truncated step when descent is not strong (p. 2).",
+      "Take machine precision from a language intrinsic when safeguards and stop tests depend on it (p. 2)."
+    ],
+    "coauthors": "José Luis Morales (ITAM)",
+    "quotes": [
+      {"text": "Our technique performs a minimal exploration (it only considers the cut-back and projection points) so as to keep the cost of the subspace minimization phase to a minimum.", "page": 2},
+      {"text": "This caused severe deterioration of performance on some problems because two important components of the algorithm rely on machine precision.", "page": 2}
+    ]
+  },
+  {
+    "id": "S043",
+    "year": "2012",
+    "title": "Newton-like methods for sparse inverse covariance estimation",
+    "read_level": "full",
+    "contribution": "Two classes of second-order methods for l1-penalized inverse covariance estimation, Newton-LASSO (piecewise quadratic model solved by FISTA) and orthant-based Newton (smooth quadratic on an orthant face by truncated CG), plus an L-BFGS variant, all exploiting the Kronecker Hessian structure; compared with a faithful MATLAB QUIC, C:QUIC and ALM on six synthetic problems, where no method dominates and OBN-LBFGS is proposed as the universal choice (pp. 2-8).",
+    "problem_entry": "Covariance selection recast as min -log det P + trace(SP) + lambda ||vec P||_1; entry via the rival code QUIC, reported 'significantly faster' than five methods, whose coordinate-descent subproblem solver is questioned (pp. 1-3).",
+    "key_idea": "Free/active sets from the steepest-descent (min-norm subgradient) direction; NL minimizes the piecewise model (FISTA inner solver), OBN minimizes a smooth quadratic on the orthant face by K = O(1) CG steps using (A kron B)vec(C) = vec(BCA^T) at O(n^3); compact L-BFGS (from L-BFGS-B [24]) for the reduced minimizer; start at P0 = (diag(S) + lambda I)^-1 (pp. 2-6).",
+    "assumptions": "Fixed lambda, i.i.d. samples, known mean, convex problem with unique P*; FISTA constant c > 1/(eigmin P_k)^2; no convergence theory (exact NL credited to Tseng-Yun; inexact NL and OBN deferred) (pp. 1-5).",
+    "proof_devices": [
+      "n/a: no theorem; active/free sets derived from the steepest-descent direction so that a small step decreases the model (pp. 2-3)",
+      "Kronecker identity for O(n^3) reduced Hessian-vector products (22) (p. 6)",
+      "compact L-BFGS formula (24) for the reduced minimizer with operation count 2t^2|F| + 4t|F| (p. 6)",
+      "closed-form diagonal solution for lambda >= |S_ij| used as starting point (16) (p. 3)",
+      "inner-solver cost comparison O(Kn^3) FISTA vs O(Kn|F|) coordinate descent vs O(K_CG n^3) CG (p. 7)",
+      "assertion without argument that the OWL convergence proof is not correct (p. 4)"
+    ],
+    "experiments": "Six synthetic problems (n = 500, 1000, 2000; card(Sigma^-1) 1-20.1%; lambda = 0.5-0.01; card(P*), cond(P*) printed) with seven algorithms incl. a faithful MATLAB QUIC (NL-Coord), C:QUIC and ALM with its stopping test aligned; stop at 10n iterations or ||grad F||_inf <= 1e-6, 5000 s limit; iterations and seconds; no method dominates, NL-Coord best below 1% sparsity, C:QUIC best in the two sparsest settings, OBN-LBFGS the only finisher on one problem and called the universal choice; one cell exceeds the time limit without comment (pp. 6-8).",
+    "positioning": "Surveys first- and second-order methods, takes QUIC as baseline on its own report, criticises OWL directly (reduced inverse Hessian 'difficult to justify', proof 'not correct'), credits Tseng-Yun and Dahl et al. (pp. 2-4, 6).",
+    "writing": "Modest contribution sentence ('useful tools'); hedged results ('seem', 'appears'); untested expectations about optimized C codes; scope stated as methods and ideas rather than implementation efficiency; label slips ('OBN-Coord', 'OBM') (pp. 2, 4, 7).",
+    "limits_future": "Convergence of inexact NL and of OBN deferred; QN inside Newton-LASSO omitted for brevity; MATLAB vs C gap; crude dynamic CG rule to be improved; unstated: synthetic data only, six problems (pp. 3-4, 6-8).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "baseline is the rival community's strongest code by its own report; faithful MATLAB reimplementation plus C original; ALM stopping test aligned; time-outs printed; losses printed (NL-Coord, C:QUIC win on the sparsest problems).", "pages": "pp. 2, 7-8"},
+      {"method": "Method 1", "relation": "variant", "note": "no handicap of the authors' own side; belief that trends hold for optimized codes is untested.", "pages": "p. 7"},
+      {"method": "Method 2", "relation": "evidence", "note": "coordinate descent as 'the most effective iteration' for the LASSO subproblem put on trial with FISTA and CG; quasi-Newton for 'a complicated Hessian like (7)' proves effective and is named the universal choice.", "pages": "pp. 3, 6-7"},
+      {"method": "Method 6", "relation": "evidence", "note": "Kronecker structure exploited for O(n^3) CG products; no algorithm consistently superior, best choice depends on problem characteristics.", "pages": "pp. 5-7"},
+      {"method": "Method 6", "relation": "variant", "note": "structure does not make his own brand the wrong choice here: L-BFGS crowned the universal solver.", "pages": "p. 7"},
+      {"method": "Method 3", "relation": "variant", "note": "classical engines kept (line-search Newton, CG, compact L-BFGS) and only the l1 handling is new, but no failing component diagnosed and no estimate or recovery path.", "pages": "pp. 3, 6"},
+      {"method": "Method 4", "relation": "evidence", "note": "open questions written in: convergence of inexact NL and of OBN; improvement of the dynamic CG rule.", "pages": "pp. 3-4, 7"},
+      {"method": "Method 5", "relation": "variant", "note": "no theory of its own; theory appears only as a critique of OWL's convergence proof and a design argument about reduced inverse vs inverse reduced Hessian. Heuristic 9 (inferred): problem arrives with IBM collaborators (p. 1).", "pages": "p. 4"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "two-phase active-set identification + second-order subspace step", "evidence": "NL and OBN both fix active/free sets from the steepest-descent direction, then take a second-order step on the free variables (Figure 1)", "pages": "pp. 2-4"},
+      {"pattern": "port the compact L-BFGS representation into new structured problems", "evidence": "reduced minimizer (24) computed with the compact form of the L-BFGS-B paper [24, eq. 5.11]; OBN-LBFGS named the universal choice", "pages": "pp. 6-7"}
+    ],
+    "transferable": [
+      "Start at the closed-form solution valid above the regularization threshold, P0 = (diag(S) + lambda I)^-1 (p. 3).",
+      "Define active/free sets from the minimum-norm subgradient so a small step decreases the model (pp. 2-3).",
+      "Kronecker-structured Hessian-vector products as matrix triple products inside truncated CG (pp. 5-6).",
+      "Inner stopping test relative to outer optimality: stop FISTA at 1/10 of F's previous min-norm subgradient (p. 7).",
+      "Faithful same-language reimplementation of the rival, reported alongside the rival's original code (p. 7).",
+      "Print card(P*) and cond(P*) per column next to iterations and time (p. 8)."
+    ],
+    "coauthors": "Peder A. Olsen (IBM), Figen Oztoprak (Sabanci University), Steven J. Rennie (IBM)",
+    "quotes": [
+      {"text": "It is suggested in [1] that coordinate descent is the most effective iteration for solving the LASSO problem (11). We claim, however, that other techniques merit careful investigation.", "page": 3},
+      {"text": "no algorithm appears to be consistently superior to the others, and the best choice may depend on problem characteristics", "page": 7}
+    ]
+  },
+  {
+    "id": "S064",
+    "year": "2016",
+    "title": "A family of second-order methods for convex ℓ1-regularized optimization",
+    "read_level": "full",
+    "contribution": "A semi-smooth Newton framework whose parameters (tau, delta) generate second-order ISTA, orthant-based and block active-set methods for f + mu||x||_1, plus a corrected block active-set method that checks and undoes mispredicted sign changes, with a nonzero-step theorem, a descent corollary, a noncycling safeguard and tests (130 BAS failures vs 0 on 1000 QPs; Newton-CBAS vs OWL-QN on one dataset) (2012 preprint, pp. 2-19).",
+    "problem_entry": "Second-order methods for l1-regularized convex problems motivated by ML; the concrete entry is the known failure of BAS when Q is not an M-matrix, observed commonly as cycling (pp. 1-2, 10).",
+    "key_idea": "Write optimality as a semi-smooth equation with free scale tau and generalized-Jacobian choice delta so that known methods are parameter settings; keep BAS's aggressive multi-change step but re-solve after moving mispredicted zero variables to the active set, until all predictions hold; safeguard by cardinality-based one-change backup; extend to general convex f by Newton-CBAS with Armijo backtracking (pp. 3-6, 10-11, 15, 18).",
+    "assumptions": "f smooth convex, mu > 0 fixed; new algorithm designed for quadratic f with Q symmetric positive definite (Theorem 4.1); BAS efficient for M-matrices, fails otherwise; matching initialization (3.12) and complementary initial u, v (8.7) for the equivalence arguments (pp. 1-2, 7, 9-12, 21).",
+    "proof_devices": [
+      "equivalence of semi-smooth Newton with BAS by induction on iterate and index-set relation (3.12) with case analysis (pp. 9-10)",
+      "Theorem 4.1: transition partition R, S, T, W (4.4) and sign vector (4.5); strict convexity of the reduced QP (4.9) gives a strict descent sum on T, corrected indices contribute nonnegative terms (pp. 12-13)",
+      "Corollary 4.2: directional derivative (4.12) split into zero, negative and nonpositive contributions, so d is a descent direction (pp. 13-14)",
+      "finiteness of the repeat loop because sets shrink each round (p. 11)",
+      "appendix: u - v split, KKT (8.3)-(8.6), y + z = 2 mu e, complementarity preserved, P<->N transitions impossible, reduction to a single vector (pp. 21-24)",
+      "Newton-CBAS descent via D phi(x; d) = D m(0; d) <= m(d) - m(0) < 0 by convexity (p. 18)",
+      "no rate and no global convergence proof for Algorithm 4.1; Algorithm 4.2 relies on the borrowed Judice-Pires safeguard (p. 15)"
+    ],
+    "experiments": "MATLAB framework with tau, delta as inputs; 1000 random QPs (sprandsym 25% density, condition ~1e4 or ~1e7, mu in [2.5, n/3], n not stated): BAS 10/500 + 120/500 failures (cycling) vs Corrected BAS 0, with 0.92-1.41 corrections per iteration; backup of Algorithm 4.2 (t_max = 10) never invoked; CPU performance profiles show OBM-COR somewhat more efficient and robustness costing extra computation; Newton-CBAS vs OWL-QN (same L-BFGS, memory 5) on StatLog Landsat, n = 7776, iterations only (pp. 17-19).",
+    "positioning": "Inside semi-smooth Newton methodology; credits Hintermuller-Ito-Kunisch for the BAS-as-semi-smooth-Newton derivation and offers a different one; BAS lineage (Aganagic, Judice-Pires, Kim-Park) and Ben Gharbia-Gilbert nonconvergence cited; rivals (OWL-QN, QUIC, own reports) recast as special cases rather than criticised (pp. 2, 4-7, 9-10).",
+    "writing": "'two-fold' contribution sentence; interpretation of index sets as predictions before the algorithm; light hedging ('possibly due to'); rarity claims backed by one count; several typos (pp. 2, 10, 15-19).",
+    "limits_future": "Algorithm 4.1 not globally convergent and may cycle; robustness costs computation; designed for quadratic f; only a few framework methods explored, second-order ISTA untested. Future: selective corrections, inexact steps, factorization updates, a descent-based safeguard, correction in second-order ISTA (pp. 2, 15-19).",
+    "method_links": [
+      {"method": "Method 3", "relation": "evidence", "note": "BAS engine and its discrete aggressive character kept; failing component named (aggressive index-set changes cause cycling); only that component repaired by checking and correcting the active-manifold estimate, with the Algorithm 4.2 backup as recovery; line search rejected to keep the engine's character.", "pages": "pp. 1, 10-11, 15"},
+      {"method": "Method 4", "relation": "evidence", "note": "external nonconvergence result [4] treated as a specification and answered with an algorithm variant; tau and delta exposed as parameters; failure mode and next papers listed.", "pages": "pp. 10, 15-19"},
+      {"method": "Method 5", "relation": "evidence", "note": "Corollary 4.2 separates Corrected BAS from BAS ('unlike the original BAS algorithm'), matching 130 vs 0 failures.", "pages": "pp. 13, 17"},
+      {"method": "Method 5", "relation": "variant", "note": "no rate and no global convergence for Algorithm 4.1 itself.", "pages": "p. 15"},
+      {"method": "Method 1", "relation": "evidence", "note": "OWL-QN given the same L-BFGS approximation 'to make the comparison as fair as possible'; cost of the repair printed. Also Heuristic 6: robustness first, speed-ups deferred (pp. 17-18).", "pages": "pp. 17, 19"},
+      {"method": "Method 1", "relation": "variant", "note": "general-convex comparison is one dataset in iterations only with no aggregate, the case Method 1's stop rule names.", "pages": "p. 19"},
+      {"method": "Method 6", "relation": "variant", "note": "one framework generates the rival classes for comparison, but they are not integrated into one solver with crossover.", "pages": "pp. 2-6"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "generative framework: rival methods as parameter choices of one iteration", "evidence": "tau and delta in the semi-smooth Newton iteration (2.9) reproduce second-order ISTA, orthant-based and BAS methods; coded with tau, delta as inputs", "pages": "pp. 2-6, 17"},
+      {"pattern": "two-phase active-set identification + second-order subspace step", "evidence": "'an active manifold identification phase and a second-order subspace phase' shared by all generated methods", "pages": "p. 2"},
+      {"pattern": "port the compact L-BFGS representation into new structured problems", "evidence": "quasi-Newton variants of all methods; Newton-CBAS with memory-5 L-BFGS matched to OWL-QN", "pages": "pp. 6, 19"}
+    ],
+    "transferable": [
+      "Write optimality conditions as a semi-smooth equation with a free scale and show which parameter choices reproduce known methods (pp. 3-6).",
+      "Predict-check-correct loop for active-set estimates: demote mispredicted zero variables and recompute until no prediction is violated (pp. 10-11).",
+      "Borrow a cardinality-based noncycling safeguard and report how often it fires (pp. 15, 17).",
+      "Transition-partition proof (R, S, T, W) that a new active-set loop moves and descends (pp. 12-14).",
+      "Count failures by conditioning class on 1000 random instances and report corrections per iteration as the repair's price (p. 17).",
+      "Give the comparator the same quasi-Newton approximation and memory (p. 19)."
+    ],
+    "coauthors": "Richard H. Byrd (Colorado), Gillian M. Chin (Northwestern), Figen Oztoprak (Colorado)",
+    "quotes": [
+      {"text": "We identify which of these changes may not be productive, and correct them.", "page": 10},
+      {"text": "While both the Corrected BAS and OBM-COR methods are more robust than the BAS algorithm, this stability is obtained at the expense of increased computational cost.", "page": 17}
+    ]
+  }
+]

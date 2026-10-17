@@ -25,7 +25,7 @@
 | 13 | S013 | 2006 | An interior algorithm for nonlinear optimization that combines line search and trust region steps | Mathematical programming 107 (3), 391-408, 2006 | 1498 | journal | url | txt | 20 | core | carded |
 | 14 | S014 | 1994 | Representations of quasi-Newton matrices and their use in limited memory methods | Mathematical Programming 63 (1), 129-156, 1994 | 1211 | journal | url | txt | 31 | core | carded |
 | 15 | S015 | 2016 | A stochastic quasi-Newton method for large-scale optimization | SIAM Journal on Optimization 26 (2), 1008-1031, 2016 | 728 | journal | arXiv | txt | 31 | core | carded |
-| 16 | S016 | 2011 | Remark on “Algorithm 778: L-BFGS-B: Fortran subroutines for large-scale bound constrained optimization” | ACM Transactions on Mathematical Software (TOMS) 38 (1), 1-4, 2011 | 657 | journal | manual | txt | 4 | core | abstract |
+| 16 | S016 | 2011 | Remark on “Algorithm 778: L-BFGS-B: Fortran subroutines for large-scale bound constrained optimization” | ACM Transactions on Mathematical Software (TOMS) 38 (1), 1-4, 2011 | 657 | journal | manual | txt | 4 | core | carded |
 | 17 | S017 | 1989 | A tool for the analysis of quasi-Newton methods with application to unconstrained minimization | SIAM Journal on Numerical Analysis 26 (3), 727-739, 1989 | 620 | journal | — | no-oa |  | core | abstract |
 | 18 | S018 | 2012 | Sample size selection in optimization methods for machine learning | Mathematical programming 134 (1), 127-155, 2012 | 564 | journal | url | txt | 30 | core | carded |
 | 19 | S019 | 1992 | Theory of algorithms for unconstrained optimization | Acta numerica 1, 199-242, 1992 | 555 | journal | url | txt | 37 | core | carded |
@@ -51,7 +51,7 @@
 | 39 | S040 | 2002 | Wedge trust region methods for derivative free optimization | Mathematical programming 91 (2), 289-305, 2002 | 153 | journal | url | txt | 19 | core | carded |
 | 40 | S041 | 2020 | An investigation of Newton-sketch and subsampled Newton methods | Optimization Methods and Software 35 (4), 661-680, 2020 | 149 | journal | arXiv | txt | 36 | core | carded |
 | 41 | S042 | 2008 | Steering exact penalty methods for nonlinear programming | Optimization Methods and Software 23 (2), 197-213, 2008 | 146 | journal | url | txt | 24 | core | carded |
-| 42 | S043 | 2012 | Newton-like methods for sparse inverse covariance estimation | Advances in neural information processing systems 25, 2012 | 143 | conference | manual | txt | 9 | core | abstract |
+| 42 | S043 | 2012 | Newton-like methods for sparse inverse covariance estimation | Advances in neural information processing systems 25, 2012 | 143 | conference | manual | txt | 9 | core | carded |
 | 43 | S044 | 1992 | On the behavior of Broyden’s class of quasi-Newton methods | SIAM Journal on Optimization 2 (4), 533-557, 1992 | 138 | journal | — | no-oa |  | supplement | abstract |
 | 44 | S045 | 2008 | An inexact SQP method for equality constrained optimization | SIAM Journal on Optimization 19 (1), 351-369, 2008 | 137 | journal | url | txt | 20 | supplement | carded |
 | 45 | S046 | 1997 | On the local behavior of an interior point method for nonlinear programming | Numerical analysis 1997, 37-56, 1997 | 133 | chapter | url | txt | 19 | supplement | skimmed |
@@ -69,8 +69,8 @@
 | 57 | S060 | 2012 | A sequential quadratic programming algorithm with an additional equality constrained phase | IMA Journal of Numerical Analysis 32 (2), 553-579, 2012 | 91 | journal | url | txt | 29 | supplement | skimmed |
 | 58 | S061 | 2004 | On the convergence of Newton iterations to non-stationary points | Mathematical Programming 99 (1), 127-148, 2004 | 90 | journal | url | txt | 25 | core | carded |
 | 59 | S062 | 2009 | On the geometry phase in model-based algorithms for derivative-free optimization | Optimization Methods & Software 24 (1), 145-154, 2009 | 86 | journal | url | txt | 10 | core | carded |
-| 60 | S063 | 2003 | KNITRO user’s manual | Northwestern University, Evanston, Illinois, Technical Report OTC-2003/5, 2003 | 79 | report | manual | txt | 44 | supplement | metadata |
-| 61 | S064 | 2016 | A family of second-order methods for convex ℓ1-regularized optimization | Mathematical Programming 159 (1), 435-467, 2016 | 77 | journal | manual | txt | 27 | core | abstract |
+| 60 | S063 | 2003 | KNITRO user’s manual | Northwestern University, Evanston, Illinois, Technical Report OTC-2003/5, 2003 | 79 | report | manual | txt | 44 | supplement | carded |
+| 61 | S064 | 2016 | A family of second-order methods for convex ℓ1-regularized optimization | Mathematical Programming 159 (1), 435-467, 2016 | 77 | journal | manual | txt | 27 | core | carded |
 | 62 | S066 | 2004 | Knitro 2.0 user’s manual | Ziena Optimization, Inc.[en ligne] disponible sur http://www. ziena. com…, 2004 | 76 | report | — | no-oa |  | supplement | metadata |
 | 63 | S067 | 2000 | Numerical experience with a reduced Hessian method for large scale constrained optimization | Computational Optimization and Applications 15 (1), 45-67, 2000 | 73 | journal | url | txt | 23 | supplement | carded |
 | 64 | S068 | 2010 | An inexact Newton method for nonconvex equality constrained optimization | Mathematical programming 122 (2), 273-299, 2010 | 71 | journal | url | txt | 23 | supplement | carded |
@@ -111,7 +111,7 @@
 | 99 | S116 | 1982 | Conjugate direction methods with variable storage | Mathematical Programming 23 (1), 326-340, 1982 | 14 | journal | — | no-oa |  | supplement | abstract |
 | 100 | S118 | 1998 | Active set and interior methods for nonlinear optimization | Proceedings of the International Congress of Mathematicians 1998, 667-676, 1998 | 13 | conference | unpaywall | txt | 10 | supplement | carded |
 | 101 | S119 | 2002 | iNEOS: An interactive environment for nonlinear optimization | Applied numerical mathematics 40 (1-2), 49-57, 2002 | 11 | journal | url | txt | 14 | supplement | carded |
-| 102 | S120 | 1978 | A study of conjugate gradient methods | — | 11 | report | manual | txt | 57 | supplement | abstract |
+| 102 | S120 | 1978 | A study of conjugate gradient methods | — | 11 | report | manual | txt | 57 | supplement | skimmed |
 | 103 | S123 | 1986 | Four quadratically convergent methods for solving inverse eigenvalue problems | Numerical analysis 11, 47, 1986 | 10 | chapter | — | no-oa |  | supplement | abstract |
 | 104 | S124 | 2024 | A trust-region algorithm for noisy equality constrained optimization | arXiv preprint arXiv:2411.02665, 2024 | 9 | preprint | arXiv | txt | 34 | core | carded |
 | 105 | S125 | 2011 | L-bfgs-b | Retrieved Feb 18, 2012, 2011 | 9 | other | — | no-oa |  | supplement | abstract |
@@ -120,7 +120,7 @@
 | 108 | S135 | 2012 | Second-order methods for L1 regularized problems in machine learning | 2012 IEEE International Conference on Acoustics, Speech and Signal…, 2012 | 5 | conference | — | no-oa |  | supplement | abstract |
 | 109 | S136 | 2005 | Introducing a constructivist approach to applying programming skills in engineering analysis | Proceedings Frontiers in Education 35th Annual Conference, T3H-20, 2005 | 5 | conference | — | no-oa |  | supplement | abstract |
 | 110 | S138 | 1978 | ON THE METHOD OF CONJUGATE GRADIENTS FOR FUNCTION MINIMIZATION. | Rice University, 1978 | 5 | thesis | manual | txt | 82 | supplement | skimmed |
-| 111 | S139 | 2011 | An implementation of an algorithm for nonlinear programming based on piecewise linear models | Technical Report, Optimization Center, Northwestern University, 2011 | 4 | report | manual | txt | 23 | supplement | abstract |
+| 111 | S139 | 2011 | An implementation of an algorithm for nonlinear programming based on piecewise linear models | Technical Report, Optimization Center, Northwestern University, 2011 | 4 | report | manual | txt | 23 | supplement | carded |
 | 112 | S140 | 2008 | A line search penalty method for nonlinear optimization | Technical Report 08/05, Optimization Technology Center, Northwestern University, 2008 | 4 | report | — | no-oa |  | supplement | metadata |
 | 113 | S141 | 1982 | Solving large nonlinear systems of equations arising in mechanics | Numerical Analysis: Proceedings of the Third IIMAS Workshop, Cocoyoc 1981, Lecture Notes in Mathematics 909, 132-141, 1982 | 4 | chapter | — | no-oa |  | supplement | metadata |
 | 114 | S143 | 1994 | LBFGS-B: Fortran Subroutines tor Large-Scale Bound Constrained Optimization | Report NAM-11, 1994 | 3 | report | manual | txt | 17 | supplement | carded |
