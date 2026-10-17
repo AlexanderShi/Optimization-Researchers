@@ -1,5 +1,45 @@
 # 蒸馏记录
 
+## 2026-10-17 (11) · Daniel P. Robinson 加入 nonlinear-team（轻量档，第 11 位成员）
+
+- 用户请求：「蒸馏一下Daniel P Robinson 放到nonlinear team」，选轻量档（T1 + 带全体重跑 T2，不做 T3）。分支 `robinson-member`
+  （独立 worktree，与 Nocedal 深读、MINLP 两个会话隔离），fast-forward 合入 `main`。scratch 用独立的
+  `nonlinear-team-robinson-scratch`，不与共用的 `nonlinear-team-scratch` 混
+- 标识（2026-10-16 核实）：DBLP 20/8222（SPARQL；合作者 Vidal 32、Curtis 31）、ORCID 0000-0003-0251-4227
+  （Lehigh 2019–、JHU 2011–2019）、主页 coral.ise.lehigh.edu/danielprobinson/；没找到 Google Scholar 主页，`scholar` 留空
+- T1（`team-base-skills.js`）：
+  - 首跑在周用量上限处整体中断（8 个 agent 全报错），但 02、06 两份笔记已写完（均以 Sources 结尾），先提交；
+    用 `dims: ["01","03","04","05"]` 只补跑缺的四路，其余阶段照常（复核步从磁盘读全部 6 份笔记）
+  - 结果：复核 ready（288 条来源，约 77% 一手）；4 个核心方法（只假设求解器能检验的东西 / 可扩张子空间加速 /
+    嵌入现任方法 / 先做确定性类比，最后一个标为与 Curtis 的联合手艺）；SKILL.md 12/12、8001 词；RESOURCES.md 210 行，
+    207 ✅、3 ⚠️
+- 额外的保真审计（kit 闸门之外，工作流 6 位分节核查员 → 每节 2 位反驳者 → 修复 → 复核）：对照 Crossref、arXiv、DBLP、
+  研究笔记，以及 Curtis 深读档里 35 篇与 Robinson 合写论文的全文与卡片。419 条声明，381 条成立；38 条问题全部修正，
+  其中 6 条重大：截断的 Izmailov–Solodov 引文、随机内点法 v3 的事实错误、把 steering 规则归给 Curtis
+  （CGJR16 自己写明来自 Byrd–Nocedal–Waltz）、三处夸大（含 Roundtable Card 里编出的一条「与 Toint 有文献分歧」，
+  实际 Cartis–Gould–Toint 说两者界「of the same order」）。复核员再报 9 处残留（与 Gould 合署的引文写成他本人的话、
+  A100 一句无笔记出处等），手工逐条核对原文后修好，相应笔记加注日期的更正行
+- T2（`team-layer.js`，全体 11 人）：混合档团队必须用 `deep_tier: true`（false 会把 DEEP-READING.md 整个换成轻量档说明，
+  抹掉 Curtis 的深读记录）。Curtis 一方的 11 条卡片引用全部保留。kit 的缺口：这个模式会给「刻意保持轻量档」的成员
+  写「(card evidence pending for <slug>)」、把覆盖表留给 T3.8。手工处理：删掉 5 处 pending 标记，DEEP-READING / README
+  的「nine members」改成 ten，两张覆盖表按 `team_status.py --coverage`（及 `--short`）原样重贴。
+  另外补跑了 Robinson 的 OpenAlex 拉取（`fetch_publications.py` 不需要 API key，T1 的 agent 误以为需要）
+- T2 差异审计 + 圆桌试跑（kit 第九节最后一项）：首跑因会话结束中断在修复步（已改了 5 个文件的一半）。这 5 个文件从 git 还原后续跑，
+  缓存没有命中，9 个 agent 全部重跑。结果：262 条声明，16 条问题（4 条重大，都在圆桌 fault line 的 Robinson 一方，如 TOP 2015
+  的引文改写、把事后观察写成预先划分的子集）；试跑题目为「QP 全局解假设 + 秩亏 Jacobian 的 SQP 重设计与 SNOPT/IPOPT 基准」，
+  Robinson 入座主讲，4 个检查点齐全、协议通过；评审另报 14 处文件缺陷（座次多行匹配无规则、单模型回退缺少视角隔离、
+  计划条目缺少归属、SNOPT 拟牛顿默认与「等量导数信息」冲突等），共修 28 处。首跑核查员报出、次跑没报的 4 处再手工修
+  （Ye 卡片补回作者的保留句、Wright 的 Team links 补 Robinson、Gould 卡片里 steering 是联合工作、Fletcher 的 NA223 p.15
+  实指无二阶导时的可行性恢复），均先核对原文
+- 验证（Windows 11，Python 3.13）：`team_check.py product/nonlinear-team` 24 项 0 失败 0 跳过（Curtis 的摘录核对用从主
+  checkout 复制来的 git 忽略的 `txt/`，180 条逐字通过）；`check_links.py` 122 文件 0 断链；`check_citations.py --roundtable`
+  0 问题；11 位成员 `quality_check.py` 均 12/12；无 `{{`、`[TODO`、pending 标记
+- 留作后续（未改 kit）：`team-layer.js` 在混合档团队里没有「成员刻意保持轻量档」的概念，可在 `team.json` 成员项加 tier
+  字段，让 pending 标记和覆盖表的推迟只针对计划深读的人
+- 成本：子 agent 约 1,600 万 token 以上（T1 约 540 万，含中断的 150 万；保真审计约 390 万；T2 约 510 万；
+  T2 差异审计次跑约 150 万，首跑中断未计量）
+- 执行模型：claude-opus-5-5
+
 ## 2026-10-10 (10) · Frank E. Curtis 深读档（nonlinear-team 成为混合档团队）
 
 - 用户请求：「强化一下Frank E Curtis skill」，选完整深读档（T3.1–T3.8）。只深读 Curtis；其余九人保持轻量档，
