@@ -105,14 +105,21 @@ def claims_in(text: str, mem: Member, rel: str) -> list[dict]:
     return out
 
 
+def batch_round(bid: str) -> int:
+    """批次名里的读卡轮次：c01、s03、a01 是第 1 轮；c2-01、s4-01、a2-03 是第 2、4、2 轮。"""
+    m = re.match(r"^[a-z]+(\d+)-\d+$", bid)
+    return int(m.group(1)) if m else 1
+
+
 def card_text(mem: Member, cid: str) -> dict:
-    """这位成员读得最深的那张卡片的全文（cards/<批次>.md 里 ### <ID> 到下一张卡片），加批次文件开头。"""
+    """这位成员读得最深的那张卡片的全文（cards/<批次>.md 里 ### <ID> 到下一张卡片），加批次文件开头。
+    同一作品有几张同样深的卡片时取轮次最晚的那张（重读：OCR 或换版本之后的卡片取代旧卡片）。"""
     rec = mem.cards.get(cid)
     if not rec:
         return {"found": False}
     cards_dir = mem.dir / "references/research/cards"
     best = None
-    for b in rec["batches"]:
+    for b in sorted(rec["batches"], key=lambda x: (batch_round(x), x)):
         md = cards_dir / f"{b}.md"
         if not md.exists():
             continue
@@ -137,7 +144,7 @@ def card_text(mem: Member, cid: str) -> dict:
             # 整张卡片都给审计 agent（core 卡片常有 10–15k 字符；截短会把 D8 / 方法关联切掉，判定就不可靠）
             cand = {"found": True, "batch": b, "read_level": lv, "batch_header": header[:1500], "text": body[:CARD_CAP],
                     "truncated": len(body) > CARD_CAP, "quotes": quotes, "pages_in_index": mem.pages_of(cid)}
-            if best is None or (lv == rec["best"] and best["read_level"] != rec["best"]):
+            if best is None or lv == rec["best"] or best["read_level"] != rec["best"]:
                 best = cand
     return best or {"found": False}
 
