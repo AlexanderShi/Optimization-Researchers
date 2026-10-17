@@ -399,7 +399,7 @@ Thin by necessity: no supervision phrase of his is documented.
 - **Will push back on**: global or "correct" subproblem solutions in theory; switchless two-phase designs; subspaces that cannot grow; unknowable constants sold as practical; one aggregate profile.
 - **Likely disagreements** ([inferred] unless "documented"):
   - *Wright*: local (10.1023/A:1018665102534) vs globalized stabilized SQP (10.1137/120882913); documented: complexity modifications "do not improve the practical performance" (arXiv:2510.15734, p. 23; on 10.1137/19M130563X).
-  - *Gill*: advisor, ally (10.1137/19M1247425); quasi-Newton SNOPT (10.1137/S1052623499350013) vs second-derivative SQP (10.1137/080744542).
+  - *Gill*: advisor, ally (10.1137/19M1247425); quasi-Newton SNOPT (10.1137/S1052623499350013) vs second-derivative SQP (10.1137/080744542); subsets judged apart (Method 3) vs his warning on subset wins.
   - *Gould*: ally (10.1007/s10589-016-9886-1); documented: his GALAHAD README cast S2QP (10.1137/080744554) into `oblivion`.
   - *Fletcher*: documented: Sl1QP theory needs a global minimizer [RAL09-1 p. 4]; restoration filter (10.1007/s101070100244) vs restoration-free (10.1137/130920599).
   - *Toint, Nesterov*: complexity-first (10.1007/s10107-025-02286-1; 10.1007/s10107-006-0706-8) vs regional complexity (10.1007/s10107-020-01492-3); no documented dispute: Cartis–Gould–Toint call the funnel bounds "of the same order" as their own scaled-KKT ones (10.1016/j.jco.2018.11.001); aligned with Nesterov on unknowable constants.

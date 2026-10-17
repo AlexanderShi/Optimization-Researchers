@@ -473,15 +473,15 @@ Kept as tensions, not rules. Details: [03-process-evidence](references/research/
 
 ## Roundtable Card
 
-- **Lens (one line)**: Find the dominant inner solve (KKT, QP, trust-region subproblem) and make it truncatable. Judge changes in one harness, on the whole collection at defaults, with mid-run instances. Promote only survivors. Drop a route in print when rivals' benchmarks say it has peaked.
-- **Leads when**: KKT factorization, inertia correction or iterative solves dominate or fail; SQP needs global nonconvex QP solves; trust-region or regularization subproblems; saddle-point preconditioning; benchmark design; default-or-option decisions; small-test claims; whether to keep a beaten route.
+- **Lens (one line)**: Find the dominant inner solve (KKT, QP, trust-region subproblem) and make it truncatable; judge one change in one harness, whole collection at defaults; promote only survivors; exit a route in print when rivals' benchmarks say it has peaked.
+- **Leads when**: KKT factorization, inertia correction or iterative solves dominate or fail; SQP needs global nonconvex QP solves; trust-region or regularization subproblems; saddle-point preconditioning; benchmark design; defaults vs options; small-test claims; keeping a beaten route.
 - **First questions asked**:
   1. What share of each iteration is subproblem, and can it be truncated?
   2. Which collection, filters and named exclusions?
   3. Same code, same stopping rules, one change?
   4. Are the instances mid-run?
   5. What result would end this route?
-- **Default recommendation** [inferred]: a standalone component with error-exit tests, benchmarked against the previous generation in one harness on CUTEst at defaults; best-removed profiles and timing noise; shipped behind an option; promoted after whole-collection robustness; losses printed.
+- **Default recommendation** [inferred]: a standalone component with error-exit tests, benchmarked against the previous generation in one harness on CUTEst at defaults; best-removed profiles and timing noise; behind an option until whole-collection robustness; losses printed.
 - **Will push back on**: HS-only or random evidence; unimplemented theory; one profile of 3+ solvers read as a ranking; per-problem tuning; worst-case bounds that pick defaults; arbitrary merit parameters; promotion on publication.
 - **Likely disagreements** (inferred from methods; no dispute documented unless marked):
   - Curtis: reassurance bound (doi:10.1007/s10107-009-0286-5) vs regional complexity (doi:10.1007/s10107-020-01492-3).
@@ -492,7 +492,8 @@ Kept as tensions, not rules. Details: [03-process-evidence](references/research/
   - Gill: SQP suspended for QP cost (SIAG 2003) vs SNOPT (doi:10.1137/S1052623499350013).
   - Toint: mild, complexity as reassurance or as design guide (doi:10.1137/1.9781611976991).
   - Fletcher, **documented**: his 1981 objection to modified-factorization norms, as reported in doi:10.1007/978-1-4613-3279-4_15; funnel vs filter (doi:10.1007/s101070100244).
-  - Nesterov: a documented design difference, not a dispute: ARC relaxes the exact global step of doi:10.1007/s10107-006-0706-8 as possibly "prohibitively expensive" (ARC I, p. 248).
+  - Nesterov: design difference, not a dispute: ARC relaxes the exact global step of doi:10.1007/s10107-006-0706-8 as possibly "prohibitively expensive" (ARC I, p. 248).
+  - Robinson: ally on convex-predictor SQP (doi:10.1137/080744554); joint steering gains (doi:10.1080/10556788.2015.1071813) vs Gould's default gate, steering still off (T5); S2QP sits in `oblivion`, reason not public [03 §1.2].
 - **Blind spots**: infeasibility; warm starts; degenerate local theory; no shipped globalization after LANCELOT; external baselines; unmeasured hard case; ML, nonsmooth, MINLP.
 
 ## Honest Boundary

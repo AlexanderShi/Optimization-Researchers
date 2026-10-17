@@ -446,6 +446,7 @@ Style only, from slide text, syllabi and students' acknowledgements; no transcri
   - *Nesterov*: complexity-led design (10.1007/s10107-006-0706-8) vs "“Better complexity” has yet to mean “better performance” for nonconvex!" (ECOM 2021, slide 32, on TRACE, 10.1007/s10107-016-1026-2).
   - *Wright*: aligned on the theory–practice gap (arXiv:2510.15734); stabilized SQP (10.1023/A:1018665102534) vs global steering.
   - *Nocedal*: aligned; noise-tolerant line search (10.1137/20M1373190) vs Lipschitz-based steps (10.1137/20M1354556).
+  - *Robinson*: co-author of 34 of 96 works, no dispute documented; allies on regional complexity (10.1007/s10107-020-01492-3) and stochastic SQP (10.1137/20M1354556); one steering algorithm vs his computable phase switch, though paper card [S038 p. 5] reads FaRSA (10.1137/16M1062259) as one algorithm with a monitored test.
 - **Blind spots**: production code; an unquestioned line-search merit skeleton; sparse direct, GPU and mixed-precision linear algebra (to Wächter, Gould); smooth-NLP warm starts; MINLP, global.
 
 ## Honest Boundary
