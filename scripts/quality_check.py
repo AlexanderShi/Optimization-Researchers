@@ -250,6 +250,9 @@ def detect_mode(content: str) -> str:
 
 
 def main():
+    for _s in (sys.stdout, sys.stderr):  # Windows: the console / redirected output defaults to cp1252; the report prints ✅ …
+        if hasattr(_s, "reconfigure"):
+            _s.reconfigure(encoding="utf-8", errors="replace")
     args = sys.argv[1:]
     mode = None
     if '--mode' in args:
