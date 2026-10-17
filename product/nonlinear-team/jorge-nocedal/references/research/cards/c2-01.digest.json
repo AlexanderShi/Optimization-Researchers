@@ -1,0 +1,173 @@
+[
+ {
+  "id": "S030",
+  "year": "2000",
+  "title": "Automatic preconditioning by limited memory quasi-Newton updating",
+  "read_level": "full",
+  "contribution": "Proposes a matrix-free CG preconditioner for sequences of SPD systems: an L-BFGS matrix built from (s, y) pairs harvested from a previous CG run, sampled uniformly by an online algorithm. Tested in Hessian-free Newton and on finite-element systems, with CPU losses on sparse matrices reported (pp. 2, 4, 6, 12, 20-21).",
+  "problem_entry": "In tests with Hessian-free Newton, Nash's 2-step preconditioner helped only a few problems, and each CG step costs a finite-difference gradient, so the entry was to precondition CG for sequences of systems using only A*v products (abstract; pp. 2-3, 5-6).",
+  "key_idea": "Save m CG pairs s = x_{i+1} - x_i, y = r_{i+1} - r_i (last m, or a uniform sample via Algorithm SAMPLE) and use the L-BFGS matrix H(m) as the next system's preconditioner; L-BFGS recursion, H0 scaling and the HFN code are unchanged (pp. 2, 4-6, 20-21).",
+  "assumptions": "SPD coefficient matrices (p. 2); f twice continuously differentiable (p. 5); forward-difference Hessian-vector products (pp. 5-6); the cost of A*v is assumed much larger than the 4mn cost of applying the preconditioner (p. 12); no theory.",
+  "proof_devices": [
+   "n/a: no theorem; spectral explanation that H(49)A1n has 49 eigenvalues at 1 as expected from quasi-Newton updating (p. 12)",
+   "structural analysis of A1n (first row e1^T) explaining when last-m sampling succeeds or fails (pp. 16-17)",
+   "qualitative properties of the online uniform-sampling algorithm SAMPLE (pp. 20-21)"
+  ],
+  "experiments": "HFN on 5 n=100 problems with distinct eigenvalue classes (m=8 cuts CG iterations, m=16 adds nothing, p. 6); a frozen Hessian with 51 random right-hand sides at two tolerances (p. 7); CUTE with failure codes (pp. 9-10); 2 MINPACK-2 problems with CPU (p. 10); finite-element multiple-RHS and slowly varying systems, refresh, hot start, sampling and sample-size tests (pp. 10-18). The metric is CG iterations; no CPU gain on the sparse FE matrices (p. 12); table bodies mostly lost in the OCR.",
+  "positioning": "Says the idea 'is not new' and credits Nash's m=2 matrix, O'Leary-Yeremin full-memory preconditioners and Byrd-Nocedal-Zhu; the claim is wider scope, not priority (p. 3).",
+  "writing": "Heavily hedged ('Numerical experiments indicate', 'may be useful', 'more research is required'); every table is followed by an explanation; unsuccessful variants are mentioned briefly; a referee's experiment is credited (abstract; pp. 6, 8, 18-20).",
+  "limits_future": "No CPU savings for very sparse matrices (3n or 14n vs 4mn, p. 12); refresh timing 'not simple' (p. 15); hot start helps only sometimes (p. 16); no theory for the sampling choice (p. 17). Future: dynamic refresh, pairs from different systems, Rayleigh-quotient selection (pp. 5, 15, 20).",
+  "method_links": [
+   {"method": "Method 6", "relation": "evidence", "note": "the structure-blind preconditioner (4mn regardless of structure) loses in CPU on very sparse matrices, and the claim is confined to matrices that are not very sparse or are matrix-free", "pages": "pp. 12, 18"},
+   {"method": "Method 1", "relation": "evidence", "note": "losses printed: no CPU gain, weak refresh gains, a hot start that does not help", "pages": "pp. 12, 15-16"},
+   {"method": "Method 1", "relation": "variant", "note": "no competing preconditioner is run in the tables; Nash's 2-step preconditioner is dismissed in one sentence without data", "pages": "p. 3"},
+   {"method": "Method 3", "relation": "variant", "note": "the CG/HFN engine is kept and one component (the preconditioner) is added from the engine's own by-products, but no failing component and no estimate with recovery", "pages": "pp. 2, 6"},
+   {"method": "Method 5", "relation": "variant", "note": "no theory; the paper says so and substitutes controlled tests, without presenting them as proof", "pages": "p. 17"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "harvest inner-solver by-products as quasi-Newton curvature pairs", "evidence": "CG iterates and residuals give (s, y) pairs for an L-BFGS preconditioner at no extra matrix-vector cost; precedent cited in Byrd-Nocedal-Zhu", "pages": "pp. 2-4, 6"}
+  ],
+  "transferable": [
+   "Evaluate an inner-solver device on a frozen Hessian with 50 random right-hand sides at two stopping tolerances, so that outer-loop noise is removed (p. 7).",
+   "Put the device's per-application cost (4mn) next to the cost of the product it saves (3n, 14n), which states exactly when it pays (p. 12).",
+   "Keep a uniform sample of a stream of correction pairs within fixed memory, online (Algorithm SAMPLE, pp. 20-21).",
+   "Before generalising a selection rule, construct the matrix and right-hand side on which it fails, and explain why (pp. 16-17)."
+  ],
+  "coauthors": "José Luis Morales (ITAM)",
+  "quotes": [
+   {"text": "the cost of applying the preconditioner is too high to offset the reduction in the number of CG iterations in these experiments", "page": 12},
+   {"text": "It is difficult to provide theoretical arguments in favor of either strategy, but we now report the results of controlled tests that further support the uniform sampling technique.", "page": 17}
+  ]
+ },
+ {
+  "id": "S040",
+  "year": "2002",
+  "title": "Wedge trust region methods for derivative free optimization",
+  "read_level": "full",
+  "contribution": "Introduces the wedge trust-region DFO method: the non-degeneracy (geometry) condition is imposed as a wedge constraint in the step subproblem, so only one type of iteration is needed, and rejected trial points are retained when they improve the model. Linear and quadratic versions are compared with COBYLA, finite-difference L-BFGS-B and DFO (pp. 2-3, 5-7, 9-15).",
+  "problem_entry": "Incumbent interpolation-based trust-region methods alternate minimization iterations with separate geometry-repairing 'simplex' iterations; the entry was to remove that second iteration type, for a smooth expensive f with moderate n (pp. 2-3).",
+  "key_idea": "Choose the farthest satellite to leave; define the taboo region (hyperplane or quadric) of degenerate steps; require |cos| between the step and its normal >= gamma inside the trust region; close the wedge (reduce gamma) when rotating away costs too much model decrease; keep unsuccessful points closer than the leaving one (pp. 4-7, 9-12).",
+  "assumptions": "Smooth f, moderate n, evaluation cost dominates (p. 2); initial non-degenerate set with f(x) <= f(y) for all satellites (p. 4); no noise model; randomness only from the signs of the initial satellites (p. 12).",
+  "proof_devices": [
+   "no theorem; global convergence asserted and deferred to [8] (in preparation) and the thesis [7] (p. 6)",
+   "design argument: retain the gradient-based trust-region property that a small radius yields a successful step by keeping rejected points as satellites (pp. 5-6)",
+   "closed-form global solution of the linear wedge subproblem by rotation in span{g, b} (p. 7)",
+   "quadratic wedge rewritten via ||s s^T||_F = ||s||^2; one QR factorization gives model coefficients and taboo normal (pp. 9-10)"
+  ],
+  "experiments": "CUTE n = 2-16, median of 5 runs. Stopping test: decrease >= (1 - 1e-6) times NITRO's decrease, 8000-evaluation limit (pp. 12-13). WEDlin vs COBYLA: 'competitive', wins both ways (pp. 13-14). WEDquad vs default forward-difference L-BFGS-B: one failure vs five (p. 15). WEDquad vs DFO from published and supplied results, with fk <= f_DFO admitted to be possibly adverse to DFO; by my count of Table 3, WEDquad fewer evaluations on 30 of 39 rows, DFO 8, one tie (pp. 15, 17).",
+  "positioning": "Within interpolation-based trust-region DFO (Powell; Conn-Scheinberg-Toint), distinguished by the step constraint; rivals described neutrally; Scheinberg and Powell thanked for testing advice and code (pp. 2, 18).",
+  "writing": "One-sentence novelty statement; name taken from the geometry; three geometric figures; hedged results ('competitive', 'sometimes, but not always'); ends with weaknesses and refinements (pp. 2, 5, 7-8, 10, 13, 15, 18).",
+  "limits_future": "Vertices-and-midpoints start 'not an efficient strategy'; acceptance test (4.13) 'quite demanding'; future: linear or underdetermined quadratic models early, increasing gamma, a Cauchy-point test; theory deferred (pp. 6, 15, 18).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "common target from a derivative-based reference solve, common budget, median of 5 runs, rival terminations explained, the bias of the DFO comparison named, rival school consulted", "pages": "pp. 12-13, 15, 18"},
+   {"method": "Method 1", "relation": "variant", "note": "finite-difference L-BFGS-B run at defaults with forward differences; difference interval not studied (unlike 2021)", "pages": "pp. 13, 15"},
+   {"method": "Method 3", "relation": "variant", "note": "trust-region engine and interpolation model kept; only the geometry-maintenance component replaced, by a step constraint and an acceptance rule; adaptive gamma is mild self-correction; not estimate-driven", "pages": "pp. 3, 5, 11"},
+   {"method": "Method 2", "relation": "variant", "note": "trajectory: in 2000 geometry is treated as necessary and enforced at every step, which the 2009 finding reverses; the FD quasi-Newton baseline is present but loses on reliability here", "pages": "pp. 2-3, 7, 15"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "proof-driven safeguard", "evidence": "a mechanism designed to restore the property the classical trust-region convergence proof needs (successful step at small radius)", "pages": "pp. 5-6"},
+   {"pattern": "reference-solver target for cross-class comparisons", "evidence": "NITRO with exact second derivatives defines f*, and DFO codes stop at a fixed fraction of the attainable decrease", "pages": "pp. 12-13"},
+   {"pattern": "fold the geometry safeguard into the step subproblem", "evidence": "the wedge constraint replaces separate geometry-improving iterations", "pages": "pp. 3, 7"}
+  ],
+  "transferable": [
+   "Compare derivative-free codes against a common target: f0 - fk >= (1 - eps)(f0 - f*) with f* from a Newton code (pp. 12-13).",
+   "Write the non-degeneracy condition as a cosine bound against the normal of the taboo set and add it to the trust-region subproblem (pp. 6-7, 9).",
+   "Keep rejected trial points that are closer than the point you would discard, so that the model improves while the radius shrinks (pp. 5-6).",
+   "Report the share of iterations in which a safeguard is active, to show that it does work (p. 13).",
+   "When relying on a rival's published results, adapt your stopping test to theirs and say which way the bias goes (p. 15)."
+  ],
+  "coauthors": "Marcelo Marazzi (Northwestern IEMS, PhD student)",
+  "quotes": [
+   {"text": "In order to retain this important property in interpolation-based models, we deviate from the standard practice of discarding trial points that give rise to an increase the objective function", "page": 5},
+   {"text": "It is difficult to design an adequate stopping test for comparing derivative free methods, and this last comparison is an example of that.", "page": 15}
+  ]
+ },
+ {
+  "id": "S057",
+  "year": "2002",
+  "title": "On the behavior of the gradient norm in the steepest descent method",
+  "read_level": "full",
+  "contribution": "Analyses the gradient norm under steepest descent with exact line searches on strongly convex quadratics: a per-step growth bound (monotone if gamma < 3 + 2*sqrt(2)), asymptotic one- and two-step ratios, the finding that larger oscillations mean faster convergence in f, the path along the smallest-eigenvalue eigenvector, an exact 2-D analysis, and a final-accuracy estimate checked on a quartic (pp. 3-4, 12-26).",
+  "problem_entry": "L-BFGS-B seemed unable to reach LANCELOT's gradient accuracy and was reported as failing, until it was seen to reach a lower f (PENALTY3, Table 1); the question is when ||g|| reflects the accuracy in f (pp. 2-3).",
+  "key_idea": "Relate f - f* and ||g||^2 through Rayleigh quotients; bound one-step growth by Kantorovich; extend Akaike's asymptotic two-eigenvector analysis to interpret c and restrict its range; show that the two-step gradient rate equals the one-step f rate (pp. 3-4, 6-14).",
+  "assumptions": "Strongly convex quadratic, exact line searches (p. 5); Assumptions 1-2 (nontrivial start, distinct eigenvalues, components along the extreme eigenvectors), partly for exposition (pp. 6, 10); §2 for general C2 f (pp. 3-4); §6 ignores rounding in the iterates (p. 25).",
+  "proof_devices": [
+   "mean-value Taylor expansions expressing f - f* and ||g||^2 via Rayleigh quotients of G and G^2 (pp. 3-4)",
+   "Kantorovich inequality on the exact one-step identity for ||g||^2, giving the growth bound of Theorem 4.1 (p. 12)",
+   "Akaike/Forsythe asymptotics with c reinterpreted as the limiting ratio of gradient components (Prop. 3.1, Lemmas 3.3-3.4, pp. 6-9)",
+   "restriction of c^2 via the minimum deviation delta of the inner eigenvalues (Lemma 3.5, pp. 9-10)",
+   "exact 2-D recurrence p(k+1) = -gamma^2/p(k) turning limits into identities (pp. 21-22)",
+   "final accuracy about u/(1 - a), about gamma*u/4 for steepest descent (pp. 24-26)"
+  ],
+  "experiments": "Illustrative only: the PENALTY3 table (p. 2), 3-D and 2-D examples in figures (pp. 19-25), and one 100-variable quartic solved by steepest descent with a Wolfe line search, giving f - f* = 9.3e-11 against the predicted 10 or so correct digits (p. 26). No benchmark.",
+  "positioning": "Extends Akaike (1959) and Forsythe (1968); §2 credited to Gill-Murray-Wright; confirms the well-known unreliability of ||g||; questions Barzilai-Borwein's use of a 2-D analysis to explain n-D results (pp. 2-3, 7-9, 24).",
+  "writing": "Opens with a mislabelled-failure anecdote; each theorem is translated into a practitioner's reading; surprise is recorded ('contrary to our initial expectations'); twelve figures (pp. 2, 12, 14, 18).",
+  "limits_future": "Steepest descent on quadratics only; quasi-Newton gradient-norm behaviour 'remains an open question'; rounding ignored in §6; no new stopping test proposed (pp. 5, 14, 25).",
+  "method_links": [
+   {"method": "Method 4", "relation": "evidence", "note": "a failure observed while developing L-BFGS-B became a paper; the failure label was revised after examination", "pages": "p. 2"},
+   {"method": "Method 5", "relation": "evidence", "note": "theory explains code behaviour, and the accuracy prediction is checked against a run; the Barzilai-Borwein critique requires the analysis to be about the n-D case", "pages": "pp. 24, 26"},
+   {"method": "Method 5", "relation": "variant", "note": "analyses steepest descent with exact line searches, not the L-BFGS-B or quasi-Newton codes that motivated the question", "pages": "pp. 2, 5"},
+   {"method": "Method 2", "relation": "variant", "note": "surprise recorded and a rival's explanatory reasoning put on trial, but no dismissed simple option tested", "pages": "pp. 18, 24"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "re-check a failure label against the quantity that matters", "evidence": "L-BFGS-B's 'failure' on the gradient norm was in fact a lower f than LANCELOT's", "pages": "p. 2"},
+   {"pattern": "check that a low-dimensional analysis is representative of the n-D case", "evidence": "the 2-D rate improves with gamma but the n-D rate does not, so the Barzilai-Borwein explanation is questioned", "pages": "p. 24"}
+  ],
+  "transferable": [
+   "Before reporting that a code fails to reach accuracy, compare final objective values across codes (p. 2).",
+   "Bound the one-step growth of a monitored quantity by applying the Kantorovich inequality to the exact one-step identity (p. 12).",
+   "In 2-D, find the invariant ratio that makes the asymptotics exact, then state what does not carry over to n dimensions (pp. 21, 24).",
+   "Predict the attainable final accuracy from the linear rate and unit roundoff, and test the prediction on a non-quadratic problem with a practical line search (pp. 24-26).",
+   "Translate each theorem into a monitoring rule for practitioners, such as two-step gradient ratios (p. 14)."
+  ],
+  "coauthors": "Annick Sartenaer (FUNDP Namur), Ciyou Zhu (Northwestern ECE)",
+  "quotes": [
+   {"text": "Initially we reported this as a failure of the limited memory code to achieve high accuracy in the solution, but a closer examination of the results revealed that in some of these runs the limited memory code had actually produced a lower function value than LANCELOT.", "page": 2},
+   {"text": "This observation was contrary to our initial expectations, as we had speculated that the largest oscillations in the gradient would characterize the most unfavorable starting points.", "page": 18}
+  ]
+ },
+ {
+  "id": "S035",
+  "year": "2003",
+  "title": "An algorithm for nonlinear optimization using linear programming and equality constrained subproblems",
+  "read_level": "full",
+  "contribution": "Presents SLIQUE, an SLP-EQP active-set trust-region method: an LP on the linearized l1 penalty selects the working set, followed by a Cauchy step, a CG-solved EQP and a dogleg combination. It sets the penalty parameter from the best attainable linearized feasibility via a second LP, and benchmarks against KNITRO and SNOPT on 560 CUTEr problems with losses printed (pp. 2-31; OTC 2002/4 version).",
+  "problem_entry": "SQP and interior-point methods may become too expensive at large scale and inequality QPs are costly; the paper revives Fletcher-Sainz de la Maza's little-used SLP-EQP now that large LP solvers exist, framed by two questions (active-set prediction, cost per iteration) (pp. 2, 4).",
+  "key_idea": "Separate active-set identification (LP in an l-infinity trust region) from the step (EQP in an l2 trust region); Cauchy decrease plus a dogleg path; EQP Hessian with signed curvature of violated constraints; an LP radius that may shrink after accepted steps; penalty parameter from the nu-infinity LP with a fraction eps = 0.1 and a reset safeguard (pp. 3-16).",
+  "assumptions": "f, h, g twice continuously differentiable (p. 3); bounds handled explicitly (p. 6); a linearly independent working set from the LP software (p. 6); degeneracy not handled (p. 31); infeasible or unbounded problems counted as failures (p. 20).",
+  "proof_devices": [
+   "no proofs in the report; global convergence in companion OTC 2002/5 [3], building on Yuan (1985), not read (pp. 7, 30)",
+   "Cauchy decrease condition (4.10) on the merit-function model as the global-convergence device, checked with model evaluations only (pp. 3, 8)",
+   "dogleg-type search from Cauchy point to EQP point preserving model decrease (pp. 11-12)",
+   "a single augmented-system factorization reused for projections, SOC and least-squares multipliers (pp. 11, 13-14)"
+  ],
+  "experiments": "560 CUTEr problems filtered to the relevant ones (QP/BC/GC, four size classes); KNITRO 2.1 and SNOPT 6.1 at defaults with SNOPT's superbasics raised; 1 h / 3000 iterations, limit = failure; stopping tests made similar to SNOPT's (p. 19). Solved: SLIQUE 438, KNITRO 506, SNOPT 455 by my sum of Table 2; large problems 47% / 85% / 52% (pp. 20-21). Performance profiles for n+m > 1000 (pp. 22-27); timing breakdown dominated by LP (p. 28); penalty statistics (pp. 16, 29).",
+  "positioning": "Extends Fletcher-Sainz de la Maza and differs from Chin-Fletcher (l1 merit vs filter, dogleg vs EQP-or-Cauchy), conceding that testing would be needed to choose between filter and penalty; SNOPT praised as benchmark; the authors' own KNITRO is the strongest rival (pp. 2, 19, 21, 30).",
+  "writing": "Numbered list of novel features; hedged verdict ('in our opinion ... holds much promise'); losses to the authors' own code stated plainly; prototype status declared; open choices flagged inline (pp. 7, 21, 30-31).",
+  "limits_future": "Large-scale inefficiency from LP time and failing warm starts; active set sometimes missed near the solution; whether an interior-point LP solver would suffice is unknown; no EQP preconditioning. Five future items: LP speed and initial active sets, LP trust region, SOC or non-monotone strategy, preconditioning, degeneracy (pp. 11, 29-31).",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "merit engine kept; penalty set from an explicit estimate (best attainable linearized infeasibility from the nu-infinity LP) with fraction eps = 0.1, keep-nu when no progress is possible, and a reset path; 2002 precursor of the 2007/2008 steering rules", "pages": "pp. 14-16"},
+   {"method": "Method 1", "relation": "evidence", "note": "stopping tests built to match SNOPT's (the 2003 protocol's alignment move a year earlier), defaults, limits = failure, rival given more superbasics, consistent success definition, losses printed", "pages": "pp. 19-21"},
+   {"method": "Method 1", "relation": "variant", "note": "the authors' own KNITRO is a comparator; SNOPT's first-derivative disparity named but not turned into a question", "pages": "pp. 18-19"},
+   {"method": "Method 4", "relation": "evidence", "note": "open choices and failure modes written into the paper (LP radius, warm starts, five improvement items); the later Knitro-Active link is inferred, not stated", "pages": "pp. 7, 29, 31"},
+   {"method": "Method 6", "relation": "evidence", "note": "owners of an interior-point code build and benchmark an active-set alternative and record why each class fails at scale", "pages": "pp. 2, 29-30"},
+   {"method": "Method 5", "relation": "evidence", "note": "weak: the implemented LP-radius rule is covered by the companion theory with admissible constants; the theory was not read", "pages": "p. 7"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "proof-driven safeguard", "evidence": "the Cauchy point inside the practical SLP-EQP step is the device that secures global convergence (also S040 pp. 5-6)", "pages": "pp. 3, 8"}
+  ],
+  "transferable": [
+   "Estimate the best achievable linearized feasibility by re-solving the step LP with the objective gradient set to zero, and set the penalty so that the step captures a fixed fraction of it (pp. 15-16).",
+   "Reuse one factorization for every auxiliary solve (projections, SOC, multipliers), and say so (pp. 11, 13-14).",
+   "Report average per-task time shares with each problem weighted equally, so that long runs do not dominate (p. 28).",
+   "Filter the test set to the problems where your mechanism matters, and state the filter (p. 19).",
+   "Define success identically for all codes, including rival near-optimal exits, and report how many such exits are reclassified (pp. 20-21).",
+   "Break failures down by size class and explain each kind (memory, CPU limit) (p. 21)."
+  ],
+  "coauthors": "Richard H. Byrd (Colorado), Nicholas I. M. Gould (RAL), Richard A. Waltz (Northwestern ECE)",
+  "quotes": [
+   {"text": "Even though SLIQUE is significantly less robust than the solver KNITRO it is nearly as robust, overall, as SNOPT.", "page": 21},
+   {"text": "Although, it is nearly impossible to enforce a uniform stopping condition, the stopping conditions for SLIQUE and KNITRO were constructed to be very similar to that used in SNOPT.", "page": 19}
+  ]
+ }
+]

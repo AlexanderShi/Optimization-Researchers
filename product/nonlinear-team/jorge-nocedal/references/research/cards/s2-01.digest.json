@@ -1,0 +1,390 @@
+[
+  {
+    "id": "S067",
+    "year": "2000",
+    "title": "Numerical experience with a reduced Hessian method for large scale constrained optimization",
+    "read_level": "full",
+    "contribution": "Turns the Biegler-Nocedal-Schmid reduced-Hessian SQP into a practical code (Algorithm RHC) whose cross-term correction (Broyden or finite-difference) stabilizes coordinate-basis steps; an analytic example and a three-arm ablation on test, Hock-Schittkowski and CUTE problems show that the correction helps with poor bases at no large cost (pp. 2, 5-9, 13-19).",
+    "problem_entry": "Dropping the cross term Z'WYp_Y works with orthonormal bases but gives poor directions with the affordable coordinate bases (p. 4); entered from the first author's inefficient runs on chemical process control problems (p. 19).",
+    "key_idea": "Approximate the cross term by w_k, via a Broyden matrix S_k (no extra gradient) or finite differences (one extra gradient) used only near the solution; rescaled FD formula (2.7), damping zeta_k, bound (2.29); MA28 basis choice with a tenfold-growth test; quasi-Newton matrices mapped across basis changes; watchdog switched on late (pp. 5-13).",
+    "assumptions": "Equality constraints only, to isolate the correction (p. 5); A_k full column rank (p. 3); nonsingular basis C and positive definite reduced Hessian (p. 4); convergence taken from [2], with redefinition (2.7) said to affect only Lemma 5.5 there (pp. 2, 6).",
+    "proof_devices": [
+      "analytic example with adjustable theta: orthogonal bases give quadratic contraction, the coordinate basis without correction a theta-dependent poor step, the corrected step equals the orthogonal one (pp. 13-14; derivation pp. 19-21)",
+      "B_k = Z_k'Z_k replaces BFGS to keep the example analytic (p. 12)",
+      "permutation identity PZ = Z~R to transform B and S after a basis change (pp. 11-12)"
+    ],
+    "experiments": "DEC-ALPHA; arms No Correction / Broyden / RHC; FD and watchdog on when the KKT measure < 0.1; Example 3 poor basis n=80: 27(39/27), 19(28/19), 17(21/18), good basis 6(6/6) for all; Hock-Schittkowski without times; CUTE EIGENC2, EIGENCCO, ORTHREGA/C/D with CPU; Broyden-only uses the fewest gradient evaluations (pp. 15-18).",
+    "positioning": "Builds on the authors' SIAM J. Optim. 1995 theory paper [2] and contrasts with reduced-Hessian methods that omit the cross term (refs [8, 13, 14, 19, 24, 30], among them Coleman-Conn, Gabay, Gilbert and Xie) (pp. 4, 11, 22).",
+    "writing": "Novelty sentence in the abstract; scope of the repair stated plainly: it cannot help with adequate bases, only prevent poor performance (p. 14).",
+    "limits_future": "Equality constraints only (p. 5); MA28 may return the same basis and forcing a new one is not yet coded (p. 11); Broyden-only may be preferable when gradients are expensive (p. 19); Table 1 defaults unreadable in this file (p. 9).",
+    "method_links": [
+      {
+        "method": "Method 3",
+        "relation": "evidence",
+        "note": "engine kept; only the cross-term component repaired, with an explicit KKT-error trigger for the FD version, safeguards (2.27)/(2.29), and an ablation",
+        "pages": "pp. 5-9, 15-18"
+      },
+      {
+        "method": "Method 5",
+        "relation": "evidence",
+        "note": "analytic example separates bases and corrected/uncorrected steps; runs read against [2]'s prediction that the correction helps only off-tangential paths",
+        "pages": "pp. 13-14, 16"
+      },
+      {
+        "method": "Method 1",
+        "relation": "variant",
+        "note": "own-code ablation rather than rival codes, but prints where the full method loses (Broyden-only needs fewer gradients)",
+        "pages": "pp. 17-19"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "Motivate-and-revisit toy examples",
+        "evidence": "the analytic example of section 4 returns as test Examples 2-3 with dictated good and poor bases",
+        "pages": "pp. 13-16"
+      },
+      {
+        "pattern": "switch on local-convergence devices only near the solution",
+        "evidence": "finite-difference correction and watchdog gated on a size-independent KKT error (0.1 in tests); compare S077 HFN cycle growth",
+        "pages": "pp. 7, 9, 13, 15"
+      },
+      {
+        "pattern": "preserve curvature memory across a change of basis",
+        "evidence": "B and S transformed into the new null-space basis instead of reset, judged beneficial",
+        "pages": "pp. 11-12"
+      }
+    ],
+    "transferable": [
+      "Build a two-variable analytic example whose parameter makes an omitted term's harm arbitrarily large, then show the repair restores the ideal behaviour (pp. 13-14, 19-21).",
+      "Ablate a repair with three arms (none, cheap approximation, full) and report gradient evaluations separately from function evaluations (pp. 16-18).",
+      "Gate expensive or local-convergence devices on a size-independent KKT error threshold, not an iteration count (pp. 9, 13, 15).",
+      "After a change of coordinates, transform the quasi-Newton matrix with a permutation identity instead of resetting it (pp. 11-12)."
+    ],
+    "coauthors": "Lorenz T. Biegler, Claudia Schmid, David Ternet (Chemical Engineering, Carnegie Mellon) (p. 1)",
+    "quotes": [
+      {
+        "text": "The correction term cannot be expected to improve the performance of the algorithm when the basis matrices are adequate, but should prevent poor performance from taking place.",
+        "page": 14
+      },
+      {
+        "text": "This research was motivated by numerical tests on chemical process control problems performed, a few years ago, by the first author.",
+        "page": 19
+      }
+    ]
+  },
+  {
+    "id": "S098",
+    "year": "2001",
+    "title": "Algorithm 809: PREQN: Fortran 77 subroutines for preconditioning the conjugate gradient method",
+    "read_level": "full",
+    "contribution": "Fortran 77 package that builds limited-memory BFGS preconditioners from the CG directions of one linear solve to precondition the next system in a slowly varying SPD sequence, through a single call per CG iteration, with two pair-selection options and numeric advice on m (pp. 1-8).",
+    "problem_entry": "Sequences of slowly varying SPD systems whose matrices are known only through products or are dense, as in Newton methods for optimization, PDEs and statistics (abstract, p. 2).",
+    "key_idea": "BFGS equals CG on quadratics, so CG pairs (p_j, A p_j) define an L-BFGS approximation of A^-1 that preconditions the next system; uniform-sample (IOP=1, last pair always added) or last-m (IOP=2) selection; one call applies the preconditioner and passes the newest pair; BUILD flag for reuse (pp. 3-7).",
+    "assumptions": "A_i symmetric positive definite (so s'y > 0) and slowly varying (pp. 2-3); no convergence theory.",
+    "proof_devices": [],
+    "experiments": "Three finite-element matrices from [5], 51 right-hand sides each, preconditioner built on the first solve and reused for 50; average CG iterations for several m and both IOP; uniform sampling much better here but usually comparable; table values unreadable (pp. 7-8).",
+    "positioning": "Implements the preconditioner of the companion SIAM J. Optim. paper [5]; contrasts cost with incomplete Cholesky (pp. 4, 10).",
+    "writing": "Advice given as numbers (m in [4, 20]) and as an explicit flop break-even (pp. 4, 7, 8).",
+    "limits_future": "Not always beneficial; pays only if a matvec costs more than about 24n operations (m=16, IOP=1), so unlikely for very sparse problems; BUILD=.FALSE. to be used with caution; users should experiment with m (pp. 7-8).",
+    "method_links": [
+      {
+        "method": "Method 4",
+        "relation": "evidence",
+        "note": "two selection rules that both performed well exposed as option IOP, plus a BUILD switch",
+        "pages": "pp. 4, 7"
+      },
+      {
+        "method": "Method 6",
+        "relation": "evidence",
+        "note": "own preconditioner scoped by structure: advocated only for unknown, dense or costly matrices; break-even says when it will not pay",
+        "pages": "pp. 4, 8"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "recycle inner-solver by-products as curvature memory",
+        "evidence": "CG directions and products of one solve become the L-BFGS preconditioner of the next system",
+        "pages": "p. 4"
+      },
+      {
+        "pattern": "algorithm information structure as a deployment interface",
+        "evidence": "a single call per CG iteration applies the preconditioner and transmits the newest pair; bookkeeping deferred to the next call (compare S119)",
+        "pages": "pp. 5-6"
+      }
+    ],
+    "transferable": [
+      "State a break-even inequality (extra preconditioner flops vs matvec cost) and name the problem class where the method will not pay (p. 8).",
+      "Design a library call so one invocation per inner iteration applies the operator and hands over what the next one needs (pp. 5-6).",
+      "When two selection rules perform comparably, ship both behind a flag and report the test where they differ (pp. 7-8)."
+    ],
+    "coauthors": "José Luis Morales (ITAM) (p. 1)",
+    "quotes": [
+      {
+        "text": "Values of m, in the range [4, 20], are recommended for most problems, independently of the value of n.",
+        "page": 4
+      },
+      {
+        "text": "Therefore the preconditioner is unlikely to be useful for very sparse problems.",
+        "page": 8
+      }
+    ]
+  },
+  {
+    "id": "S111",
+    "year": "2001",
+    "title": "Feasibility control in nonlinear optimization",
+    "read_level": "full",
+    "contribution": "Survey with analysis that names 'feasibility control' (progress toward feasibility at least comparable to a Cauchy step) and classifies Newton, SQP and interior methods by it against Powell's and Wächter-Biegler's counterexamples, adding an inefficiency example for NITRO's own inexact normal step (pp. 1-23).",
+    "problem_entry": "Methods that demand exact satisfaction of constraint linearizations can converge to spurious non-stationary points; entered through Powell's nonlinear-equations example and the Wächter-Biegler interior example (abstract, pp. 2-4, 13-15).",
+    "key_idea": "One property, feasibility control, sorts methods: LM, dogleg, Byrd-Omojokun, Celis-Dennis-Tapia and NITRO have it; Vardi, line-search Newton and interior methods and NUOPT lack it; SNOPT elastic mode supplies it only when needed; regularization is kept apart (pp. 4-22).",
+    "assumptions": "Smooth functions; the TR result needs A(x) Lipschitz and bounded on the level set (p. 5); Byrd-Omojokun assumptions in a footnote (p. 9).",
+    "proof_devices": [
+      "Powell's example: exact-line-search Newton converges to about (1.8016, 0.000), not stationary for the merit function (pp. 3-4)",
+      "Wächter-Biegler argument uses only the third Newton block plus bounds, so merit function and barrier update are irrelevant (p. 14)",
+      "singular KKT matrix on the limit manifold compared with Example 1, left open (p. 15)",
+      "Example 3 recurrence: range-space normal step cut by fraction-to-boundary gives an iteration lower bound (4.23) under Delta0 > (9/4)mu, s0 = mu (pp. 19-21)"
+    ],
+    "experiments": "Demonstration runs only: relaxed line search converges on Powell's example (p. 4); NITRO escapes Example 2 (Figure 3, p. 18); NITRO line-search option solves Example 3 in five steps, infeasibility 5.000E+02 to 6.706E-14 (Table 1, p. 21); slow feasibility also on CUTE GOFFIN (p. 21).",
+    "positioning": "Credits Powell's analysis as a founding block of TR theory (p. 6), Wächter-Biegler for the interior counterexample (p. 13), NUOPT's excellent results while showing it fails Example 2 (pp. 21-22).",
+    "writing": "Hedges placed where knowledge stops: 'We speculate' (p. 8), 'We do not know whether failures of this type are rare in practice' (p. 15), 'To our surprise' (p. 4).",
+    "limits_future": "Open: a simple fix for line-search interior methods and whether Forsgren-Gill converges better (p. 15); new inexact subproblem techniques for Example 3 (p. 21); feasibility control in interior methods only beginning to be studied (p. 23).",
+    "method_links": [
+      {
+        "method": "Method 4",
+        "relation": "evidence",
+        "note": "external counterexample analysed as a specification; own solver's failure mode (NITRO inexact normal step on Example 3, GOFFIN) written down with a call for new techniques",
+        "pages": "pp. 13-15, 19-21"
+      },
+      {
+        "method": "Method 5",
+        "relation": "evidence",
+        "note": "Cauchy-decrease criterion separates methods that cannot fail on the examples from those that can",
+        "pages": "pp. 5-10, 13-22"
+      },
+      {
+        "method": "Method 6",
+        "relation": "evidence",
+        "note": "records where the own TR method loses, using the line-search option inside NITRO (like-with-like)",
+        "pages": "p. 21"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "property abstraction",
+        "evidence": "name one property (feasibility control) and classify about ten methods by it against canonical counterexamples",
+        "pages": "pp. 2, 8-10, 16-22"
+      }
+    ],
+    "transferable": [
+      "Organize a survey around one named mechanism and a few canonical counterexamples, and classify each method by whether it has the mechanism (pp. 2-22).",
+      "Before generalizing a counterexample proved for one line search, rerun it with a relaxed line search and from other starts (p. 4).",
+      "Turn a suspected inefficiency into a closed-form recurrence on a one-variable barrier problem that bounds the iteration count, then confirm with the alternative option in the same code (pp. 19-21)."
+    ],
+    "coauthors": "M. Marazzi (Northwestern IEMS) (p. 1); Byrd, Wächter, Waltz and Powell thanked (p. 23)",
+    "quotes": [
+      {
+        "text": "We should stress that failures of the line search Newton iteration (2.2) are observed in practical applications, and are not purely of academic interest.",
+        "page": 4
+      },
+      {
+        "text": "We should stress that the interior method will not fail on Example 3, but that it will be inefficient.",
+        "page": 21
+      }
+    ]
+  },
+  {
+    "id": "S077",
+    "year": "2002",
+    "title": "Enriched methods for large-scale unconstrained optimization",
+    "read_level": "full",
+    "contribution": "Enriched method that interlaces L-BFGS and preconditioned Hessian-free Newton cycles with dynamically adjusted lengths and one shared limited-memory matrix; on large CUTE problems it uses 34371 function/gradient evaluations in total against 76224 and 75089 for two HFN variants (pp. 1-11).",
+    "problem_entry": "HFN methods are notoriously sensitive to the inner CG termination rule; goal of parameter-free algorithms; HFN and L-BFGS strengths are complementary (pp. 2-3).",
+    "key_idea": "l L-BFGS steps alternate with t HFN steps; H(m) both preconditions PCG and warm-starts L-BFGS; t=0 and l=0 give the parent methods; ADJUST sets l, t from step quality (profitable if alpha in [0.8, 1]), negative curvature and a force2 rule (pp. 3-7).",
+    "assumptions": "Gradients available, no second derivatives; Hessian-vector products by finite differences or AD; CG stops at negative curvature (pp. 2, 4); no convergence theory.",
+    "proof_devices": [],
+    "experiments": "All large unconstrained CUTE problems; m=20, l=15; CG stop 30 iterations (5 at first) or residual ratio 1/10; HFN1 (Nash) and HFN2 (Dembo-Steihaug rule) with the same quasi-Newton preconditioner; totals 34371 / 76224 / 75089 evaluations; per-problem Enriched column lost in the text layer; no L-BFGS column (pp. 7-11).",
+    "positioning": "Replaces the rigid Byrd-Nocedal-Zhu attempt (20 L-BFGS + 1 HFN, 5 unpreconditioned CG iterations) with a 'sophisticated implementation' (pp. 3-4).",
+    "writing": "Claims of parameter insensitivity are asserted in the abstract and text without a table (abstract, pp. 4, 10); prose and ADJUST pseudocode disagree on two update rules (pp. 5-7).",
+    "limits_future": "No limitations or future work printed; robustness claims rest on untabulated runs (pp. 4, 10).",
+    "method_links": [
+      {
+        "method": "Method 6",
+        "relation": "evidence",
+        "note": "integrates complementary algorithms (HFN and L-BFGS) in one dynamic family rather than crowning one",
+        "pages": "p. 3"
+      },
+      {
+        "method": "Method 1",
+        "relation": "evidence",
+        "note": "competitors given the authors' own preconditioner and the same stopping test; other HFN variants tried",
+        "pages": "pp. 8, 10"
+      },
+      {
+        "method": "Method 1",
+        "relation": "contradiction",
+        "note": "plain L-BFGS, one end of the family and the obvious simple baseline, has no column; insensitivity claims untabulated",
+        "pages": "pp. 4, 9-11"
+      },
+      {
+        "method": "Method 4",
+        "relation": "variant",
+        "note": "the undecided choice (cycle lengths, CG budget) is adapted automatically from in-run signals instead of being exposed as an option; only m is left to the user",
+        "pages": "pp. 2, 4-7"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "recycle inner-solver by-products as curvature memory",
+        "evidence": "inner PCG pairs update the matrix that preconditions later HFN steps and warm-starts L-BFGS",
+        "pages": "p. 3"
+      },
+      {
+        "pattern": "model family with two classical methods at its ends",
+        "evidence": "t=0 gives L-BFGS, l=0 gives HFN; L-BFGS is HFN with one CG iteration (compare S138 storage knob)",
+        "pages": "pp. 3, 5"
+      },
+      {
+        "pattern": "switch on local-convergence devices only near the solution",
+        "evidence": "HFN cycles lengthen only after a full profitable cycle, the first HFN step is capped at 5 CG iterations (compare S067)",
+        "pages": "p. 6"
+      }
+    ],
+    "transferable": [
+      "Define the hybrid so both parent methods are special cases and write every member as one base iteration with a varying inner budget (pp. 3-5).",
+      "Switch between cheap and expensive steps on in-run signals: accepted step length in [0.8, 1] and detected negative curvature (pp. 5-7).",
+      "Give competitors your own enhancement (the quasi-Newton preconditioner) so the comparison isolates the new idea (p. 8)."
+    ],
+    "coauthors": "José Luis Morales (ITAM) (p. 1)",
+    "quotes": [
+      {
+        "text": "Hessian-free Newton (HFN) methods for unconstrained optimization are notorious for their sensitivity on the termination rule used in the inner conjugate gradient (CG) iteration.",
+        "page": 2
+      },
+      {
+        "text": "Another way of motivating our approach is to note that the strengths and weaknesses of the HFN and L-BFGS methods are complementary.",
+        "page": 3
+      }
+    ]
+  },
+  {
+    "id": "S119",
+    "year": "2002",
+    "title": "iNEOS: An interactive environment for nonlinear optimization",
+    "read_level": "full",
+    "contribution": "CORBA-based client-server environment in which the user keeps a confidential, expensive simulation and a remote L-BFGS-B server returns iterates from function and gradient values alone, demonstrated on a 10-parameter piezoelectric identification problem (pp. 1-12).",
+    "problem_entry": "NEOS requires the whole model as AMPL/Fortran/C files, excluding proprietary, slow or multi-language models (p. 2).",
+    "key_idea": "Quasi-Newton iterations need only x_k, f_k, g_k, which do not reveal the model; reverse communication over the Internet via CORBA with a solver Factory and an Init/NextIterate interface; Nexus and DCOM rejected with reasons (pp. 3-7).",
+    "assumptions": "Bound constraints only (general constraints would need second derivatives sent to the server); 2n+1 floats per exchange, negligible against minutes-to-hours simulations; up to 1 million variables envisioned (pp. 4-5).",
+    "proof_devices": [],
+    "experiments": "Piezoelectric crystal model, 10 bounded parameters, finite-difference derivatives; synthetic target, start perturbed by 7.5%, 1% recovery target, about 10 minutes per f/g evaluation, client in California and server in Illinois; reported as successfully completed, details deferred to [3] (pp. 8-11).",
+    "positioning": "Motivated by the success of the NEOS server; builds on the internal client-server design of TRON and L-BFGS(-B) (pp. 2-3).",
+    "writing": "Short systems note; design trade-offs recorded with concrete reasons (pp. 4-5).",
+    "limits_future": "No user-level security (anyone can view submitted data); solver-specific API, XML common interface proposed with overhead to be measured; general constraints future work (pp. 4, 12).",
+    "method_links": [
+      {
+        "method": "Method 6",
+        "relation": "variant",
+        "note": "the f-and-g-only property that makes L-BFGS the general method (step 3) reused as a deployment property that hides the model",
+        "pages": "p. 3"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "algorithm information structure as a deployment interface",
+        "evidence": "reverse communication turned into a remote, model-hiding optimization service (compare S098 single-call interface)",
+        "pages": "pp. 3, 7"
+      }
+    ],
+    "transferable": [
+      "List what the algorithm needs per iteration (2n+1 numbers) and size communication against evaluation time before choosing middleware (p. 5).",
+      "Validate an identification pipeline on synthetic truth with a stated perturbation (7.5%) and a recovery target fixed in advance (1%) (p. 9)."
+    ],
+    "coauthors": "Marcel Good, Jean-Pierre Goux (Northwestern), Victor Pereyra (Weidlinger Associates) (p. 1); Todd Plantenga thanked (p. 12)",
+    "quotes": [
+      {
+        "text": "In nonlinear optimization, an improved solution can be generated just by knowing the current iterate and the numerical values of the function and gradient at the current point.",
+        "page": 3
+      },
+      {
+        "text": "Anyone has access to iNEOS and can view the data submitted to it.",
+        "page": 12
+      }
+    ]
+  },
+  {
+    "id": "S075",
+    "year": "2003",
+    "title": "Feasible interior methods using slacks for nonlinear optimization",
+    "read_level": "full",
+    "contribution": "Shows how slack resets turn infeasible slack-based interior methods into feasible ones, proves the reset is harmless when steps satisfy the linearized inequalities, repairs KNITRO's trust-region step by a modified Cauchy direction, and gives the first feasible-versus-infeasible comparison (216 CUTE problems, 181 vs 179 solved) (pp. 1-19).",
+    "problem_entry": "Some applications need inequality-feasible iterates (objective undefined outside, early termination), most NLP interior codes are infeasible, and no study had compared the two (pp. 2, 17).",
+    "key_idea": "Reset s <- g(x_T) before evaluating the merit function, so feasible and infeasible modes differ in two boxed instructions with the same linear systems; with equalities, impose r_g = 0 (Feasible Step Conditions) and recompute only the Cauchy direction of KNITRO's normal step from system (5.30) (pp. 4-5, 12-14).",
+    "assumptions": "Smooth f, h, g; merit with chi infinite for s <= 0; step-merit compatibility; Theorem 4.1 needs Lipschitz chi and Jacobian and a step satisfying (4.15); Corollary 5.1 needs nu large enough (called not restrictive) and a point not stationary for ||h||^2 (pp. 3-4, 10, 14-15).",
+    "proof_devices": [
+      "Theorem 4.1: reset perturbation O(||d_x||^2) against first-order decrease gamma||d||, so small steps are accepted (pp. 10-11)",
+      "backtracking cannot cure a violation of (4.15) since every scalar multiple keeps it (p. 12)",
+      "Corollary 5.1 transfers the result to the modified dogleg normal step (pp. 14-15)",
+      "equivalence with the classical Fiacco-McCormick barrier for exact primal-dual Newton steps (pp. 6-7)"
+    ],
+    "experiments": "GAUSSELM (385 equalities, 750 inequalities) fails before the repair as ||delta_s|| tracks Delta down to 1.2e-14, then is solved in 102 iterations (Tables 1-2, pp. 9, 16); 153 problems with equalities: differ on 45, failures 3 vs 17 (p. 16); feasible vs infeasible KNITRO on 216 CUTE problems: 181 vs 179 solved, 58 never entered feasible mode, log2 ratio plot on 119 (pp. 17-18); limits 1000 iterations and 60 CPU minutes (p. 25).",
+    "positioning": "Frames trust-region step computations of Vardi, Celis-Dennis-Tapia, Powell-Yuan, Byrd-Omojokun and Yamashita-Yabe in one subproblem form (p. 11); relates slack resets to Fiacco-McCormick barriers (pp. 6-7).",
+    "writing": "Null result reported as a surprise and read as good news for the option; a confound (shared slack adjustment) disclosed in the same section (pp. 17-19).",
+    "limits_future": "The reject-infeasible-trials alternative can fail and its step modification was not explored, though called plausible (pp. 16-17); shared slack adjustment narrows the comparison (p. 19); keep inequality/slack identity in the formulation and reset before the merit evaluation (pp. 19-20).",
+    "method_links": [
+      {
+        "method": "Method 3",
+        "relation": "evidence",
+        "note": "engine kept; only the slack reset and, in KNITRO, only the Cauchy direction of the normal step change",
+        "pages": "pp. 5, 14"
+      },
+      {
+        "method": "Method 1",
+        "relation": "evidence",
+        "note": "method-level comparison inside one code with all else equal; confound of the shared slack adjustment disclosed; full table and failure codes in an appendix",
+        "pages": "pp. 17-25"
+      },
+      {
+        "method": "Method 5",
+        "relation": "evidence",
+        "note": "Theorem 4.1 discriminates: line-search interior methods are safe under resets, trust-region methods such as KNITRO's are not without the fix",
+        "pages": "p. 11"
+      },
+      {
+        "method": "Method 4",
+        "relation": "evidence",
+        "note": "own failure case (GAUSSELM) becomes the specification for the step conditions; ships as KNITRO feasible mode; untried alternative recorded",
+        "pages": "pp. 8-18"
+      },
+      {
+        "method": "Method 2",
+        "relation": "evidence",
+        "note": "plausible expectations about infeasible freedom put on trial for the first time; verdict scoped by untouched problems and unattributed wins",
+        "pages": "pp. 17-18"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "price the repair in reused factorizations and warm starts",
+        "evidence": "the new Cauchy direction reuses the matrix already factored in KNITRO, about one backsolve",
+        "pages": "p. 15"
+      }
+    ],
+    "transferable": [
+      "Implement a variant as a minimal switch inside the existing algorithm (same systems, same data structures) so the comparison isolates it (pp. 4-5, 17).",
+      "Diagnose an acceptance failure from a per-iteration table of merit reduction, radius and extra perturbation size; if the perturbation does not shrink faster than the radius, fix the step condition, not the step length (pp. 8-9, 12).",
+      "Prove a repair by an order argument: perturbation O(||d||^2) against first-order decrease gamma||d|| (pp. 10-11).",
+      "Report pairwise comparisons as sorted log2 ratios over problems where both arms reached the same solution, and state how many the switch never touched (p. 18)."
+    ],
+    "coauthors": "Richard H. Byrd (Colorado), Richard A. Waltz (Northwestern) (p. 1); Guanghui Liu, Marcelo Marazzi, José Luis Morales thanked (p. 20)",
+    "quotes": [
+      {
+        "text": "To our surprise, the tests we report below do not indicate a clear superiority of either method and the potential advantages of each approach do not appear to be a major factor.",
+        "page": 17
+      },
+      {
+        "text": "However, we use it in our comparison taking the view that all methods should be tested using their best implementation within the KNITRO framework.",
+        "page": 19
+      }
+    ]
+  }
+]
