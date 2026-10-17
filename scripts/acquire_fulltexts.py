@@ -243,6 +243,20 @@ def control_share(text: str) -> float:
     return sum(1 for c in ns if ord(c) < 32) / len(ns) if ns else 0.0
 
 
+def digit_share(text: str) -> float:
+    """非空白字符里数字的比例（不算 [[page N]] 标记）。"""
+    ns = [c for c in re.sub(r"\[\[page \d+\]\]", "", text) if not c.isspace()]
+    return sum(1 for c in ns if c.isdigit()) / len(ns) if ns else 0.0
+
+
+def digits_lost(text: str) -> bool:
+    """数字字体层坏掉的文字层：正文可读，但数字（常连同希腊字母、数学符号、fi/ff 连字）全丢。
+    万字以上的拉丁文字论文正常不会低于 0.5%（页码、年份、参考文献）；Nocedal 的 26 篇坏文本 24 篇低于此值，
+    本仓库 1112 篇正常全文无一低于此值（2026-10-17 校准）。"""
+    ns = sum(1 for c in text if not c.isspace())
+    return ns > 10000 and latin_share(text) >= 0.5 and digit_share(text) < 0.005
+
+
 def garbled(text: str) -> bool:
     """字体乱码的文字层：拉丁文字却几乎没有英文常用词，或控制字符占三成以上（零星字母会骗过常用词检测）。
     以非拉丁文字为主的正常文字层不按英文常用词判断。"""
@@ -277,15 +291,20 @@ def extract_text(pdf: Path, txt: Path, force_ocr: bool = False) -> int:
         doc = pdfium.PdfDocument(str(pdf))
         pages = [doc[i].get_textpage().get_text_range() for i in range(len(doc))]
         text = "".join(pages)
-        if pages and (force_ocr or sum(len(p.strip()) for p in pages) / len(pages) < 200 or garbled(text)):
-            ocr = ocr_pages(doc)  # 无文字层，或文字层是字体乱码（Type 3 字体等）
+        lost = digits_lost(text)
+        if pages and (force_ocr or sum(len(p.strip()) for p in pages) / len(pages) < 200 or garbled(text) or lost):
+            ocr = ocr_pages(doc)  # 无文字层，或文字层是字体乱码（Type 3 字体等），或数字字体层坏了
             if force_ocr and ocr is None:
                 print(f"  ⚠️ --reocr {pdf.name}: tesseract is not installed (apt-get install tesseract-ocr); kept the text layer")
             if ocr:
                 o = "".join(ocr)
                 if (force_ocr and o.strip()) or stopword_ratio(o) > stopword_ratio(text) or \
-                        (latin_share(o) < 0.5 and letter_count(o) > letter_count(text)):  # 非拉丁文字的扫描件
+                        (latin_share(o) < 0.5 and letter_count(o) > letter_count(text)) or \
+                        (lost and digit_share(o) >= 2 * digit_share(text) + 0.003
+                         and stopword_ratio(o) >= 0.8 * stopword_ratio(text)):  # 数字找回来了、正文没变差
                     pages = ocr
+            elif lost:
+                print(f"  ⚠️ {pdf.name}: the text layer has lost its digits; install tesseract and rerun with --reocr")
         txt.write_text("\n\f\n".join(f"[[page {i + 1}]]\n{p}" for i, p in enumerate(pages)), encoding="utf-8")
         return len(pages)
     except ImportError:
