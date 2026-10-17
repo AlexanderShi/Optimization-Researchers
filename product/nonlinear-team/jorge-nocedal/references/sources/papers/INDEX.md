@@ -39,16 +39,16 @@
 | 27 | S027 | 2006 | Interior methods for mathematical programs with complementarity constraints | SIAM Journal on Optimization 17 (1), 52-77, 2006 | 299 | journal | url | txt | 28 | supplement | skimmed |
 | 28 | S028 | 1995 | A reduced Hessian method for large-scale constrained optimization | SIAM Journal on Optimization 5 (2), 314-347, 1995 | 267 | journal | url | txt | 36 | supplement | skimmed |
 | 29 | S029 | 2009 | Adaptive barrier update strategies for nonlinear interior methods | SIAM Journal on Optimization 19 (4), 1674-1693, 2009 | 257 | journal | url | txt | 25 | core | carded |
-| 30 | S030 | 2000 | Automatic preconditioning by limited memory quasi-Newton updating | SIAM Journal on Optimization 10 (4), 1079-1096, 2000 | 257 | journal | url | txt | 23 | supplement | skimmed |
+| 30 | S030 | 2000 | Automatic preconditioning by limited memory quasi-Newton updating | SIAM Journal on Optimization 10 (4), 1079-1096, 2000 | 257 | journal | url | txt | 23 | core | skimmed |
 | 31 | S031 | 2018 | A progressive batching L-BFGS method for machine learning | International Conference on Machine Learning, 620-629, 2018 | 249 | conference | arXiv | txt | 24 | core | carded |
 | 32 | S032 | 2019 | Exact and inexact subsampled Newton methods for optimization | IMA Journal of Numerical Analysis 39 (2), 545-578, 2019 | 248 | journal | arXiv | txt | 37 | supplement | carded |
 | 33 | S033 | 2016 | A multi-batch L-BFGS method for machine learning | Advances in Neural Information Processing Systems 29, 2016 | 241 | conference | arXiv | txt | 31 | supplement | skimmed |
 | 34 | S034 | 1998 | On the implementation of an algorithm for large-scale equality constrained optimization | SIAM Journal on Optimization 8 (3), 682-706, 1998 | 228 | journal | url | txt | 25 | supplement | carded |
-| 35 | S035 | 2003 | An algorithm for nonlinear optimization using linear programming and equality constrained subproblems | Mathematical Programming 100 (1), 27-48, 2003 | 212 | journal | url | txt | 33 | supplement | carded |
+| 35 | S035 | 2003 | An algorithm for nonlinear optimization using linear programming and equality constrained subproblems | Mathematical Programming 100 (1), 27-48, 2003 | 212 | journal | url | txt | 33 | core | carded |
 | 36 | S036 | 2018 | Adaptive sampling strategies for stochastic optimization | SIAM Journal on Optimization 28 (4), 3312-3343, 2018 | 207 | journal | arXiv | txt | 32 | supplement | skimmed |
 | 37 | S038 | 2019 | Derivative-free optimization of noisy functions via quasi-Newton methods | SIAM Journal on Optimization 29 (2), 965-993, 2019 | 157 | journal | arXiv | txt | 26 | core | carded |
 | 38 | S039 | 1990 | An analysis of reduced Hessian methods for constrained optimization | Mathematical Programming 49 (1), 285-323, 1990 | 157 | journal | manual | txt | 46 | supplement | skimmed |
-| 39 | S040 | 2002 | Wedge trust region methods for derivative free optimization | Mathematical programming 91 (2), 289-305, 2002 | 153 | journal | url | txt | 19 | supplement | skimmed |
+| 39 | S040 | 2002 | Wedge trust region methods for derivative free optimization | Mathematical programming 91 (2), 289-305, 2002 | 153 | journal | url | txt | 19 | core | skimmed |
 | 40 | S041 | 2020 | An investigation of Newton-sketch and subsampled Newton methods | Optimization Methods and Software 35 (4), 661-680, 2020 | 149 | journal | arXiv | txt | 36 | core | carded |
 | 41 | S042 | 2008 | Steering exact penalty methods for nonlinear programming | Optimization Methods and Software 23 (2), 197-213, 2008 | 146 | journal | url | txt | 24 | core | carded |
 | 42 | S043 | 2012 | Newton-like methods for sparse inverse covariance estimation | Advances in neural information processing systems 25, 2012 | 143 | conference | — | no-oa |  | supplement | — |
@@ -64,7 +64,7 @@
 | 52 | S054 | 1993 | Analysis of a self-scaling quasi-Newton method | Mathematical Programming 61 (1), 19-37, 1993 | 110 | journal | manual | txt | 19 | supplement | skimmed |
 | 53 | S055 | 1996 | Conjugate gradient methods and nonlinear optimization | Linear and nonlinear conjugate gradient-related methods, 9-23, 1996 | 108 | chapter | — | no-oa |  | supplement | — |
 | 54 | S056 | 1994 | L-BFGS-B: a limited memory FORTRAN code for solving bound constrained optimization problems | Technique Report Rep, 1994 | 107 | report | — | no-oa |  | supplement | — |
-| 55 | S057 | 2002 | On the behavior of the gradient norm in the steepest descent method | Computational Optimization and Applications 22 (1), 5-35, 2002 | 104 | journal | url | txt | 27 | supplement | skimmed |
+| 55 | S057 | 2002 | On the behavior of the gradient norm in the steepest descent method | Computational Optimization and Applications 22 (1), 5-35, 2002 | 104 | journal | url | txt | 27 | core | skimmed |
 | 56 | S058 | 2005 | On the convergence of successive linear-quadratic programming algorithms | SIAM Journal on Optimization 16 (2), 471-489, 2005 | 101 | journal | manual | txt | 26 | supplement | carded |
 | 57 | S060 | 2012 | A sequential quadratic programming algorithm with an additional equality constrained phase | IMA Journal of Numerical Analysis 32 (2), 553-579, 2012 | 91 | journal | url | txt | 29 | supplement | skimmed |
 | 58 | S061 | 2004 | On the convergence of Newton iterations to non-stationary points | Mathematical Programming 99 (1), 127-148, 2004 | 90 | journal | url | txt | 25 | core | carded |
