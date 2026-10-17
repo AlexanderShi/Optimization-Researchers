@@ -16,12 +16,12 @@
 | 4 | S004 | 2018 | Optimization methods for large-scale machine learning | SIAM review 60 (2), 223-311, 2018 | 5967 | journal | arXiv | txt | 95 | supplement | — |
 | 5 | S005 | 1997 | Algorithm 778: L-BFGS-B: Fortran subroutines for large-scale bound-constrained optimization | ACM Transactions on mathematical software (TOMS) 23 (4), 550-560, 1997 | 5247 | journal | url | txt | 17 | supplement | — |
 | 6 | S006 | 2016 | On large-batch training for deep learning: Generalization gap and sharp minima | arXiv preprint arXiv:1609.04836, 2016 | 5159 | conference | arXiv | txt | 16 | supplement | — |
-| 7 | S007 | 1980 | Updating quasi-Newton matrices with limited storage | Mathematics of computation 35 (151), 773-782, 1980 | 4373 | journal | — | no-oa |  | supplement | — |
+| 7 | S007 | 1980 | Updating quasi-Newton matrices with limited storage | Mathematics of computation 35 (151), 773-782, 1980 | 4373 | journal | manual | txt | 10 | supplement | — |
 | 8 | S008 | 1999 | An interior point algorithm for large-scale nonlinear programming | SIAM Journal on Optimization 9 (4), 877-900, 1999 | 2662 | journal | url | txt | 28 | supplement | — |
 | 9 | S009 | 2000 | A trust region method based on interior point techniques for nonlinear programming | Mathematical programming 89 (1), 149-185, 2000 | 2451 | journal | url | txt | 37 | supplement | — |
 | 10 | S010 | 1999 | Numerical optimization | Springer Science 35 (67-68), 7, 1999 | 1975 | book | — | no-oa |  | supplement | — |
 | 11 | S011 | 2006 | Knitro: An Integrated Package for Nonlinear Optimization | Large-scale nonlinear optimization, 35-59, 2006 | 1717 | chapter | url | txt | 25 | supplement | — |
-| 12 | S012 | 1992 | Global convergence properties of conjugate gradient methods for optimization | SIAM Journal on optimization 2 (1), 21-42, 1992 | 1679 | journal | — | no-oa |  | supplement | — |
+| 12 | S012 | 1992 | Global convergence properties of conjugate gradient methods for optimization | SIAM Journal on optimization 2 (1), 21-42, 1992 | 1679 | journal | manual | txt | 29 | supplement | — |
 | 13 | S013 | 2006 | An interior algorithm for nonlinear optimization that combines line search and trust region steps | Mathematical programming 107 (3), 391-408, 2006 | 1498 | journal | url | txt | 20 | supplement | — |
 | 14 | S014 | 1994 | Representations of quasi-Newton matrices and their use in limited memory methods | Mathematical Programming 63 (1), 129-156, 1994 | 1211 | journal | url | txt | 31 | supplement | — |
 | 15 | S015 | 2016 | A stochastic quasi-Newton method for large-scale optimization | SIAM Journal on Optimization 26 (2), 1008-1031, 2016 | 728 | journal | arXiv | txt | 31 | supplement | — |
@@ -29,13 +29,13 @@
 | 17 | S017 | 1989 | A tool for the analysis of quasi-Newton methods with application to unconstrained minimization | SIAM Journal on Numerical Analysis 26 (3), 727-739, 1989 | 620 | journal | — | no-oa |  | supplement | — |
 | 18 | S018 | 2012 | Sample size selection in optimization methods for machine learning | Mathematical programming 134 (1), 127-155, 2012 | 564 | journal | url | txt | 30 | supplement | — |
 | 19 | S019 | 1992 | Theory of algorithms for unconstrained optimization | Acta numerica 1, 199-242, 1992 | 555 | journal | url | txt | 37 | supplement | — |
-| 20 | S020 | 1987 | Global convergence of a cass of quasi-Newton methods on convex problems | SIAM Journal on Numerical Analysis 24 (5), 1171-1190, 1987 | 548 | journal | — | no-oa |  | supplement | — |
+| 20 | S020 | 1987 | Global convergence of a cass of quasi-Newton methods on convex problems | SIAM Journal on Numerical Analysis 24 (5), 1171-1190, 1987 | 548 | journal | manual | txt | 20 | supplement | — |
 | 21 | S021 | 2001 | On the solution of equality constrained quadratic programming problems arising in optimization | SIAM Journal on Scientific Computing 23 (4), 1376-1395, 2001 | 392 | journal | url | txt | 30 | supplement | — |
 | 22 | S022 | 1985 | Projected Hessian updating algorithms for nonlinearly constrained optimization | SIAM Journal on Numerical Analysis 22 (5), 821-850, 1985 | 349 | journal | — | no-oa |  | supplement | — |
 | 23 | S023 | 2011 | On the use of stochastic hessian information in optimization methods for machine learning | SIAM Journal on Optimization 21 (3), 977-995, 2011 | 345 | journal | url | txt | 23 | supplement | — |
 | 24 | S024 | 1998 | Combining trust region and line search techniques | Advances in Nonlinear Programming: Proceedings of the 96 International …, 1998 | 341 | chapter | url | txt | 25 | supplement | — |
 | 25 | S025 | 1991 | A numerical study of the limited memory BFGS method and the truncated-Newton method for large scale optimization | SIAM Journal on Optimization 1 (3), 358-372, 1991 | 322 | journal | — | no-oa |  | supplement | — |
-| 26 | S026 | 1987 | The formulation and analysis of numerical methods for inverse eigenvalue problems | SIAM Journal on Numerical Analysis 24 (3), 634-667, 1987 | 308 | journal | — | no-oa |  | supplement | — |
+| 26 | S026 | 1987 | The formulation and analysis of numerical methods for inverse eigenvalue problems | SIAM Journal on Numerical Analysis 24 (3), 634-667, 1987 | 308 | journal | manual | txt | 34 | supplement | — |
 | 27 | S027 | 2006 | Interior methods for mathematical programs with complementarity constraints | SIAM Journal on Optimization 17 (1), 52-77, 2006 | 299 | journal | url | txt | 28 | supplement | — |
 | 28 | S028 | 1995 | A reduced Hessian method for large-scale constrained optimization | SIAM Journal on Optimization 5 (2), 314-347, 1995 | 267 | journal | url | txt | 36 | supplement | — |
 | 29 | S029 | 2009 | Adaptive barrier update strategies for nonlinear interior methods | SIAM Journal on Optimization 19 (4), 1674-1693, 2009 | 257 | journal | url | txt | 25 | supplement | — |
@@ -47,7 +47,7 @@
 | 35 | S035 | 2003 | An algorithm for nonlinear optimization using linear programming and equality constrained subproblems | Mathematical Programming 100 (1), 27-48, 2003 | 212 | journal | url | txt | 33 | supplement | — |
 | 36 | S036 | 2018 | Adaptive sampling strategies for stochastic optimization | SIAM Journal on Optimization 28 (4), 3312-3343, 2018 | 207 | journal | arXiv | txt | 32 | supplement | — |
 | 37 | S038 | 2019 | Derivative-free optimization of noisy functions via quasi-Newton methods | SIAM Journal on Optimization 29 (2), 965-993, 2019 | 157 | journal | arXiv | txt | 26 | supplement | — |
-| 38 | S039 | 1990 | An analysis of reduced Hessian methods for constrained optimization | Mathematical Programming 49 (1), 285-323, 1990 | 157 | journal | — | no-oa |  | supplement | — |
+| 38 | S039 | 1990 | An analysis of reduced Hessian methods for constrained optimization | Mathematical Programming 49 (1), 285-323, 1990 | 157 | journal | manual | txt | 46 | supplement | — |
 | 39 | S040 | 2002 | Wedge trust region methods for derivative free optimization | Mathematical programming 91 (2), 289-305, 2002 | 153 | journal | url | txt | 19 | supplement | — |
 | 40 | S041 | 2020 | An investigation of Newton-sketch and subsampled Newton methods | Optimization Methods and Software 35 (4), 661-680, 2020 | 149 | journal | arXiv | txt | 36 | supplement | — |
 | 41 | S042 | 2008 | Steering exact penalty methods for nonlinear programming | Optimization Methods and Software 23 (2), 197-213, 2008 | 146 | journal | url | txt | 24 | supplement | — |
@@ -61,11 +61,11 @@
 | 49 | S051 | 2012 | A line search exact penalty method using steering rules | Mathematical Programming 133 (1), 39-73, 2012 | 113 | journal | url | txt | 32 | supplement | — |
 | 50 | S052 | 2010 | Infeasibility detection and SQP methods for nonlinear optimization | SIAM Journal on Optimization 20 (5), 2281-2299, 2010 | 111 | journal | url | txt | 23 | supplement | — |
 | 51 | S053 | 2014 | An interior point method for nonlinear programming with infeasibility detection capabilities | Optimization Methods and Software 29 (4), 837-854, 2014 | 110 | journal | url | txt | 35 | supplement | — |
-| 52 | S054 | 1993 | Analysis of a self-scaling quasi-Newton method | Mathematical Programming 61 (1), 19-37, 1993 | 110 | journal | — | no-oa |  | supplement | — |
+| 52 | S054 | 1993 | Analysis of a self-scaling quasi-Newton method | Mathematical Programming 61 (1), 19-37, 1993 | 110 | journal | manual | txt | 19 | supplement | — |
 | 53 | S055 | 1996 | Conjugate gradient methods and nonlinear optimization | Linear and nonlinear conjugate gradient-related methods, 9-23, 1996 | 108 | chapter | — | no-oa |  | supplement | — |
 | 54 | S056 | 1994 | L-BFGS-B: a limited memory FORTRAN code for solving bound constrained optimization problems | Technique Report Rep, 1994 | 107 | report | — | no-oa |  | supplement | — |
 | 55 | S057 | 2002 | On the behavior of the gradient norm in the steepest descent method | Computational Optimization and Applications 22 (1), 5-35, 2002 | 104 | journal | url | txt | 27 | supplement | — |
-| 56 | S058 | 2005 | On the convergence of successive linear-quadratic programming algorithms | SIAM Journal on Optimization 16 (2), 471-489, 2005 | 101 | journal | — | no-oa |  | supplement | — |
+| 56 | S058 | 2005 | On the convergence of successive linear-quadratic programming algorithms | SIAM Journal on Optimization 16 (2), 471-489, 2005 | 101 | journal | manual | txt | 26 | supplement | — |
 | 57 | S060 | 2012 | A sequential quadratic programming algorithm with an additional equality constrained phase | IMA Journal of Numerical Analysis 32 (2), 553-579, 2012 | 91 | journal | url | txt | 29 | supplement | — |
 | 58 | S061 | 2004 | On the convergence of Newton iterations to non-stationary points | Mathematical Programming 99 (1), 127-148, 2004 | 90 | journal | url | txt | 25 | supplement | — |
 | 59 | S062 | 2009 | On the geometry phase in model-based algorithms for derivative-free optimization | Optimization Methods & Software 24 (1), 145-154, 2009 | 86 | journal | url | txt | 10 | supplement | — |
@@ -86,12 +86,12 @@
 | 74 | S081 | 2008 | Flexible penalty functions for nonlinear constrained optimization | IMA journal of numerical analysis 28 (4), 749-769, 2008 | 49 | journal | url | txt | 19 | supplement | — |
 | 75 | S082 | 2023 | A trust region method for noisy unconstrained optimization | Mathematical Programming 202 (1), 445-472, 2023 | 46 | journal | arXiv | txt | 34 | supplement | — |
 | 76 | S084 | 2023 | Constrained optimization in the presence of noise | SIAM Journal on Optimization 33 (3), 2118-2136, 2023 | 43 | journal | arXiv | txt | 22 | supplement | — |
-| 77 | S085 | 2004 | A starting point strategy for nonlinear interior methods | Applied mathematics letters 17 (8), 945-952, 2004 | 43 | journal | — | no-oa |  | supplement | — |
+| 77 | S085 | 2004 | A starting point strategy for nonlinear interior methods | Applied mathematics letters 17 (8), 945-952, 2004 | 43 | journal | manual | txt | 9 | supplement | — |
 | 78 | S086 | 1985 | A conic algorithm for optimization | SIAM journal on scientific and statistical computing 6 (2), 253-267, 1985 | 41 | journal | — | no-oa |  | supplement | — |
 | 79 | S087 | 2015 | An algorithm for quadratic ℓ1-regularized optimization with a flexible active-set strategy | Optimization Methods and Software 30 (6), 1213-1237, 2015 | 38 | journal | arXiv | txt | 23 | supplement | — |
 | 80 | S088 | 1996 | Towards a discrete Newton method with memory for large-scale optimization | Nonlinear optimization and applications, 1-12, 1996 | 38 | chapter | url | txt | 13 | supplement | — |
 | 81 | S089 | 2016 | A second-order method for convex 1\-regularized optimization with active-set prediction | Optimization Methods and Software 31 (3), 605-621, 2016 | 37 | journal | arXiv | txt | 18 | supplement | — |
-| 82 | S090 | 1997 | Mechanics in the engineering first curriculum at Northwestern University | International Journal of Engineering Education 13 (6), 1997 | 37 | journal | — | no-oa |  | supplement | — |
+| 82 | S090 | 1997 | Mechanics in the engineering first curriculum at Northwestern University | International Journal of Engineering Education 13 (6), 1997 | 37 | journal | manual | txt | 16 | supplement | — |
 | 83 | S091 | 2022 | Adaptive finite-difference interval estimation for noisy derivative-free optimization | SIAM Journal on Scientific Computing 44 (4), A2302-A2321, 2022 | 36 | journal | arXiv | txt | 39 | supplement | — |
 | 84 | S092 | 2011 | On the solution of complementarity problems arising in American options pricing | Optimization methods and Software 26 (4-5), 813-825, 2011 | 36 | journal | url | txt | 16 | supplement | — |
 | 85 | S097 | 1983 | Numerical methods for solving inverse eigenvalue problems | Numerical Methods: Proceedings of the International Workshop, Caracas 1982, Lecture Notes in Mathematics 1005, 212-226, 1983 | 32 | chapter | — | no-oa |  | supplement | — |
@@ -107,7 +107,7 @@
 | 95 | S111 | 2001 | Feasibility control in nonlinear optimization | Foundations of Computational Mathematics 284, 125, 2001 | 20 | chapter | url | txt | 26 | supplement | — |
 | 96 | S113 | 2013 | Subspace accelerated matrix splitting algorithms for asymmetric and symmetric linear complementarity problems | SIAM Journal on Optimization 23 (3), 1371-1397, 2013 | 16 | journal | url | txt | 23 | supplement | — |
 | 97 | S114 | 2013 | On the use of piecewise linear models in nonlinear programming | Mathematical Programming 137 (1), 289-324, 2013 | 15 | journal | url | txt | 34 | supplement | — |
-| 98 | S115 | 1993 | Automatic differentiation and the step computation in the limited memory BFGS method | Applied mathematics letters 6 (3), 47-50, 1993 | 15 | journal | — | no-oa |  | supplement | — |
+| 98 | S115 | 1993 | Automatic differentiation and the step computation in the limited memory BFGS method | Applied mathematics letters 6 (3), 47-50, 1993 | 15 | journal | manual | txt | 6 | supplement | — |
 | 99 | S116 | 1982 | Conjugate direction methods with variable storage | Mathematical Programming 23 (1), 326-340, 1982 | 14 | journal | — | no-oa |  | supplement | — |
 | 100 | S118 | 1998 | Active set and interior methods for nonlinear optimization | Proceedings of the International Congress of Mathematicians 1998, 667-676, 1998 | 13 | conference | unpaywall | txt | 10 | supplement | — |
 | 101 | S119 | 2002 | iNEOS: An interactive environment for nonlinear optimization | Applied numerical mathematics 40 (1-2), 49-57, 2002 | 11 | journal | url | txt | 14 | supplement | — |
@@ -115,15 +115,15 @@
 | 103 | S123 | 1986 | Four quadratically convergent methods for solving inverse eigenvalue problems | Numerical analysis 11, 47, 1986 | 10 | chapter | — | no-oa |  | supplement | — |
 | 104 | S124 | 2024 | A trust-region algorithm for noisy equality constrained optimization | arXiv preprint arXiv:2411.02665, 2024 | 9 | preprint | arXiv | txt | 34 | supplement | — |
 | 105 | S125 | 2011 | L-bfgs-b | Retrieved Feb 18, 2012, 2011 | 9 | other | — | no-oa |  | supplement | — |
-| 106 | S126 | 2006 | Steering exact penalty methods for optimization | Optimization Technology Center, Northwestern University, Evanston, IL, USA…, 2006 | 9 | report | — | no-oa |  | supplement | — |
+| 106 | S126 | 2006 | Steering exact penalty methods for optimization | Optimization Technology Center, Northwestern University, Evanston, IL, USA…, 2006 | 9 | report | manual | txt | 23 | supplement | — |
 | 107 | S128 | 2025 | Design guidelines for noise-tolerant optimization with applications in robust design | SIAM Journal on Scientific Computing 47 (3), A1335-A1357, 2025 | 8 | journal | arXiv | txt | 28 | supplement | — |
 | 108 | S135 | 2012 | Second-order methods for L1 regularized problems in machine learning | 2012 IEEE International Conference on Acoustics, Speech and Signal…, 2012 | 5 | conference | — | no-oa |  | supplement | — |
 | 109 | S136 | 2005 | Introducing a constructivist approach to applying programming skills in engineering analysis | Proceedings Frontiers in Education 35th Annual Conference, T3H-20, 2005 | 5 | conference | — | no-oa |  | supplement | — |
-| 110 | S138 | 1978 | ON THE METHOD OF CONJUGATE GRADIENTS FOR FUNCTION MINIMIZATION. | Rice University, 1978 | 5 | thesis | — | no-oa |  | supplement | — |
+| 110 | S138 | 1978 | ON THE METHOD OF CONJUGATE GRADIENTS FOR FUNCTION MINIMIZATION. | Rice University, 1978 | 5 | thesis | manual | txt | 82 | supplement | — |
 | 111 | S139 | 2011 | An implementation of an algorithm for nonlinear programming based on piecewise linear models | Technical Report, Optimization Center, Northwestern University, 2011 | 4 | report | — | no-oa |  | supplement | — |
 | 112 | S140 | 2008 | A line search penalty method for nonlinear optimization | Technical Report 08/05, Optimization Technology Center, Northwestern University, 2008 | 4 | report | — | no-oa |  | supplement | — |
 | 113 | S141 | 1982 | Solving large nonlinear systems of equations arising in mechanics | Numerical Analysis: Proceedings of the Third IIMAS Workshop, Cocoyoc 1981, Lecture Notes in Mathematics 909, 132-141, 1982 | 4 | chapter | — | no-oa |  | supplement | — |
-| 114 | S143 | 1994 | LBFGS-B: Fortran Subroutines tor Large-Scale Bound Constrained Optimization | Report NAM-11, 1994 | 3 | report | — | no-oa |  | supplement | — |
+| 114 | S143 | 1994 | LBFGS-B: Fortran Subroutines tor Large-Scale Bound Constrained Optimization | Report NAM-11, 1994 | 3 | report | manual | txt | 17 | supplement | — |
 | 115 | S146 | 2005 | On the solution of very large nonlinear optimization problems | Talk at the Eighth SIAM Conference on Optimization, Stockholm, 2005 | 2 | talk | — | no-oa |  | skip | — |
 | 116 | S147 | 1998 | On the accuracy of nonlinear optimization algorithms | Technical Report Nov. 1998, ECE Department, Northwestern Univ., Evanston, Il… | 2 | report | — | no-oa |  | supplement | — |
 | 117 | S148 | 1994 | Recent advances in large-scale nonlinear optimization | Univ. of Michigan, Ann Arbor, MI (United States), 1994 | 2 | other | — | no-oa |  | supplement | — |
@@ -132,7 +132,7 @@
 | 120 | S152 | 2013 | Second order methods for optimizing convex matrix functions and sparse covariance clustering | IEEE transactions on audio, speech, and language processing 21 (11), 2244-2254, 2013 | 1 | journal | — | no-oa |  | supplement | — |
 | 121 | S154 | 2009 | An Algorithm for Linear Complementarity and its Application in American Options Pricing | AIP Conference Proceedings 1168 (1), 1400-1402, 2009 | 1 | conference | — | no-oa |  | supplement | — |
 | 122 | S155 | 2008 | Enjeux �thiques de la diff�rence dans l'approche du genre | Les Politiques Sociales, 2008 | 1 | other | — | no-oa |  | supplement | — |
-| 123 | S160 | 1996 | Nonlinear Programming. | Mathematics of Computation 65 (214), 884-884, 1996 | 1 | review | — | no-oa |  | supplement | — |
+| 123 | S160 | 1996 | Nonlinear Programming. | Mathematics of Computation 65 (214), 884-884, 1996 | 1 | review | manual | txt | 1 | supplement | — |
 | 124 | S162 | 1978 | Properties of Conjugate Gradient Methods with Inexact Linear Searches. | — | 1 | report | — | no-oa |  | supplement | — |
 | 125 | S163 | — | L-BFGS | — | 1 | other | — | no-oa |  | supplement | — |
 | 126 | S164 | 2026 | Package ‘rIsing’ | — | — | other | — | no-oa |  | supplement | — |
@@ -148,22 +148,22 @@
 | 136 | S176 | 2008 | Nonlinear Optimization: Algorithms, Theory and Software | NSF Award Number 0810213. Directorate for Mathematical and Physical Sciences…, 2008 | — | other | — | no-oa |  | supplement | — |
 | 137 | S177 | 1986 | Viewing the conjugate gradient method as a trust region algorithm | Numerical Analysis: Proceedings of the Fourth IIMAS Workshop, Guanajuato 1984, Lecture Notes in Mathematics 1230, 118-126, 1986 | — | chapter | — | no-oa |  | supplement | — |
 | 138 | S178 | 2005 | Active-Set and Interior Algorithms for Non-Linear Optimization | NSF Award Number 0514772. Directorate for Computer and Information Science…, 2005 | — | other | — | no-oa |  | supplement | — |
-| 139 | S179 | 2004 | 4.7 Sequential linear-quadratic programming for huge optimization problems (RH Byrd, NIM Gould | Numerical Analysis Group Progress Report January 2002-December 2003, 39, 2004 | — | other | — | no-oa |  | supplement | — |
+| 139 | S179 | 2004 | 4.7 Sequential linear-quadratic programming for huge optimization problems (RH Byrd, NIM Gould | Numerical Analysis Group Progress Report January 2002-December 2003, 39, 2004 | — | other | manual | txt | 2 | supplement | — |
 | 140 | S180 | 2003 | Solving optimization problems using parallel and grid computing | Proceedings of the Fourth Mexican International Conference on Computer…, 2003 | — | conference | — | no-oa |  | supplement | — |
 | 141 | S181 | 2003 | Interior Point Methods for Mathematical Programs with Equilibrium Constraints (MPECs) | — | — | report | — | no-oa |  | supplement | — |
 | 142 | S184 | 2002 | ITR: Collaborative Research: Optimization of Systems Governed by Partial Differential Equations | NSF Award Number 0219438. Directorate for Computer and Information Science…, 2002 | — | other | — | no-oa |  | supplement | — |
 | 143 | S186 | 2001 | Collaborative Research: Improved Minimization Techniques in Meteorological Data Assimilation | NSF Award Number 0086579. Directorate for Geosciences, 86579, 2001 | — | other | — | no-oa |  | supplement | — |
 | 144 | S187 | 2000 | Large-Scale Nonlinear Programming | NSF Award Number 9987818. Directorate for Computer and Information Science…, 2000 | — | other | — | no-oa |  | supplement | — |
-| 145 | S188 | 2000 | 3.3 Linear systems and optimization (NIM Gould, ME | Numerical Analysis Group Progress Report January 1998-December 1999, 21, 2000 | — | other | — | no-oa |  | supplement | — |
+| 145 | S188 | 2000 | 3.3 Linear systems and optimization (NIM Gould, ME | Numerical Analysis Group Progress Report January 1998-December 1999, 21, 2000 | — | other | manual | txt | 3 | supplement | — |
 | 146 | S189 | 1997 | Challenges in CISE: Metacomputing Environments for Optimization | NSF Award Number 9726385. Directorate for Computer and Information Science…, 1997 | — | other | — | no-oa |  | supplement | — |
 | 147 | S190 | 1996 | Nonlinear Optimization | NSF Award Number 9625613. Directorate for Computer and Information Science…, 1996 | — | other | — | no-oa |  | supplement | — |
 | 148 | S191 | 1994 | Extending interior point method to nonlinear programming using trust regions | Univ. of Michigan, Ann Arbor, MI (United States), 1994 | — | other | — | no-oa |  | supplement | — |
 | 149 | S192 | 1994 | Numerical Optimization Techniques | NSF Award Number 9400881. Directorate for Computer and Information Science…, 1994 | — | other | — | no-oa |  | supplement | — |
-| 150 | S193 | 1993 | Optimization and eigenvalue computation with application to meteorology and oceanography. Progress report, August 1, 1992--July 31, 1993 | Northwestern Univ., Evanston, IL (United States), 1993 | — | report | — | no-oa |  | supplement | — |
+| 150 | S193 | 1993 | Optimization and eigenvalue computation with application to meteorology and oceanography. Progress report, August 1, 1992--July 31, 1993 | Northwestern Univ., Evanston, IL (United States), 1993 | — | report | manual | txt | 6 | supplement | — |
 | 151 | S194 | 1992 | University of Co o ado | — | — | other | — | no-oa |  | supplement | — |
 | 152 | S195 | 1992 | Optimization Algorithms for Advanced Computer Architectures | NSF Award 92 (9213149), 13149, 1992 | — | other | — | no-oa |  | supplement | — |
 | 153 | S196 | 1991 | Large Scale Nonlinear Optimization | NSF Award Number 9101359. Directorate for Computer and Information Science…, 1991 | — | other | — | no-oa |  | supplement | — |
-| 154 | S197 | 1990 | Algorithms and software for large scale optimization. Progress report, August 1, 1989--May 5, 1990 | Northwestern Univ., Evanston, IL (United States), 1990 | — | report | — | no-oa |  | supplement | — |
+| 154 | S197 | 1990 | Algorithms and software for large scale optimization. Progress report, August 1, 1989--May 5, 1990 | Northwestern Univ., Evanston, IL (United States), 1990 | — | report | manual | txt | 7 | supplement | — |
 | 155 | S198 | 1990 | Numeric Methods for Nonlinear Optimization | NSF Award Number 8902096. Directorate for Computer and Information Science…, 1990 | — | other | — | no-oa |  | supplement | — |
 | 156 | S199 | 1988 | 三川 University of Colorado at Boulder | — | — | other | — | no-oa |  | supplement | — |
 | 157 | S202 | 1986 | Algorithms for Optimization and Inverse Eigenvalue Problems (Computer Research) | NSF Award Number 8602071. Directorate for Computer and Information Science… | — | other | — | no-oa |  | supplement | — |
@@ -178,4 +178,4 @@
 | 166 | S219 | — | JOS E LUlS MORALES lnstituto Tecnol ogico Aut onomo de M exico a nd | — | — | other | — | no-oa |  | supplement | — |
 | 167 | S221 | — | Computer Science Department University of Colorado at Boulder Boulder Colorado 80309 | Computer Science 2, 1, 0 | — | other | — | no-oa |  | supplement | — |
 
-167 works · txt 73 · pdf 0 · no-oa 94
+167 works · txt 91 · pdf 0 · no-oa 76
