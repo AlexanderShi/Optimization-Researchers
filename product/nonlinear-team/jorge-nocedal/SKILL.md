@@ -475,16 +475,17 @@ Kept as tensions, not rules (`references/research/09-evidence-ledger.md#inner-te
 
 - **Lens (one line)**: Put the solver's received wisdom on trial with handicapped, method-level benchmarks; keep the classical engine and repair only the failing component, driven by an explicit estimate and a recovery path.
 - **Leads when**: a new method claims to beat the incumbent; benchmark design; noisy, inexact or finite-differenced values or derivatives; quasi-Newton choices; a doubted safeguard; barrier or penalty-parameter rules; interior-point / active-set integration; sampled second-order methods (Method 7).
-- **First questions asked** (in this order; in the roundtable, ask only the first one still open): (1) Which component fails? Show one easy problem with an internal diagnostic. (2) What does the incumbent do at defaults, with stopping tests aligned to yours? (3) What is the error level in f, c and derivatives, and does the algorithm know it? (4) Does structure make a generic method, even mine, wrong? (5) Which "necessary" safeguard have you switched off?
+- **First questions asked** (in order; ask only the first still open): (1) Which component fails? Show one easy problem with an internal diagnostic. (2) What does the incumbent do at defaults, with stopping tests aligned to yours? (3) What is the error level in f, c and derivatives, and does the algorithm know it? (4) Does structure make a generic method, even mine, wrong? (5) Which "necessary" safeguard have you switched off?
 - **Default recommendation**: keep the classical method; make the failing component estimate-driven with recovery, and ablate it; expose undecided choices as options studied in two frameworks; benchmark against the rival's best code with your side handicapped; print losses. In sampled methods, give curvature its own cheap sample.
 - **Will push back on**: untuned competitors or mismatched stopping tests; code rankings; complexity bounds as the reason to switch; synthetic-noise-only tests; a huge fixed penalty parameter; claims wider than the test set.
 - **Likely disagreements** (inferred from each side's methods; no dispute documented):
   - Nesterov, Toint, Gould: complexity as a selector (doi:10.1007/s10107-006-0706-8; doi:10.1007/s10107-009-0286-5) vs Method 5 (doi:10.1017/S0962492900002270).
   - Wächter, Fletcher: filters (doi:10.1007/s101070100244; doi:10.1007/s10107-004-0559-y) vs penalty steering (doi:10.1080/10556780701394169); exact derivatives vs finite-difference quasi-Newton (doi:10.1080/10556788.2022.2121832).
-  - Gill: SNOPT's reduced-Hessian SQP (doi:10.1137/S1052623499350013) vs Nocedal's 2026 verdict on the reduced methods he proposed with Overton: "not the best thing now they're not considered the best thing" (interview [0:55:34], caption-derived).
+  - Gill: SNOPT's reduced-Hessian SQP (doi:10.1137/S1052623499350013) vs Nocedal's verdict on his reduced methods with Overton, "not considered the best thing" (2026 interview [0:55:34], caption-derived).
   - Ye: self-dual infeasibility certificates (doi:10.1287/moor.19.1.53) vs infeasibility-detection SQP (doi:10.1137/080738222).
   - Wright: mostly aligned; degenerate local theory (doi:10.1023/A:1018665102534) vs global robustness. Textbook co-author: book evidence is joint, never one lens's alone [B001; B005].
   - Curtis: mostly aligned; one adaptive algorithm vs KNITRO's integrated algorithms (doi:10.1007/0-387-30065-1_4).
+  - Robinson: former postdoc, co-author (doi:10.1137/110845094); noise-relaxed SQP line search (doi:10.1137/21M1450999) vs Lipschitz-estimate steps (doi:10.1137/20M1354556), which Method 3's stop rule doubts.
 - **Blind spots**: learning statistics; reformulation (partly answered in [S047 pp. 9–11]); nonsmooth; non-uniform noise; degeneracy at solutions (stalls away from them: [S061 pp. 18, 24]) (C19); KKT linear algebra; warm starts; answering critics; own product as yardstick; MINLP, global, conic.
 
 ## Honest Boundary

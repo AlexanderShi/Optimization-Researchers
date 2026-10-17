@@ -1,10 +1,10 @@
 # Deep reading · Nonlinear Team
 
-This is the record of the deep reading in this team. It is a mixed-tier team: only `frank-e-curtis` was deepened, by reading his publications in full or in part wherever an open copy exists, not just as search snippets. The other nine members (Jorge Nocedal, Stephen J. Wright, Yinyu Ye, Andreas Wächter, Philip E. Gill, Philippe L. Toint, Nicholas I. M. Gould, Roger Fletcher, Yurii Nesterov) are kept at the base tier on purpose, with no deep reading planned (see [The other nine members](#the-other-nine-members-base-tier-no-deep-reading)). Cards and syntheses are written in English.
+This is the record of the deep reading in this team. It is a mixed-tier team: only `frank-e-curtis` was deepened, by reading his publications in full or in part wherever an open copy exists, not just as search snippets. The other ten members (Jorge Nocedal, Stephen J. Wright, Yinyu Ye, Andreas Wächter, Philip E. Gill, Philippe L. Toint, Nicholas I. M. Gould, Roger Fletcher, Yurii Nesterov, and Daniel P. Robinson, who joined on 2026-10-17) are kept at the base tier on purpose, with no deep reading planned (see [The other ten members](#the-other-ten-members-base-tier-no-deep-reading)). Cards and syntheses are written in English.
 
 ## Status (2026-10-10)
 
-**Complete for Frank E. Curtis. Base tier, no deep reading, for the other nine members.** The numbers below come from `python3 scripts/team_status.py product/nonlinear-team` (with `--coverage`) and `python3 scripts/verify_card_quotes.py product/nonlinear-team/frank-e-curtis`, both run on 2026-10-10.
+**Complete for Frank E. Curtis. Base tier, no deep reading, for the other ten members** (Daniel P. Robinson joined on 2026-10-17). The numbers below come from `python3 scripts/team_status.py product/nonlinear-team` (with `--coverage`) and `python3 scripts/verify_card_quotes.py product/nonlinear-team/frank-e-curtis`, both run on 2026-10-10; `team_status.py --coverage` was re-run on 2026-10-17 for the Coverage table.
 
 | Stage | Workflow / script | Frank E. Curtis |
 |-------|-------------------|------|
@@ -121,11 +121,12 @@ These counts are exact and were computed from each researcher's `references/sour
 | Nicholas I. M. Gould | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | Roger Fletcher | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | Yurii Nesterov | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| Daniel P. Robinson | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | **Total** | 96 | 96 | 87 | 86 | 0 | 8 | 2 | 0 | 0 | 180 |
 
 Notes:
 
-- The zero rows are the nine base-tier members: they have no audited publication list and no `INDEX.md`, so nothing is counted for them. A zero means "not indexed", not "no publications".
+- The zero rows are the ten base-tier members: they have no audited publication list and no `INDEX.md`, so nothing is counted for them. A zero means "not indexed", not "no publications".
 - *Distinct works indexed* = Scholar rows minus duplicates, plus items found only in DBLP or on a homepage. For Curtis: 96 Scholar rows − 3 duplicates + D001, D002, H001 = 96. No interviews, memoirs or other special items are counted.
 - *Metadata only (incl. unreadable)* for Curtis = S084 (metadata only) + S086 (unreadable).
 - *Read in part* means the supplement reading: abstract, introduction, method or algorithm, main result, experimental setup and conclusion. Curtis has none: all 87 open texts were planned as core reads.
@@ -155,12 +156,12 @@ Never read references/sources/private/. Edit no file other than the batch's own 
 
 ## What is still missing
 
-- **Works with no open full text** have abstract or metadata cards only: 10 of 96 for Curtis (8 abstract only + 2 metadata only incl. unreadable, from the Coverage table); 0 for the other nine, who are not indexed. The biggest gaps, from Curtis's 08 "Open gaps": the stochastic inexact SQO paper S045 (its termination tests for stochastic gradients known only from the abstract); the ε-constraint fairness paper S055 and the bilevel synthetic-data paper S072; the SCOPF journal paper S060 (its preprint S061 was read); the adaptive stochastic optimization framework S031 (the D001 article was read); a workshop report S078; the MOPTA proceedings S079; the hard-constraint training paper S084 (metadata only).
+- **Works with no open full text** have abstract or metadata cards only: 10 of 96 for Curtis (8 abstract only + 2 metadata only incl. unreadable, from the Coverage table); 0 for the other ten, who are not indexed. The biggest gaps, from Curtis's 08 "Open gaps": the stochastic inexact SQO paper S045 (its termination tests for stochastic gradients known only from the abstract); the ε-constraint fairness paper S055 and the bilevel synthetic-data paper S072; the SCOPF journal paper S060 (its preprint S061 was read); the adaptive stochastic optimization framework S031 (the D001 article was read); a workshop report S078; the MOPTA proceedings S079; the hard-constraint training paper S084 (metadata only).
 - **Book bodies** were not read. Curtis's 2025 SIAM book *Practical Nonconvex Nonsmooth Optimization* (S074) is known only from a retailer's copy of the publisher's description, so its treatment of BFGS-SQP, gradient sampling and NonOpt is not known; SIAM front and back matter returned 403 to `curl` (`book-leads.json`). For the MOPTA 2010 proceedings (S079), the publisher's free front-matter PDF and table-of-contents page are logged as leads. No T4 increment has carded either.
 - **Uneven periods.** Full reads by period for Curtis (full / carded, 08 §1): 2003–2007 4/5; 2008–2012 9/10; 2013–2017 19/19; 2018–2022 27/28; 2023–2026 27/34. Eight of the nine works without an open text date from 2020–2026; the ninth is S079 (2012).
 - **Unreadable files** are listed on their cards: `frank-e-curtis` S086 (2003 William & Mary undergraduate thesis; garbled text layer; card in `c01`; combinatorics, outside the skill's scope).
 - **Outside the publication list**: talks, syllabi, code history and student theses remain web-research evidence (notes 01–06); the deep reading neither confirms nor refutes the slide-only claims (08 "Open gaps").
-- **The nine base-tier members** have no full-text reading at all (next section).
+- **The ten base-tier members** have no full-text reading at all (next section).
 
 ### How to extend
 
@@ -171,9 +172,9 @@ Never read references/sources/private/. Edit no file other than the batch's own 
 5. **Card and fold it in.** Either run `team-increment.js` (T4; see `scripts/workflows/README.md`), which cards the new material, folds it into the skill, verifies and fixes; or by hand: plan a new round with `python3 scripts/plan_reading_batches.py product/nonlinear-team/<researcher> --out-dir <scratch> --no-abstract` (or `--round N --exclude …`), read with the brief above, run `verify_card_quotes.py` and `mark_read_from_cards.py`, regenerate `07-paper-cards.md` with `python3 scripts/build_card_index.py <member folder>`, and apply the conservative-update rules to `SKILL.md`, `09-evidence-ledger.md` and `technique-catalog.md`.
 6. **Refresh the numbers.** Re-run `python3 scripts/team_status.py product/nonlinear-team --coverage` and paste it unchanged into the Coverage table here; paste `--coverage --short` unchanged over the five-column summary in the team README (or run `team-integrate.js`, which does both).
 
-## The other nine members (base tier, no deep reading)
+## The other ten members (base tier, no deep reading)
 
-Jorge Nocedal, Stephen J. Wright, Yinyu Ye, Andreas Wächter, Philip E. Gill, Philippe L. Toint, Nicholas I. M. Gould, Roger Fletcher and Yurii Nesterov are kept at the base tier by choice: no deep reading is planned for them. `team_status.py` reports each at "T1 base skill" with `SKILL.md` at 12/12 and notes 01–06 complete. Their skills rest on web research only: the six research notes in `references/research/`, `RESOURCES.md`, and the OpenAlex pull the notes started from (`publications/publications.md`, `abstracts.md`), which is raw material, not an audited publication list. They have no `works.json`, `papers/INDEX.md`, paper cards, 07–09 or technique catalog, so their Coverage rows are zero and their sides of the roundtable's fault lines cite their notes and the papers those rest on, not cards.
+Jorge Nocedal, Stephen J. Wright, Yinyu Ye, Andreas Wächter, Philip E. Gill, Philippe L. Toint, Nicholas I. M. Gould, Roger Fletcher, Yurii Nesterov and Daniel P. Robinson (joined 2026-10-17) are kept at the base tier by choice: no deep reading is planned for them. `team_status.py` reports each at "T1 base skill" with `SKILL.md` at 12/12 and notes 01–06 complete. Their skills rest on web research only: the six research notes in `references/research/`, `RESOURCES.md`, and the OpenAlex pull the notes started from (`publications/publications.md`, `abstracts.md`; for Robinson it was made after his notes, whose note 01 assembled his list from DBLP, Crossref, OpenAlex and his homepage), which is raw material, not an audited publication list. They have no `works.json`, `papers/INDEX.md`, paper cards, 07–09 or technique catalog, so their Coverage rows are zero and their sides of the roundtable's fault lines cite their notes and the papers those rest on, not cards.
 
 To deepen one of them later, run stages T3.1–T3.8 of `references/research-team-playbook.md` for that member (the commands above with `R=<slug>`); `team_check.py` then checks that member at the deep tier, and this file and the README are refreshed by `team-integrate.js`.
 

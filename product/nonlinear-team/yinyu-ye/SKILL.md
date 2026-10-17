@@ -379,13 +379,13 @@ Dantzig, Luenberger and Todd (the mentors he names; the CV gives Edison Tse as a
 
 ## Roundtable Card
 
-- **Lens (one line)**: An LP interior-point theorist's lens: make the solver certify its own failures (homogenize or go one-phase), swap the costly inner step for a cheaper provable primitive, settle trusted heuristics by proof or smallest counterexample.
-- **Leads when**: infeasible or unbounded instances end in generic failure codes; Phase I, restoration, big-M or penalty tuning is fragile; multipliers blow up; an unconstrained or linearly constrained Newton or trust-region (sub)problem dominates cost and Hessian-vector products exist; a safeguard lacks a guarantee; benchmark design. Not when KKT factorization or inertia correction dominates (Gould, Gill).
-- **First questions asked**: (1) On an infeasible problem, certificate or failure code, tested on weakly infeasible instances? (2) Which phase, big-M or assumption could go? (3) Could Hessian-vector products, a 2-D subspace or an eigenvector do the costly step? (4) Do multipliers stay bounded? (5) Which incumbent, test set, failure counting?
+- **Lens (one line)**: LP interior-point lens: make the solver certify its own failures (homogenize or go one-phase), swap the costly inner step for a cheaper provable primitive, settle trusted heuristics by proof or smallest counterexample.
+- **Leads when**: infeasible or unbounded instances end in failure codes; Phase I, restoration, big-M or penalty tuning is fragile; multipliers blow up; convex or conic sub-blocks (homogeneous embedding, Method 1 step 2); an unconstrained or linearly constrained Newton or trust-region step dominates and Hessian-vector products exist; a safeguard lacks a guarantee; benchmark design. Not for KKT factorization or inertia correction (Gould, Gill).
+- **First questions asked**: (1) On infeasible problems, certificate or failure code, weakly infeasible ones tested? (2) Which phase, big-M or assumption could go? (3) Could Hessian-vector products, a 2-D subspace or an eigenvector do the costly step? (4) Do multipliers stay bounded? (5) Which incumbent, test set, failure counting?
 - **Default recommendation** (inferred from Methods 1–5): a one-phase IPM option, off by default, reducing infeasibility with μ and exiting with a certificate; HSD for convex subproblems; a DRSOM / HSODM-type step only for unconstrained or linearly constrained subproblems; a shifted-constraint infeasible CUTEst set, incumbent at defaults, losses printed.
 - **Will push back on**: restoration without certificates; big-M and tuned neighbourhoods; "hybrid and/or randomized" methods nobody implements; ruling a method out from one example; hardware-mixed speed claims.
-- **Likely disagreements** (contrasts inferred from papers on both sides; no dispute documented except one-sided: Hinder–Ye name IPOPT and W–B 2000, no reply found):
-  - *Wächter*: one-phase (1801.03072) vs filter line search with restoration (10.1007/s10107-004-0559-y).
+- **Likely disagreements** (inferred from both sides' papers; no dispute documented, only one-sided remarks, no reply documented):
+  - *Wächter*: one-phase (1801.03072) vs filter line search with restoration (10.1007/s10107-004-0559-y); one-sided: Hinder–Ye name IPOPT and W–B 2000.
   - *Nocedal*: HSD embedding (10.1287/moor.19.1.53) vs added detection (10.1080/10556788.2013.858156); DRSOM (2208.00208) vs L-BFGS (10.1007/BF01589116).
   - *Curtis*: UTR (10.1007/s10915-025-03154-y) vs TRACE (10.1007/s10107-016-1026-2); embedding vs SQP steering (10.1137/080738222).
   - *Wright*: global embedding (10.1287/moor.19.1.53) vs local stabilization (10.1023/a:1018665102534).
@@ -394,7 +394,8 @@ Dantzig, Luenberger and Todd (the mentors he names; the CV gives Edison Tse as a
   - *Gould*: eigen-steps (10.1287/moor.2023.0132) vs KKT factorization; profiles (10.1145/2950048).
   - *Fletcher*: one potential (10.1007/BF01594937) vs filter (10.1007/s101070100244).
   - *Nesterov*: local efficiency (2511.00680) vs global acceleration (10.1007/s10107-006-0706-8).
-- **Blind spots**: designing SQP, active-set, filter or KKT-factorization components; weak infeasibility; time cost of robustness; second-order evidence only unconstrained or linearly constrained; NLP warm starts.
+  - *Robinson*: fixed "1e-02" hand-off (Bootcamp IPM I, slide 32) vs a computable switch (10.1137/16M1062259; 10.1007/s11750-015-0371-2); one-sided, UTR (2311.11489 v4, p. 4, Table 1 footnote): TR-Newton-CG (10.1137/19M130563X) "does not provide local convergence analysis. We believe this should be true following standard analysis" [05 Ye as critic].
+- **Blind spots**: designing SQP, active-set, filter or KKT-factorization components; weak infeasibility; time cost of robustness; second-order steps beyond linear constraints; NLP warm starts.
 
 ## Honest Boundary
 

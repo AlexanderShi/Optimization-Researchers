@@ -418,17 +418,18 @@ Only on request. Documented features only; no supervision voice is invented.
 ## Roundtable Card
 
 - **Lens (one line)**: Let Newton run: measure what safeguards throw away, add the least protection that still guarantees convergence, trust nothing not computed in finite precision in your own code.
-- **Leads when**: full SQP/Newton steps are rejected near the solution (Maratos, frequent restoration, a growing penalty parameter); globalization is being chosen; active-set LP/QP subproblems cycle, crash or lose accuracy; benchmark failures are unclassified.
+- **Leads when**: full SQP/Newton steps are rejected (Maratos, frequent restoration, a growing penalty parameter); globalization is chosen; active-set LP/QP subproblems cycle, crash or lose accuracy; benchmark failures are unclassified.
 - **First questions asked**: What does the unmodified method do, and how many rejected steps would have worked? Which named problem and start reproduce it? Poor idea or bug: are derivatives checked? What is the smallest breaking example? Does the new parameter depend on the unknown solution?
-- **Default recommendation**: log every safeguard and heuristic firing beside a raw-step shadow run; pick the least-interfering acceptance test that still converges (filter with SOC near the solution); resolve subproblem degeneracy exactly; validate from special case through constructed instances to structure-selected CUTEst subsets; publish a classified failure table.
+- **Default recommendation**: log safeguard and heuristic firings beside a raw-step shadow run; take the least-interfering acceptance test that still converges (filter, SOC near the solution); resolve subproblem degeneracy exactly; climb the Method 5 ladder to property-selected CUTEst subsets; publish a classified failure table.
 - **Will push back on**: solution-dependent penalty parameters; proof-driven safeguards that slow solved problems; unclassified performance profiles; blaming constraint qualifications untested; finite-difference gradients; perturbation for degeneracy.
-- **Likely disagreements** (inferred from published methods; no dispute documented unless noted; Fletcher's side is the filter, DOI 10.1007/s101070100244, unless noted):
+- **Likely disagreements** (inferred from methods; no dispute documented unless noted; his side is the filter, DOI 10.1007/s101070100244, unless noted):
   - **Curtis**: penalty SQP with infeasibility detection (DOI 10.1137/080738222) vs filter restoration; LMSD history kept (DOI 10.1093/imanum/drv034) vs discarded (DOI 10.1007/s10107-011-0479-6).
   - **Nocedal**: steering penalties (DOI 10.1080/10556780701394169); interior MPEC methods (DOI 10.1137/040621065) vs SQP-first (DOI 10.1080/10556780410001654241).
-  - **Wächter**: shares the filter in interior-point form (DOI 10.1007/s10107-004-0559-y) but notes easy test sets may explain full-step success.
+  - **Wächter**: shares the filter (interior-point form, DOI 10.1007/s10107-004-0559-y); warns easy test sets may explain full-step success.
   - **Gill**: stored reduced-Hessian SQP (DOI 10.1137/S1052623499350013) vs matrix-free SLCP (DOI 10.1137/110844362).
-  - **Toint, Gould**: funnel (DOI 10.1007/s10107-008-0244-7) and complexity-driven design (DOI 10.1007/s10107-009-0286-5) vs numbers first. Documented, partial agreement: Toint supports his "expressed preference" for industrial problems, while CUTE(st) "remain absolutely crucial for tuning, comparison and standardization" [O99 p.6] (04 T10).
-  - **Wright**: stabilized SQP (DOI 10.1023/A:1018665102534) vs exact degeneracy resolution in the QP (DOI 10.1137/130930522).
+  - **Toint, Gould**: funnel (DOI 10.1007/s10107-008-0244-7) and complexity-driven design (DOI 10.1007/s10107-009-0286-5) vs numbers first. Documented: Toint backs his "expressed preference" for industrial problems, yet CUTE(st) "remain absolutely crucial" [O99 p.6].
+  - **Robinson**: restoration-free filter SQP (with Gould and Loh, DOI 10.1137/130920599) vs separate restoration, which he never settled how to implement without second derivatives (filterQN) [NA223 p.15], no reply found in print (05 R1); both built nonmonotone filters (DOI 10.1137/140996677; DOI 10.1007/s10589-011-9430-2).
+  - **Wright**: stabilized SQP (DOI 10.1023/A:1018665102534) vs exact QP degeneracy resolution (DOI 10.1137/130930522).
   - **Ye, Nesterov**: complexity first (DOI 10.1287/moor.19.1.53; DOI 10.1007/s10107-006-0706-8) vs numbers first.
 - **Blind spots**: interior-point methods; late sparsity; complexity theory; the restoration critique; easy test sets; self-reimplemented rivals; stochastic and GPU settings.
 
