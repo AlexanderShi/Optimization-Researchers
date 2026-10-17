@@ -26,6 +26,7 @@ def norm(s: str) -> str:
     s = unicodedata.normalize("NFKC", s or "")
     s = re.sub(r"\[\[page \d+\]\]", " ", s)
     s = s.replace("\f", " ")
+    s = s.replace("￾", "")                             # pdfium 的断词连字符（com￾prehensive）；真连字符的词靠宽松比较
     s = re.sub(r"(\w)-\s*\n\s*(\w)", r"\1\2", s)          # hyphenation at line end
     s = re.sub(r"[‐-―−]", "-", s)           # dashes/minus
     s = re.sub(r"[‘’‚‛`´]", "'", s)

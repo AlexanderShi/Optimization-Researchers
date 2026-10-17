@@ -81,6 +81,7 @@ bash scripts/workflows/selftest.sh product/dfo-team              # kit 自检（
 | `scripts/team_check.py` | 每位成员新增 `citations` 一项（深读档），团队级新增圆桌的 `citations` | 交付闸门含引用闭包 |
 | `scripts/workflows/team-synthesize.js`、`team-tighten.js`、`team-increment.js`、`team-integrate.js` | 闸门清单里加 `check_citations.py`（synthesize 的 fidelity 复核员第 4 项改用脚本） | 每次改 SKILL.md / 账本的步骤都过引用闭包 |
 | `references/research-team-playbook.md`、`scripts/workflows/README.md`、`references/research-extraction-framework.md` §十一、`references/paper-reading-card.md` §四、`references/fidelity-scorecard.md` | 相应的闸门行、命令、失败模式与引用规则 | 文档同步 |
+| `scripts/verify_card_quotes.py`（2026-10-16） | `norm()` 删掉 U+FFFE | pypdfium2 把行末断词写成 U+FFFE（`com￾prehensive`），Nocedal 的 91 篇全文里有 59 篇如此，读卡 agent 只好绕开这些词；删掉后断词处逐字匹配，真连字符的词（`quasi￾Newton`）靠宽松比较。Curtis 180 条摘录结果不变 |
 
 除此之外 `scripts/`、`references/` 与 nvwa-skill `eb012fa` 逐字节一致。再从 nvwa 同步时注意
 不要覆盖掉这些修改（或同步后重跑 `selftest.sh` 和 `check_citations.py product/dfo-team` 确认）。
