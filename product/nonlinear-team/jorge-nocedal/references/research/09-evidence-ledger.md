@@ -1,6 +1,6 @@
 # Jorge Nocedal · Evidence ledger
 
-> Date: 2026-10-17. The full evidence behind `SKILL.md` after the first full-text deep reading (cards in `cards/`, index `07-paper-cards.md`, synthesis `08-deep-reading-synthesis.md`). SKILL.md keeps, per item, the strongest statement and cards, a one-line say–do count, at most four variant or correction bullets and a link here. Each section below holds (a) the **base-tier text** of the item as it stood in SKILL.md on 2026-09-28 (web research only, notes 01–06), copied **verbatim** (headings demoted one level and relative links re-based to this folder), so nothing condensed out of SKILL.md is lost, and (b) the **full-text evidence** added on 2026-10-17, with card ids and pages. Where (b) corrects (a), the correction number C1–C13 is given and the table is in [Corrections](#corrections); (a) is kept as written, as the conservative-update rule requires.
+> Date: 2026-10-17. The full evidence behind `SKILL.md` after the first full-text deep reading (cards in `cards/`, index `07-paper-cards.md`, synthesis `08-deep-reading-synthesis.md`). SKILL.md keeps, per item, the strongest statement and cards, a one-line say–do count, at most four variant or correction bullets and a link here. Each section below holds (a) the **base-tier text** of the item as it stood in SKILL.md on 2026-09-28 (web research only, notes 01–06), copied **verbatim** (headings demoted one level and relative links re-based to this folder), so nothing condensed out of SKILL.md is lost, and (b) the **full-text evidence** added on 2026-10-17, with card ids and pages. Where (b) corrects (a), the correction number C1–C13 is given and the table is in [Corrections](#corrections); (a) is kept as written, as the conservative-update rule requires. After the second tightening (2026-10-17, T3.7: SKILL.md cut from 13,121 to about 11,500 words), a section may also end with (c) the **SKILL.md wording before the second tightening**: the pre-tighten SKILL.md lines of that item that were shortened, copied verbatim, so that the increments inc-ocr and inc-book wording also stays traceable.
 >
 > **How to read.** `[S012 p. 9]` is paper card S012 in `07-paper-cards.md`, at the page of the extracted file named in `../sources/papers/INDEX.md` (several cards give the journal-page offset in their header). `[S032 arXiv p. N]`, `[S091 arXiv p. N]` and `[S080 arXiv p. N]` cite arXiv files, `[S016 preprint p. N]` and `[S064 preprint p. N]` the 2011 and 2012 author preprints, and `[S035 report p. N]` OTC Report 2002/4 under an earlier title, as the cards say. `[B005 p. 8]` is a book-material card (increment inc-book: the textbook's open parts, errata, reviews and web pages), in the joint voice of Nocedal and S. J. Wright unless the card says otherwise. A bare id is an abstract-level or metadata card (no page). Quotation marks around card material surround only text in a card's verified Quotes list (`verify_card_quotes.py`: 284 quotes, 257 exact, 27 after normalisation, 0 not found; after increment inc-ocr: 316 quotes, 288 exact, 28 after normalisation, all 28 in round-1 to round-3 cards and differing only in commas, hyphens and, once, capitals, 0 not found; waiver in 08 §12.1; after increment inc-book: 340 quotes, all exact, 0 not found). Quotes in the base-tier blocks come from the web research of 2026-09-28 (preprints, arXiv abstracts, code pages, the prize speech, talk captions), with the source given there.
 >
@@ -81,6 +81,12 @@
 | C20 | Heuristic 7 | *80 numbered book errata* [03 §2.7, §4.3] | true of Nocedal's copy of the second-edition list (May 27, 2008) only; Wright's copy (May 17, 2008) has 79 items and lacks the paragraph removal on book page 63, numbered one lower from item 12 on; both copies byte-unchanged in the Internet Archive 2008–2024; the errata are joint and match Wright's Heuristic 5, so they are not Nocedal-specific | [B003 pp. 1–5; B004 pp. 1–5] (c5-02, c5-03) | Heuristic 7 (C20) |
 | C21 | Acta anatomy | noise set aside ("we will not consider these aspects here") for 27 years | true of his research papers (the noise programme opens in 2019); the joint 2006 textbook already opens its new derivative-free chapter with section 9.1 *Finite Differences and Noise* and indexes noise in function evaluation at book pages 221–222 (those pages not read) | [B001 p. 10; B002 pp. 59, 62; S038 p. 1] (c5-01, c5-02) | Acta anatomy (C21) |
 
+
+**SKILL.md wording before the second tightening (2026-10-17, T3.7), verbatim.** These are the lines of the pre-tighten SKILL.md (scratch copy `jorge-nocedal-SKILL.before-tighten-2026-10-17.md`) that the shortened SKILL.md text of this item replaced; nothing in them is withdrawn. Markdown links are re-based to this folder.
+
+Seven methods: 1–6 ordered from most to least exclusive (base tier), 7 added from the full texts (2026-10-17). Say–do counts: distinct works whose full or partial card links to the method, by relation (a work can be both evidence and variant); abstract- and metadata-level cards, NSF award records, the group-voice S063, S179, S188 and skip rows are not counted; S126 merged with S042, S056 with S143 (card lists: each ledger section). C1–C13: corrections, marked in place (table: references/research/09-evidence-ledger.md#corrections).
+- C14–C19 (inc-ocr), tagged in place: same-solution check [S002 p. 8]; legible tables [S002 p. 11; S078 pp. 6–7]; NITRO vs LANCELOT [S008 pp. 21, 24]; 1997 survey losses [S049 pp. 15–16]; 2003 disclaimer [S078 p. 2]; degeneracy [S061 pp. 18–19].
+
 ---
 
 <a id="how-to-use"></a>
@@ -158,6 +164,11 @@ Conclusion first → at most five numbered next steps, each labelled with its me
 
 **Full-text evidence (2026-10-17):** no change to this item.
 
+
+**SKILL.md wording before the second tightening (2026-10-17, T3.7), verbatim.** These are the lines of the pre-tighten SKILL.md (scratch copy `jorge-nocedal-SKILL.before-tighten-2026-10-17.md`) that the shortened SKILL.md text of this item replaced; nothing in them is withdrawn. Markdown links are re-based to this folder.
+
+- **Failure-component check (Methods 3, 4)**: published failure examples (Wächter & Biegler, doi:10.1007/PL00011386; Dai's BFGS example, doi:10.1137/S1052623401383455, acknowledged and worked around with cautious updating [S033 p. 6; S031 p. 5]); error-level estimation (ECnoise, doi:10.1137/100786125); the solver manual's limitations and options.
+
 ---
 
 <a id="taste-marks"></a>
@@ -199,6 +210,11 @@ Evidence: [02-methodology](02-methodology.md) (items T, E, R, I, W, P) and [03-p
 - **Mark 3 (scale is the test)**: the 1999 preface states an emphasis on large-scale techniques (interior-point, inexact Newton and limited-memory methods, partial separability, automatic differentiation) [B005 p. 7]. Joint framing.
 - **Mark 4 (self-correction)**: both editions index self-correction under the BFGS method [B006 p. 50; B002 p. 57]; the body pages were not read.
 - **Mark 8 (honest scope)**: both prefaces name what the book leaves out and where to read it [B005 p. 8; B001 p. 22]; one item of the second-printing errata strips the words *minor* and *slightly* from a stated weakness [B008 p. 3] (weak: one item, and the weakness itself was not read). Joint; Wright's taste mark 7 (honest scope) covers the same ground.
+
+
+**SKILL.md wording before the second tightening (2026-10-17, T3.7), verbatim.** These are the lines of the pre-tighten SKILL.md (scratch copy `jorge-nocedal-SKILL.before-tighten-2026-10-17.md`) that the shortened SKILL.md text of this item replaced; nothing in them is withdrawn. Markdown links are re-based to this folder.
+
+4. **Self-correction**: "the BFGS method has interesting self-correcting properties, which account for its robustness" (Acta 1992); the 2019 recovery ablation [02 E5; 03 §2.6]; the trace term DFP lacks [S020 pp. 8, 19]; a conjectured self-correction in DFO [S062 p. 7].
 
 ---
 
@@ -250,6 +266,11 @@ Four or more "yes" answers fit this lens; a "no" to the second or third is where
 **Full-text evidence (2026-10-17):**
 
 - Item 7 (sampled methods only) added with Method 7. The threshold line is unchanged.
+
+
+**SKILL.md wording before the second tightening (2026-10-17, T3.7), verbatim.** These are the lines of the pre-tighten SKILL.md (scratch copy `jorge-nocedal-SKILL.before-tighten-2026-10-17.md`) that the shortened SKILL.md text of this item replaced; nothing in them is withdrawn. Markdown links are re-based to this folder.
+
+Four or more "yes" answers to the first six fit this lens (item 7 applies to sampled methods only); a "no" to the second or third is where he would push back first.
 
 ---
 
@@ -313,6 +334,20 @@ Four or more "yes" answers fit this lens; a "no" to the second or third is where
 - **Contradiction** (7 works, 9 card ids): S005 pp. 9–11 (c02); S005 pp. 9–11 (c4-02); S023 pp. 12–17; S042 pp. 13, 20; S077 pp. 3, 8–11 (s03); S077 pp. 4, 9–11 (s2-01); S082 pp. 18, 20, 27–34; S084 pp. 15–16; S124 p. 29.
 - **Not counted** (abstract- or metadata-level, award records, group voice): evidence: S025; S100; S198 (award); S204.
 
+
+**SKILL.md wording before the second tightening (2026-10-17, T3.7), verbatim.** These are the lines of the pre-tighten SKILL.md (scratch copy `jorge-nocedal-SKILL.before-tighten-2026-10-17.md`) that the shortened SKILL.md text of this item replaced; nothing in them is withdrawn. Markdown links are re-based to this folder.
+
+- Practice: in 2002, "Although, it is nearly impossible to enforce a uniform stopping condition, the stopping conditions for SLIQUE and KNITRO were constructed to be very similar to that used in SNOPT." [S035 report p. 19], with limits as failures and the loss to the group's own KNITRO printed [S035 report pp. 19–21]; 1989: rivals run as their authors recommend [S002 pp. 7–8]; one code base [S013 p. 14]; own side handicapped, rivals rerun at non-default settings [S080 arXiv pp. 4, 27–28, 42–44].
+- Say–do: ✅ stated + practised 1989–2026 [S002 p. 8; S150 pp. 6–8]; full or partial texts: 68 works (47 evidence, 39 variant, one partly on reporting slips [S021 pp. 22–26], 7 contradiction).
+- ⚠ Early form weaker: non-converged runs matching the rival's f not counted as failures, 3 of 34 unconstrained runs at m = 5 [S005 pp. 9–11]; step 4 holds from 2002 [S035 report p. 19; S013 p. 14]; the self-handicap appears in some papers before 2016 [S034 p. 22; S035 report p. 19], regular after [S031 p. 6].
+- ✗ Own parameters swept, baseline fixed, one problem [S023 pp. 12–17]; illustrative runs with no aggregate [S082 pp. 18, 20; S084 pp. 15–16].
+- ⚠ Alignment can be nominal (C15): one 10⁻⁷ value on different measures (1999) [S008 p. 20]; a headline count the gradient count reverses (card's sums) [S024 p. 21]; CPU columns mixing norm and solver [S101 p. 11].
+3. **Handicap your own side**: minimal memory, the simplest variant, untuned parameters. Give competitors tuning grids, and rerun the rival at non-default settings in an appendix (2021: L-BFGS memory 1, "lmsize=1", to stay close to COBYLA, arXiv:2102.09762 p. 27).
+4. **Align termination tests and budgets**, even by editing your own code: "we modified KNITRO's stopping test to be almost identical to that of SNOPT" (2003, preprint pp. 6–7): 10⁻⁶ for all codes; 30 CPU minutes and 1000 major iterations, a limit reached counted as failure [S078 pp. 6–7]. Define success identically for all codes [S035 report pp. 19–21]. Correct accounting artefacts in the rival's favour (2003: LOQO's one unnecessary evaluation per iteration discounted).
+5. **Control implementation effects**: compare methods inside one code base "to minimize the effect of implementation details" (doi:10.1007/978-3-540-79409-7_18). When Hessian information differs, name the disparity and turn it into its own question (2003, preprint p. 7). Drop problems where codes reach different solutions and say how many per code [S029 p. 7; S012 p. 24]; 1989 only checks for the same point [S002 p. 8] (C14).
+7. **Put losses in the abstract and full results in an appendix.** Show typical-behaviour problems together with aggregate performance or data profiles; split outcomes by type before profiling [S080 arXiv pp. 28–29]. Report CPU time only where set-up cost does not dominate (2003: n > 100 [S078 p. 6]); count evaluations everywhere.
+**Limitations**: KNITRO was both platform and comparator (2008, 2021, 2024), with no conflict-of-interest statement [03 C3; S080 arXiv pp. 1, 27]; KNITRO is also the baseline in 2026 [S150 pp. 6–7]; a 1997 web page ranks codes [03 C6]; rival authors' benchmarks rated NITRO/KNITRO lower on their terms [05 §4.2–4.4]. Early-career users should declare the handicap, or reviewers may read it as a weak implementation.
+
 ---
 
 <a id="method-2"></a>
@@ -361,6 +396,14 @@ Four or more "yes" answers fit this lens; a "no" to the second or third is where
 - **Variant** (10 works, 13 card ids): S004 pp. 4, 15–19, 34–37, 40, 49; S006 pp. 1, 3–5; S011 p. 5; S019 pp. 7, 15, 27 (c02); S019 pp. 7, 17, 31 (c4-01); S024 p. 22 (c03); S024 pp. 21–22 (c4-02); S026 pp. 13–15; S032 arXiv pp. 3, 24, 27; S040 pp. 2–3, 7, 15 (c2-01); S040 pp. 3, 15 (s03); S057 pp. 18, 24 (c2-01); S071 p. 6.
 - **Contradiction** (0 works, 0 card ids): none.
 - **Not counted** (abstract- or metadata-level, award records, group voice): evidence: S152; S167 (award); S169 (award).
+
+
+**SKILL.md wording before the second tightening (2026-10-17, T3.7), verbatim.** These are the lines of the pre-tighten SKILL.md (scratch copy `jorge-nocedal-SKILL.before-tighten-2026-10-17.md`) that the shortened SKILL.md text of this item replaced; nothing in them is withdrawn. Markdown links are re-based to this folder.
+
+- Practice: "We find, to our surprise, that omitting the geometry phase does not seem to harm the efficiency and robustness of our algorithm" (doi:10.1080/10556780802409296, preprint p. 2) [S062 pp. 2, 4–5, 7, 9]; the LP corrector folklore tested by removing its hidden ingredient, PCx falling from 90 to 28 of 94 [S029 pp. 17, 20]; a huge initial penalty tested [S042 pp. 15–16]; line searches under noise tested both ways [S128 pp. 10–13]; plain BFGS against a self-scaling refinement, 1993 [S054 p. 16].
+- Say–do: ✅ stated + practised 1993–2026 [S054 p. 16; S150 p. 2] (C8; base tier: 2009–2025); full or partial texts: 31 works (22 evidence, 10 variant, 0 contradiction).
+- ⚠ The dismissed option can be a method theory favoured that nobody implemented carefully: "However we believe that conjugate gradient methods have not been properly implemented so far, and that their full potential needs to be assessed." [S197 p. 4]; FIBO rehabilitated by auditing the earlier evidence [S150 pp. 2, 6, 9].
+- ⚠ The moving DFO verdict starts in 2002, not 2009: finite-difference L-BFGS-B loses to the wedge method on reliability (five failures against one) [S040 pp. 2–3, 7, 15].
 
 ---
 
@@ -423,6 +466,27 @@ Four or more "yes" answers fit this lens; a "no" to the second or third is where
 - **Contradiction** (0 works, 0 card ids): none.
 - **Not counted** (abstract- or metadata-level, award records, group voice): evidence: S135; S167 (award); S169 (award); S173 (award); S176 (award); S178 (award); S186 (award); S191; S192 (award) — variant: S063 p. 37 (group voice); S188 pp. 1–2 (group voice).
 
+
+**SKILL.md wording before the second tightening (2026-10-17, T3.7), verbatim.** These are the lines of the pre-tighten SKILL.md (scratch copy `jorge-nocedal-SKILL.before-tighten-2026-10-17.md`) that the shortened SKILL.md text of this item replaced; nothing in them is withdrawn. Markdown links are re-based to this folder.
+
+- Practice: finite-difference L-BFGS with a noise-based interval, a relaxed Armijo test, a five-case recovery tree and its ablation [S038 pp. 6–11, 21]; noise-tolerant BFGS [S071 pp. 1–6, 13–16]; the noisy trust region changing only the ratio test [S082 pp. 2, 4–5, 11, 18–19]; the infeasibility mode driven by the normal step's feasibility estimate, with exits [S053 pp. 5–6, 8–9, 12].
+- Say–do: ✅ planned 1993 [S193 pp. 3–4]; practised 1995–2025, engine kept and one component replaced [S003 pp. 6, 18–19], estimate-driven from 2002 [S035 report pp. 14–16] (C8; base tier: 2007–2025); step 4 ⚠ partial; full or partial texts: 62 works (40 evidence, 27 variant, 0 contradiction).
+- ⚠ Step 4 is the least practised: recovery built [S038 pp. 9–11; S071 pp. 12–14], named but not built [S084 p. 20], absent [S082 p. 18; S124 pp. 4–5].
+1. **Run the classical method** (BFGS/L-BFGS [S071 pp. 1–3], trust region [S082 pp. 2, 4, 18–19], Byrd–Omojokun SQP [S124 pp. 2, 4, 30–31]) in the new regime and **name the failing component** (update, line search, ratio test, difference interval [S091 arXiv p. 2]); audit the few fragile operations first [S128 p. 1].
+3. **Replace only that component** with a version driven by an explicit estimate of the noise level (ECnoise, doi:10.1137/100786125) or curvature: lengthened difference spacing, a relaxed acceptance ratio, an interval set from the noise estimate. Exemplar (equality-constrained SQP): "by introducing a relaxation in the line search procedure while keeping all other components of the SQP method unchanged" (arXiv:2110.04355, p. 3). For an objective–feasibility trade-off, measure the attainable progress with an extreme-value probe (ν = ∞ LP; ρ = 0 step) [S042 pp. 8–11; S052 p. 15] (catalog D6, D15–D17).
+   - 🔴 Stop if the design needs a constant users cannot know: existing procedures for estimating Lipschitz-type bounds "are not robust" (arXiv:2102.09762, p. 6, not App. A as first recorded [S080 arXiv p. 6]; C3). Estimate what can be estimated and let recovery handle the rest.
+**Worked case 1: penalty steering** (Byrd, Nocedal & Waltz, *OMS* 23, 2008, doi:10.1080/10556780701394169 [S042]; co-authored; the full case with every number: references/research/09-evidence-ledger.md#method-3) [05 §4.6]:
+- *Diagnosis*: Sℓ1QP-type methods "were never incorporated into production-quality software. We conjecture that this was mainly due to the difficulties of choosing the penalty parameter" (preprint p. 5); a penalty that grows too soon was named in 1993 [S193 p. 4], its link to steering inferred (C4).
+- *One component replaced*: ν is set against an auxiliary LP (the subproblem with ν = ∞), the best attainable reduction in linearized infeasibility: reach it when possible, else a fraction ε1; then raise ν until the model decrease is at least ε2·ν times the feasibility gain [S042 pp. 8–11]. The earliest such rule in the works read is SLIQUE's, 2002 [S035 report pp. 14–16] (C4).
+- *Defaults and tests*: ν0 = 10, ε1 = 0.1, ε2 = 0.5, ν multiplied by 10 until the conditions hold; the extra LPs cost "less than three percent" of the simplex iterations [S042 p. 13]. Fletcher's ADLITTLE as a specification (Method 4): the fixed-ν failure reproduced, then solved with ν raised to 10⁴ [S042 p. 15]. The huge-fixed-ν heuristic tested: solved problems fell from 485 of 616 to 449 at ν = 10⁵ and 321 at ν = 10¹⁰ [S042 pp. 15–16].
+- *Merit functions* (line search, equality constraints; base tier, preprint pp. 18–19): ν⁺ = ν_trial + 1 when ν < ν_trial, with ν_trial = (∇fᵀd + (σ/2)dᵀWd) / ((1 − ε2)‖h‖), σ = 1 if dᵀWd > 0, else 0.
+- *Follow-ups*: the line-search open question was answered in 2012 [S051 pp. 1–2, 25]; the 2010 infeasibility update follows the steering rules [S052 pp. 14–16]; reused in PLA [S139 pp. 4–5].
+**Worked case 2: infeasibility mode** (Nocedal, Oztoprak & Waltz, *OMS* 29, 2014, doi:10.1080/10556788.2013.858156 [S053]; co-authored; the SQP counterpart [S052] is also in Curtis's corpus):
+- *Estimate*: the normal step of the trust-region interior step already measures the attainable linearized feasibility reduction, which line-search primal-dual steps cannot [S053 pp. 2, 5] (catalog D11).
+- *Switch with hysteresis*: to feasibility mode when the linearized residual after the step is ≥ δ‖c‖, back when it is ≤ δ̄‖c‖, δ = 0.9, δ̄ = 0.1 [S053 p. 8]; anti-cycling: ‖w_k‖ ≥ ζ‖w_{k−1}‖ with ζ = 0.99, at least 3 main-mode iterations, conditions on two consecutive iterations; warm-start rules at each switch [S053 pp. 10, 12] (catalog D8).
+- *Exits and tests*: KKT point, infeasible stationary point, LICQ failure [S053 pp. 9–10]; infeasibility detected on 17 of 17 small infeasible problems against 8 before (card's count of Table 4), a termination cross-table over all 430 constrained CUTEr problems and a log₂ iteration-ratio plot [S053 pp. 13–14] (catalog E6, E7).
+**Limitations**: "It is assumed that noise level is known or can be estimated by means of difference tables or sampling" (arXiv:2102.09762). Mainly additive, bounded, uniform noise [03 §2.3]; nonsmooth problems out of scope. His noise-aware constrained work is equality-constrained only (Oztoprak, Byrd & Nocedal, "Constrained Optimization in the Presence of Noise", *SIOPT* 33, 2023, doi:10.1137/21M1450999; arXiv:2411.02665) [S084 pp. 2–3, 20; S124 pp. 4–5]; general constraints only in the noiseless 2026 DFO letter [S150 pp. 5, 9–10]. Noisy barrier, filter or inequality tests are inference.
+
 ---
 
 <a id="method-4"></a>
@@ -479,6 +543,16 @@ Four or more "yes" answers fit this lens; a "no" to the second or third is where
 - **Not counted** (book material, joint voice): evidence, framing and title-level: B001 p. 16 (19.7 *Failure of the Line Search Approach*, then *Modified Line Search Methods*; the 1999 edition had *Failure of the Active-Set Method*, B005 p. 17). Not exclusive: Wright's Heuristic 7 (treat a published worst case as a problem).
 - Not read (the body is closed): whether 19.7 presents the Wächter–Biegler example [S061], and whether the 18.5 subsection *A Technique for Updating the Penalty Parameter* presents the steering rules [S042] [B001 pp. 15–16].
 - Dating: the 2006 bibliography cites four of the group's papers as then-unpublished OTC reports (KNITRO, penalty steering, the MPCC interior work, the interior/active-set hybrid) [B002 pp. 42, 49, 54] (card's reading of the dates).
+
+
+**SKILL.md wording before the second tightening (2026-10-17, T3.7), verbatim.** These are the lines of the pre-tighten SKILL.md (scratch copy `jorge-nocedal-SKILL.before-tighten-2026-10-17.md`) that the shortened SKILL.md text of this item replaced; nothing in them is withdrawn. Markdown links are re-based to this folder.
+
+- Practice: KNITRO's missing infeasibility handling became the 2014 paper and `bar_switchrule=2`: "The performance of the interior point methods knitro/direct and knitro/cg are quite poor, which may not be surprising since these two algorithms do not contain any features for handling infeasibility." [S053 pp. 1, 4, 13]; the Wächter–Biegler counterexample analysed as a specification [S061 pp. 2, 14, 19–24]; NITRO's refinement, called very conservative, cited forward to the next paper [S008 pp. 23, 26], whose residual update cuts NITRO's projections 26% against plain CG (augmented system; card's sums) [S021 pp. 25–26; S008 p. 18]; the undecided subspace minimization shipped as `isbmin` [S003 pp. 11, 23; S005 pp. 5–6]; the own failure case GAUSSELM → KNITRO's feasible mode [S075 pp. 8–18]; the 2024 noisy trust region prototyped as an option inside KNITRO-CG [S124 p. 29].
+- Say–do: ✅ stated + practised 1989–2024 [S002 p. 13; S124 p. 29] (C8; base tier: 1999–2014); full or partial texts: 52 works (51 evidence, 3 variant, 0 contradiction).
+- ✗ C5: in the 2009 barrier study the base step's *two independent frameworks* are the authors' own codes (IPOPT's author is a co-author) [S029 pp. 1–2, 25]; in 2004 KNITRO is paired with a bare code built for the purpose [S085 pp. 6, 8].
+- ⚠ Undecided choices can instead be adapted from in-run signals, leaving only m to the user [S077 pp. 2, 5–7].
+- ⚠ The 2001 answer to Wächter–Biegler: a safe paper algorithm and a new, unfixed failure example; no production change reported [S061 pp. 20–24].
+3. **Study the open choice in two frameworks, ideally including one you do not own** (C5; base text: *two independent frameworks*), including how the incumbent heuristic fails (2009: IPOPT and KNITRO; failures of the Mehrotra predictor-corrector rule, by name and cause [S029 pp. 16–17]).
 
 ---
 
@@ -538,6 +612,16 @@ Four or more "yes" answers fit this lens; a "no" to the second or third is where
 - **Limitations, C1 context**: the 2006 bibliography cites neither Dai 2002 nor Mascarenhas 2004; its only Dai entry is Dai–Yuan 1999 on conjugate gradients [B002 pp. 40–55]. Whether the text discusses the examples uncited was not read (05 §3.1 now has a bibliography-level answer). Added to SKILL's Limitations.
 - The first-printing errata add an outlined Zoutendijk-type liminf argument to Chapter 3 for methods such as conjugate gradient methods [B007 p. 1]: an expository repair, not evidence for the method.
 
+
+**SKILL.md wording before the second tightening (2026-10-17, T3.7), verbatim.** These are the lines of the pre-tighten SKILL.md (scratch copy `jorge-nocedal-SKILL.before-tighten-2026-10-17.md`) that the shortened SKILL.md text of this item replaced; nothing in them is withdrawn. Markdown links are re-based to this folder.
+
+- Stated: "After all, if all we want to achieve is global convergence we should be satisfied with the steepest descent method." (Acta 1992, preprint p. 7) [S019 p. 7]. On complexity work (2026, caption-derived): "They're not distinguishing between good methods and bad methods." His most repeated belief, in 6 sources [02 §0, T3–T6].
+- Practice: the Broyden-class analysis that singles out DFP and confirms it with a targeted run: "Nevertheless, we have seen in this paper that the DFP method can be much less efficient than the BFGS method, and that the reason for this is that it lacks the self-correcting property given by the fourth term on the right-hand side of equation (3.2)." [S020 pp. 1, 10, 17–19]; in 1992 DFP's 4041 iterations against BFGS's 15, "amazingly close to the estimate given by Powell" [S019 p. 24]; CG theory explaining Fletcher–Reeves stalling and Polak–Ribière recovering [S012 pp. 4–6, 11–12, 24]; merit choices separated [S061 pp. 11–13, 16–22]; the shipped barrier settings proved safe but only linear [S046 p. 16]; a bound plotted against runs and called pessimistic [S082 pp. 19–22].
+- Say–do: ⚠ partial (C8; base tier: ✅ 1985–2023): stated throughout; practised 1987–2004; from 2006 most theorems are safety nets or analyses of a simplified iteration; full or partial texts: 66 works (38 evidence, 31 variant, 7 contradiction).
+- ✗ Theorems in the group's papers that cannot discriminate: a safety net valid for any μ rule [S029 pp. 10–12]; convergence for any positive definite Hessian sample [S023 pp. 5, 7, 11]; an O(1/k) bound that H_k = I also meets [S015 pp. 12–14]; global convergence of the shipped hybrid asserted by analogy, not analysed [S013 pp. 2, 4]. The group says so: "where the provable convergence rate for L-BFGS is no better than for steepest descent, even though L-BFGS is superior in practice." [S038 p. 14].
+- ⚠ The 2000 theory covers a sibling of NITRO: the primal step, radius rule [S009 pp. 8, 10] and trust-region shape [S008 p. 10] are named; two proof devices the code lacks, a 1.5× penalty factor and a slack reset, are not [S009 pp. 17, 23, 26–27; S008 pp. 17, 19].
+**Limitations**: "Nobody has been able to construct an example in which the BFGS method fails" (Acta 1992) was overtaken by Dai 2002 (doi:10.1137/S1052623401383455), with no response found [05 §3.1]; ✗ C1: acknowledged in 2016 [S033 p. 6], which cites Dai and Mascarenhas and adopts Li–Fukushima cautious updating for its nonconvex analysis (also [S031 p. 5]); the joint 2006 textbook's bibliography cites neither [B002 pp. 40–55]; the 1992 survey had listed nonconvex BFGS as Open Question II [S019 pp. 21–22]. The stance on complexity shifted (IT5); the practice weakened after 2005. Early-career users should pair complexity results with the bound-versus-run plot, not drop them.
+
 ---
 
 <a id="method-6"></a>
@@ -593,6 +677,15 @@ Four or more "yes" answers fit this lens; a "no" to the second or third is where
 **Increment inc-book (2026-10-17)** (book material B001–B012, cards c5-01 to c5-03: the open parts of *Numerical Optimization*, its errata, two reviews, the authors' book pages and Springer's catalogue pages; joint voice of Nocedal and S. J. Wright unless marked; dating and framing only, never in a say–do count; 08 §13, #textbook). Count unchanged: 42 works (39 evidence, 8 variant, 1 contradiction).
 - **Not counted** (book material, joint voice, framing): B005 pp. 13–14: the 1999 Chapter 9 sets L-BFGS, the compact representation and three partial-separability sections (with a subsection *Sparsity vs. Partial Separability*) side by side, and nonlinear least squares and nonlinear equations get chapters of their own; this confirms from the contents the metadata-level S010 link of a2-02. The 2006 edition cuts partial separability to one section, 7.4 [B001 p. 10; B005 p. 14] (title-level; the preface does not mention it). Not exclusive: Wright's Method 6 and taste mark 6.
 
+
+**SKILL.md wording before the second tightening (2026-10-17, T3.7), verbatim.** These are the lines of the pre-tighten SKILL.md (scratch copy `jorge-nocedal-SKILL.before-tighten-2026-10-17.md`) that the shortened SKILL.md text of this item replaced; nothing in them is withdrawn. Markdown links are re-based to this folder.
+
+- Stated: "understanding the characteristics of the objective function is crucial in large scale optimization" (1996 survey, preprint p. 2); on Google's request, 2026 (caption-derived): "my first thing is don't use LBFGS here" [02 E8].
+- Practice: partitioned quasi-Newton recommended over the own method in 1989 [S002 p. 24]; the 1997 survey shows his codes needing more evaluations than LANCELOT's Newton on 7 of 8 rows, less time on 5 (card's count), and a prose-only loss to partitioned quasi-Newton [S049 pp. 13–16] (C17); interior and active-set integration on the LP/MIP analogy [S011 pp. 2–3, 20–22]; a sub-sampled Newton method twice as fast as L-BFGS on its problem [S023 pp. 4, 16]. The co-authored case study of ECMWF's operational 4D-Var explains why quasi-Newton Hessians were rejected there (too few iterations; the least-squares structure): "Moreover, a quasi-Newton approximation to (6) ignores the “least-squares” structure of this Hessian, namely, that the first term in (6) involves only first-derivative information." [S047 pp. 7–8]; which choices are the authors' own is not stated [S047 pp. 1, 13].
+- Say–do: ✅ stated + practised 1989–2026 (the Google story is stated only); full or partial texts: 42 works (39 evidence, 8 variant, 1 contradiction).
+- ⚠ Integration also at the algorithm level: one parameterized family with two classical methods at its ends [S138 pp. 7, 77–79; S077 pp. 3, 5; S081 pp. 4–5]; shared with Toint and Gill, so a variant.
+**Limitations**: the ECMWF account rests on the 2026 interview; ✗ C10: the paper is read and confirms Gauss–Newton and its reasons, but tells no origin story and credits the multilevel method to Courtier et al. [S047 pp. 1, 13, 16]. Integration needs a team, and conflicts with Curtis's preference for one adaptive algorithm (inferred).
+
 ---
 
 <a id="method-7"></a>
@@ -616,6 +709,23 @@ Four or more "yes" answers fit this lens; a "no" to the second or third is where
 
 
 **Increment inc-ocr (2026-10-17)** (round-4 cards c4-01 to c4-04 and s4-01, second reads from an OCR text layer; one piece of evidence with each work's earlier card; numbers from the round-4 cards; 08 §12). No new evidence: the sixteen re-read works date from 1989–2004, before the sampled methods.
+
+
+**SKILL.md wording before the second tightening (2026-10-17, T3.7), verbatim.** These are the lines of the pre-tighten SKILL.md (scratch copy `jorge-nocedal-SKILL.before-tighten-2026-10-17.md`) that the shortened SKILL.md text of this item replaced; nothing in them is withdrawn. Markdown links are re-based to this folder.
+
+- Stated (co-authored): "Our approach is based on the fact that less accuracy in the Hessian is required than in the gradient" [S023 p. 3]; also [S033 p. 3; S015 p. 5]. Spoken (Purdue 2017 [0:51:41], uploader subtitles, caption-derived): "The sample for the Hessian here is going to be smaller than the sample for the gradient because the gradient is more important than the Hessian."
+- Practice: sub-sampled Newton-CG, a step costing about one gradient [S023 pp. 5–6]; dynamic gradient samples with a fixed Hessian-to-gradient sample ratio [S018 pp. 4–5, 15–17]; curvature pairs on their own sample and a slower clock [S015 pp. 5, 8–9]; pairs on batch overlaps [S033 pp. 3–5]; theory: a constant Hessian sample suffices for a linear rate, the gradient sample must grow geometrically [S032 arXiv pp. 6, 8, 11].
+- Say–do: ✅ stated + practised 2011–2019; 7 works read in full or in part, four projects; promoted from the cards' new-pattern candidates [S023; S032; S004; S015; S018]. The cards link four of the works to Method 3 as evidence and two as variants (S032 unlinked), but Method 3 repairs a failing component and Method 7 allocates samples and clocks (ledger).
+- ⚠ Shared with Curtis's Method 1, not claimed: the accuracy-by-need principle, the inner-solve step (CG stop tied to the outer error) [S018 pp. 15–17] and step 3's adaptive gradient sample (his variant: a sample-size schedule as outer need); S004 is co-authored with Curtis. Claimed as Nocedal's: curvature on its own sample and clock, a constant Hessian sample, pricing in gradient evaluations.
+1. **List the oracle components the iteration consumes** (gradient, Hessian-vector products or curvature pairs, inner solve) [S004 pp. 53, 57–58] and the error each tolerates: less accuracy is needed in the Hessian than in the gradient [S023 p. 3; S004 p. 53].
+2. **Give curvature its own sample**: a fixed fraction of the gradient sample, so as not to add a parameter [S018 p. 15], or a larger sample on a slower clock (every L iterations) [S015 pp. 5, 8–9]; both ends of a curvature pair on the same data (the batch overlap) [S033 p. 3] (catalog D5). Nonconvex: skip the update when yᵀs ≤ ε‖s‖² (ε = 10⁻² in [S031 p. 5]; cautious updating [S033 p. 6]; catalog D20).
+3. **Grow only the accuracy-critical component**: the gradient sample by a variance test [S018 pp. 4–5], with a geometric backup in the SIAM Review survey [S004 p. 45] (S018 itself grows the Hessian sample along with it at a fixed ratio R [S018 p. 15]); keep the Hessian sample constant unless a superlinear rate is the goal [S032 arXiv pp. 6, 8, 11].
+4. **Price every component in gradient evaluations** (maxcg × factor ≈ 1 [S023 p. 6]; the ratio 1 + 2M/b + 2b_H/(3bL) [S015 p. 8]), on an axis that charges the extra samples [S023 p. 16; S015 p. 15] (catalog E11).
+   - *Printed settings to start from* (per problem class, not defaults to copy): SQN Lb/b_H ∈ [2, 20], M ∈ [4, 20], L = 20 [S015 pp. 9, 29]; progressive batching m = 10, inner-product test θ = 0.9, c1 = 10⁻⁴ [S031 p. 5], |S0| = 512, 25% overlap [S031 p. 6]; dynamic sampling: variance test θ = 0.5, initial sample 1% of N, Hessian-to-gradient ratio 0.1 [S018 p. 19].
+   - *Step size and recovery*: the first trial step from the expected-decrease inequality, α = 1 in the noise-free limit [S031 pp. 4, 11], or a constant step [S033 p. 4]; one tuning rule for every method (catalog E19) [S015 p. 14]. Sample too small for the variance estimate: a moving-window fallback [S031 p. 4]. Bad curvature: skipped updates [S031 p. 5]; monitoring the s–y angle is proposed, not built [S015 p. 19].
+   - 🔴 Stop if the curvature work per iteration exceeds about one gradient evaluation at the user's batch size [S015 p. 8; S018 p. 15; S023 p. 6]; a loss in the deterministic limit is reported, not a stop: S023's L-BFGS variant lost there, then performed similarly to its subsampled Newton-CG on the main test [S023 pp. 12, 18]; subsampled Newton-CG is recommended only for large gradient samples [S004 p. 54].
+**Different from standard practice**: one batch for every quantity, curvature updated every step; the strongest rival is that default recast as a wasteful setting of the scheme (oLBFGS ≈ SQN with L = 1, b = b_H) [S015 pp. 26–27].
+**Limitations**: convex or strongly convex theory [S023 p. 7; S015 pp. 9–10], except fixed-step nonconvex bounds [S033 pp. 6–7; S031 pp. 5–6]; the theorems do not separate the method from SGD, so the case rests on numerics [S015 pp. 12–14]; one data set or single runs in several papers [S023 p. 16]; on deep networks the progressive-batching method needs more gradient evaluations than SG and Adam [S031 p. 7]; finite sums with cheap Hessian-vector products; Google and Intel data access.
 
 ---
 
@@ -708,6 +818,20 @@ Techniques added to the steps in SKILL.md, with their cards (details in the tech
 **Increment inc-book (2026-10-17)** (book material B001–B012, cards c5-01 to c5-03: the open parts of *Numerical Optimization*, its errata, two reviews, the authors' book pages and Springer's catalogue pages; joint voice of Nocedal and S. J. Wright unless marked; dating and framing only, never in a say–do count; 08 §13, #textbook).
 - **E, step 3** (publish corrections as versioned errata), ✅ joint evidence: one errata sheet per printing of the first edition [B011 p. 3]; the second-printing sheet kept in three dated versions (September 17, 2004; February 13, 2006; October 2, 2008; card c5-03 from Internet Archive captures), its last update correcting its own item 76 [B008 pp. 1, 6]; later sheets repeat or re-correct earlier fixes (the proof constant on book page 91 changed twice; the (5.37) fix in both sheets) [B007 p. 2; B008 pp. 2–3]. ⚠ Variant: the second-edition list exists as two copies with different numbering, neither naming the other, both frozen since May 2008 [B003 p. 1; B004 pp. 1, 5]; the HTML errata page for the second edition still read "Errata in the Second Edition [not yet posted]" in 2016 [B011 p. 4]. Shared with Wright (his Workflow E and Heuristic 5), so not Nocedal-specific.
 
+
+**SKILL.md wording before the second tightening (2026-10-17, T3.7), verbatim.** These are the lines of the pre-tighten SKILL.md (scratch copy `jorge-nocedal-SKILL.before-tighten-2026-10-17.md`) that the shortened SKILL.md text of this item replaced; nothing in them is withdrawn. Markdown links are re-based to this folder.
+
+*Workflow A, steps 1–2:*
+1. Structure check; if structure exists, benchmark against the structure-exploiting method first (→ Method 6); list an application's constraining features first [S047 pp. 5–6].
+2. Draw at most one candidate per source: a recurring failure in the log (→ Method 4); a "necessary" safeguard never compared against the simple option (→ Method 2); a component that breaks under noise or inexactness (→ Method 3); an undecided choice, e.g. the barrier or penalty update, to expose as an option (→ Method 4); a sampled component given the wrong accuracy (→ Method 7).
+
+*Workflow D, steps 2–3:*
+2. Record surprise as surprise; turn an unexplained regularity into a conjecture: "We conjecture that a self-correction mechanism may be at play" (2009) [03 §2.5; S062 p. 2], labelled as a conjecture throughout [S062 pp. 6, 9].
+3. Limitations before any result [S080 arXiv p. 7]; a ranking disclaimer before the results [S078 p. 2] (C18).
+
+*Workflow F, 🔴 checkpoint, second bullet:*
+- The exact run fails too → drop the noise hypothesis; check published failure examples (Step 2). Step length and cos(d, −∇φ) → 0, ‖∇φ‖ bounded away from zero → suspect a singular non-stationary point; check the merit function first (order inferred) [S061 pp. 8, 18, 24] (C19). Other degeneracy or KKT linear algebra → "not Nocedal-style"; suggest the Wright, Gill or Wächter lens.
+
 ---
 
 <a id="heuristic-1"></a>
@@ -723,6 +847,11 @@ Full texts (08 §2.7): one chosen 2-D function with the trace as diagnostic [S02
 
 
 **Increment inc-ocr (2026-10-17)** (round-4 cards c4-01 to c4-04 and s4-01, second reads from an OCR text layer; one piece of evidence with each work's earlier card; numbers from the round-4 cards; 08 §12). Powell's two-variable example, whose exact-line-search iterates converge to z ≈ (1.8016, 0), with F′ singular along the x-axis [S061 pp. 3–4]; a one-variable barrier example [S061 p. 17]; a three-variable example mapped onto a two-variable one [S061 p. 23].
+
+
+**SKILL.md wording before the second tightening (2026-10-17, T3.7), verbatim.** These are the lines of the pre-tighten SKILL.md (scratch copy `jorge-nocedal-SKILL.before-tighten-2026-10-17.md`) that the shortened SKILL.md text of this item replaced; nothing in them is withdrawn. Markdown links are re-based to this folder.
+
+1. **Failure demo first**: if a classical method breaks, show it on a small, easy, chosen problem with an internal diagnostic, then run the broad set. Case: the BFGS condition number on ARWHEAD (arXiv:2010.04352); "Failure of the Classical Trust Region Algorithm" (arXiv:2201.00973) [03 §2.4]; one chosen 2-D function in 1987 [S020 p. 18].
 
 ---
 
@@ -785,6 +914,11 @@ Full texts: the simple μ rule kept over superlinear rules [S013 p. 10]; "Values
 - **Numbers as defaults**: NITRO's list (η = 10⁻⁸, τ = 0.995, θ = 0.2, ζ = 0.8, ε_TOL = 10⁻⁷, initial ε_μ = μ = 0.1, Δ0 = 1) [S008 p. 19]; L-BFGS-B's factr table (1.d+12, 1.d+7, 1.d+1) and storage formulas [S005 pp. 2–4]; the trust-region constants of the norm study (ε_g = 10⁻⁵, η1 = 0.01, η2 = 0.95, γ1 = 0.5, γ2 = 2) [S101 p. 11]; σ₁ = 10⁻⁴ and σ₂ = 0.9 for BFGS [S019 pp. 16–17]. Variants with no printed values: the reduced-Hessian theory paper defers every constant to its companion [S028 p. 34]; the superlinear barrier strategies are conditions on exponents [S046 pp. 16–18]; the trust-region constants c1–c4 of the hybrid's runs are not reported [S024 pp. 19–20].
 - **Cheapest adequate option, with counts**: γ_k free because both inner products are stored, σ_k one multiplication, the compact update 2mn against (3/2)m²n for the straightforward approach [S014 pp. 13, 16, 20]; M3 preferred to M4 at comparable efficiency [S002 p. 15]; the residual update costs no more than refinement in all 28 problem × mode cells (card's count) [S021 p. 24]; operation counts for the three subspace solvers and their crossover (citer < m/2) derived before the runs [S003 pp. 13, 15].
 
+
+**SKILL.md wording before the second tightening (2026-10-17, T3.7), verbatim.** These are the lines of the pre-tighten SKILL.md (scratch copy `jorge-nocedal-SKILL.before-tighten-2026-10-17.md`) that the shortened SKILL.md text of this item replaced; nothing in them is withdrawn. Markdown links are re-based to this folder.
+
+5. **The cheapest adequate option wins ties; give parameter advice as numbers.** Case: "these two scalings are comparable in efficiency, and therefore M3 should be preferred since it is less expensive to implement" (1989); "3<= M <=7 is recommended" [01 SW1; 03 §2.7], widened to 3 ≤ m ≤ 20 from 1994 [S005 p. 3; S049 p. 14]; PREQN preconditioner memory m in [4, 20] [S098 p. 4]; price devices in base-iteration units [S035 report p. 16].
+
 ---
 
 <a id="heuristic-6"></a>
@@ -800,6 +934,11 @@ Full texts: the rate deferred on practical grounds [S029 p. 22]; NITRO's linear 
 
 
 **Increment inc-ocr (2026-10-17)** (round-4 cards c4-01 to c4-04 and s4-01, second reads from an OCR text layer; one piece of evidence with each work's earlier card; numbers from the round-4 cards; 08 §12). μ falls by a factor of 5 per barrier problem (θ = 0.2), linear by design [S008 pp. 4, 19, 23]; the companion analysis proves those settings only linearly convergent [S046 p. 16]; the rate is deferred in the theory [S009 pp. 9, 33].
+
+
+**SKILL.md wording before the second tightening (2026-10-17, T3.7), verbatim.** These are the lines of the pre-tighten SKILL.md (scratch copy `jorge-nocedal-SKILL.before-tighten-2026-10-17.md`) that the shortened SKILL.md text of this item replaced; nothing in them is withdrawn. Markdown links are re-based to this folder.
+
+6. **Robustness before speed in a first code**, with naïve failure tests. Case: NITRO: "No attempt was made to obtain a rapidly convergent method" (1999); Curtis's thesis implements "naïve failure tests … to aggressively challenge the robustness of our approach" (2007, p. 50) [04 §3.3]; [S029 p. 22].
 
 ---
 
@@ -822,6 +961,11 @@ Full texts: the Remark replaces a machine-precision constant wrong by two orders
 - **C20**: the base text's *80 numbered book errata* [03 §2.7, §4.3] holds for Nocedal's copy of the second-edition list: "Corrections to Numerical Optimization, Second Edition Published August 2006 (Last updated May 27, 2008)" [B003 p. 1], 80 located items, three readers thanked [B003 pp. 1–5]; its item 12 removes a paragraph on book page 63. Wright's copy, "Corrections to Numerical Optimization, Second Edition Published August 2006 (Last updated May 17, 2008)" [B004 p. 1], has 79 items, numbered one lower from item 12 on, and is the copy Wright's skill counts (his 03 §2.1) [B004 pp. 1–5]; 03 §4.3's *item 12, Remove the paragraph* uses Nocedal's numbering. Both copies are byte-unchanged in the Internet Archive from 2008 to 2024, and Wright's is the only author-hosted copy still served (card c5-03, B004 D8).
 - **First edition**: the first-printing sheet has 35 items plus a 4-item addendum dated 2/25/2000 [B007 pp. 1–7]; the second-printing sheet has 91 items, last updated October 2, 2008 [B008 pp. 1–7]; both are written as paste-ready LaTeX for the typesetter: "To make it easier for the typesetter, we have included in many cases an explicit correction of the offending passages" [B007 p. 1; B008 p. 1]. Neither names a finder [B007 pp. 1–7; B008 pp. 1–7].
 - **Exclusivity**: the errata are joint, and keeping public errata is Wright's Heuristic 5; the Nocedal-specific evidence stays the code record [S016 preprint pp. 1–2; S005 pp. 5–6; S098 pp. 6–7]. ⚠ Variant: maintenance stopped in 2008, and the two second-edition copies were never reconciled [B004 pp. 1, 5]. SKILL's Heuristic 7 now names the copy (C20).
+
+
+**SKILL.md wording before the second tightening (2026-10-17, T3.7), verbatim.** These are the lines of the pre-tighten SKILL.md (scratch copy `jorge-nocedal-SKILL.before-tighten-2026-10-17.md`) that the shortened SKILL.md text of this item replaced; nothing in them is withdrawn. Markdown links are re-based to this folder.
+
+7. **Code as a numbered, maintained artefact**: proven components, marked changes, old versions kept, errata. Case: the L-BFGS-B Remark (doi:10.1145/2049662.2049669) [S016 preprint pp. 1–2]; 80 numbered book errata [03 §2.7, §4.3] in his copy of May 27, 2008, 79 in Wright's of May 17 (C20) [B003 pp. 1–5; B004 pp. 1–5], plus dated first-edition sheets, 2000–2008 [B007 p. 7; B008 p. 1]. Joint errata, also Wright's Heuristic 5: the code record, not the book, is the Nocedal-specific evidence (ledger).
 
 ---
 
@@ -870,6 +1014,11 @@ Full texts (08 §9): Byrd co-authors 37 of the 96 distinct works read in full or
 - **Stated (1999)**, the only Nocedal-specific item in the book material, in the joint preface and the third person: "One of us (JN) would like to express his deep gratitude to Richard Byrd, who has taught him so much about optimization and who has helped him in very many ways throughout the course of his career." [B005 p. 9] (reprinted with the first preface in 2006, B001 p. 20). Added to SKILL.
 - **Dating**: Byrd co-authors 8 of the 17 Nocedal entries in the 2006 bibliography, Waltz 4 [B002 pp. 42–43, 55]; in 1999 Nocedal and Byrd have 11 entries each [B006 pp. 36–48] (card's counts). The heuristic itself (Byrd in student projects) still rests on the record [04 §3.2].
 
+
+**SKILL.md wording before the second tightening (2026-10-17, T3.7), verbatim.** These are the lines of the pre-tighten SKILL.md (scratch copy `jorge-nocedal-SKILL.before-tighten-2026-10-17.md`) that the shortened SKILL.md text of this item replaced; nothing in them is withdrawn. Markdown links are re-based to this folder.
+
+10. **A standing theory partner in student projects.** Case: 15 of 22 students co-authored with Byrd, 1992–2022 [04 §3.2]; inferred from the record, person-specific. Byrd is on 37 of 96 full or partial reads, 1987–2024 [S020; S102] (ledger). In the book material the partnership is stated once, in the joint 1999 preface's only sentence about him alone: "One of us (JN) would like to express his deep gratitude to Richard Byrd, who has taught him so much about optimization" [B005 p. 9]; he states it himself in 2017 [02 O1].
+
 ---
 
 <a id="heuristic-11"></a>
@@ -880,6 +1029,11 @@ New heuristic (08 §5). "The key idea is to preserve the information generated d
 
 
 **Increment inc-ocr (2026-10-17)** (round-4 cards c4-01 to c4-04 and s4-01, second reads from an OCR text layer; one piece of evidence with each work's earlier card; numbers from the round-4 cards; 08 §12). The numbers, legible rows only: at ε = 0 and σ = .06/.12/.18, L-BFGS needs 131/138/151 evaluations and DINEMO 110/115/115, 16–24% fewer (card's percentages) [S088 p. 10]. DINEMO also takes discrete Newton steps, so this comparison does not isolate the kept pairs, and with Table 1's evenly spread eigenvalues its advantage deteriorates as ε grows until L-BFGS ends up the winner at ε = .09; DINEMO beats ALTERNATE except for large ε and σ [S088 p. 10] (scope added to SKILL after review); at ε = .09 (condition number 5073) DINEMO needs 222/333/274/331 against the discard arm's 364/405/444/435, 18–39% fewer (card's percentages) [S088 p. 11]: "Collecting information from the inner CG cycle and saving it in the form of a limited memory matrix is certainly beneficial since DINEMO clearly outperformed ALTERNATE in the great majority of the tests." [S088 p. 12]. Table 2 (12 distinct eigenvalues) is lost, so the eigenvalue-distribution conclusion rests partly on prose; one function family, n = 100, one starting point [S088 pp. 8–12].
+
+
+**SKILL.md wording before the second tightening (2026-10-17, T3.7), verbatim.** These are the lines of the pre-tighten SKILL.md (scratch copy `jorge-nocedal-SKILL.before-tighten-2026-10-17.md`) that the shortened SKILL.md text of this item replaced; nothing in them is withdrawn. Markdown links are re-based to this folder.
+
+11. **Harvest the curvature the solver already computes; keep it by default, and drop it where its cost does not pay, as the papers print.** "The key idea is to preserve the information generated during the inner CG iteration to improve the quality of the limited memory matrix used in subsequent steps" [S088 p. 7]. Case: Newton steps plus kept pairs give 16–24% fewer evaluations than L-BFGS at ε = 0, more at ε = .09 with spread eigenvalues [S088 p. 10]; 18–39% fewer than the discard arm there with clustered ones (card's percentages) [S088 p. 11]; CG pairs from one solve precondition the next [S030 pp. 2, 4, 6]; scope printed: "Therefore the preconditioner is unlikely to be useful for very sparse problems." [S098 p. 8]; no CPU gain on sparse finite-element tests [S030 p. 12].
 
 ---
 
@@ -927,6 +1081,14 @@ Full anatomies: [01-publications](01-publications.md) (SW1–SW6). Not dissected
 - **Minimum evidence in numbers**: "In contrast, the L-BFGS method gives a substantial speed-up in 70% of the problems." [S002 p. 11], against little or none for Buckley–LeNir; B-L needs fewer iterations but about two evaluations per iteration (a forced interpolation), L-BFGS about one [S002 p. 9]; at m = 5 the scaling M3 cuts evaluations against M1 on every legible row but not against M2 on problem 12 (322 against 260) [S002 p. 14], a row the paper's tallies do not mention; M4's safeguard fires in about 5% of iterations [S002 p. 15]; n = 5000 and 10000 are solved in 14–183 iterations, and storage beyond m = 5 has little effect [S002 pp. 15–16]; PQN in #method-6 [S002 pp. 19–21]; Theorem 6.1, R-linear convergence from any positive definite start [S002 p. 23].
 - **Credits**: the diagonal scaling M4 is Byrd's suggestion [S002 p. 25]; the code is to be released as Harwell VA15 [S002 p. 4].
 
+
+**SKILL.md wording before the second tightening (2026-10-17, T3.7), verbatim.** These are the lines of the pre-tighten SKILL.md (scratch copy `jorge-nocedal-SKILL.before-tighten-2026-10-17.md`) that the shortened SKILL.md text of this item replaced; nothing in them is withdrawn. Markdown links are re-based to this folder.
+
+| Aspect | Content |
+|---|---|
+| Minimum evidence | Months of testing (stated); 1989: rivals run as their authors recommend, same-solution check, losses in the abstract [S002 pp. 2, 7–8]; extra storage pays for L-BFGS on 70% of problems, little for Buckley–LeNir [S002 p. 11]; partitioned quasi-Newton: fewer evaluations in 35 of 38 runs, clearly faster on one problem only (card's count) [S002 pp. 19–20] (C15) |
+| Reception | Poor reviews and Powell's dislike (stated, 2026 interview, caption-derived) [02 F2]; take-off after 1989 and the 1990 Harwell release [06 T2]; for the 1997 L-BFGS-B code (Algorithm 778), a correction 14 years after its release [S016 preprint pp. 1–2, 4] |
+
 ---
 
 <a id="anatomy-acta"></a>
@@ -950,6 +1112,11 @@ Thin (the underlying papers doi:10.1137/0724077 and doi:10.1137/0726042 **not re
 
 
 **Increment inc-book (2026-10-17)** (book material B001–B012, cards c5-01 to c5-03: the open parts of *Numerical Optimization*, its errata, two reviews, the authors' book pages and Springer's catalogue pages; joint voice of Nocedal and S. J. Wright unless marked; dating and framing only, never in a say–do count; 08 §13, #textbook). **C21**: the base text's *Noise was set aside … for 27 years* holds for his research papers, where the noise programme opens in 2019 [S038 p. 1]. The joint 2006 textbook already opens its new derivative-free chapter with section 9.1 *Finite Differences and Noise* [B001 p. 10] and indexes noise in function evaluation at book pages 221–222 and noise under finite differencing at 221 [B002 pp. 59, 62]; what those pages say was not read. The 1999 edition has no noise entry [B006 pp. 49–60]. SKILL's sentence now carries the limitation.
+
+
+**SKILL.md wording before the second tightening (2026-10-17, T3.7), verbatim.** These are the lines of the pre-tighten SKILL.md (scratch copy `jorge-nocedal-SKILL.before-tighten-2026-10-17.md`) that the shortened SKILL.md text of this item replaced; nothing in them is withdrawn. Markdown links are re-based to this folder.
+
+Read in full: the survey [S019] and the 1987 paper (doi:10.1137/0724077) [S020] (C12); the 1989 paper only in abstract [S017]. Origin (stated, caption-derived): Powell's convex BFGS proof prompted a family-wide analysis with Byrd; C13: Powell (1976), which the 1987 paper generalizes [S020 pp. 1, 6] (match to the interview inferred). DFP was "already observed to be not as good as the BFGS method" (2026 interview, caption-derived); the reason: no self-correction [S020 pp. 8, 19]. Four kinds of result and numbered open questions [S019 pp. 2, 17, 21–22]. Noise was set aside ("we will not consider these aspects here") for 27 years in his research papers; the joint 2006 textbook already has a section on finite differences and noise (C21) [B001 p. 10; B002 p. 62]. Reception: Powell, "This is the best paper I read all year" (stated); Dai 2002 overtook the BFGS judgement, acknowledged in 2016 [S033 p. 6] (C1). Shows Method 5.
 
 ---
 
@@ -982,6 +1149,15 @@ Thin (the underlying papers doi:10.1137/0724077 and doi:10.1137/0726042 **not re
 **Increment inc-ocr (2026-10-17)** (round-4 cards c4-01 to c4-04 and s4-01, second reads from an OCR text layer; one piece of evidence with each work's earlier card; numbers from the round-4 cards; 08 §12).
 - **C16**: the bullet above (*NITRO and LANCELOT stopped at the same 10⁻⁷*) holds as one tolerance value on different measures [S008 p. 20]. Table 2 (14 CUTE problems): NITRO needs fewer evaluations on 9 and LANCELOT on 5; CPU splits 7–7, NITRO's largest losses being SVANBERG 2,704.77 s against 120.96, OBSTCLAE 543.22 against 12.98 and TORSION1 58.00 against 1.11 [S008 p. 21]; primal-dual needs fewer evaluations than primal on 11 of 14 [S008 p. 22]. On the 56 Hock–Schittkowski problems NITRO fails on 3 and LANCELOT on 2 (plus HS75 stopped short); LANCELOT needs fewer evaluations on 29 and NITRO on 23 (card's counts) [S008 p. 24]: "It is reassuring to observe that NITRO failed on very few of these problems" [S008 p. 23].
 - **Defaults** printed as one list [S008 p. 19] (#heuristic-5). **Dates**: the theory existed as Report OTC 96/02 before the July 1997 code paper [S008 p. 25], and the August 1998 theory preprint cites the code as Report OTC-97/04 [S009 pp. 1, 35]. **Refinement → the next paper** (#method-4) [S008 pp. 23, 26; S021 p. 26]. The 2003 benchmark names S009 as the theory of an algorithm similar to KNITRO's [S078 p. 5].
+
+
+**SKILL.md wording before the second tightening (2026-10-17, T3.7), verbatim.** These are the lines of the pre-tighten SKILL.md (scratch copy `jorge-nocedal-SKILL.before-tighten-2026-10-17.md`) that the shortened SKILL.md text of this item replaced; nothing in them is withdrawn. Markdown links are re-based to this folder.
+
+| Aspect | Content |
+|---|---|
+| Minimum evidence | Competitive with LANCELOT on its 14-problem CUTE set (n = 14–2001; fewer evaluations on 9, CPU 7–7), not on 56 small ones (fewer on 23, LANCELOT on 29), one 10⁻⁷ value on different measures (card's counts) [03 §2.1, §2.6; S008 pp. 20–21, 24] (C16); Knitro/Direct against Knitro-CG sharing all other parts [S013 p. 14] |
+| Abandoned paths | NITRO's fast convergence deferred and its linear-system refinement called very conservative, not abandoned [S008 pp. 4, 23]; the CG step supplemented by direct factorization [S013 pp. 4–5] |
+| Reception | NITRO "significantly slower and far less robust" on small problems (doi:10.1007/s10107-003-0418-2) → Knitro-Direct; KNITRO 3.1.1 829/954 vs IPOPT 895 (doi:10.1007/s10107-004-0559-y) → infeasibility SQP; the Knitro-Direct arrow inferred from timing [05 §4]; the infeasibility arrow partly documented [S053 p. 4] (C6) |
 
 ---
 
@@ -1025,6 +1201,14 @@ New anatomy (the base tier listed this paper as not read).
 - **Reception**: 131 Scholar citations (scholar.md). The paper does not say which parts are the authors' own [S047 pp. 1, 16].
 - Quote: "This paper shows how practical demands of the application dictate the various algorithmic choices that are made in the nonlinear optimization solver, with particular reference to the system in operation at the European Centre for Medium-Range Weather Forecasts." [S047 p. 1].
 
+
+**SKILL.md wording before the second tightening (2026-10-17, T3.7), verbatim.** These are the lines of the pre-tighten SKILL.md (scratch copy `jorge-nocedal-SKILL.before-tighten-2026-10-17.md`) that the shortened SKILL.md text of this item replaced; nothing in them is withdrawn. Markdown links are re-based to this folder.
+
+| Aspect | Content |
+|---|---|
+| Key insight | Gauss–Newton, not quasi-Newton (the paper's argument: too few iterations; least-squares structure) [S047 pp. 7–8]; reduced over full space by storage, stability and cost, a hybrid in reserve [S047 pp. 9–11] |
+| Reception | 131 Google Scholar citations against 13,019 for the 1989 paper (scholar.md, 2026-10-16); it credits the multilevel method to Courtier et al. and does not say which parts are the authors' own [S047 pp. 1, 13, 16] |
+
 ---
 
 <a id="anatomy-sqn"></a>
@@ -1038,6 +1222,14 @@ New anatomy (Method 7's central work).
 - **Abandoned paths**: v2 has no *Preliminary Approach* section, consistent with its deletion (IT3) [S015]; the s–y monitoring safeguard proposed, not built [S015 p. 19].
 - **Limits**: Theorem 3.2 holds for any H_k with bounded eigenvalues, so it cannot separate SQN from SGD [S015 pp. 12–14, 29]; convex case only; single runs.
 - **Reception**: 728 Scholar citations (scholar.md); the step-size and no-linear-rate critique by the SLBFGS authors is in 05-peer-critique.
+
+
+**SKILL.md wording before the second tightening (2026-10-17, T3.7), verbatim.** These are the lines of the pre-tighten SKILL.md (scratch copy `jorge-nocedal-SKILL.before-tighten-2026-10-17.md`) that the shortened SKILL.md text of this item replaced; nothing in them is withdrawn. Markdown links are re-based to this folder.
+
+| Aspect | Content |
+|---|---|
+| Abandoned paths | v1's "A Preliminary Approach", absent in v2 [S015] (IT3); s–y monitoring proposed, not built [S015 p. 19] |
+| Method shown | Method 7; Heuristics 2, 5; taste warning 2 (Theorem 3.2 holds for any bounded H_k [S015 pp. 12–14]) |
 
 ---
 
@@ -1056,6 +1248,11 @@ New section (increment inc-book, 2026-10-17; cards c5-01, c5-02, c5-03; 08 §13)
 - **Printings** (inference, cards c5-01 and c5-02): the 2006 Springer preview is the uncorrected first printing, since all nine Appendix A errata stand in it [B002 pp. 3–32]; the 1999 preview appears to be a later, corrected printing, two pages shorter from Chapter 13 on than the first printing the errata cite, with three reference corrections already in place [B006 pp. 37, 39, 47; B007 p. 7]. Its page numbers are therefore not first-printing pages.
 - **What it supports in SKILL.md** (framing, not counted): Heuristic 10's stated line [B005 p. 9]; Heuristic 7 by copy (C20); the Acta anatomy's noise limitation (C21) [B001 p. 10]; Method 5's C1 context [B002 pp. 40–55]; the Research Trajectory's textbook line [B005 pp. 6, 8; B001 p. 21; B003 p. 1; B008 p. 1]; the Roundtable Card's Wright line; the Honest Boundary.
 - **Base-tier notes it supersedes** (not edited at this step; 08 §13.10): 02 W1's *preface not read*; 03 Gaps item 11 and RESOURCES row 113 (*first-edition errata sheets not opened*); 03 §4.3's *(updated 2/12/06)* label, stale since the sheet was last updated October 2, 2008 [B008 p. 1], and its item numbering (Nocedal's copy); the a2-02 card's S010 open point (Springer's description is the preface's first paragraph, verbatim [B005 p. 6; B012 p. 2]) and the S001 voice question (the catalogue's first paragraph and the last sentence of its second paragraph are the authors' web text [B011 pp. 1–2; B012 p. 1]); works.json's B008 note (the 2006-01-10 capture is the 90-item version of September 17, 2004, card c5-03).
+
+
+**SKILL.md wording before the second tightening (2026-10-17, T3.7), verbatim.** These are the lines of the pre-tighten SKILL.md (scratch copy `jorge-nocedal-SKILL.before-tighten-2026-10-17.md`) that the shortened SKILL.md text of this item replaced; nothing in them is withdrawn. Markdown links are re-based to this folder.
+
+Full anatomies: [01-publications](01-publications.md) (SW1–SW6); evidence and base-tier tables: `references/research/09-evidence-ledger.md#anatomy-lbfgs`, `#anatomy-acta`, `#anatomy-knitro`, `#anatomy-fd-dfo`, `#anatomy-ecmwf`, `#anatomy-sqn`, `#textbook`. Not dissected: the textbook (doi:10.1007/978-0-387-40065-5 [S001]), whose body is closed; its open prefaces, contents, back matter and errata are carded as joint framing with S. J. Wright [B001; B005; B002; B003]. Reception: N. Curteanu's zbMATH reviews restate the prefaces and criticize nothing [B009 p. 1; B010 p. 1].
 
 ---
 
@@ -1133,6 +1330,15 @@ The 1980s are thin in full text (3 works); most of that decade is abstract or me
 - **Interview check**: the 2026 interview's *second edition fairly quickly within five years* (06 T11, caption-derived) against the preface's six years since the first edition [B001 p. 21]; the preface is the written record (06 Contradictions).
 - **Errata dates**: January 2000 and 2/25/2000 for the first printing [B011 p. 2; B007 p. 7]; 2004–2008 for the second printing [B008 p. 1] (versions: card c5-03); August 2006 to May 27, 2008 for the second edition [B003 p. 1]. No book-material item (prefaces, errata, book pages) mentions a third edition [B011 pp. 2, 4].
 
+
+**SKILL.md wording before the second tightening (2026-10-17, T3.7), verbatim.** These are the lines of the pre-tighten SKILL.md (scratch copy `jorge-nocedal-SKILL.before-tighten-2026-10-17.md`) that the shortened SKILL.md text of this item replaced; nothing in them is withdrawn. Markdown links are re-based to this folder.
+
+| 1978–c. 1995 | Unconstrained quasi-Newton and CG; convergence theory with Byrd | Thesis programme judged "a impressive collection of failed ideas" (stated); Powell's convex BFGS proof (Powell 1976 [S020 p. 1]; match to the interview inferred) | doi:10.1007/BF01589116; doi:10.1017/S0962492900002270 [S007; S020; S019] |
+| c. 1989/90–2009 (✗ C2: base tier c. 1992) | Meteorology and data assimilation: L-BFGS in meteorology by 1990, 4-D assimilation planned, DOE/NSF-funded; ECMWF co-authors by 2009 | ECMWF asked about L-BFGS (stated; undated) [S197 pp. 2, 4; S198; S196] | doi:10.1007/s11081-008-9051-5 [S047] |
+| 2009/10–2019 | Machine learning: sampling and second-order methods | Google approached him (stated); pitched against the view that "you can only use simple methods" (Purdue 2017). Exit with two stated regrets. First full text on Google data, 2011 [S023 p. 14] | doi:10.1137/140954362; doi:10.1137/16M1080173; arXiv:1609.04836 |
+Textbook (joint with S. J. Wright; framing, not his own voice): the 1999 edition leaves out stochastic optimization and gives interior methods for NLP no detailed treatment, as current research [B005 pp. 6, 8]; the 2006 edition adds chapters on derivative-free optimization and on interior methods, a topic that "now forms the basis of successful codes for nonlinear programming" [B001 p. 21]; the errata of both editions were kept until 2008 [B003 p. 1; B008 p. 1].
+Constant: the quasi-Newton engine [S007; S150 p. 7], benchmarking hygiene [S002 p. 8], numbers as defaults, the Byrd partnership.
+
 ---
 
 <a id="collaboration"></a>
@@ -1174,6 +1380,14 @@ Kept as tensions, not rules.
 - **IT3** (print losses, yet trim failures): omissions declared in the text from the start: a weak configuration withheld [S007 p. 9]; an erratic scaling not reported [S002 p. 15]; a slightly weaker variant not tabulated [S030 p. 8]; SQN v2 has no *Preliminary Approach* section, consistent with its deletion [S015].
 - **IT5** (what theory is for): the survey credits SG's success to its superior work-complexity guarantees [S004 p. 82]; a 2020 paper: "That analysis, however, underestimates the power of the SSN-CG method on problems with favorable eigenvalue distributions and yields complexity estimates that are not indicative of its practical performance." [S041 p. 11]; the period split of Method 5's say–do (#method-5).
 - IT2, IT4, IT6: no new full-text evidence beyond Method 1's limitations [S080 arXiv pp. 1, 27; S150 pp. 6–7] (IT2).
+
+
+**SKILL.md wording before the second tightening (2026-10-17, T3.7), verbatim.** These are the lines of the pre-tighten SKILL.md (scratch copy `jorge-nocedal-SKILL.before-tighten-2026-10-17.md`) that the shortened SKILL.md text of this item replaced; nothing in them is withdrawn. Markdown links are re-based to this folder.
+
+- **IT1, theory first or experiments first**: "I'm not going to design algorithms heristically [sic]" (2026) against "why don't we do some experiments before we do more philosophizing or before we do any theory" (UCLA 2021; both caption-derived). His resolution: "The right balance is not for us to decide but is driven by the topic" (2017 prize speech). Full texts: practice first, rationale later [S013 pp. 6–7; S042 pp. 18–20; S139 p. 3].
+- **IT3, print losses, yet trim failures**: losses in abstracts, against SQN v1's deleted "Preliminary Approach", a deleted origin sentence (arXiv:1803.10173) and a Newton-sketch claim removed, not retracted (arXiv:1705.06211) [03 §4.2]. Full texts: omissions declared in the text [S007 p. 9; S002 p. 15].
+- **IT5, what theory is for**: in 1992 global efficiency "requires more attention"; from 2019 complexity results are "not distinguishing between good methods and bad methods" [02 C4]. Full texts: the co-authored survey (with Bottou and Curtis) credits SG's success to complexity guarantees [S004 p. 82]; a 2020 paper calls a worst-case bound not indicative of practice [S041 p. 11].
+- **IT6, depth or pivot**: quasi-Newton updating runs 1980–2022; everything else comes as 3–15-year stints with unexplained exits. He rates ECMWF highest; citations say the opposite (61 Crossref citations against about 7,000 for L-BFGS, base tier [01 C12]; Google Scholar 2026-10-16: 131 against 13,019, scholar.md).
 
 ---
 
