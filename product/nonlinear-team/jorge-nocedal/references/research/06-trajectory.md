@@ -331,6 +331,7 @@ Each turn gives the trigger in his words where one exists, the dated record, and
 - **Stated** [I26 [1:45:19]–[1:45:51], caption-derived]: "Right now, I'm just working on the third edition of my book with Steve Wright. I'm taking a pause from writing research papers. I'm very interested in generative AI but I will see if I can have something to contribute there. I'm interested in the occasional [educational] aspect of it which at this point seems completely confusing how it's going to disrupt education and what are you going to do about this? So I've been organizing groups to discuss those questions and um in six months when the third edition of the book is finished we've added a lot of material since then I will see if I have something to contribute."
 - **Consistent with the record** [practice]: no arXiv preprint after 2024-11-04; the 2025–26 journal items both come from 2024 preprints.
 - **Book history as he tells it** [stated, [1:07:53]–[1:09:01]]: he wanted to write a book "just because I wanted to learn the subject well"; "the first edition took six years"; "we did a second edition fairly quickly within five years … And then for 17 years the book stayed and we're now doing the third edition". This matches the dates 1999 → 2006 [practice]. Seventeen years after 2006 is 2023, so work on the third edition apparently began around 2023. That date is my inference.
+- *Increment inc-book (2026-10-17)* [practice, primary; joint with S. J. Wright]: the written record dates the editions. The first edition is © 1999 [B005 p. 4]; the Preface to the Second Edition counts six years since the first edition [B001 p. 21], against the interview's *within five years* (Contradictions 12); the second edition's hardcover appeared on 27 July 2006 [B012 p. 1]. No book-material item (prefaces, errata, book pages) mentions a third edition [B011 pp. 2, 4].
 
 ---
 
@@ -485,7 +486,17 @@ Sources: the paper cards (`07-paper-cards.md`) and the synthesis (`08-deep-readi
 ### 9.5 Gaps the full texts close or leave
 
 - Closed: the Google Scholar list (harvested 2026-10-16); the dating of the meteorology turn (1989–90); the 1980 paper, the 1987 theory paper, Byrd–Gilbert–Nocedal 2000, the ECMWF paper and the 2011 Remark.
-- Still open: the reasons for each exit (the full texts carry no origin or exit stories); when the ECMWF contact began; the 1980s beyond three works; *Numerical Optimization* [S001]; whether the declared pause holds (no card after the 2026 DFO letter [S150]).
+- Still open: the reasons for each exit (the full texts carry no origin or exit stories); when the ECMWF contact began; the 1980s beyond three works; *Numerical Optimization* [S001]; whether the declared pause holds (no card after the 2026 DFO letter [S150]). (*inc-book*: the textbook's open parts are now read, §9.6; its body stays closed.)
+
+### 9.6 The textbook in the book material (increment inc-book, 2026-10-17)
+
+Sources: cards c5-01 to c5-03 (B001–B012) and `08-deep-reading-synthesis.md` §13. All of it is the joint voice of Nocedal and S. J. Wright, a member of this team, except two zbMATH reviews and Springer's text; it dates and frames, and is not evidence of his own choices.
+
+- **Editions and affiliations**: 1999, preface signed Evanston, IL / Argonne, IL [B005 p. 9], Nocedal at Northwestern ECE and Wright at Argonne MCS [B012 p. 2]; 2006, preface signed Evanston, IL / Madison, WI [B001 p. 22], Nocedal at Northwestern EECS and Wright at Wisconsin Computer Sciences [B012 p. 1]; hardcover 27 July 2006, eBook 11 December 2006, XXII + 664 pages against XXI + 636 [B012 pp. 1–2].
+- **Scope against his turns** (T7, T8, T9): the 1999 edition omits discrete and stochastic optimization [B005 p. 6; B012 p. 2], about ten years before the machine-learning turn (T9); it gives interior methods for NLP no detailed treatment, as current research [B005 p. 8], during his own NITRO work (T7), whose 1997 report its reference list already cites [B006 p. 38]; the 2006 edition adds chapters on derivative-free optimization and interior-point methods for NLP [B001 p. 21], three years before the 2009 DFO-geometry paper [S062], and its not-covered list excludes complementarity constraints [B001 p. 22], the area of the 2008–2013 side line (T8) [S076; S092; S113].
+- **Finite differences and noise** (T10): a section of the 2006 textbook (9.1) [B001 p. 10], indexed at the start of the derivative-free chapter [B002 pp. 59, 62], thirteen years before the noise programme's first paper [S038 p. 1]. SKILL's *27 years* is therefore limited to his research papers (C21).
+- **Errata kept, 2000–2008**: the first-printing sheet dated January 2000 with an addendum of 2/25/2000 [B011 p. 2; B007 p. 7]; the second-printing sheet in three versions, September 17, 2004 to October 2, 2008 [B008 p. 1] (versions: card c5-03); the second-edition list from August 2006 to May 27, 2008 [B003 p. 1]. Nothing was updated after 2008 on either author's site (card c5-03).
+- **The Byrd partnership** (§9.3): the only sentence about Nocedal alone in the book material thanks Byrd [B005 p. 9]; Byrd co-authors 8 of the 17 Nocedal entries in the 2006 bibliography (card's count) [B002 pp. 42–43, 55].
 
 ---
 
@@ -523,6 +534,8 @@ Sources: the paper cards (`07-paper-cards.md`) and the synthesis (`08-deep-readi
 
     Both are current web pages.
 11. **Theory versus computation over the career.** In 1992 he called for more work on "global efficiency" (01 Contradiction 10). In 2026 he says the field "has gone really really theoretical" and "the computational side of it … used to be the core now it's a smaller field" [1:29:02]–[1:29:35]. His own trajectory moved from theory-heavy (1985–94) to computation- and software-heavy (1995–2025).
+
+12. **Interval between the editions.** The 2026 interview: "we did a second edition fairly quickly within five years" (T11, caption-derived). The Preface to the Second Edition counts six years since the first edition appeared [B001 p. 21]; the copyright years are 1999 and 2006 [B005 p. 4; B001 p. 5]. The preface is the written record. (Added in increment inc-book, 2026-10-17.)
 
 ## Gaps
 

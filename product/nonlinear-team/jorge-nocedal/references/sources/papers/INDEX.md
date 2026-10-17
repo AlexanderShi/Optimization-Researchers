@@ -177,5 +177,17 @@
 | 165 | S218 | — | SPECIAL SECTION ON LARGE-SCALE OPTIMIZATION FOR AUDIO, SPEECH, AND LANGUAGE PROCESSING | — | — | other | — | no-oa |  | skip | metadata |
 | 166 | S219 | — | JOS E LUlS MORALES lnstituto Tecnol ogico Aut onomo de M exico a nd | — | — | other | — | no-oa |  | supplement | metadata |
 | 167 | S221 | — | Computer Science Department University of Colorado at Boulder Boulder Colorado 80309 | Computer Science 2, 1, 0 | — | other | — | no-oa |  | supplement | metadata |
+| 168 | B001 | 2006 | Numerical Optimization, Second Edition: front matter with prefaces, dedications and table of contents (Springer free preview) | book material | — | other | manual | txt | 22 | core | carded |
+| 169 | B002 | 2006 | Numerical Optimization, Second Edition: back matter with Appendix A (Background Material), Appendix B (A Regularization Procedure), references and index (Springer free preview) | book material | — | other | manual | txt | 67 | core | carded |
+| 170 | B003 | 2008 | Corrections to Numerical Optimization, Second Edition (last updated May 27, 2008): errata list from Nocedal's homepage | book material | — | errata | manual | txt | 5 | core | carded |
+| 171 | B004 | 2008 | Corrections to Numerical Optimization, Second Edition (last updated May 17, 2008): errata list from Wright's homepage | book material | — | errata | manual | txt | 5 | core | carded |
+| 172 | B005 | 1999 | Numerical Optimization, First Edition: front matter with preface, dedication and table of contents (Springer free preview) | book material | — | other | manual | txt | 19 | core | carded |
+| 173 | B006 | 1999 | Numerical Optimization, First Edition: back matter with Appendix A (Background Material), references and index (Springer free preview) | book material | — | other | manual | txt | 60 | core | carded |
+| 174 | B007 | 2000 | Corrections to First Printing of Nocedal-Wright (Numerical Optimization, first edition; additional corrections noted 2/25/2000) | book material | — | errata | manual | txt | 7 | core | carded |
+| 175 | B008 | 2008 | Corrections to Second Printing of Numerical Optimization (first edition; last updated October 2, 2008) | book material | — | errata | manual | txt | 7 | core | carded |
+| 176 | B009 | 1999 | Review of Numerical Optimization (first edition, 1999) by Neculai Curteanu in zbMATH Open, Zbl 0930.65067 | book material | — | review | manual | txt | 1 | core | carded |
+| 177 | B010 | 2006 | Review of Numerical Optimization (second edition, 2006) by Neculai Curteanu in zbMATH Open, Zbl 1104.65059 | book material | — | review | manual | txt | 1 | core | carded |
+| 178 | B011 | 2006 | Numerical Optimization: the authors' book web pages on Nocedal's Northwestern homepage (Internet Archive captures, 2002-2016) | book material | — | other | manual | txt | 4 | core | carded |
+| 179 | B012 | 2006 | Numerical Optimization: Springer catalogue pages for the first and second editions (About this book, Reviews excerpt, bibliographic data) | book material | — | other | manual | txt | 2 | core | carded |
 
-167 works · txt 97 · pdf 0 · no-oa 70
+179 rows = 167 works + 12 book-material items (B001–B012) · txt 109 · pdf 0 · no-oa 70

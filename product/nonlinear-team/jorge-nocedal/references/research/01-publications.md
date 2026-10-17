@@ -184,7 +184,7 @@ Citation counts from four databases disagree and are only for relative compariso
 
 | # | Work | Verified id | OpenAlex | Crossref | Sem. Scholar |
 |---|---|---|---|---|---|
-| 1 | Nocedal & Wright, *Numerical Optimization* (1st ed. 1999; 2nd ed. 2006) | doi:10.1007/b98874; doi:10.1007/978-0-387-40065-5 | 9,520 + 9,050 + 1,119 (3 records) | 6,564 + 1,007 | not read |
+| 1 | Nocedal & Wright, *Numerical Optimization* (1st ed. 1999; 2nd ed. 2006) | doi:10.1007/b98874; doi:10.1007/978-0-387-40065-5 | 9,520 + 9,050 + 1,119 (3 records) | 6,564 + 1,007 | not read (*inc-book*: the body is closed; its open front and back matter, errata and reviews are carded [B001; B005]) |
 | 2 | Liu & Nocedal 1989, L-BFGS | doi:10.1007/BF01589116 | 8,818 | 6,927 | 9,075 (702 "influential") |
 | 3 | Byrd, Lu, Nocedal & Zhu 1995, L-BFGS-B | doi:10.1137/0916069 | 6,420 | 5,235 | 6,883 |
 | 4 | Zhu, Byrd, Lu & Nocedal 1997, Algorithm 778 | doi:10.1145/279232.279236 | 3,565 | 2,907 | not read |
@@ -493,7 +493,7 @@ Included because he calls it his most important contribution, although citation-
 
 ### 4.1 Published corrections and errata [practice, primary]
 - **L-BFGS-B Remark (2011)**: "an improvement and a correction to Algorithm 778 … The correction concerns an error caused by the use of routine dpmeps to estimate machine precision" (doi:10.1145/2049662.2049669; abstract via OpenAlex). Released 14 years after Algorithm 778. The L-BFGS-B page keeps v2.1 and v3.0 side by side.
-- **Book errata**: homepage book page links "Errata2 (Second edition, August 2006)" and "Errata1 (First edition, January 2000)" (contents not read).
+- **Book errata**: homepage book page links "Errata2 (Second edition, August 2006)" and "Errata1 (First edition, January 2000)" (contents not read). *Increment inc-book (2026-10-17)*: the lists are now read and carded, all joint with S. J. Wright: the second-edition list in Nocedal's copy (80 items, last updated May 27, 2008) [B003 pp. 1–5] and in Wright's (79 items, May 17, 2008) [B004 pp. 1–5]; the first-printing sheet of the first edition (35 items plus a 4-item addendum of 2/25/2000) [B007 pp. 1–7] and the second-printing sheet (91 items, last updated October 2, 2008) [B008 pp. 1–7] (`09-evidence-ledger.md#heuristic-7`, C20).
 - **SIAM Review errata** (June 30, 2016): two equation-reference fixes in Chapter 5 (`PDFfiles/opt_ml_errata.pdf`, read).
 
 ### 4.2 Papers about failure [practice, primary]
@@ -589,14 +589,15 @@ Sources: `../sources/publications/works.json` and `scholar.md` (Google Scholar p
 |---|---|---|---|---|---|---|---|---|---|
 | 223 | 167 | 97 | 76 | 21 | 39 | 23 | 8 | 0 | 284 |
 | 223 | 167 | 97 | 80 | 17 | 39 | 23 | 8 | 0 | 316 |
+| 223 | 167 | 97 | 80 | 17 | 39 | 23 | 8 | 12 | 340 |
 
-The second row is the coverage after increment inc-ocr (2026-10-17): S002, S028, S046 and S101 were re-read in full from an OCR text layer and moved from *skimmed* to *carded* (`08-deep-reading-synthesis.md` §12).
+The second row is the coverage after increment inc-ocr (2026-10-17): S002, S028, S046 and S101 were re-read in full from an OCR text layer and moved from *skimmed* to *carded* (`08-deep-reading-synthesis.md` §12). The third row is the coverage after increment inc-book (2026-10-17): twelve book-material items B001–B012 (the open parts of *Numerical Optimization*, its errata, two reviews, the authors' book pages and Springer's catalogue pages) were carded in full; the research-work columns are unchanged (`08-deep-reading-synthesis.md` §13).
 
 - Card entries: 181 (full 79, partial 28, abstract 44, metadata 30) for 165 works. After counting S126 (2006 report) with S042 and S056 with S143, and leaving out the skip rows (S155, not by Nocedal; S164, S165, S214, S215, S218, non-research; the talks S146 and S175, no card), 157 distinct research works carry cards.
 - Every open full text was read in full or in part. Full or partial reads by period (distinct works): 1978–79 2; 1980–84 1; 1985–89 3; 1990–94 9; 1995–99 13; 2000–04 18; 2005–09 13; 2010–14 14; 2015–19 12; 2020–24 9; 2025–26 2 (96 in all).
 - Abstract level: 39 works, 15 of them NSF award abstracts (S167 S169 S173 S174 S176 S178 S184 S186 S187 S189 S190 S192 S195 S196 S198 S202 S206 are award records; they date interests and are weak method evidence). Among the abstract- or metadata-only works: *Numerical Optimization* [S001] and its 1999 edition [S010], the 1989 analysis tool [S017], the negative-φ Broyden paper [S044], column scaling [S108], the 1990–91 numerical studies [S100; S025] and most 1980s work.
 - Ten works were carded twice from one text (S030 S067 S098 S111 S040 S057 S077 S119 S035 S075): round 1 read text layers without digits, round 2 the OCR text; numbers come from the round-2 cards only. The 1989 L-BFGS study [S002] and the 2003 benchmark [S078] have unreadable digits. *Increment inc-ocr (2026-10-17)*: sixteen more works were re-read from an OCR text layer in round 4 (S002 S019 S014 S003 S005 S049 S024 S008 S009 S021 S078 S061 S028 S088 S046 S101; card entries 197: full 94, partial 29, abstract 44, metadata 30); the 2003 benchmark is now legible [S078 pp. 6–7, 15], the 1989 study mostly (ten tables still illegible) [S002], and the numbers of these works come from the round-4 cards only. No new work was added.
-- Quotes: 284 card quotes, 257 exact and 27 matching after normalisation, 0 not found (`verify_card_quotes.py`); after inc-ocr 316, 288 exact, 28 after normalisation, 0 not found.
+- Quotes: 284 card quotes, 257 exact and 27 matching after normalisation, 0 not found (`verify_card_quotes.py`); after inc-ocr 316, 288 exact, 28 after normalisation, 0 not found. After inc-book: 340, all exact, 0 not found.
 
 ### 7.3 What the full texts change in this note
 
@@ -608,6 +609,7 @@ The second row is the coverage after increment inc-ocr (2026-10-17): S002, S028,
 - **SW6** (data assimilation): meteorology is already an application in the 1989–90 DOE progress report [S197 pp. 2, 4] and in the 1990–91 award abstracts [S198; S196], earlier than the c. 1992 start of §3; the 2009 case study is read [S047]: Gauss–Newton over quasi-Newton because of least-squares structure [S047 pp. 7–8], the multilevel method credited to Courtier et al. [S047 p. 13], and no statement of which parts are the authors' own [S047 pp. 1, 16].
 - **§6 candidate patterns**: patterns 1–3, 7 and 9 are the skill's Methods 5, 1, 3, 2 and 6; 4, 5, 8 and 10 are Heuristics 5, 7, 4 and 9; pattern 6 is part of Method 6. The full texts add Method 7 and Heuristics 11–12 (`08-deep-reading-synthesis.md` §§4–5).
 - **Gaps closed**: Gap 1 (Google Scholar, now harvested); Gap 3's bodies, except *Numerical Optimization* [S001] and the 1989 theory paper [S017].
+- **Increment inc-book (2026-10-17), the textbook**: the open parts of both editions are read, all in the joint voice of Nocedal and S. J. Wright: prefaces and full contents [B005; B001], appendices, references and index [B006; B002], the four errata lists [B003; B004; B007; B008], two zbMATH reviews [B009; B010], the authors' book pages [B011] and Springer's catalogue pages [B012]. For this note: the 2006 edition adds chapters on derivative-free optimization and interior-point methods for NLP, the latter because it "now forms the basis of successful codes for nonlinear programming" [B001 p. 21]; the 2006 bibliography cites 17 entries with Nocedal as an author, 8 of them with Byrd (card's counts) [B002 pp. 40–55]; §4.1's errata are read. Gap 3's last item is closed for the prefaces and back matter; the bodies stay unread. Book material dates and frames; it adds no signature work and no method (`08-deep-reading-synthesis.md` §13).
 
 ---
 
@@ -655,7 +657,7 @@ The second row is the coverage after increment inc-ocr (2026-10-17): S002, S028,
    - Waltz et al. 2006;
    - the 2011 stochastic-Hessian paper;
    - all noise-program papers (abstracts only);
-   - *Numerical Optimization* (either edition, including prefaces).
+   - *Numerical Optimization* (either edition, including prefaces). (*inc-book*, 2026-10-17: the prefaces, contents, appendices, references, index and errata are now read [B001; B005; B002; B006; B003; B004; B007; B008]; the bodies are still not open.)
    Origin, minimum-evidence and abandoned-path claims for these rest on abstracts, CV records or inference, as marked.
 4. **Origin stories come from one caption-derived interview.** The WebSearch for an interview found nothing. The origin accounts for L-BFGS, the QN theory, KNITRO, the Google/ML turn and ECMWF all come from the March 2026 interview transcript (`../sources/talks/2026-03-18_subject-to-interview_CfR-llfmb6E.txt`), which is automatic ASR, not human-checked. They are late retrospective accounts (about 45 years after L-BFGS) and he himself warns "my memory tends to really distort things" [0:46:03]. No contemporaneous account (letters, early talks, referee reports) was found to cross-check them. Moré's role as editor of the 1980 paper is unverified.
 5. **Dantzig Prize 2012 citation** not read (mathopt.org pages render empty to curl and WebFetch). The Broyden Prize citation was not read either; the award is known only from the CV.

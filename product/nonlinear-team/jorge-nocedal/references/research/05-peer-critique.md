@@ -176,6 +176,7 @@ He concedes the adoption fact and keeps the normative judgement.
 - W. F. Mascarenhas, "The BFGS method with exact line searches fails for non-convex objective functions", *Math. Program.* 99 (2004) 49–61, doi:10.1007/s10107-003-0421-7. Metadata only; not read.
 - Y.-H. Dai, "A perfect example for the BFGS method", *Math. Program.* 138 (2013) 501–530, doi:10.1007/s10107-012-0522-2. Metadata only; not read.
 - **Answered?** Not found. Whether *Numerical Optimization* (2nd ed., 2006) discusses these examples was **not read**.
+- *Book material, increment inc-book (2026-10-17)* [practice, P; joint with S. J. Wright]: the 2006 textbook's bibliography (322 entries) cites neither Dai 2002 nor Mascarenhas 2004; its only Dai entry is Dai–Yuan 1999 on conjugate gradients [B002 pp. 40–55]. Whether the text discusses the examples without citing them is still **not read** (the body is closed). The bibliography is the joint choice of both authors.
 - Reading [inferred]:
   - the practical half of the 1992 judgement ("numerical experience … suggests") is not refuted by constructed examples;
   - the stronger sentence "Nobody has been able to construct an example" was overtaken within ten years.
@@ -195,7 +196,7 @@ He concedes the adoption fact and keeps the normative judgement.
 
 The referee reports themselves were not found (Gap). Answered by later practice: L-BFGS became his most-cited work (`01-publications.md` Contradictions 13).
 
-**3.4 Self-corrections recorded elsewhere** (cross-reference, not repeated): the 2011 L-BFGS-B Remark (doi:10.1145/2049662.2049669), the book and SIAM Review errata, and the 2004 non-stationary-points paper (`01-publications.md` §4.1–4.2).
+**3.4 Self-corrections recorded elsewhere** (cross-reference, not repeated): the 2011 L-BFGS-B Remark (doi:10.1145/2049662.2049669), the book and SIAM Review errata (the book errata now read and carded in increment inc-book, 2026-10-17 [B003; B004; B007; B008], joint with S. J. Wright), and the 2004 non-stationary-points paper (`01-publications.md` §4.1–4.2).
 
 ---
 
@@ -359,6 +360,15 @@ Source: A. S. Berahas, O. Sohab & L. N. Vicente, "Full-low evaluation methods fo
 
 ---
 
+## 9. Reception of the textbook (book material, increment inc-book, 2026-10-17)
+
+*Numerical Optimization* is co-authored with S. J. Wright, a member of this team, so its reception is not Nocedal's alone. The reviews below are the reviewers' voices; the prefaces they are compared with are the two authors' joint voice.
+
+- **N. Curteanu, zbMATH Open, 1st ed.** (Zbl 0930.65067; read in full) [observed, S]: the reviewer frames the book by its goal: "The main goal of the book is to give a comprehensive description of the most powerful, state-of-the-art techniques for solving optimization problems." [B009 p. 1]. The review follows the preface paragraph by paragraph, drops the word *continuous* from its goal sentence and leaves out its not-covered section [B009 p. 1; B005 pp. 6–9]. Its one apparent reservation, "the proposed treatment of the optimization process modelling is light, serving mainly to set the stage for the algorithmic developments." [B009 p. 1], restates the preface's own self-description of its modelling treatment [B005 p. 8]. No evaluation, no criticism, no error.
+- **N. Curteanu, zbMATH Open, 2nd ed.** (Zbl 1104.65059; read in full) [observed, S]: anchored to the first review, "the review of the first edition remaining still as a reference point" [B010 p. 1]; it lists the two new chapters and the reorganisations in the order of the Preface to the Second Edition, adds a software-guide link, omits the length remark, the typo list, the acknowledgments and the not-covered list, and names no weakness [B010 p. 1; B001 pp. 21–22].
+- **MMOR, 2001, reviewer not named**, quoted on Springer's first-edition page [observed, S]: recommends the book for graduate courses and self-study; laudatory and descriptive [B012 p. 2].
+- **Reading** [inferred]: every published review read here is descriptive praise; none criticizes the book. The skill therefore has no external critique of the textbook. Reviews are routed here, never used as evidence of Nocedal's methods.
+
 ## Contradictions (kept, not reconciled)
 
 1. **What the data-augmentation experiment showed (Keskar et al. 2017).** Four readings:
@@ -410,7 +420,7 @@ Source: A. S. Berahas, O. Sohab & L. N. Vicente, "Full-low evaluation methods fo
 3. **Not read, metadata only**:
    - Wächter & Biegler 2000 (content taken from two readers who did read it);
    - Dai 2002 (abstract only), Dai 2013 and Mascarenhas 2004.
-   - Whether *Numerical Optimization* (2nd ed.) discusses the BFGS counterexamples: **not read**.
+   - Whether *Numerical Optimization* (2nd ed.) discusses the BFGS counterexamples: **not read**. (*inc-book*: they are not in its bibliography [B002 pp. 40–55]; the text is still not read.)
 4. **Lewis & Overton**: only the December 2008 preprint was read. Whether the published 2013 version keeps the L-BFGS-B recommendation is unchecked. Whether Nocedal ever responded is unknown. That the later SciPy L-BFGS-B port (a C translation) added a weak-Wolfe option was not checked.
 5. **COPS 3.0**: 21 of 22 per-problem tables not read (the PDF's embedded fonts defeat text extraction; no OCR available). No overall KNITRO record was compiled.
 6. **Mittelmann logs** (`plato.asu.edu/ftp/ampl-nlp_logs/`) and other Mittelmann NLP pages were not read. Older snapshots (to date when KNITRO's position changed) were not reachable (Wayback blocked).
@@ -419,7 +429,7 @@ Source: A. S. Berahas, O. Sohab & L. N. Vicente, "Full-low evaluation methods fo
 9. **Rejected papers and referee reports**: none found beyond the interview anecdotes (L-BFGS 1980 reviews; Powell's review of an unnamed Knitro theory paper).
 10. **Critique of the SIAM Review 2018 survey, the dynamic-sampling "norm test" line, or the weather / data-assimilation work**: none found. The only self-critique found is the 2018 abstract's claim that the new inner-product test "improves upon the well known norm test" (arXiv:1710.11258).
 11. **Complexity-theory school**: no published reply to Nocedal's criticism of complexity results (`02-methodology.md` C4) was found or searched for (budget).
-12. **zbMATH reviews** of *Numerical Optimization* (1st and 2nd eds., reviewer N. Curteanu) are descriptive. They contain no criticism beyond noting that the treatment of modelling "is light" (1999 review).
+12. **zbMATH reviews** of *Numerical Optimization* (1st and 2nd eds., reviewer N. Curteanu) are descriptive. They contain no criticism beyond noting that the treatment of modelling "is light" (1999 review). *Correction (increment inc-book, 2026-10-17)*: both reviews are now read in full [B009; B010]. The 1999 review's *light* remark restates the preface's own description of its modelling treatment [B005 p. 8; B009 p. 1], so neither review contains any criticism; the 2006 review names no weakness [B010 p. 1]. See §9.
 
 ## Sources
 
@@ -485,5 +495,11 @@ Retrieval date for all: 2026-09-28. P = primary (Nocedal's own words, work, code
 45. Crossref REST API: metadata checks for every DOI in this file — S
 46. WebSearch 1 (2026-09-28): `Keskar Nocedal "sharp minima" ICLR 2017 openreview reviewer comments large-batch criticism`. It returned the papers only, no review text; it confirmed Dinh et al. appeared in ICML 2017 Vol. 70 — S
 47. WebSearch 2 (2026-09-28): `"finite-difference" derivative-free Shi Xuan Oztoprak Nocedal comparison criticized model-based NEWUOA noisy benchmark response`. It returned the paper's own concessions, which were then verified in the arXiv text — S
+
+**Book material (increment inc-book, 2026-10-17)**
+48. N. Curteanu, review of Nocedal & Wright, *Numerical Optimization* (1999), zbMATH Open Zbl 0930.65067, https://zbmath.org/?q=an:0930.65067 (zbMATH Open API document 1324815; read in full, card B009) — S
+49. N. Curteanu, review of the 2nd ed. (2006), zbMATH Open Zbl 1104.65059, https://zbmath.org/?q=an:1104.65059 (API document 5060482; read in full, card B010) — S
+50. Springer catalogue page of the 1st ed., *Reviews* excerpt (MMOR Mathematical Methods of Operations Research, 2001, reviewer not named), https://link.springer.com/book/10.1007/b98874 (card B012) — S
+51. The prefaces of both editions (Springer free previews; cards B005 and B001), compared with the reviews — P
 
 **Scratch materials** (not committed): `/tmp/nonlinear-team-scratch/base-skills/jorge-nocedal/critique/`. It holds the arXiv, NeurIPS, OSTI, Vanderbei, Optimization Online and Overton PDFs with their extracted text, the Mittelmann page, the Crossref, zbMATH and Semantic Scholar JSON, and the COPS page images.
