@@ -1,5 +1,49 @@
 # 蒸馏记录
 
+## 2026-10-17 (12) · Jorge Nocedal 深读档（nonlinear-team 第二位深读成员）
+
+- 用户请求：「加强nonlinear team nocedal的蒸馏」，选完整深读档（T3.1–T3.8）。分支 `nocedal-deep-read`（独立 worktree）。
+  Robinson（第 11 条）先合入 main，本分支 merge main 后带全体 11 人重做 T3.8（旧的 10 人版留作标签 `nocedal-t38-10members`）
+- 产物（`product/nonlinear-team/jorge-nocedal/`）：
+  - 发表全表：223 条 Scholar 行，56 条 `dup_of`，剩 167 个不同作品，另有 12 项书籍材料；`validate_works.py` 0 错误。
+    审计改正了 3 篇 LNM 章节的年份（Scholar 给的是 SpringerLink 上线年）、S150 的年份，以及 S111、S179、S188 被截断的作者和标题
+  - 开放全文 97 篇（获取 73 → 补搜 91 → 读卡时又找到 6 篇）。卡片 209 张，分 36 个批次文件、5 轮读完：全读 80，部分 17，
+    摘要 39，元数据 23，跳过 8，书籍材料 12；340 条摘录全部逐字匹配（宽松匹配 0）
+  - 07–10、`technique-catalog.md`。SKILL.md 改写后 11,687 词：
+    - 新增 Method 7「让曲率样本独立于梯度样本，并按梯度计价」，对照其他成员排他性成立，内层求解一步标为与 Curtis 共享
+    - 新增 Heuristic 11、12，按全文更正 C1–C21
+    - 约 60 个候选里，多数因在别的成员身上也成立（Curtis、Wächter、Toint、Ye、Gould）而被否
+- 数字字体层坏掉的全文：97 篇中有 26 篇正文完好，但数字、希腊字母、数学符号和 fi/ff 连字全丢，第 1 轮读卡只能读正文。
+  其中有 L-BFGS 1989、L-BFGS-B、紧凑表示 1994、Acta Numerica 1992、NITRO。本机装了 tesseract（winget），全部 OCR 后重读：
+  10 篇在第 2 轮重读，16 篇在 T4 `inc-ocr` 重读。重读带出 C14–C19 六处更正，例如 KNITRO「与 LANCELOT 相当」只在 14 个大问题上成立
+- T4 增量两次：`inc-ocr`（上条）和 `inc-book`。后者读《Numerical Optimization》两版的前后附录、勘误、zbMATH 书评和 Springer 页面。
+  书与 S. J. Wright 合著，Wright 也是本队成员，书籍材料只用来定时间和定位，不当作 Nocedal 一个人的声音，也不据此升格方法。
+  两次增量各自在 +400 词上限内，合起来却让 SKILL.md 到了 13,121 词，于是跑 T3.7 精简到 11,666 词（`--before` 无损）
+- 声明抽审（每条两位零上下文审计员，有分歧时第三位裁定）：
+  - 第一轮 SKILL.md 60 条：50/10/0/0，两位审计员 59/60 一致；10 条 partial 收窄后复判全部 supported
+  - 增量后第二轮 SKILL.md 20 条：18/2/0/0；09 与技术目录 20 条：17/3/0/0。收窄后复判全部 supported；
+    另有 1 条无需改，原因是脚本不会按声明里写明的批次选卡
+- kit 改动（TEAM-KIT.md 本地修改表都有记录）：
+  - `verify_card_quotes.py` 去掉 U+FFFE：pdfium 写在行末的断词连字符，59 篇全文受影响
+  - `acquire_fulltexts.py` 识别数字全丢的文字层并自动 OCR：阈值 0.5%，26 篇坏文本抓到 24 篇，1112 篇正常全文 0 误报
+  - `quality_check.py` 把输出重配置为 UTF-8
+  - `audit_claims.py` 在同样深的卡片里取最晚一轮：原来会把 OCR 重读前的旧卡片交给审计员，第二轮抽审有 10 条因此换卡重审
+- 团队层（T3.8，11 人）：
+  - 圆桌 fault line 1–3 的 Nocedal 一方改为卡片证据（S052、S053、S042、S019、S041 等），Curtis 与 Robinson 一方保留
+  - DEEP-READING、README 的覆盖表原样取自 `team_status.py`
+  - merge 时 Nocedal 的 Roundtable Card 两边都保留：main 的 Robinson 分歧与措辞精简，本分支的 Method 7 与盲点。
+    RESOURCES.md 里 main 的第 200 行改编为第 218 行
+- 验证（Windows 11，Python 3.13）：
+  - `team_check.py product/nonlinear-team` 29 项 0 失败 0 跳过；`check_citations.py` 全队 0 问题；`check_links.py` 129 文件 0 断链
+  - Nocedal `quality_check.py` 12/12；`check_ledger.py --before`（精简前副本）通过；无 `{{`、`[TODO`
+- 运行教训：
+  - 第 1 轮读卡跑到周用量上限，21 批停在 16 批，用 `only` 补跑剩下 5 批
+  - `inc-book` 跨会话中断，用 `resumeFromRunId` 续跑；检索 agent 把半途留下的文件挪进 scratch，没有删
+  - 改了 works.json 的标题，文件名 slug 也会跟着变，本地 PDF/txt 要随之改名（S188）
+- 成本：子 agent 约 2,490 万 token（读卡约 900 万，两次增量约 510 万，抽审与收窄约 430 万，T3.6 约 240 万，
+  T3.8 两次约 270 万，其中 10 人版作废）；`inc-book` 首跑中断那部分未计量
+- 执行模型：claude-opus-5-5
+
 ## 2026-10-17 (11) · Daniel P. Robinson 加入 nonlinear-team（轻量档，第 11 位成员）
 
 - 用户请求：「蒸馏一下Daniel P Robinson 放到nonlinear team」，选轻量档（T1 + 带全体重跑 T2，不做 T3）。分支 `robinson-member`
