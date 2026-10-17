@@ -1,0 +1,497 @@
+[
+ {
+  "id": "S119",
+  "year": "2002",
+  "title": "iNEOS: An interactive environment for nonlinear optimization",
+  "read_level": "full",
+  "contribution": "Software note describing iNEOS, a CORBA client-server environment in which the user's machine keeps a proprietary simulation and evaluates f and g while a remote L-BFGS-B server returns trial points, validated on a piezoelectric parameter-identification problem (pp. 1-3, 8-11).",
+  "problem_entry": "NEOS requires the whole model as AMPL/Fortran/C files, excluding proprietary models, slow simulations and multi-language models (p. 2).",
+  "key_idea": "Exploit the information structure of quasi-Newton iterations (only x, f, g and line-search trial values are exchanged, which do not reveal the model); CORBA client-server with a SolverFactory and a two-method L-BFGS-B interface (Init, NextIterate) (pp. 3-7).",
+  "assumptions": "n/a (software); CORBA overhead acceptable because simulations take minutes or hours and each exchange sends O(n) numbers (p. 5); bound constraints only (p. 4).",
+  "proof_devices": [],
+  "experiments": "One controlled validation on a proprietary finite-element piezoelectric crystal model (ten parameters, bounds, finite-difference Jacobian): planted target parameters, perturbed start, recovery to a set accuracy; client in California, server in Illinois; fitted impedance after 20 L-BFGS iterations; numbers lost in the text layer (pp. 8-11).",
+  "positioning": "Motivated by the success and limits of the NEOS server; reverse-communication design already present in TRON and L-BFGS (pp. 2-3).",
+  "writing": "Short engineering note; capability claim stated from a single run (p. 9).",
+  "limits_future": "Bound constraints only, general constraints need second derivatives on the server (p. 4); no user-level security; solver-specific API; XML common interface proposed with overhead still to be measured (p. 12).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "step 3: with a proprietary model hidden from the solver, the general method needing only function and gradient values is the right tool, and that property becomes the privacy argument",
+    "pages": "pp. 3, 9"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "algorithm information structure as a deployment interface",
+    "evidence": "reverse communication (driver computes f, g; solver returns next iterate) turned into a remote, model-hiding optimization service",
+    "pages": "p. 3"
+   }
+  ],
+  "transferable": [
+   "Validate an optimization pipeline on a real simulator with a planted solution: data from known parameters, a perturbed start, and recovery to a set accuracy (p. 9).",
+   "Before building a service around a solver, list what each iteration actually needs (x, f, g, trial values) and design the interface around that minimum (p. 3)."
+  ],
+  "coauthors": "Marcel Good, Jean-Pierre Goux (Northwestern), Victor Pereyra (Weidlinger Associates); Todd Plantenga thanked (pp. 1, 12)",
+  "quotes": [
+   {
+    "text": "In nonlinear optimization an improved solution can be generated just by knowing the current iterate and the numerical values of the function and gradient at the current point",
+    "page": 3
+   },
+   {
+    "text": "These arrays of real numbers do not reveal the nonlinear model to an observer of the data submissions",
+    "page": 3
+   }
+  ]
+ },
+ {
+  "id": "S035",
+  "year": "2003",
+  "title": "An algorithm for nonlinear optimization using linear programming and equality constrained subproblems",
+  "read_level": "full",
+  "contribution": "Introduces the SLQP (SLP-EQP) active-set trust-region algorithm and code SLIQUE: an l1-penalty LP in an l-infinity trust region predicts the active set, a Cauchy point and an inexact EQP with its own trust region give a dogleg-like step, and the penalty parameter is set from the LP; benchmarked against KNITRO and SNOPT on CUTEr (OTC report version, pp. 1-31).",
+  "problem_entry": "Active-set SQP and interior methods are likely to become very expensive as problems grow because of the general QP subproblem; the Fletcher-Sainz de la Maza LP-EQP idea had received little attention (p. 2).",
+  "key_idea": "Keep LP-for-active-set plus EQP-for-optimality; change step generation (Cauchy point, EQP with violated-constraint curvature solved by projected CG-Lanczos, dogleg-like path), the LP trust-region update (may shrink after accepted steps), and the penalty update driven by the attainable linear-feasibility reduction from an LP with zero objective gradient (pp. 2, 5-16).",
+  "assumptions": "f, h, g twice continuously differentiable (p. 3); bounds kept feasible but omitted from the exposition (p. 6); no preconditioning (p. 11); convergence theory in a separate paper (p. 7).",
+  "proof_devices": [
+   "no proofs; LP trust-region rule and Cauchy decrease justified by the separate global convergence theory with admissible ranges of constants (p. 7; S058)"
+  ],
+  "experiments": "CUTEr subset (QP, BC, GC classes; sizes by n+m), SLIQUE vs KNITRO and SNOPT at defaults, aligned stopping tests, limits counted as failures, SNOPT near-successes counted as failures; fevals/CPU performance profiles and a per-task time breakdown; SLIQUE less robust than KNITRO, close to SNOPT, weak on large problems because of LP time (pp. 18-29).",
+  "positioning": "Extends Fletcher-Sainz de la Maza in step generation, penalty management and LP trust region; differs from Chin-Fletcher (filter, full EQP or Cauchy step) (pp. 2, 30-31).",
+  "writing": "Lists four novel features and five planned improvements; states which observations are positive and that the code is a first stage (pp. 29-31).",
+  "limits_future": "Inefficient on large problems because of LP solves and weak warm starts; LP trust region and warm starts open; planned: faster LP, better LP radius update, SOC or nonmonotone strategy, EQP preconditioning, degeneracy handling (pp. 7, 29-31).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "stopping tests of their own two codes made very similar to SNOPT's, defaults for all, limits = failure, SNOPT near-successes counted as failures for consistency, loss to their own KNITRO printed",
+    "pages": "pp. 19-21"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "step 5: active-set and interior codes compared like with like and each loss explained (SNOPT large reduced spaces, SLIQUE LP time)",
+    "pages": "pp. 29-30"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "open choices (LP radius, warm starts, five improvements) written down as the agenda; the code reappears as Knitro-Active (S126 p. 12)",
+    "pages": "pp. 7, 29, 31"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "earliest form of penalty steering: nu set from an explicit estimate, the best attainable linearized-infeasibility reduction from an LP with zero objective gradient; no third condition (5.14) yet",
+    "pages": "pp. 14-16"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "price the repair in reused factorizations and warm starts",
+    "evidence": "SOC reuses the factored projection matrix, least-squares multipliers cost one backsolve, extra penalty LPs cheap by warm starts (also S075 p. 15, S126 pp. 12-13)",
+    "pages": "pp. 13-14, 16"
+   },
+   {
+    "pattern": "specify by admissible conditions so the theory covers the code",
+    "evidence": "LP trust-region update supported by a convergence theory that provides a range of admissible constants (also S058 pp. 10, 24; S126 p. 13)",
+    "pages": "p. 7"
+   }
+  ],
+  "transferable": [
+   "Locate the bottleneck with a per-task time breakdown weighted equally per problem, restricted to solved runs of at least one second, before tuning (pp. 28-29).",
+   "Count a rival's almost-converged exit as a failure when your own codes count that case as a failure, and say so (pp. 20-21).",
+   "Get the best attainable feasibility reduction cheaply by re-solving the same LP with the objective gradient set to zero (pp. 15-16).",
+   "Tie an active-set predictor's trust radius to the last step length and let it shrink after accepted steps so inactive constraints leave the working set (p. 7)."
+  ],
+  "coauthors": "Richard H. Byrd, Nicholas I. M. Gould, Richard A. Waltz",
+  "quotes": [
+   {
+    "text": "Although it is nearly impossible to enforce a uniform stopping condition the stopping conditions for Slique and Knitro were constructed to be very similar to that used in Snopt",
+    "page": 19
+   },
+   {
+    "text": "because it allows us to work simultaneously on optimality and feasibility but testing would be needed to establish which approach is preferable",
+    "page": 30
+   }
+  ]
+ },
+ {
+  "id": "S075",
+  "year": "2003",
+  "title": "Feasible interior methods using slacks for nonlinear optimization",
+  "read_level": "full",
+  "contribution": "Shows how a slack-based infeasible interior method becomes a feasible one by resetting slacks after each trial step, proves why this can fail with trust-region steps when equalities are present, and repairs KNITRO's normal step by a modified Cauchy direction; feasible and infeasible KNITRO compared on CUTE (pp. 1-20).",
+  "problem_entry": "Applications need iterates feasible for inequalities (objective undefined outside, or early termination); most NLP interior codes are infeasible; no feasible-vs-infeasible comparison existed (pp. 2, 17).",
+  "key_idea": "Slack reset s_T = g(x_T) (Algorithm FeasReset) with the same linear system and data structures; equivalent to a classical barrier method for Newton steps; for trust-region steps require r_g = 0 at feasible iterates and recompute only the Cauchy direction of the dogleg normal step via an augmented system (pp. 5-7, 12-14).",
+  "assumptions": "Smooth f, h, g (p. 3); Lipschitz merit term and Jacobian, step satisfying linearized inequality constraints (Theorem, p. 10); sufficiently large merit parameter, Lipschitz A and grad f, non-stationary point of ||h||, small radius (Corollary, p. 14).",
+  "proof_devices": [
+   "reset perturbation bounded as O(||d_x||^2) when the step satisfies the linearized constraints, against a first-order merit decrease, so small steps are accepted (Theorem, pp. 10-11)",
+   "explanation of the trust-region failure: least-squares relaxation makes r_g nonzero, so the perturbation can be as large as the step (pp. 11-12)",
+   "for small radius the dogleg normal step is a multiple of the modified Cauchy direction, giving the Corollary (pp. 14-15)",
+   "equivalence of slack reset and classical primal-dual barrier steps by eliminating ds (pp. 6-7)"
+  ],
+  "experiments": "GAUSSELM failure and fix tables (pp. 9, 16); modified vs unmodified normal step on equality-constrained problems (p. 16); feasible vs infeasible KNITRO on a CUTE set as per-problem log2 fevals ratios, same-solution problems only, KNITRO slack adjustment kept in both; no clear winner (pp. 17-19).",
+  "positioning": "Contrasts feasible active-set methods with deflections and classical Fiacco-McCormick barrier methods; frames trust-region SQP steps of Vardi, Celis-Dennis-Tapia, Powell-Yuan, Byrd-Omojokun in one subproblem form (pp. 2, 11).",
+  "writing": "Surprise recorded explicitly when neither variant wins (p. 17).",
+  "limits_future": "Simpler reject-infeasible variant can fail with equalities, not explored (pp. 16-17); keep inequality/slack distinction in the formulation, reset before merit evaluation, partial feasibility possible (pp. 19-20).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "infeasible slack-based engine kept; only the slack reset and, in trust-region codes, only the Cauchy component of the normal step changed, at one backsolve; failure shown first on GAUSSELM with the internal diagnostic ||delta s||",
+    "pages": "pp. 5, 8-9, 13-15"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "theorem separates practical variants: why line-search versions survive the reset and the KNITRO trust-region version fails",
+    "pages": "pp. 10-12"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "step 5: feasible and infeasible versions compared inside one code, each in its best KNITRO implementation, even though this damps the disparity",
+    "pages": "p. 19"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "step 5: the expected advantage of infeasible (or feasible) iterations tested; surprise recorded, no clear superiority",
+    "pages": "pp. 17-18"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "price the repair in reused factorizations and warm starts",
+    "evidence": "the modified Cauchy direction uses the matrix already factored in KNITRO, costing one backsolve",
+    "pages": "p. 15"
+   }
+  ],
+  "transferable": [
+   "Build the feasible variant as a switch inside the infeasible code (same linear algebra, two changed instructions) so the comparison isolates feasibility (pp. 5, 17).",
+   "Diagnose a stall by tabulating per iteration the quantity your change introduces (||delta s|| against radius and merit reduction) (pp. 8-9).",
+   "Compare two variants with a per-problem log2-ratio bar chart restricted to problems where both found the same solution (pp. 17-18).",
+   "When a reset or projection follows the step, prove its perturbation is second order provided the step satisfies the linearized constraints, then check which step generators meet that condition (pp. 10-12)."
+  ],
+  "coauthors": "Richard H. Byrd, Richard A. Waltz; Guanghui Liu, Marcelo Marazzi, Jose Luis Morales thanked (p. 20)",
+  "quotes": [
+   {
+    "text": "To our surprise the tests we report below do not indicate a clear superiority of either method",
+    "page": 17
+   },
+   {
+    "text": "taking the view that all methods should be tested using their best implementation within the KNITRO framework",
+    "page": 19
+   }
+  ]
+ },
+ {
+  "id": "S085",
+  "year": "2004",
+  "title": "A starting point strategy for nonlinear interior methods",
+  "read_level": "full",
+  "contribution": "Proposes an initial-point heuristic for nonlinear interior methods that computes an affine-scaling step, shifts only slacks and multipliers to be sufficiently positive while keeping the user's x, and recommends it as an option after tests in a MATLAB IPM and KNITRO 3.0 (pp. 2-8).",
+  "problem_entry": "LP/QP start heuristics exist and are commercial, but the NLP case has not received much attention; LP heuristics do not carry over because NLP users supply estimates and large multipliers create non-convexity (p. 2).",
+  "key_idea": "Affine-scaling (mu = 0) step from preliminary values, measure violations of s, lambda >= 0, shift s and lambda by Rule 1 or 2, keep (x, y, z), set mu = s'lambda/m, evaluate the first Hessian at unshifted z0 (pp. 4-5).",
+  "assumptions": "f, h, g twice continuously differentiable (p. 3); motivation by convex QP path-following and central-path neighbourhood (p. 5); test code only for convex problems (pp. 6-7).",
+  "proof_devices": [
+   "argument that in QP the slack and multiplier steps and step lengths do not depend on (x, y, z), so only (s1, lambda1) matter (pp. 5-6)"
+  ],
+  "experiments": "MATLAB short-step IPM on Maros-Meszaros QPs (Rules 1, 2 vs none), 58 filtered CUTEr inequality problems (slight improvement), KNITRO 3.0 Direct on 66 hard problems selected for the study with Rule 1 only (dramatic improvement); iteration performance profiles (pp. 7-8).",
+  "positioning": "Starts from LP/QP start heuristics (Mehrotra, Andersen-Gondzio-Meszaros-Xu, Gertz-Wright) and explains why they do not transfer to NLP (p. 2).",
+  "writing": "Recommendation phrased as an option, not a default (p. 8).",
+  "limits_future": "Heuristic without theory; limits not discussed; KNITRO test set selected for the study (p. 8).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "result becomes an option rather than a default claim; tested in two frameworks, KNITRO and a bare code built to show general applicability (step 3)",
+    "pages": "pp. 6, 8"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "the LP start heuristic is kept and only the NLP-breaking part changed: model variables keep their preliminary (user) values, only sign-constrained s and lambda reset; no estimate-driven recovery",
+    "pages": "pp. 5-6"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "KNITRO set selected specifically for the study, only the better rule shown, easy CUTEr problems filtered out: the scales tilt toward the strategy",
+    "pages": "pp. 7-8"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "When porting an LP/QP heuristic to NLP, split variables into model-defining ones (keep user values) and sign-constrained ones (reset), and say why (pp. 5-6).",
+   "Use one cheap affine-scaling step to estimate the scale of slacks and multipliers before choosing starting values (p. 4).",
+   "Evaluate the first Hessian at unshifted multipliers so a large shifted multiplier cannot make it indefinite (p. 4).",
+   "Test a solver heuristic both in the production code and in a stripped-down code written for the study (p. 6)."
+  ],
+  "coauthors": "E. Michael Gertz (UW-Madison), Annick Sartenaer (Namur); Jose Luis Morales and Richard Waltz thanked (p. 9)",
+  "quotes": [
+   {
+    "text": "This topic has not received much attention in spite of the fact that nonlinear interior methods can be as sensitive as their linear counterparts to a poor initial guess.",
+    "page": 2
+   },
+   {
+    "text": "As a result of this testing, we recommend this as an option in nonlinear interior methods.",
+    "page": 8
+   }
+  ]
+ },
+ {
+  "id": "S179",
+  "year": "2004",
+  "title": "4.7 Sequential linear-quadratic programming for huge optimization problems (RH Byrd, NIM Gould",
+  "read_level": "full",
+  "contribution": "Two-page section of the RAL Numerical Analysis Group progress report 2002-2003 stating the SLQP project for huge problems: why QP subproblems fail at 10^7 unknowns, the two-trust-region LP-EQP design, results so far and outstanding practical issues (pp. 1-2).",
+  "problem_entry": "A nonconvex QP is too complicated a subproblem for huge (10^7) problems, while LPs of that size are routine and plain SLP is notoriously slow (p. 1).",
+  "key_idea": "Fletcher-Sainz de la Maza LP-EQP with an l1-penalty LP in a polyhedral trust region and an EQP in a second elliptical trust region, so both subproblems are feasible and bounded; the art is adjusting the two radii (p. 1).",
+  "assumptions": "n/a",
+  "proof_devices": [
+   "refers to the global convergence of a two-trust-region framework established in Byrd-Gould-Nocedal-Waltz 2003 (S058 line); local convergence next (p. 1)"
+  ],
+  "experiments": "none (points to SLIQUE CUTEr comparisons in Byrd et al. 2002, p. 1)",
+  "positioning": "Lists penalty-parameter management as outstanding while S035 concludes it is not a problem (S035 p. 29); presents the project as a bridge between competing GALAHAD and KNITRO teams (p. 1).",
+  "writing": "Group progress-report voice (collective we, drafter not stated, probably the RAL group's); success on huge problems stated as a belief (p. 1).",
+  "limits_future": "Outstanding: penalty parameter in the l1 function, solving and truncating the EQP, LP accuracy; local convergence to be studied (p. 1).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "explicit list of unresolved practical choices (penalty, EQP truncation, LP accuracy) kept as the agenda",
+    "pages": "p. 1"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "stated collaboration across competing solver teams to combine LP and EQP technology; group voice, drafter possibly Gould",
+    "pages": "p. 1"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Frame a method by the scale at which the incumbent subproblem stops being solvable (nonconvex QP at 10^7) and the scale at which a simpler subproblem is routine (LP), then design around the simpler one (p. 1)."
+  ],
+  "coauthors": "Richard H. Byrd, Nicholas I. M. Gould, Richard A. Waltz",
+  "quotes": [
+   {
+    "text": "The difficulty is simply that a (non-convex) quadratic program is too complicated a subproblem for huge problems.",
+    "page": 1
+   },
+   {
+    "text": "Since we believe that collaboration is the best way to tackle huge problems, the project also acts as a friendly and useful bridge between the competing GALAHAD and KNITRO software development teams.",
+    "page": 1
+   }
+  ]
+ },
+ {
+  "id": "S058",
+  "year": "2005",
+  "title": "On the convergence of successive linear-quadratic programming algorithms",
+  "read_level": "full",
+  "contribution": "Global convergence theory for SLQP penalty methods with two interacting trust regions: for fixed penalty parameter the criticality measure has liminf zero, and a penalty update tied to the attainable reduction in linearized infeasibility converges to KKT points, infeasible critical points or MFCQ-violating feasible points (RAL-TR-2004-031, pp. 3-24).",
+  "problem_entry": "S035's SLQP uses two mutually influencing trust regions so Yuan's nonsmooth theory does not apply; Chin-Fletcher's SLP-filter method has no control on the QP component (p. 7).",
+  "key_idea": "Algorithm 2.1 with a Cauchy step tested against the linear model and LP-radius rules given as admissible properties; Algorithm 4.1 keeps sigma while Psi_sigma(x, delta) >= xi sigma theta(x, delta), reusing the LP via delta = mid(delta_min, Delta_LP, delta_max) (pp. 9-10, 19-20).",
+  "assumptions": "P1 Lipschitz f, g, h and derivatives on a bounded convex set containing the iterates; P2 bounded B_k, made to simplify the analysis (pp. 10-11); MFCQ in Theorem 4.4 (p. 23).",
+  "proof_devices": [
+   "Yuan's criticality measure Psi(x, Delta) and its concavity/monotonicity in Delta (Lemma 3.1, pp. 11-12)",
+   "LP trust region active for small radius at non-critical points (Lemma 3.2, p. 12)",
+   "joint recursion bounding min(Delta_k/gamma, Delta_LP_k) from below for interacting trust regions (Lemma 3.6, pp. 14-16)",
+   "two-case contradiction on bounded/unbounded LP radius for liminf Psi_k(1) = 0 (Theorem 3.8, pp. 17-18)",
+   "feasible critical points of the penalty function are KKT points (Theorem 4.1, p. 19)",
+   "contradiction via a linearly feasible descent direction near a feasible MFCQ non-KKT limit, so sigma would stop growing (Theorem 4.4, pp. 22-24)"
+  ],
+  "experiments": "none (strong numerical evidence mentioned, not shown, p. 24)",
+  "positioning": "Builds on Yuan's nonsmooth trust-region theory but explains why it does not apply; contrasts with Fletcher-Sainz de la Maza and Chin-Fletcher; credits Waltz's thesis and Gate's second trust region (p. 7).",
+  "writing": "States which theorem holds for the actual code SLIQUE and which is unclear (p. 24).",
+  "limits_future": "No rate or finite active-set identification analysis (p. 24); Theorem 4.4 analogue for SLIQUE unclear; simple rule (4.12) not recommended (p. 21).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "analysis written for the code: radius framework deliberately general to cover SLIQUE now and later; says which theorem applies to SLIQUE",
+    "pages": "p. 24"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "global convergence only, rate deferred, whereas Method 5 step 3 asks for a rate",
+    "pages": "p. 24"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "penalty rule measures sigma against an explicit estimate, the attainable reduction in linearized infeasibility theta; theoretical root of steering (S126 p. 13)",
+    "pages": "pp. 19-20"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "specify by admissible conditions so the theory covers the code",
+    "evidence": "LP-radius rules stated as the inequalities the proof needs; framework deliberately general to cover current and future SLIQUE (also S035 p. 7, S126 p. 13)",
+    "pages": "pp. 10, 24"
+   }
+  ],
+  "transferable": [
+   "Specify implementation-dependent rules by the inequalities the proof needs, not a formula, so one theorem covers several implementations (pp. 10, 24).",
+   "When two trust regions interact, combine their update recursions into one lower bound on the smaller radius (pp. 15-16).",
+   "To reuse a quantity computed at the current radius in a criticality test stated at radius 1, clamp the radius into [delta_min, delta_max] and transfer the inequality by concavity/monotonicity bounds (pp. 11, 20-21)."
+  ],
+  "coauthors": "Richard H. Byrd, Nicholas I. M. Gould, Richard A. Waltz",
+  "quotes": [
+   {
+    "text": "It should be noted that the theory of non-smooth optimization developed by Yuan [19, 21] cannot be applied to the algorithm considered here and in [1, 16] because in these algorithms the two trust regions influence each other, whereas Yuan assumes that a single trust region is used.",
+    "page": 7
+   },
+   {
+    "text": "Our framework for trust-region radius updates is deliberately general. This is because we wished it to apply in the case of the current implementation of our evolving nonlinear programming code Slique [1] as well as to cover its future evolution.",
+    "page": 24
+   }
+  ]
+ },
+ {
+  "id": "S027",
+  "year": "2006",
+  "title": "Interior methods for mathematical programs with complementarity constraints",
+  "read_level": "partial",
+  "contribution": "Interior-penalty methods for MPCCs: global convergence to C- and strongly stationary points (extended to interior-relaxation methods), superlinear local convergence without penalty updates near regular solutions, and a dynamic penalty update tested on MacMPEC (preprint, pp. 1-25).",
+  "problem_entry": "Interior codes were slower and less reliable than SQP on MacMPEC, unlike ordinary NLP; the NLP form violates MFCQ everywhere; penalty chosen as a general tool for degenerate NLPs (pp. 2-3).",
+  "key_idea": "Put pi x1'x2 in the objective with bounds kept, solve barrier problems with a complementarity acceptance test, and update pi dynamically inside inner iterations when complementarity is above mu^0.4 and not below 0.9 of its recent maximum (pp. 3-5, 19-20).",
+  "assumptions": "Inner algorithm assumed to succeed (p. 9); C1 near the limit plus MPCC-LICQ for C-stationarity, pi^k x^k -> 0 at corners for strong stationarity (Theorem 3.4, p. 9); local: C2 Lipschitz, MPCC-LICQ, strict complementarity, MPCC-SOSC and rate conditions on tolerances (pp. 14, 16).",
+  "proof_devices": [
+   "global result built on Hu-Ralph's exact-solve proof (p. 11)",
+   "non-monotone penalty sequence allowed, enabling an indirect proof for interior-relaxation methods by reading relaxation multipliers as penalty parameters (Theorem 3.6, pp. 12-13)",
+   "local analysis via implicit function theorem, barrier-trajectory bounds and Newton analysis: one step per barrier problem, no penalty update, superlinear rate (Theorem 4.5, pp. 16-17; proof not followed)"
+  ],
+  "experiments": "MATLAB interior code ipm-d without production heuristics on 74 MacMPEC problems (<1,000 variables) plus badly scaled additions; NLP, Fixed (pi = 10^4), Classic, Dynamic; total-iteration profiles with two initial pi; case plots; failures named and attributed (pp. 20-25).",
+  "positioning": "Penalty vs relaxation approaches (Scholtes, Ralph-Wright, Liu-Sun, Raghunathan-Biegler, DeMiguel et al.); builds on Anitescu, Benson et al. and Hu-Ralph; Classic more flexible than fixed-then-update (pp. 2-3, 25).",
+  "writing": "Notes with interest that a theoretically allowed bad outcome (C-stationary limits) is observed in practice (p. 24).",
+  "limits_future": "MacMPEC mostly well scaled so Dynamic vs Classic barely separated there (p. 23); failures on problems without multipliers and with other degeneracy; KNITRO implementation and general regularization planned (pp. 24-25).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "interior engine kept, only complementarity handling (penalty and its update) added; stated aim to adapt an existing interior method",
+    "pages": "p. 20"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "asks whether the penalty needs updating at all; a fixed large pi (10^4) loses to adaptive rules",
+    "pages": "pp. 7, 22"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "step 5: all four methods in one bare code without production heuristics so the effect is the approach's own; failures listed",
+    "pages": "pp. 20, 24-25"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "theory checked against runs: convergence to C-stationary points allowed by the theory is observed on scale4",
+    "pages": "pp. 8, 24"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "failures from degeneracy beyond complementarity become the next topic (general regularization) and a planned KNITRO implementation",
+    "pages": "p. 25"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "State an outer parameter rule as non-monotone in the theory even if the code is monotone, so the proof transfers to a neighbouring method by reading its multipliers as your parameter (pp. 12-13).",
+   "Trigger a penalty increase from a windowed test (current value vs a fraction of the max over the last m iterates) gated by a mu-dependent tolerance, so oscillation does not inflate the parameter (pp. 19-20, 24).",
+   "Test a regularization in a bare research solver without production heuristics so the measured effect is the approach's own (p. 20).",
+   "Set the complementarity tolerance exponent from the distance-to-solution rate without strict complementarity (sqrt(mu)), here mu^0.4 (p. 19)."
+  ],
+  "coauthors": "Sven Leyffer (Argonne), Gabriel Lopez-Calva (Northwestern IEMS, PhD in progress)",
+  "quotes": [
+   {
+    "text": "We chose to work with ipm-d because it is a simple interior solver that does not employ the regularizations, scalings, and other heuristics used in production packages that alter the MPCC, making it harder to assess the impact of the approach proposed in this paper.",
+    "page": 20
+   },
+   {
+    "text": "We find it interesting that convergence to C-stationary points is possible in practice and is not simply allowed by the theory.",
+    "page": 24
+   }
+  ]
+ },
+ {
+  "id": "S126",
+  "year": "2006",
+  "title": "Steering exact penalty methods for optimization",
+  "read_level": "full",
+  "contribution": "February 2006 OTC report version of the steering paper (later S042): penalty-parameter guidelines driven by an auxiliary nu = infinity LP, Algorithm 5.1 for penalty SQP and SLQP (Knitro-Active), links to trust-region SQP relaxations and a derived merit-function rule for line search (pp. 1-20).",
+  "problem_entry": "Exact penalty methods are back for degenerate problems and MPCCs, but Sl1QP-type methods never reached production software, conjecturally because of the penalty parameter; toy examples show too-small and no-fixed-value failures (pp. 2, 5-7).",
+  "key_idea": "Choose nu against the best attainable linear-feasibility reduction (auxiliary LP with nu = infinity): reach linear feasibility if attainable, else a fraction eps1 of the best reduction, and make the model decrease at least eps2 nu times the feasibility gain (pp. 8-10).",
+  "assumptions": "f, h, g twice continuously differentiable (p. 3); Section 7 equality constraints only with W positive definite on the null space (p. 18).",
+  "proof_devices": [
+   "one-dimensional counterexamples revisited under Algorithm 5.1 (pp. 6-7, 13-14)",
+   "descent derivation for the merit rule via the directional derivative (7.30)-(7.31) (p. 19)",
+   "global convergence delegated to S058 under a less restrictive condition (p. 13)"
+  ],
+  "experiments": "ADLITTLE with fixed-nu failure confirmed and Knitro-Active solving it in 1 (Delta0 = 10^10) and 6 (Delta0 = 10) iterations; huge-fixed-nu ablation on 616 CUTEr problems (485 -> 449 at 10^5, 321 at 10^10); extra LPs under three percent of simplex iterations (pp. 12-15).",
+  "positioning": "Differs from Chen-Goldfarb and Leyffer et al. (S027) by judging nu by its effect on the step; recasts Byrd-Omojokun, Powell-Yuan and Celis-Dennis-Tapia relaxations as the same kind of rule; cites Wachter on nonsmooth merit functions (pp. 15-19).",
+  "writing": "Frames the contribution as turning a heuristic into part of the step computation (abstract, p. 2); version note: unlike the 2007 report (card c05, p. 10) no comparison with Yuan's condition (pp. 9-10).",
+  "limits_future": "Penalty SQP not implemented (p. 11); extension to penalty line-search methods open (p. 19); choosing nu may need an auxiliary subproblem (p. 20).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "the SKILL.md worked case in its earliest report form: engine kept, only nu replaced, rule driven by the nu = infinity LP estimate",
+    "pages": "pp. 5, 7-12"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "the heuristic of a huge fixed penalty parameter ablated on a CUTEr subset",
+    "pages": "p. 15"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Fletcher's ADLITTLE used as a specification and acknowledged",
+    "pages": "pp. 14-15, 20"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "support is examples and one ablation; theory delegated to S058 under a weaker condition, no rate",
+    "pages": "p. 13"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "specify by admissible conditions so the theory covers the code",
+    "evidence": "the analysis in S058 uses a less restrictive condition than the implemented (5.14), so it covers the code",
+    "pages": "p. 13"
+   },
+   {
+    "pattern": "price the repair in reused factorizations and warm starts",
+    "evidence": "extra LPs for selecting nu warm-started; under three percent of simplex iterations",
+    "pages": "pp. 12-13"
+   }
+  ],
+  "transferable": [
+   "Recast rival relaxation rules (Byrd-Omojokun beta, Powell-Yuan, Celis-Dennis-Tapia) as instances of one rule, a fraction of the attainable feasibility gain, to show a new rule belongs to an established family (pp. 15-17).",
+   "Report the extra cost of a parameter-selection loop as a share of the main solver's work (extra simplex iterations under three percent) (pp. 12-13).",
+   "Test the fix-a-huge-parameter heuristic directly by rerunning the full test set at two large fixed values and reporting problems solved (p. 15)."
+  ],
+  "coauthors": "Richard H. Byrd, Richard A. Waltz; Fletcher and Gould thanked (p. 20)",
+  "quotes": [
+   {
+    "text": "The choice of the penalty parameter then ceases to be a heuristic and becomes an integral part of the step computation.",
+    "page": 2
+   },
+   {
+    "text": "The methods proposed in Section 5 differ from these strategies in that they assess the effect of the penalty parameter on the step to be taken, based on the current model of the problem.",
+    "page": 15
+   }
+  ]
+ }
+]

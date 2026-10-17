@@ -1,0 +1,278 @@
+[
+  {
+    "id": "S030",
+    "year": "2000",
+    "title": "Automatic preconditioning by limited memory quasi-Newton updating",
+    "read_level": "partial",
+    "contribution": "A matrix-free automatic CG preconditioner: an L-BFGS matrix built from m correction pairs sampled uniformly across the CG run on one system preconditions the next system; it pays most inside Hessian-free Newton, where products are expensive and low accuracy suffices (abstract p. 1; pp. 2, 4-5, 18-20).",
+    "problem_entry": "Sequences of SPD systems with fixed or slowly varying matrices and only matrix-vector products, mainly the inner CG of Hessian-free Newton; entered from the observation that Nash's preconditioner helped on only a few problems (pp. 1-3, 5-6).",
+    "key_idea": "Save CG pairs (s_i, y_i = r_{i+1} - r_i) from the first solve and use the L-BFGS matrix they define as the next preconditioner; keep a uniform sample of pairs online by algorithm SAMPLE; CUTE runs also store the outer pair (pp. 2, 4-5, 8, 20-21).",
+    "assumptions": "SPD coefficient matrices (p. 2); f twice continuously differentiable, forward-difference Hessian-vector products costing one gradient each (pp. 5-6); assumes Av costs much more than applying the preconditioner (p. 12).",
+    "proof_devices": [
+      "no theorems; structural explanation of an anomalous win: the first row e1^T aligns the solution with e1, removed by zeroing the first and last components of b (pp. 16-17)"
+    ],
+    "experiments": "Nash's HFN code on five eigenvalue-class problems, CUTE and MINPACK (CPU only for MINPACK), finite-element matrices with multiple and slowly varying right-hand sides, refresh variants, last-m vs uniform sampling, forced sample size; CG iterations counted with the reason given (pp. 6-19).",
+    "positioning": "Against Nash's limited-memory preconditioner, O'Leary-Yeremin full-memory preconditioners and Byrd-Nocedal-Zhu's discrete Newton with memory (p. 3).",
+    "writing": "Limits are stated where they arise (pp. 8, 12, 15); the motivation is the authors' own test experience (p. 3).",
+    "limits_future": "Application cost may dominate when gradients are cheap (p. 8); no CPU gain on very sparse FE matrices (p. 12); when to refresh is open (p. 15); hot start helps only sometimes (pp. 15-16); smallest-Rayleigh selection not better (p. 20); more research needed outside optimization (p. 20).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "Losses printed (no CPU gain on sparse FE matrices for any m); counting unit justified; CPU reported only where meaningful.", "pages": "pp. 8, 10, 12"},
+      {"method": "Method 4", "relation": "evidence", "note": "Undecided choices written down (refresh timing, sampling strategy without theory, other selection rules); both sampling strategies later shipped as PREQN option IOP (S098 pp. 4, 7).", "pages": "pp. 15, 17, 20"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "recycle inner-solver by-products as curvature memory", "evidence": "CG pairs from one linear solve become the L-BFGS preconditioner for the next; same move in S098 p. 4, S077 pp. 2-3, S088 (s02).", "pages": "pp. 2, 4"}
+    ],
+    "transferable": [
+      "When one strategy wins unexpectedly on a test matrix, find the structural reason and build a right-hand side that removes it, then rerun both strategies (pp. 16-17).",
+      "To separate a wider sample from more memory, fix m and force the first solve to run maxCG iterations (p. 18).",
+      "Show the device on a controlled case first (Hessian frozen at one iterate, random right-hand sides, two tolerances) before the broad set (p. 7)."
+    ],
+    "coauthors": "Jose Luis Morales",
+    "quotes": [
+      {"text": "Numerical experiments indicate that the preconditioner has most to offer when these matrix-vector products are expensive to compute and when low accuracy in the solution is required.", "page": 1},
+      {"text": "Our conclusion is that the decision of when to refresh the preconditioner is not simple", "page": 15}
+    ]
+  },
+  {
+    "id": "S067",
+    "year": "2000",
+    "title": "Numerical experience with a reduced Hessian method for large scale constrained optimization",
+    "read_level": "partial",
+    "contribution": "Turns the Biegler-Nocedal-Schmid reduced-Hessian SQP with a cross-term correction into a practical large-scale code (Algorithm RHC: late finite-difference switch, basis selection and matrix transformation on basis change, watchdog) and shows by an analytic example and ablations that the correction prevents poor steps under coordinate bases (abstract p. 2; pp. 6-19).",
+    "problem_entry": "Implementation companion of a theory paper; origin in Biegler's process-control tests, where a non-orthogonal-basis reduced-Hessian SQP was sometimes very inefficient because of poor search directions (pp. 2-3, 19).",
+    "key_idea": "Keep null-space SQP with coordinate bases, BFGS on the reduced Hessian and the l1 merit function; approximate the cross term by Broyden or finite differences, switching to finite differences only near the solution; transform B and S on basis changes instead of resetting (pp. 3-13).",
+    "assumptions": "Equality constraints only (p. 5); A_k of full column rank (p. 3); nonsingular basis C(x) (p. 4); bases that change smoothly between switches (p. 10).",
+    "proof_devices": [
+      "analytic two-variable example with an adjustable parameter: one-step error ratio in closed form for orthogonal basis, coordinate basis without correction, and coordinate basis with correction (pp. 13-14, Appendix pp. 19-21)",
+      "redefined finite-difference correction affects only one lemma of the companion analysis, whose proof is said to adapt easily (p. 6; no proof given)"
+    ],
+    "experiments": "RHC vs ablations No Correction and Broyden Correction on scalable examples with dictated good and poor bases, Hock-Schittkowski problems and CUTE EIGENC/EIGENCCO/ORTHREG problems; iterations, function and gradient evaluations, CPU for CUTE (pp. 15-18).",
+    "positioning": "Builds on Biegler-Nocedal-Schmid's Algorithm II (p. 5); classical reduced-Hessian methods that drop the cross term work with orthonormal bases but not with coordinate bases (p. 4); Coleman-Conn, Byrd, Yuan, Xie cited (pp. 4, 11, 14).",
+    "writing": "Opens with what the theory paper left out (pp. 2-3) and closes with the origin story of the research (p. 19).",
+    "limits_future": "Correction gains nothing with adequate bases (pp. 14, 16); pure Broyden option fewest gradient evaluations (pp. 17-18); code cannot yet force a different basis (p. 11); inequality constraints left for an active-set extension (p. 5).",
+    "method_links": [
+      {"method": "Method 3", "relation": "evidence", "note": "Classical reduced-Hessian SQP kept; only the failing component (dropped cross term under coordinate bases) replaced at standard-SQP cost; failure shown on an analytic example first and the repair ablated (No Correction, Broyden Correction).", "pages": "pp. 13-15, 19"},
+      {"method": "Method 4", "relation": "evidence", "note": "Unfinished refinements named in the paper (forcing a new basis, extension to inequalities).", "pages": "pp. 5, 11"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "predecessor as control", "evidence": "The No Correction arm resembles a classical reduced Hessian method and isolates the effect of the correction.", "pages": "p. 15"},
+      {"pattern": "Motivate-and-revisit toy examples", "evidence": "The analytic example motivating the correction returns as Examples 1-2 with dictated good and poor bases.", "pages": "pp. 13-16"}
+    ],
+    "transferable": [
+      "Build a two-variable example in which the dropped term can be switched on and off and the basis chosen, and compute the one-step error ratio in closed form for each variant (pp. 13-14, 19-21).",
+      "Make an accurate but expensive option a late-stage switch activated only when the KKT error is below a threshold (pp. 6-7).",
+      "On a basis change, transform stored quasi-Newton matrices to the new basis instead of resetting them, and report the comparison (pp. 11-12)."
+    ],
+    "coauthors": "Lorenz T. Biegler, Claudia Schmid, David Ternet",
+    "quotes": [
+      {"text": "The correction term cannot be expected to improve the performance of the algorithm when the basis matrices are adequate but should prevent poor performance from taking place", "page": 14},
+      {"text": "an examination of the results revealed that poor search directions were being generated", "page": 19}
+    ]
+  },
+  {
+    "id": "S188",
+    "year": "2000",
+    "title": "3.3 Linear systems and optimization (NIM Gould, ME",
+    "read_level": "full",
+    "contribution": "RAL group progress-report section summarising constraint-preconditioned CG for equality-constrained quadratic problems, including Gould-Hribar-Nocedal's observation that projected CG iterates drift from the constraints and their iterative-refinement remedy (pp. 1-2).",
+    "problem_entry": "Approximate minimization of a quadratic subject to linear constraints is a key computation in NLP; large problems call for preconditioned iterative methods (p. 1).",
+    "key_idea": "CG preconditioned by an indefinite constraint system acts as CG in the null space, so definite-case estimates apply; drift from Ax = 0 repaired by iterative refinement and an adaptive QP reformulation (pp. 1-2).",
+    "assumptions": "Quadratic objective, linear equality constraints; unbounded objectives need a norm constraint (p. 2).",
+    "proof_devices": [
+      "null-space equivalence of constraint-preconditioned CG, stated not proved (p. 1)"
+    ],
+    "experiments": "none (effectiveness asserted without data, p. 2)",
+    "positioning": "Section by the RAL group (Gould, Hribar, Keller, Nocedal, Wathen); cites Keller-Gould-Wathen, Gould-Hribar-Nocedal RAL-TR-98-069, Gould 1999 and Gould-Lucidi-Roma-Toint (p. 2).",
+    "writing": "Group-report register: two paragraphs of results with references and no data; voice is the RAL group's, not Nocedal's (pp. 1-2).",
+    "limits_future": "No limits stated; links to the QP code HSL_VE12 (p. 2).",
+    "method_links": [
+      {"method": "Method 3", "relation": "variant", "note": "CG engine kept and the practical failure (drift from the constraints) repaired at low cost, but by iterative refinement rather than an explicit estimate with a recovery tree; group-report evidence only.", "pages": "pp. 1-2"}
+    ],
+    "new_pattern_candidates": [],
+    "transferable": [
+      "Precondition CG on a saddle-point system with a constraint (augmented) system so the iteration is CG on the null space and definite-case estimates carry over (p. 1).",
+      "Monitor whether projected iterates keep satisfying the constraints; if they drift, add iterative refinement or reformulate the subproblem (pp. 1-2)."
+    ],
+    "coauthors": "N. I. M. Gould, M. E. Hribar, C. Keller, A. J. Wathen",
+    "quotes": [
+      {"text": "in Gould, Hribar and Nocedal (1998), we observed that in practice the conjugate-gradient iterates sometimes wander away from the constraints Az = 0 unless care is taken", "page": 1},
+      {"text": "These techniques have subsequently proved to be most effective in practice.", "page": 2}
+    ]
+  },
+  {
+    "id": "S098",
+    "year": "2001",
+    "title": "Algorithm 809: PREQN: Fortran 77 subroutines for preconditioning the conjugate gradient method",
+    "read_level": "partial",
+    "contribution": "TOMS package of the S030 limited-memory quasi-Newton preconditioner, designed so that one call per CG iteration applies the preconditioner and passes the data for the next one, with options for the sampling scheme (IOP) and reuse (BUILD) (abstract p. 1; pp. 4-7).",
+    "problem_entry": "Make the S030 preconditioners callable from any CG routine for sequences of slowly varying SPD systems arising in Newton methods, differential equations and statistics (p. 2).",
+    "key_idea": "Pairs (p_j, A p_j) from CG directions define the next L-BFGS preconditioner (pp. 3-4); one call at the preconditioned-residual step applies H and transmits the previous pair, with decisions deferred to the next call (pp. 5-6).",
+    "assumptions": "SPD matrices that vary slowly; only products A_i v available (p. 2).",
+    "proof_devices": [],
+    "experiments": "Three finite-element matrices from S030 with multiple right-hand sides, different CG stopping test from S030; average CG iterations for several m and both IOP values (pp. 7-8).",
+    "positioning": "Implements the companion paper S030 (p. 4); compared in cost with incomplete Cholesky preconditioning (p. 4).",
+    "writing": "TOMS software-paper register: method recap, calling design, parameter advice, small numerical illustration (pp. 2-8).",
+    "limits_future": "Advocated only when A_i is unknown, not sparse or expensive (p. 4); not always beneficial, experiment with m (p. 8); break-even rule makes very sparse problems unlikely to benefit (p. 8); BUILD reuse with caution (p. 7).",
+    "method_links": [
+      {"method": "Method 4", "relation": "evidence", "note": "The sampling choice S030 could not settle ships as option IOP; preconditioner reuse ships as BUILD.", "pages": "pp. 4, 7"},
+      {"method": "Method 6", "relation": "evidence", "note": "Own method scoped against structure: when A is known and sparse, incomplete Cholesky is preferable.", "pages": "pp. 4, 8"},
+      {"method": "Method 1", "relation": "evidence", "note": "Losses printed: the preconditioner is not always beneficial; a break-even estimate in operation counts is given.", "pages": "p. 8"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "recycle inner-solver by-products as curvature memory", "evidence": "CG directions and products A p_j stored as correction pairs for the next system's preconditioner (see S030).", "pages": "p. 4"}
+    ],
+    "transferable": [
+      "Design a library routine called once per inner iteration at a point every CG code already has, piggy-back the data for its next state on that call, and defer decisions to the next call so the user's loop does not change (pp. 5-6).",
+      "Give users a break-even rule in operation counts, not only timings (p. 8)."
+    ],
+    "coauthors": "Jose Luis Morales",
+    "quotes": [
+      {"text": "PREQN is written so that a single call from a conjugate gradient routine performs the preconditioning operation and stores information needed for the generation of a new preconditioner.", "page": 1},
+      {"text": "Therefore the preconditioner is unlikely to be useful for very sparse problems", "page": 8}
+    ]
+  },
+  {
+    "id": "S111",
+    "year": "2001",
+    "title": "Feasibility control in nonlinear optimization",
+    "read_level": "partial",
+    "contribution": "Survey that names 'feasibility control' (mechanisms regulating progress toward feasibility), classifies Newton-type, SQP and interior methods by whether they have it using Powell's and Wachter-Biegler's failure examples, and exposes an inefficiency of the authors' own NITRO normal step (abstract p. 1; pp. 2, 10, 13-23).",
+    "problem_entry": "Which properties prevent convergence to non-stationary points of the merit function; entered through Powell's example (line-search Newton) and the Wachter-Biegler example (line-search interior methods) (pp. 1-4, 13-15).",
+    "key_idea": "Exact satisfaction of constraint linearizations is the common cause; trust-region normal steps with Cauchy-type decrease supply feasibility control, which is distinct from regularization (pp. 4-10, 16-19).",
+    "assumptions": "Smooth problems; Lipschitz and bounded Jacobian on the level set for the Levenberg-Marquardt result (p. 5); boundedness assumptions for Byrd-Omojokun results (footnote p. 9).",
+    "proof_devices": [
+      "Powell's example recomputed with exact and relaxed line searches and several starting points (p. 4)",
+      "Wachter-Biegler argument: the full step toward the linearized constraints violates a bound at every iterate, so iterates never leave an infeasible region regardless of merit function or barrier update (pp. 13-14)",
+      "comparison of the two failures: KKT matrix singular on a manifold vs merit-function-forced zero steps (p. 15)",
+      "one-variable barrier problem with closed-form normal and tangential steps giving a lower bound on iterations for NITRO's range-space normal step (pp. 19-21)"
+    ],
+    "experiments": "Illustrations only: NITRO on the Wachter-Biegler example (iterate plot, p. 18) and NITRO's line-search option on the one-variable problem (table, p. 21); GOFFIN noted (p. 21).",
+    "positioning": "Fair to rivals: LOQO a careful implementation (p. 12), NUOPT a novel approach to nonconvexity (p. 23), while both are shown to lack feasibility control (pp. 13, 22).",
+    "writing": "Survey organised around two worked counterexamples with figures; open questions stated as plain 'we do not know' (pp. 3-4, 13-15).",
+    "limits_future": "Open: how often such failures occur in practice and whether they appear as inefficiency (p. 15); whether a simple modification or the Forsgren-Gill method fixes line-search schemes (p. 15); new subproblem techniques for NITRO's slow case (p. 21); feasibility control in interior methods only beginning to be investigated (p. 23).",
+    "method_links": [
+      {"method": "Method 5", "relation": "evidence", "note": "Theory separates practical methods by whether they can stall at non-stationary infeasible points; the analysis targets the version NITRO runs (inexact range-space normal step).", "pages": "pp. 8-10, 13-15, 19-22"},
+      {"method": "Method 4", "relation": "evidence", "note": "External counterexample run on the authors' own code; own code's inefficiency written in as the next task; follow-up failure analysis announced; Wachter thanked.", "pages": "pp. 13-21, 23-24"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "property abstraction", "evidence": "Name one property (feasibility control) and classify methods by whether they have it, each tested against the canonical counterexamples.", "pages": "pp. 2, 10, 22-23"}
+    ],
+    "transferable": [
+      "Organise a survey around one named property and one or two canonical counterexamples, asking for each method whether the counterexample can defeat it (pp. 2-4, 10, 22).",
+      "Run a published counterexample on your own code and add a simpler example where your code is merely slow, with an iteration-count bound from closed-form steps (pp. 18-21).",
+      "When a classical failure example behaves unexpectedly, vary only the line search and the starting point before naming the cause (p. 4)."
+    ],
+    "coauthors": "M. Marazzi",
+    "quotes": [
+      {"text": "We do not know whether failures of this type are rare in practice", "page": 15},
+      {"text": "Our view is that the selection of ... should not be based entirely on linear algebra considerations but must be tied in with the convergence properties of the optimization process", "page": 6}
+    ]
+  },
+  {
+    "id": "S040",
+    "year": "2002",
+    "title": "Wedge trust region methods for derivative free optimization",
+    "read_level": "partial",
+    "contribution": "A derivative-free interpolation trust-region method with a single iteration type: a wedge constraint in the step subproblem keeps the sample set nondegenerate, and rejected points closer than the leaving satellite are kept to improve the model; linear and quadratic versions benchmarked against COBYLA, finite-difference L-BFGS-B and DFO (abstract p. 1; pp. 3-15).",
+    "problem_entry": "Smooth f, moderate n, no derivatives, expensive evaluations; model-based trust-region methods need separate geometry (simplex) iterations because steps can spoil the interpolation geometry (pp. 2-3).",
+    "key_idea": "Impose the geometric condition inside the step computation via a wedge |b^T s| >= gamma ||b|| ||s|| (quadratic analogue via QR), with the farthest satellite leaving and a nonincreasing wedge parameter (pp. 3-12).",
+    "assumptions": "f smooth, derivatives unavailable, evaluation cost dominates linear algebra (p. 2); convergence argued informally, proof for linear models deferred (p. 6; ref. p. 18).",
+    "proof_devices": [
+      "global solution of the linear wedge subproblem by rotation in span{s_TR, b} (p. 7)",
+      "informal global-convergence mechanism: rejected points enter the satellite set until the model is accurate enough for a successful step (pp. 5-6)"
+    ],
+    "experiments": "CUTE problems; WEDlin vs COBYLA (from Powell), WEDquad vs finite-difference L-BFGS-B at defaults and vs DFO (published plus Scheinberg-supplied results); stop at a fixed fraction of NITRO's decrease, evaluation limit, median of five randomized runs, wedge-activity percentages reported (pp. 12-17).",
+    "positioning": "Within the interpolation trust-region school of Powell and Conn-Scheinberg-Toint, changing only how geometry is maintained (pp. 2-3).",
+    "writing": "Hedged comparative claims (competitive; sometimes but not always more efficient) with failures explained (pp. 13, 15).",
+    "limits_future": "Stopping test may be adverse to DFO (p. 15); O(n^2) initial evaluations inefficient; untried: linear or underdetermined early models, increasing the wedge parameter, Cauchy-point acceptance test (pp. 15, 18); convergence analysis in preparation (p. 18).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "Rival code from its author (COBYLA from Powell) and rival results from DFO's developer (Scheinberg, thanked for observations on testing DFO methods); one stopping test anchored to a third solver; medians of five runs; rival handicaps explained; bias against DFO conceded.", "pages": "pp. 12-15, 18"},
+      {"method": "Method 2", "relation": "variant", "note": "Finite-difference quasi-Newton already a baseline in 2002, but the verdict runs the other way: QNfd fails five times vs once for WEDquad, attributed to forward-difference errors; geometry enforced at every step. A pre-2009 point for Method 2's moving verdict.", "pages": "pp. 3, 15"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Make the safeguard unnecessary by construction", "evidence": "Geometry is enforced inside the trust-region step (wedge constraint), so no separate geometry-improving iterations are needed.", "pages": "pp. 3, 5"},
+      {"pattern": "Cite the rival's own data", "evidence": "The DFO comparison is built on DFO's published results plus results supplied by Scheinberg.", "pages": "p. 15"}
+    ],
+    "transferable": [
+      "Stop each derivative-free code when it reaches a fixed fraction of the decrease a derivative-based solver achieves, and say which code the test may disadvantage (pp. 13, 15).",
+      "With randomized initial designs, run each problem several times and report the median (p. 12).",
+      "Report how often the new constraint is active next to the counts, so readers can see whether the device does work (pp. 13, 15)."
+    ],
+    "coauthors": "Marcelo Marazzi",
+    "quotes": [
+      {"text": "Our method performs only one type of iteration", "page": 3},
+      {"text": "As a result using the stopping test may be adverse to DFO", "page": 15}
+    ]
+  },
+  {
+    "id": "S057",
+    "year": "2002",
+    "title": "On the behavior of the gradient norm in the steepest descent method",
+    "read_level": "partial",
+    "contribution": "Analysis of the gradient norm for steepest descent with exact line searches on strongly convex quadratics (growth bound, asymptotic one- and two-step ratios, oscillation vs rate, path along the smallest-eigenvalue eigenvector, final accuracy in f), motivated by a misjudged L-BFGS-B result (pp. 2, 12-26).",
+    "problem_entry": "L-BFGS-B could not reduce the gradient norm as far as LANCELOT and was first reported as failing, yet reached lower f; when is the gradient norm a reliable stopping measure (pp. 2-3)?",
+    "key_idea": "f - f* and ||g||^2 both scale with ||x - x*||^2 via Rayleigh quotients so their ratio varies with conditioning; for steepest descent, extend Akaike and Forsythe to the gradient norm (pp. 3-14).",
+    "assumptions": "Strongly convex quadratic, exact line search, Assumptions 1-2 on the starting gradient and simple extreme eigenvalues (p. 6), partly relaxable per Forsythe (p. 10); roundoff in iterates ignored in the accuracy argument (p. 25).",
+    "proof_devices": [
+      "Kantorovich inequality for the per-iteration growth bound and a monotonicity threshold on the condition number (p. 12)",
+      "Akaike's two-direction asymptotics and Forsythe's convergence of normalized gradients (pp. 6-7)",
+      "minimum-deviation parameter delta of inner eigenvalues restricting the constant c (pp. 9-10)",
+      "exact analysis of the 2-D case (pp. 21-23)"
+    ],
+    "experiments": "One quartic test with Wolfe line search; observed final accuracy matches predicted correct digits (p. 26); PENALTY table L-BFGS vs inexact Newton (p. 2).",
+    "positioning": "Extends Akaike and Forsythe (pp. 5-7); questions Barzilai-Borwein's use of a 2-D rate result to explain n-D behaviour (p. 24).",
+    "writing": "Each result followed by a prose interpretation; surprise stated as such (pp. 12, 14, 18).",
+    "limits_future": "Gradient-norm behaviour of quasi-Newton methods left open (p. 5); results only for steepest descent on quadratics, one nonquadratic check (pp. 5, 26).",
+    "method_links": [
+      {"method": "Method 5", "relation": "evidence", "note": "Theory explains a behaviour observed in codes (gradient-norm stopping test misjudging L-BFGS-B) and is checked against a run; unproved quasi-Newton case kept as an open question.", "pages": "pp. 2-5, 26"},
+      {"method": "Method 1", "relation": "evidence", "note": "A code ranking resting on the termination measure was re-examined and reversed (warning sign 7, mismatched stopping tests, caught in his own work).", "pages": "p. 2"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "audit the termination measure before declaring a failure", "evidence": "A reported L-BFGS-B failure to reach a gradient tolerance was reversed by comparing final function values.", "pages": "p. 2"},
+      {"pattern": "check that the low-dimensional case is representative", "evidence": "Barzilai-Borwein's 2-D rate argument questioned because the 2-D behaviour of steepest descent does not carry to n dimensions.", "pages": "p. 24"}
+    ],
+    "transferable": [
+      "Before reporting that a code fails to reach a gradient tolerance another reaches, compare final function values (p. 2).",
+      "Monitor gradient progress over two iterations for zigzagging methods, since the two-step gradient rate matches the one-step rate in f (p. 14).",
+      "Predict the attainable accuracy in f from the linear convergence factor and unit roundoff and check it on a nonquadratic run (pp. 24-26)."
+    ],
+    "coauthors": "Annick Sartenaer, Ciyou Zhu",
+    "quotes": [
+      {"text": "Initially we reported this as a failure of the limited memory code to achieve high accuracy in the solution but a closer examination of the results revealed that in some of these runs the limited memory code had actually produced a lower function value than LANCELOT", "page": 2},
+      {"text": "This observation was contrary to our initial expectations as we had speculated that the largest oscillations in the gradient would characterize the most unfavorable starting points", "page": 18}
+    ]
+  },
+  {
+    "id": "S077",
+    "year": "2002",
+    "title": "Enriched methods for large-scale unconstrained optimization",
+    "read_level": "partial",
+    "contribution": "An enriched method that alternates L-BFGS and preconditioned Hessian-free Newton cycles of dynamically adjusted lengths, with one limited-memory matrix both preconditioning the inner CG and warm-starting L-BFGS; reported more efficient than two HFN variants on large CUTE problems and insensitive to the CG stopping test (abstract p. 1; pp. 3-10).",
+    "problem_entry": "HFN methods are sensitive to the inner CG termination rule; HFN and L-BFGS have complementary strengths; the earlier rigid enriched method (S088) did not perform well over CUTE (pp. 2-4).",
+    "key_idea": "Interlace l L-BFGS and t HFN steps, pass curvature through one limited-memory matrix, treat L-BFGS and HFN as special cases (t = 0, l = 0), and set l and t by procedure ADJUST from step-quality signals (pp. 3-7).",
+    "assumptions": "Gradient available, second derivatives not; products by finite differences or AD (pp. 2, 4); CG stops on negative curvature (p. 4); Wolfe backtracking line search (p. 5).",
+    "proof_devices": [],
+    "experiments": "All large unconstrained CUTE problems; enriched vs two HFN variants (Nash's rule, residual rule) sharing the same quasi-Newton preconditioner; function-gradient evaluations; no plain L-BFGS arm (pp. 7-11).",
+    "positioning": "Successor of Byrd-Nocedal-Zhu's discrete Newton with memory (pp. 3-4); uses the Morales-Nocedal preconditioners (pp. 2, 4).",
+    "writing": "Short paper with a strong closing claim and no limitations paragraph (p. 10).",
+    "limits_future": "No limitations stated; only m to choose, performance varies gradually with m (p. 4); other HFN variants tried, no better (p. 10).",
+    "method_links": [
+      {"method": "Method 6", "relation": "evidence", "note": "Complementary algorithms integrated rather than one crowned, both as special cases of the hybrid.", "pages": "p. 3"},
+      {"method": "Method 4", "relation": "evidence", "note": "Open choices of the earlier S088 paper (preconditioning with the pairs, when to take Newton steps) answered by the next paper.", "pages": "pp. 3-4"},
+      {"method": "Method 1", "relation": "contradiction", "note": "The obvious simple baseline is missing: L-BFGS itself (the l-only special case) has no column in the tables; only two HFN variants are compared, though they share the same preconditioner.", "pages": "pp. 3, 8-11"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Special-case reduction as a design requirement", "evidence": "L-BFGS (t = 0) and HFN (l = 0) are special cases of the enriched method; L-BFGS is formally HFN with one CG iteration.", "pages": "pp. 3, 5"},
+      {"pattern": "recycle inner-solver by-products as curvature memory", "evidence": "Inner PCG pairs update the limited-memory matrix that preconditions later HFN steps and warm-starts L-BFGS.", "pages": "pp. 2-3"}
+    ],
+    "transferable": [
+      "Design a hybrid so each parent is a parameter setting of it, and frame both as instances of one inexact Newton iteration with a variable number of CG steps (pp. 3, 5).",
+      "Switch between expensive and cheap steps on simple observed signals (negative curvature, a short Newton steplength, a run of profitable steps), with a minimum run length where the expensive step needs it (pp. 5-7)."
+    ],
+    "coauthors": "Jose Luis Morales",
+    "quotes": [
+      {"text": "Another way of motivating our approach is to note that the strengths and weaknesses of the HFN and LBFGS methods are complementary", "page": 3},
+      {"text": "We argue that it is not economical to compute HFN steps at every iteration and that it can be advantageous to interlace them with LBFGS steps", "page": 2}
+    ]
+  }
+]

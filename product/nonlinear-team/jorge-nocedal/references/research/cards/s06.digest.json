@@ -1,0 +1,572 @@
+[
+ {
+  "id": "S060",
+  "year": "2012",
+  "title": "A sequential quadratic programming algorithm with an additional equality constrained phase",
+  "read_level": "partial",
+  "contribution": "SQP+: a line-search SQP method that solves a convex IQP (positive definite B_k) for global convergence and working-set estimation, then an EQP with the exact Hessian on that working set for quadratic local convergence, ablated against sqplab inside one code base (pp. 2-6, 15, 20).",
+  "problem_entry": "Convex quasi-Newton SQP is slow on large or badly scaled problems; exact-Hessian SQP needs global solutions of indefinite QPs (p. 2); second derivatives are hard to add to SNOPT-type codes, and the SLQP LP phase is erratic and hard to warm start (p. 6).",
+  "key_idea": "Two phases per iteration: IQP predictor (convex) gives the working set and drives globalization; EQP with the exact Hessian, contracted to keep the linearized constraints, gives the rate; segment line search with fallback to the IQP step; penalty update from the IQP step (pp. 2-6).",
+  "assumptions": "Global: bounded iterates and derivatives, feasible IQPs, bounded IQP multipliers, uniformly bounded positive definite B_k, called fairly restrictive and accepted for a compact analysis (pp. 6-7); local: C2, full-rank active Jacobian, strict complementarity, second-order sufficiency, unit steps (pp. 12-13, 17).",
+  "proof_devices": [
+   "bounded IQP multipliers imply an eventually constant penalty parameter (Lemma 3.2, pp. 7-8)",
+   "sufficient decrease on the model reduction qred instead of the directional derivative, allowing longer steps (p. 7)",
+   "backtracking lower bound on alpha_k gives qred(d_IQ) -> 0 (Lemma 3.3, pp. 8-10)",
+   "Robinson's active-set identification for the IQP step, then Newton on W* for quadratic convergence (Lemma 4.2, Theorem 4.3, pp. 13-15)",
+   "local result needs no assumption on which local QP minimizer the solver picks (p. 17)"
+  ],
+  "experiments": "Matlab prototype on sqplab with KNITRO/Active QP solver and the new penalty rule (also given to the baseline); CUTEr small and medium problems fixed in advance; iteration performance profiles vs sqplab and major iterations vs SNOPT 7.2-1 with LPs and QPs removed (pp. 17-21).",
+  "positioning": "Close to Gould-Robinson's second-derivative SQP, which solves a second inequality QP instead of an EQP (p. 2); built on the group's SLQP work (p. 6).",
+  "writing": "States restrictive assumptions openly and justifies them by a compact analysis (p. 7); prints the caveats of the SNOPT comparison (pp. 20-21).",
+  "limits_future": "No full implementation (p. 6); large QPs remain the main cost, so SQP+ targets problems SQP already solves (p. 22); EQP cost not timed (p. 20); future: projected CG with Hessian-vector products or gradient differences (p. 22).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "EQP phase ablated inside one code base; baseline given the same QP solver and penalty rule; SNOPT comparison presented as not like-for-like.",
+    "pages": "pp. 17-18, 20-21"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Classical convex-QP SQP engine kept, but the repair adds a second-order phase instead of replacing the failing component; no estimate-driven recovery path.",
+    "pages": "pp. 2, 6"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Motivated by second-derivative difficulties in SNOPT-type codes and the erratic, hard-to-warm-start SLQP LP phase.",
+    "pages": "p. 6"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Local theory separates SQP+ from exact-Hessian SQP (no assumption on the QP solver's choice of local minimizer).",
+    "pages": "p. 17"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Global analysis of a somewhat idealized algorithm under assumptions the authors call restrictive.",
+    "pages": "pp. 6-7"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "cheap predictor carries the proof, second-order phase carries the rate",
+    "evidence": "IQP phase drives global convergence and working-set selection while the EQP phase yields the superlinear rate.",
+    "pages": "p. 6"
+   }
+  ],
+  "transferable": [
+   "Ablate a new phase by adding it to an existing simple code and giving the baseline every other improvement (QP solver, penalty rule) so the difference isolates the phase (pp. 17-18, 20).",
+   "Fix the test set before running and say so in the paper (p. 20).",
+   "When comparing a prototype with a mature code, remove the problem classes the mature code treats specially (LPs and QPs in SNOPT) and print the caveats (pp. 20-21)."
+  ],
+  "coauthors": "Jose Luis Morales, Yuchen Wu",
+  "quotes": [
+   {
+    "text": "One of the main questions we wish to investigate is whether the EQP phase does, in fact, add significant benefits to the standard SQP approach.",
+    "page": 6
+   },
+   {
+    "text": "The test set was selected before the numerical experiments were performed; no problems were removed or added during the testing process.",
+    "page": 20
+   }
+  ]
+ },
+ {
+  "id": "S113",
+  "year": "2013",
+  "title": "Subspace accelerated matrix splitting algorithms for asymmetric and symmetric linear complementarity problems",
+  "read_level": "partial",
+  "contribution": "Two-phase methods for nonconvex bound-constrained QPs and asymmetric LCPs that predict the zero variables with matrix-splitting iterations (projected gradient, Jacobi, Gauss-Seidel, SOR) and accelerate with a subspace phase, globally convergent under weaker assumptions than earlier two-phase methods; read in a preprint titled for BQP and LCP (pp. 1-5, 8, 13-14, 18).",
+  "problem_entry": "Two-phase methods (More-Toraldo, Kocvara-Zowe, FLMN for options and contact problems) work well but lack guarantees for nonconvex BQPs and asymmetric LCPs, which have no objective (pp. 1-2).",
+  "key_idea": "Splitting iterations predict the active set; BQP: Cauchy step from one splitting iteration drives convergence, projected searches and a subspace step accelerate; LCP: contraction tests on splitting iterates, merit-function forcing sequence, trust-region shrink (C-, M-, F-iterates) (pp. 3-5, 13-14).",
+  "assumptions": "BQP: symmetric, possibly indefinite M with a splitting whose B is positive definite (p. 8); LCP: splitting iterations are contractions (Assumption 3.1, p. 11); tests drop the trust region, said not to affect the theory (p. 10).",
+  "proof_devices": [
+   "descent property of splitting iterations from Cottle-Pang-Stone Lemma 5.5.1 and a Cauchy-decrease bound (Lemmas 2.1-2.2, p. 6)",
+   "trichotomy: finite termination, unbounded ray, or all limit points first-order (Theorem 2.4, p. 8)",
+   "observed contraction ratios plus a halving merit-function forcing sequence give liminf phi(x_k) = 0 (Theorem 3.4, p. 18)",
+   "extension to iteration-dependent splittings with uniformly positive definite B_k (pp. 9, 20)"
+  ],
+  "experiments": "Matlab, with the authors' own projected-gradient (Barzilai-Borwein) and FLMN baselines, equal subspace steps and termination; CUTEr and random BQPs, American put options (identical to FLMN), random diagonally dominant asymmetric LCPs with and without the subspace phase (pp. 9-12, 20-22).",
+  "positioning": "Presented as a generalization of More-Toraldo (projected gradient is the most basic splitting) and an extension of Kocvara-Zowe to nonconvex problems (p. 2).",
+  "writing": "Frames the gain on the home application as a guarantee, not speed: performance identical to FLMN, with comfort from convergence (p. 21).",
+  "limits_future": "Splitting iteration must be inexpensive to pay off (p. 22); nonconvex tests use the simplest splitting B = I, better splittings left to future research (p. 11); no CPU times in the tables (pp. 10-12, 21-22).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Splitting chosen from matrix structure (SOR for positive definite, B = I for indefinite); LCP guarantee from the diagonal dominance of the application matrices.",
+    "pages": "pp. 10-11, 21"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Two-phase engine kept; only the prediction iteration generalized, plus an acceptance test with merit-function fallback and trust-region shrink for LCPs.",
+    "pages": "pp. 2, 13-14"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Theory certifies an already working heuristic (identical performance to FLMN) rather than discriminating between methods.",
+    "pages": "p. 21"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Baselines reimplemented in the same environment with equal subspace steps and termination for a fair comparison.",
+    "pages": "p. 10"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "cheap predictor carries the proof, second-order phase carries the rate",
+    "evidence": "The Cauchy point from a splitting iteration drives convergence; the subspace phase accelerates.",
+    "pages": "pp. 4-5"
+   }
+  ],
+  "transferable": [
+   "Parameterize the prediction phase by a matrix splitting so the field's standard method (projected gradient) is its simplest member and one analysis covers all members (pp. 2-3).",
+   "Without an objective (asymmetric LCP), globalize by observed contraction ratios with a merit-function forcing sequence to accept long productive steps (pp. 13-14).",
+   "Show the provably convergent method reproduces the heuristic incumbent exactly on its home application, then ablate the subspace phase on a new class (Tables 3.1-3.2, pp. 21-22)."
+  ],
+  "coauthors": "Daniel P. Robinson, Liming Feng, Jong-Shi Pang",
+  "quotes": [
+   {
+    "text": "Our key contribution in this area is the development of a provably convergent two-phase general purpose method that is efficient at solving the problems considered in [6] as well as more general problems.",
+    "page": 2
+   },
+   {
+    "text": "We find comfort, however, in knowing that Algorithm 3.1 is guaranteed to converge since Assumption 3.1 holds as a result of Mj being diagonally dominant",
+    "page": 21
+   }
+  ]
+ },
+ {
+  "id": "S114",
+  "year": "2013",
+  "title": "On the use of piecewise linear models in nonlinear programming",
+  "read_level": "partial",
+  "contribution": "An active-set NLP method between SQP and SL-QP: a piecewise-linear outer approximation of a separable quadratic model (Hermite interpolation at a few nodes per coordinate) defines an LP predictor that needs no trust region, followed by an EQP; global and local theory reduces to conditions on node placement; a BFGS-PLA variant (pp. 1-2, 4, 8-12, 24-26).",
+  "problem_entry": "SQP's inequality QP is too costly at large scale while interior methods scale; SL-QP's LP needs a delicate trust region that is typically active and blocks warm starts (pp. 1-2).",
+  "key_idea": "Replace the LP's linear objective by grad f'd + Gamma_k(d), a convex piecewise-linear underestimate of 1/2 d'B_k d built coordinatewise; the box indicator recovers SL-QP; EQP with exact Hessian on the working set; separable change of variables for compact L-BFGS (pp. 4, 8-9, 25-26).",
+  "assumptions": "Global: bounded derivatives, feasible PLA subproblems, bounded multipliers, uniformly bounded positive definite B_k (p. 11); local: LICQ, strict complementarity (p. 19); dependent working-set gradients and incompatible constraints assumed away (p. 6).",
+  "proof_devices": [
+   "abstract Growth Conditions P1-P3 on the model, from which global convergence follows (pp. 12, 18)",
+   "Placement Conditions A on interpolation nodes imply the Growth Conditions (Theorem 4.1, p. 12)",
+   "active-set identification from flatness near zero and linear growth of Gamma_k (Lemma 5.1, Theorem 5.2, pp. 19-22)",
+   "node intervals proportional to ||x_k - x*||, satisfiable via a node of order KKT error^1/2 (Theorem 5.3, p. 24)",
+   "BFGS-PLA inherits the theory by checking the Growth Conditions under Placement Conditions B (pp. 27-28)"
+  ],
+  "experiments": "none; implementation and computational results deferred to a companion report (pp. 6, 27, 32)",
+  "positioning": "Middle ground between SQP and Fletcher-Sainz de la Maza SL-QP; lists Gould-Robinson, Friedlander-Gould-Leyffer-Munson and SQP+ as rival two-phase SQP designs (pp. 2-3); node intervals compared with Oberlin-Wright (p. 24).",
+  "writing": "States that all new SQP methods, the authors' included, are untested in production-quality software (p. 3).",
+  "limits_future": "Practical BFGS-PLA implementation, relaxations, working-set independence and experiments deferred to companion paper [7] (pp. 6, 27, 32); final remarks give a node-placement procedure (p. 32).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "SL-QP's known failure modes (delicate radius, no warm starts) from the group's own SLQP work are the starting point; production comparison stated as open.",
+    "pages": "pp. 2-3"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Theory used as a design specification (where to place interpolation nodes) rather than to discriminate between run methods; no runs.",
+    "pages": "abstract; pp. 12, 24"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "model family with two classical methods at its ends",
+    "evidence": "Gamma as a box indicator gives SL-QP; Gamma approximating 1/2 d'Bd moves towards SQP (compare the storage knob of S138).",
+    "pages": "pp. 2, 8"
+   },
+   {
+    "pattern": "cheap predictor carries the proof, second-order phase carries the rate",
+    "evidence": "PLA step gives the working set and global convergence; EQP gives the rate.",
+    "pages": "pp. 4-5"
+   }
+  ],
+  "transferable": [
+   "Split a convergence proof into abstract conditions on the model and a separate lemma that a concrete construction satisfies them, so other constructions inherit the theory (pp. 11-12, 18, 27).",
+   "Make a high-dimensional quadratic separable (diagonal B, or a cheap change of variables for compact L-BFGS) before approximating it coordinatewise (pp. 8, 25-26).",
+   "Replace unavailable local-analysis constants by a computable quantity of the right order, such as the square root of the KKT error (pp. 24, 32)."
+  ],
+  "coauthors": "Richard H. Byrd, Richard A. Waltz, Yuchen Wu",
+  "quotes": [
+   {
+    "text": "By using a piecewise linear (as opposed to linear) model in the active-set prediction phase, the new method becomes insensitive to the choice of the trust region constraint — in fact, one can dispense with this constraint altogether.",
+    "page": 2
+   },
+   {
+    "text": "All these new SQP methods have been tested only on prototype implementations and their relative efficiency with respect to SL-QP methods and established SQP methods such as [13, 16] is yet to be explored in production-quality software.",
+    "page": 3
+   }
+  ]
+ },
+ {
+  "id": "S087",
+  "year": "2015",
+  "title": "An algorithm for quadratic ℓ1-regularized optimization with a flexible active-set strategy",
+  "read_level": "partial",
+  "contribution": "iiCG: an interleaved ISTA-CG active-set method for convex quadratic plus l1 problems that chooses at every iteration between an ISTA (or subspace ISTA) step and a subspace CG step by a gradient balance condition, with a 2-step Q-linear rate, work complexity in matrix-vector products and finite identification (pp. 1-5, 10-12).",
+  "problem_entry": "Second-order information as an integral part of the iteration for quadratic-l1 problems; two-phase methods commit to a whole CG cycle after identification (abstract; pp. 1-2).",
+  "key_idea": "Gradient balance condition ||omega|| <= ||psi|| on the zero and free parts of the minimum-norm subgradient decides ISTA versus CG (adapted from Dostal-Schoeberl without their -omega step); CG may cross orthants with sufficient decrease, else cutback; iiCG-2 uses a subspace ISTA step (pp. 3-5).",
+  "assumptions": "Analysis: A nonsingular with eigenvalues lambda, L; ISTA step 1/(8L) <= alpha <= 1/L; strict complementarity for finite identification (pp. 5, 10-11); tests include singular Hessians (gamma = 0), outside the analysed setting (p. 13).",
+  "proof_devices": [
+   "sufficient decrease of each constituent step; cut CG steps followed by ISTA give a 2-step Q-linear rate (Theorem 4.5, pp. 10-11)",
+   "work complexity counted in matrix-vector products (Corollary 4.6, p. 11)",
+   "finite orthant identification via strict-complementarity margins and CG finite termination (Theorem 4.7, pp. 11-12)"
+  ],
+  "experiments": "Matlab, 48 problems (spectra, sigrec, myrand, proxnewt x 12 gamma-tau variants), per matrix-vector comparison with FISTA and ISTA-BB-LS, then CPU-time profiles against SpaRSA, PSSgb, N83, pdNCG; five codes dropped as not competitive; Figure 5 caption covers three of four families (pp. 12-19, 22-23).",
+  "positioning": "Departs from Dostal-Schoeberl by dropping the -omega step (pp. 5, 19); contrasted with two-phase, orthant-based and semismooth Newton methods by its step-by-step adaptivity (p. 2).",
+  "writing": "Calls the complexity bound worst case and not indicative of practice (p. 11); hedged verdict 'most efficient in these tests, but not uniformly so' (p. 14).",
+  "limits_future": "Complexity is worst case (p. 11); FISTA ahead at 1e-4 on several problems (Table 1, p. 15); PSSgb competitive at high sparsity (p. 19); no future directions stated (p. 19).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Complexity bound declared worst case; the proof device hides the power of CG, which finite identification shows instead.",
+    "pages": "p. 11"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Controlled per-matrix-vector comparison first; borrowed line-search parameters not tuned; losses visible in Table 1 and at high sparsity.",
+    "pages": "pp. 12, 15, 19"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Five codes dropped without shown results; CPU-time figure caption lists three of the four problem families although the text says all.",
+    "pages": "pp. 17-18"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Weak: a predecessor's component (step along -omega) dropped after observing it was unnecessary.",
+    "pages": "p. 5"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "cheap predictor carries the proof, second-order phase carries the rate",
+    "evidence": "ISTA steps give identification and the linear-rate proof; subspace CG gives speed and finite termination, switched every iteration.",
+    "pages": "pp. 3-5, 10-11"
+   }
+  ],
+  "transferable": [
+   "Use a computable split of the optimality measure (zero vs free components of the minimum-norm subgradient) as the switch between identification and subspace steps (pp. 3, 5).",
+   "Count work in the dominant operation (matrix-vector products) in both the complexity bound and the experiments (pp. 11, 13).",
+   "Build a test set from real subproblems of an outer method and vary conditioning and sparsity by two parameters (p. 13; Appendix 7, p. 22).",
+   "Compare sparse solvers by the accuracy-sparsity Pareto frontier at several work budgets (Fig. 3, p. 16)."
+  ],
+  "coauthors": "Richard H. Byrd, Stefan Solntsev",
+  "quotes": [
+   {
+    "text": "More generally, Corollary 4.6 represents worst-case analysis, and is not indicative of the overall performance of the algorithm in practice.",
+    "page": 11
+   },
+   {
+    "text": "The choice of parameters M, ξ is as in [38]; we did not attempt to fine tune them to our test set.",
+    "page": 12
+   }
+  ]
+ },
+ {
+  "id": "S033",
+  "year": "2016",
+  "title": "A multi-batch L-BFGS method for machine learning",
+  "read_level": "partial",
+  "contribution": "A multi-batch and fault-tolerant L-BFGS method that computes curvature pairs on the overlap of consecutive samples, with fixed-step convergence to a neighbourhood (strongly convex) and a gradient-norm bound with cautious updating (nonconvex), tested on LIBSVM logistic regression and distributed scaling (pp. 2-8).",
+  "problem_entry": "Batch methods with large changing samples balance computation and communication better than SGD, but L-BFGS gradient differences from different samples (changing batches or failed nodes) can be unstable; consistency is impossible or undesirable (pp. 1-3).",
+  "key_idea": "y_k = g^O_{k+1} - g^O_k on the overlap O_k = S_k intersect S_{k+1}, justified by the freedom in choosing Hessian approximations; two sampling schemes; constant steplength; skip update if y's < eps||s||^2 for nonconvex (pp. 3-6).",
+  "assumptions": "Strongly convex: subsampled Hessians on every overlap set uniformly bounded, bounded second moment, independent unbiased samples (p. 5); nonconvex: Lipschitz gradients, bounded below, second-moment growth (p. 6); the ordered sampling scheme gives dependent samples (p. 5).",
+  "proof_devices": [
+   "eigenvalue bounds on H_k by adapting the SQN analysis of [8], working with B_k (Lemma 3.1, p. 5; App. A.2, p. 10)",
+   "fixed-step linear convergence to a neighbourhood growing with alpha (Theorem 3.2, p. 6)",
+   "cautious update skip for bounded eigenvalues in the nonconvex case (Lemma 3.3, p. 6)",
+   "averaged gradient-norm bound following [4, Chapter 4] (Theorem 3.4, pp. 6-7)"
+  ],
+  "experiments": "Logistic regression on LIBSVM datasets; robust vs naive multi-batch L-BFGS, multi-batch GD, serial SGD; 10 seeds with best and worst; batch and overlap sizes varied; node-failure probabilities 0.1-0.5; strong and weak scaling to 128 MPI processes; EC2 vs shared-cluster noise benchmark (pp. 7-8, 16, 26-27).",
+  "positioning": "Alternative to gradient-consistency and fixed-batch remedies (p. 3); cites Mascarenhas and Dai for BFGS failure on nonconvex problems and Li-Fukushima for cautious updating (p. 6).",
+  "writing": "Contributions paragraph in the introduction (p. 2); concedes SGD's comparable accuracy and rate at r = 1% (p. 7).",
+  "limits_future": "Overlap must not be too small (pp. 2, 7); fixed steplength only (pp. 2, 4); serial SGD comparable at r = 1% at higher communication cost (p. 7); no future work stated (p. 8).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Classical L-BFGS kept; the corrupted component (curvature pairs from inconsistent samples) named and replaced by overlap differences, plus cautious skip; repair ablated against the unmodified multi-batch L-BFGS.",
+    "pages": "pp. 2-3, 6-8"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Loss to serial SGD at r = 1% printed; 10 seeds with worst and best runs.",
+    "pages": "p. 7"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "The fixed-steplength version that is run is the one analysed, argued more relevant to practice than Robbins-Monro; no bound-versus-run plot.",
+    "pages": "p. 6"
+   },
+   {
+    "method": "Method 5",
+    "relation": "contradiction",
+    "note": "Contradicts the SKILL.md Method 5 limitation 'with no response found' for Dai 2002: this paper cites Dai and Mascarenhas as showing BFGS fails on nonconvex problems and adopts cautious updating.",
+    "pages": "p. 6"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "one repair for two settings",
+    "evidence": "Fault-tolerant distributed L-BFGS and multi-batch learning treated as one sample-inconsistency problem with one fix.",
+    "pages": "pp. 2-3"
+   }
+  ],
+  "transferable": [
+   "When an update needs the difference of two noisy quantities, compute both ends on the same random subset (the overlap) instead of forcing full sample consistency (p. 3).",
+   "Ablate a robustness repair by running the same code with the naive pairs and show mean, best and worst over seeds (p. 7).",
+   "Measure the platform's computation and communication noise with a microbenchmark before motivating a fault-tolerant algorithm (p. 26)."
+  ],
+  "coauthors": "Albert S. Berahas, Martin Takáč",
+  "quotes": [
+   {
+    "text": "This observation is based on an important property of Newton-like methods, namely that there is much more freedom in choosing a Hessian approximation than in computing the gradient [7, 3].",
+    "page": 3
+   },
+   {
+    "text": "serial SGD achieves similar accuracy as the robust L-BFGS method and at a similar rate (e.g., r = 1%), at the cost of n communications per epochs",
+    "page": 7
+   }
+  ]
+ },
+ {
+  "id": "S050",
+  "year": "2016",
+  "title": "An inexact successive quadratic approximation method for L-1 regularized optimization",
+  "read_level": "partial",
+  "contribution": "An inexactness criterion for proximal Newton (successive quadratic approximation) methods on l1-regularized problems, based on a continuous soft-thresholding optimality measure, with global convergence, rates controlled by eta_k, eventual unit steps, and a numerical study showing the benefit is problem dependent (pp. 3-5, 6-12, 12-19).",
+  "problem_entry": "The practical viability of SQA/proximal Newton methods, which need inexact inner solves, is unexplored; earlier papers do not cover inexact solutions and Lee-Sun-Saunders' criterion has drawbacks (pp. 2-3, 5).",
+  "key_idea": "Accept x_hat if ||F_q(x_k; x_hat)|| <= eta_k ||F(x_k)|| and the model decreases, with F(x) = g(x) - P_[-mu,mu](g(x) - x/tau); reduces to Dembo-Eisenstat-Steihaug for mu = 0; line search on a piecewise-linear model decrease; FISTA or orthant-based inner solvers (pp. 3-5, 17-18).",
+  "assumptions": "Global: Lipschitz gradient, bounded below, uniformly bounded positive definite H_k, convexity not needed (pp. 6, 8); local: Lipschitz positive definite Hessian at x*, tau < 1/||Hessian|| (pp. 10-11).",
+  "proof_devices": [
+   "inexactness plus projection contraction gives linear-model decrease >= gamma ||F(x_k)||^2 (pp. 6-7)",
+   "Lipschitz bound gives a steplength bounded below and F(x_k) -> 0 (Theorem 3.1, pp. 6-8)",
+   "Facchinei-Pang nonsingular strong Newton approximation for linear, superlinear, quadratic rates (Theorems 4.2-4.4, pp. 9-11)",
+   "strengthened model sufficient decrease (4.8) satisfied by accurate inner solutions and giving eventual unit steps (Lemma 4.5, Theorem 4.6, pp. 11-12)"
+  ],
+  "experiments": "FISTA (N83) applied directly as benchmark, PNOPT, three SQA variants; inverse covariance estimation (Estrogen, Leukemia, OONR) and logistic regression (Gisette, RCV1); outer/inner iterations, evaluations, Hessian-vector products, time; tolerance sweeps (pp. 12-17).",
+  "positioning": "Argues its criterion is preferable to Lee-Sun-Saunders' (discontinuous subgradient; H^-1 scaling) (pp. 5, 19); relates to Patriksson and Dontchev-Rockafellar inexact rules (pp. 2-3).",
+  "writing": "Rejects the name 'proximal Newton' because the quadratic is a second-order model (p. 2); promises a list of open questions in Section 6 that does not appear (pp. 3, 18-19).",
+  "limits_future": "Advantage on logistic regression less pronounced and dependent on H_k and inner solver choice (p. 17); SQA-FISTA loses to FISTA except at high accuracy (p. 17); OBM convergence unproved (p. 18).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "SQA engine kept; the inner termination test replaced by a criterion from a continuous optimality measure that reduces to the classical inexact-Newton condition when mu = 0.",
+    "pages": "pp. 3-4"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Tests the dismissed simple option (FISTA on the original problem) and prints a split verdict by problem class.",
+    "pages": "pp. 12, 16-17"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Best H_k and inner solver depend on structure: Kronecker Hessian favours Newton-CG, expensive Hessian-vector products favour quasi-Newton.",
+    "pages": "pp. 14-17, 19"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Theoretical argument against a practical termination test (Lee et al. can reject points arbitrarily close to the minimizer); Theorem 4.6 explains observed unit steps.",
+    "pages": "pp. 5, 11-12"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Baseline uses the better-performing N83 FISTA; PNOPT ftol and xtol set so as not to end runs prematurely.",
+    "pages": "p. 13"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Build the inner-solver stopping test from a continuous optimality residual of the subproblem and check that it reduces to the classical inexact-Newton condition in the smooth case (pp. 3-4).",
+   "Before claiming a nested method helps, run the plain first-order method on the original problem as the benchmark and report inner and outer work separately (pp. 12, 15-17).",
+   "Give the baseline its strongest implementation and disable competitor stopping tests that would end runs early (p. 13)."
+  ],
+  "coauthors": "Richard H. Byrd, Figen Oztoprak",
+  "quotes": [
+   {
+    "text": "we prefer not to use the term “proximal” in this context since the quadratic term in (1.2) is better interpreted as a second-order model rather than as a term that simply restricts the size of the step.",
+    "page": 2
+   },
+   {
+    "text": "Note that sqa-fista is not efficient; in fact it requires a much larger number of inner iterations than the total number of iterations in fista.",
+    "page": 17
+   }
+  ]
+ },
+ {
+  "id": "S089",
+  "year": "2016",
+  "title": "A second-order method for convex ℓ1-regularized optimization with active-set prediction",
+  "read_level": "partial",
+  "contribution": "OBA: an orthant-based method for convex l1-regularized problems with a selective-corrective cycle of orthant-face predictions and inexact CG subspace steps, globalized by an ISTA reference point (never triggered in the runs) with a linear-rate proof, competitive in CPU time from Matlab against the C code LIBLINEAR (pp. 2-8, 10, 13).",
+  "problem_entry": "Orthant-based versus proximal Newton methods: which second-order approach for l1 problems should be preferred; the earlier corrective method [6] was not competitive in CPU time (pp. 2-3).",
+  "key_idea": "Limit the zero variables allowed to move to those with the largest subgradient components, correct mispredicted signs in a cycle, double the limit when no corrections were needed, solve the smooth face subproblem by CG, line search on the model, accept only if phi is below a majorant of the ISTA point (pp. 4-8).",
+  "assumptions": "f C1, strongly convex, Lipschitz gradient with known L (pp. 7, 15); exact Hessian with CG relative residual 0.1 (pp. 6, 9).",
+  "proof_devices": [
+   "finite termination of the projected line search on the model (Theorem A.3, pp. 15-16)",
+   "majorization of phi at the ISTA point by Gamma_k gives linear rate 1 - lambda/L (Theorem A.4, pp. 16-18)",
+   "safeguard analogous to the Cauchy step in Newton trust-region methods (p. 13)"
+  ],
+  "experiments": "Logistic regression, eight datasets incl. a designed non-diagonally-dominant Synthetic problem, mu by 5-fold CV, Matlab OBA vs C LIBLINEAR and OWL on CPU time; sparsity at matched accuracy; diagonal-dominance measure D (pp. 8-13, 18).",
+  "positioning": "Contrasted with proximal Newton (newGLMNET), OWL and bound-constrained reformulations (pp. 1-3); credits [6] for the correction idea (p. 2).",
+  "writing": "Balanced verdict 'both approaches have their strengths' (p. 3); separates the source of gains (corrective mechanism) from the safeguard (p. 10).",
+  "limits_future": "Inferior to LIBLINEAR on RCV1 and News20 (p. 10); no clear correlation with diagonal dominance, further investigation needed (p. 13); quasi-Newton variant not explored (p. 6).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Verdict tied to structure (diagonal dominance favours coordinate descent, CG otherwise), probed with a designed problem; honest that the correlation is not clean.",
+    "pages": "pp. 3, 12-13"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Matlab prototype against a C code on CPU time (handicap against own side); losses on RCV1 and News20 printed.",
+    "pages": "pp. 3, 10, 13"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Reference value phi(x*) computed with the authors' own method.",
+    "pages": "p. 9"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Theorem covers the algorithm as run; its safeguard never fired, likened to the Cauchy step.",
+    "pages": "pp. 10, 13"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Weak: engine of [6] kept; exact subspace solves and too-liberal prediction replaced by inexact CG and an adaptive filter.",
+    "pages": "p. 2"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "rarely-binding safeguard for the proof",
+    "evidence": "ISTA backup needed for the linear-rate proof was never required in the reported experiments.",
+    "pages": "pp. 10, 13"
+   },
+   {
+    "pattern": "cheap predictor carries the proof, second-order phase carries the rate",
+    "evidence": "ISTA reference point carries the convergence proof; orthant-face CG subspace steps carry the performance.",
+    "pages": "pp. 7-8, 10"
+   }
+  ],
+  "transferable": [
+   "Globalize a fast heuristic against a cheap first-order reference point using a majorant value instead of an extra function evaluation, and report how often the safeguard fires (pp. 7-8, 10).",
+   "Build a synthetic problem that violates the property suspected to favour the competitor (diagonal dominance) and publish its generator (pp. 12-13, 18).",
+   "Let more variables change only after a corrective cycle needed no corrections (pp. 5, 7)."
+  ],
+  "coauthors": "Nitish Shirish Keskar, Figen Oztoprak, Andreas Wächter",
+  "quotes": [
+   {
+    "text": "One of the main conclusions of this paper is that both approaches have their strengths.",
+    "page": 3
+   },
+   {
+    "text": "We emphasize that the improved performance of the proposed method is driven by the selective-corrective mechanism as opposed to the ISTA backup.",
+    "page": 10
+   }
+  ]
+ },
+ {
+  "id": "S036",
+  "year": "2018",
+  "title": "Adaptive sampling strategies for stochastic optimization",
+  "read_level": "partial",
+  "contribution": "An adaptive-sampling gradient method whose sample size is controlled by an inner product test (descent with high probability) instead of the norm test of the group's 2012 paper, with an orthogonality safeguard for linear, sublinear and nonconvex convergence results and a practical line search and sample-update rules, more efficient than the norm test on logistic regression (pp. 2-8, 10-19, 20-23).",
+  "problem_entry": "Adaptive sampling has optimal complexity but practical implementations are difficult; the norm test (ball around the true gradient) increases samples too fast (pp. 2, 6-7).",
+  "key_idea": "Inner product test controls the variance of the sampled gradient along the true gradient (band instead of ball), requiring fewer samples by the factor beta(x) <= 1; orthogonality test as rarely binding safeguard; variance-based Lipschitz reset in the line search; running-average check for tiny samples (pp. 4-8, 14-17).",
+  "assumptions": "Exact-variance tests in the theory; F C2 with Hessian bounded by L (strongly convex for linear rate); fixed steplength alpha <= 1/((1+theta^2+nu^2)L) (pp. 8-12); practical sample approximations unreliable at very small samples (pp. 15-16).",
+  "proof_devices": [
+   "E||grad F_S||^2 <= (1+theta^2+nu^2)||grad F||^2 gives expected decrease alpha/2 ||grad F||^2 (Lemma 3.1, pp. 8-9)",
+   "linear rate 1 - mu alpha recovering the exact gradient method at theta = nu = 0 (Theorem 3.2, p. 10)",
+   "sublinear rates for convex and nonconvex objectives (Theorems 3.3-3.4, pp. 11-13)",
+   "ratio of minimal sample sizes |S_i|/|S_n| = beta(x) <= 1 (p. 7; Appendix A, p. 26)"
+  ],
+  "experiments": "l2-regularized logistic regression on nine datasets; effective gradient evaluations and iterations; fixed steplengths tuned per problem and method from a grid, then the complete algorithm with line search vs the norm test; theta = 0.9 for both tests, nu = tan 80 deg (pp. 19-23, 27, 30).",
+  "positioning": "Revisits the norm test of Byrd, Chin, Nocedal and Wu [6] and related tests of Carter, Hashemi et al., Cartis-Scheinberg; contrasted with SAG, SAGA, SVRG (pp. 3-4, 6).",
+  "writing": "Calls the orthogonality test a safeguard against rare cases (p. 3); hedges heuristics as possibly unreliable and parameters as tunable (pp. 17, 19); claims beta(x_k) often much less than 1 although Section 5 plots angles and batch sizes, not beta (pp. 7, 20-22).",
+  "limits_future": "Norm test needs fewer iterations (p. 20); sample-size heuristics can be unreliable (p. 17); future: inner product test in subsampled Newton and quasi-Newton methods (p. 23).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "The received norm test, including the group's own 2012 version, is put on trial by a geometric argument, the beta(x) ratio and experiments.",
+    "pages": "pp. 6-7, 20-23"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Gradient method kept; sample-size control replaced, driven by explicit variance and Lipschitz estimates with a running-average fallback when estimates are unreliable.",
+    "pages": "pp. 14-17"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "beta(x) result discriminates between two practical tests and is said to be borne out by runs.",
+    "pages": "p. 7"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Theory needs exact-variance tests and an orthogonality safeguard the practical algorithm rarely uses.",
+    "pages": "pp. 3, 7-8"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Both methods get per-problem tuned steplengths from the same grid; norm test's advantage in iterations printed.",
+    "pages": "pp. 20, 27"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "rarely-binding safeguard for the proof",
+    "evidence": "Orthogonality test needed for the linear-rate proof is invoked infrequently in practice.",
+    "pages": "p. 3"
+   }
+  ],
+  "transferable": [
+   "Compare two acceptance tests by the minimal sample sizes they require and write the ratio as an interpretable variance fraction (p. 7; Appendix A, p. 26).",
+   "Derive default parameters from a statistical meaning (one-sided confidence for descent, maximum angle 80 degrees) and state that they remain tunable (pp. 18-19).",
+   "Plot the internal quantities that explain the result: batch-size growth and the angle between sampled and true gradients (Figs. 5.2-5.3, pp. 21-22).",
+   "Reset an adaptive Lipschitz estimate by a variance-based factor rather than a fixed fraction when function values are sampled (pp. 14-15)."
+  ],
+  "coauthors": "Raghu Bollapragada, Richard Byrd",
+  "quotes": [
+   {
+    "text": "the inner product test places more emphasis on generating descent directions and allows more freedom in their length.",
+    "page": 3
+   },
+   {
+    "text": "The orthogonality test is invoked infrequently in practice and should be regarded as a safeguard against rare difficult cases.",
+    "page": 3
+   }
+  ]
+ }
+]

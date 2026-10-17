@@ -1,0 +1,155 @@
+[
+  {
+    "id": "S032",
+    "year": "2019",
+    "title": "Exact and inexact subsampled Newton methods for optimization",
+    "read_level": "full",
+    "contribution": "Sampling rules for subsampled Newton methods (geometric gradient growth with constant Hessian sample gives R-linear, faster-than-geometric gradient growth with any growing Hessian sample gives R-superlinear convergence in expectation) and a work-complexity analysis of inexact subsampled Newton-CG compared with Newton-SGI/LiSSA and Newton sketch; read as arXiv v1 (pp. 6, 11, 16, 18-21).",
+    "problem_entry": "Which gradient/Hessian sample sequences {X_k},{S_k} are most promising in theory and practice (p. 2), and whether CG, the accepted inner solver in deterministic Newton, stays preferable to a stochastic gradient iteration under subsampling, measured by the effort to reach a local linear rate 1/2 (p. 3).",
+    "key_idea": "Coordinate sample sizes with the target rate (Thm 2.1 p. 6; Thm 2.4 pp. 8, 11); in the inexact method fix beta and the CG count r (or residual forcing zeta <= mu_beta/(8L)) so each error term is at most 1/8 of the contraction (pp. 16-17).",
+    "assumptions": "Each F_i strongly convex (via regularization), bounded subsampled-Hessian eigenvalues, bounded gradient covariance trace, Lipschitz Hessian, bounded Hessian-component variance (A1-A4, pp. 5-6); restrictive moment assumption B1 (pp. 11, 27); independent uniform samples (pp. 6, 27).",
+    "proof_devices": [
+      "three-term split of the expected Newton-step error: Lipschitz-Hessian, Hessian-subsampling and gradient-sampling terms (Lemma 2.2, pp. 8-9)",
+      "variance of a sample mean via the trace of a covariance, with Jensen (eq. 2.11, p. 7; Lemma 2.3, p. 10)",
+      "Hessian error measured along w_k - w* instead of matrix concentration inequalities (p. 10), removing a log d factor in the complexity comparison (p. 19)",
+      "induction on E||w_k - w*|| with fixed error shares 1/4, 1/8, 1/8 (Theorem 3.2, p. 16)",
+      "worst-case CG bound in sqrt(kappa) plugged into a linear-quadratic recursion (eq. 3.4, p. 14; Lemma 3.1, p. 14)",
+      "work counted in Hessian-vector products to reach a rate of 1/2: Newton-CG O(kmax^2 min{d, sqrt(kmax) log kmax}) vs LiSSA O(kmax^2 k log k log d) (eqs. 4.1, 4.4, pp. 18-19)"
+    ],
+    "experiments": "L2-regularized logistic regression on six binary datasets (Table 5.1, p. 22): GD, Newton, Newton-CG at |S| = 5/10/50%, Newton-SGI; error vs iterations, effective gradient evaluations and CPU time (pp. 23-24); CG parameters fixed in advance and untuned (p. 22), SGI given matched Hessian-vector budget and a step-length grid (pp. 24, 26); CG and SGI similar in evaluations, SGI slower in time (p. 24).",
+    "positioning": "N.B. paragraph distinguishing results in expectation for the whole sequence from Xu et al.'s one-step results in probability (p. 3); same contrast with Roosta-Khorasani and Mahoney and with Pasupathy et al. (pp. 4, 13); Table 4.1 presented as a literature summary, not a ranking (pp. 20-21).",
+    "writing": "Hedged verdicts: no result in the area is called definitive (p. 13); numerical results labelled preliminary (pp. 1, 27); caveats on worst-case CG (p. 17) and on mixed convergence types in Table 4.1 (p. 21).",
+    "limits_future": "Limits: assumption B1, uniform sampling only, worst-case CG analysis, theory demanding kappa^2 samples while practice needs few, preliminary numerics (pp. 11, 17, 20, 27); future: comprehensive numerical study and proof techniques beyond concentration bounds (pp. 20, 27).",
+    "method_links": [
+      {
+        "method": "Method 1",
+        "relation": "evidence",
+        "note": "Own CG parameters (zeta = 0.01, maxcg = 10) fixed beforehand and untuned; the rival SGI gets a matched Hessian-vector budget and a step-length grid 2^-20..2^3.",
+        "pages": "pp. 22, 24, 26"
+      },
+      {
+        "method": "Method 5",
+        "relation": "variant",
+        "note": "Theory separates the inner solvers (sqrt(kappa) vs kappa, log d), but runs show them similar in effective gradient evaluations, no bound-vs-run plot is given, the sample-size theory is admitted to be pessimistic, and Table 4.1 is said not to rank methods.",
+        "pages": "pp. 19-20, 24"
+      },
+      {
+        "method": "Method 2",
+        "relation": "variant",
+        "note": "The received view that CG is the inner solver of choice is retested under subsampling; here the classical tool is defended against a newer challenger (LiSSA-type SGI), with a scoped verdict that both deserve more study.",
+        "pages": "pp. 3, 24, 27"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "asymmetric accuracy (cheap curvature, accurate gradient)",
+        "evidence": "Constant Hessian sample suffices for R-linear and any growth to infinity for R-superlinear convergence, while the gradient sample must grow geometrically or faster.",
+        "pages": "pp. 6, 8, 11"
+      },
+      {
+        "pattern": "Error balancing for inner solves",
+        "evidence": "Hessian sample size and CG iterations (or residual forcing zeta <= mu_beta/(8L)) chosen so the sampling and CG-residual error terms are each at most 1/8 of the contraction.",
+        "pages": "pp. 16-17"
+      }
+    ],
+    "transferable": [
+      "Compare two inner solvers by the work, in one shared unit (Hessian-vector products), each needs to reach a common target such as a local linear rate with constant 1/2 (pp. 3, 18).",
+      "Bound a subsampled-matrix error along the single relevant vector (w_k - w*) via the trace of a covariance instead of a matrix concentration inequality; it removes a log d factor (pp. 10, 19).",
+      "Prove a target contraction by giving each error term a fixed share (1/4 quadratic, 1/8 sampling, 1/8 solver) and solving for the sample size and iteration count each share implies (p. 16).",
+      "When a concurrent paper posts similar-looking results, add a dated paragraph stating the difference in result type (in expectation for the sequence vs one step in probability) and scope (pp. 3, 13).",
+      "In a work-complexity table, state per row the convergence type and accuracy measure and say that the table does not rank methods (pp. 20-21)."
+    ],
+    "coauthors": "Raghu Bollapragada (Northwestern IEMS), Richard Byrd (University of Colorado, Computer Science)",
+    "quotes": [
+      {
+        "text": "all the results just mentioned are useful and shed light into the properties of subsampled Newton methods, but none of them seem to be definitive.",
+        "page": 13
+      },
+      {
+        "text": "This suggests that the theory could be improved and that techniques other than concentration bounds might help in achieving this.",
+        "page": 20
+      }
+    ]
+  },
+  {
+    "id": "S091",
+    "year": "2022",
+    "title": "Adaptive finite-difference interval estimation for noisy derivative-free optimization",
+    "read_level": "full",
+    "contribution": "A bisection procedure that, given the noise level, finds a near-optimal finite-difference interval for any difference scheme by driving a computable truncation-to-measurement error ratio into a band, without estimating higher derivatives, with a finite-termination theorem and tests in 1-D and in FD L-BFGS on 54 noisy CUTEst problems; read as arXiv v2 (pp. 1, 4-5, 8, 12, 15-19).",
+    "problem_entry": "Noise has kept finite differences out of favour in DFO because the interval becomes critical as noise grows (p. 1); the near-optimal interval needs a higher derivative that users do not have (p. 2), and the default sqrt(eps_M) rule fails under noise (p. 2).",
+    "key_idea": "Estimate h directly: bisect h until a testing ratio, e.g. |f(t+4h) - 4f(t+h) + 3f(t)|/(8 eps_f), lies in [r_l, r_u] with r_l > 1, r_u > r_l + 2, giving h of optimal order; generalized to any scheme with testing ratios built from the scheme at h and alpha*h, reusing evaluations (pp. 4-5, 8, 10-11).",
+    "assumptions": "Bounded noise |eps(t)| <= eps_f with eps_f known (Assumption 3.1, pp. 12, 15, 19); ratio-perturbation bound from ||w~||_1 = 1 and continuity with r_S(2^K h_0) >= r_u - 1 (Assumptions 3.2-3.3, p. 12); o(h^q) ignored in the accuracy argument (pp. 4, 9); uniform noise in tests (p. 14).",
+    "proof_devices": [
+      "Taylor argument bounding the noise part of the testing ratio by 1 so that h lands within a constant factor of h* (eqs. 2.6-2.8, pp. 4-5; eqs. 3.7-3.10, pp. 8-9)",
+      "finite termination by contradiction: invariants r_S(l_k) < r_l + 1 and r_S(u_k) > r_u - 1 on the true function, finite expansion phase, uniform continuity on a compact bracket (Theorem 3.4, pp. 12-13)",
+      "as printed, Theorem 3.4 states 0 < r_l while Algorithm 3.1 requires 1 < r_l, and the proof uses expansion factor 2 while the algorithm has a general eta (pp. 8, 12-13)",
+      "failure-case analysis in prose: o(h^q) dominance, phi^(q) ~ 0 ending in a warning after max iter 20, termination at risk if eps_f is underestimated (pp. 11-12)"
+    ],
+    "experiments": "1-D: six schemes (Table 1, p. 14) on cos(t) for eps_f from 1e-8 to 1e-1 and four difficult functions, with h-dagger marked on the worst-case relative-error curve (Figs. 1-2, pp. 15-16); FD L-BFGS (memory 10, relaxed Armijo-Wolfe) on 54 CUTEst problems at eps_f in {1e-1, 1e-3, 1e-5, 1e-7}, Fixed (idealized, true Hessian info) vs More-Wild vs Adaptive, optimality gap vs function evaluations (Table 2, Figs. 3-4, pp. 16-19), full tables in App. B (pp. 32-39).",
+    "positioning": "Places itself in numerical differentiation (Curtis-Reid, Stepleman-Winarsky, Gill-Murray-Saunders-Wright, Barton, More-Wild; p. 3); contrasts with Gill et al.'s nested estimation and More-Wild's non-affine-invariant test (p. 6); Gill et al. dropped from the benchmark since More-Wild is regarded as an improvement (p. 17).",
+    "writing": "Practical considerations numbered I-V (rule choice, ratio generation, initialization, special cases, sensitivity to eps_f), pairing each failure case with its design rule (pp. 10-12).",
+    "limits_future": "Limits: known noise level, rare large errors from poor h_0 (BOX2), higher cost than More-Wild and than the idealized Fixed interval, termination needs eps_f not underestimated (pp. 11-12, 19, 31); future: unbounded finite-variance noise via Chebyshev and periodic re-estimation of the interval (p. 19).",
+    "method_links": [
+      {
+        "method": "Method 3",
+        "relation": "evidence",
+        "note": "FD L-BFGS engine kept; only the difference interval is replaced, driven by eps_f; the unknowable higher derivative is replaced by a testable ratio; misestimated eps_f analysed; phi^(q) ~ 0 ends in a warning, not a failure.",
+        "pages": "pp. 2, 4, 11-12, 15-17"
+      },
+      {
+        "method": "Method 1",
+        "relation": "evidence",
+        "note": "Idealized Fixed baseline using true Hessian information, not viable in practice; rival More-Wild given a safeguard threshold tuned on the test set; own higher cost and the BOX2 failure printed.",
+        "pages": "pp. 17-19, 31"
+      },
+      {
+        "method": "Method 2",
+        "relation": "evidence",
+        "note": "Programme context: opens with the DFO community's dismissal of finite differences under noise and closes that accuracy and robustness make them reliable for established algorithms; the broad test is in S080.",
+        "pages": "pp. 1, 19"
+      },
+      {
+        "method": "Method 5",
+        "relation": "variant",
+        "note": "Only finite termination is proved; accuracy rests on a Taylor argument checked by plotting the error model with the output marked; the superiority over More-Wild is purely empirical.",
+        "pages": "pp. 4-5, 12, 15-16, 29-31"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "Computable proxy for an unavailable quantity",
+        "evidence": "The testing ratio stands in for the unknown truncation-to-measurement error ratio and hence for |phi^(q)(t)|, and drives the interval search.",
+        "pages": "pp. 4-5, 8-9"
+      },
+      {
+        "pattern": "arm with an idealized estimate",
+        "evidence": "Fixed interval computed from true Hessian diagonals (forward differences) or true-Hessian third-derivative estimates (central differences), labelled for benchmarking purposes only.",
+        "pages": "pp. 17-18"
+      },
+      {
+        "pattern": "invariance as a design requirement and a test",
+        "evidence": "Testing ratio built to be affine-invariant, rival More-Wild condition (2.12) criticised for not being so, invariance tested on a*sin(b*t).",
+        "pages": "pp. 5-6, 27"
+      }
+    ],
+    "transferable": [
+      "To set a parameter that balances two error sources, compute a ratio of the two from available data and bisect the parameter until the ratio lies in a band wider than the ratio's noise bound (r_u > r_l + 2 when the noise part is at most 1), instead of estimating the constant in the optimal formula (pp. 4-5, 8-9).",
+      "Generate valid testing ratios for any difference scheme by combining the scheme at h and alpha*h, which cancels the derivative term and reuses evaluations; choose alpha as a power of the expansion factor so monotone trials cost one new evaluation (pp. 5, 10-11).",
+      "Evaluate an estimator on a deterministic worst-case error curve against the parameter, with the estimator's output marked, so the check needs no noise realization (eq. 4.1, p. 14; Figs. 1-2, pp. 15-16).",
+      "Add an oracle arm with true derivative information, labelled for benchmarking only, to show the distance between a practical rule and the ideal (pp. 17-18).",
+      "For each user-supplied estimate, write the direction of failure when it is wrong: overestimated eps_f still terminates with h > h*, underestimated eps_f may not terminate and gives h < h* (p. 12)."
+    ],
+    "coauthors": "Hao-Jun Michael Shi, Yuchen Xie, Melody Qiming Xuan (all Northwestern IEMS)",
+    "quotes": [
+      {
+        "text": "Our procedure produces reliable estimates of the finite-difference interval at low cost without explicitly approximating higher-order derivatives.",
+        "page": 1
+      },
+      {
+        "text": "We created this idealized option for benchmarking purposes only.",
+        "page": 17
+      }
+    ]
+  }
+]

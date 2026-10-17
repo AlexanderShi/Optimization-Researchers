@@ -1,0 +1,313 @@
+[
+ {
+  "id": "S110",
+  "year": "2007",
+  "title": "Steplength selection in interior-point methods for quadratic programming",
+  "read_level": "full",
+  "contribution": "Replaces the equal primal-dual steplength rule of convex-QP interior methods by three multipliers chosen as the merit-function minimizer over a set that contains every equal-step choice, cheap to compute (two 2-D QPs from products already available) and fewer iterations than equal steps or Meszaros's rule on 56 Maros-Meszaros QPs (pp. 2, 5-8).",
+  "problem_entry": "The textbook rule (common steplength, recommended in [1, 4, 11]) is argued to be unnecessarily conservative; with Q nonzero, primal and dual steps are coupled in the dual residual, so unequal steps need a safeguard (pp. 1-3).",
+  "key_idea": "Three multipliers (alpha_y unrestricted) minimizing phi = ||Ax-b||^2 + ||A'y+z-Qx-c||^2 + x'z over the equal-step segment plus one boundary segment; decrease at least that of equal steps; Remark 4.1 reduces it to two 2-D bound-constrained QPs; Newton system, centering and fraction-to-boundary unchanged (pp. 3-7).",
+  "assumptions": "Standard-form convex QP, Q PSD, A full row rank (p. 1); r_p, r_d, Q dx nonzero for the efficient-set characterization (p. 4); no convergence theory.",
+  "proof_devices": [
+   "set-inclusion argument: every feasible equal truncated step is in A1 u A2, so the merit decrease is at least that of equal steps (p. 6)",
+   "Remark 4.1: global minimizer of the steplength subproblem via two 2-D bound-constrained QPs (p. 6)"
+  ],
+  "experiments": "Matlab, 56 Maros-Meszaros QPs (<10,000 variables, AMPL models), equal steps vs Meszaros vs new; iteration counts only (overhead argued negligible, p. 7); KKT < 1e-6, 200-iteration limit; per-problem relative differences with losses (dual3 +22%, qpcboei2 +25%), Meszaros fails on qsierra; log performance profile (pp. 7-8).",
+  "positioning": "Against the equal-step rule of [1, 4, 11] (p. 1) and Meszaros [8] (p. 4); unequal steps noted as common in LP and NLP codes (p. 5).",
+  "writing": "Four-page letter; conjecture labelled as conjecture (p. 5); results summarized as a fairly consistent reduction, larger on difficult problems (p. 8).",
+  "limits_future": "No theory, no timings, no limitations or future-work statement; cheaper alpha_y = alpha_z variant slightly less efficient (p. 8).",
+  "method_links": [
+   {"method": "Method 2", "relation": "evidence", "note": "Received rule written down with its sources and tested against the bolder option under a merit safeguard.", "pages": "pp. 1, 5-8"},
+   {"method": "Method 3", "relation": "variant", "note": "IPM engine kept, only the steplength rule replaced; safeguard is merit decrease at least that of the classical rule, not an explicit estimate with recovery.", "pages": "pp. 4-6"},
+   {"method": "Method 1", "relation": "evidence", "note": "Per-problem losses against the default printed; weak on cost (iteration counts stand in for time on an argued overhead).", "pages": "pp. 7-8"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "contain the classical choice in the search set", "evidence": "Merit minimized over a set containing every equal-step choice, so the new rule cannot do worse on the merit than the incumbent; compare S081's retained classical pi update as pi^u.", "pages": "p. 6"},
+   {"pattern": "Degenerate-parameter ablation to attribute the gain", "evidence": "Variant with alpha_y = alpha_z removes the free dual multiplier and is slightly less efficient.", "pages": "p. 8"}
+  ],
+  "transferable": [
+   "When a safeguard is too conservative, enlarge the candidate set so that it still contains the conservative choice and take the merit minimizer over the enlarged set (p. 6).",
+   "Before reporting iteration counts only, show that the extra work reuses products the solver already computes (A dx, Q dx, A' dy from iterative refinement) (p. 7).",
+   "Print per-problem relative differences against the default with signs so that losses stay visible next to the profile (p. 8)."
+  ],
+  "coauthors": "Frank Curtis",
+  "quotes": [
+   {"text": "Empirical evidence has shown, however, that this approach is unnecessarily conservative in numerous cases.", "page": 2},
+   {"text": "We conjecture that such a choice can be beneficial in convex quadratic programming as well, as long as necessary globalization techniques are implemented", "page": 5}
+  ]
+ },
+ {
+  "id": "S045",
+  "year": "2008",
+  "title": "An inexact SQP method for equality constrained optimization",
+  "read_level": "full",
+  "contribution": "Gives termination tests (SMART tests) for an iterative solver inside a line-search SQP method that judge inexact steps by the reduction they give in a model of the exact penalty function, proves global convergence under standard assumptions, and shows on 44 CUTEr/COPS problems that the tests make the method robust where a residual-only inexact Newton rule fails (pp. 4-7, 8-15, 15-18).",
+  "problem_entry": "Very large (e.g. PDE-constrained) problems where the primal-dual matrix cannot be formed or factored; how accurately must SQP subproblems be solved for global convergence, given that residual-based inexact Newton rules can move away from minimizers in nonconvex problems (pp. 1-4).",
+  "key_idea": "Keep line-search SQP on phi = f + pi||c||; accept an iterative-solver iterate when it gives sufficient reduction in the merit model (Model Reduction Condition) with loose residual bounds (Test I) or sufficient linearized-feasibility reduction with a pi increase (Test II); primal and dual residuals handled separately; directional derivative replaced by a computable upper bound (pp. 2, 4-8).",
+  "assumptions": "Assumptions 4.1: bounded f, c and derivatives on a convex set, bounded multipliers, full-row-rank Jacobians with singular values bounded away from zero, bounded W_k positive definite on the null space; (b) and (c) admitted to be strong and used to focus on inexactness (pp. 8-9).",
+  "proof_devices": [
+   "analysis-only normal/tangential decomposition d = u + v (p. 9)",
+   "index sets K1/K2 by dominant component and the quantity Theta_k bounding ||d||^2 and the directional derivative (Lemmas 4.4-4.6, pp. 10-11)",
+   "bounded penalty parameter from the dual residual bound (3.5b) (Lemma 4.7, p. 12)",
+   "steplength bounded away from zero via Taylor bound (Lemma 4.8, p. 13)",
+   "telescoping sum of merit decreases gives ||c|| -> 0, ||d|| -> 0 (Lemma 4.9, pp. 13-14)",
+   "contraction argument on the dual residual (Theorem 4.10, pp. 14-15)"
+  ],
+  "experiments": "Matlab isqp with unpreconditioned GMRES on 44 equality-constrained CUTEr/COPS problems, exact Hessian shifted to satisfy Assumption 4.1(e); vs ires (residual-only test) at kappa = 2^-1..2^-10: 45-86% solved vs 100%; naive failure tests; stacking the tests on ires costs 0.5 extra GMRES iterations on average and solves ires's 9 failures (pp. 15-18).",
+  "positioning": "Distinguished from inexact Newton for equations [8] and Heinkenschloss-Vicente's composite-step conditions; full-space line-search PDE methods credited but lacking convergence conditions (pp. 2, 5).",
+  "writing": "Tests named with an acronym (SMART, p. 6); claims flagged as 'we claim' (p. 5); closing section on assumptions, rate and extensions (pp. 17-19).",
+  "limits_future": "Scale-dependent beta 'not ideal' and constants to be tuned per application (p. 7); bounded multipliers not guaranteed, slow rate possible with a fix sketched (p. 18); Jacobian singularity and nonconvex W_k deferred as beyond the benign setting (pp. 18-19); efficiency left to a PDE study (p. 15).",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "Line-search SQP engine kept; only the inner solver's stopping rule replaced by a merit-model test.", "pages": "pp. 4, 6-7"},
+   {"method": "Method 4", "relation": "evidence", "note": "Stated limits (singular Jacobians, nonconvex W_k) are the subjects of S068 and S073.", "pages": "pp. 18-19"},
+   {"method": "Method 1", "relation": "evidence", "note": "Rival residual rule given a ten-value sweep of its accuracy parameter; naive failure tests used to challenge own robustness.", "pages": "pp. 16-17"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "Computable proxy for an unavailable quantity", "evidence": "Upper bound g'd - pi(||c|| - ||r||) replaces the exact directional derivative in the Armijo test.", "pages": "p. 8"},
+   {"pattern": "Benign setting first, as declared staging", "evidence": "Strong assumptions named as simplifications; singular Jacobians and nonconvexity deferred.", "pages": "pp. 8-9, 19"},
+   {"pattern": "experiments kept inside the theorem's assumptions", "evidence": "Hessian shifted by a multiple of the identity to satisfy Assumption 4.1(e) in the tests; same move in S068 (singular-value filter) and S081; S073 then builds sets outside.", "pages": "p. 17"},
+   {"pattern": "Price devices in base-iteration units", "evidence": "Robustness of the SMART tests priced as 0.5 extra GMRES iterations per run over the residual rule.", "pages": "p. 18"}
+  ],
+  "transferable": [
+   "Judge an inexact subproblem solution by the reduction it gives in the merit-function model, not by its residual size, and write the test so it can be checked at every inner iteration (pp. 5-7).",
+   "Run the field's natural rival rule over a sweep of its accuracy parameter, report success per value, then price your robustness by stacking your test on the rival rule and counting extra inner iterations (pp. 17-18).",
+   "Prove convergence with an analysis-only decomposition (normal and tangential components never computed), split by which component dominates the step (pp. 9-11)."
+  ],
+  "coauthors": "Richard H. Byrd, Frank E. Curtis",
+  "quotes": [
+   {"text": "Assumptions 4.1(b) and (c) are strong; we use them to simplify the analysis in order to focus on the issues related to inexactness.", "page": 8},
+   {"text": "Indeed, the extra cost is minimal with respect to the added robustness.", "page": 18}
+  ]
+ },
+ {
+  "id": "S076",
+  "year": "2008",
+  "title": "An algorithm for the fast solution of symmetric linear complementarity problems",
+  "read_level": "full",
+  "contribution": "Proposes a two-phase method for mixed symmetric LCPs that alternates a few projected Gauss-Seidel sweeps (active-set identification) with a recursive subspace minimization and a backtracking safeguard, and shows on game-physics LCPs that it beats interior-point and gradient projection (tron) codes, especially on ill-conditioned problems (pp. 1, 7-14).",
+  "problem_entry": "Real-time applications (game physics at 30 frames/s, about 0.005 s per LCP) need approximate LCP solutions that identify most of the active set; PGS is popular but very slow on ill-conditioned problems, yet identifies most of the active set in a few iterations (pp. 1-7).",
+  "key_idea": "k_gs PGS sweeps, then up to k_sm reduced square solves with projection onto v >= 0 and removal of newly zero components; a backtracked safeguard point z^b ensures phi does not increase; Kocvara-Zowe is the special case k_sm = 1 with backtracking only (pp. 7-10).",
+  "assumptions": "Q symmetric, B with positive diagonal, A with nonzero diagonal (p. 2); global convergence only for positive definite Q, not guaranteed otherwise (pp. 8, 10).",
+  "proof_devices": [],
+  "experiments": "Fortran 77, Open Dynamics Engine LCPs n = 18 to 9,534; same pardiso solver for IPM and new method: 0.50-4.67 s vs 0.22-0.87 s on the five largest with about half the Cholesky fill; k_sm = 1 ablation 387 vs 7 iterations; error-vs-CPU plots; tron with CPU adjusted for repeated Hessian evaluations; parameter insensitivity (pp. 6, 10-13).",
+  "positioning": "Improvement of Kocvara-Zowe (credited, not run, justified by their own reported gains); Ferris-Wathen-Armand studied game LCPs but not PGS (pp. 3, 9, 14).",
+  "writing": "Application numbers open the paper (30 frames/s, 0.005 s, p. 2); puzzle (why is a slow method popular?) answered with a table before the method is introduced (pp. 6-7).",
+  "limits_future": "No convergence for indefinite Q (p. 10); parameters to be tuned per application (p. 13); parallel scalability argued from a 64-core simulator, quantitative chip-multiprocessor studies left as future work (p. 14).",
+  "method_links": [
+   {"method": "Method 6", "relation": "evidence", "note": "Application structure (time limit, approximate answer, active set as output) shapes a design that combines a cheap identification method with a Newton-like subspace phase.", "pages": "pp. 2-3"},
+   {"method": "Method 1", "relation": "evidence", "note": "One package and one sparse solver for the arms; rival tron's time corrected in its favour.", "pages": "pp. 10, 13"},
+   {"method": "Method 1", "relation": "variant", "note": "Closest predecessor (Kocvara-Zowe) not run; its own reported results used instead.", "pages": "p. 14"},
+   {"method": "Method 2", "relation": "evidence", "note": "Practitioners' default (PGS) tested and found poor, then its popularity explained before replacing it.", "pages": "pp. 6-7"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "explain the incumbent's popularity, then keep its strength", "evidence": "Fraction of the optimal active set identified by PGS after k iterations explains its popularity; the new method keeps PGS for identification (also S092 p. 2).", "pages": "pp. 6-7"},
+   {"pattern": "Degenerate-parameter ablation to attribute the gain", "evidence": "Predecessor's restriction k_sm = 1 run inside the new code: 387 vs 7 iterations.", "pages": "p. 11"}
+  ],
+  "transferable": [
+   "Before replacing a practitioners' method that looks poor on your metric, measure what it is good at (fraction of the optimal active set identified after k iterations) and design around that strength (pp. 6-7).",
+   "Compare against interior-point methods inside one package with the same sparse direct solver and report factor fill and factorization counts next to CPU time (pp. 10-11).",
+   "When a rival code repeats work that is constant for your problem class (the Hessian of a QP), report an adjusted time that removes it (p. 13)."
+  ],
+  "coauthors": "Jose Luis Morales, Mikhail Smelyanskiy",
+  "quotes": [
+   {"text": "Given this poor performance, it may seem surprising that the projected Gauss-Seidel method is popular in computer game software.", "page": 6},
+   {"text": "The refinements introduced in our algorithm are crucial; without them the method can be very inefficient on ill-conditioned problems (as we report in §4).", "page": 9}
+  ]
+ },
+ {
+  "id": "S081",
+  "year": "2008",
+  "title": "Flexible penalty functions for nonlinear constrained optimization",
+  "read_level": "full",
+  "contribution": "Introduces a flexible penalty function that accepts a step if it gives sufficient decrease for some penalty value in an interval [pi^l, pi^u] (fixed penalty and one-element filter as the two extremes), with pi^u set by the usual model rule and pi^l by actual reductions, proves global convergence for line-search SQP, and reports fewer function evaluations in KNITRO-Direct (pp. 4-10, 14-16).",
+  "problem_entry": "Penalty functions and filters both block productive steps: a large monotone pi forces iterates to hug the feasible region, a filter entry can block feasibility-improving steps; the authors see blocking as the main weakness of penalty methods (pp. 2-4).",
+  "key_idea": "Acceptance for at least one pi in [pi^l, pi^u]; pi^u updated by the model-based rule chi_k used in current codes, pi^l raised (damped by 0.1) only after a step into region II from the actual reduction ratio nu; Armijo with pi^m = max{pi^l, chi_k}; no filter history kept (pp. 5-10).",
+  "assumptions": "Equality constraints; Assumptions 3.1: bounded f, c and derivatives, full-row-rank Jacobians with singular values bounded away from zero (admitted strong), bounded W_k positive definite on the null space (p. 10).",
+  "proof_devices": [
+   "normal/tangential decomposition, K1/K2 sets and Theta_k, following S045 (pp. 10-12)",
+   "pi^u bounded and eventually constant (Lemma 3.6), then pi^l (Corollary 3.1) (pp. 12-13)",
+   "steplengths bounded below (Lemma 3.7, p. 13) and KKT residual to zero (Theorem 3.2, p. 14)"
+  ],
+  "experiments": "KNITRO-Direct (KNITRO 5.0) with the trust-region fallback disabled, 85 equality-constrained CUTEr/COPS problems; default pi rule vs four flexible variants (initial pi^u = 1, 10, 100, 1000); iterations and function evaluations in log performance profiles only, no per-problem table (pp. 15-16).",
+  "positioning": "Credits filters (Fletcher-Leyffer 2002) and the slanting envelope (Chin-Fletcher 2003, Li 2006); dismisses nonmonotone penalty updates as ad hoc heuristics; thanks Leyffer, Toint and Waechter (pp. 2-3, 5-6, 18).",
+  "writing": "Argument built on pictures of acceptance regions in the ||c||-f plane (Figures 1-7, pp. 2-8); position stated as 'our view' (p. 3).",
+  "limits_future": "Only equality constraints analysed; extensions to barrier subproblems and trust-region ratio tests sketched without analysis, and further components needed for guarantees (pp. 17-18); no failure analysis reported.",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "Line-search SQP engine kept; the single penalty value becomes an interval whose lower end is driven by the measured actual reduction ratio.", "pages": "pp. 7-9"},
+   {"method": "Method 6", "relation": "variant", "note": "Integrates features of the two rival globalization schools (penalty and filter) into one mechanism instead of crowning one; component-level integration.", "pages": "pp. 4-5"},
+   {"method": "Method 1", "relation": "variant", "note": "Performance profiles only, no per-problem results or failure classification.", "pages": "pp. 15-16"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "one-parameter family spanning two rival methods", "evidence": "pi^l = pi^u recovers a fixed penalty, pi^l near 0 with large pi^u a one-element filter; compare the s01 candidate storage knob spanning two classical methods (S138, S143).", "pages": "p. 5"},
+   {"pattern": "Collapse check to the classical case", "evidence": "With pi^l = pi^u the flexible penalty is the classical penalty function.", "pages": "p. 5"},
+   {"pattern": "Modular proof by reduction to the companion theory paper", "evidence": "Global analysis follows the approach of Byrd et al. (2007) (S045).", "pages": "p. 10"}
+  ],
+  "transferable": [
+   "Draw rival step-acceptance mechanisms in the (||c||, f) plane: the region each accepts and the productive steps each blocks; then design the new acceptance region from the pictures (pp. 2-5).",
+   "Drive one end of an adaptive parameter by the model and the other by actual measured reductions, damped so it rises gradually (pp. 7-9).",
+   "When testing a globalization component inside a production solver, switch off the solver's fallbacks so the runs measure the component alone (p. 15)."
+  ],
+  "coauthors": "Frank E. Curtis",
+  "quotes": [
+   {"text": "In summary, both penalty functions and filters can be shown to block different types of productive steps.", "page": 4},
+   {"text": "Not only does an algorithm with a flexible penalty function approach often require slightly fewer iterations to find a solution, but a considerable amount of savings is often experienced in terms of function evaluations.", "page": 16}
+  ]
+ },
+ {
+  "id": "S068",
+  "year": "2010",
+  "title": "An inexact Newton method for nonconvex equality constrained optimization",
+  "read_level": "full",
+  "contribution": "Extends the SMART-test inexact SQP method (S045) to nonconvex problems without inertia information, using computable bounds on the tangential and normal step components and a Hessian modification rule triggered inside the iterative solve; proves global convergence and solves all 44 CUTEr test problems, against naive and inertia-using variants (pp. 2-11, 16-21).",
+  "problem_entry": "Line-search convexification needs inertia, unavailable without factorizations; existing nonconvex globally convergent methods factor the Jacobian or the primal-dual matrix; inexact full-space nonconvex methods have received little attention (pp. 2-4).",
+  "key_idea": "Forgo the QP interpretation and judge steps by their effect on the merit model: Model Reduction Condition with max{d'Wd/2, theta Upsilon_k}; extended Termination Tests I-II; Hessian modification W <- W + mu I inside the solver when the step is neither convex enough nor sufficiently normal; Upsilon and nu computed from ||A d|| and ||A|| (pp. 4-10, 17).",
+  "assumptions": "Assumption 1 as in S045 minus positive definiteness on the null space, plus consistency of the primal-dual system for each W_k; bounded multipliers and full-row-rank Jacobians kept (p. 11).",
+  "proof_devices": [
+   "Lemmas 1-6 parallel S045 with the bound Upsilon_k replacing the K1/K2 split in the step and directional-derivative bounds (pp. 12-15)",
+   "bounded penalty parameter via a case split on the u/v ratio (Lemma 4, pp. 13-14)",
+   "main theorem inherited from S045's Theorem 4.10 analysis (Theorem 5.1, p. 16)"
+  ],
+  "experiments": "Matlab, unpreconditioned GMRES (MINRES and SQMR very similar); 44 CUTEr problems with n+t <= 1000 and Jacobian singular values >= 1e-4 (to fit Assumption 1); all solved; per-problem diagnostics of tests fired and convexity; vs ISQP-naive (8 failures) and ISQP-ideal (uses inertia), losses printed (e.g. eigena2 148 vs 44 iterations) (pp. 16-21).",
+  "positioning": "Builds on S045; reduced-space inexact SQP methods credited (Heinkenschloss-Vicente, Ulbrich, Heinkenschloss-Ridzal); claims no other inertia-free globally convergent line-search method known (pp. 4, 19).",
+  "writing": "Unconstrained case first as motivation for the constrained condition (pp. 5-7); observations labelled 'comforting' (p. 18); idealized competitor explicitly disclaimed (p. 20).",
+  "limits_future": "Effectiveness to be studied in practical applications, outside scope (p. 18); extensions to kappa >= 1, a flexible modification strategy and barrier subproblems for inequalities (pp. 21-22).",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "S045 engine kept; unavailable inertia replaced by computable bounds and an in-solver modification rule.", "pages": "pp. 10, 17"},
+   {"method": "Method 4", "relation": "evidence", "note": "S045's stated limit (nonconvex W_k) becomes this paper's subject.", "pages": "pp. 2, 11"},
+   {"method": "Method 1", "relation": "evidence", "note": "Per-problem losses against an idealized arm printed; the naive adaptation run as an arm.", "pages": "pp. 19-21"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "arm with an idealized estimate", "evidence": "ISQP-ideal uses inertia the method avoids and is declared a yardstick, not a practical competitor.", "pages": "p. 20"},
+   {"pattern": "Computable proxy for an unavailable quantity", "evidence": "Upsilon (upper bound on ||u||^2) and nu (lower bound on ||v||^2) from ||A d|| and ||A|| replace null-space information.", "pages": "p. 17"},
+   {"pattern": "Collapse check to the classical case", "evidence": "Reduces to the S045 inexact SQP method on strictly convex problems.", "pages": "p. 2"},
+   {"pattern": "Modular proof by reduction to the companion theory paper", "evidence": "Theorem 5.1 obtained by the same analysis as Theorem 4.10 of S045.", "pages": "p. 16"},
+   {"pattern": "experiments kept inside the theorem's assumptions", "evidence": "Problems with a Jacobian singular value below 1e-4 removed to respect Assumption 1; S073 then targets them.", "pages": "p. 18"}
+  ],
+  "transferable": [
+   "Bracket a new method between a naive arm that ignores the difficulty and an idealized arm that uses the information your method avoids, and say explicitly the idealized arm is a yardstick (pp. 19-20).",
+   "Replace unavailable structural information (inertia, null-space components) by cheap computable bounds and accept conservative behaviour when the bounds are loose (p. 17).",
+   "Report per-problem diagnostics of the mechanism (which test fired, positive eigenvalues of the modified matrix) next to iteration counts (pp. 18-19)."
+  ],
+  "coauthors": "Richard H. Byrd, Frank E. Curtis",
+  "quotes": [
+   {"text": "Note that this algorithm does in fact require explicit representations and factorizations of primal-dual matrices, and thus should not be considered a practical competitor of our approach on problems for which Algorithm INS was designed; we simply implemented this method to gauge how Algorithm INS compares to an idealized approach.", "page": 20},
+   {"text": "At first glance it appears that ISQP-naive is surprisingly robust despite the fact that nonconvexity was ignored throughout the solution process.", "page": 20}
+  ]
+ },
+ {
+  "id": "S073",
+  "year": "2010",
+  "title": "A matrix-free algorithm for equality constrained optimization problems with rank-deficient Jacobians",
+  "read_level": "partial",
+  "contribution": "Adds a trust-region normal step to the SMART-test inexact Newton framework so that a matrix-free line-search method stays well defined and globally convergent to KKT points or stationary points of the feasibility measure when Jacobians lose rank or problems are infeasible, and shows this on original, rank-deficient and infeasible versions of 73 CUTEr problems (pp. 3-9, 11-12, 23-25).",
+  "problem_entry": "Methods that handle rank deficiency (penalty regularization, trust regions) require factorizations; very large PDE problems may have ill-conditioned or inconsistent constraints; earlier SMART-test methods assumed full row rank (pp. 1-3).",
+  "key_idea": "Normal step from a trust-region least-squares subproblem with Cauchy decrease; tangential and dual steps from a modified primal-dual system; tangential component condition, model reduction condition in u_k, three termination tests including a dual-only step; Hessian modification and penalty line search (pp. 4-9).",
+  "assumptions": "Assumption 3.1: bounded f, c and first derivatives on a convex set, bounded W_k, iterative solver able to solve the modified system to any accuracy; no full-rank assumption (p. 9).",
+  "proof_devices": [
+   "outcome theorem: KKT if all limit Jacobians have full row rank, otherwise stationarity of the feasibility measure (Theorem 3.3, pp. 11-12)",
+   "one-dimensional lemma for the Cauchy decrease bound (Lemma 3.4, proof from [5], p. 12)",
+   "scaled and shifted penalty (f - f_min)/pi + ||c|| monotonically decreasing (Lemma 3.11, p. 14)",
+   "assembly of Theorem 3.3 from Lemmas 3.12, 3.16, 3.19 and Corollary 3.14 (p. 20)"
+  ],
+  "experiments": "Matlab, LSQR normal step, MINRES then GMRES, no preconditioner; 73 CUTEr equality problems in three versions (original; first constraint duplicated as c1 = 0 and c1 - c1^2 = 0 for rank deficiency; right-hand side 1 for infeasibility); functions prescaled; vs predecessor INS, which fails on many perturbed and almost all infeasible instances; failures marked in Tables 4.2-4.3 (pp. 20-25).",
+  "positioning": "Extends the Byrd-Curtis-Nocedal inexact Newton algorithms [3, 4]; trust-region and penalty treatments of rank deficiency cited as factorization-based (pp. 1, 3).",
+  "writing": "Experiments labelled preliminary (p. 3); unsuccessful runs conjectured fixable by a better implementation (p. 24); a drawback of the design stated in the conclusion (p. 25).",
+  "limits_future": "Trust region may block near-Newton steps and slow local convergence, so try the Newton system first and revert only under ill-conditioning; watchdog against Maratos, preconditioners, MINRES-QLP (pp. 25-26).",
+  "method_links": [
+   {"method": "Method 4", "relation": "evidence", "note": "Jacobian singularity, left out by S045 and filtered from S068's test set, is this paper's target.", "pages": "p. 3"},
+   {"method": "Method 3", "relation": "variant", "note": "Adds a trust-region normal-step component to the SMART-test engine rather than replacing one; separate exits for optimality and local infeasibility.", "pages": "pp. 4-6, 20-21"},
+   {"method": "Method 1", "relation": "evidence", "note": "Predecessor run as control on the same three sets; failures printed.", "pages": "pp. 23-25"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "failure outcomes as theorem cases", "evidence": "Global theorem enumerates KKT or feasibility-stationary outcomes according to the rank of the limit Jacobians.", "pages": "pp. 11-12"},
+   {"pattern": "predecessor as control", "evidence": "INS (S068) run on original, perturbed and infeasible sets.", "pages": "p. 23"},
+   {"pattern": "controlled perturbation of a standard test set", "evidence": "Constraint duplicated as c1 = 0 and c1 - c1^2 = 0 to make Jacobians rank-deficient everywhere; right-hand side changed to 1 to make instances infeasible.", "pages": "p. 23"}
+  ],
+  "transferable": [
+   "Build a degenerate test set from a standard one by a transformation that keeps the solution but destroys a regularity property, and an infeasible set by changing one right-hand side (p. 23).",
+   "To prove the feasibility limit when the penalty parameter may blow up, work with a scaled and shifted merit (f - f_min)/pi + ||c|| that decreases monotonically (p. 14).",
+   "Give the solver separate exits for optimality and local infeasibility and prescale functions so infeasibility tolerances do not produce false infeasibility messages (pp. 20-21)."
+  ],
+  "coauthors": "Frank E. Curtis, Andreas Waechter",
+  "quotes": [
+   {"text": "The main challenge in this work, to extend the methods in [3, 4], is that we do not assume that the constraint Jacobians {Ak} have full row rank throughout the solution process.", "page": 3},
+   {"text": "Algorithm TRINS failed to satisfy (4.1a), (4.1b), or (4.1c) before the iteration limit was reached for a few problems instances, but we conjecture that many of these unsuccessful runs could be remedied by a more sophisticated implementation.", "page": 24}
+  ]
+ },
+ {
+  "id": "S092",
+  "year": "2011",
+  "title": "On the solution of complementarity problems arising in American options pricing",
+  "read_level": "full",
+  "contribution": "Adapts the projected-SOR-plus-recursive-reduced-space method of S076 to the LCPs of American option pricing, tailoring the inner linear algebra to the Black-Scholes-Merton (one Toeplitz LU) and Heston (MILU(0)-preconditioned GMRES) models, with speedups up to 31x and 6x over projected SOR (pp. 2, 8-14).",
+  "problem_entry": "Real-time re-pricing of large options books requires thousands of fast option prices; each time step of the discretized variational inequality gives an LCP; projected SOR is the practitioners' method and interior methods are not well suited (p. 2).",
+  "key_idea": "Three projected SOR sweeps, then a recursive reduced-space phase solving the reduced square system with projection until fewer than 20 components change; inner solves tailored to each model's matrix structure (pp. 8-10, 13).",
+  "assumptions": "Black-Scholes-Merton and Heston models with stated parameters, FE in space and Rannacher time stepping; matrices slightly nonsymmetric; no convergence claim (pp. 3-7, 10, 13).",
+  "proof_devices": [],
+  "experiments": "Fortran 77, quad-core 2.66 GHz; vs projected SOR (omega by Ikonen-Toivanen formula for BSM, omega = 1 for Heston); pricing error at 41 points against high-accuracy benchmarks; four BSM regimes and a Heston grid; speedups up to 31x and 6x; stop tolerance tightened for P-SOR; preconditioner ablation 259 s vs 28 s (pp. 10-14).",
+  "positioning": "Borici-Luethi and Ikonen-Toivanen as recent rivals (speedups quoted, not rerun); Brennan-Schwartz limited to tridiagonal matrices (pp. 2, 13).",
+  "writing": "Finance-motivated introduction with the speedup headline stated early (p. 2); short final remarks without limitations (pp. 14-15).",
+  "limits_future": "Smaller speedup for Heston where no fast direct solver exists (p. 14); no theory, no limitations paragraph, single rival actually run.",
+  "method_links": [
+   {"method": "Method 6", "relation": "evidence", "note": "Inner linear algebra exploits each model's matrix structure (Toeplitz LU once; preconditioned GMRES for the banded Heston matrix).", "pages": "pp. 10, 13-14"},
+   {"method": "Method 1", "relation": "evidence", "note": "Rival given its published relaxation formula on BSM; stop tolerance set so the rival reaches the reported accuracy.", "pages": "pp. 10, 13"},
+   {"method": "Method 1", "relation": "variant", "note": "Rival untuned (omega = 1) on Heston; other methods compared only through numbers quoted from their papers.", "pages": "p. 13"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "explain the incumbent's popularity, then keep its strength", "evidence": "Projected SOR kept for its quick estimation of the optimal active set, followed by a reduced-space phase (see S076 pp. 6-7).", "pages": "p. 2"},
+   {"pattern": "Cite the rival's own data", "evidence": "Borici-Luethi's 2-9x speedups taken from their paper and set against 31x.", "pages": "p. 13"}
+  ],
+  "transferable": [
+   "When moving an algorithm to a new application, re-derive the matrices and exploit their structure in the inner solve; if every reduced matrix inherits the Toeplitz structure, factor once (pp. 5, 10).",
+   "Measure accuracy against an independent high-accuracy benchmark at a grid of points, not only the solver residual, and set stop tolerances so that every method reaches that accuracy (pp. 10, 13)."
+  ],
+  "coauthors": "Liming Feng, Vadim Linetsky, Jose Luis Morales",
+  "quotes": [
+   {"text": "By tailoring this approach to the structure of the linear complementarity problems studied in this paper, the algorithm achieves speedups up to thirty one times on our tests in the Black-Scholes-Merton model, and up to six times on our tests in the Heston model, compared to the projected SOR method.", "page": 2},
+   {"text": "However, it was necessary to reduce the stop tolerance to these levels so that the P-SOR method was able to achieve the reported accuracy.", "page": 13}
+  ]
+ },
+ {
+  "id": "S051",
+  "year": "2012",
+  "title": "A line search exact penalty method using steering rules",
+  "read_level": "partial",
+  "contribution": "Carries the steering rules for the penalty parameter from trust-region to line-search l1-penalty SQP, using an auxiliary trust-region LP only to calibrate the penalty, and proves that limit points are KKT points, infeasible stationary points or points of MFCQ failure; five hard examples illustrate the robustness (pp. 1-7, 24-30).",
+  "problem_entry": "Choosing the penalty parameter is the main difficulty of exact penalty methods; updates triggered only near undesirable points are inefficient; steering existed only for trust-region methods, and line searches can take very large unproductive steps near irregular points (pp. 1-2).",
+  "key_idea": "Solve the penalty QP; if the linearized constraints are not satisfied, solve an LP in an infinity-norm box for the best local linearized feasibility, then raise pi until the step achieves that feasibility (or a fraction) and a commensurate model decrease (closed form for pi); Armijo on model decrease; box affects only pi, so a pure line search (pp. 3-7).",
+  "assumptions": "Assumptions I: twice differentiable functions with bounded derivatives on a bounded convex set containing the iterates; W_k uniformly positive definite and bounded; MFCQ used only locally (pp. 7, 17-19).",
+  "proof_devices": [
+   "stopping tests tied to stationarity of phi_pi and of the infeasibility measure (Theorem 3.2, pp. 8-9)",
+   "large pi makes the QP minimizer minimize the linearized infeasibility model (Lemma 3.4, p. 10)",
+   "pointwise convergence of the piecewise quadratic models along subsequences (Theorem 3.6, p. 12)",
+   "outcome theorem: KKT, infeasible stationary, or feasible point of MFCQ failure (Theorem 3.12, p. 24)"
+  ],
+  "experiments": "Matlab linprog/quadprog; five small examples (Waechter-Biegler, Fletcher et al.'s MFCQ failure where filterSQP was rerun and converged to (0,0), an MPCC, vanishing constraints, Burke-Han infeasible: 3 iterations vs Chen-Goldfarb's reported 50) with per-iteration tables of pi, Delta, QPs and LPs; broader tests deferred to the Lopez-Calva thesis (pp. 24-29).",
+  "positioning": "Contrasted with filterSQP restoration and SNOPT's elastic mode with fixed pi; general-purpose treatment of MPCCs set against specialized MPCC methods (pp. 25, 28).",
+  "writing": "Examples narrated iteration by iteration with the safeguard's activity (pp. 25-29); apparent anomaly anticipated ('It may seem surprising', p. 29).",
+  "limits_future": "Cost of extra QPs and LPs unmeasured; a careful sparse implementation needed; efficiency on regular problems rests on the thesis results (pp. 29-30).",
+  "method_links": [
+   {"method": "Method 4", "relation": "evidence", "note": "Answers the steering work's open question on line-search penalty methods with the variant it called for; the Waechter-Biegler counterexample used as a test specification.", "pages": "pp. 1-2, 25-26, 30"},
+   {"method": "Method 3", "relation": "evidence", "note": "Line-search SQP engine kept; only the penalty update replaced, driven by the LP estimate of attainable linearized feasibility.", "pages": "pp. 4-6"},
+   {"method": "Method 1", "relation": "evidence", "note": "Literature-reported failure reproduced with the rival's own code (filterSQP).", "pages": "p. 26"},
+   {"method": "Method 1", "relation": "variant", "note": "Other comparisons rely on reported numbers and five illustrative problems carry no aggregate in the paper (pointed to the thesis).", "pages": "pp. 24-29"},
+   {"method": "Method 5", "relation": "variant", "note": "Theory gives a line search the outcome guarantees of trust-region methods rather than separating practical methods against runs.", "pages": "p. 30"},
+   {"method": "Method 6", "relation": "variant", "note": "General-purpose robustness preferred to exploiting MPCC structure; no MPCC-specific method run.", "pages": "p. 28"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "failure outcomes as theorem cases", "evidence": "Limit points are KKT points, infeasible stationary points or feasible points where MFCQ fails, according to whether pi stays bounded.", "pages": "p. 24"},
+   {"pattern": "one continuous parameter instead of a mode switch", "evidence": "No restoration or elastic-mode switch; the method treats regular and deficient problems equally.", "pages": "pp. 2, 25"},
+   {"pattern": "Collapse check to the classical case", "evidence": "When the linearized constraints are satisfiable nearby, the step is the classical SQP step.", "pages": "pp. 4, 29"}
+  ],
+  "transferable": [
+   "Test a robustness claim on the field's published hard cases, one per failure mechanism, print per-iteration tables of the safeguard's activity, and rerun the rival code where the literature says it fails (pp. 25-29).",
+   "Decouple a safeguard from the step: use a trust-region LP only to calibrate the penalty parameter, so the method stays a line search and its convergence does not depend on the radius (pp. 2, 7).",
+   "Justify each stopping test by a theorem that maps it to a stationarity notion (KKT point, infeasible stationary point) (pp. 8-9)."
+  ],
+  "coauthors": "Richard H. Byrd, Gabriel Lopez-Calva",
+  "quotes": [
+   {"text": "There is no switch in Algorithm I, which always takes steps based on the penalty function φπ.", "page": 25},
+   {"text": "We ran the filterSQP solver [14] and observed that it did indeed converge to (0, 0).", "page": 26}
+  ]
+ }
+]
