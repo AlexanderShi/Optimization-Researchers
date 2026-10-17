@@ -493,7 +493,7 @@ Kept as tensions, not rules. Details: [03-process-evidence](references/research/
   - Toint: mild, complexity as reassurance or as design guide (doi:10.1137/1.9781611976991).
   - Fletcher, **documented**: his 1981 objection to modified-factorization norms, as reported in doi:10.1007/978-1-4613-3279-4_15; funnel vs filter (doi:10.1007/s101070100244).
   - Nesterov: design difference, not a dispute: ARC relaxes the exact global step of doi:10.1007/s10107-006-0706-8 as possibly "prohibitively expensive" (ARC I, p. 248).
-  - Robinson: ally on convex-predictor SQP (doi:10.1137/080744554); joint steering gains (doi:10.1080/10556788.2015.1071813) vs Gould's default gate, steering still off (T5); S2QP sits in `oblivion`, reason not public [03 §1.2].
+  - Robinson: ally on convex-predictor SQP (doi:10.1137/080744554); steering: joint gains (doi:10.1080/10556788.2015.1071813, Gould co-author) still off by default, Gould's own tension (T5), no Robinson objection on record; S2QP sits in `oblivion`, reason not public [03 §1.2].
 - **Blind spots**: infeasibility; warm starts; degenerate local theory; no shipped globalization after LANCELOT; external baselines; unmeasured hard case; ML, nonsmooth, MINLP.
 
 ## Honest Boundary

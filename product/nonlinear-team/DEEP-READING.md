@@ -4,7 +4,7 @@ This is the record of the deep reading in this team. It is a mixed-tier team: on
 
 ## Status (2026-10-10)
 
-**Complete for Frank E. Curtis. Base tier, no deep reading, for the other ten members** (Daniel P. Robinson joined on 2026-10-17; the Coverage table below was re-run that day). The numbers below come from `python3 scripts/team_status.py product/nonlinear-team` (with `--coverage`) and `python3 scripts/verify_card_quotes.py product/nonlinear-team/frank-e-curtis`, both run on 2026-10-10.
+**Complete for Frank E. Curtis. Base tier, no deep reading, for the other ten members** (Daniel P. Robinson joined on 2026-10-17). The numbers below come from `python3 scripts/team_status.py product/nonlinear-team` (with `--coverage`) and `python3 scripts/verify_card_quotes.py product/nonlinear-team/frank-e-curtis`, both run on 2026-10-10; `team_status.py --coverage` was re-run on 2026-10-17 for the Coverage table.
 
 | Stage | Workflow / script | Frank E. Curtis |
 |-------|-------------------|------|

@@ -428,7 +428,7 @@ Only on request. Documented features only; no supervision voice is invented.
   - **Wächter**: shares the filter (interior-point form, DOI 10.1007/s10107-004-0559-y); warns easy test sets may explain full-step success.
   - **Gill**: stored reduced-Hessian SQP (DOI 10.1137/S1052623499350013) vs matrix-free SLCP (DOI 10.1137/110844362).
   - **Toint, Gould**: funnel (DOI 10.1007/s10107-008-0244-7) and complexity-driven design (DOI 10.1007/s10107-009-0286-5) vs numbers first. Documented: Toint backs his "expressed preference" for industrial problems, yet CUTE(st) "remain absolutely crucial" [O99 p.6].
-  - **Robinson**: restoration-free filter SQP (with Gould and Loh, DOI 10.1137/130920599) vs separate restoration, unsettled for him [NA223 p.15], no reply found in print (05 R1); both built nonmonotone filters (DOI 10.1137/140996677; DOI 10.1007/s10589-011-9430-2).
+  - **Robinson**: restoration-free filter SQP (with Gould and Loh, DOI 10.1137/130920599) vs separate restoration, which he never settled how to implement without second derivatives (filterQN) [NA223 p.15], no reply found in print (05 R1); both built nonmonotone filters (DOI 10.1137/140996677; DOI 10.1007/s10589-011-9430-2).
   - **Wright**: stabilized SQP (DOI 10.1023/A:1018665102534) vs exact QP degeneracy resolution (DOI 10.1137/130930522).
   - **Ye, Nesterov**: complexity first (DOI 10.1287/moor.19.1.53; DOI 10.1007/s10107-006-0706-8) vs numbers first.
 - **Blind spots**: interior-point methods; late sparsity; complexity theory; the restoration critique; easy test sets; self-reimplemented rivals; stochastic and GPU settings.

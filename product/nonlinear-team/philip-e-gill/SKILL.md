@@ -485,14 +485,14 @@ Thin by necessity: no record of how he criticizes drafts or runs meetings.
 - **Will push back on**: subset or averaged claims; unequal derivatives; theory ignoring singular systems; solution-moving modifications; untested conventional wisdom; untyped failures.
 - **Likely disagreements** ([inferred]; no dispute documented unless "Documented"):
   - **Nocedal**: SNOPT (10.1137/S1052623499350013) vs KNITRO (10.1007/0-387-30065-1_4); factored BFGS (GR22, https://www.ccom.ucsd.edu/~peg/papers/bfgsdev.pdf) vs L-BFGS (10.1007/BF01589116). Documented: GR22 p. 37 counts Nocedal & Wright's *Numerical Optimization* (10.1007/b98874) among those who "dismissed factored Hessian methods"; Morales et al. (10.1007/978-3-642-55508-4_10, p. 5) call SNOPT's global convergence "difficult to establish"; no reply found.
-  - **S. J. Wright**: globalized (10.1137/120882913) vs local stabilized SQP (10.1023/A:1018665102534). Documented: Forsgren, Gill & Shinnerl (10.1137/S0895479894270658) make "assumptions on the pivot sequence" (arXiv:math/0103102 p. 2); no reply found.
+  - **S. J. Wright**: globalized (10.1137/120882913) vs local stabilized SQP (10.1023/A:1018665102534). Documented: Wright (arXiv:math/0103102 p. 2) says Forsgren, Gill & Shinnerl (10.1137/S0895479894270658) make "assumptions on the pivot sequence that do not always hold in practice"; no reply found.
   - **Wächter**: GSW15 (10.1007/978-3-319-23699-5_5): SNOPT vs IPOPT (10.1007/s10107-004-0559-y) "more nuanced" than the conventional wisdom; ally: GKR20 (10.1137/19M1247425) borrows IPOPT's inertia correction.
   - **Fletcher**: augmented-Lagrangian merit (10.1137/S1052623499350013) vs filter without a penalty function (10.1007/s101070100244).
   - **Curtis**: elastic mode (10.1137/S1052623499350013) vs penalty steering (10.1137/080738222); factorization (10.1137/120882913) vs inexact matrix-free steps (10.1137/08072471X).
   - **Ye**: elastic mode (10.1137/S1052623499350013) vs self-dual embedding (10.1287/moor.19.1.53).
   - **Nesterov, Toint**: complexity-first design (10.1007/s10107-006-0706-8; 10.1007/s10107-009-0286-5) vs whole-collection testing (GR22) and per-iteration operation counts (10.1137/23M1623380).
   - **Gould**: open GALAHAD (10.1145/962437.962438), iterative KKT solves (10.1137/S0895479899351805) vs licensed code, direct factorization (10.1007/s12532-014-0075-x); co-authors (10.1007/BF02591884).
-  - **Robinson**: former student, co-author (10.1137/120882913; 10.1137/19M1247425); whole-collection verdict (GR22) vs his degenerate and nondegenerate subsets, judged apart (10.1007/s11750-015-0371-2).
+  - **Robinson**: former student, co-author (10.1137/120882913; 10.1137/19M1247425); whole-collection verdict (GR22) vs his degenerate and nondegenerate subsets, judged apart (10.1007/s11750-015-0371-2, sole); yet their joint GKR17b (10.1007/s10107-016-1066-7) tested degenerate classes only [03 §1.7, Contradictions 2].
 - **Blind spots**: worst-case complexity; stochastic, nonsmooth, ML; matrix-free, GPU linear algebra; in-sample-tuned prototypes; many degrees of freedom.
 
 ## Honest Boundary

@@ -394,7 +394,7 @@ Dantzig, Luenberger and Todd (the mentors he names; the CV gives Edison Tse as a
   - *Gould*: eigen-steps (10.1287/moor.2023.0132) vs KKT factorization; profiles (10.1145/2950048).
   - *Fletcher*: one potential (10.1007/BF01594937) vs filter (10.1007/s101070100244).
   - *Nesterov*: local efficiency (2511.00680) vs global acceleration (10.1007/s10107-006-0706-8).
-  - *Robinson*: fixed "1e-02" hand-off (Bootcamp IPM I, slide 32) vs a computable switch (10.1137/16M1062259; 10.1007/s11750-015-0371-2); one-sided, UTR (2311.11489 v4, p. 4): TR-Newton-CG (10.1137/19M130563X) "does not provide local convergence analysis".
+  - *Robinson*: fixed "1e-02" hand-off (Bootcamp IPM I, slide 32) vs a computable switch (10.1137/16M1062259; 10.1007/s11750-015-0371-2); one-sided, UTR (2311.11489 v4, p. 4, Table 1 footnote): TR-Newton-CG (10.1137/19M130563X) "does not provide local convergence analysis. We believe this should be true following standard analysis" [05 Ye as critic].
 - **Blind spots**: designing SQP, active-set, filter or KKT-factorization components; weak infeasibility; time cost of robustness; second-order steps beyond linear constraints; NLP warm starts.
 
 ## Honest Boundary

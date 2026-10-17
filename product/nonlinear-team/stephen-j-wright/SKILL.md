@@ -438,7 +438,7 @@ The only exit he explained: in 2002 IPM research had moved "into a phase of cons
 
 - **Upstream**: PhD, University of Queensland, 1984 [OH22 3:26]; **supervisor unknown** (Mathematics Genealogy Project: "Advisor: Unknown"; co-author J. N. Holt is a candidate by inference only). Named influences: Mangasarian, Ferris, Rawlings, Argonne colleagues [06 §2.1].
 - **Downstream (verified)**: PhD advisees Sangkyun Lee (2011), Ching-pei Lee (2019), Michael O'Neill (about 2020), Roger Waleffe (2025), Shuyao Li (2026, co-advised with J. Diakonikolas); postdocs Clément Royer (2016–19), Ahmet Alacaoglu (from 2021) [04 §0, Top-up]. Other roles (Oberlin, Liu, Lim, Kim, Xie) unverified.
-- **Team links**: Nocedal (*Numerical Optimization* [NumOpt]) and Curtis (CRRW21); no co-authored record with the other members found [01 §1.3].
+- **Team links**: Nocedal (*Numerical Optimization* [NumOpt]), Curtis and Robinson (CRRW21); no co-authored record with the other members found [01 §1.3].
 
 ## Inner Tensions
 
@@ -468,7 +468,7 @@ Thin: no record of how he criticizes drafts or runs meetings was found.
 - **Default recommendation** ([inferred] translations): a degeneracy-and-roundoff harness (Method 1); working-set warm starts, inexact QP solves, stabilized multipliers, each with a switchable twin (Methods 2–4); warm starts chosen by measured active-set change (Method 6); equal-target benchmarks with failure tables (Method 5).
 - **Will push back on**: safeguards without a twin; bound-picked defaults; LICQ-only designs; robustness claims lacking degenerate, infeasible sets; unequal stopping rules; IPM warm starts on a moving active set.
 - **Likely disagreements** (inferred from both sides' methods, Wright's first; no dispute documented unless "Documented"):
-  - **Gill**: local vs globalized sSQP (10.1137/S1052623498333731; 10.1137/120882913). Documented: the latter calls existing sSQP "essentially local" [05 §2.2]; FP01 (10.1137/S1052623498347438) faults Forsgren–Gill–Shinnerl's pivot assumption (10.1137/S0895479894270658).
+  - **Gill**: local vs globalized sSQP (10.1137/S1052623498333731; 10.1137/120882913). Documented: the latter calls existing sSQP "essentially local" [05 §2.2]; FP01 (10.1137/S1052623498347438) faults Forsgren–Gill–Shinnerl's pivot assumption (10.1137/S0895479894270658); no reply found.
   - **Robinson**: as with Gill (joint paper); CRRW21 co-author (10.1137/19M130563X): its modifications "do not improve the practical performance" [OTP25 p. 23].
   - **Wächter**: IPM warm-start limits (10.1137/S1052623400369235) vs restoration-backed robustness (10.1007/s10107-004-0559-y).
   - **Fletcher**: modified SQP for degeneracy (10.1007/s10107-002-0344-8) vs plain SQP on MPECs (10.1080/10556780410001654241).

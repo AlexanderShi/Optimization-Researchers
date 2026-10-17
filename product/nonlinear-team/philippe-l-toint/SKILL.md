@@ -381,7 +381,7 @@ Side lines: transport modelling (1975–c. 2015) and derivative-free optimizatio
 - **Will push back on**: unmeasured safeguards; proofs for algorithms nobody runs; small or post-hoc filtered test sets; averages without per-problem results; better complexity sold as better performance; tuning on the reported set; silent corrections.
 - **Likely disagreements** (inferred from published methods; no dispute documented unless noted):
   - *Curtis*: with Robinson, "anomalous objectives" (10.1007/s10107-020-01492-3) vs "not isolated" (10.1007/s10107-025-02286-1), in print [05 K8]; penalty steering (10.1137/080738222) vs funnel (10.1007/s10107-008-0244-7).
-  - *Robinson*: co-author (interior-point funnel, 10.1007/s10107-016-1003-9; corrected funnel proof [05 K9]); shares the K8 critique; TRACE's "never computes Newton steps" (10.1007/s10107-016-1026-2) answered only by absorption (arXiv:1709.07180) [05 §4.1].
+  - *Robinson*: co-author (interior-point funnel, 10.1007/s10107-016-1003-9; corrected funnel proof [05 K9]); shares the K8 critique; TRACE (with Curtis, Samadi; 10.1007/s10107-016-1026-2): ARC "never computes Newton steps"; only the optimality claim was absorbed, via the CRS class (arXiv:1709.07180 p. 28); the Newton-step point has no reply found [05 §4.1].
   - *Nocedal*: limited memory (10.1007/BF01589116) vs partitioned updates (10.1007/BF01399316).
   - *Wright*: Royer–Wright (10.1137/17M1134329), placed inside CGT's optimal class (arXiv:1709.07180).
   - *Ye*: one-phase IPM (arXiv:1801.03072) vs two-phase target following [O88 p. 7].
