@@ -7,7 +7,7 @@
 | 目录 | 团队 | 内容 | 档位 |
 |------|------|------|------|
 | `dfo-team/` | DFO Team（无导数优化） | Powell、Conn、Scheinberg、Vicente、Audet 五位 + `dfo-roundtable` | 深读档（356 篇全文精读、59 篇部分，1139 条摘录逐字核对；见 `DEEP-READING.md`） |
-| `nonlinear-team/` | **NLP Team**（非线性规划；源目录名保留为 nonlinear-team） | Curtis、Nocedal、Wright、Ye、Wächter、Gill、Toint、Gould、Fletcher、Nesterov 十位 + `nonlinear-roundtable` | 轻量档（公开来源调研，未做全文深读） |
+| `nonlinear-team/` | **NLP Team**（非线性规划；源目录名保留为 nonlinear-team） | Curtis、Nocedal、Wright、Ye、Wächter、Gill、Toint、Gould、Fletcher、Nesterov、Robinson 十一位 + `nonlinear-roundtable` | 混合档：Curtis 深读档（2026-10-10）；其余十位轻量档（公开来源调研，未做全文深读） |
 
 每个团队目录下的 `README.md`、`DEEP-READING.md`、`team.json` 是团队说明与成员清单，
 `python3 scripts/team_status.py product/<team>` 可随时重算进度与覆盖表。
@@ -18,6 +18,8 @@
   同步自提交 `eb012fa`（内容与 `ff2ef35`，2026-09-28 相同），2026-10-09 同步，
   文件逐字节一致（539 个文件）。目录名与 nvwa 相同，因此团队文档内的
   `product/...` 路径在本仓库内原样有效。
+  之后在本仓库内用 team-kit 做的改动记在 `teams/DISTILLATION_LOG.md`：Curtis 深读档（条目 (10)），
+  Daniel P. Robinson 以轻量档加入 nonlinear-team（条目 (11)，2026-10-17，不来自 nvwa 同步）。
 - **蒸馏方式**：team-kit（网络调研 + 逐篇论文卡片 + 证据台账），标注日期
   `researched: 2026-09-27`。每位研究者的证据链在其
   `references/research/09-evidence-ledger.md`，论文卡片在 `references/research/cards/`。
