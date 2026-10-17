@@ -25,7 +25,7 @@ T2 team-layer pass (2026-09-28): "SKILL (section)" was added to **Used in** wher
 
 | # | Type | Title | Authors | Year | Venue / Where | Link / DOI / arXiv | Status | Used in | Notes |
 |---|------|-------|---------|------|---------------|--------------------|--------|---------|-------|
-| 1 | profile | Publication list of Jorge Nocedal (Google Scholar; DBLP and the homepage CV when there is no Scholar profile) | — | — | Google Scholar / DBLP | https://scholar.google.com/citations?user=gGNxMZ0AAAAJ&hl=en | ⚠️ | — | not harvested (base tier) |
+| 1 | profile | Publication list of Jorge Nocedal (Google Scholar profile) | — | — | Google Scholar | https://scholar.google.com/citations?user=gGNxMZ0AAAAJ&hl=en | ✅ | — | 223 Scholar rows, 167 distinct works (56 rows dup_of), 0 DBLP-only works (DBLP n/JorgeNocedal: 83 records, all matched), 0 homepage-only works (69 homepage entries, all matched); publications/works.json + scholar.md, audited 2026-10-16 |
 | 2 | profile | Curriculum Vitae (17 pp., c. 2018: publications, students supervised, grants, talks) | J. Nocedal | c. 2018 | Nocedal homepage (Northwestern) | http://www.ece.northwestern.edu/~nocedal/CV/cv_nocedal.pdf | ✅ | 01, 02, 04, 06 | PDF fetched, header 'CURRICULUM VITAE JORGE NOCEDAL'. Primary record for dates, students, honours |
 | 3 | profile | Brief CV / bio (lists honours to the 2021 Lagrange Prize) | J. Nocedal | c. 2021 | Nocedal homepage (Northwestern) | http://www.ece.northwestern.edu/~nocedal/Bio/bio-brief.pdf | ✅ | 01, 02, 06 | PDF fetched (second attempt; first gave 503) |
 | 4 | profile | NSF biosketch | J. Nocedal | c. 2011 | Nocedal homepage (Northwestern) | http://www.ece.northwestern.edu/~nocedal/CV/nsf-bio.pdf | ✅ | 01, 02 | PDF fetched; Education: PhD Rice 1978 |
