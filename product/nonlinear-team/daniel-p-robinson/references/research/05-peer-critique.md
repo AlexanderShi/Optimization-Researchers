@@ -296,6 +296,7 @@ The setting: TOP 23(1) (2015) ran the invited discussion paper by Izmailov & Sol
 - **X4. Reception of the shifted penalty-barrier method.** Andreani et al. praise it ("an interesting new method with good properties") and on the same page show its CAKKT notion is "strictly weaker than the less stringent AGP condition".
 - **X5. SSC-OMP's accuracy.** Its own paper presents it as scalable with subspace-preserving guarantees. Outside users report poor results under noise (Peng–Pavlidis, Vielhaben et al.), on small data (Lipor et al.) and in hyperspectral clustering (Hinojosa et al.). It is nevertheless a default scalable baseline in later deep-clustering benchmarks (S2 contexts, e.g. Chu et al. ICLR 2023, arXiv:2306.05272).
 - **X6. The complexity yardstick.** Curtis–Robinson (ISMP 2018): "Our worst-case analysis for nonconvex optimization is faulty." Meanwhile Robinson co-authored at least four complexity-bound papers (TRACE, the inexact regularized-Newton framework, the trust-funnel complexity paper, TR-Newton-CG), and CGT incorporated the CRS class into their optimality theory.
+- Audit 2026-10-17: in §4.2 (and R4, §10), "this analysis considers unscaled approximate first-order critical points" describes Birgin et al. [6], not Cartis–Gould–Toint's own analysis, which also uses a scaled measure and groups the Curtis–Robinson–Samadi funnel bounds with its earlier scaled-KKT bounds [21] as "of the same order"; no dispute is documented (arXiv:1705.07285v2 pp. 2, 24, 27).
 
 ## Gaps
 

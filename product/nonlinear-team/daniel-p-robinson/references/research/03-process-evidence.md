@@ -245,6 +245,7 @@
 - **C6 Sibling notes disagree.** Note 06 §6 says "The homepage has **no software page** today". Note 02 and my fetch on 2026-10-16 both find `/danielprobinson/software/` live, with the "Coming soon" list.
 - **C7 Author-name variants for the MPC 2010 paper.** The preprint (RAL-TR-2009-003) and the GALAHAD references say "H. Sue Dollar / H. S. Dollar, N. I. M. Gould and D. P. Robinson". Crossref and DBLP list "Gould, Robinson, Thorne". The GALAHAD `\galorigin` lines say "H. S. Thorne". [inferred] These are two surnames of one co-author, and the author order differs between the preprint and the journal.
 - **C8 Repository authorship vs README authorship.** StochasticSQP and the C++ FaRSA call Robinson a "main author". Their commit histories show none (StochasticSQP) or only the empty initial commit (FaRSA). AUTHORS files name Curtis as main author (StochasticSQP) or list both (FaRSA).
+- Audit 2026-10-17: the §5.1 PDAS cycling example is a counterexample to the incumbent Hintermüller–Ito–Kunisch update (with U0 = ∅ the framework "is identical to the algorithm in [25, Sect. 2]"), not to CHR15's new updates, which converge on it (CHR15 §3.1 and Table 2; Curtis corpus txt S024).
 
 ## Gaps
 

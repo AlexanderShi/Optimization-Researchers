@@ -16,9 +16,9 @@ researched: 2026-10-16
 
 **Weak spots**: the last two Research Task Routing rows (no distillable Robinson method, or other seats' ground).
 
-**Domain fit**: continuous NLP and structured sparse optimization; his vision and fairness papers only show how he scopes claims.
+**Domain fit**: continuous NLP and structured sparse optimization; his vision papers are outside it (his share is stated nowhere [01 S3]), and the fairness papers supply only Heuristic 10 (hard constraints for tolerances).
 
-**Voice caveat**: one sole-authored opinion text [TOP15] and one sole research paper [R15, not read]. After 2016 most stated beliefs are co-signed with Frank E. Curtis (team member); his personal share cannot be separated. Optimization papers list authors alphabetically, so order says nothing about who led; ML papers put the student first and Robinson last from 2021 [01 §1.3; 04 §4.3].
+**Voice caveat**: one sole-authored opinion text [TOP15] and one sole research paper [R15, not read]. After 2016 most stated beliefs are co-signed with Frank E. Curtis (team member); his personal share cannot be separated. Optimization papers almost always list authors alphabetically, so order says little about who led (exceptions: [RFNP13], Robinson first; [WCR26], student Wu first). On papers led by his advisees Tianyu Ding (from ICML 2019), Dai and Wu the student is first and Robinson last; on other Vidal-group papers, and on his advisees Qu's CVPR 2025 and Khatti's 2025 preprint, he is a middle author [01 §1.3, Contradictions 9; 04 §1, §4.2–4.3].
 
 **Citations**: `[02 §1.3]` is a section of the research notes ([01](references/research/01-publications.md), [02](references/research/02-methodology.md), [03](references/research/03-process-evidence.md), [04](references/research/04-mentorship.md), [05](references/research/05-peer-critique.md), [06](references/research/06-trajectory.md)); `[01 S6]`, `[03 B1]`, `[06 T2]` are item labels in those notes. Keys such as `[TOP15 p. 46]` resolve in Sources (Appendix). Tags: [sole]; [PI] an NSF abstract he wrote as PI; [joint: X] co-signed, possibly X's voice; [practice]; [observed] others report it; [inferred] this skill's reading.
 
@@ -48,7 +48,7 @@ Pick one row: S first; then a request row (test, judge, review) over a problem-c
 | User says | Workflow | Main methods |
 |---|---|---|
 | "We're stuck", "it stalls or cycles", "it does what the theory says it cannot", "retuning hasn't helped", "keep going or drop it?" | S | Heuristic 6; stop rules of Methods 3, 1, 2 |
-| "Our proof assumes the QP solve finds X; is that acceptable?", "our complexity-optimal variant needs a known Lipschitz constant, exact solves or a preset ε; is it practical?" | B, step 1 | Method 1; Warning signs 1–2 (2 is joint with Curtis) |
+| "Our proof assumes the QP solve finds X; is that acceptable?", "our complexity-optimal variant needs a known Lipschitz constant, exact solves or a preset ε; is it practical?" | B, step 1 | Method 1; Warning signs 1–2 (1 partly joint with Gould; 2 joint with Curtis) |
 | "Globalize this fast local method", "it fails on degenerate problems" | B | Methods 3, 1 |
 | "Our augmented Lagrangian wastes early iterations on a poor penalty parameter or multiplier estimate" | B step 5, then C step 2 | Heuristics 3, 1; Method 1 step 6 (safeguarded variants [03 B5]); joint with Curtis [05 §5.1] |
 | "Is this topic worth doing?" | A | Methods 1, 3, 2 + Taste quick-check |
@@ -89,11 +89,11 @@ Conclusion first → the assumed hypothesis table or class split → at most fiv
 1. **Theory rests only on what an implementation can compute or verify**: [TOP15 pp. 45–46] (sole); [RAL09-1 p. 4] (joint: Gould); FaRSA's "computationally practical condition" [CCR17].
 2. **A good method wins where the incumbent fails and does not lose where it works**: criteria (iv)–(v) [TOP15 p. 47] (sole); reductions in [MR15], [CHR15]; "as reliable as" but "sometimes less efficient" [BCRZ21].
 3. **A design feature earns its place by consistent gain, net of its added cost**: "Commonly employed strategies for using negative curvature directions usually hurt algorithm performance" [UF19] (sole); [CR19] (joint).
-4. **Exploit structure through subspaces that can grow, and models that match how the data come**: [NSF12], [NSF20] (PI); FaRSA, FaRSA-Group [02 R9, §1.6].
+4. **Exploit structure through subspaces that can grow, and models that match how the data come**: [NSF12] (PI); [NSF20] (PI; joint: Curtis, co-PI); FaRSA, FaRSA-Group [02 R9, §1.6].
 5. **Claims scaled to the evidence; mixed evidence stays mixed**: "We stress that these results are preliminary" [RAL09-2] (joint); "The picture is not completely clear at this point." [TOP15 p. 45] (sole); titles narrowed between versions [03 §6.3].
 
 ### Warning signs of bad research
-1. **Theory assuming a global minimizer of a nonconvex subproblem, or a "correct" local solution the solver cannot certify**: Fletcher's Sl1QP theory (original paper not identified here) needs a global minimizer, "which is known to be an NP-hard problem" [RAL09-1 p. 4]; [TOP15 pp. 45–46].
+1. **Theory assuming a global minimizer of a nonconvex subproblem, or a "correct" local solution the solver cannot certify**: Fletcher's Sl1QP theory (original paper not identified here) needs a global minimizer, "which is known to be an NP-hard problem" [RAL09-1 p. 4] (joint: Gould); the "correct" local solution: [TOP15 pp. 45–46] (sole).
 2. **A better worst-case bound bought with unknown constants, exact solves or a preset ε, presented as practical** (joint with Curtis): "This would likely lead to very poor behavior in practice" [CLR18 v1 p. 9]; "conservative characterizations based on anomalous objectives" [CR21].
 3. **A two-phase design without a reliable, computable switch**: "it is difficult to develop conditions that reliably and efficiently decide when the global phase should transition to the local phase" [TOP15 p. 45] (Tension 4).
 
@@ -127,22 +127,22 @@ Four methods passed the Phase 2 checks (recurrence, say–do, executability, exc
 6. Count in runs how often the theory's event occurs, and compare with the variant closer to the theory [CGJR16 p. 13; 03 B5].
 7. If a paper idealizes for exposition, name the idealized hypotheses and the follow-up that removes them (TRACE → [CRS19]).
 
-**🔴 Stop rule**: if removing the hypothesis costs the promised rate on a visible share of problems, report mixed evidence as mixed [TOP15 p. 45]. The rival school finds the assumption harmless ("we have never encountered a case when superlinear convergence is lost" [IS15r p. 51]) and neither side has run a verification, so the question stays open. Settle who owns the production port before publishing (Tension 2).
+**🔴 Stop rule**: if removing the hypothesis costs the promised rate on a visible share of problems, report mixed evidence as mixed [TOP15 p. 45]. The rival school finds the assumption harmless ("so far we have never encountered a case when superlinear convergence is lost because apparently 'wrong' subproblem solutions are computed" [IS15r p. 51]) and neither side has run a verification, so the question stays open. Settle who owns the production port before publishing (Tension 2).
 
 **Applies to stage**: problem choice; algorithm design; judging results.
 
-**Different from standard practice**: for the rival school such conditions are "purely theoretical" [IS15r p. 51]; here they are a defect, removed by redesign, a documented minority position [05 §1.1].
+**Different from standard practice**: for the rival school such conditions are "purely theoretical" [IS15r p. 51]; here they are a defect, removed by redesign: a documented, contested position [05 §1.1].
 
-**Limitations**: the price is real (TRACE is "significantly more complex compared to the classical trust-region framework", arXiv:2412.02079 v4, p. 3); the assumption's practical harm is untested (U5); his complexity papers set the rule aside (Tension 1).
+**Limitations**: the price is real and stated in print ("necessarily more complicated than that used by Fletcher" [OO08 p. 3] (joint: Gould); "more difficult than anticipated" [TOP15 p. 46] (sole)); the assumption's practical harm is untested (U5); his complexity papers set the rule aside (Tension 1).
 
 ### Method 2: Accelerate in a subspace that can grow
 
 **One line**: where the difficulty is which variables or constraints are active, alternate a cheap globally convergent phase that predicts the support with an inexact reduced-space second-order phase, and make the contribution the computable test that updates, and can enlarge, the predicted subspace.
 
 **Evidence**:
-- Stated: [PI] "This success, however, has masked a prevailing weakness: all iterates generated must remain in the subspace." and an acceleration phase has "the added flexibility of selectively enlarging the subspace, when deemed necessary" [NSF12]; [joint: Chen, Curtis] "a computationally practical condition that determines when the predicted support should be updated" [CCR17]; talk titles 2011–2019 [02 §2.4].
-- Practice: [RFNP13; CHR15; R15; MR15; CCR17; CCR18; CDR22; DR24; DQR25; CQR25; CRZ25] [01 S6; 06 T2]. His own line: PI on both grants, carried by students Chen → Dai → Qu [04 §6].
-- Say–do consistency: ✅ stated + practised, 2011–2026.
+- Stated: [PI] "This success, however, has masked a prevailing weakness: all iterates generated must remain in the subspace." and an acceleration phase has "the added flexibility of selectively enlarging the subspace, when deemed necessary" [NSF12]; [joint: Chen, Curtis] "a computationally practical condition that determines when the predicted support should be updated" [CCR17]; talk titles 2011–2019 [02 §0 R9].
+- Practice (reduced-space acceleration): [RFNP13; CHR15; R15; MR15; CCR17; CCR18; CDR22]; later first-order sequels in the same thread with no reduced-space phase: support or active-set identification [DR24; CQR25; CRZ25] and constrained proximal-gradient [DQR25] [01 §1.3, §1.8, S6; 06 T1–T2, §7]. His own line: PI on both grants, carried by students Chen → Dai → Qu [04 §6].
+- Say–do consistency: ✅ stated 2011–2020 and practised with a reduced-space phase 2011–2022; the thread continues to 2026 without one.
 
 **Steps**:
 1. Write the problem so the support is the unknown (active bounds, nonzero pattern, active groups); a bound-constrained QP reformulation of ℓ1 is a starting point, not the end [CCR17 §1.1].
@@ -171,13 +171,13 @@ Four methods passed the Phase 2 checks (recurrence, say–do, executability, exc
 
 **Steps**:
 1. Name the incumbent and its home class (the Dostál–Schöberl algorithm cited in [MR15] on strictly convex BQP; Newton-based SQP on nondegenerate problems; line-search SQP when f is exact).
-2. Name the hard class and the exact failure: nonconvexity, LICQ failure, a cycling partition update ([CHR15] builds its own counterexample [03 §5.1]), an intractable line search.
+2. Name the hard class and the exact failure: nonconvexity, LICQ failure, a cycling partition update ([CHR15] builds a three-dimensional example on which the incumbent Hintermüller–Ito–Kunisch update cycles [03 §5.1, Contradictions]), an intractable line search.
 3. Add the smallest component that handles the hard class and is idle on the easy one: an auxiliary index set, convexification only when needed, dual regularization adjusted near and far from a solution.
 4. Prove both halves: global convergence on the hard class; equivalence to the incumbent on the easy class, so its fast rate is inherited.
 5. Measure the extra component's idle rate on the test set.
 6. Split the test set before running; print both verdicts, efficiency losses, and where the predecessor is still best.
 
-**🔴 Stop rule**: if the method is measurably worse on the easy class and the component cannot be made idle, criterion (v) fails: redesign, or publish as theory and name the incumbent as the method of choice there (the DQP precedent). A hard subset chosen after the runs is reported beside the a-priori set (Tension 5).
+**🔴 Stop rule**: if the method is measurably worse on the easy class and the component cannot be made idle, criterion (v) fails: redesign, or publish as theory; either way name where the incumbent remains the method of choice (as the DQP paper did: "CQP remains the best solver" when good solution estimates are not known in advance [GR17]). A hard subset chosen after the runs is reported beside the a-priori set (Tension 5).
 
 **Applies to stage**: problem choice; algorithm design; judging results.
 
@@ -191,7 +191,7 @@ Four methods passed the Phase 2 checks (recurrence, say–do, executability, exc
 
 **Evidence**:
 - Stated: [joint: Curtis] fixed stepsizes make the methods "readily translatable from deterministic to stochastic settings" [CR19 abstract]; [joint: Berahas, Curtis, Zhou] "As a starting point for this stochastic setting, an algorithm is proposed for the deterministic setting" [BCRZ21 abstract].
-- Practice: negative curvature [CR19]; stochastic SQP [BCRZ21] and four sequels [SEQ24]; a stochastic interior-point method whose v3 added the deterministic study [SIPM; 03 §6.3]; progressive sampling [PS25; PS26].
+- Practice: negative curvature [CR19]; stochastic SQP [BCRZ21] and four sequels [SEQ24]; a stochastic interior-point method analysed and tested in both the deterministic and stochastic settings from v1 (2023), whose 2024 revision (v2, kept in v3) added a sentence justifying the deterministic study [SIPM; 03 §6.3]; progressive sampling [PS25; PS26].
 - Say–do consistency: ✅ stated + practised 2017–2026, always with Curtis; Robinson's share cannot be separated.
 
 **Steps**:
@@ -218,7 +218,7 @@ Four methods passed the Phase 2 checks (recurrence, say–do, executability, exc
 1. Find the assumption the field tolerates about the algorithm's computations (Method 1 step 2).
 2. Prefer the open global question once local theory exists: "The key remaining question is how to best globalize such methods." [TOP15 p. 47].
 3. Find the success that hides a weakness (Heuristic 2).
-4. Match the model to the application's structure: groups of covariates, a stated tolerance (Heuristic 10).
+4. Match the model to the application's structure: groups of covariates (Mark 4 [NSF20]), a stated tolerance (Heuristic 10).
 5. Name the incumbent and its home class (Method 3 step 1); without one, the problem is weaker by this taste.
 **🔴 Checkpoint**: if the only route assumes a global or "correct" subproblem solution, redesign (Method 1) or drop the topic. No incumbent and no hard class nameable in advance → Workflow D cannot run; sharpen the problem.
 **Output**: one page, three lines: what we refuse to assume; where the incumbent works; where it fails.
@@ -241,7 +241,7 @@ Four methods passed the Phase 2 checks (recurrence, say–do, executability, exc
 2. Build the twin that differs only in the mechanism; calibrate it against a mature code (Heuristic 1).
 3. Run the strongest external code from its authors unmodified, or justify each change; exclude a competitor class only on stated grounds [03 §4.1].
 4. Write every filter and exclusion before reporting; split the set into the hard subset and the rest (Method 3 step 6).
-5. Share constants, starting points and random seeds; simulate missing components (Heuristic 5) [03 §4.1].
+5. Share constants, starting points and random seeds (joint with Curtis; cf. Curtis Method 5) [03 §1.1, §4.1]; simulate missing components (Heuristic 5) [03 §4.2].
 6. Record each failure mode and the safeguard it led to [03 §4.5]; state the tuning status in one phrase ("rough tuning") [03 §4.4].
 **🔴 Checkpoint**: (a) a twin far from the mature code is fixed before any claim; (b) a filter that depends on the new method's behaviour comes with the a-priori set [03 C5]; (c) one budget convention for baselines, stated with its reason (Tension 5).
 **Output**: performance profiles, per-problem tables in an appendix, box plots over noisy runs [03 §6.2]; a failure table.
@@ -253,7 +253,7 @@ Four methods passed the Phase 2 checks (recurrence, say–do, executability, exc
 2. Two-sided test: substantially better on the hard subset, comparable on the rest (Method 3 step 6).
 3. Phrase the verdict at the strength of the evidence ("as reliable as"; a predecessor "remains the best solver" where true) [03 §1.2].
 4. Check the theory against the runs (Method 1 step 6); explain anomalies by mechanism before fixing them [CGJR16; 03 §5.2].
-5. Keep negative results in print (DQP failures; the [CHR15] cycling example) [03 §5.1].
+5. Keep negative results in print (DQP failures; the [CHR15] cycling example of the incumbent's update) [03 §5.1].
 6. An idea that works without theory appears only as a labelled "first step" (Tension 8).
 **🔴 Checkpoint (stop rule)**: a gain not consistent across the named hard subset, or eaten by the added cost, is not claimed: report "preliminary" or keep the work as theory.
 **Output**: one claim sentence per class; a list of what is not claimed.
@@ -262,11 +262,11 @@ Four methods passed the Phase 2 checks (recurrence, say–do, executability, exc
 Order [inferred] from his reported debugging [03 §4.3, §4.5, §5.1–5.2]; he stated no rule for abandoning a problem [02 §2.5].
 **Input**: what was tried; the failing problems; the incumbent's run on them (none → that run is next step 1). No Step 2 search before step 3.
 **Steps**:
-1. Reproduce the failure on the smallest dense instance you can inspect run by run (Heuristic 6; [CHR15] built a three-dimensional cycle against its own update [03 §5.1]).
+1. Reproduce the failure on the smallest dense instance you can inspect run by run (Heuristic 6; [CHR15] built a three-dimensional cycle against the Hintermüller–Ito–Kunisch update its framework reduces to, then showed its own fix converges on it [03 §5.1]).
 2. Name each failure mode's mechanism, and the safeguard it calls for, before any retuning (Workflow C step 6, D step 4).
 3. Count per run: the theory's event (Method 1 step 6), the added component's idle rate where the incumbent works (Method 3 step 5), support-test firings (Method 2 stop rule).
 4. Pick the method: loses only where the incumbent works → 3; blocked by an uncheckable hypothesis → 1; slow or wrong support → 2; stochastic with the deterministic analogue untested → Method 4's stop rule.
-**🔴 Checkpoint**: a bug or missing safeguard → fix, rerun step 1, stop. Still worse where the incumbent works, and the added component cannot be made idle → Method 3 stop rule (publish as theory, name the incumbent; the DQP precedent). Dropping the line has no Robinson rule: label it "not Robinson-style".
+**🔴 Checkpoint**: a bug or missing safeguard → fix, rerun step 1, stop. Still worse where the incumbent works, and the added component cannot be made idle → Method 3 stop rule (publish as theory; name where the incumbent remains best, as the DQP paper did for CQP). Dropping the line has no Robinson rule: label it "not Robinson-style".
 **Output**: failure table, the three counts, the method, one redesign or one narrowed claim.
 
 ### Workflow E: Writing and after publication
@@ -284,9 +284,9 @@ Order [inferred] from his reported debugging [03 §4.3, §4.5, §5.1–5.2]; he 
 From theses [observed] and records [practice] only [04].
 **Input**: a new doctoral student and a candidate line.
 **Steps**:
-1. Pair the thesis with a senior outside collaborator for the specialist part (Jiang with Curtis [Jiang16]; Loh with Gould; Chen with Curtis) [04 §4.1].
+1. Pair the thesis with a senior outside collaborator whom the student credits as essential to the work (Curtis for Jiang's chapters 3–5 [Jiang16 p. iv]; Gould for Loh; Curtis for Chen), with others for single chapters of Jiang's thesis (Vidal, Chapter 6; Gould, Chapter 5 numerics) [04 §4.1, K5].
 2. Implement from scratch in one package so only the mechanism differs [04 K1].
-3. Read proofs sceptically but patiently ("for not being easily convinced" [Tsakiris17 p. v]; "patiently listening to me as I rambled through some poorly presented proof" [Haeffele15 p. v]).
+3. Read proofs sceptically but patiently ("for not being easily convinced" [Tsakiris17 p. v]; "patiently listening to me as I rambled through some poorly presented proof" [Haeffele15 p. v]; reported by Vidal's students on whose committees he sat, not by his own advisees [04 §3.2, K7]).
 4. Pass a long line through successive students (Chen → Dai → Qu); route talks from the department seminar to SIAM and MOS meetings [04 §4.1, §6].
 **🔴 Checkpoint**: none documented. [inferred] Several student-sized lines ended at graduation (AL with Jiang, filter SQP with Loh) [04 §6].
 **Output**: none documented; topic assignment, meetings and draft review are unknown (Ding's and Dai's theses not read).
@@ -295,20 +295,20 @@ From theses [observed] and records [practice] only [04].
 
 1. **Price the mechanism against its twin**: a twin identical except for the mechanism, calibrated ("roughly on par with Lancelot" [CJR15]), the mechanism's cost counted, the claim narrowed to what the twin shows; also in Loh's thesis with Gould [Loh16 p. 133]. Shared craft (Curtis Method 5; also Wright, Fletcher, Toint, Wächter): do not double-count [03 B1; 04 K1].
 2. **Look for the weakness a success hides**: write down a working technique's implicit restriction (iterates stay in the subspace; negative curvature avoided, not used) and make removing it the project [NSF12; CR19] [02 §2.4].
-3. **Transplant one mechanism, then test only the transplant**: "Our only modification to Lancelot was to incorporate a basic form of steering" [CGJR16], scoped as "most beneficial for difficult and/or poorly scaled problems" [CJR15 p. 202]; shipped in GALAHAD's LANCELOT, off by default (U6) [05 §5.1]. Joint with Curtis, whose steering it is.
-4. **Hybridize rival schools; keep both options**: "an SIQP/SEQP hybrid" [RAL09-1 pp. 3–4]; "We take the stance that both approaches should be available to the user." [RAL09-2 p. 15].
-5. **Simulate the missing component so the theory can be tested now**: inexact solutions made by perturbing exact ones [CJRW14]; controlled noise added to deterministic problems [BCRZ21] [03 §4.2] (practice only).
-6. **Small and dense first, then the collection; write every filter**: Hock–Schittkowski problems are "very useful during early stages of code development" [GR10b §5]; then CUTEst with every exclusion named [03 §4.3].
+3. **Transplant one mechanism, then test only the transplant**: "Our only modification to Lancelot was to incorporate a basic form of steering" [CGJR16], scoped as "most beneficial for difficult and/or poorly scaled problems" [CJR15 p. 202]; shipped in GALAHAD's LANCELOT, off by default (U6) [05 §5.1]. Joint with Curtis; steering itself comes from exact-penalty methods, "first introduced" by Byrd, Nocedal & Waltz [CGJR16 §4].
+4. **Hybridize rival schools; keep both options** (joint: Gould): "an SIQP/SEQP hybrid" [RAL09-1 pp. 3–4]; on two penalty-parameter updates, "We take the stance that both approaches should be available to the user." [RAL09-2 p. 15].
+5. **Simulate the missing component so the theory can be tested now**: inexact solutions made by perturbing exact ones [CJRW14]; controlled noise added to deterministic problems [BCRZ21] [03 §4.2] (practice only; joint with Curtis).
+6. **Small and dense first, then the collection; write every filter**: Hock–Schittkowski problems are "very useful during early stages of code development" [GR10b §5] (joint: Gould); then CUTEst with every exclusion named [03 B3, §2.2] (for S2QP itself the promised CUTEr tests never appeared [03 §4.3]).
 7. **Say the status of the evidence**: "preliminary" or "basic" for prototypes; theory with preliminary numerics, then a "numerical experience" paper [02 R5; 03 B4, B7], also in his sole ICCOPT 2025 abstract [ICCOPT25].
-8. **Admit, then remove, one assumption per paper**: bounded iterates "admittedly not ideal in a stochastic setting", then sequels [SEQ24]; TRACE → [CRS19] [05 §9.1].
+8. **Admit, then remove, one assumption per paper** (joint with Curtis; cf. Curtis Heuristic 10): "The LICQ is a relatively strong assumption" [BCRZ21 §2], dropped for rank-deficient Jacobians in the first [SEQ24] sequel (Math. Oper. Res. 2024, 10.1287/moor.2021.0154); TRACE → [CRS19]. Not every admission is lifted: bounded function and derivative values over a set containing the iterates, "admittedly not ideal in a stochastic setting" [BCRZ21 Remark 20], stay in all four sequels [02 §5.4; 01 S4, S5, §3 M7; 05 §10].
 9. **Fixed skeleton, numbered theses**: Introduction, Contributions, Notation, Assumption, Organization, Analysis, Numerical Results, Conclusion (PaperStarter [UTIL]); claims numbered (i), (ii), (iii) [TOP15 p. 47; UF19] [03 §6.1].
-10. **Hard constraints for tolerances**: "hard constraints so that specific tolerances for unfairness can be enforced" instead of tuned regularization [KRC25] (joint, student-led; also [CLR24; WCR26]).
+10. **Hard constraints for tolerances**: "hard constraints so that specific tolerances for unfairness can be enforced" instead of tuned regularization [KRC25] (joint, student-led; also [CLR24]).
 
 ## Signature Work Anatomy
 
 Full anatomies: [01 §2](references/research/01-publications.md); reception: [05](references/research/05-peer-critique.md). TRACE (10.1007/s10107-016-1026-2) and stochastic SQP (10.1137/20M1354556) are dissected in `frank-e-curtis/SKILL.md`; the adaptive augmented Lagrangian is in Heuristics 1 and 3.
 
-### A Second Derivative SQP Method: Global Convergence (SIAM J. Optim. 2010, 10.1137/080744542), with its companion on local convergence (10.1137/080744554)
+### A Second Derivative SQP Method: Global Convergence (Gould & Robinson, SIAM J. Optim. 2010, 10.1137/080744542), with its companion on local convergence (10.1137/080744554)
 
 | Dimension | Content |
 |---|---|
@@ -328,8 +328,8 @@ Full anatomies: [01 §2](references/research/01-publications.md); reception: [05
 | Why then | [sole] "it is probably safe to say that the best way to globalize sSQP is not yet clear" [TOP15 p. 44] |
 | Key insight | relate the sSQP and BCQP subproblems: convexification gives global convergence, computable inexact conditions give local equivalence to sSQP [TOP15 p. 46] |
 | Minimum evidence | better than SNOPT on the LICQ-failing problems [TOP15 p. 46]; the papers' numerics not read |
-| Abandoned paths | [sole] a single-phase algorithm "proved more difficult than anticipated" [TOP15 p. 46] |
-| Reception | open dispute: "we have a different view on this" [IS15r p. 50]; partial stabilization questioned [FS14 p. 472]; a counterexample to the later [GKR20] CAKKT notion [ABHMRS22], no reply found [05 §1.2–1.3] |
+| Abandoned paths | none stated [02 §8]; [sole] an admitted difficulty, not a dropped route: "the synchronization of these two aspects into a practical single-phase algorithm proved more difficult than anticipated", yet the convergence results "do not require an assumption about which subproblem solutions are computed" [TOP15 p. 46; 06 F5] |
+| Reception | open dispute: "we have a different view on this" [IS15r p. 50]; partial stabilization questioned [FS14 p. 472]; a counterexample to the later [GKR20] CAKKT notion [ARRSV22], no reply found [05 §1.2–1.3] |
 | Methods | 1 (clearest first-person statement), 3 (criteria (iv)–(v)) |
 
 ### A Reduced-Space Algorithm for Minimizing ℓ1-Regularized Convex Functions (SIAM J. Optim. 2017, 10.1137/16M1062259) → group sparsity (10.1137/21M1411111) → constrained proximal methods
@@ -341,7 +341,7 @@ Full anatomies: [01 §2](references/research/01-publications.md); reception: [05
 | Key insight | evolving predicted support, inexact reduced-space subproblems, computable support-update condition |
 | Minimum evidence | a "preliminary Matlab implementation" on LIBSVM-type data, 16 GB desktop, against OBA's own code [01 S6]; in Python against gglasso, "FaRSA-Group failed 2 times and gglasso failed 7 times" [03 §5.1] |
 | Abandoned paths | the direct BCQP route; an unfinished C++ rewrite took over the URL printed in [CCR18] [03 §7.2–7.4] |
-| Methods | 2; Heuristics 1, 7 |
+| Methods | 2 (step 6: the rival run as its authors ship it); Heuristic 7 |
 
 ## Research Anti-patterns
 
@@ -349,7 +349,7 @@ Full anatomies: [01 §2](references/research/01-publications.md); reception: [05
 |---|---|---|
 | Warning signs 1–3 (global or "correct" subproblem solutions assumed; unknowable constants sold as practical; switchless two-phase designs) and benefits claimed without consistent gains (Mark 3) | [RAL09-1 p. 4] (joint: Gould); [TOP15 pp. 45–46] (sole); [CLR18 v1 p. 9] (joint); [UF19] (sole) | Methods 1, 3; Method 2 step 4; Heuristic 1 |
 | Subspace phases that keep all iterates in the subspace | [NSF12] (PI) | Method 2 |
-| One-norm regularization where covariates come in groups | [NSF20] (PI) | Method 2 step 1 |
+| One-norm regularization where covariates come in groups | [NSF20] (PI; joint: Curtis, co-PI) | Method 2 step 1 |
 | Tuned fairness weights when a tolerance is the requirement | [KRC25] (joint) | Heuristic 10 |
 
 ## Research Trajectory
@@ -357,9 +357,9 @@ Full anatomies: [01 §2](references/research/01-publications.md); reception: [05
 | Period | Main direction | Why it turned | Representative work |
 |---|---|---|---|
 | to 2007 | UCSD PhD with Gill: primal-dual augmented Lagrangian | thesis line | [R07]; 10.1007/s10589-010-9339-1 |
-| 2007–2011 | Oxford/RAL with Gould: second-derivative SQP, trust-region subproblems; Northwestern with Nocedal: LCP acceleration | each line took the host's agenda [06 T1] | [GR10a]; [RFNP13] |
-| 2011–2019 | JHU: stabilized SQP (Gill, Kungurtsev); AL steering (Curtis, Jiang) and filter SQP (Gould, Loh); complexity (Curtis); own active-set line; vision as Vidal's co-PI | own grant; place and partner [06 T2–T5] | [GilR13]; [CJR15]; [CCR17]; [TRACE17] |
-| 2019– | Lehigh with Curtis: stochastic objectives, deterministic constraints (ONR since 2021); group sparsity → constrained proximal methods; fairness via hard constraints (2024–) | move and partner; no stated reason [06 T6–T7] | [BCRZ21]; [CDR22]; [DQR25]; [KRC25] |
+| 2007–2011 | Oxford/RAL with Gould: second-derivative SQP, trust-region subproblems; Northwestern with Nocedal: LCP acceleration | [inferred] each line took the host's agenda [06 T1] | [GR10a]; [RFNP13] |
+| 2011–2019 | JHU: stabilized SQP (Gill, Kungurtsev); AL steering (Curtis, Jiang) and filter SQP (Gould, Loh); complexity (Curtis); own active-set line; vision as Vidal's co-PI | own grant; [inferred] place and partner [06 T2–T5, §8] | [GilR13]; [CJR15]; [CCR17]; [TRACE17] |
+| 2019– | Lehigh with Curtis: stochastic objectives, deterministic constraints (ONR since 2021); group sparsity → constrained proximal methods; fairness via hard constraints (2024–) | [inferred] move and partner; stated: such problems are "just now emerging in data science" (homepage), and hard constraints let tolerances "be enforced" [KRC25] (joint); no stated reason for the move [06 T6–T7, Gaps] | [BCRZ21]; [CDR22]; [DQR25]; [KRC25] |
 
 ### Latest
 - Last 12 months (to 2026-10-16): [DQR25]; [CQR25] (submitted by Robinson); progressive sampling [PS25; PS26]; fairness [WCR26] and arXiv:2605.08616; the book with Curtis, *Practical Nonconvex Nonsmooth Optimization* (SIAM 2025, 10.1137/1.9781611978599; not read) [06 §7].
@@ -368,16 +368,16 @@ Full anatomies: [01 §2](references/research/01-publications.md); reception: [05
 ## Academic Lineage
 
 - **Upward**: PhD UC San Diego 2007, advisor Philip E. Gill (team member; collaboration to 2020) [MGP]; postdoctoral hosts Nicholas I. M. Gould (team member; Oxford/RAL) and Jorge Nocedal (team member; Northwestern, one paper) [04 §2; 06 §2.1]; academic sibling Vyacheslav Kungurtsev.
-- **Main partners**: Frank E. Curtis (team member; from 2014, dominant after 2016; grants, tooling, book); René Vidal (2014–2024, vision) [06 §4].
+- **Main partners**: Frank E. Curtis (team member; from 2014; main partner in his optimization papers after 2016 and overall from 2022, Vidal co-authoring more in 2017–21; grants, tooling, book); René Vidal (2014–2024, vision) [01 §1.4; 06 §4; DBLP 20/8222, CoRR excluded: Curtis is on 17 of the 24 optimization-journal records from 2017].
 - **Downward** (from theses and rosters [04 §1]): Lingzhou Hong (JHU MSE 2014); Hassan Mohy-ud-Din (2014; degree type uncertain); JHU PhDs Hao Jiang (2016), Yueling Loh (2016), Tianyi Chen (2018), Tianyu Ding (2021, with Vidal); Lehigh PhD Yutong Dai (2023); current students, several co-advised with Curtis.
 - **Team bridges**: Toint (interior-point trust funnel, 10.1007/s10107-016-1003-9); Wächter [CJRW14]; Wright [CRRW21].
 
 ## Inner Tensions
 
-1. **Verifiable-hypothesis purism vs idealized flagships**: [TOP15] and [RAL09-1] reject unverifiable subproblem assumptions; TRACE assumes "exact first- and second-order derivative information" and globally solved trust-region subproblems, and the trust funnel, TRACE and regional complexity carry no experiments [03 §1.3, C3].
+1. **Verifiable-hypothesis purism vs idealized flagships**: [TOP15] and [RAL09-1] reject unverifiable subproblem assumptions; TRACE assumes "exact first- and second-order derivative information" and globally solved trust-region subproblems, and the trust funnel, TRACE and regional complexity carry no experiments [03 §1.3, C3]; matching the cubic-regularization complexity bound makes TRACE "significantly more complex compared to the classical trust-region framework" (Hamad & Hinder, arXiv:2412.02079 v4, p. 3) [05 §6.1].
 2. **"Freely available software" vs delivery** (U1): released subproblem solvers (TRS, RQS, CQP, DQP, Gould principal author), FaRSA-L1-C (student) and StochasticSQP (Curtis) vs S2QP in `oblivion`, FiSQP and the TRACE port in `forthcoming` since 2014, an unreleased funnel package, a C++ FaRSA with a "???" licence [03 C1, C8].
 3. **Complexity: co-author and critic**: four or more complexity papers and a best-paper prize [CLR18] vs "Our worst-case analysis for nonconvex optimization is faulty" (joint slides, Curtis's voice [ISMP18]) and [CR21]; within [CRRW21], "without significantly degrading important performance measures" vs "there may be a significant increase in run time" [05 §6.2].
-4. **Two-phase designs promoted, then criticized**: "Two-phase Matrix Splitting Methods for BQP and LCP" talks (2011–12) vs the 2015 critique of two-phase sSQP; Method 2 keeps phases, with a computable switch [02 C3].
+4. **Two-phase designs promoted, then criticized**: "Two-phase Matrix Splitting Methods for BQP and LCP" (2011) and "…for Asymmetric and Symmetric LCP" (2012) talks vs the 2015 critique of two-phase sSQP; Method 2 keeps phases, with a computable switch [02 C3].
 5. **General benefit vs method-conditioned test sets**: problems kept only where negative curvature was used, or LICQ held in all runs; baselines given 110× the iterations in 2020, fewer in 2024 [03 C4, C5]; all disclosed.
 6. **Promotional homepage vs hedged papers**: "routinely been shown to outperform", "significantly outperforms gglasso" vs "We stress that these results are preliminary" [02 C5].
 7. **Depth vs pivot**: a 14-year self-owned active-set line vs application identities set by place and partner (vision at JHU; stochastic and fairness work at Lehigh; a 2019 healthcare plan not pursued); exits without stated reasons [06 §0].
@@ -387,7 +387,7 @@ Full anatomies: [01 §2](references/research/01-publications.md); reception: [05
 
 Thin by necessity: no supervision phrase of his is documented.
 - **Stated** (press): "I've seen first-hand how getting involved in a research project can be life altering" [LU22]; "I am passional [sic] about teaching." [HP].
-- **Reported by students** [observed]: "He was always available for any kind of help and without his patience and confidence in me, this dissertation would have been impossible." [Jiang16 p. iv]; "for not being easily convinced" [Tsakiris17 p. v].
+- **Reported by students** [observed]: "He was always available for any kind of help and without his patience and confidence in me, this dissertation would have been impossible." [Jiang16 p. iv]; "for not being easily convinced" [Tsakiris17 p. v] (Vidal's student; Robinson was secondary reader [04 §3.2]).
 - **Style** [inferred]: patient, sceptical of proofs, hedged in papers. Invent no catchphrases.
 
 ## Roundtable Card
@@ -402,7 +402,7 @@ Thin by necessity: no supervision phrase of his is documented.
   - *Gill*: advisor, ally (10.1137/19M1247425); quasi-Newton SNOPT (10.1137/S1052623499350013) vs second-derivative SQP (10.1137/080744542).
   - *Gould*: ally (10.1007/s10589-016-9886-1); documented: his GALAHAD README cast S2QP (10.1137/080744554) into `oblivion`.
   - *Fletcher*: documented: Sl1QP theory needs a global minimizer [RAL09-1 p. 4]; restoration filter (10.1007/s101070100244) vs restoration-free (10.1137/130920599).
-  - *Toint, Nesterov*: complexity-first (10.1007/s10107-025-02286-1; 10.1007/s10107-006-0706-8) vs regional complexity (10.1007/s10107-020-01492-3); documented: scaled stationarity questioned (10.1016/j.jco.2018.11.001); aligned with Nesterov on unknowable constants.
+  - *Toint, Nesterov*: complexity-first (10.1007/s10107-025-02286-1; 10.1007/s10107-006-0706-8) vs regional complexity (10.1007/s10107-020-01492-3); no documented dispute: Cartis–Gould–Toint call the funnel bounds "of the same order" as their own scaled-KKT ones (10.1016/j.jco.2018.11.001); aligned with Nesterov on unknowable constants.
   - *Ye*: documented: TR-Newton-CG (10.1137/19M130563X) "does not provide local convergence analysis" (10.1007/s10915-025-03154-y).
   - *Nocedal*: noise-tolerant line search (10.1137/20M1373190) vs Lipschitz steps (10.1137/20M1354556); OBA (10.1080/10556788.2016.1138222), FaRSA's rival.
   - *Wächter*: restoration-phase filter IPM (10.1007/s10107-004-0559-y) vs restoration-free; co-author (10.1137/130918320).
@@ -415,10 +415,10 @@ Thin by necessity: no supervision phrase of his is documented.
 - **Voice**: see How to Use; his share of the Vidal-line vision papers is stated nowhere [01 S3].
 - **Tacit-knowledge gaps**: how he picks a convexification or regularization; how "rough tuning" was done; how meetings run and drafts are reviewed; why he left the Gould, Gill and Vidal lines or moved from JHU to Lehigh [04 Gaps; 06 Gaps].
 - **Not read**: [GKR17a/b], [R15], [MR15] (abstract only), the 2010 TRS/RQS paper (10.1007/s12532-010-0011-7), [IS15] and three other comments, the 2025 book's preface (HTTP 403); no slides or video of his own; closed journal review [02 Gaps; 05 Gaps].
-- **Era and resources**: Matlab and Python prototypes; HS, CUTEst subsets, LIBSVM on 16 GB; CPU desktop to cluster; GALAHAD Fortran only through Gould; no GPU practice [03 §10].
+- **Era and resources**: Matlab and Python prototypes; HS, CUTEst subsets, LIBSVM on 16 GB; CPU desktop to cluster; GALAHAD Fortran only through Gould; no GPU practice in the optimization-venue experiments read [inferred; 01 Time and resource caveat; 03 §10]; the co-authored, Qu-led CVPR 2025 pruning paper (10.1109/CVPR52734.2025.01419) ran on "a single A100 GPU" (arXiv:2502.16638v1 p. 8; 01 Time and resource caveat, audit line).
 - **Field boundary**: not for KKT linear algebra, quasi-Newton design, MINLP, global or derivative-free optimization, conic first-order methods, or computer vision.
 - **Claimed but unverified** (never core): U1 "freely available software" (contradicted for his NLP methods); U2 contributions to "computer vision, healthcare, and beyond" [LU19] (no healthcare paper at Lehigh); U3 upper-bounding models as a decision principle (one paper); U4 two-phase sSQP "may never reliably produce superlinearly convergent iterates in practice" (untested); U5 the subproblem assumption matters in practice ("such a verification is generally not possible"); U6 steering helps other AL methods (Lancelot only); U7 extensive CUTEr tests of S2QP (none found); U8 dual regularization's "important practical numerical advantage" (numerics not read) [02; 03; 05].
-- **Open factual items**: Mohy-ud-Din's degree type; the second teaching award (stated only in his bio); a truncated-Newton paper's fate; rank Associate Professor vs Professor [06 Contradictions].
+- **Open factual items**: Mohy-ud-Din's degree type [04 Contradictions 1]; the second Joel Dean teaching award ("twice" in Lehigh's 2019 news and profile, 2012 and 2018 in his ICCOPT 2025 bio; the JHU page archived June 2018 lists only 2012) [04 Contradictions 2; 06 §1]; a truncated-Newton paper's fate [04 §8; 06 §5 F1]; rank Associate Professor vs Professor [02 C6; 06 Contradictions 1].
 
 ## Sources (Appendix)
 
@@ -443,7 +443,7 @@ Notes: [01](references/research/01-publications.md) · [02](references/research/
 - BCRZ21: Berahas, Curtis, Robinson & Zhou, SIAM J. Optim. 31(2) (2021), 10.1137/20M1354556; arXiv:2007.10525
 - SEQ24: 10.1287/moor.2021.0154; 10.1287/ijoo.2022.0008; 10.1007/s10107-023-01981-1; 10.1137/23M1556149
 - SIPM: arXiv:2304.14907; PS25: arXiv:2510.00417; PS26: arXiv:2608.12665
-- KRC25: Khatti, Robinson & Curtis, arXiv:2505.15788; CLR24: Optim. Lett. 18 (2024), 10.1007/s11590-023-02024-6; WCR26: INFORMS J. Optim. 8(3) (2026), 10.1287/ijoo.2025.0091; arXiv:2605.08616
+- KRC25: Khatti, Robinson & Curtis, arXiv:2505.15788; CLR24: Optim. Lett. 18 (2024), 10.1007/s11590-023-02024-6; WCR26: INFORMS J. Optim. 8(3) (2026), 10.1287/ijoo.2025.0091 (preprint arXiv:2409.09532, retitled, per 06 source 53 and RESOURCES row 148); separately, Wu, Curtis & Robinson, FLICS 2026, 10.1109/FLICS70075.2026.11621940; arXiv:2605.08616
 
 ### Stated methodology (primary)
 - R07: PhD dissertation, UC San Diego (2007), https://escholarship.org/uc/item/8hz1b6q0
@@ -463,7 +463,7 @@ Notes: [01](references/research/01-publications.md) · [02](references/research/
 - Theses: Jiang16, https://core.ac.uk/reader/478853910; Loh16, https://core.ac.uk/reader/478850248; Haeffele15, https://core.ac.uk/reader/478853256; Tsakiris17, https://core.ac.uk/reader/424777299
 - MGP: https://www.mathgenealogy.org/id.php?id=112624
 - IS15 / IS15r: Izmailov & Solodov, TOP 23(1) (2015), 10.1007/s11750-015-0372-1 (not read); rejoinder 10.1007/s11750-015-0373-0; IS16: Optim. Methods Softw. 31(6) (2016), 10.1080/10556788.2016.1177528
-- FS14: Fernández & Solodov, Pesquisa Operacional 34(3) (2014), 10.1590/0101-7438.2014.034.03.0463; ABHMRS22: Andreani et al., IMA J. Numer. Anal. 42(2) (2022), 10.1093/imanum/drab021
+- FS14: Fernández & Solodov, Pesquisa Operacional 34(3) (2014), 10.1590/0101-7438.2014.034.03.0463; ARRSV22: Andreani, Ramos, Ribeiro, Secchin & Velazco, IMA J. Numer. Anal. 42(2) (2022), 10.1093/imanum/drab021
 - NAK23: Na, Anitescu & Kolar, Math. Program. 199 (2023), 10.1007/s10107-022-01846-z; arXiv:2102.05320; FNMK24: Fang, Na, Mahoney & Kolar, SIAM J. Optim. 34(2) (2024), 10.1137/22M1537862; O'N24: O'Neill, arXiv:2408.16656
 - Hamad & Hinder, arXiv:2412.02079; Wright, arXiv:2510.15734; Jiang et al., 10.1007/s10915-025-03154-y; Cartis, Gould & Toint, 10.1016/j.jco.2018.11.001
 - Other members' papers in the Roundtable Card carry their DOIs inline.

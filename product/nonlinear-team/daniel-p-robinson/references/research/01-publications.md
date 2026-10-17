@@ -403,6 +403,7 @@ Each dissection follows the framework's rows: origin, why then, key insight, min
 | M8 | Report first, journal later; proofs lead, numerics follow and are often "preliminary" | S1 report chain; S4 has no numerics; S6 calls its implementations "preliminary" |
 
 **Time and resource caveat** [inferred]: every experiment found is CPU- and desktop-scale (Matlab or Python, CUTE(r) or LIBSVM, at most 16 GB). None of these patterns has been tested in a GPU or deep-learning-scale setting. The CVPR 2025 pruning paper (DOI 10.1109/CVPR52734.2025.01419), where he is middle author with Microsoft co-authors, was not read.
+Audit 2026-10-17: one page of its arXiv version was checked: arXiv:2502.16638v1 p. 8 runs the Phi2-2.7B experiment "to ensure computational feasibility on a single A100 GPU", so the CPU-only pattern above holds for the optimization-venue experiments only.
 
 ---
 
@@ -427,6 +428,7 @@ Each dissection follows the framework's rows: origin, why then, key insight, min
 6. **IJCAI 2016 title**: his homepage list gives "Incorporating user preferences in predictive models via structured regularizers"; DBLP gives "Trading-Off Cost of Deployment Versus Accuracy in Learning Predictive Models" (arXiv 1604.05819); ORCID gives "Incorporating end preferences in predictive models via structured regularizers". The proceedings title was not checked.
 7. **Funding attribution in FaRSA**: the "IDIES Seed Funding" footnote follows Robinson's affiliation in the extracted arXiv text, but the footnote markers did not survive extraction, so the attribution is uncertain.
 8. **Postdoc institution**: his bio says "the Mathematical Institute at the University of Oxford", while the 2008–09 reports give "Oxford University Computing Laboratory, Numerical Analysis Group".
+9. Audit 2026-10-17: the ICML 2019 "Noisy Dual Principal Component Pursuit" byline puts Robinson last (7 of 7), not 5th as DBLP lists, so the student-first, Robinson-last group of §1.3 starts in 2019; and *IJOO* 2026 (Wu, Curtis, Robinson; student first) is a second non-alphabetical optimization-journal paper besides the 2013 one (PMLR v97 ding19b PDF; Crossref 10.1287/ijoo.2025.0091).
 
 ## Gaps
 

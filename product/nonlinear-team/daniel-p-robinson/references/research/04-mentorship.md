@@ -220,6 +220,7 @@ No student wrote about a failed project, a rejection or a dropped topic in the t
    - Lara Zebiane: the roster says "Advisor: Frank E. Curtis" only. She co-authors with Robinson.
 4. **Thesis dates in CORE metadata against title pages.** CORE gives Jiang's thesis as "yearPublished 2018"; the title page says "May, 2016". CORE gives Chen's as 2019; the title page says "August, 2018". I used the title pages.
 5. **MGP against the theses.** MGP credits Robinson with one student. Four JHU theses (Hong MSE 2014; Jiang 2016; Loh 2016; Chen 2018) name him advisor, and an employer bio (Ding 2021) and a homepage (Dai 2023) say the same. The earlier notes 01 and 06 relied on MGP and author order; this note supersedes them on advisor roles.
+6. Audit 2026-10-17: K5 files Curtis's role for Jiang as a specialist chapter, but Jiang credits him for chapters 3–5, the thesis's main chapters; the single-chapter helpers are Vidal (Chapter 6) and Gould (Chapter 5 numerics) (Jiang thesis p. iv, CORE reader 478853910).
 
 ## Gaps
 
