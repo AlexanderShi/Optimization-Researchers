@@ -1,0 +1,283 @@
+[
+ {
+  "id": "S003",
+  "year": "1995",
+  "title": "A limited memory algorithm for bound constrained optimization",
+  "read_level": "full",
+  "contribution": "Second read (inc-ocr) of L-BFGS-B, the algorithm paper: parameter values, cost formulas and Tables 1-3. At m = 5, L-BFGS-B fails on 4 of 34 CUTE bound problems (LANCELOT-SR1 on 0), needs more evaluations than LANCELOT on almost every row, and takes less time than both LANCELOT options on 12 of the 15 problems with n >= 100.",
+  "problem_entry": "As in the c02 card: min f s.t. l <= x <= u, gradient only, storage linear in n (p. 2); per-iteration cost of order n through compact limited-memory matrices (p. 3).",
+  "key_idea": "B = theta I - W M W' with W = [Y theta S], M 2m x 2m (p. 5); theta = y'y/y's, B0 = I (p. 18); line search alpha = 1e-4, beta = 0.9, unit step first, More-Thuente with max step to the closest bound (pp. 4, 18-19); skip pair unless s'y > eps|y|^2, eps = 2.2e-16 (pp. 6, 18). Cauchy point: first segment O(n), later segments O(m^2) each (Remark p. 9), total (2m+2)n + O(m^2) n_int + n log n (p. 10). Subspace: direct primal 2m^2 t + 6mt + 4t + O(m^3) (5.12) (p. 13); CG stop |r| < min(0.1, sqrt|r_c|)|r_c|, cost (2m+2)t + (4m+6)t citer + O(m^2), cheaper than direct only if citer < m/2, at most 2m iterations (pp. 14-15); dual (2m+3)n + 9m t_a + 2m^2 t_a + O(m^3), primal brought to 2m^2 t_a + 6mt + 4t + O(m^3) by the primal-dual identity (pp. 17-18).",
+  "assumptions": "Smooth f, gradient only, simple bounds; B_k positive definite gives g'd < 0 (p. 4); no convergence analysis (p. 4).",
+  "proof_devices": [
+   "no theorems; descent from m_k(x_k) > m_k(x_c) >= m_k(x_bar) (p. 4)",
+   "breakpoint recursion (4.9)-(4.12) carried by p = W'd and c = W'z, O(m^2) per segment (pp. 8-10)",
+   "operation counts for direct primal (5.12), CG (5.14) and dual, with the crossover citer < m/2 (pp. 13, 15, 17)",
+   "saved inner products and Y'ZZ'Y = Y'Y - Y'AA'Y when t >> n - t (p. 13)",
+   "primal-dual matrix identity reducing the primal cost to the dual's (pp. 17-18)"
+  ],
+  "experiments": "Both codes stop at |P(x-g,l,u)-x|_inf < 1e-5 (p. 18); SPARCstation 2, 40 MHz, 32 MB; F1 = not solved in 999 evaluations, F2 = indistinguishable next iterate (p. 19); discard n < 4, yet HS25 (n = 3) is tabulated (pp. 19-22). Table 1 (p. 20, 34 problems): failures m=5 4, m=17 2, LANCELOT-BFGS 5 F1, LANCELOT-SR1 0; JNLBRNGA 313/843.59 vs SR1 24/1474.09, OBSTCLAE 282/277.71 vs 7/1763.42, OBSTCLBM 133/383.61 vs 7/1275.72, TORSION6 301/835.80 vs 10/168.67; card writer's count n >= 100: m=5 faster than both LANCELOT options on 12 of 15, slower on JNLBRNGB and TORSION6, F1 on BQPGAUSS; fewer evaluations than SR1 on 3 of 34 rows. Table 2 (p. 21, m = 3/5/17/29): failures 3/4/2/2; TORSION6 time 646.21/835.80/1582.75/2442.59, nfg 298/301/400/385; no comment in the text. Table 3 (p. 22, primal/dual/cg vs LANCELOT Hessian): failures 4/4/1/0; dual 5-19% slower on the four largest, cg 1.9x on JNLBRNGA and 1.7x on OBSTCLBM; LANCELOT-Hessian nf 22/6/6/9 vs 313/282/133/301, time 1775.51/1696.45/2300.28/150.15 vs 843.59/277.71/383.61/835.80; primal faster on 12 of 15 rows with n >= 100 (card writer's count).",
+  "positioning": "As in c02; LANCELOT SBMIN run in three options (BFGS, SR1, exact Hessian), each at default settings (p. 19).",
+  "writing": "As in c02; 'To our surprise' (p. 23) sized by the table: LANCELOT-Hessian takes 2.1x, 6.1x and 6.0x the time of L-BFGS-B on JNLBRNGA, OBSTCLAE and OBSTCLBM (card writer's ratios, p. 22).",
+  "limits_future": "As in c02; 4 of 34 runs fail at m = 5 (p. 20); evaluation counts 13-47 times LANCELOT's on the largest problems (card writer's ratios, pp. 20, 22); TORSION6 5-5.6x slower than LANCELOT is not singled out in the closing time verdict (pp. 20, 22-23).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "One projected-gradient stopping test at 1e-5 for both codes; every non-converged run printed as F1 or F2 and counted as a failure in the text ('three more failures for the cg method'). Correction for 09 #method-1 Say-do and 08 section 2.1, which group S003 with the C1 non-failure accounting: S003 has no C1 marker; it first appears in the December 1994 code report [S005 pp. 9-11].",
+    "pages": "pp. 18-20, 23"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Rival at default settings in three options; own side in seven configurations (m = 3, 5, 17, 29; primal, dual, cg).",
+    "pages": "pp. 19-22"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "As in c02, with values: pair skipped when s'y <= 2.2e-16 |y|^2 without deleting the oldest; backtracking replaced by More-Thuente (1e-4, 0.9) with the maximum step at the closest bound.",
+    "pages": "pp. 6, 18-19"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "The undecided subspace method is costed three ways ((5.12), (5.14), dual count); Table 3 splits the verdict (cg fewest failures at m = 5, most time) and the text overrules it with other m values.",
+    "pages": "pp. 13, 15, 17, 22-23"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Two-sided verdict as in c02, with the evaluation gap now sized: 13-47x more evaluations than LANCELOT on the largest problems, but less time on 12 of 15 problems with n >= 100.",
+    "pages": "pp. 20, 22-23"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Give alternative inner solvers operation counts in the same units and derive their crossover (citer < m/2) before testing (pp. 13, 15).",
+   "Report the tested code's parameter values next to the algorithm statement (alpha = 1e-4, beta = 0.9, eps = 2.2e-16, theta = y'y/y's) (p. 18).",
+   "Define each failure marker on the page and count all of them as failures in the text (pp. 19, 23).",
+   "Show the memory parameter's trade-off (failures against time over m = 3-29) in one table (p. 21).",
+   "Correction for technique catalog D3: in the generalized Cauchy point search each segment after the first costs O(m^2), not O(m) (Remark p. 9; Algorithm CP p. 10)."
+  ],
+  "coauthors": "Richard H. Byrd (Colorado), Peihuang Lu, Ciyou Zhu (Northwestern)",
+  "quotes": [
+   {
+    "text": "indicates that the solution was not obtained after 999 function evaluations",
+    "page": 19
+   },
+   {
+    "text": "this can be seen by examining the problems with at least 50 or 100 variables (which are the only ones for which times are meaningful)",
+    "page": 23
+   }
+  ]
+ },
+ {
+  "id": "S005",
+  "year": "1997",
+  "title": "Algorithm 778: L-BFGS-B: Fortran subroutines for large-scale bound-constrained optimization",
+  "read_level": "full",
+  "contribution": "Second read (inc-ocr) of the L-BFGS-B code paper (December 31, 1994 report version): every documented parameter value, the code's skip test and recovery trigger, and Tables 1.1-1.6. At m = 5, 5 of 33 bound runs end F1 and 3 of 34 unconstrained runs are C1 (not counted as failures); the code is faster than both LANCELOT options on 16 of 33 bound and 21 of 34 unconstrained problems.",
+  "problem_entry": "As in c02; storage about (12 + 2m)n, iteration cost from 4mn + n to about m^2 n multiplications, 8 more n-vectors than L-BFGS (p. 2).",
+  "key_idea": "Reverse-communication package of S003. m: below 3 not recommended, 3 <= m <= 20 recommended (p. 3); factr test (f_k - f_k+1)/max(|f_k+1|, |f_k|, 1) <= factr*epsmch with factr 1.d+12 / 1.d+7 / 1.d+1, factr = 0 stops only if f unchanged (p. 4); wa (2m+4)n + 12m^2 + 12m, iwa 3n (p. 4); isbmin 1 (default primal) / 2 dual / 3 CG (p. 5); counters isave(26) skipped updates, isave(30), isave(34), dsave(2), dsave(13) (pp. 5, 7). Changes from S003: primal and dual through the inverse of one 2m x 2m indefinite block matrix factorized by Cholesky of its blocks (p. 8); skip test y's/(-g's) <= epsmch (p. 7) instead of S003's s'y > eps|y|^2; second stop at |proj g|_inf = 0 (p. 6).",
+  "assumptions": "As in c02; epsmch enters only the factr test and the skip test; invariance under scalar multiples of variables and objective except the first iteration and the factr test (p. 7).",
+  "proof_devices": [
+   "no proofs; recovery: after 20 line-search evaluations without sufficient decrease, discard all pairs and restart along steepest descent; second failure gives ABNORMAL TERMINATION IN LINE SEARCH (pp. 6-7)",
+   "same restart for a singular or indefinite L-BFGS matrix or submatrix and for g'd >= 0 (p. 7)",
+   "one block-matrix inverse shared by the primal and dual subspace computations (p. 8)"
+  ],
+  "experiments": "CUTE bound problems with n >= 5 and unconstrained with n >= 100; LANCELOT SR1 and exact Hessian at all defaults; Sparcstation-2 32 Mb; |proj g|_inf <= 1e-5 (p. 8). Markers *, **, C1, F1, C2, F2 relative to LANCELOT-SR1 (pp. 10-11). Table 1.1 (p. 10, 33 bound): m=5 five *F1 (BQPGAUSS, PALMER1E-4E, 9999 limit), m=17 one *C1, LANCELOT none; card writer's count: m=5 faster than both LANCELOT options on 16, tie 1, slower 11, F1 5; never fewer evaluations than LANCELOT-Hessian; JNLBRNGA 332/740.33 vs 24/1263.77 vs 22/1502.96, OBSTCLAE 258/207.20 vs 7/1442.00 vs 6/1422.62, OBSTCLBM 146/353.04 vs 7/1106.37 vs 6/2017.70, TORSION6 362/707.22 vs 10/130.73 vs 9/130.31. Table 1.2 (p. 11, 34 unconstrained): m=5 **C1 on FLETCHBV, FREUROTH, PENALTY3; LANCELOT-SR1 *F2 FLETCHBV, C2 NONDIA; LANCELOT-Hessian *F1 FLETCHBV, **C1 PENALTY3; m=5 faster on 21, slower on 10 (DIXMAANI 166.37 vs 9.30, TRIDIA 48.90 vs 3.91); fewer evaluations than Hessian only on NONDIA and PENALTY1. Table 1.3 (p. 12): bound F1 runs 7/5/0/0 for m = 3/5/17/29; TORSION6 time 565.25/707.22/1157.74/1994.78. Table 1.4 (p. 13): C1 runs 3/3/4/3, no F1. Tables 1.5-1.6 (pp. 14-15): dual and CG have the same five F1 at m=5; CG m=5 1419.78 s on JNLBRNGA (primal 740.33); CG m=17 DIXMAANI 1679.64 s (primal 273.08). Evaluation limit 9999 here vs 999 in S003; MAXLIKA F1 in S003 at m=5 converges here in 1665 evaluations (card writer's comparison).",
+  "positioning": "As in c02; larger CUTE instances than S003 (n = 1000/1024 for BDEXP, MCCORMCK, NONSCOMP, TORSION1-4, OBSTCL*L/U against 10-100 in S003) (p. 10; S003 p. 20).",
+  "writing": "As in c02; advice as numbers (m range p. 3; factr values p. 4; isbmin default p. 5).",
+  "limits_future": "As in c02; five F1 runs of 33 at m = 5 on bound problems (p. 10); the good-f, unmet-gradient-test behaviour is 3 of 34 unconstrained runs at m = 5 (p. 11) and 'deserves further study' (p. 9).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "contradiction",
+    "note": "Kept from c02, now sized: C1 runs (test missed, f at least as good as LANCELOT-SR1's) are not counted as failures. They are 3 of 34 unconstrained runs at m = 5 and 5 of 67 at m = 17. The marking is also applied to the rival (LANCELOT-Hessian **C1 on PENALTY3; both LANCELOT options fail on FLETCHBV), and all five bound misses at m = 5 are printed as F1.",
+    "pages": "pp. 9-11"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "One stopping test, |proj g|_inf <= 1e-5, for all codes.",
+    "pages": "p. 8"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "isbmin with default 1; driver4 runs 67 problems x 3 options; Tables 1.5-1.6 publish all three options.",
+    "pages": "pp. 5-6, 14-15"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Step 4 only, with values: restart after 20 failed line-search evaluations, then a named exit; no estimate drives the repair.",
+    "pages": "pp. 6-7"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Drawback (iii), structure cannot be used (p. 3); at m = 5 more evaluations than LANCELOT-Hessian on 27 of 28 converged bound rows (tie on HS110) and 28 of 31 converged unconstrained rows (card writer's count).",
+    "pages": "pp. 3, 10-11"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Ship a stopping-tolerance table in words and numbers (factr 1.d+12 / 1.d+7 / 1.d+1) for a stated machine precision (p. 4).",
+   "Define failure markers relative to a reference code and apply them to every column, the rival's other options included (pp. 10-11).",
+   "Give the user counters for every recovery device (skipped updates in isave(26)) (p. 7).",
+   "Put a numeric bound on a recovery trigger (20 evaluations without sufficient decrease) and document the second-failure exit (pp. 6-7).",
+   "When the code's safeguard differs from the algorithm paper's (skip test), print the code's version in the software paper (p. 7).",
+   "Heuristic 2 evidence: user-readable counters (pp. 5, 7); Heuristic 5 variant: m range 3 <= m <= 20 (p. 3) against the 1989 '3<= M <=7' cited in SKILL.md."
+  ],
+  "coauthors": "Ciyou Zhu, Richard H. Byrd (Colorado), Peihuang Lu",
+  "quotes": [
+   {
+    "text": "It runs the code on 67 test problems (33 bound constrained, 34 unconstrained) from the CUTE collection",
+    "page": 6
+   },
+   {
+    "text": "If the line search is unable to find a point with a sufficiently lower value of the objective after 20 evaluations of the objective function, we conclude that the current direction is not useful",
+    "page": 7
+   }
+  ]
+ },
+ {
+  "id": "S049",
+  "year": "1997",
+  "title": "Large scale unconstrained optimization",
+  "read_level": "full",
+  "contribution": "Second read (inc-ocr) of the 1996 single-author survey: numeric recipes (LANCELOT 11-band preconditioner, Minpack-2 shift rule, m in [3, 20]) and Tables 1-3. His limited-memory codes lose to LANCELOT's Newton in evaluations on 7 of 8 rows and win in time on 5 of 8. The rows are the m = 5 and LANCELOT-Hessian entries of S005's tables.",
+  "problem_entry": "As in the c03 card; n large, 'say n > 500' (p. 2).",
+  "key_idea": "Partial separability f = sum phi_i(U_i x) (2.8)-(2.9), minimum-surface element on 4 variables with 3 distinct Hessian elements and invariant subspace of dimension n - 2 (pp. 3-4); Algorithm I CG trust-region step with three exits (p. 8); LANCELOT default 11-band modified Cholesky (p. 9); Minpack-2 shift alpha0 = 0 or beta/2, alpha_k+1 = max(2 alpha_k, beta/2) after diagonal scaling (p. 10); residual test |r_j+1| <= eps|r_0| (3.6) or eps(|B||p| + |r_0|) (p. 11); L-BFGS H0 = gamma I with gamma = s'y/y'y, m in [3, 20] (p. 14); compact form (4.10)-(4.12) (pp. 15-16); strong Wolfe 0 < sigma1 < sigma2 < 1/2 and beta = max{beta_PR, 0} for CG (pp. 19-20).",
+  "assumptions": "As in c03; CG results assume a bounded level set, a Lipschitz gradient nearby and no restarts (p. 19).",
+  "proof_devices": [
+   "survey, no proofs; monotone CG iterate norms 0 = |p0| < ... < |pj| < |pj+1| ... <= Delta and the Cauchy first iterate (p. 9)",
+   "PR with the new line search of [36]: liminf |g_k| = 0 (5.6) (p. 19)",
+   "global convergence for 0 <= beta_k <= beta_FR [64] and any |beta_k| <= beta_FR [30], tight for some c > 1 (p. 20)",
+   "sparse quasi-Newton update unique under linear independence; 2 pairs suffice for an arrowhead matrix (pp. 17-18)"
+  ],
+  "experiments": "Table 1 (p. 10, Bouaricha-More's results): GL2 n = 2,500/10,000/40,000 iterations 6/6/8, evaluations 12/10/12, time 13.0/63.4/537.7; MSA 6/6/10, 7/7/14, 2.8/2.8/91.1; card writer's arithmetic: 16x n gives 41x (GL2) and 33x (MSA) time, MSA time at 10,000 equals that at 2,500, against 'only a little faster than linearly'. Table 2 (p. 15, L-BFGS m=5 vs LANCELOT Newton defaults, nfg/time): CRAGGLVY 95/13 vs 15/10, FMINSURF 186/11 vs 316/106, DIXMAANI 1237/166 vs 8/9, EIGENCLS 2900/563 vs 543/2300. Table 3 (p. 16, L-BFGS-B): JNLBRNGA 332/740 vs 22/1503, LINVERSE 291/57 vs 28/150, OBSTCLAE 258/207 vs 6/1423, TORSION6 362/707 vs 9/130. Card writer's count: more evaluations on 7 of 8 rows, less time on 5 of 8. Table 3 and three Table 2 rows are the rounded S005 Table 1.1-1.2 entries (S005 pp. 10-11); in S005's 34 unconstrained problems L-BFGS-B needs fewer evaluations than LANCELOT-Hessian on 2. TORSION6 (LANCELOT 5.4x faster) is passed over by the time verdict (p. 17).",
+  "positioning": "As in c03; tables come from his group's report [65] and Bouaricha-More [7] (pp. 10, 14, 16).",
+  "writing": "As in c03; rows chosen because they 'typify situations we have observed in practice' (p. 15).",
+  "limits_future": "As in c03; four rows per table, no aggregate, although the aggregate exists in S005 and is not summarised (pp. 15-16).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Refines SKILL.md Method 6 and 09 #taste-marks mark 6 ('shown losing to Newton and partitioned quasi-Newton'): in the tables his codes lose to LANCELOT's Newton in evaluations on 7 of 8 rows but win in time on 5 of 8; the loss to partially separable quasi-Newton is asserted in prose without numbers (pp. 13-14). Holds for evaluations and reliability, not for time.",
+    "pages": "pp. 13-16"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Rival at all default settings, L-BFGS at m = 5; rows are a declared selection from a larger table (S005) cited but not summarised.",
+    "pages": "pp. 15-16"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "As in c03: CG convergence results stated with conditions and judged by practical effect ('only a marginal improvement'; no significant practical advances).",
+    "pages": "pp. 19-20"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "As in c03: open-question subsections per algorithm class.",
+    "pages": "pp. 11-12, 17-18"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Report the full numeric recipe of a preconditioner shift (alpha0 = 0 or beta/2, alpha_k+1 = max(2 alpha_k, beta/2)) (p. 10).",
+   "Check a printed growth claim ('a little faster than linearly') against the ratios in the table before printing it (p. 10).",
+   "Tie illustrative rows to their source table and its aggregate (pp. 15-16; S005 pp. 10-11).",
+   "Heuristic 5 variant: m in [3, 20] (p. 14), wider than the 1989 '3<= M <=7' cited in SKILL.md."
+  ],
+  "coauthors": "none (sole author on the title page, p. 1)",
+  "quotes": [
+   {
+    "text": "The memory parameter for L-BFGS was set to m = 5, and LANCELOT was run with all its default settings",
+    "page": 15
+   },
+   {
+    "text": "These are very good results in that the number of iterations stays nearly constant as the dimension of the problem increases, and computing time grows only a little faster than linearly",
+    "page": 10
+   }
+  ]
+ },
+ {
+  "id": "S024",
+  "year": "1998",
+  "title": "Combining trust region and line search techniques",
+  "read_level": "full",
+  "contribution": "Second read (inc-ocr) of the trust-region/backtracking hybrid with Yuan: the equations of Algorithm 2.6 and 3.1, the lemma and theorem statements (liminf |g_k| = 0 under sum 1/M_k = infinity, M_k = 1 + max|B_i|), and Tables I-II. Function evaluations over 18 MGH problems are 1125 (line search), 986 (pure TR) and 999 (TR+BT); SR1 beats BFGS on all 8 medium problems.",
+  "problem_entry": "As in c03; re-solving (B_k + lambda I)d = -g_k (1.4) after a failed step is costly for large n (p. 2).",
+  "key_idea": "d(lambda) = -(B + lambda I)^-1 g (2.29), accepted if Delta/gamma <= |d| <= Delta with gamma > 1 (2.30) or if lambda <= |B| + (1+eps)|g|/Delta (2.33) and |d| <= Delta (2.34); both give (2.37)-(2.38) with tau = min{1/8, 1/2gamma} (pp. 8-10). Algorithm 2.6: lambda := lambda + (|d|^2/|q|^2)(gamma|d| - Delta)/Delta (2.39), Newton on 1/|d| - gamma/Delta (2.40) instead of More-Sorensen's (2.41) (p. 10). Algorithm 3.1: backtrack f(x + alpha^i d) < f(x) (3.3), curved paths with |d(i+1)| in [alpha1, alpha2]|d(i)| and the cosine condition (3.4)-(3.5) (p. 11); 0 < c3 < c4 < 1 < c1, 0 < c2 < 1, Delta_k+1 in [|x_k+1 - x_k|, c4 Delta_k] after backtracking (3.8) (p. 12). Runs: gamma = 1.5; Wolfe 0.01/0.9; BFGS skipped if s'y <= 0; SR1 only if |s'y| >= 1e-6|s||y|; alpha_k = max{0.1, 0.5/[1 + (f(x) - f(x+d))/d'g]}; Delta1 = 1, B1 = I, stop |g| <= 1e-8; c1-c4 and eps not reported (pp. 19-20). Corrections for c03: the interval constant is gamma, not tau; M_k carries '1 +'.",
+  "assumptions": "Assumptions 3.2: iterates in a closed convex set S, f twice differentiable with |Hessian| <= M (3.12)-(3.13) (p. 13); B_k only through M_k = 1 + max_{1<=i<=k}|B_i| (3.19) with sum 1/M_k = infinity (3.43) (pp. 13, 17).",
+  "proof_devices": [
+   "Lemma 2.2 (Powell): phi(0) - phi(d*) >= 1/2 |g| min{Delta, |g|/|B|} (2.12) (p. 5)",
+   "Lemma 2.3: 0 <= lambda* <= |g|/Delta - sigma_n(B) and d*'g <= -|g|^2/(sigma_1 - sigma_n + |g|/Delta) (2.14)-(2.15) (pp. 5-6)",
+   "Lemma 2.4: d*'g <= -1/2 |g| min{Delta, |g|/(2|B|)} (2.20), cosine bound (2.21) (pp. 6-7)",
+   "Lemma 2.5: cos(d_Delta1, -g) >= cos(d_Delta2, -g) for Delta2 > Delta1, three cases incl. the hard case (pp. 7-8)",
+   "Lemmas 3.3-3.5: Delta_k bounded below by a constant times min{mu(1 - c2), 1}/M_k for ratio failures and backtracking (pp. 14-17)",
+   "Lemma 3.6 (Powell 1984) sequence lemma; Theorem 3.7 liminf |g_k| = 0 under sum 1/M_k = infinity (pp. 17-18)",
+   "Corollary 3.8 (Newton): liminf, lim |g_k| = 0 for convex f, PSD Hessian at a limit, quadratic rate (3.47) (p. 18)"
+  ],
+  "experiments": "Table I (p. 21, 18 MGH problems, n = 2-20): card writer's sums: function evaluations 1125 (line-search BFGS), 986 (pure TR), 999 (TR+BT BFGS); gradient evaluations 902, 986, 864; iterations 821, 986, 864. TR+BT BFGS fewer iterations than pure TR on 13, equal 3, more 2 (problems 5, 8); function evaluations fewer 5, equal 5, more 8. TR+BT SR1 > 300 iterations on problems 4 and 12. The text compares in function evaluations only; in gradient evaluations line search (902) beats pure TR (986), not stated. Table II (p. 22, Liu-Nocedal problems 1, 2, 3, 7, 8, 11, 15, 16; n = 50-121): SR1 fewer iterations and evaluations than BFGS on all 8; BFGS > 300 on problem 7; other 7: 699 vs 1107 function evaluations (card writer's sums). No run above n = 121.",
+  "positioning": "As in c03.",
+  "writing": "As in c03; comparative convergence claim 'as strong as the results obtained previously for pure trust region methods' (p. 19).",
+  "limits_future": "As in c03; no test above n = 121 although large n motivates the paper (pp. 2, 21-22); update ranking reverses between tables (pp. 21-22); trust-region constants of the runs unreported (pp. 19-20).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Theorem 3.7 needs only sum 1/M_k = infinity (at most linear growth of |B_k|), set against the condition-number or trace-determinant control of line-search quasi-Newton theory; Corollary 3.8 gives the four Newton conclusions incl. the quadratic rate.",
+    "pages": "pp. 13, 17-19"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Four arms in one Fortran code with Delta1 = 1, B1 = I, |g| <= 1e-8; evaluations counted per arm.",
+    "pages": "pp. 19-20"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Headline measure: line search vs pure TR ranked in function evaluations (1125 vs 986); gradient evaluations (902 vs 986) would reverse it (card writer's sums); both counts are printed.",
+    "pages": "pp. 20-21"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Surprise reversal, now complete in numbers: SR1 wins all 8 medium problems after losing to BFGS in Table I.",
+    "pages": "pp. 21-22"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "As in c03: one component changed (re-solve -> backtrack), triggered by cost, no estimate or recovery tree.",
+    "pages": "pp. 2-3, 11-12"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Solve the trust-region subproblem by Newton's method on 1/|d(lambda)| - gamma/Delta, accepting any |d| in [Delta/gamma, Delta]; only positive definite factorizations are needed ((2.39)-(2.41), p. 10).",
+   "Certify the inequalities the fallback needs ((2.37)-(2.38), tau = min{1/8, 1/2gamma}) inside the inexact subproblem solver (p. 10).",
+   "Carry one growth scalar M_k = 1 + max|B_i| through the convergence proof (pp. 13-18).",
+   "Total iterations, f and g per arm and check whether the ranking flips between counts (pp. 20-21).",
+   "Print every constant of the tested configuration next to its equation; here c1-c4 are missing (pp. 19-20)."
+  ],
+  "coauthors": "Ya-xiang Yuan (Computing Center, Academia Sinica)",
+  "quotes": [
+   {
+    "text": "We tested the algorithms on the 18 examples given by Moré, Garbow and Hillstrom (1981)",
+    "page": 20
+   },
+   {
+    "text": "the pure trust region methods requires fewer function evaluations, but the difference is not significant",
+    "page": 21
+   }
+  ]
+ }
+]

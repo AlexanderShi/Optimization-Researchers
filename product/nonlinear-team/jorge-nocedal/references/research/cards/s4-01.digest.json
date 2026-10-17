@@ -1,0 +1,241 @@
+[
+ {
+  "id": "S028",
+  "year": "1995",
+  "title": "A reduced Hessian method for large-scale constrained optimization",
+  "read_level": "full",
+  "contribution": "Second read (inc-ocr) of the reduced-Hessian SQP theory paper: the cross term Z^T W Y p_Y is estimated by a Broyden matrix S_k ~ Z^T W (no extra evaluations) or by finite differences (up to three gradient evaluations per iteration, used only in region R2 of Update Criterion I), with summable-sequence safeguards that become inactive; the theorems give lim inf convergence, a rate C r^|U_k| in the number of updates, R-linear convergence regardless of the update pattern and 1-step Q-superlinear convergence against the 2-step rate of cross-term-free methods (pp. 4, 8, 10, 12, 16, 23, 29, 32).",
+  "problem_entry": "As in s02: large n, small n - m, first derivatives only; ignoring the cross term is 'quite adequate' with orthonormal bases but not with the elimination bases (2.2) large sparse problems need (pp. 4, 7).",
+  "key_idea": "Range step (A^T Y)p_Y = -c (1.26); null step B p_Z = -[Z^T g + zeta w], 0 < zeta <= 1 (1.18, 3.43); Broyden S_{k+1}(x_{k+1} - x_k) = Z_k[grad L(x_{k+1}, lambda_{k+1}) - grad L(x_k, lambda_{k+1})] (1.20), w = S Y p_Y, w-bar = alpha S_{k+1} Y p_Y (3.12); finite differences (3.1) with up to three gradient evaluations (p. 8); BFGS with y = Z^T[grad L difference] - w-bar (1.22); Update Criterion I: update if s^T y > 0 and ||p_Y|| <= gamma_k ||p_Z|| (Broyden, 3.18) or ||p_Y|| <= gamma_d ||p_Z|| / sigma_k^(1/2) (finite differences, 3.19), sigma_k replaced by ||Z^T g|| + ||c|| in the code (pp. 12, 17); regions R1, R2, R3 with finite differences only in R2 and BFGS skipped in R3 (pp. 16, 32); penalty mu_k = mu_{k-1} if mu_{k-1} >= ||lambda_k||_inf + 2 rho, else ||lambda_k||_inf + 3 rho (3.40), damping zeta = min{1, zeta-hat} (3.39) (p. 15); safeguards (3.13) with constant Gamma and (3.14) ||w-bar|| <= alpha ||p_Y|| / gamma_k (p. 10).",
+  "assumptions": "Assumptions 4.1: iterates in a convex set with f, c and two derivatives uniformly bounded, full-rank A with bounded bases (4.1), (3.21)-(3.22) at updates, and (4.2), whose exponent is garbled but which the proof of Lemma 4.1 uses as ||w_j||^2 <= kappa^2 ||c_j||, i.e. ||w_k|| <= kappa ||c_k||^(1/2) (pp. 18-19); Assumptions 5.1: Lipschitz Hessians, full rank at x*, positive definite reduced Hessian, bounded and Lipschitz bases (p. 21); Assumption 5.2 level-set condition, which no practical line search guarantees (p. 22); unit steps assumed for the superlinear result, watchdog left to the companion paper (p. 30).",
+  "proof_devices": [
+   "Theorem 3.1 (Byrd-Nocedal 1989): under s^T y / s^T s >= m and ||y||^2 / y^T s <= M, cos theta_j >= beta1 and beta2 <= ||B_j s_j|| / ||s_j|| <= beta3 for at least half of j in [1, k]; Lemma 3.1: Update Criterion I implies these conditions near x* (pp. 12-13)",
+   "Rate stated in the number of updates: ||x_j - x*|| <= C r^|U_k|, 0 < r < 1 (Theorem 5.4, p. 23); then the trace-log-det potential psi(B) = tr(B) - ln det(B) >= ln cond(B) bounds B_k and B_k^-1 and gives ||(B_k - Z*^T W* Z*) p_Z|| = o(||d_k||) on U (Theorem 5.6, pp. 24-29), hence R-linear 'regardless of how often updating takes place' (Theorem 5.7, p. 29)",
+   "Finite-difference corrections second-order accurate, ||w_k - Z*^T W* Y p_Y|| = O(sigma_k ||p_Y||) (Lemma 5.5, p. 25); Broyden bounded deterioration makes S_k bounded and the safeguards inactive (Lemma 5.8, pp. 29-30); zeta_k = 1 for large k (p. 30)",
+   "Dennis-More-type condition for S_k (Lemma 6.1, p. 31) and a region-by-region case analysis over R1, R2, R3 for 1-step Q-superlinear convergence (Theorem 6.3, pp. 32-34)"
+  ],
+  "experiments": "n/a (no experiments; computational experience deferred to the companion paper, p. 34).",
+  "positioning": "1-step against the 2-step Q-superlinear rate of methods ignoring the cross term (Byrd 1985, Yuan 1985) (p. 4); for Coleman-Conn only {x_k + Z_k p_Z} is 1-step superlinear (p. 9); approximating Z^T W preferred to Gurwitz's Z^T W Y because it gives 1-step superlinear convergence 'in all cases'; Coleman-Fenyes need a cubic root choice; Tagliaferro's PSB matrices may become very ill conditioned (p. 11).",
+  "writing": "Assumptions graded by the authors themselves ('rather strong', p. 18; 'restrictive', p. 23); the theory is presented as design-serving (p. 34).",
+  "limits_future": "No values printed for Gamma, gamma_d, rho, eta, tau, tau' or {gamma_k}: constants and tolerances, damping computation, basis changes, the criterion away from the solution and inequality constraints go to the companion paper (p. 34); a possible fourth region where the curves intersect (p. 17).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Engine kept, only the cross term repaired: default Broyden estimate at no extra evaluations, finite-difference fallback (up to three gradient evaluations) only in region R2; safeguards proved inactive asymptotically. Also Heuristic 5 (cheapest adequate option). Confirms s02 with numbers.",
+    "pages": "pp. 8, 16, 29-30, 32"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "The rate separates designs (1-step vs 2-step Q-superlinear; Z^T W vs Gurwitz's Z^T W Y) and covers irregular update patterns through C r^|U_k| and the R-linear theorem. Also Taste mark 2.",
+    "pages": "pp. 4, 11, 23, 29"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Weak, as in s02: the group's own earlier code's instabilities motivate the paper; open choices (fourth region, constants) deferred by name. Heuristic 5 variant: no parameter values printed in the theory paper.",
+    "pages": "pp. 17, 34"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "specify by admissible conditions so the theory covers the code; proof-driven or rarely binding safeguards (existing candidate in 08)",
+    "evidence": "Safeguards scaled by 1/gamma_k with summable {gamma_k} let S_k grow 'in a controlled manner' and are proved inactive near x*; the analysis assumes no boundedness of B_k or S_k.",
+    "pages": "pp. 10, 16, 29-30, 34"
+   }
+  ],
+  "transferable": [
+   "Let a safeguard's bound grow along a summable sequence (1/gamma_k, sum gamma_k < inf), then prove the guarded estimate bounded so the safeguard is inactive near the solution and costs no rate (pp. 10, 29-30).",
+   "When updates may be skipped in any pattern, state the rate in the number of updates (C r^|U_k|) and remove the dependence with the potential tr(B) - ln det(B) (pp. 23-29).",
+   "With a cheap and a costly estimate of one quantity, divide the step space by the ratio of step components and spend the costly estimate only in the region the rate proof needs (pp. 16, 32-34)."
+  ],
+  "coauthors": "Lorenz T. Biegler, Claudia Schmid",
+  "quotes": [
+   {
+    "text": "We will show that the rate of convergence of the new algorithm is 1-step Q-superlinear, as opposed to the 2-step superlinear rate for methods that ignore the cross term",
+    "page": 4
+   },
+   {
+    "text": "Thus, up to three evaluations of the objective function gradient may be required at each iteration.",
+    "page": 8
+   }
+  ]
+ },
+ {
+  "id": "S088",
+  "year": "1996",
+  "title": "Towards a discrete Newton method with memory for large-scale optimization",
+  "read_level": "partial",
+  "contribution": "Second read (inc-ocr): DINEMO stores the inner CG difference pairs of a discrete truncated-Newton step (taken at iterations 6, 16, 26, ...) as L-BFGS pairs (m = 29, maxcg = 20); on a quartic family in n = 100 with condition numbers 1, 125, 5073 it needs 110/115/115 evaluations against L-BFGS's 131/138/151 at epsilon = 0 and 222-333 against ALTERNATE's 364-444 on the clustered spectrum at condition 5073, while L-BFGS wins on evenly spread spectra at condition 5073 (pp. 8-12).",
+  "problem_entry": "As in s02: discrete truncated Newton spends many gradients per iteration and discards their curvature; L-BFGS is slow on ill-conditioned problems; one inner CG iteration gives steepest descent, high accuracy approximates Newton (pp. 2-3).",
+  "key_idea": "Inner pairs s^i = eps v^i, y^i = g(x + eps v^i) - g(x) (3.3) satisfy (s^i)^T y^i > 0 because CG stops on negative curvature (p. 6); they enter the limited-memory matrix after a Newton step (scaling from the outer pair, inner pairs first, p. 8); five open choices listed, e.g. one Newton step per 10 limited-memory steps or an automatic trigger (p. 7); L-BFGS memory m in [3, 20] 'very often' satisfactory (p. 4).",
+  "assumptions": "Strong Wolfe steps (p. 3); strongly convex test functions, so no negative-curvature test (p. 8); no convergence theory.",
+  "proof_devices": [],
+  "experiments": "L-BFGS, DINEMO and ALTERNATE (same schedule, discards inner pairs) share the More-Thuente line search (c2 = 0.9; c1's exponent garbled); Newton steps at iterations 6, 16, 26, ...; inner CG stops on a residual test (exponent lost) or 20 iterations; m = 29 (p. 8); quartic in n = 100 from x0_i = (-1)^i x 50, D with condition numbers 1, 125, 5073 for epsilon = 0, .05, .09 and sigma in {0, .06, .12, .18} (pp. 8-11); evaluations counted, stringent tests (4.2)-(4.3) with exponents lost (p. 9). Legible: 6 evaluations for all at epsilon = sigma = 0 (p. 9); Table 1 epsilon = 0: L-BFGS 131/138/151, DINEMO 110/115/115 (16-24% fewer, computed); epsilon = .09: ALTERNATE 1084/936*/811*/868, L-BFGS wins per text (p. 10); Table 2 (12 distinct eigenvalues) lost, DINEMO consistently better per text (pp. 10-11); Table 3 (89 middle eigenvalues in [0.6, 9.4]): epsilon = .05 L-BFGS 102/194/190/191; epsilon = .09 DINEMO 222/333/274/331 vs ALTERNATE 364/405/444*/435 (18-39% fewer, computed) (p. 11); fewer iterations than L-BFGS; extra 25+26-eigenvalue test won by DINEMO for all epsilon (p. 12).",
+  "positioning": "Credits Nash and Schlick-Fogelson codes for discrete truncated Newton and Nash for a simple pair-based preconditioner (pp. 3, 7); L-BFGS is the benchmark (p. 8).",
+  "writing": "The tempting conclusion is stated and then overturned by a designed experiment (p. 10); percentages are not given in the paper, only tables and verbal verdicts (pp. 10-12).",
+  "limits_future": "All the 3.1 implementation questions must be investigated before DINEMO could be general purpose (p. 12); one function family, n = 100, one starting point (pp. 8-9); tolerance exponents, Table 2 and half of Tables 1 and 3 unreadable in this text.",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Ablation arm differs only in discarding the inner pairs; shared line search (c2 = 0.9), Newton schedule (6, 16, 26, ...), m = 29, maxcg = 20; evaluations as 'the key measure', iterations also mentioned. Caveat: one family, n = 100, one starting point.",
+    "pages": "pp. 8-9, 12"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "Algorithm-level integration of two complementary methods, as in s02.",
+    "pages": "p. 2"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Five open choices numbered and deferred as next work. Also Heuristic 5 (numbers as advice: m in [3, 20]; one Newton step per ten L-BFGS steps) and Heuristic 11 with numbers (16-24% fewer evaluations than L-BFGS at epsilon = 0; 18-39% fewer than the discard arm at condition 5073 with clustered eigenvalues; the payoff boundary set by eigenvalue distribution and inner capture, not condition number).",
+    "pages": "pp. 4, 7, 10-12"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "controlled spectral test family (existing single-card candidate in 08; technique catalog E9)",
+    "evidence": "n = 100; condition numbers 1, 125, 5073; 100 distinct eigenvalues vs 12 vs a middle cluster of 89 in [0.6, 9.4]; inner CG capped at 20 steps, so the 12-eigenvalue case is solved exactly and called 'too simple'.",
+    "pages": "pp. 9-11"
+   }
+  ],
+  "transferable": [
+   "Size the ablation's memory so the only difference between arms is the harvested information (m = 29 holds 20 inner pairs plus the outer pairs between Newton steps; corrections are discarded only before a Newton step) (p. 8).",
+   "Read the test spectrum against the inner solver's budget: 100 distinct eigenvalues with 20 CG steps leaves the inner solve incomplete, 12 distinct eigenvalues makes it exact and the case too easy (pp. 10-11).",
+   "Report percentages only where both arms' rows are legible, and say which conclusion rests on a lost table (pp. 10-12)."
+  ],
+  "coauthors": "Richard H. Byrd, Ciyou Zhu",
+  "quotes": [
+   {
+    "text": "The maximum number of limited memory corrections stored is m = 29.",
+    "page": 8
+   },
+   {
+    "text": "Collecting information from the inner CG cycle and saving it in the form of a limited memory matrix is certainly beneficial since DINEMO clearly outperformed ALTERNATE in the great majority of the tests.",
+    "page": 12
+   }
+  ]
+ },
+ {
+  "id": "S046",
+  "year": "1997",
+  "title": "On the local behavior of an interior point method for nonlinear programming",
+  "read_level": "full",
+  "contribution": "Second read (inc-ocr) of the local analysis of the Byrd-Hribar-Nocedal interior method (Report OTC 98/02): with residual ||r|| <= M1 ||F||^(1+a), mu+ = o(||F||) and a > 0 give superlinear and mu+ = O(||F||^2) quadratic convergence; conditions on tau and the mu decrease keep slacks positive without backtracking and meet the next barrier test; the code's settings theta = 1, tau = 0.995, gamma = 0.2 are proved safe but only linear, while mu+ = ||F(z)||^(1+delta), tau = 1 - ||F(z)||^beta is superlinear (pp. 8, 12, 14-18).",
+  "problem_entry": "As in s02: the algorithm of [2] is robust and 'competitive with the LANCELOT algorithm in terms of function evaluations', but no attempt was made there to make it rapidly convergent (p. 2).",
+  "key_idea": "Barrier problem f - mu sum ln s_i with h = 0, g + s = 0 (1.2-1.3, p. 2); trust-region SQP step with scaled radius and fraction-to-boundary d_s >= -tau s, tau close to 1 (1.5, 1.7, p. 3); barrier test ||F_mu(z+)|| <= eps_mu with F_mu = (grad L; S Lambda e - mu e; h; g + s) (1.11-1.12, p. 4); inexact Newton F'(z)d = -F_mu(z) + r_mu (1.16, p. 5); F' independent of mu (p. 6); strategies tie mu+, tau and the residual to mu or to ||F(z)|| (pp. 15-18).",
+  "assumptions": "Assumptions I at the limit (KKT, locally Lipschitz Hessians, LICQ, second-order sufficiency, strict complementarity) (pp. 4-5); the analysed iteration is an idealization of the coded one, partly bridged by least-squares multiplier resets (pp. 5-6, 10); eps_mu = theta mu with theta in [0, sqrt t) in Section 5 (p. 15).",
+  "proof_devices": [
+   "Inexact-Newton bound ||z+ - z*(mu)|| <= ML ||z - z*(mu)||^2 + M ||r_mu|| (Theorem 2.3, p. 7) with ||z*(mu) - z*|| <= C mu (Lemma 2.2, p. 6) and ||z - z*(mu)|| <= 2M ||F_mu(z)||, ||F_mu(z)|| <= 2Q ||z - z*(mu)|| (Lemma 2.4, p. 7)",
+   "Theorem 2.5: residual ||r_{mu+}|| <= M1 ||F_{mu+}(z)||^(1+a); mu+ = o(||F(z)||), a > 0 gives superlinear, mu+ = O(||F(z)||^2), a > 1 (as the OCR reads) quadratic convergence; a bound M1 (mu+)^(1+a) also works (pp. 8-9)",
+   "Theorem 3.1: ||z+ - z*(mu+)|| <= M'(eps_mu + mu)^2 + M ||r||, M' = 4ML(max{C, M})^2 (pp. 10-11); Theorem 3.2: [(mu + eps_mu)^2 + ||r||] / mu+ -> 0 and lim sup (1 - tau)(mu + eps_mu) / mu+ < 1 give s+ >= (1 - tau)s (p. 12; read from the restatement (5.1)-(5.2), pp. 14-15)",
+   "Section 4: one-step barrier test if [(eps_mu + mu)^2 + ||r||] / eps_{mu+} -> 0 (4.1), which fails if mu decreases quadratically (p. 14); heuristic, admittedly not rigorous, argument (3.5) for the same danger (p. 11)"
+  ],
+  "experiments": "n/a (no experiments).",
+  "positioning": "Differs from Yamashita-Yabe [12] and El-Bakry-Tapia-Tsuchiya-Zhang [4] by keeping slacks positive without backtracking and handling an inner barrier stopping test; complementarity-based mu rules (5.15) are similar to LP rules in S. J. Wright's book [13] (pp. 18-19).",
+  "writing": "Each strategy is verified against the same list of conditions (5.1)-(5.4), the shipped one first (pp. 15-18); the paper flags its own heuristic step as not rigorous (p. 11).",
+  "limits_future": "Strategy 1 (the settings of [2]: theta = 1, tau = 0.995, gamma = 0.2) gives only a linear rate (p. 16); no values recommended for delta, beta, a in the superlinear strategies (pp. 16-18); regularity assumed throughout, constants M, Q, L, C kept explicit for a future study of degeneracy (p. 18).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "The analysis separates parameter strategies of the coded method: the settings of [2] (theta = 1, tau = 0.995, gamma = 0.2; (1 - tau)(1 + theta)/gamma = 0.05 < 1, computed) are proved safe but only linear; Strategies 2-3 superlinear; quadratic mu decrease ruled out for the one-step barrier test. Also Taste mark 2, and Taste warning 9 (the group names the idealization gap, p. 5).",
+    "pages": "pp. 5, 14, 16-18"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "The undecided barrier-parameter update is given as alternative strategies, not one rule (link to KNITRO's barrier options inferred). Heuristic 5 variant: numbers only for the linear strategy, exponent conditions (0 < delta < 1, beta > delta, a > delta) without values for the superlinear ones. Heuristic 6: robustness first in [2], the rate here (p. 2).",
+    "pages": "pp. 2, 15-18"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "specify by admissible conditions so the theory covers the code; proof-driven or rarely binding safeguards (existing candidate in 08)",
+    "evidence": "Three step properties (slack positivity without backtracking, next barrier test, fast rate) derived as limits in mu and mu+ and checked strategy by strategy, starting from the code's own settings.",
+    "pages": "pp. 14-18"
+   }
+  ],
+  "transferable": [
+   "Prove the shipped defaults first: check that the code's settings (theta = 1, tau = 0.995, gamma = 0.2) meet the safety conditions, then state exactly what they give up (the rate) (p. 16).",
+   "Tie mu+, tau and the inner residual to one measured quantity, the optimality residual ||F(z)||, so one signal drives feasibility, the inner stopping test and the rate (pp. 17-18).",
+   "Write tolerances as multiples of the barrier parameter (eps_mu = theta mu) so all conditions reduce to limits in mu and mu+ that can be checked per strategy (pp. 15-18)."
+  ],
+  "coauthors": "Richard H. Byrd, Guanghui Liu",
+  "quotes": [
+   {
+    "text": "The rate of convergence will, however, be only linear.",
+    "page": 16
+   },
+   {
+    "text": "Strategy 3 ensures that the step is feasible, that the barrier stopping test is satisfied and that the rate of convergence is superlinear.",
+    "page": 18
+   }
+  ]
+ },
+ {
+  "id": "S101",
+  "year": "1998",
+  "title": "The modified absolute-value factorization norm for trust-region minimization",
+  "read_level": "full",
+  "contribution": "Second read (inc-ocr) of RAL-TR-97-071: the trust-region norm M = PL|B|L^T P^T makes the subproblem block-diagonal with one MA27 factorization (HSL_VF06); in a standard trust-region code (eps_g = 1e-5, eta1 = 0.01, eta2 = 0.95, gamma1 = 0.5, gamma2 = 2, 20n iterations, 30 CPU minutes) on 29 larger CUTE problems with frequent negative curvature, l2 wins easy and dense problems (SPARSINE 36.5 s vs 1047.5 s and > 1800 s), the new norm alone solves NONCVXUN (490.7 s) and beats modified Cholesky on most hard problems, at the cost of more wasted evaluations (pp. 11-14).",
+  "problem_entry": "As in s02: trust-region theory works for any norm uniformly related to l2, yet the choice of norm, which affects every iteration, had received little attention (p. 2).",
+  "key_idea": "Ideal |H| norm needs a spectral factorization, 'likely out of the question' for large n (pp. 3-4); M = PL|B|L^T P^T from H = PLBL^T P^T (3.4-3.6, p. 4); after (3.7) the subproblem is block-diagonal, then diagonal with D of entries +-1 (pp. 5-6); convex case s = -g if ||g|| <= Delta else -Delta g/||g||, a backtracking line search along -H^-1 g (p. 6); indefinite case: root larger than 1 of a quartic by Newton, hard case with an eigenvector (pp. 6-7); near-singular H: Cheng-Higham (3.13) or the alternative (3.14), which HSL_VF06 uses (pp. 7, 11); Algorithm 3.1 Newton on the secular equation, stop |  ||s|| - Delta | <= eps Delta (pp. 8-9).",
+  "assumptions": "Uniform norm equivalence needs bounded H and bounded L: delta <= ||C|| <= max(delta, ||H|| ||(LL^T)^-1||) (p. 9), and with entries of L bounded by beta, 1 <= lambda_max(LL^T) <= n + n(n - 1)beta^2/2 (p. 10); Bunch-Parlett, Fletcher and Duff-Reid bound L, Bunch-Kaufman and LAPACK are 'untrustworthy for our application' (p. 10).",
+  "proof_devices": [
+   "Eigenvalue bounds on M via Higham's Theorem 3.2 and entry bounds on L (pp. 9-10)",
+   "Change of variables that turns the subproblem into a diagonal one with entries +-1, where the convex case is linear in lambda and the indefinite case a quartic (pp. 5-7)"
+  ],
+  "experiments": "Algorithm 4.2 (p. 12) with eps_g = 0.00001, eta1 = 0.01, eta2 = 0.95, gamma1 = 0.5, gamma2 = 2, 20n iterations, Delta0 = ||M0||_inf (pp. 11, 14); HSL_VF06 for the new norm, HSL_VF05 at defaults for l2 and Schnabel-Eskow modified Cholesky (p. 11); IBM RISC System/6000 3BT, 64 MB, xlf90 -O; larger CUTE problems with frequent negative curvature, 30 CPU-minute limit (p. 11); bold for at least 10% better, dagger for different local minimizers (p. 12). Table 4.1 legible rows (#f/#g/CPU; l2 | modified Cholesky | abs; p. 13): EIGENALS 66/53/71.0 | 63/47/85.4 | >1800 s; SPARSINE 16/16/36.5 | 361/205/1047.5 | >1800 s; NONCVXU2 272/227/29.7 | >20n | >20n; NONCVXUN >1800 s | >20n | 3020/2493/490.7; SBRYBND >1800 s | 59/28/9.7 | 65/28/5.5; GENHUMPS 14474/13964/1023.0 | >20n | 10208/9521/796.4; GENROSE 721/665/48.1 | 434/312/19.3 | 1109/776/58.7; NCB20B 45/29/141.1 | 33/20/26.8 | 21/12/10.8. Reading the last entry of scrambled rows as CPU (inferred): CURLY30 81.9 vs 18.3, SCURLY30 105.4 vs 16.3, SCOSINE 4.4 vs 1.7, CURLY10 7.6 vs 8.6 (modified Cholesky vs abs). Wasted evaluations (#f - #g, computed): GENROSE 56 | 122 | 333; NONCVXUN 527 for abs; causes: initial radius often far too large, pivot sign changes (p. 14).",
+  "positioning": "Builds on Greenstadt, Gill-Murray-Ponceleon-Saunders and Cheng-Higham; rejects Goldfarb's PLL^T P^T norm, which stays l2 for diagonal H however ill-conditioned (pp. 4-5); compares with the LANCELOT modified Cholesky norm and refers to Gould et al. 1997 for other norms (p. 11).",
+  "writing": "Results sorted into three categories of problem behaviour (pp. 12-13); scoped verdict 'We do not pretend' (p. 14); a critic's 1981 objection to a related proposal applied to their own method (pp. 14-15).",
+  "limits_future": "Useful 'so long as as the factorization is feasible'; dense Hessians or factors make it lose (pp. 12-14); radius management after pivot-order changes is a 'possible defect' under investigation (pp. 14-15).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Recommendation follows problem structure with each norm's losses printed: l2 wins dense problems (SPARSINE 36.5 s vs 1047.5 s and > 1800 s), the new norm alone solves NONCVXUN and is faster than modified Cholesky on most hard problems read.",
+    "pages": "pp. 12-14"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "One algorithm and one parameter set for all norms, a 10% rule for bold, a dagger for different minimizers, waste printed; but the new norm gets its own subproblem solver (HSL_VF06) while the rivals run the general HSL_VF05 at defaults, so CPU mixes norm and solver (the authors say so), and the common initial radius ||M0||_inf hurts the factorization norms.",
+    "pages": "pp. 11-14"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "As in s02: one component (the norm) of a classical trust-region method replaced, with no regime-driven estimate or recovery path.",
+    "pages": "p. 12"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Weak, as in s02: Fletcher's objection to Goldfarb applied to their own method; pivot-order changes named a possible defect under study. Also Heuristic 5 (all constants printed, p. 11) and Heuristic 7, weak (released as HSL_VF06, pp. 1, 10). The factorization-stability check (p. 10) is in a Gould-led paper, so the roundtable blind spot on KKT linear algebra stands (inferred).",
+    "pages": "pp. 1, 10-11, 14-15"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Print the full outer-algorithm parameter set and hold it fixed across arms so only the component under test varies (p. 11).",
+   "Mark a win only above a stated margin (10%) and flag runs ending at different local minimizers before counting wins (p. 12).",
+   "Read the waste column (#f - #g) as a diagnostic and trace it to named causes (initial radius, change of trust-region shape) (p. 14)."
+  ],
+  "coauthors": "Nicholas I. M. Gould",
+  "quotes": [
+   {
+    "text": "We indicate those cases where one or other method performs at least 10% better than its competitors by highlighting the relevant figure in bold.",
+    "page": 12
+   },
+   {
+    "text": "the number of “wasted” function evaluations (the difference between #g and #f in in Table 4.1) is significantly higher for the new method than for its competitors",
+    "page": 14
+   }
+  ]
+ }
+]

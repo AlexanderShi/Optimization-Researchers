@@ -11,7 +11,7 @@
 | # | ID | Year | Title | Venue | Cites | Kind | Source | Full text | Pages | Role | Read |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | 1 | S001 | 2006 | Numerical Optimization, Second Edition | Numerical optimization, 497-528, 2006 | 51615 | book | — | no-oa |  | core | abstract |
-| 2 | S002 | 1989 | On the limited memory BFGS method for large scale optimization | Mathematical programming 45 (1), 503-528, 1989 | 13019 | journal | url | txt | 27 | core | skimmed |
+| 2 | S002 | 1989 | On the limited memory BFGS method for large scale optimization | Mathematical programming 45 (1), 503-528, 1989 | 13019 | journal | url | txt | 27 | core | carded |
 | 3 | S003 | 1995 | A limited memory algorithm for bound constrained optimization | SIAM Journal on scientific computing 16 (5), 1190-1208, 1995 | 9453 | journal | url | txt | 25 | core | carded |
 | 4 | S004 | 2018 | Optimization methods for large-scale machine learning | SIAM review 60 (2), 223-311, 2018 | 5967 | journal | arXiv | txt | 95 | core | carded |
 | 5 | S005 | 1997 | Algorithm 778: L-BFGS-B: Fortran subroutines for large-scale bound-constrained optimization | ACM Transactions on mathematical software (TOMS) 23 (4), 550-560, 1997 | 5247 | journal | url | txt | 17 | core | carded |
@@ -37,7 +37,7 @@
 | 25 | S025 | 1991 | A numerical study of the limited memory BFGS method and the truncated-Newton method for large scale optimization | SIAM Journal on Optimization 1 (3), 358-372, 1991 | 322 | journal | — | no-oa |  | core | abstract |
 | 26 | S026 | 1987 | The formulation and analysis of numerical methods for inverse eigenvalue problems | SIAM Journal on Numerical Analysis 24 (3), 634-667, 1987 | 308 | journal | manual | txt | 34 | supplement | skimmed |
 | 27 | S027 | 2006 | Interior methods for mathematical programs with complementarity constraints | SIAM Journal on Optimization 17 (1), 52-77, 2006 | 299 | journal | url | txt | 28 | supplement | skimmed |
-| 28 | S028 | 1995 | A reduced Hessian method for large-scale constrained optimization | SIAM Journal on Optimization 5 (2), 314-347, 1995 | 267 | journal | url | txt | 36 | supplement | skimmed |
+| 28 | S028 | 1995 | A reduced Hessian method for large-scale constrained optimization | SIAM Journal on Optimization 5 (2), 314-347, 1995 | 267 | journal | url | txt | 36 | supplement | carded |
 | 29 | S029 | 2009 | Adaptive barrier update strategies for nonlinear interior methods | SIAM Journal on Optimization 19 (4), 1674-1693, 2009 | 257 | journal | url | txt | 25 | core | carded |
 | 30 | S030 | 2000 | Automatic preconditioning by limited memory quasi-Newton updating | SIAM Journal on Optimization 10 (4), 1079-1096, 2000 | 257 | journal | url | txt | 23 | core | carded |
 | 31 | S031 | 2018 | A progressive batching L-BFGS method for machine learning | International Conference on Machine Learning, 620-629, 2018 | 249 | conference | arXiv | txt | 24 | core | carded |
@@ -54,7 +54,7 @@
 | 42 | S043 | 2012 | Newton-like methods for sparse inverse covariance estimation | Advances in neural information processing systems 25, 2012 | 143 | conference | manual | txt | 9 | core | carded |
 | 43 | S044 | 1992 | On the behavior of Broyden’s class of quasi-Newton methods | SIAM Journal on Optimization 2 (4), 533-557, 1992 | 138 | journal | — | no-oa |  | supplement | abstract |
 | 44 | S045 | 2008 | An inexact SQP method for equality constrained optimization | SIAM Journal on Optimization 19 (1), 351-369, 2008 | 137 | journal | url | txt | 20 | supplement | carded |
-| 45 | S046 | 1997 | On the local behavior of an interior point method for nonlinear programming | Numerical analysis 1997, 37-56, 1997 | 133 | chapter | url | txt | 19 | supplement | skimmed |
+| 45 | S046 | 1997 | On the local behavior of an interior point method for nonlinear programming | Numerical analysis 1997, 37-56, 1997 | 133 | chapter | url | txt | 19 | supplement | carded |
 | 46 | S047 | 2009 | Data assimilation in weather forecasting: a case study in PDE-constrained optimization | Optimization and Engineering 10 (3), 409-426, 2009 | 131 | journal | url | txt | 22 | core | carded |
 | 47 | S049 | 1997 | Large scale unconstrained optimization | INSTITUTE OF MATHEMATICS AND ITS APPLICATIONS CONFERENCE SERIES 63, 311-338, 1997 | 118 | chapter | url | txt | 24 | core | carded |
 | 48 | S050 | 2016 | An inexact successive quadratic approximation method for L-1 regularized optimization | Mathematical Programming 157 (2), 375-396, 2016 | 117 | journal | arXiv | txt | 20 | supplement | skimmed |
@@ -97,7 +97,7 @@
 | 85 | S097 | 1983 | Numerical methods for solving inverse eigenvalue problems | Numerical Methods: Proceedings of the International Workshop, Caracas 1982, Lecture Notes in Mathematics 1005, 212-226, 1983 | 32 | chapter | — | no-oa |  | supplement | metadata |
 | 86 | S098 | 2001 | Algorithm 809: PREQN: Fortran 77 subroutines for preconditioning the conjugate gradient method | ACM Transactions on Mathematical Software (TOMS) 27 (1), 83-91, 2001 | 32 | journal | url | txt | 10 | supplement | carded |
 | 87 | S100 | 1990 | The performance of several algorithms for large scale unconstrained optimization | Large Scale Numerical Optimization, 138-151, 1990 | 32 | chapter | — | no-oa |  | supplement | abstract |
-| 88 | S101 | 1998 | The modified absolute-value factorization norm for trust-region minimization | High Performance Algorithms and Software in Nonlinear Optimization, 225-241, 1998 | 30 | chapter | url | txt | 17 | supplement | skimmed |
+| 88 | S101 | 1998 | The modified absolute-value factorization norm for trust-region minimization | High Performance Algorithms and Software in Nonlinear Optimization, 225-241, 1998 | 30 | chapter | url | txt | 17 | supplement | carded |
 | 89 | S102 | 2024 | Constrained and composite optimization via adaptive sampling methods | IMA Journal of Numerical Analysis 44 (2), 680-709, 2024 | 29 | journal | arXiv | txt | 26 | core | carded |
 | 90 | S103 | 1989 | Algorithms with conic termination for nonlinear optimization | SIAM journal on scientific and statistical computing 10 (1), 1-17, 1989 | 29 | journal | — | no-oa |  | supplement | abstract |
 | 91 | S105 | 2008 | A numerical study of active-set and interior-point methods for bound constrained optimization | Modeling, Simulation and Optimization of Complex Processes: Proceedings of…, 2008 | 22 | conference | url | txt | 21 | core | carded |

@@ -209,6 +209,7 @@ The referee reports themselves were not found (Gap). Answered by later practice:
   - "A trust region approach, on the other hand, performs efficiently on the same example" (for Powell's example; PDF p. 3);
   - a proof "that a class of line search feasible interior methods cannot exhibit convergence to non-stationary points" (abstract).
 - The rival camp's reading of that answer [observed, S]: "Nocedal and Marazzi further examined this nonconvergence issue and proposed a general trust region method as a resolution" (Benson, Shanno & Vanderbei, ORFE-00-02 rev. 28 Aug 2000, PDF p. 2). They also propose their own fixes (shifting slacks, trust region, modified barrier; abstract).
+- *Full text, increment inc-ocr (2026-10-17)* [practice, P]: the report's numbers are now legible. On Powell's example every regularization parameter ρ > 0 of a five-value grid hits the 1000-iteration limit, while MINPACK's LMDER solves it in 12 iterations [S061 pp. 12–13]; the answer is a provably safe paper algorithm (Theorem 4.1) and a new failure example left without a fix, with no production change reported [S061 pp. 20–24].
 
 **4.2 LOQO authors vs NITRO (2000): "significantly slower and far less robust"** [observed, S]
 Source: H. Y. Benson, D. F. Shanno & R. J. Vanderbei, "Interior-Point Methods for Nonconvex Nonlinear Programming: Jamming and Numerical Testing". Preprint title "…Jamming and Comparative Numerical Testing", ORFE-00-02, rev. 28 Aug 2000; *Math. Program.* 99 (2004) 35–48, doi:10.1007/s10107-003-0418-2.
@@ -229,6 +230,8 @@ Test set: 889 AMPL models (CUTE + Schittkowski), default settings, SUN SPARC 400
 - "a line search interior-point algorithm exhibits excellent robustness, as well as efficiency, compared to a trust-region method" (p. 17).
 
 Caveats they state: "As we felt unqualified to tune either SNOPT or NITRO, we chose to run and compare all three codes on the default settings" (p. 15). They are the LOQO authors (conflict of interest noted by me). [observed]
+
+*The group's own 1999 tables, read in full in increment inc-ocr (2026-10-17)* [practice, P; not a review]: NITRO's own paper already shows the small-problem weakness the LOQO authors report. On the 56 Hock–Schittkowski problems LANCELOT needs fewer evaluations than NITRO on 29 and NITRO on 23, with 3 NITRO failures (card's counts) [S008 p. 24]; on the 14-problem main CUTE set (n = 14–2001) NITRO needs fewer evaluations on 9 but splits CPU time 7–7, losing 22× on SVANBERG [S008 p. 21], the problem on which the 2002 study (§4.3) reports up to 1260 CG iterations per major iteration. The paper's own verdict on the small problems is that NITRO's performance is not as good as LANCELOT's [S008 p. 23].
 
 - In his 2026 retrospective, Nocedal describes the rival without reference to the benchmark: Vanderbei "was trying to extend the ideas of quadratic programming with minimal changes and we were designing the elements from scratch … Vunder by [Vanderbei] finished first published loco [LOQO]" [1:18:21–1:18:55] [stated, P, caption-derived].
 
