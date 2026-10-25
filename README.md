@@ -27,26 +27,30 @@
 ```
 README.md                 本文件
 DISTILL.md                蒸馏协议（自包含，从这里开始）
+RUNBOOK.md                两条流水线共用的运行纪律：分支/worktree、用量窗口、Windows、常见坑
 standards/
   grounding.md            接地标准：锚点规则、验证层级、数学声明纪律
   researcher-extraction.md 研究者档案提炼标准（nuwa 三重验证适配版）
   skill-template.md       团队 skill 的输出模板
+  distill-gates.md        质量门 G1–G7 的机械部分（distill_check.py）与 G7 声明抽审协议（distill_audit.py）
 teams/
   dfo-team/               DFO Team 语料（00-charter … 05-failure-modes、researchers/）
     SKILL.md              由这份语料蒸馏出的团队级 skill（带语料 ID；复制到 ~/.claude/skills/dfo-team/）
-  nlp-team/               NLP Team 语料（同构）+ SKILL.md
+    CLAIM-AUDIT.md        G7 声明→语料抽审记录（按日期追加；产物，不是语料）
+  nlp-team/               NLP Team 语料（同构）+ SKILL.md + CLAIM-AUDIT.md
   DISTILLATION_LOG.md     每次蒸馏的记录（语料版本、质量门结果、试答）
 TEAM-KIT.md               逐人研究者 skill 流水线（team-kit）入口
 references/               team-kit 文档与模板：playbook、研究提炼框架、研究 skill 模板、
                           team-templates/；nuwa-SKILL.md 为冻结的 nuwa 根 skill 副本
 scripts/                  team-kit 脚本：发表全表、全文、读卡、台账、团队状态；workflows/ 为 T1–T4；
-                          本仓库新增 check_citations.py（引用闭包）、audit_claims.py（声明抽审，协议 references/claim-audit.md）
+                          本仓库新增 check_citations.py（引用闭包）、audit_claims.py（声明抽审，协议 references/claim-audit.md）；
+                          语料线的 distill_check.py（lint + G1–G6 + 版本戳）、distill_audit.py（G7 抽审，协议 standards/distill-gates.md）
 product/                  team-kit 产物：逐人研究者 skill + 圆桌（dfo-team、nonlinear-team = NLP Team）
 .claude/skills/
   optimization-researchers/ 项目级 skill：在本仓库内把蒸馏请求分流到 DISTILL.md / TEAM-KIT.md
 ```
 
-每个团队目录六个文件，编号即阅读顺序：
+每个团队目录六个语料文件，编号即阅读顺序（`SKILL.md`、`CLAIM-AUDIT.md` 是蒸馏产物，不算语料）：
 
 | 文件 | 内容 |
 |------|------|
@@ -61,13 +65,16 @@ product/                  team-kit 产物：逐人研究者 skill + 圆桌（dfo
 ## 快速开始
 
 ```
-团队级 skill（封闭语料）           逐人研究者 skill / 圆桌（team-kit）
-1. 读 DISTILL.md                   1. 读 TEAM-KIT.md → references/research-team-playbook.md
-2. 按协议蒸馏 → teams/<team>/       2. 加成员：team.json + scripts/new_team.py --add-member；
-   SKILL.md                            新团队：scripts/new_team.py --init
-3. 只复制这个 SKILL.md 到            3. 按 T1–T4 跑 scripts/workflows/，产物在 product/<team>/
-   ~/.claude/skills/<team>/
+团队级 skill（封闭语料）                     逐人研究者 skill / 圆桌（team-kit）
+1. 读 DISTILL.md；distill_check.py --lint    1. 读 TEAM-KIT.md → references/research-team-playbook.md
+2. 按协议蒸馏 → teams/<team>/SKILL.md        2. 加成员：team.json + scripts/new_team.py --add-member；
+3. distill_check.py 0 ✗ + distill_audit.py     新团队：scripts/new_team.py --init
+   抽审 unsupported 0（G1–G7）              3. 按 T1–T4 跑 scripts/workflows/，产物在 product/<team>/
+4. 只复制这个 SKILL.md 到                   4. team_check.py / check_citations.py / audit_claims.py
+   ~/.claude/skills/<team>/；--installed 核对
 ```
+
+做任何一条之前先读 [RUNBOOK.md](./RUNBOOK.md)（分支与 worktree、用量窗口、Windows 编码、常见坑）。
 
 两条流水线所需的一切（协议、模板、脚本、语料、已蒸馏产物）都在本仓库内；在本仓库启动
 Claude Code 时项目级 skill `optimization-researchers` 会自动把蒸馏/扩展请求分流到对应入口。
@@ -86,7 +93,9 @@ Claude Code 时项目级 skill `optimization-researchers` 会自动把蒸馏/扩
 - 新增文献：在 `01-canon.md` 加一行（分配新 ID、标验证层级），相关结论进
   `04-results.md`。
 - 发现语料错误：直接改正并在该条目加 `勘误:` 注记——语料库是活的。
-- 改完语料后重跑 DISTILL.md 即可得到更新版 skill（蒸馏是纯函数：语料 → skill）。
+- 改完语料先跑 `python3 -X utf8 scripts/distill_check.py teams/<team> --lint`（ID 重复、04 缺状态行、
+  引用了不存在的 ID 都在这一步抓），再重跑 DISTILL.md 得到更新版 skill（蒸馏是纯函数：语料 → skill）。
+  语料改了而 skill 没重蒸馏时，`distill_check.py` 会在 `stamp` 一项报 skill 过期。
 
 ## 本地证据源（已用于交叉验证）
 
