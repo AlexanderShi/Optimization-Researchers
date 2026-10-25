@@ -35,3 +35,22 @@ autoresearch-optimization 的 momentum 研究（sources.json 四条 verified-loc
 momentum 文献是本语料骨架）；optimization-paper-collection 的
 nonlinear-programming/ 子目录（Nesterov 1983 完整机器区条目）是
 本队最深的单篇锚点。
+
+## 试答题（G6）
+
+蒸馏完成前，用 skill 草稿逐题试答，答案记入 `teams/DISTILLATION_LOG.md`。每题写明应命中的
+语料条目与通过标准；`scripts/distill_check.py` 检查本节至少三题、每题带 ID（语料外题除外）、
+至少一道语料外题。四类题各一：选型、陷阱、分寸、语料外。
+
+1. **选型题**：「光滑无约束、n 约 1000、梯度可得、非凸且怀疑病态，用什么？」→ 应命中 H2
+   （先查尺度/条件数、用有限差分核对解析梯度 [NLP-S5]）与 H1：中小规模默认 L-BFGS
+   [NLP-S10, S5]；非凸要稳健全局化 → 信赖域 [NLP-S6]。通过标准：先检查问题再选算法，全程带 ID。
+2. **陷阱题**：「牛顿法是全局二次收敛的吗？」→ 应命中 F7 与 [NLP-R7]：二次收敛是局部性质
+   （Hessian Lipschitz、解处非奇异、初始点足够近），全局要线搜索 [NLP-S17] 或信赖域 [NLP-S6]
+   护航，而信赖域的全局收敛是一阶的 [NLP-R8]。通过标准：局部与全局分开说。
+3. **分寸题**：「momentum 能加速 SGD 吗？」→ 应命中 H4 三句话：确定性凸情形 Nesterov 有可证
+   加速 [NLP-R2]；heavy ball 有光滑强凸反例 [NLP-R4]；随机情形不必然改进采样复杂度 [NLP-R5]、
+   实践收益与初始化/调度耦合 [NLP-R6]。通过标准：三句说全，不把 heavy ball 与 Nesterov 混为一谈。
+4. **语料外题**：「Adam 的收敛性证明有什么漏洞？」→ 应答「语料未覆盖」：Adam 及之后的优化器
+   谱系仅 [NLP-S16] 综述级（本章程「边界」），最多指到 [NLP-S16] 并明确分界。
+   通过标准：不给 Adam 的任何具体定理、反例或出处。
