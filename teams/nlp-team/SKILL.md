@@ -11,7 +11,7 @@ description: |
 
 **语料契约**：本 skill 的全部事实来自
 `C:\Users\sr881\repos\Optimization-Researchers\teams\nlp-team\`
-（蒸馏日期 2026-10-09，语料版本 6e2011c）。**只说语料里有的。**
+（首次蒸馏 2026-10-09；2026-10-25 按 G1–G7 重新对账，语料版本 75ce176）。**只说语料里有的。**
 
 ## 回答工作流（最重要）
 
@@ -69,7 +69,7 @@ description: |
 ## 决策启发式
 
 - **H1 选型速查**：光滑无约束中小规模 → L-BFGS 默认强基线 [NLP-S10, S5]；
-  凸+要最优速率 → 加速梯度 [NLP-S1, S8]；非凸要稳健 → 信赖域 [NLP-S6]；
+  凸、可承受精确调参、要最优速率 → 加速梯度 [NLP-S1, S8]；非凸要稳健 → 信赖域 [NLP-S6]；
   光滑约束 NLP → 内点/SQP [NLP-S11, S5]；随机大规模 → SGD 族，momentum 按 H4
   [NLP-S16]。
 - **H2 先检查问题再怪算法**：尺度/条件数检查；解析梯度先用有限差分核对
@@ -95,6 +95,8 @@ description: |
   放弃——若函数值/梯度估计能以固定高概率达到动态调整的精度，经典 Armijo
   回溯可随机化并保留一阶方法的期望复杂度、凸情形的确定性 GD 速率
   [NLP-S23]。先问「估计能以多大概率多准」，再决定要不要放弃全局化机制。
+  （本条由 `researchers/katya-scheinberg.md` 的 ✅三重验证心智模型升格，03-heuristics 无对应编号，
+  见 DISTILL.md Phase 2 规则 4。）
 
 ## 关键结果速查
 
@@ -135,7 +137,9 @@ description: |
 
 ## 诚实边界
 
-- 语料截止：蒸馏于 2026-10-09，语料版本 6e2011c；文献主体覆盖至约 2026-07，
+- 语料截止：首次蒸馏 2026-10-09（当时语料提交 6e2011c，该 hash 已随 2026-10-23 的历史重写
+  失效，同树提交为 2c88951）；2026-10-25 按 G1–G7 重新对账，语料版本 75ce176（此后语料只
+  新增了 00-charter 的试答题，事实条目未变）；文献主体覆盖至约 2026-07，
   Duchi/Scheinberg 档案与 [NLP-S19–S23] 联网核实于 2026-10-09。
 - 语料缺口：Adam 及之后的深度学习优化器谱系（AdaGrad 本体已入库 [NLP-S19]，
   其余仅 [NLP-S16] 综述级）、非凸全局优化、整数/组合、鲁棒优化（含 DRO）、
@@ -145,6 +149,8 @@ description: |
   收敛的精确表达式需查原文；[NLP-S21] 期刊版出处未核实。
 - 验证层级：cited / model-knowledge 结论写进论文前需核对元数据；
   verified-local 四条 momentum 文献带 URL 可直接引用。
+- 声明抽审（G7）：2026-10-25 抽 20 条，supported 19 · partial 1（H1 加速梯度一条少了
+  「可承受精确调参」，已按 03 收窄并复判 supported）· unsupported 0，见 `teams/nlp-team/CLAIM-AUDIT.md`。
 - 本 skill 不替代读原文；职责是把你引到正确的原文并防止编造。
 
 ## 来源索引
@@ -179,4 +185,5 @@ Bertsekas 教材
 本地工件：[NLP-L1] _EXTRACT.md 锚点规范 · [NLP-L2] momentum 实验（探索性）
 
 ---
-> 由 Optimization-Researchers 语料库蒸馏（DISTILL.md 协议），质量门 G1–G6 已通过。
+> 由 Optimization-Researchers 语料库蒸馏（DISTILL.md 协议），质量门 G1–G7 已通过
+> （2026-10-25：`scripts/distill_check.py` 0 ✗；`scripts/distill_audit.py` 20 条 unsupported 0）。

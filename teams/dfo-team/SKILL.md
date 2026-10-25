@@ -11,7 +11,7 @@ description: |
 
 **语料契约**：本 skill 的全部事实来自
 `C:\Users\sr881\repos\Optimization-Researchers\teams\dfo-team\`
-（蒸馏日期 2026-10-09，语料版本 6e2011c）。**只说语料里有的。**
+（首次蒸馏 2026-10-09；2026-10-25 按 G1–G7 重新对账，语料版本 75ce176）。**只说语料里有的。**
 
 ## 回答工作流（最重要）
 
@@ -103,7 +103,7 @@ description: |
 1. **F1** 编造 Powell 方法 venue：BOBYQA 是 DAMTP 技术报告 2009/NA06
    **非期刊论文**；Powell 谱系引用照抄语料，不补 venue 细节 [DFO-S15]。
 2. **F2** 给 NM 安收敛定理：不存在「NM 一般收敛定理」，只有 McKinnon 反例
-   [DFO-S10]。
+   [DFO-S10]（正面结果仅 [DFO-S11] 的受限情形）。
 3. **F3** 吞维度因子：把 ZO 说成一阶速率、把迭代数当评估数都算吞 [DFO-R1]。
 4. **F4** 混用噪声模型：确定性/有界/随机噪声保证互不迁移 [DFO-S3, S22]。
 5. **F5** 不声明评估计费口径：(d+1) 口径改变排名 [DFO-L1]，无口径的对比无效。
@@ -115,7 +115,9 @@ description: |
 
 ## 诚实边界
 
-- 语料截止：蒸馏于 2026-10-09，语料版本 6e2011c；文献主体覆盖至约 2026-07
+- 语料截止：首次蒸馏 2026-10-09（当时语料提交 6e2011c，该 hash 已随 2026-10-23 的历史重写
+  失效，同树提交为 2c88951）；2026-10-25 按 G1–G7 重新对账，语料版本 75ce176（此后语料只
+  新增了 00-charter 的试答题，事实条目未变）；文献主体覆盖至约 2026-07
   （verified-local 工件 sources.json 采集于 2026-07-24）；Duchi/Scheinberg
   档案与 [DFO-S21, S23, S24] 联网核实于 2026-10-09。
 - 研究者档案仅基于论文摘要与 Scholar 页（未读全文）：√d 因子的精确常数、
@@ -123,6 +125,8 @@ description: |
 - 语料缺口：贝叶斯优化、离散/组合黑盒、多目标 DFO、具体软件包工程细节。
 - 验证层级：标 cited / model-knowledge 的结论写进论文前需核对元数据；
   verified-local 的带 DOI/URL 可直接引用（见来源索引）。
+- 声明抽审（G7）：2026-10-25 抽 20 条，supported 20 · partial 0 · unsupported 0，
+  见 `teams/dfo-team/CLAIM-AUDIT.md`。
 - 本 skill 不替代读原文；职责是把你引到正确的原文并防止编造。
 
 ## 来源索引
@@ -158,4 +162,5 @@ Katya Scheinberg（Georgia Tech，模型型学派随机模型支线：概率质�
 本地工件：[DFO-L1] autoresearch 审计 2026-07-25 · [DFO-L2] momentum-vs-DFO 实验
 
 ---
-> 由 Optimization-Researchers 语料库蒸馏（DISTILL.md 协议），质量门 G1–G6 已通过。
+> 由 Optimization-Researchers 语料库蒸馏（DISTILL.md 协议），质量门 G1–G7 已通过
+> （2026-10-25：`scripts/distill_check.py` 0 ✗；`scripts/distill_audit.py` 20 条 unsupported 0）。
