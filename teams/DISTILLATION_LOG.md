@@ -1,5 +1,76 @@
 # 蒸馏记录
 
+## 2026-10-25 (13) · 语料流水线质量门机械化（G1–G7）+ 两队 skill 重新对账
+
+- 用户请求：「强化一下Optimization researchers里知识蒸馏的技能」。理解为强化蒸馏**技能本身**（协议、质量门、
+  路由 skill），不是某位研究者的档位。分支 `distill-gates`（独立 worktree，主 checkout 停在 `minlp-team`），
+  fast-forward 合入 `main`
+- 缺口：DISTILL.md 的 G1–G6 自 2026-10-09 起全靠蒸馏 agent 口头「扫描」「grep 核对」，六次蒸馏没有一条结果能被
+  第三方复跑；team-kit 线 2026-10-10 补了 `check_citations.py` / `audit_claims.py` 之后，语料线成了仓库里唯一没有
+  机械闸门的产物线。运行教训（分支、用量窗口、Windows、Scholar 登录、OCR）只存在于各条 LOG 和会话记忆里
+- 新增（协议见 `standards/distill-gates.md`）：
+  - `scripts/distill_check.py teams/<team>`：语料 lint（前缀、重复 ID、01 的层级小节、04 的结论/状态/假设/层级行、
+    02 的共识/分歧小节、语料内 ID 闭包、裸 ID、档案三重验证）+ G1 ID 闭包（跨队 ID 到对方语料解析）与承重条目
+    无 ID 提示 + G2（作者, 年份）闭包（同一 canon 行须含年份与全部姓氏，折叠重音）+ G3 结果表结构与语料外数字 +
+    G4 诚实边界四项、两处 hash 一致、**语料版本戳核对**（是本仓库提交、在当前历史上、语料自此未变、工作区干净）+
+    G5 F/R/H 逐条覆盖与未引用的 S/L + G6 试答题小节 + `--installed` 安装漂移。✗ 退出码 1，⚠ 要人看
+  - `scripts/distill_audit.py teams/<team> --sample / --report`：G7 声明→语料抽审。抽承重部分带 ID 的声明，配上所引
+    ID 的定义（01 行 / 04 整节 / 03、05 整节）与 00–05、researchers/ 里提到它的每个条目，写成审计包 JSON + .md；
+    零上下文 agent 判定 supported / partial / unsupported / uncheckable；报告追加到 `teams/<team>/CLAIM-AUDIT.md`，
+    unsupported > 0 退出码 1。与 kit 的 `audit_claims.py` 同一套判定与铁律（写手 ≠ 审计员）
+  - 试答题进语料：`teams/<team>/00-charter.md` 新增「试答题（G6）」小节，四类各一（选型、陷阱、分寸、**语料外**），
+    每题标明应命中的 ID 与通过标准。此前 DISTILL.md 硬编码三题、两队共用、没有语料外题（G6 要求「如实说未覆盖」
+    却从没测过）；MINLP 立队时已经要另拟题
+  - `RUNBOOK.md`：两条流水线共用的运行纪律（分支/worktree、用量窗口与中断、Windows、team-kit 常见坑、语料线、
+    完成后），全部来自第 (8)–(12) 条的实跑教训
+  - DISTILL.md：Phase 0 加 `--lint` 前提与 distill-gates 必读；Phase 2 规则 4 写明升格启发式的编号与 ⚠；Phase 3 规定
+    语料版本戳 = 语料最后一次改动的提交、两处一致；Phase 4 每道门标出脚本管的部分与人管的部分，G6 改读 00-charter
+    的题，新增 G7；Phase 5 修正安装路径（`skills/` 目录 2026-10-09 已取消，命令却一直没改）并加 `--installed`
+  - `standards/skill-template.md` 诚实边界加 G7 一行、页脚改 G1–G7；README、TEAM-KIT.md（对照表、本地修改表注明
+    两个脚本不是 kit 文件）、项目级 skill（升档问档位、协议维护一行、闸门命令、RUNBOOK 指针）同步
+- 首跑抓到的真问题：两份 SKILL.md 的语料版本 `6e2011c` **不在 main 的历史上**——2026-10-23 删署名重写历史后，
+  该 hash 只靠 `refs/original/` 备份存活，同树提交为 `2c88951`；六次人工 G4 都没发现。处理：先提交试答题（语料提交
+  `75ce176`），两队 SKILL.md 改戳 `75ce176`（事实条目未变，诚实边界写明来龙去脉），不重蒸馏
+- 负向测试：复制 dfo-team 到 scratch、注入 11 处缺陷（不存在的 ID、跨队不存在的 ID、裸 ID、语料外作者-年份、语料外
+  常数、删一条 F、删一行 R、头部与边界 hash 不一致、04 重复定义、状态行无 proved/cited、05 引不存在的 L），
+  `distill_check.py` 11/11 抓到（10 ✗ + 1 ⚠）
+- 两队全量结果：0 ✗ · 13 ⚠。⚠ 的处理：
+  - `lint result-fields 缺 **假设**`（DFO R5/R7/R8/R9、NLP R5/R6）：语料 04 这几条本来就没写假设行（反例、差分区间、
+    SMTP、profiles、momentum 实践面）。**留着**：补假设要读原文，不能从记忆补（grounding 第 1 节）；下次语料维护时
+    按原文补或写 `(unanchored)`
+  - `G3 result-row 假设列只有 —`（DFO R5/R8/R9、NLP R6）：同上，反例/工具/实证类结果，可接受
+  - `G1 unknown-label H9`（NLP）：H9 是 Scheinberg 档案 ✅心智模型升格的启发式（第 (4) 条），03 无对应编号。
+    SKILL.md 该条已加注出处；更稳的做法是把它写进 03-heuristics，留给下次语料维护
+  - `install`：安装副本旧于仓库，Phase 5 重新复制后消失
+- G6 试答（用两份 SKILL.md 逐题作答，核对命中）：
+  - DFO 1 选型：先问噪声类型（H1）；噪声主导先 ECNoise 估噪声再定差分区间 [DFO-S22, S3]（H4）；低维、评估贵、底层光滑 →
+    模型型信赖域 [DFO-S2, S16]；带噪不用无噪设计的固定小 h [DFO-S3]；评估次数计费并声明 (d+1) 口径 [DFO-L1]（H2）；
+    对比用双 profiles [DFO-S2, S8]（H3）——命中 ✓
+  - DFO 2 陷阱：无一般收敛保证，McKinnon 反例 [DFO-S10]、[DFO-R5]；正面结果仅受限情形 [DFO-S11]；正式对比配 MADS 或
+    模型型方法（H5，[DFO-S14]）；F2 ——命中 ✓，无编造定理
+  - DFO 3 分寸：两点估计相对随机梯度至多 √d 因子、单点高斯平滑 O(n) 级、信息论下界证 sharp [DFO-R1; DFO-S21, S20]，
+    常数查原文（F7）；SMTP 收敛性已证 [DFO-R8; DFO-S5]，「数量级改进」语料无定论（流派对比分歧 4，[DFO-L2] 在研）——
+    两处「无定论」如实说 ✓
+  - DFO 4 语料外：BO 核函数——「语料未覆盖」（F8、00-charter 边界、诚实边界缺口），只说 BO 是独立流派 ✓
+  - NLP 1 选型：先 H2（尺度/条件数、有限差分核对解析梯度 [NLP-S5]，带噪区间见 [DFO-R7]）；中小规模 L-BFGS 默认基线
+    [NLP-S10, S5]；非凸要稳健 → 信赖域 [NLP-S6]；病态先预条件 [NLP-S5]——命中 H1/H2 ✓
+  - NLP 2 陷阱：不是全局；二次收敛是局部性质（Hessian Lipschitz、解处非奇异、初始点近）[NLP-R7; NLP-S5]；全局要线搜索
+    [NLP-S17] 或信赖域 [NLP-S6]；信赖域的全局收敛是一阶 lim‖∇f‖=0 [NLP-R8]；F7 ——局部/全局分开 ✓
+  - NLP 3 分寸：H4 三句——确定性凸 Nesterov O(1/k²) 可证加速 [NLP-R2; NLP-S1, S13]；heavy ball 二次局部加速、光滑强凸
+    反例 [NLP-R4; NLP-S14, S7]；随机不必然改进采样复杂度 [NLP-R5; NLP-S3, S4]、收益与初始化/调度耦合 [NLP-R6; NLP-S2]；
+    不混同 heavy ball 与 Nesterov（F2）✓
+  - NLP 4 语料外：Adam 收敛证明——「语料未覆盖」，Adam 及之后仅 [NLP-S16] 综述级（00-charter 边界），不给定理/反例/出处 ✓
+- G7 抽审（各 20 条，seed 1；审计员 = 只读审计包的独立子 agent，与写手分离）：
+  - dfo-team：pool 53，**20 supported / 0 / 0 / 0**。审计员记了三处「忠于语料但语料本身可再斟酌」：流派表 Duchi 一格把
+    [DFO-S23]（随机平滑）与 [DFO-S21] 并列在「两点+下界」后（02-schools 流派表原样如此）；F2 的 skill 版漏了「正面结果仅
+    [DFO-S11] 受限情形」的括注——已补回；F4「三种噪声模型互不迁移」是 05 自己的综合、[DFO-S3, S22] 是噪声处理文献。
+    另发现语料内不一致：fixed-budget/fixed-target 在 02 归 [DFO-S2 content]、在 03 H3 归 [DFO-S8]，skill 两处都引，留给语料维护
+  - nlp-team：pool 67，**19 supported / 1 partial / 0 / 0**。partial：H1「凸+要最优速率 → 加速梯度」漏了 03 H1 的
+    「可承受精确调参」——按 03 收窄为「凸、可承受精确调参、要最优速率」，同一审计员复判 supported（CLAIM-AUDIT.md 有 follow-up）
+- 提交：`97a1f64` 闸门与文档 → `75ce176` 语料试答题 → skills 改戳 + 抽审报告 → 本条
+- 成本：子 agent 约 37 万 token（两次抽审各 12–13 万，复判 1 万）；主会话内完成脚本、文档与试答
+- 执行模型：claude-fable-5-1
+
 ## 2026-10-17 (12) · Jorge Nocedal 深读档（nonlinear-team 第二位深读成员）
 
 - 用户请求：「加强nonlinear team nocedal的蒸馏」，选完整深读档（T3.1–T3.8）。分支 `nocedal-deep-read`（独立 worktree）。
