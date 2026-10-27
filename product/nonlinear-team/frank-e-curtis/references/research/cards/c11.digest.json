@@ -1,0 +1,91 @@
+[
+  {
+    "id": "S011",
+    "year": "2017",
+    "title": "Optimization methods for supervised machine learning: From linear models to deep learning",
+    "read_level": "full",
+    "contribution": "An INFORMS tutorial that derives supervised-learning optimization problems from the prediction goal (indicator -> surrogate loss -> empirical risk -> regularized risk) and walks GD, SGD, momentum, variance reduction, stochastic quasi-Newton and Hessian-free / subsampled-Hessian methods from convex logistic regression to deep networks, naming the open questions (arXiv v1 read).",
+    "problem_entry": "Community gap: terminology and goal barriers between statistics, CS and OR 'have led to duplications of efforts'; aim is a translation for optimizers who are new to ML (p. 1).",
+    "key_idea": "One chain of named approximations from max probability of correct prediction to the regularized empirical-risk problem (pp. 3-7), then a fixed ladder of methods described by what changes in the step and what it costs per iteration (pp. 8-22).",
+    "assumptions": "Strong convexity / L-smoothness or convexity for rates (pp. 8-10); sampling indefinitely from P for the SGD-superiority argument, flagged as failing for fixed data (pp. 10-11); two-sided bounds on E[B_k^-1 g_k] for stochastic quasi-Newton (p. 15); nonconvex DNN training (pp. 18-19).",
+    "proof_devices": [
+      "error decomposition (9) with learning bound (10), reused as an error-budget split (17)-(18) giving SGD's theoretical edge for large n (pp. 6, 10)",
+      "unbounded-ray argument that regularization is needed for a minimizer of (12) (p. 8)",
+      "VC-dimension illustration with 3 points and 8 labelings (pp. 6-7)",
+      "unbiasedness check for SVRG (19) and its loss for SARAH (20) (p. 12)",
+      "complexity tables for GD/SGD/SVRG/SAGA/SARAH (Tables 2-3, p. 13)",
+      "Dennis-More condition and s_k^T y_k > 0 as the crux of BFGS superlinear convergence (p. 14)",
+      "Gauss-Newton matrix equals the Hessian only at zero loss (pp. 20-21)",
+      "random-model framework: sample size tied to trust-region radius (pp. 21-22)"
+    ],
+    "experiments": "none (cites a DNN trust-region-CG comparison [88], p. 21, and the random-label overfitting result [90], p. 20)",
+    "positioning": "Builds on Bottou-Curtis-Nocedal [11] and Bousquet-Bottou [12] for SG theory (p. 10), the Scheinberg-side random-model line [3, 15, 16, 34] (pp. 21-22), and lists Curtis's own self-correcting stochastic BFGS [19] neutrally among four variants (p. 15).",
+    "writing": "Glossary with an 'a.k.a.' column (p. 2), running business example (pp. 2-3), boxed algorithms (pp. 11-14); theoretical claims immediately undercut by practical caveats (pp. 10-11); open questions named plainly (pp. 19-20); no conclusion section (p. 22).",
+    "limits_future": "Exposition only, no experiments; open: guarantees for stochastic momentum (p. 11), second-order methods with provable practical gains (p. 15), avoiding saddle points / poor minimizers in DNN training (p. 20), more experiments on negative-curvature trust-region methods (p. 21).",
+    "method_links": [
+      {"method": "Method 4", "relation": "evidence", "note": "SGD's complexity advantage is stated, then demoted because its sampling assumption fails for fixed data; learning bounds called not useful for DNNs; no proof yet reflects second-order practical gains.", "pages": "pp. 10-11, 15, 20"},
+      {"method": "Method 1", "relation": "variant", "note": "In random-model trust-region methods the sampled-oracle accuracy (|S_k|) is dictated by the trust-region radius; inexactness is in the oracle, not an iterative linear solver, and the line is credited to Scheinberg-side papers.", "pages": "pp. 21-22"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "error-budget split", "evidence": "Total error split into estimation and optimization halves (eps-hat <= eps/2); methods compared by the cost to reach the optimization half.", "pages": "p. 10"},
+      {"pattern": "curvature-pair hygiene in stochastic quasi-Newton", "evidence": "Four variants each redefine y_k (same mini-batch, overlapping batches, damping, sampled-Hessian product) to keep s_k^T y_k bounded away from zero.", "pages": "p. 15"}
+    ],
+    "transferable": [
+      "Derive the optimization problem from the application goal through named approximations, each with its reason (pp. 3-7).",
+      "Use the estimation-plus-optimization error budget (17)-(18) to compare stochastic and deterministic methods, then state which assumption it needs and when it fails (pp. 10-11).",
+      "Survey variants of one method by the single quantity each redefines (y_k) and the failure mode that motivated it (pp. 14-15).",
+      "Open a cross-community tutorial with a glossary table that has an 'a.k.a.' column (p. 2)."
+    ],
+    "coauthors": "Katya Scheinberg",
+    "quotes": [
+      {"text": "From this discussion, we can conclude that, at least in theory, SGD is a superior algorithm for large-scale (i.e., large n) ML applications.", "page": 10},
+      {"text": "Unfortunately, despite practical improvements that have been observed, there has yet to be a practical second-order method that provably achieves such improvements in theory.", "page": 15}
+    ]
+  },
+  {
+    "id": "S039",
+    "year": "2017",
+    "title": "An interior-point trust-funnel algorithm for nonlinear optimization",
+    "read_level": "full",
+    "contribution": "Extends Gould-Toint's penalty-free, filter-free trust-funnel method to inequality constraints inside a barrier (interior-point) framework with matrix-free inexact normal/tangential steps gated by criticality measures, and proves finite termination for each barrier subproblem and a KKT limit point for the outer barrier loop (TR version NAXYS-02-2014 read).",
+    "problem_entry": "Composing trust-funnel SQP with barrier-SQP naively may leave convergence 'elusive' because the funnel method lacks mechanisms to avoid the boundary; large-scale effectiveness of second-derivative SQP unconfirmed (p. 4).",
+    "key_idea": "Shrinking funnel bound on violation replaces merit/filter; scaled trust regions plus fraction-to-the-boundary keep iterates interior; criticality measures decide whether to compute normal step, multipliers and tangential step; iterations typed y/f/v (pp. 5-14).",
+    "assumptions": "C2 functions (p. 4); compact iterates (p. 21); iterative solver converges if run forever (p. 18); full-rank scaled Jacobian at limit points and a uniform singular-value bound near feasibility (pp. 30, 32); condition (2.27) admitted as imposed for the proof (p. 9).",
+    "proof_devices": [
+      "Cauchy decrease along a scaled steepest-descent ray using a cited 1-D quadratic bound [3, Lemma 1] (Lemmas 2.3, 2.6, pp. 17-20)",
+      "eleven-part index-set bookkeeping lemma (Lemma 2.1, pp. 15-16)",
+      "funnel monotonicity by induction (Lemma 2.4, p. 18)",
+      "finite termination of the iterative multiplier solve by limit-point contradiction (Lemmas 2.5, 2.8, pp. 18-19, 21)",
+      "small radius implies successful iteration and radius lower bounds by induction (Lemmas 3.8, 3.10, pp. 25-26)",
+      "contradiction: a v-iteration would satisfy all f-iteration conditions, contradicting V and F disjoint (Lemma 3.6 p. 24; Lemma 3.24 pp. 36-37; Theorem 3.27 pp. 38-40)",
+      "case split on cardinality of successful iteration sets (Theorem 3.11 pp. 26-27; Theorem 3.28 p. 41)",
+      "outer loop: tolerances proportional to mu and capped barrier Hessian to recover complementarity and y >= 0 (Theorem 4.1, pp. 42-43)"
+    ],
+    "experiments": "none; implementation for GALAHAD announced as in progress (p. 44)",
+    "positioning": "Extends Gould-Toint trust-funnel [24, 23]; barrier-SQP of Byrd et al. [3, 4]; scaling as in [3, 6] (Curtis-Schenk-Waechter); iteration typing in the spirit of filter-SQP [9, 10, 11] but with no merit function or filter (pp. 3-4, 11).",
+    "writing": "Five enumerated features in the abstract (p. 3); each condition followed by a sentence on its role (pp. 10-11); guide lemma of basic facts before analysis (p. 15); mu-dependent constants tabulated (p. 42); more than twenty user constants (p. 14); conclusion restates theorems (p. 43).",
+    "limits_future": "No implementation or experiments, no local rate (p. 44); equality constraints only remarked (pp. 43-44); relies on uniform singular-value assumption near feasibility (p. 32); many constants without guidance (p. 14); future: GALAHAD implementation (p. 44).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "Subproblem accuracy is defined by what the funnel/trust-region acceptance needs (Cauchy decrease, range-space condition, stopping tests (2.26a-c) for the iterative multiplier solve); very relaxed steps exist because null-space steps are unreasonable matrix-free.", "pages": "pp. 7, 9-10, 18-19"},
+      {"method": "Method 2", "relation": "variant", "note": "One algorithm moves between barrier decrease (f-iterations) and violation decrease (v-iterations) without restoration and returns infeasible stationary points from the same loop; the steered object is the funnel bound, not a penalty parameter.", "pages": "pp. 6, 11-14, 42"},
+      {"method": "Method 5", "relation": "contradiction", "note": "No comparison of any kind; solver design published with implementation still pending.", "pages": "p. 44"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "criticality-gated computation", "evidence": "Feasibility vs optimality criticality measures decide each iteration whether a normal step, multipliers or a tangential step are computed at all.", "pages": "pp. 6, 8-9"},
+      {"pattern": "iteration typing as proof scaffold", "evidence": "Disjoint y/f/v iteration types with own update rules; convergence proved by showing a V iteration would meet all F conditions.", "pages": "pp. 15-16, 24, 38-40"}
+    ],
+    "transferable": [
+      "Move an equality-constrained method into an interior-point setting by adding a slack-scaled trust region with P_k = diag(I, S_k) and fraction-to-the-boundary constraints to every subproblem, scaling the criticality measures the same way (pp. 6, 8-9).",
+      "Use a slack reset that can only lower violation and barrier value so c(x, s) >= 0 holds at each iteration start (p. 5; Lemma 2.2, p. 17).",
+      "Require only Cauchy decrease plus a Krylov-compatible range-space condition so any matrix-free solver qualifies (p. 7).",
+      "Gate expensive sub-computations by cheap criticality comparisons (p. 6, p. 8).",
+      "Tie inner tolerances to the barrier parameter (eps <= zeta*mu) and cap the barrier Hessian diagonal for the outer limit (p. 41; pp. 42-43).",
+      "Prove an iteration-type algorithm convergent by contradiction on the disjointness of the types (pp. 24, 38-40)."
+    ],
+    "coauthors": "Nicholas I. M. Gould, Daniel P. Robinson, Philippe L. Toint",
+    "quotes": [
+      {"text": "It is not necessarily prudent to compute a normal step in every iteration.", "page": 6},
+      {"text": "The algorithm is extremely flexible in that, during each iteration, it automatically determines the types of steps and updates that are expected to be most productive, where potential productivity is determined by available criticality measures.", "page": 43}
+    ]
+  }
+]

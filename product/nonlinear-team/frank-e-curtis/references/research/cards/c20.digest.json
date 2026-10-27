@@ -1,0 +1,270 @@
+[
+ {
+  "id": "S053",
+  "year": "2022",
+  "title": "A subspace acceleration method for minimization involving a group sparsity-inducing regularizer",
+  "read_level": "full",
+  "contribution": "FaRSA-Group: a reduced-space method for convex f plus a nonoverlapping group-l2 regularizer that uses proximal-gradient steps to predict the support and run Newton-CG on the predicted free groups, with O(eps^-(1+p)) / O(eps^-(2+p)) worst-case complexity and local superlinear convergence; read as arXiv:2007.14951v1 (cite [S053 arXiv pp. ...]).",
+  "problem_entry": "l1 fails when covariates come in groups (ANOVA dummy variables, p. 2); existing methods use prescribed decompositions, no second-order information, or lack support-identification guarantees (p. 3).",
+  "key_idea": "PG step as support oracle and optimality measure; compare chi_pg and chi_cg to choose a PG line search on I_pg or a reduced-space Newton-CG step on I_cg, with a projected search that zeroes a group when its ray enters a ball of radius rho_bar (pp. 5-9).",
+  "assumptions": "f convex, C1, Lipschitz gradient and bounded gradient on the level set (Assumption 1.1, p. 4; intro says C2, p. 2); H_k bounded and uniformly PD (p. 10); local: strong convexity, Lipschitz Hessian, nondegeneracy ||[grad f(x*)]_Gi|| < lambda_i (p. 18).",
+  "proof_devices": [
+   "per-iteration-type decrease lemmas over K_pg->, K_pg-down, K_cg_0, K_cg_sd (pp. 10-16)",
+   "distance-from-zero gate rho_k,i (eq. 11) gives a local Lipschitz constant L + lambda_max/rho_k,min along the path via nonexpansive projection onto a ball (Lemma 4.5, pp. 12-13)",
+   "two-case step-length lower bound (ball-hitting tau_k or Armijo) giving decrease min{c1 chi^(1+p), c2 chi^(2+p)} (Lemma 4.6, pp. 13-16)",
+   "big/small split at c1/c2 plus a combinatorial count of new-zero iterations (at most n_G between others) (Theorem 4.1, pp. 16-17)",
+   "support-identification chain Lemmas 4.8-4.11 then inexact-Newton theory of Dembo-Eisenstat-Steihaug (Theorem 4.3, pp. 18-20)",
+   "Lemma 2.4 (PG step bounded by group gradient) by case analysis and Cauchy-Schwarz (Appendix A, pp. 25-26)"
+  ],
+  "experiments": "Python code vs gglasso (defaults, same x0) on 200 group-logistic-regression instances from 25 LIBSVM sets (sets excluded by gglasso memory), 1000 s limit: failures 2 vs 7; faster on 93 of 109 instances with >= 1 s; objective wins 153 vs 35 and sparsity wins 33 vs 8 on all 200 (pp. 21-24).",
+  "positioning": "Extends the authors' FaRSA for l1 ([5],[6]); criticizes rivals by design deficits (prescribed decomposition, no support guarantee) and cites FaRSA's earlier win over the orthant-based method (p. 3).",
+  "writing": "Abstract names three ingredients and three theorems, calls experiments 'Preliminary' (p. 2); candid that complexity is worse than PG but covers it with an unsourced general claim (p. 17); no limitations paragraph (p. 24).",
+  "limits_future": "Stated: worse complexity exponent (p. 17), practical step-size update (47) not covered by the analysis (p. 22); unstated: convex f, nonoverlapping groups, logistic loss only, one baseline; no future work (p. 24).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Places its own worse-than-PG complexity beside better practical performance and lets experiments carry the claim; rhetoric leans on an unsourced general claim instead of auditing the measure.",
+    "pages": "p. 17; p. 24"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "CG termination conditions derived from analysis needs: (13)-(14) for complexity, (15) only for the local rate; implementation adds caps aimed at line-search cost. Unconstrained composite setting, no merit parameter.",
+    "pages": "pp. 6, 8, 21"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Single external rival at default settings and same x0; data sets cut to the rival's memory limit; no in-framework ablation; CPU profile filtered to instances where some code took >= 1 s (symmetric outcome filter, Heuristic 7) with full-set counts for objective and sparsity; Python vs R package timed without comment (against Heuristic 6).",
+    "pages": "pp. 21-24"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "first-order step as active-set oracle",
+    "evidence": "PG step predicts the support and defines the optimality measure; second-order work only on the predicted free subspace, chosen by comparing the measure's two components.",
+    "pages": "pp. 5-6, 8"
+   }
+  ],
+  "transferable": [
+   "Gate Newton work on groups a computable distance from zero so the nonsmooth term is Lipschitz-smooth along the step; cap the step where a group's ray enters the ball (pp. 9, 12-13).",
+   "Make a safeguard threshold a power p of the optimality measure so the complexity exponent exposes p, and say how to shrink it (pp. 5-6, 17).",
+   "Count structure-changing iterations (new zero groups) by a finite combinatorial budget instead of a decrease bound (p. 17).",
+   "When the practical parameter update differs from the analysed one, say so and sketch the modification that would cover it (p. 22).",
+   "Fix win criteria per axis (time; objective within 1e-8; zero-group dominance) and report counts on the filtered subset and on the full set (p. 24)."
+  ],
+  "coauthors": "Yutong Dai, Daniel P. Robinson",
+  "quotes": [
+   {
+    "text": "However, as is typical with well-designed second-derivative methods, although the complexity bound is worse, it typically performs better (see Section 5).",
+    "page": 17
+   },
+   {
+    "text": "Although this PG parameter update strategy worked better than the basic strategy in Algorithm 1 (see Line 19 and Line 21), it is not covered by our analysis in Section 4.",
+    "page": 22
+   }
+  ]
+ },
+ {
+  "id": "S065",
+  "year": "2022",
+  "title": "Gradient sampling methods with inexact subproblem solutions and gradient aggregation",
+  "read_level": "full",
+  "contribution": "Gradient sampling with inexact QP solves (primal-dual gap and dual-progress stopping tests) and bundle-style gradient aggregation, both proved to keep GS convergence with probability one, and shown in NonOpt to cut QP iterations by up to about 97%; read as arXiv:2005.07822v2 (cite [S065 arXiv pp. ...]).",
+  "problem_entry": "The QP is the most expensive part of GS and every prior GS analysis requires exact QP solves; Maleknia-Shamsi still needs exact QPs near stationarity (pp. 2-3).",
+  "key_idea": "Stop the QP solver when a duality-gap test (12) or a dual-progress test (13) plus a descent test (11) holds; both imply ||Gy||_W <= (1+sigma_k)||Gy*||_W without knowing y*, which a generalized acute-angle lemma turns into the old GS proof; after null steps aggregate old gradients into G_k y_k (pp. 7-10, 15-16).",
+  "assumptions": "f bounded below, locally Lipschitz, C1 on an open full-measure set D (Assumption 1.1, p. 4); QP iterates primal-dual feasible and convergent (Assumption 2.1, p. 6); implementation assumes x_k + alpha_k d_k in D (p. 17).",
+  "proof_devices": [
+   "weak-duality chains turning the stopping tests into relation (18) (Lemmas 2.3-2.4, pp. 9-10)",
+   "Lemma 2.2: acute-angle lemma generalized from the exact W-projection to a (1+s)-neighbourhood of it (p. 7)",
+   "self-correcting BFGS: eigenvalue bounds on a fraction chi of iterations (Lemma 2.5 and eq. 24, p. 11; used p. 13)",
+   "Caratheodory-based nonempty open set of good sample sets (Lemma 2.8, pp. 12-13)",
+   "probability-zero argument: the iteration would need samples to miss an open set infinitely often, with Lebourg's mean value theorem (Theorem 2.1, pp. 13-15)",
+   "dual-feasibility lifting lemma for aggregated QPs (Lemma 3.1, p. 16; Theorem 3.1, pp. 16-17)"
+  ],
+  "experiments": "NonOpt (C++), fixed parameters (Table 1); GS-exact (QP to 1e-10) vs GS-inexact vs GS-inexact-agg on 15 convex max-type problems with known x* = 0, 10 runs averaged, QP iterations as effort proxy (CPU rejected): -89.5% to +1.4% and -4.1% to -96.9%; vs LMBM on 20 problems LMBM is tuned for, time-matched to LMBM's 10-run average, mixed final objective values (pp. 17-21).",
+  "positioning": "Differs from [31] in two named respects (generic inexactness, inexactness near stationarity too); borrows aggregation from bundle methods (Kiwiel) with a probabilistic analysis; extensions declared out of scope (p. 3).",
+  "writing": "Parallel two-part abstract (inexactness; aggregation), each with 'without the loss of theoretical convergence guarantees' and 'Numerical experiments show' (p. 2); only new components in the body, the rest in an online companion (pp. 5, 23); hedged unexpected findings (pp. 19-20); four-sentence conclusion (p. 21).",
+  "limits_future": "No limits written as such; from the text: no rate or complexity, convex synthetic test set, proxy effort measure (p. 19), one instance worse (+1.39%, p. 19), LMBM ahead on several problems (p. 21); no future work (p. 21).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "QP stopping tests (12)-(13) built to give exactly relation (18) that Lemma 2.2 and the GS proof need; test cost limited by periodic checking (Heuristic 2).",
+    "pages": "pp. 7-10, 17-18"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "GS-exact = same code with only the QP tolerance changed; aggregation arm isolates one component; external rival on its tuned test set, time-matched, 10 runs averaged, rival's wins printed.",
+    "pages": "pp. 17, 20-21"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Justifies its measure (QP iterations, a 'rough proxy') and the rejection of CPU time, and declines cross-code count comparisons; measure hygiene rather than a critique of a community yardstick (Heuristic 6 evidence).",
+    "pages": "pp. 19, 21"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "known-answer controlled test problems",
+    "evidence": "Convex instances with x* = 0, f* = 0 and a structural dial m_A, so results are not skewed by different local minimizers.",
+    "pages": "p. 18"
+   },
+   {
+    "pattern": "inexactness as an enabler",
+    "evidence": "Gradient aggregation is only admissible once inexact subproblem solves are allowed.",
+    "pages": "p. 15"
+   }
+  ],
+  "transferable": [
+   "Use a primal-dual QP solver so each inner iterate yields a duality gap and a primal-feasible direction, and stop on gap- or progress-relative tests that imply a bound relative to the unknown optimum (pp. 5-10).",
+   "Generalize the key geometric lemma from 'exact projection' to 'within a factor of the projection' to carry inexactness through an existing proof (Lemma 2.2, p. 7).",
+   "When aggregating pieces of a subproblem, prove a feasibility-lifting lemma so old lemmas apply unchanged (Lemma 3.1, p. 16).",
+   "Check costly stopping tests only periodically and report it (pp. 17-18).",
+   "Build convex test problems with a known minimizer and a tunable structural parameter to isolate the algorithmic change (p. 18).",
+   "Against an external code with different stopping logic, cap your time at the rival's average time, average over runs, and compare only final objective values (pp. 20-21)."
+  ],
+  "coauthors": "Minhan Li",
+  "quotes": [
+   {
+    "text": "(By employing convex, as opposed to nonconvex test problems, we can be sure that the results of our experiments are not skewed by two algorithms converging to different local minimizers and other related circumstances.)",
+    "page": 18
+   },
+   {
+    "text": "That said, we found it to be the best measure for comparison, as opposed to CPU time which can vary despite the algorithm being run with the same initial conditions, random number generator seeds, and so on.",
+    "page": 19
+   }
+  ]
+ },
+ {
+  "id": "S094",
+  "year": "2022",
+  "title": "Hybrid Interior-Point/Active-Set SCOPF Algorithms Exploiting Power System Characteristics",
+  "read_level": "full",
+  "contribution": "Final ARPA-E grant report (Curtis PI) on team GO-SNIP's Ipopt-based decomposition for security-constrained AC OPF in the GO Competition (2nd of 27 in Challenge 1), stating which planned components (active-set/SQP, crossover, inexact solves, transmission switching) were dropped and why.",
+  "problem_entry": "Application-driven: AC OPF with contingencies under 5-10 minute operator limits, replacing industry linearizations; problem, scoring and hardware set by the ARPA-E GO Competition (p. 3).",
+  "key_idea": "Ipopt inside an iterative decomposition: preprocess degeneracies and redundant contingencies, solve base case, screen contingencies fast then fully, grow a master problem with selected contingencies in parallel, and always keep the best-known output (pp. 4-5, 7).",
+  "assumptions": "n/a (no theorems; models provided by the competition organizers, p. 6).",
+  "proof_devices": [],
+  "experiments": "External, organizer-run on common hardware: Challenge 1 2nd of 27, best on 20% of problems, best or second-best on 53%, top ten on >99%; Challenge 2 6th and 7th within four divisions among 16 teams, 107/480 best and 132/480 second-best scores (pp. 3-4).",
+  "positioning": "Against industrial linearized approximations (p. 3); no scholarly citations.",
+  "writing": "Grant template, task by task with 'Actual Performance'; dropped tasks stated plainly (pp. 5-6); broad closing claim that nonlinear optimization is effective for industrial OPF (p. 4).",
+  "limits_future": "The titular hybrid interior-point/active-set algorithm and SQP crossover were not realized in the competition time frame (pp. 5-6); outputs: two papers under review at Operations Research; no follow-on funding (p. 7).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "contradiction",
+    "note": "Context-bound: inexact solution methods were tried and dropped because the speed gain did not offset the accuracy loss; methods not specified.",
+    "pages": "p. 5"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Degeneracy arose naturally (parallel-line flow constraints) and broke active-set identification; handled by preprocessing and falling back on the IPM rather than robustifying the method.",
+    "pages": "pp. 4-5"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Neutral organizer-run comparison on common hardware: a fair fight by design, but not one the team designed.",
+    "pages": "pp. 3-4"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "anytime best-known output under a hard time limit",
+    "evidence": "Implementation 'failed gracefully by continuously updating the output with the best-known solution'.",
+    "pages": "p. 5"
+   },
+   {
+    "pattern": "report plan deviations plainly",
+    "evidence": "Each dropped task (active-set identification, SQP, crossover, inexact solves, transmission switching) named with its reason.",
+    "pages": "pp. 5-6"
+   }
+  ],
+  "transferable": [
+   "Under a hard wall-clock limit, keep a feasible best-known output written at all times and overwrite it as it improves (p. 5).",
+   "Screen many candidates with a fast approximate evaluation, then run the full evaluation only on the flagged ones (p. 4).",
+   "Report an organizer-run competition by rank, field size, and best and second-best counts per problem (p. 4)."
+  ],
+  "coauthors": "Daniel Molzahn, Andreas Waechter, Ermin Wei, Elizabeth Wong (project team)",
+  "quotes": [
+   {
+    "text": "The team also explored the application of various inexact solution methods but did not find that they provided a substantial enough speed improvement to make up for the decrease in accuracy.",
+    "page": 5
+   },
+   {
+    "text": "Despite some successes in identifying and removing degeneracies, the team ultimately decided to focus on improving the interior-point methodology of the originally envisioned algorithm since it proved difficult to identify all (near) degeneracies in the problem formulation within the competition’s time frame.",
+    "page": 5
+   }
+  ]
+ },
+ {
+  "id": "S016",
+  "year": "2023",
+  "title": "An inexact column-and-constraint generation method to solve two-stage robust optimization problems",
+  "read_level": "full",
+  "contribution": "i-C&CG: column-and-constraint generation with masters solved to a relative gap, an optimistic bound with a pointer to the last certified lower bound, and an exploration/exploitation backtracking rule that provably terminates finitely; read as arXiv:2207.03291v2 (cite [S016 arXiv pp. ...]).",
+  "problem_entry": "C&CG masters are large MIPs that get harder as scenarios accumulate; the only adaptive-tolerance scheme [13] has no guarantees; an inexact master value may not be a valid lower bound (pp. 2, 4).",
+  "key_idea": "Solve masters to gap eps_MP with constraint c'x + delta >= L, set L to the optimistic U^j, terminate on the certified gap (U - L^l)/U, and when the inexact gap is small backtrack to the last certified iteration l with eps_MP shrunk by alpha (pp. 5-6).",
+  "assumptions": "Xi finite or a polytope, relatively complete recourse, finite optimum, objective >= K > 0, subproblem optimality oracle returning extreme points (p. 3); DRO cases under a Slater-type condition (p. 15).",
+  "proof_devices": [
+   "validity of the certified bound via Proposition 5 (master value equals L when L exceeds the optimum) (Proposition 1, pp. 15-16)",
+   "telescoping product bound on the certified gap since the last certified iteration (Proposition 2, eq. 8, pp. 7-8)",
+   "finite termination: every exploration adds a new extreme point, and endless exploitation is impossible because eps_MP -> 0 drives the bound below eps when eps~ < eps/(1+eps) (Theorem 4, pp. 8-9)",
+   "parameter guidance derived from the theorem's condition (Remark 5, p. 9)"
+  ],
+  "experiments": "240 distributionally robust OR-scheduling instances from real surgery data plus 15 robust capacitated p-center instances, AMPL/CPLEX defaults, 2 h limit, time-limit variant (300 s +600 s): time profiles (C&CG about 70% vs i-C&CG up to 90% solved; 20% vs >= 50%) and final-gap profiles (C&CG gaps > 80% on >= 70% of timed-out instances; p-center <= 8.8% vs 18.9-73.4%) (pp. 11-13, 21-25).",
+  "positioning": "Builds on Zeng-Zhao C&CG; criticizes [13] for lacking guarantees and recasts it as a special case with its own gap bound (Corollary 3) (pp. 2, 8).",
+  "writing": "Short letter; 'Importantly' flags the guarantee (p. 1); design reasons in numbered Remarks (pp. 5-9); 'no one set of parameters' (p. 9); no conclusion section; personal dedication by Shehadeh (p. 13).",
+  "limits_future": "No limitations section; proof covers Algorithm 2 while experiments run the time-limit variant (pp. 9-11); [13] not run as a baseline; relatively complete recourse and finite/polyhedral Xi (p. 3); no future work stated.",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Inner (master MILP) accuracy governed by the outer certificate; eps_MP tightened only when exploration stalls; outside NLP and adapted reactively rather than derived from a merit model.",
+    "pages": "pp. 5-6, 8"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "One algorithm moving between exploration and exploitation through a computed gap test inside each iteration instead of two phases; no penalty or merit parameter.",
+    "pages": "p. 6"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Shared AMPL/CPLEX setup with defaults, but only exact C&CG as rival, the closest heuristic [13] not run, and variants shown on single instances.",
+    "pages": "pp. 11, 25-26"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "certified rollback",
+    "evidence": "An optimistic bound L <- U^j drives the search; the index l of the last certified bound is kept, only the certified bound enters the stopping test, and exploitation backtracks to it with tighter tolerances.",
+    "pages": "pp. 5-6, 9"
+   }
+  ],
+  "transferable": [
+   "Locate the exact certificate a practitioners' heuristic breaks (here the lower bound) and repair that point only (pp. 2, 4).",
+   "Keep 'last iteration with a certified bound' as explicit algorithm state so optimistic shortcuts stay provably safe (p. 5).",
+   "Bound a relative-gap certificate as a product over iterations since the last certified point and choose the switching threshold so its limit is below target (pp. 7-9).",
+   "Absorb the closest prior heuristic as a special case and give it the bound it lacked (Corollary 3, p. 8).",
+   "For exactness-for-speed methods report time-to-target on solved instances and final certified gap on timed-out ones (pp. 12-13)."
+  ],
+  "coauthors": "Man Yiu Tsang, Karmel S. Shehadeh",
+  "quotes": [
+   {
+    "text": "Although computational results from [13] suggest an improvement in solution time by adopting their proposed scheme, the work did not provide theoretical guarantees concerning the accuracy and convergence of the proposed modification of C&CG.",
+    "page": 2
+   },
+   {
+    "text": "allowing inexactness is not something that can be done naively.",
+    "page": 4
+   }
+  ]
+ }
+]

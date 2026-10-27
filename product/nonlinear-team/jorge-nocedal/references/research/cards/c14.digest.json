@@ -1,0 +1,220 @@
+[
+ {
+  "id": "S124",
+  "year": "2024",
+  "title": "A trust-region algorithm for noisy equality constrained optimization",
+  "read_level": "full",
+  "contribution": "A noise-tolerant Byrd-Omojokun trust-region SQP that changes only the ratio test (adding xi(eps_f + nu eps_c) to ared and pred), with convergence to noise-determined critical regions for feasibility (even with rank-deficient Jacobians) and, under full rank, optimality; prototyped as a KNITRO-CG option (arXiv v1 pp. 4-5, 28-29).",
+  "problem_entry": "Noisy f, c, g, A in equality-constrained NLP; trust-region methods for noisy constrained problems neglected because the radius carries noisy memory, and rivals assume full-rank Jacobians or remove TR history (abstract; pp. 2-3).",
+  "key_idea": "Keep every BO component (normal/tangential steps, LS multipliers, l2 merit, penalty update) and relax only the ratio test with the input noise levels, xi = 2/(1-pi0) (eqs. 19-20, Alg. 1, pp. 4-5; p. 33).",
+  "assumptions": "Lf/Lc-smooth f, c; boundedness of generated sequences A_k, W_k, c_k and f bounded below (on iterates); deterministic noise bounds on f, c, g, A; full rank sigma_min and bounded null-space-basis error only for the optimality part (Assumptions 1-5, pp. 5-6, 16, 23).",
+  "proof_devices": [
+   "model-accuracy bound |ared-pred| <= ML(nu)Delta^2 + (eps_g+nu eps_A)Delta + 2(eps_f+nu eps_c) (Lemma 2, pp. 6-7)",
+   "outside a noise threshold a small radius forces acceptance, so the radius is bounded below (Lemma 3, Corollary 1, pp. 7-9)",
+   "gamma chosen as root of a quadratic so per-step rescaled-merit decrease is chi mu^2 + mu sqrt(...) (eq. 44, Lemma 4, pp. 9-11)",
+   "visit-infinitely-often by contradiction with boundedness below (Prop. 1, pp. 11-12; Prop. 3, p. 24)",
+   "displacement bound from geometric series of radii tau/(tau-1) Delta-bar, hence never leave the larger merit-level region (Lemma 5, Prop. 2, pp. 12-16; Lemma 12, Prop. 4, pp. 25-28)",
+   "anchor iterate k' and settling iterate k'' for a monotonically increasing penalty parameter (Remarks 1 and 3, pp. 9, 20)",
+   "rescaled merit f/nu + ||c|| made monotone in nu by shifting f > 0 (Observation 1, p. 11)",
+   "normal-step length bounded by vpred under full rank, bounded penalty and pred >= Gamma2 hpred (Lemmas 7-8, pp. 18-20)"
+  ],
+  "experiments": "KNITRO-CG prototype (option with noise-level input, default stopping); CUTEst with uniform noise in f, c, g, Hessian, Jacobian; 'over 50' problems run, three shown (HS7 with Delta0 = 1e-7, ROBOT, BYRDSPHR) in three arms (noise-free unmodified, noisy unmodified, noisy modified) with an f* + noise line; no aggregate, run count not stated (pp. 29-32).",
+  "positioning": "Extends Sun-Nocedal noisy unconstrained TR; BO chosen over Celis-Dennis-Tapia, Powell-Yuan, Vardi for robustness and scalability; differentiated from noisy SQP/TR rivals by keeping TR history and allowing rank-deficient Jacobians (pp. 2-3).",
+  "writing": "Problem statement, then 24 pages of theory and 4 of experiments; unhedged claims ('significant generality', 'comprehensive convergence theory'); key design claim only in final remarks; many editing lapses in v1 (missing appendix, Theorem 2 without Theorem 1, two Remarks 3, sign slip) (pp. 2, 9, 20, 23, 26-29, 33).",
+  "limits_future": "No limitations section or future directions (p. 33); implicit limits: noise levels must be supplied, equality constraints only, optimality result needs full rank and Assumption 5 (pp. 2, 5, 16, 23).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "BO engine and penalty rule kept; only the ratio test made noise-aware from explicit noise levels; no recovery tree (step 4 absent).",
+    "pages": "pp. 4-5, 33"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "repair shipped as a KNITRO option with the noise level as user input (Heuristic 8 too).",
+    "pages": "p. 29"
+   },
+   {
+    "method": "Method 1",
+    "relation": "contradiction",
+    "note": "3 of 'over 50' problems shown with no aggregate, the step-7 stop case; stopping tests aligned since the competitor is the unmodified code.",
+    "pages": "p. 29"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "analyses the shipped version (inexact subproblems, KNITRO-CG) but gives no rate and never compares region constants with runs; only a noise-level line is plotted. Heuristics 1 and 3 evidenced by the Delta0 = 1e-7 failure demo and three arms.",
+    "pages": "pp. 4-5, 29-30"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "two-tier noise-floor convergence statement",
+    "evidence": "iterates visit a noise-scaled stationarity region infinitely often and never leave a larger merit-level region, stated relative to an anchor iterate; Remark 3 reduces them to the unconstrained regions C1, C2",
+    "pages": "pp. 9-16, 24-29"
+   }
+  ],
+  "transferable": [
+   "Relax a trust-region ratio by adding the same noise term to ared and pred with xi = 2/(1-pi0), so acceptance implies ared > pi0 pred - 2 noise (eqs. 19, 54, pp. 4, 10).",
+   "Proof template for trust regions with memory: radius lower bound outside the critical region, fixed decrease per accepted step, visit infinitely often, displacement bounded by a geometric series of radii, never leave a merit-level region (pp. 7-16).",
+   "For an increasing penalty parameter fix an anchor iterate and shift f > 0 so f/nu + ||c|| is monotone in nu (pp. 9, 11).",
+   "Stage assumptions: a rank-free feasibility-stationarity result first, full rank only for ||c|| and optimality (pp. 11-20).",
+   "Force the known weakness (Delta0 = 1e-7) on an easy problem, run three arms, mark f* + noise level, and show a case where the unmodified method succeeds and why that success is brittle (pp. 29-32)."
+  ],
+  "coauthors": "Shigeng Sun",
+  "quotes": [
+   {
+    "text": "When adapting the Byrd-Omojokun method to problems where the noise level can be estimated, it is not necessary to change the penalty parameter update rule or other components of the algorithm.",
+    "page": 33
+   },
+   {
+    "text": "Our work distinguishes itself from previous studies by considering a standard trust region method for equality-constrained optimization, as opposed to modifications that eliminate history by either using a predetermined trust region schedule or defining the trust radius as a multiple of the current gradient norm.",
+    "page": 3
+   }
+  ]
+ },
+ {
+  "id": "S128",
+  "year": "2025",
+  "title": "Design guidelines for noise-tolerant optimization with applications in robust design",
+  "read_level": "full",
+  "contribution": "States design guidelines for noise-tolerant methods (safeguard only noisy comparisons, function differences and gradient differences, from a noise-level estimate), illustrates them with a relaxed and self-calibrated line-search gradient projection method on a PDE-based acoustic-horn robust-design problem, and proves convergence to a noise neighbourhood (read as arXiv v2; pp. 1-2, 13-15, 19).",
+  "problem_entry": "Does noise require redesign or only modifications? Only three operations are fragile; literature tests synthetic noise or toy ML, so a real robust-design application with a tunable noise knob (sample size N) is used (pp. 1-2, 5-6).",
+  "key_idea": "Relax Armijo by 2 eps_A with eps_A = lambda eps_f, choose h from the noise level, shrink alpha0 as noise grows, and self-calibrate eps_A and alpha0 from average backtrack counts with asymmetric rules and a backtrack cap (eqs. 4.1-4.3, 5.3-5.5, pp. 8-9, 12-14).",
+  "assumptions": "Noise level = standard deviation (bias cancels in differences); theory: closed convex Omega, f bounded below, L-Lipschitz gradient, bounded noise in f and g; theorem needs eps_A > eps_b, the setting the experiments call excessively cautious (pp. 3, 9, 11, 15-16, 19).",
+  "proof_devices": [
+   "stationarity measure -p^T g of the projected step (Lemmas 6.3, 6.5, pp. 16-17; Lemma D.1, pp. 27-28)",
+   "noisy-vs-true stationarity via noise-to-signal ratio gamma_k = ||delta_g||/sqrt(-p^T g), projection inequality used three times plus AM-GM (Lemma 6.6, pp. 17-18)",
+   "finite termination of relaxed backtracking from eps_A > eps_b (p. 19)",
+   "case split noise small (step length >= rho/(alpha0 L)) vs noise large (decrease charged to eta), merged into one inequality and contradiction with f bounded below (Theorem 6.7, pp. 19-21)"
+  ],
+  "experiments": "One 6-variable acoustic-horn problem (FE solve of order 30,000 per sample), noise via N = 100, 50, 10; sample-inconsistent default, consistent in App. C; GP-F fixed step tuned over alpha grid; one-factor sweeps of eps_A, h (vs analytic gradients, CPU time), alpha0; effort = N x function calls; losses printed (no GP-LS advantage at N = 10); no repetitions reported (pp. 6-15, 26-27).",
+  "positioning": "Synthesises the group's relaxed line search, difference-interval and quasi-Newton spacing work plus Moré-Wild; concedes diminishing steps can help at high noise; criticises solver packages and textbooks (including his own L-BFGS-B) for undocumented roundoff-only heuristics, crediting Gill-Murray-Wright Ch. 2 as partial exception (pp. 1-2, 14, 22).",
+  "writing": "Advocacy register ('advocates', 'argues') with a numbered list of fragile operations, an explicit hedge that adaptation is not the only way, received wisdom quoted then tested, parameter advice as numbers, experiments before theory, modest close (abstract; pp. 1-3, 9-11, 14, 22).",
+  "limits_future": "One application with bound constraints; future: similar studies for more general constrained problems; varying noise distributions need recomputed eps_A or eps_b; self-calibration may fail in extreme cases (pp. 9, 22, 25).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "programme statement: adapt classical deterministic methods, repairing only the three fragile operations from noise-level estimates; backtrack cap discards steps as a recovery element.",
+    "pages": "abstract; pp. 1-2, 4, 9, 14"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "tests 'common practice to avoid line searches' and the view that finite differences should be avoided under noise; parameters varied both ways; rival (fixed step) wins printed at N = 10.",
+    "pages": "pp. 10-13"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "competitor GP-F given a tuning grid and extensive experimentation, effort counted as N x function calls; but own method also tuned, no handicap, one problem.",
+    "pages": "pp. 10, 13"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "theorem covers eps_A > eps_b, the setting called excessively cautious; recommended version not analysed; extension to self-calibration asserted without proof; no bound-vs-run comparison.",
+    "pages": "pp. 9, 11, 19, 21"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "fragile-operations audit",
+    "evidence": "enumerate the operations that compare or difference noisy quantities (function comparisons, function differences, gradient differences) and safeguard only those; sharpens Method 3 step 1",
+    "pages": "p. 1"
+   },
+   {
+    "pattern": "telemetry-driven self-calibration",
+    "evidence": "line-search parameters adapted from average backtrack counts every T iterations, described as an implicit estimate of the local noise level",
+    "pages": "pp. 13-14, 25"
+   }
+  ],
+  "transferable": [
+   "List the algorithm's noisy comparisons, function differences and gradient differences and safeguard only those, each from one noise-level estimate (pp. 1-2).",
+   "Set the Armijo relaxation eps_A = lambda eps_f with lambda in [1, 2] from the lower range of pointwise estimates; underestimation only costs backtracks, which a cap contains (pp. 9-11).",
+   "Self-calibrated line search: every T iterations adjust eps_A and alpha0 multiplicatively from the average backtrack count, shrinking faster than growing, with a hard backtrack cap (eqs. 5.3-5.5, pp. 13-14).",
+   "Use a real application with a noise knob (sample size N), report effort as N x evaluations, and switch to CPU time when one arm's cost cannot be counted in evaluations (pp. 6, 10-11).",
+   "Make sample-consistent vs sample-inconsistent evaluation an explicit experimental factor (pp. 10, 26-27).",
+   "Cheap noise-bound estimators (empirical Chebyshev, maximum deviation, sample range) with their consistency conditions (App. B, pp. 25-26)."
+  ],
+  "coauthors": "Yuchen Lou, Shigeng Sun",
+  "quotes": [
+   {
+    "text": "These guidelines stem from the observation that, in the presence of noise, only few operations can lead to numerical difficulties in optimization methods.",
+    "page": 1
+   },
+   {
+    "text": "A common view in optimization is that finite difference gradient approximations should be avoided in the noisy setting.",
+    "page": 11
+   }
+  ]
+ },
+ {
+  "id": "S150",
+  "year": "2026",
+  "title": "A feasible method for constrained derivative-free optimization",
+  "read_level": "full",
+  "contribution": "Revives the feasible interpolation-based trust-region method (FIBO) of Conn et al. for constrained DFO with cheap constraints, built by swapping only the step computation of an unconstrained IBO code for an NLP subproblem with the original constraints, and shows on 38 CUTEst problems that it beats finite-difference KNITRO in objective evaluations while losing in accuracy and constraint evaluations (read as arXiv v1; pp. 2-3, 7-9).",
+  "problem_entry": "IBO methods are efficient unconstrained but hard to extend to constraints; FIBO's earlier results were inconclusive and the method is rarely used; setting narrowed to cheap constraints and derivatives with expensive f (pp. 1-2).",
+  "key_idea": "Minimise the interpolation model of f subject to the original nonlinear constraints and a trust region with a general NLP solver (KNITRO), leaving all other IBO components unchanged; iterates stay feasible so the model represents f only (eq. 2.4, Alg. 1, pp. 3-4, 6).",
+  "assumptions": "No derivatives of f; smooth f and c; c and its derivatives cheap; NLP subproblem solved successfully each iteration; feasible start and feasible interpolation set when f undefined outside; noise robustness asserted without a noise level and untested (pp. 2, 4-5, 9-10).",
+  "proof_devices": [],
+  "experiments": "Python FIBO around dfotr (no geometry phase) with KNITRO 12.4 SQP/L-BFGS subproblems vs KNITRO-FD with options aligned to FIBO's criterion and equal 500 x max(m, n) budget; 38 noiseless CUTEst problems; log2-ratio plots of accuracy and objective/constraint evaluations at four tolerances; feasibility-phase cost excluded then included (App. B); FIBO failure cases visible only in tables (pp. 6-9, 13, 18).",
+  "positioning": "Credits Conn-Scheinberg-Toint and Powell; argues earlier studies were wrong or weak (LANCELOT finite-differenced available constraints and counted them; Conejo et al. used an inefficient baseline; CONDOR gave no comparisons); excludes COBYLA/COBYQA as disadvantaged and uses the group's FD study to justify a KNITRO-FD baseline (pp. 2, 5-6).",
+  "writing": "Short letter; hedged abstract ('promising potential') but strong body ('one of the most efficient methods', 'attempts to rectify'); claims tied to the cost model; direct, specific criticism of prior benchmarks; v1 editing lapses (wrong appendix pointer, typos) (abstract; pp. 2, 6-9).",
+  "limits_future": "Subproblem must be solved to optimality with no guarantee; noise not explored but expected to work; feasible interpolation-set cost not addressed; no convergence theory; future: noisy case (pp. 5, 9-10).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "the received verdict on FIBO (inconclusive, rarely used) put on trial by auditing why earlier evidence failed and rerunning a cleaner comparison with scope stated; noise passage shows the moving verdict on model-based DFO.",
+    "pages": "pp. 2, 5-9"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "method justified by a cost structure (cheap differentiable constraints, expensive f) and recommended only there; FD wins on constraint evaluations.",
+    "pages": "pp. 2, 5, 8-9"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "classical engine (unconstrained IBO, dfotr logic unchanged) kept and only the step computation swapped, but no estimate, recovery or exit flags; noise left to IBO's unexplained robustness without a noise level.",
+    "pages": "pp. 3, 5-6"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "stopping criteria aligned via the baseline's options, equal budgets, accounting with and without feasibility phase, losses in the text, prior accounting errors audited; but the baseline is KNITRO (also the subproblem solver), rival DFO codes excluded, and FIBO failures only in tables.",
+    "pages": "pp. 6-8, 13, 18"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "rehabilitate an abandoned method by auditing the original benchmarks",
+    "evidence": "find the accounting error or weak baseline that made earlier results inconclusive, then rerun with a fair baseline and scoped claim; close to Method 2",
+    "pages": "pp. 2, 6, 9"
+   }
+  ],
+  "transferable": [
+   "For constrained DFO with cheap constraints, keep an unconstrained interpolation trust-region code and replace only its subproblem with model minimisation under the original constraints and the trust region, solved by an off-the-shelf NLP solver (pp. 3, 6).",
+   "Before declaring a published method ineffective, audit its benchmark accounting (which evaluations were counted, whether available derivatives were finite-differenced) and its baseline strength (p. 6).",
+   "Report per-problem log2 ratios sorted ascending for final accuracy (with a floor) and evaluations-to-tolerance at several tau, counting objective and constraint evaluations separately (pp. 7-9).",
+   "Report results with and without the cost of the feasibility phase (p. 18).",
+   "Align a commercial baseline's termination through its documented options (xtol, xtol_iters, findiff_terminate) and give both methods the same evaluation budget (p. 7)."
+  ],
+  "coauthors": "Melody Qiming Xuan",
+  "quotes": [
+   {
+    "text": "The numerical results reported in [6], and subsequently in [4], are, however, inconclusive and the FIBO approach is rarely (if ever) used in practice.",
+    "page": 2
+   },
+   {
+    "text": "In fact, to develop the FIBO method one can start with any IBO method for unconstrained optimization and replace the step computation (2.2) by (2.4).",
+    "page": 3
+   }
+  ]
+ }
+]

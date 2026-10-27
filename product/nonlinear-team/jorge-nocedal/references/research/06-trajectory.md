@@ -7,6 +7,7 @@
 - **Local corpus**: `references/sources/papers/`, `essays/` and `software/` hold only `.gitkeep` files, so **no user-supplied material exists** and nothing here is marked "from user-supplied material". Research agent 02 saved the talk and interview transcripts in `../sources/talks/` earlier in this run. They are YouTube captions, mostly automatic speech recognition (ASR) that nobody has checked by hand. Quotes from them are verbatim *captions* with the block timestamp `[h:mm:ss]`, marked "caption-derived". ASR errors stay as they are, with the intended word in square brackets. `private/` was not opened.
 - **WebSearch calls used**: 2 of 2 (the 2024 SIAM prize; a third edition of the book).
 - **Division of labour**: the publication landscape and signature works are in `01-publications.md`, stated method in `02-methodology.md`, process evidence in `03-process-evidence.md`, and students and supervision in `04-mentorship.md`. This file adds four things: the dated timeline, the causes of each turn and their timing, a topic-by-period matrix built from the CV, and the latest activity. It cross-references the other files rather than repeating them. Where I re-cite a paper, I re-checked its identifier with Crossref, arXiv or zbMATH in this run.
+- **Deep-reading update (2026-10-17)**: §9 below re-reads the trajectory from the full texts (97 of 167 listed works read in full or in part; cards in `07-paper-cards.md`, synthesis `08-deep-reading-synthesis.md` §§8–9). The sections above and below are the base-tier record of 2026-09-28 and are kept as written; where §9 corrects them, it says so (main correction: T6 starts in 1989–90, not c. 1992).
 
 **Labels.** Each item carries one of:
 - [stated]: Nocedal said or wrote it;
@@ -233,6 +234,7 @@ Each turn gives the trigger in his words where one exists, the dated record, and
 - **Kind of trigger**: a new result by another researcher (Powell) opens a question that a two-person team can extend. [inferred]
 
 ### T6. Weather forecasting and data assimilation (c. 1992–2009)
+- **Deep-reading correction (2026-10-17)**: the start is 1989–90, not c. 1992: the 1989–90 DOE progress report already names meteorology and oceanography as L-BFGS applications and plans 4-D assimilation [S197 pp. 2, 4]; the 1990 and 1991 award abstracts name meteorology and variational data assimilation [S198; S196]. When the ECMWF contact itself began is not dated by any card. See §9.
 - **Trigger** [stated, I26 [1:15:39]]: "the reason why they contacted me is because by that time LBFGS was well known … and they said how can we use LBFGS here which by the way in the future this is also what led me into machine learning". His own answer was Gauss–Newton: "when the problem has a structure like a nonlinearly square structure, you have to exploit it" [1:16:12].
 - **Record** [practice]:
   - grants 1992–98 (meteorology, climate modeling, weather forecasting) and NSF "Improved Minimization Techniques in Meteorological Data Assimilation" 2001–03 (CV18);
@@ -329,6 +331,7 @@ Each turn gives the trigger in his words where one exists, the dated record, and
 - **Stated** [I26 [1:45:19]–[1:45:51], caption-derived]: "Right now, I'm just working on the third edition of my book with Steve Wright. I'm taking a pause from writing research papers. I'm very interested in generative AI but I will see if I can have something to contribute there. I'm interested in the occasional [educational] aspect of it which at this point seems completely confusing how it's going to disrupt education and what are you going to do about this? So I've been organizing groups to discuss those questions and um in six months when the third edition of the book is finished we've added a lot of material since then I will see if I have something to contribute."
 - **Consistent with the record** [practice]: no arXiv preprint after 2024-11-04; the 2025–26 journal items both come from 2024 preprints.
 - **Book history as he tells it** [stated, [1:07:53]–[1:09:01]]: he wanted to write a book "just because I wanted to learn the subject well"; "the first edition took six years"; "we did a second edition fairly quickly within five years … And then for 17 years the book stayed and we're now doing the third edition". This matches the dates 1999 → 2006 [practice]. Seventeen years after 2006 is 2023, so work on the third edition apparently began around 2023. That date is my inference.
+- *Increment inc-book (2026-10-17)* [practice, primary; joint with S. J. Wright]: the written record dates the editions. The first edition is © 1999 [B005 p. 4]; the Preface to the Second Edition counts six years since the first edition [B001 p. 21], against the interview's *within five years* (Contradictions 12); the second edition's hardcover appeared on 27 July 2006 [B012 p. 1]. No book-material item (prefaces, errata, book pages) mentions a third edition [B011 pp. 2, 4].
 
 ---
 
@@ -428,6 +431,75 @@ Consolidated from the turns above, with cross-references to 01 §4, 02 §9 and 0
 
 ---
 
+## 9. The trajectory in the full texts (deep reading, 2026-10-17)
+
+Sources: the paper cards (`07-paper-cards.md`) and the synthesis (`08-deep-reading-synthesis.md` §§8–9). Citation form `[S012 p. 9]` = card S012, page of the file read; `[S080 arXiv p. N]` and similar name the version on the card; a bare id is an abstract- or metadata-level card. Coverage: 97 of 167 listed works read in full (76) or in part (21); the 1980s are thin (3 works in full text). After increment inc-ocr (2026-10-17, sixteen works re-read from an OCR text layer, no new works): 80 in full, 17 in part.
+
+### 9.1 Topics by period (full or partial reads)
+
+| Period | Works | Main topics (cards) |
+|---|---|---|
+| 1978–79 | 2 | CG and variable-storage methods: S120 (with Nazareth), S138 (thesis) |
+| 1980–84 | 1 | limited-storage BFGS, sole author: S007 |
+| 1985–89 | 3 | Broyden-class theory with Byrd and Yuan: S020; L-BFGS study with Liu: S002; inverse eigenvalue problems: S026 |
+| 1990–94 | 9 | CG and quasi-Newton theory: S012 S019 S054; L-BFGS linear algebra and software: S014 S115 S143; reduced Hessian theory: S039; PI reports with meteorology: S197 S193 |
+| 1995–99 | 13 | bound constraints: S003 S005; large unconstrained: S049 S088 S024 S101; constrained and interior (NITRO): S028 S046 S034 S118 S008; service and teaching: S160 S090 |
+| 2000–04 | 18 | interior and active-set solvers, KNITRO, SLIQUE: S009 S067 S021 S111 S075 S061 S078 S085 S063 S035 S179 S188; preconditioning and enriched methods: S030 S098 S077; S057; DFO: S040; iNEOS: S119 |
+| 2005–09 | 13 | KNITRO, penalty and barrier rules: S058 S011 S013 S042 S105 S029 S027 S110; inexact SQP and flexible penalties with Curtis: S045 S081; LCP: S076; ECMWF case study: S047; DFO geometry: S062 |
+| 2010–14 | 14 | infeasibility and inexact Newton: S052 S068 S073 S053; penalty and PLA active-set: S051 S060 S114 S139; L-BFGS-B Remark: S016; ML sampling: S023 S018; sparse inverse covariance: S043; LCP and finance: S092 S113 |
+| 2015–19 | 12 | ℓ1 second-order methods: S087 S064 S050 S089; stochastic and ML methods: S006 S015 S033 S004 S031 S036 S032; noisy DFO: S038 |
+| 2020–24 | 9 | noise: S072 S071 S091 S080 S082 S084 S124; sampling: S041 S102 |
+| 2025–26 | 2 | noise design guidelines: S128; feasible constrained DFO: S150 |
+
+### 9.2 Turns, as the full texts show them
+
+- **1978–80, from CG to limited memory** (T2): the variable-storage family between CG and BFGS [S120 pp. 23–24, 27; S138 pp. 7, 77–79] becomes the update that never discards the matrix wholesale [S007 p. 1].
+- **1987, theory with Byrd** (T5): the family-wide analysis that singles out DFP [S020 pp. 1, 19], generalizing Powell's 1976 BFGS result [S020 pp. 1, 6].
+- **1989–90, meteorology as the application** (T6, corrected): L-BFGS in meteorology and oceanography and 4-D assimilation planned [S197 pp. 2, 4]; award abstracts 1990–92 [S198; S196; S195]; about one CRAY hour per simulation in 1993 [S193 p. 2]; a 2001 award with NCEP [S186]; the ECMWF case study with practitioners in 2009 [S047 p. 1].
+- **c. 1995–2004, constrained solvers** (T7): reduced Hessian SQP [S039; S028; S067], interior methods [S046; S118; S008; S009], then KNITRO and the 2002 active-set code [S035 report pp. 17–18; S011]; teaching and service in the same years [S090; S160]. *inc-ocr* dates: the interior theory existed as Report OTC 96/02 before NITRO's July 1997 code paper [S008 p. 25], whose revised theory preprint of August 1998 cites the code as Report OTC-97/04 [S009 pp. 1, 35]; the projection paper that NITRO hands its refinement problem to is dated September 2000 [S021 p. 1; S008 p. 26]; the answer to Wächter and Biegler's 2000 counterexample is dated April 23, 2001 [S061 pp. 1, 25]; the 2003 benchmark's runs date from fall 2000 [S078 p. 7]. The penalty-parameter problem is already named in 1993 [S193 p. 4]; the first steering rule is in SLIQUE, 2002 [S035 report pp. 14–16].
+- **2008–2013, a side line in complementarity and option pricing** with Morales, Feng and Linetsky [S076; S092; S113] (T8; not in the SKILL table before 2026-10-17).
+- **2011, machine learning through Google data** (T9) [S023 pp. 1, 14; S018 p. 18], then Intel collaborators [S006; S031] and the field map [S004]; the shared design of the period, curvature on its own cheap sample, is the skill's Method 7 [S023 p. 3; S015 p. 5; S033 p. 3].
+- **2019, noise** (T10): the noisy-DFO programme opens [S038 p. 1] and runs to the 2025 design guidelines [S128].
+- **2024–26, back to model-based DFO for constraints** [S150 pp. 1–3], the endpoint of the moving verdict on interpolation methods [S040; S062; S080 arXiv pp. 6, 15; S150 p. 5], which starts in 2002 with the wedge method [S040 pp. 2–3, 15].
+
+### 9.3 What stayed constant
+
+- **The quasi-Newton engine**: from the 1980 update [S007] to noise-tolerant BFGS [S071] and KNITRO's L-BFGS inside the 2026 baseline [S150 p. 7].
+- **Benchmarking hygiene**: rivals run as their authors recommend and the same answer checked (1989) [S002 p. 8] to aligned termination through the baseline's options (2026) [S150 p. 7].
+- **Failure modes and open choices written into the paper** [S019 pp. 17, 21–22; S035 report pp. 7, 29, 31; S080 arXiv pp. 7, 15–16, 32].
+- **Numbers given as defaults** [S098 p. 4; S042 p. 13; S038 p. 12; S139 p. 14].
+- **The Byrd partnership**: Byrd co-authors 37 of the 96 distinct works read in full or in part, from 1987 [S020] to 2024 [S102], in every five-year period 1985–2024; no 2025–26 work lists him [S128; S150].
+
+### 9.4 Collaboration by period (full or partial reads)
+
+| Period | Works | Most frequent co-authors (works) |
+|---|---|---|
+| 1978–89 | 6 | Nazareth (S120), Byrd (S020), Yuan (S020), Liu (S002), Friedland and Overton (S026); sole author S007, S138 |
+| 1990–94 | 9 | Byrd 3 (S014 S039 S143), Gilbert 2 (S012 S115), Zhu and Lu (S143), Schnabel (S014), Yuan (S054); sole author S019; PI reports S197 S193 |
+| 1995–99 | 13 | Byrd 6 (S003 S005 S008 S046 S088 S118), Zhu 3, Lu 2, Hribar (S008), Biegler and Schmid (S028), Yuan (S024), Lalee and Plantenga (S034); sole author S049, S160 |
+| 2000–04 | 18 | Waltz 5, Byrd 5, Gould 4 (S021 S035 S179 S188), Morales 4 (S030 S098 S077 S078), Marazzi 3 (S040 S061 S111), Hribar 2 |
+| 2005–09 | 13 | Waltz 6, Byrd 4 (S011 S042 S045 S058), Morales 3, Curtis 3 (S110 S045 S081), Wächter (S029), Fisher, Trémolet and Wright (S047) |
+| 2010–14 | 14 | Byrd 7, Wu 4 (S018 S060 S114 S139), Morales 3, Waltz 3, Curtis 3 (S052 S068 S073), Oztoprak 2 |
+| 2015–19 | 12 | Byrd 7, Oztoprak 3, Bollapragada 3 (S031 S036 S032), Berahas 2 (S033 S038), Intel co-authors (S006 S031) |
+| 2020–26 | 11 | Byrd 4 (S071 S072 S084 S102), Xie 4 (S071 S072 S091 S102), Shi 3 (S071 S080 S091), Sun 3 (S082 S124 S128), Xuan 3 (S080 S091 S150), Bollapragada 2 (S041 S102), Oztoprak 2 (S080 S084), Berahas 1 (S041) |
+
+### 9.5 Gaps the full texts close or leave
+
+- Closed: the Google Scholar list (harvested 2026-10-16); the dating of the meteorology turn (1989–90); the 1980 paper, the 1987 theory paper, Byrd–Gilbert–Nocedal 2000, the ECMWF paper and the 2011 Remark.
+- Still open: the reasons for each exit (the full texts carry no origin or exit stories); when the ECMWF contact began; the 1980s beyond three works; *Numerical Optimization* [S001]; whether the declared pause holds (no card after the 2026 DFO letter [S150]). (*inc-book*: the textbook's open parts are now read, §9.6; its body stays closed.)
+
+### 9.6 The textbook in the book material (increment inc-book, 2026-10-17)
+
+Sources: cards c5-01 to c5-03 (B001–B012) and `08-deep-reading-synthesis.md` §13. All of it is the joint voice of Nocedal and S. J. Wright, a member of this team, except two zbMATH reviews and Springer's text; it dates and frames, and is not evidence of his own choices.
+
+- **Editions and affiliations**: 1999, preface signed Evanston, IL / Argonne, IL [B005 p. 9], Nocedal at Northwestern ECE and Wright at Argonne MCS [B012 p. 2]; 2006, preface signed Evanston, IL / Madison, WI [B001 p. 22], Nocedal at Northwestern EECS and Wright at Wisconsin Computer Sciences [B012 p. 1]; hardcover 27 July 2006, eBook 11 December 2006, XXII + 664 pages against XXI + 636 [B012 pp. 1–2].
+- **Scope against his turns** (T7, T8, T9): the 1999 edition omits discrete and stochastic optimization [B005 p. 6; B012 p. 2], about ten years before the machine-learning turn (T9); it gives interior methods for NLP no detailed treatment, as current research [B005 p. 8], during his own NITRO work (T7), whose 1997 report its reference list already cites [B006 p. 38]; the 2006 edition adds chapters on derivative-free optimization and interior-point methods for NLP [B001 p. 21], three years before the 2009 DFO-geometry paper [S062], and its not-covered list excludes complementarity constraints [B001 p. 22], the area of the 2008–2013 side line (T8) [S076; S092; S113].
+- **Finite differences and noise** (T10): a section of the 2006 textbook (9.1) [B001 p. 10], indexed at the start of the derivative-free chapter [B002 pp. 59, 62], thirteen years before the noise programme's first paper [S038 p. 1]. SKILL's *27 years* is therefore limited to his research papers (C21).
+- **Errata kept, 2000–2008**: the first-printing sheet dated January 2000 with an addendum of 2/25/2000 [B011 p. 2; B007 p. 7]; the second-printing sheet in three versions, September 17, 2004 to October 2, 2008 [B008 p. 1] (versions: card c5-03); the second-edition list from August 2006 to May 27, 2008 [B003 p. 1]. Nothing was updated after 2008 on either author's site (card c5-03).
+- **The Byrd partnership** (§9.3): the only sentence about Nocedal alone in the book material thanks Byrd [B005 p. 9]; Byrd co-authors 8 of the 17 Nocedal entries in the 2006 bibliography (card's count) [B002 pp. 42–43, 55].
+
+---
+
 ## Contradictions (kept, not reconciled)
 
 1. **Birth year.** The interviewer says "you were born in Mexico in 1950" (I26 [0:00:38]) and Nocedal does not correct it. Wikipedia's infobox and category say 1952. No primary document with a birth date was found.
@@ -462,6 +534,8 @@ Consolidated from the turns above, with cross-references to 01 §4, 02 §9 and 0
 
     Both are current web pages.
 11. **Theory versus computation over the career.** In 1992 he called for more work on "global efficiency" (01 Contradiction 10). In 2026 he says the field "has gone really really theoretical" and "the computational side of it … used to be the core now it's a smaller field" [1:29:02]–[1:29:35]. His own trajectory moved from theory-heavy (1985–94) to computation- and software-heavy (1995–2025).
+
+12. **Interval between the editions.** The 2026 interview: "we did a second edition fairly quickly within five years" (T11, caption-derived). The Preface to the Second Edition counts six years since the first edition appeared [B001 p. 21]; the copyright years are 1999 and 2006 [B005 p. 4; B001 p. 5]. The preface is the written record. (Added in increment inc-book, 2026-10-17.)
 
 ## Gaps
 

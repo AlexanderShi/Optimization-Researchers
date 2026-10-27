@@ -1,0 +1,209 @@
+[
+ {
+  "id": "S002",
+  "year": "1989",
+  "title": "On the limited memory BFGS method for large scale optimization",
+  "read_level": "full",
+  "contribution": "Second (OCR) read of the 1989 L-BFGS study (round-1 card c01, prose only): the table numbers are now legible. They show L-BFGS beating Buckley-LeNir on evaluations, scaling M3 cutting evaluations against M1 on every legible row, and n = 5000-10000 solved in 14-183 iterations. PQN needs fewer evaluations in 35 of 38 runs (my count), but wins clearly on time on one problem only (Tables 3-4, 8-9, 11, 14, 18-19; pp. 9-21).",
+  "problem_entry": "As in c01: no comparison of limited-memory methods with each other since Gill-Murray 1979, little known against Newton or PQN on large problems (p. 3). New: 16 test problems with n from 49 to 10000, sources listed in Table 1 (pp. 6-7).",
+  "key_idea": "Algorithm 2.1: BFGS with a Wolfe search (0 < beta' < 1/2, beta' < beta < 1), unit step first, H_k from min{k, m-1}+1 updates of H0 (p. 5). Scalings now legible (p. 14): M1 none; M2 gamma0 = y0's0/||y0||^2 once (3.2); M3 gamma_k = y_k's_k/||y_k||^2 every iteration (4.1); M4 a diagonal D_k minimizing ||D_k Y_{k-1} - S_{k-1}||_F over the last m steps, safeguarded, falling back to gamma_k (4.2)-(4.3). Test search: strong-Wolfe form (3.1) with beta' = 1e-4 and beta = 0.9, the Buckley-LeNir values (p. 8). The accurate variant forces one cubic interpolation (p. 12). The analysis uses the equivalent Algorithm 6.1 (p. 22).",
+  "assumptions": "Assumptions 6.1: f in C^2, convex level set, M1||z||^2 <= z'G(x)z <= M2||z||^2 on D (6.4) (p. 22); {B_k^(0)} and their inverses bounded (p. 23). Tests: low-accuracy stop relative to max(1,||x_k||) (exponent garbled) (p. 7); H0 = I, then gamma0 I (p. 8); SUN 3/60 in double precision (p. 8); Alliant FX/8 for n = 5000, 10000 (p. 15).",
+  "proof_devices": [
+   "Theorem 6.1: for any positive definite B0, x_k -> x* and f_k - f* <= r^k (f0 - f*), 0 <= r < 1 (6.5) (p. 23)",
+   "averaged Hessian y_k = Gbar_k s_k gives M1||s||^2 <= y's <= M2||s||^2 (6.8) and ||y||^2/y's <= M2 (6.9) (p. 23)",
+   "uniform trace bound tr(B_{k+1}) <= tr(B_k^(0)) + m~ M2 <= M3 (6.10) and Pearson/Powell determinant bound det(B_{k+1}) >= M4 (6.11)-(6.12) give cos theta_k >= delta (6.13) (pp. 23-24)",
+   "Powell's decrease inequality f_{k+1} - f* <= (1 - c cos^2 theta_k)(f_k - f*) gives (6.5); (1/2)M1||x_k - x*||^2 <= f_k - f* gives R-linear iterates (p. 24)",
+   "gamma_k bounded by constants from (6.4), (6.9), so M3 meets the theorem; Shanno-Phua and Buckley-LeNir are special cases; R-linear is the best possible for L-BFGS (p. 24)"
+  ],
+  "experiments": "Table 3 (B-L vs L-BFGS, m = 5, 7, 9, p. 9). Problem 1 (n = 1000): 19/88-19/75 against 45/55-44/54. Problem 10 (n = 961): 171/343-172/346 against 168/280-163/267, total times 1308-1407 against 1146-1290. B-L needs fewer iterations but about two evaluations each. Table 4 (m = 15 and BFGS, p. 9): BFGS usually fewest calls, e.g. problem 12: 229/464, 263/269, 179/185. Speed-up NFUN(3)/NFUN(7): L-BFGS substantial in 70% of problems, B-L little (p. 11). Table 8: gains beyond m = 15 small and not monotone (p. 12). Table 9: a forced interpolation cuts iterations (problem 1: 44-45 -> 16) and raises evaluations (problem 12: 251-260 -> 447-461) (pp. 9, 12). Table 11 (m = 5; M1/M2/M3/M4, p. 14): problem 10 569/280/197/179 evaluations; problem 11 83/42/22/22, times 183/153/63/74. M3 beats M1 on every legible row but loses to M2 on problem 12 (322 against 260 evaluations, 293 against 238 time). M4 safeguard used in about 5% of iterations (p. 15). Table 14 (M3, n = 5000/10000, p. 16): 14-183 iterations. Tables 18-19 (PQN vs L-BFGS M3, m = 5, pp. 19-20): problem 9 PQN time 53/62 against 1608; problem 10 with variable reduction 853/854 against 964, without 3479/1439 against 964; dense problem 12 PQN 14871/21290 against 293. PQN iteration 2-5x, on problems 10 and 15 10-15x, L-BFGS's (p. 21). Illegible: Tables 2, 5-7, 10, 12-13, 16-17, 20 and the headers of 9, 14, 15.",
+  "positioning": "As in c01; for given m the two limited-memory methods need roughly the same storage, L-BFGS slightly less arithmetic (p. 7); Gilbert-Lemarechal used Buckley's newer 1987 code and found smaller differences (p. 4); PQN highly recommended when the element functions depend on fewer than 4 or 5 variables (p. 24).",
+  "writing": "Numeric user advice for VA15: low storage and accurate searches for cheap functions; 3 <= m <= 7 (page image of p. 18; the OCR prints <) with an inaccurate search for expensive ones (p. 18). Overlapping thresholds in the final remarks (PQN below 4 or 5 element variables; L-BFGS can be faster above 3 or 4, p. 24). Numbering slip: section 7 carries Algorithm/Assumptions/Theorem 6.1 (pp. 21-23).",
+  "limits_future": "R-linear is the best possible (p. 24); storage gains at n = 5000-10000 marginal and unexplained, iteration counts small multiples of m (p. 16); CG competitive for large cheap problems (pp. 18, 25); dynamic scaling as the main future topic (p. 15).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Refines c01 (one piece of evidence): rival at defaults with its authors' constants beta' = 1e-4, beta = 0.9, used by L-BFGS too; same-solution check for every run; count and split-time lines; loss to PQN in the abstract and in full in Tables 18-19.",
+    "pages": "pp. 2, 8, 19-20"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "SKILL Method 1 step 5 and catalog E2 cite S002 p. 8 for dropping problems with different solutions and counting them per code; the text only verifies that both methods reached the same solution in each run, with no drop and no count. Also as c01: the alignment move upgrades the own line search (Table 9).",
+    "pages": "pp. 8, 12"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "PQN recommended over the own method, with numbers: PQN fewer evaluations in 35 of 38 runs (exceptions: problem 3 from the finite-difference start, problem 14 at n = 100 from the scaled-identity start; page images); time win on problem 9 (53-62 vs 1608), tie on problem 10 with variable reduction (853 vs 964), loss without it (3479/1439 vs 964); iteration cost 2-5x (10-15x on two problems); less attractive above 4 or 5 element variables; misapplied on dense problem 12 (14871 vs 293).",
+    "pages": "pp. 19-21, 24"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "The two line-search options rest on Table 9: forcing an interpolation cuts iterations and raises evaluations. Also Heuristic 5 (M3 over M4, M4 safeguard 5% of iterations, m-ranges per cost regime matching the code's 3<= M <=7) and Heuristic 4 (Gill-Murray scaling dropped).",
+    "pages": "pp. 12-13, 15, 18"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "As c01: Theorem 6.1 covers Shanno-Phua and Buckley-LeNir too, and the rival can be made n-step quadratic; it does not discriminate.",
+    "pages": "p. 24"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "storage-matched head-to-head with a structured rival, including a deliberately misapplied case",
+    "evidence": "Stg, it/nf and split times per method in one row; the dense-Hessian problem kept to show PQN misapplied; continues c01's cost-split reporting candidate",
+    "pages": "pp. 19-21"
+   }
+  ],
+  "transferable": [
+   "Print storage, iterations/evaluations and iteration/function/total time per method in one row, so a win on one count and a tie on another show together (pp. 19-20).",
+   "Give storage advice as a range tied to the cost regime: cheap functions get low storage and accurate searches; expensive ones get 3-7 corrections and an inexact search (p. 18).",
+   "Report how often each safeguard fires (M4: about 5% of iterations) (p. 15).",
+   "Measure the value of extra storage as NFUN(m1)/NFUN(m2) and show its distribution over the test set (pp. 10-11).",
+   "Label each variant with a one-line formula (M1-M4) before tallying (p. 14)."
+  ],
+  "coauthors": "Dong C. Liu (Northwestern EECS); Richard Byrd suggested scaling M4 (acknowledged, p. 25)",
+  "quotes": [
+   {
+    "text": "In contrast, the L-BFGS method gives a substantial speed-up in 70% of the problems.",
+    "page": 11
+   },
+   {
+    "text": "We observe large variations in the iteration time of PQN: for most problems it is 2 to 5 times larger than that of L-BFGS.",
+    "page": 21
+   }
+  ]
+ },
+ {
+  "id": "S019",
+  "year": "1992",
+  "title": "Theory of algorithms for unconstrained optimization",
+  "read_level": "full",
+  "contribution": "Second (OCR) read of the Acta Numerica survey (round-1 card c02): theorem statements, constants and the targeted-run numbers are now legible. BFGS 15 iterations against DFP 4041 (close to Powell's estimate) and phi = 0.999 at 2223; sigma1 = 1e-4, sigma2 = 0.9; m in [3,7]; the Khalfan-Byrd-Schnabel SR1 rate is 2n-step q-quadratic (pp. 17, 24, 29, 31).",
+  "problem_entry": "As in c02 (a user's view of which theory matters, methods as implemented, pp. 1-2). New: progress 'in the last 15 years' (p. 1); trust-region theory obtained before 1982, hence omitted (p. 3); large n fixed as 10,000 to justify studying unrestarted CG (p. 11).",
+  "key_idea": "Four classes of results and a few hub principles (pp. 2, 4-7). Settings now legible: BFGS with a very loose search, sigma1 = 1e-4, sigma2 = 0.9 (pp. 16-17); the unit trial step always, since alpha = 1 satisfies Wolfe for large k if sigma1 < 1/2 (p. 7); PR+ beta = max{beta_PR, 0} (4.8) (p. 13); L-BFGS with m in [3,7] (p. 31); library list tied to codes VA14, CONMIN, IMSL/NAG BFGS, VE08, VA15, Nash's truncated Newton, IMSL Nelder-Mead for noisy functions (pp. 2-3).",
+  "assumptions": "Theorem 3.1: f bounded below, C^1 near the level set, Lipschitz gradient L, Wolfe steps 0 < sigma1 < sigma2 < 1 (pp. 4-5). Strong convexity m||z||^2 <= z'Gz <= M||z||^2 (5.6) (p. 18). Theorem 5.1: any pairs with y's/s's >= m (5.18), ||y||^2/y's <= M (5.19) (p. 21). CGT SR1: C^2, bounded Lipschitz Hessian, (6.2) with r in (0,1), uniformly independent steps (p. 28); KBS replace independence by bounded positive definite B_k (p. 29). Powell 1986: two-variable quadratic, G(x*) = I, unit steps (p. 23).",
+  "proof_devices": [
+   "Zoutendijk sum cos^2 theta_k ||g_k||^2 < inf (3.9) from alpha_k >= ((sigma2-1)/L) g'd/||d||^2 (3.10) and c = sigma1(sigma2-1)/L; cond(B_k) <= A gives cos theta_k >= 1/A (pp. 5-6)",
+   "steepest descent on a quadratic: f_{k+1} <= [(lambda_n - lambda_1)/(lambda_n + lambda_1)]^2 f_k via Kantorovich (3.21); same constant asymptotically with one quadratic interpolation (pp. 8-9)",
+   "CG: Al-Baali sufficient descent g'd <= -c||g||^2 (4.7); |beta| <= beta_FR suffices and c > 1 is tight (Gilbert-Nocedal); Theorem 4.2 (beta >= 0, (4.7), Property (*)) gives liminf ||g|| = 0; n-step quadratic rates (Cohen, Burmeister, Ritter) (pp. 11-14)",
+   "BFGS trace and determinant: ||s|| <= c2||g|| cos theta with c2 = 2(1-sigma1)/m (5.9), decrease term ~ alpha/cos^2 theta (5.10), increase term <= M (5.13), det(B_{k+1}) = det(B_k) y's/s'Bs (5.15); Broyden-class decrease term ~ 1/cos^2 theta against an uncertain-sign term ~ 1/cos theta (5.16)-(5.17) (pp. 18-20)",
+   "Theorem 5.1 (Byrd-Nocedal 1989): for any p in (0,1), cos theta_j >= beta1 for at least ceil(pk) of j in [1,k]; psi(B) = tr(B) - ln det(B) >= ln cond(B) (5.21) (p. 21)",
+   "Theorem 5.2 (Powell 1976a): BFGS liminf ||g|| = 0 if ||y||^2/y's stays bounded (5.22) (p. 22)",
+   "Powell 1986: DFP iterations of order lambda_1 for a large initial eigenvalue, BFGS logarithmic in lambda_1 in the worst case (pp. 23-24)",
+   "SR1: n+1-step termination on strongly convex quadratics (Fiacco-McCormick, p. 27); B_k -> Hessian (CGT, p. 28); 2n-step q-quadratic, limsup e_{k+2n}/e_k^2 < inf (KBS, p. 29), correcting c02's n-step",
+   "trust regions: ||B_k|| growing at most linearly suffices; an accumulation point with zero gradient and PSD Hessian (p. 32)"
+  ],
+  "experiments": "No new experiments; the reported targeted runs now have numbers. Byrd-Nocedal-Yuan two-variable test (quadratic plus small quartic, start eigenvalues 1 and 1e4): BFGS solved in 15 iterations, trace 1e4 -> 3 in 10 iterations; DFP 4041 iterations (close to Powell's estimate), 3000 iterations to bring the trace to 1100; phi = 0.999 needed 2223 (p. 24). FR on the 961-variable minimal surface makes tiny steps for hundreds of iterations (p. 12). CG family storage FR 4, PR 5, VE04 6, CONMIN 7 n-vectors, evaluation ranking in the same order (p. 15). KBS: in about one third of problems neither SR1 nor BFGS approximates the Hessian well (p. 28). Zhang-Tewarson negative phi: moderate but consistent gain (p. 25).",
+  "positioning": "As in c02. Open Question I on DFP unanswered since 1976, for a method known for almost 30 years (pp. 17-18). L-BFGS said to be competitive with PQN when element functions have more than 5 or 6 variables, citing Liu-Nocedal 1989 (p. 30), while the 1989 study itself prints 3-5 [S002 pp. 21, 24]: a drift between source and survey.",
+  "writing": "Numbers serve as argument anchors: n = 10,000 for the unrestarted-CG regime (p. 11), three counts (15, 4041, 2223) for the BFGS-DFP story (p. 24), a storage ladder 4-5-6-7 for CG extensions (p. 15). Otherwise as c02.",
+  "limits_future": "As c02, now dated: DFP convergence open since 1976 (p. 17); why L-BFGS with m in [3,7] is as fast as BFGS on many problems is not understood (p. 31); no counterexample for nonconvex BFGS yet (p. 22).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Refines c02 (one piece of evidence): the separating mechanism is confirmed by a targeted run whose count is set against the theoretical estimate (DFP 4041 against BFGS 15, close to Powell's estimate), and the continuity question is answered by running phi = 0.999 (2223); steps 2 and 4 in a 1992 survey. Also Taste mark 4 quantified (trace 1e4 -> 3 in 10 BFGS iterations; DFP 3000 iterations to 1100).",
+    "pages": "pp. 18, 22, 24"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "As c02: PQN one of the major algorithmic advances; CG best for very large problems with cheap functions.",
+    "pages": "pp. 10, 30"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "The survey restates the L-BFGS/PQN crossover as more than 5 or 6 element variables, where the cited 1989 study prints 3-5 (S002 pp. 21, 24); a skill statement of the threshold should cite S002.",
+    "pages": "p. 30"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "As c02: angle tests rejected by argument and by what the best codes do, not by a new experiment. Also Heuristic 5: parameter advice as numbers (sigma1 = 1e-4, sigma2 = 0.9, unit trial step, m in [3,7]).",
+    "pages": "pp. 7, 17, 31"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Put the theory's predicted count next to the observed count on one small, nearly quadratic problem, and say how close they are (p. 24).",
+   "Answer a continuity question (holds at phi = 0.999, why not at 1?) with the run at 0.999 as well as with the argument (pp. 18, 24).",
+   "Rank a family of methods by storage and by evaluations in one sentence, to show the extra vectors buy the gain (p. 15).",
+   "Fix the scale of 'large' with a number (n = 10,000) before arguing which theoretical regime matters (p. 11)."
+  ],
+  "coauthors": "none (single-authored); thanks Marucha Lalee, Christy Hartung, Peihuang Lu",
+  "quotes": [
+   {
+    "text": "In contrast, the DFP method required 4041 iterations to obtain the solution (which is amazingly close to the estimate given by Powell).",
+    "page": 24
+   },
+   {
+    "text": "Then the rate of convergence is 2n-step q-quadratic",
+    "page": 29
+   }
+  ]
+ },
+ {
+  "id": "S014",
+  "year": "1994",
+  "title": "Representations of quasi-Newton matrices and their use in limited memory methods",
+  "read_level": "full",
+  "contribution": "Second (OCR) read of the compact-representation paper (round-1 card c02; TR NAM-03, June 1992, revised January 21, 1996). The formulas and the multiplication counts are now legible: unconstrained step 4mn + O(m^2) = the two-loop recursion's 4mn; H_k e_i 2mn + O(m^2) against (4m-1)n; reduced-Hessian work (4m+1)t; compact update 2mn against (3/2)m^2 n (pp. 13, 15, 17-20).",
+  "problem_entry": "As in c02 (projections and the direct matrix are expensive with the recursion, pp. 2, 4). New: m in [3,7] suffices in practice (p. 3); the recursion's H_k e_i costs (4m-1)n, almost the dense cost, and no O(mn) recursion exists for B_k (p. 19).",
+  "key_idea": "Lemma 2.1: V0...V_{k-1} = I - Y_k R_k^{-1} S_k', R_k upper triangular of s_{i-1}'y_{j-1} (2.2)-(2.3) (p. 5). Theorem 2.2: inverse compact form (2.6) with D_k = diag(s_i'y_i) (2.7) (p. 6). Theorem 2.3: direct form (2.17) with L_k strictly lower (2.18) (p. 7), L_k = S_k'Y_k - R_k (2.22) (p. 8). Theorem 2.4: S'B0S + L D^{-1} L' positive definite, so only a k x k Cholesky is needed (p. 9). Limited memory with H^(0) = gamma_k I (3.1), B^(0) = sigma_k I (3.5) (p. 10), gamma_k (3.12) and sigma_k (3.23) (pp. 12, 16). SR1 forms (5.2), (5.9) (pp. 21-22); Broyden forms (6.4), (6.15) (pp. 23, 25).",
+  "assumptions": "BFGS: s_i'y_i > 0 and a positive definite start (pp. 6-7); SR1: a well-defined update (p. 21); Broyden: nonzero s_i, nonsingular start (pp. 23, 25); scalar basic matrix 'because this choice is common in practice' (p. 10); m constant (p. 9); m very small in practice, 'say m < 7' in the OCR (p. 11).",
+  "proof_devices": [
+   "induction with the bordered triangular R_{k+1} for the product of projections (p. 5)",
+   "split H_k = M_k + N_k, N_k = S_k R_k^{-T} D_k R_k^{-1} S_k' (2.12) by induction (pp. 6-7)",
+   "Sherman-Morrison-Woodbury through the explicit inverse of the middle matrix C_k (2.20) to get the direct form (p. 8)",
+   "positive definiteness of S'B0S + L D^{-1} L' by contradiction through triangular R_k with positive diagonal (p. 9)",
+   "two-loop coefficients equal R_k^{-1} S_k' g_k; the recursion is the adjoint of g -> (1/2) g'H_k g (p. 19)",
+   "exact equivalence with multiple secant updates: Y'S = D (conjugate directions) for BFGS (p. 26); symmetry s_i'y_j = s_j'y_i for SR1 (p. 28)"
+  ],
+  "experiments": "n/a (no tests). Multiplication counts now legible: Algorithm 3.1 (2m+1)n + (2m+1)n + O(m^2) = (4m+2)n + O(m^2), extra work 4mn + O(m^2) inside a line-search code (p. 13); two-loop recursion 4mn (+ n for diagonal H0) (p. 18). H_k v (4m+1)n + 3m^2 (p. 13); v'H_k v (2m+1)n + O(m^2), roughly half (p. 14); u'H_k v (4m+1)n + 2m^2 + O(m) against (4m+2)n + O(m^2) (p. 14). A'H_kA: 2mnt for S'A, Y'A; other products (2t+4m)n (pp. 14-15). Sparse: H_k e_i 2mn + O(m^2), e_i'H_k e_i O(m^2), work proportional to nonzeros n_A (p. 15), against (4m-1)n for the two-loop recursion (p. 19). B_k: forming 2mn plus lower order, B_k v (4m+1)n + O(m^2), v'B_k v (2m+1)n + O(m^2), B_k e_i 2mn + O(m^2) (pp. 16-17); reduced Hessian product (4m+1)t + O(m^2), theta'B theta (2m+1)t + O(m^2) (pp. 17-18). gamma_k free, sigma_k one multiplication (pp. 13, 16). Straightforward direct approach (3/2)m^2 n to form against 2mn (p. 20).",
+  "positioning": "As in c02. The two-loop recursion is kept as better when H^(0) is not a scalar multiple of I (pp. 18-19); no O(mn) direct recursion known (p. 19); multiple secant BFGS not advantageous (p. 27), Broyden preference not clear cut (p. 28). Users dated: Mahidhara-Lasdon 1990, Byrd-Lu-Nocedal 1993 (p. 16), Biegler-Nocedal-Schmid 1993 (p. 25).",
+  "writing": "Each algorithm box ends with per-step counts and a total (pp. 13, 16-17); every comparative word is backed by two counts ('roughly half', 'only slightly less expensive', p. 14; 'less efficient', p. 20); hedge 'as far as we know' on parity (p. 13).",
+  "limits_future": "No numerical tests; no gain over the recursion for unconstrained problems (pp. 13, 18); recursion preferable for non-scalar H^(0) (pp. 18-19); SR1 skip test can be expensive, triangular factorization of M_k suggested (p. 23); no detailed limited-memory SR1 algorithms (p. 23).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "As c02 (one piece of evidence): matrix kept, representation replaced; parity with the incumbent on its home problem now exact, 4mn + O(m^2) against the two-loop recursion's 4mn.",
+    "pages": "pp. 13, 18"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "As c02, with counts: structure exploited inside the generic method's linear algebra; H_k e_i 2mn + O(m^2) against (4m-1)n; reduced-Hessian work in t rather than n.",
+    "pages": "pp. 15, 17-19"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Step 5 (record where each part loses): the incumbent two-loop recursion is kept as the better choice for a non-scalar H^(0). Also Heuristic 5 with exact counts (gamma_k free, sigma_k one multiplication, (3/2)m^2 n against 2mn), confirming 08 and catalog D2 [S014 pp. 12-13, 19-20]; Heuristic 7 staircase users dated.",
+    "pages": "pp. 13, 16, 18-20, 25"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "State the incumbent's exact cost for the same operation next to yours, and claim parity only when the leading terms agree (4mn and 4mn) (pp. 13, 18).",
+   "Separate the cost of forming a representation from the cost of using it (2mn to form B_k, (4m+1)n for B_k v), so a comparison can be won on formation alone ((3/2)m^2 n against 2mn) (pp. 16-17, 20).",
+   "Choose free parameters (gamma_k, sigma_k) by what is already stored, so they cost nothing or one multiplication (pp. 13, 16).",
+   "Write the product of rank-one projections in closed form once (Lemma 2.1); every compact form then follows by induction or Sherman-Morrison-Woodbury (pp. 5-8, 23-25)."
+  ],
+  "coauthors": "Richard H. Byrd, Robert B. Schnabel (University of Colorado, Boulder); thanks Peihuang Lu",
+  "quotes": [
+   {
+    "text": "Of course for large problems the term 4mn predominates.",
+    "page": 13
+   },
+   {
+    "text": "updating the representation of the limited memory matrix using the compact form requires only 2mn multiplications, compared to 3/2 … multiplications needed by the approach described in this section.",
+    "page": 20
+   }
+  ]
+ }
+]

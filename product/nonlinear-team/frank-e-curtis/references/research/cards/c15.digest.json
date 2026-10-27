@@ -1,0 +1,165 @@
+[
+  {
+    "id": "S052",
+    "year": "2018",
+    "title": "FaRSA for ℓ1-regularized convex optimization: local convergence and numerical experience",
+    "read_level": "full",
+    "contribution": "Adds one inexact-Newton residual condition to the FaRSA reduced-space method for ℓ1-regularized convex problems, proves finite active-set identification and local superlinear/quadratic convergence, and benchmarks a public C implementation against LIBLINEAR and ASA-CG on 30 LIBSVM datasets.",
+    "problem_entry": "Companion SIAM paper gave only global convergence and preliminary Matlab results; this one supplies the local rate and production code, motivated by first-order methods' weakness on ill-conditioned ℓ1 problems (pp. 2-3).",
+    "key_idea": "Switch between a reduced-space Newton-CG step on nonzeros and a reduced ISTA step on zeros by comparing optimality measures β and φ; the only change is the subproblem test (4) ‖Hd+g‖ ≤ min{μ‖g‖^r, ‖g‖²}, which leaves global theory intact (pp. 5-8).",
+    "assumptions": "f convex C² with uniformly positive definite bounded Hessian (strong convexity), Hessian Lipschitz near x*, strict complementarity |∇_i f(x*)| < λ on zero variables; strong convexity admitted as a limitation (pp. 4, 20).",
+    "proof_devices": [
+      "separation constants δ1, δ2 define a ball where signs agree and β=0 (Lemmas 3.1-3.2, pp. 9-10)",
+      "activities freeze because ADD iterations only zero components (Lemma 3.3, p. 10)",
+      "finite active-set identification by contradiction with strict complementarity (Lemma 3.5, pp. 10-11)",
+      "unit-step acceptance via mean-value theorem, Hessian Lipschitz and eigenvalue interlacing (Lemma 3.6, pp. 12-13)",
+      "reduction to Dembo-Eisenstat-Steihaug inexact Newton on the free subspace (Lemma 3.7, Theorem 3.8, p. 13)"
+    ],
+    "experiments": "ℓ1 logistic regression on 30 LIBSVM binary sets (seven dropped for FaRSA out-of-memory, named); LIBLINEAR and ASA-CG at defaults with native 1e-6 termination; CPU averaged over 10 trials, 12 h cap; FaRSA fastest on 19, LIBLINEAR on 10; Table 3 checks predicted β=0 and superlinear φ decay over the last 5 iterations (pp. 14-20).",
+    "positioning": "Places FaRSA among proximal-Newton (LIBLINEAR), orthant-based (OBA) and bound-constrained reformulation (ASA-CG) methods and stresses that its inexactness conditions admit both CG and CD inner solvers (p. 3).",
+    "writing": "Key-features list then 'First/Second' contributions; algorithm restated with the one changed line flagged; each practical CG test justified by a lemma; memory disadvantage stated twice (pp. 3, 5, 15, 16, 20).",
+    "limits_future": "Higher memory from reduced-Hessian storage; strong convexity required; conjecture that distance-proportional regularization removes it (pp. 16, 20).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "subproblem accuracy conditions (2)-(4) derived from global and local convergence needs, implemented as CG termination tests (16a)-(16d)", "pages": "pp. 6, 8, 14-15"},
+      {"method": "Method 5", "relation": "variant", "note": "external codes at defaults, 10-trial averages, incumbent wins visible; but own parameters from unreported rough tuning and dataset exclusion triggered by FaRSA's own out-of-memory failures (named with reasons)", "pages": "pp. 14, 16-18"},
+      {"method": "Method 4", "relation": "evidence", "note": "notes that differing termination conditions change final objective values; reports F-final next to time", "pages": "p. 17"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Check the asymptotic theorem in the run logs", "evidence": "Table 3 tabulates β and φ over the final 5 iterations to confirm β=0 and superlinear φ decay; reruns at 1e-12 where not visible", "pages": "pp. 18-20"},
+      {"pattern": "Two-paper split: global theory + prototype, then local rate + production code", "evidence": "SIAM J. Optim. paper gave global convergence and Matlab results; this paper adds the local rate and C solver", "pages": "pp. 2-3"}
+    ],
+    "transferable": [
+      "Add a forcing-sequence residual test (r in (1,2]) to an existing inexact subproblem test to upgrade local convergence without redoing the global proof (pp. 6, 8, 13).",
+      "Use eigenvalue interlacing to transfer global Hessian bounds to reduced Hessians in unit-step-acceptance proofs (p. 12).",
+      "Design CG early-exit tests that monitor the outer method's structure (orthant flips, size relative to last accepted step) besides residual size (pp. 14-15).",
+      "Tabulate the theorem's predicted local signatures over the last iterations of every run (pp. 18-20)."
+    ],
+    "coauthors": "Tianyi Chen, Daniel P. Robinson",
+    "quotes": [
+      {"text": "thus indicating that the termination condition plays an important role for these two datasets.", "page": 17},
+      {"text": "We suspect that similar ideas could be incorporated into the FaRSA framework and would allow us to prove a superlinear convergence result without having to make a strong convexity assumption.", "page": 20}
+    ]
+  },
+  {
+    "id": "S071",
+    "year": "2018",
+    "title": "Fast market clearing algorithms",
+    "read_level": "full",
+    "contribution": "Applies the Curtis-Raghunathan implicit-complementarity semismooth Newton method to decentralized multi-period electricity-market clearing, obtaining sensitivities by finite differences through the unchanged price-query protocol and beating subgradient and pure Newton methods on IEEE networks (MERL TR2017-196 version read).",
+    "problem_entry": "Market-design work has neglected computation; privacy forces price-only communication, and the standard subgradient method needs many communication rounds (TR pp. 4-5).",
+    "key_idea": "Dualize only the ISO coupling constraints, pose clearing as an implicit complementarity problem in the multipliers, solve its Fischer-Burmeister reformulation by line-search semismooth Newton, with Jacobians from finite-differenced participant responses (TR pp. 10-15).",
+    "assumptions": "DC power flow (convex), strictly convex GenCo costs, strictly concave DSO utilities, price-taking participants, DSOs as single nodes; unit-commitment binaries set aside; local theory needs nonsingular generalized Jacobians and covers PC1 F via [5] (TR pp. 5, 7-8, 14).",
+    "proof_devices": [
+      "equivalence of competitive equilibrium and ICP solutions via KKT of the convex ISO problem (Theorem 1, TR p. 13)",
+      "Fischer-Burmeister characterization of complementarity (TR p. 13)",
+      "local superlinear rate imported from Qi-Sun and from [5] for PC1 functions (Theorem 2, TR p. 14)"
+    ],
+    "experiments": "MATLAB on IEEE case9-case300 with random quadratic costs/utilities, averages over 10 runs; subgradient hits its 100000-iteration cap on most instances (step constant unreported) while semismooth Newton needs 5-10 iterations; pure Newton of Motto et al. fails on most instances of four networks; multi-period T=2..32 shows iterations flat, evaluations linear, parallel speed-up shrinking as the dense m^3 solve dominates (TR pp. 17-21).",
+    "positioning": "Surveys equilibrium-model literature; criticizes Motto et al. for nonconvex AC dual decomposition without duality guarantees and for pure Newton without global convergence; restricts to convex DC model as better posed (TR pp. 4, 6).",
+    "writing": "Chapter style with an explicit 'Our Focus' list of lettered assumptions; welfare caveats added after referees; conclusion's 4-orders-of-magnitude claim is stronger than the 2-3 orders in the results section (TR pp. 5, 9-10, 18, 21-22).",
+    "limits_future": "Dense Newton matrix without exploitable structure; speed-ups fade at large T; future: unit commitment via convex hulls, DSO networks, AC power flow and SDP relaxations (TR pp. 17, 20, 22).",
+    "method_links": [
+      {"method": "Method 5", "relation": "variant", "note": "pure-Newton comparison is an in-framework ablation of the line search, but the main baseline is an untuned, iteration-capped subgradient method stopped on a different error measure", "pages": "TR pp. 12, 18-19"},
+      {"method": "Method 1", "relation": "variant", "note": "outer Newton method adapts to unmodifiable inner solvers (participants) by finite-differencing their responses through the existing protocol, instead of setting inner accuracy", "pages": "TR pp. 5, 15"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Keep the deployed interface fixed; put the acceleration in the coordinator", "evidence": "sensitivities obtained without modifying participants; communication requirement identical to subgradient", "pages": "TR pp. 5, 15, 22"},
+      {"pattern": "Port own structured-optimization algorithm to an industrial application with an industrial coauthor", "evidence": "ICP semismooth Newton of Curtis-Raghunathan (COAP 2017) reused with MERL/Mitsubishi coauthors, extending a 2016 PES paper", "pages": "TR pp. 3, 5-6"}
+    ],
+    "transferable": [
+      "Decentralize a welfare problem by partial Lagrangian dualization of the coordinator's constraints and solve the dual as a Fischer-Burmeister semismooth system with a merit line search (TR pp. 10-15).",
+      "Get Jacobians of black-box responses by central finite differences through the existing interface, parallel across agents (TR p. 15).",
+      "Ablate the globalization (pure Newton vs line search) to show what makes the method robust (TR p. 19).",
+      "Report the CPU share of each component plus a projected parallel speed-up and state where it stops helping (TR pp. 20-21)."
+    ],
+    "coauthors": "Arvind U. Raghunathan, Yusuke Takaguchi, Hiroyuki Hashimoto",
+    "quotes": [
+      {"text": "Table 1.3 clearly shows that employing the pure Newton strategy is not robust.", "page": 19},
+      {"text": "However as the number of time periods increases the time involved in the step computation (1.16) dominates the overall CPU time and as a consequence the speedups are not significant.", "page": 20}
+    ]
+  },
+  {
+    "id": "H001",
+    "year": "2019",
+    "title": "An Inexact Regularized Newton Framework with a Worst-Case Iteration Complexity of O(epsilon^-3/2) for Nonconvex Optimization",
+    "read_level": "full",
+    "contribution": "Gives generic inexact step conditions under which a regularized Newton framework containing ARC and TRACE attains O(ε^-3/2) first-order and O(max{ε1^-3/2, ε2^-3}) subspace second-order complexity, plus a hybrid CG-Newton/cubic instance that saves Hessian-vector products on CUTEst (arXiv v4 read).",
+    "problem_entry": "ARC, TRACE and Birgin-Martínez share the optimal O(ε^-3/2) bound; the paper abstracts the conditions on a trial step that suffice rather than adding one more method (arXiv pp. 2-3).",
+    "key_idea": "Subproblem in (s, λ) with σ^L‖s‖ ≤ λ ≤ σ^U‖s‖ plus three step inequalities (2.3a-c) that inexact Krylov solves can satisfy; cubic-decrease acceptance ratio as in TRACE; hybrid tries CG Newton steps (λ=0) before cubic subproblems (arXiv pp. 3-5, 16).",
+    "assumptions": "f C² bounded below; gradient Lipschitz on a set containing iterates and trial points with g_k ≠ 0 (admitted for exposition); Hessian Lipschitz along the path for complexity; subspace curvature condition for second order; ratio not scale invariant (arXiv pp. 4-6, 10, 13).",
+    "proof_devices": [
+      "λ_k ≤ 2‖g_k‖/‖s_k‖ + const (Lemma 3.3, arXiv p. 6)",
+      "persistent rejection drives λ/‖s‖ to infinity and forces acceptance (Lemmas 3.5-3.6, arXiv p. 7)",
+      "finiteness of rejected-then-accepted index sets R1, R2 (Lemma 3.8, arXiv pp. 8-9)",
+      "acceptance threshold λ ≥ (H_Lip+κ2+2η)‖s‖ ⇒ bounded σ^U ⇒ ‖s_k‖ ≥ c‖g_{k+1}‖^{1/2} (Lemmas 3.9-3.11, arXiv pp. 10-11)",
+      "accepted-step count × bounded rejections between acceptances (Lemmas 3.12-3.13, Theorem 3.5, arXiv pp. 11-13)",
+      "special-case embedding of ARC and TRACE (arXiv pp. 14-16)"
+    ],
+    "experiments": "Matlab iR Newton vs in-house iARC (GALAHAD RQS on Lanczos subspaces), shared parameters chosen on the test set; CUTEst 171 → 152 problems with named removals, three iR-only successes left out of profiles; performance profiles in iterations and Hessian-vector products, gain explained by CG reusing products (arXiv pp. 16-19).",
+    "positioning": "Builds on Nesterov-Polyak, Cartis-Gould-Toint ARC, TRACE and Birgin-Martínez; treats concurrent Dussault-Orban work by three listed differences and calls the papers complementary (arXiv pp. 2-3).",
+    "writing": "Contribution stated by negation (not trust region, not quadratic, not cubic regularization); proofs follow TRACE lemmas 'in a similar manner'; numerical claims hedged (arXiv pp. 2, 12-13, 18-19).",
+    "limits_future": "Second-order guarantees only in explored subspaces; implementation skips second-order checks; single in-house comparator; future instances from other solvers of (2.1) (arXiv pp. 13, 17, 19).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "step conditions (2.3) are what the acceptance mechanism needs; Krylov/CG inner iteration stops once they hold", "pages": "pp. 4, 16, 18"},
+      {"method": "Method 5", "relation": "evidence", "note": "rival iARC in the same Matlab code; removals named; iR-only successes dropped from profiles in the baseline's favour", "pages": "pp. 17-18"},
+      {"method": "Method 5", "relation": "variant", "note": "parameters chosen as values that worked well on the test set; iARC used a stricter inner test (5.1)", "pages": "p. 17"},
+      {"method": "Method 4", "relation": "evidence", "note": "practical gain attributed to inexact Newton steps and measured in Hessian-vector products, not credited to the complexity bound", "pages": "p. 19"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Generalize by step conditions: a framework containing rival optimal methods as special cases", "evidence": "generic conditions (2.3) and subproblem (2.1) with ARC and TRACE shown as instances plus a new hybrid", "pages": "pp. 2, 4, 14-16"}
+    ],
+    "transferable": [
+      "Treat the regularization value λ as a variable bounded by multiples of ‖s‖ to unify trust-region and regularization subproblems (p. 3).",
+      "Show existing algorithms are instances of a framework by checking accepted steps satisfy its conditions and rejection updates are consistent (pp. 14-16).",
+      "Decompose complexity into accepted-step count times bounded rejections between acceptances (pp. 11-13).",
+      "Profile the inner-work unit (Hessian-vector products) when the gain comes from cheaper inner steps, and explain the mechanism (pp. 18-19)."
+    ],
+    "coauthors": "Daniel P. Robinson, Mohammadreza Samadi",
+    "quotes": [
+      {"text": "Our proposed framework is intentionally very general; it is not a trust region method, a quadratic regularization method, or a cubic regularization method.", "page": 2},
+      {"text": "Overall, we claim that the primary strength of iR Newton as compared to iARC is its ability to employ inexact Newton steps.", "page": 19}
+    ]
+  },
+  {
+    "id": "S014",
+    "year": "2019",
+    "title": "Exploiting negative curvature in deterministic and stochastic optimization",
+    "read_level": "full",
+    "contribution": "Proposes two-step and dynamic frameworks that choose between descent and negative-curvature steps via upper-bounding models (allowing fixed step sizes), proves second-order convergence and O(max{εg^-2, εH^-3}) complexity deterministically, gives an SG method with zero-mean curvature noise, and shows empirical gains on CUTEst and an MNIST CNN (arXiv v3 read).",
+    "problem_entry": "Theory for negative-curvature methods exists but no paper had shown consistent computational gains; stochastic use was unexplored for that reason (arXiv pp. 1-2, 4).",
+    "key_idea": "Quadratic and cubic upper-bounding models with adaptive Lipschitz estimates pick the step with larger predicted decrease and permit fixed steps; in the stochastic case add ω_k d_k with ω_k uniform on [-1,1], or take the first nonpositive-curvature CG direction (arXiv pp. 5, 8, 17-21).",
+    "assumptions": "f C² bounded below with Lipschitz g and H on the iterate path; direction conditions with k-independent constants; no non-degenerate-saddle assumption; stochastic moment bounds (26)-(27) without expected-descent on d_k; no second-order claim stochastically (arXiv pp. 4-5, 12, 17-18).",
+    "proof_devices": [
+      "per-iteration decrease ≥ c1|λ_k|^3 + c2‖g‖^2 from cubic/quadratic upper bounds, then summability (Theorem 1, arXiv pp. 6-7)",
+      "dynamic decrease ≥ max of two model reductions (16) (arXiv pp. 9-10)",
+      "complexity by summing decreases over G(εg), H(εH) and bounding inner-loop iterations (Theorem 3, arXiv pp. 10-11)",
+      "SG expected-decrease lemma reused with Bottou-Curtis-Nocedal Theorems 4.8/4.9 (Lemma 2, Theorem 4, arXiv pp. 18-20)"
+    ],
+    "experiments": "Matlab on 97 CUTEst unconstrained problems (n ≤ 500, explicit Hessians): ablation Algorithm 2(s_k) vs 2(s_k,d_k) with steepest-descent and modified-Newton s_k; per-problem normalized differences in final f, iterations and f-evals plotted only where NC was used (39 problems); TensorFlow CNN on MNIST, SG = same code with β_k=0, same seeds, single run, L1/σ1 set to smallest stable values (arXiv pp. 13-16, 21-23).",
+    "positioning": "Moré-Sorensen → Forsgren-Gill-Murray → Gill-Kungurtsev-Robinson → Royer-Wright line, none showing consistent gains; contrasts with saddle-escape analyses needing non-degenerate saddles; credits Liu-Yang and Neelakantan et al. (arXiv pp. 3-4).",
+    "writing": "Yes/no research question in the abstract; contributions with section pointers and candid admission that the stochastic dynamic method lacks theory; stochastic part framed as a first step (arXiv pp. 1, 3).",
+    "limits_future": "No theory for the stochastic dynamic method; one network, one run; deterministic tests use exact leftmost eigenvectors (arXiv pp. 3, 13, 21-23).",
+    "method_links": [
+      {"method": "Method 5", "relation": "evidence", "note": "rivals built in the same framework with one component off: descent-only Algorithm 2(s_k); SG = NC with β_k=0, same seeds and start", "pages": "pp. 13, 22"},
+      {"method": "Method 5", "relation": "variant", "note": "stochastic comparison from a single run; initial Lipschitz estimates tuned to stability for both", "pages": "p. 22"},
+      {"method": "Method 4", "relation": "evidence", "note": "premise is the mismatch between convergence theory and lack of practical evidence; judged by final f, iterations and evaluations, not by the bound", "pages": "pp. 2, 4, 14"},
+      {"method": "Method 1", "relation": "variant", "note": "inner CG supplies what the outer method needs (its first nonpositive-curvature direction becomes d_k) rather than accuracy set by a merit model", "pages": "pp. 20-21"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Pick a globalization that survives losing exact function values", "evidence": "upper-bounding models give fixed step sizes, making methods translatable to stochastic settings where line searches are not viable", "pages": "pp. 2, 8, 17-21"},
+      {"pattern": "Per-problem pairwise difference plots restricted to problems where the feature fired", "evidence": "normalized differences (21)-(23) plotted only for problems using at least one negative-curvature step", "pages": "pp. 14-15"}
+    ],
+    "transferable": [
+      "Choose between two candidate steps by comparing model-predicted reductions and test sufficient decrease only for the chosen step (pp. 8, 10).",
+      "Update a Lipschitz estimate to the value making model decrease equal actual decrease, clipped to [ρL_k, 10^3 L_k] (pp. 13-14).",
+      "Add a randomly signed zero-mean curvature step to SG so the SG analysis carries over (pp. 17-20).",
+      "Stop CG at the first nonpositive-curvature direction and reuse it as the negative-curvature step (pp. 20-21).",
+      "Plot per-problem normalized pairwise differences only on problems where the feature was triggered (pp. 14-15)."
+    ],
+    "coauthors": "Daniel P. Robinson",
+    "quotes": [
+      {"text": "Importantly, none of the papers above (or any others to the best of our knowledge) have established consistent gains in computational performance as a result of using negative curvature directions.", "page": 4},
+      {"text": "As previously mentioned, we do not claim convergence guarantees for this method. However, we believe that it is well motivated by our previous algorithms.", "page": 21}
+    ]
+  }
+]

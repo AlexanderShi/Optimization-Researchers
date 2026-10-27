@@ -1,0 +1,94 @@
+[
+ {
+  "id": "S001",
+  "year": "2018",
+  "title": "Optimization methods for large-scale machine learning",
+  "read_level": "full",
+  "contribution": "A joint survey (Bottou, Curtis, Nocedal) that builds a unified expectation-based convergence and work-complexity theory for a generic stochastic gradient method and organizes noise-reduction, second-order, and regularized-model methods on a map centred on SG (read from arXiv v3).",
+  "problem_entry": "Large-scale ML is a setting where classical nonlinear optimization 'typically falters'. Two case studies (convex text classification on RCV1, nonconvex DNNs) frame three questions: how the problems arise, which methods succeed and why, and what is open (pp. 3-8).",
+  "key_idea": "SG is the workhorse and the origin of a 2-D map (noise-reduction axis x second-order axis, Fig. 3.3 p. 20). One generic Algorithm 4.1, with an abstract stochastic direction g(wk, xi_k), covers SG, mini-batch and scaled steps (pp. 21-22).",
+  "assumptions": "L-smooth F (A4.1); first/second-moment limits (4.7)-(4.8) giving (4.9); strong convexity (A4.5) for rates. Independent seeds, expectation-only results and the strongly-convex focus are stated as choices for convenience or relevance (fn. 4 p. 22; Inset 4.2 p. 25). E(n,eps) ~ 1/n + eps in the work analysis (p. 36).",
+  "proof_devices": [
+   "Lemma 4.2: descent lemma in expectation from the L-smooth upper bound (pp. 23, 83)",
+   "Lemma 4.4: moment bounds turn it into a deterministic right-hand side -(mu - alpha L M_G/2) alpha ||grad F||^2 + alpha^2 L M/2 (pp. 24-25)",
+   "Subtract the noise floor alpha L M/(2 c mu) to get a contraction (4.15), Theorem 4.6 (pp. 26-27)",
+   "Stepsize-halving sketch: each halving needs about log(3)/(alpha c mu) iterations, giving O(1/k) (4.17)-(4.18), Fig. 4.1 (pp. 27-28)",
+   "Induction with a constant nu chosen so the residual is nonpositive, Theorem 4.7 (pp. 28-29)",
+   "Telescoping sums for nonconvex fixed and diminishing steps, Theorems 4.8-4.10 (pp. 32-34)",
+   "Markov inequality at a random iterate, Corollary 4.11 (p. 34); S+/S- convergent-sum argument, Corollary 4.12 (p. 84)",
+   "Geometric variance decay gives a linear rate by induction, Theorem 5.1 (pp. 41-42)",
+   "Work count: geometric mini-batch growth reaches eps with O(1/eps) sample gradients, Theorem 5.3 (pp. 43-44)",
+   "Approximation/estimation/optimization error decomposition and the macroscopic budget problem (4.31)-(4.34), Table 4.1 (pp. 35-37)",
+   "Descent-direction test (5.11) and its sample-variance surrogate (5.12) (p. 45)",
+   "Randomized coordinate descent (Theorem 7.1, p. 72) and proximal gradient (Theorem 8.1, pp. 75-76) linear rates"
+  ],
+  "experiments": "Numerical comparison avoided on purpose to escape test-set bias (p. 4). One demonstration: RCV1 logistic regression, SG with fixed alpha = 4 against batch L-BFGS over 10 epochs, plotted against accessed data points. SG's stepsize tuning is disclosed, and so is the batch method's later overtaking (Fig. 3.1, pp. 17-19). Other figures report other groups' results (pp. 8-9).",
+  "positioning": "Bridges the ML and optimization vocabularies (R-linear = geometric, SA/SAA; p. 16, p. 18). Continues Robbins-Monro, Bottou-Bousquet trade-offs and Nemirovski-Yudin lower bounds (pp. 16, 35-37). Tempers the ML consensus ('far from settled', p. 40). Cites Bottou's and Nocedal's lines but no Curtis paper (refs pp. 85-95).",
+  "writing": "Three numbered questions (p. 3); 'Role of ...' paragraphs after theorems (pp. 29-31); history and side-view insets (pp. 16, 25, 39); Commentary subsections that hedge specifically (pp. 37, 49, 81); small toy examples that show mechanisms (pp. 17, 52, 66, 80).",
+  "limits_future": "Not covered: parallel and distributed computing, ADMM, EM (p. 82). Open: nonconvex Hessian-free strategies (p. 55), stochastic quasi-Newton safeguards (p. 58), momentum theory (p. 69), batch-normalization noise (p. 68). Future: SG-to-reduced-variance transition methods (p. 45) and noise reduction combined with second-order schemes (pp. 21, 58).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Inner accuracy set by the outer method's needs. Newton-CG residual test controls the outer rate (Alg. 6.1, pp. 53-54). The Hessian can be sampled more coarsely than the gradient (p. 53). Proximal-Newton subproblems stop on an ISTA-step-norm test plus model decrease, tightened near the solution (pp. 79-80). Joint survey in the Byrd-Nocedal line, so this is school-level evidence.",
+    "pages": "pp. 53-54, 79-80"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Replaces convergence rate by expected error under a time budget (pp. 34-37). Asks whether 'linearly convergent' is meaningful when per-iteration cost grows, and answers with total work (p. 43). Repeats for aggregation methods (p. 49). Rejects the minimum-norm subgradient as a discontinuous accuracy measure (fn. 9, p. 80).",
+    "pages": "pp. 34-37, 43-44, 49, 80"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Shares the worry about test-set and implementation bias but answers it by not benchmarking at all (p. 4). The single demo uses a tuned SG on one dataset, discloses the tuning and the batch method's later win, and does not count the tuning effort (pp. 17-19).",
+    "pages": "pp. 4, 17-19"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "The single-algorithm, monitored-transition ideal appears in unconstrained sampling form: start like SG and pass into reduced variance, with sample size raised by a monitored test (5.12) and a geometric backup. There is no penalty or feasibility trade-off.",
+    "pages": "p. 45"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "abstract stochastic direction with moment bounds",
+    "evidence": "Algorithm 4.1 needs only a seed, a stochastic vector and a stepsize. Conditions (4.7)-(4.8) on the direction's first and second moments make one analysis cover SG, mini-batch and Hk-scaled directions.",
+    "pages": "pp. 21-24"
+   },
+   {
+    "pattern": "map the field around the workhorse",
+    "evidence": "2-D schematic with SG at the origin and axes named by the deficiency each family fixes (noise, ill-conditioning), hedged at once as not to be taken literally, then reused to open sections 5 and 6.",
+    "pages": "pp. 20-21, 40, 51"
+   },
+   {
+    "pattern": "total-work accounting before a verdict",
+    "evidence": "Rates are converted into sample-gradient evaluations to eps or error under a time budget before methods are ranked: Table 4.1, Theorem 5.3, and section 5.3.3 for aggregation methods. Possibly a sub-step of Method 4.",
+    "pages": "pp. 34-37, 43-44, 49"
+   }
+  ],
+  "transferable": [
+   "Analyse a generic method whose direction is an abstract random vector under first- and second-moment conditions, so one proof covers plain, mini-batch and quasi-Newton-scaled steps (pp. 21-24).",
+   "Subtract the recursion's fixed point (noise floor) to obtain a pure contraction for fixed steps (4.15, p. 27). Close diminishing-step rates by induction with a constant chosen to absorb the noise term (4.22, p. 29).",
+   "Derive a practical step-halving schedule from the fixed-step theorem: halve at twice the floor and hold each step about twice as long (pp. 27-28).",
+   "Rank slower-rate or growing-cost methods by total evaluations to eps or by error under a time budget, not by rate (pp. 35-37, 43-44).",
+   "Replace an uncheckable condition by an estimate plus a guaranteed fallback schedule (sample-variance test (5.12) with geometric backup, p. 45).",
+   "Stop inexact subproblem solves on a measure that is zero exactly at the solution and continuous (ISTA step norm), add model decrease, and tighten eta_k to 0 for a superlinear rate (pp. 79-80).",
+   "Under a favourable demo plot, disclose the tuning and the regime where the other method wins. Plot against accessed data points (pp. 17-19).",
+   "Follow each theorem with 'Role of ...' paragraphs explaining each constant's practical meaning (pp. 29-31)."
+  ],
+  "coauthors": "Léon Bottou, Jorge Nocedal",
+  "quotes": [
+   {
+    "text": "Rather than contrast SG and other methods based on the results of numerical experiments—which might bias our review toward a limited test set and implementation details—we focus our attention on fundamental computational trade-offs and theoretical properties of optimization methods.",
+    "page": 4
+   },
+   {
+    "text": "Ultimately, an algorithm that performs like SG at the start and transitions to a regime of reduced variance in an efficient manner could prove to be a very powerful method for large-scale learning.",
+    "page": 45
+   }
+  ]
+ }
+]

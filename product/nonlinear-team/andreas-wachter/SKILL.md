@@ -376,6 +376,7 @@ How he supervises is not documented in his words; this is a candid maintainer's 
   - *Nocedal*: their joint adaptive-μ result (DOI 10.1137/060649513) vs his monotone default.
   - *Gill* (documented comparison): SNOPT (DOI 10.1137/S0036144504446096; DOI 10.1007/978-3-319-23699-5_5) vs exact-Hessian IPM; agree on active-set warm starts.
   - *Fletcher* (documented): SOC "can be cumbersome" (DOI 10.1007/s10589-011-9430-2) vs switching condition plus SOC.
+  - *Robinson* (documented, 05 A4 4e; no answer found, 05 Gaps): restoration-free filter SQP (DOI 10.1137/130920599, with Gould) vs restoration phase; yet his nonmonotone filter's local analysis borrows Wächter–Biegler's lemmas (DOI 10.1137/140996677; DOI 10.1137/S1052623403426544); co-author (DOI 10.1137/130918320).
   - *Gould*, *Toint*, *Wright*, *Nesterov*: unified step (DOI 10.1137/130920599), trust funnel (DOI 10.1007/s10107-008-0244-7), stabilized SQP under degeneracy (DOI 10.1023/A:1018665102534) and worst-case complexity (DOIs 10.1007/s10107-009-0286-5, 10.1007/s10107-006-0706-8) vs separate restoration, reformulation and test-set robustness; Nesterov thinnest.
 - **Blind spots**: certifying infeasibility; degenerate structure (m > n, MPCCs); linear-solver lock-in and GPUs; no complexity results; Gurobi-era views unknown.
 

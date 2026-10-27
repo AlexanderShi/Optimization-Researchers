@@ -1,0 +1,131 @@
+[
+ {
+  "id": "S092",
+  "year": "2025",
+  "title": "Progressively Sampled Equality-Constrained Optimization",
+  "read_level": "full",
+  "contribution": "Extends progressive (adaptive) sample-size methods to equality-constrained SAA problems in which both objective and constraints are sampled, proving a better worst-case second-order sample-complexity bound than a one-shot full-sample solve when the initial sample is large enough, and showing data-access savings on a 2-D problem and a PINN.",
+  "problem_entry": "Lifts Mokhtari-Ozdaglar-Jadbabaie's unconstrained progressive sampling to sampled constraints, naming what breaks: constrained second-order complexity, a constrained termination test (least-squares multipliers), and acute-perturbation geometry of sampled Jacobians (pp. 2-3).",
+  "key_idea": "Solve nested sampled problems with geometrically growing sample sets, warm-starting each at the previous output and stopping at (eps_k, zeta_k)-stationarity; any solver with a cold-start O(max{eps^-2, zeta^-3}) bound and a warm-start log bound gives the total sample bound (Algorithm 1 p. 6; Theorem 3.1 pp. 17-18).",
+  "assumptions": "Uniform smallest-singular-value bound for sampled Jacobians with |S| >= p1, solver convergence to second-order points, (alpha, beta)-strongly Morse full problem, bounded derivatives, deterministic finite-population variance bounds; high-probability versions admitted as possible but not used; infeasible stationary points excluded (pp. 6-8).",
+  "proof_devices": [
+   "finite-population sampling bound via Cauchy-Schwarz giving errors proportional to xi_S = sqrt(N(N-|S|))/|S| (Lemma 3.2, p. 9)",
+   "acute perturbation of sampled vs full Jacobians once |S| exceeds a threshold proportional to N, via singular-value perturbation (Lemma 3.3, p. 10)",
+   "Stewart (1977) pseudo-inverse perturbation theory to bound least-squares multiplier differences, correcting a typo in Stewart's Theorem 5.2 (Lemma 3.4, pp. 11-13)",
+   "inheritance of strong Morse-ness by sampled problems via null-space/range decomposition (Lemmas 3.5-3.6, pp. 13-17)",
+   "tolerances eps_k = tau1 xi_{S_k} put each warm start inside the next problem's strongly Morse region; local strong convexity of Fletcher's augmented Lagrangian gives log2(5 omega eps_k/eps_{k+1}) gradient-descent iterations (Lemmas A.1, A.4, pp. 24-26, 33-34)",
+   "geometric sum of |S_k| log terms for the total bound (Theorem A.1, pp. 37-38)"
+  ],
+  "experiments": "Matlab; measure = individual constraint-gradient/data accesses; 2-D sin/cos-perturbed problem (N = 2048) with strong-Morse constants checked by contour plots, p1 = 64 vs one-shot, two subproblem solvers (Fletcher-AL second-order and first-order SQP); PINN for a damped oscillator with a 10x10 grid of initial sample sizes, best (16,32) about 35% of one-shot data accesses; in-house geometric-increase rival (27 settings) all worse; repeats per cell not reported (pp. 19-23).",
+  "positioning": "Constrained counterpart of Mokhtari et al.; builds on recent second-order complexity work for equality constraints (Goyens-Eftekhari-Boumal; Dimou-O'Neill) and Stewart's perturbation theory; adaptive-sampling literature engaged only through an in-house imitation (pp. 2-3, 9-13, 23).",
+  "writing": "'We propose, analyze, and test' opening and closing; each assumption followed by a mildness argument; 'formal remarks' flagged as important; Remark 3.3 pre-empts the |S| proportional to N objection; theorem text admits p1 is unknown in practice; one-paragraph conclusion (pp. 2, 7, 10, 17, 23).",
+  "limits_future": "Needed sample size is a fixed fraction of N; valid p1 unknown in practice; deterministic assumptions; infeasible stationary points ruled out; appendix covers constraint sampling only; no future-work section (pp. 6-11, 17, 23-24).",
+  "method_links": [
+   {"method": "Method 1", "relation": "variant", "note": "Subproblem tolerances are derived from what the outer progressive-sampling scheme needs (warm start must land in the next strongly Morse region), but the outer object is a sample-size schedule, not a merit function.", "pages": "pp. 20, 24-26"},
+   {"method": "Method 5", "relation": "variant", "note": "One-shot baseline is the same algorithm with p1 = N and the same solver, and the adaptive-sampling rival is built in-house with one component changed; but the rival is run only at the progressive method's best start chosen from the evaluation grid, and repeats are not reported.", "pages": "pp. 19-23"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "inner-solver contract", "evidence": "Outer sample bound proved against a stated cold-start/warm-start complexity contract for any subproblem solver, then instantiated with one solver in a corollary.", "pages": "pp. 6, 17-19"},
+   {"pattern": "check the assumption numerically on a 2-D instance", "evidence": "Contour plots measure the (0.6, 0.8)-strongly Morse constants of full and sampled problems before the comparison.", "pages": "pp. 19-20"},
+   {"pattern": "unknown-threshold parameter handled by a sweep", "evidence": "Theorem needs a sufficiently large p1 that is unknown in practice; experiments sweep a 10x10 grid of initial sample sizes.", "pages": "pp. 17, 22"}
+  ],
+  "transferable": [
+   "Count cost in individual sample-gradient accesses so progressive and one-shot runs are compared on the quantity the theorem bounds (pp. 18-22).",
+   "Tie the inner stopping tolerance to the sampling-error scale with a +1 so the final tolerance does not vanish: eps_k = 1e-6 sqrt(N(N-|S_k|)/|S_k|^2 + 1) (eq. (43), p. 20).",
+   "Report the full grid of unknown initial sample sizes against the one-shot corner of the same table, marking row and column minima (Table 1, p. 22).",
+   "Re-run the outer scheme with a subproblem solver that violates the theory's contract to show the gain does not hinge on it (pp. 20, 22).",
+   "State the outer scheme against a generic inner-solver complexity contract and instantiate it in a corollary (pp. 17-19)."
+  ],
+  "coauthors": "Lingjun Guo, Daniel P. Robinson",
+  "quotes": [
+   {"text": "it was better to run the subproblem solver to a prescribed accuracy before increasing the sample size, rather than employ an adaptive-like approach that increases the sample sizes more gradually.", "page": 23},
+   {"text": "such an assumption would generally not be verifiable in practice.", "page": 11}
+  ]
+ },
+ {
+  "id": "S093",
+  "year": "2025",
+  "title": "Active-Set Identification in Noisy and Stochastic Optimization",
+  "read_level": "full",
+  "contribution": "Proves that two active-set identification procedures (Oberlin-Wright's LP-LPEC multiplier route and a new l1-penalty QP primal-step route) still identify the optimal active set from a nearby point when all function and derivative values carry small bounded deterministic or stochastic errors, with corollaries inside stochastic algorithms and 2-D and constrained-NN illustrations.",
+  "problem_entry": "Classical identification guarantees assume exact values plus a CQ; little extends them to errors, and the one exception (Na-Anitescu-Kolar) is algorithm-specific with exact constraints (pp. 2-3).",
+  "key_idea": "Keep the identification subproblems and thresholds, feed them noisy data, and bound the effect; replace Oberlin-Wright's LP-with-trust-region by an always-feasible l1-penalty QP with proximal term because noisy-setting algorithms already solve such QPs (pp. 5-8, 14-15).",
+  "assumptions": "Uniform deterministic error bounds on f, e, c and gradients (covers deterministic and stochastic noise); LP-LPEC route: MFCQ + second-order condition with x-dependent noise tolerance (noise reduction near x*); QP route: LICQ + strict complementarity at a strict local minimizer with a uniform tolerance; stochastic corollaries assume a.s. convergence of iterates and per-iteration probability p of small noise (pp. 10, 14, 17-19).",
+  "proof_devices": [
+   "exact QP route: contradiction over finitely many index sets, closedness of the finitely generated cone (Rockafellar Thm 19.1), dual QP objective lower vs upper bound with theta <= ||x - x*||^-zeta (Theorem 3.3, pp. 8-10)",
+   "sign-pattern bookkeeping (PP, PN, NP, NN) and a mean-value bound on the square root to bound noisy vs exact rho-bar (Lemma 4.2, pp. 11-14)",
+   "noisy QP solution = solution of the KKT linear system on A(x*); linear-system perturbation bound keeps d near 0 and multipliers positive (Lemma 2.1, Lemma 4.4, pp. 5, 16-17)",
+   "Han-Mangasarian exact-penalty theory makes slacks zero for nu large (Theorem 4.2, p. 17)",
+   "two-line stochastic corollaries: a.s. convergence puts X_k in the identification ball (Theorems 4.3-4.4, pp. 18-19)"
+  ],
+  "experiments": "Two strongly convex 2-D problems (one/two active constraints), grid heatmaps of exact-identification fraction under uniform noise 0, 1e-2, 1e-1 with 8 instances per point; constrained NN on UCI heart disease (91 variables, 10 group monotonicity constraints, test = top-20% cholesterol) solved by quadratic-penalty L-BFGS, test accuracy 78.5% -> 83.9%, identification tracked along iterates with exact data and with 10 minibatch(32) resamplings; host solver is deterministic (pp. 19-24).",
+  "positioning": "'Following primarily' Oberlin-Wright; credits the deterministic-noise literature (Nocedal group, Waechter, own work) and stochastic-constrained literature (much his own); the closest competitor is described by its scope (pp. 3, 8, 25-27).",
+  "writing": "Contribution as 'showing that such guarantees can be extended'; organization separates one new exact-setting result from the main noisy contributions; intuitive paragraph on what theta and nu thresholds do; explicit hedges on numerical comparisons; NN constraints flagged as for demonstration only (pp. 3-4, 10, 20, 24).",
+  "limits_future": "Purely local results needing small noise (x-dependent for LP-LPEC); comparisons parameter-dependent. Future: noisy active-set algorithms that estimate the set then compute directions on it; extending equality-only multiplier guarantees to inequalities (pp. 14, 18, 20, 25).",
+  "method_links": [
+   {"method": "Method 1", "relation": "variant", "note": "The identification test is built on the QP the outer noisy-setting algorithm already solves for its search direction; the inner subproblem serves a second purpose rather than having its accuracy set by the globalization.", "pages": "pp. 5-6"},
+   {"method": "Method 4", "relation": "evidence", "note": "Attributes LP-LPEC's early identification success to all iterates being infeasible ('lucky'), and QP's better noisy count to over-prediction, rather than crediting the methods.", "pages": "pp. 23-24"},
+   {"method": "Method 5", "relation": "evidence", "note": "Reports where each procedure wins and narrows the claim to parameter-dependent, problem-dependent comparisons.", "pages": "pp. 20, 24"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "perturbation bridge from exact to noisy data", "evidence": "Exact-data identification theorem carried to noisy data by the classical perturbation bound for nonsingular linear systems (S092 does the same with pseudo-inverse perturbation).", "pages": "pp. 5, 16-17"},
+   {"pattern": "check the assumption or guarantee numerically on a 2-D instance", "evidence": "Heatmaps over a grid around x* for two 2-D problems at three noise levels.", "pages": "pp. 19-22"}
+  ],
+  "transferable": [
+   "Define one noise model as uniform error bounds on every function and derivative value so a single proof covers deterministic and stochastic noise (eq. (23), p. 10).",
+   "Write the identification test as the solution of a nonsingular linear system on the optimal active set and apply the standard Kv = b perturbation bound (Lemma 4.4, pp. 16-17).",
+   "Contrast two procedures by the shape of their noise requirement (point-dependent with noise reduction vs uniform in a neighbourhood) (pp. 14, 17-18).",
+   "Record at every iterate of an ordinary solver run how many elements of the final active set a procedure gets right, with exact data and with several minibatch resamplings (pp. 23-24).",
+   "Impose one max-constraint per data group rather than per point to keep a constrained-learning test problem tractable, and report the effect on test accuracy (pp. 20, 23)."
+  ],
+  "coauthors": "Daniel P. Robinson, Lara Zebiane",
+  "quotes": [
+   {"text": "this demonstrates a situation in which the LP-LPEC approach is lucky always to identify violated constraints as being active at the optimal solution.", "page": 23},
+   {"text": "Naturally, the behavior of the methods can vary with these parameter choices, so these comparisons do not necessarily hold in general.", "page": 20}
+  ]
+ },
+ {
+  "id": "S063",
+  "year": "2026",
+  "title": "A single-loop stochastic feasible interior-point algorithm for nonlinear inequality-constrained optimization",
+  "read_level": "full",
+  "contribution": "Proposes SLIP, a single-loop feasible interior-point framework using stochastic objective gradients and no objective values for problems with linear equalities and nonlinear inequalities, proves liminf stationarity (deterministic) and almost-sure liminf stationarity (stochastic) with KKT limits under LICQ, and demonstrates it on 327 CUTEst problems, an SOCP and a norm-constrained NN.",
+  "problem_entry": "IPMs dominate deterministic nonconvex practice but have barely been extended to stochastic gradients; three obstacles named: nested loops need an uncomputable inner stationarity test, barrier gradients are not Lipschitz or bounded, globalization needs function values (p. 2).",
+  "key_idea": "Replace the nested loop by prescribed coupled decay of barrier and neighbourhood parameters (mu_k/theta_{k-1} constant), keep iterates in shrinking neighbourhoods {c <= -theta}, take one projected (stochastic) barrier-gradient step whose direction moves away from nearly active constraints, with a step factor gamma_k keeping the segment feasible (pp. 6-9, 12).",
+  "assumptions": "f, c C1, strictly feasible point exists (no nonlinear equalities), A full row rank; Lipschitz/bounded constants on iterate segments; nonstandard Assumption 2 that a direction satisfying (6) always exists (nondegeneracy + mu1/theta0 large), examined via a holding and a failing example; unbiased gradients with almost-surely bounded projected error; uniformly bounded H_k (pp. 3, 5, 8-9, 18, 25-29).",
+  "proof_devices": [
+   "shifted barrier with log(-c_i/kappa_ci): same gradient, bounded below by f_inf, increasing in mu, so barrier decreases never hurt (pp. 9-10)",
+   "local Lipschitz constant of the barrier gradient on the neighbourhood N(theta) (Lemma 2, p. 10)",
+   "gamma_k as positive root of the quadratic upper model of c_i along the step, with a uniform lower bound from a nearly-active / not-nearly-active case split (Lemmas 3-4, pp. 12-14)",
+   "sufficient decrease and non-summability of gamma_k alpha_k under polynomial schedules with t_mu = t_theta; multipliers z_k = -mu_k/c(x_k) give KKT limits under LICQ (Lemma 5, Theorem 1, pp. 15-17)",
+   "run-independent band [gamma_min, gamma_max] with a k^t buffer and a sign split of the noise inner product via the Law of Total Expectation to handle correlation between step factor and noise (Parameter Rule 2, Lemma 9, pp. 19-23)",
+   "exponent conditions t + t_alpha in [-1,0), 2t + t_alpha < -1, t + 2t_alpha < -1 for summable noise, then Fatou's lemma for a.s. liminf (Lemma 11, Theorem 2, pp. 19, 23-25)"
+  ],
+  "experiments": "No level-playing-field competitor, so no external baseline. Deterministic Python SLIP on CUTEst: 1315 -> 396 (filters on problem type/size) -> 327 after a separate Phase I failed on 59 and 10 evaluation errors; t = 0.7, Lipschitz constants estimated from random points, mu1 doubled (cap 1e4) when (6) fails, 2e4 iterations; f decreased on all runs; histogram of a relative stationarity measure. Stochastic: random SOCP with Gaussian gradient noise and mushrooms NN with minibatch 256, 10 seeds each, all printed against the deterministic twin (pp. 30-34).",
+  "positioning": "Direct extension of the group's bound-constrained stochastic IPM (Curtis-Kungurtsev-Robinson-Wang 2025); separated from non-Lipschitz stochastic-gradient work because the barrier changes each iteration; claims no comparable stochastic IPM exists; points to stochastic SQP methods for a future infeasible variant (pp. 2-3, 34-35).",
+  "writing": "Limitations announced upfront ('Let us emphasize upfront' not competitive deterministically); the nonstandard assumption flagged in contributions and given a full section with examples; each parameter rule followed by a design-rationale paragraph and a concrete admissible setting; conclusion explains concretely why a slack-based infeasible variant is hard (pp. 3, 12, 19-20, 25-30, 34-35).",
+  "limits_future": "Feasible method needing a strictly feasible start; no nonlinear equalities; Assumption 2 parameters not computable in advance (tuning/resets needed); conservative prescribed steps; bounded-error noise; not competitive deterministically. Future: practical directions meeting Assumptions 2/5; a single-loop infeasible IPM (pp. 3, 5, 8, 18, 26-30, 34-35).",
+  "method_links": [
+   {"method": "Method 2", "relation": "variant", "note": "One loop without an inner barrier-subproblem test, but the barrier parameter follows a prescribed schedule rather than being steered by measured progress; the code resets mu1 when the direction test fails; feasibility comes from a separate Phase I because a strictly feasible start is required.", "pages": "pp. 3, 5, 6-9, 30-31, 35"},
+   {"method": "Method 4", "relation": "evidence", "note": "Without f_inf, success is judged by a relative stationarity measure whose denominator takes the smaller initial stationarity value, the harder comparison for the method.", "pages": "p. 32"},
+   {"method": "Method 5", "relation": "variant", "note": "No external baseline because none is comparable; the deterministic twin is the reference and all 10 stochastic seeds are printed, but parameters (t = 0.7, mu1 reset factor) are set without a reported tuning procedure.", "pages": "pp. 30-34"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "unknown-threshold parameter handled by a practical reset or sweep", "evidence": "Theory needs mu1/theta0 large enough with problem-dependent constants; the implementation doubles mu1 whenever condition (6) fails (cf. S092 sweeping the unknown p1).", "pages": "pp. 8, 26, 30-31"},
+   {"pattern": "examples where the assumption holds and where it fails", "evidence": "Section 5 gives a polyhedral example where Assumption 2 holds for large mu/theta and a curved example where the argument breaks, with Fig. 1.", "pages": "pp. 25-29"}
+  ],
+  "transferable": [
+   "Shift a log barrier by analysis-only constants so it is bounded below and monotone in mu; the algorithm never needs the constants (pp. 9-10).",
+   "Confine a random step-scaling factor to a deterministic band and bound its cross term with the gradient noise by splitting on the sign of the inner product (Lemma 9, pp. 22-23).",
+   "Replace a nested barrier loop by prescribed coupled decay of barrier and neighbourhood parameters plus a step cap that keeps the iterate in the current neighbourhood (pp. 6-9).",
+   "When no competitor exists, use the deterministic twin as reference, print every seed, and pick convex feasible regions so seed-to-seed differences reflect noise (pp. 32-34).",
+   "Give a nonstandard assumption its own section with a holding example, a failing example and a practical fallback (pp. 25-30).",
+   "Estimate Lipschitz and bound constants for prescribed step sizes by sampling points around the start (p. 31)."
+  ],
+  "coauthors": "Xin Jiang, Qi Wang",
+  "quotes": [
+   {"text": "meaning that there is no such method in the literature against which our algorithm can be compared on a level playing field.", "page": 30},
+   {"text": "This assumption essentially requires that, when an algorithm iterate is close to a constraint boundary, a direction of sufficient descent can be computed that moves sufficiently away from the boundary.", "page": 3}
+  ]
+ }
+]

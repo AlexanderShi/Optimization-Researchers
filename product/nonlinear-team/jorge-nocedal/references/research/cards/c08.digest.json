@@ -1,0 +1,86 @@
+[
+  {
+    "id": "S015",
+    "year": "2016",
+    "title": "A stochastic quasi-Newton method for large-scale optimization",
+    "read_level": "full",
+    "contribution": "SQN keeps the L-BFGS engine for stochastic approximation and replaces only the curvature pairs: sub-sampled Hessian-vector products at averaged iterates, computed on a separate sample every L iterations. It comes with an O(1/k) expected-gap result for bounded-H Newton-like iterations and beats SGD and oLBFGS in accessed data points on three ML problems (arXiv v2 read).",
+    "problem_entry": "SGD's iteration count grows with the Hessian condition number κ, while Murata's exact-inverse-Hessian result removes κ (p. 3). Naive quasi-Newton updating under sampling gives noisy curvature that harms robustness (abstract p. 1). Requirements set first: update the inverse directly, O(n) per step (p. 3).",
+    "key_idea": "Quasi-Newton updating overwrites rather than averages, so y must reflect the full Hessian (p. 5). Decouple gradient and curvature estimation: y_t = sub-sampled Hessian times s_t, with s_t the difference of averaged iterates, every L iterations on its own sample S_H. The BFGS formula, limited memory and two-loop recursion are unchanged (pp. 5-7). The cost ratio 1 + 2M/b + 2b_H/(3bL) gives the guidelines Lb/b_H in [2,20] and M in [4,20] (pp. 8-9).",
+    "assumptions": "Strongly convex C2 objective, admitted as possibly 'unduly strong' and to be ensured by l2 regularization or a strongly convex region (pp. 9-10). Hessian bounds hold for every sub-sample S_H (p. 10); bounded gradient second moment; alpha_k = beta/k for convenience (p. 12). Reader's note: the test objectives (4.1) and (4.4) carry no l2 term (pp. 15, 22), and (3.13) with (3.14) cannot both hold on all of R^n (deduction from p. 12).",
+    "proof_devices": [
+      "Lemma 3.1: uniform eigenvalue bounds on the L-BFGS matrices. Because y is an exact sub-sampled Hessian times s, lambda <= y's/s's and ||y||^2/y's <= Lambda (square-root argument); the trace bound gives the largest eigenvalue, Powell's determinant formula the smallest (pp. 10-12)",
+      "Analyse the direct matrix B instead of H to quote a result from the literature (p. 10)",
+      "Theorem 3.2: O(1/k) expected optimality gap for a general Newton-like iteration with mu1 I < H_k < mu2 I. Descent lemma, then expectation with the gamma^2 second-moment bound, then the minorizing quadratic 2 lambda (F - F*) <= ||grad F||^2, then the recursion phi_{k+1} <= (1 - 2 alpha_k mu1 lambda) phi_k + (Lambda/2)(alpha_k mu2)^2 gamma^2, closed by induction with Q(beta) (pp. 12-13)",
+      "General-class theorem specialized by a corollary (Corollary 3.3 via Lemma 3.1), proved because no self-contained proof was known (c.f. [25]) (pp. 12, 14)"
+    ],
+    "experiments": "SGD and SQN with beta/k, beta tuned by the same rule (keep the value where a fixed increment either way is worse) (p. 14). Problems: synthetic logistic regression (n=50), RCV1 (n=112919, N=688329), Google speech multi-class (n=30315) (pp. 15, 17, 22). Axes: accessed data points b + b_H/L (p. 15), iterations, and flop-model work (p. 25); no wall-clock time. Studies of b_H, M, small b with L=200 and test error (pp. 17-26). oLBFGS reimplemented with the settings its authors recommend (pp. 26-27). Failures diagnosed: the b_H=10 spike via the s-y angle (p. 19), M=0 unstable (p. 20). GradError and HvError against full-data values (pp. 20-21). Single runs, no variance reported.",
+    "positioning": "Extends his L-BFGS [11,17] to the SA regime (pp. 4-5). Unifies the Robbins-Monro/SA/SGD names (p. 4). Earlier stochastic QN [24,12,4,22] 'have not been entirely successful' because of noisy updates (pp. 27-28); fixed-interval updating credited to [4] (p. 28). AdaGrad, natural-gradient methods and Bach-Moulines are set apart (p. 28), as are the group's own SAA Hessian-free methods [6,7] (pp. 28-29). oLBFGS, 'the best known' stochastic QN, is recast as L=1, b=b_H (pp. 26-27).",
+    "writing": "Hedged contribution in the abstract ('suggest ... much promise', p. 1); key idea in the second paragraph of the introduction (p. 2); explicit burden-of-proof sentence (p. 7); mechanism explained in prose (p. 5). About 4 pages of theory against 14 of experiments (pp. 10-27). Incidental components flagged 'not essential' (pp. 6, 29). Minor slips remain in v2 (pp. 19, 29).",
+    "limits_future": "Convex only; nonconvex use needs a mechanism keeping s'y > 0 (p. 29). Hessian-vector code is required, and a same-sample gradient-difference variant is left open (p. 29). The s'y monitoring safeguard is proposed but not implemented (p. 19), and the M effect is unexplained (p. 20). Reader's note: per-problem beta tuning with 'no generally accepted rule' (p. 14), and an O(1/k) bound that shows no curvature gain (pp. 12-14).",
+    "method_links": [
+      {
+        "method": "Method 3",
+        "relation": "variant",
+        "note": "Keeps the classical engine (BFGS formula, limited memory, two-loop recursion) and replaces only the failing component, the correction pair built from noisy gradient differences. But the repair is a sampling and schedule design (a separate larger sample every L iterations), not one driven by an explicit noise-level estimate. Recovery (monitor s'y, enlarge b_H or skip) is only proposed, and there are no exit flags.",
+        "pages": "pp. 1, 5-7, 19"
+      },
+      {
+        "method": "Method 5",
+        "relation": "contradiction",
+        "note": "Theorem 3.2 holds for any H_k with bounded eigenvalues, so H_k = I (SGD) satisfies it equally. The O(1/k) bound cannot separate SQN from SGD, and the superiority claim rests on numerics (taste warning sign 2). It does analyse the version as run (H_t fixed for L iterations).",
+        "pages": "pp. 3, 12-14, 29"
+      },
+      {
+        "method": "Method 1",
+        "relation": "variant",
+        "note": "Fair accounting is present: the same beta-selection rule for SGD and SQN, a cost axis that charges SQN's Hessian samples plus a flop model, and the strongest rival (oLBFGS) reimplemented with its authors' recommended settings. But the own method is not handicapped (L, M, b_H set per problem; L = 200 'crucial' for small b), there are no losses in the abstract, and only single runs.",
+        "pages": "pp. 1, 14-16, 25-27"
+      },
+      {
+        "method": "Method 4",
+        "relation": "evidence",
+        "note": "Weak. Failure modes are written into the paper with a diagnosis and a proposed safeguard (b_H = 10 spike from the s-y angle; M = 0 instability). Choices are exposed as parameters with numeric guidelines, and the open questions are listed (nonconvex case, same-sample gradient differences).",
+        "pages": "pp. 9, 19-20, 29"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "Decouple and amortize noisy estimates",
+        "evidence": "Curvature pairs get their own sample S_H (larger than b) and a slower clock (counter t, every L iterations) than the gradient (counter k). The overhead is justified by the cost ratio 1 + 2M/b + 2b_H/(3bL) and turned into the guideline Lb/b_H in [2,20]. oLBFGS is characterised as the wasteful special case L = 1, b = b_H.",
+        "pages": "pp. 5-9, 27"
+      },
+      {
+        "pattern": "Make the safeguard unnecessary by construction",
+        "evidence": "y_t is a sub-sampled Hessian-vector product, so lambda||s||^2 <= y's <= Lambda||s||^2 holds automatically and the eigenvalue lemma needs no line search or skip rule. The final remarks say Hessian-vector products take care of sample uniformity and round-off in close gradient differences automatically.",
+        "pages": "pp. 5, 10-12, 29"
+      },
+      {
+        "pattern": "Degenerate-parameter ablation to attribute the gain",
+        "evidence": "M = 0 runs (H_t a scalar multiple of I) are poor and unstable on RCV1 and degrade markedly on SPEECH. They support the conclusion that the method does more than rescale the gradient.",
+        "pages": "pp. 17, 20, 23-24, 29"
+      }
+    ],
+    "transferable": [
+      "Give the accuracy-sensitive estimate (curvature) its own larger sample and a slower update clock. Choose its size and frequency from an explicit cost ratio (1 + 2M/b + 2b_H/(3bL)) and publish the ratio as a numeric guideline (Lb/b_H in [2,20]) (pp. 5, 8-9).",
+      "Replace a noisy gradient difference with a sub-sampled Hessian-vector product at an averaged point. The curvature condition then holds by construction, and the trace-determinant eigenvalue lemma applies without a line search (pp. 5, 10-12).",
+      "Prove the O(1/k) result once for the general iteration w - alpha_k H_k grad f with bounded H_k, then specialize through an eigenvalue lemma; state that this does not separate the method from SGD (pp. 12-14).",
+      "Use the same step-tuning rule for every method (keep the beta where one increment up or down is worse) on a fixed beta/k schedule, so the comparison isolates the new component (p. 14).",
+      "Plot against accessed data points that charge the new method's extra samples (b + b_H/L), and add a flop-model work curve when the overhead is arithmetic (pp. 15, 25).",
+      "Diagnose spikes by logging the angle between s and y (or s'y relative to s'Bs), then propose a skip or resample rule from that diagnosis (p. 19).",
+      "Run the M = 0 ablation to show that the gain is full-matrix curvature, not scaling (pp. 20, 23).",
+      "Recast the strongest rival as a parameter setting of your own scheme (oLBFGS = L = 1, b = b_H) and show that the setting is inefficient (p. 27)."
+    ],
+    "coauthors": "R. H. Byrd, S. L. Hansen, Y. Singer",
+    "quotes": [
+      {
+        "text": "quasi-Newton updating is inherently an overwriting process rather than an averaging process, and therefore the vector y must reflect the action of the Hessian of the entire objective F given in (1.1)",
+        "page": 5
+      },
+      {
+        "text": "This allows us to observe the effect of the quasi-Newton Hessian approximation Hk in a controlled setting, without the clutter introduced by elaborate step length strategies for βk.",
+        "page": 14
+      }
+    ]
+  }
+]

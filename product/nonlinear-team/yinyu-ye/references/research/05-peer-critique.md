@@ -249,6 +249,7 @@ Each pattern is seen at least twice. Tags as marked.
 
 - [practice] (P) His critiques take the form of sharp constructions that settle a question. Examples: the multi-block ADMM counterexample (Chen, He, Ye & Yuan, MP 155 2016, 10.1007/s10107-014-0826-5 [S68]; the homepage says "where we settled long-time open questions" [S63]); the two-variable LP against learning the optimal basis purely from data (2026 note, `01` §1.6); and the one-phase IPM against the "two-phase or penalty" consensus (B9).
 - [stated] (P) A dismissal in a talk: rival negative-curvature hybrids "seem difficult to be implemented" (`01` SW5).
+- [practice] (P, co-authored) A comparison-table remark, not a dispute (audit 2026-10-17, checked in the v4 PDF): UTR (arXiv:2311.11489 v4, p. 4, Table 1 footnote) on TR-Newton-CG, its ref. [19] = Curtis, Robinson, Royer & Wright (10.1137/19M130563X): "The method [27, 19] does not provide local convergence analysis. We believe this should be true following standard analysis."
 - How those targets responded was not researched in this run (Gaps).
 
 ---

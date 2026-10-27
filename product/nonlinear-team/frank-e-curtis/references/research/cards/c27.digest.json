@@ -1,0 +1,133 @@
+[
+ {
+  "id": "S073",
+  "year": "2025",
+  "title": "Equity-promoting integer programming approaches for medical resident rotation scheduling",
+  "read_level": "full",
+  "contribution": "Feasibility, equity-neutral and bi-objective equity-promoting IP models for resident rotation and vacation scheduling, an exact Pareto Search Algorithm (keep previous grants, add one to the worst-off resident) that finds whole Pareto fronts where the epsilon-constraint method fails within a day, and a web tool built with the collaborating residency program.",
+  "problem_entry": "A collaborator's manual, weeks-long scheduling task; a blind feasible assignment leaves residents unequally served in vacation requests; few prior models make equity a formal objective or allow class-specific block lengths (pp. 2-5).",
+  "key_idea": "Bracket the bi-objective integer front with two lexicographic solves (Props 1-2), then step one granted request at a time with an IP that fixes previous grants and grants one to a least-served resident (Props 3-4), falling back to the full epsilon-problem when infeasible (pp. 12-14).",
+  "assumptions": "All program/ACGME/vacation rules are hard constraints; equity only on number of granted vacation requests; seven linearizable inequity measures; 18 instances from 2018-2023 structures with synthetic requests (rules A, B) plus a 2023-2024 case with 54 residents; data not public (pp. 9-10, 15-16, 39).",
+  "proof_devices": [
+   "Props 1-2: lexicographic solves give the two ends of the Pareto front (p. 12; proofs pp. 23-24)",
+   "integrality of f1: consecutive non-dominated points differ by >= 1 request, so epsilon = 1 is exact (Remark 1, pp. 11-12)",
+   "Prop 3 per inequity measure via the request-distribution vector k and differences psi(k') - psi(k) (pp. 13-14; proof pp. 23-29, skimmed)",
+   "Prop 4 by induction over Step 3: restricted and full problems have equal optimal f2 (p. 14; proof p. 30, skimmed)",
+   "count of extra variables/constraints per measure linearization explains run-time ranking (Table 7, p. 24; p. 21)"
+  ],
+  "experiments": "Gurobi 9.5 on a MacBook Pro M1 (the chief resident's hardware). Pareto fronts for five measures on the case instance (3 to 63 non-dominated points), price of equity 0-0.44, integrated vs sequential practice approach with three distinct rotation solutions (sequential dominated), resident- vs class-based equity, 90 timing runs: all fronts in about 2 h or less ('less than two hours' in the text, max 7972 s in Table 6), while epsilon-constraint solves none under Gini/MeanDev/SumMaxPair within a day (pp. 15-21, 36).",
+  "positioning": "Builds on resident-scheduling literature (Erhard, Guo, Bard, Smalley-Keskinocak, Proano-Agarwal); claims varied block structures, a choice of inequity measures, a full-front exact algorithm and a decision-support tool; criticism is mild (pp. 3-5, 11).",
+  "writing": "OR-application style: methodological and practical contributions, 'insights' lists, propositions in the main text with proofs in the E-Companion; one slip (Section 7.3 promised as 'manual approach', delivered as sequential approach) (pp. 2-3, 11, 15, 17-19).",
+  "limits_future": "No clear winner among inequity measures, no universal answer on individual vs group equity, data not public; future: uncertainty such as absenteeism and equity in shift scheduling; not stated: synthetic requests in the timing instances, no deployment results (pp. 15-22, 39).",
+  "method_links": [
+   {"method": "Method 4", "relation": "evidence", "note": "audits the yardstick: inequity alone rewards granting nothing; seven measures give different fronts; choice left to decision makers", "pages": "pp. 10, 17-18"},
+   {"method": "Method 5", "relation": "evidence", "note": "sequential baseline given three distinct rotation solutions 'for a fair comparison'; per-step timings published", "pages": "pp. 19, 36"},
+   {"method": "Method 2", "relation": "variant", "note": "the scalar trade-off weight is not steered but replaced: weighting method rejected, the whole Pareto front enumerated", "pages": "pp. 10-11"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "constrain, don't weight", "evidence": "weighting method rejected for missing Pareto points and scale dependence; epsilon-constraint/Pareto search instead", "pages": "pp. 10-11"}
+  ],
+  "transferable": [
+   "Bracket a bi-objective integer front with two lexicographic solves, then step one integer unit at a time (pp. 12-13).",
+   "Restrict each epsilon-step to 'keep previous grants, add one to the worst-off', prove it optimal per measure, keep the unrestricted problem as fallback (pp. 13-14, 30).",
+   "Report the price of equity beside the Pareto front (p. 17).",
+   "Count the extra variables and constraints of each fairness linearization before timing it (Table 7, p. 24).",
+   "Give a practitioners' sequential heuristic several distinct starting decisions in the comparison (p. 19).",
+   "Run the timing study on the end user's hardware and say so (p. 17)."
+  ],
+  "coauthors": "Shutian Li, Karmel S. Shehadeh (corresponding), Beth R. Hochman; Curtis third of four",
+  "quotes": [
+   {"text": "We emphasize upfront that there is no universally accepted approach to rotation scheduling.", "page": 3},
+   {"text": "Intuitively, denying all vacation requests is the most equitable schedule", "page": 10}
+  ]
+ },
+ {
+  "id": "S082",
+  "year": "2025",
+  "title": "A Proximal-Gradient Method for Solving Regularized Optimization Problems with General Constraints",
+  "read_level": "full",
+  "contribution": "A penalty-free proximal-gradient method with normal/tangential step decomposition and an l2 merit function for min f + r s.t. c(x) = 0, x >= 0, with O(eps^-2) complexity without a CQ (to infeasibility stationarity) and under a sequential CQ (to KKT), global convergence under LICQ at limit points, and active-set and manifold identification; it beats Bazinga on 81 CUTEst-derived and sparse CCA problems (arXiv v2 read).",
+  "problem_entry": "Proximal-gradient methods identify structure, but projections onto nonlinear constraints are intractable and penalty methods may destroy structure; existing composite-constrained methods are penalty/AL-based or assume feasible subproblems (pp. 1-3).",
+  "key_idea": "Normal step: Cauchy-decrease solution of a bound-constrained trust-region subproblem on linearized infeasibility with radius kappa_v alpha_k delta_k; tangential step: strongly convex proximal subproblem with Ju = 0, bounds and explicit r (u = 0 always feasible); l2 merit function with a decreasing merit parameter; proximal parameter shrinks on rejection; exit at infeasible stationary points (pp. 4-6).",
+  "assumptions": "Bounded f, c with Lipschitz bounded gradients on an open convex set containing the iterates, convex r with bounded subdifferential (Assumption 3.1, p. 6); layered: no CQ; sequential CQ on [J_k; I_A] uniformly (Assumption 5.1, p. 15); bounded X and LICQ at limit points (pp. 18); strict complementarity (p. 24); partial smoothness, nondegeneracy and alpha bounded below (p. 25).",
+  "proof_devices": [
+   "Cauchy-decrease lemma for projected backtracking adapted from More [41], three cases (Lemma 4.3, pp. 7-8)",
+   "stationarity measure using ||v_k(1)|| instead of ||c_k|| when no CQ is assumed (5.1, p. 11)",
+   "merit-parameter lower bound when decreased, eps_tau ||v_k(1)||^2 (Lemma 5.5, p. 12), giving the dichotomy Theorem 5.8 (p. 14)",
+   "monotone shifted merit function from [16] and telescoping for O(eps^-2) (Lemma 5.7, Theorem 5.8, pp. 13-15)",
+   "sequential CQ converts infeasibility stationarity to ||c_k|| (Lemma 5.9, p. 15) for Theorem 5.12 (p. 17)",
+   "compact limit set plus finite ball cover for uniform singular-value bounds (Lemmas 5.17-5.19, pp. 20-21); eventual merit-parameter and multiplier bounds (Lemmas 5.22, 5.24, pp. 22-24)",
+   "active-set identification from subproblem complementarity under strict complementarity (Theorem 5.26, pp. 24-25)",
+   "manifold identification by verifying the hypotheses of a partial-smoothness theorem [37, Thm 4.10] (Theorem 5.27, pp. 25-26)"
+  ],
+  "experiments": "Python with Gurobi subproblem solvers; implemented alpha update differs from the analysed one (stated); 81 CUTEst problems reformulated with an artificial l1-weighted variable a whose zero is a KKT point by construction (lambda = ||y_eq||_inf + 10 from IPOPT), filtered on IPOPT success; six-column table vs Bazinga (71 vs 67 feasible, 70 vs 58 KKT, 76 vs 55 a = 0) and a wall-clock profile; sparse CCA with planted support (sl = 0 everywhere, sparser and faster than Bazinga); single runs; tolerances 1e-4 for Algorithm 3.1 vs 1e-6 for Bazinga; Python vs Julia timing (pp. 26-31).",
+  "positioning": "Extends [16] (equality constraints only) to bounds; positioned against AL and penalty-barrier methods [8, 17, 18, 26, 38, 46] and non-penalty methods [7, 51] with a specific weakness named for each; Bazinga is called the only open-source code for the problem; claims to be the first PG-type method for this class (pp. 2-3, 27, 31).",
+  "writing": "Contributions listed as three algorithmic properties and five theorem-numbered results; inequality chains justified step by step; candid about a missing reference and about the implementation departing from the theory; one-paragraph conclusion without future work; small slips ('More-Dolen', Bazinga's time limit attributed to Algorithm 3.1) (pp. 3, 9, 12, 27, 29, 31).",
+  "limits_future": "No stated limitations or future work; visible: complexity CQ is an assumption on the iterates, manifold identification assumes alpha bounded below, first-order only, n <= 100; unstated: asymmetric tolerances, cross-language timing, filtering on IPOPT success without pre-filter count (pp. 15, 25, 27-29, 31).",
+  "method_links": [
+   {"method": "Method 2", "relation": "evidence", "note": "single algorithm; merit parameter updated from predicted decrease in linearized infeasibility; analysis hinges on how small tau gets; infeasible stationary points as a designed exit. Bears on Inner Tension 3: penalties avoided as reformulation, merit parameter kept in step acceptance", "pages": "pp. 2, 4-6, 11-14"},
+   {"method": "Method 1", "relation": "variant", "note": "inner accuracy set by the outer analysis only as Cauchy decrease of the normal subproblem, implemented as solver plus Cauchy fallback", "pages": "pp. 4-5, 26"},
+   {"method": "Method 3", "relation": "variant", "note": "CUTEst set transformed by a mechanical rule, but to plant a known sparse KKT point rather than to create infeasible or degenerate variants", "pages": "p. 28"},
+   {"method": "Method 4", "relation": "evidence", "note": "six success columns (feasible, better objective, performs better, a zero, a small, KKT) instead of one flag", "pages": "pp. 28-29"},
+   {"method": "Method 5", "relation": "contradiction", "note": "looser stopping tolerances for the new method than for Bazinga, Python vs Julia wall-clock comparison, single runs, filtering on IPOPT success without pre-filter count (cf. Heuristics 6-7, Inner Tension 2)", "pages": "pp. 27-29"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "constrain, don't weight", "evidence": "penalty methods may destroy solution structure, so constraints are handled by step decomposition rather than a penalty reformulation", "pages": "pp. 2-3"},
+   {"pattern": "plant the answer", "evidence": "regularization weight chosen above reference multipliers so a = 0 is a known KKT point; synthetic SCCA data with known support", "pages": "pp. 28, 30"}
+  ],
+  "transferable": [
+   "Keep the regularizer explicit in a tangential proximal subproblem whose zero step is always feasible (p. 5).",
+   "To add bounds to an equality-constrained decomposition method, put bounds in both subproblems and require only Cauchy decrease (projected backtracking) of the normal step (pp. 4-5).",
+   "State the no-CQ complexity theorem as a dichotomy on the merit parameter: bounded below gives O(eps^-2), tau -> 0 gives approach to infeasible stationarity (p. 14).",
+   "Turn LICQ at limit points into uniform constants with a finite ball cover of the compact limit set (pp. 20-21).",
+   "Get manifold identification by verifying a known partial-smoothness theorem's hypotheses (pp. 25-26).",
+   "Build test problems whose sparse KKT point is known by choosing lambda above reference multipliers, then count exact zeros (p. 28)."
+  ],
+  "coauthors": "Xiaoyi Qu, Daniel P. Robinson",
+  "quotes": [
+   {"text": "conventional techniques such as penalty-based methods [17] may fail to preserve the structure of the solution (see [16, Section 5]), therefore limiting their effectiveness in this setting.", "page": 2},
+   {"text": "We found this update strategy to work better in our testing, all of the analysis of Section 5.2.3 still holds, and the analysis of Section 5.2.2 still holds if this modified update is only allowed a finite (possibly large) number of times.", "page": 27}
+  ]
+ },
+ {
+  "id": "S083",
+  "year": "2025",
+  "title": "Fair supervised learning through constraints on smooth nonconvex unfairness-measure surrogates",
+  "read_level": "full",
+  "contribution": "Bounded smooth nonconvex surrogates (scaled sigmoid and a Chen-smoothed step) imposed as hard constraints and trained with the authors' stochastic SQP make imposed disparate-impact targets match the achieved ones on Dutch, Law and ACSIncome, with mild accuracy loss and multiple simultaneous measures, unlike regularization or covariance surrogates (arXiv v3 read).",
+  "problem_entry": "Convex (covariance) surrogates do not bound the true unfairness measure and regularization weights are costly to tune and nonmonotone; Theorem 2.1 (from Yao et al. [43]) bounds the true DP violation for bounded saturating surrogates, but [43] never enforced it as a constraint (pp. 2, 6).",
+  "key_idea": "Bounded, smooth, nonconvex surrogates scaled so values saturate near 0/1, imposed as hard constraints in the training problem, solved by stochastic SQP with active-set enumeration and stratified mini-batches (pp. 7-9, 23-25).",
+  "assumptions": "Binary sensitive feature and label (extension asserted), independence criterion, thresholded network output; Theorem 2.1 needs every point's surrogate within gamma of 0 or 1 (approximated by scaling, not enforced); fixed group counts per batch for unbiasedness; SQP theory deferred to [13] (pp. 4-9, 19-20).",
+  "proof_devices": [
+   "Theorem 2.1 proof: odd shift phi -> 2phi - 1, split groups by predicted label, reverse triangle inequality; appendix corrects the bound to 2gamma + eps vs eps + gamma in the main text (pp. 6, 17-19)",
+   "Theorem 2.2: covariance surrogate = N0 N1 / N^2 times the linear-phi DP surrogate, hence unbounded and outside Theorem 2.1 (pp. 6-7)",
+   "unbiasedness of the group-difference estimate under stratified sampling by linearity of expectation (Theorem 3.1, pp. 9, 19-20)"
+  ],
+  "experiments": "Dutch, Law, ACSIncome (50k subset), small networks, 500 epochs full batch, training-data results (test said similar); imposed delta vs achieved delta-hat for surrogate and true measure, unscaled vs scaled (alpha = 50 chosen from six values by minimizing that gap); constraint-only (8 delta) vs regularization-only (8 lambda, nonmonotone); DI + EI together (ACSIncome 78.9% -> 78.5%); 5 seeds mean +/- sd; compute table shows constraint runs up to ~2.5x slower on ACSIncome; label-implied fairness baselines (pp. 9-13, 21-31).",
+  "positioning": "Against regularization (Kamishima, Bechavod-Ligett) and convex/covariance surrogates (Zafar [44]); alongside constrained fair ML (Donini, Cotter); builds on Yao et al. [43] for the bound and on the authors' [13] for the solver; claims to be the first to combine hard constraints with smooth nonconvex surrogates so the bounds are realized (pp. 2-3, 6-7).",
+  "writing": "Lettered advantages in the abstract, bold 'first paper' claim, informal theorem in the main text with formal version in the appendix; several v3 inconsistencies (bound eps + gamma vs 2gamma + eps, main text citing appendix Figures 6-9, 'Adult' for ACSIncome, Law N 20,798 vs 16,638, d_lu listed twice) (pp. 1, 3, 6, 9-11, 19, 21-24).",
+  "limits_future": "Only stated limit: slightly higher training cost outweighed by tuning savings; no future work section; unstated: both approaches ran 8 hyperparameter values so tuning savings are argued not measured, alpha tuned on the evaluation gap, training-data reporting, ~2.5x cost on ACSIncome (pp. 10-11, 13, 27).",
+  "method_links": [
+   {"method": "Method 4", "relation": "evidence", "note": "audits the surrogate as a yardstick: small surrogate need not mean small unfairness; proves when it does, shows covariance falls outside, and plots imposed vs achieved levels on the true measure", "pages": "pp. 2, 6-7, 10-12"},
+   {"method": "Method 2", "relation": "variant", "note": "at the modelling level the fairness weight is removed in favour of hard constraints because tuning is costly and nonmonotone, while the training SQP keeps a merit parameter (Inner Tension 3)", "pages": "pp. 2, 11-12, 24"},
+   {"method": "Method 5", "relation": "variant", "note": "equal 8-value grids and 5 seeds, but surrogate scale tuned on the evaluation gap and the cost table contradicts 'slightly higher' on ACSIncome (Inner Tension 2)", "pages": "pp. 11, 13, 27-30"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "constrain, don't weight", "evidence": "hard constraints on unfairness surrogates instead of regularization weights; monotone, explicit control of the bound", "pages": "pp. 2-3, 11-12"},
+   {"pattern": "rote-learning baselines", "evidence": "compute the fairness levels implied by the labels themselves and constant-predictor accuracies to interpret where constraints become active", "pages": "pp. 21-22"}
+  ],
+  "transferable": [
+   "Find a theorem whose hypotheses were never enforced in its source paper's experiments and make enforcing them the contribution (p. 6).",
+   "Smooth a bounded piecewise-linear step via composed smoothed maxes and scale its argument to saturate near 0/1 (pp. 7-8).",
+   "Stratify mini-batches by group so group-difference constraint estimates are unbiased (pp. 9, 19-20).",
+   "Enumerate active sets for a QP with very few inequalities, reusing one factorization (pp. 23-24).",
+   "Plot imposed target vs achieved level on the true (discontinuous) measure, not the surrogate (pp. 10-12).",
+   "Compute label-implied fairness levels and constant-predictor accuracies as reference lines (pp. 21-22)."
+  ],
+  "coauthors": "Zahra Khatti, Daniel P. Robinson; Curtis third of three",
+  "quotes": [
+   {"text": "This is the first paper to combine hard constraints with smooth nonconvex surrogates in such a way that desired bounds on unfairness measures are actually realized (to high accuracy) when a prediction model is ultimately trained.", "page": 3},
+   {"text": "First, the unfairness measure does not always improve monotonically with decreasing λ.", "page": 11}
+  ]
+ }
+]

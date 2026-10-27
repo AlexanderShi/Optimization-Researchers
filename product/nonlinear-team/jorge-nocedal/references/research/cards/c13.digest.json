@@ -1,0 +1,141 @@
+[
+  {
+    "id": "S082",
+    "year": "2023",
+    "title": "A trust region method for noisy unconstrained optimization",
+    "read_level": "full",
+    "contribution": "Makes the classical trust-region method tolerate bounded noise by one change, a ratio test relaxed by r*eps_f in numerator and denominator, and proves that the iterates visit a critical region with ||g|| = O(sqrt(eps_f), eps_g) infinitely often and never leave a level set C2 after the first visit (read in arXiv v1).",
+    "problem_entry": "The authors' own runs showed the classical TR often tolerates noise but can fail (p. 2); the ratio test is named as the component that breaks, since its numerator is O(eps_f) while its denominator is O(Delta_k) (p. 4).",
+    "key_idea": "Relax both sides of the actual/predicted ratio by r*eps_f (r = 2/(1-c2)) so that rho ~ 1 still means an adequate model; all else unchanged; needs only eps_f and costs nothing extra (pp. 1-2, 4-5).",
+    "assumptions": "Lipschitz gradient, errors only bounded, ||B_k|| < L_B, Cauchy decrease, f~ bounded below, no convexity (pp. 6-7); eps_f known; deterministic worst-case framework set against probabilistic analyses (p. 3).",
+    "proof_devices": [
+      "Lemma 1: |rho_k - 1| bound from Taylor, noise bounds and Cauchy decrease (p. 7)",
+      "Lemma 2 / Corollary 1: the radius must grow when ||g~|| > r*eps_g + gamma and Delta <= gamma/(rM), giving a radius lower bound; the Remark marks this as the departure from classical TR theory (pp. 8-9)",
+      "Lemma 3: fixed decrease per accepted step, eta the smallest positive root of a quadratic, slack mu keeps it meaningful at zero noise, later mu = eps_g/2 (pp. 9-11)",
+      "Theorem 6: contradiction via f~ -> -infinity gives infinitely many visits to C1 (pp. 11-12)",
+      "Proposition 1 / Corollary 2: one-step increase bounded by r(1-c0)eps_f; radius bound kept by induction (pp. 12-13)",
+      "Theorem 7: excursion analysis in two cases; count l = ceil(log_nu(Delta_bar/Delta_{K+1})) regrowth iterations and bound displacement by a geometric series (pp. 13-17)"
+    ],
+    "experiments": "MATLAB, uniform noise (ball for g), no stop test, 200 iterations (p. 18); failure demos on an 8-D quadratic and a tridiagonal N = 200 with small Delta0 using four-panel diagnostics (pp. 18-20); noisy indefinite Hessian with identical noise in both arms (pp. 20-21); bound-scaling test over a noise grid and 10 seeds (pp. 21-22); supplement: Rademacher noise and Schittkowski problems 271, 289, 293 (pp. 25-34); no aggregate over a test set.",
+    "positioning": "Extends his group's relaxed line searches [2, 27, 21] to trust regions (p. 2); neutral survey of norm-test, stochastic-SQP, probabilistic-TR and complexity work; leaves open whether deterministic and probabilistic approaches complement each other (p. 3); 10 of 27 references are his (pp. 23-24).",
+    "writing": "One-change claim in the abstract and the intro's second paragraph (pp. 1-2); interpretive remarks after each lemma and theorem (pp. 7, 9, 11, 12, 17); hedges placed with the evidence (pessimistic bound pp. 19-20; classical sometimes better p. 21; single runs vary p. 22).",
+    "limits_future": "Bounded noise, pessimistic worst-case bound (p. 21), claims hold only on average (p. 22), no stop test and few problems (p. 18); future: restart with reduced noise as a disciplined high-accuracy scheme (p. 23); no estimation or recovery for eps_f.",
+    "method_links": [
+      {"method": "Method 3", "relation": "evidence", "note": "Classical TR kept; only the ratio test is changed, driven by an explicit noise level; failure shown first on an easy chosen problem with internal diagnostics; convergence to a noise-determined neighbourhood.", "pages": "pp. 2, 4-5, 11, 18-19"},
+      {"method": "Method 3", "relation": "variant", "note": "No recovery tree, re-estimation or exit flag; runs have no stop test; only an outer restart with reduced noise is sketched.", "pages": "pp. 18, 23"},
+      {"method": "Method 5", "relation": "evidence", "note": "Bound plotted against runs and called pessimistic; goes beyond step 4 by also testing the bound's scaling in (eps_f, eps_g) over a grid and 10 seeds.", "pages": "pp. 19-22"},
+      {"method": "Method 1", "relation": "evidence", "note": "Identical noise injected into both arms; the unmodified method's advantage (milder oscillations) printed.", "pages": "p. 21"},
+      {"method": "Method 1", "relation": "contradiction", "note": "Step 7 stop rule: illustrative runs on a few problems with no aggregate profile behind them.", "pages": "pp. 18, 20, 27-34"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Collapse check to the classical case", "evidence": "Slack mu keeps Lemma 3 meaningful at zero noise; with no noise C1 = C2 and ||g_k|| -> 0", "pages": "pp. 11, 23"},
+      {"pattern": "Two-set neighbourhood convergence template", "evidence": "Critical region C1 visited infinitely often (Thm 6) and level set C2 never left after the first visit (Thm 7)", "pages": "pp. 11-17"}
+    ],
+    "transferable": [
+      "Relax both sides of an acceptance ratio by r*eps_f, with r taken from the proof (r = 2/(1-c2)), so the classical reading of rho is preserved (pp. 4-5)",
+      "In a noisy TR analysis prove a 'radius must grow' lemma, not only a no-collapse lemma (Lemma 2, Remark p. 9)",
+      "Bound excursions by counting radius-regrowth iterations and summing radii as a geometric series (pp. 14-16)",
+      "Add a slack so a lemma stays meaningful at zero noise, then absorb it (p. 11)",
+      "Test a pessimistic bound's functional scaling: log10(bound / observed best accuracy averaged over seeds) on a noise grid (pp. 21-22)",
+      "Feed identical noise realizations to both arms of a comparison (p. 21)",
+      "Four-panel diagnostic figure: true gradient norm with noise line, radius, distance to solution, clipped rho_k (p. 18)"
+    ],
+    "coauthors": "Shigeng Sun (Northwestern ESAM); Byrd thanked for suggestions, Oztoprak, Waechter and Xuan for proofreading (p. 23)",
+    "quotes": [
+      {"text": "All other aspects of the classical trust region method remain unchanged.", "page": 2},
+      {"text": "We cannot, however, recommend this type of trust region reduction as a general procedure for handling noise since failures can happen unexpectedly.", "page": 21}
+    ]
+  },
+  {
+    "id": "S084",
+    "year": "2023",
+    "title": "Constrained optimization in the presence of noise",
+    "read_level": "full",
+    "contribution": "Gives a convergence theory for a classical l1-merit SQP method for equality-constrained problems with bounded noise in functions and derivatives: with only the Armijo test relaxed by R = 2(eps_f + pi*eps_c), the iterates enter a noise-determined critical region C1, revisit it infinitely often and stay in a level set C2; experiments ablate the relaxation and stress the noise estimate (read in arXiv v1).",
+    "problem_entry": "KNITRO runs with injected noise and noise-aware finite differences were acceptable at low noise but degraded markedly at higher noise (pp. 2-3); theory is then called essential, and the scope is narrowed to equality constraints and a simple SQP method (p. 3).",
+    "key_idea": "Keep every SQP component (QP step, least-squares multipliers, classical penalty rule that at least doubles when it increases) and change only the line search to a relaxed Armijo test with margin R = 2(eps_f + pi*eps_c), which cannot fail (pp. 3-5, 18).",
+    "assumptions": "Lipschitz gradients of f and c_i, bounded noise in f, c, g, J, beta_k bounds, sigma_min(J) >= gamma > eps_J, bounded sequences (pp. 5-6); noise level known or estimable (p. 2); admitted conveniences: H_k = beta_k I (p. 2), unique QP solution 'admittedly a strong assumption' (p. 5), no safeguards (p. 6), C2's supremum may be infinite (p. 14).",
+    "proof_devices": [
+      "Descent lemma on the true merit function phi with linear model l(x; s) (pp. 6-7)",
+      "Range/null-space step split with Stewart's projection perturbation bound ||P~ - P|| <= eps_J/gamma (Lemma 3.4, pp. 7-8)",
+      "Model decrease for a large enough penalty and the stationarity measure psi_pi (Lemma 3.5, Corollaries 3.6-3.7, pp. 8-10)",
+      "Penalty eventually constant because increases at least double; analysis at fixed pi_bar (pp. 4, 10)",
+      "|l~ - l| <= eps_l and step-length threshold alpha_hat with halving giving alpha_k >= alpha_bar (Theorem 3.8, pp. 11-12)",
+      "Critical region C1 as the union of the failure sets of three sufficient-progress conditions; level set C2; Theorem 3.11 (pp. 13-14)",
+      "Constants unpacked: E, eps_l scale with delta = 1/(gamma - eps_J), 1/b_l, eta/b_l; with m = 0 the conditions reduce to Berahas et al. (p. 15)"
+    ],
+    "experiments": "Python, nu = 0.1, tau = 0.9, beta_k = 50; HS7, BT11, HS40 with uniform noise; ||x_k - x*|| over 1000 iterations (pp. 15-17); ablation of the relaxation at three noise levels and budgets 100/500/1000 (Tables 4.1-4.3, p. 18); noise estimates 10x-1000x too large or too small with a naive stop test and (opt)/(ls) markers (Tables 4.4-4.6, pp. 18-19).",
+    "positioning": "Polyak, Hintermueller and Schittkowski's NLPQLP (no convergence theory) as early work (p. 3); the closest work, Berahas-Curtis-Robinson-Zhou-O'Neill stochastic SQP, is treated respectfully, and the difference (their penalty assumption, the same boundedness assumption) is stated plainly (p. 4); C1/C2 compared with Berahas-Byrd-Nocedal (p. 15).",
+    "writing": "A 'Contributions of this work' subsection with the hedge beside the claim ('somewhat pessimistic bounds', p. 3); a discussion section that turns a complex region into orders of magnitude (p. 15); strong assumptions labelled as such (p. 5); final remarks open with two guiding questions and list open problems (p. 20); tables called 'Figures 4.6-4.4' (p. 19).",
+    "limits_future": "Equality constraints only; Jacobian never near singular (p. 20); large constants and pi_bar dependent on x0 (p. 15); no regularization or trust region (p. 5); future: practical globalized algorithm (p. 5), local analysis with sharper bounds, stop test, singularity, nondiagonal Hessian, noisy inequality constraints (p. 20); recovery procedure needed (pp. 19-20).",
+    "method_links": [
+      {"method": "Method 3", "relation": "evidence", "note": "Guiding question is the minimal modification when the noise level can be estimated; only the line search is changed; the repair is ablated (line search fails near x* without it) and the estimate is stress-tested 10x-1000x both ways.", "pages": "pp. 2-3, 18-20"},
+      {"method": "Method 3", "relation": "variant", "note": "Recovery tree named as necessary for robust implementations but not built; stop test called naive.", "pages": "pp. 18, 20"},
+      {"method": "Method 4", "relation": "evidence", "note": "Started from a KNITRO failure observation; failure modes and open choices written in as next work (globalization, local bounds, stop test, singularity, nondiagonal Hessian, inequality constraints).", "pages": "pp. 2-3, 5, 20"},
+      {"method": "Method 5", "relation": "variant", "note": "The version analysed is a stripped SQP (H = beta*I, unique QP, no TR or regularization), not the KNITRO code; penalty rule would not converge with a general H; no bound plotted against runs; experiments measure ||x - x*|| while the theory is in phi.", "pages": "pp. 2, 4-5, 15"},
+      {"method": "Method 1", "relation": "contradiction", "note": "Step 7: three small CUTEst problems, no aggregate, no rival code, declared illustrative ('it suffices to test only a few examples').", "pages": "pp. 15-16"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Two-set neighbourhood convergence template", "evidence": "Iterates enter C1, revisit it infinitely often and never leave level set C2 (Thm 3.11); analogous level set noted in Berahas et al.", "pages": "pp. 13-15"},
+      {"pattern": "Collapse check to the classical case", "evidence": "With m = 0 the C1 conditions reduce to those of the unconstrained relaxed line-search analysis", "pages": "p. 15"}
+    ],
+    "transferable": [
+      "Set the relaxation margin to the largest change noise can cause in the merit function (R = 2(eps_f + pi*eps_c)) so the backtracking line search cannot fail (p. 5)",
+      "Use a penalty update that at least doubles when it increases, so pi is eventually constant and the analysis runs at fixed pi_bar (pp. 4, 10)",
+      "Define the critical region as the union of the failure sets of the proof's sufficient-progress conditions (Definition 3.9, p. 13)",
+      "After a complex theorem, add a section reducing its region to orders of magnitude and conditioning (delta, 1/b_l, sigma_min(J)) and check the unconstrained special case (p. 15)",
+      "Ablation table with the repair disabled (failure iteration, best accuracy) against enabled at several budgets and noise levels (Tables 4.1-4.3, p. 18)",
+      "Stress the required estimate at 10x, 100x, 1000x too large and too small, marking how each run ended (opt)/(ls) (Tables 4.4-4.6, p. 19)",
+      "Simplify the analysed method (H_k = beta_k I), say why, and state what breaks in the general case (pp. 2, 4)"
+    ],
+    "coauthors": "Figen Oztoprak (Artelys), Richard Byrd (Colorado Boulder); Shigeng Sun thanked (p. 20)",
+    "quotes": [
+      {"text": "As the noise level was increased, the quality of the solution deteriorated markedly, suggesting that classical optimization methods should be redesigned to handle noise.", "page": 3},
+      {"text": "What are the minimal modifications of a classical optimization algorithm that allow it to tolerate noise, when the noise level can be estimated?", "page": 20}
+    ]
+  },
+  {
+    "id": "S102",
+    "year": "2024",
+    "title": "Constrained and composite optimization via adaptive sampling methods",
+    "read_level": "full",
+    "contribution": "Extends adaptive sampling to constrained and composite stochastic problems by replacing the pointwise norm test with a look-ahead test that compares gradient variance with the length of the proximal step, proves linear (strongly convex) and O(1/k) (convex) convergence in expectation, and gives a practical inner-product variant (read in arXiv v1).",
+    "problem_entry": "The norm test, the basis of adaptive sampling, fails under constraints because pointwise decisions cannot predict the quality of the projected step; shown by a one-constraint quadratic picture (abstract p. 1; Fig. 1.1, p. 2); a priori geometric growth has no guidance on its rate (p. 3).",
+    "key_idea": "Accept a sampled gradient only if Var_k[g_k] <= xi*||(E_k[x_{k+1}] - x_k)/alpha||^2; implement with a trial prox step from the current sample and sample variance, resample and recompute if needed; reduces to the norm test when h = 0 by design (pp. 3, 5, 11-12).",
+    "assumptions": "f [mu, L]-smooth or convex with L-Lipschitz gradient, h closed convex proper, unbiased g_k, fixed alpha = (1-eta)/L (pp. 6-8); admitted: (3.6) not enforceable in practice (p. 8), (3.10) more restrictive (p. 11), practical rule approximate (pp. 11-13), inner-product test assumes an independence that does not hold (p. 13).",
+    "proof_devices": [
+      "One-step inequality evaluated at the comparison point x~ = beta*x* + (1-beta)x_k with beta = mu*alpha, which cancels the strong-convexity term (Lemma 3.2, pp. 6-7)",
+      "Q-linear rate in expectation under (3.6), which reduces to the norm test with xi = eta/(1-eta) when h = 0 (Theorem 3.3, pp. 7-8)",
+      "O(1/k) for convex f by telescoping ||x_k - x*||^2 and monotone expected values (Lemma 3.5, Theorem 3.6, pp. 8-9)",
+      "Computable condition via the bias-variance split and the measurable true-gradient prox point x^_{k+1} with prox nonexpansiveness, bounding the cross term by alpha*Var (Theorem 3.7, p. 10)",
+      "Sample-size rule from Var = population variance / S_k (Corollary 3.8, p. 11)"
+    ],
+    "experiments": "l1-regularized logistic regression, lambda = 1/N, six datasets (pp. 13-14); GEOMETRIC (gamma swept) vs NORM vs IP, each with the step chosen from a grid, S0 = 2, stop at 1e-8 or 100 epochs, phi* from 50,000 deterministic iterations; optimality gap against effective gradient evaluations and batch fraction against iterations, with parameter sweeps and a best-run panel; mushrooms in the main text, five datasets in Appendix A (pp. 14-26); CPU time and number of repetitions not reported.",
+    "positioning": "Norm-test lineage (Carter; Friedlander-Schmidt; his own Byrd et al. 2012 and Bollapragada et al.; Cartis-Scheinberg; Pasupathy; Roosta-Mahoney; De et al.) (p. 3); inexact prox-gradient work lacks an automatic accuracy rule (pp. 3-4); a priori schedule [13] criticized (p. 3); 'N.B.' priority note on concurrent Beiser et al. (p. 3, footnote p. 4).",
+    "writing": "Abstract runs motivation -> failure of the existing mechanism -> fix -> theory -> experiments (p. 1); failure picture early (p. 2); 'reassuring' collapse checks after the theorems (pp. 8, 11); candid caveats where they arise (pp. 8, 13); final remarks name the cornerstone condition and one open question (p. 14).",
+    "limits_future": "Convex f only (pp. 6, 8); (3.10) more restrictive than (3.6), a less restrictive computable condition is open (p. 14); IP test without theory (p. 13); one problem class (p. 13); the step is grid-tuned in the experiments while the theory fixes alpha = (1-eta)/L, a gap not discussed (pp. 7, 14).",
+    "method_links": [
+      {"method": "Method 3", "relation": "evidence", "note": "Proximal-gradient engine kept; the sample-size control that breaks under constraints is replaced by an estimate-driven look-ahead test with a built-in recovery (resample and recompute, reusing samples); failure first shown on one chosen picture.", "pages": "pp. 1-3, 5, 11-12"},
+      {"method": "Method 1", "relation": "variant", "note": "Rival a priori schedule as baseline with a gamma sweep, the same step-size grid for every method, cost in effective gradient evaluations, all six datasets reported; but nothing handicapped on his side and the summary panel compares best runs.", "pages": "pp. 14-15, 17-26"},
+      {"method": "Method 5", "relation": "variant", "note": "The theorems cover the idealized (3.10), while the code runs its approximation (3.15) and the theory-free inner-product test; no bound against runs; standard rates do not separate NORM from GEOMETRIC.", "pages": "pp. 7-14"},
+      {"method": "Method 5", "relation": "evidence", "note": "Step 5: what cannot be proved is kept as a stated open question and an admitted heuristic.", "pages": "pp. 13-14"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Collapse check to the classical case", "evidence": "Design requirement that the method reduce to the norm-test iteration when h is absent, checked after Theorems 3.3 and 3.7", "pages": "pp. 5, 8, 11"},
+      {"pattern": "Look-ahead accuracy test", "evidence": "Judge a sampled gradient by the proximal step it produces (variance against squared step length), via a cheap trial step", "pages": "pp. 2-3, 11-12"}
+    ],
+    "transferable": [
+      "Open with a one-picture counterexample in which the standard test passes and the step is bad (Fig. 1.1, p. 2)",
+      "Test the step, not the point: Var(g) <= xi*||(x_{k+1} - x_k)/alpha||^2 with a trial prox step from the current sample; draw only the extra samples when enlarging (pp. 3, 5, 12)",
+      "Find the most general sufficient condition first, then a computable stronger one, and label which is which (pp. 8, 10-11)",
+      "Use the comparison point x~ = mu*alpha*x* + (1 - mu*alpha)x_k to cancel the strong-convexity term in a one-step bound (pp. 6-7)",
+      "Bound a stochastic cross term with a measurable true-gradient prox step and prox nonexpansiveness (p. 10)",
+      "Report against effective gradient evaluations sum S_j/N with batch-fraction plots and per-method parameter sweeps (p. 14)"
+    ],
+    "coauthors": "Yuchen Xie (Northwestern IEMS), Raghu Bollapragada (UT Austin), Richard Byrd (Colorado Boulder)",
+    "quotes": [
+      {"text": "The mechanism commonly employed in unconstrained optimization is no longer reliable in the constrained or composite optimization settings because it is based on pointwise decisions that cannot correctly predict the quality of the proximal gradient step.", "page": 1},
+      {"text": "Again, it is reassuring that when h = 0, condition (3.10) reduces to the norm test (1.3).", "page": 11}
+    ]
+  }
+]

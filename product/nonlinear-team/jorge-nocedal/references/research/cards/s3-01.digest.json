@@ -1,0 +1,194 @@
+[
+ {
+  "id": "S120",
+  "year": "1978",
+  "title": "A study of conjugate gradient methods",
+  "read_level": "partial",
+  "contribution": "A unifying study of nonlinear CG methods that presents each variant through three interpretations (BFGS relation, specialized Gram-Schmidt, implicit Lanczos), proves quadratic-termination properties of variable-metric and variable-storage CG hybrids (VSGCG for any Broyden member; interleaved QN-CG only with BFGS) and of a BFGS/three-term-recurrence method (pp. 10-13, 24-26, 34-38, 49).",
+  "problem_entry": "Many CG variants since Fletcher-Reeves, valued for large n; entry by unification, presenting each algorithm within the context of existing algorithms, focusing on CG methods that use variable-metric information (p. 5).",
+  "key_idea": "Use three interpretations of CG on quadratics as a staging ground (p. 10) and relax one condition at a time: metric H (pp. 15-16), arbitrary starting direction (Beale, pp. 17, 21-22), storage-dependent metric (VSGCG, pp. 23-24; interleaved QN-CG, p. 27), inexact line searches (GP, memoryless BFGS, multistep, TTR, pp. 40-44; BFGS-TTR, p. 49).",
+  "assumptions": "Strictly convex quadratic and mostly exact line searches for the termination results (pp. 14, 18, 24, 30, 34, 49); for general functions only positive definiteness under sufficiently accurate line searches (Lemma 3.1, pp. 29-30, via Powell's Theorem 3.2, pp. 27-28).",
+  "proof_devices": [
+   "induction showing a hybrid generates the same steps as CG with one fixed metric H0, then inheriting CG's termination (Theorem 3.1 pp. 24-26; Theorem 3.4 pp. 34-35; Theorem 5.1 pp. 49-52)",
+   "negative lemma discriminating within Broyden's class: any member other than BFGS loses quadratic termination in the interleaved method (Lemma 3.2, pp. 37-38), contrasted with the member-independent VSGCG result (p. 26)",
+   "Luenberger polynomial-minimization argument extended to Beale's method with an arbitrary starting direction (Theorem 2.1, pp. 18-21; pp. 13-14)",
+   "lemma on what holds at a failure point (TTR premature termination leaves the gradient conjugate to earlier directions) used to justify an existing hybrid code (pp. 47-48)"
+  ],
+  "experiments": "none (no runs of its own; records conflicting external experience with TTR: encouraging in [27], poor for Shanno [26], p. 44)",
+  "positioning": "A map of the CG family; generalizes Buckley's theorem 'slightly' (p. 27); credits Powell for why Polak-Ribiere recovers from poor directions (p. 9).",
+  "writing": "Fixed per-section template basics / generalizations / strategies (p. 6); grades its own result as 'a weak result' before strengthening it (p. 34).",
+  "limits_future": "Convergence analysis deferred to a forthcoming report and a documented FORTRAN implementation hoped for (p. 6); unclear how to exploit the multistep lemma, multistep and TTR lack descent guarantees (pp. 43, 45); TTR modifications deferred (p. 48).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Theory separates methods (only BFGS keeps quadratic termination in the interleaved method; VSGCG works for any Broyden member) but on quadratics with exact line searches, not the version people run, and without runs.",
+    "pages": "pp. 26, 37-38"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Known weaknesses (TTR non-descent and premature termination with d0 != -g0; multistep without descent guarantee) listed and turned into lemmas suggesting repairs; repairs deferred, no solver options yet.",
+    "pages": "pp. 45-48"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "equivalence on quadratics as a staging ground",
+    "evidence": "Start from CG = BFGS on quadratics and relax one condition at a time (metric, storage, starting direction, line-search exactness), asking which property survives.",
+    "pages": "pp. 10-12, 15-17, 23-24, 40"
+   },
+   {
+    "pattern": "storage knob spanning two classical methods",
+    "evidence": "VSGCG family between CG and BFGS whose metric varies 'depending on the storage available'; interleaved QN-CG keeps as many corrections as storage allows. Matches the candidate from S138 and S143 (card s01).",
+    "pages": "pp. 23-24, 27"
+   }
+  ],
+  "transferable": [
+   "To show a hybrid keeps finite termination, prove by induction that its directions coincide (up to scale) with those of a reference method with one fixed metric, then inherit the reference property (pp. 24-26, 34-36, 49-52).",
+   "Make theory discriminate cheaply by testing whether a result holds for the whole parametrized family (Broyden's class) or only one member, and state both results side by side (pp. 26, 37-38).",
+   "When a method has a known failure (TTR premature termination), prove what still holds at the failure point and use it to justify a practical safeguard someone already ships (pp. 47-48)."
+  ],
+  "coauthors": "L. Nazareth",
+  "quotes": [
+   {
+    "text": "it can be seen that the BFGS method can be interpreted as a conjugate gradient method in which the metric is changed at each step.",
+    "page": 23
+   },
+   {
+    "text": "we hope eventually to develop a documented and distributable FORTRAN implementation.",
+    "page": 6
+   }
+  ]
+ },
+ {
+  "id": "S063",
+  "year": "2003",
+  "title": "KNITRO user's manual",
+  "read_level": "full",
+  "contribution": "User documentation of KNITRO 3.0: an interior (barrier) trust-region method with two step computations (default projected-CG Knitro-CG and direct-KKT Knitro-Direct with CG fallback), 16 options with defaults, a scaled termination test, exit codes documenting failure modes, derivative options and special modes (feasible version, nonlinear equations, least squares, reverse communication) (pp. 4, 11, 35-43).",
+  "problem_entry": "Local solutions of smooth continuous problems with or without constraints, designed for large scale but presented as efficient across eight problem classes (p. 3).",
+  "key_idea": "Barrier subproblems with trust regions and a merit function (p. 4); Knitro-CG factors a projection matrix and uses projected CG instead of the KKT matrix, Knitro-Direct factors the primal-dual KKT matrix and falls back to CG when step quality is doubtful or negative curvature appears (pp. 4, 38); reverse communication returns control at every evaluation (pp. 3, 43).",
+  "assumptions": "f, h, g smooth; local solutions only (pp. 3-4); exact first derivatives highly recommended (pp. 32, 39).",
+  "proof_devices": [],
+  "experiments": "none beyond one three-variable example: 8 iterations with direct=1, opttol=1e-8 (pp. 8-10), 7 iterations with defaults from the C driver (pp. 26-27)",
+  "positioning": "n/a for rivals; algorithm papers [2], [3], [7] (p. 4); CUTEr called extremely valuable for benchmarking (p. 29); Gauss-Newton/LM background from Nocedal & Wright (p. 42).",
+  "writing": "Conditional, numeric user advice (p. 31); the dense quasi-Newton size threshold is inconsistent, n < 1000 (p. 31) vs n < 2000 (p. 40).",
+  "limits_future": "Exit codes document failure modes: -2 convergence to an infeasible point, possibly for feasible problems (p. 37); -4/-5 cannot improve (degeneracy, ill-conditioning, scaling) or near-optimal within a factor of 100 (p. 37); option incompatibilities (pp. 32-33, 38); no future directions.",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Undecided choice exposed as an option ('try both options', 'difficult to predict in advance'); the infeasible-stationary-point failure mode already documented as exit code -2 in 2003; Knitro-Direct ships in version 3.0 (timing note for chain (b)).",
+    "pages": "pp. 1, 4, 37-38"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Complementary step computations (iterative CG, direct KKT) integrated with automatic fallback; structure exploited through the Hessian callback (J^T J gives Gauss-Newton / LM) and square systems treated as feasibility problems; interior and active-set not yet integrated.",
+    "pages": "pp. 4, 37-38, 42"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Exit flags for 'cannot be improved' and near-optimality within a factor of 100, but none driven by an explicit estimate and no recovery path.",
+    "pages": "p. 37"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "symptom-to-option map in user documentation",
+    "evidence": "A log symptom is tied to the option to change (many CG iterations -> direct=1) and an exit pattern to a diagnosis (-2 from several starting points -> likely infeasible).",
+    "pages": "pp. 37-38"
+   }
+  ],
+  "transferable": [
+   "Build the stopping test's scale factors only from quantities the code always has (initial infeasibility and current gradient norm, each floored at 1) and keep absolute tolerances that default to zero (p. 35).",
+   "Pair each exit code with a cause and an action, and include a near-success code (within a factor of 100 of the tolerances) so users do not discard usable answers (pp. 36-37).",
+   "Write derivative-option advice as a decision rule on what the user has and what dominates cost: exact gradients -> finite-difference Hessian-vector products; finite-difference or costly gradients -> quasi-Newton; dense quasi-Newton only below a stated n (pp. 31, 39-41).",
+   "Expose problem structure through an existing callback: passing J^T J as the Hessian turns the general code into Gauss-Newton or Levenberg-Marquardt depending on the step option (p. 42)."
+  ],
+  "coauthors": "Richard A. Waltz",
+  "quotes": [
+   {
+    "text": "We encourage the user to try both options as it is difficult to predict in advance which one will be more effective on a given problem.",
+    "page": 38
+   },
+   {
+    "text": "This happens when the problem is infeasible, but may also occur on occasion for feasible problems with nonlinear constraints.",
+    "page": 37
+   }
+  ]
+ },
+ {
+  "id": "S139",
+  "year": "2011",
+  "title": "An implementation of an algorithm for nonlinear programming based on piecewise linear models",
+  "read_level": "full",
+  "contribution": "Progress report on a knitro implementation of the PLA active-set method of S114 (l1-penalty LP prediction with a separable piecewise-linear curvature model, steering rules, Cauchy point, relaxed EQP by projected CG, SOC), with robustness tied to knitro/active (480/514 CUTEr problems) and fewer function evaluations than knitro/active (pp. 3-14, 16-17).",
+  "problem_entry": "An algorithm for large-scale problems including those with a large reduced space (abstract, p. 1), entered from a three-family landscape: IPMs not always robust, SQP robust but QP-limited, SLP-QP scalable but less robust; aim to combine SQP and SLP-QP properties (p. 2).",
+  "key_idea": "Curvature enters LP-based active-set prediction as a separable convex piecewise-linear model built by interpolation (2r+1 points, ratio 0.3, guarded slopes, Delta-form LP), with an l1 penalty and an added trust region, steering rules from [2], a Cauchy point, a relaxed EQP and SOC (pp. 3-13); diagonal B_k = mid(1e-5, H_jj, 1e5), r = 3 (p. 14).",
+  "assumptions": "f, h, g twice differentiable, bounds on variables (p. 1); convergence theory from [6], keeping the Cauchy point for global convergence (p. 6).",
+  "proof_devices": [],
+  "experiments": "514 CUTEr/AMPL problems by type and size (p. 15); active-set codes only, knitro/active and SNOPT 7.2-1 (p. 14); PLA uses knitro/active stopping test, SNOPT default, 1e-6, limits counted as failures (p. 15); robustness tied 480/514 (p. 16); FEV profiles favour PLA (p. 17); SNOPT CPU only for n >= 500, indefinite QPs omitted (p. 18); SNOPT figures not extractable (pp. 20-21); no timing vs knitro/active (p. 18).",
+  "positioning": "Benchmarks chosen as some of the most effective active-set codes; derivative disparity named (SNOPT first derivatives and limited-memory BFGS reduced Hessian vs exact second derivatives in PLA and knitro/active) (p. 14).",
+  "writing": "Framed as a progress report (abstract; p. 18), upbeat verdicts ('highly encouraging', p. 17; 'already very robust', p. 18).",
+  "limits_future": "Speed not optimized, no timing vs knitro/active (pp. 18, 22); diagonal Hessian approximation not very sophisticated (p. 22); infeasible/unbounded recognition out of scope (p. 15); future: efficient diagonalized L-BFGS model of [6] and other B_k (pp. 14, 22).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Shared stopping test with the incumbent, 1e-6 for all, limits as failures, symmetric scoring of unsolvable and multi-minimum problems, CPU only for n >= 500; but no handicap of own side: exact Hessians vs SNOPT's quasi-Newton named but not turned into a question, SNOPT default stopping test, a SNOPT-problematic class removed, no losses in the abstract.",
+    "pages": "pp. 14-15, 18"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "The penalty-steering repair of the Method 3 worked case is reused unchanged as a module in a new active-set algorithm (Algorithm 2.1, adapted from Algorithm 9.1 of [2]).",
+    "pages": "pp. 4-5"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Aim to combine SQP and SLP-QP properties; built inside knitro next to knitro/active and compared like with like (active-set solvers only).",
+    "pages": "pp. 2-3, 14"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Theory steers the implementation (conform to the guidelines of [6]), but the implementation reinstates the trust region that S114 said could be dispensed with, for control and robustness.",
+    "pages": "abstract; p. 3"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "theory paper, then implementation report that reinstates safeguards",
+    "evidence": "Trust region added back, l1 penalty makes the subproblem always feasible, EQP relaxed; each departure from S114 stated.",
+    "pages": "pp. 3-4, 6"
+   },
+   {
+    "pattern": "cheap predictor carries the proof, second-order phase carries the rate",
+    "evidence": "LP phase and Cauchy point give global convergence, EQP gives step quality; matches the candidate from S060 recurring in S114 (card s06).",
+    "pages": "pp. 3, 6"
+   }
+  ],
+  "transferable": [
+   "Decide in advance how to score instances with no solution (failure for every code) and convergence to different local minima (success for both), and state that this affects the codes equally (p. 15).",
+   "Report CPU time only for problems large enough (n >= 500) for timing to be meaningful; count function evaluations everywhere (p. 18).",
+   "Take a linearly independent working set from the LP solver's basis rather than extracting one yourself (p. 5).",
+   "Keep a piecewise-linear model LP bounded by overriding the outermost slopes with +/- ||grad f(x_k)|| where the interpolation range could not be closed (p. 12).",
+   "Clip diagonal curvature estimates into [1e-5, 1e5] with a Frobenius-norm fallback for structurally zero diagonal entries (p. 14)."
+  ],
+  "coauthors": "Richard Byrd, Richard Waltz, Yuchen Wu",
+  "quotes": [
+   {
+    "text": "Given that PLA is an active-set method, it is appropriate to compare it only with active-set solvers.",
+    "page": 14
+   },
+   {
+    "text": "In addition, we include a trust region constraint in (2.2) for greater control and robustness.",
+    "page": 3
+   }
+  ]
+ }
+]

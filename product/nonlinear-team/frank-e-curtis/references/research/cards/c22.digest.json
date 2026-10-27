@@ -1,0 +1,147 @@
+[
+ {
+  "id": "D002",
+  "year": "2024",
+  "title": "Single-Loop Deterministic and Stochastic Interior-Point Algorithms for Nonlinearly Constrained Optimization",
+  "read_level": "full",
+  "contribution": "A single-loop feasible interior-point framework (SLIP) for linear equality and nonlinear inequality constraints that uses stochastic objective gradients and no objective values. Convergence guarantees are given in deterministic and almost-sure stochastic forms, and the method is tested on 327 CUTEst problems, an SOCP and a norm-constrained neural network (read from arXiv:2408.16186v1).",
+  "problem_entry": "Interior-point methods dominate deterministic nonconvex NLP (Ipopt, Knitro, LOQO) but have had little stochastic extension. Three obstacles are named: the inner-loop stopping test, non-Lipschitz and unbounded barrier gradients, and function-value-based globalization (pp. 2-3).",
+  "key_idea": "Replace the nested barrier loop by prescribed sequences mu_k and theta_k with mu_k/theta_{k-1} constant. Keep iterates in a shrinking neighbourhood N(theta_k), use directions satisfying (5a)-(5e) including a push away from nearly active constraints, step size about 1/L_k, and a boundary factor gamma_k from a quadratic root. In the stochastic case gamma_k is boxed in a run-independent bracket (pp. 5-7, 10, 15-16).",
+  "assumptions": "A strictly feasible point exists and there are no nonlinear equalities (pp. 4-5). Nonstandard Assumption 3.1, read as nondegeneracy plus mu_1/theta_0 large (pp. 3, 6-7, 21-24). Lipschitz and bounded f, grad f, c_i, grad c_i on the iterate set (pp. 7-8). Unbiased gradients with an almost-sure error bound sigma (p. 15). H_k uniformly positive definite on Null(A) (p. 15). LICQ at the limit for KKT (pp. 13, 20).",
+  "proof_devices": [
+   "Shifted barrier f - mu sum log(-c_i/kappa_ci): same gradient, bounded below, monotone in mu (eqs. (6)-(7), p. 8)",
+   "Local Lipschitz constant of the barrier gradient on N(theta), scaling like mu/(theta theta-bar) (Lemma 4.1, pp. 8-9)",
+   "Positive root of a strongly convex quadratic upper bound keeps the segment in N(theta_k) (Lemma 4.2, p. 10)",
+   "Lower bound on gamma_k by a nearly-active / not-nearly-active case split (Lemma 4.3, pp. 11-12)",
+   "Unsummability of min{alpha_k, rho_k, upsilon_k} by matching exponents t_mu = t_theta, t_mu + t_alpha in [-1, 0) (Theorem 4.1, pp. 12-14)",
+   "KKT recovery from z = -mu/c and least-squares y under LICQ (eq. (18), p. 14)",
+   "Sign split by total expectation plus the prescribed bracket [gamma_min, gamma_min + gamma_buff] to bound the noise-step correlation (Lemma 4.8, pp. 18-19)",
+   "Exponent conditions 2t + t_alpha < -1, t + 2t_alpha < -1, summation and Fatou's lemma give liminf = 0 almost surely (Lemma 4.10, Theorem 4.2, pp. 19-21)",
+   "A pair of 2-D examples where Assumption 3.1 holds (polyhedral) or cannot be shown (opposing gradients), with a figure (§5, pp. 21-24)"
+  ],
+  "experiments": "Python SLIP. (1) Deterministic runs on CUTEst via PyCUTEst, filtered by stated rules 1315 -> 396 -> 327 with a Phase I solve; budget 2e4 iterations; f decreased on every run; histogram of relative stationarity (pp. 24-26). (2) A random convex SOCP: deterministic reference plus 10 stochastic seeds, all final values tabulated (pp. 26-27). (3) A one-hidden-layer network on mushrooms with a norm constraint, mini-batch 256, 10 runs tabulated (pp. 26-27). No external baseline, with the reason stated (p. 24).",
+  "positioning": "Extends the group's bound-constrained stochastic IPM [7] to nonlinear inequalities (p. 3). Claims to be the first IPM with comparable stochastic guarantees (p. 3). Treats stochastic SQP methods as the infeasible, equality-constrained alternative (p. 27). Concedes the deterministic regime to second-order IPMs (pp. 3, 24).",
+  "writing": "A 'Contributions and Limitations' subsection leads with what the method will not do, and the disclaimer is repeated at pp. 9 and 24. 'We contend' is the main claim verb. Rules are stated first and explained after (p. 10). A dedicated section on the nonstandard assumption, with examples and a figure (pp. 21-24). Small slips: an unnumbered table called 'Table 6' (p. 27).",
+  "limits_future": "Needs a strictly feasible start; no nonlinear equalities; a nonstandard assumption whose parameters cannot be set in advance; conservative step sizes; only liminf results, no rates; the practical mu_1 reset lies outside the theory (pp. 3, 7, 24-27). Future work: a single-loop infeasible IPM, and why slack variables make it hard (pp. 27-28).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Instead of deriving the inner solve's stopping test from the outer method, the inner loop is removed because its stationarity test is intractable with stochastic gradients; the barrier and neighbourhood schedule is prescribed.",
+    "pages": "pp. 3, 5-6"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "One algorithm with no switch between barrier subproblems, but the barrier parameter is prescribed rather than steered in the theory. The implementation doubles mu_1 when (5e) fails (cap 1e4), outside the theory.",
+    "pages": "pp. 3, 6, 24-25"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "No external rival is run, and the paper says why ('level playing field', p. 24). The deterministic twin with identical parameters serves as the reference for stochastic seeds, and the incumbent is conceded without a run.",
+    "pages": "pp. 3, 24, 26-27"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "limitations-first contribution statement",
+    "evidence": "A §1.1 'Contributions and Limitations' opens by stating that the method is not expected to be competitive deterministically; repeated in §4.1 and §6.",
+    "pages": "pp. 3, 9, 24"
+   },
+   {
+    "pattern": "assumption bracketed by a provable and an unprovable 2-D example",
+    "evidence": "Example 1 (Assumption 3.1 holds for large mu/theta) and Example 2 (cannot be shown), with Figure 1 explaining the geometry of the polar cone.",
+    "pages": "pp. 21-24"
+   }
+  ],
+  "transferable": [
+   "List each component of a deterministic solver that needs an exact quantity (inner stopping test, Lipschitz gradients, acceptance test) before designing its stochastic version (p. 3).",
+   "Shift log-barrier terms by known bounds on |c_i| to get a potential that is bounded below, has the same gradient and is monotone in mu (p. 8).",
+   "Box a direction-dependent safeguard in a prescribed, run-independent bracket [gamma_min, gamma_min + buffer] so that the noise-step correlation costs at most buffer x alpha_k x const (pp. 16, 18-19).",
+   "Compute a step-to-boundary factor as the positive root of each constraint's quadratic upper bound along the ray (p. 10).",
+   "For a stochastic method with no fair rival: deterministic twin as reference, every seed's final value tabulated, convex instance first (pp. 26-27).",
+   "When f_inf is unknown, normalize the final stationarity by the better of the initial stationarity measures (eq. (29), p. 25)."
+  ],
+  "coauthors": "Xin Jiang, Qi Wang",
+  "quotes": [
+   {
+    "text": "Let us emphasize upfront that we do not expect our method to be competitive with state-of-the-art interior-point methods in the deterministic regime, and especially not with those that employ second-order derivatives of the objective.",
+    "page": 3
+   },
+   {
+    "text": "meaning that there is no such method in the literature against which our algorithm can be compared on a level playing field.",
+    "page": 24
+   }
+  ]
+ },
+ {
+  "id": "S013",
+  "year": "2024",
+  "title": "Worst-case complexity of an SQP method for nonlinear equality constrained stochastic optimization",
+  "read_level": "full",
+  "contribution": "The first worst-case complexity bound for a stochastic SQP method with an adaptive merit parameter (Berahas-Curtis-Robinson-Zhou 2021). It shows that, with high probability, the method matches SG's O(eps^-4) up to log factors, with a separate additive term for the cost of adaptivity (read from arXiv:2112.14799v2).",
+  "problem_entry": "Complexity results for stochastic constrained optimization existed only for simple sets, and the one SQP bound [18] assumed a known merit threshold. The paper analyzes the adaptive-merit-parameter SQP of [2] in the highly stochastic regime (pp. 2-3).",
+  "key_idea": "Condition on an event E (tau >= tau_min, at most s_max decreases); isolate the bad event E_k,3 (negative error inner product while tau decreases); introduce an analysis-only shadow T-hat_k = min{T_k, tau_trial_true_k}; bound with high probability the sum of probabilities of E_k,3 and the number of iterations where shadow and actual differ. The result is an SG-like rate plus a (tau_-1 - tau_min)(s_max log k_max + log 1/delta)/sqrt(k_max+1) term (pp. 6-7, 11, 14, 16, 20-25).",
+  "assumptions": "f C1, bounded below, Lipschitz bounded gradient; J full rank uniformly (p. 4). H_k bounded and positive definite on Null(J_k) (p. 7). Unbiased gradients with variance M plus a conditional moment bound M_tau (p. 12). A probability p_tau that the stochastic model term exceeds the true one (pp. 12-13). Known Lipschitz constants (p. 8). Event E, called 'not necessarily minor' and shown to hold with high probability under symmetric sub-Gaussian noise (pp. 11, 25-27).",
+  "proof_devices": [
+   "Deterministic O(eps^-2) warm-up by contradiction on summed merit decreases (Theorem 1, p. 5; Lemma 14, Theorem 4, pp. 31-32)",
+   "Three-event decomposition E_k,1/E_k,2/E_k,3 with three upper bounds averaged so that only the E_k,3 term survives (Lemma 6, pp. 14-16)",
+   "Sign split of Q_k with two bounds averaged (Lemma 7, pp. 17-18)",
+   "Analysis-only shadow merit parameter T-hat_k and difference bounds (Lemma 8, pp. 16, 19)",
+   "Conditional independence: whether tau_trial_true < tau_k-1 is fixed by past samples, so bounds hold under either case (pp. 20, 22)",
+   "Tree of realizations by B-bin discretized probability signatures, with Chernoff for Bernoullis and a union bound over binomial paths (Lemma 15, Theorem 5, pp. 33-36, 43)",
+   "Binomial-sum estimate giving the s_max log k_max + log 1/delta factor (Lemma 22, pp. 45-46)",
+   "Noise symmetry gives p_tau = 1/2 via the null-space form of D_k (Lemma 11, p. 26); sub-Gaussian maximum bound (Lemma 12, p. 26)",
+   "Output index sampled in proportion to beta_k, then Jensen (pp. 6-8, 25)"
+  ],
+  "experiments": "none",
+  "positioning": "Claims the first worst-case complexity for SQP in the highly stochastic regime with nonlinear equality constraints. Benchmarks against SG for unconstrained nonconvex problems (Davis-Drusvyatskiy). Limits [18] to the idealized known-threshold case. Places SQP above penalty methods in practice (p. 3) and the technique as reusable for adaptive penalty, augmented-Lagrangian, barrier and penalty-interior-point methods (p. 29).",
+  "writing": "A §2 'Outline of Main Results' previews and interprets every term of the bound before the proofs (pp. 5-7). Modest framing ('Theorem 1 is not surprising', p. 5). The strength of event E is conceded in a bullet list (p. 11). The §4.6 extension is stated without proof as 'straightforward, but tedious' (p. 28). The conclusion misstates the rate as 'k -4' (p. 29).",
+  "limits_future": "Conditioned on E; known Lipschitz constants; equality constraints with full-rank J only; the adaptive-xi theorem is unproved; no experiments measuring how often E holds (pp. 4, 8, 11, 28). Future work: apply the tools to other methods whose auxiliary parameter sequence becomes a random process (p. 29).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "The adaptive merit parameter is kept, not fixed to a known threshold, and the analysis is organized around it as a random process; the paper accepts a high-probability theorem to keep the steering rule.",
+    "pages": "pp. 3, 6, 11, 29"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "The complexity statement is split into SG-like terms (7a) and a separate price-of-adaptivity term (7b), with the idealized known-tau_min case reported as a special case. This audits the bound itself rather than an evaluation measure, and no practical gain is claimed.",
+    "pages": "pp. 6-7"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "price-of-adaptivity term isolated in the bound",
+    "evidence": "The rate (7) is split into an SG-matching part and an additive term from merit-parameter adaptivity; the text says when it is harmless (s_max = O(log log) under sub-Gaussian noise).",
+    "pages": "pp. 6-7, 29"
+   },
+   {
+    "pattern": "shadow parameter computed with the true gradient",
+    "evidence": "tau_trial_true_k and T-hat_k = min{T_k, tau_trial_true_k}, never computed by the algorithm, tie the model reduction to stationarity, and the iterations where they differ are counted with high probability.",
+    "pages": "pp. 10, 14, 16, 20"
+   }
+  ],
+  "transferable": [
+   "Define an analysis-only shadow of an adaptive parameter using the true gradient, then bound with high probability the number of iterations where shadow and actual differ (pp. 14, 16, 20).",
+   "Bound products of correlated random quantities by splitting on the error sign and on parameter movement, writing several valid upper bounds and averaging them to cancel terms (Lemma 6, pp. 14-16).",
+   "Control sums of random per-iteration probabilities with a signature tree over discretized probabilities, Chernoff and a union bound (pp. 33-36, 43).",
+   "Use the fact that an event is fixed by past samples to condition on it without breaking the expectation over the current sample (pp. 20, 22).",
+   "Write a preview section that interprets each term of the final bound and states when the extra terms are harmless (pp. 6-7)."
+  ],
+  "coauthors": "Michael J. O'Neill, Daniel P. Robinson",
+  "quotes": [
+   {
+    "text": "The high-probability aspect of this result arises purely due to the uncertainty of the behavior of the adaptive merit parameter sequence",
+    "page": 3
+   },
+   {
+    "text": "While key to the practical performance of the algorithm, the adaptivity of the merit parameter introduced a number of theoretical challenges to overcome.",
+    "page": 29
+   }
+  ]
+ }
+]

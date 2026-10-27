@@ -1,0 +1,222 @@
+[
+ {
+  "id": "S049",
+  "year": "2020",
+  "title": "A self-correcting variable-metric algorithm framework for nonsmooth optimization",
+  "read_level": "full",
+  "contribution": "SVANO: a variable-metric framework for locally Lipschitz minimization. BFGS updates are damped toward a fixed matrix H so that curvature bounds hold for all k, and BFGS self-correction then gives bounded matrices on a fraction p of iterations. This yields generic stationarity theory, a full proof for a convex bundle trust-region instance, and a C++ code with BFGS, bundle and gradient-sampling instances (arXiv v5, pp. 5-20).",
+  "problem_entry": "Earlier nonsmooth variable-metric methods either restrict updates so matrices stay bounded in all iterations (Curtis-Que) or run unadulterated BFGS, which lacks general guarantees and may break down in the line search before any stationarity guarantee (p. 3).",
+  "key_idea": "Keep the BFGS formula and a free y_k, but use v_k = beta_k H s_k + (1 - beta_k) y_k with fixed H, so that eta <= s'v/||s||^2 and ||v||^2/s'v <= theta hold for all k; self-correction (tr - ln det) then gives good matrices on at least ceil(pK) of K iterations, enough for convergence (pp. 6, 8, 10).",
+  "assumptions": "f bounded below, locally Lipschitz, C1 on an open full-measure set (Assumption 2.1, p. 4); convex f for the complete bundle theory (Theorem 4.1, p. 14); weak lower semismoothness for nonconvex line searches (p. 16); classical BFGS instance covered only if stepsizes stay >= alpha_min (p. 12).",
+  "proof_devices": [
+   "potential psi(H) = tr(H) - ln det(H) with trace/determinant recurrences (3.2)-(3.4), after Byrd-Nocedal (p. 9)",
+   "Theorem 3.1: good cosines and Rayleigh quotients on at least ceil(pK) of any K iterations, proof by bounding the ceil(pK) smallest loss terms zeta_k (p. 10; App. C pp. 24-25)",
+   "Theorem 3.2: decrease on the good subsequence forces ||G w + gamma|| -> 0 and ||s|| -> 0 (p. 11)",
+   "Theorem 3.3: practical version of Kiwiel's lemma, stationarity from vanishing convex combinations of eps_k-subgradients (p. 11)",
+   "Moreau-Yosida regularization lemmas adapted from Ruszczynski 7.4 for the variable-metric bundle step (pp. 14, 25-27)",
+   "Theorem 4.1: radius update tied to a computable stationarity test, delta_k -> 0 proved via the angle between t_k and gamma_k (pp. 14-15)",
+   "dual of the trust-region subproblem: affine equality plus bounds, warm start by appending a zero variable (pp. 7-8)"
+  ],
+  "experiments": "C++ code with own active-set QP solver; first 10 Haarala et al. problems, n = 50 (5 convex); common W1 = I and y_k for all instances; success = theory test (5.1); counters #iter/#func/#grad/#subs; Bundle and GS stationary on 10/10, BFGS on 1/10 (Table 2, p. 18); ablation theta = infinity: Bundle 5 and GS 4 failures (Table 3, p. 19); LMBM and HANSO at defaults, 'difficult to compare' (pp. 19-20); randomized GS single runs (p. 17); no CPU times.",
+  "positioning": "Places itself among restricted-update quasi-Newton methods but exploiting self-correction (p. 3); builds on Byrd-Nocedal, Kiwiel, Schramm-Zowe, Ruszczynski and own Curtis-Que and 2016 stochastic self-correcting work (pp. 3, 5, 8, 9, 14, 16); stresses it does not claim classical BFGS cannot be proved convergent (p. 12).",
+  "writing": "Contribution sentence in abstract (p. 2); open hedging ('The hope is', 'We conjecture', pp. 3, 18); classical BFGS failure shown first to motivate (p. 12); each table explained through a named inequality ((5.2), (C.4), pp. 18-19).",
+  "limits_future": "Complete proof only for the convex bundle instance (p. 14); nonconvex instances without complete analysis (p. 15); L-BFGS omitted on an unshown observation (p. 20); 10 problems at n = 50, single runs of a randomized method, theta = 20 with large impact (p. 17); future: unbounded or extended-real-valued f (p. 20).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "in-framework instances with common W1 and y_k and a one-constant ablation (theta = infinity), but external codes at defaults with incomparable termination, single runs of a randomized method, theta tuning unreported; also evidence for Heuristic 5 (guarantee-free classical BFGS kept as comparator, pp. 12, 18) and Heuristic 10 (BFGS skeleton kept, only the curvature pair damped, pp. 6, 8)",
+    "pages": "pp. 17-20"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "success defined by own theory-based termination test (5.1), though f(x_end) is printed and the gap is conceded for SVANO-BFGS; declines to rank against LMBM/HANSO",
+    "pages": "pp. 17-18, 20"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "guarantee on a fraction of iterations",
+    "evidence": "good matrix properties proved for at least ceil(pK) of K iterations via self-correction, and the convergence argument run only on that subsequence",
+    "pages": "pp. 10-11, 24-25"
+   },
+   {
+    "pattern": "predict the rival's failure, then show it",
+    "evidence": "line-search breakdown of classical BFGS argued in 4.1 and seen as Stepsize exits on 9 of 10 problems",
+    "pages": "pp. 12, 18"
+   }
+  ],
+  "transferable": [
+   "Damp quasi-Newton update pairs toward a fixed reference matrix so curvature bounds hold with k-independent constants (pp. 6, 8).",
+   "Use psi(H) = tr(H) - ln det(H) and select the ceil(pK) iterations with smallest per-step losses to get uniform constants there (pp. 9-10, 24-25).",
+   "Pose cutting-plane or sampling subproblems in dual form so added pieces keep the old optimum feasible for warm starts (p. 8).",
+   "Shrink the trust-region/sampling radius only when a computable stationarity test passes, so radius -> 0 identifies the stationarity subsequence (pp. 14-15).",
+   "Ablate the theory-required constant and explain the degradation through the proof's constants (pp. 18-19)."
+  ],
+  "coauthors": "Daniel P. Robinson, Baoyu Zhou",
+  "quotes": [
+   {
+    "text": "One cannot maintain such assurances if Hk is used in place of H in (2.8).",
+    "page": 8
+   },
+   {
+    "text": "Overall, this influence of θ on our numerical results shows that a practical benefit of our self-correcting framework is that it allows our code to enforce theoretically sound termination criteria.",
+    "page": 19
+   }
+  ]
+ },
+ {
+  "id": "S057",
+  "year": "2020",
+  "title": "Inexact sequential quadratic optimization with penalty parameter updates within the QP solver",
+  "read_level": "full",
+  "contribution": "A penalty-SQP method that updates the exact-penalty parameter inside a single inexact (matrix-free) QP solve, by ratio tests on primal reductions against dual bounds (DUST) plus a posterior check (PSST). The update is proved to trigger finitely often per subproblem, with global convergence to KKT points, infeasible stationary points or MFCQ-failure points; prototype results on feasible, infeasible and 13 large CUTEr problems (arXiv v3, pp. 2-29).",
+  "problem_entry": "SQP falters at scale because QPs must be solved accurately; inexact SQP exists but its practical efficiency is open; prior penalty updates happen in hindsight or at the cost of several subproblem solves per iteration, as in the authors' own SQuID (two exact QPs) and [8] (two inexact QPs) (pp. 1-2).",
+  "key_idea": "Track primal-dual estimates for the penalty QP and a dual estimate for the feasibility QP; reduce rho when the penalty-model ratio and complementarity ratio pass but the feasibility ratio fails (DUST), with margins omega_k -> 0; drop rho f(x_k) from the model and keep rho only in the dual objective so dual feasibility survives updates (pp. 5-9, 14).",
+  "assumptions": "f, c C1 (p. 3); H_rho positive definite for all rho in [0, rho_{k-1}], nonzero constraint gradients (Assumption 1, p. 6); solver iterates feasible and no worse than zero (Assumption 2, p. 11); compact X with 0 interior, bounded derivatives, uniform eigenvalue bounds, bounded multipliers (Assumption 7, pp. 15-16); primal convergence only, no local rate (p. 15).",
+  "proof_devices": [
+   "weak/strong duality ratio certificates: passing r_v or r_phi implies a fixed fraction of the exact model reduction ((3.7)-(3.8), p. 8)",
+   "Lipschitz-in-rho bounds on primal and dual subproblem values (Lemma 5, p. 12)",
+   "Theorem 6: explicit threshold rho-tilde (3.15) below which DUST never triggers, by contradiction (pp. 13-14)",
+   "shifted penalty phi = rho(f - f_low) + v monotone as rho decreases (Lemma 11, p. 17)",
+   "Theorem 14: if rho -> 0, limit points are all feasible or all infeasible, via monotone shifted penalty (pp. 18-19)",
+   "three-case argument (Lemma 15) and dual form of MFCQ to show feasible limits with rho -> 0 violate MFCQ (Theorem 17, pp. 19-23)",
+   "O(n + l) dual coordinate descent via maintained running sums (pp. 25-26)"
+  ],
+  "experiments": "Python prototype; 126 CUTEr HS problems with exact modified Hessian: 115/126 vs SQuID 110/122 with SQuID numbers copied from [3] under a different termination test (Table 1, p. 27); sensitivity omega_0 and beta_phi (113, 111 solved) (p. 27); per-problem Hessian-constant changes (p. 28); hs_inf by adding x1 <= 0 and x1 >= 1: 116/126 vs 111/123 (Table 2, p. 28); 13 large CUTEr problems with L-BFGS, failures 'not shown', attempted set unspecified (pp. 28-29); SQuID none in 10 minutes, max 64 s, Ipopt a couple of seconds on LUKVLE10 (p. 29).",
+  "positioning": "Continues SQuID [3] and inexact SQO [8], restating their QP counts; groups Burke, Han, Han-Mangasarian as hindsight updates and SQuID, Byrd-Lopez-Calva-Nocedal, Byrd-Nocedal-Waltz as multi-solve steering (p. 2); credits Ipopt's two decades of development (p. 29).",
+  "writing": "Three bullet contributions and the claim 'We prove that our algorithm does not reduce the penalty parameter unnecessarily' (p. 2); intuitive case analysis before proofs (pp. 9-10); 'outperforms' on counts over different sets (pp. 27-28); small slips in percentages, section list and a 'Theorem 15(iv)' reference (pp. 2, 22, 27).",
+  "limits_future": "Needs a more efficient QP solver and more robust handling of Hessian ill-conditioning (p. 30); coordinate descent weak on ill-conditioned QPs (p. 27); large-scale failures deferred (p. 28); unstated: rival not re-run, no local analysis, per-problem constant changes (pp. 27-28).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "penalty parameter updated by predicted-progress tests inside the QP solve (DUST) plus posterior PSST, with infeasibility detection; third rung of the Heuristic 2 ladder: one inexact QP per iteration instead of two (pp. 2, 30)",
+    "pages": "pp. 9, 14, 23"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "inner-solver termination ratios derived from what the penalty line search needs, with omega_k margins",
+    "pages": "pp. 5, 7-9"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "infeasible test set made mechanically by adding x1 <= 0 and x1 >= 1",
+    "pages": "p. 28"
+   },
+   {
+    "method": "Method 5",
+    "relation": "contradiction",
+    "note": "main rival SQuID not re-run: numbers copied from [3] with different termination and problem counts; partly offset by printing Ipopt's win on LUKVLE10; Heuristic 7 variant: large-scale successes only, attempted set unspecified (p. 28)",
+    "pages": "pp. 27-29"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "prove the adaptive parameter freezes",
+    "evidence": "Theorem 6: below an explicit threshold the in-solve update never triggers, so the QP solver's own guarantees resume",
+    "pages": "pp. 5, 10, 13"
+   },
+   {
+    "pattern": "duality-gap certificates for inexact subproblem solves",
+    "evidence": "ratios of primal reduction to (initial value - dual bound) certify a fraction of the exact reduction",
+    "pages": "pp. 7-8"
+   }
+  ],
+  "transferable": [
+   "Monitor penalty-model, feasibility-model and complementarity ratios inside the QP solver and reduce the penalty parameter only when the first and third pass and the second fails (pp. 8-9).",
+   "Add a vanishing slack omega_k to inexact model-reduction tests so they stay satisfiable near stationary points (pp. 5, 7, 14).",
+   "Keep the adaptive parameter out of the dual constraints so dual iterates remain feasible after updates (p. 7).",
+   "Report the final adaptive-parameter value per problem and plot a few trajectories (Fig. 1, p. 27; Tables 4-8).",
+   "Maintain running sums so each dual coordinate update costs O(n + l) (p. 26)."
+  ],
+  "coauthors": "James V. Burke, Hao Wang, Jiashan Wang",
+  "quotes": [
+   {
+    "text": "This strategy represents a stark contrast to previously proposed techniques that only update the penalty parameter after a sequence of iterations, in hindsight at the end of an iteration [1, 9, 10], or at the expense of numerous subproblem solves within a single iteration [3, 5, 7].",
+    "page": 2
+   },
+   {
+    "text": "(On a contemporary laptop to computer, the state-of-the-art code Ipopt [17] solves problem LUKVLE10 in only a couple of seconds, but that code benefits from two decades of software development.)",
+    "page": 29
+   }
+  ]
+ },
+ {
+  "id": "S007",
+  "year": "2021",
+  "title": "Sequential quadratic optimization for nonlinear equality constrained stochastic optimization",
+  "read_level": "full",
+  "contribution": "A line-search-free SQP for equality-constrained problems: first a deterministic twin with Lipschitz-based (adaptive) stepsizes matching line-search SQP theory, then a stochastic-gradient SQP with projected adaptive stepsizes. It gets SG-type expectation guarantees conditioned on a good merit-parameter event, with the bad events shown to have probability zero or to need extreme noise, and beats a heavily tuned stochastic subgradient penalty method on 49 CUTE problems (arXiv v1, pp. 2-28).",
+  "problem_entry": "Deterministic equality constraints with a stochastic objective; existing stochastic methods are penalty-based and Frank-Wolfe needs convex constraints, while the state-of-the-art line-search SQP is unusable because line searches are intractable (pp. 2-3).",
+  "key_idea": "Replace the line search by minimizing a Lipschitz upper bound of the l1 merit change (three cases around the kink at alpha = 1), keep the model-reduction merit-parameter rule, and in the stochastic version project the adaptive stepsize into an interval of width theta*beta^2 set by an adaptive lower estimate xi (pp. 6-8, 14-16).",
+  "assumptions": "f C1 with Lipschitz bounded gradient, c with Lipschitz gradients, LICQ via singular values bounded away from zero (Assumption 1, p. 4); H_k bounded and positive definite on null(J_k) (Assumption 4, p. 5); unbiased gradients with variance <= M (Assumption 19, p. 13); known Lipschitz constants and bounded iterates in the analysis, 'admittedly not ideal' (Remark 20, p. 14); event E_tau,small (Assumption 27, p. 20).",
+  "proof_devices": [
+   "tangential/normal decomposition d = u + v and critical quantity Psi_k with index sets K_u, K_v (pp. 8-10)",
+   "merit upper bound with kink term |1 - alpha| and three-case sufficient decrease (Lemmas 13-14, pp. 10-11)",
+   "merit parameter eventually constant (Lemma 16, p. 12) and xi eventually constant, bounded below deterministically (Lemma 22, p. 16)",
+   "standard backtracking SQP analysed in the same lemma sequence for comparison (pp. 4, 8-13)",
+   "stepsize interval of width theta*beta^2 (Lemma 23, p. 16) and key merit bound (Lemma 24, pp. 16-18)",
+   "expectation of adaptive stepsize times error bounded by splitting on the sign of g'(dbar - d) (Lemma 28, pp. 20-21)",
+   "event split E_tau,small / E_tau,big / E_tau,0 with probability-zero (Prop. 33, Example 34) and bounded-noise (Prop. 35) arguments (pp. 20, 24-26)"
+  ],
+  "experiments": "Matlab; 49 of 123 CUTE equality problems kept by f non-constant, n + m <= 1000 and LICQ at all iterates of all runs (p. 26); deterministic: Dolan-More profiles of iterations and function evaluations, adaptive as reliable but less efficient, stepsize <1/=1/>1 in 40.9/41.8/17.3 % (pp. 26-27); stochastic: Gaussian noise at 4 levels, 10 runs, 490 instances per level; subgradient baseline tuned per instance over 11 tau values with 10x iterations (110x total); shared L and Gamma, H_k = I for fairness; errors measured with true gradient and least-squares multipliers; box plots (p. 28, not readable); event held in 99.10-99.92 % of iterations (pp. 26-28).",
+  "positioning": "Line-search SQP on an exact penalty as state of the art (p. 3); penalty and augmented Lagrangian methods criticized (p. 2); ML-venue stochastic penalty methods and stochastic Frank-Wolfe set aside (p. 3); results of the type of SG theory in Bottou-Curtis-Nocedal (pp. 3, 24); analysis follows own inexact SQP papers [4, 5] (p. 8).",
+  "writing": "Expectation management ('as should be expected, it is sometimes less efficient', p. 3; 'We do not claim', p. 26); explicit admissions (Remark 20, p. 14; theta = 0 'detrimental in practice', p. 24); a section titled 'Poor Merit Parameter Behavior' (p. 24); strongest claim 'consistently and significantly outperforms' rests on box plots (pp. 3, 28).",
+  "limits_future": "LICQ, bounded iterates, known Lipschitz constants in analysis vs estimates near x0 in practice, results conditional on E_tau,small (pp. 4, 14, 20, 27); unstated: test set filtered on run outcomes (p. 26), inequality constraints not covered; future: theta = 0 variant to drop the bounded-gradient need (p. 28).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "baseline given 110x iterations with per-instance tuning, shared Lipschitz estimates, H_k = I for fairness; Heuristic 1 evidence: event held in 99.10-99.92 % of iterations (p. 27); Heuristic 7 contradiction: LICQ-in-all-runs filter (p. 26)",
+    "pages": "p. 27"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "merit parameter set by a model-reduction test, its stochastic misbehaviour classified into events and bounded; Heuristic 10 evidence: deterministic twin with constants carried over (pp. 2, 15-16)",
+    "pages": "pp. 6, 20, 24-26"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "optimality error measured with true gradient and least-squares multipliers, not the stochastic gradient",
+    "pages": "p. 27"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "prove the adaptive parameter freezes",
+    "evidence": "merit parameter eventually constant (Lemma 16) and xi eventually constant and bounded below (Lemma 22); compare S057 Theorem 6",
+    "pages": "pp. 12, 16"
+   },
+   {
+    "pattern": "analyse alongside the incumbent",
+    "evidence": "new Lipschitz-stepsize SQP and standard backtracking SQP proved in the same lemma sequence 'for ease of comparison'",
+    "pages": "pp. 4, 8-13"
+   }
+  ],
+  "transferable": [
+   "Build and analyse a deterministic twin that lacks the ingredient the stochastic setting forbids before designing the stochastic method (pp. 2-3, 6).",
+   "Replace a line search by minimizing a Lipschitz upper bound of the nonsmooth merit function with explicit cases around the kink (pp. 7-8, 10-11).",
+   "Project an adaptive stochastic stepsize into an interval of width O(beta^2) so adaptivity only adds a second-order term (Lemma 23, p. 16).",
+   "Split the analysis on events of the adaptive parameter and dispose of the bad events separately (pp. 20, 24-26).",
+   "Measure and report how often the theory's conditioning event holds in the runs (p. 27).",
+   "Evaluate stochastic runs with true-gradient least-squares-multiplier errors at a defined iterate (p. 27)."
+  ],
+  "coauthors": "Albert S. Berahas, Daniel P. Robinson, Baoyu Zhou",
+  "quotes": [
+   {
+    "text": "We do not claim that “SQP Adaptive” is as efficient as “SQP Backtracking” since, as has been verified by others in the literature, the line search scheme is very effective across a broad range of problems.",
+    "page": 26
+   },
+   {
+    "text": "This provides evidence that the theory offered under the event (25) is relevant in practice.",
+    "page": 27
+   }
+  ]
+ }
+]

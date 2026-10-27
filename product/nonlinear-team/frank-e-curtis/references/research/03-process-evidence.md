@@ -341,7 +341,7 @@ Dates are from archive file timestamps, git commits, arXiv submission histories,
 | Era | Setting |
 |---|---|
 | 2009–2010 | The 2009–10 archives list file owner `fec028` in group `e90nocedal` [observed in archive metadata; inferred to be a Northwestern-group machine] |
-| 2011 | Mac laptop (`.DS_Store` files); Matlab R2010b on an 8-core Opteron for PIPAL |
+| 2011 | Mac laptop (`.DS_Store` files); Matlab release 2010b on an 8-core Opteron for PIPAL |
 | 2017–2022 | 8 GB memory and 4-hour or 90-minute wall-clock caps; Lehigh COR@L "polyps" cluster (i-TRACE) |
 | 2025 | Apple M1 Pro laptop (NonOpt) |
 | 2026 | GitHub Actions CI and an AI coding agent |

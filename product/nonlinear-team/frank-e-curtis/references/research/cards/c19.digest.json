@@ -1,0 +1,174 @@
+[
+  {
+    "id": "S061",
+    "year": "2021",
+    "title": "A decomposition algorithm for large-scale security-constrained AC optimal power flow",
+    "read_level": "full",
+    "contribution": "Presents the GO-SNIP decomposition algorithm for SC-AC-OPF (second place of 27 in ARPA-E GO Challenge 1). It combines Ipopt master problems with regression-based contingency ranking, an active-set loop for complementarities, an upper-bound fast pre-screen, max-violation dominance filtering and degeneracy-removing preprocessing, and validates each component by on/off ablations.",
+    "problem_entry": "Industrial need: SC-AC-OPF within competition time limits (10/45 min, 2 s per contingency) instead of DC approximations. The competition's fixed formulation, scoring and hardware drive the design, and the problem is 'nearly separable' through complementarity links only (pp. 2, 5, 7).",
+    "key_idea": "Iteratively add the top three non-dominated contingencies to an Ipopt master problem while contingencies are evaluated in parallel. The ranking comes from ridge regression on topology and power-loss features; evaluation is fast and bound-certified first, with a full penalty solve only above an adaptive cutoff; complementarities are handled by multiplier-driven segment prediction (pp. 8-14).",
+    "assumptions": "The competition formulation with polar coordinates, squared rating constraints for smoothness, a logical (complementarity) response model and penalized slacks. No convergence assumptions and no theory (pp. 3-7).",
+    "proof_devices": [
+      "n/a: no theorems; only Definitions 3.1-3.2 of dominance (p. 13)",
+      "Evaluation device: recompute the objective explicitly instead of trusting Ipopt's reported value, which is distorted by internal bound relaxation (p. 11)"
+    ],
+    "experiments": "C++/MPI on a single server without time limits, Challenge 1 offline datasets. Four on/off ablations: ranking heuristics by penalty share of top-3 (Fig. 3, one representative scenario per network); complementarity updates (penalty ratio >= 1); pre-screening (over half of contingencies eliminated, time saved); cumulative selection arms scored against the best competition score (gap shrinks monotonically in nearly all cases) (pp. 15-21).",
+    "positioning": "Builds on power-systems contingency screening (Ejebe-Wollenberg, Stott et al., Capitanescu); relaxes Capitanescu et al.'s individual dominance as too conservative; tried and dropped the Hu-Ralph penalty for complementarity; no run against other teams' codes (pp. 8-13).",
+    "writing": "An engineering report of 'techniques found to be most effective'. Discarded alternatives (warm start, penalty complementarity, projection/MIP formulations, multiplicative features) are listed with hedged causal guesses; claims are modest (pp. 1, 6-7, 10-12, 21).",
+    "limits_future": "Stated: polar vs rectangular formulations not fully evaluated; experiments off-platform and without time limits. Unstated: no theory, a single representative scenario per network in Fig. 3, only in-house baselines. Future: newer datasets (Challenge 2, DR POWER, GRID DATA, PGLib-OPF) (pp. 7, 15, 16, 21).",
+    "method_links": [
+      {"method": "Method 5", "relation": "variant", "note": "Each heuristic is switched on and off, and cumulative arms are scored against the best competition score. But no external rival code is run, Fig. 3 uses one unexplained representative scenario, and the time limits that motivated the design are dropped.", "pages": "pp. 15-20"},
+      {"method": "Method 4", "relation": "evidence", "note": "Quality judged by the external competition score rather than the team's own flag; the objective is recomputed outside Ipopt because the reported value is distorted by bound relaxation.", "pages": "pp. 7, 11, 20"},
+      {"method": "Method 1", "relation": "variant", "note": "The outer loop sets inner effort through an iteratively tightened penalty cutoff (fast vs full evaluation) and remaining-time budgets, not through merit-model termination tests.", "pages": "pp. 12, 14"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Competition as test bed and write-up of what worked", "evidence": "External rules fix formulation, scoring and limits; the paper reports surviving heuristics and the alternatives that failed.", "pages": "pp. 2, 6-7, 10-12"},
+      {"pattern": "Certified cheap bound as pre-screen", "evidence": "A reduced square power-flow solve plus projection gives a feasible point (upper bound) that decides whether the expensive penalty minimization runs.", "pages": "p. 12"}
+    ],
+    "transferable": [
+      "Two-tier evaluator: a cheap certified upper bound screens candidates; the expensive exact evaluation runs only above an adaptive cutoff (p. 12).",
+      "Global time cap: give each remaining item (remaining time)/(remaining items) and process predicted-expensive items last so they inherit slack (p. 14).",
+      "Outer active-set loop for complementarities: predict a segment, solve the smooth NLP, flip the prediction when the multiplier is positive and -s/lambda < 1e-6, stop when the objective stops improving (p. 11).",
+      "Cumulative ablation arms (A, A+B, A+B+C, ...) scored against an external best-known value (p. 20).",
+      "Recompute reported objectives from the original model when the solver relaxes bounds internally (p. 11).",
+      "Remove degeneracy in preprocessing: drop redundant constraints of identical parallel elements and aggregate co-located generator variables (p. 13)."
+    ],
+    "coauthors": "Daniel K. Molzahn, Shenyinying Tu, Andreas Wächter, Ermin Wei, Elizabeth Wong",
+    "quotes": [
+      {"text": "This makes the problem nearly separable, which is a property that needs to be exploited in a solution approach for it to be efficient.", "page": 5},
+      {"text": "This reformulation did not work well in our experiments, which we attribute to the negative curvature that such a penalty term introduces into the objective function.", "page": 12}
+    ]
+  },
+  {
+    "id": "S062",
+    "year": "2021",
+    "title": "Regional complexity analysis of algorithms for nonconvex smooth optimization",
+    "read_level": "full",
+    "contribution": "Proposes regional complexity (RC) analysis: analyze an algorithm's per-iteration decrease over regions defined by gradient- and curvature-domination inequalities relative to a reference value, then combine regions into bounds for function classes. Applied to gradient, trust-region and cubic-regularized Newton methods and extended to higher orders; shows that TR-H behaves like cubic regularization where standard bounds equate it with gradient descent.",
+    "problem_entry": "Standard nonconvex complexity (iterations to approximate p-th-order stationarity) is driven by anomalous objectives (Cartis-Gould-Toint tightness examples). Average-case analysis is ill-defined and per-class analysis is too narrow (pp. 2-3).",
+    "key_idea": "Two steps. Step 1: prove the per-step decrease Omega(measure^r) at points of generic regions R1 (||g||^tau >= kappa(f - f_ref)), R2 (negative-curvature domination) and Rp. Step 2: fit regional results together for any class whose search space the regions cover (pp. 3, 7-8, 12-13, 15, 23-24).",
+    "assumptions": "Unconstrained smooth f, bounded below; gradient bounded and Lipschitz (and Lipschitz Hessian for second order) on a neighbourhood of the level set; monotone descent methods; reference value f_ref >= f_inf, admitted as a disadvantage (pp. 5, 7, 22-23).",
+    "proof_devices": [
+      "Normalized gap a_k := (f_k - f_ref)/omega; region plus decrease give a_k - a_{k+1} >= a_k^q (or a_{k+1}^q), and q determines linear, superlinear or sublinear behaviour (pp. 9-11, 13-14, 25-27)",
+      "Threshold case split: kappa(f_k - f_ref) < 1 is forced in lower subregions; separate rates above and below constants like kappa^3/zeta^4 (pp. 9-10)",
+      "m-step decrease f_k - f_{k+m} with m independent of k absorbs rejected steps of adaptive methods (pp. 8-9, 11, 14)",
+      "Per-method decrease properties borrowed from Nesterov-Polyak, Curtis-Lubberts-Robinson Lemmas 2.5-2.6 and ARC (Corollaries 2.1, 3.1; pp. 11, 14)",
+      "Puzzle combination: the loosest regional bound eventually dominates; telescoping 1/a_k^{q-1} for sublinear cases and log-log iteration for superlinear ones (Theorems 4.1-4.4, pp. 16-21)",
+      "Consistency lemma: Delta_1 = ||g||^2 and Delta_2 = (lambda)_-^3 up to the scaling p(p+1) via the closed-form minimizer of the regularized second-order term (Lemma 6.1, p. 24)"
+    ],
+    "experiments": "none (Figures 1-2 only illustrate region membership for toy functions, pp. 8, 12)",
+    "positioning": "Generalizes Nesterov-Polyak's phase analysis by decoupling algorithm from function class and covering several methods at once. Claims to be more comprehensive than PL-path, 'Convex Until Proven Guilty' and strict-saddle analyses, with an explicit 'not to say that our work subsumes' hedge. Reframes rather than attacks Cartis-Gould-Toint tightness (pp. 3-4).",
+    "writing": "Four contribution bullets including a user question ('What performance can I expect...'); named procedural steps reused throughout; one summary table of all regional rates; specific hedges in footnotes; a balanced advantages/disadvantages discussion (pp. 4, 9, 15, 22-23).",
+    "limits_future": "Stated: f_ref may exceed f_inf; monotone smooth unconstrained setting. Future: Hölder derivatives, nonmonotone methods, stochastic/probabilistic versions, nonsmooth via proximal steps, constrained via projected gradient. Unstated: practical relevance asserted but region membership never measured on real problems (pp. 4, 5, 22, 28).",
+    "method_links": [
+      {"method": "Method 4", "relation": "evidence", "note": "An audit of the complexity yardstick: names what it rewards (anomalous objectives, static methods), locates the gap partly in the measure, and builds a view in which TR-H, TR-G and RN separate.", "pages": "pp. 3-4, 18-22"},
+      {"method": "Method 4", "relation": "variant", "note": "The audit stays theoretical: the claim of practical representativeness is not checked by measuring region membership in runs (cf. Heuristic 1).", "pages": "p. 4; §§1-7"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Analyze over regions, then plug in classes", "evidence": "Algorithm analysis is done over generic derivative-defined regions and combined 'as if fitting together the pieces of a puzzle' for each function class.", "pages": "pp. 3, 15-21"},
+      {"pattern": "Let the analysis framework motivate adaptive steps", "evidence": "TR-H's curvature-dependent radius attains features of both first- and second-order methods; RC gaps suggested as design targets.", "pages": "pp. 4, 23"}
+    ],
+    "transferable": [
+      "Define regions by pointwise inequalities (measure)^tau >= kappa(f - f_ref) with justified exponent ranges and split them into subregions by exponent (pp. 7, 12, 24).",
+      "Turn per-step decrease into rates through the normalized-gap recursion a_k - a_{k+1} >= a_k^q (pp. 9-11).",
+      "State results as one-iteration ratios in a common table to compare methods without choosing a function class (Table 1-2, p. 15).",
+      "Verify that a generalization reduces to known special cases by a short lemma (Lemma 6.1, p. 24).",
+      "Phrase the analysis as an instruction ('prove a decrease of the form Omega(measure^r) at a point of the region') so other algorithms can be plugged in (pp. 8, 13)."
+    ],
+    "coauthors": "Daniel P. Robinson",
+    "quotes": [
+      {"text": "Such questions are not answered well by contemporary worst-case results, which are too conservative.", "page": 4},
+      {"text": "RC analysis can be used to guide the design of new algorithms.", "page": 4}
+    ]
+  },
+  {
+    "id": "S041",
+    "year": "2022",
+    "title": "A fully stochastic second-order trust region method",
+    "read_level": "full",
+    "contribution": "Extends TRish to use stochastic Hessian estimates in a Cauchy-decrease trust-region subproblem while keeping its step-normalizing radius rule. Proves convergence in the fully stochastic regime (unbiased gradients, bounded variance, bounded Hessian estimates), rates under PL, and O(eps^-3/2) complexity in expectation in a nearly deterministic regime. Shows gains over SG and first-order TRish on two CNNs and an LSTM.",
+    "problem_entry": "SG's step variance scales with gradient variance, so it can take large steps when the true gradient is small. First-order TRish fixes this; the question is whether second-order information can be added under only fully-stochastic assumptions (pp. 2-3).",
+    "key_idea": "Keep the TRish radius rule (piecewise in ||g_k|| via gamma1, gamma2, alpha) and add a stochastic Hessian H_k in the subproblem, solved only to Cauchy decrease; no acceptance test; H_k = 0 recovers first-order TRish; the analysis needs only ||H_k|| bounded (pp. 4-5).",
+    "assumptions": "f is C2, bounded below, L_g-smooth; unbiased gradients; bounded variance and ||H_k|| <= M_H. Further sets: variance proportional to the step size, bounded second moment (admitted strong), PL, geometric variance decay. For complexity: Lipschitz Hessian, expected estimate errors O(eps) and O(sqrt eps), global subproblem solves and G_low <= ||g_k|| <= G_high (pp. 6, 12-19).",
+    "proof_devices": [
+      "One-step bound for any (g_k, H_k) via Taylor plus noise and model-error terms (Lemma 4.1, p. 6)",
+      "Standard and small-||H_k|| Cauchy-decrease lemmas (Lemmas 4.2-4.3, p. 7)",
+      "Three-case analysis by ||g_k|| vs 1/gamma1 and 1/gamma2; completing the square (1/2||g|| - ||grad f - g||)^2 to absorb the cross term; identity E||grad f - g||^2 = -||grad f||^2 + E||g||^2 (Lemmas 4.4-4.5, pp. 6-11)",
+      "Telescoping for average squared gradient bounds (Theorem 4.1, pp. 12-13); nonnegative supermartingale (Robbins-Siegmund) for liminf a.s. (Theorem 4.2, pp. 13-14)",
+      "Contradiction with interleaved index sets for lim ||grad f|| = 0 a.s., correcting an oversight in Wang et al.'s proof (negate only with positive probability) (pp. 14-15)",
+      "Induction for O(1/k) under PL and for a geometric rate under geometric variance decay (Theorems 4.5-4.7, pp. 16-19)",
+      "Complexity via a split on the trust-region multiplier upsilon_k <= sqrt eps (small next gradient) vs > sqrt eps (boundary step, decrease >= eps^{3/2}/(3 L_H^2)) (Theorem 5.1, pp. 19-21)"
+    ],
+    "experiments": "PyTorch, Steihaug-CG capped at 3 iterations; a Hessian-vector product counted as one gradient. Equal numbers of hyperparameter settings per method, SG grid widened until its best is interior, validation-split selection. FashionMNIST and CIFAR-10 CNNs (5 epochs, 5 runs, mean +/- std) and NSW2016 LSTM (20 epochs, 50 runs). TRish ends best in test accuracy on both CNNs and reaches low LSTM losses earlier, but first-order TRish has the best CIFAR training loss (pp. 21-24).",
+    "positioning": "A second-order extension of first-order TRish. Classifies stochastic second-order methods into four groups (after Bottou-Curtis-Nocedal) and treats Adam-type diagonal scaling as second-order-like. Distinguished from probabilistic-model trust-region methods that need stronger estimate accuracy. Guarantees framed as on par with TRish and SG (pp. 3-4, 24).",
+    "writing": "Calibrated hedging: 'Admittedly' for stricter step sizes, assumptions labelled strong, complexity explicitly scoped to the nearly deterministic regime and called weaker; experiment goal stated first; a negative CIFAR result printed (pp. 3, 14, 19, 21, 24).",
+    "limits_future": "Stated: stricter step sizes; Newton-TR benefits not fully attainable stochastically; complexity weaker than deterministic; scaling H_k may bias it. Unstated: three small networks, fixed CG cap, no Adam comparison, G_low assumption fails near stationarity. No future directions given (pp. 3, 9, 19, 22, 25).",
+    "method_links": [
+      {"method": "Method 5", "relation": "evidence", "note": "Equal tuning budgets, baseline grid widened to an interior optimum, Hessian-vector products charged as gradients, in-framework first-order rival (H_k = 0), repeated runs with spread, and the incumbent's CIFAR training-loss win printed.", "pages": "pp. 5, 21-24"},
+      {"method": "Method 4", "relation": "evidence", "note": "The complexity theorem is scoped to the regime it covers and explicitly called weaker than deterministic results, not sold as practical gain.", "pages": "p. 19"},
+      {"method": "Method 2", "relation": "variant", "note": "The contribution again rests on a parameter rule (radius from ||g_k||), but it trades step length against noise, not objective against feasibility, and is reused from first-order TRish.", "pages": "p. 5"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Two-regime guarantees for one algorithm", "evidence": "The same unmodified method has fully-stochastic convergence guarantees and nearly-deterministic O(eps^-3/2) complexity.", "pages": "pp. 2-3, 19-21"}
+    ],
+    "transferable": [
+      "Extend a first-order stochastic method to second order by keeping the guarantee-carrying step-length control and letting curvature enter only through a bounded matrix in a Cauchy-decrease subproblem; check that zero curvature recovers the original method (pp. 4-5).",
+      "Case-by-case descent lemma matched to a piecewise step rule, with cross-term absorption by completing a square and the unbiasedness variance identity (pp. 6-11).",
+      "Split on the trust-region multiplier to obtain eps^{-3/2} complexity (pp. 20-21).",
+      "Equalize tuning effort by equal numbers of hyperparameter configurations per method and widen the baseline grid until its best value is interior (p. 22).",
+      "Charge a Hessian-vector product as one gradient and plot against epochs (p. 22).",
+      "In almost-sure contradiction proofs, negate the limit statement only with positive probability (p. 14)."
+    ],
+    "coauthors": "Rui Shi",
+    "quotes": [
+      {"text": "To ensure that all algorithms were tuned with the same amount of effort, we fixed the total number of hyperparameter settings to be the same for all algorithms.", "page": 22},
+      {"text": "Consequently, our theorem is weaker than those that can be proved in the deterministic setting.", "page": 19}
+    ]
+  },
+  {
+    "id": "S051",
+    "year": "2022",
+    "title": "Limited-memory BFGS with displacement aggregation",
+    "read_level": "full",
+    "contribution": "Shows that when a stored iterate displacement lies in the span of later ones, the later gradient displacements can be modified (aggregated) so that the pair can be dropped with the BFGS matrix unchanged. This gives a limited-memory-type scheme (at most n pairs) that reproduces full BFGS and inherits its local superlinear rate, plus a practical adaptive L-BFGS variant that outperforms L-BFGS on CUTEst.",
+    "problem_entry": "L-BFGS has only a linear local rate and no principled memory size; adaptive L-BFGS lacked theory. The ambitious question (adaptive limited memory with full-memory guarantees) is narrowed to exact reproduction of full BFGS with at most n pairs; Rosenbrock experiments show BFGS over-writing is not absolute (pp. 3, 7-9).",
+    "key_idea": "Ansatz Y~ = W^{-1} S [A;0] + y0 [b;0]^T + Y with zero blocks from the parallel case; match compact forms to get three key equations; detect add/replace/aggregate cases by a Cholesky downdate breakdown; practical variant aggregates a projected displacement under a tolerance (pp. 7-8, 10-12, 17-18, 22).",
+    "assumptions": "f is C1 (C2 for rates); Armijo-Wolfe line search with unit initial step and convergence to x* with PD Lipschitz Hessian (inherited BFGS theorem); s^T y > 0; linearly independent S_{1:m}. Exactness may need up to n pairs, costing more than full BFGS; the practical variant aggregates projected vectors (pp. 3-4, 7, 11, 22).",
+    "proof_devices": [
+      "Direct algebra for the parallel case: U_j U_{j+1} = U_{j+1}, V_j U_{j+1} = 0 (Theorem 3.1, pp. 7-8)",
+      "Term matching of compact representations to derive key equations (16) (pp. 10, 12)",
+      "Counting unknowns vs effective equations, (m+1)(m-1) each: a square linear-quadratic system (pp. 11-12)",
+      "Change of variables a_j = Q^{-1}[a_{j,1}; a_{j,2}] with Q = S^T W^{-1} S to decouple affine from quadratic equations (pp. 12-13)",
+      "Gram-matrix reformulation phi_i^T phi_j = z_i^T z_j (eqs. (25)-(27), p. 13)",
+      "Reverse induction: a particular solution with norm <= target (projection eigenvalues in {0,1}), a null-space direction by dimension count, and a strongly convex scalar quadratic hitting the target (pp. 13-17)",
+      "Rate inherited from BFGS by equality of matrices (Theorem 3.3, p. 20)"
+    ],
+    "experiments": "MATLAB. (i) Single-aggregation accuracy on 100 random planted datasets per (n,m) up to 128: errors near machine precision. (ii) Error accumulation over n+8 iterations: mild. (iii) CUTEst problems with n in [10,3000], same weak Wolfe search; arms LBFGS, AggBFGS and a delete-instead-of-aggregate LBFGS-Alt; per-problem tables (m=5) with failures; Dolan-Moré and Morales profiles for m=3,5,7,9 by iterations and function evaluations. AggBFGS generally wins, more for small m; losses (DMN15333LS, TESTQUAD, SINQUAD failure) visible in tables; no CPU times (pp. 20-24, 28-30).",
+    "positioning": "Continues L-BFGS and compact representations (Nocedal; Byrd-Nocedal-Schnabel) and Dennis-Moré theory. Contrasted with Kolda-O'Leary-Nazareth's fixed-weight merging (convex quadratics only, worse function counts) and Boggs-Byrd adaptive L-BFGS (no theory). Novelty claimed 'to the best of our knowledge' (pp. 2-4, 6, 9-10).",
+    "writing": "Ambitious question, then the answerable weaker question as 'a significant first step'; expectations lowered early ('might not always offer practical advantages'); three-layer algorithm presentation (basic, detailed, computational); 'Much remains to be investigated' (pp. 3, 11-12, 20, 24).",
+    "limits_future": "Stated: exactness may need n pairs; numerical error; the practical variant lacks the full-memory guarantee. Future: DFP by symmetry (formula given), Broyden class harder, projection-based aggregation, block-coordinate descent, constrained problems with few degrees of freedom. Unstated: untuned tolerances, no timing, ablation arm absent from tables (pp. 3, 22-25).",
+    "method_links": [
+      {"method": "Method 5", "relation": "evidence", "note": "LBFGS-Alt deletes the same pair instead of aggregating, isolating 'the effect of aggregation itself'; the same line search for all arms; incumbent wins and own failures printed in tables.", "pages": "pp. 21-23, 28"},
+      {"method": "Method 5", "relation": "variant", "note": "The ablation arm appears only in profiles, not in the tables, and tolerances 1e-8/1e-4 are set without reported tuning.", "pages": "pp. 22-23"},
+      {"method": "Method 4", "relation": "evidence", "note": "Two complementary profile types plus per-problem tables with aggregation counts show where gains arise, including many ties with zero aggregations.", "pages": "pp. 23-24, 28"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Exact equivalence first, tolerance-relaxed heuristic second", "evidence": "Prove that the limited scheme reproduces full BFGS (superlinear rate inherited), then relax span dependence to a projection tolerance for a practical L-BFGS variant without guarantees.", "pages": "pp. 3, 20, 22, 25"},
+      {"pattern": "Test the folklore before building on it", "evidence": "Side computations on Rosenbrock show BFGS over-writing is not absolute; aggregation frequency read as evidence that steps lie in low-dimensional subspaces.", "pages": "pp. 8-9, 23"}
+    ],
+    "transferable": [
+      "Find an invariance under which discarded information can be folded exactly into the remaining storage, then relax it with a tolerance for practice (pp. 10, 22).",
+      "Existence for a square affine-plus-quadratic system: a particular solution with norm <= target, then a null-space direction giving a strongly convex scalar quadratic that hits the target (pp. 13-17).",
+      "Inherit convergence theory by proving equality of iterates with an existing method (p. 20).",
+      "Detect linear dependence by attempting a rank-one Cholesky downdate; breakdown yields the coefficients by a triangular solve (p. 18).",
+      "Validate a matrix identity numerically on planted instances (relative error box plots, 100 draws per size) and test error accumulation before using it in an optimizer (pp. 20-22).",
+      "Pair Dolan-Moré profiles with sorted per-problem outperforming-factor bars (p. 24).",
+      "Pose the full research question, then answer a weaker one explicitly framed as a first step (p. 3)."
+    ],
+    "coauthors": "Albert S. Berahas, Baoyu Zhou",
+    "quotes": [
+      {"text": "A straightforward application of the strategy proposed in this paper might not always offer practical advantages over previously proposed full-memory or limited-memory schemes in all settings.", "page": 3},
+      {"text": "Consequently, the comparison between the second and third algorithms shows the effect of aggregation itself, rather than only the difference between removing the oldest versus some other historical pair in an L-BFGS scheme.", "page": 22}
+    ]
+  }
+]

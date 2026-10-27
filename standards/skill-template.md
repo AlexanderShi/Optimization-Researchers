@@ -56,6 +56,8 @@ description: |
 - 语料缺口：<Phase 2 记录的清单>。
 - 验证层级：标 model-knowledge 的结论写入论文前需核对元数据；
   标 verified-local 的带 DOI/URL 可直接引用。
+- 声明抽审（G7）：<date> 抽 <n> 条，supported <a> · partial <b> · unsupported 0，
+  见 `teams/<team-slug>/CLAIM-AUDIT.md`。
 - 本 skill 不能替代读原文；它的职责是把你引到正确的原文并防止编造。
 
 ## 来源索引
@@ -64,5 +66,5 @@ description: |
 
 ---
 > 由 Optimization-Researchers 语料库蒸馏（DISTILL.md 协议），
-> 质量门 G1–G6 已通过。
+> 质量门 G1–G7 已通过（`scripts/distill_check.py` 0 ✗；`scripts/distill_audit.py` unsupported 0）。
 ```

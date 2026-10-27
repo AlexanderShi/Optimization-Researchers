@@ -1,0 +1,135 @@
+[
+ {
+  "id": "S090",
+  "year": "2026",
+  "title": "Low-Order Explicit Hessian Imitation Method for Large-Scale Supervised Machine Learning",
+  "read_level": "full",
+  "contribution": "LEHI: an Adam-type method whose second-moment term squares the gradient of an auxiliary loss chosen so that its squared derivative imitates the loss Hessian with respect to predictions, with an Adam-level convergence rate and wins over Adam/AdamW on six tasks up to a 1.23B-parameter model.",
+  "problem_entry": "Adam's squared-gradient term approximates the Gauss-Newton curvature only if grad(l)grad(l)^T ~ Hess(l), which is 'not reasonable in general'; Adam also ignores the composite structure l(p(w,x),y) (pp. 4-5).",
+  "key_idea": "Keep simplified Adam (Defossez et al.) and change only the second moment: accumulate squares of the gradient of an auxiliary loss z with (dz/dp)^2 = d2l/dp2 (e.g. z = arcsin(tanh(p/2)) for binary cross-entropy), computed by backprop through the shared grad_w p (pp. 5-6, 14-15).",
+  "assumptions": "f C^1 with L-Lipschitz gradient, bounded below; g_k unbiased; ||g_k||_inf and ||g~_k||_inf bounded; nothing assumed about g~ beyond boundedness, so the Hessian-imitation property is not used by the theorem (p. 7); design motivation assumes Hess_w p_i ~ 0 (p. 5).",
+  "proof_devices": [
+   "Proof transplanted from Defossez et al. [2]: Lemmas B.1 and B.3 and the C/D terms are cited, not re-proved (pp. 16, 18, 20)",
+   "Lemma B.2: split of the momentum sum into lagged-gradient term A and drift term B; B bounded by Lipschitz + Jensen + weighted Young with lambda = sqrt(1-beta1)/(2M sqrt(j+1)) (pp. 16-17)",
+   "Conditional surrogate v-hat measurable before g_{k-j} is drawn, giving E[A1] = E[grad_i f^2 / sqrt(eps + v-hat)] (pp. 16, 18)",
+   "Random output index R_K with P[R_K = k] proportional to 1 - beta1^(K-k+1) for the expected squared-gradient bound (Theorem 3.2, p. 7)"
+  ],
+  "experiments": "UCI Protein, MNIST, CIFAR-10/100 (ResNet-18), PTB (GPT-2 Small), FineWeb-Edu subset (Llama-3.2-1B) against Adam, AdamW and Sophia-G; same learning-rate grid per optimizer, mu +/- 2 sigma selection score, seed-0 screening then 3-seed re-runs; tuning on the test split except PTB; PTB sensitivity and NaN/spike stability table; LEHI ~2x Adam time per step, curves not time-matched (pp. 7-12, 21-35).",
+  "positioning": "'another alternative of Adam' in the Adagrad/RMSprop/Adam-variant family; analysis rests on Defossez et al.; Sophia-G is the only second-order rival (pp. 3, 7).",
+  "writing": "Theory hedged upfront ('not stronger than that of Adam', p. 3); derivation-driven motivation of what each method class uses from the Hessian formula (pp. 4-5); experiment narrative stronger than the ~1% margins in the 3-seed tables (pp. 8, 28).",
+  "limits_future": "Each loss needs its own auxiliary loss (p. 11); runtime overhead blamed on a non-optimized PyTorch implementation, with fused or amortized auxiliary updates as future work (p. 21); test-set tuning admitted (p. 23).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Identical tuning rule and grid for all optimizers, 3 seeds, seed-0 AdamW winner reported and overturned in the re-run; but test-split tuning, untuned and unequal epsilon, and no time-matching despite ~2x per-step cost.",
+    "pages": "pp. 7-8, 22-23, 27, 34"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Designs and states its own risk-adjusted selection yardstick that rewards stability; the wall-clock trade-off stays hidden in step-matched plots.",
+    "pages": "pp. 7, 22"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "match the incumbent's theorem, win in the experiments",
+    "evidence": "States upfront that the rate is not stronger than Adam's; the claim is a comparable guarantee plus better practice (also seen in S015, c16).",
+    "pages": "pp. 3, 7, 11"
+   },
+   {
+    "pattern": "curvature by auxiliary function",
+    "evidence": "Exploit the composite structure l(p) to get a second-derivative proxy at gradient cost by backpropagating an auxiliary loss whose squared derivative equals d2l/dp2.",
+    "pages": "pp. 5-6, 14-15"
+   }
+  ],
+  "transferable": [
+   "Rewrite the incumbent's heuristic statistic as an approximation of a classical object and isolate the condition under which it is valid (eq. (4), p. 5).",
+   "Design an auxiliary function whose squared derivative equals the target second derivative (binary cross-entropy: arcsin(tanh(p/2)), pp. 6, 14-15).",
+   "Prove the new method's rate by transplanting the incumbent's proof and re-deriving only the step the change touches; say upfront that the rate is no better (pp. 3, 16-18).",
+   "Use a risk-adjusted (mu +/- 2 sigma over a final window) selection score, rescreen shortlisted settings on fresh seeds, and add a NaN/spike stability table to every learning-rate sweep (pp. 7, 12, 23-35)."
+  ],
+  "coauthors": "Yunlang Zhu, Lingjun Guo, Zahra Khatti, Xiaoyi Qu, Chia-Yuan Wu, Lara Zebiane (all Lehigh ISE); Curtis last author",
+  "quotes": [
+   {
+    "text": "We highlight upfront that the convergence-rate guarantee for our proposed algorithm is not stronger than that of Adam; the point is that the algorithm has a comparable guarantee and can perform better in practice in various settings.",
+    "page": 3
+   },
+   {
+    "text": "Assuming that (4) holds is not reasonable in general.",
+    "page": 5
+   }
+  ]
+ },
+ {
+  "id": "S091",
+  "year": "2026",
+  "title": "A Gradient Sampling Algorithm for Noisy Nonsmooth Optimization",
+  "read_level": "full",
+  "contribution": "The first gradient-sampling method for locally Lipschitz minimization with bounded, possibly biased errors in function and generalized-gradient values, built on a new two-constant noise assumption, with an almost-sure guarantee of approximate stationarity proportional to the noise.",
+  "problem_entry": "Every previous GS method assumes exact function and generalized-gradient values; noisy smooth optimization has guarantees but noisy GS 'has not been explored'; GS is chosen over proximal bundle methods because it is simpler and needs fewer tuning parameters (pp. 3-4).",
+  "key_idea": "Keep the GS skeleton (sample m >= n+1 points, min-norm convex-hull QP) and add a +eps_ls relaxation (eps_ls > 2 eps_f) to the Armijo line search, plus a Lipschitz-based step floor that sets alpha = 0 and resamples on a bad sample set; drop the differentiability check (pp. 8-9, 27).",
+  "assumptions": "|f~ - f| <= eps_f with a known Lipschitz constant of the true f on an enlarged f~-sublevel set ('the strongest part', p. 6); Assumption 2.2 separates domain misidentification (Goldstein eps_x-subdifferential) from value error (eps_g ball) (pp. 6-8); Assumption 3.1 gives a positive probability of a good sample set (p. 14).",
+  "proof_devices": [
+   "Noisy version of Kiwiel's GS lemma: if dist(0, G~) > 2 eps_g, a near-min-norm u~ satisfies u~^T v > eta ||u~||^2 on G; proof by compactness, contradiction and the projection theorem (Lemma 3.1, pp. 10-11)",
+   "Step-size lower bound under a good sample set via Lebourg's mean value theorem and an eps_k/3-ball contradiction; eps_ls > 2 eps_f absorbs both noise terms (Lemma 3.3, pp. 12-13)",
+   "Almost-sure termination: eventually-constant-radius event has probability zero by the second Borel-Cantelli lemma, then a countable union (Lemma 3.4, pp. 14-15)",
+   "Rate exponent eps_ls^(1/3) flagged before the analysis (p. 10) and traced to the eps_k-proportional step floor in (8) (p. 16)"
+  ],
+  "experiments": "NonOpt implementation that deviates from Algorithm 1 (quasi-Newton, adaptive sampling, no Lipschitz constant, eps_x = 0) (p. 17); nonsmooth Rosenbrock with artificial noise at four levels (p. 17); purpose-built nonsmooth PDE control problem with certifiable error, final gap ~1-5 eps_f and misidentified-active-index rate 29% -> 2% (pp. 18-21); heart-disease neural network with adaptive sampling and an eps_ls sweep under fixed mini-batches, training-set accuracy (pp. 21-22, 32); no baseline solver; single runs.",
+  "positioning": "Extends the authors' GS line and the Berahas-Byrd-Nocedal noisy-smooth line; Davis et al. GS 'quite distinct in spirit', subgradient guarantees need weak convexity, Hare-Sagastizabal-Solodov bundle method closest but not tested (pp. 2-4).",
+  "writing": "Dense explicit concessions (Lipschitz constant 'not ideal', exponent 'may be surprising', 'all that one can expect'); one bullet per requirement saying why it exists; informal preview of the theorem before the proofs; parameter insensitivity asserted from experience without a sweep (pp. 8-10, 16).",
+  "limits_future": "Known Lipschitz constant needed in theory, 1/3 exponent, drift away from approximate stationarity after the tolerance is reached, implementation differs from the analysed algorithm (pp. 6, 9, 16-17); future work: estimate L from observed difference quotients, extend the theory to quasi-Newton or adaptive-sampling variants (pp. 17, 22).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Audit applied to the theory's noise model: measured error populations show that bounding all error by eps_g alone would make the theorem vacuous, which justifies the eps_x/eps_g decoupling.",
+    "pages": "pp. 20-21, 30"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Hard instance built to have a property (nonsmoothness 'introduced', certifiable noise) rather than a mechanical corruption of a standard set; artificial noise on Rosenbrock over four orders of magnitude.",
+    "pages": "pp. 17-19"
+   },
+   {
+    "method": "Method 5",
+    "relation": "contradiction",
+    "note": "No rival run (no exact GS, no inexact-information bundle method, no stochastic subgradient method) despite the argued advantages over bundle methods; parameter-insensitivity claim without a reported sweep; single runs.",
+    "pages": "pp. 4, 16-22"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "decouple error sources in the assumption",
+    "evidence": "Separate constants for kink misidentification (eps_x) and value error (eps_g), checked on worked |x| examples and verified by split error populations in the PDE experiment.",
+    "pages": "pp. 6-8, 20-21, 30"
+   },
+   {
+    "pattern": "analyse the clean algorithm, run the production variant",
+    "evidence": "Experiments run NonOpt with quasi-Newton, adaptive sampling, no Lipschitz floor and eps_x = 0; each deviation is listed and the extension of the theory is only 'expected'.",
+    "pages": "p. 17"
+   }
+  ],
+  "transferable": [
+   "Give each physical error source its own constant (eps_x for a shifted kink, eps_g for value error) and show on worked one-dimensional examples which values satisfy the assumption (pp. 6-8, 26).",
+   "Separate noise from a bad random sample in a sampling-based line search: a relaxation term eps_ls > 2 eps_f for the former, a step-size floor with resampling for the latter (pp. 8-9, 27).",
+   "Flag a surprising rate exponent before the analysis and trace it after the proof to the lemma that causes it (pp. 10, 16).",
+   "Use a test problem with a certifiable, user-controlled error bound (solver tolerance -> eps_f through an M-matrix argument) to check that the final gap is proportional to eps_f over four orders of magnitude (pp. 18-21).",
+   "Split measured errors by whether the theory's second error mechanism occurred, and plot both populations against the tolerance (Figure 6, p. 30)."
+  ],
+  "coauthors": "Albert S. Berahas (University of Michigan IOE), Lara Zebiane (Lehigh ISE)",
+  "quotes": [
+   {
+    "text": "Such a conclusion is all that one can expect in our noisy setting.",
+    "page": 10
+   },
+   {
+    "text": "This observation is worth emphasizing, since it shows that the decoupling in Assumption 2.2 is not merely a technical convenience.",
+    "page": 20
+   }
+  ]
+ }
+]

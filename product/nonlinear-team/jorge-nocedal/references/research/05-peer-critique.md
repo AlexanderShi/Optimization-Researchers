@@ -176,6 +176,7 @@ He concedes the adoption fact and keeps the normative judgement.
 - W. F. Mascarenhas, "The BFGS method with exact line searches fails for non-convex objective functions", *Math. Program.* 99 (2004) 49–61, doi:10.1007/s10107-003-0421-7. Metadata only; not read.
 - Y.-H. Dai, "A perfect example for the BFGS method", *Math. Program.* 138 (2013) 501–530, doi:10.1007/s10107-012-0522-2. Metadata only; not read.
 - **Answered?** Not found. Whether *Numerical Optimization* (2nd ed., 2006) discusses these examples was **not read**.
+- *Book material, increment inc-book (2026-10-17)* [practice, P; joint with S. J. Wright]: the 2006 textbook's bibliography (322 entries) cites neither Dai 2002 nor Mascarenhas 2004; its only Dai entry is Dai–Yuan 1999 on conjugate gradients [B002 pp. 40–55]. Whether the text discusses the examples without citing them is still **not read** (the body is closed). The bibliography is the joint choice of both authors.
 - Reading [inferred]:
   - the practical half of the 1992 judgement ("numerical experience … suggests") is not refuted by constructed examples;
   - the stronger sentence "Nobody has been able to construct an example" was overtaken within ten years.
@@ -195,7 +196,7 @@ He concedes the adoption fact and keeps the normative judgement.
 
 The referee reports themselves were not found (Gap). Answered by later practice: L-BFGS became his most-cited work (`01-publications.md` Contradictions 13).
 
-**3.4 Self-corrections recorded elsewhere** (cross-reference, not repeated): the 2011 L-BFGS-B Remark (doi:10.1145/2049662.2049669), the book and SIAM Review errata, and the 2004 non-stationary-points paper (`01-publications.md` §4.1–4.2).
+**3.4 Self-corrections recorded elsewhere** (cross-reference, not repeated): the 2011 L-BFGS-B Remark (doi:10.1145/2049662.2049669), the book and SIAM Review errata (the book errata now read and carded in increment inc-book, 2026-10-17 [B003; B004; B007; B008], joint with S. J. Wright), and the 2004 non-stationary-points paper (`01-publications.md` §4.1–4.2).
 
 ---
 
@@ -209,6 +210,7 @@ The referee reports themselves were not found (Gap). Answered by later practice:
   - "A trust region approach, on the other hand, performs efficiently on the same example" (for Powell's example; PDF p. 3);
   - a proof "that a class of line search feasible interior methods cannot exhibit convergence to non-stationary points" (abstract).
 - The rival camp's reading of that answer [observed, S]: "Nocedal and Marazzi further examined this nonconvergence issue and proposed a general trust region method as a resolution" (Benson, Shanno & Vanderbei, ORFE-00-02 rev. 28 Aug 2000, PDF p. 2). They also propose their own fixes (shifting slacks, trust region, modified barrier; abstract).
+- *Full text, increment inc-ocr (2026-10-17)* [practice, P]: the report's numbers are now legible. On Powell's example every regularization parameter ρ > 0 of a five-value grid hits the 1000-iteration limit, while MINPACK's LMDER solves it in 12 iterations [S061 pp. 12–13]; the answer is a provably safe paper algorithm (Theorem 4.1) and a new failure example left without a fix, with no production change reported [S061 pp. 20–24].
 
 **4.2 LOQO authors vs NITRO (2000): "significantly slower and far less robust"** [observed, S]
 Source: H. Y. Benson, D. F. Shanno & R. J. Vanderbei, "Interior-Point Methods for Nonconvex Nonlinear Programming: Jamming and Numerical Testing". Preprint title "…Jamming and Comparative Numerical Testing", ORFE-00-02, rev. 28 Aug 2000; *Math. Program.* 99 (2004) 35–48, doi:10.1007/s10107-003-0418-2.
@@ -229,6 +231,8 @@ Test set: 889 AMPL models (CUTE + Schittkowski), default settings, SUN SPARC 400
 - "a line search interior-point algorithm exhibits excellent robustness, as well as efficiency, compared to a trust-region method" (p. 17).
 
 Caveats they state: "As we felt unqualified to tune either SNOPT or NITRO, we chose to run and compare all three codes on the default settings" (p. 15). They are the LOQO authors (conflict of interest noted by me). [observed]
+
+*The group's own 1999 tables, read in full in increment inc-ocr (2026-10-17)* [practice, P; not a review]: NITRO's own paper already shows the small-problem weakness the LOQO authors report. On the 56 Hock–Schittkowski problems LANCELOT needs fewer evaluations than NITRO on 29 and NITRO on 23, with 3 NITRO failures (card's counts) [S008 p. 24]; on the 14-problem main CUTE set (n = 14–2001) NITRO needs fewer evaluations on 9 but splits CPU time 7–7, losing 22× on SVANBERG [S008 p. 21], the problem on which the 2002 study (§4.3) reports up to 1260 CG iterations per major iteration. The paper's own verdict on the small problems is that NITRO's performance is not as good as LANCELOT's [S008 p. 23].
 
 - In his 2026 retrospective, Nocedal describes the rival without reference to the benchmark: Vanderbei "was trying to extend the ideas of quadratic programming with minimal changes and we were designing the elements from scratch … Vunder by [Vanderbei] finished first published loco [LOQO]" [1:18:21–1:18:55] [stated, P, caption-derived].
 
@@ -356,6 +360,15 @@ Source: A. S. Berahas, O. Sohab & L. N. Vicente, "Full-low evaluation methods fo
 
 ---
 
+## 9. Reception of the textbook (book material, increment inc-book, 2026-10-17)
+
+*Numerical Optimization* is co-authored with S. J. Wright, a member of this team, so its reception is not Nocedal's alone. The reviews below are the reviewers' voices; the prefaces they are compared with are the two authors' joint voice.
+
+- **N. Curteanu, zbMATH Open, 1st ed.** (Zbl 0930.65067; read in full) [observed, S]: the reviewer frames the book by its goal: "The main goal of the book is to give a comprehensive description of the most powerful, state-of-the-art techniques for solving optimization problems." [B009 p. 1]. The review follows the preface paragraph by paragraph, drops the word *continuous* from its goal sentence and leaves out its not-covered section [B009 p. 1; B005 pp. 6–9]. Its one apparent reservation, "the proposed treatment of the optimization process modelling is light, serving mainly to set the stage for the algorithmic developments." [B009 p. 1], restates the preface's own self-description of its modelling treatment [B005 p. 8]. No evaluation, no criticism, no error.
+- **N. Curteanu, zbMATH Open, 2nd ed.** (Zbl 1104.65059; read in full) [observed, S]: anchored to the first review, "the review of the first edition remaining still as a reference point" [B010 p. 1]; it lists the two new chapters and the reorganisations in the order of the Preface to the Second Edition, adds a software-guide link, omits the length remark, the typo list, the acknowledgments and the not-covered list, and names no weakness [B010 p. 1; B001 pp. 21–22].
+- **MMOR, 2001, reviewer not named**, quoted on Springer's first-edition page [observed, S]: recommends the book for graduate courses and self-study; laudatory and descriptive [B012 p. 2].
+- **Reading** [inferred]: every published review read here is descriptive praise; none criticizes the book. The skill therefore has no external critique of the textbook. Reviews are routed here, never used as evidence of Nocedal's methods.
+
 ## Contradictions (kept, not reconciled)
 
 1. **What the data-augmentation experiment showed (Keskar et al. 2017).** Four readings:
@@ -407,7 +420,7 @@ Source: A. S. Berahas, O. Sohab & L. N. Vicente, "Full-low evaluation methods fo
 3. **Not read, metadata only**:
    - Wächter & Biegler 2000 (content taken from two readers who did read it);
    - Dai 2002 (abstract only), Dai 2013 and Mascarenhas 2004.
-   - Whether *Numerical Optimization* (2nd ed.) discusses the BFGS counterexamples: **not read**.
+   - Whether *Numerical Optimization* (2nd ed.) discusses the BFGS counterexamples: **not read**. (*inc-book*: they are not in its bibliography [B002 pp. 40–55]; the text is still not read.)
 4. **Lewis & Overton**: only the December 2008 preprint was read. Whether the published 2013 version keeps the L-BFGS-B recommendation is unchecked. Whether Nocedal ever responded is unknown. That the later SciPy L-BFGS-B port (a C translation) added a weak-Wolfe option was not checked.
 5. **COPS 3.0**: 21 of 22 per-problem tables not read (the PDF's embedded fonts defeat text extraction; no OCR available). No overall KNITRO record was compiled.
 6. **Mittelmann logs** (`plato.asu.edu/ftp/ampl-nlp_logs/`) and other Mittelmann NLP pages were not read. Older snapshots (to date when KNITRO's position changed) were not reachable (Wayback blocked).
@@ -416,7 +429,7 @@ Source: A. S. Berahas, O. Sohab & L. N. Vicente, "Full-low evaluation methods fo
 9. **Rejected papers and referee reports**: none found beyond the interview anecdotes (L-BFGS 1980 reviews; Powell's review of an unnamed Knitro theory paper).
 10. **Critique of the SIAM Review 2018 survey, the dynamic-sampling "norm test" line, or the weather / data-assimilation work**: none found. The only self-critique found is the 2018 abstract's claim that the new inner-product test "improves upon the well known norm test" (arXiv:1710.11258).
 11. **Complexity-theory school**: no published reply to Nocedal's criticism of complexity results (`02-methodology.md` C4) was found or searched for (budget).
-12. **zbMATH reviews** of *Numerical Optimization* (1st and 2nd eds., reviewer N. Curteanu) are descriptive. They contain no criticism beyond noting that the treatment of modelling "is light" (1999 review).
+12. **zbMATH reviews** of *Numerical Optimization* (1st and 2nd eds., reviewer N. Curteanu) are descriptive. They contain no criticism beyond noting that the treatment of modelling "is light" (1999 review). *Correction (increment inc-book, 2026-10-17)*: both reviews are now read in full [B009; B010]. The 1999 review's *light* remark restates the preface's own description of its modelling treatment [B005 p. 8; B009 p. 1], so neither review contains any criticism; the 2006 review names no weakness [B010 p. 1]. See §9.
 
 ## Sources
 
@@ -482,5 +495,11 @@ Retrieval date for all: 2026-09-28. P = primary (Nocedal's own words, work, code
 45. Crossref REST API: metadata checks for every DOI in this file — S
 46. WebSearch 1 (2026-09-28): `Keskar Nocedal "sharp minima" ICLR 2017 openreview reviewer comments large-batch criticism`. It returned the papers only, no review text; it confirmed Dinh et al. appeared in ICML 2017 Vol. 70 — S
 47. WebSearch 2 (2026-09-28): `"finite-difference" derivative-free Shi Xuan Oztoprak Nocedal comparison criticized model-based NEWUOA noisy benchmark response`. It returned the paper's own concessions, which were then verified in the arXiv text — S
+
+**Book material (increment inc-book, 2026-10-17)**
+48. N. Curteanu, review of Nocedal & Wright, *Numerical Optimization* (1999), zbMATH Open Zbl 0930.65067, https://zbmath.org/?q=an:0930.65067 (zbMATH Open API document 1324815; read in full, card B009) — S
+49. N. Curteanu, review of the 2nd ed. (2006), zbMATH Open Zbl 1104.65059, https://zbmath.org/?q=an:1104.65059 (API document 5060482; read in full, card B010) — S
+50. Springer catalogue page of the 1st ed., *Reviews* excerpt (MMOR Mathematical Methods of Operations Research, 2001, reviewer not named), https://link.springer.com/book/10.1007/b98874 (card B012) — S
+51. The prefaces of both editions (Springer free previews; cards B005 and B001), compared with the reviews — P
 
 **Scratch materials** (not committed): `/tmp/nonlinear-team-scratch/base-skills/jorge-nocedal/critique/`. It holds the arXiv, NeurIPS, OSTI, Vanderbei, Optimization Online and Overton PDFs with their extracted text, the Mittelmann page, the Crossref, zbMATH and Semantic Scholar JSON, and the COPS page images.

@@ -438,7 +438,7 @@ The only exit he explained: in 2002 IPM research had moved "into a phase of cons
 
 - **Upstream**: PhD, University of Queensland, 1984 [OH22 3:26]; **supervisor unknown** (Mathematics Genealogy Project: "Advisor: Unknown"; co-author J. N. Holt is a candidate by inference only). Named influences: Mangasarian, Ferris, Rawlings, Argonne colleagues [06 §2.1].
 - **Downstream (verified)**: PhD advisees Sangkyun Lee (2011), Ching-pei Lee (2019), Michael O'Neill (about 2020), Roger Waleffe (2025), Shuyao Li (2026, co-advised with J. Diakonikolas); postdocs Clément Royer (2016–19), Ahmet Alacaoglu (from 2021) [04 §0, Top-up]. Other roles (Oberlin, Liu, Lim, Kim, Xie) unverified.
-- **Team links**: Nocedal (*Numerical Optimization* [NumOpt]) and Curtis (CRRW21); no co-authored record with the other members found [01 §1.3].
+- **Team links**: Nocedal (*Numerical Optimization* [NumOpt]), Curtis and Robinson (CRRW21); no co-authored record with the other members found [01 §1.3].
 
 ## Inner Tensions
 
@@ -462,20 +462,23 @@ Thin: no record of how he criticizes drafts or runs meetings was found.
 
 ## Roundtable Card
 
-- **Lens (one line)**: Find where solver behaviour and theory disagree (degeneracy, finite precision, warm starts), show it on the smallest instance with heuristics off, borrow the fix from a neighbouring method class, and keep only safeguards that beat a no-safeguard twin on a fair benchmark.
-- **Leads when**: local rate is lost; Jacobians are rank-deficient, multipliers non-unique or constraints weakly active; KKT solves degrade as µ → 0; warm starts along a sequence; judging a safeguard or a benchmark.
-- **First questions asked**: (1) Smallest instance that shows it, prediction printed? (2) Which assumption fails: LICQ, strict complementarity, unique multipliers, exact arithmetic? (3) Does it persist with presolve, scaling and safeguards off? (4) Which code feature explains it, when toggled? (5) One solve or a sequence; how much does the active set move?
-- **Default recommendation** ([inferred] translations, not his NLP advice): a degeneracy-and-roundoff harness (Method 1); working-set warm starts, inexact QP solves, stabilized multipliers, each switchable with a twin (Methods 2–4); warm starts chosen by measured active-set change (Method 6); equal-target benchmarks with failure tables (Method 5).
-- **Will push back on**: safeguards without a twin; defaults picked by bounds; LICQ-only designs; robustness claims without degenerate and infeasible sets; unequal stopping rules; IPM warm starts when the active set moves.
-- **Likely disagreements** (inferred from each side's methods; Wright's side first):
-  - **Gill**: local-only sSQP (10.1137/S1052623498333731) vs globalized sSQP (10.1137/120882913). Documented: FP01 (10.1137/S1052623498347438) faults Forsgren–Gill–Shinnerl's pivot assumption (10.1137/S0895479894270658); no reply found.
-  - **Wächter**: local rate and IPM warm-start limits (10.1137/S1052623400369235) vs global robustness and restoration (10.1007/s10107-004-0559-y). No dispute documented.
-  - **Fletcher**: modified SQP for degeneracy (10.1007/s10107-002-0344-8) vs unmodified SQP on MPECs (10.1080/10556780410001654241). No dispute documented.
-  - **Curtis**: safeguards judged by practice (arXiv:2510.15734) vs guarantees as design criteria, as in their joint CRRW21 (10.1137/19M130563X). No dispute documented.
-  - **Nocedal**: exact-Hessian local theory (10.1137/S1052623498333731) vs quasi-Newton and inexact engineering (10.1007/0-387-30065-1_4). No dispute documented.
-  - **Ye**: bounds not a design guide (arXiv:2510.15734) vs complexity-led design (10.1287/moor.19.1.53). Documented: Sun–Ye's worst case (10.1007/s10107-019-01437-5) answered by LW19 (10.1093/imanum/dry040).
-  - **Toint, Gould, Nesterov**: minimal-safeguard Newton-CG (10.1007/s10107-019-01362-7) vs complexity-first ARC and cubic Newton (10.1007/s10107-009-0286-5; 10.1007/s10107-006-0706-8); with Gould, benign ill-conditioning (10.1137/S1052623496304712) vs factorization control. No dispute documented.
-- **Blind spots**: globalization, NLP infeasibility, quasi-Newton under degeneracy, production NLP engineering, inertia correction, how common degeneracy is.
+- **Lens (one line)**: Find where solver and theory disagree (degeneracy, roundoff, warm starts), show it on the smallest instance, heuristics off, borrow a neighbouring class's fix, keep only safeguards beating a no-safeguard twin.
+- **Leads when**: lost local rate; rank-deficient Jacobians, non-unique multipliers, weakly active constraints; KKT solves degrading as µ → 0; sequence warm starts; judging safeguards or benchmarks.
+- **First questions asked**: (1) Smallest instance showing it, prediction printed? (2) Which assumption fails: LICQ, strict complementarity, unique multipliers, exact arithmetic? (3) Still there with presolve, scaling, safeguards off? (4) Which feature, toggled, explains it? (5) One solve or a sequence, with how much active-set change?
+- **Default recommendation** ([inferred] translations): a degeneracy-and-roundoff harness (Method 1); working-set warm starts, inexact QP solves, stabilized multipliers, each with a switchable twin (Methods 2–4); warm starts chosen by measured active-set change (Method 6); equal-target benchmarks with failure tables (Method 5).
+- **Will push back on**: safeguards without a twin; bound-picked defaults; LICQ-only designs; robustness claims lacking degenerate, infeasible sets; unequal stopping rules; IPM warm starts on a moving active set.
+- **Likely disagreements** (inferred from both sides' methods, Wright's first; no dispute documented unless "Documented"):
+  - **Gill**: local vs globalized sSQP (10.1137/S1052623498333731; 10.1137/120882913). Documented: the latter calls existing sSQP "essentially local" [05 §2.2]; FP01 (10.1137/S1052623498347438) faults Forsgren–Gill–Shinnerl's pivot assumption (10.1137/S0895479894270658); no reply found.
+  - **Robinson**: as with Gill (joint paper); CRRW21 co-author (10.1137/19M130563X): its modifications "do not improve the practical performance" [OTP25 p. 23].
+  - **Wächter**: IPM warm-start limits (10.1137/S1052623400369235) vs restoration-backed robustness (10.1007/s10107-004-0559-y).
+  - **Fletcher**: modified SQP for degeneracy (10.1007/s10107-002-0344-8) vs plain SQP on MPECs (10.1080/10556780410001654241).
+  - **Curtis**: practice judges safeguards (arXiv:2510.15734) vs guarantees as design criteria (joint CRRW21).
+  - **Nocedal**: exact-Hessian local theory (10.1137/S1052623498333731) vs quasi-Newton, inexact engineering (10.1007/0-387-30065-1_4).
+  - **Ye**: bounds not a design guide (arXiv:2510.15734) vs complexity-led design (10.1287/moor.19.1.53). Documented: Sun–Ye's worst case (10.1007/s10107-019-01437-5), answered by LW19 (10.1093/imanum/dry040).
+  - **Toint**: minimal-safeguard Newton-CG (10.1007/s10107-019-01362-7) vs complexity-first ARC (10.1007/s10107-009-0286-5).
+  - **Gould**: benign ill-conditioning (10.1137/S1052623496304712) vs factorization control; ARC as Toint.
+  - **Nesterov**: that Newton-CG vs cubic-regularized Newton (10.1007/s10107-006-0706-8).
+- **Blind spots**: globalization, NLP infeasibility, degenerate quasi-Newton, production NLP engineering, inertia correction, how common degeneracy is.
 
 ## Honest Boundary
 

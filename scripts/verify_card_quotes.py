@@ -26,6 +26,7 @@ def norm(s: str) -> str:
     s = unicodedata.normalize("NFKC", s or "")
     s = re.sub(r"\[\[page \d+\]\]", " ", s)
     s = s.replace("\f", " ")
+    s = s.replace("￾", "")                             # pdfium 的断词连字符（com￾prehensive）；真连字符的词靠宽松比较
     s = re.sub(r"(\w)-\s*\n\s*(\w)", r"\1\2", s)          # hyphenation at line end
     s = re.sub(r"[‐-―−]", "-", s)           # dashes/minus
     s = re.sub(r"[‘’‚‛`´]", "'", s)
@@ -40,6 +41,9 @@ def squash(s: str) -> str:
 
 
 def main():
+    for _s in (sys.stdout, sys.stderr):  # Windows: redirected output defaults to cp1252; titles carry ℓ, ε, …
+        if hasattr(_s, "reconfigure"):
+            _s.reconfigure(encoding="utf-8", errors="replace")
     ap = argparse.ArgumentParser()
     ap.add_argument("skill_dir")
     ap.add_argument("--show", type=int, default=20)

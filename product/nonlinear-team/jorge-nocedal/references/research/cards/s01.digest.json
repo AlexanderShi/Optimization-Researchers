@@ -1,0 +1,284 @@
+[
+  {
+    "id": "S138",
+    "year": "1978",
+    "title": "ON THE METHOD OF CONJUGATE GRADIENTS FOR FUNCTION MINIMIZATION.",
+    "read_level": "partial",
+    "contribution": "PhD thesis (Rice 1978) studying two O(k*n)-storage families between CG and quasi-Newton (the interleaved QN-CG method and Nazareth's variable storage CG), proving quadratic termination and n-step quadratic convergence and testing them with a STORE parameter (pp. 4, 7, 39, 49-51, 67-70, 77-79).",
+    "problem_entry": "Trade-off between fast quasi-Newton and storage-free CG for large problems with dense or unknown Hessian structure; aim to speed up CG with QN updates in O(k*n) storage, 1<k<n (p. 7); CG without line searches for multiplier updates where line searches are impossible (p. 75).",
+    "key_idea": "Interleave QN steps (corrections stored as vectors) with CG steps in the fixed metric, or run only CG steps in a QN-built metric (VSCG); CG with metric H via z = L^-1 x (pp. 10-11, 32, 48-49).",
+    "assumptions": "Quadratic termination under exact line searches on strictly convex quadratics (pp. 39, 49); local results under Assumption 7.5 (C2, uniformly positive definite and Lipschitz Hessian at x*) with asymptotically perfect line searches (p. 69); bounded deterioration unusable with less than O(n^2) storage (p. 52).",
+    "proof_devices": [
+      "induction showing each combined step equals a CG step with one fixed metric (Theorem 5.17, pp. 39-41; Theorem 5.36, pp. 49-51)",
+      "interleaved result requires BFGS, VSCG result holds for any Broyden-class member (p. 51)",
+      "local Q-linear convergence via Stoer's framework and a bounded condition number of H_k (pp. 52-53)",
+      "n-step quadratic convergence outlined along Stoer's and Cohen's lines (Theorem 7.6, pp. 69-70)",
+      "correction step recovering the exact-line-search point in CG without line searches (eq. 4.7, p. 20)"
+    ],
+    "experiments": "Wood, Powell singular (n=4), Biggs exp (n=6), trigonometric (n=20) on IBM 370/168; NFCALL and final gradient norm vs STORE=0-4; SR1 update used although theory covers only Broyden's restricted class (pp. 77-79).",
+    "positioning": "Generalizes Buckley's interleaved theorem (p. 32), studies Nazareth's VSCG (p. 48) and Shanno's memoryless QN (pp. 30-31); notes Crowder-Wolfe and Powell reached opposite conclusions on Beale restarts (p. 13).",
+    "writing": "Theorem-proof thesis with a short numerical chapter; the SR1-theory mismatch is stated openly (p. 77); larger-problem claim hedged as what experiments seem to indicate (p. 78).",
+    "limits_future": "Local, not global, theory (p. 52); SR1 not covered by theory (p. 77); multiplier formulas untested and need step lengths and safeguards (p. 76).",
+    "method_links": [
+      {"method": "Method 5", "relation": "evidence", "note": "quadratic-termination theory separates update choices: interleaved scheme needs BFGS, VSCG works for any Broyden member", "pages": "pp. 39, 49-51"},
+      {"method": "Method 5", "relation": "contradiction", "note": "tests use SR1 while theorems cover Broyden's restricted class; analysed and run versions differ (acknowledged)", "pages": "p. 77"},
+      {"method": "Method 6", "relation": "evidence", "note": "CG motivated as the method for large problems whose Hessian is dense or of unknown structure", "pages": "p. 7"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "storage knob spanning two classical methods", "evidence": "O(k*n) family with CG and quasi-Newton as its ends; STORE as the experimental axis (compare m in S143)", "pages": "pp. 7, 77-79"},
+      {"pattern": "port a canonical convergence framework to the new variant", "evidence": "local and rate analysis built on Stoer's framework (also S039, S054)", "pages": "pp. 52, 67-69"}
+    ],
+    "transferable": [
+      "Define a one-parameter family by memory whose ends are two known methods and make that parameter the experimental axis (pp. 7, 77-79).",
+      "Prove a property of a hybrid by showing every step coincides on quadratics with a classical method in one fixed metric, then transfer the classical property by induction (pp. 39-41, 49-51).",
+      "When an application rules out line searches, reuse line-search-free methods and state the safeguards a practical version needs (pp. 75-76)."
+    ],
+    "coauthors": "none (sole author; director Richard Tapia; Larry Nazareth and Richard Byrd thanked, p. 5)",
+    "quotes": [
+      {"text": "On the other hand, conjugate gradient methods do not require storage of a matrix and have proved themselves useful in large problems where the matrix of second derivatives is not sparse or where the structure of this matrix is unknown.", "page": 7},
+      {"text": "Unless STORE is also large we think that the best approach is to build the metric as soon as possible, since doing many iterations but few updates will not scale the steps well enough.", "page": 77}
+    ]
+  },
+  {
+    "id": "S026",
+    "year": "1987",
+    "title": "The formulation and analysis of numerical methods for inverse eigenvalue problems",
+    "read_level": "partial",
+    "contribution": "Four locally quadratic Newton-type methods for the symmetric inverse eigenvalue problem (one new, Cayley-transform based), a reformulation that removes overdetermination when eigenvalues are multiple, and one local convergence analysis covering distinct and multiple cases (pp. 1, 6-10, 16-17, 21-30).",
+    "problem_entry": "Eigenvalues are non-differentiable where they coalesce, yet the behaviour of numerical methods there had received little attention; local analysis only, assuming a solution exists (pp. 1-2).",
+    "key_idea": "Common step J c+ = lambda* - b for Methods I-III (exact eigenvectors, inverse iteration, Cayley transform), Method IV on determinant equations; for multiplicity t specify only n-s eigenvalues, s = t(t-1)/2, and set the rotation parameters of the multiple block to zero (pp. 6-10, 16-17).",
+    "assumptions": "Existence of c* and bounded inverse Jacobians along the iterates (Assumption 3.1, p. 21); nonsingularity of K(c*) for modified methods; a condition at c* would be preferable but J*(Q) can be singular for some eigenvector choices (p. 14).",
+    "proof_devices": [
+      "Jacobian from the eigenvector derivative formula (p. 6)",
+      "matrix-exponential linearization and Cayley transform for the eigenvector update (pp. 7-8)",
+      "construction showing J*(Q) can be singular by choice of eigenvectors (p. 14)",
+      "eigenprojection plus QR to build a nearby orthonormal eigenvector basis (Lemma 3.1, pp. 21-22)",
+      "quadratic convergence of c and of Method III error matrices (Theorems 3.2-3.7, pp. 23-30)",
+      "minimal-case argument against Method IV: linear lambda(c) solved in one Newton step by Method I, not by Method IV (p. 10)"
+    ],
+    "experiments": "Three examples (n=8 distinct, n=8 multiplicity 3, n=6 multiplicity 3) started near the solution, residual to 1e-8, VAX 11/780 with EISPACK; quadratic convergence and similar behaviour of Methods I-III (pp. 30-33).",
+    "positioning": "Credits Downing-Householder, Kublanovskaja (Method I), Osborne and Hald (Method II), Biegler-Konig (Method IV); Nocedal-Overton 1983 and Bohte for the multiple-eigenvalue observation (pp. 6-10, 13).",
+    "writing": "Applications first (pp. 2-3); novelty claim hedged as apparently new (p. 8); scope limits stated in the introduction (pp. 1-2).",
+    "limits_future": "Global behaviour not addressed (p. 1); variants such as inequality eigenvalue constraints only mentioned (p. 2); no line search or trust region in tests (p. 30).",
+    "method_links": [
+      {"method": "Method 3", "relation": "variant", "note": "Newton engine kept; only the formulation (Problem 2) and one component (zero rotation parameters, Neglig tolerance) changed; no estimate or recovery path", "pages": "pp. 16-17"},
+      {"method": "Method 5", "relation": "evidence", "note": "a minimal case and experience discriminate between two locally quadratic methods (Method I vs IV)", "pages": "pp. 10, 30"},
+      {"method": "Method 2", "relation": "variant", "note": "the expectation that Newton is at best slowly convergent with multiple eigenvalues is tested and found false, analytically rather than against a dismissed simple tool", "pages": "pp. 13-15"}
+    ],
+    "new_pattern_candidates": [],
+    "transferable": [
+      "Before patching a method for a degenerate case, check whether the problem is overdetermined there and count the degrees of freedom (s = t(t-1)/2 rotation parameters, p. 16).",
+      "Rank two methods with the same asymptotic rate by the simplest instance where one finishes in one step and the other iterates (p. 10).",
+      "Write all candidate methods in one common step form so they differ only in how (J, b) are produced, and compare per-iteration costs (pp. 6-8, 11)."
+    ],
+    "coauthors": "S. Friedland, M. L. Overton",
+    "quotes": [
+      {"text": "Interestingly enough, however, even when Method I is started at such a point, it has no difficulty with convergence.", "page": 14},
+      {"text": "A line search (or a trust region strategy) would be essential to make the algorithms convergent in practical applications.", "page": 30}
+    ]
+  },
+  {
+    "id": "S039",
+    "year": "1990",
+    "title": "An analysis of reduced Hessian methods for constrained optimization",
+    "read_level": "partial",
+    "contribution": "Global, R-linear and two-step superlinear convergence theory for reduced-Hessian BFGS SQP with a backtracking line search on the l1 or Fletcher merit function, assuming only a positive definite initial matrix (read as TR CU-CS-398-88; TR pp. 4, 15-18, 26-30, 43-44).",
+    "problem_entry": "Prior analyses assumed good initial approximations or convergent iterates with bounded matrices, which cannot be verified in practice; reduced Hessian chosen as the simpler case (TR pp. 7-8).",
+    "key_idea": "Algorithm 2.1: reduced-Hessian SQP, BFGS with the Coleman-Conn y_k, backtracking on l1 or Fletcher merit, any positive definite B_1; second-order correction or watchdog against the Maratos effect for l1 (TR pp. 9-10, 30, 43).",
+    "assumptions": "Assumptions 3.1: convex set with bounded f, c and derivatives, full-rank A(x), y's/s's >= m and ||y||^2/y's <= M (TR p. 16); second-order sufficiency locally (TR p. 22); additional optimistic assumptions for the Fletcher function (TR pp. 19, 27); bounded multipliers stronger than we would like (TR p. 43).",
+    "proof_devices": [
+      "Byrd-Nocedal 1987 theorem: BFGS bounds on cos theta and ||Bs||/||s|| hold for at least ceil(pk) iterates (Theorem 3.1, TR p. 15)",
+      "set of good iterates and summation of merit decrease over it (Definition 3.1, TR p. 15; Theorem 3.4, TR p. 18)",
+      "R-linear convergence implies bounded B_k and the Powell consistency condition given a smoothly varying null-space basis (Theorem 5.1, TR pp. 28-30)",
+      "second-order correction and watchdog to admit unit steps under the l1 merit function (TR pp. 30, 42-43)"
+    ],
+    "experiments": "none",
+    "positioning": "Extends Powell (1976) BFGS analysis to reduced-Hessian SQP (TR p. 4); uses the Coleman-Conn update, defers the Nocedal-Overton update (TR p. 8); surveys Han, Tapia, Glad, Powell, Boggs-Tolle, Fenyes (TR p. 7).",
+    "writing": "Self-graded results: somewhat weak global result (TR p. 8), optimistic assumptions named as such (TR pp. 19, 27), summary rates each result's strength (TR pp. 43-44).",
+    "limits_future": "Weak global theory; Fletcher-function theory significantly weaker; stronger local result omitted as much more complex (TR pp. 26, 43); future: Nocedal-Overton update and full-Hessian SQP (TR p. 44).",
+    "method_links": [
+      {"method": "Method 5", "relation": "evidence", "note": "analyses the version that is run: backtracking line search, BFGS from any positive definite matrix, no assumed convergence or bounded matrices; claims a realistic analysis of a practical implementation", "pages": "TR pp. 4, 7-8, 44"},
+      {"method": "Method 3", "relation": "variant", "note": "engine kept, only step acceptance repaired (SOC or watchdog) for the Maratos effect, at extra function-evaluation cost; no estimate-driven design", "pages": "TR pp. 30, 43"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "port a canonical convergence framework to the new variant", "evidence": "framed as an extension of Powell (1976), carried by one reusable lemma from Byrd and Nocedal 1987 (also S054, S138)", "pages": "TR pp. 4, 8, 15, 30"},
+      {"pattern": "label unprovable assumptions as optimistic", "evidence": "assumptions on the Fletcher-function weights called optimistic, with an explanation of why they hold a posteriori", "pages": "TR pp. 19, 27, 43"}
+    ],
+    "transferable": [
+      "When an update keeps good properties only on average, prove the key bounds on a positive fraction of iterates and sum the merit decrease over those good iterates (TR pp. 15, 18).",
+      "Open with the unverifiable assumptions of prior analyses and make dropping them the contribution (TR p. 7).",
+      "Develop the technique on the simpler variant and name the harder one as the next target (TR pp. 8, 44).",
+      "Grade each result's strength in the summary rather than listing theorems uniformly (TR pp. 43-44)."
+    ],
+    "coauthors": "R. H. Byrd",
+    "quotes": [
+      {"text": "We regard these assumptions as undesirable since it is not known when they will be satisfied in practice.", "page": 7},
+      {"text": "we will be forced to make some additional optimistic assumptions in order to establish convergence.", "page": 19}
+    ]
+  },
+  {
+    "id": "S197",
+    "year": "1990",
+    "title": "Algorithms and software for large scale optimization. Progress report, August 1, 1989--May 5, 1990",
+    "read_level": "full",
+    "contribution": "DOE progress report and continuation request in which Nocedal as PI summarizes L-BFGS work (parallel runs, applications, a comparison with discrete Newton, a Broyden-class analysis) and plans column scaling, bound constraints and a nonlinear CG theory (pp. 2-5).",
+    "problem_entry": "Large problems and applications (meteorology, oceanography, transonic flow as 461-dof least squares) plus two theory gaps: is BFGS the best variable metric method, and why does PR work best while only FR has global theory (pp. 2-4).",
+    "key_idea": "Report of results and plans: parallel L-BFGS on the Alliant FX/8; L-BFGS beats discrete Newton on common problems; negative Broyden parameters can lose superlinear convergence; planned column-scaling BFGS; a line-search condition ensuring CG descent (pp. 2-5).",
+    "assumptions": "n/a (report)",
+    "proof_devices": [],
+    "experiments": "Summarized without tables: up to 50,000 variables and 13 Mflops on 8 processors; L-BFGS faster than Buckley-LeNir and CONMIN on transonic flow; column scaling typically cutting work by 50% (pp. 2-4).",
+    "positioning": "Names Newton with sparse techniques, Griewank-Toint partitioned quasi-Newton and L-BFGS as the best current large-scale approaches (pp. 2-3).",
+    "writing": "Grant-report register with strong claims (the column-scaling code would be the most efficient BFGS code in existence, p. 4; first tests remarkable, p. 3).",
+    "limits_future": "Plans: column-scaling BFGS and its limited-memory extension (not simple), meteorology and oceanography with bounds next year, a better nonlinear CG (pp. 3-5).",
+    "method_links": [
+      {"method": "Method 6", "relation": "evidence", "note": "lists structure-exploiting methods (sparse Newton, partitioned quasi-Newton) beside L-BFGS as the best approaches; expects 4-D assimilation to need structure-exploiting techniques", "pages": "pp. 2-4"},
+      {"method": "Method 6", "relation": "contradiction", "note": "a nonlinear least-squares problem is solved with L-BFGS and compared only with general CG/quasi-Newton codes, not a least-squares method", "pages": "p. 2"},
+      {"method": "Method 5", "relation": "evidence", "note": "both theory questions are practice-theory gaps between named methods (BFGS vs other Broyden members; PR vs FR)", "pages": "pp. 3-5"},
+      {"method": "Method 4", "relation": "evidence", "note": "application needs and open questions written into next year's plan; bounds later delivered as L-BFGS-B (S143 p. 2; link inferred from timing)", "pages": "pp. 4-5"}
+    ],
+    "new_pattern_candidates": [],
+    "transferable": [
+      "In a grant report, pair each result with the open question it raises and next year's deliverable, so the report is also a research agenda (pp. 3-5).",
+      "Frame a theory project around a named practice-theory inversion (the method that works lacks theory, the one with theory works badly) (p. 4)."
+    ],
+    "coauthors": "none (PI report; cited joint work with S. Nash, R. Byrd, D. C. Liu, J. C. Gilbert; student M. Lalee)",
+    "quotes": [
+      {"text": "However we believe that conjugate gradient methods have not been properly implemented so far, and that their full potential needs to be assessed.", "page": 4},
+      {"text": "Our work shows that much care is required when implementing such strategies.", "page": 3}
+    ]
+  },
+  {
+    "id": "S054",
+    "year": "1993",
+    "title": "Analysis of a self-scaling quasi-Newton method",
+    "read_level": "partial",
+    "contribution": "Proves global and R-linear convergence of Oren-Luenberger self-scaling BFGS on convex functions with Wolfe line searches, shows its directions approach Newton's, and shows by a constructed 2-D example that superlinear convergence may need two function evaluations per iteration (pp. 1, 4-5, 7, 10-16).",
+    "problem_entry": "A scaling method motivated on quadratics, with disappointing reported practice (Shanno-Phua), analysed on general convex functions; one scaling rule chosen to simplify analysis (pp. 2, 18).",
+    "key_idea": "Auxiliary sequence with constant determinant; directions become Newton-like but steps are mis-scaled, so unit steps fail condition (4.2) and the best known fix costs two evaluations per step (pp. 2-3, 10-11).",
+    "assumptions": "Convex, bounded below, C2, Hessian bounded on the level set, Wolfe line search (Assumptions 2.1, p. 4); uniformly convex level set and Lipschitz Hessian at x* for the rate (Assumptions 3.1, pp. 5-6).",
+    "proof_devices": [
+      "auxiliary matrices with constant determinant (eqs. 2.1-2.7, pp. 2-3)",
+      "Powell 1976 trace-determinant argument with infinite-product lemma and Zoutendijk contradiction (Theorem 2.1, pp. 4-5)",
+      "boundedness of [tr B]^(2n)(f_k - f*) for R-linear convergence (Theorem 3.1, pp. 7-10)",
+      "constructed 2-D quadratic with step lengths alternating 2 and 0.5 (pp. 11-15)"
+    ],
+    "experiments": "2-D quadratic with exact and Wolfe (0.01, 0.9) line searches vs unscaled BFGS (Tables 1-3, pp. 16-17); Moré-Garbow-Hillstrom set: standard BFGS needs fewer evaluations most of the time, no table (p. 16).",
+    "positioning": "Oren-Luenberger 1974 method; Shanno-Phua results consistent with the analysis; points to column scaling (Powell 1987, Siegel, Lalee-Nocedal) as the better route (pp. 1-2, 18).",
+    "writing": "Section heading posed as a question, Can superlinear convergence be obtained? (p. 10); drawback stated in the abstract (p. 1).",
+    "limits_future": "Analysis is asymptotic; desirable to design scaling strategies without the extra evaluations; column scaling suggested (p. 18).",
+    "method_links": [
+      {"method": "Method 5", "relation": "evidence", "note": "theory explains disappointing practice and separates BFGS (unit steps, condition 4.2 holds) from the self-scaling variant; example and Table 2 confirm the predicted pattern", "pages": "pp. 10-11, 15-18"},
+      {"method": "Method 2", "relation": "evidence", "note": "a refinement is tested against the plain method; plain BFGS wins most of the time, self-scaling uses almost twice the evaluations on several problems", "pages": "p. 16"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "port a canonical convergence framework to the new variant", "evidence": "global analysis uses Powell's 1976 trace and determinant approach on an auxiliary sequence (also S039, S138)", "pages": "pp. 2, 4-5"}
+    ],
+    "transferable": [
+      "To show a rate needs extra cost, build the smallest problem (2-D quadratic) where the required steps are computable in closed form and print iterate tables with exact and practical line searches (pp. 11-17).",
+      "Simplify a scaled update's analysis with an auxiliary sequence differing by a scalar and keeping one invariant constant (pp. 2-3).",
+      "Separate asymptotically right direction (cos theta -> 1) from asymptotically right step length when diagnosing slow superlinear methods (pp. 10-11)."
+    ],
+    "coauthors": "Ya-xiang Yuan",
+    "quotes": [
+      {"text": "We find that the method has a major drawback: to achieve superlinear convergence it may be necessary to evaluate the function twice per iteration, even very near the solution.", "page": 1},
+      {"text": "the standard BFGS method is superior to the self-scaling method most of the time.", "page": 16}
+    ]
+  },
+  {
+    "id": "S115",
+    "year": "1993",
+    "title": "Automatic differentiation and the step computation in the limited memory BFGS method",
+    "read_level": "full",
+    "contribution": "Shows that the L-BFGS two-loop recursion is the reverse-mode AD adjoint of a one-loop program computing f_m(g) = g'H_m g / 2, explaining why it is efficient (read as HAL author version; HAL pp. 2-5).",
+    "problem_entry": "Two apparently unrelated subjects: the non-unique, more or less economical formulas for the limited-memory step, and reverse-mode AD (HAL pp. 2-3).",
+    "key_idea": "Write H_m g as the gradient of a scalar quadratic form, compute that scalar with a one-loop recursion, take its adjoint code and delete unneeded instructions to obtain the two-loop recursion (HAL pp. 4-5).",
+    "assumptions": "H_0 symmetric positive definite, rho_i > 0 (HAL p. 3); reverse-mode cost bound with C <= 5 cited from Griewank (HAL p. 3).",
+    "proof_devices": [
+      "recursion f_m(g) = f_{m-1}(V g) + rho/2 (s'g)^2 by induction (HAL p. 4)",
+      "adjoint code construction and dead-code elimination (HAL pp. 4-5)"
+    ],
+    "experiments": "none",
+    "positioning": "Interprets Nocedal 1980 two-loop formula [6] alongside Byrd-Nocedal-Schnabel compact representations [1]; AD literature from Griewank, Rall, Speelpenning (HAL pp. 2-3, 5-6).",
+    "writing": "Four-page letter with one claim and one derivation; the paper claims only an explanation of efficiency, while the DOE reports call the recursion optimal (S197 p. 2; S193 p. 3).",
+    "limits_future": "None stated.",
+    "method_links": [
+      {"method": "Method 5", "relation": "variant", "note": "theory explains why a coded computation is the economical one among equivalent formulas; about arithmetic cost, not convergence, and implementations rather than methods", "pages": "HAL pp. 2, 5"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "cross-field reinterpretation explains efficiency", "evidence": "an optimization kernel read as an instance of reverse-mode AD inherits AD's efficiency argument", "pages": "HAL pp. 2, 5"}
+    ],
+    "transferable": [
+      "To explain why an implicit matrix-vector product is cheap, write it as the gradient of a scalar quadratic form, program the scalar, and derive the product as its adjoint code (HAL pp. 4-5)."
+    ],
+    "coauthors": "Jean Charles Gilbert",
+    "quotes": [
+      {"text": "Thus, we find a connection between two apparently unrelated subjects: the step computation in a limited memory method and automatic differentiation.", "page": 2},
+      {"text": "This derivation shows why algorithm (3.6) is efficient: it is based on the compact algorithm (3.4) computing fm, and on the reverse mode of automatic differentiation, which is known to be very efficient.", "page": 5}
+    ]
+  },
+  {
+    "id": "S193",
+    "year": "1993",
+    "title": "Optimization and eigenvalue computation with application to meteorology and oceanography. Progress report, August 1, 1992--July 31, 1993",
+    "read_level": "full",
+    "contribution": "DOE progress report in which Nocedal as PI reports column scaling, an eigenvalue-enhanced limited-memory method for data assimilation (at least 50% fewer simulations), L-BFGS-B and compact representations, and plans a large equality-constrained solver, listing its failure-prone components (pp. 2-4).",
+    "problem_entry": "4-D variational data assimilation where each iteration needs a full model simulation (about one hour on a CRAY); CG and limited-memory methods lack Hessian information (p. 2).",
+    "key_idea": "Inject a few extreme Hessian eigenvalues into a limited-memory code; plan a vertical/horizontal-step equality-constrained method with repairs for basis ill-conditioning, inner CG and the penalty parameter (pp. 2-4).",
+    "assumptions": "n/a (report)",
+    "proof_devices": [],
+    "experiments": "Summarized without tables: at least 50% fewer simulations in data assimilation (p. 2).",
+    "positioning": "Lists joint reports with Lalee, Byrd and Lu, Byrd and Schnabel, Gilbert, Yuan (p. 4); Steihaug CG adopted for the horizontal step (p. 3).",
+    "writing": "Grant-report register; claims limited-memory operations are optimal in arithmetic operations on the strength of the AD note (p. 3), a stronger claim than S115 makes.",
+    "limits_future": "Planned: detect Jacobian ill-conditioning earlier (MA28 basis change is a stop-gap), a CG variant for ill-conditioned tangent spaces, a re-adjustable penalty parameter using the whole run's information, code release summer 1994 (pp. 3-4).",
+    "method_links": [
+      {"method": "Method 3", "relation": "evidence", "note": "names how each component breaks (basis, horizontal-step CG, penalty parameter growing too soon) and plans a component repair inside the same algorithm; penalty rule to adapt both ways, an early statement of the steering problem (link to the 2007 paper inferred)", "pages": "pp. 3-4"},
+      {"method": "Method 4", "relation": "evidence", "note": "known failure modes of the solver under construction written down as the research plan", "pages": "pp. 3-4"},
+      {"method": "Method 6", "relation": "evidence", "note": "problem-specific spectral information added to a generic limited-memory code for data assimilation", "pages": "p. 2"}
+    ],
+    "new_pattern_candidates": [],
+    "transferable": [
+      "For each solver component under development, write its known failure and current stop-gap, and plan the repair before the first release (pp. 3-4).",
+      "When each function value costs a full simulation, inject a little spectral information (a few extreme Hessian eigenvalues) into the quasi-Newton model and count simulations as cost (p. 2)."
+    ],
+    "coauthors": "none (PI report; cited joint work with M. Lalee, R. Byrd, P. Lu, R. Schnabel, J. C. Gilbert, Y. Yuan)",
+    "quotes": [
+      {"text": "Conjugate gradient and limited memory methods do not have adequate information on the Hessian matrix and dynamic scaling of the variables can supply some of this missing information.", "page": 2},
+      {"text": "In practice, however, the penalty parameter may become large too soon, and this forces the iterates to follow the constraints too closely.", "page": 4}
+    ]
+  },
+  {
+    "id": "S143",
+    "year": "1994",
+    "title": "LBFGS-B: Fortran Subroutines tor Large-Scale Bound Constrained Optimization",
+    "read_level": "full",
+    "contribution": "User report for the L-BFGS-B Fortran code (gradient projection plus subspace minimization on a compact limited-memory model) with implementation safeguards and a CUTE benchmark against LANCELOT SR1 and exact-Hessian options (pp. 1-15).",
+    "problem_entry": "Bound-constrained problems with hard-to-compute or dense Hessians; no other limited-memory quasi-Newton code handles bounds and nonlinear CG had not been extended to them (pp. 1-2).",
+    "key_idea": "Gradient projection to identify active variables, approximate minimization of the L-BFGS model over free variables, Moré-Thuente line search, compact representation; storage (12+2m)n; primal and dual subspace minimizations unified through one matrix (pp. 2, 8).",
+    "assumptions": "User supplies f and g only, no Hessian or structure information; reverse communication (pp. 2-3).",
+    "proof_devices": [],
+    "experiments": "33 bound-constrained and 34 unconstrained CUTE problems vs LANCELOT SR1 and exact Hessian at defaults, same projected-gradient test 1e-5, nfg/nf and CPU time, m = 3, 5, 17, 29, primal/dual/CG options, failure codes incl. C1/F1 (pp. 8-15).",
+    "positioning": "Extends L-BFGS (Harwell VA15); compact form [7]; algorithm paper [8] by Byrd, Lu, Nocedal and Zhu; follows MINPACK-2 style (pp. 2, 16).",
+    "writing": "Manual register; drawbacks listed beside advantages (p. 3); C1 runs not interpreted as failures (p. 9).",
+    "limits_future": "Not rapidly convergent, limited accuracy on highly ill-conditioned problems, no use of structure (p. 3); incomplete scale invariance and restart not always successful (p. 7); C1 behaviour deserves further study (p. 9).",
+    "method_links": [
+      {"method": "Method 1", "relation": "variant", "note": "structure-using rival at defaults with an aligned stopping test and losses in evaluations stated, but runs missing the stopping test are labelled C1 and not counted as failures", "pages": "pp. 8-9"},
+      {"method": "Method 4", "relation": "evidence", "note": "undecided subspace-minimization choice exposed as option isbmin and compared; memory m varied with numeric advice", "pages": "pp. 2-3, 5, 9, 14-15"},
+      {"method": "Method 6", "relation": "evidence", "note": "own code scoped to problems with dense or hard Hessians; inability to use structure listed as a drawback", "pages": "p. 3"},
+      {"method": "Method 3", "relation": "variant", "note": "recovery path (discard corrections, restart along steepest descent after line-search failure or indefinite matrix) and update skipping by a machine-precision test; no noise estimate", "pages": "p. 7"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "storage knob spanning two classical methods", "evidence": "memory m with small recommended values; larger m improves reliability at extra CPU time (compare STORE in S138)", "pages": "pp. 2-3, 9"}
+    ],
+    "transferable": [
+      "In a software paper print advantages and concrete drawbacks side by side (p. 3).",
+      "Benchmark against a rival using more problem information with the same stopping test, and report both evaluations and CPU time, saying which you lose (p. 8).",
+      "Give every exit a named status and a readable counter (CONV/ABNO/ERROR, isave(26) skipped updates) and give tolerances as concrete values (factr 1.d+12, 1.d+7, 1.d+1) (pp. 4-7).",
+      "Define failure categories in the table legend so a reader can recount (pp. 10-11)."
+    ],
+    "coauthors": "Ciyou Zhu, Richard H. Byrd, Peihuang Lu",
+    "quotes": [
+      {"text": "(iii) the algorithm cannot make use of knowledge about the structure of the problem to accelerate convergence.", "page": 3},
+      {"text": "We do not interpret these as failures of the algorithm, but feel that this property of L-BFGS deserves further study.", "page": 9}
+    ]
+  }
+]

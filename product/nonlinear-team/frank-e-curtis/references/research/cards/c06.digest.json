@@ -1,0 +1,315 @@
+[
+ {
+  "id": "S033",
+  "year": "2012",
+  "title": "A penalty-interior-point algorithm for nonlinear constrained optimization",
+  "read_level": "full",
+  "contribution": "PIPAL: a penalty-interior-point method whose closed-form slack reset removes a merit parameter and whose penalty and barrier parameters are chosen inside each iteration from a few candidate values by model-reduction tests, with one factorization per iteration; competitive with IPOPT on CUTEr and more robust on constructed degenerate and infeasible variants (pp. 1, 8-19, 22-28).",
+  "problem_entry": "Penalty methods regularize and detect infeasibility but need LP/QP subproblems; IPMs scale but lack constraint regularization and converge slowly to infeasible stationary points; combine them and make the parameter updates the contribution (pp. 1-3).",
+  "key_idea": "Subproblem (1.5) with slack reset (3.4) so (1.5)'s constraints always hold; in each iteration pick the largest admissible rho from candidates by (3.16)-(3.18), then the largest mu nearly minimizing quality function (3.20)-(3.21); fall back to the conservative PIPAL-c direction if no pair is admissible (pp. 3, 8-19).",
+  "assumptions": "f, c C1 (Assumption 2.1, p. 5); reduced-Hessian positivity (Assumption 3.1, p. 9) enforced by identity shifts (p. 19); equalities via c + a - b = 0 to keep MFCQ of the penalty subproblem (p. 20); no convergence theorem for the adaptive algorithm, only 'motivated' (pp. 1, 5, 15).",
+  "proof_devices": [
+   "regularity facts stated without proof: MFCQ of penalty and penalty-IPM subproblems, mu -> 0 limits, exact-penalty threshold (Theorems 2.2-2.8, pp. 5-7)",
+   "directional-derivative identity (3.6) under the closed-form slack reset (Theorem 3.2, pp. 9-10)",
+   "linearity of the Newton right-hand side in (rho, mu): any pair's direction from three solves with one factorization ((4.3), p. 18)",
+   "second-order correction reusing the factors (p. 19)"
+  ],
+  "experiments": "Matlab; PIPAL-c, PIPAL-a, IPOPT 3.9 (MA27) on AMPL CUTEr, presolve off; 438 -> 417 models after stated filters; iteration counts in pairwise bar profiles and Dolan-More profile; IPOPT more efficient on the full set, PIPAL-a better on the 132 problems where PIPAL-c reduced rho; degenerate (120) and infeasible (105) HS variants favour PIPAL; IPOPT engineering adopted; parameters tuned on the runs; one ablation without numbers (pp. 17-27).",
+  "positioning": "Lists penalty-barrier and penalty-IPM relatives as differing in detail and classifies their parameter updates as conservative; claims first combination of steering [9] and adaptive barrier [28] rules; concedes IPOPT's efficiency (pp. 4, 11-13, 28).",
+  "writing": "Hedged contribution sentences ('we believe', 'novel and sound'); design choices justified by the failure of the alternative tried; each constructed test set introduced with 'the picture is much different'; conclusion = two strengths plus one concession plus application contexts (pp. 4, 16, 25-28).",
+  "limits_future": "Stated: extra degrees of freedom may slow convergence, needs a more sophisticated implementation, rho may be reduced too far, one type of degeneracy (pp. 24-25, 28); visible: no convergence theorem, iteration counts only, tuned parameters, unquantified ablation (pp. 5, 15, 21, 27); future: general-purpose solver, MPCC, MINLP (p. 28).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Contribution is the in-iteration update of penalty and barrier parameters from model-predicted feasibility progress; final rho values tabulated.",
+    "pages": "pp. 1, 13-17, 24"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Step 4 (prove fast local convergence to infeasible stationary points) not done: the rate is imported from [5] as a hope via condition (3.18).",
+    "pages": "p. 15"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Degenerate (-c_i^2 <= 0) and infeasible (c_i^2 <= -1) HS variants, presolve off, narrowness of the construction admitted.",
+    "pages": "pp. 22, 25-26"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "IPOPT's bound relaxation, initial point, scaling, minimum values and evaluation-error handling adopted 'for a fairer comparison'; in-framework conservative rival PIPAL-c; IPOPT's efficiency win printed.",
+    "pages": "pp. 12, 17, 20-21, 24, 28"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Parameters set to the values giving the best results in the experiments; an ablation reported without numbers (and apparently citing the wrong condition number).",
+    "pages": "pp. 21, 27"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "one factorization, many parameter values",
+    "evidence": "Because (rho, mu) enter only the right-hand side, directions for all 25 candidate pairs are linear combinations of three solves with one factorization.",
+    "pages": "p. 18"
+   },
+   {
+    "pattern": "mechanism-activated subset",
+    "evidence": "After the full-set profile, the comparison is repeated on the 132 problems where the conservative baseline had to decrease rho, which is where the adaptive rule should matter.",
+    "pages": "p. 24"
+   },
+   {
+    "pattern": "cheap default with guaranteed fallback",
+    "evidence": "If no (rho, mu) pair is admissible, PIPAL-a uses the conservative PIPAL-c direction.",
+    "pages": "pp. 18-19"
+   }
+  ],
+  "transferable": [
+   "Eliminate slack variables in closed form at every iterate so the constraints always hold and the merit function needs no balancing parameter ((3.3)-(3.4), pp. 8-9).",
+   "Freeze the KKT matrix within an iteration and get the step for any (rho, mu) by linear combination of three solves ((4.3), p. 18).",
+   "Choose the largest mu whose quality value is within a factor of the best rather than the minimizer, to avoid driving mu to zero for marginal gains ((3.21), p. 16).",
+   "Import the incumbent's preprocessing and safeguards into the prototype before comparing, listing each with its source (pp. 20-21).",
+   "Build the comparison in three layers: full set, subset where the mechanism fired, constructed degenerate and infeasible sets (pp. 22-27)."
+  ],
+  "coauthors": "none (sole author; R. A. Waltz helped with software, p. 28)",
+  "quotes": [
+   {
+    "text": "After all, in the context of Algorithm 1, each distinct value for the penalty parameter ρ potentially requires the computational efforts of a complete run of a standard interior-point algorithm.",
+    "page": 12
+   },
+   {
+    "text": "Our experiments support the claim that when an interior-point method is performing at its best, it is difficult to outperform such an approach in terms of efficiency.",
+    "page": 28
+   }
+  ]
+ },
+ {
+  "id": "S036",
+  "year": "2012",
+  "title": "A note on the implementation of an interior-point algorithm for nonlinear optimization with inexact step computations",
+  "read_level": "full",
+  "contribution": "Implements the inexact interior-point algorithm of Curtis-Schenk-Waechter (2010) in Ipopt with PARDISO's iterative solver, using the cheap single-system SMART-test step by default and the rank-robust decomposition step only after short steps, reaching 89% robustness on CUTE and speedups up to 17.89 on 3-D PDE-constrained problems (pp. 2-18).",
+  "problem_entry": "Interior-point methods become impractical at large scale because factorizations fill in; PDE-constrained optimization is the target; the paper is an implementation note for the algorithm of [13] (pp. 2-3).",
+  "key_idea": "Iterative solves of the primal-dual system stopped by SMART tests on the merit-model reduction; switch from the one-system Algorithm 2 to the normal/tangential Algorithm 3 when the accepted steplength drops below 1e-3, since Algorithm 2's proof needs steplengths bounded away from zero; Hessian modification triggered by the tests; flexible penalty; adaptive preconditioner refinement (pp. 5-11).",
+  "assumptions": "Smooth (e.g. C2) problem functions (p. 2); global convergence inherited from [13] for Algorithm 1 + 3 (p. 9); practical primal-dual barrier Hessian kept between multiples of the analysed primal one so the analysis applies (pp. 10-11).",
+  "proof_devices": [
+   "no new theorems; merit-model reduction as a bound on the directional derivative (p. 6)",
+   "Cauchy decrease for the inexact trust-region normal step (p. 9)",
+   "sandwich of the practical primal-dual Sigma between nu*mu*S^-2 multiples to inherit the primal analysis (pp. 10-11)"
+  ],
+  "experiments": "Ipopt rev. 1954 + PARDISO 4.1.1 SQMR with multilevel preconditioner; 617 CUTE problems: 89% vs 96% default Ipopt vs 84% always-Algorithm-3, 142 switches (p. 12); boundary control (up to 670k variables) speedups 4.34-7.85 and server-room cooling (up to 664k variables) speedups 2.64-17.89 at equal iteration counts and objective values; late-iteration preconditioner degradation reported (pp. 12-17).",
+  "positioning": "Full-space PDE-optimization method with strong guarantees and computational flexibility, contrasted with nonlinear elimination and reduced-space approaches; convex-case relative-residual termination [14] insufficient for nonconvex problems (pp. 2, 6).",
+  "writing": "Short note that names what is omitted and where it lives (full report [10]); all parameter values listed; claims tied to tables; conclusion restates design and one open problem (pp. 3, 7, 9-11, 14, 18).",
+  "limits_future": "Preconditioner effectiveness falls as mu -> 0, handling log-barrier ill-conditioning in the incomplete factorization left open (p. 18); robustness below default Ipopt (p. 12); general-purpose preconditioner only, two PDE examples, no other inexact solver compared (pp. 3, 12-17).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "SMART tests derived from the merit model stop the iterative solver; Hessian modification triggered by the tests' curvature condition, not inertia; timed in a production code at scale.",
+    "pages": "pp. 6-7, 11-17"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Flexible penalty interval steers the merit parameter, but the step computation switches between two algorithms on a steplength trigger (within one outer algorithm).",
+    "pages": "pp. 9-11"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Always-guaranteed variant of [13] run as an in-framework rival (84% vs 89%); default Ipopt's higher robustness printed; worst preconditioner behaviour described.",
+    "pages": "pp. 12, 14-15"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "cheap default with guaranteed fallback",
+    "evidence": "Use the single-system inexact step and switch to the regularized decomposition step only when the accepted steplength falls below 1e-3, the quantity Algorithm 2's convergence proof needs bounded away from zero.",
+    "pages": "pp. 9-10"
+   },
+   {
+    "pattern": "price the guarantee",
+    "evidence": "The always-regularized, fully guaranteed variant of [13] solves 84% of CUTE vs 89% for the switching implementation, measuring what the guarantee costs.",
+    "pages": "p. 12"
+   }
+  ],
+  "transferable": [
+   "Monitor the quantity the cheap method's convergence proof needs (here the steplength) and switch to the guaranteed method only when it collapses (pp. 9-10).",
+   "Sandwich a practical component between multiples of the analysed one and enforce the bounds, so the existing proof still applies (pp. 10-11).",
+   "Escalate inside the inner solver before changing the outer algorithm: tighten drop tolerances, retry, then switch step algorithm (p. 10).",
+   "Report per-mesh-level tables with iterations, objective, total and per-iteration CPU time and speedup (Tables 2 and 4, pp. 13, 17).",
+   "Scale discretized PDE constraints by powers of h so their gradients do not vanish under refinement (pp. 13, 16)."
+  ],
+  "coauthors": "Johannes Huber, Olaf Schenk, Andreas Waechter",
+  "quotes": [
+   {
+    "text": "Specifically, the computation time for the largest instance with more than 600,000 variables was reduced from more than 6 days to 8.2 h, a speedup by a factor of 17.89.",
+    "page": 17
+   },
+   {
+    "text": "As mentioned at the end of Sect. 4.1, we have observed a decrease in effectiveness of the preconditioner as the barrier parameter approaches zero.",
+    "page": 18
+   }
+  ]
+ },
+ {
+  "id": "S012",
+  "year": "2013",
+  "title": "An adaptive gradient sampling algorithm for nonsmooth optimization",
+  "read_level": "full",
+  "contribution": "Adaptive gradient sampling (AGS): reuses sampled gradients so only O(1) new gradients are needed per iteration, warm-starts the QO solver, adds two bounded variable-metric updates built from sample-point information, and keeps GS's probability-one convergence; more progress than GS within a fixed gradient budget (pp. 2-21).",
+  "problem_entry": "Three numbered practical limitations of gradient sampling: n+1 fresh gradients per iteration, QO subproblems solved from scratch, steepest-descent-like behaviour (p. 3).",
+  "key_idea": "Keep gradients still in the epsilon-ball, add p-bar new samples, allow incomplete line searches that trigger more sampling, seed the QO active set from the previous iteration, and use L-BFGS on sampled directions or a rank-one overestimation update with bounded conditioning; GS is the special case p-bar = p, H = I (pp. 3-12).",
+  "assumptions": "f locally Lipschitz and C1 on an open dense set (Assumption 4.1, p. 12); uniformly bounded positive definite H_k (Assumption 3.1, p. 6), proved for both updates; bounds worst-case and not tight in practice, so guarantee-free variants are also tested (pp. 6, 9, 11-12).",
+  "proof_devices": [
+   "per-update bound lemma for BFGS with skip rules, iterated over at most p+1 updates, Rayleigh-Ritz for the inverse (Lemma 3.2, Theorem 3.3, pp. 7-9)",
+   "rank-one overestimation stretch with rho in [0, sqrt(2 rho)-1] giving (2 rho)^(p+1) conditioning; inert for convex f (Theorems 3.6, 3.8, pp. 10-12)",
+   "QO KKT conditions give grad f(x_k)^T d_k <= -d_k^T H_k d_k (Lemma 4.3, p. 13)",
+   "incomplete line searches cannot repeat forever because the sample count grows (Lemma 4.4, p. 13)",
+   "Caratheodory-based open set of good sample sets; staying outside it is a probability-zero event (Lemma 4.7 and Cases 1a-1b, pp. 15-17), following Kiwiel"
+  ],
+  "experiments": "Matlab with a specialized active-set QO solver; 26 scalable nonsmooth problems, n = 50, 10 runs each (fixed and 9 random starts); six variants in one code (Table 1); measures: final sampling radius at a 100n gradient budget and QO iterations per nonlinear iteration; AGS beats GS, Hessian updates help, ill-conditioned guarantee-free variants do not; parameters tuned to best results; no external comparator (pp. 17-21).",
+  "positioning": "Builds on Burke-Lewis-Overton and Kiwiel with point-by-point differences and explicit credit; bundle methods named as the target to match; Wolfe's conjugate subgradient discussed as a forerunner (pp. 2-3, 21).",
+  "writing": "Numbered limitation list mapped to design elements; efficiency claim tied to a stated measure; unexpected and negative results flagged with possible explanations; repeated proofs justified (pp. 2-3, 13, 15, 20-21).",
+  "limits_future": "n = 50 only, parameters tuned on the test set, no external comparator, heuristic mu_k update called critical (pp. 6, 18-19); future: merging gradient sampling with bundle methods and borrowing Wolfe's previous search directions (pp. 21-22).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Incumbent GS is a parameter setting of the same code; one-component ablation ladder of six variants; 10 runs per problem.",
+    "pages": "pp. 5, 18-19"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Parameters chosen for the best overall results on the evaluation set; no external state-of-the-art comparator.",
+    "pages": "pp. 2, 18"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Success not judged by a termination flag: progress is measured by the sampling radius reached within a fixed gradient-evaluation budget.",
+    "pages": "p. 19"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Adaptive sampling chosen partly so the inner QO solver can be warm-started, with a tailored QO solver for near-collinear gradients; but the inner tolerance is fixed (1e-10), not derived from the globalization.",
+    "pages": "pp. 3, 19, 23-24"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "price the guarantee",
+    "evidence": "Variants that drop the Hessian bounds required by the convergence analysis (AGS-LBFGS-ill, AGS-over-ill) are run beside the guaranteed ones; no gain, and LBFGS-ill is worse on final radius.",
+    "pages": "pp. 18, 20-21"
+   },
+   {
+    "pattern": "incumbent as a parameter setting",
+    "evidence": "GS is AGS with p-bar = p >= n+1 and H_k = I, so the incumbent and all variants run in one code.",
+    "pages": "pp. 5, 17-18"
+   }
+  ],
+  "transferable": [
+   "Make the incumbent a parameter setting of the new method so every comparison is one code with one knob turned (p. 5).",
+   "Keep a quasi-Newton matrix within convergence hypotheses by per-iteration reinitialization, capped update count and curvature skip rules ((9), pp. 7-9).",
+   "For methods with incomparable termination, compare the progress measure reached at a fixed evaluation budget and add a measure isolating the mechanism (p. 19).",
+   "Run the guarantee-free twin of a safeguarded component to test whether the safeguard costs performance (pp. 18, 20-21).",
+   "Reuse samples still in the neighbourhood and allow incomplete line searches that trigger more sampling instead of failing (Algorithm 2.1, p. 5)."
+  ],
+  "coauthors": "Xiaocun Que",
+  "quotes": [
+   {
+    "text": "Global convergence of the algorithm is proved assuming that the Hessian approximations are positive definite and bounded, an assumption shown to be true for the proposed Hessian approximation updating strategies.",
+    "page": 2
+   },
+   {
+    "text": "The first measure shows the progress towards optimality that the solver makes within a fixed gradient evaluation limit",
+    "page": 19
+   }
+  ]
+ },
+ {
+  "id": "S022",
+  "year": "2014",
+  "title": "A sequential quadratic optimization algorithm with rapid infeasibility detection",
+  "read_level": "full",
+  "contribution": "SQuID: an SQO method with at most two QO solves per iteration (a pure feasibility QO, then a penalized optimality QO) and penalty and multiplier updates placed between them, proved globally convergent and quadratically convergent to both KKT points and infeasible stationary points without feasibility restoration (pp. 1-28).",
+  "problem_entry": "Slow infeasibility detection hurts modelers and MINLP branch-and-bound; penalty-SQO puts the whole burden on the penalty parameter; the predecessor [6] has the fast infeasible rate but needs at least three QO solves per iteration near infeasible stationary points (pp. 1-3).",
+  "key_idea": "Solve a feasibility QO (3.7) to measure attainable linearized feasibility progress; if it is small relative to v(x_k), cut rho to O(R_inf^2) and pull the optimality multipliers toward the feasibility ones before the optimality QO (3.9); combine the two directions with the smallest weight achieving a fraction of the feasibility progress; second rho update for model reduction; l1 line search (pp. 5-9).",
+  "assumptions": "C2 functions (p. 4); positive definite QO Hessians (Assumption 4.1, p. 9); bounded Lipschitz functions and uniformly bounded H for global results (Assumption 4.7, p. 12); full-rank active Jacobian, strict complementarity, SOSC, exact Hessians and unit steps for local rates, called strong with named relaxation devices (Assumptions 4.19-4.20, pp. 20-21).",
+  "proof_devices": [
+   "model reductions as surrogates for directional derivatives of v and the l1 penalty (Lemma 4.2, pp. 9-10)",
+   "boundedness of directions by comparison with the feasible zero step (Lemma 4.9, p. 13)",
+   "monotone shifted penalty rho(f - f_low) + v absorbing decreasing rho (Lemma 4.11, p. 14)",
+   "dichotomy: limit points all feasible or all infeasible; feasible ones with rho -> 0 are FJ points where MFCQ fails (Theorem 4.16, pp. 17-19)",
+   "implicit-function path x_rho with O(rho) distance to the infeasible stationary point (Lemma 4.22, pp. 22-23)",
+   "perturbed Newton error bound C||e||^2 + O(rho) + O(multiplier change); rho = O(||e||^2) gives quadratic rate (Theorem 4.25, pp. 25-27)",
+   "Newton analysis via Dennis-Schnabel Thm 5.2.1 for KKT points (Theorem 4.28, p. 28)"
+  ],
+  "experiments": "Prototype Matlab code with quadprog on 123 HS AMPL models and infeasible copies (add x1 <= 0 and x1 >= 1): 90.16% and 90.24% success with failures and one false infeasibility verdict reported and attributed to nonconvexity; last-ten-iteration log-residual plots as rate evidence; predecessor [6] compared on its six toy problems with matched parameters, fewer QO solves except on robot; no external solver (pp. 28-32).",
+  "positioning": "Literature-review section: penalty-SQO criticised by mechanism; predecessor [6] credited and its QO count quantified; multiphase active-set SQO and trust-region predictor/accelerator methods distinguished by subproblem type and globalization; Burke's earlier methods closest (pp. 2-4).",
+  "writing": "Two named novelties in the introduction; focus explicitly fenced against general assumptions; abstract calls the per-iteration design 'two-phase'; modest framing of prototype results; parallel sentences for the feasible and infeasible regimes in the conclusion (pp. 1-2, 30, 32).",
+  "limits_future": "Stated: QO solver efficiency, Hessian modifications cumbersome at large scale and possibly blocking superlinear rates, strong local assumptions (pp. 20-21, 32); visible: HS-only Matlab prototype, no external solver, single easy infeasibility construction, implementation skips analysed branches (pp. 29-30); future: inexact QO solves and negative curvature (p. 32).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "One algorithm for feasible and infeasible instances without feasibility restoration; penalty update placed between the two QO solves from predicted feasibility progress; fast local convergence to infeasible stationary points proved (step 4).",
+    "pages": "pp. 2, 7, 25-27"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "The paper calls its per-iteration design a 'two-phase strategy'; both phases run in every iteration, so it is not a switch.",
+    "pages": "p. 1"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Infeasible copy of the whole HS set by adding x1 <= 0 and x1 >= 1, already in 2014.",
+    "pages": "p. 30"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Only rival is the predecessor [6] on six toy problems with its parameters matched and its robot win printed; no external code, no profile.",
+    "pages": "p. 32"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "empirical-rate plot",
+    "evidence": "log10 of the optimality and infeasibility residuals over the last ten iterations of every solved run; slopes below -1 and -2 read as superlinear and quadratic convergence.",
+    "pages": "p. 31"
+   },
+   {
+    "pattern": "separate multiplier estimates for optimization and feasibility",
+    "evidence": "Two multiplier estimates are maintained because the algorithm must implicitly decide which of two problems it is solving; the optimality one is pulled toward the feasibility one near infeasible points.",
+    "pages": "pp. 3, 7"
+   }
+  ],
+  "transferable": [
+   "Place the parameter update between two subproblem solves so the first solve's information changes the second solve's objective in the same iteration (p. 7).",
+   "Require the step to achieve a fixed fraction of the attainable feasibility progress by choosing the smallest convex-combination weight, found by bisection ((3.10)-(3.11), p. 7; p. 30).",
+   "Prove monotonicity of the shifted merit rho(f - f_low) + v to handle a decreasing penalty parameter (Lemma 4.11, p. 14).",
+   "Derive the parameter update rule from the perturbation terms of a perturbed-Newton error bound (Theorem 4.25, pp. 25-26).",
+   "Plot log residuals over the last ten iterations of all solved runs as empirical rate evidence (p. 31).",
+   "Guard infeasibility verdicts with an extra condition (rho_k <= rho-bar) that the fast mechanism makes cheap (p. 29)."
+  ],
+  "coauthors": "James V. Burke, Hao Wang",
+  "quotes": [
+   {
+    "text": "This last feature of our algorithm—that of having two separate multiplier estimates—is quite unique for an optimization algorithm.",
+    "page": 3
+   },
+   {
+    "text": "One finds that many of the curves possess slopes of this type, providing empirical evidence for the convergence results in section 4.",
+    "page": 31
+   }
+  ]
+ }
+]

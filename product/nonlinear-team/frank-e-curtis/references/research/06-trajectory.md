@@ -23,6 +23,7 @@
 - Four papers were read in part: the introduction, the footnotes and the acknowledgments.
 - Notes 01 (publications) and 04 (mentorship) from this workflow served as leads only. Anything taken from them was re-checked here or is marked "from note 0X, not re-checked".
 - Personal details on his "About me" page (family, birth) are left out on purpose. They carry no research-craft information.
+- **Deep-reading update (2026-10-10)**: §9 below re-reads the trajectory from the full texts (86 of 96 listed works read in full; cards in `07-paper-cards.md`, synthesis `08-deep-reading-synthesis.md` §8–9). The sections above are the base-tier record of 2026-09-28 and are kept as written; where §9 corrects them, it says so.
 
 ---
 
@@ -342,6 +343,60 @@ Alongside these, the nonsmooth line is consolidated into the book and NonOpt.
 6. **One cohort, one line.** Thesis topics map one-to-one onto dated lines (§2.3), so the student pipeline times the trajectory.
 
 ---
+
+## 9. The trajectory in the full texts (deep reading, 2026-10-10)
+
+Card ids resolve in `07-paper-cards.md`; pages are file pages of the version read (`../sources/papers/INDEX.md`). Five possible journal/preprint pairs count once: S045 ~ S037, S031 ~ D001, S072 ~ S069, S060 ~ S061, S063 ~ D002.
+
+### 9.1 Topics by period (cards; full reads in brackets)
+
+| Period | Cards [full] | Main topics (cards) |
+|---|---|---|
+| 2003–2007 | 5 [4] | combinatorial matrix theory at William & Mary (S058, S081; S086 unreadable); IPM step lengths for QP with Nocedal (S047); dissertation on inexact SQP (S096) |
+| 2008–2012 | 10 [9] | inexact and matrix-free SQP/IPM (S006, S025, S017, S010, S036); penalty updates and infeasibility (S032, S009, S033); nonsmooth SQP-GS (S003); proceedings editing (S079, abstract) |
+| 2013–2017 | 19 [19] | nonsmooth quasi-Newton and GS (S012, S008, S004); inexact SQO and SQuID (S029, S022); AL steering (S019, S040); active-set QP and isotonic regression (S024, S067, S064); sparse and ℓ1 (S038, S050); LMSD (S042); stochastic BFGS (S028); ML tutorial (S011); TRACE and the trust funnel (S002, S039); market clearing with MERL (S077, S066) |
+| 2018–2022 | 28 [27] | SIAM Review survey (S001); complexity line (S026, S035, H001, S062, S020); stochastic trust region and adaptive frameworks (S015, D001, S041; S031 abstract); first stochastic SQP (S007, S037); nonsmooth (S005, S049, S065); quasi-Newton (S046, S051); sparse (S052, S053); penalty inside the QP solver (S057); negative curvature (S014); applications and distributed (S018, S048, S056, S071, S061, S094) |
+| 2023–2026 | 34 [27] | stochastic and noisy SQP and IPM (S013, S021, S030, S054, S068, S092, D002/S063, S044, S059; S045 abstract); noisy active-set identification and noisy GS (S093, S091); inexact TRACE (S043); NonOpt (S088); local-linear method on Fletcher's AL (S087); constrained proximal gradient (S082); ML fairness and optimizers (S069, S083, S089, S090; S055, S072 abstract; S084 metadata); OR applications (S016, S034, S073); SCOPF (S023; S060 abstract); DFO with surrogates (S075); incremental quasi-Newton (S076); prox-SVRG (S070); book (S074, known only from a secondary source); workshop report (S078, abstract) |
+
+### 9.2 Turns, as the full texts show them
+
+1. **2006–2007, combinatorics to NLP**: the pre-PhD work is matrix theory and determinant optimization [S058 pp. 2–6; S081 pp. 3–19]; the move to inexact SQP happens inside the Northwestern dissertation [S096 pp. 23, 98]. This matches T0 above; SKILL.md's trajectory table lacked the row and now has it (no methodological weight).
+2. **2012–2013, nonsmooth line**: SQP joined to gradient sampling with Overton [S003 p. 4], continued at Lehigh with adaptive sampling and BFGS hybrids [S012 pp. 2–5; S008 pp. 2–3].
+3. **2014, Robinson enters** [S029] and stays; AL steering, active-set QP and sparse methods follow (2015–2016).
+4. **2016–2018, stochastic and complexity**: a single-author stochastic BFGS [S028], TRACE [S002], the survey [S001].
+5. **2020–2021, stochastic SQP**: the deterministic twin and the adaptive merit parameter carried into the stochastic setting [S007 pp. 2, 26–27].
+6. **2024–2026, noise moves into constraints, IPMs and active sets** [D002 pp. 3, 24; S059 pp. 3–4; S093 pp. 5–19], **plus three application or ML lines with new co-authors**: fairness and ML optimizers [S069; S083; S089; S090], healthcare OR [S016; S034; S073], power systems [S061; S094; S023]. T6 and T9 above already record these lines; SKILL.md's trajectory table now has a row for them.
+7. **When progress tests cannot be computed** (stochastic IPMs, 2024–2026), steering gives way to prescribed schedules [S044 p. 3; D002 pp. 3, 6]: the machinery moves into the new setting, but not unchanged.
+
+### 9.3 What stayed constant, 2007–2026
+
+- Inner accuracy derived from the outer method [S096 p. 23; S088 pp. 3, 9].
+- The merit-model skeleton and its proof devices, from the dissertation to the stochastic papers [S096 pp. 33–39; S007 pp. 8–10; S054 pp. 10–11].
+- The rung ladder of Heuristic 10 [S096 pp. 33, 46, 59, 99; S093 pp. 5–19].
+- Guards attached to an incumbent (SKILL Heuristic 5) [S047 pp. 4–5; S087 pp. 13–14].
+- In-framework rivals with one component varied [S047 pp. 6–8; S088 pp. 7–9].
+
+This supports §8 move 1 (change the information model, keep the skeleton) and move 2 (deterministic twin first) with full-text evidence; move 5 (audit your own yardstick while still using it) gains a within-paper form in 2017–2018 [S026 p. 1; S035 p. 9].
+
+### 9.4 Collaboration pattern (cards)
+
+| Period | Most frequent co-authors (cards) |
+|---|---|
+| 2003–2007 | Drew, C.-K. Li, Pragel (S058); Kincaid (S081); Nocedal (S047; advisor of S096) |
+| 2008–2012 | Nocedal 5, Byrd 3, Wächter 3, Schenk 2, Overton 1, Huber 1 |
+| 2013–2017 | Robinson 7, Z. Han 3, Que 2, Burke 2, H. Wang 2, H. Jiang 2, Gould 2, Raghunathan 2 |
+| 2018–2022 | Robinson 11, B. Zhou 4, Scheinberg 3, Wächter 3, Samadi 2, R. Shi 2, Burke 2, Berahas 2, Molzahn 2 |
+| 2023–2026 | Robinson 16, Q. Wang 6, Wächter 4, C.-Y. Wu 4, Zebiane 4, Shehadeh 3, X. Jiang 3, L. Guo 3 |
+
+- Robinson co-authors 34 of the 96 works (35 cards list him; S028 only acknowledges him; 32 works counting each possible pair once), all from 2014 on; Wächter is the longest continuous partner (11 cards, 2009–2025); Nocedal (9 cards, 2007–2018) and Byrd (4, 2007–2010) frame the formative work.
+- Sole-author papers are rare and mark new lines: the dissertation [S096], PIPAL [S033], stochastic self-correcting BFGS [S028].
+- Junior co-authors appear on 2–6 cards each within short windows, each on one of his lines, which supports §8 move 6 (one cohort, one line).
+- Application partners enter in bursts and rarely return: MERL (S077, S066, S071), the GO-competition team (S061, S094, S023), Shehadeh's healthcare OR (S016, S034, S073).
+
+### 9.5 Gaps the full texts close or leave
+
+- Closed: the thesis text (read in full [S096]); DBLP and Google Scholar (harvested 2026-10-10 for the publication list).
+- Still open: why he left matrix theory, who proposed the inexact-SQP problem, and talks after April 2026 (the full texts carry no origin stories); the abstract-only works (S031, S045, S055, S060, S072, S078, S079) and the 2025 book's body (S074, secondary source only).
 
 ## Contradictions (kept, not reconciled)
 

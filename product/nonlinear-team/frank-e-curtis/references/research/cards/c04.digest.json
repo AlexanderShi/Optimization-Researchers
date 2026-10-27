@@ -1,0 +1,165 @@
+[
+  {
+    "id": "S006",
+    "year": "2008",
+    "title": "An inexact SQP method for equality constrained optimization",
+    "read_level": "full",
+    "contribution": "Introduces SMART termination tests (merit-model reduction plus separate primal/dual residual bounds) that make inexact, iterative-solver SQP steps globally convergent for equality-constrained optimization.",
+    "problem_entry": "Very large (PDE-constrained) problems where exact steps are too expensive; prior inexact full-space SQP lacked conditions guaranteeing global convergence (pp. 1-2).",
+    "key_idea": "Accept an inexact KKT solve when it reduces a local model of the exact penalty function, treating primal and dual residuals separately; allow penalty increases only under Termination Test II (pp. 2, 5-7).",
+    "assumptions": "Full-row-rank Jacobians with bounded-below singular values, bounded multipliers, W_k uniformly positive definite on null(A_k); (b),(c) flagged as strong, chosen to focus on inexactness (p. 8, p. 18).",
+    "proof_devices": [
+      "computable directional-derivative bound D phi <= g'd - pi(||c||-||r||) used as Armijo surrogate (Lemma 3.1, (3.9)-(3.10), pp. 7-8)",
+      "analysis-only normal/tangential split with K1/K2 index sets and a single measure Theta_k (Lemmas 4.2-4.6, pp. 9-11)",
+      "penalty boundedness from dual-residual bound ||rho_k|| <= beta||c_k|| (Lemma 4.7, pp. 11-12)",
+      "steplength bounded below + telescoping merit decrease, then contraction on dual residual (Lemma 4.8-Theorem 4.10, pp. 12-14)"
+    ],
+    "experiments": "Matlab, unpreconditioned GMRES, 44 CUTEr/COPS equality problems; baseline identical except full-residual stopping swept over kappa = 2^-1..2^-10 solves 45-86% vs 100% (Table 5.2, p. 17); hybrid isqp-ires costs 0.5 extra GMRES iterations on average (p. 18); success rates only.",
+    "positioning": "Extends Dembo-Eisenstat-Steihaug inexact Newton, contrasts Heinkenschloss-Vicente composite-step conditions, supplies the guarantee missing in PDE full-space line-search practice (pp. 2, 4-5).",
+    "writing": "Purpose stated early (p. 2), novelty located explicitly (p. 4), acronym SMART coined (p. 6), candid on tuning and scale dependence of beta (p. 7).",
+    "limits_future": "Strong assumptions, slow rate unless forcing sequence used, no preconditioning, Jacobian singularity and nonconvexity left for future (pp. 8, 17-18).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "inner-solver stopping rule derived from merit-model reduction; primal and dual residuals tested separately", "pages": "pp. 2, 5-7"},
+      {"method": "Method 5", "relation": "evidence", "note": "baseline differs only in the stopping test, swept over ten tolerances; naive failure tests to challenge robustness", "pages": "pp. 16-17"},
+      {"method": "Method 2", "relation": "variant", "note": "penalty increase gated by which termination test passed, but update formula borrowed from KNITRO", "pages": "pp. 6-7"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Theta_k proof skeleton", "evidence": "normal/tangential decomposition, K1/K2 split and Theta_k bounding step length and merit decrease; reused in S032 (p. 12) and S025", "pages": "pp. 9-13"},
+      {"pattern": "strong assumptions to isolate the new ingredient", "evidence": "full-rank and bounded-multiplier assumptions adopted explicitly to focus on inexactness, relaxation deferred", "pages": "pp. 8, 18"}
+    ],
+    "transferable": [
+      "Write the inexact-solve acceptance test as merit-model decrease plus a loose residual bound rather than a small whole residual ((3.2)-(3.5), pp. 5-6).",
+      "Replace the exact directional derivative by a computable residual-based upper bound in the Armijo test (Lemma 3.1, pp. 7-8).",
+      "Baseline = own code with one component swapped, tolerance swept, whole sweep reported (Table 5.2, p. 17).",
+      "Price robustness with a hybrid meeting both naive and new tests and count extra inner iterations (p. 18)."
+    ],
+    "coauthors": "R. H. Byrd, J. Nocedal",
+    "quotes": [
+      {"text": "Our approach, on the other hand, is based on a requirement that the step decreases a local approximation of a merit function while also satisfying bounds on the primal and dual components of the residual.", "page": 2},
+      {"text": "Indeed, the extra cost is minimal with respect to the added robustness.", "page": 18}
+    ]
+  },
+  {
+    "id": "S032",
+    "year": "2008",
+    "title": "Flexible penalty functions for nonlinear constrained optimization",
+    "read_level": "full",
+    "contribution": "Proposes a 'flexible' penalty function that accepts a step if it decreases f + pi||c|| for any pi in an interval [pi_l, pi_u] with separately updated bounds, proves global convergence for line-search SQP and shows fewer function evaluations in KNITRO.",
+    "problem_entry": "Penalty functions block steps that temporarily increase infeasibility while filters block feasibility-improving steps via history; entry by comparing acceptance regions in the ||c||-f plane (pp. 2-5).",
+    "key_idea": "Interval-valued penalty parameter: pi_u updated from the model quantity chi_k, pi_l from actual reductions with 0.1 damping; endpoints recover fixed penalty and one-element filter (pp. 6, 9-11).",
+    "assumptions": "Equality constraints, exact SQP steps, full-rank Jacobians (flagged strong, p. 12), bounded W_k positive definite on null(A_k) (p. 12).",
+    "proof_devices": [
+      "Theta_k skeleton reused from Byrd-Curtis-Nocedal 2008 (Lemmas 3.4-3.7, pp. 12-14)",
+      "pi_u bounded and eventually constant via model-reduction bound (Lemma 3.8, pp. 14-15)",
+      "pi_l increases finitely often since each increase is >= eps_l or hits pi_u (Corollary 3.9, p. 15)",
+      "eventual pi_l = pi* acts as fixed merit function for telescoping (Theorem 3.11, pp. 16-17)"
+    ],
+    "experiments": "KNITRO 5.0 KNITRO-Direct, 85 CUTEr/COPS equality problems, trust-region fallback disabled; baseline = same code with pi_l <- pi_u; four initial pi_u values; performance profiles on iterations and function evaluations; fewer evaluations, initial pi_u inconsequential (pp. 17-18).",
+    "positioning": "Builds on Han/Powell penalty methods and KNITRO update; relates to Chin-Fletcher slanting envelope but stores no history; even-handed critique of filters (pp. 2-7).",
+    "writing": "Figure-driven argument with seven acceptance-region pictures before the algorithm (pp. 2-10); modest results sentence (p. 17); extensions offered with caveats (pp. 19-20).",
+    "limits_future": "Equality-only analysis; IPM and trust-region extensions only sketched and need further safeguards (pp. 19-20); small benchmark, no CPU time or failure details.",
+    "method_links": [
+      {"method": "Method 2", "relation": "evidence", "note": "the penalty-parameter update rules (model-based pi_u, actual-reduction pi_l) are the whole contribution", "pages": "pp. 9-11"},
+      {"method": "Method 5", "relation": "evidence", "note": "rival is the same KNITRO-Direct code with one update swapped and fallbacks disabled", "pages": "p. 17"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Theta_k proof skeleton", "evidence": "explicitly follows the Byrd et al. (2008) decomposition and Theta_k argument", "pages": "pp. 12-14"},
+      {"pattern": "acceptance-region geometry", "evidence": "penalty, filter and flexible penalty compared as acceptance regions in the ||c||-f plane before the algebra", "pages": "pp. 2-10"}
+    ],
+    "transferable": [
+      "Interpolate between rival mechanisms by making a scalar parameter interval-valued and check the endpoints recover each rival (p. 6).",
+      "Update the two bounds of one parameter from different sources: model prediction for theory, actual reduction (damped) for practice (pp. 9-11).",
+      "Draw each method's acceptance region in the (infeasibility, objective) plane to show which productive steps it blocks (Figs 3-4, pp. 3-4).",
+      "Show initial-parameter sensitivity as separate curves in the same performance profile (p. 18)."
+    ],
+    "coauthors": "J. Nocedal",
+    "quotes": [
+      {"text": "Thus, our view is that the main weakness of penalty-based strategies is the blocking effect illustrated in Fig. 3", "page": 4},
+      {"text": "This suggests that the initial value for πu is inconsequential compared to the effect that separate updating strategies for πl and πu have on the practical performance of the approach.", "page": 18}
+    ]
+  },
+  {
+    "id": "S025",
+    "year": "2009",
+    "title": "A matrix-free algorithm for equality constrained optimization problems with rank-deficient Jacobians",
+    "read_level": "full",
+    "contribution": "Extends SMART-test inexact Newton to rank-deficient and locally infeasible equality-constrained problems via a trust-region normal step and a perturbed primal-dual system (TRINS), with global convergence to KKT points or infeasible stationary points.",
+    "problem_entry": "Rank-deficiency handling in existing codes requires factorizations, and earlier SMART-test methods assume full-rank Jacobians (pp. 1, 3).",
+    "key_idea": "Normal step from least-squares trust-region subproblem with radius omega||A'c|| and Cauchy decrease, then iterative solve of KKT system with rhs -A v; three SMART tests incl. multiplier-only step; inertia-free Hessian modification (pp. 4-8).",
+    "assumptions": "Bounded Lipschitz f, c and first derivatives, bounded W_k, iterative solver can drive residual to zero; no rank assumption (p. 9).",
+    "proof_devices": [
+      "well-posedness via concave quadratic in ||u|| with vanishing maximizer (pp. 9-11)",
+      "1-D lemma -> Cauchy decrease ||c||-||c+Av|| >= gamma ||A'c||^2/||c|| (Lemmas 3.4-3.5, p. 12)",
+      "envelope gamma2||A'c||^2 <= ||v|| <= omega||A'c|| (Lemma 3.6, p. 13)",
+      "scaled-shifted merit (f - f_min)/pi + ||c|| monotone as pi grows (Lemma 3.11, p. 14)",
+      "dichotomy theorem: full-rank limits => KKT; else infeasibility stationarity (Theorem 3.3, p. 11; proof p. 19)"
+    ],
+    "experiments": "Matlab LSQR + MINRES, no preconditioner, fixed parameters; 73 CUTEr equality problems in three versions (original, rank-deficient via c1 - c1^2 = 0, infeasible via = 1); per-problem flags and iterations vs predecessor INS (Tables 4.2-4.3, pp. 22-25).",
+    "positioning": "Extension of Byrd-Curtis-Nocedal SMART-test papers; credits penalty and trust-region regularization (Burke, Omojokun, Powell-Yuan) but faults their factorization needs (pp. 1, 3).",
+    "writing": "Each condition followed by prose on what it permits; differences from predecessor listed (p. 6); direct admissions ('We admit', p. 22; false-infeasible risk, p. 20); conjecture labelled (p. 25).",
+    "limits_future": "Extra normal-subproblem solve per iteration (fallback design proposed), no watchdog, preconditioners needed, large-scale and inequality extensions deferred to Curtis-Schenk-Waechter (p. 25).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "termination tests and Hessian-modification trigger derived from penalty-model needs; inertia-free", "pages": "pp. 6-8"},
+      {"method": "Method 3", "relation": "evidence", "note": "rank-deficient and infeasible variants of every test problem by adding c1 - c1^2 = 0 or = 1; earlier than the 2010/2012/2020 instances in SKILL.md", "pages": "pp. 22-23"},
+      {"method": "Method 5", "relation": "evidence", "note": "comparator is own predecessor INS in same Matlab code, failures printed per problem; only one comparator, no timing", "pages": "pp. 23-24"},
+      {"method": "Method 2", "relation": "evidence", "note": "one algorithm converging to KKT or infeasible stationary point without restoration", "pages": "p. 11"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Theta_k proof skeleton", "evidence": "same decomposition family with u_k replacing d_k and an envelope on v_k", "pages": "pp. 12-14"},
+      {"pattern": "scaled-shifted merit for unbounded penalties", "evidence": "phi~ = (f - f_min)/pi + ||c|| is monotone even when pi increases, giving infeasibility stationarity without bounded pi", "pages": "pp. 14-16"}
+    ],
+    "transferable": [
+      "Create rank-deficient and infeasible variants of any equality test set by adding c1 - c1^2 = 0 and c1 - c1^2 = 1 (pp. 22-23).",
+      "Set the trust-region radius in units of the stationarity measure (||v|| <= omega||A'c||) (pp. 4, 13).",
+      "Analyse (f - f_min)/pi + ||c|| when the penalty parameter may diverge (p. 14).",
+      "Add a multiplier-only acceptance test so the iterative solver never needs an exact solve at primal stationary points (p. 7).",
+      "Report per-problem flags for original/perturbed/infeasible columns with failures shown (pp. 23-24)."
+    ],
+    "coauthors": "J. Nocedal, A. Wächter",
+    "quotes": [
+      {"text": "We admit that by testing small problems we do not illustrate the benefits of a matrix-free approach", "page": 22},
+      {"text": "A drawback of the algorithm described in this paper is that it requires the inexact solution of the normal subproblem (2.2) in addition to the primal-dual system (2.6).", "page": 25}
+    ]
+  },
+  {
+    "id": "S009",
+    "year": "2010",
+    "title": "Infeasibility detection and SQP methods for nonlinear optimization",
+    "read_level": "full",
+    "contribution": "Shows that a penalty SQP method with a structured Hessian converges quadratically/superlinearly to infeasible stationary points if the penalty parameter is driven to zero fast enough, and gives steering-type update rules that do so while staying efficient on feasible problems.",
+    "problem_entry": "Fast methods are slow on infeasible instances, which matter in MINLP branch-and-bound; Sl1QP lacks fast local guarantees when infeasible; switching designs are hard to tune (pp. 1-3).",
+    "key_idea": "Penalty multiplies the objective only (structured Hessian (2.4)); choose rho_k = O(||z_k - z^||^2) near an infeasible stationary point; Algorithm II steering rules plus step f rho <= [E_k(lambda,0)/max{1,v}]^2 (pp. 4, 11, 13).",
+    "assumptions": "Inequality constraints; at infeasible stationary point: C2, active-gradient full rank, strict complementarity, SOSC for auxiliary problem (3.5); unit steps assumed via watchdog/SOC (pp. 2, 5, 7).",
+    "proof_devices": [
+      "infeasible stationary point recast as KKT point of auxiliary problem (3.5) (p. 6)",
+      "implicit function theorem path z_rho with ||z_rho - z^|| <= C rho (Lemma 3.3, pp. 7-8)",
+      "QP step = Newton step on F(.,rho), quadratic contraction uniform in rho (Lemmas 3.4-3.5, pp. 9-11)",
+      "triangle inequality ||z_{k+1}-z^|| <= C||z_k-z^||^2 + O(rho) (p. 7; Theorem 3.6, p. 11)",
+      "Dennis-More-type condition (3.28) for positive definite Hessian replacements (p. 12)"
+    ],
+    "experiments": "Matlab prototype with quadprog; five illustrations with full iteration tables (unique, robot + c4 = c1^2 + 1, isolated, batch vs batch1 with tl[1] >= 5, nactive); KNITRO/direct 42 iterations/151 evaluations on unique; ablation with step f disabled (pp. 14-18); no benchmark set (p. 14).",
+    "positioning": "Extends Fletcher's Sl1QP and Byrd-Nocedal-Waltz steering rules; contrasts SNOPT's switch and history-based penalty updates (pp. 3, 14).",
+    "writing": "Two-tasks opening, contribution in abstract, early scope caveat on nonconvex infeasibility (pp. 1, 3); proof strategy previewed as an inequality chain (p. 7).",
+    "limits_future": "Multiple QPs per iteration, no systematic benchmark, only local infeasibility, rho forced to zero even when unnecessary (pp. 3, 14, 17-18).",
+    "method_links": [
+      {"method": "Method 2", "relation": "evidence", "note": "single algorithm instead of switch; penalty update (steering + step f) is the design object", "pages": "pp. 2, 13-14"},
+      {"method": "Method 3", "relation": "evidence", "note": "infeasible variants of robot and batch plus constructed toy problems", "pages": "pp. 14-16"},
+      {"method": "Method 5", "relation": "variant", "note": "ablation of step f only; no fair external benchmark, one KNITRO count on one toy", "pages": "pp. 15, 18"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "perturb from the rho = 0 problem", "evidence": "treat the parameterized method as Newton on F(.,rho), bound the implicit-function path by C rho, then pick the parameter decay to inherit the rate", "pages": "pp. 7-11"}
+    ],
+    "transferable": [
+      "Rate to a limiting problem: path bound ||z_rho - z^|| <= C rho, Newton contraction uniform in rho, then rho_k ~ ||z_k - z^||^2 (pp. 7-11).",
+      "Tie the parameter update to the squared KKT error of the auxiliary problem so the rate condition is enforced computably (step f, p. 13).",
+      "Let the penalty scale only objective curvature in the QP Hessian so multipliers need no reset when it changes (p. 4).",
+      "Build one toy per theoretical case (one/none/n active) and print full iteration tables (pp. 14-18).",
+      "Simulate an application node with a one-bound modification of a standard model (batch1, p. 16)."
+    ],
+    "coauthors": "R. H. Byrd, J. Nocedal",
+    "quotes": [
+      {"text": "What the method lacks, however, are fast local convergence guarantees when (1.1) is infeasible.", "page": 3},
+      {"text": "In summary, by using the structured Hessian approximation (2.4), a penalty SQP method will achieve a fast rate of convergence simply by driving the penalty parameter to zero fast enough in a neighborhood of an infeasible stationary point.", "page": 11}
+    ]
+  }
+]

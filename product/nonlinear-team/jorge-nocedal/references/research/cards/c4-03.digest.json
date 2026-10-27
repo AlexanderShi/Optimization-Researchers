@@ -1,0 +1,202 @@
+[
+ {
+  "id": "S008",
+  "year": "1999",
+  "title": "An interior point algorithm for large-scale nonlinear programming",
+  "read_level": "full",
+  "contribution": "Second read (OCR, round 4) of the NITRO paper. The printed defaults are η = 10⁻⁸, τ = 0.995, θ = 0.2, ζ = 0.8, ρ = 0.3, ε_TOL = 10⁻⁷ and μ0 = 0.1. In the full tables NITRO needs fewer function evaluations than LANCELOT on 9 of 14 large CUTE problems, while CPU time splits 7–7 with losses of 22–52× on SVANBERG, OBSTCLAE and TORSION1. On 56 Hock–Schittkowski problems NITRO is behind: LANCELOT needs fewer evaluations on 29, NITRO on 23, with 3 ties, 1 joint failure and 3 NITRO failures.",
+  "problem_entry": "Unchanged from the round-1 card (c03): large nonconvex NLP with second derivatives. Line-search interior methods for nonconvex problems are judged too recent to assess. The entry is to embed Byrd–Omojokun SQP trust regions in a barrier method (pp. 2–3).",
+  "key_idea": "Barrier problems (2.1) are solved to E(x, s; μ) ≤ ε_μ, then μ and ε_μ are both multiplied by θ = 0.2 (pp. 3–4, 19). The slack Hessian is primal μS⁻² or primal-dual S⁻¹Λ, clipped to μ/s² where a multiplier is negative (pp. 7, 9). Other components: a scaled trust region with τ = 0.995 (pp. 9–10); a dogleg vertical step within ζΔ, ζ = 0.8 (pp. 10–12); projected CG with tol = 0.01‖g‖ and at most 2(n − t) iterations (p. 15); the penalty update ν_k = max{ν_{k−1}, q/((1 − ρ)√(−m))} with ρ = 0.3 and no growth factor (pp. 16–17); acceptance at ared ≥ 10⁻⁸·pred, with the radius expanded to 7‖d‖ or 2‖d‖ when r ≥ 0.9 or r ≥ 0.3 (p. 17); a second-order correction only when ‖v‖ ≤ 0.1‖w‖ (p. 18). An accepted step sets s_{k+1} = s_k + d_s, with no slack reset (p. 19).",
+  "assumptions": "Smooth f, h and g with first and second derivatives; no theorem; the trust region differs from the analysed model (p. 10). Compared with S009 (this batch), the shipped code also differs from the analysed Algorithm I in three places: there is no penalty growth factor (S009 uses 1.5), no slack reset, and the primal-dual version is the default (S009 analyses the primal one) (pp. 17, 19–20; S009 pp. 8, 17).",
+  "proof_devices": [
+   "design arguments only, as in round 1 (pp. 7–8, 14–17)",
+   "infeasible CG steps were about 2% of all CG steps, which justifies applying the bounds by truncation after a norm-only loop (p. 16)",
+   "a monotone ν for fixed μ is named as the property needed for global convergence (p. 17)"
+  ],
+  "experiments": "Protocol: 14 CUTE problems (n 14–2001, m 0–1273); LANCELOT with second derivatives at its defaults; both codes at 10⁻⁷ on their own measures (\"very similar\"); 10,000-iteration limit; Sparcstation 20 with 32 MB (pp. 20–21). Table 2 (p. 21; my counts): NITRO needs fewer function evaluations on 9 of 14 (e.g. NGONE 224 vs 3997, DIXCHLNV 18 vs 1445), LANCELOT on 5 (e.g. OBSTCLAE 26 vs 5, TORSION1 19 vs 8). CG iterations split 9–5. CPU splits 7–7, with SVANBERG 2704.77 vs 120.96 s, OBSTCLAE 543.22 vs 12.98 and TORSION1 58.00 vs 1.11. Table 3 (p. 22): the primal-dual version needs fewer evaluations on 11 problems, ties on 2 and loses OPTCNTRL (51 vs 50); its %full steps are higher on 7 and lower on 3. Table 4 (p. 22): the last-step ratio CG/(n − t) ranges from 0.0 to 2.0, with four of 14 between 1.3 and 2.0 against the cap of 2. Table 5 (p. 24; my counts): on 56 Hock–Schittkowski problems NITRO fails 3 times, LANCELOT twice plus HS75. LANCELOT needs fewer evaluations on 29, NITRO on 23, with 3 ties and 1 joint failure. Summed over the 52 problems both codes stopped on, NITRO uses 1,929 and LANCELOT 2,076, a difference driven by HS114.",
+  "positioning": "Unchanged from round 1 (c03). The reference list shows the Byrd–Gilbert–Nocedal theory as a 1996 report that precedes this 1997 code paper (p. 25). It hands the refinement question to [24], which is S021 (pp. 18, 23, 26).",
+  "writing": "Table 2 is summarized on the axis NITRO wins: \"highly encouraging, particularly the number of function evaluations\" (p. 21). The 7–7 CPU split and its 22–52× losses get no comment in §4. The loss on the Hock–Schittkowski set is a verbal verdict, not a count (p. 23). The defaults are printed as one list (p. 19).",
+  "limits_future": "Linear rate by design, with θ = 0.2 (pp. 19, 23). 3 failures in 56 Hock–Schittkowski problems, and worse per-problem evaluation counts than LANCELOT (pp. 23–24). The conservative refinement and barrier decrease are handed to [24] and [7] (p. 23).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "the rival runs at its defaults with second derivatives; both codes stop at a 10⁻⁷ tolerance; the 10,000-iteration limit counts as failure; all 56 robustness problems are printed, losses included",
+    "pages": "pp. 20–24"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "the tolerance value is matched but on different measures (\"very similar\"); verdicts are in words, not counts; CPU losses of 22–52× go unremarked in §4. This scopes the SKILL.md KNITRO-anatomy line \"Competitive with LANCELOT at a matched 10⁻⁷ tolerance\" to the 14 large problems (evaluations 9–5, CPU 7–7); on 56 Hock–Schittkowski problems LANCELOT needs fewer evaluations on 29 against NITRO's 23",
+    "pages": "pp. 20–21, 23–24"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "the failure-mode list (barrier decrease \"overly conservative\", refinement \"very conservative\") names the next papers, [7] and [24]; [24] is S021, which delivers the refinement work (documented by citation)",
+    "pages": "pp. 23, 25–26"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "besides the trust-region mismatch it names, the shipped code lacks the analysed 1.5× penalty growth and the slack reset, and runs the primal-dual Σ that S009 does not analyse",
+    "pages": "pp. 10, 17, 19–20"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Specify by admissible conditions so the theory covers the code; proof-driven or rarely binding safeguards",
+    "evidence": "the code omits two proof devices of the analysed algorithm (the penalty growth factor and the slack reset) without saying so; this is evidence for the 'proof-driven safeguard' side of the existing candidate, seen from the code side",
+    "pages": "pp. 17, 19"
+   }
+  ],
+  "transferable": [
+   "Print a per-problem diagnostic against its hard cap (CG iterations divided by n − t, against 2) and read the values near the cap before claiming that the subproblems stay easy (pp. 21–22).",
+   "When a code wins on evaluations but loses on time, divide time by inner iterations (SVANBERG: about 0.53 vs 0.03 s per CG iteration, my arithmetic) to place the cost in the linear algebra (pp. 21, 23).",
+   "Give a broad robustness set as win/loss/tie/failure counts, with totals and the outlier named (HS114), before a verbal verdict (pp. 23–24).",
+   "Print the code's defaults as one list next to the algorithm statement (p. 19)."
+  ],
+  "coauthors": "Richard H. Byrd, Mary E. Hribar",
+  "quotes": [
+   {
+    "text": "the infeasible CG steps accounted for about 2% of the total",
+    "page": 16
+   },
+   {
+    "text": "It is reassuring to observe that NITRO failed on very few of these problems",
+    "page": 23
+   }
+  ]
+ },
+ {
+  "id": "S009",
+  "year": "2000",
+  "title": "A trust region method based on interior point techniques for nonlinear programming",
+  "read_level": "full",
+  "contribution": "Second read (OCR, round 4) of the Byrd–Gilbert–Nocedal theory, preprint of August 10, 1998. The statements are now readable: Lemma 2.1 (ψ* ≤ −(b/2) min{t, b/|a|}), Lemma 3.1 (|pred − ared| ≤ γ_L((1 + ν)‖d_x‖² + ‖S⁻¹d_s‖²)), the trichotomy of Theorem 4.3 and Theorem 5.1. The analysed Algorithm I is primal, raises the penalty by at least 1.5× and resets the slacks to max(s + d_s, −g). It differs from the shipped NITRO in exactly the devices the proofs use.",
+  "problem_entry": "Unchanged from round 1 (c04): SQP subproblems are expensive QPs at scale, while interior methods won on LPs. The entry is to view interior methods from the SQP side and shape the QP so that steps avoid violating s > 0. Only inequality constraints are treated, for simplicity; equalities are in [4], i.e. NITRO (pp. 2, 6).",
+  "key_idea": "Subproblem (1.16): ‖(d_x, S⁻¹d_s)‖ ≤ Δ and d_s ≥ −τs, with τ close to 1 (p. 4). The normal step stays within ξΔ with d_s ≥ −ξτs, \"say ξ = 0.8\" (p. 5); the merit function (1.19) uses the unsquared ℓ2 norm (p. 5). Algorithm I takes constants ξ, τ, ρ, η ∈ (0, 1) (p. 16). When ν must increase, ν_k = max(ν̃_k, 1.5ν_{k−1}); a rejection cuts Δ by a constant factor (e.g. Δ/2); the slacks are reset to s_{k+1} = max(s_k + d_s, −g_{k+1}) (pp. 10, 17). pred = ν·vpred + hpred + χ, where χ can have either sign, and ν ≥ −χ/((1 − ρ)·vpred) suffices (p. 17).",
+  "assumptions": "Assumptions 4.1: f and g are differentiable, with ∇f, g and A Lipschitz on an open convex set containing the iterates; f_k is bounded below and ∇f_k, g_k, A_k, B_k are bounded; no full-rank assumption (p. 20). The range-space condition (2.11) and the normal and tangential Cauchy decrease conditions (2.15), (2.31) hold with γ_v, γ_h > 0 (pp. 10–11, 15). Null-space bases have a bounded norm and a smallest singular value bounded away from zero (pp. 14–15). The analysed algorithm is primal, with 1.5× penalty growth and the slack reset; NITRO is primal-dual and has neither device (S008 pp. 17, 19, 21).",
+  "proof_devices": [
+   "Lemma 2.1: min over 0 ≤ z ≤ t of ½az² − bz, with b ≥ 0 and t > 0, has optimal value ≤ −(b/2) min{t, b/|a|} (p. 12)",
+   "Lemma 2.2: ‖g + s‖·vpred ≥ (γ_v/2)‖(A; S)(g + s)‖·min(Δ̃, ξτ, ‖(A; S)(g + s)‖/‖(Aᵀ S)‖²) (p. 12); Lemma 2.3 is the tangential analogue (p. 16)",
+   "Lemma 3.1: |pred − ared| ≤ γ_L((1 + ν_k)‖d_x‖² + ‖S⁻¹d_s‖²); Proposition 3.2: small radii are accepted at non-stationary points (pp. 18–19)",
+   "Lemmas 4.4–4.11: bounded slacks (p. 22); steps ≤ γ_s·Δ despite the reset (p. 23); (A; S)(g + s) → 0 (p. 24); A g⁺ → 0, and ν → ∞ if infeasible (p. 26); a σ_min bound, or LICQ failure with ν → ∞ (p. 27); ν eventually constant once it exceeds γ′/(1 − ρ) (pp. 29–30); slacks bounded away from zero, and stationarity (p. 30)",
+   "Theorem 4.3 / 4.12, a trichotomy: outcomes (i) and (ii) are flagged by ν → ∞, outcome (iii) has λ = μS⁻¹e (pp. 21, 32–33). Theorem 5.1, outcomes (A) and (B) for μ_{l+1} ∈ (0, αμ_l), with inner stops ‖g + s‖ ≤ ε_l and ‖∇f + Aλ‖ ≤ ε_l (pp. 33–34)",
+   "ball-leaving template: in a ball of radius θ_l/(2γ_θ) small steps are accepted; the iterates must leave, or the merit function would go to −∞; each exit costs a fixed decrease (pp. 24–26, 31–32)"
+  ],
+  "experiments": "None. Computations are referred to [16] (Hribar's thesis) and [4] (NITRO), and the second-order correction to [18, 4] (p. 35).",
+  "positioning": "Unchanged from round 1 (c04). Lemma 2.1 credits Powell [23] (p. 12), and Steihaug's truncated CG is said to satisfy both Cauchy conditions (pp. 12, 15). The paper cites NITRO as Report OTC-97/04 (p. 35), while NITRO cites this theory as a 1996 report (S008 p. 25).",
+  "writing": "Numbers appear only where an example or a proof needs them: \"say ξ = 0.8\" (p. 5), \"e.g.\" Δ/2 (p. 10), the factor 1.5 (p. 17). Simplifications are flagged (\"for simplicity of exposition\", p. 2; \"because of its simplicity\", p. 8; \"this simple rule will be sufficient for our purposes\", p. 10), but the differences from the shipped code are not listed.",
+  "limits_future": "As in round 1: the rate, the barrier rule, B_k and the multipliers, the primal-dual analysis and the Maratos effect are left open (pp. 2, 8, 18, 33, 35). Added: the theorem covers a sibling of NITRO, which differs in the growth factor, the slack reset, the radius rule and primal vs primal-dual. This paper names its primal-step and radius-rule simplifications (pp. 8, 10) and S008 the trust-region shape (S008 p. 10); neither names the 1.5× growth factor or the slack reset, which are proof devices (pp. 17, 23, 26–27).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "failure outcomes (i) and (ii) of Theorem 4.3, and (A) of Theorem 5.1, are user-readable problem properties flagged by ν → ∞",
+    "pages": "pp. 21, 32–34"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "global convergence only. The analysed algorithm (primal, 1.5× penalty growth, slack reset) is not the shipped NITRO (primal-dual, neither device), and two of the differences are proof devices (Lemmas 4.5, 4.7, 4.8). An early form of taste warning 9, with the gap partly named",
+    "pages": "pp. 8, 10, 17, 23, 26–27, 33"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "as in round 1: the equality-constrained SQP engine is kept and only the slack handling changes; no estimate-driven repair or recovery",
+    "pages": "pp. 4, 17–18, 35"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Specify by admissible conditions so the theory covers the code; proof-driven or rarely binding safeguards",
+    "evidence": "the 1.5× penalty growth factor and the slack reset are in the analysed algorithm because the proofs need them (ν is unbounded if raised infinitely often; g + s ≥ g⁺); both are absent from the shipped NITRO",
+    "pages": "pp. 17, 23, 26–27"
+   }
+  ],
+  "transferable": [
+   "If a growth factor in a parameter update is what makes \"raised infinitely often implies unbounded\" true, put it in the algorithm statement and say whether the code has it (pp. 17, 26).",
+   "Reset the slacks of satisfied constraints, s ← max(s + d_s, −g), so that g + s ≥ g⁺ and non-convergence becomes a statement about ‖g(x)⁺‖ (pp. 17, 26).",
+   "Reuse a one-dimensional Powell-type bound (Lemma 2.1) as the engine for Cauchy-decrease estimates in scaled, bounded trust regions (pp. 12, 16).",
+   "Prove the outer barrier loop by reducing it to the inner trichotomy, so that each inner failure becomes an outer outcome (Theorem 5.1, p. 34)."
+  ],
+  "coauthors": "Richard H. Byrd, Jean Charles Gilbert",
+  "quotes": [
+   {
+    "text": "This theorem isolates two situations where the KKT conditions may not be satisfied in the limit, both of which are of interest.",
+    "page": 21
+   },
+   {
+    "text": "In summary the local behavior of our method is similar to that of other interior point methods, but its global behavior is likely to be markedly different.",
+    "page": 9
+   }
+  ]
+ },
+ {
+  "id": "S021",
+  "year": "2001",
+  "title": "On the solution of equality constrained quadratic programming problems arising in optimization",
+  "read_level": "full",
+  "contribution": "Second read (OCR, round 4). The residual update with iterative refinement meets a 10⁻¹² residual test on 13 of 14 QPs harvested from NITRO, in both projection modes; refinement alone meets it on 11 and standard CG on at most 1. The update costs no more CPU than refinement in all 28 cells. Inside NITRO it cuts projections from 29,509 to 17,200 with the normal equations (22,301 to 16,433 with the augmented system) and rescues two normal-equations failures. Evaluated on CVXEQP3, the error bound predicts no correct digits where CG stalls.",
+  "problem_entry": "As in round 1 (pp. 2–3), now with numbers. Example 1: κ(A) = 7.142E+03; the normal-equations projection gives cos θ = −0.15 against 9.6E−21 for the exact one, and the augmented system −.0032 (pp. 8–9). Example 2: CVXEQP3 with n = 1000 and m = 750; at iteration 50, r ~ 10⁵ while g ~ 10⁻¹ (p. 9).",
+  "key_idea": "Projected CG without a null-space basis. A projection is accepted when cos θ (3.15) < ε_m^0.75 ≈ 10⁻¹² (p. 10). Refinement (multiple projections, or augmented-system refinement) is applied only while the cosine exceeds 10⁻¹² (pp. 13, 16): normally 1 step, sometimes 2–3, at most 1–2 with the residual update (pp. 17–18). The residual update r ← r − Aᵀy needs one projection per iteration for G = I (pp. 17–19). Steplength α = gᵀg/pᵀHp, with a gᵀg stopping test (p. 21). G = diag(H) for barrier terms on bounds, G = I in trust-region methods (p. 5).",
+  "assumptions": "As in round 1: A has full row rank; H is positive definite on the null space \"for convenience\"; the analysis takes ‖A‖ = 1 and G = I (pp. 2, 10–11). Constants: γ = 2.5n^{3/2} in (4.1); ε_m κ²(A) is assumed somewhat smaller than 1; the denominator becomes max(‖g‖, ε), with ε a multiple (e.g. 10) of ε_m (p. 11).",
+  "proof_devices": [
+   "normal equations: ‖Δv‖ ≤ γ ε_m κ²(A)‖v‖, and the relative projection error is ≤ γ ε_m κ²(A)‖v⁺‖/‖g⁺‖ (p. 11)",
+   "the bound checked against the run: Example 2 gives γ = O(10⁴), ε_m = 10⁻¹⁶, κ = O(10³) and a ratio of O(10⁶) at iteration 50, so \"no correct digits\"; the bound is \"reasonably tight in this example\" (p. 12)",
+   "augmented system: the bound is linear in κ(A), with a factor \"difficult to predict\" (p. 12)",
+   "multiple projections contract R-linearly with rate γ ε_m κ²(A), guaranteed only below 1; on Example 1, cos θ = 6.2E−14 after one refinement and 9.6E−21 after two (pp. 13–15)",
+   "the least-squares perturbation bound is linear in κ, which shows that the normal-equations approach is not backward stable (p. 15)"
+  ],
+  "experiments": "CVXEQP3: multiple projections reduce √(rᵀg) by a factor of 10⁻¹⁶ (p. 14). Augmented-system refinement makes the residual rise after 10⁻¹⁰ (p. 17). The residual update keeps the cosine at 10⁻¹⁴ (normal equations) and 10⁻¹⁵ (augmented system) (p. 20). The new α and stopping test reach 10⁻⁸ past iteration 70, and 10⁻¹² without oscillations (p. 21). Table 1 (pp. 22–23; my count): 14 QPs, test 10⁻¹², limit 2(n − m). The test is met by standard CG on 0 (normal equations) and 1 (augmented system: DIXCHLNV, printed unmarked against the text's \"for any\"), by refinement on 11 and by the update on 13 of 14. Table 2 (p. 24): the update costs no more CPU than refinement in all 28 cells. Table 3 (p. 24): least √(rᵀg) on OBSTCLAE, SVANBERG and TORSION1; the update is lowest in all six rows (e.g. SVANBERG 5.7D−12, augmented system). Table 4 (pp. 25–26; my count): 28 rows, though the text says 29. Standard CG with the normal equations fails on OPTCNTRL and ORTHREGA, and the update solves both. Projections fall by more than 10% on 4 problems (augmented system) and 12 (normal equations); totals 22,301 → 16,433 and 29,509 → 17,200. Evaluations are not \"roughly the same\" for standard CG with the normal equations: more than 10% more on 9 problems, plus 2 failures.",
+  "positioning": "Unchanged from round 1 (c04). The paper answers the refinement item in NITRO's failure-mode list: NITRO cites it as [24] (S008 pp. 18, 23, 26). The test QPs come from [8], i.e. NITRO (pp. 22, 28).",
+  "writing": "The remedies are ranked in the conclusions, and the tables mostly bear the ranking out. Three small reporting slips are visible only in the numbers: the unmarked DIXCHLNV cell, 28 rows against \"29 nonlinear programming problems\", and \"roughly the same\" evaluations (pp. 22–26). The demanding tolerance is chosen \"To test the reliability of the techniques\" (p. 22).",
+  "limits_future": "As in round 1: preconditioners are not evaluated, the general-G update is untested, three QPs are unsolved and the Coleman–Verma comparison is left open (pp. 7, 9, 22). Added: the refinement-step counts (pp. 17–18) and the 10⁻¹² trigger (p. 10).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "rounding error as the regime: a cosine diagnostic with a machine-precision threshold, ε_m^0.75 ≈ 10⁻¹²; the costly fix is applied only above it; the one-component repair (the residual update) is ablated against a reset done only at the start. The test is met on 13 of 14 QPs, against 11 for refinement and at most 1 for the baseline",
+    "pages": "pp. 10, 13, 16, 18–19, 23"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "step 4 with numbers: the bound, evaluated with Example 2's constants, predicts no correct digits where CG stalls; it is called reasonably tight here, though generally overly pessimistic",
+    "pages": "p. 12"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "answers the refinement failure named in NITRO (S008 p. 23); the remedies are shipped in NITRO, GALAHAD and HSL VE12/VE19",
+    "pages": "pp. 22, 25"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "one code base, with the authors' own unrefined CG as baseline and the baseline's CPU advantage reported \"with caution\"; three small reporting slips leave the text slightly kinder than the tables",
+    "pages": "pp. 22–26"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Set the trigger for a costly accuracy fix from machine precision (ε_m^0.75 ≈ 10⁻¹²), and apply the fix only when a cheap per-iteration diagnostic exceeds it (pp. 10, 13).",
+   "Plug the failing example's own constants (γ, ε_m, κ, the norm ratio) into the error bound and show that it predicts the stall (p. 12).",
+   "When no variant meets the test, tabulate the best residual each one reached instead of a bare failure mark (p. 24).",
+   "Test a kernel at a tolerance tighter than any outer solver uses, mark each kind of non-success, then report the outer solver's evaluation and projection counts (pp. 22–26)."
+  ],
+  "coauthors": "Nicholas I. M. Gould, Mary E. Hribar",
+  "quotes": [
+   {
+    "text": "In our experience, 1 iterative refinement step is normally enough to provide good accuracy, but we have encountered cases in which 2 or 3 steps are beneficial.",
+    "page": 17
+   },
+   {
+    "text": "Note that the standard CG iteration was not able to meet the residual stopping test for any of the problems in Table 1, but that iterative refinement and update residual were successful in most cases.",
+    "page": 22
+   }
+  ]
+ }
+]

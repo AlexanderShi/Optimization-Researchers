@@ -1,0 +1,100 @@
+[
+ {
+  "id": "S096",
+  "year": "2007",
+  "title": "Inexact sequential quadratic programming methods for large-scale nonlinear optimization",
+  "read_level": "full",
+  "contribution": "PhD dissertation that introduces a matrix-free inexact line-search SQP method whose Krylov termination tests are derived from a penalty-model reduction (with separate primal and dual residual bounds), an inertia-tolerant step acceptance for negative curvature, and a flexible penalty function interpolating between a penalty function and a one-element filter, each with global first-order convergence and Matlab/KNITRO numerics.",
+  "problem_entry": "Scale wall in PDE-constrained optimization where factorization is impractical (pp. 11, 22); inexact methods mature for unconstrained problems and equations but not constrained ones (p. 12); posed as how accurately the SQP subproblem must be solved to keep global convergence (p. 23); Ch. 6 enters via the blocking behaviour of penalties and filters (pp. 77-80).",
+  "key_idea": "Accept an inexact primal-dual step when it reduces a local model of the exact penalty function, with primal and dual residuals bounded separately (Termination Tests I/II, pp. 26-29); accept a step before the inertia is corrected if computable curvature/normal-step tests hold (pp. 62-66); let the penalty parameter range over an interval [pi_l, pi_u] whose endpoints recover penalty and one-element filter (p. 82).",
+  "assumptions": "Smooth equality-constrained problems; Assumptions 3.4: bounded functions/derivatives, bounded multipliers, uniformly full-rank Jacobians, bounded W, W positive definite on null(A) (p. 33), (b),(c) admitted strong (p. 33); Ch. 5 drops (e) except where inertia is correct (p. 67); scale-dependent beta admitted not ideal (p. 30).",
+  "proof_devices": [
+   "analysis-only tangential/normal decomposition d = u + v, never computed (pp. 33-34)",
+   "case split K1/K2 by ||u||^2 >= gamma4 ||v||^2 with one progress measure Theta_k bounding step norm, directional derivative and steplength (Lemmas 3.7-3.10, pp. 36-39)",
+   "computable directional-derivative surrogate g'd - pi(||c|| - ||r||) usable in Armijo (Lemma 3.2, (3.10)-(3.11), pp. 31-32)",
+   "penalty boundedness by bounding model-reduction terms by (||c|| - ||r||) via bound (3.6b) (Lemma 3.11, pp. 39-42)",
+   "telescoping fixed-penalty merit decrease, then contraction recursion on the dual residual (Lemma 3.12, Theorem 3.13, pp. 42-45)",
+   "observable inequalities ||Ad||/||A|| <= ||v|| turning the implicit case split into explicit acceptance tests (Lemma 5.2, pp. 65-66; p. 67)",
+   "reuse of the Ch. 3 lemma chain for the flexible penalty, proving only the touched lemmas (Lemmas 6.3-6.6, pp. 90-94); constant-label slip in the Lemma 6.4 proof (p. 92)"
+  ],
+  "experiments": "Ch. 4: Matlab + unpreconditioned GMRES on 44 CUTEr/COPS problems kept if the exact-solve variant solved them (p. 50); baseline ires differing only in stopping rule, kappa = 2^-1..2^-9, 50-86 % vs 100 % solved (pp. 51-52); hybrid shows 0.5 extra GMRES iterations per run (pp. 52-53); PDE inverse problems, 27-point parameter grid, Jacobian mat-vecs as metric (pp. 53-58). Ch. 5: KNITRO-Direct, 36 problems with wrong inertia, iteration/factorization profiles (pp. 72-75). Ch. 6: KNITRO-Direct, 85 problems, iteration/function-evaluation profiles (pp. 94-97). Losses only in appendix tables (pp. 112, 114-115); no CPU times.",
+  "positioning": "Corrects inexact Newton's whole-residual forcing for nonconvex constrained problems (pp. 23, 25); separates from composite-step inexact SQP (Heinkenschloss-Vicente etc.) and from full-space PDE methods lacking global guarantees (pp. 23-24, 26-27); penalty update from Waltz et al. (pp. 19, 30); even-handed critique of penalty and filter blocking (pp. 77-80).",
+  "writing": "Repeated chapter arc motivation-algorithm-well-posedness-analysis-numerics-final remarks (pp. 7-8); explicit 'we claim' for argued statements (pp. 28, 48, 52, 84, 95, 99); geometric ||c||-f plane figures carry the globalization argument (pp. 18-19, 78-88); warm evaluative words with counter-cases left in appendices (pp. 73, 96).",
+  "limits_future": "Strong assumptions (p. 33), no rate guarantee without a forcing sequence (p. 46), singular Jacobians not analyzed (p. 46), no preconditioner in CUTEr tests (p. 51), per-application tuning (p. 58), Ch. 5 needs the full step before testing (p. 76); future: inexact interior-point and flexible penalty in IPM and trust-region SQP (pp. 99-103), Ch. 5 tests in the inexact setting (pp. 75-76).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Earliest form: inner Krylov termination tests derived from the penalty-model reduction with separate primal/dual residuals; one-component baseline and deliberately naive failure tests already present; the dissertation reports 50-86 % for the baseline vs SKILL's 45-86 % from the 2008 paper (different version).",
+    "pages": "pp. 23, 26-29, 49-52, 98"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Penalty raised only when Test II signals feasibility progress; flexible-penalty update rules for pi_l and pi_u are the design object; filter criticised for needing a restoration backup.",
+    "pages": "pp. 27-29, 79-80, 85-89"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Names the blocking effect as the main weakness of penalty methods, an early seed of the later penalty doubt (SKILL Inner Tension 3).",
+    "pages": "p. 78"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Rivals built in the same code differing in one component: ires (stopping rule), matmod (no (5.8)/(5.9)), pi_default (single penalty) in KNITRO-Direct.",
+    "pages": "pp. 51, 72-73, 95"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Incumbent wins (e.g. orthrgds, eigenb2, eigenc2, elec3) appear only in appendix tables, not in the prose; PDE parameters chosen by a grid on the evaluation problems.",
+    "pages": "pp. 56-58, 73-75, 96, 112, 114-115"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Hard instances selected by the hazard (problems where the inertia was wrong at least once), not mechanically constructed.",
+    "pages": "p. 72"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "interval interpolation of rival mechanisms",
+    "evidence": "Flexible penalty function: pi_l = pi_u gives the penalty function, pi_l = 0 and pi_u = infinity a one-element filter; endpoint updates designed separately.",
+    "pages": "pp. 82-89"
+   },
+   {
+    "pattern": "make the proof's case split computable",
+    "evidence": "Analysis-only null/range decomposition and K1/K2 split (Ch. 3) turned into observable acceptance inequalities (5.8)/(5.9) in Ch. 5.",
+    "pages": "pp. 33-36, 65-67"
+   },
+   {
+    "pattern": "accept before repairing",
+    "evidence": "Test the current primal-dual solution for acceptability before another Hessian modification; argued even more valuable in an inexact setting.",
+    "pages": "pp. 62-63, 75-76"
+   }
+  ],
+  "transferable": [
+   "Baseline = own solver with only the inner stopping rule replaced by the textbook relative-residual test, swept over kappa = 2^-1..2^-9, success rate per value (pp. 51-52, 109).",
+   "Price a safeguard with a hybrid run adding it to the baseline: extra inner iterations per run vs extra problems solved (pp. 52-53).",
+   "One progress measure Theta_k per step type bounding step norm, merit decrease and steplength at once, then telescope (pp. 36-42).",
+   "Replace an unobservable proof split by observable inequalities (||Ad||/||A|| lower-bounds the normal component) and add them to the algorithm (pp. 65-67).",
+   "Move the lower end of a parameter range toward the smallest value that would have accepted the step, by a fraction with a minimum increment (pp. 89, 95).",
+   "Use the operation the preconditioner consumes (Jacobian mat-vecs) as headline metric when iteration counts are uninformative (p. 57).",
+   "Draw the region each acceptance mechanism blocks in the ||c||-f plane to argue for a new one (pp. 78-88)."
+  ],
+  "coauthors": "none (single-author dissertation; advisor Jorge Nocedal; Richard Byrd acknowledged as essential, p. 5)",
+  "quotes": [
+   {
+    "text": "The main purpose of this chapter is to determine the accuracy with which the SQP subproblems must be solved in order to ensure global convergence in the context of a practical algorithm for problem (2.1).",
+    "page": 23
+   },
+   {
+    "text": "A major theme in this work has been the importance of tying various aspects of the optimization process into one cohesive unit.",
+    "page": 98
+   }
+  ]
+ }
+]
