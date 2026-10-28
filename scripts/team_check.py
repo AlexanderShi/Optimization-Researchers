@@ -15,7 +15,8 @@
     roundtable      圆桌 SKILL.md 存在，frontmatter name = team.json 的 roundtable；Team 表有每位成员的 `slug`；
                     座位表里每位成员至少主讲一行；3–6 条 fault line，每条引用至少两位成员
                     （深读档：每条两边都有 [<slug> card <ID> p. N] 卡片引用，引用的 ID 在该成员的卡片里都存在，
-                    不剩 "card evidence pending"）
+                    不剩 "card evidence pending"）。只有 1 位成员时跳过（—）：team-layer.js 不足 2 人不写圆桌，
+                    团队级的圆桌引用闭包同样跳过
     coverage        深读档：DEEP-READING.md 原样含 team_status.py --coverage 的表，README 原样含 --coverage --short 的表
   每位成员
     skill           SKILL.md 存在；quality_check.py 12/12（--skip-quality 跳过）；## Roundtable Card 的 7 项齐全
@@ -102,6 +103,11 @@ def digest_ids(member_dir: Path) -> set[str]:
 def check_roundtable(rep: Report, team: Path, cfg: dict, deep: bool, deep_members: set[str] | None = None):
     slugs = [m["slug"] for m in cfg["members"]]
     rt = team / cfg["roundtable"] / "SKILL.md"
+    if len(slugs) < 2:
+        # 只有一位创始成员的团队：team-layer.js 不足 2 人不写圆桌，没有可查的座位表与 fault line
+        rep.add("team", "roundtable", None, f"{len(slugs)} member: no roundtable until a second member joins "
+                "(team-layer.js seats ≥2, playbook §一 recommends 3–6; add members per playbook §八)")
+        return
     if not rt.exists():
         rep.add("team", "roundtable", False, f"{rt} missing (team-layer.js, T2)")
         return
@@ -277,10 +283,13 @@ def main():
             "README.md missing" if not readme.exists() else
             (f"member rows missing: {', '.join(unlinked)}" if unlinked else "links every member"))
     check_roundtable(rep, team, cfg, deep, deep_members)
-    if deep:
+    if deep and len(cfg["members"]) < 2:
+        rep.add("team", "citations", None, "1 member: no roundtable to check (member citations are checked per member)")
+    elif deep:
         rc, out = run([sys.executable, str(HERE / "check_citations.py"), str(team), "--roundtable", "--show-warnings", "0"])
         rep.add("team", "citations", rc == 0, next((l.strip() for l in out.splitlines() if l.startswith(("✅", "❌")) and "roundtable" in l),
                                                    last_line(out)))
+    if deep:
         ordered = [sts[m["slug"]] for m in cfg["members"]]
         dr = team / "DEEP-READING.md"
         full, short = ts.coverage_md(ordered), ts.coverage_short_md(ordered)
