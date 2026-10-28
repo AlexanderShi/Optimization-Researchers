@@ -85,6 +85,7 @@ bash scripts/workflows/selftest.sh product/dfo-team              # kit 自检（
 | `scripts/audit_claims.py`（2026-10-17） | `card_text()` 按轮次（`batch_round()`：`c01`、`s03` 是第 1 轮，`c4-01` 是第 4 轮）遍历同一作品的卡片，同样深的卡片取最晚一轮 | 原来取文件名排序里第一张最深的卡片：重读（OCR 后、换版本后）的作品会把旧卡片交给审计 agent，例如 Nocedal S005 用的是数字全丢的第 1 轮卡片，审计员据此判「数字读不出」；文件名排序也不等于轮次（`c2-01` 排在 `s03` 前）。Nocedal 第二轮抽审有 10 条换了卡片后重审 |
 | `scripts/quality_check.py`（2026-10-17） | `main()` 开头把 stdout / stderr 重配置为 UTF-8 | Windows 的 Git Bash 下不设 `PYTHONUTF8` / `PYTHONIOENCODING` 时，打印 ✅ 就以 UnicodeEncodeError 崩溃（退出码 1），工作流里的 agent 每次都要绕开；与 2026-10-10 给其他 5 个脚本加的重配置相同 |
 | `scripts/verify_card_quotes.py`（2026-10-16） | `norm()` 删掉 U+FFFE | pypdfium2 把行末断词写成 U+FFFE（`com￾prehensive`），Nocedal 的 91 篇全文里有 59 篇如此，读卡 agent 只好绕开这些词；删掉后断词处逐字匹配，真连字符的词（`quasi￾Newton`）靠宽松比较。Curtis 180 条摘录结果不变 |
+| `scripts/team_check.py`（2026-10-27） | 团队只有 1 位成员时，`roundtable` 与团队级 `citations`（圆桌引用闭包）两项记为跳过（—）并写明原因，不再判 ✗ | lp-team 以一位创始成员（Qi Huangfu）立队：`team-layer.js` 不足 2 人不写圆桌（`fewer than 2 members have a skill`），原检查必然报「圆桌缺失」；第二位成员加入后两项照常检查。dfo-team 回归 38 项 0 失败 |
 | `scripts/distill_check.py`、`scripts/distill_audit.py`（新增，2026-10-24；**不是 kit 文件**） | 语料流水线（DISTILL.md）的质量门脚本，与 kit 无关、不 import kit 代码，只是放在同一个 `scripts/` 下；协议 `standards/distill-gates.md` | 语料线此前没有任何机械闸门（G1–G6 全靠人工）；再同步 kit 时 `git archive | tar -x` 只覆盖同名文件，这两个不受影响 |
 
 除此之外 `scripts/`、`references/` 与 nvwa-skill `eb012fa` 逐字节一致。再从 nvwa 同步时注意
