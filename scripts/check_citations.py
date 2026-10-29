@@ -13,7 +13,8 @@ fault line 的卡片 ID）。本脚本把这些变成确定性检查：引用必
     page-on-unread   引了页码，但该作品最深的卡片只到 abstract / metadata / unreadable 级（没有全文就没有页码）
     page-range       引用的页码超过 INDEX.md 的 Pages（读的就是那个文件）
     version          版本引用（见下）所引的卡片不存在，或卡片正文里没有提到那个版本
-    roundtable       圆桌里 [<slug> card …] 的 slug 不是队员；或该引用在那位成员处过不了上面的检查
+    roundtable       圆桌里 [<slug> card …] 的 slug 不是队员（理事会：也不是 guest_teams 里任何一队的成员）；
+                     或该引用在那位成员处过不了上面的检查
 警告（⚠，不计入退出码）:
     skip-mention     只提到（不带页码）INDEX 里 Role=skip 的行，例如诚实边界里说明哪些行被排除
     roundtable-bare  圆桌里不带 [<slug> card …] 的裸卡片 ID，无法判定属于谁
@@ -30,8 +31,9 @@ fault line 的卡片 ID）。本脚本把这些变成确定性检查：引用必
 认得的版本词：TR、v<数字>、arXiv、preprint、report、manual、draft、precursor、substitute。
 
 扫描的文件（成员）：SKILL.md；references/*.md（technique-catalog、proof-playbook、open-problems、reading-path）；
-references/research/0[1-9]-*.md（不含 cards/：卡片本身是证据，不是引用）。团队目录时还查圆桌 SKILL.md 的
-[<slug> card …] 引用。轻量档成员（没有 cards/）不查卡片 ID，只报 DOI / arXiv 计数。
+references/research/0[1-9]-*.md（不含 cards/：卡片本身是证据，不是引用）；references/domains/*.md（按优化领域分的
+领域文件，有的成员才有）。团队目录时还查圆桌 SKILL.md 的 [<slug> card …] 引用；team.json 有 guest_teams（理事会）时，
+别队成员的 slug 到 product/<guest 队>/ 里解析。轻量档成员（没有 cards/）不查卡片 ID，只报 DOI / arXiv 计数。
 不扫描：围栏代码块、front matter、行内代码 `…`（写法示例）、表格单元格之外的页码（| 不能跨）。
 
 引用写法（ID 规则与 check_ledger.py 相同：一个大写字母 + 3–4 位数字；字母限于 S D H R X B 和这位成员 works.json
@@ -301,7 +303,8 @@ def check_member(team: Path, m: dict, args) -> dict:
         return report
     # 07-paper-cards.md 不扫：它是 digest 的投影（build_card_index.py），单元格里的页码是书目页，不是读到的页
     files = [mem.dir / f for f in MEMBER_FILES] + sorted(
-        p for p in (mem.dir / "references/research").glob("0[1-9]-*.md") if not p.name.startswith("07-"))
+        p for p in (mem.dir / "references/research").glob("0[1-9]-*.md") if not p.name.startswith("07-")) + sorted(
+        (mem.dir / "references/domains").glob("*.md"))  # 按优化领域分的领域文件（有的成员才有）
     for f in files:
         if f.exists():
             scan_text(f.read_text(encoding="utf-8"), mem, f.relative_to(mem.dir).as_posix(), report)
@@ -412,6 +415,13 @@ def main():
         sys.exit(2)
 
     members = {m["slug"]: Member(team, m) for m in cfg.get("members", members_cfg)}
+    # 理事会（team.json 的 guest_teams）：圆桌里坐着别队的成员，[<slug> card …] 到他们自己的团队目录里解析
+    for g in cfg.get("guest_teams") or []:
+        gj = team.parent / g / "team.json"
+        if gj.exists():
+            for gm in json.loads(gj.read_text(encoding="utf-8")).get("members", []):
+                if gm.get("slug"):
+                    members.setdefault(gm["slug"], Member(team.parent / g, gm))
     reports = []
     if not a.roundtable:
         for m in members_cfg:
