@@ -327,6 +327,14 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 - 2022, with den Hertog: the LP case first, then nonlinear RO split by how the uncertainty enters [B011 p. 1]; that the split follows where exact counterparts end is [inferred] (card S283 [S283 p. 3]).
 - ⚠ Teaching level: formulation first with no kept class (the MBA texts and the 2009 course) [B014 p. 1; B015 pp. 4–5; B021 p. 2].
 
+**Claim audit 2026-10-29, round 1** (earlier wording, verbatim):
+
+```text
+- ✗ Outside it: the 2025–26 foundation-model papers [S426 pp. 4, 6].
+```
+
+SKILL.md packet, item k = 8 (`10-claim-audit.md`): one 2025 card cannot show every 2025–26 foundation-model paper. The line now says *some* and restores the 2026 card cut at the tighten step [S426 pp. 4, 6; S474 pp. 2, 4, 8].
+
 <a id="method-2"></a>
 ## Method 2: Quantified "why now"
 
@@ -418,6 +426,14 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 - Stated: "It is our belief that the “price” of fairness is effectively inescapable if the allocations prescribed by a given scheme are to be ethically acceptable and implementable." [S012 p. 14]; the 2004 abstract [02 G4].
 - ⚠ Precursor, 1988–1993: the price of simplicity, no knob or bound; the thesis prices robustness in lost tractability [S048 p. 29], later as an asymptotic constant or worst-case ratio against re-solving [S048 pp. 40–44; S017 pp. 1, 9–11].
 - ⚠ The solution-independent bound appears mainly for robustness and fairness; the price of interpretability is usually a point or two, without a bound [S190 pp. 4, 7–8].
+
+**Claim audit 2026-10-29, round 1** (earlier wording, verbatim):
+
+```text
+- ⚠ Precursor, 1988–1993: the price of simplicity, no knob or bound; the thesis prices robustness in lost tractability [S048 p. 29].
+```
+
+SKILL.md packet, item k = 9: the S048 card names the coverage probability as the thesis's knob, a model parameter rather than a protection level a decision-maker chooses, with cost-ratio bounds tight by example and no violation-probability bound [S048 pp. 40–44]. The line now says *no decision-maker's knob or violation bound* and cites the a priori solution priced against re-solving for *the price of simplicity* [S048 pp. 12–13]; C7's *knob-free precursor 1988* is narrowed the same way (earlier wording under [Corrections](#corrections)).
 
 <a id="method-4"></a>
 ## Method 4: Warm start, exact solve, honest certificate, duel the incumbent
@@ -571,6 +587,14 @@ The line before this increment (verbatim):
 - Practice: the thesis problem class came from his adviser's group [S048 pp. 18, 71, 125]; a cohort consolidated in a sole-author survey with open problems [S185 pp. 1, 4, 46, 48–49, 51]; an organ-allocation programme over successive theses [S476 pp. 1–2]; books with former students and colleagues, 2019–2025 [01 §1.9]; Interpretable AI 2018.
 ```
 
+**Claim audit 2026-10-29, round 1** (earlier wording, verbatim):
+
+```text
+- ⚠ The company before the paper [S050 pp. 1, 10]; teachability argued after the fact [S018 pp. 4, 23].
+```
+
+SKILL.md packet, item k = 15 (flagged by the official auditor only): the card reads teachability only from the remark that textbooks ignore the 1937 Uspensky bound, and labels that reading [inferred, thin] [S018 pp. 4, 23]; the line now carries the label.
+
 <a id="method-7"></a>
 ## Method 7: Bound before policy (promoted 2026-10-29)
 
@@ -609,6 +633,18 @@ The line before this increment (verbatim):
 **Different from standard practice**: one bound grades the incumbent and every heuristic, in a loop carried across queueing, routing, IO and adaptive RO. Bound-first alone is not his (approximation algorithms [S052 pp. 3, 11]; conservation laws, Whittle's and Kelly's bounds [S185 pp. 3–4, 21; S368 p. 8]): claim novelty for the transfer and the graded incumbent.
 
 **Limitations**: a bound can be loose without telling which side: "Since the optimal cost is not known, we cannot calculate the closeness of our lower bound to the optimal cost." [S072 p. 26]; mostly 1988–2002 work; where an exact MIO solves at scale, Method 4's gap replaces the ratio [S010 pp. 27–40]; the yardstick is a bound, not an owner's rule (Method 5).
+
+**Claim audit 2026-10-29, round 1** (earlier wording, verbatim):
+
+```text
+5. Grade every heuristic, the incumbent's included, by its gap to the same bound [S072 pp. 26–31].
+```
+
+```text
+**Different from standard practice**: one bound grades the incumbent and every heuristic, in a loop carried across queueing, routing, IO and adaptive RO. Bound-first alone is not his (approximation algorithms [S052 pp. 3, 11]; conservation laws, Whittle's and Kelly's bounds [S185 pp. 3–4, 21; S368 p. 8]): claim novelty for the transfer and the graded incumbent.
+```
+
+SKILL.md packet, item k = 16: the network paper computes efficiency only for the best policy found per instance, which certifies the incumbent Harrison–Wein policies, with FCFS tabulated beside them [S072 pp. 26–31]; a gap for every heuristic is now labelled the skill's rule. Item k = 19: the earlier Steiner ratios (Takahashi–Matsuyama, Kou et al., Plesnik, El-Arbi) were measured against the optimum, and measuring against the LP bound is the paper's own strengthening [S052 pp. 3, 11]; the third-party bound-graded heuristics on the card are Johnson's tours, graded by the Held–Karp bound [S052 p. 7].
 
 <a id="workflow-a"></a>
 ## Workflow A: Problem choice
@@ -652,6 +688,14 @@ The line before this increment (verbatim):
 
 **🔴 Checkpoint**: class left without measured solve times → change the device. *Corrections*: test exactness on a small example; check the LP-relaxation strength of big-M models, as his formulation papers do [S015 pp. 2, 4–5, 10; S093 pp. 8–9, 17–19].
 
+**Claim audit 2026-10-29, round 1** (earlier wording, verbatim):
+
+```text
+**🔴 Checkpoint**: class left without measured solve times → change the device. *Corrections*: test exactness on a small example; check the LP-relaxation strength of big-M models, as his formulation papers do [S015 pp. 2, 4–5, 10].
+```
+
+SKILL.md packet, item k = 20 (flagged by the official auditor only): S015's model is a 0-1 cumulative-variable IP with no big-M constraints, and the card shows no exactness test on a small example. The two corrections now name their sources (the two-period example of 05 §4.3; the big-M critique of 05 §2.5), and the card is cited only for checking the LP strength of his own formulation (strength pursued, LP-bound dominance, facets) [S015 pp. 2, 4–5, 7, 10].
+
 <a id="workflow-c"></a>
 ## Workflow C: Experimental design and execution
 
@@ -673,6 +717,14 @@ The line before this increment (verbatim):
 **Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
 
 5. Stochastic or dynamic policies, the owner's rule included: simulate with a stated stopping rule (batch means; CI width a set fraction of the estimate [S016 p. 12; S829 p. 13]), from light to heavy traffic [S016 pp. 5–14]; report each gap to the Method 7 bound per regime, with its error [S072 pp. 26–31; S368 pp. 12–13]; use the owner's simulator if one exists [S044 pp. 5, 18–22].
+
+**Claim audit 2026-10-29, round 1** (earlier wording, verbatim):
+
+```text
+5. Stochastic or dynamic policies, the owner's rule included: simulate with a stated stopping rule (batch means; CI width a set fraction of the estimate [S016 p. 12]), from light to heavy traffic; report each gap to the Method 7 bound per regime, with its error [S072 pp. 26–31]; use the owner's simulator if one exists.
+```
+
+SKILL.md packet, item k = 22: per load regime the paper reports only the best policy's efficiency against the bound, and prints a simulation error for one table only (± 0.0009, Table 7) [S072 pp. 26–31]; every policy's gap with its error is now labelled the skill's rule.
 
 <a id="workflow-d"></a>
 ## Workflow D: Judging results
@@ -754,6 +806,14 @@ The line before this increment (verbatim):
 ```
 
 **Full-text additions** (08 §9). Students carry programmes: van Ryzin [S016 p. 1], Niño-Mora [S051 p. 11], Teo [S214 p. 11], Popescu [S007 p. 1], Sim [S001 p. 1], Dunn [S096 pp. 5–6], Pauphilet and Cory-Wright [S183 pp. 4–5, 19], Ma [S351 pp. 5, 12, 29], Koulouras [S527 pp. 2–4]. Former students return as co-authors on later stages of a programme [S476 p. 1] (*fix round*: *co-senior* withdrawn; the byline after the first author is alphabetical and states no roles). Co-advised lines with Tsitsiklis [S072 pp. 1, 8, 10, 32–33; S237 pp. 1–3] and Odoni [S135 p. 1; S806 pp. 1–2]; the co-advising itself is documented in the DSpace advisor fields [04 A.2], the papers show the co-authored thesis lines. Supervision routines themselves cannot be seen in papers (note 04 stays the source).
+
+**Claim audit 2026-10-29, round 1** (earlier wording, verbatim):
+
+```text
+2. Partners from year one; job-talk rehearsal; companies only after graduation; former students as co-authors on later stages of a programme [S476 p. 1].
+```
+
+SKILL.md packet, item k = 24: the card supports only the last item [S476 p. 1]. The first three now cite their sources in note 04: F.13 (partners from the first year), F.14 (job-talk rehearsal, stated in the oral history) and B.7 (companies only after graduation, a stated rule).
 
 <a id="heuristic-1"></a>
 ## Heuristic 1: the problem a working heuristic solves exactly
@@ -987,6 +1047,14 @@ The line before this increment (verbatim):
 | Origin | [stated-joint] Soyster too conservative; ellipsoidal counterparts nonlinear and unattractive for discrete problems [S001 pp. 1–3]; a budget Γ already in a 2002 working paper [S653 pp. 12–14]; how Γ arose: unknown |
 | Abandoned paths | PILOT4, where the price stays high [S001 pp. 14, 16]; an unpublished ellipsoidal discrete manuscript; data-driven sets later [S013 pp. 3–4, 10] |
 
+**Claim audit 2026-10-29, round 1** (earlier wording, verbatim):
+
+```text
+| Key insight | At most Γ deviating coefficients per constraint; the counterpart stays linear or mixed-integer [S001 pp. 3–4]; robust 0–1 problems keep the nominal complexity [S004 pp. 5–7, 22] |
+```
+
+SKILL.md packet, item k = 27: the robust MIP staying a MIP is on p. 10 of the card, not pp. 3–4 [S001 p. 10]; the page is added.
+
 <a id="anatomy-best-subset-trees"></a>
 ## Signature work: best subset selection and optimal trees (SW4)
 
@@ -1014,6 +1082,14 @@ The line before this increment (verbatim):
 | Why then | The rebuilt speed-up (Method 2): 200 billion in arXiv v1, about 450 billion in print (AoS p. 819), 800 billion for trees [S010 pp. 7–8; S081 p. 4; S011 pp. 5–6] |
 | Abandoned paths | Slow lower bounds for p ≫ n and losing regimes printed [S010 pp. 34, 38–40]; "most of our results for OCT and OCT-H do not carry explicit certificates" [S011 p. 26]; by 2018 local search for trees |
 | Reception | HTT (DOI 10.1214/19-STS733) and the 2020 exchange, answered in the critics' frame [S095 pp. 3, 10, 21, 23]; lecture, class, company, book (2019), Lanchester Prize 2021 |
+
+**Claim audit 2026-10-29, round 1** (earlier wording, verbatim):
+
+```text
+| Key insight | Exact estimator; good solutions by a discrete first-order method or CART; the warm-started MIO proves optimality or reports a gap [S010 pp. 1, 5–6, 18–20] |
+```
+
+SKILL.md packet, item k = 29: CART is the warm start of the trees paper [S011 pp. 14–15], not in S010; the citation is split by clause (estimator and first-order method [S010 pp. 5, 18–20]; certificate or gap [S010 pp. 1, 6]).
 
 <a id="anatomy-prescriptive-analytics"></a>
 ## Signature work: From Predictive to Prescriptive Analytics (SW5)
@@ -1403,6 +1479,25 @@ researched: 2026-10-28
 ```text
 - State once, at first activation: *This is distilled from Bertsimas's public work (papers, books, homepage essay, the 2014 Sloan oral history, students' theses, published critiques), not Bertsimas's own advice; no full-text deep reading has been done yet.*
 ```
+
+**Claim audit 2026-10-29, round 1** (earlier wording, verbatim):
+
+SKILL.md, Corrections from the full texts (C7, not in the sample; narrowed with SKILL.md packet item k = 9, see [Method 3](#method-3)):
+
+```text
+- **C7** ⚠ Method 3 from 2004 → one knob from 1990 [S597 pp. 36–38]; knob-free precursor 1988 [S048 p. 29]; knobs from moments 2006, samples 2009 [S014 pp. 10–12; S024 p. 3].
+```
+
+`references/technique-catalog.md` (catalog packet of the same audit; the catalog links to no ledger anchor):
+
+```text
+| Many jobs of few types (job shop, packet routing) | fluid LP, solved in closed form | a schedule that tracks the fluid optimum, with an additive error | [S130 pp. 7–8; S205 pp. 9–11] |
+| Two-stage or multistage adaptive RO | a sampled bound from binding scenarios, or a bound from the set's symmetry | a static, affine or polynomial policy priced against it | [S138 pp. 7–9; S134 pp. 6, 12–18; S075 pp. 7, 14–15] |
+- **Price of a policy class with tight families.** How to use: bound the ratio of a static or affine policy to the adaptive optimum by a quantity of the set alone (symmetry, non-convexity), then build the family that attains it. Cards: [S134 pp. 6, 12–18; S176 pp. 13–14; S192 pp. 16, 18–19; S392 pp. 15–17].
+- **Regime maps and phase transitions.** How to use: use the exact solver as an instrument across n, p, SNR and correlation; fit a when-to-use rule. Cards: [S061 pp. 4, 14–19; S355 pp. 4–5, 13–15; S170 pp. 5, 17, 20; S046 p. 19; S104 pp. 4, 25–27; S011 pp. 30–35].
+```
+
+Catalog packet items: k = 3, the closed-form fluid optimum is Proposition 2 and the additive error Theorem 4 [S205 pp. 7–11, 26–27]; k = 6, the polynomial policies are priced against the exact LP over all extreme disturbance sequences at small horizons, now named in the bound column [S075 pp. 7, 14–15]; k = 9, the static-versus-adaptive bound ρ_adapt (a scaling between the projection box and the coupled set), its tight instance and its comparison with the symmetry and non-convexity bounds are on pp. 21–23, while pp. 15–17 bound the coupled against the constraint-wise problem [S392 pp. 21–23]; k = 13 (flagged by the second auditor only), the routing card maps regimes by demand and pick-up window, now named beside n, p, SNR and correlation [S046 p. 19].
 
 <a id="card-key"></a>
 ## Card key

@@ -153,7 +153,7 @@ Six methods passed all four checks (recurrence, say–do, executable, exclusive)
 - Say–do: ✅ stated (sole-author texts 1994–1995 [S580 pp. 5, 10; S185 p. 1]; C1) + practised 1988–2026; full texts: 346 linked works, 5 contradicting.
 - ⚠ SD 1988–1997: the kept class is an analysable distribution or queue class [S239 pp. 1–2, 8, 12].
 - ⚠ Class left → his group builds the algorithm (outer approximation, custom branch-and-bound) [S040 pp. 2, 6, 10] (C5).
-- ✗ Outside it: the 2025–26 foundation-model papers [S426 pp. 4, 6].
+- ✗ Outside it: some 2025–26 foundation-model papers [S426 pp. 4, 6; S474 pp. 2, 4, 8].
 **Steps**:
 1. Name the owning tradition, its tool and what it optimizes only implicitly (dynamic programming, tail inequalities, greedy selection, estimate-then-plug-in) [S057 p. 1].
 2. Choose variables over a describable set: performance vectors, moments, a budget Γ of deviating coefficients, support indicators, ML weights.
@@ -191,7 +191,7 @@ Six methods passed all four checks (recurrence, say–do, executable, exclusive)
 - Stated: "It is our belief that the “price” of fairness is effectively inescapable if the allocations prescribed by a given scheme are to be ethically acceptable and implementable." [S012 p. 14]; the 2004 abstract [02 G4].
 - Practice: one knob per constraint, solution-independent bounds, the class kept, the PILOT4 bad case printed [S001 pp. 3–5, 9–16]; price-of-fairness bounds uniform over utility sets [S012 pp. 7, 11–14]; community satisfaction priced in buses and dollars [S262 pp. 10–11].
 - Say–do: ✅ stated jointly (2004, 2011) + practised with one knob from 1990 [S597 pp. 36–38]; full texts: 205 linked works, none contradicting.
-- ⚠ Precursor, 1988–1993: the price of simplicity, no knob or bound; the thesis prices robustness in lost tractability [S048 p. 29].
+- ⚠ Precursor, 1988–1993: the price of simplicity, with no decision-maker's knob or violation bound; the thesis prices robustness in lost tractability [S048 pp. 12–13, 29, 40–44].
 - ✗ Knobs set from data *later* → from moments in 2006 [S014 pp. 10–12], from samples in 2009 [S024 pp. 3, 5]; hand-set knobs persist (C7).
 - ⚠ The price of interpretability is usually a point or two, without a bound [S190 pp. 4, 7–8].
 **Steps**:
@@ -253,7 +253,7 @@ Six methods passed all four checks (recurrence, say–do, executable, exclusive)
 - Stated: the impact test, 11 statements on 5 occasions 2014–2026 (homepage essay; oral history pp. 6–7); courses become books; companies for scale, hedged in 2014 [02 T1, R1, R4, O8, C9].
 - Practice: the thesis problem class came from his adviser's group [S048 pp. 18, 71, 125]; a cohort consolidated in a sole-author survey with open problems [S185 pp. 1, 4, 46, 48–49, 51]; an organ-allocation programme over successive theses [S476 pp. 1–2]; books with former students and colleagues, 2019–2025 [01 §1.9]; the 1997 text was developed while teaching an MIT graduate course [B001 p. 1]; publisher pages name MIT classes that use the 2004, 2005 and 2016 texts [B014 p. 1; B006 p. 1; B017 p. 1]; the 2019–2025 pages name none [B009 p. 1; B011 p. 1; B013 p. 1; B019 pp. 1–2]; Interpretable AI 2018.
 - Say–do: ✅ for steps 2–5; ⚠ step 1 stated only: the pre-start test cannot be seen in papers, though students restate it [04 B.2, B.5]; full texts: 194 linked works, none contradicting.
-- ⚠ The company before the paper [S050 pp. 1, 10]; teachability argued after the fact [S018 pp. 4, 23].
+- ⚠ The company before the paper [S050 pp. 1, 10]; teachability only after the fact [inferred]: textbooks said to ignore a bound [S018 pp. 4, 23].
 - ⚠ Carriers the steps omit: the LO book's errata sheet by printing, last updated 2021 (at least six printings) [B003 p. 1]; RO taught in his graduate methods course 15.093J by 2009 [B021 pp. 1–2].
 **Steps**:
 1. Gate: assume 100% success. Would a graduate course teach it (an undergraduate course marks a once-or-twice-a-career breakthrough)? Would a company use it within 2–5 years (two in 2025)? Would it improve understanding of how the world works? No answer in advance → do not start.
@@ -279,11 +279,11 @@ Six methods passed all four checks (recurrence, say–do, executable, exclusive)
 2. Read the policy off its solution: indices from reduced costs, rounding, tracking the fluid optimum, an affine rule [S051 pp. 7–9].
 3. Prove the policy's ratio to the bound: a constant factor, an asymptotic optimality, or a price of the policy class [S016 pp. 5–11]. No ratio provable → report the computed gap per instance and regime, and say so [S072 pp. 26–27].
 4. Check tightness: an instance attaining the ratio, or a counterexample just outside exactness; open constants printed as conjectures [S052 pp. 20–21].
-5. Grade every heuristic, the incumbent's included, by its gap to the same bound [S072 pp. 26–31].
+5. Grade the incumbent by its gap to the same bound, other heuristics tabulated beside it [S072 pp. 26–31]; *skill's rule*: a gap for every heuristic.
 6. If the gap does not close, strengthen the relaxation (higher interaction order, PSD constraints) and print where its size becomes prohibitive [S185 pp. 22–24, 44–45].
 **🔴 Stop rule**: no bound, no claim of near-optimality; if the policy is only compared with other heuristics, say so, as the 1995 survey did of its own policies [S185 p. 49].
 **Applies to stage**: formulation; experiments; judging, wherever no exact solve exists (dynamic, stochastic, adaptive policies; heuristics at scale).
-**Different from standard practice**: one bound grades the incumbent and every heuristic, in a loop carried across queueing, routing, IO and adaptive RO. Bound-first alone is not his (approximation algorithms [S052 pp. 3, 11]; conservation laws, Whittle's and Kelly's bounds [S185 pp. 3–4, 21; S368 p. 8]): claim novelty for the transfer and the graded incumbent.
+**Different from standard practice**: one bound grades the incumbent and every heuristic, in a loop carried across queueing, routing, IO and adaptive RO. Bound-first alone is not his (Johnson's tours graded by the Held–Karp bound [S052 p. 7]; conservation laws, Whittle's and Kelly's bounds [S185 pp. 3–4, 21; S368 p. 8]): claim novelty for the transfer and the graded incumbent.
 **Limitations**: a bound can be loose without telling which side [S072 p. 26]; mostly 1988–2002 work; where an exact MIO solves at scale, Method 4's gap replaces the ratio [S010 pp. 27–40]; the yardstick is a bound, not an owner's rule (Method 5).
 
 ## Stage Workflows
@@ -308,7 +308,7 @@ Pre-synthesis wording and the citations cut at the tighten step: `references/res
 2. One joint model for the greedy or hand-tuned step (→ Method 4); knob and bound for the property to price, the incumbent rule nested as one knob setting [S199 pp. 5, 8, 17–18] (→ Method 3).
 3. A dynamic, stochastic or adaptive policy with no exact solve: relaxation first, policy read off it, ratio and tight instance (→ Method 7).
 4. If a heuristic already works, find the problem it solves exactly (→ Heuristic 1); with a new device, re-derive the classical results first (→ Heuristic 10).
-**🔴 Checkpoint**: class left without measured solve times → change the device. *Corrections*: test exactness on a small example; check the LP-relaxation strength of big-M models, as his formulation papers do [S015 pp. 2, 4–5, 10].
+**🔴 Checkpoint**: class left without measured solve times → change the device. *Corrections*: test exactness on a small example [05 §4.3]; check the LP-relaxation strength of big-M models [05 §2.5], as his formulation papers check their own [S015 pp. 2, 4–5, 7, 10].
 **Output**: formulation, class statement, dual reading, boundary, knob and bound, policy bound.
 
 ### Workflow C: Experimental design and execution
@@ -318,7 +318,7 @@ Pre-synthesis wording and the citations cut at the tighten step: `references/res
 2. Synthetic data with known truth plus real data; baselines with versions at matched complexity and budget, overruns printed [S340 pp. 16, 23]; the partner's rule as baseline; your run time reported (→ Method 5).
 3. The regimes a critic would choose: low SNR, feasibility-border instances [S015 p. 11], misspecified truths and points beyond the set [S053 pp. 16–22]; released code.
 4. Time to the best solution reported apart from time to proof [S184 pp. 25–36]; the exact solver as an instrument to map regimes [S061 pp. 4, 14–19].
-5. Stochastic or dynamic policies, the owner's rule included: simulate with a stated stopping rule (batch means; CI width a set fraction of the estimate [S016 p. 12]), from light to heavy traffic; report each gap to the Method 7 bound per regime, with its error [S072 pp. 26–31]; use the owner's simulator if one exists.
+5. Stochastic or dynamic policies, the owner's rule included: simulate with a stated stopping rule (batch means; CI width a set fraction of the estimate [S016 p. 12]), from light to heavy traffic; report the best policy's gap to the Method 7 bound per regime [S072 pp. 26–31]; *skill's rule*: every policy's gap, with its error; use the owner's simulator if one exists.
 **🔴 Checkpoint**: lower bound stuck or root node not passed → a stronger formulation first (Method 4 stop rule), then Heuristic 3, and change the claim; a policy gap open in every regime → Method 7 step 6.
 **Output**: a protocol table (data, baselines, solver, machine, limits, splits, stopping rule, regimes, admissions).
 
@@ -348,7 +348,7 @@ Pre-synthesis wording and the citations cut at the tighten step: `references/res
 ### Workflow G: Supervision and group organisation
 **Steps**:
 1. Heuristic 8; theses assembled from joint papers [04 C.2]; a student carries each programme from its first paper [S016 p. 1].
-2. Partners from year one; job-talk rehearsal; companies only after graduation; former students as co-authors on later stages of a programme [S476 p. 1].
+2. Partners from year one; job-talk rehearsal; companies only after graduation [04 F.13, F.14, B.7]; former students as co-authors on later stages of a programme [S476 p. 1].
 **🔴 Checkpoint**: at capacity (his words, 2014; missed meetings, 2015) → a named second adviser per student [04 B.4].
 **Output**: a supervision plan per student.
 
@@ -402,7 +402,7 @@ Full evidence: references/research/09-evidence-ledger.md#anatomy-moment-bounds
 |---|---|
 | Origin | [stated-joint] Soyster too conservative; ellipsoidal counterparts nonlinear and unattractive for discrete problems [S001 pp. 1–3]; how Γ arose: unknown |
 | Why then | Ben-Tal–Nemirovski (DOI 10.1287/moor.23.4.769) and El Ghaoui–Lebret; CPLEX 6.0 solved a 200-item robust knapsack [S001 pp. 10, 12] |
-| Key insight | At most Γ deviating coefficients per constraint; the counterpart stays linear or mixed-integer [S001 pp. 3–4]; robust 0–1 problems keep the nominal complexity [S004 pp. 5–7, 22] |
+| Key insight | At most Γ deviating coefficients per constraint; the counterpart stays linear or mixed-integer [S001 pp. 3–4, 10]; robust 0–1 problems keep the nominal complexity [S004 pp. 5–7, 22] |
 | Minimal evidence | Solution-independent violation bounds [S001 pp. 4–6]; the knapsack point, a 0.57% bound for a 1.54% loss [S001 pp. 10, 12] |
 | Abandoned paths | PILOT4, where the price stays high [S001 pp. 14, 16]; data-driven sets later [S013 pp. 3–4, 10] |
 | Reception | His most cited work; refined by Poss and Iancu–Trichakis; 2022 book; 2026 retrospective (abstract only [S614]) |
@@ -414,7 +414,7 @@ Full evidence: references/research/09-evidence-ledger.md#anatomy-price-of-robust
 |---|---|
 | Origin | [stated-joint] statistics' belief that MIO is impractical, dated and conceded [S010 pp. 2, 5, 8]; a student line (Shioda, King, Dunn) with postdoc Mazumder |
 | Why then | The rebuilt speed-up (Method 2) [S010 pp. 7–8; S081 p. 4; S011 pp. 5–6] |
-| Key insight | Exact estimator; good solutions by a discrete first-order method or CART; the warm-started MIO proves optimality or reports a gap [S010 pp. 1, 5–6, 18–20] |
+| Key insight | Exact estimator; good solutions by a discrete first-order method [S010 pp. 5, 18–20] or CART [S011 pp. 14–15]; the warm-started MIO proves optimality or reports a gap [S010 pp. 1, 6] |
 | Minimal evidence | Gap curves within a 500 s limit [S010 pp. 27–33]; depth-matched gains over CART on 53 UCI data sets [S011 pp. 26–36] |
 | Abandoned paths | Slow lower bounds for p ≫ n and losing regimes printed [S010 pp. 34, 38–40]; "most of our results for OCT and OCT-H do not carry explicit certificates" [S011 p. 26] |
 | Reception | HTT (DOI 10.1214/19-STS733) and the 2020 exchange, answered in the critics' frame [S095 pp. 3, 10, 21, 23]; book (2019), Lanchester Prize 2021 |
@@ -551,7 +551,7 @@ Earlier wording, verbatim: ledger `#corrections`, `#honest-boundary`, `#how-to-u
 - **C4** ✗ AP: outcomes thin → measured in several deployments [S115 pp. 22–24; S617 arXiv pp. 22–25].
 - **C5** ✗ Solver internals as black boxes → custom algorithms from 2009 [S040 pp. 2, 6, 10].
 - **C6** ✗ Method 2 step 3 as his practice → the skill's rule; rebuilt only 2014–2017.
-- **C7** ⚠ Method 3 from 2004 → one knob from 1990 [S597 pp. 36–38]; knob-free precursor 1988 [S048 p. 29]; knobs from moments 2006, samples 2009 [S014 pp. 10–12; S024 p. 3].
+- **C7** ⚠ Method 3 from 2004 → one knob from 1990 [S597 pp. 36–38]; precursor 1988 with no decision-maker's knob [S048 pp. 29, 40–44]; knobs from moments 2006, samples 2009 [S014 pp. 10–12; S024 p. 3].
 - **C8** ✗ Method 4 checks not his practice → a stated yardstick in 1993 [S005 pp. 3–4]; practised from 2002 [S070 pp. 9–15], widely after 2020.
 - **C9** ✗ Tension T1 from 2017 → from 2004 [S031 p. 26].
 - **C10** ✗ Formulation strength as a general blind spot (T4) → tree MIOs and some ML models only.
