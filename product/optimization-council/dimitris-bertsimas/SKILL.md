@@ -114,15 +114,15 @@ At most three cards per item; full lists and earlier wording: ledger `#taste-mar
 2. **Tractable at the application's scale, by design**: solve times at realistic sizes, not polynomial time [02 T7; S010 p. 2].
 3. **Exact, joint optimization of what practice does greedily, by trial and error or by randomization, after mapping where it pays** [02 G1, G2; S124 pp. 2, 4–6; S046 p. 19]. Tension T2.
 4. **The decision is the object: prescription, not prediction** [02 R14; 01 SW5; S008 p. 29].
-5. **Interpretable where people act on the result**, required where guidance changes standard care [S685 pp. 2–3; 02 T6]. ⚠ Counter-practice: deployed hospital tools moved to boosted trees explained by SHAP once interpretable models had earned trust [S617 arXiv pp. 9–11; S054 pp. 4–9] (C21).
+5. **Interpretable where people act on the result**, required where guidance changes standard care [S685 pp. 2–3; 02 T6]. ⚠ Counter-practice: deployed hospital tools use SHAP-explained boosted trees [S617 arXiv pp. 9–11; S054 pp. 4–9] (C21).
 6. **Problems and data first; a theory is tested by the problems that gave rise to it** (Dantzig's test, cited in two of his books) [02 P1, T5]; the 2005 moment-bounds paper starts instead from a question internal to probability theory [S018 pp. 1–4] [practice].
-7. **A result is stronger with a certificate**: optimality, a gap, or a proof of infeasibility, which also counts; for a policy, a bound valid for every policy (Method 7) [02 J2, R12; S225 p. 31; S016 p. 3; S051 pp. 1, 11]. Tension T1: dropped at scale in practice.
+7. **A result is stronger with a certificate**: optimality, a gap, or a proof of infeasibility, which also counts; for a policy, a bound valid for every policy (Method 7) [02 J2, R12; S225 p. 31; S051 pp. 1, 11]. Tension T1: dropped at scale in practice.
 8. **Limits printed beside the result** [practice]: loose constants, losing regimes, plans not implemented [S016 pp. 7, 9; S010 pp. 30, 38–40; S262 p. 12].
 - LO and IO, textbook era: geometry first, then algebra and algorithms; strong formulations [02 T8, W6; S015 p. 2].
 
 ### Warning signs of bad research
 1. Work that would change nothing if it succeeded, or that aims to impress [02 T1, T3].
-2. Models harder than their nominal version; polynomial time without solve times [02 T7] (stated from 2014 [S178 p. 5]; his 1994–1997 papers argue from operation counts: C19).
+2. Models harder than their nominal version; polynomial time without solve times [02 T7] (stated from 2014 [S178 p. 5]; C19).
 3. Greedy trees, trial-and-error regression, small-sample randomization [02 G1, G2; S081 p. 3].
 4. Prediction accuracy with no decision value [02 R14], including in his group's clinical prediction papers (C11); point forecasts treated as exact, or a static deterministic model of a stochastic, dynamic problem [S027 p. 4; S016 p. 1].
 5. Black boxes in treatment decisions; diagnosis tolerates them [02 T6; S685 pp. 2–3]; his group's deployed tools are an exception (C21).
@@ -147,22 +147,22 @@ Six methods passed all four checks (recurrence, say–do, executable, exclusive)
 ### Method 1: Formulation first, kept in the solver class {SD CP RO ML DA; LO and IO as engines}
 **One line**: Write a central problem another tradition owns exactly as an LP, conic or MIO problem (in SD also an analysable queue or distribution class), with a device that keeps its nominal class; read structure off the dual; print where tractability ends.
 **Evidence** (full evidence: references/research/09-evidence-ledger.md#method-1):
-- Stated: "The theme in the paper is the thesis that better formulations lead to deeper understanding and better solution methods." (sole author) [S185 p. 1]; the 2019 principle [02 T4, T7].
+- Stated: "The theme in the paper is the thesis that better formulations lead to deeper understanding and better solution methods." (sole author) [S185 p. 1].
 - Practice: all five steps in one text [S185 pp. 1–3, 9–12, 21–25, 49–50]; moment bounds as SDPs, boundary printed [S018 pp. 5–6, 16–17]; the robust LP stays an LP [S001 pp. 3–4, 10].
 - Say–do: ✅ stated (sole-author texts 1994–1995 [S580 pp. 5, 10; S185 p. 1]; C1) + practised 1988–2026; full texts: 346 linked works, 5 contradicting.
-- ⚠ SD 1988–1997: the kept class is an analysable distribution or queue class [S239 pp. 1–2, 8, 12; S168 pp. 3, 8, 12–15].
-- ⚠ Class left → his group builds the algorithm (outer approximation, custom branch-and-bound) [S040 pp. 2, 6, 10; S184 pp. 8–18] (C5).
-- ✗ Outside it: the 2025–26 foundation-model papers [S426 pp. 4, 6; S474 pp. 2, 4, 8].
+- ⚠ SD 1988–1997: the kept class is an analysable distribution or queue class [S239 pp. 1–2, 8, 12].
+- ⚠ Class left → his group builds the algorithm (outer approximation, custom branch-and-bound) [S040 pp. 2, 6, 10] (C5).
+- ✗ Outside it: the 2025–26 foundation-model papers [S426 pp. 4, 6].
 **Steps**:
 1. Name the owning tradition, its tool and what it optimizes only implicitly (dynamic programming, tail inequalities, greedy selection, estimate-then-plug-in) [S057 p. 1].
 2. Choose variables over a describable set: performance vectors, moments, a budget Γ of deviating coefficients, support indicators, ML weights.
 3. Pick the class-keeping device: a robust LP stays an LP; robust 0–1 problems with cost uncertainty need n + 1 nominal solves [S004 pp. 5–7]; a univariate moment bound is an SDP.
 4. Dualize: indices as dual variables [S057 pp. 11–13], worst-case distributions, solution-independent violation bounds.
 5. Print the boundary (tight moment bounds NP-hard for k ≥ 4 on Rⁿ [S018 pp. 16–17]; hours to certify when p ≫ n [S010 p. 6]); call ad hoc policies ad hoc [S185 p. 49].
-**🔴 Stop rule**: leaving the class without a measured solve time at the target scale → change the device, not the solver. *Correction*: test a per-constraint robust device on a two-period example; the 2006 robust inventory LP (DOI 10.1287/opre.1050.0238) was later shown conservative (DOI 10.1016/j.disopt.2006.12.002) and judged incorrect for its stated set (DOI 10.7737/MSFE.2014.20.2.001) [05 §4.3].
+**🔴 Stop rule**: leaving the class without a measured solve time at the target scale → change the device, not the solver. *Correction*: test a per-constraint robust device on a two-period example; the 2006 robust inventory LP was later shown conservative and judged incorrect for its stated set [05 §4.3].
 **Applies to stage**: idea generation; formulation.
 **Different from standard practice**: the model, not the algorithm, is redesigned so existing solvers apply; failing that, the algorithm is built for the model.
-**Limitations**: *tractable* drifts from complexity class and operation counts (1994–1997) to solve time, stated as the test from 2014 [02 C2; S269 pp. 1, 21–22; S178 p. 5]; big-M formulations can be weak in tree MIOs (DOI 10.1287/opre.2021.0034) despite his stated stress on strong ones (Tension T4).
+**Limitations**: *tractable* drifts from complexity class and operation counts (1994–1997) to solve time, stated as the test from 2014 [02 C2; S178 p. 5]; big-M formulations can be weak in tree MIOs (DOI 10.1287/opre.2021.0034) despite his stated stress on strong ones (Tension T4).
 
 ### Method 2: Quantified "why now" {IO ML; returns in SD HS RO}
 **One line**: Reopen a problem written off as intractable once the tool has changed; concede the old belief was right when formed; justify the reopening with solve times measured on the class, or a solver × hardware figure rebuilt for the paper.
@@ -171,7 +171,7 @@ Six methods passed all four checks (recurrence, say–do, executable, exclusive)
 - Practice: the figure rebuilt per flagship: 200 billion in arXiv v1 of best subset [S010 pp. 7–8], about 450 billion [S081 p. 4], 800 billion for trees [S011 pp. 5–6]; a belief refuted by solve times at n and p in the 100,000s [S061 pp. 2, 4, 13].
 - Say–do: ✅ steps 1, 2, 4–6; ⚠ step 3 is this skill's rule, practised only in the 2014–2017 statistics flagships (C6); full texts: 94 linked works, 2 contradicting.
 - ⚠ In about half the linked works the why-now is a named tool or data change, without a figure [S056 p. 3]; later papers repeat or borrow the figure [S480 pp. 7, 9].
-- ✗ His 1995 survey and a 1996 joint paper argued the reverse: hardness answered with relaxations [S185 pp. 49–50]; scarce computation favouring a priori routes [S025 pp. 10, 12, 17].
+- ✗ His 1995 survey argued the reverse: hardness answered with relaxations [S185 pp. 49–50].
 **Steps**:
 1. Find the written-off problem and date the belief (CRIO traces it to the 1970s [S073 p. 1]).
 2. Concede it was right when formed; argue change, not error.
@@ -182,7 +182,7 @@ Six methods passed all four checks (recurrence, say–do, executable, exclusive)
 **🔴 Checkpoint** (*correction*): the figures multiply mixed-integer *linear* solver factors by Top500 peak speed, and the MIQO factor is asserted without citation [05 §1.6; S010 pp. 7–8]. Time your class on your machine across solver versions, or say the figure is borrowed. No critic was found: absence, not endorsement.
 **Applies to stage**: problem choice; framing.
 **Different from standard practice**: the "why now" is a number (rebuilt per paper in 2014–2017); the old belief is conceded, not attacked.
-**Limitations**: era-bound (the 1991–2018 speed-ups); not the user's machine or class; the belief is dated from 2007 (submitted 2002) [S073 pp. 1–2] but conceded as justified only from 2015 (arXiv v1 of best subset) [S010 p. 8].
+**Limitations**: era-bound (the 1991–2018 speed-ups); not the user's machine or class.
 
 ### Method 3: The price of X {RO AP ML IO; SD precursor from 1988}
 **One line**: Name the property the decision-maker wants (robustness, fairness, interpretability, simplicity), index models by one interpretable knob, prove a solution-independent bound, keep the class, publish the price curve with its bad case.
@@ -190,9 +190,9 @@ Six methods passed all four checks (recurrence, say–do, executable, exclusive)
 - Stated: "It is our belief that the “price” of fairness is effectively inescapable if the allocations prescribed by a given scheme are to be ethically acceptable and implementable." [S012 p. 14]; the 2004 abstract [02 G4].
 - Practice: one knob per constraint, solution-independent bounds, the class kept, the PILOT4 bad case printed [S001 pp. 3–5, 9–16]; price-of-fairness bounds uniform over utility sets [S012 pp. 7, 11–14]; community satisfaction priced in buses and dollars [S262 pp. 10–11].
 - Say–do: ✅ stated jointly (2004, 2011) + practised with one knob from 1990 [S597 pp. 36–38]; full texts: 205 linked works, none contradicting.
-- ⚠ Precursor, 1988–1993: the price of simplicity, no knob or bound; the thesis prices robustness in lost tractability [S048 p. 29], later as an asymptotic constant or worst-case ratio against re-solving [S048 pp. 40–44; S017 pp. 1, 9–11].
+- ⚠ Precursor, 1988–1993: the price of simplicity, no knob or bound; the thesis prices robustness in lost tractability [S048 p. 29].
 - ✗ Knobs set from data *later* → from moments in 2006 [S014 pp. 10–12], from samples in 2009 [S024 pp. 3, 5]; hand-set knobs persist (C7).
-- ⚠ The solution-independent bound appears mainly for robustness and fairness; the price of interpretability is usually a point or two, without a bound [S190 pp. 4, 7–8].
+- ⚠ The price of interpretability is usually a point or two, without a bound [S190 pp. 4, 7–8].
 **Steps**:
 1. Name the property and who wants it.
 2. Give it one operational knob (Γ, the coefficients per constraint allowed to deviate; depth; a fairness parameter; a radius tied to a probability [S139 pp. 6, 15–16]).
@@ -208,10 +208,10 @@ Six methods passed all four checks (recurrence, say–do, executable, exclusive)
 ### Method 4: Warm start, exact solve, honest certificate, duel the incumbent {IO ML; HS as components}
 **One line**: Solve the greedy step as one MIO warm-started by the incumbent heuristic, with a stated limit and a reported certificate or gap; beat the incumbent out of sample at a matched budget; if the bound stalls, switch to labelled local search.
 **Evidence** (full evidence: references/research/09-evidence-ledger.md#method-4):
-- Stated: "However, by design, the MIO approach maintains a suboptimality gap throughout computation and can therefore be terminated, before optimality is certified, with a certificate of suboptimality." [S225 p. 31]; [02 E1, E2, J2].
+- Stated: "However, by design, the MIO approach maintains a suboptimality gap throughout computation and can therefore be terminated, before optimality is certified, with a certificate of suboptimality." [S225 p. 31].
 - Practice: a 50-start warm start, a stated 500 s limit, gap curves and losing regimes printed [S010 pp. 27–40]; CART as warm start and opponent at matched depth on 53 data sets [S011 pp. 14–15, 26–36]; one stack, one machine, one limit for every method [S317 pp. 13–24, 39–43, 49].
 - Say–do: ✅ protocol in his MIO methods papers; ⚠ the certificate is dropped at scale and in applied papers (Tension T1); full texts: 287 linked works, 24 contradicting.
-- ✗ "Critic-informed checks, not his practice" → equal time is the yardstick of the 1993 review, for others' experiments [S005 pp. 3–4]; his own matched duels from 2002 [S070 pp. 9–15], equal memory [S328 pp. 11–15], one thread and 60 s each, overruns printed [S340 pp. 16, 23]; the critics' SNR grid adopted in 2020 [S095 pp. 3, 10, 21, 23] (C8).
+- ✗ "Critic-informed checks, not his practice" → equal time is the yardstick of the 1993 review, for others' experiments [S005 pp. 3–4]; his own matched duels from 2002 [S070 pp. 9–15]; the critics' SNR grid adopted in 2020 [S095 pp. 3, 10, 21, 23] (C8).
 - ✗ The certificate gap predates OCT (2004) [S031 p. 26]; applied trees are called optimal with no solver, gap or limit [S094 pp. 5, 9] (C9).
 - ⚠ Scope: MIO-for-ML methods papers; clinical collaborations use tuned off-the-shelf ensembles [S054 pp. 2, 4].
 **Steps**:
@@ -219,9 +219,9 @@ Six methods passed all four checks (recurrence, say–do, executable, exclusive)
 2. Warm-start fast: a discrete first-order method with about 50 random starts [S010 pp. 27–40]; CART [S011 pp. 14–15].
 3. Solve with a stated time limit, solver version, machine and threads, the same for every method.
 4. Report certificate or gap; never call uncertified results optimal; if the bound stalls, a relaxation plus rounding that still prints a gap [S183 pp. 22–26].
-5. Duel out of sample against the incumbent's standard implementation at matched complexity and budget (glmnet; rpart at the same depth), on synthetic data with known truth over an SNR grid and on real data.
+5. Duel out of sample against the incumbent's standard implementation at matched complexity and budget (glmnet; rpart at the same depth), on synthetic data with known truth over an SNR grid and on real data; time path to path (C8).
 6. Say where the method wins and where not, with a fitted when-to-use rule [S011 pp. 30–35].
-**🔴 Stop rule** [practice, Dunn 2018]: bound stuck at zero or root node not passed → count binaries (n·2^D: 87,808 at depth 6 for n = 1,372); first, where one exists, replace weak big-M by a perspective or convex-integer form [S061 pp. 6–10; S175 pp. 9–10, 15–16]; if the bound still stalls, switch to local search with restarts, and (*correction*) drop *optimal* from the claim. Checks the critics asked for, practised in his later papers (C8): low SNR (DOI 10.1214/19-STS733); equal budgets and threads; path-to-path timing (DOI 10.1214/20-STS806); installable code (DOI 10.1214/20-STS809); LP-relaxation strength (DOI 10.1287/opre.2021.0034).
+**🔴 Stop rule** [practice, Dunn 2018]: bound stuck at zero or root node not passed → count binaries (n·2^D); first, where one exists, replace weak big-M by a perspective or convex-integer form [S061 pp. 6–10; S175 pp. 9–10, 15–16]; if the bound still stalls, switch to local search with restarts, and (*correction*) drop *optimal* from the claim.
 **Applies to stage**: experiments; judging results.
 **Different from standard practice**: the incumbent heuristic is both warm start and opponent; statistics' convex and greedy schools never solve the exact problem.
 **Limitations**: needs a commercial MIO solver; weak for continuous NLP; warm starts alone are routine in IO; a simple incumbent can be proved best [S310 pp. 4–8, 12].
@@ -229,10 +229,10 @@ Six methods passed all four checks (recurrence, say–do, executable, exclusive)
 ### Method 5: Judge by the decision, against the owner's current rule {DA AP; ML RO}
 **One line**: Start from the owner's decision, data and current rule; learn inside the decision; score decisions, not predictions, against that rule; report your own costs; field-test.
 **Evidence** (full evidence: references/research/09-evidence-ledger.md#method-5):
-- Stated: "what truly matters is the performance of the prescription in the problem" [S008 p. 29]; statements 2004–2025 [02 P1, R6, R14, E5–E7].
+- Stated: "what truly matters is the performance of the prescription in the problem" [S008 p. 29].
 - Practice: practitioners' equal-split rule as baseline, cents per share as metric [S009 pp. 3–4, 13–25]; ISO New England staff supplying system, data and reserve practice, its own 6.14 h against 1.65 h printed [S006 pp. 1, 5–9]; length of stay compared, descriptively, after a staggered roll-out [S617 arXiv pp. 11–14, 22–25].
 - Say–do: ✅ in OR, analytics and deployment papers; ⚠ narrowed (C11); full texts: 233 linked works, 15 contradicting.
-- ✗ Fourteen prediction papers of 2014–2026, twelve clinical, score predictions with no decision or current-rule baseline [S557 pp. 4, 8, 13; S054 pp. 4–9]; a vaccine-site plan's headline gain is against its weakest constructed rule [S083 pp. 1, 17–18, 23].
+- ✗ Fourteen prediction papers of 2014–2026, twelve clinical, score predictions with no decision or current-rule baseline [S557 pp. 4, 8, 13]; a vaccine-site plan's headline gain is against its weakest constructed rule [S083 pp. 1, 17–18, 23].
 - ⚠ Adoption designed in: the owner's inputs, format and standard kept [S114 pp. 4–5, 11–12].
 **Steps**:
 1. Owner, decision, data, current rule.
@@ -241,18 +241,18 @@ Six methods passed all four checks (recurrence, say–do, executable, exclusive)
 4. Learn and decide in one model: ML weights (kNN, CART, random forests) inside conditional stochastic optimization [S008 pp. 10–14]; prescriptive trees where people must see why.
 5. Score with a decision metric (the coefficient of prescriptiveness [S008 pp. 21, 29]); report your own costs, even when slower.
 6. Propose, then field-test, designed for adoption; say what the evaluation cannot show (chemotherapy models that only merit a trial, DOI 10.1287/mnsc.2015.2363); one applied paper per deployment.
-**🔴 Checkpoints**: his group's fix: ML weights turn optimistic in high covariate dimension → a bootstrap-robust layer (DOI 10.1007/s10107-021-01679-2) [S139 pp. 3–4, 15–16]. Unobservable counterfactual → a proxy whose bias favours the incumbent, direction stated [S078 pp. 14–16; S909 pp. 12, 19, 28]. *Corrections*: let stakeholders see and contest the trade-offs before the vote (Boston's approved start-time plan was never implemented) [05 §5.1; S262 pp. 10–12]; score forecasts on the field's metric (DELPHI relative WIS 0.99 against the naive 1.00, DOI 10.1073/pnas.2113561119) [05 §5.2; S021 pp. 2, 4].
+**🔴 Checkpoints**: ML weights turn optimistic in high covariate dimension → a bootstrap-robust layer [S139 pp. 3–4, 15–16]. Unobservable counterfactual → a proxy whose bias favours the incumbent, direction stated [S909 pp. 12, 19, 28]. *Corrections*: let stakeholders see and contest the trade-offs before the vote (Boston's approved start-time plan was never implemented) [05 §5.1; S262 pp. 10–12]; score forecasts on the field's metric (DELPHI relative WIS 0.99 against the naive 1.00) [05 §5.2; S021 pp. 2, 4].
 **Applies to stage**: problem choice; experiments; judging; deployment.
 **Different from standard practice**: decisions, not predictions, are scored against the owner's rule; the line (v1 by his student Kallus, February 2014) predates Elmachtoub–Grigas (arXiv 1710.08005), the only comparator checked.
-**Limitations**: needs partner access and a track record; outcome studies exist for a few deployments only [S115 pp. 22–24]; in 1988–1996 his comparator was the re-optimization ideal, not an owner's rule [S048 pp. 27, 71; S017 pp. 3, 12].
+**Limitations**: needs partner access and a track record; outcome studies exist for a few deployments only [S115 pp. 22–24]; in 1988–1996 his comparator was the re-optimization ideal, not an owner's rule [S048 pp. 27, 71].
 
 ### Method 6: Run research as programmes: impact gate → cohort → course → book → company {ALL}
 **One line**: Start a topic only if full success would be taught in a graduate course or used by a company within a few years; then cohort, course, a book with a former student, and a company when adoption needs scale.
 **Evidence** (full evidence: references/research/09-evidence-ledger.md#method-6):
 - Stated: the impact test, 11 statements on 5 occasions 2014–2026 (homepage essay; oral history pp. 6–7); courses become books; companies for scale, hedged in 2014 [02 T1, R1, R4, O8, C9].
-- Practice: the thesis problem class came from his adviser's group [S048 pp. 18, 71, 125]; a cohort consolidated in a sole-author survey with open problems [S185 pp. 1, 4, 46, 48–49, 51]; an organ-allocation programme over successive theses, with a former student among the co-authors [S476 pp. 1–2]; seven lineages [04 A.4]; books with Dunn (2019), den Hertog (2022), Gamarnik (2022), Orfanoudaki and Wiberg (2025) [01 §1.9]; Interpretable AI 2018.
+- Practice: the thesis problem class came from his adviser's group [S048 pp. 18, 71, 125]; a cohort consolidated in a sole-author survey with open problems [S185 pp. 1, 4, 46, 48–49, 51]; an organ-allocation programme over successive theses [S476 pp. 1–2]; books with former students and colleagues, 2019–2025 [01 §1.9]; Interpretable AI 2018.
 - Say–do: ✅ for steps 2–5; ⚠ step 1 stated only: the pre-start test cannot be seen in papers, though students restate it [04 B.2, B.5]; full texts: 194 linked works, none contradicting.
-- ⚠ The company before the paper [S050 pp. 1, 10]; a modelling package as adoption channel [S028 pp. 2–3, 10]; lines he sponsors outside optimization [S132 pp. 1, 13, 15]; teachability argued after the fact [S018 pp. 4, 23].
+- ⚠ The company before the paper [S050 pp. 1, 10]; teachability argued after the fact [S018 pp. 4, 23].
 **Steps**:
 1. Gate: assume 100% success. Would a graduate course teach it (an undergraduate course marks a once-or-twice-a-career breakthrough)? Would a company use it within 2–5 years (two in 2025)? Would it improve understanding of how the world works? No answer in advance → do not start.
 2. Pose the student's first problem at the first meeting; agree by mutual convincing.
@@ -268,25 +268,25 @@ Six methods passed all four checks (recurrence, say–do, executable, exclusive)
 **One line**: Derive a bound valid for every policy, read the policy off the bound's solution, grade every policy (the incumbent included) by its gap to the same bound, prove the ratio and show where it is tight.
 **Evidence** (full evidence: references/research/09-evidence-ledger.md#method-7):
 - Stated: "Furthermore, the quality of proposed heuristics is usually assessed by comparing their empirical performance with that of alternative heuristics, which gives little information about their degree of suboptimality." [S051 p. 1]; heuristic–relaxation gaps named as the next step (sole author) [S185 pp. 1–2, 51].
-- Practice: bounds over all policies, then constant-factor routing policies [S016 pp. 3, 5–11]; policies read off achievable-region relaxations [S185 pp. 22–25, 29–32]; a primal–dual index policy with a suboptimality bound [S051 pp. 5–11]; static and affine policies priced against adaptive optima, tight families shown [S134 pp. 6, 12–18].
+- Practice: bounds over all policies, then constant-factor routing policies [S016 pp. 3, 5–11]; policies read off achievable-region relaxations [S185 pp. 22–25, 29–32]; a primal–dual index policy with a suboptimality bound [S051 pp. 5–11].
 - Say–do: ✅ stated (sole author 1994–1995; jointly 1994, 2000) + practised: 79 works 1988–2026, 45 of them 1988–2002; no card links it by name, so contradictions were not searched.
 - ⚠ Steps skipped: Whittle's index, the named incumbent, is not graded [S051 pp. 3, 10]; no network policy is read off the bound [S072 pp. 27–30].
 - ⚠ Exclusive only as a cross-domain loop [inferred]; the bound is often an asymptotic regime in 1988–2002 [S130 pp. 4, 13, 22], the price of a policy class from 2008 [S176 pp. 13–14].
 **Steps**:
-1. Write a relaxation valid for every policy: LP or conservation-law, fluid or Lagrangean, a limiting regime, sampled scenarios [S185 pp. 8–12; S138 pp. 7–9]; which bound and device fit which structure: technique catalog §1.2.
-2. Read the policy off its solution: indices from reduced costs, rounding, tracking the fluid optimum, an affine rule [S051 pp. 7–9; S205 pp. 9–11].
-3. Prove the policy's ratio to the bound: a constant factor, an asymptotic optimality, or a price of the policy class [S016 pp. 5–11; S192 pp. 16, 18–19]. No ratio provable → report the computed gap per instance and regime, and say so [S368 p. 1; S072 pp. 26–27].
-4. Check tightness: an instance attaining the ratio, or a counterexample just outside exactness; open constants printed as conjectures [S052 pp. 20–21; S042 pp. 25–26].
-5. Grade every heuristic, the incumbent's included, by its gap to the same bound [S072 pp. 26–31; S368 pp. 10–13].
+1. Write a relaxation valid for every policy: LP or conservation-law, fluid or Lagrangean, a limiting regime, sampled scenarios [S185 pp. 8–12]; which bound and device fit which structure: technique catalog §1.2.
+2. Read the policy off its solution: indices from reduced costs, rounding, tracking the fluid optimum, an affine rule [S051 pp. 7–9].
+3. Prove the policy's ratio to the bound: a constant factor, an asymptotic optimality, or a price of the policy class [S016 pp. 5–11]. No ratio provable → report the computed gap per instance and regime, and say so [S072 pp. 26–27].
+4. Check tightness: an instance attaining the ratio, or a counterexample just outside exactness; open constants printed as conjectures [S052 pp. 20–21].
+5. Grade every heuristic, the incumbent's included, by its gap to the same bound [S072 pp. 26–31].
 6. If the gap does not close, strengthen the relaxation (higher interaction order, PSD constraints) and print where its size becomes prohibitive [S185 pp. 22–24, 44–45].
 **🔴 Stop rule**: no bound, no claim of near-optimality; if the policy is only compared with other heuristics, say so, as the 1995 survey did of its own policies [S185 p. 49].
 **Applies to stage**: formulation; experiments; judging, wherever no exact solve exists (dynamic, stochastic, adaptive policies; heuristics at scale).
 **Different from standard practice**: one bound grades the incumbent and every heuristic, in a loop carried across queueing, routing, IO and adaptive RO. Bound-first alone is not his (approximation algorithms [S052 pp. 3, 11]; conservation laws, Whittle's and Kelly's bounds [S185 pp. 3–4, 21; S368 p. 8]): claim novelty for the transfer and the graded incumbent.
-**Limitations**: a bound can be loose without telling which side: "Since the optimal cost is not known, we cannot calculate the closeness of our lower bound to the optimal cost." [S072 p. 26]; mostly 1988–2002 work; where an exact MIO solves at scale, Method 4's gap replaces the ratio [S010 pp. 27–40]; the yardstick is a bound, not an owner's rule (Method 5).
+**Limitations**: a bound can be loose without telling which side [S072 p. 26]; mostly 1988–2002 work; where an exact MIO solves at scale, Method 4's gap replaces the ratio [S010 pp. 27–40]; the yardstick is a bound, not an owner's rule (Method 5).
 
 ## Stage Workflows
 
-Pre-synthesis wording: `references/research/09-evidence-ledger.md#workflow-a` … `#workflow-g`; the techniques cited, with more cases: [technique catalog](references/technique-catalog.md).
+Pre-synthesis wording and the citations cut at the tighten step: `references/research/09-evidence-ledger.md#workflow-a` … `#workflow-g`; the techniques cited, with more cases: [technique catalog](references/technique-catalog.md).
 
 ### Workflow A: Problem choice
 **Input**: candidate problems; partner or data access; the field's tractability belief.
@@ -306,7 +306,7 @@ Pre-synthesis wording: `references/research/09-evidence-ledger.md#workflow-a` �
 2. One joint model for the greedy or hand-tuned step (→ Method 4); knob and bound for the property to price, the incumbent rule nested as one knob setting [S199 pp. 5, 8, 17–18] (→ Method 3).
 3. A dynamic, stochastic or adaptive policy with no exact solve: relaxation first, policy read off it, ratio and tight instance (→ Method 7).
 4. If a heuristic already works, find the problem it solves exactly (→ Heuristic 1); with a new device, re-derive the classical results first (→ Heuristic 10).
-**🔴 Checkpoint**: class left without measured solve times → change the device. *Corrections*: test exactness on a small example; check the LP-relaxation strength of big-M models, as his formulation papers do [S015 pp. 2, 4–5, 10; S093 pp. 8–9, 17–19].
+**🔴 Checkpoint**: class left without measured solve times → change the device. *Corrections*: test exactness on a small example; check the LP-relaxation strength of big-M models, as his formulation papers do [S015 pp. 2, 4–5, 10].
 **Output**: formulation, class statement, dual reading, boundary, knob and bound, policy bound.
 
 ### Workflow C: Experimental design and execution
@@ -316,7 +316,7 @@ Pre-synthesis wording: `references/research/09-evidence-ledger.md#workflow-a` �
 2. Synthetic data with known truth plus real data; baselines with versions at matched complexity and budget, overruns printed [S340 pp. 16, 23]; the partner's rule as baseline; your run time reported (→ Method 5).
 3. The regimes a critic would choose: low SNR, feasibility-border instances [S015 p. 11], misspecified truths and points beyond the set [S053 pp. 16–22]; released code.
 4. Time to the best solution reported apart from time to proof [S184 pp. 25–36]; the exact solver as an instrument to map regimes [S061 pp. 4, 14–19].
-5. Stochastic or dynamic policies, the owner's rule included: simulate with a stated stopping rule (batch means; CI width a set fraction of the estimate [S016 p. 12; S829 p. 13]), from light to heavy traffic [S016 pp. 5–14]; report each gap to the Method 7 bound per regime, with its error [S072 pp. 26–31; S368 pp. 12–13]; use the owner's simulator if one exists [S044 pp. 5, 18–22].
+5. Stochastic or dynamic policies, the owner's rule included: simulate with a stated stopping rule (batch means; CI width a set fraction of the estimate [S016 p. 12]), from light to heavy traffic; report each gap to the Method 7 bound per regime, with its error [S072 pp. 26–31]; use the owner's simulator if one exists.
 **🔴 Checkpoint**: lower bound stuck or root node not passed → a stronger formulation first (Method 4 stop rule), then Heuristic 3, and change the claim; a policy gap open in every regime → Method 7 step 6.
 **Output**: a protocol table (data, baselines, solver, machine, limits, splits, stopping rule, regimes, admissions).
 
@@ -324,7 +324,7 @@ Pre-synthesis wording: `references/research/09-evidence-ledger.md#workflow-a` �
 **Input**: runs, gaps, out-of-sample results, partner feedback.
 **Steps**:
 1. Certificate or gap per result (→ Method 4), or each policy's ratio to a relaxation bound, the incumbent's included (→ Method 7); decision metric against the partner's rule (→ Method 5).
-2. Where it wins and where not; negative results in the body; prospective external scoring for forecasts (→ Heuristic 4); proxies with a stated bias direction [S909 pp. 12, 19, 28]; a staggered roll-out with a comparison group, analysed descriptively [S617 arXiv pp. 22–25].
+2. Where it wins and where not; negative results in the body; prospective external scoring for forecasts (→ Heuristic 4); proxies with a stated bias direction [S909 pp. 12, 19, 28].
 **🔴 Checkpoint** (*corrections*): the incumbent matches you (OCT at depth 4: 80.4% against 80.7% for CART unconstrained in depth [05 §2.1]) → no headline that the optimal method wins; forecasts at the baseline's WIS → no headline on your own metric; a plan not adopted → *not implemented*, not *delayed*.
 **Output**: certificate or bound status, winning regime, decision metric, negative results.
 
@@ -332,7 +332,7 @@ Pre-synthesis wording: `references/research/09-evidence-ledger.md#workflow-a` �
 **Steps**:
 1. Abstract: the community's belief, the measured change, the exact formulation, one headline number (→ Heuristic 9); a survey opens on a neighbouring field's plan of attack [S185 pp. 1–3].
 2. Print looseness and conjectures beside the theorem [S016 pp. 7, 9]; close with numbered open problems [S185 pp. 49–51].
-3. One programme brand; companion papers from one model (bounds, then policies) [S072 p. 2]; one applied write-up per deployment; methods in flagship OR journals, clinical work in clinical journals; student-paper competitions [04 B.9].
+3. One programme brand; companion papers from one model (bounds, then policies) [S072 p. 2]; one applied write-up per deployment; methods in flagship OR journals, clinical work in clinical journals.
 **🔴 Checkpoint** (*correction*): *optimal* or *best* in a title only with certificates, else the abstract says which results lack them; after an error, narrow the claim (the prescriptive-analytics preprint, v1 → v3).
 **Output**: abstract skeleton; venue plan.
 
@@ -356,15 +356,15 @@ Pre-synthesis wording: `references/research/09-evidence-ledger.md#workflow-a` �
 
 Case lists and earlier wording: ledger `#heuristic-1` … `#heuristic-10`.
 
-1. **If** a heuristic or a practice works well, **then** find the problem it solves exactly, print where the equivalence breaks, and extend from there: the equal split optimal under one model only [S009 pp. 4, 9–10, 43]; ℓ1 from robustification, and where not [S085 pp. 7–15] (DOI 10.1016/j.ejor.2017.03.051); robust classifiers (DOI 10.1287/ijoo.2018.0001). The Lasso equivalence is Xu–Caramanis–Mannor's (C14).
-2. **If** critics attack, **then** answer with a new paper: a new student, the critic's frame (their SNR grid, a partial concession, released code [S095 pp. 3, 10, 21, 23]), a fix (an ℓ2 term), a reframed target (DOI 10.1214/19-STS701 after HTT) [03 B5.3]. No reply was found to formulation-strength or reproducibility critiques.
-3. **If** an exact model stalls, **then** count variables, switch to local search with restarts over the structural variables, keep MIO as the neighbourhood move [S046 pp. 22–26; S137 p. 4], use small exact solves to certify the heuristic [S199 pp. 6, 8, 11, 13–15], and change the claim (Dunn 2018; DOI 10.1287/ijoc.1110.0496) [03 B4.5].
-4. **If** a result is negative, **then** print it in the body (losing regimes [S010 pp. 30, 38–40]; PILOT4; 6.14 h; uncertified trees; greedy where optimization does not pay [S046 p. 19]; a plan not implemented [S262 p. 12]), archive failed variants with labels, and submit forecasts to an external prospective scoreboard (DELPHI) [03 B5.1, B4.7].
-5. **If** one optimization is solved repeatedly online, **then** learn the optimizer's strategy offline and narrow the claims as the paper matures [S112 pp. 1–2, 9–10, 14; S204 pp. 2–3, 5–8] (DOI 10.1007/s10994-020-05893-5; DOI 10.1287/ijoc.2022.1181) [03 B5.4]; not DOI 10.1287/opre.2021.0707, which learns constraints (C13).
-6. **If** a field lacks the data to decide, **then** build the data asset and split prediction from selection (a trial database that "did not exist before this study" [S078 p. 3] → DOI 10.1287/mnsc.2015.2363; a trial database kept up 2012–2019, [inferred] the same line [S292 pp. 2, 9]) [02 P8].
-7. **If** a topic stalls, **then** retry it with the next student, from the predecessor's stated limit [S456 pp. 1, 3–4, 6], and keep the manuscript listed [03 C.1]; of 40 items listed as submitted in 2017, 21 were published by 2025 and 10 are absent, some retitled [01 §3].
-8. **If** you supervise many students, **then** a weekly hour one-on-one each, no whole-group meeting, a funded topic beside the thesis topic, an informal second adviser, companies only after graduation [02 P7, O10; 04 B.4, B.5]; counterpoint: missed meetings in 2015.
-9. **If** you write the abstract, **then** open with the community's belief, the enabling change and one headline number [S081 p. 2; S010 p. 1; S093 p. 2]; reuse one programme brand for a decade (*under a modern optimization lens*) [02 W8, W9]; critics aimed at the headline numbers [05].
+1. **If** a heuristic or a practice works well, **then** find the problem it solves exactly, print where the equivalence breaks, and extend from there: the equal split optimal under one model only [S009 pp. 4, 9–10, 43]; ℓ1 from robustification, and where not [S085 pp. 7–15]. The Lasso equivalence is Xu–Caramanis–Mannor's (C14).
+2. **If** critics attack, **then** answer with a new paper: a new student, the critic's frame (their SNR grid, a partial concession, released code [S095 pp. 3, 10, 21, 23]), a fix (an ℓ2 term), a reframed target [03 B5.3]; no reply was found to formulation-strength or reproducibility critiques.
+3. **If** an exact model stalls, **then** count variables, switch to local search with restarts over the structural variables, keep MIO as the neighbourhood move [S046 pp. 22–26], use small exact solves to certify the heuristic [S199 pp. 6, 8, 11, 13–15], and change the claim [03 B4.5].
+4. **If** a result is negative, **then** print it in the body (losing regimes [S010 pp. 30, 38–40]; a plan not implemented [S262 p. 12]), archive failed variants with labels, and submit forecasts to an external prospective scoreboard (DELPHI) [03 B5.1, B4.7].
+5. **If** one optimization is solved repeatedly online, **then** learn the optimizer's strategy offline and narrow the claims as the paper matures [S112 pp. 1–2, 9–10, 14; S204 pp. 2–3, 5–8] [03 B5.4]; not DOI 10.1287/opre.2021.0707, which learns constraints (C13).
+6. **If** a field lacks the data to decide, **then** build the data asset and split prediction from selection (a trial database that "did not exist before this study" [S078 p. 3] → DOI 10.1287/mnsc.2015.2363) [02 P8].
+7. **If** a topic stalls, **then** retry it with the next student, from the predecessor's stated limit [S456 pp. 1, 3–4, 6], and keep the manuscript listed [03 C.1].
+8. **If** you supervise many students, **then** a weekly hour one-on-one each, no whole-group meeting, a funded topic beside the thesis topic, an informal second adviser [02 P7, O10; 04 B.4, B.5].
+9. **If** you write the abstract, **then** open with the community's belief, the enabling change and one headline number [S081 p. 2; S010 p. 1; S093 p. 2]; reuse one programme brand for a decade [02 W8, W9]; critics aimed at the headline numbers [05].
 10. **If** you introduce a new device, **then** first re-derive the field's classical results with it (special cases, limits of the knob, relaxations), print where the equivalence breaks, place your own earlier method in the new order, then extend [S129 pp. 1–2, 9–12; S057 pp. 3–4, 22, 38; S283 pp. 3–4, 15–19]. Not a method: exclusivity fails (80 works).
 
 ## Signature Work Anatomy
@@ -375,34 +375,34 @@ Rows rest on the full texts. Earlier rows: the ledger anchor under each table; a
 | Dimension | Content |
 |---|---|
 | Origin | [stated, sole author] stochastic control's ad hoc methods against mathematical programming's plan of attack [S185 pp. 1–3]; personal origin unknown |
-| Why then | The stochastic counterpart of sharper polyhedral and SDP formulations [S185 pp. 1–4]; a student's thesis line with Tsitsiklis as co-author [S072 pp. 1, 8, 33], co-advised per DSpace [04 A.2]; an NSF PYI |
+| Why then | The stochastic counterpart of sharper polyhedral and SDP formulations [S185 pp. 1–4] |
 | Key insight | Conservation laws make the performance region an extended polymatroid; adaptive greedy solves its LP, and Gittins indices are sums of dual variables [S057 pp. 3, 11–13, 19–20] |
-| Minimal evidence | Classical index rules recovered as one algorithm on one polytope [S057 pp. 3–4, 22, 38]; polyhedral and SDP bounds for networks [S072 pp. 20–22] |
+| Minimal evidence | Classical index rules recovered as one algorithm on one polytope [S057 pp. 3–4, 22, 38] |
 | Abandoned paths | Policies read off relaxations "somewhat ad hoc", none for networks [S185 p. 49] (→ Method 7 stop rule) |
-| Reception | Erlang and SIAM prizes 1996 (citations unverified); an index policy with a suboptimality bound [S051 pp. 7–11]; revisited by ML in 2026 [S681 pp. 1, 3, 8] |
+| Reception | Erlang and SIAM prizes 1996 (citations unverified); revisited by ML in 2026 [S681 pp. 1, 3, 8] |
 
 Full evidence: references/research/09-evidence-ledger.md#anatomy-achievable-region
 
 ### SW2 · Optimal probability inequalities, 1998–2005 (SIOPT 2005, DOI 10.1137/S1052623401399903 [S018]) · Methods 1, 7 {CP SD AP}
 | Dimension | Content |
 |---|---|
-| Origin | [stated-joint] are the Markov, Chebyshev and Chernoff bounds best possible, and is there an optimization theory for them? The gap is taken from critics of moment theory [S018 pp. 1–4] |
+| Origin | [stated-joint] are the Markov, Chebyshev and Chernoff bounds best possible, and is there an optimization theory for them? [S018 pp. 1–4] |
 | Why then | [inferred] SDP had become a standard solvable class [S018 p. 7] |
 | Key insight | A tight moment bound is an LP over measures with a polynomial dual; univariate nonnegativity is a PSD condition, so the univariate bound is one SDP [S018 pp. 5–16] |
 | Minimal evidence | Closed forms up to three moments; NP-hardness for k ≥ 4 on Rⁿ marks the boundary [S018 pp. 16–17] |
 | Abandoned paths | Stated limits only: the algorithmic understanding of the general bound problem "is still lacking" [S018 p. 4] |
-| Reception | SDP relaxations as yardsticks for heuristic policies [S007 p. 18]; Kingman's and Daley's bounds as special cases [S255 pp. 1, 7–9]; no critique found |
+| Reception | SDP relaxations as yardsticks for heuristic policies [S007 p. 18]; no critique found |
 
 Full evidence: references/research/09-evidence-ledger.md#anatomy-moment-bounds
 
 ### SW3 · The Price of Robustness, 2001–2004 (OR 2004, DOI 10.1287/opre.1030.0065 [S001]; MP 2003, DOI 10.1007/s10107-003-0396-4 [S004]) · Methods 3, 1, 6 {RO IO LO}
 | Dimension | Content |
 |---|---|
-| Origin | [stated-joint] Soyster too conservative; ellipsoidal counterparts nonlinear and unattractive for discrete problems [S001 pp. 1–3]; a budget Γ already in a 2002 working paper [S653 pp. 12–14]; how Γ arose: unknown |
+| Origin | [stated-joint] Soyster too conservative; ellipsoidal counterparts nonlinear and unattractive for discrete problems [S001 pp. 1–3]; how Γ arose: unknown |
 | Why then | Ben-Tal–Nemirovski (DOI 10.1287/moor.23.4.769) and El Ghaoui–Lebret; CPLEX 6.0 solved a 200-item robust knapsack [S001 pp. 10, 12] |
 | Key insight | At most Γ deviating coefficients per constraint; the counterpart stays linear or mixed-integer [S001 pp. 3–4]; robust 0–1 problems keep the nominal complexity [S004 pp. 5–7, 22] |
 | Minimal evidence | Solution-independent violation bounds [S001 pp. 4–6]; the knapsack point, a 0.57% bound for a 1.54% loss [S001 pp. 10, 12] |
-| Abandoned paths | PILOT4, where the price stays high [S001 pp. 14, 16]; an unpublished ellipsoidal discrete manuscript; data-driven sets later [S013 pp. 3–4, 10] |
+| Abandoned paths | PILOT4, where the price stays high [S001 pp. 14, 16]; data-driven sets later [S013 pp. 3–4, 10] |
 | Reception | His most cited work; refined by Poss and Iancu–Trichakis; 2022 book; 2026 retrospective (abstract only [S614]) |
 
 Full evidence: references/research/09-evidence-ledger.md#anatomy-price-of-robustness
@@ -410,32 +410,32 @@ Full evidence: references/research/09-evidence-ledger.md#anatomy-price-of-robust
 ### SW4 · Best subset selection and optimal trees, 2014–2017 (AoS 2016, DOI 10.1214/15-AOS1388, read as arXiv v1 [S010]; Mach. Learn. 2017, DOI 10.1007/s10994-017-5633-9 [S011]) · Methods 2, 4, 6 {ML IO HS}
 | Dimension | Content |
 |---|---|
-| Origin | [stated-joint] statistics' belief that MIO is impractical, dated and conceded [S010 pp. 2, 5, 8], stated already in CRIO [S073 p. 1]; a student line (Shioda, King, Dunn) with postdoc Mazumder |
-| Why then | The rebuilt speed-up (Method 2): 200 billion in arXiv v1, about 450 billion in print (AoS p. 819), 800 billion for trees [S010 pp. 7–8; S081 p. 4; S011 pp. 5–6] |
+| Origin | [stated-joint] statistics' belief that MIO is impractical, dated and conceded [S010 pp. 2, 5, 8]; a student line (Shioda, King, Dunn) with postdoc Mazumder |
+| Why then | The rebuilt speed-up (Method 2) [S010 pp. 7–8; S081 p. 4; S011 pp. 5–6] |
 | Key insight | Exact estimator; good solutions by a discrete first-order method or CART; the warm-started MIO proves optimality or reports a gap [S010 pp. 1, 5–6, 18–20] |
 | Minimal evidence | Gap curves within a 500 s limit [S010 pp. 27–33]; depth-matched gains over CART on 53 UCI data sets [S011 pp. 26–36] |
-| Abandoned paths | Slow lower bounds for p ≫ n and losing regimes printed [S010 pp. 34, 38–40]; "most of our results for OCT and OCT-H do not carry explicit certificates" [S011 p. 26]; by 2018 local search for trees |
-| Reception | HTT (DOI 10.1214/19-STS733) and the 2020 exchange, answered in the critics' frame [S095 pp. 3, 10, 21, 23]; lecture, class, company, book (2019), Lanchester Prize 2021 |
+| Abandoned paths | Slow lower bounds for p ≫ n and losing regimes printed [S010 pp. 34, 38–40]; "most of our results for OCT and OCT-H do not carry explicit certificates" [S011 p. 26] |
+| Reception | HTT (DOI 10.1214/19-STS733) and the 2020 exchange, answered in the critics' frame [S095 pp. 3, 10, 21, 23]; book (2019), Lanchester Prize 2021 |
 
 Full evidence: references/research/09-evidence-ledger.md#anatomy-best-subset-trees
 
 ### SW5 · From Predictive to Prescriptive Analytics, 2014–2020 (Manag. Sci. 2020, DOI 10.1287/mnsc.2018.3253 [S008]; arXiv 1402.5481) · Method 5 {DA ML AP}
 | Dimension | Content |
 |---|---|
-| Origin | [stated-joint] OR/MS data are mostly auxiliary covariates, which SAA ignores [S008 pp. 1–2, 6–7]. arXiv v1–v2 were Kallus's single-author preprint, v2 withdrawn by Kallus; Bertsimas joined at v3: not his retraction |
-| Why then | Data availability and flexible ML, stated without a figure [S008 p. 2]; plenaries in 2015–2016 |
+| Origin | [stated-joint] OR/MS data are mostly auxiliary covariates, which SAA ignores [S008 pp. 1–2, 6–7]; he joined Kallus's preprint at v3 (v2's withdrawal was Kallus's) |
+| Why then | Data availability and flexible ML, stated without a figure [S008 p. 2] |
 | Key insight | Predictors read as weights over past observations in a re-weighted SAA; asymptotically optimal for kNN, kernel and local-linear weights; P as R² for decisions [S008 pp. 10–14, 16, 21] |
 | Minimal evidence | A 150-week rolling backtest over just under 20,000 locations: P = 0.88 [S008 pp. 28–31] |
-| Abandoned paths | v1's universal claim narrowed; no asymptotic theory for CART and random forests, the methods used in the application [S008 p. 19]; censoring and P added |
-| Reception | Six years from v1 to print; a bootstrap-robust follow-up [S139 pp. 3–4, 15–16] after optimism in high dimension, noted also by a survey (DOI 10.1016/j.ejor.2024.03.020) |
+| Abandoned paths | v1's universal claim narrowed; no asymptotic theory for CART and random forests, the methods used in the application [S008 p. 19] |
+| Reception | Six years from v1 to print; a bootstrap-robust follow-up [S139 pp. 3–4, 15–16] after optimism in high dimension |
 
 Full evidence: references/research/09-evidence-ledger.md#anatomy-prescriptive-analytics
 
 ### SW6 · Stochastic and dynamic vehicle routing, 1990–1993 (OR 1991, DOI 10.1287/opre.39.4.601 [S016]; OR 1993, DOI 10.1287/opre.41.1.60 [S032]) · Methods 7, 1, 3 {SD AP}
 | Dimension | Content |
 |---|---|
-| Origin | [stated-joint] the TSP is a deterministic, static approximation of problems that are stochastic, dynamic and judged by waiting [S016 pp. 1–2]; a colleague (Psaraftis) brought the problem to him [S016 p. 14] |
-| Why then | Probabilistic analysis of Euclidean problems joined to queueing [S016 pp. 3–4, 10–11]; [inferred] the next step after a priori optimization |
+| Origin | [stated-joint] the TSP is a deterministic, static approximation of problems that are stochastic, dynamic and judged by waiting [S016 pp. 1–2]; a colleague's question [S016 p. 14] |
+| Why then | Probabilistic analysis of Euclidean problems joined to queueing [S016 pp. 3–4, 10–11] |
 | Key insight | Bound all policies first, then analyse simple policies against the bounds [S016 p. 3] |
 | Minimal evidence | Light-traffic optimal and heavy-traffic constant-factor policies against bounds over all policies [S016 pp. 5–11] |
 | Abandoned paths | Loose constants and an unproved assumption printed [S016 pp. 7, 9, 11–12] |
@@ -471,29 +471,29 @@ Full-text view by period: ledger `#research-trajectory`; [06 trajectory](referen
 | 2014–2019 | Statistics and ML under a modern optimization lens; prescriptive analytics {ML DA IO} | Tractability redefined as solve times [S178 pp. 3–5]; the measured MIO speed-up; Morse Lecture 2014 | DOI 10.1214/15-AOS1388; DOI 10.1287/mnsc.2018.3253 |
 | 2019–2026 | Health care at scale, COVID-19, multimodal AI, LLMs, global optimization, education {AP DA ML} | Roles (associate dean 2019, Vice Provost 2024), hospital partners, the pandemic | DOI 10.1007/s10729-020-09542-0; arXiv 2501.00568 |
 
-Constant: Method 7, Heuristic 10, Method 1, priced trade-offs [S597 pp. 36–38], printed limits. Changed: the meaning of *tractable*; sole authorship to teams; theory to deployments with partners [08 §8–9].
+Constant: Method 7, Heuristic 10, Method 1, priced trade-offs, printed limits. Changed: the meaning of *tractable*; sole authorship to teams; theory to deployments with partners [08 §8–9].
 
 ### Latest
-- **2025-10 → 2026-10** [06 §8]: *Fifty years of Robust Linear and Convex Optimization* with den Hertog (EJOR 2026, DOI 10.1016/j.ejor.2026.08.042, abstract only [S614]); *Cone Product Reformulation for Global Optimization* (IJOC 2026, DOI 10.1287/ijoc.2023.0345); fluid restless bandits by ML (DOI 10.1007/s10994-026-07022-0); Hartford HealthCare operations (DOI 10.1287/inte.2024.0170); preprints on lecture-video generation (arXiv 2609.26540), LLM personalization (arXiv 2610.17203) and wildfire sensing (arXiv 2609.11829).
-- Roles: Vice Provost for Open Learning; Universal AI launched 2026-05-12; Killian Lecture 2026-03-19; PhD theses no. 107–109 in spring 2026. Direction [inferred]: health care dominant; RO continuing in energy and insurance; research following his education role.
+- **2025-10 → 2026-10** [06 §8]: an RO retrospective with den Hertog (abstract only [S614]); global optimization; fluid restless bandits by ML; Hartford HealthCare operations; preprints on lecture videos, LLMs and wildfire sensing.
+- Roles: Vice Provost for Open Learning; Universal AI launched 2026-05-12. Direction [inferred]: health care dominant; RO continuing in energy and insurance; research following his education role.
 
 ## Academic Lineage
 
 Evidence and coauthors by period: ledger `#academic-lineage`.
 
-- **Upstream**: PhD MIT 1988 (applied mathematics and OR), advisers Amedeo Odoni (primary) and Daniel Kleitman; Tom Magnanti on the committee; the thesis problem class came from Odoni's group [06 §2.1; S048 pp. 18, 71, 125].
-- **Long collaborators**: John Tsitsiklis (queueing; LO textbook), Andrew Lo (finance), Robert Weismantel (IO book), Dick den Hertog (RO book; co-signs the 2021–2026 robust and global-optimization lines [S283 pp. 3–4, 15–19]), David Gamarnik (queueing book).
-- **Downstream**: 109 completed PhDs and 20 current (homepage, 2026). Lineages: SD (Niño-Mora, Paschalidis, Gamarnik, Sethuraman); IO (Goemans, C.-P. Teo); CP (Popescu, Natarajan); RO (Sim, Thiele, Brown, Caramanis, Iancu, Gupta, Dunning); ML (Shioda, King, Dunn, Pauphilet, Cory-Wright); DA (Kallus, McCord, Sturt); health (O'Hair, Orfanoudaki, Wiberg, Ma) [04 A.4]. Alumni return as co-advisers, book co-authors, informal advisers and co-authors on later programme stages [04 B.10; S476 p. 1].
+- **Upstream**: PhD MIT 1988 (applied mathematics and OR), advisers Amedeo Odoni (primary) and Daniel Kleitman; Tom Magnanti on the committee [06 §2.1].
+- **Long collaborators**: John Tsitsiklis (queueing; LO textbook), Andrew Lo (finance), Robert Weismantel (IO book), Dick den Hertog (RO book), David Gamarnik (queueing book).
+- **Downstream**: 109 completed PhDs and 20 current (homepage, 2026); lineages in SD, IO, CP, RO, ML, DA and health [04 A.4]. Alumni return as co-advisers, book co-authors, informal advisers and co-authors on later programme stages [04 B.10; S476 p. 1].
 - **Guest-team link**: one joint work with a guest member: Bertsimas & Ye, *Semidefinite relaxations, multivariate normal distributions, and order statistics* (Handbook of Combinatorial Optimization, 1998, DOI 10.1007/978-1-4613-0303-9_24).
 
 ## Inner Tensions
 
 Evidence per tension: ledger `#inner-tensions`.
 
-- **Tension T1 · certified vs uncertified *optimal***: certificates make results strong [02 J2] vs runs stopped early or uncertified from 2004 on [S031 p. 26; S073 pp. 15–18], a limit set by confidence in the warm start, as the solver "spends a lot of the time proving its optimality" [S095 p. 5], and applied trees called optimal with no gap or limit [S094 pp. 5, 9]; honest labels elsewhere [S093 pp. 17, 19] (C9).
-- **T2 · joint optimization vs heuristic engine**: optimization beats greedy practice [02 R11] vs simulated annealing judged lacking in theory, mixed in practice but generally applicable (1993) [S005 pp. 4–5], a heuristic beating CPLEX (2002) [S070 pp. 13–15], greedy recommended where optimization does not pay [S046 p. 19].
-- **T3 · optimization, not probability**: the 2019 principle [02 T4] vs asymptotic probabilistic analysis as the backbone of 1988–2002 [S038 pp. 6–8; S016 pp. 5–14], limit laws returning as uncertainty sets [S119 pp. 7–10], and a thesis combining stochastic and optimization ideas [02 C4].
-- **T4 · strong formulations vs solver speed** [inferred]: strength measured and pursued in air-traffic and product-line models [S015 pp. 2, 4–5, 10; S093 pp. 8–9, 17–19] vs weak big-M in tree MIOs and some ML models [S225 pp. 5–9; S358 pp. 4–12] (C10).
+- **Tension T1 · certified vs uncertified *optimal***: certificates make results strong [02 J2] vs runs stopped early or uncertified from 2004 on [S031 p. 26; S073 pp. 15–18] and applied trees called optimal with no gap or limit [S094 pp. 5, 9] (C9).
+- **T2 · joint optimization vs heuristic engine**: optimization beats greedy practice [02 R11] vs simulated annealing judged lacking in theory, mixed in practice but generally applicable (1993) [S005 pp. 4–5] and greedy recommended where optimization does not pay [S046 p. 19].
+- **T3 · optimization, not probability**: the 2019 principle [02 T4] vs asymptotic probabilistic analysis as the backbone of 1988–2002 [S038 pp. 6–8; S016 pp. 5–14] and limit laws returning as uncertainty sets [S119 pp. 7–10].
+- **T4 · strong formulations vs solver speed** [inferred]: strength measured and pursued in air-traffic and product-line models [S015 pp. 2, 4–5, 10; S093 pp. 8–9, 17–19] vs weak big-M in tree MIOs and some ML models [S225 pp. 5–9] (C10).
 - **T5 · impact soon vs slow pipelines**: 2–5 years, later two [02 C8], vs six years for P2P to print and manuscripts listed as submitted for 7–10 years [06 §7]; his horizon concerns adoption.
 - **T6 · headline vs caveat**: *optimal*, *best* and big numbers up front, limits in the body [S093 pp. 2, 20]; Boston: the abstract reports the unanimous approval, *not implemented yet* comes on p. 2 [S137 pp. 1–2] (C12).
 - **T7 · decide before starting vs aim beyond reach**, valuing the failed 1989 proof [02 C1].

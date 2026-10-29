@@ -6,6 +6,10 @@
 
 **Scope.** Sections exist for every SKILL.md item that this synthesis changed or condensed. Items not listed (frontmatter, Activation Rules apart from the disclaimer line, Research Integrity Rules, Agentic Protocol, Mentor Voice, the Sources lists) were not condensed and remain complete in SKILL.md; the earlier frontmatter and disclaimer wording is kept under [Corrections](#corrections).
 
+**Tighten step (T3.7, 2026-10-29).** To fit the skill budget, SKILL.md was cut from 12,174 to 11,400 words (`wc -w`) without deleting anything: every SKILL.md line that was shortened is copied verbatim, as it stood before the cut, under **Moved at the tighten step** at the end of its section below (taste marks and warning signs, Methods 1–7, Workflows B–E, Heuristics 1–10, the six anatomies, the domain map's HS row, research trajectory, academic lineage, inner tensions). What moved: second and later card citations of an item, DOIs, per-work case lists, historical details and two quotations. Frontmatter, How to Use, Activation Rules, Research Integrity Rules, Research Task Routing, Agentic Protocol, the taste quick-check, anti-patterns, Mentor Voice, Roundtable Card, Honest Boundary (with its corrections list) and Sources were not changed.
+
+**Review fix (T3.7, 2026-10-29).** A read-only review of the cut found scope evidence and working detail that SKILL.md still needs. They were put back from the copies below, which stay in place, and SKILL.md now has 11,494 words (`wc -w`). Back in full, so that the SKILL.md line again equals its copy under **Moved at the tighten step**: the domain map's HS row, taste mark 6, the *Stated* lines of Methods 3, 6 and 7 (the evidence behind their say–do scope), Method 7's *Different from standard practice* line and Heuristic 10. Back in part: Heuristic 2 (its four response moves), Heuristic 3 (local search over the structural variables) and Workflow C step 5 (batch means and the confidence-interval stop, with the step's first card citation only). Additions only, nothing removed: Method 4 step 5 now asks for path-to-path timing (C8), the one check from the critics' list in Method 4's copy below that SKILL.md no longer named, and the Stage Workflows pointer now says that the workflow sections also hold the citations cut here.
+
 ## Contents
 
 - [How to Use](#how-to-use) · [Research task routing](#routing) · [Domain map](#domain-map)
@@ -98,6 +102,12 @@ M = Method, H = Heuristic, T = Tension.
 - **RO**: a 2002 working paper with Pachamanova already uses a budget Γ normalised by standard deviations to narrow computed bounds [S653 pp. 12–14, 24]; why he entered RO and how Γ arose stay unknown (the 2026 retrospective is abstract-level [S614]).
 - **Method 7** was first added to the LO, IO, CP, SD and RO rows' moves (the bound as yardstick; see [Method 7](#method-7)). *Fix round*: those additions corrected no contradicted row, so they were removed to keep the map unexpanded, as the operator asked; the RO row's earlier wording "adaptive policies with self-quantified limits" is restored; the domain-layer map that replaces this table should cite Method 7 in its SD, IO, CP and RO rows (08 §4).
 
+**Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
+
+| Code | Voice | His moves | Anchor works | Delegations | Cautions |
+|---|---|---|---|---|---|
+| **HS** | practice + the 1993 verdict | Heuristics as warm starts, components, fallbacks (M4, H3); 1993: theory lacking, practice mixed but generally applicable (C15) | DOI 10.1214/ss/1177011077; DOI 10.1287/opre.1090.0715 | DFO | Robust local search converges only for convex costs with an exact oracle; otherwise a heuristic without certificate (C3); T1, T2 |
+
 <a id="taste-marks"></a>
 ## Taste: marks of good research
 
@@ -128,6 +138,12 @@ M = Method, H = Heuristic, T = Tension.
 9. *Limits printed beside the result* (new, from Heuristic 4 and cluster 2 of 08 §6): conjectures and loose constants in 1988–1993 [S048 pp. 100–101, 164–165; S016 pp. 7, 9; S032 pp. 7–8, 11, 16; S158 pp. 15, 17]; losing regimes [S010 pp. 30, 38–40]; few uncertain coefficients explain PILOT4 [S001 p. 14]; own tree losing to logistic regression said plainly [S276 p. 4; S296 pp. 5, 9]; non-implementation printed [S083 pp. 25, 27; S262 p. 12; S243 pp. 17–28]; own model the weakest predictor [S370 pp. 13–16].
 - *Strong formulations* (LO and IO line): measured and pursued in practice too (C10): models judged by total unimodularity, facets and solve time in 1997 [S241 pp. 14–15, 27, 31–32]; facets designed so LPs are almost always integral [S015 pp. 2, 4–5, 10]; cover inequalities so only one of 41 instances branches [S109 pp. 2–8]; valid inequalities without which the model fails [S037 pp. 2, 4–8]; convex-hull and TU checks [S076 pp. 12–19, 35–36].
 
+**Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
+
+5. **Interpretable where people act on the result**, required where guidance changes standard care [S685 pp. 2–3; 02 T6]. ⚠ Counter-practice: deployed hospital tools moved to boosted trees explained by SHAP once interpretable models had earned trust [S617 arXiv pp. 9–11; S054 pp. 4–9] (C21).
+6. **Problems and data first; a theory is tested by the problems that gave rise to it** (Dantzig's test, cited in two of his books) [02 P1, T5]; the 2005 moment-bounds paper starts instead from a question internal to probability theory [S018 pp. 1–4] [practice].
+7. **A result is stronger with a certificate**: optimality, a gap, or a proof of infeasibility, which also counts; for a policy, a bound valid for every policy (Method 7) [02 J2, R12; S225 p. 31; S016 p. 3; S051 pp. 1, 11]. Tension T1: dropped at scale in practice.
+
 <a id="taste-warnings"></a>
 ## Taste: warning signs of bad research
 
@@ -154,6 +170,10 @@ M = Method, H = Heuristic, T = Tension.
 - Sign 9 (new): heuristics judged only against heuristics [S051 p. 1; S185 pp. 1–2]; "a practitioner using a heuristic method typically has no way of knowing when this has occurred" [S183 p. 3]; affine policies advocated without quality results [S042 p. 3].
 - *Fix round*: SKILL.md keeps eight warning signs (framework §四: 5–8): sign 9 was merged into sign 7 (quality claims with no guarantee) and sign 10 into sign 4 (no decision value; point forecasts and static models of dynamic problems); sign 5 is scoped to treatment decisions, with the group's deployed tools as an exception (C21).
 - Sign 10 (new): "Yet, in many practical applications, the TSP is a deterministic, static approximation to a problem which is, in reality, both probabilistic and time varying (dynamic)." [S016 p. 1]; "Point forecasts are meaningless (because they are always wrong) and should be replaced by range forecasts." [S027 p. 4]; a priori optimization's motive, the robustness of deterministic optima to changed instances [S038 p. 1].
+
+**Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
+
+2. Models harder than their nominal version; polynomial time without solve times [02 T7] (stated from 2014 [S178 p. 5]; his 1994–1997 papers argue from operation counts: C19).
 
 <a id="taste-quick-check"></a>
 ## Taste quick-check
@@ -239,6 +259,17 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 - ✗ *Scope* (08 §3 row 8): some 2025–2026 AI papers have no formulation at all: a small network trained on a contrastive loss [S426 pp. 4, 6]; a training-free classifier [S474 pp. 2, 4, 8]; one optimization stated in a sentence [S618 pp. 13–14]; optimization only as study design [S439 pp. 5–6]. Earlier contradictions: no exact formulation in a 2005 revenue-management paper [S066 pp. 2, 7, 10] and a class left on purpose without solve times [S278 pp. 2, 4].
 - *Tractable drifts*: complexity class and asymptotic constants in 1988–1997 [S289 pp. 2, 6, 11–12; S269 pp. 1, 21–22]; computation in real problems named the criterion in 2004 [S001 p. 8]; solve time stated as the test from 2014 [S178 p. 5] and in 2016 [S010 p. 2]. *Fix round*: SKILL.md now uses this one dating in Method 1's Limitations, warning sign 2 and C19.
 
+**Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
+
+- Stated: "The theme in the paper is the thesis that better formulations lead to deeper understanding and better solution methods." (sole author) [S185 p. 1]; the 2019 principle [02 T4, T7].
+- ⚠ SD 1988–1997: the kept class is an analysable distribution or queue class [S239 pp. 1–2, 8, 12; S168 pp. 3, 8, 12–15].
+- ⚠ Class left → his group builds the algorithm (outer approximation, custom branch-and-bound) [S040 pp. 2, 6, 10; S184 pp. 8–18] (C5).
+- ✗ Outside it: the 2025–26 foundation-model papers [S426 pp. 4, 6; S474 pp. 2, 4, 8].
+
+**🔴 Stop rule**: leaving the class without a measured solve time at the target scale → change the device, not the solver. *Correction*: test a per-constraint robust device on a two-period example; the 2006 robust inventory LP (DOI 10.1287/opre.1050.0238) was later shown conservative (DOI 10.1016/j.disopt.2006.12.002) and judged incorrect for its stated set (DOI 10.7737/MSFE.2014.20.2.001) [05 §4.3].
+
+**Limitations**: *tractable* drifts from complexity class and operation counts (1994–1997) to solve time, stated as the test from 2014 [02 C2; S269 pp. 1, 21–22; S178 p. 5]; big-M formulations can be weak in tree MIOs (DOI 10.1287/opre.2021.0034) despite his stated stress on strong ones (Tension T4).
+
 <a id="method-2"></a>
 ## Method 2: Quantified "why now"
 
@@ -275,6 +306,12 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 - ⚠ *Qualitative why-now*: in about 46 of the 94 linked works the why-now is a named tool or data change: SDP solvers [S056 p. 3], interior-point methods [S003 p. 2], first-order methods [S315 p. 2], data availability [S074 pp. 1, 3; S193 pp. 2, 32; H004 p. 1], open LLMs [S390 pp. 1–2], a foundation model [S474 pp. 1–2].
 - ✗ *Two contradictions*: a 1994 *fastest* claim from operation counts [S269 pp. 1, 21–22] and the 2016 figure reused in 2024 [S480 pp. 7, 9].
 - ✗ *The reverse argument was his own* (08 §3 row 10): before 2002 hardness was accepted as the limit of exact work and answered with relaxations and bounds [S185 pp. 49–50; S580 pp. 6–7; S052 pp. 2, 4]; in 1996 scarce computation argued for a priori routes [S025 pp. 10, 12, 17]: "A priori optimization in VRPs is an attractive policy in the absence of intensive computational power." [S025 p. 17]; in 2002 his own matched-quality test found CPLEX 6.0 much slower than his heuristic [S070 pp. 13–15]. The belief is dated from 2007 (submitted 2002) and change argued in 2011 [S073 pp. 1–2; S561 pp. 3, 10–12]; *fix round*: neither concedes that the belief was justified when formed; that concession appears first in the arXiv v1 of best subset (2015) [S010 p. 8], then [S105 p. 7].
+
+**Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
+
+- ✗ His 1995 survey and a 1996 joint paper argued the reverse: hardness answered with relaxations [S185 pp. 49–50]; scarce computation favouring a priori routes [S025 pp. 10, 12, 17].
+
+**Limitations**: era-bound (the 1991–2018 speed-ups); not the user's machine or class; the belief is dated from 2007 (submitted 2002) [S073 pp. 1–2] but conceded as justified only from 2015 (arXiv v1 of best subset) [S010 p. 8].
 
 <a id="method-3"></a>
 ## Method 3: The price of X
@@ -313,6 +350,12 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 - ⚠ *Step 3, the solution-independent bound* (08 §3 row 13): present mainly in robustness and fairness [S001 pp. 3–5; S004 pp. 4, 6; S027 pp. 6, 8–13; S012 pp. 7, 11–14; S026 pp. 6–7; S139 pp. 6, 15–16; H004 pp. 6–9; S672 pp. 23–24, 27–29]. The price of interpretability is usually one or two points, without a curve or bound [S190 pp. 4, 7–8; S356 p. 2; H003 pp. 1, 24–26; S457 pp. 4, 13, 21; S267 pp. 21, 25]; quote: "This is the price of insisting on interpretability" [S081 p. 11].
 - ⚠ *Step 5, the misspecification duel* (08 §3 row 14; cluster 11, 25 works 2003–2026): the robust policy and the model-based optimum (DP, SAA) both scored under distributions other than the assumed one, or beyond the set [S014 p. 12; S027 pp. 9–10, 21; S055 pp. 8–9; S059 pp. 9, 11, 14; S053 pp. 14–22; S278 pp. 5–6; S116 p. 12; S003 pp. 6–7; S006 pp. 5, 7; S172 pp. 21–23]; stated as a lesson in 2025 [S623 p. 4]. Heuristic-eligible, folded into step 5 because of the ten-heuristic cap.
 
+**Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
+
+- Stated: "It is our belief that the “price” of fairness is effectively inescapable if the allocations prescribed by a given scheme are to be ethically acceptable and implementable." [S012 p. 14]; the 2004 abstract [02 G4].
+- ⚠ Precursor, 1988–1993: the price of simplicity, no knob or bound; the thesis prices robustness in lost tractability [S048 p. 29], later as an asymptotic constant or worst-case ratio against re-solving [S048 pp. 40–44; S017 pp. 1, 9–11].
+- ⚠ The solution-independent bound appears mainly for robustness and fairness; the price of interpretability is usually a point or two, without a bound [S190 pp. 4, 7–8].
+
 <a id="method-4"></a>
 ## Method 4: Warm start, exact solve, honest certificate, duel the incumbent
 
@@ -349,6 +392,13 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 - ⚠ *Scope* (08 §3 row 17): in clinical collaborations the final learner is usually a tuned off-the-shelf ensemble, not an exact model [S054 pp. 2, 4; S127 pp. 3–4, 8; S023 pp. 3, 8; S677 pp. 2, 6, 8, 24; S678 pp. 4, 9, 14, 43; S618 pp. 3, 8–10, 13; S683 pp. 5–6]; a greedy step kept with the MIO deferred [S391 pp. 5, 8]. A simple incumbent (mean imputation) is proved asymptotically optimal for prediction and wins [S310 pp. 4–8, 12]: "In short, as far as prediction is concerned, crude is good." [S310 p. 5].
 - ⚠ *When the bound stalls*: relaxation plus rounding that still prints a bound gap [S183 pp. 22–26]; a box-restricted MIO certifying inside a neighbourhood of the incumbent [S010 pp. 34–36]. *Fix round*: the stop rule now tries a stronger formulation first, where one exists: the data-dependent big-M constant weakens the group's own 2016 formulation (paraphrase), so the continuous part is eliminated in closed form and the binary support solved by outer approximation [S061 pp. 2–3, 6–10]; ridge or perspective forms replace big-M [S175 pp. 9–10, 15–16; S136 pp. 3, 6–7, 26–27].
 - *Computation as an instrument* (cluster 31, 21 works; step 6 evidence): regime maps and phase transitions [S061 pp. 4, 14–19]; more data makes the exact problem easier [S355 pp. 4–5, 13–15; S170 pp. 5, 17, 20]; where optimization pays [S046 p. 19]; a fitted when-to-use rule [S104 pp. 4, 25–27; S011 pp. 30–35].
+
+**Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
+
+- Stated: "However, by design, the MIO approach maintains a suboptimality gap throughout computation and can therefore be terminated, before optimality is certified, with a certificate of suboptimality." [S225 p. 31]; [02 E1, E2, J2].
+- ✗ "Critic-informed checks, not his practice" → equal time is the yardstick of the 1993 review, for others' experiments [S005 pp. 3–4]; his own matched duels from 2002 [S070 pp. 9–15], equal memory [S328 pp. 11–15], one thread and 60 s each, overruns printed [S340 pp. 16, 23]; the critics' SNR grid adopted in 2020 [S095 pp. 3, 10, 21, 23] (C8).
+
+**🔴 Stop rule** [practice, Dunn 2018]: bound stuck at zero or root node not passed → count binaries (n·2^D: 87,808 at depth 6 for n = 1,372); first, where one exists, replace weak big-M by a perspective or convex-integer form [S061 pp. 6–10; S175 pp. 9–10, 15–16]; if the bound still stalls, switch to local search with restarts, and (*correction*) drop *optimal* from the claim. Checks the critics asked for, practised in his later papers (C8): low SNR (DOI 10.1214/19-STS733); equal budgets and threads; path-to-path timing (DOI 10.1214/20-STS806); installable code (DOI 10.1214/20-STS809); LP-relaxation strength (DOI 10.1287/opre.2021.0034).
 
 <a id="method-5"></a>
 ## Method 5: Judge by the decision, against the owner's current rule
@@ -389,6 +439,15 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 - ✗ *DELPHI* (08 §3 row 23): the hub evaluation puts DELPHI's relative WIS at the baseline level [S021 pp. 2, 4]; the group's own CDC comparison uses its own metric and window [S103 pp. 14–16]; a German–Polish hub scores DELPHI worse than the naive baseline (higher mean WIS) for one- and two-week cases and one-week deaths, better for two-week deaths [S157 pp. 15–16]. Hub papers (S021, S110, S157) are outside evaluations in which he is only a consortium member [S110 pp. 2–3, 17; S021 pp. 10–11; S157 pp. 21–22]; they are not evidence of his method.
 - *Checkpoint kept*: ML weights turn optimistic in high covariate dimension → a bootstrap-robust layer [S139 pp. 3–4, 15–16]; its radius is set in advance from a disappointment level [S139 p. 19].
 
+**Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
+
+- Stated: "what truly matters is the performance of the prescription in the problem" [S008 p. 29]; statements 2004–2025 [02 P1, R6, R14, E5–E7].
+- ✗ Fourteen prediction papers of 2014–2026, twelve clinical, score predictions with no decision or current-rule baseline [S557 pp. 4, 8, 13; S054 pp. 4–9]; a vaccine-site plan's headline gain is against its weakest constructed rule [S083 pp. 1, 17–18, 23].
+
+**🔴 Checkpoints**: his group's fix: ML weights turn optimistic in high covariate dimension → a bootstrap-robust layer (DOI 10.1007/s10107-021-01679-2) [S139 pp. 3–4, 15–16]. Unobservable counterfactual → a proxy whose bias favours the incumbent, direction stated [S078 pp. 14–16; S909 pp. 12, 19, 28]. *Corrections*: let stakeholders see and contest the trade-offs before the vote (Boston's approved start-time plan was never implemented) [05 §5.1; S262 pp. 10–12]; score forecasts on the field's metric (DELPHI relative WIS 0.99 against the naive 1.00, DOI 10.1073/pnas.2113561119) [05 §5.2; S021 pp. 2, 4].
+
+**Limitations**: needs partner access and a track record; outcome studies exist for a few deployments only [S115 pp. 22–24]; in 1988–1996 his comparator was the re-optimization ideal, not an owner's rule [S048 pp. 27, 71; S017 pp. 3, 12].
+
 <a id="method-6"></a>
 ## Method 6: Run research as programmes
 
@@ -420,6 +479,12 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 - *Collaboration roles in 2021–2026* (08 §9): the senior sponsor and editor of student-led lines outside optimization, stated in contribution sections [S299 p. 10; S132 pp. 1, 13; S478 pp. 1, 21; S682 p. 7; S618 pp. 1, 15]; the analytics partner inside a clinical team's study [S238 pp. 1–2; S707 pp. 1, 5, 11; S686 pp. 1, 13; S439 pp. 1, 8]; quote: "D.B. directed the overall project, from concept and research to implementation, and edited the manuscript." [S617 arXiv p. 28].
 - *Say–do*: unchanged. Courses and books appear only at abstract level [S792; S793; S020; S128; S209; S047; S084; S334; S695], and the pre-start gate cannot be seen in papers.
 
+**Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
+
+- Stated: the impact test, 11 statements on 5 occasions 2014–2026 (homepage essay; oral history pp. 6–7); courses become books; companies for scale, hedged in 2014 [02 T1, R1, R4, O8, C9].
+- Practice: the thesis problem class came from his adviser's group [S048 pp. 18, 71, 125]; a cohort consolidated in a sole-author survey with open problems [S185 pp. 1, 4, 46, 48–49, 51]; an organ-allocation programme over successive theses, with a former student among the co-authors [S476 pp. 1–2]; seven lineages [04 A.4]; books with Dunn (2019), den Hertog (2022), Gamarnik (2022), Orfanoudaki and Wiberg (2025) [01 §1.9]; Interpretable AI 2018.
+- ⚠ The company before the paper [S050 pp. 1, 10]; a modelling package as adoption channel [S028 pp. 2–3, 10]; lines he sponsors outside optimization [S132 pp. 1, 13, 15]; teachability argued after the fact [S018 pp. 4, 23].
+
 <a id="method-7"></a>
 ## Method 7: Bound before policy (promoted 2026-10-29)
 
@@ -443,6 +508,21 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 **Variants.** Asymptotic regimes for sharp constants (cluster 3, 22 works, 19 of them 1988–2002): the bound of the probabilistic-analysis years [S038 pp. 6–8, 10–12; S016 pp. 5–14; S130 pp. 4, 13, 22; S310 pp. 5–7]; exclusivity weak (the Beardwood–Halton–Hammersley and Steele tradition [S038 pp. 4–5]). Adaptive policies, power and limits of a tractable policy class (cluster 10, 17 works) [S134 pp. 6, 12–18; S165 pp. 21–22, 24; S217 pp. 9–11; S060 pp. 15, 23]: "We refer to the ratio of the optimal cost of the robust problem and the optimal cost of the two-stage stochastic problem as the stochasticity gap." [S134 p. 1].
 
 **Limitations.** Bounds can be loose without telling which side [S072 p. 26; S212 p. 24]; policies from relaxations were admitted to be ad hoc and missing for networks [S185 p. 49]; 45 of the 79 works date from 1988–2002; when an exact MIO solves at scale, Method 4's solver gap replaces the proved ratio [S010 pp. 27–40]; the yardstick is the bound or the re-optimization ideal, not an owner's current rule (contrast Method 5) [S048 pp. 27, 71; S017 pp. 3, 12]. Part of the 1992–1999 achievable-region series is abstract- or metadata-level [S587; S468; S507; S581; S656; D007; D008; S798], so the SD evidence rests on the surveys [S185; S580] and the papers read [S072; S057; S051; S368; S130; S205; H010; S212].
+
+**Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
+
+- Stated: "Furthermore, the quality of proposed heuristics is usually assessed by comparing their empirical performance with that of alternative heuristics, which gives little information about their degree of suboptimality." [S051 p. 1]; heuristic–relaxation gaps named as the next step (sole author) [S185 pp. 1–2, 51].
+- Practice: bounds over all policies, then constant-factor routing policies [S016 pp. 3, 5–11]; policies read off achievable-region relaxations [S185 pp. 22–25, 29–32]; a primal–dual index policy with a suboptimality bound [S051 pp. 5–11]; static and affine policies priced against adaptive optima, tight families shown [S134 pp. 6, 12–18].
+
+1. Write a relaxation valid for every policy: LP or conservation-law, fluid or Lagrangean, a limiting regime, sampled scenarios [S185 pp. 8–12; S138 pp. 7–9]; which bound and device fit which structure: technique catalog §1.2.
+2. Read the policy off its solution: indices from reduced costs, rounding, tracking the fluid optimum, an affine rule [S051 pp. 7–9; S205 pp. 9–11].
+3. Prove the policy's ratio to the bound: a constant factor, an asymptotic optimality, or a price of the policy class [S016 pp. 5–11; S192 pp. 16, 18–19]. No ratio provable → report the computed gap per instance and regime, and say so [S368 p. 1; S072 pp. 26–27].
+4. Check tightness: an instance attaining the ratio, or a counterexample just outside exactness; open constants printed as conjectures [S052 pp. 20–21; S042 pp. 25–26].
+5. Grade every heuristic, the incumbent's included, by its gap to the same bound [S072 pp. 26–31; S368 pp. 10–13].
+
+**Different from standard practice**: one bound grades the incumbent and every heuristic, in a loop carried across queueing, routing, IO and adaptive RO. Bound-first alone is not his (approximation algorithms [S052 pp. 3, 11]; conservation laws, Whittle's and Kelly's bounds [S185 pp. 3–4, 21; S368 p. 8]): claim novelty for the transfer and the graded incumbent.
+
+**Limitations**: a bound can be loose without telling which side: "Since the optimal cost is not known, we cannot calculate the closeness of our lower bound to the optimal cost." [S072 p. 26]; mostly 1988–2002 work; where an exact MIO solves at scale, Method 4's gap replaces the ratio [S010 pp. 27–40]; the yardstick is a bound, not an owner's rule (Method 5).
 
 <a id="workflow-a"></a>
 ## Workflow A: Problem choice
@@ -482,6 +562,10 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 
 **Full-text additions.** Exact reformulations for cutting planes: a closed-form inner problem gives a convex integer program without big-M [S061 pp. 6–10; S095 pp. 4–7]; z² = z linearizes a ridge term [S175 p. 9]. Nest the incumbent rule as one setting of the knob [S076 p. 17; S199 pp. 5, 8, 17–18; S104 pp. 9, 13, 17]. Step 3 (new): Method 7 for policies with no exact solve. Step 4 adds Heuristic 10. The LP-relaxation strength check is his own practice in his strongest formulation papers [S015 pp. 2, 4–5, 10; S093 pp. 8–9, 17–19] (C10).
 
+**Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
+
+**🔴 Checkpoint**: class left without measured solve times → change the device. *Corrections*: test exactness on a small example; check the LP-relaxation strength of big-M models, as his formulation papers do [S015 pp. 2, 4–5, 10; S093 pp. 8–9, 17–19].
+
 <a id="workflow-c"></a>
 ## Workflow C: Experimental design and execution
 
@@ -500,6 +584,10 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 
 **Full-text additions.** Matched budgets are his practice (C8): [S317 pp. 13–24; S340 pp. 16, 23; S708 pp. 35–41]. Regimes a critic would choose: SNR grids [S010 pp. 26, 30, 38]; feasibility-border instances [S015 p. 11; S068 pp. 31, 39; S241 p. 30; S275 p. 25]; misspecification and outside-the-set stress tests [S014 p. 12; S053 pp. 16–22; S278 pp. 5–6]; released code [S093 p. 16; S208 pp. 11–14]. Time to the best solution apart from time to proof [S445 p. 24; S488 pp. 25–27; S184 pp. 25–36]; regime maps and phase transitions [S061 pp. 4, 14–19]; asymptotics checked by simulation with a stated stopping rule [S829 pp. 13–17; S080 pp. 14–18; S016 p. 12]; a scale test before trusting a small-n result [S048 pp. 121–123]; where the time goes, step by step [S291 p. 13; S168 pp. 15–16; S316 p. 11]. The label "critic-informed, not his practice" on step 3 is corrected (C8). *Fix round*: a step 5 for stochastic and dynamic policies (simulation with batch means and a stopping rule on the confidence-interval width [S016 p. 12; S829 p. 13]; light to heavy traffic [S016 pp. 5–14]; each policy's gap to the relaxation bound per regime [S072 pp. 26–31; S368 pp. 12–13]; the owner's simulator [S044 pp. 5, 18–22]); the checkpoint tries a stronger formulation before local search ([Method 4](#method-4)); the matched budget of [S340 pp. 16, 23] is noted as set equal, with the rival's overruns printed.
 
+**Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
+
+5. Stochastic or dynamic policies, the owner's rule included: simulate with a stated stopping rule (batch means; CI width a set fraction of the estimate [S016 p. 12; S829 p. 13]), from light to heavy traffic [S016 pp. 5–14]; report each gap to the Method 7 bound per regime, with its error [S072 pp. 26–31; S368 pp. 12–13]; use the owner's simulator if one exists [S044 pp. 5, 18–22].
+
 <a id="workflow-d"></a>
 ## Workflow D: Judging results
 
@@ -517,6 +605,10 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 
 **Full-text additions.** Bound-referenced yardstick: every policy as a ratio to a relaxation bound [S072 pp. 26–31; S070 p. 9; S207 pp. 12–16; S368 pp. 10–13]. Bias-signed proxies [S909 pp. 12, 19, 28; S078 pp. 14–16]. Field impact studies by difference-in-differences [S115 pp. 22–24; S617 arXiv pp. 22–25]; the Hartford one is called a descriptive analysis by its authors, with no standard error, and its controls partly used the tool [S617 arXiv pp. 24–25]. The OCT depth-4 comparison is in the card too [S011 pp. 26–36]. Boston: *not implemented yet* is the PNAS paper's wording on p. 2, *delayed* its wording on p. 6 (C12).
 
+**Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
+
+2. Where it wins and where not; negative results in the body; prospective external scoring for forecasts (→ Heuristic 4); proxies with a stated bias direction [S909 pp. 12, 19, 28]; a staggered roll-out with a comparison group, analysed descriptively [S617 arXiv pp. 22–25].
+
 <a id="workflow-e"></a>
 ## Workflow E: Writing and dissemination
 
@@ -532,6 +624,10 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 ```
 
 **Full-text additions** (writing moves, 08 §7.4): field-contrast opening, the neighbouring field's plan of attack against this field's ad hoc state [S185 pp. 1–3; S051 p. 1]; programme abstract, practice → belief → figure → method [S081 p. 2; S010 p. 1; S093 p. 2]; looseness and conjectures printed beside the theorem [S016 pp. 7, 9; S032 pp. 7–8, 11, 16; S158 pp. 15, 17; S323 pp. 2, 13, 17–18]; a closing complexity map and numbered open problems [S185 pp. 49–51]; staged companion papers from one model, including a bounds paper and a policies paper [S098 pp. 2–3; S072 p. 2; S004 pp. 4, 16–17, 22; S019 pp. 1–2, 4–5; S234 p. 1; S305 p. 3]; claims narrowed from working paper to journal [S833 pp. 6, 9, 15–23; S186 pp. 2, 16–17; S261 pp. 7, 14, 20, 26]; an integration section mapping the model onto the owner's process [S076 pp. 22–23; S245 pp. 11–13]; claims graded by their evidence [S017 pp. 11–12].
+
+**Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
+
+3. One programme brand; companion papers from one model (bounds, then policies) [S072 p. 2]; one applied write-up per deployment; methods in flagship OR journals, clinical work in clinical journals; student-paper competitions [04 B.9].
 
 <a id="workflow-f"></a>
 ## Workflow F: After publication
@@ -578,6 +674,10 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 
 **Full-text evidence** (26 works cite H1; cluster 6, 18 works; upgraded from metadata level, C14). DP form in 1998: the model under which practice's equal split is exactly optimal, shown non-optimal elsewhere, then extended [S009 pp. 4, 9–10, 43]: "We have shown that the common approach of breaking up a large trade into a number of smaller trades of equal size is optimal only in one very special case" [S009 p. 43]; regularization as robustification in the 2011 survey [S003 p. 37]; Lasso and SLOPE as robust problems [S225 pp. 5–6, 14–17]; iff conditions and two-sided bounds where the equivalence fails [S085 pp. 7–15, 18–22]; ℓ1 buys robustness, not sparsity [S725 p. 4]; a dual-norm lemma for SVMs, logistic regression and trees [S104 pp. 9–12]; Tan's sensitivity model as an exact DRO problem [S333 pp. 5–7]; ridge as robustness [S218 p. 7]; an averaged robust problem behind practice [S530 pp. 2, 9, 12–13]; numerical linear algebra [S458 pp. 3, 6–7]; adaptive coefficients [S623 pp. 2–4]; inverse variant, the problem Black–Litterman solves [S086 pp. 1, 3, 5–9]. The cards credit the Lasso equivalence to Xu–Caramanis–Mannor; his contribution is where it breaks [S085 pp. 7–15]: "As a result, when robustification and regularization do not coincide, they can induce structurally distinct solutions." [S085 p. 13]. Not promoted to a method: exclusivity partial. The pre-2011 adaptive-RO and robustness–regularization papers are metadata-level [S789; S466; S560; S462; S424].
 
+**Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
+
+1. **If** a heuristic or a practice works well, **then** find the problem it solves exactly, print where the equivalence breaks, and extend from there: the equal split optimal under one model only [S009 pp. 4, 9–10, 43]; ℓ1 from robustification, and where not [S085 pp. 7–15] (DOI 10.1016/j.ejor.2017.03.051); robust classifiers (DOI 10.1287/ijoo.2018.0001). The Lasso equivalence is Xu–Caramanis–Mannor's (C14).
+
 <a id="heuristic-2"></a>
 ## Heuristic 2: answer critics with a new paper
 
@@ -588,6 +688,10 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 ```
 
 **Full-text evidence.** The reply to the best-subset critique adopts the critics' SNR grid and formula, concedes in part and releases code [S095 pp. 3, 10, 21, 23]: "Our experiments suggest that their observations are still valid but less obvious as soon as the best subset selection estimator is regularized as well" [S095 p. 23]; a 2017 journal version adds the handicap test absent from 2014 [S197 p. 12].
+
+**Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
+
+2. **If** critics attack, **then** answer with a new paper: a new student, the critic's frame (their SNR grid, a partial concession, released code [S095 pp. 3, 10, 21, 23]), a fix (an ℓ2 term), a reframed target (DOI 10.1214/19-STS701 after HTT) [03 B5.3]. No reply was found to formulation-strength or reproducibility critiques.
 
 <a id="heuristic-3"></a>
 ## Heuristic 3: an exact model stalls
@@ -600,6 +704,10 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 
 **Full-text evidence** (24 works, version pairs merged; cluster 24, 38 works; 08 §3 row 31). MIO kept as the move of a local search, not abandoned: a local backbone [S046 pp. 22–26] and random subsets of schools [S137 p. 4]: "The core idea of a “backbone” is that some decision variables do not vary too much across almost all near-optimal solutions, and that identifying them can significantly accelerate the optimization process." [S046 p. 39]. Exact optima on small instances certify the heuristic [S199 pp. 6, 8, 11, 13–15; S366 pp. 5–6, 8–12; S558 pp. 15–16; S867 pp. 18, 21–22]. When the bound stalls, relaxation plus rounding that still prints a bound gap [S183 pp. 22–26]. An intractability verdict by size count, once without re-measurement [S456 pp. 4, 6, 15]. Stated: "However, in many cases a provably optimal solution is not necessary and scalable heuristics such as local improvement may be employed." [S199 p. 11].
 
+**Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
+
+3. **If** an exact model stalls, **then** count variables, switch to local search with restarts over the structural variables, keep MIO as the neighbourhood move [S046 pp. 22–26; S137 p. 4], use small exact solves to certify the heuristic [S199 pp. 6, 8, 11, 13–15], and change the claim (Dunn 2018; DOI 10.1287/ijoc.1110.0496) [03 B4.5].
+
 <a id="heuristic-4"></a>
 ## Heuristic 4: print negative results in the body
 
@@ -610,6 +718,10 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 ```
 
 **Full-text evidence** (51 works; the strongest-recurring heuristic in the cards). Losing regimes printed [S010 pp. 30, 38–40]; few uncertain coefficients explain PILOT4 [S001 p. 14]: "We attribute this to the fact that there are very few uncertain coefficients in each constraint (Table 4), and thus probabilistic protection is quite close to deterministic protection." [S001 p. 14]; a regime map recommending greedy where it is near-optimal [S046 p. 19]; his own tree losing to logistic regression said plainly [S276 p. 4; S296 pp. 5, 9]; non-implementation printed [S083 pp. 25, 27; S262 p. 12; S243 pp. 17–28]; his own model the weakest predictor [S370 pp. 13–16]; a slower run time printed [S006 pp. 5, 9]; "Therefore, the full plan was not implemented and instead FEMA has opened just 24 facilities in 13 states, as compared to the original 100 planned ones." [S083 p. 25].
+
+**Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
+
+4. **If** a result is negative, **then** print it in the body (losing regimes [S010 pp. 30, 38–40]; PILOT4; 6.14 h; uncertified trees; greedy where optimization does not pay [S046 p. 19]; a plan not implemented [S262 p. 12]), archive failed variants with labels, and submit forecasts to an external prospective scoreboard (DELPHI) [03 B5.1, B4.7].
 
 <a id="heuristic-5"></a>
 ## Heuristic 5: learn the optimizer's strategy offline
@@ -623,6 +735,10 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 **Full-text evidence** (8 works; cluster 26, 32 works). Strategy labels and an interpretable model of the optimizer [S112 pp. 1–2, 9–10, 14, 17–21]: "Instead, our approach encodes the optimal solution with a small amount of information that we denote as strategy." [S112 p. 2]; online MIO in milliseconds [S092 pp. 2–3, 8, 12–13, 20–23]; robot planning [S204 pp. 2–3, 5–8]; fluid restless bandits [S681 pp. 3, 5, 14, 24]; a structure theorem first [S402 pp. 9–11]; a 1995 precursor, policies learned from exactly solved special cases [S098 p. 22]; math programming inside DP [S070 pp. 3–5; S034 pp. 8–9; S106 pp. 7–9]. Claims narrowed: "Therefore, the current approach does not apply to problems that take hours to solve with Gurobi." [S092 p. 36].
 **Correction** (C13): the earlier citation DOI 10.1287/opre.2021.0707 is [S097], which learns constraints from decision–outcome data, not an optimizer's strategy for repeated solves [S097 pp. 1–9]; it moves to Method 5 and the DA row. Replacements: [S204] (DOI 10.1109/cdc42340.2020.9304043) and [S681] (DOI 10.1007/s10994-026-07022-0).
 
+**Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
+
+5. **If** one optimization is solved repeatedly online, **then** learn the optimizer's strategy offline and narrow the claims as the paper matures [S112 pp. 1–2, 9–10, 14; S204 pp. 2–3, 5–8] (DOI 10.1007/s10994-020-05893-5; DOI 10.1287/ijoc.2022.1181) [03 B5.4]; not DOI 10.1287/opre.2021.0707, which learns constraints (C13).
+
 <a id="heuristic-6"></a>
 ## Heuristic 6: build the data asset
 
@@ -633,6 +749,10 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 ```
 
 **Full-text evidence** (8 works). The chemotherapy-trial database built by hand: "such a database did not exist before this study" [S078 p. 3] (DOI 10.1287/mnsc.2015.2363 is [S078]); a trial database kept up 2012–2019 with former graduate students and undergraduates [S292 pp. 2, 9] (its tie to the S078 database is inferred; the paper does not state it); patients rated by experts first [S489 pp. 2–3, 7]; registry automation [S364 pp. 1, 3–4]; HAIM data released on PhysioNet [S023 pp. 1, 6, 8–9]; transcribed cohort studies [S099 pp. 2–3, 7, 9]; consortium and linked registry data [S527 pp. 2–4, 10, 19–20; S682 pp. 2–7].
+
+**Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
+
+6. **If** a field lacks the data to decide, **then** build the data asset and split prediction from selection (a trial database that "did not exist before this study" [S078 p. 3] → DOI 10.1287/mnsc.2015.2363; a trial database kept up 2012–2019, [inferred] the same line [S292 pp. 2, 9]) [02 P8].
 
 <a id="heuristic-7"></a>
 ## Heuristic 7: retry a stalled topic with the next student
@@ -645,6 +765,10 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 
 **Full-text evidence** (5 works). A new student starts from the predecessor thesis's stated limit [S456 pp. 1, 3–4, 6]; 19 works enter from the group's own earlier limit (cluster 20) [S068 pp. 2, 5–6; S192 pp. 5–6; S440 pp. 1–2; S457 pp. 2–3].
 
+**Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
+
+7. **If** a topic stalls, **then** retry it with the next student, from the predecessor's stated limit [S456 pp. 1, 3–4, 6], and keep the manuscript listed [03 C.1]; of 40 items listed as submitted in 2017, 21 were published by 2025 and 10 are absent, some retitled [01 §3].
+
 <a id="heuristic-8"></a>
 ## Heuristic 8: supervising many students
 
@@ -656,6 +780,10 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 
 **Full-text evidence.** None: supervision routines cannot be seen in papers; contribution statements show the later sponsor-and-editor role [S617 arXiv p. 28; S023 p. 9] (08 §9). Unchanged.
 
+**Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
+
+8. **If** you supervise many students, **then** a weekly hour one-on-one each, no whole-group meeting, a funded topic beside the thesis topic, an informal second adviser, companies only after graduation [02 P7, O10; 04 B.4, B.5]; counterpoint: missed meetings in 2015.
+
 <a id="heuristic-9"></a>
 ## Heuristic 9: the abstract template
 
@@ -666,6 +794,10 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 ```
 
 **Full-text evidence** (7 works). Practice → belief → figure → method [S081 p. 2]; belief and figure in the first sentences [S010 p. 1; S011 pp. 3, 5–6]; a week to ten minutes [S093 p. 2]: "We show that this problem, which required a week of computation time to solve in prior work, is solved by our approach to full optimality in approximately 10 minutes." [S093 p. 2]. The caveat sits in the body: hardware and solver progress conceded on p. 20 [S093 pp. 2, 20].
+
+**Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
+
+9. **If** you write the abstract, **then** open with the community's belief, the enabling change and one headline number [S081 p. 2; S010 p. 1; S093 p. 2]; reuse one programme brand for a decade (*under a modern optimization lens*) [02 W8, W9]; critics aimed at the headline numbers [05].
 
 <a id="heuristic-10"></a>
 ## Heuristic 10: re-derive the classical results with the new device (new)
@@ -679,6 +811,10 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 **Steps.** (1) List the classical results and tools the field relies on; (2) derive each as a special case, a limit of your knob, or a relaxation of your formulation; (3) state the condition where the equivalence breaks [S085 pp. 7–15]; (4) place your own earlier method in the new order [S216 pp. 5, 14]; (5) only then extend.
 
 **Checks.** Recurrence ✅; say–do ✅ (stated jointly); executable ✅; exclusivity ✗ (generalizing known results is routine in mathematics). Hence a heuristic, not a method; it fills the tenth and last heuristic slot, which is why three more heuristic-eligible clusters were folded into Methods 3 and 5 (08 §5).
+
+**Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
+
+10. **If** you introduce a new device, **then** first re-derive the field's classical results with it (special cases, limits of the knob, relaxations), print where the equivalence breaks, place your own earlier method in the new order, then extend [S129 pp. 1–2, 9–12; S057 pp. 3–4, 22, 38; S283 pp. 3–4, 15–19]. Not a method: exclusivity fails (80 works).
 
 <a id="anatomy-achievable-region"></a>
 ## Signature work: achievable region (SW1)
@@ -699,6 +835,14 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 
 **Full-text evidence.** Read in full: the 1995 survey [S185], the 1994 working paper [S580], the 1996 conservation-law paper [S057], the 1994 network paper [S072] (not read in the web pass: a scan without a text layer), the 2000 restless-bandit paper [S051], loss networks [S368], changeover times [S212], H010. Origin stated, sole author: "This approach is based on the thesis that the essential difficulty in stochastic and dynamic optimization is primarily the dynamic and combinatorial character of the problem and only secondarily the stochastic character of the problem." [S580 p. 10]; the field contrast [S185 pp. 1–3]; "For the most part, the tradition for stochastic and dynamic scheduling problems has been, however, quite different, as it relies primarily on dynamic programming formulations." [S057 p. 1]; "Faced with these results, one asks what is the underlying reason that these nontrivial problems have very efficient solutions, both in theory and in practice." [S057 p. 3]. Key insight [S057 pp. 3, 11–13, 19–20]; minimal evidence [S057 pp. 3–4, 22, 38; S072 pp. 20–22]; the abandoned path, in his words: "For restless bandits, polling systems and loss networks we proposed empirically effective heuristics from the relaxations, but the heuristics were somewhat ad hoc." [S185 p. 49]; lineage and funding [S057 pp. 1, 4, 12, 14, 32, 48–49]; reception through the primal–dual heuristic [S051 pp. 7–11] and the 2026 ML return [S681 pp. 1, 3, 8].
 
+**Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
+
+| Dimension | Content |
+|---|---|
+| Why then | The stochastic counterpart of sharper polyhedral and SDP formulations [S185 pp. 1–4]; a student's thesis line with Tsitsiklis as co-author [S072 pp. 1, 8, 33], co-advised per DSpace [04 A.2]; an NSF PYI |
+| Minimal evidence | Classical index rules recovered as one algorithm on one polytope [S057 pp. 3–4, 22, 38]; polyhedral and SDP bounds for networks [S072 pp. 20–22] |
+| Reception | Erlang and SIAM prizes 1996 (citations unverified); an index policy with a suboptimality bound [S051 pp. 7–11]; revisited by ML in 2026 [S681 pp. 1, 3, 8] |
+
 <a id="anatomy-moment-bounds"></a>
 ## Signature work: optimal probability inequalities (SW2)
 
@@ -717,6 +861,13 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 ```
 
 **Full-text evidence.** Read in full: SIOPT 2005 [S018] and the 2000 handbook chapter [S007]. Origin: three numbered questions and critics' quotations define the gap [S018 pp. 1–4]; key insight [S018 pp. 5–16]; boundary [S018 pp. 16–17]; stated limit: "It is fair to say that a thorough understanding of the algorithmic aspects and the complexity of the (n, k, Ω)-bound problem is still lacking." [S018 p. 4]; no procedure to extract an extremal distribution from the SDP [S018 pp. 19–21]. The CP line takes its questions from inside theory, with no owner or data [S018 pp. 1, 3, 25]. Reception and extensions: SDP relaxations certify heuristic policies [S007 p. 18]; covariance rounding of an SDP solution [S007 pp. 33–35]; Kingman's and Daley's bounds as special cases [S255 pp. 1, 7–9]; moment hierarchies with two-sided convergence [S413 pp. 4–5; S499 pp. 4, 14–15]; option and stock prices [S056 pp. 2–15].
+
+**Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
+
+| Dimension | Content |
+|---|---|
+| Origin | [stated-joint] are the Markov, Chebyshev and Chernoff bounds best possible, and is there an optimization theory for them? The gap is taken from critics of moment theory [S018 pp. 1–4] |
+| Reception | SDP relaxations as yardsticks for heuristic policies [S007 p. 18]; Kingman's and Daley's bounds as special cases [S255 pp. 1, 7–9]; no critique found |
 
 <a id="anatomy-price-of-robustness"></a>
 ## Signature work: The Price of Robustness (SW3)
@@ -737,6 +888,13 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 
 **Full-text evidence.** Read in full: OR 2004 [S001] and MP 2003 [S004]; the 2002 credit-risk working paper read in part [S653]. Origin [S001 pp. 1–3]; a budget Γ normalised by standard deviations in 2002 [S653 pp. 12–14, 24]; the knapsack point, CPLEX 6.0 on a Pentium II, 0.57% bound for 1.54% loss [S001 pp. 10, 12]; PILOT4 diagnosed [S001 pp. 14, 16]; "Moreover, we think that the ultimate criterion for comparing the degree of conservatism of these methods will be computation in real problems." [S001 p. 8]; robust 0-1 problems by n + 1 nominal solves, robust flows by a logarithmic number of nominal flows [S004 pp. 5–7, 22]: "We next show that surprisingly, the robust counterpart of a polynomially solvable combinatorial optimization problem is also polynomially solvable." [S004 p. 7]. Later lines: data-driven sets [S013 pp. 3–4, 10]; theory and applications survey [S003 p. 37]; the 2026 retrospective abstract-level [S614].
 
+**Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
+
+| Dimension | Content |
+|---|---|
+| Origin | [stated-joint] Soyster too conservative; ellipsoidal counterparts nonlinear and unattractive for discrete problems [S001 pp. 1–3]; a budget Γ already in a 2002 working paper [S653 pp. 12–14]; how Γ arose: unknown |
+| Abandoned paths | PILOT4, where the price stays high [S001 pp. 14, 16]; an unpublished ellipsoidal discrete manuscript; data-driven sets later [S013 pp. 3–4, 10] |
+
 <a id="anatomy-best-subset-trees"></a>
 ## Signature work: best subset selection and optimal trees (SW4)
 
@@ -755,6 +913,15 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 ```
 
 **Full-text evidence.** Read in full: best subset (arXiv v1, with the 200-billion figure) [S010], OCT [S011], the OR Forum regression paper [S081], CRIO [S073], logistic regression [S105], the BPV reply [S095]. Origin: "the belief was formed in the early 1970s that these methods are not tractable in practical computational settings." [S073 p. 1]; the figure [S010 pp. 7–8; S081 p. 4; S011 pp. 5–6]; key insight [S010 pp. 1, 5–6, 18–20; S011 pp. 9–19]; limits printed: hours to certify for p ≫ n [S010 p. 6], slow lower bounds [S010 p. 34], losing regimes [S010 pp. 38–40]; certificates: "most of our results for OCT and OCT-H do not carry explicit certificates" [S011 p. 26]; the evaluation stance: "is not necessarily required in practice when evaluating a classifier" [S011 p. 14]; CART baseline at matched depth and the depth-4 comparison [S011 pp. 26–36]; the reply in the critics' frame [S095 pp. 3, 10, 21, 23].
+
+**Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
+
+| Dimension | Content |
+|---|---|
+| Origin | [stated-joint] statistics' belief that MIO is impractical, dated and conceded [S010 pp. 2, 5, 8], stated already in CRIO [S073 p. 1]; a student line (Shioda, King, Dunn) with postdoc Mazumder |
+| Why then | The rebuilt speed-up (Method 2): 200 billion in arXiv v1, about 450 billion in print (AoS p. 819), 800 billion for trees [S010 pp. 7–8; S081 p. 4; S011 pp. 5–6] |
+| Abandoned paths | Slow lower bounds for p ≫ n and losing regimes printed [S010 pp. 34, 38–40]; "most of our results for OCT and OCT-H do not carry explicit certificates" [S011 p. 26]; by 2018 local search for trees |
+| Reception | HTT (DOI 10.1214/19-STS733) and the 2020 exchange, answered in the critics' frame [S095 pp. 3, 10, 21, 23]; lecture, class, company, book (2019), Lanchester Prize 2021 |
 
 <a id="anatomy-prescriptive-analytics"></a>
 ## Signature work: From Predictive to Prescriptive Analytics (SW5)
@@ -775,12 +942,28 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 
 **Full-text evidence.** Read in full (arXiv version) [S008]. Problem entry [S008 pp. 1–2, 6–7]; key idea [S008 pp. 3, 10–14, 16, 21]; the real case, 150 weeks over just under 20,000 locations, P = 0.88 [S008 pp. 28–31]; the stated priority of the decision over the prediction [S008 p. 29]; the stated gap: "Although we do not have firm theoretical results on the asymptotic optimality of the predictive prescriptions based on CART (eq. (7)) and RF (eq. (8)), we have observed them to converge empirically in Section 1.1." [S008 p. 19]; the baseline is a constructed data-poor rule, not the vendor's rule [S008 pp. 30–31]. Follow-up: the bootstrap-robust layer [S139 pp. 3–4, 15–16].
 
+**Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
+
+| Dimension | Content |
+|---|---|
+| Origin | [stated-joint] OR/MS data are mostly auxiliary covariates, which SAA ignores [S008 pp. 1–2, 6–7]. arXiv v1–v2 were Kallus's single-author preprint, v2 withdrawn by Kallus; Bertsimas joined at v3: not his retraction |
+| Why then | Data availability and flexible ML, stated without a figure [S008 p. 2]; plenaries in 2015–2016 |
+| Abandoned paths | v1's universal claim narrowed; no asymptotic theory for CART and random forests, the methods used in the application [S008 p. 19]; censoring and P added |
+| Reception | Six years from v1 to print; a bootstrap-robust follow-up [S139 pp. 3–4, 15–16] after optimism in high dimension, noted also by a survey (DOI 10.1016/j.ejor.2024.03.020) |
+
 <a id="anatomy-dynamic-routing"></a>
 ## Signature work: stochastic and dynamic vehicle routing (SW6, new)
 
 **Before this synthesis**: not dissected in SKILL.md (01 §2 lists it among the routing works).
 
 **Full-text evidence.** Read in full: OR 1991 [S016], OR 1993 [S032], the 1990 working paper [S597], Adv. Appl. Probab. 1993 [S091]. Origin: "Yet, in many practical applications, the TSP is a deterministic, static approximation to a problem which is, in reality, both probabilistic and time varying (dynamic)." [S016 p. 1]; the problem came from a colleague, Psaraftis (acknowledgment) [S016 p. 14]. Key insight: "First, we establish some lower bounds on the average system time for all policies." [S016 p. 3]; batching into TSP tours as a GI/G/1 queue [S016 p. 10]. Minimal evidence: light-traffic optimality and heavy-traffic constant factors [S016 pp. 5–11]; simulated constants with a stated stopping rule [S016 p. 12]. Abandoned paths: loose constants and an unproved assumption printed [S016 pp. 7, 9, 11–12]; "Though useful for data-intensive tactical problems, they are inherently ad hoc and hence do not give the insight necessary for strategic planning." [S032 p. 2]; partition policies lack travel–waiting control [S597 p. 38]. Reception and extensions: m vehicles and capacity [S032 pp. 3–15]; general densities and renewal arrivals, with a factor-2 stronger bound [S091 pp. 3, 11]; the travel–waiting price [S032 pp. 15–16]; the price of an equal-service policy [S091 pp. 11, 23–25]. Methods: 7 (bound before policy), 1 (an analysable queue reached by policy design), 3 (a priced trade-off).
+
+**Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
+
+| Dimension | Content |
+|---|---|
+| Origin | [stated-joint] the TSP is a deterministic, static approximation of problems that are stochastic, dynamic and judged by waiting [S016 pp. 1–2]; a colleague (Psaraftis) brought the problem to him [S016 p. 14] |
+| Why then | Probabilistic analysis of Euclidean problems joined to queueing [S016 pp. 3–4, 10–11]; [inferred] the next step after a priori optimization |
 
 <a id="anatomy-execution-costs"></a>
 ## Signature work: optimal control of execution costs (ledger only)
@@ -858,6 +1041,13 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 
 **What changed.** The meaning of *tractable* (complexity class and asymptotic constants in 1988–1997 [S289 pp. 2, 6, 11–12; S269 pp. 1, 21–22]; computation named the criterion in 2004 [S001 p. 8]; solve time stated as the test from 2014 [S178 p. 5; S010 p. 2]); scarce computation favouring simple a priori policies in 1996 [S025 p. 17] became abundant computation favouring exact MIO [S010 pp. 7–8]; sole authorship gave way to teams (11 sole-author works in 1988–92, about one a period later, editorials aside); theory papers gave way to deployments with partners. Computation was steady from the start, not little (C17): a home-made C package, 45 PTSP problems and 20 instances per VRP type against named heuristics in 1991 [S089 pp. 13–17, 23, 26–28]; programmed queueing algorithms with run times by step [S291 p. 13; S168 pp. 15–16; S389 pp. 11–14]: "Being fully aware of the need for the probabilist to be closely involved with the algorithmic analysis of a problem, we have undertaken the task of programming and testing our algorithms." [S168 p. 14]; an IP solved with MPSX [S036 pp. 7–10]; airport congestion runs on real data [S135 pp. 1–2, 7–8, 15–16].
 
+**Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
+
+Constant: Method 7, Heuristic 10, Method 1, priced trade-offs [S597 pp. 36–38], printed limits. Changed: the meaning of *tractable*; sole authorship to teams; theory to deployments with partners [08 §8–9].
+
+- **2025-10 → 2026-10** [06 §8]: *Fifty years of Robust Linear and Convex Optimization* with den Hertog (EJOR 2026, DOI 10.1016/j.ejor.2026.08.042, abstract only [S614]); *Cone Product Reformulation for Global Optimization* (IJOC 2026, DOI 10.1287/ijoc.2023.0345); fluid restless bandits by ML (DOI 10.1007/s10994-026-07022-0); Hartford HealthCare operations (DOI 10.1287/inte.2024.0170); preprints on lecture-video generation (arXiv 2609.26540), LLM personalization (arXiv 2610.17203) and wildfire sensing (arXiv 2609.11829).
+- Roles: Vice Provost for Open Learning; Universal AI launched 2026-05-12; Killian Lecture 2026-03-19; PhD theses no. 107–109 in spring 2026. Direction [inferred]: health care dominant; RO continuing in energy and insurance; research following his education role.
+
 <a id="academic-lineage"></a>
 ## Academic lineage
 
@@ -873,6 +1063,12 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 ```
 
 **Full-text evidence.** The thesis documents the inheritance from Odoni's group [S048 pp. 18, 71, 125; S038 p. 5]. Most frequent coauthors by period (08 §9, from the cards' coauthor fields, approximate): 1988–92 van Ryzin, Nakazato, Papaconstantinou; 1993–97 Tsitsiklis, Odoni, C.-P. Teo; 1998–2002 C.-P. Teo, Tsitsiklis, Lo, Gamarnik; 2003–07 Natarajan, Caramanis, Sim; 2008–12 Nohadani, Farias, Trichakis; 2013–17 Mišić, Bandi, V. Gupta; 2018–22 Dunn, Orfanoudaki, Zhuo; 2023–26 Y. Ma, Margonis, den Hertog. The RO book co-author den Hertog co-signs the 2021–2026 robust and global-optimization lines [S215 pp. 21–23; S283 pp. 3–4, 15–19; S708 pp. 8, 14–15; S689 pp. 3, 16; S415 pp. 19–20; S836 pp. 4–5]. Partners as co-authors: ISO New England staff [S006 pp. 1, 5–9]; an owner co-author [S245 pp. 2–3, 6–7]; UNOS staff [S476 pp. 1–2]; hospital partners [S617 arXiv pp. 1–2, 9, 28, 31; S683 pp. 1, 7]. Company software as platform [S300 pp. 23–24; S308 pp. 2–3; H002 pp. 1–2, 8, 19; S677 pp. 1–3].
+
+**Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
+
+- **Upstream**: PhD MIT 1988 (applied mathematics and OR), advisers Amedeo Odoni (primary) and Daniel Kleitman; Tom Magnanti on the committee; the thesis problem class came from Odoni's group [06 §2.1; S048 pp. 18, 71, 125].
+- **Long collaborators**: John Tsitsiklis (queueing; LO textbook), Andrew Lo (finance), Robert Weismantel (IO book), Dick den Hertog (RO book; co-signs the 2021–2026 robust and global-optimization lines [S283 pp. 3–4, 15–19]), David Gamarnik (queueing book).
+- **Downstream**: 109 completed PhDs and 20 current (homepage, 2026). Lineages: SD (Niño-Mora, Paschalidis, Gamarnik, Sethuraman); IO (Goemans, C.-P. Teo); CP (Popescu, Natarajan); RO (Sim, Thiele, Brown, Caramanis, Iancu, Gupta, Dunning); ML (Shioda, King, Dunn, Pauphilet, Cory-Wright); DA (Kallus, McCord, Sturt); health (O'Hair, Orfanoudaki, Wiberg, Ma) [04 A.4]. Alumni return as co-advisers, book co-authors, informal advisers and co-authors on later programme stages [04 B.10; S476 p. 1].
 
 <a id="inner-tensions"></a>
 ## Inner tensions
@@ -899,6 +1095,13 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 - *T3* (21 works): asymptotic probabilistic analysis is the backbone of 1988–2002 [S038 pp. 6–8; S016 pp. 5–14; S017 pp. 10–11; S130 pp. 4, 13, 22]; limit laws re-enter as uncertainty sets [S065 pp. 5–10; S119 pp. 7–10; S227 pp. 1, 4, 13, 27]; clinical texts centre on confounding and calibration [S685 pp. 1–3]: "If a key prognostic variable is missing, no amount of clever modeling will recover the true treatment effect." [S685 p. 2]; Bayesian and EM machinery [S666 pp. 7–8, 44–45].
 - *T4* (23 works; narrowed, C10): formulation strength measured and pursued [S241 pp. 14–15, 27, 31–32; S015 pp. 2, 4–5, 10; S101 pp. 17–18; S109 pp. 2–8; S037 pp. 2, 4–8; S076 pp. 12–19, 35–36]; a formulation-strength ordering tested against gaps and solve times, printing where it fails [S093 pp. 8–9, 17–19]; constrained Lasso shown weaker than the root relaxation [S010 pp. 9–10]; big-M left for convex integer or perspective forms [S061 p. 6; S175 pp. 9–10, 15–16; S136 pp. 3, 6–7, 26–27]; SOC strengthening kept [S250 p. 23]. Big-M weakness printed by the authors themselves [S225 pp. 5–9; S358 pp. 4–12]: "Although, the “Big-M” formulations are weak, for tractability of the problem, we linearize constraints (10) using McCormick type linearization" [S358 p. 10]. "We had to experiment with different formulations to identify those that yield tighter relaxations and with heuristics to create appropriate starting solutions so that Gurobi would avoid long delays at the root relaxation." [S339 p. 8]. T4 stays, narrowed to optimal trees and some ML models [S097 pp. 44–45].
 - *T6* (49 works): the caveat sits in the body [S093 pp. 2, 20]: "Admittedly, some of this reduction is likely due to hardware improvements and general improvements in LO/MIO solution software since the time that their paper was written (2008)" [S093 p. 20]; Boston as in [Method 5](#method-5) (C12). *Fix round*: SKILL.md's T6 example no longer sets p. 2 against p. 6 of the PNAS paper (the two wordings agree: not implemented yet, delayed); it sets the abstract, which reports the unanimous approval of the reform [S137 p. 1], against the non-implementation stated on p. 2 [S137 p. 2] and in the 2020 account [S262 p. 12].
+
+**Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
+
+- **Tension T1 · certified vs uncertified *optimal***: certificates make results strong [02 J2] vs runs stopped early or uncertified from 2004 on [S031 p. 26; S073 pp. 15–18], a limit set by confidence in the warm start, as the solver "spends a lot of the time proving its optimality" [S095 p. 5], and applied trees called optimal with no gap or limit [S094 pp. 5, 9]; honest labels elsewhere [S093 pp. 17, 19] (C9).
+- **T2 · joint optimization vs heuristic engine**: optimization beats greedy practice [02 R11] vs simulated annealing judged lacking in theory, mixed in practice but generally applicable (1993) [S005 pp. 4–5], a heuristic beating CPLEX (2002) [S070 pp. 13–15], greedy recommended where optimization does not pay [S046 p. 19].
+- **T3 · optimization, not probability**: the 2019 principle [02 T4] vs asymptotic probabilistic analysis as the backbone of 1988–2002 [S038 pp. 6–8; S016 pp. 5–14], limit laws returning as uncertainty sets [S119 pp. 7–10], and a thesis combining stochastic and optimization ideas [02 C4].
+- **T4 · strong formulations vs solver speed** [inferred]: strength measured and pursued in air-traffic and product-line models [S015 pp. 2, 4–5, 10; S093 pp. 8–9, 17–19] vs weak big-M in tree MIOs and some ML models [S225 pp. 5–9; S358 pp. 4–12] (C10).
 
 <a id="roundtable-card"></a>
 ## Roundtable card
@@ -1123,3 +1326,5 @@ researched: 2026-10-28
 - S747 · Note on the Reformulation for Static Robust Problems for Convex Uncertainty Sets (2015) · full · s2-07
 - S829 · A central limit theorem for the exodic tree and exodic matching in geometrical probabil… (1991) · full · s2-02
 - S909 · Optimal Selection of Health Care Providers (2017) · full · a3-05, s4-03
+
+*Tighten step (T3.7)*: the list above is the set cited before the cut; these IDs are now cited only in this ledger, with their pages, under **Moved at the tighten step**: S017, S025, S028, S042, S132, S134, S138, S168, S192, S205, S255, S292, S328, S358, S474, S829.
