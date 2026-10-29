@@ -1,0 +1,524 @@
+[
+ {
+  "id": "S183",
+  "year": "2022",
+  "title": "Solving large-scale sparse PCA to certifiable (near) optimality",
+  "read_level": "full",
+  "contribution": "Reformulates sparse PCA exactly as a convex mixed-integer SDP and solves it by an SDP-free outer approximation (closed-form eigenvalue cuts, Gershgorin-strengthened master) to certified optimality for p in the hundreds (k = 5 and 10 even at p = 1300); a strengthened SOC relaxation with greedy rounding then gives printed bound gaps, mostly under 2% and up to 54.4%, for p up to 8000 (read in arXiv v4).",
+  "problem_entry": "{ML+IO+CP} Sparse PCA gives interpretable components, but heuristics can fail without the user knowing (no heuristic right on all 14 Berk–Bertsimas instances), SDP relaxations need O(p^6) interior-point memory and stop near p = 300 without rounding schemes, and exact branch-and-bound stops at p = 40 or 250; no method certifies optimality beyond p in the 100s (pp. 1–5).",
+  "key_idea": "Exact MISDO with support indicators, the rank-one constraint dropped without loss and tight constants M_ij = 1/2 plus row sums (Thm 1, pp. 7–8); a concave saddle-point form solved by outer approximation in one branch-and-bound tree (Thm 3, Alg. 1, pp. 9–10) whose cuts come in closed form from a leading eigenvalue and one linear system (Thm 5, pp. 11–12); Gershgorin inequalities and pruning in the master (pp. 12–13); at scale, a strengthened Boolean relaxation with SOC minors and greedy rounding of z (Alg. 2, Thm 15, pp. 17–18, 23).",
+  "assumptions": "Correlation matrices of normalized data; the sample covariance is used for simplicity, shrinkage recommended in practice (p. 2, footnote 1; p. 19). Data: six UCI sets with p = 13–1300 (p. 19), Wilshire 5000, Gisette and Arcene up to p = 8000 (p. 24), and a spiked-covariance design with p = 150 and 20 instances (pp. 24–26).",
+  "proof_devices": [
+   "Theorem 1: the rank constraint is dropped without loss because a convex objective has a rank-one extreme optimum; proof by decomposing a feasible X and keeping its best component; M_ij = 1/2 from 2×2 minors (pp. 7–8)",
+   "Remark 2: without M_ij = 1/2 or the row-sum inequality, the continuous relaxation equals λmax (p. 8)",
+   "Theorem 3: duality writes f(z) as a minimum of functions linear in z, hence concave, enabling outer approximation (pp. 9–10)",
+   "Theorem 5: Slater, complementary slackness and the generalized Schur complement give optimal duals from λmax of the support submatrix and one linear system; β set by max-k optimization for stronger cuts (pp. 11–12)",
+   "Finite convergence: outer approximation never revisits a binary point; run inside one branch-and-bound tree with lazy-constraint callbacks (p. 10)",
+   "Gershgorin bound as big-M master inequalities and a node-pruning test; within a factor 1 + ρ for scaled diagonally dominant Σ, tight for diagonal Σ (Theorem 7, Proposition 8, Remark 10, pp. 12–14)",
+   "Brauer ovals of Cassini bound representable as MISOCP; within a factor 2 for doubly diagonally dominant Σ; not used because of its cost (Theorem 11, Proposition 12, pp. 15–16)",
+   "Theorem 15: the strengthened relaxation (20) is valid and exact when its optimum has rank one (p. 18)"
+  ],
+  "experiments": "Julia 1.3, Gurobi 9.1, JuMP 0.21.6 on a MacBook Pro; all methods warm-started with the truncated power method; 600 s limit; tolerance 1e-3; gaps of unsolved runs printed (pp. 19–20). Micromass (p = 1300) certified at k = 5 and 10 in 164 s and 242 s; nothing with p > 300 and k > 10 closes (Table 1, p. 20). Relax+round finds every known optimum with relaxation gaps under 2% (p. 21; Table 3, p. 22); 8.87% on arrhythmia k = 20 in 22 s against 18.45% for Berk–Bertsimas in 600 s (p. 23); gaps from 0.01% to 54.4% up to p = 8000 on 600 GB RAM (Table 5, pp. 24–25). Synthetic support-recovery AUC: sorting 0.7028, truncated power 0.7482, exact 0.7483, greedy 0.7561, relax+round 0.7593; exact gaps 30% or more against 1% or less (p. 26). Code on GitHub (p. 19).",
+  "positioning": "Places itself among heuristics (Journée et al., Yuan–Zhang), SDP relaxations (d'Aspremont et al.) and exact branch-and-bound (Moghaddam et al., Berk–Bertsimas); extends the authors' logical-constraints framework and SOC relaxation; credits Li and Xie's concurrent MISDO formulation, proposed within a week of theirs, while noting they certify nothing beyond p = 13 (pp. 2–5).",
+  "writing": "The abstract opens with the scale at which existing methods stop (p in the 100s); contributions are listed by section (p. 6); remarks justify each modelling choice (Remark 2); the experiments end with regime-by-regime guidelines (pp. 26–28).",
+  "limits_future": "Exact method fails beyond p = 300 with k > 10 (p. 20); relax+round is near-optimal in practice, not in theory (p. 26); Brauer inequalities too costly (p. 16); non-negative sparse PCA falls outside the method (p. 28). Future: first-order SOC solvers with screening for p in the 10,000s (p. 24); non-negative, rectangular and multi-component sparse PCA (pp. 28–30).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "A problem held by heuristics and SDP relaxations is written exactly as a convex MISDO; the dual (Theorems 3 and 5) gives an SDP-free cut; the boundary is printed (no certificate beyond p = 300 with k > 10; the non-negative case is outside the method).",
+    "pages": "pp. 7–12, 20, 28"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Steps 2–6 complete: a shared warm start for every method, stated solver, version, machine, limit and tolerance, a gap for every unsolved run, duels against the incumbent B&B and three heuristics, and regime guidelines.",
+    "pages": "pp. 19–28"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Stop rule: when the exact bound stalls, the paper moves to relaxation plus greedy rounding that still prints a bound gap, not to unlabelled local search, so the certificate survives at scale (cf. Heuristic 3, Tension T1).",
+    "pages": "pp. 22–26"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "The ML cohort (Cory-Wright, Pauphilet) extends its own framework and relaxation, and fixes a bug in the group's earlier Berk–Bertsimas code before dueling it (footnote 4).",
+    "pages": "pp. 4–5, 19"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "bound-gap certificate at scale",
+    "evidence": "Where the exact method cannot certify, relax, round greedily and print the gap between the rounded solution and the relaxation bound (under 2% where optima are known; 0.01–54.4% up to p = 8000).",
+    "pages": "pp. 22–26"
+   },
+   {
+    "pattern": "repair the comparator before the duel",
+    "evidence": "A typo in the group's earlier Berk–Bertsimas branch-and-bound code is identified, corrected and disclosed before the timing comparison.",
+    "pages": "p. 19"
+   }
+  ],
+  "transferable": [
+   "When dropping a rank-one constraint, argue exactness from the convexity of the objective, then check the relaxation is not trivial: 2×2-minor big-M constants (1/2) and row-sum inequalities stop it collapsing to λmax (pp. 7–8).",
+   "Solve each outer-approximation subproblem in closed form via complementary slackness and run the whole OA in one branch-and-bound tree with lazy-constraint callbacks (pp. 10–12).",
+   "Use a cheap eigenvalue-inclusion bound (Gershgorin) both as master inequalities and as a node-pruning test, and report runs with and without it (pp. 13–14, Table 1).",
+   "Warm-start every compared method with the same heuristic for fairness, and end the experiments with regime-by-regime guidelines (pp. 19, 26–28)."
+  ],
+  "coauthors": "Ryan Cory-Wright (MIT), Jean Pauphilet (London Business School)",
+  "quotes": [
+   {
+    "text": "Unfortunately, while these methods are often very effective in practice, they sometimes badly fail to recover an optimal sparse principal component, and a practitioner using a heuristic method typically has no way of knowing when this has occurred.",
+    "page": 3
+   },
+   {
+    "text": "Once both k and p are sufficiently large (e.g. p > 300 and k > 10), no approach is able to solve the problem to provable optimality within 600s.",
+    "page": 20
+   }
+  ]
+ },
+ {
+  "id": "S235",
+  "year": "2022",
+  "title": "Using artificial intelligence to find the optimal margin width in hepatectomy for colorectal cancer liver metastases",
+  "read_level": "full",
+  "contribution": "Combines a random-forest counterfactual model with Optimal Policy Trees to prescribe hepatectomy margin widths for KRAS-variant colorectal liver metastases; it finds no heterogeneous effect and a single 7 mm optimum, whose predicted 5-year death-risk reduction against R1 margins (10.6–13.1% internal, 5.8–7.1% external) is re-estimated with a new model on an international cohort.",
+  "problem_entry": "{DA+ML+AP} Margin width is one of only two variables under the surgeon's control and has no consensus value; prior studies give one width for all patients, and causal forests handle only binary, hard-to-interpret treatments; question: which width minimizes 5-year death probability, and should it be individualized (pp. 1–2).",
+  "key_idea": "Two steps: a random forest estimates each patient's 5-year death probability under every width from 0 to 20 mm; an OPT trained on these counterfactuals prescribes a width per subgroup in an interpretable tree; validation by SHAP plots and by a new RF trained on an external cohort (pp. 2–3).",
+  "assumptions": "Internal cohort 965 patients from three centres, 386 KRAS-variant with an 80/20 split; external cohort 878 (375 KRAS-variant) from six countries; pre- and intraoperative variables only; 5-year endpoint fixed a priori; wild-type tumours dropped after a test AUC of 0.57; censored patients excluded (pp. 1–3, 5, 7–8).",
+  "proof_devices": [
+   "n/a: no formulation, solver or tree settings in the article beyond 5-fold cross-validation for rewards and tree fitting (p. 3); OPT is cited, not described (p. 2, ref. 10)"
+  ],
+  "experiments": "RF AUC 0.76 in training and test, 0.78 for the external RF (pp. 3, 5). OPT widths 6, 7, 12 and 7 mm for subgroups A–D; SHAP agrees except for C (7–8 mm against 12 mm) (p. 3). Predicted relative reduction of 5-year death risk against R1 (0 mm): 10.57–13.06% in training, 5.76–7.06% externally (Table 2, p. 6); most of the benefit comes from a submillimetre or 1-mm margin (pp. 6–7). No AUC confidence intervals (p. 8). The baseline is R1 rather than current practice (median 3.0 mm, Table 1, p. 4) [my reading].",
+  "positioning": "Against single-width recommendations and meta-analyses, and between the Johns Hopkins view (R1 tolerable for KRAS-variant tumours) and the MD Anderson view (10–15 mm), concluding that the truth lies in between (pp. 2, 7); causal forests named as the binary-treatment alternative (p. 2).",
+  "writing": "JAMA Key Points format; the abstract claims the highest AUC ever reported (p. 1); the figure legend credits OPT to the collaborating MIT group and SHAP to a Microsoft group (p. 5); causal language avoided by design (p. 7).",
+  "limits_future": "Uncertain causal structure and possible confounders, censored patients excluded, few predictive variables, no AUC CIs; the benefit is a statistical projection that only prospective validation can confirm; the liver-recurrence analysis lacks an external cohort; operative indications should not change (pp. 3, 7–8).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "The decision (margin width) is learned inside a prescriptive tree because surgeons must see why (step 4), and the paper says what the evaluation cannot show (step 6).",
+    "pages": "pp. 2–3, 8"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Step 2: the benefit is scored against R1 (0 mm) margins, not against current practice (median 3.0 mm); Table 2 allows a 7 mm against 3 mm reading (node 3: 63.66% against 66.68%), but the headline uses 0 mm.",
+    "pages": "pp. 4, 6"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "OPT is presented as a globally optimal decision tree with no solver, limit, gap or certificate; its opponent is a second explainer (SHAP) on the same RF, not an incumbent policy (Tension T1).",
+    "pages": "pp. 2–3"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "external re-estimation of a prescription's benefit",
+    "evidence": "A new random forest trained on an international external cohort scores the frozen OPT margins against R1 margins (5.76–7.06% risk reduction).",
+    "pages": "pp. 3, 5–7"
+   },
+   {
+    "pattern": "null-heterogeneity result as headline",
+    "evidence": "A method built to personalize treatment reports one 7 mm width for all KRAS-variant patients and says it differs from earlier recommendations (cf. Heuristic 4).",
+    "pages": "pp. 6, 8"
+   }
+  ],
+  "transferable": [
+   "For a dose-like treatment, estimate counterfactual outcomes on a grid of treatment levels with one outcome model, then fit a prescriptive tree to the counterfactual table (pp. 2–3).",
+   "Print the outcome at several non-prescribed levels next to the prescribed one, so readers see the flat region and the marginal value of going further (Table 2, p. 6).",
+   "Validate a prescription by retraining the outcome model on an external cohort and re-scoring the frozen prescriptions (pp. 3, 5)."
+  ],
+  "coauthors": "Georgios Antonios Margonis (MSKCC, corresponding; equal contribution), Yu Ma and Seehanah Tang (MIT ORC), Suleeporn Sujichantararat (MIT EECS), and 30 surgical and institute coauthors from the US, Germany, France, Norway, Austria, Greece, Japan and Argentina",
+  "quotes": [
+   {
+    "text": "Although the OPT framework can infer causality, we have elected not to use causal language throughout the article, for 2 reasons.",
+    "page": 7
+   },
+   {
+    "text": "It should be kept in mind that the presented survival benefits from applying optimal margins is a statistical projection and only prospective validation can determine whether these recommendations can translate into a real survival benefit.",
+    "page": 8
+   }
+  ]
+ },
+ {
+  "id": "S243",
+  "year": "2022",
+  "title": "Course scheduling under sudden scarcity: Applications to pandemic planning",
+  "read_level": "full",
+  "contribution": "Unifies term planning and timetabling as one two-stage binary model (fictitious online block, room blocks, rotation), solves it at MIT scale (up to 1.5 million variables, printed gaps of at most 5.1%), shows that a three-semester calendar would let students take 90–96% of required courses on campus (MIT kept two semesters), and produced the schedule Sloan implemented in Fall 2020 (read in an author manuscript).",
+  "problem_entry": "{IO+AP} Physical distancing cut classroom capacity about fourfold; universities weighed extra terms, hybrid teaching and rotation; timetabling literature splits curriculum-based and post-enrollment views, exact post-enrollment methods were thought unscalable, and term planning is understudied (pp. 1–5, 26).",
+  "key_idea": "First-stage course schedule x and second-stage student schedules z linked by z ≤ x (p. 6); term planning keeps each course's yearly offerings (load shifted, not increased) under density caps (pp. 8–10); timetabling adds lessons with multiplicity, sections, two-room blocks, a zero-capacity online block and rotation via lesson-dependent capacity (pp. 11–15); objectives solved lexicographically (p. 16).",
+  "assumptions": "Last year's enrollments as demand (p. 17); 4,287 undergraduates, 620 courses, required courses taken by at least 10% of a major plus unfulfilled prerequisites (p. 18); Sloan: 1,455 students, 114 courses, 115 faculty, 26 rooms of mean distanced capacity 19.46 (p. 18); demand independent of timing (pp. 7, 28); off-campus weight 0.1 (p. 10).",
+  "proof_devices": [
+   "n/a for proofs; modelling devices: start-period variables avoid contiguity constraints (p. 13)",
+   "Fictitious zero-capacity online block guarantees feasibility, turning conflicts into objective loss (pp. 12, 16)",
+   "Rotation encoded as a lesson-dependent block capacity, enrollment divided by weekly multiplicity (pp. 13–14)",
+   "Size control: designated start periods, time-then-room decomposition, super-students for identical course sets (pp. 16–17); appendix constraints for spacing, time zones, room changes and gaps (p. 32)"
+  ],
+  "experiments": "Gurobi via JuMP; eight server cores for term planning, laptops for timetabling (p. 18). Scale test up to 241,917 variables: 720-minute limit, gap 2.4%, with 10% at 120 and 5% at 252 minutes (Table 2, p. 21). Two semesters: 51–59% of courses on campus; three: 90–96% (gaps 2.4% and 5.1%) (Table 3, p. 22). MBA core 60,582 variables, optimal in 7 minutes (p. 24); non-core 1.5 million variables, 30-minute steps, gaps at most 2% (p. 26). About half of courses get an in-person component against a status quo that was virtually unimplementable (Table 4, pp. 26–27).",
+  "positioning": "Against curriculum-based and post-enrollment timetabling literatures and their metaheuristics; cites Gonzalez et al. (2018) for exact approaches becoming viable; claims to be first to unite term planning and timetabling (pp. 3–5).",
+  "writing": "MSOM structured abstract (Problem Definition, Relevance, Methodology, Results, Managerial Implications) (p. 1); a toy two-stage model before the full formulations (pp. 6–7); candid sections on feedback, modelling limitations and the non-adopted calendar (pp. 22, 27–28).",
+  "limits_future": "MIT kept two semesters (pp. 22, 28); historical enrollments, rotation left to instructors, no fairness component, demand assumed independent of timing (pp. 27–28); joint term planning and timetabling out of scope (p. 17). Future: test the timing assumption with course-selection mechanisms (p. 28).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Owner (MIT Registrar, Sloan leadership), decision, last year's data, the status-quo schedule as baseline, run times reported, metrics shown at town halls and focus groups, and the non-adoption of the three-semester plan reported plainly: the stakeholder-contest correction done (cf. Heuristic 4).",
+    "pages": "pp. 17–28"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "The problem stays a binary IO at university scale; feasibility is designed into the model (online block) and size is controlled by formulation rather than a metaheuristic.",
+    "pages": "pp. 5, 12, 16–17"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "The why-now is a citation of solver progress plus measured solve times on growing subsets of the real data, with no solver × hardware figure.",
+    "pages": "pp. 4–5, 21"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "The number of MBA cohorts is a knob whose effect on days on campus, time slots and shared rooms is plotted (Figure 4a) and handed to Sloan, which chose nine; no bound.",
+    "pages": "pp. 23–25"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "infeasibility-proof fallback option",
+    "evidence": "Every lesson may use a fictitious zero-capacity online block, so hard capacity and safety constraints never make the model infeasible and conflicts appear as objective loss.",
+    "pages": "pp. 12, 16"
+   }
+  ],
+  "transferable": [
+   "Give a hard assignment a fictitious zero-capacity fallback so the solver always returns a solution and conflicts show up in the objective (pp. 12, 16).",
+   "Rank objectives and solve lexicographically, holding earlier objectives within a tolerance, instead of tuning weights (p. 16).",
+   "Test tractability on nested subsets of the real data and report variables, constraints, time, gap, and the time to reach 10% and 5% gaps (pp. 19–21).",
+   "Encode rotation through a lesson-dependent room capacity rather than new variables (pp. 13–14)."
+  ],
+  "coauthors": "Cynthia Barnhart (MIT CEE), Arthur Delarue and Julia Yan (MIT ORC)",
+  "quotes": [
+   {
+    "text": "In our application, we are guaranteed to obtain a feasible schedule because (i) any course can be scheduled online, and (ii) scheduling conflicts for individual students manifest in objective deterioration rather than infeasibility.",
+    "page": 16
+   },
+   {
+    "text": "As such, MIT decided to keep the two-semester calendar.",
+    "page": 22
+   }
+  ]
+ },
+ {
+  "id": "S272",
+  "year": "2022",
+  "title": "POTTER-ICU: An artificial intelligence smartphone-accessible tool to predict the need for intensive care after emergency surgery",
+  "read_level": "full",
+  "contribution": "Builds POTTER-ICU, an optimal classification tree on 464,861 NSQIP emergency-surgery patients predicting an expert-defined composite need for postoperative ICU care (c-statistic 0.89 train, 0.88 test), delivered as a smartphone questionnaire of 2–11 questions whose admission cutoff each hospital sets by its capacity.",
+  "problem_entry": "{ML+AP} Late ICU admission of high-risk emergency-surgery patients worsens outcomes and unnecessary admission wastes beds; existing predictors are linear and additive, and the Surgical Apgar score needs intraoperative data; extend POTTER to a preoperative ICU-need predictor (pp. 1–2, 5).",
+  "key_idea": "An OCT for a composite label (postoperative death or one of four critical-care complications) defined by a panel of six critical-care surgeons, served as an adaptive smartphone questionnaire (pp. 2, 4).",
+  "assumptions": "ACS-NSQIP 2007–2017 emergency cases, 464,861 patients, 80:20 split; exclusions for no general anaesthesia, outpatient surgery and preoperative ventilation; less than 10% missing, imputed by Optimal Impute; 85.5% White (pp. 1–3, 6).",
+  "proof_devices": [
+   "n/a: OCT described in words only (splits chosen with knowledge of upstream and downstream effects); no depth, complexity parameter, solver or run time (p. 2)"
+  ],
+  "experiments": "C statistic 0.89 (train) and 0.88 (test) (p. 4); calibration named in the Methods but not reported (pp. 2, 4); no comparator rerun: CARES 0.84 and ESS 0.90 quoted from their own studies (p. 5).",
+  "positioning": "Against linear triage scores (CARES, Surgical Apgar, ESS) and black-box ML (Chiew et al.), claiming interpretability, preoperative use and usability rather than higher accuracy than ESS (pp. 5–6).",
+  "writing": "Clinical structure; a worked patient example argues non-linearity (p. 5); six limitations listed in order (p. 6); conclusion repeats the abstract's recommendation (p. 6).",
+  "limits_future": "Consensus definition of ICU need; retrospective, so actual ICU admission is unknown; NSQIP variables only; skewed demography; preoperative only; NSQIP's emergency-surgery definition; pre-COVID data (p. 6). No future work beyond use as a triage adjunct (p. 6).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The decision (ICU admission) and its owners are named and the threshold is left to each hospital by capacity, but no decision metric is computed and no current rule is scored on the same patients.",
+    "pages": "pp. 2, 5"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "The POTTER programme extended to a new outcome and app; POTTER's app is used by thousands of surgeons; Bertsimas discloses being a founder of Interpretable AI.",
+    "pages": "pp. 2, 6"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "OCT is set against greedy CART in words only; no CART or logistic baseline is run and no certificate is reported (Tension T1).",
+    "pages": "pp. 2, 5"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "expert-panel composite label",
+    "evidence": "Six board-certified surgical critical-care experts select which registry complications define ICU need before the tree is trained; acute renal failure is excluded with a stated reason.",
+    "pages": "p. 2"
+   }
+  ],
+  "transferable": [
+   "When the registry lacks the decision itself, build a composite proxy label with a named expert panel and say what it leaves out (pp. 2, 6).",
+   "Ship a probability and let each site set its own capacity-dependent cutoff, stating which way small and large ICUs should move it (p. 5)."
+  ],
+  "coauthors": "Anthony Gebran (first), Annita Vapsi, Lydia R. Maurer, Mohamad El Moheb, Leon Naar, Sumiran S. Thakur, Robert Sinyard, Dania Daye, George C. Velmahos, Haytham M. A. Kaafarani (corresponding) (MGH and MIT)",
+  "quotes": [
+   {
+    "text": "Instead, as hospitals have different resources, we recommend that each hospital sets its own cutoff for ICU admission based on available critical care resources.",
+    "page": 5
+   },
+   {
+    "text": "POTTER-ICU accurately predicted the need for ICU admission (C statistics: 0.89 train, 0.88 test).",
+    "page": 4
+   }
+  ]
+ },
+ {
+  "id": "S287",
+  "year": "2022",
+  "title": "World-class interpretable poker",
+  "read_level": "full",
+  "contribution": "Pairs a compact equity-decile feature representation with Discounted CFR self-play and per-round learners that imitate the average strategy; the OCT agent beats Slumbot (9.8 ± 4.0 mbb/g) and CART at equal depth, while XGBoost and a neural network win more, so the price of interpretability is visible.",
+  "problem_entry": "{ML+AP (games)} Poker bots beat professionals but none is interpretable, because of opaque features (card buckets, embeddings) and black-box learners; goal: a strong and interpretable heads-up no-limit agent (pp. 1–2).",
+  "key_idea": "Interpretable features (current equity, deciles of future-equity histograms, four opponent bets) double as the card abstraction for Discounted CFR; four per-round classifiers (CART, OCT at depth 15, XGBoost, a seven-layer network) learn the CFR average strategy; OCT trained on doubling data subsets with warm starts (pp. 4–6, 9–12).",
+  "assumptions": "HUNL with $20,000 stacks and $50/$100 blinds (p. 3); over 10^161 states, so action and card abstraction (p. 9); OCT complexity parameter and minimum bucket tuned by grid search (p. 12); computation on the MIT Sloan cluster and Supercloud (p. 14).",
+  "proof_devices": [
+   "n/a: CFR and the convergence of its average strategy restated from the literature; no new analysis (pp. 8–9)"
+  ],
+  "experiments": "150,000 games per pairing with standard deviations: against Slumbot NN 18.4, XGBoost 16.1, OCT 9.8, CART -8.9 mbb/g; OCT beats CART by 13.5 at equal depth (Table 1, p. 13); OCT has at most 131,069 parameters against 1,591,296 (p. 14); self-play ties Slumbot after about 14 days (p. 14). [my reading] The text's dollar figures (almost $5 for NN, 4.3 for XGBoost, $2.6 for OCT; pp. 13–14, 18) are about 0.27 times the Table 1 entries [my arithmetic], not the $1.84, $1.61 and $0.98 the usual mbb/g reading gives; the BLUEPRINT row is undefined.",
+  "positioning": "Against neural-network poker AIs (DeepStack, Libratus, Brown et al.) and card-bucketing abstractions; nearest prior work is Ganzfried's decision-tree rules for simplified poker (pp. 2–4).",
+  "writing": "The title claims world-class play; abstract and conclusion call interpretability the most exciting property; a whole section walks through bluffing and equity nodes of the tree (pp. 15–18).",
+  "limits_future": "Deciles and depth-15 trees fall short of full interpretability (p. 18); Libratus and DeepStack not available as opponents (p. 13); diminishing returns from longer self-play (p. 14); data and code on request (p. 20). Future: interpretable control for real-life problems (p. 19).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "The greedy incumbent (CART) is dueled at the same depth and loses to OCT; OCT is warm-started from smaller-data solves.",
+    "pages": "pp. 12–14"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "The trees are called globally optimal with no solver, limit or gap, and are fitted to an abstracted game (Tension T1).",
+    "pages": "pp. 1, 12"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Learners are chosen to span interpretability so its price is readable from Table 1 (OCT 9.8 against NN 18.4 mbb/g versus Slumbot); the knob is a model class, with no bound.",
+    "pages": "pp. 10, 13–14"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "distil a black-box solver's output into an interpretable tree",
+    "evidence": "The CFR self-play average strategy becomes the label set of per-round OCTs that humans can read and learn from.",
+    "pages": "pp. 9–10, 15–18"
+   }
+  ],
+  "transferable": [
+   "Replace opaque clusters by ordered, readable summary statistics (equity now, deciles of future equity) that also serve as the solver's abstraction (pp. 4–6, 9).",
+   "Train OCTs on doubling data subsets, warm-starting each solve from the previous tree (p. 12).",
+   "Run a ladder of learners from interpretable to opaque through the same pipeline and opponent, so the price of interpretability is visible (pp. 10, 13)."
+  ],
+  "coauthors": "Alex Paskov (Columbia University, applied mathematics)",
+  "quotes": [
+   {
+    "text": "Firstly, the OCT agent is able to play significantly better than CART agent, despite both agents being trained to the same depth and having the same final structure—that is, a decision tree.",
+    "page": 13
+   },
+   {
+    "text": "Finally, we emphasize that while this feature representation and methodology provides a significantly more interpretable picture for humans, it is still not fully interpretable due to the use of deciles (rather than less granular groupings) and deep decision trees.",
+    "page": 18
+   }
+  ]
+ },
+ {
+  "id": "S295",
+  "year": "2022",
+  "title": "Validation of the artificial intelligence–based trauma outcomes predictor (TOP) in patients 65 years and older",
+  "read_level": "full",
+  "contribution": "Validates the existing OCT-based Trauma Outcomes Predictor on 260,505 TQIP 2017 trauma patients aged 65 and older: mortality c-statistics 0.83 (blunt) and 0.92 (penetrating), lower than in the general trauma population and lowest at 85 and older, so the claim is limited to patients up to 85.",
+  "problem_entry": "{ML+AP} Ageing population, worse trauma outcomes and goals-of-care discussions that need prognosis; TRISS and GTOS are linear and additive; TOP had been validated on all trauma patients but not on the elderly (pp. 1–2).",
+  "key_idea": "Apply the existing TOP trees (one OCT per outcome, smartphone app) unchanged to patients aged 65 and older, scored by c-statistic overall and in three pre-planned age bands (pp. 2–4).",
+  "assumptions": "ACS-TQIP 2017, 260,505 patients from more than 800 trauma centres, 98.8% blunt; outcomes in-hospital mortality, combined morbidity and nine complications; TOP's training years are not stated, so out-of-sample status cannot be checked from this text [my reading] (pp. 1–2, 4–5).",
+  "proof_devices": [
+   "n/a: no model fitting; OCT described in words (p. 2)"
+  ],
+  "experiments": "Mortality c-statistic 0.83 blunt (0.86 at 65–74, 0.77 at 85+) and 0.92 penetrating; morbidity 0.69 and 0.71; best complications ARDS and cardiac arrest 0.75 (blunt), organ-space and deep SSI 0.95 and 0.84 (penetrating) on 53 and 93 events in the whole cohort [my reading: small counts] (pp. 5–6). TRISS and GTOS AUCs quoted from other studies, not rerun (p. 7); no calibration.",
+  "positioning": "Against TRISS (logistic, age dichotomized at 55, needs prehospital data) and GTOS (needs 24-hour transfusion data), arguing TOP's age splits, ED-only inputs and complication predictions (p. 7).",
+  "writing": "Clinical validation format; a worked 70-year-old example for non-linearity (p. 2); the conclusion is scoped to patients up to 85 in both abstract and text (pp. 1, 8).",
+  "limits_future": "TQIP excludes less severe injuries; data insufficient for patients over 85 (no cognition); national data may not fit a local hospital; in-hospital outcomes only (p. 8). Future: benchmarking the quality of geriatric trauma care (p. 8).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The decision (goals-of-care counselling) is named and the incumbents (TRISS, GTOS) discussed, but compared through literature AUC ranges, not on the same patients, and no decision metric is used.",
+    "pages": "pp. 2, 7"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "POTTER, then TOP, then age-group validations; Zhuo, Dunn and Bertsimas disclose being founders of Interpretable AI.",
+    "pages": "pp. 1–2, 8"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "OCT is described as trying all conceivable combinations of variables, yet no certificate is reported (Tensions T1, T6).",
+    "pages": "p. 2"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "scope narrowed by subgroup validation",
+    "evidence": "After pre-planned age bands show the drop at 85 and older, the abstract and conclusion limit the claim to patients up to 85 (cf. Heuristic 4).",
+    "pages": "pp. 1, 6, 8"
+   }
+  ],
+  "transferable": [
+   "Validate a deployed calculator in a pre-planned subgroup with fixed strata, report where it degrades, and narrow the abstract's claim to match (pp. 1, 6, 8)."
+  ],
+  "coauthors": "Majed El Hechi (first), Anthony Gebran, Hamza Tazi Bouardi, Lydia R. Maurer, Mohamad El Moheb, Daisy Zhuo, Jack Dunn, George C. Velmahos, Haytham M. A. Kaafarani (corresponding) (MGH, MIT, Interpretable AI)",
+  "quotes": [
+   {
+    "text": "Despite having good to excellent performance among certain geriatric patients, TOP performed better in the general cohort of trauma patients, when compared to geriatric trauma patients as evidenced by the respective AUCs.",
+    "page": 6
+   },
+   {
+    "text": "For the elderly trauma patient, especially those older than 85, the data points currently collected by the ACS-TQIP are not sufficient.",
+    "page": 8
+   }
+  ]
+ },
+ {
+  "id": "S296",
+  "year": "2022",
+  "title": "Machine learning models for mitral valve replacement: a comparative analysis with the Society of Thoracic Surgeons risk score",
+  "read_level": "full",
+  "contribution": "Compares logistic regression, random forest, XGBoost, OCT and logistic-leaf OCT with the STS risk score for mitral valve surgery on 383,550 STS procedures; XGBoost and logistic regression beat STS on mortality (0.826 and 0.825 against 0.796), the stand-alone OCT does not (0.787), and the authors recommend interpretable LR or L-OCT where comparable.",
+  "problem_entry": "{ML+AP} The STS risk models assume linear, cumulative effects and the 2018 update still uses traditional statistics; build mortality and morbidity calculators for mitral valve surgery and test them against the STS score (pp. 1–2).",
+  "key_idea": "Five learners including L-OCT (an OCT with a logistic regression in each leaf) trained on STS registry data and compared with the STS score on the same held-out patients for five STS endpoints, over five random 75/25 splits (pp. 2–3, 9).",
+  "assumptions": "STS ACSD 2008–2017 isolated mitral valve surgery, 383,550 procedures, 89 features including variables outside the STS calculator; Optimal Impute; grid search with k-fold CV on AUC; test set filtered to patients with an STS score, so outcome rates differ (deaths 7.00% train, 4.34% test) (pp. 2–3, 9).",
+  "proof_devices": [
+   "n/a: no formulation; AUC differences tested with DeLong's test (p. 5)"
+  ],
+  "experiments": "Mortality AUC STS 0.796, LR 0.825, XGBoost 0.826, OCT 0.787, L-OCT 0.808, RF 0.77; renal failure XGBoost 0.815 against STS 0.791; stroke about 0.67–0.68 for all but RF; deep sternal wound infection LR 0.784, XGBoost 0.771, STS 0.751 (Table 2, p. 5). ML overestimates and STS underestimates risk; STS stays better calibrated for annuloplasty-only infection and ventilation (pp. 4, 9). [my reading] The text on p. 4 swaps the LR and XGBoost values for deep sternal wound infection relative to Table 2.",
+  "positioning": "Against the STS ACSD risk calculator (2018 update) and prior ML-versus-logistic studies, including the group's own POTTER, diabetes and coronary papers (refs. 14–16) (p. 2).",
+  "writing": "Reports where ML does not win (stroke, annuloplasty-only calibration, the stand-alone OCT) beside where it does, and closes with a model recommendation rule (pp. 4–9).",
+  "limits_future": "Registry biases, no causality, rare outcomes hard, concomitant procedures excluded, AUC-tuned CV costs sensitivity; gains may come from new variables, imputation or tuning (pp. 8–9). Future: external validation on later years with the newest STS score; ablation without the new features (pp. 9–10).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "The owner's current rule (the STS score) is the baseline on the same test patients, with CIs, DeLong p-values and calibration curves.",
+    "pages": "pp. 2, 5, 7"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Discrimination and calibration are scored, not decisions.",
+    "pages": "pp. 2, 5"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "The optimal tree loses (OCT 0.787 against STS 0.796 and XGBoost 0.826 for mortality) and the paper says so, calling OCT equivalent to STS and recommending LR or L-OCT: the Workflow D checkpoint applied by his own group; no certificate (cf. Heuristic 4).",
+    "pages": "pp. 5, 9"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Interpretability priced by a model ladder with a rule: prefer LR or L-OCT where their AUC is comparable to XGBoost.",
+    "pages": "pp. 5, 9"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "name the confound and plan the ablation",
+    "evidence": "The gain over STS may come from new variables, imputation or tuning rather than the learner; an ML-versus-STS comparison without new features is proposed to isolate it.",
+    "pages": "pp. 8–10"
+   },
+   {
+    "pattern": "logistic leaves (L-OCT)",
+    "evidence": "A logistic regression in each tree leaf lifts the OCT's mortality AUC from 0.787 to 0.808 while keeping the tree's structure.",
+    "pages": "pp. 5, 9"
+   }
+  ],
+  "transferable": [
+   "Compare against the incumbent score on exactly the same held-out patients and report CIs and DeLong p-values per endpoint (pp. 2, 5).",
+   "Repeat the split several times, using one split for all endpoints in each repetition, and report means with CIs (pp. 2–3).",
+   "When a pure tree loses accuracy, fit a logistic regression in each leaf (p. 9)."
+  ],
+  "coauthors": "Agni Orfanoudaki (Oxford Saïd; first and corresponding), Aikaterini Giannoutsou (USC Marshall), Sabet Hashim and Robert C. Hagberg (Hartford HealthCare)",
+  "quotes": [
+   {
+    "text": "Thus, the superior performance of our models could be due to the newly added variables, the missing data imputation methods, or the tuning process of the hyperparameters.",
+    "page": 8
+   },
+   {
+    "text": "OCT, as a standalone method, achieves equivalent performance when compared to the STS risk calculator.",
+    "page": 9
+   }
+  ]
+ },
+ {
+  "id": "S318",
+  "year": "2022",
+  "title": "Benchmarking in congenital heart surgery using machine learning-derived optimal classification trees",
+  "read_level": "full",
+  "contribution": "Uses an OCT fitted to 64 European centres' benchmark operations (ECHSA database) as a virtual hospital whose leaves act as risk strata, giving each hospital a case-mix-adjusted expected rate and cohort-level areas of distinction and opportunity for self-assessment, not public reporting (read in the pre-peer-review manuscript).",
+  "problem_entry": "{ML+AP} Congenital heart surgery benchmarks need case-mix adjustment; existing scores (RACHS-1, Aristotle, STAT, STS CHSD, PRAiS) reach AUCs 0.852–0.875 but are criticized for limited data, linear additive risk and a single O/E summary (p. 8).",
+  "key_idea": "One OCT per outcome on all hospitals defines a virtual hospital; a hospital's expected rate is its case mix run through the virtual leaves (indirect standardization over leaves); leaf-by-leaf comparison yields areas of distinction and opportunity; the reverse standardization is rejected as unfair to low-volume procedures (pp. 10–15).",
+  "assumptions": "ECHSA Congenital Database, ten benchmark procedure groups, European centres, 31,792 operations; training 2010–2015 (23,380), testing 2016–2019 (8,412), though the Methods also give 12/31/2018 as the data end [my reading]; preoperative features only, procedure carrying 71.0% of mortality-model importance (pp. 9, 22–23).",
+  "proof_devices": [
+   "n/a: indirect standardization arithmetic over tree leaves (leaf rate × hospital's leaf counts / total) is the only derivation (p. 12)"
+  ],
+  "experiments": "Out-of-sample AUC 0.871, 0.814, 0.813 for mortality, ventilation time and stay (p. 10). Mortality: 17.0% of hospitals over- and 26.4% under-perform, 11.3% have O/E above 2 (pp. 6, 13); Hospital A 7.2% against 7.2%, ventilation 22.7% against 19.7%, stay 25.7% against 21.6% (p. 13, Table 3 p. 24). [my arithmetic] All six hospital percentages equal k/53, not k/64; 90% CIs in the abstract, 95% in Figure 4A (pp. 6, 26). No existing risk model run on these data; no calibration.",
+  "positioning": "Against expert-consensus (RACHS-1, Aristotle) and regression-based (STAT, STS CHSD, PRAiS) risk adjustment and the single O/E summary; follows the STS CHSD benchmark-procedure practice and the group's earlier OCT prediction on the same database (pp. 8–9).",
+  "writing": "Repeated scoping statements (self-assessment, not public reporting) in the introduction and limitations (pp. 9, 17); a worked example hospital; figure legends that explain the tree in prose (pp. 25–27).",
+  "limits_future": "Benchmark procedures are 45.7% of the database, unrecorded genetic and procedure-specific factors, European data only, not for public reporting (pp. 16–17). Future: non-benchmark procedures, procedure-specific fields, other databases, periodic recalculation (pp. 16–17).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Owners (ECHSA centres) and use (self-assessment, not public reporting) are fixed first and the output points to where to improve, but the current risk-adjustment models are not run on the same data.",
+    "pages": "pp. 8–9, 12–17"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "One database partnership yields a sequence (prediction, benchmarking, non-benchmark procedures in progress) carried by Alexandria Health, whose staff on the paper include Zhuo and his former student Dunn.",
+    "pages": "pp. 4, 9, 16–17"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "A figure legend calls the splits the optimal ones, with no solver, limit or certificate (Tension T1).",
+    "pages": "p. 25"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "tree leaves as risk-adjustment strata",
+    "evidence": "Indirect standardization over the leaves of one pooled interpretable tree gives each hospital an expected rate and cohort-level over- or under-performance.",
+    "pages": "pp. 10–13"
+   }
+  ],
+  "transferable": [
+   "Use the leaves of one pooled tree as case-mix strata: expected rate = sum over leaves of pooled leaf rate × the unit's leaf share; then test observed against expected per leaf (p. 12).",
+   "Standardize in the direction that does not extrapolate a unit's sparse experience, and say why (p. 15).",
+   "Restrict to a benchmark subset of common procedures and print its coverage (45.7%) as the price of that choice (pp. 9, 16)."
+  ],
+  "coauthors": "Daisy Zhuo, Jordan Levine, Jack Dunn (Alexandria Health); Zdzislaw Tobota, Bohdan Maruszewski (Warsaw); Jose Fragata (Lisbon); George E. Sarris (Athens, corresponding)",
+  "quotes": [
+   {
+    "text": "We emphasize that we aimed to define the methodology to be used for center self-assessment using European data, and not to establish generally applicable benchmarking standards or for the purpose of public reporting.",
+    "page": 9
+   },
+   {
+    "text": "it would be unfair to extrapolate this hospital’s very limited experience relevant to such a procedure to predict its performance as if it treated the virtual hospital’s population.",
+    "page": 15
+   }
+  ]
+ }
+]

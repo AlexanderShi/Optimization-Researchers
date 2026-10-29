@@ -1,0 +1,514 @@
+[
+ {
+  "id": "D020",
+  "year": "2023",
+  "title": "Tensor completion with noisy side information",
+  "read_level": "full",
+  "contribution": "Extends Farias and Li's slice-rank tensor completion with an additive ridge-regression term on noisy row (and column) features, fitted by alternating Slice Learning and accelerated gradient steps, and shows on simulated tensors and on dose-level GDSC and CCLE drug screens that the combined model matches or beats the tensor-only, regression-only and practice (NLME) models, most clearly at 80% missing data (read in its 2019 preprint).",
+  "problem_entry": "{ML; AP (health) as testbed} Side-information tensor methods are called computationally intensive and hard to implement (Narita; Rai), and drug-response work completes matrices of pre-fitted sensitivities; the paper models raw (patient, drug, dose) data with noisy genomic features instead, aiming to prescribe treatment per patient (preprint pp. 2, 4-5).",
+  "key_idea": "Slice model U S^k V^T + X W^k (or X W^k Y^T) that nests both baselines (W = 0; U, S, V = 0; gamma -> 0), solved by alternating truncated-SVD Slice Learning on residuals with Nesterov-accelerated ridge updates and refilling missing entries (Table 1, Algorithms 1-5, preprint pp. 8-16, 27).",
+  "assumptions": "Slice rank at most r with latent features constant across slices (preprint pp. 11, 25); no strong assumption on how features relate to the tensor (p. 2); Frobenius penalty chosen to reuse the solver (p. 16); synthetic 200x200x10 rank-20 tensors with X = U + noise, 80% MCAR (p. 17); GDSC 955x265x12 with 2,004 features, CCLE 461x24x8 with 2,036 features (p. 19).",
+  "proof_devices": [
+   "n/a: no theorem; nonconvex problem (8) solved only to local optimality (preprint pp. 12-13, 15); convergence asserted from monotone decrease of the objective (p. 14), which the truncated-SVD step is not shown to guarantee (my reading)",
+   "nested model: W = 0 gives the tensor model, U, S, V = 0 the regression, gamma -> 0 problem (8) (preprint pp. 13-14)"
+  ],
+  "experiments": "Out-of-sample R^2 averaged over slices vs slice-mean baseline, 5 seeds, r tuned first with W = 0 then gamma (preprint pp. 18, 20-21); simulated sigma = 1: 0.957 / 0.933 / 0.298 (TensorTwoSided / Tensor / TwoSided), sigma = 0: 0.997 / 0.933 / 0.988 (p. 18); GDSC and CCLE with 20-80% hidden vs piecewise linear, NLME, SoftImpute, Tensor, Genomic: ties with Tensor at 20-60% on GDSC, wins at 80%; NLME R^2 negative at high missingness (pp. 20-21); no run times, software or error bars reported.",
+  "positioning": "Extends Farias-Li slice-rank completion and Chiang et al.'s additive noisy-side-information matrix model to tensors; calls CP/Tucker impractical at scale and Narita/Rai side-information methods costly; contrasts with two-stage sensitivity-then-matrix-completion drug-response work (preprint pp. 3-5).",
+  "writing": "Two worked examples (e-commerce, drug screens) before the model; numbered contributions with headline R^2 numbers; abstract says 'outperforms all state-of-the-art methods' while the body says 'equally the best' at 20-60% on GDSC (preprint pp. 1-5, 21).",
+  "limits_future": "No limitations or future work stated (preprint pp. 23-24); 'scales to large data sets' unmeasured (p. 1); clinical claim that earlier chemotherapy rounds predict response best is a hypothesis, since imputation, not treatment choice, is scored (p. 23).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Decision motivation (drug and dose per patient) and the practice model (NLME) as baseline, but scored by imputation R^2, not by a decision metric.",
+    "pages": "preprint pp. 2, 21, 23"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Warm start (piecewise-linear imputation) and duel with the practice model are present; no exact solve or certificate, and the paper says the global optimum cannot be computed.",
+    "pages": "preprint pp. 12, 20-21"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "isolate the gain by matching everything but the new ingredient",
+    "evidence": "The proposed model contains the tensor and regression baselines as special cases, and r is tuned with W = 0 before gamma, so Tensor and TensorGenomic share the same rank and differ only by the side-information term.",
+    "pages": "preprint pp. 13-14, 18, 20-21"
+   }
+  ],
+  "transferable": [
+   "Build the new model additively so that each baseline is a special case (W = 0; U, S, V = 0; gamma -> 0) and the tables isolate the new ingredient (preprint pp. 13-14).",
+   "Tune sequentially: fix the shared hyperparameter (rank) with the new block switched off, then tune the new block's regularization (preprint pp. 18, 20).",
+   "Include the field's working model (the NLME dose-response fit of the original data paper) and show where it breaks, R^2 < 0 at high missingness (preprint p. 21)."
+  ],
+  "coauthors": "Colin Pawlowski",
+  "quotes": [
+   {
+    "text": "In this work, we avoid the dependence upon intermediate models by casting this as a tensor completion problem instead of a matrix completion problem.",
+    "page": 5
+   },
+   {
+    "text": "Unlike the previous one-sided and two-sided regression formulations, problem (8) is nonconvex, so we cannot compute the global optimal solution.",
+    "page": 12
+   }
+  ]
+ },
+ {
+  "id": "H003",
+  "year": "2023",
+  "title": "Interpretable Prescriptive Neural Networks",
+  "read_level": "full",
+  "contribution": "Trains a feedforward network on a softmax-relaxed prescriptive objective over a doubly robust reward matrix (PNN), then fits an Optimal Classification Tree to its prescriptions (OCT-PNN), and reports that both beat causal forests, Regress & Compare and the group's optimal prescriptive and policy trees on four real data sets (about 4 points on average), with the tree 0.83 points behind the network, while losing several synthetic settings.",
+  "problem_entry": "{DA + ML; AP (health, pricing) as testbeds} Move ML from prediction to prescription; Regress & Compare splits data per treatment and is a black box, optimal prescriptive trees cannot learn complex outcomes beyond small depth, fully optimal policy trees scale poorly, causal methods give effects, not policies (pp. 2, 4-5).",
+  "key_idea": "Three steps: counterfactual reward matrix Gamma (direct, propensity, doubly robust; eq. 1), a network with one output per treatment minimizing sum_i sum_t P[tau(x_i) = t] Gamma_it via softmax (eqs. 2-4), then an OCT fitted to the network's prescriptions for interpretability (pp. 5-8).",
+  "assumptions": "Observational data with unknown counterfactuals (p. 2); no unconfoundedness or overlap assumption stated; continuous doses discretized (p. 7); counterfactuals re-estimated on train and test halves of a 50/50 split (p. 10); synthetic d = 10, 25,000 train / 50,000 test, 5 data sets x 5 models, noise N(0, 2.0) (pp. 11-13); real: diabetes (58,200), groceries (97,295 transactions), spleen (35,954), REBOA (9,998), three of four confidential, code on request (pp. 20-23, 27-28).",
+  "proof_devices": [
+   "n/a: no theorem; the only formulation device is the softmax relaxation of the indicator policy objective (eqs. 2-4, pp. 7-8); the OCT step is supervised learning on the network's labels (p. 8)"
+  ],
+  "experiments": "Synthetic accuracy and mean regret over 25 models (eq. 8, p. 13): PNN/OCT-PNN lose binary A to optimal policy trees and causal forests (98.29 / 97.96 vs 95.76; Table 3, p. 14), both multiple-discrete experiments to Regress & Compare (Table 5, p. 15) and multiple-continuous A to optimal policy trees (Table 10, p. 18); real data scored on estimated rewards: PNN improvement vs best non-PNN 2.52 vs 1.94 (diabetes), 113.77 vs 104.17 (groceries), 20.15 vs 17.09 (spleen), 9.67 vs 7.07 (REBOA) (Tables 11-14, pp. 21-24); own optimal prescriptive trees -61.10% in REBOA (p. 24); eq. (17) has an absolute value but the tables show negative improvements (my reading); no software, run times or tests.",
+  "positioning": "Against Regress & Compare (including the group's P2P, [BK20]), causal forests and the group's own optimal prescriptive and policy trees, which serve as baselines; criticizes R&C's per-treatment data split and opacity and OPT's limited depth (pp. 2-5).",
+  "writing": "The same contribution sentence ('tractable, flexible, and strongly performing') in abstract, introduction and conclusion; 'Remarkably' and 'significantly' without tests; an explicit author-contribution statement (pp. 1-2, 5, 20, 26-28).",
+  "limits_future": "No limitations or future work stated (pp. 26-27); unmeasured claims of no 'large computational resources' and performance 'unaffected by dataset size' (p. 27); gains rest on estimated counterfactuals without outcome checks (pp. 19-20).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Price of interpretability reported as one number (OCT-PNN 0.83 points behind PNN); no depth-performance curve; depth-4/5 display trees are single runs.",
+    "pages": "pp. 1, 24-26"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Decisions are the object and observed outcomes ('Actual') the baseline, but prescriptions are scored on estimated counterfactuals with no field test and no statement of what the evaluation cannot show.",
+    "pages": "pp. 13, 19-20"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Duel with incumbents including the group's own tree methods, negative synthetic cases printed in tables; no certificate, solver or limit for the OCT step; 'significantly' without tests.",
+    "pages": "pp. 13-24"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Next cohort extends the prescriptive line ([BK20] -> [BDM19] -> [ADZ22] -> PNN) with earlier group methods as baselines; Bertsimas inspired, supervised and edited.",
+    "pages": "pp. 3-4, 13, 28"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "distil the black box into an optimal tree",
+    "evidence": "A network trained on the decision objective is the teacher; an OCT fitted to its prescriptions as class labels is the student, with fidelity reported as 93-97% training accuracy and a price of 0.83 points.",
+    "pages": "pp. 8, 19-26"
+   }
+  ],
+  "transferable": [
+   "Relax the indicator objective sum 1{tau(x) = t} Gamma_it with a softmax over treatment outputs so any classifier architecture can be trained directly on decision cost (pp. 7-8).",
+   "Report the student tree's fidelity to the teacher (training accuracy on the teacher's labels) next to its decision performance (pp. 20, 22-24).",
+   "Re-estimate counterfactuals separately on the test half to avoid leakage, choosing a split that leaves both halves enough data (p. 10)."
+  ],
+  "coauthors": "Lisa Everest, Vasiliki Stoumpou",
+  "quotes": [
+   {
+    "text": "Furthermore, OCT-PNNs perform almost just as strongly as their PNN counterparts on which they are trained, reducing improvement by only 0.83% on average compared to the PNNs.",
+    "page": 1
+   },
+   {
+    "text": "Dimitris Bertsimas inspired, supported, and supervised the presented work and edited the paper.",
+    "page": 28
+   }
+  ]
+ },
+ {
+  "id": "H004",
+  "year": "2023",
+  "title": "Probabilistic Robust Optimization",
+  "read_level": "full",
+  "contribution": "Proposes an uncertainty set that budgets the summed negative log tail probabilities of the parameters, proves distribution-free coverage (Erlang law), a mean-violation bound, a convex counterpart and O(N^-1/2) convergence of its data-driven version, and shows it lowers maximum and mean violations (at a higher probability of violation) on synthetic data and lowers the maximum bed census at Hartford Hospital's Bone and Joint Institute against classical RO and DRO.",
+  "problem_entry": "{RO; DA; AP (health) as testbed} Norm-based sets standardize by moments and were designed when data were scarce; DRO protects only in expectation; violation-probability guarantees leave violation size uncontrolled; entry: applications that tolerate frequent small but not large violations, such as a robust objective or a maximum census (pp. 1-4, 17).",
+  "key_idea": "U_PRO = {z : -(1/m) sum log P(z_i >= z_i) <= Gamma}, an information budget on tail events built on reliability functions; under independence it is {z : P(z >= z) >= e^(-m Gamma)}, and Weibull marginals recover l1, ball and box sets (eq. 1, pp. 2, 4-5).",
+  "assumptions": "g non-decreasing in z with transformations for other cases (pp. 1, 6); independence and densities for Theorems 1-2 (pp. 6, 8); log-concave reliability for convexity (p. 9); correlations only sketched (p. 5); synthetic n = 10, seven families plus Cauchy, N_train 30-1,000, N_test 10,000, 100 trials (pp. 15-16); hospital data Jan 2020-Apr 2022, 10 blocks, 28 providers, 9 resources, 10 tuning and 6 test months (pp. 20-21).",
+  "proof_devices": [
+   "change of variables t_i = -log S_i(z_i) making each coordinate Exp(1), so coverage is an Erlang(m) CDF at m Gamma (Theorem 1, pp. 6-7); tightness for exponentials by LP duality (pp. 7-8)",
+   "scaling inclusion {-sum log S_i <= n Gamma u} contained in u U_PRO from log-concavity, integrated against Theorem 1's tail for a mean-violation bound (Theorem 2, pp. 8-9)",
+   "Fenchel-duality robust counterpart with m + 1 extra variables (Theorem 3, p. 10); cutting planes with a binary subproblem for discrete laws (p. 11)",
+   "Glivenko-Cantelli plus multivariate DKW plus monotonicity of the optimal value in Gamma for O(N^-1/2) convergence (Theorem 4, pp. 12-13); the printed inclusion chain is reversed, conclusion unaffected (my reading, p. 12)",
+   "extreme-point argument: the LP relaxation of the binary data-driven set has at most m + 1 nonzeros and two fractional entries; linear counterpart with one constraint per sample (pp. 13-14)",
+   "Section 3.3 announces a mean bound with no result (p. 8)"
+  ],
+  "experiments": "Synthetic robust-portfolio LP compared on the attained objective b, not on Gamma, vs l1, l2, box, nominal, naive and TV-DRO; Python 3.9.12, Gurobi 9.5.1, CVXPY 1.3.0; one trial discussed (pp. 14-16): worse probability of violation for b in [0.7, 1], lower maximum and mean violation, reaches b < 0.7 (p. 17). Hospital: theta-lifted census MIO, Julia 1.6.3, Gurobi 5-minute timer, no gaps (pp. 19, 21); elective test census Real 31.67 vs PRO 27.33, others 29.17-30.17 (Table 2, p. 21); all surgeries 56.56 -> 54.44, reported as 3.9% (3.7% of 56.56 by my arithmetic), up to 8.16% in the best month (p. 22); retrospective, rest times assumed independent of weekday (p. 21).",
+  "positioning": "Against norm-based sets (Bertsimas-Sim 2004, Ben-Tal-Nemirovski), DRO (Ben-Tal et al. 2013; Mohajerin Esfahani-Kuhn 2018), data-driven sets (Bertsimas-Gupta-Kallus 2018) and globalized RO (Ben-Tal et al. 2017); builds on Bandi-Bertsimas 2012 and cumulative residual entropy (pp. 1-5).",
+  "writing": "Motivation by five toy distributions (Figure 1), theorem-proof sections, candid statements of where the method loses ('fail to achieve as good probabilistic guarantees'), abstract headline 'up to 8.16 %' against a 3.9% average in the body (pp. 1, 3-4, 17, 22).",
+  "limits_future": "Higher probability of violation (pp. 2, 17); no exact method for non-log-concave Cauchy (p. 16); subsample when data are too many (p. 14); future: feed feature-based ML predictions of each parameter's distribution into the set (p. 22).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "One knob Gamma with a solution-independent coverage law and a mean-violation bound; trade-off drawn against the attained objective with the bad case (probability of violation) printed; Gamma tuned on training months. The priced property is violation size, not frequency.",
+    "pages": "pp. 6-9, 14-17, 21"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Class-keeping devices: Fenchel counterpart; theta-lifting keeps a linear constraint linear and the census MIO linear; boundary printed (Cauchy, subsampling).",
+    "pages": "pp. 10, 13-14, 16, 19"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Old sets conceded as right when formed, 'at a time when data was not necessarily plentiful'; the change is data, not solver speed, and no figure quantifies it.",
+    "pages": "p. 1"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Realized hospital census as baseline with training and test months; retrospective only, and the abstract headline uses the best month.",
+    "pages": "pp. 21-22"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Timetable MIOs run with a 5-minute Gurobi limit and no gap or certificate reported.",
+    "pages": "p. 21"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "compare on the attained objective, not on the set's parameter",
+    "evidence": "Radii of different uncertainty sets mean different things, so each set's probability, maximum and mean violation are traced against the objective value b it attains.",
+    "pages": "pp. 14-17"
+   }
+  ],
+  "transferable": [
+   "Change variables t_i = -log S_i(z_i) to turn any continuous marginal into Exp(1) so set coverage becomes a distribution-free Erlang tail (pp. 6-7).",
+   "Benchmark uncertainty sets on the objective-violation frontier, reporting probability, maximum and mean violation separately (pp. 14-17).",
+   "Lift a nonconvex dependence on a discrete uncertain quantity with assignment variables theta_ik so the robust constraint stays linear in theta and in the decisions (p. 19)."
+  ],
+  "coauthors": "Benjamin Boucher",
+  "quotes": [
+   {
+    "text": "However, the remaining violations, even if infrequent, can be very large and can hence be prohibitive in real-world applications.",
+    "page": 2
+   },
+   {
+    "text": "Overall, the PRO approach manages to reduce the average maximum census by 3.9% from 56.56 to 54.44, with up to 8.16% improvement over the historical census observed.",
+    "page": 22
+   }
+  ]
+ },
+ {
+  "id": "S271",
+  "year": "2023",
+  "title": "An interpretable AI model for recurrence prediction after surgery in gastrointestinal stromal tumour: an observational cohort study",
+  "read_level": "full",
+  "contribution": "With MSKCC surgeons, trains an Optimal Classification Tree on the three predictors used by existing GIST tools (395 patients) and validates it on a Polish registry (556 patients), reporting a higher C-index, better calibration and higher decision-curve net benefit than the MSK nomogram.",
+  "problem_entry": "{ML + AP (health); IO as tree engine} Adjuvant imatinib selection needs calibrated recurrence probabilities; existing tools give strata or ranges, and the MSK nomogram overestimates; ranking is not calibration, and pre-imatinib cohorts cannot grow, so a different method is needed (pp. 2-3).",
+  "key_idea": "An OCT on tumour size, mitotic count and site, the same inputs as the incumbent tools, so gains are attributable to the method, judged on external calibration and decision curves (pp. 4-6, 8).",
+  "assumptions": "Internal 395 patients (MSKCC 1982-2001, GEIS 1987-2011), 147 recurrences; external Polish registry 556 patients, 173 recurrences (pp. 1, 5-6); features checked by five selection methods; 5-fold CV over minbucket 5-15%, depth 3-5, gini/entropy (p. 4); abstract gives 596 and 556 external patients (my reading, p. 1).",
+  "proof_devices": [
+   "n/a: empirical clinical study; OCT training not described, no solver, limit or gap; computing named as Julia and Python on the MIT Sloan Engaging cluster with an iai link (p. 5)"
+  ],
+  "experiments": "OCT AUC 0.84 training, 0.777 CV, eight leaves, online calculator (p. 6); external C-index 0.805 vs 0.788, calibration slope/intercept 1.041/0.038 vs 0.681/0.032, Hosmer-Lemeshow P = 0.087 vs < 0.001, Brier 0.147 vs 0.564, decision curve dominant at 25-50% and > 50% risk (pp. 7-8); vignette 88% vs 24% vs observed 24.1% (p. 9); my readings: a Brier of 0.564 is worse than a constant prediction at the 31.1% event rate (about 0.21), and the C-index CI 0.803-0.808 is unusually narrow (pp. 5-7).",
+  "positioning": "Against the NIH, modified NIH and AFIP-Miettinen criteria, Joensuu maps and the MSK nomogram; cites external validations finding the nomogram overestimates (pp. 2-3, 8-9).",
+  "writing": "Lancet-family structure with 'Research in context' and STROBE; written as surgeons who 'collaborated with a group from the Massachusetts Institute of Technology'; superlatives 'first' and 'only' (pp. 2-3, 5, 9).",
+  "limits_future": "Abrupt changes between OCT groups; inter-observer variation in tumour size not assessed; further validation warranted; larger cohorts for deeper trees (pp. 2, 9).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Incumbent clinical tool as baseline, utility scored by decision-curve analysis across guideline thresholds, vignettes show the treatment consequence of miscalibration.",
+    "pages": "pp. 3, 5, 8-9"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Duel with the incumbent at matched inputs, but the tree is reported without solver, limit or optimality status.",
+    "pages": "pp. 4-8"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Optimal Trees programme carried into clinical journals by surgeon partners, with a public calculator.",
+    "pages": "pp. 2, 4, 6, 10"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "isolate the gain by matching everything but the new ingredient",
+    "evidence": "The OCT uses only the three predictors shared by all incumbent tools, and the improvement is attributed to the method.",
+    "pages": "pp. 4, 6, 8, 10"
+   }
+  ],
+  "transferable": [
+   "Report calibration slope, intercept, Hosmer-Lemeshow and Brier score next to discrimination, and size the external cohort for calibration (400 cases with at least 100, ideally 200 events) (pp. 4-5).",
+   "Use decision-curve analysis across the clinically plausible threshold range when no single treatment threshold exists (p. 5).",
+   "Show vignettes where incumbent and new model disagree, with the observed external rate as arbiter (p. 9)."
+  ],
+  "coauthors": "Georgios Antonios Margonis (co-first), Seehanah Tang, Angelos Koulouras, Cristina R. Antonescu, Murray F. Brennan, Javier Martin-Broto, Piotr Rutkowski, Georgios Stasinos, Jane Wang, Emmanouil Pikoulis, Elzbieta Bylina, Pawel Sobczuk, Antonio Gutierrez, Bhumika Jadeja, William D. Tap, Ping Chi, Samuel Singer",
+  "quotes": [
+   {
+    "text": "However, a perfect ranking does not necessarily equate to correct prediction of probability of recurrence.",
+    "page": 3
+   },
+   {
+    "text": "The algorithm utilised the same predictors of recurrence used by most existing models to allow for a fair comparison across different methodologies and has three main advantages.",
+    "page": 8
+   }
+  ]
+ },
+ {
+  "id": "S285",
+  "year": "2023",
+  "title": "Development of a machine learning–based prescriptive tool to address racial disparities in access to care after penetrating trauma",
+  "read_level": "full",
+  "contribution": "With the MGH trauma group, reads an optimal classification tree to expose race as the second split in postacute-care discharge (52,468 penetrating-trauma patients), then uses a label-flipping fairness MIO to equalize recommended PAC rates (15.8% vs 15.8%) by changing 4.5% of dispositions, after which the tree's C statistic on the adjusted labels rises from 0.79 to 0.87.",
+  "problem_entry": "{ML + DA; AP (health, fairness); IO as engine} AI may encode care disparities; Black trauma patients reach rehabilitation less often; aim: show interpretable ML can uncover and address the disparity (pp. 1-2).",
+  "key_idea": "Diagnose by reading OCTs with and without race (race is the second node), then remedy by an MIO that 'fairness-flips' recorded dispositions to minimize the racial imbalance while keeping protected covariates within a tolerance, then retrain the OCT on adjusted labels (pp. 2-4).",
+  "assumptions": "ACS TQIP 2010-2016, Black and White penetrating-trauma patients, exclusions for in-hospital death, AMA and missing disposition, 52,468 patients (pp. 2, 4); optimal impute for missing data (p. 2); stated normative premise that PAC should go to those with highest injury burden and benefit regardless of race (p. 5); total PAC held at 8,304 (p. 4); MIO only cited (p. 4).",
+  "proof_devices": [
+   "n/a: the fairness MIO is cited ('previously described', ref. 23, carded as S421) and not stated; no solver, limit or gap (p. 4)"
+  ],
+  "experiments": "80:20 splits, C statistic over 10 random splits (p. 4); PAC 12.1% Black vs 21.5% White (P < .001); 2,358 flips (4.5%); 15.8% vs 15.8% after (P = .87); C statistic 0.79 -> 0.87 (p. 4); Figure 1C plots delta vs epsilon without discussion (p. 3); my reading: the C-statistic rise is measured on MIO-relabelled outcomes, so it shows consistency with adjusted labels rather than better prediction; no patient outcomes evaluated.",
+  "positioning": "Within ML-bias literature (historical and representation bias; Suresh-Guttag) and trauma-disparity studies; claims interpretable models can diagnose bias where black boxes encode it (pp. 2, 4-5).",
+  "writing": "JAMA format with Key Points; diagnose-and-remedy framing; specific limitations section; C-statistic gain read as a 'more accurate' model (pp. 2, 5, 7).",
+  "limits_future": "TQIP variables only (no social support), two races and one mechanism, insurance not adjusted; future: interactive app and insurance status (pp. 6-7).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "The adjustment is the 'price of diversity' MIO and Figure 1C draws a delta-epsilon curve, but the paper reports a gain, not a price, and no chosen point.",
+    "pages": "pp. 3-4, 8"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The recommended destination is the decision and recorded practice the baseline, but success is judged by parity of recommendations and a C statistic on adjusted labels, not by outcomes.",
+    "pages": "pp. 4-5"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Long clinical partnership reusing programme tools (OCT, optimal impute, fairness MIO) with a bedside app planned; founder of Interpretable AI disclosed.",
+    "pages": "pp. 5-7"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "read the interpretable model to audit the data",
+    "evidence": "Race appears as the second split of the unadjusted tree, read as the algorithm reproducing system-level disparities in the training data.",
+    "pages": "pp. 4-5"
+   }
+  ],
+  "transferable": [
+   "Fit the interpretable model with and without the protected attribute and read where it enters the tree as a bias audit (pp. 2, 4).",
+   "When relabelling for fairness, hold the total of the scarce resource fixed and keep the dispersion of clinically protected covariates within a tolerance (pp. 3-4)."
+  ],
+  "coauthors": "Anthony Gebran, Sumiran S. Thakur, Lydia R. Maurer, Hari Bandi, Robert Sinyard, Ander Dorken-Gallastegi, Mary Bokenkamp, Mohamad El Moheb, Leon Naar, Annita Vapsi, Dania Daye, George C. Velmahos, Haytham M. A. Kaafarani",
+  "quotes": [
+   {
+    "text": "Examining carefully the interpretable ML tree allowed us to realize that the algorithm is simply reproducing the system-level disparities in the training data.",
+    "page": 4
+   },
+   {
+    "text": "fairness entails sending patients who have the highest injury burden and most likelihood of benefit from rehabilitation to PAC regardless of race",
+    "page": 5
+   }
+  ]
+ },
+ {
+  "id": "S308",
+  "year": "2023",
+  "title": "A prescriptive machine learning approach to mixed-integer convex optimization",
+  "read_level": "full",
+  "contribution": "Replaces the classifier that predicts optimal strategies of parametric MICO instances by Optimal Policy Trees trained on an exact reward matrix (every strategy applied to every training instance, infeasibility penalized), with an OPT(k, Q) extension, and shows on LO, QO, MILO, MIQO and MIPLIB instances that it produces far fewer infeasible solutions than OCT at the cost of more suboptimal ones.",
+  "problem_entry": "{DA + IO; ML} Bertsimas-Stellato classify optimal strategies of repeatedly solved MICO instances; classification treats all wrong strategies as equally bad and OCT was chosen for interpretability, not performance (pp. 2-3, 6).",
+  "key_idea": "Since the evaluator is the optimizer, compute counterfactual costs exactly by applying each training strategy to each training instance (penalty M if infeasible), train an Optimal Policy Tree on that reward matrix, and apply the k best strategies at test time; OPT(k, Q) mixes in the Q most frequent strategies (Algorithms 1-2, pp. 7-9).",
+  "assumptions": "Convex parametric MICO solved to optimality offline (p. 6); parameters uniform in a ball B(u, r) (p. 7); fixed problem size and parameter dimension (p. 17); 7,000 training / 3,000 test instances (p. 9); MIPLIB key parameters chosen by 'slightly arbitrary' rules (p. 14).",
+  "proof_devices": [
+   "n/a: no theorem; a learning-objective argument contrasting E[v(u, h(u))] with the 0-1 surrogate E[1{h(u) != argmin v}] over the same tree space (pp. 6-7); theory left open (p. 17)"
+  ],
+  "experiments": "Accurate / suboptimal / feasible / infeasible counts and max suboptimality (pp. 9-10); depth grid {5, 10}; IAI software, Gurobi without version or hardware; code on GitHub (p. 9); transportation 20x10: OPT(1) 3,000 feasible vs OCT(1) 2,299 (Table 4, p. 11); M insensitive (Tables 8-9, pp. 13-14); training 4 s vs 120 s at small |S| but 1,704 s vs 460 s at |S| = 127 (Table 10, p. 14); online solves 'hundreds of times faster' than Gurobi (p. 13); binkar10_1 r = 4: OPT(1) 106 infeasible vs 652 but 276 accurate vs 2,179 (Table 12, p. 16).",
+  "positioning": "Builds on Bertsimas-Stellato (2021, 2022) and Optimal Policy Trees (Amram, Dunn, Zhuo 2022); situated in ML-for-combinatorial-optimization work (Khalil, Alvarez, Balcan, Bengio-Lodi-Prouvost) (pp. 2-3).",
+  "writing": "Contribution list in the introduction; a formal learning-objective section; bullet conclusions after each table that state where OCT wins (pp. 3, 6-7, 12, 15-16).",
+  "limits_future": "Relative speed-up vs Gurobi not the focus (p. 3); slower training for large strategy sets (p. 13); fixed problem size; future: theory for why prescriptive methods avoid infeasibility, varying sizes, other learning-augmented methods (p. 17).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Train on the decision's cost, not on prediction labels, and score strategies by feasibility and suboptimality against the group's incumbent OCT(k) approach.",
+    "pages": "pp. 6-7, 9-12"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Duel with the incumbent at matched hypothesis class and depth grid, negative cases printed (more suboptimal solutions, slower training at large |S|); solver version and machine not stated.",
+    "pages": "pp. 7, 9, 11-16"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "A new student merges the learning-to-optimize and prescriptive-trees lines, run on the group's company software (IAI), thanks to Dunn.",
+    "pages": "pp. 2-3, 9, 17"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "isolate the gain by matching everything but the new ingredient",
+    "evidence": "OPT(k) and OCT(k) share the decision-tree hypothesis space and the depth grid, so any performance gap is attributed to the learning objective.",
+    "pages": "pp. 7, 9"
+   }
+  ],
+  "transferable": [
+   "When the evaluator is an optimizer, compute counterfactual rewards exactly by applying every candidate strategy to every training instance with a large infeasibility penalty (pp. 7, 16).",
+   "Test the sensitivity of the infeasibility penalty M over orders of magnitude before reporting (Tables 8-9, pp. 13-14).",
+   "Report accurate, suboptimal and infeasible counts separately with the maximum suboptimality (pp. 9-10)."
+  ],
+  "coauthors": "Cheol Woo Kim",
+  "quotes": [
+   {
+    "text": "In a sense, classification algorithms optimize a surrogate objective, instead of optimizing the actual objective.",
+    "page": 7
+   },
+   {
+    "text": "Hence, any performance gap can be attributed to the difference between the learning objectives that prescriptive and predictive algorithms try to optimize.",
+    "page": 7
+   }
+  ]
+ },
+ {
+  "id": "S332",
+  "year": "2023",
+  "title": "Policy analytics in public school operations",
+  "read_level": "full",
+  "contribution": "Builds a decomposition pipeline for school assignment, bus routing and joint bus scheduling with start-time selection (integer network flow under fixed route arrival times, proved exact for two-tier schedules and within a factor two for three tiers) plus a joint postimprovement heuristic, estimates 8% savings over Boston's 2019 summer-programme assignment, draws policy trade-off curves, and reports a simplified model used by the district in 2021.",
+  "problem_entry": "{AP (education, transportation) + IO; LO as engine} Assignment, routing and start times are interconnected and rarely solved together; Boston's Extended School Year for special-education students serves as a microcosm (pp. 2-4).",
+  "key_idea": "Three-step decomposition (assignment MIO, hitting-set stops, greedy plus k-OPT routing, scheduling and start times as an integer network flow) enabled by collapsing arrival-time windows to one time per school, plus a fragment-reassembly heuristic that may reassign students (pp. 5-13).",
+  "assumptions": "Deterministic constant-speed travel times on a 188,002-node road network (pp. 17-18); one school per bus (p. 7); expected attendance, admitted 'not robust' (p. 19); district cost parameters (pp. 18-19); ESY 2019 with 3,758 students, 15 programmes, 11 schools (p. 18); synthetic sets from BPS Transportation Challenge data (pp. 16-17).",
+  "proof_devices": [
+   "with time windows a weak nonlinear big-M MIO; fixed arrival times give a strong linear pure-integer network flow (eq. 14, pp. 14-15)",
+   "Proposition 1: two-tier exactness with polynomial-time recovery, by fixing binaries, solving LP (P3) and an exchange argument (pp. 15, 24-25)",
+   "Remark 1: three-school counterexample for three tiers (Figure 2, p. 16)",
+   "Proposition 2: three-tier bound z' <= z* + N_23 - N_1 <= 2 z*, constructive proof plus Zeng et al. (pp. 16, 25)"
+  ],
+  "experiments": "Synthetic postimprovement: no gain to about 5% on bus count, 7-20% on a weighted objective over 50 iterations (p. 17); case in Julia/JuMP/Gurobi (no version), single-core 8 GB per configuration, no postimprovement (p. 19); 10-minute limits with 1-2% and about 1% gaps (p. 20); actual 2019 assignment $4.11M vs best optimized $3.77M (8%) with the baseline's 45 extended-use classrooms (p. 20); policy curves for classrooms (infeasible below 10), travel time, start-time gap and route sets (pp. 20-22); simplified R assignment model used by the district in 2021 (p. 22).",
+  "positioning": "Taxonomy of school-operations work (assignment, routing, scheduling); extends BiRD (Bertsimas et al. 2019); engages Zeng et al. (2022) on time windows; school-choice mechanism design placed outside scope (pp. 3-5, 13).",
+  "writing": "Contribution bullets 'Comprehensive / Flexible / Scalable'; a taxonomy figure of prior work; theory used to justify a modelling assumption; candid implementation section ('falls short of using all the modeling tools') (pp. 4-5, 13-16, 22).",
+  "limits_future": "No family preferences or externalities; a purely optimization-based plan unlikely to be fully implemented; attendance not robust; start-time results depend on travel-time assumptions; partial 2021 implementation; future: data-driven attendance, choice and transportation (pp. 4, 19, 22).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "One arrival time per school turns a weak nonlinear MIO into a strong linear integer network flow; the boundary is proved: exact for two tiers, counterexample and factor-2 bound for three.",
+    "pages": "pp. 13-16, 24-25"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Policies handed to decision-makers as priced trade-off curves (distance vs classroom cost, extended-use classrooms, travel time, start-time gap), including the infeasible region.",
+    "pages": "pp. 4, 20-22"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "The district's actual assignment priced in its own cost units is the baseline, evaluated with the same routing engine; a simplified model was used by the district.",
+    "pages": "pp. 20, 22-23"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Time limits, machine and gaps reported for MIO steps (10 minutes, 1-2%); local-search steps labelled heuristics; solver version missing.",
+    "pages": "pp. 19-20"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Second paper of one partnership and student line (after PNAS 2019), with an implementation write-up.",
+    "pages": "pp. 4, 22-23"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "prove the simplifying assumption free in the practical case",
+    "evidence": "Collapsed time windows are justified by exactness for the two-tier schedules districts use, with a counterexample and a factor-2 bound for three tiers.",
+    "pages": "pp. 14-16"
+   }
+  ],
+  "transferable": [
+   "Before adopting a simplifying assumption, prove when it is free, show by counterexample when it is not, and bound the loss (Propositions 1-2, pp. 15-16).",
+   "Evaluate the decision-maker's actual plan with your own downstream engine so the comparison isolates the decision under study (p. 20).",
+   "After a parametric sweep with time-limited solves, remove dominated solutions before drawing the Pareto frontier (p. 20)."
+  ],
+  "coauthors": "Arthur Delarue",
+  "quotes": [
+   {
+    "text": "Thus, by eliminating time windows, we can go from a weak, nonlinear mixed-integer formulation to a strong, linear pure-integer formulation.",
+    "page": 15
+   },
+   {
+    "text": "The current reality of school choice programs means that a purely optimization-based approach is unlikely to be directly and fully implemented by a district.",
+    "page": 4
+   }
+  ]
+ },
+ {
+  "id": "S356",
+  "year": "2023",
+  "title": "Explainable vs. interpretable artificial intelligence frameworks in oncology",
+  "read_level": "full",
+  "contribution": "A commissioned editorial arguing that explainable AI (SHAP, LIME) cannot fix miscalibrated or overfit black boxes, that interpretable optimal trees nearly match XGBoost and suit treatment-effect estimation via optimal policy trees, and that the two frameworks should be used together with external validation.",
+  "problem_entry": "{ML + AP (health); DA for treatment effects} Responds to Ladbury et al.'s narrative review of SHAP and LIME in oncology by adding limitations and caveats (p. 1).",
+  "key_idea": "Discrimination is not calibration; explanations inherit the black box's flaws; OCTs nearly match XGBoost and SHAP can validate their cut-offs; risk is not benefit, so treatment allocation needs heterogeneous effects, which optimal policy trees capture (pp. 1-3).",
+  "assumptions": "n/a: no data of its own; numbers from cited studies (pp. 1-3).",
+  "proof_devices": [
+   "n/a: editorial argument by worked examples from cited studies (pp. 1-3)"
+  ],
+  "experiments": "none",
+  "positioning": "Comments on Ladbury et al.'s review; critiques a cited prostate-biopsy study's unremarked miscalibration; cites the group's PDAC staging (S395) and liver-margin (S235) studies and Dunn et al. on SHAP (pp. 1-3).",
+  "writing": "Editorial voice ('we call for increased attention to calibration', 'In our opinion'); argument by examples; not externally peer reviewed (pp. 1, 3).",
+  "limits_future": "No limits stated; OPTs called 'globally optimal decision trees' (p. 3), against 'near-globally optimal' in S308 (S308 pp. 4-5); no conflicts declared (p. 3), while S285 records a founder-of-Interpretable-AI disclosure (S285 p. 7).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Stated principle: risk cannot alone allocate treatment; the target is who benefits (heterogeneous treatment effects), i.e. prescription, not prediction.",
+    "pages": "p. 2"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Price of interpretability given as AUC gaps of 0.016 and 0.015 between OCT and XGBoost, two points rather than a curve.",
+    "pages": "p. 2"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Programme methods promoted in a clinical venue with the surgeon partner, citing the group's own applications.",
+    "pages": "pp. 2-3"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "validate the interpretable model with an explainer",
+    "evidence": "SHAP interaction analysis on an independently trained XGBoost recovered the OCT's cut-offs and is proposed as internal validation; SHAP also validated optimal policy tree recommendations.",
+    "pages": "pp. 2-3"
+   }
+  ],
+  "transferable": [
+   "Use SHAP interactions on an independently trained XGBoost as an internal check of an interpretable model's thresholds (p. 2).",
+   "Screen for interactions with an explainer, then confirm them with a prespecified regression model (p. 2).",
+   "When reviewing a prediction study, check calibration on the published plot even if only discrimination is reported (p. 1)."
+  ],
+  "coauthors": "Georgios Antonios Margonis",
+  "quotes": [
+   {
+    "text": "Collectively, XAI and interpretable AI (IAI) should be viewed as complementary and not competing analytical frameworks.",
+    "page": 3
+   },
+   {
+    "text": "However, risk of an outcome (e.g., recurrence) cannot be the sole determinant of allocating a treatment, as high baseline risk does not necessarily equate to good treatment response.",
+    "page": 2
+   }
+  ]
+ }
+]

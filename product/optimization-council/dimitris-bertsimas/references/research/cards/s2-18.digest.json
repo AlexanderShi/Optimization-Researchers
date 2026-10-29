@@ -1,0 +1,480 @@
+[
+ {
+  "id": "S708",
+  "year": "2023",
+  "title": "Reformulation-Perspectification Technique for nonconvex optimization problems",
+  "read_level": "partial",
+  "contribution": "Introduces RPT, which convexifies products of a linear and a convex function by perspectives after pairwise constraint multiplication, and embeds it in a spatial branch and bound whose eigenvector branching also works for indefinite residuals; proves lower-bound convergence (finite termination when only the objective is nonconvex) and is competitive with BARON, SCIP and CPLEX on five problem classes, solving the dike problems at the root with the LMI. Read in a 2026 revision of the 2023 posting.",
+  "problem_entry": "{CP+IO; AP (Dutch dike heightening) as one testbed} RLT multiplies only linear or quadratic inequalities (p. 2); RPT targets problems whose nonconvex parts are sums of products of convex functions (concave minimization, DC, fractional) (abstract, pp. 1-2). Recent convex-maximization methods (Selvi et al. 2022; CoMax) give no global optimality (p. 3). SCC problems reduce to SLC form by epigraph variables and the biconjugate (pp. 4-6).",
+  "key_idea": "Perspectify each product (q - d'x)c(x) as (q - d'x)c((qx - Xd)/(q - d'x)) with X standing for xx', jointly convex (eq. 5, p. 8); add pairwise products of linear and convex constraints (pp. 9-14) and an optional LMI (pp. 14-15); read upper-bound candidates off the relaxation (pp. 15-16); branch on the eigenvector of the largest-|lambda| eigenvalue of X* - x*x*', multiplying the branching inequalities with themselves and all node constraints so the tangent excludes the parent even when lambda < 0 (pp. 17-19).",
+  "assumptions": "X nonempty and compact; sign conditions on factors (Assumptions 1-2, p. 5); node relaxations solved to accuracy eps-bar (Assumption 3, p. 29). Admitted: the unbounded biconjugate set of the multiplicative problem is one reason for no convergence claim there (p. 39); the dike model is made compact by added bounds x_i <= 300 (p. 41). Instances: sum-of-max-linear-terms (Selvi et al. instances plus random groups), log-sum-exp, linear multiplicative (Ryoo-Sahinidis), ten QCQPs, Dutch dike rings 10, 15, 16 (pp. 36-41).",
+  "proof_devices": [
+   "Theorem 1: epigraph preprocessing gives a relaxation at least as tight, by dropping two constraint sets and eliminating tau (pp. 11-12); Example 4 shows strictness, 13/4 against the exact optimum 3 (pp. 12-13)",
+   "Lemma 1: equality x convex products are redundant once equalities are multiplied by x, via the closure of the perspective at zero (p. 10); Lemma 2: epigraph variables for linear parts add nothing (pp. 13-14); Theorem 2: linear constraints redundant to linear ones add nothing (p. 25)",
+   "Lemma 3: candidate points X*_i/x*_i and (V*')_k/tau*_k are feasible for X when nonnegativity rows and their RPT products are present (pp. 15-16)",
+   "Eigenvector branching: products of the split inequalities give the tangent y >= 2st - s^2 and the secants (18)-(20); children at least as tight as Anstreicher (2022) (pp. 17-19)",
+   "Theorem 3: a terminated run is delta-optimal, otherwise lower bounds converge to within eps-bar; Remark 9: upper bounds need not converge; Corollary 1: finite termination when K is empty (pp. 29-30; proofs in Appendix F, not read)",
+   "Section 7: RPT recovers the hull relaxation, Dantzig's generalized LP, the Sherali-Adams 0-1 convex hull, the approximate S-lemma and Schaible's fractional reformulation (pp. 30-34)"
+  ],
+  "experiments": "MacBook Pro M3 Pro, Julia 1.12.5, Gurobi 13.0.0, MOSEK 11.0.30, tolerance 1e-4, 1800 s, against BARON 21.1.13, SCIP 10.0.0 and CPLEX 22.1.2 at one thread with a 1e-6 feasibility recheck (p. 35). Incumbents win on several classes (exact MIP, SCIP-Dir, BARON-Dir, CPLEX; Tables 4-7, pp. 37-40); RPT wins where BARON times out and RPT-SDP-BB solves all nine dike instances at the root in at most 8.71 s (Table 8, p. 41). Failures printed: no feasible solution on X3 5/5r, MOSEK stalls, RPT-BB timeouts (pp. 37-41). [my reading] BARON is the 2021 version while other software is dated 2025-2026 (p. 35).",
+  "positioning": "Extends RLT (Sherali-Adams) to products of convex functions and modifies Anstreicher's (2022) eigenvector branching for indefinite residuals; treats BARON and SCIP as the state of the art; counts Selvi et al. (2022) as a special case and notes CoMax lacks global guarantees (pp. 1-3); recovers known reformulations (pp. 30-34).",
+  "writing": "Numbered four-item contribution list (pp. 3-4); a toy problem worked by hand through the relaxations and one branching step (pp. 20-24); result tables with an explicit caveat on what timeouts prove (p. 35); a generative-AI disclosure in the acknowledgements (p. 42).",
+  "limits_future": "Tractability falls with many variables and constraints because variables are squared and all constraint pairs multiplied (p. 42); the LMI is not consistently advantageous (p. 37); no branching rule is consistently fastest, but the main tables use U-RX because it is the rule of Algorithm 1 (p. 50). Future: partial multiplications, selective products, constraint generation; MINLP, RO, ARO, DRO, polynomial and bilevel problems (p. 42).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "The perspective device keeps each node a conic program solved by MOSEK, but exactness comes from branching, not from the reformulation; the size boundary is printed (squared variables, all constraint pairs).",
+    "pages": "pp. 8, 14-15, 42"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Duel with BARON, SCIP and CPLEX at one thread, equal tolerance and time limit, with feasibility rechecks; timeouts are the certificates and the paper says what they do not prove; no incumbent warm start. Losing classes and no-solution cases are in the body (Heuristic 4).",
+    "pages": "pp. 35-41, 50"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "recover known reformulations as special cases of the new technique",
+    "evidence": "Section 7 derives the hull relaxation, Dantzig's generalized LP, the Sherali-Adams 0-1 convex hull, the approximate S-lemma and Schaible's fractional reformulation from RPT",
+    "pages": "pp. 30-34"
+   },
+   {
+    "pattern": "disclosed LLM-generated theorem statements and proof drafts",
+    "evidence": "the 2026 revision states that the statements of Theorem 3 and Corollary 1, the Appendix F proof strategies and most initial proof text were generated with two named LLMs, directed by one author, then checked and rewritten by the authors (single occurrence)",
+    "pages": "p. 42"
+   },
+   {
+    "pattern": "main tables use the variant the theory covers, even when another is faster",
+    "evidence": "Appendix A finds no branching rule consistently fastest (U-LP often fastest), yet the main tables use U-RX because it is the rule of Algorithm 1, the one the convergence analysis covers",
+    "pages": "pp. 46, 50"
+   }
+  ],
+  "transferable": [
+   "Convexify (q - d'x)c(x) with c convex and q - d'x >= 0 by multiplying and dividing the argument by (q - d'x), replacing xx' by X and using the joint convexity of the perspective (pp. 7-8).",
+   "Before building a branch and bound, test whether epigraph variables tighten the root relaxation and show strictness on a two-variable example (Theorem 1, Example 4, pp. 11-13).",
+   "Branch on the eigenvector of the largest-|lambda| eigenvalue of X* - x*x*' and multiply the new inequality with itself: the tangent cuts off the parent point even for an indefinite residual (pp. 17-19).",
+   "Benchmark global solvers with one thread, equal tolerance and time limit, an independent feasibility recheck, and a written warning that zero timeouts do not prove optimality (p. 35)."
+  ],
+  "coauthors": "Danique de Moor, Dick den Hertog, Thodoris Koukouvinos, Jianzhe Zhen",
+  "quotes": [
+   {
+    "text": "A solver may also stop before the time limit without proving optimality, so a feasible objective value or a zero timeout count does not by itself establish optimality.",
+    "page": 35
+   },
+   {
+    "text": "The statements of Theorem 3 and Corollary 1, the proof strategies developed in Appendix F, and most of the initial proof text were generated using OpenAI’s GPT-6 Astra via ChatGPT and Anthropic’s Claude Fable 5.1.",
+    "page": 42
+   }
+  ]
+ },
+ {
+  "id": "S259",
+  "year": "2024",
+  "title": "Reshaping national organ allocation policy",
+  "read_level": "full",
+  "contribution": "Builds a sample-surrogate-MILP framework that turns a black-box allocation simulator into fast multi-objective optimization, used with the OPTN to choose the lung continuous-distribution weights (10% placement efficiency, 20% pediatric) that became national policy on 9 March 2023, projected to cut waitlist deaths by about 20% (SRTR: about 40%).",
+  "problem_entry": "{DA+HS+AP; ML as surrogate} The OPTN's 2018 move to continuous distribution requires CAS weights that balance efficiency, utility and fairness under the Final Rule (pp. 2-5); weights were chosen by trial and error with slow, opaque SRTR simulators, and the kidney system took a decade and over 30 simulated options (p. 5). Problem P(pi): minimize one simulated outcome subject to bounds on others over the weight simplex (p. 6).",
+  "key_idea": "Treat policy design as an inverse control problem (p. 6): sample policies and simulate them, fit MILP-representable ML surrogates per outcome, solve each stakeholder query as a MILP and verify it with one simulator call (pp. 6-7); slacks handle infeasible requirements (pp. 7-8); sweep a bound to trace the frontier and its critical points (p. 8).",
+  "assumptions": "Policy domain MILP-representable and bounded; black box = SRTR's TSAM 2015 (3,326 lungs, 6,546 candidates, 2009-2011) with 47 outcomes (p. 9); 10,000 weight vectors from the six-attribute simplex, 20 simulations each; surrogates are max or min of K affine functions, l2 loss, 80/10/10 split, out-of-sample R2 0.85-0.99 (mean 0.96) (p. 9; Table 1, p. 10). Admitted: surrogate solutions may violate true constraints (p. 7); the simulator assumes stable acceptance behaviour (p. 11).",
+  "proof_devices": [
+   "n/a for proofs; MILP representation of piecewise-linear (max/min of K affine) surrogates, detailed in Online Appendix C, not in the file (p. 9)",
+   "Slack variables with an epigraph constraint on the original objective to return the closest feasible policy when requirements are infeasible (pp. 7-8)",
+   "Frontier tracing by sweeping one outcome's bound while holding equity outcomes at no worse than current policy (pp. 8, 10)"
+  ],
+  "experiments": "Waitlist deaths against transport distance: knee at about 10% placement weight, about 175 nautical miles, same on two other transport metrics (Fig. 2, p. 10); pediatric transplant rate reaches current policy at about 10% weight and levels off at 15-20%, against UNOS's informal 30% (Fig. 3, pp. 10-11). SRTR validated the 10% finding on a 2018-2019 cohort; the committee adopted 10% and 20%, policy since 9 March 2023 (pp. 9-10). Projected about 20% fewer waitlist deaths (about 118 over two years) against SRTR's about 40% (175), cohorts not comparable (p. 10; endnote 4, p. 12). MILPs solved in seconds by CBC, no time table (pp. 7, 9).",
+  "positioning": "Places itself in multi-objective and black-box optimization with optimization over trained ML models (Biggs et al., Anderson et al., Misic, Maragno et al.) (pp. 3, 7); positions against committee trial and error with SRTR simulators (p. 5); extends to kidney, pancreas, heart and liver (pp. 2-3).",
+  "writing": "Impact first: national policy since 9 March 2023 and about 20% fewer waitlist deaths in the abstract and introduction (pp. 2-3); OR Practice area (p. 2); a limitations section with four concrete limits (pp. 11-12).",
+  "limits_future": "Surrogates inherit simulator biases; accuracy falls away from the current operating point; post-transplant outcomes hard to predict so analysis focuses on waitlist mortality; surrogates must be accurate; low-dimensional policies only (pp. 11-12). An analysis informing the biological-disadvantage weight is not reported (pp. 8-9). Future: other organs, school choice, public housing (pp. 2-3, 11).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Owner (OPTN Lung Transplantation Committee, UNOS), decision (CAS weights), data (SRTR simulator), current rule as the reference point in Figs. 2-3, national deployment; SRTR validated the results and stakeholders explored trade-offs before the vote, as Method 5's correction asks. Only projections are reported, no post-deployment outcomes [my reading].",
+    "pages": "pp. 2-3, 8-10"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Breadth of distribution and pediatric access priced by one knob (a CAS weight), with a frontier and its knee handed to the committee; no solution-independent bound, the curve is simulated.",
+    "pages": "pp. 8, 10-11"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "The surrogate class is chosen so every query stays a MILP solvable in seconds by an open-source solver; boundary printed (low-dimensional policies only). Research Taste mark 3: one optimization replaces committee trial and error (p. 5).",
+    "pages": "pp. 5-7, 12"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "surrogate MILP over a black-box policy simulator",
+    "evidence": "sample policies, fit MILP-representable ML surrogates per outcome, solve each stakeholder query as a MILP, verify each solution with one simulator call",
+    "pages": "pp. 6-7, 9"
+   },
+   {
+    "pattern": "debate target outcomes, not parameters",
+    "evidence": "the inverse problem lets policymakers set desired outcomes while the optimizer finds the weights, instead of debating weights that mix apples and oranges",
+    "pages": "pp. 6, 8, 11"
+   }
+  ],
+  "transferable": [
+   "Replace a slow, opaque simulator by one piecewise-linear surrogate per outcome (max or min of K affine functions) fitted on uniformly sampled policies; optimize over the surrogates as a MILP and check each optimized policy with one simulator run (pp. 6-7, 9).",
+   "Grow the training sample until held-out R2 is acceptable and print R2 per outcome (pp. 7, 10).",
+   "Trace a frontier by sweeping one outcome's bound while holding equity outcomes at no worse than current policy, and mark the knee for the decision-makers (p. 10).",
+   "Let stakeholders debate target outcomes rather than weights; the optimizer translates outcomes into parameters (p. 8)."
+  ],
+  "coauthors": "Theodore Papalexopoulos, James Alcorn, Rebecca Goff, Darren Stewart, Nikolaos Trichakis",
+  "quotes": [
+   {
+    "text": "The OPTN committees’ simulation modeling has typically been conducted via trial and error, with simulated outcomes from initial policy ideas used to iteratively refine those ideas until acceptable predicted outcomes are achieved.",
+    "page": 5
+   },
+   {
+    "text": "Within our framework, policymakers can instead focus on debating appropriate target outcomes, a setting where ethical theory and community sentiment is more likely to generate useful feedback.",
+    "page": 8
+   }
+  ]
+ },
+ {
+  "id": "S375",
+  "year": "2024",
+  "title": "Congenital heart surgery machine learning-derived in-depth benchmarking tool",
+  "read_level": "full",
+  "contribution": "Extends optimal-classification-tree benchmarking from the benchmark procedure groups to all 172,888 congenital heart operations in the European database, giving each hospital case-mix-adjusted observed-to-expected ratios overall and per risk cohort through an online tool (AUC 0.866, 0.851 and 0.818 for mortality, prolonged ventilation and prolonged length of stay).",
+  "problem_entry": "{ML+AP} Earlier OCT papers predicted risk (ref. 1) and benchmarked the 10 benchmark procedure groups (ref. 2) (pp. 1-2), which cover only 44.6% of the ECHSA database, so hospitals need case-adjusted performance for all procedures (p. 5); the tool is for hospital self-assessment, not public comparison (pp. 6-8).",
+  "key_idea": "Train OCTs on pooled data (the virtual hospital); apply its leaf rates to each hospital's case mix to get expected outcomes and observed-to-expected ratios overall and per leaf cohort, stratifiable by STAT score or benchmark procedure, served through an online platform with time windows (pp. 2, 4).",
+  "assumptions": "172,888 European procedures 1989-2022; training 121,022 (1989-2018), testing 51,866 (2010-2022) [my reading: the windows overlap in 2010-2018]; outcomes hospital mortality, prolonged ventilation and length of stay above the 85th percentile; STAT Mortality Score added, diagnosis and year of surgery omitted; 146 centers (p. 2).",
+  "proof_devices": [
+   "n/a for formulation or proof (empirical paper); the OCT method is previously described (p. 2)",
+   "Observed-to-expected ratios with 90% CIs, chosen to lower false negatives; the CI method is not stated in the file (p. 2) [my reading: the text says 95% CIs for Figure 2 on p. 2, the caption 90% on p. 4]"
+  ],
+  "experiments": "AUC 0.866, 0.851, 0.818 (abstract; p. 2); on mortality 20.5% of centers over- and 20.5% underperform, ventilation 18.5%/19.9%, length of stay 18.5%/30.1% (p. 2); agreement with the STAT-score quality-of-care chart for 48, 45 and 41 of 60 centers (pp. 5-6). [my reading] No comparator AUC is reported; accuracy rises with center and procedure volume per supplemental figures not in the file (p. 7).",
+  "positioning": "Continues the group's 2021 and 2022 papers (refs. 1-2); contrasts with linear risk models' assumption of linear, additive risk factors and with black-box ML (p. 5); refines ECHSA's STAT-score quality-of-care chart (p. 5).",
+  "writing": "Clinical-journal structure with a structured abstract, Comment and Limitations sections (pp. 1-8); the disclaimer that the tool is not for public comparison is stated twice (pp. 6-8).",
+  "limits_future": "ML needs large data, so small centers' trees are pruned; coarse data granularity; European data only, internally valid but may not transfer; not for public comparison (pp. 7-8). Future: diagnosis-based long-term survival and quality of life, combined international databases, 1-year survival data being added (pp. 7-8).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Owner (ECHSA database and hospitals) and its current tool (STAT-score quality-of-care chart) are named, but the comparison is an agreement count, not a decision outcome; no deployment outcome reported.",
+    "pages": "pp. 2, 5-6"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "OCT used as a finished tool in a clinical write-up: no incumbent duel at matched complexity, no solver, time limit or certificate; the advantage over linear models is asserted by citing the earlier paper.",
+    "pages": "pp. 2, 5"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "A series 2021, 2022, 2024 in clinical outlets, delivered through an online platform with four coauthors at Alexandria Health (Workflow E: clinical work in clinical journals). Research Taste mark 5: interpretable trees contrasted with black-box ML (p. 5).",
+    "pages": "pp. 1-2, 4-5, 8"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "virtual-hospital benchmark by an interpretable tree with per-leaf O/E ratios",
+    "evidence": "one OCT trained on all peers' pooled data defines risk cohorts; each hospital's observed-to-expected ratio is reported overall and per cohort",
+    "pages": "pp. 2, 4"
+   }
+  ],
+  "transferable": [
+   "Build case-mix-adjusted benchmarks by training one interpretable tree on all peers' pooled data and reporting each member's O/E ratio overall and per leaf cohort (pp. 2, 4).",
+   "Choose the CI level for flagging outliers by the error you most want to avoid (here 90% to lower false negatives) and say so (p. 2)."
+  ],
+  "coauthors": "George E. Sarris, Daisy Zhuo, Luca Mingardi, Jack Dunn, Jordan Levine, Zdzislaw Tobota, Bohdan Maruszewski, Jose Fragata",
+  "quotes": [
+   {
+    "text": "We chose a lower 90% CI for the definition of overperforming or underperforming hospitals, instead of 95% CI, to lower the false negative rate of selecting hospitals that perform differently from expectation.",
+    "page": 2
+   },
+   {
+    "text": "Our aim is definitely not to present generally applicable standards or to engage in hospital comparisons for the public.",
+    "page": 8
+   }
+  ]
+ },
+ {
+  "id": "S416",
+  "year": "2024",
+  "title": "Optimization automates emergency department nurse scheduling at Hartford hospital",
+  "read_level": "full",
+  "contribution": "Develops and deploys a two-phase optimization for Hartford Hospital's ED nurse staffing: a robust MILP with a data-calibrated uncertainty set, solved by cutting planes, sets staffing levels, and two MILPs assign individual work, trainee and preceptor shifts; reported gains are 5-8% lower staffing cost or 8-25% lower insufficiency, 85% less overtime, and software in use since spring 2023 with a projected $728,088 annual saving. Read in the submitted-manuscript version.",
+  "problem_entry": "{RO+IO+AP} Fixed staffing targets, the same for all days and mostly constant across shifts, against demand that varies by day and hour (p. 3; Fig. 1); 88 manual hours per 6-week cycle (p. 4; Table 4, p. 22); a research-practice gap with about 30% of nurse scheduling models implemented and critics calling them unimplementable (p. 6). Decisions: aggregate staffing per position, shift and day, then individual assignments (pp. 3, 7).",
+  "key_idea": "Phase 1: robust MILP minimizing nurse-shifts + mu1 x worst-case weighted insufficiency over a data-driven set + mu2 x changes from the current schedule (pp. 7-8, 32). Phase 2: individual MILP for weighted satisfaction over nine criteria, shortages, surpluses and training (pp. 10, 35-39), then a preceptor MILP minimizing the maximum load (pp. 11, 40). Software lets nurse managers re-solve themselves (pp. 17-20).",
+  "assumptions": "13 positions, 9 tiers, 2 weekend groups, 3 shifts, 42 days or 1,008 hours (pp. 30-31); demand from daily patient records and target nurse-to-patient ratios (p. 8). Uncertainty set: nominal demand from weeks w0-10 to w0-5, per-hour bounds at the 80th percentile of 10-week-apart differences, weekly and total budgets scaled by sqrt(S) and sqrt(MS) from large deviation bounds with discount beta (pp. 30-31). Admitted: integer decisions and uncertainty rule out duality (p. 9); nurse availability uncertainty not modeled directly (pp. 5-6).",
+  "proof_devices": [
+   "n/a for proofs; cutting planes over scenarios: master MILP on a finite scenario set to 0.01 gap within 20 minutes, worst case by maximizing insufficiency over U, stop at relative change eta = 0.1 or 20 iterations, lazy callbacks, Julia/JuMP/Gurobi (pp. 9, 33-34)",
+   "Linearization of positive parts and absolute values with auxiliary variables (p. 33); big-M shift-type selection for strategic variants (p. 35); sparse indexing of binaries by eligibility and availability (p. 37)",
+   "Uncertainty budgets scaled by sqrt(number of cells) citing large deviation bounds, with one discount factor (pp. 30-31)"
+  ],
+  "experiments": "End of 2020: current 56 nurse-shifts/day and 0.17 insufficiency, oracle 49.81/0.02, non-robust 50.42/0.21, robust 51.33/0.12 (8.33% cost and 27.70% +- 81.31 insufficiency reductions) (Table 1, pp. 13-14). 2021: leadership resisted an 8% cut, deviation penalty added; individual schedule for 110 ED and 26 EDOU nurses: 5% fewer shifts, 17% weekend, 14% holiday, 85% overtime reductions, 0.95 training shifts/day, 4.6 positions per nurse, 5% lower dissatisfaction (Tables 2-3, pp. 14-16). 2022: insufficiency 5.08 to 4.66 with 64.43 against 66 shifts (p. 17); weekly re-solve -24.83% against -13.86% (Table A2, p. 44). Deployed since March-April 2023 (p. 18); projected $728,088.10 a year (Table 5, p. 22). [my reading] No solve times reported; 88 against 78 manual hours (pp. 1, 25).",
+  "positioning": "Builds on ED operations reviews (Saghafian et al.), nurse scheduling MIO and goal programming (Ang et al. 2018) and robust workforce planning (Lim-Mobasher; Van Hulst et al.), and answers the unimplementability critique (Park et al. 2022) and the low implementation rate (Kellogg-Walczak) (pp. 5-6).",
+  "writing": "Results told chronologically along the collaboration, with three stated reasons (p. 12); quantified benefits in the abstract (p. 1); frictions and failed integration reported (pp. 14, 22-24); an author-contribution statement (p. 25).",
+  "limits_future": "Deployment impact still to be evaluated with more data (p. 24); the contract required using all nursing hours, so saved shifts became training shifts (p. 23) [my reading: qualifies the projected cash saving]; integration with the payroll-linked commercial scheduler failed, so standalone software was built (p. 24). Future: all nurse staffing in the network's 7 hospitals (p. 24).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Owner, decision, data and the current rule as baseline with an oracle as ceiling; proposed, then deployed, with frictions reported; the owner contested an 8% cut and the model changed (deviation penalty, explore-solutions software), as Method 5's correction asks.",
+    "pages": "pp. 3-4, 12-18, 22-24"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Robustness priced by a cost-insufficiency curve indexed by mu1 and beta (Fig. 3a; Fig. A3); the set size is calibrated from data with sqrt(S) scaling, as Method 3's correction asks; no solution-independent bound.",
+    "pages": "pp. 16-17, 30-31, 42"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Integer uncertainty rules out a dual robust counterpart; scenario cutting planes keep each master a MILP. No boundary or solve time printed.",
+    "pages": "pp. 9, 33-34"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Dynamic Ideas LLC builds and maintains the software; a network-wide extension to 7 hospitals is planned; Bertsimas directed the project from concept to implementation.",
+    "pages": "pp. 1, 17, 24-25"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Solver limits stated (0.01 gap, 20 minutes), but no per-run gaps or times; the incumbent is the hospital's rule, not a heuristic.",
+    "pages": "pp. 9, 34"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "adoption term: penalize distance from the status-quo schedule",
+    "evidence": "a third objective term minimizes changes from the current schedule to increase adoption, added after leadership resisted an 8% cut",
+    "pages": "pp. 8, 14, 32"
+   },
+   {
+    "pattern": "deployment ladder to owner-run optimization software",
+    "evidence": "offline iterations, strategic adoption (hiring to the model's shift mix, training shifts), then software that lets managers re-solve themselves because offline back-and-forth was not sustainable",
+    "pages": "pp. 22-24"
+   }
+  ],
+  "transferable": [
+   "Calibrate a budget-type uncertainty set from history: per-cell bounds at a percentile of lagged differences matched to the decision lead time (ten weeks), aggregate budgets scaled by the square root of the number of cells with one discount factor (pp. 30-31).",
+   "When decisions and uncertainty are both integer, solve the robust model by scenario cutting planes and state the master gap, time limit, relative-improvement stop and iteration cap (pp. 33-34).",
+   "Add an explicit penalty on changes from current practice so practitioners can dial adoption risk (pp. 8, 14, 32).",
+   "Evaluate on the same rolling windows against the current rule, a non-robust version and a perfect-information oracle (Table 1, pp. 13-14; pp. 41-42)."
+  ],
+  "coauthors": "Liangyuan Na, Jean Pauphilet, Ali Haddad-Sisakht, Louis Raison, Audrey Silver, Patricia Veronneau, Nicole Vogt",
+  "quotes": [
+   {
+    "text": "Due to the fact that both the decision variables and uncertainties are integers, duality theory is not applicable and thus a closed-form robust counterpart cannot be obtained.",
+    "page": 9
+   },
+   {
+    "text": "Finally, to increase the adoption of our recommendation, we want to minimize the number of changes recommended compared with the current schedule.",
+    "page": 8
+   }
+  ]
+ },
+ {
+  "id": "S427",
+  "year": "2024",
+  "title": "Ensembling wind forecasting models to construct data-driven uncertainty sets in robust optimization",
+  "read_level": "full",
+  "contribution": "Learns ensemble weights for wind forecasts and the size of a box uncertainty set in one MIO with a coverage constraint, with optional slowly varying weights and sizes, a generalization-bound guarantee the authors call loose, and coverage results on 18 wind resources of a large US ISO.",
+  "problem_entry": "{RO+ML+AP} Unit commitment remains mostly deterministic in practice (p. 1); set size drives cost and conservativeness, yet robust unit-commitment papers choose it arbitrarily or only sweep the hyperparameter (p. 1); data-driven sets ignore covariates and ensembles have not been used to build sets (pp. 1-2).",
+  "key_idea": "One MIO per resource: minimize MAE + sum of delta with big-M binaries marking residuals within delta_i and at least a fraction p inside, nonnegative ensemble weights, separable and parallel (Problem (1), p. 2); extensions with time-dependent sizes, spatially slowly varying weights and temporally slowly varying sizes (Problem (3), eqs. 4-5, pp. 3-4).",
+  "assumptions": "Box and budget norm sets; robust constraint s <= y for wind dispatch; unknown distribution (p. 2); Theorem 1 assumes bounded inputs, outputs and weights (p. 3). Data: a vendor's 24-hour-ahead forecasts for a large US ISO, 18 resources, 5 models, three training days, p = 0.8 (p. 4). [my reading] Constraint (1c) reads p n, while the text asks for a fraction p of the K residuals (p. 2).",
+  "proof_devices": [
+   "Theorem 1: Rademacher bound (Bartlett-Mendelson) on the Lipschitz MAE loss gives P*(s_i <= y_i) >= p as K grows, with a finite-K version (p. 3); the authors call the bound relatively loose (p. 3) [my reading: the proof equates y_i in U_i with an expected-loss event]",
+   "Big-M indicators turn a coverage requirement on residuals into linear constraints inside the MIO (p. 2)"
+  ],
+  "experiments": "Ensemble MAE 11.1, 21.6, 12.4 against the best single model 11.2, 20.3, 15.4 on three test days (p. 4) [my reading: worse on day 2]; aggregate set 109.18 against 237.67 for the sum of individual sizes at p = 0.8 (p. 4); out-of-sample coverage 0.27-0.75 for individual sets on both bounds, 0.61-0.88 on the lower bound, 0.79-1.00 for aggregate sets (Table I, p. 4); spatial constraints cut MAE about 5% and raise size about 5% (p. 5). [my reading] No dispatch cost, solver or run time reported.",
+  "positioning": "Positions against robust unit-commitment papers that only sweep the budget (refs. [1], [3]) and against data-driven sets without covariates (pp. 1-2); cites the group's data-driven RO (ref. [12]) and ensemble forecasting (ref. [11]) (pp. 2, 5).",
+  "writing": "Five-page conference format with a three-part contribution paragraph (p. 2) and one illustrative figure per idea (Figs. 1-5).",
+  "limits_future": "The bound is loose (p. 3); individual sets under-cover out of sample on both bounds (p. 4). Future: tighter generalization bounds (p. 3); the conclusion names nothing further (p. 5).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Method 3's correction in practice: the set size is learned from data instead of fixed arbitrarily, with a coverage-size curve (Fig. 3) and a probabilistic statement; the knob is p.",
+    "pages": "pp. 1-4"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Real ISO vendor data, but sets are scored by coverage and MAE, not by dispatch decisions or against the ISO's current reserve rule.",
+    "pages": "pp. 4-5"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Set construction written as one MIO, separable by resource; the robust constraint with a box set stays linear.",
+    "pages": "p. 2"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "joint MIO for predictor and uncertainty-set radius with a coverage constraint",
+    "evidence": "ensemble weights and box radius learned in one MIO with big-M coverage indicators (cf. S400, card c2-08)",
+    "pages": "p. 2"
+   }
+  ],
+  "transferable": [
+   "Learn ensemble weights and the set radius jointly: minimize MAE + sum of delta subject to |residual| <= delta + M(1 - z) and sum z >= coverage, one resource at a time in parallel (p. 2).",
+   "Report out-of-sample coverage for both bounds and separately for the one-sided bound the decision needs (the lower bound for wind shortfall) (Table I, p. 4).",
+   "Check aggregation: at the same coverage an aggregate set can be much smaller than the sum of individual radii (109.18 against 237.67) (p. 4)."
+  ],
+  "coauthors": "Panagiotis Andrianesis, Thodoris Koukouvinos, Angelos Georgios Koulouras",
+  "quotes": [
+   {
+    "text": "The bounds of the uncertainty sets are usually selected either somewhat arbitrarily or with strong probabilistic assumptions.",
+    "page": 1
+   },
+   {
+    "text": "This bound is based on the Radamacher complexity of linear models and is relatively loose but the previous probabilistic guarantee could be improved using tighter generalization error bounds.",
+    "page": 3
+   }
+  ]
+ },
+ {
+  "id": "S458",
+  "year": "2024",
+  "title": "Robust linear algebra",
+  "read_level": "full",
+  "contribution": "Formulates linear systems, matrix inversion, eigenpairs and Cholesky factorization under norm-bounded matrix uncertainty as tractable robust problems (regularized LO/CQO), proves exact-nearby-solution and conditioning results, and shows smaller errors than Gaussian elimination, MINRES, GMRES and GLasso on nearly singular matrices at much longer run times.",
+  "problem_entry": "{RO+CP; LO} Linear-algebra methods assume exact data and lose accuracy on nearly singular matrices (p. 1); prior work does perturbation analysis, interval linear systems (NP-hard) and robust least squares (pp. 1-4). Problem: min-max norm-error formulations of linear systems, inversion, eigenpairs and Cholesky under perturbations of the matrix.",
+  "key_idea": "Minimize the worst-case residual over Frobenius or column-wise l2/l1 balls; the robust counterparts are regularized least squares (l2+rho l2, l2+rho l1 as CQO, l1+rho l1 as LO) (Theorem 1, p. 3); inversion as n robust systems (Algorithm 1, p. 6); eigenpairs by alternating eigenvector and Rayleigh-quotient steps (Algorithm 2, p. 8); Cholesky by Adam on a nonconvex robust objective then a projection QP (pp. 9-10).",
+  "assumptions": "Additive norm-bounded perturbations (p. 3); rho fixed at 0.1 for linear systems and Cholesky (pp. 4, 10); synthetic nearly singular matrices from a row equal to the sum of others plus N(0, sigma^2) noise (p. 4); perturbations lambda U[0,1], lambda in [1,5], for eigen and Cholesky tests (pp. 9-10).",
+  "proof_devices": [
+   "Robust counterparts via robustification-regularization equivalence (Bertsimas-Copenhaver; Xu et al.) (Theorem 1, p. 3)",
+   "Oettli-Prager: the robust solution exactly solves a system in an interval around each nearby matrix (Theorems 2 and 8, pp. 3, 8, 10-11)",
+   "Conditioning: cond(A'A + rho I) = (sigma1 + rho)/(sigma_n + rho) (Theorem 4, p. 4), stated for the squared version [my reading]; Weyl bound for eigenpairs (Theorem 6, pp. 7-8)",
+   "GLasso as the robust counterpart of a problem with a column-wise infinity-norm set (Theorem 5, pp. 6-7)",
+   "Theorem 7: O(1/T) convergence of Algorithm 2 by citing block coordinate descent because each block is convex (p. 8) [my reading: normalization and the choice between (16) and (17) are not addressed]"
+  ],
+  "experiments": "One i9 core, Gurobi 9.0.2, Julia 1.5.3, code on GitHub (p. 2). Linear systems: smallest residual against Gaussian elimination, MINRES and GMRES in single and double precision over 1,000 matrices per size (Tables 2-3, p. 4); n = 1e4 times 3.05 s against 526.53 s (Table 5, p. 6); gain shrinks with sparsity (p. 5). Inversion: best, but nominal wins for cond <= 1e15 (p. 6); beats GLasso with best rho per method (Table 8, p. 7). Eigenpairs: small significant gains, up to 4,519 s at n = 300 (Tables 10-11, p. 9). Cholesky: better on perturbed matrices, worse at n = 1e3 for small perturbations (p. 10). [my reading] Linear-system and inversion metrics are residuals on the nominal matrix, so they measure round-off in the nearly singular regime (p. 5).",
+  "positioning": "Extends robust least squares (El Ghaoui-Lebret; Bertsimas-Copenhaver; Xu et al.) and Zhen-den Hertog's uncertain linear equations; contrasts with perturbation analysis, interval linear systems, Gaussian elimination, MINRES, GMRES, LOBPCG and GLasso (pp. 1-4, 6-7).",
+  "writing": "Four-item contribution list (p. 2); each section runs formulation, properties, experiments; short proofs, with hardware and code link stated up front (p. 2).",
+  "limits_future": "Robust Cholesky is not provably optimal (p. 2); the advantage is concentrated in the ill-conditioned regime (p. 1); run times up to thousands of seconds (Tables 5, 7, 11, 13). Future: QR and other factorizations and problems (p. 10).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Numerical-linear-algebra problems written as robust problems whose counterparts stay LO or CQO; tractability measured by solve times up to n = 1e4 with the cost printed. Heuristic 1: GLasso and Tikhonov regularization shown to be robust counterparts (pp. 3, 6-7).",
+    "pages": "pp. 3, 6-10"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "The knob rho and its two-sided effect (conditioning against residual) are explained, but rho is fixed at 0.1 or picked after the fact on the metric; no price curve.",
+    "pages": "pp. 4, 7, 10"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Duels the field's incumbents with versions and machine stated; losing regimes printed (cond <= 1e15, sparse matrices, n = 1e3 small perturbations); convex problems, so certificates are moot except for heuristic Cholesky.",
+    "pages": "pp. 2, 4-10"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "robustify another field's numerical primitives",
+    "evidence": "linear systems, inversion, eigenpairs and Cholesky reformulated as robust problems, with the regime of advantage located by digits lost against machine precision",
+    "pages": "pp. 1-2, 5, 10"
+   }
+  ],
+  "transferable": [
+   "Show a robust solution exactly solves a nearby problem: bound |Ax - b| componentwise by the optimal value and apply Oettli-Prager to get an interval of matrices containing an exact system (Theorem 2, pp. 3, 10-11).",
+   "Explain a regularizer's accuracy gain through conditioning, cond(A'A + rho I) = (sigma1 + rho)/(sigma_n + rho), and state the trade-off with the residual as rho grows (p. 4).",
+   "Locate the regime of advantage explicitly by comparing digits lost (log10 cond) with machine precision, for both single and double precision (p. 5)."
+  ],
+  "coauthors": "Thodoris Koukouvinos",
+  "quotes": [
+   {
+    "text": "Although applicable in all cases, the regime where the proposed approach is most advantageous is that of ill-conditioned problems.",
+    "page": 1
+   },
+   {
+    "text": "One important aspect is the separation of round-off errors and data uncertainty.",
+    "page": 5
+   }
+  ]
+ },
+ {
+  "id": "S480",
+  "year": "2024",
+  "title": "Interpretable algorithmic fairness in structured and unstructured data",
+  "read_level": "full",
+  "contribution": "Trains classifiers while choosing which training labels to flip, by alternating projected SGD with a MILO projection, adds moment constraints for meritocracy, proves stationarity convergence via total unimodularity, and reaches the best demographic parity on 3 of 4 tabular datasets and on most image targets at average accuracy costs of 3.31% and 0.65%, with OCT and Grad-CAM explanations of the flips.",
+  "problem_entry": "{ML+IO} Historical labels carry systemic bias; dropping the sensitive attribute fails through correlated features (pp. 1-2); label massaging depends on a separate ranker (p. 4); meritocracy must be kept for structured data (p. 2). Problem (4): minimize over the model and binary label flips with per-group flip counts derived from equalizing positive rates within epsilon at a fixed total of positives (pp. 6-7).",
+  "key_idea": "A min-min problem over flips and model parameters (p. 7), solved by alternating projected SGD with a MILO projection of the flip vector (Algorithm 1, pp. 7-8); first- and second-moment meritocracy constraints linear in the flips (p. 11); extensions to multiple and multi-valued attributes (pp. 12-14); OCT and Grad-CAM explain the flips (pp. 29-32).",
+  "assumptions": "Binary labels and sensitive attribute (p. 6); LR for tables and ResNet-18 for images, soft margin loss, Adam, batch 64 (p. 15); bounded network output (Assumption 1, p. 8); epsilon = 1e-2, delta in {0.1, 0.5}, tuning on validation by SPD, 10 seeds, EthicML splits (pp. 15-16). Data: LSAC, Crime, COMPAS, German credit, CelebA, LFW (pp. 16-25).",
+  "proof_devices": [
+   "Theorem 1: with logistic loss, Armijo steps and rounding before projection, Algorithm 1 is cyclic block coordinate descent with gradient projections onto conv(Z), hence converges to a stationary point (Bonettini et al. 2016) (p. 8)",
+   "Total unimodularity of the two-row cardinality constraint matrix (Bertsimas-Weismantel 2005, Corollary 3.2) lets the binary set be replaced by its convex hull (p. 9); the guarantee lapses once flip-direction and total-positive constraints are added (p. 10)",
+   "Closed-form per-group flip proportions from the parity and conservation equations (eqs. 2-3, pp. 6-7); Lemma 2: only one tolerance is free for a k-valued attribute (pp. 13-14)",
+   "Exact MINLP formulations for LR and SVM by big-M linearization, intractable at thousands of points (p. 10; Appendix B, pp. 34-36)"
+  ],
+  "experiments": "Best out-of-sample SPD on 3 of 4 tabular datasets (p. 28), with Calders best on COMPAS SPD and DEO (p. 20); average accuracy cost 3.31% (tables) and 0.65% (images) (p. 28), with large losses on Crime 0.779 to 0.678 (Table 4, p. 18) and LFW Smiling by gender 0.898 to 0.852 (Table 15, p. 26); price of fairness by merit averages (Table 9, pp. 21-23); projection under 10 s up to 1e4 points and 45 s at 1.5e5 (p. 33). [my reading] Zafar's baseline is reported at its best out-of-sample SPD over two variants (p. 15).",
+  "positioning": "Places itself in the pre-, in- and post-processing taxonomy (pp. 2-4); brings Calders et al.'s label massaging inside training (p. 4); benchmarks Calders, Kamiran-Calders, Zafar, Agarwal and Hashimoto's DRO on tables and FAAP and DRO on images (pp. 15, 24).",
+  "writing": "Four-item contribution list (p. 5); a subsection titled The price of fairness reuses the group's earlier term (p. 21); a summary of findings that admits no method is uniformly best (p. 28).",
+  "limits_future": "No convergence guarantee with the extra constraints (p. 10); the projection is not expected to scale to 1e6 points, with LP relaxation and rounding suggested (p. 33); no method uniformly best, and accuracy improves only when test data are less biased than training data (p. 28). The conclusion names no future work (pp. 33-34).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "contradiction",
+    "note": "The 2024 paper reuses the 2016 figure (450 billion factor speed-up, 1991-2015) instead of rebuilding it (step 3), and [my reading] invokes it for a projection whose base form the paper itself proves totally unimodular.",
+    "pages": "pp. 7, 9"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "A subsection titled The price of fairness; the meritocracy tolerance delta is handed to the user with Merit-delta and Merit-SPD curves (Figs. 1-2); no bound.",
+    "pages": "pp. 21-23, 34"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Fairness becomes discrete label decisions inside training with a MILO projection; exact MINLPs for LR and SVM are given and their boundary stated (thousands of points).",
+    "pages": "pp. 7, 10-11"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Duels five incumbent fairness methods on the same base model and FAAP and DRO on images, with losing cases printed (COMPAS, Crime accuracy); no exact solve or certificate, the algorithm is a heuristic with a MIO subroutine. Research Taste mark 5: flips explained by OCT and Grad-CAM (pp. 29-32).",
+    "pages": "pp. 15-32"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "label flips as decision variables optimized jointly with training",
+    "evidence": "binary flip variables with per-group counts inside a min-min training problem, solved by alternating projected SGD with a MILO projection",
+    "pages": "pp. 6-8"
+   },
+   {
+    "pattern": "OCT trained on an optimizer's discrete decisions to explain them",
+    "evidence": "a three-class OCT (flip positive, flip negative, no flip) of depth 1-5 explains the flips on LSAC and LFW, with accuracies 0.937 and 0.885",
+    "pages": "pp. 29-31"
+   }
+  ],
+  "transferable": [
+   "Turn a fairness target (equal positive rates within epsilon, total positives fixed) into closed-form per-group flip counts, tau1 n1 = tau2 n2, then optimize which items to flip (eqs. 2-3, pp. 6-7).",
+   "Prove convergence of an alternating SGD-and-binary scheme by showing the projection's constraint matrix is totally unimodular, so the binary set can be replaced by its convex hull (p. 9).",
+   "Limit the distribution shift of merit covariates by first- and second-moment bounds linear in the binaries (p. 11) and evaluate by 1-Wasserstein distance (pp. 14-15).",
+   "Explain discrete decisions with a shallow OCT (depth 1-5 by cross-validation) trained on flip-positive, flip-negative and no-flip labels (p. 29)."
+  ],
+  "coauthors": "Hari Bandi, Thodoris Koukouvinos, Sofie Kupiec",
+  "quotes": [
+   {
+    "text": "We remark that in the period 1991–2015, algorithmic advances in MIO coupled with hardware improvements have resulted in an astonishing 450 billion factor speedup in solving MIO problems.",
+    "page": 7
+   },
+   {
+    "text": "Finally, we note that there does not exist a method that performs uniformly the best in terms of accuracy, fairness, and meritocracy.",
+    "page": 28
+   }
+  ]
+ }
+]

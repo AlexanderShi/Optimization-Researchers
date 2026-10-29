@@ -1,0 +1,526 @@
+[
+ {
+  "id": "S407",
+  "year": "2020",
+  "title": "Optimizing influenza vaccine composition: From predictions to prescriptions",
+  "read_level": "full",
+  "contribution": "A predict–robustify–evaluate pipeline for choosing flu vaccine strains by region: tensor completion with a slowly drifting low-rank core forecasts circulation rates, a robust choice over a latent-space uncertainty set is cast as an SOCP, and Optimal Regression Trees score the choice against WHO, FDA and EMA compositions in predicted morbidity and mortality.",
+  "problem_entry": "{DA+RO+ML; AP (health)} Strain predictors do not optimize composition under their own forecast uncertainty, and the OR models of the WHO committee's choice neither personalize by region nor quantify morbidity and mortality (p. 4). Problem: prescribe one strain per subtype for a region from GISRS circulation data (pp. 1–2, 5).",
+  "key_idea": "Forecast circulation by tensor completion with ‖S^t − S^{t−1}‖_F ≤ λ, solved by alternating unfolding SVDs and an SOCP in the cores (pp. 7–8, 19). Choose the strain that minimizes the worst-case weighted antigenic distance over Y = U S Vᵀ with ‖S − Ŝ‖_F² ≤ λ (p. 10). Score both compositions with ORTs (pp. 8–9).",
+  "assumptions": "Latent weights change slowly between seasons, an assumption admitted for tractability (p. 3). Data: a 132 × 1,206 × 32 tensor about 88% missing (pp. 2, 6); HI distances for 1,377 viruses × 82 strains (pp. 6–7); r and λ chosen by 5-fold cross-validation (p. 8).",
+  "proof_devices": [
+   "alternating optimization: factors from SVDs of the mode-1 and mode-2 unfoldings, cores from an SOCP in T r² variables (pp. 7–8, 19)",
+   "Lemma 1 (von Neumann) minimax swap, then an epigraph SOCP; the strain is argmin_v at the worst-case Y* (p. 10). [my derivation] Over a discrete one-hot choice only max–min ≤ min–max holds, so (8) is a lower bound and ℓ is a best response, not necessarily robust-optimal"
+  ],
+  "experiments": "Retrospective seasons 2010–2018 against WHO, FDA and EMA compositions; outcomes are predicted by ORTs retrained on 20-year windows (R² 0.64–0.83); the robust choice wins 7 of 8 seasons per table (pp. 11–12). [my arithmetic] Table totals give 9.4/7.8%, 8.5/9.6% and 5.4/1.7% reductions in illness and mortality, not the stated 11–14/8–11%, 8–10/6–9% and 10–12/9–11% (pp. 1, 11–12). No solver or run time is printed.",
+  "positioning": "Against strain-evolution predictors (fitness models, phylogenetics) that do not optimize under prediction uncertainty, and against stochastic-DP, optimal-stopping, game and bilevel models of the committee decision (pp. 3–4). Builds on the group's tensor completion (Bertsimas–Pawlowski) and ORT (Bertsimas–Dunn) (pp. 2–3).",
+  "writing": "Pipeline announced as a three-item list in the introduction (pp. 2–3); 'first work' claim (p. 5); headline percentages repeated in the abstract, results and conclusion (pp. 1, 11–12, 15); no limitations section.",
+  "limits_future": "No limits or future work stated (p. 15). [my reading] Tables are internally inconsistent: Table 8 repeats Table 4's distances despite different strains; the EMA count in the text (5) differs from the table (4); Table 11 repeats Table 4 in 7 of 10 years; H1N1 strains appear as H3N2 prescriptions (pp. 13–14, 20–21). The outcome model misses badly in some seasons (USA 2011–12: 9.3 million observed against 24.7 million predicted, p. 12).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The institutions' actual compositions are the baseline and the decision is scored in morbidity and mortality, but through a learned outcome model, and the headline ranges do not follow from the tables [my arithmetic].",
+    "pages": "pp. 1, 11–15"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "The robust choice is kept in a conic class (an SOCP) by a minimax swap applied outside its conditions (discrete choice) [my derivation]; the stop-rule correction (test exactness on a small example) applies.",
+    "pages": "pp. 9–10"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "uncertainty set in the predictor's latent space",
+    "evidence": "a Frobenius ball around the learned low-rank core Ŝ, mapped through fixed factors U and V, defines the uncertain circulation rates",
+    "pages": "pp. 9–10"
+   }
+  ],
+  "transferable": [
+   "Build the uncertainty set from your own predictor's structure: a ball around the estimated low-rank core, mapped through the fixed factors (p. 10).",
+   "Fix tensor factors by SVDs of the mode-1 and mode-2 unfoldings, then solve one SOCP for the time-varying cores with a drift budget ‖S^t − S^{t−1}‖_F ≤ λ (pp. 7–8, 19).",
+   "Correction [my derivation]: for a choice among q discrete options, solve q convex worst-case problems and take the minimum; swap min and max only when the choice may be mixed (p. 10)."
+  ],
+  "coauthors": "Hari Bandi",
+  "quotes": [
+   {
+    "text": "Although, some of these methods help identify a cluster or a set of viruses predicted to circulate in the future, they do not optimize the vaccine composition in anticipation of the uncertainty in their predictions.",
+    "page": 4
+   },
+   {
+    "text": "The min-max in Problem (6) can be interchanged",
+    "page": 10
+   }
+  ]
+ },
+ {
+  "id": "S408",
+  "year": "2020",
+  "title": "Novel target discovery of existing therapies: Path to personalized cancer therapy",
+  "read_level": "full",
+  "contribution": "Infers binary therapy–target links from Dana-Farber records by an MIO regression whose constraints encode the mechanism (therapy → mutation → pathway → survival). Bootstrap selection frequencies rank candidate pairs; known pairs (erlotinib–EGFR, pertuzumab–ERBB2, cetuximab–EGFR) are recovered, with a TCGA replication and synthetic recovery tests.",
+  "problem_entry": "{ML+IO; AP (health)} Finding new targets of existing drugs 'relies on pure serendipity or anecdotal evidence' and defeats trial and error (p. 3); computational methods use incomplete curated databases, cell lines and no phenotypes (pp. 3–4). Problem: infer w_jk from observational survival data (p. 7).",
+  "key_idea": "log survival = β₀ + xᵀβ − Σ r_ℓ s_iℓ, where a pathway set is abnormal if a gene in it is mutated and untargeted (pp. 7–8). The logic is written as linear constraints on binaries with big-M products (pp. 9–10); the objective is absolute error + λΣw + γ‖β‖₁ (pp. 9–10); bootstrap and propensity subsamples give confidence frequencies (p. 11).",
+  "assumptions": "A Bayesian network with hidden variables is the true model, with enough capacity and data; randomized experiments are still needed to confirm causality (p. 5). Data: 3,118 patients, 6,928 regimens, 133 covariates, K = 176 mutations, m = 10 therapies, temporal split 2004–11 / 2012–14 (pp. 6, 12–13); TCGA 1,098 patients, 299 mutations (pp. 13–14).",
+  "proof_devices": [
+   "logical constraints (7c)–(7g) define 'mutated and untargeted' and 'pathway abnormal' from binaries (pp. 9–10)",
+   "big-M linearization of the product r_ℓ s_iℓ, (7h)–(7j) (p. 10)",
+   "bootstrap (random and propensity-defined subsamples) over MIO solves as the confidence of each binary (p. 11)",
+   "recovery checked on synthetic data generated from the model at increasing noise, not proved (pp. 12, 17–18)"
+  ],
+  "experiments": "Out-of-sample MAE on log survival: 0.69 for the MIO against 0.71–0.73 for three L1-fitted linear models (Dana-Farber); 0.91 against 0.92–0.99 (TCGA); no intervals (pp. 14–15). Against DrugBank: accuracy 95.8%, TPR 50%, FPR 4.0% (Dana-Farber); 98.3%, 26.7%, 1.4% (TCGA) (pp. 15–16). [my arithmetic] Base rates are 6/1,760 and 15/3,588, so all-negative accuracy is higher (99.7%, 99.6%); precision of 4.1% and 7.5% is about 12 and 18 times the base rate. R 3.3.3, Julia 0.6.0, Gurobi 7.0 (p. 12); no times, gaps, M or bootstrap count.",
+  "positioning": "Against similarity- and side-effect-based repositioning, cell-line screens (Garnett, Connectivity Map) and signature or network methods; builds on the group's combination-chemotherapy database (S078) as the phenotype-side precedent (pp. 3–4).",
+  "writing": "Numbered advantages in the abstract and discussion (pp. 1, 18); an explicit paragraph listing causal assumptions (p. 5); 'highly accurate' headline (p. 1); first-study claim (p. 18).",
+  "limits_future": "Confounding; a small gene panel ('296 measured mutations', while p. 13 gives K = 176 [my reading]); no immune-cell data; incomplete gene sets. Future: dosing, and prospective in-vitro, animal and clinical validation; consortium data (pp. 18–19).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "A bioinformatics question (which drug hits which target) is written as one MIO whose binaries are the scientific output.",
+    "pages": "pp. 7–10"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "The 'why now' is a borrowed, uncited 'several trillion times' speed-up, with no timing of this model (the Method 2 checkpoint).",
+    "pages": "p. 9"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Linear incumbents are dueled with a matched loss 'for a fair comparison', but no limit, gap or certificate is reported.",
+    "pages": "pp. 11–15"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Therapy selection is promised as the 'natural pathway', but predictions (MAE) and recall of known links are scored, not decisions.",
+    "pages": "pp. 5, 14–19"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "bootstrap selection frequency as the confidence of an MIO's binary output",
+    "evidence": "the MIO is re-solved on random and propensity-defined subsamples; the frequency of w_jk = 1 is thresholded to a ranked list of about 60 pairs",
+    "pages": "pp. 11, 14–15"
+   },
+   {
+    "pattern": "mechanism graph as MIO constraints, so that the binaries are the finding",
+    "evidence": "therapy → mutation → pathway → survival logic encoded as linear constraints; w_jk is the discovery",
+    "pages": "pp. 7–10"
+   }
+  ],
+  "transferable": [
+   "Encode a causal mechanism graph as linear logical constraints on binaries, so that fitting the model answers the scientific question (pp. 8–10).",
+   "Refit the MIO on bootstrap and propensity subsamples, report selection frequencies, and threshold them to a list of fixed length for experimental follow-up (pp. 11, 14–15).",
+   "Fit the linear baselines with the MIO's own loss (absolute error on log survival) so that the comparison isolates the structure (p. 11).",
+   "With rare positives, report precision against the base rate, not accuracy [my arithmetic, Table 3, p. 15]."
+  ],
+  "coauthors": "Ying Daisy Zhuo",
+  "quotes": [
+   {
+    "text": "The current approach to find new targets of existing drugs in practice typically relies on pure serendipity or anecdotal evidence.",
+    "page": 3
+   },
+   {
+    "text": "In recent years, advances in algorithms and computational hardware allowed a speedup of over several trillion times for solving MIO models, making even complex, large-scale problems tractable.",
+    "page": 9
+   }
+  ]
+ },
+ {
+  "id": "S543",
+  "year": "2020",
+  "title": "Time series that are robust to regime changes",
+  "read_level": "full",
+  "contribution": "Trains one AR model against the worst synthetic training set: either any k-subset or contiguous blocks, the latter via a fused penalty. Total unimodularity makes the binary inner problem an LP, and duality yields a single convex QP. On Beth Israel emergency-department and bed-request series, small MSE gains and larger coefficient-stability gains are reported over OLS AR, in both a Covid-19 and a calm window.",
+  "problem_entry": "{ML+RO; IO as device} Changepoint tests act 'after the fact', and switching models need the switching dynamics (pp. 1–3). Problem: build one forward-looking model robust to regime changes without modelling them (pp. 1–2).",
+  "key_idea": "min over (ξ, γ) of max over z ∈ Z of Σ z_t r_t², with Z1 = k-subsets (p. 5) or Z2 = k blocks of h periods (p. 6). Z2 is computed through a fusion penalty λΣ|z_{t+1} − z_t| and a cardinality multiplier Γ (pp. 8–9). The idea replaces random splits and ensembles by a worst case over splits (p. 4).",
+  "assumptions": "AR(p) with the MA order set to zero, data differenced and log-transformed (pp. 4, 14). Data: BIDMC arrivals and bed requests at 24 and 8 hours; a turbulent window Dec 2019–Oct 2020 and a calm window Jan–Nov 2019, confirmed by the hospital; chronological 15/30/70 splits (pp. 13–14).",
+  "proof_devices": [
+   "Theorem 1: once Γ removes the cardinality row, the fused constraint matrix is totally unimodular (Ghouila-Houri; Hoffman–Kruskal), so conv(Z) is the LP relaxation (pp. 8–9)",
+   "LP dual of the inner maximization gives one convex QP (p. 10); for Z1 the top-k-sum dual min kθ + Σuᵢ with θ + uᵢ ≥ rᵢ² (eq. 8, p. 12)",
+   "[my derivation] three sign slips in the printed Z2 dual: an objective −λΣ(s1 + s2) that is unbounded in s, a v2 row reading ≥ λ for ≥ −λ, and a last z row with +p_{n−1} for −p_{n−1} (p. 10)"
+  ],
+  "experiments": "Eight series × daily, weekly and monthly refitting × standard and rolling forecasts; MSE and coefficient stability with standard errors and p-values; the only baseline is OLS AR (pp. 13–27). Several gains are not significant (e.g., p = 0.212, 0.526, 0.640). No hyperparameters, solver or run times, despite a promised 'timing section' (pp. 1, 12) [my reading]. [my arithmetic] For 24-hour arrivals, Z2's MSE gain is larger in the calm window than the turbulent one under every schedule (3.9/1.9%, 7.4/0.9%, 9.0/6.1%; Tables 1–6, pp. 15–25).",
+  "positioning": "Against detect-then-refit changepoint analyses (parametric, Bayesian, nonparametric, regression) and against regime-switching models (EARMA, Markov switching, hidden or partially hidden) estimated by maximum likelihood (pp. 2–3). Builds on the authors' stable regression and stable classification (p. 30).",
+  "writing": "The abstract is repeated nearly verbatim in the introduction and conclusion (pp. 1–3, 29); long templated result paragraphs per table (pp. 15–27); no limitations section.",
+  "limits_future": "No limits or future work stated. The choice between Z1 (stability) and Z2 (accuracy) is left to the user (p. 27). The Discussion calls Z1 'smaller', though p. 6 says Z2's series are a subset of Z1's [my reading]. The gains look like regularization rather than regime robustness [my arithmetic].",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "A combinatorial worst case over training sets is made exact by total unimodularity, dualized, and kept as one convex QP.",
+    "pages": "pp. 8–12"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Conservatism is indexed by k (and λ, Γ), and the price is checked on a calm window, but no knob–property bound or curve is shown; the headline claims the price is zero.",
+    "pages": "pp. 1, 27–28"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Only the naive incumbent (OLS AR) is dueled, with no timings or settings. Heuristic 1 and Taste mark 3 (optimization over randomization) frame the method.",
+    "pages": "pp. 4, 13–16"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "the worst training split as the uncertainty set",
+    "evidence": "validation-split randomness becomes a min–max over subsets or contiguous blocks, made exact by total unimodularity and dualized",
+    "pages": "pp. 4–12"
+   }
+  ],
+  "transferable": [
+   "Train against the worst k samples with min kθ + Σuᵢ subject to uᵢ ≥ lossᵢ − θ and u ≥ 0; the top-k-sum dual keeps a convex loss convex (eq. 8, p. 12).",
+   "Move a cardinality constraint into the objective with a multiplier and linearize a fusion penalty with two slacks; the remaining matrix is totally unimodular, so the binary inner problem equals its LP (pp. 8–9).",
+   "Test a robustness claim on a turbulent and a calm window separately, across refit frequencies, with fixed-window and rolling forecasts (pp. 13–14)."
+  ],
+  "coauthors": "Ivan Paskov",
+  "quotes": [
+   {
+    "text": "In this paper, we propose a methodology for constructing a single model that is explicitly designed to be robust against regime changes.",
+    "page": 2
+   },
+   {
+    "text": "stable time series (Z1) employ a smaller uncertainty set than do stable time series (Z2), and hence can be viewed as more conservative.",
+    "page": 27
+   }
+  ]
+ },
+ {
+  "id": "H007",
+  "year": "2021",
+  "title": "Robust Optimization with Side Data",
+  "read_level": "full",
+  "contribution": "Formulates contextual robust optimization, where the uncertainty set depends on side data x. It gives two convex data-driven approaches: local nearest-neighbour scenarios, or a global RKHS decision rule imposed on all scenarios. Cost and violation converge almost surely; one knob (k or η) priced by cross-validation replaces finite-sample guarantees; extensions cover adaptive problems and objective uncertainty.",
+  "problem_entry": "{RO+DA} RO users must pick an uncertainty set, and data-driven sets ignore side data that narrow the possible y (p. 1). Problem (CRO): min c(z) subject to max over y ∈ Y(x⁰) of f_j(z, y) ≤ 0, with Y(x⁰) unknown and only (xⁱ, yⁱ) observed (pp. 1–2).",
+  "key_idea": "Start from the scenario approach (Calafiore–Campi). Local: keep only the k nearest neighbours of x⁰, or tree or forest leaf-mates (pp. 2, 9). Global: impose all scenarios on an RKHS decision rule with ‖z‖² ≤ η and evaluate at x⁰ (p. 2). Adaptive problems reduce to the same form through the recourse value and an epigraph variable (pp. 8–9).",
+  "assumptions": "IID data; continuity of c, f and Y(x); f convex in z; Z convex and compact; Y(x) bounded; Slater-type interior; positive probability near x⁰ and near feasible y; k/n → 0 and k ≥ n^{1/b} (p. 4). The global case adds a Gaussian kernel, Lipschitz c and f, bounded X, and continuous interior and optimal selections (p. 6). Experiments: synthetic y = βᵀx × U[0.9, 1.1] (pp. 11, 16).",
+  "proof_devices": [
+   "k-th nearest neighbour converges to x⁰ almost surely by the strong law when k/n → 0 (Lemma 2.1/C.1, pp. 5, 25)",
+   "Borel–Cantelli with k(n) ≥ n^{1/b} bounds violation probabilities (p. 5)",
+   "set sandwich int Zₓ(x⁰) ⊆ lim inf ⊆ lim sup ⊆ Zₓ(x⁰) (Proposition 2.1, p. 5)",
+   "RKHS norm bound ⇒ Lipschitz rule ⇒ locally near constant ⇒ reduction to the local theorem (Theorem 2.2, p. 6)",
+   "Representer Theorem with hard constraints including z(x⁰) ∈ Z, and Nyström substitution β = Mᵀa usable by solvers (pp. 5–6, 21–22)",
+   "distance function g(y, x) to represent a continuous convex set-valued map (Lemma C.2, pp. 25–26)"
+  ],
+  "experiments": "Inventory (d = 1, 5) and two-stage shipment planning (d = 3, 10); 60 random instances; 2⁵–2¹⁰ samples; violation at the worst 1% against a 1% target; methods loc, loc-cart, loc-rf and glo against a simulated optimum (pp. 10–16). Cross-validation nears the target by 2¹⁰ samples (glo by 2⁷); glo's cost is insensitive to dimension; Gurobi 9.1.2, quad-core 2.6 GHz, run time about n^1.25 (loc) and n^1.5 (glo) (pp. 11–14). [my reading] No context-free or contextual-DRO baseline, and the experiments run a projected variant the theorems do not cover (pp. 11, 21).",
+  "positioning": "Claims the first formulation of data-driven contextual RO (p. 3). Extends Calafiore–Campi and Bertsimas–Gupta–Kallus (non-contextual) and contrasts with contextual DRO (Kannan et al., Nguyen et al., Esteban-Pérez–Morales). Builds on Bertsimas–Kallus 2020 and Bertsimas–Koduri 2021, with explicit improvements over the latter (pp. 2–3, 5–6).",
+  "writing": "Theorem-first, each theorem followed by a paragraph explaining which assumptions are on unknown objects and which on user choices (pp. 4–5); the guarantee gap is stated in the abstract (p. 1); the paper closes by naming a new research object (p. 18).",
+  "limits_future": "Asymptotic guarantees only (pp. 1, 3); η's effect on violation is not monotone (p. 10); loc's cost degrades with dimension (p. 13). Future: conditional maximum estimation (p. 18).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "One knob (k or η) indexes violation against suboptimality; Figure 1 prints the curve with its non-monotone case; the knob is set from data by validation (the Method 3 correction), with only asymptotics instead of a bound.",
+    "pages": "pp. 1, 9–10"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Each approach keeps the nominal class ('a single new convex optimization problem'); adaptive problems become LPs or QPs; run times are measured at scale.",
+    "pages": "pp. 1, 4–5, 9, 14"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Decisions are scored in cost and violation against a simulated optimum on synthetic data; there is no owner and no current-rule baseline [my reading].",
+    "pages": "pp. 10–16"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Programme lineage: Kallus (2020) → Koduri (2021) → this paper, each student's method becoming the next paper's building block.",
+    "pages": "pp. 3, 5–7"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "localize the scenarios or globalize the decision",
+    "evidence": "two routes to context: restrict the scenario set to neighbours or leaf-mates, or impose all scenarios on a regularized decision rule",
+    "pages": "pp. 2, 9"
+   },
+   {
+    "pattern": "conditional maximum estimation as a named new object",
+    "evidence": "the closing remark contrasts estimating E[y|x] with estimating max over Y(x)",
+    "pages": "p. 18"
+   }
+  ],
+  "transferable": [
+   "Calibrate a robustness knob by validation: binary-search for the smallest k whose violation at the worst p% of validation cases is at most α; use a full grid if the knob is not monotone (pp. 9–10).",
+   "Turn a two-stage robust problem into one uncertain constraint via the recourse value c̃₂(z₁, y) and an epigraph variable (pp. 8–9).",
+   "Prove consistency of a neighbour-scenario decision from neighbour convergence (k/n → 0), Borel–Cantelli with k(n) ≥ n^{1/b}, and Slater interior feasibility (pp. 4–5).",
+   "Use Nyström inside a solver model: substitute β = Mᵀa so that kernel terms cost O(npd) instead of O(n²d) (pp. 21–22)."
+  ],
+  "coauthors": "Nihal Koduri",
+  "quotes": [
+   {
+    "text": "In lieu of finite-sample probabilistic guarantees, we show that for both approaches, varying a single parameter controls the tradeoff between suboptimality and constraint violation",
+    "page": 1
+   },
+   {
+    "text": "this paper deals with the new concept of estimating the conditional maximum",
+    "page": 18
+   }
+  ]
+ },
+ {
+  "id": "S198",
+  "year": "2021",
+  "title": "A simple and fast spectroscopy-based technique for Covid-19 diagnosis",
+  "read_level": "full",
+  "contribution": "A reagent-free screening test: FTIR spectra of RNA extracts are classified by machine learning, reaching 97.8% accuracy, 97% sensitivity and 98.3% specificity on a 95-sample test split of 280 Moroccan patients. An ℓ0-sparse MIO classifier selects interpretable RNA bands; specificity against 15 other viruses and the limit of detection are assessed on synthetic samples.",
+  "problem_entry": "{ML; AP (health); IO through sparse classification} RT-PCR is slow (2–4 hours, more than 12 overall), needs imported kits, and in several African countries takes over 5 days to return results (p. 2). Problem: classify SARS-CoV-2 status from FTIR spectra of RNA extracts (pp. 1–2).",
+  "key_idea": "Second-derivative, normalized spectra fed to PCA or PLS with logistic regression, SVM or kernel SVM; in parallel, an ℓ0-constrained sparse logistic classifier with a Tikhonov penalty, whose wavenumbers are mapped to RNA band assignments (pp. 3–7).",
+  "assumptions": "RT-PCR is the reference standard (p. 1). Data: 280 patients (100 positive, 180 negative), Ct 11.7–34, 17 symptomatic (p. 3); 8,287 features; one random 185/95 split (p. 4); 123 synthetic samples with 15 other viruses (p. 6); dilutions of 0.5–25 copies/μl (p. 7).",
+  "proof_devices": [],
+  "experiments": "Logistic regression on second-derivative 600–4500 cm⁻¹ spectra: 97.8/97/98.3% out of sample, 100% in sample (Table 1, p. 4); [my arithmetic] consistent with two errors among 95 test samples. Specificity: 100% in sample with 13 of 1,867 variables (p. 6), but 25/30 by leave-one-out (p. 7), while the Discussion reports 100% agreement (p. 8) [my reading]. Limit of detection 10 copies/μl, from 3 samples per level (Table 5, p. 7). sklearn 0.23 and Julia SubsetSelection with warm starts; no certificate or limit (p. 9).",
+  "positioning": "Against RT-PCR's time and kit dependence, a saliva ATR-FTIR study (Martin and Coll), and CRISPR and MALDI-MS assays (Table 6) (pp. 2, 8).",
+  "writing": "'Unprecedented' and 'for the first time' claims (pp. 1–2); Scientific Reports format with methods last (p. 9); details deferred to the Supplementary Information (pp. 3–4).",
+  "limits_future": "Stated: the training set covers few viruses (p. 7). Proposed uses: pre-filtering before PCR, surveillance, portable devices and other viruses (pp. 8–9); none is evaluated [my reading]. Bertsimas supervised the ML authors and is a co-inventor (p. 11).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "An MIO sparse classifier with warm starts serves interpretation, but the headline model is PLS with logistic regression, and no certificate, limit or gap is given.",
+    "pages": "pp. 4, 9"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The current rule (RT-PCR) is the reference standard, not an opponent in a decision metric; the proposed pre-filtering decision is not scored.",
+    "pages": "pp. 1, 4, 8"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "D.B. is a co-inventor of the technology, and the work is part of technology development by the 'Smart Spectra' team.",
+    "pages": "p. 11"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "dense model for the headline metric, sparse ℓ0 model as the interpretation layer",
+    "evidence": "the PLS and logistic-regression model carries the accuracy; the sparse MIO classifier's wavenumbers are assigned to RNA bands",
+    "pages": "pp. 4–7"
+   }
+  ],
+  "transferable": [
+   "Pair the best dense classifier with an ℓ0-sparse one, and map the sparse model's selected features to domain assignments to argue that the signal is physical (pp. 4–7).",
+   "Separate clinical accuracy, leave-one-out specificity against near-neighbour classes, and a dilution series for the limit of detection into three studies (pp. 3–7)."
+  ],
+  "coauthors": "Driss Lahlou Kitane, Salma Loukman, Nabila Marchoudi, Alvaro Fernandez-Galiana, Fatima Zahra El Ansari, Farah Jouali, Jamal Badir, Jean-Luc Gala, Nawfal Azami, Omar Lakbita, Omar Moudam, Rachid Benhida, Jamal Fekkak",
+  "quotes": [
+   {
+    "text": "warm-starting the algorithm with a good solution is key to reduce the computational time",
+    "page": 9
+   },
+   {
+    "text": "The algorithm predicts correctly 25 out of the 30 samples presented (2 of each virus).",
+    "page": 7
+   }
+  ]
+ },
+ {
+  "id": "S208",
+  "year": "2021",
+  "title": "Data-driven transit network design at scale",
+  "read_level": "full",
+  "contribution": "Column generation that designs new bus lines with discrete frequencies, maximizing ridership under a budget with single transfers and travel-time limits. Direction-filtered pricing graphs make pricing acyclic and fast. Boston networks of 233 stops and 2,042 edges are built in 14–34 minutes, with 27–35% more modelled ridership than a 9-line subset of the MBTA key network, and three times as much on Blue Bikes demand.",
+  "problem_entry": "{IO+LO; AP (transport)} The MBTA evaluates lines one by one and adjusts them incrementally (p. 2); redesigns use 'ad hoc methods' (p. 2); optimization models reach only 9–141 stops or rearrange existing lines (pp. 3–4). Problem: generate lines and frequencies for ridership under a budget (pp. 2–3).",
+  "key_idea": "An LP master over lines × frequencies and an integer path-pricing subproblem with lazy subtour cuts (pp. 5–7). Extensions: single transfers through precomputed transfer stops (Λ) (pp. 7–10) and a travel-time factor Γ with strengthened path cuts (p. 9). Pricing runs on direction-filtered acyclic graphs in parallel (pp. 10–11); a final MIO is solved over the generated columns (pp. 7, 11).",
+  "assumptions": "Ridership is scaled by frequency coefficients γ and λ; cost is line travel time × ρ_f (p. 4); one transfer at most, argued on equity grounds (p. 7). Boston: 233 rounded stops; edges of at most 1 mile; lines of at most 20 stops; MBTA 2017 counts (93,826 trips) and Blue Bikes August 2013 (50,621 trips); illustrative parameters ρ = [1, 0.3], γ = [1, 0.45], λ = [1, 0], Γ = Λ = 1.5 (p. 13).",
+  "proof_devices": [
+   "LP dual read as prices: q is ridership per unit budget, p_uv the value of a commute; a column enters if priced ridership exceeds priced cost (p. 6)",
+   "subtour elimination added lazily at incumbents in branch-and-cut (pp. 6–7)",
+   "a path cut strengthened to all paths through a stop set when a nearest-insertion check shows the violating path is shortest on it (eq. 15, p. 9)",
+   "direction-filtered edge sets E(z, Δ) make the pricing graph acyclic, so no subtour cuts are needed (eq. 17, p. 11)",
+   "[my reading] termination proves LP optimality only over the filtered graphs; the integer network is solved over generated columns with no LP–IP gap (pp. 7, 11)"
+  ],
+  "experiments": "Julia/JuMP, Gurobi 8.1, a laptop (i7-6500U, 16 GB), code and data in the e-companion (p. 11). Toy grid under 3 minutes (Table 2, p. 12). Filtered pricing 5–57 s against 141–411 s for the full subproblem; at Δ = 0.0 within 2.2% of its objective (Γ = 1.5) (Table 3, p. 14). Boston, capped at 20 iterations: 14–34 minutes; ridership +27–35% on MBTA demand and about ×3 on Blue Bikes demand (Table 4, p. 14). [my reading] The baseline is a 9-line subset, and the reported ridership seems to be the restricted-master LP value (pp. 6, 13–15).",
+  "positioning": "Against heuristic and metaheuristic line generation and multi-phase MIO that scale to 9–141 stops. Closest to Borndörfer et al. (2007) and Borndörfer–Karbstein (2012): adds explicit transfers and travel-time limits while generating new lines with discrete frequencies (pp. 3–4).",
+  "writing": "Three numbered contributions (pp. 2–3); modelling choices argued from practice (discrete frequencies, one transfer for equity) (pp. 5, 7); parameters disclaimed as illustrative (p. 13).",
+  "limits_future": "Frequency-only ridership coefficients (p. 8); parameters should come from surveys (pp. 4, 13); at most one line per edge in the Boston runs (p. 14). Future work is not stated beyond use by transit authorities (p. 16).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "A line-by-line, hand-adjusted planning problem is written as one IO, and the LP dual is read as ridership prices.",
+    "pages": "pp. 2, 5–7"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "The 'why now' is a scale gap in the literature (9–141 stops before, 233 stops and 2,042 edges here), closed by algorithm design, not by a solver × hardware figure.",
+    "pages": "pp. 3–4, 13"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Solver, machine, run times, warm starts across directions and released code and data are reported; there is no certificate or gap for the final network, and an iteration cap and restricted pricing limit optimality.",
+    "pages": "pp. 11–14"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The owner's network seeds and benchmarks the design, but the baseline is a truncated subset, the parameters are illustrative, and the gains are model-internal; no field test.",
+    "pages": "pp. 13–15"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "direction-filtered pricing graphs",
+    "evidence": "keeping only edges aligned with a direction makes integer pricing acyclic; one direction per worker, warm-started from the previous line's feasible subpath",
+    "pages": "pp. 10–11, 13–14"
+   },
+   {
+    "pattern": "another mode's trips as counterfactual demand",
+    "evidence": "Blue Bikes trips mapped to bus stops reveal cross-town demand the north–south network misses",
+    "pages": "pp. 13, 15"
+   }
+  ],
+  "transferable": [
+   "Make integer pricing acyclic by keeping edges with vec(u, v) · z / ‖vec(u, v)‖ ≥ Δ; solve one direction per worker and warm-start each from the previous direction's feasible subpath (pp. 11, 13).",
+   "When pricing returns a line, also add all its consecutive subsequences as columns (p. 12).",
+   "Strengthen a path-violation cut to every ordering of the same stop set when a cheap insertion heuristic shows the path is shortest on that set (p. 9).",
+   "Use another mode's trip data as a demand matrix to see whom the current network fails to serve (p. 13)."
+  ],
+  "coauthors": "Yee Sian Ng, Julia Yan",
+  "quotes": [
+   {
+    "text": "However, the analysis seems to rely on ad hoc methods, for example, considering each line in isolation and using manual incremental adjustments with backtracking.",
+    "page": 2
+   },
+   {
+    "text": "We do not claim that these are the right values for the Boston network; the intention is merely to set these parameters to reasonable values on which to test our approach.",
+    "page": 13
+   }
+  ]
+ },
+ {
+  "id": "S219",
+  "year": "2021",
+  "title": "Adverse outcomes prediction for congenital heart surgery: a machine learning approach",
+  "read_level": "full",
+  "contribution": "Optimal Classification Trees on 221,335 procedures from the ECHSA Congenital Database predict mortality, prolonged ventilation and prolonged stay (test AUC 86.2, 84.8 and 81.0) with readable trees and a smartphone risk calculator. They beat logistic regression and come within about 1.5 AUC points of random forests and gradient boosting.",
+  "problem_entry": "{ML; AP (health)} Congenital heart surgery risk tools assume risk factors combine 'in a linear and additive fashion, an erroneous assumption' (p. 1); interactions in STS-CHSD are hand-built (p. 5). Problem: interpretable nonlinear risk models from preoperative variables (pp. 1–2).",
+  "key_idea": "OCTs, chosen for interpretability at the level of the patient, against logistic regression, random forests and gradient boosting (p. 2); a 23-leaf mortality tree that clinicians can read (pp. 3–4) feeds a smartphone calculator (p. 3).",
+  "assumptions": "ECDB procedures 2000–2019 (221,335) with 13 preoperative variables; preoperative diagnosis excluded (pp. 2, 5). Outcomes: in-hospital or 30-day mortality; ventilation and stay above the 85th percentile (94.5 h, 19 days) (p. 3). Temporal split: before 2016 (175,239) and from 2016 (46,096); stratified validation (p. 2).",
+  "proof_devices": [],
+  "experiments": "Test AUC: OCT 86.2/84.8/81.0; RF 87.3/85.4/82.1; GB 87.4/85.6/82.0; LR 77.2/81.3/72.8 for mortality/ventilation/stay (Table 2, p. 3); no intervals or tests. Calibration is in the supplement; the model overestimates high-risk procedures on recent data (p. 6). No solver, depth or run time reported (p. 2) [my reading].",
+  "positioning": "Against expert-consensus (RACHS-1, Aristotle) and empirical scores (STS-EACTS, STAT, STS-CHSD model, PRAiS2) built on linear additive risk, and against black-box deep learning that clinicians cannot read (p. 5).",
+  "writing": "Clinical-journal format; 'superior' in the abstract and conclusion (pp. 1, 7) against 'within 1.5%' in the Comment (p. 5); long, specific caveat paragraphs (pp. 6–7).",
+  "limits_future": "Geographic and temporal heterogeneity; 'not ready' for clinical use; predictions per procedure; centre effects excluded; about 14% of data audited; heterogeneous leaves for rare procedures (pp. 6–7). Future: centre-specific models, benchmark operation groups, new data fields (pp. 6–7).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Incumbents are dueled on a temporal split, but the headline breaks the Workflow D checkpoint ('superior' while RF and GB have higher test AUC); no solver, limit or certificate is reported.",
+    "pages": "pp. 1–5, 7"
+   },
+   {
+    "method": "Method 5",
+    "relation": "contradiction",
+    "note": "Prediction only: the baseline is a logistic regression refit on the same data, not the STS-CHSD or PRAiS2 models in use; the calculator is declared a pilot with no decision evaluated.",
+    "pages": "pp. 5–7"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "The OCT programme moves into a clinical registry with surgeons, and three coauthors are at a company (Alexandria Health). Taste mark 5 (interpretable where people act) is the stated reason for OCT.",
+    "pages": "pp. 1–2, 5"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Split by date so that the test set describes 'future' operations, and tune on a stratified validation split of the training years (p. 2).",
+   "Report discrimination and calibration separately; when drift lowers absolute risk but keeps the ordering, recalibrate on a recent window and say so (p. 6)."
+  ],
+  "coauthors": "Daisy Zhuo, Jack Dunn, Jordan Levine, Eugenio Zuccarelli, Nikos Smyrnakis, Zdzislaw Tobota, Bohdan Maruszewski, Jose Fragata, George E. Sarris",
+  "quotes": [
+   {
+    "text": "However, methodologies used typically assume that various possible risk factors interact in a linear and additive fashion, an erroneous assumption.",
+    "page": 1
+   },
+   {
+    "text": "Our results demonstrated that OCTs consistently outperformed the simpler linear regression and had similar predictive accuracy (within 1.5%) as the more complex ML models",
+    "page": 5
+   }
+  ]
+ },
+ {
+  "id": "S236",
+  "year": "2021",
+  "title": "Sparse convex regression",
+  "read_level": "full",
+  "contribution": "A delayed-constraint-generation algorithm solves least-squares and ℓ1 convex regression up to n = 10⁵, d = 10² in hours. The first algorithms for best k-subset convex regression come in two forms: a primal big-M MIQO with bounds, and a dual binary problem with a convex objective solved by outer approximation. Both recover supports with 89–100% accuracy at n = 50,000–100,000.",
+  "problem_entry": "{ML+IO; CP as engine} Convex least squares has n(n − 1) constraints: interior-point solvers do not scale beyond n ≈ 300, and ADMM reaches n ≈ 1,000–5,000 (p. 3). Sparse nonparametric regression is unexplored, and cardinality is NP-hard and 'considered intractable' (p. 3). Problem: best k-subset convex regression (pp. 3, 6).",
+  "key_idea": "Algorithm 1: start from n − 1 constraints (spanning path, MST, closest or random pairs) and add each point's most violated constraint per round (pp. 4–5); ℓ1 version as an LP by dual simplex (p. 6). Sparse: primal big-M MIQO with lower and upper bounds (pp. 6–7); dual binary min of a convex g(z) by outer approximation with lazy constraints in one tree (pp. 7–8), with column generation for the inner problem (p. 9).",
+  "assumptions": "Zero-mean noise (p. 2); a ridge term on subgradients for strong convexity (p. 3); bounded subgradients justified by overfitting at the hull boundary (p. 14). Synthetic Gaussian X, Φ = ‖x‖² or a sparse sum of squares, correlation ρ^{|i−j|}, SNR 3 (pp. 10, 14); EPA heat-input data n = 28,063, d = 4 (p. 14).",
+  "proof_devices": [
+   "Theorem 1: finite convergence of delayed constraint generation (Kelley) (p. 5)",
+   "valid big-M from 2nd auxiliary problems bounding each subgradient coordinate at a feasible objective level (eqs. 14–15, p. 7)",
+   "Theorem 2: duality of the inner QP gives a convex g(z) with subgradient from μ̂ (pp. 7–8); the relaxation with semi-infinite constraints gives warm starts (Corollary 2.1, p. 8)",
+   "outer approximation with lazy constraints in a single branch-and-bound tree (p. 8)",
+   "Nesterov smoothing and iterative thresholding for warm starts (pp. 9–10; details in the online appendix, not read)"
+  ],
+  "experiments": "Gurobi 6.5.2, Julia/JuMP, cluster nodes (2 × 8-core Xeon, 64 GB); code on GitHub (p. 10). About 20 times faster than ACP (pp. 12–13); against ADMM at n = 10³ only, where ADMM is faster at Tol 0.05 but Algorithm 1 bounds the maximum violation (pp. 13–14). Sparse: 89–100% support accuracy in 1,123–25,596 s at n = 50,000–100,000 (Tables 7–9, p. 16); median FPR 0% (p. 18). 'Provable optimality' means a 1% gap (p. 16); later runs use time cutoffs (pp. 17–18); no sparse baseline (p. 10).",
+  "positioning": "Against interior-point solvers (n ≥ 300), ADMM (Mazumder et al.), adaptive partitioning (Hannah–Dunson), aggregate cutting planes (Balázs et al.) and the additive sparse method of Xu et al.; extends Bertsimas–Van Parys dual cutting planes and best-subset MIO (pp. 3–4).",
+  "writing": "Contributions stated with (n, d, k) scale and time figures (p. 4); 'first algorithms for sparse convex regression' (p. 4); 'price of sparsity' measured in run time (pp. 18–19).",
+  "limits_future": "Memory failure at d = 1,000; one unsolved instance at ρ = 0.5; evaluating g becomes the bottleneck beyond n = 50,000 (p. 16). [my reading] The Discussion's claim that the dual has the edge in scalability contradicts §4.8.2 (pp. 17–18); big-M becomes a cross-validated regularizer for n > 10⁴ (pp. 15–16). No future work stated.",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "A statistics problem is written as a QP, an MIQO and a binary problem with a convex objective, the last by dualizing the inner problem (the S061 device).",
+    "pages": "pp. 3, 6–8"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "NP-hardness is conceded and the change attributed to 30 years of hardware and software progress (Bixby 2012, Nemhauser 2013); the figure is cited, not rebuilt.",
+    "pages": "p. 3"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Heuristic warm starts, lower bounds and a gap, with solver, machine and code stated; but the certificate is dropped under time cutoffs, and the sparse method duels no incumbent.",
+    "pages": "pp. 6–7, 10, 16–18"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "A 'price of sparsity' is named but measured in computing time, not as a curve of loss against the knob.",
+    "pages": "pp. 18–19"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "big-M as a cross-validated regularizer",
+    "evidence": "a big-M proved valid by auxiliary problems is replaced in experiments by ηM* (η ≤ 0.5) chosen by the one-standard-error rule, and for n > 10⁴ by a grid value without M*",
+    "pages": "pp. 7, 14–16"
+   }
+  ],
+  "transferable": [
+   "For n² pairwise constraints, seed the reduced master with a data-geometry structure (spanning path, MST, closest pairs), add each point's most violated constraint per round, and keep a random seed as the control (pp. 4–5, 10–11).",
+   "Compute a valid big-M by minimizing and maximizing each coordinate subject to a feasible solution's objective level; say so if the bound is later tuned instead (pp. 7, 15).",
+   "Dualize the inner continuous problem so that a cardinality-constrained fit becomes min over binary z of a convex g(z), solved by outer approximation with lazy constraints in one tree (pp. 7–8).",
+   "When comparing with a first-order method, report the maximum violation beside the average infeasibility (p. 13)."
+  ],
+  "coauthors": "Nishanth Mundru",
+  "quotes": [
+   {
+    "text": "Given that there are no competing approaches for this problem to the best of our knowledge, we do not include any comparisons.",
+    "page": 10
+   },
+   {
+    "text": "we avoid solving problems (14) and (15) due to high solve times and select M from the set",
+    "page": 15
+   }
+  ]
+ }
+]

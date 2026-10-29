@@ -1,0 +1,186 @@
+[
+ {
+  "id": "S046",
+  "year": "2019",
+  "title": "Online vehicle routing: The edge of optimization in large-scale applications",
+  "read_level": "full",
+  "contribution": "Makes exact network-flow MIO usable for real-time taxi dispatch at Manhattan scale by re-optimizing on sparse backbones harvested from integral max-flow LPs, beating greedy and 2-OPT in simulations on NYC data.",
+  "problem_entry": "IO+AP (SD for the online setting, HS for the search): ride-sharing brings central control, prior requests and big data, while the literature saw 'limited space for optimization' and exact methods that do not scale beyond dozens or hundreds of customers (pp. 1-4); online taxi routing as dial-a-ride with hard pick-up windows, a profit objective and accept/reject decisions by a confirmation time (pp. 7-9).",
+  "key_idea": "Re-optimize every 30 s with a network-flow MIO whose arcs are not indexed by taxi; fixed pick-up times make it an integral max-flow LP (Theorem 1, p. 13); prune by locality (K-neighborhood), pool the arcs of many randomized max-flow solves into a backbone and solve the MIO there, locally around and warm-started by the incumbent (pp. 20-25).",
+  "assumptions": "Acyclic graph, i.e. windows shorter than rides; with larger windows the algorithms 'would have to be adapted' (pp. 7-8); identical taxis, hard windows, deterministic and stationary travel times, destinations known at request, full control, idle taxis wait (pp. 2, 8-9, 33, 38); a synthetic 192-node city (p. 16) and the 26,109 Manhattan yellow-cab rides of 15 April 2016, 12:00-1:30 pm, with travel times estimated from the same rides (pp. 26-28).",
+  "proof_devices": [
+   "Network-flow MIO (5)-(14) with two strengthened big-M sets for the time windows; variables only for window-compatible arcs, O(E + N) (pp. 11-12)",
+   "Theorem 1: with fixed pick-up times, substitution makes each time constraint force its arc to zero or become inactive, leaving the integral network-flow polytope (p. 13)",
+   "K-neighborhood pruning to O(|C| + |K|) variables and constraints (Algorithm 1, pp. 21-22)",
+   "Backbone: the union of optimal arcs of max-flow LPs with random fixed pick-up times, then the MIO on that union (Algorithm 2, pp. 22-23)",
+   "Local backbone: forward and backward recursions (16)-(19) give the windows that keep the incumbent feasible; sample there and re-solve the MIO warm-started by the incumbent (Algorithm 3, pp. 24-25)",
+   "Remark 1: adding non-local random samples gives convergence to the optimum by a positive-probability argument, with no rate (p. 26)",
+   "Confirmed customers fixed by p_c = 1 keep the network-flow structure (p. 32); formulation warm-start with heaps, 1-2 s instead of 10-40 s per rebuild (pp. 31-32)"
+  ],
+  "experiments": "Synthetic: 20 simulations per setting, windows of 1-6 min at three demand levels, Gurobi; gains over greedy of 1.42-19.93% for MIOoptimal, 0.96-11.64% for 2-OPT and -2.60% to 12.82% for maxflow (Table 1, p. 17); proving optimality within an hour stops near 150 customers (p. 20). Offline NYC: 2,700 taxis, 6,000-6,500 customers, 5-minute limit: local-backbone +9.13% against +4.03% for 2-OPT; MIOoptimal proved optimal only at K = 2, where it is 5.05% below greedy (pp. 29-30). Online NYC: 1.5 h simulations on 2 CPUs and 8 GB, all parameters tuned; backbone beats 2-OPT by 1-3.5%, and 10-minute prior requests add 18% profit (pp. 34-36). Failures printed: tabu search unusable in the time budget, MIOoptimal intractable for K >= 4, backbone too large for wide windows, a dip near 70% served demand (pp. 4, 14, 22-23, 37). No solver version and no gap at scale.",
+  "positioning": "Within dynamic vehicle routing: takes the re-optimization line ([5, 31], [34]) and co-author Jaillet's network-flow formulation (pp. 3, 6); faults ride-sharing systems for managing systems more than optimizing vehicle actions, exact methods for not scaling and heuristics for being special-purpose (pp. 3-4); chooses 2-OPT* as benchmark (p. 4); credits the backbone idea to Schneider et al. for the TSP (p. 39); builds its own NYC benchmark because none exists (pp. 4, 28).",
+  "writing": "Thesis carried by the title and section names on the edge of optimization and of optimality (pp. 1, 9, 19); regime-based recommendations that concede greedy at low demand (p. 19); advice to industry on early requests and wider windows (p. 38); hedges on facts and tuning (pp. 19, 22, 26); the abstract's 'more than 25,000 customers per hour' (p. 1) exceeds the 26,109 customers over 1.5 hours actually simulated (pp. 28, 34-35).",
+  "limits_future": "Stated: acyclicity, hard windows, stationary travel times, full control, the idle-taxi policy, and an offline comparison covering one re-optimization iteration, which the online study then runs in full (pp. 2, 8, 30, 33, 38). Unstated: all demand from one 90-minute window on one date (p. 28); no certificate or gap at scale, no solver version; Remark 1 is only an existence argument (p. 26). Future: repositioning idle taxis by demand forecasts, online travel-time estimates, a recommendation mode for drivers, other fleets (pp. 38-39).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "Network-flow MIO with a class-keeping device: fixed times give an integral LP, and confirmed customers keep the flow structure. The boundary is printed (about 150 customers for a proof within an hour; K >= 4 intractable at scale). The big-M constraints are strengthened, which counts against the skill's formulation-strength blind spot.", "pages": "pp. 12-13, 20, 22, 32"},
+   {"method": "Method 2", "relation": "variant", "note": "A 'seemingly intractable' belief is reopened, but the why-now is industry change (central control, prior requests, data), not a solver x hardware figure.", "pages": "pp. 1-2, 4, 6"},
+   {"method": "Method 4", "relation": "variant", "note": "Incumbent heuristics (greedy insertion, 2-OPT*) are the opponents and the previous solution warm-starts the MIO under stated time limits, but there is no certificate at scale: MIOoptimal is proved optimal only at K = 2 and local-backbone reports no gap. Fits Heuristic 3 and Tension T1.", "pages": "pp. 10, 14, 25, 29-31, 33-34"},
+   {"method": "Method 5", "relation": "variant", "note": "Decisions are scored in profit against an emulated current rule (nearest-taxi dispatch, typical greedy strategies); there is no owner, no partner data and no field test, only public data and a simulator.", "pages": "pp. 28, 33, 38"},
+   {"method": "Method 3", "relation": "variant", "note": "The value of prior information and of window length is drawn as curves and turned into advice to operators; there is no bound and no knob inside the model.", "pages": "pp. 35-38"},
+   {"method": "Method 6", "relation": "evidence", "note": "Lineage only: Martin's simulator line continues in S137.", "pages": "p. 45"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "backbone: pool the supports of cheap randomized relaxations, then solve the exact MIO on their union", "evidence": "Max-flow LPs with random fixed pick-up times collect likely-optimal arcs, and the MIO is solved on their union. Sibling: S137 generates Pareto routing scenarios per school and chooses them jointly by IO (S137 p. 3).", "pages": "pp. 22-23, 39"},
+   {"pattern": "MIO as the move of a local search", "evidence": "The local backbone repeatedly re-solves the MIO on a support sampled around the incumbent. Siblings: S137 p. 4 (MIO on random subsets of schools) and S096 p. 6 (coordinate descent over tree splits).", "pages": "pp. 24-26"},
+   {"pattern": "regime map of where optimization pays", "evidence": "Greedy is within 2% at low demand, maxflow is near-optimal for short windows, and the MIO pays for medium or high demand with wide windows.", "pages": "p. 19"}
+  ],
+  "transferable": [
+   "If fixing one continuous decision makes the MIO integral, use the fixed problem as a heuristic and, with random fixings, as a generator of candidate variables for the exact MIO (pp. 13, 22-23).",
+   "Prune by a locality cost (the K arcs per node with least lost time) and calibrate K on the regime, not on instance size (pp. 21-22).",
+   "Local backbone: compute each variable's slack interval that keeps the incumbent feasible, sample inside it, re-solve the MIO warm-started by the incumbent, and add a few non-local samples to escape (pp. 24-26).",
+   "In rolling-horizon systems, warm-start the formulation as well as the solution by updating the sparse model incrementally with heaps (pp. 31-32).",
+   "Before scaling up, map the regimes on synthetic instances small enough to solve to optimality, and recommend the simple method where it is near-optimal (pp. 14-19).",
+   "For online policies, vary one information parameter (mean prior request time, window length) and plot the gain against the incumbent rule (pp. 34-38)."
+  ],
+  "coauthors": "Patrick Jaillet, Sébastien Martin",
+  "quotes": [
+   {"text": "In this situation, optimization is not extremely useful and we recommend using greedy, which is the fastest and the most interpretable.", "page": 19},
+   {"text": "The core idea of a “backbone” is that some decision variables do not vary too much across almost all near-optimal solutions, and that identifying them can significantly accelerate the optimization process.", "page": 39}
+  ]
+ },
+ {
+  "id": "S093",
+  "year": "2019",
+  "title": "Exact first-choice product line optimization",
+  "read_level": "full",
+  "contribution": "A first-choice product line MIO with only n binary variables, proved stronger than all published formulations and integral for one segment, solved at scale by Benders decomposition with closed-form and greedy cuts: a 2008 instance that took a week is solved in about 10 minutes.",
+  "problem_entry": "IO+AP (marketing): product line design is NP-hard and hard to approximate, and cannibalization makes it hard in practice (pp. 2, 5); the literature mostly uses heuristics and few papers solve it as IO (p. 3); the foil is McBride-Zufryden (1988) and Belloni et al. (2008), whose real instance needed a week (pp. 2-3).",
+  "key_idea": "Aggregate the preference constraints per option, so the choice variables need not be binary and only n binaries remain (p. 6); exploit the global/local structure with Benders decomposition, whose cuts come in closed form at binary masters and from a greedy primal-dual pair at fractional masters, with no LO solver (pp. 3, 10-13); cuts from the LO phase warm-start a lazy-constraint MIO phase (p. 14).",
+  "assumptions": "K rankings with probabilities, both unrestricted (p. 5); permissible product lines as Cx <= d, an assumption called 'relatively mild' (Assumption 1, p. 6); fixed, known profits (p. 6); utility assumptions only for the rival formulations (p. 7); synthetic rankings, profits and weights drawn uniformly, 20 instances per cell (p. 16); the rivals' utilities set to n minus rank, admitted to be possibly unrepresentative (p. 17); the Toubia et al. (2003) Timbuk2 conjoint data, 330 respondents and 3,584 candidate products (p. 19).",
+  "proof_devices": [
+   "Strength by containment of LO relaxations: Theorem 1 and Propositions 1-3 give a complete ordering, with incomparability shown on a one-segment instance (pp. 8-9; proofs in the e-companion, not read)",
+   "Corollary 1: the ordering of LO bounds (p. 9)",
+   "Proposition 4: integral for one segment without side constraints, by total unimodularity; Proposition 5: the rivals are not, by explicit instances (p. 9)",
+   "Benders reformulation by LO duality; Proposition 6 (the first-choice vector is the only feasible y at binary x) and Proposition 7 (closed-form dual solution) (pp. 9-11)",
+   "Lazy cut generation inside one branch-and-bound tree instead of classical master re-solves (p. 11)",
+   "Theorem 2: a greedy primal phase that records which constraint binds (A, B, C events) plus a dual reconstruction, optimal by complementary slackness, traced on Example 1 where both objectives equal 51.05 (pp. 12-14)",
+   "Exactness and finite termination, because the subproblem algorithms return extreme points (pp. 14-15; proofs in EC.2)"
+  ],
+  "experiments": "Late-2013 MacBook Pro (i7 2.6 GHz, 16 GB), Julia 0.6.0, JuMP, Gurobi 7.5, public code (p. 16). Synthetic, n up to 500 and K up to 1,000: hardest solved cell 1,510.80 s on average (Table 3, pp. 16-17); n = 500 and K = 1,000 with a one-hour limit: gaps of 3.33%, 1.34% and 0.11% (Table 4, p. 17); integrality gaps below 2% on average against about 6%, 11% and 20% for the rivals at n = 100 (Table 5, p. 17); solve times and unsolved counts under a one-hour limit favour the new formulation, while (4) is tighter than (5) yet slower (Table 6, pp. 18-19); two text-table slips: the b = 5 speed-ups quoted match the b = 10 row, and the misses for (5) sum to 62, not 52 (p. 18). Real data: D&C warm start from 10 random starts, 6 hours or 0.01%: widths up to 10 proved optimal, widths 20 and 50 end at gaps of 1.74% and 3.09%; the direct formulation fails on memory; Belloni et al.'s instance takes 606.22 s against a week, partly from hardware and solvers (pp. 19-20).",
+  "positioning": "Proves the McBride-Zufryden and Belloni et al. formulations weaker (pp. 3, 8-9); sets product line design beside assortment optimization and ranking-based assortment work, differing by model-agnosticism, provable optimality and use of solver progress (p. 4); contrasts Belloni et al.'s Lagrangean method on implementation effort, with a hedge (p. 16); thanks Belloni as area editor (p. 20); anchors the background in his own textbooks (pp. 8-9).",
+  "writing": "The abstract runs from the firm's question to a new, stronger formulation, a unified understanding and a surprising fact, then the week-to-10-minutes headline (p. 2); numbered contributions (p. 3); surprise flagged three times (pp. 3-4, 11); a fully worked example (pp. 13-14); the hardware and solver caveat appears only in §5.3, not in the abstract or the conclusion (pp. 2, 20).",
+  "limits_future": "Stated: not integral for K >= 2, gaps on the largest instances, possibly unrepresentative rival utilities, a hardware share in the speed-up (pp. 9, 17, 20). Unstated: profits are fixed, so prices are not decided (p. 6). Future: more LO and MIO modeling in product design and marketing science (p. 20).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "A marketing problem written exactly as an MIO with n binaries, with a proved strength ordering, integrality for one segment and an exact Benders reformulation. Counter-evidence to Tension T4 and the formulation-strength blind spot: strength is the main theorem and is tested against speed, including where it fails ((4) tighter but slower).", "pages": "pp. 6, 8-9, 14-15, 17-19"},
+   {"method": "Method 2", "relation": "variant", "note": "The old belief is one named instance (a week in 2008) re-solved in 606.22 s, not a solver x hardware figure; the confound is conceded in the body, not in the abstract; NP-hardness does not deter the exact attempt.", "pages": "pp. 2, 5, 20"},
+   {"method": "Method 4", "relation": "evidence", "note": "The incumbent heuristic (D&C, 10 random starts) warm-starts the MIO; limits, solver version and machine are stated; gaps are printed and nothing unproved is called optimal; the incumbent formulations are duelled under the same solver and limit; the code is released.", "pages": "pp. 16-19"},
+   {"method": "Method 6", "relation": "evidence", "note": "Lineage only: Mišić's thesis line after the robust product line paper.", "pages": "pp. 3, 21"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "formulation-strength tournament", "evidence": "Order every published formulation by containment of LO relaxations, test the order against integrality gaps and solve times, and report where it breaks. S046's strengthened big-M constraints are a lighter instance (S046 p. 12).", "pages": "pp. 8-9, 17-19"},
+   {"pattern": "cuts without an LP solver", "evidence": "Benders cuts come in closed form at binary masters and from a greedy primal-dual pair at fractional masters.", "pages": "pp. 10-13"}
+  ],
+  "transferable": [
+   "Aggregate pairwise ordering constraints into one constraint per option (the y of all options ranked below i sum to at most 1 - x_i), so continuous y take binary values on their own (pp. 6-7).",
+   "Prove 'stronger than' by containment of relaxations, show incomparability on a one-segment instance, and prove the special case integral by total unimodularity (pp. 8-9).",
+   "For Benders decomposition with many small LP subproblems, write the dual in closed form at integer masters; at fractional masters run a greedy primal phase that records which constraint binds, reconstruct the dual and check complementary slackness; trace one example in full (pp. 10-14).",
+   "Run Benders decomposition in two phases: cut the LO relaxation first, then reuse those cuts to warm-start the lazy-constraint MIO (p. 14).",
+   "Re-solve the predecessor's published instance, report your time beside theirs, and say how much may be hardware and solver progress (pp. 19-20).",
+   "Compare formulations under one time limit and report the unsolved instances per cell, not only mean times (Table 6, p. 18)."
+  ],
+  "coauthors": "Velibor V. Mišić",
+  "quotes": [
+   {"text": "We show that this problem, which required a week of computation time to solve in prior work, is solved by our approach to full optimality in approximately 10 minutes.", "page": 2},
+   {"text": "Admittedly, some of this reduction is likely due to hardware improvements and general improvements in LO/MIO solution software since the time that their paper was written (2008)", "page": 20}
+  ]
+ },
+ {
+  "id": "S096",
+  "year": "2019",
+  "title": "Optimal prescriptive trees",
+  "read_level": "full",
+  "contribution": "Prescriptive trees trained by the coordinate descent of optimal trees on a blend of prescription and prediction error, interpretable and competitive with regress-and-compare and causal forests on synthetic data and four real data sets.",
+  "problem_entry": "DA+ML (AP: medicine, advertising): personalize treatments from observational data, facing unobserved counterfactuals, biased assignment and the need for interpretability (pp. 2-3); objective: a convex combination of prescription error and prediction error weighted by a prescription factor mu (eq. (3), p. 3).",
+  "key_idea": "The tree's leaves are the neighbourhoods that impute counterfactuals, so partition and imputation are learned together (pp. 6-7); a prediction term is kept because the pure prescription objective (mu = 1, Kallus's) is optimistic out of sample, with the best prescription error at mu between 0.5 and 0.8 in one experiment (p. 7); training by coordinate descent, after an earlier MIO attempt did not scale (pp. 6-7).",
+  "assumptions": "Observational triples with m treatments, smaller outcomes better (pp. 2-3); counterfactuals as leaf means or per-leaf linear predictions (pp. 7, 9); defaults n_min = 1, n_treatment = 10, mu = 0.5 (p. 8); no identification assumption (unconfoundedness, overlap) is stated, though observational bias is named as a challenge (p. 2); synthetic data after Powers et al. (n = 1,000, d = 20, test 60,000) (pp. 9-10); warfarin, Boston Medical Center diabetes, LaLonde jobs and IHDP data (pp. 15-19).",
+  "proof_devices": [
+   "n/a for proofs: no theorem in the paper",
+   "Loss blend of prescription and prediction error weighted by mu (eqs. (3), (6), (10); pp. 3, 7, 9)",
+   "Leaf-based counterfactual estimates: leaf means (eq. (5), p. 7) or per-leaf, per-treatment l1-regularized regressions (eqs. (7)-(9), pp. 8-9)",
+   "Coordinate descent from random starting trees: delete, re-optimize or add one split at a time until a local minimum (p. 6)",
+   "Unbiasedness and consistency of the mu = 1 objective asserted by citation to Kallus (2017) (p. 7)"
+  ],
+  "experiments": "Synthetic, 100 simulations each: OPT(0.5)-L best in Experiments 1-2, RC-RF and causal forests best in Experiment 3 with OPT(0.5)-L close, OPT best with three treatments; sample trees recover the true boundary (pp. 9-14). Warfarin, 100 replications: OPT(1) beats greedy PT by about 0.6% and OPT(0.5) adds 0.6% at n = 2,500, but regress-and-compare beats every tree, reported against Kallus (2017) (pp. 15-17). Diabetes: OPT(0.5) best at all training sizes, with RC-kNN similar at large n, on kNN-imputed counterfactuals against the standard of care and an oracle (pp. 17-18). Jobs: $6,000.02 against $5,990.85 for RC-LASSO with standard errors near $18-19, delta chosen on predicted test income (pp. 18-19). IHDP: effect R2 0.759 against 0.704 (p. 20). No run times, software, machine or code reported.",
+  "positioning": "Recasts regress-and-compare, a family that includes the group's own 2017 diabetes kNN study, as a depth-1 tree with interpretability and data-splitting weaknesses (pp. 3-4); faults propensity weighting for needing known scores and being unstable (p. 4); names two differences from Kallus's personalization trees (p. 4); separates causal trees and forests as effect estimators for two treatments (p. 4); explains rather than dismisses its disagreement with Kallus on warfarin (p. 17).",
+  "writing": "Hedged abstract and contributions (pp. 2, 5); four labelled contribution claims (p. 5); a one-paragraph conclusion claiming superior prescriptive power, stronger than the body, where RC wins on warfarin and Experiment 3 (pp. 13, 17, 20); 'optimal' in the title while training is coordinate descent toward global optimality without a certificate (p. 6); drawn trees read against the ground truth (pp. 11-13).",
+  "limits_future": "Stated: mu may need tuning (p. 8); regress-and-compare gains flexibility at a complete loss of interpretability (p. 17). Unstated: no theory, no identification assumption, no run times or code, evaluation on imputed counterfactuals for diabetes and jobs, delta set on predicted test income (pp. 17-18). No future work stated (p. 20).",
+  "method_links": [
+   {"method": "Method 5", "relation": "variant", "note": "Decisions are scored against the current rule (HbA1c relative to the standard of care; income against the baseline) with an oracle as ceiling, and prescriptive trees serve where people must see why. Variant: training on the decision loss alone (mu = 1) is optimistic out of sample, so a prediction term stays in the objective; no field test with a partner.", "pages": "pp. 3, 7, 17-19"},
+   {"method": "Method 4", "relation": "variant", "note": "Incumbents (greedy PT, causal forests, RC with RF or LASSO) are duelled out of sample and the losses printed, but there is no exact solve and no certificate: the MIO version did not scale and coordinate descent replaced it under the name optimal. Evidence for Heuristic 3 and Tension T1; no time limit, solver or machine stated.", "pages": "pp. 6-7, 13, 17"},
+   {"method": "Method 3", "relation": "variant", "note": "One knob, mu, trades prescription against prediction, with its curve; the best point is interior (0.5-0.8), so the curve acts as a regularization path, not a price; the price of interpretability is named but not measured.", "pages": "pp. 7, 17"},
+   {"method": "Method 6", "relation": "evidence", "note": "Dunn's optimal-trees line (2017 paper, 2018 thesis, 2019 book) extended to prescription.", "pages": "pp. 5-6"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "keep a prediction term in a decision loss", "evidence": "The pure prescription objective (mu = 1) gives high predictive error and an optimistic estimate of the prescriptive error; blending in prediction error improves out-of-sample prescriptions.", "pages": "p. 7; results pp. 11-14"},
+   {"pattern": "rivals as special cases of one's own model", "evidence": "Regress-and-compare is a depth-1 tree, and Kallus's PT is OPT with mu = 1 trained greedily. S093 does the same with formulations (S093 pp. 7-9).", "pages": "pp. 3-4, 7"}
+  ],
+  "transferable": [
+   "When counterfactuals are missing, let the model's own partition define the neighbourhoods that impute them, and optimize partition and imputation together (pp. 6-7).",
+   "Add a prediction-error term with weight 1 - mu to a prescription objective, and plot both test errors against mu on synthetic data with known truth before fixing it (p. 7).",
+   "On synthetic data, report treatment accuracy and effect R2 separately, since a method can choose well and predict effects badly (pp. 10-11).",
+   "Bracket real-data results between the current rule (baseline) and an oracle or full-information classifier (pp. 16-17, 19).",
+   "Check that conclusions survive a change of counterfactual imputer (kNN, LASSO, RF) (p. 17).",
+   "Read a learned tree against the generating function: spurious variables, thresholds and the prescription in each leaf (pp. 11-12)."
+  ],
+  "coauthors": "Jack Dunn, Nishanth Mundru",
+  "quotes": [
+   {"text": "This approach did not scale beyond shallow trees and small data sets, and therefore, they resorted to using a greedy CART-like heuristic to solve the problem instead.", "page": 7},
+   {"text": "This added flexibility leads to more refined prescriptions but at a complete loss of interpretability, which is a crucial aspect of the prescription tree.", "page": 17}
+  ]
+ },
+ {
+  "id": "S137",
+  "year": "2019",
+  "title": "Optimizing schools' start time and bus routes",
+  "read_level": "full",
+  "contribution": "BiRD decomposes school bus routing and joins per-school Pareto scenarios by IO, saving Boston 50 buses in deployment; a GQAP model of start times with a routing proxy gives the district trade-off curves, a unanimously approved policy and a proposed plan that was not implemented.",
+  "problem_entry": "AP+IO (DA as decision support for policy): Boston Public Schools spends over 10% of its budget on transport with hand-drawn routes and decades-old start times linked to health harms and inequity (pp. 1, 3-5); subproblem algorithms exist but no algorithm addresses start times jointly with routing (p. 2).",
+  "key_idea": "BiRD: stop assignment by IO, trips by insertion and set cover, several Pareto scenarios per school chosen jointly by a network-flow IO, then bus scheduling by IO (pp. 2-3); start times as a GQAP whose transport cost is a pairwise proxy built from BiRD, solved by local improvement with MIO over random subsets of schools; further objectives as weighted GQAP-representable terms (pp. 4-5).",
+  "assumptions": "Anonymized BPS student data for 2017-2018 and Google Maps travel times (pp. 2, 6); four bus types, walking and riding limits, available fleet (p. 3); a routing proxy with trade-off parameters set by cross-validation, and local search on random subsets, admitted for tractability (p. 4); morning in the main text, afternoon in the SI (p. 2); a preference survey with unequal response rates and four objectives from a 2016 engagement process, combined by a weighted average (pp. 4-5).",
+  "proof_devices": [
+   "IO models detailed only in the SI (not read): assignment with walking limits, a set cover reminiscent of crew scheduling, a network-flow IO for scenario selection (pp. 2-3)",
+   "Pairwise affinity costs from trip compatibility make the start-time problem a generalized quadratic assignment problem (GQAP) (p. 4)",
+   "Local improvement by MIO on random subsets of schools, with the stated property that a converged solution can only be improved by changing at least n + 1 schools (p. 4)",
+   "No theorem, bound or gap; earlier GQAP formulations noted as intractable even for small instances (p. 4)"
+  ],
+  "experiments": "32 published routing benchmarks and 20 synthetic instances: BiRD wins on all but one, by 4% and 12% on average; an ablation shows +20% from selecting among two scenarios per school system-wide (p. 3). Boston: 530 buses against 650 by hand (18%, $10-15 million estimated), 50 buses removed in year one (about $5 million), ride time unchanged near 23 minutes (p. 3). Start times: optimized tiers 11% better than balancing, another 1-2% from free middle-tier times, 450 buses for Boston (p. 4). Equity audit: income-start time correlation 0.78 and a homogeneity test with P < 10^-5 (p. 4). Trade-off curve of satisfaction against cost (p. 5). Outcome: plan with 74% to 6% early high-school starts approved as policy but not implemented (pp. 2, 6). No run times, solver, machine or gaps in the main text; code repository cited (p. 6).",
+  "positioning": "Cites school bus routing reviews, subproblem algorithms, metaheuristics and variants (p. 2); faults general-purpose algorithms for lacking portability (p. 2); credits Wenzel's earlier STSP framework but notes its intractable GQAP formulations (pp. 2, 4); claims the first joint model of start times and routing, kept modular so any router can be swapped in (pp. 2-3); health and equity literature as motivation (p. 1).",
+  "writing": "Abstract and Significance lead with deployment numbers and the unanimous vote (p. 1); playful headings (pp. 2, 5); hedged synthetic findings (p. 4); the 4-12% benchmark claim folds the team's own synthetic instances into benchmark datasets (pp. 2-3); non-implementation stated early and framed late as a delay, closing against the political whims of special interest groups (pp. 2, 6); students performed the research and wrote the paper (p. 1).",
+  "limits_future": "Stated: start times not implemented; families' concerns still to be modelled as objectives (pp. 2, 6). Unstated: no certificate or gap for GQAP solutions, no run times, estimated savings, unequal survey response not corrected (pp. 3-4). Future: model the families' concerns within the formulation as BPS gathers input (p. 6).",
+  "method_links": [
+   {"method": "Method 5", "relation": "evidence", "note": "Owner (BPS), data and current rules (hand-drawn routes with 650 buses; 1990 start times) are the baselines; decisions scored in the owner's units; routing deployed. For Tension T6 and note 05 §5.1: the PNAS text itself says the start times 'have not been implemented yet' (p. 2) as well as 'delayed' (p. 6). The trade-off curve shown to the district and the engagement process are a partial precedent for the skill's stakeholder correction.", "pages": "pp. 2-6"},
+   {"method": "Method 3", "relation": "evidence", "note": "A priced curve of community satisfaction against transport cost with three bell-time sets marked, handed to the district as a paradigm shift; the bad case printed (satisfaction is expensive); the knob is the vector of objective weights.", "pages": "p. 5"},
+   {"method": "Method 1", "relation": "variant", "note": "The policy problem is written in a known class (GQAP via the routing proxy) that is not tractable at this size; as the Method 1 stop rule asks, the device changes to local search with MIO moves; no solve times reported.", "pages": "p. 4"},
+   {"method": "Method 4", "relation": "variant", "note": "Incumbents duelled (published benchmarks; BPS's hand-drawn routes) but no certificate; local search with exact MIO moves and random restarts.", "pages": "pp. 3-4"},
+   {"method": "Method 6", "relation": "evidence", "note": "A programme carried by students: Delarue and Martin performed the research and wrote the paper, continuing Martin's routing line (S046).", "pages": "p. 1"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "candidate pool, then joint exact selection", "evidence": "Several Pareto routing scenarios per school are chosen jointly by an IO; selecting among two per school gains 20% over each school's best. Sibling: S046's backbone (S046 pp. 22-23).", "pages": "p. 3"},
+   {"pattern": "MIO as the move of a local search", "evidence": "Start times of a random subset of schools are re-optimized by MIO with the others fixed, repeated from random starts. Siblings: S046 pp. 24-26 and S096 p. 6.", "pages": "p. 4"},
+   {"pattern": "proxy cost from the inner optimizer", "evidence": "Pairwise trip-compatibility costs, with parameters set by cross-validation, stand in for re-routing, so the outer start-time problem becomes a standard class (GQAP).", "pages": "p. 4"}
+  ],
+  "transferable": [
+   "When subproblems are solved one by one, generate several Pareto candidates for each and let an exact model pick one per subproblem for the system; prove the value with an ablation of one candidate against two (p. 3).",
+   "Replace an expensive inner optimization by pairwise affinity costs set by cross-validation, so that the outer problem falls into a standard class (p. 4).",
+   "Use a local search whose move is an exact MIO over a random subset, and state the local-optimality property it buys (p. 4).",
+   "Report deployment in the owner's units (buses, dollars, ride time) together with the scaled-down adoption the owner chose (p. 3).",
+   "Give decision-makers a trade-off curve with concrete solutions marked on it, not a single optimum (p. 5).",
+   "Before proposing, measure the inequity of the status quo, for example the correlation of income with start time and a homogeneity test (p. 4)."
+  ],
+  "coauthors": "Arthur Delarue, Sébastien Martin",
+  "quotes": [
+   {"text": "These start times have not been implemented yet due to parents concern with the magnitude of the change", "page": 2},
+   {"text": "For BPS, the tradeoff curve in Fig. 5A represented a paradigm shift, the first time that the district could visualize or even quantify any of the tradeoffs of bell time policy making.", "page": 5}
+  ]
+ }
+]

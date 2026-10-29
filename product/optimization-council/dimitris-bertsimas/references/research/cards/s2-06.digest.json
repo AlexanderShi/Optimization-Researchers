@@ -1,0 +1,558 @@
+[
+ {
+  "id": "S558",
+  "year": "2013",
+  "title": "Weapon coordination in a fleet: Centralized and distributed optimization",
+  "read_level": "full",
+  "contribution": "Extends asset-based weapon–target assignment to soft-kill weapons and resource conservation. The exact model is rewritten as a binary SOCP and solved offline as a benchmark; a log-linearized binary IP serves as the real-time heuristic; a leakage/linkage message-passing version distributes it. One synthetic case gives firing costs of 18 without coordination, 13 for both heuristics and 12 for the exact model.",
+  "problem_entry": "{IO+CP+AP} Soft-kill weapons act on several threats and can retarget a threat onto another ship (p. 2). Published WTA methods rest on threat ownership or, for the asset-based problem, on identical weapons or evolutionary search (pp. 2–3). Exact integer models with logarithmic objectives were judged too hard (Ahuja et al., accepted, p. 3). Problem: minimize firing cost subject to a survival threshold for each ship (pp. 4–5).",
+  "key_idea": "One model in three tiers: an exact binary SOCP solved offline as the benchmark (pp. 5–7); a real-time linear binary IP that requires each threat factor to reach γ^{1/|T_s|} (pp. 7–8); a distributed version in which ships exchange leakage and linkage matrices and update in sequence (pp. 11–14).",
+  "assumptions": "Any hit destroys a ship; all ships know the threats and their destinations; weapon effectiveness is predicted exactly (p. 4). At most one soft-kill weapon may engage a threat (pp. 4–5). One synthetic instance: 3 ships, nine threats [my count], kill probabilities drawn from 50–100%, thresholds from 0.7–0.95 (p. 15).",
+  "proof_devices": [
+   "for binary x, (1 − P)^x = (1 + (P/(1 − P))x)^{-1}, so survival enters through products of linear factors (eqs. 7–8, p. 6)",
+   "Theorem 1: 1 ≤ ∏ x_i over nonnegative variables is a projection of rotated second-order cones, proved by induction with geometric-mean auxiliaries (p. 7)",
+   "sufficient per-factor split γ^{1/|T_s|} plus logarithms gives a linear binary IP; the paper says it is not equivalent (p. 8)",
+   "lexicographic sequence of SOCPs over ships in priority order when the exact model is infeasible (pp. 9–10)"
+  ],
+  "experiments": "One synthetic instance, four methods (Table 1, p. 15). Firing costs: 18 without coordination (ship 1 misses its threshold), 13 for the distributed and centralized heuristics, 12 exact. No solver, machine or run time is reported, and the scalability discussion promised on p. 3 is absent [my reading].",
+  "positioning": "Extends asset-based WTA (Hosein) with soft-kill effects modelled as in an earlier Lincoln Laboratory report. Contrasts with threat-ownership auction and greedy methods, and with Ahuja et al.'s exact logarithmic-objective IP, which it accepts as too hard for real time (pp. 2–4).",
+  "writing": "A numbered three-item contribution list (p. 3); assumptions stated up front (p. 4); the case study is reported in one paragraph and one table (pp. 15–16).",
+  "limits_future": "The exact model runs offline only. Future work: multiperiod engagements and onboard weapon-control constraints (p. 16). Not stated [my reading]: one instance, no timing.",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "A nonlinear problem left to heuristics is written exactly as a binary SOCP, a class that commercial solvers handle (Gurobi 5.0+, CPLEX, Xpress named in footnote 1).",
+    "pages": "pp. 3, 5–7"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Roles reversed: the exact model certifies the heuristics after the fact, and no heuristic warm-starts it. No time limit, gap or run time is printed.",
+    "pages": "pp. 15–16"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "exact optimum on a small solvable instance as the certificate for a heuristic",
+    "evidence": "the offline binary SOCP gives the optimum (cost 12) against which the real-time and distributed heuristics (cost 13) are judged",
+    "pages": "pp. 1, 15–16"
+   },
+   {
+    "pattern": "control-architecture ladder: exact offline, centralized real-time, distributed real-time",
+    "evidence": "the same instance is run under no coordination, distributed, centralized and exact control, so each tier's loss is visible",
+    "pages": "pp. 3, 15–16"
+   }
+  ],
+  "transferable": [
+   "For binary x, rewrite a^x as the linear factor 1 + (a − 1)x; a product of such factors bounded below by 1 is then SOC-representable by induction (pp. 6–7).",
+   "To get a real-time version of a product constraint ∏_{j≤k} f_j ≥ γ, require each factor to reach γ^{1/k} and take logs; say that this is sufficient, not equivalent (p. 8).",
+   "Run exact-offline, heuristic-real-time and distributed tiers on the same instance and report them side by side (Table 1, p. 15)."
+  ],
+  "coauthors": "Adrian Becker, Joel Cofield, Dan Finkel, Sung-Hyun Son, Jessica Stigile",
+  "quotes": [
+   {
+    "text": "A novel technique is also used to reformulate the problem as a binary second-order optimization problem that can be solved offline and serve as a benchmark for online solutions.",
+    "page": 1
+   },
+   {
+    "text": "While inequality (26) implies inequality (25), it should be noted that these two expressions are not equivalent, introducing the potential for an optimality gap.",
+    "page": 8
+   }
+  ]
+ },
+ {
+  "id": "S172",
+  "year": "2014",
+  "title": "Optimal design for multi-item auctions: A robust optimization approach",
+  "read_level": "partial",
+  "contribution": "Writes multi-item auction design with budgets as a robust LP over valuation uncertainty sets built from limit theorems. It derives a worst-case optimal mechanism (ROM) with bidder-and-item reservation prices computed by a bilinear problem, which reduces to an LP and a second-price auction without budgets, and extends it to indivisible items and private budgets.",
+  "problem_entry": "{RO+LO+AP} Public budgets, private budgets and correlated valuations leave Myerson's problem 'by and large open' in both the Bayesian and the prior-free school (pp. 2–4). Entry: IC and IR are robustness properties, and a fitted distribution is a modelling choice (p. 4).",
+  "key_idea": "One robust LP over allocation and payment rules indexed by v ∈ U (eqs. 5–10, p. 7). ROM.a solves a bilinear problem for the worst-case valuation, nominal allocations and reservation prices; ROM.b runs a VCG-like auction on v − r* with opportunity-cost payments (pp. 8–9). Without budgets: a second-price auction with an LP-computed reserve (Proposition 8, pp. 17–18).",
+  "assumptions": "n buyers, m divisible items, worst-case revenue. CLT sets with knob Γ (Γ = 2, 3 covering about 95%, 99.7%), a common-factor correlation set, typical sets from a known pdf (pp. 5–7). Budgets public (§2–3) or uncertain (§4). Finite or bounded U for optimality (p. 14); polyhedral sets for tractability (p. 15).",
+  "proof_devices": [
+   "LP dual (11) of the robust mechanism LP (pp. 7–8)",
+   "primal–dual feasible pair with equal values plus strong duality for finite U, then a discrete subset containing the worst case z sandwiches the bounded case (Theorem 1, pp. 14–15)",
+   "extreme-point optimality of the bilinear problem gives a polynomial algorithm when U has polynomially many extreme points (Proposition 7, p. 15)",
+   "generalized Benders decomposition alternating the inner and outer LPs (Figure 3, p. 16)",
+   "randomized rounding for indivisible items: IC, IR and BF in expectation (Theorem 2, p. 16)"
+  ],
+  "experiments": "Simulated single-item duels against Myerson: relative revenue +0.271 to +1.038 under misspecified distribution families (Table 1, p. 22); ROM-Si wins only once the total-variation distance exceeds 0.22 and loses when the realized mean is larger (pp. 22–23). Run times of roughly 4–73 minutes for n ≤ 100, m ≤ 50 [my reading; decimals garbled], with no solver or machine named; §5.1's 'number of iterations' does not match the captions' minutes and 'ROM-Si' (pp. 25–26).",
+  "positioning": "Extends Myerson from a single item without budgets to multiple items with budgets, correlation and uncertain budgets. The Bayesian and prior-free schools are reviewed as leaving P1–P3 open, and the uncertain-budget model avoids Dobzinski et al.'s impossibility (pp. 2–4, 25). Part of the Bandi programme (p. 4).",
+  "writing": "Motivation in two numbered considerations, with the stance on probability in the first person (p. 4); 'practical efficiency' defined against polynomial time (pp. 4–5); results hedged with 'we feel' (pp. 23, 25); a five-point implications list in the conclusion (p. 27).",
+  "limits_future": "The bilinear step is 'theoretically difficult in general' (p. 27); the indivisible case is 'a partial solution', feasible only in expectation (p. 16). No future work is listed.",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Auction design, owned by economics, becomes a robust LP; it stays an LP without budgets and is solved by alternating LPs with them; the polynomial-time boundary is stated.",
+    "pages": "pp. 7, 15, 17–18"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Tractability is redefined as practical efficiency on realistic sizes, with the simplex method as the precedent; no solver × hardware figure, and the run-time tables name neither solver nor machine.",
+    "pages": "pp. 4–5, 26"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Γ is an interpretable knob with a CLT coverage figure, and the losing cases are printed; no revenue–Γ curve is published.",
+    "pages": "pp. 5, 21–23"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "An explicit programme statement: replace probabilistic primitives by uncertainty sets in queueing, option pricing, information theory and auctions, all with Bandi.",
+    "pages": "p. 4"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "robust analogue of another field's canonical concept",
+    "evidence": "the robust mechanism recovers the second-price-with-reserve structure of Myerson's auction, with reserves computed by an LP",
+    "pages": "pp. 17–18, 21"
+   },
+   {
+    "pattern": "misspecification duel",
+    "evidence": "ROM-Si against Myerson under other distribution families, total-variation distance, shifted means and scaled standard deviations, with the losing region printed",
+    "pages": "pp. 21–23"
+   },
+   {
+    "pattern": "limit laws as primitives",
+    "evidence": "CLT-based and typical-set uncertainty sets with asymptotic coverage 2Φ(Γ) − 1",
+    "pages": "pp. 5–7"
+   },
+   {
+    "pattern": "inner-easy/outer-hard decomposition",
+    "evidence": "the bilinear reservation-price problem is solved by alternating inner and outer LPs (generalized Benders)",
+    "pages": "pp. 15–16"
+   }
+  ],
+  "transferable": [
+   "Write IC and IR as constraints indexed by every valuation in a set, then read the mechanism (reserve prices, VCG-like payments) off the dual (pp. 7–9).",
+   "Build an uncertainty set by bounding a normalized sum by ±Γ and report its asymptotic coverage 2Φ(Γ) − 1 (p. 5).",
+   "Prove a min–max optimum over a bounded set by restricting to a finite subset that contains the worst case and using LP strong duality there (pp. 14–15).",
+   "Duel the robust design against the classical optimum under graded misspecification and print where it loses (pp. 21–23)."
+  ],
+  "coauthors": "Chaithanya Bandi",
+  "quotes": [
+   {
+    "text": "We use exactly this notion of practical efficiency: the ability to solve problems of realistic size relative to the application we address.",
+    "page": 5
+   },
+   {
+    "text": "The probabilistic approach chooses to fit a specific probability distribution to these data, which is, in our view, a model of reality, not reality itself.",
+    "page": 4
+   }
+  ]
+ },
+ {
+  "id": "S210",
+  "year": "2014",
+  "title": "Dynamic resource allocation: A flexible and tractable modeling framework",
+  "read_level": "partial",
+  "contribution": "Generalizes the Bertsimas–Stock ATFM model into one binary time-indexed framework for dynamic resource allocation, with alternative resources, three fairness rules and an iterative scaling procedure. Integrality and facet results are offered as the reason the solver rarely branches. Computations cover ATFM on real US flights, aircraft maintenance and the FT10 job shop.",
+  "problem_entry": "{IO+AP} No unified tractable approach exists for allocating resources over time, and it is 'widely believed' that optimization does not suit scheduling (p. 1). Entry: the success of the 1998 ATFM model, with two questions: can it be generalized, and why does it work? (p. 1). Dantzig's test is the stated yardstick (p. 2).",
+  "key_idea": "Binary variables meaning 'request i has begun using resource r by time t' (p. 4) carry capacity, precedence, alternative-resource and fairness constraints (pp. 4–6). An iterative wrapper scales durations by L_k and narrows time windows (pp. 6–7).",
+  "assumptions": "Discrete time; requests with windows, durations, resource amounts, priorities and owners (pp. 3–4). Data: real flights of the five largest US carriers, 55 airports, a 10 × 10 sector grid (p. 10); random maintenance instances (p. 10); FT10 (p. 11).",
+  "proof_devices": [
+   "cumulative 'by' variables give two nonzeros per precedence row (Remark 2, p. 4)",
+   "integrality of the single-request polyhedron P(i) and of the fairness polyhedron (Theorems 1 and 4, p. 9; proofs in the online supplement)",
+   "antichain inequalities are facet-defining; island inequalities are (dim − f)-faces, facets when f = 1 (Theorems 2–3, Remarks 5–7, p. 9)",
+   "RCPSP as the single-request special case (p. 4)"
+  ],
+  "experiments": "Gurobi 4.5.2, AMPL, 4 AMD-Xeon processors at 3 GHz, 8 GB RAM, 1% gap or 3600 s (p. 10). ATFM: about 300,000 variables; reversals fall from 753–924 to 9–25 at 13–25% more delay cost; one 4.1% gap; one instance branches, with 3 nodes (Table 3, p. 10). Maintenance: 2,190–2,647 s averages; the iterative procedure saves 45% of time for under 1% cost with L1 = 2, and 90% for about 10% with L1 = 4, with one infeasible run (Tables 4–5, pp. 10–11). FT10: best makespan 953 against the known 930 (Table 6, p. 12). [my reading] The summary's time claims (p. 13) do not cover a 4,095 s run (Table 5, p. 11).",
+  "positioning": "Continues the group's own ATFM line (Bertsimas–Stock 1998; fairness with Gupta; rerouting with Lulli and Odoni). Contrasts with ADP approaches and rule-based commercial schedulers, and supports the time-indexed choice with Andreatta–Brunetta and Keha et al. (pp. 1–3).",
+  "writing": "Opens with the field's belief and Dantzig's test, then two research questions (pp. 1–2); evidence is described as 'encouraging' and 'striking' (pp. 10–13); the conclusion is a single paragraph (p. 13).",
+  "limits_future": "The time-indexed formulation can grow large (p. 6); for job shop 'the standalone framework remains far off from optimality' (p. 13). No future work is listed.",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Scheduling, owned by rule-based systems, is written as one binary model, with polyhedral theorems offered as the reason it solves without branching.",
+    "pages": "pp. 1, 4, 9"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Opens against the belief that optimization does not suit scheduling, but answers it with solve times, not a quantified solver or hardware speed-up.",
+    "pages": "pp. 1, 10, 13"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Fairness gets knobs (λ; the number k of airports with fairness) and a printed curve of reversals against delay cost, but no solution-independent bound.",
+    "pages": "pp. 6, 10"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "structural theorem explains computational success",
+    "evidence": "integrality and facet results paired with node counts showing almost no branching",
+    "pages": "pp. 9–10, 12"
+   },
+   {
+    "pattern": "shrink-then-solve with a printed quality/time knob",
+    "evidence": "duration scaling L_k and window width Δ, with the time saved and the cost increase reported for each scale",
+    "pages": "pp. 6–7, 11, 13"
+   },
+   {
+    "pattern": "staged companion papers from one model",
+    "evidence": "the 1998 ATFM model, its fairness and rerouting companions, and this general framework",
+    "pages": "p. 1"
+   }
+  ],
+  "transferable": [
+   "Define time-indexed binaries cumulatively ('started by t'); starts, activity and precedence then become differences and two-nonzero rows (p. 4).",
+   "Pair a modelling framework with integrality and facet theorems and report node counts as the empirical side of the same claim (pp. 9–10).",
+   "Wrap an exact time-indexed model in a coarsen-then-refine loop and print the time–quality trade-off for each scale (pp. 6–7, 11)."
+  ],
+  "coauthors": "Shubham Gupta, Guglielmo Lulli",
+  "quotes": [
+   {
+    "text": "On the contrary, it is widely believed that optimization might not be the right approach for certain classes of resource allocation problems such as scheduling for example.",
+    "page": 1
+   },
+   {
+    "text": "Finally, one of the most striking observations is that the solver did not branch at all for all but one instance, which highlights the strength of the framework.",
+    "page": 10
+   }
+  ]
+ },
+ {
+  "id": "S245",
+  "year": "2014",
+  "title": "Scheduling, revenue management, and fairness in an academic-hospital radiology division",
+  "read_level": "full",
+  "contribution": "A deployed MIO schedules eight interventional radiologists over a quarter with maximin revenue fairness, minimax preference matching, spread limits on desirable and undesirable assignments, and fatigue limits. It projects +8.2% division revenue against the hand-made schedule, with a smaller revenue spread.",
+  "problem_entry": "{IO+AP} Extended campuses made the hand-made physician schedule complex, without quantified objectives (pp. 1–2). The owner, the division director, is a coauthor (p. 2). Entry: scheduling, revenue management and fairness had not been treated together here (pp. 2–3).",
+  "key_idea": "A Rawlsian maximin over revenue plus a minimax over preference mismatch per block, joined by an exchange rate λ; small multipliers on the totals stand in for a two-step Pareto-robustly-optimal solve (p. 9). Spread and effort constraints (pp. 10–11).",
+  "assumptions": "Binary x_bdas with B = 7 two-week blocks, D = 14 days, 15 assignments, 8 physicians (p. 11). Expected revenue: recency-weighted historical averages (p. 7). Preferences: each physician's ideal block schedule (p. 7). Effort ratings, limits and λ tuned with the manager (pp. 7, 11). Site rules added as linear constraints (p. 12).",
+  "proof_devices": [
+   "linearization of max, min and absolute-value terms with auxiliary variables, with counts given (p. 11)",
+   "small objective multipliers on totals as a simplified stand-in for Pareto-robust optimality (p. 9)"
+  ],
+  "experiments": "About 160,000 variables and 140,000 constraints; CPLEX 12.3 via IBM OPL on a PC, under ten minutes (p. 12). Against the hand-made schedule: projected revenue +8.2%, coefficient of variation −11.9%, least revenue +5.04%, individual changes from −1.57% to +19.1% (p. 13). No realized or out-of-sample revenue.",
+  "positioning": "At the junction of personnel scheduling, fairness (the group's price-of-fairness and kidney-allocation papers) and revenue management; claims novelty for the combination (pp. 2–3, 5).",
+  "writing": "A clinical-journal structured abstract (p. 1); strong claim words ('significant impact', 'far outweighed') (pp. 1, 14); the implementation is narrated from the director's own division (pp. 2–3, 12–14).",
+  "limits_future": "The quarterly horizon limits the memory of fairness (p. 11). Not stated [my reading]: the +8.2% is projected from the model's own revenue estimates, not measured after deployment (p. 13). No future work is listed.",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "The owner is a coauthor; his decision, data and hand-made schedule define the problem and the baseline; the decision is scored on revenue and fairness; the run time is reported; the system is deployed. Caveat: the score is projected from the same estimates the model optimizes.",
+    "pages": "pp. 2–3, 6–7, 12–13"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "The price of fairness is named and endorsed for managers, but declared moot because fairness is a hard rule and the fair schedule already beats the existing one; no curve is computed.",
+    "pages": "p. 5"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "counterfactual replay against the historical decision-maker",
+    "evidence": "the optimized schedule is scored with the historical revenue estimates against the hand-made schedule",
+    "pages": "p. 13"
+   },
+   {
+    "pattern": "adoption-compatible design",
+    "evidence": "structural constraints tuned so that schedules resemble the familiar ones; the display mimics existing schedules; physicians enter their preferred schedules",
+    "pages": "pp. 7, 12–13"
+   },
+   {
+    "pattern": "integration section mapping model stages onto the owner's process and data systems",
+    "evidence": "relational database, web interface, re-optimization when fixed assignments change, and realized revenues fed back each quarter",
+    "pages": "pp. 11–13"
+   }
+  ],
+  "transferable": [
+   "Let the people being scheduled submit their ideal schedule and score each person's mismatch per block with a minimax term (pp. 7, 9, 13).",
+   "Tune hard-to-quantify limits such as fatigue with the manager in the loop: guess ratings, generate schedules, ask, retune (pp. 7, 11).",
+   "Replace a two-step Pareto-efficient maximin solve by small multipliers on the totals, and say that this is a simplification (p. 9)."
+  ],
+  "coauthors": "Richard Baum, Nathan Kallus",
+  "quotes": [
+   {
+    "text": "For our present study the price of fairness is a moot point because fairness is a non-negotiable business principle and, in the case of BWH IR the optimal fair allocation generates more total revenue than the existing one.",
+    "page": 5
+   },
+   {
+    "text": "The running time, in fact, as long as it is under one day, is really quite irrelevant due to the infrequency of solving the optimization model.",
+    "page": 12
+   }
+  ]
+ },
+ {
+  "id": "S557",
+  "year": "2014",
+  "title": "Semi-supervised approach to predictive analysis using temporal data",
+  "read_level": "full",
+  "contribution": "Clusters members' temporal claim histories (spectral clustering) before training one random forest per cluster to predict myocardial infarction within three months. It reports higher 'prediction performance' than a single random forest (79.15% against 58.31% in the costliest bucket) and clinically recognizable risk trajectories.",
+  "problem_entry": "{ML+AP} A single classifier on temporal records assumes that members of a class share a history (abstract p. 2; p. 4). Application: three-month MI risk from insurance claims, with military health and personnel databases as intended uses (pp. 2, 13–14).",
+  "key_idea": "Cluster first with the target withheld, then one random forest per cluster; cluster profiles serve as temporal templates of high-risk trajectories (pp. 4–6, 10–12).",
+  "assumptions": "47,763 members with coronary artery disease and hypertension, 2000–2007; 46 diagnosis groups counted in 90-day windows aligned on the event, using three windows of history; balanced training set, unbalanced test set; three cost buckets (pp. 4, 7–8).",
+  "proof_devices": [],
+  "experiments": "Table 1 (p. 8): random forest alone 49.63/55.99/58.31% against 68.25/71.55/79.15% with k = 10 clusters, by cost bucket. The metric is undefined; no AUC, false-positive rate, interval or software is reported. P_k rises with k toward 1 (p. 8) [my reading: the number rewards fragmentation].",
+  "positioning": "Against SVD+SVM co-occurrence analysis (Domeniconi et al.), Timeweaver (Weiss–Hirsh) and rule induction (Vilalta et al.), criticized for ignoring the member or lacking an unsupervised step (p. 3). Random forests justified by Caruana–Niculescu-Mizil (p. 6).",
+  "writing": "Military-OR framing at both ends (pp. 2, 13–14); strong claims ('dramatic improvement', abstract p. 2); the evaluation metric is never named.",
+  "limits_future": "Needs large training pools and is sensitive to the clustering choice (p. 13). Future work: procedures and prescriptions, a real-time decision aid for doctors, military applications (pp. 12–14).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "contradiction",
+    "note": "Prediction only: the decision that would use the score is deferred to future work, and the baseline is another classifier, not an owner's current rule ('prediction accuracy with no decision value').",
+    "pages": "pp. 4, 8, 13"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "per-sample model choice",
+    "evidence": "an early, cluster-level form: one classifier per unsupervised cluster of temporal histories",
+    "pages": "pp. 5–6"
+   }
+  ],
+  "transferable": [
+   "Align each member's history on the target event and compress it into counts per window, so trajectories from different calendar dates become comparable (pp. 4, 7).",
+   "Show the cluster-size distribution next to the choice of k, so the chosen k visibly leaves no dominant cluster (Fig. 4, pp. 8–9)."
+  ],
+  "coauthors": "Kimberly Shenk, Natasha Markuzon",
+  "quotes": [
+   {
+    "text": "The joint method improves the prediction performance of MI by more than 30 percent.",
+    "page": 8
+   },
+   {
+    "text": "Smaller training sets can be difficult to analyze as the size of clusters will become too small for sufficient supervised learning training.",
+    "page": 13
+   }
+  ]
+ },
+ {
+  "id": "S082",
+  "year": "2015",
+  "title": "Design of near optimal decision rules in multistage adaptive mixed-integer optimization",
+  "read_level": "partial",
+  "contribution": "Shows that optimal continuous and binary decision rules are piecewise linear and piecewise constant (max-affine differences), and designs rules with P pieces endogenously by a cutting-plane loop of MILPs with sampled termination and VC-dimension guarantees. Gaps to a scenario lower bound are below 5% on inventory control, against 20–60% for linear rules, and 17–42% on lot sizing, against 62–91% for nonadaptive binaries.",
+  "problem_entry": "{RO+IO} Existing decision rules fix their structure a priori and omit adaptive binaries (abstract p. 2). Linear rules can be O(√k) suboptimal, while optimal rules are piecewise linear (p. 2).",
+  "key_idea": "A piecewise linear rule is max-affine minus max-affine, and a binary rule is the indicator that this difference is nonpositive (Theorems 1–2, pp. 4–5). A Blankenship–Falk scenario loop solves MILP masters and separations (big-M, SOS or indicator forms), so the MIO designs the rule's shape (pp. 3, 6–7, 9).",
+  "assumptions": "Compact polyhedral uncertainty set; nonempty bounded feasible region (p. 4); fixed P; violation measured under the uniform distribution (p. 7). Test problems: inventory control (25 random instances, T ≤ 30) and lot sizing with 2–3 binary orders per stage (T ≤ 10) (pp. 14–17).",
+  "proof_devices": [
+   "difference-of-max-affine representation of piecewise linear continuous functions, and its indicator for binary functions (Theorems 1–2, pp. 4–5)",
+   "Blankenship–Falk cutting plane over scenarios; global optimality of masters and separations gives the best P-piece rule, otherwise the output is still robustly feasible (pp. 6–7)",
+   "Hoeffding-based sampled termination test (Example 1, p. 8)",
+   "VC-dimension sample-size bound for ε-feasibility with confidence 1 − β (Proposition 1, pp. 8–9)",
+   "scenario-counterpart lower bound on binding scenarios (Hadjiyiannis et al.); counterexample showing extreme points are not enough with binaries (Example 2, pp. 11–12)"
+  ],
+  "experiments": "CPLEX 12.5, Intel i7-2600 at 3.4 GHz, 8 GB (p. 14). Inventory: gap below 5% against 20–60% for linear and a-priori piecewise rules (Table 1, p. 15); [my reading of garbled decimals] times from about 2.7 s (T = 5) to about 36,704 s (T = 30, global optimality), against under 10 s for linear rules. Lot sizing: gaps of 17–42% against 62–91%, one blank cell, richer information sets solved only to T = 4 or 3 (Table 2, pp. 17–18).",
+  "positioning": "Overcomes the a-priori structure of nonlinear rules (Chen–Zhang, Goh–Sim, Georghiou et al., Bertsimas et al. 2011) and the fixed structure of earlier binary rules, including the authors' own (Bertsimas–Caramanis 2007; Bertsimas–Georghiou 2014). Borrows the lower bound of Hadjiyiannis et al. (pp. 2–3, 11–12).",
+  "writing": "A three-item contribution list (p. 3); each case study ends with numbered key conclusions (pp. 16, 18); the abstract's 'outperform alternative methods' (p. 2) is broader than the binary results.",
+  "limits_future": "Binary results 'not as strong', partly blamed on the lower bound (pp. 17–18). Future work: warm-start the master with fixed-structure binary rules (p. 18). [my reading] The abstract omits the lot-sizing gaps and the run-time cost (p. 2).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Solver, machine and MIO tolerances are stated; every result has a gap to a lower bound; linear, a-priori piecewise and nonadaptive incumbents are dueled; weak results and blank cells are printed; warm starts appear only as future work.",
+    "pages": "pp. 14–18"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "The class kept is MILP inside a cutting-plane loop, not a one-shot reformulation; duality arguments are unavailable because the rule is nonconvex.",
+    "pages": "pp. 3, 6, 9"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "binding scenarios bridge the restricted policy and the sampled lower bound",
+    "evidence": "the scenario-counterpart lower bound is built on the binding scenarios of the decision-rule problem; its quality depends on them",
+    "pages": "pp. 12, 15, 17"
+   },
+   {
+    "pattern": "constraint generation as the scaling engine",
+    "evidence": "the semi-infinite rule-design problem is solved by scenario generation with MILP masters and separations",
+    "pages": "pp. 6–7"
+   },
+   {
+    "pattern": "approximation-knob frontier (price of tractability)",
+    "evidence": "MIO tolerances (global, 1%, 5%) and the information available to binary rules are traded against run time, with the results printed",
+    "pages": "pp. 15, 17–18"
+   }
+  ],
+  "transferable": [
+   "Represent an unknown piecewise linear policy as max-affine minus max-affine, and a binary policy as the sign of that difference, so a MIO can choose the pieces (pp. 4–5).",
+   "Stop a scenario-generation loop on a sampled violation probability with a Hoeffding interval when exact separation is too slow (pp. 7–8).",
+   "Reuse the restricted policy's binding scenarios to build a scenario-counterpart lower bound, and report a gap for every instance (pp. 11–12, 15, 17)."
+  ],
+  "coauthors": "Angelos Georghiou",
+  "quotes": [
+   {
+    "text": "the structure of the proposed decision rules is not decided a priori but rather is decided endogenously through the solution of a sequence of mixed-integer optimization problems, having the potential to achieve the optimal solution.",
+    "page": 3
+   },
+   {
+    "text": "Although the results are not as strong as in §5.1, the proposed binary decision rules outputperform the simple, nonadaptive binary decisions, and produce good quality results.",
+    "page": 18
+   }
+  ]
+ },
+ {
+  "id": "S176",
+  "year": "2015",
+  "title": "A tight characterization of the performance of static solutions in two-stage adjustable robust linear optimization",
+  "read_level": "partial",
+  "contribution": "For two-stage packing LPs with an uncertain constraint matrix, a static robust solution is optimal iff a transformation T(U, h) of the uncertainty set is convex for all h > 0. Otherwise its loss is bounded, tightly, by a measure of non-convexity κ, which never exceeds the earlier symmetry bound. The results extend to objective uncertainty.",
+  "problem_entry": "{RO+LO} Optimal adjustable solutions are intractable (Ω(log n) inapproximability), while static solutions are 'perceived to be highly conservative' (p. 2). Earlier bounds cover only covering constraints with right-hand-side uncertainty, not packing problems such as revenue management (pp. 2–3).",
+  "key_idea": "Dualize the inner LP and rescale (λ = hᵀα, α = λμ): the adjustable value is an optimization over T(U, h) = {Bᵀμ : hᵀμ = 1, B ∈ U, μ ≥ 0} and the static value is the same over its convex hull (Lemmas 3–4, pp. 7–10). Hence the iff (Theorem 1, p. 9) and the bound κ(S) = min{α : conv(S) ⊆ αS} (Definition 1, p. 12; Theorem 3, p. 14).",
+  "assumptions": "Nonnegative data (B ≥ 0; c, d ≥ 0; h > 0); U compact, convex and full-dimensional, down-monotone without loss of generality (p. 3); objective uncertainty in a product set U_B × U_d; right-hand-side uncertainty only partly covered (pp. 5–6, 25). No data.",
+  "proof_devices": [
+   "inner-LP duality plus multiplier normalization turns adjustable and static values into one problem over a set and over its convex hull (Lemmas 3–4, pp. 7–10)",
+   "convexity of T for constraint-wise sets and sets with symmetric projections (Lemmas 1–2, pp. 8–9)",
+   "min–max equality not obtainable from the saddle-point theorem (p. 12)",
+   "measure of non-convexity κ with a tight family U^θ, κ = n^{1/θ} (Definition 1, Theorem 2, pp. 12–14)",
+   "comparison theorem: κ ≤ 1 + 1/sym(U), with a table of standard sets (Theorem 4, Table 1, pp. 17–18)"
+  ],
+  "experiments": "none",
+  "positioning": "Generalizes Ben-Tal–Nemirovski's constraint-wise optimality and improves the group's own symmetry bound (Bertsimas–Goyal; Bertsimas, Goyal and Sun); moves from covering/right-hand-side models to packing/coefficient models (pp. 2–5, 17–18).",
+  "writing": "'Surprising' three times against 'the usual perception' (abstract p. 1; pp. 4, 5); contributions in run-in headed paragraphs (pp. 4–6); a comparison table against the previous bound (p. 18).",
+  "limits_future": "No approximation bound under right-hand-side uncertainty, where κ is 'not even well defined' (p. 25). Stated use: guidance for choosing uncertainty sets (p. 25). No future work is listed.",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "The dual of the inner problem exposes the structure (Step 4), and the paper prints where its result stops (no bound under right-hand-side uncertainty).",
+    "pages": "pp. 7–10, 25"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "The price of the simple, static policy gets a solution-independent, tight bound computed from the uncertainty set alone; there is no knob and no computed curve.",
+    "pages": "pp. 12–14, 17–18"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "power-and-limits theorem for a tractable policy class",
+    "evidence": "static solutions are optimal iff T(U, h) is convex, and otherwise lose at most a factor κ, which is attained",
+    "pages": "pp. 9, 14"
+   },
+   {
+    "pattern": "graded measure of a binary property",
+    "evidence": "κ(S) grades convexity: 1 iff S is convex, larger the further S is from its hull",
+    "pages": "pp. 12–13"
+   },
+   {
+    "pattern": "low-dimensional projection of the uncertainty set as proof device",
+    "evidence": "T(U, h), the set of convex combinations of the rows of B weighted by h, carries the whole comparison",
+    "pages": "pp. 8–10"
+   },
+   {
+    "pattern": "tightness audit of one's own bound",
+    "evidence": "the family U^θ attains κ = n^{1/θ}, so the bound is exact for it",
+    "pages": "pp. 13–14"
+   }
+  ],
+  "transferable": [
+   "Compare adaptive and static robust values by dualizing the inner problem and normalizing the multipliers; the gap then lives in the set against its convex hull (pp. 7–10).",
+   "Grade a yes/no property with a scaling measure (the smallest factor at which S covers its own hull) and show a family attaining it (pp. 12–14).",
+   "Compare a new bound with the previous one on a table of standard uncertainty sets (p. 18)."
+  ],
+  "coauthors": "Vineet Goyal, Brian Y. Lu",
+  "quotes": [
+   {
+    "text": "This is highly surprising in view of the usual perception about the conservativeness of static solutions.",
+    "page": 1
+   },
+   {
+    "text": "Therefore, our results provide useful guidance in selecting uncertainty sets such that the adjustable robust problem can be well approximated by a static solutions.",
+    "page": 25
+   }
+  ]
+ },
+ {
+  "id": "S554",
+  "year": "2015",
+  "title": "Channel coding via robust optimization, part 1: The case of a single channel",
+  "read_level": "partial",
+  "contribution": "Formulates finite-length channel coding as robust optimization: decoding constraints hold over a typical-set uncertainty set and binaries count the decoded share of sampled noise. This gives a rank-minimization SDP for Gaussian noise and a mixed binary LP for exponential and uniform noise. Bounds meet Shannon capacity as n → ∞; computed lower bounds are exact with codes, and upper bounds are approximate (n = 140 Gaussian, n = 300 exponential).",
+  "problem_entry": "{RO+CP+IO} Finite-length error probabilities are n-dimensional integrals, and capacity regions of interference and broadcast channels remain open (pp. 1–2). Entry: decoding is a robustness property, and typical sets are uncertainty sets (p. 2; §2).",
+  "key_idea": "Four ingredients: robust minimum-distance decoding constraints, typical sets as uncertainty sets, binaries that count probability, and SDP or binary reformulation of the nonconvexity (p. 2). Rate test: rank 1 means achievable with a code; rank ≥ 2 means not achievable on a slightly noisier channel (Algorithm 1, Theorem 1, pp. 12–13).",
+  "assumptions": "Single-user additive-noise channel, power nP, average error ε (p. 3). Noise is replaced by T deterministic vectors spread over a sphere by Lloyd's algorithm (pp. 8, 31). The accuracy knob ν trades tightness for size (p. 8). Typical sets: Gaussian, exponential, uniform, binary, CLT and stable laws (Table 1, p. 22).",
+  "proof_devices": [
+   "binary counting variables with big-M decoding constraints and a (1 − ε)T coverage constraint (eqs. 21–26, p. 9)",
+   "squaring the decoding constraint and v² = v for binaries (Proposition 2, pp. 9–10); lift to an SDP with a rank constraint (Proposition 3, p. 10, not read in detail)",
+   "log-det rank-minimization heuristic of Fazel et al., which converges only locally (pp. 22–23)",
+   "Wyner's sphere covering and Gaussian norm concentration behind the two-sided capacity statement (Propositions 4–5, Theorem 1, pp. 12–13; proof not read)"
+  ],
+  "experiments": "Gaussian, n ≤ 140, ε = 0.001, ν = 0.05: at R = 0.2 about 3 billion variables in 5,000 subproblems, SDPARA, 18 h; at R = 0.35 over 50 trillion variables, more than 700 h on 32 cores (p. 23). Exponential, n = 300: 1,430,000 variables, CPLEX 11.1, 18 h per rate (p. 24). Infeasibility declared after 50,000 restarts (p. 23). Against Polyanskiy et al.: a sharper, but approximate, upper bound and comparable lower bounds (Fig. 1, p. 24). [my reading] How cross-subproblem decoding constraints are enforced is not stated (p. 23).",
+  "positioning": "Builds on Shannon (1948), with Polyanskiy et al. (2010) finite-length bounds as the comparison; RO and binary optimization are reviewed as the enabling tools (pp. 1–5); part of the Bandi–Bertsimas programme (p. 5).",
+  "writing": "A four-item 'philosophy' list (p. 2); the limitation is stated in the abstract (p. 1), after the theorem (p. 13) and in the implementation (p. 23); a first-person closing recommendation ('in our opinion', p. 25).",
+  "limits_future": "No provable optimality, so the upper bounds are approximate (pp. 1, 13, 23); at n = 140 the bounds remain 'quite far' from Shannon capacity (p. 24). Future work: Part II on multi-user channels (p. 2); larger n as solvers and hardware improve (p. 25).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "A problem owned by information theory is written as an optimization problem, and the noise model is chosen so the problem stays in a mature class (polyhedral typical sets give a mixed binary LP).",
+    "pages": "pp. 2, 21–22, 25"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "The abstract says which results lack a certificate; lower bounds come with a code; upper bounds are labelled approximate, with the stopping rule (50,000 restarts) printed.",
+    "pages": "pp. 1, 13, 23"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "The 'why now' is solver progress stated in words (LPs with tens of millions of variables; mixed binary problems with hundreds of thousands of binaries), not a rebuilt figure.",
+    "pages": "pp. 4, 25"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "The robust-probability programme statement recurs; the work list gives the venue as 'Submitted for publication'.",
+    "pages": "p. 5"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "re-derive classical theorems with the new device",
+    "evidence": "the RO bounds coincide with Shannon capacity as n → ∞",
+    "pages": "pp. 1–2, 13"
+   },
+   {
+    "pattern": "limit laws as primitives",
+    "evidence": "typical sets, CLT and stable-law sets used as noise uncertainty sets",
+    "pages": "pp. 2, 21–22"
+   },
+   {
+    "pattern": "asymmetric certificate labelling",
+    "evidence": "constructed codes certify the lower bounds, while upper bounds from 50,000 failed restarts are called approximate, in the abstract and in the body",
+    "pages": "pp. 1, 13, 23"
+   },
+   {
+    "pattern": "approximation-knob frontier (price of tractability)",
+    "evidence": "ν trades bound accuracy for problem size; the variable count is exponential in n",
+    "pages": "pp. 8, 20"
+   }
+  ],
+  "transferable": [
+   "Replace a probability constraint by the requirement that it hold for at least (1 − ε)T of T deterministic sample points, counted with binaries and big-M (p. 9).",
+   "When the noise model is a modelling choice, pick one whose typical set is polyhedral, so the problem lands in MILP (pp. 21–22, 25).",
+   "Label asymmetric certificates: a constructed solution certifies one side; failure after a stated number of restarts gives only an approximate bound on the other (p. 23)."
+  ],
+  "coauthors": "Chaithanya Bandi",
+  "quotes": [
+   {
+    "text": "In this sense, the upper bounds we report are approximate, while the lower bounds are exact.",
+    "page": 23
+   },
+   {
+    "text": "Given that we have a choice in modeling noise, it is reasonable in our opinion, to model noise so that the underlying typical set are polyhedra.",
+    "page": 25
+   }
+  ]
+ }
+]

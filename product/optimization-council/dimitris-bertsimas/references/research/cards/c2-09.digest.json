@@ -1,0 +1,205 @@
+[
+ {
+  "id": "S618",
+  "year": "2026",
+  "title": "Artificial Intelligence for Automated, Highly Accurate, and Scalable Multimodal EHR Data Abstraction",
+  "read_level": "full",
+  "contribution": "A per-variable pipeline (30 source x featurization base models stacked by a meta-learner) with a dual-threshold defer-to-human layer auto-populates 647 of 758 candidate STS Adult Cardiac Surgery Database variables at above 99% pooled accuracy, automating 49.5% (MGB) and 43.2% (HHC, the external site) of the abstraction workload; relaxing to 94% accuracy would reach about 75% at MGB. A retrospective medRxiv preprint (March 2026) in which Bertsimas is credited with funding acquisition, supervision and review and editing.",
+  "problem_entry": "AP+ML; DA-adjacent (the automate-or-defer decision); no optimization model. Manual abstraction makes registries costly and limits their use (pp. 2-3). Prior AI extraction is single-domain, mostly proprietary-GPT-based, rarely externally validated and rarely tested against gold-standard registries; commercial services lack published validation (p. 3). Stated problem: populate STS ACSD v4.20.2 automatically at the registry's accuracy standard, developed at MGB and validated at HHC (pp. 2-3, 11).",
+  "key_idea": "One pipeline per variable: 10 sources (7 note types; labs, medications, diagnosis codes) x 3 featurizations (fine-tuned ClinicalBERT; S-BERT sentence ranking against the STS abstraction manual, then ClinicalBERT; TF-IDF) = 30 base models, stacked by a meta-learner trained on validation (pp. 2, 12-13). A dual-threshold rule labels predictions negative, positive or deferred to humans; a per-variable accuracy gate returns weak variables to humans; hierarchy rules fill 434 child fields (pp. 6, 13-14). Small on-premise models are chosen over LLMs for privacy and compute reasons (pp. 8-10).",
+  "assumptions": "Per-variable binary classification of binary or binarized targets, modelled independently (pp. 11, 13); labels are the hospitals' nurse-abstracted, audited STS submissions (p. 11). MGB 8,515 patients (2015-2021) and HHC 3,116 (2020-2023); transfers and records with missing or inconsistent timestamps excluded (pp. 4, 11). 311 variables populated in under 0.15% of patients excluded; 111 of the 758 candidates fail the quality gate (pp. 5-7). Structured data serialised to text with TabText (p. 12). On-premise GPUs preclude frontier models (p. 13); labels inherit human errors (p. 10).",
+  "proof_devices": [
+   "Threshold calibration stated in words: t1 and t2 chosen on validation so that sensitivity and specificity both exceed 96% while maximizing automated completion (p. 13)",
+   "Variable-level gate: at least 96% accuracy on automated predictions in the testing set, else the variable reverts to manual review (p. 13); [my reading] a selection on the test set that also produces the reported metrics",
+   "Operating point chosen on the accuracy-completion trade-off to meet the STS 99% standard (p. 14; Fig. S5 not in the file)",
+   "Hierarchy enforcement: a negative parent sets the children negative; a positive or deferred parent leaves the children's own predictions (p. 14)",
+   "Stacked meta-learner trained on the validation-set probabilities of 30 base models (p. 13)",
+   "Two-stage evaluation: discrimination on post-threshold records, then pooled accuracy against the manual labels and completion rate (pp. 6-7, 14)",
+   "Blinded adjudication of AI-registry disagreements by an expert who sees neither value (pp. 8, 14-15)",
+   "No formulation, bound or proof (pp. 1-15)"
+  ],
+  "experiments": "Patient-stratified 70/20/10 split at MGB, metrics on the held-out test set; HHC as the external site, but how models and thresholds reached HHC (and the visit-note source absent there) is not described (pp. 11-14). Above 99% pooled accuracy on extracted outputs at both sites; completion 49.5% (MGB) and 43.2% (HHC); intraoperative 61.5%/52.6%, preoperative 35.0%/31.4%, CABG 53.5%/46.3% (p. 7). AI-derived variables are gated at 96% (p. 13); their discrimination, computed only on post-threshold records, is in the supplement, not in the file (p. 6). Relaxing to 94% accuracy: about 75% completion at MGB (pp. 7, 10). Blinded review: the AI was right in 17.9% of the discordant diabetes cases and 9.1% of the discordant CABG cases (p. 8). No confidence intervals, no competing extraction system run, no runtime, compute or cost, no abstractor hours saved (pp. 4-10).",
+  "positioning": "Places itself after cTAKES, MetaMap and MedCAT, deep learning and LLM extractors (p. 3). Criticizes narrow GPT-based systems, the rarity of external validation, and commercial services without published validation (Q-Centrix, Carta) (p. 3). Builds on Boussina et al. 2024 (ref. 19) and credits the deferral design to Waskom et al. 2023 and Singh et al. 2023 (pp. 3, 13, 17, 19). Self-cites xHAIM twice (refs. 17 and 47), the domain-adaptation preprint (ref. 43) and TabText (ref. 50); no optimization literature cited (pp. 15-19).",
+  "writing": "Clinical-journal layout, Results before Methods, with data, code, contribution and competing-interest declarations (pp. 4-15). Strong headline words ('registry-grade'; the Fig. 1 label 'Performance Guarantees'; 'comparable to or exceeding human data collection') sit beside validation-set calibrations that 'may require recalibration' and a human-error check on two variables (pp. 2, 4, 8, 10, 13). The limitations paragraph is concrete (p. 10). Lapses: xHAIM listed twice (refs. 17 and 47); 'carrdiology' (pp. 12, 16, 19).",
+  "limits_future": "Stated: accuracy may drop on ambiguous documentation; more external validation needed; transfers excluded; labels inherit human bias; thresholds may need recalibration under dataset shift; class imbalance caps automation at about half under the >99% requirement (p. 10). Future: independent expert-labelled data, more sites, hybrid AI-human abstraction, open-weight multimodal models (p. 10). Unstated: a retrospective proof-of-concept only (p. 11); no cost accounting; the test-set gate; data under data-use agreements and code withheld for contractual and IP reasons beside a no-competing-interests declaration (p. 15).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Step 1: owner (STS and its hospitals), decision (automate or defer each registry entry), EHR data, current rule (manual nurse abstraction). Step 5, first half: the operating point is the owner's 99% standard and success is completion at that accuracy, not discrimination alone. Step 2 takes a special form: the current rule is the label, so the pipeline can at best match it except through blinded adjudication of disagreements. Missing: the pipeline's own costs and a field test.",
+    "pages": "pp. 2, 7, 8, 11, 13-14"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Knob = the accuracy target, set through t1 and t2; price = completion (99%+ to 94% moves MGB completion from 49.5% to about 75%); the curve (Fig. S5, not read) is offered to applications with different risk tolerances. No bound links knob and property: the 'guarantee' is an empirical validation-set calibration. Same shape as S617's alert-threshold knob (card in c38).",
+    "pages": "pp. 4, 7, 10, 13-14"
+   },
+   {
+    "method": "Method 4",
+    "relation": "contradiction",
+    "note": "Learners picked per variable on validation from 'multiple model types'; no exact model, certificate or time limit. The incumbents named (GPT-based extractors, DeepPhe-CR, commercial services) are not run; the case against LLMs rests on deployment constraints and citations. Scope caveat: the question is registry automation, not the learner.",
+    "pages": "pp. 3, 8-10, 13"
+   },
+   {
+    "method": "Method 1",
+    "relation": "contradiction",
+    "note": "No formulation: the one optimization (maximize automated completion subject to sensitivity and specificity of at least 96%) is a sentence, not a model. [My reading] The joint problem (all variables' thresholds chosen together to maximize completion under the pooled 99%) goes unposed: per-variable 96% floors are fixed and the pooled 99% checked afterwards (Taste mark 3). Same as S426 (card in c32), by the same first authors.",
+    "pages": "pp. 13-14"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Programme machinery: an STS grant to MIT for the two ORC first authors; a former student (Orfanoudaki, per SKILL.md) as co-senior author; the group's TabText, xHAIM and domain-adaptation work reused; Bertsimas credited with funding acquisition, supervision and review and editing.",
+    "pages": "pp. 1, 12, 15-19"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "owner-set accuracy floor with a defer-to-human band",
+    "evidence": "A three-zone threshold rule calibrated to the owner's standard, a per-variable gate that returns weak variables to humans, and completion reported at the floor plus one alternative point (94% for about 75%). Related: S617's owner-chosen alert precision (c38) and S621's clinician-tuned thresholds (c34).",
+    "pages": "pp. 7, 10, 13-14"
+   },
+   {
+    "pattern": "blinded adjudication of model-label disagreements",
+    "evidence": "When the incumbent's output is the label, an expert blind to both sources re-reviews only the discordant cases; the label was wrong in 17.9% (diabetes) and 9.1% (CABG) of them.",
+    "pages": "pp. 8, 14-15"
+   },
+   {
+    "pattern": "implementability-first entry",
+    "evidence": "Recurrence (S426 in c32, there with S012 and S026): HIPAA and PHI governance and on-premise compute choose ClinicalBERT and TF-IDF over frontier LLMs.",
+    "pages": "pp. 8-9, 13"
+   },
+   {
+    "pattern": "every modality serialised as text for one foundation-model extractor",
+    "evidence": "Recurrence (S426 in c32): structured fields go through TabText, and labs and medications are rendered as sentences.",
+    "pages": "p. 12"
+   },
+   {
+    "pattern": "sponsor-and-edit senior authorship on student-led lines outside optimization",
+    "evidence": "Recurrence (S299 in s16): Bertsimas's role is 'funding acquisition, supervision, writing - review & editing', while two others are named co-senior authors who directed the study.",
+    "pages": "pp. 1, 15"
+   },
+   {
+    "pattern": "second stage fitted on held-out first-stage outputs",
+    "evidence": "The meta-learner is trained on the validation-set probabilities of the 30 base models; S677 fits its clusters and tree on validation-set predictions for the same reason (S677 p. 8).",
+    "pages": "p. 13"
+   }
+  ],
+  "transferable": [
+   "Three-zone rule (negative / defer / positive): pick both thresholds on validation to meet sensitivity and specificity floors while maximizing the automated share, return targets that miss a per-target accuracy floor to humans, and keep that gate off the test set (p. 13)",
+   "Report the pair (accuracy on automated outputs, share automated) at the owner's standard, plus one alternative operating point (pp. 7, 10, 14)",
+   "When the baseline is also the ground truth, run blinded adjudication of the disagreements and report how often the label, not the model, was wrong (pp. 8, 14-15)",
+   "Fit long documents into a transformer by ranking sentences against the target's definition in the owner's manual (S-BERT similarity), then fine-tune on the top sentences (pp. 12-13)",
+   "Use the data standard's parent-child hierarchy to propagate predictions and keep outputs logically consistent (p. 14)",
+   "Document site heterogeneity (note types, counts and lengths per site) so that an external validation shows what it actually tests (Table 2, pp. 5-6; p. 8)"
+  ],
+  "coauthors": "Georgios Margaritis and Periklis Petridis (MIT ORC; shared first authorship); Jordan Bloom and David M. Shahian (MGH cardiac surgery); Robert Hagberg (Hartford Hospital); Robert Habib (The Society of Thoracic Surgeons); Agni Orfanoudaki (Saïd Business School, Oxford). Shahian and Orfanoudaki are co-senior authors; Bertsimas is credited with funding acquisition, supervision, and review and editing (pp. 1, 15).",
+  "quotes": [
+   {
+    "text": "However, in this study we select the operating point based on accuracy, in order to satisfy the stringent accuracy requirements of the STS database.",
+    "page": 7
+   },
+   {
+    "text": "Each non-deterministic target variable was further required to achieve ≥96% accuracy on automated predictions within the testing set to remain in the automated pipeline.",
+    "page": 13
+   }
+  ]
+ },
+ {
+  "id": "S677",
+  "year": "2026",
+  "title": "Empowering Health in Aging Populations: A Multimodal Vulnerability Tool for Frail Patients",
+  "read_level": "full",
+  "contribution": "A HAIM-style multimodal model (structured EHR, Clinical-Longformer notes, Merlin abdominal-CT and I3D head-CT embeddings; XGBoost) predicts six adverse outcomes for frail older inpatients at Mass General Brigham, with test AUCs of 0.74-0.86: +4.3% over the best single modality for mortality, at most about 0.01 AUC elsewhere. k-means on the predicted risks plus an Optimal Policy Tree yields four vulnerability tiers whose one-hot codes beat the Frailty Index's AUC except on falls. One health system, predictions only, no intervals (ML4H 2025, PMLR 297).",
+  "problem_entry": "AP+ML; DA only nominally (a prescriptive-tree tool used as a classifier); no optimization model. The Frailty Index needs manual chart abstraction and a geriatrician's questionnaire, suffers inter-rater problems, and predicts mortality but not falls or hospitalization well; automated tools are single-modality and mostly single-outcome (pp. 1-2). Stated problem: predict six post-discharge outcomes from EHR, notes and CT, and map visits to four tiers that mirror the FI's four care-planning levels (pp. 1-3).",
+  "key_idea": "Stage 1: concatenate tabular features with note and CT embeddings and train XGBoost per outcome, as in HAIM (pp. 3, 5-6). Stage 2: a 7-dimensional vector per visit (five predicted probabilities, age, comorbidity count), z-scored and clustered by k-means (k = 4) on the validation set; an OPT trained on the raw vectors reproduces the clusters as threshold rules (pp. 2, 8). Why a policy tree rather than a classification tree, and with which rewards, is not stated (pp. 2, 8).",
+  "assumptions": "One health system (MGB). Patients with an FI evaluation from 2018 (8,519); inpatient visits 2017-2024 with two years of history, age 65 or older, visits ending in death excluded: 6,763 patients, more than 19,000 inpatient visits, more than 1.13 million encounters (p. 4). Mortality from a three-step rule with an age-gap inference; falls from ICD codes (pp. 4, 14). Seven look-back windows, CCSR code groups, high-risk drug classes, 768-d note and 128-d CT embeddings; median imputation; elastic-net screening from more than 12,000 to 80-400 features (pp. 4-5). Patient-level 80/10/10 split (p. 4).",
+  "proof_devices": [
+   "Second stage (k-means and OPT) fitted on validation-set predictions to avoid optimistic training-set probabilities (p. 8)",
+   "Tier validation by an untuned logistic regression on one-hot tiers, trained on validation and scored on test (p. 8; Table 1, p. 9)",
+   "Matched comparison with the incumbent: the FI scored only where recorded, and an extra HAIM model trained and tested on those visits (pp. 7-8; Appendix B, p. 19)",
+   "Mortality label cascade: death dates, 'Expired' dispositions, an age-gap rule with asymmetric thresholds, undeterminable visits dropped (p. 14)",
+   "Reporting threshold at argmin over t of |TPR(t) - TNR(t)| on validation (Table 8 caption, p. 18)",
+   "Elastic-net screening (strength 0.1, L1 ratio 0.1, coefficients above 0.01) (p. 5)",
+   "No formulation, proof, interval, significance test or calibration analysis (pp. 1-24)"
+  ],
+  "experiments": "XGBoost chosen over logistic regression, SVMs and random forests; grid search, selection by validation AUC, scoring on test (p. 6). HAIM test AUCs 0.8554, 0.8240, 0.7385, 0.7527, 0.7493, 0.7959, with training AUCs up to 0.9849 (Table 2, p. 15). Gain over the best single modality: +4.3% for both mortality outcomes, none for 3-month readmission, 0.0012-0.0121 AUC otherwise (p. 6; Tables 2-3, p. 15). Failures printed: abdominal CT 0.4932 and 0.4558 on readmission; a note model at 0.9999 train vs 0.6678 test (Tables 4, 7, pp. 16-17). Against the FI: +8.15% to +49.1%; the FI scores 0.505 on readmission; the FI-matched HAIM model scores 0.729-0.853 (pp. 6-7; Tables 9-10, p. 19). Tiers: 0.753, 0.727, 0.685, 0.695, 0.604 vs the FI's 0.734, 0.723, 0.505, 0.505, 0.627 (Table 1, p. 9); [my reading] on different visits from the FI figures, and the 6-month mortality margin is 0.004 with no interval. Text-table mismatches: abdominal-CT falls AUC 0.63 in the text vs 0.5495 in Table 4; the sensitivity drop is at 6-month, not 3-month, mortality (pp. 6, 16, 18). No external site; the tree's accuracy appears only in a figure (pp. 4, 8, 24).",
+  "positioning": "Set against the FI tradition (Rockwood and Mitnitski; the CGA-FI of Cooper et al. 2021, whose last author is coauthor Javedan) and automated single-modality frailty scores (Gilbert et al. 2018; Kochar et al. 2025) (pp. 2-3, 10-11). Builds on the group's HAIM and names xHAIM for transparency (pp. 3, 9). Compares its AUCs with literature values from other elderly cohorts ('match or exceed') without reruns (p. 3). No clustering or optimization literature beyond the OPT paper and the Interpretable AI documentation (pp. 9-13).",
+  "writing": "ML4H layout: Importance, Approach, three bulleted Contributions (pp. 1-2). Priority claims ('the first'; 'To our knowledge, we are the first') and 'significantly' three times with no test (pp. 1, 2, 6); 'externally validated' for a within-system split (pp. 1, 4); 'up to 4.3%' is the maximum, while four of six outcomes gain at most 0.0121 AUC (pp. 1, 15). A careful close: an additional tool, not a replacement (p. 9). 'Table A.2' refers to Table 8 (p. 6).",
+  "limits_future": "Stated: inpatient visits only; Clinical-Longformer reduces transparency (future xHAIM); few short-term outcomes; not a replacement for frailty evaluations (p. 9). Future: outpatient encounters for earlier detection (p. 9). Unstated: one health system; no intervals; no prospective, decision or intervention evaluation; data and code unavailable (p. 1); the tree's splits, depth and accuracy absent from the text (pp. 8, 24).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "The owner's current rule is the baseline: the CGA-FI, administered from 2018, whose paper lists coauthor Javedan as last author. It is scored where actually recorded to give it 'its strongest footing', and the new model is retrained on those visits; the multimodal gain is measured against the strongest single modality, not the average (contrast S023, card in c23).",
+    "pages": "pp. 3, 6-8, 19"
+   },
+   {
+    "method": "Method 5",
+    "relation": "contradiction",
+    "note": "Predictions, not decisions, are scored: the tiers are judged by the AUC of a logistic regression on their one-hot codes, and the 'actionable classifications that directly inform interventions' are tied to no intervention, decision rule or field test (SKILL.md warning sign 4).",
+    "pages": "pp. 1, 8-9"
+   },
+   {
+    "method": "Method 4",
+    "relation": "contradiction",
+    "note": "XGBoost chosen among four standard families; the OPT imitates k-means labels with no depth, solver, time limit, certificate, gap or accuracy figure in the text, and no CART or multinomial baseline. Tension T1: an optimal name without a certificate. Scope caveat: the question is clinical stratification, not the learner.",
+    "pages": "pp. 2, 6, 8, 24"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Programme machinery: the group's HAIM framework, xHAIM as the next step, and the Interpretable AI product for the tree; an ORC student first author with a hospital co-senior author. No funding or competing-interest statement although the company's software is used (Integrity rule 5).",
+    "pages": "pp. 1-3, 9-13"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "re-pose the target at the clinicians' decision strata",
+    "evidence": "Recurrence (S678 in c41): four vulnerability tiers deliberately mirror the FI's four levels used for prognosis and care planning.",
+    "pages": "pp. 3, 8"
+   },
+   {
+    "pattern": "cluster-then-tree phenotyping",
+    "evidence": "Predicted multi-outcome risks plus age and comorbidity count are clustered into four tiers, made assignable by an interpretable tree, and validated by downstream prognostic AUC on held-out visits.",
+    "pages": "p. 8; Table 1, p. 9"
+   },
+   {
+    "pattern": "second stage fitted on held-out first-stage outputs",
+    "evidence": "Clusters and tree are fitted on validation-set predictions to avoid optimistic training-set risks; S618 trains its meta-learner on validation-set probabilities (S618 p. 13).",
+    "pages": "p. 8"
+   },
+   {
+    "pattern": "matched-cohort re-run for the incumbent",
+    "evidence": "The FI is scored only where it was recorded, and a second HAIM model is trained and tested on exactly those visits for a like-for-like comparison.",
+    "pages": "pp. 7-8, 19"
+   },
+   {
+    "pattern": "frozen modular extractors producing one patient vector",
+    "evidence": "Recurrence (S023 in c23, S678 in c41): per-modality foundation-model embeddings concatenated with tabular features for one boosted learner.",
+    "pages": "pp. 3, 5"
+   }
+  ],
+  "transferable": [
+   "Recover incomplete death outcomes with an explicit rule cascade (recorded dates, expired discharges, an age-gap rule with asymmetric margins), dropping the visits that stay undetermined (p. 14)",
+   "Build every feature over nested look-back windows (current visit, 30, 60, 90 and 180 days, 1 and 2 years) to separate acute from chronic risk (p. 4)",
+   "Fit any second stage (clusters, a tree, a meta-model) on the validation split's out-of-sample predictions, never on training-set predictions (p. 8)",
+   "Judge a discretization by its downstream prognostic value: one-hot tiers in an untuned logistic model, trained on validation and scored on test, beside the incumbent's AUC (p. 8; Table 1, p. 9)",
+   "Give the incumbent its strongest footing: score it only where it was recorded and retrain your model on that same cohort (pp. 7-8; Appendix B, p. 19)",
+   "Print training, validation and test AUC for every modality and note type, failures included (Tables 2-7, pp. 15-17)",
+   "Pit a foundation-model image embedding against a simple domain-feature model (body composition) before crediting the foundation model (Table 5, p. 16)"
+  ],
+  "coauthors": "Joanna G. Kondylis (MIT ORC, first author); Houman Javedan (Division of Aging, BWH, and HMS); Bharti Khurana (Trauma Imaging Research and Innovation Center, BWH, and HMS); Bertsimas and Khurana are marked as contributing equally (p. 1). The file has no contribution, funding or competing-interest statement.",
+  "quotes": [
+   {
+    "text": "To avoid this temporal mismatch and give the FI model its strongest footing",
+    "page": 7
+   },
+   {
+    "text": "It is also important to note that we only looked at a limited number of short term outcomes that do not cover the breadth and depth of the utility of frailty assessments",
+    "page": 9
+   }
+  ]
+ }
+]

@@ -1,0 +1,452 @@
+[
+ {
+  "id": "S376",
+  "year": "2023",
+  "title": "High-performance pediatric surgical risk calculator: a novel algorithm based on machine learning and pediatric NSQIP data",
+  "read_level": "full",
+  "contribution": "Optimal classification trees trained on 2012–2017 pediatric NSQIP data (431,148 cases) predict 30-day mortality and morbidity on 2018 data (108,604 cases) with test AUCs of 0.94–0.96 (mortality), 0.90 (major), 0.86 (any) and 0.69 (minor). They beat a re-fit of the ACS NSQIP Pediatric calculator's logistic method on morbidity (0.90 vs 0.82 for major) but not on mortality, hold up without ASA class and labs, and ship as a free web page and iOS app.",
+  "problem_entry": "{ML+AP} Existing pediatric calculators (ACS NSQIP Pediatric, Kraemer et al.) 'suffer from unstable internal validation' and vary across subspecialties, and procedure-specific scores do not generalize (p. 1). Entry: carry the group's OCT calculator approach (POTTER) to the pediatric NSQIP registry (pp. 1–2). Hypothesis: beat the ACS NSQIP Pediatric calculator on 30-day mortality and morbidity (p. 2).",
+  "key_idea": "Optimal classification trees with optimal-tree imputation for four outcomes, each fitted on four variable sets (all; no ASA class; no labs; neither). A threshold is chosen to keep the true-positive rate while pushing false positives toward 0. The incumbent's logistic method is re-fitted on the same split (p. 2).",
+  "assumptions": "Pediatric NSQIP 2012–2018 (133 preoperative, 65 intraoperative, 160 postoperative attributes); preoperative variables under 30% missing kept; codes collapsed to CCS; 74 variables; temporal split of 431,148 training and 108,604 test cases (pp. 1–2); 1,553 deaths in training (Table 2, p. 3).",
+  "proof_devices": [
+   "n/a for formulation or proof (empirical paper); OCT is asserted to be 'solved to global optimality' by mixed-integer optimization, with no depth, solver, time limit or gap reported (p. 2)",
+   "temporal hold-out: train on 2012–2017, test on 2018 (p. 2)",
+   "nested variable-set sensitivity analysis: all, without ASA class, without labs, without both (p. 2)",
+   "incumbent re-implemented: logistic regression by Kraemer et al.'s method on the same training years (p. 2)"
+  ],
+  "experiments": "Test AUCs: mortality 0.94–0.96, major 0.90–0.91, any 0.86, minor 0.69–0.70 (Tables 4–7, pp. 5–6). Against the re-fitted logistic regression: 0.90 vs 0.82 (major), 0.86 vs 0.80 (any), 0.69 vs 0.66 (minor), no significant difference for mortality, whose logistic AUC is not printed (p. 5). No CIs for the AUC differences and no calibration [my reading]; software Julia 0.6.0, R 4.0.5, SAS 9.4 (p. 2).",
+  "positioning": "Against the ACS NSQIP Pediatric calculator (Kraemer et al. 2016) and procedure-specific pediatric scores; the warrants are the group's own POTTER, liver-transplant, imputation and OCT papers (refs 10–14, 21–23; pp. 1–2, 7).",
+  "writing": "Clinical structured abstract and an explicit hypothesis (pp. 1–2); 'one of the first' and 'validated by the highest standard' claims (p. 5); the discussion imagines a changed 'landscape for clinical care' (p. 6); the limitations are specific (pp. 6–7).",
+  "limits_future": "Stated: registry weaknesses (coding errors, selection bias), procedures outside NSQIP, untested subgroups, weak minor-morbidity prediction (pp. 6–7). Not stated [my reading]: prospective or external validation, calibration, the choice of tree depth.",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Duel on the same data: the incumbent calculator's logistic method is re-fitted on the same training years and scored on the same test year, not quoted from its paper (step 5).",
+    "pages": "pp. 2, 5"
+   },
+   {
+    "method": "Method 4",
+    "relation": "contradiction",
+    "note": "The trees are called globally optimal, with no certificate, gap, time limit or solver reported (step 4; Tension T1).",
+    "pages": "p. 2"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Users (families, clinicians, ICU planners) and the current tool are named and the model ships as an app, but predictions (AUC) are scored, not decisions, and no use or outcome after release is measured.",
+    "pages": "pp. 1, 5–7"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "drop costly or rater-dependent inputs and show the model holds",
+    "evidence": "four variable sets perform alike; ASA class is observer-dependent and labs are hard to obtain; the trees on display are the models without labs and ASA class",
+    "pages": "pp. 2, 4–5"
+   }
+  ],
+  "transferable": [
+   "With a multi-year registry, train on the early years and test on the last one, a temporal hold-out that mimics deployment (p. 2).",
+   "Re-fit the incumbent's published method on your own training split, so that both models face the same test set (p. 2).",
+   "Fit the model on nested variable sets (all; without the rater-dependent score; without labs; without both) and deploy the cheapest set that holds up (pp. 2, 4–5).",
+   "Tabulate the test cases your model catches and the incumbent misses (Appendix 9, summarized on p. 6)."
+  ],
+  "coauthors": "Michael Li, Nova Zhang, Carlos Estrada, Hsin-Hsiao Scott Wang (corresponding)",
+  "quotes": [
+   {
+    "text": "This method is similar to classic classification and regression tree; however, it is solved to global optimality with a novel method (mixed integer optimization) which provides superior performance.",
+    "page": 2
+   },
+   {
+    "text": "To our surprise, ASA score and lab data did not play significant roles in our pediatric surgical morbidity and mortality prediction model.",
+    "page": 5
+   }
+  ]
+ },
+ {
+  "id": "S377",
+  "year": "2023",
+  "title": "A novel algorithm for a broad class of nonconvex optimization problems",
+  "read_level": "partial",
+  "contribution": "Introduces the Reformulation-Perspectification Technique: pairwise products of linear and convex constraints are convexified by perspectives, optionally with an SDP cut. It is embedded in a spatial branch and bound that branches on maximum-margin hyperplanes through the analytic center, with convergence proved under Lipschitz conditions. On six problem classes it solves more instances than BARON and SCIP, while BARON stays faster on small instances.",
+  "problem_entry": "{CP+IO; RO as the source of the branching idea; HS as components} Nonconvex problems whose nonconvex parts are sums of products of convex functions (nonconvex QPs, mixed-binary LPs, concave minimization, difference-of-convex and fractional problems) (pp. 1–2). RLT multiplies only linear or quadratic constraints (p. 2); Selvi et al. (2020) and CoMax have no global guarantee and cannot handle nonconvex constraints (p. 3); BARON and SCIP are the state of the art (pp. 2–3).",
+  "key_idea": "RPT-BB in five steps: epigraph variables; pairwise products of constraints written in perspective form, with U replacing xxᵀ; an optional LMI; upper bounds from candidate points read off the relaxation (columns U_i/x_i, eigenvectors of U), polished by Ipopt or mountain climbing; spatial branch and bound on maximum-margin hyperplanes through the analytic center that split the candidates (pp. 7–16, 24).",
+  "assumptions": "X nonempty and compact (Assumption 1); sign conditions on the factors (Assumption 2) (p. 5). Convergence needs Lipschitz factors and recession functions (Theorem 2), and bounded conjugate domains in the biconjugate case (Proposition 1) (pp. 25–27); the linear multiplicative problems violate them (p. 34). Instances: random convex-maximization classes, QCQPs, linear multiplicative problems and Dutch dike rings 10, 15 and 16 (pp. 29–37).",
+  "proof_devices": [
+   "joint convexity of the perspective turns each product into a convex constraint in (x, U) (p. 8)",
+   "Lemma 1: equality × convex products are redundant once Ud = qx is imposed (p. 10)",
+   "Theorem 1: linear constraints redundant to other linear constraints add nothing, by LP duality (p. 20)",
+   "Lemma 2: candidate points U_i/x_i are feasible when x ≥ 0 (p. 13)",
+   "maximum-margin hyperplane through the analytic center found by a small MIO (problem (11), pp. 14–15)",
+   "Theorem 2: Adaptation A bisects the bounding box every d levels; |U_ij − x_i x_j| ≤ 4ε(|α_j| + ε) passed through Lipschitz constants (pp. 25–26)",
+   "counterexample c(x) = x eˣ shows the recession condition is needed (pp. 26–27)"
+  ],
+  "experiments": "One Intel i9 2.3 GHz core with 16 GB; MOSEK 9.2.45, Gurobi 9.0.2, SCIP 8.0.2, BARON 20.10.16, CPLEX 22.1.0; gap 10⁻⁴, 3600 s limit; many rows average 10 random instances (pp. 28–35). RPT-BB solves more instances than BARON and SCIP (p. 1). The exact MIO is fastest on most polyhedral instances (p. 29) and BARON on most small ones (pp. 31–33). RPT-BB proves optimality on linear multiplicative problems with 8–30 products, in 909, 305 and 55 s (pp. 34–35), but loses with 200 variables and 3 products (p. 35). RPT-SDP-BB solves all dike instances at the root in under a second (p. 37); on ring 16, plain RPT-BB leaves a larger gap than BARON (p. 38).",
+  "positioning": "Extends RLT (Sherali–Adams) to products of convex constraints; positions against BARON's branch-and-reduce and SCIP; criticizes Selvi et al. (2020) and CoMax (Ben-Tal–Roos 2022) for lacking global guarantees (pp. 2–3); borrows the branching insight from Zhen et al. (2022) (pp. 14–15).",
+  "writing": "Numbered three-item contribution list (pp. 3–4); a toy problem worked through every step (pp. 16–20); remarks and small examples show why each device is needed (Remark 1, p. 11; Examples 5–6, pp. 23–24); the abstract says where BARON is faster (p. 1).",
+  "limits_future": "Multiplying all pairs makes the method less tractable with many variables and constraints, and fewer products could be used (p. 38); the trade-off on linear multiplicative problems (p. 35). Future: hyperplanes in the y-space (p. 16); multiplying the SLC constraints themselves (p. 38).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "A class owned by global solvers (BARON, SCIP) is relaxed, node by node, into convex conic programs solved by MOSEK (perspective, exponential and second-order cones, optional SDP); the tractability boundary (all-pairs products at scale) is printed.",
+    "pages": "pp. 7–13, 28, 35, 38"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Local solvers (Ipopt, mountain climbing) supply upper bounds inside an exact branch and bound; every run states solver versions, machine, gap and time limit; uncertified entries are starred; BARON, SCIP, CPLEX and the exact MIO are dueled, and their wins printed.",
+    "pages": "pp. 13–16, 28–38"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "split the critical points across children (a robust-optimization lesson reused for branching)",
+    "evidence": "as in Zhen et al. (2022), a split that leaves all worst-case scenarios on one side does not improve the bound, so the hyperplane separates the candidate points evenly with maximum margin",
+    "pages": "pp. 14–15"
+   },
+   {
+    "pattern": "show that known relaxations are special cases of the new technique",
+    "evidence": "Remark 3: disjunctive, generalized linear and fractional optimization and the approximate S-lemma are recovered by RPT or RPT-SDP (Appendix B not read)",
+    "pages": "p. 12"
+   }
+  ],
+  "transferable": [
+   "Multiply a linear inequality b − aᵀx ≥ 0 by a convex constraint h(x) ≤ 0 and write (b − aᵀx)·h((bx − Ua)/(b − aᵀx)) ≤ 0 with U for xxᵀ: a valid convex cut that RLT cannot form (p. 9).",
+   "Read primal candidates off a lifted relaxation (columns U_i/x_i, eigenvectors of U) and use them as upper bounds and as warm starts for a local solver (pp. 13–14, 24).",
+   "Branch on a maximum-margin hyperplane through the analytic center that separates the current candidate points; interleave coordinate bisection every d levels so that convergence can be proved (pp. 14–15, 25).",
+   "After a convergence theorem, give a one-line counterexample that shows which assumption is needed (pp. 26–27)."
+  ],
+  "coauthors": "Danique de Moor, Dick den Hertog, Thodoris Koukouvinos, Jianzhe Zhen (corresponding); author order alphabetical",
+  "quotes": [
+   {
+    "text": "In particular, our approach solves more instances to global optimality for the considered problems than BARON and SCIP.",
+    "page": 1
+   },
+   {
+    "text": "Since we are multiplying all constraints in the feasible region, the method becomes less tractable in problems involving a large number of variables and constraints.",
+    "page": 38
+   }
+  ]
+ },
+ {
+  "id": "S394",
+  "year": "2023",
+  "title": "Automated segmentation of sacral chordoma and surrounding muscles using deep learning ensemble",
+  "read_level": "full",
+  "contribution": "Six 3D U-Net models for the sacral-chordoma GTV and five muscle groups (48 MGH patients) are combined by averaging and by validation-optimized weights. The ensembles raise mean Dice and cut variance (the optimal ensemble beats the best single model by 1.7% Dice and 14% ASSD), but a blinded oncologist needs 11 rather than 6 minutes to edit the 'optimal' ensemble's GTVs.",
+  "problem_entry": "{ML+AP} Manual contouring for radiotherapy is slow and expert-dependent, hardest for rare tumors (p. 1); soft-tissue segmentation is little studied and deep-learning evaluations are 'often not pushed enough' for clinical translation (p. 2). Problem: segment the GTV and five muscle groups that act as spread pathways, toward automating the clinical target volume (pp. 2, 11).",
+  "key_idea": "A pool of six 3D U-Nets (two architectures × three losses) combined by a voxel-wise average and by an 'optimal ensemble' whose simplex weights maximize the summed validation IoU (pp. 2, 4–5); an independent oncologist times the edits on anonymized contours (p. 6).",
+  "assumptions": "48 consecutive MGH patients (1999–2019) treated with definitive proton therapy (p. 2); GTVs from six oncologists over 20 years, muscles re-contoured by one oncologist (p. 3); 30/5/8 split plus a 5-patient outlier test set with obliterated piriformis and larger GTVs (p. 3); 2 mm resampling, left and right muscles merged (p. 3); data not available (p. 1).",
+  "proof_devices": [
+   "n/a for proof; ensemble weights found by Adam on a nonconvex IoU objective (learning rate 10⁻³, tolerance 10⁻⁴), leaving four nonzero weights 0.2, 0.2, 0.28, 0.32 (p. 5)",
+   "selection metric (IoU) kept distinct from test metrics (volumetric Dice, surface Dice at 2 and 3 mm, ASSD) (p. 5)",
+   "surface tolerances derived from the 2 mm resolution and clinical precision (p. 6)",
+   "blinded qualitative review: anonymized contours, editing time per structure with the ground truth as a reference (p. 6; Table 4, p. 9)"
+  ],
+  "experiments": "8 test patients: ensembles have higher averages, lower variance and better minima in 31 of 36 (Dice) and 35 of 36 (ASSD) model–structure pairs (p. 6); the optimal ensemble beats the best standalone model by 1.7% Dice and 14% ASSD (p. 6; Table 2, p. 7). On the 5 outliers the ensembles no longer win systematically (p. 9). Blinded review of 5 patients: GTV editing 6 min (ground truth), 6 (best model), 11 (optimal ensemble) (Table 4, p. 9). Training about 2 days on a Tesla V100; inference under 1 minute per patient (p. 4).",
+  "positioning": "Within deep-learning auto-segmentation (3D U-Net and residual U-Net, which outperform atlas methods) and stacking ensembles; claims the first models for these muscle compartments together with the GTV (pp. 2, 4).",
+  "writing": "Bulleted contributions (p. 2); results with averages, SDs and ranges (Tables 2–3, pp. 7–8); a limitations section that leads with the method's own adverse finding (p. 10); the conclusion repeats the 2% and 14% gains (p. 11).",
+  "limits_future": "Stated: the optimal ensemble's GTVs need more editing (conjectured ground-truth flaws), small rare-tumor data, mixed GTV contouring styles, weaker results on very large tumors, no dosimetric evaluation, CT only (pp. 10–11). Future: MRI channels, more pelvic structures, CTV delineation (pp. 10–11).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "contradiction",
+    "note": "'Optimal ensemble' names a local Adam solution of a nonconvex objective, with no certificate (step 4; Workflow E's correction on optimal). Bertsimas is fourth of ten authors, so this is weak evidence of his own practice.",
+    "pages": "p. 5"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The clinicians' current practice (40 minutes for muscles, 10–60 minutes for a GTV) frames the benefit and a blinded expert's editing time is decision-relevant, but the time saved is taken from reported durations, not measured against the current workflow, and no treatment-plan outcome is scored.",
+    "pages": "pp. 6, 9–10"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "metric-optimal is not clinic-optimal: report blinded editing time beside overlap metrics",
+    "evidence": "the ensemble with the best Dice needs the longest GTV editing time; the paper prints the disagreement and argues for qualitative clinical assessment",
+    "pages": "pp. 6, 9–10"
+   },
+   {
+    "pattern": "keep the extreme cases as a separate outlier test set",
+    "evidence": "five patients whose piriformis the tumor obliterated are held out and reported separately rather than dropped",
+    "pages": "pp. 3, 8–9"
+   }
+  ],
+  "transferable": [
+   "Keep extreme cases as a separate outlier test set instead of dropping them, and report both test sets (pp. 3, 8–9).",
+   "Select models on one metric (validation IoU) and test them on others (volumetric and surface Dice, ASSD), so the test does not reward overfitting to the selection metric (p. 5).",
+   "Anonymize the automated and the ground-truth contours and have an independent expert time the edits per structure, with the ground truth as a reference row (pp. 6, 9).",
+   "Derive surface-distance tolerances from the image resolution and the clinically acceptable error, and state the reasoning (p. 6)."
+  ],
+  "coauthors": "Leonard Boussioux (corresponding), Yu Ma, Nancy Knight Thomas, Nadya Shusharina, Jennifer Pursley, Yen-Lin Chen, Thomas F. DeLaney, Jack Qian, Thomas Bortfeld (Qian and Bortfeld supervised)",
+  "quotes": [
+   {
+    "text": "Contrary to standard weighted average ensembles in machine learning that can be obtained with linear regression (e.g., on a tabular task), this 3D objective function (Equation 1) is not convex.",
+    "page": 5
+   },
+   {
+    "text": "This reflects the limitations of only using quantitative metrics and the importance of complementing with a qualitative clinical use assessment.",
+    "page": 10
+   }
+  ]
+ },
+ {
+  "id": "S418",
+  "year": "2023",
+  "title": "Holistic prescriptive analytics for continuous and constrained optimization problems",
+  "read_level": "full",
+  "contribution": "Holistic prescriptive analytics jointly clusters observations, fits one predictor per cluster and prescribes constrained or continuous decisions by alternating local search. A data-duplication reduction makes any MSE learner decision-aware. The method cuts prescriptive cost by 28–30% on synthetic data, raises assortment revenue by 17% and ties prescriptive trees on a diabetes data set.",
+  "problem_entry": "{DA+ML; IO for the assignment step; HS for the local search} Predict-then-optimize and Bertsimas–Kallus (2020) still train first and prescribe second (p. 2); optimal prescriptive trees are joint but limited to discrete, low-cardinality, unconstrained decisions (pp. 3–4); Demirović et al. call for better direct methods (p. 4). Problem: one model that clusters, predicts and prescribes for many learners and constrained or continuous decisions (pp. 3–4).",
+  "key_idea": "Minimize λ·prediction error + (1 − λ)·prescriptive cost jointly over cluster assignments, per-cluster predictors and decisions (Problems (3)–(5), pp. 4–5). Solve by alternating minimization with random restarts and k-means warm starts (pp. 7–8). For quadratic cost, an augmented data set (p copies of each row, q zero-target copies) turns the joint fit into plain MSE fitting (Proposition 1, pp. 8–9).",
+  "assumptions": "λ ∈ [0, 1] by cross-validation (pp. 4–5), though the tuning grid reaches 10³ (p. 17) [my reading]; ℓ2 clusters (p. 5); synthetic n = 10,000, p = 4, five tree-defined groups, cost y² (pp. 11–12); assortment with no inventory limit or cannibalization (pp. 13–14); proprietary diabetes data with 100,000 patients and 11 treatments (p. 14); real-data counterfactuals from a best-out-of-sample XGBoost or neural network (p. 11).",
+  "proof_devices": [
+   "Proposition 1: the augmented-data MSE fit equals the joint predictive–prescriptive fit, by expanding the loss (pp. 8–9)",
+   "complexity O(T_max(kρ₁((p + q)n/k) + ρ₂(n))) given oracle costs for fitting and prescribing (p. 9)",
+   "convergence to a local minimum asserted without proof; T_max = 2 reduces to a clustered predict-then-optimize (pp. 8–9)",
+   "tree decision step: enumerate reachable leaves when unconstrained, an MIO when constrained (p. 11)"
+  ],
+  "experiments": "Baselines: predict-then-optimize, SAA, Bertsimas–Kallus weights, Tulabandhula–Rudin joint fitting (with and without elastic net), prescriptive trees from Interpretable AI (pp. 11, 14); a 2.3 GHz quad-core i7 with 16 GB (p. 18). Synthetic test: cost −28% (linear) and −30% (elastic net) against the baseline (Table 2, p. 12); k = 5 recovered (p. 12). About 2,220–2,240 s per iteration at n = 100,000, k = 5 (Table 3, p. 15). Assortment +17% (Table 4, p. 15). Diabetes −14% against the baseline and 7% better than Bertsimas–Kallus; prescriptive trees tie on cost with higher R² (85 vs 82) (p. 14; Table 5, p. 16).",
+  "positioning": "Sorts the literature into predict-then-optimize (SAA, RO, SPO, Wilder et al.) and direct methods (Tulabandhula–Rudin, Bertsimas–Kallus, OPTs, Demirović et al.), and presents HPA as the tractable direct method Demirović et al. called for (pp. 3–4).",
+  "writing": "Six-item contribution list and a 14–30% headline range (p. 4); a toy example with figures motivates joint clustering (pp. 5–6); the abstract carries no numbers (p. 2); tables bold the best method per metric (pp. 12, 15–16).",
+  "limits_future": "Extensions: probabilistic cluster assignment, warm-started retraining (p. 16). Limits stated as such: none [my reading]; unstated: no certificate for the local search, scoring by a learned model, proprietary medical data, and the 5–17% margin over Bertsimas–Kallus is a difference in percentage points of the baseline [my arithmetic] (p. 4).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Decisions are scored by prescriptive cost against predict-then-optimize and the group's own prescriptive methods, but on real data a learned model stands in for outcomes, and there is no owner's rule and no field test.",
+    "pages": "pp. 11–16"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "One joint model replaces the sequential pipeline (step 1), warm-started by k-means and the observed treatments (step 2), but it is solved by alternating local search with restarts to a local minimum with no gap (the Heuristic 3 route); the machine is named, no solver.",
+    "pages": "pp. 7–8, 11–12, 18"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "The joint problem is a nonconvex mixed-integer model; the class is kept only per block: a convex fit for convex learners and costs, an LP decision step in the assortment case, an assignment problem for clusters, an MIO for constrained trees.",
+    "pages": "pp. 8–9, 11, 13"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "reduce a decision-aware loss to data (duplicated and zero-target rows) so any off-the-shelf learner can be used",
+    "evidence": "Algorithm 2 and Proposition 1: with c = y² and λ = p/(p + q), p copies of each training row plus q zero-target copies with the prescribed decision reproduce the joint objective",
+    "pages": "pp. 8–9"
+   }
+  ],
+  "transferable": [
+   "If the decision cost is y² and λ = p/(p + q), add p copies of each training row and q copies of each row with the prescribed decision and target 0, then fit any MSE learner (pp. 8–9).",
+   "Motivate a joint model with a two-cluster toy in which cluster-then-regress learns a slope of 14 instead of 100 and misses a new point by 150, while the joint fit recovers both slopes (pp. 5–6, 16–17).",
+   "In synthetic tests, tune the number of clusters on validation data and report whether the true number is recovered (p. 12).",
+   "When counterfactuals are unknown, name the learned model that scores the prescriptions and choose it out of sample (p. 11)."
+  ],
+  "coauthors": "Omar Skali Lami",
+  "quotes": [
+   {
+    "text": "Algorithm 1 converges to a local minimum of Problem (5), which is why we use multiple restarts.",
+    "page": 8
+   },
+   {
+    "text": "Only prescriptive trees (presc-trees) are on par with HPA in terms of prescriptive cost and outperform it in terms of out-of-sample accuracy.",
+    "page": 14
+   }
+  ]
+ },
+ {
+  "id": "S428",
+  "year": "2023",
+  "title": "Data-driven COVID-19 vaccine development for Janssen",
+  "read_level": "full",
+  "contribution": "Describes how Janssen used the DELPHI epidemic model as a policy-scenario tool to choose 230 phase III trial sites in 2020. 91% of the sites became hotspots, with site incidence of 5.34% against 2.06% for their areas. The paper credits the approach with a trial 6–8 weeks shorter and 15,000 participants smaller, without a stated counterfactual.",
+  "problem_entry": "{AP+DA; RO named for the site choice but not formulated; HS in the calibration} Trial length T ∝ (1/√N)·(1/I)·(1/p_eff), so with N and efficacy fixed the lever is incidence at the sites (p. 3); site set-up takes 4–5 months, so hotspots must be predicted months ahead (p. 4); long-horizon epidemic forecasts had failed (Ebola, Zika) and no analytics effort had succeeded in this setting (p. 3).",
+  "key_idea": "DELPHI (an 11-state SEIR extension with undetected cases, an arctan societal response with a resurgence bump and time-varying mortality) used to simulate policy scenarios instead of forecasting policy; intervention strengths of five policy categories are estimated across 167 areas; Janssen kept the countries and then counties that stayed hotspots across policy paths (pp. 4–9, 13).",
+  "assumptions": "13 fitted parameters per area, biological parameters fixed from a review of 190+ papers (pp. 12–13); recency-weighted MSE, daily truncated Newton within 10% and weekly dual annealing within 50% kept only if better on the last two weeks (p. 13); OxCGRT and IHME data, January–May 2020 (p. 7); a policy switch shifts the response by the difference in intervention strength on a piecewise-linear scale (pp. 13–14); hotspot = at least 1.4% annualized moderate-to-severe incidence (p. 9).",
+  "proof_devices": [
+   "n/a for proof; intervention strength s_i = 1 − γ̄_i/γ̄_1 estimated across areas (p. 7)",
+   "scenario correction clipped to [0, 2] with piecewise-linear scaling through (0%, 2) and (100%, 0) (pp. 13–14)",
+   "two-track calibration: bounded daily local refit plus weekly global dual annealing with a two-week validation window (p. 13)",
+   "site-selection 'robust optimization' named but not formulated (p. 9) [my reading]"
+  ],
+  "experiments": "Median MAPE 5.8% (cases) and 10.6% (deaths) over 15 days in 167 areas (Table 1, p. 6); four-week-ahead US deaths: first in 6 of 13 weeks and never below fourth of eight CDC-ensemble models (p. 6). Trial: 230 sites, 43,783 participants, site incidence 5.34% vs 2.06% for the areas, 91% hotspot sites (Table 3, p. 9; pp. 10–11). Savings of 6–8 weeks and 15,000 participants with no stated counterfactual (pp. 2, 12) [my reading]; 'over 90% accuracy' is a precision called 'high specificity' (p. 11) [my reading].",
+  "positioning": "Against failed long-horizon epidemic forecasts (Ebola, Zika) and earlier proposals for hotspot-based trials (Dean et al. 2020; Madewell et al. 2021; van der Plas et al. 2021); DELPHI against seven CDC-ensemble models (pp. 3, 6).",
+  "writing": "Applied narrative with an Edelman framing: background, problem statement, challenges, model, use, impact (pp. 2–12); headline numbers in the abstract (p. 2); 'first successful implementation' claims (pp. 2, 12); author biographies list awards (p. 16).",
+  "limits_future": "No limitations section [my reading]; the unreliability of long-term forecasts is acknowledged and designed around (p. 7). Later uses: RSV site selection (83% county accuracy), Medical Devices demand planning, return-to-work for 130,000 employees (p. 11). Unstated: the counterfactual for the savings, a comparison with Janssen's pre-DELPHI shortlist, the site-selection model.",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Owner, decision and deployment are clear and the decision is scored (site incidence, share of hotspots, trial length and size), but the baseline is the areas' average incidence, not the sites Janssen would otherwise have chosen, and the savings carry no counterfactual.",
+    "pages": "pp. 3–4, 8–12"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "One applied paper per deployment, in the INFORMS applied journal with an Edelman framing (Bertsimas a four-time finalist, Li a 2021–2022 finalist); adoption spread across Johnson & Johnson (RSV, Medical Devices, return-to-work).",
+    "pages": "pp. 2, 11, 16"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "The problem is entered through epidemiology's own model (SEIR → DELPHI) with an optimization-based calibration; the site selection is called robust optimization, but no formulation or class is given.",
+    "pages": "pp. 4–5, 8–9, 13"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "scenarios instead of forecasting the unforecastable driver",
+    "evidence": "rather than predict government responses, DELPHI simulates incidence under each feasible policy path, and Janssen keeps the sites that stay hotspots under all of them",
+    "pages": "pp. 7–9"
+   },
+   {
+    "pattern": "find the lever in the domain's governing formula",
+    "evidence": "T ∝ (1/√N)·(1/I)·(1/p_eff) leaves incidence I as the only lever once sample size and efficacy are fixed",
+    "pages": "p. 3"
+   }
+  ],
+  "transferable": [
+   "Start from the formula that governs the outcome and name the one lever you control (p. 3).",
+   "Estimate each policy category's effect from the fitted model's own response parameter across many areas, then reuse those strengths to simulate policy switches (pp. 7, 13–14).",
+   "Calibrate on two tracks: a bounded local refit daily and a global search weekly, keeping the global solution only if it wins on the latest two weeks (p. 13).",
+   "Judge chosen sites by their realized outcome against the regional background rate, with a significance test (Table 3, pp. 9–11)."
+  ],
+  "coauthors": "Michael Lingzhi Li, Xinggang Liu, Jennings Xu, Najat Khan",
+  "quotes": [
+   {
+    "text": "we enumerate the first successful implementation of using machine learning models to accelerate phase III vaccine trials",
+    "page": 2
+   },
+   {
+    "text": "Therefore, to provide useful insights, we avoided attempting to predict the government response and used DELPHI to create scenario analyses instead.",
+    "page": 7
+   }
+  ]
+ },
+ {
+  "id": "S442",
+  "year": "2023",
+  "title": "Accelerating vaccine innovation for emerging infectious diseases via parallel discovery",
+  "read_level": "full",
+  "contribution": "(Read as NBER Working Paper 30126, June 2022; WP pages.) A Monte Carlo simulation of a 120-candidate mRNA vaccine megafund across 11 emerging infectious diseases finds a −6.0% expected annualized return and a −$9.5 billion NPV. Clinical trials are 94% of costs and the price per dose is the decisive driver (break-even $69–$78), so about $10 billion of public funding would be needed.",
+  "problem_entry": "{AP (finance and health policy); SD (Monte Carlo of correlated outcomes); no optimization model} Vaccine R&D for emerging infectious diseases stagnated for lack of financial incentives (pp. 3, 5); Vu et al. (2022) found a −61% return using a fixed expected annual profit (p. 10). Question: can a 120-candidate mRNA portfolio across 11 EIDs, including disease X, attract private investors (pp. 4, 11)?",
+  "key_idea": "Simulate the whole value chain under random outbreaks (100,000 runs): correlated trial outcomes (Emrich–Piedmonte), phase 3 only once an outbreak occurs, manufacturing and supply-chain costs, revenue per outbreak (pp. 14–18, 28–29); a back-of-the-envelope expected-value model comes first (pp. 5–8).",
+  "assumptions": "Portfolio and outbreak probabilities from CEPI and Vu et al. (Table 1, p. 11); phase success 60.0/83.6/65.8/80.9% (Table 2, p. 12); technology factor 1.2 for six diseases (p. 12); ρ_ij = 1 − d_ij from a biological distance, 0.8 within a pathogen, disease X independent (p. 13); no human challenge trials at baseline (p. 14); $20 per dose (p. 15); 20-year horizon (p. 17); 10% discount rate (p. 19); budget constraints and portfolio optimization left out on purpose (pp. 10–11).",
+  "proof_devices": [
+   "n/a (simulation study)",
+   "correlated Bernoulli trial outcomes by thresholding Cholesky-correlated normals at Φ⁻¹(1 − p_j) (Emrich–Piedmonte) (p. 29)",
+   "correlation from a biological distance, checked positive definite in this calibration; equal correlations in the sensitivity analysis to keep definiteness (pp. 13, 30)"
+  ],
+  "experiments": "Baseline: return −6.0% (SD 6.7%), NPV −$9.5 billion (SE $13 million), investment $17.7 billion vs revenue $7.5 billion, 31 of 45 outbreaks prevented, 66% chance of preventing a disease-X pandemic (p. 18); P(return > 0) 9.8%, P(NPV > 0) 3.1%; trials 94% of cost, phase 3 59% (p. 19). Sensitivity (Table S1, p. 32): break-even prices $69 (return) and $78 (NPV) (pp. 21, 29); a higher chance of success lowers NPV (p. 30); correlation 0 → 80% takes the return from −3.5% to −11.7% (p. 30); human challenge trials and portfolio size do not make returns positive (pp. 21–22, 31).",
+  "positioning": "Extends Vu et al. (2022) within the megafund literature that runs from Fernandez et al. (2012); uses the trial simulation of Siah et al. (2021); contrasts with portfolio-decision analysis for CEPI (Gouglas and Marsh) (pp. 9–11).",
+  "writing": "Executive summary for policy readers (p. 3); four bulleted key observations before the details (pp. 17–18); back-of-the-envelope arithmetic before the model (pp. 5–8); hedged policy conclusion ('likely to be necessary', 'may all play a role') (pp. 2, 23).",
+  "limits_future": "Idealized human challenge trials (p. 14); no portfolio optimization (pp. 10–11, 22); parameters from experts and the literature (p. 20). Future: adaptive and platform trials, staged phase 3 starts, a 'robust and multi-criteria optimization framework' (p. 22), public–private mechanisms (p. 23).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Financial self-sustainability is priced by one dominant knob, the price per dose, with break-even values ($69 for return, $78 for NPV) and a public-funding figure ($9.5 billion); but this is a sensitivity table over several knobs, with no bound and no optimization. Alphabetical authorship and Lo as corresponding author make this weak evidence of Bertsimas's own practice.",
+    "pages": "pp. 18, 21, 29, 32"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "back-of-the-envelope expected-value model before the simulation",
+    "evidence": "a three-line calculation shows that diversification raises the chance of an approval from 25% to 94.4% while local-outbreak revenues stay small, before the Monte Carlo",
+    "pages": "pp. 5–8"
+   },
+   {
+    "pattern": "simulate the unoptimized policy first, leave optimization to future work",
+    "evidence": "budget constraints and portfolio optimization are left out on purpose to isolate the endogenous drivers; a robust multi-criteria optimization framework is named as needed",
+    "pages": "pp. 10–11, 22"
+   }
+  ],
+  "transferable": [
+   "Before a large simulation, give a three-line expected-value calculation that exposes the mechanism the simulation will quantify (pp. 5–8).",
+   "Simulate correlated binary trial outcomes by thresholding a Cholesky-correlated normal vector at Φ⁻¹(1 − p) (p. 29); check that a distance-built correlation matrix is positive definite (p. 13), and switch to equal correlations in the sensitivity analysis (p. 30).",
+   "Report the break-even value of the dominant knob (for zero return and for zero NPV), not only elasticities (pp. 21, 29)."
+  ],
+  "coauthors": "Joseph Barberio, Jacob Becraft, Zied Ben Chaouch, Tasuku Kitada, Michael Lingzhi Li, Andrew W. Lo (corresponding), Kevin Shi, Qingyang Xu; author order alphabetical",
+  "quotes": [
+   {
+    "text": "We find that the portfolio generates an average annualized return on investment of –6.0% per annum and a net present value of –$9.5 billion, despite the scientific advantages of mRNA technology and the financial benefits of diversification.",
+    "page": 2
+   },
+   {
+    "text": "While we fully recognize the importance of active portfolio management in improving the financial performance of a vaccine megafund, we do not impose exogenous budget constraints or perform any portfolio optimization in our simulation analysis",
+    "page": 10
+   }
+  ]
+ },
+ {
+  "id": "S481",
+  "year": "2023",
+  "title": "Personalized breast cancer screening",
+  "read_level": "full",
+  "contribution": "(Read as an author manuscript; MS pages.) Optimal survival trees on claims data set each woman's next mammogram by trading the expected 'pessimistic delay' against an over-screening penalty, re-solved at every visit. At matched screening frequency the delay falls by 2–3 months, which a logistic model turns into a 30% average relative reduction in modelled mortality risk.",
+  "problem_entry": "{DA+ML+AP} US guidelines conflict, are one-size-fits-all and depend mostly on age (p. 1); personalized-screening studies rely on simulation with many progression and behaviour assumptions (p. 1). Entry: learn each woman's risk from claims and set the next screening time by a small optimization updated at every visit (p. 2).",
+  "key_idea": "Optimal survival trees give per-patient survival curves (p. 4); the next screening time minimizes expected pessimistic delay plus λ times an over-screening rate term on a monthly grid, re-solved at each visit (p. 5); a logistic model translates delay saved into mortality risk through the odds identity (pp. 5–6); λ is handed to patient and clinician as a frontier (Figure 4, p. 8).",
+  "assumptions": "Claims from Benefits Science Technologies: 378,524 → 349,088 → 329,156 patients (p. 2), against 378,840 in the abstract (p. 1); claims after 1 January 2020 dropped (p. 2); only features observable at routine visits (p. 2); the outcome is the pessimistic delay, an upper bound (p. 2); 1,544-patient mortality cohort with death inferred from discharge location or ER days (pp. 3–4); adherence assumed (p. 11).",
+  "proof_devices": [
+   "n/a for proof; screening time chosen by enumerating months for a one-dimensional objective (p. 5)",
+   "odds identity P_new = 1/(1 + ((1 − P)/P)e^{mβ}) converts a delay coefficient into a risk change (p. 6)",
+   "ROSE oversampling on the training set only, then refit after dropping insignificant features (pp. 5–6)",
+   "resource-matched comparison: λ tuned per patient so the personalized interval matches the observed one (p. 8)"
+  ],
+  "experiments": "Survival trees: Harrell's C 0.679/0.657 (train/test), AUC 0.67–0.71 by year (Tables 3–4, p. 7); Gail, Tyrer-Cuzick and BCSC quoted at 0.61–0.64 from other data, called 'only descriptive' (p. 7). Delay reduction 2.0–2.4 months on test, 2.2–3.3 on train (Table 6, p. 9), on 1,170 training and 301 test patients (Table 5, p. 9) [my arithmetic]; individual effects from 10 months better to 5 months worse (p. 9). Mortality model AUC 0.988/0.859, delay coefficient 0.136 (p. 9); relative risk reduction 30% on average, 31% at risk 0.10 down to 4.8% at risk 0.90 (Tables 8–9, p. 10).",
+  "positioning": "Against USPSTF and ACS guidelines and simulation-based personalized screening studies (refs 12–16); tree AUCs compared descriptively with Gail, Tyrer-Cuzick and BCSC (pp. 1, 7).",
+  "writing": "Abstract leads with screening's 10–20% mortality benefit and the 30% headline (p. 1); a one-patient worked example (pp. 7–8); 'significant' delay reductions reported without a test (p. 9) [my reading]; a short limitations section (p. 11).",
+  "limits_future": "Stated: claims less detailed than EHRs and without screening results or images, uninsured under-represented, history-length bias, adherence assumed (p. 11); an implementation pipeline is proposed, not deployed (p. 11). Not stated [my reading]: the mortality model's train–test gap, an evaluated cohort of about 1,500 patients against the abstract's 378,840, no prospective test; the conclusion's 'save as many as 30% more patients' restates a modelled relative risk (p. 12).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Decisions (screening times) are scored by a decision metric (pessimistic delay) against observed practice at matched screening frequency; still missing are a field test and observed mortality, which is projected by a model.",
+    "pages": "pp. 8–9"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "One knob (the over-screening penalty λ) yields a frontier between screening interval and delay that patient and clinician own ('a 16-month average interval over a 13-month interval' for one more month of delay); no solution-independent bound.",
+    "pages": "pp. 5, 8"
+   },
+   {
+    "method": "Method 4",
+    "relation": "contradiction",
+    "note": "The incumbent risk models (Gail, Tyrer-Cuzick, BCSC) are not run on the same data; their published AUCs are set beside the trees', though the paper flags the comparison as descriptive.",
+    "pages": "p. 7"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "resource-matched comparison against observed practice",
+    "evidence": "the penalty is tuned per patient so the personalized policy uses the observed average screening interval before delays are compared",
+    "pages": "p. 8"
+   },
+   {
+    "pattern": "pessimistic (upper-bound) proxy for an unobserved event time",
+    "evidence": "claims do not record when cancer became detectable, so the outcome is the gap between the last cancer-free sign and the first cancer sign, with worked examples",
+    "pages": "pp. 2–3"
+   }
+  ],
+  "transferable": [
+   "Compare a personalized policy with current practice at equal resources: tune its knob per individual until the average interval matches the observed one (p. 8).",
+   "When the data never record the event time, define a conservative bound from what they do record and show two worked cases (pp. 2–3).",
+   "Convert a logistic coefficient on a modifiable variable into a risk change by the odds identity, and tabulate it by baseline risk instead of averaging (p. 6; Table 8, p. 10).",
+   "Give the decision-maker the frontier over the penalty knob, not a single schedule (Figure 4, p. 8)."
+  ],
+  "coauthors": "Yu Ma, Omid Nohadani, Olga Kyriazi (the manuscript lists four authors; the index lists three)",
+  "quotes": [
+   {
+    "text": "For a fair comparison, we first ensure that the average time elapsed between personalized screenings is close to that of the real screenings.",
+    "page": 8
+   },
+   {
+    "text": "However, note that these reported values are only descriptive, as we obtained these values from papers using different data and features.",
+    "page": 7
+   }
+  ]
+ }
+]

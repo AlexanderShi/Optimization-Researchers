@@ -1,0 +1,328 @@
+[
+ {
+  "id": "H002",
+  "year": "2023",
+  "title": "A Simulated Annealing Approach to Designing Optimal Policy Trees",
+  "read_level": "full",
+  "contribution": "Ports the group's simulated-annealing tree search (OCT-SA) to Optimal Policy Trees by swapping the Gini score for a rescaled mean reward; on 10 data sets OPT-SA beats OPT on 3 and CART on 4, at 12-31 minutes against about one.",
+  "problem_entry": "HS+ML+DA: Optimal Policy Trees separate reward estimation from treatment assignment but still grow trees by OCT-style local search that can stop in local minima; since annealing improved OCT, apply the same framework to OPT (pp. 1-2, 4).",
+  "key_idea": "Keep OPT's tree moves and OCT-SA's annealing shell and change only the score (mean reward, rescaled by beta into [0, 1]); geometric cooling with alpha = 0.95; rank annealing inherited from OCT-SA takes the r-th best split in the hottest band down to the best; OPT and CART trees among 103 warm starts (pp. 3, 6, 8-9, 13).",
+  "assumptions": "Rewards from random-forest direct or doubly robust estimators (eqs. 1-2, pp. 3-4, 6, 13); only the complexity penalty gamma tuned, l = 2 and r = 3 copied from OCT-SA (pp. 6, 13); grocery pricing plus 9 UCI sets, n 301-97,295, p 5-14 (p. 13; Table 1, p. 14); several treatments are attributes nobody sets (acceleration, km driven, house age, MLOGP; p. 14); alpha said to suit 'the 61 real-world datasets we used to evaluate OPT-SA' though 10 are used, and bands designed on the same 10 sets (pp. 6, 9).",
+  "proof_devices": [
+   "No theorem; the optimality guarantee is borrowed from Kirkpatrick et al. and Bertsimas-Tsitsiklis 1993 (pp. 2-3). [my reading, via card c01 on S005 p. 2] Hajek's condition sum exp(-d*/T(t)) = infinity fails under the geometric schedule actually run (start at 1, alpha = 0.95, stop below 0.01; pp. 6-8), so the cited guarantee does not cover the algorithm",
+   "Acceptance rule: better always, equal never, worse with probability exp(-dE/(beta*temp_k)), with the score rescaled into [0, 1] (eqs. 3-5, p. 6; Algorithm 5, pp. 12-13)",
+   "Rank annealing: r temperature bands ending at iterations S/r, S/(r-1), ..., S; the move taken is the r-th best split in band 1 down to the best in band r (Algorithm 2, pp. 8-9)",
+   "Candidate cut points at midpoints of sorted unique values, one subtree kept per distinct score so ranks are defined (Algorithm 4, pp. 11-12)"
+  ],
+  "experiments": "Grocery pricing plus 9 UCI sets; split 35:15:50 with a separate reward model on the test half; 5 splits, depths 2-5, 103 warm starts; Python 3.8.15, OPT from Interpretable AI 3.2.0 in Julia 1.9.0, scikit-learn CART (pp. 8, 13). Table 2 at depth 5 (p. 14): against OPT 3 wins (each smaller than its +/- spread), 1 tie, 6 losses; against CART 4 wins, 1 tie, 5 losses; no significance tests. Runtime on qsar: CART and OPT about 1 minute, OPT-SA 12-31 minutes at depths 2-5 (p. 18). The metric is estimated, not observed, reward.",
+  "positioning": "Builds only on the group's own line (Optimal Prescriptive Trees, Amram et al.'s OPT, OCT, OCT-SA) plus Kirkpatrick et al., Bertsimas-Tsitsiklis 1993 and Rosenbaum-Rubin; no outside policy-learning baseline; nine references, none for OCT or OCT-SA (pp. 1-4, 13-14, 19-20).",
+  "writing": "The abstract prints the mixed count, 3 of 10 and 4 of 10 (p. 1); a contribution claims an optimality guarantee (p. 3); the conclusion opens unhedged, then hedges (p. 19); copy-over traces of OCT-SA in text, pseudo-code and a caption (pp. 6-7, 10, 12, 16, 18).",
+  "limits_future": "Stated: gains on few sets, 12-31 minutes against about one, Python (pp. 18-19). Future: more data sets 'to prove or disprove this hypothesis'; Julia or Cython (pp. 18-19). Unstated: no proof or certificate, a guarantee that does not cover the schedule, tuning on the evaluation sets, no equal-time comparison, estimated rewards, no tests.",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "The incumbents OPT and CART are both warm starts and opponents at matched depth over 5 splits (steps 2 and 5), but there is no exact model, time limit or gap; annealing replaces the local search that Heuristic 3 substitutes for a stalled MIO.",
+    "pages": "pp. 8, 13-14, 18"
+   },
+   {
+    "method": "Method 4",
+    "relation": "contradiction",
+    "note": "Step 4 (never call uncertified results optimal): 'optimal' stays in the name and a guarantee is claimed for a geometric schedule that the cited result does not cover; the 1993 review's yardsticks (equal computing time, complexity over families; card c01, S005 pp. 3-4) are not applied, with 12-31 minutes against about one. Further evidence for the warning on Tension T1.",
+    "pages": "pp. 2-3, 6-8, 18"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Policies are scored by out-of-sample mean reward, a decision metric, but the rewards are model estimates, several treatments are attributes nobody sets, and there is no owner or current rule.",
+    "pages": "pp. 2-3, 13-14"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "A node of the optimal-trees programme carried by an EECS student: OCT-SA ported to OPT, warm starts from Interpretable AI 3.2.0, and Bertsimas 'introduced the problem' (contribution statement), as in step 2. Also Tension T2: annealing is the working engine in 2023, and S005 is cited for a guarantee rather than for its reservations (p. 2); Heuristic 4 and Tension T6: the abstract prints the mixed count, the conclusion's first sentence claims more (pp. 1, 19).",
+    "pages": "pp. 1-2, 8, 19"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "port the search shell, swap the objective",
+    "evidence": "OCT-SA's annealer is reused for OPT by changing only the score, rescaling it into the Gini range and copying the hyperparameters l and r.",
+    "pages": "pp. 2, 6, 13"
+   },
+   {
+    "pattern": "rank-annealed neighbour choice",
+    "evidence": "Temperature bands take the r-th, then the (r-1)-th, down to the best move, instead of random neighbour proposals.",
+    "pages": "pp. 8-9"
+   }
+  ],
+  "transferable": [
+   "Replace random neighbour proposals in annealing by rank annealing: cut the schedule into r temperature bands and take the r-th best move in the hottest band, down to the best move in the coldest (Algorithm 2, pp. 8-9).",
+   "When porting a metaheuristic to a new objective, rescale the new score into the old one's range (beta) so the cooling schedule and acceptance rule carry over (p. 6).",
+   "In policy learning from observational data, fit a separate reward model on the test split so that evaluation rewards do not leak from training (35:15:50 split, p. 13).",
+   "Report the improvement over each baseline per data set as mean +/- standard deviation over splits, ties shown, and plot runtime against depth (Table 2, p. 14; Figure 5, p. 18)."
+  ],
+  "coauthors": "Suleeporn Sujichantararat",
+  "quotes": [
+   {
+    "text": "Simulated Annealing is an optimization method that guarantees to provide a global optimal solution asymptotically under an appropriate cooling schedule (see Kirkpatrick et al., 1983; Bertsimas and Tsitsiklis, 1993).",
+    "page": 2
+   },
+   {
+    "text": "Dimitris Bertsimas introduced the problem, supervised the work and wrote and edited the paper.",
+    "page": 19
+   }
+  ]
+ },
+ {
+  "id": "S113",
+  "year": "2023",
+  "title": "A data-driven approach to multistage stochastic linear optimization",
+  "read_level": "full",
+  "contribution": "Sample robust optimization for multistage stochastic linear problems: balls around each historical sample path, with averaged worst cases, give asymptotic bounds that need no parametric model or decision-rule restriction, LP and MILP approximations whose size grows only linearly in N, and wins over SAA, estimate-then-optimize and DRO baselines on synthetic inventory problems.",
+  "problem_entry": "RO+DA (SD setting): multistage stochastic linear optimization with unknown, time-correlated distributions is solved by estimate-then-optimize; nonparametric methods are 'surprisingly scarce' and none is known to be asymptotically optimal (pp. 2-3); sample-path SAA overfits even with big data (Example 1, pp. 6-7).",
+  "key_idea": "Problem (2): average the worst-case costs over balls of radius eps_N around each sample path and require feasibility on their union; robustness is used to avoid overfitting, not for worst-case protection (pp. 4, 6).",
+  "assumptions": "Costs and constraints affine in xi (p. 5); light tails E exp(||xi||^a) < infinity (Assumption 1), eps_N = kappa N^(-1/max{3, d+1}) (Assumption 2), a bounded near-optimal rule called 'mild' (Assumption 3) (p. 7); box sets for the reformulations (pp. 11, 13); synthetic demand: truncated normals for Sec. 7, See and Sim's autoregressive process for Sec. 8 (pp. 18, 22).",
+  "proof_devices": [
+   "Theorem 1: J_lower <= liminf J_N <= limsup J_N <= J_upper almost surely, with a chance-constrained lower limit and an upper limit with expanded support and an upper-semicontinuous envelope (pp. 7-8; proof in the online appendix, not read)",
+   "Theorem 2: a uniform bound, out-of-sample expectation on the union <= average in-sample worst case + M_N sup|f|, with M_N = N^(-1/((d+1)(d+2))) log N (p. 8; proof not read)",
+   "Proposition 1 and Examples 2-4: zero gap for the running example; constructed gaps (an integer first stage with enlarged support, an infeasible chance-constrained relaxation, the need for the envelope) (pp. 8-9)",
+   "Theorem 3: P(feasible) >= P(xi in the union of the sets), which turns out-of-sample feasibility into nonparametric support estimation after Devroye-Wise (pp. 9-10)",
+   "Theorem 4: for box sets the inner duals [d]+ and [-d]+ do not depend on the sample, so dual variables are shared across the N sets and the linear-decision-rule approximation is an LP with O(md) auxiliary variables (pp. 10-11); Corollary 1 for finite adaptability with O(N + Kmd) variables (p. 13)",
+   "Propositions 3-4: SRO equals infinity-Wasserstein DRO, giving its convergence 'for the first time'; p-WDRO with p < infinity forces feasibility on all of Xi (pp. 5, 14)"
+  ],
+  "experiments": "Sec. 7: three-stage replenishment modelled on Avrahami et al.'s publisher, as a MILP; SRO-FA against SAA Independence and AR Linear plus a true-distribution benchmark; N 50-800, 50 training sets, 10,000 test paths, eps by five-fold CV; figures only, 'significantly' without tests, no solver or times in the main text (pp. 15-20). Sec. 8: inventory with T = 5 and 10; SRO-LDR against SAA-LDR, Approx PCM, DDP/RDDP and WDRO-LDR; Table 2, e.g. 208.9 against 293.9 for SAA-LDR at N = 10, T = 10; ties or marginal SAA-LDR wins at large N; under 1 s; projection, with more than 93% of test paths feasible (pp. 19-24).",
+  "positioning": "RO lineage (Soyster, Ben-Tal-Nemirovski, adjustable RO) and DRO (Scarf, Delage-Ye, Esfahani-Kuhn); the closest ML work on robustness as regularization (Xu-Caramanis-Mannor, Shafieezadeh-Abadeh et al.) is distinguished; Esfahani-Kuhn's p-WDRO is criticized (Proposition 4, Remark 1); his own Approx PCM is a baseline that loses in every cell (pp. 3-4, 14, 21-22).",
+  "writing": "Abstract: approach, bounds, zero-gap cases, a 'first' claim, approximations, 'stylized' experiments (p. 2); 'To the best of our knowledge' six times (pp. 2-8); Example 1 as the running example (pp. 6-8, 18-19); proofs in the appendix except Theorem 4 (p. 11); hedges such as 'converges nearly' (p. 3); a conclusion without limits (p. 24).",
+  "limits_future": "Stated: the exact Problem (2) is demanding, linear rules are poor in general, a gap can remain, no feasibility outside the sets, a projection is needed (pp. 3, 9, 11-12, 23). Future: subclasses with equal bounds; structure-exploiting approximations (pp. 9, 12). Unstated: no finite-sample gap rates, eps by CV rather than Assumption 2, synthetic data only, no solver, Sec. 7 times or code.",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "A problem owned by multistage stochastic programming is written as a robust LP whose linear-rule approximation grows only linearly in N through shared duals (Theorem 4) and whose finite-adaptability version is a MILP; the boundary is printed (the exact problem is hard, linear rules are poor in general, p-WDRO turns static).",
+    "pages": "pp. 3, 10-13, 16-18, 23"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "One knob, eps, with in- and out-of-sample curves, an oracle comparison and a printed bad case (eps > 0 unnecessary for linear rules at moderate N); the property priced is generalization, not protection, and eps is set by CV, the data-set knob that the Method 3 correction recommends. Also a variant of Heuristic 1: robustness repairs an estimator that overfits.",
+    "pages": "pp. 4, 6-7, 18-19, 21-23"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Decisions are scored out of sample against estimate-then-optimize and against the method Avrahami et al. studied for the publisher (SAA Independence); the demand is synthetic, and there is no owner or field test.",
+    "pages": "pp. 15-19, 22"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Sturt's SRO line with a two-stage companion note; his finite adaptability, adaptive partitions and Approx PCM serve as components and baselines; the line merges later into S150 (card c27). Also Tension T3: the main results are probabilistic asymptotics (pp. 7-10).",
+    "pages": "pp. 2, 7-10, 12, 21, 24"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "dual variables shared across sample-indexed robust constraints",
+    "evidence": "For box sets the inner LP duals do not depend on the sample index, so one set of dual variables serves all N sets and the reformulation size stops scaling with N.",
+    "pages": "p. 11"
+   },
+   {
+    "pattern": "feasibility reduced to support estimation",
+    "evidence": "P(feasible) >= P(new path in the union of the sets), so out-of-sample feasibility inherits rates from nonparametric support estimation.",
+    "pages": "pp. 9-10"
+   },
+   {
+    "pattern": "cross-validated knob against the post hoc best",
+    "evidence": "SRO-FA CV is plotted against SRO-FA Best (eps chosen on the test set) to show that the tuning rule loses little.",
+    "pages": "p. 19"
+   }
+  ],
+  "transferable": [
+   "Open with a two-line example in which the naive data-driven estimator fails (rules keyed to each historical value, infeasible with probability one, wrong limit), and later prove that your fix removes the failure (Example 1, pp. 6-7; Proposition 1, p. 8).",
+   "When N robust constraints share one linear objective over boxes, solve the inner dual in closed form ([d]+, [-d]+); if it does not depend on the sample, one set of dual variables serves every set (Theorem 4, p. 11).",
+   "Bound out-of-sample feasibility from below by the probability that a new path falls in the union of the sets, then import a rate from nonparametric support estimation (Theorem 3, pp. 9-10).",
+   "Bracket a data-driven optimum between a chance-constrained lower limit and an expanded-support upper limit, and show with one-dimensional examples that each inequality can be strict (Theorem 1, Examples 2-4, pp. 7-9).",
+   "Plot in-sample and out-of-sample cost against the robustness parameter for several N with a known-distribution benchmark line, and report the gap between the cross-validated and the post hoc best parameter (Figures 1-3, pp. 18-20).",
+   "If decision rules can violate hard bounds out of sample, project before costing and report the share of feasible paths and the mean distance to feasibility (pp. 23-24)."
+  ],
+  "coauthors": "Shimrit Shtern, Bradley Sturt",
+  "quotes": [
+   {
+    "text": "Rather, our proposed approach to multistage stochastic linear optimization adds robustness to the historical data as a tool to avoid overfitting as the number of data points tends to infinity.",
+    "page": 4
+   },
+   {
+    "text": "the results demonstrate that a strictly positive choice of the robustness parameter is not necessary to avoid asymptotic overfitting when Problem (2) is approximated with a fixed, finite-dimensional space of decision rules",
+    "page": 23
+   }
+  ]
+ },
+ {
+  "id": "S131",
+  "year": "2023",
+  "title": "Optimization-based scenario reduction for data-driven two-stage stochastic optimization",
+  "read_level": "full",
+  "contribution": "Problem-dependent scenario reduction: a Wasserstein-type divergence whose transport cost is decision regret, minimized by k-means-style alternating minimization with an LP upper bound per cluster; better out-of-sample decisions than Wasserstein reduction, Monte Carlo and importance sampling at small m, and level at m = 50.",
+  "problem_entry": "DA (two-stage stochastic setting): SAA with large n is intractable, and existing scenario reduction ignores the cost and the feasible set (pp. 3-4, 11); problem-based generation has unclear tractability and moment matching does not target solution quality (pp. 5, 7).",
+  "key_idea": "Charge c(z*(zeta); xi) - c(z*(xi); xi) for moving mass from xi to zeta, symmetrized, which gives back Wasserstein for squared loss; reduce by partition and clustering, with a convex LP bound for the centroid step (pp. 13, 15, 17-23).",
+  "assumptions": "Continuous LP recourse, affine A(xi), relatively complete and fixed recourse (pp. 11-12); a unique solution per scenario, relaxed later (pp. 12, 19-20); injectivity of z* (Assumption 3) and a Lipschitz-type bound (Assumption 4) for stability (p. 15); bilinear max costs over a polytope for the LP bound (pp. 21-22); a synthetic CVaR portfolio with n = 100, d = 5, and the gbd and APL1P test problems (pp. 28-34).",
+  "proof_devices": [
+   "Theorem 1, stability |v(P) - v(Q)| <= h(rho) D_S^2, proved by citing Roemisch-Wets Proposition 3.3 (p. 16)",
+   "Theorem 2: the reduction equals an optimal m-partition, after Dupacova et al. and Rujeerapaiboon et al. (pp. 17-18)",
+   "Proposition 1: for unconstrained quadratic costs m = 1 returns the SAA solution, but computing it needs the full SAA (pp. 18-19)",
+   "Propositions 2-3: weak Lagrangian duality with a fixed multiplier alpha = 1, then LP duality, give the convex surrogate (16) (pp. 22-23)",
+   "Theorem 3: for m = 1, c = max{z'xi, 0} and a symmetric distribution, the bound is minimized by the mean, by Elmachtoub-Grigas's subgradient argument (pp. 24-25)",
+   "Theorem 4: worst-case C(m, n) <= sqrt(M(n - m)/(n - 1)) via quadratic growth and Rujeerapaiboon et al.'s Theorem 2 (p. 26)"
+  ],
+  "experiments": "Metric: out-of-sample prescriptive cost; baselines WSR (k-means), importance sampling and Monte Carlo; Julia/JuMP/Gurobi (p. 27). Portfolio: PDSR best at small m, the gap closing towards m = 50, Wilcoxon-significant (pp. 28-30). gbd and APL1P: PDSR better up to m = 5 or 10, level at 50, and not the best at higher m on APL1P (pp. 31-36). No times at all; n for gbd and APL1P and the restart counts not given.",
+  "positioning": "Builds on scenario reduction with probability metrics (Dupacova et al., Heitsch-Roemisch, Rujeerapaiboon et al.) with a tailored objective; sets aside problem-based generation, objective-specific reductions and moment matching (pp. 5-7); joins his optimization-over-randomization thread (Johnson-Kallus 2015, Korolko-Weinstein 2019) (p. 7); borrows Elmachtoub-Grigas's proof idea (p. 24).",
+  "writing": "An abstract with a typo ('is comparable to for') that also calls literature test problems 'real world data sets' (pp. 1, 5); four contributions and five observations; an intuition after each result; 'novel' throughout; a conclusion that says 'consistently outperforms' after the admission about larger m (pp. 36-37).",
+  "limits_future": "Stated: no computational gain at m = 1; a costly cost evaluation, approximated by stored duals; not the best at larger m on APL1P; a minimum m needed at high noise (pp. 19, 30, 36). No future work. Unstated: no timing despite the tractability motive, no convergence or bound-gap analysis, Assumption 3 unchecked for the test problems, a small n.",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The decision is the object: a reduced distribution is judged by the out-of-sample cost of the decision it induces, and the divergence measures the loss in decision quality; the baselines are the field's standard methods, but there is no owner, current rule or field test.",
+    "pages": "pp. 3-4, 13, 27"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "A task owned by the scenario-reduction tradition of stochastic programming is recast as clustering with a decision-aware transport cost, and the nonconvex centroid step becomes an LP upper bound (class kept); but the tractability that motivates the paper is never timed, the measurement that Method 1's stop rule asks for.",
+    "pages": "pp. 13, 17-18, 22-23, 27-36"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "The incumbents (WSR, Monte Carlo, importance sampling) are duelled out of sample at equal m with a Wilcoxon test, and both clustering methods share restarts, caps and tolerance; but Algorithm 1 is a multistart heuristic with no certificate or gap.",
+    "pages": "pp. 21, 27-28, 30"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "The paper joins the group's optimization-over-randomization thread (Taste mark 3 and the small-sample randomization anti-pattern), now with Monte Carlo and importance sampling as the randomized incumbents. Also Tension T6: 'real world data sets' and 'consistently outperforms' in the frame against literature test problems and the admission about larger m in the body (pp. 1, 5, 36-37).",
+    "pages": "pp. 1, 5, 7, 36-37"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "decision-regret metric",
+    "evidence": "A classical distance (Wasserstein) is generalized by charging the loss in decision quality, and the classical distance is shown to be the special case (squared loss, no constraints).",
+    "pages": "pp. 13, 15"
+   },
+   {
+    "pattern": "theorems assembled from cited results",
+    "evidence": "Theorem 1 from Roemisch-Wets, Theorems 2 and 4 from Dupacova et al. and Rujeerapaiboon et al., Theorem 3 from Elmachtoub-Grigas, each named; close to card c27's 'swap the concentration lemma' (S150).",
+    "pages": "pp. 16-17, 24, 26"
+   }
+  ],
+  "transferable": [
+   "To make a distance between distributions decision-aware, set the unit transport cost to the regret c(z*(zeta); xi) - c(z*(xi); xi), symmetrize it, and check that squared loss with no constraints gives back the classical metric (pp. 13, 15).",
+   "Rewrite a continuous reduction as an m-partition and solve it k-means style: assign points to the nearest scenario under the new divergence, then re-solve each cluster's scenario in parallel (Theorem 2, pp. 17-18; Algorithm 1, pp. 20-21).",
+   "When an inner maximum over an optimal set is nonconvex, bound it by weak Lagrangian duality with a fixed multiplier and dualize the remaining LP into a convex surrogate (Propositions 2-3, pp. 22-23).",
+   "Evaluate a recourse cost cheaply by pre-computing the second-stage dual solutions at the training points and taking a maximum over that finite dual set (p. 30).",
+   "Compare methods over repeated training sets with paired nonparametric tests (Wilcoxon signed-rank) (p. 28)."
+  ],
+  "coauthors": "Nishanth Mundru",
+  "quotes": [
+   {
+    "text": "While our application is different, we emphasize the key insight that selecting scenarios via optimization, in this case taking the decision quality into account, can lead to better decisions with fewer scenarios and thus, greater tractability and interpretability.",
+    "page": 7
+   },
+   {
+    "text": "However, this edge decreases with increasing m, and some times for higher m PDSR is not the best (which is the case for the APL1P example).",
+    "page": 36
+   }
+  ]
+ },
+ {
+  "id": "D021",
+  "year": "2025",
+  "title": "An Exact Solution to Wordle",
+  "read_level": "full",
+  "contribution": "Solves Wordle exactly as a finite MDP over consistent-word sets by memoized forward DP with bound-based pruning (days on 64 cores): SALET is best at 3.42117 expected guesses and every word is found within five; the policy is shown with OCT-H trees, and a noise experiment explains why approximate methods disagree.",
+  "problem_entry": "SD+ML (AP testbed): heuristic and RL solvers disagree on the best first word because all of them approximate; Wordle is NP-hard, and exact DP had not been tried because of the curse of dimensionality (pp. 1-2).",
+  "key_idea": "The state is the set of words still consistent with the feedback; cost 1 per guess and infinity for losing; forward memoized Bellman recursion with five accelerations; OCT-H trees over one-hot colorings display the policy (pp. 4-11).",
+  "assumptions": "A uniform prior over 2,315 solutions, 10,657 allowed guesses, six guesses (p. 5); transitions deterministic given the hidden word (p. 6); 15 binary features per guess (pp. 10-11); no human data (p. 16).",
+  "proof_devices": [
+   "Bellman equation (1) with closed forms: |s| = 1 gives 1, |s| = 2 gives 1.5, t = 5 with |s| > 1 gives infinity (pp. 6-7)",
+   "A valid lower bound LB(s) = (2|s| - 1)/|s| on every successor, replaced by exact values in decreasing order of probability, with pruning once the bound passes the incumbent (p. 7)",
+   "5,995,042,065 pre-computed feasibility booleans make transitions array look-ups (p. 7); guesses inside the state are tried first (p. 8); memoization on (s, t) and a parallel root (pp. 6, 21)",
+   "[my reading] Slips in the printed pseudo-code: Algorithm 1 adds 'solution' rather than 'temp_solution' (p. 8); Algorithm 2 sums bounds and values with no visible probabilities (p. 21)",
+   "An OCT-H hyperplane split on 0-1 features read as an OR of conditions (p. 9)"
+  ],
+  "experiments": "Table 1: SALET 3.42117, REAST 3.42246, TRACE and CRATE 3.42376, SLATE 3.42462; every word within 5 guesses, 3.3% needing the fifth (p. 12). Trees of depth 10, 10 and 7 for guesses 3-5; a perfect fit for guess 2 at depth 8 with OCT-H against 12 with CART (pp. 13, 16). Noise on V3: 0.1% already loses optimality, about 10% loses sure wins, 25 reruns (pp. 18-19). Days on 64 cores in C++ (p. 8). No code and no independent check.",
+  "positioning": "Against RL and heuristic solvers (CRANE, SLATE, ROATE, SOARE), judged by their disagreement and lack of certification (pp. 1-2, 17-18); Bertsekas's DP textbook for exact DP; his own OCT/OCT-H and the poker paper as precedents, with OCT restated beyond its published averages (pp. 1-2, 9).",
+  "writing": "An excited register ('exciting', 'withstood many attempts'); headline numbers in the abstract; 'certifiably' as the key word; limits stated precisely; no theorems (pp. 1-3, 8, 13).",
+  "limits_future": "Stated: days on 64 cores, 7 rounds out of reach, time-independence not used, OCT-H training takes hours (pp. 8, 10). No future work. Unstated: no code or independent verification, tree fidelity stated only for guess 2, no test with people, a uniform prior; Hard Mode and the worst case appear only in the published version (abstracts.json).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "An exact solve with a real certificate (exhaustive memoized recursion with a valid bound) replaces greedy and approximate play, and the incumbents' first words are dominated; unlike OCT the certificate survives at the application's scale (Tension T1). Caveats: no code, and slips in the printed pseudo-code.",
+    "pages": "pp. 1-3, 6-8, 12"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "A problem treated as intractable (NP-hard, curse of dimensionality) is reopened by exact computation with its cost measured (days, 64 cores, C++); the why-now is algorithm engineering and hardware, with no solver-by-hardware figure. SD is a domain where Method 2 'returns'.",
+    "pages": "pp. 1, 6-9"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Formulation first: a POMDP owned by RL and information theory is recast as a finite MDP over consistent-word sets; the class kept is exact DP, not LP or MIO; the boundary (7 rounds) is printed.",
+    "pages": "pp. 4-8"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The policy is judged by its decisions (expected guesses, a certain win) against heuristic first words and human play, and shown as trees to the person who acts (Taste mark 5); the human comparison is one constructed game, not data.",
+    "pages": "pp. 12, 15-17"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Poker, then Wordle, with the same student; the OCT-H brand reused for games; a public website. Also Tension T6: an excited register, and OCT's record restated beyond its published averages (pp. 1, 9, 13).",
+    "pages": "pp. 1-3, 9, 13"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "exact solution as arbiter",
+    "evidence": "When heuristic solvers disagree on the 'best' answer, compute the certified optimum and rank the contested answers.",
+    "pages": "pp. 1-2, 12"
+   },
+   {
+    "pattern": "noise injection to explain why approximation fails",
+    "evidence": "Perturb the exact value function by x% at one stage, re-derive the policy over 25 runs, and show that even 0.1% loses optimality.",
+    "pages": "pp. 18-19"
+   },
+   {
+    "pattern": "exact policy distilled into an optimal tree",
+    "evidence": "OCT-H trees over one-hot colorings display the optimal policy, with the depth CART needs for the same fit (12 against 8) as the yardstick.",
+    "pages": "pp. 9-11, 16"
+   }
+  ],
+  "transferable": [
+   "When transitions are deterministic given a hidden state, replace the POMDP belief by the set of hypotheses still consistent with the observations; it is finite and Markov (pp. 4-5).",
+   "Solve the Bellman equation forward from the start state with memoization instead of backward over all states (p. 6).",
+   "Prune actions with a cheap valid lower bound on every successor's value, replace bounds by exact values in decreasing order of transition probability, and stop once the partial sum passes the incumbent (p. 7).",
+   "Pre-compute feasibility for every (action, observation, hypothesis) triple so that each transition is an array look-up (p. 7).",
+   "To show why approximate methods disagree, perturb the exact value function by x% at a single stage, re-derive the policy, and plot the loss over repetitions against x (Figure 8, pp. 18-19).",
+   "Present an exact policy as an optimal decision tree with hyperplane splits over one-hot features, and report the depth CART would need for the same fit (pp. 9-11, 16)."
+  ],
+  "coauthors": "Alex Paskov",
+  "quotes": [
+   {
+    "text": "Yet at the same time lack of consensus on the “best” policies produced by these methods prompts interest in a framework that produces a certifiably optimal strategy.",
+    "page": 1
+   },
+   {
+    "text": "took days to solve via an efficient C++ implementation of the algorithm, parallelized across a 64-core computer.",
+    "page": 8
+   }
+  ]
+ }
+]

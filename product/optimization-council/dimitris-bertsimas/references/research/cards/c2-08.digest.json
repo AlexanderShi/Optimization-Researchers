@@ -1,0 +1,356 @@
+[
+ {
+  "id": "S686",
+  "year": "2025",
+  "title": "Can Artificial Intelligence Improve the Appropriate Use and Decrease the Misuse of REBOA?",
+  "read_level": "full",
+  "contribution": "An Optimal Policy Tree trained on ACS-TQIP 2010-2019 (100,615 blunt-trauma patients in hemorrhagic shock, 803 with REBOA) prescribes REBOA or not from trauma-bay information. Test-half doubly robust estimates put the 24 h mortality reduction at 0.9 points overall and 18 points for patients who received REBOA (47% to 29%), which the authors read as REBOA overuse. The model is offered as a proof of concept 'not ready for bedside use' (pp. 1, 6, 10-13).",
+  "problem_entry": "DA+ML, with AP (trauma surgery). REBOA mortality evidence conflicts in both directions, complications are reported inconsistently, trials are hard to run in emergencies, and a joint professional statement finds no survival benefit (pp. 1-2, 11). The MGH-MIT group moves from OCT risk calculators to OPT prescriptions, 'from outcome-estimation-based methods to decision-based methods' (p. 2).",
+  "key_idea": "Random-forest propensity and outcome models give doubly robust reward matrices, and an OPT (an MIO-based single tree, cited but not formulated) is trained on them. One tree is preferred to ensembles such as Regress and Compare and causal forests, so that physicians can follow the decision path (pp. 2, 4-5).",
+  "assumptions": "ACS-TQIP PUFs 2010-2019: age > 16, blunt trauma, SBP <= 90 or >= 4 RBC units within 4 h; transfers and missing age or LOS excluded; REBOA within 4 h identified by ICD-10 codes (p. 2). Only trauma-bay features are used (vitals, injuries visible on survey, procedures within 1 h); blood volumes and ISS are excluded (pp. 3-4). Optimal Impute fills missing values (p. 5). Admitted: some variables are taken at the 4 h cutoff, and there are no device, timing, occlusion or FAST data (p. 12). [my reading] The 4 h transfusion inclusion criterion uses information from after the decision (p. 2).",
+  "proof_devices": [
+   "n/a for formulation or proof (empirical paper); OPT is cited as an MIO-based method, not formulated (p. 4)",
+   "Doubly robust reward matrices from random-forest propensity and outcome models (p. 5)",
+   "Hyperparameters (minimum leaf size, maximum depth, complexity parameter) chosen by grid search on training reward (p. 5)",
+   "Policy evaluation on rewards re-estimated on the test half only, reported as absolute risk reduction overall, by observed group and per leaf (pp. 5-6)",
+   "Clinical-logic loop: the best tree is checked for clinical integrity, and the data are adjusted and the tree refit until physicians accept it (pp. 5, 10)"
+  ],
+  "experiments": "Data and set-up: 50:50 split, root N = 50,308 (pp. 5, 9); descriptives in STATA 17, with 24 h mortality 46.9% with REBOA vs 20.9% without (pp. 6, 9). Results: ARR 0.9% overall, 0.8% for No-REBOA patients and 18% for REBOA patients (47% to 29%); leaves 5 and 17 gain 7.98% and 5.44% (pp. 10-11). The tree splits on pulse, SBP (< 68), GCS (< 5, < 6) and pneumothorax; it uses BMI and pulse oximetry but not pelvic fracture (pp. 9, 12). Not reported: the AUCs of the nuisance models, announced as the metric (p. 6); confidence intervals; how many patients the tree reassigns; any comparator policy (CART, causal forest, treat-none). Code and data are said to be on GitHub (p. 13).",
+  "positioning": "The clinical literature is split in both directions (pp. 1-2, 11). OPT is claimed superior to CART by citation [15,16]; Regress and Compare and Causal Forest are labelled black boxes (p. 4); graph analytics is offered as a complement (pp. 4-5, 12). Priority claims: the first AI study of REBOA indications and the first use of OPTs in trauma (p. 11).",
+  "writing": "MDPI structured abstract closing on a 'groundbreaking use' in prescribing (p. 1); the abstract's '18% reduction' is an ARR in percentage points (p. 10). Later sections hedge: proof of concept, prototype and 'not ready for bedside use' (pp. 11, 13), so Tension T6 appears inside one paper. Slips: Tables 1-2 are captioned as showing similar cohorts although nearly every p-value is < 0.001 (pp. 7-8); 'Regress and Compare [17]' cites a paper on doubly robust estimation (pp. 4, 14).",
+  "limits_future": "The limits are specific (p. 12): a registry not designed for REBOA, without device or FAST data; clustering in a few centres; missing data and imputation choices; variables taken at 4 h. A newer dataset is wanted (p. 12). Future work: more granular data and graph-analytics hybrids (pp. 5, 12). The model is not ready for bedside use (p. 13).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Decisions are scored: expected 24 h mortality under the tree's prescriptions is compared with that under the observed treatments, so observed practice is the baseline. The tree learns on decision rewards, and deployment is explicitly deferred (propose, then field-test).",
+    "pages": "pp. 5-6, 10-13"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The current rule is observed practice, not a stated rule. The ARR rests on model-imputed counterfactuals, with no confidence interval, no overlap check for a 0.8% treated group and no reported accuracy for the nuisance models.",
+    "pages": "pp. 2, 5-6, 10"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "There is no duel. OPT's edge over CART and black-box ensembles is asserted by citation, and no rival policy is run. No solver, limit or gap is reported for the MIO-based tree, and the hyperparameters are chosen on training reward.",
+    "pages": "pp. 4-5"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "One programme with the same MGH surgeons: OCT risk calculators (2018, 2021), then OPT prescriptions. An ORC student runs it with the group's tools (OPT, Optimal Impute).",
+    "pages": "pp. 2, 5, 13-14"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Counterfactual replay against the historical decision-maker",
+    "evidence": "The tree's prescriptions and the observed treatments are both scored by reward models refit on the test half. Compare c33 S457 and c38 S615.",
+    "pages": "pp. 5-6, 10-11"
+   },
+   {
+    "pattern": "analytics partner inside a clinical team's study",
+    "evidence": "Co-first authors from MGH and MIT and co-senior authors Kaafarani and Bertsimas; methodology and software come from the ORC side. Compare s19 S707.",
+    "pages": "pp. 1, 13"
+   },
+   {
+    "pattern": "decision-time feature gate",
+    "evidence": "Only trauma-bay information enters the tree, with a one-hour window for procedures, and a review removes variables unknowable at decision time. Also S390 (p. 2) and S439 (p. 6) in batch c2-08.",
+    "pages": "pp. 3-5"
+   },
+   {
+    "pattern": "clinical-logic audit loop on the final tree",
+    "evidence": "The best tree is evaluated for clinical integrity and logic, and the data are adjusted and the steps repeated. The final tree is selected computationally and through physician feedback. Compare c38 S615 and c34 S621.",
+    "pages": "pp. 5, 10"
+   }
+  ],
+  "transferable": [
+   "(D5) For off-policy evaluation of a learned prescription, fit fresh propensity and outcome models on the test half only, and score both the policy and the observed assignments with them (p. 5).",
+   "(D3) Write down what the decision-maker knows at decision time (here trauma-bay vitals, injuries visible on survey and procedures within one hour), exclude everything else, and audit the final model for violations (pp. 3-5).",
+   "(D5) Report the risk reduction overall, per observed-treatment group and per leaf, so that readers see where the policy changes outcomes (pp. 6, 10-11)."
+  ],
+  "coauthors": "Mary Bokenkamp (MGH, co-first), Yu Ma (MIT ORC, co-first, corresponding), Ander Dorken-Gallastegi, Jefferson A. Proaño-Zamudio, Anthony Gebran, George C. Velmahos, Haytham M. A. Kaafarani (MGH; co-senior with Bertsimas)",
+  "quotes": [
+   {
+    "text": "To avoid any information from the training set leaking through to the out-of-sample evaluation, instead of directly using the rewards from our existing reward estimator trained on the training set, we estimate a new set of reward estimators using only the test set and evaluate the policy against these rewards.",
+    "page": 5
+   },
+   {
+    "text": "Our model is not ready for bedside use, and further studies with more granular data can improve its performance further for clinical practice.",
+    "page": 13
+   }
+  ]
+ },
+ {
+  "id": "S390",
+  "year": "2026",
+  "title": "Holistic AI in medicine; improved performance and explainability",
+  "read_level": "full",
+  "contribution": "Journal version of S524 (card c33). xHAIM retrieves and summarizes each modality of ICU records with LLMs, fine-tunes ClinicalBERT on the summaries for a discriminative predictor, and generates explanations that cite the patient's documents. On five HAIM-MIMIC-MM tasks, average AUC rises from 79.9 (HAIM) to 91.3 (fine-tuned, with Gemini summaries), while a fine-tuned HAIM control gains nothing. Explanations are rated by two author-annotators and a calibrated LLM judge (pp. 1-5, 8).",
+  "problem_entry": "ML with AP (ICU medicine); no optimization model. The group's own HAIM 'uses data in a task-agnostic manner and lacks explainability', and it chunks and averages long notes (pp. 1, 3, 6). Only 5% of health-care organizations have deployed AI, and generative models can explain but predict worse (pp. 1-2). Tasks: pleural effusion, cardiomegaly, pneumonia, 48 h mortality and length of stay (p. 3).",
+  "key_idea": "Use GenAI 'auxiliarily': hybrid BM25-SBERT retrieval of task-relevant chunks per modality, LLM summaries, ClinicalBERT fine-tuned per summary type, HAIM-style concatenation, a discriminative predictor, and explanations that cite the patient's documents. One labelled summary per stay is said to make fine-tuning work where HAIM's unlabelled chunks cannot (pp. 2-3, 6).",
+  "assumptions": "HAIM-MIMIC-MM from MIMIC-IV: 34,537 samples, 7,279 hospitalizations and 6,485 patients in four modalities; task cohorts of 3,512-16,888 (pp. 2-3). The decision time is a random scan per stay, with prior information only; 80/20 patient-separated splits, repeated five times (pp. 2-3). Admitted: the pathology tasks are partly information extraction from notes (p. 3). Settings: Qwen2.5-VL-72B image descriptions; alpha = 0.5; top-k chunks (k not given in the main text); summarizers MedGemma 4B, Llama-3.3-70B, Qwen3-32B and Gemini-2.5-Flash (p. 6).",
+  "proof_devices": [
+   "n/a for optimization or proof",
+   "Hybrid relevance score alpha*BM25 + (1-alpha)*SBERT similarity, eq. (1) (p. 6)",
+   "Per-modality fine-tuned ClinicalBERT [CLS] embeddings concatenated with tabular and time-series features, eq. (2) (p. 6)",
+   "Two-stage LLM judge (adversarial critique, then rubric scoring; GPT-4.1 mini at temperature 0.2), with Wasserstein distances between score distributions (p. 4)"
+  ],
+  "experiments": "Average AUC over 5 runs (Table 2, p. 3): HAIM 79.9, HAIM-FT 79.7, zero-shot Gemini 79.6; xHAIM 72.3-85.1; xHAIM-FT 77.7 (MedGemma), 89.8 (Qwen3), 90.2 (Llama) and 91.3 (Gemini). Fine-tuned Gemini gains +13.8, +17.1 and +20.4 on the pathologies, +3.1 on mortality and +2.2 on LOS. Zero-shot Gemini scores 44.7 on LOS. With MedGemma, xHAIM-FT is below HAIM on all five tasks (shown in the table only). [my check] The text's '13.4%' matches neither the 11.4-point nor the 14.3% gain, and 'statistically meaningful' is claimed without a test. Explanations: two tasks; two author-annotators rate 50 each and the judge 1,000; scores about 3.4-4.3; Wasserstein distances <= 0.40; mortality scores lower only on citation and factuality [my check] (pp. 3-5, 8). Not reported: calibration metrics, compute cost, clinician raters, external validation; code promised (pp. 5, 7).",
+  "positioning": "HAIM is 'a state-of-the-art multimodal framework' and the main baseline, and ClinicalBERT is the black box. LLM prediction approaches 'often underperform compared to traditional, albeit black-box, ML models' (pp. 1-2). Novelty claim: 'among the first works in healthcare that combines' RAG-like pipelines with prediction and fine-tuning (p. 2). No OR or interpretable-ML literature is cited.",
+  "writing": "Nature format, with strong framing: xHAIM 'transforms AI from a black-box predictor into an explainable decision support system' (p. 1); 'a significant advancement'; the gains 'challenge the prevailing assumption that more data is always better' (p. 5). Operational claims (chart-review time, cross-hospital robustness) are left untested (pp. 5-6). The example mortality explanation says 'the model likely weighed' trends, a rationalization rather than a trace of the model [my reading] (p. 5). Compared with v1 (c33), it adds HAIM-FT, a zero-shot baseline, two summarizers and an error analysis (p. 3).",
+  "limits_future": "Stated: currency of knowledge sources, LLM overhead, validation beyond MIMIC-IV (p. 5). Unstated: no decision is modelled; explanations are rated by the authors and an LLM, not by clinicians; the information-extraction share of the pathology gains is not quantified (pp. 3-5, 8).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "contradiction",
+    "note": "The paper claims decision support but scores only AUC and explanation ratings, against the group's own HAIM and a zero-shot LLM. There is no decision, owner or current clinical rule. Same verdict as c33's S524.",
+    "pages": "pp. 1, 3-5"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "The duel with the incumbent now controls the fine-tuning confound with a fine-tuned HAIM, which v1 lacked (c33). But no external method is run, and no test backs 'statistically meaningful'.",
+    "pages": "p. 3"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "A tool change (open LLMs that can run inside a hospital) reopens the group's own framework, as in step 6, but no figure measures the change.",
+    "pages": "pp. 1-2, 5"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "HAIM (2022) leads to xHAIM (arXiv 2025, npj 2026), carried by a new ORC cohort; 'D.B. directed the overall research'.",
+    "pages": "pp. 1, 8"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "own predecessor system's limit as the entry point",
+    "evidence": "The abstract opens with HAIM's task-agnostic use of data and its lack of explainability; the same entry as c33's S524. S390 is the journal version of S524 (c33), so the two count as one line.",
+    "pages": "p. 1"
+   },
+   {
+    "pattern": "generative model as input curator for a discriminative predictor",
+    "evidence": "LLMs retrieve and summarize; fine-tuned ClinicalBERT embeddings and a discriminative learner make the prediction; the LLMs return only to explain. S390 is the journal version of S524 (c33), so the two count as one line.",
+    "pages": "pp. 2, 6"
+   },
+   {
+    "pattern": "LLM judge calibrated on a small human-annotated subset",
+    "evidence": "Two author-annotators rate 50 explanations per task on two tasks. Wasserstein agreement is checked against the human-human distance before the judge rates 1,000. S390 is the journal version of S524 (c33), so the two count as one line.",
+    "pages": "pp. 4-5, 8"
+   },
+   {
+    "pattern": "confound-matched comparison: equalize the budget or dimension the rival could blame",
+    "evidence": "HAIM-FT gives the baseline the same fine-tuning step (79.7 vs 79.9), so the gain is not credited to fine-tuning alone. Compare c36 S474 and s14 S395.",
+    "pages": "p. 3"
+   },
+   {
+    "pattern": "decision-time feature gate",
+    "evidence": "A random scan per ICU stay sets the decision time, and only earlier information enters. See S686 in batch c2-08.",
+    "pages": "p. 2"
+   }
+  ],
+  "transferable": [
+   "(D5) When your method adds a training step (here fine-tuning), give the baseline the same step and report it, so that the gain cannot be credited to the step alone (p. 3, Table 2).",
+   "(D5) Add a zero-shot baseline from a frontier model and show where it beats the old baseline and where it fails (pathologies vs length of stay at 44.7) (p. 3).",
+   "(D5) Before scaling an automated judge to 1,000 items, calibrate it on a small double-annotated sample (50 items per task): compare its score distribution with each annotator's by a Wasserstein distance on the rubric scale, beside the annotator-annotator distance (pp. 4-5).",
+   "(D5) On a task with few residual errors, inspect the errors by hand to separate mislabeling from model confusion (p. 3)."
+  ],
+  "coauthors": "Periklis Petridis, Georgios Margaritis, Vasiliki Stoumpou (MIT ORC); Bertsimas last and corresponding author, 'directed the overall research'",
+  "quotes": [
+   {
+    "text": "Although generative models are not inherently interpretable in their training or inference, they can be prompted to provide summaries or post-hoc explanations",
+    "page": 1
+   },
+   {
+    "text": "At first glance, one might attribute the performance gains primarily to fine-tuning rather than the xHAIM pipeline itself.",
+    "page": 3
+   }
+  ]
+ },
+ {
+  "id": "S415",
+  "year": "2026",
+  "title": "Cone product reformulation for global optimization",
+  "read_level": "full",
+  "contribution": "Shows how to convexify all 15 pairwise products of linear, second-order, power, exponential and semidefinite cone constraints inside RPT relaxations of sum-of-linear-times-convex problems. New valid inequalities come from the power cone (best member chosen by an RO adversarial method) and from the exponential cone (Taylor-based). The paper adds redundancy and dominance results, a duality proof that the LMI gives the tightest linearization, and first-order cuts for DC constraints. Inside RPT-BB, the additions prove global optima faster than BARON on six averaged exponential-cone rows and on one of two robust-diet instances (author manuscript; main text read in full, appendix in part).",
+  "problem_entry": "CP+RO (RO as a device), with AP (a World Food Programme diet) as a testbed. The predecessor RPT-BB multiplies a linear inequality with a convex one, but a product of two general convex inequalities 'does not necessarily yield a convexifiable inequality'. Restricting to the five basic cones makes 'all 15 possibilities' analysable; the products with power and exponential cones are new (pp. 1-3).",
+  "key_idea": "Multiply (parts of) each cone pair, rewrite the product in perspective or homogeneous cone form, linearize xx^T by U, and link U and x by an LMI. Two new generators: splitting the power cone's exponents gives infinitely many valid inequalities indexed by a weight polytope, from which the best is chosen 'by using a robust optimization lens leveraging the adversarial approach'; a sign-split Taylor expansion of exp gives linear and rotated-SOC inequalities. Lemma 1 prunes redundant products (pp. 3, 6-8, 13-14; Table 1, p. 7).",
+  "assumptions": "Proper closed convex f_ik; constraints in the five basic cones (pp. 2, 5-6). Adversarial convergence needs a bounded nominal region (Mutapcic-Boyd) (p. 8); the biconjugate step needs an attained infimum, and the first-order cuts a differentiable c1 (p. 24); the decomposition cases need the sign of x3 (pp. 7, 13). Tests: the log-sum-exp problem (30) with rho = 1 (pp. 25-26); a quadratic objective with two exponential-cone constraints, six rows of 10 random instances, data in Appendix E (pp. 26-27, 46); a robust palatable diet with regression-fitted palatability (Maragno et al. data), WFP nutrients and costs, and l3-ball uncertainty with rho = 0.1, W = 5 (pp. 28-29).",
+  "proof_devices": [
+   "Power-cone exponent splitting with linearized products u_ij, giving valid inequalities indexed by a weight polytope U (eqs. (4)-(7), p. 6)",
+   "The family read as a robust constraint; an adversarial master and subproblem, the worst-case subproblem an LP after a log transform; convergence via Mutapcic-Boyd; Example 1 lifts the bound from 1.7548 to the optimum 2.2341 (pp. 7-9; Algorithm 1, p. 36)",
+   "Power-cone homogeneity for products of a linear inequality and a power cone (p. 10)",
+   "Sign-split Taylor expansion of exp, giving a linear and a rotated-SOC inequality (eqs. (19)-(21), p. 13)",
+   "Lemma 1: if f >= g on the feasible set, the perspectified product with g is redundant (p. 14)",
+   "Lemma 2: direct multiplication and multiplication after conic reformulation give the same inequalities (pp. 19-20)",
+   "Dominance examples, one per retained multiplication, with with/without tables (Table 2, pp. 20-22; Appendix F, pp. 47-66)",
+   "Lemma 3: dualizing max over psd B of Tr(B(xx^T - U)) yields the LMI, so full linearization plus the LMI is tightest (pp. 23-24)",
+   "First-order conditions y = grad c1(x) for DC constraints, via the biconjugate, then linearized (pp. 24-25)",
+   "Counts of the inequalities full RPT generates per case (Appendix C, Table 6, pp. 36-41)"
+  ],
+  "experiments": "Set-up: one Intel i9 2.3 GHz core, 16 GB; MOSEK 9.2.45, Gurobi 9.0.2, Julia 1.5.3, JuMP 0.21.6; BARON 20.10.16 via Pyomo 6.4.1; 3,600 s limit (pp. 26-27). SCIP is named but never reported; threads, tolerances, BARON options and code are not stated. Table 3 gives bounds only (e.g. nx = 10: from 243,922 down to 20,314 with the decomposition and first-order cuts) (p. 26). Table 4: RPT-BB without the LMI beats BARON's time on all six rows; BARON cannot prove optimality within an hour for nx = 20-100; the LMI version takes 2,100 s vs 101 s at nx = 50 and does not finish the root at nx = 100; without the decomposition the relaxation is unbounded (p. 27). Table 5: BARON is fastest on ThiamineB1 (1.9 s, vs 16 s with and 111.2 s without the additions); on NicacinB3 the additions take 39.6 s vs 44.5 s, and BARON times out at 212.2 vs the optimum 213 (p. 29). [my check] The printed data do not reproduce the tables. Instances 1-2 give -102 and -175.8 only with nx = 5, while Table 4 gives nx = 10 for instance 2. A0 = L^T L with b0 = c0 = 0 cannot give negative optima (instances 3-6). Because beta + e^alpha < 2nx, instances 3-5 are infeasible as printed. Problem (30) as printed is unbounded at x1 = 0, yet Table 3 is finite (pp. 25-27, 46, 65).",
+  "positioning": "Completes RLT and RPT, crediting each cell of Table 1: Sherali-Adams 1990, Sherali-Tuncbilek, Sturm-Zhang 2003, Jiang-Li 2019, Anstreicher 2017 and the group's 2023 RPT-BB. Case 9 is called new, although its steps follow Anstreicher (pp. 2-3, 6-7). Claims to surpass 'the existing methods described by Bertsimas et al. (2023)' (pp. 3-4) and to be often faster than BARON, the only external solver run (p. 1).",
+  "writing": "Five contribution bullets, each tied to its evidence (pp. 3-4); a case table with a reference column (p. 7); a dominance table backing the word 'valuable' (pp. 4, 18, 20). The abstract hedges with 'often' (p. 1), and BARON's win is conceded (p. 29). Slips: the appendix labels the Section 5.4 problem 'Section 5.3' (p. 41); Appendix C's text and Table 6 disagree on counts for Cases 11(ii)-(iii) (pp. 39, 41); Gurobi 9.0.2 is cited via an 8.1.1 manual (pp. 26, 30); the template running head 'Author:' is left unfilled.",
+  "limits_future": "Stated: only the LMI root failure at nx = 100 and BARON's win (pp. 27, 29). Future: partial constraint multiplications and partial generation of product variables (p. 30), the size issue visible in Table 6 (p. 41). Unstated: nx <= 100, six rows and two diet instances, solvers from about 2020, no code, inconsistencies in the instance description [my check].",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "The relaxations are designed to stay in the five cones that MOSEK solves, and the class is kept by homogeneity and perspectives. The dual is read for structure (Lemma 3: the LMI is the best B). The boundary is printed: general convex products are not convexifiable, and the LMI version fails at the root.",
+    "pages": "pp. 2-3, 7, 10, 14, 24, 27"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Global optima are certified, and the incumbent global solver is duelled with versions and a time limit, conceding its win once. But settings are not matched or stated (JuMP vs Pyomo, threads, tolerances), rows are averages, and the printed instance data do not reproduce the tables [my check].",
+    "pages": "pp. 26-29, 46"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Weak: a programme with den Hertog (RPT-BB 2023, then cone products, then integers in S624, c34). The joint 2022 RO book supplies the adversarial approach and the robust counterpart. Method 2 is absent: no why-now figure.",
+    "pages": "pp. 2-3, 7-8, 28, 30"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "robust-optimization lens as a separation oracle",
+    "evidence": "A family of valid power-cone inequalities indexed by weights in a polytope is treated as a robust constraint; an LP subproblem finds the most violated member, which is added (Cases 3(ii), 7(ii), 10(ii), Remark 1). Compare c40 S672 (worst case of a robust counterpart as a scenario).",
+    "pages": "pp. 3, 7-12, 16, 36"
+   },
+   {
+    "pattern": "exhaustive case matrix with per-cell attribution and a dominance example per cell",
+    "evidence": "Table 1 lists all 15 cone pairs with their source (prior work or this paper); Table 2 and Appendix F give, for each multiplication, a toy example where it beats all others. Compare s07 S134.",
+    "pages": "p. 7; pp. 20-22, 47-66"
+   },
+   {
+    "pattern": "PSD moment-matrix strengthening carried across domains",
+    "evidence": "Duality proves that the LMI linking U and x is the best strengthening of a quadratic inequality, but it is the computational bottleneck at nx = 50-100. Compare c34 S624.",
+    "pages": "pp. 2, 23-24, 27"
+   },
+   {
+    "pattern": "show the method ties where it should",
+    "evidence": "Lemma 2 proves that multiplying after conic reformulation reproduces the predecessor's direct multiplication. Compare c35 S688.",
+    "pages": "pp. 19-20"
+   }
+  ],
+  "transferable": [
+   "(D4) If a valid inequality comes in a family indexed by weights in a polytope, treat the weights as uncertainty and separate by the adversarial method: a master problem over finitely many weights, an LP for the worst case after a log transform, and a stop when the worst case is satisfied. Convergence needs a bounded nominal region (pp. 7-8; Alg. 1, p. 36).",
+   "(D4) When a cone yields no products of the original variables (the exponential cone), derive linear and SOC inequalities from a truncated Taylor expansion with a sign split, and multiply those. Here this turns an unbounded relaxation into a usable one (pp. 13, 27).",
+   "(D4) Prune candidate products with a dominance lemma before computing: if f >= g on the feasible set, the product with g is redundant (p. 14).",
+   "(D4) To show that a strengthening is the best of a family, write the family as a maximization over psd B and dualize; the dual constraint is the strengthening (pp. 23-24).",
+   "(D4) For a DC constraint with a differentiable concave part, add the first-order condition y = grad c1(x) and linearize its products (pp. 24-25).",
+   "(D6) Present a family of results as a case matrix, with a reference column (prior work or this paper) and one dominance example per cell (Table 1, p. 7; Table 2, pp. 20-22).",
+   "(D5) Print where the incumbent solver wins, and where your strongest variant cannot finish the root node (pp. 27, 29)."
+  ],
+  "coauthors": "Danique de Moor, Dick den Hertog (University of Amsterdam), Thodoris Koukouvinos (MIT ORC), Jianzhe Zhen (University of Chinese Academy of Sciences); alphabetical order",
+  "quotes": [
+   {
+    "text": "we show how to find the best reformulation out of the infinitely many possible ones for a given (x, U), by using a robust optimization lens leveraging the adversarial approach",
+    "page": 3
+   },
+   {
+    "text": "From Table 5 we observe that for ThiamineB1 as the robust nutrient, all methods find the global optimal solution, with BARON achieving the best computational time.",
+    "page": 29
+   }
+  ]
+ },
+ {
+  "id": "S439",
+  "year": "2026",
+  "title": "Leveraging multimodal machine learning for accurate risk identification of intimate partner violence",
+  "read_level": "full",
+  "contribution": "Tabular, clinical-note and HAIM-fusion XGBoost models flag intimate partner violence from EMR data. They are developed on 841 help-seeking women and 5,212 optimally matched controls at Mass General Brigham. The fusion model reaches AUC 0.88 on the test set and 0.82-0.88 on three validation cohorts, and flags 80.6% of later self-reporters in advance (mean lead 3.68 years) (pp. 1-4).",
+  "problem_entry": "ML+AP (women's health, radiology); optimization only as a cohort-matching tool. IPV is underreported, and screening tools 'simply rely on self-reporting of violence'. Radiologists see the injury patterns but lack time, and prior ML tools were small or predicted the response to intervention. The aim is 'the first multimodal machine-learning approach' to clinical IPV risk (p. 1).",
+  "key_idea": "Three models for different data availability (tabular, notes, and a HAIM fusion that concatenates tabular features with note embeddings) predict daily, at each encounter. An optimization model builds the control cohort so that the predictor cannot learn demographics, and leakage filters act on codes and report sections (pp. 2, 4-6).",
+  "assumptions": "Cases: 841 women in AHC1's DAIP centre in 2017-2019 and 2021-2022 (2020 dropped because of COVID). Validation: DAIP1 2023 (223/1,333); AHC1 patients with IPV diagnoses who did not enrol (95/569); DAIP2 2023 at AHC2, of the same network (186/1,130) (p. 2). Every case observation is labelled IPV (p. 2); [my reading] abuse onset is unobserved. Controls: a hospital pool of ten per case within +/-10 years and of similar race; a demographic distance weighted by logistic regression; six controls per case within 5-year age bands (pp. 5-6). [my check] 841 x 6 = 5,046, not 5,212. Features: EMR 2017-2023, top 5% of codes (119 diagnoses, 187 medications), ED visits, injury sites and timing, zip-code deprivation and income; individual demographics excluded (pp. 5-6).",
+  "proof_devices": [
+   "n/a for formulation or proof (empirical paper)",
+   "Control matching by an optimization model: a demographic distance weighted by logistic coefficients, six controls per case within 5-year age bands; the model is not printed (pp. 5-6)",
+   "Leakage filters: IPV-indicative diagnoses and the Indication/History/Reason sections of radiology reports removed; patient-level 80/20 split (pp. 2, 6)",
+   "Time-series aggregation (min, max, mean, latest), Clinical-Longformer embeddings (MedAlpaca 7B within +/-0.02 AUC), XGBoost tuned by 5-fold grid search (p. 6)",
+   "Isotonic calibration and SHAP (pp. 3-4)"
+  ],
+  "experiments": "Test AUC: tabular 0.85, notes 0.87, fusion 0.88; on DAIP1 2023 the fusion model reaches 0.88 and all models exceed 0.82 (p. 3). Validation (tabular/notes/fusion): AHC2 0.81/0.78/0.82; non-enrolled 0.77/0.83/0.84 (pp. 3-4). The threshold is chosen to balance test-set sensitivity and specificity, both above 73% (p. 3). Lead time on DAIP1 2023: 68% (tabular) and 80.6% (fusion) of cases are flagged before the first self-report; mean/median 3.99/5.32 and 3.68/4.61 years, bounded by the 2017 EMR start (pp. 3-4). SHAP: mental-health disorders, chest pain, painkillers, deprivation and upper-extremity radiology raise the risk, mammography and cervical screening lower it; for text, SHAP ranks only embedding dimensions (p. 4). Not reported: CIs, per-observation vs per-patient AUC, the preliminary learner comparison, any published IPV model, the false-positive burden. The text and Fig. 2's caption disagree for the non-enrolled cohort (0.77/0.83 vs 0.81/0.78) (pp. 3-4).",
+  "positioning": "Against self-report screening (USPSTF) and earlier ML tools (refs. 18-20); built on the partner's radiology findings on IPV; fusion credited to HAIM (pp. 1-2, 4). Priority: 'the first multimodal machine-learning approach' (p. 1). The validation is called evidence of 'generalizability to external populations', although the second hospital belongs to the same network (pp. 2, 4).",
+  "writing": "Clinical-journal register with careful, patient-centred framing: not a diagnosis, a support for conversations, safeguards for autonomy (p. 5). Specific limits (p. 5). The text and the captions disagree (pp. 3-4). Bertsimas lists Dynamic Ideas LLC among his affiliations, and no competing interests are declared (pp. 1, 8).",
+  "limits_future": "Stated: selection bias from help-seekers, unknown true prevalence, EMR quality, SHAP not statistical, demographics excluded (p. 5). Future: a statistical analysis of risk factors, socio-demographic variables, a real-time decision support tool embedded in the EMR (p. 5). Data and code are withheld because of PHI (p. 7).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The owner and the current rule exist (clinicians; self-report screening), and the lead-time metric scores the model against that rule's timing. But no decision or false-positive cost is modelled, the threshold is set on the test set, and there is no field test yet.",
+    "pages": "pp. 1, 3, 5"
+   },
+   {
+    "method": "Method 4",
+    "relation": "contradiction",
+    "note": "No published IPV model is run (refs. 6, 10 and 18-20 are only cited). The baselines are the paper's own single-modality models, and the comparison of learners is not shown.",
+    "pages": "pp. 1, 6-8"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Optimization enters only as study design (the matched control cohort), described in prose without a formulation.",
+    "pages": "pp. 5-6"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "The group's tools (HAIM fusion, R.O.A.D.-style matching) and an ORC trio are carried into a new partner's NIH-funded IPV programme, with Bertsimas as co-senior author.",
+    "pages": "pp. 1-2, 5, 8"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "exact matching IO as a study-design tool",
+    "evidence": "Controls are chosen by an optimization model minimizing a logistic-weighted demographic distance, six per case within 5-year age bands (the model is not printed). Compare c39 S620 and s21 S696.",
+    "pages": "pp. 5-6"
+   },
+   {
+    "pattern": "frozen modular extractors producing one patient vector",
+    "evidence": "HAIM fusion: aggregated tabular features concatenated with Clinical-Longformer note embeddings into one XGBoost input. Compare c41 S678.",
+    "pages": "p. 6"
+   },
+   {
+    "pattern": "analytics partner inside a clinical team's study",
+    "evidence": "Khurana's NIH R01 study, with Bertsimas as co-senior author and co-director and ORC students running the experiments. Compare S686 in batch c2-08 and s19 S707.",
+    "pages": "pp. 1, 8"
+   },
+   {
+    "pattern": "lead time over the current detection route",
+    "evidence": "The model's first flag is dated against the patient's first self-report and plotted against the largest possible lead.",
+    "pages": "pp. 3-4"
+   },
+   {
+    "pattern": "decision-time feature gate",
+    "evidence": "Target-revealing diagnoses and the Indication/History/Reason sections of radiology reports are removed before encoding. See S686 in batch c2-08.",
+    "pages": "p. 6"
+   }
+  ],
+  "transferable": [
+   "(D3) Build the control cohort by optimization: weight the demographic distance by a simple classifier's coefficients, fix exact strata (5-year age bands), and match a fixed number of controls to each case (pp. 5-6).",
+   "(D3) Before encoding, remove target-revealing text (the Indication/History/Reason sections of radiology reports) and target-revealing codes, and split by patient (pp. 2, 6).",
+   "(D5) Choose validation cohorts that each probe one bias: the next year, people who never used the help service, another hospital (p. 2).",
+   "(D5) For a screening model, report the lead time over the current detection route next to the AUC, plotted against the largest possible lead (pp. 3-4)."
+  ],
+  "coauthors": "Jiayi Gu, Kimberly Villalobos Carballo, Yu Ma (Brigham and Women's Hospital and MIT ORC), Bharti Khurana (BWH, Harvard Medical School; corresponding author; co-senior with Bertsimas)",
+  "quotes": [
+   {
+    "text": "To achieve a closer match in age, we discretize age into 5-year age groups; each IPV patient is matched with six control patients within the same 5-year age group while minimizing the difference in their demographic features.",
+    "page": 6
+   },
+   {
+    "text": "It is also important to emphasize that the models are not intended to provide a definitive diagnosis of IPV, but rather to serve as a tool to assist healthcare providers in having patient-centered conversations around IPV.",
+    "page": 5
+   }
+  ]
+ }
+]
