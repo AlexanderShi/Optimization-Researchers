@@ -1,0 +1,422 @@
+[
+ {
+  "id": "S403",
+  "year": "2023",
+  "title": "Multistage stochastic optimization via kernels",
+  "read_level": "partial",
+  "contribution": "Represents multistage decision rules with side information as elements of a reproducing kernel Hilbert space, trains them by functional SGD with kernel-OMP pruning (SMOK), proves asymptotic optimality, and finds sparse, fast, near-optimal rules on synthetic inventory and shipment problems.",
+  "problem_entry": "{DA SD; ML as engine} Multistage stochastic optimization with side information, where decisions do not affect the uncertainty (p. 1); the entry is the group's own limits: SRO and SRO-knn need scenario trees and hours for a few stages (p. 2), local kernel methods need more data (p. 3), and the Bertsimas-Koduri kernel formulation grows cubically with the data (pp. 3-4).",
+  "key_idea": "Decision rules as RKHS elements with covariate-augmented domains (p. 5), trained by functional SGD on the regularized empirical loss (pp. 6-8), with kernel orthogonal matching pursuit pruning the dictionary after every step to Hilbert-norm tolerance epsilon (Algorithms 1-2, pp. 9-11); a global learned rule instead of reweighted samples or linear rules over uncertainty sets (pp. 2-3).",
+  "assumptions": "Convex loss, i.i.d. sample paths, no cross-stage correlation assumption (pp. 2, 6); compact data space with bounded universal kernels, Lipschitz loss, convexity and differentiability (A1-A3, p. 11); constraints only via a quadratic penalty, feasibility not guaranteed (p. 14); synthetic inventory data and a reproduced synthetic shipment problem (pp. 15, 20).",
+  "proof_devices": [
+   "Theorem 1: constant step eta and pruning tolerance P2*eta^2 give expected excess regularized loss O(eta/lambda) (p. 12)",
+   "Corollary 1: eta = sqrt(P1/N), lambda -> 0, lambda*sqrt(N) -> infinity give L1 convergence to the optimum over continuous rules, rate O(1/(lambda*sqrt(N))) (p. 12)",
+   "SGD descent inequality with the projection error entering as a bias of order epsilon (Lemma 6, p. 29); penalty feasibility as psi -> infinity (Lemma 7, p. 30)",
+   "dictionary size bounded by a covering number depending on eta and P2 but not N: worst-case O(NM^3) time and O(NM^2) space vs Omega(N^2) unpruned; covering number unknown in closed form (pp. 12-13)",
+   "analytic lower bound for T <= 5: drop the two loose bound constraints and solve the rest with the newsvendor fractile under normal noise (Appendix D, pp. 31-32)"
+  ],
+  "experiments": "Python/NumPy on a 4-core laptop (p. 15); 10-period inventory with N = 2,000: SMOK loss 491.30 in 0.3 h with 1.5e3 parameters vs MOK 493.74 (0.1 h) and SAA-knn 496.04 (14.36 h), SRO intractable (Table 1, p. 16); near the lower bounds and far better than affine rules in sweeps (pp. 16-19); shipment planning: MOK best profit, SMOK second, SMOK time flat at 150-260 s but SAA-knn fastest (Tables 2-3, p. 21); all data synthetic.",
+  "positioning": "Against local kernel predict-then-optimize methods (Hanasusanto-Kuhn, Pflug-Pichler) and predictive-only online kernel learning; follows Koppel et al. (2016) for pruned FSGD; extends the group's SRO, SRO-knn and Bertsimas-Koduri kernel work (pp. 2-4).",
+  "writing": "Four numbered contributions with a 'to the best of our knowledge' first-tractable claim (p. 4); experiments narrated figure by figure; two SMOK/MOK label slips (pp. 17-18).",
+  "limits_future": "Decisions must not affect the uncertainty (pp. 1, 21); penalty-only feasibility (p. 14); unknown covering number (p. 13); constant step trades accuracy for memory (p. 12); no future-work list (pp. 21-22).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Decisions scored out of sample (loss, profit), but baselines are the group's own SRO, SRO-knn, SAA-knn and textbook affine rules on synthetic data, not an owner's rule; step 4 varied: the decision rule itself is learned globally rather than ML weights inside a sample average.",
+    "pages": "pp. 2-3, 13-21"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Certificate idea moved out of MIO: an optimality gap against an analytic lower bound that exists only because the generator is known, and only for T <= 5.",
+    "pages": "pp. 16-17, 31-32"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "A scenario-tree problem rewritten as kernel learning rather than LP or MIO; tractability by pruning, not by a class-keeping device; boundary printed (penalized constraints, unknown covering number).",
+    "pages": "pp. 6-13"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "own earlier result's limit as the entry",
+    "evidence": "The group's SRO and SRO-knn (scenario trees, hours) and the Bertsimas-Koduri kernel formulation (cubic growth) are the named limits the paper removes.",
+    "pages": "pp. 2-4"
+   },
+   {
+    "pattern": "bound-referenced quality yardstick for heuristics and policies",
+    "evidence": "A relaxation plus closed-form newsvendor solution under the known synthetic generator turns 'near optimal' into a measured gap for T <= 5.",
+    "pages": "pp. 16, 31-32"
+   }
+  ],
+  "transferable": [
+   "Add the covariates to the decision rule's domain so one unconditional learning problem replaces the conditional one, then evaluate the rule at the observed covariates (p. 5).",
+   "Pair functional SGD with greedy dictionary pruning at tolerance P2*eta^2 so model size is bounded through eta, not N; state time and memory with and without pruning (pp. 9-13).",
+   "On synthetic instances, build a lower bound from the known generator (drop non-binding constraints, solve the rest in closed form) and report gaps (pp. 31-32).",
+   "When sweeping dimensions, rescale the instance so the optimal value stays fixed and loss curves are comparable (pp. 18-19)."
+  ],
+  "coauthors": "Kimberly Villalobos Carballo",
+  "quotes": [
+   {
+    "text": "However, these dynamic methods are affected by the curse of dimensionality; they require scenario tree enumeration and can require many hours for solving problems with only a few stages.",
+    "page": 2
+   },
+   {
+    "text": "A constant step size is then what allows us to control the trade-off between accuracy and memory required",
+    "page": 12
+   }
+  ]
+ },
+ {
+  "id": "S530",
+  "year": "2023",
+  "title": "Robust Regression over Averaged Uncertainty",
+  "read_level": "partial",
+  "contribution": "Averaging the squared loss uniformly over a symmetric uncertainty set, instead of taking its worst case, yields exactly ridge regression with a closed-form lambda for l_p sets (and asymptotically for Schatten balls) but not for non-symmetric polytopes; on UCI and synthetic data it beats worst-case robust regression by under 1% MSE.",
+  "problem_entry": "{ML RO} The group's worst-case equivalence gives root-mean-square regression, 'not practically used', while practice solves least squares (pp. 2, 9); worst case can be too conservative (p. 8); no exact regularization strengths for the least-squares case (p. 2).",
+  "key_idea": "Integrate the loss over the set (Definition 1, a uniform-distribution stochastic program, p. 9); the exact second-order expansion (Lemma 12, p. 17) and symmetry kill the linear term (Corollaries 1-3, pp. 12-13), leaving ridge with lambda equal to the set's second moment (p. 18).",
+  "assumptions": "Linear regression with additive feature perturbations uniform on ellipsoidal, box, diamond, budget, Schatten or polytopal sets, no data model beyond the set (pp. 7-8); ten UCI sets with hit-and-run perturbations at six levels and 10 seeds, 80/20 split (pp. 21-22); synthetic 300-900 samples, 3-10 informative features, 20 seeds (p. 24).",
+  "proof_devices": [
+   "odd-function integrals vanish over symmetric sets (Lemma 5, Corollaries 1-3, pp. 12-13)",
+   "exact second-order expansion of the squared loss in the perturbation (Lemma 12, p. 17)",
+   "Theorem 6: closed-form lambda, box n*rho^2/3, diamond 2n*rho^2/((nk+2)(nk+1)), budget two-term expression valid for sqrt(2)/2*rho <= Gamma <= rho (pp. 18-19)",
+   "Theorem 7: Schatten balls via isotropic constants, asymptotic and square only (p. 19; Remark p. 12); Theorem 8: non-symmetric polytopes keep a linear term, no ridge (p. 20)",
+   "volumes by Coxeter's formula and corner truncation (Lemmas 2-3, pp. 11-12); simplex integration formulas for polytopes (pp. 15-16)",
+   "my reading: ellipsoid constant printed as 1/k in the statement and via V(nk, rho) in the proof (p. 18), not scaling as rho^2; general step gives n*rho^2/(nk+2) (my computation); budget radii swapped between definition (4) and Lemma 3's proof and validity range (pp. 7, 12, 19)"
+  ],
+  "experiments": "Gurobi, Julia 1.9.3, Python 3.10.6, barrier, public code (p. 21); 2,400 real-data runs: AUR beats WUR by 0.4-0.9% MSE on average, rising with perturbation, box set excepted (p. 22); theorem lambda beats CV lambda by 0.6-0.8% and CV selects up to six different lambda across seeds (Table 2, pp. 22-23); synthetic gains shrink with samples and informative features (p. 24); no dispersion, tests or run-time numbers.",
+  "positioning": "Starts from the group's worst-case equivalence (Bertsimas-Copenhaver; Bertsimas-Brown et al.) and sets itself against DRO equivalences (Blanchet et al.; martingale DRO) as a deterministic alternative (pp. 3-4, 9-10).",
+  "writing": "Contribution bullets stress 'exact, closed-form, in some cases analytical' solutions (p. 4); empirical claims phrased universally in the conclusion (p. 25) with the box-set exception noted only in the body (p. 22).",
+  "limits_future": "Equivalence fails for non-symmetric sets (p. 20); Schatten results asymptotic and square only (p. 12); AUR needs a larger lambda (p. 25); future: matrix regression, RO with solution constraints, discrete RO (p. 26).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Ridge regression, owned by statistics, written exactly as an averaged robust problem; symmetry plus the set's second moment is the class-keeping device; boundary printed (non-symmetric polytopes, asymptotic Schatten). Also Heuristic 1 evidence: the procedure practice runs is shown to solve a robust problem exactly.",
+    "pages": "pp. 2, 9, 12-13, 18-20"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Conservatism answered by averaging instead of a budget; the knob rho maps to lambda in closed form, independent of the solution, and replaces cross-validation; no probability bound and no price curve.",
+    "pages": "pp. 8, 18, 21-23"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "exact dictionary between a statistical procedure and a robust model, with its boundary",
+    "evidence": "Ridge regression equals averaged robust regression for every symmetric set considered, with lambda in closed form; the equivalence fails for non-symmetric polytopes.",
+    "pages": "pp. 9, 18-20"
+   },
+   {
+    "pattern": "own earlier result's limit as the entry",
+    "evidence": "The group's worst-case equivalence ends in root-mean-square regression, which the paper calls not practically used.",
+    "pages": "p. 9"
+   },
+   {
+    "pattern": "average over the uncertainty set instead of its worst case",
+    "evidence": "The same norm-ball sets integrated uniformly, as the remedy for worst-case conservatism.",
+    "pages": "pp. 8-9"
+   }
+  ],
+  "transferable": [
+   "Expand the loss exactly to second order in the perturbation and integrate over a symmetric set: odd terms vanish and the regularizer equals the set's second-moment matrix (pp. 17-18).",
+   "Test hyperparameter stability by rerunning cross-validation over noise seeds of the same data and counting distinct lambda selected, beside a closed-form choice (Table 2, pp. 22-23).",
+   "For increasing noise levels from nested sets, require samples at a higher level to lie outside the smaller set (p. 24).",
+   "Check each closed-form constant against lambda = integral of Delta'Delta over U divided by vol U, e.g. by Monte Carlo at small n and k, before reuse (p. 18)."
+  ],
+  "coauthors": "Yu Ma",
+  "quotes": [
+   {
+    "text": "This implies that ridge regression is a general regularization method that protects against global perturbations of different noise structures",
+    "page": 20
+   },
+   {
+    "text": "This implies that CV is not the most reliable methodology for computing regularization strengths, as it provides unstable selections as we are exposed to randomness.",
+    "page": 22
+   }
+  ]
+ },
+ {
+  "id": "S531",
+  "year": "2023",
+  "title": "Adaptive pricing in unit commitment under load and capacity uncertainty",
+  "read_level": "full",
+  "contribution": "Proposes adaptive pay-as-bid and uniform pricing for adaptive robust unit commitment with load and capacity uncertainty, read off the dual of the linear-decision-rule robust counterpart with binaries fixed; proves the schemes coincide and deter self-scheduling when the worst case is realized, and illustrates them on two textbook examples.",
+  "problem_entry": "{RO AP; LO duality; IO with commitments fixed} ARO and stochastic UC already adapt commitment and dispatch, but ISO marginal and convex-hull prices are deterministic and need ad hoc uplifts that motivate self-scheduling; only two prior papers price robust UC, neither with ARO (pp. 1-2).",
+  "key_idea": "ARO-UC with linear decision rules over norm-ball load and capacity sets (pp. 2-3); fix binaries at the optimum as in O'Neill et al.'s IP pricing and price from the robust dual (p. 3); day-ahead payments for commitment and non-adaptive dispatch, adaptive part as an upper bound on intra-day payments, plus payments proportional to the uncertainty-set sizes (p. 4).",
+  "assumptions": "Scarf-type UC; l1, l2, l-infinity sets whose sizes control conservativeness (p. 2); non-adaptive dispatch tied to expected load (p. 3); LDR may not be optimal (p. 2); binaries fixed for pricing (p. 3); data: Scarf example and Chen et al.'s two-generator three-hour example, no ISO data (pp. 7, 9).",
+  "proof_devices": [
+   "Theorem 1: day-ahead pay-as-bid equals uniform price plus uplift, by complementary slackness between the robust problem and its dual (p. 4)",
+   "Theorem 2: total payments coincide when the worst case is realized (p. 5)",
+   "Theorem 3: no generator gains by self-scheduling in its own robust problem under centralized prices, at the worst-case realization (pp. 5-6)",
+   "dual-norm robust counterparts give the prices and the uncertainty-size payments (pp. 3-4)"
+  ],
+  "experiments": "Worked examples, no solver or timings: Scarf deterministic $260 vs ARO payments $328.5 (identical under both schemes), $352 with capacity uncertainty (pp. 7-8); intra-day cost below the adaptive part, equal at the worst case (Fig. 1, p. 8); Chen et al.: convex-hull $365 duality-gap uplift vs ARO with none (p. 9); text says $280 against a printed $260 and adaptive uplifts total 208.5 vs 180 (p. 7, my arithmetic).",
+  "positioning": "Against ISO marginal (IP) pricing and convex-hull pricing (O'Neill et al.; Hua-Baldick; the group's own Dantzig-Wolfe convex-hull paper); notes only two earlier robust-UC pricing papers, neither ARO (p. 1).",
+  "writing": "The abstract's 'two major disadvantages' framing is repeated in the introduction (p. 1); 'the first' claimed in the abstract and the conclusion (pp. 1, 10); theory, then worked examples with full payment tables.",
+  "limits_future": "Uplifts remain in the uniform scheme though fixed day-ahead (pp. 4, 7); guarantees only at the worst-case realization (pp. 5-6); LDR and fixed binaries (pp. 2-3); small examples; no future-work statement (p. 10).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Class kept by linear decision rules and norm-ball sets; prices and uplifts read off the dual (step 4); boundary printed only in part (LDR may be suboptimal; theorems at the worst case).",
+    "pages": "pp. 2-6"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Set sizes are the knobs and the uncertainty is priced, but the cost of protection appears at single points ($260 to $328.5 to $352; $7340 to $7860), with no curve and no probabilistic bound.",
+    "pages": "pp. 2, 4, 7-9"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The owners' current pricing rules are the comparators, but only on textbook examples, without ISO data or field test, unlike the ISO New England evaluation of the 2012 ARO-UC paper.",
+    "pages": "pp. 1, 7, 9"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "own earlier result's limit as the entry",
+    "evidence": "The group's ARO unit commitment [10] made commitments robust while pricing stayed deterministic.",
+    "pages": "pp. 1-2"
+   },
+   {
+    "pattern": "robust analogue of another field's canonical concept",
+    "evidence": "O'Neill et al.'s IP pricing (binaries fixed, prices from duals) carried into ARO with linear decision rules.",
+    "pages": "pp. 3-4"
+   },
+   {
+    "pattern": "price the uncertainty set itself",
+    "evidence": "Uniform-price payments include terms proportional to the load and capacity set sizes, through the duals of the robust constraints.",
+    "pages": "p. 4"
+   }
+  ],
+  "transferable": [
+   "To price a mixed-integer market model under uncertainty, fix binaries at the optimum, write the LDR robust counterpart, read payments off its dual and prove pay-as-bid = uniform pricing by complementary slackness (pp. 3-4).",
+   "Split payments into a firm day-ahead part and an upper bound on intra-day payments that is tight at the worst case (pp. 4, 8).",
+   "Run the new scheme on the field's canonical toy examples beside the incumbent pricing, reporting objective, prices, payments and uplifts per generator (pp. 7-9)."
+  ],
+  "coauthors": "Angelos Georgios Koulouras",
+  "quotes": [
+   {
+    "text": "In contrast to deterministic pricing, we also price the uncertainty by introducing payments based on sizes Γq and ∆p of the uncertainty sets.",
+    "page": 4
+   },
+   {
+    "text": "The adaptive dispatch is an upper bound to the optimized intra-day dispatch.",
+    "page": 8
+   }
+  ]
+ },
+ {
+  "id": "S707",
+  "year": "2023",
+  "title": "Renalase Identified by Machine Learning Methods As A Novel Independent Predictor Of Mortality In Hospitalized Patients With COVID-19",
+  "read_level": "full",
+  "contribution": "A Yale-led single-centre COVID-19 cohort study (437 patients) in which a priori and stepwise logistic regression and XGBoost with SHAP all retain low serum renalase as a predictor of 180-day mortality; XGBoost reaches test AUC 0.85.",
+  "problem_entry": "{AP ML} Identify traditional and novel predictors of mortality in hospitalized COVID-19 patients and test whether low renalase predicts independently (pp. 3-4); traditional predictor models have predictable biases and validate poorly, ML may generalize better (p. 4).",
+  "key_idea": "Three-model triangulation: a priori logistic regression as baseline, backward-stepwise logistic regression and XGBoost with SHAP; renalase called independent because it appears in all three (pp. 6, 8); no optimization model, post-hoc interpretability (p. 6).",
+  "assumptions": "Single-centre retrospective cohort, March-June 2020: 437 analysed of 473 enrolled (3,450 admitted), 71 deaths, 897 samples (pp. 3, 7); features with >30% missing dropped, OptImpute for the rest, cut-offs by quantiles and clinical judgement (p. 5); 50/20/30 split, 200 random splits for CIs (p. 6).",
+  "proof_devices": [
+   "n/a: no formulation or proofs; univariate Fisher and chi-square tests and quartile-trajectory comparisons (pp. 5, 8-9)"
+  ],
+  "experiments": "Test AUC: a priori LR 0.72, backward LR 0.70, XGBoost 0.85 (Table 3, p. 18), though the abstract and one discussion line say 0.87 (pp. 3, 9); train and validation AUC of 1 for XGBoost and backward LR undiscussed (p. 18); Table 2 repeats rows for IFN-alpha/IFN-lambda and IL-6/TNF-alpha (p. 18, my reading).",
+  "positioning": "Clinical COVID-19 biomarker literature (cytokines, cardiac markers) and the team's own earlier renalase cohort; ML justified by a 13-algorithm bioinformatics benchmark (pp. 3-6).",
+  "writing": "Clinical IMRaD format; headline AUC inconsistent between abstract and table (pp. 3, 18); 'independent predictor' used for consistency across models (p. 8).",
+  "limits_future": "Single site, first wave, pre-vaccination, few serial samples (p. 11); future prospective studies and a possible therapeutic role for exogenous renalase (p. 11); last author's renalase patents and equity declared (pp. 2, 11-12).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The field's traditional model is the explicit baseline, but predictions are scored (AUC, PR-AUC, calibration) with no decision attached (Warning sign 4); prospective validation deferred.",
+    "pages": "pp. 6, 11, 18"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "A held-out duel against the incumbent model, but no exact model: a boosted ensemble wins with post-hoc SHAP while the group's interpretable learners (OCT) are absent, in tension with Taste mark 5 (my reading); perfect training AUCs unremarked.",
+    "pages": "pp. 6, 18"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "analytics partner inside a clinical team's study",
+    "evidence": "Bertsimas credited with design, analysis and drafting but neither first nor last author; the group brings its tool (OptImpute) and an MIT analyst (Sobiesk); compare the sponsor-and-edit candidate (c28 S132, c34 S682), where the line was his student's.",
+    "pages": "pp. 1, 5, 11"
+   }
+  ],
+  "transferable": [
+   "Triangulate a biomarker claim across model families (a priori regression with clinical confounders, stepwise regression, gradient boosting with SHAP) and call a predictor independent only if all keep it (pp. 6, 8).",
+   "Choose hyperparameters on a validation split, refit on training plus validation, and report test-AUC intervals from many random splits (200 here) (p. 6)."
+  ],
+  "coauthors": "Basmah Safdar, Matthew Sobiesk, Armin Nowroozpoor, Yanhong Deng, Gail D'Onofrio, James Dziura, Joe El-Khoury, Xiaojia Guo, Michael Simokonov, R. Andrew Taylor, Melinda Wang, Gary Desir",
+  "quotes": [
+   {
+    "text": "Low renalase emerged as a consistent predictor of mortality across all the tested models.",
+    "page": 8
+   },
+   {
+    "text": "This was a single site retrospective study in the first wave of COVID-19",
+    "page": 11
+   }
+  ]
+ },
+ {
+  "id": "S253",
+  "year": "2024",
+  "title": "Hospital-wide inpatient flow optimization",
+  "read_level": "partial",
+  "contribution": "HIFO: a three-horizon mixed-integer bed-assignment model for a whole hospital, fed by ML predictions and protected by prediction-based adaptive robust optimization, re-solved every two hours; solved in seconds for a 600-bed hospital and, in historical replay, cutting boarding delays and off-service placements against staff decisions.",
+  "problem_entry": "{AP DA RO; IO and ML as engines} Hospital-wide coordination is wanted (p. 2), but patient-level bed-assignment models are myopic or slow (12+ hours for 96 beds) and unit-level queueing/MDP models miss patient requirements (pp. 4, 6-8).",
+  "key_idea": "Granularity matched to horizon: patient assignments now, unit flows in 2-hour periods to 6 am, hospital capacity for the week, coupled and weighted by lambda and lambda_w (Table 2, pp. 9-12); single-move assumption links aggregates to individuals (p. 10); ML predictions from risk scores (pp. 14-16) wrapped in an uncertainty set (pp. 16-17) with static or affine rules (pp. 21-22); closed-loop re-solve (p. 12).",
+  "assumptions": "~600 beds, 31 units, 15 services (pp. 3-4); ~18,000 binaries and 630 constraints (p. 9); single-move assumption validated at >85% (p. 10); piecewise-linear convex costs calibrated with the partner (pp. 11, 13); scheduled admissions certain (p. 16); independent Poisson flows for Proposition 1, relaxed to independent patients (pp. 19-20); data January-August 2019 (p. 23).",
+  "proof_devices": [
+   "Proposition 1: P(realized cost >= robust cost) <= exp(-(c_bar/c_inf) Gamma_c^2/(1+Gamma_c)) for a fixed flow, a posteriori, reading the worst case as a value-at-risk bound (p. 19)",
+   "new large-deviation bound for sums of independent Poisson variables (Lemma 1, Appendix A.1; cited p. 19)",
+   "guarantee for open-loop day-level flows only; closed loop left open (p. 20)",
+   "epigraph plus constraint-wise robustification for the robust counterpart (p. 21)",
+   "full affine rules intractable, so affine with known recourse (Proposition 1 still holds) and restricted affine (p. 22)"
+  ],
+  "experiments": "Hybrid historical replay from recorded states with staff decisions between runs (p. 23); vs history, fluid and SAA-100 (p. 24); median solves 0.36-0.70 s, 99th percentile up to 41.2 s (Table 4, p. 25); 1-day runs cut waiting 20%/11% and off-service 6%, 7-day runs 35%/18%/24% (p. 26); census +0.9-2.6%, transfers -12.9% on 1-day runs (Table 5, p. 28); 38% of patients better, 20% worse (p. 28); 20% compliance keeps ~70% of the off-service gain (p. 29); solver and hardware not named in the text read.",
+  "positioning": "Between patient-level bed-assignment models (Thompson et al.; Thomas et al.; Schafer et al.) and unit-level queueing/MDP models (Kilinc et al.; Dai-Shi); RO chosen over stochastic and DRO modelling for tractability and a value-at-risk reading (pp. 4-8, 17-20).",
+  "writing": "'One of the most comprehensive of its kind' (p. 4); 7-day headline numbers in the abstract, caveats on PACU, compliance and fairness in the body (pp. 2, 26-29).",
+  "limits_future": "Single-move assumption, implicit costs, no model of decisions changing flows (pp. 12-13); PACU gain to be taken with a pinch of salt (pp. 26-27); full compliance assumed (p. 28); future: real pilot, closed-loop theory, adjustable DRO, fairness and behaviour (p. 29).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Owner, decision, EHR data and the historical staff rule as baseline; decision metrics with census and volume controls; costs set with the partner; compliance curve; field test deferred with smaller real gains predicted. Also Heuristic 4 evidence: PACU caveat, fewer transfers, 20% of patients worse printed in the body.",
+    "pages": "pp. 3, 13, 23-29"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Granularity matched to horizon plus the single-move assumption keep a 600-bed hospital in an MIO solved in seconds; boundary printed (full affine rules intractable; guarantees for open-loop flows only).",
+    "pages": "pp. 9-10, 20-22, 25"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "lambda and lambda_w trace a waiting/off-service frontier with the chosen point marked, and compliance p traces a second curve; but the probabilistic bound is solution-specific (a posteriori), not solution-independent.",
+    "pages": "pp. 19, 25-26, 29"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "counterfactual replay against the historical decision-maker",
+    "evidence": "History replayed in 1-7-day periods from recorded hospital states, recorded discharges kept, staff decisions followed between two-hourly runs.",
+    "pages": "p. 23"
+   },
+   {
+    "pattern": "receding-horizon robust re-solve in place of a dp recursion",
+    "evidence": "A folding horizon re-solved every two hours; the authors credit the closed loop with relieving the robust model's conservatism.",
+    "pages": "pp. 9-10, 12, 25"
+   },
+   {
+    "pattern": "aggregate, then disaggregate only where coupling needs it",
+    "evidence": "Patient-level assignments only for the immediate period, unit flows for the day, hospital occupancy for the week.",
+    "pages": "pp. 7-10"
+   },
+   {
+    "pattern": "compliance continuum between the incumbent rule and the model",
+    "evidence": "Each recommendation implemented with probability p, from p = 0 (history) to p = 1 (model); 20% compliance keeps about 70% of the off-service gain.",
+    "pages": "p. 29"
+   },
+   {
+    "pattern": "winners-and-losers audit at the individual level",
+    "evidence": "Shares of patients better, worse, identical and not comparable under the model (38% vs 20% on 1-day runs).",
+    "pages": "p. 28"
+   }
+  ],
+  "transferable": [
+   "Match decision granularity to the horizon and couple the layers; validate on history the assumption that ties aggregates to individuals before using it (pp. 9-10).",
+   "Evaluate a recommender by replay: start each short period from the recorded state, keep recorded discharges, follow staff decisions between runs, normalize metrics by the historical median (pp. 23-24).",
+   "Report a compliance curve (implement each recommendation with probability p) and a per-person tally of winners and losers (pp. 28-29).",
+   "Read a static robust objective as a value-at-risk bound with an explicit tail probability, and say when it does not cover the closed-loop policy (pp. 19-20)."
+  ],
+  "coauthors": "Jean Pauphilet",
+  "quotes": [
+   {
+    "text": "Yet, the reduction in boarding time for patients in the post-anesthesia units (part of scheduled admissions) ought to be taken with a pinch of salt.",
+    "page": 26
+   },
+   {
+    "text": "using adaptive decision rules has a first-order effect on the algorithm performance",
+    "page": 28
+   }
+  ]
+ },
+ {
+  "id": "S267",
+  "year": "2024",
+  "title": "A machine learning approach to two-stage adaptive robust optimization",
+  "read_level": "partial",
+  "contribution": "Learns the strategies of two-stage ARO (binary first-stage decision, worst-case extreme point, second-stage tight constraints) from CCG-solved instances with XGBoost or Optimal Policy Trees, plus learned warm starts and class merging, giving millisecond solutions with high accuracy on small parametric families.",
+  "problem_entry": "{RO DA; IO for binary first-stage decisions, ML} Two-stage ARO is heavy: affine rules have no near-optimality or feasibility guarantee and exact methods may not scale (p. 2); CCG's unit-commitment solve time jumps at n = 5 on the authors' machine (Fig. 1, pp. 7-8); real-time uses need milliseconds (p. 2); the group's strategy learning for MICO does not carry over directly (p. 2).",
+  "key_idea": "Encode solutions as three finite strategies (decision; decision plus worst-case extreme point; decision plus tight constraints) (pp. 9-10); sample the parameter in a ball, solve by CCG, train XGBoost or OPT on reward matrices (pp. 10-12); online, predict and solve only the reduced LP (p. 10); extensions for varying dimensions, learned warm starts and fixing, and class merging (pp. 14-19).",
+  "assumptions": "Fixed recourse, affine dependence on d, polyhedral sets so worst cases are extreme points (pp. 4-5); labels near-optimal only, from an alternating-direction heuristic with three starts (p. 5; Remark 1, p. 10); parameters sampled from small balls around fixed centres (Remark 2, p. 10; pp. 20-21); facility location, inventory control and Carrion-Arroyo unit commitment (pp. 20-21).",
+  "proof_devices": [
+   "no theorems; CCG on the extreme-point reformulation with a heuristic max-min oracle (pp. 4-6)",
+   "per-prediction infeasibility and relative suboptimality against the heuristic second-stage evaluation (pp. 9-10)",
+   "warm-start/fixing threshold p chosen as the smallest value with validation misclassification below a bound (p. 16)",
+   "rare tight-constraint sets merged into a union so the reduced LP still contains each instance's tight set (pp. 17-19)"
+  ],
+  "experiments": "Julia 1.4.1, Gurobi, a 2.6 GHz laptop, OPT from Interpretable AI (pp. 7, 20); 70/30 split (p. 22); near-optimal labels: accuracy >= 0.93, never infeasible, max suboptimality <= 0.001, speed-ups up to 3.37 million (pp. 22-25); large UC with loose labels: accuracy 0.18, max suboptimality 0.0205, speed-up 8.49e7 (Table 12, pp. 27-28); Algorithm 6 >10x faster data generation (p. 28); offline time only in the Supplementary Material (p. 20).",
+  "positioning": "Extends the group's learning-to-optimize line (Bertsimas-Stellato 2021, 2022; Bertsimas-Kim 2023) to ARO; against affine rules and exact ARO algorithms (CCG, Benders, scenario reduction, branch-and-bound, Fourier-Motzkin) (pp. 2-3).",
+  "writing": "'The first' ML approach to ARO claimed (p. 2); the headline speed-up of more than 10 million times (p. 3) comes from the setting with 0.18 accuracy (p. 28); results as bullet lists under each table.",
+  "limits_future": "Heavy offline phase (p. 2); suboptimal labels from CCG (pp. 5, 10); many classes for large uncertainty sets (p. 17); no future-work list (p. 29).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Learned predictions warm-start or fix binaries and every prediction carries infeasibility and maximum suboptimality, but the yardstick is uncertified (heuristic inner solver) and the duel is a speed race with CCG. Also Heuristic 5 evidence: a repeatedly solved optimization has its strategy learned offline.",
+    "pages": "pp. 2, 5, 10, 16, 22-28"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "The price of interpretability measured by running OPT against XGBoost: a two-point price with no knob curve or bound.",
+    "pages": "pp. 21, 25"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "The learning-to-optimize line passes from Stellato to Kim, and the prescriptive learner comes from the group's company Interpretable AI.",
+    "pages": "pp. 2, 8, 20"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "own earlier result's limit as the entry",
+    "evidence": "The group's strategy learning for mixed-integer convex problems does not cover infinite-dimensional ARO solutions with decisions, worst cases and recourse.",
+    "pages": "pp. 2-3"
+   },
+   {
+    "pattern": "finite strategy encoding of an optimal solution as the learning target",
+    "evidence": "Decision, worst-case extreme point and tight-constraint set become class labels; an LP restores the continuous recourse.",
+    "pages": "pp. 9-10"
+   }
+  ],
+  "transferable": [
+   "Encode a two-stage solution as a finite label (binary first-stage decision, worst-case extreme point, tight-constraint set) so classifiers learn it and an LP restores the recourse (pp. 9-10).",
+   "Score predicted strategies by feasibility and relative suboptimality, not only label accuracy, and report the maximum suboptimality among feasible predictions (pp. 9-10, 22).",
+   "Warm-start or fix only binaries whose predicted probability lies beyond p or 1 - p, with p chosen on validation to bound misclassification (p. 16).",
+   "Merge rare classes into the union of their tight-constraint sets so the number of targets drops while the reduced LP stays valid (pp. 17-19, 25)."
+  ],
+  "coauthors": "Cheol Woo Kim",
+  "quotes": [
+   {
+    "text": "Theoretically, CCG can output suboptimal solutions precisely because problem (3) is non-convex.",
+    "page": 5
+   },
+   {
+    "text": "we aim to analyze the cost we have to pay to gain interpretability",
+    "page": 21
+   }
+  ]
+ }
+]

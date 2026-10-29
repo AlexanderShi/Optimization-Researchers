@@ -1,0 +1,394 @@
+[
+ {
+  "id": "S233",
+  "year": "2010",
+  "title": "Robust and data-driven approaches to call centers",
+  "read_level": "full",
+  "contribution": "Casts multi-class, multi-pool call-center staffing and routing as a fluid LP and compares, on a US bank's data, a CVaR (expected-shortfall) data-driven LP with a robust LP whose arrivals are inflated to mean + Γσ: the robust model solves in seconds instead of hours, with lower or comparable costs in most networks.",
+  "problem_entry": "RO+DA (SD fluid model; AP): arrival rates are random and time-varying, 'as opposed to the usual assumption of constant or known arrival rates', and customers abandon (p. 2). Prior staffing methods assume a known probabilistic structure (Harrison-Zeevi) or estimate the distribution from historical data (Bassamboo-Zeevi) (p. 2). Staffing and routing must be solved together for multi-class, multi-pool centers (pp. 1-2).",
+  "key_idea": "One discrete fluid LP for pool capacities b_j(s) and reserved allocations d_ij(t) (pp. 3-4). On it sit a risk-averse data-driven model that minimizes expected shortfall over K historical paths (pp. 5-7) and a robust model with λ_i(t) ≤ λ̄_i(t) + Γσ_i(t), which reduces to the nominal LP with inflated arrivals (Theorem 3, p. 12). A routing rule enforces the offline allocation online (pp. 12-13).",
+  "assumptions": "Fluid dynamics with abandonment and service rates below one per period (p. 3); constant service rates, because time-varying ones 'will significantly affect the tractability of our model' (p. 5); exponential patience and a fine time step (p. 5); a class-separable uncertainty set (p. 9). Data: SEESTAT records from a US bank, about 300 weekdays, T = 720 one-minute periods, 24 half-hour shifts, six classes and five pools, with cross-pool agents at most 10% slower (p. 14).",
+  "proof_devices": [
+   "The sum of the K_α largest costs is written as an LP over x ∈ [0,1]^K with Σx = K_α and dualized into v + w_k ≥ C_k; the inner optimal value is replaced by its feasible set because it sits on the small side of ≥ (Theorem 2, pp. 7-8)",
+   "Monotonicity of the recourse penalty in each arrival rate: relaxing the queue equation to ≥ leaves the optimum unchanged, and the value is then a maximum over dual extreme points with nonnegative multipliers π_i(t) (Proposition 1, pp. 9-11)",
+   "The worst case over an upper-bound set is its corner, so the robust LP is the nominal LP with λ̄ + Γσ arrivals (eq. (13) and Theorem 3, p. 12)"
+  ],
+  "experiments": "300 days split 150/75/75 into training, validation and test sets; α over 0-1 and Γ over 0-3 in steps of 0.1; CPLEX 9.1 barrier method on a 4×3 GHz Unix machine (p. 14). Scoring by event-driven simulation with thinning-generated NHPP arrivals (p. 13). Networks I, V, N, W (Gans et al.) and C1-C3 with up to six classes and five pools (pp. 15, 23). The robust model has the lower mean test cost in I and V (pp. 17, 19), the data-driven one in N and W (pp. 20-23). Failures are printed (pp. 19, 21, 24). Solve times: 0.08-3.45 s robust against 99.89-44,469.47 s data-driven (Table 2, p. 18).",
+  "positioning": "Builds on the call-center modelling line (Gans-Koole-Mandelbaum, Harrison-Zeevi, Bassamboo-Zeevi), cited rather than criticized (pp. 1-2); the square-root safety-staffing rule is mentioned (p. 1) but not used as a baseline.",
+  "writing": "The verdict sits in the abstract ('significantly more tractable'; better 'in most experiments', p. 1). Each network gets the same paragraph: validation frontier, chosen parameter, test result, explanation (pp. 15-24). Explanations are hedged with 'probably' (pp. 17, 19, 20).",
+  "limits_future": "Neither model copes when arrivals move away from history (p. 21); the data-driven model fits better once routing grows complex and depends on the arrival pattern (pp. 19, 23). No future work is stated.",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Both models stay LPs: the data-driven one through LP duality on the sum of the largest costs, the robust one through a monotonicity result that reduces it to the nominal LP with λ̄ + Γσ. Solve times are measured at the target scale.",
+    "pages": "pp. 7-12, 18"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "One knob per model (Γ; the quantile α), with the price printed as mean-standard-deviation frontiers and the bad cases shown. No knob-property bound is proved. The knob is chosen on a validation split and judged on a test split, already in the 2008 preprint; Method 3's correction credits this data-driven setting to later work.",
+    "pages": "pp. 13-26"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Decisions are scored by simulated cost on held-out days of the bank's own data, but the baseline is the rival data-driven model, not the bank's current staffing rule (the square-root rule is only mentioned).",
+    "pages": "pp. 1, 13-14"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "monotone recourse makes the corner the worst case",
+    "evidence": "The penalty is nondecreasing in each arrival rate, because the dual multipliers are nonnegative at every extreme point. So the robust counterpart over an upper-bound set is the nominal LP with inflated data.",
+    "pages": "pp. 9-12"
+   },
+   {
+    "pattern": "robust versus scenario-based model on the same history",
+    "evidence": "A robust (Γ) and a CVaR data-driven (α) model are built from the same historical data, their knobs chosen on a validation split. Mean-standard-deviation frontiers, test costs and solve times are compared across seven network designs.",
+    "pages": "pp. 13-26"
+   }
+  ],
+  "transferable": [
+   "(D4) Prove that the recourse cost of an LP is monotone in the uncertain data from the sign of the dual multipliers at all extreme points; then the robust counterpart over an upper-bound set {λ ≤ λ̄ + Γσ} is the nominal LP with inflated data (pp. 9-12).",
+   "(D4) To minimize CVaR (expected shortfall) over K historical scenarios, write the sum of the K_α largest costs as an LP and dualize it into v + (1/K_α)Σw_k with v + w_k ≥ C_k; an inner minimization on the small side of a ≥ constraint can be replaced by its feasible set (pp. 7-8).",
+   "(D5) Evaluate optimized fluid decisions by event-driven simulation of the stochastic system, under a routing rule that tracks the optimized allocation; choose the knob on a validation split before scoring on the test split (pp. 12-14)."
+  ],
+  "coauthors": "Xuan Vinh Doan (MIT Operations Research Center)",
+  "quotes": [
+   {
+    "text": "The result also shows that both models do not perform well if arrival data change significantly from the past data.",
+    "page": 21
+   },
+   {
+    "text": "For the network design C3, the robust approach needs less than 4 seconds while the data-driven approach takes more than 12 hours on average.",
+    "page": 24
+   }
+  ]
+ },
+ {
+  "id": "S075",
+  "year": "2011",
+  "title": "A hierarchy of near-optimal policies for multistage adaptive optimization",
+  "read_level": "full",
+  "contribution": "Introduces polynomial disturbance-feedback policies computed by a single SOS-based SDP: a hierarchy indexed by the polynomial degree that dominates affine and S-lemma rules and, on two inventory problems, cuts the optimality gap below 1% at degree 3.",
+  "problem_entry": "RO+CP (SD multistage control): min-max control of linear systems with semialgebraic disturbance sets (pp. 1-2). DP suffers the curse of dimensionality (p. 2); affine rules, adopted 'for purposes of tractability', lose performance, sometimes badly (pp. 3, 6); other nonlinear rules lack a systematic performance-computation trade-off (pp. 3-4). Example 1: the best affine policy costs N where the optimum is 1 (p. 6; Lemma 1, p. 22).",
+  "key_idea": "Recourse is polynomial of degree d in past disturbances (eq. (11), p. 7). States become polynomials whose coefficients are linear in the decision matrices, and each robust constraint becomes polynomial nonnegativity, enforced by degree-capped Putinar-type SOS certificates: one SDP (pp. 7-9). Piecewise costs are replaced by polynomial upper bounds (pp. 9-10). The degree d is the user's only choice (pp. 4, 9-10).",
+  "assumptions": "Additive disturbances, independent across time, in compact basic semialgebraic sets; linear constraints; piecewise-affine convex costs (p. 2). Time dependence, multiplicative uncertainty and stochastic or distributionally robust objectives are sketched, but 'we do not pursue them here' (pp. 11-12). Admitted conservatism: the SOS degree cap (p. 9), and the cost over-bound and fixed-degree SOS are sufficient but not necessary (p. 10). Tests use interval demand sets (pp. 16, 18).",
+  "proof_devices": [
+   "Putinar-type SOS certificate with capped multiplier degree turns nonnegativity on a semialgebraic set into linear equalities plus SDP constraints (pp. 8-9)",
+   "Polynomial epigraph per stage makes cost constraints the same form as feasibility constraints (pp. 9-10)",
+   "Domination of affine rules: a feasible affine solution remains feasible at d = 1, by the nonlinear Farkas lemma and the fact that a nonnegative quadratic is SOS; the S-lemma quadratic rule is dominated at d = 2 (Theorem 1, p. 14; proof pp. 23-24)",
+   "Exact benchmark for polytopic sets: an LP over all extreme disturbance sequences, of size O(∏|ext W_k|) (pp. 14-15)",
+   "Multi-affine policies of degree T-1 are optimal under box uncertainty: their 2^(T-1) coefficients interpolate the vertex decisions of the exact LP, and a multi-affine function reaches its maximum at vertices (Theorem 2, p. 16; proof pp. 22-23)",
+   "Affine gap N against 1 on a two-stage example with a Euclidean-ball set (Lemma 1, pp. 6, 22)"
+  ],
+  "experiments": "Single echelon with cumulative order bounds (T = 4-10) and serial supply chain (T = 7, J = 2-5) (pp. 16-18); 100 random instances per size, generated so that affine policies are suboptimal (p. 18), with the one-dimensional case avoided on purpose (p. 17); gaps against the exact LP (p. 18). Affine gaps average 2.8-3.7%, quadratic about three times smaller, cubic all below 1% (Table 1, p. 19); at T = 10 cubic solves take a mean of 1,846.94 s and a maximum of 4,547.09 s, while quadratic solves have a mean and median under 15 s (p. 19; Table 2, p. 20); MATLAB, YALMIP, SDPT3, 3 GHz Xeon 5050, 8 GB of RAM (p. 19).",
+  "positioning": "Placed between DP and ADP, stochastic-programming decision rules (Garstka-Wets), and robust control and RO's affine rules (Ben-Tal-Nemirovski, Kerrigan-Maciejowski, Skaf-Boyd) (pp. 1-3). Thanks a referee for pointing out Ben-Tal-El Ghaoui-Nemirovski 2009 (p. 12) and shows that the hierarchy contains its affine and S-lemma rules (pp. 13-14).",
+  "writing": "Bulleted contributions with headline numbers ('typically by a factor of 2 or 3'; a median gap below 0.01%) (p. 4); each approximation layer is listed together with why it is judged second-order (pp. 9-10).",
+  "limits_future": "Tests cover only the min-max setting with interval demand; the exact benchmark exists only for small horizons (p. 15); cubic SDPs are expensive (p. 19). Future work: structure-exploiting SOS and first-order SDP methods (p. 19), commercial interior-point solvers (pp. 21-22).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Formulation first: a problem owned by DP and robust control is written as one SDP over policy coefficients. The class is not kept (the size grows with d), but the boundary is printed in solve times and in an exact benchmark limited to small horizons.",
+    "pages": "pp. 7-10, 15, 20-22"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "One interpretable knob, the degree d, which 'directly controls the trade-off', with the curve printed as gaps and times by degree. But the knob prices computation, not a property the decision-maker wants, and the only bound is the monotone ordering J*_AFF ≥ J*_{d=1} ≥ ...",
+    "pages": "pp. 9, 14, 19-22"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Certificate and incumbent steps: every gap is certified against an exact optimum, and the incumbent class (affine) is dueled on the same instances with solver and machine stated. The instances were generated so that affine policies are suboptimal, which conditions the comparison.",
+    "pages": "pp. 14-15, 17-19"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "power-and-limits theorem for a tractable policy class",
+    "evidence": "A small example shows the incumbent affine class arbitrarily bad (gap N against 1), and a degree is found at which the policy class is exactly optimal (multi-affine of degree T-1 under box uncertainty). The same pattern appears in S060 and S165 of this batch.",
+    "pages": "pp. 6, 16, 22-23"
+   },
+   {
+    "pattern": "build the tractable policy from the fully adaptive optimum",
+    "evidence": "The optimality proof makes the multi-affine policy interpolate the exact LP's decisions at the vertices of the disturbance hypercube. Also in S060 (vertex interpolation, scaling) and S165 (scaling).",
+    "pages": "pp. 22-23"
+   },
+   {
+    "pattern": "exact exponential formulation as a small-scale benchmark",
+    "evidence": "An LP over all extreme disturbance sequences (size O(∏|ext W_k|), which the paper calls doubly exponential in the horizon and usable only for small horizons) is solved only to give the exact optimum against which every polynomial policy's gap is reported.",
+    "pages": "pp. 14-15, 18"
+   }
+  ],
+  "transferable": [
+   "(D2) Write constraints that must hold for all w in a semialgebraic set, on polynomial recourse, as SOS certificates with capped multiplier degree: one SDP results, and the policy degree becomes the single quality-versus-size knob (pp. 7-10).",
+   "(D4) To claim that a new hierarchy dominates an established method, show that every feasible point of the method is feasible at the hierarchy's lowest level (proof of Theorem 1, pp. 23-24).",
+   "(D5) Benchmark approximate policies at small horizons against an LP over all extreme disturbance sequences, and report the mean, standard deviation, median, minimum and maximum of gaps and solve times over 100 instances per size (pp. 14-15, 18-22)."
+  ],
+  "coauthors": "Dan A. Iancu (MIT Operations Research Center), Pablo A. Parrilo (MIT LIDS)",
+  "quotes": [
+   {
+    "text": "it avoids ad-hoc modeling decisions and has the advantage of keeping a single parameter that is adjustable to the user (the degree d), which directly controls the trade-off between the size of the resulting SDP formulation and the quality of the overall solution.",
+    "page": 9
+   },
+   {
+    "text": "While computations for cubic policies are rather expensive, the quadratic case, shown in Figure 2(b), shows promise for scalability",
+    "page": 19
+   }
+  ]
+ },
+ {
+  "id": "S120",
+  "year": "2011",
+  "title": "Optimal Selection of Airport Runway Configurations",
+  "read_level": "full",
+  "contribution": "Formulates runway-configuration selection and arrival/departure balancing under changeover times as an MIP with valid inequalities, solved to optimality in seconds and beating a skilled-controller proxy by 2.0-51.1% (decoded table values), with extensions to several changeover times, a metroplex and environmental rules.",
+  "problem_entry": "IO+AP: the FAA chooses runway configurations and the arrival/departure balance 'largely on the basis of experience', and the hard cases are variable or poor weather with changeover losses and backlogs (p. 2). Changeover times make a greedy choice suboptimal (p. 3). The paper presents itself, as far as the authors are aware, as the first optimization approach to the combined RCM and ADRB problems (p. 2).",
+  "key_idea": "MIP P1: a binary z_kt selects the configuration; the arrivals and departures served must lie inside the configuration's capacity envelope (RCCE); queues carry over through backlog equations (pp. 3-4). Changeover device: the time step equals the changeover time (about 10 minutes), and service is forbidden in the switching interval (constraint (5), pp. 3-4). Extensions: several changeover times by refining the grid (p. 9), a metroplex with coupling constraints (p. 11), environmental rules (pp. 12-13).",
+  "assumptions": "Deterministic data over a horizon of a few hours, re-solved on a rolling horizon said to be every 30 minutes (pp. 3, 13) and every 15 minutes (p. 6); integral RCCE breakpoints, with the IMC envelope inside the VMC one (p. 3); queues clear without cancellations (pp. 3-4). Instances of 4, 8 and 12 configurations, 11, 22 and 33 RCCE and 30 ten-minute intervals (pp. 7-8) are called realistic (pp. 3, 7, 13), but their data source is not stated.",
+  "proof_devices": [
+   "Integrality of the served-flow variables relaxed because it holds automatically once z is fixed, given integral breakpoints and data (p. 4)",
+   "Valid inequalities: reverse-direction switching constraints (11), and per period the convex hull of the union of the available RCCE as an aggregate envelope (12), called 'the tightest possible bound' (p. 4)",
+   "Formulation strength claimed (pp. 3, 8), while Table 2 prints IP-LP differences of 7.6%, 28.9% and 16.2% (p. 9, decoded); no theorems",
+   "Model-size counts for one, two and three changeover times (Table 6, p. 10)"
+  ],
+  "experiments": "AMPL with CPLEX 11.2.10, one thread, Core 2 Duo E7400, 2 GB of RAM (p. 5). Problems 2-4 solve in under 3 s (Table 2, p. 9). The baseline is a 'smart' greedy heuristic that solves its own MIPs to mimic 'a highly skilled controller' (pp. 6-7); P1 is better by 2.0-51.1% on problems 2-7 (Table 4, p. 9). Two and three changeover times: up to 24.2 s and 122.1 s (Tables 7-8, p. 10). Metroplex (5 airports, 30 configurations, 79 RCCE): 1.3-79.6 s without a system-wide envelope; with one, no optimum within five minutes and gaps of 0.6-2.7% printed (Tables 9-10, p. 12). Table numbers decoded from the garbled font layer.",
+  "positioning": "Builds on Gilbo's integer programs for ADRB and on the RCCE literature (Gilbo, Hall, de Neufville-Odoni) (pp. 1-3); ties the output to the airport acceptance rate in the FAA's collaborative decision making (p. 2).",
+  "writing": "The abstract leads with solve times and an expected improvement of at least 10% (p. 1); a small worked example (Figures 3-6) shows how early decisions propagate (pp. 4-5); claims about the baseline are hedged with 'confident' and 'expect' (pp. 6, 9).",
+  "limits_future": "The metroplex model is less effective (p. 12); data are treated as deterministic (p. 3). Next: an offline comparison with the FAA's actual sequences and observed delays, with MIT Lincoln Laboratory, then rolling-horizon use (p. 13).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Optimal solutions are certified, with LP values printed. Where the metroplex model is not solved in five minutes, bounds and gaps are printed. The incumbent (a greedy controller proxy) is dueled on the same instances, and the weak 2% case is reported.",
+    "pages": "pp. 8-9, 12"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The owner (the FAA) and its current rule (experience) are named, but the baseline is a constructed proxy for a skilled controller, said to make the gains a lower bound on practical benefit. A field test against actual FAA sequences is planned, not done.",
+    "pages": "pp. 2, 6, 13"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "IO as engine: a decision made by experience is written as an MIP that CPLEX solves in seconds, and the boundary is printed (the metroplex). Caveat: the claim of a strong formulation sits beside IP-LP differences of up to 28.9% (decoded), which bears on Tension T4.",
+    "pages": "pp. 3-4, 8-9, 12"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "practitioner-mimicking optimization baseline as a lower bound on benefit",
+    "evidence": "With no data on current practice, the baseline is a greedy heuristic built from MIPs to imitate a highly skilled controller, and improvements over it are presented as a lower bound on benefits in practice, pending an offline comparison with actual FAA decisions.",
+    "pages": "pp. 6-7, 9, 13"
+   }
+  ],
+  "transferable": [
+   "(D2) To model a changeover that costs capacity, set the time step equal to the changeover time and forbid service in the switching interval with pairwise constraints ruling out configuration k at t-1 together with any k′ ≠ k at t; refine the grid when changeovers differ in length (pp. 3-4, 9).",
+   "(D4) To strengthen a 'pick one envelope' disjunction, add per period the convex hull of the union of the envelopes as an aggregate valid inequality, and add each switching constraint in the reverse direction (p. 4).",
+   "(D5) When no data on current practice exist, build the baseline as an optimization-based imitation of a skilled practitioner (commit to the best configuration available for at least an hour; re-plan when it lapses), and present the gains as a lower bound (pp. 6-7, 9)."
+  ],
+  "coauthors": "Michael Frankovich, Amedeo Odoni (MIT Operations Research Center)",
+  "quotes": [
+   {
+    "text": "In practice, these problems are solved today largely on the basis of experience.",
+    "page": 2
+   },
+   {
+    "text": "Overall, we expect to see an average improvement of the order of at least 10% in practice, given the results presented here, and the advanced nature of our baseline heuristic, which involves solving a relevant optimization problem.",
+    "page": 9
+   }
+  ]
+ },
+ {
+  "id": "S165",
+  "year": "2011",
+  "title": "A geometric characterization of the power of finite adaptability in multistage stochastic and adaptive optimization",
+  "read_level": "partial",
+  "contribution": "Shows that static robust (two-stage) and finitely adaptable (multistage) solutions cost at most 1 + ρ/s times the fully adaptable stochastic or adaptive optimum under right-hand-side uncertainty, a tight factor set only by the symmetry s and translation factor ρ of the uncertainty set, with conic and integer extensions.",
+  "problem_entry": "RO+SD (IO in §8): stochastic optimization needs a distribution, which is a modelling choice, and multistage problems are intractable even approximately (p. 2); static robust solutions may be conservative, and fully adaptable robust policies are intractable (p. 3). Question: how good are static and finitely adaptable solutions against the fully adaptable optima, and what decides it (pp. 3-4)?",
+  "key_idea": "The geometry of the uncertainty set decides it: Minkowski symmetry s (p. 12) and translation factor ρ (p. 16). Since (1 + ρ/s)·u₀ dominates every point of the set (Lemma 2.4, pp. 16-17), scaling the fully adaptable solution's expectation by 1 + ρ/s gives a feasible static solution (Theorem 4.1, pp. 20-21). A finitely adaptable policy fixes one solution per path of an uncertainty network and is computed by one LP (pp. 12, 28).",
+  "assumptions": "Right-hand-side uncertainty only, covering constraints Ax + By ≥ b, uncertainty sets in the nonnegative orthant (pp. 5-6, 9); finite z_Stoch and existing expectations (p. 5); E_μ[b] ≥ b₀, called mild (pp. 20-21); a DAG of uncertainty sets with known transition probabilities and independent measures (pp. 6-8). Admitted: capacity constraints on order quantities cannot be modelled (p. 11); stochastic problem with integers in the first stage only (p. 36). No data.",
+  "proof_devices": [
+   "Domination lemma: (1 + ρ/s)·u₀ ≥ u for all u in the set (Lemma 2.4, pp. 16-17)",
+   "Scaling argument: τ = 1 + ρ/s times the expected fully adaptable solution is feasible for the static robust problem (Theorem 4.1, pp. 20-21), and the adaptive solution at the symmetry point of each path, scaled, is feasible for the multistage problem (§6.3, p. 33)",
+   "Tightness family: translated L_p balls in the orthant realize every (s, ρ) (Theorem 4.2, p. 22)",
+   "Necessity of the assumptions: one- and two-dimensional examples with unbounded gaps outside the orthant or with uncertain A, B (p. 21)",
+   "s ≥ 1/m via Löwner-John (Belloni-Freund), so the bound is at most m + 1 (pp. 15, 18); scaling bound θ* as a sometimes tighter alternative (pp. 22-23)",
+   "Table of symmetries and gaps for 14 sets; budgeted set Δ_k has symmetry k/m and gap 1 + m/k (pp. 24, 26)",
+   "Multistage: finitely adaptable LP with |P|·m constraints, with possibly exponentially many paths (p. 28); (1 + ρ/s) for RHS uncertainty (Theorems 5.1 and 6.1, pp. 27, 31), (1 + ρ/s)² for the adaptive problem with RHS and cost uncertainty (Theorem 6.2, p. 31); conic and integer extensions (pp. 36-37)"
+  ],
+  "experiments": "none",
+  "positioning": "Credits the founders of stochastic programming and its hardness results (pp. 1-2); sampling methods are said to need complete or relatively complete recourse (p. 2), while finite adaptability covers every scenario (p. 4); generalizes Bertsimas-Goyal from perfectly symmetric sets and two stages (pp. 4, 17).",
+  "writing": "Priority claims 'To the best of our knowledge' (pp. 1, 4, 17); one section lists every result before any proof (pp. 17-20); remarks after each theorem state what it does not cover (pp. 21, 23-24).",
+  "limits_future": "In the stochastic problem with RHS and cost uncertainty, static and finitely adaptable solutions are not a good approximation; (1 + ρ/s)² is weaker (p. 38). The conclusion tells modellers the uncertainty set is their choice (p. 38). No future work stated.",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "The price of a static or finitely adaptable policy gets a bound that depends on neither the solution nor the data, with a bad family and a table for common sets, handed to the modeller who chooses the set. The knob is the set's geometry, not a budget priced along a curve, though for Δ_k the budget k fixes the gap at 1 + m/k.",
+    "pages": "pp. 21-22, 24, 38"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Step 5, print the boundary: unbounded gaps outside the stated assumptions, arbitrarily bad stochastic performance with RHS and cost uncertainty, and possibly exponentially many paths.",
+    "pages": "pp. 18, 21, 28"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "power-and-limits theorem for a tractable policy class",
+    "evidence": "A tight bound (1 + ρ/s), a matching bad family for every symmetry and translation factor, unbounded-gap examples outside the assumptions, and the case where the class is exactly optimal (hypercube sets). The same pattern appears in S060 and S075 of this batch.",
+    "pages": "pp. 19-22, 34"
+   },
+   {
+    "pattern": "build the tractable policy from the fully adaptive optimum",
+    "evidence": "The static or finitely adaptable solution is the fully adaptable solution's expectation, or its value at the symmetry point, scaled by 1 + ρ/s; the scaling factor is the bound. Also in S060 and S075.",
+    "pages": "pp. 20-21, 33"
+   }
+  ],
+  "transferable": [
+   "(D4) For covering constraints with RHS uncertainty in the orthant, find a scalar τ and a point u₀ with τu₀ ≥ u for every u in the set; then τ times the adaptive solution at u₀ (or at its expectation) is feasible in every scenario, and τ bounds the price of not adapting (pp. 16-17, 20-21, 33).",
+   "(D4) Show tightness with a one-parameter family of sets that realizes every value of the geometric parameters, and show the assumptions are needed with two-dimensional examples whose gap is unbounded (pp. 21-22).",
+   "(D8) Tabulate the guarantee for the uncertainty sets practitioners actually use, so modellers can read off the cost of their choice of set (Table 1, p. 24; p. 38)."
+  ],
+  "coauthors": "Vineet Goyal (Columbia IEOR), Xu Andy Sun (MIT Operations Research Center)",
+  "quotes": [
+   {
+    "text": "Modeling uncertainty using a probability distribution is a choice we make, and it is not a primitive quantity fundamentally linked to the application.",
+    "page": 2
+   },
+   {
+    "text": "The symmetry bound (4.2) is independent of the problem data A, B, c, d, depending only on the geometric properties of the uncertainty set U, namely the symmetry and the translation factor of U.",
+    "page": 21
+   }
+  ]
+ },
+ {
+  "id": "S227",
+  "year": "2011",
+  "title": "Performance analysis of queueing networks via robust optimization",
+  "read_level": "partial",
+  "contribution": "Replaces i.i.d. queueing primitives by linear constraints implied by the Law of the Iterated Logarithm and derives explicit, non-asymptotic bounds on sojourn time (tandem network) and on busy period and workload (multiclass single server) that carry over to the stochastic models.",
+  "problem_entry": "SD+RO: non-asymptotic performance bounds for queueing networks are scarce. Outside product form they need Markovian assumptions and weaken in heavy traffic, including his own O((1 - ρ*)^-2) bound with Gamarnik and Tsitsiklis (p. 2); most results are asymptotic (pp. 2-3). Entry: assume 'the implications of such probability laws' instead of the laws themselves (pp. 1, 3).",
+  "key_idea": "Deterministic primitives satisfy |Σ U_i - k/λ| ≤ Γ√(k ln ln k), with Γ named among the 'budgets of uncertainty' after Bertsimas-Sim (pp. 11-12). Bound the worst case explicitly; the LIL makes the constraints hold almost surely with a random Γ (Proposition 1, p. 13), so the bounds carry over to the stochastic network, and taking expectations gives Corollaries 1-2 (pp. 13-15). Unlike burstiness constraints A(t) ≤ λt + B, these are consistent with renewal processes (p. 4).",
+  "assumptions": "Tandem single-class network under FIFO and multiclass single server with routing matrix P (P^n = 0) under any work-conserving policy; i.i.d. renewal primitives; infinite buffers (pp. 6-9). The robust tandem model processes n jobs from an empty start, while MCSS starts with one job per class (pp. 11-12); λΓ ≥ e^(2e) (p. 12). Steady-state convergence and ergodic properties are assumed, not derived (pp. 7, 10). No data.",
+  "proof_devices": [
+   "Lindley-type recursion bounds the sojourn time under general partial-sum bounds by a maximum over chains of indices (Theorem 3, p. 18)",
+   "Explicit maximization of the concave function x(μ_min^-1 - λ^-1) + 2JΓφ(x) yields W_n ≤ (7J²Γ²λ/(1 - ρ*)) ln ln(JλΓ/(1 - ρ*)) + J/λ (Theorem 1, pp. 13, 18-19)",
+   "Workload during a busy period bounded by -at + b√(t ln ln t) + c, giving the busy-period length and the maximum workload (Theorem 2, pp. 15-17)",
+   "Almost-sure transfer from the robust model to the stochastic one, then expectations (Proposition 1 and Corollary 1, pp. 13-14)",
+   "Steady-state workload bounded by E[B²]/E[B] through ergodic and renewal arguments, which gives a conservative (1 - ρ)^-4 (ln ln)² order (eq. (7), p. 10; p. 17)"
+  ],
+  "experiments": "none",
+  "positioning": "Related to Cruz's network calculus and to adversarial queueing theory, credited and then distinguished on probabilistic consistency (p. 4); his own Markovian-bound papers are listed among the results that weaken in heavy traffic (p. 2).",
+  "writing": "The premise is stated in one abstract sentence (p. 1); the technical derivation is called involved and the conceptual approach very simple (p. 4); an informal proof outline comes before the proofs (pp. 16-17).",
+  "limits_future": "Admitted: crude constants (p. 4); quadratic rather than linear dependence on J and a lost ln ln factor (p. 14); multiclass scaling far from the correct heavy-traffic order, left open (pp. 15-16). Future: multiclass networks via Lyapunov functions, tighter laws than the LIL, tail bounds from large-deviations constraints, adversarial queueing, the same philosophy outside queueing (pp. 26-27).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "A central problem owned by applied probability is re-posed as a worst case over a budgeted set, and the boundary is printed (wrong heavy-traffic scaling). But the output is a closed-form bound, not a formulation solved in a solver class: the results are 'explicit, as opposed to numeric'.",
+    "pages": "pp. 4, 11-16"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "The budget Γ is borrowed from the price-of-robustness line, but here it is a random constant set by the LIL, not a knob for a decision-maker.",
+    "pages": "pp. 11, 13"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "probability laws as uncertainty sets",
+    "evidence": "Distributional assumptions are replaced by constraints that a limit theorem implies; the deterministic worst case is bounded and carried back almost surely to the stochastic model. An early (2010) instance of the robust-queueing line in the Domain Map's SD row, proposed by the authors as a philosophy for other stochastic analyses.",
+    "pages": "pp. 1, 4, 13, 27"
+   }
+  ],
+  "transferable": [
+   "(D2) To bound a stochastic system without distributional assumptions, pick a limit law that the primitives satisfy almost surely (here the LIL), write its implication as linear constraints with a random constant, bound the deterministic worst case, then take expectations (pp. 11-14).",
+   "(D6) Before adopting a class of deterministic constraints for random inputs, check that the stochastic model satisfies it almost surely; A(t) ≤ λt + B fails for every renewal process with positive variance (p. 4).",
+   "(D8) Print each derived scaling next to the known correct heavy-traffic order, and name the gap as an open problem (pp. 14-16)."
+  ],
+  "coauthors": "David Gamarnik (MIT Operations Research Center and Sloan), Alexander Anatoliy Rikun (MIT Operations Research Center)",
+  "quotes": [
+   {
+    "text": "rather than assuming that the stochastic primitives of a queueing model satisfy certain probability laws, such as, for example, i.i.d. interarrival and service times distributions, we assume that the underlying primitives are deterministic and satisfy the implications of such probability laws.",
+    "page": 1
+   },
+   {
+    "text": "These explicit bounds however, come at a price of not caring much for the constants corresponding to the leading coefficient.",
+    "page": 4
+   }
+  ]
+ },
+ {
+  "id": "S060",
+  "year": "2012",
+  "title": "On the power and limitations of affine policies in two-stage adaptive optimization",
+  "read_level": "partial",
+  "contribution": "Characterizes affine policies in two-stage adaptive LPs with right-hand-side uncertainty: optimal for simplex sets, a factor 2 - δ worse with m + 3 extreme points, Ω(m^(1/2-δ)) worse in general, at most O(√m) worse when A ≥ 0 (O(√k) with k uncertain parameters), plus a non-affine O(√m)-approximation for general A.",
+  "problem_entry": "RO+IO (approximation and hardness): affine rules 'perform extreme well in practice as observed empirically', yet have no general performance bounds (p. 2). The two-stage min-max LP with RHS uncertainty is hard to approximate within O(log m), by reduction from max-min fractional set cover (p. 2); static robust solutions lose Ω(m) on non-symmetric sets such as at most k resource failures (p. 3).",
+  "key_idea": "A full map of where the affine class works: exact on simplices, by interpolating the adaptive optimum at the m + 1 vertices (Theorem 1, pp. 6-8); 2 - δ with m + 3 extreme points (Theorem 2, p. 9); Ω(m^(1/2-δ)) on sets with exponentially many extreme points near the unit sphere (Theorem 3, pp. 14-15); 3√m when A ≥ 0 (Theorem 4, p. 23) and O(√k) for k uncertain parameters (Theorem 5, p. 29); a dominating simplex gives a non-affine O(√m)-approximation for general A (Theorem 6, p. 31).",
+  "assumptions": "Convex uncertainty set in R^m_+, c, d ≥ 0 and x, y ≥ 0 (p. 2); compact and full-dimensional set for Theorem 4 (p. 23); A ≥ 0 for the affine upper bound (pp. 4, 23). No data.",
+  "proof_devices": [
+   "The worst case of an optimal solution over a polytope is attained at an extreme point (Lemma 1, p. 5)",
+   "Affine interpolation of the optimal adaptive decisions at the m + 1 affinely independent vertices of a simplex (Theorem 1, pp. 6-8)",
+   "Symmetrization: averaging an optimal affine solution over the permutations that leave the instance unchanged gives an optimal affine solution with equal constant terms (Lemmas 3-4, pp. 10-12)",
+   "Upper-bound construction: y(b) = Σ (b_j/μ_j)·y*(β^j) at the coordinate maximizers β^j, with the first stage scaled by √m (eqs. (42)-(44), pp. 23-24)",
+   "Algorithm A partitions the coordinates into dominated and bounded-sum parts in at most 2√m iterations (Lemmas 10-11, pp. 25-26)",
+   "Reduction of the general case to a dominating simplex conv{2√m β^j, 2β}, where affine policies are exact, giving a 4√m factor (Lemma 13, p. 31; p. 35)"
+  ],
+  "experiments": "none",
+  "positioning": "Approximation algorithms for demand-robust covering (Dhamdhere et al., Feige et al., Khandekar et al.) are described as specific to their problems (pp. 2-3); affine policies are traced from Rockafellar-Wets through Ben-Tal et al. and control theory (p. 3); follows Bertsimas-Goyal on static robust solutions (p. 3).",
+  "writing": "The abstract promises 'a sharp characterization of the power and limitations' (p. 1); results are labelled Optimality, Suboptimality, Lower Bound, Upper Bound (pp. 3-4); the lower bound is set 'in contrast to strong empirical evidence' (p. 4). The general-case guarantee is announced as O(√k) in the abstract and contributions (pp. 1, 4) but proved and restated as O(√m) (pp. 31, 35).",
+  "limits_future": "Open: closing the gap between O(√m) and the O(log m) hardness; studying polynomial and piecewise-affine policies in theory and practice (p. 35). The affine upper bound needs A ≥ 0 (p. 23).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Step 5, print where tractability ends: the boundary of the affine class is mapped from exact (simplices) through 2 - δ and Ω(m^(1/2-δ)) to the O(log m) hardness of the problem.",
+    "pages": "pp. 2-4, 9, 15"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "A price of affinity with a bound independent of the solution (3√m; O(√k)) and the bad case printed (the hypersphere intersected with the orthant), but no decision-maker's knob and no computed curve.",
+    "pages": "pp. 15, 23, 29, 35"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "power-and-limits theorem for a tractable policy class",
+    "evidence": "Exact optimality on simplices, an almost-tight suboptimality example, a general lower bound, a matching upper bound under A ≥ 0, and the problem's hardness are stated together as one characterization. The same pattern appears in S165 and S075 of this batch.",
+    "pages": "pp. 1-4, 35"
+   },
+   {
+    "pattern": "build the tractable policy from the fully adaptive optimum",
+    "evidence": "Affine interpolation at the simplex vertices, and a linear combination of the optimal recourse at the coordinate maximizers with √m scaling; the cost of the construction is the bound. Also in S165 (scaling) and S075 (multi-affine interpolation).",
+    "pages": "pp. 6-8, 23-24"
+   }
+  ],
+  "transferable": [
+   "(D4) To bound a restricted policy class, build one of its members from the unrestricted optimum (interpolate at the vertices of a simplex, or combine the optimal recourse at the coordinate maximizers with weights b_j/μ_j and scale the first stage); the cost of the construction is the bound (pp. 6-8, 23-24).",
+   "(D4) In lower-bound instances with permutation symmetry, average an optimal policy over the symmetry group to obtain an optimal policy with few free parameters, then optimize over those (pp. 10-12).",
+   "(D4) For general sets, replace the set by a dominating simplex on which the restricted class is exact, and pay the domination factor (pp. 31-32, 35)."
+  ],
+  "coauthors": "Vineet Goyal (MIT Operations Research Center)",
+  "quotes": [
+   {
+    "text": "This lower bound is in contrast to strong empirical evidence of the performance of affine policies.",
+    "page": 4
+   },
+   {
+    "text": "Therefore, the intersection of a hypersphere with the non-negative orthant is essentially the worst-case example for affine policies.",
+    "page": 35
+   }
+  ]
+ }
+]

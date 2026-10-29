@@ -1,0 +1,388 @@
+[
+ {
+  "id": "S683",
+  "year": "2025",
+  "title": "Detection and Localization of Subdural Hematoma Using Deep Learning on Computed Tomography",
+  "read_level": "full",
+  "contribution": "A multimodal pipeline (XGBoost on clinical variables, 3D CNN ensembles on CT volumes and on the maps of a CNN-Swin hybrid segmentation network) detects and localizes subdural hematoma on 25,316 Hartford HealthCare head CTs with test AUC 0.9407 and validation Dice 0.768; an application paper with no optimization model, supervised by Bertsimas and a Hartford clinician.",
+  "problem_entry": "AP + ML, no optimization model: commercial SDH tools report detection only, may miss bleeds below about 1 mL and do not disclose models or data; academic work is single-modality, 2D or small (fewer than 110 scans); the problem is a transparent multimodal detection-and-localization pipeline evaluated at scale (pp. 1-3).",
+  "key_idea": "Fuse three model families by averaging probabilities: tabular XGBoost, 3D CNNs on CT volumes, and 3D CNNs on the probability maps of a U-Net/Swin hybrid segmentation network. Ensemble members are chosen by multi-start greedy forward selection on validation AUC; 'interpretability' means localization maps of a black-box ensemble (pp. 1, 3-6).",
+  "assumptions": "Hartford HealthCare, 15,183 adults 2016-2023, 25,316 non-contrast head CTs (3,774 with SDH) after exclusions; the abstract says 25,315 and 2015-2024. Patient-level 64/16/20 split; labs as last value plus a two-year exponentially weighted average; HU window 0-130, skull stripping and a fixed 15 slices per study for computational feasibility; 335 physician-supervised annotated studies plus 100 zero-mask controls for segmentation (pp. 1, 3-4).",
+  "proof_devices": [
+   "n/a: no optimization model and no proofs; the only algorithmic device beyond training is multi-start greedy forward ensemble selection on validation AUC (p. 5)",
+   "Operating thresholds by Youden's J on the validation set (Table 1 caption, p. 6)"
+  ],
+  "experiments": "Test AUC: tabular 0.751, CNN ensemble 0.922, Seg-CNN ensemble 0.926, overall ensemble 0.9407 [0.930-0.951] with sensitivity 0.815 and specificity 0.947; Brier 0.050. Segmentation Dice 0.768 on the validation set vs 0.692-0.754 for variants; 0.92-0.93 on polyps and 0.83 vs 0.76 on a brain-tumour set. Baselines are the authors' own components; radiologists and commercial tools are not run on the same scans; no decision or outcome metric; only correct segmentations shown; the ensemble's model count is inconsistent (eight, ten, nine) (pp. 2, 4-6, 9).",
+  "positioning": "Against FDA-cleared commercial tools (Rapid SDH, Viz Subdural) on transparency and scope rather than accuracy, against academic SDH studies on modality and sample size, and against general vision-language models; the only self-citation is the HAIM multimodal framework; no optimization literature (pp. 2-3, 6, 8).",
+  "writing": "Clinical-journal format: structured abstract with CIs and a Lancet-style 'Research in context' box; a 'to our knowledge ... first' claim on scale; contributors, data-sharing, competing-interest and generative-AI statements; a specific limitations paragraph (pp. 1-2, 6-7).",
+  "limits_future": "Few annotated scans; needs diverse scanners and populations, semi- or weakly supervised labelling and external validation; future prospective, real-time deployment in EMR systems such as EPIC; data cannot leave the health system (pp. 6-7).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "contradiction",
+    "note": "A partner owns the decision and EMR deployment is the next step, but the work is scored only as prediction (AUC, Dice, calibration) against the authors' own components. The current rule (radiologists, or the commercial tools on the same scans) is not a baseline, and the decision value (time to intervention) is asserted, not measured: Warning sign 4.",
+    "pages": "pp. 1-2, 5-6"
+   },
+   {
+    "method": "Method 4",
+    "relation": "contradiction",
+    "note": "Weak; student-led work that Bertsimas supervised. Ensemble membership is chosen by multi-start greedy forward selection, the step Taste mark 3 says to optimize jointly; no component is exact or certified.",
+    "pages": "pp. 5-6"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Partner programme: Hartford HealthCare supplies data, compute and clinician co-authors; the group's HAIM line motivates multimodal fusion; EMR deployment is announced as the next stage.",
+    "pages": "pp. 1-3, 6-7"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "partner-resident data and compute",
+    "evidence": "All analyses ran inside Hartford HealthCare's secure computing environment and the data cannot leave the health system; the funding statement names institutional resources from MIT and Hartford HealthCare.",
+    "pages": "pp. 1, 7"
+   }
+  ],
+  "transferable": [
+   "Split at patient level when patients contribute several scans, so repeat studies cannot leak across training, validation and test (p. 3).",
+   "Encode each lab as the last value before the index event plus a two-year exponentially weighted average, so a static model sees level and trend (p. 3).",
+   "Feed a segmentation network's probability maps to a second classifier and ensemble it with the image classifier, so localization also improves detection (pp. 4-5).",
+   "When selecting ensemble members greedily, restart forward selection from each top model rather than only the best, and report the selection order (p. 5).",
+   "Report calibration (reliability curve and Brier score) next to AUC when clinicians read the output as a probability, and fix operating thresholds on validation data (p. 6)."
+  ],
+  "coauthors": "Vasiliki Stoumpou (MIT ORC), Rohan Kumar (MIT ORC; Boston University), Bernard Burman (MIT), Diego Ojeda (UConn School of Medicine), Tapan Mehta (UConn; Hartford HealthCare); Bertsimas is corresponding author; supervision by TM and DB",
+  "quotes": [
+   {
+    "text": "A greedy ensemble strategy combined complementary predictors.",
+    "page": 1
+   },
+   {
+    "text": "Our primary limitation is that the segmentation model was trained on a limited number of manually annotated scans, which may constrain generalizability.",
+    "page": 6
+   }
+  ]
+ },
+ {
+  "id": "S684",
+  "year": "2025",
+  "title": "Sparse Multiple Kernel Learning: Alternating Best Response and Semidefinite Relaxations",
+  "read_level": "full",
+  "contribution": "Sparse multiple kernel learning with an explicit cardinality constraint and an l2 term is solved by alternating exact best responses (LIBSVM for the SVM dual, GSSP for the sparse-simplex projection) and bounded through an exact MISDP with a ladder of full-SDP, 3x3-minor and SOC relaxations; on ten UCI sets it beats open-source MKL baselines by 3.34 points on average and certifies global optimality on two sets.",
+  "problem_entry": "ML + IO + CP: MKL's simplex constraint is a convex surrogate for sparsity; direct cardinality is NP-hard, so the field uses l1, lp or smooth nonconvex penalties that 'do not guarantee truly sparse solutions'. Problem (4): minimize over sparse simplex weights the SVM dual maximum plus lambda times the squared norm of beta (pp. 2-4).",
+  "key_idea": "Alternate exact best responses: the alpha-step is a kernel-SVM dual solved by LIBSVM's SMO; the beta-step, after completing the square, is a Euclidean projection onto the sparse simplex solved exactly by GSSP. Bound the method by dualizing the inner maximum, a generalized Schur-complement LMI and binaries with a perspective constraint (an exact MISDP), relaxed to full-SDP, 3x3-minor and SOC levels used for certificates and warm starts (pp. 5-12).",
+  "assumptions": "Binary classification with q prespecified kernels combined convexly; C, lambda and k0 tuned by 10-fold CV; ten UCI sets (150-4,601 examples), one fixed-seed 80/20 split standardized on training data; ten base kernels symmetrized plus 1e-6 I. Theorem 3 assumes positive definite kernels and a stabilized support; the random start and the sparse-SDP and SOC relaxations are admitted as tractability devices (pp. 8, 11, 13-14, 16).",
+  "proof_devices": [
+   "Compactness and Bolzano-Weierstrass for accumulation points (Proposition 1, p. 7; proof pp. 21-22)",
+   "Berge's maximum theorem: the limit of a convergent sequence is a mutual best response (Proposition 2, p. 7; proof p. 22)",
+   "Contraction of composed Lipschitz best-response maps (strong concavity in alpha, 2-lambda strong convexity in beta) and Banach's fixed-point theorem: linear convergence once the support stabilizes (Theorem 3, p. 8; proof pp. 22-23)",
+   "Lagrangian dual of the SVM dual in pseudo-inverse form, with Slater for strong duality (eq. 10, p. 8; Appendix C, pp. 23-24)",
+   "Generalized Schur complement turning the pseudo-inverse quadratic into an LMI (Proposition 4, p. 9; proof p. 24)",
+   "Perspective reformulation beta_i^2 <= z_i omega_i for the support (p. 9) and relaxation validity by mapping feasible points (Theorem 5, p. 10; proof p. 24)",
+   "Sparse-PSD approximation imposing only the principal minors that touch the border row, C(n, l-1) instead of C(n+1, l) constraints (p. 11); simultaneously diagonalizable kernels reduce the SDP to an SOCP (Theorem 6, p. 11; proof p. 25)"
+  ],
+  "experiments": "Julia 1.10.1, Python 3.10.14, MOSEK 10.1.31, LIBSVM 0.8.0, MKLpy 0.6, MIT Supercloud; code released. Q1: matches or beats EasyMKL, AverageMKL and CKA on all ten sets (+3.34 points), 1-5 kernels, comparable time. Q2: warm starts uneven (parkinsons 89.7 to 94.9, haberman 67.7 to 66.1); the 4.05 headline takes the better warm-start variant per set on test accuracy. Q3: certified optimal on wine and haberman, gaps 2.4%-51.6% on the six sets with a full SDP bound; Table 7 divides by the lower bound, not by F as printed on p. 17; only weak SOC or 3x3 bounds elsewhere; Table 6 contradicts 'consistently reduce'. Q4: q = 50 gives 90.3% mean accuracy vs 80.6, 79.5 and 67.7, about 1.9 kernels. Memory limits and possible cycling reported; one split only (pp. 8, 12-20).",
+  "positioning": "Within MKL (Lanckriet et al. 2004 as an SDP; Bach et al. 2004; Sonnenburg et al. 2006; SimpleMKL) and sparse MKL (Bach 2008; Koltchinskii-Yuan 2010; Kloft et al. 2011; Subrahmanya-Shin 2010; Xue-Song 2019). Critique by restatement, backed by Bertsimas-Copenhaver 2018 (Lasso-type penalties give robust, not sparse, estimators); relaxation devices credited to Blekherman et al. 2022 and Song-Parrilo 2023; benchmarks chosen as open source (pp. 3-5, 11).",
+  "writing": "The abstract leads with surrogate vs explicit cardinality and two headline numbers (3.34 and 4.05 points); four numbered questions answered in a summary. Hedging drifts: warm starts 'occasionally' help in the body but give 'systematic benefits' in the summary; 'several cases' certified in the abstract, two data sets in the summary. Code release framed as bridging theory and practice (pp. 1, 12-13, 16, 20).",
+  "limits_future": "SDP relaxations exhaust memory as n grows; convergence is not guaranteed and iterates can cycle; simultaneous diagonalizability rarely holds. Future: a custom branch-and-bound on the SDP relaxation for global optimality, and regression (pp. 8, 10-11, 16-17, 20).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "An ML-owned problem is written exactly as a MISDP through duality, a Schur complement and a perspective reformulation; but the exact class has no off-the-shelf solver at this scale, so it serves only for bounds and warm starts. The boundary is printed as memory limits.",
+    "pages": "pp. 2, 8-12, 16-17"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Explicit cardinality replaces the surrogate; versions and machine stated; certificate or gap per set; duel with the incumbents' reference implementations; where it wins is named. But the warm start runs from relaxation to heuristic, nothing is solved exactly, gaps exceed 40% on several sets, the 4.05 headline is chosen on test results, and 'consistently reduce' contradicts Table 6 (Tensions T1, T6).",
+    "pages": "pp. 1, 12-20"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Weak: the NP-hardness belief behind the l1 surrogate is reopened, but tractability comes from a cheap heuristic plus relaxations, with no solver speed-up figure.",
+    "pages": "pp. 3-4"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Weak: the sparse-ML programme carried by a new student under its template (sparsity enforced exactly, robustness by l2), with released code; the same student leads S688.",
+    "pages": "pp. 1-2, 4, 12"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "relaxation-seeded heuristic",
+    "evidence": "The relaxation's support starts the heuristic even when its bound is useless: on spambase the SOC bound is 0.2 against an objective above 700, yet test accuracy rises from 90.9% to 93.9%.",
+    "pages": "pp. 16-17"
+   },
+   {
+    "pattern": "relaxation ladder priced in memory",
+    "evidence": "SOC with basis vectors, SOC with random vectors, the 3x3-minor SDP and the full SDP are reported side by side; each step trades bound strength against memory.",
+    "pages": "pp. 11-12, 17"
+   },
+   {
+    "pattern": "binaries-plus-ridge template carried to a new learning model",
+    "evidence": "An explicit l0 constraint, an l2 term for robustness, a perspective reformulation and a Boolean relaxation are transplanted from sparse regression to kernel selection (compare c26 S250 for the matrix version).",
+    "pages": "pp. 2, 4, 9-10"
+   }
+  ],
+  "transferable": [
+   "For a min-max learning problem with a cardinality constraint on the outer variable, check that each block's best response is exactly solvable, alternate them, and prove accumulation points, mutual best responses at limits, and a contraction condition once the support stabilizes (pp. 5-8, 21-23).",
+   "Remove an inner maximum over an SVM-type dual by dualizing and replacing the pseudo-inverse quadratic with a Schur-complement LMI (pp. 8-9, 24).",
+   "Model the support of a nonnegative weight vector with binaries and the rotated-cone constraint beta_i^2 <= z_i omega_i, so the l2 penalty becomes lambda times the sum of omega_i (p. 9).",
+   "When the full SDP is too large, impose only the principal minors containing the border row of the Schur matrix, and strengthen the SOC level with random directions (pp. 11-12).",
+   "Fix the evaluation as numbered questions (accuracy and runtime, warm starts, optimality gap, scalability) and answer them in order in a summary (pp. 12-13, 20).",
+   "Recompute headline numbers and gaps from your own tables before submission; here the gap denominator, a 'consistently' claim and a test-set maximum disagree with the tables (pp. 16-18)."
+  ],
+  "coauthors": "Caio de Próspero Iglesias and Nicholas A. G. Johnson (MIT)",
+  "quotes": [
+   {
+    "text": "In this work, we take the approach of directly imposing a cardinality constraint on β and demonstrate that this yields a tractable formulation that produces superior solutions to MKL.",
+    "page": 2
+   },
+   {
+    "text": "even relatively weak relaxations can offer valuable guidance for initialization when solving large-scale SMKL problems with Algorithm 1",
+    "page": 16
+   }
+  ]
+ },
+ {
+  "id": "S688",
+  "year": "2025",
+  "title": "Prescribe-then-Select: Adaptive Policy Selection for Contextual Stochastic Optimization",
+  "read_level": "full",
+  "contribution": "Prescribe-then-Select builds a library of feasible contextual-stochastic-optimization policies (SAA, point prediction, Bertsimas-Kallus weighted SAA) and learns from a cross-fitted cost table an ensemble of Optimal Policy Trees that picks one policy per context; on synthetic newsvendor and shipment-planning data it beats the best single policy in heterogeneous regimes and converges to the dominant policy otherwise.",
+  "problem_entry": "DA + SD (contextual stochastic optimization), ML as the selector, AP testbeds: no single CSO policy dominates across covariate space; parametric rules cannot keep hard constraints, end-to-end training is costly, RL mixture-of-experts is unconstrained, and the only CSO combination method (Cui et al. 2025) averages policies, which can break feasibility (pp. 1-3).",
+  "key_idea": "Prescribe a library of feasible policies, then select: treat each policy as a treatment and train Optimal Policy Trees on K-fold held-out realized costs, with R seeds per fold, a majority vote at inference and the policies refit on all data; selecting rather than averaging keeps every decision feasible (pp. 5-8, 17, 22).",
+  "assumptions": "CSO with decisions that do not affect the uncertainty; synthetic data only, with calendar covariates and three demand segments per task (newsvendor d = 4, S = 1200; shipment F = L = 4, p1 = 5, p2 = 10, a = 90, a latent driver hidden from the features); N from 250 to 5000 with 100 samples per N; kNN with 5 neighbours, random forests with 5 trees, a (16, 32, 16) network; K = 5, R = 10. Both feasible sets are convex (pp. 3-4, 9-10, 18-19).",
+  "proof_devices": [
+   "Lemma 1 by constructing a two-leaf tree: the optimal policy tree is no worse than the best single policy and gains at least delta times Pr(X in R) (p. 7); [my reading] it needs R to be tree-representable and concerns the population-optimal tree, not the heuristic one",
+   "Leafwise closed-form policy assignment enabling coordinate descent (eq. 7, p. 22); training admitted to be a stochastic heuristic (p. 8)",
+   "Cross-fitted cost table as the selector's training data (p. 8; Algorithm 1, p. 17)"
+  ],
+  "experiments": "Gurobi 12.0.1, Interpretable AI OPT 3.2.2, scikit-learn 1.6.0; mean out-of-sample profit with 95% t-intervals over 100 samples. RQ1: heterogeneity confirmed. RQ2: newsvendor PS significantly better for N 750-1500 by non- or barely overlapping CIs, converging to PP-RF by N about 2000; shipment gains from N about 1000, strongest at 3000-5000 with slightly overlapping CIs. RQ3: indistinguishable from PP-RF for N of 2000 and more. Optimization dominates runtime (1064.69 s vs 31.21 s for the meta-policy at N = 5000); peak memory under 0.5 GB. No real data, no averaging or end-to-end rival, significance by CI overlap rather than paired tests; figures are images (pp. 10-13, 20-21).",
+  "positioning": "Within contextual stochastic optimization (Sadana et al. 2025), with policy families from the group's own P2P, kernel, robust SAA and side-information papers; set apart from RL ensembling and mixture-of-experts and from policy averaging (Cui et al. 2025), called promising only in unconstrained settings (pp. 1-3, 5-6, 14).",
+  "writing": "Three contributions and three research questions answered in order, with a summary; 'low-risk default' framing; the abstract's 'consistently outperforms' rests on ranges of N with barely overlapping intervals; an appendix admits the learned partitions only partly recover the segments (pp. 1-2, 10-13, 20).",
+  "limits_future": "Synthetic segments, two small problems and heuristic trees, with limits left implicit. Future: multi-stage settings, other selectors, large real applications with high-dimensional and partially observed covariates, and meta-policies that combine policies where averaging is feasible (p. 13).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Decisions are scored by out-of-sample profit, the ML-weighted conditional stochastic optimization of P2P is in the library, and the covariate-free SAA rule is a baseline; but there is no owner, no partner's current rule and no real data: the rule to beat is the best single policy in hindsight.",
+    "pages": "pp. 1, 10-13"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "The selector carries the 'optimal' name while the paper says its training is a stochastic heuristic, answered by 50 trees rather than a certificate; no gap is reported. Evidence for Tension T1 in his group's own words.",
+    "pages": "pp. 7-8, 22"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "No new formulation; the class-keeping logic moves to policy combination: select one feasible policy per context rather than average, so every decision stays feasible. Both experiments use convex feasible sets where averaging would also stay feasible, so the device is argued, not tested.",
+    "pages": "pp. 3, 6-7, 9"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Programme line P2P to Optimal Trees and OPT to PS, with the company's software as research infrastructure. Integrity Rule 5 check: the file has no competing-interest or funding statement, while the selector is Interpretable AI's OPT 3.2.2 (as in c25 S115).",
+    "pages": "pp. 5-6, 10, 14, 22"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "select, don't average",
+    "evidence": "Feasibility is kept by choosing one feasible pipeline per context instead of averaging candidate decisions.",
+    "pages": "pp. 3, 6-7"
+   },
+   {
+    "pattern": "whole optimization pipelines as the treatments of a prescriptive tree",
+    "evidence": "Optimal Policy Trees choose among entire predict-and-optimize pipelines, trained on a cross-fitted table of realized out-of-sample costs.",
+    "pages": "pp. 7-8, 22"
+   },
+   {
+    "pattern": "show the method ties where it should",
+    "evidence": "A research question tests that PS converges to the dominant policy when heterogeneity vanishes, presenting PS as a low-risk default.",
+    "pages": "p. 12"
+   }
+  ],
+  "transferable": [
+   "Build a cross-fitted cost table (fit each candidate on K-1 folds, record realized cost on the held-out fold) and train the selector on it, so selection learns out-of-sample quality (p. 8; Algorithm 1, p. 17).",
+   "When decisions must satisfy hard or integer constraints, combine policies by per-context selection rather than averaging, so feasibility is inherited (pp. 3, 6-7).",
+   "When the tree learner is a stochastic heuristic, train R seeds per fold, vote, and state that a global optimum may be missed (p. 8).",
+   "Generate synthetic data with known segments, hide them from the learner, and afterwards inspect the learned trees against them (pp. 10, 20).",
+   "Add a research question for the regime where your method should only tie the best baseline, and show that it does (p. 12).",
+   "Report the meta-step's cost per pipeline stage beside the cost of the underlying optimization (p. 21)."
+  ],
+  "coauthors": "Caio de Próspero Iglesias (MIT Sloan) and Kimberly Villalobos Carballo (NYU Tandon)",
+  "quotes": [
+   {
+    "text": "averaging feasible policies does not necessarily produce another feasible policy",
+    "page": 3
+   },
+   {
+    "text": "the learning algorithm is a stochastic heuristic and may not always find a global optimum",
+    "page": 8
+   }
+  ]
+ },
+ {
+  "id": "S689",
+  "year": "2025",
+  "title": "A novel exact approach to polynomial optimization",
+  "read_level": "full",
+  "contribution": "Every polynomial on a box has sum-of-linear-times-convex (SLC) decompositions; choosing the decomposition that gives the tightest RPT relaxation is posed as a robust problem over the decomposition coefficients and dualized into one SDP whose largest LMI is (n+1)x(n+1); inside spatial branch-and-bound this solves random box-constrained instances with 40 variables at degree 3 and 20 at degree 4 within an hour, ahead of BARON and SOS.",
+  "problem_entry": "CP + RO (as the device), global optimization: SOS needs large and growing SDPs, may give no optimality guarantee and handles only linear or polynomial constraints; Lasserre and RLT scale worse; the group's RPT handles SLC functions, so the question is whether polynomials have SLC decompositions and which one is best (pp. 1-2).",
+  "key_idea": "Prove SLC decompositions exist (bound factors times convex quadratics, convexified by Gershgorin diagonal shifts); parametrize all valid decompositions as a spectrahedral set; after RPT linearization the relaxation is linear in the coefficients, so take the worst case over them ('a robust optimization problem') and dualize with Theorem 13.1 of the Bertsimas-den Hertog RO book into one SDP used at each branch-and-bound node (pp. 4-7, 9-15, 17).",
+  "assumptions": "Polynomial objective and constraints plus convex constraints; the feasible region is bounded and mapped to [0,1]^n; random instances (coefficients in [-5, 5], density 0.5 at degree 3 and 0.2 at degree 4, 10 per size) on a box, a box plus a polynomial constraint, and a box plus a log-sum-exp constraint; no application instance (pp. 1-2, 4, 17-18).",
+  "proof_devices": [
+   "Existence by construction: coefficient matching plus alpha times the squared norm of x, with alpha from Gershgorin row sums so each Hessian is diagonally dominant, cancelled by linear terms (Theorems 1, 4, 6, 8; pp. 4, 10, 14-15, 23-24)",
+   "Robust-counterpart duality (RO book Theorem 13.1) turning the maximum over decomposition coefficients into LMIs (Theorems 2, 5; pp. 6-7, 12-13)",
+   "Folding argument: an extra linear factor is a combination of x_i and 1 - x_i, so it cannot improve the best decomposition (Theorem 3, p. 8)",
+   "LMI-size accounting against SOS: (n+1)x(n+1) vs C(n + d/2, d/2) (pp. 3, 16)",
+   "Weaker alternatives priced: Gershgorin linear inequalities (Theorem 7, pp. 22-23) and the degree d-1 decomposition (Theorem 8, pp. 23-24) give looser bounds (pp. 8, 15)"
+  ],
+  "experiments": "Intel i9 with 16 GB; Julia 1.5.3, JuMP 0.21.6, MOSEK 9.3.18; SOS via SumOfSquares 0.4.3; BARON 20.10.16 via Pyomo; 3600 s limit; averages over 10 instances. Best vs random decomposition (Table 1): -710.05 (tight) vs -81,439.45 on the box at n = 30. Degree 3: box instances solved at the root up to n = 40 (2964 s); BARON at the limit from n = 20; SOS out of memory from n = 30 and uncertified on X2; X3 at n = 30 unsolved by both. Degree 4: the n = 20 box in 2001 s; SOS faster at n = 10; constrained sets only to n = 15. The headline sizes hold for box instances (pp. 17-19).",
+  "positioning": "Against SOS (Parrilo), Lasserre's hierarchy, RLT (Sherali-Adams) and BARON (Sahinidis), and against RLT-POS (Dalkiran-Sherali 2016: 16 and 12 variables); builds on the group's own RPT papers and the Bertsimas-den Hertog RO book; cites Hilbert and Reznick on nonnegative polynomials that are not SOS (pp. 2, 15-17, 20).",
+  "writing": "An 'exact' title for a relaxation inside spatial branch-and-bound; the abstract says 'outperforms' BARON and SOS, the body 'often outperforms'; headline sizes without the box qualifier; scare-quoted 'best'; three numbered contributions; a pros-and-cons comparison section; no limitations or future work in the conclusion; keywords include adaptive robust optimization, which the paper does not use (pp. 1, 3, 15-17, 19-20).",
+  "limits_future": "Limits mostly implicit: the boundedness assumption, a variable count growing with n^d (stated as O(n^d) on p. 15 and as O(n^(d-1)) variables on p. 16), and the time limit on X3 at n = 30; no future work stated (pp. 4, 15-16, 18, 20).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "A problem owned by the SOS and global-optimization traditions is rewritten so every node bound stays an SDP (conic when X is conic); the structure is read off a dual (Theorems 2, 5); the boundary is partly printed (variables of order n^d; X3 at n = 30 unsolved).",
+    "pages": "pp. 2-7, 15-17"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Steps 3-6 only (no warm start, no greedy step): exact solves with certificates (lower bound equal to upper bound, branching hyperplanes counted), versions, machine and a one-hour limit; a duel with BARON and SOS in their own implementations, rival bounds without certificates flagged, and the case where SOS wins (n = 10) printed.",
+    "pages": "pp. 17-19"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "The RO book written with den Hertog becomes the proof engine of a new programme (RPT), carried by a student, with companion papers (a) and (b).",
+    "pages": "pp. 2, 7, 13, 20"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "RO duality lemma as a portable single-level device",
+    "evidence": "The choice among infinitely many valid relaxations is posed as a robust problem over decomposition coefficients and dualized into one SDP (same name as the c10 candidate).",
+    "pages": "pp. 6-7, 12-13"
+   },
+   {
+    "pattern": "subsume the incumbent as a special case",
+    "evidence": "The authors claim their approach 'contains RLT' once zero-coefficient degree-4 terms are added, asserted without proof.",
+    "pages": "p. 17"
+   },
+   {
+    "pattern": "compare relaxations by the size of their largest LMI",
+    "evidence": "The case against SOS rests on an (n+1)x(n+1) largest LMI against an LMI of dimension C(n + d/2, d/2).",
+    "pages": "pp. 3, 16"
+   }
+  ],
+  "transferable": [
+   "To prepare a polynomial for an RPT or perspective relaxation, write it as a sum of bound factors times quadratics, convexify each quadratic by adding alpha times the squared norm with alpha from Gershgorin row sums, and cancel the additions with linear terms (Theorem 1, p. 4).",
+   "When a relaxation depends on a free choice among infinitely many valid representations, parametrize them as a convex set, take the worst case over it inside the relaxation, and dualize the inner maximum with a standard robust-counterpart theorem (pp. 6-7).",
+   "Show that a seemingly useful extension (more linear factors) already lies inside your family, so it cannot help (Theorem 3, p. 8).",
+   "Before the solver duel, print a table of random-representation vs optimized-representation bounds, so readers see what the optimization buys (Table 1, p. 18).",
+   "In a duel table, mark rival outputs that are bounds without certificates and memory failures separately from time-limit hits (Tables 2-3, pp. 18-19)."
+  ],
+  "coauthors": "Dick den Hertog (Amsterdam Business School) and Thodoris Koukouvinos (MIT ORC)",
+  "quotes": [
+   {
+    "text": "we view the problem as a robust optimization problem, in which Z are the uncertain parameters",
+    "page": 6
+   },
+   {
+    "text": "We show that with our method, we can solve polynomial optimization problems to optimality with 40 variables and degree 3, as well as 20 variables and degree 4, in less than an hour.",
+    "page": 1
+   }
+  ]
+ },
+ {
+  "id": "S692",
+  "year": "2025",
+  "title": "Interpretable AI-driven Guidelines for Type 2 Diabetes Treatment from Observational Data",
+  "read_level": "full",
+  "contribution": "Interpretable step-up guidelines for type 2 diabetes: Boston Medical Center visits are matched to emulate a randomized trial (R.O.A.D.), eight binary policy trees are trained and joined by hand into four pipelines, and outcome models predict a median HbA1c reduction 0.26 points larger than the doctors' on disagreement visits (0.13 on an external Hartford cohort).",
+  "problem_entry": "DA + AP, ML as the engine: practice varies despite guidelines; the group's earlier kNN recommender lacked structure and external validation, pattern mining does not time prescriptions, and the AACE algorithm is a consensus without data. Problem: precise, structured, data-backed treatment-progression guidelines from confounded observational records (pp. 2-4).",
+  "key_idea": "Emulate a trial by deleting data (prognostic random-forest buckets plus matching on history, worst pairs dropped), train class-weighted binary policy trees per step-up option, join them by hand with a more-aggressive-first priority, and evaluate with ground-truth outcome models where pipelines and doctors disagree (pp. 7-9).",
+  "assumptions": "22,387 Boston Medical Center visits 1998-2014, treated as independent; demographics, last values and summary statistics of HbA1c and BMI, kidney disease. Inclusion keeps only visits where HbA1c fell after the doctor's prescription; per-model 80/20 split and 95th-percentile outlier removal; external Hartford cohort of 17,482 visits 2020-2024 under IRB approval; data not public (pp. 5-7, 9).",
+  "proof_devices": [
+   "n/a for proofs; no formulation is printed",
+   "Prognostic-score bucketing and matching to emulate a randomized trial (pp. 7-8)",
+   "Asymmetric class weights making step-up trees conservative against residual confounding (p. 8)",
+   "A hand-set step-up priority combining binary trees into a pipeline (p. 9)",
+   "Ground-truth outcome models predicting the HbA1c change on disagreement visits (p. 9)"
+  ],
+  "experiments": "Boston: 9,308 disagreement visits, median predicted reduction 1.06% vs 0.80% for doctors (+0.26). Hartford: 11,409 disagreements, 0.63% vs 0.50% (+0.13). Per pipeline +0.38/+0.11, +0.42/+0.07, +0.12/+0.27, +0.13/0.00; thresholds read medically (HbA1c 8.05%, 9.05%, 8.75%, 6.85%; BMI 37.02, 24.12, 27.35). Predicted vs observed outcomes on an outcome-filtered sample; no intervals, no outcome-model accuracy, no agreement rate or all-visit effect; unclear whether Hartford uses the Boston-trained outcome models (pp. 6, 9-18).",
+  "positioning": "Against the ADA-EASD and AACE consensus guidelines for lacking precision, structure and data, and against the group's own kNN recommender for structure and missing external validation; method credited to R.O.A.D.; no optimization or causal-inference literature beyond the group's own (pp. 3-4, 7, 18, 20-21).",
+  "writing": "A clinical abstract hedged ('predicted to outperform'), while the conclusion says 'shown to be effective on external data too'; each tree translated into a medical sentence; deployment rhetoric (EMRs, smartphones, wearables); no funding and no conflict of interest declared; section 3.4 inconsistent (two trees announced, one listed) (pp. 2, 10-19).",
+  "limits_future": "Non-adherence cannot be told apart from ineffective treatment; visits are treated as independent. Future: time-series embeddings, pilot studies under physician supervision, holistic multimodal AI. Stated lesson: balancing is not enough, outliers must be removed from both classes (pp. 18-19).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Owner (physicians), records, the current rule (the doctors' actual prescriptions), a decision outcome (HbA1c reduction), an external cohort and a proposed pilot are all present; but predicted outcomes are compared with observed ones on an outcome-filtered sample with no uncertainty, so the comparison tests the outcome models as much as the pipelines.",
+    "pages": "pp. 2, 4-6, 9-10, 19"
+   },
+   {
+    "method": "Method 4",
+    "relation": "contradiction",
+    "note": "Weak, since the step-up order has a clinical rationale: eight binary trees are joined by hand with a fixed priority, where Taste mark 3 and Method 4 step 1 would fit one joint multi-treatment policy; no certificate or gap is reported for the trees.",
+    "pages": "pp. 8-9"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Programme lineage (S079 to R.O.A.D. to this paper), data reuse, a second partner (Hartford) and the company's software. Integrity Rule 5 check: 'no conflict of interest' is declared while the policy trees come from Interpretable AI's software (ref. 11).",
+    "pages": "pp. 3-5, 8-9, 19, 21"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "trial emulation by deleting data before prescriptive learning",
+    "evidence": "R.O.A.D. matching on predicted outcomes and history discards data until the remainder resembles a randomized trial; policy trees are trained only afterwards.",
+    "pages": "pp. 2, 4, 7-8"
+   },
+   {
+    "pattern": "counterfactual replay against the historical decision-maker",
+    "evidence": "Outcome models predict the result of following the pipeline on the visits where it disagrees with the doctor, at Boston and at Hartford; see card S079, p. 5.",
+    "pages": "p. 9"
+   },
+   {
+    "pattern": "disagreement-subset reporting",
+    "evidence": "Only the disagreement medians are reported (9,308 and 11,409 visits), without the agreement rate or the all-visit effect that S079 printed.",
+    "pages": "p. 10"
+   },
+   {
+    "pattern": "asymmetric class weights as a conservatism knob against residual confounding",
+    "evidence": "The more aggressive treatment class is weighted higher so that the trees step up less readily.",
+    "pages": "p. 8"
+   }
+  ],
+  "transferable": [
+   "To learn treatment rules from records confounded by severity: fit an outcome model on the less aggressive arm, score the more aggressive arm, bucket both on the predicted outcome, match within buckets on history, and drop the worst-matched pairs before training (pp. 7-8).",
+   "Weight the more aggressive class higher when training a binary step-up policy, so residual confounding pushes the rule toward caution (p. 8).",
+   "Translate each learned split into a clinical sentence and check it against known medicine, such as HbA1c near 8-9% and BMI near the 25 and 30 cut-offs (pp. 10-17).",
+   "Validate a guideline on a second health system from a later period (2020-2024 against 1998-2014) (pp. 2, 9).",
+   "Evaluation protocol, by contrast with this paper: do not filter the cohort on the outcome of the baseline decision, and report the outcome model's error, intervals, the agreement rate and the all-case effect next to the disagreement-set effect (pp. 6, 10; cf. card S079, pp. 5-6)."
+  ],
+  "coauthors": "Dewang K. Agarwal (MIT Sloan and ORC); D.K.A. implemented the methods and wrote the paper, D.J.B. defined the problem, suggested methods and edited; D.K.A. is guarantor",
+  "quotes": [
+   {
+    "text": "we address this shortcoming by deleting some of the observed data, so that the remaining data emulates data from a randomized trial",
+    "page": 4
+   },
+   {
+    "text": "There was a decrease in HbA1c after following the doctor’s prescription from the current visit.",
+    "page": 6
+   }
+  ]
+ }
+]

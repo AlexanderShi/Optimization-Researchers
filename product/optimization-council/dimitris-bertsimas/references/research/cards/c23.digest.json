@@ -1,0 +1,246 @@
+[
+ {
+  "id": "S112",
+  "year": "2021",
+  "title": "The voice of optimization",
+  "read_level": "full",
+  "contribution": "Recasts parametric convex and mixed-integer convex optimization as multiclass classification of the optimal 'strategy' (tight constraints plus integer values), learned with optimal classification trees or neural networks after Good-Turing-controlled sampling; on generated LP, QP, MILO and MIQO benchmarks the predicted strategies recover feasible, near-optimal solutions in 89-100% of test cases, with speed-ups over Gurobi ranging from none to several thousand times (arXiv v3 read).",
+  "problem_entry": "DA+ML+IO: practitioners treat solvers as black boxes and solve many similar instances with varying parameters; goal: predict the optimal solution as parameters vary, interpretably; regressing the solution directly is dismissed as intractable and imprecise (pp. 1-2, 9, 12).",
+  "key_idea": "Encode the optimum as a strategy (tight constraints; plus integer values for MIO), label sampled parameters with the solver, learn parameter-to-strategy as multiclass classification (OCT, OCT-H, NN), and online solve only the reduced problem of the top 3 predicted strategies, a KKT linear system for LO/QO/MILO/MIQO; stop sampling by a Good-Turing bound on unseen strategies (pp. 2, 10, 14, 17-23).",
+  "assumptions": "f and g convex in x, any dependence on the parameters; every parameter feasible; i.i.d. samples only; experiments draw parameters from narrow intervals or balls around set points on generated textbook problems (transportation, Markowitz, facility location, hybrid-vehicle MIQO), no real data; relies on few strategies occurring (|S| <= 43 in all tables) (pp. 7-11, 20, 22-31).",
+  "proof_devices": [
+   "Support constraints number at most n (Hoffman 1979; Calafiore 2010), bounding the label space when n << m (p. 9)",
+   "Fixing the integer part turns the MIO into a continuous convex problem with the same optimal cost (p. 14)",
+   "Theorem 3.1: Good-Turing missing-mass bound N1/N + c sqrt((1/N) ln(3/beta)), c = 2 sqrt 2 + sqrt 3, cited from McAllester-Schapire (2000, Thm 9) (p. 19)",
+   "Algorithm 1 stops on the bound, but MLOPT stops when the point estimate is below 0.005; my arithmetic (beta not stated): at N = 10,000 the confidence term alone is about 0.09 for beta = 0.05, so about 3.4 million samples would be needed for epsilon = 0.005 (pp. 20-21, 25-31)",
+   "No analysis links classification error to suboptimality; robustness of wrong predictions shown only empirically (pp. 22-31)"
+  ],
+  "experiments": "Dell R730 cluster (28 E5-2680 CPUs, 256 GB, K80); Gurobi cited only as the 2020 manual, no version; OCT/OCT-H (OptimalTrees.jl) vs NN (PyTorch) with small tuning grids; N = 10,000 training and 100 test samples; accuracy = feasible and within 1e-3 of optimal; transportation up to 6,400 variables (95-100%, speed-ups at most about 5x, Gurobi faster when small), portfolio up to 400 assets (100%, speed-up not significant), facility location up to 6,480 variables (100%, up to 2,201x), hybrid control T = 10-40 (89-100%, up to 6,846x; at T = 40 OCT 93%, OCT-H 89%, NN 100%); training 2-12 hours; losing rows printed (pp. 20-31).",
+  "positioning": "Sets itself apart from algorithm configuration (ParamILS, SMAC, irace), learned heuristics (branching, MIQP linearization, decomposition), RL for combinatorial problems, CP/SAT (SATzilla), and learning parametric programs, criticising Misra et al. 2019 directly and Klaucko et al. 2019; distinguishes sensitivity analysis (his LO textbook ch. 5) by deterministic data and MIO reach (pp. 3-6).",
+  "writing": "Brand metaphor ('give optimization a voice'); headline '90%-100%' and 'significantly faster' while Table 4 has an 89% row and the body reports insignificant speed-ups and solver wins; generated benchmarks called 'realistic examples'; Enigma digression; small shallow-tree examples before benchmarks; self-contained appendices; v3 abstract narrows the claim but the v3 body keeps 'novel, reliable and insightful' and 'any' (pp. 1, 7, 10-19, 24-26, 31-36).",
+  "limits_future": "Stated: training time, feasibility assumption, OCT accuracy degrades as strategies multiply, no speed gain on small instances or portfolios. Future: online use via the sibling online-MIO paper. Unstated (my reading): narrow parameter balls, no real parameter histories, untested claim to beat (s, S) policies, theorem-implementation gap (pp. 6, 8, 12, 23-26, 32).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Direction reversed: optimization is recast as classification instead of another tradition's problem recast as LP/conic/MIO; the class-keeping move survives online (a known strategy turns an MIO into a smaller convex problem, and LO/QO/MILO/MIQO into a KKT linear system).",
+    "pages": "pp. 1, 9-10, 14, 21"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "For: tuned duel against the strongest learner (NN), stated machine, decision-quality metrics, losing rows printed. Against: no exact or certified tree, solver version unstated; Tension T1 evidence: Appendix A says MIO training runs 'in a reasonable amount of time' (p. 33) but the package trains OCTs by local search with random restarts (p. 34).",
+    "pages": "pp. 21-23, 31, 33-34"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Decisions, not labels, are scored (accurate only if the recovered solution is feasible and within 1e-3 of optimal; top 3 strategies tried), but there is no owner, partner data or current rule; the time baseline is the solver. Heuristic 5 (learn the optimizer's strategy offline) is evidenced; its 'narrow the claims' half holds for the v3 abstract only (pp. 1, 7, 32).",
+    "pages": "pp. 22-23"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Interpretability priced in accuracy (OCT below OCT-H, OCT-H close to NN) with the bad case printed (T = 40) and depth or split sparsity as knobs, but no curve or bound, and the abstract folds the 89% case into '90%-100%' (Tension T6).",
+    "pages": "pp. 1, 21, 31-33"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "solution-as-label",
+    "evidence": "The optimum is compressed to a strategy (tight constraints plus integer values) so a parametric optimization problem becomes multiclass classification with a small label set",
+    "pages": "pp. 2, 10, 14, 17"
+   },
+   {
+    "pattern": "Good-Turing coverage stopping rule",
+    "evidence": "Sample parameters until the estimated probability of an unseen strategy is small; replaces a four-parameter sampling scheme of prior work",
+    "pages": "pp. 5-6, 18-21"
+   },
+   {
+    "pattern": "explain the optimizer with an interpretable model",
+    "evidence": "Optimal trees read as policies over parameters (inventory: wait t0 periods, then order the demand; knapsack and supplier rules), so that trees 'give optimization a voice'",
+    "pages": "pp. 1, 7, 10-18, 32"
+   }
+  ],
+  "transferable": [
+   "Encode each parametric optimum as (tight-constraint set, integer values) and learn it as a class label; online, solve only the reduced problem, which for LO/QO/MILO/MIQO is a KKT linear system with no solver at run time (pp. 10, 14, 21).",
+   "Sample parameters in batches until the Good-Turing estimate N1/N of unseen strategies is small; if you claim the high-confidence bound, compute the N it requires, since the point estimate is all the implementation controls (pp. 19-21).",
+   "Score a learned optimizer by its decisions: normalized violation and relative suboptimality with explicit tolerances, maximum over test points; let it propose top-k strategies and keep the best after solving each reduced problem (pp. 22-23).",
+   "Report the speed ratio against the solver for every size, keeping rows where the solver wins (pp. 24-26).",
+   "Show the mechanism on small instances with shallow trees whose leaves read as policies, then move to large benchmarks (pp. 10-12)."
+  ],
+  "coauthors": "Bartolomeo Stellato",
+  "quotes": [
+   {
+    "text": "Instead, our approach encodes the optimal solution with a small amount of information that we denote as strategy.",
+    "page": 2
+   },
+   {
+    "text": "OCTs show competitive accuracy in most comparisons apart from the cases with higher number of strategies where the prediction performance degrades.",
+    "page": 32
+   }
+  ]
+ },
+ {
+  "id": "S175",
+  "year": "2021",
+  "title": "A unified approach to mixed-integer optimization problems with logical constraints",
+  "read_level": "full",
+  "contribution": "Reads big-M as one of two regularizers (big-M or ridge) for on/off logical constraints, dualizes the inner continuous problem into a mixed-integer saddle-point problem convex in the binaries, and solves it by single-tree outer approximation with Boolean-relaxation bounds, rounding and local search; this unifies big-M, perspective and ridge formulations and beats CPLEX's direct formulations on several large classes, with gaps and losing cases reported (arXiv v3 read).",
+  "problem_entry": "IO+ML (CP devices; AP testbeds): a modelling convention, big-M since Glover 1975, which textbooks present as part of the problem although it reformulates logical constraints; the abstract says 'we challenge this longstanding modeling practice'; problem (1.1) covers network design, sparse ERM, sparse portfolio, unit commitment, facility location, sparse PCA, BQP and unions of ellipsoids (pp. 1-7).",
+  "key_idea": "Substitute v = Diag(z)x, regularize with big-M or ridge, dualize: f(z) = max h(alpha) - sum z_i Omega*(alpha_i) is convex in z with subgradients from one continuous solve on supp(z); run outer approximation in one branch-and-bound via lazy callbacks; Boolean relaxation for bounds and root cuts; rounding and local search for incumbents; ridge removes cut degeneracy and recovers perspective cuts (pp. 8-16).",
+  "assumptions": "Omega is the big-M indicator or ridge (decomposable, convex, minimized at 0); each inner problem infeasible or strongly dual; conic feasibility cuts assume conic g ('some loss of generality'); rounding bound needs a uniform bound L on |alpha*|; admitted: big-M infeasible below M0, ridge changes the objective for any gamma; data: synthetic network design and ERM, Biq-Mac BQP, six PCA sets, Wilshire 5000 and Russell 1000, 112 OR-Library facility instances, Frangioni-Gentile unit commitment (pp. 7-12, 14, 17-23, 27-28).",
+  "proof_devices": [
+   "Nonlinear reformulation v = Diag(z)x plus Fenchel duality on the coupling constraint; z_i^2 = z_i linearizes the ridge term (Theorem 2.5, p. 9)",
+   "Remark 2.6: regularization as a relaxation replacing hard dual constraints alpha_i = 0 if z_i = 1 by a soft penalty (p. 9)",
+   "Convexity of f as a pointwise maximum of linear functions; outer-approximation cut (2.16); ridge gives strong concavity, hence unique alpha* and no degeneracy (p. 10)",
+   "Proposition 2.9: Lipschitz-type bounds with constants proportional to M or gamma (pp. 10-11)",
+   "Theorem 3.1: randomized rounding of the Boolean relaxation is epsilon-optimal with probability at least 1 - |R| exp(-epsilon^2/kappa); proof by a sub-Gaussian maximum over the l1 ball's extreme points; my reading: the gap bound grows like M L |R| sqrt(ln|R|) (pp. 14-15, 26)",
+   "Theorem 3.2: ridge dual gives the perspective formulation; perspective cuts are the outer-approximation cuts (p. 16; proof p. 27)",
+   "Coercive regularizer rules out asymptotic feasibility, so conic infeasibility certificates exist (footnote 5, p. 13)",
+   "Lemma B.1 and Corollary B.2: explicit L under strong concavity (pp. 27-28)",
+   "Printed boundaries: exponential worst case of outer approximation (p. 12); two-moment SDP relaxations usually intractable for n > 300 (p. 15)"
+  ],
+  "experiments": "Julia 1.0, JuMP 0.18.4, CPLEX 12.8.0, one Xeon core, 32 GB; opponent: CPLEX on big-M or MISOCP. Network design m = 40-200, 1 h: big-M cuts better in 94% of 100 instances (9.9% average, up to 40%), ridge cuts 11% better than MISOCP, gaps mostly > 100%. BQP: Goemans-Williamson warm start, only bqp-50/100 solved; the 'faster than CPLEX' claim holds only with triangle inequalities (my reading of Table 4); better incumbents everywhere; only the cuts fit 32 GB on bqp-1000. ERM, PCA, portfolio summarized from companion papers (100,000s of features; 3,200 vs 400 securities). Facility location (112 instances): cuts faster in only 12.7% (big-M) and 23.85% (ridge) of instances; ablation table, whose ridge row does not match the text. Unit commitment: big-M faster for alpha <= 1, ridge MISOCP for alpha >= 2 (pp. 17-23, 29).",
+  "positioning": "Joins two literatures 'often considered in isolation': forcing-constraint formulations (Glover big-M, Bienstock, perspective cuts, MISOCP, ridge) and decomposition (Benders, generalized Benders, outer approximation, branch-and-cut, modern Benders, Pareto cuts); claims a new general link to perspective cuts; heavy self-citation (six of 55 references; three experiment subsections from companion papers) (pp. 2-3, 13, 16, 19-21, 24-26).",
+  "writing": "Abstract: class, convention, 'we challenge this longstanding modeling practice', reformulation, headline numbers (Heuristic 9 skeleton); 'Duality to the Rescue'; merits summaries from theoretical, algorithmic and experimental angles with explicit routing advice; hedges on untested points ('we intuit', 'This suggests', 'We believe'); numbered practical guidelines (pp. 1, 8-9, 11, 13-14, 16-17, 23-24).",
+  "limits_future": "Regularizer choice instance-dependent; efficiency hinges on fast separation and cardinality structure; ridge changes the objective; big-M can make the problem infeasible; no restarts or multi-threading; uninformative gaps on network design; no code link in the arXiv text. Future: other regularizers, higher-level relaxations, mixed-integer semidefinite optimization (pp. 9, 11, 13, 15, 17-18, 21-24).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "The model (the regularizer) is redesigned so a standard solver's lazy callbacks apply; the dual is read for cuts and uniqueness; boundaries are printed. Bears on Method 1's limitation and Tension T4: by 2019-2021 the group named big-M's instability and weak bounds and preferred ridge or perspective formulations when the objective is strongly convex; not a reply to the OCT big-M critique and silent on trees, so the Roundtable Card's blind spot 'formulation strength' should be narrowed, not dropped.",
+    "pages": "pp. 1, 3, 9-10, 12, 15-16, 22-24"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Warm starts (Boolean relaxation, rounding, local search; Goemans-Williamson for BQP), exact branch-and-cut under a stated limit with solver version and machine, gaps printed even above 100%, duel against the solver's own formulation, an ablation, and losing cases printed.",
+    "pages": "pp. 14-19, 21-22, 29"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "One knob (M or gamma), a solution-independent rounding bound that 'quantifies the price of fixing variables', and published curves with the bad case (M < 1/k infeasible); but the priced property is tractability, not a property a decision-maker wants.",
+    "pages": "pp. 14-15, 22-23"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Reopening driven by remodelling, not a rebuilt solver-times-hardware figure; the 'why now' is qualitative (solver improvements; lazy callbacks 'now standard tools'); the only numbers are scale ratios against previous attempts, including three orders of magnitude over his own 2016 big-M best-subset paper.",
+    "pages": "pp. 1, 3, 12, 19, 21"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Umbrella paper over two students' lines (Cory-Wright, Pauphilet); three experiment subsections are drawn from companion papers [8], [9], [12].",
+    "pages": "pp. 1, 19-21, 24-25"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "re-read a modelling convention as a hidden, tunable modelling choice",
+    "evidence": "Big-M recast as a regularizer, with ridge as an alternative chosen by tractability, not habit",
+    "pages": "pp. 1, 3, 7-8, 11"
+   },
+   {
+    "pattern": "regularize to break cut degeneracy",
+    "evidence": "Ridge makes the inner dual strongly concave so outer-approximation cuts are unique, recommended instead of Pareto-optimal cut selection",
+    "pages": "pp. 10, 13, 21, 24"
+   },
+   {
+    "pattern": "merits summaries from three angles",
+    "evidence": "Theoretical (Table 2), algorithmic (section 3.5) and experimental (section 4.4) summaries route the reader to big-M or ridge",
+    "pages": "pp. 11, 16-17, 23-24"
+   }
+  ],
+  "transferable": [
+   "For on/off logical constraints, write x_i = 0 if z_i = 0 as v = Diag(z)x, add a decomposable convex regularizer minimized at 0 (big-M box or ridge) and dualize the inner problem: f(z) = max h(alpha) - sum z_i Omega*(alpha_i) is convex in z and one continuous solve on supp(z) gives the cut (pp. 8-10, 13).",
+   "Run outer approximation as one branch-and-bound with lazy callbacks, cutting at binary (sparse) z; for infeasible subproblems add the no-good cut or a conic infeasibility-certificate cut (pp. 12-13).",
+   "Feed the root: Boolean relaxation (Kelley or dual subgradient ascent) for a lower bound and initial cuts; Bernoulli rounding and subgradient-guided sequential rounding; one-flip local search that stops on cycling (pp. 14-16).",
+   "Derive natural regularizers from data: M from flow conservation, 1/gamma = lambda_min(Q), or a diagonal q from max e'q s.t. Q - Diag(q) PSD (p. 8).",
+   "Compare formulations that optimize different objectives by re-evaluating each returned z at the unregularized cost, not by gaps (pp. 17-18).",
+   "Choose big-M vs ridge by scaling the objective's quadratic coefficient and timing both formulations (p. 22).",
+   "Ablate the recipe on a public library (OA + lower-bound step, OA + upper-bound step, OA + both) and report the share of wins and mean improvement (pp. 21-22)."
+  ],
+  "coauthors": "Ryan Cory-Wright, Jean Pauphilet",
+  "quotes": [
+   {
+    "text": "In this work, we challenge this longstanding modeling practice and express the logical constraints in a non-linear way.",
+    "page": 1
+   },
+   {
+    "text": "We argue that regularization is a modeling choice that impacts the tractability of the formulation and should be made accordingly.",
+    "page": 3
+   }
+  ]
+ },
+ {
+  "id": "S023",
+  "year": "2022",
+  "title": "Integrated multimodal artificial intelligence framework for healthcare applications",
+  "read_level": "full",
+  "contribution": "A modular multimodal pipeline (HAIM) that turns MIMIC-IV patient records (tabular data, time series, notes, X-rays) into one fusion embedding from frozen pre-trained extractors and trains XGBoost on every subset of 11 sources (14,324 models), reporting AUROC gains of 6-33% over the average single-source model and Shapley-measured modality value across 12 prediction tasks; predictions only; directed, not written, by Bertsimas (published version read).",
+  "problem_entry": "AP+ML (no optimization model): multimodal clinical AI is promising but unified, scalable pipelines that beat single-modality systems remain hard to build, and prior work assumes multimodality helps without validating how performance changes as modalities are added (pp. 1, 4).",
+  "key_idea": "Patient-centric files; one embedding per source from frozen, exchangeable extractors (tabular normalization, time-series statistics, Clinical BERT with 512-token chunk averaging, DenseNet121-res224-chex probabilities and dense features); concatenation into a 4,845-dimensional vector; XGBoost on every non-empty subset of sources; Shapley attribution of AUROC to sources and modalities (pp. 3, 6-8).",
+  "assumptions": "MIMIC-IV v1.0 plus MIMIC-CXR-JPG v2.0.0 restricted to patients with a chest X-ray (34,537 samples, 7,279 stays, 6,485 patients); labels from radiology-note annotations (confirmed only), 48 h discharge and 48 h mortality; radiology notes excluded as inputs for chest tasks; a single learner (XGBoost) chosen heuristically; Shapley with AUROC 0.5 for no source; missing-data handling only in the supplement (not read); MIMIC only exemplifies the pipeline (pp. 1, 3, 6-8).",
+  "proof_devices": [
+   "n/a: no optimization formulation, algorithm analysis or proof (pp. 1-10)",
+   "Exhaustive enumeration of all non-empty source subsets: 2,047 per task with 11 sources, 1,023 per chest task with 10 (p. 8)",
+   "Shapley values over 11 sources and 4 modalities on test AUROC, empty set 0.5, modality AUROC = average over its sources' models; small or negative values read as information loss (p. 3)"
+  ],
+  "experiments": "14,324 XGBoost models, each on five patient-stratified 80/20 splits with fivefold CV grid search inside training (depth 5-8, 200 or 300 trees, learning rate 0.05/0.1/0.3); metric: mean and SD of test AUROC; gains measured against the average single-source model (chest 6-22%, length of stay 8-20%, mortality 11-33%); images dominate chest tasks, time series dominate the others; diminishing returns; MIT Supercloud, one V100 per instance; no external validation, calibration or clinical-score comparator. My checks: 11-source per-modality counts sum to 2,046, not 2,047; Evd/Evmp dimensions swapped in the list; N = 45,050 exceeds the 34,537 samples (pp. 1, 3-4, 7-8).",
+  "positioning": "Among single-specialty multimodal systems and a 2020 review; 'Qualitatively' improves on Li et al.; three stated differences: systematic combinatorial study of adding modalities, modular open-source extractors instead of ad-hoc fused architectures, many sources and modalities with Shapley values; no optimization or OR citations; one self-citation (pp. 1-5, 9).",
+  "writing": "Nature-family layout; abstract from AI's promise to scale numbers to the headline 'by 6–33%'; 'To our knowledge' novelty; dense hedging ('appears', 'suggest', 'could potentially'); lettered contributions (A)-(C); contributions statement assigns writing to four first authors and direction and editing to Bertsimas (pp. 1-6, 9).",
+  "limits_future": "Stated: MIMIC only exemplifies the pipeline, only XGBoost tested, diminishing returns and redundancy, negative Shapley values as error propagation. Future: other extractors, deployment in clinical and operational settings, more holistic data. Unstated (my reading): single-centre data, no decision analysis, average-model baseline (pp. 1, 3-6).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "contradiction",
+    "note": "Predictions only: no decision scored, no owner's rule as baseline (APACHE named, not compared), and the headline gain is measured against the average single-source model rather than the strongest, the opposite of step 2's 'prefer the stronger naive rule'; SKILL.md warning sign 4 applies.",
+    "pages": "pp. 1, 3, 7-8"
+   },
+   {
+    "method": "Method 4",
+    "relation": "contradiction",
+    "note": "The final learner is greedy boosted trees chosen heuristically from seven architectures that exclude his optimal trees; no exact model or certificate. Scope caveat: the paper's question is data integration, not the learner.",
+    "pages": "pp. 3, 8"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Cohort-scale programme work: six equal-contribution first authors, four of whom planned and wrote while eight authors coded and analyzed and he directed and edited; open-source code and a reusable data asset on PhysioNet (Heuristic 6: build the data asset); Jameel Clinic funding.",
+    "pages": "pp. 1, 6, 8-9"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "value data sources by exhaustive subset training plus Shapley attribution",
+    "evidence": "A model for every non-empty subset of 11 sources (14,324 in total) and Shapley values over sources and modalities on test AUROC",
+    "pages": "pp. 3, 8"
+   },
+   {
+    "pattern": "frozen modular extractors producing one patient vector reused across tasks",
+    "evidence": "Exchangeable pre-trained extractors per modality, concatenated into a fixed 4,845-dimensional embedding used for 12 tasks; an extractor can be swapped without retraining the others",
+    "pages": "pp. 4-5, 7"
+   }
+  ],
+  "transferable": [
+   "To value data sources, train one model per non-empty subset of sources (2^k - 1), repeat over patient-stratified splits, and compute Shapley values of sources and modalities on test AUROC with 0.5 for the empty set (pp. 3, 8).",
+   "Keep each test split unseen at the level of every model: tune by k-fold CV inside the training split only, stratify splits by patient (pp. 7-8).",
+   "Drop any input from which the label was derived, e.g. radiology notes when labels come from radiology notes (pp. 7-8).",
+   "For notes longer than the encoder's 512-token window, embed each chunk and average; for several images per patient, average per-image probability and dense-feature embeddings (p. 7)."
+  ],
+  "coauthors": "Luis R. Soenksen, Yu Ma, Cynthia Zeng, Leonard Boussioux, Kimberly Villalobos Carballo, Liangyuan Na, Holly M. Wiberg, Michael L. Li, Ignacio Fuentes",
+  "quotes": [
+   {
+    "text": "Previous works in this field assume advantageous properties to multimodality without clear validation of the dynamics of such expected performance benefits as data modalities are added.",
+    "page": 4
+   },
+   {
+    "text": "D.B. directed overall research and edited the paper.",
+    "page": 9
+   }
+  ]
+ }
+]

@@ -1,0 +1,228 @@
+[
+  {
+    "id": "S478",
+    "year": "2024",
+    "title": "Binary Classification: Is Boosting stronger than Bagging?",
+    "read_level": "full",
+    "contribution": "Enhanced Random Forests: AdaBoost-style adaptive sample weights and selection probabilities inside bagging, per-sample tree weights from the best trees of nearest training neighbours, and sample/feature cleaning; on 15 binary data sets they tie tuned XGBoost in AUC (0.8494 vs 0.8500, n.s.), beat it at default settings (0.8483 vs 0.8355), and show a few trees per prediction as a partial explanation.",
+    "problem_entry": "ML (AP only as test material): boosting (XGBoost) is held to beat bagging on tabular data and both lack interpretability (abstract p. 1; p. 2); entry: Random Forests' 'simplistic assumptions' that all samples and all trees are equally important (abstract p. 1; p. 5); problem: make RF match boosting in AUC and partially recover interpretability, binary classification only (pp. 2-3).",
+    "key_idea": "Iterate RF fits: set the threshold by Youden's J, add lambda times each sample's misclassification margin to its weight and bootstrap probability, clip at zero (Algorithm 1, pp. 6-7); optionally sample features per tree and prune low-weight samples and low-MDI features (Algorithm 2, pp. 7-8); predict each new point with only the L best trees of its M nearest training neighbours and show the top-scoring trees as its explanation (eqs. 4-8, pp. 9-10). AdaBoost's hard-sample idea moved into bagging, each tree kept as a full predictor (pp. 3, 9-10).",
+    "assumptions": "Binary labels; train/validation/test split (p. 6); 15 data sets of 4,909-51,476 rows and 11-211 one-hot features, two from collaborating hospitals (Table 1, p. 11; p. 21); 200 trees per ensemble, RF and CART capped at depth 5-6, XGBoost depth 3-6 and learning rate 0.01-0.4 (p. 11); Euclidean neighbours on encoded features (p. 9); no theory of the weight update beyond the AdaBoost analogy (pp. 3, 6).",
+    "proof_devices": [
+      "n/a: no optimization model, theorem or convergence argument; the weight update is justified by analogy with AdaBoost (pp. 3, 6)",
+      "Youden's J threshold t* = argmax (TPR(t) - FPR(t)) defines misclassification margins on imbalanced data (eq. 1, p. 6)",
+      "Neighbour-vote tree weights u_{k,i} = (1/ML) x count of tree i in the neighbours' top-L lists (eqs. 4-5, p. 9); two normalized scores (count, negative rank sum) averaged to rank trees per point (eqs. 6-8, p. 10)",
+      "Bucketed sample pruning and relative-MDI feature pruning (l = 0.1) with a validation stopping rule (Algorithm 2, p. 8; 70 rounds, 1% early stop, p. 14)",
+      "Wilcoxon tests with 'adjusted' p-values (correction not named) across the 15 data sets (p. 12)"
+    ],
+    "experiments": "5-fold CV tuning, 15% hold-out, AUC, 15 sets (p. 11). Tuned: ERF 0.8494 vs XGBoost 0.8500 (p = 0.3028), AdaBoost 0.8431 (0.0738), RF 0.8298 (0.0012), CART 0.7967 (0.0002); XGBoost ahead on 10/15 sets by my count (Table 2, p. 12). Defaults: ERF 0.8483 vs XGBoost 0.8355 (p = 0.0256) (Table 3, p. 13). Factorial ablation: sample weights plus probabilities best on 11/15 (pp. 13-14). Cleaning: features -26.55%, samples -11.01% at <0.2% AUC loss (Table 5, p. 15). Tree weights add gains on 6/15 inside ERF and 13/15 on vanilla RF (pp. 18-19). Spleen and shopping case studies (pp. 15-18). No package names, versions, run times or seeds; code on request (p. 21). [my reading] ERF's default learning rate 0.2 was chosen on the same 15 sets, tuning budgets were unequal, and three sets show identical ERF AUCs in the tuned and default tables despite different settings (pp. 11-13, 24).",
+    "positioning": "Against XGBoost as the tabular state of the art (p. 2); related work on importance sampling, curriculum and self-paced learning, focal loss and meta-learned weights (pp. 3-4); the closest RF extensions (WAVE, Robnik-Sikonja's neighbour-based tree selection, out-of-bag tree weights) are distinguished by using the weights for interpretability (p. 4); no self-citation of the group's optimal-tree work (pp. 21-23).",
+    "writing": "A question title answered 'equivalence' in the abstract and 'a valuable, or even stronger alternative' in the conclusion (pp. 1, 20); a non-significant Wilcoxon p (0.3028) read as 'with high probability' due to randomness (p. 12); a contribution statement that gives algorithms, code, experiments and text to the student (p. 21).",
+    "limits_future": "Stated: binary only, multi-class as the next step (p. 20); tree scores 'are a proxy' (p. 16); tree weights help on only 6 of 15 sets inside ERF (p. 18). Not stated [my reading]: one test split per set, no theory or run times, and the claim of beating XGBoost rests on the default regime (pp. 1, 12-13).",
+    "method_links": [
+      {
+        "method": "Method 4",
+        "relation": "variant",
+        "note": "Only the duel step survives, outside MIO: four incumbents in a tuned and a default regime with Wilcoxon tests, and the tuned loss to XGBoost printed ('performs slightly better in most datasets'). No exact model, warm start, certificate or time limit; step 5's equal budgets not met (ERF tuned over several switches and a learning rate, RF over depth 5-6 only).",
+        "pages": "pp. 11-13"
+      },
+      {
+        "method": "Method 6",
+        "relation": "variant",
+        "note": "A student-carried line he 'motivated, supported and supervised' and edited, with no optimization and no group work cited: a programme he sponsors rather than shapes, as in c28 S132 and c34 S682 (same student). Methods 1 and 5 not engaged; not counted as counter-evidence given his stated role. Not counted: Taste warning signs 3 and 4 apply (greedy CART trees kept as the explanation; accuracy without decision value).",
+        "pages": "pp. 1, 21-23"
+      },
+      {
+        "method": "Method 3",
+        "relation": "variant",
+        "note": "Interpretability is named as the property but not priced: tree weighting is said to come 'without sacrificing performance', the knobs M and L are set by validation, and no curve of AUC against the number of trees shown is given.",
+        "pages": "pp. 9-10, 18"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "sponsor-and-edit senior authorship on student-led lines outside optimization",
+        "evidence": "Contribution statement: Bertsimas 'motivated, supported and supervised the presented work and edited the paper'; Stoumpou developed the algorithms, code and experiments and wrote it; no optimization content; same student as c34 S682.",
+        "pages": "pp. 1, 21"
+      },
+      {
+        "pattern": "per-sample model choice",
+        "evidence": "Each test point gets its own tree weights from the best trees of its M nearest training neighbours, and its top-scoring trees serve as its explanation; S626 learns the same choice as an Optimal Policy Tree over models and ensembles.",
+        "pages": "pp. 8-10"
+      },
+      {
+        "pattern": "optimize the training sample, not the model",
+        "evidence": "Heuristic variant of c39's candidate: hard samples are up-weighted and made likelier to be drawn, low-weight samples and low-MDI features are pruned (features -26.55%, samples -11.01% at <0.2% AUC loss); 'cleaning the dataset is actually beneficial' on 8 of 15 sets; the base learner (CART) is unchanged. Compare S696.",
+        "pages": "pp. 6-8, 14-15, 20"
+      },
+      {
+        "pattern": "default-parameter duel beside the tuned duel",
+        "evidence": "Every method is run tuned by 5-fold CV and at defaults with one depth chosen across sets; robustness is claimed from the small tuned-to-default loss (ERF 0.8494 to 0.8483 vs XGBoost 0.8500 to 0.8355); ERF's own default was chosen on the same 15 sets.",
+        "pages": "pp. 11-13"
+      }
+    ],
+    "transferable": [
+      "Run every method twice, tuned by CV and at one default fixed across all data sets, and report both tables; a small tuned-to-default loss is evidence of robustness (pp. 11-13). [my reading] Fix your own method's default on data outside the benchmark.",
+      "For a per-point ensemble explanation, weight each tree by how often it is among the L best trees of the point's M nearest training neighbours, break ties by summed rank, and show the top three trees (eqs. 4-8, pp. 9-10; Fig. 1, p. 17).",
+      "Ablate a multi-part extension factorially in one table: per-tree features, sample weights, sample probabilities and their combinations (Table 4, p. 14).",
+      "Report data cleaning as three numbers per data set (AUC change, feature reduction, sample reduction) under a stated tolerance and stopping rule: 0.2% AUC, 70 rounds, 1% early stop (pp. 14-15; Tables 9-10, p. 25)."
+    ],
+    "coauthors": "Vasiliki Stoumpou (MIT ORC; developed the algorithms, code and experiments and wrote the paper, p. 21). Bertsimas first and corresponding author (p. 1).",
+    "quotes": [
+      {
+        "text": "Dimitris Bertsimas motivated, supported and supervised the presented work and edited the paper.",
+        "page": 21
+      },
+      {
+        "text": "with high probability, XGBoost outperforming our method is due to randomness, although it performs slightly better in most datasets",
+        "page": 12
+      }
+    ]
+  },
+  {
+    "id": "S626",
+    "year": "2024",
+    "title": "Policy Trees for Prediction: Interpretable and Adaptive Model Selection for Machine Learning",
+    "read_level": "full",
+    "contribution": "Optimal Predictive-Policy Trees (OP2T): model selection, fixed-weight ensembling and a priced reject option cast as a prescription problem over a complete validation reward matrix and learned with Optimal Policy Trees, with propositions on when an adaptive policy beats the best single model and why relative rewards beat a best-label meta-classifier; gains on Concrete, IMDb and MIMIC-IV, a loss to Meta-XGB on a physics example.",
+    "problem_entry": "DA+ML (IO as the tree engine; AP and physics as test material): practitioners holding many ready models ask which to use and when, whether to ensemble, when all will fail, and black box or interpretable (pp. 1-2); mixture-of-experts needs differentiable, retrainable experts and is not interpretable, and rejection learning trains predictor and rejector jointly (pp. 2-3); entry: models that 'cannot practically, or in some cases legally, be fine-tuned' (p. 3).",
+    "key_idea": "Model selection as prescription: constituent models, fixed ensemble weights and a dummy reject model are the treatments; per-sample rewards on a held-out validation set form a complete reward matrix, so no counterfactual estimation is needed (pp. 4, 8-10); an Optimal Policy Tree trained by Optimal Trees coordinate descent with split penalty, depth and leaf-size limits (eq. 6, pp. 5-6) may split on features and on the models' own output scores (p. 7). Unlike the Meta-Tree (CART on best-model labels) it sees relative rewards (pp. 11, 14).",
+    "assumptions": "Query access only (p. 4); a finite weight set W fixed a priori that always contains every single model (pp. 6, 8-9); parallel splits, hyperplanes implemented without benefit (pp. 6, 15); the reject model assumed 'perfectly calibrated' with alpha_k < 1/K (p. 9); smooth predictions motivate the cross-entropy reward (p. 8); data: 1-D toy (n = 500), Concrete (n = 1080, p = 8), projectile with drag (n = 20k), IMDb (50k), MIMIC-IV mortality (n = 11,306, 14 features) (pp. 17-28).",
+    "proof_devices": [
+      "Leaf separability: for a fixed tree each leaf's prescription is found by enumeration (eqs. 3-5, p. 5)",
+      "Proposition 3: two disjoint dominated subspaces with different best models suffice for an informative policy; proof by construction and linearity of expectation (p. 13; App. C.2, pp. 37-38); two intervals on R need only a depth-3 tree (pp. 13-14)",
+      "Proposition 4: the OP2T vs Meta-Tree/Meta-XGB reward gap is unbounded for unbounded rewards and at most ((m-1)/m) R_max on fixed data; proof by a non-separable majority-label subset and a contradiction with a depth-0 tree (p. 14; App. C.3, pp. 38-39)",
+      "Proposition 6: as the reject reward rises to the reward bound, maximal dominated subspaces vanish in the limit and the remaining ones gain expected reward (p. 16; App. C.4, pp. 39-40)",
+      "Proposition 7: closed-form critical reject threshold alpha* per leaf under cross-entropy (App. C.1, pp. 36-37)",
+      "Single-model reject interval written as an MIO 'purely to demonstrate' solvability, then a polynomial enumeration over scores (App. B, pp. 33-34); as printed (24) has the bilinear term (h(x_i) - a)(b - h(x_i)), so it is not a linear MIO (my reading)"
+    ],
+    "experiments": "Meta-Tree (CART) and Meta-XGB tuned; OP2T tuned over lambda, D <= 10 and c_min by 3- or 5-fold CV (p. 16). Concrete MSE 36.13 vs 39.2 best single model and 39.69/39.57 meta-learners, 25.22 at 37.43% rejected (Table 1, pp. 19-20); projectile: Meta-XGB best at every reject level (140.85 vs 141.74) but OP2T 183.26 vs Meta-Tree 79,344.09 at depth 2 (Tables 3-4, p. 23; Fig. 8, p. 24); IMDb 93.53% vs BERT 92.8 and Meta-XGB 93.44 (Table 5, pp. 25-26); MIMIC-IV AUC 0.9235 vs Meta-XGB 0.9224/0.9209 (Tables 6-7, p. 28). Single splits; no tree software named, no run times, seeds, intervals or tests.",
+    "positioning": "Mixture of experts (Jordan-Jacobs 1994; Shazeer et al. 2017; IME 2023) and rejection learning (Chow 1970; Bartlett-Wegkamp 2008; Cortes et al. 2016) are reframed as gaps rather than attacked (pp. 2-3); builds on Amram-Dunn-Zhuo's Optimal Policy Trees and Bertsimas-Dunn Optimal Trees against greedy policy trees (Zhou et al. 2018; Biggs et al. 2021) (pp. 4-6); Singh et al. 2023's hand-set deferral thresholds as the manual alternative (p. 25).",
+    "writing": "Four practitioner questions open the paper and are answered by name after the hypothetical hurricane example and after the Concrete and IMDb experiments (pp. 2, 7, 20-21, 27); a theory section titled 'The Advantage of Prescription over Prediction' (p. 14); the title names the transplant (policy trees for prediction); slips: Proposition 6 cited as 'Proposition 4.3' (pp. 11, 39) and AUC tables captioned 'Accuracy' (p. 28).",
+    "limits_future": "Stated: the quality of a depth-bounded policy depends on the number and shape of maximal dominated subspaces (p. 15); Meta-XGB wins on the projectile data (p. 23). Future: other reward functions, dynamic ensemble weights, theory of expert selection (p. 31). Not stated: no gap or certificate for the 'globally optimized' trees, single splits, no run times.",
+    "method_links": [
+      {
+        "method": "Method 5",
+        "relation": "variant",
+        "note": "The prescription-over-prediction thesis applied to ML practice: the decision is which model, ensemble or abstention to use; the Meta-Tree, which predicts the best model's label, plays the predict-then-act incumbent, and Proposition 4 and the depth-2 projectile trees (MSE 183.26 vs 79,344.09) show the gap when best-model labels are not separable. No owner, partner rule or field test; the 'best model in hindsight' stands in for the current rule.",
+        "pages": "pp. 4, 11, 14, 23-25"
+      },
+      {
+        "method": "Method 3",
+        "relation": "evidence",
+        "note": "One knob, the reject reward alpha, prices abstention with a solution-independent leaf rule (regression: a model is prescribed only if its leaf MSE is below alpha; classification with the misclassification reward: reject iff the models' leaf accuracy is below the reject model's), a closed-form alpha* under cross-entropy, and error-versus-rejected tables in every experiment. The curves have only 2-3 points and no bad case is named for the knob.",
+        "pages": "pp. 10-11, 20, 23, 26, 28, 36"
+      },
+      {
+        "method": "Method 4",
+        "relation": "variant",
+        "note": "The abstract's 'globally optimized' trees are trained by coordinate descent with no gap or time limit (Tension T1); the duel steps are present: the greedy Meta-Tree at matched shallow depth (Table 4) and the black-box Meta-XGB, with the loss to Meta-XGB on the projectile data printed and explained by Proposition 4.",
+        "pages": "pp. 1, 5-6, 16, 23, 27"
+      },
+      {
+        "method": "Method 6",
+        "relation": "evidence",
+        "note": "The Optimal Trees to Optimal Policy Trees programme (Bertsimas-Dunn 2017, 2019; Amram-Dunn-Zhuo 2022) extended by a new ORC student to model selection, motivated by the group's own multimodal hurricane and health-care papers.",
+        "pages": "pp. 3, 4-6, 42"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "per-sample model choice",
+        "evidence": "OP2T prescribes a constituent model, a fixed ensemble or rejection per region of features and model scores, learned from relative rewards on validation data; S478 does a heuristic version with per-sample tree weights.",
+        "pages": "pp. 4-9"
+      },
+      {
+        "pattern": "practitioner questions as the paper's spine",
+        "evidence": "Four questions (which model and when; ensemble or not; when error-prone; black box or interpretable) open the paper and are answered under their own headings after the illustrative example and the Concrete and IMDb experiments; cf. 'numbered open questions answered in order' (c04).",
+        "pages": "pp. 2, 7, 20-21, 27"
+      }
+    ],
+    "transferable": [
+      "When the actions are models you can run on every validation sample, build the full reward matrix and fit a prescriptive tree to it directly; no counterfactual estimation is needed (pp. 4, 8-9, 35).",
+      "Add a dummy 'reject' action with a constant reward alpha; in each leaf it wins exactly when every model's leaf loss is worse than alpha, so the knob has a stated meaning (pp. 9-11; App. C.1, p. 36).",
+      "To show why learning from relative rewards beats classifying the best model, construct a non-separable subset whose majority-best model has a far worse total reward, and bound the gain by ((m-1)/m) R_max (p. 14; App. C.3, pp. 38-39).",
+      "Compare against the greedy rival at matched shallow depths, where interpretability lives, not only at the tuned depth (Table 4, p. 23; Fig. 8, p. 24).",
+      "Let the policy split on the constituent models' output scores; on IMDb and MIMIC-IV the best trees used only those (pp. 7, 26, 28-29)."
+    ],
+    "coauthors": "Matthew Peroni (MIT ORC, p. 1). Bertsimas first author; MIT SuperCloud acknowledged (p. 31).",
+    "quotes": [
+      {
+        "text": "This demonstrates the benefit of prescription over prediction in this setting.",
+        "page": 24
+      },
+      {
+        "text": "This work takes a first step toward using prescriptive analytics to enhance predictive models, and we hope it encourages further research in this direction.",
+        "page": 31
+      }
+    ]
+  },
+  {
+    "id": "S696",
+    "year": "2024",
+    "title": "Improving survival models in healthcare: a novel matching approach",
+    "read_level": "full",
+    "contribution": "A two-stage method for Cox prognostic models: stratify a resected-CRLM cohort by baseline 5-year risk, select a risk-balanced treated/untreated training set by minimum-distance matching integer programs (Gurobi), and train per-arm Cox models on 124-156 patients, reported to beat the whole-cohort model (1,799 patients) on bias-corrected discrimination and most calibration indices; the December 2024 preprint of the line published as S620 (2026).",
+    "problem_entry": "ML+AP (oncology prognosis; IO as the matching engine; DA as motivation): prognostic Cox models are trained on the whole observational cohort, as all 71 CRLM models in a 2024 review were (p. 4); treatment propensities unbalance treated and untreated, so a model 'may disproportionately focus on densely populated areas of the data' (p. 4); entry: matching, standard for treatment effects, 'has not been previously explored' for prognostication (p. 4); two hypotheses: stratum matching and a smaller balanced cohort improve accuracy (p. 4).",
+    "key_idea": "Fit a Cox model on the untreated, stratify both arms by deciles of 5-year death risk, and in each stratum select patients by a minimum-distance matching integer program: 1-1 with at least alpha pairs (equalized), exact cover of a small minority side, or a relaxed version with up to two matches (Algorithm 1, p. 6; Problems 1-3, pp. 7-8); train separate Cox models on matched untreated and treated (3A/3B), optionally duplicating or tripling them (pp. 5-6). The Cox learner is unchanged; matching shapes the training set (pp. 4-5, 16).",
+    "assumptions": "1,799 of 2,375 resected-CRLM patients (1,197 adjuvant chemotherapy, 602 not), 10 literature-chosen covariates, 5-year overall survival (pp. 3, 11); multiple imputation under MAR (p. 10); alpha = 23, the smallest stratum size >= 20, with strata 3 and 10 matched without equalization (p. 13); matched training sets of 124-156 patients (Table S2, p. 21); only observed confounding addressed (p. 17), although hypothesis 1 claims latent confounders (p. 4); age still imbalanced after matching (Table 2, p. 13; my reading).",
+    "proof_devices": [
+      "n/a for theorems; the mechanism (equal attention across risk strata rather than confounding removal) is argued from the failure of PSM, not tested (p. 17)",
+      "Problems 1-3: binary assignment programs with at-most-one (or two) matches per patient and a cardinality floor alpha per stratum, minimizing summed standardized Euclidean distance (pp. 7-8); solved by Gurobi 11.0.0 from Julia 1.9.4 on a MacBook M2 Pro, no solve times (p. 10); [my reading, as card S620] a min-cost-flow structure with integral LP relaxation, unused",
+      "Efron's bias-corrected (optimism) bootstrap after Harrell, 100 resamples, for discrimination and calibration (pp. 9-10)"
+    ],
+    "experiments": "Baselines: Model 1 (whole cohort, treatment as covariate 'for fair comparison'), 2A/2B (per arm, unmatched), PSM A/B (MatchIt, RF or GLM propensity, caliper 0.2) (pp. 5, 10); metrics Harrell and Uno C, Brier, O/E, ICI, E50, E90, Emax, calibration slope (pp. 9-10). Bias-corrected Harrell C: Model 1 0.6115, 3A 1-1 0.6535, 3B relaxed 0.6747, 3B relaxed tripled 0.6901; PSM about equal to the unmatched per-arm models (Table 5, p. 15); 3B relaxed calibrates worse, calibration slope the exception for 3A (p. 14). [my arithmetic] largest gain over Model 1 +12.9% (Harrell) and +15.1% (Uno), not the abstract's 'up to 20%' (p. 3), which matches only gains against 2B or in-sample against 1B (Tables 3, 5, p. 15); Model 1 keeps the calibration slope closest to 1 (0.9226, Table 6, p. 16). [my reading] scored populations and bootstrap scope not stated (pp. 9, 14).",
+    "positioning": "Clinical prognostics: the Kokkinakis 2024 review (71 CRLM models, all whole-cohort), Harrell's Regression Modeling Strategies for validation, Van Calster's calibration hierarchy (pp. 4, 9); propensity-score matching (Ho, Imai, King, Stuart 2007) as the conventional matching it claims to go beyond (pp. 4-5, 8); the gain set against the most popular CRLM score's 7% C improvement over its predecessor (p. 16); no optimal-matching or OR literature cited; one self-citation, Bertsimas and Margonis 2023 (pp. 18-19).",
+    "writing": "'Novel' in the title and 'to our knowledge, the first methodological study' in the abstract (pp. 1, 3), 'the first approach' again in the Discussion (p. 17); two numbered hypotheses up front (p. 4); headline percentages with no table cell named (p. 3); a 'less is more' slogan (p. 17); hypothesis 1's latent confounders (p. 4) withdrawn in the Discussion without comment (p. 17).",
+    "limits_future": "Stated: unobserved confounding out of scope (p. 17); small matched sets hurt 3B's calibration, remedied by oversampling (p. 14); future studies to validate (pp. 17-18). Not stated [my reading]: internal validation only, by choice (p. 17); one disease and one learner; no decision analysis although chemotherapy choice motivates (p. 17). The 2026 version S620 adds two external cohorts (card S620, c39).",
+    "method_links": [
+      {
+        "method": "Method 5",
+        "relation": "variant",
+        "note": "The baseline is the field's current rule, documented by a review of 71 models, and strengthened by adding treatment as a covariate; scoring uses the field's own discrimination and calibration metrics with Harrell's bootstrap. But the object stays prediction: the chemotherapy decision is only invoked, there is no decision metric or field test, and the headline percentages cannot be traced to a table cell (Tension T6).",
+        "pages": "pp. 3-5, 9-10, 14-17"
+      },
+      {
+        "method": "Method 1",
+        "relation": "variant",
+        "note": "A step that practice does greedily (1:1 nearest-neighbour PSM) or not at all becomes an exact integer program with a per-stratum floor that greedy matching lacks, solved by Gurobi; the class (min-cost flow) is not read, and there is no dual reading, boundary or solve time. Same line as S620 (c39), which counts the same move; count once.",
+        "pages": "pp. 6-8, 10"
+      },
+      {
+        "method": "Method 6",
+        "relation": "evidence",
+        "note": "The health programme: a recurring surgeon partner (Margonis; joint 2023 paper cited), clinicians from seven institutions, an ORC student and Jameel Clinic funding; the line moved from this preprint to a clinical-informatics journal with the student first (card S620). Not counted: Heuristic 4 partial (calibration failures printed, p. 14); Taste mark 3 (optimized selection replaces greedy matching, pp. 7-8).",
+        "pages": "pp. 1, 3, 18-19"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "optimize the training sample, not the model",
+        "evidence": "'we prioritize optimizing the data used to train these models'; the Cox learner is unchanged and the matched sets are about one-sixth of the cohort; earlier version of c39's S620, so S696 and S620 count as one line; S478 is a heuristic variant.",
+        "pages": "pp. 3-6, 16"
+      },
+      {
+        "pattern": "exact matching IO as a study-design tool",
+        "evidence": "Problems 1-3 select the training cohort by minimum-distance matching IPs with a per-stratum floor alpha (Gurobi); same line as S620 (c39); risk-bucket matching also opens the ROAD pipeline (S527, S682, c34).",
+        "pages": "pp. 6-8, 10"
+      }
+    ],
+    "transferable": [
+      "To rebalance a training set across risk levels, fit a baseline risk model on the control arm, stratify both arms by its deciles, and within each stratum select pairs by a minimum-distance matching IP with a floor alpha, falling back to exact cover where the minority side is below alpha (Algorithm 1, p. 6; pp. 7-8, 13).",
+      "Keep isolating baselines of the same learner: the whole-cohort model with treatment as a covariate, unmatched per-arm models and PSM-matched models (pp. 5, 14).",
+      "Validate the development process with Efron's optimism bootstrap (100 resamples) instead of a single split, and report discrimination and calibration separately, including ICI, E50, E90 and the calibration slope (pp. 9-10, 17).",
+      "[my reading] When the training subsets differ in case-mix, score every compared model on one common population, or per risk stratum, before comparing C-indices (Tables 3-6, pp. 14-16); S620 later reports per-stratum external results."
+    ],
+    "coauthors": "Catherine Ning (MIT ORC); clinicians Per Eystein Lønning (Bergen), Hideo Baba (Kumamoto), Itaru Endo (Yokohama City), Richard Burkhart (Johns Hopkins), Federico N. Aucejo (Cleveland Clinic), Felix Balzer and Martin E. Kreis (Charité); Georgios Antonios Margonis (MIT ORC and Memorial Sloan Kettering), last (pp. 1, 3). Bertsimas first; Jameel Clinic funding (p. 18).",
+    "quotes": [
+      {
+        "text": "Rather than focusing solely on the choice of model or the incorporation of new covariates, we prioritize optimizing the data used to train these models.",
+        "page": 16
+      },
+      {
+        "text": "However, it is important to note that this approach addresses only observed confounding; unobserved confounding remains outside its scope, as is true for all existing methodologies.",
+        "page": 17
+      }
+    ]
+  }
+]

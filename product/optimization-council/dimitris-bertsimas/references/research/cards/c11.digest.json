@@ -1,0 +1,371 @@
+[
+ {
+  "id": "S160",
+  "year": "2006",
+  "title": "Persistence in discrete optimization under data uncertainty",
+  "read_level": "full",
+  "contribution": "Defines the persistency of a 0-1 variable (the probability that it is on in the optimal solution under random costs). Computes it, with a tight worst-case bound on the expected optimum, by an SDP/SOCP over conditional moments that uses only ranges and marginal moments. The model is polynomial when the convex hull of the feasible set has a compact description, and it is tested on PERT projects and on spanning-tree re-optimization.",
+  "problem_entry": "{CP+IO; RO-type moment set; SD} Moment methods give bounds, not solution structure (p. 2). PERT picks the wrong critical path under variability: activity 3 is critical with probability 0.715 in Van Slyke's project (Table 1, p. 3). Exact persistency for a given distribution is NP-hard, and distributions are rarely known (p. 3).",
+  "key_idea": "Lift x_i to conditional moment vectors w_i(k) = E[c_i^j | x_i = k] P(x_i = k). The expected optimum becomes linear, the persistence vector lies in CH(X), and each w_i(k) lies in a moment cone (Theorem 1, p. 7). The optimal w_i0(1) is the persistency under an explicitly constructed extremal distribution (Lemma 1, pp. 8-9). This is the primal of the authors' dual bound [4], chosen for structure (pp. 9-10). A two-step extension follows (Theorem 2, pp. 10-14).",
+  "assumptions": "0-1 problem with a random objective; ties have measure zero (p. 1). Only ranges and marginal moments are used, and dependence is deliberately omitted, which may be imprecise for correlated data (pp. 3-4, 16). A compact description of CH(X) is needed for tractability (pp. 6, 9). Data: Van Slyke's 8-activity and Kleindorfer's 40-activity projects; random complete graphs with 15 and 30 nodes (pp. 15-21).",
+  "proof_devices": [
+   "duality of moment cones and nonnegative polynomials, with a closure for moments attained only by limits of measures (pp. 4-6)",
+   "Hankel-matrix SDP representation of univariate moment cones (Proposition 1, p. 5); 2x2 PSD equals SOC, so two moments give an SOCP (Proposition 2, p. 6)",
+   "conditioning on x_i(c) to linearize the expected optimum (pp. 6-7)",
+   "tightness by an explicit extremal distribution built from a convex decomposition of the optimal persistence vector into extreme points of CH(X) (Lemma 1, pp. 8-9)",
+   "nested two-level convex decomposition for two-step problems (Theorem 2, pp. 12-14)",
+   "polynomial solvability when CH(X) has a compact description: longest path on DAGs, assignment, shortest path, spanning tree (Remark (a), p. 9)"
+  ],
+  "experiments": "SeDuMi 1.05 with MATLAB 6.5 on a 2.4 GHz Pentium IV (p. 15); the references cite v1.03 (p. 23). Van Slyke: PERT vs Monte Carlo (20,000 samples, 4 distributions) vs MMM. MMM gives a worst-case duration of 26.30 vs 22.56-23.33 simulated, and a persistency of 0.655 for activity 3 vs 0.675-0.810, in under 5 s (Table 2, p. 16). Kleindorfer: compared with the marginal-distribution model under 20-piece linearization; MMM runs in under 0.5 s, and a 942 s simulation finds 20 persistent activities vs MMM's 15, the extra ones with probability below 0.08 (pp. 16-18). Spanning tree, pruning to L arcs before 20,000 Prim solves: 15 nodes, L=66 saves 19.8% CPU for +0.042% objective and L=21 saves 44.6% for +6.8%; 30 nodes, L=191 saves 28.9% for +0.6% and L=37 saves 53.5% for +14.9% (Table 5, p. 23). Only independent data are used in the spanning-tree tests (p. 21).",
+  "positioning": "Distinguished from Adams-Lassiter-Sherali's LP persistency (footnote, p. 2). Extends the authors' own moment-bound line [2-5] from bounds to structure (p. 2). PERT/CPM is the classical baseline (pp. 2-3). The marginal-distribution approach (Meilijson-Nadas, Klein Haneveld) is called cumbersome for lack of precision (p. 16). The pruning idea is borrowed from Yaman-Karasan-Pinar (p. 20).",
+  "writing": "Opens with a tiny motivating instance and a striking number (p. 3); a numbered structure-and-contributions list (p. 4); theorem, lemma and remarks with inline proofs (pp. 7-14); hedged empirical claims (pp. 4, 21, 22).",
+  "limits_future": "Theory, an algorithm and an illustration (pp. 4, 22). Stated limits: dependence is ignored (p. 4), persistency is sensitive to correlation (p. 16), and a compact hull is needed (p. 9). No future directions are stated (p. 22).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Criticality/persistency, owned by PERT and simulation, is written as an SDP/SOCP that stays polynomial when CH(X) has a compact description. The boundary is printed: NP-hard for a given distribution, and a compact hull is needed. Structure is read from the primal moment variables instead of the dual, a nuance on step 4.",
+    "pages": "pp. 3, 6-10"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Persistence pruning is priced as a one-knob curve (L arcs kept vs CPU saved vs objective lost), with its bad end printed. The knob is computational, and no bound links L to the loss.",
+    "pages": "pp. 20-23"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The practitioner's rule (PERT/CPM) is the baseline, but the score is agreement with simulated criticality and duration, not a decision outcome.",
+    "pages": "pp. 2-3, 16-17"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "solution structure, not only bounds",
+    "evidence": "Targets persistence (which variables are on) instead of the bound value, read from the primal of the authors' own dual bound through an explicit extremal distribution.",
+    "pages": "pp. 2, 8-10"
+   },
+   {
+    "pattern": "shrink-then-solve with a printed quality/time knob",
+    "evidence": "A convex persistence model prunes arcs before 20,000 spanning-tree re-solves, and the full L curve is reported; S073 is a second instance (clustering before the MIO).",
+    "pages": "pp. 20-23"
+   }
+  ],
+  "transferable": [
+   "Lift a 0-1 decision under random costs to conditional moment vectors with Hankel-PSD moment-cone constraints; its persistency is w_i0(1) (pp. 7-8).",
+   "With two moments, replace the 2x2 Hankel PSD constraint by a second-order cone so the model stays an SOCP (p. 6).",
+   "Prove a moment relaxation tight by building the extremal distribution from a convex decomposition of the optimal point into feasible 0-1 solutions (pp. 8-9).",
+   "Prune variables by persistence before many re-solves, and publish the whole kept-fraction/time/objective curve, bad end included (pp. 20-23).",
+   "Open with a small classical instance on which the practitioner's deterministic rule fails under variability, and give one number for the damage (pp. 2-3)."
+  ],
+  "coauthors": "Karthik Natarajan, Chung-Piaw Teo (both National University of Singapore)",
+  "quotes": [
+   {
+    "text": "Using a deterministic approach would imply that the project manager focuses on the wrong path 71.5 percent of the time!",
+    "page": 3
+   },
+   {
+    "text": "The advantage in the primal formulation is that we obtain important insights into the persistence of decision variables of discrete optimization problems.",
+    "page": 10
+   }
+  ]
+ },
+ {
+  "id": "S073",
+  "year": "2007",
+  "title": "Classification and regression via integer optimization",
+  "read_level": "full",
+  "contribution": "CRIO first clusters the data. One mixed-integer program then assigns clusters to groups and removes outliers, and QPs/LPs turn the groups into polyhedral regions, for classification and for piecewise-linear regression. It matches or beats SVM, trees, boosting and neural networks on synthetic data and four UCI classification sets, but is weaker and much slower in regression. The paper argues that statisticians should revisit integer optimization.",
+  "problem_entry": "{ML+IO} Integer optimization has had very limited impact in statistics because of a belief, formed in the early 1970s, that it is intractable (pp. 1-2). CART is greedy (p. 1). The why-now is qualitative: the past decade's IO advances (pp. 1-2). The project began as a globally optimal CART (p. 4).",
+  "key_idea": "A Farkas-based MIO groups Class-1 clusters so that no Class-0 point lies in a group's convex hull. Assignment binaries switch the constraints through big-M scaled to 1, and violation margins absorb outliers (pp. 5-7). The regression MIO assigns clusters to K groups, each with its own coefficients, plus an outlier group with budget rho (pp. 8-10). SVM-like QPs and LPs then define the polyhedra. Hyperplane partitions proved far more tractable than univariate splits (p. 4).",
+  "assumptions": "Two-class classification; absolute-loss regression; a small user-set K; outlier clusters below 1% removed; hierarchical clustering with a statistical distance (pp. 2, 6-11, 19). Data: 11 Gaussian sets built to favour SVM and 11 polyhedral sets built to favour CRIO and multivariate trees, with 5% of labels flipped; UCI Cancer, Liver, Diabetes, Heart; Boston, Abalone, Auto and 9 Friedman sets for regression; 50/30/20 splits repeated 10 times (pp. 11, 16).",
+  "proof_devices": [
+   "Farkas' lemma turns convex-hull membership into one separating hyperplane per (point, group) (p. 5)",
+   "big-M assignment constraints rescaled to M = 1 for classification (p. 6); M = 1,000 and 10,000 in the runs (pp. 11, 16)",
+   "size accounting: clustering cuts K*m1 binaries to K*K1, and K*n to K*L in regression, with L as the quality/time knob (pp. 6, 10)",
+   "LP merge test for clusters (problem (7), p. 6) and LP redundancy test for polyhedron faces (problem (14), p. 8)",
+   "a pair of soft-separation LPs with p'e >= 1 or <= -1 to avoid the trivial hyperplane (problems (18)-(19), p. 10)",
+   "no optimality or generalization theorem; global optimality refers to cluster assignments (pp. 4, 18)"
+  ],
+  "experiments": "CPLEX 8.0 on a Linux desktop (pp. 11, 20). Baselines tuned on validation data: logistic regression and neural networks (MATLAB), SVMfu, CRUISE univariate and multivariate trees (kept over Salford CART), GBM, TreeNet; least squares and MARS for regression (pp. 11, 16, 20). CRIO beats SVM on 7/11 Gaussian and 9/11 polyhedral sets, neural networks on 10/11, and multivariate trees and both boosters on 11/11 Gaussian sets (p. 14). It is claimed best on all four real sets (p. 15), but Table 7 shows GBM at 0.720 vs CRIO 0.717 on Liver. K = 1 on most sets, where the MIO reduces to an LP and 80-99% of the time is spent in QPs (pp. 14-15). Regression is not as convincing, and run time explodes because of big-M: about 148 s vs 7.7 s (MARS) on Abalone, and 3,029-3,307 s vs under 4 s on the n = 4,000 Friedman sets (pp. 16, 18-19). No gaps or MIO solve status are reported.",
+  "positioning": "Placed between statistical-inference heuristics (CART, MARS) and the ML/mathematical-programming tradition (SVM) (p. 1). CART is faulted as fundamentally greedy, and checkerboard over-splitting is shown (pp. 1, 4-5). Credits Arthanari-Dodge, Bennett-Blue and Mangasarian (p. 1). Proposes implicit branching (Bienstock; Bertsimas-Shioda) to remove big-M (p. 17). Note 05 section 2.1 records the later OCT manuscript's verdict that CRIO did not reach provable optimality and gained little over CART, while S073's Table 7 shows CRIO above the CRUISE trees on all four real sets (p. 15).",
+  "writing": "Two-part contribution statement (p. 2); geometric intuition before the mathematics (section 2, pp. 2-5); win tallies (p. 14); a hedged conclusion asking statisticians to re-examine IO, still claiming global optimality (p. 18); a dedicated shortcomings section (pp. 16-18); small text-table mismatches in point and variable counts (pp. 11, 15-16, 19).",
+  "limits_future": "Contribution: a method, software and a computational study. Stated limits: discontinuous regression, run time, no interpretability with little that can be done about it, weak big-M (pp. 16-17). Future work: a tailored QP solver, implicit branching, stopping at a 5-10% gap or a time limit, continuity constraints, a tighter M (pp. 16-17). Intended for users who value accuracy over time (p. 17).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Early form: the intractability belief is dated (early 1970s) and conceded as the cause of neglect, but the why-now is a qualitative appeal to the past decade's IO advances, with no rebuilt speed-up figure. Received November 2002.",
+    "pages": "pp. 1-2"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Classification and regression, owned by statistics, are rewritten as MIO plus QP/LP. The boundary is printed: problem (15) is too slow at n of about 200, and big-M blows up regression time. Qualified: heuristic clustering runs upstream, and K = 1 in most runs reduces the MIO to an LP.",
+    "pages": "pp. 5-10, 15-16"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "The duel protocol: baselines tuned on validation data, the stronger tree code kept (CRUISE over CART), 10 random splits with standard deviations, and one synthetic family generated to favour the strongest rival.",
+    "pages": "pp. 11, 14, 20"
+   },
+   {
+    "method": "Method 4",
+    "relation": "contradiction",
+    "note": "The certificate part: no gaps or solve status are reported. The paper proposes stopping branch-and-bound at a 5-10% gap or a time limit because provable optimality is not critical here, while the conclusion claims a globally optimal partition (Tension T1, already in 2007). Related: negative results in the body (Heuristic 4), big-M named as the bottleneck (Tension T4), and interpretability conceded as unfixable (Taste mark 5, reversed later).",
+    "pages": "pp. 15-18"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "outlier removal inside the integer model with a budget",
+    "evidence": "Violation margins let the classification MIO ignore outlier points; the regression MIO has an outlier group capped at a fraction rho of the points.",
+    "pages": "pp. 7, 9-10"
+   },
+   {
+    "pattern": "shrink-then-solve with a printed quality/time knob",
+    "evidence": "Hierarchical clustering with LP-checked merges cuts binaries from K*m1 to K*K1 and from K*n to K*L, with L named as the quality/time knob; S160's persistence pruning is a second instance.",
+    "pages": "pp. 6, 9-10"
+   }
+  ],
+  "transferable": [
+   "Encode the condition that no opposite-class point lies inside a group's convex hull through Farkas' lemma: one separating hyperplane per (point, group), switched by assignment binaries, with big-M rescaled to 1 (pp. 5-6).",
+   "Cut binaries by clustering with LP-checked merges, and expose the number of clusters as the quality/time knob (pp. 6, 10).",
+   "Put outlier removal inside the assignment MIO, with a budget rho on the points removed (p. 9).",
+   "Avoid the trivial separating hyperplane: solve one LP with p'e >= 1 and one with p'e <= -1, and keep the better (p. 10).",
+   "Generate one synthetic family that favours the strongest rival and one that favours your model, and say which is which (p. 11).",
+   "Write a shortcomings section that names who should use a competitor instead (pp. 16-17)."
+  ],
+  "coauthors": "Romy Shioda (University of Waterloo)",
+  "quotes": [
+   {
+    "text": "the belief was formed in the early 1970s that these methods are not tractable in practical computational settings.",
+    "page": 1
+   },
+   {
+    "text": "In addition, because a provably optimal solution is not critical in this context, we can prematurely terminate the branch-and-bound procedure, say at 5% to 10% relative optimality gap or by a time limit.",
+    "page": 17
+   }
+  ]
+ },
+ {
+  "id": "S106",
+  "year": "2007",
+  "title": "A learning approach for interactive marketing to a customer segment",
+  "read_level": "full",
+  "contribution": "Formulates batched Bayesian (beta-Bernoulli) message selection for a customer segment as a finite-horizon DP and proves value-of-information and superadditivity results. Gives two scalable policies: a Lagrangian-decomposition ADP, and Interval, a batched extension of Lai's UCB rule. Both beat the greedy and Gittins-greedy rules in simulation, and the ADP extends to budgets and segment migration.",
+  "problem_entry": "{SD+AP; DA} Interactive marketers must learn message effectiveness during operations. Decisions come in batches (mail drops, delayed responses, offline databases, global constraints), while classic bandits sample one at a time. There is little prior work and no consensus framework (pp. 1-2).",
+  "key_idea": "The exact DP over beta-posterior counts (pp. 5-6) is intractable, with 10^8 to 10^34 states (p. 7). ADP: relax the per-stage contact constraint with one time-invariant multiplier found by bisection, so the DP separates by message; restore feasibility by a one-stage re-solve each period; approximate the subproblems with lookahead H=2, blocks B=N/10 and interpolated value functions (pp. 7-10). The Interval heuristic batches Lai's UCB rule (pp. 11-12). The ADP extends to budgets and migration (pp. 10-11).",
+  "assumptions": "Homogeneous, independent, pre-built segments; messages independent given the decisions. These are the key tractability assumptions, and they are conservative under dependence (pp. 1-2). Bernoulli rewards; beta priors read as pre-experiment counts (p. 4). N constant and exogenous (p. 5). Known migration matrices, as an approximation (p. 11). Simulated data only: p_m drawn from beta(s,f), priors strengthened by a_m pre-experiments (p. 13).",
+  "proof_devices": [
+   "Lemma 1: splitting a batch into two sequential batches leaves the outcome law unchanged (Vandermonde's identity; proof omitted) (p. 6)",
+   "Proposition 1 (value of information) by backward induction, with Jensen's inequality applied to the convex final-stage value (pp. 6-7)",
+   "Propositions 2-4: superadditivity in N and T, and more, smaller batches do better (p. 7; proofs in the online appendix, not read)",
+   "Lagrangian relaxation of the coupling constraint: the relaxed value is convex in lambda and an upper bound (p. 8; proof in Appendix B, not read)",
+   "Proposition 5: lambda <= 0 or >= 1 reduces the method to greedy, so only (0,1) matters (p. 9)",
+   "state and operation counts: O(T^3 N^2) states and T^3 N^4 operations per subproblem (p. 9)"
+  ],
+  "experiments": "Benchmarks: Ideal (oracle), Exact (tiny cases), Greedy, GGreedy (Gittins, discount 0.90), Interval, ADP (p. 12). In tiny cases, all methods are indistinguishable from Exact in most simulations (p. 13). 13 configurations x 2,000 simulated problems, batches up to 1,000 (Tables 1-2, pp. 13-14): ADP's regret reduction vs Greedy ranges from -6.0% to 38.3%, and vs Interval from -6.4% to 3.2%. Gains are largest with weak priors (pp. 13-15). H=2 is enough (p. 14; Table 3, p. 15). CPU per stage on a 2.4 GHz Xeon: Interval below 0.005-0.02 s, ADP with H=2 0.53-0.69 s (Table 4, p. 16). A batch-size-choice variant gained little beyond three periods (p. 5). No real data or field test (pp. 14-15). The significance marks of Table 1 are not recoverable from the text.",
+  "positioning": "Marketing work is sorted into myopic choice models, lifetime-value DPs and two learning studies, one of them not implemented or tested (pp. 2-3). Draws on the bandit and sequential-design literature: Gittins, Lai-Robbins, Lai, Anantharam et al., few-stage trials (pp. 3-4). Decomposition lineage: Castanon, Yost-Washburn, Hawkins, Whittle; later Caro-Gallien and Adelman-Mersereau (p. 7). Restates earlier work rather than attacking it.",
+  "writing": "The problem is summarised as difficult to solve but simple to state (p. 2); an explicit modelling-sacrifice paragraph (p. 2); a claim to be among the first to propose a workable solution (p. 14); a practical rule for choosing among the methods (p. 14); a concrete future-research section (pp. 14-15).",
+  "limits_future": "Contribution: a framework, two methods and structural insights (p. 3). Limits: a simple customer model (pp. 2, 14-15); Interval does not extend to multi-segment features (pp. 11-12); the ADP lookahead is weak for long horizons and small batches (p. 13); Propositions 3-4 need the undiscounted case (p. 6). Future: dependence and heterogeneity, approximations of Bayes updates, non-Bayesian or asymptotic optimality, and field tests, which need decision control (pp. 14-15).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "SD variant: the exact formulation (a DP) comes first, then a Lagrangian relaxation that decomposes by message. The multiplier is a price, meaningful only in (0,1). The authors prefer the ADP, built on a mathematical-programming formulation, because it extends to budgets and migration. The class is a DP, not LP/conic/MIO, and the only solve-time evidence is per-stage CPU.",
+    "pages": "pp. 5-11, 14, 16"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Decisions are scored (successes, regret) against the myopic play-the-leader and Gittins-greedy rules, the logic of existing marketing models, but only in simulation. The field test is named as the missing step, with its obstacle stated. Related: losses to Interval and Greedy are printed (Heuristic 4).",
+    "pages": "pp. 2, 12-15"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Weak: a joint paper drawn from co-author Mersereau's MIT ORC PhD thesis, opening the bandit thread that SKILL.md traces to 2026.",
+    "pages": "p. 16"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Lagrangian decomposition of a weakly coupled stochastic DP with one multiplier found by bisection",
+    "evidence": "The per-stage contact constraint is priced by a time-invariant multiplier chosen in about seven bisection steps; feasibility is restored by a one-stage re-solve.",
+    "pages": "pp. 7-9"
+   },
+   {
+    "pattern": "structural propositions of the exact model as design advice before approximating",
+    "evidence": "Value of information, superadditivity in batch size and horizon, and the advice to use more, smaller batches are all proved before the ADP.",
+    "pages": "pp. 6-7"
+   }
+  ],
+  "transferable": [
+   "Price the per-stage coupling constraint with one time-invariant multiplier found by bisection, then restore feasibility with a one-stage re-solve each period (pp. 8-9).",
+   "Prove the meaningful range of the multiplier: outside (0,1) the method collapses to greedy (Proposition 5, p. 9).",
+   "Approximate subproblem value functions by linear interpolation on a few samples, after plotting their typical shapes (pp. 9-10).",
+   "Batch a one-at-a-time UCB rule: assign customers sequentially within the batch, widening each interval without moving its midpoint (p. 12).",
+   "Benchmark against an oracle upper bound, an exact method on tiny instances and the greedy rules, and report regret reductions with their sign (pp. 12-14).",
+   "Before approximating, prove the exact model's structural facts and turn them into design advice, such as more and smaller batches (pp. 6-7)."
+  ],
+  "coauthors": "Adam J. Mersereau (UNC Kenan-Flagler; work from his MIT ORC PhD thesis)",
+  "quotes": [
+   {
+    "text": "The fact that the ADP approach is based on a mathematical programming formulation makes it extendable.",
+    "page": 14
+   },
+   {
+    "text": "Testing an adaptive learning model requires not just data but also decision-making control in a real-world system.",
+    "page": 15
+   }
+  ]
+ },
+ {
+  "id": "S050",
+  "year": "2008",
+  "title": "Algorithmic prediction of health-care costs",
+  "read_level": "full",
+  "contribution": "Uses claims data on 838,242 members from a company partner. Classification trees and a two-stage spectral clustering predict next-year cost buckets out of sample better than carrying last year's cost forward: APE falls by over 16% overall and by over 50-58% in the top bucket. The paper argues for error measures aligned with the decision instead of R-squared.",
+  "problem_entry": "{AP+ML; DA as a first step} Health-care costs are rising, and prediction is framed as a first step (p. 1). Claims-based models since the 1980s use regression and heuristic rules without out-of-sample validation, and R-squared is a poor yardstick (pp. 1-2).",
+  "key_idea": "Off-the-shelf trees and an EigenCluster-based clustering (cost trajectory first, then medical data within each cost cluster) run on engineered features: grouped codes, risk factors, the cost trajectory and a spike indicator. They predict cost buckets of equal total dollars, judged by hit ratio, an asymmetric penalty, APE and a median-anchored R measure (pp. 3-7).",
+  "assumptions": "838,242 members from 2,866 employers; a 24-month observation window and a 12-month result window (p. 2). Only full-coverage members, for simplicity, although partial coverage improves the errors (p. 2). Random equal thirds, with a sealed test set (p. 2). 1,523 variables (p. 3). Five buckets of about $117M each (p. 4).",
+  "proof_devices": [
+   "n/a: no optimization model or proofs (pp. 1-11)",
+   "R-squared denominator broken down by bucket: 0.5% of members contribute 27.9% (16% after truncation at $100,000) (Table 4, p. 5)",
+   "a median-anchored absolute measure R, equal to zero for the median forecast (p. 5)",
+   "per-bucket relative reduction of the error sums (Tables 13-14, pp. 9-10)"
+  ],
+  "experiments": "Baseline (last 12 months' cost): hit ratio 80.0%, penalty 0.431, APE $2,677 (Table 6, p. 6). Trees: 84.6%, 0.386, $2,243; clustering: 84.3%, 0.374, $1,977 (Table 11, p. 9). Top bucket: the hit ratio rises from 19.3% to 36.9% (trees) and 42.7% (clustering), and APE falls by over 50% and over 58% (pp. 8-9). Cost-only models are as good for the low buckets (Table 12, p. 9). Cross-study comparison, as an indication only: APE of 78.8% and 89.4% of the mean vs 93% and 98%; R-squared of 0.162 and 0.180 vs 0.099-0.154 (p. 8). One random split, no confidence intervals.",
+  "positioning": "Argues against regression risk adjustment (Ash, Zhao, Cumming, Powers) and the R-squared habit (pp. 1-2). Notes the doubts about claims data (Jolins, Dans) (p. 1). The clustering comes from the co-authors' EigenCluster (Kannan et al.) (p. 6). The tree software is not named in the text, but the references list CRUISE binaries (p. 10).",
+  "writing": "Three findings, (a)-(c), up front (pp. 1-2). In-our-view statements on validation (p. 2). A hedged cross-study comparison (p. 8). Finding (c) is worded differently in the abstract, the introduction and the conclusion (pp. 1, 2, 10).",
+  "limits_future": "Contribution: an application and an evaluation methodology, not algorithms. Limits: comparisons across data sets are not fully valid (p. 8); the full-coverage restriction (p. 2). Future: reimbursement and insurance pricing, together with health economics and system design; patient intervention (p. 10).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "The owner-side naive rule (last year's cost) is the baseline, stronger than random. The measures are shaped by the intervention decision: under-forecasts are penalised twice, and the buckets map to wellness, disease-management and case-management programmes. Partner-company data. Nuance: predictions, not decisions, are scored, and prediction is framed as a first step. Related: interpretable trees preferred for patient contact (Taste mark 5, pp. 6, 8).",
+    "pages": "pp. 1, 4-6, 8"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "An out-of-sample protocol with a sealed test set and a strong naive incumbent, but no exact model, warm start or certificate (heuristic trees and clustering); the comparison with published studies is loose.",
+    "pages": "pp. 2, 5-8"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "The company comes before the paper: data and two co-authors come from D2Hawkeye, the reverse of Method 6's course, book, company order. The paper states no Bertsimas-D2Hawkeye tie; notes 03 and 06 record a board seat (2003-2009) and a co-founding claim.",
+    "pages": "pp. 1, 10"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "audit the field's headline metric before competing on it",
+    "evidence": "Breaks R-squared down by bucket to show outlier dominance; adds hit ratio, an asymmetric penalty, APE and a median-anchored R; reports every measure by baseline segment.",
+    "pages": "pp. 2, 4-5, 9-10"
+   }
+  ],
+  "transferable": [
+   "Use carry-forward of last period's value as the baseline: it beats random and is hard to beat in low-risk segments (pp. 5-6).",
+   "Make the bucket penalty table asymmetric, so that under-forecasts cost twice as much as over-forecasts, to match the intervention cost of misses (Table 3, p. 4).",
+   "Put a heavy-tailed outcome into buckets of equal total dollars, sized so that the top bucket keeps enough cases (p. 4).",
+   "Before reporting R-squared, break its denominator down by segment, and add a median-anchored absolute analogue (Table 4, p. 5).",
+   "Report every measure by baseline segment, not only overall (Tables 6, 11-14, pp. 6, 9-10).",
+   "Cluster on the cost trajectory first, then on medical data inside each cost cluster; encode the trajectory's shape (spike vs plateau) as one indicator (pp. 3, 6-8)."
+  ],
+  "coauthors": "Margrét V. Bjarnadóttir, Michael A. Kane, J. Christian Kryder and Rudra Pandey (D2Hawkeye), Santosh Vempala, Grant Wang",
+  "quotes": [
+   {
+    "text": "this baseline is much stronger than, for example, random assignment.",
+    "page": 5
+   },
+   {
+    "text": "Given that an important objective of cost prediction is medical intervention through patient contact, the models with interpretable medical details are preferred.",
+    "page": 8
+   }
+  ]
+ },
+ {
+  "id": "S109",
+  "year": "2008",
+  "title": "The air traffic flow management problem: An integer optimization approach",
+  "read_level": "full",
+  "contribution": "A 0-1 air traffic flow management model that adds rerouting to the Bertsimas-Stock time-indexed formulation without new variables, using local precedence conditions on a poset of sectors. Fork, joint and antichain valid inequalities strengthen it, and CPLEX solves synthetic regional (about 3,000 flights) and national (6,475 flights) instances to within 1%, except one national instance.",
+  "problem_entry": "{IO+AP} Delays cost billions, and en-route sector capacity, not only airports, needs a network model with rerouting (pp. 1-2). The authors' 1998 model is fast but has fixed routes; their 2000 rerouting model does not scale (p. 2). The goal is to combine the strengths of the two (p. 2).",
+  "key_idea": "Keep the cumulative by-variables w(f,j,t). Represent routes as maximal chains of an acyclic sector digraph, and impose one route per flight by local in/out conditions at forks and joints, adding constraints but no variables. Use super-linear tardiness costs for equity, and strengthen with fork, joint and antichain inequalities (pp. 3-8).",
+  "assumptions": "Deterministic per-period capacities for airports and sectors, minimum sector times, time windows and turnaround links (pp. 4-6); an acyclic route digraph (p. 3). Data: randomly generated grid-sector, hub-and-spoke instances with uniform demand and a moving weather front; route sets from shortest paths plus the neighbours of sectors above 80% capacity (pp. 8-9). No real data.",
+  "proof_devices": [
+   "cumulative by-variables: occupancy as a difference of two variables, monotonicity as a chain of inequalities (pp. 5-6)",
+   "poset encoding: routes as maximal chains, one route enforced by local conditions (pp. 3-4)",
+   "fork and joint inequalities proved by two-case arguments on constraints (4), (5) and (8) (Propositions 1-2, pp. 6-7)",
+   "antichain inequality as a consequence of the poset (Proposition 3, p. 7)",
+   "a condition that turns constraints (5) into equalities (Proposition 4, p. 8)",
+   "no facet proofs or complexity results"
+  ],
+  "experiments": "CPLEX 9.0 MIP through AMPL on a 4-processor 3 GHz AMD-Xeon with 8 GB RAM (p. 9); a 1% gap accepted; clique cuts on (p. 9). Regional: 20 airports, 113 sectors, 20 periods, about 3,000 flights, about 270,000 rows and 150,000 columns after preprocessing. Mean 241 s over the 41 feasible instances; one instance took over 10 minutes and was the only one that branched; 5 instances infeasible (pp. 9-11). National: 30 airports, 145 sectors, 6,475 flights, about 570,000 rows and 305,000 columns, a 3,600 s limit. The stated mean and median are 987 s and 710 s, but the ten listed times give 1,032 s and 773 s. At 50% capacity the gap is 1.05% at the limit, and 2.58% after 569 s with a 3% tolerance (pp. 11-12). Rerouting at 10% capacity: ground delay 949 -> 733, airborne 150 -> 126, 220 flights (3.4%) rerouted. The stated almost 30% and 19% are relative to the rerouted values; relative to the baseline they are 22.8% and 16.0% (p. 12).",
+  "positioning": "Credits Odoni 1987 as the first formalization (p. 1). Helme's model was weak computationally; Lindsay et al. are disaggregate (p. 2). Positions against the authors' own 1998 and 2000 models (p. 2) and against the 1994 model's slow-down near infeasibility (p. 11). Four of the ten references are the first author's (pp. 12-13).",
+  "writing": "The abstract promises less than 15 minutes at US scale and a main engine (p. 1), but the body shows national runs above 15 minutes (pp. 11-12). The outline promises future-research indications that Section 4 lacks (pp. 3, 12). Toy-digraph figures illustrate each inequality (pp. 7-8).",
+  "limits_future": "Contribution: a formulation, inequalities and computation (pp. 2, 12). There is no limits section. Visible limits: synthetic instances, deterministic capacities, and a comparator that is the model without rerouting, not current practice (pp. 8-12). No future work is stated (p. 12).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Rerouting is added inside the same 0-1 class with no new variables, and poset inequalities strengthen the LP relaxation: only one of the 41 feasible regional instances branched. The boundary is printed: infeasible cases and the 50%-capacity national instance. This matches the 2005 strong-formulation stance (the other side of Tension T4) and Taste mark 2.",
+    "pages": "pp. 2-8, 10-12"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Solver, machine, gap tolerance, time limit and per-instance gaps are reported, and the failure is printed. But there is no warm start and no duel with current ATFM practice; the comparator is the model without rerouting. Related: the abstract's under-15-minutes claim vs the national runs, and percentages divided by the improved values (Tension T6).",
+    "pages": "pp. 1, 9-12"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The owner is named (the ATFM Central Unit) and delay is the decision metric, but the instances are synthetic and the current rule is absent; readiness as the main engine rests on run times.",
+    "pages": "pp. 1, 8, 12"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "A 14-year ATFM programme with Odoni and successive co-authors (1994, 1998, 2000, 2008). The 2000 rerouting model that did not scale is retried with a new co-author (Heuristic 7).",
+    "pages": "pp. 1-2, 12-13"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "merge two of one's own predecessor models",
+    "evidence": "The stated goal is to combine the flexibility of the 2000 rerouting model with the polyhedral properties of the 1998 model.",
+    "pages": "p. 2"
+   },
+   {
+    "pattern": "local conditions on a poset instead of new variables",
+    "evidence": "Routes as maximal chains; one-route constraints at forks and joints; antichain inequalities.",
+    "pages": "pp. 3-8"
+   }
+  ],
+  "transferable": [
+   "Use time-indexed cumulative (by) binaries, so that occupancy is a difference of two variables and monotonicity a chain of inequalities (pp. 5-6).",
+   "Encode route choice by local conditions at the forks and joints of an acyclic digraph, and derive fork, joint and antichain inequalities from the poset (pp. 3-8).",
+   "Use a super-linear tardiness exponent 1 + epsilon in the objective to spread delay equitably (p. 5).",
+   "Generate route sets adaptively: the shortest route plus the neighbours of sectors above 80% of capacity (p. 9).",
+   "Tabulate time, gap, cuts by family and iterations per instance, keep infeasible instances in the table, and name the instances that branched (Tables 1-2, pp. 10-11).",
+   "Compute improvement percentages against the baseline value, not the improved one; S109 does the opposite (p. 12)."
+  ],
+  "coauthors": "Guglielmo Lulli (Milano-Bicocca), Amedeo Odoni (MIT)",
+  "quotes": [
+   {
+    "text": "We report short computational times (less than 15 minutes) on instances of the size of the US air traffic control system that make it realistic that our approach can be used as the main engine of managing air traffic in the US.",
+    "page": 1
+   },
+   {
+    "text": "With respect to previous models, the methodology we presented does not require any additional variables, but it only introduces new constraints.",
+    "page": 2
+   }
+  ]
+ }
+]

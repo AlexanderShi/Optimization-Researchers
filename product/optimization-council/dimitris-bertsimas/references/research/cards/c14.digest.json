@@ -1,0 +1,149 @@
+[
+ {
+  "id": "S114",
+  "year": "2012",
+  "title": "Equitable and efficient coordination in traffic flow management",
+  "read_level": "full",
+  "contribution": "Extends the industry's first-scheduled, first-served fairness standard to overlapping FAA traffic flow programs with a time-order deviation metric, and shows on 40 scenarios built from 2007 data that an exponential-penalty integer program (RBS-EP) solves national-scale instances in under 10 s of CPLEX time and cuts delay by 4.0-4.5% against exemption RBS at equal or better fairness.",
+  "problem_entry": "IO+AP. Overlapping ground delay and airspace flow programs give flights conflicting departure times; the FAA's two conflict-resolution heuristics (precedence and exemption RBS) can be inefficient and arbitrarily unfair; the paper seeks a model that reduces to RBS for one resource, yields a delay-fairness trade-off curve and beats current practice (pp. 1-5).",
+  "key_idea": "Generalize the accepted rule instead of replacing it: time-order deviation charges only the delay beyond the worst position-implied delay over a flight's controlled resources (pp. 6-8). RBS-EP, built on the Bertsimas-Patterson 1998 variables, adds no variables and puts fairness into exponential time-indexed objective coefficients beyond each flight's worst independent-RBS delay (pp. 9-11).",
+  "assumptions": "Deterministic multiresource ground-holding model with 5-minute intervals, controlled resources only, ground delay only, and no aircraft connectivity or intra-day program dynamics (explicit choices for consistency with practice, pp. 9, 12); delay window d_MAX^RBS + 15/30 min (p. 14). Data: the 23 April 2007 schedule from Flight Schedule Monitor overlaid with 10 days of 2007 GDP/AFP programs, historical (capacities -7.5%) and hypothetical (FCAs -25%) (p. 13).",
+  "proof_devices": [
+   "cumulative time-indexed binaries y_fit (step started by t), with capacity through y_fit - y_fi(t-p) (constraints (1)-(5), pp. 9-10)",
+   "ordered auxiliary variables u_rjt, linked to the flight variables by a count-equality constraint, which make the j-th start time at a resource linear (constraints (9)-(12), pp. 10-11)",
+   "nonconvex max replaced by an average over the bottleneck steps predicted a priori by independent RBS; this overstates TOD unless the prediction is right (eqs. (14)-(15), pp. 10-11)",
+   "fairness encoded only in time-indexed objective coefficients, exponential in the delay beyond d_MAX^RBS (eqs. (16)-(17), p. 11)",
+   "delay window around the incumbent's allocation, avoiding well over a million binaries (p. 14)",
+   "greedy rounding of the LP relaxation by relaxed first-step start times, for a root-node incumbent; CPLEX gap 0.01% (pp. 14, 18)",
+   "no theorems: metric properties and the zero-iff-RBS claim are argued in prose (p. 8)"
+  ],
+  "experiments": "40 instances (10 days x historical/hypothetical x precedence/exemption RBS). Baselines are the FAA's current rules, replayed in historical order; precedence RBS's capacity overruns are fed to the optimizer and the remaining tilt is admitted (pp. 12-13). TODA vs RBS-EP trade-off curves on 7/16/2007 (p. 14). Delay reductions 4.0-4.5% (historical) and 8.8-9.6% (hypothetical) against exemption RBS; 0.4-2.5% and 5.3-6.4% against precedence RBS (Tables 11-14 decoded, p. 17). A heavy delay tail at base 1.001 is reported and fixed with 2.001 (p. 17). Under 10 s of CPLEX 11.2 per instance, gap 0.01%, dual Xeon 3220 (p. 18). $25-50M a year by an attribution chain computed against exemption RBS (pp. 16-18).",
+  "positioning": "Continues his own air-traffic models (Vranas-Bertsimas-Odoni 1994; Bertsimas-Patterson 1998; Bertsimas-Lulli-Odoni 2011) and the price-of-fairness theory (2011). Generalizes Vossen et al.'s exemption-bias measure. Diagnoses the network school, his own work included, as lacking traction on equity and tractability ('Arguably'). Credits RBS before showing its failures (pp. 4-7).",
+  "writing": "A dollar figure ends the abstract (p. 1); numbered contributions and design requirements come before the models (pp. 4-5); a small worked example for every concept (pp. 3, 7-8); moderate hedging; weaknesses stated in the body (tilt p. 12, intractable TODA p. 14, tail p. 17); no theorems. Headline vs caveat (Tension T6): the dollar estimate uses the exemption-RBS baseline (p. 16).",
+  "limits_future": "Open questions: aircraft connectivity and intra-day program dynamics (p. 12). TODA is intractable at scale, and RBS-EP cannot reach the low-unfairness end (p. 14); heavy tail at a low base (p. 17); the savings rest on an attribution chain (pp. 17-18). Framed as the first step in a sequence of practical enhancements for the FAA; no deployment reported (pp. 18-19).",
+  "method_links": [
+   {"method": "Method 5", "relation": "evidence", "note": "The FAA is the owner. Its current rules (precedence and exemption RBS in Flight Schedule Monitor) are the baselines, replayed in historical order with the owner's data. The metrics score decisions (total delay, unfair delay, dollars). The paper reports its own costs and negative results in the body (tail, run time, tilt; Heuristic 4). No field test.", "pages": "pp. 2-3, 12-18"},
+   {"method": "Method 3", "relation": "evidence", "note": "Fairness is defined from the stakeholders' FSFS standard and gets one knob (the exponential base; the TODA weight), trade-off curves and a printed bad case (heavy tail; low-unfairness end unreachable). Consistent with the 2011 price-of-fairness bound.", "pages": "pp. 14-17"},
+   {"method": "Method 3", "relation": "variant", "note": "No solution-independent bound in this paper. The knob is a penalty base, and the reported operating point is chosen to match the incumbent's fairness (RBS-EP Fair, 30).", "pages": "pp. 4, 15"},
+   {"method": "Method 1", "relation": "evidence", "note": "Class-keeping device: RBS-EP adds no new variables or constraints, and fairness enters only the objective coefficients of the nominal time-indexed model. TODA linearizes an order statistic with ordered auxiliary variables. No dual reading.", "pages": "pp. 9-11"},
+   {"method": "Method 4", "relation": "variant", "note": "The incumbent RBS allocation bounds each flight's delay window, and LP rounding gives a root-node incumbent. The 0.01% gap refers to the restricted problem, whose suboptimality is acknowledged. The duel with the incumbent is held at levelled capacity, which contradicts the Roundtable Card's 'fair benchmarking' blind spot.", "pages": "pp. 12, 14, 18"},
+   {"method": "Method 6", "relation": "evidence", "note": "Programme lineage in air traffic flow management (1994 -> 1998 -> 2011 -> this paper), with Odoni thanked as advisor; step 3 (thesis lineage with co-advisers from a close network).", "pages": "pp. 4, 19"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "adoption-compatible design", "evidence": "Keep the incumbent's inputs, output format (slot assignments for CDM stage 1) and accepted FSFS standard; require reduction to RBS in the single-resource case; omit connectivity constraints to stay consistent with practice.", "pages": "pp. 4-5, 11-12"},
+   {"pattern": "dominate the incumbent at its own fairness level, then price the relaxation", "evidence": "RBS-EP (Fair, 30) picks the smallest penalty base at least as fair as the incumbent RBS schedule and reports the delay saved; the trade-off curve then shows what further fairness or delay costs.", "pages": "pp. 14-17"},
+   {"pattern": "level the field and say which way it still tilts", "evidence": "Precedence RBS's capacity overruns are given to the optimizer as raised capacities, and the authors state that the comparison is still tilted toward precedence RBS.", "pages": "p. 12"},
+   {"pattern": "axioms, then metric", "evidence": "Five properties derived from why RBS is accepted, then a time-order deviation metric that satisfies them and is zero exactly on RBS allocations for independent resources.", "pages": "pp. 6-8"}
+  ],
+  "transferable": [
+   "[D2] When stakeholders already accept a fairness rule, write down why they accept it as properties; then build a metric that satisfies them, extends to the harder setting and is zero exactly on the accepted rule in the simple case (pp. 6-8).",
+   "[D4] To use the time of the j-th event at resource r in a time-indexed integer program, add cumulative ordered indicators u_rjt linked to the entity-indexed indicators by one count-equality constraint per resource and period (constraints (9)-(12), pp. 10-11).",
+   "[D4] Replace a nonconvex max over components by an average over the components a cheap heuristic predicts to be maximal; the approximation overstates the metric unless the prediction is right (pp. 10-11).",
+   "[D4] In time-indexed scheduling models, encode a fairness or priority preference purely in the objective coefficients of start times (exponential beyond a fair threshold), so the model keeps its size and speed (p. 11).",
+   "[D4] Bound each variable's domain around the incumbent's allocation (d_MAX^RBS + 15 or 30 minutes), keeping the binaries from exceeding a million (p. 14).",
+   "[D4] When a decision is due within a minute, round the LP relaxation greedily by relaxed start times so that a feasible solution exists right after the root node (p. 14).",
+   "[D5] When the incumbent violates constraints, feed its violations to your method as relaxed capacities, and say which way the field still tilts (p. 12).",
+   "[D5] Report two operating points: the smallest knob value at least as fair as the incumbent, and a fixed near-efficient value. Then show the tail of the distribution and how the knob fixes it (pp. 15-17).",
+   "[D5] Turn delay reductions into money through an explicit attribution chain, and list how it underestimates (pp. 17-18)."
+  ],
+  "coauthors": "Cynthia Barnhart, Constantine Caramanis, Douglas Fearing",
+  "quotes": [
+   {"text": "That is, we hope that our work allows future TFM research, including our own, to build upon a foundation that has a high likelihood of being accepted in practice.", "page": 5},
+   {"text": "One of the nice properties of discrete scheduling models is that we can associate different objective coefficients with each possible start time for a task.", "page": 11}
+  ]
+ },
+ {
+  "id": "S044",
+  "year": "2013",
+  "title": "Fairness, efficiency, and flexibility in organ allocation for kidney transplantation",
+  "read_level": "full",
+  "contribution": "Designs point-system kidney allocation rules by solving a hindsight LP with linear fairness constraints, pricing those constraints by their duals and regressing the dual-adjusted values on the chosen criteria. In the policymakers' own simulator the designed rule keeps the form, criteria and (approximately) the fairness profile of the 2008 KTC proposal while raising life-years from transplant by 8.2% out of sample (read from the 2011 preprint).",
+  "problem_entry": "DA+AP (LO as engine). The US kidney allocation policy redesign: the KTC chose criteria and tried more than 28 scoring rules by simulation, at hours per rule. The paper takes the 'implementation' challenge: can a scoring rule of the same simple format be equally fair and more efficient than the 2008 proposal? (preprint pp. 2-11)",
+  "key_idea": "Hindsight LP (maximize total LYFT subject to matching and linear fairness constraints) -> the fairness duals act as bid prices and turn it into a matching problem with adjusted values -> a least-squares fit of those values on the score components gives an online, interpretable point system (preprint pp. 14-15). Near-optimality is argued by analogy with Talluri-van Ryzin bid prices (pp. 15-16).",
+  "assumptions": "Design LP: complete ex post information on patients and organs, linear fairness constraints, planner foresight, acceptance of all offers (preprint pp. 12-14). Evaluation: SRTR's KPSAM simulator with an exogenous historical acceptance model and SRTR survival models (pp. 5, 18-19). SRTR 2008 data, first half for design and second half for evaluation. Components: LYFT, piecewise-linear dialysis time and CPRA (DPI superfluous). Lower bounds at the KTC's simulated recipient shares by race, age, dialysis time, blood type, diagnosis, CPRA and 11 regions (pp. 19-20).",
+  "proof_devices": [
+   "hindsight bipartite-matching LP with linear fairness side constraints Ax <= b (problem (1), preprint p. 14)",
+   "LP duality: the fairness duals act as bid prices and reduce (1) to a matching problem with values c = LYFT - (y^T A) (problem (2), preprint p. 14)",
+   "ordinary least-squares projection of the dual-adjusted values onto interpretable score components (Procedure 1, preprint p. 15)",
+   "asymptotic optimality argued by analogy with Talluri-van Ryzin bid-price controls, not proved (preprint pp. 15-16, footnote 4)"
+  ],
+  "experiments": "Benchmark: the KTC's 2008 proposal, simulated in KPSAM with SRTR data and models. Out-of-sample half-year: transplants 5,746 vs 5,796; net LYFT 34,290 vs 37,092 (+8.2%). Recipient shares are called almost identical, though some groups fall below the KTC shares used as lower bounds (African-American 35.7% -> 33.3%); the LYFT gap by dialysis time narrows. A uniform slack s on the dialysis-time or CPRA constraints raises LYFT to about 44,300 years (+30%), with the KTC point marked (preprint pp. 21-27). Run times, regression fit and simulation replications not reported.",
+  "positioning": "Earlier organ-allocation OR (Ruth et al.; Righter; David-Yechiali; the fluid model of Zenios et al.; Su-Zenios) designs policies from the ground up; this paper stays inside the precise constraints of current practice and needs no grouping of patients. The KTC proposal is the client's benchmark, not a target. Bid-price lineage from Talluri-van Ryzin 1998 (preprint pp. 5-6, 10, 15-16).",
+  "writing": "Headline 8% and 30% in the abstract and the numbered contributions; 'Critically' twice; about seven pages of legal and policy context before the method; a black-box schematic (Fig. 1); the far end of the curve qualified as possibly not implementable; a 'Discussion and Future Directions' section with no future direction; no theorems (preprint pp. 1-28). Tension T6: fairness called almost identical while Table 1 shows shortfalls of up to 2.4 points.",
+  "limits_future": "Near-optimality by analogy only; fairness only approximately satisfied, with some group shares dropping out of sample; exogenous acceptance; one year of data; no field test; no future directions stated (preprint pp. 11, 16, 22, 28). The published 2013 version (not read) adds case studies remedying criticisms of the KTC proposal (abstract).",
+  "method_links": [
+   {"method": "Method 5", "relation": "evidence", "note": "The owner is the OPTN/UNOS Kidney Transplantation Committee and the current rule its 2008 proposal. Scoring uses the owner's simulator (KPSAM), survival models and SRTR data on a held-out half-year, with decision metrics (life-years, transplants, recipient shares). No field test.", "pages": "preprint pp. 5, 18-22"},
+   {"method": "Method 3", "relation": "evidence", "note": "The price of fairness as a curve over one knob (a uniform slack s on one family of fairness constraints); the incumbent's operating point is marked and the far end flagged as possibly not implementable.", "pages": "preprint pp. 24-27"},
+   {"method": "Method 3", "relation": "variant", "note": "No solution-independent bound in this paper; the theory is left to the 2011 price-of-fairness paper.", "pages": "preprint pp. 24-25"},
+   {"method": "Method 1", "relation": "evidence", "note": "Step 4, read structure off the dual: the fairness duals become per-pair bid prices that reduce the hindsight LP to a matching problem.", "pages": "preprint pp. 14-16"},
+   {"method": "Method 1", "relation": "variant", "note": "The LP is a hindsight relaxation used to design an online, interpretable rule, not an exact class-keeping reformulation; near-optimality only by analogy.", "pages": "preprint pp. 14-16"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "adoption-compatible design", "evidence": "Policies of the same form as the one in use, with the same criteria, and a mechanism that can fit directly in the policymakers' decision process; evaluated with their own simulator.", "pages": "preprint pp. 1, 6, 18-19"},
+   {"pattern": "dominate the incumbent at its own fairness level, then price the relaxation", "evidence": "The KTC policy's simulated recipient shares become lower-bound constraints; the efficiency gain at that fairness level is reported, then the constraints are relaxed by a slack s to trace the curve.", "pages": "preprint pp. 10, 19-27"},
+   {"pattern": "dual-priced hindsight LP projected onto an interpretable rule", "evidence": "Solve the clairvoyant LP, price its side constraints by their duals, and regress the adjusted values on interpretable features to get an online scoring rule.", "pages": "preprint pp. 14-16"}
+  ],
+  "transferable": [
+   "[D2/D4] Design an online scoring rule by solving the hindsight LP, taking the duals of its side constraints, computing the adjusted per-pair values and fitting them by least squares on the interpretable features (preprint pp. 14-15).",
+   "[D3] Write fairness as linear constraints on the assignment variables (group shares, averages among recipients) so that duality can price any of them (preprint p. 13).",
+   "[D5] Constrain the new policy to the incumbent's simulated fairness profile, then compare efficiency on a held-out period with the policymakers' own simulator and data (preprint pp. 19-22).",
+   "[D5] Price fairness by relaxing one family of constraints at a time with a uniform slack, and plot the incumbent's operating point on the curve (preprint pp. 24-27).",
+   "[D5] Report side effects on a fairness notion that is not among the constraints, here the LYFT gap between recipients by dialysis time (preprint p. 24).",
+   "[D8] Present the method as a redesign tool: when criteria change, only the inputs change (preprint p. 17)."
+  ],
+  "coauthors": "Vivek F. Farias, Nikolaos Trichakis",
+  "quotes": [
+   {"text": "In our work, we restrict our attention to policies that comply with the precise constraints imposed by current practice.", "page": 6},
+   {"text": "Note that although such a policy might not be implementable, the analysis can provide insights to policymakers and facilitate their decision process.", "page": 25}
+  ]
+ },
+ {
+  "id": "S340",
+  "year": "2014",
+  "title": "A comparison of Monte Carlo tree search and mathematical optimization for large scale dynamic resource allocation",
+  "read_level": "full",
+  "contribution": "Adapts Monte Carlo tree search (double progressive widening, GA-style action generation, a Floyd-Warshall rollout) and a re-solved deterministic fluid MIO to a wildfire-inspired dynamic resource allocation MDP. At matched single-threaded per-decision budgets the two are comparable on small instances, while mathematical optimization pulls ahead as state and action spaces grow.",
+  "problem_entry": "SD+HS+IO (AP as testbed). AI's MCTS and OR's re-optimization both succeed on dynamic stochastic problems, but their relative merits on large DRAs are not understood. MCTS's successes are in games with small branching (at most 81), while the DRA here branches about 230 million ways; tactical wildfire management is the testbed (pp. 1-4).",
+  "key_idea": "Give each school's flagship method its best adaptation on one MDP and compare under fixed budgets. MCTS: double progressive widening, action generation by mutating and recombining tree actions, and a Floyd-Warshall rollout. MO: a deterministic, smoothed fluid MIO of fire intensity and fuel, re-solved each step (model predictive control) (pp. 6-14).",
+  "assumptions": "Grid MDP with burning flags and fuel, stochastic ignition and suppression, reignition allowed, identical resources and zero travel time, deliberately simplified (pp. 5-6); MO calibrated with big-M bounds from a no-suppression recursion and delta = 0.1 (pp. 14-15); synthetic Grid 1 and Grid 2 instances only, no real fire data (pp. 17-19).",
+  "proof_devices": [
+   "deterministic fluid smoothing of the stochastic MDP into a mixed-integer linear program with binary fuel switches and big-M intensity terms ((5a)-(5j), pp. 13-14)",
+   "model predictive control: re-solve every period and apply only the first allocation (p. 11)",
+   "LP-relaxation index policy v(x) = sum_i A_0(x,i) for tight budgets (p. 14)",
+   "branching-factor estimate via Stirling's approximation (eq. (6), p. 26)",
+   "MCTS with double progressive widening, a UCB bonus and GA-style action generation (Algorithms 1-2, pp. 7-10)",
+   "additive-effects models with backward stepwise deletion, and ANOVA, for the factorial experiments (pp. 20, 23, 27, 31)",
+   "no theorems; no bound for either method"
+  ],
+  "experiments": "Custom C++ MCTS vs a Gurobi 5.0 MIO; 2.2 GHz, single-threaded; 60 s per decision for both (MCTS also 90 and 120 s); 256 simulations per configuration; random and Floyd-Warshall straw men (p. 16). MCTS hyperparameter study (pp. 19-22). State-space scaling k = 8-30: MO +2.22/+3.80 vs MCTS +0.83-0.87/+2.74-3.03 points over FW (Table 5, p. 25). Action branching, 2-32 teams: no significant MO-MCTS difference at k = 10; at k = 20, MCTS below FW with 16 and 32 teams (pp. 27-28). Horizon and asymmetric rewards: MO's edge largest for flat local rewards; the horizon effect is significant only for MCTS (pp. 29, 32). MO time overruns, 'typically not solved to optimality', are reported (p. 23). Effects models have low R2 (0.06-0.47), not discussed.",
+  "positioning": "Between AI (Coulom, Kocsis-Szepesvari, Browne et al., Couetoux et al.) and OR (certainty-equivalent control, fluid approximations, MPC, robust control, chance constraints). Credits MCTS generously before questioning its transfer; claims the first MCTS application to a real-world-motivated DRA; cites his own fluid-model, RO, DRA-framework and air-traffic papers (pp. 2-4, 33).",
+  "writing": "Neutral comparative framing; opinions flagged ('In our opinion', 'we think it is fair to say'); main insights listed before the experiments; each plot claim backed by a fitted effects model with p-values; the conclusion claims three broad methodological contributions; the roadmap promises future directions that section 6 barely gives; internal slips (Grid 2's valuable side stated both ways, typos) (pp. 1-2, 5, 15-31).",
+  "limits_future": "Simplified MDP (identical resources, no travel time), synthetic grids only, no performance bounds, MO time overruns, hyperparameters tuned on one setting, parallelism unexplored; unclear whether section 5 used the MIO or its LP-relaxation index. Future work is only the conjecture that MO's edge tracks the action branching factor (pp. 5, 14, 16, 19-23, 31).",
+  "method_links": [
+   {"method": "Method 1", "relation": "variant", "note": "An MDP owned by the DP and AI traditions is written as an MIO, but as a deterministic fluid approximation, not an exact model; no dual reading or bound; justified by computation.", "pages": "pp. 11-14, 31"},
+   {"method": "Method 2", "relation": "variant", "note": "Practical MIO tractability is asserted against the lack of polynomial-time solvability without a solver x hardware figure, then measured per decision with the over-limit upper tail shown.", "pages": "pp. 14, 20, 23, 26-27"},
+   {"method": "Method 4", "relation": "variant", "note": "The duel is against a rival school's method (MCTS), not the incumbent heuristic; no warm start; no gaps or certificates reported.", "pages": "pp. 16-31"},
+   {"method": "Method 4", "relation": "contradiction", "note": "SKILL.md labels 'equal budgets and threads' as critic-informed, not his practice. Here both methods run single-threaded with the same 60 s per decision, and the rival also gets 90 s and 120 s.", "pages": "pp. 16, 23, 25"},
+   {"method": "Method 5", "relation": "variant", "note": "No owner, no current rule and no real data: the application only inspired a synthetic benchmark, and the straw men are self-built (Taste mark 6 not met). Heuristic 4 evidenced: the null result at k = 10, MO's time overruns and MCTS below FW are printed in the body.", "pages": "pp. 1, 3, 16, 23, 27-28"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "level the field and say which way it still tilts", "evidence": "The same single-threaded 60 s per decision for both methods; MO's uncappable time shown as a distribution, and MCTS also given 90 s and 120 s.", "pages": "pp. 16, 23, 26-27"},
+   {"pattern": "smooth, then re-solve", "evidence": "A deterministic, continuous-rate MIO approximation of a stochastic discrete MDP, re-solved each period, beats a tuned MCTS on large instances despite departing from the true dynamics.", "pages": "pp. 11-14, 31"},
+   {"pattern": "cross-community bake-off", "evidence": "Adapt and tune the rival community's flagship method (MCTS with progressive widening, new action generation, strong rollout) and compare it with the OR method on one benchmark at matched budgets, with fitted effects models.", "pages": "pp. 1-5, 16-31"}
+  ],
+  "transferable": [
+   "[D2] In huge action spaces, generate MCTS candidate actions by mutating and recombining good actions already in the tree (tournament selection on Q), together with double progressive widening (pp. 7-10).",
+   "[D2] Build a cheap but strong rollout or baseline policy from shortest-path-weighted rewards W(x) = sum_y R(y)/D(x,y), computed offline with Floyd-Warshall (pp. 10-11).",
+   "[D4] Smooth a discrete stochastic MDP into a deterministic, continuous-rate MIO; re-solve it every period and apply only the first decision (pp. 11-14).",
+   "[D4] When the MIO is too slow, relax the assignment binaries and allocate by the index v(x) = sum_i A_0(x,i) (p. 14).",
+   "[D5] Compare methods from different communities at the same wall-clock budget, single-threaded; when one method's time cannot be capped, plot its time distribution and give the rival more time as well (pp. 16, 23, 26-27).",
+   "[D5] Analyse factorial algorithm experiments with additive-effects models (backward stepwise deletion from second-order interactions), reporting coefficients and p-values against a named baseline configuration (pp. 20-22, 25, 28, 32).",
+   "[D5] Report improvements against two straw men, a naive random policy and a tailored heuristic (p. 16)."
+  ],
+  "coauthors": "J. Daniel Griffith, Vishal Gupta, Mykel J. Kochenderfer, Velibor V. Mišić, Robert Moss",
+  "quotes": [
+   {"text": "Although mixed linear optimization is not solvable in polynomial time, there exist high-quality open-source and commercial solvers which are able to solve such problems extremely efficiently in practice, even for very large instances.", "page": 14},
+   {"text": "Our results indicate that such approximations, in spite of how much they depart from the true dynamics, can lead to effective heuristics for large scale stochastic control problems.", "page": 31}
+  ]
+ }
+]

@@ -1,0 +1,190 @@
+[
+ {
+  "id": "S456",
+  "year": "2025",
+  "title": "Should We Relax Stability in Matching Markets?",
+  "read_level": "full",
+  "contribution": "Prices the relaxation of stability in many-to-one matching. An inverse LP recovers a cost vector that makes the Deferred-Acceptance solution optimal; a multi-objective assignment IP then trades blocking pairs for travel, students matched or couples placed together. On a simulated Boston Public Schools match (16,255 students), 0.7% and 3% blocking pairs buy 5% and 10% less travel. The paper adds an exact-MIO comparison on 200 students and an appendix tail bound whose assumptions are strong (arXiv v1 read).",
+  "problem_entry": "{IO LO AP} DA guarantees stability but optimizes nothing else and, by the Rural Hospitals Theorem, fixes who is matched. BPS travel cost, unmatched students and couples in residency matches motivate treating stability as a soft constraint, posed as the title's question. The predecessor thesis's exact MIO does not scale once stability is relaxed (pp. 1-4).",
+  "key_idea": "Run DA; recover by inverse LP (dual feasibility, complementary slackness, strong duality, normalization) a cost vector b* that makes DA's solution optimal; then solve an assignment IP with b*, rank-share preference rewards and a travel, match-count or couples target. This replaces about 300,000 binaries and 100 million constraints with a learned cost that 'implicitly optimizes for stability' (Algorithm 1, pp. 1, 6-10).",
+  "assumptions": "Synthetic preferences on BPS 2017 Transportation Challenge data (92 schools, 16,255 students, 95,076 admissible pairs; utilities mix distance, school quality and noise; distance enters with a positive sign as printed) and a synthetic residency match with 1,000 couples. Partners share acceptable sets 'for tractability'. The theorem assumes sub-Gaussian inverse error, said to weaken as B grows, and Lipschitz optimal assignments (pp. 8, 10-11, 15, 18-19).",
+  "proof_devices": [
+   "Exact MIO for at most B blocking pairs via indicator logic for unmatched, under capacity, applicant unhappy and program unhappy (constraints 1-8, pp. 5-6)",
+   "Inverse optimization from LP duality, with normalization sum b = 1 and a regularizer toward an initial cost vector to avoid trivial solutions (eqs. 14-18, p. 7)",
+   "Rank-share preference rewards |P<(i,j)|/|P(i)| in [0,1) steering deviations from the stable solution (p. 8)",
+   "Product linearization for couples placed together (eqs. 26-29, p. 9)",
+   "Lemma 1: l1-Lipschitz bound on the number of blocking pairs, constant (p_max + 2C_max)/2, by counting the effect of one reassignment (pp. 18-19)",
+   "Theorem 1: exponential tail bound on excess blocking pairs via sub-Gaussian norm concentration and a Lipschitz chain (pp. 19-20). Reader's note: Assumption 2 asks a map into the finite set of 0-1 assignments to be Lipschitz on R^|S|, which forces it to be constant, so it cannot hold as stated (p. 19)."
+  ],
+  "experiments": "BPS: DA matches 15,466 of 16,255. With matches fixed, 0.7% and 3% blocking pairs (of 95,076 admissible pairs) buy 5% and 10% less travel; with travel fixed, 100 and 200 more students matched cost 1.8% and 3.6%. Across 15 preference regimes, 5% blocking pairs give 3-20% less travel, worst when students rank by distance. On 200 students and 7 schools the exact MIO is better by at most 1 point, but at scale it finds no feasible solution in hours. Residency: couples placed together rise from 549 of 1,000 under DA to about 600 (5%) and 670 (10%). No solver, hardware, time limits, code or variance is reported (pp. 11-17).",
+  "positioning": "Against DA's 'almost religious devotion to stability' (Roth; Abdulkadiroglu et al.). Credits the stable admissions polytope and stability-preserving optimization (Baiou-Balinski, Delorme et al., Ashlagi-Shi, Shi, Bodoh-Creed) and the predecessor thesis (Papalexopoulos 2022); cites the couples literature, including the NP-hardness of minimizing blocking pairs (Manlove et al. 2017), and inverse optimization (Ahuja-Orlin; Chan et al.). Incentives and strategy-proofness are not discussed (pp. 2-3, 7, 21).",
+  "writing": "Question title answered in the last line ('not only viable, but in many contexts, desirable'); 'almost religious devotion'; bold-labelled contributions. The headline 'up to more than 20%' 'with as low as 5%' is the best of 15 variants, while the base case is 5% at 0.7% and 10% at 3%, and the percentages are of admissible pairs, not students. The 'Admittedly' concession sits in the body. v1 typos in constraints and domains (pp. 2-5, 8-9, 11, 13, 15, 17).",
+  "limits_future": "Stated: the exact method is better on small instances; Assumption 1 weakens as B grows; couples must share acceptable sets; data are synthetic. Not discussed: incentives, who bears the blocking pairs, adoption by districts or match operators. No future-work section; other objectives 'can also be easily incorporated' (pp. 4, 8, 15, 17-18).",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "The incumbent's axiom is priced: a curve of blocking pairs against travel, students matched and couples together, with the bad case printed and explained (3% gains when students rank by distance) and the choice handed to policy-makers.", "pages": "pp. 3-4, 11-13, 15-16"},
+   {"method": "Method 3", "relation": "variant", "note": "The decision-maker's knob B is not set directly; the curve is traced through T and a grid search on lambda. The bound covers the heuristic's excess over the exact curve, not knob against property, and rests on an assumption that cannot hold as stated.", "pages": "pp. 11, 18-19"},
+   {"method": "Method 1", "relation": "evidence", "note": "The exact blocking-pair MIO is written and sized; structure is read off the LP dual; the boundary is shown (at scale the exact model finds no feasible solution in hours).", "pages": "pp. 5-7, 15"},
+   {"method": "Method 1", "relation": "variant", "note": "The class is kept by giving up exactness: the dual yields a surrogate cost that encodes stability only implicitly, and an extra assumption is made 'for tractability'.", "pages": "pp. 1, 6-8"},
+   {"method": "Method 4", "relation": "variant", "note": "DA, the incumbent, is both anchor and opponent, but no solver, time limit, certificate or gap is reported, and the exact model's failure 'in hours' is undocumented (Tension T1).", "pages": "pp. 10, 15"},
+   {"method": "Method 2", "relation": "variant", "note": "No why-now figure. Intractability is inherited from a 2022 thesis by size count and an undocumented run, and answered with a surrogate rather than a re-measurement with current solvers (Taste warning sign 8).", "pages": "pp. 4, 6, 15"},
+   {"method": "Method 5", "relation": "evidence", "note": "The baseline is the mechanism BPS and residency matches use; outcomes are decision metrics (travel, students matched, couples together, offer ranks); the trade-off is handed to policy-makers, in the direction of the skill's stakeholder correction.", "pages": "pp. 2-4, 11-17"},
+   {"method": "Method 5", "relation": "variant", "note": "Preferences are simulated, there is no owner involvement or field test, and incentives under the new mechanism are not examined.", "pages": "pp. 10, 15"},
+   {"method": "Method 6", "relation": "evidence", "note": "[inferred] A new ORC student carries a Boston Public Schools optimization line forward from the predecessor thesis's stated limit; compare Heuristic 7 (retry with the next student). Heuristic 3 also fits: an exact model stalled on size is replaced by a tailored heuristic, with the MIO kept for a small instance.", "pages": "pp. 1, 3-4, 6, 15, 18"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "own predecessor system's limit as the entry point", "evidence": "The predecessor thesis's exact MIO 'is challenging to scale ... when stability is relaxed'; this paper starts there. All four works of batch c33 share this entry (S457, S523, S524).", "pages": "pp. 3-4"},
+   {"pattern": "Size-count intractability verdict licensing a tailored heuristic", "evidence": "About 300,000 binaries and 100 million constraints at BPS scale (from the 2022 thesis) license the inverse method; the exact run is reported only as failing 'in hours', with no solver or hardware.", "pages": "pp. 4, 6, 15"},
+   {"pattern": "exact optimum on a small solvable instance as the certificate for a heuristic", "evidence": "Exact MIO and inverse method are compared on 200 students and 7 schools at matched travel reductions: the gap is at most 1 point of blocking pairs and shrinks above 10%.", "pages": "p. 15"},
+   {"pattern": "Inverse optimization of a rival's decisions", "evidence": "An inverse LP recovers the cost vector under which the incumbent mechanism's (DA's) stable output is optimal, and that cost is reused as the stability proxy in a multi-objective IP.", "pages": "pp. 6-8"}
+  ],
+  "transferable": [
+   "To relax a hard combinatorial property at scale, recover by inverse LP a cost vector that makes the incumbent's property-satisfying solution optimal (dual feasibility, complementary slackness, strong duality, normalization, a regularizer toward a non-trivial start); then optimize the new objectives with that cost as a proxy (eqs. 14-24, pp. 7-8).",
+   "Reward deviations by rank shares |P<(i,j)|/|P(i)| in [0,1), so that moves away from the stable solution go up both sides' preference lists (p. 8).",
+   "Show a policy trade-off three ways: a curve at fixed volume, a curve that varies the volume at fixed cost, and the offer-rank distribution (pp. 11-13, 17).",
+   "Stress the trade-off curve across preference regimes (5 x 3 homogeneous problems), explain the worst regime, and swap the starting solution to show the result does not depend on the anchor (pp. 13-14).",
+   "Benchmark the heuristic against the exact MIO on a sub-instance small enough to solve, at matched values of the other objective (p. 15).",
+   "Count how many violated pairs one reassignment can change to get an l1 Lipschitz constant for a combinatorial metric (Lemma 1, pp. 18-19)."
+  ],
+  "coauthors": "Carol Gao (Operations Research Center, MIT); Theodore Papalexopoulos and Felipe Cordera thanked",
+  "quotes": [
+   {"text": "However, the literature is characterized by an almost religious devotion to stability.", "page": 2},
+   {"text": "Admittedly, the exact method is able to achieve a smaller percentage of blocking pairs for the same amount of travel reduction.", "page": 15}
+  ]
+ },
+ {
+  "id": "S457",
+  "year": "2025",
+  "title": "Multimodal prescriptive deep learning",
+  "read_level": "full",
+  "contribution": "Introduces Prescriptive Neural Networks: feedforward networks trained on a softmax relaxation of the policy-tree reward objective over counterfactual reward matrices. They handle multimodal (tabular plus clinical-note) data and all four treatment scenarios, beat or match Regress & Compare, Causal Forests and Optimal Policy Trees on estimated outcomes across six real datasets, and are distilled into Mirrored OCTs at an average cost of 1.38 points, almost all of it on one dataset (arXiv v1 read).",
+  "problem_entry": "{DA ML AP} ML and DL target prediction while DL has 'underutilized potential' for decisions. From observational (x, y, t) data, learn a policy for binary, discrete or continuous treatments with structured and unstructured inputs. Gaps claimed: Regress & Compare (including the group's 2020 extension) lacks neural networks; the group's prescriptive and policy trees are limited to shallow functions; no prescriptive method handles multimodal data (pp. 1-4).",
+  "key_idea": "Embed each modality (Clinical Longformer notes reduced by PCA to 32-d, concatenated with tabular features); estimate a counterfactual reward matrix by the direct or doubly robust method; train a network with a softmax over treatments to minimize the probability-weighted reward, a softened form of the Optimal Policy Trees objective; distil the prescriptions into Mirrored OCTs (pp. 4-8).",
+  "assumptions": "Six real datasets: TAVR 2,127, liver trauma 722, Boston Medical Center diabetes 58,200, groceries 97,295 transactions, spleen 35,954, REBOA 9,998. Doubly robust rewards except groceries (direct method, because price 'does not seem' correlated with covariates). A 50/50 split so the test half has its own estimator. Gains are estimated outcomes. Provenance and ethics approvals of four clinical datasets are not stated (pp. 6, 8-12).",
+  "proof_devices": [
+   "No theorems (n/a for proofs)",
+   "Doubly robust reward matrix with propensity re-weighting (eq. 1, p. 6)",
+   "Softmax relaxation of the indicator objective so that backpropagation applies (eqs. 2-4, pp. 6-7)",
+   "Knowledge distillation of the network's prescriptions into Optimal Classification Trees (p. 7)",
+   "Evaluation metrics: relative outcome improvement against the historical treatment (eq. 5, pp. 9-10; as extracted it uses an absolute value inconsistent with the negative values of Table 4, p. 13), realism by mean absolute treatment difference (eqs. 6-7, pp. 13-14), treatment-space coverage (eq. 8, pp. 14-15), per-sample prescription standard deviation over 25 models (pp. 15-16)"
+  ],
+  "experiments": "5 splits x 5 models per method (p. 9). Multimodal beats tabular-only PNNs: TAVR 32.15 vs 20.50 and liver 40.30 vs 25.32 under the tabular-and-notes estimator, 8.66 vs 3.41 and 32.50 vs 16.34 under the tabular one, with large SDs (Table 1, p. 11). On tabular sets PNN is best on diabetes (4.01), groceries (110.88) and spleen (20.47) and second to Optimal Policy Trees on REBOA (10.22 vs 10.79) (Table 4, p. 13). PNN is the least realistic and least stable on groceries and covers 16.62% of diabetes treatments (Tables 5-9, pp. 14-16). No run times, network sizes, software or significance tests.",
+  "positioning": "Builds on and criticizes the group's own line: Bertsimas-Kallus 2020 Regress & Compare without neural networks; Optimal Prescriptive and Policy Trees limited to shallow functions. Also cites personalization trees, causal trees and forests, causal boosting and MARS, Zhou-Athey-Wager offline policy learning, Patil et al. 2024 (whose models are also called 'PNNs', a clash not addressed), Sun-Tsiourvas 2023 and JANOS (pp. 2-3, 19).",
+  "writing": "Priority claimed 'to the best of our knowledge' three times; 'remarkably'; 'significantly' without tests. The abstract's 32% and 'over 40%' are the multimodal model under the multimodal estimator, labelled 'estimated'. Candid about an unexpected favourable result. Separate sections on realism, stability and interpretability. Draft traces: 'Force Appendix above figures' five times, and a reference that carries the cited paper's abstract (pp. 1, 4, 10-14, 17, 19, 21).",
+  "limits_future": "Admitted in passing: Mirrored OCTs cannot fully capture the PNNs, note embeddings are not interpretable, and results depend on the estimator's modality. Not discussed: the bias of evaluating on estimated counterfactuals, any prospective or field evaluation, data provenance. Proposed controls (switch thresholds or penalties, dropout, probability thresholds) are not tested; no future-work section (pp. 10, 14-17).",
+  "method_links": [
+   {"method": "Method 5", "relation": "evidence", "note": "Prescription, not prediction, is the target; prescriptions are scored against the treatment actually given, and realism is measured as distance from current practice.", "pages": "pp. 1, 9, 13-14"},
+   {"method": "Method 5", "relation": "variant", "note": "Gains are model-estimated outcomes on the test half, not observed or field-tested; the owner's current rule (Method 5's baseline) is only the observed historical treatment, and no partner or decision owner is named.", "pages": "pp. 8-10, 12"},
+   {"method": "Method 4", "relation": "variant", "note": "The duel with incumbents (Regress & Compare, Causal Forest, Optimal Policy Trees) on shared splits is kept, but the exact solve is dropped: the policy objective is relaxed and trained by Adam, with no certificate, timing or implementation details. The group's own optimal trees become the capacity-limited baseline (Tension T2).", "pages": "pp. 3, 6-7, 9, 11, 13"},
+   {"method": "Method 3", "relation": "variant", "note": "A price of interpretability is reported as one averaged number (1.38 points) at fixed tree depth 7, not as a curve over a knob; the bad case (spleen 20.47 to 15.72) is in the table but not discussed.", "pages": "pp. 4, 13, 21"},
+   {"method": "Method 1", "relation": "variant", "note": "The exact policy objective is written first, then relaxed to stay in the trainer's class (differentiable losses); the relaxation gap is not examined.", "pages": "pp. 6-7"},
+   {"method": "Method 6", "relation": "evidence", "note": "Assembles the group's components (prescriptive analytics, OCT, optimal prescriptive trees, Optimal Imputation, HAIM-style multimodal embeddings) with two new ORC students.", "pages": "pp. 1-3, 7, 12"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "own predecessor system's limit as the entry point", "evidence": "The group's prescriptive and policy trees are 'limited to learning outcome functions that can be modeled by trees of relatively small depth', and its Regress & Compare extension does not use neural networks; the paper starts there. Shared with S456, S523 and S524 in batch c33.", "pages": "pp. 2-3"},
+   {"pattern": "Counterfactual replay against the historical decision-maker", "evidence": "The relative outcome improvement compares the prescribed treatment with the real-life one, both arms drawn from the test-half reward matrix.", "pages": "pp. 9-10"},
+   {"pattern": "distil the black-box prescriber into an optimal tree", "evidence": "Mirrored OCTs are trained on the network's prescriptions as class labels (training accuracy 75.7-98.0%) and scored on outcomes next to the network.", "pages": "pp. 4, 7, 11-13"},
+   {"pattern": "prescription realism and stability audit", "evidence": "Beyond estimated gains: mean absolute distance from actual treatments, share of the treatment space used, and per-sample prescription SD across 25 models.", "pages": "pp. 13-16"}
+  ],
+  "transferable": [
+   "Turn a discrete prescription objective sum_i sum_t 1{tau(x_i)=t} Gamma_it into a trainable loss by replacing the indicator with softmax probabilities, then prescribe the argmax (eqs. 2-4, pp. 6-7).",
+   "When the test set must be scored on counterfactuals, split 50/50 so that the test half can carry its own reward estimator; with several modalities, report gains under estimators fitted on each modality (pp. 8-10).",
+   "Recover interpretability by training an optimal classification tree on the black-box policy's prescriptions, and report the tree's fidelity next to its outcome score (pp. 7, 11-12).",
+   "Audit prescriptions beyond the headline gain: distance from actual treatments, coverage of the treatment space, and per-sample SD across 5 splits x 5 seeds (eqs. 6-8, pp. 13-16).",
+   "Embed clinical notes with a domain language model, reduce them by PCA to a size suited to n, and concatenate with tabular features (p. 5)."
+  ],
+  "coauthors": "Lisa Everest, Vasiliki Stoumpou (Operations Research Center, MIT)",
+  "quotes": [
+   {"text": "We find that deep learning has tremendous and underutilized potential in the area of decision-making.", "page": 1},
+   {"text": "In general, reporting improvement based on estimated rewards is a good approximation for evaluating the performance of prescriptive methods.", "page": 13}
+  ]
+ },
+ {
+  "id": "S523",
+  "year": "2025",
+  "title": "Adaptive forests for classification",
+  "read_level": "full",
+  "contribution": "Proposes Adaptive Forests: an Optimal Policy Tree routes each input to an input-specific weight vector over at most 50-100 CARTs, and the candidate weights are grown by MIO with exploration and exploitation constraints. The paper reports higher average AUC than RF, XGBoost and weighted RF on 21 small UCI and Boston Medical Center datasets (6 of 14 and 2 of 7 wins), with no solver, timing or variance reported and code released (arXiv v1 read).",
+  "problem_entry": "{ML IO DA} RF and XGBoost aggregate equally weighted CARTs, and weighted-RF variants use the same weights for every input. Can the weights be adapted to each input, as a panel of doctors' opinions would be weighted per patient? The predecessor OP2T is 'limited to a finite set of pre-defined weights' (pp. 1-4, 7).",
+  "key_idea": "Read ensemble weight vectors as treatments and learn an Optimal Policy Tree that assigns one per leaf, with rewards computed directly from labels and base predictions (OP2T). Then generate new weight candidates by 0-1-loss MIOs with exploration and exploitation constraints, keep the top k by a selection MIO, and retrain the tree for at most 10 rounds (pp. 6-11, 20-21).",
+  "assumptions": "Split: 20% test, 12% validation, 40.8% CART training, 27.2% OPT training. CARTs on random subsamples (ratios in [0.5, 0.9]). Configurations (six rewards, OPT inputs, deterministic-instance filters) are chosen on validation in the first iteration. 14 binary and 7 multi-class sets, n 74-5,000. Stated heuristic assumption: never-chosen weights have no useful neighbours (pp. 9-15, 18, 20).",
+  "proof_devices": [
+   "No theorems (n/a for proofs)",
+   "Weight selection under 0-1 loss as MIO with big-M = 2 and a strict-inequality epsilon (eqs. 4a-4f, p. 18)",
+   "Multi-class correctness via per-class comparison binaries b(i,q) and an AND linearization B(i) (eqs. 5a-5i, pp. 18-19)",
+   "Nonconvex quadratic exploration constraint ||w - w'|| >= min_gap, and exploitation via binary slacks with big-M 10 (p. 10)",
+   "Top-k candidate selection MIO with leaf-to-weight assignment variables (eq. 3, p. 11)",
+   "Deterministic-instance filter: drop instances whose prediction no convex weighting can change (pp. 12-13)",
+   "Reader's note: as printed, the KL reward D_KL(P || e_y) is infinite unless P is one-hot on y; the reverse direction equals the cross-entropy reward (p. 12)"
+  ],
+  "experiments": "RF and XGBoost (Interpretable AI package, grid search up to 1,000 trees) and a re-implemented, multi-class-extended wRF; CART depth 10 and 100 (p. 13). Binary: average AUC 0.8256 vs 0.8077 for XGBoost (depth 10) and 0.8179 vs 0.8087 (depth 100); 6 of 14 wins (one tie) (p. 14). Multi-class: average OvR AUC 0.8497 vs 0.8430 and 0.8489 vs 0.8396; 2 of 7 wins (p. 15). OCT base learners gave no gain (p. 13). No solver, time limits, gaps, run times, repeated splits, tests, or ablation without the MIO step.",
+  "positioning": "Against RF and XGBoost. Restates seven constant-weight RF schemes formula by formula (TWRF, Kim et al., wRF, Xuan et al., Cesaro RF, Bayesian weights, OWRF). Builds on the group's OCT (restating the 800-billion-fold speed-up), Optimal Policy Trees (called global optimization via coordinate descent) and OP2T. Mixture-of-experts or stacking literatures are not cited (pp. 1, 4-7).",
+  "writing": "Doctor-panel analogy with a figure; promotional hopes ('a leading method', 'a new go-to model'); 'consistently outperforms' against 6 of 14 and 2 of 7 wins; 'robust' defined as top-two; 'significantly' without tests; the complexity claim counts trees but not the OPT and MIO training; related methods given with formulas (pp. 1-6, 15-16).",
+  "limits_future": "Stated: no configuration is best everywhere; structured initialization grows combinatorially; OCT base learners do not help. Not discussed: training time, scale beyond n = 5,000, regression, variance. Future work: only applications across industries (pp. 13, 16, 18).",
+  "method_links": [
+   {"method": "Method 4", "relation": "variant", "note": "The duel with RF, XGBoost and wRF is fair in base learners and tuning, but the MIO parts report no solver, limit or gap; the OPT is trained by coordinate descent while called global optimization (Tension T1); one test split, no variance.", "pages": "pp. 6, 13-15"},
+   {"method": "Method 2", "relation": "variant", "note": "The 2017 OCT paper's '800-billion-fold speedup' is reused unchanged in 2025 rather than rebuilt (the skill's Method 2 step 3 and checkpoint: say the figure is borrowed).", "pages": "p. 4"},
+   {"method": "Method 1", "relation": "variant", "note": "The 0-1-loss weight problem is written exactly as MIO, but the exploration constraint makes it a nonconvex quadratic MIO, and no solve times are printed, so the stop rule is not observed.", "pages": "pp. 9-11, 18-19"},
+   {"method": "Method 6", "relation": "evidence", "note": "The optimal-trees programme continues (OCT, Optimal Policy Trees, OP2T, Adaptive Forests) with a new student; Interpretable AI's package trains the OPT and runs the baselines; code is released. No statement about ties to the company appears (skill's Integrity Rule 5).", "pages": "pp. 4, 6-7, 13, 16, 20-21"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "own predecessor system's limit as the entry point", "evidence": "OP2T 'is limited to a finite set of pre-defined weights'; the MIO weight generation is introduced to go beyond it. Shared with S456, S457 and S524 in batch c33.", "pages": "pp. 7-9"},
+   {"pattern": "prediction recast as prescription (weights as treatments)", "evidence": "Ensemble weight vectors are the treatments of an Optimal Policy Tree; rewards come from labels and base predictions, so no counterfactual estimation is needed.", "pages": "pp. 6-7, 12"},
+   {"pattern": "MIO candidate generation for a policy's action set", "evidence": "New actions from 0-1-loss MIOs with min-gap and max-gap constraints, top-k selection MIO, policy tree retrained, at most 10 rounds or until stable.", "pages": "pp. 9-11, 20-21"},
+   {"pattern": "knobs chosen by hold-out validation", "evidence": "Reward function, OPT inputs and data subset are chosen on a 12% validation split in the first iteration; baselines are also grid-searched on validation.", "pages": "pp. 9, 13, 20"}
+  ],
+  "transferable": [
+   "Treat a model-selection or ensembling choice as a prescription: a policy tree routes each input to a weight vector, with rewards computed from labels and base predictions so that no counterfactuals are needed (pp. 6-7, 11-12).",
+   "Grow a finite action set by optimization: a new action minimizes loss on a leaf or the whole set, at least min_gap from existing actions and within max_gap of a used one; then keep the top k by a selection MIO (pp. 9-11).",
+   "Encode the event that the weighted ensemble predicts y correctly as MIO with per-class comparison binaries and an AND linearization; big-M = 2 suffices for probabilities (pp. 18-19).",
+   "Before learning a weighting policy, drop the instances whose prediction no admissible weighting can change (pp. 12-13).",
+   "Report robustness as top-two counts next to averages and wins, and show sensitivity to base-learner depth (pp. 13-15)."
+  ],
+  "coauthors": "Yubing Cui (Operations Research Center, MIT)",
+  "quotes": [
+   {"text": "OCT leverages modern Mixed Integer Optimization techniques, which have achieved an 800-billion-fold speedup in recent years, enabling the practical solution of globally optimal decision trees for real-world datasets containing thousands of samples.", "page": 4},
+   {"text": "Given its strong performance, we hope Adaptive Forests will become a leading method in tree-based modeling.", "page": 2}
+  ]
+ },
+ {
+  "id": "S524",
+  "year": "2025",
+  "title": "Holistic Artificial Intelligence in Medicine; improved performance and explainability",
+  "read_level": "full",
+  "contribution": "Extends the group's HAIM clinical framework into xHAIM. LLMs retrieve and summarize each modality; the summaries feed fine-tuned ClinicalBERT encoders and a discriminative model; generated explanations cite patient documents. Average AUC on five HAIM-MIMIC-MM tasks rises from 79.9 to 90.3 (fine-tuned Llama variant), and explanations are rated by two author-annotators and a calibrated LLM judge (arXiv v1 read; supplement not available).",
+  "problem_entry": "{AP ML} The group's own HAIM 'uses data in a task-agnostic manner and lacks explainability' and dilutes signals by truncating and averaging embeddings; only 5% of health-care organizations have deployed AI; generative models explain but predict worse. The tasks: five ICU predictions with explanations. No optimization model (pp. 1-3, 5).",
+  "key_idea": "Use generative AI auxiliarily around a discriminative predictor: hybrid BM25 + SBERT retrieval of task-relevant chunks, per-modality LLM summaries (Llama-3.3-70B or Qwen3-32B; images via Qwen2.5-VL-72B), fine-tuned ClinicalBERT embeddings concatenated as in HAIM, a discriminative model (e.g. XGBoost), and explanations grounded in summaries, predictions and medical knowledge (pp. 4, 10-12).",
+  "assumptions": "HAIM-MIMIC-MM from MIMIC-IV: 34,537 samples, 7,279 hospitalizations, 6,485 patients; cohorts 3,512-16,888. Decision time is a random scan per ICU stay, with prior information used. 80/20 split repeated five times with patient separation. Not stated: label derivation, exclusion of the index report, k, model settings, knowledge source. Explanations: two author-raters on 50 per task for two tasks, then a ChatGPT judge on 1,000 (pp. 4-7, 10, 12-13).",
+  "proof_devices": [
+   "No theorems or optimization (n/a)",
+   "Hybrid lexical-semantic relevance score 0.5 BM25 + 0.5 SBERT against task anchor sentences, top-k chunks per modality (p. 10)",
+   "Summaries sized to fit the encoder's 512-token window, so that the encoder can be fine-tuned (p. 11)",
+   "Two-stage adversarial LLM-as-a-judge (critique, then rubric scoring), calibrated on manual annotation; no agreement statistic reported (pp. 6-7)"
+  ],
+  "experiments": "AUC (5 runs, standard errors): HAIM 79.9; xHAIM without fine-tuning 83.4 (Qwen) and 83.7 (Llama); fine-tuned 89.9 and 90.3. The per-task gains in the text mix variants (pathologies from FT-Llama, mortality +2.7 and LOS +1.9 from FT-Qwen), and the non-fine-tuned variants fall below HAIM on LOS. 'Statistically significant' is claimed without a test. Explanations score about 3.8-4.3 (pleural effusion) and 3.4-4.0 (mortality). Missing: a fine-tuned HAIM baseline, a label-leakage check, calibration measures, compute cost, clinician evaluation (pp. 5-7, 9, 11).",
+  "positioning": "The group's own HAIM is the state of the art and the only baseline. Generative clinical AI is credited for interpretability but shown losing to XGBoost and ClinicalBERT; federated learning is the alternative route; ClinicalBERT is the black box; a JAMA systematic review frames the deployment gap. The hybrid is pitched as the best of both worlds. No OR literature (pp. 2-3, 5).",
+  "writing": "Nature-family format (Results before Methods, Declarations, author contributions). Strong framing ('transforms AI from a black-box predictor', 'a significant advancement', 'challenge the prevailing assumption that more data is always better'). The headline 79.9 to 90.3 is described 'across chest pathology tasks' though it averages all five. Untested operational claims (chart review time, cross-hospital robustness); broken 'Appendix ??' references (pp. 1, 6, 8-11).",
+  "limits_future": "Stated: dependence on medical knowledge sources, computational overhead, validation beyond MIMIC-IV. Not addressed: label leakage, clinician-rated and faithful explanations, the frozen-vs-fine-tuned confound, decisions. Code promised on publication; no future-work section beyond limits (pp. 9, 12).",
+  "method_links": [
+   {"method": "Method 5", "relation": "contradiction", "note": "The paper claims decision support but scores predictions (AUC) and explanation ratings, against the group's own earlier framework rather than a clinical current rule; no decision, owner or clinician enters the evaluation.", "pages": "pp. 1, 5-7, 9"},
+   {"method": "Method 2", "relation": "variant", "note": "The group's own framework is reopened because the tool changed (open LLMs that can run inside a hospital), as in step 6, but no figure measures the change.", "pages": "pp. 2-4, 9-11"},
+   {"method": "Method 4", "relation": "variant", "note": "The duel with the incumbent (HAIM) uses matched splits but a different training regime (frozen vs fine-tuned encoders), so the gain cannot be credited to the summaries; ablations sit in an absent supplement.", "pages": "pp. 6, 11-12"},
+   {"method": "Method 6", "relation": "evidence", "note": "Programme sequel HAIM (2022) to xHAIM (2025) carried by a new ORC cohort; 'D.B. directed the overall research'; data public and code promised.", "pages": "pp. 1, 12-13"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "own predecessor system's limit as the entry point", "evidence": "The abstract opens with the group's own HAIM: it 'uses data in a task-agnostic manner and lacks explainability'; the body lists its truncation and averaging problems. Shared with S456, S457 and S523 in batch c33.", "pages": "pp. 1, 3"},
+   {"pattern": "generative model as input curator for a discriminative predictor", "evidence": "LLMs retrieve and summarize per modality; fine-tuned ClinicalBERT embeddings and a discriminative learner make the prediction; LLMs return only for explanations.", "pages": "pp. 4, 10-12"},
+   {"pattern": "LLM judge calibrated on a small human-annotated subset", "evidence": "Two raters (two of the authors) annotate 50 explanations per task for two tasks; the two-stage judge is compared on these, then scales to 1,000.", "pages": "pp. 6-7, 12-13"}
+  ],
+  "transferable": [
+   "Cut long multimodal records to what the task needs before encoding: score chunks against task anchor sentences with 0.5 normalized BM25 + 0.5 SBERT, keep the top k per modality, and summarize each modality separately (pp. 10-11).",
+   "Make summaries fit the encoder's input window so that the encoder can be fine-tuned, then discard the classification head and reuse the embeddings downstream (p. 11).",
+   "Split train and test by patient, repeat over five splits, and report standard errors (pp. 5-6).",
+   "Validate an LLM judge on a hand-annotated subset before scaling it, with a first adversarial critique pass and a second rubric-scoring pass; report judge and raters side by side (pp. 6-7)."
+  ],
+  "coauthors": "Periklis Petridis, Georgios Margaritis, Vasiliki Stoumpou (Operations Research Center, MIT); Bertsimas corresponding author, 'directed the overall research'",
+  "quotes": [
+   {"text": "However, HAIM uses data in a task-agnostic manner and lacks explainability.", "page": 1},
+   {"text": "The observed performance gains challenge the prevailing assumption that more data is always better—particularly in clinical contexts, where large volumes of unfiltered information may dilute the relevant signal.", "page": 9}
+  ]
+ }
+]

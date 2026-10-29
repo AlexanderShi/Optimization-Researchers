@@ -1,0 +1,329 @@
+[
+ {
+  "id": "S200",
+  "year": "2017",
+  "title": "Data-driven learning in dynamic pricing using adaptive optimization",
+  "read_level": "partial",
+  "contribution": "Models demand learning in finite-inventory pricing as adaptive robust optimization with a data-driven, policy-dependent uncertainty set. A hierarchical inner approximation is solved as a mixed-binary conic program, and it beats myopic and certainty-equivalent pricing on synthetic instances.",
+  "problem_entry": "RO+DA (AP: revenue management). The demand curve is unknown and only a sales history exists. Most studies assume the curve is known (p. 3); Bayesian models are intractable and tied to conjugate priors (p. 5); robust pricing leaves no room for learning (p. 6). Two questions: (a) model demand uncertainty from data; (b) price to balance exploration and exploitation (p. 4).",
+  "key_idea": "Learning as a property of the uncertainty set. The prior set holds every (alpha, beta) not falsified by the data under a norm-bounded residual (eq. (4), p. 13; set-membership estimation, Remark 4, p. 16). Future price-demand paths form a policy-dependent set U(pi) (eq. (5), p. 15). Prices are functions of the observed history, and worst-case profit is maximized over policies (DP, p. 18).",
+  "assumptions": "Linear demand with ||eps||_p <= eta, p in {1, 2, inf}, and no distribution (p. 10). (A1) the model is valid, with p and eta known; (A2) the data set is bounded with a nonempty interior (p. 10). Linearity is defended over a moderate price range, and eta is admitted to be hard to set (pp. 10-11). Holding and backlog costs (p. 9); discrete prices (p. 24). Two synthetic instances with four historical points each (pp. 35-36).",
+  "proof_devices": [
+   "Minimax theorem: with h = b = 0 and beta <= 0 a static robust policy is optimal (Proposition 1, p. 20; EC.1, p. 46). Otherwise, a two-period counterexample (Proposition 2, p. 20; EC.2, p. 46).",
+   "Approximation hierarchy: stage aggregation with a reduced information vector (pp. 21-22); K candidate strategies (pp. 23-24); piecewise-constant binary rules on a preselected box partition (pp. 25-26).",
+   "RO duality plus big-M linearization give a mixed-binary conic program. It is conservative for p in [1, inf] and exact for p in {1, inf} (Proposition 3, pp. 28-29; EC.3, pp. 49-50).",
+   "Size is polynomial for fixed |S| and exponential in M otherwise. Remedies: binary-encoded breakpoints and lifted partitions (pp. 29-30)."
+  ],
+  "experiments": "CPLEX 12.6, Core i7-920, 24 GB (p. 35). Learning gain over the static robust policy: above 73% in under 3 s, all frontier problems under 10 s, about -10% at |S| = 1 and M <= 2 (pp. 37-39). Out of sample: +31.5% worst case and +9.2% mean, but up to $223 lost on some draws (p. 39). Folding horizon against certainty-equivalent and myopic pricing: worst-case loss -76.6% and -92.8%, mean +1.28% and +4.52%, tail equal to the perfect-information policy (pp. 40-42). Synthetic data only.",
+  "positioning": "Sets aside Bayesian learning, learning by classical estimation, and robust pricing without learning (pp. 4-6). Calls itself a data-driven, distribution-free paradigm (p. 6).",
+  "writing": "Numbered contributions (pp. 7-8). Four 'to the best of our knowledge' priority claims (pp. 8, 15, 16, 29). No conclusion section beyond the conclusions from the experiments (p. 42).",
+  "limits_future": "The approximation is conservative, and its size is exponential in M when |S| is free (p. 29). Eta and the norm must be known (p. 10). Synthetic data only, and no gap to DP itself (pp. 36-42). Future work: finite adaptability with decision-dependent sets (Remark 9, p. 25). Heuristic 4 evidence: the negative gain and the $223 loss are printed (pp. 37, 39).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Learning-and-earning, owned by the Bayesian and dual-control traditions, is rewritten as adaptive RO and brought into the mixed-binary conic class. It gets there only through a conservative approximation hierarchy. Exactness (p in {1, inf}) and the size explosion are printed.",
+    "pages": "pp. 4-5, 20, 28-29"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "The value of learning is priced as a learning gain over the static robust policy. It is drawn as an efficient frontier against solver time over the design knobs M and |S|, and the bad case (about -10%) is printed. The conservatism knob eta is left to the seller.",
+    "pages": "pp. 11, 36-38"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Coarser partitions warm-start finer ones, and times are reported cumulatively. Solver, version and machine are stated. There is no incumbent heuristic as warm start and no gap.",
+    "pages": "pp. 29, 35, 38"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Decisions are scored by profit distributions (mean, VaR, CVaR) against the two rules commonly used in practice and a perfect-information bound. The instances are synthetic, with no owner.",
+    "pages": "pp. 34, 40-42"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "learning as a decision-dependent uncertainty set",
+    "evidence": "Exploration is modelled by letting prices shape a set-membership uncertainty set of future price-demand paths; exploitation by decision rules on the observed history. The authors claim it is the first model of this type.",
+    "pages": "pp. 7-8, 15-16"
+   },
+   {
+    "pattern": "approximation-knob frontier (price of tractability)",
+    "evidence": "Learning gain against solver time over the design knobs M and |S|: an efficient frontier, convergence at M = 4, and a negative bad case. S117 makes the same move (Tables 2-3, 5-6).",
+    "pages": "pp. 37-39"
+   }
+  ],
+  "transferable": [
+   "Build the uncertainty set as all parameters not falsified by the data under a norm-bounded residual. Prior and posterior sets keep the same conic form and always contain the truth (pp. 7, 13-16).",
+   "Before building adaptivity, prove when a static robust policy is optimal (minimax theorem), and give a two-period counterexample otherwise (p. 20; EC.1-EC.2, p. 46).",
+   "Solve an intractable adaptive problem in steps: aggregate stages, summarize the history by a few statistics, choose among K candidate strategies, warm-start finer partitions from coarser ones, and plot the gain-time efficient frontier (pp. 21-29, 38).",
+   "Judge robust policies on the downside (worst case, VaR, CVaR) in a folding-horizon simulation. Compare against certainty-equivalent and myopic rules and a perfect-information bound (pp. 40-42)."
+  ],
+  "coauthors": "Phebe Vayanos",
+  "quotes": [
+   {
+    "text": "This construction enables us to unify optimization and (dynamic) estimation.",
+    "page": 7
+   },
+   {
+    "text": "while the adaptive policy may yield up to $223 less than the myopic policy, it yields higher profits with probability greater than 81.6%",
+    "page": 39
+   }
+  ]
+ },
+ {
+  "id": "S225",
+  "year": "2017",
+  "title": "The trimmed lasso: Sparsity and robustness",
+  "read_level": "partial",
+  "contribution": "Studies the trimmed Lasso as an exact penalty for best subset selection with direct control of sparsity. Interprets it as the min-min robust counterpart of SLOPE. Shows that it strictly subsumes bounded separable penalties such as the clipped Lasso. Compares DC, ADMM and convex-envelope heuristics against MIO certificates.",
+  "problem_entry": "ML+IO (RO lens). Separable nonconvex penalties bridge the Lasso and best subset selection but give no direct control of sparsity (pp. 2-3). The trimmed Lasso was used mainly as a reformulation tool (p. 3). The paper studies its structure, and its relation to other penalties, from the viewpoints of sparsity and robustness (pp. 3, 7).",
+  "key_idea": "T_k is exact for large lambda (Theorem 2.3, p. 9). One uncertainty set (at most k perturbed columns, each with norm <= lambda) gives SLOPE under min-max (Proposition 1.2, p. 6) and the trimmed Lasso under min-min (Theorem 3.1, Corollary 3.2, p. 15). The Lasso is the min-max case (Proposition 1.1, p. 5). The trimmed Lasso is the Lasso with k corruptions discarded (p. 17).",
+  "assumptions": "Least-squares linear regression with a small eta*l1 term for well-posedness (p. 9, fn. 2). Bounded penalties mu*min{g(|beta|), 1} in Section 4, with unbounded ones treated as limits (pp. 17-18, 23-24). Test instance: n = 100, p = 20, k = 2, SNR = 10, Toeplitz covariance 0.8^|i-j|, ||beta_true||_0 = 10 (pp. 29, 43-44).",
+  "proof_devices": [
+   "Binary representation of T_k (Lemma 2.1, p. 8), giving a big-M linear MIO whose LP relaxation is the ordinary Lasso for large M. Without a tuned M, SOS formulations prove optimality faster (pp. 28-29).",
+   "A Scholtes-type MPCC relaxation leads to the trimmed penalty (pp. 9-10).",
+   "Min-min versus min-max robust counterparts from one uncertainty set (Propositions 1.1-1.2, pp. 5-6; Theorem 3.1, Corollary 3.2, p. 15; p. 17).",
+   "Subsumption: clipped-Lasso optima are trimmed-Lasso optima (Theorem 4.1, p. 19). The converse holds iff a discrete convexity condition on optimal values holds (Theorem 4.2, p. 21). Strictness by a 2x2 example (Example 4.4, p. 23).",
+   "DC decomposition with alternating minimization: finite convergence to a local minimum at a linear rate, a result from [39] (Theorem 5.1, pp. 25-26). ADMM without a guarantee, with a closed-form sorting step (pp. 27-28; App. C.3, p. 43). Convex envelope (||beta||_1 - k)_+ (Lemma 5.3, p. 27)."
+  ],
+  "experiments": "A limited demonstration (p. 29): 100 seeds at p = 20. Relative optimality gaps of alternating minimization, ADMM and the convex envelope against MIO (Gurobi, no version given) along a lambda path. The heuristics do well for small lambda and fail as sparsity bites; ADMM is best and the envelope worst (pp. 29-31, 44). No runtime, recovery or out-of-sample study (p. 31). Code on GitHub (p. 7).",
+  "positioning": "Extends the earlier trimmed-Lasso work [39, 43, 69, 72] from computation to structure (p. 3). Shows separable penalties subsumed rather than attacking them (p. 7). Sets robust statistics (Huber, LTS, total least squares) beside RO (pp. 3-5).",
+  "writing": "Opens the robustness discussion with Huber's remark that 'robust' is a loaded word (p. 4). Three numbered contributions (p. 7). Computational claims are hedged (p. 29).",
+  "limits_future": "No statistical properties, and no rigorous computational comparison (pp. 29, 31). Future directions: algorithms and statistical properties (p. 32).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Best subset is rewritten as an exact penalty with a binary representation and a certifying MIO. The authors print their own big-M weakness: the LP relaxation collapses to the Lasso, and SOS is faster. This is Tension T4 stated by the authors. Also full-text evidence for Heuristic 1: the robust problems behind the Lasso and SLOPE are identified, and the trimmed Lasso is derived as their min-min analogue (pp. 5-6, 14-17).",
+    "pages": "pp. 5-9, 14-17, 28-29"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Heuristic upper bounds plus an MIO that keeps a suboptimality gap and can stop with a certificate. The duel is on objective gap only, at p = 20, with no runtime or out-of-sample comparison.",
+    "pages": "pp. 28-31"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "min-max/min-min pairing of penalties from one uncertainty set",
+    "evidence": "The same column-perturbation set yields SLOPE as the pessimistic (RO) estimator and the trimmed Lasso as the optimistic (robust-statistics) one. The Lasso and LTS give a second min-min reading.",
+    "pages": "pp. 5-7, 14-17"
+   }
+  ],
+  "transferable": [
+   "To interpret a new penalty, find the uncertainty set whose min-max counterpart is a known convex penalty, then take the min-min counterpart of the same set (pp. 5-6, 14-15).",
+   "To show a penalty family is strictly richer: rewrite separable bounded penalties as a minimum over trimmed problems (eq. (29), p. 18); characterize the converse by a discrete convexity condition (Theorem 4.2, p. 21); close with a tiny counterexample (Example 4.4, p. 23).",
+   "Compute the convex envelope to show what the LP relaxation of a big-M formulation keeps (Lemma 5.3, p. 27; p. 29).",
+   "Report heuristic quality as geometric-mean relative gaps to MIO optima across 100 seeds and a lambda path, listing all seeds and parameters (pp. 29-31, 43-44)."
+  ],
+  "coauthors": "Martin S. Copenhaver, Rahul Mazumder",
+  "quotes": [
+   {
+    "text": "This gives an interpretation of the SLOPE and trimmed Lasso as a complementary pair of penalties, one under a pessimistic (min-max) model and the other under an optimistic (min-min) model.",
+    "page": 7
+   },
+   {
+    "text": "However, by design, the MIO approach maintains a suboptimality gap throughout computation and can therefore be terminated, before optimality is certified, with a certificate of suboptimality.",
+    "page": 31
+   }
+  ]
+ },
+ {
+  "id": "S117",
+  "year": "2018",
+  "title": "Binary decision rules for multistage adaptive mixed-integer optimization",
+  "read_level": "partial",
+  "contribution": "Proposes linearly parameterized binary decision rules y = Y G(xi), with an exact MILP reformulation via lifting, an exact convex hull and LP duality. Proves the general problem NP-hard and identifies polynomial-size structures (box sets, axis-aligned breakpoints). Extends to random recourse and multistage problems. Shows large scalability gains, at some loss of quality against the authors' earlier flexible rule.",
+  "problem_entry": "RO+IO (AP testbeds). Multistage adaptive mixed-integer problems are #P-hard or intractable, so decision rules are used (p. 2). Real-valued rules abound and scale (Table 1, p. 3). Binary rules are near-optimal but unscalable (1.2), randomized, or K-adaptable for two stages only (p. 3). Goal: scalable binary rules usable alongside real-valued ones (pp. 3-4).",
+  "key_idea": "y(xi) = Y G(xi), with G a vector of hyperplane indicators and Y integer (p. 6). Lift xi to (xi, G(xi)) so the constraints are linear in the lifted vector (pp. 8-10). Build the exact convex hull of the lifted support from one-sided limit points (Proposition 3, pp. 11-12). Dualize (Proposition 4, p. 13) to an MILP that gives the best rule for the chosen G (p. 13). The structure is fixed a priori; only the shape is optimized (p. 34).",
+  "assumptions": "Expected-cost objective, with constraints for all xi in a polyhedral support with xi_1 = 1 (pp. 2, 5). The second-moment matrix is analytic or computed by offline Monte Carlo (p. 8). Fixed recourse; random recourse linear in xi (p. 20); multistage non-anticipativity (pp. 23-24). Tractable case: box sets with axis-aligned breakpoints (pp. 14-17); general polyhedra are handled conservatively (pp. 18-20). 30 random instances per setting (pp. 28, 32).",
+  "proof_devices": [
+   "NP-hardness even with Y relaxed to reals, via an epsilon integer feasibility problem (Theorem 1, p. 10; Lemmas 1-3, pp. 34-38).",
+   "Lifting plus an exact convex hull of the nonconvex lifted support, built from one-sided limit points at the partition vertices (Propositions 1-3, pp. 9-12).",
+   "Robust counterpart by LP duality over the hull (Proposition 4, p. 13), giving MILP (2.20).",
+   "Separability for box sets: a product of marginal hulls with 2 + k(4r + 4) constraints (Proposition 5, p. 17). Y restricted to {-1, 0, 1} without loss, by induction (Proposition 6, pp. 17-18).",
+   "Random recourse lifted with G(xi)xi terms, at the same complexity (Proposition 7, pp. 22-23). In the multistage case the exponential growth in T is implicit (p. 26)."
+  ],
+  "experiments": "CPLEX 12.5, Core i5-3570, 8 GB (pp. 4, 27). Inventory: 15-20% better than static binary decisions at global, 1% and 5% gaps; global optimality is impractical for T > 20 and r > 9 (pp. 28-29). Against the flexible rule (1.2): 19-60% worse at r = 0 and 1-30% worse at r = 9, but seconds against up to 16,613 s (Table 3, p. 29). Gains saturate for r > 3; times reach 19,298 s at N = 4, r = 5, T = 50 (Table 5, p. 31). Knapsack: 26-36% gains; partial information reaches T = 25 with 1,300 binary rules, at up to 11,349 s (Table 6, p. 33).",
+  "positioning": "A complement to real-valued rules, and the scalable alternative to the group's own rule (1.2) of Bertsimas-Georghiou. Builds on Bertsimas-Caramanis and on the lifting of Georghiou et al. (pp. 3-4, 34).",
+  "writing": "Calls Theorem 1 'a rather disappointing result' (p. 10). The loss against (1.2) is stated in a table caption (p. 29).",
+  "limits_future": "NP-hard in general, with exponential exact size (p. 13). Conservative for general polyhedra (pp. 19-20). Weaker than (1.2) (p. 29). Enrichment needs expensive solves (p. 30). The conclusion's 'horizons <= 50, ~5 min' (p. 34) holds for r <= 3 (357 s at N = 4, r = 3, T = 50) but not for r = 5 (19,298 s, Table 5, p. 31): Tension T6. Heuristic 4 evidence: the loss and the impracticality thresholds are printed (p. 29). No future-work list.",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "A class-keeping device (lifting, exact convex hull, LP duality) keeps discontinuous binary decision rules in the MILP class. The boundary is printed: NP-hard in general, exponential exact size, polynomial for boxes, conservative for general polyhedra.",
+    "pages": "pp. 9-20"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Optimality is traded for scalability via knobs (breakpoints r, information restriction, termination gap). Tables show gain against time, saturation (r > 3) and the bad case against (1.2). The priced property is tractability, not a property the decision-maker wants.",
+    "pages": "pp. 28-33"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Results at 1% and 5% gaps are shown next to global optima. The duel is against the group's own earlier rule, which wins on quality and loses on time. No out-of-sample test.",
+    "pages": "pp. 28-29"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "approximation-knob frontier (price of tractability)",
+    "evidence": "Gains over static decisions, and losses against the flexible rule, are tabulated against solution time across r, the information structure and the termination gap, with saturation for r > 3. S200 makes the same move.",
+    "pages": "pp. 28-33"
+   }
+  ],
+  "transferable": [
+   "Lift and hull: to keep indicator-based decision rules linear, lift xi to (xi, G(xi)), take the convex hull of the lifted support from one-sided limits at the partition vertices, then dualize (pp. 8-13).",
+   "With box sets and axis-aligned breakpoints, use separability (a product of marginal hulls) and restrict the integer coefficients to {-1, 0, 1}. In the tests this gives the same optima much faster (pp. 14-18, 29).",
+   "Solve the flexible but slow rule on a short horizon, read off its hyperplane directions, and use them to enrich the scalable rule's basis on longer horizons (pp. 29-30).",
+   "Restrict what a rule may observe to partial information (xi_s, xi_t). This cuts integer variables from s(r + 1) to 2(r + 1); tabulate the quality cost (p. 33)."
+  ],
+  "coauthors": "Angelos Georghiou",
+  "quotes": [
+   {
+    "text": "Theorem 1 provides a rather disappointing result on the complexity of Problems (2.10) and (2.14).",
+    "page": 10
+   },
+   {
+    "text": "The proposed decision rule problems have great scalability properties but do not perform as well compared to binary decision rules of type (1.2)",
+    "page": 29
+   }
+  ]
+ },
+ {
+  "id": "S260",
+  "year": "2018",
+  "title": "Optimization over continuous and multi-dimensional decisions with observational data",
+  "read_level": "full",
+  "contribution": "Prescribes continuous, multi-dimensional decisions from observational data by minimizing a weight-based ML prediction of cost plus penalties on its variance and bias. Gives finite-sample generalization and regret bounds, asymptotic optimality, and tractable formulations for trees and linear models. Shows gains on synthetic pricing and semi-synthetic Warfarin dosing.",
+  "problem_entry": "DA+ML (AP: dosing, pricing). Optimize a known cost of an outcome that depends on the decision, from incomplete and confounded observational data (pp. 1-2). Earlier prescriptive methods assume decisions do not affect outcomes; kernel methods do not scale in the decision dimension; tree-ensemble MIO ignores uncertainty (p. 2); policy learning treats finite treatments (p. 3). Predict-then-optimize 'tries to learn too much' (p. 2).",
+  "key_idea": "Choose z to minimize mu_hat(x, z) + lambda1*sqrt(V(x, z)) + lambda2*B(x, z): a weight-based cost prediction plus penalties on its conditional variance and on a Lipschitz bias bound (eq. (2), pp. 3-4). A lower-confidence-bound rule for offline exploitation, the reverse of UCB (p. 3).",
+  "assumptions": "Ignorability (p. 2); honest weights (p. 3); bounded weights, Lipschitz within each of Gamma_n regions (p. 4); a bounded domain and a bounded, Lipschitz cost (p. 5). Homoscedasticity when variances are unknown (p. 4). Synthetic pricing with z in R^5 (p. 7). Semi-synthetic Warfarin data: 5,410 patients with known optimal doses, 99 covariates, and a simulated BMI-based physician policy (p. 8).",
+  "proof_devices": [
+   "Uniform generalization bound: Bernstein's inequality conditional on the design (honesty), Jensen plus Lipschitz for the bias, then a nu-net in each of the Gamma_n regions and a union bound (Theorem 1, p. 5; pp. 11-12).",
+   "Regret bound that depends only on the variance and bias at the optimal action (Theorem 2, p. 5); asymptotic optimality (Corollary 1, p. 6).",
+   "Toy example in which the penalized regret is asymptotically strictly below that of predicted-cost minimization (Example 1, p. 6).",
+   "Tractability: per-leaf convex problems solved in parallel for trees; an SOCP for linear models, even with mixed-integer Z; coordinate descent for ensembles (pp. 6, 15)."
+  ],
+  "experiments": "Pricing: 100 training sets per n. At n = 2000, UP-RF gains $270 expected revenue over RF (Wilcoxon p = 4.4e-18); CART and Lasso fall below the plotted range (p. 7). Warfarin: fixed 4,000/1,410 split, 100 randomizations, dose MSE against the true optimal dose. Penalization improves CART/RF/Lasso by 2.2%/8.6%/0.5% (Bonferroni-corrected Wilcoxon). Comparators: a constant 35 mg/week dose, CRM with the true propensities ('always performed poorly'), and an unattainable lower bound (pp. 8-9). Lambda sensitivity checked (p. 16). No run times in the parts read.",
+  "positioning": "Builds on Bertsimas-Kallus, Kao et al., Elmachtoub-Grigas and Misic (p. 2). Against continuous-treatment policy learning (Kallus-Zhou), prefers regression, which the authors believe scales better and needs no density estimation (p. 3).",
+  "writing": "Theory motivates the penalties (pp. 4-5). The conclusion restates the contributions and names no limits or future work (p. 9).",
+  "limits_future": "Homoscedasticity is assumed (p. 4). Lambda2 = 0 for regularized linear models 'for computational reasons' (p. 15). Ignorability and the simulated physician policy are assumed, not validated (pp. 2, 8). No future work stated (p. 9).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Learning and deciding happen in one model. Decisions are scored on decision metrics (revenue; dose error against the true optimal dose) against unpenalized predict-then-optimize, a constant-dose rule and an unattainable bound. The variance and bias penalties anticipate the Method 5 checkpoint (optimistic ML weights need a robust layer). Variant aspect: there is no owner's rule, and the historical policy is simulated.",
+    "pages": "pp. 4, 7-8"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "The learner class is chosen so that the prescriptive problem stays tractable: per-leaf convex problems for trees, an SOCP for linear models.",
+    "pages": "pp. 6, 15"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Lineage only: the DA programme continues with a new student, after Bertsimas-Kallus and optimal prescriptive trees.",
+    "pages": "pp. 2-3"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "pessimistic prescription (penalize variance and bias of a learned cost)",
+    "evidence": "A lower-confidence-bound decision rule over a weight-based ML prediction, whose regret depends only on the uncertainty at the optimal action. An early instance of the robust layer later added to ML-weighted prescriptions.",
+    "pages": "pp. 3-5"
+   }
+  ],
+  "transferable": [
+   "Write the learner's prediction as sum_i w_i(x, z) c(z; Y_i) to get closed-form variance and bias proxies to penalize (pp. 3-4).",
+   "Pair a regret bound with a toy example in which the naive method's regret is asymptotically worse (Theorem 2 and Example 1, pp. 5-6).",
+   "Build a semi-synthetic observational benchmark from data with known optimal decisions: simulate a historical policy, fix the split in advance, and test over 100 randomizations with Bonferroni correction (pp. 8-9).",
+   "Tune the penalties without counterfactuals by imputing outcomes on a validation set with a random forest (pp. 4-5)."
+  ],
+  "coauthors": "Christopher McCord",
+  "quotes": [
+   {
+    "text": "A key issue with the direct approach is that it tries to learn too much.",
+    "page": 2
+   },
+   {
+    "text": "Because the predicted cost is penalized by V (x, z) and B(x, z), it does not matter how poor the prediction of cost is at suboptimal actions.",
+    "page": 5
+   }
+  ]
+ },
+ {
+  "id": "S268",
+  "year": "2018",
+  "title": "Robust transient analysis of multi-server queueing systems and feed-forward networks",
+  "read_level": "partial",
+  "contribution": "Models interarrival and service times by CLT-shaped polyhedral uncertainty sets, giving closed-form worst-case transient system times for multi-server, tandem and feed-forward queues. Then averages the worst case over distributions on the conservatism parameters to approximate expected system times: within 10% of simulation for light tails, up to 30% for heavy-tailed 20-server queues. (Manuscript version read.)",
+  "problem_entry": "SD+RO (AP: call centres, data centres, cloud). Heavy-tailed, long-transient systems never reach steady state (p. 2). Probabilistic transient analysis is by and large intractable (p. 2); there is no tractable transient G/G/m theory (p. 3); SDP bounds miss heavy tails and initial buffers (p. 3). The entry: extend the authors' robust steady-state framework (p. 4).",
+  "key_idea": "Polyhedral sets on normalized partial sums, shaped by the generalized CLT, with conservatism parameters (gamma, Gamma) and tail index alpha (pp. 5-7). They give closed-form worst-case system times (Theorems 2-4, pp. 9-14). Then (gamma, Gamma) are treated as random (normal or stable), with Gamma = theta*gamma, and the worst case is averaged by a double integral (pp. 9-10, 15-18).",
+  "assumptions": "FCFS, rho < 1, initial buffer n0 (p. 10). Assumption 1 sets, with multi-server service sets on blocks of m jobs (p. 7). Only an upper bound for Gamma_m < 0 (pp. 11-12). Gamma linear in gamma, because the exact distribution is hard (p. 17). Theta matched to Kingman for light tails, with an extended formula for heavy tails (pp. 17-18). GEV fit for tandems (p. 28). The heavy-tailed worst-case steady state is an artefact of the truncated tails (pp. 34-35). Simulation is the ground truth.",
+  "proof_devices": [
+   "Lindley and Krivulin recursions; the worst case equals the queue without overtaking (Proposition 1, p. 11; App. A3, p. 47). Closed forms come from a one-dimensional optimization (p. 12).",
+   "Tandem worst cases by induction (Theorems 5-7, pp. 23-26; App. A1, p. 45).",
+   "Averaging: distributions on the conservatism parameters from limit laws, theta calibrated to Kingman's bound, and a double integral computed by discretization (pp. 15-18, 35).",
+   "Feed-forward networks as combinations of tandem paths, with a three-step algorithm (Propositions 2-3, pp. 36-40)."
+  ],
+  "experiments": "Average percent error against simulated expected system times: normal and Pareto primitives, rho 0.95-0.99, 1/10/20 servers, several n0 (Tables 1-2, pp. 18-20). Within 10% for light tails; up to 15% and 30% for heavy-tailed 10- and 20-server queues (p. 21). Tandems of J = 10, 25 and 50: mostly within 10%, with occasional outliers (pp. 30-32). Multi-server Pareto tandems omitted because simulation is costly (p. 32). Milliseconds per evaluation at a discretization of 1000 (p. 35).",
+  "positioning": "Against transform and numerical traditions that give no general insight (pp. 2-3). Checked against Kingman (p. 9) and Morse (p. 34), and agrees with the probabilistic conclusions on heavy tails (p. 35). The reference list (pp. 41-44) has no Whitt-You or Goldberg-Li robust-queueing paper.",
+  "writing": "'Break new ground(s)' claims (pp. 1, 4, 6). A stated-joint rationale: RO as a natural framework for stochastic systems, tied to commercial solvers (p. 4). A practitioner-facing robust relaxation time (pp. 32-34).",
+  "limits_future": "Heavy-tailed multi-server errors up to 30% (p. 21). Multi-server Pareto tandems omitted (p. 32). Theta for heavy tails set by an extended formula, not by matching (pp. 17-18). No future-work list (p. 40). Heuristic 4 evidence: the errors and the omission are printed. Context: critics later named choosing the sets, and tying them to the real queue, as open challenges [05 §4.5].",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "A problem owned by probabilistic queueing theory is rewritten as RO over polyhedral sets, giving closed forms rather than an LP/MIO. The boundary is partly printed: only an upper bound for Gamma_m < 0, and a heavy-tailed steady state that is an artefact. Tension T3 evidence: RO is claimed as the natural framework (p. 4), while the sets come from the generalized CLT (p. 6), the parameters get distributions (pp. 15-17), and the results are reconciled with probability (p. 35).",
+    "pages": "pp. 4-7, 11, 15-17, 34-35"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "The one-knob conservatism Gamma is integrated out under a distribution from limit laws and calibrated to Kingman, not handed over as a price curve: the knob is set from theory.",
+    "pages": "pp. 1, 7, 15-18"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "A programme step with the same two co-authors, building on Bandi et al. (2012), and part of a broader RO investigation of stochastic systems. The manuscript is headed for Operations Research; the index lists Queueing Systems 2018.",
+    "pages": "pp. 1, 4"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "average the worst case over the conservatism knob",
+    "evidence": "Treat the uncertainty-set parameters as random variables with limit-law distributions and integrate the closed-form worst case to approximate expectations. This reduces transient analysis to a double integral.",
+    "pages": "pp. 9-10, 15-18, 40"
+   }
+  ],
+  "transferable": [
+   "CLT-shaped polyhedral sets: bound the normalized partial sums (sum_{i=k+1}^n T_i - (n-k)/lambda)/(n-k)^{1/alpha} >= -Gamma for all k, with alpha < 2 for heavy tails (pp. 6-7).",
+   "Calibrate the knob's distribution so that the averaged worst case matches a known asymptotic, here Kingman's heavy-traffic bound (p. 17).",
+   "Collapse a (J + 1)-dimensional integral to a double integral by fitting an extreme-value distribution to the sampled aggregate parameter (p. 28).",
+   "Report accuracy against simulation in grids over rho, the number of servers, n0 and the tail index, including where the method degrades (pp. 19-21, 30-32)."
+  ],
+  "coauthors": "Chaithanya Bandi, Nataly Youssef",
+  "quotes": [
+   {
+    "text": "Robust Optimization (RO), arguably one of the fastest growing areas in optimization in the last decade, provides, in our opinion, a natural modeling framework for stochastic systems.",
+    "page": 4
+   },
+   {
+    "text": "Errors for heavy-tailed multi-server queues seem to increase with the number of servers, with magnitudes within 15% for 10-server queues and 30% for 20-server queues.",
+    "page": 21
+   }
+  ]
+ }
+]

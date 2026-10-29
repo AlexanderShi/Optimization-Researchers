@@ -1,0 +1,273 @@
+[
+  {
+    "id": "D022",
+    "year": "2026",
+    "title": "Strike Price Optimization for ISO New England's Day-Ahead Ancillary Services",
+    "read_level": "full",
+    "contribution": "Replaces ISO New England's rule-of-thumb DASI strike price (E[P] + 10) with an optimization that picks the highest strike at which enough resources stay certified incentive-compatible to cover the nested reserve requirements. A tight lower-bound certificate removes the unobservable counterfactual price distribution, and a threshold theorem reduces the MINLP to scalar root-findings plus at most |G|+1 LP feasibility checks. A year of reconstructed ISO-NE price distributions maps when representative gas units would constrain the strike.",
+    "problem_entry": "AP+RO+IO (LO in the feasibility checks; DA as the setting). The owner's current rule, under cost pressure. Since 1 March 2025, DASI settles four reserve products as call options with one system-wide hourly strike. The rule K = E[P] + 10, from a conditional GMM, ignores resource costs, capabilities, eligibility and nesting (pp. 1-2). ISO-NE projected about $140M a year in added costs; the IMM reported $974M of incremental cost in the first 12 months, and ISO-NE proposed a floor on the strike (p. 2). Claimed gap: no prior work optimizes the DASI strike (p. 2).",
+    "key_idea": "Certify each resource's preparation incentive without the unobservable counterfactual: two reduced-form price-impact assumptions give a tight lower bound (Theorem 6, pp. 3-4). Each resource then enters through one threshold, and any finite optimum sits at a threshold (Proposition 7, Theorem 8, pp. 4-6). The MINLP (6) is therefore solved exactly by a sorted threshold scan with LP feasibility checks (Algorithm 1, p. 6). Kept from the current design: the rule's efficiency-reliability rationale, ISO-NE's GMM, the ISO's offer decomposition, and F_t fixed in K (p. 2).",
+    "assumptions": "Hourly model: each resource has a marginal cost c, a sunk preparation cost A, a price-impact bound phi and product capabilities; requirement sets are nested (Table I, (6)-(7), pp. 3, 5-6). Payoffs are risk-neutral expectations (eqs. (1)-(4), p. 3). The offer risk premium decreases in K (Assumption 1, p. 2). F_t is fixed with respect to K (p. 2). No price impact below c (Assumption 4); above c, the survival function falls by at most a fraction phi, with phi constant across hours (Assumption 5, p. 4). The density is positive above c (Proposition 7, p. 4). Data: 12 months of reconstructed ISO-NE conditional GMMs (March 2025 - February 2026), from the public memo plus internal features; heat rates 7 and 11 MMBtu/MWh; the Algonquin Citygate gas price; c = alpha*HR*g and A = (1-alpha)*HR*g, with alpha = 0.8 and phi = 0.2 as reduced-form baselines (p. 7). Resource-level parameters are admitted to be unobservable (pp. 2, 6).",
+    "proof_devices": [
+      "Offers decrease in K: (P-K)^+ is pointwise monotone and the risk premium decreases (Proposition 2, p. 3)",
+      "Tail-integral identity E[(Y-a)^+] = integral from a to infinity of P(Y>p) dp, which cancels the counterfactual terms below marginal cost (proof of Theorem 6, p. 4)",
+      "A stochastic band on the counterfactual survival function gives the lower bound (1-phi)E[(P-c)^+] + phi E[(P-K)^+] - A; tightness via the explicit extremal distribution F^w = F + phi*Fbar above c (Theorem 6, p. 4)",
+      "The derivative dI/dK = -phi P(P>K) above c gives a three-case threshold structure; the crossing case needs phi > 0 (Proposition 7, pp. 4-5)",
+      "Threshold optimality by contradiction: the certified set changes only at thresholds, and counting every certified resource preserves feasibility (Theorem 8, pp. 5-6)",
+      "Algorithm 1: scalar root-finding per resource, an unboundedness test on the always-certified set, then a decreasing scan with at most |G|+1 LP feasibility checks; infeasible and unbounded cases are read off K = 0 and the always-certified set (p. 6)",
+      "[my reading] With phi = 0 both the certificate and the exact incentive (4) are constant in K, so the strike affects the preparation incentive only through the resource's own price impact (pp. 3, 5)"
+    ],
+    "experiments": "Illustration: the GMM for 1 July 2025 at 12:00, with c = 40, A = 10 and phi = 0.2, gives kappa = 60.8 (Figure 1, pp. 5-6). Toy optimization: three gas units and a 1,000 MW requirement; thresholds 145.4, 64.6 and 46.5; K* = $64.6/MWh (Table II, pp. 6-7). Regime study (Table III, p. 7): Gas CC is never certified in 3.9% of hours, has a finite threshold in 1.0% and is always certified in 95.1% (finite-threshold median $159.6); Gas CT 31.1%, 8.3% and 60.6% (median $44.8). Sensitivity over alpha and phi (Figure 2, p. 8). Absent: a fleet-wide calculation (deliberately omitted, p. 6), run times, and the current rule's strike next to K*. [my arithmetic] The Figure 1 mixture has E[P] of about 47.0, so the current rule would give about $57/MWh against the toy K* of $64.6/MWh; the Gas CC quantiles rest on about 88 hours.",
+    "positioning": "Builds on the reliability-options literature [4]-[11]. Existing strike rules tie the strike to generation costs or fuel indices, to option value, to a market equilibrium, or to a high price quantile ([6], [8]-[10], [12], [13]); [14], with Zheng and Zhao, studies DASI fuel procurement for a given strike (p. 2). The owner's rule is conceded as intuitive, then formalized: a practical rule, not a system-level solution (pp. 1-2). The model is offered as a benchmark (p. 2). Sources are ISO-NE filings and IMM and NEPOOL documents (pp. 8-9); there is no self-citation.",
+    "writing": "The abstract has no headline number. It runs: mechanism, trade-off, gap in the current rule, method, structural result, one qualitative finding (p. 1). Three numbered contributions with bold labels (p. 2). An Assumption-Proposition-Theorem-Proof chain, with an interpretive line after each result (pp. 3-7), e.g. strike design as an upper-tail problem (p. 4). Hedges are specific: costs reflect many aspects of the design (p. 2); a benchmark, not an estimate (pp. 2, 8); the never-certified label is conservative (p. 7); and an explicit refusal of a fleet-wide number (p. 6).",
+    "limits_future": "Contribution: theory, an exact algorithm, and a regime study for two representative resource types; not a calibrated ISO-NE strike (p. 8). Stated limits: unobservable resource inputs (pp. 2, 6); a fleet study is needed (pp. 6, 8); the certificate is conservative (p. 7); alpha and phi are reduced-form (pp. 4, 7). Future work: fleet data and market simulations (p. 8). [my reading] Not discussed: risk aversion in the availability decision (expectations only, p. 3); feedback from K to the price distribution (assumed away, p. 2); and the dollar size of the efficiency side, which enters only through the monotonicity of offers in K (Proposition 2, p. 3).",
+    "method_links": [
+      {
+        "method": "Method 5",
+        "relation": "evidence",
+        "note": "Steps 1-3 are practised. The owner is ISO-NE and the decision its hourly strike. The current rule, E[P]+10, is the starting point. The owner's data and model are used (GMMs reconstructed with internal features, p. 7). Three ISO-NE staff are co-authors (p. 1), and the owner's own cost evidence is the entry (p. 2).",
+        "pages": "pp. 1-2, 7"
+      },
+      {
+        "method": "Method 5",
+        "relation": "variant",
+        "note": "Steps 5-6 are not done: no decision metric against the current rule and no field test. The model is offered as a benchmark, not a recommendation (pp. 2, 8). The refusal of a fleet-wide number is principled (p. 6), but the duel with the incumbent rule is left unrun.",
+        "pages": "pp. 2, 6, 8"
+      },
+      {
+        "method": "Method 1",
+        "relation": "evidence",
+        "note": "The MINLP is never solved as such: its structure reduces it exactly to scalar root-finding plus LP feasibility checks (p. 6). The worst-case distribution is built by hand, not read off a dual (p. 4). The boundary printed is a data boundary, not a solve-time one (p. 6).",
+        "pages": "pp. 4-6"
+      },
+      {
+        "method": "Method 3",
+        "relation": "variant",
+        "note": "The bound step is practised: phi is tied to the certified incentive by a tight, solution-independent inequality, with its assumptions stated (Theorem 6, p. 4). But reliability is a hard constraint and K is optimized, so no price curve of efficiency per unit of reliability is drawn. The sensitivity map runs over the modelling assumptions alpha and phi (Figure 2, p. 8), not over a decision-maker's knob.",
+        "pages": "pp. 1-4, 7-8"
+      },
+      {
+        "method": "Method 6",
+        "relation": "evidence",
+        "note": "A partner relationship of at least 14 years: ISO-NE's Zhao and Zheng co-authored the 2012 robust unit-commitment paper (card S006 in c13, pp. 1, 12) and this 2026 paper, now with a new MIT ORC first author (p. 1).",
+        "pages": "p. 1"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "tight one-sided certificate over an unobservable counterfactual",
+        "evidence": "The incentive depends on the price distribution that would hold if the resource prepared. A reduced-form band (no impact below cost; survival cut by at most phi above cost) plus the tail-integral identity gives a lower bound computable from observed data. The band's extremal distribution proves it tight.",
+        "pages": "pp. 3-4"
+      },
+      {
+        "pattern": "threshold enumeration for maximizing a design parameter subject to enough qualifying agents",
+        "evidence": "Each resource's certificate is monotone with a single threshold, so any finite optimum lies at a threshold. A decreasing scan with LP feasibility checks solves the MINLP exactly; infeasibility and unboundedness are read off the extremes.",
+        "pages": "pp. 4-6"
+      },
+      {
+        "pattern": "claim hygiene: decline the add-on that would contaminate the claim",
+        "evidence": "No fleet-wide strike is computed on simplified assumptions; the framework and the resource-level inputs are published instead (compare S474, p. 10, in this batch).",
+        "pages": "pp. 2, 6, 8"
+      }
+    ],
+    "transferable": [
+      "(D4) For an incentive that depends on an unobservable counterfactual distribution: bound the counterfactual by a reduced-form band, lower-bound the incentive via the tail-integral identity, and prove tightness with the band's extremal distribution (Theorem 6, pp. 3-4).",
+      "(D4) For problems that maximize a scalar parameter subject to enough qualifying agents covering the requirements, show that each agent qualifies on an interval bounded by one threshold. The optimum then lies at a threshold and is found by a sorted scan with LP feasibility checks. Read infeasibility and unboundedness off the parameter's extremes (pp. 4-6).",
+      "(D4) Differentiate the certificate in the design lever to see which modelling term carries its effect (dI/dK = -phi P(P>K), p. 5). Then ask whether the lever still matters when that term vanishes [my reading].",
+      "(D3) Split one fuel commitment into marginal cost and sunk preparation cost with a single salvage fraction, so that the parts add up without double counting (p. 7).",
+      "(D5) Per resource type, over a year of hourly distributions, report the regime shares (never, finite, always certified) and the finite-threshold quantiles, plus a regime map over the reduced-form parameters (Table III, p. 7; Figure 2, p. 8).",
+      "(D7) When the inputs to a system-wide number are unobservable, say so. Publish the framework with the resource-level inputs instead of a headline built on simplified assumptions (pp. 2, 6, 8)."
+    ],
+    "coauthors": "Karl Zhu (MIT Operations Research Center); Parviz Alivand, Jinye Zhao and Tongxin Zheng (ISO New England, Holyoke, MA) (p. 1)",
+    "quotes": [
+      {
+        "text": "A fleet-wide result based on simplified assumptions would not be informative.",
+        "page": 6
+      },
+      {
+        "text": "Thus, strike price design is fundamentally an upper-tail problem: the availability incentives created by reserve products are determined by scarcity events rather than typical price outcomes.",
+        "page": 4
+      }
+    ]
+  },
+  {
+    "id": "S298",
+    "year": "2026",
+    "title": "Global optimization via optimal decision trees",
+    "read_level": "full",
+    "contribution": "Proposes OCT-HaGOn (read as arXiv v1, 2022). Each nonlinear constraint, explicit or black-box, is sampled and its feasible set learned with an optimal hyperplane classification tree (objectives with regression trees). The trees are embedded exactly in a MILO through a locally ideal, big-M-free disjunctive formulation, solved with CPLEX, and the near-feasible optimum is repaired with AD-based projected gradient steps. It matches BARON on 5 small MINLPLib problems (slower) and best-known values on 4 of 6 larger ones, and on a satellite on-orbit servicing problem finds the same service order as a hand-discretized model. There is no global-optimality guarantee.",
+    "problem_entry": "DA+IO+ML (HS for the black-box claim; AP for the aerospace cases). The entry is a scope restriction in the owning tradition: global optimizers accept only some primitives (BARON is quoted on exp, ln, x^alpha and beta^x, p. 3), while real constraints include trigonometric, signomial, discontinuous and black-box (simulation) functions (p. 3). Gradient-based solvers need starting points and fail with integers; outer approximation needs structure; branch-and-reduce scales worse (pp. 2-3). The only stated requirement is a bounded domain for the variables in nonlinear constraints (pp. 1, 3). The why-now is asserted without a figure (p. 1).",
+    "key_idea": "Replace each hard constraint by an OCT-H trained on sampled feasibility labels. Each feasible leaf is a polyhedron, so the constraint becomes an exactly representable union of polyhedra. Solve the MILO with CPLEX, then repair against the true functions by projected gradient descent with automatic differentiation (pp. 3-4, 14-22). Changed: no restriction on primitives; constraints are only queried (p. 4). Kept: MIO branch-and-bound as the engine (p. 19). Trees are chosen for MIO representability and as tunable, accurate and interpretable (p. 6).",
+    "assumptions": "Standard form (2): linear constraints are passed unchanged, nonlinear and black-box ones are approximated, and bounds are required (p. 9); missing bounds come from min/max LPs (eq. (3), p. 10). Sampling is staged: corners, an optimal Latin hypercube from an early-stopped GA, then kNN secant sampling near the boundary (pp. 10-13). The data are noise-free, so trees are trained on all the data with almost no complexity penalty; base OCT-H/ORT-H settings are depth 5, complexity 1e-6, 10 tree restarts and 5 hyperplane restarts (pp. 13-14, Table 1). Admitted later: constraints are cheap to evaluate and AD-differentiable (p. 40). Instances: 5 small and 6 larger MINLPLib problems, the Golinski speed reducer, and a 7-client satellite on-orbit servicing problem (pp. 29-37, 46-49).",
+    "proof_devices": [
+      "Big-M disjunction over the feasible leaves (7), with the difficulty of choosing M named (p. 15)",
+      "Big-M-free extended formulation (8) with leaf copies y_l: x*z_l <= y_l <= xbar*z_l, sum y_l = x, sum z_l = 1. It is big-M free and locally ideal (Vielma 2015), the stated reasons it is implemented (pp. 15-16)",
+      "Equality approximation: classify h(x) >= 0 and force x into one feasible and one infeasible leaf, i.e. onto a separating face ((9)-(11), pp. 16-17)",
+      "Objectives and separable constraints: an ORT-H plus a per-leaf refit of the tightest lower-bounding hyperplane, giving an approximate relaxation that the repair step tightens (pp. 17-18)",
+      "kNN quasi-Newton (secant) boundary sampling between infeasible centres and their feasible neighbours (Algorithm 1, pp. 12-13)",
+      "PGD repair: AD-linearized constraints, squared-penalized slacks, the step bound alpha*exp(-rt/T), and a projection step while infeasible; each step is an MI-quadratic program; no convergence result ((13)-(16), Table 2, pp. 19-22)",
+      "Size counts: binaries O(2^d(1+|I|+|J|)), disjunctive constraints O(2^d d(1+|I|+|J|)), super-exponential in depth; worst-case exponential time admitted (pp. 41-42)",
+      "No approximation-error bound and no global-optimality guarantee (p. 39)"
+    ],
+    "experiments": "Worked example: a depth-3 OCT-H is 97% accurate on 554 samples; the MIO gives -7.685 (infeasible), repaired to -7.021, and PGD hits its 100-iteration cap (pp. 25-28). Small MINLPLib: the same objectives as BARON on 5 of 5 but slower (minlp 29.9 s vs 0.120 s); training dominates, with MIO and repair under 5% (Table 4, p. 29). Larger MINLPLib (depth 8, double samples): best-known values on 4 of 6, after imposed bounds (himmel16) and raised penalties (kall_circles_c6b); misses on kall_circles_c6b and pointpack08. It is faster than BARON on fo9 (29.5 s vs 959.1 s) and o9_ar4_1 (1,255.6 s vs 2,283.3 s), and slower than CONOPT or IPOPT on the other four (Table 6, p. 30). Speed reducer: 2994.355 with zero error in 32.6 s, against IPOPT's 4.2 s (integrality relaxed) and the best known 2994.472 (Table 7, pp. 31-32). Satellite OOS: the same service order as a hand-built MI-bilinear model in Gurobi; wet mass 1,725.9 vs 1,724.4 kg; PGD stuck; maximum relative error 3.5e-3; 14.2 s against 17.7 s plus two days of an engineer's reformulation (Table 9, pp. 35-37). Solver versions are listed (pp. 45-46); hardware is given only for OOS; no time limits, threads or restart spread are reported. [my reading] Each larger instance meets one solver only (pp. 45-46). [my arithmetic] The 5% bound cannot support the claim that MIO and repair take a small fraction of BARON's time on minlp (p. 29).",
+    "positioning": "Set against gradient-based NLP solvers, outer approximation and branch-and-reduce (pp. 2-3). BARON is quoted on its primitives (p. 3) and named as the benchmark that provides guarantees (p. 39). Bayesian optimization and neural-network approaches are dismissed in one sentence as expensive and unscalable (p. 5). Constraint-learning precedents (Biggs et al., Misic, and Maragno et al. with Bertsimas) are called restricted to data-driven objectives or constraints (p. 6). His own OCT, OCT-H and ORT-H, through the Interpretable AI software, are the engine (pp. 6-7, 13). [my reading] No derivative-free or surrogate-based optimization literature is cited, despite the black-box selling point (pp. 50-52).",
+    "writing": "Five numbered contributions (pp. 7-8), a six-step method overview (pp. 8-9) and a fully worked example that prints every tree and constraint (pp. 22-28). Strong framing: the most general global optimization method (p. 45); the only tool for OOS (p. 37); 'remarkable' twice in one sentence (p. 28). Limitations are ordered by significance (p. 39). Headline vs body: global optima and black-box handling in the abstract (p. 1) vs no guarantee and explicit-only tests (p. 39); 'the only requirement' (p. 3; restated on p. 45) vs cheap evaluation and AD (p. 40); 'both theoretically and practically' efficiently solvable (p. 44) vs worst-case exponential counts (p. 42). A two-author paper speaks of 'the author' in the singular (pp. 39, 43, 45, 50).",
+    "limits_future": "A method plus released Julia software that needs an academic Interpretable AI licence (p. 45); no approximation or convergence theorems. Stated limits, in the authors' order: constraints with many variables, untested scaling, no global-optimality guarantee, black boxes untested, cheap evaluation and AD assumed (pp. 39-40). Future work: faster tree training, MI-convex extensions, a test of big-M against big-M-free, tree ensembles for restarts, data-driven constraints, other MIO-representable learners (pp. 40-44). v1 has no competing-interest statement for the Interpretable AI dependency (pp. 7, 13, 45, 50); the JOGO version was not read.",
+    "method_links": [
+      {
+        "method": "Method 1",
+        "relation": "variant",
+        "note": "Formulation first into the MIO class, but by approximation. A learned surrogate is embedded exactly (a union of polyhedra) through a locally ideal, big-M-free disjunction (pp. 15-16); the true problem is restored only by local repair. The boundary is printed as super-exponential size counts (p. 42) and untested scaling (p. 39). There is no dual reading.",
+        "pages": "pp. 3-4, 14-19, 39, 41-42"
+      },
+      {
+        "method": "Method 2",
+        "relation": "variant",
+        "note": "The why-now (MIO speed-ups plus ML) is asserted in the abstract without a figure. The belief challenged is that global optimizers must restrict their primitives, not that the problem is intractable (p. 3).",
+        "pages": "pp. 1, 3"
+      },
+      {
+        "method": "Method 4",
+        "relation": "variant",
+        "note": "The duel is run against BARON, IPOPT and CONOPT, with versions, and losses are printed: slower on the small benchmarks, 2 of 6 best-known values missed, OOS 0.1% worse. The certificate is dropped, and the paper says so (p. 39). The order is reversed: MIO first, then local search (PGD) as repair, not as a warm start. Weaknesses of the duel: no time limits; hardware only for OOS; one solver per larger instance; no restart statistics.",
+        "pages": "pp. 28-31, 39, 45-46"
+      },
+      {
+        "method": "Method 5",
+        "relation": "variant",
+        "note": "There is no owner or current rule. But the OOS result is judged by the decision that matters: the service order, called arguably the most important decision, is right even where the phasing orbits are not. And the incumbent's human cost (two days of reformulation) is counted against it.",
+        "pages": "p. 37"
+      },
+      {
+        "method": "Method 6",
+        "relation": "evidence",
+        "note": "A programme step: OCT (2017) -> OCT-H and ORT-H (2019 book) -> constraint learning (Maragno et al.) -> global optimization. Carried by a student from another department, on the company's software, with released code and DARPA funding.",
+        "pages": "pp. 3, 6-7, 45, 50"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "learned surrogate embedded exactly as MIO, then repaired against the true functions",
+        "evidence": "OCT-H and ORT-H surrogates of the sampled constraints become exact disjunctive MILO constraints. The MILO optimum is then repaired by AD-based projected gradient steps on the true constraints.",
+        "pages": "pp. 3-4, 14-22"
+      },
+      {
+        "pattern": "amortization argument for a slow single solve",
+        "evidence": "Slower than BARON per instance, but argued to be competitive when the optimization is re-run many times (a Pareto frontier) and the trees are stored and reused. The argument is made, not measured.",
+        "pages": "pp. 29, 41"
+      },
+      {
+        "pattern": "count the human reformulation cost of the baseline",
+        "evidence": "The MI-bilinear benchmark's 17.7 s solve is reported together with the two days an experienced engineer spent reformulating the problem.",
+        "pages": "p. 37"
+      }
+    ],
+    "transferable": [
+      "(D4) Embed a trained hyperplane tree in an MIO with the extended formulation: one copy y_l and one binary z_l per feasible leaf, with x*z_l <= y_l <= xbar*z_l, sum y_l = x and sum z_l = 1. It needs no big-M and is locally ideal (pp. 15-16).",
+      "(D4) Approximate an equality h(x) = 0 by classifying h(x) >= 0, then force x into one feasible and one infeasible leaf at once (pp. 16-17).",
+      "(D4) For objectives or separable constraints a'x + b >= g(x), regress g with a tree, then refit the tightest lower-bounding hyperplane in each leaf (pp. 17-18).",
+      "(D3) Get sampling bounds from min/max LPs over the linear constraints (eq. (3), p. 10).",
+      "(D3) Sample in stages for constraint learning: the corners, a near-optimal Latin hypercube, then kNN secant steps to load the feasibility boundary (pp. 10-13).",
+      "(D4) Repair a surrogate's optimum against the true functions with AD-linearized constraints, squared-penalized slacks, a shrinking step bound, and a projection step while the point is infeasible (pp. 19-22).",
+      "(D5) When the competitor needs a hand-built reformulation, report the expert's time next to the solver's (p. 37).",
+      "(D5) Split the total time into training, MIO and repair for each instance (pp. 29, 31).",
+      "(D7) List the limitations in order of significance (p. 39)."
+    ],
+    "coauthors": "Berk Öztürk (MIT Department of Aeronautics and Astronautics) (p. 1); acknowledgments: Michael Luu; DARPA contract HR0011-17-2-0028 (p. 50)",
+    "quotes": [
+      {
+        "text": "As noted in Section 5, the proposed method has no guarantees of global optimality since it is approximate.",
+        "page": 39
+      },
+      {
+        "text": "To the author’s best knowledge, it is the most general global optimization method in the literature, since it has no requirements on the mathematical primitives of constraints or variables.",
+        "page": 45
+      }
+    ]
+  },
+  {
+    "id": "S474",
+    "year": "2026",
+    "title": "RocketPFN: Accurate Time Series Classification via In-Context Learning",
+    "read_level": "full",
+    "contribution": "Introduces RocketPFN, a training-free time series classifier. Groups of 1,000 random Rocket convolutional kernels are fed to the pretrained tabular foundation model TabPFN v2.5 in context, and the class probabilities are averaged. On 92 UCR datasets it ties HC2 (both 0.900, p = 0.50) at a median of 30 s per fold on a GPU. It beats every HC2 component, and Rocket at the same kernel budget. With only 200 features it beats three TSC foundation models used zero-shot (p < 0.001), and it is proposed as a reference baseline for such models.",
+    "problem_entry": "ML (outside the domain's optimization-lens scope: nothing is fitted or optimized on the target data). The gap lies among HC2 (most accurate, but hours to days of training), Rocket-type random features (near-HC2 at low cost) and TSC foundation models (used frozen, they match neither) (pp. 1-2). The opening: TabPFN has matured as an in-context, non-linear, training-free classifier (p. 2). The question, answered experimentally: can a training-free pipeline reach the dominant methods' accuracy? (p. 2)",
+    "key_idea": "Two training-free stages, glued by grouping: Rocket features go to TabPFN v2.5. Rocket's 20,000 features exceed the 2,000 that TabPFN v2.5 is designed for, so the kernels are split into G groups of 1,000, each group is classified in context, and the probabilities are averaged (eq. (1), p. 4). G = 10 equals Rocket's kernel budget, which isolates the classifier: ridge against in-context learning (p. 4). Changed relative to Rocket: the classifier and the grouping. Kept: the kernels, z-normalization and the aeon toolkit (p. 4).",
+    "assumptions": "The scope is set by TabPFN's limits (at most 10 classes and 50,000 training cases): 103 UCR and 23 UEA datasets, with the exclusions listed (pp. 4, 14). Comparisons run on the intersection with Middlehurst et al. 2021: 92 UCR and 20 UEA datasets (pp. 4, 6, 8). Protocol: 30 stratified resamples (resample 0 is the archive split, 1-29 are seeded), scored by mean accuracy (p. 4). HC2 and the other baselines are taken from published numbers; MOMENT, Mantis and MantisV2 are run by the authors (p. 5). TabPFN's internal ensemble is e = 8; G in {1, 10} and k = 1,000 were chosen without tuning (pp. 3, 9).",
+    "proof_devices": [
+      "No optimization model. Statistical devices: pairwise Wilcoxon signed-rank tests (p < 0.05) with win/tie/loss counts, and critical-difference diagrams with Holm correction (pp. 5, 7-8)",
+      "Necessity ablation: TabPFN on the flattened raw series, with the constructed ShapeletSim failure case (Table 1, Figure 1, pp. 5-6)",
+      "Matched-budget ablation: G = 10 against Rocket at 10,000 kernels, so only the classifier differs (p. 5)",
+      "Handicapped comparison: 200 features (k = 100) against encoders of 256-1,024 dimensions whose pretraining corpora include UCR training splits (Table 3, p. 8)",
+      "Sensitivity grid over the extractor (Rocket, MiniRocket, MultiRocket), G in {1, 2, 5, 10, 25}, three feature widths, and e = 1 against e = 8 (p. 9)",
+      "Dependency version re-run: TabPFN v3, with everything else fixed (Appendix C, p. 15)"
+    ],
+    "experiments": "UCR (92 datasets): RocketPFN with G=10 scores 0.900 against HC2's 0.900, p = 0.504, W/T/L 44/3/45. It beats every HC2 component, InceptionTime, HC1 and TS-CHIEF (p < 0.005), and Rocket by +0.018 (70/3/19, p < 0.001); G=1 reaches 0.894 (pp. 5, 8). UEA (20 datasets): both 0.747, p = 0.37, treated as inconclusive (pp. 6, 10). TabPFN on flattened series: 0.847, and chance level on ShapeletSim (p. 5). Foundation models (103 UCR datasets): RocketPFN with 200 features scores 0.874, against Mantis 0.859, MantisV2 0.851 and MOMENT 0.845, all p < 0.001 (Table 3, p. 8). Median time per fold: 30.6 s (G=10) and 3.7 s (G=1) on an L40S GPU; the baselines ran on CPU, so this is not a controlled comparison (pp. 9-10). Accuracy plateaus after G of about 5, and extractor differences stay below 0.006 (p. 9). TabPFN v3 is ahead at 200 features and behind at 2,000 (p. 15). [my reading] Undiscussed per-dataset losses in the appendix: CinCECGTorso 88.5 against HC2's 99.8; flattened TabPFN beats RocketPFN on ChlorineConcentration (96.6 vs 79.5), EthanolLevel (94.2 vs 86.6) and InsectEPGSmallTrain (100.0 vs 92.2) (pp. 12-13). The claim that G=1 is not significantly different from HC2 (p. 6) has no tabulated test (p. 8).",
+    "positioning": "HC2 is the bar, and the Rocket family the efficient near-equal (p. 1, citing the bake-off redux). TSC foundation models are challenged directly: they should justify their pretraining cost (pp. 1-2, 10). The comparison is deliberately tilted in their favour: the same classifier, the full embedding dimension, pretraining on UCR training splits, and head-independence checked against their own papers (p. 8). Concurrent work: TabPFN v3 (pp. 3, 15) and TabPFN for forecasting (p. 10). No self-citation (pp. 10-12).",
+    "writing": "Numbers and test statistics are in the abstract (p. 1). Four numbered contributions with section pointers (p. 2). One-line verdicts after results: 'The answer is clear', and a 'structural' failure (p. 5). Hedges are specific: UEA is inconclusive and the timings are not a hardware comparison (p. 10); the settings were not tuned (p. 9). It ends with a recommendation to the community and a broader research direction (p. 10).",
+    "limits_future": "An empirical contribution: a composed pipeline and a reference baseline, with no theory and no new learner. Stated limits: the 10-class cap (decompositions deliberately not used, to keep the zero-shot claim clean); 20 UEA datasets, near the Wilcoxon test's floor; GPU against CPU timings (p. 10). Future work: multi-class decompositions, subsampled ensembles, other modalities (pp. 10, 14). [my reading] Not discussed: the dataset-level failures (pp. 12-13), and dependence on a third-party pretrained model whose version changes the results (p. 15).",
+    "method_links": [
+      {
+        "method": "Method 1",
+        "relation": "contradiction",
+        "note": "There is no formulation: nothing is fitted, tuned or optimized on the target data (p. 8), and the classifier approximates Bayesian inference (p. 2). This is counter-evidence to Method 1's claimed practice across five domains, ML included, from 1993 to 2026: in this 2026 ML work the method is composition, not formulation.",
+        "pages": "pp. 2, 4, 8"
+      },
+      {
+        "method": "Method 2",
+        "relation": "variant",
+        "note": "The why-now is a tool change, TabPFN's maturity (p. 2), which matches step 6. But nothing is quantified, and no belief is conceded.",
+        "pages": "pp. 1-2"
+      },
+      {
+        "method": "Method 4",
+        "relation": "variant",
+        "note": "Step 5 is practised with care: a duel against HC2 on the field's archives and protocol, a matched kernel budget against Rocket, a deliberately handicapped comparison against the foundation models, and losses and non-significant results printed. Steps 1-4 are absent: no joint model, exact solve or certificate. The incumbent's numbers are borrowed, not re-run (p. 5), and the timing budgets are unequal, as the paper admits (p. 10).",
+        "pages": "pp. 4-10"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "training-free reference baseline that sets the bar for an expensive model class",
+        "evidence": "RocketPFN is proposed as the reference point that zero-shot TSC foundation models must beat; their pretraining cost should be justified by concrete conditions under which they win.",
+        "pages": "pp. 1-2, 10"
+      },
+      {
+        "pattern": "confound-matched comparison: equalize the budget or dimension the rival could blame",
+        "evidence": "The same 10,000 kernels as Rocket isolate the classifier, and 200 features against 256-1,024-dimensional encoders rule out dimensionality. Compare card S139 in c25 (radius matched on in-sample cost, p. 19).",
+        "pages": "pp. 4-5, 8"
+      },
+      {
+        "pattern": "pretrained model used in context only, no fine-tuning, as the method",
+        "evidence": "TabPFN v2.5 classifies in a single forward pass, with no gradient updates on the target data. Compare card S330 in c28 (ChatGPT prompted in context, pp. 4, 8).",
+        "pages": "pp. 2, 4"
+      },
+      {
+        "pattern": "claim hygiene: decline the add-on that would mix the claim",
+        "evidence": "A multi-class decomposition is refused because it would mix the zero-shot result with an engineering choice, and the excluded datasets are listed (compare D022, p. 6).",
+        "pages": "pp. 10, 14"
+      }
+    ],
+    "transferable": [
+      "(D5) Isolate one component by matching the rival's budget: the same 10,000 random kernels as default Rocket, so only the classifier differs (pp. 4-5).",
+      "(D5) Rule out a confound before a reviewer raises it, by handicapping yourself: 200 features against encoders of 256-1,024 dimensions, and rivals pretrained on the benchmark's own training splits (p. 8).",
+      "(D5) Show that a component is necessary with a dataset where its absence fails visibly: flattened features score at chance on ShapeletSim, encoded ones near perfect (pp. 5-6).",
+      "(D5) Use the field's standard protocol and statistics: 30 stratified resamples, Wilcoxon signed-rank tests with win/tie/loss counts, and critical-difference diagrams with Holm correction (pp. 4-5, 7-8).",
+      "(D5) Fix the settings before seeing results, say so, and show the sensitivity grid afterwards (p. 9).",
+      "(D5) When a dependency's new version appears mid-project, re-run only the parts that depend on it, with everything else fixed, and report where it helps and where it hurts (p. 15).",
+      "(D7) With a small benchmark, call the comparison inconclusive rather than claiming parity, and say why (p. 10).",
+      "(D7) Keep the claim pure: refuse an engineering add-on that would mix the zero-shot result with an unvalidated choice, and list what this excludes (pp. 10, 14)."
+    ],
+    "coauthors": "Franco Martino O'Rourke, Ana Trisovic (p. 1; roles and affiliations not stated)",
+    "quotes": [
+      {
+        "text": "The pretraining cost and design complexity required to learn low-dimensional embeddings should be justified by concrete conditions under which those embeddings outperform this training-free baseline.",
+        "page": 2
+      },
+      {
+        "text": "We chose not to introduce a decomposition strategy here because it would mix our zero-shot result with an engineering choice that is not central to the paper’s claim.",
+        "page": 10
+      }
+    ]
+  }
+]

@@ -1,0 +1,178 @@
+[
+  {
+    "id": "S010",
+    "year": "2016",
+    "title": "Best subset selection via a modern optimization lens",
+    "read_level": "full",
+    "contribution": "Best subset regression solved as a warm-started MIQO: a discrete first-order method finds solutions in seconds and Gurobi with data-derived bounds certifies them or reports a gap, giving sparser models than Lasso.",
+    "problem_entry": "ML+IO (HS as warm start): statistics treats best subset as intractable (NP-hard; leaps stops at p = 30; 'widely dismissed', p. 2; 'deemed as intractable', p. 5), Lasso rests on hard-to-verify conditions and nonconvex penalties lack global guarantees (pp. 3-4); keep the cardinality form (pp. 4-5). Read: arXiv v1.",
+    "key_idea": "Hard-thresholding projected-gradient warm starts plus an MIQO with data-derived bounds that improves them and supplies lower bounds, so a suboptimality guarantee holds even when stopped early; replaces tailored enumerators, including the group's 2009 branch-and-bound (pp. 1, 5-6, 18-20).",
+    "assumptions": "Standardized linear model (p. 2); MIQO by big-M or SOS-1 with bounds MU, Ml, Mzeta that are provable (coherence mu[k-1] < 1 and restricted eigenvalues, or convex QPs with UB; pp. 15-17) or warm-start heuristics tau*||beta_hyb||inf, not provable (p. 17); g convex, l-Lipschitz gradient, L > l (pp. 18, 22); Gaussian designs over rho and SNR, Diabetes (n = 350, p = 64), semi-synthetic Leukemia (n = 72, p = 1000), double-exponential errors for LAD (pp. 26-27, 39).",
+    "proof_devices": [
+      "Convex hull of the big-M set {||beta||inf <= MU, ||beta||1 <= MU k}: constrained Lasso is a weaker relaxation than the root node, Z3 <= Z2 <= Z1 (pp. 9-10)",
+      "Big-M bounds from cumulative coherence and restricted eigenvalues via (1,1) operator norms (Propositions 1-2, Theorem 2.1, pp. 14-15; proofs pp. 49-52)",
+      "Bound-tightening convex QPs max/min beta_i (and <x_i, beta>) s.t. loss <= UB, closed form through one scalar multiplier, solved in parallel (pp. 16-17, 48-49)",
+      "Hard thresholding as the exact projection onto the l0 ball (Proposition 3, p. 19; proof p. 55) combined with the descent-lemma upper bound Q_L (Proposition 4, p. 19)",
+      "Sufficient decrease (L - l)/2 ||beta_{m+1} - beta_m||^2 and finite support identification by contradiction when alpha_k > 0 (Proposition 6, p. 22; proof pp. 52-54)",
+      "O(1/eps) rate to eps-stationarity by telescoping (Theorem 3.1, p. 23; proof p. 56); linear rate once the support settles if g is strongly convex on it (p. 23)",
+      "Nesterov smoothing with continuation tau <- 0.8 tau for the LAD loss (p. 25)",
+      "Bounding-box MIO (37): l1 balls around an incumbent in beta or X beta give certificates inside the box (pp. 34-36)"
+    ],
+    "experiments": "Gurobi 5.5 (Matlab, Python 2.7), Matlab 2012b, two stated Xeon machines (p. 27); heuristic vs MIO cold vs MIO warm within 500 s (Tables 1-2, pp. 28, 33) and gap curves (Figures 2-3, pp. 11, 29); Lasso (glmnet 1.7.3), Sparsenet, stepwise, two debiased Lassos and LAD-Lasso tuned on validation sets, 10 replications (pp. 29-30, 40, 58-63); losses printed: slow bounds for p >> n (p. 34), Lasso best at the lowest SNR in Example 2 (p. 38), MIO ~ first-order for LAD (p. 40); bound type in certified runs and p >> n time limit not stated (pp. 28, 37); no certification-time table at the headline scale (pp. 1, 6, 30-31).",
+    "positioning": "Concedes Lasso's 'impressive work', then lists its shortcomings from statistics' own evidence (pp. 3-4); nonconvex penalties, including coauthor Mazumder's Sparsenet, are uncertified opponents (pp. 4, 29-30); leaps (p <= 30), Bienstock 1996 and his own 2009 branch-and-bound are less scalable (p. 5); IHT needs coherence or RIP, theirs does not (p. 18); speed-up from Bixby 2012 and Nemhauser 2013 (pp. 7-8).",
+    "writing": "Abstract opens on the 200-billion speed-up, then method and scale numbers (p. 1); 'astonishing' four times (pp. 1, 7, 41) and 'to the best of our knowledge' three times with a first-time claim (pp. 2, 5, 6); tractability redefined as solve time (pp. 2, 5); old belief conceded (p. 8); 'orders of magnitude' (pp. 60, 61) overstates table ratios of at most about 3.5 (pp. 61-63).",
+    "limits_future": "Stated: hours to certify for p >> n (p. 6), slow lower bounds (p. 34), correlation lengthens runs (p. 35), 'higher, but still reasonable' times (p. 41); future: statistics of sub-optimal solutions (p. 58). Unstated: the guarantee transfers to (1) only with provable bounds (p. 17), box runs certify only inside the box (p. 34), no code release mentioned.",
+    "method_links": [
+      {
+        "method": "Method 2",
+        "relation": "evidence",
+        "note": "Abstract opens on the 200-billion figure; the belief is dated to the 1970s-80s and conceded as justified then; the figure is Bixby's version-on-version factors (29,000 x 20 = 580,000) times Top500 peak speed (about 320,000); the MIQO factor is asserted ('similar') without a source; runs on Xeon servers. Confirms the skill's dating of arXiv v1 to 200 billion and its Method 2 checkpoint.",
+        "pages": "pp. 1, 2, 7-8, 27"
+      },
+      {
+        "method": "Method 1",
+        "relation": "evidence",
+        "note": "A statistics-owned problem written exactly as MIQO; structure read from the convex hull (Lasso is a weaker relaxation of the root node) rather than the dual; boundary printed (hours for p >> n; correlation). The solve-time definition of tractability is already explicit in 2014-15, earlier than the 2019 principle the skill uses to date the drift.",
+        "pages": "pp. 2, 5, 6, 9-13, 35"
+      },
+      {
+        "method": "Method 4",
+        "relation": "evidence",
+        "note": "Fast heuristic warm start (50 random starts), stated 500 s limit, solver version and machines, gap curves, and an out-of-sample duel against glmnet Lasso, Sparsenet and stepwise at validation-tuned complexity on synthetic data with known truth and real data; regimes where MIO does not win are printed (Heuristic 4).",
+        "pages": "pp. 27-40"
+      },
+      {
+        "method": "Method 4",
+        "relation": "variant",
+        "note": "The warm start is the authors' own new heuristic and the incumbents (Lasso, stepwise, Sparsenet) are opponents only, unlike CART in OCT; when lower bounds stall, the response is a box-restricted MIO certifying inside a neighbourhood of the incumbent (radius insensitivity as support), not local search with restarts (Tension T1).",
+        "pages": "pp. 28, 34-37, 59"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "Rival method as a relaxation of the exact formulation",
+        "evidence": "The convex hull of the big-M best-subset set shows that constrained Lasso is weaker than the MIO root-node relaxation (Z3 <= Z2 <= Z1), so the exact model dominates the rival's bound before any branching.",
+        "pages": "pp. 9-10"
+      },
+      {
+        "pattern": "Big-M constants from the rival field's theory or from incumbent-bounded convex programs",
+        "evidence": "MU, Ml and Mzeta come from coherence and restricted eigenvalues (Theorem 2.1, 'a purely computational motivation' yet compressed-sensing quantities) or from max/min beta_i s.t. loss <= UB with UB from the warm start.",
+        "pages": "pp. 13-17, 48-52"
+      },
+      {
+        "pattern": "Box-restricted certificate around the incumbent when global bounds stall",
+        "evidence": "For p >> n, l1 balls around an incumbent in beta or X beta let the MIO certify optimality inside the box; optima are insensitive to the radius.",
+        "pages": "pp. 34-36, 59"
+      }
+    ],
+    "transferable": [
+      "Characterize the convex hull of your MIO's constraint set to show the rival's convex estimator is a weaker relaxation of your root node, and print the bound ordering (pp. 9-10)",
+      "Tighten big-M constants from the data: with the warm start's objective as UB, solve max/min beta_i (and <x_i, beta>) s.t. loss <= UB, one-multiplier closed form, in parallel (pp. 16-17, 48-49)",
+      "Between equivalent MIO formulations, choose by the dimension of the quadratic form: p x p for n > p, n x n through zeta = X beta for p >> n (p. 13)",
+      "Discrete projected gradient for cardinality constraints: hard-threshold the gradient step, prove sufficient decrease (L > l), finite support identification and an O(1/eps) stationarity rate by telescoping, then polish on the active set (pp. 18-24, 52-56)",
+      "Smooth a non-smooth loss (Nesterov) and run a continuation tau <- 0.8 tau with warm starts (p. 25)",
+      "Report three arms on the same instances (heuristic, MIO cold, MIO warm) with relative accuracy and time to best within a fixed limit, and plot upper bound, lower bound and gap over time (Tables 1-2, Figures 2-3, pp. 11, 28-29, 33)",
+      "Solve the whole k-path in one model with solver callbacks adding sum z <= k, with a per-k stop rule of 1% gap or 15 minutes (pp. 31-32)",
+      "Run at default solver settings and disclose the tuning speed-up you forgo (2-4x), so times read as tractability evidence rather than benchmarks (p. 32)",
+      "When global bounds stall, add l1 balls around an incumbent, certify inside them, and show the optimum is insensitive to the radius (pp. 34-36, 59)",
+      "Score sparse estimators by prediction error relative to the true signal and support size at validation-tuned complexity over SNR and correlation grids (pp. 26, 30)"
+    ],
+    "coauthors": "Angela King (MIT ORC), Rahul Mazumder (MIT Sloan and ORC; most of the work done while he was at Columbia, p. 42)",
+    "quotes": [
+      {
+        "text": "we use the term tractability not to mean the usual polynomial solvability for problems, but rather the ability to solve problems of realistic size in times that are appropriate for the applications we consider.",
+        "page": 2
+      },
+      {
+        "text": "The belief that MIO approaches to problems in statistics are not practically relevant was formed in the 1970s and 1980s and it was at the time justified.",
+        "page": 8
+      }
+    ]
+  },
+  {
+    "id": "S076",
+    "year": "2016",
+    "title": "Fairness and collaboration in network air traffic flow management: An optimization approach",
+    "read_level": "full",
+    "contribution": "Adds airline fairness (penalized reversals and overtaking of scheduled order, one binary per flight pair) and cross-airport slot trading to a network ATFM integer model, priced on six national-scale days.",
+    "problem_entry": "AP+IO: ATFM research 'has not been fully implemented in practice' because network models take a central planner's view and CDM fairness (RBS) is single-airport (p. 1); RBS cannot be applied airport by airport in a network and may be infeasible under a maximum delay (p. 3); the efficiency-only TFMP schedule has 915 reversals (p. 11). Read: 2011 working paper.",
+    "key_idea": "Fairness as preservation of scheduled arrival order: count airport and sector reversals and overtaking with cumulative 'by' binaries and add them with weights lambda to the delay-cost objective (RBS is the high-lambda special case), then let airlines trade Stage-I slots across airports with one binary per offer (pp. 11-22).",
+    "assumptions": "Deterministic 15-minute capacities, no cancellations, maximum delay M = 6 periods for tractability (pp. 3, 5, 24-25); hard flight connectivities for polyhedral strength (pp. 10-11); randomized shortest-path trajectories on a 10 x 10 sector grid; capacity = realized operations + 20% (pp. 23-24); six days 2004-06, 55 airports, top five airlines (p. 24); synthetic on-time-maximizing offers (p. 31); M also defines the reversible pairs (p. 7) though said to have no fairness consequences (pp. 24-25).",
+    "proof_devices": [
+      "Truth table of (w_f, w_f', s) and one-sided linearizations proved correct only when the indicator is minimized (Table 1, Theorems 1-2, pp. 12-15)",
+      "Objective-independent formulations: convex hull of the four feasible 0/1 points for overtaking, (7a)-(7d) (Figure 2, pp. 13-14), and two inequalities with one binary per pair for reversals, (12a)-(12b) (p. 16)",
+      "Integrality of the per-pair reversal polyhedron by total unimodularity: two standard TU facts from Optimization over Integers plus a row-partition argument over two-row blocks; without the last column the matrix is a network matrix (Proposition 1, pp. 35-36)",
+      "RBS as the special case of a sufficiently high lambda when RBS is feasible (Remark 2, p. 17)",
+      "Size bounds per model and a U.S.-scale example (Tables 2-3, p. 19)",
+      "Super-linear delay cost (t - a)^(1+eps) to spread delay across flights (Example 2.2, p. 9)"
+    ],
+    "experiments": "CPLEX 11.0 via AMPL on a 2 GB laptop, about 300k variables and 800k constraints (p. 25); baselines actual delays and the efficiency-only TFMP (-23%, Table 5, p. 25); fairness at 0/5/15/25/30 airports and lambda in {0, 1, 10, 100, 1000} (Tables 6-7, Figure 5, pp. 26-28); sector reversals (Table 8, p. 30), super-linear vs linear costs (Figure 7, p. 31), trading and a single-airport ablation (Tables 9-10, pp. 33-34); failures: breakdown at >= 30 airports put down to memory, 3600 s entries, within 20% of optimum in < 15 min (pp. 28-29); 4 of 12 runs at 25 airports exceed 30 min (pp. 26, 28).",
+    "positioning": "Builds on Odoni 1987 and the group's own ATFM line (1994-2008), faulted for a single decision-maker view (p. 2); CDM/RBS and Vossen-Ball trading credited but single-airport (p. 3); contrasted with the simultaneous Barnhart-Bertsimas-Caramanis-Fearing paper (exact vs approximate overtaking, network effects, Stage II) while closing that both contribute (pp. 4-5).",
+    "writing": "Self-described 'proposal' (title, p. 1; 23 lines); opens on the theory-practice gap with 'In our opinion' (p. 1), opinion markers through to the conclusion (pp. 4, 18, 23-24, 28-29, 34); examples and remarks justify each modelling choice (pp. 8-11, 17-19, 25, 31-32); 'consistently less than 30 minutes' (p. 28) vs 4 of 12 runs over 30 min at 25 airports (pp. 26, 28); the Reversal summary repeats the Overtake average of 24.5% (pp. 27-28) where Table 7 gives 23.2%.",
+    "limits_future": "Stated: memory breakdown at >= 30 airports (p. 28), M >= 10 gives millions of variables (p. 24), capacities inferred (p. 24), sector-reversal control costs about 13% so made secondary (pp. 29, 34). Unstated: deterministic capacities with only a qualitative stochastic argument (p. 18), synthetic offers (p. 31), no field test or stakeholder evaluation, 23% gain depends on the 20% capacity slack (pp. 24-25); no future work in the conclusion (p. 34).",
+    "method_links": [
+      {
+        "method": "Method 3",
+        "relation": "variant",
+        "note": "Price of fairness published as curves (reversals vs % delay increase over lambda in {0, 1, 10, 100, 1000}, with a knee: < 100 reversals for <= 10%), a second knob (number of airports with fairness) and bad cases (sector reversals +13%, breakdown at 30 airports); class kept; but the knob is an objective weight and no solution-independent knob-property bound is proved.",
+        "pages": "pp. 14, 16, 26-30"
+      },
+      {
+        "method": "Method 1",
+        "relation": "evidence",
+        "note": "CDM's fairness principle written exactly into the Bertsimas-Stock-Patterson binary network model with one extra variable per pair; strength shown (convex hull of truth-table points; TU integrality); boundary printed (M >= 10; memory at 30 airports). On the strong-formulation side of Tension T4 (hard connectivities kept for 'stronger polyhedral structure').",
+        "pages": "pp. 10-19, 24, 28, 35-36"
+      },
+      {
+        "method": "Method 5",
+        "relation": "evidence",
+        "note": "Starts from the owners' process (FAA and airlines under CDM, RBS, FSM data) and maps Stage I and II onto its three phases; decisions scored by delay cost, reversals and executed trades against actual delays and the efficiency-only model, own run times reported. Step 6 missing: the paper stays a 'proposal' with no field test, and the 23% gain rests on capacities set 20% above realized operations.",
+        "pages": "pp. 1-4, 22-25, 34"
+      },
+      {
+        "method": "Method 6",
+        "relation": "evidence",
+        "note": "Programme lineage: adapts the Bertsimas-Stock-Patterson model, cites the group's ATFM line from 1994 to 2008, and positions a simultaneous co-authored alternative (Barnhart, Bertsimas, Caramanis, Fearing) on the same problem as complementary.",
+        "pages": "pp. 2, 4-5"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "Nest the incumbent rule as a limiting case of the priced model",
+        "evidence": "With a sufficiently high lambda the reversal model reproduces the RBS schedule whenever RBS is feasible, so the current rule is one setting of the knob.",
+        "pages": "p. 17"
+      },
+      {
+        "pattern": "Truth table to convex hull for objective-independent indicators, then a TU check",
+        "evidence": "One-sided linearizations are proved correct only when the indicator is minimized (Theorems 1-2); they are replaced by the convex hull of the feasible 0/1 points so that any objective (e.g. equalizing reversals across airlines) can use them; integrality is checked by total unimodularity.",
+        "pages": "pp. 12-19, 35-36"
+      },
+      {
+        "pattern": "Integration section mapping model stages onto the owner's process and data systems",
+        "evidence": "Section 5 maps Stage I to CDM phase 1 (RBS) and Stage II to the airline-response and FAA-coordination phases, with inputs from FSM and outputs convertible into slot assignments.",
+        "pages": "pp. 22-23"
+      }
+    ],
+    "transferable": [
+      "Model order-based fairness with cumulative 'by' binaries (w = 1 if arrived by t): a reversal or a period of overtaking becomes a linear inequality on w_f' - w_f (pp. 5, 12, 15)",
+      "For each indicator, write the truth table of feasible 0/1 points, take its convex hull to get objective-independent constraints, and check integrality with a TU row-partition argument (pp. 12-16, 35-36)",
+      "Make the incumbent rule a limiting case of your model (a high lambda reproduces RBS whenever feasible), so adoption is a parameter choice (p. 17)",
+      "Add a tiny super-linear exponent (1 + eps) to per-unit costs to spread delays evenly, then measure that it moves cost and fairness by about 1-2% or less (pp. 9, 31)",
+      "Two-knob price sweep: the weight lambda over decades {0, 1, 10, 100, 1000} and the number of resources where the property is imposed, with % cost over the unconstrained model and solve time per cell (pp. 26-28)",
+      "Ablate the network model against its single-resource restriction while varying the share of local vs network requests, and report where the simpler model wins (Table 10, pp. 32-34)",
+      "When exact solves blow up, report time to a fixed gap (within 20% in under 15 minutes) next to the failures (pp. 28-29)",
+      "Write a section mapping each model stage onto the owner's process phases and data systems, showing inputs exist and outputs convert into the current artefact (pp. 22-23)"
+    ],
+    "coauthors": "Shubham Gupta (MIT ORC)",
+    "quotes": [
+      {
+        "text": "Yet, the research has not been fully implemented in practice.",
+        "page": 1
+      },
+      {
+        "text": "The computational times of both (TFMP-Reversal) and (TFMP-Overtake) are consistently less than 30 minutes for up to 25 airports, but they break down when we impose fairness at 30 airports and above.",
+        "page": 28
+      }
+    ]
+  }
+]

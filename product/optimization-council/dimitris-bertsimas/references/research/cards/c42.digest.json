@@ -1,0 +1,195 @@
+[
+ {
+  "id": "S681",
+  "year": "2026",
+  "title": "Optimal Control of Fluid Restless Multi-armed Bandits: A Machine Learning Approach",
+  "read_level": "full",
+  "contribution": "For fluid (ODE) restless bandits with affine or quadratic dynamics, Pontryagin extremals follow a top-m index rule read off an LP dual and have closed-form pieces. A closed-form shooting method generates extremal trajectories, and OCT-H, trained on features derived from that structure, imitates them as an interpretable time-dependent feedback policy. On three synthetic applications: accuracy >= 0.98, max PMP-Gap <= 0.0181, inference speed-ups up to 2.65e7 (arXiv v2).",
+  "problem_entry": "SD+ML+DA, with AP models as testbeds. Restless bandits are PSPACE-hard, and Whittle's index needs indexability and conditions hard to verify (p. 2). ODE-type fluid models, classical for queueing networks, are little used for restless bandits; the one exception relaxes the coupling (pp. 2-3). Re-solving from many initial states is prohibitive, so the target is a state-time feedback policy (pp. 3, 5-6).",
+  "key_idea": "PMP turns the instantaneous control into an LP whose dual gives a top-m index rule (Prop. 1, pp. 7-8). Closed-form state and costate pieces make shooting cheap (pp. 10-13). OCT-H imitates the solved (x, t) -> u map, with features from writing the index as an affine combination of state terms within an interval (Props. 2-3, Alg. 2, pp. 14-17). The indices are coupled and time-dependent, with no averaged relaxation and no indexability (Remark 1(b), p. 8).",
+  "assumptions": "Affine dynamics with affine rewards, or quadratic dynamics without intercept with affine rewards (pp. 5, 10-11). State constraints dropped by forward invariance (p. 5; Props. 4, 6-8, pp. 19, 27-28); no chattering assumed (pp. 8, 12); fixed parameters (p. 27). Synthetic machine-maintenance, SIS-epidemic and logistic-fisheries models with uniform parameter draws; n in {5, 10}, T in {1, 5}, m = floor(0.3n) (pp. 21-23, 25).",
+  "proof_devices": [
+   "Pontryagin maximum principle reduced to a per-instant LP, whose dual gives the binary top-m index rule (Lemma 1, Prop. 1, pp. 7-8)",
+   "Proof that Sethi's derived-Hamiltonian concavity condition fails: a pointwise maximum of affine or concave quadratic functions, so extremals cannot be called optimal (pp. 8-9)",
+   "Closed-form state and costate trajectories on constant-control intervals (eqs. (8), (10), pp. 10-11)",
+   "Shooting on the terminal costate condition with Broyden's derivative-free quasi-Newton update; the closed forms remove ODE-discretization error (eq. (11), Remark 2, Alg. 1, pp. 11-13)",
+   "Costate elimination writing the index as an affine combination of state-derived terms within an interval, used as features (Props. 2-3, pp. 15-16; Alg. 2, p. 17)",
+   "Forward invariance by induction over constant-control intervals (Prop. 4, p. 19; Props. 6-8, pp. 27-28)",
+   "Closed-form index and switching time t = 10 - log 9 for admission and routing to parallel infinite-server queues (Prop. 5, eqs. (16)-(18), pp. 19-20)"
+  ],
+  "experiments": "Data: 3,000 sampled initial states per configuration, solved by shooting, 10 points per constant-control interval. OCT-H (Interpretable AI) with depth tuned over {5, 10, 15}, on a MacBook Pro M2 Pro (pp. 23-24). Metrics: held-out accuracy on 1,000 points; max PMP-Gap over 100 instances; speed-up over shooting, averaged over converged runs; training time excluding data generation (pp. 23-24). Results: accuracy >= 0.98; max gap <= 0.0181; speed-ups 47,625 to 2.65e7; training 2:23 to 143:20 min:s (Tables 1-4, pp. 25-26). The closed-form toy is recovered (p. 20). Under +/-Gamma parameter perturbation the gap stays below 5% when small (pp. 24-25). Shooting takes up to 2,880 s (Table B4, p. 30); some runs failed, uncounted (p. 21). No comparison with Whittle's index, the LP index, RL or neural nets; data-generation cost not reported (p. 24).",
+  "positioning": "Sits between restless-bandit index heuristics (Whittle, Weber-Weiss, Gast et al.), faulted for indexability (p. 2); MCQN fluid models as policy surrogates (Dai, Stolyar, Maglaras, Bertsimas et al. 2015, Bertsimas-Gamarnik 2022) (p. 2); and learning for control (RL; Bertsimas-Kim 2023) (p. 3). Larranaga et al. 2016 is credited as the exception that relaxes the coupling (p. 3). The index is contrasted with Whittle's and with S051's LP index (Remark 1(b), p. 8). Among his bandit papers only S051 (2000) is cited (pp. 31-35).",
+  "writing": "Four contributions, opening 'We initiate the study of FRMABPs' (p. 6). The body hedges precisely: extremal, candidate optimal trajectories, the chattering remark, a proved sufficiency failure, inherent theoretical limitations (pp. 4-5, 8-9, 27). The headline layer is stronger: high-quality policies and up to 26 million times in the abstract, which does not say the targets are uncertified (p. 1); the gap column is labelled Max Suboptimality (p. 25).",
+  "limits_future": "Limits: fixed parameters; no a priori guarantee of finite switching or global optimality; the observed finite switching, apparent uniqueness and small nonnegative gaps await proof (p. 27); linear splits may miss nonlinear boundaries (p. 13); features do not model explicit time dependence (p. 16). Future: policies that adapt to changing parameters; general fluid MDPs (p. 27).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Steps 4-5 present: the per-instant LP is dualized into the index rule, and the boundary is printed (sufficiency fails, chattering possible, runtimes explode). Steps 2-3 absent: the control problem stays with PMP and shooting, and the learned object is a tree, not an LP, conic or MIO reformulation.",
+    "pages": "pp. 7-9, 30"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Confirms step 6: a return to restless bandits once the tool changed (S051's LP relaxations -> OCT-H imitation). But no belief is conceded and no solver x hardware figure is rebuilt. The headline is a per-query inference speed-up over the authors' own solver, excluding data generation and training. The only bandit paper of his cited is S051 (2000).",
+    "pages": "pp. 1, 3, 8, 23-25, 31-35"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Interpretability is named as the property and tree depth is the knob. But depth is grid-tuned, and no price is shown: no black-box comparison and no accuracy-depth curve.",
+    "pages": "pp. 13, 24, 26"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "The certificate step is honoured in the body: extremals are never called optimal, the sufficiency failure is proved, restarts probe uniqueness, limits are stated. The incumbent duel is missing: Whittle's index, the LP index, the fluid index, RL and neural nets are named but not run. The table label Max Suboptimality claims more than is certified.",
+    "pages": "pp. 2-5, 8-9, 21, 23-25, 27"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Decisions are scored (PMP-Gap on the objective) beside imitation accuracy, but there is no owner, no current rule and no field test; the instances are synthetic.",
+    "pages": "pp. 21-23"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "The OCT programme's tool (2017 paper, 2019 book, Interpretable AI software) is carried into a new domain after the same team's 2023 queueing preprint. Former student Nino-Mora returns as coauthor, with visits supported by Bertsimas. The queueing book with Gamarnik serves as background.",
+    "pages": "pp. 2-3, 9, 24, 30"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "features derived from the optimality conditions",
+    "evidence": "Costate elimination gives the functional form of the switching index within an interval. Those terms become the interpretable learner's features, pruned by the controls observed in the data.",
+    "pages": "pp. 13-17"
+   },
+   {
+    "pattern": "closed-form case recovered before scaling",
+    "evidence": "For parallel infinite-server queues the index and switching time have closed forms; OCT-H trained on 1,000 sampled starts recovers the policy almost identically.",
+    "pages": "pp. 17-20"
+   },
+   {
+    "pattern": "restart agreement as a soft certificate",
+    "evidence": "Three random costate initializations per instance gave identical trajectories or failed, read as a strong candidate if an optimum exists. Compare S038 p. 11 (the same tour from every start).",
+    "pages": "pp. 21, 27"
+   },
+   {
+    "pattern": "SD exception to the incumbent duel",
+    "evidence": "Whittle's index is faulted in the introduction but never run, both here and in S051 (S051 pp. 3, 10, per card c06).",
+    "pages": "pp. 2, 8, 23-25"
+   },
+   {
+    "pattern": "offline imitation of a repeatedly solved control problem (supports SKILL Heuristic 5)",
+    "evidence": "Repeated solves from varying initial conditions motivate a tree trained offline on solver output and deployed online by millisecond inference.",
+    "pages": "pp. 3, 5, 14, 24"
+   }
+  ],
+  "transferable": [
+   "When the Hamiltonian is linear in a bounded control with a budget coupling, write the pointwise maximization as an LP and read the top-m index rule off its dual (pp. 7-8).",
+   "Before writing 'optimal', test the derived-Hamiltonian concavity condition on your model class; if it fails, prove the failure and call the solutions extremal (pp. 8-9).",
+   "In shooting for bang-bang controls, propagate state and costate in closed form between switches, and start a new interval when the index ranking changes (pp. 10-12).",
+   "Derive the switching index's functional form within one interval, add exactly those terms as features for a linear-split tree, and prune the terms the observed controls never activate (pp. 14-17).",
+   "Validate a learned-policy pipeline first on a model with a closed-form optimal policy (pp. 17-20).",
+   "Report imitation accuracy and the decision-level gap side by side, and state what the speed-up and training times exclude (pp. 23-24).",
+   "Probe uncertified solutions with several random starts of the root-finder, and report agreement or failure (p. 21).",
+   "Test misspecification by drawing each test parameter within +/-Gamma of its training value, and plot the worst gap against Gamma (p. 24)."
+  ],
+  "coauthors": "Cheol Woo Kim (MIT Operations Research Center); José Niño-Mora (Universidad Carlos III de Madrid)",
+  "quotes": [
+   {
+    "text": "Consequently, for these models the derived-Hamiltonian condition does not hold, and PMP extremals cannot be asserted to be optimal by this route.",
+    "page": 9
+   },
+   {
+    "text": "Instead of using deep neural networks, we adhere to OCT-H and address potential nonlinearities in the decision boundaries by augmenting the feature vector with nonlinear transformations of the state variables.",
+    "page": 13
+   }
+  ]
+ },
+ {
+  "id": "S914",
+  "year": "—",
+  "title": "A General Purpose Local Search Algorithm for Binary Optimization",
+  "read_level": "full",
+  "contribution": "A general-purpose local search for pure binary programs that also keeps near-feasible 'interesting' solutions, indexed by their constraint-status trace, with a depth knob Q. It is proven pseudo-polynomial for fixed Q and w^2/(2w-1)-approximate for unweighted w-set packing at Q = w^2. In a hashed implementation it is comparable to or better than CPLEX 9.1 on long runs on random set covering and packing instances (undated working paper; likely an earlier version of S328, IJOC 2013).",
+  "problem_entry": "IO+HS. Exact codes (CPLEX, 'EXPRESS') now solve problems out of reach a decade earlier, with cutting planes judged the main algorithmic driver (p. 1). Yet especially dense binary problems remain unsolved, practice wants feasible solutions without a proof of optimality, and general-purpose heuristics are few (p. 2). Problem: max c'x, Ax <= b, x binary, with integer data and no structure used (pp. 1-2).",
+  "key_idea": "One-flip local search that also keeps interesting solutions: violation at most 1 per constraint, trace within l1-distance Q of the incumbent's, and better than all examined solutions with the same hashed trace. The list is cleared on every improvement (pp. 3-5). Q is an explicit quality-time dial (p. 2). General-purpose, and close to the problem-specific Hurkens-Schrijver bound (pp. 2, 15).",
+  "assumptions": "Pure binary programs with integer A, b, c (p. 1); the bound is pseudo-polynomial in ||c||_1 (p. 2). The guarantee needs unweighted w-set packing with exactly w ones per column, a FIFO list and an injective h (pp. 9-10). Hashing and a capped list forfeit it (pp. 16-18). Random instances from the authors' generator: covering m=1000, n=2500, w = 3, 5 or 3-7, unweighted and weights in [400, 500]; one m=4000, n=10000 instance; packing m=1000, n=2500 (pp. 23-24).",
+  "proof_devices": [
+   "Run-time bound O(||c||_1^2 n C(2m,Q) max(m,n)) for fixed Q and injective h; strongly polynomial for c = e (Theorem 1, pp. 6, 9)",
+   "Counting device: interesting traces lie in {0,1}^{2m} within distance Q, and each trace box improves at most ||c||_1 + 1 times since objective values are bounded integers (Lemma 1, p. 7)",
+   "Incremental evaluation Ay - b = Ax - b +/- A_i, so each neighbour costs O(m) (Lemma 2, pp. 7-8)",
+   "Approximation ratio w^2/(2w-1) at Q = w^2: structure of a poor local optimum (constraint-disjoint optimum, tight-constraint counting R > Z*/w, swap pairs, improving exchange) (Lemma 3, Theorem 2, pp. 10-12)",
+   "Reachability by generations: a FIFO list examines solutions in increasing generation, so the exchange path is reached when Q >= T w (Lemma 4 and proof of Theorem 2, pp. 13-15)",
+   "Implementation analysis: memory O(n C(2m,Q)) when h is injective; run time O(||c||_1^2 N_TB n max(m, n N_H)) with hashing, with the guarantee lost (pp. 16-18)"
+  ],
+  "experiments": "CPLEX 9.1 against the heuristic, both with 6 GB, on a dual-core Xeon 5050 with 8 GB (pp. 22-23). The heuristic runs in stages Q = 4, 6, 10, then 15 and 20, with memory rising from 10 MB to 6 GB, each warm-started from the previous stage and timed as a sum (p. 22). Checkpoints at 5, 10 and 20 h, and 10, 20, 100 and 200 h for the large instance (pp. 23-24). At 20 h, of 14 comparisons (my tally): heuristic better in 9, CPLEX in 3, 2 ties. Weighted packing w=3 flips toward CPLEX over time; the large weighted instance needs 100 h (pp. 23-24). CPLEX leads at 1-2 h (p. 23). No CPLEX settings, bounds or gaps, starting solution, variance or other heuristics reported.",
+  "positioning": "Framed by the success of exact MIP codes, with cutting planes ranked above heuristics (p. 1). Places itself among lift-and-project, pivot-and-complement, the feasibility pump and pivot-cut-and-dive (p. 2). Hurkens-Schrijver is credited as slightly stronger but specific to set packing (pp. 2, 15). Eight references, none on simulated annealing, not even his own 1993 review (S005) (p. 28).",
+  "writing": "Five contributions, opening 'genuinely general purpose' and ending with the CPLEX comparison flagged 'Most importantly' (pp. 1-2). A toy set-packing instance is traced step by step (pp. 5-6, 25-28). Hedges: we believe, very encouraging, preliminary computational tests (pp. 1-2, 25). Slips: the packing text says w = 3 while the tables show 3, 5 and 3-7 (p. 24); dense in the motivation, sparse in the implementation and conclusion (pp. 2, 16, 25). The 20-hour headline generalizes over exceptions in its own tables.",
+  "limits_future": "Limits: the guarantee is lost in the hashed implementation (p. 18); CPLEX leads on short runs (p. 23); memory is n C(2m,Q) without hashing (p. 16); the tests are preliminary and random (p. 25). No future directions stated (p. 25).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "The incumbent duel is there: the leading code, matched memory, equal wall-clock checkpoints, one machine, losses printed; warm starts link the stages. Missing: a certificate or gap for either method, an exact step, and CPLEX's settings. The paper states that practice wants feasible solutions without proof of optimality, in tension with Taste 7 and Tension T1.",
+    "pages": "pp. 2, 22-24"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "One knob Q with proven bounds (run time, Theorem 1; approximation ratio at Q = w^2, Theorem 2). But the knob trades the algorithm's own time against quality, not a decision-maker's property; no quality-vs-Q curve is published; and the bound does not survive hashing.",
+    "pages": "pp. 2, 6-15, 18, 22"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "The solver-progress story appears without a number and is turned the other way: what solvers still cannot do (dense problems) motivates a heuristic, not an exact reformulation.",
+    "pages": "pp. 1-2"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "a heuristic held to the 1993 yardsticks",
+    "evidence": "One depth knob with a proven run-time bound and an approximation ratio on a subclass, then a duel with the best general code at equal time and memory: the complexity and equal-time standards S005 applied to simulated annealing (S005 pp. 3-4, per card c01).",
+    "pages": "pp. 2, 6-15, 22-24"
+   },
+   {
+    "pattern": "signature-indexed near-feasible search",
+    "evidence": "Keep the best objective for each constraint-status signature (violated and loose constraints), allowing one unit of violation per constraint; clear on improvement.",
+    "pages": "pp. 3-5"
+   },
+   {
+    "pattern": "memory as a matched, explicit parameter",
+    "evidence": "Trace-box count tied to memory and scaled with Q (N_TB/Q constant); the comparison with CPLEX at equal memory (6 GB).",
+    "pages": "pp. 16-17, 20, 22-23"
+   },
+   {
+    "pattern": "local-search fallback evidence (supports SKILL Heuristic 3, partially)",
+    "evidence": "A working-paper version of the IJOC paper that Heuristic 3 cites: a general local search beats an exact code on long runs, but with no restarts and no MIO certification step; the trigger is CPLEX's limit on large instances.",
+    "pages": "pp. 2, 23-24"
+   }
+  ],
+  "transferable": [
+   "Let local search keep bounded-infeasibility solutions indexed by their violated/loose-constraint signature, keeping the best objective per signature and clearing the store when the incumbent improves (pp. 3-5).",
+   "Prove pseudo-polynomial running time by counting signatures within the depth bound times the distinct integer objective values per signature record (Lemma 1, p. 7).",
+   "For a local-search approximation ratio, characterize a poor local optimum and its improving exchange, then prove the search order reaches it within the depth budget (Lemmas 3-4, pp. 10-15).",
+   "Update constraint slacks incrementally so each neighbour costs O(m) (p. 8).",
+   "Run a heuristic in stages of rising depth and memory, each warm-started by the previous output, and report the summed wall-clock time (p. 22).",
+   "Duel a commercial solver at matched memory over several wall-clock checkpoints and print every checkpoint, including the ones it wins (pp. 23-24).",
+   "Trace a three-variable instance through every step of the algorithm, with the full trace in an appendix (pp. 5-6, 25-28)."
+  ],
+  "coauthors": "Dan Iancu; Dmitriy Katz (MIT Operations Research Center)",
+  "quotes": [
+   {
+    "text": "In real-world applications, there is stringent desire to find feasible solutions that improve current practice, without necessarily having a proof of their optimality.",
+    "page": 2
+   },
+   {
+    "text": "For shorter running times (1-2 hours), CPLEX has an edge, although not in all cases.",
+    "page": 23
+   }
+  ]
+ }
+]

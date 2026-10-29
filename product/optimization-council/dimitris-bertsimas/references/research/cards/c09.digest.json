@@ -1,0 +1,332 @@
+[
+  {
+    "id": "S066",
+    "year": "2005",
+    "title": "Simulation-based booking limits for airline revenue management",
+    "read_level": "full",
+    "contribution": "A simulation-based booking-limit method (SBL) for airline network revenue management. It keeps the industry's DAVN control framework and the LP-derived nesting order, and improves EMSR- or LP-based booking limits by a stochastic-gradient search whose revenue estimates combine simulation of the current window with an approximate value function for future reoptimizations.",
+    "problem_entry": "Network LPs are deterministic, static and partitioned, leg-based heuristics miss network effects, and exact stochastic DP is intractable, so no model optimizes the booking limits airlines actually implement under DAVN nesting (pp. 1-4). Domains AP+HS+SD, with LO as engine.",
+    "key_idea": "Keep DAVN and the LP nesting order. Estimate the revenue of a booking-limit vector by simulating to the next revision plus a value-function estimate, then improve the incumbent EMSR-BL or LP-BL limits by finite-difference stochastic gradient (pp. 2, 5-10).",
+    "assumptions": "Pólya demand (NHPP with beta-shaped intensity times a gamma total, with negative-binomial updates); no overbooking, cancellations, no-shows or buy-down; independent demand per class; nesting order fixed per window; separable piecewise-linear value function from the prior demand model (pp. 5, 8-11).",
+    "proof_devices": [
+      "LP duals of Model (1) give displacement-adjusted leg revenues and the DAVN nesting order (p. 3)",
+      "booking-limit choice written as a dynamic program over time windows (eqs. 2-3, p. 5)",
+      "first finite differences instead of gradients, because expected revenue depends only on the integer part of the limits (p. 6)",
+      "parallel-bookkeeping estimator: branch a counterfactual path only when exactly one bucket limit rejects a request (pp. 6-7)",
+      "step rule with cap Δmax, sign-change interpolation and projection onto nesting constraints (p. 7)",
+      "two-leg example in which both finite differences vanish though a joint increase helps, so there is no local-optimality guarantee (p. 7)",
+      "state-space points concentrated at the simulated mean ± 3 sd per leg, qL axis points instead of a q^L grid (p. 8)",
+      "interpolation between a chord lower bound and a tangent-envelope upper bound, from single-leg concavity (pp. 8-9)",
+      "gamma-Poisson conjugacy keeps conditional remaining demand negative binomial (p. 11)"
+    ],
+    "experiments": "C++ simulator, all policies on common request streams. Single-leg factor grid (100,000 runs): +0.01-0.68% over EMSR-BL under standard nesting, +1.80-7.93% under theft nesting. Exact SDP benchmark (single leg, 2,500 runs): gap <0.17% at 95% confidence with 20 updates. Value-function ablation: gains shrink, -0.11% under theft. 5-15-spoke hubs (1,000 runs): +0.05-0.61% over EMSR-BL. Cost: 50-60 CPU h offline, seconds online, Pentium IV. Beats bid prices updated up to 100 times by 1.03-2.67% (pp. 11-15).",
+    "positioning": "Builds on Glover et al.'s LP, Smith-Penn's DAVN, Williamson's LP-BL, Belobaba's EMSRb, Robinson's simulation-based optimization and Bertsimas-Popescu's ADP. Judges the alternatives by name, and says the others, though better justified theoretically, oversimplify or optimize a different policy from the one implemented (pp. 2-5, 10).",
+    "writing": "Numbered contributions with a 'first to' claim (p. 2); abstract and conclusion hedged with 'Preliminary simulation experiments suggest' (pp. 1, 16); heuristic status stated on pp. 7 and 10; 'Insights Gained' bullets (p. 15); gains of 0.05-0.61% called practically significant by airline scale (p. 14).",
+    "limits_future": "Simplified demand model and few test problems (p. 16); no overbooking, cancellations or buy-down (p. 11); no convergence guarantee (p. 7); unequal tuning across cases (p. 14); dynamic bid prices out of scope (p. 15). Future: more extensive testing, and value functions updated as forecasts change (pp. 10, 16).",
+    "method_links": [
+      {
+        "method": "Method 5",
+        "relation": "evidence",
+        "note": "The baselines are the rules airlines run (DAVN with EMSR-BL, LP-BL, bid prices), scored by revenue on common simulated request streams, and the method's own computing cost is reported (50-60 CPU h offline). Caveat: synthetic Pólya demand, no partner data or field test.",
+        "pages": "pp. 3, 11, 15-16"
+      },
+      {
+        "method": "Method 4",
+        "relation": "variant",
+        "note": "The incumbent heuristic is both the start and the opponent, but the solver is a stochastic-gradient heuristic, labelled as such. An exact-DP benchmark on a single-leg instance (gap <0.17%) takes the place of a certificate.",
+        "pages": "pp. 7, 10-13"
+      },
+      {
+        "method": "Method 1",
+        "relation": "contradiction",
+        "note": "No exact LP or MIO formulation. The IP is dropped as computationally unattractive, the LP fixes only the nesting order, and the decision is optimized by simulation with 'no theoretical justification'. An HS-domain data point for Tension T2, already in 2005.",
+        "pages": "pp. 2, 7, 10"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "optimize the policy actually deployed",
+        "evidence": "Keeps the airline's DAVN control framework and improves its parameters by simulation; faults better-justified methods for optimizing a different policy from the one implemented.",
+        "pages": "pp. 3, 10"
+      },
+      {
+        "pattern": "exact optimum on a small solvable instance as the certificate for a heuristic",
+        "evidence": "SBL is compared with the SDP-optimal policy on a single-leg instance, and the gap is reported as a 95%-confidence bound that shrinks to <0.17% with 20 updates.",
+        "pages": "p. 13"
+      }
+    ],
+    "transferable": [
+      "Parallel-bookkeeping finite differences: branch a counterfactual path with that one limit raised by a seat only when exactly one binding limit rejects a request, at most once per bucket; n simulated paths then estimate all N finite differences (pp. 6-7)",
+      "Common random numbers: evaluate every policy on the same simulated request sequences (p. 11)",
+      "Benchmark a heuristic against the exact DP optimum on a small instance and report the gap as a 95%-confidence bound (p. 13)",
+      "Ablate the component claimed to be essential (value functions) and show the gain shrinks or turns negative (pp. 13-14)",
+      "Place value-function grid points where simulated states fall: mean ± 3 sd per leg, on the axes only (qL instead of q^L) (p. 8)",
+      "Interpolate a concave value function as a weighted average of the chord (lower bound) and the tangent envelope (upper bound) (pp. 8-9)",
+      "For a noisy finite-difference search over integers: cap the step, interpolate back on a sign flip, project, stop at kmax (p. 7)",
+      "Separate offline estimation, overnight improvement and online implementation, and time each part (pp. 10, 15)"
+    ],
+    "coauthors": "Sanne de Boer",
+    "quotes": [
+      {
+        "text": "Attempting to solve this type of optimization problem with a stochastic gradient method has no theoretical justification, but is a heuristic based on the intuition behind gradient descent methods.",
+        "page": 7
+      },
+      {
+        "text": "most of the methods that have been proposed in the literature have a better theoretical justification, but they either oversimplify the problem or are directed at optimizing a different policy than the one that is actually implemented",
+        "page": 10
+      }
+    ]
+  },
+  {
+    "id": "S014",
+    "year": "2006",
+    "title": "A robust optimization approach to inventory theory",
+    "read_level": "full",
+    "contribution": "A budgeted robust-optimization model of multi-period inventory control, for a single station, capacitated settings and tree supply chains. It stays an LP (no fixed costs) or a MIP (fixed costs), and its optimal policy is the nominal policy for an explicitly modified demand, so base-stock structure and closed-form thresholds carry over without distributional assumptions.",
+    "problem_entry": "DP for supply chains suffers from dimensionality and needs the full demand distribution; the simulation, ADP and min-max alternatives still need distributions or DP; the paper states four requirements for a replacement (pp. 1-2). Domains RO+SD, LO/IO as engines, inventory as the AP testbed.",
+    "key_idea": "Interval demand with per-period cumulative budgets Γ_k; robustify each holding and shortage constraint by LP duality; prove that the robust optimum equals the nominal optimum for a modified demand w'_k = w̄_k + (p-h)/(p+h)(A_k - A_{k-1}) (Theorem 3.2), then extend to capacities and tree networks (pp. 4-10).",
+    "assumptions": "Discrete time, zero (or constant) lead time, backlogging, linear dynamics, convex piecewise-linear holding/shortage cost with p > c; budgets nondecreasing, rising by at most 1 per period; tree networks for the structural results; budget selection assumes uncorrelated demand with known mean and variance and ignores fixed costs (pp. 3-4, 8-11).",
+    "proof_devices": [
+      "strong duality on a per-row auxiliary LP gives the linear robust counterpart (Theorem 2.1, p. 3)",
+      "per-period auxiliary LP (13) and its dual give formulation (14): an LP if K=0, a MIP if K>0 (pp. 4-5)",
+      "Remark 1: the holding and shortage worst cases are opposite, so no single demand realizes both (p. 4)",
+      "explicit dual-feasible solution proves base-stock optimality of the nominal problem (Lemma 3.1, pp. 5-6)",
+      "fix the optimal duals and change the stock variable: robust = nominal with modified demand plus a constant (Theorem 3.2, eq. 23, p. 6)",
+      "Lemma 3.4: a decreasing time-varying capacity never threatens feasibility (p. 7)",
+      "fixing coupling right-hand sides and Lagrangean relaxation decouple the echelons (Lemma 4.1, p. 9)",
+      "two-installation counterexample: the nominal optimal policy is not base stock in general networks (Figure 1, pp. 9-10)",
+      "tight mean-variance bound on E[max(0, X-a)] (Lemma 5.1; Lo 1987, Bertsimas-Popescu 2002) used to choose budgets (p. 11)",
+      "closed-form budgets Γ_k = min{(σ/ŵ)√((k+1)/(1-α²)), k+1} (eq. 44, p. 12)"
+    ],
+    "experiments": "Single station (T=20, c=1, h=4, p=6, mean 100, sd 20): DP built on an assumed binomial or five-point Gaussian; both policies scored on realized gamma, lognormal or Gaussian demand with equal moments, 1,000 samples. Robust ahead by up to 10-13% (binomial assumed) and by at most 0.4% (Gaussian assumed); behind DP for holding cost below about 2.5. Series (T=10) and tree (T=5) networks against myopic policies: r mostly 15-45%. No solver, run times or nominal baseline reported (pp. 11-17).",
+    "positioning": "Against DP (Clark-Scarf), IPA and stochastic approximation, ADP and Scarf's min-max line, all of which need distributions or DP. RO lineage Soyster -> Ben-Tal-Nemirovski and El Ghaoui (conic) -> Bertsimas-Sim (linear, discrete), whose technique it applies (pp. 1-3).",
+    "writing": "Four numbered contributions hedged 'preliminary ... promising' (pp. 1-2); class preservation repeated from abstract to conclusion (pp. 1, 5, 9, 19); theorems followed by managerial remarks (p. 7); the conclusion claims to beat the nominal policy, a comparison §5 does not report (p. 19).",
+    "limits_future": "General non-tree chains lose the base-stock structure and the modified-demand meaning (pp. 9-10); budget selection rests on approximations (p. 11); DP wins at low holding cost (p. 13); short horizons favour myopic (p. 17); whether per-constraint worst cases occur together across periods is not discussed (p. 4). No future-work list.",
+    "method_links": [
+      {
+        "method": "Method 1",
+        "relation": "evidence",
+        "note": "The robust inventory model stays an LP (no fixed cost) or a MIP (fixed cost) for any tree topology; duals are read as worst-case cumulative deviations; the boundary is printed for general networks. The per-constraint device (Remark 1) is the one Method 1's correction says to test on a two-period example.",
+        "pages": "pp. 1, 4-5, 9-10"
+      },
+      {
+        "method": "Method 3",
+        "relation": "variant",
+        "note": "The budgets Γ_k are the knob trading performance against protection, but no price curve is shown. The knob is set from mean and variance by minimizing a worst-case expected-cost bound (Algorithm 5.2): the set-the-knob-from-data correction, already practised with moments in 2006.",
+        "pages": "pp. 1, 10-12"
+      },
+      {
+        "method": "Method 5",
+        "relation": "variant",
+        "note": "Policies are scored by realized cost against DP built on an assumed distribution and against practitioners' myopic policies, not against an owner's rule. No partner data, and no nominal baseline despite the conclusion's claim.",
+        "pages": "pp. 1, 12, 16-17, 19"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "robust = nominal on modified data (structure inheritance)",
+        "evidence": "The robust optimum equals the nominal optimum for an explicitly computable modified demand (and modified capacities), so base-stock structure and closed forms carry over (Theorems 3.2, 3.3, 3.5, 4.2, 4.3).",
+        "pages": "pp. 6-7, 9-10"
+      },
+      {
+        "pattern": "misspecification duel",
+        "evidence": "DP is computed with an assumed distribution; DP and robust policies are scored under different realized distributions with the same mean and variance.",
+        "pages": "p. 12"
+      },
+      {
+        "pattern": "knob set by a distributional bound",
+        "evidence": "The budgets are chosen by minimizing a worst-case expected-cost bound built from known means and variances, with a closed form growing like √(k+1).",
+        "pages": "pp. 10-12"
+      }
+    ],
+    "transferable": [
+      "Budget cumulative deviations period by period with 0 ≤ Γ_k - Γ_{k-1} ≤ 1; a single horizon budget would overprotect early periods (p. 4)",
+      "Get policy structure from a robust LP: fix the optimal duals, rewrite the robust constraints as nominal constraints on a shifted state, and inherit the nominal structure (p. 6)",
+      "Decouple a network by fixing or dualizing the coupling constraints, then apply single-node results (p. 9)",
+      "Choose Γ by minimizing a distribution-free worst-case expected cost from known means and variances (pp. 10-11)",
+      "Score policies under a realized distribution different from the incumbent's assumed one, with the first two moments held equal (p. 12)",
+      "In rolling-horizon use, shift the budgets instead of re-optimizing them, to avoid overprotecting the first period (p. 16)",
+      "Diagnostic suggested by Remark 1 (not run in the paper): check whether a single demand path attains all per-period worst cases at once; if not, the counterpart is conservative (p. 4)"
+    ],
+    "coauthors": "Aurélie Thiele",
+    "quotes": [
+      {
+        "text": "the robust problem is of the same difficulty as the nominal problem, that is, a linear programming problem when there are no fixed costs, and a mixed-integer programming problem when fixed costs are present",
+        "page": 1
+      },
+      {
+        "text": "there is no feasible demand in the uncertain set that realizes both constraints of each pair",
+        "page": 4
+      }
+    ]
+  },
+  {
+    "id": "S022",
+    "year": "2006",
+    "title": "Tractable approximations to robust conic optimization problems",
+    "read_level": "full",
+    "contribution": "A relaxed robust counterpart for uncertain conic constraints (LP, QCQP, SOCP, SDP and general cones). It keeps the nominal problem's class and nearly its size, implies classical robustness under concavity and homogeneity, and carries a probability-of-violation bound under i.i.d. Gaussian perturbations.",
+    "problem_entry": "Earlier robust counterparts climb the complexity ladder (LP->SOCP->SDP->NP-hard) and lack probability bounds beyond LP. Two criteria are set up front: keep the nominal class, and give a probability guarantee (pp. 1-3). Domains RO+CP.",
+    "key_idea": "Define robustness through perturbation directions, with nonnegative splits v, w and an absolute norm. Under concavity and positive homogeneity the constraint becomes f(x,D0) >= ||s||_* with s_j = max{-f(x,ΔD_j), -f(x,-ΔD_j)}: 2|N| constraints of the nominal type plus one dual-norm constraint (pp. 6-8, 12).",
+    "assumptions": "D = D0 + Σ ΔD_j z_j with i.i.d. zero-mean z_j; absolute norms; f concave and positively homogeneous in D (covers LP, QCQP via SOCP, SOCP, SDP); probability bounds for z ~ N(0,I) and the l2 norm; cones closed, convex, pointed, with nonempty interior (pp. 3-5, 15, 20).",
+    "proof_devices": [
+      "positive/negative split with the monotonicity of absolute norms (Propositions 1-2, pp. 4, 6-7)",
+      "equality of two maximization problems gives the dual-norm reformulation (Theorem 1, pp. 8-9)",
+      "seminorm g(x,.) mapped to a class-specific norm of a linear map H (Proposition 3, Table 3, pp. 10-12)",
+      "size and class table per norm, with sparsity reductions (Table 4, p. 13; Appendix B, pp. 28-31)",
+      "norm-equivalence constants α (LP 1, QCQP/SOCP(2) √2, SDP √m) (Proposition 4, p. 14)",
+      "Chernoff-type bound on a Gaussian quadratic form: Markov, spectral decomposition, Jensen, optimized θ and β (Theorem 2, pp. 15-18)",
+      "structure-blind χ² bound and Nemirovski's large-deviation bounds as comparators (pp. 18-20)",
+      "general cones via f(x,D) = max{θ : A(x,D) ⪰_K θV} and conic duality; the norm ||.||_{K,V} (Propositions 5-6, Theorem 4, pp. 20-23)",
+      "homogeneous cones: bound independent of V; α = √2 (second-order cone), √m (PSD cone) (Theorem 5, Proposition 7, pp. 24-26)",
+      "feasibility-preserving update of V as a heuristic (Theorem 6, pp. 26-27)"
+    ],
+    "experiments": "None. Only illustrative Ω values per class and ε for m=n=100, |N|=495,000 (e.g. ε=1e-6: LP 5.68, SDP 56.8, versus 706.9 for the structure-blind bound; Table 6, p. 19). Computational support is left to Bertsimas-Brown (p. 7).",
+    "positioning": "Credits Ben-Tal-Nemirovski and El Ghaoui for robust counterparts and Nemirovski for SDP approximations with guarantees; extends Bertsimas-Sim and Bertsimas-Pachamanova-Sim; concedes that Nemirovski's bounds are stronger; claims novelty for (a) and (b) together and for general cones (pp. 2-4, 20).",
+    "writing": "Criteria-first introduction answered point by point in the conclusion, with 'we feel'/'we believe' hedges (pp. 2, 27); theorem-proof-remark style with per-class tables; gaps stated plainly (pp. 7, 18, 27).",
+    "limits_future": "Conservative, with closeness to classical robustness unproven (p. 7); the bound is loose by the power ρ (Remark 1, p. 18); Gaussian i.i.d. assumption; optimizing V or the SOCP parameter λ breaks convexity, left open (p. 27); for LPs, the LP-keeping norms and the l2-norm bound differ (Table 4, p. 13; Theorem 2, p. 15).",
+    "method_links": [
+      {
+        "method": "Method 1",
+        "relation": "evidence",
+        "note": "Class preservation is the stated criterion and the main theorem: robust LP/SOCP/SDP stay LP/SOCP/SDP through a redesigned device, not a new solver, and the limits are printed. Nuance for 02 C2: tractability 'most importantly practically' is measured only by class and size counts, with no solve times.",
+        "pages": "pp. 1-3, 8, 12-13, 27"
+      },
+      {
+        "method": "Method 3",
+        "relation": "variant",
+        "note": "One knob Ω, a solution-independent violation bound and a lookup table of Ω per class and ε; no objective-loss or price curve, since there are no computations.",
+        "pages": "pp. 3, 15, 19"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "criteria-first, class-by-class audit of prior art",
+        "evidence": "Two acceptance criteria are stated, then each problem class (LP, QCQP, SOCP, SDP, general cones) is audited for tractability and probability bounds before the proposal.",
+        "pages": "pp. 2-3"
+      },
+      {
+        "pattern": "knob set by a distributional bound",
+        "evidence": "Ω is read off a violation-probability bound for each class and target ε, without solving the problem.",
+        "pages": "pp. 15, 19"
+      }
+    ],
+    "transferable": [
+      "Write the perturbation as D0 + Σ ΔD_j z_j and split each z_j into nonnegative parts with ||v + w|| ≤ Ω; for concave, positively homogeneous constraints this gives a conservative counterpart in the nominal class (pp. 6-8)",
+      "Choose the uncertainty norm from a size table: l2 adds one variable and one SOC constraint; l1∩l∞ and l2∩l∞ add O(|N|) variables and constraints (p. 13)",
+      "Make probability bounds structure-aware: bound the ratio α between the problem's norm and the Euclidean/Frobenius norm, then apply a Chernoff bound to a Gaussian quadratic form, and compare with a structure-blind bound (pp. 14-19)",
+      "For an arbitrary cone, define f(x,D) = max{θ : A(x,D) ⪰_K θV} to obtain concavity and homogeneity from conic duality (pp. 20-21)",
+      "With independent entry-wise perturbations, collapse conic constraints on single-entry perturbations to linear ones (p. 13; pp. 28-31)",
+      "Publish the knob values for target violation levels per problem class (p. 19)"
+    ],
+    "coauthors": "Melvyn Sim",
+    "quotes": [
+      {
+        "text": "In earlier proposals, the robust counterpart of conic optimization problems exhibits a lateral increase in complexity, i.e., robust linear programming problems (LPs) become second order cone problems (SOCPs), robust SOCPs become semidefinite programming problems (SDPs), and robust SDPs become NP-hard.",
+        "page": 1
+      },
+      {
+        "text": "While we do not have theoretical evidence on the closeness of the approximation, Bertsimas and Brown [7] report excellent computational results utilizing Problem (8) for constrained stochastic linear control problems",
+        "page": 7
+      }
+    ]
+  },
+  {
+    "id": "S027",
+    "year": "2006",
+    "title": "Robust and data-driven optimization: modern decision-making under uncertainty",
+    "read_level": "full",
+    "contribution": "A tutorial (read in the authors' March 2006 preprint) that packages the 2003-2006 robust and data-driven optimization programme for teaching. It covers budgeted polyhedral robustness with probability guidance, dynamic robust inventory and adaptability (dynamic budgets, affine, finite), and uncertainty sets built from data through coherent and comonotone risk measures.",
+    "problem_entry": "Decision models assume known parameters and distributions that practice lacks; estimation errors cause infeasibility or poor cost; shorter life cycles make a non-probabilistic theory pressing (pp. 1-2). Domains RO+DA+SD, LO/IO as engines, AP examples.",
+    "key_idea": "Turn two forecasting maxims into intervals plus budgets with LP counterparts; extend to dynamic problems (modified-demand base-stock, robust Bellman equations, affine and finite adaptability); derive uncertainty sets from data through risk measures (pp. 3-35).",
+    "assumptions": "LP with uncertainty in A (without loss of generality), independent symmetric interval coefficients; symmetric bounded distributions for the violation bound; linear dynamics, convex costs, one source of uncertainty per period; N distinct historical observations for data-driven sets; LP and polyhedral focus (pp. 4-8, 16, 22, 31, 36).",
+    "proof_devices": [
+      "strong duality on each row's inner LP, with closed-form optimal p and q (pp. 7-8)",
+      "n nominal subproblems for robust 0-1 programs (pp. 12-13)",
+      "per-period budgets and modified demand w'_t (eqs. 25-27, pp. 17-18)",
+      "robust Bellman recursion with z_t in {-1,0,1} and the budget as a second state (p. 23)",
+      "K-adaptability through covering corners, and the covering-pair characterization for K=2 (pp. 26-27)",
+      "directions of dual unboundedness and the family A_η decide when 2-adaptability gains more than η (pp. 29-30)",
+      "a coherent risk measure as a sup over Q gives an uncertainty set inside the data's convex hull (eqs. 51-54, p. 32)",
+      "Choquet integral and an assignment LP give polyhedral sets A_q from a weight vector q (eqs. 55-63, pp. 32-34)"
+    ],
+    "experiments": "No new experiments; worked examples, all from the authors' and Thiele's papers except Example 3.3: a 150-asset portfolio (robust sd 0.0063 vs nominal 0.1448 for 2.7% less return), a warehouse cost bound against Γ (minimum near 20), 200-project capital allocation (0.995 feasibility for a 1.5% loss), robust vs myopic on a tree, a 2-adaptable newsvendor (cost 3 -> 2). Numbers rechecked here; one index slip found in Example 3.1 (pp. 8-29).",
+    "positioning": "History Soyster -> Ben-Tal-Nemirovski/El Ghaoui (complexity increases) -> Bertsimas-Sim (class kept). Rejects distributionally robust stochastic programming as inheriting intractability, calls affine rules weakly justified, and presents finite adaptability as complementary. Managerial texts are the source of the principles; 12 of 48 references are the authors' or their students' (pp. 1-3, 15, 25, 30, 36-39).",
+    "writing": "Practice-first motivation, maxims as bullets, an intuition figure, rhetorical questions answered 'yes', vivid ratios ('a factor of 23'), source-labelled examples, and a 'compelling alternative' close (pp. 2, 4, 6, 10, 15, 36).",
+    "limits_future": "LP/polyhedral focus; the first dynamic model needs a rolling horizon; affine rules weakly justified; optimal partitions NP-hard; constraint-wise immunization of coupled uncertainty overly conservative, though this is not applied to the tutorial's own inventory model. Future: multi-stage information, data-driven sets, the structure good adaptability needs (pp. 14, 22, 25, 27-30, 36).",
+    "method_links": [
+      {
+        "method": "Method 1",
+        "relation": "evidence",
+        "note": "Device choices keep the class: polyhedral sets keep LPs, robust 0-1 problems become n nominal subproblems, and the dynamic inventory counterpart stays an LP for any topology. Random variables, not probabilities, are made uncertain, because robust versions of intractable stochastic programs stay intractable. Its own warning on constraint-wise immunization (p. 25) is the general form of Method 1's correction but is not applied to its inventory model (pp. 17-18).",
+        "pages": "pp. 3, 7, 12-13, 15, 17-19, 25"
+      },
+      {
+        "method": "Method 3",
+        "relation": "evidence",
+        "note": "Γ is the knob, with a solution-independent violation bound; price curves with a knee (Fig. 2) and with both failure modes (Fig. 3); a priced point (0.995 for 1.5%); the knob is tied to the manager's risk attitude and to data.",
+        "pages": "pp. 6, 8-13, 30-35"
+      },
+      {
+        "method": "Method 6",
+        "relation": "evidence",
+        "note": "[inferred] A teaching synthesis of one programme's cohort (Sim, Thiele, Brown, Caramanis, Pachamanova; theses cited): the course step of the programme lifecycle.",
+        "pages": "pp. 3, 13-14, 22-35, 39"
+      },
+      {
+        "method": "Method 2",
+        "relation": "variant",
+        "note": "The why-now argument is a change in the environment (volatile demand, shorter life cycles), not a rebuilt solver speed-up figure.",
+        "pages": "p. 2"
+      },
+      {
+        "method": "Method 5",
+        "relation": "variant",
+        "note": "Decisions are scored under realized distributions against nominal, worst-case and myopic rules; the examples are synthetic or re-presented, with no owner data.",
+        "pages": "pp. 9-10, 21-22"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "practitioners' maxims encoded as uncertainty-set geometry",
+        "evidence": "Range forecasts become intervals, and 'aggregate forecasts are more accurate' becomes a budget on summed scaled deviations, illustrated with random-walk paths.",
+        "pages": "pp. 3-6"
+      },
+      {
+        "pattern": "robust = nominal on modified data (structure inheritance)",
+        "evidence": "The robust inventory problem equals a deterministic one with modified demand, so base-stock follows; the robust right-hand-side problem equals the deterministic one at the covering corner.",
+        "pages": "pp. 18, 20, 26"
+      },
+      {
+        "pattern": "misspecification duel",
+        "evidence": "A myopic policy computed under an assumed Gaussian is scored under gamma demand; portfolio strategies are scored under a Gaussian truth.",
+        "pages": "pp. 9-10, 21"
+      },
+      {
+        "pattern": "knob set by a distributional bound",
+        "evidence": "Γ ≥ 1 + Φ^{-1}(1-ε)√n for a violation target; Γ chosen to minimize a worst-case expected-cost bound; closed-form dynamic budgets from mean and variance.",
+        "pages": "pp. 8, 10-11, 18-19"
+      }
+    ],
+    "transferable": [
+      "Turn managers' forecasting practice into a set: range forecast -> interval; 'aggregate forecasts are more accurate' -> a budget on summed scaled deviations (pp. 3-6)",
+      "Use a one-dimensional example with a closed-form robust solution to plot cost against the knob and show both failure modes, nominal and worst case (pp. 10-12)",
+      "Size Γ by Γ ≥ 1 + Φ^{-1}(1-ε)√n and point out the √n scaling (p. 8)",
+      "Solve robust 0-1 problems with coefficient uncertainty as n nominal subproblems of the same size (pp. 12-13)",
+      "Dynamic budgets: a robust Bellman recursion with z_t in {-1,0,1} and the remaining budget as a second state (p. 23)",
+      "Build a polyhedral uncertainty set from N data points and a weight vector q: q=(1/N)e gives the sample mean, q=(1,0,...,0) the convex hull (pp. 33-35)",
+      "Before solving, test whether 2-adaptability can pay, using the directions of dual unboundedness (family A_η) (pp. 29-30)"
+    ],
+    "coauthors": "Aurélie Thiele",
+    "quotes": [
+      {
+        "text": "Point forecasts are meaningless (because they are always wrong) and should be replaced by range forecasts.",
+        "page": 4
+      },
+      {
+        "text": "immunizing a problem against uncertainty that cannot be decoupled across constraints yields overly conservative solutions, in the sense that the robust approach protects the system against parameters that fall outside the uncertainty set",
+        "page": 25
+      }
+    ]
+  }
+]

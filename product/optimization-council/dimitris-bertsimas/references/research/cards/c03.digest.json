@@ -1,0 +1,233 @@
+[
+  {
+    "id": "S089",
+    "year": "1995",
+    "title": "Computational approaches to stochastic vehicle routing problems",
+    "read_level": "full",
+    "contribution": "Develops and tests a priori heuristics for the probabilistic TSP (space-filling curve or radial sort plus 2-interchange or 1-shift on the expected cost) and the 1-vehicle probabilistic VRP (cyclic heuristic plus a threshold DP), compares them with sampled heuristic re-optimization using a control variate, and concludes that simple a priori strategies come close to re-optimization and suit practitioners (read as the April 18, 1991 preprint).",
+    "problem_entry": "SD+HS+AP: practitioners need fixed a priori routes (driver familiarity, small firms' limited computing) although re-optimization is better; four questions: heuristics vs re-optimization, when asymptotics emerge, what local improvement and DP add, what to tell practitioners (preprint pp. 2, 4-5).",
+    "key_idea": "Score a priori tours by closed-form expected cost with incremental move evaluation; for the PVRP take the best of n rotations of a TSP tour plus a DP giving threshold return rules; estimate the intractable re-optimization benchmark by scenario sampling with the a priori cost as control variate (preprint pp. 7-8, 12, 18, 21-23).",
+    "assumptions": "Euclidean points uniform in the unit square; independent Bernoulli presence (PTSP) and independent integer demands with known distributions and K < Q (PVRP); strategy a only in testing; i.i.d. demands for local improvement; triangle inequality for the DP; exact re-optimization replaced by heuristic re-optimization for tractability (preprint pp. 2-3, 12-13, 20-26).",
+    "proof_devices": [
+      "closed-form a priori expected lengths with capacity-break probabilities from a recursion (eqs. 1, 8, 10-11; preprint pp. 2-4)",
+      "incremental 2-interchange expected-cost difference via precomputed arrays A, B under homogeneous p, O(n^2) average implementation (eq. 14; preprint pp. 7-8)",
+      "heterogeneous and 1-shift analogues (eqs. 17-20; preprint pp. 9-11)",
+      "control-variate split of the re-optimization cost, only the residual sampled (eqs. 22-23; preprint p. 12)",
+      "cited theory: cyclic heuristic worst-case ratio 2 and asymptotic optimality (Theorems 1-2, proofs in Bertsimas 1989; preprint p. 19)",
+      "DP over (node, load) with threshold policy, O(nK^2) time and O(nK) space (preprint pp. 21-22)",
+      "complexity accounting: full cyclic heuristic not polynomial, DP-only version O(n^2 K^2) (preprint p. 23)"
+    ],
+    "experiments": "Home-made C package (Macintosh II; VAX 3100). PTSP: 5 random 100-node instances per p = 0.1-0.9 plus 5 heterogeneous ones, 4 heuristic combinations vs heuristic re-optimization over 50 sampled scenarios; PVRP: 20 random instances per (n = 20-100, Q, distribution) type with 100 demand samples, cyclic heuristic vs Clarke-Wright and Christofides-Mingozzi-Toth clustering, plus a 2x2 ablation of local improvement and DP; no exact optimum or gap; recomputation shows the text's 'typically within 1%', 'about 8%' and 'never more than 3%' summaries are more favourable than Tables 1-3 (preprint pp. 13-17, 26-31).",
+    "positioning": "Computational companion to his a priori optimization theory (Jaillet's PTSP, Bertsimas-Howell, Bertsimas 1989 PVRP, Bertsimas-Jaillet-Odoni survey); adapts Bartholdi-Platzman space-filling curves; benchmarks against standard VRP heuristics and cites Haimovitch-Rinnooy Kan on cluster-first suboptimality; calls only the sampling-with-variance-reduction comparison novel (preprint pp. 4-6, 10, 28).",
+    "writing": "Question-driven experimental report with a practitioner verdict in the abstract and conclusion; hedged mechanisms ('Our intuition is', 'quite probably'); an early use of 'robust' for strategies that perform well across realized demands; prose summaries more favourable than tables; a typo names the PTSP where the PVRP is meant (preprint pp. 1, 16-17, 28, 33).",
+    "limits_future": "Exact re-optimization abandoned (heuristic benchmark), strategy b untested and the DP not adaptable to it, heterogeneous 2-opt truncated, asymptotics not reached at 100 nodes; no future agenda beyond expecting case b to work (preprint pp. 16-17, 23, 25-26).",
+    "method_links": [
+      {
+        "method": "Method 5",
+        "relation": "variant",
+        "note": "practitioner framing (fixed routes for driver familiarity, small firms' computing limits) and practitioner recommendations, but synthetic instances and no owner, data or current rule; the baseline is an idealized re-optimization policy approximated by heuristics",
+        "pages": "preprint pp. 1-2, 5, 33"
+      },
+      {
+        "method": "Method 4",
+        "relation": "variant",
+        "note": "duel against named incumbents (Clarke-Wright savings; Christofides-Mingozzi-Toth clustering) on 20 random instances per type, but no exact solve, certificate or gap; exact re-optimization abandoned as intractable and the comparator itself heuristic",
+        "pages": "preprint pp. 25-28"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "price of simplicity",
+        "evidence": "measures what a simple, implementable a priori policy loses against full re-optimization and argues for the simple policy on implementability and uniformity of service; S185 makes the same static-versus-dynamic comparison for polling systems",
+        "pages": "preprint pp. 2, 14, 17, 28, 33"
+      },
+      {
+        "pattern": "control-variate pseudo-reoptimization",
+        "evidence": "estimates an intractable benchmark policy's expected cost by scenario sampling with a heuristic per scenario and the exactly computable a priori cost as control variate",
+        "pages": "preprint pp. 12, 25-26"
+      },
+      {
+        "pattern": "asymptotic optimality as the warrant for a simple heuristic",
+        "evidence": "a worst-case ratio of 2 and asymptotic optimality justify the cyclic heuristic; the experiments ask at what size the asymptotic regime appears and plot cost against the asymptotic formula",
+        "pages": "preprint pp. 4-5, 16, 19, 30-31"
+      }
+    ],
+    "transferable": [
+      "Pseudo-reoptimization: estimate an intractable per-scenario-optimal benchmark by sampling scenarios, solving each with a strong heuristic, and using the a priori solution's exactly computable expected cost as a control variate (preprint p. 12)",
+      "Score local moves under uncertainty by incremental expected-cost differences from precomputed arrays, so stochastic local search costs about as much as deterministic local search (preprint pp. 7-8)",
+      "Cyclic heuristic: try every rotation of a TSP tour as the starting point, then add a DP over (node, load) that yields threshold rules for preventive returns (preprint pp. 18, 21-23)",
+      "Run a 2x2 ablation of refinements (local improvement x DP) and report each refinement's run-time multiplier beside its gain (preprint p. 31)",
+      "Plot observed cost against the asymptotic formula as n grows to locate where the asymptotic regime starts (preprint pp. 15-16, 30-31)"
+    ],
+    "coauthors": "Philippe Chervi (Operations Research Center, MIT); Michael Peterson (Sloan School, MIT)",
+    "quotes": [
+      {
+        "text": "Based on extensive testing we conclude that our heuristics are very close in terms of performance compared with re-optimization strategies and can be used by a practitioner.",
+        "page": 1
+      },
+      {
+        "text": "What our results indicate is that simple a priori strategies are robust, in the sense that they perform well over a wide range of actual (realized) demands.",
+        "page": 33
+      }
+    ]
+  },
+  {
+    "id": "S108",
+    "year": "1995",
+    "title": "Locating discretionary service facilities, II: maximizing market size, minimizing inconvenience",
+    "read_level": "full",
+    "contribution": "Generalizes flow-interception location of discretionary service facilities to customers who may deviate from preplanned trips (delta coverage, market-size maximization with a decreasing deviation response, and an m-median inconvenience model), proves node optimality and submodularity so that greedy is within 1-(1-1/m)^m (37%) of optimal, tight for one model, and gives an IP and branch-and-bound for the market-size model.",
+    "problem_entry": "IO+AP: the predecessor BLF model assumed customers never leave their preplanned path; relaxing that single behavioural assumption yields three models (delta coverage, market size, minimum inconvenience) (pp. 1-2).",
+    "key_idea": "Unify the models as disutility minimization, reduce locations to finite candidate sets, prove submodularity to import the Nemhauser-Wolsey-Fisher greedy bound, show tightness by a layered instance, and solve P2 exactly by IP-based branch-and-bound to audit the greedy (pp. 2-9).",
+    "assumptions": "Known path flows on a bidirectional network; identical facilities; three deviation behaviours; convex decreasing response g needed only for node optimality, not for submodularity; m-median structure for P3; no real data (pp. 2-4, 7, 9).",
+    "proof_devices": [
+      "node optimality: deviation distance along an arc is a lower envelope of linear functions (piecewise-linear concave), composed with a convex decreasing response it is convex, so the maximum is at an endpoint (Theorem 2, p. 4)",
+      "reduction of delta coverage to the predecessor problem on the enlarged candidate set N' = N plus points at distance delta (Theorem 1, pp. 3-4)",
+      "submodularity by the marginal-gain inequality: coverage sets (Prop. 1, p. 6); three-case analysis for a decreasing response (Prop. 2, p. 7)",
+      "import of the Nemhauser-Wolsey-Fisher greedy bound 1-(1-1/m)^m (Theorem 3, pp. 5-6)",
+      "layered tight instance with chosen path weights so that greedy attains the bound (Theorem 4, pp. 7-8)",
+      "boundary from m-median inapproximability unless P = NP; greedy arbitrarily bad on P3 (pp. 4-5)",
+      "IP with location and assignment variables; branch-and-bound with two upper bounds strong in complementary regimes (pp. 8-9)"
+    ],
+    "experiments": "Greedy and branch-and-bound in C on a DEC 5810 on randomly generated networks (n = |P| in {10, 30, 50, 100}, m = 2-5, exponential response): greedy/optimal ratio 0.934-1, B&B CPU up to 2,147 s; Table II is 'a typical sample' with no instance counts or seeds; no real data (p. 9).",
+    "positioning": "Extends Fouska (1988) and Berman-Larson-Fouska (1992), credits Hodgson's independent flow-capturing model (1990) and Hodgson (1981) for the m-median variant, uses Hakimi for node optimality and Nemhauser-Wolsey-Fisher for the greedy bound; claims to improve BLF's worst-case bound (pp. 1-2, 4-7).",
+    "writing": "Abstract leads with a precise guarantee phrased as distance from optimum ('within 37%') plus tightness; behavioural-change motivation; a 3-node example contrasting the three models before the theory; numbered main results; terse proofs, some omitted as straightforward (pp. 1, 4-5, 9).",
+    "limits_future": "P3 left to m-median algorithms without guarantee; small synthetic computation; future: competing facilities and the polyhedral structure of P2 to strengthen the branch-and-bound (pp. 4-5, 9-10).",
+    "method_links": [
+      {
+        "method": "Method 1",
+        "relation": "variant",
+        "note": "P2 written exactly as an IP with location and assignment variables and the hard boundary printed (P3 inapproximable unless P = NP), but the central device is submodularity certifying the greedy, solved by a custom branch-and-bound rather than a model kept in a solver class",
+        "pages": "pp. 4-5, 8-9"
+      },
+      {
+        "method": "Method 4",
+        "relation": "variant",
+        "note": "roles reversed: the exact branch-and-bound audits the greedy (ratios 0.934-1) and the greedy is endorsed with a tight 1-(1-1/m)^m guarantee; no warm start and no out-of-sample duel",
+        "pages": "pp. 7-9"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "certify greedy by submodularity, then show tightness",
+        "evidence": "proves nondecreasing submodularity of two location objectives to import the Nemhauser-Wolsey-Fisher bound and builds a layered instance that attains it",
+        "pages": "pp. 5-8"
+      },
+      {
+        "pattern": "relax one assumption of the predecessor's model and reduce back to it",
+        "evidence": "lets customers deviate from preplanned paths and shows the delta-coverage variant reduces to the predecessor's problem on an enlarged candidate set",
+        "pages": "pp. 1-2, 4"
+      }
+    ],
+    "transferable": [
+      "Prove the objective is a nondecreasing submodular set function (marginal-gain inequality with a case analysis) to inherit the 1-(1-1/m)^m greedy guarantee, then build a layered instance that attains it (pp. 5-8)",
+      "Node optimality by lower envelopes: a piecewise-linear concave distance composed with a convex decreasing response is convex in position, so optima sit at endpoints and the candidate set becomes finite (p. 4)",
+      "Before any theory, use a 3-node example to show that the competing formulations choose different optima and how the optimum moves with a model parameter (p. 5)",
+      "In branch-and-bound, pair two upper bounds that are strong in complementary regimes (few vs many variables fixed to 0) and take their minimum (p. 9)",
+      "Report the greedy/exact ratio and the exact CPU time for every (n, |P|, m) cell (Table II, p. 9)"
+    ],
+    "coauthors": "Oded Berman (University of Toronto); Richard C. Larson (MIT)",
+    "quotes": [
+      {
+        "text": "In this paper, we relax the assumption that, to be useful to a potential customer, a facility must be located at some point precisely on her preplanned travel path.",
+        "page": 1
+      },
+      {
+        "text": "In particular, the greedy solution is always within 37% of optimal, and for one of the formulations we prove that the bound is tight.",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "id": "S185",
+    "year": "1995",
+    "title": "The achievable region method in the optimal control of queueing systems; formulations, bounds and policies",
+    "read_level": "full",
+    "contribution": "Sole-author survey of the achievable-region method: stochastic control problems (indexable systems, restless bandits, polling, multiclass queueing and loss networks) are formulated as mathematical programs over performance vectors, giving exact LPs over extended polymatroids for indexable systems (Gittins indices as sums of duals), LP, convex and new SDP relaxation hierarchies elsewhere, relaxation-guided heuristic policies, and a complexity map of the method's limits.",
+    "problem_entry": "SD+LO+IO+CP: stochastic control lacks a unified method of attack (each problem ad hoc, distance to optimal unknown) while mathematical programming has a formulation-first plan; the transplant characterizes the region of achievable performance (pp. 1-3).",
+    "key_idea": "Optimize over achievable performance vectors: conservation laws give an exact LP over extended polymatroids solved by an adaptive greedy whose duals define indices; elsewhere relaxation hierarchies (LP, convex, SDP) give bounds, and heuristic policies are read off primal and dual relaxation solutions (pp. 3, 9-12, 21-25, 27-31, 34-45, 48).",
+    "assumptions": "Markovian models (finite-state bandits; Poisson arrivals, exponential services and holding times; independent initial states); conservation laws as the structural assumption for exactness; admissible or Markovian policies with Assumption A 'for technical reasons'; static policies for the polling bound; no data, performance measures are expectations (pp. 3, 5, 8, 13-14, 20, 26-28, 33-34, 47).",
+    "proof_devices": [
+      "conservation laws imply the performance space is exactly an extended (contra-)polymatroid whose vertices are static priority rules (Theorem 1, p. 9)",
+      "adaptive greedy algorithm builds an optimal dual solution in O(n^3); generalized Gittins indices as sums of dual variables (pp. 11-12)",
+      "index decomposition under a block condition on A (Theorem 4, p. 13)",
+      "k-th order MDP relaxations projected onto first-order variables, monotone and exact at k = N, polynomial for fixed k; conservation law by counting k-tuples with r active projects (pp. 22-24)",
+      "primal-dual index heuristic from optimal reduced costs (pp. 24-25)",
+      "vacation-time decomposition with v2 >= v^2 giving a convex lower bound over a network flow with a side constraint (Theorem 5, pp. 27-28)",
+      "min-max closeness IP for routing tables with connectivity relaxed and table length bounded (pp. 30-31)",
+      "potential-function method: uniformize, recursion for E[R^2(tau_k+1) | n(tau_k)], f-parameters chosen so indicators aggregate, steady-state expectations (Theorem 8, pp. 34-37)",
+      "nonparametric variant: quadratic forms in f equal for all f give equality constraints; O(R^2) LP instead of O(2^R) constraints (Theorem 9, pp. 38-40)",
+      "quadratic-size reformulation of the extended polymatroid for undiscounted branching bandits, proving the polynomial-formulation conjecture for this case (Theorem 10, pp. 40-42)",
+      "positive semidefinite moment-matrix constraint linking higher-order moment variables (pp. 44-45)",
+      "complexity map: EXPTIME-hard queueing networks, PSPACE-hard restless bandits, NP-hard and PSPACE-hard polling, indexable systems in P (Fig. 3, pp. 49-50)"
+    ],
+    "experiments": "No new computation: reports cohort papers' results without instance counts, run times or solvers (restless bandits: primal-dual heuristic very close to the second-order bound; polling: routing tables within 3% of the convex lower bound; networks: bounds comparable to Ou-Wein, tight in imbalanced or closed networks; loss networks: policy within 0-3% of the LP upper bound); the new SDP relaxations are untested (pp. 25, 32, 45-46, 48, 51).",
+    "positioning": "Continues Coffman-Mitrani, Gelenbe-Mitrani, Federgruen-Groenevelt, Shanthikumar-Yao and Tsoucas; treats Whittle's relaxation as the first rung; compares with Kelly's loss-network bounds and Ou-Wein's pathwise bound; credits Kumar-Kumar's independent derivation; frames the method as the stochastic counterpart of polyhedral and SDP sharper formulations (Lovasz-Schrijver); unification rather than attack (pp. 2-4, 18, 21, 38, 46, 48).",
+    "writing": "Thesis-first abstract; field-contrast opening; two-panel analogy figure; a uniform section template (problem, relaxation, bound, policy, reported performance); numbered implications, four-step recipes, a complexity figure and numbered open problems; moderate hedging ('in our opinion', 'a plausible explanation', 'somewhat ad hoc'); new SDP relaxations claimed but only outlined (pp. 1-4, 18-19, 44-46, 48-51).",
+    "limits_future": "Policies from relaxations ad hoc and none for queueing networks; hardness rules out polynomial convex characterizations for networks; best f-parameters unknown; higher-order relaxations prohibitively large; open problems: systematic policies from relaxations, bounds on heuristic-relaxation gaps via approximability, computational tests of SDP relaxations (pp. 37, 44, 49-51).",
+    "method_links": [
+      {
+        "method": "Method 1",
+        "relation": "evidence",
+        "note": "all five steps in one text: owning tradition and its ad hoc state named; performance vectors as variables; LP over extended polymatroids, polynomial-size LP relaxations, a convex program and SDP strengthening as class-keeping devices; duals read as Gittins indices and reduced-cost heuristics; boundary printed by complexity results and the admission that policies are ad hoc. 'Efficiently' means polynomial time here, supporting the skill's note that 'tractable' later drifts to solve time",
+        "pages": "pp. 1-3, 9-12, 21-25, 27-28, 44-45, 49-50"
+      },
+      {
+        "method": "Method 4",
+        "relation": "variant",
+        "note": "bound plus policy: each relaxation supplies a bound against which the heuristic policy's gap is reported (polling within 3%, loss networks 0-3%, restless bandits close to the second-order bound), a relaxation-bound analogue of reporting a certificate or gap; the numbers are second-hand from the cohort papers",
+        "pages": "pp. 25, 32, 45-46, 48"
+      },
+      {
+        "method": "Method 6",
+        "relation": "evidence",
+        "note": "one programme carried by a student cohort (Nino-Mora; Paschalidis with Tsitsiklis; Xu; Cryssikou; Ricard with Avram) and consolidated in a sole-author survey with a generic recipe and open problems",
+        "pages": "pp. 1, 4, 46, 48-49, 51"
+      },
+      {
+        "method": "Method 2",
+        "relation": "variant",
+        "note": "in 1995 hardness results (EXPTIME-, PSPACE-hard) are accepted as the limit of exact characterization and the response is relaxations and bounds; no tool-change argument or speed-up figure",
+        "pages": "pp. 49-50"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "relaxation hierarchy by interaction order",
+        "evidence": "k-th order relaxations over k-tuples of projects, monotone and exact at k = N, polynomial for fixed k (restless bandits); first- and second-order relaxations (loss networks); higher-order potential functions of size O(R^i) (queueing networks)",
+        "pages": "pp. 22-24, 43-44, 48"
+      },
+      {
+        "pattern": "policy read off a relaxation",
+        "evidence": "primal-dual index heuristic from reduced costs (restless bandits); IP rounding of relaxed visit rates into routing tables (polling); acceptance with the relaxation's conditional probability (loss networks); admitted to be somewhat ad hoc",
+        "pages": "pp. 24-25, 29-31, 48-49"
+      },
+      {
+        "pattern": "PSD moment-matrix strengthening carried across domains",
+        "evidence": "the 1995 survey links higher-order moment variables of queue lengths through a positive semidefinite moment matrix, the device on which the later optimal-inequalities programme (SKILL.md SW2) builds",
+        "pages": "pp. 44-45"
+      }
+    ],
+    "transferable": [
+      "Achievable-region formulation: define performance vectors (expectations), derive conservation laws or other constraints every policy satisfies, and optimize the objective over the resulting set (pp. 3, 8-12)",
+      "Read indices or prices as sums of optimal dual variables and use LP sensitivity analysis on the stochastic system (pp. 12, 19)",
+      "Build a monotone relaxation hierarchy by projecting k-th order MDPs onto first-order variables, polynomial for fixed k and exact at the top (pp. 22-24)",
+      "Primal-dual heuristic: activate items with positive primal activity, then fill or choose by reduced costs (pp. 24-25)",
+      "Potential-function method: uniformize, take steady-state expectations of a quadratic potential's one-step change, and choose its parameters so indicator terms aggregate; the nonparametric version equates quadratic forms coefficient by coefficient (pp. 34-40)",
+      "Round a convex relaxation's visit rates into an integer routing table by a min-max closeness IP, relaxing connectivity and bounding the table length (pp. 29-31)",
+      "Strengthen moment relaxations with a positive semidefinite moment-matrix constraint (pp. 44-45)",
+      "Draw the organizing analogy as a two-panel figure and close a survey with a complexity map and numbered open problems (pp. 3, 49-51)"
+    ],
+    "coauthors": "sole author (reviews joint work with Nino-Mora, Paschalidis and Tsitsiklis, Xu, Cryssikou, Avram and Ricard)",
+    "quotes": [
+      {
+        "text": "The theme in the paper is the thesis that better formulations lead to deeper understanding and better solution methods.",
+        "page": 1
+      },
+      {
+        "text": "For restless bandits, polling systems and loss networks we proposed empirically effective heuristics from the relaxations, but the heuristics were somewhat ad hoc.",
+        "page": 49
+      }
+    ]
+  }
+]

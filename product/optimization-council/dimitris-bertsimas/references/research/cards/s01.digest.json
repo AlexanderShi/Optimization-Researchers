@@ -1,0 +1,543 @@
+[
+ {
+  "id": "S470",
+  "year": "2018",
+  "title": "Interpretable Clustering via Optimal Trees",
+  "read_level": "full",
+  "contribution": "Extends Optimal Classification Trees to clustering (ICOT): one tree whose leaves are the clusters, trained by local search on a Silhouette or Dunn objective, which matches K-Means on some synthetic sets while giving split-based cluster definitions.",
+  "problem_entry": "{ML; AP motivates; IO formulation, HS solver} Clustering heuristics give no rationale for membership, a barrier in health care (abstract p. 1); centroids, PCA plots and the two-step cluster-then-tree route do not build interpretability into cluster creation (p. 2).",
+  "key_idea": "OCT modified so that each leaf is a cluster and the objective is an internal validation index (Silhouette or Dunn) with no complexity penalty; the number of clusters is an output; solved by coordinate-descent local search from many greedy trees, keeping the best (pp. 2-3, 7).",
+  "assumptions": "Axis-parallel splits on [0,1]-normalized features, minimum leaf size N_min, Euclidean distances (pp. 7-8); nine FCPS synthetic sets and 200 Framingham patients with 8 covariates (p. 4); clusters not separable by parallel splits (Atom, Hepta) admitted as missed (p. 4).",
+  "proof_devices": [
+   "OCT tree-structure constraints with epsilon-separated splits (eqs. 2-10, pp. 7-8)",
+   "Silhouette objective via cluster sizes, average distances, a big-M nearest-cluster bound and the ratio s_i = (q_i - r_i)/m_i (eqs. 12-19, p. 8); as printed these are ratios and products of variables, not a linear MIO (my reading)",
+   "coordinate-descent local search from many greedy starting trees, best tree kept (pp. 2-3)",
+   "no theorem, bound or convergence statement (n/a)"
+  ],
+  "experiments": "ICOT vs K-Means vs OCT-on-K-Means-labels vs truth, Silhouette and Dunn, 9 FCPS sets: ICOT >= OCT everywhere, matches or beats K-Means on 4/9 (Silhouette) and 8/9 (Dunn), truth below ICOT on 5/9 and 2/9 (Table 1, p. 4); one Framingham tree with 7 clusters on 4 features (pp. 4-5); no run times, depth, restarts, solver or gap reported.",
+  "positioning": "Against centroid representations, PCA visualization and two-step tree-on-labels approaches (CART, Hancock et al.); K-Means named the current standard practice; builds on OCT (pp. 2, 4).",
+  "writing": "Short workshop format; results hedged as 'early results'; the interpretability trade-off stated as an acceptance, not a measured price (pp. 4-5).",
+  "limits_future": "Parallel splits miss non-separable clusters and cluster quality is metric-dependent (p. 4); future applications in health care such as grouping patients and diagnoses (p. 5).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Joint tree replaces the two-step pipeline and duels K-Means and two-step OCT (steps 1, 5), but the MIO is only written down; greedy-start local search with restarts, no limit, solver, gap or certificate, while the abstract claims it approximates the globally optimal solution; shape of Heuristic 3 and Tension T1.",
+    "pages": "pp. 1-4, 7-8"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Price of interpretability accepted in words ('a slight decrease in cluster quality score') but not priced; depth is a knob without a depth-quality curve.",
+    "pages": "pp. 3-4"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Optimal Trees programme extended to unsupervised learning by the next cohort (Orfanoudaki, Wiberg) at a health venue; same pair as the 2025 book.",
+    "pages": "pp. 1-2"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "promote the evaluation metric to the training objective",
+    "evidence": "The internal validation index normally used to choose K after clustering (Silhouette, Dunn) becomes the objective, so the number of clusters is an output and K disappears as a tuning parameter.",
+    "pages": "pp. 2-3, 7"
+   }
+  ],
+  "transferable": [
+   "Put the two-step pipeline (K-Means, then a tree fitted to the labels) in the results table next to the joint model to isolate the gain from building interpretability into the clusters (pp. 2, 4).",
+   "Optimize an internal validation index directly so that the number of clusters becomes an output, with tree depth only as a cap (pp. 2-3).",
+   "Score the ground-truth labels with each metric too; when the truth loses, report it and treat the metric choice as a modelling decision (p. 4)."
+  ],
+  "coauthors": "Agni Orfanoudaki, Holly Wiberg",
+  "quotes": [
+   {
+    "text": "we accept a slight decrease in cluster quality score for the gain in interpretability due to the importance of intuitive assignment rules in many settings",
+    "page": 4
+   },
+   {
+    "text": "recovering known labels in synthetic data does not necessarily translate to meaningful cluster assignment",
+    "page": 4
+   }
+  ]
+ },
+ {
+  "id": "S239",
+  "year": "1988",
+  "title": "An exact FCFS waiting time analysis for a general class of G/G/s queueing systems",
+  "read_level": "full",
+  "contribution": "Derives the FCFS waiting-time distribution of the MGE_k/MGE_m/s queue in closed form (a Coxian finite sum of exponentials), unifying G/G/1 and G/M/s results, recovering Takahashi's asymptotics with explicit constants, and giving an algorithm polynomial in s for fixed m.",
+  "problem_entry": "{SD} Exact multi-server waiting times 'present substantial difficulties' and non-exponential service, which 'seldom holds in practice', makes them 'really challenging' (pp. 1-2); entry from his own steady-state results [2] (pp. 1, 4).",
+  "key_idea": "Stage channels (ATC/STC) give a Markov chain; condition on the pre-arrival state, write next-event equations, Laplace-transform and collapse them with the coefficients f(i, w_j) of [2], then invert by partial fractions to a finite sum of exponentials (Theorem 1, pp. 5-8); the waiting time is Coxian again (p. 8).",
+  "assumptions": "s identical servers, FCFS, MGE interarrival and service times justified by denseness (Schassberger) and a real stage interpretation (pp. 1-2); rho < 1 (p. 5); distinct roots assumed (the author 'did not find any case' otherwise), proved only for m = 2 (p. 4; Lemma 2, pp. 10-11).",
+  "proof_devices": [
+   "stage (ATC/STC) Markov-chain representation of MGE arrivals and services (pp. 2-3)",
+   "next-event differential-difference equations, Laplace transforms and a two-step collapse with f(i, w_j) (pp. 6-7)",
+   "partial fractions and inversion to a finite sum of exponentials (Theorem 1, pp. 5, 8)",
+   "checks on the algebra: t -> infinity limit, Little's formula, M/G/s factorial moments (pp. 8-9)",
+   "sign and monotonicity argument for positive, distinct, ordered roots when m = 2, giving real arithmetic (Lemma 2, pp. 10-11)",
+   "recovery of Takahashi's PH/PH/s tail asymptotics with explicit constants K2, K3 (pp. 11-12)"
+  ],
+  "experiments": "FORTRAN 77 on a SUN 3 for MGE2/MGE2/s (O(s^3)), Newton-Raphson warm-started at the previous root; two plotted waiting-time tails (s = 10, rho = 0.9; s = 5, rho = 0.8); no timings, no run of the matrix-geometric rival, comparison argued only (pp. 12-15).",
+  "positioning": "Extends his own [2]; lists Pollaczek, Avis, de Smit, Ishikawa, Ramaswami-Lucantoni and Tijms; unifies the Wiener-Hopf (G/G/1) and imbedded-chain (G/M/s) traditions; credits Ramaswami-Lucantoni as 'elegant' with good stability while arguing a finite sum and parallel roots (pp. 2, 13-15).",
+  "writing": "Theorem-proof with explicit 'checks on the algebra'; marks results as 'remarkable' and 'surprising' (pp. 8, 11); complexity stated per parameter in the abstract (p. 1).",
+  "limits_future": "Distinct-root assumption proved only for m = 2 (pp. 4, 10-11); exponential when s and m both grow; a parallel implementation under investigation (p. 12).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Device is a distribution class dense in all distributions and closed under the analysis (the output is Coxian, p. 8), with the computational boundary printed (polynomial in one parameter, exponential in both, p. 12); an analysable class, not LP/MIO; sole-author SD paper, bearing on the Domain Map's 'co-authored papers only' label for SD.",
+    "pages": "pp. 1-2, 8, 12"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "subsume the incumbent as a special case",
+    "evidence": "G/G/1 (Wiener-Hopf) and G/M/s (imbedded Markov chain), 'traditionally analysed with very different methods', come out as special cases of the MGE closed form.",
+    "pages": "pp. 2, 9-10"
+   },
+   {
+    "pattern": "re-derive classical theorems with the new device",
+    "evidence": "Little's formula, the M/G/s factorial-moment law and Takahashi's tail asymptotics re-derived as checks, with Takahashi's uncomputed constants made explicit.",
+    "pages": "pp. 8-9, 11-12"
+   },
+   {
+    "pattern": "dense rational-transform class as the tractability device",
+    "evidence": "Mixed generalized Erlang stages, dense in all distributions, keep the analysis finite and the output in the same Coxian class; recurs in S346 (R/G/1, GI/R/1).",
+    "pages": "pp. 1-2, 8"
+   }
+  ],
+  "transferable": [
+   "Justify a special distribution family by a denseness theorem, then take the subclass with a real, nonnegative stage interpretation so probabilistic arguments apply (pp. 1-2).",
+   "After a long derivation, run named checks on the algebra: a limit, a conservation law (Little) and known special cases (pp. 8-10).",
+   "State complexity separately in each size parameter (polynomial if one varies, exponential if both) (p. 12).",
+   "Use a proven ordering of roots to warm-start Newton-Raphson from the previous root (pp. 12-13)."
+  ],
+  "coauthors": "none (sole author)",
+  "quotes": [
+   {
+    "text": "when we go beyond the exponentially assumption for the service time pdf, which seldom holds in practice, the relevant analytic and computational problems become really challenging",
+    "page": 2
+   },
+   {
+    "text": "It is remarkable that the waiting time pdf has also rational Laplace transform, i.e. it belongs to the Coxian class of distributions",
+    "page": 8
+   }
+  ]
+ },
+ {
+  "id": "S161",
+  "year": "1989",
+  "title": "Worst-case examples for the spacefilling curve heuristic for the Euclidean traveling salesman problem",
+  "read_level": "full",
+  "contribution": "Refutes Bartholdi and Platzman's O(1) conjecture with a line instance on which the spacefilling-curve tour is a log n factor longer than optimal, so their O(log n) bound is tight, also for the PTSP (read in the TR version).",
+  "problem_entry": "{IO + HS; SD for the PTSP corollary} Bartholdi and Platzman proved an O(log n) ratio for their spacefilling-curve heuristic and conjectured O(1); the note refutes the conjecture (TR pp. 1-2).",
+  "key_idea": "n points uniformly spaced on a line have a constant-length optimal tour, while the curve's recursive triangle ordering splits the instance into half-scale and reversed copies of itself, forcing long jumps between consecutive subtriangles at every level, so the tour grows like the recursion depth, i.e. log n (TR pp. 3-5).",
+  "assumptions": "Points in the unit square; the curve as a recursively defined total order on triangles (TR p. 2); the line instance chosen for proof convenience, 'any reasonably uniform distribution' on the line would do (TR p. 3). TR version read; digits and symbols lost in the extraction.",
+  "proof_devices": [
+   "line instance with constant optimal tour (TR p. 3)",
+   "self-similar decomposition into half-scale and reversed copies using the curve's reversibility (TR p. 4)",
+   "inductive lemma on the first and last points visited in each subtriangle, fixing the jumps and a recurrence for the path length (TR pp. 4-5)",
+   "PTSP corollary asserted 'by a similar analysis' without proof (TR p. 5)"
+  ],
+  "experiments": "One sentence: numerical experiments 'strongly suggest' points on a random line also give expected tour length of order log n; no protocol or numbers (TR p. 6).",
+  "positioning": "Refutes Bartholdi-Platzman's conjecture; applies the result to the PTSP heuristic of Bertsimas's thesis; extends the construction to the Hilbert and zigzag curves (TR pp. 1-2, 5-6).",
+  "writing": "A note: the refutation is stated in one abstract sentence, and the basic idea of the proof is announced before the proof (TR pp. 1, 3).",
+  "limits_future": "Conjectures that all spacefilling curves, and any ordering of the n x n mesh, admit subsets with a log n factor (TR p. 6).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Audits the worst-case certificate of the heuristic his thesis and S038 use as a starting tour: the gap stays O(log n) and cannot be a constant; a worst-case audit of a heuristic, not a solver gap.",
+    "pages": "TR pp. 1-5"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "tightness audit of one's own bound",
+    "evidence": "The O(1) conjecture would have given his thesis's PTSP heuristic a constant-factor guarantee; it is refuted, for the PTSP too, rather than assumed (compare Heuristic 4).",
+    "pages": "TR pp. 1, 5"
+   },
+   {
+    "pattern": "tightness instance by symmetry and a forced repeating step",
+    "evidence": "The curve's recursion maps the line instance onto half-scale and reversed copies of itself, which forces a long jump at every level.",
+    "pages": "TR pp. 3-5"
+   }
+  ],
+  "transferable": [
+   "To refute a constant-factor conjecture for a recursively defined heuristic, place points on a simple curve that the recursion maps onto half-scale copies of itself and write a recurrence for the length from the jumps between consecutive pieces (TR pp. 3-5).",
+   "Try the same family on sibling heuristics by matching the line to each curve's geometry (Hilbert: the diagonal; zigzag: a horizontal line) (TR pp. 5-6)."
+  ],
+  "coauthors": "Michelangelo Grigni",
+  "quotes": [
+   {
+    "text": "We refute this conjecture by exhibiting a simple set Sn of n points",
+    "page": 2
+   },
+   {
+    "text": "Hence ak is the sum of the path lengths within each subtriangle together with the lengths of the jumps between consecutive subtriangles",
+    "page": 4
+   }
+  ]
+ },
+ {
+  "id": "S148",
+  "year": "1990",
+  "title": "The probabilistic minimum spanning tree problem",
+  "read_level": "full",
+  "contribution": "Defines the probabilistic MST, gives a closed-form expected length of an a priori tree, proves NP-completeness even with unit costs and equal probabilities, identifies polynomial cases and tight bounds against the MST, and shows the a priori tree is asymptotically within constant factors of reoptimization.",
+  "problem_entry": "{SD + IO; AP motivation} A 'natural probabilistic variation' of the MST with nodes present at random and an a priori tree pruned per instance (pp. 1-2), argued against Steiner and MST reoptimization by real-time O(n) updating and a fixed network structure (pp. 3-4); VLSI, communication and agent-network applications, admitted as idealized (p. 4).",
+  "key_idea": "Edge e is used iff at least one node is present on each side of its cut, so E[L_T] = sum c(e){1 - h(K_e) - h(V - K_e) + h(V)}, O(n) for independent presence (Theorems 1-2, pp. 5-7); the closed form drives NP membership, hardness and structure (p. 7).",
+  "assumptions": "General graph and presence law p(S) allowing dependence (p. 5); independent p_i (p. 6); equal p for complexity and structure (pp. 7, 14); random Euclidean and random-length models with equal p for asymptotics (p. 21).",
+  "proof_devices": [
+   "edge-contribution closed form by inclusion-exclusion over the two sides of a cut (Theorems 1-2, pp. 5-7)",
+   "reduction from Exact Cover by 3-Sets using properties of phi(k) (Proposition 3, Theorems 4-5, pp. 8-13)",
+   "exchange argument: adding a missing arc lowers the expected cost (pp. 10-11)",
+   "limit p -> 0 to the NP-complete network design problem on a tree as the first hint of hardness (pp. 11-12)",
+   "star-tree optimality transfer from MST to PMST (Theorems 6-7, p. 13)",
+   "concavity of f(p) as a minimum of concave functions (Proposition 8, pp. 14-15)",
+   "tight example for the MST-versus-PMST bound (pp. 16-17)",
+   "backward induction bound on MST reoptimization (Proposition 12, pp. 18-20)",
+   "Chernoff concentration of the number of present points (Theorem 14, pp. 22-24)",
+   "Steele subadditivity with representative 'black' points plus approximate monotonicity (Theorem 15, pp. 24-28)"
+  ],
+  "experiments": "none",
+  "positioning": "Part of the probabilistic combinatorial optimization family after Jaillet's PTSP and his thesis; 'never defined before'; builds on Steele's subadditive functionals, Frieze's zeta(3) and Johnson et al.'s network design hardness (pp. 2, 12, 21, 28).",
+  "writing": "Applications and the a priori-versus-reoptimization argument come first, with an admission of idealization; results flagged as 'quite surprising' (pp. 2, 4, 30); a hardness intuition is reported as how the result was found (p. 12).",
+  "limits_future": "Suboptimal in the worst case (p. 30); Conjecture 18 open and the Steiner strategy unanalysed in the random-length model (p. 29); future: solve network design as a sequence of PMST problems (p. 30).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Formulation first (re-solving recast as one a priori problem with a closed-form objective) and boundary printed (NP-complete in the simplest case, polynomial for star MSTs), but the nominal class is lost: P becomes NP-complete. Sole-author SD/IO paper with stated reasons.",
+    "pages": "pp. 1-2, 5-13"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Price of robustness named in complexity, not cost ('one pays for these nice properties (robustness, globality)'); performance priced against reoptimization by constants and a tight bound; p traces a curve f(p) from MST to network design, but p is data, not a decision-maker's knob.",
+    "pages": "pp. 5, 14-17, 30"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "a priori solution with a cheap update rule, priced against re-solving",
+    "evidence": "The a priori tree pruned in O(n) per instance is compared with MST and Steiner reoptimization in the worst case and asymptotically; recurs from S038 and S017 (card c01).",
+    "pages": "pp. 3-4, 21-30"
+   },
+   {
+    "pattern": "carry deterministic devices into the stochastic version and measure what survives",
+    "evidence": "Greedy optimality of the MST does not survive (NP-complete), star-tree optimality does, and the MST stays a good solution for p > 1/2.",
+    "pages": "pp. 1, 5, 13, 16"
+   },
+   {
+    "pattern": "tightness audit of one's own bound",
+    "evidence": "The PMST-versus-MST bound (11) is shown 'the best possible' by an explicit example.",
+    "pages": "pp. 16-17"
+   },
+   {
+    "pattern": "limit cases of the new parameter locate the hardness",
+    "evidence": "p -> 1 gives the MST and p -> 0 the NP-complete network design problem on a tree; this limit 'originally led us to suspect' hardness and frames the f(p) curve.",
+    "pages": "pp. 11-12, 14-15"
+   }
+  ],
+  "transferable": [
+   "For an expected cost over random sub-instances, sum over edges the probability that each edge is needed (inclusion-exclusion over the two sides of its cut); the closed form also puts the decision problem in NP (pp. 5-8).",
+   "Before proving hardness, send the new parameter to its limits; if one limit is a known NP-complete problem, suspect hardness and borrow its reduction (pp. 11-12).",
+   "When a Euclidean functional is subadditive but not monotone, prove an approximate monotonicity inequality and follow Steele's route (pp. 25-28)."
+  ],
+  "coauthors": "none (sole author; thanks thesis adviser Amedeo Odoni and Patrick Jaillet)",
+  "quotes": [
+   {
+    "text": "one pays for these nice properties (robustness, globality) by changing the complexity of the problem radically",
+    "page": 5
+   },
+   {
+    "text": "In fact, it is this observation that originally led us to suspect that the PMST problem is hard.",
+    "page": 12
+   }
+  ]
+ },
+ {
+  "id": "S195",
+  "year": "1990",
+  "title": "An asymptotic determination of the minimum spanning tree and minimum matching constants in geometrical probability",
+  "read_level": "full",
+  "contribution": "Determines the MST and matching constants asymptotically in the dimension (beta_MST(d) ~ sqrt(d/2 pi e), matching half of it) by Crofton-method upper bounds and nearest-neighbour lower bounds, with the upper bounds realized by exodic heuristics, and improves TSP-constant bounds for d = 3, 4 (read in the preprint version).",
+  "problem_entry": "{SD + IO} The constants beta(d) in the n^((d-1)/d) laws for MST, matching and TSP are 'a long open problem' (preprint pp. 1, 3); entry via Crofton's method, 'an old but surprisingly neglected method' (p. 3).",
+  "key_idea": "Grow the ball's volume, condition on whether the new point falls in the shell, and join it to the nearest point of the inner MST to get a differential-difference inequality whose leading behaviour bounds beta_MST(d); nearest-neighbour distances give lower bounds; the two meet as d -> infinity (pp. 4-13).",
+  "assumptions": "n i.i.d. uniform points in a d-ball, n -> infinity then d -> infinity (pp. 4, 12); leading behaviour of the difference equation taken from the differential equation via a regular singular point and a consistency check with a priori knowledge (pp. 9-10); for matching the removed region's effect vanishes as n -> infinity (p. 10).",
+  "proof_devices": [
+   "nearest-neighbour lower bounds (Lemma 1, pp. 4-5)",
+   "Crofton's method: volume perturbation and conditioning on the shell (pp. 6-7)",
+   "feasible insertion of the outside point turns the identity into an inequality (p. 7)",
+   "boundary-distance lemma (Lemma 2, pp. 8-9)",
+   "scaling, regular-singular-point argument and trial solution (pp. 9-10)",
+   "gamma-function asymptotics (p. 12)",
+   "TSP: nearest and second-nearest neighbour lower bound, twice-MST and strip upper bounds (Theorem 4, pp. 14-15)"
+  ],
+  "experiments": "Computed tables, no simulation: lower, upper and asymptotic beta_MST(d) for d = 10 to 1000 (e.g. 0.866331 / 0.928511 at d = 10, Table 1, p. 13) and best known TSP bounds for d = 2 to 10 (Table 2, p. 15).",
+  "positioning": "Builds on Beardwood-Halton-Hammersley and Steele; re-derives Gilbert's d = 2 exodic-tree constant 'considerably easier'; improves BHH's strip bound for d = 3, 4 (pp. 3, 11, 14-15).",
+  "writing": "Labels the tool 'surprisingly neglected' and the heuristics' asymptotic optimality a 'surprising property'; prints a failed extension plainly (pp. 3, 12, 15).",
+  "limits_future": "Constants only asymptotic in d, though bounds close for small d (p. 13); the method could not be generalized to the TSP, leaving a conjecture of sqrt(d/2 pi e) behaviour (pp. 4, 15; formula partly garbled).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Honest gap in analytic form: the upper bound is a named heuristic's value (exodic tree, exodic matching), the lower bound a nearest-neighbour bound, and the finite-d gap is printed in Table 1 rather than only the d -> infinity limit.",
+    "pages": "pp. 11-13"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "asymptotic regimes for sharp constants",
+    "evidence": "The d -> infinity regime is where the upper and lower bounds coincide, giving exact asymptotic constants.",
+    "pages": "pp. 12-13"
+   },
+   {
+    "pattern": "re-derive classical theorems with the new device",
+    "evidence": "Gilbert's d = 2 exodic-tree constant re-derived 'considerably easier' and for every d.",
+    "pages": "p. 11"
+   },
+   {
+    "pattern": "print the looseness of your own constants and the conjecture that would close it",
+    "evidence": "The failed extension to the TSP is stated and a TSP conjecture offered.",
+    "pages": "pp. 4, 15"
+   },
+   {
+    "pattern": "revive a neglected classical method from a neighbouring field",
+    "evidence": "Crofton's method from geometric probability, 'surprisingly neglected', applied to a combinatorial-optimization constant.",
+    "pages": "pp. 3, 6"
+   }
+  ],
+  "transferable": [
+   "Crofton's method: differentiate an expected value with respect to the region's size by conditioning on where one extra point lands, and close the inequality with a feasible insertion of that point (pp. 6-7).",
+   "Read every upper-bounding construction as a heuristic and state its asymptotic performance (pp. 11-12).",
+   "Print a table of both bounds at finite parameter values next to the asymptotic formula (p. 13)."
+  ],
+  "coauthors": "Garrett van Ryzin",
+  "quotes": [
+   {
+    "text": "an old but surprisingly neglected method in geometrical probability",
+    "page": 3
+   },
+   {
+    "text": "Despite our attempts we were not able to generalize the method for the TSP.",
+    "page": 15
+   }
+  ]
+ },
+ {
+  "id": "S229",
+  "year": "1991",
+  "title": "Probabilistic analysis of the Held and Karp lower bound for the Euclidean traveling salesman problem",
+  "read_level": "full",
+  "contribution": "Proves that the Held-Karp bound on random Euclidean points grows like beta_HK(d) n^((d-1)/d) almost surely (also for nonuniform densities, completely for d = 2), sandwiches beta_HK between matching, MST and TSP constants, and so explains its small practical gap (estimated below 3%).",
+  "problem_entry": "{IO + SD; LO as engine} The HK bound is 'extremely close' to optimal tours in practice, with gaps often below 1% (p. 1), but the 2/3 worst-case result 'does not capture the efficiency of the bound in practice' (p. 2).",
+  "key_idea": "Combine polyhedral descriptions of the bound with Steele's subadditive Euclidean functionals: prove subadditivity and monotonicity in the 1-tree form, and simple subadditivity and upper linearity in the capacity formulation (pp. 2, 5-16).",
+  "assumptions": "n i.i.d. points uniform in the d-cube, then any bounded-support distribution with absolutely continuous part (pp. 1, 14); the capacity formulation needs the triangle inequality (pp. 2-3); no data of their own, published constants used for the gap estimate (p. 13).",
+  "proof_devices": [
+   "choice among five equivalent formulations of the bound (LP, capacity, 1-tree combinations, Lagrangian dual) per property (pp. 3-5)",
+   "Steele's subadditive Euclidean functional theorem (p. 5)",
+   "product weights over combinations of subcube 1-trees, patched by root-edge deletion and adjacent-subcube links (Proposition 2, pp. 5-9)",
+   "rational basic solution duplicated into equal weights, edge trading and triangle-inequality shortcuts (Proposition 3, pp. 9-12)",
+   "capacity 2 on one connecting edge for simple subadditivity (Proposition 7, pp. 14-15)",
+   "face-centre points and a tour patch for upper linearity (Proposition 8, pp. 15-16)",
+   "sandwich max(2 beta_M, beta_MST) <= beta_HK <= beta_TSP via the matching polytope (M <= HK/2) and an MST on n - 1 points (Proposition 5, p. 13)",
+   "Rhee-Talagrand deviation inequality via Lemma 11 (pp. 16-17)"
+  ],
+  "experiments": "No runs; published estimates of beta_M(2), beta_MST(2), beta_TSP(2) (0.35, 0.68, 0.72) put the asymptotic gap at 'perhaps less than' 3% (p. 13).",
+  "positioning": "Extends Held-Karp and Wolsey's worst-case result (rediscovered by Shmoys-Williamson) with Steele's subadditivity and Rhee-Talagrand; claims the first probabilistic analysis of an LP relaxation by subadditivity; notes Karp-type partitioning as almost surely asymptotically optimal (pp. 1-2, 16).",
+  "writing": "Motivation from computational folklore, five formulations laid out before the proofs, a closing belief statement and listed open questions (pp. 1, 3-5, 17).",
+  "limits_future": "Open: whether beta_HK(d) = beta_TSP(d) and the exact constants (p. 17).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Formulation first as a proof device: among equivalent formulations, the one in which the needed property has a direct feasible-solution construction is chosen ('A more concise proof can be obtained using the new formulation'); structure read off polytopes, not a solver class.",
+    "pages": "pp. 3-5, 14-16"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "The LP bound as certificate of tour quality, with its asymptotic gap priced (about 3%) from published constants; no runs or duel of their own.",
+    "pages": "pp. 1, 13"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "structural theorem explains computational success",
+    "evidence": "The motivating fact is computational folklore (HK gaps below 1%), and the limit theorem's role is to explain it; recurs from S025 and S015 (card c04).",
+    "pages": "pp. 1-2, 13, 17"
+   },
+   {
+    "pattern": "relaxation-centred IO",
+    "evidence": "The LP relaxation itself is the object of study (polyhedral descriptions plus probabilistic analysis); with S052, S036, S269 (card c02) and S015 (card c04).",
+    "pages": "pp. 1-3"
+   },
+   {
+    "pattern": "staged companion papers from one model",
+    "evidence": "The capacity formulation of Goemans-Bertsimas [8] (S052, card c02) carries this paper's nonuniform case.",
+    "pages": "pp. 2-3"
+   }
+  ],
+  "transferable": [
+   "To analyse an LP relaxation probabilistically, prove Steele's hypotheses one at a time, each in the formulation where a feasible solution for the merged instance is easiest to build (pp. 5-16).",
+   "Merge optimal solutions of subproblems into a feasible solution of the whole by product weights over all combinations of their supports (pp. 6-7).",
+   "Price the gap of a new constant without computation by sandwiching it between known constants of sibling problems through polyhedral relations (M <= HK/2) (p. 13)."
+  ],
+  "coauthors": "Michel X. Goemans",
+  "quotes": [
+   {
+    "text": "However, this worst-case analysis does not capture the efficiency of the bound in practice.",
+    "page": 2
+   },
+   {
+    "text": "We believe that the idea of combining polyhedral characterizations with probabilistic analysis has the potential to lead to very interesting results.",
+    "page": 17
+   }
+  ]
+ },
+ {
+  "id": "S346",
+  "year": "1991",
+  "title": "Transient and busy period analysis of the GI/G/1 queue as a Hilbert factorization problem",
+  "read_level": "full",
+  "contribution": "Formulates the transient waiting time and the busy period of GI/G/1 as a two-dimensional Lindley process and a Hilbert factorization problem, solved in closed form (transforms and first two moments) for R/G/1 and GI/R/1.",
+  "problem_entry": "{SD; AP motivation} Transient and busy-period analyses have 'long been considered as very difficult problems' yet matter for openings, closings, new controls and slow convergence (start-ups, airport runways) (p. 1); recent work went numerical and analytical results are rare (p. 2).",
+  "key_idea": "Track the busy cycle and a signed quantity (next waiting time if positive, minus the idle period otherwise) to get a two-dimensional Lindley recursion and one key formula; in transforms this is a Hilbert problem, solved by roots and Liouville's theorem when one distribution has a rational Laplace transform (pp. 4-11).",
+  "assumptions": "GI/G/1, FCFS, rho < 1 (p. 6); system initially idle with a forward-recurrence first arrival, admitted as restrictive for the waiting time but not the busy period (p. 2); one distribution in the rational class R (p. 8).",
+  "proof_devices": [
+   "two-dimensional Lindley recursion with a signed waiting/idle variable (pp. 4-5)",
+   "Hilbert factorization in transform space (pp. 5-6)",
+   "Rouche's theorem to count the roots (p. 8)",
+   "Liouville's theorem after a boundedness proposition using a Chernoff bound (Proposition 1, pp. 8-9)",
+   "symbolic differentiation in Mathematica for moments (pp. 9-10)",
+   "special-case checks: M/G/1 mean busy period, GI/M/1 and M/G/1 classical results, Takacs's equation, MGE/MGE results of [2] (pp. 11-12)"
+  ],
+  "experiments": "none in this paper; numerical inversion and results are in the companion method-of-stages paper [2] (pp. 12-13).",
+  "positioning": "In the Lindley-Keilson Hilbert-problem line, against the numerical turn (Jensen randomization, Kolmogorov integration) and Ramaswami's matrix-geometric busy period; credits a referee for Asmussen's matrix-algorithmic alternative (pp. 2, 8).",
+  "writing": "Practical motivation first; 'The reward of our analysis is' a closed form; the general solution openly declared not numerically useful; conclusion as an attempted demonstration (pp. 1, 7, 9, 12).",
+  "limits_future": "General closed form not numerically useful (p. 7); alternative matrix-algorithmic route noted (p. 8); no future work stated.",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "A problem the field had handed to numerics is rewritten in exact analytic form (Lindley process, Hilbert problem) and the boundary printed: the general closed form is set aside and the class restricted to R/G/1 and GI/R/1 where it is computable; an analysable class, not LP/MIO.",
+    "pages": "pp. 2, 5-8"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Early analytic form of the skill's epigraph ('Practical tractability not polynomial solvability'): a closed form is judged by numerical usefulness; no tool-change argument or speed-up figure (compare S052, card c02).",
+    "pages": "pp. 7-8"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "re-derive classical theorems with the new device",
+    "evidence": "GI/M/1 (Takacs) and M/G/1 busy-period results, E[Bp] = 1/(mu - lambda) and Takacs's integrodifferential equation recovered.",
+    "pages": "pp. 11-12"
+   },
+   {
+    "pattern": "staged companion papers from one model",
+    "evidence": "The analytic Hilbert-problem paper and the method-of-stages paper with Nakazato (S220, batch s02) share the model; numbers live in the companion.",
+    "pages": "pp. 11-13"
+   },
+   {
+    "pattern": "dense rational-transform class as the tractability device",
+    "evidence": "Emphasis on R/G/1 and GI/R/1 'Due to the numerical tractabilty of the solution'; recurs from S239.",
+    "pages": "pp. 2, 8"
+   }
+  ],
+  "transferable": [
+   "For a transient or busy-period question, add one state variable whose sign records how the cycle ended, so one recursion yields both distributions (pp. 4-5).",
+   "For a transform-space factorization with one rational factor, count roots by Rouche, prove boundedness and apply Liouville's theorem for the unique solution (pp. 8-9).",
+   "Generate moment formulas by symbolic differentiation and check them on the M/G/1 special case (pp. 9-11)."
+  ],
+  "coauthors": "Julian Keilson, Daisuke Nakazato, Hongtao Zhang",
+  "quotes": [
+   {
+    "text": "Although this is a result in closed form, we do not believe that it is numerically useful",
+    "page": 7
+   },
+   {
+    "text": "In this paper we attempted to demonstrate the power of direct probabilistic arguments",
+    "page": 12
+   }
+  ]
+ },
+ {
+  "id": "S158",
+  "year": "1992",
+  "title": "The minimum spanning tree constant in geometrical probability and under the independent model: a unified approach",
+  "read_level": "full",
+  "contribution": "Gives an exact series expansion of the MST constant on the torus (valid in the usual Euclidean model) by analysing the greedy algorithm, proves the analogous expansion for the independent model with the same argument, and raises the d = 2 lower bound to 0.600822.",
+  "problem_entry": "{SD + IO} The MST constant is 'a major open problem' (abstract p. 1), and the Euclidean and independent models 'use entirely different techniques', so their unification is a second problem (p. 2).",
+  "key_idea": "Since greedy solves the MST exactly, T_n = integral of (C_n(z) - 1) dz over thresholds z; expected component counts by component size k have scaling limits f_k(y) that give a series for beta_MST(d), proved once under four conditions and verified for the torus and the independent model (pp. 2-12).",
+  "assumptions": "Random symmetric distances with F(x)/(c_d x^d) -> 1 at 0, bounded by M (p. 2); torus to avoid boundary effects, extended to the usual Euclidean model by Jaillet's proof (pp. 2, 10); Poissonization as an equivalent model (p. 3).",
+  "proof_devices": [
+   "MST length as an integral of a component count via greedy exactness (p. 4)",
+   "four abstract conditions verified per model (pp. 2-3, 6-12)",
+   "Fubini-Tonelli and dominated convergence (pp. 4-5)",
+   "k^(k-2) tree count for the domination condition (p. 8)",
+   "summation by parts and a pseudotree on clusters bounded by an MST on representatives (pp. 8-9)",
+   "counting connected graphs in the independent model (pp. 10-11)",
+   "Hall's rightmost-point upper bound (pp. 15-16)",
+   "numerical integration of the first five terms (pp. 13-15)"
+  ],
+  "experiments": "Mathematica numerical integration of the first five terms for d = 2: lower-bound ladder 0.5, 0.575957, 0.597831, 0.600822 against the previous 1/2 (pp. 13-15); 0.608701 under Conjecture 2 (p. 17); the 'empirically estimated value' named in the abstract is not printed (pp. 1, 13-17).",
+  "positioning": "Builds on BHH, Steele, Karp, Frieze and Steele's zeta(3), Aldous-Steele's Poisson approach (credited for unpublished work), Jaillet's proof of their conjecture, Timofeev (Prim versus their Kruskal) and Hall's coverage technique; supersedes the nearest-neighbour bound of Bertsimas-van Ryzin (pp. 1-3, 10, 12, 15, 17).",
+  "writing": "Two open problems framed in the introduction, conditions stated before verification, numbered conjectures with their consequences computed, and credits to colleagues' unpublished work (pp. 1-3, 17).",
+  "limits_future": "Terms get harder to obtain as k grows (p. 10); better bounds possible 'With more work' (p. 15); Conjectures 1-2 on the relation of the two models as d -> infinity (pp. 16-17).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "One exact representation, obtained through the exact algorithm (Kruskal), serves two traditions (Euclidean and independent models) under one set of checkable conditions; the boundary printed (a = d, harder terms for large k); an analysable expansion, not a solver class.",
+    "pages": "pp. 2-6, 10"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Results reported as a ladder of lower bounds, each truncation called a lower bound and the conjecture-dependent improvement labelled as such; no exact value claimed numerically.",
+    "pages": "pp. 13-17"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "re-derive classical theorems with the new device",
+    "evidence": "Frieze's zeta(3), Timofeev's expansion and the S195 bounds (first term, exodic-tree upper bound) fall out of the expansion.",
+    "pages": "pp. 12, 15-16"
+   },
+   {
+    "pattern": "print the looseness of your own constants and the conjecture that would close it",
+    "evidence": "Conjecture 2 and the improved bound 0.608701 it would give are printed next to the proved 0.600822.",
+    "pages": "pp. 15, 17"
+   },
+   {
+    "pattern": "one set of checkable conditions covering two models",
+    "evidence": "The theorem is proved once under isotropy, scaling-limit, domination and tail conditions, then the conditions are verified for the torus and for the independent model.",
+    "pages": "pp. 2-3, 6-12"
+   }
+  ],
+  "transferable": [
+   "Write the value of a problem that greedy solves exactly as an integral over the threshold of a component count, and analyse the count instead of the optimum (p. 4).",
+   "Prove a limit theorem under abstract conditions, then verify them per model, so two random models share one proof (pp. 2-3).",
+   "Truncate an exact series of nonnegative terms to get a ladder of computable lower bounds, and print each rung (pp. 13-15).",
+   "For an upper bound on the number of components, count the 'rightmost' points instead (Hall's technique) (pp. 15-16)."
+  ],
+  "coauthors": "Florin Avram",
+  "quotes": [
+   {
+    "text": "Until now the analysis under the independent and the Euclidean model use entirely different techniques.",
+    "page": 2
+   },
+   {
+    "text": "Our analysis for the MST constants under both the Euclidean and independent model was made possible by analyzing directly the greedy algorithm, which solves the MST exactly.",
+    "page": 16
+   }
+  ]
+ }
+]

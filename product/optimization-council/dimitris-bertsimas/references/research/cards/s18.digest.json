@@ -1,0 +1,483 @@
+[
+ {
+  "id": "S309",
+  "year": "2023",
+  "title": "Global flood prediction: a multimodal machine learning approach",
+  "read_level": "full",
+  "contribution": "A three-step multimodal pipeline (tabular disaster history plus Wikipedia geography text embedded with DistilBERT variants, concatenated and classified by XGBoost) that predicts 1-, 2- and 5-year flood occurrence for historically flooded 1° × 1° cells with ROCAUC about 0.76–0.77, against about 0.54 for a persistence baseline.",
+  "problem_entry": "{ML; AP} Physical hydrological models lose accuracy at long horizons, and earlier ML flood work used a single modality (p. 1). Entry: global multi-year flood prediction per grid cell from disaster statistics plus location text, claimed as the first global multi-year ML flood model and the first use of text in flood prediction (pp. 1–2).",
+  "key_idea": "Embed each modality separately (24 yearly disaster statistics plus the year; DistilBERT paragraph embeddings that are pre-trained, fine-tuned on a flood-history label, or frozen with a trained (796, 32) sigmoid layer), concatenate them, and classify with XGBoost (pp. 2–4).",
+  "assumptions": "GDIS 1960–2018 linked to EM-DAT; 2,852 cells, with text for 2,775 (p. 2). Prediction is restricted to the 881 cells with at least two historical floods, on the stated assumption that some locations are not flood-prone (p. 6). Random 70/30 split and 3-fold CV on AUC (pp. 4, 6). Neither the temporal ordering of the split nor its alignment with the fine-tuning split is stated (my reading of pp. 4, 6).",
+  "proof_devices": [
+   "n/a: no optimization model, theorem or bound; pipeline engineering only (pp. 2–4, 6)"
+  ],
+  "experiments": "Out-of-sample ROCAUC, F1, accuracy and balanced accuracy at 1-, 2- and 5-year horizons against a persistence baseline likened to FEMA-style risk mapping (Table 1, p. 4). Transfer multimodal ROCAUC is 0.772/0.764/0.767, against 0.544/0.534/0.539 for the baseline and 0.742/0.726/0.715 for statistics only. Over statistics only, transfer gains +4% to +7% in ROCAUC but −1%, −1% and +3% in balanced accuracy (my reading of the garbled table header). The baseline keeps the best plain accuracy (0.895), and this is printed (p. 4). Colab and SuperCloud GPUs; no run times (p. 6).",
+  "positioning": "Against physical hydrological models and single-modality ML flood work (p. 1); leads with first-ever claims (pp. 1–2).",
+  "writing": "Six pages with internal inconsistencies: ROCAUC 75–77% in the abstract but 70–75% in the body (pp. 1, 4); 818 cells on p. 4 but 881 on p. 6; Table 1 cited as Table 4 (p. 4). The text says fine-tuned DistilBERT does not improve on statistics only, yet its ROCAUC is higher at all three horizons (p. 4, my reading).",
+  "limits_future": "No limitation is stated, and the conclusion restates the results (p. 4). The paper claims the framework generalizes to wildfires, earthquakes, droughts and extreme weather (p. 2). The decision the forecasts would serve is only named as long-term disaster planning (pp. 1, 4).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The baseline imitates the agencies' current persistence rule (FEMA-style risk mapping), but there is no owner, decision or decision metric, and predictions are scored by ROCAUC (Taste warning sign 4).",
+    "pages": "pp. 1, 4"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "A student's sustainability strand: the framework is pitched for other disasters, Zeng co-authors S384, and S338 names this paper as a next application of adaptive multimodal feature selection.",
+    "pages": "p. 2; S338 p. 35; S384 p. 1"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "multimodal = per-modality embeddings concatenated into one tabular learner",
+    "evidence": "Text and tabular modalities are embedded separately, concatenated in feature space and fed to XGBoost. S338 describes the same recipe for two other group works (Soenksen et al. 2022; Bertsimas et al. 2022).",
+    "pages": "pp. 2–3; S338 p. 35"
+   }
+  ],
+  "transferable": [
+   "Use the encyclopedia text of each location (the Wikipedia Geography section, with a synonym search and a Summary fallback) as a cheap static modality. Embed it with a frozen language model plus a small trained projection, and test it against statistics-only features (pp. 2–4).",
+   "Report the gain of the added modality over the single-modality model in its own delta column, not only the gain over the baseline (Table 1, p. 4).",
+   "Keep the agencies' persistence rule as the baseline, report imbalance-robust metrics (ROCAUC, balanced accuracy) beside plain accuracy, and print the metric on which the baseline still wins (p. 4)."
+  ],
+  "coauthors": "Cynthia Zeng",
+  "quotes": [
+   {
+    "text": "This approach aims to mark previously flooded region as high risk, which is similar to the flood risk mapping procedure employed by agencies such as FEMA.",
+    "page": 4
+   },
+   {
+    "text": "This filtering criterion is based on the assumption that some grid locations are not prone to flooding risk.",
+    "page": 6
+   }
+  ]
+ },
+ {
+  "id": "S338",
+  "year": "2023",
+  "title": "Ensemble modeling for time series forecasting: an adaptive robust optimization approach",
+  "read_level": "full",
+  "contribution": "Adaptive ridge: a linear ensemble of forecasts whose weights follow an affine decision rule in the members' recent errors, robustified by an adaptive robust min–max that is equivalent to a regularized regression. It beats the best member in hindsight by 16–26% in RMSE and 14–28% in CVaR on wind, energy and cyclone data.",
+  "problem_entry": "{ML+RO; AP} No forecaster wins consistently under model drift. Fixed ensembles degrade, and regret-based dynamic ensemblers do not necessarily enforce robustness (pp. 2, 4–5). Entry: treat the ensemble weights as the wait-and-see decisions of a multi-stage robust problem (pp. 2–3).",
+  "key_idea": "Time-varying weights are stacked in a block-diagonal design (p. 8) and robustified against perturbations of the forecast matrix (p. 8). They are restricted to beta_t = beta0 + V0 Z_t, where Z_t holds the members' last tau errors (pp. 9–10). Norm-ball sets turn the min–max into a regularized regression, Adaptive Ridge or Adaptive Lasso (Theorem 1, p. 12; Corollary 1, p. 13). lambda and tau are chosen by chronological validation (Algorithm 1, p. 15).",
+  "assumptions": "Forecasts and targets are fully observed at T regular time steps, for any lead time (p. 7). Uncertainty sets have the form ||Delta|| <= lambda, with lambda fixed (p. 11). Member training data are disjoint from the ensemble's (p. 14). Data: a synthetic sine with drifting member errors (pp. 17, 21–22); Safi wind (8,494 forecasts from 6 models, p. 29); UCI appliance energy (pp. 31–32); cyclone intensity (870 North Atlantic and 849 Eastern Pacific cases, pp. 33–34).",
+  "proof_devices": [
+   "Bertsimas–Copenhaver lemma, max over Delta in U(h,g) of g(z + Delta beta) = g(z) + lambda h(beta), with the proof reproduced through a rank-one worst-case perturbation lambda z v^T / g(z) (pp. 12–13)",
+   "Xu et al. 2008 robust-regression theorem for Frobenius-norm sets, giving the dual-norm regularizer (Corollary 1, p. 13)",
+   "Block-diagonal compact form, which lets known robust–regularized equivalences apply to time-varying weights (pp. 8, 11)",
+   "Affine decision rule on observed past errors as a proxy for the revealed uncertainty. My reading: the rule adapts to data, not to the adversary, so the min–max is a static robust regression in (beta0, V0) (pp. 9–11)",
+   "No generalization or regret bound (n/a)"
+  ],
+  "experiments": "Synthetic: 30 seeds; MAE, RMSE, MAPE and CVaR at 5% and 15%; chronological 50/25/25 splits. Baselines: best member in hindsight (chosen on test MAPE), ensemble mean, Exp3, passive-aggressive, ridge. Julia 1.6, JuMP, Gurobi, 4 Xeon cores (pp. 16–19). Adaptive ridge is best across ensemble sizes and drift levels but loses below about 500 training samples; tau = 3–4 is best (pp. 20–24). Real data, against the best member in hindsight: Safi 8% MAE, 17% RMSE, 26%/14% CVaR (p. 30); energy 15% MAE, 26% RMSE, 27%/28% CVaR, with MAPE slightly worse (p. 32). Cyclones, against the NHC official forecast OFCL: 12%/17% MAE and 5%/21% CVaR 15%, with ridge slightly better on North Atlantic CVaR (p. 35). Training takes 0.4–239 s, and 1,361 s at tau = 25 (pp. 41–42).",
+  "positioning": "Against static linear ensembles (the Bates–Granger lineage) and regret-based dynamic ensemblers (Exp3, passive-aggressive) (pp. 3–5); builds on Bertsimas–Copenhaver robust regression and Bertsimas–den Hertog adaptive robust optimization (pp. 2, 10).",
+  "writing": "Numbers-first abstract and contribution list (pp. 1, 3); the synthetic section is framed as guidance for practitioners (p. 14). Minor slips: sigma_k is drawn from Uniform(−0.5, 0.5) on p. 17 but from [0, 0.5] in Table 9 (p. 43); Exp3's MAPE is 27.6% in the text but 27.1 in Table 3; both 36 and 30 models are reported (p. 32).",
+  "limits_future": "Needs a training set of a few hundred points, and overfits with a large tau or little data (pp. 24, 26–27, 36). Correlated members may need pre-selection and a sum-to-one constraint (p. 30). Future work: adaptive feature selection in multimodal models, and other time-series domains (pp. 35–36).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Forecast ensembling is written as adaptive robust optimization and kept in class: with an affine rule, the min–max becomes a convex regularized regression solved with JuMP and Gurobi. Heuristic 1 is visible too: ridge and lasso ensembles are reread as robust regressions.",
+    "pages": "pp. 8–13, 19, 36"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "The duel against the incumbent ensemblers runs on identical chronological splits and includes an oracle opponent (the best member in hindsight); software and cores are stated, and the losing regimes are printed. The problem is convex, so there is no MIO, warm-start or certificate step.",
+    "pages": "pp. 18–19, 24, 26, 32, 35"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The cyclone case benchmarks the NHC's operational consensus forecasts (the owner's current rule), and Safi is motivated by production shutdowns. Scoring stays on forecast error, with CVaR as a proxy for the worst decisions.",
+    "pages": "pp. 27, 33–35"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "The cohort's own deployments supply the data (the Safi forecasts of Bertsimas et al. 2023 = S384 per the reference list, and Hurricast), and the next application is named (Zeng and Bertsimas 2023 = S309).",
+    "pages": "pp. 27–29, 33, 35, 37, 41"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "model weights as wait-and-see decisions (ARO decision rules inside learning)",
+    "evidence": "Ensemble weights are treated as the adaptive decisions of a multi-stage robust problem, with an affine decision rule in recent forecast errors.",
+    "pages": "pp. 2–3, 9–10"
+   },
+   {
+    "pattern": "methods paper built on the forecast archive of the group's own deployment",
+    "evidence": "The forecasts of the deployed Safi pollution system and the Hurricast forecasts become the ensemble members of the new method.",
+    "pages": "pp. 27–29, 33"
+   }
+  ],
+  "transferable": [
+   "To robustify a time-varying regression, stack the per-period coefficient vectors into one block-diagonal design X̃. Published robust ↔ regularized equivalences then apply verbatim (pp. 8, 11–13).",
+   "Make the coefficients an affine function of the members' last tau errors (beta_t = beta0 + V0 Z_t). The problem stays convex in (beta0, V0), and weights may turn negative to correct member bias (pp. 9–10, 27, 30).",
+   "Benchmark an ensembler against the best member in hindsight, chosen on the test set (an oracle no online method can match), and against the operational consensus forecast where one exists (pp. 18, 34).",
+   "When the worst errors drive decisions, report CVaR of the absolute error beside MAE and RMSE; its discrete form is a small optimization problem (pp. 16, 35).",
+   "Sweep the training-set size to find the regime where the method loses, and state the data requirement in the conclusion (pp. 24, 36)."
+  ],
+  "coauthors": "Léonard Boussioux",
+  "quotes": [
+   {
+    "text": "This is convenient for the practitioner as a min-max formulation can be converted to a minimization problem with a regularizer on the variables.",
+    "page": 10
+   },
+   {
+    "text": "Adaptive ridge is not suitable when there is little data available.",
+    "page": 26
+   }
+  ]
+ },
+ {
+  "id": "S369",
+  "year": "2023",
+  "title": "Improving stability in decision tree models",
+  "read_level": "full",
+  "contribution": "A structural distance between decision trees (an optimal matching of paths, solved exactly as an LP) and a Pareto-selection method over bootstrapped CART trees that buys a 38% gain in stability for a 4.6% loss in AUC on six health-care data sets.",
+  "problem_entry": "{ML; AP} Tree instability is documented but understudied. Retrained models change notably as patient data grow, which harms physicians' trust (pp. 1–2). The stated target is Breiman's question whether a more stable single-tree CART exists (p. 4). Existing measures are semantic, structural summaries, or edit distances that treat logically equivalent trees as different (pp. 4–5).",
+  "key_idea": "A tree is represented as a set of paths (pp. 8–9). Path distance and path weight are defined (pp. 9–10), and the tree distance is a minimum-cost path matching (p. 11): a metric, solvable as an LP, normalized by 2^D(2D+lambda) (pp. 11–12). Training: bootstrap CART trees on an early subset X0 and on all data, score each full-data tree by its mean distance to the X0 trees and by its holdout AUC, keep the Pareto frontier, and select with an application function such as the most stable tree within epsilon of the best AUC (pp. 15–16).",
+  "assumptions": "Classification with numerical and categorical features over bounded ranges (p. 8); axis-parallel scikit-learn CART (p. 7). The method assumes stability is negatively correlated with the distance, so a centroid tree is likely stable (p. 16). Data: five partner data sets from MGH, Hartford Hospital and MSK (930–35,954 patients, 17–42 features, prevalence 1.6–31%) plus UCI breast cancer (p. 22); 67/33 splits, repeated 10 times (p. 7).",
+  "proof_devices": [
+   "Path-level metric (an l1-type decomposition plus a case analysis on labels) lifted to trees through the optimal matching (Lemma 1, Proposition 1, pp. 34–35)",
+   "Integrality of the matching LP by total unimodularity after padding with dummy paths (Corollary 1, pp. 12, 35–36)",
+   "Normalizing bound 2^D(2D+lambda), from a construction of two maximally distant trees (Proposition 2, pp. 12, 36)",
+   "My reading: trees with the same path collection are at distance zero (p. 9), so the metric is on trees up to the order of their splits"
+  ],
+  "experiments": "Pareto frontiers are clear in 4 of 6 studies; a frontier has at most 9 trees and about 5 on average (pp. 16–17). The AUC-maximizing Pareto tree beats CART tuned by cross-validation everywhere and random forest in Sarcoma and TAVR (p. 18). Mean distance stays at or below 5% of the maximum except in breast cancer (p. 19). Pareto trees are half as deep as random forest's largest tree and have 2–10× fewer nodes in 5 of 6 studies (p. 19). In aggregate, AUC is 0.800 against 0.763 and distance 4.056 against 2.511 (Table 1, p. 21). In the sarcoma retraining example the distance is 11.21% with cross-validation against 0.18% (p. 13). Gurobi 9.5, Python 3.7; no run times; 'significantly' is used without a test (pp. 7, 18).",
+  "positioning": "Against stabilization by averaging (random forests, boosting) and heuristic tweaks to the learner or to model selection (p. 4). Builds on optimal trees, credited with more stability but still unstable (p. 3). Framed by Breiman's grades and his 1996 question (pp. 2, 4, 28).",
+  "writing": "Opens with Breiman's A+/B grades and closes by answering his question (pp. 2, 28). The price is stated plainly as 38% for 4.6% (p. 21). One over-reach: the most stable Pareto tree beats CART with cross-validation on mean AUC in only 3 of 6 studies, yet the text concludes it strictly dominates (p. 18).",
+  "limits_future": "Averaging procedures still reach higher stability (p. 28); the normalizing bound is conservative, so distance percentages look low (pp. 14, 37). Future work: the distance as a regularizer in tree training (p. 27), and a three-dimensional Pareto frontier with an interpretability score (p. 16).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Stability, wanted by physicians who must trust retrained models, is priced: a Pareto frontier per data set, a selection knob epsilon, the printed price of 38% stability for 4.6% AUC, and flat-frontier cases reported. An empirical frontier replaces a solution-independent bound.",
+    "pages": "pp. 2, 15–17, 21"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "The tree distance is written as an assignment-type ILP whose LP relaxation is integral, so a polynomial-time LP computes it.",
+    "pages": "pp. 11–12, 36"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "The trees are heuristic scikit-learn CART trees, not MIO trees. The incumbents (CART with cross-validation, random forest) are the opponents, and there is no gap or certificate. The method is deliberately algorithm-agnostic although optimal trees are credited with more stability.",
+    "pages": "pp. 3–4, 7, 18"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The owner is the physician, hospital partners supply the data, and the current retraining rule (5-fold CV) is the baseline. But no decision is scored, only AUC and tree structure.",
+    "pages": "pp. 2, 12, 22"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "retraining stability as distance to models fitted on an earlier data batch",
+    "evidence": "Each candidate tree trained on all data is scored by its mean structural distance to bootstrap trees trained on an earlier subset, which mimics retraining as data grow.",
+    "pages": "pp. 14–16"
+   },
+   {
+    "pattern": "structural model distance as an optimal assignment solved exactly by LP",
+    "evidence": "The tree distance is a minimum-cost matching of paths with weighted unmatched paths; total unimodularity makes the LP exact.",
+    "pages": "pp. 11–12, 36"
+   }
+  ],
+  "transferable": [
+   "Measure the stability of a model trained on all the data as its mean distance to a bootstrap collection trained on an earlier subset; this mimics retraining as data grow (pp. 15–16).",
+   "Define a distance between combinatorial objects as a minimum-cost assignment of their parts, with unmatched parts paying a weight. Pad with dummy parts to get total unimodularity, and an LP then solves it (pp. 11–12, 36).",
+   "Normalize a distance by a provable worst-case bound to report it as a percentage, and say when that bound is conservative (pp. 12, 14, 37).",
+   "Select from the Pareto frontier with an explicit application function (for example, the most stable model within epsilon of the best AUC) instead of cross-validation's single score (p. 16)."
+  ],
+  "coauthors": "Vassilis Digalakis Jr",
+  "quotes": [
+   {
+    "text": "The price of a 38% improvement in stability is, on average, 0.04 (or 4.625%) in AUC.",
+    "page": 21
+   },
+   {
+    "text": "The proposed methodology relies on the assumption that decision trees’ stability is negatively correlated with the proposed tree distance metric.",
+    "page": 16
+   }
+  ]
+ },
+ {
+  "id": "S383",
+  "year": "2023",
+  "title": "Interpretable matrix completion: A discrete optimization approach",
+  "read_level": "full",
+  "contribution": "Interpretable matrix completion (latent features selected from known features) is reformulated as a binary convex program and solved by outer approximation. A subsampled stochastic-cutting-plane variant (OptComplete) is optimal with high probability and scales to 10^6 × 10^6 matrices and the full Netflix matrix, read in arXiv v3.",
+  "problem_entry": "{ML+IO} Latent features in matrix completion cannot be interpreted, and inductive completion's linear combinations are still unreadable (mixed units, repeated features with opposite signs) (pp. 2–3). Entry: require the k latent features to be selected from the p known features, which makes the problem discrete (pp. 3–4). One-sided side information, because user features are fragmented and constrained by privacy rules (pp. 2–3).",
+  "key_idea": "Squared loss plus a Tikhonov term, with X = U S B^T and S a 0/1 diagonal selection (pp. 6–7). Minimizing out U row by row in closed form gives a binary convex problem (Theorem 1, pp. 7–8). CutPlanes is outer approximation with a heuristic warm start and MILP masters (pp. 8–10), with Woodbury making a cut O(|Omega|(p+k^2)+nk^3) (pp. 10–11). OptComplete builds cuts from row and column subsamples at O(k sqrt(mn) log sqrt(mn) (p+k^2)) (pp. 12–17). The two-sided case reduces to sparse regression (pp. 11–12).",
+  "assumptions": "Small rank k and known product features B; a ridge term added for robustness (p. 7). Theorem 4 assumes feasibility and uses a convexity parameter a, positive when no two supports tie in cost (pp. 15–16). Synthetic A = UV + E with U, V uniform on [0, 1], E ~ N(0, 0.01), and B formed by V plus p − k confounding rows, so the side information is exactly predictive by construction (p. 17, my reading). Netflix: 471,268 × 14,538 with 59 TMDB features (p. 21).",
+  "proof_devices": [
+   "Closed-form inner ridge minimization per row reduces the mixed problem to a binary convex function of the support s (Theorem 1, pp. 7–8)",
+   "Woodbury identity reduces each cut's cost from an m × m inverse to a k × k inverse (pp. 10–11)",
+   "Hoeffding's inequality for sampling without replacement bounds the subsampled cost and gradient terms (Theorems 2–3, pp. 13–15, 24–25)",
+   "Finite termination of outer approximation (Fletcher–Leyffer) plus a convexity slack a^2 theta^2/2: failure only if an approximate cut cuts off s*, with success probability at least 1 − kC exp(−D a^4 g/(p+k)) by a union bound over iterations (Theorem 4, pp. 16, 34)",
+   "My reading: the paper says the theorem needs no data assumptions (p. 16), but the guarantee depends on the data-dependent a and on an unknown C; Algorithm 2 samples with replacement (p. 14) while the theorems assume sampling without (pp. 13, 15)"
+  ],
+  "experiments": "Gurobi 8.1.0 on 16 cores, 10 runs per setting with medians, MAPE on missing entries. Baselines: IMC (Matlab 2018b), SoftImpute-ALS (R 3.4.4) and CutPlanes; 20 h limit (pp. 17–19). Synthetic results (Table 1, p. 19): MAPE equals CutPlanes'. At n = 10^6, m = 10^4: 480 s against 13,750 s (IMC) and 25,094 s (SIALS). At n = m = 10^6: 1,415 s, where the baselines do not finish. OptComplete is slower on small instances and scales poorly in k (980 s at k = 30 against under 1 s) (pp. 19–21). Netflix, k = 5 (p. 22): MAPE 15.7% against 21.5% and 16.7%, in 170 s against 3,921 s and 5,300 s; k = 10 is worse than k = 5. Five named factors are selected (p. 23).",
+  "positioning": "Against nuclear-norm and alternating methods for general completion, and against inductive completion that assumes perfectly predictive side information; builds on Bertsimas–van Parys sparse regression (pp. 4–6).",
+  "writing": "The approach is named 'interpretable, as opposed to inductive' (p. 4). The 20x to 60x speed-up claim over CutPlanes (p. 5) understates the n-sweep in Table 1 (18 s against 10,856 s at n = 10^5, p. 19). The conclusion is two sentences claiming both scalability and accuracy (p. 23).",
+  "limits_future": "Poor scaling in k, dismissed because applications usually have k <= 30 (p. 21). Small instances run slower than the baselines (p. 19). No future work is stated (p. 23).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "A problem owned by statistics and recommender systems is written exactly as a binary convex program and solved as MILPs by outer approximation in Gurobi; the two-sided variant reduces to the group's sparse regression.",
+    "pages": "pp. 3–4, 6–12"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "The exact method has a warm start and an exact outer approximation, the duel against IMC and SIALS runs at the same rank, and limits are printed. But the scalable OptComplete trades the certificate for a high-probability guarantee whose constant depends on the unknown a, and it starts from a random point.",
+    "pages": "pp. 9, 14, 16, 18–22"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "The 2020 sparse-regression device (Bertsimas–van Parys) is carried by the next cohort's student to a new ML problem.",
+    "pages": "pp. 4, 6, 12"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "stochastic cutting planes (subsampled outer approximation with high-probability optimality)",
+    "evidence": "Cuts are built from random row and column subsamples. Concentration bounds plus a convexity slack bound the probability of cutting off the optimum.",
+    "pages": "pp. 12–16, 34"
+   },
+   {
+    "pattern": "interpretability as selection of named features, not combination",
+    "evidence": "Latent factors must be k of the p known features instead of linear combinations, which makes the problem a discrete selection.",
+    "pages": "pp. 3–4"
+   }
+  ],
+  "transferable": [
+   "When latent factors must be readable, replace a linear combination of features by a selection of k features. Rescaling U absorbs the magnitudes in S, so S can be binary without loss of generality (pp. 3–4, 7).",
+   "Eliminate the continuous variables in closed form (a ridge regression for each row) to get a binary convex objective, then solve it by outer approximation with an MILP master (pp. 7–10).",
+   "Use the Woodbury identity to cut the cost of each cut from an m × m inverse to a k × k inverse (pp. 10–11).",
+   "When full cuts are too expensive, build them from subsamples of rows and columns, and bound the failure probability by concentration, a slack of strong-convexity type and a union bound over the iterations (pp. 13–16, 34).",
+   "Size the subsamples from the sample complexity of completion (O(kN log N)) and fix the constants empirically (g0 = 100, c = 1) (pp. 16–17)."
+  ],
+  "coauthors": "Michael Lingzhi Li",
+  "quotes": [
+   {
+    "text": "we argue that instead of supposing the k features are linear combinations of the p known features, we should assume that the k features are selected from the p known features.",
+    "page": 3
+   },
+   {
+    "text": "The theorem requires no assumptions on the data, and thus applies generally.",
+    "page": 16
+   }
+  ]
+ },
+ {
+  "id": "S384",
+  "year": "2023",
+  "title": "Reducing air pollution through machine learning",
+  "read_level": "full",
+  "contribution": "A predictive–prescriptive system at OCP's Safi plant. Deployed ML wind forecasts cut error by 38–52% below 12 h against the official forecasts, and back-tested optimal policy trees, tuned by a health-cost knob, trace a curve of cost savings against pollution reduction.",
+  "problem_entry": "{DA+AP; ML} The Safi site, 10 km from a city of more than 300,000, has cut production in dangerous weather since 2013 (p. 3). The official forecasts are regional, come every 12 hours and lag 5–7 hours, which causes needless shutdowns or missed dangerous conditions (pp. 3–4). Entry: link operational decisions to ML-improved forecasts and to a prescriptive policy (pp. 2, 4).",
+  "key_idea": "Predictive part: 48 lead times × 3 targets (speed, and the cosine and sine of the direction), each fitted with five model types on 304 features from sensors and the latest official forecast, combined by an Elastic Net stacking ensemble (pp. 6–8) and mapped onto the site's scenario rules (p. 5). Prescriptive part: an Optimal Policy Tree maps the 18 member predictions to reduce-or-not for the next 3 hours, trained on a reward matrix whose public-health cost of a missed dangerous scenario is varied (pp. 8–9).",
+  "assumptions": "Observational data (x, z, y), with dangerous scenarios in 1.5–2% of hours (p. 8). 43,952 hourly samples from August 2015 to March 2022, split 60/20/20, with 5-fold CV on the validation predictions (p. 9). Costs: $2,000/h for reduced production plus odour control, and $4,000–20,000 for a miss (Table 4, p. 9). Python 3.8, scikit-learn and InterpretableAI (p. 9). The split is not said to be chronological, but the test set is said to correspond to the deployment phase (p. 9).",
+  "proof_devices": [
+   "n/a for theory; the reward matrix and the policy-tree training are the formulation (pp. 8–9)",
+   "My reading: each action's cost is fixed by the realized scenario, so both counterfactual outcomes are known and the policy tree solves a cost-sensitive classification rather than a causal prescription problem (Table 4, p. 9)"
+  ],
+  "experiments": "Predictive (Tables 6–7, pp. 10–11): every ML model beats the official forecast, and the ensemble is best. Wind-speed MAE falls from 0.96 to 0.48 m/s at 1 h and from 1.94 to 0.94 at 12 h; the headline is 38–52% lower error below 12 h and 14–46% at 12–48 h (pp. 1, 3). Expected shortfall at 85% is also reported. Prescriptive, back-tested (Table 8, p. 12): the baseline has 288 false positives and 110 false negatives. The policy tree at $10,000 has 106 and 74 (63% savings, 33% pollution reduction); at $15,000, 40% and 47%; at $20,000, 2% and 65%. The prediction-only Elastic Net ensemble saves 82% but worsens pollution by 21%. The percentages are the relative reductions in false positives and false negatives (my arithmetic). Manager feedback is qualitative (p. 8); no run times or uncertainty measures.",
+  "positioning": "The literature predicts pollution or its health effects but rarely links predictions to mitigation decisions; the paper claims the first attempt to reduce industrial air pollution through ML (p. 2).",
+  "writing": "M&SOM-structured abstract in a managerial register (p. 1). Internal inconsistencies: deployment since July 2022 (pp. 2, 5, 8) but results after deployment in December 2020 (p. 9); data from July 2015 (p. 6) or August 2015 (p. 9); health costs of $2,000 to $18,000 in the text but $4,000–20,000 in Tables 4 and 8 (pp. 9, 12).",
+  "limits_future": "The prescriptive component is still under implementation, so its field effect is unmeasured (pp. 1–2, 9). No other limits are stated. The approach is claimed to transfer to other chemical sites (pp. 13–14).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Owner (the Safi operators), decision (reduce production), data (sensors and official forecasts) and current rule (official forecast plus scenario rules) come first, and the rule is the baseline. Decisions are scored against it as false positives and false negatives. The predictive part is field-deployed with manager feedback, and the paper states that the prescriptive part is only back-tested. Prescription beats prediction: the Elastic Net ensemble saves cost but worsens pollution.",
+    "pages": "pp. 3–6, 8–12"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "The public-health cost of a missed dangerous scenario is the single knob. Table 8 is the price curve (savings against pollution reduction), handed to the decision-maker, and its bad points are printed (−3% at $4,000; 2% savings at $20,000).",
+    "pages": "pp. 9, 12"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "The prescriptive engine is the group company's product (InterpretableAI Optimal Policy Trees), and the partner's software team integrated the models; S338 later reuses the data.",
+    "pages": "pp. 8–9, 14–15"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "staged deployment: better inputs to the owner's rule first, prescriptive policy second",
+    "evidence": "Improved forecasts are fed into the site's existing scenario table and deployed. The policy-tree replacement of the rule is back-tested and proposed as the next step.",
+    "pages": "pp. 2, 5, 7–9"
+   }
+  ],
+  "transferable": [
+   "Average wind by vector averaging and encode direction by its sine and cosine; predict the cosine and the sine, then map them back (pp. 6–7).",
+   "Convert the forecasts into the partner's own scenario table, so that operators keep their decision rules while the inputs improve (pp. 5, 7).",
+   "Train the prescriptive policy over a grid of the cost that is hard to price (the public-health cost of a miss), and hand the operator the resulting trade-off between false positives and false negatives (pp. 9, 12).",
+   "Put the prediction-only ensemble in the decision table next to the prescriptive policies; it shows that the best predictor can be a worse decision rule (p. 12)."
+  ],
+  "coauthors": "Léonard Boussioux, Cynthia Zeng",
+  "quotes": [
+   {
+    "text": "This parameter yields differing trade-offs between pollution and costs and can be determined based on the decision-makers’ level of conservatism and risk aversion.",
+    "page": 9
+   },
+   {
+    "text": "The Elastic Net ensemble substantially reduced the unnecessary costs by 82% but with a 21% worse pollution outcome than the baseline.",
+    "page": 12
+   }
+  ]
+ },
+ {
+  "id": "S385",
+  "year": "2023",
+  "title": "Optimal low-rank matrix completion: Semidefinite relaxations and eigenvector disjunctions",
+  "read_level": "full",
+  "contribution": "A custom spatial branch-and-bound for low-rank matrix completion, built on matrix-perspective SDP relaxations, eigenvector disjunctions and minors-based Shor inequalities. It certifies (near) optimality for 50 × m instances up to m = 2,500 and k ≤ 5 and improves out-of-sample error over alternating minimization (read in arXiv v4, retitled 'Disjunctive Branch-and-Bound for Certifiably Optimal Low-Rank Matrix Completion').",
+  "problem_entry": "{ML+CP+IO} Matrix-completion heuristics give no instance-wise certificate (p. 1). Low-rank problems are not MI-conic representable (p. 2). The previous exact method reached only 50 × 50 at k = 1, with gaps above 100% beyond (pp. 2, 4), and Burer–Monteiro guarantees need unverifiable assumptions (p. 3). Entry: a custom branch-and-bound with instance-wise gaps (pp. 3–4).",
+  "key_idea": "The mixed-projection formulation models rank through a projection matrix and a matrix-perspective constraint, with an SDP relaxation over conv(Y) and the lift Y ⪰ UU^T (p. 6). Branching uses the most negative eigenvector of UU^T − Y and a piecewise-linear upper bound on u^2, giving 2^k or q^k children (pp. 8–10). Alternating minimization supplies incumbents at the nodes (pp. 14–15). Shor LMIs on 2 × 2 minors of rank-one slices strengthen the bounds (pp. 15–18).",
+  "assumptions": "Squared loss on observed entries plus (1/2 gamma)||X||_F^2, subject to rank ≤ k (p. 2). Synthetic data only: A = UV + 0.1Z with Gaussian factors and at least one observed entry per row and column, |I| proportional to n log n (pp. 19–20). Square n ≤ 100 at the root, n ≤ 50 in the design tests, and 50 × m with m ≤ 2,500 and k ≤ 5 for scale (pp. 20, 23).",
+  "proof_devices": [
+   "Negative result for the standard device: McCormick disjunctions over fewer than 2^(n−4) regions leave the root bound unchanged (Proposition 1, p. 7)",
+   "Separation: an eigenvector disjunction cuts off any fractional relaxed optimum (Proposition 2, p. 9)",
+   "Finite convergence to an epsilon-feasible superoptimal solution by a packing argument: iterates never revisit an epsilon/2-ball in a weighted norm, and the feasible set is bounded (Theorem 1, pp. 11–12)",
+   "Rank via vanishing minors (Lemma 1) and a minors-based SDP at least as strong as the perspective relaxation (Proposition 3, pp. 15–17)",
+   "Admitted column-permutation symmetry from the lifting (Remark 1, p. 9)"
+  ],
+  "experiments": "Julia 1.9, Mosek 10.0, Xeon Platinum 8260 (p. 18); code on GitHub (p. 19). At the root, Shor LMIs cut the median rank-one gap from about 10^-2 to 10^-4 for n ≥ 50 at about 10× the time (p. 20). Design tests (1 h, 20 instances, n ≤ 50, k = 1): eigenvector disjunctions give about 10× smaller gaps than McCormick, node-level alternating minimization another 10×, and best-first search wins; Gurobi's nonconvex solver and the earlier multi-tree method are not competitive (pp. 20–22). Scale (3 h, 10 instances): gaps shrink at every (m, k), mostly for k = 1; the k = 2 root gap falls from 38% to 9% as m goes from 100 to 2,500 (pp. 23–24). Out-of-sample MSE is 1–10% better than alternating minimization at the root (pp. 24–25). Memory O(K min{m,n}^2) (p. 26). No real data.",
+  "positioning": "Against commercial nonconvex solvers built on McCormick disjunctions (p. 7) and against the guarantees of Burer–Monteiro methods (p. 3). Builds on Saxena et al.'s eigenvector cuts, used here for branching (pp. 3–4, 8), and on the group's mixed-projection and matrix-perspective papers (pp. 2–3, 6).",
+  "writing": "Hedged scale claims (certifiable optimality or near optimality, p. 1). The test-error reduction is reported as 2%–50% in the abstract (p. 1), 1%–50% in the summary and conclusion (pp. 26–27), and 1–10% in §5.4 (p. 25). The limits of the fixed time limit are discussed openly (p. 24).",
+  "limits_future": "The relaxations' benefit depends on the number of observed entries, especially at larger ranks, and future work should find scalable relaxations for k > 1 (p. 25). Memory grows with the nodes explored (p. 26). A fixed time limit may understate the gains at larger k and m, and no fair alternative is known (p. 24). The advantage of 4-piece branching vanishes as n grows (p. 23).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "A global model replaces the local heuristic, which serves both as the node warm start and as the out-of-sample opponent. Solver, version, machine and limits are stated, and gaps are reported rather than claims of optimality. Where the method helps (small m) and helps less (larger k) is printed, and code is released, which meets the critic-informed check for installable code. Real data are missing.",
+    "pages": "pp. 14–15, 18–26"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "The formulation is Method 1's (rank as a projection matrix, a convex objective over a nonconvex set), but no device keeps the problem in a solver class (low rank is not MI-conic representable). The group therefore writes its own spatial branch-and-bound with SDP nodes, inverting the SKILL stop rule (change the device, not the solver), while measuring solve times.",
+    "pages": "pp. 2, 6, 10–14"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Two alumni (Cory-Wright at Imperial, Pauphilet at LBS) return as co-authors with a current student (Lo), continuing their low-rank papers of 2022–2023.",
+    "pages": "pp. 1–3"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "prove the default branching device useless before introducing the new one",
+    "evidence": "Proposition 1 shows McCormick disjunctions over fewer than 2^(n−4) regions cannot move the root bound; Proposition 2 shows the eigenvector disjunction separates the relaxed optimum with a single branching.",
+    "pages": "pp. 7–9"
+   },
+   {
+    "pattern": "eigenvector disjunctions as spatial branching on matrix variables",
+    "evidence": "Saxena et al.'s eigenvector cuts are recast as branching regions over a lifted rank constraint, with 2^k or q^k children.",
+    "pages": "pp. 8–11"
+   }
+  ],
+  "transferable": [
+   "Before proposing a new branching rule, prove that the default rule cannot improve the root bound over fewer than 2^(n−4) regions, then show that the new rule separates the relaxed optimum with one disjunction (pp. 7–9).",
+   "Lift a rank constraint to Y ⪰ UU^T and branch on the most negative eigenvector of UU^T − Y, which gives 2^k rather than 2^n children (pp. 8–9).",
+   "Run the incumbent heuristic inside the tree (alternating minimization started from the SVD of the node relaxation), with a probability that decreases with depth (pp. 14–15, 21, 24–25).",
+   "Strengthen an SDP relaxation selectively, with Shor LMIs only on the 2 × 2 minors that have all or most of their entries observed, trading tightness against time (pp. 17–20).",
+   "When instances of different sizes share one time limit, report the solve time per node relaxation and the number of nodes explored beside the gaps, and say that the fixed limit may bias the comparison (pp. 24–25)."
+  ],
+  "coauthors": "Ryan Cory-Wright, Sean Lo, Jean Pauphilet",
+  "quotes": [
+   {
+    "text": "existing methods for matrix completion are heuristics that, while highly scalable and often identifying high-quality solutions, do not provide an instance-wise certificate of optimality.",
+    "page": 1
+   },
+   {
+    "text": "Consequently, the observation that the improvement over the root node gap is less acute when k and m increase could also be an artifact of using the same time limit for all instance sizes.",
+    "page": 24
+   }
+  ]
+ },
+ {
+  "id": "S402",
+  "year": "2023",
+  "title": "Optimal control of multiclass fluid queueing networks: A machine learning approach",
+  "read_level": "full",
+  "contribution": "A structure theorem (optimal policies of multiclass fluid queueing networks are piecewise constant on regions separated by hyperplanes through the origin) that justifies learning the control with OCT-H. The learned policies reach 100% test accuracy up to 33 servers and 99 classes, run in milliseconds online, and extend to robust networks (read in arXiv v2).",
+  "problem_entry": "{SD+ML; RO; IO via OCT-H} Fluid-network control is an SCLP whose numerical solvers return one trajectory per initial state, so repeated or real-time use is presented as intractable and a whole-state-space policy as possibly the only tractable alternative (p. 2). ML and RL methods for queueing lack exact-optimality guarantees (p. 3). Entry: prove the policy's structure, then pick a learner whose class contains it (pp. 3, 9–10).",
+  "key_idea": "Theorem 1 gives a piecewise-constant optimal policy with hyperplane boundaries through the origin (p. 9), so OCT-H can represent it (Corollary 1, p. 10). Algorithm 1 solves SCLPs from initial states sampled on the unit sphere, in cells defined by which classes are non-empty, augments the data by scaling, and trains one OCT-H per group of cells (pp. 11–13). The robust MFQNET with budgeted service-time uncertainty is covered too (Corollary 2, p. 17).",
+  "assumptions": "Deterministic fluid dynamics, linear holding cost, load below 1 and a horizon long enough to drain (pp. 4–5). Robust variant with service times in [tau-bar, tau-bar + tau-tilde] and a budget Gamma; arrival uncertainty is irrelevant (pp. 6–8). Robust stability is checked by m LPs (p. 17). Reentrant networks with 3m classes and random parameters (p. 18); criss-cross and Rybko–Stolyar networks (pp. 14–15, 25). The proof fixes the depletion order and the switch sequence (p. 10).",
+  "proof_devices": [
+   "Pontryagin maximum principle: priority indices r_i(t) = [y(t)^T A]_i from the costates decide the control (pp. 6, 9)",
+   "Costates piecewise linear with breaks at the depletion times (Avram 1997), so y(0) is linear in the depletion times (Lemma 4, p. 9)",
+   "Depletion times linear in x0 for a fixed order, so the switching conditions r_j = r_k are hyperplanes through the origin (Theorem 1, pp. 9–10)",
+   "Scale invariance u*(alpha x0) = u*(x0) and V(alpha x0) = alpha^2 V(x0) used for sampling and augmentation (Lemma 3, Proposition 1, pp. 6, 11–12)",
+   "My reading: Corollary 1 is representability; OCT-H trains by MIO and local heuristics (p. 8), so exactness of the trained tree rests on test accuracy"
+  ],
+  "experiments": "Training on an MIT cluster, testing on a MacBook Pro; OCT-H from Interpretable AI with depth chosen from {3, 5, 10} (p. 19). Three cells per network, 40,000 training and 2,000 test states each (pp. 19, 27). Table 2 (p. 20): 100% test accuracy in all 21 settings with up to 9 distinct controls; training up to 48 h; speed-up over the SCLP solver 125× to 6,014×, with the solver needing 0.004–1.02 s per instance (Table 9, p. 29). Sparsity: accuracy 94–100%, training up to about 4× faster (Table 5, p. 24). Robust against deterministic (Tables 6–7, p. 26): deterministic wins at nominal parameters and robust as noise grows (Rybko–Stolyar at epsilon = 0.10: maximum suboptimality 0.35 against 0.18; criss-cross at nominal: mean 0.099 robust against 0.0009 deterministic). With smaller training sets, accuracy is 94–100% (p. 28).",
+  "positioning": "Generalizes Avram et al. (1995) from special cases (pp. 3, 9); set against SCLP algorithms (discretization, simplex-like, approximation) and RL for queueing control (pp. 2–3); builds on Bertsimas et al. 2015 robust fluid networks and OCT-H (pp. 6, 8).",
+  "writing": "Strong firsts: the first RL result where ML provably learns the exact optimal policy, and the first exact real-time control of MFQNETs (p. 4). The abstract leads with 100% accuracy (p. 1). The phrase 'otherwise intractable' (p. 4) sits beside a solver that needs at most about 1 s per instance (Table 9, p. 29) (my reading).",
+  "limits_future": "Training can take days (pp. 1, 21). Covering the whole state space is impractical for large m, so only three cells are learned (pp. 12–13, 18–19). Robust policies are conservative at low uncertainty and cost more to train (pp. 3, 17, 27). No future work is stated (p. 27).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "A control problem owned by optimal control and queueing is analysed through its dual (costate) variables, and the structure read off them chooses the learner's class (OCT-H) so that it contains the optimum. The control problem itself is not reformulated as an LP, conic or MIO problem. Heuristic 5 is in plain view: solve offline, learn the optimizer's strategy, apply it online in milliseconds.",
+    "pages": "pp. 2–3, 6, 9–11, 18–21"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Two properties are priced: interpretability through the sparsity knob ('the price we have to pay', with accuracy and training time per setting), and robustness through Gamma, with the nominal loss set against the gain under noise, including the bad case. Gamma is fixed by hand (0.1 and 0.25), the SKILL's arbitrary-knob correction.",
+    "pages": "pp. 23–27"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "The claims of exact and optimal rest on representability and 100% test accuracy, not on a certificate for the trained tree. The opponent is the exact SCLP solver, compared on speed, not a heuristic (Tension T1).",
+    "pages": "pp. 1, 4, 8, 10, 20"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "structure theorem first, then a learner whose hypothesis class contains the optimal policy",
+    "evidence": "From PMP costates the optimal policy is shown to be piecewise constant with hyperplane boundaries, and OCT-H is chosen because hyperplane trees represent exactly that class.",
+    "pages": "pp. 9–11"
+   },
+   {
+    "pattern": "invariance-based data generation and augmentation for learned policies",
+    "evidence": "Scale invariance lets initial states be sampled on the unit sphere and training data be augmented by scaling.",
+    "pages": "pp. 6, 11–12"
+   }
+  ],
+  "transferable": [
+   "Before learning a policy, prove its structural form from the optimality conditions (here, PMP costates give hyperplanes through the origin), and choose a learner that represents that form exactly (pp. 9–10).",
+   "Use scale invariance to sample initial states only on the unit sphere and to augment the data by scaling (pp. 6, 11–12).",
+   "Partition the state space by which classes are empty and train one tree per cell; boundary conditions x_i = 0 become splits x_i <= epsilon (pp. 11–12, 15).",
+   "Report the speed-up as the solver's time per instance divided by the policy's prediction time, and report the solver time itself as well (pp. 19, 29).",
+   "Evaluate learned robust and nominal policies on perturbed instances by their maximum and mean suboptimality against the true optimum, projecting the controls to keep trajectories feasible (pp. 25–26)."
+  ],
+  "coauthors": "Cheol Woo Kim",
+  "quotes": [
+   {
+    "text": "To the best of our knowledge, this is the first instance in the reinforcement learning literature where a machine learning algorithm is proven to learn the exact optimal policy, not merely an approximation.",
+    "page": 4
+   },
+   {
+    "text": "The purpose of this experiment is to analyze the price we have to pay in order to gain more interpretability.",
+    "page": 23
+   }
+  ]
+ }
+]

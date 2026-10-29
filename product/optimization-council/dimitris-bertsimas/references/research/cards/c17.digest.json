@@ -1,0 +1,369 @@
+[
+  {
+    "id": "S078",
+    "year": "2016",
+    "title": "An analytics approach to designing combination chemotherapy regimens for cancer",
+    "read_level": "full",
+    "contribution": "Builds the first database of published advanced gastric-cancer chemotherapy trials (414 trials, 495 arms), predicts trial survival and toxicity out of sample from earlier trials, and plugs the fitted models into a MIO with an exploration bonus to propose phase II regimens and into a ranking to select phase III regimens, evaluated against oncologists' historical choices with a simulation metric and a matching metric.",
+    "problem_entry": "{AP+DA+IO} Phase II trials mostly test new combinations of known drugs, trials are costly and phase II populations unrepresentative; prediction rules, meta-regressions and preclinical models cannot propose or score unseen combinations; enter by predicting trial outcomes before the trial and optimizing the regimen choice (pp. 2-4).",
+    "key_idea": "Hand-built trial-arm database -> regularized regressions for median OS and DLT share trained only on earlier trials -> MIO (1) maximizing predicted OS plus an exploration bonus Gamma*t_d^(-1/2) under a predicted-toxicity limit, at most three drugs, never-tested regimens; phase III picks by population-adjusted prediction instead of raw phase II results (pp. 5-15).",
+    "assumptions": "Linear outcome models with error variance sigma^2/n_i (weights n_i/mean n); 20 demographic/study and 216 drug variables (72 drugs x binary, instantaneous and average dose); DLT definitions and the 0.5 threshold read from 20 phase I/II protocols; mean filling and imputation (Grade 4 blood toxicities imputed in 46.5% of arms); only performance status controls treatment selection; trastuzumab excluded; doses limited to observed values; one screener and one extractor (pp. 5-8, 13, 19).",
+    "proof_devices": [
+      "MIO (1): binaries plus continuous doses, linear ridge predictors in objective and toxicity constraint, cardinality N = 3 (89.1% of the database), drug-class constraints, novelty constraint, observed-dose sets; linearization of (1d)-(1e) not shown (pp. 12-13)",
+      "Exploration bonus u_d = t_d^(-1/2) motivated by the standard deviation of a sample mean (footnote 11, p. 12)",
+      "DLT composite: five combination rules between the max rule (lower bound) and the sum rule (upper bound), ranked by correlation with reported total Grade 3/4 toxicity on 36 arms; grouped independent wins with 0.893 (pp. 19-20)",
+      "Linear vs quadratic imputation chosen by residual sum of squares (p. 19)",
+      "Simulation metric with 40 bootstrap ground-truth coefficient sets and outcome feedback; matching metric with 0/1/10/100 mismatch penalties (pp. 15-16; App. B, pp. 20-21)"
+    ],
+    "experiments": "Chronological testing after the first 98 arms (347 survival, 307 toxicity predictions); last four-year window: ridge OOS R2 0.56 (bootstrap 0.53 [0.50, 0.57]), RMSE 2.50 vs 3.75 for a running-mean baseline, lasso R2 0.58, toxicity AUC 0.83 (SVM 0.87); flagging 10%/20% of high-toxicity trials at 0.4%/1.9% false flags; 27 phase III arms from 1997: simulated median OS +2.8 to +4.7 months in all 360 runs, toxicity not significantly different; matching +2.3/+3.5/+3.9 months with +0.02/+0.05/+0.12 high-toxicity share; model regimens almost always three drugs (100%/98% vs 31%/37%); no MIO solver, version or run time reported (pp. 9-18, 20).",
+    "positioning": "Against patient-level clinical prediction rules, meta-analysis and meta-regression (explanatory, few drug variables, randomized trials only, no out-of-sample test) and preclinical models (no patient outcomes), presented as a complement to the latter; three 'to our knowledge' firsts; knowledge gradient and Q-learning deferred to future work (pp. 3-4, 18).",
+    "writing": "Aspiration paragraph plus bulleted firsts (p. 3); Table 1 maps each model to its evaluation technique (p. 4); a bias-direction paragraph after each surrogate metric with an asymmetric reading (pp. 15-16); hedged abstract, but 'without changing toxicity outcomes' (p. 2) against 'without major changes' and +0.12 at t = 0.5 (p. 17).",
+    "limits_future": "Stated: no trial run; the simulation assumes the ridge structure and may score infeasible regimens; matching scores in other populations; new drugs cannot be predicted; HER2 subgroup excluded; next a single-arm trial, then an RCT, preclinical constraints and interaction terms, other diseases (pp. 4, 13, 15-18). Unstated: single-person screening and extraction, the formulation's three-drug signature left unchanged (pp. 5, 16-17).",
+    "method_links": [
+      {
+        "method": "Method 5",
+        "relation": "evidence",
+        "note": "owner = trial planners; baseline = regimens oncologists chose for 27 phase III experimental arms; decisions scored by simulated and matched outcomes, not prediction accuracy; limits of the evaluation stated; single-arm then randomized trial proposed (the step-6 instance the skill cites)",
+        "pages": "pp. 3, 14-18"
+      },
+      {
+        "method": "Method 1",
+        "relation": "variant",
+        "note": "fitted linear predictors keep regimen design inside a MIO, but no solver, version or solve time is reported (the stop rule's measured solve time is missing)",
+        "pages": "pp. 12-13, 20"
+      },
+      {
+        "method": "Method 4",
+        "relation": "variant",
+        "note": "no certificate or gap for model (1); the duel is with practitioners' historical choices and, for prediction, a running-mean baseline, not a warm-start heuristic",
+        "pages": "pp. 9, 15-17"
+      },
+      {
+        "method": "Method 3",
+        "relation": "variant",
+        "note": "toxicity limit t and exploration weight Gamma swept on a 3x3 grid with a published table of survival gain and toxicity change; no knob-property bound; differences between settings within noise",
+        "pages": "pp. 13, 16-17"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "Surrogate evaluation with stated bias direction",
+        "evidence": "simulation metric (model structure assumed true, may score infeasible regimens: bias in the model's favour) and matching metric (other populations: bias either way), read asymmetrically: favourable results merit a trial, unfavourable ones end the line",
+        "pages": "pp. 14-16"
+      },
+      {
+        "pattern": "Counterfactual replay against the historical decision-maker",
+        "evidence": "history rerun from 1997: the model chooses where oncologists chose, simulated outcomes are fed back into training, both choices scored on the same ground truths; also in S143 (150-week replay, [card S143, p. 4]) and S079 (matched imputation, [card S079, p. 5])",
+        "pages": "pp. 15-16, 20"
+      }
+    ],
+    "transferable": [
+      "Chronological out-of-sample testing for anything built from historical cases: sort by date, predict each case only from earlier ones, keep sibling records (other arms of the same trial) out, start after a burn-in share (p. 9).",
+      "When a decision cannot be field-tested yet, evaluate it with two surrogates whose biases run in different directions (a simulator over bootstrap-plausible ground truths; matching to the closest real future case), state each bias, and let only favourable results justify the next, costlier test (pp. 14-16; App. B, pp. 20-21).",
+      "Put an exploration bonus proportional to (prior tests)^(-1/2) of each component into the optimization objective, with one weight swept in the evaluation (pp. 12, 16).",
+      "Restrict continuous decisions to values observed in the data (doses used in some trial) so the optimizer cannot propose unprecedented quantities (constraint (1e), p. 13).",
+      "Read thresholds and composite definitions off the domain's own documents (DLT lists and the 0.5 cut-off from phase I protocols) instead of inventing them (pp. 6-7).",
+      "Bracket an aggregate that cannot be computed from marginals between a max rule (lower bound) and a sum rule (upper bound), and pick a rule in between by correlation on the cases that report the aggregate (pp. 19-20).",
+      "Report how the optimizer's decisions differ in kind from practice (regimen size, age of drugs, novelty share), not only in outcome (pp. 16-17)."
+    ],
+    "coauthors": "Allison O'Hair, Stephen Relyea, John Silberholz",
+    "quotes": [
+      {"text": "such a database did not exist before this study", "page": 3},
+      {"text": "would suggest that no further evaluation is warranted", "page": 15}
+    ]
+  },
+  {
+    "id": "S081",
+    "year": "2016",
+    "title": "OR forum—an algorithmic approach to linear regression",
+    "read_level": "full",
+    "contribution": "Builds linear regression models with one MIQO that imposes sparsity, group sparsity, limited pairwise collinearity, transform selection, expert-mandated variables and a robustifying l1 term jointly, enforces significance and conditioning by cutting off failing supports, and shows on synthetic and real data sparser, less collinear models at accuracy comparable to the Lasso.",
+    "problem_entry": "{ML+IO} Regression is built by trial and error, one property at a time, and textbooks give no guidance on balancing the properties; the task fits MIQO but is not modelled so because of the intractability belief; enter by replacing the textbook 'standard approach' with one MIQO that also certifies infeasibility when properties conflict (pp. 2-3).",
+    "key_idea": "MIQO (5): support indicators with big-M, cardinality k, constraint families for groups, correlated pairs, transforms and mandated variables, and Gamma*||beta||_1 as robustification (Theorem 1, cited: robust least squares equals regularized regression and recovers the Lasso); bootstrap significance and condition number enforced by no-good cuts on the top three supports; sweep k and Gamma, select by validation R2 (pp. 5-8).",
+    "assumptions": "Linear model; norm-bounded uncertainty on X; bootstrap instead of distributional assumptions; pairwise correlation as multicollinearity surrogate plus condition number <= 30; fixed transform menu (x^2, sqrt x, log x); defaults rho = 0.8, ten Gamma values, three Stage-3 rounds, 50/25/25 split; big-M from data; synthetic Toeplitz Gaussian designs with k = 10; twelve public real sets plus four case studies (pp. 2-14).",
+    "proof_devices": [
+      "Theorem 1 cited (Bertsimas-Fertis 2009; Xu et al. 2009): robust least squares equals a norm-regularized problem; p = 2, q = 1 recovers the Lasso (p. 6)",
+      "Big-M support linking -M z_l <= beta_l <= M z_l with M estimated from data (pp. 7-8)",
+      "Constraint families (5d)-(5h): cardinality, equal indicators for groups, z_i + z_j <= 1 for correlated pairs, at most one transform per variable, forced inclusion (pp. 7-8)",
+      "No-good cut sum over S_i of z_l <= |S_i| - 1 removing a failing support (Stage 3, p. 8)",
+      "k_max as the maximum stable set of the correlation-conflict graph, solved as a small MIO (p. 7)",
+      "Warm start by discrete first-order methods from the best-subset paper (p. 5)",
+      "Speed-up arithmetic: CPLEX 29,000 x Gurobi >27 = 780,000 solver factor times about 570,000 hardware factor = about 450 billion; MILO factors asserted similar for MIQO (p. 4)"
+    ],
+    "experiments": "Gurobi 6.0.0 / JuMP 0.7.0 / Julia 0.3.3 on a 16-core Xeon with 128 GB; 20 s (n>p) or 40 s (n<p) per MIQO, about 0.3-2.1 h per synthetic experiment; MIQO recovers the true support with 1-2 extras vs about 24/45 for the Lasso at similar R2, with half the maximum correlation; real data: fewer variables, but the Lasso has higher test R2 on 7 of 12 sets (Pyrimidines 0.367 vs 0.175, discussed; Diabetes 0.381 vs 0.334, not); Croq'Pain same model as the manual approach in under a minute; Ames 20 variables, R2 0.920; Concrete 0.823 with 6 variables vs Lasso 0.834 with 12; combined example: Lasso wins the noisiest cell (0.368 vs 0.245); Tables 3 and 7 carry identical entries with rows reversed except Time; no gaps reported (pp. 9-15).",
+    "positioning": "Against the textbook standard approach (Chatterjee et al.), Furnival-Wilson (MIQO-based but accurate only for p <= 30), the Lasso (conditions unverifiable; accuracy credited to robustness), group Lasso, PCR/PLS and shrinkage, analytic post-selection inference; speed-up history from Bixby and Nemhauser; devices from the group's own papers (pp. 3-7).",
+    "writing": "Abstract template practice -> belief -> 450 billion -> method (p. 2); 'astonishing' four times (pp. 2-4); an aspirations section dividing labour between humans and machines (p. 2); Table 1 maps properties to model lines (p. 3); teaching-case examples before the experiments (pp. 8-10); 'only methodology we are aware of' twice (pp. 3, 15); one-paragraph conclusion without limits (p. 15).",
+    "limits_future": "No limits or future work stated (p. 15); visible: time-limited MIQOs on Diabetes and HIV (p. 11), hours of run time (pp. 11-12), lower R2 than the Lasso on most real sets (p. 13), the Table 3/7 duplication (p. 12), infeasibility certificate never exercised.",
+    "method_links": [
+      {
+        "method": "Method 2",
+        "relation": "evidence",
+        "note": "abstract leads with practice, belief and figure; belief dated to the 1970s-1980s and conceded as justified then; figure rebuilt from solver version tests (780,000) times Top500 hardware (570,000) = about 450 billion, the figure the skill dates to AoS 2016, here in a second paper",
+        "pages": "pp. 2, 4"
+      },
+      {
+        "method": "Method 2",
+        "relation": "variant",
+        "note": "factors are for mixed-integer linear problems; the MIQO factor is asserted 'similar' without a source (the skill's checkpoint); the same hardware factor recurs in S011, where the total becomes 800 billion through the solver factor alone",
+        "pages": "p. 4"
+      },
+      {
+        "method": "Method 1",
+        "relation": "evidence",
+        "note": "a statistics-owned modelling process written as one MIQO that keeps its class",
+        "pages": "pp. 3, 7-8"
+      },
+      {
+        "method": "Method 4",
+        "relation": "evidence",
+        "note": "trial-and-error loop replaced by one MIQO; warm starts; stated limits, solver, machine and versions; duel with the Lasso tuned on the same validation set; synthetic known-truth plus real data",
+        "pages": "pp. 5, 7-11"
+      },
+      {
+        "method": "Method 4",
+        "relation": "variant",
+        "note": "certificate promised (suboptimality and infeasibility) but no gaps reported, two real sets end at the time limit, infeasibility never demonstrated",
+        "pages": "pp. 3, 11"
+      },
+      {
+        "method": "Method 3",
+        "relation": "variant",
+        "note": "'the price of insisting on interpretability' named, knob rho handed to the analyst with two points of the curve (Pyrimidines, Tables 9-10); no solution-independent bound",
+        "pages": "pp. 11, 13"
+      },
+      {
+        "method": "Method 6",
+        "relation": "evidence",
+        "note": "part of a named programme (2013 Morse lectureship, modern optimization lens) and a student's thesis line; examples are teaching cases (own Croq'Pain case, Ames class project)",
+        "pages": "pp. 8-10, 16"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "Lazy no-good cuts for properties checked outside the model",
+        "evidence": "bootstrap significance and condition number are checked on the top three supports; failing supports are excluded with sum over S of z_l <= |S| - 1 and the MIQO is resolved, up to three rounds",
+        "pages": "pp. 8, 11"
+      }
+    ],
+    "transferable": [
+      "Turn each rule of thumb of a modelling craft into a constraint on support indicators: equal indicators for groups, z_i + z_j <= 1 for conflicting pairs, sum of z <= 1 over a variable's transforms, z = 1 for expert-mandated variables (pp. 7-8).",
+      "For properties that can only be checked after fitting (bootstrap significance, condition number), check the best few incumbents, cut each failing support off with a no-good cut, resolve, and cap the rounds (p. 8).",
+      "Before sweeping a cardinality k, compute the largest feasible k as a maximum stable set on the conflict graph so that no infeasible MIQO is solved (p. 7).",
+      "Read the field's standard textbooks to define the current procedure step by step, then test against it on the textbooks' own teaching data sets (pp. 3, 8-10).",
+      "Report interpretability measures (K*, maximum pairwise correlation, condition number, true positives) beside test R2 so a sparser model's price is visible next to its gain (pp. 11-13)."
+    ],
+    "coauthors": "Angela King",
+    "quotes": [
+      {"text": "Fitting regression models has long been viewed as an art", "page": 3},
+      {"text": "This is the price of insisting on interpretability", "page": 11}
+    ]
+  },
+  {
+    "id": "S143",
+    "year": "2016",
+    "title": "Inventory management in the era of big data",
+    "read_level": "full",
+    "contribution": "Applies conditional stochastic optimization with random-forest weights to the vendor-managed inventory of a major multimedia distributor, harvesting web covariates (IMDb, RottenTomatoes, Google Trends) and reporting a coefficient of prescriptiveness of 0.88 over a 150-week replay at 20,000 locations.",
+    "problem_entry": "{DA+AP} Web data predict demand but those works stop short of optimal decisions under uncertainty; enter through a real vendor-managed inventory operation (about 1 billion units a year, more than 20,000 European retail locations) under shelf-capacity pressure (p. 1).",
+    "key_idea": "Conditional stochastic optimization min_z E[c(z;Y)|X=x] with machine-learning weights (random forests) from the prescriptive-analytics preprint; decision problem: per location and week, maximize expected sell-through under shelf capacity, justified by scan-based trading; scored by the coefficient of prescriptiveness P (pp. 1-2, 4).",
+    "assumptions": "Problem decomposes by week and location; X = recent item and location sales, chain, country, geocoded location, IMDb/RottenTomatoes title features, Google Trends attention at world, country and sub-national level; sales treated as censored demand and corrected by a Kaplan-Meier-type transform; properties of the method quoted from the earlier preprint (pp. 2-4).",
+    "proof_devices": [
+      "Formulation (2): capacitated multi-item sell-through newsvendor max sum_j E[min{Y_j, z_j} | X = x] s.t. sum_j z_j <= K_r (p. 2)",
+      "Coefficient of prescriptiveness P as a unitless R2 for decisions, quoted from Bertsimas-Kallus 2014 (p. 2)",
+      "Asymptotic optimality and tractability quoted, not proved here (p. 2)"
+    ],
+    "experiments": "150-week rolling replay (Dec 2011-Nov 2014), weekly retraining on past data only; comparators perfect foresight and SAA++ (no auxiliary data but product-age demand distributions); P = 0.88 averaged over 20,000 locations, three locations plotted; no absolute sell-through or cost, no spread across locations, no comparison with the vendor's current rule, no run times, deployment not stated (p. 4).",
+    "positioning": "Against web-data demand prediction (Choi-Varian, Asur-Huberman, Da et al., Goel et al., Gruhl et al., Kallus 2014) that does not reach decisions; builds on Bertsimas-Kallus 2014; no inventory-theory references among the nine (pp. 1-2, 4).",
+    "writing": "Award-feature genre: industry stakes first, the method's two properties as labelled paragraphs, one headline number repeated and translated into plain language; 'an 88% reduction in operational costs' (p. 2) looser than the definition as the share of the sell-through gap closed (p. 4); vendor anonymous; typos (pp. 1-4).",
+    "limits_future": "No limits or future directions stated; absent are deployment status, the owner's current rule as baseline and absolute impact (p. 4).",
+    "method_links": [
+      {
+        "method": "Method 5",
+        "relation": "evidence",
+        "note": "owner (vendor), decision (weekly order quantities under capacity), auxiliary covariates rather than the uncertain demand itself, learning inside the decision (random-forest weights), decision metric P on sell-through, long out-of-sample replay; the data-poor baseline strengthened with product-age distributions (stronger naive rule in spirit)",
+        "pages": "pp. 1-4"
+      },
+      {
+        "method": "Method 5",
+        "relation": "variant",
+        "note": "baseline is a constructed policy (SAA++) and an oracle, not the vendor's current replenishment rule; no field test, no own costs reported",
+        "pages": "p. 4"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "Counterfactual replay against the historical decision-maker",
+        "evidence": "rolling-origin weekly retraining and scoring over 150 weeks, each week using only prior data; also S078 (simulation and matching from 1997) and S079 (matched imputation)",
+        "pages": "p. 4"
+      }
+    ],
+    "transferable": [
+      "Rolling-origin replay for a decision policy: at each period train only on the past, decide, then score on what happened; run it over years, not one split (p. 4).",
+      "Report a decision policy as the share of the gap it closes between a data-poor baseline (made as strong as fairness allows, e.g. age-dependent demand distributions) and the perfect-foresight bound (pp. 2, 4; note 3).",
+      "Turn public web traces into covariates aligned with the decision's geography and timing: sub-national search volume, title metadata, network communities of cast members, text clusters of plots (pp. 2-4).",
+      "Treat observed sales as censored demand and correct before learning (note 1, p. 4)."
+    ],
+    "coauthors": "Nathan Kallus, Amjad Hussain",
+    "quotes": [
+      {"text": "do not address optimal decision-making under uncertainty", "page": 1},
+      {"text": "gets us 88% of the way from the best data-poor decision", "page": 4}
+    ]
+  },
+  {
+    "id": "S011",
+    "year": "2017",
+    "title": "Optimal classification trees",
+    "read_level": "full",
+    "contribution": "Formulates CART's own tree-training problem exactly as a MIO (OCT) and, by relaxing split integrality, hyperplane trees (OCT-H); warm-started by CART and lower-depth solutions and solved by Gurobi 6.5 under time limits, they beat depth-matched CART by about 1-2% (OCT) and 3-5% (OCT-H) on 53 UCI data sets, mostly without certificates of optimality.",
+    "problem_entry": "{ML+IO} Greedy top-down induction optimizes impurity split by split and needs pruning; Breiman et al. themselves called an overall optimal tree infeasible in 1984; earlier heuristics never certified optimality; enter by posing CART's own problem as a MIO now that MIO solvers are fast (pp. 4-6).",
+    "key_idea": "OCT model (24): misclassification plus alpha*splits with leaf-size constraints over the maximal tree of depth D, solving exactly the problem CART approximates; OCT-H by relaxing split coefficients to [-1,1]^p with the same binaries; warm starts from trimmed CART and lower depths; alpha tuned through an integer split budget (pp. 9-19).",
+    "assumptions": "Features scaled to [0,1]; K classes; N_min fixed at 5% of n; depths 1-4; synthetic Murthy-Salzberg ground-truth trees with label noise, feature noise, dimension and training size varied; 53 UCI data sets (n 47-5,456, p up to 484), 50/25/25 splits repeated five times; tens of thousands of points prohibitive (pp. 8, 20-26).",
+    "proof_devices": [
+      "Maximal-tree indexing with left and right ancestor sets (p. 10)",
+      "Split switch d_t: a_t = 0, b_t = 0 sends all points right, so nodes can stop splitting without new variables (p. 11)",
+      "Strict inequality replaced by a per-feature epsilon_j (smallest nonzero gap between sorted values) with big-M constants from the scaling, M1 = 1 + epsilon_max, M2 = 1 (p. 12)",
+      "Leaf misclassification linearized with label indicators and M = n; loss normalized by baseline error so alpha does not depend on data-set size (p. 13)",
+      "Alpha tuning via integer split budget C = 1..C_max with warm-start chains in C and depth, dominated solutions removed, midpoint of the winning alpha interval (pp. 15-17)",
+      "OCT-H: |a_jt| linearized, M = 2, mu = 0.005 for the strict inequality, variable-use indicators s_jt penalized (pp. 17-18)",
+      "Speed-up arithmetic: Gurobi 1.0 -> 6.5 'nearly 50', solver total about 1.4 million, hardware about 570,000, about 800 billion (p. 6)",
+      "Difficulty set by the n*2^D binaries z_it; minutes for depth <= 4 and thousands of points (p. 14)"
+    ],
+    "experiments": "Gurobi 6.5 via JuMP/Julia on AWS c4.xlarge (4 vCPU, 7.5 GB), limits 30 min-2 h (OCT), 5-15 min (OCT-H); Wine depth 2: optimum found in 105 s and proved in 230 s more with CART warm start vs 270 s + 1,360 s without; synthetic: OCT closest to ground-truth structure, gains 1-2% at 15-20% label noise; real data mean accuracy depth 1-4: CART 71.0/76.2/78.8/79.8, OCT 71.3/78.0/79.5/80.4, OCT-H 76.1/81.0/82.3/82.9; OCT gains 0.36/1.86/0.73/0.62% (p-values given), OCT-H 5.12/4.88/3.59/3.12%; unconstrained CART 80.7% vs OCT depth-4 80.4%; random forests 85.8%; most results uncertified; CART baseline is trimmed rpart; 'when it wins' rules fitted on the same 53 sets (pp. 14-37).",
+    "positioning": "CART defines the problem and Breiman is quoted twice; C4.5 choice called arbitrary (Murthy-Salzberg); lookahead, one-step 'optimal' and enumeration heuristics never certified; multivariate heuristics top-down; own CRIO judged plainly (no provable optimality, no significant gain); random forests used only to scale the gains (pp. 4-9, 36).",
+    "writing": "Abstract template greedy practice -> 800 billion -> formulation -> headline numbers (p. 3); numbered contributions with numbers (pp. 6-7); strong verbs about beliefs ('refuting', 'widely-held belief', 'comprehensive evidence') with hedges in the body (pp. 3, 25-29, 37); headline gains rounded up against Tables 9-10 (pp. 7, 30-31, 37); random-forest comparison framed in advance (p. 36).",
+    "limits_future": "Stated: tens of thousands of points prohibitive, most results uncertified, smaller gains at depths 3-4, N_min untuned, LR/SVM warm starts untested; future: tune N_min, a single tree as accurate as a random forest, longer limits for depth-4 OCT (pp. 19-20, 25-29, 37). Unstated: in-sample applicability rules; trimmed-CART baseline (pp. 25-26, 31-34).",
+    "method_links": [
+      {
+        "method": "Method 2",
+        "relation": "evidence",
+        "note": "abstract leads with greedy practice and the 800-billion figure; belief conceded in Breiman's 1984 words and as justified in the 1970s-1980s; figure rebuilt for this paper (Gurobi 6.5): against S081's 450 billion the hardware factor is unchanged and the whole increase comes from one solver release",
+        "pages": "pp. 3, 5-6"
+      },
+      {
+        "method": "Method 2",
+        "relation": "variant",
+        "note": "the Gurobi 6.5 factor is referenced to Bixby 2012, Nemhauser 2013 and a 'Gurobi 6.0 performance benchmarks' PDF accessed September 2015, none of which by title and date covers version 6.5",
+        "pages": "pp. 6, 46"
+      },
+      {
+        "method": "Method 1",
+        "relation": "evidence",
+        "note": "the incumbent's own problem written exactly as a MIO, boundary printed (n*2^D binaries; minutes at depth <= 4; tens of thousands of points prohibitive)",
+        "pages": "pp. 9-14, 25"
+      },
+      {
+        "method": "Method 4",
+        "relation": "evidence",
+        "note": "one MIO replaces greedy splitting; CART is warm start and opponent; solver, machine, limits stated; matched-depth duel on 53 data sets; winning and losing regions printed",
+        "pages": "pp. 14-15, 26-36"
+      },
+      {
+        "method": "Method 4",
+        "relation": "contradiction",
+        "note": "contradicts step 4: the paper argues a proof of optimality is not needed to evaluate a classifier and solves may stop when the incumbent stalls; most results carry no certificate while method and title say optimal (the skill's say-do caveat and Tension T1, confirmed at source)",
+        "pages": "pp. 14, 26"
+      },
+      {
+        "method": "Method 6",
+        "relation": "evidence",
+        "note": "doctoral student, programme brand and its paper series named",
+        "pages": "pp. 3, 6, 37"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "Solve the incumbent heuristic's own objective exactly",
+        "evidence": "OCT keeps CART's objective, parameters (alpha, N_min) and depth so that the comparison isolates exactness; depth-1 gains attributed to the objective change alone",
+        "pages": "pp. 9, 27, 29, 36"
+      },
+      {
+        "pattern": "Relax the exact model to reach a richer class at no extra binaries",
+        "evidence": "relaxing integrality of the split coefficients turns OCT into hyperplane trees with the same number of binaries and an easier solve",
+        "pages": "pp. 17-19"
+      },
+      {
+        "pattern": "Benchmark-derived applicability rule",
+        "evidence": "rules on CART accuracy, n/p and p predict when OCT or OCT-H beats CART, found by looking across all depths of the same 53 data sets (in sample)",
+        "pages": "pp. 30-35"
+      }
+    ],
+    "transferable": [
+      "Let a node switch off by zeroing its split (a_t = 0, b_t = 0 sends every point the same way), so tree size is decided inside the model without new variables (p. 11).",
+      "Replace a strict inequality by a data-derived margin, for each feature the smallest nonzero gap between sorted values, and read tight big-M constants off the feature scaling (p. 12).",
+      "Tune a continuous complexity penalty through its integer budget form, warm-starting each budget and depth from the previous one, discarding dominated solutions and taking the midpoint of the winning alpha interval (pp. 15-17).",
+      "Show upper- and lower-bound traces with and without the incumbent as warm start on one small instance, separating time to find from time to prove (Fig. 3, pp. 14-15).",
+      "Before real data, run a ground-truth recovery study (Murthy-Salzberg protocol) and report structure beside accuracy, varying training size, label noise, feature noise and dimension (pp. 20-25).",
+      "Decompose the gain: at depth 1 there is no global search, so a gain there measures the change of objective alone (p. 29).",
+      "Print per-data-set results with wins, losses, ties and p-values, the losses included (pp. 28-29, 37-45)."
+    ],
+    "coauthors": "Jack Dunn",
+    "quotes": [
+      {"text": "is not necessarily required in practice when evaluating a classifier", "page": 14},
+      {"text": "most of our results for OCT and OCT-H do not carry explicit certificates", "page": 26}
+    ]
+  },
+  {
+    "id": "S079",
+    "year": "2017",
+    "title": "Personalized diabetes management using electronic medical records",
+    "read_level": "full",
+    "contribution": "Proposes a kNN-based prescriptive rule for type 2 diabetes regimens from Boston Medical Center records that switches a patient's regimen only when predicted HbA1c improves by at least 0.8%, and estimates retrospectively a mean HbA1c reduction of 0.14% over all visits and 0.44% where the algorithm departs from the standard of care.",
+    "problem_entry": "{DA+AP+ML} Guidelines do not differentiate by patient and subgroup studies give no general decision rule; electronic medical records are large and longitudinal but not randomized; enter by recommending a regimen at each visit that beats the standard of care on HbA1c (pp. 1-2).",
+    "key_idea": "Per visit, predict post-treatment HbA1c for each regimen on an incremental menu by kNN with distance weights from per-regimen regression coefficients and k_t = 0.34 sqrt(n_t); prescribe the best only if it beats the current regimen by delta = 0.8%; impute counterfactuals by the same weighted matching on held-out visits; dashboard with provider override (pp. 2-7).",
+    "assumptions": "10,806 patients and 48,140 visits (1999-2014); lines of therapy cut at regimen changes or 500-day gaps; visits every 100 days; outcome = mean HbA1c 75-200 days later; standard of care = regimen given; lower HbA1c always better, single outcome, no individualized targets or adverse events, no socio-economic factors, GLP-1 agonists not separate, BMC population, unfilled prescriptions possible (pp. 2-3, 7).",
+    "proof_devices": [
+      "No optimization model: argmin over a small incremental menu with a switching threshold delta (pp. 3-4)",
+      "Supervised kNN distance weights from per-treatment OLS coefficient magnitudes (p. 4)",
+      "Square-root rule for k fitted from RMSE-optimal values, k_t = 0.34 sqrt(n_t) (p. 5)",
+      "Counterfactual imputation by weighted matching on test-set neighbours, citing Imbens and Rubin (p. 5)"
+    ],
+    "experiments": "R 3.3.0; prediction R2 0.20-0.54 (kNN), 0.24-0.53 (LASSO, random forests); delta tuned on 'a single test set'; all visits: HbA1c 0.14% lower than standard of care (SE 0.01, P < 0.001); 15,323 visits (31.8%) where the algorithm differs: 0.44 +/- 0.03% lower (8.37% -> 7.93%), median 0.21%; LASSO and forest variants 0.13% and 0.07%; subgroups 0.05-0.22%; three other random splits 0.11-0.15%; the 48,140 visits called 'the test set' in the abstract are all visits in the data set; evaluator shares the predictor's matching structure; no run times (pp. 1, 3-7).",
+    "positioning": "Against guideline algorithms, the ADA-EASD patient-centred statement and single-subgroup studies; within machine learning in health care and causal inference (Rosenbaum-Rubin, Imbens-Rubin); claims the first prescriptive method for personalized type 2 diabetes care; no OR literature beyond the authors' own (pp. 1-2, 5, 7-8).",
+    "writing": "Clinical-journal format; effects in % and mmol/mol; 'novel' four times and 'novelty' once; abstract headline on the disagreement subset (-0.44%) beside the 68.2% agreement rate, the all-visit -0.14% only in Results and Table 2; specific listed limits; kNN interpretability argued (pp. 1-7).",
+    "limits_future": "Stated: non-randomized data, counterfactuals only estimated, missing socio-economic factors and preferences, GLP-1 not separate, representativeness, adherence unknown, single outcome, no individualized targets; future: other hospitals, a clinical trial, genomic data (p. 7).",
+    "method_links": [
+      {
+        "method": "Method 5",
+        "relation": "evidence",
+        "note": "decision = regimen per visit, owner = provider, baseline = standard of care actually given, scored by the outcome under the decision rather than prediction R2, provider override, clinical trial named as next step; reports retrospective records only, so it cannot settle the diabetes-trial outcomes the skill lists as unverified",
+        "pages": "pp. 1-7"
+      },
+      {
+        "method": "Method 5",
+        "relation": "variant",
+        "note": "no optimization model; prediction and choice in two steps; threshold tuned on a test set; the evaluator shares the predictor's matching structure",
+        "pages": "pp. 3-5"
+      },
+      {
+        "method": "Method 3",
+        "relation": "variant",
+        "note": "delta as a single knob trading the number of switches against mean benefit among switchers, described in words; no curve published",
+        "pages": "p. 4"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "Disagreement-subset reporting",
+        "evidence": "agreement rate with practice (68.2%) reported with the effect on the visits where the algorithm departs from practice (-0.44%), the all-visit mean (-0.14%) and medians",
+        "pages": "pp. 1, 5-6"
+      },
+      {
+        "pattern": "Counterfactual replay against the historical decision-maker",
+        "evidence": "outcomes of the recommended regimen imputed by weighted matching on held-out visits and compared with the observed standard-of-care outcome; see S078 and S143",
+        "pages": "p. 5"
+      }
+    ],
+    "transferable": [
+      "Define decision epochs and outcome windows from the clinical process and biology (lines of therapy, a visit every 100 days, the outcome 75-200 days later) so each record is one decision with one outcome (pp. 2-3).",
+      "Weight a kNN distance by per-treatment regression coefficients so neighbours are close on what predicts the outcome, and scale k with sqrt(n) per treatment (pp. 4-5).",
+      "Recommend a change only when the predicted gain clears a threshold, which keeps most decisions at the status quo and concentrates changes where the gain is large (pp. 4, 6); tune the threshold on validation data, not on the evaluation set.",
+      "Report together the agreement rate with practice, the effect on the cases of disagreement, the all-case mean and median, and subgroup effects (pp. 5-6).",
+      "Ship the recommendation with its evidence: the outcome distribution of the nearest neighbours under each option, and a provider override (pp. 6-7)."
+    ],
+    "coauthors": "Nathan Kallus, Alexander M. Weinstein, Ying Daisy Zhuo",
+    "quotes": [
+      {"text": "guidelines for managing type 2 diabetes do not differentiate based on patient-specific factors", "page": 1},
+      {"text": "we can only estimate counterfactual outcomes", "page": 7}
+    ]
+  }
+]

@@ -1,0 +1,276 @@
+[
+ {
+  "id": "S290",
+  "year": "2024",
+  "title": "Compressed sensing: A discrete optimization approach",
+  "read_level": "full",
+  "contribution": "Writes l2-regularized compressed sensing exactly as a mixed-integer second-order cone program, shows that its perspective relaxation is Basis Pursuit Denoising for large enough gamma, adds a stronger SOS/SDP bound, and solves small instances with a custom branch and bound that returns sparser solutions than OMP, BPD and IRWL1, at a cost of orders of magnitude in run time.",
+  "problem_entry": "{ML IO CP} CS is attacked almost only by l1 convex approximations or greedy heuristics, whose guarantees need assumptions such as RIP that cannot be verified on real data; earlier MILPs need big-M values and cover only eps = 0 (pp. 4-5). Entry: add a ridge term (1/gamma)||x||^2 and solve the discrete problem exactly (p. 2).",
+  "key_idea": "The perspective constraint x_i^2 <= z_i theta_i gives an exact MISOCP (Theorem 3, p. 10). Its relaxation equals (weighted) BPD when gamma >= max ||Wx||_inf^2 (Theorem 4, p. 11), and an SOS hierarchy strengthens it (Theorem 5, p. 15). A custom B&B takes lower bounds from the BPD-type relaxation and upper bounds from greedy column selection (pp. 17-22).",
+  "assumptions": "A, b and eps > 0; gamma = sqrt(n) by default or cross-validated (p. 2). Admitted limits: gamma0 needs the hard problem, and lambda_eps is not easily computable (pp. 8-9); the SDP needs PSD matrices of size C(2n+d, d) (p. 17). Data: Gaussian synthetic (m = 100, sigma = 10, 100 trials) (p. 24); 100 MIT-BIH ECG records with a K-SVD dictionary 1024x2000 and 40x1024 Bernoulli sensing (pp. 31-32); del.icio.us multi-label data with 983 labels (p. 35).",
+  "proof_devices": [
+   "Theorem 1: gamma0 = ||x~||^2 for a minimum-norm l0 optimum, by a short cardinality-counting argument (pp. 7-8)",
+   "Theorem 2: sparsity bound for gamma < gamma0, via the ridge solution and the KKT conditions of min ||x||^2 s.t. ||Ax - b||^2 <= eps (pp. 8-9)",
+   "Theorem 3: the perspective reformulation is exact, shown by mapping solutions both ways (pp. 10-11)",
+   "Theorem 4: the inner problem is separable with closed-form z_i, so the SOC relaxation equals weighted BPD (pp. 11-12)",
+   "Theorem 5: any dual-feasible point of BPD gives a degree-1 SOS certificate of equal value (pp. 15-17)",
+   "B&B with most-fractional branching, least-lower-bound node selection and feasibility cuts sum_{i in I0} z_i >= 1; Theorem 6 (finite termination, delta-optimality) follows Theorem 21 of [46] (p. 20)",
+   "Greedy upper bound with block-matrix inversion: O(k*^3 + m k*^2) instead of O(k*^4) (pp. 19-20)",
+   "Backbone (BPD support) and early stopping, both of which drop the guarantee (pp. 21-23)"
+  ],
+  "experiments": "Julia/JuMP, Gurobi 9.0.3 and Mosek 9.3 on MIT Supercloud; code on GitHub (p. 23). Against OMP, BPD and IRWL1 (rounded), with 10-minute caps (5 for ECG): 2.71/16.62/6.04% sparser (p. 24); SOS bound 8.92% above SOC for n <= 50 (pp. 29-30); an ECG frontier that dominates the baselines (p. 34); higher multi-label accuracy (p. 36). Mean time is about 600 s, the cap, for n >= 400, against <= 4 s for the baselines (Table 3, p. 27). No gaps or counts of certified runs are reported.",
+  "positioning": "Against l1 convex approximations (BPD, IRWL1) and greedy pursuit (OMP, SP), whose guarantees need RIP-type assumptions, and against earlier big-M MILPs for eps = 0 (pp. 4-6). Reuses the group's B&B [46] and backbone method [48] (pp. 20-21).",
+  "writing": "The abstract leads with average gains, gives the best-benchmark versions too, and admits the run-time cost (pp. 1-2). Gains are reported before and after rounding the baselines (pp. 24-25). One table caption is reused: Table 10's caption mentions alpha and 100 trials for the multi-label frequency table (p. 37).",
+  "limits_future": "Run time is several orders of magnitude higher, so the method suits applications where runtime is not critical (pp. 2, 38). The SDP bound does not scale (pp. 17, 30). The claim that the custom B&B beats Gurobi's MISOCP (pp. 13-14) is not tested in Section 6. Future work: valid inequalities, a scalable B&B, fast SDP methods (p. 38).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "CS is written exactly as a MISOCP via the perspective device, the incumbent BPD is read off as its relaxation (Theorem 4), and the boundary is printed (SDP size, run times).", "pages": "pp. 2-4, 10-17, 27"},
+   {"method": "Method 4", "relation": "variant", "note": "The incumbent heuristics serve as backbone, upper bound and opponents, with solver versions and caps stated, but the certificate step is missing: the abstract promises certifiable optimality, while the experiments use a backbone that drops the guarantee, caps that bind at n >= 400, and report no gaps (Tension T1).", "pages": "pp. 1, 18-27"},
+   {"method": "Method 3", "relation": "variant", "note": "gamma is a knob tied to sparsity by Theorems 1-2 and traces a sparsity-error frontier on ECG. The price of exactness is paid in compute and printed in the abstract. The bound is data-dependent and not computable.", "pages": "pp. 2, 7-9, 34, 38"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "recover the incumbent convex surrogate as the exact model's relaxation", "evidence": "Basis Pursuit Denoising is shown to be the perspective (SOC) relaxation of the l2-regularized MISOCP for gamma >= gamma0. This justifies it as a lower bound and lets it be reused inside the B&B; close to Heuristic 1.", "pages": "pp. 10-14, 18"}
+  ],
+  "transferable": [
+   "Add a small ridge term to an l0 objective; prove a finite gamma0 above which the regularized and original problems share an optimum, and bound the loss in sparsity below it (Theorems 1-2, pp. 7-9).",
+   "Write the support with the perspective constraint x_i^2 <= z_i theta_i, then prove that its relaxation equals the field's standard convex method under a parameter condition, which gives a familiar lower bound and a ready subproblem solver (pp. 10-14, 18).",
+   "Turn every infeasible branch-and-bound node into a cut sum_{i in I0} z_i >= 1 that prunes all its descendants (pp. 18, 20).",
+   "Apply your own post-processing (greedy rounding) to the baselines and report results before and after it; report gains against both the average baseline and the best baseline in each experiment (pp. 1, 24-25)."
+  ],
+  "coauthors": "Nicholas A. G. Johnson",
+  "quotes": [
+   {"text": "This improved accuracy comes at the cost of an increase in computation time by several orders of magnitude.", "page": 2},
+   {"text": "though Basis Pursuit Denoising is typically motivated as a convex approximation to CS in the presence of noise, it can alternatively be understood as the natural convex relaxation of the mixed integer second order cone problem given by (12)", "page": 11}
+  ]
+ },
+ {
+  "id": "S331",
+  "year": "2024",
+  "title": "Holistic deep learning",
+  "read_level": "full",
+  "contribution": "Combines the group's linearized robust training, worst-training-subset stability and a sigmoid-gated l0 sparsity penalty into one deep-learning loss. Ablations on 45 UCI and 3 image data sets show that robustness, stability and sparsity can often be improved together without losing natural accuracy, and an Optimal Policy Tree prescribes a loss from data-set features.",
+  "problem_entry": "{ML RO} Networks for high-stakes decisions are vulnerable to input perturbations, unstable across train-validation splits and over-parametrized; these weaknesses were studied almost only in isolation (p. 2). Entry: one loss that imposes all three (pp. 2, 6).",
+  "key_idea": "Loss (4) adds lambda*sum sigma(beta s_j) to theta + (1/a) sum [robust CE - theta]+ (p. 6). The robust CE comes from a first-order linearization inside the l_inf ball (pp. 6-7), stability from the worst training subset of size a (pp. 8-9), and sparsity from a multi-round sigmoid approximation of l0 (pp. 7-8). All are trained by gradient descent. An OPT then prescribes the loss (pp. 16-17).",
+  "assumptions": "Feed-forward ReLU nets (2x128) and AlexNet (pp. 5, 11). Conceded: the linearized robust term is not always an upper bound of the adversarial loss for arbitrary rho (p. 7). Data: 45 UCI sets (up to 245,056 rows and 856 features), MNIST, Fashion-MNIST, CIFAR10 (p. 10); a fixed 20% test set and 10 random 80/20 splits (p. 11).",
+  "proof_devices": [
+   "Stability term: the inner max over binary subsets of size a is linear, so it is relaxed to the convex hull, dualized by LP duality, and its slacks solved in closed form, giving the unconstrained loss theta + (1/a) sum [L_n - theta]+ (pp. 8-9)",
+   "First-order linearization of the network output to approximate the robust cross-entropy over the l_inf ball (eqs. 5-7, pp. 6-7)",
+   "no theorems (n/a)"
+  ],
+  "experiments": "8 loss combinations (Table 1, p. 10) scored on natural accuracy, PGD adversarial accuracy, worst accuracy over 10 splits and % zero weights (pp. 9-10), against the nominal network only. Gains concentrate where nominal accuracy is 70-90% (p. 12); HDL is 16.2x slower (Table 5, p. 14); a policy tree is trained on 40 data sets and tested on 5 (pp. 16-17). The tables show costs the text does not discuss: CIFAR10 natural accuracy 70.1 -> 69.3; on MNIST, adding sparsity to robustness lowers adversarial accuracy (78.4 -> 74.7; HDL 76.0), and Stable+Sparse falls to 27.7 against the nominal 49.6 (Tables 3-4, p. 14).",
+  "positioning": "Robustness, sparsity and stability are said to be studied in isolation (p. 2). The paper reuses the group's own components (Bertsimas et al. 2021; Bertsimas & Paskov 2020; Bertsimas, Dunn & Paskov 2022) and Savarese et al. 2020 (pp. 6-8); no external state-of-the-art baselines are compared.",
+  "writing": "The contribution list is phrased as cross-effects of the form imposing X further improves Y (p. 3), hedged with often and typically (pp. 3, 13). The conclusion is a short paragraph with no limitations section (p. 17).",
+  "limits_future": "Limits appear only inside the results: sparsity generally hurts accuracy and stability (p. 16); the robust approximation holds for small rho (p. 7); training is 16x slower (p. 14). No future work is stated (p. 17).",
+  "method_links": [
+   {"method": "Method 3", "relation": "variant", "note": "Three properties, each with one knob (rho, a, lambda with beta), and measured trade-offs (multi-objective rank, SHAP, slowdown), but no knob-property bound or price curve; the user receives a prescribed loss rather than a curve.", "pages": "pp. 6, 11-17"},
+   {"method": "Method 1", "relation": "variant", "note": "Step 4 (dualize) keeps the worst-case-subset problem trainable by SGD, not inside an LP, conic or MIO class.", "pages": "pp. 8-9"},
+   {"method": "Method 6", "relation": "evidence", "note": "The group's earlier robust, stable and policy-tree components are reused and combined by a cohort of students.", "pages": "pp. 3-8, 16"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "prescriptive tree as method selector", "evidence": "An Optimal Policy Tree trained on data-set meta-features (size, classes, nominal accuracies) prescribes which training loss to use. It is scored out of sample against the nominal method and the best method for each data set (Table 6).", "pages": "pp. 16-17"},
+   {"pattern": "first-order surrogate for an MIO-born model class", "evidence": "The l0 sparsity that the group elsewhere solves exactly by MIO becomes a sigmoid-gated penalty trained by gradient descent at network scale (also S477).", "pages": "pp. 7-8"}
+  ],
+  "transferable": [
+   "Make a worst-training-subset loss trainable by SGD: relax the binary inner max to its convex hull, dualize it, and eliminate the slacks in closed form to get theta + (1/a) sum [l_n - theta]+ (pp. 8-9).",
+   "Run the full factorial of loss components (2^3 = 8 models), choose each by its average validation rank across all metrics, and report test ranks by difficulty band of the data sets (pp. 10-13).",
+   "Split each reported slowdown into cost per batch times number of iterations (Table 5, p. 14)."
+  ],
+  "coauthors": "Kimberly Villalobos Carballo, Leonard Boussioux, Michael Lingzhi Li, Alex Paskov, Ivan Paskov",
+  "quotes": [
+   {"text": "Even though the expression in Eq. (7) is not always an upper bound of Eq. (5) for an arbitrary value of ρ", "page": 7},
+   {"text": "it is often possible to simultaneously improve robustness, stability, and sparsity without sacrificing performance on natural accuracy", "page": 3}
+  ]
+ },
+ {
+  "id": "S348",
+  "year": "2024",
+  "title": "Pareto adaptive robust optimality via a Fourier–Motzkin elimination lens",
+  "read_level": "partial",
+  "contribution": "Defines Pareto Adaptive Robust Optimality for two-stage linear ARO and proves, with Fourier-Motzkin elimination as the proof device, that PARO here-and-now decisions and piecewise-linear PARO decision rules exist. It gives special-case methods and a column-and-constraint generation method for (approximate) PARO solutions, which improve on ARO and PRO solutions in non-worst-case scenarios of a facility-location study.",
+  "problem_entry": "{RO LO; IO as testbed} Worst-case optimal ARO solutions can differ greatly outside the worst case. PRO (Iancu-Trichakis) covers only static RO, and applying it after LDRs fails to produce undominated solutions (pp. 1-2). Entry: a radiation-therapy toy example in which the PARO set {20 <= x <= 30} is a strict subset of the PRO set (pp. 2-3).",
+  "key_idea": "FME of the adaptive variables turns the ARO into a static RO with a convex PWL objective (Lemma 1, p. 8), so PARO for x is equivalent to PRO for that static problem (Lemma 2, p. 9). Existence (Theorems 1-2, pp. 9, 11), special cases with d = 0 (Theorem 3, Corollary 2, pp. 11-12) and an appended C&CG stage (Algorithm 2, pp. 14-16) follow.",
+  "assumptions": "Two-stage linear ARO with fixed continuous recourse, affine dependence on z, and a compact convex U with nonempty relative interior; x may be integer (pp. 5-6). Admitted restrictions: two-stage linear only (p. 4); d = 0 for the special cases is 'a limiting assumption' (p. 11); Lemma 5's uniqueness is 'quite restrictive' (p. 13). Data: 250 random facility-location instances (40 sites, 20 demand points, budget set with Gamma = 200) and 1,000 smaller instances (pp. 19-20, 29).",
+  "proof_devices": [
+   "FME eliminates the adaptive variables, tracking which original constraints produce each bound (Lemma 1, Lemma 11; pp. 8, 24-25, 30)",
+   "Existence of a PRO/PARO solution: minimize the integral of f(x, z) against a strictly positive measure (e.g. Gaussian) over the worst-case optimal set; continuity by dominated convergence (Lemma 12, Theorem 1; pp. 9, 34-35)",
+   "Counterexample showing that compactness cannot be dropped (p. 9)",
+   "PWL PARO decision rule, with two proofs: FME, and basic solutions in LP (Lemma 3, Theorem 2, p. 11)",
+   "Decision-rule structures (hybrid, block, simplex/LDR) that are feasible for every feasible x give PARO via PRO of the plugged-in static problem (Theorem 3, Corollary 2, pp. 11-12)",
+   "Check of a PARO extension by max over (z, y) of d'(y*(z) - y) (Lemma 4, p. 12); finite-scenario uniqueness (Lemma 5, p. 13); optimizing a relative-interior scenario over a convex-hull set (Lemma 6, p. 13)",
+   "Second C&CG stage with bilinear subproblems solved by alternating LPs (mountain climbing) from LDR-based and random starts (Algorithm 2, Lemma 7, pp. 14-17)"
+  ],
+  "experiments": "Gurobi 9.0 dual simplex on an i7-8565U with 16 GB (p. 19). ARO via C&CG takes <= 6 iterations (251 s), the PARO stage <= 6 iterations (78 s) (p. 20). x_PARO differs from x_ARO in 31% of instances (median l1 differences 3-4, Table 2). Median gains are 0.54-1.83% at the nominal scenario, and up to 19.1% over PRO with LDR recourse in the scenario of maximal difference (Table 3, p. 20). Some gains are negative, and ARO is the first solution found (pp. 20-21); Appendix B on small instances gives similar results (pp. 29-30).",
+  "positioning": "Extends Iancu & Trichakis (2014) PRO from static RO to ARO. Argues that LDR-based PRO approaches (Bertsimas et al. 2019; De Ruiter et al. 2016; Iancu & Trichakis 2014) can be dominated (pp. 2, 8). Extends Zhen et al.'s (2018) FME and reproves Bertsimas-Goyal (2012) results (pp. 4-5, 24).",
+  "writing": "Opens with a toy example that exhibits the gap and motivates the new proof technique (pp. 2-3), then gives numbered findings and contributions (p. 4). Limits are stated bluntly ('not computationally tractable', 'quite restrictive', 'a limiting assumption') (pp. 11, 13).",
+  "limits_future": "The existence proofs are not constructive (p. 11). Heuristic bilinear solves may stop without a PARO solution or falsely conclude that a solution is ARO (p. 17), and Algorithm 2 sometimes cannot improve the ARO solution (p. 19). Future work: tractable algorithms for larger instances and more general classes (p. 22).",
+  "method_links": [
+   {"method": "Method 3", "relation": "variant", "note": "The property is efficiency outside the worst case at an unchanged worst case: zero price, measured gain. It answers the SKILL's correction to Method 3 (budgeted robust optima need not be Pareto efficient, Iancu-Trichakis 2014) in the critic's frame and with the critic as co-author (Heuristic 2).", "pages": "pp. 1-3, 19-21"},
+   {"method": "Method 1", "relation": "evidence", "note": "A reformulation device (FME turns ARO into a static PWL RO), the class kept (LDRs suffice under simplex uncertainty), and the boundary printed (about 20 adaptive variables; NP-hardness).", "pages": "pp. 8-11, 14, 24-25"},
+   {"method": "Method 4", "relation": "variant", "note": "No MIO duel, but heuristically solved stages are labelled '(approximate) PARO', the risk of false termination is stated, and multiple starting points reduce it.", "pages": "pp. 14, 17-20"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "Pareto refinement of an optimal set", "evidence": "Optimize a secondary criterion (performance in non-worst-case scenarios) over the set of worst-case optimal solutions. Existence is proved, and an appended C&CG stage computes it. The same move appears in S401 (Pareto-optimal model sequences).", "pages": "pp. 2-3, 9, 14-16"}
+  ],
+  "transferable": [
+   "To prove that an optimal set contains a non-dominated element, minimize the integral of the objective against a strictly positive measure over that set; continuity follows by dominated convergence (pp. 34-35).",
+   "Use FME as a proof device: eliminate the adaptive variables while tracking which original constraints produce each bound, then read structural results on decision rules off the eliminated system (pp. 8, 24-25, 30).",
+   "Report improvement in three kinds of scenario: nominal, a random sample, and the scenario that maximizes the difference between two solutions, found by the same subproblem (p. 19)."
+  ],
+  "coauthors": "S. C. M. ten Eikelder, Dick den Hertog, Nikolaos Trichakis",
+  "quotes": [
+   {"text": "From a practical standpoint, this means that implementing PARO solutions can only yield performance benefits, without any associated drawbacks.", "page": 2},
+   {"text": "The methods used in the existence proofs of Section 3 are not computationally tractable, i.e., they provide little guidance for finding PARO solutions in practice.", "page": 11}
+  ]
+ },
+ {
+  "id": "S351",
+  "year": "2024",
+  "title": "M3H: multimodal multitask machine learning for healthcare",
+  "read_level": "full",
+  "contribution": "Proposes M3H, a multimodal multitask deep-learning framework for diagnoses, hospital operations and phenotyping, with cross-task attention and a task-interaction (TIM) score. On HAIM-MIMIC-MM it improves on the best single-task models in every task reported; predictions only, with no decision or deployment evaluation.",
+  "problem_entry": "{ML AP} Medical ML builds single-disease, single-task models, and multitask work picks task combinations from prior medical knowledge (pp. 4-5). Entry: one framework across diagnosis, operations and phenotyping, and across binary, multiclass, regression and clustering tasks, with explainability over the outcome space (pp. 2-3).",
+  "key_idea": "Frozen pretrained modality embeddings feed modality networks, a contrastive shared module, task networks and cross-task attention softmax(I + alpha*M) with task-token queries (alpha = 0.1) (pp. 6-7, 11, 15). Clustering is an autoencoder plus K-means (pp. 9-10). The loss is an equal-weight sum (p. 12). TIM averages the gain from adding a task over subsets of the other tasks (p. 19).",
+  "assumptions": "HAIM-MIMIC-MM: 12,586 samples from 5,178 stays, 4 modalities and 11 sources (pp. 12-13). Tasks: 40 diagnoses in 16 departments, 8-class chest pathology, length of stay, 48-h mortality, hospital-acquired infection, 15 phenotypes (pp. 13-15). An 80/20 patient-level split with 5-fold CV over batch size and learning rate (pp. 15-16).",
+  "proof_devices": [
+   "n/a (no proofs)",
+   "Greedy forward search over task combinations, keeping the top 3 up to size 3 (p. 16)",
+   "TIM score: marginal gain from adding a task, averaged over subsets of the other tasks, approximated by sampling subsets or capping their size; the formula is garbled in the text layer (pp. 19-20)"
+  ],
+  "experiments": "Best multitask model against the best single-task model on the same test set, with +-SD from 5 bootstraps of 90% of the test set (p. 16). Gains: 1-41.2% in diagnosis, 3.3-12.4% in operations, 62.7% in phenotyping (p. 17). Examples: chest AUROC 0.770 -> 0.788, length-of-stay R^2 0.563 -> 0.581, silhouette 0.413 -> 0.671 (p. 19). Not reported: whether task combinations were chosen on validation or test scores, external baselines, run times, deployment results.",
+  "positioning": "Against single-disease medical ML and multitask frameworks that rely on prior knowledge for task choice (pp. 4-6). Claims firsts: the first integrated system bridging diagnosis, operations and phenotyping, and the first architecture of its kind for attention (pp. 2-3, 6). Builds on the group's HAIM data set (p. 12).",
+  "writing": "Promotional register ('unprecedented', 'production ready', p. 1), with a concrete limitations section (p. 23). The file has no author block.",
+  "limits_future": "Missing modalities and tasks; robustness to data perturbation and numerical instability, via DRO; task selection as a combinatorial problem (Pareto-optimal disease combinations); a link to predict-then-optimize (p. 23).",
+  "method_links": [
+   {"method": "Method 5", "relation": "contradiction", "note": "Scores predictions (AUROC, R^2, silhouette) against single-task models, not decisions against a hospital's current rule. Cost and operational gains are argued, not measured, and decisions are left to future predict-then-optimize work: the Research Taste warning sign of prediction with no decision value.", "pages": "pp. 1, 16-19, 22-23"},
+   {"method": "Method 4", "relation": "variant", "note": "The combinatorial choice of jointly trained tasks is made greedily (top 3, up to size 3). The authors name it a nonlinear combinatorial problem for future work: the greedy step Method 4 would replace by one joint optimization.", "pages": "pp. 16, 23"},
+   {"method": "Method 6", "relation": "evidence", "note": "Continues the HAIM programme with the same data asset and the health lineage (Ma).", "pages": "pp. 5, 12, 29"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "explain the outcome space, not the features", "evidence": "The TIM score averages the marginal gain from adding a task over subsets of the other tasks and shows it as an asymmetric task-by-task heatmap; the authors read medical links from it (infectious diseases and length of stay; IBD and bipolar disorder).", "pages": "pp. 5, 19-20"}
+  ],
+  "transferable": [
+   "Measure task interaction as the average change in a source task's score from adding a target task, over subsets of the other tasks; cap the cost by sampling subsets or capping their size, and report the asymmetric rank matrix (pp. 19-20).",
+   "Bias cross-task attention toward self-learning with softmax(I + alpha*M), and tune alpha as a single exploration knob (p. 11)."
+  ],
+  "coauthors": "Yu Ma (per works.json; the file has no author block)",
+  "quotes": [
+   {"text": "multitask training can improve the performance of single-task models if the tasks are judiciously chosen", "page": 3},
+   {"text": "designing what tasks to include for a multi-disease setting is a nonlinear, combinatorial problem that can be challenged by the curse of dimensionality as the number of possible combinations explodes", "page": 23}
+  ]
+ },
+ {
+  "id": "S393",
+  "year": "2024",
+  "title": "The ROAD to precision medicine",
+  "read_level": "full",
+  "contribution": "Proposes R.O.A.D.: prognostic stratum matching, then a cost-sensitive weight that cancels residual unobserved confounding, then Optimal Policy Trees trained on counterfactual risks and validated by sensitivity and specificity in external cohorts. Applied to observational GIST data and a sarcoma RCT, its treatment recommendations beat current trial criteria and identify a subgroup that may not need radiotherapy.",
+  "problem_entry": "{DA AP; ML, IO for matching} HTE methods face unobserved confounding, outputs that are not patient subgroups, validation by significance tests, and one-variable-at-a-time RCT subgroup analyses (pp. 2-3). Entry: emulate an RCT within prognostic strata, correct residual confounding, prescribe with trees (pp. 3-4).",
+  "key_idea": "(1) Train a baseline-risk model on the untreated, bucket by risk, and match treated to untreated within buckets by an MIO (pp. 5-6). (2) Fit outcome models per arm; read an excess of predicted risk under treatment as minimum unobserved confounding, and up-weight treated non-events by rho until it reverses (pp. 6-7). (3) Train an OPT on the two predicted risks (p. 7). (4) Validate by sensitivity and specificity and tune rho (pp. 8-10).",
+  "assumptions": "The treatment does not increase risk (imatinib 'is not detrimental', p. 4). The sensitivity metric assumes the drug would have prevented the recurrences (p. 8). Data: 536 MSK GIST patients (117 treated) matched to 164 (pp. 11-12), validated on 557 pre-imatinib-era Polish patients (p. 14); an MSK sarcoma RCT (164 patients) with nomogram risk, validated on 936 MSK patients without radiotherapy (pp. 16, 18).",
+  "proof_devices": [
+   "Matching MIO (1): each treated patient is assigned to a distinct untreated patient in the same risk bucket, minimizing the sum of ||x_i - x_j||^2; my reading: a bipartite assignment problem, solvable as an LP (pp. 5-6)",
+   "Cost-sensitive loss (3) with weight rho on treated patients without recurrence to equalize mean predicted risks across arms (pp. 6-7)",
+   "OPT objective: min over tau of sum [1{tau=0} h0 + 1{tau=1} h1(., rho)] (pp. 7-8)",
+   "no theorems (n/a)"
+  ],
+  "experiments": "GIST: rho from 1.5 to 3.25 traces sensitivity 84-94% against specificity 77-52% (Table 2). rho = 2.25 gives sensitivity 89% and specificity 70%, with NPV 93% (pp. 14-15). Sensitivity 89% against 82% for the SSG XVIII/AIO criteria; specificity 70% against 63% for PERSIST-5 (p. 15). Sarcoma: sensitivity 90%, specificity 14%, about 15% of patients spared (pp. 18-19). Results are stable across tree hyperparameters (pp. 13, 20), and the trees agree with the earlier OPT on 98.7% of its recommendations to treat (p. 22). My reading: rho was tuned in the same validation cohort in which the final figures are reported (pp. 13-14).",
+  "positioning": "Against methods resting on the unconfoundedness assumption (matching, causal forests), the PATH statement, SHAP subgroup screening and one-variable-at-a-time RCT subgroup analyses (pp. 2-3). Credits Rosenbaum's prognostic matching (p. 20).",
+  "writing": "Clinical register with large claims (the framework 'has the potential to revolutionize medical research', p. 4) and several 'first' claims (pp. 7, 8, 20). Limits are stated inside the discussion, with no separate section.",
+  "limits_future": "Residual unobserved confounding may remain after weighting (pp. 7, 20). The trees' variables may be surrogates, not causes (p. 21). Without rebalancing, the RCT trees found no subgroups (p. 22). No future work is listed (p. 23).",
+  "method_links": [
+   {"method": "Method 5", "relation": "evidence", "note": "Recommendations, not predictions, are scored in external cohorts against the current rule: trial eligibility criteria for GIST, radiotherapy for all for sarcoma. The output is a tree clinicians can read. Caveat: the tuning cohort is reused for the final figures.", "pages": "pp. 8, 14-15, 18-19"},
+   {"method": "Method 3", "relation": "evidence", "note": "One knob (rho) traces a sensitivity-specificity curve (Table 2). The authors print why they stop at 2.25 (4% sensitivity for 6% specificity, but not another 5% for 18%) and leave the choice of metric to the end user.", "pages": "pp. 10, 13-14"},
+   {"method": "Method 1", "relation": "variant", "note": "An MIO appears only as the matching step, cited to the IO textbook. ML models and OPTs carry the work, not a formulation in the solver class.", "pages": "pp. 5-6"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "calibrate unobserved confounding with a known sign", "evidence": "Since the treatment cannot harm, the excess of predicted risk under treatment after matching is read as a lower bound on confounding and cancelled by a loss weight, which is then tuned on validation.", "pages": "pp. 6-7, 13, 20"},
+   {"pattern": "validate prescriptions in a never-treated external cohort", "evidence": "Recommendations are validated with prevalence-free sensitivity and specificity in cohorts that never received the treatment: Polish patients from the pre-imatinib era, and MSK patients without radiotherapy.", "pages": "pp. 8, 14, 18"}
+  ],
+  "transferable": [
+   "Match treated to untreated patients separately within strata of predicted baseline risk, so that matching balances prognosis rather than only raw covariates (pp. 5-6).",
+   "When a treatment's direction is known, fit outcome models per arm on the matched cohort; raise the weight rho on treated non-events until the arm means cross, then tune rho further on validation sensitivity and specificity (pp. 6-7, 10).",
+   "Before a subgroup analysis of an RCT, stratify by baseline risk to detect imbalance within strata and rebalance by oversampling; here the trees found nothing without it (pp. 16, 22)."
+  ],
+  "coauthors": "Angelos Koulouras, Georgios Antonios Margonis",
+  "quotes": [
+   {"text": "the essence of precision medicine is to find the best match between the available treatments and patient subgroups and not the discovery of causal relationships", "page": 21},
+   {"text": "we attempted to train counterfactual models and OPTs despite the distribution imbalances, but the trees could not identify any patient subgroups with HTE", "page": 22}
+  ]
+ },
+ {
+  "id": "S401",
+  "year": "2024",
+  "title": "Towards stable machine learning model retraining via slowly varying sequences",
+  "read_level": "full",
+  "contribution": "Formulates model retraining as choosing a whole sequence of models that minimizes change between consecutive models, subject to a multiplicative accuracy tolerance, with Pareto-optimality and excess-risk guarantees. A restricted MIO over pre-trained candidates is solved exactly as a shortest path. Across three domains, including a hospital pipeline, about 2% less accuracy buys about 30% more stability.",
+  "problem_entry": "{ML DA; IO as formulation; AP health} Greedy retraining at each batch causes structural and insight shifts that erode the trust of expert users (pp. 1-2); related work decides when to retrain, not how to stay consistent (p. 2). Entry: optimize the whole sequence for accuracy and stability jointly (pp. 2-3).",
+  "key_idea": "Problem (1): minimize the sum of d(f_b, f_{b+1}) subject to L_P(f_b) <= (1 + alpha) * best_b, an eps-constraint that controls the price of stability (pp. 3-4). The restricted MIO (5) selects among bootstrapped candidates and reduces to a shortest path (Theorem 3.1, p. 5). Retraining builds a new full sequence and deploys its last model ('stability by process', pp. 3, 7).",
+  "assumptions": "Nested batches, a bounded loss, a uniform generalization bound (Assumption 2.1) and a data-independent stability loss (Remark 2.2) (p. 3). Distances: coefficients, optimal path matching for trees (an LP), spectral distances for networks, feature-importance and SHAP distances (p. 8). Data: a Connecticut hospital system (168,815 patients, 865,954 patient-days, mortality by AUC), Yearbook FaceNet embeddings, HuffPost text embeddings (p. 9).",
+  "proof_devices": [
+   "eps-constraint results: solutions are weakly Pareto optimal, unique solutions Pareto optimal, and complementary problems certify Pareto optimality, all by contradiction (Theorems 2.4-2.6, pp. 4, 14)",
+   "Pareto excess-risk bound by direct application of Sukenik & Lampert's Theorem 4, with a linear-regression instance (Lemma 2.7, eq. 4, pp. 4-5)",
+   "Shortest-path reduction: a layered graph of candidate models, edge weights equal to distances, nodes outside the tolerance deleted, solved by Dijkstra (Theorem 3.1, pp. 5, 14)",
+   "Inter-sequence stability <= eps + eps' by the triangle inequality, given a common initial model (Theorem 3.4, pp. 7, 14)",
+   "As printed, the constants of the bounds in eqs. (3)-(4) (p. 5) and (7)-(8) (p. 14) differ (my reading)"
+  ],
+  "experiments": "Synthetic linear regression: the restricted formulation is 1-3% worse than the full one for alpha <= 0.03 and fails at larger alpha (pp. 5-7). LogReg, CART, XGBoost and an MLP at alpha in {0.01, 0.02, 0.05, 0.1}, against a greedy best-validation sequence, with AUC on a held-out final period: on average 2% less accuracy for 30% more stability (p. 10). The text says realized deterioration is always well below the tolerance, but Table 2 shows 15.01% for the MLP on Healthcare at alpha = 0.1, and in Table 3 SVML's first inter-sequence loss is worse than greedy's (0.561 vs 0.476) (p. 11). The test period runs past the stated data end (p. 9); no run times or production outcomes are reported.",
+  "positioning": "Against retraining work on when to retrain (shift detection, costs) and on online learning (p. 2); builds on the stability literature (Breiman; Bertsimas & Digalakis 2023) and on slowly varying regression under sparsity (OR 2024) (pp. 2-3, 12); multi-objective eps-constraint (Miettinen) (p. 3).",
+  "writing": "The headline trade-off (2% for 30%) is in the abstract (p. 1); the paper coins 'stability by process' (p. 3); one summary sentence overstates its tables (pp. 10-11).",
+  "limits_future": "The restricted formulation misses Pareto-optimal solutions at higher tolerances (p. 7); distances between networks of different architectures are left open (p. 8). Future work: anticipated, quantifiable distribution shifts and explicit retraining costs (p. 11).",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "Names the price of stability, gives it one knob (the multiplicative tolerance alpha), proves Pareto properties and publishes the curve (Figure 1, Tables 1-2) with its bad cases in the tables, although the text summarizes them away.", "pages": "pp. 3-4, 6, 10-11"},
+   {"method": "Method 1", "relation": "evidence", "note": "Class-keeping device: a selection MIO with products of binaries is solved exactly as a shortest path, giving a polynomial certificate on the restricted problem.", "pages": "pp. 5, 14"},
+   {"method": "Method 5", "relation": "variant", "note": "The baseline is the owner's current rule (greedy retraining; XGBoost in production on a 6-month window). But the scores are AUC and model distance, not decisions, and the claimed deployment has no reported outcome.", "pages": "pp. 9-11"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "Pareto refinement of an optimal set", "evidence": "The eps-constraint plus uniqueness or complementary problems yields Pareto-optimal model sequences; the frontier is traced by varying the tolerance (as in S348).", "pages": "pp. 4-6"},
+   {"pattern": "optimize the whole sequence, deploy the last", "evidence": "Stability comes from re-solving the whole history of batches and deploying the final model ('stability by process'), not from a proximal step away from the deployed model.", "pages": "pp. 3, 7, 11"}
+  ],
+  "transferable": [
+   "Pre-train a pool of bootstrapped candidates per period, then select one per period by a shortest path over a layered graph: edge weights are model distances, and candidates outside the accuracy tolerance are deleted (Theorem 3.1, pp. 5, 14).",
+   "State the tolerance as a multiplicative factor on each period's best loss; vary it to recover the frontier, and certify Pareto optimality by uniqueness or complementary problems (pp. 4-6).",
+   "Check that stability in the optimized distance (XGBoost Gain importance) carries over to an independent one (SHAP) (p. 11)."
+  ],
+  "coauthors": "Vassilis Digalakis Jr, Yu Ma, Phevos Paschalidis",
+  "quotes": [
+   {"text": "Our approach thus relies on imposing stability by process.", "page": 3},
+   {"text": "On average, across all datasets and model types, a 2% reduction in (realized) predictive power results in a 30% improvement in model stability.", "page": 10}
+  ]
+ },
+ {
+  "id": "S477",
+  "year": "2024",
+  "title": "Deep Trees for (Un) structured Data: Tractability, Performance, and Interpretability",
+  "read_level": "full",
+  "contribution": "Introduces Generalized Soft Trees, sigmoid-routed trees with hyperplane or convolutional splits and linear leaves trained by backpropagation, and DeepTree, a greedy growing heuristic. A single GST beats CART, RF and XGBoost on four image data sets, though not on MIMIC-IV, and stays more interpretable than deep networks.",
+  "problem_entry": "{ML HS} Trees are interpretable but not expressive enough for nonlinear or unstructured data; deep networks are black boxes (pp. 1-2). GST training is presented as more efficient than Optimal Classification Trees and as scaling to greater depth and feature spaces (p. 2). Entry: richer soft splits and a scalable way to grow the tree (pp. 2-3).",
+  "key_idea": "Sigmoid routing with linear leaves (eq. 3, p. 4), hyperplane or conv-ReLU-pool-linear splits (pp. 5-7), and split and sample penalties on leaf weights (pp. 4-5). DeepTree splits the eligible leaf with the largest leaf loss, trains the new depth-1 subtree against the frozen tree as a warm start, and periodically retrains the whole tree (pp. 7-9).",
+  "assumptions": "Classification with cross-entropy (MSE for regression) (p. 4); Bayesian-optimization hyperparameter search with CV (pp. 10-11). Data: MIMIC-IV mortality (70,887 patients, 14 features), MNIST, Fashion-MNIST, CIFAR-10, and Celeb-A gender (60,000 images downsampled to 109x89) (pp. 11-18).",
+  "proof_devices": [
+   "n/a (no theorems)",
+   "Computational argument for the greedy split rule: evaluating every leaf would mean training hundreds to thousands of depth-1 subtrees per step at O(1) s each (p. 8)",
+   "Risk argument: with linear leaves a new split can reproduce its parent leaf, so a poorly chosen leaf is unlikely to overfit (p. 8)"
+  ],
+  "experiments": "Five trees per depth (4-10); grown trees add 8-32 leaves (pp. 11-12). The best GST on validation is compared with tuned CART, RF and XGBoost: MNIST 98.87 vs 97.74, Fashion-MNIST 92.21 vs 90.81, CIFAR-10 68.64 vs 55.41, Celeb-A 97.00 vs 96.45 (pp. 13-19). It loses on MIMIC-IV (74.00 vs RF 74.70 and XGBoost 75.06, p. 12) and is far from the 99.5% state of the art on CIFAR-10 (pp. 15, 17). The interpretability metric is the (k, alpha)-fraction; accuracy drops at depth 8 (p. 21); the Celeb-A nodes shown were selected after inspection (p. 22). No run times; code available on request (p. 27).",
+  "positioning": "Extends soft trees (Irsoy et al. [YA12]; Frosst & Hinton [FH17]), with linear leaves, growth and no distillation. Builds on OCT [BD17], the hyperplane-tree-network equivalence [BD19] and nonlinear regression trees [BDW21] (pp. 2-3).",
+  "writing": "The paper is organized by the three title words (tractability, performance, interpretability). It is candid about the CIFAR-10 gap and about interpretability below that of classical trees (pp. 2, 17, 25-26). The contribution statement gives Bertsimas a conceiving and supervising role (p. 27).",
+  "limits_future": "Less interpretable than traditional trees (p. 26); GSTs struggle with abstract shapes or patterns, hence the gap to deep networks on CIFAR-10 (p. 25); the sample penalty's benefit fades with depth (p. 20). Future work: combine the regularizer with DeepTree for more interpretable GSTs (p. 20).",
+  "method_links": [
+   {"method": "Method 4", "relation": "variant", "note": "The exact MIO tree with a certificate gives way to first-order training and a greedy split rule that 'may not be optimal'. The claim changes to tractable rather than optimal (Heuristic 3, Tension T1). Step 5, the duel with tuned CART, RF and XGBoost, is kept, and the MIMIC-IV loss is printed.", "pages": "pp. 2, 7-9, 11-19"},
+   {"method": "Method 6", "relation": "evidence", "note": "A new cohort extends the Optimal Trees programme (OCT, the 2019 book's hyperplane-tree equivalence, nonlinear regression trees).", "pages": "pp. 2-3, 27"},
+   {"method": "Method 3", "relation": "variant", "note": "An interpretability property (leaf-weight concentration) gets a knob (alpha_S) and a metric, and its accuracy cost is reported by depth; there is no curve or bound.", "pages": "pp. 19-21"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "first-order surrogate for an MIO-born model class", "evidence": "A tree class born as an MIO (OCT) is relaxed to sigmoid routing and trained by backpropagation, reaching images and depth 10; S331's sigmoid l0 gate is the same move.", "pages": "pp. 2-4, 7-9"}
+  ],
+  "transferable": [
+   "Grow a soft tree from a shallow full tree: among leaves with enough weight, split the one with the largest unnormalized leaf loss, train the new depth-1 subtree with the rest frozen, insert it, and retrain everything every few steps (Algorithms 1-3, pp. 7-9).",
+   "Measure soft-routing interpretability with a (k, alpha)-fraction, the share of samples whose top k leaves carry at least alpha of their weight, and report it next to accuracy with and without the penalty (pp. 19-21).",
+   "Compare grown shallow trees with full deeper trees at matched leaf counts to show where the leaf budget should go (Figs. 1-2, pp. 15, 17)."
+  ],
+  "coauthors": "Lisa Everest, Jiayi Gu, Matthew Peroni, Vasiliki Stoumpou",
+  "quotes": [
+   {"text": "While this approach to selecting the leaf to split on may not be optimal", "page": 8},
+   {"text": "highlighting how they struggle to learn more abstract concepts, such as shapes or patterns, which likely explains the gap in performance between these trees and deep neural networks on challenging image datasets like CIFAR-10", "page": 25}
+  ]
+ }
+]

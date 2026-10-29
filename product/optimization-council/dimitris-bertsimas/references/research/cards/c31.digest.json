@@ -1,0 +1,136 @@
+[
+ {
+  "id": "S347",
+  "year": "2025",
+  "title": "A stochastic benders decomposition scheme for large-scale stochastic network design",
+  "read_level": "full",
+  "contribution": "A generalized Benders scheme for sample-average stochastic network design that solves only a 10% sample of scenario subproblems per cut yet keeps every cut valid by giving unsampled scenarios the average of the sampled optimal duals, run single-tree in Gurobi with an outer loop and Morton's stopping rule; 5-7% gaps at 100-200 nodes against 16-27% for deterministic Benders, about 30% at 700 nodes.",
+  "problem_entry": "IO (LO duality engine; RO in App. A; network design as AP testbed): stochastic MCFND with 100 nodes is 'currently regarded as intractable' (p. 2), perspective decompositions reach about 50 nodes (p. 2), branch-and-bound fails at tens of nodes (p. 5), and sampled Benders cuts are only probabilistically valid and hit the optimizer's curse (pp. 12-13). Read: arXiv v2 (2024).",
+  "key_idea": "Sample scenarios at each iteration and give unsampled scenarios the averaged sampled duals, which stay dual-feasible, so the aggregated cut (9) is deterministically valid but not tight (pp. 12-13); multi-, accelerated multi- and k-cut variants (pp. 12, 15, 38); an outer loop that turns lazy cuts into ordinary constraints makes non-binding cuts safe in single-tree branch-and-cut (Algorithm 3, pp. 18-19).",
+  "assumptions": "MIO in binary z with convex QP recourse; 'if' logical constraints kept for a perspective-type convexification instead of big-M (p. 4); quadratic term admitted as smoothing, v(γ) - Σu²/(2γ) <= v(∞) <= v(γ), γ = 1 (pp. 21, 33, 40); uncertainty only in demands, equally weighted historical scenarios (pp. 3, 8); bounded optimal duals (p. 36); finite variance and |R| large relative to |W| for the CLT stopping rule (pp. 16-17); synthetic k-NN graphs with relatively complete recourse, 10-700 nodes, 5-50 commodities, 10-100 scenarios (pp. 20-21, 41); Crainic R instances with 10-1,000 scenarios (pp. 24-25, 41).",
+  "proof_devices": [
+   "Recourse cost as a pointwise maximum of functions affine in z via flow/quadratic splitting, a coupling multiplier and a minimax exchange needing no constraint qualification (Proposition 1, pp. 8-9; proof p. 35)",
+   "Farkas feasibility cuts cited from the LO textbook (Bertsimas-Tsitsiklis Theorem 4.6, p. 9)",
+   "Dual-averaging cut: every dual-feasible point gives a valid underestimator, so averaged sampled duals give a deterministically valid single cut (eq. 9, p. 13)",
+   "High-probability bound L·sqrt|R∖Rt|·ν plus an estimation term on the cut error, from Lipschitz continuity in the duals, a triangle inequality and Bardenet-Maillard concentration for sampling without replacement (Proposition 2, pp. 13-14; proof pp. 36-37)",
+   "Probabilistic method: some sample attains the bound, so the non-terminating algorithm returns a ρ-optimal solution almost surely (p. 14)",
+   "Morton (1998) stopping rule: CLT upper confidence bound from an independent sample against the deterministic lower bound, with the adversarial caveat (pp. 16-17)",
+   "Outer loop converting lazy cuts to ordinary constraints for non-binding cuts, termination tested between outer iterations only (Algorithm 3, pp. 18-19)",
+   "Quadratic regularizer equal to a worst case over an ellipsoid of cost perturbations for fixed z (Proposition A.1, pp. 33-34); relaxation version stated with proof omitted (Proposition A.2, p. 34)"
+  ],
+  "experiments": "MIT Supercloud Xeon Platinum 8260, Julia 1.7.3, JuMP 0.21.10, Gurobi 9.5.1 (p. 20; '9.1.2' on p. 18); 7,200 s, ε = 1%, α = 0.90, 10% sampling, γ = 1 (p. 21); gaps from true costs over all scenarios, evaluation time excluded (p. 21); ablation of cut schemes x root-node cuts (Tables 2-3, p. 22) with fraction solved (Table E.3, p. 43); duels vs Gurobi on the perspective formulation and the best of four deterministic Benders variants (pp. 23, 43); accelerated multi-cut 5.5-7.2% vs deterministic 16.4-26.7% at 100-200 nodes, 30.7% vs 53.4% at 700 (Table 4, p. 24); deterministic better on small R instances with few scenarios (pp. 25-26). My reading: no sampling-rate sweep, no out-of-sample design evaluation, no code; Table E.5's caption ('Gurobi converged to within 5%') does not fit its rows, which repeat Table 4 (pp. 24, 44); 54 vs 42 R instances (pp. 24, 41).",
+  "positioning": "Bridges MIO decomposition with perspective reformulations and sampling from stochastic programming (p. 5), with the sampling motive taken from ML (p. 2); restates and contrasts Infanger's cuts (pp. 12-13), Zakeri's inexact cuts (p. 13) and Ramirez-Pico's scenario aggregation (p. 15); 'sleeping beauties' remark on old decomposition schemes (p. 6); self-citations supply the duality (2021 SIOPT, p. 9), stochastic cutting planes (2022, p. 6), the LO textbook and 1990s approximation algorithms (pp. 5, 9).",
+  "writing": "Priority claims for single-tree sampling Benders on pp. 1, 2, 4 and 26, plus 'for the first time' (p. 7) and the outer loop (p. 18); 'certifiable optimality' framing (pp. 3, 7, 10, 17) against 5-40% gaps (p. 24), while the abstract states the gaps and 'relatively complete recourse' (p. 1); headline ranges drift slightly (16-27% vs 16-26%, pp. 1, 26); censoring and harmful accelerations admitted in the body (pp. 20, 24).",
+  "limits_future": "About 30% gaps at 700 nodes (p. 26); Morton's adversarial caveat (p. 17); fixed clustering for k-cut, whose benefit shrinks with size (pp. 38-39); feasibility on empty networks (p. 25); future: other two-stage SAA problems with a discrete first stage (p. 26).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "Stochastic MIO written as a pure-integer master with linear cuts whose structure is read off the dual (convexity, subgradients, Farkas cuts); logical constraints kept for a tighter-than-big-M convexification (T4: strength chosen); boundary printed (Gurobi fails at 100+ nodes; 22-40% gaps at 500-700 nodes)", "pages": "pp. 4, 8-9, 23-24"},
+   {"method": "Method 4", "relation": "variant", "note": "Solver, version, machine, limits and true-cost gaps reported; duels vs Gurobi and the best deterministic Benders variant; but warm starts deliberately naive (initial and all-edges networks) to isolate the algorithm, and no out-of-sample scoring", "pages": "pp. 19, 21-24, 43"},
+   {"method": "Method 2", "relation": "variant", "note": "Reopens a current 'regarded as intractable' belief, justified by a transferred idea (ML sampling) and modern valid inequalities ('sleeping beauties'), not by a rebuilt solver x hardware speed-up figure", "pages": "pp. 2, 6"},
+   {"method": "Method 3", "relation": "variant", "note": "γ is one knob with a solution-independent sandwich bound and a runtime/objective curve, but it prices tractability against fidelity and the authors fix it (γ = 1)", "pages": "pp. 21, 33, 40"},
+   {"method": "Method 6", "relation": "evidence", "note": "Programme continuation reusing the group's 2021 SIOPT decomposition and regularizer and the 2022 stochastic cutting planes, with coauthors at Imperial, LBS and MIT ORC", "pages": "pp. 1, 5, 6, 9, 33"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "sample for speed, dualize for validity", "evidence": "Scenario sampling inside exact Benders; unsampled scenarios get the averaged sampled duals, which are dual-feasible, so every cut stays a valid lower bound, with a high-probability bound on its looseness", "pages": "pp. 12-14, 36-37"},
+   {"pattern": "level the field and say which way it still tilts", "evidence": "Same accelerations and naive warm starts for all Benders-type methods; the opponent's best variant chosen from a published ablation (Table E.4); exclusion of the true-cost evaluation time stated", "pages": "pp. 19, 21, 43"}
+  ],
+  "transferable": [
+   "Sample scenarios in an exact cutting-plane method but give unsampled scenarios a dual-feasible point (average of sampled optimal duals) so cuts stay valid; works when uncertainty is in the right-hand side only (pp. 8, 12-13)",
+   "Bound the looseness of such cuts by dual heterogeneity (variance of optimal duals) plus a sampling-without-replacement concentration term, then use the probabilistic method (pp. 13-14, 36-37)",
+   "Wrap single-tree branch-and-cut in an outer loop that converts lazy cuts to ordinary constraints when cuts are valid but not binding; test termination only between outer iterations (pp. 18-19)",
+   "Stop a sampled method with Morton's rule: upper confidence bound from a fresh sample against a deterministic lower bound; with few scenarios compute the true upper bound (pp. 16-17)",
+   "Justify a computational regularizer as a cost model, as a robust counterpart over an ellipsoid, and as an approximation with an explicit sandwich bound (pp. 33-34)",
+   "Isolate the algorithmic gain: identical naive warm starts and accelerations for all methods, opponent's best variant chosen from a published ablation (pp. 19, 43)",
+   "Report true gaps by evaluating the returned solution on all scenarios, state that this time is excluded, and print fraction solved next to capped averages (pp. 21, 43)"
+  ],
+  "coauthors": "Ryan Cory-Wright (Imperial College Business School), Jean Pauphilet (London Business School), Periklis Petridis (MIT Operations Research Center)",
+  "quotes": [
+   {"text": "some of the decomposition schemes reviewed above may even be considered “sleeping beauties” in the sense of Ke et al. (2015), i.e., were not originally considered numerically successful but would be if proposed today, implicitly in conjunction with these valid inequalities.", "page": 6},
+   {"text": "However, we do not implement a more sophisticated warm-starting strategy for any of our methods, to better isolate the numerical benefit of our decomposition schemes.", "page": 19}
+  ]
+ },
+ {
+  "id": "S381",
+  "year": "2025",
+  "title": "An artificial intelligence interpretable tool to predict risk of deep vein thrombosis after endovenous thermal ablation",
+  "read_level": "full",
+  "contribution": "A partner-led clinical prediction study: on 21,549 ACS-NSQIP endovenous-ablation patients (1.59% 30-day DVT), CART, OCT, random forest and XGBoost are compared after Optimal Imputation; XGBoost wins on test AUC (0.711; OCT 0.580) and is explained with SHAP; no decision is optimized or evaluated.",
+  "problem_entry": "AP+ML (IO only via OCT as a packaged contender): guideline disagreement on post-EVTA surveillance and EHIT rates of 0-8% without consensus (p. 3) motivate predicting 30-day DVT (p. 2); posed as prediction, not decision; novelty is the first AI tool for this procedure (p. 14). Read: medRxiv preprint (2024).",
+  "key_idea": "Registry bake-off of four tree-based models with class weights and AUC-based grid search, winner explained by population- and patient-level SHAP (pp. 6-8, 10-13); the claimed advantage over regression risk models is nonlinearity and interactions (p. 14), but no regression baseline is run (my reading).",
+  "assumptions": "Binary classification; ACS-NSQIP 2007-2017, about 700 hospitals, CPT-filtered, 34 variables (pp. 4-5); 17 features with missing values imputed by the group's Optimal Imputation because missingness is not random (p. 7); one 75/25 split after imputation (p. 7); sample weights for imbalance (p. 7); admitted: uniform CPT procedures and teaching-hospital bias (pp. 15-16).",
+  "proof_devices": [
+   "n/a: purely empirical; OCT and Optimal Imputation used as packages with no formulation, solver, time limit or gap (pp. 7-8)",
+   "Train vs test AUC reported per model, exposing XGBoost's training AUC of 1 (Table 2, p. 10)",
+   "Population SHAP summary and dependence plots plus one patient-level SHAP walk-through (pp. 10-13)"
+  ],
+  "experiments": "Hold-out test of 5,388; AUC, accuracy, sensitivity, specificity (pp. 7-10); test AUC OCT 0.580, CART 0.558, RF 0.670, XGBoost 0.711, training AUC of XGBoost 1 (Table 2, p. 10). My reading: the XGBoost row (accuracy 0.985, sensitivity 1.00, specificity 0.047; pp. 9-10) is impossible at 1.59% prevalence and fits only with sensitivity and specificity swapped, while the other rows satisfy the identity; the abstract's subgroup claim (p. 2) has no reported numbers; no CIs, calibration, thresholds, external validation, comparison with existing VTE tools or code.",
+  "positioning": "Clinical literature only (guidelines and EHIT reviews, ML VTE tools elsewhere, pathophysiology; pp. 3, 14-15); optimization cited once, Optimal Imputation as warrant for its own use (p. 7); OCT's source paper uncited; duplicate references [23]/[24] and [25] misapplied (pp. 15-16, 19-20).",
+  "writing": "Clinical IMRaD with a firstness claim (p. 14); 'interpretable' attached to XGBoost explained post hoc by SHAP (pp. 1, 3, 16); drafting remnants ('54 ± SD years', p. 2; 'log (-0.21)', p. 12; 'DT and DD', p. 1) and three different top-feature lists (pp. 10, 13, 15); contribution statement: the student led data, code and writing, Bertsimas directed (p. 17).",
+  "limits_future": "Registry bias, 30-day window, missing procedural variables, CPT filtering, overfitting, correlation not causation, 1.59% imbalance (pp. 15-16); validation internal only (p. 7); no future work stated.",
+  "method_links": [
+   {"method": "Method 5", "relation": "contradiction", "note": "Scores predictions (AUC etc.), not decisions; no current-rule baseline (existing VTE tools mentioned but not compared), no threshold analysis or field test, yet claims it may help personalize medical decisions", "pages": "pp. 2, 7-8, 10, 14, 17"},
+   {"method": "Method 4", "relation": "variant", "note": "The duel survives (OCT vs CART and two ensembles on one hold-out set, OCT's loss printed) but no solver, limit, certificate, warm start or matched complexity", "pages": "pp. 6-8, 10, 13"},
+   {"method": "Method 6", "relation": "evidence", "note": "Partner-led clinical paper: hospital team poses the question, MIT student models and writes, Bertsimas directs, clinical venue, group software and imputation as default infrastructure", "pages": "pp. 1, 7-8, 17"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "clinical registry bake-off with post hoc explanation", "evidence": "National registry, group imputation, one split, four tree-based models including OCT chosen by AUC, winner explained with SHAP; same XGBoost+SHAP template in c21 S054 and c23 S023", "pages": "pp. 4-13"}
+  ],
+  "transferable": [
+   "Lesson, not the paper's practice: check every row of a classification table against accuracy = prevalence x sensitivity + (1 - prevalence) x specificity before publishing (pp. 10, 16)",
+   "Lesson, not the paper's practice: fit imputation on the training split only; imputing before splitting lets test rows inform training features (p. 7)",
+   "Report training and test AUC side by side for every model to expose overfitting (Table 2, p. 10)"
+  ],
+  "coauthors": "Azadeh Tabari and Yu Ma (equal first), Jesus Alfonso, Anthony Gebran, Haytham Kaafarani, Dania Daye (equal senior author with Bertsimas)",
+  "quotes": [
+   {"text": "The specificity of XG Boost was the lowest at 0.047, which indicates that this model generated a large number of false positives.", "page": 13},
+   {"text": "D.B. directed the overall project, from concept and research to implementation, and edited the manuscript.", "page": 17}
+  ]
+ },
+ {
+  "id": "S391",
+  "year": "2025",
+  "title": "Adaptive optimization for prediction with missing data",
+  "read_level": "full",
+  "contribution": "Recasts prediction with missing data as two-stage adaptive optimization: regression coefficients become static, affine, polynomial or finitely adaptive rules in the missingness pattern, an affinely adaptive intercept equals jointly learned constant imputation, and an alternating heuristic extends joint impute-then-regress to any learner; gains over mean imputation appear when data are strongly not missing at random.",
+  "problem_entry": "ML+RO: practice imputes then regresses, which needs MAR, an untestable assumption (pp. 1-3); target changed to learning E[Y | M, observed X] directly, agnostic to the mechanism (p. 3); fully adaptive per-pattern models need up to 2^d models and split the data (pp. 2, 4). Read: arXiv v2 (2025).",
+  "key_idea": "Adaptive-optimization hierarchy as model classes: w(m) static, affine, order-t polynomial, finite (greedy partition) or fully adaptive, all linear regressions over extended features (pp. 3-5); static with affine intercept = jointly learned constant imputation µj = bj/wj (p. 7); Algorithm 2 alternates fitting any learner and a ±σj coordinate search on µ (pp. 8-9).",
+  "assumptions": "i.i.d. samples, zero-imputation convention (pp. 2-3); theory under Assumption 2.1 (fully adaptive linear truth, bounded f*, centred noise) for OLS with truncation, conceded to fail in most experiments (pp. 6, 9); practice uses ElasticNet with λk = λ/nk (p. 7); synthetic Gaussian X (d = 10), n 40-1,000, SNR 2, linear or network signals, MCAR or censoring, 1,568 instances (pp. 9, 19); 63 UCI/Rdatasets sets with real and semi-synthetic MAR, NMAR and adversarial signals (pp. 20-22).",
+  "proof_devices": [
+   "Adaptive rules as linear regression over extended features: affine on (1-mj)xj and mk(1-mj)xj (d + d² features), affine intercept 2d + 1, order t O(d^(t+1)) (pp. 4-5, 8)",
+   "Pattern indicator written as the product of (1 - mj - m'j + 2 mj m'j), making finite adaptability a special case of polynomial adaptivity (pp. 4-5)",
+   "Finite-sample bound σ² + 8b(F) + c max{σ², L}(1 + log n)/n · p(F) from Györfi et al. Theorem 11.3 (Theorem 2.1, pp. 6, 18)",
+   "Bias bound by Taylor expansion of a multilinear function of binary indicators at E[M]: mixed partials vanish for repeated indices and are bounded by 2^t L (Lemma A.1, p. 17), then ||M - E[M]||² <= d/4 and Stirling (Lemma A.2, p. 18); my reading: the displayed steps give about (e²d)^(t+1)/(2π(t+1)^(2t+3)), not the stated O(d^(t+1)/(t+1)^(3(t+1))) (pp. 6, 18)",
+   "Closed-form joint imputation for one feature, µ1 = E[Y|M1=1]E[X1²|M1=0]/E[YX1|M1=0], equal to E[X1|M1=1] under a linear Y, contrasted with mean imputation (pp. 7-8)",
+   "Greedy recursive partitioning of missingness patterns (Algorithm 1, p. 5) and alternating minimization with coordinate local search (Algorithm 2, pp. 8-9)"
+  ],
+  "experiments": "5-fold CV of all hyperparameters, 10 random splits, test 5,000 (synthetic) or 30% (real), one Xeon core with 8 GB (pp. 19, 23); baselines: mean and mice impute-then-regress, CART/RF with MIA, XGBoost, complete-feature regression, oracle (pp. 10, 12-13, 22); synthetic censoring R² adaptive LR 0.641/0.524 vs mean 0.562/0.469, MCAR network signal adaptive LR 0.354 below mean 0.397 and mice 0.424 (Table 2, p. 13); finite adaptability R² -7.083 on censored network signals (p. 23); real X: gains only under adversarial missingness (0.546/0.541 vs 0.532), real signals mean imputation best 0.596 vs adaptive LR 0.508 (Table D1, p. 30); win frequencies (p. 16); no code or package versions.",
+  "positioning": "Joins the stream revisiting inference-era missing-data findings for prediction (p. 2); concedes that the affine-intercept family is Le Morvan et al.'s affine approximation (p. 7) and the fully adaptive idea Saar-Tsechansky and Provost's (p. 2), and extends the missing-indicator method (p. 2); EM contrasted by objective (pp. 8-9); smart predict-then-optimize as analogy (p. 8); RO policy hierarchy from Ben-Tal et al., Bertsimas-Goyal and Bertsimas-Iancu-Parrilo (pp. 4-5); the group's own Optimal Imputation (S030) not cited (my reading).",
+  "writing": "Abstract opens on the field's default pipeline, then the reframing and one headline range restricted to strongly NMAR data (p. 1); heuristics admitted as such (pp. 5, 8); 'three striking observations' and 'surprisingly' (pp. 13, 15); my reading: 'among the best ... irrespective of the missing data mechanism' (p. 13), 'confirm a small edge' (p. 27) and 'comparable or better' (p. 16) overstate Tables 2 and D1 (pp. 13, 30).",
+  "limits_future": "Greedy partitioning and local-search imputation update (pp. 5, 8); finite adaptability overfits at small n (pp. 6, 23); smaller gains on real data, which look closer to MAR (pp. 14, 32); synthetic designs may miss real structure (p. 15); future: exact MIO or column generation for the partition (p. 5), nonconvex optimization for µ (p. 8).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "ML problem written with an RO device that keeps its class: every adaptive rule is a linear regression over extended features solved by glmnet; boundary printed (2^d patterns, p(F) vs b(F))", "pages": "pp. 4-8"},
+   {"method": "Method 3", "relation": "variant", "note": "One knob (degree of adaptivity) indexes the family with a bias/parameter bound and the bad case printed (finite adaptability R² -7.083), but the knob is cross-validated, not owned by a decision-maker, and the bound needs Assumption 2.1", "pages": "pp. 5-6, 13, 23, 26"},
+   {"method": "Method 4", "relation": "evidence", "note": "Duel against the stronger naive rule (mean impute-then-regress with CV-chosen learner) plus mice, MIA trees and XGBoost, on synthetic data with known truth and on real data; losses printed", "pages": "pp. 10-16, 22-23, 30"},
+   {"method": "Method 4", "relation": "contradiction", "note": "The greedy step stays greedy: one-split-at-a-time partitioning with the MIO formulation acknowledged and deferred, local-search imputation, no certificate", "pages": "pp. 5, 8"},
+   {"method": "Method 5", "relation": "variant", "note": "Joint-not-sequential principle (train imputation for the downstream loss, likened to smart predict-then-optimize) applied inside ML; no owner or decision", "pages": "pp. 2-3, 8"},
+   {"method": "Method 6", "relation": "evidence", "note": "Programme line with two students of the lineage, a companion TMLR 2024 paper, and a device carried over from his own RO programme", "pages": "pp. 1-2, 4-5"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "subsume the incumbent as a special case", "evidence": "Zero imputation is the static model, the missing-indicator method is extended, and mean-impute-then-linear-regress is one point of the jointly learned constant-imputation family", "pages": "pp. 2, 4, 7-8"},
+   {"pattern": "adaptive-policy hierarchy as a model class", "evidence": "RO's static, affine, polynomial and finite-adaptability decision rules reused to index regression models by how they adapt to observed information, with tractability and a generalization bound per level", "pages": "pp. 3-6"}
+  ],
+  "transferable": [
+   "Make coefficients decision rules in the observed-information pattern; affine rules become linear regression over (1-mj)xj and mk(1-mj)xj (pp. 3-4)",
+   "Learn imputation jointly with a linear predictor by regressing on zero-imputed x, indicators m and an intercept, then read µj = bj/wj (pp. 7-8)",
+   "Scale each feature's penalty by its number of nonzero rows, λk = λ/nk, for sparse indicator products (p. 7)",
+   "Bound the bias of an order-t truncation of a multilinear function of binary indicators by Taylor expansion at E[M] (Lemma A.1, p. 17)",
+   "Joint impute-then-regress for any learner by alternating model fits and a ±σj coordinate search on imputed values (pp. 8-9)",
+   "Build NMAR tests by censoring, by letting Y depend on M, and by adversarially permuting missingness patterns; report win frequencies against the strongest naive baseline (pp. 16, 19, 22)",
+   "Recheck aggregated mixed metrics (R², 2(AUC - 0.5)) separately by task type (p. 27)"
+  ],
+  "coauthors": "Arthur Delarue (Georgia Tech ISyE), Jean Pauphilet (London Business School)",
+  "quotes": [
+   {"text": "we view prediction with missing data as a two-stage adaptive optimization problem and propose a new class of models, adaptive linear regression models, where the regression coefficients adapt to the set of observed features.", "page": 1},
+   {"text": "Future work could investigate the practical scalability and relevance of solving it via exact optimization methods (Bertsimas and Dunn, 2017) or column-generation heuristics (Patel et al., 2024) instead of our greedy procedure.", "page": 5}
+  ]
+ }
+]

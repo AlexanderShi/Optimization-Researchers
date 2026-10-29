@@ -1,0 +1,394 @@
+[
+  {
+    "id": "S527",
+    "year": "2025",
+    "title": "The ROAD to clinical trial emulation",
+    "read_level": "full",
+    "contribution": "A trial-emulation pipeline (R.O.A.D. extended). It selects an observational cohort by an integer program that matches a target RCT's published baseline risk and covariate means, and calibrates per-arm counterfactual models to the trial's arm outcomes with a cost-sensitive weight, read as a correction for unobserved confounding. Optimal policy trees fitted on the result found about 15% of JCOG0603-eligible colorectal-liver-metastasis patients without chemotherapy benefit, a split the trial's own group replicated blind in the RCT cohort.",
+    "problem_entry": "DA + ML (IO as the matching engine; AP oncology testbed). Target-trial emulation cannot remove unobserved confounding (Hernan and Robins quoted), while regulators push real-world evidence. The predecessor R.O.A.D.'s upweighting is unclear for low or moderate efficacy 'unless the target trial is specified'. Problem: reproduce a published RCT from observational data, then find subgroups (pp. 2-4, 18-19).",
+    "key_idea": "Apply the trial's eligibility criteria. Match pairs within baseline-risk buckets by an IP that minimizes the gaps to the trial's control-arm rate and covariate means in both arms. Tune a weight rho on treated non-recurrences until the treated-arm mean prediction equals the trial's. Fit OPTs on the counterfactuals, with rewards shrunk to encode 'do no harm'. Check node balance with external risk scores, then have the trial group validate blind (pp. 3-10, 20).",
+    "assumptions": "779 IGCLM patients (639 surgery alone, 140 chemotherapy), 2002-2019, matched to 216; only the trial's published summaries are used (control DFS 38.7%, treated 49.5%, four covariates). RFS stands in for DFS ('a strength rather than a limitation'). Methods written for binary recurrence 'for simplicity', results use random survival forests. Assumed: the remaining gap to the trial is unobserved confounding; node balance on observed prognosis signals no unobserved confounding; unreported trial covariates are absorbed by the weight (pp. 3-12, 19).",
+    "proof_devices": [
+      "Matching IP (1): binary pair variables; absolute gaps of both arms' mean baseline risk to mu0 and of covariate means to the trial's, plus pair distances; one-to-one, per-bucket counts, same-bucket pairs (pp. 5-6). [inferred] Linear MIO, because the bucket counts fix the denominators. No solver, time or gap reported.",
+      "Cost-sensitive loss (2): weight rho on treated patients without recurrence, tuned until the mean prediction equals the trial rate. Monotonicity in rho is expected, not proved (pp. 6-7).",
+      "Constrained rewards approximated by scaling no-chemotherapy rewards to 0.78 of chemotherapy rewards, the largest value at which the tree still splits (pp. 7-8).",
+      "Node-level confounding check: two-sample p-values of external scores (MSK CRS, JHH GAME) by arm (pp. 8, 14-15).",
+      "Validation by Kaplan-Meier and log-rank tests on direction, size and significance (pp. 10, 14-15). No theorems: 'theoretical foundation ... by using an example' (p. 3)."
+    ],
+    "experiments": "Predicted baseline RFS 35% vs the trial's 38.7-39%; untreated KM RFS 27% before matching, 34% after. Before weighting: predicted benefit 6% vs the trial's 11%, surgery alone better (38% vs 34%, p = 0.016). Weights: 1.5 treated, 1.25 untreated (the latter not in Methods). Survival forests: C-index 0.88 in sample, 0.68/0.61 by 3-fold CV. OPT1 recommends chemotherapy to 186/216, OPT2 to 182/216, overlap 95.2%. All node p-values > 0.05. RCT validation by the trial group: +24 months median RFS (p = 0.05) and +20.4 (p = 0.01) where recommended; none where not. Non-benefit 14% vs 15% and 16% vs 17%. Two recommended nodes failed validation ('not problematic'). No rival emulation method, no sensitivity analysis, no code (pp. 10-20).",
+    "positioning": "Against Hernan and Robins's admissions; classical adjustments (PS, IPW, g-estimation, doubly robust) called 'ineffective against unobserved (unmeasured) confounding'. Extends own R.O.A.D. (npj 2024) and uses OPT ('developed by our team'). Against one-variable-at-a-time subgroups (Kent et al.). External scores include the corresponding author's GAME score. No sensitivity-analysis literature cited (pp. 1-3, 6, 8, 19, 22-23).",
+    "writing": "Headline firsts: the first framework to address observed and unobserved confounding, a challenge 'since the 1950s'. Limitations recast as strengths (RFS vs DFS; the in-sample fit, the model's ability to 'memorize' the data). Rhetorical questions answer objections; hedge 'Pending further validations'. Draft signs: duplicated paragraphs, 12 vs 12.5-month thresholds, 'median OS' in an RFS comparison, a wrong Figure 6 caption, a wrong section reference, no Step 4. No limitations section (pp. 1, 3, 9-20).",
+    "limits_future": "Stated: reliance on in-sample fit, unreported trial covariates, need for an existing trial. Unstated: the identification assumption, small nodes behind the non-significance checks, two trees selected from many. Future: larger samples, genomic data, wider access; OPTs said to make hypothetical trials unnecessary (pp. 11, 18-21).",
+    "method_links": [
+      {
+        "method": "Method 5",
+        "relation": "variant",
+        "note": "Decisions are judged against the strongest rule available, the positive trial's treat-everyone result, by a blind check run by the trial's owners on frozen models (step 6 in a strong form). But the yardstick is a published RCT, not an owner's current rule. No decision metric (P, expected RFS under the policy) is computed, and the trees are built and selected on in-sample counterfactuals.",
+        "pages": "pp. 7, 15, 18, 20"
+      },
+      {
+        "method": "Method 1",
+        "relation": "variant",
+        "note": "Target-trial emulation, owned by epidemiology, is restated as an IP that matches the trial's published moments; the identification gap becomes a calibration target. The solver class and solve times are not reported, so the stop rule (class left unmeasured) stays open.",
+        "pages": "pp. 5-7"
+      },
+      {
+        "method": "Method 3",
+        "relation": "variant",
+        "note": "Two one-dimensional knobs carry properties: rho sets the confounding correction, and the 0.78 reward shrink encodes 'do no harm'. They are set from an external anchor or at an extreme value; no curve and no bad case are shown.",
+        "pages": "pp. 7-8, 11-12"
+      },
+      {
+        "method": "Method 4",
+        "relation": "variant",
+        "note": "'Optimal decision trees' with no solver, gap or time. Two trees are chosen among many by concordance, and no greedy or causal-ML rival is run (Tension T1).",
+        "pages": "pp. 1, 7, 13"
+      },
+      {
+        "method": "Method 6",
+        "relation": "evidence",
+        "note": "Programme continuity: R.O.A.D. 2024, then this paper, then the SAVR/TAVR adaptation S682. Clinical partners (MSK, the JCOG trial group) are coauthors; a student (Koulouras) carries the line; the framing is regulatory (EMA, FDA, NICE). Heuristic 6: the IGCLM consortium data asset.",
+        "pages": "pp. 2-4, 10, 19-20"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "ROAD pipeline: risk-bucket matching, per-arm counterfactuals, outcome-class reweighting, policy tree",
+        "evidence": "The same four-stage de-confounding pipeline appears here, matching to a target trial, and in S682 (cardiology, STS-score buckets, sample weight w = 1.8). Both cite R.O.A.D. (npj Digital Medicine 2024) as the source.",
+        "pages": "pp. 3-9; S682 pp. 3-4"
+      },
+      {
+        "pattern": "calibrate a bias knob to a published trial's arm outcomes",
+        "evidence": "The cost-sensitive weight is raised until the mean counterfactual equals the trial's treated-arm rate (and 1.25 for the untreated arm). The pre-calibration gap (6% vs 11% benefit) is read as the size of the unobserved confounding.",
+        "pages": "pp. 6-7, 11-12, 19"
+      },
+      {
+        "pattern": "frozen models handed to the data owner for blind validation",
+        "evidence": "Two trained OPTs were sent to the JCOG0603 group, which returned subgroup KM curves from RCT data the authors never saw; nothing was refined afterwards.",
+        "pages": "pp. 1, 20"
+      }
+    ],
+    "transferable": [
+      "Turn a published RCT's Table 1 into an assignment IP that penalizes the gaps between each arm's mean predicted baseline risk and the control arm's event rate, and between each reported covariate mean and the trial's, with one-to-one pairs inside risk buckets plus a pair-distance term (pp. 5-6). Report the solver and solve time, which this paper omits.",
+      "Calibrate a cost-sensitive weight on one outcome class until the model's mean counterfactual equals an external anchor, and report the gap before calibration as the size of the bias corrected (pp. 6-7, 11-12, 19).",
+      "Hand frozen models to whoever holds the validation data, ask for subgroup Kaplan-Meier curves, refit nothing afterwards, and fix the success criteria (direction, size, significance) in advance (pp. 10, 20).",
+      "Check balance inside each subgroup with prognostic scores trained elsewhere, so nothing leaks; do not read non-significance in small nodes as proof of no confounding (pp. 8, 14-15).",
+      "Encode an asymmetric principle ('do no harm') by shrinking the competing option's rewards, and report the strongest shrink that still lets the tree split (p. 8).",
+      "Fit a second tree on different splits and report the overlap of recommendations and whether the non-benefit share replicates (pp. 15, 20)."
+    ],
+    "coauthors": "Angelos Koulouras, Carol Gao (MIT); Hiroshi Nagata, Junki Mizusawa, Yukihide Kanemitsu (National Cancer Center Hospital, Tokyo; JCOG0603); Georgios Antonios Margonis (MIT and MSK; corresponding author). Bertsimas first author; no contribution statement.",
+    "quotes": [
+      {
+        "text": "To our knowledge, this is the first framework to successfully address both observed and unobserved confounding",
+        "page": 1
+      },
+      {
+        "text": "The answer lies in our model’s in-sample C-index, which was excellent at 0.88, indicating the model’s ability to “memorize” the data within the study sample.",
+        "page": 18
+      }
+    ]
+  },
+  {
+    "id": "S621",
+    "year": "2025",
+    "title": "Early Warning Index for Patient Deteriorations in Hospitals",
+    "read_level": "full",
+    "contribution": "A multimodal early-warning model for a Hartford HealthCare hospital: gradient-boosted trees on 1,478 tabular, time-series and tiny-ClinicalBERT text features (test AUROC 0.798) predict emergency-team dispatch, ICU admission or death within 24 hours for non-ICU inpatients. It was refined with clinicians through SHAP error audits and thresholds set in live use, and shipped as a three-tier dashboard. There is no head-to-head with the incumbent scores and no outcome evaluation.",
+    "problem_entry": "ML + AP (hospital operations); DA only through the threshold design. The partner's existing scores (EPIC deterioration index, NEWS) 'were not adopted widely in practice' because single-source inputs give low performance and contradict clinicians. Problem: a daily next-24-hour deterioration probability for every non-ICU inpatient; deployment 'should not be purely quantitative' (pp. 3-4, 9).",
+    "key_idea": "One multimodal patient-day vector: tabular and operational context, daily summaries of vitals and labs, and text embeddings of medications and diagnoses (tiny-ClinicalBERT with a task prompt, averaged per day). A caregiver-centric clock: cut at 11:59 pm, alerts at 8 am. Human in the loop: SHAP on large errors with clinicians led to feature changes (DNR, green/yellow medications), and thresholds were iterated in live use (pp. 9-12, 15-16, 21-22).",
+    "assumptions": "18,633 patients, 2021-01-01 to 2023-04-01, giving 110,900 patient-days; ICU patients and stays under 24 h excluded. Outcome: the union of ERT dispatch, ICU admission and death within 24 h; unrecorded events count as negative. Admitted: the outcomes are surrogates and endogenous (ICU beds, human decisions). Imputation: last value, else 0. No embedding alignment, to keep explainability. Chronological 70/15/15 split (pp. 9-14).",
+    "proof_devices": [
+      "n/a for proofs. Generic ERM over a parametric family, with a small hyperparameter grid on a chronological validation set and a refit on training plus validation (p. 14).",
+      "Text embedding of categorical EHR fields: tiny-ClinicalBERT, a prompt prefix, mean pooling to 312 dimensions (pp. 10-11).",
+      "The aggregated outcome is written as a sum of indicators although defined as a union (p. 13)."
+    ],
+    "experiments": "Test AUROC (Table 1): GBT on all modalities 0.798, best single modality 0.768 (time series), language alone 0.660; TabNet weakest; RF tabular+language 0.733 below tabular 0.738. The abstract says 0.796, and the text's 4.7% gain does not follow from the table (about 3.9%). Threshold 0.06: sensitivity 0.846, specificity 0.557, precision 0.154; 0.12 for high risk. The dashboard uses 3%/12% plus day-over-day rises of 1.5%/6%. SHAP: census, admissions, next-day surgery, DNR, RASS, heart rate. No CIs, no comparison with EPIC DI, NEWS or clinicians, no deployment outcomes, no code (pp. 2, 17-22).",
+    "positioning": "Operations-management work on the ICU and patient flow (KC and Terwiesch, Kim et al., Chan et al.); early-warning scores (NEWS, APACHE III, EPIC DI); multimodal AI; human-in-the-loop Management Science papers; own inpatient-flow MSOM 2022. Slips: KC and Terwiesch cited for language models, an unformatted 'Na 2023', an unresolved '[18]' for the reused pipeline (pp. 4-7, 10, 21).",
+    "writing": "INFORMS template with an M&SOM-style structured abstract [inferred]. 'Two key steps that had not been previously explored'. Deployment wording drifts: 'currently used' (abstract), 'currently under testing', 'Once fully implemented'. Unmeasured claims of 'measurable reductions' in length of stay and ICU admissions beside 'cannot be straightforwardly evaluated'. Many typos (pp. 2, 7, 14, 21-26).",
+    "limits_future": "Stated: ICU patients excluded; no images or notes (processing delays, identifiable information); operational effects not evaluable; a 24 h cadence vs shorter shifts. Future: predictions every 6 or 8 h, expansion to satellites and other systems, retraining every 6 months (pp. 22, 24-26).",
+    "method_links": [
+      {
+        "method": "Method 5",
+        "relation": "contradiction",
+        "note": "Partial adherence: an owner with its data, a dashboard in use or testing, and thresholds set with users (steps 1 and 6). But the incumbent rule the paper names as its motivation (EPIC deterioration index, NEWS) is never scored on the same patients; the baselines are only the model's own modality subsets; and decisions are not scored ('cannot be straightforwardly evaluated'). Taste mark 5 is a variant: post-hoc SHAP on gradient-boosted trees instead of optimal trees in a tool clinicians act on. Tension T6: 'currently used' (abstract) vs 'under testing' (body); compare S054 in c21.",
+        "pages": "pp. 2-3, 16-18, 21, 24-25"
+      },
+      {
+        "method": "Method 6",
+        "relation": "evidence",
+        "note": "A partner hospital; an author from Holistic Hospital Optimization, the company the research notes record him founding in 2022 [02 E5; 06 section 1]; a pipeline 'developed by a proprietary firm'; the inpatient-flow pipeline reused; former students (Ma, Villalobos Carballo) as lead authors. No competing-interest statement (cf. SKILL.md integrity rule 5).",
+        "pages": "pp. 1, 21-22, 26"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "value data sources by exhaustive subset training plus Shapley attribution",
+        "evidence": "Variant without Shapley values over sources: every non-empty modality subset is trained with three learners and the grid printed, which shows marginal value and one case where adding text hurts. Compare c23's S023.",
+        "pages": "p. 17"
+      },
+      {
+        "pattern": "Integration section mapping model stages onto the owner's process and data systems",
+        "evidence": "Section 5 maps the model onto the hospital's day: data received at 11:59 pm, alerts at 8 am before rounds, dashboard fields (unit, room, bed, service, risk and change), physician feedback to a maintenance team, retraining every 6 months. Compare c16's S076.",
+        "pages": "pp. 20-22"
+      },
+      {
+        "pattern": "clinician-in-the-loop refinement: attribution-driven error audit and thresholds iterated in live use",
+        "evidence": "SHAP on cases far from the truth, reviewed with physicians, revealed DNR patients and medications that reflect existing recognition, which led to feature removal or reclassification (green/yellow). Alert thresholds were tested in practice and adjusted daily until physicians agreed.",
+        "pages": "pp. 12, 15-16"
+      }
+    ],
+    "transferable": [
+      "Split clinical time series chronologically (70/15/15 by date) so the test period lies after training, as in deployment (pp. 13-14).",
+      "Train every non-empty subset of modalities with each learner and print the grid, so each modality's marginal value, and the cases where adding one hurts, show at a glance (p. 17).",
+      "Encode high-cardinality categorical EHR fields as text, embed them with a small clinical language model under a task prompt, and average per day instead of one-hot or top-k encoding (pp. 6, 10-11).",
+      "Audit errors with users: attribute the largest-error cases with SHAP, review them with clinicians, then remove, reclassify or add features (pp. 12, 15-16).",
+      "Fix alert thresholds in live use with the clinicians who receive the alerts, triggering on absolute risk and on day-over-day rises (pp. 16, 18, 22).",
+      "Align the prediction clock to the owner's workflow: cut the data at 11:59 pm and publish before morning rounds (pp. 9, 21-22)."
+    ],
+    "coauthors": "Yu Ma (UW-Madison; led the work), Kimberly Villalobos Carballo (NYU), Gagan Singh, Jeff Mather, Dan Kombert, Howard Haronian (Hartford HealthCare), Michal Laskowski (Holistic Hospital Optimization). 'D.B. directed the overall project ... and edited the manuscript'.",
+    "quotes": [
+      {
+        "text": "It is currently used as a triage tool for proactively managing at-risk patients.",
+        "page": 2
+      },
+      {
+        "text": "We also note that the operational effects of the deterioration index cannot be straightforwardly evaluated.",
+        "page": 25
+      }
+    ]
+  },
+  {
+    "id": "S623",
+    "year": "2025",
+    "title": "Overfitting in Adaptive Robust Optimization",
+    "read_level": "full",
+    "contribution": "A workshop note arguing that affine adaptive robust policies overfit the uncertainty set: adaptation makes uncertainty-free constraints such as non-negativity brittle outside the set. It prescribes constraint-specific set sizes, deterministic for hard constraints and probabilistic for soft ones, and reads them as regularization of the adaptive coefficients.",
+    "problem_entry": "RO with ML as the lens. An 'under-discussed drawback' of ARO: constraints independent of u become dependent under affine rules, so adaptive policies fail outside U where static ones stay feasible. This is framed as overfitting (pp. 1-2).",
+    "key_idea": "Size each constraint's uncertainty set by its criticality: support-covering sets for hard constraints, epsilon-calibrated ellipsoidal or budget sets for soft ones. Rewrite robust counterparts as norm bounds on V, so 1 - epsilon is a regularization parameter and epsilon -> 0 recovers the static policy (pp. 2-4).",
+    "assumptions": "Robust LP with right-hand-side uncertainty and affine rules x(u) = z + Vu. Guarantees recalled for Gaussian u, or independent zero-mean u with support [-1, 1]; deterministic counterparts for bounded or semi-bounded supports. A two-period renewable toy with a budget set; no data (pp. 1-3).",
+    "proof_devices": [
+      "Toy solved in closed form: nominal 4, static robust 2 (box-equivalent), affine 3 but infeasible for u1 < -1, and with an enlarged set on non-negativity only 3 and feasible for u >= -2 (p. 2).",
+      "Recalled counterparts: Gaussian SOC; ball-box with 1 - exp(-rho^2/2); budget set with a bound garbled in the text layer (pp. 3).",
+      "Proposition 1 and Corollary 1: the LP counterpart for box and semi-bounded supports by duality, stated without proof (p. 3).",
+      "Counterpart rearranged into ||V^T a_i - d_i||_2 <= (b_i - a_i^T z)/rho, a ridge-like bound; Figure 1 plots it against 1 - epsilon (p. 4)."
+    ],
+    "experiments": "none (one illustrative figure of maximal adaptivity vs guarantee, Gaussian vs distribution-free; no simulation, although the first lesson is 'Simulate beyond the set') (p. 4).",
+    "positioning": "Ben-Tal et al. 2004 (ARO); Soyster, Ben-Tal-Nemirovski and Bertsimas-Sim for set shapes; robustness-regularization (Xu-Caramanis-Mannor; Bertsimas-Copenhaver) with 'no similar discussions of this insight for ARO'; Marandi-den Hertog for coupling; own [8], [9], [10]. Five of ten references are Bertsimas papers; reference [5] is garbled (pp. 1-2, 5).",
+    "writing": "The analogy is the title and the abstract's opening. A toy, two short technical sections, three bold lessons. Proportionate claims ('motivates a principled approach', 'suggests several lessons') (pp. 1-4).",
+    "limits_future": "Not discussed: no experiment, no rule for classing constraints as hard or soft beyond physical reasoning, no objective-cost analysis beyond the toy, and the choice of guarantee model left open. Future implied: principled set design balancing robustness and adaptivity (pp. 1, 4).",
+    "method_links": [
+      {
+        "method": "Method 3",
+        "relation": "variant",
+        "note": "Stability outside the set gets one knob per constraint (1 - epsilon, via rho or Gamma) with solution-independent probabilistic bounds, and the class stays LP or SOCP. But the curve is the knob against admissible adaptivity, not objective cost, and there is no realistic or bad case.",
+        "pages": "pp. 3-4"
+      },
+      {
+        "method": "Method 1",
+        "relation": "evidence",
+        "note": "Class-keeping counterparts (LP by duality for boxes, SOC for ellipsoids), with structure read off the counterpart as a norm bound on the adaptive coefficients. The note runs the two-period test SKILL.md's Method 1 correction asks for, here to expose a failure of affine policies. Heuristic 1 is extended: robustness as regularization, carried from static models to adaptive coefficients.",
+        "pages": "pp. 2-4"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "Robust analogue of another field's canonical concept",
+        "evidence": "Overfitting from machine learning becomes the brittleness of adaptive policies, complete with regularization and bias-variance readings; compare c10's S029 (robust game theory).",
+        "pages": "pp. 1-2, 4"
+      },
+      {
+        "pattern": "knob set by a distributional bound",
+        "evidence": "Per-constraint rho = sqrt(2 ln(1/epsilon)) for ball-box sets, and the corresponding Gamma for budget sets, from recalled violation bounds.",
+        "pages": "p. 3"
+      },
+      {
+        "pattern": "out-of-model stress test",
+        "evidence": "Stated as a lesson ('Simulate beyond the set': sample from a distribution whose support exceeds U), not run in the note.",
+        "pages": "pp. 1, 4"
+      },
+      {
+        "pattern": "exact dictionary between a statistical procedure and a robust model, with its boundary",
+        "evidence": "Variant: robust counterparts on adaptive coefficients read as ridge regularization, with epsilon as the regularization parameter. Here it is an analogy, not an iff.",
+        "pages": "p. 4"
+      }
+    ],
+    "transferable": [
+      "To show the hidden fragility of a more flexible policy, build a two-period toy with closed-form nominal, static and adaptive solutions, and exhibit one realization outside the set that breaks a constraint the adaptation made uncertain (p. 2).",
+      "Size uncertainty sets per constraint by criticality: a support-covering box with the LP counterpart from duality for hard constraints, epsilon-calibrated ellipsoidal or budget sets for soft ones (p. 3).",
+      "Rearrange each robust counterpart into an explicit norm bound on the adaptive coefficients, so the robustness parameter can be read and tuned as a regularization strength (p. 4).",
+      "Evaluate robust policies on samples from a distribution whose support exceeds the uncertainty set, never on samples from the set itself (pp. 1, 4)."
+    ],
+    "coauthors": "Karl Zhu (MIT Operations Research Center; first author). No contribution statement.",
+    "quotes": [
+      {
+        "text": "This phenomenon of adaptive policies being brittle is analogous to overfitting in machine learning.",
+        "page": 1
+      },
+      {
+        "text": "In the limit as ε → 0, we recover the static policy with V = 0, eliminating brittleness.",
+        "page": 4
+      }
+    ]
+  },
+  {
+    "id": "S624",
+    "year": "2025",
+    "title": "Global nonconvex optimization with integer variables",
+    "read_level": "full",
+    "contribution": "Extends the group's RPT-BB global solver to binary and integer variables. It relaxes integrality, builds RPT convex relaxations (in which McCormick rows for binaries appear by themselves), and branches on integers first, then on eigenvector hyperplanes. On the parent paper's instances and nine dike problems it often beats BARON 2021 and proves some instances that SCIP cannot, while conceding that SCIP leads overall.",
+    "problem_entry": "IO + CP (AP dike heightening as the real-world test). Nonconvexities plus integer choices defeat gradient-based local search and weaken convex relaxations. The group's own RPT-BB covers only continuous sum-of-linear-times-convex problems (by Hartman and Weierstrass, nearly all continuous ones); integer domains are the gap. Incumbents: BARON and SCIP (pp. 1-5).",
+    "key_idea": "Relax integrality; apply RPT (pairwise products of constraints, perspective of the convex factors, X for xx^T, plus X_ii = x_i and the emerging McCormick rows for binaries). Branch on the most fractional integer while the integrality violation exceeds delta, otherwise on the top eigenvector of X*_C - x*_C x*_C^T, multiplying each branching constraint into the child relaxation (pp. 5-9).",
+    "assumptions": "Assumption 1: X nonempty and compact. Assumption 2: sign conditions on the factors (it uses r_ik, undefined in (2)). Remark 1: perspectives stay in the same cone, so node problems are conic. Instances: SOMOL, QCQP, log-sum-exp, linear multiplicative (all from 2023a, n <= 100) and nine dike problems. Mixed domains make the first floor(n/2) variables integer; Tables 1, 3 and 4 average five random instances (pp. 4, 6-7, 10-15).",
+    "proof_devices": [
+      "RPT relaxation (8) with RLT-like constraint products, perspective terms and epigraph variables tau; tighter by 2023a, Theorem 1 (p. 6).",
+      "McCormick inequalities for binary pairs emerge from RPT; X_ii = x_i is added (p. 6).",
+      "Remark 1: conic representability carries over to perspectives, so the node problems stay in the five basic cones (pp. 6-7).",
+      "Hybrid branching, Algorithms 1-2, best-first node selection (pp. 7-9). No convergence proof. As printed, termination compares the incumbent with the smaller child bound only (p. 8; Algorithm 2 line 16, p. 9), and Remark 2 skips integral-but-untight pure-integer nodes (p. 9)."
+    ],
+    "experiments": "Apple M3 Pro; MOSEK 10.2.0, Gurobi 11.0.2, SCIP 'version 0.11.6' (likely the Julia wrapper [inferred]), BARON 2021.1.13 via Pyomo; gap 1e-4, 1 h limit, 3600* for unproven; threads not stated; no code. SCIP 'generally the most efficient'. RPT-BB wins on SOMOL instance 5 and some MI QCQPs; RPT-SDP-BB alone proves integer QCQP 9 and proves 7 of 9 dike problems (BARON none; SCIP times out on 4). A branching ablation favours integers first (delta = 0). Text-table mismatches: MI QCQP 5 (90.64 s vs 590.53 s in the table, against 'less than 4 minutes' and 'more than 50 minutes' in the text) and MI QCQP 9 rankings; 8 vs 6 branches; 'within two minutes' covering 136 s. Unexplained cells: BARON's lower values on Table 3 MI 4-5, an 'Inf' at 1931 s, a 113.69 typo (pp. 10-18).",
+    "positioning": "Extends own RPT-BB (2023a) and cone-product (2023b; IJOC 2026 per SKILL.md) papers; Anstreicher's eigenvector branching; integer-branching literature (Benichou; Achterberg et al.); Hartman for the reach of SLC. Rivals BARON (Sahinidis, MINLP guest team) and SCIP. RLT/Sherali-Adams and McCormick not cited (pp. 2, 6-7, 18-20).",
+    "writing": "The abstract concedes 'SCIP continues to lead' and targets the claim (often beats BARON; proves some instances neither solver proves). Template remnants ('Author:' heads, empty key words); RPT spelled out two ways; Gurobi cited by an 8.1.1 manual; results narrated instance by instance without performance profiles (pp. 1-2, 10-20).",
+    "limits_future": "Stated: SCIP leads; the edge is on harder mixed-integer instances. Unstated: small n, no convergence proof, an old BARON release, no code. Future: apply RPT directly to the mixed-integer problem and let SCIP branch on the integers, then eigenvector branching (pp. 13, 18-19).",
+    "method_links": [
+      {
+        "method": "Method 1",
+        "relation": "variant",
+        "note": "Class-keeping holds for the relaxations: every node problem is conic and solved by Gurobi or MOSEK. The original problem is not reformulated into a solver class; the group writes its own spatial branch-and-bound, and the boundary is shown only by time-outs.",
+        "pages": "pp. 6-7, 10"
+      },
+      {
+        "method": "Method 4",
+        "relation": "variant",
+        "note": "The incumbents (BARON, SCIP) are duelled at equal limits and gap, with versions, star marks and proved infeasibility, and the abstract concedes SCIP's lead (against Tension T6). No warm starts, threads, code or convergence argument; four text-table mismatches.",
+        "pages": "pp. 1, 10-16, 18"
+      },
+      {
+        "method": "Method 6",
+        "relation": "evidence",
+        "note": "Weak: a programme extension (continuous RPT-BB, then cone product, then integers) carried by two ORC students on the parent paper's own benchmark. Method 2 is absent: no why-now figure.",
+        "pages": "pp. 1-2, 10, 20"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "relax one assumption of the predecessor's model and reduce back to it",
+        "evidence": "Integrality is relaxed so the predecessor's continuous RPT-BB applies, and restored by integer branching. Compare c03's S108.",
+        "pages": "pp. 5-9"
+      },
+      {
+        "pattern": "level the field and say which way it still tilts",
+        "evidence": "Variant: the one-hour limit and 1e-4 gap are equal for all, but the tilt is not discussed (BARON's 2021 release through Pyomo vs the others through JuMP; threads unstated).",
+        "pages": "p. 10"
+      },
+      {
+        "pattern": "port a method to new variable domains on the parent paper's benchmark",
+        "evidence": "Every 2023a instance family is rerun in the binary, mixed-binary, integer and mixed-integer domains (integrality on the first floor(n/2) variables) against the same two solvers.",
+        "pages": "pp. 10-16"
+      },
+      {
+        "pattern": "PSD moment-matrix strengthening carried across domains",
+        "evidence": "Variant: the LMI added in RPT-SDP-BB is not printed, yet it is the main lever on the dike problems (7 of 9 proved vs 1 of 9) and detects binary infeasibility at the root. Compare c03's S185.",
+        "pages": "pp. 13, 16"
+      }
+    ],
+    "transferable": [
+      "To extend a continuous global relaxation to integers, relax integrality and add X_ii = x_i plus the McCormick rows for binary pairs; a product-based relaxation generates the rows itself (p. 6).",
+      "Hybrid branching: branch on integers while the maximum integrality violation exceeds delta (0 worked best), otherwise on the top eigenvector of X*_C - x*_C x*_C^T, and multiply each new branching inequality with the existing constraints so branching also tightens (pp. 7-9, 16-18).",
+      "Benchmark protocol: rerun the parent paper's families in four variable domains against two global solvers with versions, equal limit and gap, starred unproven times, best value found and proved infeasibility, averages over five random instances, plus a separate branching ablation (pp. 10, 16-18).",
+      "Print every method with and without its strengthening (RPT-BB vs RPT-SDP-BB), so the strengthening's value can be read per family (Tables 1-5).",
+      "Concede the overall leader in the abstract and name the instance classes where you win (pp. 1, 13, 18).",
+      "Before submission, recompute every number quoted in the text from the final tables; this paper shows four mismatches (pp. 12-16)."
+    ],
+    "coauthors": "Danique de Moor, Thodoris Koukouvinos (MIT ORC), Demetrios Kriezis (MIT). No contribution statement.",
+    "quotes": [
+      {
+        "text": "while SCIP continues to lead as the state-of-the-art solver, the proposed algorithm demonstrates strong performance on challenging instances",
+        "page": 1
+      },
+      {
+        "text": "the well-known McCormick inequalities (given by the last three inequalities in (8)) for binary variables naturally emerge within the convex relaxation",
+        "page": 6
+      }
+    ]
+  },
+  {
+    "id": "S682",
+    "year": "2025",
+    "title": "An Interpretable AI Tool for SAVR vs TAVR in Low to Intermediate Risk Patients with Severe Aortic Stenosis",
+    "read_level": "full",
+    "contribution": "A student-led prescriptive pipeline for SAVR vs TAVR: STS-stratified prognostic matching, per-arm survival forests, reweighting of discordant outcomes, and an Optimal Policy Tree with five leaves. Trained on 236 matched Hartford patients and applied to 305 St. Vincent's patients, it estimates 20.2% and 13.8% lower 5-year mortality than real-world decisions by model-based counterfactuals, and 55% and 43% by a leaf-level imputation.",
+    "problem_entry": "DA + AP (cardiology), ML. SAVR vs TAVR selection varies with institutions because trials disagree; existing models predict risk for one procedure and 'are not prescriptive', and manual trees are 'difficult to scale'. Problem: learn tau(x) to minimize 5-year mortality from observational data (pp. 1-3).",
+    "key_idea": "R.O.A.D. adapted: STS-score strata with 1:1 nearest-neighbour matching; separate survival random forests per arm (chosen because they 'yielded larger differences' than a joint model); an OPT minimizing summed predicted mortality; weight w on (better arm, bad outcome) and (worse arm, good outcome), raised iteratively. The tree is chosen by sensitivity, specificity and clinical plausibility (w = 1.8) (pp. 3-5).",
+    "assumptions": "STS < 3.5, September 2016 - June 2023; STS and TVT registries plus echo and CTA; deaths from the Connecticut registry by name and date-of-birth linkage (out-of-state deaths missed). Hartford: 1,352 patients, 372 with CTA, 236 matched. St. Vincent's: 305 (36 SAVR), with all CTA imputed by Hartford KNN models. Binary 5-year death with survival models for censoring. Matching improves 22 of 39 SMDs; the residual gap is attributed to confounding plus heterogeneity (pp. 3-5).",
+    "proof_devices": [
+      "n/a for proofs. OPT objective (1): sum over patients of the predicted mortality of the assigned arm (p. 4).",
+      "Discordant-outcome weighting set (2) with a single uniform weight w (p. 4).",
+      "Prescriptive sensitivity (bad outcomes whose treatment is changed) and specificity (good outcomes whose treatment is kept), eqs. (3)-(4) (p. 4).",
+      "No solver, depth, time or optimality information for the OPT; implementation not named (pp. 4-5)."
+    ],
+    "experiments": "Leaf table: in Hartford (training) the prescribed arm has the lower observed mortality in all five leaves; at St. Vincent's the SAVR counts per leaf are 1, 2, 2, 23 and 8, and node 7 reverses. Panel A: Hartford (train) sensitivity 0.78, specificity 0.52, concordance 0.50; St. Vincent's 0.55, 0.38, 0.39. Panel B (vs real-world decisions, Hartford-trained counterfactual evaluator): OPT +20.2% and +13.8%; all-SAVR -1.0%/+4.6%; all-TAVR +1.4%/+1.5%; random +0.1%/+3.1%; bootstrap CIs. Panel C leaf analysis: +55.45% and +43.42%. The abstract says 0.77 and 20.3%. No code; data not shareable (pp. 1, 5-8).",
+    "positioning": "Clinical trials and meta-analyses with conflicting findings; predictive STS and TVT risk models; a manual lifetime-management tree. Method lineage: R.O.A.D. [27], OPT [28], the group's TAVR valve paper [29]. No causal-ML or policy-learning comparators cited or run (pp. 1-4, 8-9).",
+    "writing": "Lancet-family format [inferred]: structured abstract, 'Research in context' panel, mid-dot decimals. Four 'first' claims (tool, dataset, prognostic matching in cardiology). Declarations: no external funding, 'no competing interests', ChatGPT for grammar. Contributors: Stoumpou led everything; DB critically revised (pp. 1-3, 7-8).",
+    "limits_future": "Stated: unmeasured confounding, calibration across institutions, missing CTA at the external site, mortality only within Connecticut. Unstated: Hartford metrics are in-sample, the evaluator is the same model family, CTA splits are imputed externally. Future: multi-objective endpoints and prospective multi-institution validation (pp. 2, 4, 7).",
+    "method_links": [
+      {
+        "method": "Method 5",
+        "relation": "evidence",
+        "note": "Owner (Hartford's heart team), decision and data. Real-world prescriptions are the baseline, with all-SAVR, all-TAVR and random policies; decisions are scored by estimated 5-year mortality and a model-free leaf check, also at an external hospital; a prospective field test is named as the next step. Corrections: the same family of counterfactual models scores the policy, Hartford figures are in-sample, and external CTA is imputed, so the method's demand to say what the evaluation cannot show is only partly met. Heuristic 6: new linked registry data asset. Taste mark 5: OPT chosen for interpretability.",
+        "pages": "pp. 2-7"
+      },
+      {
+        "method": "Method 4",
+        "relation": "variant",
+        "note": "An 'optimal' policy tree with no solver, gap or time, selected by sensitivity, specificity and clinical plausibility; no duel with another policy learner (Tension T1).",
+        "pages": "pp. 4-5"
+      },
+      {
+        "method": "Method 6",
+        "relation": "evidence",
+        "note": "Weak: a student-led paper in the Hartford HealthCare partner programme, reusing the R.O.A.D. pipeline and paired with a companion TAVR valve preprint [29].",
+        "pages": "pp. 2, 6-7, 9"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "Counterfactual replay against the historical decision-maker",
+        "evidence": "Estimated mortality under the policy vs real-world decisions and naive policies (Panel B), plus a leaf-level imputation from leaf-mates who received the recommended treatment (Panel C). Compare c17's S078 and S079.",
+        "pages": "pp. 6-7"
+      },
+      {
+        "pattern": "ROAD pipeline: risk-bucket matching, per-arm counterfactuals, outcome-class reweighting, policy tree",
+        "evidence": "STS-bucket matching, per-arm survival forests, weight w on discordant outcome classes, then an OPT; S527 uses the same pipeline with a learned X-ray risk model and a trial anchor.",
+        "pages": "pp. 3-4; S527 pp. 3-9"
+      },
+      {
+        "pattern": "outcome-conditioned agreement metrics for prescriptions",
+        "evidence": "Sensitivity is the share of bad-outcome patients whose treatment the policy changes, specificity the share of good-outcome patients whose treatment it keeps, reported with concordance; they are used to select the final tree.",
+        "pages": "pp. 4-5, 7"
+      },
+      {
+        "pattern": "sponsor-and-edit senior authorship on student-led lines outside optimization",
+        "evidence": "Variant: Stoumpou 'led ... all methodological components' and drafted the paper, and DB critically revised it; here the line uses the group's own OPT method, and Bertsimas is corresponding author. Compare c28's S132.",
+        "pages": "p. 7"
+      }
+    ],
+    "transferable": [
+      "Score a prescriptive policy with outcome-conditioned agreement metrics (sensitivity: bad-outcome patients whose treatment is changed; specificity: good-outcome patients whose treatment is kept) plus overall concordance (p. 4).",
+      "Report three levels of evaluation: model-based improvement over real-world decisions, the same for naive policies (all-A, all-B, random) with bootstrap CIs, and a model-free leaf analysis that imputes outcomes from leaf-mates who actually received the recommended treatment (pp. 6-7).",
+      "Print a leaf table with per-arm counts and observed outcomes for every cohort, so readers see the small cells behind external claims (p. 6).",
+      "Upweight the two discordant outcome classes so per-arm counterfactual models are not optimistic for one arm only, and tune the weight jointly with tree complexity (p. 4).",
+      "When a split variable is missing at the external site, say so where the external results are reported, not only in the Limitations (pp. 4, 7-8)."
+    ],
+    "coauthors": "Vasiliki Stoumpou (MIT ORC; led the work), Maciej Tysarowski (Yale), Talhat Azemi, Jawad Haider, Robert C. Hagberg (Hartford HealthCare), Howard L. Haronian (Novant Health). Bertsimas last and corresponding author.",
+    "quotes": [
+      {
+        "text": "Training separate models per treatment empirically yielded larger differences between the two predicted risks compared with a single joint model",
+        "page": 3
+      },
+      {
+        "text": "CTA measurements were not available in this dataset; therefore, these variables were imputed using the same KNN models",
+        "page": 4
+      }
+    ]
+  }
+]

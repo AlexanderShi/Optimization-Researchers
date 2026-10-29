@@ -1,0 +1,524 @@
+[
+ {
+  "id": "S264",
+  "year": "2006",
+  "title": "Bounds on linear PDEs via semidefinite optimization",
+  "read_level": "full",
+  "contribution": "Guaranteed upper and lower bounds on linear functionals of solutions of linear PDEs from an SDP over moments (adjoint test-function equations plus PSD moment matrices), shown on an ODE, Bessel, Helmholtz and a reflected-Brownian-motion queueing example.",
+  "problem_entry": "CP (SD in Example 4; AP as motivation): applications need a functional of a PDE solution, not the solution (p. 1); discretization grows like (1/eps)^d and gives approximations without guaranteed bounds (pp. 1-2); entry: guaranteed brackets at lower cost (p. 2).",
+  "key_idea": "Moments of the unknown solution as variables; each monomial test function in the adjoint form gives a linear equation (pp. 5-6); PSD moment matrices, exact on compact semi-algebraic domains by Haviland plus Schmudgen (Theorem 3, pp. 8-9), and extension constraints indexed by K give an SDP bracket for each (N, K) (pp. 10-11); earlier adjoint-moment work lacked the PSD constraints (p. 6).",
+  "assumptions": "Linear operators with polynomial coefficients; separable test functions; u of compact support or exponential tails (p. 4); known lower bound u0 strengthens the PSD constraints (p. 6); compact semi-algebraic domains (pp. 8-9); textbook equations with known solutions, no field data (pp. 12-22).",
+  "proof_devices": [
+   "Haviland's theorem plus Schmudgen's Positivstellensatz: PSD localizing conditions for every subset of the defining constraints, necessary and sufficient for a valid moment sequence (Theorem 3, pp. 8-9); 16 conditions per truncation on the unit square (pp. 9-10)",
+   "Adjoint (weak) form with monomial test functions turns the PDE into linear equations in full and boundary moments (pp. 5-6)",
+   "Lower-bound variable u0 maximized under PSD conditions gives an upper bound on min u (Proposition 1, p. 11)",
+   "Trigonometric test functions for trigonometric coefficients, products rewritten by sum formulas (pp. 12, 20-21)"
+  ],
+  "experiments": "SDPA 5.00 and SeDuMi 1.03 on a Sparc 5 (p. 13); ODE bounds to 5 decimals at N = 60 in under five minutes, SDPA needing an equality slack of 0.001 (pp. 13-14); Bessel unstable for the maximum at N = 30, 40 (p. 15); Helmholtz LP-only bounds (AMPL/CPLEX) uninformative even at N = 20 against informative SDP bounds at N = 3 (Tables 6-8, pp. 18-20); reflected Brownian motion: m1,0 in [0.5515, 0.5516] vs 0.551506 (Table 9, p. 21).",
+  "positioning": "Against discretization methods (Quarteroni-Valli, Strang-Fix) and the Patera-Peraire bound methods, which give approximations or bounds tied to a discretization (pp. 1-2); continues the moment-SDP line of Bertsimas, Bertsimas-Popescu, Lasserre and Parrilo (p. 3).",
+  "writing": "A labelled Contributions paragraph that already carries the numerical-stability caveat (p. 2); a numbered list of insights from the computations (p. 22).",
+  "limits_future": "SDP codes less stable than LP codes, monomial moments possibly ill-conditioned, general-purpose solvers ignore structure (pp. 2, 22-23); future: other spanning families or parameterizations and SDP codes built for moment matrices (p. 23).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "A numerical-analysis problem written as an SDP whose device (moments, adjoint test functions, PSD moment matrices) keeps it in a solver class; boundary printed (instability, O(N^d) variables, looser trigonometric bounds); no dual reading.",
+    "pages": "pp. 2, 10, 21-23"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Certificate step only: guaranteed brackets at every (N, K) against discretization's uncertified approximations (argued, not run); the comparator actually run is the LP-only formulation. Supports Taste mark 7.",
+    "pages": "pp. 2, 11, 19, 22"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "PSD moment-matrix strengthening carried across domains",
+    "evidence": "Adjoint-equation moment constraints used without PSD conditions in earlier work (Bertsimas-Paschalidis-Tsitsiklis, Kumar-Kumar, Schwerer) are strengthened by PSD moment matrices for PDE functionals; also S255 (queueing) in this batch.",
+    "pages": "pp. 6, 18-20"
+   },
+   {
+    "pattern": "constraint-family ablation",
+    "evidence": "LP-only bounds at N = 5, 10, 20 against the SDP at N = 3 with K = 0 and K = 4 isolate the PSD constraints as the source of informative bounds.",
+    "pages": "pp. 18-20"
+   }
+  ],
+  "transferable": [
+   "(D2) To bound a functional of an unknown function fixed by a linear operator equation, make its moments the variables: each test function in the adjoint form gives a linear equality, a Positivstellensatz gives PSD validity conditions, and the functional is optimized both ways (pp. 5-10).",
+   "(D4) To bound min u with a linear method, add a lower-bound variable u0 linearly and maximize it subject to PSD conditions on the shifted moments (Proposition 1, p. 11).",
+   "(D5) Show which constraints carry the result: run the LP-only version at large N, then the SDP at small N with and without extension constraints (Tables 6-8, pp. 18-20).",
+   "(D2) Choose a test-function basis closed under the operator: monomials for polynomial coefficients, trigonometric functions for trigonometric ones (p. 12)."
+  ],
+  "coauthors": "Constantine Caramanis (MIT LIDS, NSF predoctoral fellow, p. 1)",
+  "quotes": [
+   {
+    "text": "The obtained bounds are guaranteed upper and lower bounds, and not simply approximations.",
+    "page": 2
+   },
+   {
+    "text": "the semidefinite constraints are critically important in improving the quality of the bounds, that is, without them the bounds are weak.",
+    "page": 1
+   }
+  ]
+ },
+ {
+  "id": "S414",
+  "year": "2006",
+  "title": "Option pricing without price dynamics: a probabilistic approach",
+  "read_level": "partial",
+  "contribution": "Best possible bounds on options with piecewise-linear payoffs on one or two assets from call prices of several maturities and no arbitrage, via a call-price transform, martingale support reduction and LPs (exact, exponential-size, and a convergent lattice approximation).",
+  "problem_entry": "CP+AP (LO as engine): Black-Scholes rests on geometric Brownian motion and constant volatility (p. 2); question: the price range given only other options' prices and no arbitrage, without dynamics (p. 2); earlier bounds are single-maturity, single-stock (p. 2).",
+  "key_idea": "Call-price transform determines the law (Theorem 1, p. 5); multi-maturity calls admit a martingale iff a nondecreasing sequence of convex call-price functions fits them (Proposition 3, Theorem 4, p. 11); Markov martingales on the strike and kink grid suffice (Corollary 1, p. 13; Theorem 5, p. 16), so the bound is an LP (pp. 18-19); two assets: exponential exact LP after a linearizing change of variables (p. 28) and a polynomial lattice LP converging as eps -> 0 (Theorems 8-9, pp. 28, 31).",
+  "assumptions": "Nonnegative martingale under the risk-neutral measure, r = 0 without loss (p. 4); prices bounded by L, with monotone convergence as L grows (Proposition 5, p. 18); continuous piecewise-linear payoffs (pp. 13, 20); Verizon and Cisco call quotes from the Wall Street Journal of 22 October 2002 (p. 28).",
+  "proof_devices": [
+   "Uniqueness of the call-price transform by monotone convergence of difference quotients (Theorem 1, p. 5)",
+   "Martingale existence as monotone order of convex call-price functions (Proposition 3, p. 11); Kertz-Rosler's theorem re-proved by a different approach (p. 7)",
+   "Convex-hull characterization of no-arbitrage across maturities (Theorem 4, pp. 11-12)",
+   "Support reduction to discrete Markov martingales on strikes and payoff kinks (Theorem 5, p. 16; Theorem 7, p. 24)",
+   "Change of variables z-hat = z P linearizing a bilinear system (p. 28)",
+   "Lattice rounding of a two-dimensional martingale and convergence of the lattice LP (Theorems 8-9, pp. 28, 31)"
+  ],
+  "experiments": "One example: bounds on (V + C - k)^+ at maturity 52 from Verizon and Cisco calls; all maturities (Table 2) give tighter bounds than maturity-52 quotes alone (Table 3); extremely tight below strike 20 (pp. 28-29); no solver, timing or LP size reported.",
+  "positioning": "Extends Bertsimas-Popescu (single maturity, convex duality) and claims to solve exactly the basket problem that d'Aspremont-El Ghaoui solve approximately (pp. 2-3); re-proves Kertz-Rosler by a different approach (p. 7).",
+  "writing": "Lettered contributions (a)-(d) mapped to sections (pp. 2-3); the basket problem is (d) in the introduction but Problem (c) in section 5 (pp. 3, 35); no conclusion section.",
+  "limits_future": "Exact two-asset LP exponential in t* (p. 28) and the multi-asset extension exponential in the dimension (p. 33); later-maturity piecewise-linear payoffs judged not linearizable in two dimensions (p. 34); no future work stated.",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "A pricing question owned by financial economics (prices from a dynamics model) answered by LP, with the boundary printed: exponential size in time and dimension and a case judged not linearizable; the route is probabilistic, not a dual reading.",
+    "pages": "pp. 3, 28, 33-34"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "assume only what can be estimated, worst-case the rest",
+    "evidence": "Only observed call prices of several maturities and no arbitrage; no price dynamics.",
+    "pages": "pp. 1-2"
+   },
+   {
+    "pattern": "tight-or-nothing: bounds certified by extremal distributions",
+    "evidence": "Best possible bounds attained by discrete Markov martingales on the strike and kink grid.",
+    "pages": "pp. 1, 16-19"
+   },
+   {
+    "pattern": "re-derive classical theorems with the new device",
+    "evidence": "Kertz-Rosler's martingale-existence theorem re-proved by a route different from Strassen's.",
+    "pages": "p. 7"
+   }
+  ],
+  "transferable": [
+   "(D4) Encode a law on R+ by its call-price function (convex, nonincreasing, slope -P(X > t)); martingale consistency across dates becomes monotonicity of these functions (pp. 5, 11).",
+   "(D4) With piecewise-linear payoffs, restrict to laws supported on kinks and strikes and solve an LP over a Markov chain's transition probabilities (pp. 16-19).",
+   "(D4) Linearize products of a probability and a conditional atom location by the substitution z-hat = z P (p. 28).",
+   "(D5) Run the bound with all available quotes and again with one maturity, to show what the extra data buys (Tables 2-3, pp. 28-29)."
+  ],
+  "coauthors": "Natasha Bushueva (MIT mathematics graduate student; part of her April 2003 thesis, p. 1)",
+  "quotes": [
+   {
+    "text": "We show that the problem reduces to solving linear optimization problems that we explicitly characterize.",
+    "page": 1
+   },
+   {
+    "text": "However the number of variables in the linear optimization problem will grow exponentially in the dimension.",
+    "page": 33
+   }
+  ]
+ },
+ {
+  "id": "S118",
+  "year": "2007",
+  "title": "Constrained stochastic LQC: a tractable approach",
+  "read_level": "full",
+  "contribution": "Constrained stochastic LQ control by worst-case optimization over an ellipsoidal disturbance set: an exact SDP that reduces to a scalar search plus matrix products when unconstrained and recovers Riccati at radius zero, an SOCP inner approximation for constraints, and probabilistic guarantees under Gaussian noise.",
+  "problem_entry": "RO+SD (control; CP as engine): one nonnegativity constraint makes the Riccati/DP cost-to-go piecewise quadratic with exponentially many pieces (pp. 1-2); motivated by an unconstrained share-purchasing policy that both buys and sells (p. 1); DP controls only the expected cost (p. 1).",
+  "key_idea": "Replace Bellman's recursion by a worst-case choice of the whole control vector over a norm-bounded disturbance set, applied in receding horizon (p. 3); exact SDP by S-lemma and Schur complement (Theorem 3, pp. 4-6), Riccati at radius 0 (Corollary 1, p. 6), scalar bisection plus matrix products when unconstrained (Theorem 4, Corollary 2, pp. 6-9), SOCP inner approximation with bounded gap for constraints (Theorem 5, Corollary 3, pp. 9-10).",
+  "assumptions": "Discrete-time linear system with known matrices and initial state (p. 2); deterministic ellipsoid whose statistical choice is left aside (p. 3); i.i.d. normal disturbances for the guarantees, chosen for analytical convenience (pp. 10-11); guarantees for open-loop control only (p. 11).",
+  "proof_devices": [
+   "S-lemma plus Schur complement give an exact SDP for the min-max quadratic problem (Theorem 3, pp. 4-6)",
+   "Elimination lemma reduces the SDP to a convex search over one scalar, solved by bisection (Propositions 4-6, pp. 6-8)",
+   "Online operation and memory counts linear and quadratic in the horizon (Corollary 2, pp. 8-9)",
+   "Bertsimas-Sim robust conic relaxation gives an SOCP inner approximation with a bounded gap (Theorem 5, Corollary 3, pp. 9-10)",
+   "Chernoff-type bound on the quadratic cost under Gaussian noise (Proposition 9, p. 12); expected loss against Riccati linear in the set size plus protection level (Theorem 8, pp. 12-13)"
+  ],
+  "experiments": "Matlab and SeDuMi (p. 14); 10-stage problem, 1000 closed-loop trials against Riccati, cost increase and upper-tail variability (Table II, pp. 14-15); SOCP vs exact law, 100 trials (p. 15); run times on a 2.2 GHz Linux machine (Table III, p. 15); 5-stage constrained problem against a grid-enumerated optimal policy: loss plateaus at 20-40%, an apparent small-set win attributed to grid error (p. 15).",
+  "positioning": "Alternative to DP and the Riccati equation, explicitly not H-infinity robust control (p. 1); builds on Ben-Tal-Nemirovski robust quadratic and Bertsimas-Sim robust conic results (pp. 3-4); notes Chen-Zhou's scalar-state solution and Yao-Zhang-Zhou's SDP form of Riccati (pp. 1, 6).",
+  "writing": "A numbered list of three advantages over DP in the introduction (p. 1); complexity type defined once and used as a refrain (pp. 10-13); numbered observations after each table (pp. 14-15).",
+  "limits_future": "Closed-loop analysis seems difficult (p. 11); the SOCP is myopic about current versus future costs and becomes burdensome for large problems; open question: simplify the constrained case (p. 15).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Names the owning tradition (DP, Riccati) and its failure under constraints; states class preservation (the SDP remains an SDP, the SOCP an SOCP) as a refrain; prints the boundary (open-loop guarantees, growth of the constrained SOCP).",
+    "pages": "pp. 1-2, 10, 11, 15"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "One knob, the set radius, indexes policies from Riccati to increasingly conservative; Theorem 8 bounds the expected loss and gives the protection bought; the computed cost-variability trade-off is shown with its plateau.",
+    "pages": "pp. 3, 12-15"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "subsume the incumbent as a special case",
+    "evidence": "The Riccati solution is recovered at radius 0 (Corollary 1).",
+    "pages": "p. 6"
+   },
+   {
+    "pattern": "receding-horizon robust re-solve in place of a DP recursion",
+    "evidence": "Open-loop worst-case plan over the remaining horizon, first control applied, re-solved from the observed state; also S059 p. 4.",
+    "pages": "pp. 3, 6"
+   },
+   {
+    "pattern": "exact optimum on a small solvable instance as the certificate for a heuristic",
+    "evidence": "The SOCP policy is scored against the optimal policy computed by grid enumeration on a five-stage problem.",
+    "pages": "p. 15"
+   }
+  ],
+  "transferable": [
+   "(D2) When constraints break the DP recursion, optimize the remaining control sequence against a norm-bounded disturbance set and re-solve each period from the observed state (pp. 3, 6).",
+   "(D4) Look for structure that turns the online solve into a scalar search plus matrix products, and count online operations and memory against the horizon (pp. 6-9).",
+   "(D4) Design in a deterministic set, then audit under a probability model: bound the expected loss against the classical controller and the tail protection gained (pp. 11-13).",
+   "(D5) On a small instance, compute the true optimum by brute-force grid enumeration and report the method's gap, including anomalies caused by the grid (p. 15)."
+  ],
+  "coauthors": "David B. Brown (MIT PhD 2006, then Duke Fuqua, p. 16)",
+  "quotes": [
+   {
+    "text": "Thus, a very simple constraint destroys the tractability of this approach.",
+    "page": 1
+   },
+   {
+    "text": "By this, we mean the SDP remains an SDP and the SOCP remains an SOCP.",
+    "page": 10
+   }
+  ]
+ },
+ {
+  "id": "S234",
+  "year": "2007",
+  "title": "Robust optimization in electromagnetic scattering problems",
+  "read_level": "full",
+  "contribution": "A two-step robust local search (nominal gradient optimization, then exclusion of worst-case neighbors by an SOCP direction) for a 100-dimensional simulation-based electromagnetic design, lowering the estimated worst case by 8% at constant nominal cost.",
+  "problem_entry": "RO+HS (AP: nanophotonic design): simulation-described designs are optimized heuristically, ignoring implementation errors (p. 1); earlier aperiodic designs left robustness open (p. 1); robust-design tools and convex RO do not fit highly nonlinear, high-dimensional problems (p. 1).",
+  "key_idea": "Nominal optimization by adjoint gradients reusing the LU factorization (SPSA as gradient-free alternative) (pp. 3-4), then robust local search: 101 gradient ascents find high-cost neighbors in the error ball, and an SOCP finds the direction with the largest angle to all of them (p. 5).",
+  "assumptions": "2D Helmholtz finite-difference model of 50 cylinders at 37.5 GHz validated against laboratory data (pp. 2-3); design in R^100, overlaps avoided rather than modelled (p. 3); errors N(0, 40 micrometres) per coordinate, ball radius 550 micrometres covering 99% (p. 5).",
+  "proof_devices": [
+   "No theorems; worst case estimated from stored evaluations of multiple gradient ascents (pp. 5-6)",
+   "Direction away from bad neighbors as a small SOCP maximizing the angle (p. 5)",
+   "Adjoint gradient reusing the forward LU factorization at practically no extra cost (p. 4)"
+  ],
+  "experiments": "Forward solve 0.7 s on a 3.4 GHz Xeon (p. 2); SPSA 2500 iterations to 0.0052 vs modified gradient 750 iterations, ending at 0.0032 (p. 4); worst case 0.05413 at the start, 0.00646 after nominal optimization, then 8% lower after 65 robust iterations with 110,000 neighbors (pp. 5-6); random sampling at 30,000 evaluations reaches 96% of the 3,000-evaluation ascent estimate; up to 2% less sensitive (p. 6).",
+  "positioning": "Against robust-design practice (sensitivity analysis, designed experiments, mean-variance objectives, Taylor expansions) and convex RO (Ben-Tal-Nemirovski, Bertsimas-Sim), and against earlier aperiodic optimizations that ignored robustness (p. 1).",
+  "writing": "Physics-journal format; the results text and conclusion lead with a 90% robustness gain measured from the starting structure, while the Fig. 5 caption gives 8% for the robust step and the abstract gives no number (pp. 1, 6).",
+  "limits_future": "Worst case only estimated, so worse errors may surface later (p. 6); global optimum out of scope (p. 4); future: other electromagnetic and nanophotonic designs (p. 6).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Nominal optimum as warm start and multiple ascents as restarts, but no certificate (estimated worst case); duel against random sampling for the inner maximum, not an incumbent design. Practice evidence for Heuristic 3.",
+    "pages": "pp. 3, 5-6"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "One knob (radius calibrated to 99% of measured errors) and a price (nominal cost unchanged, worst case 8% lower), but no bound and no curve over the radius.",
+    "pages": "pp. 5-6"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "The design problem stays a black box; only the direction subproblem is kept in a solver class (SOCP).",
+    "pages": "pp. 3, 5"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "staged companion papers from one model",
+    "evidence": "Applied physics paper first; the general OR method (S305) follows and says it generalizes this specialized search.",
+    "pages": "p. 1; S305 p. 3"
+   }
+  ],
+  "transferable": [
+   "(D4) Reuse the forward solver's LU factorization for the adjoint gradient, so gradients come at practically no extra cost (p. 4).",
+   "(D3) Size the uncertainty set from measured error statistics: a per-coordinate standard deviation from experiments and a radius covering 99% (p. 5).",
+   "(D2) Estimate a worst case over a high-dimensional ball by ascents from the centre and from plus or minus Gamma/3 along each coordinate, keeping every evaluation for later iterations (p. 5).",
+   "(D5) Check the inner-maximization estimator against random sampling with ten times the budget (p. 6).",
+   "(D5) Validate the simulator against laboratory measurements before optimizing, and report the mesh needed for agreement (pp. 2-3)."
+  ],
+  "coauthors": "Omid Nohadani (corresponding author), Kwong Meng Teo (MIT Operations Research Center, p. 1)",
+  "quotes": [
+   {
+    "text": "Overall, we observe a 90% improvement in robustness of the final design, when compared to the initial PC-like structure.",
+    "page": 6
+   },
+   {
+    "text": "Since we can only estimate the worst case cost by local searches, there is always a chance for late discoveries of worst implementation errors.",
+    "page": 6
+   }
+  ]
+ },
+ {
+  "id": "S255",
+  "year": "2007",
+  "title": "A semidefinite optimization approach to the steady-state analysis of queueing systems",
+  "read_level": "full",
+  "contribution": "An SDP moment hierarchy for steady-state models W =d g(W, X) that contains Kingman's and Daley's bounds and tightens bounds on waiting-time moments and tails in GI/GI/1 and GI/GI/2 queues.",
+  "problem_entry": "CP+SD: steady states with general distributions are hard (p. 1); Kingman's two-moment bound is tight only in special cases and weak in light traffic, and higher moments, tails and second moments are little used (pp. 2-3).",
+  "key_idea": "Relax equality in distribution to equality of moments and independence to factorized moments; split the support where g is linear; conditional moments times probabilities as variables; moment and localizing matrices give an SDP hierarchy (pp. 4-6); the first-order relaxation equals Kingman's bound (Proposition 6, pp. 7-8) and Daley's is one more linear constraint (p. 9).",
+  "assumptions": "Piecewise-linear g and piecewise-polynomial f on semi-algebraic pieces (Assumption 1, p. 4); finitely many known moments of X, independent of W (pp. 3-4); convergence claimed only under conditions the authors call strong (p. 5); normal Lindley process, M/M/1 and M/M/2 test cases (pp. 8-12).",
+  "proof_devices": [
+   "Relaxation chain inf(Ps) <= inf(P) <= sup(P) <= sup(Ps) (p. 6)",
+   "Kingman's bound recovered by constructing a feasible point of the first-order SDP attaining it (Proposition 6, pp. 7-8)",
+   "Daley's inequality as one extra linear constraint (p. 9)",
+   "GI/GI/2 ordering map piecewise linear over five polyhedral sets (Proposition 8, p. 10); general-c count credited to a referee (p. 12)"
+  ],
+  "experiments": "MATLAB 7.04 and SeDuMi 1.1 on a 1.72 GHz Pentium 4-M (p. 8); Lindley with normal X against 500,000 replications: upper-bound error on E[W] from about 90% (r = 1) to about 9% (r = 5) (Table 2, pp. 8-9); M/M/1 for rho 0.2-0.8 (p. 9); tails loose for small w (Table 3, p. 10); M/M/2 first-order bound beats Kingman's two-server bound (Table 4, p. 12).",
+  "positioning": "Builds on Bertsimas-Popescu, Lasserre and Bertsimas-Natarajan-Teo; credits Lasserre-Hernandez-Lerma's moments approach for Markov chains and claims the queueing showcase (p. 3); generalizes Kingman and Daley (pp. 2, 9).",
+  "writing": "Opens by reproving Kingman's bound to motivate the relaxation (p. 2); contributions listed by section (p. 3); short bullet observations after each table (pp. 9-12).",
+  "limits_future": "SDP size grows rapidly with servers and relaxation order; tail bounds loose for small w (pp. 10, 12); open: closed form of the first-order GI/GI/c relaxation; future: tandem, fork-join queues and networks (p. 12).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "A queueing-theory problem written as an SDP hierarchy kept in class by moments per linear piece and localizing matrices; boundary printed (strong convergence conditions, size growth).",
+    "pages": "pp. 4-6, 12"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "The incumbent bound (Kingman) is the first rung of the hierarchy and the opponent beaten at higher order, and for two servers already at r = 1; the certificate is a two-sided bracket checked against simulation and exact values.",
+    "pages": "pp. 7-12"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "re-derive classical theorems with the new device",
+    "evidence": "Kingman's and Daley's bounds as special cases of the SDP hierarchy.",
+    "pages": "pp. 1, 7-9"
+   },
+   {
+    "pattern": "PSD moment-matrix strengthening carried across domains",
+    "evidence": "Moment and localizing matrices bound queueing steady states; also S264 (PDEs) in this batch.",
+    "pages": "pp. 5-6"
+   }
+  ],
+  "transferable": [
+   "(D2) For a steady state defined by W =d g(W, X), split the support where g is linear and use conditional moments times probabilities as variables; moment equality and factorized independence become linear constraints (pp. 4-5).",
+   "(D4) Show that the new hierarchy contains the classical bound by constructing a feasible point of the first-order relaxation that attains it (pp. 7-8).",
+   "(D5) Report brackets against a high-replication simulation and exact formulas across traffic levels, and say where they stay loose (light traffic, small w) (pp. 8-12)."
+  ],
+  "coauthors": "Karthik Natarajan (NUS mathematics, p. 1)",
+  "quotes": [
+   {
+    "text": "We show that the classical Kingman’s and Daley’s bounds for the expected waiting time in a GI/GI/1 queue are special cases of the proposed approach.",
+    "page": 1
+   },
+   {
+    "text": "These conditions are however fairly strong typically.",
+    "page": 5
+   }
+  ]
+ },
+ {
+  "id": "S305",
+  "year": "2007",
+  "title": "Robust nonconvex optimization for simulation-based problems",
+  "read_level": "partial",
+  "contribution": "Theory and algorithm for robust optimization of unconstrained nonconvex simulation-based problems: descent directions and robust local minima for the worst-case cost, convex-case convergence and a practical robust local search, extended to parameter uncertainty (June 2007 manuscript of the paper published as S090).",
+  "problem_entry": "RO+HS (AP as testbed): robust convex optimization fails when the cost is given only by a simulation, worse when nonconvex (pp. 1-2); distributions are seldom available (p. 2); implementation and parameter errors together lack attention (p. 3).",
+  "key_idea": "A direction descends for the worst-case cost iff it has negative inner product with every worst error (Theorem 1, p. 5); robust local minimum = no such direction (Proposition 1, p. 6); direction by a max-angle SOCP (p. 7); known bad neighbors that span the worst errors suffice (Proposition 2, p. 8); practical search by n + 1 capped ascents and an SOCP move (pp. 9-12); parameters folded in as fixed decision variables (p. 18).",
+  "assumptions": "Unconstrained, continuously differentiable f with value and gradient oracle (pp. 2, 5); error ball (p. 4); convergence only for convex f with bounded minima, an oracle for worst errors and diminishing steps (Theorem 2, pp. 7-8); EM radius 550 micrometres from measured errors (p. 16).",
+  "proof_devices": [
+   "Danskin's min-max theorem for directional derivatives of the worst-case cost (Appendix A, pp. 22-23)",
+   "KKT conditions make the gradient at a worst error parallel to it (p. 5)",
+   "Descent iff negative inner product with all worst errors (Theorem 1, p. 5; proof in Appendix B, not read in detail)",
+   "Algorithm 1 as a subgradient method on convex g, convergent by Shor's step rules (Theorem 2, p. 8; proof pp. 24-25)",
+   "Spanning set of bad neighbors certifies descent without the exact worst errors (Proposition 2, p. 8)"
+  ],
+  "experiments": "2D polynomial: global nominal minimum -20.8 certified with Gloptipoly, two starts reach one robust local minimum (p. 12); 100-dim EM design: worst case 8% lower at the same nominal cost, 110,000 neighbors, random sampling at 30,000 evaluations reaches 96% of the estimate from 3,000 (p. 17); 18-dim implementation plus parameter errors: worst case from 450 to much lower, 10+1 ascents 550 s vs 600 s, 3+1 fails to terminate (pp. 20-21).",
+  "positioning": "Against stochastic programming, multi-criteria robust design and convex RO (Ben-Tal-Nemirovski, Bertsimas-Sim); credits Diehl et al. and Zhang for first-order nonlinear robustness (pp. 1-2); presents itself as the general version of S234 (p. 3).",
+  "writing": "Builds the method by analogy with gradient descent (descent direction, local minimum) with geometric figures (pp. 2-7); a duplicated paragraph and a stray caption remain in the manuscript (p. 21).",
+  "limits_future": "Worst case only estimated (p. 17); number of ascents unknown in advance (p. 21); unconstrained problems only (p. 1); convergence proved only for convex f (p. 8); no future work stated (p. 22).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Nominal local minimum as warm start and a Gloptipoly-certified nominal optimum on the small example, but the robust result has only a numerical termination test, which the conclusion calls an optimality condition (Tension T1 evidence).",
+    "pages": "pp. 12, 17, 22"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "The polynomial-SDP route is weighed and declined as too large; only the direction subproblem is kept in a solver class (SOCP).",
+    "pages": "pp. 7, 12"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Radius calibrated to 99% of measured errors; price reported as unchanged nominal cost for an 8% lower worst case; no bound, no curve over Gamma.",
+    "pages": "pp. 16-17"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "robust analogue of another field's canonical concept",
+    "evidence": "Descent direction and local minimum redefined for the worst-case cost, with a robust-local-minimum characterization.",
+    "pages": "pp. 2-3, 5-6"
+   },
+   {
+    "pattern": "staged companion papers from one model",
+    "evidence": "S234's application-specific geometric search generalized with a directional-derivative framework, convergence analysis and parameter uncertainty.",
+    "pages": "p. 3"
+   }
+  ],
+  "transferable": [
+   "(D4) For a min-max objective, characterize descent with Danskin's theorem: a direction descends iff it has negative inner product with every worst-case perturbation; compute it as a max-angle SOCP (pp. 5, 7).",
+   "(D2) When worst cases cannot be found exactly, certify descent with a set of known bad neighbors that spans them (Proposition 2, p. 8).",
+   "(D2) Fold parameter uncertainty into implementation error by making parameters decision variables pinned to their nominal values (p. 18).",
+   "(D4) Keep the inner search's time predictable: a capped gradient ascent, then a barrier term used only to keep iterates inside the ball, not driven to zero as in the standard barrier method (p. 10).",
+   "(D5) Tune the depth of the inner search and report the time-termination trade-off, including the setting that fails (p. 21)."
+  ],
+  "coauthors": "Omid Nohadani, Kwong Meng Teo (p. 1)",
+  "quotes": [
+   {
+    "text": "the following algorithm embodies a heuristic strategy to finding a more robust neighbor",
+    "page": 8
+   },
+   {
+    "text": "The numerically determined termination criteria of the algorithm acts as an optimality condition for robust optimization problems.",
+    "page": 22
+   }
+  ]
+ },
+ {
+  "id": "S785",
+  "year": "2007",
+  "title": "Bounds on some contingent claims with non-convex payoff based on multiple assets",
+  "read_level": "full",
+  "contribution": "Copositive-relaxation SDP bounds on calls on the minimum and puts on the maximum of several assets from first and second moments, compared with Monte Carlo prices.",
+  "problem_entry": "CP+AP (finance): moment bounds on options cover convex payoffs, where Jensen gives a tight lower bound (pp. 1-2); entry: non-convex payoffs (call on the minimum, put on the maximum) given first and second moments only (p. 2).",
+  "key_idea": "Dualize the moment problem (p. 3); nonnegativity of a quadratic on the orthant is copositivity of the bordered matrix (Lemma 1, p. 3), NP-hard, so relaxed to PSD plus nonnegative (Remark 1, p. 3); the minimum handled by a min-max swap over the simplex (Lemma 2, p. 4); SDP upper bound (Theorem 1, p. 5) and Jensen-based lower bound (Theorem 2, pp. 5-6).",
+  "assumptions": "Nonnegative prices with known mean vector and second-moment matrix, no distribution (p. 2); weak Slater condition for strong duality (p. 3); synthetic correlated lognormal prices for 4 assets with Boyle-Lin-like parameters, exact prices by Monte Carlo (p. 7).",
+  "proof_devices": [
+   "Bordered-matrix copositivity equivalence by a scaling argument (Lemma 1, p. 3)",
+   "Copositive cone relaxed to PSD plus entrywise nonnegative; exact only up to size 4 by Diananda (Remark 1, pp. 3-4)",
+   "Minimum of linear functions as a maximum over the simplex, with weak min-max duality (Lemma 2, p. 4)",
+   "Relaxation chain P^c_u >= P_u >= P_max (Theorem 1, p. 5)"
+  ],
+  "experiments": "Matlab 7.4, SeDuMi via YALMIP (p. 7); call on the minimum of 4 assets, K = 20-50: at K = 40 exact 4.2340, upper 8.0961, lower 0; upper bound about 2.5 times the exact price at K = 50 (Table 1, p. 9); put on the maximum, K = 40-70: positive lower bounds only above 50 (Table 2, p. 9).",
+  "positioning": "Extends Lo, Bertsimas-Popescu, Boyle-Lin and Zuluaga-Pena from convex to non-convex payoffs (pp. 1-2).",
+  "writing": "An 11-page report without a conclusion; evaluative claims hedged as reasonably good (pp. 1, 7, 11).",
+  "limits_future": "No limits or future directions written (pp. 9-11); no gap analysis, although two relaxations are stacked and the 5 x 5 bordered matrices of the 4-asset runs exceed Diananda's size-4 exactness (pp. 3-4, 7; inference, not discussed in the report).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "A pricing question written as a dual moment problem; hardness printed (copositivity NP-hard) and a tractable inner device chosen (PSD plus nonnegative, an SDP).",
+    "pages": "pp. 3-5"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "assume only what can be estimated, worst-case the rest",
+    "evidence": "Bounds over all nonnegative distributions with given first and second moments.",
+    "pages": "p. 2"
+   }
+  ],
+  "transferable": [
+   "(D4) Turn a dual constraint that a quadratic be nonnegative on the nonnegative orthant into copositivity of the bordered matrix, then relax it to PSD plus entrywise nonnegative (pp. 3-4).",
+   "(D4) Handle a minimum of linear functions inside a semi-infinite constraint by writing it as a maximum over the simplex and swapping min and max, with the simplex weights as new variables (Lemma 2, p. 4).",
+   "(D5) Generate the moments from a known model (correlated lognormal) so that exact prices are available by Monte Carlo, and sweep the strike to show where each bound is informative (pp. 7-9)."
+  ],
+  "coauthors": "Xuan Vinh Doan (MIT ORC), Karthik Natarajan (NUS) (p. 1)",
+  "quotes": [
+   {
+    "text": "The reformulation makes it clear that finding the (tight) upper bound Pu is a hard problem.",
+    "page": 3
+   },
+   {
+    "text": "Computational results shows that these upper and lower bounds are reasonably good for call options on the minimum of multiple assets and put options on the maximum of multiple assets.",
+    "page": 1
+   }
+  ]
+ },
+ {
+  "id": "S059",
+  "year": "2008",
+  "title": "Robust multiperiod portfolio management in the presence of transaction costs",
+  "read_level": "full",
+  "contribution": "Linear (D-norm polyhedral) robust formulations for multiperiod portfolio selection with transaction costs, compared in simulations with single-period mean-variance, single-period robust and nominal multiperiod policies.",
+  "problem_entry": "RO+AP (finance; LO as engine): Markowitz is single-period, DP needs strong assumptions and breaks with transaction costs, scenario trees grow exponentially (pp. 1-2); Ben-Tal et al.'s robust model is an SOCP, while tax and structure constraints call for linear MIP (pp. 2-3); does multiperiod RO beat practice's single-period mean-variance (p. 3)?",
+  "key_idea": "D-norm polyhedral sets keep the counterpart an LP (pp. 3, 6); cumulative returns cut uncertain constraints from N M to N and equalities become inequalities (pp. 4-5); MPR1 (intervals plus first-period D-norm set) and MPR2 (per-period D-norm budgets with covariances), zero budgets giving the certainty-equivalent policy and the L2 norm Ben-Tal et al. (pp. 5-6); rolling horizon (p. 4).",
+  "assumptions": "Proportional transaction costs, no short sales or borrowing, fixed riskless return, linear (risk-neutral) objective with robust feasibility as implicit risk measure (pp. 3-4); known means and covariances; synthetic data only (3 normal stocks; 25 lognormal stocks from Ben-Tal et al.'s factor model) (pp. 8, 10-11).",
+  "proof_devices": [
+   "Robust counterparts from the D-norm duality results of Bertsimas-Pachamanova-Sim (p. 6)",
+   "Cumulative-return change of variables reducing the uncertain constraints to the cash updates (pp. 4-5)",
+   "Size counts: MPR1 38,006 variables and 76,508 constraints, MPR2 14,006 and 23,016 for 500 stocks and 6 periods; no solve times (p. 8)"
+  ],
+  "experiments": "1000 simulated paths, five periods, 1% transaction costs; baselines single-period mean-variance (risk parameter 0.531 matched to SPR's expected return), single-period robust, nominal (pp. 8-9); misspecified arms (means 0.5 sigma or 10% low) (pp. 9, 11); failure printed: with i.i.d. normal returns mean-variance has the better worst case and ratio, MPR1 min -0.6136 and 12.5% loss probability vs 5.4% (Table 4, p. 12); other risk indices omitted (p. 13).",
+  "positioning": "Builds on Ben-Tal-Margalit-Nemirovski (ellipsoidal, SOCP) and replaces the set by the D-norm of Bertsimas-Pachamanova-Sim to stay linear (pp. 2-3); benchmarks against industry's single-period mean-variance, not only stochastic programming (p. 3).",
+  "writing": "Experiments organized around three numbered questions (p. 8); the conclusion claims dominance in situations most similar to real life on simulated data only (p. 14).",
+  "limits_future": "Claims excellent potential whatever the return distribution (p. 15); MPR1 best under misspecification, MPR2 when parameters are right (p. 14); no real data, no solve times, no future directions (pp. 8-15).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Owning traditions (DP, stochastic programming) named with their limits; the set chosen to keep the LP class so integer side constraints stay possible; counterparts by duality; tractability argued by size counts, not timed.",
+    "pages": "pp. 1-3, 6, 8"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "The knob maps risk aversion to tolerance of forecast error and interval width controls conservativeness, but no bound links knob and protection and no curve over the knob is computed.",
+    "pages": "pp. 1, 10"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The baseline is practice's rule (single-period mean-variance) and decisions are scored by realized returns, but there is no owner, partner or real data.",
+    "pages": "pp. 3, 8-14"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "knob-matched baseline",
+    "evidence": "The mean-variance risk parameter is set to 0.531 so its portfolio has the same expected return and about the same variance as SPR's.",
+    "pages": "p. 9"
+   },
+   {
+    "pattern": "misspecification duel",
+    "evidence": "All methods run on paths whose true means are 0.5 sigma or 10% below the inputs, with pairwise win rates.",
+    "pages": "pp. 9, 11, 14"
+   },
+   {
+    "pattern": "subsume the incumbent as a special case",
+    "evidence": "Zero budgets give the certainty-equivalent nominal policy; the L2 norm gives Ben-Tal et al.'s formulation.",
+    "pages": "p. 6"
+   },
+   {
+    "pattern": "receding-horizon robust re-solve in place of a DP recursion",
+    "evidence": "Rolling horizon: take the first step of the robust plan, re-solve with the shorter horizon; also S118 pp. 3, 6.",
+    "pages": "p. 4"
+   }
+  ],
+  "transferable": [
+   "(D2) Rewrite multiperiod dynamics in cumulative returns so that only the cash-account constraints are uncertain, then robustify (pp. 4-5).",
+   "(D2) Turn uncertain equalities into inequalities before robustifying (p. 5).",
+   "(D5) Set the incumbent's risk parameter so that its portfolio matches the challenger's expected return, then compare realized distributions on the same simulated paths (p. 9).",
+   "(D5) Add misspecified arms, with true means below the inputs, and report pairwise win rates on common paths (pp. 9, 11, 14)."
+  ],
+  "coauthors": "Dessislava Pachamanova (Babson College, corresponding author, p. 1)",
+  "quotes": [
+   {
+    "text": "Robust optimization models treat future asset returns as uncertain coefficients in an optimization problem, and map the level of risk aversion of the investor to the level of tolerance of the total error in asset return forecasts.",
+    "page": 1
+   },
+   {
+    "text": "the MPR1 approach appears to be the most robust with respect to misspecifications in the parameters of the model, and clearly dominates the other approaches in situations that are most similar to real life.",
+    "page": 14
+   }
+  ]
+ }
+]
