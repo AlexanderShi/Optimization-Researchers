@@ -761,5 +761,26 @@
 | 749 | H009 | 2018 | Optimal classification and regression trees with hyperplanes are as powerful as classification and regression neural networks | submitted to Journal of Machine Learning Research | — | preprint | manual | txt | 52 | supplement | skimmed |
 | 750 | H010 | 1999 | Optimization of multiclass queueing networks with changeover times via the achievable region approach: Part II, the multi-station case | Mathematics of Operations Research | — | journal | url | txt | 31 | supplement | skimmed |
 | 751 | H011 | 2004 | Optimal mean-variance bounds on the expectation of the highest order statistics | — | — | preprint | url | txt | 20 | supplement | carded |
+| 752 | B001 | 1997 | Introduction to Linear Optimization (Bertsimas, Tsitsiklis; Athena Scientific 1997): Preface, as served on the publisher's web page | book material | — | other | manual | txt | 1 | core | carded |
+| 753 | B002 | 1997 | Introduction to Linear Optimization: publisher web pages (Athena Scientific book page with review excerpts, Athena contents page, Dynamic Ideas book page) | book material | — | other | manual | txt | 3 | core | carded |
+| 754 | B003 | 2021 | Introduction to Linear Optimization: errata sheet (last updated 7/5/2021), Athena Scientific | book material | — | errata | manual | txt | 5 | core | carded |
+| 755 | B004 | 1997 | Introduction to Linear Optimization: title page and table of contents (library scan, TU Ilmenau via GBV) | book material | — | book-toc | manual | txt | 5 | core | carded |
+| 756 | B005 | 1997 | Review of Introduction to Linear Optimization by Motakuri V. Ramana, Optima 54 (June 1997), pp. 13-14 | book material | — | review | manual | txt | 16 | core | carded |
+| 757 | B006 | 2005 | Optimization over Integers (Bertsimas, Weismantel; Dynamic Ideas 2005): publisher's book page (purpose, distinguishing characteristics, four parts) | book material | — | other | manual | txt | 1 | core | carded |
+| 758 | B007 | 2005 | Optimization over Integers: table of contents (library scan via B3Kat/BVB) | book material | — | book-toc | manual | txt | 4 | core | carded |
+| 759 | B008 | 2026 | Dimitris Bertsimas's own books pages: Published Books on dbertsim.mit.edu (2026) and Books on his old MIT homepage (2017) | book material | — | other | manual | txt | 2 | core | carded |
+| 760 | B009 | 2019 | Machine Learning under a Modern Optimization Lens (Bertsimas, Dunn; Dynamic Ideas 2019): publisher's book page (structure, philosophical principles) | book material | — | other | manual | txt | 1 | core | carded |
+| 761 | B010 | 2020 | Review of Machine Learning under a Modern Optimization Lens by Thibaut Cuvelier, developpez.com (6 December 2020, in French), with the site's chapter list | book material | — | review | manual | txt | 1 | core | carded |
+| 762 | B011 | 2022 | Robust and Adaptive Optimization (Bertsimas, den Hertog; Dynamic Ideas 2022): publisher's book page (purpose, six parts, distinguishing characteristics) | book material | — | other | manual | txt | 1 | core | carded |
+| 763 | B012 | 2022 | Review of Robust and Adaptive Optimization by Thibaut Cuvelier, developpez.com (2 December 2022, in French), with the site's chapter list | book material | — | review | manual | txt | 1 | core | carded |
+| 764 | B013 | 2022 | Queueing Theory: Classical and Modern Methods (Bertsimas, Gamarnik; Dynamic Ideas 2022): publisher's book page (structure, Parts I-V) | book material | — | other | manual | txt | 1 | core | carded |
+| 765 | B014 | 2004 | Data, Models, and Decisions (Bertsimas, Freund; 2nd ed., Dynamic Ideas 2004): publisher's book page (educational philosophy, distinguishing characteristics) | book material | — | other | manual | txt | 1 | core | carded |
+| 766 | B015 | 2000 | Data, Models, and Decisions (Bertsimas, Freund; South-Western 2000): table of contents (library scan via GBV/hbz, OCR) | book material | — | book-toc | manual | txt | 5 | core | carded |
+| 767 | B016 | — | Review of Data, Models, and Decisions on GraduateTutor.com (unsigned page of a tutoring company, linked by the publisher) | book material | — | review | manual | txt | 1 | core | carded |
+| 768 | B017 | 2016 | The Analytics Edge (Bertsimas, O'Hair, Pulleyblank; Dynamic Ideas 2016): publisher's book page (educational philosophy, distinguishing characteristics) | book material | — | other | manual | txt | 1 | core | carded |
+| 769 | B018 | 2016 | The Analytics Edge: table of contents (library PDF via B3Kat/BVB) | book material | — | book-toc | manual | txt | 5 | core | carded |
+| 770 | B019 | 2025 | The Analytics Edge in Healthcare (Bertsimas, Orfanoudaki, Wiberg; Dynamic Ideas 2025): publisher's book page and the authors' book site (aims, chapter list) | book material | — | other | manual | txt | 2 | core | carded |
+| 771 | B020 | 1992 | Simulated Annealing (Bertsimas, Tsitsiklis), chapter 2 of Probability and Algorithms (National Research Council 1992), National Academies Press read-online text | book material | — | other | manual | txt | 14 | core | carded |
+| 772 | B021 | 2009 | Optimization Methods (MIT 15.093J, Fall 2009, instructor Dimitris Bertsimas): MIT OpenCourseWare course description and syllabus pages | book material | — | other | manual | txt | 2 | core | carded |
 
-751 works · txt 473 · pdf 0 · no-oa 278
+772 rows = 751 works + 21 book-material items (B001–B021) · txt 494 · pdf 0 · no-oa 278

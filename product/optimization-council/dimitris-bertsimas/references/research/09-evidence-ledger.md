@@ -18,7 +18,7 @@
 - [Workflow A](#workflow-a) · [B](#workflow-b) · [C](#workflow-c) · [D](#workflow-d) · [E](#workflow-e) · [F](#workflow-f) · [G](#workflow-g)
 - [Heuristics 1](#heuristic-1) · [2](#heuristic-2) · [3](#heuristic-3) · [4](#heuristic-4) · [5](#heuristic-5) · [6](#heuristic-6) · [7](#heuristic-7) · [8](#heuristic-8) · [9](#heuristic-9) · [10](#heuristic-10)
 - Anatomies: [achievable region](#anatomy-achievable-region) · [moment bounds](#anatomy-moment-bounds) · [price of robustness](#anatomy-price-of-robustness) · [best subset and trees](#anatomy-best-subset-trees) · [prescriptive analytics](#anatomy-prescriptive-analytics) · [dynamic routing](#anatomy-dynamic-routing) · [execution costs](#anatomy-execution-costs)
-- [Anti-patterns](#anti-patterns) · [Research trajectory](#research-trajectory) · [Academic lineage](#academic-lineage) · [Inner tensions](#inner-tensions) · [Roundtable card](#roundtable-card) · [Honest boundary](#honest-boundary)
+- [Anti-patterns](#anti-patterns) · [Research trajectory](#research-trajectory) · [Academic lineage](#academic-lineage) · [Inner tensions](#inner-tensions) · [Roundtable card](#roundtable-card) · [Honest boundary](#honest-boundary) · [Book material](#books)
 - [Corrections from the full texts](#corrections) · [Card key](#card-key)
 
 <a id="how-to-use"></a>
@@ -39,6 +39,12 @@
 ```
 
 **Changes.** Strengths add bounding a policy when no exact solve exists (Method 7). Weak spots: SD is no longer a weak spot (stated in sole-author texts, C1); the books were read at abstract level only. Domain fit: the claim that his record treats solver internals as black boxes is narrowed (C5): from 2009 his group builds tailored algorithms when a model leaves the solver class, a cardinality-constrained QP algorithm after the general MIQP proved unsuited [S040 pp. 2, 6, 10, 12, 15], a first-order method for SOS relaxations [S315 pp. 8–12], a solver bake-off before a tailored outer approximation [S105 pp. 7–9], a custom branch-and-bound for sparse PCA [S184 pp. 8–18], closed-form Benders cuts without an LP solver [S093 pp. 10–13], Kelley's method diagnosed through its bound's constant [S302 pp. 1, 5–8], spatial branching on matrix variables [S385 pp. 2, 6, 10–14], a group global solver extended to integers [S624 pp. 10–16], a custom pricing routine [S316 pp. 3, 5, 11], a tailored algorithm because commercial solvers fail [S083 p. 15]. In 1994 the stated choice had been a commercial package over custom algorithms [S036 p. 7]. Evidence pointers now explain card citations, the ledger and the technique catalog.
+
+**Increment books-2026-10-29** (2026-10-29; book material, framing and dating only, outside every say–do count; full account: [Book material](#books)). *Weak spots*: the clause on the books now says what was read: their open parts, never their bodies. The line before this increment (verbatim):
+
+```text
+**Weak spots**: the not-voiced and no-evidence rows of Research Task Routing; CP stated only in co-authored texts; HS thin; LO textbook-era only; his books were read at abstract level only.
+```
 
 <a id="routing"></a>
 ## Research task routing
@@ -108,6 +114,27 @@ M = Method, H = Heuristic, T = Tension.
 |---|---|---|---|---|---|
 | **HS** | practice + the 1993 verdict | Heuristics as warm starts, components, fallbacks (M4, H3); 1993: theory lacking, practice mixed but generally applicable (C15) | DOI 10.1214/ss/1177011077; DOI 10.1287/opre.1090.0715 | DFO | Robust local search converges only for convex costs with an exact oracle; otherwise a heuristic without certificate (C3); T1, T2 |
 
+**Increment books-2026-10-29** (2026-10-29; book material, framing and dating only, outside every say–do count; full account: [Book material](#books)). The Voice cells of LO, IO, RO, ML, DA and AP now name the book text that states the domain's view, with its page; LO's and ML's Cautions gain one reception line each; the HS row is re-dated to 1992 (C22). CP and SD are unchanged: no book page gives them a voice (the 2005 IO book lists semidefinite and polynomial methods inside IO [B006 p. 1]; the 2022 queueing book's page has a structure and no first-person sentence [B013 p. 1]), so their labels stay as C1 set them.
+- **LO**: the 1997 preface, joint with Tsitsiklis, read in full in its web form [B001 p. 1]; "Dormant as a topic" narrowed to research, since the book was kept in print and corrected until 2021 [B003 pp. 1–5] and LO opened his 2009 methods course (lectures 1–9) [B021 p. 2]; Ramana's 1997 review praises the pedagogy and finds the book dense in places, with chapter 7 overloaded [B005 pp. 13–14].
+- **IO**: the 2005 statement now has a page [B006 p. 1], and a second stated sentence comes from his 2017 page [B008 p. 2]; "taught 1997": a section "Guidelines for strong formulations" in the LO textbook [B004 p. 4], with "some intuition as to what constitutes a ``strong'' formulation" in the preface [B001 p. 1].
+- **RO**: the 2022 book page, joint with den Hertog [B011 p. 1]: ARO before nonlinear RO, nonlinear RO by concave versus convex uncertainty, applications under Dantzig's quotation. Cautions unchanged: the 2000 MBA text has a starred section "Linear Optimization Under Uncertainty" [B015 p. 4], whose content was not read, so why he entered RO and how Γ arose stay unknown.
+- **ML**: the six principles [B009 p. 1]; reception: Cuvelier (2020) finds no widespread implementation of most of the book's algorithms, and the stance not yet followed by the wider AI community [B010 p. 1].
+- **DA**: the 2004 page with Freund [B014 p. 1] and the 2016 page with O'Hair and Pulleyblank [B017 p. 1].
+- **HS**: the verdict is in print in 1992, in the NRC report *Probability and Algorithms*, with the same text as the 1993 journal version [B020 pp. 8–10] (C22).
+- **AP**: the 2025 health book's site, joint with Orfanoudaki and Wiberg [B019 p. 2].
+- *Fix round*: each new Voice citation now says "joint" (IO, RO, ML, DA, AP), as LO's "stated jointly" does (C1); DA reads "MBA and analytics texts", since the 2016 book was taught to an audience of "MBA, undergraduate and graduate students", to executive MBAs and in a MOOC [B017 p. 1]; IO's "taught 1997" cites the preface beside the contents [B001 p. 1; B004 p. 4]; ML's Caution, formerly "few released implementations", now follows the reviewer's "il n'existe pas encore d'implémentation répandue pour la plupart des algorithmes présentés" [B010 p. 1]: an adoption point, not a code-release charge.
+The domain-layer map that replaces this table should take its Voice entries from [Book material](#books), "Stated views per domain". The rows before this increment (verbatim):
+
+```text
+| **LO** | textbook-era taste | Geometry before algebra; LP as the engine of relaxations and robust counterparts (M1) | *Introduction to Linear Optimization* (Athena Scientific 1997, ISBN 1886529191); DOI 10.1007/BF01582057 | LP, NLP | Dormant as a topic after 1998 |
+| **IO** | stated + practice | Strong formulations (stated 1998 and 2005); LP bounds (C2) and rounding; MIO as the engine of RO and ML (M2, M4, H3, H5) | DOI 10.1007/BF01580607 (a bound, not rounding: C2); DOI 10.1137/20M1346778 | MINLP, LP | T4: weak big-M in tree MIOs |
+| **RO** | stated + practice | Class inheritance (M1); price of robustness (M3); adaptive policies with self-quantified limits; data-driven sets; H1 | DOI 10.1287/opre.1030.0065; DOI 10.1287/moor.1100.0444; DOI 10.1137/080734510 | NLP, MINLP, DFO | Why he entered RO and how Γ arose: unknown |
+| **ML** | stated + practice (strongest) | M2, M4, M1; H1–H3; interpretability required | DOI 10.1214/15-AOS1388; DOI 10.1007/s10994-017-5633-9; DOI 10.1214/19-STS701 | MINLP, NLP, DFO | SNR, timing, certification, strength and reproducibility critiques [05 §1–2] |
+| **DA** | stated + practice | M5; H5 | DOI 10.1287/mnsc.2018.3253; DOI 10.1287/opre.2021.0707 | all four | Prescriptive-tree counterexample unanswered (DOI 10.1287/mnsc.2021.02813) |
+| **HS** | practice + the 1993 verdict | Heuristics as warm starts, components, fallbacks (M4, H3); 1993: theory lacking, practice mixed but generally applicable (C15) | DOI 10.1214/ss/1177011077; DOI 10.1287/opre.1090.0715 | DFO | Robust local search converges only for convex costs with an exact oracle; otherwise a heuristic without certificate (C3); T1, T2 |
+| **AP** | stated + practice | Partners as validation (M5); companies and applied write-ups (M6, H9) | DOI 10.1287/opre.1080.0619; DOI 10.1073/pnas.1811462116; DOI 10.1287/opre.2022.2306 | all four | Outcomes measured in several deployments (C4); Boston and DELPHI contested (C12) |
+```
+
 <a id="taste-marks"></a>
 ## Taste: marks of good research
 
@@ -144,6 +171,22 @@ M = Method, H = Heuristic, T = Tension.
 6. **Problems and data first; a theory is tested by the problems that gave rise to it** (Dantzig's test, cited in two of his books) [02 P1, T5]; the 2005 moment-bounds paper starts instead from a question internal to probability theory [S018 pp. 1–4] [practice].
 7. **A result is stronger with a certificate**: optimality, a gap, or a proof of infeasibility, which also counts; for a policy, a bound valid for every policy (Method 7) [02 J2, R12; S225 p. 31; S016 p. 3; S051 pp. 1, 11]. Tension T1: dropped at scale in practice.
 
+**Increment books-2026-10-29** (2026-10-29; book material, framing and dating only, outside every say–do count; full account: [Book material](#books)).
+- **Marks 2–5**: each now also cites the 2019 book's principles [B009 p. 1]: practical tractability, not polynomial solvability (mark 2); optimization over randomization, with Part IV on design of experiments, exceptional responders, stable regression and the bootstrap (mark 3); prescription, not prediction (mark 4); interpretability "materially important" (mark 5). These are book-level principles, joint with Dunn, as the publisher presents them.
+- **Mark 6**: Dantzig's test now has its pages: the 2004 book's mission [B014 p. 1] and the 2022 book's applications "guided by the quote of George Dantzig at the beginning of the preface" (the quotation itself was not seen; that it is the same one stays [inferred], 02 T5) [B011 p. 1]; problems and data lead in 2016 [B017 p. 1], carried out in the contents, where seven application parts precede the methods part [B018 pp. 1–5]. The 1997 preface states the test without naming Dantzig: "The success of any optimization methodology hinges on its ability to deal with large and important problems." [B001 p. 1]. ⚠ Variant added to SKILL.md: the same 1997 graduate text (pitched "at the PhD level" by its publishers [B002 p. 3]) puts theory first and the art chapter last [B001 p. 1; B004 p. 5]. Not added: the 2025 health book organises its Part I by method classes, each taught through one clinical example, and only Part II by problems [B019 p. 2]. *Fix round*: in SKILL.md the variant clause now carries its ⚠, and the B011 citation says "(the quotation unseen; same test [inferred])".
+- **LO and IO, textbook era**: now with pages: geometry first [B001 p. 1]; "most importantly geometry" [B006 p. 1]; and a second 2005 sentence, "The key characteristic of our treatment is that our development of the algorithms is naturally based on the algebraic and geometric developments of Part II." [B008 p. 2]. The contents carry it out: the geometry chapter precedes the simplex chapter [B004 pp. 2–3], and algebra and geometry (chapters 6–8) precede the algorithm chapters [B007 pp. 2–3]; the 2009 course teaches geometry in lecture 2, before the simplex method and duality [B021 p. 2]. ⚠ The simplex-free derivation of duality is a starred, advanced section [B004 p. 3]. An outside check: Ramana finds the geometric explanations "widely successful" [B005 p. 14]. Still textbook and teaching material, so *geometry first in research* stays claimed but unverified.
+
+The lines before this increment (verbatim):
+
+```text
+2. **Tractable at the application's scale, by design**: solve times at realistic sizes, not polynomial time [02 T7; S010 p. 2].
+3. **Exact, joint optimization of what practice does greedily, by trial and error or by randomization, after mapping where it pays** [02 G1, G2; S124 pp. 2, 4–6; S046 p. 19]. Tension T2.
+4. **The decision is the object: prescription, not prediction** [02 R14; 01 SW5; S008 p. 29].
+5. **Interpretable where people act on the result**, required where guidance changes standard care [S685 pp. 2–3; 02 T6]. ⚠ Counter-practice: deployed hospital tools use SHAP-explained boosted trees [S617 arXiv pp. 9–11; S054 pp. 4–9] (C21).
+6. **Problems and data first; a theory is tested by the problems that gave rise to it** (Dantzig's test, cited in two of his books) [02 P1, T5]; the 2005 moment-bounds paper starts instead from a question internal to probability theory [S018 pp. 1–4] [practice].
+- LO and IO, textbook era: geometry first, then algebra and algorithms; strong formulations [02 T8, W6; S015 p. 2].
+```
+
 <a id="taste-warnings"></a>
 ## Taste: warning signs of bad research
 
@@ -174,6 +217,12 @@ M = Method, H = Heuristic, T = Tension.
 **Moved at the tighten step** (T3.7, 2026-10-29). These SKILL.md lines are copied verbatim as they stood before the cut; SKILL.md now keeps a shorter form of each, and the card citations, pages, DOIs and quotes it dropped are kept here.
 
 2. Models harder than their nominal version; polynomial time without solve times [02 T7] (stated from 2014 [S178 p. 5]; his 1994–1997 papers argue from operation counts: C19).
+
+**Increment books-2026-10-29** (2026-10-29; book material, framing and dating only, outside every say–do count; full account: [Book material](#books)). Warning sign 6 now cites the two book pages behind it: "Simply teaching students to plug numbers into black-box models is not relevant to a student's education." (2004, with Freund) [B014 p. 1] and the 2016 contrast with "the vast majority of books and classes available today, in which methods play the leading role" (with O'Hair and Pulleyblank) [B017 p. 1]. ⚠ Audience: his PhD textbooks are organised by theory and methods [B004 pp. 2–5; B007 pp. 1–4]; the warning concerns MBA and analytics teaching. The line before this increment (verbatim):
+
+```text
+6. Methods-first teaching; a literature that gives practitioners little guidance [02 T9].
+```
 
 <a id="taste-quick-check"></a>
 ## Taste quick-check
@@ -270,6 +319,14 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 
 **Limitations**: *tractable* drifts from complexity class and operation counts (1994–1997) to solve time, stated as the test from 2014 [02 C2; S269 pp. 1, 21–22; S178 p. 5]; big-M formulations can be weak in tree MIOs (DOI 10.1287/opre.2021.0034) despite his stated stress on strong ones (Tension T4).
 
+**Increment books-2026-10-29** (2026-10-29; book material, framing and dating only, outside every say–do count; full account: [Book material](#books)). One Evidence line added (nothing removed): "Textbooks (stated jointly; no say–do count)". Its sources:
+- 1997, with Tsitsiklis: the book's main objective is the reader's ability "to formulate fairly complex optimization problems", then an appreciation of "the main classes of problems that are practically solvable", then the solution methods and the qualitative properties of solutions [B001 p. 1]; LP in general form, and "we separate the structural understanding of linear programming from the particulars of the simplex method", with a derivation of duality that does not rely on it [B001 p. 1]; dual optimal solutions as subgradients of the optimal cost function (chapter 5) [B001 p. 1]. This matches step 4 (read structure off the dual).
+- 2005, with Weismantel: strong formulations, ways to improve them, integral polyhedra, duality and relaxations as the stated emphasis [B006 p. 1]; three formulation chapters and a duality chapter precede any algorithm [B007 pp. 1–2].
+- 2004, with Freund: in chapters 7–9 the optimization model is built by defining decision variables and constructing constraints and objective, and "Only then do we translate the problem into a spreadsheet for solution by appropriate software." [B014 p. 1].
+- 2019, with Dunn: "ML is inherently linked to optimization not probability theory." [B009 p. 1] (step 1: cast a neighbouring tradition's problem as optimization).
+- 2022, with den Hertog: the LP case first, then nonlinear RO split by how the uncertainty enters [B011 p. 1]; that the split follows where exact counterparts end is [inferred] (card S283 [S283 p. 3]).
+- ⚠ Teaching level: formulation first with no kept class (the MBA texts and the 2009 course) [B014 p. 1; B015 pp. 4–5; B021 p. 2].
+
 <a id="method-2"></a>
 ## Method 2: Quantified "why now"
 
@@ -312,6 +369,12 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 - ✗ His 1995 survey and a 1996 joint paper argued the reverse: hardness answered with relaxations [S185 pp. 49–50]; scarce computation favouring a priori routes [S025 pp. 10, 12, 17].
 
 **Limitations**: era-bound (the 1991–2018 speed-ups); not the user's machine or class; the belief is dated from 2007 (submitted 2002) [S073 pp. 1–2] but conceded as justified only from 2015 (arXiv v1 of best subset) [S010 p. 8].
+
+**Increment books-2026-10-29** (2026-10-29; book material, framing and dating only, outside every say–do count; full account: [Book material](#books)). The Stated line now adds the 2019 book's principles 2 and 3, "Practical tractability not polynomial solvability leads to real world impact." and "NP-hardness is an opportunity not anobstacle." (run together as printed) [B009 p. 1]. The older publisher summary on his books page promises solutions to central ML problems "at large scale" found "in seconds/minutes" [B008 p. 1; B010 p. 1]. No book page gives a speed-up figure, so C6 stands. The line before this increment (verbatim):
+
+```text
+- Stated: "The belief that MIO approaches to problems in statistics are not practically relevant was formed in the 1970s and 1980s and it was at the time justified." [S010 p. 8; S105 p. 7].
+```
 
 <a id="method-3"></a>
 ## Method 3: The price of X
@@ -400,6 +463,12 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 
 **🔴 Stop rule** [practice, Dunn 2018]: bound stuck at zero or root node not passed → count binaries (n·2^D: 87,808 at depth 6 for n = 1,372); first, where one exists, replace weak big-M by a perspective or convex-integer form [S061 pp. 6–10; S175 pp. 9–10, 15–16]; if the bound still stalls, switch to local search with restarts, and (*correction*) drop *optimal* from the claim. Checks the critics asked for, practised in his later papers (C8): low SNR (DOI 10.1214/19-STS733); equal budgets and threads; path-to-path timing (DOI 10.1214/20-STS806); installable code (DOI 10.1214/20-STS809); LP-relaxation strength (DOI 10.1287/opre.2021.0034).
 
+**Increment books-2026-10-29** (2026-10-29; book material, framing and dating only, outside every say–do count; full account: [Book material](#books)). The ✗ line on the critic-informed checks is re-dated: equal computation time as the yardstick is in print in 1992, in the NRC printing of the simulated-annealing review, word for word as in 1993 [B020 p. 9] (C22). It stays a yardstick applied to Johnson et al.'s experiments, not his own practice, so C8 is unchanged in substance. Also on record, not in SKILL.md: the ML book's description promises solutions that "can be certified to be optimal in minutes/hours" and "outperform classical heuristic approaches in out-of-sample experiments" [B008 p. 1; B010 p. 1] (the stated side of Tension T1); a teaching case puts a fast heuristic beside an integer-optimization formulation, then results (titles only) [B018 p. 2]. The line before this increment (verbatim):
+
+```text
+- ✗ "Critic-informed checks, not his practice" → equal time is the yardstick of the 1993 review, for others' experiments [S005 pp. 3–4]; his own matched duels from 2002 [S070 pp. 9–15]; the critics' SNR grid adopted in 2020 [S095 pp. 3, 10, 21, 23] (C8).
+```
+
 <a id="method-5"></a>
 ## Method 5: Judge by the decision, against the owner's current rule
 
@@ -448,6 +517,12 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 
 **Limitations**: needs partner access and a track record; outcome studies exist for a few deployments only [S115 pp. 22–24]; in 1988–1996 his comparator was the re-optimization ideal, not an owner's rule [S048 pp. 27, 71; S017 pp. 3, 12].
 
+**Increment books-2026-10-29** (2026-10-29; book material, framing and dating only, outside every say–do count; full account: [Book material](#books)). The Stated line adds the 2019 book's sixth principle, "The ultimate objective in the real world is prescription,not prediction." (as printed) [B009 p. 1]. Teaching-level statements, not added: decision support "through real world applications", with management-science techniques "only as tools to facilitate problem solving" (2004) [B014 p. 1]; "Problems and data play a leading role in this book, while models play an essential but supporting role." (2016) [B017 p. 1]. ⚠ None of these names an owner, a current rule or a decision metric [B017 p. 1]. The line before this increment (verbatim):
+
+```text
+- Stated: "what truly matters is the performance of the prescription in the problem" [S008 p. 29].
+```
+
 <a id="method-6"></a>
 ## Method 6: Run research as programmes
 
@@ -484,6 +559,17 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 - Stated: the impact test, 11 statements on 5 occasions 2014–2026 (homepage essay; oral history pp. 6–7); courses become books; companies for scale, hedged in 2014 [02 T1, R1, R4, O8, C9].
 - Practice: the thesis problem class came from his adviser's group [S048 pp. 18, 71, 125]; a cohort consolidated in a sole-author survey with open problems [S185 pp. 1, 4, 46, 48–49, 51]; an organ-allocation programme over successive theses, with a former student among the co-authors [S476 pp. 1–2]; seven lineages [04 A.4]; books with Dunn (2019), den Hertog (2022), Gamarnik (2022), Orfanoudaki and Wiberg (2025) [01 §1.9]; Interpretable AI 2018.
 - ⚠ The company before the paper [S050 pp. 1, 10]; a modelling package as adoption channel [S028 pp. 2–3, 10]; lines he sponsors outside optimization [S132 pp. 1, 13, 15]; teachability argued after the fact [S018 pp. 4, 23].
+
+**Increment books-2026-10-29** (2026-10-29; book material, framing and dating only, outside every say–do count; full account: [Book material](#books)).
+- **Practice line extended**: only the 1997 preface states that a book came from a course: "The book was developed while we took turns teaching a first-year graduate course at M.I.T., for students in engineering and operations research." [B001 p. 1]; it does not name the course. Publisher pages name MIT classes that use three later books: "The book is used in" the PhD class Integer and Combinatorial Optimization (2005) [B006 p. 1] and the core MBA class Data, Models, and Decisions, with most chapters and cases pre-tested at eight named schools (2004) [B014 p. 1]; the 2016 authors have used their book to teach a one-semester Sloan class and a shorter executive class with a named chapter subset, and the edX MOOC 15.071x is "based on this book" (the MOOC ran from 2014 [06 §1]) [B017 p. 1]. These pages name the classes as users of the books; none says that a book came from its named class, though the 2005 page has examples and exercises "developed through extensive classroom use" [B006 p. 1] and the 2004 page chapters "pre-tested in classrooms" at eight schools [B014 p. 1]. The pages of the 2019–2025 books name no course [B009 p. 1; B011 p. 1; B013 p. 1; B019 pp. 1–2]. His own pages list all eight books as Dynamic Ideas editions, the two first published elsewhere included [B008 pp. 1–2]. *Fix round*: the first wording, "each from a course named in its front matter" (SKILL.md) and "each book's front matter names its course" (here and in 08), is withdrawn: B006, B014 and B017 are publisher pages, not front matter, and the course → book direction is stated only for 1997, in line with the oral-history account [01 §1.9].
+- **⚠ line added**, carriers the steps omit: the 1997 book kept up by a dated errata sheet organised by printing, last updated 7/5/2021, through at least six printings [B003 p. 1]; RO taught inside his existing graduate methods course 15.093J (lecture 8 of 24, after sensitivity analysis) by 2009 [B021 pp. 1–2], beside the new courses of step 4. *Fix round*: "corrected by printing for 24 years" and "core methods course" are withdrawn: the sheet carries one date, its last update, so a continuous record from 1997 is not shown [B003 p. 1], and the course pages call 15.093J "Graduate", not core [B021 p. 1].
+- Not in SKILL.md: Ramana adopts the book for his own course in its first year [B005 p. 13] (a teaching-adoption signal, not the impact gate); the 2025 book is offered as a free PDF for academic use, but only through a request form [B019 p. 2]; the pool candidate *pre-test a book in other schools' classrooms* [B014 p. 1] joins card S792's *a course as the book's beta test*.
+
+The line before this increment (verbatim):
+
+```text
+- Practice: the thesis problem class came from his adviser's group [S048 pp. 18, 71, 125]; a cohort consolidated in a sole-author survey with open problems [S185 pp. 1, 4, 46, 48–49, 51]; an organ-allocation programme over successive theses [S476 pp. 1–2]; books with former students and colleagues, 2019–2025 [01 §1.9]; Interpretable AI 2018.
+```
 
 <a id="method-7"></a>
 ## Method 7: Bound before policy (promoted 2026-10-29)
@@ -644,6 +730,12 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 ```
 
 **Full-text additions.** The reply in the critics' frame [S095 pp. 3, 10, 21, 23]; a dated proof-repair note that keeps the published statements [S747 p. 1]; an adoption post-mortem in print [S262 p. 12]; a usable tool released with the paper [S190 pp. 1, 4–5; S094 pp. 1, 10; S325 p. 11; S395 pp. 5, 9; S615 p. 22]; staged and revised publication of one model (cluster 21, 19 works).
+
+**Increment books-2026-10-29** (2026-10-29; book material, framing and dating only, outside every say–do count; full account: [Book material](#books)). Step 1 adds public self-correction of a textbook: the errata sheet of *Introduction to Linear Optimization*, joint with Tsitsiklis, "Last updated on 7/5/2021", organised by printing (68 items in three lists; local fixes such as added hypotheses, signs and a missing figure; no wrong theorem reported) [B003 pp. 1–5]. The line before this increment (verbatim):
+
+```text
+1. Answer critique with a new paper in the critic's frame (→ Heuristic 2); repair a proof in a dated note [S747 p. 1].
+```
 
 <a id="workflow-g"></a>
 ## Workflow G: Supervision and group organisation
@@ -993,6 +1085,12 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 
 **Full-text evidence per row.** Trees and regression as an art: "Fitting regression models has long been viewed as an art" [S081 p. 3]; greedy induction and Breiman's own words [S011 pp. 4–6]. Randomization in small samples: [S124 pp. 2, 4–6]: "Indeed it does better because any manual manipulation of the optimized results would make the result less well matched than the reproducible optimum, which is verifiable, whereas no one grouping can ever be verified as the true result of pure randomization." [S124 p. 6]. Robust counterparts that turn nonlinear: [S001 pp. 1–3]. Polynomial solvability as the test: [S010 p. 2; S178 p. 5]: "Our view of computational tractability is not polynomial time solution times as these do not exist for the LQS problem unless P = NP." [S178 p. 5]. New row, heuristics judged only against heuristics: [S051 p. 1; S185 pp. 1–2; S183 p. 3]. The row on heuristics whose failures the user cannot see was merged into it to save words.
 
+**Increment books-2026-10-29** (2026-10-29; book material, framing and dating only, outside every say–do count; full account: [Book material](#books)). The row on methods-first teaching now cites the two book pages behind it [B014 p. 1; B017 p. 1] (quoted under [Taste: warning signs](#taste-warnings)). The row before this increment (verbatim):
+
+```text
+| Methods-first teaching; numbers plugged into black boxes | 2004 and 2016 book pages [02 T9] | Problem and data first (Method 5) |
+```
+
 <a id="research-trajectory"></a>
 ## Research trajectory
 
@@ -1070,6 +1168,12 @@ Constant: Method 7, Heuristic 10, Method 1, priced trade-offs [S597 pp. 36–38]
 - **Long collaborators**: John Tsitsiklis (queueing; LO textbook), Andrew Lo (finance), Robert Weismantel (IO book), Dick den Hertog (RO book; co-signs the 2021–2026 robust and global-optimization lines [S283 pp. 3–4, 15–19]), David Gamarnik (queueing book).
 - **Downstream**: 109 completed PhDs and 20 current (homepage, 2026). Lineages: SD (Niño-Mora, Paschalidis, Gamarnik, Sethuraman); IO (Goemans, C.-P. Teo); CP (Popescu, Natarajan); RO (Sim, Thiele, Brown, Caramanis, Iancu, Gupta, Dunning); ML (Shioda, King, Dunn, Pauphilet, Cory-Wright); DA (Kallus, McCord, Sturt); health (O'Hair, Orfanoudaki, Wiberg, Ma) [04 A.4]. Alumni return as co-advisers, book co-authors, informal advisers and co-authors on later programme stages [04 B.10; S476 p. 1].
 
+**Increment books-2026-10-29** (2026-10-29; book material, framing and dating only, outside every say–do count; full account: [Book material](#books)). Robert Freund added among the long collaborators: co-author of the MBA text in both editions [B015 pp. 1–5; B014 p. 1], and thanked with Dimitri Bertsekas in the 1997 preface for discussions and for reading parts of the manuscript [B001 p. 1]. The line before this increment (verbatim):
+
+```text
+- **Long collaborators**: John Tsitsiklis (queueing; LO textbook), Andrew Lo (finance), Robert Weismantel (IO book), Dick den Hertog (RO book), David Gamarnik (queueing book).
+```
+
 <a id="inner-tensions"></a>
 ## Inner tensions
 
@@ -1102,6 +1206,20 @@ Constant: Method 7, Heuristic 10, Method 1, priced trade-offs [S597 pp. 36–38]
 - **T2 · joint optimization vs heuristic engine**: optimization beats greedy practice [02 R11] vs simulated annealing judged lacking in theory, mixed in practice but generally applicable (1993) [S005 pp. 4–5], a heuristic beating CPLEX (2002) [S070 pp. 13–15], greedy recommended where optimization does not pay [S046 p. 19].
 - **T3 · optimization, not probability**: the 2019 principle [02 T4] vs asymptotic probabilistic analysis as the backbone of 1988–2002 [S038 pp. 6–8; S016 pp. 5–14], limit laws returning as uncertainty sets [S119 pp. 7–10], and a thesis combining stochastic and optimization ideas [02 C4].
 - **T4 · strong formulations vs solver speed** [inferred]: strength measured and pursued in air-traffic and product-line models [S015 pp. 2, 4–5, 10; S093 pp. 8–9, 17–19] vs weak big-M in tree MIOs and some ML models [S225 pp. 5–9; S358 pp. 4–12] (C10).
+
+**Increment books-2026-10-29** (2026-10-29; book material, framing and dating only, outside every say–do count; full account: [Book material](#books)).
+- **T1**: the stated side now includes the ML book's promise, on his own books page in 2026, of solutions that "can be certified to be optimal in minutes/hours" [B008 p. 1]; a 2020 reviewer reads it as solutions "impossibles à améliorer" (impossible to improve) [B010 p. 1].
+- **T2**: re-dated: the verdicts are in print in 1992 [B020 pp. 8–10] (C22). Teaching data, not in SKILL.md: simulated annealing is one IP heuristic in about two book pages of the 1997 textbook [B004 p. 5], local search and simulated annealing about six of the 550 body pages of the 2005 book [B007 p. 3], and one lecture, shared with approximation algorithms, in 2009 [B021 p. 2].
+- **T3**: the stated side now has its page [B009 p. 1]; the practice side adds the 2022 queueing book, four of whose five parts (titles only; Part V an appendix) are queueing analysis and probability [B013 p. 1] (card B013: [inferred from the structure]; a count of part titles, not a share of the content). *Fix round*: SKILL.md's "four-fifths queueing analysis and probability" is replaced by this wording. Not in SKILL.md: about 62% of the 2000 MBA text is decision analysis, probability, sampling, simulation and regression [B015 pp. 1–5]; a reviewer finds the RO book's link with probability "rarement aussi explicite et détaillé" (rarely this explicit and detailed) [B012 p. 1]. The 2019 principle concerns ML, so these are the practice side, not contradictions.
+- **T4** (not in SKILL.md): the stated side has a 1997 section "Guidelines for strong formulations" [B004 p. 4] and the 2005 emphasis [B006 p. 1; B007 p. 1].
+
+The lines before this increment (verbatim):
+
+```text
+- **Tension T1 · certified vs uncertified *optimal***: certificates make results strong [02 J2] vs runs stopped early or uncertified from 2004 on [S031 p. 26; S073 pp. 15–18] and applied trees called optimal with no gap or limit [S094 pp. 5, 9] (C9).
+- **T2 · joint optimization vs heuristic engine**: optimization beats greedy practice [02 R11] vs simulated annealing judged lacking in theory, mixed in practice but generally applicable (1993) [S005 pp. 4–5] and greedy recommended where optimization does not pay [S046 p. 19].
+- **T3 · optimization, not probability**: the 2019 principle [02 T4] vs asymptotic probabilistic analysis as the backbone of 1988–2002 [S038 pp. 6–8; S016 pp. 5–14] and limit laws returning as uncertainty sets [S119 pp. 7–10].
+```
 
 <a id="roundtable-card"></a>
 ## Roundtable card
@@ -1150,6 +1268,94 @@ Constant: Method 7, Heuristic 10, Method 1, priced trade-offs [S597 pp. 36–38]
 
 **Changes.** The research basis now gives the coverage of the full-text reading (team_status row: 932 Scholar rows, 751 distinct works, 473 open full texts, 413 read in full, 59 in part, 63 abstract only, 56 metadata only, 160 skipped, 1,083 quotes verified); the remaining gaps follow 08 §11; the field boundary drops "no stated methodology for SD and CP" (C1); a short list of corrections from the full texts sits under the Honest Boundary in SKILL.md, with the earlier wording below. *Fix round*: the claimed-but-unverified item "the Hartford length-of-stay figures" is annotated: the 2023 preprint read for [S617] reports a 0.67-day difference-in-differences against a parallel-trends counterfactual, without a standard error, which its authors call descriptive [S617 arXiv pp. 23–25]; the 2026 lecture's figures do not appear in it, and the 2026 article was not read. The books list now names all eight abstract-level book cards [S002; S020; S128; S209; S047; S084; S334; S695].
 
+**Increment books-2026-10-29** (2026-10-29; book material, framing and dating only, outside every say–do count; full account: [Book material](#books)). The research basis adds the 21 book-material cards and their 42 quotes (team_status: Book material carded 21; the research-work columns are unchanged); the remaining gaps say what of the books was read (the 1997 preface in its web form [B001 p. 1], four printed contents [B004 pp. 2–5; B007 pp. 1–4; B015 pp. 1–5; B018 pp. 1–5], publisher pages and his own [B002 pp. 1–3; B006 p. 1; B008 pp. 1–2; B009 p. 1; B011 p. 1; B013 p. 1; B014 p. 1; B017 p. 1; B019 pp. 1–2], an errata sheet [B003 pp. 1–5], four reviews [B005 pp. 13–14; B010 p. 1; B012 p. 1; B016 p. 1]) and that their bodies were not; the LO voice is no longer web-sourced only. Tacit gaps: *printed* book prefaces stay unread (the 1997 one is read only as the publisher serves it, Last-Modified 1999-11-04). Claimed but unverified: two items now have their joint statements with pages, ARO as a new way to solve RO [B011 p. 1] and data as objective reality [B017 p. 1; B009 p. 1]; both stay outside the methods. The first-activation disclaimer still says "his books at abstract level only": it is protected in an increment (see [Corrections](#corrections), pending edit). *Fix round*: the books clause of the remaining gaps now points here ([Book material](#books)), and the other gaps are "abstract- or metadata-level", as 08 §11 grades them (the achievable-region series abstract- or metadata-level, the editorials metadata-level). The lines before this increment (verbatim):
+
+```text
+- **Research basis**: six research notes (2026-10-28) from his homepage, two CVs, the 2014 Sloan oral history (read in full), publisher pages, lecture abstracts, about 30 thesis acknowledgements, version histories, repositories and critics' texts; then the full-text reading (2026-10-29): of 932 Google Scholar rows, 751 distinct works indexed, 473 with an open full text; 413 read in full and 59 in part, 63 at abstract and 56 at metadata level, 160 skipped (students' theses, reports, works not his); 611 cards, 1988–2026, including the 1988 thesis [S048]; 1,083 quotes verified verbatim.
+- **Remaining gaps**: 119 research works have no open full text (abstract or metadata cards); his eight books are carded at abstract level only [S002; S020; S128; S209; S047; S084; S334; S695], so the LO voice and the textbooks' philosophy stay web-sourced; so are the 2026 RO retrospective [S614], parts of the achievable-region series, clinical validations and editorials [08 §11]; preprints read may differ from journal versions.
+- **Tacit gaps**: the 2021 *Subject to* interview (supervision, selection criteria, time management) was not read; how Γ arose and why he entered RO are unknown; the BPV rejoinder (DOI 10.1214/20-STS701REJ), book prefaces, IJOO editorials and prize citations were not read; the pre-start impact gate and supervision routines cannot be seen in papers; his real-time judgment in meetings is invisible.
+- **Claimed but unverified** (never used as methods): adaptive RO as a new way to solve RO; the best idea wins whoever had it; yes to every prospective student; 60% of students becoming professors; graduates mostly in academia or small firms (contradicted: 6 of 8 placements in 2025–26 at large firms); weekly one-on-ones after 2014; students joining his companies only after graduating; impact within two to five years as a rule; certification in minutes in general; the Hartford length-of-stay figures (the 2023 preprint's 0.67 days is a descriptive estimate without a standard error [S617 arXiv pp. 23–25]; the 2026 article was not read); the Panama Canal plan; the diabetes trials' outcomes; the 2009 losses as the health trigger; companies as the channel to scale; data as objective reality; positive energy over IQ; geometry first in research.
+```
+
+<a id="books"></a>
+## Book material (increment books-2026-10-29)
+
+> Date: 2026-10-29 (stage T4, increment "books-2026-10-29"). Source: 21 cards, each item read in full, in `cards/c5-01.md` to `cards/c5-05.md` (round 5; works.json `B` entries B001–B021); synthesis: `08-deep-reading-synthesis.md`, section "Increment books-2026-10-29". Book material is framing and dating: it never enters a say–do count and promotes nothing (`references/paper-reading-card.md` §三; `references/research-extraction-framework.md` §三). No book body was read. Every voice is joint (the co-authors' "we", or the publisher's page) unless marked, and reviews are their reviewers' voices. SKILL.md points here from How to Use, the Signature Work Anatomy note and the Honest Boundary; the evidence per SKILL.md item, with that item's wording before this increment, is in the blocks headed **Increment books-2026-10-29** under the item's own anchor.
+
+### What was read
+
+| Book [work card] | Open items [cards] | Voice | Not read |
+|---|---|---|---|
+| *Introduction to Linear Optimization*, with J. N. Tsitsiklis, Athena Scientific 1997 [S002] | the preface as served on the publisher's site [B001 p. 1]; the Athena book and contents pages and the Dynamic Ideas page [B002 pp. 1–3]; the printed title page and contents [B004 pp. 1–5]; the errata sheet [B003 pp. 1–5]; M. V. Ramana's review, *Optima* 54 [B005 pp. 13–14] | joint; publishers; reviewer | the body; whether the web preface equals the printed one; J. Bard's 2000 review (an excerpt only, on the publisher's page); Y. Ye's 1998 review |
+| *Data, Models, and Decisions*, with R. M. Freund, South-Western 2000; 2nd ed. Dynamic Ideas 2004 [S128] | the 2000 printed contents [B015 pp. 1–5]; the 2004 publisher page [B014 p. 1]; an unsigned review on GraduateTutor.com [B016 p. 1] | joint; reviewer | body, prefaces |
+| *Optimization over Integers*, with R. Weismantel, Dynamic Ideas 2005 [S020] | the publisher page [B006 p. 1]; the printed contents [B007 pp. 1–4]; the four-part map on his 2017 books page [B008 p. 2] | joint ("we") | body, preface; no review carded |
+| *The Analytics Edge*, with A. K. O'Hair and W. R. Pulleyblank, 2016 [S209] | the publisher page [B017 p. 1]; the printed contents [B018 pp. 1–5] | joint first person | body, preface |
+| *Machine Learning under a Modern Optimization Lens*, with J. Dunn, 2019 [S047] | the publisher page with structure and principles [B009 p. 1]; T. Cuvelier's review, with an older publisher summary and a third-party chapter list [B010 p. 1] | joint, as the publisher presents it; reviewer | body, preface |
+| *Robust and Adaptive Optimization*, with D. den Hertog, 2022 [S084] | the publisher page [B011 p. 1]; T. Cuvelier's review, with a third-party chapter list [B012 p. 1] | joint "we"; reviewer | body, preface, the Dantzig quotation at the start of the preface |
+| *Queueing Theory: Classical and Modern Methods*, with D. Gamarnik, 2022 [S334] | the publisher page: five parts [B013 p. 1] | publisher, no first person | everything else |
+| *The Analytics Edge in Healthcare*, with A. Orfanoudaki and H. Wiberg, 2025 [S695] | the publisher page and the authors' site [B019 pp. 1–2] | publisher; joint | the book: its PDF is e-mailed only after a request form, which was not used |
+| all eight | his books pages, 2026 and 2017 [B008 pp. 1–2] | his pages, mostly publisher sentences | — |
+| not books | the 1992 printing of the simulated-annealing review, chapter 2 of the NRC report *Probability and Algorithms* [S438] [B020 pp. 1–14]; the Fall 2009 home page and syllabus of his course 15.093J [S564] [B021 pp. 1–2] | joint; his syllabus (the course description is MIT catalogue text) | lecture notes |
+
+All the publisher, library, review and course URLs answered HTTP 200 on 2026-10-29 (re-checked at the integration step), and the six PDFs had the byte sizes of the local copies.
+
+### Stated views per domain (for the Domain Map's Voice column)
+
+- **LO** [stated-joint, 1997, with Tsitsiklis; B001 p. 1]: "Our general philosophy is that insight matters most." Insight "necessarily requires a geometric view", while algorithms "can only be described algebraically", hence "the beautiful interplay between algebra and geometry". Other stated choices: comprehensive but economical; the state of the art, with case studies "that stretch the limits of currently available algorithms and computers"; the full simplex tableau only a device for numerical examples; LP in general form, the standard form only for algorithms; "we separate the structural understanding of linear programming from the particulars of the simplex method", with a duality theory that does not rely on it; and "The success of any optimization methodology hinges on its ability to deal with large and important problems.", which makes the last chapter, on the art of linear optimization, "a critical part of this book". The four abilities the book builds, in order: formulate fairly complex problems; appreciate "the main classes of problems that are practically solvable"; describe the solution methods; understand the qualitative properties of solutions. The publishers add "at the PhD level" and "It emphasizes the underlying geometry, intuition and applications of large scale systems." [B002 p. 3], a sentence his own pages reuse [B008 pp. 1–2].
+- **IO** [stated-joint, 2005, with Weismantel]: "We depart from earlier treatments of integer optimization by placing significant emphasis on strong formulations, duality, algebra and most importantly geometry." [B006 p. 1]; the topics chosen because "we feel" they "will affect the future of the field" [B006 p. 1]; "The key characteristic of our treatment is that our development of the algorithms is naturally based on the algebraic and geometric developments of Part II." [B008 p. 2]; mixed integer and robust discrete optimization included because real problems "have very often both continous and discrete variables and have elements of uncertainty that need to be addressed in a tractable manner" (spelling as printed) [B008 p. 2]. The 1997 antecedent: "some intuition as to what constitutes a ``strong'' formulation" [B001 p. 1] and a section "Guidelines for strong formulations" [B004 p. 4].
+- **RO** [stated-joint, 2022, with den Hertog; B011 p. 1]: the purpose, "a unified, insightful, and original treatment of robust and adaptive optimization"; RO and ARO for LO first, then nonlinear RO, "as opposed to presenting RO first and then ARO", because "ARO offers new and very effective ways to solve RO problems, a fact not fully recognized earlier." (claimed, not verified); nonlinear RO by concave and convex uncertainty, "as opposed to treating robust conic optimization" (no reason given); applications "guided by the quote of George Dantzig at the beginning of the preface" (the quotation was not seen). Teaching dates, titles only: "Linear Optimization Under Uncertainty*" in the 2000 MBA text [B015 p. 4]; "Robust discrete optimization" as the last chapter of the 2005 IO book [B007 p. 4]; robust optimization as lecture 8 of 24 in the 2009 methods course, after sensitivity analysis [B021 p. 2].
+- **CP**: no book voice. The 2005 IO book lists semidefinite approximation methods and optimization over polynomials [B006 p. 1]; the 2009 course closes with semidefinite optimization [B021 p. 2]. The label stays "stated jointly; this follows his co-authored papers" (C1).
+- **SD**: the 2022 book with Gamarnik has a publisher page of five part lines and no first-person sentence; "Part IV outlines the use of optimization in queueing networks." [B013 p. 1]; his own page condenses Parts III–V [B008 p. 1]. The voice stays "stated in his sole-author texts 1988–1995" (C1).
+- **ML** [stated-joint, 2019, with Dunn, as the publisher presents the book; B009 p. 1], the six "Philosophical principles of the book", as printed (some words run together on the page): "Interpretability is materially important in the realworld."; "Practical tractability not polynomial solvability leads to real world impact."; "NP-hardness is an opportunity not anobstacle."; "ML is inherently linked to optimization not probability theory. Data represent an objective reality; models only exist in our imagination."; "Optimization has a significant edge over randomization."; "The ultimate objective in the real world is prescription,not prediction.". The older summary, still on his 2026 page: "The book provides an original treatment of machine learning (ML) using convex, robust and mixed integer optimization that leads to solutions to central ML problems at large scale that can be found in seconds/minutes, can be certified to be optimal in minutes/hours, and outperform classical heuristic approaches in out-of-sample experiments." [B008 p. 1; B010 p. 1].
+- **DA** [stated-joint]: 2004, with Freund [B014 p. 1]: "This book represents a departure from existing textbooks. Rather than covering methodology, the book introduces decision support systems through real world applications"; "It is our mission in this book to contribute to preparing today's management students to become tomorrow's business leaders, and therefore demonstrate that the tools and models of management science pass Dantzig's test."; "Simply teaching students to plug numbers into black-box models is not relevant to a student's education."; "In context, spreadsheets are a vehicle for working with models, but are not a substitute for thinking through the construction of models and analyzing modeling-related issues." 2016, with O'Hair and Pulleyblank [B017 p. 1]: "Problems and data play a leading role in this book, while models play an essential but supporting role."; "The only objective reality is data, which itself may be incomplete and of questionable quality, and the role of models is to facilitate the solution of real world problems."; real problems "do not come with labels".
+- **HS** [stated-joint, 1992, with Tsitsiklis]: "As far as theory is concerned, there is at present a definite lack of rigorous results justifying the use of simulated annealing." [B020 p. 8]; practice "mixed" in the Johnson et al. study the review reports, with the comparison at equal computation time [B020 p. 9]; "Overall, SA is a generally applicable and easy-to-implement probabilistic approximation algorithm that is able to produce good solutions for an optimization problem, even if we do not understand the structure of the problem well." [B020 p. 10]. In his textbooks, heuristics are a few pages of the IP chapters [B004 p. 5; B007 p. 3].
+- **AP** [stated-joint, 2025, with Orfanoudaki and Wiberg; B019 p. 2]: "Analytics is not in conflict with medical expertise, but synergistic with it: a new paradigm of evidence-based care, learned from the records of millions of patients."; recent advances "through real applications developed with leading medical centers"; "Each chapter introduces a class of algorithms through the lens of a real clinical example." The 2016 application areas: humans and machines, sports and games, healthcare, the internet, crime, operations, finance [B017 p. 1; B018 pp. 1–4].
+
+### How the books are organised (contents and prefaces; titles only, the cards' counts)
+
+- **1997 LO** [B004 pp. 2–5; B001 p. 1]: 12 chapters and 112 sections, 8 starred; the LP core 40% of the 568 chapter pages, network flows (the longest chapter) 17%, polynomial-time methods 16%, integer programming 14%, the art chapter 6%; geometry before the simplex method; the simplex-free and general duality starred; a section on strong formulations before the IP algorithms; heuristics in three book pages; stochastic programming as one section (Benders decomposition, inside large-scale optimization); a theme across chapters: problems with exponentially many constraints, from modeling to complexity, algorithms and a case study [B001 p. 1].
+- **2000 MBA text** [B015 pp. 1–5]: ten chapters, opening with decision analysis and "The Need for a Systematic Theory of Probability"; about 62% probability, statistics and simulation, 31% optimization, 6% a capstone; each optimization chapter opens with the formulation of a management problem; branch and bound and a solvability taxonomy starred; 33 case modules; no title on queueing.
+- **2005 IO** [B007 pp. 1–4]: 14 chapters, no part headings in print; formulations and their strength first (chapters 1–3, 22% of 550 body pages); duality a chapter of its own; algebra and geometry before the algorithms; approximation algorithms the longest chapter (60 pages), with a section on limitations in approximability; robust discrete optimization last; no title on computation, applications or a solver.
+- **2016 analytics** [B018 pp. 1–5]: seven application parts, then "Methods and Exercises to Put the Analytics Edge into Action" in about the last fifth; linear and integer optimization the shortest section of the methods overview.
+- **2022 RO** [B011 p. 1]: six parts (linear RO and sets; ARO; nonlinear RO with concave, then convex uncertainty; distributionally robust theory; applications); a third-party list of 27 chapter titles, not checked against print [B012 p. 1].
+- **2022 queueing** [B013 p. 1]: queues, networks, asymptotic methods, optimization (one part of five), the probabilistic machinery in an appendix.
+- **2025 health** [B019 p. 2]: 11 method chapters, each through one clinical example; nine case studies; two chapters of summary tables; optimization one chapter of eleven, in a closing decision group with prescriptive methods and fairness.
+
+### Errata
+
+[B003 pp. 1–5], joint with Tsitsiklis: "Last updated on 7/5/2021"; a sixth printing named ("In some copies of the 6th printing, this figure is missing", with the whole page reproduced) [B003 p. 1]; 68 items in three lists by printing (13 still listed for the third and later printings, 31 fixed after the second, 24 after the first; the card's count); local fixes (hypotheses added, signs and strictness, a table, names), with no wrong theorem or proof reported; 18 of the 24 fixes after the first printing are exercises; Exercise 3.8 replaced by a hardness result: "This exercise deals with the problem of deciding whether a given degenerate basic feasible solution is optimal and shows that this is essentially as hard as solving a general linear programming problem." [B003 p. 4]. Note 03 B5.2 says "about 33" entries (correction candidate, not applied). No addenda found.
+
+### Reviews (reviewers' voices; also in note 05)
+
+- **M. V. Ramana**, *Optima* 54 (June 1997), on the 1997 book [B005 pp. 13–14]: adopts it for his own course; chapters 8, 9 and 12 alone a reason to buy it; the last chapter "unique to this book"; the geometric explanations "widely successful". Criticisms: no upper-bounded simplex; the network simplex for the uncapacitated case first; chapter 6 brisk; "In trying to cover too many topics in one chapter, I feel that the authors have somewhat compromised the clarity of exposition in this chapter." (chapter 7) [B005 p. 13]; chapter 11 omits the Gomory convergence proof and brings in complexity classes "out of the blue"; dense in places, with the tone of a research paper [B005 p. 14]. The publisher quotes only his praise [B002 p. 1].
+- **J. Bard**, *Interfaces* 30(4), 2000: an excerpt on the publisher's page only ("at the top of the list") [B002 p. 1]; the review was not read.
+- **T. Cuvelier**, developpez.com, 6 December 2020, on the 2019 ML book [B010 p. 1]: "Ce parti pris n'est pas encore suivi par la communauté de l'intelligence artificielle au sens large" (this stance is not yet followed by the wider AI community); "En particulier, cela signifie qu'il n'existe pas encore d'implémentation répandue pour la plupart des algorithmes présentés." (in particular, there is not yet a widespread implementation for most of the algorithms presented); most content the authors' own research; rigorous yet readable; demanding prerequisites.
+- **T. Cuvelier**, developpez.com, 2 December 2022, on the 2022 RO book [B012 p. 1]: "L'auteur y poursuit une approche très pragmatique, où les temps de calcul en pratique sont plus importants qu'une classe de complexité abstraite." (a very pragmatic approach, in which computing times in practice matter more than an abstract complexity class); "Le lien avec les probabilités est rarement aussi explicite et détaillé." (the link with probability is rarely this explicit and detailed); no criticism.
+- **Unsigned, GraduateTutor.com**, about 2014 [inferred], on the MBA text [B016 p. 1], weak evidence (a company selling tutoring for the book; linked from the publisher's page [B014 p. 1]): "Unlike most text books, the objective is not to cover standard topics in statistics and operations research but to provide students frameworks for decision making."; "One wonders, however, if students would be better off having more depth in statistics and operations management separately."
+
+### Dating and versions
+
+- B020 = S005: one work in two printings (1992 NRC chapter; 1993 *Statistical Science*); counted once, as S005; the 1992 printing dates the verdicts (C22) [B020 pp. 8–10].
+- His books pages date *Introduction to Linear Optimization* by its 2008 Dynamic Ideas edition and the MBA text by its 2004 second edition [B008 pp. 1–2]; this skill dates both by their first editions (1997; 2000).
+- Contradiction kept: his 2017 page maps *Optimization over Integers* as Part III = chapters 9–11 (with approximation algorithms) and Part IV = chapters 12–13 [B008 p. 2], while the printed contents carry no parts and put approximation algorithms in chapter 12, mixed integer optimization in 13 and robust discrete optimization in 14 [B007 pp. 3–4].
+
+### SKILL.md lines changed outside an item anchor (verbatim, before this increment)
+
+The epigraph gained the card citation [B009 p. 1]; the Signature Work Anatomy note no longer says "prefaces unread; abstract-level cards".
+
+```text
+> "Practical tractability not polynomial solvability leads to real world impact." — Bertsimas & Dunn, *Machine Learning under a Modern Optimization Lens* (Dynamic Ideas, 2019), "Philosophical principles of the book" on the publisher's page (https://www.dynamic-ideas.com/books/machine-learning-under-a-modern-optimization-lens; wording checked 2026-10-28)
+Rows rest on the full texts. Earlier rows: the ledger anchor under each table; a seventh anatomy (execution costs): ledger `#anatomy-execution-costs`. The textbooks are not dissected (prefaces unread; abstract-level cards); web-pass dissections: [01 §2](references/research/01-publications.md).
+```
+
+### Not added to SKILL.md
+
+- The disclaimer's book clause (protected in an increment; pending edit under [Corrections](#corrections)).
+- No new method, heuristic or taste item: book material alone never promotes; the eight pool candidates are in 08, "Increment books-2026-10-29", I.9.
+- No say–do count change; no Research Trajectory "Latest" line (no new edition or work in 2025-10 to 2026-10 [B008 p. 1]).
+- Reception lines from the RO review (positive, no criticism [B012 p. 1]) and from the unsigned MBA-text review (weak [B016 p. 1]): note 05 only.
+- The teaching variants of Methods 1 and 5 at MBA level, the M3, M7, H9 and H10 links, and the 2025 health book's method-first Part I: here and in 08 only.
+
 <a id="corrections"></a>
 ## Corrections from the full texts
 
@@ -1177,6 +1383,8 @@ Each line: the earlier wording (verbatim where it was a phrase in SKILL.md), the
 - **C20** Disclaimer and Honest Boundary "no full-text deep reading has been done yet" / "no full-text deep reading yet" → overturned by the coverage above.
 - **C21** (fix round) Taste mark 5 "Interpretable where people act on the result" and warning sign 5 "Black boxes in decisions about people [02 T6]" → scoped by decision type: required where guidance changes standard care, black boxes acceptable for diagnosis [S685 pp. 2–3]; counter-practice: boosted trees explained by SHAP in tools clinicians use [S054 pp. 4–9; S621 pp. 2–3, 16–18], and a trust ladder from optimal trees to XGBoost once doctors were receptive [S617 arXiv pp. 9–11, 20–21].
 - **Activation Rules, rule 3** (applied 2026-10-29 in an operator step after T3.6 and before T3.7: rule 3 now carries the SD and CP labels below with "(C1)", the disclaimer's override sentence "**Label correction (C1), overriding the CP and SD clause of the next rule**: for SD add …; for CP add …" is dropped, and the convener's agenda and sign-off name *a bound valid for every policy* beside *certificate or gap*; the earlier wording follows): the rule still tells the model to add, for CP and SD, *no stated methodology found; this follows his co-authored papers* (SKILL.md, Activation Rules, rule 3). The T3.6 deletion detector protects every Activation Rules line except the first-activation disclaimer, so the override sits in the disclaimer line (C1). Proposed one-line edit for an operator-approved step: for SD add *stated in his sole-author texts 1988–1995*; for CP add *stated jointly; this follows his co-authored papers*; then drop the override sentence from the disclaimer. Likewise pending: the convener's agenda and sign-off could name *a bound valid for every policy (no exact solve)* beside *certificate or gap* (Method 7).
+- **C22** (increment books-2026-10-29) The simulated-annealing review's verdicts dated 1993 (Domain Map HS row, Tension T2, Method 4's line on the critic-informed checks; C8 and C15 cite the 1993 journal pages) → the same text is in print in 1992, as chapter 2 of the National Research Council report *Probability and Algorithms* (Crossref: DOI 10.17226/2026, issued 1992; checked 2026-10-29): the theory verdict [B020 p. 8], the mixed practice and the equal-time comparison [B020 p. 9], the general applicability [B020 p. 10]. The card's word comparison finds copy-edits only. B020 and S005 are one work in two printings: S005 is counted, B020 dates it. *Fix round*: SKILL.md's C22 now names C8 in its scope, since C8 still dates the equal-time yardstick to 1993 by the journal pages [S005 pp. 3–4], while Method 4's line dates it to 1992 [B020 p. 9]; C8's own wording is unchanged.
+- **Activation Rules edit, applied 2026-10-29** in an operator step after the increment: the disclaimer now ends "his eight books only through their open parts (the 1997 preface, publisher pages and his own, four contents lists, an errata sheet, four reviews), never their bodies" [B001 p. 1; B002 pp. 1–3; B008 pp. 1–2; B004 pp. 2–5; B007 pp. 1–4; B015 pp. 1–5; B018 pp. 1–5; B003 pp. 1–5; B005 pp. 13–14; B010 p. 1; B012 p. 1; B016 p. 1]. The earlier entry follows verbatim. **Pending Activation Rules edit** (increment books-2026-10-29, not applied: an increment may change only the numbers of the first-activation disclaimer, and they do not change, because book material is not counted in the research-work columns): the disclaimer still ends "his books at abstract level only". Proposed wording for an operator-approved step: "his eight books only through their open parts (prefaces, publisher pages, contents, errata, reviews), never their bodies". How to Use and the Honest Boundary already say this.
 
 **Earlier frontmatter** (verbatim; `researched:` is now 2026-10-29 and the description mentions the full-text coverage and bounding policies):
 
@@ -1328,3 +1536,21 @@ researched: 2026-10-28
 - S909 · Optimal Selection of Health Care Providers (2017) · full · a3-05, s4-03
 
 *Tighten step (T3.7)*: the list above is the set cited before the cut; these IDs are now cited only in this ledger, with their pages, under **Moved at the tighten step**: S017, S025, S028, S042, S132, S134, S138, S168, S192, S205, S255, S292, S328, S358, S474, S829.
+
+*Increment books-2026-10-29*: book-material IDs now cited in SKILL.md (generated from the card digests the same way; all book material, outside every say–do count; version pair B020 = S005, one work in two printings, S005 counted):
+
+- B001 · Introduction to Linear Optimization (Bertsimas, Tsitsiklis; Athena Scientific 1997): P… (1997) · full · c5-01
+- B003 · Introduction to Linear Optimization: errata sheet (last updated 7/5/2021), Athena Scie… (2021) · full · c5-03
+- B004 · Introduction to Linear Optimization: title page and table of contents (library scan, T… (1997) · full · c5-01
+- B005 · Review of Introduction to Linear Optimization by Motakuri V. Ramana, Optima 54 (June 1… (1997) · full · c5-01
+- B006 · Optimization over Integers (Bertsimas, Weismantel; Dynamic Ideas 2005): publisher's bo… (2005) · full · c5-02
+- B008 · Dimitris Bertsimas's own books pages: Published Books on dbertsim.mit.edu (2026) and B… (2026) · full · c5-04
+- B009 · Machine Learning under a Modern Optimization Lens (Bertsimas, Dunn; Dynamic Ideas 2019… (2019) · full · c5-03
+- B010 · Review of Machine Learning under a Modern Optimization Lens by Thibaut Cuvelier, devel… (2020) · full · c5-03
+- B011 · Robust and Adaptive Optimization (Bertsimas, den Hertog; Dynamic Ideas 2022): publishe… (2022) · full · c5-04
+- B013 · Queueing Theory: Classical and Modern Methods (Bertsimas, Gamarnik; Dynamic Ideas 2022… (2022) · full · c5-04
+- B014 · Data, Models, and Decisions (Bertsimas, Freund; 2nd ed., Dynamic Ideas 2004): publishe… (2004) · full · c5-02
+- B017 · The Analytics Edge (Bertsimas, O'Hair, Pulleyblank; Dynamic Ideas 2016): publisher's b… (2016) · full · c5-03
+- B019 · The Analytics Edge in Healthcare (Bertsimas, Orfanoudaki, Wiberg; Dynamic Ideas 2025):… (2025) · full · c5-04
+- B020 · Simulated Annealing (Bertsimas, Tsitsiklis), chapter 2 of Probability and Algorithms (… (1992) · full · c5-01
+- B021 · Optimization Methods (MIT 15.093J, Fall 2009, instructor Dimitris Bertsimas): MIT Open… (2009) · full · c5-02

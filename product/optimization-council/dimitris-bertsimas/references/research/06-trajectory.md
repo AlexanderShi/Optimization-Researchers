@@ -541,3 +541,27 @@ Patterns: early sole authorship and co-advising (DSpace advisor fields [04 A.2])
 ### 15. Latest, as carded
 
 The 2025–2026 items of §8 that have cards: fluid restless bandits by ML, read in full [S681 pp. 1, 3, 8]; Hartford HealthCare operations, read in full [S617 arXiv pp. 1–2, 11–14, 22–25]; cone product reformulation for global optimization [S415 pp. 19–20]; xHAIM in npj Digital Medicine [S390 pp. 1–5] (= the arXiv version S524); domain adaptation of embeddings [S426 pp. 4, 6] and a training-free time-series classifier [S474 pp. 2, 4, 8], two papers with no optimization formulation; the 2026 RO retrospective with den Hertog, abstract only [S614].
+
+### 16. Increment books-2026-10-29 (2026-10-29): dated additions from the open parts of his books
+
+> Stage T4, increment "books-2026-10-29": 21 items of book material (works.json `B001`–`B021`; cards `cards/c5-01.md` to `c5-05.md`), each read in full for its item; no book body was read. Full account: `09-evidence-ledger.md#books`.
+
+| Year | Item | Source |
+|---|---|---|
+| 1992 | The simulated-annealing review with Tsitsiklis in print as chapter 2 of the NRC report *Probability and Algorithms*, a year before the *Statistical Science* version, with the same text and verdicts | [B020 pp. 1–14] |
+| 1997 | *Introduction to Linear Optimization*: "The book was developed while we took turns teaching a first-year graduate course at M.I.T., for students in engineering and operations research."; reviewed in *Optima* in June 1997 | [B001 p. 1]; [B005 pp. 13–14] |
+| 2000 | *Data, Models, and Decisions*, first edition (South-Western), with a starred section "Linear Optimization Under Uncertainty" (title only; content not read), two years before the budget Γ of the 2002 working paper | [B015 p. 4]; [S653 pp. 12–14] |
+| 2004 | Its second edition, Dynamic Ideas (July 2004 on his 2017 page), with Dantzig's test as its stated mission | [B014 p. 1]; [B008 p. 2] |
+| 2005 | *Optimization over Integers* (January 2005 on his 2017 page), with robust discrete optimization as its last chapter | [B008 p. 2]; [B007 p. 4] |
+| 2008 | *Introduction to Linear Optimization* listed on his pages as a Dynamic Ideas edition ("March, 2008") | [B008 p. 2] |
+| 2009 | 15.093J Optimization Methods: robust optimization is lecture 8 of 24, inside the linear-optimization block | [B021 p. 2] |
+| 2014 → 2016 | The edX MOOC 15.071x runs from 2014 (§1); *The Analytics Edge* (2016) says the MOOC is based on the book | [B017 p. 1] |
+| 2019 → 2021 | *Machine Learning under a Modern Optimization Lens*; a signed review on developpez.com (December 2020); the 2021 Lanchester Prize stated on the publisher's page | [B009 p. 1]; [B010 p. 1] |
+| 2021 | The LO textbook's errata sheet last updated (7/5/2021), with a sixth printing named | [B003 p. 1] |
+| 2022 | *Robust and Adaptive Optimization* and *Queueing Theory: Classical and Modern Methods*; a signed review of the RO book (December 2022) | [B011 p. 1]; [B013 p. 1]; [B012 p. 1] |
+| 2025 → 2026 | *The Analytics Edge in Healthcare*; his books page, last published 2026-09-11, lists eight books, all as Dynamic Ideas editions | [B019 pp. 1–2]; [B008 p. 1] |
+
+- **Turn T10 (education)**: four books tie themselves to MIT courses (one preface, three publisher pages): the 1997 text was developed while teaching a graduate course there [B001 p. 1], and the 2004, 2005 and 2016 texts are used in named MIT classes [B014 p. 1; B006 p. 1; B017 p. 1]; the pages of the 2019–2025 books name no course [B009 p. 1; B011 p. 1; B013 p. 1; B019 pp. 1–2]. The first book has an errata sheet organised by printing, last updated 2021, through at least six printings [B003 p. 1]. The textbooks span his whole career, from the 1997 PhD text to the 2025 health book.
+- **Teaching order across eras** [inferred from contents and pages]: the 1997 and 2005 PhD texts put theory first and practice last [B004 pp. 2–5; B007 pp. 1–4]; the 2000/2004 MBA text and the 2016 analytics book put decisions, problems and data first [B015 pp. 1–5; B017 p. 1]; the 2025 health book teaches method classes first, each through one clinical example, then case studies [B019 p. 2].
+- **Dating correction**: the simulated-annealing verdicts date from 1992 [B020 pp. 8–10] (correction C22 in `09-evidence-ledger.md#corrections`).
+- **The last 12 months** (§8 and §15): no new book or edition appeared; "Latest" is unchanged.

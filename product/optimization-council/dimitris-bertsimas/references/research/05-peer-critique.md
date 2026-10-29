@@ -475,3 +475,47 @@ P = primary (the item's own text read in this run; "abstract" when only the abst
 78. Semantic Scholar Graph API, citation contexts of 19 Bertsimas papers (15,853 records, 8,785 with contexts), queried 2026-10-28 (S, tool)
 79. zbMATH Open API, document search for Bertsimas items, queried 2026-10-28 (S, tool)
 80. Sibling research note `06-trajectory.md` (Interpretable AI founding; faded RO-for-stochastic-analysis programme; arXiv 1402.5481 history, re-verified), 2026-10-28 (S, cross-reference only)
+
+---
+
+## Update 2026-10-29 (increment books-2026-10-29): published reviews of his books
+
+> Stage T4, increment "books-2026-10-29". Four reviews of his books were found and carded in this increment, each read in full: works.json B005, B010, B012 and B016, on the cards in `cards/c5-01.md`, `c5-03.md`, `c5-04.md` and `c5-05.md`. Every review below is the reviewer's voice, never evidence of Bertsimas's methods. Citations: `[B005 p. 13]` = card B005 at the file page. The sections above stay as written in the web pass of 2026-10-28; where these reviews change them, the last subsection says so. Full account of the book material: `09-evidence-ledger.md#books`; synthesis: `08-deep-reading-synthesis.md`, section "Increment books-2026-10-29".
+
+### Overview rows (continuing the table of §0)
+
+| # | Target (domain) | Critic(s), year | Critique in one line | Kind | Answered? How |
+|---|---|---|---|---|---|
+| 18 | *Introduction to Linear Optimization*, with Tsitsiklis, 1997 (LO, IO) | M. V. Ramana, *Optima* 54, June 1997 | Praise for the pedagogy, the geometric explanations and chapters 8, 9 and 12; six criticisms of coverage and density | review, positive with criticisms | **No reply known.** The authors' errata sheet (68 items by printing, last updated 7/5/2021) [B003 pp. 1–5] corrects local errors; by the card's classification of its items, none concerns the points Ramana raised [inferred] |
+| 19 | *Machine Learning under a Modern Optimization Lens*, with Dunn, 2019 (ML) | T. Cuvelier, developpez.com, 6 December 2020 | Not yet followed by the wider AI community; mostly the authors' own research; no widespread implementation of most algorithms; demanding prerequisites | review, positive with limits | **No reply known** |
+| 20 | *Robust and Adaptive Optimization*, with den Hertog, 2022 (RO) | T. Cuvelier, developpez.com, 2 December 2022 | Pragmatic (computing time over complexity class), theory well covered, the link with probability unusually explicit; no criticism | review, positive | n/a |
+| 21 | *Data, Models, and Decisions*, with Freund, 2000 and 2004 (DA) | unsigned, GraduateTutor.com, about 2014 [inferred] | One combined course drops standard topics and may cost depth | review, positive with a question; weak (unsigned, commercial) | n/a |
+
+### Ramana (1997) on *Introduction to Linear Optimization* [observed, P]
+- **Source**: M. V. Ramana, review, *Optima* 54 (June 1997), pp. 13–14, the newsletter of the Mathematical Programming Society (now the Mathematical Optimization Society), openly hosted at mathprog.org [B005 pp. 13–14].
+- **Praise**: the pedagogy is the book's "true merit", so that he adopts it for his own LP course [B005 p. 13]; chapters 8 and 9, with chapter 12, "alone are a good enough reason for one to buy this book" [B005 p. 13]; the final chapter is "unique to this book" [B005 p. 14]; the geometric and intuitive explanations are "widely successful" [B005 p. 14].
+- **Criticisms** (the reviewer's): the upper-bounded simplex method is the one aspect of the simplex coverage he finds missing; the network simplex is developed for the uncapacitated case first; "In trying to cover too many topics in one chapter, I feel that the authors have somewhat compromised the clarity of exposition in this chapter." (chapter 7); chapter 6 is "rather brisk but is sufficient" [B005 p. 13]. In chapter 11 the Gomory convergence proof is omitted, branch-and-bound and branch-and-cut are brief, and a section on complexity classes appears "out of the blue"; at times the tone is that of a research paper and the material feels dense [B005 p. 14].
+- **Reception record**: the publisher's page quotes three of his praising sentences and none of the criticisms [B002 p. 1]. The section he found "out of the blue" (11.8, Complexity theory) is in the printed contents [B004 p. 5] but missing from the publisher's web contents [B002 p. 2]. J. Bard's review (*Interfaces* 30(4), 2000) is known only from the publisher's excerpt, "at the top of the list" [B002 p. 1]; Y. Ye's 1998 review (row 17's lead, §6) stays unread.
+
+### Cuvelier (2020) on *Machine Learning under a Modern Optimization Lens* [observed, P]
+- **Source**: T. Cuvelier, "Critique du livre par la rédaction", developpez.com, 6 December 2020, in French [B010 p. 1]; English renderings below are outside quotation marks.
+- **Praise**: a new viewpoint; each technique introduced from first principles, with the current heuristics and their drawbacks first; rigorous yet readable; usable also as an advanced optimization text [B010 p. 1].
+- **Limits named**: "Ce parti pris n'est pas encore suivi par la communauté de l'intelligence artificielle au sens large" (the stance is not yet followed by the wider AI community); a good part of the content is the authors' and their collaborators' own research; "En particulier, cela signifie qu'il n'existe pas encore d'implémentation répandue pour la plupart des algorithmes présentés." (in particular, there is not yet a widespread implementation for most of the algorithms presented); demanding prerequisites, chiefly convex and integer optimization [B010 p. 1].
+- **How the reviewer reads the headline**: methods that bring optimal solutions "impossibles à améliorer" (impossible to improve) [B010 p. 1], stronger than the publisher's own "can be certified to be optimal in minutes/hours" [B010 p. 1] (the card's comparison).
+
+### Cuvelier (2022) on *Robust and Adaptive Optimization* [observed, P]
+- **Source**: T. Cuvelier, "Critique du livre par la rédaction", developpez.com, 2 December 2022, in French [B012 p. 1].
+- **Reading**: "L'auteur y poursuit une approche très pragmatique, où les temps de calcul en pratique sont plus importants qu'une classe de complexité abstraite." (a very pragmatic approach, in which computing times in practice matter more than an abstract complexity class); the theory, adaptive or distributional, is well covered, from the foundations in duality to equivalences between robust and adaptive optimization; modelling and solution algorithms stressed; "Le lien avec les probabilités est rarement aussi explicite et détaillé." (the link with probability is rarely this explicit and detailed), with characterizations of constraint-violation probabilities [B012 p. 1].
+- **Limits**: none stated. The review does not bear on any of the RO critiques of §4 (Pareto efficiency of budgeted optima, the 2006 inventory formulation, affine policies, robust queueing).
+
+### GraduateTutor.com (about 2014) on *Data, Models, and Decisions* [observed, weak]
+- **Source**: an unsigned page of a company that sells tutoring for the book, linked from the publisher's page [B016 p. 1; B014 p. 1]. Weak evidence: no reviewer can be named.
+- **Reading**: "Unlike most text books, the objective is not to cover standard topics in statistics and operations research but to provide students frameworks for decision making." [B016 p. 1]; one book for two subjects usually taught in two courses; decision trees first.
+- **Limits named**: combining two courses drops standard topics (descriptive statistics, hypothesis testing, inference and analysis of variance, the expected value of perfect information; discriminant analysis, forecasting, queueing theory); "One wonders, however, if students would be better off having more depth in statistics and operations management separately." [B016 p. 1]. At title level the 2000 contents agree that no section names these topics, except that confidence intervals and two-sample comparisons are there [B015 pp. 1–5] (the card's check).
+
+### What this changes above
+- **§0 row 17** ("Moment problems, textbooks, SDVRP, OPOM: none found"): for the textbooks, rows 18–21 above now exist; moment problems, SDVRP and OPOM are unchanged.
+- **§6, "LO/IO textbooks"**: a signed review of *Introduction to Linear Optimization* is now read in full (Ramana); Ye's review stays unread; no review of *Optimization over Integers* was carded in this increment either.
+- **Gaps, "Textbooks"**: "No review found for ... *Machine Learning under a Modern Optimization Lens*" no longer holds [B010 p. 1]. "Not checked for critique: ... *The Analytics Edge*": still no review carded.
+- **§7, pattern 3** (silence on reproducibility critiques): the 2020 reviewer's point that most of the ML book's algorithms have no widespread implementation [B010 p. 1] is an outside reader's version of the same gap; no reply found.
+- The two signed reviews of the theory books praise their stated design (geometry and practice in 1997; pragmatism and probability in 2022). Ramana's criticisms concern coverage and density, not correctness [B005 pp. 13–14]; Cuvelier's RO review states none [B012 p. 1]; his 2020 ML review names adoption and implementation limits [B010 p. 1].

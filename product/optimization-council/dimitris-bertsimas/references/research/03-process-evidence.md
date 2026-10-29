@@ -167,7 +167,7 @@ Source: the commit log of `COVIDAnalytics/DELPHI` (GitHub API: 554 commits under
 - **1997 correction** {SD}: DB, D. Gamarnik and J. N. Tsitsiklis, "Correction to 'Stability Conditions for Multiclass Fluid Queueing Networks'", IEEE Transactions on Automatic Control 42(1):128, January 1997, DOI 10.1109/TAC.1997.553697. It is a one-page notice published two issues after the original (41(11):1618–1631, November 1996, DOI 10.1109/9.543999). Content **not read**: paywalled, and the Semantic Scholar record elides the abstract.
 - **2014 withdrawal** {DA}: version 2 of arXiv:1402.5481 (26 June 2014) was withdrawn by N. Kallus with the comment "Withdrawn due to crucial error in Theorem 2.2". Version 3 (February 2015) returned with Bertsimas as co-author (B5.4).
 - **2023 publisher correction** {CP, IO}: a Publisher Correction (DOI 10.1007/s10107-023-01947-3) to "A new perspective on low-rank optimization" (Mathematical Programming 202:47–92, DOI 10.1007/s10107-023-01933-9). Content not read. [inferred] A publisher correction usually concerns a production error.
-- **Textbook errata** {LO}: *Introduction to Linear Optimization* (with Tsitsiklis, Athena Scientific, 1997) has an errata sheet "Last updated on 7/5/2021" on the publisher's site. It is organized by printing (errors in the first printing corrected in later ones, and so on) and has about 33 page-numbered entries.
+- **Textbook errata** {LO}: *Introduction to Linear Optimization* (with Tsitsiklis, Athena Scientific, 1997) has an errata sheet "Last updated on 7/5/2021" on the publisher's site. It is organized by printing (errors in the first printing corrected in later ones, and so on) and has 68 page-numbered entries [B003 pp. 1–5] (corrected 2026-10-29 from the carded sheet; the earlier count here was "about 33").
 - Crossref searches by author (Bertsimas) for erratum, correction, corrigendum, retraction and addendum found only the two corrections above. No retraction was found.
 
 #### B5.3 Answering criticism: the best-subset exchange, 2016–2020 {ML, IO} [practice · group · P; observed · S]
@@ -339,7 +339,7 @@ Summary: of 34 old-homepage entries checked, 17 have a journal version (11 in th
 
 | Code | What the artefacts show | Strength of evidence |
 |---|---|---|
-| LO | textbook errata maintained for 24 years by printing; NetLib PILOT4 used as a test case for an LP with uncertain coefficients (2004) | thin |
+| LO | textbook errata sheet organized by printing (at least six), last updated 2021 [B003 p. 1] (corrected 2026-10-29; earlier "maintained for 24 years by printing"); NetLib PILOT4 used as a test case for an LP with uncertain coefficients (2004) | thin |
 | IO | heuristic warm start, then MIO under a time limit, with certificates optional (best subset, optimal trees); the "why now" speed-up figure (B4.4); diagnosis of a non-scaling formulation by variable counts and a switch to local search (B4.5); BARON as the global-solver baseline in the cone-product paper (IJOC 2026) | strong |
 | RO | the rival's test problems (2004); the operator's incumbent rule and real network as baseline (ISO-NE 2013); a modelling package written by a student (JuMPeR); a published discussion and closure (2014); stalled robust-statistics manuscripts later retried (C.1) | medium |
 | CP | the low-rank optimization paper and its publisher correction (2023); MOSEK-based relaxations in the IJOC snapshot; moment and SDP papers known only from the publication list, with no process artefact read | thin |

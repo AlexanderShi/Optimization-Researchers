@@ -86,7 +86,7 @@ Single statements that are informative but below the threshold of three: an ex-a
 **T4. The six "Philosophical principles" of *Machine Learning under a Modern Optimization Lens* (2019)** {ML, IO, DA} [stated · primary · S05, publisher page of his own press; co-author J. Dunn; the preface itself not read]
 > "Interpretability is materially important in the realworld [sic]."
 > "Practical tractability not polynomial solvability leads to real world impact."
-> "NP -hardness is an opportunity not anobstacle [sic]."
+> "NP-hardness is an opportunity not anobstacle [sic]."
 > "ML is inherently linked to optimization not probability theory. Data represent an objective reality; models only exist in our imagination."
 > "Optimization has a significant edge over randomization."
 > "The ultimate objective in the real world is prescription,not [sic] prediction."
@@ -144,7 +144,7 @@ Single statements that are informative but below the threshold of three: an ex-a
   - S24 (arXiv 2015, AoS 2016): "In the last twenty-five years (1990-2014), algorithmic advances in integer optimization combined with hardware improvements have resulted in an astonishing 200 billion factor speedup in solving Mixed Integer Optimization (MIO) problems."
   - S25 (2017): "In the last 25 years, algorithmic advances in integer optimization coupled with hardware improvements have resulted in an astonishing 800 billion factor speedup in mixed-integer optimization (MIO). Motivated by this speedup, we present optimal classification trees".
   - S26 (2017) and S20 (2016) use 450 billion for 1991–2015.
-- S05 (2019): "NP -hardness is an opportunity not anobstacle [sic]."
+- S05 (2019): "NP-hardness is an opportunity not anobstacle [sic]."
 - R9: seven occurrences, 2015–2019. The size of the speed-up differs between papers (C5). Era: the argument depends on 2010s commercial MIO solvers and hardware. In his own framing it was not available "two decades ago".
 
 **P3. Bring another field's central problems under your own lens** {ML} [stated · primary]
@@ -509,7 +509,7 @@ This is for the council: these are the positions the record shows him **stating*
 - **C2. Theory and complexity first (1997–2005) vs. practical tractability first (2019)**.
   - 1997: "Our general philosophy is that insight matters most" (S09). That book covers the complexity of linear optimization and the ellipsoid method, and in 1989 his own goal was a complexity-type result (F1).
   - 2004: "tractable" means the robust counterpart stays a linear optimization problem (S29).
-  - 2019: "Practical tractability not polynomial solvability leads to real world impact." and "NP -hardness is an opportunity not anobstacle [sic]." (S05).
+  - 2019: "Practical tractability not polynomial solvability leads to real world impact." and "NP-hardness is an opportunity not anobstacle [sic]." (S05).
   - His own account of the change is that his principles took "more than a decade to fully crystalize" (S01).
 - **C3. Data as "objective reality" vs. data as uncertain**.
   - 2019: "Data represent an objective reality; models only exist in our imagination." (S05).

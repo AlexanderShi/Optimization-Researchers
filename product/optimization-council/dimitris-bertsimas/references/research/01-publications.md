@@ -454,3 +454,36 @@ Versions read where they differ from the listed venue (card headers): S010 is ar
 - **§1.3 AP**: outcome studies exist for several deployments [S115 pp. 22–24; S617 arXiv pp. 22–25; S339 pp. 10–11].
 - **§3 failures**: the Boston start-time plan's non-implementation is printed in the PNAS paper itself [S137 p. 2] and in the group's 2020 account [S262 pp. 10–12].
 - All corrections from the full texts, with the earlier wording: `09-evidence-ledger.md#corrections` (C1–C20).
+
+---
+
+## Update 2026-10-29 (increment books-2026-10-29): the open parts of the books
+
+> Stage T4, increment "books-2026-10-29". 21 items of book material (works.json `B001`–`B021`; cards `cards/c5-01.md` to `c5-05.md`; index `07-paper-cards.md`), each read in full for its item. They are not research works: `team_status.py --coverage` counts them in a column of their own (Book material carded: 21) and the coverage table of the full-text update above is unchanged. Citations: `[B001 p. 1]` = card B001 at the file page. Full account: `09-evidence-ledger.md#books`; synthesis: `08-deep-reading-synthesis.md`, section "Increment books-2026-10-29". No book body was read.
+
+### What is now read of each book (§1.9)
+
+| Book | Open items carded | Not read |
+|---|---|---|
+| *Introduction to Linear Optimization* (with Tsitsiklis, Athena Scientific 1997) | the preface as the publisher serves it [B001 p. 1]; publisher pages [B002 pp. 1–3]; printed contents [B004 pp. 1–5]; errata sheet [B003 pp. 1–5]; Ramana's review [B005 pp. 13–14] | body; printed preface |
+| *Data, Models, and Decisions* (with Freund, South-Western 2000; Dynamic Ideas 2004) | 2000 contents [B015 pp. 1–5]; 2004 publisher page [B014 p. 1]; an unsigned review [B016 p. 1] | body, prefaces |
+| *Optimization over Integers* (with Weismantel, 2005) | publisher page [B006 p. 1]; printed contents [B007 pp. 1–4]; his 2017 page's part map [B008 p. 2] | body, preface |
+| *The Analytics Edge* (with O'Hair and Pulleyblank, 2016) | publisher page [B017 p. 1]; printed contents [B018 pp. 1–5] | body, preface |
+| *Machine Learning under a Modern Optimization Lens* (with Dunn, 2019) | publisher page with the principles [B009 p. 1]; Cuvelier's review [B010 p. 1] | body, preface |
+| *Robust and Adaptive Optimization* (with den Hertog, 2022) | publisher page [B011 p. 1]; Cuvelier's review [B012 p. 1] | body, preface |
+| *Queueing Theory: Classical and Modern Methods* (with Gamarnik, 2022) | publisher page, structure only [B013 p. 1] | everything else |
+| *The Analytics Edge in Healthcare* (with Orfanoudaki and Wiberg, 2025) | publisher page and the authors' site [B019 pp. 1–2] | the book (PDF only through a request form, not used) |
+
+Also carded: his own books pages of 2026 and 2017 [B008 pp. 1–2]; the 1992 printing of the simulated-annealing review [B020 pp. 1–14]; the Fall 2009 syllabus of 15.093J [B021 pp. 1–2].
+
+### Corrections and additions to the sections above
+
+- **§1.9, dates and publishers**: his own pages give *Introduction to Linear Optimization* as "Dynamic Ideas and Athena Scientific, Belmont, Massachusetts, March, 2008." and *Data, Models and Decisions* as July 2004 [B008 p. 2]; the 2026 page lists all eight books as Dynamic Ideas editions [B008 p. 1]. The first editions are 1997 (Athena Scientific; ISBN 978-1-886529-19-9, 608 pages) [B002 p. 1] and 2000 (South-Western) [B015 pp. 1–5]; this note dates the books by their first editions. *Optimization over Integers* is dated January 2005 on his 2017 page [B008 p. 2].
+- **§1.9, the course-to-book route**: of the books' own pages, only the 1997 preface states it: the book "was developed while we took turns teaching a first-year graduate course at M.I.T." [B001 p. 1], which agrees with the oral-history account for that book; the preface does not name the course. Publisher pages name MIT classes that use three later books, consistent with the oral-history account, but none says that a book came from its named class (the 2005 page says only that its examples and exercises were "developed through extensive classroom use" [B006 p. 1]): the PhD class Integer and Combinatorial Optimization [B006 p. 1]; the core MBA class, with chapters and cases pre-tested at eight named schools [B014 p. 1]; a Sloan class, an executive class and the 15.071x MOOC, "based on this book" [B017 p. 1]. The pages of the 2019–2025 books name no course [B009 p. 1; B011 p. 1; B013 p. 1; B019 pp. 1–2].
+- **§1.9, book blurbs**: the stated aims now have pages: the IO book's departure, "strong formulations, duality, algebra and most importantly geometry" [B006 p. 1], and its algorithms "naturally based on the algebraic and geometric developments of Part II" [B008 p. 2]; the ML book's promise of solutions "found in seconds/minutes", "certified to be optimal in minutes/hours" and better out of sample [B008 p. 1; B010 p. 1], and its six principles [B009 p. 1]; the RO book's ARO-first order and its reason [B011 p. 1]; the 2025 book's stance that analytics is "synergistic" with medical expertise [B019 p. 2].
+- **§1.9, contradiction kept**: his 2017 page maps *Optimization over Integers* as Part III = chapters 9–11 (with approximation algorithms) and Part IV = chapters 12–13 [B008 p. 2]; the printed contents have 14 chapters and no part headings, with approximation algorithms in chapter 12, mixed integer optimization in 13 and robust discrete optimization in 14 [B007 pp. 3–4].
+- **§1.7, rank 5 (the simulated-annealing review)**: first printed in 1992 as chapter 2 of the National Research Council report *Probability and Algorithms* [S438] (Crossref: DOI 10.17226/2026, issued 1992), with the same text and verdicts as the 1993 *Statistical Science* version; one work in two printings [B020 pp. 1–14].
+- **§2, selection note** ("the two textbooks ... not dissected, because their prefaces were not read"): the 1997 preface is now read in its web form [B001 p. 1] and the 2005 book's purpose and parts are carded [B006 p. 1; B008 p. 2]; the bodies stay unread, so the textbooks are still not dissected.
+- **§3, failures and corrections**: the LO textbook's errata sheet has 68 items in three lists by printing, last updated 7/5/2021, with a sixth printing named [B003 pp. 1–5]; the corrections are local (none reports a wrong theorem).
+- **Teaching record**: his Fall 2009 graduate course 15.093J covers linear, robust, network, discrete, dynamic and nonlinear optimization, with robust optimization as lecture 8 of 24, right after sensitivity analysis [B021 p. 2].
+- **Data hygiene** (works.json not edited at this step): S002's Scholar venue "Athena scientific 6, 479-530" matches the printed span of chapter 11, book pages 479–532 [B004 p. 5], so it is probably a Scholar artifact; B020 and S005 are the same work, with no `dup_of` link between them.
