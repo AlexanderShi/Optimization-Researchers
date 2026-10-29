@@ -471,3 +471,73 @@ Accessed 2026-10-28 unless stated. P = primary, S = secondary.
 91. WebSearch result lists, 4 queries (2026-10-28), used as leads only. They led to sources 7, 11, 71 and 79. S
 92. `02-methodology.md` (sibling note in this repo), read only as a list of leads; every lead used here was re-fetched (sources 77, 78, 82). S
 93. MIT News, "Q&A: A roadmap for revolutionizing health care through data-driven innovation", 2025-05-05 (listed on the homepage media page; used only to date the 2025 book; not read). S
+
+---
+
+## Update 2026-10-29 (full-text pass)
+
+> Stage T3.6. From the paper cards (`cards/`, index `07-paper-cards.md`: 611 cards on 592 works; 413 works read in full and 59 in part, 1988–2026, including the 1988 thesis) and the synthesis `08-deep-reading-synthesis.md` §8–9. The sections above stay as written in the web pass; §10 lists what the full texts correct. Citations: `[S012 p. 9]` = card S012 at the file page of the version named on the card.
+
+### 10. Corrections to earlier sections
+
+- **§6, row 1988–1995** ("Pencil-and-paper probability and polyhedral theory; little computation") → theory-led, with steady computation from the start: a home-made C package, 45 PTSP problems and 20 instances per VRP type against named heuristics in the 1991 preprint [S089 pp. 13–17, 23, 26–28]; programmed queueing algorithms with run times by step [S291 p. 13; S168 pp. 15–16; S389 pp. 11–14]; an IP solved with MPSX [S036 pp. 7–10]; airport congestion runs on real data [S135 pp. 1–2, 7–8, 15–16]. In his words: "Being fully aware of the need for the probabilist to be closely involved with the algorithmic analysis of a problem, we have undertaken the task of programming and testing our algorithms." [S168 p. 14].
+- **§2.1** (the inherited problem class): the thesis itself documents it [S048 pp. 18, 71, 125; S038 p. 5]; the SKILL.md trajectory's "[inferred]" tag on this point is replaced by the cards.
+- **§3 T2** ("Trigger: no stated reason found") → the stated rationale is in his sole-author texts: the essential difficulty of stochastic and dynamic optimization is its dynamic and combinatorial character [S580 p. 10], and better formulations lead to deeper understanding and better methods [S185 p. 1]; the co-advising with Tsitsiklis is documented in the DSpace advisor fields (§2 above; [04 A.2]), and the papers show the co-authored thesis line [S072 pp. 1, 8, 10, 32–33] (*fix round*: the paper itself states no co-advising).
+- **§4, row "Moments and SDP bounds (CP)"** (entry 1998) → SDP strengthening of achievable-region relaxations starts in 1994–95 [S072 pp. 20–22; S185 pp. 44–45]; the moment-bound line proper starts with the 1998 work, as the row says.
+- **§3 T5** (robust optimization from 2001) → a budget Γ normalised by standard deviations appears in a 2002 working paper with Pachamanova [S653 pp. 12–14, 24], before the 2003–2004 papers [S004 pp. 4–7; S001 pp. 3–5]; how Γ arose is still not stated.
+- **The meaning of tractable**: in 1994–1997 his LP papers argue from operation counts and worst-case iteration bounds [S269 pp. 1, 21–22; S289 pp. 2, 6, 11–12]; computation in real problems is named the criterion in 2004 [S001 p. 8], and solve time is stated as the test from 2014 [S178 p. 5] and in 2016 [S010 p. 2] (*fix round*: one dating, as in SKILL.md). In 1996 scarce computation argued for simple a priori policies [S025 p. 17].
+- **§7, Boston** → the PNAS paper itself says the start times had not been implemented (p. 2) and later calls it a delay (p. 6) [S137 pp. 2, 6]; the group's 2020 account says the plan did not become reality [S262 pp. 10–12].
+- **§7, DELPHI** → the hub evaluation puts its relative WIS at the baseline level [S021 pp. 2, 4]; the group's own comparison uses its own metric [S103 pp. 14–16]. The hub papers are outside evaluations.
+- **Note 05, row 16** (execution costs, "permanent impact only"): the LPT law makes impact temporary [S009 pp. 17, 20–22]; recorded here and in `09-evidence-ledger.md#corrections` (C18) because note 05 is not edited in this pass.
+
+### 11. Topics by period
+
+Works read in full or in part / all works with a card, with the cards' domain tags (a work can carry several; 08 §8.1):
+
+| Period | Works | LO | IO | RO | CP | SD | ML | DA | HS | AP |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 1988–92 | 23/33 | 1/4 | 11/17 | 0/0 | 0/0 | 23/31 | 0/0 | 0/0 | 2/3 | 8/8 |
+| 1993–97 | 34/47 | 13/19 | 14/20 | 0/0 | 6/6 | 22/29 | 1/1 | 0/0 | 3/3 | 14/18 |
+| 1998–2002 | 34/46 | 13/13 | 16/18 | 1/1 | 7/8 | 21/26 | 0/0 | 0/2 | 1/1 | 15/19 |
+| 2003–07 | 36/50 | 16/17 | 12/16 | 15/20 | 18/19 | 17/20 | 3/3 | 5/5 | 3/3 | 21/25 |
+| 2008–12 | 36/47 | 3/4 | 16/18 | 21/23 | 7/8 | 7/8 | 6/7 | 3/6 | 4/5 | 25/28 |
+| 2013–17 | 55/60 | 14/14 | 31/34 | 24/26 | 8/8 | 6/6 | 17/19 | 13/16 | 7/7 | 33/37 |
+| 2018–22 | 128/156 | 10/10 | 63/71 | 31/33 | 19/22 | 8/10 | 92/112 | 39/56 | 11/11 | 84/98 |
+| 2023–26 | 116/137 | 10/10 | 48/49 | 38/41 | 20/22 | 9/9 | 85/96 | 52/57 | 11/11 | 74/84 |
+
+### 12. Turns, as the full texts show them
+
+1. **1988–1993, probabilistic combinatorial optimization and queueing analysis {SD IO}.** The thesis problem class comes from his adviser's group [S048 pp. 18, 71, 125]; a priori optimization [S038 pp. 1–2]; dense distribution classes for multiserver queues [S239 pp. 1–2; S168 pp. 1–2]; dynamic routing with van Ryzin after a colleague raised the problem [S016 pp. 1, 14].
+2. **1993–1995, from asymptotic constants to mathematical-programming relaxations of stochastic control {SD LO}.** The 1994 working paper names the dynamic and combinatorial character as the essential difficulty [S580 p. 10]; polyhedral and SDP relaxations of queueing networks [S072 pp. 2, 20–22]; the survey consolidates the cohort [S185 pp. 1–4].
+3. **1995–2002, IO relaxations, rounding and moments {IO CP AP}.** Survivable networks [S052 p. 3]; randomized rounding read as probability [S121 pp. 3–9; S007 pp. 33–35]; moment bounds as SDPs [S007 pp. 9, 18; S056 pp. 2–15]; finance with Lo [S009 p. 3]; fluid scheduling [S130 pp. 2–3].
+4. **2002–2007, budgeted robust optimization {RO}.** First Γ budget in a 2002 working paper [S653 pp. 12–14]; robust discrete optimization keeps the nominal complexity [S004 p. 22]; the price of robustness [S001 pp. 1, 3–5]; robust inventory [S014 pp. 1, 4–5].
+5. **2008–2015, adaptive policies, data-driven sets and limit laws {RO}.** Power and limits of static and affine policies [S134 pp. 6, 12–18; S042 pp. 2–3]; sets from risk measures [S024 pp. 2–5]; limit-law sets [S065 pp. 5–10; S119 pp. 7–10]; fairness [S012 pp. 1, 14; S026 pp. 1–2].
+6. **2014–2018, MIO for statistics and ML {ML DA IO}.** Tractability redefined by solve times [S178 pp. 3–5; S010 p. 2]; the why-now figure [S010 pp. 7–8; S081 p. 4; S011 pp. 5–6]; the prescriptive line [S008 pp. 10–12].
+7. **2018–2022, clinical ML, COVID-19 and deployment at scale {AP DA ML}.** Clinical calculators with optimal trees [S190 pp. 1, 4–5; S231 pp. 3, 8]; DELPHI [S103 pp. 2–3]; HAIM [S023 pp. 1, 3]; hospital operations [S115 pp. 2, 19–24].
+8. **2023–2026, multimodal AI, LLMs, global optimization and education {AP ML DA CP}.** xHAIM [S390 pp. 1–2]; LLM-assisted modelling [S330 pp. 1–4]; a group global-optimization solver line [S624 pp. 10–16; S415 pp. 19–20]; field roll-outs [S617 arXiv pp. 11–14]; teaching tools under the Open Learning role [S667 pp. 4–5, 7].
+
+### 13. What stayed constant, and what changed
+
+- **Constant**: bound before policy (Method 7 in SKILL.md; 79 works in all periods, version pairs merged); re-derive the classical results before extending (Heuristic 10; 80 works); class-keeping formulation (Method 1; 210 works with evidence links); a priced trade-off handed to the decision-maker from 1990 [S597 pp. 36–38] to 2026 [S668 pp. 4–8, 11]; printed limits, conjectures and loose constants in 1988–1993 [S048 pp. 100–101, 164–165; S016 pp. 7, 9] and negative results in the body later (51 works); programmes carried by students and former students (194 works).
+- **Changed**: the meaning of *tractable* (§10); scarce computation favouring simple a priori policies in 1996 [S025 p. 17] became abundant computation favouring exact MIO [S010 pp. 7–8]; sole authorship gave way to teams (§14); theory papers gave way to deployments with partners, several with measured outcomes [S115 pp. 22–24; S617 arXiv pp. 22–25; S339 pp. 10–11].
+
+### 14. Collaboration pattern by period
+
+From the cards' coauthor fields (surnames merged; approximate; 08 §9):
+
+| Period | Works with a card | Median coauthors | Sole-author works | Most frequent coauthors (works) |
+|---|---|---|---|---|
+| 1988–92 | 33 | 1 | 11 | van Ryzin 5, Nakazato 4, Papaconstantinou 3, Goemans 2, Odoni 2, Avram 2, Jaillet 2 |
+| 1993–97 | 47 | 1 | 4 | Tsitsiklis 9, Odoni 7, C.-P. Teo 5, Avram 4, Paschalidis 4, Gamarnik 3, Peterson 3, Mourtzinou 3 |
+| 1998–2002 | 46 | 1 | 0 | C.-P. Teo 6, Tsitsiklis 6, Lo 5, Gamarnik 5, Vohra 4, Popescu 4, Paschalidis 4, Sethuraman 3 |
+| 2003–07 | 50 | 1 | 4 | Natarajan 6, Caramanis 5, Sim 5, C.-P. Teo 4, Perakis 4, Thiele 4, Doan 3 |
+| 2008–12 | 47 | 2 | 2 | Nohadani 5, Farias 4, Trichakis 4, Odoni 3, Brown 3, Caramanis 3, Doan 3, Goyal 3 |
+| 2013–17 | 60 | 2 | 1 | Mišić 5, Bandi 5, V. Gupta 4, O'Hair 4, Kallus 4, Mazumder 4, Silberholz 4 |
+| 2018–22 | 156 | 2 | 5 (editorials) | Dunn 18, Orfanoudaki 15, Zhuo 11, M. L. Li about 10, Wiberg 9, Pauphilet 9, Delarue 7, Kaafarani 6, J. Yan 6, Cory-Wright 6 |
+| 2023–26 | 137 | 3 | 2 (editorials) | Y. Ma 14, Margonis 12, den Hertog 11, Pauphilet 10, Koulouras 10, Koukouvinos 10, Stoumpou 8, Kaafarani 7, Trichakis 7, Villalobos Carballo 7 |
+
+Patterns: early sole authorship and co-advising (DSpace advisor fields [04 A.2]), with co-authored thesis lines with Tsitsiklis [S072 pp. 1, 8, 10, 32–33; S237 pp. 1–3] and Odoni [S135 p. 1; S806 pp. 1–2]; students carry programmes from their first paper (van Ryzin [S016 p. 1], Niño-Mora [S051 p. 11], Teo [S214 p. 11], Popescu [S007 p. 1], Sim [S001 p. 1], Dunn [S096 pp. 5–6], Pauphilet and Cory-Wright [S183 pp. 4–5, 19], Ma [S351 pp. 5, 12, 29]); former students return as co-authors on later stages of a programme [S476 p. 1] (*fix round*: *co-senior* withdrawn; the byline after the first author is alphabetical); the RO book co-author den Hertog co-signs the 2021–2026 robust and global-optimization lines [S283 pp. 3–4, 15–19; S708 pp. 8, 14–15; S415 pp. 19–20]; partners as co-authors [S006 pp. 1, 5–9; S476 pp. 1–2; S617 arXiv pp. 1–2, 9, 28, 31]; in 2021–2026 health work three roles: senior sponsor and editor of student-led lines [S132 pp. 1, 13; S478 pp. 1, 21], analytics partner in a clinical team's study [S238 pp. 1–2; S439 pp. 1, 8], and contributing modeller in forecast hubs where others write and score [S110 pp. 2, 17; S021 pp. 10–11].
+
+### 15. Latest, as carded
+
+The 2025–2026 items of §8 that have cards: fluid restless bandits by ML, read in full [S681 pp. 1, 3, 8]; Hartford HealthCare operations, read in full [S617 arXiv pp. 1–2, 11–14, 22–25]; cone product reformulation for global optimization [S415 pp. 19–20]; xHAIM in npj Digital Medicine [S390 pp. 1–5] (= the arXiv version S524); domain adaptation of embeddings [S426 pp. 4, 6] and a training-free time-series classifier [S474 pp. 2, 4, 8], two papers with no optimization formulation; the 2026 RO retrospective with den Hertog, abstract only [S614].

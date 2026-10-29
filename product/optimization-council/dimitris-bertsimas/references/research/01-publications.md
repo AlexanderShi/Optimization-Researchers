@@ -398,3 +398,59 @@ Secondary:
 44. Hastie, Tibshirani & Tibshirani, "Best Subset, Forward Stepwise or Lasso?", Stat. Sci. 35(4):579–592, 2020, record only — DOI 10.1214/19-STS733 — secondary (not read)
 45. Soyster, "Convex programming with set-inclusive constraints and applications to inexact linear programming", Oper. Res. 21(5):1154–1157, 1973, record only — DOI 10.1287/opre.21.5.1154 — secondary
 46. YouTube oEmbed titles for five of his listed talk videos (to identify the 2021 interview) — https://www.youtube.com/oembed — secondary
+
+---
+
+## Update 2026-10-29 (full-text pass): coverage from the Google Scholar list
+
+> Stage T3.6. Counts from `../sources/publications/works.json` and `scholar.md` (harvested and audited 2026-10-28), the full-text index `../sources/papers/INDEX.md`, the paper cards (`cards/`, index `07-paper-cards.md`) and `scripts/team_status.py --coverage`. The sections above stay as written in the web pass; where the full texts change them, this update says so and cites the cards (`[S012 p. 9]` = card S012 at the file page of the version named on the card). The synthesis is `08-deep-reading-synthesis.md`; the full evidence behind SKILL.md is `09-evidence-ledger.md`.
+
+### Coverage
+
+| Item | Count | Source |
+|---|---|---|
+| Google Scholar rows | 932 | scholar.md (year-sorted audit, 2026-10-28) |
+| Records in works.json | 965, of which 214 point to another row by `dup_of` (versions, duplicates, preprint–journal pairs) | works.json |
+| Distinct works | 751: 725 Scholar rows (S), 15 found only in DBLP or Crossref (D), 11 only on his homepage (H) | works.json |
+| Distinct works with a DOI / an arXiv id | 382 / 124 | works.json |
+| Kinds (distinct works) | journal 363, other 94, preprint 87, thesis 85, report 49, conference 40, book 9, chapter 7, talk 6, patent 4, review 4, errata 3 | works.json |
+| Open full text found | 473 (278 without; 159 of those are skipped rows) | INDEX.md |
+| Roles | core 190, supplement 401, skip 160 (students' theses filed under his profile, reports, talks, patents, works not his) | INDEX.md |
+| Read in full / in part | 413 / 59 | INDEX.md Read column, cards |
+| Abstract only / metadata only | 63 / 56 (57 metadata cards; S771, not his work, counts as skipped) | team_status |
+| Card entries / works with a card | 611 / 592 (19 works carded twice, the deeper card counts) | 07 |
+| Quotes verified verbatim | 1,083 (1,080 exact, 3 after spacing and symbol normalisation, 0 not found) | verify_card_quotes.py |
+| Works used as method evidence | 459 (full or partial, version pairs merged, consortium and hub papers excluded; 463 before the fix round merged four more pairs) | 08 §1 |
+
+The resource tracker's row 1 records 779 distinct works and 186 `dup_of` links as at the harvest; later version links bring the count to 751. Version pairs counted once in all method evidence: S390 = S524, S561 = S412, S185 = S580 (the earlier, partly different 1994 working paper, still cited for its own sentences), S223 = S906; from the fix round also S016 = S261, S032 = S597, S340 = S197 and, probably, S328 = S914. S771 is a 2010 workshop page, not his work. In S063, S110, S021, S157 and S294 he is only a member of a forecasting consortium or hub team: outside evaluations, not evidence of his method.
+
+### What was read, by period and by domain
+
+Works read in full or in part / all works with a card (version-merged; 08 §1, §8.1):
+
+| 1988–92 | 1993–97 | 1998–2002 | 2003–07 | 2008–12 | 2013–17 | 2018–22 | 2023–26 | undated |
+|---|---|---|---|---|---|---|---|---|
+| 23/33 | 34/47 | 34/46 | 36/50 | 36/47 | 55/60 | 128/156 | 116/137 | 1/6 |
+
+By the cards' domain tags (a work can carry several; full or partial / all cards): LO 80/91, IO 211/243, RO 130/144, CP 85/93, SD 113/139, ML 204/238, DA 112/142, HS 42/44, AP 274/317. The 1988–2000 SD, IO, CP and LO work that §1.3 knew mostly from abstracts is now read in depth: the 1988 thesis [S048 pp. 11–13], a priori optimization [S038 pp. 1–2; S017 pp. 1–3; S148 pp. 1–2], dynamic vehicle routing [S016 p. 3; S032 pp. 3–15; S091 p. 3], the achievable-region and conservation-law programme [S185 pp. 1–3; S580 p. 10; S057 pp. 1, 3; S072 p. 2], moment bounds [S007 p. 35; S018 p. 1], randomized rounding [S121 pp. 3–9; S658 pp. 18–20; S435 pp. 3–6] and the Lagrangean-dual speed-up [S269 pp. 3–4].
+
+Versions read where they differ from the listed venue (card headers): S010 is arXiv v1 (with the 200-billion figure); S089 the 1991 MIT preprint; S013 arXiv v2; S039, S042, S085 and S003 arXiv versions; S044, S077 and S098 preprints; S161 a technical report; S186 and S448 working papers; S008 arXiv v4; S617 arXiv 2305.15629v1 of 2023 (the 2026 article was not read); S669 arXiv 2405.07068v1. Many other cards name a preprint or working-paper file in their headers.
+
+### Signature works: now read in full
+
+- **SW1** (§2): the 1995 survey [S185], the 1994 working paper [S580], MOR 1996 [S057] and the 1994 AAP paper [S072] are read in full, as are the restless-bandit paper [S051] and the loss-network paper [S368]. The §2 notes "scanned copy, no text layer: not read" (AAP 1994) and "first page read from the scan" (MOR 1996) are superseded.
+- **SW2**: SIOPT 2005 [S018], the 2000 handbook chapter [S007] and the option–stock paper [S056] read in full. The April 2000 manuscript lists Popescu on its title page; the work list gives Sethuraman only [S007] (Contradictions 3 stands).
+- **SW3**: OR 2004 [S001] and MP 2003 [S004] read in full; a 2002 working paper with Pachamanova, read in part, already uses a budget Γ normalised by standard deviations [S653 pp. 12–14, 24]. How Γ arose is still not stated in any card.
+- **SW4**: best subset read as arXiv v1 [S010] (200 billion [S010 pp. 7–8]; the published version's 450 billion stands as in §2); the 2016 OR Forum paper gives about 450 billion [S081 p. 4]; OCT gives 800 billion [S011 pp. 5–6]; CRIO [S073], logistic regression [S105] and the reply to the best-subset critique [S095] read in full.
+- **SW5**: read in full in the arXiv version [S008]; the §2 note "the full text was not read" is superseded.
+- **Added anatomies**: dynamic vehicle routing [S016; S032; S597; S091] in SKILL.md (SW6), and optimal control of execution costs [S009] in the ledger (`09-evidence-ledger.md#anatomy-execution-costs`).
+- The 1993 simulated-annealing review is read in full [S005] (the Gaps note "read on pages 10 and 13–15" is superseded). The 1997 correction [D005] stays metadata-level, and the 2026 retrospective [S614] abstract-level (no open full text).
+
+### Corrections to the sections above
+
+- **§1.3 SD and CP**: SD is his founding domain also in what he *states*: nine sole-author SD works are read in full, among them the thesis [S048 pp. 11–13], a 1992 paper that states its approach and judges it [S017 pp. 3, 12], the 1994 working paper [S580 pp. 5, 10] and the 1995 survey [S185 pp. 1–3]. CP statements are co-authored [S018 p. 1; S007 p. 35].
+- **§1.3 IO**: the anchor DOI 10.1007/BF01580607 [S052] bounds tree and matching constructions by the LP value and has no rounding step [S052 pp. 10–18, 20–21]; rounding is in [S121 pp. 3–9; S658 pp. 18–20; S435 pp. 3–6; S007 pp. 33–35]. Strong formulations are stated already in 1998 [S015 p. 2], before the 2005 book.
+- **§1.3 HS**: the robust local search and robust annealing are read [S141 pp. 5–6, 9, 11; S278 pp. 2–6; S116 pp. 5, 8–9, 13–14]: they leave the solver class on purpose and carry no certificate; the anchor DOI 10.1287/opre.1090.0715 [S090] proves convergence only for convex costs with an exact worst-error oracle and calls the nonconvex method a heuristic [S090 pp. 5–6, 16–17]. The 1993 review judges SA lacking in theory, mixed in practice but generally applicable, reporting Johnson et al.'s comparisons at equal computing time; it has no experiments of its own [S005 pp. 3–5].
+- **§1.3 AP**: outcome studies exist for several deployments [S115 pp. 22–24; S617 arXiv pp. 22–25; S339 pp. 10–11].
+- **§3 failures**: the Boston start-time plan's non-implementation is printed in the PNAS paper itself [S137 p. 2] and in the group's 2020 account [S262 pp. 10–12].
+- All corrections from the full texts, with the earlier wording: `09-evidence-ledger.md#corrections` (C1–C20).
