@@ -11,7 +11,7 @@
 | # | ID | Year | Title | Venue | Cites | Kind | Source | Full text | Pages | Role | Read |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | 1 | S001 | 2004 | The price of robustness | Operations research 52 (1), 35-53 | 7185 | journal | url | txt | 19 | core | carded |
-| 2 | S002 | 1997 | Introduction to linear optimization | Athena scientific 6, 479-530 | 5688 | book | — | no-oa |  | core | — |
+| 2 | S002 | 1997 | Introduction to linear optimization | Athena scientific 6, 479-530 | 5688 | book | — | no-oa |  | core | abstract |
 | 3 | S003 | 2011 | Theory and applications of robust optimization | SIAM review 53 (3), 464-501 | 3831 | journal | arXiv | txt | 50 | core | carded |
 | 4 | S004 | 2003 | Robust discrete optimization and network flows | Mathematical programming 98 (1), 49-71 | 2690 | journal | url | txt | 23 | core | carded |
 | 5 | S005 | 1993 | Simulated annealing | Statistical science 8 (1), 10-15 | 2436 | journal | url | txt | 6 | core | carded |
@@ -29,7 +29,7 @@
 | 17 | S017 | 1992 | A Vehicle Routing Problem with Stochastic Demand | Operations Research 40 (3), 574-585 | 733 | journal | url | txt | 12 | core | carded |
 | 18 | S018 | 2005 | Optimal inequalities in probability theory: A convex optimization approach | SIAM Journal on Optimization 15 (3), 780-804 | 703 | journal | url | txt | 25 | core | carded |
 | 19 | S019 | 2004 | Robust linear optimization under general norms | Operations Research Letters 32 (6), 510-516 | 691 | journal | url | txt | 7 | core | carded |
-| 20 | S020 | 2005 | Optimization over integers | (No Title) | 649 | book | — | no-oa |  | core | — |
+| 20 | S020 | 2005 | Optimization over integers | (No Title) | 649 | book | — | no-oa |  | core | abstract |
 | 21 | S021 | 2022 | Evaluation of individual and ensemble probabilistic forecasts of COVID-19 mortality in the United States | Proceedings of the National Academy of Sciences 119 (15), e2113561119 | 554 | conference | manual | txt | 12 | core | carded |
 | 22 | S022 | 2006 | Tractable approximations to robust conic optimization problems | Mathematical programming 107 (1), 5-36 | 552 | journal | url | txt | 32 | core | carded |
 | 23 | S023 | 2022 | Integrated multimodal artificial intelligence framework for healthcare applications | NPJ digital medicine 5 (1), 149 | 540 | journal | arXiv | txt | 10 | core | carded |
@@ -50,13 +50,13 @@
 | 38 | S038 | 1990 | A priori optimization | Operations Research 38 (6), 1019-1033 | 403 | journal | url | txt | 16 | core | carded |
 | 39 | S039 | 2018 | Robust sample average approximation | Mathematical Programming 171 (1), 217-282 | 397 | journal | arXiv | txt | 45 | core | carded |
 | 40 | S040 | 2009 | Algorithm for cardinality-constrained quadratic optimization | Computational Optimization and Applications 43 (1), 1-22 | 388 | journal | url | txt | 22 | core | carded |
-| 41 | S041 | 2018 | Surgical risk is not linear: derivation and validation of a novel, user-friendly, and machine-learning-based predictive optimal trees in emergency surgery risk (POTTER) calculator | Annals of surgery 268 (4), 574-583 | 382 | journal | — | no-oa |  | core | — |
+| 41 | S041 | 2018 | Surgical risk is not linear: derivation and validation of a novel, user-friendly, and machine-learning-based predictive optimal trees in emergency surgery risk (POTTER) calculator | Annals of surgery 268 (4), 574-583 | 382 | journal | — | no-oa |  | core | abstract |
 | 42 | S042 | 2010 | Optimality of affine policies in multistage robust optimization | Mathematics of Operations Research 35 (2), 363-394 | 363 | journal | arXiv | txt | 35 | core | carded |
 | 43 | S043 | 2000 | The traffic flow management rerouting problem in air traffic control: A dynamic network flow approach | Transportation Science 34 (3), 239-255 | 360 | journal | url | txt | 17 | core | carded |
 | 44 | S044 | 2013 | Fairness, efficiency, and flexibility in organ allocation for kidney transplantation | Operations research 61 (1), 73-87 | 354 | journal | url | txt | 31 | core | carded |
 | 45 | S045 | 2004 | Solving convex programs by random walks | Journal of the ACM (JACM) 51 (4), 540-556 | 354 | journal | url | txt | 17 | core | carded |
 | 46 | S046 | 2019 | Online vehicle routing: The edge of optimization in large-scale applications | Operations Research 67 (1), 143-162 | 339 | journal | manual | txt | 46 | core | carded |
-| 47 | S047 | 2019 | Machine learning under a modern optimization lens | Dynamic Ideas LLC | 338 | book | — | no-oa |  | core | — |
+| 47 | S047 | 2019 | Machine learning under a modern optimization lens | Dynamic Ideas LLC | 338 | book | — | no-oa |  | core | abstract |
 | 48 | S048 | 1988 | Probabilistic combinatorial optimization problems | Massachusetts Institute of Technology | 329 | thesis | manual | txt | 172 | supplement | carded |
 | 49 | S049 | 2010 | Finite adaptability in multistage linear optimization | IEEE Transactions on Automatic Control 55 (12), 2751-2766 | 326 | journal | manual | txt | 16 | supplement | carded |
 | 50 | S050 | 2008 | Algorithmic prediction of health-care costs | Operations Research 56 (6), 1382-1392 | 324 | journal | url | txt | 11 | core | carded |
@@ -93,7 +93,7 @@
 | 81 | S081 | 2016 | OR forum—an algorithmic approach to linear regression | Operations Research 64 (1), 2-16 | 198 | journal | url | txt | 16 | core | carded |
 | 82 | S082 | 2015 | Design of near optimal decision rules in multistage adaptive mixed-integer optimization | Operations Research 63 (3), 610-627 | 198 | journal | manual | txt | 19 | supplement | skimmed |
 | 83 | S083 | 2022 | Where to locate COVID‐19 mass vaccination facilities? | Naval Research Logistics (NRL) 69 (2), 179-200 | 194 | journal | arXiv | txt | 37 | core | carded |
-| 84 | S084 | 2022 | Robust and Adaptive Optimization | Dynamic Ideas | 192 | book | — | no-oa |  | core | — |
+| 84 | S084 | 2022 | Robust and Adaptive Optimization | Dynamic Ideas | 192 | book | — | no-oa |  | core | abstract |
 | 85 | S085 | 2018 | Characterization of the equivalence of robustification and regularization in linear and matrix regression | European Journal of Operational Research 270 (3), 931-942 | 192 | journal | arXiv | txt | 31 | core | carded |
 | 86 | S086 | 2012 | Inverse optimization: A new perspective on the Black-Litterman model | Operations research 60 (6), 1389-1403 | 192 | journal | url | txt | 15 | core | carded |
 | 87 | S087 | 2016 | Multistage robust mixed-integer optimization with adaptive partitions | Operations Research 64 (4), 980-998 | 189 | journal | url | txt | 54 | supplement | skimmed |
@@ -136,7 +136,7 @@
 | 124 | S125 | 2009 | Depression and costs of health care | Psychosomatics 50 (4), 392-401 | 132 | journal | manual | txt | 10 | supplement | carded |
 | 125 | S126 | 1993 | On central limit theorems in geometrical probability | The Annals of Applied Probability 3 (4), 1033-1046 | 132 | journal | url | txt | 14 | supplement | carded |
 | 126 | S127 | 2021 | Machine learning for real-time heart disease prediction | IEEE Journal of Biomedical and Health Informatics 25 (9), 3627-3637 | 131 | journal | manual | txt | 11 | core | carded |
-| 127 | S128 | 2000 | Data, models, and decisions: The fundamentals of management science | (No Title) | 130 | book | — | no-oa |  | core | — |
+| 127 | S128 | 2000 | Data, models, and decisions: The fundamentals of management science | (No Title) | 130 | book | — | no-oa |  | core | abstract |
 | 128 | S129 | 1995 | The distributional Little's law and its applications | Operations Research 43 (2), 298-310 | 130 | journal | manual | txt | 13 | supplement | carded |
 | 129 | S130 | 1999 | Asymptotically optimal algorithms for job shop scheduling and packet routing | Journal of Algorithms 33 (2), 296-318 | 128 | journal | url | txt | 23 | supplement | carded |
 | 130 | S131 | 2023 | Optimization-based scenario reduction for data-driven two-stage stochastic optimization | Operations Research 71 (4), 1343-1361 | 126 | journal | manual | txt | 39 | core | carded |
@@ -187,7 +187,7 @@
 | 175 | S176 | 2015 | A tight characterization of the performance of static solutions in two-stage adjustable robust linear optimization | Mathematical Programming 150 (2), 281-319 | 88 | journal | manual | txt | 33 | supplement | skimmed |
 | 176 | S177 | 1998 | On the large deviations behavior of acyclic networks of queues | The Annals of Applied Probability 8 (4), 1027-1069 | 88 | journal | url | txt | 43 | supplement | skimmed |
 | 177 | S178 | 2014 | Least quantile regression via modern optimization | The Annals of Statistics | 87 | journal | arXiv | txt | 34 | supplement | carded |
-| 178 | S179 | 2021 | Validation of the Artificial Intelligence-Based Predictive Optimal Trees in Emergency Surgery Risk (POTTER) Calculator in Emergency General Surgery and Emergency Laparotomy Patients | Journal of the American College of Surgeons 232 (6), 912-919. e1 | 86 | journal | — | no-oa |  | supplement | — |
+| 178 | S179 | 2021 | Validation of the Artificial Intelligence-Based Predictive Optimal Trees in Emergency Surgery Risk (POTTER) Calculator in Emergency General Surgery and Emergency Laparotomy Patients | Journal of the American College of Surgeons 232 (6), 912-919. e1 | 86 | journal | — | no-oa |  | supplement | abstract |
 | 179 | S180 | 2020 | Joint frequency-setting and pricing optimization on multimodal transit networks at scale | Transportation Science 54 (3), 839-853 | 86 | journal | manual | txt | 27 | supplement | carded |
 | 180 | S181 | 1996 | Stability conditions for multiclass fluid queueing networks | IEEE Transactions on Automatic Control 41 (11), 1618-1631 | 86 | journal | url | txt | 14 | supplement | carded |
 | 181 | S182 | 2017 | Certifiably optimal low rank factor analysis | Journal of Machine Learning Research 18 (29), 1-53 | 85 | journal | arXiv | txt | 49 | supplement | skimmed |
@@ -196,7 +196,7 @@
 | 184 | S185 | 1995 | The achievable region method in the optimal control of queueing systems; formulations, bounds and policies | Queueing systems 21 (3), 337-389 | 79 | journal | url | txt | 53 | core | carded |
 | 185 | S186 | 1989 | Traveling salesman facility location problems | Transportation science 23 (3), 184-191 | 78 | journal | manual | txt | 24 | supplement | carded |
 | 186 | S187 | 1999 | Large deviations analysis of the generalized processor sharing policy | Queueing Systems 32 (4), 319-349 | 77 | journal | url | txt | 31 | supplement | skimmed |
-| 187 | S188 | 2021 | Trauma outcome predictor: an artificial intelligence interactive smartphone tool to predict outcomes in trauma patients | Journal of Trauma and Acute Care Surgery 91 (1), 93-99 | 76 | journal | — | no-oa |  | supplement | — |
+| 187 | S188 | 2021 | Trauma outcome predictor: an artificial intelligence interactive smartphone tool to predict outcomes in trauma patients | Journal of Trauma and Acute Care Surgery 91 (1), 93-99 | 76 | journal | — | no-oa |  | supplement | abstract |
 | 188 | S189 | 2020 | Machine learning provides evidence that stroke risk is not linear: The non-linear Framingham stroke risk score | PloS one 15 (5), e0232414 | 75 | journal | unpaywall | txt | 20 | supplement | carded |
 | 189 | S190 | 2018 | Applied informatics decision support tool for mortality predictions in patients with cancer | JCO clinical cancer informatics 2, 1-11 | 74 | journal | manual | txt | 11 | supplement | carded |
 | 190 | S191 | 2016 | On the power of randomization in network interdiction | Operations Research Letters 44 (1), 114-120 | 74 | journal | arXiv | txt | 9 | supplement | carded |
@@ -217,7 +217,7 @@
 | 205 | S206 | 2015 | Or forum—tenure analytics: Models for predicting research impact | Operations Research 63 (6), 1246-1261 | 64 | journal | url | txt | 17 | supplement | carded |
 | 206 | S207 | 2003 | From fluid relaxations to practical algorithms for high-multiplicity job-shop scheduling: The holding cost objective | Operations Research 51 (5), 798-813 | 64 | journal | manual | txt | 16 | supplement | carded |
 | 207 | S208 | 2021 | Data-driven transit network design at scale | Operations Research 69 (4), 1118-1133 | 63 | journal | manual | txt | 17 | supplement | carded |
-| 208 | S209 | 2016 | The analytics edge | Dynamic Ideas LLC | 63 | book | — | no-oa |  | supplement | — |
+| 208 | S209 | 2016 | The analytics edge | Dynamic Ideas LLC | 63 | book | — | no-oa |  | supplement | abstract |
 | 209 | S210 | 2014 | Dynamic resource allocation: A flexible and tractable modeling framework | European Journal of Operational Research 236 (1), 14-26 | 63 | journal | manual | txt | 13 | supplement | skimmed |
 | 210 | S211 | 2013 | Learning preferences under noise and loss aversion: An optimization approach | Operations Research 61 (5), 1190-1199 | 63 | journal | url | txt | 11 | supplement | carded |
 | 211 | S212 | 1999 | Optimization of Multiclass Queueing Networks with Changeover Times Via the Achievable Region Approach: Part I, the Single-Station Case | Math. Oper. Res 24, 306-330 | 63 | journal | url | txt | 31 | supplement | skimmed |
@@ -229,12 +229,12 @@
 | 217 | S218 | 2023 | Sparse plus low rank matrix decomposition: A discrete optimization approach | Journal of Machine Learning Research 24 (267), 1-51 | 58 | journal | arXiv | txt | 51 | supplement | skimmed |
 | 218 | S219 | 2021 | Adverse outcomes prediction for congenital heart surgery: a machine learning approach | World Journal for Pediatric and Congenital Heart Surgery 12 (4), 453-460 | 58 | journal | manual | txt | 8 | supplement | carded |
 | 219 | S220 | 1992 | Transient and busy period analysis of the_GI/G_/1 queue: The method of stages | Queueing Systems 10 (3), 153-184 | 58 | journal | url | txt | 32 | supplement | carded |
-| 220 | S221 | 2007 | Adaptability via sampling | 2007 46th IEEE Conference on Decision and Control, 4717-4722 | 57 | conference | — | no-oa |  | supplement | — |
+| 220 | S221 | 2007 | Adaptability via sampling | 2007 46th IEEE Conference on Decision and Control, 4717-4722 | 57 | conference | — | no-oa |  | supplement | abstract |
 | 221 | S222 | 2019 | Robust maximum likelihood estimation | INFORMS Journal on Computing 31 (3), 445-458 | 56 | journal | manual | txt | 15 | supplement | carded |
 | 222 | S223 | 2023 | The power and limits of predictive approaches to observational data-driven optimization: The case of pricing | INFORMS Journal on Optimization 5 (1), 110-129 | 55 | journal | arXiv | txt | 45 | supplement | skimmed |
 | 223 | S224 | 2019 | Robust and stochastic formulations for ambulance deployment and dispatch | European Journal of Operational Research 279 (2), 557-571 | 54 | journal | manual | txt | 15 | supplement | carded |
 | 224 | S225 | 2017 | The trimmed lasso: Sparsity and robustness | arXiv preprint arXiv:1708.04527 | 54 | preprint | arXiv | txt | 48 | supplement | skimmed |
-| 225 | S226 | 2023 | Validation of the Al-based Predictive OpTimal Trees in Emergency Surgery Risk (POTTER) calculator in patients 65 years and older | Annals of Surgery 277 (1), e8-e15 | 53 | journal | — | no-oa |  | supplement | — |
+| 225 | S226 | 2023 | Validation of the Al-based Predictive OpTimal Trees in Emergency Surgery Risk (POTTER) calculator in patients 65 years and older | Annals of Surgery 277 (1), e8-e15 | 53 | journal | — | no-oa |  | supplement | abstract |
 | 226 | S227 | 2011 | Performance analysis of queueing networks via robust optimization | Operations research 59 (2), 455-466 | 52 | journal | arXiv | txt | 35 | supplement | skimmed |
 | 227 | S228 | 2021 | Imputation of clinical covariates in time series | Machine Learning 110 (1), 185-248 | 51 | journal | arXiv | txt | 6 | supplement | skimmed |
 | 228 | S229 | 1991 | Probabilistic analysis of the Held and Karp lower bound for the Euclidean traveling salesman problem | Mathematics of operations research 16 (1), 72-89 | 51 | journal | url | txt | 18 | supplement | carded |
@@ -248,9 +248,9 @@
 | 236 | S237 | 1995 | Branching bandits and Klimov's problem: Achievable region and side constraints | IEEE Transactions on Automatic Control 40 (12), 2063-2075 | 48 | journal | url | txt | 13 | supplement | carded |
 | 237 | S238 | 2021 | Selecting children with vesicoureteral reflux who are most likely to benefit from antibiotic prophylaxis: application of machine learning to RIVUR | The Journal of Urology 205 (4), 1170-1179 | 47 | journal | manual | txt | 10 | supplement | carded |
 | 238 | S239 | 1988 | An exact FCFS waiting time analysis for a general class of G/G/_s_ queueing systems | Queueing Systems 3 (4), 305-320 | 46 | journal | url | txt | 16 | supplement | carded |
-| 239 | S240 | 2017 | Regression and classification using optimal decision trees | 2017 IEEE MIT undergraduate research technology conference (URTC), 1-4 | 45 | conference | — | no-oa |  | supplement | — |
-| 240 | S241 | 1997 | A critical survey of optimization models for tactical and strategic aspects of air traffic flow management | — | 45 | other | — | no-oa |  | supplement | — |
-| 241 | S242 | 2023 | Artificial intelligence versus surgeon gestalt in predicting risk of emergency general surgery | Journal of Trauma and Acute Care Surgery 95 (4), 565-572 | 44 | journal | — | no-oa |  | supplement | — |
+| 239 | S240 | 2017 | Regression and classification using optimal decision trees | 2017 IEEE MIT undergraduate research technology conference (URTC), 1-4 | 45 | conference | — | no-oa |  | supplement | abstract |
+| 240 | S241 | 1997 | A critical survey of optimization models for tactical and strategic aspects of air traffic flow management | — | 45 | other | manual | txt | 36 | supplement | abstract |
+| 241 | S242 | 2023 | Artificial intelligence versus surgeon gestalt in predicting risk of emergency general surgery | Journal of Trauma and Acute Care Surgery 95 (4), 565-572 | 44 | journal | — | no-oa |  | supplement | abstract |
 | 242 | S243 | 2022 | Course scheduling under sudden scarcity: Applications to pandemic planning | Manufacturing & Service Operations Management 24 (2), 727-745 | 44 | journal | manual | txt | 32 | supplement | carded |
 | 243 | S244 | 2015 | Robust fluid processing networks | IEEE Transactions on Automatic Control 60 (3), 715-728 | 44 | journal | url | txt | 14 | supplement | carded |
 | 244 | S245 | 2014 | Scheduling, revenue management, and fairness in an academic-hospital radiology division | Academic radiology 21 (10), 1322-1330 | 43 | journal | manual | txt | 15 | supplement | carded |
@@ -259,8 +259,8 @@
 | 247 | S248 | 2017 | Accept or decline? An analytics-based decision tool for kidney offer evaluation | Transplantation 101 (12), 2898-2904 | 42 | journal | manual | txt | 7 | supplement | carded |
 | 248 | S249 | 2018 | Optimal healthcare decision making under multiple mathematical models: application in prostate cancer screening | Health care management science 21 (1), 105-118 | 41 | journal | manual | txt | 14 | supplement | carded |
 | 249 | S250 | 2022 | Mixed-projection conic optimization: A new paradigm for modeling rank constraints | Operations Research 70 (6), 3321-3344 | 40 | journal | arXiv | txt | 49 | core | carded |
-| 250 | S251 | 2022 | Ethics-by-design: efficient, fair and inclusive resource allocation using machine learning | Journal of Law and the Biosciences 9 (1), lsac012 | 40 | journal | — | no-oa |  | supplement | — |
-| 251 | S252 | 2024 | Interpretable artificial intelligence to optimise use of imatinib after resection in patients with localised gastrointestinal stromal tumours: an observational cohort study | The Lancet Oncology 25 (8), 1025-1037 | 39 | journal | — | no-oa |  | supplement | — |
+| 250 | S251 | 2022 | Ethics-by-design: efficient, fair and inclusive resource allocation using machine learning | Journal of Law and the Biosciences 9 (1), lsac012 | 40 | journal | — | no-oa |  | supplement | abstract |
+| 251 | S252 | 2024 | Interpretable artificial intelligence to optimise use of imatinib after resection in patients with localised gastrointestinal stromal tumours: an observational cohort study | The Lancet Oncology 25 (8), 1025-1037 | 39 | journal | — | no-oa |  | supplement | abstract |
 | 252 | S253 | 2024 | Hospital-wide inpatient flow optimization | Management Science 70 (7), 4893-4911 | 39 | journal | unpaywall | txt | 52 | supplement | skimmed |
 | 253 | S254 | 2020 | Scalable holistic linear regression | Operations Research Letters 48 (3), 203-208 | 39 | journal | arXiv | txt | 13 | supplement | carded |
 | 254 | S255 | 2007 | A semidefinite optimization approach to the steady-state analysis of queueing systems | Queueing Systems 56 (1), 27-39 | 39 | journal | url | txt | 13 | core | carded |
@@ -276,16 +276,16 @@
 | 264 | S267 | 2024 | A machine learning approach to two-stage adaptive robust optimization | European Journal of Operational Research 319 (1), 16-30 | 33 | journal | arXiv | txt | 31 | supplement | skimmed |
 | 265 | S268 | 2018 | Robust transient analysis of multi-server queueing systems and feed-forward networks | Queueing Systems 89 (3), 351-413 | 33 | journal | url | txt | 51 | supplement | skimmed |
 | 266 | S269 | 1994 | A technique for speeding up the solution of the Lagrangean dual | Mathematical Programming 63 (1), 23-45 | 33 | journal | url | txt | 23 | core | carded |
-| 267 | S270 | 2023 | Pediatric cervical spine injury following blunt trauma in children younger than 3 years: the PEDSPINE II study | JAMA surgery 158 (11), 1126-1132 | 32 | journal | — | no-oa |  | supplement | — |
+| 267 | S270 | 2023 | Pediatric cervical spine injury following blunt trauma in children younger than 3 years: the PEDSPINE II study | JAMA surgery 158 (11), 1126-1132 | 32 | journal | — | no-oa |  | supplement | abstract |
 | 268 | S271 | 2023 | An interpretable AI model for recurrence prediction after surgery in gastrointestinal stromal tumour: an observational cohort study | EClinicalMedicine 64 | 32 | journal | manual | txt | 11 | supplement | carded |
 | 269 | S272 | 2022 | POTTER-ICU: An artificial intelligence smartphone-accessible tool to predict the need for intensive care after emergency surgery | Surgery 172 (1), 470-475 | 32 | journal | manual | txt | 6 | supplement | carded |
 | 270 | S273 | 2002 | A robust optimization approach to finance | Massachusetts Institute of Technology | 32 | thesis | — | no-oa |  | skip | — |
 | 271 | S274 | 2023 | A new perspective on low-rank optimization | Mathematical Programming 202 (1), 47-92 | 31 | journal | arXiv | txt | 43 | supplement | skimmed |
-| 272 | S275 | 2011 | Multistage air traffic flow management under capacity uncertainty: a robust and adaptive optimization approach | — | 31 | other | — | no-oa |  | supplement | — |
+| 272 | S275 | 2011 | Multistage air traffic flow management under capacity uncertainty: a robust and adaptive optimization approach | — | 31 | other | manual | txt | 31 | supplement | abstract |
 | 273 | S276 | 2021 | Prediction of neutropenic events in chemotherapy patients: A machine learning approach | JCO Clinical Cancer Informatics 5, 904-911 | 30 | journal | manual | txt | 8 | supplement | carded |
-| 274 | S277 | 2019 | Prediction of cervical spine injury in young pediatric patients: an optimal trees artificial intelligence approach | Journal of pediatric surgery 54 (11), 2353-2357 | 30 | journal | — | no-oa |  | supplement | — |
+| 274 | S277 | 2019 | Prediction of cervical spine injury in young pediatric patients: an optimal trees artificial intelligence approach | Journal of pediatric surgery 54 (11), 2353-2357 | 30 | journal | — | no-oa |  | supplement | abstract |
 | 275 | S278 | 2008 | Robust chirped mirrors | Applied optics 47 (14), 2630-2636 | 30 | journal | url | txt | 7 | supplement | carded |
-| 276 | S279 | 2005 | Improving air traffic management during thunderstorms | 24th digital avionics systems conference 1, 3. D. 2-31 | 30 | conference | — | no-oa |  | supplement | — |
+| 276 | S279 | 2005 | Improving air traffic management during thunderstorms | 24th digital avionics systems conference 1, 3. D. 2-31 | 30 | conference | — | no-oa |  | supplement | abstract |
 | 277 | S280 | 1997 | Multiclass queueing systems in heavy traffic: an asymptotic approach based on distributional and conservation laws | Operations Research 45 (3), 470-487 | 30 | journal | manual | txt | 18 | supplement | carded |
 | 278 | S281 | 2019 | Targeted workup after initial febrile urinary tract infection: using a novel machine learning model to identify children most likely to benefit from voiding cystourethrogram | The Journal of Urology 202 (1), 144-152 | 29 | journal | manual | txt | 17 | supplement | carded |
 | 279 | S283 | 2023 | Robust convex optimization: A new perspective that unifies and extends | Mathematical Programming 200 (2), 877-918 | 28 | journal | unpaywall | txt | 43 | supplement | skimmed |
@@ -315,7 +315,7 @@
 | 303 | S308 | 2023 | A prescriptive machine learning approach to mixed-integer convex optimization | INFORMS Journal on Computing 35 (6), 1225-1241 | 22 | journal | manual | txt | 18 | supplement | carded |
 | 304 | S309 | 2023 | Global flood prediction: a multimodal machine learning approach | arXiv preprint arXiv:2301.12548 | 22 | preprint | arXiv | txt | 6 | supplement | carded |
 | 305 | S310 | 2021 | Simple Imputation Rules for Prediction with Missing Data: Contrasting Theoretical Guarantees with Empirical Performance | arXiv preprint arXiv:2104.03158 | 22 | journal | arXiv | txt | 24 | supplement | carded |
-| 306 | S311 | 2020 | The rise and fall of the model for end-stage liver disease score and the need for an optimized machine learning approach for liver allocation | Current opinion in organ transplantation 25 (2), 122-125 | 22 | journal | — | no-oa |  | supplement | — |
+| 306 | S311 | 2020 | The rise and fall of the model for end-stage liver disease score and the need for an optimized machine learning approach for liver allocation | Current opinion in organ transplantation 25 (2), 122-125 | 22 | journal | — | no-oa |  | supplement | abstract |
 | 307 | S312 | 2020 | Stable regression: On the power of optimization over randomization | Journal of Machine Learning Research 21 (230), 1-25 | 22 | journal | manual | txt | 25 | supplement | carded |
 | 308 | S313 | 2018 | A scalable algorithm for two-stage adaptive linear optimization | arXiv preprint arXiv:1807.02812 | 22 | preprint | arXiv | txt | 23 | supplement | carded |
 | 309 | S314 | 2016 | Data, models and decisions for large-scale stochastic optimization problems | Massachusetts Institute of Technology | 22 | thesis | — | no-oa |  | skip | — |
@@ -327,20 +327,20 @@
 | 315 | S321 | 2008 | Data-driven approach to health care: applications using claims data | Massachusetts Institute of Technology | 21 | thesis | — | no-oa |  | skip | — |
 | 316 | S322 | 1999 | Decomposition results for general polling systems and their applications | Queueing Systems 31 (3), 295-316 | 21 | journal | url | txt | 22 | supplement | skimmed |
 | 317 | S323 | 1997 | Estimation of time-varying parameters in statistical models: an optimization approach | Proceedings of the tenth annual conference on Computational learning theory�… | 21 | conference | url | txt | 21 | supplement | carded |
-| 318 | S324 | 1995 | Nonlinear formulations and improved randomized approximation algorithms for multicut problems | International Conference on Integer Programming and Combinatorial�… | 21 | conference | — | no-oa |  | supplement | — |
+| 318 | S324 | 1995 | Nonlinear formulations and improved randomized approximation algorithms for multicut problems | International Conference on Integer Programming and Combinatorial�… | 21 | conference | — | no-oa |  | supplement | abstract |
 | 319 | S325 | 2021 | Personalized prescription of ACEI/ARBs for hypertensive COVID-19 patients | Health Care Management Science 24 (2), 339-355 | 20 | journal | unpaywall | txt | 17 | supplement | carded |
 | 320 | S326 | 2019 | Identifying exceptional responders in randomized trials: An optimization approach | INFORMS Journal on Optimization 1 (3), 187-199 | 20 | journal | manual | txt | 14 | supplement | carded |
 | 321 | S327 | 2016 | Scalable robust and adaptive inventory routing | Optim. Online, 1-29 | 20 | preprint | manual | txt | 35 | supplement | carded |
 | 322 | S328 | 2013 | A new local search algorithm for binary optimization | INFORMS Journal on Computing 25 (2), 208-221 | 20 | journal | manual | txt | 15 | core | carded |
-| 323 | S329 | 1988 | Analysis of the stationary Ek/C2/s queueing system | European Journal of Operational Research 37 (2), 272-287 | 20 | journal | — | no-oa |  | supplement | — |
+| 323 | S329 | 1988 | Analysis of the stationary Ek/C2/s queueing system | European Journal of Operational Research 37 (2), 272-287 | 20 | journal | — | no-oa |  | supplement | abstract |
 | 324 | S330 | 2024 | Robust and adaptive optimization under a large language model lens | arXiv preprint arXiv:2501.00568 | 19 | preprint | arXiv | txt | 33 | core | carded |
 | 325 | S331 | 2024 | Holistic deep learning | Machine Learning 113 (1), 159-183 | 19 | journal | arXiv | txt | 26 | supplement | carded |
 | 326 | S332 | 2023 | Policy analytics in public school operations | Operations Research 71 (1), 289-313 | 19 | journal | manual | txt | 26 | supplement | carded |
 | 327 | S333 | 2022 | Distributionally robust causal inference with observational data | arXiv preprint arXiv:2210.08326 | 19 | preprint | arXiv | txt | 32 | supplement | carded |
-| 328 | S334 | 2022 | Queueing Theory: Classical and Modern Methods | — | 19 | book | — | no-oa |  | supplement | — |
+| 328 | S334 | 2022 | Queueing Theory: Classical and Modern Methods | — | 19 | book | — | no-oa |  | supplement | abstract |
 | 329 | S335 | 2019 | Predictive and prescriptive methods in operations research and machine learning: an optimization approach | Massachusetts Institute of Technology | 19 | thesis | — | no-oa |  | skip | — |
 | 330 | S336 | 1996 | A unified method to analyze overtake free queueing systems | Advances in applied probability 28 (2), 588-625 | 19 | journal | url | txt | 38 | supplement | skimmed |
-| 331 | S337 | 2024 | Marginal pricing in adaptive robust unit commitment under load and capacity uncertainty | IEEE Transactions on Power Systems 40 (1), 341-354 | 18 | journal | — | no-oa |  | supplement | — |
+| 331 | S337 | 2024 | Marginal pricing in adaptive robust unit commitment under load and capacity uncertainty | IEEE Transactions on Power Systems 40 (1), 341-354 | 18 | journal | — | no-oa |  | supplement | abstract |
 | 332 | S338 | 2023 | Ensemble modeling for time series forecasting: an adaptive robust optimization approach | arXiv preprint arXiv:2304.04308 | 18 | preprint | arXiv | txt | 43 | supplement | carded |
 | 333 | S339 | 2022 | Toward global food security: Transforming OCP through analytics | INFORMS Journal on Applied Analytics 52 (1), 90-107 | 18 | journal | manual | txt | 19 | supplement | carded |
 | 334 | S340 | 2014 | A comparison of Monte Carlo tree search and mathematical optimization for large scale dynamic resource allocation | arXiv preprint arXiv:1405.5498 | 18 | preprint | arXiv | txt | 37 | core | carded |
@@ -371,7 +371,7 @@
 | 359 | S368 | 1999 | Bounds and policies for dynamic routing in loss networks | Operations research 47 (3), 379-394 | 13 | journal | url | txt | 16 | supplement | carded |
 | 360 | S369 | 2023 | Improving stability in decision tree models | arXiv preprint arXiv:2305.17299 | 12 | preprint | arXiv | txt | 37 | supplement | carded |
 | 361 | S370 | 2022 | Ensemble machine learning for personalized antihypertensive treatment | Naval Research Logistics (NRL) 69 (5), 669-688 | 12 | journal | manual | txt | 25 | supplement | carded |
-| 362 | S371 | 2014 | Introduction to the special issue on business analytics | Management Science 60 (6), 1351-1351 | 12 | journal | — | no-oa |  | supplement | — |
+| 362 | S371 | 2014 | Introduction to the special issue on business analytics | Management Science 60 (6), 1351-1351 | 12 | journal | — | no-oa |  | supplement | metadata |
 | 363 | S372 | 2012 | Integer optimization methods for machine learning | Massachusetts Institute of Technology | 12 | thesis | — | no-oa |  | skip | — |
 | 364 | S373 | 2011 | Applications of robust optimization to queueing and inventory systems | Massachusetts Institute of Technology | 12 | thesis | — | no-oa |  | skip | — |
 | 365 | S374 | 2009 | A robust optimization approach to statistical estimation problems by Apostolos G. Fertis. | Massachusetts Institute of Technology | 12 | thesis | — | no-oa |  | skip | — |
@@ -380,9 +380,9 @@
 | 368 | S377 | 2023 | A novel algorithm for a broad class of nonconvex optimization problems | Optimization Online | 11 | preprint | manual | txt | 60 | supplement | skimmed |
 | 369 | S378 | 2020 | A Look at Robustness and Stability of \-versus \-Regularization: Discussion of Papers by Bertsimas et al. and Hastie et al. | — | 11 | other | — | no-oa |  | skip | — |
 | 370 | S379 | 2020 | Stochastic optimization in supply chain networks: averaging robust solutions | Optimization Letters 14 (4), 839-855 | 11 | journal | manual | txt | 19 | supplement | carded |
-| 371 | S380 | 2014 | Closure to the discussion of “adaptive robust optimization for the security constrained unit commitment problem” | IEEE Transactions on Power Systems 29 (2), 996-997 | 11 | journal | — | no-oa |  | supplement | — |
+| 371 | S380 | 2014 | Closure to the discussion of “adaptive robust optimization for the security constrained unit commitment problem” | IEEE Transactions on Power Systems 29 (2), 996-997 | 11 | journal | — | no-oa |  | supplement | metadata |
 | 372 | S381 | 2025 | An artificial intelligence interpretable tool to predict risk of deep vein thrombosis after endovenous thermal ablation | Journal of Vascular Surgery: Venous and Lymphatic Disorders 13 (5), 102253 | 10 | journal | unpaywall | txt | 21 | core | carded |
-| 373 | S382 | 2023 | Applying analytics to design lung transplant allocation policy | INFORMS journal on applied analytics 53 (5), 350-358 | 10 | journal | — | no-oa |  | supplement | — |
+| 373 | S382 | 2023 | Applying analytics to design lung transplant allocation policy | INFORMS journal on applied analytics 53 (5), 350-358 | 10 | journal | — | no-oa |  | supplement | abstract |
 | 374 | S383 | 2023 | Interpretable matrix completion: A discrete optimization approach | INFORMS Journal on Computing 35 (5), 952-965 | 10 | journal | arXiv | txt | 39 | supplement | carded |
 | 375 | S384 | 2023 | Reducing air pollution through machine learning | arXiv preprint arXiv:2303.12285 | 10 | preprint | arXiv | txt | 15 | supplement | carded |
 | 376 | S385 | 2023 | Optimal low-rank matrix completion: Semidefinite relaxations and eigenvector disjunctions | arXiv preprint arXiv:2305.12292 | 10 | preprint | arXiv | txt | 40 | supplement | carded |
@@ -406,7 +406,7 @@
 | 394 | S403 | 2023 | Multistage stochastic optimization via kernels | arXiv preprint arXiv:2303.06515 | 8 | preprint | arXiv | txt | 32 | supplement | skimmed |
 | 395 | S407 | 2020 | Optimizing influenza vaccine composition: From predictions to prescriptions | Machine Learning for Healthcare Conference, 121-142 | 8 | conference | manual | txt | 21 | supplement | carded |
 | 396 | S408 | 2020 | Novel target discovery of existing therapies: Path to personalized cancer therapy | Informs Journal on Optimization 2 (1), 1-13 | 8 | journal | manual | txt | 22 | supplement | carded |
-| 397 | S409 | 2019 | Tensor completion with noisy side information for the predcition of anti-cancer drug response | Submitted | 8 | preprint | — | no-oa |  | supplement | — |
+| 397 | S409 | 2019 | Tensor completion with noisy side information for the predcition of anti-cancer drug response | Submitted | 8 | preprint | — | no-oa |  | supplement | metadata |
 | 398 | S412 | 2010 | A discrete optimization approach to supervised ranking | Proceedings of the 5th INFORMS workshop on data mining and health… | 8 | conference | manual | txt | 6 | supplement | carded |
 | 399 | S413 | 2008 | Approximating integrals of multivariate exponentials: A moment approach | Operations Research Letters 36 (2), 205-210 | 8 | journal | url | txt | 6 | supplement | carded |
 | 400 | S414 | 2006 | Option pricing without price dynamics: a probabilistic approach | arXiv preprint math/0612075 | 8 | preprint | arXiv | txt | 37 | supplement | skimmed |
@@ -418,18 +418,18 @@
 | 406 | S421 | 2021 | The price of diversity | arXiv preprint arXiv:2107.03900 | 7 | preprint | arXiv | txt | 36 | supplement | carded |
 | 407 | S422 | 2019 | Machine learning for problems with missing and uncertain data with applications to personalized medicine | Massachusetts Institute of Technology | 7 | thesis | — | no-oa |  | skip | — |
 | 408 | S423 | 2014 | An analytics approach to hypertension treatment | Massachusetts Institute of Technology | 7 | thesis | — | no-oa |  | skip | — |
-| 409 | S424 | 2009 | On the equivalence of robust optimization and regularization in statistics | Submitted to Operations Research | 7 | preprint | — | no-oa |  | supplement | — |
+| 409 | S424 | 2009 | On the equivalence of robust optimization and regularization in statistics | Submitted to Operations Research | 7 | preprint | — | no-oa |  | supplement | metadata |
 | 410 | S426 | 2025 | Efficient domain adaptation of multimodal embeddings using constrastive learning | arXiv preprint arXiv:2502.02048 | 6 | preprint | arXiv | txt | 13 | core | carded |
 | 411 | S427 | 2024 | Ensembling wind forecasting models to construct data-driven uncertainty sets in robust optimization | 2024 IEEE Power & Energy Society General Meeting (PESGM), 1-5 | 6 | conference | manual | txt | 5 | supplement | carded |
 | 412 | S428 | 2023 | Data-driven COVID-19 vaccine development for Janssen | INFORMS Journal on Applied Analytics 53 (1), 70-84 | 6 | journal | manual | txt | 16 | supplement | carded |
 | 413 | S429 | 2022 | Sparse PCA: A geometric approach | arXiv preprint arXiv:2210.06590 | 6 | journal | arXiv | txt | 34 | supplement | carded |
 | 414 | S430 | 2022 | Machine learning reimagined: the promise of interpretability to combat bias | Annals of Surgery 275 (6), e738-e739 | 6 | journal | manual | txt | 2 | supplement | carded |
 | 415 | S432 | 2018 | Multitarget tracking via mixed integer optimization | IEEE Transactions on Automatic Control 63 (11), 3627-3642 | 6 | journal | manual | txt | 16 | supplement | carded |
-| 416 | S433 | 2011 | Network information theory via robust optimization | Submitted for publication | 6 | preprint | — | no-oa |  | supplement | — |
-| 417 | S434 | 2000 | Moment problems via semidefinite programming: Applications in probability and finance | INSEAD | 6 | report | — | no-oa |  | supplement | — |
+| 416 | S433 | 2011 | Network information theory via robust optimization | Submitted for publication | 6 | preprint | — | no-oa |  | supplement | metadata |
+| 417 | S434 | 2000 | Moment problems via semidefinite programming: Applications in probability and finance | INSEAD | 6 | report | — | no-oa |  | supplement | metadata |
 | 418 | S435 | 1996 | Improved randomized approximation algorithms for lot-sizing problems | International Conference on Integer Programming and Combinatorial… | 6 | conference | url | txt | 15 | supplement | carded |
 | 419 | S436 | 1995 | Optimization of queueing networks: an optimal control appraoch | Massachusetts Institute of Technology | 6 | thesis | — | no-oa |  | skip | — |
-| 420 | S438 | 1992 | Probability and algorithms | National Academies Press | 6 | report | — | no-oa |  | supplement | — |
+| 420 | S438 | 1992 | Probability and algorithms | National Academies Press | 6 | report | — | no-oa |  | supplement | abstract |
 | 421 | S439 | 2026 | Leveraging multimodal machine learning for accurate risk identification of intimate partner violence | npj Women's Health 4 (1), 15 | 5 | journal | manual | txt | 9 | core | carded |
 | 422 | S440 | 2025 | From Data to Uncertainty Sets: a Machine Learning Approach | arXiv preprint arXiv:2503.02173 | 5 | preprint | arXiv | txt | 25 | core | carded |
 | 423 | S442 | 2023 | Accelerating vaccine innovation for emerging infectious diseases via parallel discovery | Entrepreneurship and Innovation Policy and the Economy 2 (1), 9-39 | 5 | journal | manual | txt | 32 | supplement | carded |
@@ -440,23 +440,23 @@
 | 428 | S447 | 2013 | Personalized diabetes management | Massachusetts Institute of Technology | 5 | thesis | — | no-oa |  | skip | — |
 | 429 | S448 | 2012 | Ordered rules for classification: A discrete optimization approach to associative classification | Poster in Proceesings of Neural Information Processing Systems Foundations… | 5 | conference | manual | txt | 31 | supplement | carded |
 | 430 | S449 | 2008 | Analysis and Optimization of the Emergency Department at Beth Israel Deaconess Medical Center via Simulation | Massachusetts Institute of Technology | 5 | thesis | — | no-oa |  | skip | — |
-| 431 | S450 | 2004 | Option pricing without price dynamics: a geometric approach | Operations Research Center, MIT, working paper | 5 | report | — | no-oa |  | supplement | — |
+| 431 | S450 | 2004 | Option pricing without price dynamics: a geometric approach | Operations Research Center, MIT, working paper | 5 | report | — | no-oa |  | supplement | metadata |
 | 432 | S451 | 2003 | Integer optimization in data mining | Massachusetts Institute of Technology | 5 | thesis | — | no-oa |  | skip | — |
-| 433 | S452 | 2002 | Applications of semidefinite optimization in stochastic project scheduling | — | 5 | other | — | no-oa |  | supplement | — |
-| 434 | S453 | 1998 | Greedy, randomized and approximate dynamic programming algorithms for facility location problems | — | 5 | other | — | no-oa |  | supplement | — |
+| 433 | S452 | 2002 | Applications of semidefinite optimization in stochastic project scheduling | — | 5 | other | manual | txt | 5 | supplement | abstract |
+| 434 | S453 | 1998 | Greedy, randomized and approximate dynamic programming algorithms for facility location problems | — | 5 | other | — | no-oa |  | supplement | metadata |
 | 435 | S456 | 2025 | Should We Relax Stability in Matching Markets? | arXiv preprint arXiv:2509.14475 | 4 | preprint | arXiv | txt | 21 | core | carded |
 | 436 | S457 | 2025 | Multimodal prescriptive deep learning | arXiv preprint arXiv:2501.14152 | 4 | journal | arXiv | txt | 31 | core | carded |
 | 437 | S458 | 2024 | Robust linear algebra | European Journal of Operational Research 314 (3), 1174-1184 | 4 | journal | manual | txt | 11 | supplement | carded |
 | 438 | S459 | 2022 | Sparse regression over clusters: SparClur | Optimization Letters 16 (2), 433-448 | 4 | journal | manual | txt | 16 | supplement | carded |
 | 439 | S460 | 2020 | Learning high order feature interactions with fine control kernels | arXiv preprint arXiv:2002.03298 | 4 | other | — | no-oa |  | skip | — |
 | 440 | S461 | 2020 | Interpretable machine learning methods with applications to health care | Massachusetts Institute of Technology | 4 | thesis | — | no-oa |  | skip | — |
-| 441 | S462 | 2012 | On the power of nature in robust discrete optimization | preparation | 4 | preprint | — | no-oa |  | supplement | — |
+| 441 | S462 | 2012 | On the power of nature in robust discrete optimization | preparation | 4 | preprint | — | no-oa |  | supplement | metadata |
 | 442 | S463 | 2010 | Patterns of heart attacks | Massachusetts Institute of Technology | 4 | thesis | — | no-oa |  | skip | — |
-| 443 | S464 | 2006 | Robust and Adaptive Optimization; a Tractable Approach to Optimization Under Uncertainty | NSF Award 5 (556106), 56106 | 4 | other | — | no-oa |  | supplement | — |
+| 443 | S464 | 2006 | Robust and Adaptive Optimization; a Tractable Approach to Optimization Under Uncertainty | NSF Award 5 (556106), 56106 | 4 | other | — | no-oa |  | supplement | abstract |
 | 444 | S465 | 2006 | No-arbitrage bounds on american put options with a single maturity | Massachusetts Institute of Technology | 4 | thesis | — | no-oa |  | skip | — |
-| 445 | S466 | 2006 | Multistage finite adaptability: Application to air traffic control | Working Paper, Massachusetts Institute of Technology | 4 | report | — | no-oa |  | supplement | — |
+| 445 | S466 | 2006 | Multistage finite adaptability: Application to air traffic control | Working Paper, Massachusetts Institute of Technology | 4 | report | — | no-oa |  | supplement | metadata |
 | 446 | S467 | 2003 | Finance without price dynamics | Massachusetts Institute of Technology | 4 | thesis | — | no-oa |  | skip | — |
-| 447 | S468 | 1994 | Bounds for loss networks | preparation | 4 | preprint | — | no-oa |  | supplement | — |
+| 447 | S468 | 1994 | Bounds for loss networks | preparation | 4 | preprint | — | no-oa |  | supplement | metadata |
 | 448 | S470 | 1812 | Interpretable Clustering via Optimal Trees | arXiv | 4 | preprint | arXiv | txt | 8 | supplement | carded |
 | 449 | S474 | 2026 | RocketPFN: Accurate Time Series Classification via In-Context Learning | arXiv preprint arXiv:2606.21786 | 3 | preprint | arXiv | txt | 15 | core | carded |
 | 450 | S475 | 2026 | Predictive low rank matrix learning under partial observations: Mixed-projection ADMM | Machine Learning 115 (6), 131 | 3 | journal | arXiv | txt | 59 | core | carded |
@@ -469,33 +469,33 @@
 | 457 | S482 | 2022 | THEMIS: a framework for cost-benefit analysis of COVID-19 non-pharmaceutical interventions | MedRxiv, 2022.04. 09.22273656 | 3 | preprint | unpaywall | txt | 18 | supplement | carded |
 | 458 | S483 | 2022 | Disease diagnosis using spectroscopy and machine learning | US Patent App. 17/368,793 | 3 | patent | — | no-oa |  | skip | — |
 | 459 | S485 | 2020 | From data to decisions in urban transit and logistics | Massachusetts Institute of Technology | 3 | thesis | — | no-oa |  | skip | — |
-| 460 | S486 | 2019 | MP64-03 SELECTING CHILDREN WITH VUR WHO ARE MOST LIKELY TO BENEFIT FROM ANTIBIOTIC PROPHYLAXIS: APPLICATION OF MACHINE LEARNING TO RIVUR DATA | The Journal of Urology 201 (Supplement 4), e941-e941 | 3 | conference | — | no-oa |  | supplement | — |
-| 461 | S487 | 2019 | New Methods of Natural Language Processing using Machine Learning Methods to Identify Ischemic Stroke Presence, Acuity and Location from Clinical Radiology Reports | — | 3 | other | — | no-oa |  | supplement | — |
+| 460 | S486 | 2019 | MP64-03 SELECTING CHILDREN WITH VUR WHO ARE MOST LIKELY TO BENEFIT FROM ANTIBIOTIC PROPHYLAXIS: APPLICATION OF MACHINE LEARNING TO RIVUR DATA | The Journal of Urology 201 (Supplement 4), e941-e941 | 3 | conference | — | no-oa |  | supplement | abstract |
+| 461 | S487 | 2019 | New Methods of Natural Language Processing using Machine Learning Methods to Identify Ischemic Stroke Presence, Acuity and Location from Clinical Radiology Reports | — | 3 | other | manual | txt | 1 | supplement | abstract |
 | 462 | S488 | 2019 | The price of flexibility | Unpublished manuscript | 3 | preprint | manual | txt | 38 | supplement | carded |
 | 463 | S489 | 2013 | Measuring quality in diabetes care: an expert-based statistical approach | SpringerPlus 2 (1), 226 | 3 | journal | url | txt | 10 | supplement | carded |
-| 464 | S490 | 2013 | Personalized diabetes management: A robust optimization approach | Submitted | 3 | preprint | — | no-oa |  | supplement | — |
-| 465 | S491 | 2012 | Call for Papers Special Issue of Management Science: Business Analytics: Submission deadline: September 16, 2012 Expected publication date: First Quarter 2014 | Management Science 58 (7), 1422-1422 | 3 | journal | — | no-oa |  | supplement | — |
-| 466 | S494 | 2009 | Max-min fairness in the air traffic flow management problem | Working Paper | 3 | report | — | no-oa |  | supplement | — |
+| 464 | S490 | 2013 | Personalized diabetes management: A robust optimization approach | Submitted | 3 | preprint | — | no-oa |  | supplement | metadata |
+| 465 | S491 | 2012 | Call for Papers Special Issue of Management Science: Business Analytics: Submission deadline: September 16, 2012 Expected publication date: First Quarter 2014 | Management Science 58 (7), 1422-1422 | 3 | journal | — | no-oa |  | supplement | abstract |
+| 466 | S494 | 2009 | Max-min fairness in the air traffic flow management problem | Working Paper | 3 | report | — | no-oa |  | supplement | metadata |
 | 467 | S496 | 2008 | Quality of care and drug surveillance: A data-driven perspective | Massachusetts Institute of Technology | 3 | thesis | — | no-oa |  | skip | — |
 | 468 | S497 | 2008 | Empirical comparison of robust, data driven and stochastic optimization | Massachusetts Institute of Technology | 3 | thesis | — | no-oa |  | skip | — |
 | 469 | S498 | 2007 | Optimal data fitting: a moment approach | Research report, Sloan School of Management, MIT, Boston, MA | 3 | report | manual | txt | 17 | supplement | skimmed |
 | 470 | S499 | 2006 | Multivariate exponential integral approximations: a moment approach | Technical Report, Operations Research Center, MIT | 3 | report | manual | txt | 15 | supplement | skimmed |
 | 471 | S500 | 2002 | Geometry, moments, and semidefinite optimization | Proceedings of the 15th International Symposium on MTNS | 3 | conference | manual | txt | 15 | supplement | carded |
 | 472 | S501 | 2001 | Solving linear partial differential equations via semidefinite optimization | Massachusetts Institute of Technology | 3 | thesis | — | no-oa |  | skip | — |
-| 473 | S502 | 2000 | Simulation-based optimization for airline network yield management' | Working Paper, Massachusetts Institute of Technology, USA | 3 | report | — | no-oa |  | supplement | — |
-| 474 | S504 | 1999 | Optimal bounds in finance: An optimization approach | Working paper, MIT, http://www. insead. fr/facultyresearch/tm/popescu | 3 | report | — | no-oa |  | supplement | — |
+| 473 | S502 | 2000 | Simulation-based optimization for airline network yield management' | Working Paper, Massachusetts Institute of Technology, USA | 3 | report | — | no-oa |  | supplement | metadata |
+| 474 | S504 | 1999 | Optimal bounds in finance: An optimization approach | Working paper, MIT, http://www. insead. fr/facultyresearch/tm/popescu | 3 | report | — | no-oa |  | supplement | metadata |
 | 475 | S505 | 1997 | Optimal control of queueing networks: A singular pertubation approach | 9th INFORMS Applied Probability Conference | 3 | talk | — | no-oa |  | skip | — |
-| 476 | S506 | 1996 | A Critical Review of Optimization Models and Their Potential Application to the European Air Traffic Flow Management System | prepared for the NOAA Project of the European Commission (unpublished) | 3 | report | — | no-oa |  | supplement | — |
-| 477 | S507 | 1994 | A linear control approach to optimization of multiclass queueing networks | preparation | 3 | preprint | — | no-oa |  | supplement | — |
+| 476 | S506 | 1996 | A Critical Review of Optimization Models and Their Potential Application to the European Air Traffic Flow Management System | prepared for the NOAA Project of the European Commission (unpublished) | 3 | report | — | no-oa |  | supplement | metadata |
+| 477 | S507 | 1994 | A linear control approach to optimization of multiclass queueing networks | preparation | 3 | preprint | — | no-oa |  | supplement | metadata |
 | 478 | S516 | — | Code for generating the HAIM multimodal dataset of MIMIC-IV clinical data and x-rays. 2022 | DOI | 3 | other | — | no-oa |  | skip | — |
 | 479 | S522 | 2026 | Wfdronebench: A benchmark for sensor placement and drone routing for wildfire detection | arXiv preprint arXiv:2609.11829 | 2 | preprint | arXiv | txt | 22 | core | carded |
 | 480 | S523 | 2025 | Adaptive forests for classification | arXiv preprint arXiv:2510.22991 | 2 | preprint | arXiv | txt | 21 | core | carded |
 | 481 | S524 | 2025 | Holistic Artificial Intelligence in Medicine; improved performance and explainability | arXiv preprint arXiv:2507.00205 | 2 | preprint | arXiv | txt | 20 | core | carded |
-| 482 | S525 | 2025 | PO-05-166 AI-enabled multi-class diagnosis of left ventricular ejection fraction from electrocardiograms | Heart Rhythm 22 (4), S540 | 2 | conference | — | no-oa |  | core | — |
+| 482 | S525 | 2025 | PO-05-166 AI-enabled multi-class diagnosis of left ventricular ejection fraction from electrocardiograms | Heart Rhythm 22 (4), S540 | 2 | conference | — | no-oa |  | core | metadata |
 | 483 | S526 | 2025 | Using Interpretable Artificial Intelligence Algorithms in the Management of Blunt Splenic Trauma: Applications of Optimal Policy Trees as a Treatment Prescription Aid to Improve Patient Mortality | Bioengineering 12 (4), 336 | 2 | journal | manual | txt | 11 | core | carded |
 | 484 | S527 | 2025 | The ROAD to clinical trial emulation | Research Square, rs. 3. rs-5576146 | 2 | preprint | arXiv | txt | 27 | core | carded |
-| 485 | S528 | 2024 | Skip Transformers: Efficient Inference through Skip-Routing | NeurIPS 2024 Workshop on Fine-Tuning in Modern Machine Learning: Principles�… | 2 | conference | — | no-oa |  | supplement | — |
-| 486 | S529 | 2023 | Use of artificial intelligence for nonlinear benchmarking of surgical care | Surgery 174 (6), 1302-1308 | 2 | journal | — | no-oa |  | supplement | — |
+| 485 | S528 | 2024 | Skip Transformers: Efficient Inference through Skip-Routing | NeurIPS 2024 Workshop on Fine-Tuning in Modern Machine Learning: Principles�… | 2 | conference | — | no-oa |  | supplement | abstract |
+| 486 | S529 | 2023 | Use of artificial intelligence for nonlinear benchmarking of surgical care | Surgery 174 (6), 1302-1308 | 2 | journal | — | no-oa |  | supplement | abstract |
 | 487 | S530 | 2023 | Robust Regression over Averaged Uncertainty | arXiv preprint arXiv:2311.06960 | 2 | preprint | arXiv | txt | 34 | supplement | skimmed |
 | 488 | S531 | 2023 | Adaptive pricing in unit commitment under load and capacity uncertainty | arXiv preprint arXiv:2309.08162 | 2 | preprint | arXiv | txt | 10 | supplement | carded |
 | 489 | S532 | 2023 | Multimodality: Models, Algorithms, and Applications | Massachusetts Institute of Technology | 2 | thesis | — | no-oa |  | skip | — |
@@ -505,71 +505,71 @@
 | 493 | S540 | 2021 | Essays on decision making under uncertainty | Massachusetts Institute of Technology | 2 | thesis | — | no-oa |  | skip | — |
 | 494 | S541 | 2021 | Optimizing school operations | Massachusetts Institute of Technology | 2 | thesis | — | no-oa |  | skip | — |
 | 495 | S543 | 2020 | Time series that are robust to regime changes | J. Mach. Learn. Res. 21, 1-31 | 2 | journal | manual | txt | 31 | supplement | carded |
-| 496 | S546 | 2020 | Mortality risk calculatory | URL https://www. covidanalytics. io/calculator | 2 | other | — | no-oa |  | supplement | — |
+| 496 | S546 | 2020 | Mortality risk calculatory | URL https://www. covidanalytics. io/calculator | 2 | other | — | no-oa |  | supplement | metadata |
 | 497 | S547 | 2019 | Data-driven dynamic optimization with auxiliary covariates | Massachusetts Institute of Technology | 2 | thesis | — | no-oa |  | skip | — |
 | 498 | S549 | 2018 | Sparsity and robustness in modern statistical estimation | Massachusetts Institute of Technology, Sloan School of Management�… | 2 | thesis | — | no-oa |  | skip | — |
-| 499 | S550 | 2018 | Optimal Trees for Prediction and Prescription | Dynamic Ideas | 2 | book | — | no-oa |  | core | — |
-| 500 | S551 | 2018 | Learning under uncertainty: an adaptive optimization perspective | Woking Paper | 2 | report | — | no-oa |  | supplement | — |
+| 499 | S550 | 2018 | Optimal Trees for Prediction and Prescription | Dynamic Ideas | 2 | book | — | no-oa |  | core | metadata |
+| 500 | S551 | 2018 | Learning under uncertainty: an adaptive optimization perspective | Woking Paper | 2 | report | — | no-oa |  | supplement | metadata |
 | 501 | S554 | 2015 | Channel coding via robust optimization, part 1: The case of a single channel | Submitted for publication | 2 | preprint | manual | txt | 31 | supplement | skimmed |
 | 502 | S555 | 2015 | Analytics for improved cancer screening and treatment | Massachusetts Institute of Technology | 2 | thesis | — | no-oa |  | skip | — |
 | 503 | S557 | 2014 | Semi-supervised approach to predictive analysis using temporal data | Military Operations Research 19 (1), 37-50 | 2 | journal | manual | txt | 15 | supplement | carded |
 | 504 | S558 | 2013 | Weapon coordination in a fleet: Centralized and distributed optimization | MIT Lincoln Laboratory. Working paper | 2 | report | manual | txt | 21 | supplement | carded |
-| 505 | S560 | 2011 | On the complexity of constructing adaptive policies in two-stage linear optimization | Working Paper | 2 | report | — | no-oa |  | supplement | — |
+| 505 | S560 | 2011 | On the complexity of constructing adaptive policies in two-stage linear optimization | Working Paper | 2 | report | — | no-oa |  | supplement | metadata |
 | 506 | S561 | 2011 | Integer optimization methods for supervised ranking | Operations Research Center Working Paper Series OR, 388-11 | 2 | report | manual | txt | 35 | supplement | carded |
 | 507 | S563 | 2010 | Optimization under moment, robust, and data-driven models of uncertainty | Massachusetts Institute of Technology | 2 | thesis | — | no-oa |  | skip | — |
-| 508 | S564 | 2009 | Optimization methods | Technical report, MIT, 2009. Disponible � http://ocw. mit. edu/courses | 2 | other | — | no-oa |  | supplement | — |
-| 509 | S567 | 2009 | Fairness in the Air Traffic Flow Management Problem | Transportation Science, submitted for publication | 2 | preprint | — | no-oa |  | supplement | — |
+| 508 | S564 | 2009 | Optimization methods | Technical report, MIT, 2009. Disponible � http://ocw. mit. edu/courses | 2 | other | — | no-oa |  | supplement | abstract |
+| 509 | S567 | 2009 | Fairness in the Air Traffic Flow Management Problem | Transportation Science, submitted for publication | 2 | preprint | — | no-oa |  | supplement | metadata |
 | 510 | S569 | 2004 | Reducing variability in equipment availability at Intel using systems optimization | Massachusetts Institute of Technology | 2 | thesis | — | no-oa |  | skip | — |
-| 511 | S571 | 2002 | Optimal control of fluid tandem networks | Manuscript in preparation | 2 | preprint | — | no-oa |  | supplement | — |
+| 511 | S571 | 2002 | Optimal control of fluid tandem networks | Manuscript in preparation | 2 | preprint | — | no-oa |  | supplement | metadata |
 | 512 | S573 | 1999 | Scheduling multiclass queueing networks and job shops using fluid and semidefinite relaxations | Massachusetts Institute of Technology | 2 | thesis | — | no-oa |  | skip | — |
-| 513 | S574 | 1998 | Queues: Theory & Applications | MIT | 2 | other | — | no-oa |  | supplement | — |
-| 514 | S575 | 1998 | Tax-Aware Multiperiod Portfolio Optimization | MIT Sloan School of Management, Cambridge, Mass | 2 | report | — | no-oa |  | supplement | — |
+| 513 | S574 | 1998 | Queues: Theory & Applications | MIT | 2 | other | — | no-oa |  | supplement | metadata |
+| 514 | S575 | 1998 | Tax-Aware Multiperiod Portfolio Optimization | MIT Sloan School of Management, Cambridge, Mass | 2 | report | — | no-oa |  | supplement | metadata |
 | 515 | S577 | 1996 | Constructing approximation algorithms via linear programming relaxations | Doctoral Thesis, MIT, Cambridge, MA., D. Bertsimas. 1996. On improved�… | 2 | thesis | — | no-oa |  | skip | — |
 | 516 | S580 | 1994 | A mathematical programming approach to stochastic optimization problems | Operations Research Center, MIT, working paper | 2 | report | manual | txt | 53 | supplement | carded |
-| 517 | S581 | 1994 | Polling model and vehicle routing problem | Technical Report, MIT | 2 | report | — | no-oa |  | supplement | — |
-| 518 | S582 | 1993 | On a characterization of the minimum assignment and matching in the independent random model. | IPCO, 161-169 | 2 | conference | — | no-oa |  | supplement | — |
+| 517 | S581 | 1994 | Polling model and vehicle routing problem | Technical Report, MIT | 2 | report | — | no-oa |  | supplement | metadata |
+| 518 | S582 | 1993 | On a characterization of the minimum assignment and matching in the independent random model. | IPCO, 161-169 | 2 | conference | — | no-oa |  | supplement | metadata |
 | 519 | S584 | 1993 | Scheduling of multiclass queueing networks: Bounds on achievable performance | MIT | 2 | thesis | — | no-oa |  | skip | — |
 | 520 | S585 | 1993 | Problems in discrete optimization | MIT | 2 | thesis | — | no-oa |  | skip | — |
-| 521 | S587 | 1992 | Scheduling of M ulticlass Networks: Bounds on Achievable Performance | Workshop on Hierarchical Control for Real—time Scheduling of Man ufacturing… | 2 | conference | — | no-oa |  | supplement | — |
+| 521 | S587 | 1992 | Scheduling of M ulticlass Networks: Bounds on Achievable Performance | Workshop on Hierarchical Control for Real—time Scheduling of Man ufacturing… | 2 | conference | — | no-oa |  | supplement | metadata |
 | 522 | S588 | 1991 | How much cash should a bank maintain?: an optimization approach | Massachusetts Institute of Technology | 2 | thesis | — | no-oa |  | skip | — |
-| 523 | S591 | 1988 | The probabilistic assignment problem and the probabilistic shortest path problem | preparation | 2 | preprint | — | no-oa |  | supplement | — |
-| 524 | S597 | — | Stochastic and Dynamic Vehicle Routing in the Euclidean Plane: The Multiple-Server, Capacitated Vehicle Case. 1990 | — | 2 | other | — | no-oa |  | supplement | — |
+| 523 | S591 | 1988 | The probabilistic assignment problem and the probabilistic shortest path problem | preparation | 2 | preprint | — | no-oa |  | supplement | metadata |
+| 524 | S597 | — | Stochastic and Dynamic Vehicle Routing in the Euclidean Plane: The Multiple-Server, Capacitated Vehicle Case. 1990 | — | 2 | other | manual | txt | 42 | supplement | abstract |
 | 525 | S605 | — | Velibor V | Misic (b) | 2 | other | — | no-oa |  | skip | — |
 | 526 | S607 | — | The optimality of the GS> rule under quadratic holding costs, December 1999 | Private conversation | 2 | other | — | no-oa |  | skip | — |
-| 527 | S614 | 2026 | Fifty years of Robust Linear and Convex Optimization | European Journal of Operational Research | 1 | journal | — | no-oa |  | core | — |
+| 527 | S614 | 2026 | Fifty years of Robust Linear and Convex Optimization | European Journal of Operational Research | 1 | journal | — | no-oa |  | core | abstract |
 | 528 | S615 | 2026 | Towards optimal valve prescription for transcatheter aortic valve replacement (TAVR) surgery: a machine learning approach | Health Care Management Science 29 (3), 27 | 1 | journal | arXiv | txt | 45 | core | carded |
 | 529 | S616 | 2026 | A Causal DAG Prior for Synthetic Time-Series Classification Datasets | arXiv preprint arXiv:2606.21776 | 1 | preprint | arXiv | txt | 11 | core | carded |
 | 530 | S617 | 2026 | Patient outcome predictions improve operations at Hartford HealthCare | INFORMS Journal on Applied Analytics 56 (3), 224-242 | 1 | journal | unpaywall | txt | 41 | core | carded |
 | 531 | S618 | 2026 | Artificial Intelligence for Automated, Highly Accurate, and Scalable Multimodal EHR Data Abstraction | medRxiv, 2026.03. 16.26348522 | 1 | preprint | manual | txt | 19 | core | carded |
-| 532 | S619 | 2026 | When is More Better? Efficient and Adaptive Modality Acquisition in Multimodal Learning | Transactions on Machine Learning Research | 1 | journal | — | no-oa |  | core | — |
+| 532 | S619 | 2026 | When is More Better? Efficient and Adaptive Modality Acquisition in Multimodal Learning | Transactions on Machine Learning Research | 1 | journal | — | no-oa |  | core | abstract |
 | 533 | S620 | 2026 | Improving survival models in health care by balancing imbalanced cohorts: a novel approach | JCO clinical cancer informatics 10 (1), e2500190 | 1 | journal | arXiv | txt | 14 | core | carded |
 | 534 | S621 | 2025 | Early Warning Index for Patient Deteriorations in Hospitals | arXiv preprint arXiv:2512.14683 | 1 | preprint | arXiv | txt | 31 | core | carded |
-| 535 | S622 | 2025 | Early detection of opioid over-procurement: A semisupervised machine learning approach | Manufacturing & Service Operations Management 27 (6), 1889-1904 | 1 | journal | — | no-oa |  | core | — |
+| 535 | S622 | 2025 | Early detection of opioid over-procurement: A semisupervised machine learning approach | Manufacturing & Service Operations Management 27 (6), 1889-1904 | 1 | journal | — | no-oa |  | core | abstract |
 | 536 | S623 | 2025 | Overfitting in Adaptive Robust Optimization | arXiv preprint arXiv:2509.16451 | 1 | preprint | arXiv | txt | 5 | core | carded |
 | 537 | S624 | 2025 | Global nonconvex optimization with integer variables | arXiv preprint arXiv:2508.07018 | 1 | preprint | arXiv | txt | 20 | core | carded |
 | 538 | S626 | 2024 | Policy Trees for Prediction: Interpretable and Adaptive Model Selection for Machine Learning | arXiv preprint arXiv:2405.20486 | 1 | preprint | arXiv | txt | 45 | supplement | carded |
-| 539 | S627 | 2024 | A novel approach for a broad class of nonconvex optimization problems | — | 1 | other | — | no-oa |  | supplement | — |
-| 540 | S628 | 2023 | Hartford HealthCare improves hospital operations with patient outcome predictions | To be submitted | 1 | preprint | — | no-oa |  | supplement | — |
+| 539 | S627 | 2024 | A novel approach for a broad class of nonconvex optimization problems | — | 1 | other | — | no-oa |  | supplement | metadata |
+| 540 | S628 | 2023 | Hartford HealthCare improves hospital operations with patient outcome predictions | To be submitted | 1 | preprint | — | no-oa |  | supplement | metadata |
 | 541 | S629 | 2022 | Disease diagnosis using spectroscopy and machine learning | US Patent App. 17/368,803 | 1 | patent | — | no-oa |  | skip | — |
 | 542 | S630 | 2022 | Sparsity in Machine Learning: Theory and Applications | Massachusetts Institute of Technology | 1 | thesis | — | no-oa |  | skip | — |
 | 543 | S631 | 2021 | ECHSA Presidential Address, CHSS-ECHSA Joint Meeting; Oct 24-25, 2020 | World Journal for Pediatric and Congenital Heart Surgery 12 (2), 164-167 | 1 | other | — | no-oa |  | skip | — |
 | 544 | S632 | 2020 | Algorithmic advancements in discrete optimization: applications to machine learning and healthcare operations | Massachusetts Institute of Technology, Sloan School of Management�… | 1 | thesis | — | no-oa |  | skip | — |
-| 545 | S633 | 2020 | Novel machine learning proves stroke risk is not linear | Stroke 51 (Suppl\_1), A153-A153 | 1 | conference | — | no-oa |  | supplement | — |
+| 545 | S633 | 2020 | Novel machine learning proves stroke risk is not linear | Stroke 51 (Suppl\_1), A153-A153 | 1 | conference | — | no-oa |  | supplement | abstract |
 | 546 | S634 | 2020 | Prescriptive methods for adaptive learning | Massachusetts Institute of Technology | 1 | thesis | — | no-oa |  | skip | — |
 | 547 | S635 | 2020 | Dynamic optimization in the age of big data | Massachusetts Institute of Technology | 1 | thesis | — | no-oa |  | skip | — |
-| 548 | S636 | 2020 | Early Detection of Opioid Over-Procurement: A Machine Learning Approach | — | 1 | other | — | no-oa |  | supplement | — |
-| 549 | S637 | 2019 | Machine Learning and Optimization: Introduction to the Special Issue | Informs Journal on Optimization 1 (3), 185-186 | 1 | journal | — | no-oa |  | supplement | — |
+| 548 | S636 | 2020 | Early Detection of Opioid Over-Procurement: A Machine Learning Approach | — | 1 | other | manual | txt | 20 | supplement | abstract |
+| 549 | S637 | 2019 | Machine Learning and Optimization: Introduction to the Special Issue | Informs Journal on Optimization 1 (3), 185-186 | 1 | journal | — | no-oa |  | supplement | metadata |
 | 550 | S638 | 2019 | The edge of large-scale optimization in transportation and machine learning | Massachusetts Institute of Technology | 1 | thesis | — | no-oa |  | skip | — |
 | 551 | S641 | 2017 | A robust optimization approach to online problems | Massachusetts Institute of Technology | 1 | thesis | — | no-oa |  | skip | — |
 | 552 | S642 | 2017 | Combinatorial structures in online and convex optimization | Massachusetts Institute of Technology | 1 | thesis | — | no-oa |  | skip | — |
 | 553 | S643 | 2016 | Stochastic analysis via robust optimization | Massachusetts Institute of Technology | 1 | thesis | — | no-oa |  | skip | — |
 | 554 | S644 | 2016 | Moneyball for professors: models for predicting research impact | MIT Initiative on the Digital Economy 2016 (11) | 1 | report | manual | txt | 5 | supplement | carded |
 | 555 | S645 | 2015 | From data to decisions through new interfaces between optimization and statistics | Massachusetts Institute of Technology | 1 | thesis | — | no-oa |  | skip | — |
-| 556 | S651 | 2007 | Introduction to Queueing Systems, monograph in preparation | — | 1 | other | — | no-oa |  | supplement | — |
+| 556 | S651 | 2007 | Introduction to Queueing Systems, monograph in preparation | — | 1 | other | — | no-oa |  | supplement | metadata |
 | 557 | S652 | 2003 | Advances in airline revenue management and pricing | Massachusetts Institute of Technology | 1 | thesis | — | no-oa |  | skip | — |
 | 558 | S653 | 2002 | An Optimization Approach to Credit Risk | Work | 1 | report | url | txt | 31 | supplement | skimmed |
 | 559 | S655 | 1999 | Relaxation and exact algorithms for solving mixed integer-quadratic optimization problems | Massachusetts Institute of Technology | 1 | thesis | — | no-oa |  | skip | — |
-| 560 | S656 | 1996 | Buffer overflow probabilities in multiclass ATM switches | PROCEEDINGS OF THE ANNUAL ALLERTON CONFERENCE ON COMMUNICATION CONTROL AND�… | 1 | conference | — | no-oa |  | supplement | — |
+| 560 | S656 | 1996 | Buffer overflow probabilities in multiclass ATM switches | PROCEEDINGS OF THE ANNUAL ALLERTON CONFERENCE ON COMMUNICATION CONTROL AND�… | 1 | conference | — | no-oa |  | supplement | metadata |
 | 561 | S657 | 1995 | RSS Research Workshop in Stochastic Networks | Edinburgh, August | 1 | talk | — | no-oa |  | skip | — |
 | 562 | S658 | 1995 | Nonlinear formulations and improved randomized approximation algorithms for multiway and multicut problems | Sloan School of Management, Massachusetts Institute of Technology\] | 1 | report | manual | txt | 25 | supplement | carded |
 | 563 | S659 | 1993 | Decomposition algorithms for analyzing transient phenomena in multi-class queuing networks in air transportation | Cambridge, Mass.: Alfred P. Sloan School of Management, Massachusetts�… | 1 | report | url | txt | 17 | supplement | carded |
@@ -580,11 +580,11 @@
 | 568 | S667 | 2026 | Bespoke: Generating MOOC-Quality Industry-Personalized Lecture Videos at Scale | arXiv preprint arXiv:2609.26540 | — | preprint | arXiv | txt | 9 | core | carded |
 | 569 | S668 | 2026 | Rapid drone-based wildfire detection at a fraction of current prevention spending | arXiv preprint arXiv:2609.18556 | — | preprint | arXiv | txt | 32 | core | carded |
 | 570 | S669 | 2026 | Catastrophe Insurance Pricing: An Adaptive Robust Optimization Approach | Variance 19 | — | journal | arXiv | txt | 39 | core | carded |
-| 571 | S670 | 2026 | Identifying subsets of patients with retroperitoneal sarcoma who benefit from radiotherapy: an Interpretable AI reanalysis of the STRASS randomised trial | The Lancet Digital Health 8 (8) | — | journal | — | no-oa |  | core | — |
+| 571 | S670 | 2026 | Identifying subsets of patients with retroperitoneal sarcoma who benefit from radiotherapy: an Interpretable AI reanalysis of the STRASS randomised trial | The Lancet Digital Health 8 (8) | — | journal | — | no-oa |  | core | abstract |
 | 572 | S671 | 2026 | Report to the President for year ended June 30, 2026, MIT Open Learning | — | — | report | — | no-oa |  | skip | — |
 | 573 | S672 | 2026 | Robust Optimization for Green Ammonia Production | arXiv preprint arXiv:2606.08335 | — | preprint | arXiv | txt | 29 | core | carded |
-| 574 | S675 | 2026 | Lung Allocation Policy Optimization to Equalize Transplant Access Across Blood Types | American Journal of Transplantation 26 (7), S1028 | — | conference | — | no-oa |  | core | — |
-| 575 | S676 | 2026 | A Unified, Fast, and Transparent System for Designing Organ Allocation Policies | American Journal of Transplantation 26 (7), S257 | — | conference | — | no-oa |  | core | — |
+| 574 | S675 | 2026 | Lung Allocation Policy Optimization to Equalize Transplant Access Across Blood Types | American Journal of Transplantation 26 (7), S1028 | — | conference | — | no-oa |  | core | metadata |
+| 575 | S676 | 2026 | A Unified, Fast, and Transparent System for Designing Organ Allocation Policies | American Journal of Transplantation 26 (7), S257 | — | conference | — | no-oa |  | core | metadata |
 | 576 | S677 | 2026 | Empowering Health in Aging Populations: A Multimodal Vulnerability Tool for Frail Patients | Machine Learning for Health 2025 | — | conference | manual | txt | 24 | core | carded |
 | 577 | S678 | 2026 | A Multimodal and Explainable Machine Learning Approach to Diagnosing Multi-Class Ejection Fraction from Electrocardiograms | arXiv preprint arXiv:2604.25942 | — | preprint | arXiv | txt | 43 | core | carded |
 | 578 | S679 | 2026 | Robustifying and Selecting Cohort-Appropriate Prognostic Models under Distributional Shifts | arXiv preprint arXiv:2604.16537 | — | preprint | arXiv | txt | 28 | core | carded |
@@ -601,16 +601,16 @@
 | 589 | S691 | 2025 | Mark Francis Magazu | Massachusetts Institute of Technology | — | other | — | no-oa |  | skip | — |
 | 590 | S692 | 2025 | Interpretable AI-driven Guidelines for Type 2 Diabetes Treatment from Observational Data | arXiv preprint arXiv:2504.12417 | — | preprint | arXiv | txt | 21 | core | carded |
 | 591 | S694 | 2025 | A Unified Adaptive Robust Optimization Approach to Electricity Markets Under Uncertainty | Massachusetts Institute of Technology | — | thesis | — | no-oa |  | skip | — |
-| 592 | S695 | 2025 | The Analytics Edge in Healthcare | Dynamic Ideas | — | book | — | no-oa |  | core | — |
+| 592 | S695 | 2025 | The Analytics Edge in Healthcare | Dynamic Ideas | — | book | — | no-oa |  | core | abstract |
 | 593 | S696 | 2024 | Improving survival models in healthcare: a novel matching approach | Research Square, rs. 3. rs-5467577 | — | preprint | unpaywall | txt | 21 | supplement | carded |
-| 594 | S697 | 2024 | Investigating hidden influences on treatment for gastrointestinal stromal tumours with AI: diet, chronic conditions, and mental health–Authors' reply | The Lancet Oncology 25 (10), e470 | — | journal | — | no-oa |  | supplement | — |
+| 594 | S697 | 2024 | Investigating hidden influences on treatment for gastrointestinal stromal tumours with AI: diet, chronic conditions, and mental health–Authors' reply | The Lancet Oncology 25 (10), e470 | — | journal | — | no-oa |  | supplement | metadata |
 | 595 | S698 | 2024 | Convex Hull Pricing in Electricity Markets: Evidence from a Large US Market | 2024 INFORMS Optimization Society (IOS) | — | talk | — | no-oa |  | skip | — |
 | 596 | S699 | 2024 | Predictive and Prescriptive Trees for Optimization and Control Problems | Massachusetts Institute of Technology | — | thesis | — | no-oa |  | skip | — |
 | 597 | S700 | 2024 | Advances in Sparse and Low Rank Matrix Optimization for Machine Learning Applications | Massachusetts Institute of Technology | — | thesis | — | no-oa |  | skip | — |
 | 598 | S701 | 2024 | A Simulated Annealing Approach to Designing Optimal Decision Trees for Classification, Prescriptive, and Survival Analysis | Massachusetts Institute of Technology | — | thesis | — | no-oa |  | skip | — |
 | 599 | S702 | 2024 | Integrating Optimization and Modern Machine Learning: Theory, Computation, and Healthcare Applications | Massachusetts Institute of Technology | — | thesis | — | no-oa |  | skip | — |
 | 600 | S703 | 2024 | Multimodal Machine Learning for Climate Adaptation | Massachusetts Institute of Technology | — | thesis | — | no-oa |  | skip | — |
-| 601 | S704 | 2023 | Powerful New Methods and Tools for Designing Allocation Policy for Deceased-Donor Organs | AMERICAN JOURNAL OF TRANSPLANTATION 23 (6), S474-S474 | — | conference | — | no-oa |  | supplement | — |
+| 601 | S704 | 2023 | Powerful New Methods and Tools for Designing Allocation Policy for Deceased-Donor Organs | AMERICAN JOURNAL OF TRANSPLANTATION 23 (6), S474-S474 | — | conference | — | no-oa |  | supplement | metadata |
 | 602 | S706 | 2023 | Evaluation of individual and ensemble probabilistic forecasts of COVID-19 mortality in the United States (vol 119, e2113561119, 2022) | PROCEEDINGS OF THE NATIONAL ACADEMY OF SCIENCES OF THE UNITED STATES OF�… | — | errata | — | no-oa |  | skip | — |
 | 603 | S707 | 2023 | Renalase Identified by Machine Learning Methods As A Novel Independent Predictor Of Mortality In Hospitalized Patients With COVID-19 | — | — | preprint | unpaywall | txt | 21 | supplement | carded |
 | 604 | S708 | 2023 | Reformulation-Perspectification Technique for nonconvex optimization problems | Optimization Online | — | preprint | manual | txt | 69 | supplement | skimmed |
@@ -622,15 +622,15 @@
 | 610 | S714 | 2022 | Stable Machine Learning | Massachusetts Institute of Technology | — | thesis | — | no-oa |  | skip | — |
 | 611 | S715 | 2021 | Improving Efficiency and Fairness in Machine Learning: a Discrete Optimization Approach | Massachusetts Institute of Technology | — | thesis | — | no-oa |  | skip | — |
 | 612 | S716 | 2021 | Novel Machine Learning Algorithms for Personalized Medicine and Insurance | Massachusetts Institute of Technology | — | thesis | — | no-oa |  | skip | — |
-| 613 | S717 | 2020 | Development of a Multivariable Proxy Model for Six-Minute Walk Distance (6MWD) in Duchenne Muscular Dystrophy (DMD) Using Machine Learning Methods (682) | Neurology 94 (15_supplement), 682 | — | conference | — | no-oa |  | supplement | — |
-| 614 | S719 | 2019 | Introduction to the Issue | INFORMS Journal on Optimization 1 (4), 265-266 | — | journal | — | no-oa |  | supplement | — |
+| 613 | S717 | 2020 | Development of a Multivariable Proxy Model for Six-Minute Walk Distance (6MWD) in Duchenne Muscular Dystrophy (DMD) Using Machine Learning Methods (682) | Neurology 94 (15_supplement), 682 | — | conference | — | no-oa |  | supplement | abstract |
+| 614 | S719 | 2019 | Introduction to the Issue | INFORMS Journal on Optimization 1 (4), 265-266 | — | journal | — | no-oa |  | supplement | metadata |
 | 615 | S720 | 2019 | Report to the President for year ended June 30, 2019, Operations Research Center | — | — | report | — | no-oa |  | skip | — |
 | 616 | S721 | 2019 | Integrated robust and adaptive methods in the heating oil industry | Massachusetts Institute of Technology | — | thesis | — | no-oa |  | skip | — |
 | 617 | S722 | 2019 | Advances in data-driven models for transportation | Massachusetts Institute of Technology | — | thesis | — | no-oa |  | skip | — |
-| 618 | S723 | 2019 | The Rise and Fall of MELD: Are We Ready for an Optimized Prediction of Mortality (OPOM) for Liver Transplant Allocation? | AMERICAN JOURNAL OF TRANSPLANTATION 19, 15-16 | — | conference | — | no-oa |  | supplement | — |
-| 619 | S725 | 2018 | A scalable algorithm for sparse and robust portfolios | — | — | other | — | no-oa |  | supplement | — |
+| 618 | S723 | 2019 | The Rise and Fall of MELD: Are We Ready for an Optimized Prediction of Mortality (OPOM) for Liver Transplant Allocation? | AMERICAN JOURNAL OF TRANSPLANTATION 19, 15-16 | — | conference | — | no-oa |  | supplement | metadata |
+| 619 | S725 | 2018 | A scalable algorithm for sparse and robust portfolios | — | — | other | manual | txt | 29 | supplement | abstract |
 | 620 | S726 | 2018 | Report to the President for year ended June 30, 2018, Dean, Operations Research Center | — | — | report | — | no-oa |  | skip | — |
-| 621 | S727 | 2018 | Abstract P3-15-03: Clinical benefit, toxicity, and cost of metastatic breast cancer drug therapies: Visualizing randomized and non-randomized evidence | Cancer Research 78 (4_Supplement), P3-15-03-P3-15-03 | — | conference | — | no-oa |  | supplement | — |
+| 621 | S727 | 2018 | Abstract P3-15-03: Clinical benefit, toxicity, and cost of metastatic breast cancer drug therapies: Visualizing randomized and non-randomized evidence | Cancer Research 78 (4_Supplement), P3-15-03-P3-15-03 | — | conference | — | no-oa |  | supplement | abstract |
 | 622 | S730 | 2018 | New algorithms in machine learning with applications in personalized medicine | Massachusetts Institute of Technology | — | thesis | — | no-oa |  | skip | — |
 | 623 | S732 | 2017 | Report to the President for year ended June 30, 2017, Operations Research Center | — | — | report | — | no-oa |  | skip | — |
 | 624 | S736 | 2017 | An analytics approach to problems in health care | Massachusetts Institute of Technology | — | thesis | — | no-oa |  | skip | — |
@@ -640,87 +640,87 @@
 | 628 | S740 | 2016 | Computational management science special issue on “Robust Optimization and Applications” | Computational Management Science 13 (2), 147-149 | — | other | — | no-oa |  | skip | — |
 | 629 | S741 | 2016 | THE ANALYTICS EDGE | Mathematics and Computer Education 50 (2), 139 | — | review | — | no-oa |  | skip | — |
 | 630 | S743 | 2016 | Supply chain network strategy for consumer medical device introduction | Massachusetts Institute of Technology | — | thesis | — | no-oa |  | skip | — |
-| 631 | S745 | 2015 | Channel Coding via Robust Optimization Part 2: The Multi-User Channel | — | — | other | — | no-oa |  | supplement | — |
+| 631 | S745 | 2015 | Channel Coding via Robust Optimization Part 2: The Multi-User Channel | — | — | other | manual | txt | 35 | supplement | abstract |
 | 632 | S746 | 2015 | Report to the President for year ended June 30, 2015, Dean, Operations Research Center | — | — | report | — | no-oa |  | skip | — |
 | 633 | S747 | 2015 | Note on the Reformulation for Static Robust Problems for Convex Uncertainty Sets | Rn 500, 1 | — | other | manual | txt | 5 | supplement | carded |
 | 634 | S749 | 2015 | Multivariate Statistics and Machine Learning Under a Modern Optimization Lens | Georgia Institute of Technology | — | talk | — | no-oa |  | skip | — |
 | 635 | S753 | 2015 | Recensione dell'articolo:(Bertimas, Dimitris; Nasrabadi, Ebrahim; Paschalidis, Ioannis-" Robust fluid processing networks."-IEEE Trans. Automat. Control 60 (2015), no. 3, 715�… | — | — | review | — | no-oa |  | skip | — |
 | 636 | S754 | 2014 | Report to the President for year ended June 30, 2014, Operations Research Center | — | — | report | — | no-oa |  | skip | — |
 | 637 | S761 | 2013 | Report to the President for year ended June 30, 2013, Operations Research Center | — | — | report | — | no-oa |  | skip | — |
-| 638 | S763 | 2012 | SHB: Type II (INT): Collaborative Research: Algorithmic Approaches to Personalized Health Care | NSF Award Number 1237136. Directorate for Computer and Information Science�… | — | other | — | no-oa |  | supplement | — |
+| 638 | S763 | 2012 | SHB: Type II (INT): Collaborative Research: Algorithmic Approaches to Personalized Health Care | NSF Award Number 1237136. Directorate for Computer and Information Science�… | — | other | — | no-oa |  | supplement | abstract |
 | 639 | S764 | 2012 | Report to the President for year ended June 30, 2012, Operations Research Center | — | — | report | — | no-oa |  | skip | — |
 | 640 | S765 | 2011 | OPERA TIONS RESEARCH CENTER | Journal of Machine Learning Research | — | other | — | no-oa |  | skip | — |
 | 641 | S766 | 2011 | Report to the President for year ended June 30, 2011, Operations Research Center | — | — | report | — | no-oa |  | skip | — |
 | 642 | S770 | 2010 | Fairness and Optimality in Trading | Massachusetts Institute of Technology | — | thesis | — | no-oa |  | skip | — |
-| 643 | S771 | 2010 | Algebraic, Geometric, and Combinatorial Methods for Optimization | — | — | other | — | no-oa |  | supplement | — |
+| 643 | S771 | 2010 | Algebraic, Geometric, and Combinatorial Methods for Optimization | — | — | other | — | no-oa |  | supplement | metadata |
 | 644 | S772 | 2010 | Report to the President for year ended June 30, 2010, Operations Research Center | — | — | report | — | no-oa |  | skip | — |
 | 645 | S777 | 2009 | Report to the President for year ended June 30, 2009, Operations Research Center | — | — | report | — | no-oa |  | skip | — |
-| 646 | S778 | 2009 | Robust optimization in high dimensions | Optimal Device Design, 149-188 | — | chapter | — | no-oa |  | supplement | — |
+| 646 | S778 | 2009 | Robust optimization in high dimensions | Optimal Device Design, 149-188 | — | chapter | — | no-oa |  | supplement | abstract |
 | 647 | S779 | 2008 | Report to the President for year ended June 30, 2008, Operations Research Center | — | — | report | — | no-oa |  | skip | — |
 | 648 | S780 | 2008 | Algorithmic issues in queueing systems and combinatorial counting problems | Massachusetts Institute of Technology | — | thesis | — | no-oa |  | skip | — |
 | 649 | S782 | 2008 | Analysis of employee stock options and guaranteed withdrawal benefits for life | Massachusetts Institute of Technology | — | thesis | — | no-oa |  | skip | — |
 | 650 | S783 | 2007 | 2007 Index IEEE Transactions on Automatic Control Vol. 52 | IEEE Transactions on Automatic Control 52 (12), 2397 | — | other | — | no-oa |  | skip | — |
-| 651 | S784 | 2007 | EFRI-ARESCI: Theory and Algorithms for Autonomous Reconfigurability of the National Air Transportation System | NSF Award 7 (735905), 35905 | — | other | — | no-oa |  | supplement | — |
+| 651 | S784 | 2007 | EFRI-ARESCI: Theory and Algorithms for Autonomous Reconfigurability of the National Air Transportation System | NSF Award 7 (735905), 35905 | — | other | — | no-oa |  | supplement | abstract |
 | 652 | S785 | 2007 | Bounds on some contingent claims with non-convex payoff based on multiple assets | — | — | other | url | txt | 11 | supplement | carded |
 | 653 | S786 | 2007 | Report to the President for year ended June 30, 2007, Operations Research Center | — | — | report | — | no-oa |  | skip | — |
 | 654 | S787 | 2007 | Robust Optimization of Aperiodic Photonic Structures | APS March Meeting Abstracts, S43. 011 | — | talk | — | no-oa |  | skip | — |
 | 655 | S788 | 2007 | Lutowanie próżniowe element�w węglikowych ze stalą nierdzewną za pomocą lutu miedziano-manganowego | Przegląd Spawalnictwa 79, 138-141 | — | other | — | no-oa |  | skip | — |
-| 656 | S789 | 2005 | The Value of Adaptability | Proceedings 43, 630 | — | conference | — | no-oa |  | supplement | — |
+| 656 | S789 | 2005 | The Value of Adaptability | Proceedings 43, 630 | — | conference | — | no-oa |  | supplement | metadata |
 | 657 | S791 | 2004 | The issue number is given in front of the page numbers | Operations Research Letters 32, 595-599 | — | other | — | no-oa |  | skip | — |
-| 658 | S792 | 2004 | 15.083 J/6.859 Integer Programming and Combinatorial Optimization, Fall 2004 | — | — | other | — | no-oa |  | supplement | — |
-| 659 | S793 | 2004 | 15.093/2.098 Optimization Methods (SMA 5213), Fall 2004 | — | — | other | — | no-oa |  | supplement | — |
-| 660 | S794 | 2003 | UNILEVER DATA ANALYSIS PROJECT | — | — | other | — | no-oa |  | supplement | — |
+| 658 | S792 | 2004 | 15.083 J/6.859 Integer Programming and Combinatorial Optimization, Fall 2004 | — | — | other | — | no-oa |  | supplement | abstract |
+| 659 | S793 | 2004 | 15.093/2.098 Optimization Methods (SMA 5213), Fall 2004 | — | — | other | — | no-oa |  | supplement | abstract |
+| 660 | S794 | 2003 | UNILEVER DATA ANALYSIS PROJECT | — | — | other | — | no-oa |  | supplement | metadata |
 | 661 | S795 | 2003 | Dynamic Optimization for Adaptive Customized Marketing | Massachusetts Institute of Technology, Sloan School of Management�… | — | thesis | — | no-oa |  | skip | — |
-| 662 | S796 | 2003 | Fluid Models for Parallel Processor Allocation | Computational Modeling and Problem Solving in the Networked World�… | — | chapter | — | no-oa |  | supplement | — |
-| 663 | S797 | 2002 | 15.060 Data, Models, and Decisions, Fall 2002 | — | — | other | — | no-oa |  | supplement | — |
-| 664 | S798 | 1999 | An asymptotically optimal algorithm for job shop scheduling | Proceedings of the 38th IEEE Conference on Decision and Control (Cat. No�… | — | conference | — | no-oa |  | supplement | — |
+| 662 | S796 | 2003 | Fluid Models for Parallel Processor Allocation | Computational Modeling and Problem Solving in the Networked World�… | — | chapter | — | no-oa |  | supplement | abstract |
+| 663 | S797 | 2002 | 15.060 Data, Models, and Decisions, Fall 2002 | — | — | other | — | no-oa |  | supplement | abstract |
+| 664 | S798 | 1999 | An asymptotically optimal algorithm for job shop scheduling | Proceedings of the 38th IEEE Conference on Decision and Control (Cat. No�… | — | conference | — | no-oa |  | supplement | abstract |
 | 665 | S800 | 1998 | BOOK NOTICES1 | Journal of Optimization Theory and Applications 96 (3), 723 | — | review | — | no-oa |  | skip | — |
 | 666 | S802 | 1997 | PRICING AND HEDGING DERIVATIVE SECURITIES IN INCOMPLETE MARKETS: AN 6-ARBITRAGE APPROACH | — | — | report | unpaywall | txt | 64 | supplement | skimmed |
-| 667 | S804 | 1997 | Optimization of Multiclass Queueing Networks | NSF Award Number 9610486. Directorate for Engineering 96 (9610486), 10486 | — | other | — | no-oa |  | supplement | — |
+| 667 | S804 | 1997 | Optimization of Multiclass Queueing Networks | NSF Award Number 9610486. Directorate for Engineering 96 (9610486), 10486 | — | other | — | no-oa |  | supplement | abstract |
 | 668 | S805 | 1997 | Sarah Stock Patterson | Massachusetts Institute of Technology | — | other | — | no-oa |  | skip | — |
 | 669 | S806 | 1997 | Decentralized and Tactical Air Traffic Flow Management | NASA Contractor Report, 27689 | — | report | manual | txt | 2 | supplement | carded |
 | 670 | S807 | 1996 | Large deviations in high speed communication networks | Massachusetts Institute of Technology | — | other | manual | txt | 223 | skip | — |
-| 671 | S809 | 1994 | The flow management problem in air traffic control | Univ. of Michigan, Ann Arbor, MI (United States) | — | other | — | no-oa |  | supplement | — |
-| 672 | S810 | 1994 | From valid inequalities to heuristics: A unified view of primal-dual methods in approximation algorithms | Univ. of Michigan, Ann Arbor, MI (United States) | — | other | — | no-oa |  | supplement | — |
-| 673 | S816 | 1994 | TSS Dissertation Abstracts—Abstracts for the 1993 Transportation Science Section Dissertation Prize Competition | Transportation Science 28 (1), 82-89 | — | other | — | no-oa |  | supplement | — |
+| 671 | S809 | 1994 | The flow management problem in air traffic control | Univ. of Michigan, Ann Arbor, MI (United States) | — | other | — | no-oa |  | supplement | abstract |
+| 672 | S810 | 1994 | From valid inequalities to heuristics: A unified view of primal-dual methods in approximation algorithms | Univ. of Michigan, Ann Arbor, MI (United States) | — | other | — | no-oa |  | supplement | abstract |
+| 673 | S816 | 1994 | TSS Dissertation Abstracts—Abstracts for the 1993 Transportation Science Section Dissertation Prize Competition | Transportation Science 28 (1), 82-89 | — | other | — | no-oa |  | supplement | abstract |
 | 674 | S818 | 1994 | The following is a list of individuals who served as referees for papers reviewed between March 1, 1993 and June 10, 1994. | Mathematical Programming 64, 371-373 | — | other | — | no-oa |  | skip | — |
-| 675 | S819 | 1994 | On the large deviations behaviour of acyclic networks of GIGII queues | LIDS Report: LIDS-P-2278 | — | report | — | no-oa |  | supplement | — |
+| 675 | S819 | 1994 | On the large deviations behaviour of acyclic networks of GIGII queues | LIDS Report: LIDS-P-2278 | — | report | manual | txt | 45 | supplement | abstract |
 | 676 | S821 | 1993 | Location and inventory optimization for service centers | Massachusetts Institute of Technology | — | thesis | — | no-oa |  | skip | — |
 | 677 | S823 | 1992 | Date of Birth: October 3, 1962 Place of birth: Greece Citizenship: US Personal: Married | Stanford University | — | other | — | no-oa |  | skip | — |
 | 678 | S825 | 1992 | The following is a list of individuals who served as referees for papers in review during the period from July 1, 1989… | Mathematical Programming 55, 125-128 | — | other | — | no-oa |  | skip | — |
-| 679 | S827 | 1991 | Presidential Young Investigator Award: Analysis of Stochastic in Dynamic Models in Combinatorial Optimization in Queueing Networks | NSF Award Number 9158118. Directorate for Engineering 91 (9158118), 58118 | — | other | — | no-oa |  | supplement | — |
+| 679 | S827 | 1991 | Presidential Young Investigator Award: Analysis of Stochastic in Dynamic Models in Combinatorial Optimization in Queueing Networks | NSF Award Number 9158118. Directorate for Engineering 91 (9158118), 58118 | — | other | — | no-oa |  | supplement | abstract |
 | 680 | S829 | 1991 | A central limit theorem for the exodic tree and exodic matching in geometrical probability | Alfred p. Sloan School of Management, Massachusetts Institute of Technology | — | report | manual | txt | 18 | supplement | carded |
-| 681 | S830 | 1990 | Probabilistic and Dynamic Combinatorial Optimization Problems | NSF Award 90 (9014751), 14751 | — | other | — | no-oa |  | supplement | — |
-| 682 | S831 | 1990 | Research Initiation: Analysis of Linear Programming Relaxations of Combinatorial Optimization Problems | NSF Award Number 9010322. Directorate for Engineering 90 (9010322), 10322 | — | other | — | no-oa |  | supplement | — |
-| 683 | S832 | 1990 | The greedy algorithm in combinatorial optimization and its probabilistic analysis | Unpublished manuscript | — | preprint | — | no-oa |  | supplement | — |
+| 681 | S830 | 1990 | Probabilistic and Dynamic Combinatorial Optimization Problems | NSF Award 90 (9014751), 14751 | — | other | — | no-oa |  | supplement | abstract |
+| 682 | S831 | 1990 | Research Initiation: Analysis of Linear Programming Relaxations of Combinatorial Optimization Problems | NSF Award Number 9010322. Directorate for Engineering 90 (9010322), 10322 | — | other | — | no-oa |  | supplement | abstract |
+| 683 | S832 | 1990 | The greedy algorithm in combinatorial optimization and its probabilistic analysis | Unpublished manuscript | — | preprint | — | no-oa |  | supplement | metadata |
 | 684 | S833 | 1988 | The Probabilistic Minimum Spanning Tree, Part II: Probabilistic Analysis and Asymptotic Results | Massachusetts Institute of Technology, Operations Research Center | — | report | manual | txt | 30 | supplement | carded |
 | 685 | S834 | 1953 | PRINCIPAL FIELDS OF INTEREST | — | — | other | — | no-oa |  | skip | — |
-| 686 | S835 | — | Optimization-Based Design of Organ Allocation Policy: Mitigating Biological Access Disparities in Lung Transplantation | — | — | other | — | no-oa |  | supplement | — |
-| 687 | S836 | — | Signed Budget Uncertainty for Robust Mixed-Integer Optimization | — | — | other | — | no-oa |  | supplement | — |
+| 686 | S835 | — | Optimization-Based Design of Organ Allocation Policy: Mitigating Biological Access Disparities in Lung Transplantation | — | — | other | — | no-oa |  | supplement | metadata |
+| 687 | S836 | — | Signed Budget Uncertainty for Robust Mixed-Integer Optimization | — | — | other | manual | txt | 38 | supplement | abstract |
 | 688 | S838 | — | \_? \_I\_? \_ I\_ IL \_YI? Lg\_YLLIILLL\_.-. lly? l-IP~ L---Y~----IC--\_ \_ I\_ \_ \_ | — | — | other | — | no-oa |  | skip | — |
 | 689 | S840 | — | MIT Libraries logo DSpace@ MIT | — | — | other | — | no-oa |  | skip | — |
 | 690 | S844 | — | SUBMITTED TO THE SLOAN SCHOOL OF MANAGEMENT IN PARTIAL FULFILLMENT OF THE REQUIREMENTS OF THE DEGREE OF | — | — | other | — | no-oa |  | skip | — |
 | 691 | S849 | — | OF TECHNOLOGY SEP 2 6 2013 LIBRARIES 2 Robust Planning for Unmanned Underwater Vehicles | — | — | other | — | no-oa |  | skip | — |
 | 692 | S852 | — | Cambridge, MA 02139, USA Michael Lingzhi Li mlli@ mit. edu Operations Research Center Massachusetts Institute… | — | — | other | — | no-oa |  | skip | — |
 | 693 | S855 | — | SUBMITTED TO THE SLOAN SCHOOL OF MANAGEMENT IN PARTIAL FULFILLMENT OF THE REQUIREMENTS OF THE DEGREE OF | — | — | other | — | no-oa |  | skip | — |
-| 694 | S858 | — | A Robust Optimization Approach to Supply Chains and Revenue Management | — | — | other | — | no-oa |  | supplement | — |
+| 694 | S858 | — | A Robust Optimization Approach to Supply Chains and Revenue Management | — | — | other | — | no-oa |  | supplement | abstract |
 | 695 | S860 | — | OPERATIONS RESEARCH INFORMS | — | — | other | — | no-oa |  | skip | — |
 | 696 | S863 | — | Cambridge, MA 02139, USA Ivan Paskov ipaskov@ mit. edu Operations Research Center Massachusetts Institute of Technology… | — | — | other | — | no-oa |  | skip | — |
 | 697 | S866 | — | Ying Daisy Zhuo zhuo@ mit. edu Sloan School of Management and Operations Research Center Massachusetts Institute of Technology… | — | — | other | — | no-oa |  | skip | — |
-| 698 | S867 | — | Distributionally Robust Optimization with General Uncertainty Structure | — | — | other | — | no-oa |  | supplement | — |
-| 699 | S872 | — | Predicting Concurrence of Heatwaves, Droughts, and Wildfires with Spatiotemporal Deep Learning | — | — | other | — | no-oa |  | supplement | — |
-| 700 | S873 | — | Optimized Oversampling | — | — | other | — | no-oa |  | supplement | — |
-| 701 | S874 | — | Informing national immigration policy through interpretable machine learning | — | — | other | — | no-oa |  | supplement | — |
-| 702 | S884 | — | Fast and Scalable Inference of Dynamical Systems via Integral Matching | NeurIPS 2023 AI for Science Workshop | — | conference | — | no-oa |  | supplement | — |
+| 698 | S867 | — | Distributionally Robust Optimization with General Uncertainty Structure | — | — | other | manual | txt | 42 | supplement | abstract |
+| 699 | S872 | — | Predicting Concurrence of Heatwaves, Droughts, and Wildfires with Spatiotemporal Deep Learning | — | — | other | manual | txt | 5 | supplement | abstract |
+| 700 | S873 | — | Optimized Oversampling | — | — | other | manual | txt | 19 | supplement | abstract |
+| 701 | S874 | — | Informing national immigration policy through interpretable machine learning | — | — | other | — | no-oa |  | supplement | metadata |
+| 702 | S884 | — | Fast and Scalable Inference of Dynamical Systems via Integral Matching | NeurIPS 2023 AI for Science Workshop | — | conference | — | no-oa |  | supplement | abstract |
 | 703 | S899 | — | Dimitris Bertsimas | — | — | other | — | no-oa |  | skip | — |
 | 704 | S900 | — | Dimitris Bertsimas, Vishal Gupta & | — | — | other | — | no-oa |  | skip | — |
 | 705 | S901 | — | Secondary Logo Journal Logo | — | — | other | — | no-oa |  | skip | — |
 | 706 | S902 | — | Hirshleifer, Jack Anticipatory Savings Denizer, Cevdet Anxiety Grant, Simon | — | — | other | — | no-oa |  | skip | — |
-| 707 | S905 | — | Imbalanced classification via robust optimization | — | — | other | — | no-oa |  | supplement | — |
-| 708 | S906 | — | The Power and Limits of Decision Making with Confounded Data: The Case of Pricing | — | — | other | — | no-oa |  | supplement | — |
-| 709 | S907 | — | Multiperiod and Online Optimization for Fleet Defense: Centralized and Distributed Approaches | — | — | other | — | no-oa |  | supplement | — |
-| 710 | S908 | — | Optimal Predictive Clustering | — | — | other | — | no-oa |  | supplement | — |
-| 711 | S909 | — | Optimal Selection of Health Care Providers | — | — | other | — | no-oa |  | supplement | — |
+| 707 | S905 | — | Imbalanced classification via robust optimization | — | — | other | manual | txt | 16 | supplement | abstract |
+| 708 | S906 | — | The Power and Limits of Decision Making with Confounded Data: The Case of Pricing | — | — | other | manual | txt | 47 | supplement | abstract |
+| 709 | S907 | — | Multiperiod and Online Optimization for Fleet Defense: Centralized and Distributed Approaches | — | — | other | manual | txt | 43 | supplement | abstract |
+| 710 | S908 | — | Optimal Predictive Clustering | — | — | other | — | no-oa |  | supplement | metadata |
+| 711 | S909 | — | Optimal Selection of Health Care Providers | — | — | other | manual | txt | 31 | supplement | abstract |
 | 712 | S910 | — | THE ANNALS | — | — | other | — | no-oa |  | skip | — |
 | 713 | S911 | — | Shock Capturing with Discontinuous Galerkin Method | — | — | other | — | no-oa |  | skip | — |
 | 714 | S912 | — | 6.436 J/15.085 J Fundamentals of Probability, Fall 2008 | — | — | other | — | no-oa |  | skip | — |
@@ -729,37 +729,37 @@
 | 717 | S917 | — | THE ANNALS | — | — | other | — | no-oa |  | skip | — |
 | 718 | S918 | — | Lead Time Distribution of Three-Machine Two-Buffer Lines with Unreliable Machines and Finite Buffers | — | — | other | — | no-oa |  | skip | — |
 | 719 | S920 | — | of days)• H. Bidkhori, S. Kim, On dual stable Grothendieck polynomials, Preprinted, 2009.• H. Bidkhori, S… | — | — | other | — | no-oa |  | skip | — |
-| 720 | S921 | — | Models and algorithms for transient queueing congestion in airline hub and spoke networks. | — | — | other | — | no-oa |  | supplement | — |
+| 720 | S921 | — | Models and algorithms for transient queueing congestion in airline hub and spoke networks. | — | — | other | — | no-oa |  | supplement | metadata |
 | 721 | S923 | — | The Editorial Board would like to thank the following individuals who acted as referees for papers considered… | — | — | other | — | no-oa |  | skip | — |
-| 722 | S926 | — | LIDS Publication# 2659 Robust linear optimization and coherent risk measures | — | — | report | — | no-oa |  | supplement | — |
-| 723 | S928 | — | Trading off Efficiency and Fairness | — | — | other | — | no-oa |  | supplement | — |
-| 724 | S929 | — | Basestock Policies in Supply Chain Networks: Robust vs. Stochastic Optimization | — | — | other | — | no-oa |  | supplement | — |
+| 722 | S926 | — | LIDS Publication# 2659 Robust linear optimization and coherent risk measures | — | — | report | — | no-oa |  | supplement | abstract |
+| 723 | S928 | — | Trading off Efficiency and Fairness | — | — | other | — | no-oa |  | supplement | metadata |
+| 724 | S929 | — | Basestock Policies in Supply Chain Networks: Robust vs. Stochastic Optimization | — | — | other | — | no-oa |  | supplement | metadata |
 | 725 | S930 | — | INVESTIGACI�N OPERATIVA OBSERVACIONES | — | — | other | — | no-oa |  | skip | — |
-| 726 | D001 | 1990 | On the Parsimonious Property of Connectivity Problems | SODA, 388-396 | — | conference | — | no-oa |  | supplement | — |
-| 727 | D005 | 1997 | Correction to "Stability Conditions for Multiclass Fluid Queueing Networks" | IEEE Trans. Autom. Control. 42(1), 128 | — | errata | — | no-oa |  | supplement | — |
-| 728 | D007 | 1999 | Performance analysis of multiclass queueing networks | SIGMETRICS Perform. Evaluation Rev. 27(3), 11-14 | — | journal | — | no-oa |  | supplement | — |
-| 729 | D008 | 2000 | Performance of multiclass Markovian queueing networks | CDC, 534-539 | — | conference | — | no-oa |  | supplement | — |
-| 730 | D011 | 2012 | Call for Papers - Special Issue of Management Science: Business Analytics: Submission deadline: September 16, 2012 Expected publication date: First Quarter 2014 | Manag. Sci. 58(7), 1422 | — | journal | — | no-oa |  | supplement | — |
+| 726 | D001 | 1990 | On the Parsimonious Property of Connectivity Problems | SODA, 388-396 | — | conference | — | no-oa |  | supplement | metadata |
+| 727 | D005 | 1997 | Correction to "Stability Conditions for Multiclass Fluid Queueing Networks" | IEEE Trans. Autom. Control. 42(1), 128 | — | errata | — | no-oa |  | supplement | metadata |
+| 728 | D007 | 1999 | Performance analysis of multiclass queueing networks | SIGMETRICS Perform. Evaluation Rev. 27(3), 11-14 | — | journal | — | no-oa |  | supplement | abstract |
+| 729 | D008 | 2000 | Performance of multiclass Markovian queueing networks | CDC, 534-539 | — | conference | — | no-oa |  | supplement | abstract |
+| 730 | D011 | 2012 | Call for Papers - Special Issue of Management Science: Business Analytics: Submission deadline: September 16, 2012 Expected publication date: First Quarter 2014 | Manag. Sci. 58(7), 1422 | — | journal | — | no-oa |  | supplement | abstract |
 | 731 | D012 | 2013 | Network Analysis for Predicting Academic Impact | ICIS | — | conference | manual | txt | 11 | supplement | carded |
-| 732 | D013 | 2018 | lauren897/Optimal-SPCA: Initial Release | — | — | other | — | no-oa |  | supplement | — |
-| 733 | D015 | 2019 | From the Editor | INFORMS J. Optim. 1(1), 1 | — | journal | — | no-oa |  | supplement | — |
-| 734 | D016 | 2019 | Machine Learning and Optimization: Introduction to the Special Issue | INFORMS J. Optim. 1(2), 91 | — | journal | — | no-oa |  | supplement | — |
+| 732 | D013 | 2018 | lauren897/Optimal-SPCA: Initial Release | — | — | other | — | no-oa |  | supplement | abstract |
+| 733 | D015 | 2019 | From the Editor | INFORMS J. Optim. 1(1), 1 | — | journal | — | no-oa |  | supplement | metadata |
+| 734 | D016 | 2019 | Machine Learning and Optimization: Introduction to the Special Issue | INFORMS J. Optim. 1(2), 91 | — | journal | — | no-oa |  | supplement | metadata |
 | 735 | D017 | 2019 | Optimal Explanations of Linear Models | CoRR abs/1907.04669 | — | preprint | arXiv | txt | 12 | supplement | carded |
-| 736 | D018 | 2022 | Frequency Estimation in Data Streams: Learning the Optimal Hashing Scheme (Extended Abstract) | ICDE, 1565-1566 | — | conference | — | no-oa |  | supplement | — |
+| 736 | D018 | 2022 | Frequency Estimation in Data Streams: Learning the Optimal Hashing Scheme (Extended Abstract) | ICDE, 1565-1566 | — | conference | — | no-oa |  | supplement | abstract |
 | 737 | D019 | 2023 | Publisher Correction to: A new perspective on low-rank optimization | Math. Program. 202(1), 93-94 | — | errata | manual | txt | 2 | supplement | carded |
 | 738 | D020 | 2023 | Tensor completion with noisy side information | Mach. Learn. 112(10), 3945-3976 | — | journal | manual | txt | 31 | supplement | carded |
 | 739 | D021 | 2025 | An Exact Solution to Wordle | Oper. Res. 73(3), 1384-1394 | — | journal | manual | txt | 21 | core | carded |
 | 740 | D022 | 2026 | Strike Price Optimization for ISO New England's Day-Ahead Ancillary Services | arXiv preprint arXiv:2608.29366 | — | preprint | arXiv | txt | 9 | core | carded |
-| 741 | H001 | 2023 | Adaptive Linear Algebra | — | — | other | — | no-oa |  | supplement | — |
+| 741 | H001 | 2023 | Adaptive Linear Algebra | — | — | other | manual | txt | 26 | supplement | abstract |
 | 742 | H002 | 2023 | A Simulated Annealing Approach to Designing Optimal Policy Trees | submitted to Machine Learning | — | preprint | manual | txt | 20 | core | carded |
 | 743 | H003 | 2023 | Interpretable Prescriptive Neural Networks | submitted to Machine Learning | — | preprint | manual | txt | 38 | supplement | carded |
 | 744 | H004 | 2023 | Probabilistic Robust Optimization | submitted to Operations Research | — | preprint | manual | txt | 27 | supplement | carded |
-| 745 | H005 | 2022 | Optimal policy trees | Machine Learning, 111, 2741–2768 | — | journal | — | no-oa |  | supplement | — |
-| 746 | H006 | 2021 | Interpretable Machine Learning for Policy Analysis: The Case of National Immigration Policy | submitted to MSOM | — | preprint | — | no-oa |  | supplement | — |
+| 745 | H005 | 2022 | Optimal policy trees | Machine Learning, 111, 2741–2768 | — | journal | — | no-oa |  | supplement | abstract |
+| 746 | H006 | 2021 | Interpretable Machine Learning for Policy Analysis: The Case of National Immigration Policy | submitted to MSOM | — | preprint | — | no-oa |  | supplement | metadata |
 | 747 | H007 | 2021 | Robust Optimization with Side Data | submitted to Mathematical Programming | — | preprint | manual | txt | 32 | supplement | carded |
-| 748 | H008 | 2019 | Prescriptive Analytics for Observational Data | submitted to Management Science | — | preprint | — | no-oa |  | supplement | — |
+| 748 | H008 | 2019 | Prescriptive Analytics for Observational Data | submitted to Management Science | — | preprint | — | no-oa |  | supplement | metadata |
 | 749 | H009 | 2018 | Optimal classification and regression trees with hyperplanes are as powerful as classification and regression neural networks | submitted to Journal of Machine Learning Research | — | preprint | manual | txt | 52 | supplement | skimmed |
 | 750 | H010 | 1999 | Optimization of multiclass queueing networks with changeover times via the achievable region approach: Part II, the multi-station case | Mathematics of Operations Research | — | journal | url | txt | 31 | supplement | skimmed |
 | 751 | H011 | 2004 | Optimal mean-variance bounds on the expectation of the highest order statistics | — | — | preprint | url | txt | 20 | supplement | carded |
 
-751 works · txt 455 · pdf 0 · no-oa 296
+751 works · txt 473 · pdf 0 · no-oa 278
