@@ -245,6 +245,12 @@ def load_config(path: Path) -> tuple[dict | None, list[str]]:
         v = cfg.get(key)
         if isinstance(v, str) and v and (not SAFE_SLUG_RE.match(v) or ".." in v):
             errs.append(f"{key} {v!r} 不能当文件夹名（只用字母、数字、- _ .）")
+    lead = cfg.get("lead")  # 可选：团队总入口 skill 的文件夹名（如理事会的 optimization-lead），team_check 查它
+    if lead is not None:
+        if not isinstance(lead, str) or not SAFE_SLUG_RE.match(lead) or ".." in lead:
+            errs.append(f"lead {lead!r} 不能当文件夹名（只用字母、数字、- _ .）")
+        elif lead == cfg.get("roundtable") or lead in {m.get("slug") for m in cfg.get("members") or [] if isinstance(m, dict)}:
+            errs.append(f"lead {lead!r} 与 roundtable 或某位成员的 slug 同名")
     members = cfg.get("members")
     if not isinstance(members, list) or not members:
         errs.append("members 必须是非空列表")

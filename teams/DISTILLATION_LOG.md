@@ -1,5 +1,41 @@
 # 蒸馏记录
 
+## 2026-10-31 (15) · optimization-lead：Bertsimas 作为四支优化团队的总入口
+
+- 用户请求：「我是希望Bertsimas领导所有的optimization team 要不单开一个optimization lead?」，随后「按方案建」。
+  查明：此前 Bertsimas 只在明确召集的 Optimization Council 里领导四队；用户本机只装了 `dfo-team`、`nlp-team`
+  （`teams/` 语料版），直接问它们时他不在场，product/ 的理事会与各队 skill 都没装
+- 新 skill `product/optimization-council/optimization-lead/`（约 3,400 词，含审查后的修改）：问题先到 Bertsimas，他按 Domain Map
+  标领域、按阶段门找第一个没过的阶段，再按他自己的召集人规则分派（LP 引擎 → LP；连续、锥、鲁棒非线性 → NLP；
+  黑箱 → DFO；全局、混合整数 → MINLP；SD 无队，标为 open）。一队能定的交给该队（NLP、DFO 用语料队 skill
+  或本队圆桌；LP、MINLP 没有队级 skill，交给最合适的成员，标「member view」）；两队以上有争议或落在断层线上
+  → 召开理事会。各队作为独立 agent 按自己的 skill 回答、原文照录；最后他按签署规则审（现行做法、带求解时间
+  测试的模型类、证书或界、决策指标），缺什么就点名。模式：`quick`、`lead only`、`discuss <team>`、`council`、
+  `agenda`、`autopilot`；点名单队的问题（「DFO team …」）仍直接交给该队，不经过他
+- 接线：理事会圆桌的泛称触发词（"Bertsimas, lead the teams"、"all optimization teams"、「让 Bertsimas 领导所有
+  优化团队」）移给 lead，圆桌留 "Optimization Council" 等；Bertsimas 的 SKILL.md 里「被要求带队」的交接改指
+  lead（12,881 → 12,904 词，仍在 13,000 预算内）；team.json 加 `"lead": "optimization-lead"`
+- kit：`new_team.py` 校验可选的 `lead` 键（能当文件夹名、不与圆桌或成员同名）；`team_check.py` 新增 lead 一项
+  （SKILL.md 存在、frontmatter name 一致、链接圆桌、本队成员和每个 guest 队），反例测试（缺文件夹、多一个 guest
+  队、多一位成员、非法名字）都能报错
+- 对抗审查（9 个 agent，只读）：四个视角（协议一致性、路由事实、作为 Claude Code skill 的可用性、诚信）加一次
+  冒烟测试（真跑一题：领衔定性分派 → DFO 语料队回答 → 领衔审），共 93 条意见，去重后 58 条修改全部采纳（7 高、
+  36 中、15 低），24 条驳回并写明理由。要点：
+  - 语料队的缺口改由成员补：NLP 语料不含鲁棒（含 DRO）与锥（交 Curtis、Wächter、Ye 或 Ye、Toint、Nesterov）；
+    DFO 语料不含离散、多目标、会崩的黑箱与软件细节（交 Audet、Vicente、Powell）；LP 的内点、PDLP、presolve、
+    crossover 不在 Huangfu 的记录里（交 Ye、Wright）。以上均已在各队章程与 team.json 里核实
+  - 圆桌不能当一个子 agent 跑（它的检查点要用户），只作会话内交接（`discuss <team>`）；领衔的 brief 带上理事会
+    的 FL1–FL6 原文；审查按字段标「已给 / 不存在 / 等用户 / 缺」；新增检查点 B；各队答复开头先给 BOTTOM LINE，
+    上限 700 词
+  - 用 Claude Code 官方文档核实了两点：skill 名总在列表里，但列表超预算时最少用的 skill 先被删掉描述；`/skill-name`
+    可直接调用
+- 第二次冒烟测试（4 个 agent，用修改后的 skill）：21 项合规检查过 17 项。另 4 项里，2 项是测试 agent 违反了 brief
+  已有的规定（领衔替该队先答了证书一项；答复 850 词超上限）；2 项由 skill 文本造成，已修：审查加「本队声明不在
+  证据内」一档并点名能补的成员，长度改为每队 150 词加公共部分 150 词
+- 文档：理事会 README（团队表、安装 28 个文件夹、用法「通过 lead 问各队」、诚实边界）、DEEP-READING 一行、
+  product/README 第 11 行
+- 未装进用户的全局 skills（等用户点头）；未推送、未合并
+
 ## 2026-10-31 (14) · Dimitris Bertsimas 深读档 + 九个优化领域 + Optimization Council（主持四队跨队讨论）
 
 - 用户请求：「蒸馏一下Dimitri bertsimas 做非常详尽的蒸馏并按照不同optimization领域来划分 并且让他领导所有optimization

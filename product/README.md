@@ -8,7 +8,7 @@
 |------|------|------|------|
 | `dfo-team/` | DFO Team（无导数优化） | Powell、Conn、Scheinberg、Vicente、Audet 五位 + `dfo-roundtable` | 深读档（356 篇全文精读、59 篇部分，1139 条摘录逐字核对；见 `DEEP-READING.md`） |
 | `nonlinear-team/` | **NLP Team**（非线性规划；源目录名保留为 nonlinear-team） | Curtis、Nocedal、Wright、Ye、Wächter、Gill、Toint、Gould、Fletcher、Nesterov、Robinson 十一位 + `nonlinear-roundtable` | 混合档：Curtis 深读档（2026-10-10）、Nocedal 深读档（2026-10-17）；其余九位轻量档（公开来源调研，未做全文深读） |
-| [`optimization-council/`](optimization-council/README.md) | **Optimization Council**（优化理事会：Bertsimas 召集并主持 LP、NLP、DFO、MINLP 四队的跨队讨论） | Dimitris Bertsimas 一位（召集人；技能按九个优化领域分为九个领域文件：LO、IO、RO、CP、SD、ML、DA、HS、AP）+ `council-roundtable`；四队成员作为客座代表团入座，须与四队一并安装 | 深读档：Bertsimas（2026-10-29 深读并写九个领域文件，2026-10-31 写领域图；413 篇全文精读、59 篇部分，1125 条摘录逐字核对，另读 21 项书籍公开部分；见 `DEEP-READING.md`）；客座四队按本队档位（DFO 深读档；NLP 混合档；MINLP 深读进行中；LP 仅 T1 基础技能）。首次会话记录：[`first-session-2026-10-31.md`](optimization-council/first-session-2026-10-31.md)（议题「精确性的代价」，四队十位代表，计划 v2 待你在检查点 4 批准） |
+| [`optimization-council/`](optimization-council/README.md) | **Optimization Council**（优化理事会：Bertsimas 召集并主持 LP、NLP、DFO、MINLP 四队的跨队讨论） | Dimitris Bertsimas 一位（召集人；技能按九个优化领域分为九个领域文件：LO、IO、RO、CP、SD、ML、DA、HS、AP）+ [`optimization-lead`](optimization-council/optimization-lead/SKILL.md)（总入口：他按领域与阶段门定性，把问题分派给该管的队，再审各队答复）+ `council-roundtable`（跨队讨论）；四队成员作为客座代表团入座，须与四队一并安装 | 深读档：Bertsimas（2026-10-29 深读并写九个领域文件，2026-10-31 写领域图；413 篇全文精读、59 篇部分，1125 条摘录逐字核对，另读 21 项书籍公开部分；见 `DEEP-READING.md`）；客座四队按本队档位（DFO 深读档；NLP 混合档；MINLP 深读进行中；LP 仅 T1 基础技能）。首次会话记录：[`first-session-2026-10-31.md`](optimization-council/first-session-2026-10-31.md)（议题「精确性的代价」，四队十位代表，计划 v2 待你在检查点 4 批准） |
 
 每个团队目录下的 `README.md`、`DEEP-READING.md`、`team.json` 是团队说明与成员清单，
 `python3 scripts/team_status.py product/<team>` 可随时重算进度与覆盖表。

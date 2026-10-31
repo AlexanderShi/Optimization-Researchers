@@ -21,6 +21,8 @@
                     Team 表有本队与各 guest 队每位成员的 `slug`；本队成员每人至少主讲一行，每个 guest 队至少有一人入座；
                     3–6 条 fault line，每条至少两位成员（可跨队），有卡片的成员一方必须是卡片证据、ID 在他自己团队目录的
                     卡片里；本队成员与每个 guest 队都至少出现在一条 fault line 里
+    lead            team.json 有 lead（可选的团队总入口 skill，如理事会的 optimization-lead）时：<lead>/SKILL.md 存在，
+                    frontmatter name = lead；正文链接圆桌、本队每位成员的 skill 和每个 guest 队的文件夹。没有 lead 不报
     coverage        深读档：DEEP-READING.md 原样含 team_status.py --coverage 的表，README 原样含 --coverage --short 的表
   每位成员
     skill           SKILL.md 存在；quality_check.py 12/12（--skip-quality 跳过）；## Roundtable Card 的 7 项齐全
@@ -265,6 +267,29 @@ def check_council(rep: Report, team: Path, cfg: dict, rt: Path, guests: dict[str
             f"{len(items)} fault lines with evidence from both sides, every guest team seated and in a fault line")
 
 
+def check_lead(rep: Report, team: Path, cfg: dict):
+    """可选的团队总入口 skill（team.json 的 lead，如理事会的 optimization-lead：召集人领导各队，按问题分派、审各队答复）：
+    SKILL.md 存在，frontmatter name = lead；正文链接圆桌、本队每位成员的 skill 和每个 guest 队的文件夹。没有 lead 不报。"""
+    lead = cfg.get("lead")
+    if not lead:
+        return
+    f = team / lead / "SKILL.md"
+    if not f.exists():
+        rep.add("team", "lead", False, f"{lead}/SKILL.md missing")
+        return
+    text = f.read_text(encoding="utf-8")
+    probs = []
+    m = re.search(r"^name:\s*(\S+)", text, re.M)
+    if not m or m.group(1) != lead:
+        probs.append(f"frontmatter name is {m.group(1) if m else 'missing'}, team.json says {lead}")
+    if f"](../{cfg['roundtable']}/" not in text:
+        probs.append(f"no link to the roundtable ../{cfg['roundtable']}/")
+    probs += [f"no link to member ../{mm['slug']}/" for mm in cfg["members"] if f"](../{mm['slug']}/" not in text]
+    probs += [f"no link into guest team ../../{g}/" for g in cfg.get("guest_teams") or [] if f"](../../{g}/" not in text]
+    rep.add("team", "lead", not probs, "; ".join(probs) or
+            f"{lead}: links the roundtable, {len(cfg['members'])} member skill(s) and {len(cfg.get('guest_teams') or [])} guest team(s)")
+
+
 def check_member(rep: Report, team: Path, m: dict, deep: bool, skip_quality: bool, st: dict):
     sk = team / m["slug"]
     skill = sk / "SKILL.md"
@@ -377,6 +402,7 @@ def main():
             "README.md missing" if not readme.exists() else
             (f"member rows missing: {', '.join(unlinked)}" if unlinked else "links every member"))
     check_roundtable(rep, team, cfg, deep, deep_members)
+    check_lead(rep, team, cfg)
     if deep and len(cfg["members"]) < 2 and not cfg.get("guest_teams"):
         rep.add("team", "citations", None, "1 member: no roundtable to check (member citations are checked per member)")
     elif deep:
