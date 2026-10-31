@@ -16,7 +16,7 @@
 | 2025–29 | 2 | 4 | 2/64 (3%) |
 | undated | 0 | 2 | 0/30 |
 
-- **Entry, 1994–1998, as a device inside SD**: Jensen-type PSD constraints separated by SDP [S072 pp. 21–22], a PSD moment matrix in the sole-author survey [S185 pp. 44–45]. The CP line proper starts with the November 1997 SDP-rounding manuscript with Ye [S033 preprint p. 2], whose reading of the SDP solution as second moments is akin to the moment line [S033 preprint p. 5]. The Bertsimas–Popescu bound papers follow in 1999: the option-bound paper was received in July 1999 [S056 p. 1] and cites their 1999 working paper on probability inequalities [S056 p. 3], beside Popescu's 1999 thesis (S306, unread).
+- **Entry, 1994–1998, as a device inside SD**: Jensen-type PSD constraints separated by SDP [S072 pp. 21–22], a PSD moment matrix in the sole-author survey [S185 pp. 44–45]. The earliest of the 40 primary rows is the November 1997 SDP-rounding manuscript with Ye [S033 preprint p. 2], which continues his 1995 and 1996 papers on dependent randomized rounding with Teo and Vohra [S033 preprint pp. 4, 16]; its reading of the SDP solution as second moments is akin to the moment line [S033 preprint p. 5]. The Bertsimas–Popescu bound papers follow in 1999: the option-bound paper was received in July 1999 [S056 p. 1] and cites their 1999 working paper on probability inequalities [S056 p. 3], beside Popescu's 1999 thesis (S306, unread).
 - **Peak, 2000–2009**: 24 of the 40 primary rows, a fifth to a quarter of his tagged output; his old homepage filed 11 papers under Moment Problems (note 01 §1.2).
 - **Exit about 2008** (note 06 §4), after moment methods for integrals and data fitting [S413; S498]; 2010–2019 holds the fairness papers, tagged CP for their convex geometry [S012; S026], one algorithm paper [S315] and the uncarded multi-author item S738 (2016), the table's only 2015–19 primary row. No card says why he left.
 - **Return, 2020–2026, in another guise**: rank and matrix problems [S302; S250; S274; S385; S475; S684] and global nonconvex optimization with den Hertog's group [S377; S708; S415; S689; S624; S867]; 9 primary rows, 3% of an output dominated by ML and AP.
@@ -122,7 +122,7 @@ Stated in his papers:
 - Tight bounds on the general k-th order statistic [S154 p. 19]; a closed form for the first-order GI/GI/c relaxation [S255 p. 12].
 - SDP codes built for moment matrices [S264 p. 23]; eliminating moment variables [S413 p. 5].
 - An empirical study and faster walks for the random-walk method [S045 p. 16]; why the faster sequence converges, and a first-order to second-order hand-off [S315 pp. 18–19]; an inexact sketching oracle [S302 p. 8].
-- A branch-and-bound tailored to projection matrices; solvers that detect matrix-perspective structure; scalable relaxations above rank one [S250 pp. 36–37; S274 arXiv p. 31; S385 p. 25].
+- A branch-and-bound tailored to projection matrices [S250 pp. 36–37]; solvers that detect matrix-perspective structure [S274 arXiv p. 31]; scalable relaxations above rank one [S385 p. 25].
 - Partial products and constraint generation for RPT, extended to MINLP, robust, polynomial and bilevel classes [S415 p. 30; S708 p. 42]; RPT inside SCIP's integer branching [S624 pp. 18–19].
 - Utility-set families with a smaller price of fairness [S012 p. 14].
 
