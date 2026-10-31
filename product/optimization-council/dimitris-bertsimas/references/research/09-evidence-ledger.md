@@ -224,6 +224,15 @@ The lines before this increment (verbatim):
 6. Methods-first teaching; a literature that gives practitioners little guidance [02 T9].
 ```
 
+**Claim census 2026-10-29** (earlier wording, verbatim):
+
+```text
+2. Models harder than their nominal version; polynomial time without solve times [02 T7] (stated from 2014 [S178 p. 5]; C19).
+6. Methods-first teaching; a literature that gives practitioners little guidance [02 T9; B014 p. 1; B017 p. 1].
+```
+
+Census items k = 42, 47, 48. Sign 2: the S178 card dates only the solve-time half, the 2014 statement that tractability is not polynomial time (p. 5); nothing on it dates *models harder than their nominal version*, so the dating now covers *the latter* only (C19 is outside this batch). Sign 6: the B014 and B017 cards support methods-first teaching (p. 1) but say nothing about a literature that leaves practitioners without guidance; the book pages now sit on the teaching clause, and the literature clause cites the card that says it, S095, whose abstract says the profusion of feature-selection research may have given practitioners little guidance (p. 1).
+
 <a id="taste-quick-check"></a>
 ## Taste quick-check
 
@@ -335,6 +344,16 @@ Variant links dominate for M2–M5 because readers marked a link as a variant wh
 
 SKILL.md packet, item k = 8 (`10-claim-audit.md`): one 2025 card cannot show every 2025–26 foundation-model paper. The line now says *some* and restores the 2026 card cut at the tighten step [S426 pp. 4, 6; S474 pp. 2, 4, 8].
 
+**Claim census 2026-10-29** (earlier wording, verbatim):
+
+```text
+- ⚠ SD 1988–1997: the kept class is an analysable distribution or queue class [S239 pp. 1–2, 8, 12].
+- ⚠ Class left → his group builds the algorithm (outer approximation, custom branch-and-bound) [S040 pp. 2, 6, 10] (C5).
+1. Name the owning tradition, its tool and what it optimizes only implicitly (dynamic programming, tail inequalities, greedy selection, estimate-then-plug-in) [S057 p. 1].
+```
+
+Census items k = 61, 62, 65. k = 61: the S239 card is one 1988 paper and cannot carry a span to 1997; the span now ends in 1993 and cites the 1993 routing paper, whose card keeps an analysable queue, the G/G/m and ΣGI/G/m policies (D2, D4; Method 1 variant) [S032 pp. 7–9]. The 1995–1997 SD papers keep a complete system of laws, not a distribution or queue class (cards S129, S280), so they no longer stretch the span (08 §3 row 7). k = 62: the S040 card shows a custom branch-and-bound built because the general MIQP solver was weak, for a problem still written as an MIQP, and no outer approximation; the line now cites the cards where the class is left and the group builds the algorithm: outer approximation after a solver bake-off fails on the MINLO class [S105 pp. 7–9], and a custom branch-and-bound once the nonconvex formulation leaves the solver classes [S184 pp. 8–18]. S040 stays the 2009 date in C5. k = 65: the S057 card supports only the dynamic-programming example (p. 1); each example now carries its own card: Markov, Chebyshev and Chernoff bounds asked to be best possible [S018 p. 1], greedy trees that optimize impurity rather than misclassification [S011 p. 4], and plugged-in point predictions [S008 pp. 2, 6].
+
 <a id="method-2"></a>
 ## Method 2: Quantified "why now"
 
@@ -383,6 +402,16 @@ SKILL.md packet, item k = 8 (`10-claim-audit.md`): one 2025 card cannot show eve
 ```text
 - Stated: "The belief that MIO approaches to problems in statistics are not practically relevant was formed in the 1970s and 1980s and it was at the time justified." [S010 p. 8; S105 p. 7].
 ```
+
+**Claim census 2026-10-29** (earlier wording, verbatim):
+
+```text
+- ⚠ In about half the linked works the why-now is a named tool or data change, without a figure [S056 p. 3]; later papers repeat or borrow the figure [S480 pp. 7, 9].
+- ✗ His 1995 survey argued the reverse: hardness answered with relaxations [S185 pp. 49–50].
+6. Return whenever a tool changes: bandits 1996 → 2026 [S681 pp. 1, 3, 8]; RO under an LLM lens (arXiv 2501.00568).
+```
+
+Census items k = 79, 81, 84. k = 79: *about half* is the count of 08 §3 row 9 (about 46 of the 94 linked works), which no single card can show; it now cites 08 §3, and S056 stays as the instance, a named tool change stated with no figure (p. 3). k = 81: the S185 card files this as a Method 2 variant, not a contradiction: hardness accepted as the limit of exact characterization and answered with relaxations and bounds, not with a tool-change argument (pp. 49–50); the cards for the same row file it as a variant too (S580 pp. 6–7; S052 pp. 2, 4; S025 pp. 10, 12, 17). The line is now ⚠ and says what the card says; the say–do count (2 contradicting: S269, S480) already excluded it. k = 84: the S681 card says the 2026 paper links back only to S051 (2000) on restless bandits, citing no 1996 bandit work (D6, pp. 31–35), and neither confirms nor refutes a 1996 start (Method 2 link, pp. 3, 8); the step now says restless bandits 2000 → 2026.
 
 <a id="method-3"></a>
 ## Method 3: The price of X
@@ -435,6 +464,19 @@ SKILL.md packet, item k = 8 (`10-claim-audit.md`): one 2025 card cannot show eve
 
 SKILL.md packet, item k = 9: the S048 card names the coverage probability as the thesis's knob, a model parameter rather than a protection level a decision-maker chooses, with cost-ratio bounds tight by example and no violation-probability bound [S048 pp. 40–44]. The line now says *no decision-maker's knob or violation bound* and cites the a priori solution priced against re-solving for *the price of simplicity* [S048 pp. 12–13]; C7's *knob-free precursor 1988* is narrowed the same way (earlier wording under [Corrections](#corrections)).
 
+**Claim census 2026-10-29** (earlier wording, verbatim):
+
+```text
+- Practice: one knob per constraint, solution-independent bounds, the class kept, the PILOT4 bad case printed [S001 pp. 3–5, 9–16]; price-of-fairness bounds uniform over utility sets [S012 pp. 7, 11–14]; community satisfaction priced in buses and dollars [S262 pp. 10–11].
+- ⚠ Precursor, 1988–1993: the price of simplicity, with no decision-maker's knob or violation bound; the thesis prices robustness in lost tractability [S048 pp. 12–13, 29, 40–44].
+- ✗ Knobs set from data *later* → from moments in 2006 [S014 pp. 10–12], from samples in 2009 [S024 pp. 3, 5]; hand-set knobs persist (C7).
+- ⚠ The price of interpretability is usually a point or two, without a bound [S190 pp. 4, 7–8].
+3. Prove a knob–property bound independent of the solution, with its assumptions, and show it tight [S012 pp. 7, 11–14].
+5. Compute the curve on the rival school's test problems and one realistic case; score robust and model-based decisions under misspecified truths and beyond the set [S014 p. 12]; report the good point and the bad case.
+```
+
+Census items k = 87, 91, 93, 94, 96, 97. k = 87: the S012 bounds are uniform over compact convex utility sets (Assumption 1; Theorems 1–2, pp. 7, 11), and a nonconvex set drives the price arbitrarily close to 1 (p. 14), so the hypothesis is now stated. k = 91: the S048 card covers the 1988 thesis (and its 1990 papers) only; the 1993 end now cites the PTSP paper whose card prices a priori routing against re-optimization, with p a model parameter, not a knob [S102 pp. 2, 14–18] (08 §3 row 11). k = 93: the S024 card builds the uncertainty set from the samples and the decision-maker's coherent risk measure (pp. 3, 5), but the knob itself, the risk level α = j/N, stays the decision-maker's choice (pp. 5–6); *knobs set from samples* is narrowed to *sets from samples and the decision-maker's risk measure* (C7 is outside this batch). k = 94: *a point or two* meant one or two data points, but read as a size it is wrong for S190, whose gap to boosting is 4–5 AUC points (p. 8); the line now says *one or two numbers*, with *usually* resting on the five cards of 08 §3 row 13 and S190 as the instance with no curve over a knob and no bound. k = 96: the S012 card flags that the paper has no continuous knob (the bound's only parameter is the number of players; S026 adds the knob); step 3 now cites the card where a knob–property bound is proved with its assumptions and shown tight: Theorem 3, Γ against the violation probability, for independent symmetric perturbations, tight for symmetric ±1 perturbations, proved in the appendix [S001 pp. 5, 16–18]. S012 pp. 7, 11–14 stays on the Practice line. k = 97: the S014 card scores the robust and the DP policy under misspecified distributions with matched moments (p. 12), but nothing beyond the set; that clause now cites the ISO New England study, where both commitments are scored on normal loads that may fall outside the budgeted set [S006 p. 5].
+
 <a id="method-4"></a>
 ## Method 4: Warm start, exact solve, honest certificate, duel the incumbent
 
@@ -484,6 +526,16 @@ SKILL.md packet, item k = 9: the S048 card names the coverage probability as the
 ```text
 - ✗ "Critic-informed checks, not his practice" → equal time is the yardstick of the 1993 review, for others' experiments [S005 pp. 3–4]; his own matched duels from 2002 [S070 pp. 9–15]; the critics' SNR grid adopted in 2020 [S095 pp. 3, 10, 21, 23] (C8).
 ```
+
+**Claim census 2026-10-29** (earlier wording, verbatim):
+
+```text
+- ⚠ Scope: MIO-for-ML methods papers; clinical collaborations use tuned off-the-shelf ensembles [S054 pp. 2, 4].
+1. Replace the greedy or trial-and-error step by one joint model (all tree splits at once; all regression goals in one MIQO [S081 pp. 2–3, 5–8]).
+**Limitations**: needs a commercial MIO solver; weak for continuous NLP; warm starts alone are routine in IO; a simple incumbent can be proved best [S310 pp. 4–8, 12].
+```
+
+Census items k = 110, 111, 118. k = 110: one clinical paper cannot show what clinical collaborations do; *usually* now rests on 08 §3 row 17 (seven cards), with S054 as the instance, an XGBoost model tuned by cross-validated AUC (pp. 2, 4). k = 111: the S081 card puts the properties that are linear constraints into one MIQO (Table 1, p. 3; pp. 5–8) but checks bootstrap significance and the condition number after fitting and enforces them by no-good cuts and re-solves (Stage 3, p. 8); *all regression goals* is narrowed, and the tree example, absent from S081, now carries its own card, one MIO over the whole tree [S011 pp. 13–14]. k = 118: the S310 card proves mean imputation asymptotically optimal (infinite data, a universally consistent learner), while mice wins in some finite-sample settings (pp. 9, 11); *proved best* is narrowed to *proved asymptotically optimal* (flagged by one auditor, confirmed in the card).
 
 <a id="method-5"></a>
 ## Method 5: Judge by the decision, against the owner's current rule
@@ -538,6 +590,15 @@ SKILL.md packet, item k = 9: the S048 card names the coverage probability as the
 ```text
 - Stated: "what truly matters is the performance of the prescription in the problem" [S008 p. 29].
 ```
+
+**Claim census 2026-10-29** (earlier wording, verbatim):
+
+```text
+- ✗ Fourteen prediction papers of 2014–2026, twelve clinical, score predictions with no decision or current-rule baseline [S557 pp. 4, 8, 13]; a vaccine-site plan's headline gain is against its weakest constructed rule [S083 pp. 1, 17–18, 23].
+2. The current rule is the baseline; prefer the stronger naive rule (last year's cost, not random); replay the owner's historical decisions [S206 pp. 9, 12].
+```
+
+Census items k = 125, 127. k = 125: the counts (fourteen prediction papers, twelve clinical) come from 08 §3 row 19, not from one card; they now cite it, and S557 stays as the instance: prediction only, another classifier as the baseline, the doctor-warning decision left to future work (pp. 4, 8, 13). k = 127: *last year's cost, not random* is the S050 baseline, the owner's naive rule, much stronger than random (p. 5); the tenure card's stronger naive rule is a five-year citation threshold (pp. 10–11), so the example now cites S050.
 
 <a id="method-6"></a>
 ## Method 6: Run research as programmes

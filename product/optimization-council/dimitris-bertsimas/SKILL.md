@@ -122,11 +122,11 @@ At most three cards per item; full lists and earlier wording: ledger `#taste-mar
 
 ### Warning signs of bad research
 1. Work that would change nothing if it succeeded, or that aims to impress [02 T1, T3].
-2. Models harder than their nominal version; polynomial time without solve times [02 T7] (stated from 2014 [S178 p. 5]; C19).
+2. Models harder than their nominal version; polynomial time without solve times [02 T7] (the latter stated from 2014 [S178 p. 5]; C19).
 3. Greedy trees, trial-and-error regression, small-sample randomization [02 G1, G2; S081 p. 3].
 4. Prediction accuracy with no decision value [02 R14], including in his group's clinical prediction papers (C11); point forecasts treated as exact, or a static deterministic model of a stochastic, dynamic problem [S027 p. 4; S016 p. 1].
 5. Black boxes in treatment decisions; diagnosis tolerates them [02 T6; S685 pp. 2–3]; his group's deployed tools are an exception (C21).
-6. Methods-first teaching; a literature that gives practitioners little guidance [02 T9; B014 p. 1; B017 p. 1].
+6. Methods-first teaching [02 T9; B014 p. 1; B017 p. 1]; a literature that gives practitioners little guidance [S095 p. 1].
 7. Quality claims with no guarantee: an algorithm stopped early, or heuristics judged only against other heuristics, whose failures the user cannot detect [02 J2; S051 p. 1; S183 p. 3].
 8. An inherited *intractable* belief, never re-measured [02 P2; S010 p. 8].
 
@@ -151,11 +151,11 @@ Six methods passed all four checks (recurrence, say–do, executable, exclusive)
 - Textbooks (stated jointly; no say–do count): formulate first (1997) [B001 p. 1]; strong formulations and duality (2005) [B006 p. 1]; the model before the spreadsheet (2004) [B014 p. 1].
 - Practice: all five steps in one text [S185 pp. 1–3, 9–12, 21–25, 49–50]; moment bounds as SDPs, boundary printed [S018 pp. 5–6, 16–17]; the robust LP stays an LP [S001 pp. 3–4, 10].
 - Say–do: ✅ stated (sole-author texts 1994–1995 [S580 pp. 5, 10; S185 p. 1]; C1) + practised 1988–2026; full texts: 346 linked works, 5 contradicting.
-- ⚠ SD 1988–1997: the kept class is an analysable distribution or queue class [S239 pp. 1–2, 8, 12].
-- ⚠ Class left → his group builds the algorithm (outer approximation, custom branch-and-bound) [S040 pp. 2, 6, 10] (C5).
+- ⚠ SD 1988–1993: the kept class is an analysable distribution or queue class [S239 pp. 1–2, 8, 12; S032 pp. 7–9].
+- ⚠ Class left → his group builds the algorithm (outer approximation, custom branch-and-bound) [S105 pp. 7–9; S184 pp. 8–18] (C5).
 - ✗ Outside it: some 2025–26 foundation-model papers [S426 pp. 4, 6; S474 pp. 2, 4, 8].
 **Steps**:
-1. Name the owning tradition, its tool and what it optimizes only implicitly (dynamic programming, tail inequalities, greedy selection, estimate-then-plug-in) [S057 p. 1].
+1. Name the owning tradition, its tool and what it optimizes only implicitly (dynamic programming [S057 p. 1], tail inequalities [S018 p. 1], greedy selection [S011 p. 4], estimate-then-plug-in [S008 pp. 2, 6]).
 2. Choose variables over a describable set: performance vectors, moments, a budget Γ of deviating coefficients, support indicators, ML weights.
 3. Pick the class-keeping device: a robust LP stays an LP; robust 0–1 problems with cost uncertainty need n + 1 nominal solves [S004 pp. 5–7]; a univariate moment bound is an SDP.
 4. Dualize: indices as dual variables [S057 pp. 11–13], worst-case distributions, solution-independent violation bounds.
@@ -171,15 +171,15 @@ Six methods passed all four checks (recurrence, say–do, executable, exclusive)
 - Stated: "The belief that MIO approaches to problems in statistics are not practically relevant was formed in the 1970s and 1980s and it was at the time justified." [S010 p. 8; S105 p. 7]; jointly, the 2019 book's principles: practical tractability, NP-hardness as an opportunity [B009 p. 1].
 - Practice: the figure rebuilt per flagship: 200 billion in arXiv v1 of best subset [S010 pp. 7–8], about 450 billion [S081 p. 4], 800 billion for trees [S011 pp. 5–6]; a belief refuted by solve times at n and p in the 100,000s [S061 pp. 2, 4, 13].
 - Say–do: ✅ steps 1, 2, 4–6; ⚠ step 3 is this skill's rule, practised only in the 2014–2017 statistics flagships (C6); full texts: 94 linked works, 2 contradicting.
-- ⚠ In about half the linked works the why-now is a named tool or data change, without a figure [S056 p. 3]; later papers repeat or borrow the figure [S480 pp. 7, 9].
-- ✗ His 1995 survey argued the reverse: hardness answered with relaxations [S185 pp. 49–50].
+- ⚠ In about half the linked works [08 §3] the why-now is a named tool or data change, without a figure [S056 p. 3]; later papers repeat or borrow the figure [S480 pp. 7, 9].
+- ⚠ His 1995 survey accepted hardness as the limit of exact work and answered it with relaxations and bounds [S185 pp. 49–50].
 **Steps**:
 1. Find the written-off problem and date the belief (CRIO traces it to the 1970s [S073 p. 1]).
 2. Concede it was right when formed; argue change, not error.
 3. *Skill's rule*: rebuild the figure from version-on-version solver tests and hardware data, or time the class across solver versions; never reuse the last paper's number.
 4. Lead the abstract with belief and figure; present the exact formulation as motivated by the speed-up.
 5. Demonstrate at a scale the old community calls practical (a week of computation cut to about 10 minutes [S093 p. 2]).
-6. Return whenever a tool changes: bandits 1996 → 2026 [S681 pp. 1, 3, 8]; RO under an LLM lens (arXiv 2501.00568).
+6. Return whenever a tool changes: restless bandits 2000 → 2026 [S681 pp. 1, 3, 8]; RO under an LLM lens (arXiv 2501.00568).
 **🔴 Checkpoint** (*correction*): the figures multiply mixed-integer *linear* solver factors by Top500 peak speed, and the MIQO factor is asserted without citation [05 §1.6; S010 pp. 7–8]. Time your class on your machine across solver versions, or say the figure is borrowed. No critic was found: absence, not endorsement.
 **Applies to stage**: problem choice; framing.
 **Different from standard practice**: the "why now" is a number (rebuilt per paper in 2014–2017); the old belief is conceded, not attacked.
@@ -189,17 +189,17 @@ Six methods passed all four checks (recurrence, say–do, executable, exclusive)
 **One line**: Name the property the decision-maker wants (robustness, fairness, interpretability, simplicity), index models by one interpretable knob, prove a solution-independent bound, keep the class, publish the price curve with its bad case.
 **Evidence** (full evidence: references/research/09-evidence-ledger.md#method-3):
 - Stated: "It is our belief that the “price” of fairness is effectively inescapable if the allocations prescribed by a given scheme are to be ethically acceptable and implementable." [S012 p. 14]; the 2004 abstract [02 G4].
-- Practice: one knob per constraint, solution-independent bounds, the class kept, the PILOT4 bad case printed [S001 pp. 3–5, 9–16]; price-of-fairness bounds uniform over utility sets [S012 pp. 7, 11–14]; community satisfaction priced in buses and dollars [S262 pp. 10–11].
+- Practice: one knob per constraint, solution-independent bounds, the class kept, the PILOT4 bad case printed [S001 pp. 3–5, 9–16]; price-of-fairness bounds uniform over compact convex utility sets [S012 pp. 7, 11–14]; community satisfaction priced in buses and dollars [S262 pp. 10–11].
 - Say–do: ✅ stated jointly (2004, 2011) + practised with one knob from 1990 [S597 pp. 36–38]; full texts: 205 linked works, none contradicting.
-- ⚠ Precursor, 1988–1993: the price of simplicity, with no decision-maker's knob or violation bound; the thesis prices robustness in lost tractability [S048 pp. 12–13, 29, 40–44].
-- ✗ Knobs set from data *later* → from moments in 2006 [S014 pp. 10–12], from samples in 2009 [S024 pp. 3, 5]; hand-set knobs persist (C7).
-- ⚠ The price of interpretability is usually a point or two, without a bound [S190 pp. 4, 7–8].
+- ⚠ Precursor, 1988–1993: the price of simplicity, with no decision-maker's knob or violation bound; the thesis prices robustness in lost tractability [S048 pp. 12–13, 29, 40–44; S102 pp. 2, 14–18].
+- ✗ Knobs set from data *later* → from moments in 2006 [S014 pp. 10–12]; sets from samples and the decision-maker's risk measure in 2009 [S024 pp. 3, 5]; hand-set knobs persist (C7).
+- ⚠ The price of interpretability is usually one or two numbers [08 §3], with no curve or bound [S190 pp. 4, 7–8].
 **Steps**:
 1. Name the property and who wants it.
 2. Give it one operational knob (Γ, the coefficients per constraint allowed to deviate; depth; a fairness parameter; a radius tied to a probability [S139 pp. 6, 15–16]).
-3. Prove a knob–property bound independent of the solution, with its assumptions, and show it tight [S012 pp. 7, 11–14].
+3. Prove a knob–property bound independent of the solution, with its assumptions, and show it tight [S001 pp. 5, 16–18].
 4. Keep the class (Method 1, step 3).
-5. Compute the curve on the rival school's test problems and one realistic case; score robust and model-based decisions under misspecified truths and beyond the set [S014 p. 12]; report the good point and the bad case.
+5. Compute the curve on the rival school's test problems and one realistic case; score robust and model-based decisions under misspecified truths [S014 p. 12] and beyond the set [S006 p. 5]; report the good point and the bad case.
 6. Hand the knob and the curve to the decision-maker (a trade-off curve shown to a school district [S137 p. 5]).
 **🔴 Stop rule**: no knee in the curve → say so and diagnose the structure (PILOT4: few uncertain coefficients per row [S001 pp. 14, 16]). *Correction*: budgeted robust optima need not be Pareto-efficient (DOI 10.1287/mnsc.2013.1753); set the knob from data where data exist (DOI 10.1007/s10107-017-1125-8) [05 §4.1].
 **Applies to stage**: formulation; judging; reporting to decision-makers.
@@ -214,9 +214,9 @@ Six methods passed all four checks (recurrence, say–do, executable, exclusive)
 - Say–do: ✅ protocol in his MIO methods papers; ⚠ the certificate is dropped at scale and in applied papers (Tension T1); full texts: 287 linked works, 24 contradicting.
 - ✗ "Critic-informed checks, not his practice" → equal time is the yardstick of the 1992 review, for others' experiments [B020 p. 9; S005 pp. 3–4]; his own matched duels from 2002 [S070 pp. 9–15]; the critics' SNR grid adopted in 2020 [S095 pp. 3, 10, 21, 23] (C8).
 - ✗ The certificate gap predates OCT (2004) [S031 p. 26]; applied trees are called optimal with no solver, gap or limit [S094 pp. 5, 9] (C9).
-- ⚠ Scope: MIO-for-ML methods papers; clinical collaborations use tuned off-the-shelf ensembles [S054 pp. 2, 4].
+- ⚠ Scope: MIO-for-ML methods papers; clinical collaborations usually use tuned off-the-shelf ensembles [08 §3; S054 pp. 2, 4].
 **Steps**:
-1. Replace the greedy or trial-and-error step by one joint model (all tree splits at once; all regression goals in one MIQO [S081 pp. 2–3, 5–8]).
+1. Replace the greedy or trial-and-error step by one joint model (all tree splits at once [S011 pp. 13–14]; the regression goals in one MIQO, the post-fit checks enforced by cuts [S081 pp. 2–3, 5–8]).
 2. Warm-start fast: a discrete first-order method with about 50 random starts [S010 pp. 27–40]; CART [S011 pp. 14–15].
 3. Solve with a stated time limit, solver version, machine and threads, the same for every method.
 4. Report certificate or gap; never call uncertified results optimal; if the bound stalls, a relaxation plus rounding that still prints a gap [S183 pp. 22–26].
@@ -225,7 +225,7 @@ Six methods passed all four checks (recurrence, say–do, executable, exclusive)
 **🔴 Stop rule** [practice, Dunn 2018]: bound stuck at zero or root node not passed → count binaries (n·2^D); first, where one exists, replace weak big-M by a perspective or convex-integer form [S061 pp. 6–10; S175 pp. 9–10, 15–16]; if the bound still stalls, switch to local search with restarts, and (*correction*) drop *optimal* from the claim.
 **Applies to stage**: experiments; judging results.
 **Different from standard practice**: the incumbent heuristic is both warm start and opponent; statistics' convex and greedy schools never solve the exact problem.
-**Limitations**: needs a commercial MIO solver; weak for continuous NLP; warm starts alone are routine in IO; a simple incumbent can be proved best [S310 pp. 4–8, 12].
+**Limitations**: needs a commercial MIO solver; weak for continuous NLP; warm starts alone are routine in IO; a simple incumbent can be proved asymptotically optimal [S310 pp. 4–8, 12].
 
 ### Method 5: Judge by the decision, against the owner's current rule {DA AP; ML RO}
 **One line**: Start from the owner's decision, data and current rule; learn inside the decision; score decisions, not predictions, against that rule; report your own costs; field-test.
@@ -233,11 +233,11 @@ Six methods passed all four checks (recurrence, say–do, executable, exclusive)
 - Stated: "what truly matters is the performance of the prescription in the problem" [S008 p. 29]; the 2019 book's sixth principle, prescription over prediction [B009 p. 1].
 - Practice: practitioners' equal-split rule as baseline, cents per share as metric [S009 pp. 3–4, 13–25]; ISO New England staff supplying system, data and reserve practice, its own 6.14 h against 1.65 h printed [S006 pp. 1, 5–9]; length of stay compared, descriptively, after a staggered roll-out [S617 arXiv pp. 11–14, 22–25].
 - Say–do: ✅ in OR, analytics and deployment papers; ⚠ narrowed (C11); full texts: 233 linked works, 15 contradicting.
-- ✗ Fourteen prediction papers of 2014–2026, twelve clinical, score predictions with no decision or current-rule baseline [S557 pp. 4, 8, 13]; a vaccine-site plan's headline gain is against its weakest constructed rule [S083 pp. 1, 17–18, 23].
+- ✗ Fourteen prediction papers of 2014–2026, twelve clinical [08 §3], score predictions with no decision or current-rule baseline [S557 pp. 4, 8, 13]; a vaccine-site plan's headline gain is against its weakest constructed rule [S083 pp. 1, 17–18, 23].
 - ⚠ Adoption designed in: the owner's inputs, format and standard kept [S114 pp. 4–5, 11–12].
 **Steps**:
 1. Owner, decision, data, current rule.
-2. The current rule is the baseline; prefer the stronger naive rule (last year's cost, not random); replay the owner's historical decisions [S206 pp. 9, 12].
+2. The current rule is the baseline; prefer the stronger naive rule (last year's cost, not random [S050 p. 5]); replay the owner's historical decisions [S206 pp. 9, 12].
 3. Shape the class around the data that exist (auxiliary covariates, not the uncertain quantity itself).
 4. Learn and decide in one model: ML weights (kNN, CART, random forests) inside conditional stochastic optimization [S008 pp. 10–14]; prescriptive trees where people must see why.
 5. Score with a decision metric (the coefficient of prescriptiveness [S008 pp. 21, 29]); report your own costs, even when slower.
