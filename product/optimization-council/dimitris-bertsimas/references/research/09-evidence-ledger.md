@@ -1598,6 +1598,16 @@ Census items k = 281, 283 (batch 3; k = 281 flagged by one auditor, confirmed on
 - **Claimed but unverified** (never used as methods): adaptive RO as a new way to solve RO; the best idea wins whoever had it; yes to every prospective student; 60% of students becoming professors; graduates mostly in academia or small firms (contradicted: 6 of 8 placements in 2025–26 at large firms); weekly one-on-ones after 2014; students joining his companies only after graduating; impact within two to five years as a rule; certification in minutes in general; the Hartford length-of-stay figures (the 2023 preprint's 0.67 days is a descriptive estimate without a standard error [S617 arXiv pp. 23–25]; the 2026 article was not read); the Panama Canal plan; the diabetes trials' outcomes; the 2009 losses as the health trigger; companies as the channel to scale; data as objective reality; positive energy over IQ; geometry first in research.
 ```
 
+<a id="claimed-unverified"></a>
+### Claimed but unverified, and the web-pass corrections (moved 2026-10-31, verbatim)
+
+Moved out of SKILL.md's Honest Boundary on 2026-10-31 in the same status trim; SKILL.md keeps the count and the one contradicted claim. Verbatim:
+
+```text
+- **Claimed but unverified** (never used as methods): adaptive RO as a new way to solve RO (stated jointly [B011 p. 1]); the best idea wins whoever had it; yes to every prospective student; 60% of students becoming professors; graduates mostly in academia or small firms (contradicted: 6 of 8 placements in 2025–26 at large firms); weekly one-on-ones after 2014; students joining his companies only after graduating; impact within two to five years as a rule; certification in minutes in general; the Hartford length-of-stay figures (the 2023 preprint's 0.67 days is a descriptive estimate without a standard error [S617 arXiv pp. 23–25]; the 2026 article was not read); the Panama Canal plan; the diabetes trials' outcomes; the 2009 losses as the health trigger; companies as the channel to scale; data as objective reality (stated jointly [B017 p. 1; B009 p. 1]); positive energy over IQ; geometry first in research.
+- **Corrections applied in the web pass** (the speed-up figures, Ye as a 1998 co-author, Kallus's own arXiv withdrawal, the two COVID-19 papers): ledger `#honest-boundary`; the DELPHI model paper is OR 2023 (DOI 10.1287/opre.2022.2306), distinct from the 21-author paper (DOI 10.1007/s10729-020-09542-0).
+```
+
 <a id="books"></a>
 ## Book material (increment books-2026-10-29)
 
@@ -1755,6 +1765,38 @@ Catalog packet items: k = 3, the closed-form fluid optimum is Proposition 2 and 
 Census items k = 301, 314 (batch 3). C7: on the S024 card the 2009 uncertainty set follows from the risk measure the decision maker selects and is built from N samples (pp. 3, 5), while the knob, the risk level α, stays the decision maker's choice (pp. 5–6); C7 now reads *sets from samples and a risk measure*, as Method 3's line and the fix round above do, and the 2006 budgets from means and variances keep their own citation [S014 pp. 10–12]. C19: the S178 card dates only the polynomial-time half of warning sign 2, the 2014 statement that tractability means practical solve times rather than polynomial time (p. 5); nothing on it dates *models harder than their nominal version*, so C19 now dates *its polynomial-time half*, as the sign itself does after census batch 1. The operation-count clause (item k = 315) belongs to the next batch.
 
 Census item k = 315 (batch 4): S269 is one paper, Mathematical Programming 1994 (received 1991, revised 1993), so it carries the operation counts of 1994 (the abstract's *fastest way*, worst-case counts only in Table 3, practicality untested; pp. 1, 21–22) but not the range's end. The 1997 end now cites the LO textbook's printed contents, whose §1.6 is *Algorithms and operation counts* [B004 p. 2]; that card dates C19 by it (title-level, its Method 1 Limitations / C19 link). S289, the 1997 paper that C19's entry above and 08 §3 row 28 cite for this end, counts worst-case primal steps rather than operations [S289 pp. 6, 11–12], so it was not restored. The second C19 line above is the wording after batch 3.
+
+<a id="corrections-list"></a>
+### SKILL.md's corrections list as it stood until 2026-10-31 (verbatim)
+
+Moved out of SKILL.md on 2026-10-31 in a status trim (team_status.py counted 13,153 words against its 13,000-word budget); SKILL.md keeps one gist per correction. Verbatim:
+
+```text
+### Corrections from the full texts
+Earlier wording, verbatim: ledger `#corrections`, `#honest-boundary`, `#how-to-use`; reasons: 08 §3.
+- **C1** ✗ SD, CP: no stated methodology → SD stated alone [S580 pp. 5, 10], CP jointly [S018 p. 1]; the Activation Rule label now says so.
+- **C2** ✗ IO rounding anchor DOI 10.1007/BF01580607 → an LP bound [S052 pp. 10–18].
+- **C3** ✗ HS: robust local search not read → convergence proved only for convex costs with an exact oracle; otherwise a heuristic, no certificate [S090 pp. 5–6, 12].
+- **C4** ✗ AP: outcomes thin → measured in several deployments [S115 pp. 22–24; S617 arXiv pp. 22–25].
+- **C5** ✗ Solver internals as black boxes → custom algorithms from 2009 [S040 pp. 2, 6, 10].
+- **C6** ✗ Method 2 step 3 as his practice → the skill's rule; rebuilt only 2014–2017.
+- **C7** ⚠ Method 3 from 2004 → one knob from 1990 [S597 pp. 36–38]; precursor 1988 with no decision-maker's knob [S048 pp. 29, 40–44]; knobs from moments 2006 [S014 pp. 10–12], sets from samples and a risk measure 2009 [S024 pp. 3, 5].
+- **C8** ✗ Method 4 checks not his practice → a stated yardstick in 1993 [S005 pp. 3–4]; practised from 2002 [S070 pp. 9–15], widely after 2020.
+- **C9** ✗ Tension T1 from 2017 → from 2004 [S031 p. 26].
+- **C10** ✗ Formulation strength as a general blind spot (T4) → tree MIOs and some ML models only.
+- **C11** ✗ Method 5 say–do ✅ throughout → not in prediction-only clinical papers.
+- **C12** ⚠ Boston *delayed* (PNAS) vs *not implemented* (thesis) → PNAS says both [S137 pp. 2, 6].
+- **C13** ✗ Heuristic 5 via DOI 10.1287/opre.2021.0707 → that paper learns constraints [S097 pp. 1–9].
+- **C14** ✗ Heuristic 1 at metadata level → full texts [S085 pp. 7–15].
+- **C15** ✗ T2: SA judged theoretically lacking → and mixed in practice, but generally applicable [S005 pp. 4–5].
+- **C16** ✗ Odoni inheritance [inferred] → documented [S048 pp. 18, 71, 125].
+- **C17** ✗ Note 06: little computation 1988–1995 → software and test protocols [S089 pp. 13–17].
+- **C18** ✗ Note 05: permanent impact only → temporary under the LPT law [S009 pp. 20–22] (05 unedited).
+- **C19** ✗ Warning sign 2 undated → its polynomial-time half stated from 2014 [S178 p. 5]; operation counts in 1994–1997 [S269 pp. 1, 21–22; B004 p. 2].
+- **C20** ✗ No full-text reading yet → the coverage under Research basis.
+- **C21** ⚠ Mark 5, warning sign 5 → scoped to treatment guidance [S685 pp. 2–3]; deployed tools use SHAP-explained boosted trees [S617 arXiv pp. 9–11].
+- **C22** ⚠ The annealing review's verdicts dated 1993 (HS row, T2, Method 4, C8) → in print in 1992, the same text [B020 pp. 8–10].
+```
 
 <a id="card-key"></a>
 ## Card key
