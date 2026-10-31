@@ -1,5 +1,75 @@
 # 蒸馏记录
 
+## 2026-10-31 (14) · Dimitris Bertsimas 深读档 + 九个优化领域 + Optimization Council（主持四队跨队讨论）
+
+- 用户请求：「蒸馏一下Dimitri bertsimas 做非常详尽的蒸馏并按照不同optimization领域来划分 并且让他领导所有optimization
+  team 进行discussion」。**更名**：「Dimitri bertsimas」按 MIT 的 Dimitris Bertsimas（Boeing Professor of Operations
+  Research）处理，不是 Dimitri P. Bertsekas；SKILL.md 的路由表把 Bertsekas 列为不代言。team-kit 线，分支
+  `bertsimas-council`（独立 worktree `Optimization-Researchers-bertsimas`，基于 `minlp-team`，已含 lp-team 合并），
+  2026-10-28 至 10-31 共 27 个提交，未推送、未合并
+- 新团队 `product/optimization-council/`（深读档）：team.json 一位成员 + `guest_teams` 四队。Bertsimas 是召集人兼主持，
+  `council-roundtable` 把 LP、NLP、DFO、MINLP 四队 23 位成员作为客座代表团入座
+- kit 改动（两个提交）：`team_check.py` 与 `check_citations.py` 认理事会圆桌（team.json `guest_teams`），领域文件进引用
+  扫描；`check_citations.py` 把成员文件里的 `[<他队成员> card …]` 解析到那位成员自己的卡片
+- 流水线：T1 研究笔记 01–06 + 2014 Sloan 口述史转录（CC BY-NC 4.0，MIT Libraries）→ 出版物清单（965 行：932 Scholar、
+  22 DBLP/Crossref、11 主页；186 行 dup_of）→ T3.2 开放全文索引 → T3.3 追源（186 个开放副本、42 个摘要）→ T3.5 四轮读卡
+  → T3.6 汇总（新增 Method 7「先界后策」与 Heuristic 10，更正 C1–C21，证据账本 09 与技巧目录）→ T3.7 精简 → T4 书籍增量
+  （21 张书籍公开部分卡：1997 序言、目录、勘误、出版社页、书评；C22）
+- 覆盖：932 条 Scholar 行 → 751 部不同作品，473 部有开放全文；413 部全文精读、59 部读了部分、63 部摘要级、56 部元数据级、
+  160 部跳过（学生论文、报告、非本人作品）；632 张卡（611 张研究卡 + 21 张书籍材料卡），1,125 条摘录逐字核对（1,122 条
+  完全一致、3 条忽略空白与符号后一致、0 条找不到）。八本书只读公开部分，正文未读
+- 按领域划分：用 team.json 的九个代码（LO 线性、IO 整数与混合整数、RO 鲁棒与自适应、CP 凸/锥/矩与多项式、SD 随机动态与
+  排队、ML 机器学习与统计、DA 规范分析、HS 启发式与仿真、AP 应用）。800 项（779 部研究作品 + 21 项书籍材料）每项两位
+  标注员，61 项裁决；`references/domains/` 九个领域文件共约 55,000 词，结构相同（§1 足迹到 §9 覆盖与缺口，§6 是与各队的
+  交锋点和判定试验），两视角核验提出 271 条意见、采纳 270 条；SKILL.md 新增「Domain Map」九行八列（声音、时期与权重、
+  代表作卡片、典型做法、涉及队伍、文件）和一条路由行
+- 声明审计（零上下文双审计员，写手 ≠ 审计员）：SKILL.md 抽审 40 条 + 技巧目录 20 条，0 unsupported，15 条 partial 收窄；
+  SKILL.md **全量普查** 318 条带页码声明（A 260 supported / 58 partial，B 253 / 65，0 unsupported），任一审计员标出的
+  67 条中 63 条收窄或改引、4 条维持原文；九个领域文件抽审 2,459 条中的 108 条（0 unsupported，12 条收窄），其中引他队
+  卡片的 11 条按对方卡片重审，11/11 supported。所有改前措辞原样存入 09 账本
+- 抓到的真问题：H005 主页列为他的论文，Crossref（DOI 10.1007/s10994-022-06128-5）作者是 Amram、Dunn、Zhuo，works.json
+  标为非本人，领域标签 NONE；SD 与 CP「无陈述方法论」被全文推翻（C1：SD 有 1988–1995 的单独署名文本，CP 只有合著）
+- 工具缺陷（留作后续）：`audit_claims.py` 给 `[<slug> card S…]` 形式的引用配的是**领衔成员自己的同号卡片**，领域文件
+  抽审因此有 11 条 uncheckable；本次用临时脚本按对方卡片重建审计包绕过，kit 本身没改
+- 状态精简（2026-10-31）：Domain Map 使 SKILL.md 按 `team_status.py` 的算法到了 13,153 词（> 13,000）。更正清单 C1–C22
+  （带卡片）与「声称未证」「web 阶段更正」两条原样移入 09 账本（`#corrections-list`、`#claimed-unverified`），SKILL.md
+  每条更正留一句要点，现 12,881 词，`check_ledger.py --before` 通过；ML §6.1 第 1 点的「双向交锋」注明只见于两队笔记、
+  不在任何卡片上
+- 理事会圆桌（41 个 agent）：每队挖 4 条断层线，共 16 条，每条两位核验员对抗核验，留 14 条、弃 2 条（定制 LP 求解器之争；
+  矩模型对 Wasserstein 集合）；写成 6 条编号断层线 FL1–FL6（`team_check` 只许 3–6 条），双方证据俱全；入座表 15 行，
+  每行由 Bertsimas 主持，23 位客座有 22 位入座（Fletcher 不在任何一行）；agenda 模式（`agenda` / `next` / `plan`）；
+  协议审与诚信审共 26 项意见，全部至少部分采纳，其中 3 项部分拒绝（与 `team_check` 规则冲突，或属于成员文件——后者已在
+  状态精简中补上）
+- 首次理事会讨论（2026-10-31，`product/optimization-council/first-session-2026-10-31.md`，约 53,000 词）：agenda 模式，
+  自动跑到检查点 4。Bertsimas 选题「精确性的代价」：可认证的精确答案何时值得其计算，"now tractable""certified""robust"
+  各凭什么。四个议题各对一队、各落在一条断层线：「why now」加速比凭什么（LP，FL1）、证明时间给统计估计量买到什么（NLP，
+  FL2）、模拟器上停下的鲁棒搜索能声称什么（DFO，FL4）、更重的锥松弛何时不再划算（MINLP，FL5）。四队十位代表入座
+  （Huangfu；Gould、Nocedal、Wright；Vicente、Audet、Conn；Sahinidis、Burer、Dey）
+  - 首轮 36 个 agent（框定、9 份开场、4 次领衔回应、9 份反驳、计划 v1、中立性检查、9 份签署、核查、组装）。**漏洞**：
+    会话脚本只让 delegate 发言，漏了各议题的挑战者（Sahinidis 议题 1–2、Conn 议题 3、Dey 议题 4），违反圆桌 Step 1–2
+    「挑战者与 delegate 同席」；计划 v1 的开放问题 16 和核查员都指出了这一点
+  - 补跑挑战者回合（29 个 agent）：挑战者读议题全程记录和 v1 后开场 → Bertsimas 回应 → 挑战者回驳一轮。Bertsimas 据此
+    起草 v2，v1 的 6 个附条件意见（Gould、Nocedal、Wright、Audet、Sahinidis、Burer）全部采纳并写进计划；经主持人中立性
+    检查（如把「item 2 已在 (V1) 解决」改回未决）后 11 位全员重签：6 位签署（其中 Gould、Sahinidis 的附加条件 v2 尚未
+    满足）、5 位异议（Nocedal、Wright、Audet、Conn、Dey），各附签署条件，留给用户在检查点 4 决定
+  - 核查三轮：第一轮 40 条关键引用，12 个问题、7 项未证；第二轮三位核查员（卡片引用 287 条、具名事物与数字 193 项、
+    对记录的忠实度 181 项），27 个问题、17 项未证；最后普查首轮全部 271 条卡片引用（17 个审计员，每块再配一个反驳者）：
+    236 条成立，35 条被标、2 条被驳回，33 条存疑，其中 23 条为新标注，v2 照抄的 5 处同一引用也标上；并更正第一轮的
+    3 处误读（S095 卡确有 stall-count 停止、S080 卡确有 p. 6、S014 卡确有 p. 17）。所有问题以斜体注记留在原处，未删
+    任何内容；核查员原文里的本机临时路径改为「path omitted here」
+  - 普查发现的规律：领衔在议题 4 把「按结构选乘积」说成自己论文的未来工作，而 S415 p. 30、S708 p. 42 写的是部分 /
+    选择性乘积（2026 修订版按违约迭代加约束），「按结构」只是推断；Problem Card 把 (2,000, 10) 设计配了 SNR 6、1、
+    0.05，S095 p. 11 实际只在 SNR 0.05 跑它
+  - 源头修正：圆桌 FL2 判定试验把 10⁻²/10⁻⁴/10⁻⁶ 三档容差引到 Nocedal 的 S043 p. 7，而该卡只有对齐的 10⁻⁶ 一档；
+    已改为「三档是本试验的设计」，并注明 QUIC 只有 CRAN 存档 1.1.1；会话记录里的 FL2 照抄件保留会话当时的措辞
+  - 只设计、未运行任何试验；计划 v2 等用户在检查点 4 批准
+- 已知边界：LP 与 MINLP 两队的团队圆桌仍是模板（T2 未跑），理事会把 LP 引擎问题转给 solo qi-huangfu，把 MINLP 求解器内核
+  转给 Sahinidis、Dey 或 Leyffer；23 位客座中 12 位没有卡片（NLP 九位基础档、Huangfu、Grossmann、Sahinidis），只能引其
+  SKILL.md 与研究笔记
+- 闸门（全部 exit 0）：`team_check.py product/optimization-council` 14 项 0 失败（skill 12/12、works 0 错误、cards 632 张
+  0 条未读行、quotes 0 NOT FOUND、ledger 52 个锚点、citations 0 problem）；`check_links` 29 个文件 0 断链（含会话记录）；无 `[TODO`、
+  无 `{{`
+
 ## 2026-10-25 (13) · 语料流水线质量门机械化（G1–G7）+ 两队 skill 重新对账
 
 - 用户请求：「强化一下Optimization researchers里知识蒸馏的技能」。理解为强化蒸馏**技能本身**（协议、质量门、

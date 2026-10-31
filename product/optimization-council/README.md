@@ -115,6 +115,25 @@ Say "exit" or "end council" to return to normal mode.
 > Bertsimas lens, RO domain file: does our budgeted uncertainty set keep the unit-commitment MIO in its class, and which delegation would contest it?
 ```
 
+**Sessions.** [first-session-2026-10-31.md](first-session-2026-10-31.md) records the council's first session (agenda mode, autopilot to checkpoint 4; about 53,000 words). Bertsimas chose the topic, *the price of exactness*, and set four items, one per delegation, each on a documented fault line:
+
+- what a "why now" speed-up may rest on (LP, FL1);
+- what proof time buys a statistical estimator (NLP, FL2);
+- what a stopped robust search on a simulator may claim (DFO, FL4);
+- where heavier conic rungs stop paying (MINLP, FL5).
+
+Ten delegates sat: Huangfu; Gould, Nocedal and Wright; Vicente, Audet and Conn; Sahinidis, Burer and Dey.
+
+The first run left out the challengers' turns (Sahinidis on items 1 and 2, Conn on item 3, Dey on item 4), so they were run afterwards. The programme plan was then revised (v2) and signed again. Six members signed, two of them on conditions v2 does not yet meet; five dissented, each stating the condition under which they would sign.
+
+Three checks are recorded, and every flagged claim is annotated where it stands:
+
+- a first verification;
+- a second verification of the challengers' round and v2;
+- a census of all 271 card citations of the first run.
+
+The plan only designs its deciding tests: none was run, and approving it at checkpoint 4 is yours.
+
 ## Resources
 
 The council's own member has a folder that keeps track of the resources behind that skill; each guest's folder lives in its own team, with the same layout at that member's tier.
@@ -175,4 +194,5 @@ This council is configured by [team.json](team.json): its `guest_teams`, its `do
 - The LP and MINLP teams' roundtables are unfilled templates (their team layer, T2, has not run), so their delegates have no team fault lines to cite and the install above leaves those two roundtables out; the council sends questions inside those solvers to the member skills (Huangfu; Sahinidis, Dey and Leyffer; Grossmann and Leyffer).
 - The roundtable's six numbered fault lines are not the whole carded record: three carded critiques of his work in guest members' papers (Scheinberg's co-authored paper on optimal trees for categorical data; Burer's on the budget model for the interval TSP and on moment-based sets) are kept in his domain files' §6, and the roundtable's Honest Boundary lists them.
 - Powell (d. 2015), Conn (d. 2019) and Fletcher (d. 2016), in the DFO and NLP delegations, are historical lenses; their skills reflect work up to then.
+- The first session ([first-session-2026-10-31.md](first-session-2026-10-31.md)) designs its deciding tests and runs none. Its numbers come from the cards, notes and documentation it cites, and the claims its checks could not confirm are annotated in place.
 - Treat every recommendation as a hypothesis to test on your problem.
