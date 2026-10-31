@@ -135,6 +135,28 @@ The domain-layer map that replaces this table should take its Voice entries from
 | **AP** | stated + practice | Partners as validation (M5); companies and applied write-ups (M6, H9) | DOI 10.1287/opre.1080.0619; DOI 10.1073/pnas.1811462116; DOI 10.1287/opre.2022.2306 | all four | Outcomes measured in several deployments (C4); Boston and DELPHI contested (C12) |
 ```
 
+**Domain layer** (2026-10-31). SKILL.md's section, now headed "Domain Map", was rebuilt from the nine domain files under `references/domains/` (their §§1–3, 6 and 9), with the columns Domain, Voice, Period and weight, Signature works (card IDs), characteristic move, Teams engaged and File; corrections C1–C4, C12, C15 and C22 stay visible in their rows, and the old Cautions now follow ⚠ in the move cell where the files support them. CP's "No critique or process artefact found" is narrowed, as the CP file's §5 and §9 have it, to thin process evidence and one printed critique, found through a guest card. Every cell the new map drops (the Anchor works DOIs; LO's Ramana and ML's Cuvelier cautions; LO's "Geometry before algebra", a teaching move by the LO file's §3) is kept in the copy below.
+
+**Domain Map before the domain layer (2026-10-31)**, verbatim:
+
+```text
+## Domain Map (team.json codes)
+
+M = Method, H = Heuristic, T = Tension. Rows corrected from the full texts (C1–C4); earlier wording: ledger `#domain-map`.
+
+| Code | Voice | His moves | Anchor works | Delegations | Cautions |
+|---|---|---|---|---|---|
+| **LO** | stated jointly in the 1997 preface [B001 p. 1]; textbook-era taste | Geometry before algebra; LP as the engine of relaxations and robust counterparts (M1) | *Introduction to Linear Optimization* (Athena Scientific 1997, ISBN 1886529191); DOI 10.1007/BF01582057 | LP, NLP | Dormant as a research topic after 1998; the book corrected until 2021 [B003 p. 1]; Ramana's 1997 review: dense in places [B005 pp. 13–14] |
+| **IO** | stated (+ 2005 book, joint [B006 p. 1; B008 p. 2]) + practice | Strong formulations (taught 1997 [B001 p. 1; B004 p. 4], stated 1998 and 2005); LP bounds (C2) and rounding; MIO as the engine of RO and ML (M2, M4, H3, H5) | DOI 10.1007/BF01580607 (a bound, not rounding: C2); DOI 10.1137/20M1346778 | MINLP, LP | T4: weak big-M in tree MIOs |
+| **RO** | stated (+ 2022 book, joint [B011 p. 1]) + practice | Class inheritance (M1); price of robustness (M3); adaptive policies with self-quantified limits; data-driven sets; H1 | DOI 10.1287/opre.1030.0065; DOI 10.1287/moor.1100.0444; DOI 10.1137/080734510 | NLP, MINLP, DFO | Why he entered RO and how Γ arose: unknown |
+| **CP** | stated jointly + practice (C1) | Probability questions as convex programs; worst case from the dual; NP-hardness mapped (M1) | DOI 10.1137/S1052623401399903; DOI 10.1287/ijoc.2023.0345 | NLP, MINLP | No critique or process artefact found |
+| **SD** | stated (sole-author 1988–1995) + practice (C1) | Achievable region (M1); stochastic routing; robust queueing; ML-trained bandit policies | DOI 10.1287/opre.38.6.1019; DOI 10.1287/moor.21.2.257; DOI 10.1287/opre.2015.1367 | none | Whitt–You critiques unanswered [05 §4.5]; T3 |
+| **ML** | stated (six book principles, joint [B009 p. 1]) + practice (strongest) | M2, M4, M1; H1–H3; interpretability required | DOI 10.1214/15-AOS1388; DOI 10.1007/s10994-017-5633-9; DOI 10.1214/19-STS701 | MINLP, NLP, DFO | SNR, timing, certification, strength and reproducibility critiques [05 §1–2]; no widespread implementation yet of most algorithms (Cuvelier 2020 [B010 p. 1]) |
+| **DA** | stated (MBA and analytics texts 2004, 2016, joint [B014 p. 1; B017 p. 1]) + practice | M5; H5 | DOI 10.1287/mnsc.2018.3253; DOI 10.1287/opre.2021.0707 | all four | Prescriptive-tree counterexample unanswered (DOI 10.1287/mnsc.2021.02813) |
+| **HS** | practice + the 1992 verdict [B020 pp. 8–10] | Heuristics as warm starts, components, fallbacks (M4, H3); 1992 (reprinted 1993): theory lacking, practice mixed but generally applicable (C15, C22) | DOI 10.1214/ss/1177011077; DOI 10.1287/opre.1090.0715 | DFO | Robust local search converges only for convex costs with an exact oracle; otherwise a heuristic without certificate (C3); T1, T2 |
+| **AP** | stated (+ 2025 health book, joint [B019 p. 2]) + practice | Partners as validation (M5); companies and applied write-ups (M6, H9) | DOI 10.1287/opre.1080.0619; DOI 10.1073/pnas.1811462116; DOI 10.1287/opre.2022.2306 | all four | Outcomes measured in several deployments (C4); Boston and DELPHI contested (C12) |
+```
+
 <a id="taste-marks"></a>
 ## Taste: marks of good research
 
