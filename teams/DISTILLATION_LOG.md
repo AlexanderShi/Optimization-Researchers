@@ -34,7 +34,11 @@
   证据内」一档并点名能补的成员，长度改为每队 150 词加公共部分 150 词
 - 文档：理事会 README（团队表、安装 28 个文件夹、用法「通过 lead 问各队」、诚实边界）、DEEP-READING 一行、
   product/README 第 11 行
-- 未装进用户的全局 skills（等用户点头）；未推送、未合并
+- 安装（用户回复「装上」）：按 README 装进 `~/.claude/skills`，28 个文件夹（理事会三个、23 位客座成员、NLP 与 DFO
+  两个圆桌；LP、MINLP 圆桌是模板，不装），只拷 git 跟踪的 1,372 个文件、48 MB：Bertsimas 文件夹里 git 忽略的
+  501 个 PDF 和 516 个 txt（约 600 MB）不拷，README 安装一节补了这句。逐字节比对 1,372/1,372 一致，frontmatter
+  名与文件夹名一致；已装的 `dfo-team`、`nlp-team` 与 `teams/` 下的相同；当前会话的 skill 列表已列出新装的 skill。
+  未推送、未合并
 
 ## 2026-10-31 (14) · Dimitris Bertsimas 深读档 + 九个优化领域 + Optimization Council（主持四队跨队讨论）
 

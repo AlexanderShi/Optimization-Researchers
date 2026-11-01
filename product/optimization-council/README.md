@@ -43,6 +43,8 @@ foreach ($t in "optimization-council", "lp-team", "nonlinear-team", "dfo-team", 
 }
 ```
 
+In a checkout that also holds the git-ignored full texts (Bertsimas's `papers/*.pdf` and `txt/`, about 600 MB), the loop copies those too. The skills never need them, since the evidence is on the cards, so copy only the tracked files instead: for each folder, the files `git ls-files -- <folder>` lists. The install of 2026-10-31 did this: 28 folders, 48 MB.
+
 Run either from the repository root. `${d%/}` drops the trailing slash, so that macOS `cp` copies each folder and not just its contents; the skills directory is created first, so that the first copy does not become the directory itself. Restart Claude Code so it picks up the new skills. Once a team's layer has run, take its roundtable off the skip list. The deep-reading records (`DEEP-READING.md`) and the team READMEs stay in the repository, so links to them from an installed skill work only in a checkout.
 
 The NLP and DFO roundtables share generic triggers ("ask the team", "convene the roundtable", "what would the team do") with each other and with any other team skill you may have installed, so name the one you want ("Optimization Council", "DFO roundtable", "nonlinear-roundtable"); another installed skill that answers to the same team name, such as "DFO team", may take the request first. A guest that is not installed is named and left out, never improvised; Bertsimas's skill without the roundtable says so and gives only the agenda.
