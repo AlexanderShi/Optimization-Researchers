@@ -32,7 +32,10 @@
 
 在 02-schools 的五张图里，来源标为新提出的、署有他名字的工作落在三格：B（基更新——与 Hall 的 APF、MPF、CFT）、C（定价——LiDSE 与超稀疏性提升的诠释；over-weighting 与 Hall 合作）、
 E（并行——PAMI 与 SIP）。在 A（对偶 vs 原始）与 D（比率检验）两格他是集成者而非发明者：DSE、BFRT、Harris、EXPAND、扰动、对偶 phase I 都取自前人（F7），
-他的增量在实现层——离基行 DSE 权重核查、Harris 组与 BFRT 的结合、BOXED 变量在 phase I 中的处理 [LP-S1 §3.2.2–§3.2.4, PDF pp. 54–60]。
+他的增量在实现层，如离基行 DSE 权重核查（更新值小于重算值的 0.5 倍就放弃这次选择、重做 CHUZR）[LP-S1 §3.2.2, PDF pp. 54–55]。原文核对：Harris 组与 BFRT 的结合，
+Koberstein 2005 已有算法实现（Alg. 18），并自称受 COIN LP 启发、与 Clp 的 dualColumn 相似 [LP-S60 PDF pp. 92, 117]；phase I 中 BOXED（与 FIXED）变量不参与、
+靠翻界取得对偶可行，也已明写在 Koberstein 2005 的子问题法里（§4.1.2，Alg. 8 第 1 步）[LP-S60 PDF pp. 53–54, 56]。论文对这两点都没有自称首创，
+只说 Koberstein–Suhl 2007 年文对后一点 "not clearly expressed" [LP-S1 §3.2.3–§3.2.4, PDF pp. 58–60]（2007 年文未读），所以不能把它们记作他的增量。
 
 ## 核心贡献（逐条带锚点）
 
@@ -40,7 +43,7 @@ E（并行——PAMI 与 SIP）。在 A（对偶 vs 原始）与 D（比率检�
 - 线性代数：实现 Suhl–Suhl 稀疏 LU [LP-S1 §2.2.6, PDF p. 28]；为置换因子写出两阶段 DFS 超稀疏求解的伪代码（论文称 Gilbert–Peierls 只简略提过）
   [LP-S1 §2.3.3, PDF pp. 32–33]；写出维护行式表示与超稀疏结构的 FT 更新实现，论文称此前 "never been documented" [LP-S1 §2.4.3, PDF p. 36]。
 - 对偶算子：离基行 DSE 权重核查（r = 0.5）与对偶超稀疏 CHUZR [LP-S1 §3.2.2, PDF p. 55]；BFRT 与 Harris 组的结合、对偶 EXPAND 零步、Koberstein 扰动的
-  简化不加权版 [LP-S1 §3.2.3, PDF pp. 58–59]。
+  简化不加权版 [LP-S1 §3.2.3, PDF pp. 58–59]——这些是 HSOL 实现了什么，不是首创（Harris 组与 BFRT 的结合见上一节的原文核对）。
 - 质量：论文称与 Clp 的对偶单纯形 comparable（LP-R11）；期刊版测得 hsol 比 Clp 1.15 快 2.29 倍（LP-R10）。
 
 ### 2. 三种基更新：APF、MPF、CFT [LP-S5; LP-S1 §2.5]
@@ -73,12 +76,14 @@ E（并行——PAMI 与 SIP）。在 A（对偶 vs 原始）与 D（比率检�
   Shu 的高加速来自老式 PRICE [LP-S1 §4.1.2, PDF p. 73]。
 
 ### 心智模型 2 为暴露并行而换用（稍劣的）算法变体，再用控制机制补回损失 ✅三重通过
-- **跨域复现**：定价层——复活被遗忘的 suboptimization，只为取得任务并行，并用 ψ 截断控制候选质量 [LP-S2 §2.3, §3.3, PDF pp. 8, 13–14]；线性代数层——设计 APF
+- **跨域复现**：定价层——重新启用在现代实现中作为定价规则已 "largely forgotten" 的 suboptimization（同段也说原始 suboptimization 支撑了 Hall–McKinnon 的
+  并行工作 [LP-S2 §2.3, PDF p. 8]；原文核对：Wunderling 1996 的并行实现也用过一次选多个下标的 block pivoting，并在对偶单纯形上测量 [LP-S50 PDF pp. 120–122, 176–177]），
+  只为取得任务并行，并用 ψ 截断控制候选质量 [LP-S2 §2.3, §3.3, PDF pp. 8, 13–14]；线性代数层——设计 APF
   让多个 FTRAN 合成一次、设计 CFT 让 minor iterations 之后仍能用 FT [LP-S5 §3.1.1, §3.2, PDF pp. 7–12]；对照方案 SIP 不换变体，只能取单次迭代内的有限并行
   [LP-S1 §4.4.1, PDF p. 90]。
 - **生成力**：面对一条串行依赖链，他会问：有没有代数上等价或略劣的变体能暴露并行，再用什么控制补回？可检验：论文为串行的 INVERT 提出「后台分解 + FT 追赶」
   的重叠方案 [LP-S1 ch. 5, PDF p. 95]。
-- **排他性**：与 Bixby–Martin 只并行常规方法组件的路线相对 [LP-S52，据 LP-S2 §2.2.4, PDF p. 6]，也与「suboptimization 已被淘汰」的通行看法相对
+- **排他性**：与 Bixby–Martin 只并行常规方法组件的路线相对 [LP-S52，据 LP-S2 §2.2.4, PDF p. 6]，也与「在现代修正单纯形实现里，suboptimization 作为定价规则已基本被遗忘」的通行看法相对
   [LP-S2 §2.3, PDF p. 8]。
 
 ### 心智模型 3 从意外的计算现象出发，用剖面找机制，再把机制做成新技巧 ✅三重通过

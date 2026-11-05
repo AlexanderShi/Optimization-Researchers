@@ -39,7 +39,7 @@
 - **语料怎么说**：论文只说 PAMI 与 Cplex 的对偶单纯形 comparable（performance profile），期刊只说 pami8 与 sip8 中较好者在多数测试题上与 Cplex 12.4 comparable（LP-R8）；
   论文第 5 章的总结把串行 HSOL 对标 Clp（comparable）、把并行 PAMI 对标 Cplex [LP-S1 ch. 5, PDF p. 94]；ERGO-13-001 表 2 有许多题 cplex 快得多（CRE-B 2.1 s vs hsol 6.4 s；
   SGPF5Y6 7.9 vs 180.2）（LP-R11）；LiDSE 系列只在 pds-30 到 pds-100 上与 Cplex 相当，只有指数 1.2 的变体逐题快于 Cplex（LP-R18）；「hsol 比 Clp 快 2.29 倍」是期刊版对
-  Clp 1.15、无预处理与 crash 的结果（LP-R10），不是论文的结论。
+  Clp 1.15、无预处理与 crash 的结果（LP-R10），不是论文的结论；关掉 crash 也就关掉了 Galabova–Hall 称对 Clp 默认路径贡献显著的 Idiot crash（LP-R10）。
 
 ## F6 把 pds / 网络专用技巧推广到一般 LP
 - **错误说法**：「LiDSE 普遍优于 DSE」「over-weighting 就是 1-范数 steepest edge」「成本扰动在任何 LP 上都会提升超稀疏性」「partial CHUZR 总能加速」「三种技术合用总是最好」。
@@ -49,14 +49,19 @@
   KEN-18 一题（「分歧」6）；组合技术在 pds-100 与 neos1 上的迭代与时间因子低于单用扰动（LP-R20）。
 
 ## F7 把背景技术的发明权记到 Huangfu（或 Hall–Huangfu）名下
-- **错误说法**：DSE、BFRT、Harris 检验、超稀疏求解、FT 及其 BTRAN 捷径、suboptimization、成本扰动、partial CHUZR、对偶 phase I、稀疏 LU，或对偶单纯形本身，是他们的发明。
+- **错误说法**：DSE、BFRT、Harris 检验、Harris 检验与 BFRT 的结合、超稀疏求解、FT 及其 BTRAN 捷径、suboptimization、成本扰动、partial CHUZR、对偶 phase I
+  （含其中 BOXED 变量的处理）、稀疏 LU，或对偶单纯形本身，是他们的发明。
 - **语料怎么说**（均据一手来源的署名；标「原文核对」「源码核对」的据 2026-11-05 补读的原文与源码）：DSE—Forrest–Goldfarb [LP-S28]；BFRT—Fourer [LP-S29]
   （原文核对：Koberstein 据 Kostina 称其基本思想 1979 年已由 Gabasov 等在俄文文献中首发 [LP-S61, LP-S62，据 LP-S60 PDF pp. 18, 41]）；两遍比率检验与 Devex—Harris [LP-S26]；
-  超稀疏性—Hall–McKinnon [LP-S45]，DFS 三角求解—Gilbert–Peierls [LP-S44]；FT—Forrest–Tomlin [LP-S37]，省去额外部分 BTRAN—Tomlin (1974) [LP-S38]；suboptimization—Rosander [LP-S47]；
+  Harris 检验与 BFRT 的结合—期刊版把两者的实现细节引向 Koberstein [LP-S23，据 LP-S2 §2.2.2, PDF p. 5]（原文核对：Koberstein 2005 的 Alg. 18 已是两者结合的实现，
+  自称受 COIN LP 启发 [LP-S60 PDF pp. 92, 117]）；
+  超稀疏性—Hall–McKinnon [LP-S45]（原文核对：其获奖公告称 CPLEX 与 Edinburgh 组各自独立识别并利用了它，线性方程组中的同一现象 Gilbert–Peierls 1988 年
+  已指出 [LP-S63 PDF p. 2]），DFS 三角求解—Gilbert–Peierls [LP-S44]；FT—Forrest–Tomlin [LP-S37]，省去额外部分 BTRAN—Tomlin (1974) [LP-S38]；suboptimization—Rosander [LP-S47]；
   成本扰动—Koberstein 与 Clp [LP-S23; LP-S8 PDF p. 7]（源码核对：按列非零数加权的版本 Clp 2003-10 已有 [LP-S55 ClpSimplexDual.cpp l. 3131–3193 @29f4248e63e3]；
   原文核对：Koberstein 2005 称其扰动与 COIN LP 的相似 [LP-S60 PDF p. 98]）；partial CHUZR—Clp（作者不知有发表文献 [LP-S7 §4, PDF p. 5]；源码核对：它是 Clp 对偶 CHUZR 的默认
   （mode 3，先只扫一部分、可转为全扫）[LP-S55 src/ClpSimplex.cpp l. 162; src/ClpDualRowSteepest.hpp l. 81–87 @874465237db8]；原文核对：Koberstein 2005 §8.2.2.3 已发表
-  [LP-S60 PDF p. 117]）；对偶 phase I—Koberstein–Suhl [LP-S24]；稀疏 LU—Suhl–Suhl [LP-S33]；对偶单纯形—Lemke [LP-S21]。
+  [LP-S60 PDF p. 117]）；对偶 phase I—Koberstein–Suhl [LP-S24]（原文核对：boxed 与 fixed 变量不参与 phase I、靠翻界取得对偶可行，Koberstein 2005 已明写
+  [LP-S60 PDF pp. 53–54, 56]；论文只说 2007 年文对此 "not clearly expressed" [LP-S1 §3.2.4, PDF p. 60]）；稀疏 LU—Suhl–Suhl [LP-S33]；对偶单纯形—Lemke [LP-S21]。
   来源自称新的只有：APF、MPF、CFT [LP-S5 §3.1, PDF p. 6]；超稀疏性提升的诠释与 LiDSE [LP-S1 §3.3]；over-weighted CHUZR（Hall 与 Huangfu 的幻灯片）[LP-S8 PDF pp. 23, 27]；
   PAMI 与 SIP 的设计 [LP-S1 ch. 4; LP-S2]；置换因子上的 DFS 伪代码，以及维护行式与超稀疏结构的 FT 实现文档 [LP-S1 §2.3.3, §2.4.3, PDF pp. 32–38]。
 

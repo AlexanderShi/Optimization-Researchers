@@ -111,8 +111,11 @@
   （极端值 ns1688926 为 0.07、dbic1 为 0.11），折算后 hsol 的迭代速度是 Clp 的 1.60 倍；作者结论 hsol 是高质量的对偶修正单纯形
   求解器；图 3 的 profile 中 pami8 优于 hsol，hsol "generally superior" 于 Clp [LP-S2 §5.2, PDF pp. 21–22]。
 - **假设**：Clp 1.15 [LP-S55]，无预处理、无 crash；30 题参考集；硬件同 LP-R4；正文说 2.29 依据表 6，但表 6 无 Clp 列（与表 5 的
-  时间相符，读者核对），照原文记录。
-- **状态**：verified-web: computational result reported in [LP-S2] (§5.2, Fig. 3, PDF pp. 21–22)
+  时间相符，读者核对），照原文记录。不开预处理与 crash 是因为 hsol 与 pami 没有这两样；Clp 用的是对偶单纯形还是由它自选，期刊版没说 [LP-S2 §5.2, PDF p. 21]。
+  原文核对：Galabova–Hall 用 Clp 1.16.10 在同一 30 题参考集上（以 qap15 代 dcp2、nug15 代 nug12；都先做 presolve）测得，默认 Clp 只在 10 题选原始单纯形，
+  并总先做 Idiot crash，其中一半 Idiot 让原始单纯形加速至少 2.5 倍，作者据此称 Idiot crash 对 Clp 的最终表现贡献显著 [LP-S66 arXiv v1 PDF pp. 6–7]。
+  所以 2.29 是相对关掉预处理与 crash 的 Clp 1.15，不是相对 Clp 的默认路径；两文的版本、预处理与硬件都不同，不能用来换算 2.29。
+- **状态**：verified-web: computational result reported in [LP-S2] (§5.2, Fig. 3, PDF pp. 21–22)；原文核对（2026-11-05）：[LP-S66] arXiv v1（PDF pp. 6–7）
 - **层级**：verified-web。
 
 ## LP-R11 hsol 与 clp、cplex：更新论文中的串行对照，及论文图 3.6

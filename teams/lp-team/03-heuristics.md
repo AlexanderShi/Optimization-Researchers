@@ -48,10 +48,20 @@
   EXPAND 的严格零步（对偶形式：入基时把其 reduced cost shift 到零，离基时撤销）[LP-S30，据 LP-S1 §3.2.3, PDF pp. 58–59]；(e) bound tightening
   （presolve 的特例；来源称小心实现时不需要 postsolve）让更多变量成为 BOXED，既利于 BFRT，又能用翻界取得对偶可行、跳过 phase I——实现细节来源略去
   [LP-S1 §3.2.3–§3.2.4, PDF pp. 58, 60]；(f) 对偶 phase I 用 Koberstein–Suhl 子问题法 [LP-S24]：BOXED 与 FIXED 设为 [0, 0]（翻界总能让 BOXED 对偶可行），
-  LOWER [0, 1]、UPPER [−1, 0]、FREE [−1000, 1000]，于是子问题恒可行 [LP-S1 §3.2.4, Table 3.4, PDF p. 60]。
+  LOWER [0, 1]、UPPER [−1, 0]、FREE [−1000, 1000]，于是子问题恒可行 [LP-S1 §3.2.4, Table 3.4, PDF p. 60]。原文核对：Koberstein 2005 的子问题
+  对 LOWER、UPPER 的界相同，FREE 先是 [−1, 1]、实现中改为 [−10^4, 10^4]（给 free 变量 10^4 的权重，好让它们入基），boxed 与 fixed 变量不参与 phase I
+  [LP-S60 PDF pp. 54–56]——±1000 是 HSOL 的取值，Koberstein–Suhl 2007 年文 [LP-S24] 取何值未核；把 BOXED 翻界后排除在外也已明写在 2005 年论文里，
+  不是 HSOL 的发明（F7）。
 - **简化的代价**：HSOL 在没有 BOXED 非基变量时也照走 BFRT 流程以复用代码；论文承认更讲究的代码此时应改用常规（Harris）比率检验 [LP-S1 ch. 5, PDF p. 95]。
+- **别的 phase I 做法**（本队一手来源只说历来有许多种 [LP-S1 §3.2.4, PDF p. 60]）：原文核对：Koberstein 2005 另述 big-M、artificial bounds（一阶段做法；
+  他们最早的对偶单纯形用过，因 M 难定而弃用）、cost modification（平移对偶不可行变量的成本、使其约化成本为零，结束时可能要接原始单纯形；SoPlex 所用）与 Pan 的方法
+  （无收敛证明）[LP-S60 PDF pp. 53, 61, 63]；在 46 个起始全逻辑基对偶不可行、只靠翻界修正不了的题上，Pan 加子问题回退（Pan+SP）总 CPU 时间 8521.1 s、
+  子问题法 9254.9 s、cost modification 11625.8 s，纯 Pan 有 3 题得不到对偶可行基；作者结论是 Pan+SP 整体最好、对子问题法只略占优，cost modification 近 25%
+  的迭代落在原始单纯形 [LP-S60 PDF pp. 134–136]。源码核对：Clp 的对偶单纯形不分两阶段，头文件注释称它是 single phase approach——把对偶可行的权重
+  updatedDualBound_ 当作假界，上下界之差小于它的变量直接翻界，否则在离一个界 updatedDualBound_ 处设假界；结束时若假界还起作用就加大它再继续
+  [LP-S55 src/ClpSimplexDual.hpp l. 31–43 @874465237db8]（与 Koberstein 所说的 artificial bounds 同类，这是本语料的归类）。选哪种：语料只有 Koberstein 的这一组比较。
 
-## H6 成本扰动：当算法手段用，但管住尺度与适用面
+## H6 成本扰动：管住尺度，收益按问题族验证
 - **场景**：退化严重，或想复现 pds 类问题上的大幅提速。
 - **规则**：(a) 对偶单纯形开始前随机扰动结构变量的成本，符号按变量类型定，幅度结合自身成本、最大成本与对偶容差——HSOL 用 Koberstein 方案的简化不加权版
   [LP-S1 §3.2.3, PDF p. 59; LP-S23]；(b) 最优后移除扰动，残余的微小对偶不可行用原始 phase II 清理 [LP-S1 §3.2.3, PDF p. 59; LP-S8 PDF p. 7]；

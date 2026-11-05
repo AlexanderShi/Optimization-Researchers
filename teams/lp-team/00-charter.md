@@ -32,10 +32,13 @@
 - 原始单纯形的内部：只作背景（traditional variant、用于清理的 primal phase II）。
 - 闭源求解器内部：FICO Xpress、COPT、Cplex 的实现细节，公开来源只到「PAMI 思想被采纳」与参数层面（F3）。
 - presolve、crash、scaling 的细节：bound tightening 的细节被论文略去 [LP-S1 §3.2.3, PDF p. 58]；hsol 的 presolve 与 crash 只有署名 [LP-S14 PDF p. 5]。
+  Clp 的 Idiot crash 只有勘误补读的 Galabova–Hall 预印本所读几页（用途与在 30 题参考集上的效果）与源码注释 [LP-S66 arXiv v1 PDF pp. 1–2, 6–7;
+  LP-S55 src/Idiot.hpp l. 31–38 @874465237db8]，只用来说明 LP-R10 的比较口径；算法细节与理论未覆盖。
 - 2018 年以后 HiGHS 单纯形的演进：只有 README 与 highs.dev 的 2026-10-27 快照 [LP-S18; LP-S19]。
 - GPU 单纯形：只有 2010–2011 年 Smith 的稠密实验，且不是 Huangfu 的工作（F12）。
 - 时间：语料截至 2026-10-27，之后的文献未覆盖。2026-11-05 勘误时补读了 LP-S22（技术报告版）、LP-S50、LP-S52 的预印本、LP-S55 的源码与新增的 LP-S60
-  所注的页、行与提交（01-canon 说明）；只读了这些部分，这些文献的其余内容仍未覆盖。
+  所注的页、行与提交（01-canon 说明）；同日第二轮又补读了 LP-S60 的另几页、LP-S55 的另两个源文件，并新增 LP-S63–S67 的所注页码。只读了这些部分，
+  这些文献的其余内容仍未覆盖。
 
 ## 与其他团队的关系
 
