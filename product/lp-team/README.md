@@ -11,7 +11,7 @@
 
 Research-craft skills distilled from the public work of Qi Huangfu, plus a roundtable skill that convenes them on your problem.
 
-Field: linear programming solver engineering, centred on the revised simplex method and above all the dual revised simplex method (pricing and CHUZR, bound-flipping ratio tests, dual steepest edge, sparse LU factorization and its updates, hyper-sparsity, parallel simplex) as built into research and production LP solvers; interior-point / barrier, first-order (PDLP-type) LP, crossover, presolve-centred and MIP traditions are not yet represented by a member.
+Field: linear programming solver engineering, centred on the revised simplex method and above all the dual revised simplex method (pricing and CHUZR, bound-flipping ratio tests, dual steepest edge, sparse LU factorization and its updates, hyper-sparsity, parallel simplex), together with the primal simplex, start bases and crash, sifting, and the measurement of production LP codes on real models, as built into research and production LP solvers; MIP enters only through the MIP craft of two members who also sit in the MILP Team (John J. H. Forrest: Cbc and earlier MIP codes; Robert E. Bixby: CPLEX and Gurobi MIP progress measurement), not as the team's centre; interior-point / barrier, first-order (PDLP-type) LP, crossover and presolve are not the centre of any member's work.
 
 [TODO: one sentence on scope: which tradition of the field this selection follows, and which neighbouring traditions are not represented; from the T0 scope decision; team-layer.js (T2)]
 
