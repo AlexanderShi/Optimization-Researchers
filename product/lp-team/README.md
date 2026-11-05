@@ -20,6 +20,8 @@ Field: linear programming solver engineering, centred on the revised simplex met
 | Member | Lens · known for | Status |
 |--------|------------------|--------|
 | [Qi Huangfu](qi-huangfu/SKILL.md) | lens: [TODO] | T0 scaffold |
+| [John J. H. Forrest](john-j-h-forrest/SKILL.md) | lens: [TODO] | T0 scaffold |
+| [Robert E. Bixby](robert-e-bixby/SKILL.md) | lens: [TODO] | T0 scaffold |
 | `lp-roundtable` | Convenes the members to discuss your problem and produce a plan | roundtable |
 
 [TODO: after T1, replace each "lens: …" cell with the member's one-line lens and what they are known for (signature works, software, books), and each status cell with the member's stage from `python3 scripts/team_status.py product/lp-team`; mark any member with a **student mode** (proof playbook, open problems, reading path, pre-meeting review); team-layer.js (T2), refreshed by team-integrate.js (T3.8). Then delete this line.]
