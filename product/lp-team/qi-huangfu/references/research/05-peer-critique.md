@@ -5,7 +5,7 @@
 | Researcher | Qi Huangfu. PhD University of Edinburgh 2013 ("High performance simplex solver", advisor J. A. J. Hall); original author of HSOL, the dual revised simplex code that became the simplex core of HiGHS; at FICO (Xpress simplex) by May 2014 and on FICO-affiliated slides in 2016–2017; co-author of the COPT User Guide (Cardinal Operations) from 2022 and Cardinal Operations affiliation on cuPDLP-C (2023/24). Not the Zhejiang University medical researchers of the same name |
 | Dimension | Research agent 05 of 06: peer critique. Covers outside objections, self-conceded limits, the fate of his code in the successor solver, benchmark evidence, rival schools, misreadings by citers, and how each was answered |
 | Research date | 2026-10-27 |
-| Sources consulted | 44 (27 primary, 17 secondary), listed under "Sources" |
+| Sources consulted | 44 (27 primary, 17 secondary), listed under "Sources", plus source 45, reopened on 2026-11-05 for the corrections marked in the text |
 | WebSearch calls | 1 (of 5 allowed) |
 | User-supplied material | None. `references/sources/{papers,talks,essays,software}/` hold only `.gitkeep`. `private/` was not opened. **Nothing in this file is from user-supplied material.** |
 | Transcripts saved | None by this agent. One caption transcript saved in this run by another agent (JuliaCon 2022) was read and is cited in §9. Slide decks stay unsaved because they are copyrighted |
@@ -109,6 +109,7 @@ Paywalled texts without a legal open copy were not read, and no login or paywall
 
 - [stated, P] **Diagnosis of earlier codes (thesis pp. 75–76).** He explains the poor speed-up of earlier parallel revised simplex codes by three causes:
   - "1. Limited parallelization": Bixby and Martin's parallel components account for "less than 35%", "so that by Amdahl's Law, the best possible speedup is limited to 1.5 on average".
+    - **Correction (original reopened 2026-11-05):** the 35% and the 1.5 come from the thesis's own profile of its solver (Table 4.3, thesis pp. 75–77), not from Bixby and Martin's code. Their own CPLEX profile puts the steps they parallelised at 24.0% of the work for pilots and 97.3% for aa300000 (source 45, PDF pp. 5–6; the entries of their Table 1 sum to 97.6%). Their shared-memory version measured 4-processor speed-ups from 1.1 to 5.3, and they report that aa300000 "exceeded ideal speedup" (source 45, PDF pp. 18–19). The bound describes his solver, not a measurement of theirs.
   - "2. Inferior pivoting rule and memory bound": "when many ftran (or btran) operations are performed in parallel, the competition for memory access will highly limit the parallelization efficiency".
   - "3. Cheap computational components".
 - [inferred] The three causes he names for **others'** codes are the same bounds that later limit PAMI: memory, the serial share, and cheap components. They are spelled out in the next three bullets.
@@ -122,7 +123,7 @@ Paywalled texts without a legal open copy were not read, and no login or paywall
   - The live page adds on threads: "it is unlikely to be more than eight due to most computation in HiGHS being memory-bound."
   - Issue #477 (2021-03-03): "At best, speed-up is limited to the number of memory channels, rather than the number of cores." In the same comment he says parallel dual simplex was "available in HiGHS under Linux - only, I think, due to problems using OpenMP on Windows (and Mac?)". That is a portability cost of the original OpenMP design.
   - Issue #1192 (2023-03-03): "Parallel simplex is generally only a little faster, and will reduce beyond 4-8 threads."
-- [inferred] **The scope narrowed toward the rival's regime.** The HiGHS rule ("significantly more variables than constraints") is the n ≫ m regime in which Bixby and Martin's data-parallel PRICE already gave "significant speed-up" (ICCOPT13 slide 9: "When n ≫ m significant speed-up was achieved — Bixby and Martin (2000)"). The general-purpose ambition of PAMI ("general large scale sparse" LPs, MPC abstract) has, in the successor code, been scoped back to the rival's niche.
+- [inferred] **The scope narrowed toward the rival's regime.** The HiGHS rule ("significantly more variables than constraints") is the n ≫ m regime in which Bixby and Martin's parallel dual already gave "significant speed-up" (ICCOPT13 slide 9: "When n ≫ m significant speed-up was achieved — Bixby and Martin (2000)"). The general-purpose ambition of PAMI ("general large scale sparse" LPs, MPC abstract) has, in the successor code, been scoped back to the rival's niche. **Correction (original reopened 2026-11-05):** their parallelism was not PRICE alone. The distributed versions parallelised Pricing, Ratio, Pivot and Update-d, and the shared-memory version also Enter (CHUZR) and the update of the row-wise A_N (source 45, PDF pp. 6, 16). The n ≫ m condition is their own: they expected no significant gains unless the ratio of variables to constraints is large (PDF p. 6).
 - [practice] **Planned fix not found.** The thesis future work (p. 94) proposed overlapping INVERT: "One reason for the relative poor speedup of PAMI is that the time-consuming sequential LU factorization is not overlapped with the simplex iterations." A keyword search of HiGHS master (catch-up / overlapped invert) found no implementation. Whether Xpress or COPT did it is **not known** (closed source).
 
 ---
@@ -250,10 +251,11 @@ Paywalled texts without a legal open copy were not read, and no login or paywall
 
 ### 8.1 Bixby–Martin data-parallel dual simplex (CPLEX, 2000)
 - [stated, P] **Huangfu's critique of the rival.**
-  - Thesis p. 76: Amdahl bound of 1.5.
+  - Thesis p. 76: Amdahl bound of 1.5 (corrected 2026-11-05: computed from the thesis's own profile, not theirs; see §3).
   - MPC p. 120: "their implementation included neither the BFRT nor hyper-sparse linear system solution techniques".
   - MPC p. 132: "parallelised only the spmv, chuzc and update-dual operations, having rejected the task parallelism of ftran and ftran-dse as being computationally disadvantageous".
-- (S) Bixby & Martin, "Parallelizing the Dual Simplex Method", INFORMS J. Comput. 12(1) (2000) 45–56, DOI 10.1287/ijoc.12.1.45.11902; only the abstract was read. No reply by Bixby or Martin to Huangfu was found.
+    - **Correction (original reopened 2026-11-05):** "only" is too narrow. The preprint (source 45) parallelised these steps (its Pricing, Ratio, Pivot and Update-d) and, in the shared-memory version, also Enter (CHUZR) and the update of the row-wise A_N (PDF pp. 6, 16). The FTRAN/FTRAN-DSE split was tried, not set aside on paper: serial CPLEX already solved both systems in one traversal of the LU factors, which saves work and uses the cache well, and their attempts to split the two solves across processors "resulted in a degradation in performance" (PDF pp. 4–5, 18).
+- (S) Bixby & Martin, "Parallelizing the Dual Simplex Method", INFORMS J. Comput. 12(1) (2000) 45–56, DOI 10.1287/ijoc.12.1.45.11902; only the abstract was read. Their December 1995 preprint (source 45) was read on 2026-11-05 for the corrections above. No reply by Bixby or Martin to Huangfu was found.
 - [inferred] See §3: the HiGHS guidance now confines the parallel solver's useful regime to roughly where the rival's approach already worked (n ≫ m).
 
 ### 8.2 Parallel search paths (Tar, Stágel, Maros; Pannon/Szeged school)
@@ -453,3 +455,4 @@ One line each: title, author(s), date, identifier or URL, primary/secondary. "Re
     - arXiv API;
     - Wayback CDX, https://web.archive.org/cdx/search/cdx;
     - one WebSearch (locating the 2014 blog republication on KDnuggets).
+45. Bixby, Martin, "Parallelizing the Dual Simplex Method", ZIB Preprint SC-95-45 (December 1995), https://opus4.kobv.de/opus4-zib/files/211/SC-95-45.pdf, read in full on 2026-11-05 for the corrections marked in §3 and §8.1; pages cited are PDF pages (preprint of source 28)
