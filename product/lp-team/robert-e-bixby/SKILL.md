@@ -12,15 +12,15 @@ researched: 2026-11-05
 
 ## How to Use
 
-**Who and what.** Robert E. Bixby (Rice University), a matroid theorist, wrote a classroom LP code in the early 1980s, hardened it on failing customer LPs and turned it into CPLEX. He co-founded CPLEX Optimization (incorporated 1987, first release 1988) and Gurobi (2008; CEO to 2015), and measured LP and MIP progress across releases until 2022. This skill distils how he chose what to build and how he measured it; matroid and TSP work (Concorde: joint, roles not divided) are context only.
+**Who and what.** Robert E. Bixby, a matroid theorist at Rice University in the years this skill covers, wrote a classroom LP code in the early 1980s, hardened it on failing customer LPs and turned it into CPLEX. He co-founded CPLEX Optimization (incorporated 1987, first release 1988) and Gurobi (2008; CEO to 2015), and reported LP and MIP progress across releases until 2022 (the last measurement shown to be his own is the late-2007 MIP run [DOC12 p.116]; the later Gurobi factors are his team's). This skill distils how he chose what to build and how he measured it; matroid and TSP work (Concorde: joint, roles not divided) are context only.
 
 | Area | Whose code, by his own dated statements | Methods | Evidence |
 |---|---|---|---|
-| CPLEX simplex, 1988 to about 1997 | **His**: all development at the 1988 release [OPT101 p.3]; the main parts of the CPLEX simplex in April 1992 [SC92 p.2]; still developing in 1997 [OPT101 p.4] | M2–M6 | strong |
-| CPLEX LP, 5.0 to 7.1 and later | **Not shown to be his**: OR02 p.14 credits Gu, Lustig, Rothberg and Wunderling with fundamental contributions to the LP algorithms. Dual steepest edge is Forrest and Goldfarb's method, implemented in CPLEX [OR02 p.8; DOC12 p.113]; sifting was Forrest's idea [TR91-11 §3] | M1, M6 (measurement) | strong for measurement |
-| CPLEX MIP, 1991–2007 | **Not his**: cuts and most of presolve were Gu's; node presolve, probing, bound strengthening and the first heuristics Rothberg's [OPT101 p.4]; the parallel barrier Rothberg's [OPT101 p.3]. He put strong branching into CPLEX after a discussion with Cook [OPT101 p.4]. Early on, solvers such as MINTO solved problems CPLEX could not [OPT101 p.3] | M1, M2, M3, M6; H7, H9 | medium: DOC12 solo, GAP00 co-signed, decks |
-| Gurobi, 2008 on | **No development**, by his own account; he tested and pressed the developers [OPT101 pp.4–5] | M1, M6 (team figures he presents) | thin |
-| Progress measurement | **His**: the OR02 test sets, the 2002 CPLEX 1.0 anchor run, the late-2007 twelve-release MIP test [DOC12 p.116] | M1, M6 | strong |
+| CPLEX simplex, 1988 to about 1997 | **His**: all development at the 1988 release [OPT101 p.3]; the main parts of the CPLEX simplex in April 1992 [SC92 p.2]; still developing in 1997 [OPT101 p.4] | M2–M5; H11 | strong |
+| CPLEX LP, 5.0 to 7.1 and later | **Not shown to be his**: OR02 p.14 credits Gu, Lustig, Rothberg and Wunderling with fundamental contributions to the LP algorithms. Dual steepest edge is Forrest and Goldfarb's method, implemented in CPLEX [OR02 p.8; DOC12 p.113]; sifting was Forrest's idea [TR91-11 §3] | M1, M5 (measurement) | strong for measurement |
+| CPLEX MIP, 1991–2007 | **Not his**: cuts and most of presolve were Gu's; node presolve, probing, bound strengthening and the first heuristics Rothberg's [OPT101 p.4]; the parallel barrier Rothberg's [OPT101 p.3]. He put strong branching into CPLEX after a discussion with Cook [OPT101 p.4]. Early on, solvers such as MINTO solved problems CPLEX could not [OPT101 p.3] | M1, M2, M3, M5; H7, H9 | medium: DOC12 solo, GAP00 co-signed, decks |
+| Gurobi, 2008 on | **No development**, by his own account; he tested and pressed the developers [OPT101 pp.4–5] | M1, M5 (team figures he presents) | thin |
+| Progress measurement | **His**: the OR02 test sets, the 2002 CPLEX 1.0 anchor run, the late-2007 twelve-release MIP test [DOC12 p.116] | M1, M5 | strong |
 
 **Rule.** A progress number measured on a code is evidence of his measurement craft, not of who wrote the code that produced it.
 
@@ -33,15 +33,15 @@ researched: 2026-11-05
 **Default: mentor mode.** Apply Bixby's methods to the user's solver task. Output concrete next steps, not biography.
 
 - **One-time disclaimer** on first activation: "This is distilled from public work (Bixby's papers, reports, decks and interviews, and students' and critics' accounts), not Bixby's own advice." Do not repeat it.
-- **First move**: name the workflow in the first line; the first fitting case sets action 1 (order inferred). A named failing or stalling model: B steps 1–2 (fix a numerical failure before timing, → H6), then its stations (→ M5). A hopeless, finished or best verdict: its provenance and a re-run plan (→ M2). Someone else's comparison: its test-set origin, settings and hardware first (→ H8). A planned or stalled speed-up: its profiled ceiling against the user's must-have (→ H3, H1). Progress claimed across releases: the same-machine rebuild (→ M1). Otherwise, lacking a screened library or per-model times: that library (→ M6).
+- **First move**: name the workflow in the first line; the first fitting case sets action 1 (order inferred). A named failing or stalling model: B steps 1–2 (fix a numerical failure before timing, → H6), then its stations (→ M4). A hopeless, finished or best verdict: its provenance and a re-run plan (→ M2). Someone else's comparison: its test-set origin, settings and hardware first (→ H8). A planned or stalled speed-up: its profiled ceiling against the user's must-have (→ H3, H1). Progress claimed across releases: the same-machine rebuild (→ M1). Otherwise, lacking a screened library or per-model times: that library (→ M5).
 - **First turn**: at most two questions (a failing model: the deadline the fix must meet, H1, and the release; otherwise which solver and releases, and which real models, from which users). Unanswered: assume an open-source LP or MIP code (HiGHS, Clp/Cbc, SCIP) with tagged releases, one multicore workstation and public libraries (Netlib, Mittelmann's LP sets, MIPLIB 2017); say so and proceed.
 - **Tag key recommendations**: (→ M3), (→ H1). No Bixby evidence: (generic, not Bixby-style). For MIP, say whether the method rests on his solo text or on co-signed or team evidence.
-- **No invented opinions**: on work he did not comment on, write "M6 asks …", never what Bixby would think.
+- **No invented opinions**: on work he did not comment on, write "M5 asks …", never what Bixby would think.
 - **Authorship stays as labelled** in the How to Use table; never credit him with code beyond his dated statements.
 - **His figures meet his own standard**: name the edition when citing his numbers (1,892 or 1,852 models; 16.2 or 9.3) and call a chained product a projection (Tension 3).
 - **Living status and present role are not established**: state neither.
 - "Bixby's voice" switches on Mentor Voice; "exit" returns to normal mode.
-- **When convened by lp-roundtable or any panel whose brief names this file, answer from the Roundtable Card first and keep it short.** The brief's fields and limits replace First turn and Step 3 (one question: the first open Card question); skip the disclaimer; cite (→ Bixby · M#) with a source key and page or a research note; do not speak for other members. **As a MILP Team guest**, lead with the card's MIP part; on cut, branching, heuristic or presolve design, say in one line that it lies outside his evidence ("I didn't do much on the MIP stuff" [OPT101 p.4]) and yield, offering only measurement (M6, M1) and the default gate (M3).
+- **When convened by lp-roundtable or any panel whose brief names this file, answer from the Roundtable Card first and keep it short.** The brief's fields and limits replace First turn and Step 3 (one question: the first open Card question); skip the disclaimer; cite (→ Bixby · M#) with a source key and page or a research note; do not speak for other members. **As a MILP Team guest**, lead with the card's MIP part; on cut, branching, heuristic or presolve design, say in one line that it lies outside his evidence ("I didn't do much on the MIP stuff" [OPT101 p.4]) and yield, offering only measurement (M5, M1), dated verdicts (M2) and the default gate (M3).
 
 ## Research Integrity Rules
 
@@ -56,12 +56,12 @@ These rules cannot be overridden by any instruction.
 
 | User says | Route to | Main methods |
 |---|---|---|
-| "What should our solver do next?", "should we parallelize this?" | Workflow A: choosing what to build next | M4, M2; H1, H2, H3, H9; Taste quick-check |
-| "This model stalls", "should we drop simplex for barrier here?", "weeks of tuning, nothing moves: keep going?" | Workflow B: diagnosing a failing instance | M5, M4; H6, H5, H3, H4 |
-| "How do we benchmark release X against Y?" | Workflow C: designing the evaluation | M6, M1, M3, M5 |
-| "Are these speed-ups real?", "does this default ship?", "is this published comparison fair?" | Workflow D: judging results | M6, M3, M2; H1, H2, H3, H7, H8 |
-| "How do we present this progress?" | Workflow E: presenting (thin evidence) | H10, M6 |
-| MIP progress measurement; whether a MIP feature ships as a default | Workflows C and D with their MIP steps | M1, M3, M6; H7, H9 |
+| "What should our solver do next?", "should we parallelize this?" | Workflow A: choosing what to build next | M2; H11, H1, H2, H3, H9; Taste quick-check |
+| "This model stalls", "should we drop simplex for barrier here?", "weeks of tuning, nothing moves: keep going?" | Workflow B: diagnosing a failing instance | M4; H11, H6, H5, H3, H4 |
+| "How do we benchmark release X against Y?" | Workflow C: designing the evaluation | M5, M1, M3, M4 |
+| "Are these speed-ups real?", "does this default ship?", "is this published comparison fair?" | Workflow D: judging results | M5, M3, M2; H1, H2, H3, H7, H8 |
+| "How do we present this progress?" | Workflow E: presenting (thin evidence) | H10, M5 |
+| MIP progress measurement; whether a MIP feature ships as a default | Workflows C and D with their MIP steps | M1, M3, M5; H7, H9 |
 | Literature review, writing method papers, supervision, answering critics, theory | None: see Stages with no distillable Bixby method | — |
 | MIP algorithm design, barrier, presolve or crossover internals, unwritten simplex kernels (Tension 1), PDLP or GPU LP, modelling | Outside his evidence: say so; methods only as (inferred) translations | — |
 
@@ -75,12 +75,12 @@ Names a paper, solver release, option or benchmark → Step 2 first; pure method
 
 ### Step 2: Bixby-style fact finding (use tools; never answer from memory)
 
-- **The instance** (M4): which named real model fails or stalls, on which release, machine and date; the symptom (Phase I stall, a constant objective over many iterations, a numerical failure); a public copy (MIPLIB 2017, Mittelmann's sets, Netlib)?
+- **The instance** (H11): which named real model fails or stalls, on which release, machine and date; the symptom (Phase I stall, a constant objective over many iterations, a numerical failure); a public copy (MIPLIB 2017, Mittelmann's sets, Netlib)?
 - **The verdict's provenance** (M2): who called the method hopeless, finished or best, when, on which code, machine and test set; what has changed since.
 - **Machine and releases** (M1): can old and new releases be built for one current machine (git tags, containers)? Machine factors per algorithm class; a direct old-against-new pair beside any chain.
-- **Library and statistic** (M6): model origin; families; trivial models dropped; row brackets; geometric mean of per-model ratios; timeout scoring; each number's lean.
+- **Library and statistic** (M5): model origin; families; trivial models dropped; row brackets; geometric mean of per-model ratios; timeout scoring; each number's lean.
 - **The default gate** (M3): losses on the middle range (slower, by >10%, by >30%); an automatic off-switch; the old version's best tuning as a second baseline; two-way ablation.
-- **The stations** (M5): explicit dual, dual simplex, barrier with crossover counted, sifting when columns far outnumber rows; per-model winners.
+- **The stations** (M4): explicit dual, dual simplex, barrier with crossover counted, sifting when columns far outnumber rows; per-model winners.
 - **The embedding and others' comparisons** (H2, H8): re-solves, warm starts, MIP node LPs; a rival's test-set origin, settings, hardware and statistic.
 - **Prior art** (Integrity rule 1): each paper verified with Crossref or arXiv, each solver option in its official docs; Mittelmann's public benchmarks as context only.
 
@@ -113,11 +113,11 @@ Conclusion first → at most five numbered actions, each tagged → one testable
 
 ### Taste quick-check
 
-- [ ] Will the claim be tested on real models from practice, screened for families and trivial models? (M6)
+- [ ] Will the claim be tested on real models from practice, screened for families and trivial models? (M5)
 - [ ] Will old and new code run on one current machine, with the machine effect reported apart? (M1)
 - [ ] Will the losses (how many models slower, by how much) be counted beside the geometric mean?
 - [ ] Will the idea run inside a general-purpose solver, with defaults and an off-switch? (M3)
-- [ ] Has the transposed or other-class route been tried before tuning the stalled algorithm? (M5)
+- [ ] Has every station (explicit dual, dual simplex, barrier with crossover) been timed on one machine before the stalled method is condemned? (M4)
 - [ ] Can you say which way each headline number leans?
 - [ ] Does the gain change a user's decision, or only a benchmark table? (H1)
 - [ ] If someone called the direction hopeless or finished, has that verdict been re-run on current code and machines? (M2)
@@ -129,19 +129,19 @@ Six methods passed all four checks (recurrence, say–do consistency, executable
 ### Method 1: Old code on today's machine: separate machine from algorithm, chain consecutive releases, call the product a projection
 **One line**: Rebuild old releases for one current machine, compare each release with the next on a screened real library, multiply the pair factors into a labelled projection, and anchor the chain with one full run of the oldest code.
 **Evidence**:
-- Stated: re-running old code on a large set would take a significant part of a year, so he chains forward comparisons [OR02 p.11]; old algorithms on old machines make no sense [COW15 part 3]; the cumulative MIP factor is a product, projected and machine-independent [DOC12 p.117]; machine factors per algorithm class [OR02 pp.4–5; TR93-40 pp.11–12].
+- Stated: re-running old code on a large set would take a significant part of a year, so he chains forward comparisons [OR02 p.11]; old algorithms on old machines make no sense [COW15 part 3]; the cumulative MIP factor is a product, projected and machine-independent [DOC12 p.117]; machine factors per algorithm class [OR02 pp.4–5]; algorithmic gains set against workstation gains [TR93-40 pp.11–12].
 - Practice: 2002, CPLEX 1.0 recompiled and the chain XMP → 1.0 → 5.0 → 7.1 [OR02 pp.4–5, 13]: about 103 from XMP to 5.0, simplex only; about 960 for models with ≥50,000 rows, set beside simplex machine gains although its last factor (9.3) is Table 14's best-of-three column (03 C-08); about 2,400 with barrier. Late 2007: twelve CPLEX releases recompiled for identical machines, 1,892 models, a 30,000 s limit, pairs on models one of the two solves, timeouts scored at the limit, geometric means [DOC12 p.116]. Anchor: CPLEX 1.0 ran 29.8 days on a 401,640-row LP in 2002 [ECCO17 PDF pp.9–14] (03 PE-25, PE-35).
 - Observed: Koch et al. (2022) relay a direct CPLEX 1.2 → 11 factor of 67.9 (from Lodi's chapter, not read) against his chained 29,530; Fichte, Hecher and Szeider (2020) took the design to SAT (05 §3).
 - Say–do consistency: ✅ stated + practised, 1993–2022.
 **Steps**:
 1. Fix one current machine type, or identical machines; rebuild every release for it with recorded compiler flags.
 2. Estimate machine progress separately, per algorithm class.
-3. Take the screened library (M6); set a limit at which the older code finishes most models (2002 LP: 350,000 s; 2007 MIP: 30,000 s).
+3. Take the screened library (M5); set a limit at which the older code finishes most models (2002 LP: 350,000 s; 2007 MIP: 30,000 s).
 4. For each consecutive pair, keep the models at least one solves, score timeouts at the limit (an understatement: say so), and take the geometric mean of the ratios.
 5. Multiply the pair factors, call the product a projection, and show the pair bars so a release that did not improve stays visible (CPLEX 6.0 [DOC12 p.117]).
 6. Anchor: run the oldest release to completion on one large real model on today's machine, even for weeks.
 7. Run one direct old-against-new comparison; if it diverges from the chain, report both and say what each measures.
-8. Label any vendor splice arguable (Gurobi 1.0 taken as roughly CPLEX 11 [DOC12 pp.117–118]).
+8. Label any vendor splice as an assumption. DOC12 takes Gurobi 1.0 as roughly CPLEX 11.0 from public benchmarks and multiplies across the splice without a label [DOC12 pp.117–118]; the label is this skill's rule (inferred), not his.
 **Applies to stage**: evaluation design; judging; presenting progress.
 **Different from standard practice**: benchmarks compare current releases on current machines or quote old timings; here old code is rebuilt for today's machine and labelled pairs are chained.
 **Limitations**: the chain shows more than a direct run (each pair has its own subset; censoring; Tension 3); one vendor, no seeds or intervals. Old binaries may not build: use git tags (HiGHS, Clp, SCIP) or containers. A lone version: 3–5 releases × 100–300 models × 1–3 h, plus one direct pair. MIP: method and measurement his, code others'.
@@ -150,7 +150,7 @@ Six methods passed all four checks (recurrence, say–do consistency, executable
 **One line**: Treat every verdict that a method is hopeless, finished or best as tied to the code, machine and date it was formed on; re-run it before accepting it, and publish revisions of your own verdicts with both dates.
 **Evidence**:
 - Stated: LP was thought mature, and the belief proved wrong [TR90-32 p.1; DOC12 p.112]; the conclusion of some that barrier, not simplex, was the way to solve degen4 was wrong, and his own 1989 conclusion that CPLEX 1.0 could not solve it probably incorrect [OR02 p.8]. Co-signed: barrier clearly best for large models in 1998, no clear best by 2000 [GAP00 p.12]; Gomory cuts were neglected because of how they were used [GAP00 pp.17–18].
-- Practice: the 2002 re-run of CPLEX 1.0 on degen4 solved it in about 1.5 days, with one stretch of 4,897,095 iterations at a constant objective, and in about half an hour with a perturbation [OR02 p.8]; the LAU2 attempts [HAUS22 PDF pp.21–22]; the 1993 counter-measurement of Lustig, Marsten and Shanno [TR93-40]; the LP-stagnation verdict revised 2012 → 2017 → 2022 [DOC12 p.115; ECCO17 PDF p.16; HAUS22 PDF p.28] (03 PE-54, PE-58).
+- Practice: the 2002 re-run of CPLEX 1.0 on degen4 solved it in about 1.5 days, with one stretch of 4,897,095 iterations at a constant objective, and in about half an hour with a perturbation [OR02 p.8]; the LAU2 attempts [HAUS22 PDF pp.21–22]; the 1993 counter-measurement of Lustig, Marsten and Shanno [TR93-40]; the LP-stagnation verdict, stated in 2012, restated in 2017 and revised only in 2022 [DOC12 p.115; ECCO17 PDF p.16; HAUS22 PDF p.28] (03 PE-54, PE-58).
 - Say–do consistency: ✅ stated + practised in papers to 2002; later revisions appear in talks only (05 §12).
 **Steps**:
 1. Write the verdict down with its provenance: code and version, machine, date, test set, who said it.
@@ -171,7 +171,7 @@ Six methods passed all four checks (recurrence, say–do consistency, executable
 - Say–do consistency: ✅ stated + practised for his own LP code; for MIP the principle is co-signed and the code is the team's (Gu, Rothberg).
 **Steps**:
 1. Make the feature and each component switchable, so on and off runs are cheap.
-2. Vary only that component, all else at default; run with it, without it and with the simpler alternatives it grew from (start basis: artificial, feasible-slack, slack [TR90-32 p.14]) on the whole screened library (M6), not only the motivating instances; one table of totals and per-model time and iteration ratios (H10) [TR90-32 pp.18–19].
+2. Vary only that component, all else at default; run with it, without it and with the simpler alternatives it grew from (start basis: artificial, feasible-slack, slack [TR90-32 p.14]) on the whole screened library (M5), not only the motivating instances; one table of totals and per-model time and iteration ratios (H10) [TR90-32 pp.18–19].
 3. Count the losses (slower; by >10%; by >30%), looking at the middle range apart from the large models.
 4. Where losses are real, add a rule that detects when the feature is not helping and turns it off (try, measure, re-check: node presolve continues past 100 nodes only if effective and is re-checked every 100 [GAP00 p.15, co-signed]; of five root heuristics only the most successful repeats [p.16]); do not leave it to users' tuning.
 5. Compare the new defaults with the old defaults and with the old version's best known tuning; report both factors and the exclusions.
@@ -180,45 +180,27 @@ Six methods passed all four checks (recurrence, say–do consistency, executable
 **Different from standard practice**: papers test an idea alone against one baseline and report its wins; here it must coexist with the other defaults, count its losses and switch itself off.
 **Limitations**: needs a production-quality base and a large library (today: fork HiGHS or SCIP; the gate also serves pull-request review). Features interact, so isolation is partial (Koch et al. 2022); the two-way ablation appears in one co-signed text. The 1991 basis was judged on Netlib-sized LPs; crash bases can cut iterations yet raise time (Fan et al. 2023; Parker et al. 2026).
 
-### Method 4: A named failing instance sets the next build
-**One line**: Take the next problem from a named real model that breaks or stalls the code; reproduce it, fix the cause in the production code, keep the model as a test for decades, and re-measure it in every later release.
+### Method 4: Time every station before condemning a stalled method, and keep the portfolio
+**One line**: Before declaring an algorithm hopeless on a model, time every station on one machine (the explicit dual solved with the primal, the dual simplex, barrier with crossover counted, sifting where columns far outnumber rows), test whether a component such as the pricing rule rather than the method is to blame, keep primal, dual and barrier, and judge by per-model winners, because no single LP algorithm dominates.
 **Evidence**:
-- Stated: about two years of fixing Chesapeake's failing LPs one at a time [OR02 p.3; OPT101 p.2]; degen4 [OR02 p.8] and LAU2 [HAUS22 PDF pp.20–22], one model under two names (4,420 × 6,711, 101,377 nonzeros in both), drove degeneracy handling, the dual and dual steepest edge; Saigal's degenerate max-cut LPs forced perturbation into CPLEX [OPT101 p.3]; the American Airlines challenge [TR91-11 p.1].
-- Practice: the degen4 stations [OR02 Table 3, p.8]: CPLEX 1.0 primal 119,364.0 s, with perturbation 1,545.7 s; CPLEX 2.2 barrier 125.8 s, primal 170.2 s, primal on the explicit dual 33.4 s, dual with standard pricing 102.3 s, dual steepest edge 12.0 s. The AA model became the scalable aaK family [SC95 p.7]; models kept for a decade (03 PE-08, PE-24, PE-60).
-- Observed: Cook glosses his motto as finding the problem when numbers are off instead of working around it; Grötschel says he learned from failures, small experiments and advice [Optima 101 pp.6–7].
-- Say–do consistency: ✅ stated + practised, 1985–1994.
+- Stated: the key idea for degen4 was to look at the dual, found only after the stalled primal had been given degeneracy measures and hybrid devex pricing ("then finally" [OR02 p.8]; Steps 2–4 [HAUS22 PDF p.21]). No single algorithm dominates; best-of-three is the yardstick, flagged as arguable [TR93-40 p.13; OR02 p.13; DOC12 p.114; TR91-32 p.1, co-signed]. The dual with standard pricing looked hopeless, but the pricing rule was the problem, not the dual [TR93-40 p.9; OR02 p.8].
+- Practice: the degen4 stations, re-run on one machine for OR02 [Table 3, p.8]: CPLEX 1.0 primal 119,364.0 s, with perturbation 1,545.7 s; CPLEX 2.2 barrier 125.8 s, primal 170.2 s, primal on the explicit dual 33.4 s, dual with standard pricing 102.3 s, dual steepest edge 12.0 s. The same model, as LAU2, on CPLEX 3.0: dual steepest edge 273 s, barrier 1,400 s, dual with Dantzig pricing 2,440 s, primal with partial pricing 27,765 s [HAUS22 PDF p.22]. 1993: every method on one SPARCstation 10/41 against Lustig, Marsten and Shanno's figures, the best method per model, and the pricing test, on simplex routines of his own [TR93-40 pp.1–2, 9–13]. AA: sifting with barrier then primal subproblems, 247 s [HAUS22 PDF p.15; TR91-11 p.3, joint; sifting was Forrest's idea]. On 677 of the 680 screened models (three solved by no algorithm) the dual is about twice as fast as the primal, barrier narrowly fastest, and best-of-three beats every single algorithm [OR02 pp.12–13] (03 PE-31, PE-53).
+- Say–do consistency: ✅ stated + practised, 1989–2002, for timing every station and the component test; the order "transpose first" is not his (Limitations).
 **Steps**:
-1. Ask users for the models that break or stall your code; chase the one presented as hopeless.
-2. Reproduce it on the current release; record release, machine, date and symptom.
-3. Look at the model and the code first; when stuck, ask whoever made the neighbouring thing work (H4).
-4. Find the cause (degeneracy, conditioning, pricing, linear algebra) and prefer the simplest change that removes the failure mode.
-5. Put the fix into the production code behind a switch, then pass the M3 gate on the whole library.
-6. Keep the instance in the library, re-run it in every later release, and publish its stations table (H10).
-**Applies to stage**: problem choice; diagnosis.
-**Different from standard practice**: problems come from named failing user models, not from gaps in the literature or random benchmarks, and the instance stays a living regression test.
-**Limitations**: access to users' models was commercial for him; today use issue trackers (HiGHS, Clp/Cbc) and open MIPLIB instances. A showcase instance invites over-generalisation (Grace 2013; Sherry and Thompson 2021). His 1984–86 habit of not reading the literature is era-bound. MIP: his role was measurement; Gurobi's model-driven tricks are team work [FIELDS12 PDF p.35].
-
-### Method 5: Transpose before you tune, and keep the portfolio
-**One line**: When a model stalls an algorithm, first change the angle and time every station (the explicit dual, the dual simplex, barrier with crossover counted, sifting for very long models); keep primal, dual and barrier, and judge by per-model winners, because no single LP algorithm dominates.
-**Evidence**:
-- Stated: the key idea for degen4 was to look at the dual [OR02 p.8; HAUS22 PDF p.21]. No single algorithm dominates; best-of-three is the yardstick, flagged as arguable [TR91-32 p.1; TR93-40 p.13; OR02 p.13; DOC12 p.114]. The dual with standard pricing looked hopeless, but the pricing rule was the problem, not the dual [TR93-40 p.9; OR02 p.8].
-- Practice: the degen4 stations (Method 4). The same model, as LAU2, on CPLEX 3.0: dual steepest edge 273 s, barrier 1,400 s, dual with Dantzig pricing 2,440 s, primal with partial pricing 27,765 s [HAUS22 PDF p.22]. AA: sifting with barrier then primal subproblems, 247 s [HAUS22 PDF p.15]. On 680 models the dual is about twice as fast as the primal, barrier narrowly fastest, and best-of-three beats every single algorithm [OR02 p.13] (03 PE-31, PE-53).
-- Say–do consistency: ✅ stated + practised, 1989–2002.
-**Steps**:
-1. Before tuning the stalled algorithm, build the explicit dual and solve it with the primal; then run the dual simplex; then barrier with crossover counted.
-2. If columns far outnumber rows, try sifting: column subsets priced by the duals.
+1. Before condemning a stalled algorithm, time every station on one machine: the explicit dual solved with the primal, the dual simplex, and barrier with crossover counted.
+2. If columns far outnumber rows, add sifting: column subsets priced by the duals.
 3. Record each station's time and iterations in one table, in the order tried.
 4. If a method looks bad, check whether a component (the pricing rule) or a usage is to blame before condemning it; swap the component (dual steepest edge).
 5. Keep all algorithms; report per-model winners beside the means; use best-of-three only as a labelled yardstick.
 **Applies to stage**: idea generation; diagnosis; algorithm choice.
-**Different from standard practice**: the textbook move is to tune the chosen algorithm or switch wholesale to barrier; here transposition comes first and every station is measured.
-**Limitations**: needs an engine with every algorithm (HiGHS ships dual and primal simplex, IPX and PDLP; Clp has Sprint and Idiot). Best-of-three inflates the algorithmic factor; his best-algorithm verdicts drift (Tension 4). Era: the 1990s barrier race; first-order LP (PDLP, arXiv 2501.07018) is a fourth station his evidence does not cover. MIP: transposition carries over only weakly.
+**Different from standard practice**: concurrent optimizers keep whichever algorithm finishes first, and presolve may dualize automatically; here no method is declared hopeless until every station, including a variant with one component swapped, has been timed on one machine and tabled.
+**Limitations**: his own order on degen4 was the reverse of "transpose first": he tuned the stalled primal first and looked at the dual last, and at the time the explicit dual only came "closer to barrier" (OB1, 1,200 s) [OR02 p.8; HAUS22 PDF p.21]; the one-machine tables date from 1993–2002. Needs an engine with every algorithm (HiGHS ships dual and primal simplex, IPX and PDLP; Clp has Sprint and Idiot). Best-of-three inflates the algorithmic factor; his best-algorithm verdicts drift (Tension 4). Era: the 1990s barrier race; first-order LP (PDLP, arXiv 2501.07018) is a fourth station his evidence does not cover. MIP: carries over only weakly.
 
-### Method 6: Screen a real-model library, then summarise per-model ratios: geometric mean, row brackets, losses and wins, and the lean of each number
+### Method 5: Screen a real-model library, then summarise per-model ratios: geometric mean, row brackets, losses and wins, and the lean of each number
 **One line**: Judge any LP or MIP change on a screened library of real models, summarised by the geometric mean of per-model time ratios within row-count brackets; count losses and wins, and state which way every number leans.
 **Evidence**:
-- Stated: algorithms tuned on random problems tend to fail on real ones [TR92-36 p.1, co-signed], a point made at least ten times, 1991–2021 (02 R1). The geometric mean of individual ratios (4.70) beats the ratio of totals (4.3) and the arithmetic mean of ratios (9.6) [OR02 p.11]; row count predicts difficulty best [OR02 p.12]; a ratio table misleads if many ratios fall well below 1 [TR90-32 p.19]; Netlib suits robustness, not choosing defaults [TR90-32 p.5]; lean statements [TR93-40 p.3; GAP00 pp.4, 9, 12].
-- Practice: 1991, per-problem ratios and a loss count on 90 netlib LPs [TR90-32 p.19]. 2002: about 2,000 LPs screened to 680 (the largest two or three per family; models under 0.25 s everywhere dropped), nested row brackets, three unsolved models named [OR02 pp.12–13]. 2007: a MIP set from 2,791 models minus 559 easy ones, 348 duplicates and 22 hard-LP models [ECCO17 PDF p.30]. MIPLIB with origins and verified-optimum flags [TR91-38 p.3] (03 PE-23, PE-30, PE-36, PE-41).
+- Stated: algorithms tuned on random problems tend to fail on real ones [TR92-36 p.1, co-signed], a point made at least ten times, 1991–2021 (02 R1). The geometric mean of individual ratios (4.70) beats the ratio of totals (4.3) and the arithmetic mean of ratios (9.6) [OR02 p.11]; row count predicts difficulty best [OR02 p.12]; a ratio table misleads if many ratios fall well below 1 [TR90-32 p.19]; Netlib suits robustness, not choosing defaults [TR90-32 p.5]; lean statements [TR93-40 p.3; GAP00 pp.4, 9, 12, co-signed].
+- Practice: 1991, per-problem ratios and a loss count on 90 netlib LPs [TR90-32 p.19]. 2002: about 2,000 LPs screened to 680 (the largest two or three per family; models under 0.25 s everywhere dropped), nested row brackets, three models that no algorithm solved within the time limit, identified only by approximate row count and omitted [OR02 pp.12–13]. 2007: a MIP set from 2,791 models minus 559 easy ones, 348 duplicates and 22 hard-LP models [ECCO17 PDF p.30]. MIPLIB with origins and verified-optimum flags [TR91-38 p.3] (03 PE-23, PE-30, PE-36, PE-41).
 - Say–do consistency: ✅ stated + practised from 2000; in 1991 the type of mean is unstated, so the rule postdates his first practice (02 C9). Papers keep the lean statements; talks drop them.
 **Steps**:
 1. Collect real models only; record each one's origin, size and whether its optimum is verified.
@@ -238,12 +220,12 @@ Six methods passed all four checks (recurrence, say–do consistency, executable
 ### Workflow A: Choosing what to build next (LP; MIP as measurement)
 **Input**: users' failing or slow models, or candidate features; who runs the solver and how (embedded, re-solves, deadlines); the current release.
 **Steps**:
-1. Collect named failing real instances; reproduce each on the current release and one machine; record size, release, machine and date (M4).
+1. Collect named failing real instances; reproduce each on the current release and one machine; record size, release, machine and date (H11).
 2. For each candidate, name the user decision it feeds: must-have or nice-to-have? (H1)
 3. Check the embedding (re-solves, a basis needed, MIP node LPs); embedded use favours the dual side (H2).
 4. If an instance comes with a verdict (*simplex is hopeless here*), record its code, machine and date, and plan the re-run (M2).
 5. If practice lags theory across the board, plan a programme of many ideas with defaults, not one idea (H9).
-**🔴 Checkpoint**: no real instance yet (the user's, an issue tracker's or a public library's; M4 limitations): do not rank; collect the models the release fails or stalls on (M4 step 1) and return that list. Park nice-to-haves (H1); a numerical failure (condition numbers near 10^20): robustness first (H6).
+**🔴 Checkpoint**: no real instance yet (the user's, an issue tracker's or a public library's; H11): do not rank; collect the models the release fails or stalls on (H11) and return that list. Park nice-to-haves (H1); a numerical failure (condition numbers near 10^20): robustness first (H6).
 **Output**: a ranked build list: instance → failure → candidate change → user decision → measurement plan.
 
 ### Workflow B: Diagnosing a failing instance and generating the idea
@@ -252,13 +234,13 @@ Six methods passed all four checks (recurrence, say–do consistency, executable
 1. Check tolerances and conditioning; re-solve from the final basis at tight tolerances (H6).
 2. Read iterations against rows: too many (degeneracy, stalling) or too slow (linear algebra)? (H5)
 3. Profile the dominant step and write down the attainable gain (H3).
-4. Transpose before tuning: explicit dual, dual simplex, barrier with crossover, sifting for long thin models; one stations table (M5).
-5. If a method looks bad, test whether a component or usage is to blame, and swap the component (M5, M2).
+4. Before condemning the stalled method, time every station: explicit dual, dual simplex, barrier with crossover, sifting for long thin models; one stations table (M4).
+5. If a method looks bad, test whether a component or usage is to blame, and swap the component (M4, M2).
 6. Ask whoever made the neighbouring version work, and the originator which variant to build (H4).
-7. Take the simplest change that removes the failure mode, behind a switch; keep the instance in the library (M4).
+7. Take the simplest change that removes the failure mode, behind a switch; keep the instance in the library (H11).
 **🔴 Checkpoint** (yardstick: the user's deadline, H1, else the tuned route's time; inferred from Tension 5 and 02 §2.5):
-- a station meets it: stop tuning and switch (M5);
-- none does, but swapping a blamed component moves the time: persist (LAU2's pricing rule, M5);
+- a station meets it: stop tuning and switch (M4);
+- none does, but swapping a blamed component moves the time: persist (LAU2's pricing rule, M4);
 - the step-3 ceiling cannot reach it: narrow to the cases it serves, or drop [TR89-16 pp.5–6, co-signed];
 - weeks of instrumentation, no fix: try the simplest change to what the algorithm sees (he shifted bounds [OPT101 p.4]);
 - a fix that hurts the library's middle range is not a default (M3).
@@ -267,12 +249,12 @@ Six methods passed all four checks (recurrence, say–do consistency, executable
 ### Workflow C: Designing the evaluation
 **Input**: the candidate change, old and new releases, the model library.
 **Steps**:
-1. Build or refresh the real library and screen it (M6).
+1. Build or refresh the real library and screen it (M5).
 2. Rebuild old and new releases on one machine type; machine factors per algorithm class (M1).
 3. Run defaults first, and the old version with its best known tuning; record any tuning (M3).
-4. Set limits the old code can meet; score timeouts at the limit and declare the underestimate; pair on models at least one solves; for MIP compare by gap when neither does; name the unsolved models (M1, M6).
+4. Set limits the old code can meet; score timeouts at the limit and declare the underestimate; pair on models at least one solves; for MIP compare by gap when neither does; name the unsolved models (M1, M5).
 5. Ablate: off from the defaults, on alone from a stripped base (M3).
-6. Run every algorithm with crossover counted; keep per-model winners (M5).
+6. Run every algorithm with crossover counted; keep per-model winners (M4).
 7. For a long span: consecutive pairs, one anchor run and one direct old-against-new figure (M1). For MIP add seeds (not his practice; Danna 2008).
 **🔴 Checkpoint**: fix the design if the set is random or Netlib-only, the baseline is weaker than the old version's best tuning, or the limit makes the old code time out on most models (Tension 3).
 **Output**: a protocol sheet: library and screening counts, machines, versions, limits, censoring rule, statistic, brackets, ablation design.
@@ -281,11 +263,11 @@ Six methods passed all four checks (recurrence, say–do consistency, executable
 **Input**: per-model times and iterations, or someone else's published comparison.
 **Steps**:
 1. Ceiling first: write the gain the profiled share allows; a result above it is not like-for-like: give the baseline the same change, and print what stays unexplained (H3).
-2. Check the comparison: the solve as users run it (H2); baseline defaults and best known tuning (M3); same build and machine; a screened library (M1, M6).
-3. Geometric means of per-model ratios in cumulative row brackets (M6); for MIP, nested time brackets (mainly ≥10 s) and shifted geometric means [ZR16-44 §1.1, co-signed].
-4. Count losses (slower; by >10%; by >30%) and wins per algorithm (M6, M3).
+2. Check the comparison: the solve as users run it (H2); baseline defaults and best known tuning (M3); same build and machine; a screened library (M1, M5).
+3. Geometric means of per-model ratios in cumulative row brackets (M5); for MIP, nested time brackets (mainly ≥10 s) and shifted geometric means [ZR16-44 §1.1, co-signed].
+4. Count losses (slower; by >10%; by >30%) and wins per algorithm (M5, M3).
 5. For features that touch few models: the number affected and the median effect (H7).
-6. One sentence per headline number on which way it leans (M6).
+6. One sentence per headline number on which way it leans (M5).
 7. Must-have test: if the gain changes no user's decision (a deadline, a model nothing else solves), it is a nice-to-have: narrow the claim (H1).
 8. Compare with earlier verdicts, your own included; revise them with dates (M2).
 9. For someone else's comparison: test-set origin, the rival's settings, hardware, statistic; re-analyse their data (H8).
@@ -319,6 +301,7 @@ Each passed the executable check and at least one other (02, 03).
 8. **H8 Read others' comparisons for selection, settings and hardware**: check the test set's origin, the rival's settings and the hardware; then re-analyse the published data with geometric means and a machine factor. Case: his 1993 commentary on Lustig, Marsten and Shanno [TR93-40 pp.1, 12–13]; his 2012 re-analysis of a 1986 PC-code comparison [DOC12 p.112].
 9. **H9 Mine the backlog**: if practice lags decades of published theory, run a programme that implements many ideas with good defaults (M3), then attribute the jump by ablation and version pairs (M1). Case: CPLEX 6.5 [GAP00 pp.26–27; DOC12 p.117]; his 1994 NSF plan (06 §1). Diagnosis and measurement his; the code Gu's and Rothberg's.
 10. **H10 Publish the stations**: when reporting a breakthrough on an instance, print the chronology of attempts as a table (each variant timed on one machine) and put such cases before test sets. Case: OR02 Table 3 and its stated plan [OR02 pp.6, 8]; LAU2 [HAUS22 PDF p.22].
+11. **H11 A named failing instance sets the next build**: take the next problem from a named real model that breaks or stalls the code; reproduce it on the current release, put the fix into the production code behind a switch and through the M3 gate, keep the model in the library and re-run it in every later release. Case: about two years of fixing Chesapeake's failing LPs one at a time [OR02 p.3; OPT101 p.2]; degen4/LAU2, one model under two names [OR02 p.8; HAUS22 PDF pp.20–22]; Saigal's degenerate max-cut LPs and perturbation [OPT101 p.3]; the AA model kept as the aaK family [SC95 p.7]. A core method until the T1 gate (2026-11-05), which found it standard practice for production solver teams (a Forrest method too); its distinctive parts live in M2, M3 and H10. A showcase instance invites over-generalisation (Grace 2013; Sherry and Thompson 2021). Today: issue trackers (HiGHS, Clp/Cbc) and open MIPLIB instances.
 
 ## Signature Work Anatomy
 
@@ -332,7 +315,7 @@ Each passed the executable check and at least one other (02, 03).
 | Minimum evidence | Cases first (degen4, PDS), then chained comparisons, then 680 screened models in row brackets with win counts [OR02 pp.6–13] |
 | Abandoned paths | The ideal design (one large set, 1987 code against current) was impractical [p.11]; his 1989 degen4 verdict was withdrawn [p.8] |
 | Reception | One of five CPLEX-only studies in Koch et al. 2022; Grace 2013 and Sherry and Thompson 2021 fault generalising from one case (05 §3) |
-| Methods | M1, M2, M4, M5, M6; H2, H8, H10 |
+| Methods | M1, M2, M4, M5; H2, H8, H10, H11 |
 
 ### Implementing the Simplex Method: The Initial Basis (ORSA J. Comput. 4(3):267–284, 1992, DOI 10.1287/ijoc.4.3.267; sole author; read as Rice TR90-32 and ZIB SC 92-11)
 
@@ -344,7 +327,7 @@ Each passed the executable check and at least one other (02, 03).
 | Minimum evidence | A numerical audit of netlib (Part I); all 90 netlib LPs from four bases, losses counted (M3) [TR90-32 pp.7–21] |
 | Abandoned paths | The announced later parts (composite Phase I, partial pricing, bound perturbation, vectorization) never appeared [SC92 p.2] |
 | Reception | Fan et al. 2023 find crash bases can raise time on large sets; Ploskas, Sahinidis and Samaras beat CPLEX 12.6.1's default crash (abstract only) |
-| Methods | M3, M6; H5, H6, H10 |
+| Methods | M3, M5; H5, H6, H10 |
 
 ### Very Large-Scale Linear Programming: A Case Study in Combining Interior Point and Simplex Methods (Operations Research 40(5):885–897, 1992, DOI 10.1287/opre.40.5.885; Bixby, Gregory, Lustig, Marsten, Shanno; read as Rice TR91-11)
 
@@ -356,7 +339,7 @@ Each passed the executable check and at least one other (02, 03).
 | Minimum evidence | One Cray Y-MP processor [TR91-11], 247 s in total [HAUS22 PDF p.15] |
 | Abandoned paths | Subproblem sizes tuned to this one problem (a stated weakness); interior-point restarts failed [TR91-11 pp.7, 13] |
 | Reception | The model became the scalable aaK family [SC95 p.7]; sifting is still on his 2022 slide [HAUS22 PDF p.17] |
-| Methods | M4, M5. Five authors, roles not divided |
+| Methods | M4; H11. Five authors, roles not divided |
 
 ### MIP: Theory and Practice — Closing the Gap (System Modelling and Optimization, Kluwer 2000, pp. 19–49, DOI 10.1007/978-0-387-35514-6_2; Bixby, Fenelon, Gu, Rothberg, Wunderling; read as the March 2000 preprint)
 
@@ -368,7 +351,7 @@ Each passed the executable check and at least one other (02, 03).
 | Minimum evidence | LP win counts by bracket; MIPLIB 3.0 partitioned by outcome; 22.3× and 3.8×; two-way ablation [GAP00 pp.7–22] |
 | Abandoned paths | Their 1998 view that barrier was best for large LPs [GAP00 p.12] |
 | Reception | Achterberg and Wunderling 2013 propose an analysis they call unbiased (abstract only); Koch et al. 2022 stress feature interaction |
-| Methods | M3, M6, M2; H9. A five-author *we*: not evidence that Bixby wrote the code it describes |
+| Methods | M3, M5, M2; H9. A five-author *we*: not evidence that Bixby wrote the code it describes |
 
 ### A Brief History of Linear and Mixed-Integer Programming Computation (Documenta Math. Extra Vol. ISMP, 2012, 107–121, DOI 10.4171/dms/6/16; sole author), with the late-2007 run and the 2012–2022 decks
 
@@ -380,7 +363,7 @@ Each passed the executable check and at least one other (02, 03).
 | Minimum evidence | The late-2007 protocol [DOC12 p.116]; the screening counts [ECCO17 PDF p.30]; a vendor splice, then 16.2 to Gurobi 5.0 [DOC12 pp.117–118] |
 | Open problems | About 2% of real MIPs blocked by their LPs; LP algorithms barely moved after 2004 [DOC12 p.115], revised in 2022 [HAUS22 PDF p.28] |
 | Reception | Koch et al. relay a direct 67.9 against the chained 29,530; figures drift between editions (Honest Boundary) |
-| Methods | M1, M6 (MIP); H9. His measurement of code he did not write |
+| Methods | M1, M5 (MIP); H9. His measurement of MIP code he did not write (the simplex routines of CPLEX 1.0 and later versions were his by 1993 [TR93-40 p.1]) |
 
 ### Failure exemplar: Parallelizing the Dual Simplex Method (ZIB SC-95-45, 1995; INFORMS J. Comput. 12(1):45–56, 2000, DOI 10.1287/ijoc.12.1.45.11902; with A. Martin)
 
@@ -392,10 +375,10 @@ Profiled before any parallel code [SC95 p.4]; negative results printed: PVM 3.3�
 
 | Anti-pattern | Why he opposed it (source) | Replacement |
 |---|---|---|
-| Random test problems | they fail on real models [TR92-36 p.1] | M6 |
+| Random test problems | they fail on real models [TR92-36 p.1] | M5 |
 | Old code on old machines as progress | [OR02 p.11; COW15 part 3] | M1 |
-| Totals and arithmetic means of ratios | oversensitive to single large entries [OR02 p.11] | M6 |
-| Most-infeasible (Dantzig) pricing in the dual | the rule, not the dual, failed [TR93-40 p.9] | M5 |
+| Totals and arithmetic means of ratios | oversensitive to single large entries [OR02 p.11] | M5 |
+| Most-infeasible (Dantzig) pricing in the dual | the rule, not the dual, failed [TR93-40 p.9] | M4 |
 | A crash on models of unknown origin | can be disastrous [TR90-32 p.16] | M3 |
 | Market studies as the source of the next feature | [OPT101 p.6] | H1 |
 
@@ -443,9 +426,9 @@ Only on request; only sourced features.
 
 - **Lens (one line)**: Production-solver measurer and decider: build what a named failing real model and a user's must-have demand; count a gain only as dated per-model ratios on screened real models, losses counted.
 - **Leads when**:
-  - **LP** (his code to about 1997; M1–M6): what a simplex code builds next; a stalled algorithm someone wants abandoned; primal, dual, barrier or sifting; release and algorithm comparisons; claims that LP is finished.
-  - **MIP** (measurement and defaults only; M1–M3, M6): progress measurement (version pairs, screening, censoring, outcome classes); whether a feature ships as a self-switching default. **Thin**: the CPLEX 6.5 and Gurobi MIP code is not his (he added strong branching); evidence: DOC12, GAP00 (co-signed), decks; on cuts, branching and heuristics he defers.
-- **First questions asked** (derived): Which real models break the code, on which release? Old and new code on one machine? How many models got slower, by how much? Dual tried before tuning? Does the gain change a user's decision?
+  - **LP** (his code to about 1997; M1–M5): what a simplex code builds next; a stalled algorithm someone wants abandoned; primal, dual, barrier or sifting; release and algorithm comparisons; claims that LP is finished.
+  - **MIP** (measurement and defaults only; M1–M3, M5): progress measurement (version pairs, screening, censoring, outcome classes); whether a feature ships as a self-switching default. **Thin**: the CPLEX 6.5 and Gurobi MIP code is not his (he added strong branching); evidence: DOC12, GAP00 (co-signed), decks; on cuts, branching and heuristics he defers.
+- **First questions asked** (derived): Which real models break the code, on which release? Old and new code on one machine? How many models got slower, by how much? Every station timed before a method is condemned? Does the gain change a user's decision?
 - **Default recommendation**: screen a real library; rebuild old and new code on one machine; report geometric-mean ratios by row bracket with losses and leans; ship only behind an off-switch that beats the old version's best tuning.
 - **Will push back on**: random or Netlib-only verdicts; totals or arithmetic means of ratios; ideas tested outside a solver's defaults; old code on old machines; benchmarks where one code always times out.
 - **Likely disagreements** (inferred; no dispute documented):
