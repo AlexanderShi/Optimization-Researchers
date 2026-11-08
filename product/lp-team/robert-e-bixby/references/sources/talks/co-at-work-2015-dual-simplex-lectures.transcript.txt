@@ -1,0 +1,1040 @@
+Transcript: "Robert Bixby: Solving Linear Programs: The Dual Simplex Algorithm" (three parts) - lecture by Robert E. Bixby at the summer school CO@Work 2015, Zuse Institute Berlin (videos on the "Zuse Institute Berlin" YouTube channel; slides on the school page http://co-at-work.zib.de, not fetched).
+Source of text: the uploaded (non-automatic) en-US subtitle tracks of the three videos, fetched 2026-11-05 with yt-dlp 2026.10.26 via uvx and cleaned with scripts/srt_to_transcript.py. A caption transcript, not a speaker-checked text. Students' questions are unnamed in the captions.
+Used in: ../../research/02-methodology.md
+----
+===== Part 1 (revised version): Some Basic Theory | https://www.youtube.com/watch?v=z1xvqwQR6xU | uploaded 2016-10-06 | 1364 s =====
+I just want to admit to you upfront, I am trying to scare you away with this, my experience with this presentation is that it is not so trivial to follow. Maybe this is because this is the way I like to look at it, which is
+
+aimed at implementation. It is not heavy on geometry; there is a little bit of geometry.
+
+I rarely found it useful over the years to think about the geometry of the simplex algorithm and figure out smarter ways to do things.
+
+That’s just maybe the way I look at it.
+
+Anyway, what you’re going to hear is my point of view on these things. To repeat a point, I think I made at the very start: It should be true that if you take away the slides and you are willing to sit down and look up
+
+a few things that I suggested you look up and work your way through some formulas, which are, when you sit down with your pencil and paper, not so hard, you should have the tools for making a reasonable implementation of
+
+the dual simplex algorithm. There is evidence – and I have given this talk before – that that indeed is true. So, I am going to talk about the LP basics, introduce primal and dual simplex algorithms in a way that I like
+
+to do it, and demonstrate some symmetry between the two algorithms, and then talk about some details of implementing the dual simplex algorithm.
+
+We are going to pause here for a break of, I don’t know, 5-10 minutes, whatever, when I get through sort of the introductory part… (Interjection: The break has half an hour.) Half an hour? Forget it! You are not getting
+
+half an hour. That’s my alternative: You get zero. Of course, I can’t prevent you from standing up but you can’t prevent me from continuing the talk. OK, so some basic theory. This should be really, more or less,
+
+familiar, if not necessarily the notation.
+
+So, here we go: Linear programming problem definition. A linear programming problem in standard form, at least the standard form I am used to, looks like this: Minimize c^Tx, that’s the objective, Subject to Ax = b
+
+those are the constraints, and nonnegativity for the variables. I will essentially always assume that there are n variables and m constraints, so that gives us these dimensions. x is the vector of variables, c^Tx is the objective
+
+function. Note: I always think of vectors as written as column matrices, so if I want a row I would take the transpose. And, by the way, if you get involved in the details of these implementations, if you don’t pay
+
+attention to that, you will get lost, for sure.
+
+Nonnegativity conditions and b, I always find this amusing, even if I have been saying it for years, b is called cleverly the right-hand side. Dual Linear Program Definition. The dual of a problem in standard form looks like
+
+this: π are the variables. The right-hand side becomes the objective, b was on the right-hand side before. The objective becomes the right-hand side. We have nonnegative variables, so we get inequality constraints. The constraint
+
+matrix just gets flipped on its side, variables become constraints, constraints become variables.
+
+And because we had equality constraints, all of the variables in this dual problem as written there are so-called free variables, that is they have no upper or lower bounds. And if you went a step further and replaced this
+
+inequality here by equality, just as a thought exercise, you would have transformed this problem into a linear algebra problem. If you have only three variables and equality constraints, that’s linear algebra, you
+
+don’t need any programming for that. Inequalities are what make linear programming. In this context the problem P on the previous slide is referred to as the primal linear program that is repeated here at the bottom.
+
+Weak Duality Theorem. I think you have all seen this before, but it’s so important and so easy to prove it’s worth just kind of thinking about it for a second.
+
+So. Let x be a feasible solution for the primal and π be a feasible solution for the dual, then there is this inequality: So, on the left is the dual objective function, on the right is the primal objective function. This
+
+thing on the right we are minimizing and the thing on the left we are maximizing. So they run up against each other. Moreover, if the left-hand side is equal to the right-hand side, then clearly x is optimal for the primal
+
+and π is optimal for the dual. And in fact, I’m sure most of you know that there is something called a Strong Duality Theorem.
+
+You can always achieve equality if there are optimal solutions. That’s much harder to prove. The interesting thing, I think, is that mostly in practice we are using the Weak Duality Theorem. It is the easy thing to prove
+
+that we use over and over again. The Strong Duality Theorem kind of falls out automatically from the algorithms anyway.
+
+OK, moreover, if I either P or D is unbounded then the other problem is infeasible, and again that’s obvious once you prove this inequality. For example, if the dual here is unbounded and this can be arbitrarily large,
+
+obviously there can be no number on the right-hand side and therefore no feasible solution.
+
+Here is the proof: You begin by writing down matrix A multiplied on the right by x and on the left by π^T after checking that the dimensions match up. The result is a number.
+
+That thing is a number, it’s a 1x1-matrix.
+
+On the left-hand side, you observe you can substitute for Ax b, because x is feasible, and so you get this equality. The right-hand side is slightly trickier. There, if you take the transpose of the dual constraint you will
+
+get this thing, so that’s the π^TAx ≤ c^T part, but to preserve the inequality you do need the nonnegativity of x. So when you take those two together, you’ll get the inequality and that’s the proof.
+
+So that’s weak duality, which…. my information is that this is really due to von Neumann.
+
+Many of you will know this name and many people consider him to be one if not the outstanding mathematician of the 20th century. He was amazing. And he worked on game theory. Neumann worked with Oskar Morgenstern about two persons
+
+doing some games, I believe, and the proved an equilibrium theorem, which amounts to the duality. It’s pretty much the same thing and the story goes that when Dantzig was touring around explaining LP to people he had an audience
+
+with von Neumann and explained this to him and von Neumann and pointed out that there was such a thing as a dual and that you could prove such and such and such a theorem. It was for him so obvious and so trivial that
+
+he never wrote it up. And I think it was some of the people at Princeton, like A.W. Tucker or whoever, I don’t remember, frankly, who actually wrote up the theorem. But my understanding is that it actually goes back to von Neumann.
+
+Solving Linear Programs. Three types of algorithms are available in practice. Primal simplex algorithms, that’s Dantzig 1947, dual simplex algorithms, actually proposed by Carl Lemke, a game theorist in many ways, in 1954, which
+
+kind of sailed around for many, many years.
+
+It was into the 90s before people started to take that algorithm seriously. And then primal-dual log barrier algorithms, which actually didn’t begin with Karmarkar. Karmarkar proved that something was polynomially time-bounded
+
+and people went back and looked at it and said, well, here is something that has got all those same characteristics that have been around for a long time. I forgot what they were called, summed algorithms or something
+
+like that, forget the name, that Fiotl and McCormick were involved in, and developed that theory, which worked in practice and led to these primal-dual log barrier algorithms, much better than explicitly what Karmarkar
+
+had proposed. I propose a reference here to this book from Steve Wright published in 1997 at SIAM. I think it is a wonderful book to read if you want to understand these interior-point algorithms, these path-following algorithms.
+
+So those are the three algorithms we have, and the emphasis in this talk will be on simplex and, in particular, will I dive into some of the details of the dual simplex algorithm.
+
+A basic solution. I hope you know the simplex algorithm, you know, a basic-to-the pith simplex algorithm is the concept of a basic solution.
+
+Geometrically, these correspond to corner points. It is not going to play such a big role in what do knowing that, but it is true and it’s useful. I think it is useful. Think of it that way. So, here is what a basis is.
+
+It is an ordered set of m distinct indices (B_1, … B_m) taken from {1,…n}. So you are picking m of the variables. B is called a basis if the corresponding sub-matrix, A_B means you find the columns from A that are
+
+in set B, and actually we write them down in that order, it matters in the formulas that they are written down in the order. And that thing is supposed to be non-singular, so it has an inverse, for example.
+
+The variables X_B are known as basic variables and variables X_N are known as the non-basic variables. Non-basic variables are all those variables that aren’t basic. That’s a tough concept. The corresponding basic solution
+
+is given by setting the non-basic variables to zero. That is to say this problem has standard form, so we are setting them to their bound.
+
+They have just one bound, a lower bound, and that lower bound is zero. And then solving for the other variables, there is a formula for the values of those other variables. B is called primal feasible or feasible, if
+
+X_B is non-negative.
+
+So this is the key concept. When we look at simplex algorithms we only look at basic solutions or nearly basic solutions. By the way, here is this computation that gets you the value of the basic variables. So you have got the
+
+basic and non-basic part that add up to B.
+
+This we decided is going to be zero, and that leaves you this part, which you can solve.
+
+And just to make the observation that I guess most of you know: We actually never compute the inverse. We don’t compute inverses of matrices. But it is often convenient to write them in formulas. So will use things like
+
+LU factorizations and so forth and so on, which we will talk about later, but don’t misinterpret that I am suggesting you should compute inverses. A. Computing inverses can later do numerical issues and B. inverses
+
+can be very dense, even if the matrix itself is not dense. If nothing else, that would kill linear programming.
+
+By the way, we solve problems with millions of constraints and millions of variables.
+
+If when people formulated problems like that they produced matrices that were basically full of non-zero entries. Forget it, we would be dead. The assumption is that these things are massively, (a funny way to use the word
+
+massively), but massively sparse. These problems that have a million constraints, they usually have no more than about 10 non-zeros per column, maybe five. That structural characteristic of real models is essential for solving them.
+
+Primal simplex algorithm. Here is a statement of a primal simplex algorithm in the way I like to think of it. Not a lot of motivation on the screen. You have all seen motivations in the past, anyway, so I will be talking
+
+about some of those aspects. Let me go through it. Input. I assume my feasible basis in this algorithm from some place. The values of the basic variables and this other part of this D_N, which is computed in this funny way that
+
+is described here, I’ll come back to that.
+
+Step 1: Pricing. If this vector D_N, by the way, I will try to be consistent in the sense that if I have variable I write that in lower case. If I actually compute values for those variables that I assign to them I will try
+
+to remember to write in upper case, so you know when I am talking about numbers as opposed to variables.
+
+Pricing. If this thing is non-negative, D_N, stop. We claim that the basis is optimal for the LP, that is, we have an optimal solution.
+
+Otherwise j=argmin{D_k : k∈N}, that is to say compute the minimum D_k that occurs and pick out an index that achieves that minimum.
+
+That’s what that means.
+
+FTRAN. Solve linear system A_By=A_j . So this j is that j, you take the j’s column out of the matrix, put it on the right-hand side and take the basis matrix and solve the linear system for the vector y. If the vector y is
+
+less than or equal to zero, stop, you can prove that the problem is unbounded.
+
+That is the objective over which we are minimizing can be made arbitrarily small.
+
+Else let i=argmin{X_(Bk)/y_k : y_k > 0}.
+
+This is the so-c alled ratio test. So you look at the indices that are strictly positive.
+
+There must be some who have escaped this test, and you give those ratios, find the minimum, take an index that achieves the minimum. Then you solve another linear system involving the basis matrix. e_i stands for the unit
+
+vector with the 1 in the i-th position. And that i is this i out of the ratio test. And finally compute something I have called alpha here, which amounts to taking the z-vector and taking its inner product with each column of A. That’s
+
+a lot of work, in general. You update the basis by replacing the i-th entry by this variable j that we selected. And you update X and B because we need those as input for the algorithm.
+
+Those are the steps in the algorithm.
+
+Some names and a little bit of motivation here. x_j that is selected here is called the entering variable, x_(Bi) the leaving variable, that’s what you determine in the Ratio test.
+
+D_N values are commonly known as reduced costs, they reflect something like a partial derivative of the objective function with respect to the non-basic variables. I will give you some indications on where those non-basic variables
+
+can help you improve your solution. One observation: the simplex algorithm is a combinatorial algorithm, is it not? It has a basic solution. A basis is a combinatorial thing, it’s a set. And at each iteration the fundamental thing you
+
+determine is what goes out of the set and what goes in, you exchange two things. So it is very combinatorial. The other thing I would say is that there is a lot of room for freedom in this algorithm to change things
+
+and do things in a slightly different way.
+
+And that is, by the way, why the simplex algorithm can be implemented in such a stable way. I have written this simple shell version of it, but there a lots of choices you can make on your own. By contrast to interior-point
+
+algorithms, where there are no choices. You are really stuck, you have to stay pretty much on the central path and they don’t converge and so forth and so on. That gives you a nice convergence theory and has lot
+
+of nice resulting properties, but makes it much harder to make those algorithms stable than the simplex algorithm, which is generally viewed as, and I think properly so, as much more stable. That’s the primal simplex algorithm
+
+that I will describe, which goes back to Dantzig, actually would have been called relative to what he proposed in his days the revised simplex algorithm. Why they used that word, I must admit, has always escaped me, but you will
+
+see that term.
+
+Anyway, that’s the description of the algorithm.
+
+Primal simplex examples. I am going to give you a little bit of geometry and will draw a picture just to give us some time, a second or two to get used to some things.
+
+So primal simplex algorithm. Consider the following simple LP: Three constraints, three variables, <= constraints. I actually chose to do a maximization problem. This problem is not in standard form. I’d rather apply
+
+the simplex algorithm to it, which I will do on the next slide with a picture. The simplex algorithm only works with equations. It doesn’t work with inequalities. It’s got to have equations. So the very first step is to make
+
+equations. And that’s what we do here. We do that, as you all know, by adding slack variables, an incredibly simple and important idea. It takes the inequality constraints and transfers them into the bounds. And so
+
+we are adding three variables x_4, x_5, x_6.
+
+And now I want apply the simplex algorithm to this thing, for which I need a starting basis, and this problems happens to have an obvious starting basis, namely the slack variables.
+
+So if you take these three variables x_4, x_5, x_6, that sub-matrix is an identity matrix of the constraint matrix and therefore obviously non-singular. The non-basic variables are going to be x_1, x_2, x_3. You’ve got to
+
+set them to zero.
+
+If you then solve the basic ones, you’ll get x_4=8, x_5=7, x_6=12 as clearly feasible, so we have a feasible basic solution.
+
+The first step you would do if you wrote down the algebra of the simplex algorithm is to compute the reduced costs. And what would those reduced costs be? For x_1 this is going to be 3, for x_2 it’s going to be 2 and for
+
+x_3 it’s going to be 2. In this case! As the algorithm proceeds, they are a little harder to compute. In this picture, the solution we are starting with, we have an objective function value zero, the slacks aren’t in
+
+the objective, and write the origin in this three-dimensional picture that has the variables x_1, x_2, x_3. Of course, in the problem we actually have 6 variables, but …. maybe there is somebody who thinks they can draw pictures
+
+in 6 dimensions, I would not know how if I had to draw pictures in 4 dimensions. So we’ll stick with the original variables. But you know what the simplex algorithm is doing is looking at the three incident edges in the
+
+polyhedron of feasible solutions, which I have depicted here. It takes a while to get that drawing right. And reduced cost is looking essentially at the rate at which the objective function changes as you move along these three
+
+axes. The fastest rate comes from variable x_1, which is 3, so what we are going to do is make x_1 positive and see what that does to the basis. We do a ratio test and that ratio test is going to tell us we cannot go
+
+any further than setting x_1 = 7 . It moves us along that edge to a new solution and an objective function value of 21. The basis is now made up of x_1, x_4 and x_6, it’s x_5 that goes to zero.
+
+It’s the second constraint that’s satisfied with equality x_1 = 7.
+
+When you come to this point, you have three choices: You go along that line, this line or back to the origin. You can go back, but that would cost you. And you can easily check that this doesn’t help. You could compute the reduced
+
+cost, the only one is going to be positive on that edge, you go out there, objective goes to 23, you do it once more there’s only one choice that takes you there, and at that point you can check the reduced costs
+
+for all of those three edges that are incident to that vertex up on that corner, all of them lead you away from this value of 28, they make it smaller, they are all less than or equal to zero, so that’s the optimal solution.
+
+So in this simple geometry, not that this example really tells you anything that most of you didn’t know already, but it gives us the chance to sort of think about the terminology and like the problem is solved, it’s optimal.
+
+===== Part 2: The Dual Simplex Algorithm | https://www.youtube.com/watch?v=ZNf84y4M-Dw | uploaded 2016-07-25 | 1798 s =====
+So let’s now move on to the dual simplex algorithm and the set-up for that. And after I show you a few more slides we will take a break, but not half an hour.
+
+Simplex algorithms apply to problems with constraints in equality form. So if we want to solve the problem, the very first we have to do is to convert what were a bunch of inequalities into equalities by adding the so-called dual
+
+slacks. I am labeling those as d here. That’s supposed to be the suggested notation because they do in fact correspond to the reduced costs in the primal way of thinking about the problem. I mean these things are full
+
+of notation and come out of thinking about both versions of this thing, which is useful on the one hand and can be confusing on the other hand. So there is my problem. It’s not in standard form any more, but it does
+
+have equality constraints and it does have some free variables and we can apply the simplex algorithm or a version of it to that problem.
+
+Dual simplex algorithm – setup. It is useful to think, at least I find it useful to think of the constraint matrix in the dual as partition as described here. Imagine you have a basis from the primal. So this describes a sub-matrix
+
+of the matrix A. Matrix A I can think of as making up the columns at the left of my constraint matrix in the dual problem. Given this B I can imagine sorting the rows so that the B part occurs at the top. And then I can take
+
+the identity matrix that corresponds to this D matrix and sort the columns so that the B part looks like this and the N part looks like that and things line up. The point is: I’ve got a basis out of the primal, and
+
+that is going to play a key role here. You will see it in a moment and to think about that and how we do our computations I want to permute the matrix around so that it has this form. Actually this is pretty important.
+
+Is anybody not clear what we just did here?
+
+Given a basis B, the corresponding dual basic variables are π and d_N. A definition, if you like; d_N are the non-basic variables.
+
+The corresponding dual basic solution is computed here. I’ll come back to that in a second.
+
+B is dual feasible if a certain condition holds. Let’s at least convince ourselves that this choice of taking π and d_N actually is a legal basis. And for that to be true, the corresponding sub-matrix has to be non-singular.
+
+That sub-matrix is made up of the A part and the I_N part. The part in the middle is gone.
+
+And it’s easy to see that that matrix is non-singular. The I_N part certainly is non-singular, it’s an identity. It’s going to be non-singular if and only if A_B is non-singular, which it is. So this definition always gives you
+
+a sub-set of columns that determine a non-singular matrix in the dual. That’s the basis matrix, this I_B part is going to be the non-basic part, and the rules for basic solutions are we set the non-basic variables to their bounds.
+
+So you set D_B equal to zero. If you set D_B equal to zero (capital D because those are the values associated with the D vector), then you can see here why substituting zero for that thing in here you can solve (A_B)^T
+
+π=c_B, which gives this formula for the values of the π variables and then by substituting in those π, multiplying by A_N subtracting from the right-hand side you get D_N. That this is the definition of dual feasibility
+
+in that case is pretty clear, right? The variables are supposed to be non-negative. If after this computation it turned out to be non-negative, you have a dual feasible solution.
+
+And then comes an important observation, for which I really can’t give you a detailed proof, but I can certainly give you the idea.
+
+And that observation is this: We may assume that every dual basis has the form that I just described. That is to say: We start with the basis in the primal. That defines for us a basis in the dual as given on the previous
+
+slide. I don’t claim that every basis of the dual looks like that. What I claim is: Those are the only ones I need to look at.
+
+I don’t need to look at any other basis of the dual. To give you a rigorous proof of that would take us, at this point, too far afield. It’s not that it’s so complicated, but it would take us too far afield to fit
+
+in today’s presentation. Nevertheless, I will give you the idea.
+
+Suppose you take just a basis for the dual.
+
+So now this is just a sub-matrix that is non-singular, that’s really all a basis is. Sub-matrix is non-singular. Now we take the non-basic variables and set them to bounds or whatever and solve them. Well, suppose you had a basis
+
+in the dual in which a free variable, one of these π variables, was not in our basis.
+
+π variables are free, they don’t have any bounds. And I said non-basis variables are supposed to be set to their bounds. So we have to decide what to do with them. What most people do is set non-basic free variables
+
+to zero. It does happen. Just set them to zero. You can pick another value, but zero seems to be easy to work with. That’s the choice typically made. Suppose you have a non-basic π variable, it’s at zero in some
+
+basis. Just consider doing an iteration in the simplex algorithm in which that π variable is the entering variable. Forget about whether it has a good reduced cost or not. Forget about that. Just suppose you consider this
+
+the entering variable. If the entering variable is a non-negative variable, it starts with zero and has to increase. But if it’s a free variable, it can increase or it can go down. In either direction. As far as the linear
+
+algebra is concerned. Now in determining how far you can go what you do is to compute the representations for that variable in terms of the basic columns. That’s what this FTRAN step is all about that we saw before. Representing
+
+a non-basic variable in terms of the basic columns. Supposed you take this free variable that’s outside the basis you represent it as a linear combination of basic variables.
+
+They can’t all be free variables. If they were all free variables, the columns in A would be linearly dependent. And they are not, because we have a basis in the primal.
+
+So there must be some slack that’s in that representation. Well, by then taking this non-basic variable and moving it in one of the two directions that slack is going to go towards its bound. Is that a legitimate
+
+leaving variable? So then the π comes in and the slack goes out. Do that for every π variable that’s not in the basis. In the end you will get a basis that includes just the π variable, all the π variables
+
+and other stuff. Now, if you apply the simplex algorithm then, the π variables are never going to leave the basis. Because the only way that a variable can leave the basis is if it hits a bound. They don’t have any
+
+bounds. So that, if you will, is the essence of a not so difficult proof, if you wrote the details that you can assume all the π variables are in any basis that you actually need to look at, even though there might be
+
+other bases. And this is the foundation of the dual simplex algorithm. Namely: We can assume that there is a 1-1 correspondence between primal bases and dual bases. So we’ve defined what a primal basis is. For each such
+
+primal basis we can write down a corresponding dual basis. We did it. Those are the only bases we need to look at. And this, and I am repeating myself, is the foundation for the dual simplex algorithm. What does the
+
+dual simplex algorithm do fundamentally? It solves the dual problem while you’re staring at the primal. And in fact, what we will do is we will take a primal basis, but we will think of it as a dual basis and work out the
+
+steps in the algorithm. So that’s, what at least I think you should think about the dual simplex algorithm.
+
+An important fact. We are getting close to the pause time here. Let X, Π and D be corresponding primal and dual basic solutions determined by a basis B. So one basis B for the primal that defines a basis for both the primal and
+
+dual. So I will speak about one, but there are two bases here. And corresponding to those two bases I will get a primal and a dual solution, which may or may not be feasible. So may claim is: Whether or not they are feasible, this
+
+equality holds. Always. Whether they are feasible or not. Well, by the weak duality theorem, if that equality always holds, as soon as we produce feasibility, we have produced optimality.
+
+And, in fact, that’s what the algorithm is doing. I am sure you’ve heard this before, the primal algorithm has a primal feasible solution that tries to make it dual feasible.
+
+The dual algorithm has a dual feasible solution and tries to make it primal feasible. By this fact, for which we will go through the proof in a second, as soon as you achieve feasibility for the second thing, you have optimality
+
+in both problems. And, by the way, for some proof of the strong duality theorem at that point: If you believe the algorithm it can be proved to converge.
+
+So, let’s go to the proof. Here is c^TX, that’s the thing on the right-hand side.
+
+So I have a basic solution here. It has got the non-basic part and the basic variables.
+
+The non-basic variables are equal to zero.
+
+So if I want to compute the objective, I just have to look at the basic variables. That’s this part. So c^TX is just equal to the basic part, (c_B)^TX_B. Now, since Π is the solution of this system in the dual, which comes from
+
+the previous slide, I can substitute Π^TA_B for (C_B)^T, I have done that, in the second equation, and now I have A_BX_B. That’s just the primal constraints. The non-basic part is zero, it’s gone. That’s equal to b, which is Π^Tb
+
+ΠTB. And that’s the desired equality. And that’s really easy to prove. So again, this is at the foundation of what we can do, something called dual simplex algorithm. So here then is a statement of the dual simplex algorithm.
+
+Again we have some input conditions, we have a pricing step. We have two linear systems, step 2 and step 4, that we solve. And we have a ratio test, and we have an update. We will change the basis and update the inputs up
+
+here. I could go through a bunch of justification for why this is the right statement, but let’s just say this one part here, which is that I am determining in my pricing step an index i.
+
+So what this really says is that d_(Bi) for the selected i (remember that d_B variables are the non-basic variables in the dual).
+
+That’s the entering variable. So now that d_(Bi) we are going to allow to be positive.
+
+That’s what that means. And then we pick an index j, which is taken from the what in the primal are the non-basic variables, and that’s the leaving variable. So in effect, viewed in the primal, you actually are picking
+
+the variable that leaves the basis B first, and the variable that enters it second, which is just the reverse. So if you weren’t confused before you’re sure to be confused now.
+
+So here are the two algorithms next to each other and part of the point of doing this is to show you that they are really incredibly similar algorithms. They both have exactly the same input, except feasibility is different.
+
+In the primal, feasibility is on the X, in the dual feasibility is on these D, dual slacks over this cross. Whatever you want to call them. We have a pricing step, we have an FTRAN step, the position is reversed, we have a
+
+BTRAN step, the positions are reversed. This BTRAN looks different from this one because I wrote the α here, there was a reason for that. The α appears down here at the bottom.
+
+They are really doing the same thing. The FTRAN and BTRAN are the same and the ratio test is a ratio test in each case. But they are different ratio tests. If you just compare these algorithms as written there, the amount
+
+of work for an iteration is virtually identical.
+
+The biggest difference is probably the ratio test, where in the primal you are computing some ratios and taking the minimum over the rows of the problem and in this dual you are taking ratios and a minimum over columns.
+
+Typically, then your programs have many more columns than rows. So that’s typically a more expensive ratio test than this ratio test. As described here, that’s the only real difference. But in practice, actually,
+
+there are other big differences that are hidden in this description. If you know the primal simplex algorithm, here it is, in one description, you know in this pricing step you don’t have to do what I said here. I am saying I
+
+pick the most negative reduced cost. But in fact the algorithms works perfectly OK if you pick some negative reduced cost. So you don’t actually have to compute all the D in the primal algorithm. You can just start,
+
+compute a value, compute another one, if you find a negative one, take it. And hence you don’t really need this entire vector to implement the primal simplex algorithm, depending on how you do it. That freedom is masked a
+
+little bit here, but it exists. You don’t really have that same freedom in the dual.
+
+You pretty much have to do those calculations.
+
+You can’t avoid this calculation of D_N because you need it to preserve feasibility in the dual. So at least a first pass implementation of the dual is actually considerably slower.
+
+It’s considerably more work. Odd, because I am claiming that the dual is faster. This seems a little bit strange.
+
+So here’s the summary. What we have done: We have defined the primal dual linear program, tried to get used to some of these notations so we can do the stuff that comes later. We proved the weak duality theorem, introduced
+
+the concept of a basis and stated the primal and dual simplex algorithms. Left to do is to show correctness of the algorithm enough so that we understand what the steps mean.
+
+For example, when I say it’s optimal, is it optimal? When I say it’s unbounded, do we know it’s unbounded? These are not hard things to do, but they are important, and describe, really this is the essence of it,
+
+some key implementation ideas. And that will bring me to the first slide of the next part, which is this: For this part of the presentation I have a natural disinclination to think of firing through lots of formulas and not really explaining
+
+everything and so forth. I’d much prefer to explain things in detail, if possible.
+
+But I think it won’t be possible in this part. I will have to fly over some of the details. I’m of course happy to discuss afterwards and I’ll point you at places where you will get more details. I think there
+
+is a certain advantage to moving along at a reasonable pace so that you at least get a sense of the landscape, of the kinds of things involved. Maybe I am completely wrong and you find it utterly straightforward and
+
+everything is fine. That would be the preferred outcome.
+
+Dual Simplex Algorithm. We have to analyze it with sort of a mix. We can sometimes analyze the dual by looking at the primal because of this 1-1 correspondence. In some cases it will be more convenient to talk explicitly
+
+about the primal, but the goal is to understand the dual simplex algorithm. So in some sense we want to come to a conclusion about the correctness of the algorithm, that’s a useful exercise. When we say that the solution is
+
+optimal, that that conclusion is correct we have already proved that. That was that important fact that said when you take these basic solutions that are in 1-1 correspondence with each other, that the objective function values are always
+
+the same and therefore for weak duality it follows that as soon as it becomes feasible in both problems it’s optimal. So that optimum or that conclusion in the pricing step about optimality we have in fact proved. The unboundedness
+
+we have not proved, we will come back to that.
+
+We will talk about finding a starting dual feasible basis, or showing that no such feasible solution exists. One or two tricks there.
+
+We will talk a little bit about the input conditions, that they are preserved not so much, and we will come back to the finiteness eventually.
+
+Let’s talk about dual unboundedness and we will do a useful calculation. Here is a summary of where we are. This is the dual problem with the slacks added to it. We imagine we have selected an entering variable, one
+
+of these d_(Bi)’s, and we have selected the leaving variable that’s leaving the basis relative to the dual representation.
+
+The idea is currently d_(Bi) = 0, and we selected this Bi because X_(Bi) was negative. It’s a violation of primal feasibility. That motivated us to increase this d to some positive value, leaving the other components of d_B at 0. That’s
+
+the way the simplex method always works. We take a single non-basic variable, leave all the others at their current values, change it, look at the effect on the basic variables and on the objective function.
+
+So letting _d_ and _π_ be the corresponding dual solutions as function of θ, we obtain the following formulas. The first formula is quite simple. It just says that the i-th component is going to be θ, this is a unit vector,
+
+and all the other components of this stay zero. So that’s what we set up at the top.
+
+And then if you simply plug this in to those dual constraints and work out the algorithm, it’s a pretty straightforward calculation, you get a formula for the new values of the π variables in terms of the old values minus
+
+θ times this z vector that’s the solution to one of the linear systems that we solved.
+
+So that’s a known vector to the algorithm.
+
+And the update of the d_N’s is given by the old values minus θ, again, times something we compute, this α vector that was computed from the inner products with all the columns, all the non-basic columns. So those quantities
+
+are known to us.
+
+So, go to the next slide. Again I repeated those formulas at the top using θ > 0 and the fact that this is a primal infeasibility at this variable X_(Bi), we get the following calculation.
+
+The new objective is equal to ….. π is all that appears in the objective, so it’s π^Tb. These are the new values of the π’s.
+
+We substitute that formula and multiply out, we get Π^Tb minus θ times an expression for z (I just went back to the definition of z and plugged it in) times b. And now, we can observe that Π^Tb, it’s this thing
+
+repeated over here, θ times (e_i)^T times (A_B)^-1b those are the values of the primal basic variables X_B, and now, e_i T just picks out the i-th component, that’s what a unit vector does.
+
+And so, you get the old objective, which is this thing, minus θ times X_(Bi), which is negative, and so it follows with θ positive that the new objective is bigger than the old objective for θ positive. And that’s
+
+good because we are maximizing in the dual.
+
+So that justifies taking this step.
+
+If α_N is less than or equal to zero, this was what we looked at in the ratio test in the dual to conclude possibly that the problem was unbounded, if every component was less than or equal to zero, we claimed that it
+
+was unbounded. But, as you can see here from this formula, if θ is less than or equal to zero, then D_N stays non-negative for all values of θ, making θ arbitrarily large, so it preserves dual feasibility and makes
+
+the objective arbitrarily large, so the problem is unbounded. So we proved unboundedness.
+
+On the other hand, if θ is not less than or equal to zero, we need at least one coordinate that is strictly positive over the index set N, then to preserve the non-negativity of this vector of the dual slacks you easily
+
+conclude (this the familiar ratio test computation) that every time a positive α occurs, θ cannot be bigger than the ratio of the corresponding component of D and the corresponding component of α.
+
+The reasoning is just exactly the same as the reasoning you are familiar with from the primal simplex algorithm, namely that you take the minimum of these, and that’s the maximum step size that you can take, that
+
+gives you this ratio test.
+
+The fact that feasibility is preserved in the algorithm, because we need to preserve dual feasibility, as we just argued that follows from the way we do the ratio test, so that’s been proved. We need to conclude that non-singularity
+
+of the basis is preserved. I do not propose to go through the details of that. I list here two update formulas for the basis, one for the basis and one for the inverse. All this formula says is that you are taking one
+
+column out und putting a new column in. So you are able to verify that, it would take us literally five or ten minutes to write it out, we don’t have the time to do that.
+
+But these formulas are very useful, and non-singularity follows by simply multiplying these two and seeing that you get the identity. That proves that this first thing has an inverse and therefore that it’s non-singular. So there is a very
+
+short way to show that you have preserved the non-singularity.
+
+Finiteness. Let’s talk about finiteness.
+
+This is again a familiar argument that I am going to make to start. If you took linear programming at some point, you surely have seen this already. If at every iteration of the dual simplex method every component of
+
+D_B is strictly positive (B is changing all the time) but if in that vector every component stays strictly positive, then the dual simplex method is finite. Why? The dual objective, the ratio test will always yield a positive
+
+value. Therefore the objective of the dual will always increase by some positive amount at every iteration. But the basis uniquely determines the value of the objective, so no basis can be repeated. There are a finite
+
+number of bases, therefore the algorithm is finite. Of course, this would correspond to a massive assumption about non-degeneracy, which doesn’t hold in practice. Typically, real problems are massively degenerate. The
+
+majority of the variables are actually equal zero, frequently. So this condition doesn’t hold. So what do you do to guarantee finiteness?
+
+Well, the standard thing that I guess everybody knows about is this beautiful combinatorial rule that Bob Bland discovered by studying so-called oriented matroids and leads to a version of the simplex algorithm that is provably
+
+finite. Unfortunately, Bland’s Rule is an absolutely terrible idea from the computational point of view. It determines the incoming variable, it determines uniquely the outcoming variable, it doesn’t pay any attention to
+
+the sizes of the reduced costs. It doesn’t pay any attention to any numerical issues, it is truly a disaster! But it’s a beautiful combinatorial law and simple to understand.
+
+If you read Vasek Chvatal’s book, I find this amusing, he states the rule and then he says that the proof is easy. Vasek has a very different notion of easy than I do.
+
+The proof is short, but short is not to be confused with easy. It’s tricky. What Gurobi does in practice, what CPLEX does, unless they changed it, what I guess XPRESS very likely does is using a perturbation to guarantee
+
+with very high probability that in fact D_B is strictly positive
+
+===== Part 3: Implementing the Algorithm | https://www.youtube.com/watch?v=uccbVoamiUM | uploaded 2016-07-26 | 3347 s =====
+Implementing the dual simplex algorithm At this point, we have in some cases quickly, in other cases in more detail, stated the algorithms and proved that they are correct.
+
+Except for finiteness, and we will get to that a little bit later in the context of some of these implementation ideas. First of all some motivation. Why are we looking at the dual simplex algorithm? Reason No.
+
+1: It’s about twice as fast as the primal.
+
+It’s much more important in practice for that reason alone. Second, and this is one of the big, driving reasons: The dual is THE best algorithm for mixed integer programming.
+
+So at mixed integer programming you are constantly solving linear programs, along with processing the nodes of the tree. And the dual simplex method is a good algorithm in that context for two reasons. First of all, when you are
+
+processing these nodes, typically you have just solved them in your programming problem, and then you change it a little bit. Like changing a bound or maybe adding a cut. So the fact that you change it only a little
+
+bit means that you can usefully use the information from the last solve to resolve the next problem.
+
+You can take the basis, in particular, and construct a new basis for the slightly modified problem. Typically that basis is close to optimal. The simplex algorithm is really good at re-optimizing. From a basis that is just
+
+a little ways away from the optimal solution you quickly get to the optimal solution.
+
+Interior point algorithms, the alternative that is not mentioned here, are terrible.
+
+They are just for this reason alone in almost all cases impractical to use in the context of processing the nodes in a mixed integer programming problem. So, those methods are gone. That leaves us with primal and dual
+
+simplex. Dual dominates the primal in terms of performance and, in addition, the nice feature (many of you will be aware of) inside of MIP is that when you add bounds, change bounds or add cuts it will destroy primal
+
+feasibility, but it doesn’t destroy dual feasibility. So you cannot only restart the dual and re-optimize, you are re-optimizing from a feasible solution. You don’t have to repair feasibility. You put all those things
+
+together: The fact that the dual is faster than the primal, that it has restart capabilities and that you typically are actually restarting from a dual feasible solution, it’s the choice that you want to make. The primary
+
+motivation for talking about the dual is that you are hard-pressed in finding in books description about how to implement the dual. People just don’t talk about it. Maybe because it’s harder to talk about, it is certainly easier
+
+to motivate the primal, I absolutely agree with that. But that’s not the algorithm that gets used so much.
+
+The dual simplex algorithm. Here it is restated.
+
+I don't think you can see the colors. There is supposed to be some red stuff, to emphasize the parts we are going to talk about.
+
+You have to get a dual feasible basis to run this thing, so we had to figure out how to do that.
+
+There is the pricing step. Here it says to take the biggest infeasibility. Actually not a very good idea. We will propose something that works better. So that will be an implementation idea. We have these two linear systems to
+
+solve. These are large, typically sparse linear systems. A few years ago we discovered that there was a way to enormously speed up those two steps. We will talk about that.
+
+The ratio test, which determines a step length and a leaving variable, is actually a wonderful idea that goes back to Paula Harris, who worked for British Petroleum. She wrote a couple of papers in 1972, which were almost
+
+unreadable. But each has a very clever, nice idea. Both of these ideas are used today in modern simplex codes. So she knew what she was doing, she just didn’t know how to write.
+
+So here is my little list: No. 1: Implementation issues. Finding an initial feasible basis or concluding that there is none. That’s phase I of the simplex algorithm. It’s the typical designation for it.
+
+Pricing. We will talk about something called dual steepest edge, which has made a huge difference. Then we are going to talk about solving linear systems and the things that are involved in doing that in the right way.
+
+In particular, we will talk about this FTRAN and BTRAN thing. By the way, BTRAN stands for backward transformation and FTRAN stands for forward transformation. The origin of those names actually goes back to the old
+
+punch-card days, when literally all these codes and all the data was on a big stack of punch-cards, which you ran through a machine in some order. And what somebody discovered is if you do stuff, you put your deck cards.
+
+For forward transformation you can run the cards in this direction, and you didn’t have to pick them up and turn them around.
+
+If you just ran them back in the other direction, you could do BTRAN. So they called that FTRAN and BTRAN, and the names have persisted. Though fortunately, punch-cards are no longer with us.
+
+Numerically stable ratio test, which led to an idea called bound shifting and perturbation, which simultaneously makes the algorithm more stable, both the primal and the dual, by the way, and also takes care of degeneracy, all
+
+in one idea. It’s actually one of my favorite things to talk about. It’s not a complicated idea and I think everybody, all codes use it now.
+
+And finally something that we call bound flipping, sometimes referred to as the long-step dual, which will come right at the end. We will see if we have time for that. It’s probably the least important thing on this list.
+
+Preparation: Bounds on variables.
+
+We have talked about standard form and we have had non-negative variables, but in general we have to talk about general bounds on variables.
+
+Real problems have upper bounds, they have lower bounds. The algorithms have to accommodate that. And some of the little implementation ideas that we want, you can’t even talk about them unless you talk about bounds. So
+
+we have to introduce them, and here’s the problem: This is what a typical real problem looks like: Minimize c^Tx Subject to Ax = b and upper and lower bounds on the individual variables, where some of the lower bounds
+
+may be minus infinity, some of the upper bounds may be plus infinity. That’s allowed.
+
+Obvious observation: You can take these bounds and absorb them into the constraints and get back to standard form and apply the simplex method in that way and that would be a really stupid idea. It’s much better to handle
+
+the bounds separately as bounds. But if you really want to slow implementation, which you can then subsequently improve, be my guest.
+
+What is a basic solution for a problem that has bounds? We define it in this way: A basis P is a triple (B,L,U), where B is an ordered m-element subset, just as before, and (B,L,U) is a partition of {1,….,n} such that L_j,
+
+the lower bound, is greater than minus infinity for everything in L and it’s less than plus infinity for everything in U. You may notice I assume that there a no free variables. Every variable has some finite bound. We will come
+
+back to that. The associated primal basic solution is given by setting all the things in L to their lower bounds, all the things in U to their upper bounds, and then computing the values of the basic variables, which you
+
+do by substituting the lower bounds and substituting the upper bounds, adjusting the right-hand side and using the fact that this thing has an inverse.
+
+The solution is feasible, obviously, if X_B lies between its bounds. The associated dual basic solution is defined exactly as before.
+
+You’ve got to go through the details to convince yourself that that this 1-1 correspondence still holds and so forth and so on, but it does, just like we said before. So you can think about the basis in the primal and there
+
+will be an associated one in the dual. The associated dual basic solution you set D_B = 0, you set and you solve for Π and then you compute the so-called reduced costs or dual slacks, and the thing is then dual feasible.
+
+Dual feasibility becomes more important, this is the statement of it. You need to be non-negative on the things at lower bound and non-positive for the things at upper bound. Time does not permit going through that derivation of this,
+
+it’s not hard, but it involves writing a number of things. The intuition is pretty simple. You’ve got a basis. You can think of it as a primal if you like. You’ve got some variables non-basic at upper bounds and
+
+some variables non-basic at lower bound. If something is added upper bound, it should be an unwise thing to reduce it, which means you want the reduced cost to be less than or equal to zero. So that reducing it would
+
+increase objective in the primal, where your bound is. And similarly for things at the lower bound, there the condition doesn’t change. It was non-negative in the previous case. So really the only difference is that
+
+for variables that are set at upper bound, their dual feasibility corresponds to those things being less than or equal to zero.
+
+Bounds on variables – The full story.
+
+This can’t be true, I am sure I am not going to tell the full story. I am starting to sound like a politician.
+
+Modify simplex algorithm.
+
+Only the pricing and ratio test steps must be changed substantially.
+
+So we’ve got bounds.
+
+Legitimately I should go back to the primal and dual and state them with bounds. It’s a mess! Literally stating the dual with all general bounds and so on and so forth, it is a long statement to get it right. And to
+
+convince yourself that it’s correct is a long and frankly boring exercise, so we won’t do it. Chvatal’s book, it’s an old book at this point, but in my opinion has a very nice description of the primal simplex algorithm with bounds.
+
+It’s easy to translate that, easy "straightforward" translate that into a description of the dual simplex algorithm with bounds.
+
+It's complicated, there are details, but there is no magic involved in this. So if you want to implement it, you do need to go through that. You do have to implement it with general bounds and take advantage of those bounds.
+
+So I am going to, obviously, skip these details.
+
+Initial feasible basis That’s what I am going to talk about. Two parts to the solution of this problem: Finding some initial basis (probably not feasible) and then modifying the simplex algorithm to find a feasible basis from that starting basis,
+
+if the starting one is not feasible.
+
+Idea number one is an old and simple idea.
+
+It has basically introduced artificial variables.
+
+Let me describe it in the primal, because between the primal and the dual there is a 1-1 correspondence. So if I tell you how to think about it in the primal, it then corresponds to the basis in the dual. So what do I do?
+
+I am going to assume that every variable has some finite bound, there are no free variables.
+
+This simplifies the statement a little bit.
+
+I am going to add artificial variables. And what does that look like? Pretty straightforward, I think. Ax = b and I just add one variable to each constraint. I have labeled them n+1 because there are n variables here up to n+m
+
+because there are m constraints. And now, it seems kind of silly, but I set the lower and upper bounds to zero. So I haven’t changed the problem at all. But I’ve done this nice, simple thing, I am introducing an identity
+
+matrix, which is, of course, non-singular.
+
+I then can choose that as my initial basis.
+
+I don’t have to worry about inverting something and checking that it’s non-singular. So the initial basis you take is just this list n+1 up to n+m. And for each non-basic variable you just pick some finite bound and put that
+
+variable into L or U, whichever. If you have got a variable that has both an upper and a lower bound, typically, what one does is to put it in the set with the one of those two bounds that’s smaller, because that
+
+somehow perturbs things a little bit less.
+
+So that’s just a simple practical choice.
+
+Go through the variables in the original model, and if they have just one finite bound, they go in the set that they have to go in, L or U, and if they have two finite bounds, put them in the set that would give them the smallest
+
+absolute value. So that gives us our initial basis.
+
+For free variables, the simple refinement that I believe almost everybody makes is to make free variables non-basic. This is really cheating. Non-basic at the value zero.
+
+Non-basic variables are supposed to be out of bound.
+
+Free variables don’t have any bounds.
+
+So you have to pick some value, and a convenient value to pick is zero. And then you make one modification in the simplex algorithm, which is those variables are now allowed to move either up or down, not just in one direction.
+
+And that in the primal, for example, gives you a corresponding simplex algorithm. So let’s leave those free variables aside and now look at the question of getting a feasible basis for the dual.
+
+So, we are thinking about the dual. We know there is a 1:1 correspondence for bases between the primal and the dual. So if I describe a basis for the primal, I have got a basis for the dual. I just described to you a way
+
+to get a pretty simple basis for the primal, using artificial variables. That gives us a starting basis for the dual. If it’s feasible, fine. In fact, let’s think about it. One of the reasons, actually, that the dual algorithm
+
+has an advantage over the primal, is that it’s easier to get a starting feasible basis.
+
+In fact, I claim, as an example, if every variable in your problem has both an upper and a lower bound, it is trivial to get a dual feasible basis. Why? Start with an artificial basis. Then take every variable in the problem
+
+which either goes into the L set or the U set. But since both bounds are finite, every variable can go in either one of those sets.
+
+So compute the values of the dual slacks, and depending on the sign of the dual slacks put it into the appropriate set, automatically capturing dual feasibility. So there is a trivial dual feasible starting solution, easy
+
+to write down for any problem in which all variables have both upper and lower bounds.
+
+For example, a purely combinatorial problem, we are dealing only with binary variables.
+
+The LP relaxation, every variable can have a lower bound of zero and an upper bound of one. There is always and easy dual feasible solution for those problems. And for the primal it typically is not an obvious dual feasible
+
+solution.
+
+Returning to the general case where we have a basis, it’s not dual feasible, we want to fix it. Here is what we do. Here is what I was doing. I claimed this problem at the top is equivalent to determining whether there
+
+does exist a feasible dual solution, basic or otherwise. And it simply says: Take the constraints of the dual and maximize over the solutions to those constraints the sum of the negative entries from D_j. So the biggest
+
+that can be is zero, obviously, and if it is zero, all the D_j’s are greater or equal to zero and therefore I found a feasible solution to the dual. So if I optimize this, I will get a feasible solution to the dual or prove
+
+that none exists.
+
+One problem that I have stated up here is a nonlinear problem. It is strictly ‘less than’, the objective is moving around depending on what the D_j values are. So it looks like this is a hard problem to solve, but in fact
+
+this problem is locally linear. That is to say, suppose I have actually a basic solution to my problem. And I compute the values of the variables. I can then identify this set of D_j indices, where I have a violation of
+
+the dual feasibility, and all the rest. And I can write down at least at this particular solution point a linear objective that tries to force these negative things to be positive.
+
+And that’s this objective κ, where κ is equal to one on exactly the negatives. So, as my solution moves around those κ values, this objective is going to change. But at that snapshot, at that point, it’s a linear
+
+problem. So, it’s a linear problem, I have got a basis for it, I assume I have a basic solution. The basic solution at that doesn’t have anything to do with the objective. It has only to do with the constraints. So it’s
+
+still a basic solution. I can apply the simplex algorithm to it, and actually all you need to do is make one simple modification. You take a step. If in the process of that step, one of these D’s moves from infeasibility
+
+to greater or equal to zero, you change its kappa. It can only happen after its iteration has been completed. Those things go to bounds.
+
+So the iteration is completed, at the completion of the iteration you stare at the objective, change it where it has to be changed, you get a new linear representation, you do the next iteration.
+
+So, you have a linear local representation, do a simplex iteration. It changes. Do a simplex iteration. It changes. Do a simplex iteration.
+
+You are doing simplex iterations and you can prove that that will either converge to a dual feasible solution, or you will prove that the minimum is not zero, which shows that there is none for the original problem.
+
+So there is some work to do prove that. But in fact it does work. So that’s the idea of the algorithm. One beauty of this algorithm is … - Question from a student: This may be a stupid question, but I am currently doing one phase
+
+of the dual simplex algorithm and is one step of this one phase using the dual simplex algorithm? - Bixby: Yes, I am in phase I, which means I am trying to find a dual feasible solution.
+
+And I am describing to you how to take one step of that. It can be viewed as an instance of the simplex algorithm and I propose repeating that. Did that answer your question?
+
+- Explanation from another student: I think he is thinking about whether phase I of the simplex algorithm means phase I to begin with.
+
+You know, that it’s circular.
+
+- Bixby: Is it circular? So, I am not concerned about the name. I have to admit that I am confused by the question. It wouldn’t be the first time. My wife thinks I am always confused by all questions. This is nothing
+
+new for me. The fact is I think I am proposing something that at each step involves using the steps of the simplex algorithm to carry out one step of this procedure. But each time you go back to the start, the objective function
+
+might have changed.
+
+- Student: I think they are worried about using the algorithm in the first phase of the algorithm.
+
+But at this point you don’t need the first phase.
+
+- Bixby: OK, now I understand the question.
+
+Here is the answer to your question: I have tricked the algorithm into believing that I have a feasible basis by declaring variables that are less than or equal to zero feasible.
+
+I changed the bounds. So right at that instant it looks feasible because I said the bound is less than or equal to zero. I changed the objective to try to make that go away. It’s a good question. Sorry it took me so long
+
+to get it. The question is: Wait a minute, I don’t have a feasible basis, so how can I apply the simplex algorithm? What I have done is I have locally changed the definition of the problem so that it is feasible to a
+
+different problem, which allows me to carry out an iteration of the simplex algorithm.
+
+And then I repeat that. It really is true, that is the structure of the code, once you’ve written the code you do an iteration of the simplex algorithm. Nothing else changes. It’s just each time you feed into a slight change
+
+in the problem, the algorithm, literally, nothing changes. It’s the same algorithm.
+
+It thinks it’s feasible, because you played with the bounds. Thank you for that question.
+
+That’s actually a very good question.
+
+So we are going to go one step in this. I am going to show you an improvement to this, which actually contributes significantly to the stability of the whole procedure and speeds it up. It’s a little bit tricky, I will
+
+go through it quickly and then we will move on, but it really does help.
+
+Suppose d_(Bi) is the entering variable. Then X_(Bi) < 0 where X_B is obtained using the following formula. That’s how I select an entering variable. This funny problem that we were solving, where we tricked the bounds, the
+
+formula for that use of these X_B’s, it’s a funny formula. I’ve got to tell you, that formula doesn’t mean anything to me. I only know one way to get it and that is just to do the algebra and compute it. There is a
+
+definition for how to compute these things.
+
+You just compute it using the dual, and this is the formula that you get with this with that κ that’s the objective that’s changing from one representation to the next. But it’s a 0/1 vector. It’s a simple vector, it’s
+
+just changing all the time. Suppose now d_j is determined to be the leaving variable.
+
+Then in terms of phase I objective this means κ_j is replaced by κ_j + ε e_j, where ε ∈ {0,+1,-1}.
+
+All that is saying is that as this objective changes, it’s just changing from plus ones to minus ones as we go across boundaries.
+
+So the changes that are occurring are very simple. And now the crux of the idea here is the following: In the normal simplex algorithm, when a variable hits its bound, you have to stop, because if you go any further, you make
+
+the problem infeasible. But in this case it’s perfectly legal to cross these boundaries.
+
+You can take a variable that’s feasible and make it infeasible. Or one that’s infeasible and make it feasible. As long as the total infeasibility is decreased. That’s all you care about. So this allows you to loosen the
+
+ratio test. You go to the boundary…. Now, you just have to think for a second. Why do I make this step? I make this step because the fact that this thing was negative told me that it was profitable in terms of improving
+
+the objective. It was moving me in the direction of feasibility. So all I have to do as I cross the boundary is to update this value. If it’s still negative, it’s still a good idea to continue in that direction. And that’s what
+
+you do. And the update formula, which of course you have to derive, it takes a few minutes, involves only this number α_j, which is an α vector we have already computed. You do not have to compute anything new. The number
+
+is known. What you discover is that α_j is actually what’s known as the pivot element in updating the basis’ inverse. And so actually if α_j is a really small number, you don’t want to do that and you also don’t want
+
+to get wrapped up in all these cables here.
+
+Actually when I was giving a talk once in Amsterdam. This was back a number of years ago, in the days when they didn’t have all fancy stuff, and I actually had a microphone with a cable that I was holding. I was on
+
+the stage walking back and forth and I totally lost track of where I was. By the time my talk was over, I was wrapped up in the cable like a mummy. People were afraid I would fall off the stage and do some damage to myself. Some might have actually hoped that would happen, but
+
+in any case, it did not. That danger has subsided somewhat, that’s nice.
+
+So, the point is that precisely when α_j is small, you are likely to conclude that x_(Bi) has not changed sign and therefore you can make a longer step. And you avoid that pivot element, which is numerically good and reduces
+
+the number of iterations. If it’s large, then the sign may change, but that’s OK because that’s numerically stable. So you reduce the iterations and you increase the stability in phase I. This is the kernel why
+
+that algorithm on the previous slide in my view is a good idea. So that’s phase I.
+
+It was not simple, I wish I knew a way to make it really simple.
+
+So much for that. This is a brand new topic and what we just talked about plays a role.
+
+This has to do with pricing in the dual. So let’s see. The rule that’s stated in the algorithm, as I stated, said take the most negative or the biggest violation of the primal variables. The most negative X_B. That turns
+
+out to be a really bad idea. It corresponds to the same really bad idea in the primal of taking the most negative reduced cost.
+
+Here is why it is a bad idea: Now thinking geometrically helps. I am at a vertex. I am trying to decide which edge I am going to go on. What the reduced cost measures is the rate of change of the objective per unit that
+
+they move along the axis, per unit that the variable changes, not per unit along the edge that I am traversing. If that edge has a big angle with the axis, a small movement on the axis is going to look like a big movement
+
+on the edge and is therefore going to blow up the reduced cost. You’re going to think it’s helping more than it is. What you really want to do is to measure the rate of change of the objective per unit along the edges.
+
+There are various ways to do that. The ideas really go back to Don Goldfarb. He is the guy who has really understood this idea of steepest edge, wrote some papers, I think his first paper on this was 1974. He and John
+
+Forrest wrote a very nice paper in 1992, in which they described a whole bunch of different steepest-edge algorithms for the primal and for the dual. When I say a whole bunch of different ones, you will say wait a minute,
+
+didn’t you just say we are supposed to measure along the edges? There’s a trick. You can take the polyhedron and you can project that polyhedron into a different space, onto a different set of variables. Maybe there are
+
+some variables that you don’t think are so important in some sets. In that new projected polyhedron it has edges and you can do steepest edges in that projected space. And what they discovered is that you get simpler formulas,
+
+faster formulas to update for different projections.
+
+And, in fact, in the dual they discovered if you project out the slack variables you look at only this thing in the space of the π variables, you get this formula for a number, it’s a complicated looking formula, if you
+
+scale the X_B values by this thing and take the most negative of those you are doing a version of steepest edge. And, in addition, they showed that there was a very efficient update formula for these particular numbers.
+
+Because you cannot re-compute those numbers at every iteration when solving a linear system, it would just kill the whole algorithm. So you need to use the numbers to scale the X_B values. That improves the number of iterations
+
+and to make it practical you have to use an update formula for this thing, which is in the paper, you will look it up. But the end result of all this is that all the standard implementations of the dual that I know of,
+
+their default is to use some version of this steepest edge in the algorithm. Interestingly, there is no correspondingly efficient steepest edge for the primal that anybody has ever found. Nobody has ever found a projection
+
+that works quite as well as the one that was used here and gives you simplified, fast to compute formulas. So even though primal and dual are mathematically equivalent one, here is another sense in which they are not equivalent.
+
+I will just give you one quick example. This is a problem, it’s an old model. It’s not so hard any more. It used to be considered very difficult. If you use greatest infeasibility it takes 281,000 iterations and 118 seconds
+
+on whatever machine I was using two days ago when I did this. And if you use the steepest-edge algorithm it takes about 20,000 iterations and 5 or so seconds to solve. I will finish this description of steepest edge with one
+
+remark and that is one of the remarkable things that happen with this steepest edge. It not only reduces the number of iterations, surprisingly it speeds up the iterations typically. Even though you are doing more work, it speeds
+
+up the iterations because it seems to be much smarter about picking a sparse path around the polyhedron than the greatest violation pricing algorithm does. So it somehow wins on both dimensions, it’s just in the end
+
+a no-brainer. And it’s a simple thing to implement. It doesn’t change anything in the linear algorithm except the scaling in the pricing step.
+
+Solving FTRAN and BTRAN.
+
+There are two parts to be discussed here. You need to solve the linear systems, you need a basic method for solving them and we will then speed it up.
+
+We never compute inverses, I said that already before. If you have done any numerical analysis you know you never compute inverses. It’s numerically unstable and it also will kill you in terms of sparsity. So what people do
+
+is implement LU factorization as the basic approach to solving these linear systems.
+
+There is actually a paper published in 1990 by Uwe and Leena Suhl that was actually implemented in CPlex many years ago. I did it, I just took that paper and implemented it. I talked to Uwe Suhl a couple of times, I got a few
+
+additional ideas that I implemented. To my knowledge it’s more or less what still gets used and it’s more or less what’s used in Gurobi. So you just go to that paper and implement what is in there, which is a dynamic
+
+Markovitz approach to computing an LU factorization.
+
+You will have a pretty good factorization, close to what state-of-the-art codes use.
+
+Updating factorization. This again is a standard idea, an old idea, not special to dual and I am not telling you something that anybody in this subject doesn’t know. You don’t want to compute a new LU factorization with
+
+every iteration, it is too expensive. So you do what’s called an update. There are various kinds of updates you can do. Chvatal’s book does a nice job of reviewing the updates that are available. The simplest is the so-called
+
+product form update, which goes back to 1950 and actually as a first implementation, it works pretty well. Especially if your problem is very sparse, so you can quickly get a product form implementation. It’s simple to implement.
+
+What the codes use these days is a version of the Forrest-Tomlin implementation, which is an LU factorization. Again I will refer you to Chvatal’s book. In my view he gives a very nice description of what that algorithm
+
+looks like. If you implement simply exactly what he says for Forrest-Tomlin, you will get something that’s pretty close to what the good codes have. Where the work is on really, really sparse problems, making Forrest-Tomlin
+
+as fast as product form. And that requires finding a few tricks in the way things are moved around. The basic implementation is as described by Chvatal and the remaining part involves looking at the combinatorial
+
+structures that arise and taking advantage of them when the problem is really sparse.
+
+To show you the main thing that is not so well known, though it is becoming certainly more well known, is related to solving these linear systems FTRAN and BTRAN. So I have written them down here. BTRAN involves a unit
+
+vector on the right-hand side. So that is certainly very sparse. FTRAN involves a column of the constraint matrix on the right. Those are typically also very sparse. I just give you an example here of a problem. This is
+
+actually an LP that came from a traveling salesman problem. It has got 85900 constraints, that many variables, the average size of this vector that we are computing in that problem is only 15.5. It’s a small number. A tiny
+
+number compared to this 85900. So you put in something small here and you get something small out. You absolutely must exploit that to do things in a smart way. Actually that’s bit of history here. Up to the point that
+
+problems had at most 5 to 10,000 constraints in them, I am going to show you it didn’t make any difference. It was only when it started to get up to 50,000 and 100,000 that this one computation I am going to show you started
+
+taking 90% of the time. And if you tried to solve a million-row constraint problem with the technology that existed before the idea that is on the next slide, you literally would spend 99.9% of time on one silly step inside
+
+of solving of these two systems, which I will now show.
+
+I have got an LU factorization. I want to solve a linear system A_B y = A_j. The way you do that with an LU factorization is you first solve L times the newly introduced vector w, Lw = A_j, when you get that result you solve
+
+Uy = W, and that gives you the vector y that you need. Since the two matrices are triangular matrices, you could solve them by back substitution.
+
+So it is a straightforward exercise to solve them. This picture here is going to describe to you what that solve looks like.
+
+So here is my input vector on the right-hand side. The x's are where the non-zeros are.
+
+The way those things are stored I know where those x's are. This problem can have a million constraints, but only 3 non-zeros and I know where they are. I don’t have to search for them. W is what I am trying to compute. Here
+
+is how I proceed. I go down x to the first non-zero, I know where it is at. I go across to the corresponding variable and to the corresponding diagonal entry which is not zero. I divide this number, the x, by the number of the diagonal
+
+and that gives me the value of this variable.
+
+And then plug in that value, multiply it by the non-zero entries in this column, I know where those are if I used any kind of reasonable data structure, and I update the right-hand side. When you update the right-hand side
+
+you introduce potentially new non-zeros. So now I have to search through that vector on the right-hand side to find the next non-zero, which in this case would be here. That step, amazingly, searching for that next non-zero,
+
+if you don’t do it in the right way, that will take 100% of the time in the whole algorithm.
+
+Just that one step. Here is how you can avoid it.
+
+There is a simple graph theory idea, a beautiful little idea that takes care of it. It works like this: Define an acyclic digraph the nodes of which are indexed on the rows of the problem and you put a directed edge in it if the entry
+
+l_(ij) is not zero. Because in the lower triangular matrix you only have entries where i is greater than j, this will be acyclic. All the arcs will go in one direction, from increasing to decreasing index. Define X to be the set
+
+of all indices for which A_(ij) is not zero.
+
+X records where the non-zeros are on the right-hand side. Then you do a reachability calculation.
+
+You find all the vertices such that there is a directed path from those vertices to X. It’s easy to implement that algorithm.
+
+It’s not more than a computer science exercise, it runs in time linear in the size of the set that you are after plus the number of edges that you traverse, which really corresponds to the number of non-zeros you have to look
+
+at here anyway to do the solve. This set _X_ is exactly the set of entries that you will have in the end on the right-hand side. So you compute that in linear time. You can sort it and now you are done. You know exactly
+
+where the next entry is going to be, you don’t have to search for it.
+
+I will show you an example. This goes back to 1990. This was back when interior point and simplex were competing with each other.
+
+The military in the US had a bunch of models that they wanted to solve and they concluded at that time you could actually solve them better with interior point algorithms than you could with the simplex algorithm. The
+
+models were seriously related to the ones that I wanted to solve, all the way up to actually pds100, Patient Distribution System 100, that they wanted to solve. At that time 02 and 06 were easy, 20 was a challenge. So
+
+everybody was looking at pds20, trying to solve it faster than all the other guys. I went back and I ran the 1988 version of CPLEX, primal simplex, I did this a number of years ago on some machine, and actually, these are
+
+seconds, so this is 30,000 seconds, a third of a day, anyway, we are talking about a long time.
+
+I actually went back and calculated pds70. If you had tried to solve this in 1990, with this primal simplex algorithm on the then available machine it would have taken 10 years.
+
+So this comes back to your point about testing old algorithms on old machines.
+
+It doesn’t make any sense. Computation time, literally we could show it would have been 10 years. So probably somewhere in there you would have decided you should, maybe, think of a different way.
+
+The same machine moving forward dual simplex.
+
+So interior points were winning, but all of a sudden dual simplex was faster. And then came along CPLEX8.0, which included that idea that I showed you. And the times plummeted.
+
+So this is now the right way to solve these models. Here are the speed-ups. But more important than the speed-ups is this graph. This is a graph of the solution times with 1.0 as a function of the size of the models. These
+
+models have the property, this is the 2-period version, 6-period, 10-period, 20-period, 70-period.
+
+The periods are like little blocks. The size of the problem grows linearly in the number of blocks. Not surprisingly, you would expect as I increase the number of blocks, the number of iterations would grow linearly in the number
+
+of blocks. And the number of rows grows linearly as the number of blocks, so the time per iteration you might expect would grow linearly. Now, iterations grow linearly, time per iteration grows linearly, the product of those two is
+
+quadratic. Indeed you see that here quite distinctly. Computation time grew quadratically.
+
+Moving to the new version here brought a completely different scale. The times are much lower.
+
+These are CPLEX times. Look at that. It’s qualitatively different. It’s not growing quadratically, it’s growing linearly. In other words, the number of iterations was growing linearly, but the time per iteration
+
+stayed constant. Because we were smart about finding the non-zeros, the fact that there were a bunch of blocks made no difference.
+
+The algorithm just went past. I updated this with Gurobi here, you see it’s really linear.
+
+This is what saved the simplex algorithm for large problems. Without this idea it’s dead.
+
+And with this idea you can solve large problems that are sparse, you’re in the game. This made a huge difference.
+
+Ratio test and finiteness. We are doing the dual. Feasibility in the dual means that these are non-negative. But in practice we replace that by a different condition, where we allow each of them to be slightly negative. Typically
+
+about 10^(-6). Why do we do that? Why do we introduce this so-called feasibility tolerance? The reason is: Most real problems, all real problems are highly degenerate, which means even though you have variables, the basic ones, that could
+
+in principle be positive, most of them are zero. You solve a linear system and you solved them exactly we would get zero. We don’t solve them exactly. Which means some will be slightly positive, some slightly negative.
+
+If you don’t allow for them to be negative, you’ll conclude everything is infeasible.
+
+It won’t work. So you are forced to introduce this. Paula Harris’ idea was exploited to make the algorithm better. So what she did is she proposed an alternative to the standard ratio test, which I have listed right here,
+
+which essentially takes the old step length that we computed, computes a new step length, which is larger based on this ε, and now says pick anything in between, maximizing the size of this α and thus improving the
+
+numerical stability. So this simple idea, explained here very quickly, improves the numerical stability. But it introduces a problem.
+
+It’s a bit of a subtle problem, it takes you a while to recognize that it’s there.
+
+But when you implement it, you’ll see it.
+
+So it’s more stable and actually does reduce degeneracy. It tends to let things be slightly negative. It tends to get you away from being stuck by degeneracy and zeros. But if it happens that your entering variable is less than zero,
+
+then the objective goes in the wrong direction.
+
+I need to explain this briefly.
+
+I have got a variable. Variables that are not in the basis need to be fixed at a bound.
+
+But suppose when it was in the basis, it was slightly negative. I was thinking this was going to be decreasing from positive down to zero, and now all of a sudden one of these in the basis goes from negative to zero. So
+
+you thought you were going to improve the objective, and suddenly it went in the wrong direction. If you just implement this in a straightforward way, you see the objective starts oscillating. It literally took me about
+
+a month to realize there was a really simple solution to this problem, which was fundamentally to cheat. And the cheat was the following: If that variable is less than zero and it’s going to go in the wrong direction, the lower
+
+bound is zero, change the lower bound. So I just went and changed it to some number that was less than what it was and made the direction the right direction. That made the objective monotone. That was wonderful. The
+
+problem is, of course, in the end you solved a different problem. You didn’t solve the problem that you started with. And that’s where the combinatorial nature of the simplex method rescues you, because even if the numbers
+
+are wrong, you have a basis. That’s a combinatorial object. At the end you can reset the variables to their proper bounds. And what you discover is in 95% of the cases you get lucky and you actually solve the original problem. Amazing.
+
+So you can improve stability, you have actually automatically improved degeneracy, and in the end you typically don’t pay anything for it. In some numerically difficult problems you do pay for it. You have to remove the
+
+shift and re-optimize it. This example illustrates a case, I won’t go into the details, where it’s happening twice, and the way Gurobi handles that is to remove the shift, switch from dual to primal, which is now feasible,
+
+and to iterate that process, and I don’t have time to go into the details.
+
+- Student: Can we characterize when this happens, or would it be possible to avoid shifting?
+
+Basically if you know that you will produce something infeasible, to not do the shift?
+
+- Bixby: No, I wouldn’t know a way to do.
+
+If I understand your point, it’s like….
+
+OK, I am changing the bounds, because I don’t want to go in the right direction. If I know that in the end removing that change is going to introduce this infeasibility, why don’t I just avoid it there by some procedure. I
+
+don’t know any way to detect that in advance, short of some massive computation. And it so rarely happens. It just turns out it’s not worth worrying about. As far as I can tell. I mean I was quite amazed at this and
+
+I felt pretty stupid when I finally realized how simple it was. But anyway, the simple ideas, I guess, are the good ones.
+
+By the way, this immediately rolls into the idea of perturbation. In essence, this is a kind of perturbation. So what do we do, by the way, if a problem is having difficulties with degeneracy, which we would measure by
+
+saying the objective function is not progressing fast enough. See, you put in something that measures that the objective is not progressing fast enough, and then all we do is we take a pseudo random number generator and generate
+
+a small perturbation that decreases the lower bounds. It’s just like a bound shift. Except that it’s an intentional bound shift that’s not forced by the ratio test. You do that.
+
+It’s utterly straightforward, I don’t know why people didn’t do this in the old days. No new machinery is needed. You don’t have to introduce any new machinery because removing a perturbation is removing a shift.
+
+It’s all the same. It all happens. Together all these things contribute to reducing the iteration. An interesting property of the dual that doesn’t seem to be shared by the primal: The dual actually seems to like to
+
+be perturbed. So Gurobi, and I suspect it was true at one point in CPLEX, actually will perturb even if the problem is making reasonable progress, because it just helps the outcome for some reason that we don’t fully understand.
+
+So, there is a trick here that I am not telling you. In fact there are lots of tricks that I am not telling you, not because I am trying to be secretive, but because I’m lazy or something. When I implemented this back in
+
+the old days I would only perturb variables that were in the basis. And now I am reducing the lower bound, and so the perturbation is guaranteed to maintain the feasibility of the solution. And then the non-basic variables
+
+that could cause an issue, I perturbed them only when they entered the basis. So in the end all variables would get perturbed and feasibility is preserved.
+
+So think I am going to skip bound flipping.
+
+But it works. That much I can tell you.
+
+And I appreciate your time, thank you.
