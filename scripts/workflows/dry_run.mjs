@@ -5,8 +5,9 @@
 //   node scripts/workflows/dry_run.mjs <workflow.js> --team product/<team> [--member a,b] [options]
 //
 // The second form previews YOUR team with exactly the args make_args.mjs builds for a real launch (repo, team, scratch,
-// today's date, the members from team.json); add workflow options with --set KEY=JSON and the user's request with
-// --request "TEXT", as in make_args.mjs.
+// today's date, the members from team.json, and for team-layer.js / team-integrate.js the team.json "guests" resolved
+// in their home teams); add workflow options with --set KEY=JSON and the user's request with --request "TEXT", as in
+// make_args.mjs.
 //
 // The workflow runs in a sandbox that mimics the Workflow runtime: agent() returns a fake result shaped by
 // opts.schema instead of spawning an agent; parallel() and pipeline() keep the runtime's semantics (a thunk or item
@@ -24,15 +25,22 @@
 //                     value: an object (merged over the fake result, schema-aware: missing fields are filled),
 //                     null (the agent "died"), a string (schema-less agents), or an array = one value per
 //                     successive matching call (the last one repeats). See examples/*.answers.json.
+//   --check-answers   warn when an answer sets a field its agent's schema does not declare (nested fields and array
+//                     items included): a real agent is never asked for it, so the branch it drives may be unreachable
 // Args: string values "$REPO" and "$SCRATCH" are replaced (default: this repo, and <tmpdir>/nuwa-dry-run/<team>).
 //   --repo PATH       value for $REPO             --scratch PATH   value for $SCRATCH
-//   --team DIR        use <repo>/DIR/team.json: sets args.team and args.members (all, or --member ones). With an
+//   --team DIR        use <repo>/DIR/team.json (DIR relative to the repo; an absolute path inside the repo works too):
+//                     sets args.team (relative to the repo) and args.members (all, or --member ones). With an
 //                     args file, "roundtable" (when the file has one, and always for team-layer.js) is set from team.json too, and when the file is one of
 //                     examples/*.args.json its example-only values (request, user_context, notes, what, skip_ids,
 //                     batch_files, batches, only, only_chunks, since, label) are dropped and the date becomes today's (each change
 //                     is printed as a note). For a real preview write your own args with make_args.mjs.
+//                     Guests: for team-layer.js and team-integrate.js args.guests becomes team.json's "guests", resolved as
+//                     make_args.mjs does; an args file's own "guests" is replaced, or dropped when team.json has none and
+//                     always for the per-member workflows (a note says so).
 //   --member a,b      keep only these member slugs (after --team, or from the args file); a warning for the team-level
-//                     workflows (team-layer.js, team-integrate.js), which must run with every member
+//                     workflows (team-layer.js, team-integrate.js), which must run with every member; a guest's slug
+//                     is an error, as in make_args.mjs (its per-member steps run in its home team)
 //   --set KEY=JSON    with --team and no args file: a workflow option, as in make_args.mjs
 //   --request TEXT    with --team and no args file: args.request (the user's request), as in make_args.mjs
 // Checks also: per-member map args (only, only_chunks, skip_ids, batch_files, batches, notes, what) keyed by a slug
@@ -51,7 +59,7 @@ import os from 'node:os'
 import path from 'node:path'
 import vm from 'node:vm'
 import { fileURLToPath } from 'node:url'
-import { buildCalls, EXAMPLE_ONLY, loadTeam, mapProblems, TEAM_LEVEL, today, workflowName } from './make_args.mjs'
+import { buildCalls, EXAMPLE_ONLY, guestEntries, guestMemberError, loadTeam, mapProblems, resolveGuests, TEAM_LEVEL, today, workflowName } from './make_args.mjs'
 
 const HERE = path.dirname(fileURLToPath(import.meta.url))
 const DEFAULT_REPO = path.resolve(HERE, '..', '..')
@@ -67,7 +75,7 @@ function usage(code) {
   process.exit(code)
 }
 const argv = process.argv.slice(2)
-const opt = { chars: 500, items: 0, bools: 'happy', full: false, quiet: false, strict: false, out: null, answers: null, forbid: null, repo: null, scratch: null, team: null, member: null, set: [], request: null }
+const opt = { chars: 500, items: 0, bools: 'happy', full: false, quiet: false, strict: false, out: null, answers: null, checkAnswers: false, forbid: null, repo: null, scratch: null, team: null, member: null, set: [], request: null }
 const pos = []
 for (let i = 0; i < argv.length; i++) {
   const a = argv[i]
@@ -81,6 +89,7 @@ for (let i = 0; i < argv.length; i++) {
   else if (a === '--items') opt.items = Number(val())
   else if (a === '--bools') opt.bools = val()
   else if (a === '--answers') opt.answers = val()
+  else if (a === '--check-answers') opt.checkAnswers = true
   else if (a === '--forbid') opt.forbid = new RegExp(val())
   else if (a === '--repo') opt.repo = val()
   else if (a === '--scratch') opt.scratch = val()
@@ -109,13 +118,16 @@ const readJson = (p, what) => {
 // ---------------------------------------------------------------- args
 let args
 let argsLabel
+let teamGuests = []   // team.json "guests" ({slug, home}) when --team comes with an args file: for the --member check
+let guestsFromTeam = false
 if (pos.length === 1) {
-  // --team without an args file: the same args make_args.mjs builds for a real launch
+  // --team without an args file: the same args make_args.mjs builds for a real launch (guests included)
   try {
     const r = buildCalls({ workflow: WF_PATH, team: opt.team, repo: REPO, scratch: opt.scratch || undefined, set: opt.set, request: opt.request || undefined, together: true,
       member: TEAM_LEVEL.has(WF_NAME) ? undefined : opt.member })
     args = r.calls[0].args
-  } catch (e) { console.error(`dry_run: ${e.message}`); process.exit(1) }
+    r.notes.forEach(n => notes.push(n))
+  } catch (e) { for (const l of e.lines || [e.message]) console.error(`dry_run: ${l}`); process.exit(1) }
   argsLabel = `built by make_args.mjs from ${opt.team}/team.json`
 } else if (/^\s*[{"[]/.test(pos[1])) {
   // inline JSON; a JSON string ("{\"repo\": ...}") reaches the script as a string, as a stringified Workflow args would
@@ -128,9 +140,24 @@ if (pos.length === 1) {
 if ((opt.team || opt.member) && (!args || typeof args !== 'object' || Array.isArray(args))) { console.error('--team / --member need args given as a JSON object'); process.exit(1) }
 if (opt.team && pos.length === 2) {
   let tj
-  try { tj = loadTeam(REPO, opt.team).tj } catch (e) { console.error(`dry_run: ${e.message}`); process.exit(1) }
-  args.team = opt.team.replace(/^\.\//, '').replace(/\/+$/, '')
+  let teamRel
+  try { ({ tj, rel: teamRel } = loadTeam(REPO, opt.team)) } catch (e) { console.error(`dry_run: ${e.message}`); process.exit(1) }
+  args.team = teamRel   // relative to the repo, as make_args.mjs writes it (an absolute --team included)
   args.members = tj.members
+  // guests as make_args.mjs builds them (team-level workflows only); an args file's own guests never survive --team
+  try {
+    teamGuests = guestEntries(tj, teamRel)
+    const r = TEAM_LEVEL.has(WF_NAME) && teamGuests.length ? resolveGuests(REPO, teamRel, tj) : { guests: [], notes: [] }
+    r.notes.forEach(n => notes.push(n))
+    if (r.guests.length) {
+      notes.push(`args.guests ${'guests' in args ? 'replaced by' : 'set from'} team.json's "guests": ${r.guests.map(g => `${g.slug} (${g.dir})`).join(', ')}`)
+      args.guests = r.guests
+      guestsFromTeam = true
+    } else if ('guests' in args) {
+      notes.push(`args.guests dropped: ${TEAM_LEVEL.has(WF_NAME) ? `${teamRel}/team.json has no "guests"` : `${WF_NAME} is per-member (a guest's per-member steps run in its home team)`}`)
+      delete args.guests
+    }
+  } catch (e) { for (const l of e.lines || [e.message]) console.error(`dry_run: ${l}`); process.exit(1) }
   if (('roundtable' in args || WF_NAME === 'team-layer') && tj.roundtable && args.roundtable !== tj.roundtable) {
     notes.push(args.roundtable === undefined ? `args.roundtable set to team.json's "${tj.roundtable}"` : `args.roundtable "${args.roundtable}" replaced by team.json's "${tj.roundtable}"`)
     args.roundtable = tj.roundtable
@@ -144,7 +171,14 @@ if (opt.team && pos.length === 2) {
     notes.push('previewing with an examples/ args file: for a real run build the args with make_args.mjs (or dry-run with --team and no args file)')
   }
 }
-if (opt.member && TEAM_LEVEL.has(WF_NAME)) warn(`--member with ${WF_NAME}: a team-level workflow must run with ALL members of team.json; this preview shows a partial run`)
+if (opt.member) {
+  // a guest's per-member steps run in its home team: --member <guest slug> is an error, as in make_args.mjs
+  const gs = [...teamGuests, ...(Array.isArray(args.guests) ? args.guests.filter(g => g && typeof g === 'object' && typeof g.slug === 'string' && typeof g.home === 'string') : [])]
+  const g = gs.find(x => opt.member.includes(x.slug))
+  if (g) { console.error(`dry_run: ${guestMemberError(String(args.team || opt.team || ''), g)}`); process.exit(1) }
+}
+const hasGuests = Boolean(args && Array.isArray(args.guests) && args.guests.length)
+if (opt.member && TEAM_LEVEL.has(WF_NAME)) warn(`--member with ${WF_NAME}: a team-level workflow must run with ALL members of team.json${hasGuests ? ' and its guests' : ''}; this preview shows a partial run`)
 if (opt.member && Array.isArray(args.members)) {
   const unknown = opt.member.filter(s => !args.members.some(m => m && m.slug === s))
   if (unknown.length) { console.error(`--member: not in members: ${unknown.join(', ')}`); process.exit(1) }
@@ -216,7 +250,7 @@ function pureLiteralProblems(lit) {
 }
 
 console.log(`dry run  ${path.relative(process.cwd(), WF_PATH) || WF_PATH}`)
-console.log(pos.length === 1 ? `args     ${argsLabel}; scratch ${args.scratch}` : `args     ${argsLabel}${opt.team ? ` (members from ${opt.team}/team.json)` : ''}; $REPO=${REPO}; $SCRATCH=${SCRATCH}`)
+console.log(pos.length === 1 ? `args     ${argsLabel}; scratch ${args.scratch}` : `args     ${argsLabel}${opt.team ? ` (members${guestsFromTeam ? ' and guests' : ''} from ${opt.team}/team.json)` : ''}; $REPO=${REPO}; $SCRATCH=${SCRATCH}`)
 if (opt.answers) console.log(`answers  ${opt.answers} (${answers.length} rule(s))`)
 notes.forEach(n => console.log(`note     ${n}`))
 if (args && typeof args === 'object' && Array.isArray(args.members)) {
@@ -287,16 +321,22 @@ function fake(schema, key, idx) {
     default: return null
   }
 }
-function shaped(schema, over, key) {
-  // an answer merged over the schema: objects keep the fields the answer omits, arrays map item by item
+function shaped(schema, over, key, where = '', undeclared = []) {
+  // an answer merged over the schema: objects keep the fields the answer omits, arrays map item by item; a field the
+  // schema does not declare is kept, and its path goes to undeclared (--check-answers warns: no real agent returns it)
   if (over === null || over === undefined || !schema || typeof schema !== 'object') return over
   const isObj = v => v && typeof v === 'object' && !Array.isArray(v)
   if (isObj(over) && (schema.type === 'object' || schema.properties)) {
     const base = fake(schema, key)
-    for (const [k, v] of Object.entries(over)) base[k] = shaped(schema.properties && schema.properties[k], v, k)
+    for (const [k, v] of Object.entries(over)) {
+      const sub = schema.properties && schema.properties[k]
+      const at = where ? `${where}.${k}` : k
+      if (!sub) undeclared.push(at)
+      base[k] = shaped(sub, v, k, at, undeclared)
+    }
     return base
   }
-  if (Array.isArray(over) && (schema.type === 'array' || schema.items)) return over.map(v => shaped(schema.items, v, key))
+  if (Array.isArray(over) && (schema.type === 'array' || schema.items)) return over.map(v => shaped(schema.items, v, key, `${where}[]`, undeclared))
   return over
 }
 function schemaProblems(s, where) {
@@ -397,7 +437,9 @@ async function agent(prompt, opts) {
     let v = rule.value
     if (Array.isArray(v)) v = v[Math.min(rule.used, v.length - 1)]
     rule.used++
-    result = v === null ? null : o.schema ? shaped(o.schema, v) : v
+    const undeclared = []
+    result = v === null ? null : o.schema ? shaped(o.schema, v, undefined, '', undeclared) : v
+    if (opt.checkAnswers && undeclared.length) warn(`${label}: answer "${rule.key}" sets field(s) its schema does not declare: ${[...new Set(undeclared)].join(', ')} (a real agent is never asked for them)`)
     console.log(`    → answer "${rule.key}"${Array.isArray(rule.value) ? ` (#${rule.used})` : ''}${result === null ? ': null (agent died)' : ''}`)
   }
   await Promise.resolve()

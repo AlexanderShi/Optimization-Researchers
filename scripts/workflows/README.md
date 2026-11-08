@@ -43,6 +43,8 @@ T3.2（`acquire_fulltexts.py`）和 T3.4（`plan_reading_batches.py --out-dir <s
 
 `team.json` 里还有几个工作流会用到的可选键：`card_dimensions`（非数学领域里 D1–D8 各指什么，读卡 agent 照用）、成员的 `family_name`（作者核对和检索用的姓；默认取 `name` 的最后一个词，`surname` 只作圆桌的视角标签，撞姓时可以写成 "N. Higham"）、`source_labels`（`acquire_fulltexts.py` 给手工补来的全文标来源）。见 [team.example.json](../../references/team-templates/team.example.json)。
 
+**客座（`args.guests`）。** `team.json` 有 `guests`（别队的成员坐进本队圆桌，见手册第一节第 7 条）时，团队级工作流 `team-layer.js`、`team-integrate.js` 多一个参数 `guests`；按成员的工作流没有它，没有客座的团队也不带这个键。它由 `make_args.mjs` 从 `team.json` 生成，不手写；`dry_run.mjs --team` 生成同样的参数，预览与真启动一致。每位客座一个对象：他在主队（home，他当成员的那支队）`team.json` 里的成员条目原样（那里有什么键就有什么键，不补任何键），加 `"home": "<home>"` 和 `"dir": "<放团队的那层目录>/<home>/<slug>"`（相对 `repo`，正斜杠；团队在 `product/` 下时就是 `product/<home>/<slug>`）。工作流开头逐项核对：`slug`、`home` 是小写连字符，有 `name`，`dir` 等于 `<放团队的那层目录>/<home>/<slug>`、不含 `..`，`slug` 不在 `members` 里、不重复。`guests` 是保留键：`--set guests=…` 报错（`set guests in team.json`）。解析不了的客座（他主队的 `team.json` 不在、不合法或写的是别的队，他不是那队的成员或只是那队的客座，他的文件夹不在，本队目录里有同名的影子文件夹）让 `make_args.mjs` 报错停下，措辞与 `new_team.py` 相同；他只是还没有 `SKILL.md` 时不算错，stderr 提示一行，工作流像对待还没有 `SKILL.md` 的成员一样处理他（T2 要至少两个座位有 `SKILL.md`、其中至少一位是本队成员，才写圆桌和 README；T2、T3.8 都不给他排座，它们返回的 `next` 让先把他主队写出 `SKILL.md` 的 T1 合进来、在本队重跑 T2，T3.8 之后再跑）。客座不进 `members`，按成员跑的工作流也不给客座跑：`--member <客座 slug>` 报错，要到他主队的文件夹（`<放团队的那层目录>/<home>`，通常是 `product/<home>`）跑。工作流只读客座的文件夹，从不改它。README、圆桌和 DEEP-READING 里写到客座的每一句（客座子句、两段安装命令里的复制行、两张 Team 表的客座行等）的准确写法，由 `python3 scripts/new_team.py <team>/team.json --guest-text` 打印（只读），T2、T3.8 照它核对。闸门 `team_check.py` 对有客座的团队：圆桌里的 "card evidence pending" 只在本队成员全部按深读档查时才判 ✗（有 `guest_teams` 时一律判 ✗）；有客座在主队有卡片时，团队级的 `citations`（圆桌引用闭包）不论档位都跑。
+
 各工作流的特有参数（都可省略，括号里是默认值）。参数名一律 `snake_case`。早期版本里有五个工作流用过 `camelCase`（`batchFiles`、`wordBudget`、`maxWords`、`targetWords`、`maxGrowth`、`rootReadme`、`newFaultLines`），这些旧名仍然当别名接受，运行开头会记一行日志提醒改名；新旧两个名字都给时用新名。写错的键不会报错，只会在运行开头记一行 `ignores args key(s)` 的日志，`dry_run.mjs` 也会警告（`make_args.mjs --set` 直接拒绝）。
 
 **按成员的映射参数**（`only`、`only_chunks`、`skip_ids`、`batch_files`、`batches`、`notes`、`what`）以成员 slug 为键。键不是这次运行里的成员时记一行日志；`only`、`only_chunks` 还会在「这次运行里有成员没有对应的键」时直接停下：slug 拼错会让 `only` 失效、把这位成员的所有批次（或块）重跑一遍，加上 `overwrite: true` 还会覆盖已有卡片。
@@ -73,7 +75,7 @@ node scripts/workflows/make_args.mjs team-layer --team product/<team>           
 node scripts/workflows/make_args.mjs team-base-skills --team product/<team> --member a,b --set to=review
 ```
 
-它打印 `[{scriptPath, args}, …]`：按成员的工作流每人一个，`team-layer.js`、`team-integrate.js` 一个（给 `--member` 会报错）。`args` 里是 `repo`、`team`、`scratch`（默认固定的 `${TMPDIR:-/tmp}/<team>-scratch`，没有就建）、`date`（默认今天）、从 `team.json` 原样拷来的 `members`，`team-layer.js` 还有 `team.json` 的 `roundtable`；`--set KEY=JSON` 加特有参数（键必须是这个工作流读的；按成员的映射只能用本队的 slug，每个调用只带自己那一项）；`--request "…"` 给每个调用加上 `request`（没给时 stderr 提示一行，不报错）。`--args-only` 只打印一个 `args`（配合 `dry_run.mjs`），`--out DIR` 另存成文件。把打印出来的每个对象原样交给 Workflow 工具：
+它打印 `[{scriptPath, args}, …]`：按成员的工作流每人一个，`team-layer.js`、`team-integrate.js` 一个（给 `--member` 会报错）。`args` 里是 `repo`、`team`、`scratch`（默认固定的 `${TMPDIR:-/tmp}/<team>-scratch`，没有就建）、`date`（默认今天）、从 `team.json` 原样拷来的 `members`，`team-layer.js` 还有 `team.json` 的 `roundtable`，团队有客座时 `team-layer.js`、`team-integrate.js` 还有 `guests`（见第二节）；`--set KEY=JSON` 加特有参数（键必须是这个工作流读的；按成员的映射只能用本队的 slug，每个调用只带自己那一项）；`--request "…"` 给每个调用加上 `request`（没给时 stderr 提示一行，不报错）。`--args-only` 只打印一个 `args`（配合 `dry_run.mjs`），`--out DIR` 另存成文件。把打印出来的每个对象原样交给 Workflow 工具：
 
 ```js
 Workflow({ scriptPath: "<repo>/scripts/workflows/team-read.js", args: { /* make_args.mjs 打印的 args */ } })
@@ -114,6 +116,7 @@ node scripts/workflows/dry_run.mjs scripts/workflows/team-read.js --team product
 | `--items N` | 假结果里每个数组放 N 项，字符串换成 `<字段>` 占位符（默认数组为空、字符串为空） |
 | `--bools MODE` | `happy`（默认：布尔值为 true，但 blocked、skipped、failed、missing 这类字段为 false，走正常路径）、`true`、`false`（走「没通过」「没准备好」的分支） |
 | `--answers FILE` | 按 label 指定假结果：`{"<label 正则>": 值}`，第一个匹配的键生效。值是对象时按 schema 合并进假结果（没给的字段自动补齐）；`null` 表示 agent 死了；数组表示依次调用的结果（最后一个重复用）。以 `_` 开头的键是注释 |
+| `--check-answers` | answers 给了某个 agent 的 schema 里没有的字段（嵌套字段和数组项也查）时警告：真 agent 不会被要这个字段，它驱动的分支可能根本走不到；加 `--strict` 时退出码为 2 |
 | `--team DIR` / `--member a,b` | 从 `<repo>/DIR/team.json` 读成员并设置 `args.team`；`--member` 只留这几位。不给参数文件时参数由 `make_args.mjs` 生成（可加 `--set KEY=JSON`、`--request "…"`） |
 | `--repo PATH` / `--scratch PATH` | args 里字符串 `$REPO`、`$SCRATCH` 替换成什么（默认：本仓库，以及 `<tmpdir>/nuwa-dry-run/<team>`） |
 | `--forbid RE` | prompt 匹配这个正则就警告，如 `--forbid 'dfo\|powell\|/home/'`，查有没有漏掉的旧团队内容 |
@@ -167,10 +170,10 @@ T4 增量        team-increment.js（以后有新材料时），之后再跑一�
 改完任何一个工作流或套件脚本，先跑自检，全部 `✓` 再提交：
 
 ```bash
-bash scripts/workflows/selftest.sh product/dfo-team    # 参数是一支已完成的团队（这里用实例）；不给就只跑示例预览和脚本检查
+bash scripts/workflows/selftest.sh product/dfo-team    # 参数是一支已完成的团队（这里用实例）；不给就跳过第 2 部分和 team_check.py，其余照跑（示例预览不带 --forbid）
 ```
 
-它做三件事：九个示例和几个分支变体（轻量档 T2、T3.6/T4 的 `from`）的 `--strict` 预览，`--forbid` 由已完成团队的 `team.json` 生成（团队、圆桌 slug 和成员的姓，不许漏进通用工作流）；对已完成团队的每个工作流跑 `make_args.mjs` 和 `dry_run.mjs --team`；所有脚本能编译、能 `--help`，`team_check.py <team>` 退出码 0。退出码是失败项数。
+它分四部分：1. 九个示例和几个分支变体（轻量档 T2、T3.6/T4 的 `from`）的 `--strict` 预览，`--forbid` 由已完成团队的 `team.json` 生成（团队、圆桌 slug 和成员的姓，不许漏进通用工作流）；2. 对已完成团队的每个工作流跑 `make_args.mjs` 和 `dry_run.mjs --team`；3. 所有脚本能编译、能 `--help`，`team_check.py <team>` 退出码 0；4. 客座 fixture：在临时目录里搭两支虚构的团队，host 队把 home 队的一位成员请作客座，查 `new_team.py`（`--dry-run`、铺目录、`--guest-text`、`--add-guest`、`--base-tier`）、`make_args.mjs` 与 `dry_run.mjs --team --strict`（另用 answers 文件走到客座的各个分支，每个都加 `--check-answers`）、`team_check.py`（`guests`、`hosts` 两项，在 host 目录里跑 `team_check.py .`）、`team_status.py` 的 Guests 一节和 `check_links.py`，再拿几份反例核对 `new_team.py`、`make_args.mjs`、`dry_run.mjs`、`team_check.py` 报错的措辞一致（主队 `team.json` 的读法也一致），`new_team.py` 停下时「先铺本队成员」那句提示只在每条客座错误都在等主队时才打印；这一部分不需要已完成的团队。四部分都不花 token，临时目录退出时删掉。退出码是失败项数。
 
 写工作流的规矩：
 - 用纯 JavaScript，开头是纯字面量的 `export const meta = {...}`；
