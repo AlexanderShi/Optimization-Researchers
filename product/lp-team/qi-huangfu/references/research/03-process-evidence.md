@@ -3,7 +3,7 @@
 - **Researcher**: Qi Huangfu (living). University of Edinburgh PhD 2013, supervised by J. A. J. Hall. He wrote the original HSOL dual revised simplex code (later the simplex core of HiGHS), worked on FICO Xpress, and develops COPT (Cardinal Operations).
 - **Dimension**: research-craft Phase 1, research agent 03 of 06: process evidence. This covers behaviour visible in code, experiment sections, version histories, and dropped or abandoned work.
 - **Research date**: 2026-10-27
-- **Sources consulted**: 41 (S1–S41 below). The identifiers of 6 further works he cites were also checked through the Crossref API. WebSearch calls used: 2.
+- **Sources consulted**: 41 (S1–S41 below), plus S42–S45, originals reopened on 2026-11-05 for the corrections marked in the text. The identifiers of 6 further works he cites were also checked through the Crossref API. WebSearch calls used: 2.
 - **Local corpus**: `references/sources/{papers,talks,essays,software,publications}` held only `.gitkeep`, so there was no user-supplied material. `private/` was not opened.
 - **Tags**: [stated] = what Huangfu wrote or said about how he works. This includes co-authored text, marked "(co-authored)". [practice] = what the papers, code or records show was actually done. [observed] = what others recorded (Hall, the HiGHS team, FICO, conference pages). [inferred] = my inference, not established. Each item also says primary or secondary.
 - **Attribution caveat (read first)**: almost all written evidence from 2010 to 2018 is co-authored with, or was presented by, his supervisor Julian Hall. The 2013 thesis (S1) and the 2014 FICO blog post (S9) are the only single-authored research texts found. HSOL's development history before 2017 is not public. The earliest public code snapshot (July 2017, S25/S26) already contains edits by Hall and Galabova, so individual lines cannot be attributed. Thesis page numbers below are the printed page numbers (PDF page = printed + 1). The thesis's terms of use forbid extensive quotation, so thesis quotes are kept short and the rest is paraphrased with page references.
@@ -52,7 +52,7 @@ His start date at Cardinal Operations is **not established** (see Gaps).
 
 **PE-04. "Why now" argued from a changed context, not from novelty alone.** [stated (thesis, single-authored); repeated co-authored] primary
 - The thesis gives two reasons that the dual revised simplex method deserves renewed parallel effort (S1 pp. 15–16, 77–78):
-  - The dual has replaced the primal as the preferred variant since DSE and BFRT. The only prior parallel dual work (Bixby & Martin, INFORMS J. Comput. 12(1):45–56, 2000, DOI 10.1287/ijoc.12.1.45.11902) had neither BFRT nor hyper-sparse solves.
+  - The dual has replaced the primal as the preferred variant since DSE and BFRT. In the thesis's account the only prior parallel dual work was Bixby & Martin (INFORMS J. Comput. 12(1):45–56, 2000, DOI 10.1287/ijoc.12.1.45.11902), which had neither BFRT nor hyper-sparse solves. **Correction (originals reopened 2026-11-05):** "only" does not hold. Wunderling's 1996 thesis, which the thesis cites but describes as primal work (S1 p. 72), tabulates parallel dual simplex runs (S43 PDF pp. 172, 176, 203–207). The Bixby–Martin work also dates from their ZIB preprint of December 1995 (S42), not 2000.
   - Multicore desktops make "any speedup" useful.
 - The same argument opens the 2018 paper: "Thus we have used a relatively standard architecture to perform computational experiments." (S7 p. 120.)
 - Context: thesis written 2013.
@@ -95,9 +95,9 @@ His start date at Cardinal Operations is **not established** (see Gaps).
 - Context: 2011–12, during the serial build.
 
 **PE-09. Generating alternatives directly from the explanation.** [practice] primary
-- From the explanation in PE-08 he derived two new pricing variants:
-  - partial CHUZR;
-  - "less-infeasibility DSE" (LiDSE): |x_i|/w_i instead of x_i²/w_i, generalised to |x_i|^t for 1 ≤ t ≤ 2.
+- From the explanation in PE-08 he derived one new pricing variant and re-tested an existing one:
+  - partial CHUZR, which he calls "not a novel idea at all" (S1 p. 63). His version starts at a random place in the hyper-sparse infeasibility list and stops after max(0.1 × |L|, 100) entries (S1 p. 64). **Correction (originals reopened 2026-11-05):** it is not new. It was Clp's default dual CHUZR in October 2003 and still is (S45), and Koberstein's 2005 thesis published it as randomized partial pricing, §8.2.2.3 (S44 PDF p. 117);
+  - "less-infeasibility DSE" (LiDSE), the new one: |x_i|/w_i instead of x_i²/w_i, generalised to |x_i|^t for 1 ≤ t ≤ 2.
 - He tested them on pds-20 and on pds-30 to pds-100 (S1 pp. 63–67, Tables 3.6–3.11).
 
 **PE-10. Need-driven derivation of linear-algebra variants.** [stated] [practice] primary
@@ -106,8 +106,8 @@ His start date at Cardinal Operations is **not established** (see Gaps).
 - By 2013 the APF is used instead to merge several FTRAN-BFRT solves into one inside the CPU-only PAMI (S1 pp. 82–83). The motive changed while the device was kept.
 - Context: 2010–13.
 
-**PE-11. Mining competitors' source code and folklore for undocumented techniques.** [practice] primary
-- APMOD 2012 on partial CHUZR: "Although the Authors know of no published reference to this technique, it is used within Clp [8]." (S8 p. 5.)
+**PE-11. Mining competitors' source code and folklore for techniques believed undocumented.** [practice] primary
+- APMOD 2012 on partial CHUZR: "Although the Authors know of no published reference to this technique, it is used within Clp [8]." (S8 p. 5.) **Correction (original reopened 2026-11-05):** the technique was documented. Koberstein's 2005 thesis, §8.2.2.3, describes randomized partial pricing for the dual (S44 PDF p. 117). The Clp case shows a missed reference, not an unpublished technique.
 - The 2018 revision adds a comparison with Forrest's Aboca, which was available only as source code and a talk: "Other than making the source code available [5], the authors believe that there is no published reference to this work." (S7 p. 124.)
 
 ---
@@ -239,9 +239,10 @@ His start date at Cardinal Operations is **not established** (see Gaps).
 - LiDSE: very helpful on pds, but "its scope for further application is fairly limited" (S1 p. 67), because its L1-norm approximation holds only for problems with ±1-like tableau entries.
 - 2016 seminar slide, co-presented, assessing the 2015 prize paper: MPF is "Not used by pami! Used by Google in glop" (S19, slide 32). Impact is tracked honestly, including where his own technique did *not* go.
 
-**PE-27. Literature claims tested and reported as not confirmed.** [practice] primary
+**PE-27. Literature claims reported as not confirmed, without the test printed.** [practice] primary
 - Koberstein's weighted cost perturbation (COAP 41(2):185–204, 2008, DOI 10.1007/s10589-008-9207-4): "no further numerical evidence or justification was provided in the original work, nor the expected effect was confirmed by computational experiences during this research" (S1 pp. 58–59).
 - The claim about perturbation and sparsity was likewise "neither supported by any numerical results nor got confirmed during this research" (S1 p. 61).
+- **Correction (originals reopened 2026-11-05):** no test is printed for the rejection either: the §3.3 tables compare perturbation on and off, never weighted against unweighted (S1 pp. 59–67). Koberstein's 2005 thesis does give a justification, a sparser LU-update spike and less fill (S44 PDF pp. 98–99), but no isolated test, since perturbation enters in the same version step as the BFRT (S44 PDF pp. 138–140); whether the 2008 paper repeats the justification was not checked. The column-count weighting is not his alone: Clp weighted its cost perturbation by column length by October 2003 (S45), and Koberstein calls his procedure "similar to the one implemented in the COIN LP code" (S44 PDF p. 98).
 
 **PE-28. Calibrated commercial comparison.** [practice] [stated (co-authored)] primary
 - The thesis's single-authored headline is that PAMI is "comparable with the dual simplex implementation of Cplex" (S1 p. 88; abstract).
@@ -312,7 +313,7 @@ His start date at Cardinal Operations is **not established** (see Gaps).
 | F-1 | **GPU extension of the dual simplex with suboptimization.** Dec 2010 slides plan CPU/GPU work-splitting and introduce the APF for it. Apr 2011: "Scope for combined CPU+GPU solver should be explored". The thesis and all later work are CPU multicore only. Dense or GPU parallel simplex is "excluded from future consideration" (thesis p. 75) | S13 slides 26–31; S14 slide 24; S1 p. 75 | [practice] primary. *Why* it was dropped is [inferred]: no statement found |
 | F-2 | **First prototype ParISS (PF update, May 2011).** Failed on 14 of 30 non-trivial problems in at least one run, 2.7× slower than Clp in serial. Rebuilt into ParISS 2.0 by Sep 2011, then HSOL; the 2018 paper says pami "out-performs ParISS by almost an order of magnitude in serial" | S3 p. 6; S15 slides 34–36; S7 p. 126 | [practice] primary |
 | F-3 | **Hyper-sparsity promotion / LiDSE line.** APMOD 2012 talk plus a 5-page extended abstract ("Preprint submitted to Elsevier", 29 Mar 2012) and thesis §3.3 ("still at an initial stage", p. 94). No resulting paper appears in Hall's publication list (checked 2026-10-27) or among his arXiv preprints | S8; S1 pp. 59–67, 94; S24; S36 | [practice] primary. Whether it was abandoned or simply never written up is [inferred] |
-| F-4 | **Techniques tried and set aside:** partial CHUZR (unsuitable for larger pds), weighted perturbation (effect not confirmed), APF as a general update (not recommended), full EXPAND (exact zero step sufficient) | S1 pp. 45, 58–59, 66 | [practice] primary |
+| F-4 | **Techniques tried and set aside:** partial CHUZR (unsuitable for larger pds), weighted perturbation (effect not confirmed; corrected 2026-11-05: neither the thesis nor Koberstein printed a weighted-vs-unweighted run, see PE-27), APF as a general update (not recommended), full EXPAND (exact zero step sufficient) | S1 pp. 45, 58–59, 66 | [practice] primary |
 | F-5 | **Overlapping INVERT with iterations** was left out of PAMI (numerical risk and implementation difficulty). A "recompute-and-catchup" FT-based version is proposed as future work. No evidence it was done | S1 pp. 84, 94 | [practice] primary; outcome unknown |
 | F-6 | **Replay test harness (HTester) disabled after his departure.** In 2017 it sits behind `#ifdef JAJH_dev`, with a note that its setup "needs to be re-written" if used again | S26 `HTester.cpp` | [observed] primary (Hall's edits) |
 | F-7 | **PAMI in HiGHS was on Hall's 2019 plan as "Resurrect pami"**, and in 2021 he advises "Use pami tactically: switch it off if it is ineffective" | S22 slide 13; S23 slide 26 | [observed] primary |
@@ -476,3 +477,10 @@ Secondary sources, metadata and attempts:
 - **S39**. OpenAlex author A5074771751. This record conflates Huangfu with a medical researcher; it surfaced S2. Secondary metadata.
 - **S40**. *COAP 2015 Best Paper Prize*, Computational Optimization and Applications 65(3):541–544, Dec 2016, DOI 10.1007/s10589-016-9882-5. **Not read** (no OA copy).
 - **S41**. Edinburgh Research Explorer (Pure) file for the PPAM paper, https://www.pure.ed.ac.uk/ws/files/17773114/A_high_performance_dual_revised_simplex_solver.pdf. Contains a slide deck, not the paper; not used.
+
+Originals reopened on 2026-11-05 for the corrections marked in the text (PDF pages):
+
+- **S42**. R. E. Bixby, A. Martin, "Parallelizing the dual simplex method", ZIB Preprint SC-95-45, December 1995, https://opus4.kobv.de/opus4-zib/files/211/SC-95-45.pdf. The preprint of the 2000 journal paper, whose text was not read.
+- **S43**. R. Wunderling, "Paralleler und objektorientierter Simplex-Algorithmus", doctoral thesis, TU Berlin, ZIB Technical Report TR 96-9, December 1996, https://opus4.kobv.de/opus4-zib/files/538/TR-96-09.pdf (German).
+- **S44**. A. Koberstein, "The dual simplex method, techniques for a fast and stable implementation", doctoral thesis, Universität Paderborn, 2005, https://d-nb.info/978580478/34.
+- **S45**. COIN-OR Clp source, https://github.com/coin-or/Clp: at commit 29f4248e63e3 (2003-10-15), `include/ClpDualRowSteepest.hpp` l. 63–70 (default mode 3, partial scan), `ClpSimplex.cpp` l. 122 (default dual row pivot) and `ClpSimplexDual.cpp` l. 3131–3190 (perturbation weighted by column length); at commit 874465237db8 (2026-11-04), `src/ClpDualRowSteepest.hpp` l. 81–87 and `src/ClpSimplex.cpp` l. 162.

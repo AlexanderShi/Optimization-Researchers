@@ -22,8 +22,10 @@
   （CHUZC、CHUZR、PRICE、UPDATE，平均不足 35%）的方案，最好也只有约 1.5；假设串行部分 30%、其余完美并行，
   8、16、32、64 核的最佳加速为 2.6、2.9、3.1、3.2，因此论文假定 8 核 [LP-S1 §4.2.1–§4.2.2, PDF pp. 76–79]。
 - **假设**：Amdahl 定律在论文中未注出处；30% 是明说的假设而非测量；组件份额来自 LP-R1；对 Bixby–Martin 的界是论文用自己的剖面
-  推出的，不是 [LP-S52] 原文的结论。
-- **状态**：proved-in-source [LP-S1]（Amdahl 定律的算术推论，§4.2.1–§4.2.2, PDF pp. 76–79）
+  推出的，不是 [LP-S52] 原文的结论。原文核对：预印本自己的剖面（表 1 的四个模型）里，数据分布式的 PVM/System V 版并行的四步（Pricing、Ratio、Pivot、Update-d）
+  占 24.0%（pilots）到 97.3%（aa300000；表 1 四项相加为 97.6）[LP-S52 SC-95-45 PDF pp. 5–6]；PowerC 版 4 处理器的实测加速 39 行中 35 行超过 1.5（本语料按表 11 计数）
+  [LP-S52 SC-95-45 PDF p. 19]，见 LP-R25。
+- **状态**：proved-in-source [LP-S1]（Amdahl 定律的算术推论，§4.2.1–§4.2.2, PDF pp. 76–79）；原文核对（2026-11-05）：[LP-S52] 预印本 SC-95-45 表 1、表 11（PDF pp. 5–6, 19）
 - **层级**：verified-web。
 
 ## LP-R3 PAMI：论文版结果（8 核）
@@ -109,8 +111,11 @@
   （极端值 ns1688926 为 0.07、dbic1 为 0.11），折算后 hsol 的迭代速度是 Clp 的 1.60 倍；作者结论 hsol 是高质量的对偶修正单纯形
   求解器；图 3 的 profile 中 pami8 优于 hsol，hsol "generally superior" 于 Clp [LP-S2 §5.2, PDF pp. 21–22]。
 - **假设**：Clp 1.15 [LP-S55]，无预处理、无 crash；30 题参考集；硬件同 LP-R4；正文说 2.29 依据表 6，但表 6 无 Clp 列（与表 5 的
-  时间相符，读者核对），照原文记录。
-- **状态**：verified-web: computational result reported in [LP-S2] (§5.2, Fig. 3, PDF pp. 21–22)
+  时间相符，读者核对），照原文记录。不开预处理与 crash 是因为 hsol 与 pami 没有这两样；Clp 用的是对偶单纯形还是由它自选，期刊版没说 [LP-S2 §5.2, PDF p. 21]。
+  原文核对：Galabova–Hall 用 Clp 1.16.10 在同一 30 题参考集上（以 qap15 代 dcp2、nug15 代 nug12；都先做 presolve）测得，默认 Clp 只在 10 题选原始单纯形，
+  并总先做 Idiot crash，其中一半 Idiot 让原始单纯形加速至少 2.5 倍，作者据此称 Idiot crash 对 Clp 的最终表现贡献显著 [LP-S66 arXiv v1 PDF pp. 6–7]。
+  所以 2.29 是相对关掉预处理与 crash 的 Clp 1.15，不是相对 Clp 的默认路径；两文的版本、预处理与硬件都不同，不能用来换算 2.29。
+- **状态**：verified-web: computational result reported in [LP-S2] (§5.2, Fig. 3, PDF pp. 21–22)；原文核对（2026-11-05）：[LP-S66] arXiv v1（PDF pp. 6–7）
 - **层级**：verified-web。
 
 ## LP-R11 hsol 与 clp、cplex：更新论文中的串行对照，及论文图 3.6
@@ -219,9 +224,14 @@
   over-weighted CHUZR 1.03 / 1.77 / 1.83；三者组合 1.05 / 1.87 / 1.97（时间 Min 0.96）；平均退化迭代 32% 分别降到 23%、17%、0%
   [LP-S8 PDF pp. 22, 24, 25]。三个一般 LP 用全部技术：pds-100 1.1 / 7.9 / 8.5、neos1 7.7 / 1.4 / 10.8、stormG2-1k 0.9 / 1.2 / 1.1——
   pds-100 与 neos1 的迭代与时间因子都**低于**只用成本扰动（LP-R19），幻灯片未作评论 [LP-S8 PDF pp. 10, 26]。
-- **假设**：同 LP-R19；partial CHUZR 在随机子集上做 CHUZR，作者称其见于 Clp、不知有发表文献 [LP-S7 §4, PDF p. 5]；over-weighting 的
+- **假设**：同 LP-R19；按 APMOD12 的说法，partial CHUZR 在随机子集上做 CHUZR，作者称其见于 Clp、不知有发表文献 [LP-S7 §4, PDF p. 5]（原文核对：Koberstein 2005 §8.2.2.3
+  已发表随机起点的 partial pricing，即对偶中选离基行的 partial CHUZR [LP-S60 PDF p. 117]；源码核对：Clp 自 2003-10-15 的提交起把它作为对偶 CHUZR 的默认（mode 3）
+  [LP-S55 include/ClpDualRowSteepest.hpp l. 63–70, ClpDualRowSteepest.cpp l. 213–238 @29f4248e63e3]，扫的是从不可行列表随机位置起回绕的连续一段，不是独立抽取的随机子集，
+  且数到 max(2000, number/8) 个超出容差的项才停（number 为不可行列表长度；LU 因子非零数与行数之比小于 1 时改用 max(2000, number/20)，
+  大于 10 时按比值放大、超过 80 即全扫；最大原始误差超过 1e-3 时也全扫），这类项不多于 2000 个时等于全扫 [LP-S55 src/ClpDualRowSteepest.hpp l. 81–87, src/ClpDualRowSteepest.cpp l. 252–336 @874465237db8]；
+  论文也说对偶的 partial CHUZR（原始中称 partial pricing）"is not a novel idea at all" [LP-S1 §3.3.3, PDF p. 64]）；over-weighting 的
   确切选择规则幻灯片未印。
-- **状态**：verified-web: computational result reported in [LP-S8] (PDF pp. 22–26)
+- **状态**：verified-web: computational result reported in [LP-S8] (PDF pp. 22–26)；原文核对 / 源码核对（2026-11-05）：[LP-S60] §8.2.2.3（PDF p. 117）、[LP-S55] ClpDualRowSteepest
 - **层级**：verified-web。
 
 ## LP-R21 网络 LP 上 over-weighting 等价于 1-范数 steepest edge
@@ -263,12 +273,21 @@
 
 ## LP-R25 前人并行单纯形的结果（转述）
 - **结论**：一手来源转述的他人结果：稠密 tableau 类实现加速「从几十到上千」，但整体不如好的串行稀疏修正单纯形 [LP-S1 §1, §4.1.1, PDF pp. 16, 70–71]；
-  Bixby–Martin（基于 Cplex 的对偶修正单纯形）加速在 1 与 3 之间 [LP-S1 Table 4.2, PDF p. 72]；PARSMI 1.7–1.9（每迭代至多快 2.4 倍），
-  ASYNPLEX 2.4–4.8 [LP-S1 Table 4.2, PDF p. 72]；Wunderling 无已知加速数据 [LP-S1 Table 4.2, PDF p. 72]；Lubin 等人在块角问题上用 256
+  Bixby–Martin（基于 Cplex 的对偶修正单纯形）加速在 1 与 3 之间 [LP-S1 Table 4.2, PDF p. 72]（原文核对，只有预印本：System V 版 2 处理器 0.8–2.6（表 10）；
+  PowerC 版 2 处理器 1.0–2.4、3 处理器 1.1–3.9、4 处理器 1.1–5.3，4 处理器的 39 行中 19 行超过 3，其中 11 行是同一个航空模型的截段 aaK（表 11；本语料计数）
+  [LP-S52 SC-95-45 PDF pp. 8, 14, 19]；「1 与 3」大体只合 2 处理器的结果，表 10 还有 5 行低于 1）；PARSMI 1.7–1.9（每迭代至多快 2.4 倍），
+  ASYNPLEX 2.4–4.8 [LP-S1 Table 4.2, PDF p. 72]；Wunderling 无已知加速数据 [LP-S1 Table 4.2, PDF p. 72]（原文核对：原文并非没有加速数据。Wunderling 论文的表 A.15–A.19
+  印了对偶单纯形（steepest edge、松弛基）在 SGI 1–2 处理器与 Cray T3D 1–32 PE 上的逐题时间与迭代数 [LP-S50 PDF pp. 172, 176, 203–207]；摘要说是否加速视问题而定，
+  并举例称 32 个处理器可加速 16 倍以上 [LP-S50 PDF p. 9]；总结说矩阵向量积与向量加法的并行对行数与列数相差很大的 LP 尤其划算，这类 LP 用 32 PE 可达约 20 倍，
+  2 个 PE 的并行看来可用于一般 LP [LP-S50 PDF p. 186]）；Lubin 等人在块角问题上用 256
   处理器相对串行 Clp 超过 100 倍，但限于该类 LP [LP-S1 §4.1.3, PDF p. 76]；
   "In two of the more successful implementations [8, 9], the limited speed-up came at the cost of unreliability due to numerical instability."
   （[8, 9] 即 PARSMI 与 ASYNPLEX）[LP-S6 §2.2, PDF p. 4]；幻灯片称
   Lubin、Hall 等人在 8192 个 Blue Gene 核上解了 5 亿变量/约束的 LP [LP-S13 PDF p. 25]。
-- **假设**：全部是引用方的转述，被引原文未读；测试集与硬件各不相同、不可横比。
-- **状态**：cited — [LP-S1] citing [LP-S52, LP-S49, LP-S51, LP-S50, LP-S54, LP-S53]; [LP-S6] citing [LP-S49, LP-S51]; [LP-S13] citing [LP-S54]
-- **层级**：verified-web（仅「一手来源如此转述」这一层）。
+- **假设**：除标「原文核对」处外，全部是引用方的转述，被引原文未读。原文核对：Bixby–Martin 只读到 1995 年预印本（期刊版未读）：表 10 是 System V 版在 2 处理器
+  75 MHz SGI R8000 上的结果，基线是串行代码（表中 Sequential 列）[LP-S52 SC-95-45 PDF pp. 13–14]；表 11 是 PowerC 版在 4 处理器 75 MHz R8000 上的结果，基线是同一 PowerC
+  代码在 1 个处理器上的时间，这一版 Cplex 串行就比表 10 的快 [LP-S52 SC-95-45 PDF pp. 15–16, 18–19]；两表都是 NETLIB 合计一行加 38 个模型，多为 Cplex 的专有模型
+  [LP-S52 SC-95-45 PDF p. 8]。Wunderling 的表只印逐题时间与迭代数（DoPlex 另印 block pivot 数），未印加速比 [LP-S50 PDF pp. 203–207]。测试集与硬件各不相同、不可横比。
+- **状态**：cited — [LP-S1] citing [LP-S52, LP-S49, LP-S51, LP-S50, LP-S54, LP-S53]; [LP-S6] citing [LP-S49, LP-S51]; [LP-S13] citing [LP-S54];
+  verified-web (2026-11-05): originals checked for [LP-S52] (preprint SC-95-45: Tables 10–11, footnote 5, test setup) and [LP-S50] (abstract, §4.3–§4.4, summary, Tables A.15–A.19)
+- **层级**：verified-web（转述层；标「原文核对」处另据原文）。

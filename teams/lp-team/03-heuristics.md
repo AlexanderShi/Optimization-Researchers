@@ -42,23 +42,37 @@
 ## H5 BOXED 变量：比率检验里翻转，phase I 里固定
 - **场景**：实现对偶 CHUZC 与对偶 phase I。
 - **规则**：(a) CHUZC 先一遍把 8 种情形（4 种非基状态 × 2 种离基不可行方向）合并成一个条件 ā_pj = â_pj · s_p · δ_j > 0 [LP-S1 §3.2.3, PDF pp. 56–57]；
-  (b) 若最小比率的候选是 BOXED 且它的整个区间也消不掉离基变量的不可行量，就把它翻到另一界而不让它入基，再看下一个比率（BFRT，出自 Fourer [LP-S29]）；
+  (b) 若最小比率的候选是 BOXED 且它的整个区间也消不掉离基变量的不可行量，就把它翻到另一界而不让它入基，再看下一个比率（BFRT，一手来源记作出自 Fourer [LP-S29]；原文核对：Koberstein 2005 据 Kostina 称其基本思想 1979 年已在俄文文献中发表 [LP-S61, LP-S62，据 LP-S60 PDF p. 41]，Kostina 原文未读）；
   遇到第一个非 BOXED 候选即停；全部翻完仍不可行则判对偶无界 [LP-S1 §3.2.3, PDF p. 57]；(c) 与 Harris 两遍检验 [LP-S26] 结合时，同一 Harris 组要么全翻、
   要么全不翻并由组内主元最大者入基——代价是入基变量可能带着微小不可行入基 [LP-S1 §3.2.3, §3.3.2, PDF pp. 59, 63]；(d) 已在容差内不可行的入基候选用
   EXPAND 的严格零步（对偶形式：入基时把其 reduced cost shift 到零，离基时撤销）[LP-S30，据 LP-S1 §3.2.3, PDF pp. 58–59]；(e) bound tightening
   （presolve 的特例；来源称小心实现时不需要 postsolve）让更多变量成为 BOXED，既利于 BFRT，又能用翻界取得对偶可行、跳过 phase I——实现细节来源略去
   [LP-S1 §3.2.3–§3.2.4, PDF pp. 58, 60]；(f) 对偶 phase I 用 Koberstein–Suhl 子问题法 [LP-S24]：BOXED 与 FIXED 设为 [0, 0]（翻界总能让 BOXED 对偶可行），
-  LOWER [0, 1]、UPPER [−1, 0]、FREE [−1000, 1000]，于是子问题恒可行 [LP-S1 §3.2.4, Table 3.4, PDF p. 60]。
+  LOWER [0, 1]、UPPER [−1, 0]、FREE [−1000, 1000]，于是子问题恒可行 [LP-S1 §3.2.4, Table 3.4, PDF p. 60]。原文核对：Koberstein 2005 的子问题
+  对 LOWER、UPPER 的界相同，FREE 先是 [−1, 1]、实现中改为 [−10^4, 10^4]（给 free 变量 10^4 的权重，好让它们入基），boxed 与 fixed 变量不参与 phase I
+  [LP-S60 PDF pp. 54–56]——±1000 是 HSOL 的取值，Koberstein–Suhl 2007 年文 [LP-S24] 取何值未核；把 BOXED 翻界后排除在外也已明写在 2005 年论文里，
+  不是 HSOL 的发明（F7）。
 - **简化的代价**：HSOL 在没有 BOXED 非基变量时也照走 BFRT 流程以复用代码；论文承认更讲究的代码此时应改用常规（Harris）比率检验 [LP-S1 ch. 5, PDF p. 95]。
+- **别的 phase I 做法**（本队一手来源只说历来有许多种 [LP-S1 §3.2.4, PDF p. 60]）：原文核对：Koberstein 2005 另述 big-M、artificial bounds（一阶段做法；
+  他们最早的对偶单纯形用过，因 M 难定而弃用）、cost modification（平移对偶不可行变量的成本、使其约化成本为零，结束时可能要接原始单纯形；SoPlex 所用）与 Pan 的方法
+  （无收敛证明）[LP-S60 PDF pp. 53, 61, 63]；在 46 个起始全逻辑基对偶不可行、只靠翻界修正不了的题上，Pan 加子问题回退（Pan+SP）总 CPU 时间 8521.1 s、
+  子问题法 9254.9 s、cost modification 11625.8 s，纯 Pan 有 3 题得不到对偶可行基；作者结论是 Pan+SP 整体最好、对子问题法只略占优，cost modification 近 25%
+  的迭代落在原始单纯形 [LP-S60 PDF pp. 134–136]。源码核对：Clp 的对偶单纯形不分两阶段，头文件注释称它是 single phase approach——把对偶可行的权重
+  updatedDualBound_ 当作假界，上下界之差小于它的变量直接翻界，否则在离一个界 updatedDualBound_ 处设假界；结束时若假界还起作用就加大它再继续
+  [LP-S55 src/ClpSimplexDual.hpp l. 31–43 @874465237db8]（与 Koberstein 所说的 artificial bounds 同类，这是本语料的归类）。选哪种：语料只有 Koberstein 的这一组比较。
 
-## H6 成本扰动：当算法手段用，但管住尺度与适用面
+## H6 成本扰动：管住尺度，收益按问题族验证
 - **场景**：退化严重，或想复现 pds 类问题上的大幅提速。
 - **规则**：(a) 对偶单纯形开始前随机扰动结构变量的成本，符号按变量类型定，幅度结合自身成本、最大成本与对偶容差——HSOL 用 Koberstein 方案的简化不加权版
   [LP-S1 §3.2.3, PDF p. 59; LP-S23]；(b) 最优后移除扰动，残余的微小对偶不可行用原始 phase II 清理 [LP-S1 §3.2.3, PDF p. 59; LP-S8 PDF p. 7]；
-  (c) 扰动相对对偶容差过小时，候选比率仍挤在零附近、BFRT 不起作用 [LP-S1 §3.3.2, PDF p. 64]；(d) 不用加权扰动：无数值证据、未被证实
-  [LP-S1 §3.2.3, PDF p. 60]；(e) 预期收益集中在 pds 与网络类（pds-20 时间减 84%，LP-R17；NETGEN 总时间减 36%，LP-R19），但 3 个 NETGEN 问题变慢、
+  (c) 扰动相对对偶容差过小时，候选比率仍挤在零附近、BFRT 不起作用 [LP-S1 §3.3.2, PDF p. 64]；(d) 加权与否没有隔离的证据：HSOL 用不加权版，论文称加权既无数值证据、也未被本研究的计算经验证实
+  [LP-S1 §3.2.3, PDF p. 60]，但没有印出加权与不加权的对比；Koberstein 2005 与 Clp 都按列非零数加权 [LP-S60 PDF p. 99; LP-S55 ClpSimplexDual.cpp l. 3131–3193 @29f4248e63e3]，
+  Koberstein 2005 也没有单独检验加权的实验 [LP-S60 PDF pp. 138–140]，(a) 所引的 2008 年期刊文 [LP-S23] 未读（「分歧」2）——要加权，先在自己的问题族上对比；(e) 预期收益集中在 pds 与网络类（pds-20 时间减 84%，LP-R17；NETGEN 总时间减 36%，LP-R19），但 3 个 NETGEN 问题变慢、
   stormG2-1k 毫无变化（LP-R19）——上线前在自己的问题族上测。
-- **依据**：Bixby 视扰动为算法手段的主张 [LP-S22，据 LP-S1 §3.3.2, PDF p. 62]，以及本队记录的机制诠释（「分歧」1；诠释不是定理，见 F8）。
+- **依据**：实测来自 HSOL（pds-20，LP-R17）与 ParISS（NETGEN 与三个一般 LP，LP-R19），机制是本队记录的诠释（「分歧」1；诠释不是定理，见 F8）。论文转述的
+  Bixby 建议（把扰动当作算法手段而不只是退化的补救）[LP-S22，据 LP-S1 §3.3.2, PDF p. 62] 不是本规则的证据：原文核对显示那是括号里对 Cplex 7.1 做法的描述，
+  7.1 在 PDS 上的表现被归于充分利用稀疏、对偶中更激进的扰动与 bound flipping 三点、未分主次 [LP-S22 TR01-20 p. 14]；文中没有印出对偶扰动的单独测量，
+  唯一单独测扰动的是 Cplex 1.0 在 degen4 上的界扰动（表 3）[LP-S22 TR01-20 p. 11]。
 
 ## H7 CHUZR 定价：默认 DSE，偏离要有问题类证据
 - **场景**：选择或调整离基行的定价规则。
@@ -66,7 +80,8 @@
   重做 CHUZR——针对原文 10^-4 权重下限造成的「虚假吸引力」[LP-S1 §3.2.2, PDF pp. 54–55]；(c) 从高级基热启动时 DSE 初始化昂贵，dual Devex 零成本初始化
   但效果较差 [LP-S13 PDF p. 40]；(d) LiDSE / 广义 LiDSE 只在 pds 类（表元多为 ±1）启用，对一般 LP 可能严重损害效率（LP-R18）；
   (e) over-weighting（ŵ_i²）的依据是网络 LP 上的恒等式（LP-R21），证据是 NETGEN（LP-R20）；(f) partial CHUZR 在 NETGEN 上有益（LP-R20），
-  在较大 pds 上不合适（LP-R18）——先确认问题族。
+  在较大 pds 上不合适（LP-R18）——先确认问题族；源码核对：Clp 的对偶 CHUZR 默认（mode 3）就是 partial 扫描，头文件注释说这在很简单的问题上可能更快，
+  但超出容差的不可行行不多于 2000 个时实际是全扫 [LP-S55 src/ClpDualRowSteepest.hpp l. 81–87, src/ClpDualRowSteepest.cpp l. 252–336 @874465237db8]。
 - **未说明**：识别「类 pds 问题」以自动启用 LiDSE 的规则（论文只说容易识别，并把自动触发列为未来工作 [LP-S1 §3.3.4, ch. 5, PDF pp. 67, 95]）；
   原始与对偶容差的取值（论文只说常见取 10^-6 或 10^-7，未给 HSOL 的值 [LP-S1 §3.2.2–§3.2.3, PDF pp. 54, 58]）。
 
