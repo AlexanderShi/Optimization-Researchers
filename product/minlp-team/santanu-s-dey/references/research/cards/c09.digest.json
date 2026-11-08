@@ -1,0 +1,122 @@
+[
+  {
+    "id": "S023",
+    "year": "2020",
+    "title": "Approximation algorithms for training one-node ReLU neural networks",
+    "read_level": "full",
+    "contribution": "Proves that least-squares training of a single ReLU node is NP-hard and gives an O(n^k) active-set enumeration algorithm with an n/k ratio (exact when the data are realizable) and an n-independent asymptotic ratio under a Gaussian-noise model; experiments show it beats GD/SGD and makes a good GD warm start (read: arXiv v2).",
+    "problem_entry": "Fixes the smallest network (one ReLU node) as a precise optimization problem, separates it from sample-complexity notions of 'training complexity', and asks NP-hard? approximable? how well, worst case and statistically? (pp. 1-3).",
+    "key_idea": "Split the samples by the sign of Y, keep the convex Y<=0 part, and turn the Y>0 part into an outer search over polynomially many active sets ordered by Y with an unconstrained convex inner problem using a surrogate sigma that is exact at the optimal active set (Prop. 2, Alg. 1, pp. 4-6).",
+    "assumptions": "Regime (i): arbitrary data, no assumptions. Regime (ii): Y = ReLU(X^T beta* + beta0*) + Gaussian noise, X i.i.d. mean zero with a 'unique optimal property', parameters in a compact convex set (Assumption 1, p. 7); no i.i.d. Gaussian-input or zero-bias assumption, unlike prior GD/SGD results (p. 7).",
+    "proof_devices": [
+      "NP-hardness by reduction from {±1} subset sum, with a gadget theta(x, beta0) forcing beta_j in {±1} and a heavy sample X = 0, Y = 10p pinning beta0; four-case analysis on beta0 (pp. 16-19)",
+      "Convex upper surrogate sigma(x, y) that upper-bounds the loss and is exact at the optimal active set (Prop. 2, pp. 4-5, 19)",
+      "n/k ratio by bounding one enumerated candidate built from the unknown optimum (the k largest inactive indices) and splitting the misclassified actives into I~+ and I~-; uses the sorted Y (pp. 19-21)",
+      "Realizable case solved exactly as a corollary of the multiplicative ratio (Cor. 1, pp. 6-7)",
+      "Asymptotic bound via the uniform strong law (Mickey 1963) and nonlinear least-squares consistency (Jennrich 1969), a seven-term conditional split (T1)-(T7) and erf/erfc bounds at y = 0 (Thm. 3, Lemma 1, pp. 8, 22-25)"
+    ],
+    "experiments": "Synthetic only: X in {-1,0,1} with sparsity 0.1-0.9, SNR 6-30 dB and noiseless, (p,n) = (10,200), (20,400), (50,1000), 20 instances per setting; realizable instances perturbed so the planted beta* is the unique optimum; sorting / sorting+iterative / GD / sorting+GD / SGD compared on prediction, objective, recovery and generalization error and time; Gurobi 7.0.2 on a MacBook; the beta* distribution stated in §3.2 disagrees with the figure captions (pp. 10-15, 30-38).",
+    "positioning": "Extends Boob-Dey-Lan's two-layer hardness to one node; credits Manurangsi-Reichman's independent reduction and inapproximability bound and Arora et al.'s O(n^p) exact algorithm; restates GD/SGD guarantees as needing Gaussian, realizable, zero-bias or special-initialization assumptions (pp. 3, 6-7, 9).",
+    "writing": "Every theorem is followed by a 'Comparison with related results from literature' paragraph; proofs are deferred to §5; the limits (the ratio blows up as noise goes to 0; the gap to the lower bound is open) are written beside the results; the conclusion presents the warm-start observation as the paper's lesson (pp. 6-9, 16).",
+    "limits_future": "Open (p. 16): the gap between n/k and the n^{1/log log n} lower bound; conjectured optimality in the statistical model; multi-node networks. The n/k bound has no tight example, and the experiments run a cruder k = 1 'sorting' variant, not Algorithm 1 itself (p. 11).",
+    "method_links": [
+      {"method": "Method 4", "relation": "evidence", "note": "Hardness paired with an approximation result; the gap to the lower bound is stated as open; the ratio's degeneration as noise goes to 0 is written beside the corollary (step 6). No tight example.", "pages": "pp. 3, 6, 9, 16"},
+      {"method": "Method 2", "relation": "evidence", "note": "Realizable instances with a planted, unique global optimum give exact ground truth for every method; the generator stated in the text disagrees with the captions, repeating the [03 C2] defect.", "pages": "pp. 10, 14, 30-33"},
+      {"method": "Method 5", "relation": "variant", "note": "The guarantee is an a priori multiplicative ratio rather than a per-instance dual bound; prior GD/SGD guarantees are criticised for Gaussian/realizable data assumptions (Taste warning 1).", "pages": "p. 7"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "approximation algorithm as warm start for a local method", "evidence": "The guaranteed sorting/approximation solution is used to start gradient descent, and the combination is reported as the main empirical lesson.", "pages": "p. 1, p. 16"},
+      {"pattern": "active-set enumeration + exact convex surrogate", "evidence": "A piecewise-linear nonconvex loss becomes an outer enumeration over activation patterns with an unconstrained convex inner problem whose surrogate is exact at the optimal pattern.", "pages": "pp. 4-6"}
+    ],
+    "transferable": [
+      "Use a convex upper surrogate that is exact at the optimal discrete pattern so that the inner problems are unconstrained convex fits and the outer search is purely combinatorial (pp. 4-5).",
+      "Prove an enumeration ratio by bounding one specific enumerated candidate built from the unknown optimum (pp. 19-21).",
+      "Construct realizable test instances whose planted parameter is the unique global optimum, so 'recovery error = 0' certifies optimality (p. 10).",
+      "After each theorem, write a 'comparison with related results' paragraph naming which assumption of each prior result is dropped (pp. 6-7)."
+    ],
+    "coauthors": "Guanyi Wang, Yao Xie",
+    "quotes": [
+      {"text": "There is a significant gap between upper bound from Algorithm 1 and this lower bound.", "page": 6},
+      {"text": "since such algorithms due to their theoretical guarantees provide a good starting point for gradient descent, usually a requirement for the gradient descent algorithm to work well.", "page": 16}
+    ]
+  },
+  {
+    "id": "S032",
+    "year": "2020",
+    "title": "The convex hull of a quadratic constraint over a polytope",
+    "read_level": "full",
+    "contribution": "Shows by a short constructive proof that the convex hull of any quadratic equation intersected with any polytope is second-order-cone representable, generalizing the authors' bipartite-bilinear-over-a-box result (read: arXiv v1).",
+    "problem_entry": "Function convexification (McCormick and its descendants) does not give hulls of sets, and set convexification is rare; is the exact hull of a quadratic over a polytope LP, SOCP or SDP representable? Their own SOCr result for bipartite bilinear over a box is the special case to generalize (p. 2).",
+    "key_idea": "After diagonalization the quadric is either a union of two convex pieces (SOCr hull directly) or a ruled surface, in which case no interior point of P is extreme; intersect with the facets of P and recurse on dimension (pp. 3, 9-10).",
+    "assumptions": "One quadratic equation with arbitrary Q, alpha, g; P a bounded polyhedron, defended as 'not very restrictive' for branch-and-bound (p. 2); inequalities and multiple quadratics are not treated.",
+    "proof_devices": [
+      "Extreme-point cover: if B_i ⊆ S cover extr(S), then conv(S) = conv(∪ conv(B_i)), and SOCr is closed under the hull of finite unions (§3.1, pp. 3-4)",
+      "Affine invariance of hulls and SOC representability (Obs. 2, p. 4)",
+      "Canonical form via the spectral theorem and completing squares: signed sum of squares plus linear terms, g >= 0 (§3.2, pp. 4-5)",
+      "Reduction to a full-dimensional P by substitution (Lemma 1, §3.3.1, pp. 5-6)",
+      "Non-extremality lemmas by sign pattern; a line in the surface is built by intersecting a unit sphere with a hyperplane at distance <= 1 (Lemmas 2-5, pp. 6-7)",
+      "Tawarmalani-Richard equation-to-inequalities hull decomposition plus Hillestad-Jacobsen polyhedral hull of reverse-convex ∩ polytope (Lemmas 6-7, pp. 8-9)",
+      "Induction on dimension over the facets of P (pp. 9-10)"
+    ],
+    "experiments": "none (n/a); points to the encouraging dual bounds of [20] as motivation (p. 2)",
+    "positioning": "Places the result against the LP/SOCP/SDP relaxation families and hierarchies; SDP is strong but scales poorly (p. 2); lists many function-convexification papers against few set-convexification ones (p. 2); calls the result 'somewhat unexpected' against the SOS view, citing Fawzi on the 3x3 PSD cone (p. 2); credits ruled-surface theory found after the proof (p. 3).",
+    "writing": "Short note; the result appears as Theorem 1 on p. 2 before any proof; a 'simple constructive proof' is promised in the abstract; two hyperboloid figures carry the intuition; candid narrative that the authors learned of 'ruled surfaces' only after proving the theorem (pp. 1-3); no conclusion section.",
+    "limits_future": "Cost stated next to the theorem: an exponential number of variables, since linear optimization over S is NP-hard (p. 2). No future directions and no computational use of the hull are discussed.",
+    "method_links": [
+      {"method": "Method 3", "relation": "evidence", "note": "Explicitly chooses set over function convexification and convexifies a recurring substructure (one quadratic ∩ polytope) to the exact hull with a constructive proof, generalizing their own bipartite bilinear result (steps 2-4).", "pages": "p. 2"},
+      {"method": "Method 4", "relation": "evidence", "note": "States the exponential cost of the constructive extended formulation and ties it to NP-hardness (step 5).", "pages": "p. 2"},
+      {"method": "Method 5", "relation": "evidence", "note": "The target class is SOCr rather than SDP, with SDP's poor scaling as the stated reason (Taste 4).", "pages": "p. 2"}
+    ],
+    "new_pattern_candidates": [],
+    "transferable": [
+      "Use the extreme-point cover identity conv(S) = conv(∪ conv(B_i)) to keep a compact set's hull inside a representability class closed under finite unions (pp. 3-4).",
+      "Argue 'no interior point is extreme' with a line inside the surface, then recurse over the polytope's facets by induction on dimension (pp. 6-7, 9-10).",
+      "Turn an equality into two inequality hulls: conv(G ∩ {f=0}) = conv(G ∩ {f<=0}) ∩ conv(G ∩ {f>=0}) (p. 8).",
+      "Put the size cost of a constructive hull proof next to the theorem, justified by the NP-hardness of linear optimization over the set (p. 2)."
+    ],
+    "coauthors": "Asteroide Santana",
+    "quotes": [
+      {"text": "Note that optimizing a linear function over S is NP-hard, therefore, while the convex hull is SOCr, the construction involves the introduction of an exponential number of variables.", "page": 2},
+      {"text": "To the best of our knowledge, however, no one from the global optimization community has ever exploited such results for convexification.", "page": 3}
+    ]
+  },
+  {
+    "id": "S044",
+    "year": "2020",
+    "title": "A k-nearest neighbor heuristic for real-time dc optimal transmission switching",
+    "read_level": "full",
+    "contribution": "Proposes a k-nearest-neighbour heuristic for DC optimal transmission switching that reuses optimal topologies of similar past instances, finds better solutions than literature and Gurobi heuristics within real-time limits on 118- to 3,375-bus networks, and analyses its training data to explain why it works (read: arXiv v3).",
+    "problem_entry": "DCOTS must be solved within the 5-minute real-time cycle but is NP-hard and inapproximable; since the same network is re-solved with loads and costs varying about 10% and 5%, past solutions are plentiful (pp. 1-3).",
+    "key_idea": "Represent an instance by its normalized cost-and-demand vector, take the k nearest solved instances, fix each neighbour's topology, solve k DCOPF LPs and return the cheapest; online time is independent of the switching cardinality and nearly of network size (Alg. 1, pp. 3-4, 6, 29).",
+    "assumptions": "B-theta DCOTS MIP with big-M Ohm's law, angle limits, cardinality K, and load-shed/over-generation slacks at M = 10^6 so that every topology is feasible (App. A, pp. 27-29); only loads and costs vary (p. 4); returned solutions may be infeasible, defended by DC post-processing (p. 4).",
+    "proof_devices": [
+      "Prop. 1: a unique integer optimum stays optimal in a right-hand-side neighbourhood (p. 18)",
+      "Proof: g(b) is the minimum of finitely many LP value functions, each piecewise linear and convex; dominance is shown competitor by competitor via a closed feasibility polyhedron or continuity, then finitely many neighbourhoods are intersected (App. D, p. 32); as printed, step 2(b) has the non-strict direction (card-writer's note)",
+      "Empirical substitute for theory: few lines are ever opened (Table 4), rank of the best vs rank of the closest 1%-optimal training solution (Figs. 10-11), congestion-class aggregation (Figs. 12-13) (pp. 18-25)"
+    ],
+    "experiments": "Seven networks (118-3,375 buses), kept only if switching has a cost benefit; 300 perturbed instances each (demand ±10%, cost ±5%), solved to 1% or 0.5 h, split 270 train / 30 test; KNN (k=10, l2/l-inf) vs four Ruiz sensitivity heuristics (10 min 'to forgive inefficiencies'), Gurobi heuristics (5 min) and greedy search; gap to best-known solution and time boxplots, best-solution win counts (KNN-l2 231 vs Gurobi 152), load shed, sensitivity to |Q| and k, leave-one-out CV with mean 0.75% and max 17.4%; Pyomo with Gurobi 9.0.2 on a 96-core server (pp. 5-17).",
+    "positioning": "MIP formulations (including Kocuk-Dey et al.'s cycle-based cuts) are too slow for real time; the sensitivity heuristics are good but scale with lines x budget; differs from Yang-Oren by learning topologies directly; applies Xavier-Qiu-Ahmed's learned initial solutions (pp. 2-3).",
+    "writing": "The abstract promises an 'empirical study ... to understand why the heuristic works well'; reports 'Surprisingly, the best solutions do not tend to be among the closest' and then resolves it with a second plot; question headings ('Is Distance the Correct Metric?'); explicit hedges ('We suspect', 'We have no reason to believe'); minor label slips (300kocuk/300burak, a wrong figure reference) (pp. 1, 18-22).",
+    "limits_future": "Limits: no feasibility guarantee, and all k neighbours may be infeasible (p. 16); distance is an imperfect metric; the aggregation variant does not scale (pp. 22, 25). Future work: characterize demand-to-congestion effects, AC optimal transmission switching, warm starts for planning and day-ahead problems (p. 25). No dual bound.",
+    "method_links": [
+      {"method": "Method 5", "relation": "contradiction", "note": "The deliverable is a heuristic with no certificate and possibly infeasible output, which Workflow A's checkpoint warns against; consistent with SKILL.md's U2 note that this ML line stayed unpublished.", "pages": "pp. 4, 16"},
+      {"method": "Method 2", "relation": "variant", "note": "The ceiling is the best-known solution (training solved only to 1%), not an exact optimum; it has a held-out test set, leave-one-out CV and parameter sweeps; it reports a surprise against its own premise (Workflow D step 4).", "pages": "pp. 6, 17, 20"},
+      {"method": "Method 1", "relation": "variant", "note": "Asks why the heuristic works but answers with training-data analysis and a weak local-stability proposition that the authors admit does not cover small training sets (step 7 without a proxy theorem).", "pages": "pp. 18-25"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "reuse past optimal integer solutions of a recurring MIP", "evidence": "A fixed network is re-solved every 5 minutes; the archive of past optimal topologies is the heuristic's candidate set. This is 2020-21 practice evidence for SKILL.md's U4 (reuse across re-solves), previously evidenced only by arXiv:2312.06714.", "pages": "pp. 1, 3-4"}
+    ],
+    "transferable": [
+      "Treat an archive of past optimal integer solutions as the candidate set; online cost is k fixed-integer LP solves (Alg. 1, p. 29).",
+      "Use a local-stability proposition for MIP value functions (finite min of convex piecewise-linear LP value functions) to justify reusing solutions near a right-hand side (pp. 18, 32).",
+      "Plot both the rank of the best stored solution and the rank of the closest epsilon-optimal one; the second explains why nearest-neighbour reuse works when the first suggests it should not (Figs. 10-11, pp. 20-22).",
+      "Probe which features matter by grouping inputs that induce the same optimal decision and rerunning with aggregated features (pp. 21-24).",
+      "Report a best-solution win-count table (ties counted for both) next to gap and time distributions (Table 2, p. 14)."
+    ],
+    "coauthors": "Emma S. Johnson, Shabbir Ahmed, Jean-Paul Watson",
+    "quotes": [
+      {"text": "Surprisingly, the best solutions do not tend to be among the closest, with the exception of the 300kocuk case with cardinality 5.", "page": 20},
+      {"text": "While it is difficult to give theoretical justification for the good performance of the KNN heuristic with the small training set, it is possible to prove that KNN can find the correct integer solution for general MIPs with a sufficiently large training set.", "page": 18}
+    ]
+  }
+]

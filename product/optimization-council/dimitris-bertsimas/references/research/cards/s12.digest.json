@@ -1,0 +1,322 @@
+[
+ {
+  "id": "S313",
+  "year": "2018",
+  "title": "A scalable algorithm for two-stage adaptive linear optimization",
+  "read_level": "full",
+  "contribution": "Extends column-and-constraint generation for two-stage adaptive LO to problems where only a feasible first stage exists (no relatively complete recourse). It pairs a fast inexact feasibility oracle inside the loop with an exact dual-partitioning oracle at termination, proves finite convergence, and on three small test problems always returns feasible solutions where CCG is infeasible in 31% to 100% of cases.",
+  "problem_entry": "RO+IO (AP test cases): Zeng-Zhao's CCG scales, but it returns infeasible first-stage decisions when only Assumption 2 holds (a feasible first stage exists), and Zeng-Zhao give no feasibility oracle. An introduction table measures CCG feasible in 69%, 66% and 0/3 of cases, and his own AMIO feasible but slow (pp. 2-3).",
+  "key_idea": "Duality Driven Benders Decomposition keeps CCG's loop with two oracles. A fast inexact oracle F1 runs in the loop: alternating maximization on the bilinear infeasibility problem, started at CCG's complementarity maximizer. An exact oracle F2, which partitions the Bertsimas-de Ruiter dual uncertainty set by optimal LP bases, runs only at termination (pp. 9-13).",
+  "assumptions": "Two-stage LO: mixed-integer first stage; continuous, fixed recourse; uncertainty entering the constraints linearly through Cu; U a bounded polytope; the problem bounded. Assumption 2 replaces relatively complete recourse. Test instances are small and random (N = L = 10; N = 5; IEEE 14-bus without reserves). The authors admit affine rules are often optimal on location-transportation (pp. 2, 15, 17, 19, 21).",
+  "proof_devices": [
+   "Prop. 1: CCG's complementarity-slackness optimality oracle rewritten as a big-M MIO, valid only for feasible x (pp. 5-6)",
+   "Lemma 1: the worst case is attained at an extreme point of U, by strong duality and linearity in u (p. 7)",
+   "Prop. 2 (finite termination under Assumption 1): vertex counting for polytopes; a Hausdorff-Lipschitz limit argument for compact convex U (p. 7; App. A pp. 20-21)",
+   "Prop. 3: the oracle underestimates Z for infeasible x, and its maximizer need not be a vertex (pp. 7-8)",
+   "Infeasibility detected by maximizing over the dual recession cone intersected with a box, a bilinear problem solved by alternating maximization (pp. 10-11)",
+   "Prop. 5: an unbounded index-0 partition cell certifies infeasibility (p. 12)",
+   "Theorem 2: Dual Basis Cuts terminates finitely, by counting feasible bases and tree nodes (p. 14)"
+  ],
+  "experiments": "Setup: Julia v0.4.2 and Gurobi v6.5.1 on one core of a 32-processor AMD64 (246.4 GB); stop at UL gap 1e-3 or 1000 s. DDBD vs CCG, AMIO and DBC on 100 location-transportation instances, 100 lot-sizing instances and IEEE 14-bus unit commitment (T = 6, 12, 24). DDBD is always feasible (CCG 69%, 66%, 0/3). AMIO and DBC fail on unit commitment. Verification takes up to 12,443 s vs 375 s to optimality, and DDBD is slower to low accuracy (pp. 14-20).",
+  "positioning": "Extends Zeng-Zhao's CCG (the incumbent) by combining it with his own Bertsimas-de Ruiter duality (2016) and Bertsimas-Dunning AMIO partitioning (2016). Notes that Bertsimas-Georghiou (2015) is not scalable and that partitioning schemes are slow (pp. 2-3, 11).",
+  "writing": "Problem-first introduction with a measured failure table before the method (p. 3); numbered contributions (pp. 3-4); drawbacks stated in the results text, such as slower low-accuracy solutions and the verification cost (pp. 16-19). The conclusion gives no future work (pp. 19-20).",
+  "limits_future": "F1 carries no guarantee (p. 10). Exact verification dominates at scale (12,443 s at T = 24, p. 20). Test instances are small. No future directions are stated (pp. 19-20).",
+  "method_links": [
+   {"method": "Method 4", "relation": "evidence", "note": "The incumbents (CCG and his own AMIO) are the opponents, with solver version, machine, time limit and gap stated. Failure rates and termination reasons are printed. The find-fast/certify-later split sits inside the algorithm: F1 in the loop, exact F2 at the end.", "pages": "pp. 3, 9, 14-20"},
+   {"method": "Method 1", "relation": "evidence", "note": "Reads the Bertsimas-de Ruiter dual for structure: x does not affect feasibility, and lambda(w) is piecewise linear and independent of x, which enables an exact infeasibility certificate. Each partition cell stays an LP via the robust counterpart. Prints the boundary: the complementarity feasibility MIO does not solve in 20-30 min.", "pages": "pp. 8, 11-12"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "fast inexact oracle in the loop, exact oracle only at termination", "evidence": "F1 (alternating maximization) generates the cuts; F2 (dual basis partitioning) is called once at the end. On unit commitment F2 never added a cut.", "pages": "pp. 9-11, 19-20"},
+   {"pattern": "constraint generation as the scaling engine", "evidence": "The CCG/Benders loop adds worst-case scenarios on demand; DDBD keeps the loop and repairs its oracle.", "pages": "pp. 4-9"},
+   {"pattern": "introduction table measuring the incumbent's failure rate", "evidence": "Before the method appears, Table 1 reports CCG infeasible in more than 30% of cases and AMIO slow.", "pages": "p. 3"}
+  ],
+  "transferable": [
+   "Measure the incumbent's failure rate on the standard test problems and put the table in the introduction (Table 1, p. 3).",
+   "Split an expensive oracle into a cheap heuristic one inside the loop and an exact one called once at termination, then report how often the exact one changed the answer (p. 19).",
+   "Certify infeasibility of a first-stage decision by maximizing over the dual recession cone intersected with a box; this turns an unbounded dual into a bounded bilinear problem (pp. 10-11).",
+   "Report time to optimality and time to verify separately (Table 3, p. 18; Table 4, p. 20)."
+  ],
+  "coauthors": "Shimrit Shtern",
+  "quotes": [
+   {"text": "This implies that the DDBD is much more scalable in terms of high accuracy solutions, but requires more time for low accuracy solutions.", "page": 16},
+   {"text": "We found that, for this problem and under this choice of parameters (as well as many others), the affine decision rule is often optimal or close to optimal.", "page": 15}
+  ]
+ },
+ {
+  "id": "D017",
+  "year": "2019",
+  "title": "Optimal Explanations of Linear Models",
+  "read_level": "full",
+  "contribution": "Defines the interpretability of a linear model as the weighted cost of its best coordinate path, and proves that one knob gamma interpolates between sparsity and greedy incrementality. Computes the price-of-interpretability front with an SOS-1 MIO and a local-improvement heuristic, and illustrates it on three small data sets.",
+  "problem_entry": "ML+IO: interpretability is ill-defined and replaced by proxies (sparsity, integrality), and explanations are ad hoc. EU law grants a right to explanation, not to sparse models. So formalize explanation as an optimization problem (pp. 1-2).",
+  "key_idea": "Explain beta by a coordinate path that changes one coefficient per step. Score paths by the weighted sum of intermediate costs, with weights gamma^k; a model's interpretability is that of its best path. The Pareto front comes from weighted sums over path length (pp. 2-5).",
+  "assumptions": "Linear models with a bounded, nonnegative cost such as MSE. Coherence axioms: the loss depends only on the cost sequence and is monotone. Small data sets: a toy 2-feature example, 100x6 prestige, California test scores, Porto bike sharing 731x18 (pp. 2, 4-5, 7-8).",
+  "proof_devices": [
+   "Path complexity equals the number of nonzero coefficients, so sparsity is a special case (p. 3)",
+   "Theorem 1: the limits gamma -> infinity (complexity, then cost) and gamma -> 0 (greedy, lexicographic), proved by bounding geometric sums (p. 5; App. A pp. 10-11)",
+   "Prop. 1: Pareto-optimal models by weighted-sum scalarization nested over path length K (p. 5; App. B p. 11)",
+   "Convex MIO with SOS-1 constraints on successive differences for the exact path (p. 6)",
+   "Local improvement: outer search over step indices, inner convex QP over step values, q steps resampled per iteration (pp. 6-7; Algorithm 1 p. 12)"
+  ],
+  "experiments": "Exact vs heuristic on a 100x6 data set (K = 10): Gurobi 5.078 s; heuristic 0.004 s (0.02% gap) and 0.019 s (optimal). California: four steps from MSE 0.122 to 0.097 (optimum 0.095), vs stagewise and direct paths. Bike sharing: expected cost 0.145 vs 0.150 for LASSO. In-sample only, with no solver version, machine or limit (pp. 7-8).",
+  "positioning": "Against proxy-optimizing interpretable ML and ex post explanations of black boxes; claims to be 'both human-driven and mathematically rigorous'. Cites the group's best subset selection as the scalable MIO for sparsity, and SLIM for integer scores (pp. 2, 8).",
+  "writing": "A toy example carries the argument through three sections (pp. 2-5); 'price of interpretability' vocabulary (p. 5). An 8-page preprint without a conclusion, with slips such as the California model said to 'predict the number of trips' (p. 7).",
+  "limits_future": "Weighted sums miss part of the Pareto front (Fig. 2, p. 6), and the exact MIO works only for small problems (p. 6). Next: other step functions (integer steps, tree splits) and human-in-the-loop model selection (p. 8).",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "Interpretability is priced by one knob (gamma) whose limits are fixed by a theorem; the price curve is printed with its discontinuity and its unreachable part.", "pages": "pp. 2, 4-6"},
+   {"method": "Method 1", "relation": "evidence", "note": "A concept owned by ML is written as an optimization problem, the incumbent proxy (sparsity) is recovered as a special case, and the exact problem is a convex MIO.", "pages": "pp. 2-3, 6"},
+   {"method": "Method 4", "relation": "variant", "note": "The exact MIO certifies the heuristic on a small real instance, and greedy stagewise is the opponent. But the comparison is in-sample only, without solver version, machine or time limit.", "pages": "pp. 6-8"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "recover the incumbent proxies as limits of a one-parameter family", "evidence": "gamma -> infinity gives sparsity then cost; gamma -> 0 gives greedy paths (Theorem 1).", "pages": "pp. 3, 5"},
+   {"pattern": "inner-easy/outer-hard decomposition", "evidence": "An inner convex QP over the step values, and an outer combinatorial search over the indices by local improvement.", "pages": "pp. 6-7"}
+  ],
+  "transferable": [
+   "State coherence axioms first, then a one-parameter family that satisfies them, and prove that the family's limits recover the field's two incumbent proxies (pp. 4-5).",
+   "Use the exact MIO as a referee on a small real instance to certify a heuristic's gap before running the heuristic at scale (Table 2, p. 7).",
+   "When the decision-maker's preferred sparsity is unknown, weight the path's steps by the probability that each level is chosen, so the path minimizes expected cost (p. 8)."
+  ],
+  "coauthors": "Arthur Delarue, Patrick Jaillet, Sébastien Martin",
+  "quotes": [
+   {"text": "Recent EU legislation [8] guarantees citizens a “right to explanation,” not a right to be affected only by sparse models.", "page": 1},
+   {"text": "The coordinate path is willing to make some suboptimal steps in preparation for very cost-improving steps.", "page": 7}
+  ]
+ },
+ {
+  "id": "S174",
+  "year": "2020",
+  "title": "Personalized treatment for coronary artery disease patients: a machine learning approach",
+  "read_level": "full",
+  "contribution": "Builds ML4CAD, a voting regress-and-compare prescription for coronary artery disease from 21,460 Boston Medical Center EHRs, with k-NN imputation of censored outcomes and a multi-ground-truth evaluation. It estimates a 24% gain in time to adverse event over the standard of care, without a field trial.",
+  "problem_entry": "DA+ML+AP: CAD guidelines give no patient-specific treatment choice; counterfactuals are unobserved, and EMR assignment is biased. The goal is to choose, for each patient, the treatment that maximizes time to adverse event, using a hospital partner's EMR (pp. 2, 5-7).",
+  "key_idea": "Impute covariates and censored outcomes, and train one regression model per method and treatment. Five methods vote for the treatment with the largest predicted TAE, with ties broken by R^2. Evaluation runs across model-based ground truths (pp. 19-23).",
+  "assumptions": "Five treatment options and 31 covariates at diagnosis. 62.9% of patients are censored; they are k-NN imputed (k chosen by downstream AUC) and kept in both train and test. Separate models per treatment group. Observational data, with no socioeconomic or preference data and an unrepresentative population (pp. 7-13, 19, 31).",
+  "proof_devices": [
+   "n/a (no theorems)",
+   "Evaluation metrics: prescription effectiveness, the robustness grid, R^2 restricted to agreement cases, and degree of ML agreement (eqs. (3)-(8), pp. 22-24)",
+   "Censoring imputation validated by artificially censoring known outcomes uniformly on [1, 3650] days (R^2 = 0.81) (p. 11)"
+  ],
+  "experiments": "75/25 split. AUC: RF 84.29%, OCT 81.54%, CART 73.33% (Table 4, p. 14); RF has the best R^2 in all five treatments (Table 6, p. 18). ML4CAD: +24.11% TAE (4.56 to 5.66 years) on PE, with Table 8 gains of 0.485-1.283 years (p. 25). It agrees with physicians in 28.24% of cases and cuts PCI from 18.84% to 6.04% (p. 28). No solver, gap or time is reported.",
+  "positioning": "Against single-model regress-and-compare, causal trees and forests (binary treatments, no prescriptions), Kallus's personalization trees, Cox models, and the group's own diabetes k-NN prescriptions, which do not suit delayed outcomes (pp. 3-5).",
+  "writing": "Numbered contributions and priority claims ('first prescriptive methodology', 'first ML study in treating cardiovascular disease') (pp. 6, 32). A superiority sentence for OCT contradicts Table 4 on the same page (p. 14). Limitations get a dedicated paragraph (pp. 31-32).",
+  "limits_future": "Observational data; estimated counterfactuals only; an unrepresentative population; coarse treatment categories; disagreement with the standard of care in most cases. The estimates are called the most optimistic. Next: censoring by optimization, and a clinical trial (pp. 25, 31-32).",
+  "method_links": [
+   {"method": "Method 5", "relation": "variant", "note": "Decisions are scored against the hospital's standard of care, robustness is checked across model-based ground truths, limits are listed and a trial is named as the field test. But the decision score is the voting models' own maximal estimate, which the paper calls the most optimistic, and learning and deciding are not joint.", "pages": "pp. 19-26, 31-32"},
+   {"method": "Method 4", "relation": "variant", "note": "OCT and ORT beat greedy CART (AUC 81.54% vs 73.33%; ORT ahead in four of five tasks). But random forest leads everywhere, and p. 14 still calls OCT superior to all other methods (Tension T6). No certificates, solver or limits.", "pages": "pp. 13-14, 18-19"},
+   {"method": "Method 6", "relation": "evidence", "note": "A student carries the programme's tools (OCT/ORT, optimization-based imputation) into a partner hospital's data, with a clinical coauthor and a physician-facing web app.", "pages": "pp. 1, 9, 13, 20-21"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "grid of model-based ground truths for counterfactual evaluation", "evidence": "Each ML model in turn acts as oracle for the observed treatment, and every estimation model is scored against every ground truth (Table 8).", "pages": "pp. 22-25"},
+   {"pattern": "validate censored-outcome imputation by artificial censoring", "evidence": "Uncensored patients are re-censored at uniform random times and the k-NN imputation is scored against the known TAE (R^2 = 0.81).", "pages": "p. 11"},
+   {"pattern": "clinician-facing web app shipped with the paper", "evidence": "An online ML4CAD application showing every model's TAE estimate per treatment (also S189's interactive N-SRS questionnaire).", "pages": "pp. 20-21"}
+  ],
+  "transferable": [
+   "When counterfactuals are unobservable, score the policy under every pair of estimation model and ground-truth model, and print the whole table (Table 8, p. 25).",
+   "Validate a censoring imputation by re-censoring complete records at random times and scoring the imputation against the known outcome (p. 11).",
+   "Fit outcome models per treatment group so that the historical assignment is not learned as a feature (p. 19).",
+   "Report the number of agreeing models per patient as a confidence signal (Table 10, p. 28)."
+  ],
+  "coauthors": "Agni Orfanoudaki, Rory B. Weiner",
+  "quotes": [
+   {"text": "Our approach does not guarantee optimality for the treatment selection problem.", "page": 26},
+   {"text": "The ultimate validation of our algorithm would be the realization of a clinical trial.", "page": 32}
+  ]
+ },
+ {
+  "id": "S189",
+  "year": "2020",
+  "title": "Machine learning provides evidence that stroke risk is not linear: The non-linear Framingham stroke risk score",
+  "read_level": "full",
+  "contribution": "Builds an Optimal-Classification-Tree stroke risk score from Framingham offspring examinations and validates it on 17,527 BMC patients. It beats the revised Framingham score in discrimination and calibration, and matches random forest and XGBoost while remaining interpretable.",
+  "problem_entry": "ML+AP: established stroke scores assume linear, additive risk factors (Cox-type), and interactions built by cross-products do not scale. The paper builds an interpretable non-linear score and validates it externally (pp. 1-2).",
+  "key_idea": "Each Framingham examination is an observation, with the split made by person. Missing values are imputed with MedImpute. OCT is selected with a path-by-path clinical review, validated externally on BMC, and delivered as an adaptive questionnaire app (pp. 3, 6-8).",
+  "assumptions": "Stroke-free participants over 40, uncensored within 10 years. Covariates: the R-FSRS factors plus medication, ECG findings and procedures. The FHS derivation cohort is Caucasian and the BMC validation cohort is sicker. The data are not i.i.d., and the findings are associations only (pp. 3, 5, 15-17).",
+  "proof_devices": [
+   "n/a (no theorems)",
+   "Evaluation design: 10-fold CV, five random partitions with bootstrap 95% CIs, Hosmer-Lemeshow calibration, and FD2 nested inside the FD1 test set (p. 7)"
+  ],
+  "experiments": "FD1 test AUC: N-SRS 0.8743 vs R-FSRS 0.7374, with RF 0.8829 and XGBoost 0.8846 (p. 9). BMC: 0.7403 vs 0.6491, with RF 0.7482 and XGBoost 0.7501 (p. 11). Calibration chi2: 1.96 vs 8.05 (FD1) and 7.12 vs 36.66 (BMC). Julia 1.0 and R 3.5; code on GitHub. The abstract's validation AUCs (75.29% vs 65.93%) differ from Table 4 (pp. 1-2, 7, 9, 11).",
+  "positioning": "Against linear additive scores (FSRS, R-FSRS). Prior ML stroke models are criticized: Khosla et al. are less specific, and the terms of Letham et al.'s Bayesian rule list are 'non-specific and descriptive at best' (pp. 2, 12).",
+  "writing": "Priority claim: 'the first validated non-linear, interpretable stroke risk predictor' (p. 11). The ensembles are called 'equivalent' on pp. 9 and 11, next to 'superior' on p. 8. The abstract's validation numbers differ from Table 4 (pp. 1, 11). Limitations section (pp. 15-17).",
+  "limits_future": "Caucasian derivation cohort; uncertain generalizability; a sicker hospital validation cohort; non-i.i.d. data; no causality; no comparison with CHADS2 or CHA2DS2-VASc; prospective trial still under evaluation. Next: risk thresholds that warrant treatment (pp. 15-17).",
+  "method_links": [
+   {"method": "Method 5", "relation": "variant", "note": "The baseline is the field's current tool (R-FSRS), the score is tested on an external partner population with the field's own metrics (AUC, calibration), and a prospective trial is planned. But it scores predictions, not decisions.", "pages": "pp. 2-4, 7, 11, 17"},
+   {"method": "Method 4", "relation": "variant", "note": "OCT beats greedy CART (AUC 0.8743 vs 0.7981) but is matched, not beaten, by random forest and XGBoost. The paper says 'equivalent' on pp. 9 and 11 but 'superior' on p. 8 (Tension T6). No MIO gap, solver or time limit.", "pages": "pp. 7-9, 11, 13"},
+   {"method": "Method 6", "relation": "evidence", "note": "A student-led clinical line funded by the partner (a Hartford HealthCare grant covering student stipends). CRediT gives Bertsimas conceptualization, methodology, funding, resources, supervision and review, not the original draft.", "pages": "pp. 2, 18"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "one row per visit, split by person", "evidence": "18,793 examinations from 4,385 participants are used as observations, with every participant's visits kept on one side of the split.", "pages": "pp. 3, 13"},
+   {"pattern": "clinician-facing web app shipped with the paper", "evidence": "An interactive adaptive questionnaire following the POTTER interface, designed for EHR integration (also S174's ML4CAD app).", "pages": "pp. 7-8, 15"}
+  ],
+  "transferable": [
+   "With a longitudinal cohort, enlarge the training set by treating each visit as a row, but keep all of a person's visits on one side of the split (pp. 3, 13).",
+   "Put the incumbent score's own development sample wholly inside your test set, so that both scores are compared out of sample (p. 7).",
+   "Review every tree path against the clinical literature during model selection, alongside the hyperparameter search (pp. 3, 7)."
+  ],
+  "coauthors": "Agni Orfanoudaki, Emma Chesley, Christian Cadisch, Barry Stein, Amre Nouh, Mark J. Alberts",
+  "quotes": [
+   {"text": "We strictly require that observations from the same individual belong in at most one of these two sets, avoiding potential natural boosts in the downstream performance.", "page": 13},
+   {"text": "We also acknowledge prospective validation of this model would outperform validation of blinded data sets", "page": 17}
+  ]
+ },
+ {
+  "id": "S254",
+  "year": "2020",
+  "title": "Scalable holistic linear regression",
+  "read_level": "full",
+  "contribution": "Scales holistic MIO regression from n in the low 100s to about 10,000. Significance is enforced as lazy big-M constraints derived from asymptotic normality, and multicollinearity as minimum-support cuts derived from the small-eigenvalue eigenvectors of X'X.",
+  "problem_entry": "ML+IO: the 2016 holistic regression checks significance and multicollinearity after the fact, by bootstrap and condition number, in a cutting-plane loop that stops at n in the low 100s. t-tests are post hoc, and VIF or condition-number constraints are only sufficient for multicollinearity (pp. 1-3).",
+  "key_idea": "Significance becomes a-priori big-M constraints, enforced lazily at integer-feasible solutions. Multicollinear relations are read from the eigenvectors of X'X with eigenvalues below epsilon and excluded by minimum-support cuts found by an iterated MIO (pp. 4-9).",
+  "assumptions": "i.i.d. errors with mean 0 and variance sigma^2; X'X/n converges to an invertible Q; asymptotic normality used 'when n large enough'. An epsilon-multicollinearity definition; the perturbation b is ignored in the algorithm. Data: synthetic designs with planted relations, and five 'randomly selected' UCI data sets (pp. 4-5, 8, 10).",
+  "proof_devices": [
+   "Asymptotic normality of least squares (Eicker) turned into big-M significance constraints (pp. 4-5)",
+   "Theorem 2: a weak equivalence between epsilon-multicollinear relations and vectors near the small-eigenvalue eigenspace, proved by eigenbasis expansion and contradiction (pp. 6-7)",
+   "Minimum-support vector in the eigenspace found by an MIO, iterated until infeasible to collect all independent relations (pp. 8-9)",
+   "Tightest big-M, M = 1/sqrt(m), from the l1-l2 norm inequality for orthonormal vectors (p. 9)"
+  ],
+  "experiments": "Algorithm 1 on synthetic n = 1000, p up to 1000: accuracy 100%, FPR up to 24%, up to 5,940.56 s (Table 1, p. 10). The full framework vs Lasso, the 2016 bootstrap method, Tamura's MISDO (SCIP 6.0.0 + SCIP-SDP 3.1.1) and Chung's MIQO, on five UCI sets with Julia 1.0, Gurobi 8.0 and an i7-5820k: 100% significant variables and every relation avoided, in 50-725 s. Lasso has lower test loss on four of five sets. No gaps are reported (pp. 10-13).",
+  "positioning": "Continues Bertsimas & King 2016. Contrasts with Carrizosa et al. (heuristic significance bounds), Chung et al. (t-test lazy constraints), Tamura et al. (VIF and condition number) and Hocking's 1976 review on multicollinearity (pp. 1-2, 11).",
+  "writing": "A short letter with numbered contributions (p. 2) and the programme framing 'more of an art than science' (p. 1). Two explanations are offered as conjectures (pp. 12-13). The abstract says n in the 10,000s, while the largest n tested is 9,358 (pp. 1, 12).",
+  "limits_future": "No limitations section. Visible limits: asymptotic significance, false positives at p = 1000, Lasso's lower loss, and a largest n of 9,358. No future work is stated (pp. 4, 10, 12-13).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "Statistics' post-hoc checks become a-priori constraints of one MIQO (lazy significance constraints; multicollinearity cuts from the near-null eigenspace), keeping the solver class. The Gamma||beta||_1 term is read as robustness, citing Bertsimas-Copenhaver (Heuristic 1).", "pages": "pp. 2-5, 8-9"},
+   {"method": "Method 6", "relation": "evidence", "note": "An explicit programme continuation ('we continue the research program initiated in [1]'), carried by a new student, with the programme's aim restated.", "pages": "pp. 1-3"},
+   {"method": "Method 4", "relation": "variant", "note": "The incumbents are dueled with solver versions and machine stated. But no gaps or certificates are reported, and the win is reframed from test loss to sparsity and significance.", "pages": "pp. 11-13"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "constraint generation as the scaling engine", "evidence": "Significance constraints are enforced as lazy constraints only at integer-feasible incumbents, and multicollinearity cuts are generated by an iterated MIO until it is infeasible.", "pages": "pp. 5, 9"},
+   {"pattern": "post-hoc statistical test turned into an a-priori lazy constraint", "evidence": "The t-test or normality test is imposed inside the MIO instead of being checked after fitting.", "pages": "pp. 2, 4-5"}
+  ],
+  "transferable": [
+   "Turn a post-fit diagnostic (significance, multicollinearity) into a lazy constraint checked only at integer-feasible incumbents (p. 5).",
+   "To exclude a family of bad supports, compute the near-null eigenspace once, then generate minimum-support vectors in it with a small MIO; each gives the strongest cut (pp. 8-9).",
+   "Derive the tightest big-M from norm inequalities instead of guessing it (p. 9)."
+  ],
+  "coauthors": "Michael Lingzhi Li",
+  "quotes": [
+   {"text": "In contrast, today the practice of regression is more of an art than science.", "page": 1},
+   {"text": "It is therefore important to identify the characterization of V that leads to the most stringent constraints to prevent multicollinearity.", "page": 8}
+  ]
+ },
+ {
+  "id": "S288",
+  "year": "2020",
+  "title": "Certifiably optimal sparse inverse covariance estimation",
+  "read_level": "partial",
+  "contribution": "Solves cardinality-constrained Gaussian maximum likelihood for sparse precision matrices by outer approximation over binary supports; big-M or ridge regularization makes the value function convex and yields cuts. It certifies optimality for p in the hundreds and returns sparser, lower-FDR estimates than Glasso and MB, though most large runs carry no gap.",
+  "problem_entry": "ML+IO+CP: the l1-penalized surrogate (graphical lasso) inherits Lasso's bias and, the paper argues, mainly buys robustness, while nonconvex penalties carry no optimality guarantee. So solve the cardinality-constrained MLE exactly, claimed as the first provably exact approach (pp. 1-2, 4-7).",
+  "key_idea": "Binary supports with a convex inner covariance-selection problem. A regularizer (big-M or ridge) smooths the piecewise-constant value function, and duality gives linear lower approximations. Outer approximation with lazy callbacks, warm-started by Glasso or MB, reuses cuts across k (pp. 7-11).",
+  "assumptions": "Gaussian data and the empirical covariance; the diagonal is excluded from the cardinality. Regularizer assumptions A1-A3: decomposable, minimized at zero, conjugate linear in Z. Ridge gives an upper approximation; big-M is exact for a valid M. Data: synthetic matrices with condition number p, and a breast-cancer gene-expression set (pp. 4, 7-8, 16, 20-21, 24).",
+  "proof_devices": [
+   "Theorem 1.A/B: norm regularization equals a min-max robust problem with noise on the covariance, by dual norms (p. 6)",
+   "Theorem 2: the dual of the regularized inner problem shows convexity in Z and gives the subgradient cut (7) (pp. 8-9; proof in App. A not read)",
+   "Finite convergence by generalized Benders decomposition (Slater; finite support set) (p. 10)",
+   "Parameter scales M0 = p/||Sigma||_1 and gamma0 = 4p/||Sigma||_2^2 from a priori bounds on the optimum (p. 11)"
+  ],
+  "experiments": "Subproblems: block coordinate descent on the primal is best; BFGS is 50-100x slower (pp. 14-15). Synthetic p = 200, against MB and Glasso, tuned on validation likelihood (Table 1): k* 199 vs 796, FDR 0.049 vs 0.68-0.75, test -LL 141 vs 157-162, 200-350 s vs 1-4 s; gaps exceed 100% and go unreported for most runs (pp. 16-17). Certification only for p <= 200, with M fixed from the ground truth, on 4 Xeon E5-2690 v4 CPUs (pp. 29-30). Breast cancer: MCC 0.460 vs CLIME's 0.506, but sparser (pp. 21-22). The master MIO solver is not named in the parts read.",
+  "positioning": "Generalizes [3]'s robustness reading of l1 regularization. Positions against Glasso, Meinshausen-Buhlmann, SCAD/MCP, CLIME and generic MI-SDP outer approximation [43], motivated by the group's best subset selection work (pp. 2, 4-6).",
+  "writing": "Numbered contributions with a hedged scale claim: certificates cost more for p in the 1000s (pp. 2-3). States openly that most experiments carry no gaps (pp. 16-17). Flags an opinion ('in our opinion') on robustness versus sparsity (p. 7).",
+  "limits_future": "Certificates are expensive in the 1000s; time grows steeply with M and gamma; big-M is harder to scale than ridge. Extensions to structured supports (degrees, hubs, trees) are offered instead of future work (pp. 3, 16, 20, 22-23).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "A statistics estimator is written exactly as a binary problem over supports, and dualizing the inner problem yields the cuts. The robust reading of l1 (Theorem 1) is Heuristic 1 in full text.", "pages": "pp. 6-10"},
+   {"method": "Method 4", "relation": "variant", "note": "Incumbent warm start (MB, Glasso), a lower bound at every iteration and a stated time limit. But the title's 'certifiably optimal' is backed by certificates only on small instances, while the headline runs carry no gaps (Tension T1); the paper says so openly.", "pages": "pp. 3, 10, 16-17, 29-30"},
+   {"method": "Method 2", "relation": "variant", "note": "The why-now is asserted (decades of MIO progress) without a rebuilt speed-up figure.", "pages": "p. 4"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "constraint generation as the scaling engine", "evidence": "Outer approximation with lazy-constraint callbacks in one branch-and-bound tree; cuts stay valid across k and are reused over the grid.", "pages": "pp. 9-11"},
+   {"pattern": "big-M read as a regularizer that smooths the value function, ridge as its alternative", "evidence": "Big-M is recast as a smoothing technique rather than a modelling trick; ridge regularization scales better (bears on Tension T4).", "pages": "pp. 7-8, 20, 23"},
+   {"pattern": "inner-easy/outer-hard decomposition", "evidence": "The combinatorial support choice is separated from the SDP-like inner covariance-selection problem, solved by tailored first-order methods.", "pages": "pp. 5-6, 23"}
+  ],
+  "transferable": [
+   "When a big-M is hard to choose, treat it as a regularizer, run ridge on the same cut machinery, and report which one scales (pp. 7-8, 20).",
+   "Reuse every outer-approximation cut across the hyperparameter grid by solving for decreasing k; the cuts do not depend on k (p. 11).",
+   "Derive starting regularization scales from a priori norm bounds on the optimum (p. 11).",
+   "State where gaps become uninformative and which experiments therefore carry none (pp. 16-17)."
+  ],
+  "coauthors": "Jourdain Lamperski, Jean Pauphilet",
+  "quotes": [
+   {"text": "For large regularization parameter value, on the other hand, the gap increases significantly (over 100%) and becomes uninformative.", "page": 16},
+   {"text": "To avoid such unrealistic assumptions, robustness and sparsity should, in our opinion, be considered as two distinct properties and be treated as such.", "page": 7}
+  ]
+ },
+ {
+  "id": "S301",
+  "year": "2020",
+  "title": "Fast exact matrix completion: A unified optimization framework for matrix completion",
+  "read_level": "partial",
+  "contribution": "Eliminates one factor of a low-rank (inductive) matrix completion in closed form and runs stochastic projected gradient on the other. Proves global convergence for the unregularized case without side information, under sampling and incoherence-type assumptions, and reports large speed and MAPE gains on synthetic and Netflix data.",
+  "problem_entry": "ML: nuclear-norm relaxations and Burer-Monteiro gradient methods dominate matrix completion; factored-gradient guarantees need special regularizers, and inductive methods assume perfectly predictive side information. The paper unifies both problems, with the plain one as B = I (pp. 2-5).",
+  "key_idea": "Write X = U S'B' with ||S|| = 1 and a Tikhonov term on U. Eliminate U row by row in closed form and descend on S on the sphere with Nesterov acceleration; fastImpute samples rows and columns per step (pp. 4-5, 11-12).",
+  "assumptions": "The analysis covers only 1/gamma = 0 and B = I, with an added vanishing Gaussian perturbation, row sampling at rate r > Ck/m, and submatrix-full-rank assumptions that exclude spiky matrices; the extension to general B is asserted. Data: synthetic uniform factors with 20-95% of entries missing, and Netflix with 59 TMDB features (pp. 13-17, 19, 21).",
+  "proof_devices": [
+   "Prop. 1: separable reformulation by eliminating U row by row (p. 5)",
+   "Theorem 1: concentration of the sampled objective and gradient, adapted from Bertsimas-Li 2018 (pp. 12-13)",
+   "Lemma 3: with 1/gamma = 0 the gradient is orthogonal to S, so the projected method is plain SGD (p. 15)",
+   "Theorem 3: strict-saddle property and no spurious local minima, combined with an SGD-escapes-saddles theorem for global convergence in poly(1/delta) iterations (pp. 14-17; proofs not read)",
+   "Corollary 4: per-step complexity O((pk + k^3) n log n / alpha) (p. 18)"
+  ],
+  "experiments": "fastImpute untuned; baselines tuned (IMC, softImpute-ALS, softImpute-SVD, MFSGD, GROUSE). A server with 16 CPU cores, ten runs, a 20-hour cap. On large synthetic settings: about 10% of the baselines' time and 15-95% lower MAPE (Table 4); with 20-50% missing, IMC and softImpute are more accurate. Netflix: 2,934 s and 20.7% MAPE vs IMC's 7,605 s and 21.0%; 2,098 s and 13.8% vs softImpute-ALS's 38,256 s and 20.1% (pp. 19-26).",
+  "positioning": "Against nuclear-norm relaxations, Burer-Monteiro gradient methods with special regularizers, and inductive methods that assume predictive side information. Continues Bertsimas & Li 2018 and borrows the Bertsimas-Copenhaver robustness view of l2 regularization (pp. 2-3, 5).",
+  "writing": "The headline 'over 75% lower in MAPE and 15 times faster' (p. 1) set against Table 4's -15% to -95% (p. 25); the text restricts the claim to 'large realistic combinations' (p. 24). States explicitly that its own method is untuned (p. 19). The conclusion gives no limits (p. 26).",
+  "limits_future": "Cubic cost in k; the O(nm) fill step dominates at scale; regularization is needed when rows have fewer than k entries; the guarantee is proved only for B = I. The conclusion gives no limits or future work (pp. 13, 17-18, 26).",
+  "method_links": [
+   {"method": "Method 1", "relation": "variant", "note": "Formulation first: eliminate a block, and unify the side-information and plain problems. But the engine is a custom stochastic first-order method, not an LP, conic or MIO solver class.", "pages": "pp. 2, 5"},
+   {"method": "Method 4", "relation": "variant", "note": "The incumbents are dueled on known-truth synthetic data and on Netflix, with tuned baselines, an untuned own method and the cap printed. But there is no certificate: 'exact' names a recovery guarantee proved under assumptions (B = I, 1/gamma = 0, row sampling, added noise).", "pages": "pp. 13-26"},
+   {"method": "Method 6", "relation": "evidence", "note": "Continues Bertsimas-Li 2018 with the same student, and imports the robustness-regularization equivalence (Heuristic 1) to justify the l2 term.", "pages": "pp. 3, 5, 17"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "inner-easy/outer-hard decomposition", "evidence": "U is eliminated in closed form as a function of S, and gradient descent runs only on S.", "pages": "pp. 2, 5"},
+   {"pattern": "tune the baselines, not your own method, and say so", "evidence": "Every baseline's lambda is tuned per setting, while fastImpute runs with fixed parameters to show it is not parameter-sensitive.", "pages": "pp. 19, 23"}
+  ],
+  "transferable": [
+   "Eliminate the block that has a closed-form optimum, normalize the remaining block to remove scaling invariance, and descend only on that block (pp. 2, 4-5).",
+   "Prove global convergence in two steps: show the objective is strict-saddle with no spurious local minima, then cite a theorem that SGD escapes saddles (pp. 13-15).",
+   "Leave your own method untuned while tuning every baseline, and state it (pp. 19, 23).",
+   "Label comparisons with methods built for another setting (online algorithms) as scaling-only (p. 24)."
+  ],
+  "coauthors": "Michael Lingzhi Li",
+  "quotes": [
+   {"text": "We explicitly stress here that no parameter tuning is done on fastImpute as we intend to show that the algorithm is not parameter sensitive.", "page": 19},
+   {"text": "We note that online matrix completion is usually used in different settings than offline algorithms and such comparison is only to note the favorable scaling behavior of fastImpute.", "page": 24}
+  ]
+ },
+ {
+  "id": "S302",
+  "year": "2020",
+  "title": "On polyhedral and second-order cone decompositions of semidefinite optimization problems",
+  "read_level": "full",
+  "contribution": "Shows that Kelley's cutting-plane method for SDO depends on the initial outer approximation's diameter, and argues for an SOC (2x2 minor) initialization over an LP one. Adds nuclear-norm cuts, and obtains near-SDO bounds for sparse PCA at n up to 2,130 and faster nuclear-norm minimization than MOSEK.",
+  "problem_entry": "CP (ML applications): SDOs are polynomial by IPMs but memory-bound in practice, an 'optimization folklore' gap between theory and practice. Kelley's method is exponentially slow in the worst case and performed poorly with LP initialization. The paper bounds its iterations by the initial diameter and changes the initialization (pp. 1-2).",
+  "key_idea": "Start Kelley's method from the SOC relaxation imposing all 2x2 minors, not the LP diagonal-dominance one. Refine with trailing-eigenvalue cuts or new nuclear-norm cuts; the latter model the nuclear norm in the original space (pp. 2-5, 7).",
+  "assumptions": "A trace bound tr(X) <= T on feasible solutions (natural in sparse PCA, or imposed as a big-M), an exact separation oracle and Lipschitz cuts. A strongly convex regularizer is the alternative, and strong duality is not required. Data: UCI sets, the Wilshire 5000, and synthetic rank-10 matrices (pp. 5-6, 8).",
+  "proof_devices": [
+   "Diameter bounds for the LP (2nT) and SOC (T) outer approximations (Props. 1, 3, pp. 2-3)",
+   "Eigenvalue-trace bound giving worst-case lambda_min of T/n - nT for LP vs 2T/n - T for SOC (Props. 2, 4, pp. 2-3)",
+   "Self-duality and spectral-nuclear norm duality give trailing-eigenvalue and nuclear-norm separating hyperplanes, the latter by an SVD (Props. 5-7, pp. 3-4)",
+   "Theorem 1: iteration bound (LT/eps + 1)^(n^2) by a ball-packing volume argument, after Mutapcic-Boyd (p. 5)"
+  ],
+  "experiments": "Julia 1.0, MOSEK 9.0 and JuMP 0.18.5 on one Xeon E5-2690 v4 (32 GB, 12 threads). Sparse PCA bound gaps vs Berk-Bertsimas feasible solutions: SOC 6.60/0.83/3.01/0.48%; SOC + 20 cuts 1.11/0.75/1.54%; SDO 1.09/0.75/n/a. The SDO takes 233.6 s vs SOC's 2.8 s, and runs out of memory on arrhythmia. Nuclear norm: faster than MOSEK for n >= 100; n = 500 in 1,245 s (5 instances) (pp. 6-8).",
+  "positioning": "Builds on Kim-Kojima's SOC relaxation and Kelley's method, and critiques Krishnan-Mitchell's LP-initialized implementation. Uses Braun et al.'s LP inapproximability and Mutapcic-Boyd's convergence proof. Compares with d'Aspremont et al.'s SDO relaxation and Recht-Fazel-Parrilo's lifted reformulation (pp. 1, 5-7).",
+  "writing": "Framed against 'optimization folklore' and traditional complexity theory (pp. 1, 8), with the contribution as 'a different perspective' (p. 1). A pros-and-cons table for the two cut classes (Table 1, p. 4); short numbered findings (pp. 6-8).",
+  "limits_future": "n^2 SOC constraints are too many above about n = 2000, so a weaker aggregated relaxation is used for Wilshire; the SVD is an Omega(n^3) bottleneck. Next: an inexact sketching oracle for cuts in Omega(n^2) time (pp. 6, 8).",
+  "method_links": [
+   {"method": "Method 2", "relation": "variant", "note": "Re-measures an inherited belief (Kelley's method is too slow for SDO; complexity theory as the test) with today's solver and concedes it only for IPMs. But the why-now is a diagnosis through the bound's constant, not a solver x hardware figure.", "pages": "pp. 1, 5, 8"},
+   {"method": "Method 1", "relation": "evidence", "note": "The SDO is kept in the SOC-plus-linear class by outer approximation and cuts, and the nuclear norm is reformulated in the original space. The boundary is printed (n > 2000; SVD cost).", "pages": "pp. 2-4, 6-8"},
+   {"method": "Method 4", "relation": "evidence", "note": "Bound gaps are reported per data set against the best feasible solution, and the incumbent IPM is dueled on time and memory, with n/a printed where it fails.", "pages": "pp. 6-8"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "diagnose an incumbent algorithm through the constant in its worst-case bound", "evidence": "Kelley's iteration bound depends on the initial region's diameter (n*tr(X) for LP vs tr(X) for SOC), which explains its poor practice and motivates SOC initialization.", "pages": "pp. 1-2, 5"},
+   {"pattern": "constraint generation as the scaling engine", "evidence": "An outer approximation refined by separating hyperplanes from an eigenvalue or SVD oracle replaces the SDO constraint.", "pages": "pp. 4-5"}
+  ],
+  "transferable": [
+   "Read a slow method's worst-case bound for the constant that depends on your design choice (here the initial diameter), and change that choice (pp. 1-2, 5).",
+   "Compare relaxations by their worst-case violation of the dropped constraint (lambda_min bounds via the eigenvalue-trace inequality), not only by tightness on instances (pp. 2-3).",
+   "Replace a lifted reformulation with a semi-infinite one in the original space, whose most-violated cut is a cheap linear-algebra step such as an SVD (pp. 3-4, 7)."
+  ],
+  "coauthors": "Ryan Cory-Wright",
+  "quotes": [
+   {"text": "it is optimization folklore that there is a gap between SDOs theoretical and practical tractability.", "page": 1},
+   {"text": "while the traditional complexity theory accurately describes the performance of IPMs, it is too conservative with respect to cutting-plane methods.", "page": 8}
+  ]
+ }
+]

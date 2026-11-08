@@ -1,0 +1,295 @@
+[
+ {
+  "id": "S678",
+  "year": "2026",
+  "title": "A Multimodal and Explainable Machine Learning Approach to Diagnosing Multi-Class Ejection Fraction from Electrocardiograms",
+  "read_level": "full",
+  "contribution": "A Hartford HealthCare retrospective study that turns 12-lead ECGs into tabular features (127 clinical features plus 777 tsfresh descriptors) and fuses them with EHR in one XGBoost classifier for four LVEF strata, with one-vs-rest AUROCs of 0.95/0.92/0.82/0.91 internally and 0.93/0.89/0.81/0.89 on a later temporal cohort, above ECG-only and EHR-only baselines, explained post hoc by SHAP.",
+  "problem_entry": "AP+ML, no optimization model: LVEF needs scarce echocardiography while the ECG is cheap and routine, and LVEF 'has not historically been evaluated from ECGs' (p. 3); prior ECG-AI is binary with one cutoff, unimodal, or deep networks with deployment barriers (pp. 3-4); stated as four-class LVEF stratification at clinical thresholds from ECG features plus EHR, explainable and cheap to deploy (p. 4).",
+  "key_idea": "Tabularize the ECG (127 clinical features from the group's 2021 feature set plus 777 tsfresh descriptors, concatenated across leads), join six months of EHR, and train one XGBoost classifier on the four strata (pp. 13-14, 43); explanations are post hoc: class-specific SHAP on the test set, display-only clinician labels, bootstrap ranking stability (pp. 8, 16-17); the learner is chosen on validation over logistic regression and random forest, and no optimal trees are tried (p. 14).",
+  "assumptions": "Retrospective, one health system, outpatients; ECG within 14 days of a physician-reviewed echo, March 2020-November 2023, closest ECG kept (p. 12); 36,784 ECGs from 30,952 patients, 88.35/5.93/3.47/2.26% normal/mild/moderate/severe (p. 12); patient-level stratified 80/10/10 split (pp. 14, 26); temporal cohort January 2024-July 2025, 19,966 ECGs from 18,057 patients (p. 15); LVEF-defining codes removed against leakage (p. 14); hyperparameters tuned for best per-class AUC on an unnamed split (p. 43); missing-data handling not described; [my reading] missing vitals look zero-coded (body temperature median 0.0; systolic BP lower quartile 0.0 in each reduced-EF class vs 105.0 in the normal class, pp. 29, 33).",
+  "proof_devices": [
+   "n/a for optimization: no formulation, algorithm analysis or proof",
+   "One-vs-rest AUROC per class as the primary metric, 95% CIs by bootstrapping the test set (p. 15), ten resamples per the software note (p. 43)",
+   "Per-class F1-maximizing thresholds chosen on validation and applied to test (p. 15)",
+   "Class-specific SHAP on the margin output with mean |SHAP| as global importance; display-only relabelling of feature names (p. 16)",
+   "Explanation stability: B = 20 bootstrap resamples of the test set, top-10 sets compared by pairwise Jaccard similarity and feature frequency (p. 16)",
+   "Chi-squared and Kruskal-Wallis tests for the cohort tables (p. 14)"
+  ],
+  "experiments": "Baselines are the same pipeline on EHR only and ECG only (pp. 21-22); internal AUROCs multimodal 0.95/0.92/0.82/0.91 vs ECG-only 0.94/0.88/0.80/0.89 and EHR-only 0.87/0.86/0.76/0.84 (p. 21); temporal 0.93/0.89/0.81/0.89 vs ECG-only 0.92/0.86/0.78/0.86 (p. 22); reduced-class F1 0.27-0.35 and normal-class specificity 0.26-0.29 printed, so AUROC declared primary (pp. 5-6, 21-22); training about 3.33 min on one NVIDIA L40s GPU, bootstrap 0.12-0.17 min (pp. 15, 43); not reported: the other families' validation scores, any external ECG-AI run, calibration, subgroups, decision outcomes; prior work compared by quoted numbers on other data, and the binary AUCs 0.91 and 0.92-0.93 are not in the tables (p. 9) [my reading: a 30% cut is Table 1's severe-vs-rest split at 0.95, p. 21].",
+  "positioning": "Complements rather than replaces ECG-AI for systolic dysfunction (Attia et al.), ECG-MACE, diastolic-function AI-ECG and longitudinal EHR models (pp. 3-4, 9); deep incumbents faulted only for deployment cost, citing an arXiv regulatory-affairs paper (pp. 4, 8-9, 20); lineage by self-citation to HAIM (ref. 8, INDEX S023) and to the 2021 heart-disease paper whose ECG features are reused (ref. 9, INDEX S127) (pp. 4, 13, 20); [my reading] ref. 1, cited for LVEF as a marker, is a meta-analysis of physicians' ECG-reading accuracy (pp. 3, 19).",
+  "writing": "Clinical-journal layout with Results before Methods and full declarations (pp. 5-19); abstract opens with the access gap, gives four AUROCs and a triage use statement (pp. 1-2); three numbered contributions (p. 4); SHAP directions hedged as associations, not causality (pp. 35-36); AUROC choice defended by exposing the threshold pathology (pp. 5-6, 21); ORC coauthors built the models and drafted, Bertsimas co-conceived and approved (pp. 18-19); slips: Note 1 numbered 1, 2, 4 (pp. 35-37), echo vs ECG quality exclusion (pp. 12, 26), ethics 'Not applicable' beside an IRB approval (p. 18), ten vs 20 bootstrap resamples (pp. 15-16, 43).",
+  "limits_future": "Stated: one health system and outpatients; class imbalance weakens threshold metrics; prospective evaluation needed for referrals and downstream testing; probabilities uncalibrated, so site-specific thresholds and recalibration are needed (pp. 9-10); proposed uses in primary care and heart-failure and cardio-oncology clinics (pp. 10-11). Unstated: missing-data handling and its possible role in the blood-pressure attributions [my reading, pp. 29, 36]; no comparison with current referral practice; code on request only (p. 18).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "contradiction",
+    "note": "Predictions (AUROC, F1, sensitivity, specificity) are scored, not referral decisions, and nothing is compared with the partner's current echocardiography referral practice; the same pattern as the HAIM and COVID-19 calculator cards (S023, S054).",
+    "pages": "pp. 5-6, 9-10, 21-22"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Steps 1 and 6: a partner (Hartford HealthCare), its data and a named decision (who should get confirmatory imaging); the paper states what the retrospective evaluation cannot show and requires prospective evaluation before use.",
+    "pages": "pp. 1, 9-10, 12"
+   },
+   {
+    "method": "Method 4",
+    "relation": "contradiction",
+    "note": "The final learner is a greedy boosted ensemble picked on validation from three standard families, without the group's optimal trees, an exact model or a certificate; the external incumbent (deep ECG-AI) is quoted from other data, not run.",
+    "pages": "pp. 4, 9, 14, 43"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "A diagnosis thought out of reach from the ECG is reopened because AI reads signals 'imperceptible to human analysis'; the why-now is qualitative, with no measured figure.",
+    "pages": "pp. 3-4"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Hospital-partner funding (Hartford HealthCare's Center for AI Innovation) beside his healthcare grants; ORC-affiliated coauthors; reuse of the group's HAIM framing and 2021 ECG features; ORC coauthors built the models and drafted, he co-conceived and approved.",
+    "pages": "pp. 1, 4, 13, 18-20"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "frozen modular extractors producing one patient vector",
+    "evidence": "HAIM-style fusion: the ECG becomes clinical and tsfresh features concatenated with the EHR into one tabular row for one boosted learner, the same design as S023.",
+    "pages": "pp. 4, 13-14"
+   },
+   {
+    "pattern": "re-pose the target at the clinicians' decision strata",
+    "evidence": "Four guideline LVEF strata replace one binary cutoff; binary AUCs are reported only to connect with prior work.",
+    "pages": "pp. 4, 9"
+   },
+   {
+    "pattern": "temporal external validation on a later cohort",
+    "evidence": "The model is frozen on 2020-2023 data and scored on 2024-2025 data through the identical inclusion and feature pipeline.",
+    "pages": "pp. 6, 15"
+   }
+  ],
+  "transferable": [
+   "Tabularize a waveform modality (domain features plus generic tsfresh descriptors) so that it fuses with the EHR in one tree learner; keep a raw-name to clinician-label map for display only (pp. 13-14, 16).",
+   "Report a modality ablation ladder on one split (EHR only, ECG only, fused) with CIs, for both the internal and the temporal cohort (pp. 21-22).",
+   "Temporal external validation: freeze the model, rerun the identical inclusion and feature pipeline on a later period, and print the same tables (p. 15).",
+   "Choose per-class thresholds on validation, evaluate them on test, and state why AUROC is primary when the F1-optimal threshold of a dominant class collapses its specificity (pp. 5-6, 15, 21).",
+   "Check explanation stability: bootstrap the test set, recompute mean |SHAP|, report top-k Jaccard overlap and feature frequencies (p. 16).",
+   "Guard against label leakage by dropping label-defining diagnosis codes from the EHR features (p. 14).",
+   "Report training and bootstrap times with the hardware (pp. 15, 43)."
+  ],
+  "coauthors": "Catherine Ning, Cindy Beini Wang (MIT ORC); Yu Ma (MIT ORC; Wisconsin School of Business); Sean McMahon, Joseph Radojevic, Steven Zweibel (Heart and Vascular Institute, Hartford Hospital)",
+  "quotes": [
+   {
+    "text": "Rather than treating “explainability” as an intrinsic property of the learning algorithm, we use post-hoc feature attribution (SHAP) to identify which engineered ECG and EHR features contribute most strongly to the model outputs.",
+    "page": 8
+   },
+   {
+    "text": "Consistent with a screening and prioritization application, we emphasize discriminatory performance for identifying patients at higher risk of reduced LVEF rather than interpreting predicted probabilities as calibrated estimates of absolute risk across classes.",
+    "page": 10
+   }
+  ]
+ },
+ {
+  "id": "S679",
+  "year": "2026",
+  "title": "Robustifying and Selecting Cohort-Appropriate Prognostic Models under Distributional Shifts",
+  "read_level": "full",
+  "contribution": "On six international colorectal-liver-metastasis cohorts, shows that the external calibration of prognostic models tracks train-target similarity (Spearman 0.61-0.74 between KL divergence and ICI), and proposes meta-analysis-informed importance weighting for a 'best-on-average' model (better average external calibration in 7 of 10 training cohorts, C-index unchanged) and an outcome-similarity rule for picking the 'best-for-their-cohort' published model, checked with decision curves.",
+  "problem_entry": "ML+AP (RO in name only; DA via decision curves): challenges external validation as the gold standard, since calibration 'is not purely an intrinsic property of the model' and one or two similar external cohorts can flatter a model (pp. 1-2); asks whether one model can do well everywhere or models should be chosen per cohort (p. 3); answered from the developer's and the end user's seats (pp. 1-3); covariate and concept shift on the expected loss (eqs. 1-2, p. 4).",
+  "key_idea": "Part I: importance weights toward a meta-analysis proxy (eqs. 3-6, p. 5): stratify by predicted risk and weight each stratum by its mass under a simulated normal recurrence risk over its training mass (eqs. 9-10, Algorithm 1, pp. 6-8); the joint weight adds a KDE covariate density ratio with simulated multivariate-normal covariates (eq. 11, Assumption 1, pp. 7-8). Part II: rank published models by the distance between the mean 5-year KM estimates of development and target cohorts (p. 9). [My reading] The implemented weight ignores y_i, so it reweights the risk score rather than estimating eq. (8)'s conditional outcome ratio (pp. 6-8).",
+  "assumptions": "Six centers, R0/R1 resection (p. 4); surgery alone JHH 157, CCF 225, YCU 117, Graz 165, UOR 1,058; with chemotherapy JHH 388, CCF 308, YCU 70, Graz 109, CHU 648 (p. 11); seven clinical covariates (p. 10); Bosma et al. meta-analysis whose individual studies are four randomized trials, eight risk strata (pp. 12, 24); Assumption 1, constant pairwise covariances across cohorts (p. 7); normal laws for risk and covariates (pp. 6-7); the concept weight corrects covariate shift only partly (p. 6); unstated: bandwidth value, the risk model behind the weights, model tuning, censoring handling in ICI (pp. 6-12).",
+  "proof_devices": [
+   "No optimization formulation; the claimed 'theoretical justification' is the importance-weighting identity (eqs. 3-6, p. 5) and the concept x covariate factorization of the joint density ratio (p. 7)",
+   "KL divergence between Gaussian-KDE densities of z = [x, y] (p. 9)",
+   "Integrated Calibration Index (eq. 12, p. 9) and Harrell's C-index (p. 9)",
+   "Spearman rank correlation between ICI and KL over cohort pairs (eq. 13, p. 10)",
+   "Wilcoxon signed-rank test of weighted vs unweighted ICI (p. 10)",
+   "Decision curve analysis against treat-all and treat-none over thresholds 0.10-0.70, surgery-alone patients only (p. 10)",
+   "[My reading] The 20 pairs per Spearman test share cohorts; ICI is bounded below by the gap between mean predicted and mean observed risk, so part of the Part II correlation is expected by construction (pp. 9-15)"
+  ],
+  "experiments": "KL vs ICI Spearman 0.614 (p = 0.004) and 0.738 (p < 0.001) (pp. 2, 11); ICI from below 0.10 in similar targets to about 0.30-0.35 in dissimilar ones (p. 11); weighting improved average external ICI in 3 of 5 surgery-alone and 4 of 5 chemotherapy training cohorts, gains from about 5% to over 50%, concept beating joint weights, Wilcoxon 7.0 with p = 0.037 on the aggregated cohort (pp. 12-13); C-index unchanged (p. 14); Figs. 3-4 average OST and RSF only, Cox dropped without comment (pp. 12-15); Part II: the most similar cohort's model has the lowest or second-lowest ICI in every surgery-alone target, rho 0.803 and 0.737 (pp. 14-15); DCA and predicted-risk histograms expose a calibrated but narrow Graz-to-CCF model with little utility (pp. 15-16); not reported: Wilcoxon n, per-model weighting results, a recalibration comparison, run times.",
+  "positioning": "Builds on Alba et al. and on Vickers' principle that calibration is a joint property of model and cohort (pp. 16-17); audits the under-reporting of calibration in CRLM models (p. 17); credits and sets apart covariate-shift ML (Shimodaira, Bickel et al., kernel mean matching, importance-weighted CV), which assumes target data (pp. 19-20), and concept-shift detection work (p. 20); sets apart Platt and isotonic recalibration (p. 23); cites no robust or distributionally robust optimization despite the title (pp. 24-25).",
+  "writing": "Structured abstract with five p-values (pp. 1-2) opening on the gold standard and 'we challenge the assumption' (p. 1); three numbered contributions (p. 3); the two-seat structure (Parts I and II) runs through every section (pp. 5, 8, 12, 14, 18, 21); a 40/42/43% worked example separates calibration from the C-index (p. 17); hedged conclusions but 'highly practical for clinicians' (p. 23); slips: empty Algorithm Step 4 (p. 8), b vs h bandwidth and q vs p in the KL definition (p. 9), caption errors in Figs. 4-6 (pp. 15, 17-18), typos (pp. 18, 21).",
+  "limits_future": "Stated: CRLM only; meta-analysis targets are approximations; simple summaries for selection (p. 23); concept weighting does not fix pure covariate shift (p. 6); inconsistent meta-analytic reporting hampers joint weighting (p. 13). Unstated: small cohorts (70-1,058, p. 11); dependence among test pairs; censoring; no comparison with recalibration or DRO; no funding, ethics, data or code statement; [my reading] the selection rule needs the target's own 5-year outcome rate, the same information recalibration-in-the-large would use (pp. 8-9).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "The owner is named (a clinician choosing which published model to adopt); models are judged by DCA net benefit as well as calibration; 'calibration and clinical utility, although related, are not identical'.",
+    "pages": "pp. 10, 15-16, 22-23"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The decision baselines are treat-all and treat-none, not the centers' current rule; DCA uses observed recurrence in surgery-alone patients as a proxy for baseline risk; retrospective only.",
+    "pages": "p. 10"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Transportability ('best-on-average') is priced in discrimination (C-index unchanged) with bad cases printed (3 of 5 and 4 of 5 cohorts improved; Graz-to-CCF calibrated but useless), but there is no knob, curve or bound; the number of strata is fixed at eight.",
+    "pages": "pp. 2, 12-14, 23"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "The group's MIO-based learner (OST via Interpretable AI 1.10.2) is one of three model classes beside Cox and RSF, with no claim that it wins and no solve times or certificate; results are averaged over the classes.",
+    "pages": "pp. 9, 12-15"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "An MSKCC partner with multicenter data, ORC-affiliated coauthors, and the group's own OST and company software.",
+    "pages": "pp. 1, 9, 24"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "audit the field's headline metric before competing on it",
+    "evidence": "Calibration is set against the routinely reported C-index, and external validation as gold standard is put to a multicenter test.",
+    "pages": "pp. 1-2, 17"
+   },
+   {
+    "pattern": "published summary statistics as a proxy target distribution",
+    "evidence": "Meta-analysis means and SDs are simulated into a target distribution that defines importance weights when no target data exist at training time.",
+    "pages": "pp. 5-7, 12"
+   },
+   {
+    "pattern": "two seats, two methods: the developer's best-on-average vs the user's best-for-their-cohort",
+    "evidence": "Part I trains a transportable model for the developer; Part II gives the end user a rule for choosing among published models; the structure runs through every section.",
+    "pages": "pp. 3, 5, 8, 22-23"
+   },
+   {
+    "pattern": "calibration is not utility: check the spread of predictions",
+    "evidence": "A Graz-trained model is well calibrated in CCF but predicts only 0.2-0.45, so its decision curve overlaps treat-all; histograms and DCA catch it.",
+    "pages": "pp. 15-16, 23"
+   },
+   {
+    "pattern": "multi-center cohorts as a validation instrument",
+    "evidence": "Every ordered pair of centers is a train-test experiment, and cohort similarity is correlated with external calibration; S680 uses multicenter data the same way.",
+    "pages": "pp. 10-15"
+   }
+  ],
+  "transferable": [
+   "Before claiming generalizability, measure train-target similarity (KL divergence on a KDE of [x, y]) and show whether it predicts external calibration across all pairs of available cohorts (pp. 9-11).",
+   "Importance-weight the training loss toward a target known only through published summaries: stratify by predicted risk, simulate the target's risk distribution, weight by stratum-mass ratios, and say which shift the weight actually corrects (pp. 6-8).",
+   "To choose among existing models for a new site, rank them by the distance between the outcome summaries (KM 5-year rate) of development and target cohorts, then confirm with DCA (pp. 8-9, 14-16).",
+   "Pair every calibration result with a decision curve and a histogram of predicted risks to catch calibrated-but-useless models (pp. 15-16, 21).",
+   "Report weighting gains per training cohort, including those where the method fails, and test the aggregate with a paired signed-rank test (pp. 12-13).",
+   "Explain why calibration and discrimination differ with a three-patient numeric example (p. 17)."
+  ],
+  "coauthors": "Carol Gao, Angelos Koulouras (MIT ORC); Georgios Antonios Margonis (MSKCC; Charité; corresponding author)",
+  "quotes": [
+   {
+    "text": "Nonetheless, calibration is not purely an intrinsic property of the model.",
+    "page": 2
+   },
+   {
+    "text": "However, a model that predicts a narrow low-risk range for nearly all patients, even if reasonably calibrated on average, offers limited ability to distinguish patients with meaningfully different prognoses and therefore limited clinical utility.",
+    "page": 16
+   }
+  ]
+ },
+ {
+  "id": "S680",
+  "year": "2026",
+  "title": "Observing the unobserved confounding through its effects: toward randomized trial-like estimates from real-world survival data",
+  "read_level": "full",
+  "contribution": "Proposes a latent prognostic factor, each patient's pseudo-RMST residual against directional within-arm nearest neighbors, balanced with prognostic matching, entropy balancing or IPTW before a weighted Cox model; it moves observational HRs toward published RCT effects in 9 of 9 cells, leaves two RCTs nearly unchanged (4 of 6 equivalence wins) and reduces the cross-center dispersion of chemotherapy HRs across six CRLM centers (6 of 6 cells).",
+  "problem_entry": "ML+AP (DA as the purpose; CP only as the entropy-balancing engine): RCTs are costly and often infeasible, while observational estimates suffer unobserved confounding, which 'one cannot regress or match on' and practice assumes away (p. 1); premise: the aggregate effect of unmeasured prognostic factors can be inferred from outcomes (pp. 1-3); stated as making an observational survival cohort RCT-like in observed and unobserved covariates before estimating the HR (p. 2).",
+  "key_idea": "Step 1: U = own pseudo-RMST minus the mean of k nearest neighbors in standardized X (optionally with a prognostic score), taken from the same arm with the opposite trajectory, then signed, winsorized within-arm percentile normalization to [-1, 1] (eqs. 1-3, 7, pp. 4-5); Step 2: balance (X, s, U) by prognostic matching plus a scalar weight on treated event-free patients (eq. 8), entropy balancing (eq. 9) or IPTW (eq. 10) (pp. 5-6); Step 3: weighted Cox without U (p. 6); no attempt to recover any specific latent variable (p. 3).",
+  "assumptions": "Y = f_t(X, V) + eps with f_t unrestricted (eq. 4, p. 4); within-arm neighbors share the treatment-covariate interaction (p. 3); U's direction comparable across arms (p. 5); U balanced under randomization (p. 5); unstated: the RMST horizon and winsorization levels (pp. 4-5); data: GIST n = 480 (benchmark HR 0.35), RPS n = 201 with 3 treated events (HR 0.75), CRLM n = 778 matched to JCOG0603 (HR 0.67) (pp. 8-9); RCTs STRASS n = 265 and BRT n = 162 (pp. 8, 12); six CRLM centers of 90-461 patients (p. 13); external and cross-fitted internal prognostic scores (pp. 4, 8, 22).",
+  "proof_devices": [
+   "Optimization only as engines: directional kNN as an arg min over k-subsets (eqs. 1-2, p. 4), Hainmueller's entropy-balancing convex program (eq. 9, p. 6), a box-constrained scalar weight w in [0.5, 20] (eq. 8, p. 5)",
+   "Heuristic decomposition: U approximates f_t(X_i, V_i) - E[f_t(X_i, V)|N] when neighbors are close in X (eqs. 5-6, p. 4); no identification theorem or bias bound",
+   "Jackknife pseudo-observations of RMST as a censoring-robust scalar outcome (eq. 7, p. 4)",
+   "Inference on dataset x method cell summaries over pre-specified grids identical for baseline and augmented runs: exact sign test primary, Wilcoxon signed-rank as sensitivity (pp. 6-7)",
+   "TOST equivalence with margin log(1.10) for the RCTs (pp. 6, 9) [my reading: applied as a 95% CI built from standard errors that the figures define across configurations, pp. 9-12, 25]",
+   "Mean absolute pairwise log-HR difference across centers (eq. 13) and a binomial test on informative center pairs (pp. 6-7, 9)",
+   "Permutation controls (Y within arm before construction, U within arm, U globally) and ablations (signed outcome, signed RMST, random direction-preserving neighbors) (pp. 23-25)"
+  ],
+  "experiments": "Benchmark: U reduced absolute log-HR error in 9 of 9 cells, sign and Wilcoxon p = 0.00195, mean gain 0.344 (p. 9), largest in RPS (0.59, 0.90; p. 25), the unstable dataset with 3 treated events (pp. 8-9); RCT negative control: U SMDs mostly at or below 0.1, equivalence 4 of 6, mean |shift| 0.081 (pp. 9, 12-13); CRLM: dispersion of chemotherapy log-HRs reduced in 6 of 6 cells, p = 0.0156, mean 0.147 (p. 14); case-mix gaps widened by X narrowed in 75-100% of pairs, 8 of 12 binomial p < 0.05, entropy balancing only 16 and 6 of 30 pairs without explanation (p. 15); sensitivity over bins, clipping, moments, k and prognostic score (pp. 17-22); permutations lose the gain, sign ablations unstable, random neighbors match the full method in CRLM (pp. 23-25); abstract p = 0.001 vs table 0.00195 (pp. 1, 9); no run times or per-HR sampling uncertainty.",
+  "positioning": "Extends standard tools without criticizing them: the group's prognostic matching (ref. 3), Hainmueller's entropy balancing, IPTW, Andersen's RMST pseudo-observations (pp. 2, 4-6, 15); motivating case: RPS radiotherapy analyses later contradicted by STRASS (pp. 1, 15); existing approaches said to rely on the assumption that unobserved confounding is limited (p. 2); [my reading] no sensitivity-analysis, instrumental-variable, proximal or negative-control literature is cited (pp. 15-16).",
+  "writing": "Lancet-style 'Research in context' box (p. 2); structured abstract with numbers for all three validations (p. 1); paradox title; the discussion calibrates claims (benchmark agreement is not identity, pp. 10-11; immortal time bias out of scope and RCTs not replaced, p. 14), while the appendix asserts that the controls 'demonstrate' no mechanical injection (pp. 24-25); slips: the abstract p-value, a CI bound '-0.796' (p. 25), TOST called 'two-sided' (p. 9), U vs U-tilde notation (pp. 2-7).",
+  "limits_future": "Stated: no correction of immortal time bias; residual differences from eligibility, endpoints and follow-up; unstandardized treatment across centers; a diagnostic subset of center pairs; a small RPS treated group; confirmation needed in independent external datasets (pp. 7-8, 11-14); future: subgroup benefit and precision oncology (p. 14). Unstated: identification conditions for U; [my reading] U's sign follows the event indicator and the matching weight touches only treated event-free patients, so part of the effect may be outcome reweighting, which the Y-permutation control cannot separate (pp. 4-5, 24-25); no code statement; data not shareable (p. 14).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The estimand serves treatment decisions and the baseline is the field's current analytic practice (X-only matching, entropy balancing, IPTW, Cox) on identical grids, but estimates, not decisions, are scored, and against published trial HRs rather than an owner's rule.",
+    "pages": "pp. 1, 6-9, 14"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "The duel protocol is strengthened (identical pre-specified grids, averages over all configurations, cell-level tests), matching the skill's critic-informed equal-budget check; no exact model, solver or certificate.",
+    "pages": "pp. 6, 14"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Optimization appears only as engines (kNN arg min, entropy-balancing convex program, box-constrained scalar weight); the central construct is a residual, not a class-keeping formulation.",
+    "pages": "pp. 4-6"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Reopens a problem the field treats as impossible, conceding the textbook statement ('one cannot regress or match on what is not observed'); the enabling change is a construct, not a measured tool speed-up.",
+    "pages": "pp. 1-2"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Third step of a programme with an MSKCC surgeon (precision medicine, trial emulation, unobserved confounding); multicenter data assembled earlier by the group; his support from the Jameel Clinic; an ORC-affiliated first author.",
+    "pages": "pp. 1-2, 8-9, 14-15"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "observe the unobserved through its effects",
+    "evidence": "A patient-level outcome residual against directional within-arm neighbors serves as a balancing covariate for latent confounding.",
+    "pages": "pp. 2-5"
+   },
+   {
+    "pattern": "three-tier validation: external benchmark, negative control, cross-site consistency",
+    "evidence": "Observational cohorts scored against published RCT HRs, RCT data where the method must change nothing, and the dispersion of effect estimates and case-mix gaps across six centers.",
+    "pages": "pp. 2, 6-9, 12-15"
+   },
+   {
+    "pattern": "level the field and say which way it still tilts",
+    "evidence": "Identical pre-specified grids for baseline and augmented runs, averages over all configurations rather than the best; residual differences from the benchmark trials (endpoints, eligibility, immortal time) named.",
+    "pages": "pp. 6, 11-14"
+   },
+   {
+    "pattern": "permutation and ablation controls against mechanical artifacts",
+    "evidence": "Y permuted within arm before construction, U permuted within arm and globally, and three ablations of the construction, each compared with the full method.",
+    "pages": "pp. 23-25"
+   },
+   {
+    "pattern": "multi-center cohorts as a validation instrument",
+    "evidence": "The cross-center dispersion of chemotherapy HRs and the case-mix survival gaps between centers serve as validation targets; S679 uses multicenter data the same way.",
+    "pages": "pp. 7, 9-10, 13-15"
+   }
+  ],
+  "transferable": [
+   "Build a latent-prognosis covariate as a residual of pseudo-RMST against directional neighbors (same arm, opposite trajectory), normalized by signed within-arm percentiles; balance on it but keep it out of the outcome model (pp. 3-6).",
+   "Validate a causal adjustment three ways: observational cohorts with published RCT effects, RCT data as a negative control that the method must leave unchanged (SMDs below 0.1), and the cross-site dispersion of effect estimates (pp. 6-9, 12-15).",
+   "Run baseline and augmented methods over identical pre-specified hyperparameter grids, average across all configurations, and test cell-level summaries with an exact sign test, with Wilcoxon as sensitivity analysis (p. 6).",
+   "When the claim is 'does no harm', test equivalence against a pre-specified clinical margin such as log(1.10), and say whether the interval reflects sampling or configuration spread (pp. 6, 9, 25).",
+   "Probe a data-derived covariate with permutations (of the outcome before construction, within arm, globally) and ablations of each construction step, including one control that keeps each patient's own outcome but scrambles the covariates (pp. 23-25).",
+   "When a test runs on a diagnostic subset, state the selection rule and that other pairs may move either way (p. 7)."
+  ],
+  "coauthors": "Vasiliki Stoumpou (MIT ORC); Samuel Singer (MSKCC); Georgios Antonios Margonis (MIT Sloan; MSKCC; Charité)",
+  "quotes": [
+   {
+    "text": "By definition, it is not possible to adjust for variables that are not measured; one cannot regress or match on what is not observed.",
+    "page": 1
+   },
+   {
+    "text": "Importantly, we do not attempt to recover any specific latent variable, as this would be infeasible for factors that are not directly observed or even known.",
+    "page": 3
+   }
+  ]
+ }
+]

@@ -1,0 +1,81 @@
+[
+ {
+  "id": "S006",
+  "year": "2016",
+  "title": "Inexactness of SDP relaxation and valid inequalities for optimal power flow",
+  "read_level": "full",
+  "contribution": "Shows that with generation lower bounds the SDP/SOCP relaxation of radial AC-OPF can be exact, inexact or feasible while OPF is infeasible (complete closed-form classification for the two-bus system), releases a library of radial MATPOWER-derived instances with large relaxation gaps, and gives SOCP-based bound tightening and secant cuts that let BARON solve them much faster (read: arXiv:1410.1004v3).",
+  "problem_entry": "Tests the hypothesis shared by recent SDP-exactness theorems (no generation lower bounds on radial networks), justified by ramping constraints in practice; goal stated as two fold: show inexactness, then make global-solution progress (pp. 1-3).",
+  "key_idea": "All radial-OPF nonconvexity lies in c_ij^2+s_ij^2=c_ii c_jj; for two buses eliminate to the (c11,c22) plane and classify outcomes geometrically; algorithmically, tighten c/s bounds by SOCP relaxations and cut the bound box away from the inner disc of the ring, feeding BARON the radial reformulation (pp. 6, 8-11, 18-20).",
+  "assumptions": "Radial networks (reformulation exact only there); SOCP=SDP on radial networks taken from cited [21]; two-bus: g=b=0, G<0, B>0, linear cost; examples: V in [0.9,1.1], large line limits; cuts assume lower bound on c_ij > 0, claimed not restrictive (pp. 3, 5-6, 12, 18).",
+  "proof_devices": [
+   "elimination of the linear power-balance system to express all variables in (c11,c22) (eqs. (7)-(9), p. 8)",
+   "hyperbola (10) with asymptotes and generator bounds as a band parallel to the first asymptote (p. 8)",
+   "linear objective level sets parallel to the band, so only lower bounds matter; effective lower bound Delta (eq. (11), pp. 8-9)",
+   "case analysis by named intersection points c^O, c^R, c^E, c^L, c^I with closed-form gap -G(c^L_22 - c^I_22) (eqs. (12)-(16), Theorem 3.1, pp. 9-11)",
+   "repair argument: shift c11, c22, c12 down equally from an SOCP-optimal point to reach the OPF optimum c^E (p. 11)",
+   "validity of secant cut: points cut off from the box lie inside the inner circle of radius Vmin_i Vmin_j (Algorithm 1, pp. 18-20)"
+  ],
+  "experiments": "Load-scaling sweeps on 2- and 3-bus examples (Tables 2-3, p. 14); radial library from MATPOWER 9-57 bus via spanning trees, SDP (MOSEK) vs BARON (gap 0) vs MATPOWER vs IPOPT with objective, time, rank and dispatch-distance check (Table 4, pp. 15-17); BARON with bounds and cuts reporting preprocessing/total time and root gap, including cases where overhead hurts (Table 5, pp. 20-22); hardware stated (p. 17).",
+  "positioning": "Sorts OPF work into local, convex-relaxation and global methods (global 'in their infancy'); restates SDP exactness results with their hypotheses, agrees with [26] in the exact case, shows [13] does not extend to reactive lower bounds; sets aside the moment hierarchy as possibly impractical; closes by affirming SDP's importance (pp. 2-3, 9, 12, 22).",
+  "writing": "Enumerated trichotomy in the abstract; roadmap paragraph; figures carry the geometry; theorem stated after the case analysis ('The above analysis proves the following theorem.'); appendix explaining BARON to power engineers; negative cut results stated plainly (pp. 1, 3, 7-11, 22-23).",
+  "limits_future": "Reformulation valid only for radial networks, so BARON approach may not scale to large OPF; cuts do not improve SOCP/SDP bounds; preprocessing dominates on small cases; future: efficient global OPF methods, cuts for meshed networks and as LMIs for SDP (claimed, untested) (pp. 17, 20, 22).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "published SDP-exactness theorem demarcated by a complete classification of outcomes on the two-bus system plus a counterexample showing another positive result does not extend to reactive lower bounds",
+    "pages": "pp. 6-12"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "relaxation judged against BARON certified global optimum (relative gap 0) and local solvers; dispatch-distance check that gaps are not cost artifacts; also Heuristics 1 (radial instance library released), 2, 3 and 6 (preprocessing overhead counted)",
+    "pages": "pp. 15-17, 20-22"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "first paper of the OPF arc: the cheap SOCP/SDP relaxation is shown inexact and the certificate comes from BARON strengthened by SOCP-based bound tightening and cuts, which do not improve the SOCP bound itself; the cheap-relaxation-as-deliverable stance appears only in the later Strong SOCP paper",
+    "pages": "pp. 15-22"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "weak: 'all the nonconvexity' isolated in the per-line coupling constraint and cuts derived from the small box-vs-ring set per line, but no hull or substructure theory",
+    "pages": "pp. 6, 18-20"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "complete classification on the smallest instance",
+    "evidence": "closed-form classification of all SOCP/SDP outcomes (exact, finite gap, OPF infeasible) for the two-bus one-generator system before larger counterexamples",
+    "pages": "pp. 6-11"
+   },
+   {
+    "pattern": "single-parameter regime sweep",
+    "evidence": "load scaling gamma moves 2-bus and 3-bus examples through exact, gap and infeasible-but-relaxation-feasible regimes, tabulated",
+    "pages": "pp. 12-15"
+   }
+  ],
+  "transferable": [
+   "List each published exactness result with its hypothesis, find the hypothesis all of them drop, and justify from practice why it matters (pp. 2-3).",
+   "Eliminate linear equalities down to two variables on the smallest instance and classify relaxation outcomes by named intersection points; state the theorem as inequalities among them (pp. 8-11).",
+   "Build counterexample instances from standard benchmarks by a structural restriction (spanning tree) plus parameter changes only, keep them realistic and post them (p. 15).",
+   "Optimization-based bound tightening with the convex relaxation followed by a secant cut separating the bound box from the infeasible inner disc of an annulus constraint (Algorithm 1, pp. 18-20).",
+   "Report preprocessing, solver and total time plus root gap, including instances where the added machinery hurts (Table 5, pp. 20-22).",
+   "When an objective gap could be blamed on cost scaling, also report the distance between relaxed and globally optimal decisions (p. 17)."
+  ],
+  "coauthors": "Burak Kocuk, X. Andy Sun",
+  "quotes": [
+   {
+    "text": "Although, for our instances, we have not observed any lower bound improvement in SOCP/SDP relaxations by the inclusion of the valid inequalities, we obtain stronger root node relaxations in BARON.",
+    "page": 22
+   },
+   {
+    "text": "Our work only serves to demonstrate the limitations of SDP relaxations and emphasizes the importance and the need to develop efficient global methods in solving OPF problems.",
+    "page": 22
+   }
+  ]
+ }
+]

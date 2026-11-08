@@ -1,0 +1,110 @@
+[
+  {
+    "id": "S168",
+    "year": "2024",
+    "title": "Remark on Algorithm 1012: Computing Projections with Large Datasets",
+    "read_level": "full",
+    "contribution": "Replaces the penalty-based NNLS solver DWNNLS in DELAUNAYSPARSE by Fletcher's active-set QP solver BQPD (new PROJECT routine), removing all projection failures on a 4050-run factorial benchmark and on KDDCUP99 where DWNNLS, OSQP, ECOS and SCS fail.",
+    "problem_entry": "Shipped-software failure: DWNNLS penalises the equality e'x=1 with a weight mu that goes to numerical zero as the number of training points n grows, making mu*W rank deficient (pp. 2-3).",
+    "key_idea": "Solve the projection as a QP with BQPD: matrix-free Hessian-vector products O(nd), unit-column LU factors O(n), and a d x d reduced Hessian because the optimum is sparse (p. 3).",
+    "assumptions": "Data normalised to the unit sphere; only Hessian-vector products available; tolerance tightened to eps^1.5; BQPD not threadsafe (common blocks), needs OpenMP lock; O(n) workspace (pp. 2-4).",
+    "proof_devices": [
+      "per-iteration complexity accounting O(nd + d^3) flops, O(n)+O(d^2) storage vs host O(nd^2) (pp. 3-4)",
+      "reduced-Hessian dimension bounded by d via facet sparsity of the projection (p. 3)"
+    ],
+    "experiments": "Full factorial synthetic design, 405 configurations x 10 trials (276 vs 0 failures, n the only effective factor, pp. 4-5); KDDCUP99 subsamples 1k-20k x 10 seeds vs DWNNLS and CVXPY 1.3.1 OSQP/ECOS/SCS at common accuracy and iteration cap, success rates only (pp. 5-7).",
+    "positioning": "A Remark updating the authors' own TOMS Algorithm 1012; DWNNLS described as not designed for many variables rather than wrong; external QP/conic solvers shown to fail too (pp. 1, 3, 7).",
+    "writing": "Mechanism-first short note; causal claims hedged ('supports the hypothesis', 'again suggesting'); engineering limits stated inline (pp. 4, 5, 7).",
+    "limits_future": "Not threadsafe, extra workspace, no timing comparison, one real data set; no future work stated (pp. 4-7).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "BQPD used as a swappable building block via a user Hessian-vector routine; one new routine; common-block thread-safety limit matches SKILL's BQPD static-state diagnosis", "pages": "pp. 3-4"},
+      {"method": "Method 6", "relation": "evidence", "note": "failure traced to the penalty reformulation of the equality constraint and the scaling of mu with n; fix keeps the constraint exact", "pages": "pp. 2-3"},
+      {"method": "Method 5", "relation": "evidence", "note": "failures counted per solver and size with common accuracy, iteration cap and modelling-layer version stated; no timing, competitors untuned", "pages": "pp. 5-7"},
+      {"method": "Method 2", "relation": "variant", "note": "home QP toolkit carried into another group's computational-geometry code as a component, not into a new problem class", "pages": "pp. 1, 3"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "factorial failure-hypothesis benchmark", "evidence": "405-cell full factorial over d, n, geometry, scale, modifier, skew; failure counts per factor level isolate n as the cause", "pages": "pp. 4-5"}
+    ],
+    "transferable": [
+      "Matrix-free active-set QP for convex-hull projection: Hessian-vector product O(nd), unit-column LU, d x d reduced Hessian (p. 3).",
+      "Full factorial synthetic stress design with failure counts broken down by factor level to identify the cause of failure (pp. 4-5).",
+      "Real-data benchmark from repeated random subsamples of growing size, condition number reported next to success rates, modelling-layer version, accuracy and iteration cap stated (pp. 6-7)."
+    ],
+    "coauthors": "Tyler H. Chang, Layne T. Watson, Thomas C. H. Lux, Hussain M. J. Almohri",
+    "quotes": [
+      {"text": "The difficulty of this problem is greater than originally thought, as observed through the failure of other well-known open source QP solvers on the failure cases of DWNNLS.", "page": 3},
+      {"text": "Given the robustness of the original Delaunay interpolation code and algorithm, only BQPD gives performance on these extrapolation tasks that is in keeping with the spirit of DELAUNAYSPARSE.", "page": 7}
+    ]
+  },
+  {
+    "id": "S123",
+    "year": "2025",
+    "title": "Robust A-optimal experimental design for sensor placement in Bayesian linear inverse problems",
+    "read_level": "full",
+    "contribution": "Formulates robust (max-min) binary A-optimal sensor placement as a stochastic program max_p E[min_lambda J] over Bernoulli policies and solves it by a scenario-exchange loop with score-function gradients, validated against brute force on small instances (read in arXiv v1 version).",
+    "problem_entry": "Bayesian OED overlooks misspecified prior/noise covariances; a 1-D binary toy with five scenarios shows a nominal-value design is wrong (arXiv pp. 1-2, 7).",
+    "key_idea": "Put the inner min inside the Bernoulli expectation (3.3), unlike the naive relaxed or outside-min forms which are non-equivalent, nonsmooth and give nonbinary optima; outer projected stochastic gradient on p, inner L-BFGS on lambda, growing scenario set (arXiv pp. 8-13).",
+    "assumptions": "Linear(ised) Gaussian inverse problem, A-optimality Tr(FIM); SPD covariances parameterised by lambda in Lambda; prior uncertainty dropped by trace linearity (not valid for D-optimality); J differentiable in lambda only; diag(lambda^2) noise, lambda_i in [0.02,0.04] in experiments (arXiv pp. 3, 6-8, 10-11, 15-16).",
+    "proof_devices": [
+      "trace-linearity decoupling of prior term from design (arXiv pp. 7-8)",
+      "Lemma A.1: derivative of pseudo-inverse weighted precision, interior case via inverse derivative and boundary case via block partition (arXiv pp. 22-23)",
+      "noise-parameter gradient (A.7)-(A.8)/(3.8) (arXiv pp. 11, 23)",
+      "score-function Bernoulli gradient with optimal baseline (3.5)-(3.9), from ref [11] (arXiv pp. 11-12)",
+      "Levitin-Polyak scenario-exchange scheme Alg. 3.1 (arXiv p. 8)"
+    ],
+    "experiments": "2-D advection-diffusion contaminant model in PyOED (scripts public); ns = 2, 5, 10 (budget 3) validated against brute force over the sampled scenario set; efficiency up to ns = 150 via new evaluations and redundancy ratio with (zeta, lambda) hashing; all hyperparameters listed; no external baselines (arXiv pp. 14-21).",
+    "positioning": "Extends the authors' own stochastic binary-OED method [11] to Wald/Pronzato-Walter max-min robust design, which was little used because of computational overhead (arXiv pp. 2, 4, 8).",
+    "writing": "Three-figure toy sequence (nominal vs robust, naive formulations, proposed) before the algorithm; derivations in an appendix; generous extension claims ('easily') but concrete limitations (arXiv pp. 2, 7-10, 21-22).",
+    "limits_future": "Empirically tuned learning rate, entrapment by early degenerate policy or nonconvex expectation surface, no global optimality guarantee; future: automatic step tuning, Hamiltonian Monte Carlo for global search (arXiv pp. 21-22).",
+    "method_links": [
+      {"method": "Method 3", "relation": "evidence", "note": "smallest breaking example (one binary variable, five scenarios) refutes nominal design and both naive formulations before the proposal", "pages": "arXiv pp. 7-10"},
+      {"method": "Method 6", "relation": "evidence", "note": "formulation fixed before method: order of min and expectation decides smoothness and binarity; trace linearity removes prior uncertainty", "pages": "arXiv pp. 7-10"},
+      {"method": "Method 2", "relation": "variant", "note": "integer-design thinking carried into Bayesian OED, but via the coauthors' stochastic-learning estimator rather than his NLP/filter toolkit", "pages": "arXiv pp. 4, 11"},
+      {"method": "Method 5", "relation": "variant", "note": "claims calibrated against brute-force optima and limits stated, but no external baselines and optimum is relative to self-generated scenario sample; also in tension with Research Taste 3 (no guarantees)", "pages": "arXiv pp. 16-22"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "scenario-exchange outer approximation for robust binary problems", "evidence": "Alg. 3.1/3.2 alternate a max over a finite scenario sample with an adversarial best response appended to the sample, an outer-approximation analogue in scenario space", "pages": "arXiv pp. 8, 13"}
+    ],
+    "transferable": [
+      "Put the worst case inside the expectation of a Bernoulli policy, max_p E[min_lambda J], to get a smooth surrogate interpolating robust values at binary corners (arXiv pp. 10-11).",
+      "Scenario-exchange loop: optimise against a finite scenario sample, append the adversary's best response, repeat (arXiv pp. 8, 13).",
+      "Take few, small outer steps per exchange round so the policy does not collapse to a corner before the adversary explores (arXiv pp. 12, 16).",
+      "Validate a binary-design heuristic on enumerable sizes and plot every design under every scenario with the returned design starred (arXiv pp. 17-20).",
+      "Memoise expensive objective calls on a hash of the (design, scenario) vector and report a redundancy ratio (arXiv p. 20).",
+      "Derivative through a pseudo-inverse at the box boundary: permute zero-weight indices into one block and show the interior formula holds blockwise (arXiv p. 22)."
+    ],
+    "coauthors": "Ahmed Attia, Todd Munson",
+    "quotes": [
+      {"text": "While these attempts to formulate the robust binary OED optimization problem are rather intuitive, the two formulations (3.2a) and (3.2b) are neither equivalent to each other nor equivalent to the original robust binary optimization problem (3.1).", "page": 9},
+      {"text": "Third, while the numerical results indicate good performance of the optimization approach, there are no global optimality guarantees.", "page": 22}
+    ]
+  },
+  {
+    "id": "S133",
+    "year": "2025",
+    "title": "Basic research needs for inverse methods for complex systems under uncertainty",
+    "read_level": "full",
+    "contribution": "DOE ASCR workshop report setting four priority research directions for inverse problems under uncertainty (structure, model misspecification, multimodal/dynamic data, goal-oriented inverse problems); committee voice, Leyffer one of nine 'Other Contributors'.",
+    "problem_entry": "Agenda-setting under a DOE ASCR charge: inverse problems central to DOE missions are growing in complexity while AI/HPC open opportunities (pp. 5, 8, 31-32).",
+    "key_idea": "Four PRDs with two thrusts each in a fixed 'Challenges and Gaps / Why Now? / Research Opportunities' template; recurring move of folding calibration, registration and downstream tasks into the inversion (pp. 15-29).",
+    "assumptions": "n/a (working definitions only, pp. 8-10).",
+    "proof_devices": [],
+    "experiments": "none",
+    "positioning": "Builds on ASCR investments (p. 15); cites Leyffer's joint-inversion papers [159], [190] for multimodal integration within inversion (pp. 23-24, 50, 52); mixed-integer optimisation named once as a compounding difficulty (p. 27).",
+    "writing": "Programme-document register ('transformative', 'unprecedented', 'Why Now?'); boxed PRD summaries in the executive summary; no feasibility hedging (pp. 5-8, 15).",
+    "limits_future": "No self-stated limits; no cross-PRD prioritisation or milestones; section authorship unrecorded; the future directions are the report (pp. 3, 30-32).",
+    "method_links": [
+      {"method": "Method 1", "relation": "variant", "note": "committee voice, not attributable: argues for integrating calibration/registration/downstream task into the inversion rather than a sequential pipeline, citing Leyffer's joint-inversion papers", "pages": "pp. 20, 23-24, 26-28"},
+      {"method": "Method 2", "relation": "variant", "note": "his optimisation base reaches inverse problems through laboratory collaborations and DOE agenda-setting (contributor and participant)", "pages": "pp. 3, 36"}
+    ],
+    "new_pattern_candidates": [],
+    "transferable": [
+      "For a field-level agenda, per-thrust 'Challenges and Gaps / Why Now? / Research Opportunities' blocks with science-driver vignettes up front (pp. 11-29)."
+    ],
+    "coauthors": "Co-chairs J. Donatelli, J. Jakeman, M. Shields; organising committee A. Gelb, F. Herrmann, S. Jantre, J. Larson, J. Mueller, A. Oberai, C. Petra, B. Wohlberg, G. Zhang; other contributors S. Dhulipala, B. Hosseini, D. Kouri, S. Leyffer, M. McCann, T. Portone, J. Restrepo, S. Wild, T. Wildey",
+    "quotes": [
+      {"text": "These difficulties are further compounded when bilevel and mixed-integer optimization is required, such as in automated decision-making tasks like planning-operation or design-operation tasks.", "page": 27},
+      {"text": "Notably, incorporating similar steps within the inversion process—rather than as a preliminary data fusion or registration stage—has been shown to be more efficient and accurate [171, 189, 190]", "page": 24}
+    ]
+  }
+]

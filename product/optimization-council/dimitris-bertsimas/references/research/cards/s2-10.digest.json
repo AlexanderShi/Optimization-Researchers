@@ -1,0 +1,514 @@
+[
+  {
+    "id": "S304",
+    "year": "2019",
+    "title": "The airlift planning problem",
+    "read_level": "full",
+    "contribution": "A slot-based MIP definition of USTRANSCOM's airlift planning problem and a decomposition (single-aircraft MIP oracle, set-partitioning-with-assignment master, two heuristic warm starts, column generation with heuristic pricing) that plans 100-aircraft instances within hours and cuts delay plus aircraft time by 8-12% on simulated and 16-38% on planning instances against an emulation of current practice, with an approximate gap audited against exact pricing on small instances.",
+    "problem_entry": "{AP; IO; HS} Planners schedule requirements one at a time, 'largely manual and ad hoc' (p. 3); airlift costs $9,000-12,000 per flying hour (p. 2); the problem is a multi-depot PDPTW with rest, active-time, hard and soft windows and a delay-plus-uptime objective, a combination not studied at this scale (pp. 3-5).",
+    "key_idea": "Use the full MIP only as a definition (pp. 7-9); decouple assignment from sequencing: a single-aircraft MIP f(a,S) as oracle (pp. 10-12), a set-partitioning master with assignment constraint (p. 12), constraint generation on the dual with add/drop local-search pricing (pp. 13-14), warm starts H1 (randomized insertion) and H2 (move-one local search) that re-optimize each changed sequence exactly (pp. 4, 14-15).",
+    "assumptions": "Deterministic requirements, weights and travel times; heterogeneous aircraft decoupled (no maximum-on-ground constraints) (pp. 6-7); priorities and uptime weight set to 1 (p. 17); simulated T instances on 10 of 174 USAF bases (pp. 15-16); R instances from USTRANSCOM's 111-requirement benchmark with ports, slacks and aircraft filled in at random (pp. 16-17).",
+    "proof_devices": [
+      "slot-based MIP with transition variables kept continuous by forcing constraints (p. 9)",
+      "big-M precedence formulation rejected as weaker and not faster (p. 9)",
+      "'by' variables for balanced branching in the single-aircraft MIP (p. 12)",
+      "set-partitioning master with assignment constraint over (aircraft, requirement set) pairs costed by a MIP oracle (p. 12)",
+      "constraint generation on the dual of the LP relaxation (Algorithm 1, p. 13)",
+      "add/drop local search with random restarts for the separation problem, giving an approximate bound (Algorithm 2, p. 14)",
+      "restricted master MIP over generated columns, not guaranteed optimal (pp. 6, 13)",
+      "BoundGap and SolGap audit against exact pricing on A = R in {10, 20} (pp. 20-21)"
+    ],
+    "experiments": "Gurobi 6.5, Julia/JuMP, 12-core Xeon, 96 GB; single-aircraft MIP capped at 2 s, CG at 12 h (p. 17). Full MIP fails at A = R = 20 (relaxation unsolved in 3 h, Table 2, p. 18). Versus a baseline that emulates planners but sequences by MIP: 8.4-11.8% average gain on T instances with approximate gaps 0.00-1.32% (Table 3, p. 18), 15.9-38.0% on R instances with gaps 0.53-6.44% (Table 10, p. 22); exact pricing moves the bound 0.00%/0.17% at 37,456 s vs 333 s (Tables 8-9, p. 21).",
+    "positioning": "Within PDPTW heuristics (Nanry-Barnes, Ropke-Pisinger), column generation and branch-and-price (Dumas et al., Savelsbergh-Sol, Ropke-Cordeau) and his own ATFM models (Bertsimas-Stock Patterson 1998, 2000; Bertsimas-Lulli-Odoni 2011; Bertsimas-Gupta-Lulli 2014), naming the differences in features, heuristics and use of CG; Jagabathula's set-based local search is credited as the closest analog (pp. 3-6).",
+    "writing": "Numbered contributions with the headline percentages up front (p. 3); the method section opens by declaring the full MIP a definition, not a solution route (p. 9); every approximation is labelled ('approximate gap') and then audited (pp. 18, 20-21).",
+    "limits_future": "Final plan not guaranteed optimal (p. 6); approximate bound (p. 14); exact pricing too slow beyond A = R = 20 (p. 20); text says the CG plan is optimal at A = R = 20 where Table 8 supports A = R = 10 (my reading, p. 21). Future: uncertain requirements, weights and travel times via adaptive and robust optimization (p. 23).",
+    "method_links": [
+      {
+        "method": "Method 4",
+        "relation": "evidence",
+        "note": "Heuristic warm starts (H1, H2), stated limits, solver and machine, a gap per instance set and a duel with the owner's rule; the gap is labelled approximate and audited against exact pricing where possible. Heuristic 3 shape: the exact model stalls, so decompose, search locally and keep exact MIP for small checks.",
+        "pages": "pp. 14-21"
+      },
+      {
+        "method": "Method 5",
+        "relation": "evidence",
+        "note": "Owner (USTRANSCOM), its planning data and its current one-at-a-time rule as baseline, made stronger than practice; decisions scored by delay, uptime and aircraft used; own run times printed. No field test reported.",
+        "pages": "pp. 3, 16-17, 21-23"
+      },
+      {
+        "method": "Method 1",
+        "relation": "variant",
+        "note": "The defining MIP leaves the tractable range and the device changes (set partitioning over a MIP oracle), not the solver; the class is kept only with heuristic pricing and an approximate bound. Formulation strength is weighed explicitly (big-M precedence rejected; 'by' variables), unlike the pattern behind Tension T4.",
+        "pages": "pp. 9-13"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "small exact MIP as a black-box oracle inside heuristics and column generation",
+        "evidence": "The single-aircraft MIP gives f(a,S) for the insertion heuristic, the move-one local search and the pricing local search; insertion into fixed sequences is avoided because constraints make it hard.",
+        "pages": "pp. 4-5, 10-15"
+      },
+      {
+        "pattern": "audit an approximate bound with an exact computation on small instances",
+        "evidence": "Heuristic pricing gives an approximate LP bound; ExactCG on A = R = 10 and 20 reports BoundGap 0.00%/0.17% and SolGap 0.00%/0.28% and the time ratio.",
+        "pages": "pp. 14, 20-21"
+      }
+    ],
+    "transferable": [
+      "When even the relaxation of the full MIP will not solve, split assignment from sequencing: make the per-resource sequencing MIP an oracle f(a,S) and price its sets in a partitioning-with-assignment master (pp. 9-13).",
+      "If pricing is heuristic, call the bound approximate and audit it on instances small enough for exact pricing, reporting BoundGap, SolGap and the time ratio (pp. 14, 20-21).",
+      "Build the baseline from the owner's described practice and make it deliberately stronger than that practice (p. 17).",
+      "Use 'by' variables next to 'at' variables so that branching splits the solution space evenly (p. 12)."
+    ],
+    "coauthors": "Allison Chang (MIT Lincoln Laboratory), Velibor V. Mišić (UCLA Anderson), Nishanth Mundru (MIT ORC) (p. 2)",
+    "quotes": [
+      {
+        "text": "At present, planners schedule each requirement one at a time and look for opportunities to combine some missions with others to reduce transportation costs.",
+        "page": 3
+      },
+      {
+        "text": "The main message of this experiment is that while the lower bound produced by CG is not theoretically guaranteed to be a true lower bound, empirically we have some assurance that it should be close (if not exactly equal) to the true lower bound.",
+        "page": 21
+      }
+    ]
+  },
+  {
+    "id": "S326",
+    "year": "2019",
+    "title": "Identifying exceptional responders in randomized trials: An optimization approach",
+    "read_level": "full",
+    "contribution": "An exact MIO, with the fractional objective linearized by binary expansion, for the interpretable covariate box with the largest (or smallest) average treatment effect in a randomized trial, plus a bootstrap significance test, sequential multiple boxes and a greedy warm-start heuristic, tested on simulations and three public trials.",
+    "problem_entry": "{ML; IO; AP (clinical trials)} Failed trials may hide subgroups with exceptional effects and trials are costly (p. 2); existing subgroup methods 'entail greedily solving a sequence of optimization problems' (pp. 2-3); the target is an axis-parallel box from prespecified cut points, at most S0 restricted covariates and bounded counts per arm, maximizing the ATE (pp. 3-4).",
+    "key_idea": "Fractional 0-1 MIO over bound choices and memberships (pp. 4-5); the reciprocal of each arm's bounded count is expanded in binaries and the products linearized with continuous variables, giving an exact mixed-binary LP (pp. 6-7); bootstrap test on the trimmed ATE (p. 7); overlap-limited multiple boxes (p. 8); CART-like warm start (pp. 8-9).",
+    "assumptions": "Randomized two-arm data; cut points, S0 and count bounds set by the decision maker (p. 4). Simulation: n = 100, four uniform covariates, effect delta0 on x1, x2 <= 0.5, N(0,1) noise, 250 samples (p. 9). Real: three public trials (prostate cancer, periodontal therapy with a validation split, primary biliary cirrhosis) (pp. 11-13).",
+    "proof_devices": [
+      "fractional 0-1 MIO with bound-choice binaries and membership forcing constraints (pp. 4-6)",
+      "binary expansion of the reciprocal of a bounded integer count (p. 6)",
+      "McCormick linearization of z*theta with continuous zeta, so binaries stay linear in n (p. 7)",
+      "bootstrap test on the 10%-trimmed ATE at alpha = 0.01 (p. 7)",
+      "sequential boxes with an overlap constraint (rho = 0.2) and Holm correction (p. 8)",
+      "CART-like recursive warm-start heuristic with shrinking count bounds (pp. 8-9)"
+    ],
+    "experiments": "Julia, Gurobi 6.5 (p. 9). Simulation: FPR 12.4% at alpha = 0.01 (25.2% at S = 10), threshold TPR 68.0% vs 66.4% for the heuristic alone (pp. 9-10); time to provable optimality 33 s (n = 100) to 14,535 s (n = 1,000) (Table 3, p. 11). Real: +18.2-month box also found by Kehl-Ulm (p. 12); periodontal box not confirmed in validation (p. 12); PBC box p = 0.03, declared not significant (p. 13).",
+    "positioning": "Against greedy subgroup methods (Cox interactions; Kehl-Ulm bump hunting; Foster et al. virtual twins; Su et al. and Hardin et al. recursive partitioning) and beside MIO matching for observational studies (Zubizarreta; BOSS); fractional 0-1 programming from Wu, Tawarmalani et al. and Borrero et al. (pp. 2-3, 6).",
+    "writing": "Opens with pharmaceutical economics (p. 2); 'With the power of MIO' framing (p. 3); real cases presented as two positive and one negative, with the validation shortfall stated (pp. 11-13); calls an FPR far above alpha 'stable and low' (p. 10).",
+    "limits_future": "Train-test splits shrink already small subsets (pp. 7-8); validation shortfall (p. 12); null case (p. 13); selective inference not discussed (my reading, p. 10). Future: observational data and more than two arms (p. 13).",
+    "method_links": [
+      {
+        "method": "Method 1",
+        "relation": "evidence",
+        "note": "A ratio objective owned by fractional programming rewritten exactly as a mixed-binary linear model for commercial solvers; boundary printed as time to optimality against n.",
+        "pages": "pp. 6-7, 11"
+      },
+      {
+        "method": "Method 4",
+        "relation": "variant",
+        "note": "One global MIO replaces greedy partitioning, warm-started by a greedy heuristic, with provable optimality and times; but in simulation the only opponent is its own heuristic, which nearly matches it (66.4% vs 68.0% TPR), and 'guarantees optimality' refers to the training objective, not the error rates.",
+        "pages": "pp. 3, 9-12"
+      },
+      {
+        "method": "Method 5",
+        "relation": "variant",
+        "note": "Decision: whether to test a subgroup further; one held-out validation and a printed negative real case (Heuristic 4); no trial sponsor as partner and no field test.",
+        "pages": "pp. 2, 7, 11-13"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "linearize a ratio objective by binary expansion of the reciprocal of a bounded integer denominator",
+        "evidence": "1/|arm in box| takes values 1/N_lo..1/N_up, so it is written as a sum of binaries; products with memberships become continuous variables, giving an exact MILP with Theta(n) binaries.",
+        "pages": "pp. 6-7"
+      }
+    ],
+    "transferable": [
+      "For an average over a selected subset, bound the subset size, expand 1/|subset| in binaries over its few values, and linearize the products with continuous variables so binaries stay linear in n (pp. 6-7).",
+      "Restrict boxes to prespecified clinical cut points and cap the number of restricted covariates: interpretability and a smaller MIO at once (p. 4).",
+      "Print a real case in which the method finds nothing significant next to the positive cases (p. 13)."
+    ],
+    "coauthors": "Nikita Korolko, Alexander M. Weinstein (MIT ORC) (p. 2)",
+    "quotes": [
+      {
+        "text": "With the power of MIO, we can find optimal interpretable solutions directly by solving a single global formulation instead of using a greedy, recursive approach.",
+        "page": 3
+      },
+      {
+        "text": "Although the reduction in the prevalence of anomalies for training-set subjects in the box does not fully hold in the validation set",
+        "page": 12
+      }
+    ]
+  },
+  {
+    "id": "S358",
+    "year": "2019",
+    "title": "Learning a mixture of gaussians via mixed-integer optimization",
+    "read_level": "full",
+    "contribution": "MIO estimators of Gaussian-mixture parameters that minimize the Kolmogorov-Smirnov or total-variation distance to the empirical distribution through a piecewise-linear approximation of the normal CDF with DP-optimized breakpoints, extended to unknown weights by alternation and to d dimensions by random projections, an MIQO label alignment and an SDO, beating EM on synthetic MAPE and UCI accuracy at a large run-time cost.",
+    "problem_entry": "{ML; IO; CP} EM is a local search on a multimodal likelihood (p. 2); provable methods need component separation and moment methods fit six moments (pp. 2-3); entry: minimize a CDF discrepancy as an MIO, made tractable by two decades of solver speed-ups (p. 3).",
+    "key_idea": "With weights known, substitute s = 1/sigma, t = mu/sigma and replace Phi by a binary-encoded PWL function (pp. 4-6); choose breakpoints by a shortest-path DP (pp. 7-8); add max-discrepancy constraints lazily (p. 8); TV variant over intervals mu +/- delta sigma (pp. 9-12); alternate with an LP for unknown weights (pp. 12-13); multivariate via d^2 projections, MIQO alignment and SDO covariances (pp. 14-15).",
+    "assumptions": "K known; weights known in the core models (pp. 4, 9); i.i.d. samples; admitted: big-M formulations weak (p. 10), KS model less robust than EM to a few points (p. 7), alternation without convergence proof (p. 12). Data: synthetic two-component mixtures, n = 100-2,000 (p. 16); five UCI sets, 70/30 splits repeated five times (pp. 18, 20).",
+    "proof_devices": [
+      "change of variables s = 1/sigma, t = mu/sigma (p. 4)",
+      "PWL approximation of Phi with binary segment selectors (eq. 3, p. 5)",
+      "Lemma 1: KS objective error bounded by the PWL maximum error (p. 5; statement only in the text read)",
+      "shortest-path DP for optimal breakpoints with closed-form segment errors (pp. 7-8)",
+      "lazy constraint generation through solver callbacks (p. 8)",
+      "big-M and McCormick linearizations of interval counts in the TV model (pp. 10-12)",
+      "alternating optimization between the MIO and an LP in the weights (pp. 12-13)",
+      "random projections, MIQO permutation alignment and SDO covariance fit (pp. 14-15)"
+    ],
+    "experiments": "Julia 0.6, Gurobi 6.5.2, 4-core Xeon, 16 GB (p. 16). Synthetic: MAPE of means 60-70% and covariances 50-60% below EM (p. 17); KS 109-595 s and TV 222-2,039 s vs EM 16.8-18.6 s (Table 1, p. 19). UCI: +1.7 to +7.5 accuracy points over EM (my arithmetic) but below CART and random forests on all five sets (Table 2, p. 20); training 1.8-169 min vs 0.1-4 min (Table 3, p. 20). No MIO gaps; EM set-up unstated.",
+    "positioning": "Against EM (Dempster et al.; Wu; Balakrishnan et al.), separation-based provable methods (Dasgupta; Sanjeev-Kannan; Vempala-Wang) and moment methods (Belkin-Sinha; Kalai-Moitra-Valiant; Moitra-Valiant) (pp. 2-3).",
+    "writing": "The abstract leads with 'optimally recovers' and headline MAPE percentages (p. 2); the qualifiers (known weights, weak big-M, no convergence proof, comparison 'not fair') sit in the body (pp. 4, 10, 12, 20).",
+    "limits_future": "Price in training time admitted (p. 21); 'in minutes' for n in the tens of thousands (p. 2) vs 126-169 min on the census set (Table 3, p. 20) and 'optimally' only for the PWL surrogate with known weights (pp. 5, 12) (my reading). Future: other univariate families (p. 21).",
+    "method_links": [
+      {
+        "method": "Method 1",
+        "relation": "variant",
+        "note": "A nonconvex estimation problem is kept in MILP through a PWL surrogate with a stated error bound, at the price of approximation and big-M constraints the authors call weak (Tension T4).",
+        "pages": "pp. 4-12"
+      },
+      {
+        "method": "Method 2",
+        "relation": "variant",
+        "note": "The 'why now' is solver speed-up over two decades, stated without a rebuilt figure.",
+        "pages": "p. 3"
+      },
+      {
+        "method": "Method 4",
+        "relation": "variant",
+        "note": "Exact (surrogate) model duels the local-search incumbent EM on synthetic data with known truth and on real data, and the winning discriminative baselines are printed; but no gap, no EM set-up, and the 'optimal' claim covers only the surrogate (Tension T1).",
+        "pages": "pp. 16-20"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "PWL surrogate with DP-optimized breakpoints and an a priori error bound",
+        "evidence": "Breakpoints for Phi chosen by a shortest-path DP on a 1,000-point grid with closed-form segment errors (max error 0.00059 with 10 breakpoints); Lemma 1 carries the error into the KS objective.",
+        "pages": "pp. 5, 7-8"
+      }
+    ],
+    "transferable": [
+      "To put a smooth nonconvex function such as Phi into an MILP, choose PWL breakpoints by a shortest-path DP on a fine grid with closed-form segment errors as arc costs, and carry the error into the objective bound (pp. 5, 7-8).",
+      "For a minimax over n data points, start with a few constraints and add the most violated one at each incumbent through a lazy-constraint callback (p. 8).",
+      "When multivariate parameters come from 1-D projections, align component labels across projections with a small MIQO before fitting covariances by SDO (pp. 14-15)."
+    ],
+    "coauthors": "Hari Bandi (MIT ORC), Rahul Mazumder (MIT ORC and Sloan) (p. 2)",
+    "quotes": [
+      {
+        "text": "Although, the “Big-M” formulations are weak, for tractability of the problem, we linearize constraints (10) using McCormick type linearization",
+        "page": 10
+      },
+      {
+        "text": "Although we have compared the performance of our algorithms with the state-of-the-art methods in classification, we believe the comparison is not fair.",
+        "page": 20
+      }
+    ]
+  },
+  {
+    "id": "S445",
+    "year": "2019",
+    "title": "The K-server problem via a modern optimization lens",
+    "read_level": "full",
+    "contribution": "MIO formulations of the offline K-server problem and of the Work Function Algorithm, robust and affinely adaptive counterparts with polyhedral uncertainty sets on future requests, and HARO, one MIO combining a WFA window with an AARO window, which beats GREEDY and WFA in simulation when approximate future information is available.",
+    "problem_entry": "{RO; IO; problem owned by online algorithms} K-server is judged by competitive ratio (p. 2); WFA is 2K-1 competitive and w-WFA works in practice (p. 6); past data support 'data-driven assumptions about the future', so use both past and an uncertainty set (p. 3).",
+    "key_idea": "Offline K-server as mixed-binary LP (pp. 6-7); WFA's decision as one MIO (Proposition 1, pp. 7-8); RO(T) with polyhedral sets on the next T requests (pp. 9-11); AARO(T) with affine future assignments (pp. 11-13); HARO(w,T) joins a w-WFA block, the current step and an AARO(T) block in one MIO (pp. 13-15), with an optional weight lambda (p. 17).",
+    "assumptions": "Requests one at a time in [0,1], [0,1]^D (l1 or l-infinity) or finite metric spaces via indicators relaxed to [0,1] (pp. 3-4, 16); uncertainty sets are radius-1/n neighbourhoods of the true future locations (pp. 17, 19-20), perturbed with probability mu in one experiment (p. 22); empirical, not theoretical, competitive ratio, with reasons (p. 15).",
+    "proof_devices": [
+      "linearization of products and absolute values in the offline MIO (p. 7)",
+      "Proposition 1: WFA's arg min reproduced by one consolidated MIO (p. 8)",
+      "server positions through product binaries u[k,t,j] (pp. 9-10)",
+      "robust counterpart by standard duality for polyhedral sets (p. 11)",
+      "affine decision rules with a binary here-and-now assignment; AARO as relaxation of RO (pp. 11-13)",
+      "HARO: past window, current step and future window in one MIO (pp. 13-15)"
+    ],
+    "experiments": "Julia/JuMP, Gurobi 6.5, 16 GB; OPT and WFA as network flows; 10 instances x 1,000 requests (pp. 18-19). RO methods reach empirical ratios 1.08-1.16; HARO equals GREEDY/WFA at n = 1 and beats them as information grows, 2.35-4.11 s per step (p. 21); falls to the best online level beyond mu = 35% (p. 23); times are to the hindsight-optimal assignment, proof takes minutes to tens of minutes (p. 24); Tables 2-3 (one instance per cell) give a 2-26% advantage, the 26% measured against GREEDY, not WFA (my arithmetic, p. 26).",
+    "positioning": "Builds on CS online algorithms (Manasse et al.; Koutsoupias-Papadimitriou; Borodin-El-Yaniv; Rudec et al.) and RO/AARO (Ben-Tal et al. 2004; Bertsimas-Brown-Caramanis 2011); claims the first RO application to online algorithms and the first CS-OR combination there (pp. 2-6, 9, 11).",
+    "writing": "Priority claims ('To the best of our knowledge, this is the first...') in the contribution list (p. 3); abstract says 'almost always outperforms' (p. 2); the choice of empirical over theoretical competitive ratio is argued in three reasons (p. 15).",
+    "limits_future": "No theoretical guarantee (p. 15); gain depends on information quality (pp. 21, 23); RO methods see information the incumbents lack (p. 15). No future work stated (p. 26).",
+    "method_links": [
+      {
+        "method": "Method 1",
+        "relation": "evidence",
+        "note": "A CS-owned problem written exactly as MIO, with robust and affine counterparts kept as robust MILPs by duality; boundary printed as per-step proof time.",
+        "pages": "pp. 3, 6-15, 24"
+      },
+      {
+        "method": "Method 4",
+        "relation": "variant",
+        "note": "Standard incumbents (GREEDY, WFA) dueled, but the RO methods get future information the incumbents lack; the asymmetry is stated and the vanishing points printed (n = 1; mu > 35%), meeting the 'equal budgets' check only in part; times are to the hindsight-optimal assignment, not to a certificate.",
+        "pages": "pp. 15, 18-26"
+      },
+      {
+        "method": "Method 3",
+        "relation": "variant",
+        "note": "Information level n, distortion mu and windows (w,T) act as knobs with empirical price curves and printed bad cases, but no bound.",
+        "pages": "pp. 17-25"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "fold the incumbent heuristic's decision rule into the optimization model, then extend it",
+        "evidence": "WFA's arg min becomes one MIO (Proposition 1); HARO replaces WFA's greedy term by an AARO cost-to-go in the same model.",
+        "pages": "pp. 7-8, 13-15"
+      },
+      {
+        "pattern": "report time to the hindsight-best solution separately from time to proof",
+        "evidence": "Table 1 reports the time to the assignment that later proves optimal (seconds), while proving optimality takes minutes to tens of minutes; S488 separates actual and perceived gaps in the same way.",
+        "pages": "p. 24"
+      }
+    ],
+    "transferable": [
+      "Write the incumbent online rule as one MIO whose binary choice reproduces its arg min, then add new terms inside the same model (pp. 7-8, 13-15).",
+      "Measure the value of forecasts on one scale (interval radius around the truth) plus a corruption rate, and report the break-even points against the incumbents that use no information (pp. 17, 21-23).",
+      "Compute OPT with a polynomial network-flow model and report the average ratio to it, with a convergence plot that justifies sequence length and instance count (pp. 18-19)."
+    ],
+    "coauthors": "Patrick Jaillet, Nikita Korolko (MIT ORC) (p. 2)",
+    "quotes": [
+      {
+        "text": "First, all presented RO-based algorithms by design have access to approximate locations of future requests, while the key idea of competitive ratio analysis is to measure the price of not knowing the future.",
+        "page": 15
+      },
+      {
+        "text": "it takes from minutes to tens of minutes (depending on the instance size) to optimize over auxiliary variables and prove the optimality",
+        "page": 24
+      }
+    ]
+  },
+  {
+    "id": "S488",
+    "year": "2019",
+    "title": "The price of flexibility",
+    "read_level": "full",
+    "contribution": "An unpublished two-stage adaptive robust model (affine policies, revenue-normalized worst-case profit, budget sets) for designing process-flexibility networks in unbalanced, nonhomogeneous systems, with Pareto and relaxed-Pareto efficiency for two-stage ARO and two lemmas on short versus long chains; in simulation its designs keep about 98% of a long chain's revenue at about 70% of its cost.",
+    "problem_entry": "{RO; IO; AP (manufacturing)} Long-chain theory covers balanced homogeneous systems and guidelines are heuristics (pp. 3-4); Mak-Shen's stochastic program must be relaxed (p. 4); entry: lower the cost of added links by ARO for systems with unequal plants, products, margins and link costs (pp. 2, 5).",
+    "key_idea": "Links here-and-now, production after demand (p. 7); absolute-profit worst case is low demand, which never values flexibility (Example 1, p. 8), so normalize profit by total revenue (pp. 9-10); affine policies give an MILP or MISOCP (p. 11); budget and correlated budget sets (pp. 12-13); Pareto robust selection by fixing z* and maximizing at an interior scenario (Theorem 1, Corollary 1, pp. 16-18), relaxed by alpha (p. 19).",
+    "assumptions": "Plants with capacities, uncertain demand in U, link and production costs, prices (p. 7); Gamma chosen by simulation (p. 12); synthetic data only: 100 random 5 x 5 instances with 100 normal demand draws, mean perturbations eta in {0, 0.5, 0.9} (pp. 30, 32-33).",
+    "proof_devices": [
+      "revenue-normalized worst-case objective through an epigraph variable (p. 9)",
+      "affine policies reformulated by robust duality into MILP or MISOCP (p. 11)",
+      "budget and correlated budget uncertainty sets via Cholesky factor (pp. 12-13)",
+      "Theorem 1 / Corollary 1: Pareto optimal affine adaptive solutions from m+1 affinely independent scenarios or one interior scenario, by affinity in d (pp. 17-18)",
+      "relaxed Pareto with alpha (p. 19)",
+      "Lemma 1 via minimum vertex covers: two short chains beat a long chain when 2B3 > B1 + B2 + 2(p - T)c (pp. 20-21)",
+      "Lemma 2 via explicit dominating demand vectors: the long chain is not dominated among 2n-link designs under symmetry (pp. 21-23)"
+    ],
+    "experiments": "Gurobi 6.0.4, JuMP and JuMPeR, 2.6 GHz i7 laptop (p. 26). At 7 x 7, 75% of instances reach an actual gap < 5% within 5 s, ~60% a proved gap < 1% after 40 s; at 15 x 15, actual 2% in ~1 h, proved 5% in ~2 h (pp. 25, 27). Pareto designs at least as good in ~70-95% of instances but worse in up to 32 of 100 (Table 1, p. 31); Gamma = 3 ties an SAA version of Mak-Shen at eta = 0 and wins under perturbation (p. 33); ~98% of a long chain's revenue at 70% of its cost (p. 35).",
+    "positioning": "Jordan-Graves chaining and its successors (Chou et al.; Simchi-Levi-Wei; Wang-Zhang) for balanced systems; Mak-Shen 2009 as the only optimizing approach for unbalanced systems (pp. 3-5); Iancu-Trichakis 2013 for Pareto robustness, extended to two-stage ARO (pp. 14-15).",
+    "writing": "'Price of' brand in the title (p. 1); small examples with hand-computed worst cases motivate each modelling choice (pp. 8-10, 15); draft state: empty acknowledgments, a duplicated reference and broken sentences (pp. 1, 3, 36, 38).",
+    "limits_future": "Pareto ties rare, hence relaxation (p. 19); affine policies only, called a 'relaxation' with an 'upper bound' although they restrict a maximization (pp. 11, 16; my reading); synthetic data; 'near-provably-optimal' in about an hour (p. 23) vs proved 5% gap in about 2 h (p. 25). No future work stated (p. 36).",
+    "method_links": [
+      {
+        "method": "Method 3",
+        "relation": "evidence",
+        "note": "Flexibility priced with knobs Gamma and alpha, Gamma set by simulation, revenue against price compared across designs, bad cases printed (Gamma = 0 and 5 poor; Pareto designs worse in up to 32% of instances). Both parts of Method 3's correction absorbed: Iancu-Trichakis's Pareto critique and a data-tuned knob, the Heuristic 2 pattern of answering inside the critic's frame. Stayed unpublished, as Method 3's limitation records.",
+        "pages": "pp. 1-3, 12, 14-19, 25-36"
+      },
+      {
+        "method": "Method 1",
+        "relation": "evidence",
+        "note": "The two-stage robust design stays MILP or MISOCP through affine policies; the device is an approximation, mislabelled as a relaxation (my reading).",
+        "pages": "pp. 10-11, 16"
+      },
+      {
+        "method": "Method 4",
+        "relation": "variant",
+        "note": "Honest separation of the solver's perceived gap from the actual gap known afterwards; but the headline 'near-provably-optimal' in about an hour sits beside a proved 5% gap at about 2 h.",
+        "pages": "pp. 23-27"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "normalize the worst-case objective so that the adversary cannot pick the trivial scenario",
+        "evidence": "Under absolute profit the worst case is low demand, where flexibility never pays; dividing by total revenue moves the worst case to high demand and lets the model value flexibility (Examples 1-2).",
+        "pages": "pp. 8-10"
+      },
+      {
+        "pattern": "report time to the hindsight-best solution separately from time to proof",
+        "evidence": "Actual gap (to the eventual best design) vs perceived gap (to the bound) over time for 7 x 7 and 15 x 15 instances; same separation in S445 p. 24.",
+        "pages": "pp. 25-27"
+      }
+    ],
+    "transferable": [
+      "If the worst case of an absolute objective is a trivial scenario that never rewards the feature being priced, divide by an optimistic benchmark (total revenue) and check the change on a 5 x 5 example with hand-computed worst cases (pp. 8-10).",
+      "After the robust solve, fix the worst-case value and maximize at an interior scenario to pick a Pareto-efficient design; relax the fixed value by alpha to trade worst case for average case (pp. 16-19).",
+      "Plot over solve time the share of instances whose actual gap, and whose proved gap, is below 1%, 2% and 5% (pp. 25-27)."
+    ],
+    "coauthors": "Hoda Bidkhori (University of Pittsburgh), Iain Dunning (DeepMind) (p. 1)",
+    "quotes": [
+      {
+        "text": "in the low demand scenario, no benefit is realized from the flexibility yet we still pay a price for the flexibility",
+        "page": 8
+      },
+      {
+        "text": "While proving a design is optimal may be desirable after a model is finalized, of more immediate interest is the time to find “good” solutions.",
+        "page": 25
+      }
+    ]
+  },
+  {
+    "id": "S063",
+    "year": "2020",
+    "title": "Ensemble forecasts of coronavirus disease 2019 (COVID-19) in the US",
+    "read_level": "full",
+    "contribution": "The COVID-19 Forecast Hub's first evaluation, in the organizers' voice, of its equal-weight quantile-average ensemble of 1-4-week-ahead US COVID-19 death forecasts: 2,512 forecasts, error growing with horizon and 95% intervals covering 92-96% after rounding; Bertsimas is a consortium author through team MIT CovidAnalytics.",
+    "problem_entry": "{AP (public-health forecasting); no optimization} Demand for forecasts to guide policy and the known robustness of ensembles (pp. 2-3); question: how did the real-time, open ensemble of cumulative death forecasts perform (p. 2).",
+    "key_idea": "Standardized weekly submissions (median and 11 intervals) from CDC and 21 academic, 5 industry and 2 government-affiliated groups (p. 3); ensemble = equal-weight average of each quantile over eligible models from 27 April 2020 (p. 4); eligibility rules (p. 10).",
+    "assumptions": "Targets: JHU CSSE cumulative deaths for states, territories and the nation (p. 3); 6-20 models per week (p. 4); 2,512 of 2,561 forecasts, weeks ending 23 May-25 July 2020, places with at least two models (p. 4).",
+    "proof_devices": [
+      "n/a: no model, formulation or proof; evaluation devices: mean absolute error and interval coverage, with intervals also rounded outward to whole numbers (p. 4)",
+      "ensemble eligibility rules: all four horizons, nondecreasing quantiles, capped probability of a fall in cumulative deaths (p. 10)"
+    ],
+    "experiments": "Four-week MAE more than three times one-week MAE (national 760 vs about 2,400 deaths) (p. 6); 95% intervals cover 87-90% raw and 92-96% rounded, 50% intervals 50-55% and 57-65% (Table 1, p. 6); 1.4% of outcomes above the 99% quantile (p. 7). Individual models, including MIT CovidAnalytics, not scored.",
+    "positioning": "Places the hub among multi-model epidemic forecasting efforts (Viboud et al.; Johansson et al.; McGowan et al.; Reich et al.) and ensemble practice in economics and weather forecasting (p. 3).",
+    "writing": "Structured abstract (p. 2); a short main text (pp. 1-9) with a long consortium supplement listing teams, members and funding (pp. 17-24); ends by encouraging decision makers to use multi-model ensembles (p. 8).",
+    "limits_future": "Equal weights; precision falls with horizon, raising concerns for longer-range forecasts (p. 7). Future: dynamic weights based on past performance (p. 7).",
+    "method_links": [
+      {
+        "method": "Method 5",
+        "relation": "variant",
+        "note": "External prospective evaluation on the field's metrics (MAE, coverage), to which his team contributed forecasts: the regime Method 5's correction asks for and the Heuristic 4 practice of an external scoreboard, seen from the organizers' side; no decision metric and no score for MIT CovidAnalytics.",
+        "pages": "pp. 3-4, 6-7, 17"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "consortium co-authorship as a contributing modeller",
+        "evidence": "Named authors write 'on behalf of the COVID-19 Forecast Hub Consortium'; Bertsimas appears only in the supplement's MIT CovidAnalytics team list; third instance after S110 (c27) and S021 (c2-05).",
+        "pages": "pp. 1, 17"
+      }
+    ],
+    "transferable": [
+      "For count outcomes, report interval coverage both raw and with bounds rounded outward, and say which weeks drive the difference (weeks with no new deaths) (pp. 4, 6).",
+      "Compare horizons only on target weeks that were forecast at every horizon (p. 4).",
+      "Fix ensemble-membership rules in advance: all horizons present, nondecreasing quantiles, capped probability of a fall in cumulative deaths (p. 10)."
+    ],
+    "coauthors": "Consortium paper: named authors E. L. Ray, N. Wattanachit, J. Niemi and others, with corresponding authors M. A. Johansson (CDC) and N. G. Reich (UMass Amherst), on behalf of the COVID-19 Forecast Hub Consortium (p. 1); Bertsimas listed in team MIT CovidAnalytics with M. L. Li, H. Tazi Bouardi, O. Skali Lami, N. K. Trichakis and T. A. Trikalinos (pp. 17-18)",
+    "quotes": [
+      {
+        "text": "The ensemble forecast was constructed as an equally-weighted average of forecasts from all eligible models.",
+        "page": 4
+      },
+      {
+        "text": "This raises concerns about the reliability of forecasts at longer horizons of weeks to months.",
+        "page": 7
+      }
+    ]
+  },
+  {
+    "id": "S111",
+    "year": "2020",
+    "title": "Machine learning in oncology: methods, applications, and challenges",
+    "read_level": "full",
+    "contribution": "A clinical-audience review of ML in oncology: model classes compared on interpretability (optimal trees beside CART), clustering and its interpretation, clinical data sources, a data-curation and validation checklist, and applications from detection to treatment response.",
+    "problem_entry": "{ML; AP (oncology); DA only in the prescriptive remarks} Digitized records enable large-scale analysis, but variable data, workflow integration and scrutiny of ML in health care stand in the way (p. 1); the review maps tasks, data, curation and applications (p. 1).",
+    "key_idea": "A practitioner's map: supervised classes compared on interpretability and nonlinearity (Table 1, p. 3) with OCT next to CART (p. 2); clustering interpreted after the fact or by construction (pp. 3-4); EMR, genomic and imaging data (pp. 4-5); curation with imputation (OptImpute, MedImpute) and a validation checklist (pp. 5, 7); applications (pp. 6-7).",
+    "assumptions": "n/a (review; no data of its own).",
+    "proof_devices": [
+      "n/a: review; no formulation, analysis or proof (pp. 1-7)"
+    ],
+    "experiments": "none",
+    "positioning": "Frames ML in medicine through general reviews (Rajkomar et al.; Emanuel-Wachter) and cites his own programme for OCT, interpretable clustering, OptImpute and MedImpute, plus the Interpretable AI documentation (pp. 1-5, 8).",
+    "writing": "Practitioner register with a Context box (Key Objective, Knowledge Generated, Relevance) (p. 2); comparison tables (pp. 3, 6, 7); closing claim that ML 'will transform cancer care' (p. 7); company ties disclosed (p. 8).",
+    "limits_future": "Technical challenges only; reinforcement learning excluded (p. 1); the claim that OCTs 'generally demonstrate stronger performance' rests on the OCT paper and the company documentation (refs. 11-12; pp. 2-3, 8; my reading). No research agenda beyond the challenges named (p. 7).",
+    "method_links": [
+      {
+        "method": "Method 6",
+        "relation": "evidence",
+        "note": "A student co-author carries the programme's methods (OCT, OptImpute, MedImpute, interpretable clustering) and the company's documentation to a clinical audience, with company ties disclosed.",
+        "pages": "pp. 1-4, 8"
+      },
+      {
+        "method": "Method 4",
+        "relation": "variant",
+        "note": "OCT reaches clinicians as an optimization framework searched locally, with no certificate (Tension T1).",
+        "pages": "p. 2"
+      },
+      {
+        "method": "Method 5",
+        "relation": "variant",
+        "note": "'ML also provides prescriptive insights' and staging framed as stratification for decisions, with a call for prospective validation; but no decision metric or current-rule baseline. Interpretability as a condition of trust echoes Taste mark 5.",
+        "pages": "pp. 1, 6-7"
+      }
+    ],
+    "new_pattern_candidates": [],
+    "transferable": [
+      "A three-check clinical data validation protocol: value feasibility (bounds; out-of-range values to NA for imputation), internal consistency (derived fields and logical rules; omit what cannot be reconciled), temporal consistency (flag spikes, replace by NA, discretize changes) (Table 3, p. 7).",
+      "In a methods table for clinicians, give each model class an overview, benefits, drawbacks and examples, with interpretability as a named axis (Table 1, p. 3)."
+    ],
+    "coauthors": "Holly Wiberg (MIT ORC) (pp. 1, 8)",
+    "quotes": [
+      {
+        "text": "ML models must gain the trust of clinicians through interpretability, collaboration between researchers and medical experts, and prospective validation in clinical settings.",
+        "page": 1
+      },
+      {
+        "text": "A local search procedure enables the recovery of data partitions that are not identifiable from a greedy approach.",
+        "page": 2
+      }
+    ]
+  },
+  {
+    "id": "S180",
+    "year": "2020",
+    "title": "Joint frequency-setting and pricing optimization on multimodal transit networks at scale",
+    "read_level": "full",
+    "contribution": "A framework that sets transit frequencies (relaxed to fluid rates) and fares jointly under logit route choice, solved by sequential LP with random restarts in minutes on Tokyo and Boston networks and bracketed by a system-optimum LP bound, showing that joint pricing cuts waiting time but can lower commuter utility.",
+    "problem_entry": "{AP (urban transit); LO as engine; nonconvex continuous choice problem} Crowding and tight budgets (p. 1); timetabling and frequency papers fix demand, pricing papers fix the schedule (pp. 2-4); entry: joint frequencies and fares with route choice at city scale, claimed as a first (pp. 1, 4, 22).",
+    "key_idea": "Relax binary departures to fluid rates so that known-choice frequency-setting is an LP over boarding flows (pp. 5-9); with logit choices responsive to frequency, fare and crowding the problem is nonconvex (pp. 10-12), solved by sequential LP with step bounds, lagged occupancy and random restarts (pp. 12-14); fare policies as linear constraints (pp. 9-10); system optimum as LP lower bound (pp. 11-12).",
+    "assumptions": "15-minute periods, service budget, capacities, Google Maps travel times, routes up to second-shortest (pp. 5, 14-15); linear utility in time, fare and convex discomfort with soft capacity 0.8K (pp. 10-11, 16); coefficients from survey shares and income ratios, beta1 = 1 arbitrary (pp. 23-24); fluid model ignores waiting between arrivals (p. 6). Data: public Kanagawa demand (57 stations, 5 lines) (p. 14); private MBTA counts turned into OD matrices, 74 stops, substitutable stations within 0.5 mile (pp. 20-21).",
+    "proof_devices": [
+      "fluid relaxation of the binary schedule to an LP (p. 6)",
+      "LP over boarding flows when route choices are known (p. 9)",
+      "fare policies (flat, line-based, distance-based) as linear constraints (pp. 9-10)",
+      "system optimum (operator dictates routes) as LP lower bound (pp. 11-12)",
+      "sequential LP with trust-region step bounds, lagged occupancy and random restarts; no convergence guarantee (pp. 12-14)"
+    ],
+    "experiments": "Julia/JuMP, Gurobi 7.5, 8 cores of a Xeon E5-2650, 64 GB (p. 14). Full Kanagawa network (362,477 commuters): median runs 218-554 s over 30 starts, some starts at poorer local optima (Table 5, p. 19); at B = 280 wait per commuter SO 6.73, frequencies only 10.22, line fares 8.30, distance fares 8.74 min (Table 6, p. 20); variable fares lower mean utility at B <= 360 (p. 19). Boston: distance fares -5.5% wait at B = 55; no fare scheme dominates across networks (p. 22). No comparison with current schedules (p. 22).",
+    "positioning": "Timetabling (Szpigel; Caprara et al.; Niu-Zhou), frequency-setting (Newell; Hurdle; Scheele; Furth-Wilson), route choice (Spiess-Florian; Han-Wilson; Constantin-Florian; Verbas-Mahmassani) and transit pricing (Huang; Wu et al.; Atasoy et al.) (pp. 2-4); claims to be first at joint frequency-setting and pricing at scale (pp. 1, 4, 22).",
+    "writing": "Abstract headline 'near-optimality in minutes' (p. 1); the priority claim repeated three times (pp. 1, 4, 22); experiments framed as demonstrations, not prescriptions (p. 14); text on utility of distance vs line pricing contradicts Table 6 (pp. 19-20; my reading).",
+    "limits_future": "Mixed synthetic and real data make comparison with the current system difficult (p. 22); not a policy prescription, parameters not claimed accurate (p. 14); no certificate behind 'near-optimality', the only bound being the dictatorial system optimum, 1.57 min below the best policy at B = 280 (pp. 1, 20; my reading). Future: farebox recovery, ridership, more cities (p. 23).",
+    "method_links": [
+      {
+        "method": "Method 1",
+        "relation": "variant",
+        "note": "Class kept by relaxing the timetable to fluid rates and solving the nonconvex choice problem as a sequence of LPs, with run times measured at city scale; the class holds only locally and no global gap is given.",
+        "pages": "pp. 6, 9, 12-14"
+      },
+      {
+        "method": "Method 5",
+        "relation": "variant",
+        "note": "Partner data (Mitsubishi Electric; MBTA counts) and decision metrics (wait, mean utility) with the trade-off printed; but the baseline is an optimized flat-fare policy, not the operators' current schedule, and nothing is field-tested, as the authors say.",
+        "pages": "pp. 14, 19-23"
+      },
+      {
+        "method": "Method 4",
+        "relation": "variant",
+        "note": "Labelled local search with random restarts and progress plots, but 'near-optimality' claimed without a gap (Tension T1).",
+        "pages": "pp. 1, 13, 19"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "bracket a nonconvex policy between an operator-dictated LP bound and the policy without the new lever",
+        "evidence": "System optimum (operator routes every commuter) as lower bound and frequency-setting with a flat fare as upper bound on waiting time for the priced policies.",
+        "pages": "pp. 11-12, 19"
+      }
+    ],
+    "transferable": [
+      "Relax a binary timetable to fluid departure rates where crowding, not headway, causes waiting, and state what the relaxation ignores (p. 6).",
+      "Solve a choice-dependent design by sequential LP: linearize choice probabilities at the incumbent, box the step, lag the dense coupling term, restart from random points, and plot objective against time per start (pp. 12-14, 18-19).",
+      "When no choice data exist, derive utility coefficients from survey shares and income ratios and label them illustrative (pp. 14, 23-24)."
+    ],
+    "coauthors": "Yee Sian Ng, Julia Yan (MIT ORC) (p. 1)",
+    "quotes": [
+      {
+        "text": "we note that the purpose of the experiments is not to provide a policy prescription, but to show that our methods can be applied to realistic data.",
+        "page": 14
+      },
+      {
+        "text": "As the computational experiments are performed on a mixture of synthetic and real data, it is difficult to make direct comparisons with the current system.",
+        "page": 22
+      }
+    ]
+  }
+]

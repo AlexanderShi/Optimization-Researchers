@@ -1,0 +1,421 @@
+[
+ {
+  "id": "S316",
+  "year": "2025",
+  "title": "Solving Large‐Scale Weapon Target Assignment Problems in Seconds Using Branch‐Price‐And‐Cut",
+  "read_level": "full",
+  "contribution": "An exact branch-price-and-cut algorithm for the nonlinear weapon-target assignment problem (a set-partitioning master over target states, credited to Lu-Chen, with columns seeded from an alpha-loosened convex relaxation, exact O(n log n)-relaxation pricing, clique cuts among fractional states and duplicate-aware branching) that certifies the 21 literature instances in 0.06-3.6 s where branch-and-adjust hit its 2-hour cap on 15, and reaches 10,000 targets on a laptop in 390.5 s (author manuscript).",
+  "problem_entry": "IO+AP (defense); RO only as an extension. Exact methods for the WTA stopped near 400 targets and weapons (branch-and-adjust, under 2 h), after decades of heuristics (pp. 1-2). Lu-Chen's tighter reformulation enumerated columns because they judged pricing difficult (pp. 2, 5).",
+  "key_idea": "Target-state columns make the master a linear set-partitioning problem with a much tighter LP relaxation (eq. (4), Fig. 1, p. 3). Five components make column generation work: initial columns from an alpha = 2 loosened convex relaxation solved by block coordinate descent (pp. 3-5); exact pricing by a KKT-and-sort relaxation with at most one fractional variable, then a trivial branch-and-bound (pp. 5-6); clique cuts among fractional states (pp. 6-7); a freeze-and-solve primal heuristic; and branching on aggregated weapon-target values that absorb duplicates (p. 7).",
+  "assumptions": "A 0-1 assignment whose objective is separable by target: sum of v_j exp(s_j^T x_j), with deterministic kill probabilities and duplicate weapons exploited (pp. 2, 7). The robust and average-case extensions assume independent interval probabilities (p. 8). Instances are synthetic only, from two literature generators: P~U(0,1) with v~U[1,100] (the harder one), and P~U(0.6,0.9) with v~U[25,100] (p. 9). Lincoln Laboratory supported the work, but no partner data are used (p. 12).",
+  "proof_devices": [
+   "Log transform s_ij = ln(1 - P_ij) to an exponential-of-linear objective (eqs. (2)-(3), p. 2)",
+   "Dantzig-Wolfe-type state reformulation via Weyl-Minkowski; its LP relaxation is much tighter (eq. (4), Fig. 1, p. 3)",
+   "KKT case analysis (Slater holds) and bisection on the multiplier for the block-coordinate-descent subproblem of the alpha-loosened relaxation (eqs. (5)-(7), Algorithm 1, pp. 4-5); no convergence statement",
+   "Reduced cost from LP duality, and an O(n log n) KKT-and-sort solver for the pricing relaxation; at most one variable is fractional, so branch-and-bound uses a fixed rule and reuses the sort (eqs. (8)-(10), Algorithm 2, pp. 5-6)",
+   "Two screening lemmas with short proofs for clique-cut separation: a violating clique exists among fractional states, and it spans at least two targets; Balas-Padberg for the convex hull and NP-completeness of separation (pp. 6-7)",
+   "Near-integrality from the basis size m + n, giving a freeze-the-ones and solve-the-rest primal heuristic (p. 7)",
+   "Branching on aggregated weapon-plus-duplicates variables x-hat_ij, choosing the pair with the largest rounding effect (p. 7)",
+   "Robust WTA reduced to the nominal WTA at the interval ends by monotonicity in P; average case reduced to E[P] by independence (p. 8)"
+  ],
+  "experiments": "Setup: MacBook Pro (M2 Max, 16 GB), C++11, Gurobi 10 (p. 9). Duel 1, on branch-and-adjust's own 21 instances (Table 1, p. 10; my parse: 400-1,000 targets, 200-500 weapon types with 1-3 copies each). BPC took 0.058-3.584 s with the lower bound equal to the best objective; branch-and-adjust took 419.9 s up to the 7,200 s cap and was unfinished on 15 instances. Speed-ups of 2,008-42,857 are lower bounds where capped. Whether branch-and-adjust was rerun on the same machine is not stated (p. 9). Duel 2, against bee colony, simulated annealing and VLSN, re-implemented in C++ from a common min-cost-flow warm start, on one instance per size (100x150, 500x750, 1,000x1,500). BPC's first solution came as fast or several times faster, and BPC proved optimality before the warm start finished on the two larger instances (pp. 9-10). Duel 3, against Lu-Chen's column enumeration, 10 sizes x 10 instances: about 100x faster, all solves under 1 s; the instances are admittedly 'easy', with zero relaxation gap (p. 10). Scale (Table 2, p. 12): up to 10,000 targets in 2.65-390.51 s; three of eight runs end with the lower bound below the objective in the third decimal, and no tolerance is stated. Memory limit and LP time share are printed (p. 11). The promised component ablations are absent (p. 2).",
+  "positioning": "Continues the exact line (Ahuja et al. 2007; Andersen et al. 2022) and directly corrects Lu-Chen (2021): 'However, we show that we can solve Eq. (9) extremely quickly' (p. 5). Heuristics are cited via the Kline et al. survey and then raced (pp. 2, 9-10). The only self-citations are his LO textbook and RO book (pp. 5, 8). His group's 2013 Lincoln Laboratory WTA working paper (S558, same Lincoln contact Sung-Hyun Son per S558 p. 1) is not cited (p. 13).",
+  "writing": "The abstract runs from problem class to reformulation, algorithms and the headline ('10,000 targets ... in seconds, which previously took hours'), then the extensions (p. 1). There are three contribution bullets (p. 2). 'In Seconds' fits the literature instances (at most 3.6 s) but not the largest one (390.51 s, p. 12). Superlatives: 'fantastic initial states' (p. 4), 'a significant leap forward' (p. 12). Tension T1 in miniature: optimality is to be proved 'in seconds' (p. 2), yet certificates are 'of secondary interest' to good solutions (p. 7). As extracted, Algorithm 1's indices slip between i and j (p. 5).",
+  "limits_future": "Limits are concrete but scattered, with no limitations section: memory grows quadratically, the Gurobi LP takes most of the runtime, and the column-enumeration comparison used easy instances (pp. 10-11). The extensions and any real data are left untested (pp. 7-9). Future work: a structure-exploiting LP solver for the sparse set-partitioning relaxation (p. 11), and algorithms for other nonlinear assignment problems (pp. 1, 9).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "The full protocol. Warm starts: the alpha-relaxation seeds columns, and freeze-and-solve gives incumbents. Exact solve: lower bound equal to the best objective on every Table 1 instance, and printed in Table 2. Three duels: the incumbent exact method on its own instances, three heuristics from one common warm start, and the competing column scheme. The 'easy' comparison instances are admitted. Gaps: budget parity of the branch-and-adjust times is unstated, the heuristic race uses one instance per size, and the promised ablations are absent.",
+    "pages": "pp. 2-12"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "The nonlinear objective moves into column costs, so the master stays a linear set-partitioning problem, and duals drive pricing; the boundary is printed. But the reformulation is borrowed (Lu-Chen; Barnhart et al.). The work is redesigning the algorithm, down to calling for a custom LP solver. This runs against SKILL's 'the model, not the algorithm, is redesigned' and its claim that his record treats solver internals as black boxes.",
+    "pages": "pp. 3, 5, 11"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "The intractability belief re-measured is a competitor's: pricing 'difficult' per Lu-Chen, refuted by an O(n log n) routine. The why-now is an algorithmic speed-up over the prior exact method, not a solver x hardware figure, and no old belief is conceded.",
+    "pages": "pp. 5, 9-10"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "A cost-versus-damage-threshold curve is proposed but not computed. The robust WTA protects against full intervals, with no budget knob and no price of robustness.",
+    "pages": "p. 8"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "A partner owner exists (MIT Lincoln Laboratory), but the evaluation uses literature generators only, with no partner rule or data.",
+    "pages": "pp. 9, 12"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "A defense-partner line of at least 12 years carried by successive students (S558 in 2013 with the same Lincoln contact; S316 in 2025), with the earlier work uncited.",
+    "pages": "p. 12; S558 p. 1"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "pricing made easy through its convex relaxation",
+    "evidence": "A pricing problem the prior authors called difficult is solved by KKT cases and a sort, with at most one fractional variable, then a fixed-rule branch-and-bound that reuses the sort; about 100x faster than enumeration.",
+    "pages": "pp. 5-6, 10-11"
+   },
+   {
+    "pattern": "anytime race with both bounds",
+    "evidence": "The exact method's upper and lower bound curves are plotted against heuristics' incumbents, all from one shared warm start.",
+    "pages": "pp. 9-10 (Fig. 4)"
+   },
+   {
+    "pattern": "component runtime profile to name the next bottleneck",
+    "evidence": "The runtime breakdown at the largest scale shows the LP solver dominating, hence the call for a structure-exploiting LP solver.",
+    "pages": "p. 11 (Fig. 6)"
+   }
+  ],
+  "transferable": [
+   "With subset columns, solve the pricing relaxation by KKT case analysis plus a sort and count the fractional variables; with one, branch-and-bound is a fixed rule that reuses the sort (pp. 5-6).",
+   "Seed column generation from a loosened convex relaxation (each item may take alpha = 2 slots), solved by block coordinate descent with bisection on the row multiplier, not from random columns (pp. 3-5).",
+   "Prove screening lemmas before separating clique cuts (fractional states only; at least two targets), then grow cliques greedily from surviving pairs (pp. 6-7).",
+   "With duplicate items, branch on aggregated original variables (item plus duplicates), not on master columns, to break symmetry (p. 7).",
+   "Race an exact method against heuristics on time-quality curves, with every heuristic started from the same construction warm start and the exact method's lower bound plotted too (pp. 9-10).",
+   "When a rival only runs on easy instances, say why they are easy (zero relaxation gap) and report the harder generator elsewhere (p. 10)."
+  ],
+  "coauthors": "Alex Paskov (MIT Operations Research Center); MIT Lincoln Laboratory staff thanked (Sung-Hyun Son, Zachary Serlin, Rajmonda Caceres, Paula Donovan)",
+  "quotes": [
+   {
+    "text": "Lu and Chen (2021) don’t use column generation because they claim that solving this problem is difficult.",
+    "page": 5
+   },
+   {
+    "text": "optimality certificates are often of secondary interest to good solutions",
+    "page": 7
+   }
+  ]
+ },
+ {
+  "id": "S400",
+  "year": "2025",
+  "title": "Constructing uncertainty sets from covariates in power systems",
+  "read_level": "full",
+  "contribution": "A mixed-integer formulation that learns a covariate-based linear predictor (here five vendor wind forecasts) together with the tightest box, budget, box-budget or ellipsoidal set covering a share p of training residuals, with asymptotic coverage claims, covariate-dependent radii and outer approximation, which in adaptive robust unit commitment on IEEE 14- and 118-bus grids lowers violation probability and reserve MW against deterministic UC, normal confidence-interval boxes and an oracle-tuned convex hull, at higher cost (author's accepted version).",
+  "problem_entry": "RO+DA+ML, with IO as engine and AP energy as testbed. The size of uncertainty sets is rarely chosen in a principled way: grids over the budget, boxes set 'somewhat arbitrarily', and newer data-driven structures with size parameters tied to no stakeholder metric (pp. 1-2). The task: learn the predictor and the tightest norm-bounded set holding p x 100% of the training points (p. 3).",
+  "key_idea": "Joint MIO: MAE regression plus mean radius, with binaries z_i, big-M switches and sum z_i >= pn, for box (1), budget (3), box-budget (5) and ellipsoid sets (pp. 3-4). The size follows the model's error, so it is tied to a stakeholder metric p (p. 2). A covariate-dependent radius delta(x) = delta0 + q^T x is likened to boosting's second learner (pp. 4-5). Outer approximation on z with dual cuts handles larger data (pp. 5-7).",
+  "assumptions": "Norm-bounded sets around linear predictions (p. 3). For the guarantees: bounded x (||x|| <= R), bounded y (y <= Q, justified by installed capacity), ||beta*|| <= B, an i.i.d. sample and n -> infinity (pp. 3-4). Unit commitment uses dc flow, min up/down times and ramping, with only wind capacity uncertain; linear decision rules make it tractable (pp. 7-8). Data: five vendor forecasts and realizations for 5 wind resources of a large US ISO; trained on the 2 prior days (2x24x5 points) and tested on one operating day (pp. 8-9). IEEE 14-bus (wind 130% of load) and 118-bus (11%) grids, generators placed at random, 120 MW line limits (pp. 9-10).",
+  "proof_devices": [
+   "Big-M coverage MIOs with one binary per data point and sum z_i >= pn, for box, budget, box-budget and ellipsoid (mixed-integer conic quadratic) sets (eqs. (1), (3), (5), pp. 3-4)",
+   "Theorem 1: a Rademacher-complexity bound for the Lipschitz MAE (Bartlett-Mendelson) chained to P*(f(s,y) <= 0) >= p as n -> infinity (p. 3). My reading: the chain treats the expected loss L_D as the per-point residual, so coverage of the residual quantile is not shown (pp. 2-4)",
+   "Theorem 2: per-coordinate events combined into 1 - m(1 - p), 'meaningful only' for small m; the ellipsoid follows via ||R||_2 <= ||R||_1 <= sqrt(m)||R||_2 (p. 4)",
+   "Covariate-dependent radius inside the same MIO; at the optimum it equals the largest covered residual. No guarantee is stated (pp. 4-5)",
+   "Outer approximation: the inner LP is dualized (Prop. 1), with cut gradient sum_j mu*_ij y_ij, Kelley/Duran-Grossmann cuts in a single tree with lazy callbacks, and an OLS residual-quantile warm start (pp. 5-7). My reading: z enters the dual constraints, so 'point-wise maximum over affine functions of z' does not follow as written (pp. 5-6). The text both affirms and denies that the scheme applies to the ellipsoid (p. 7)",
+   "Robust counterparts of the decision-rule capacity constraint by LP duality, for box (21), box-budget (22) and convex hull (23) sets (p. 8)"
+  ],
+  "experiments": "Baselines: deterministic UC (practice, p. 1); normal 100p% confidence-interval boxes with sigma from the spread of the 5 forecasts [19] (budget version dropped as too conservative); a convex hull of K = 6 days, chosen by test-day violations, called 'the best possible' (p. 9). Metrics: worst-case cost, violation probability, MW over capacity (about reserves) (p. 9). 14-bus, p from 0.70 to 0.99 (Tables II-IV, p. 10). Cost: Det 25,705; CI 44,439-75,392; CH 57,917; constant box 57,125-170,478; constant budget 48,054-117,673; covariate budget 43,405-91,917. Violation probability: the authors' sets 0.00-0.08 against CI 0.03-0.12, CH 0.10 and Det 0.28, better in every row. MW: constant sets 0-47.2; covariate budget 8.9-266.8, worse than CI at p = 0.70, 0.90 and 0.99 and than Det at 0.70; CI 2.2-724.3; CH 309.9; Det 186.6. 118-bus (Tables VI-VIII, p. 11): costs 3.329-3.532 x 1e6 dollars; violation probability 0.00-0.06 for the authors' sets; the constant budget has zero MW throughout; the CH cost varies with p although CH does not depend on it. Setup: Julia 1.5.3 and JuMP 0.21.6; 0.1% gap within 20 minutes for the 118-bus ARUC; M = 1e4; solver and machine unnamed. The outer-approximation speed-up appears only in Fig. 3 (3-6 training days) (p. 11). One test day per grid; the warm-start sizing rule is not run as a baseline.",
+  "positioning": "Treats robust unit commitment as settled and fills its tuning gap, claiming to 'work in tandem' with newer set structures (p. 2). Guan-Wang's normal confidence intervals [19] are the foil; the convex hull is 'an excellent alternative' without covariates (p. 9). Self-citations (pp. 11-12): RO book [1], S006 [12], S337 [16], S175 [26] for outer approximation, S013 [27] for the guarantee. Not cited: S024 (Bertsimas-Brown 2009, 'Constructing Uncertainty Sets for Robust Linear Optimization'); the PESGM 2024 version S427, whose abstract opens with the same three sentences (S427 p. 1); the sibling S440 (card c32).",
+  "writing": "Tension T6: the abstract ends 'without exhibiting a significant increase in cost' (p. 1), and the contributions say 'without a compromise in the cost' (p. 2). The body concedes 'albeit at a larger cost' for constant sets; its 'win-win' for the budget and covariate sets is measured against the constant box, not against CI (p. 10). The size is framed for stakeholders: 'tangible metrics', 'more transparent' (p. 2). Inconsistencies: Table V repeats Table I's buses although the text says 'at different buses' (p. 10), and the ellipsoid statements on p. 7 contradict each other. The conclusion is a summary with no limits (p. 11).",
+  "limits_future": "Stated: Theorem 2 needs small m (p. 4); CH was tuned on the test day (p. 9); violation probabilities are non-monotone because of the single test day (p. 10); the box is costly (p. 10). Unstated: the single test day as a limit, asymptotic-only guarantees, no guarantee for covariate-dependent bounds. Future work is implicit only: robust bidding with price covariates (p. 8) and pairing with refined set structures (p. 2).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "The knob is p, a coverage level presented as meaningful to stakeholders. Price curves of cost, violation probability and MW violation over p are given for six methods on two grids. The bad case is printed: the constant box costs 170,478 against 25,705 deterministic at p = 0.99. This practises SKILL's 'set the knob from data' correction. Variant: the knob-guarantee bound is asymptotic and its proof has a gap.",
+    "pages": "pp. 2-4, 10-11"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "The class is kept twice. Set construction is a linear MIO (box, budget, box-budget) or a mixed-integer conic quadratic problem (ellipsoid), and the ARUC with linear decision rules stays a MILP through dual counterparts. Boundary printed: Theorem 2 needs small m; no outer approximation for the ellipsoid.",
+    "pages": "pp. 4, 7-8"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "The current rule (deterministic UC, 'prevalent in practice') is a baseline. The data are a vendor's real forecasts for a large US ISO, and the metrics are decision metrics (cost, MW of reserves). Weak on the checkpoints: one test day per grid, generators placed at random, no field test.",
+    "pages": "pp. 1, 8-10"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "The OLS residual-quantile warm start is not duelled as the incumbent sizing rule. A 0.1% gap is reported for the ARUC, but the solver and machine are unnamed and the outer-approximation gains appear only in a figure.",
+    "pages": "pp. 6, 11"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "The ISO New England robust unit-commitment line continues: S006 (2012), S337 (2024), the PESGM version S427 (2024) and S400 (2025). It is carried by two students who finished their PhDs in 2025, with the 2022 RO book as reference [1].",
+    "pages": "pp. 1, 11-12"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "learn the centre and the radius in one coverage-constrained MIO",
+    "evidence": "Regression coefficients and set size are chosen jointly, with one binary per data point and sum z_i >= pn; compare S440's validation calibration (card c32) and S013's hypothesis-test sets (card c18).",
+    "pages": "pp. 3-5"
+   },
+   {
+    "pattern": "give the rival oracle tuning and say so",
+    "evidence": "The convex hull's K = 6 is chosen by test-day violations and called 'the best possible' for that set.",
+    "pages": "p. 9"
+   },
+   {
+    "pattern": "conference version reissued as a journal paper without citing it",
+    "evidence": "S427 (PESGM 2024, with Andrianesis) shares S400's opening abstract sentences and framework but is absent from S400's references.",
+    "pages": "S400 pp. 1, 11-12; S427 p. 1"
+   }
+  ],
+  "transferable": [
+   "To size an uncertainty set from data, put the predictor and the radius in one MIO (one binary per point, big-M switches, sum z_i >= pn), then swap the norm for a box, budget or ellipsoid (pp. 3-4).",
+   "Make the radius affine in the covariates inside the same model to get heteroscedastic sets without changing the class (pp. 4-5).",
+   "For many data points, use single-tree outer approximation on the binaries with dual cuts and an OLS residual-quantile warm start. Check first that the inner value function is convex in z (pp. 5-6).",
+   "Score robust schedules on worst-case cost, violation probability and violation magnitude in physical units (MW, about reserves), across a grid of the knob (Tables II-VIII).",
+   "Tune the strongest rival with oracle information and say so in the text (p. 9).",
+   "When several vendor forecasts exist, use them as covariates so the regression is the ensemble and its residuals size the set (pp. 8-9)."
+  ],
+  "coauthors": "Thodoris Koukouvinos, Angelos Georgios Koulouras (MIT Operations Research Center)",
+  "quotes": [
+   {
+    "text": "Our method is consistent in both metrics, offering more reliable bounds, albeit at a larger cost.",
+    "page": 10
+   },
+   {
+    "text": "Therefore, the results for this set are the best possible for this set of historical data and robust formulations.",
+    "page": 9
+   }
+  ]
+ },
+ {
+  "id": "S476",
+  "year": "2025",
+  "title": "Modernizing the Design Process for US Organ Allocation Policy: Toward a Continuous Distribution Policy for Kidneys",
+  "read_level": "full",
+  "contribution": "With UNOS and the OPTN Kidney Transplantation Committee, a re-implementation of the owner's KPSAM 2019 model that runs a simulated year in 14.8 s instead of 6 h 42 min on the same desktop makes it possible to simulate 50,000 sampled continuous-distribution kidney policies, redesign failing rating scales and choose weights by a sample-and-filter multiobjective search, giving four policies that met all current-policy constraints and cut simulated geographic disparity by 6-26%.",
+  "problem_entry": "AP (health policy) + HS (simulation-based search) + DA. OPTN policy design proposes 5-10 options and simulates them, as since 1995. This gives little evidence of being best, takes months per round, and with more than 6 h per run and 10 runs per policy, exploring more is 'computationally intractable' (pp. 1-3). Choose the weights of a rating-scale policy to meet the committee's constraints and objectives, judged in simulation (pp. 3, 5).",
+  "key_idea": "Keep the owner's simulation model (KPSAM 2019) and change only the algorithm that runs it, for a speed-up of more than 1,600x (pp. 4, 6). Then replace propose-and-simulate with four phases: criteria specification, rating-scale analysis over thousands of sampled weight vectors, rating-scale redesign, and weight optimization (pp. 3-5). The optimizer filters simulated policies by constraints and minimum improvements, picks the largest total relative improvement, and re-simulates variants (p. 5). An interactive website supports the committee (p. 5).",
+  "assumptions": "The policy class is a weighted average of 10 rating-scale subscores; six weights are identical across the four final policies (Table 1, p. 2). The simulation model is KPSAM 2019 (offer-acceptance and outcome models, one year from a waitlist start date, pancreas included) on SRTR data (p. 4). The criteria come from the committee (Table 3, p. 10). Admitted model limits: KPSAM 2019's validation has not been released, and the model fixes transplant volume, so nonuse is invisible (p. 12).",
+  "proof_devices": [
+   "n/a for proofs. Exact re-implementation of the owner's simulation model in a faster algorithm, timed on the same desktop (pp. 4, 6); the algorithm itself is not described in the main text (p. 4)",
+   "Sample-filter-rank-perturb weight search over 50,000 simulated policies, with no optimality or convergence claim: constraint filter, improvement relative to the best observed per objective, a minimum-improvement filter, and re-simulated variants of the largest total relative improvement (p. 5)",
+   "Weight-metric correlation matrix over the sampled policies, exposing intended effects (r = +0.87) and spillovers (r = -0.81) (Fig. 6, pp. 6-7)",
+   "Frontier rechecked under a second disparity metric (Fig. 8, p. 10)"
+  ],
+  "experiments": "Speed: one year under the current policy on one desktop (Intel Core i7-6700, 24 GB, Windows 10): KPSAM 2019 6 h 42 min, MITSAM 14.8 s (p. 6). Fidelity: 'align across a wide array of metrics', with the largest difference in cPRA subgroup transplants (SDC tables, not read; p. 6). Exploration: 50,000 policies (p. 6) on a supercomputing cluster (p. 4); each point averages 50 one-year runs per the Fig. 4 caption as extracted (p. 7). Intended effects of four weights are shown (Fig. 4, p. 6). The first blood-type scale failed to keep B transplants and was redesigned, with similar issues for longevity matching and cPRA (p. 6). Spillovers in Fig. 6 (pp. 6-7) and trade-off clouds in Fig. 7 (p. 7). Four optimized policies met the constraints and cut geographic disparity by 6%, 11%, 14% and 26%, blood-type disparity by >50% and racial disparity by up to 10%, averaged over 50 simulations (p. 8; Fig. 9). Frontier policies are 'best-in-class' under one disparity metric but not another (Fig. 8, p. 10). No variability, number of search iterations or adoption outcome is reported.",
+  "positioning": "The foil is the OPTN's own process, criticized as slow and inefficient (National Academies, ref. 3; pp. 1-3). Predecessors: the lung continuous-distribution policy, where these techniques 'played a limited role' (refs. 5-7, p. 2), and Stewart's framework. No operations research paper is cited: the group's S044 (2013, same committee and simulator; card c14) and S259 (OR 2024, lungs) are absent, and the lung work enters only through Papalexopoulos's thesis (p. 12).",
+  "writing": "Clinical-journal structured abstract led by the speed-up and '50000 policy simulations' (p. 1). Results sit mostly in figures, with few numbers in the text (pp. 6-8). A section addresses readers who find optimization 'troubling' and warns against reading weights as ethical judgments (p. 12). Limitations are explicit (p. 12). Cross-reference slips: the long-wait metric of Fig. 7A is >=10 y on p. 7 and >5 y on p. 11, and Fig. 8A is said to repeat Fig. 7A where 7B is meant (pp. 7, 10).",
+  "limits_future": "Stated: results are 'illustrative and informative, but with caution', because the simulator's validation is unreleased; a fixed transplant volume means policies that worsen nonuse could pass unseen (p. 12). The contributions promise policies that 'optimize (rather than simply improve)' metrics (p. 2), though the search certifies nothing (p. 5). Future: validated models of nonuse, helped by the faster simulation (p. 12).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Owner: the OPTN Kidney Transplantation Committee. Current rule: constraints reading 'No less than' the current policy, with the current policy as reference in the results. The owner's evaluator is kept (KPSAM 2019). Stakeholders can see and contest trade-offs through the website and trade-off clouds, practising SKILL's Boston-derived correction. The paper says what the evaluation cannot show. No adoption outcome is reported.",
+    "pages": "pp. 4-5, 7-8, 10, 12"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "The why-now is a speed-up measured on one desktop against the owner's own simulator (6 h 42 min vs 14.8 s), after decades of 'little advancement': the measured form that SKILL's checkpoint asks for. Variant: a simulator speed-up, not solver x hardware, with no belief conceded.",
+    "pages": "pp. 1, 6"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "There is no formulation: the design is simulate-and-filter over sampled weights. S044 designed rules for the same committee from LP duals (card c14).",
+    "pages": "p. 5"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Equity against efficiency appears as clouds of 50,000 policies, with four operating points set by two constraint levels. There is no single knob and no bound; the metric-dependence caveat is printed.",
+    "pages": "pp. 7, 10"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "No certificate and no exact model: the chosen policies are the best among those simulated. The speed duel is on matched hardware.",
+    "pages": "pp. 5-6"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "A programme in three stages: kidney rules (2013), lung continuous distribution (2022-2024), kidney continuous distribution (2025). Carried by successive theses (Papalexopoulos; Pivo, his 109th PhD per note 04), with former student Trichakis as co-senior, partner staff as co-authors and a public tool.",
+    "pages": "pp. 1-2, 5"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "accelerate the owner's evaluator, then optimize over it",
+    "evidence": "The incumbent simulation model is re-implemented exactly, old and new are timed on one machine (6 h 42 min vs 14.8 s), and the weight space is then searched by 50,000 simulations.",
+    "pages": "pp. 4-6"
+   },
+   {
+    "pattern": "weight-metric correlation matrix to expose spillovers",
+    "evidence": "Correlating each weight with each system metric over sampled policies shows the waiting-time weight at r = +0.87 with wait at transplant (intended) and -0.81 with EPTS 0-20 transplants (unintended).",
+    "pages": "pp. 6-7 (Fig. 6)"
+   }
+  ],
+  "transferable": [
+   "Before using a faster simulator, implement the owner's model exactly, time old and new on the same machine and publish a metric-by-metric fidelity comparison (pp. 4, 6).",
+   "Separate criteria specification from the weight search: explore the weight space by sampling, and redesign any scoring rule that no sampled weight can make meet a hard constraint (pp. 3-4, 6).",
+   "Correlate each weight with each system metric over all sampled policies to show intended effects and unintended spillovers (pp. 6-7).",
+   "Recompute the efficient frontier under a second definition of the equity metric before calling policies best-in-class (p. 10).",
+   "Write the decision-maker's requirements as constraints that the new policy do no worse than the current one, with the current values printed (Table 3, p. 10)."
+  ],
+  "coauthors": "Elijah Pivo (MIT IDSS, first author), James Alcorn, Sarah E. Booker, Keighly Bradbrook, Thomas G. Dolan, Lindsay V. Larkin, Kayla R. Temple (UNOS), Nikolaos Trichakis (MIT Sloan)",
+  "quotes": [
+   {
+    "text": "KPSAM 2019 required 6 h and 42 min. MITSAM took 14.8 s, >1600 times faster.",
+    "page": 6
+   },
+   {
+    "text": "Hence, selecting (or interpreting) attribute weights in isolation as a proxy for ethical judgments is cautioned.",
+    "page": 12
+   }
+  ]
+ },
+ {
+  "id": "S526",
+  "year": "2025",
+  "title": "Using Interpretable Artificial Intelligence Algorithms in the Management of Blunt Splenic Trauma: Applications of Optimal Policy Trees as a Treatment Prescription Aid to Improve Patient Mortality",
+  "read_level": "full",
+  "contribution": "Doubly robust counterfactual mortality estimates (random forests) on 54,345 ACS-TQIP blunt-splenic-injury patients feed one Optimal Policy Tree per SBP stratum, giving short rules on shock index, early transfusion and AAST grade for angioembolization, splenectomy or observation, with estimated mortality 18.4% vs 36.46% observed (SBP < 70) and 4.97% vs 7.60% (SBP >= 70), reported without intervals or a comparator policy.",
+  "problem_entry": "DA+ML; AP health care. Clinicians must choose between angioembolization, splenectomy and observation without a data-driven rule (p. 2). Framed as a method gap ('prescriptive analytics remain an underutilized resource') and a domain gap (OPT never used for splenic trauma) (p. 2). Hypothesis: the prescriptions bring a clinically significant improvement over observed mortality (p. 2).",
+  "key_idea": "Estimate counterfactual mortality for three treatments with a doubly robust estimator (random-forest outcome and propensity models), then train an Optimal Policy Tree to minimize it, separately for SBP < 70 and >= 70 mmHg (pp. 1, 3-4). Kept from predictive trees such as POTTER: interpretability; changed: the tree prescribes (p. 2). Rules: SBP < 70 gives AE if shock index < 1.551 or no early transfusion, else splenectomy; SBP >= 70 gives AE for grades 4-5 or grades 1-3 with shock index >= 1.181, else observation (pp. 6-7).",
+  "assumptions": "Data: ACS-TQIP 2013-2019, adults with blunt splenic injury; exclusions for no signs of life, ED death, transfers, missing age or length of stay (p. 2). 54,345 patients: 83.8% observation, 13.1% splenectomy, 3.1% AE; in-hospital mortality is the only outcome (pp. 3-4, 6). Only 1,366 patients have SBP < 70, of whom 88 had AE (Table 1, p. 4). My arithmetic: the >= 70 root n = 26,490 equals (54,345 - 1,366)/2, suggesting patients without an SBP category went into the >= 70 cohort, which the text does not say (p. 7). Admitted gaps: retrospective data, selection bias, no CT findings, single-time vitals, centre variation, no long-term outcomes (pp. 8-9).",
+  "proof_devices": [
+   "n/a for proofs. Doubly robust reward estimation (Robins-Rotnitzky; Cassel et al.) with random-forest outcome and propensity models (p. 3)",
+   "Separate counterfactual estimators fitted on the training and test halves 'to keep the testing set unbiased'; a 50/50 split chosen for reward-estimation quality, with a fixed seed (pp. 3-4)",
+   "OPT with minimum leaf size 20 and a grid over the complexity parameter and depth 3-8 (p. 4)",
+   "Cohort split at SBP 70 mmHg before learning, with no stated rationale (p. 1)",
+   "Leaf-level table of observed mortality by treatment as a face-validity check (p. 7)"
+  ],
+  "experiments": "Headline: estimated mortality under the trees 18.4% vs 36.46% observed (SBP < 70) and 4.97% vs 7.60% (SBP >= 70), a model-based counterfactual set against observed outcomes with no interval (pp. 1, 7-8). Face validity: under each leaf the prescribed arm has the lowest observed mortality; for example leaf 2 (SBP < 70) has 21 AE patients of 273 at observed mortality 0.14 (p. 7). The tree would use AE in 74% of unstable patients, against 5% in Guinto et al. (p. 8) and 6.4% (88 of 1,366) observed here, about 44 in the training half (my arithmetic). Table 1 repeats the kidney-injury row as the small-bowel row (p. 5). No comparator policy (another prescriptive learner or the guideline), no calibration and no sensitivity analysis for unmeasured confounding.",
+  "positioning": "Clinical literature on AE versus splenectomy (refs. [1]-[9]) and the WSES guideline [20] of immediate laparotomy for unstable patients, which the tree contradicts (p. 8). AI-in-trauma work is predictive or imaging-based, so 'no previous research exists' on AI for this decision (p. 8). Method support rests on his own OPT applications [10] (S252) and [11] (S041) and the OPT paper [17], which is cited, not shown, as outperforming other methods (p. 3). The group's R.O.A.D. framework for residual confounding (S393, 2024; card s20) is not used or cited.",
+  "writing": "The abstract's conclusions are hedged ('may serve as a decision aid', p. 1). The discussion goes further: the model 'demonstrates that alternative management strategies are viable' against the guideline, with the missing CT confounders listed two paragraphs later (p. 8), an instance of Tension T6. The trees are narrated leaf by leaf, with colour intensity as prescription strength (pp. 4, 6-7). Typos: 'plenic AE' (p. 7) and the duplicated Table 1 rows (p. 5).",
+  "limits_future": "Limits are concrete: retrospective selection bias; missing CT findings (contrast extravasation, haemoperitoneum, pseudoaneurysm, AV fistula); SBP only at presentation; centre variation; no delayed rupture or pseudoaneurysm outcomes (pp. 8-9). Future: prospective validation and longitudinal data (p. 9).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Owner, decision, data and current rule (observed practice and its mortality). The decision is learned inside an interpretable prescriptive tree, scored on mortality, with prospective validation called for. Checkpoint: the scores are no-unmeasured-confounding estimates without intervals, against observed outcomes, and the paper's own limitations name the missing confounders.",
+    "pages": "pp. 1-3, 7-9"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "No incumbent is duelled: neither another prescriptive learner nor the guideline as a policy. Depth is tuned by grid search.",
+    "pages": "pp. 4, 8"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Interpretability is the selling point, but its price is not shown: no black-box comparator and no depth-outcome curve.",
+    "pages": "pp. 3-4, 8"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "The MGH trauma partnership continues from POTTER (S041), with the company's OPT software as engine and student Yu Ma as co-first author.",
+    "pages": "pp. 1, 4"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "one policy tree per clinical stratum",
+    "evidence": "The cohort is split at SBP 70 mmHg and a separate prescriptive tree is learned in each stratum.",
+    "pages": "pp. 1, 6-7"
+   },
+   {
+    "pattern": "clinical headline beyond the causal design (T6)",
+    "evidence": "A viability claim against a guideline rests on a no-unmeasured-confounding pipeline with the key CT confounders missing. The same year, his co-authored editorial S685 states that such methods cannot recover treatment effects when a key prognostic variable is missing.",
+    "pages": "S526 p. 8; S685 p. 2"
+   }
+  ],
+  "transferable": [
+   "Fit counterfactual reward models separately on the training and test halves, so the test evaluation of a learned policy does not reuse the training estimator; hold out half the data when test-side reward estimation is the bottleneck (pp. 3-4).",
+   "Under each leaf of a prescriptive tree, tabulate observed outcomes by treatment and check that the raw data do not contradict the prescribed arm (p. 7).",
+   "Stratify by a clinically meaningful threshold before learning, so each tree speaks to one regime of practice (pp. 1, 6-7).",
+   "Use a minimum leaf size (20) with a depth and complexity grid to keep trees short enough to read at the bedside (p. 4)."
+  ],
+  "coauthors": "Vahe S. Panossian and Yu Ma (co-first), Bolin Song, Jefferson A. Proaño-Zamudio, Veerle P. C. van Zon, Ikemsinachi C. Nzenwa, Azadeh Tabari, George C. Velmahos, Haytham M. A. Kaafarani, Dania Daye (co-senior with Bertsimas; corresponding)",
+  "quotes": [
+   {
+    "text": "In order to keep the testing set unbiased, separate counterfactual estimators were independently fit to the training and testing sets.",
+    "page": 3
+   },
+   {
+    "text": "However, our optimized model demonstrates that alternative management strategies are viable for severely injured patients.",
+    "page": 8
+   }
+  ]
+ },
+ {
+  "id": "S685",
+  "year": "2025",
+  "title": "Can artificial intelligence deliver on the promise of precision medicine?",
+  "read_level": "full",
+  "contribution": "A co-authored editorial arguing that AI can supply objective, interpretable patient stratification for treatment decisions (Optimal Policy Trees, X-learners) but cannot by itself overcome unmeasured confounding, so treatment decisions need interpretability and confounding adjustment, prognosis needs calibration (covariate and concept shift), and diagnosis can tolerate black boxes, with the team's R.O.A.D. frameworks presented alongside their data requirements.",
+  "problem_entry": "DA+ML; AP health care. Bradford Hill's remark that RCTs 'do not tell the doctor what he wants to know' frames heterogeneity of treatment effects (p. 1). Two barriers: unobserved confounding in observational data, and no objective stratification even in RCTs (one-variable subgroups invite multiple testing and bias) (p. 1). Question: can AI do both tasks (p. 2)?",
+  "key_idea": "AI can stratify but cannot remove unmeasured confounding by itself: TMLE, IPW and double machine learning 'still rely on the assumption that all confounders are measured' (p. 2). Subgroups are 'intermediate strata between the global and the individual' (p. 2). Interpretability is demanded for treatment decisions but not for diagnosis; calibration is demanded for prognosis (pp. 2-3). Two team frameworks address confounding with natural-history cohorts or RCTs (pp. 2-3).",
+  "assumptions": "n/a (no model or data). The data a method needs are named: real-world data, natural-history cohorts, RCTs (pp. 1-3). Calibration depends on covariate shift and on concept shift, the latter often driven by unmeasured prognostic variables (p. 3).",
+  "proof_devices": [
+   "n/a for proofs. Direction-of-bias argument: the direction of unobserved confounding must be 'favorable'; in the KRAS example the bias 'would have worked against our findings' (pp. 1-2)",
+   "Curse-of-dimensionality warning for subgroup discovery with few patients and many genomic features (p. 2)",
+   "Two-task decomposition of what AI must do: stratification versus confounding (p. 2)",
+   "Contrast of treatment, diagnosis and prognosis to scope interpretability and calibration (p. 3)"
+  ],
+  "experiments": "n/a (editorial commentary; no new data).",
+  "positioning": "Cites causal inference (Hernán; Austin-Stuart), heterogeneous-treatment-effect meta-learners (Künzel et al.), subgroup-analysis methodology (Brookes et al.) and calibration (Van Calster et al.) (p. 4). Four of 14 references are the group's clinical-AI papers (S235, S252, S393, a 2025 R.O.A.D. preprint). None of his optimization or prescriptive-analytics method papers is cited; OPT enters only through the Lancet Oncology application (p. 4). 'our 2018 study' is Margonis's Ann Surg 2017 paper, a team voice (pp. 1, 4).",
+  "writing": "Commentary arc: definition, history, two barriers, a worked example, two tasks, an objection and reply ('We argue that this apparent contradiction can be reconciled', p. 2), a limitation, the team's frameworks with their limits, diagnosis and prognosis, conclusion (pp. 1-3). Hedging is dense and specific ('a sobering limitation', p. 2). The close calls for 'statistical principles and clinical realities' (p. 3). Date slip: '2018 study' cites a 2017 article (pp. 1, 4).",
+  "limits_future": "A position, not a result. The team's frameworks are said to depend on disease-specific data: real-world cohorts or RCTs (p. 3). Future: methods that generalize beyond existing trials and datasets (rare diseases, underrepresented populations, settings where RCTs are infeasible), and frameworks that target calibration (p. 3).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Treatment prescription is set apart from diagnosis and prognosis. The evaluation's blind spot is named: unmeasured confounding that 'no amount of clever modeling' recovers. Calibration is tied to decisions through absolute benefit. In the same year, S526's discussion does not honour this caution.",
+    "pages": "pp. 2-3"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "A clinical programme with one surgeon partner (Margonis): JAMA Surgery 2022, Lancet Oncology 2024, R.O.A.D. 2024-2025, and now a commissioned editorial.",
+    "pages": "pp. 1-4"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "interpretability scoped by decision type",
+    "evidence": "Interpretability is required where treatment guidance would alter standard care; black boxes are acceptable in diagnosis, with objective labels and structured images. This refines SKILL Taste mark 5.",
+    "pages": "pp. 2-3"
+   },
+   {
+    "pattern": "direction-of-bias argument for observational findings",
+    "evidence": "A finding gains credibility when the plausible selection bias would work against it (anatomical resections for KRAS-mutated tumours); the alignment is called rare.",
+    "pages": "pp. 1-2"
+   },
+   {
+    "pattern": "statistical principles at the centre of co-authored clinical texts (T3 practice side)",
+    "evidence": "Confounding, calibration and multiple testing frame the argument, against the 2019 principle of optimization rather than probability.",
+    "pages": "pp. 1-3"
+   }
+  ],
+  "transferable": [
+   "When an observational comparison may be confounded, ask which way clinical selection would bias it; if the bias would work against the observed effect, use that as a stated, rare credibility argument (pp. 1-2).",
+   "Diagnose miscalibration as covariate shift (different prognostic-factor distributions) or concept shift (a changed factor-outcome relation, often from unmeasured variables) before choosing a fix (p. 3).",
+   "In a position piece, split what the method must achieve into separable tasks and say which ones the method family can and cannot do (p. 2)."
+  ],
+  "coauthors": "Chen Lin (Peking Union Medical College Hospital), Samuel Singer (MSKCC), Georgios Antonios Margonis (MIT and MSKCC; corresponding author)",
+  "quotes": [
+   {
+    "text": "If a key prognostic variable is missing, no amount of clever modeling will recover the true treatment effect.",
+    "page": 2
+   },
+   {
+    "text": "Their transparent nature is critical: clinicians are unlikely to trust or adopt treatment guidance that comes from a black-box model, especially when the stakes involve altering standard care.",
+    "page": 2
+   }
+  ]
+ }
+]

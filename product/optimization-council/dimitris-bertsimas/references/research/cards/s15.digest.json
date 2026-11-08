@@ -1,0 +1,100 @@
+[
+ {
+  "id": "S136",
+  "year": "2022",
+  "title": "A scalable algorithm for sparse portfolio selection",
+  "read_level": "full",
+  "contribution": "Adds a ridge term to cardinality-constrained mean-variance portfolio selection and dualizes the inner QP into a saddle-point problem convex in the support. It solves that problem to certified optimality by single-tree outer approximation with a discrete first-order warm start, an SOCP (perspective) bound with a sufficient condition for exactness, and in-out root cuts. It beats CPLEX's big-M and MISOCO formulations on OR-library, Frangioni-Gentile and S&P 500 / Russell 1000 / Wilshire 5000 instances, with failures printed (arXiv v5 read).",
+  "problem_entry": "{IO CP; AP testbed; ML via the regression equivalence} No certifiably optimal method had been shown to converge in practical time beyond 400 securities, while real-world size means 500 <= n <= 3,200 (rivals' self-reported frontier, Table 1). The diagnosis: big-M relaxations are weak, outer approximation had lost to branch-and-bound, and perspective methods assume the problem must not be modified (pp. 1-2, 4, 6-7).",
+  "key_idea": "Add a ridge term 1/(2 gamma)||x||^2 and substitute Diag(z)x, leaving the ridge unscaled. Dualizing the inner QP makes f(z) a max of functions linear in z, with subgradient -(gamma/2) w_i^2 from one QP. Solve by single-tree outer approximation via lazy callbacks, plus a discrete first-order warm start, the SOCP perspective bound and in-out root cuts. The dual re-derives perspective cuts (pp. 3, 8-14, 17-23).",
+  "assumptions": "Long-only, fully invested Markowitz with ||x||_0 <= k, l <= Ax <= u and optional minimum investment; Sigma PSD of rank r. Adopted for tractability: the ridge (the problem stays NP-hard; read as robustification only by citation); Lipschitz f for the heuristic (bounded duals); diagonal-dominance extraction. Data: OR-library, the Frangioni-Gentile sets, and 2007-2017 index prices with low-rank covariance (pp. 2-4, 8, 12, 15, 18, 26-30).",
+  "proof_devices": [
+   "strong duality per fixed z under the Abadie constraint qualification (convex QP, linear constraints), with z_i^2 = z_i at binaries: f(z) is a max of functions linear in z, hence convex (Theorem 1, pp. 10-12)",
+   "subgradient read off the inner dual, g_i = -(gamma/2) w_i^2; inactive w_i filled in closed form, giving the strongest cut for those duals (Corollary 1, pp. 12-13)",
+   "finite termination of outer approximation within C(n,k) <= (en/k)^k iterations, with no extra constraint qualification (p. 13)",
+   "Sion-Kakutani minimax, then LP duality over the capped simplex, then SOC duality: the convex-hull relaxation is one SOCP, dual to the perspective relaxation (Theorem 2, pp. 20-21)",
+   "KKT conditions for max-k norms (Zakeri et al.): a sufficient condition for support recovery and a closed form for diagonal Sigma (Corollaries 4-5, pp. 21-23, 38-39)",
+   "textbook sensitivity analysis: an objective sandwich gives 1/(2 gamma)-optimality; concavity in 1/gamma gives intervals of optimality and a stable support for large gamma (Propositions 1-2, pp. 16-17)",
+   "the dual of the inner maximization re-derives the perspective cut approach (section 3.5, p. 17)"
+  ],
+  "experiments": "Julia 1.1 / JuMP 0.18.5, CPLEX 12.8.0 masters, Mosek 9.0 subproblems, MacBook Pro i9 16 GB, one thread, default parameters, code on GitHub. Opponents: CPLEX big-M and MISOCO on the regularized problem. OR-library unconstrained: <= 0.17 s vs > 300 s for big-M on port2-5. Frangioni-Gentile 400+, k = 6: 54.47 s vs 531.7 s (8/10 CPLEX failures). Index data: < 1 s unconstrained; unsolved minimum-return Wilshire runs end at gaps <= 1.85%, where CPLEX often finds no feasible solution. Failures printed: port4 k = 10 unsolved by all methods in 1 h; MISOCO faster on several minimum-return instances; every plain run without diagonal extraction on the 200+ set hits 600 s. No out-of-sample portfolio evaluation (pp. 24-35, 40-46).",
+  "positioning": "Three strands: branch-and-bound, outer approximation and perspective reformulation. Joins Bertsimas-Van Parys 2020 in imposing a ridge, claims to unify it with perspective reformulation, and re-derives perspective cuts. Treats CPLEX's MISOCO as an aggregation of the literature (Vielma et al. absorbed into CPLEX). Grants earlier findings that branch-and-bound beat outer approximation (pp. 4-7, 17, 25).",
+  "writing": "Two main contributions stated up front (p. 3); a footnoted definition of real-world size (p. 2); frontier tables of rivals' self-reported results with an explicit imperfect-comparison caveat (pp. 4-5); four experimental questions answered in a numbered summary (pp. 24-25, 33-35); no conclusion section.",
+  "limits_future": "Stated: still NP-hard; worst case exponential in k; Algorithm 1 ill-suited to fixed time budgets; SDO diagonal extraction memory-bound for n in the thousands; root cuts can hurt; comparisons imperfect (different machines, no code); constraint-free speed partly due to the data; restarts not explored (pp. 3, 13-15, 18, 29, 35). No future directions stated. Card-writer's reading: big-M benchmarked on the ridge problem (p. 27); n not printed for the index data, which use rank-50 to rank-1,000 covariances (pp. 30-33); ridge negligible on the Frangioni-Gentile data (p. 28).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Model redesigned (ridge; z kept off the regularizer) so a commercial MILP solver's lazy callbacks apply. Dual read for cuts, for the support (Corollary 4) and to re-derive the rival perspective cuts (section 3.5). Boundary printed: NP-hard, worst case C(n,k), port4 unsolved. Bears on Tension T4: like S061 and S175, it leaves big-M for weak relaxations and shows big-M failing from n = 85, though only on the regularized problem (p. 27).",
+    "pages": "pp. 3, 6-7, 9-13, 17, 20-21, 26-27"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "The written-off thing is a method (outer approximation had lost to branch-and-bound), not a problem; the paper grants why (uninformative subgradients). The named change is a new dual subgradient plus lazy callbacks, now standard in solvers. The why-now number is a scale ratio over rivals' self-reported instances (Table 1), not a rebuilt solver x hardware figure.",
+    "pages": "pp. 1, 4, 6, 10"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "One knob gamma with a solution-independent price (1/(2 gamma)-optimality, Proposition 1), support stability, and published curves of allocations, runtime and cuts against gamma. As in S175, the priced property is tractability; the robustness reading of gamma is cited, not measured.",
+    "pages": "pp. 3-4, 16-17, 31-34"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Warm start from the group's discrete first-order heuristic (five random starts, L = 10). Exact solve with certificates or printed gaps under stated limits, versions, machine and threads; unsolved runs carry gaps, not 'optimal' (Tension T1 not triggered). Variant element: the opponent is the commercial solver on two formulations, not an incumbent heuristic; published rivals enter only through self-reported times.",
+    "pages": "pp. 4, 19-20, 24-35"
+   },
+   {
+    "method": "Heuristic 4",
+    "relation": "evidence",
+    "note": "Failures in the body: port4 (k = 10, minimum return) unsolved by all methods; MISOCO faster on several minimum-return instances; CPLEX's own heuristics give better incumbents than Algorithm 2; all plain runs without diagonal extraction on the 200+ set fail; Zheng et al.'s tighter diagonals slow the method in 95% of instances.",
+    "pages": "pp. 25-26, 28, 40, 44"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Practice sets the class and scale (index sizes, monitoring costs, rebalancing time budgets), but portfolios are never scored as decisions: no out-of-sample risk or return, no asset manager's rule as baseline. Finance is the testbed (AP), not the judge.",
+    "pages": "pp. 2, 4, 18"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Weak: one device passes between students and across problem classes, from S061 (with Van Parys) to S175 and this paper (with Cory-Wright; a thesis-topic paper as inferred in 04-mentorship.md). The in-out code came from Jean Pauphilet, Cory-Wright's informal second adviser per 04-mentorship.md (Heuristic 8).",
+    "pages": "pp. 6-7, 35"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "regularize the model for tractability, then price and undo the regularization",
+    "evidence": "A small ridge makes f convex in z and the relaxation near-exact; Proposition 1 prices it at 1/(2 gamma); an unregularized QP on the fixed support polishes the answer. Recurs in S061 (card c21) and S175 (card c23, 're-read a modelling convention as a hidden, tunable modelling choice'), so this is the third card.",
+    "pages": "pp. 3, 7, 16-17, 21"
+   },
+   {
+    "pattern": "exact equivalence to a sibling problem the group already solves",
+    "evidence": "Portfolio selection equals constrained sparse regression via a Cholesky factor, importing the regression outer-approximation machinery (S061) and the best-subset warm start (S010).",
+    "pages": "pp. 8-9, 18"
+   }
+  ],
+  "transferable": [
+   "On/off logic with a strongly convex term: write Diag(z)x, leave the ridge term unscaled, dualize the inner QP and use z_i^2 = z_i. Then f(z) is convex in z, and the subgradient -(gamma/2) w_i^2 comes free with each subproblem (pp. 9-12).",
+   "Solve each subproblem only on the k active indices and fill the inactive dual entries in closed form (w_i = max(., 0)). This gives a full cut, the strongest for those duals (p. 13).",
+   "Price a regularized surrogate before using it: bound its suboptimality for the original problem (1/(2 gamma)), polish by re-solving the unregularized QP on the support found, and use support stability to tune gamma after one certified solve (pp. 3, 16-17, 31).",
+   "Stabilize in-out root cuts at the exact optimum of the cheap SOCP relaxation, capped at 200 root cuts, 20 per node and at most 50 nodes; stop on the larger of the outer-approximation and SOCP bounds (pp. 14, 23, 47).",
+   "Replace no-good feasibility cuts by implied constraints on z where they exist (for a minimum-return constraint, some z_i = 1 among assets with mu_i >= r). When many constraints bind, copy x into the master instead (pp. 14-15, 25).",
+   "When rivals' code is unavailable, tabulate each rival's largest solved instance (solver, constraints, data) as reported by its authors, say why the comparison is imperfect, and benchmark against the commercial solver that has absorbed the rivals' techniques (pp. 4-5, 25)."
+  ],
+  "coauthors": "Ryan Cory-Wright (MIT ORC; his PhD student, 2022, per 04-mentorship.md)",
+  "quotes": [
+   {
+    "text": "Existing certifiably optimal approaches to this problem have not been shown to converge within a practical amount of time at real-world problem sizes with more than 400 securities.",
+    "page": 1
+   },
+   {
+    "text": "An unchallenged assumption in all perspective reformulation approaches is that Problem (2) must not be modified.",
+    "page": 7
+   }
+  ]
+ }
+]

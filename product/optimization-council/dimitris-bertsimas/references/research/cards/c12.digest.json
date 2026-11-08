@@ -1,0 +1,224 @@
+[
+  {
+    "id": "S040",
+    "year": "2009",
+    "title": "Algorithm for cardinality-constrained quadratic optimization",
+    "read_level": "full",
+    "contribution": "A tailored branch-and-bound for cardinality-constrained convex QPs that branches on the continuous variables (no binaries or big-M), deletes down-branched variables and warm-starts every node with Lemke's pivoting method; on synthetic subset-selection and portfolio instances it beats forward regression and, within time limits, CPLEX's big-M MIQP, but reports no gaps.",
+    "problem_entry": "IO+ML+AP: quadratic MIO has had relatively little attention compared with linear IO; extends Bienstock's 1996 tailored B&B to subset selection and to portfolio problems with cardinality, minimum-level and sector constraints motivated by asset-management practice (pp. 2, 6-9).",
+    "key_idea": "Branch on x directly; delete variables on down-branches so subproblems shrink; solve each node QP as an LCP by Lemke's method, warm-started from the parent's basis like dual simplex; add a root heuristic (re-optimize on the K largest entries, then a restricted B&B on the K+0.1d largest) (pp. 2-7).",
+    "assumptions": "Convex QP with PSD Q, linear constraints, |supp(x)| <= K and minimum levels on the support; regression kept unconstrained to isolate tailored-vs-general; portfolio without ticket costs and with x0 = 0; synthetic data only (Gaussian designs, five instances per size), which the authors admit may give optimistic run times (pp. 2, 7-8, 10, 13).",
+    "proof_devices": [
+      "No theorems; linear-algebraic algorithm design only (pp. 1-16)",
+      "Lemke augmentation with a covering vector h and an artificial z0; warm start from the parent's basis (pp. 3-4)",
+      "Rank-one elementary-row-operation update of the basis inverse after deleting a variable, eqs. (4)-(6) (pp. 4-5)",
+      "Crout LU factorisation to extract only the needed column of the basis inverse; identity-basis restart when the reduced basis is singular (pp. 5-6)",
+      "Closed-form node value Y'Y - v'(X'X)^-1 v for regression, updated by deleting entries of v = X'Y (p. 7)",
+      "Pivoting returns basic KKT solutions, hence minimum-support relaxation solutions when Q is only PSD (p. 14)"
+    ],
+    "experiments": "Subset selection, d = 20-500: against forward regression and CPLEX MIQP (big-M with M = 100; CPLEX 8.1 per ref. [8]; machine not stated) at 60 s and 3600 s limits, BnB gets lower RSS; CPLEX is worse than the greedy method when K is large relative to d; 12-hour CPLEX runs do not match BnB's one-hour solutions. Portfolio, d = 100-500: against CPLEX barrier at the nodes and CPLEX MIQP at 120 s and 3600 s, pivoting needs about 5 pivots per node against about 400 from scratch; the advantage appears only with the root heuristic (Table 3 vs Table 4). No lower bounds or gaps are reported (pp. 10-15, 17-21).",
+    "positioning": "Extends Bienstock [4]; sorts the portfolio literature into approximations, heuristics and exact methods; the stated difference is Lemke pivoting; concedes that CPLEX's engineering is 'far superior to ours' (pp. 2, 7-8, 10).",
+    "writing": "Modest, hedged claims ('show some computational advantages'); numbered 'we learn that' conclusions; self-deprecation about software engineering; admissions in the body (random data may be optimistic, CPLEX is faster per node, an unexplained CPLEX weakness) (pp. 1, 12-16).",
+    "limits_future": "Depth-first search gets stuck in subtrees; the root bound stays the bound for most nodes; Lemke's method gives no choice of entering variable; implementation needs work. Next: other principal pivoting methods and other CCQOs. Goal narrowed to good, not provably optimal, solutions fast (pp. 13, 16).",
+    "method_links": [
+      {
+        "method": "Method 4",
+        "relation": "variant",
+        "note": "For: the greedy incumbent (forward regression) is the opponent and loses within stated 60 s and 3600 s limits. Against: the warm start is the paper's own heuristic, the duel is in-sample RSS on synthetic data, no gaps are reported, and the claim is narrowed to good solutions fast rather than certificates (Tension T1; Heuristic 3).",
+        "pages": "pp. 6, 10-13, 16"
+      },
+      {
+        "method": "Method 1",
+        "relation": "variant",
+        "note": "Subset selection is formulated exactly as an MIQP/CCQO, but solver weakness is answered with a tailored algorithm, the reverse of 'the model, not the algorithm, is redesigned so existing solvers apply'.",
+        "pages": "pp. 2, 6, 10, 12, 15"
+      },
+      {
+        "method": "Method 2",
+        "relation": "evidence",
+        "note": "Pre-history: the group's own 2007 finding that CPLEX's general MIQP was 'not well suited' to subset selection at d = 100-500, i.e. the intractability belief was right when formed (step 2); big-M weakness already named (Tension T4).",
+        "pages": "p. 12"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "branch on the continuous variables, delete on down-branches",
+        "evidence": "No binaries or big-M; a down-branch deletes the variable so subproblems shrink; argued against the weak LP relaxations of CPLEX's big-M model",
+        "pages": "pp. 2, 4, 10, 12"
+      },
+      {
+        "pattern": "pick the node solver for warm starts",
+        "evidence": "Lemke pivoting re-solves a node in about 5 pivots against about 400 from scratch; interior-point methods cannot start from infeasible points",
+        "pages": "pp. 3, 14, 15"
+      }
+    ],
+    "transferable": [
+      "If the MIO needs big-M, also build a B&B that branches on the continuous variables (down-branch: delete the column; up-branch: enforce the lower bound inside the pivoting), and race it against the solver's big-M model at equal time limits (pp. 2, 10, 12).",
+      "Inside B&B, prefer a node solver that warm-starts from the parent's basis (dual simplex, or Lemke for QP KKT systems); report pivots per node vs from scratch to justify it (p. 14).",
+      "Update the basis inverse after deleting a variable by a rank-one elementary-row-operation step, keep only an LU factorisation, extract the one column needed, and restart if singular (pp. 4-6).",
+      "Root heuristic for cardinality problems: re-optimize on the K largest relaxation entries, then run the exact B&B on the K + 0.1d largest with a node cap, seeding the first upper bound (p. 6).",
+      "Protocol: a short budget (good fast) and a long one (proof); averages in the body, per-instance tables in the appendix, a best-node column; run with and without the heuristic so its share is visible (pp. 10-14, 17-21)."
+    ],
+    "coauthors": "R Shioda",
+    "quotes": [
+      {
+        "text": "These big-M constraints can lead to weak LP relaxations, making it hard to fathom nodes.",
+        "page": 12
+      },
+      {
+        "text": "However, provable optimality may not be of critical importance to data mining practitioners who may be interested in finding a “good” solution “quickly”.",
+        "page": 13
+      }
+    ]
+  },
+  {
+    "id": "S077",
+    "year": "2009",
+    "title": "Optimal bidding in online auctions",
+    "read_level": "full",
+    "contribution": "Models eBay bidding as a finite-horizon DP whose competing-bid distribution is estimated from public bid histories; in simulation on 1772 PDA and 4208 stamp auctions the DP policy beats widely used static bidding rules, and for multiple auctions an integer program combining single-auction DP value functions (IPA) is near-optimal and fast. Read as the 2001/2002 working-paper preprint.",
+    "problem_entry": "SD+IO+AP (DA flavour): eBay's scale, price variance, sniping and failed last-second bids motivate a model that captures the essentials, is computable for bidders and is estimable from public data, hence an optimization rather than a game-theoretic approach (pp. 1-5).",
+    "key_idea": "Treat other bidders as a population with an estimated bid distribution and solve the single auction exactly by DP over 13 shrinking periods; for N auctions under one budget, combine exact single-auction value functions in a 0-1 IP with monotone bid-at-least-j variables and a global budget row (IPA), plus ADP and pairwise variants (pp. 5-11, 21-26, 32-33).",
+    "assumptions": "No reserve-price auctions; seller ratings ignored; one maximum population bid per period; bids rounded to $10 or $50; data: 1772 Palm Pilot III auctions (22478 bids) and 4208 stamp auctions (50766 bids); p estimated at about 0.27 but set to 0.8 from experience after a sensitivity check; IPA ignores future budget constraints and cross-auction correlation (pp. 2, 4, 10-14, 17, 24).",
+    "proof_devices": [
+      "No theorems; exact backward DP with Bellman equations (16)-(17), population-bid probabilities capped at the budget (pp. 10-11)",
+      "Simulation-based least-squares ADP with 2^N or N+1 linear value functions, eqs. (20)-(21) (pp. 22-23)",
+      "Threshold-variable 0-1 IP whose objective telescopes to the single-auction value of the chosen bid, eqs. (24)-(27) (pp. 23-24)",
+      "Pairwise IP with two-dimensional consistency constraints, eqs. (29)-(38) (pp. 24-25)",
+      "Estimate of the last-second bid acceptance probability from observed vs submitted arrival fractions, eq. (18) (p. 14)"
+    ],
+    "experiments": "10,000 simulated auctions per setting, drawn from the same estimated distribution that built the policy; baselines: bid the budget at t = 0, T-1 or T; metrics: win %, average utility, spend per win. The DP is best in utility ($105.8 per PDA win; stamps 99% wins at $163.6 vs 98% and $168.4). The DP does poorly when told a competitor enters with probability < 1. For N = 2, 3, 6, IP methods beat ADP, IPA is near-optimal against exact DP at N = 2, and PIPA1 is slightly better at much higher cost. Field use by the first author is self-reported (about 20% lower spend per win). Table bodies are lost in the OCR; numbers are from the prose (pp. 15-20, 26-33).",
+    "positioning": "Auction theory (Vickrey) set aside for computability and estimation from data; draws on the empirical late-bidding literature (Roth-Ockenfels and others) and on multiple-auction work (Oren-Rothkopf, Boutilier et al., Zheng); ADP from Bertsekas-Tsitsiklis; claims the DP-plus-IP coupling is new (pp. 3-5, 22).",
+    "writing": "Abstract leads with eBay's scale numbers; modelling choices justified against three requirements stated up front; 'We feel' contributions list; lettered insights; personal testimony hedged as hard to assess scientifically; testimony counts worded differently on p. 17 and p. 33 (pp. 1, 4-5, 17, 27-29, 33).",
+    "limits_future": "Reserve auctions and seller reputation out of scope; IPA ignores future budget constraints and correlation and struggles against competitive agents across auctions; exact DP infeasible beyond two auctions. Next: stochastically arriving auctions (companion preprint), and weakly coupled DPs in general (pp. 2, 4, 21, 24, 32-33).",
+    "method_links": [
+      {
+        "method": "Method 5",
+        "relation": "evidence",
+        "note": "The decision (the bid) is scored by utility, win rate and price paid against the static rules bidders actually use; parameters come from public data; the first author uses the method in the field.",
+        "pages": "preprint pp. 4, 11-12, 17, 33"
+      },
+      {
+        "method": "Method 5",
+        "relation": "variant",
+        "note": "The duel against the owner's rule is in-sample: the simulation draws from the same estimated distribution that built the policy, and the field evidence is self-reported and 'difficult to assess scientifically'.",
+        "pages": "preprint pp. 15, 33"
+      },
+      {
+        "method": "Method 1",
+        "relation": "variant",
+        "note": "A problem owned by auction theory and game theory is recast as optimization (DP), and the multi-auction coupling is written as a 0-1 IP over single-auction value functions, but the IP is an admitted approximation, not an exact class-keeping reformulation.",
+        "pages": "preprint pp. 4, 23-24"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "single-component DP values as IP coefficients",
+        "evidence": "Weakly coupled DP (auctions linked by a budget): exact single-auction value functions feed a 0-1 IP; near-optimal against exact DP at N = 2 and proposed for weakly coupled DPs in general",
+        "pages": "preprint pp. 5, 23-24, 27-29, 33"
+      },
+      {
+        "pattern": "author as first user",
+        "evidence": "The first author used the bidding algorithm in over one thousand stamp auctions and reports the effect, hedged",
+        "pages": "preprint pp. 5, 17, 33"
+      },
+      {
+        "pattern": "model requirements stated up front",
+        "evidence": "Captures the essentials, computable for the user, parameters estimable from public data; richer states rejected against these requirements",
+        "pages": "preprint pp. 4, 10"
+      }
+    ],
+    "transferable": [
+      "For a weakly coupled DP, solve each component exactly, then pick the joint action by a 0-1 IP with monotone threshold binaries and marginal-value coefficients so the objective telescopes; validate against exact DP at the largest solvable size before scaling (pp. 23-29).",
+      "State model requirements first (essentials, computable for the user, estimable from public data) and reject richer states that fail them, saying why (pp. 4, 10).",
+      "Use non-uniform decision epochs that shrink where activity concentrates and fall at times users can act on (p. 6).",
+      "Estimate an unobservable failure rate from how observed arrival fractions deviate from a scale-invariant pattern, then run a sensitivity check over the parameter (pp. 14, 16-17).",
+      "Test robustness against strategic competitors as well as the fitted population, including a misspecified prior on entry, and print where the method loses (pp. 18-20, 30-32)."
+    ],
+    "coauthors": "J Hawkins, G Perakis",
+    "quotes": [
+      {
+        "text": "To achieve our goals we have taken an optimization, as opposed to a game theoretic approach.",
+        "page": 4
+      },
+      {
+        "text": "While it is difficult to assess scientifically the effects, the first author feels the algorithm contributed to (a) increasing the probability of winning and (b) decreasing by 20% the amount paid per win.",
+        "page": 33
+      }
+    ]
+  },
+  {
+    "id": "S042",
+    "year": "2010",
+    "title": "Optimality of affine policies in multistage robust optimization",
+    "read_level": "full",
+    "contribution": "Proves that disturbance-affine control policies, together with affine stage costs, are exactly optimal for one-dimensional, box-constrained, finite-horizon min-max problems with convex state costs, so optimal policies come from an LP when costs are piecewise affine; the proof is a forward induction on zonogons, and a counterexample shows suboptimality with coupled constraints or 2-D states. Read as arXiv v1.",
+    "problem_entry": "RO (+SD, AP): affine decision rules were widely advocated and computable, but there had been very little progress on the quality of their objective values; robust modelling is taken as given and the question is when affine policies are optimal for a 1-D min-max control problem (pp. 1-3).",
+    "key_idea": "Under forward induction, the k disturbances affect the objective only through a 2-D affine image (cost so far, state) of the hypercube, a zonogon; a convex objective peaks at the k+1 right-side vertices, so an affine policy can match the optimal policy there (matching) and align the other generators (alignment), preserving the min-max value; the same construction gives dominating affine costs (pp. 5-20).",
+    "assumptions": "One-dimensional linear dynamics; independent interval disturbances; box control constraints; convex coercive state costs; linear control costs c_k >= 0; finite horizon; worst-case objective; expository assumptions (unit cube, maximal vertex count, unique minimizer) without loss of generality; state bounds absorbed by indicator functions (pp. 1-3, 6, 10).",
+    "proof_devices": [
+      "DP structure: 3-piece, non-increasing optimal control law and convex value functions, properties P1-P5 (p. 4; §7.1 pp. 27-29)",
+      "Forward induction on time with base case q1 = u*1(x1) and linear interpolation of h1 (pp. 6-7)",
+      "Maximum of a convex function over a polytope at extreme points, plus zonogon symmetry and the right side (Lemma 4.1, Corollary 4.1, pp. 7-9)",
+      "Case analysis of the zonogon against the band where control bounds are inactive (pp. 11-12; Lemma 4.3 proof §7.3 pp. 31-33)",
+      "Matching and alignment linear systems with a k+3 unknown counting argument for feasibility and robust feasibility (Algorithm 1, Lemmas 4.4-4.5, pp. 13-17)",
+      "Induction on subset size with the mediant inequality and increasing increments of convex functions for affine-cost domination (Lemmas 4.7-4.9, pp. 20-24)",
+      "Counterexample computed by LP over the extreme points of the uncertainty set: 838.493 vs 873.248 vs 876.057 (pp. 25-26)"
+    ],
+    "experiments": "n/a: no numerical study; only the counterexample's three LP values (true 838.493; affine policies 873.248; affine policies and costs 876.057, a 4.4% gap); solver unnamed (pp. 6, 25-26).",
+    "positioning": "Places itself after affine rules in stochastic programming (Rockafellar-Wets), RO (Ben-Tal et al.) and robust control (Kerrigan-Maciejowski, Goulart-Kerrigan, Bemporad, Lofberg, Skaf-Boyd); claims the first optimality result of its kind; the inventory reading is linked to Ben-Tal et al.'s retailer-supplier model and Muharremoglu-Tsitsiklis (pp. 1-3, 25-27).",
+    "writing": "Theorem early, unpacked into existential and computational results; a proof roadmap before the proof; geometry carried by figures; technical lemma deferred to the appendix; strong claims (elegant, tight, first of its kind); extensions posed as three numbered questions answered negatively by one example (pp. 1-6, 13, 25).",
+    "limits_future": "Affine policies are suboptimal with cumulative control constraints or multi-dimensional states; Algorithm 1 needs the DP solution. Next: mixed polyhedral constraints, multi-dimensional systems, other uncertainty sets, nonconvex or nonlinear costs, performance bounds for affine policies where suboptimal, cuts for the AARC LP, and portfolio and operations applications (pp. 25-27).",
+    "method_links": [
+      {
+        "method": "Method 1",
+        "relation": "evidence",
+        "note": "With piecewise-affine costs the multistage robust problem under affine policies stays an LP solvable by commercial software, and the boundary (coupled constraints, 2-D state) is printed with a computed gap (step 5).",
+        "pages": "arXiv pp. 5-6, 25-26"
+      },
+      {
+        "method": "Method 1",
+        "relation": "variant",
+        "note": "The core is an optimality proof for a policy class, not a reformulation of another tradition's problem; Algorithm 1 needs the DP solution, and no dual reading is used.",
+        "pages": "arXiv pp. 13-14, 27"
+      },
+      {
+        "method": "Method 6",
+        "relation": "evidence",
+        "note": "Co-adviser network: Parrilo (LIDS) co-authors with Iancu (ORC; listed in SKILL.md's RO student lineage), as in step 3.",
+        "pages": "arXiv p. 1"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "exact optimality of the advocated simple policy, fenced by a computed counterexample",
+        "evidence": "Affine policies are widely advocated; the paper proves exact optimality in 1-D and computes a 4.4% gap once constraints couple or the state is 2-D (related to Heuristic 1)",
+        "pages": "arXiv pp. 2-3, 25-26"
+      },
+      {
+        "pattern": "low-dimensional projection of the uncertainty set as proof device",
+        "evidence": "The disturbance hypercube enters only through a 2-D zonogon; worst cases sit on its right side; the policy is constructed geometrically",
+        "pages": "arXiv pp. 7-9, 13-14"
+      }
+    ],
+    "transferable": [
+      "To show a simple policy class loses nothing, track the 2-D image of the uncertainty (cost so far, state); with an objective theta1 + convex(theta2), only the right-side vertices of that zonogon matter (pp. 7-9).",
+      "Construct the policy by matching its values to the optimal policy at the worst-case vertices and aligning the remaining generators so the image equals the zonogon hull of those points; reuse the construction for dominating affine costs (pp. 13-14, 19-20).",
+      "When backward DP induction gives no handle on a policy class, try forward induction with a min-max-preserving invariant (pp. 6-7).",
+      "Fence a theorem with a small computed counterexample: the true min-max by an LP over the extreme points of the uncertainty set, the restricted policy by its own LP, and the gap (pp. 25-26).",
+      "Absorb state constraints into convex costs as indicator functions to extend an optimality result without new proofs (p. 6).",
+      "Translate policy coefficients into the application's terms (the fraction of each demand met by each later order) to show the decision-maker what the theorem says (pp. 26-27)."
+    ],
+    "coauthors": "DA Iancu, PA Parrilo",
+    "quotes": [
+      {
+        "text": "However, to the best of our knowledge, apart from these theoretical advances, there has been very little progress in proving results about the quality of the objective function values resulting from the use of such parameterizations.",
+        "page": 3
+      },
+      {
+        "text": "Our theoretical results are tight (if the conditions in Problem 1.1 are slightly perturbed, then simple counterexamples for Theorem 3.1 can be found), and the proof of the theorem itself is atypical, consisting of a forward induction and making use of polyhedral geometry to construct the optimal affine policies.",
+        "page": 3
+      }
+    ]
+  }
+]

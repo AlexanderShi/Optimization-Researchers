@@ -1,0 +1,170 @@
+[
+  {
+    "id": "S068",
+    "year": "2022",
+    "title": "Stochastic learning approach for binary optimization: Application to Bayesian optimal design of experiments",
+    "read_level": "partial",
+    "contribution": "Recasts binary Bayesian OED (sensor placement) as minimising the expected utility over a product-Bernoulli distribution and solves it by a policy-gradient (REINFORCE-type) stochastic method with an optimal baseline, avoiding relaxation, rounding, design gradients and smoothing of the l0 penalty.",
+    "problem_entry": "The relax-then-round route to binary OED needs design gradients (many model solves), smoothing of l0, and gives relaxed solutions not guaranteed to be related to binary ones (pp. 1-2).",
+    "key_idea": "Minimise Upsilon(theta) = E_{zeta~Bernoulli(theta)} J(zeta) over theta in [0,1]^ns with a score-function gradient estimate that needs only J values at sampled designs; add an optimal baseline for variance reduction (pp. 5, 10, 14-17).",
+    "assumptions": "Independent Bernoulli activations; linear forward operators and A-optimality in the experiments; convergence in expectation only under a Robbins-Monro step schedule (pp. 3, 5, 9, 13, 28).",
+    "proof_devices": [
+      "Convex-hull lifting: [0,1]^ns = conv{0,1}^ns, values of Upsilon = conv of objective values, agreement at vertices, hence equal minima (Proposition 3.1, Caratheodory, pp. 6-7)",
+      "Uniqueness transfer: a unique binary optimum is the unique theta-optimum (Lemma 3.2, p. 7)",
+      "Unbiased bounded-variance estimator meets an assumption of a cited SGD convergence theorem (Lemma 3.4 used on p. 13)"
+    ],
+    "experiments": "2-D linear toy (p. 18) and 14-candidate advection-diffusion sensor placement with all 16,384 designs enumerated as ground truth; with the optimal baseline the sampled designs fall within 1% of the global optimum in 20 iterations (pp. 22-24).",
+    "positioning": "Contrasts with relaxation plus l1/continuation/sum-up-rounding and with earlier Robbins-Monro/SAA stochastic OED; links the method to policy-gradient reinforcement learning (pp. 2-3, 10).",
+    "writing": "Contributions paragraph enumerated First/Second/Third/Fourth against the standard approach (pp. 2-3); the benefits of the reformulation are listed again in five points after the proofs (pp. 7-8).",
+    "limits_future": "Learning-rate choice is the main open issue; comparison with sample average approximation deferred to separate work (p. 28); the saving over relaxation is argued from model-solve counts (pp. 16-18), not from a run in the parts read.",
+    "method_links": [
+      {"method": "Method 2", "relation": "variant", "note": "Re-casts the binary design problem into stochastic optimisation / RL policy gradient, not into Leyffer's NLP or filter base", "pages": "pp. 2-3, 10"},
+      {"method": "Method 5", "relation": "variant", "note": "Honest ground truth by full enumeration, but the headline saving over relaxation is argued from cost formulas, not measured on the same problem", "pages": "pp. 16-18, 22, 28"},
+      {"method": "Method 6", "relation": "evidence", "note": "Reformulation chosen so the nonsmooth l0 penalty can be used without smoothing (weak)", "pages": "pp. 7-8"}
+    ],
+    "new_pattern_candidates": [],
+    "transferable": [
+      "Benchmark binary-design methods at an enumerable size (2^14) and report the distance to the true global optimum under a small fixed iteration budget (pp. 22-24).",
+      "Justify a lifted formulation by three facts: convex hull of the domain, convex hull of the values, agreement at the vertices; equal optimal values follow (pp. 6-7)."
+    ],
+    "coauthors": "Ahmed Attia, Todd Munson",
+    "quotes": [
+      {"text": "In general, however, the numerical solutions of the two problems are not guaranteed to be related or even similar.", "page": 2},
+      {"text": "We also note that Algorithm 3.1 is equivalent to the vanilla policy gradient REINFORCE algorithm [51].", "page": 10}
+    ]
+  },
+  {
+    "id": "S092",
+    "year": "2022",
+    "title": "Sequential linearization method for bound-constrained mathematical programs with complementarity constraints",
+    "read_level": "partial",
+    "contribution": "Proposes SLPCC, a trust-region method that solves a separable LPCC each iteration while keeping complementarity feasible, proves convergence to B-stationary points, and adds Cauchy and bound-constrained-QP steps for speed, as a subproblem solver for an augmented Lagrangian method for MPCCs.",
+    "problem_entry": "Bound-constrained MPCCs arise as augmented Lagrangian subproblems of general MPCCs after slack variables are added; no analysed trust-region method keeps complementarity feasible in every iterate (pp. 1-2).",
+    "key_idea": "Linearise f, keep complementarity, use an l-infinity trust region so the LPCC separates into 1-D LPs and 2-D LPCCs solved by checking at most four points; accept by actual over linear-predicted reduction, reset the radius to at least a fixed value (Algorithm 1, Props 2.3-2.4, pp. 3-6).",
+    "assumptions": "f C^1 with locally Lipschitz gradient (Assumption 4.1, p. 8); feasible start obtained by projection (p. 4); no coercivity, unboundedness detected numerically (p. 9); C^2 for the second-order steps (p. 14).",
+    "proof_devices": [
+      "Constructive B-stationarity test: a feasible descent direction for some partition of the biactive set (Proposition 4.1, p. 8)",
+      "Three-lemma skeleton: Taylor reduction bound, finite inner loop, step with reduction bounded below by a multiple of the radius near a non-B-stationary point (Lemmas 4.3-4.5, outline p. 9)",
+      "Radius reset to at least a fixed value keeps the radius from collapsing (p. 7)",
+      "Acceleration steps accepted only if as good as the first-order step, changing only a factor 1/2 in the proof (p. 16)"
+    ],
+    "experiments": "Python; 40 random QPs (indefinite/PSD, n0=n1=20,40) and 20 nonlinear instances vs filterSQP, IPOPT, MINOS, SNOPT on the x1'x2<=0 reformulation; iteration violin plots and a performance profile with failures counted (pp. 17-20).",
+    "positioning": "Places itself beside Scholtes-Stohr trust-region penalty, Fukushima-Tseng epsilon-active sets and active-set methods of Judice et al. and Chen-Goldfarb (p. 2); states that NLP solvers are currently the most efficient MPEC solvers (p. 17).",
+    "writing": "A two-variable example motivating the design comes before the proofs (pp. 6-7); the proof is announced with an outline paragraph (p. 9); limits are stated plainly in the results (pp. 17-20).",
+    "limits_future": "Plain method at best linear (p. 17); slower in time than filterSQP, MINOS, SNOPT, cauchy often slowest, attributed to Python (pp. 19-20); degenerate instances counted as failures (p. 19); extension to AMPL-style mixed complementarity without slacks (pp. 21-22).",
+    "method_links": [
+      {"method": "Method 3", "relation": "evidence", "note": "Two-variable MPCC on which exact-Hessian SQP converges to an M-stationary, non-B-stationary point; stated as the reason to use linear models", "pages": "pp. 6-7"},
+      {"method": "Method 2", "relation": "evidence", "note": "NLP trust-region toolkit and the SLQP idea carried into MPCCs, with a bound-constrained QP on the identified active set", "pages": "pp. 14-16"},
+      {"method": "Method 5", "relation": "evidence", "note": "Failures counted, filtered MINOS runs named, per-iteration cost differences stated, time losses reported", "pages": "pp. 17-20"},
+      {"method": "Method 6", "relation": "evidence", "note": "NLP baselines get the inequality complementarity form x1'x2<=0, with a citation that the equality form is worse", "pages": "p. 17"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Linear-model trust region on a combinatorial feasible set", "evidence": "First-order model plus a trust-region norm chosen so the subproblem separates and is solved by enumeration (LPCC by four-point checks), accepted by the actual/predicted ratio; the same construction appears in S128 with a Hamming-ball knapsack", "pages": "pp. 3-6"}
+    ],
+    "transferable": [
+      "Choose the trust-region norm that makes the subproblem separable, then solve each coordinate block by listing candidate points (pp. 5-6).",
+      "Keep acceleration steps outside the convergence proof by accepting them only when they do at least as well as the first-order step (pp. 4, 16).",
+      "When comparing with SQP or interior-point codes, say that iteration counts only check for a reasonable number of outer iterations and report each solver's own times (p. 17).",
+      "Detect unboundedness by a large-negative objective test in the code instead of assuming coercivity (p. 9)."
+    ],
+    "coauthors": "Christian Kirches, Jeffrey Larson, Paul Manns",
+    "quotes": [
+      {"text": "This example is a reason for developing our approach using sequential linear models rather than a sequential quadratic approach, which would suffer from the same behavior as an SQP approach.", "page": 7},
+      {"text": "Global convergence of Algorithm 1 to B-stationary points does not depend on—and is not hampered by—these optional steps.", "page": 4}
+    ]
+  },
+  {
+    "id": "S128",
+    "year": "2022",
+    "title": "A mixed-integer PDE-constrained optimization formulation for electromagnetic cloaking",
+    "read_level": "partial",
+    "contribution": "Formulates binary electromagnetic cloak design (2-D Helmholtz, nominal and uncertain incidence angle) as a MIPDECO and solves it by relaxation, rounding and a first-order trust-region method whose subproblem is a knapsack over a Hamming ball.",
+    "problem_entry": "Cloak design is usually done by topology optimisation; here it is posed as a MIPDECO with one binary per design cell, then extended to an expected objective over uncertain incidence angles (pp. 3-5).",
+    "key_idea": "Solve the relaxation with reduced-space quasi-Newton (TAO blmvm), round at tau=0.8, then improve with a steepest-descent trust-region method: linearised objective, l1 (Hamming) trust region giving a knapsack, nonlinear trust-region acceptance rule; one forward and one adjoint solve per iteration (pp. 11-13).",
+    "assumptions": "Discretised 2-D Helmholtz with absorbing boundary (FEniCS 128x128 mesh, k0=6pi, q=0.75); bilinear state equation makes the relaxation nonconvex; method explicitly heuristic, stopping at Delta<1 (pp. 11-14).",
+    "proof_devices": [
+      "No convergence theorem in the parts read; nonconvexity shown numerically by evaluating J along the segment between two checkerboard designs (pp. 14-15)",
+      "l1 trust region on binaries rewritten as an affine knapsack constraint (eq. 4.4, p. 12)"
+    ],
+    "experiments": "Three cloak regions x two angles, 20x20 and 40x40 control meshes; 25 random starts; 15-79 TR iterations; PDE/gradient time dominates and knapsack solves are cheap; 10- and 15-angle uncertainty runs; no external MINLP or topology-optimisation baseline (pp. 13-20).",
+    "positioning": "Alternative to topology-optimisation cloaking (Haslinger-Makinen); read as rounding plus repeated local branching (Fischetti-Lodi; Nannicini-Belotti-Liberti) but first-order; builds on the Hahn-Sager-Leyffer discrete trust-region report (pp. 3, 12).",
+    "writing": "Short applied paper: formulation, adjoints, algorithm, numerical evidence; the conclusion restates the method and gives no future work (pp. 21-22).",
+    "limits_future": "Relaxation is not a valid lower bound and rounding can beat it (pp. 15, 18); direct MINLP with discretised PDEs ruled out from experience on other MIPDECOs (p. 12); no future directions stated (pp. 21-22).",
+    "method_links": [
+      {"method": "Method 2", "relation": "evidence", "note": "Nonlinear trust-region acceptance rule carried unchanged into a binary PDE design problem", "pages": "p. 13"},
+      {"method": "Method 6", "relation": "evidence", "note": "Formulation chosen around solver capability: full-space MINLP with discretised PDEs avoided because modern MINLP solvers cannot solve it; rounding-threshold choice reported with its effect", "pages": "p. 12"},
+      {"method": "Method 5", "relation": "variant", "note": "No external baselines; evidence is random starts, relaxation and rounding only", "pages": "pp. 15, 18"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Linear-model trust region on a combinatorial feasible set", "evidence": "Steepest-descent trust region over binaries with a Hamming-ball (l1) constraint so the subproblem is a knapsack, accepted by the nonlinear actual/predicted ratio; same construction as S092's separable LPCC", "pages": "pp. 12-13"}
+    ],
+    "transferable": [
+      "For binary design with an expensive simulator, linearise at the incumbent and restrict to a Hamming ball: the subproblem is a knapsack and each iteration needs one forward and one adjoint solve (pp. 12-13).",
+      "Test nonconvexity of a relaxation by evaluating the objective along a segment between two feasible designs; if nonconvex, say the relaxation value is not a bound (pp. 14-15).",
+      "Report the time split between simulation (PDE and gradient) and the combinatorial subproblem (Tables 1, 4, 5, pp. 18, 20)."
+    ],
+    "coauthors": "Ryan H. Vogt, Todd Munson",
+    "quotes": [
+      {"text": "However, we found on other MIPDECOs that such an approach does not result in an MINLP that can be solved by modern MINLP solvers.", "page": 12},
+      {"text": "We observe that the relaxed objective function value does not always give a lower bound on the solution.", "page": 18}
+    ]
+  },
+  {
+    "id": "S136",
+    "year": "2022",
+    "title": "BROOD: Bilevel and robust optimization and outlier detection for efficient tuning of high-energy physics event generators",
+    "read_level": "partial",
+    "contribution": "Automates the choice of observable weights in Monte Carlo event-generator tuning through bilevel (surrogate-based outer search) and single-level robust formulations, with outlier-observable and chi-square bin filtering, compared with the ATLAS A14 expert tune on three new metrics.",
+    "problem_entry": "Expert hand-weighting of observables in generator tuning is slow, subjective, 'inefficient and biased' (pp. 4, 7).",
+    "key_idea": "Bilevel: weights on the simplex chosen by a merit function (portfolio or median/mean score) with an RBF surrogate over the black-box inner fit; robust: worst-case bin deviation with slacks and a mu-controlled weight lower bound; pre-filter outlier observables by Z-score and bins by a longest-contiguous-run chi-square test solved by a maximum-subarray algorithm (pp. 9-16).",
+    "assumptions": "Bins independent (pp. 7, 50); rational surrogate represents the MC simulation; discrepancies come from the model's domain, not analysis mistakes (p. 13); multimodal inner problem handled by 100 multistarts (p. 17).",
+    "proof_devices": [
+      "n/a (no theorems); chi-square degrees of freedom reduced to |B|-d because bins share parameters (p. 15)",
+      "Contiguous bin selection posed as an integer program and solved in polynomial time via maximum subarray (eq. 15, p. 16)"
+    ],
+    "experiments": "ATLAS A14 and Sherpa datasets; bilevel (three merits), robust, Expert and all-weights-equal compared on weighted chi-square, A-optimality and log D-optimality; no method best on all metrics, Expert best on two of three for the full data; about 14.5 h for bilevel vs weeks or months by hand (pp. 17-18, 23, 38-40).",
+    "positioning": "Related to influence-based weighting [5] and Bayesian-optimisation tuning without weights [6]; builds on the Professor framework, now apprentice (pp. 6-7).",
+    "writing": "Physics-facing exposition with a notation table (pp. 7-8); the conclusion lists four contributions as First-Fourth (p. 50).",
+    "limits_future": "Sherpa optimal parameters often on the box bounds, suggesting missing physics or a too-small domain; a trust-region outer loop is proposed as future work; bin correlations ignored (p. 50).",
+    "method_links": [
+      {"method": "Method 5", "relation": "evidence", "note": "Human expert tune kept as a named baseline; split verdict by metric reported rather than a winner (Leyffer's share unknown)", "pages": "pp. 17, 23"},
+      {"method": "Method 6", "relation": "evidence", "note": "Bilevel problem replaced by a single-level robust formulation with slacks because it is easier to solve (weak for Leyffer personally)", "pages": "p. 12"}
+    ],
+    "new_pattern_candidates": [],
+    "transferable": [
+      "When automation replaces expert judgement, keep the expert's result as a named baseline, score both on several objective metrics, and report where the expert still wins (pp. 17, 23).",
+      "Before calling a MIP solver on a subset-selection problem with a contiguity constraint, check whether it reduces to a maximum-subarray scan (p. 16).",
+      "Filter data the model cannot describe: fit each observable alone, flag outliers among the ideal per-observable errors, give them weight zero (p. 14)."
+    ],
+    "coauthors": "Wenjing Wang, Mohan Krishnamoorthy, Juliane Müller, Stephen Mrenna, Holger Schulz, Xiangyang Ju, Zachary Marshall",
+    "quotes": [
+      {"text": "Based on these results we can see that no method performs the best for all metrics in all cases.", "page": 23},
+      {"text": "In this work, we assume that each bin is completely independent of all the other bins.", "page": 50}
+    ]
+  },
+  {
+    "id": "S171",
+    "year": "2022",
+    "title": "Improving Earth System Predictability with Artificial Intelligence",
+    "read_level": "full",
+    "contribution": "A two-page SIAM News report of the DOE AI4ESP workshop that summarises AI/ML for Earth system models and lists applied-math challenges, including constrained learning and the inclusion of state-of-the-art optimisation methods.",
+    "problem_entry": "Impressions from the October 2021 AI4ESP workshop (450+ attendees, 150+ white papers), ahead of the official report (p. 3).",
+    "key_idea": "n/a (no method); summarises talks by Schneider, Gentine, Shen and Zanna (pp. 3-4) and closes with the authors' list of applied-math challenges (p. 4).",
+    "assumptions": "n/a",
+    "proof_devices": [],
+    "experiments": "none",
+    "positioning": "Reports others' talks in their voice; cites differentiable convex optimisation layers and physics-informed ML (p. 4).",
+    "writing": "News-style summary organised by speaker, ending with an applied-math challenge paragraph (pp. 3-4).",
+    "limits_future": "Open challenges: learning emerging constraints, identifying erroneous constraints, including state-of-the-art optimisation methods, explainable AI, rare-event identification (p. 4).",
+    "method_links": [
+      {"method": "Method 2", "relation": "evidence", "note": "Weak: the openings singled out for applied math are constrained learning and inclusion of state-of-the-art optimisation methods, where an optimiser's toolkit can be carried in", "pages": "p. 4"}
+    ],
+    "new_pattern_candidates": [],
+    "transferable": [],
+    "coauthors": "Salil Mahajan",
+    "quotes": [
+      {"text": "Because the use of brute-force computation to resolve such small-scale phenomena on a global scale is impractical, new approaches are necessary", "page": 3},
+      {"text": "However, the challenges that accompany the interpretation of ML models persist.", "page": 4}
+    ]
+  }
+]

@@ -1,0 +1,137 @@
+hello my name is ruth meisner and i'm presenting omelette this is our optimization and machine learning toolkit omelette was developed in collaboration with researchers from imperial college in london carnegie mellon in pittsburgh
+
+and zandia national laboratories in albuquerque our project was led by francesco chikon and jordan chalving with the help of many of us other researchers if you would like to join us and have your picture together with all of our
+
+wonderful pictures please join us on github there's plenty of contributing to do to the omelette project we're giving the website for our github page up in the upper right hand corner okay so what is the optimization and machine learning
+
+toolkit well what it is is it's something that takes trained neural networks or trained gradient boosted trees these are machine learning models that have already been trained and it transforms these already trained
+
+machine learning models into piomo code payomo is a algebraic modeling language that helps us represent optimization problems and then easily pass the optimization problems onto solvers we're pretty serious about the software
+
+engineering in omelette so we do have quite a number of tests for the omelette code we are passing these tests the code coverage is 94 and then we also have a nice api documentation okay so why might i like to represent uh
+
+trained machine learning models as paimo formulations well first off i might want to do optimization formulations that are thinking about adversarial examples and i'll give a few examples of this on the
+
+next slide i might also want to be investigating uh maximizing a neural acquisition function in a machine learning context or doing bayesian optimization also in a machine learning context in engineering machine learning models
+
+may replace complicated constraints or serve as surrogates in larger design and operations problems okay so i mentioned these adversarial examples and it's worth sort of digging into these a bit more let's say that i have an already trained
+
+neural network so my already trained neural network is going to classify mnist digits so it's going to take these pictures here i have a picture that my trained general network recognizes as a nine and i'm going to ask myself about
+
+adversaries an adversary is going to be something where it's somehow nearby in this trained neural network but maybe instead of recognizing the image as a 9 the adversary will be a 4 and i want to know is there somehow
+
+an image that predicts 4 that is very close to this image that predicts nine okay so i can take some perturbation for instance in the l1 space using an l1 distance metric i can take a perturbation of four
+
+and if i was to take a perturbation of 4 in the l1 norm then this image shown here at the bottom that is going to predict a 4 using my already trained neural network or if i perturb by 0.05 using the l infinity norm
+
+this image as well in the lower right hand corner is also going to be recognized by my trained neural network as a 4.
+
+so what's happening here is that somehow my trained neural network might be a little bit too brittle depending on the application i might be able to trick my trained neural network by changing just a few of the pixels and um or changing
+
+the pixels by just a little bit and be predicting a four rather than a nine uh so there's lots of optimization problems in artificial intelligence that are somehow related uh to these ideas i just mentioned
+
+uh the first is actually not an optimization problem it's a feasibility problem but often in the literature it's sort of written down to be solved by an optimization solver because there are quite a number of very
+
+good optimization solvers this is a verification problem and what it asks is is there an adversary labeled k so is there a 4 within a given perturbation so you set the distance metric say an l1 norm or an l infinity
+
+norm and you set the given perturbation so for instance if i was to say well my perturbation is going to be 5 with an l1 norm then yes there would be an adversary labeled 4 in that given perturbation but if i was going to take an l
+
+infinity norm and say that my perturbation was 0.01 well then no there is not going to be an image that is recognized as a 4 within that perturbation so that's a verification problem basically the existence or not of an
+
+adversary an optimal adversary would be within a given perturbation radius what maximizes the prediction difference so where are you quite sure that no no this really is a 4.
+
+and then i might want to think about a minimally distorted adversary this would be the smallest perturbation over which the neural network is going to predict that this is a four i might also want to ask myself can i
+
+safely remove neural network nodes or layers so these are all challenges that can be written down as optimization problems maybe i want to write them down as optimization problems um and then i also had mentioned a
+
+number of other applications in engineering and also in machine learning so generally all of these types of problems that i've mentioned what is the class of optimization problem that i want to solve well basically the key word here is
+
+hybridize i want to mix different types of constraints or possibly a different kind of objective with a different kind of constraint i want to mix first i want to mix model-based optimization so many people
+
+and this is the field of mathematical programming or mathematical optimization many people what they will do is they will solve an optimization problem here i have my objective function uh subject to uh constraints and people will assume
+
+that they can write down these constraints and the objective function so for instance if my objective function is to maximize profit then what i'll do is i will basically take my revenue subtract my costs and that will be my
+
+objective function it's basically anything that goes into my revenue i would like to increase anything that goes into my costs i would like to be decreasing this tends to be the kind of formulation that i can write down
+
+if it's as easy as revenue minus costs you might even have a linear function in the objective then there are other constraints that i can write down for instance if i know that i'm only allowed to use a certain amount of a
+
+resource i can write that down but and here's what is different about omelette what i also want to do is i also want to be able to incorporate an already trained machine learning model into the optimization problem so for instance
+
+we have our inputs uh x into uh an already trained machine learning problem and we have our outputs y into an already out of an already trained machine learning model what i would like to do is have these
+
+inputs and these outputs basically available to me as variables in my optimization problem so that i can work with them as much as i may wish now this is exactly what omelette does omelette uses the payomo abstraction that's called a
+
+block and basically what the payomo block abstraction allows you to do is hide if you wish all of the constraints or all of the new variables that are introduced within a block the reason that these pyomo blocks are
+
+very useful inside of omelette is that we are particularly using an extension of the block abstraction that we call an omelet block abstraction to hide dense neural networks convolutional neural networks and gradient boosted
+
+trees so basically what happens is that the constraints and the variables that represent dense neural networks convolutional neural networks and gradient boosted trees are going to be hidden inside of this piomo block now i
+
+do keep saying hide um but this is open source software so of course if you wish to go into the piomo block you always may now i'll mention this a bit more later but one thing that we might want to keep
+
+in mind is what are these expressions fi so basically these expressions that we can write down as part of our optimization problem maybe they're affine i mentioned something like revenue minus cost that might be an
+
+affine function maybe these expressions are going to have discrete variables maybe there's some sort of on off switch of if there's like a facility location yes i want to locate that facility in that place
+
+and then maybe there are non-linear expressions so for instance this might be if i needed to follow some physical law if i needed to follow some law of thermodynamics of reaction engineering or of something else
+
+now what we might need to keep in mind and i'll mention this a bit more later is that we will want our biomo block to have inside of it functions that somehow match these expressions f so for instance if there are discrete
+
+variables in the functions that we're writing down we may want to be using relu neural network or gradient boosted tree surrogates if we are using nonlinear functions f we may want smooth neural network
+
+activations so we mentioned the problem that we want to solve but we're going to need to be able to go from a higher order neural network or gradient boosted tree representation in to omelet the reason that this is a
+
+little bit annoying is that there are lots of different ways of developing uh neural networks or gradient boosted trees using a lot of different software so what omelette is going to use is it's going to use onnx
+
+onnx is a code that represents many of these uh different ways of training neural networks so basically the entire purpose of onnx is interoperability you can make your neural network in pi torch and i
+
+can make mine in tensorflow and nobody cares because we can both get our neural network into onnx from onnx we are able to read into omelette omelette does also have a direct from keras interface this interface is supporting neural
+
+networks only not gradient boosted trees and if you're getting excited about omelette well if you would like to join us one of the many things we do need to do is that we do need another gradient boosted tree interface
+
+so for instance light gbm the problem with o and x is it's not supporting categorical variables something like red green blue o and x is only going to represent continuous items like a wavelength of light or something like
+
+this and the problem with this is that gradient boosted trees work really well with categorical variables um so that's one of our very many to do's find some of the others either on our github discussion forum or on our github issue
+
+list okay now most software that is out there evaluates a trained model and i'm going to use the example of gradient boosted trees here here evaluating a single tree is really super easy so let's say i want to know what is the
+
+value of this tree for the point four two first i ask myself up at the root node of this tree is x1 less than 3 or is it greater than or equal to 3 well 4 is greater than or equal to 3 so i'm going to take the
+
+right branch then i get to another node and it asks me to compare x2 which in this case is equal to 2 to 4.
+
+now 2 is strictly less than 4 and so i'm going to take the left branch now i get to a node in the tree that asks me to compare x2 to 1 and we have that x2 is greater than or equal to 1 and so i'm going to take the
+
+right branch so after all of that branching i get to the value of that leaf the value of that leaf is x4 is equal to 0.4 that is the output of this one tree now what happens in gradient boosted trees is that you end up with an ensemble of
+
+these trees and the gradient boosted tree value is defined by the summation of each of the leaf nodes that you end up hitting so for each of the trees in the ensemble i end up doing this right left right
+
+for instance in the first tree uh set of rules all by checking what is the value of the input say x with respect to the splits that i'm asked to take i continue this procedure for each of the trees in the ensemble
+
+and i get a value for each leaf in each tree and then i sum up the active leaves and i add a constant and i get the output so this is my output i'm going to call it y because in omelette we have been calling inputs to our
+
+trained machine learning models x and outputs but what if and this is the omelet setting the trained gradient boosted tree is in an optimization problem and now the x or the inputs are decision variables they're not fixed anymore and
+
+there are mathematical programming formulations incorporating y is equal to gbtx with decision variables x into a larger optimization problem this is a a solved item and people know how to do this however it can be annoying to program
+
+and omelette is going to automate the translation from this machine learning model to an optimization model continuing on with the gradient boosted tree example on the left hand side i'm just illustrating one tree or an example tree
+
+in a gradient boosted tree ensemble on the right hand side i'm showing the formulation so what's happening here is that we have inputs uh x the inputs x are going to get translated into these new uh sort of on off variables w that say
+
+in which of these little squares you end up in and then there are also these variables zed that are again sort of turning on and off leaves in individual trees okay so basically what happens is that these
+
+gbt formulations they are introducing two new types of variables they're introducing variables w and they're introducing variables zed and this is just sort of annoying to program um so what omelette is doing is that you
+
+can go and look into the omelette block if you wish but if you don't want to all you have to do is basically take your trained gradient boosted tree use omelet to say this is going to be part of my constraints
+
+and then in your larger optimization problem hook the inputs of the gradient boosted tree and the output of the gradient boosted tree to the other variables in your optimization problem so if you're interested and you want to
+
+try more please check out our notebooks this is a really good place to start with omelette we're giving lots of examples of how we like to use omelette so for instance there's this example of an auto thermal reformer
+
+that was built uh for the ideas pse framework there's also examples that sort of show how to use omelette an example similar uh to the mnist example i gave at the beginning and a bayesian optimization example
+
+what is special about omelette and what i'm so excited about is that we can automatically uh translate a trained machine learning model currently neural networks or gradient boosted trees into piomo optimization constraints
+
+we have really nice interoperability via the onnx interface and we can easily switch and compare formulations if you want to join our awesome team please find us on github we're really looking forward to working
+
+with you

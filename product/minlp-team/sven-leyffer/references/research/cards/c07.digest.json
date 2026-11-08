@@ -1,0 +1,250 @@
+[
+ {
+  "id": "S022",
+  "year": "2006",
+  "title": "Complementarity constraints as nonlinear equations: Theory and numerical experience",
+  "read_level": "full",
+  "contribution": "Shows that MPCCs can be solved by SQP after replacing complementarity with any of a family of NCP functions (including three new exact smoothings of the min/natural-residual function) without a smoothing parameter, proves KKT/strong-stationarity equivalence and superlinear local convergence, and ranks the formulations on MacMPEC (read from ANL/MCS-P1054-0603 preprint).",
+  "problem_entry": "Received verdict that MPCCs as NLPs are 'numerically unsafe' because X1x2<=0 violates MFCQ everywhere (p. 2); asks which NCP-function reformulations work without the smoothing parameter of [8,10] (p. 3).",
+  "key_idea": "Replace complementarity by x1,x2>=0, Phi(x1,x2)<=0 with an NCP function, fix the subgradient convention grad phi(0,0)=0 so KKT points equal strongly stationary points, relax the linearization by delta*min(1,phi)^(1+kappa), omit grad^2 Phi from the QP Hessian; algorithm unchanged (pp. 3, 9, 13).",
+  "assumptions": "[A0]-[A5] (convention, C2 Lipschitz, MPCC-LICQ, MPCC-SOSC, nonzero multipliers, independent QP basis) p. 14; [A6] exact complementarity p. 15; [A7] consistent QPs, called 'clearly an undesirable assumption' p. 18; linear complementarity only p. 23; A2/A3 flagged most restrictive p. 14.",
+  "proof_devices": [
+   "Subgradient Convention 3.4 grad phi(0,0)=0 (p. 9)",
+   "Consistency of relaxed linearizations, Prop. 3.5 (pp. 9-10)",
+   "Min-function linearizations consistent near strong stationarity under MPCC-MFCQ = CQ-like property, Prop. 3.6 (p. 11)",
+   "Common gradient structure tau_a, tau_b unifies all NCP functions; Thm. 3.7 KKT <=> strong stationarity with multiplier maps (pp. 11-12)",
+   "Basic/minimum-norm multiplier of the multiplier ray (3.8) (p. 12)",
+   "Equivalence of QPs to relaxed-NLP QPs when complementarity holds, Lemmas 5.3-5.5, Thm. 5.6 (pp. 15-17)",
+   "Basis-by-basis reduced NLPs with LICQ+SOSC, Lemmas 5.7-5.10 (pp. 19-21)",
+   "Perturbation o(||d_N||) + Dennis-More characterization, Prop. 5.11 (p. 22)",
+   "Finite number of bases => superlinear convergence, Thm. 5.12 (p. 22)",
+   "Filter outcomes (A)/(B)/(C) used to predict behaviour (p. 13)"
+  ],
+  "experiments": "MacMPEC (~150, some 32x32 discretizations dropped with stated bias, p. 23); 8 formulations in his SQP-filter solver via AMPL interface; untuned defaults (p. 24); iteration and CPU performance plots with failures set large (p. 25); failure list by mode TR too small / infeasible QP / iter. limit (p. 26); failures tied to non-strongly-stationary problems, IEEE errors excluded as model errors (p. 27); xi as strong-stationarity indicator; per-instance appendices (pp. 30-36).",
+  "positioning": "Extends own [17]; contrasts with smoothing NCP methods [8,10] ('smoothing is not required', p. 3); credits Anitescu elastic mode and IPM relaxations as parallel routes; calls the pessimistic verdict 'premature' (p. 2).",
+  "writing": "One-sentence contribution (p. 3) restated in conclusions (p. 28); plain negative reporting ('disappointing', p. 27); hedged open questions ('At present, we believe', p. 29); a Discussion of Proofs section giving geometric intuition (pp. 22-23).",
+  "limits_future": "Global convergence from remote starts and avoiding C-stationary limits open (p. 29); nonlinear complementarity not covered (p. 23); no quadratic rate with kappa<1 (p. 14); proposes lumped NCP formulation e'Phi<=0 (p. 29).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "SQP-filter toolkit and the strong-stationarity/KKT equivalence of [17] carried to a family of MPCC reformulations; algorithm unchanged",
+    "pages": "pp. 3, 13, 23"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Study compares formulations of one constraint; solver behaviour traced to formulation (lumping, smaller FB linearized region, slacks for nonlinear complementarity, IEEE errors blamed on model)",
+    "pages": "pp. 23, 27"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Failures inside performance plots, per-instance failure taxonomy, test-set filter and bias stated, no default tuning, theory-favoured variant reported as losing",
+    "pages": "pp. 23-27"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Hypothesis check applied to failures: failing instances matched to known absence of strongly stationary points before blaming the method",
+    "pages": "p. 27"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "MacMPEC as test bed with per-instance appendix and degeneracy classification",
+    "pages": "pp. 30-36"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "exactness by convention",
+    "evidence": "Choosing grad phi(0,0)=0 makes reformulation KKT points equal strong stationarity; other subgradients gave M-/C-stationary limits",
+    "pages": "p. 9, p. 12"
+   },
+   {
+    "pattern": "basis-by-basis convergence under CQ failure",
+    "evidence": "Each QP basis defines a reduced NLP with LICQ+SOSC; finiteness of bases gives superlinear convergence despite dependent active normals",
+    "pages": "pp. 18-22"
+   }
+  ],
+  "transferable": [
+   "Fix the subgradient convention at kinks so reformulation KKT points coincide with the target stationarity; test alternatives numerically for spurious limits (p. 9)",
+   "Relax a linearized complementarity constraint by delta*min(1,phi)^(1+kappa) and show the perturbation is o(||d||) to keep superlinear convergence via Dennis-More (p. 9, p. 22)",
+   "Unify a family of functions by a shared gradient structure so one proof covers all (pp. 11-12)",
+   "Check reformulas for single-precision cancellation and rewrite stably (p. 24)",
+   "Set failures to a large value inside performance profiles and list failures by mode with instance names and theory-based reasons (pp. 25-27)",
+   "Report a per-instance certificate of the theory's conclusion (complementarity multiplier xi) beside timings (p. 27, p. 33)"
+  ],
+  "coauthors": "none (single author)",
+  "quotes": [
+   {
+    "text": "Our contribution is to show that this smoothing is not required.",
+    "page": 3
+   },
+   {
+    "text": "The results for the min-function, on the other hand, are disappointing.",
+    "page": 27
+   }
+  ]
+ },
+ {
+  "id": "S011",
+  "year": "2010",
+  "title": "Solving multi-leader–common-follower games",
+  "read_level": "full",
+  "contribution": "Characterizes EPEC (multi-leader-common-follower) solution sets as intersections of simpler Nash games and derives NCP, MPEC and NLP formulations from concatenated strong-stationarity conditions plus a square price-consistent NCP, solving the whole EPEC as one problem and publishing the MacEPEC test set (read from ANL/MCS-P1243-0405 preprint).",
+  "problem_entry": "Electricity-market EPECs solved by cyclic diagonalization or Su's sequential smoothed NCP; entry is the MPEC-as-NLP lesson applied to all leaders simultaneously (p. 4).",
+  "key_idea": "Strong stationarity of each leader's MPEC = KKT of its NLP reformulation; concatenate them into a nonsquare NCP (4.1), remove degeneracy with basic-multiplier complementarities (4.4), give MPEC (min l1 of xi) and penalized NLP versions, and a price-consistency restriction that yields square NCPs for PATH (pp. 12-20).",
+  "assumptions": "Followers convex with CQ ('We accept these limitations', p. 6); MPEC-LICQ for each leader (Prop. 4.1, p. 14); [A1] 'not very restrictive', [A2] 'rather restrictive' (pp. 17-18); electricity models violate [A2] (p. 25).",
+  "proof_devices": [
+   "Solution set = intersection of k generalized Nash games, Thm. 3.1 (p. 10)",
+   "Uniqueness/nonexistence transfer, Cor. 3.2 (p. 11)",
+   "Equilibrium => strongly stationary via Scheel-Scholtes under MPEC-LICQ, Prop. 4.1 (p. 14)",
+   "Local solutions of (4.6)/(4.7 with zero penalty) are strongly stationary, Thm. 4.1 (p. 16)",
+   "Complete separability => equivalence with a single collective-loss MPEC, Prop. 5.1 (p. 21)",
+   "Two-player parametric example mapping zero/one/infinite price-consistent equilibria (pp. 21-22)"
+  ],
+  "experiments": "New MacEPEC library: 30 random QPEC-leader EPECs (single-precision data to increase degeneracy), academic ex-001/example-4/outrata3-4, three electricity models incl. 14-node PJM (pp. 22-25); every formulation as separate AMPL file; baselines GJ, GS, NCP(t) reimplemented; filterMPEC and PATH; iteration counts (CPU avoided, reason given); tags [I], [S], CYCLE; solution comparison across solvers (pp. 26-29).",
+  "positioning": "Builds on Pang-Fukushima EPEC paradigm and Su's strong-stationarity definition; 'In contrast, we attack (4.1) directly' vs Su's smoothing (p. 12); diagonalization and special-purpose MPEC methods require more work (p. 7).",
+  "writing": "Calibrated: 'no clear overall winner' (p. 28), 'competitive' in conclusions (pp. 29-30); admits baseline-only success on electric-1 (p. 28); first-person acceptance of limitations (p. 6).",
+  "limits_future": "No MPEC solver guarantees strongly stationary limits; how to formulate/presolve NCPs, MPECs, EPECs to expose structure such as skew symmetry (p. 28, p. 30); hand-coding strong-stationarity conditions is error prone (p. 25).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "MPEC-as-NLP toolkit (strong stationarity = NLP KKT, filterMPEC) carried up to EPECs; new class recast as NCP/NLP/MPEC",
+    "pages": "pp. 4, 8, 12-16"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Starts public MacEPEC library because none existed; formulations kept side by side as model files; instance generator",
+    "pages": "pp. 22-24"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Competitors rebuilt in AMPL, iteration unit justified, typed failure tags, no-winner rule of thumb, baseline wins reported",
+    "pages": "pp. 22, 27-28"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Reformulations target degeneracy; bad formulation hides skew-symmetry PATH could exploit",
+    "pages": "p. 13, p. 28"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Small parametric example used to show what a restriction loses rather than to break a method",
+    "pages": "pp. 21-22"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "restricted model first, general model as fallback",
+    "evidence": "Solve price-consistent model first; its solutions solve the general EPEC but it may have none, then resort to Section 4 reformulations",
+    "pages": "p. 21"
+   },
+   {
+    "pattern": "solution-set comparison as an evaluation axis",
+    "evidence": "Subsection comparing which stationary points each solver reaches; different approaches detect multiple solutions and infeasibility",
+    "pages": "pp. 28-29"
+   }
+  ],
+  "transferable": [
+   "Concatenate each player's strong-stationarity (= NLP-KKT) conditions into one system and offer NCP, MPEC (minimum-norm multiplier) and penalized NLP versions for different solvers (pp. 12-16)",
+   "Pick the basic multiplier of a multiplier ray with an extra complementarity or an l1 objective to reduce degeneracy (p. 13, p. 15)",
+   "Characterize a coupled game's solution set as an intersection of games with nonconvexity in one player (pp. 10-11)",
+   "Generate random instances in reduced precision to increase degeneracy, and say so (p. 23)",
+   "Tag runs as infeasible / spurious-stationary / cycling and compare reached solutions, not only speed (pp. 27-29)",
+   "Ship each formulation of each problem as its own model file with a suffix scheme (p. 22)"
+  ],
+  "coauthors": "Todd Munson",
+  "quotes": [
+   {
+    "text": "We accept these limitations because it is not clear at present how they can be avoided in practice.",
+    "page": 6
+   },
+   {
+    "text": "Regarding the performance of the different solvers and formulations, there appears to be no clear overall winner, though the NLP approach is often the fastest.",
+    "page": 28
+   }
+  ]
+ },
+ {
+  "id": "S015",
+  "year": "2010",
+  "title": "FilMINT: An outer approximation-based solver for convex mixed-integer nonlinear programs",
+  "read_level": "full",
+  "contribution": "Implements Quesada-Grossmann LP/NLP-based branch and bound inside MINTO with filterSQP, shows by one-feature-at-a-time ablation which MILP techniques carry over to convex MINLP, and introduces cut-style management of ECP/fixfrac/NLPR linearizations, giving a solver competitive with Bonmin (read from ANL/MCS-P1374-0906 preprint; appendix not in file).",
+  "problem_entry": "Aim of MINLP at a small multiple of MILP cost (p. 4); old thesis observation that simplistic LP/NLP-BB beat NLP-BB and OA by an order of magnitude, yet no implementation besides concurrent Bonmin (pp. 4-5).",
+  "key_idea": "Build LP/NLP-BB entirely in MINTO user callbacks (no core changes) with warm-started filterSQP and its restoration phase, and treat linearizations as MILP cuts: violated-only, cut pool, depth-biased probability min{beta 2^-d,1}, tailing-off, per-node caps, hierarchy ECP < fixfrac < NLPR (pp. 9, 18-24).",
+  "assumptions": "Convex twice-differentiable f, g; compact polyhedral X, Y (p. 4); heuristic use for nonconvex (p. 4); finite OA convergence cited 'under mild conditions' (p. 7); dual preprocessing invalid for OA master (p. 13).",
+  "proof_devices": [],
+  "experiments": "222 convex instances (MINLPLib, MacMINLP, CMU-IBM) converted to AMPL; tiers by MINLP-BB time (100 easy dropped, 37 moderate, 85 hard); 4 h limit; time profiles for moderate, scaled solution value for hard (pp. 10-11); ablation ladder vanilla -> single MILP features -> vanIP -> row-mgmt -> linearization schemes -> filmint (pp. 11-25); final vs MINLP-BB and two dated Bonmin versions; 88/122 solved (p. 27); defaults tuned on all previous experiments (p. 27).",
+  "positioning": "Credits Quesada-Grossmann ('clever extension of outer approximation', p. 5) and Leyffer 1993 thesis; four explicit differences from Bonmin (p. 5); Linderoth-Savelsbergh 1999 for branching expectations (p. 16).",
+  "writing": "Mostly calibrated ('not competitive ... for difficult instances' p. 11; strong branching 'surprising' p. 16; 'Further research ... will be required' p. 23) with one strong claim ('conclusively demonstrates', p. 25); abstract stronger than the Bonmin-v2 tie in Section 4 (p. 3 vs p. 27).",
+  "limits_future": "Convex only (p. 4); future heuristics and cutting planes (p. 27), better point selection (p. 23), Benders aggregation deferred (pp. 20-21); unstated: tuning on comparison suite (p. 27), easy tier dropped (p. 11).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Algorithm built through framework callbacks without core changes; inner NLP solver's warm start and restoration reused; linearizations reinterpreted as cuts",
+    "pages": "p. 9, p. 18"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Self-built vanilla baseline, same NLP solver in MINLP-BB, dated Bonmin versions, reported loss; but defaults tuned on the comparison suite, easy tier dropped, abstract stronger than results; 'biased subset' sentence cited as [03 E20] is not in this preprint",
+    "pages": "pp. 3, 11, 25, 27"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "The carried-in toolkit is MILP (MINTO, Linderoth's base) into MINLP, with Leyffer's filterSQP as the subproblem solver",
+    "pages": "pp. 9-18"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Uses MacMINLP plus converted MINLPLib and CMU-IBM models",
+    "pages": "p. 10"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "cut-management analogy",
+    "evidence": "New valid inequalities managed like MILP cuts: violated-only, inactivity-based cut pool, depth-biased generation probability, tailing-off, per-node cap",
+    "pages": "pp. 18-22"
+   },
+   {
+    "pattern": "difficulty tiers set by a reference solver, with a metric per tier",
+    "evidence": "Easy/moderate/hard by MINLP-BB time; time profiles for moderate, scaled best objective for hard",
+    "pages": "pp. 10-11"
+   }
+  ],
+  "transferable": [
+   "Implement a new algorithm as callbacks of a mature framework without touching its core, then switch framework features on one at a time (p. 9, p. 12)",
+   "Generate cuts at a node with probability min{beta 2^-d, 1} so beta is the expected number of cut nodes per level (p. 22)",
+   "Order linearization-point rules from cheap/weak (ECP) to costly/strong (NLPR) with separate budgets (beta, K, M) (pp. 22-24)",
+   "Use an NLP solver whose restoration phase returns the l1 feasibility solution for infeasible NLP(y), so a valid linearization point exists either way (p. 6, p. 9)",
+   "Disable dual (optimality-based) MILP preprocessing when the LP is only an outer approximation (p. 13)",
+   "Tier instances by a reference solver and use time profiles where solves finish and scaled best objective where they do not (pp. 10-11)",
+   "Name each intermediate build and profile each step of the ablation ladder (pp. 12-25)",
+   "Benchmark two dated versions of an evolving competitor and state their provenance (p. 27)"
+  ],
+  "coauthors": "Kumar Abhishek, Jeffrey T. Linderoth",
+  "quotes": [
+   {
+    "text": "Our aim is to provide a solver that is capable of solving MINLPs at a cost that is a small multiple of the cost of a comparable mixed integer linear program (MILP).",
+    "page": 4
+   },
+   {
+    "text": "a fundamental design philosophy is to treat linearizations of the nonlinear feasible region in a manner similar to the way cutting planes are treated by a branch-and-cut algorithm for MILP.",
+    "page": 18
+   }
+  ]
+ }
+]

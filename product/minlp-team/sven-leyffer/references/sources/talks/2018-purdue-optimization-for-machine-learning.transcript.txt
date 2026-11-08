@@ -1,0 +1,347 @@
+Transcript (auto-generated English captions, YouTube ASR; NOT checked against the audio; ASR mis-hears names and terms)
+Talk: "Optimization for Machine Learning - Sven Leyffer" (video title). Leyffer's talks page lists it as: Optimization for Machine Learning (updated), Purdue University Workshop on Approximation Theory and Machine Learning, September 2018.
+Video: https://www.youtube.com/watch?v=IfjXNJI7Bug (channel: David Gleich; published 2018-10-16; length 2637 s)
+Retrieved: 2026-10-10 with yt-dlp 2026.08.19 (--write-auto-subs --sub-langs en), converted with scripts/srt_to_transcript.py
+Used in: ../../research/02-methodology.md
+----
+it's a great pleasure to be at this workshop this was I had a fantastic time I sort of agreed to talk about optimization for machine learning and the plan is to talk a little bit about data analysis in the Department of
+
+Energy so I work at Argonne National Laboratory which is about 150 miles north west of here and we have big x-ray machine it's a two hundred billion dollar x-ray machine that's being upgraded at the moment and so there's
+
+some interesting challenges that I'll talk about and then the the main part of my talk is to talk a little bit about optimization so my background is in optimization developing algorithms for optimization problems and I'll talk how
+
+some optimization paradigms have an impact in machine learning I should say that most of this work in fact almost all of this work is not my own work so you have to forgive me if I'm sort of blundering along and then I'll come to
+
+some conclusions and extensions luckily there will be a skip out at some point in this talk where you can sort of go and do something else so here's sort of the motivation for why we should be interested in machine learning or why
+
+one of the motivations and this is that the light sources like the Advanced Photon Source at Argonne or slack Stanford they're experiencing what what people have caught like Ian Foster have called this data Nami so the rates at
+
+which data is being produced is fast overtaking the rate at which computing is getting faster and bigger and so looking here from the sort of 1950s to the 2010 s you have about a 12 order of magnitude increase in terms of compute
+
+power but at the same time you had an 18 order of magnitude increase over these five decades in terms of what light sources are producing in terms of data and so sooner or later you're going to overtake and you're not going to be able
+
+to keep up and so doing computing and computer science optimization doing statistics for these light sources becomes very important and if one example that sort of highlights why this is important but before going there a
+
+colleague of mine at Argonne Chris Jacobsen created this slide which is sort of shows the increase in terms of compute power so notice that on the on the axis here you have a this that's a logarithmic scale so the increase in
+
+terms of the the current data rate of bursts rates that you expect from some of these light sources so the names down here are different beam lines that are gone so argon is this big is the light sources this big circle and every few
+
+hundred meters or so you have an exit that corresponds to a VM line and and they're all going to increase by one or maybe two orders of magnitude in terms of the rates the data rates that they're expecting and so people are now for
+
+example talking about using supercomputers like Myra to actually just do the data processing for the Advanced Photon Source that next to argon that's the people at the Advanced Photon Source who would like to do that
+
+the people who own Myra don't want anything to do with these with the scientists because they like to run big simulations on their machine and they don't want to do the data analysis so there's a bit of a conflict going on
+
+there but there's lots of things that come up for mathematicians nster decisions so this is these experiments even though they are conducted at the same facility they all have a different mathematics that underlies them so
+
+there's different experiments different observations some of them are time-dependent some of them are stationary you repeat lots of experiments and there's lots of opportunity there for data analysis in
+
+some cases these experiments are multi models so for example you have transmission x-ray tomography where you just do the normal x-ray transmission that you see when you go to the doctor and get your hand x-rayed but you also
+
+have fluorescence where photons excite photons inside the object and they scatter off to the side and you have a detector that actually tells you something about the kinds of elements that you detect it along the way on the
+
+path through the object and then a colleagues of mine actually looking at new experimental design so traditionally when you're scanning an object you have your x-ray beam and you slowly move the through this x-ray beam to scan and
+
+basically get your pixelated picture of that object that you're interested in it's often much more effective to actually do some spiral scans or something really bizarre that gives you a much better way of getting the object
+
+so this new experimental designs but also using less exposure to these x-rays but when you're detecting the object so the data is becoming less regular the reconstruction is becoming more complex and there's this hot spot of math
+
+computer science statistics that you can throw at these problems so here's one problem that I looked at which was learning cell identification from spectral data so what you see on this images are the maps of potassium
+
+manganese iron and zinc top left to bottom right and you're supposed to find where the cells are and identify different kinds of cells in these images so these are cells that people images that people have taken at the Advanced
+
+Photon Source the way we approach this was to sort of first do a kind of data reduction where we reduce this high dimensional oops these the spectral data using a non-negative matrix factorization where we decompose it
+
+effectively into maps of elements and then multipliers of these maps of elements in practice what you want to do is you also repeat this analysis possibly hundreds of times and eventually identify cancerous cells and
+
+so on we didn't go there so here's sort of the raw data on the left in the middle you see where we identified the cells and then on the on the right you classify the cells into different classes and this is sort of semi
+
+supervised learning where we're given an idea of what content to expect in a typical cell so these are red blood cells and I think there are yeast cells the the green ones are yeast cells typically how this had been done before
+
+we started this work at the Advanced Photon sauce was that a lucky postdoc would be given the picture on left and he would be told to mark the potential location of the cells in the picture and then you would try to fit do
+
+some data fitting to test whether this those were really cells now this is something that doesn't really work if the Advanced Photon Source increases by a factor 10 because you're not going to hire 10 times as many postdocs once the
+
+upgrade is completed so there's lots of opportunities here sorry no no sorry we are going to hire lots of postdocs but they're going to do smart things with machine learning instead of stupid things where they mark out little cells
+
+in pictures so we want people who do machine learning ok so after the sort of semi commercial here for argon and why we're interested in machine learning I talked a bit a little bit a little bit about optimization for machine learning
+
+and so I came across this book which sort of has almost the same title as my talk optimization for machine learning by these three guys including Steve right and this is really a great book so there's there's lots of things in there
+
+that tell you about optimization and the impact it has had on machine learning so it talks about convexity for example and one of the things that talks about is sparsity inducing norms and I'll this is
+
+one of the things that I'll concentrate on later and then it goes through the standard sort of optimization terminology really non smooth method non smooth optimization gradients up gradient methods and proximal methods so
+
+those are very classical ideas there's a nice paper in there by at sugandha where he looks at interior point methods and Newton methods arguing that maybe you need more than just first-order methods for certain problems
+
+there's work on cutting plain methods there's some interesting papers on augmented Lagrangian methods and it's connection to a DMM and then later papers are on uncertainty and robust optimization so this is also something
+
+that I'll talk about in in this talk and then lastly there's something about invariants and inverse covariance selection now at this point I should give a fair warning that argon make me put in here name me that I made
+
+zero contribution to this fantastic book so I was not a co-author I didn't even referee the paper I just read part of this book and worse until yesterday I had no clue about optimization for machine learning so
+
+you're really in for a treat here I finished my slides at about 7:30 this morning I didn't work through the night I slept but but one thing I wanted to do also was there was there was a really great talk by Moore it's hard from UC
+
+Berkeley that he gave her the informed optimization conference and this was a great talk for two reasons one it talked about machine learning but two it sort of had a very challenging title for somebody giving a talk at an
+
+optimization conference to call it non optimization and he sort of identified these four lengths of learning which is a good way of a warning I think that is good for optimizers so not maybe for you but for people who optimizes in the room
+
+to heed when you're looking at applying optimization methods to machine learning and so he sort of talked about this first blender which is convex eco where in many cases here you have this really nice regular Hessian matrix often the
+
+identity matrix and methods will converge very well that may not happen in all the cases and so yeah agency has some very nice examples where maybe you need other need to look at other things the the sort of gradient Tina is the
+
+sort of idea that somehow you the steepest descent or gradient method somehow regularized stochastic gradient methods some are regular Rises your method or your your solution and of course this is sort of really the
+
+warning for the optimizers and the warning for you in terms of what you should take away from my talk so I'm not going to give you solutions I'm not going to give you the panacea of how optimization is going to serve safe
+
+machine learning sort of there this this search for sort of some overarching optimization goal that if we only knew this fantastic optimization problem we would solve it and all machine learning problems would be solved forever that
+
+sort of maybe never happening though some of the tools that we're using may be helpful in in some small cases and so what what Moritz mainly said was in many cases you you're in messy land it works and if it works and and so at this point
+
+if you're not happy with my talk you're welcome to go to this website here and you're welcome to sort of follow maurices talk which might be much more interesting than mine okay right so so now we'll get to sort of the meat of how
+
+optimization has impacted machine learning and I've split this into two areas that I've been involved that I've contributed to in the optimization side for not on the machine learning side which is the mixed integer optimization
+
+and and robust optimization and so first I'll talk about mixed integer optimization a little bit so a mixed integer nonlinear program mixed integer Nollan the optimization problem is an optimization problem where you minimize
+
+some nonlinear objective subject to a set of nonlinear constraints and there could be some other constraints that I denote by X here which could be mostly linear constraints for example and then you have these integer constraints so
+
+some of your variables a subset of your variables has to be integer at a solution and so this corresponds to this picture on the on the on the right there where you sort of see a feasible set that's the blue region where you have
+
+two linear hyper planes that that limit where you where you can choose your variables from and the red points correspond to the integer lattice so your solution has to be one of those integer points and you can see
+
+immediately that if you just minimize a function over this over this blue set here then the solution might lie at a point out here or out here for example if it's a linear function that doesn't that's not at an integer point so you
+
+need to do something else and what people typically do is some kind of branch and cut approach where you create these trees that I've sort of illustrated there on the right where you keep solving non-linear optimization
+
+problems or linear optimization problems linear approximations and you keep branching on variables until you eventually get to an integer point and that's kind of related to finding in a sense the convex hull of these integer
+
+points so the green region here is the convex hull so once you have the convex hull of an integer mixed integer optimization problem is very easy to solve it you just minimize your linear objective over this convex hull and
+
+you're guaranteed to find an integer point so these problems in general are np-hard that was shown in 78 and worse jaroslava solve showed five years earlier that there actually undecidable so there are some very simple
+
+two-dimensional quadratic mixed integer optimization problems where you can where no computing machine can decide whether you found a solution or not and it's got to do with the directions of negative curvature that you can sort of
+
+follow off to infinity and you don't know whether there's going to be another integer point that intersects these negative curvature directions so the first problem that I want to tell you about that uses mixed integer nonlinear
+
+programming is this problem by a bunch of optimizers who are at IBM so Leo whoreish is one of them that's the colleague that I know and and they're looking at optimal symbolic regression and so that the idea here is that if
+
+you're not given the symbolic the functional forms of regression problem then how do you find can you find this functional form somehow and so you're trying to find a symbolic mathematical expression that explains some dependent
+
+variables in terms of independent variables without actually assuming that you know what the functional form is so it's a bit like Lee squares but you don't know that it's a linear function it could be any functional form that you
+
+put in there and they're looking at problems where they look for the simplest functional form because they assume that's presumably using Occam's razor that's the one that nature has selected so that's your objective is
+
+trying to find the easiest or simplest form you have constraints on the grammar that means what kind of forms you can put into your expressions you eventually want to match the data's you have some observations that you want to match and
+
+selecting this best possible expression gives you gives you a binary optimization problem and you can model these mathematical expressions using things like a directed acyclic graph so here's a little bit of a site tour to
+
+what these graphs look like move down here at the bottom we have the expression tree of this nonlinear functions a very simple nonlinear function just of two variables so the way they're constructed is you put your
+
+independent variables as leaves at the bottom and then you're creating nodes whenever you have compositions of knowledge of these functions so LOC X 2 for example is created here and then you multiply it with X 1 in this next node
+
+and you pass it up to the top we add X 2 cube to it to obtain the expression the nonlinear expression f of X so this is something that's called a factorial function if you can put your function into this form where u is either made up
+
+of unary operations which just depend on one variable or binary operations which depend on two variables then you call a function factorable and you can have any combinations of functions any combinations of operators but it
+
+excludes certain things such as blackbox functions or integrals for example which you can't always write in this explicit form and this technology forms the basis really of automatic differentiation to
+
+ask Alex pourtant he's got a great paper in in Siam review on this and also for global optimization of non convex functions and so the idea that the guys from IBM were pursuing was well what if we don't actually know the functional
+
+form that we're after can we somehow find an optimization problem that this tree together so we're wanting to build these trees these expression trees out of data that we have thought served and so what you can imagine is that you
+
+stick a tree together and then you put your data your into your independent variables at the bottom you figure out what comes out at the top and you mesh it met you look at the Miss match the data mismatch so it's very much like a
+
+sort of deep neural network it's got a very similar flavor to that and they did this and there's two formulations of this and and I think the second formulation is better where they form this super tree so this is a tree that
+
+contains all possible trees that they have want to consider they use binary variables then to switch parts of the tree on and off and they propagate they use continuous variables to propagate basically data through the tree that
+
+gives them then a data mismatch that they want to minimize and in in their example they're minimizing the complexity that's the number of binary variables that are switched to one so the number of expressions that they're
+
+using subject to a bound on the data mismatch and then depending on how much noise you're accept your you have in your problem you get different you recover different forms of the correct answer so they tried this out on two
+
+examples and I'm just listing one here this is Kepler's law on planetary motion and they get some data from NASA on planets in other solar systems that have been observed and they they built a tree of depth three so that's a very shallow
+
+tree if you think about it in terms of machine learning but they're able to ops they're able to really match the correct answer which is given down here to sort of a reasonable amount of accuracy right
+
+m-miss the the smaller the planet Big M is this the Sun that the small planet is is orbiting you're interested in this D which is the major semi axis and tau is the period and I forgot what C was here it's not the speed of light I don't
+
+think so but you get you get to the correct you get to something like the correct answer with these expression trees and this is you're recovering in a sense of recovering a formula without actually knowing what the formula looked like and
+
+E and you had all sorts of expressions that you could have selected there and you're recovering something through relatively good accuracy and then it's the noise increases you can sort of make an argument that what you're recovering
+
+is still accurate to some extent so you're taking terms out and do some kind of asymptotic analysis or so this the second instance of where people have used mixed integer programming in machine learning is sort of much closer
+
+to machine learning I think and this is in deep neural networks and so material is Ketty and one of the students looked at the model of a deep neural network as a mixed integer program so in particular
+
+and I should say this this picture is taken from a webpage they model the maximization function this activation function using binary variables I'll show you in a moment what this model looks like and then you can model the
+
+output of your deep neural network in terms of the inputs and you can solve a reasonable you can solve deep neural networks of moderate size so it's not going to be a big problems that you can solve now this should sound a little bit
+
+and I hope some people are looking a little bit puzzled in the audience because this is not really a good idea if you want to train a deep neural network because a mixture is your problem is is np-hard it's a difficult
+
+problem training a neural network if you just want to evaluate it you just propagate variables forward that's a much much cheaper way of evaluating that deep neural network then just solve a mixed integer problem so this would be a
+
+daft idea for solving for trying to to train a deep neural network because it's far too cumbersome a expensive to evaluate but you can sort of use it to build adversarial advantageous examples that fool deep neural networks so you
+
+can build - to design examples that will then fool a deep neural network and so that's what they effectively did so I'll tell you a little bit how this model what this model looks like so they assumed that
+
+they had a neural network with k plus 1 layers where 0 is the input layer and K is the output layer and they have a given number of notes NK nodes per unit sorry per layer and on each layer they call a unit that's effectively the max
+
+function here so they have the variable that comes out of that max function is then basically output of that of that unit that operates there and so here's here's the max this activation functions written here so we assume now that the
+
+weights are already given so we we've trained the neural network it's it's all the weights are given so the the bias and the and the weights are given and this is and I just want to model now the max function using integer optimization
+
+and so this is not something that's terribly deep but it's sort of it's it's called an implication constraint so you can model this max function just by this by the following explication here you introduce one additional variable s
+
+which is your slack variable and you have that both X and s have to be non-negative and then you have an additional very binary variable 0 that's 0 1 that switches these variables on and off so if Z is equal to 1 then you set X
+
+to 0 so you add an upper bound of X that's 0 a lower bound of 0 so if Z equals 1 X is 0 and if Z equals 0 then you said s equals 0 and then the output must be must be X and so you can easily see that that's exactly what you're
+
+getting out of here so if because if if this term here for example is it's negative if W transpose Y plus B is negative then you must choose s and so S has to be greater equal to zero which means X is zero and you're
+
+choosing that there's an alternative you can also do this with complementarity constraints but these problems are a little bit harder to solve in practice so it's actually better to do it in this way and you can also model the maximum
+
+pooling problem where you have a range of variables and you're looking at the maximum of the range of these variables and you do that by just introducing again t binary variables one for each of these expressions that you have in your
+
+maximization and then a special or that set of type one constraint which just says that you have to select exactly one of these T variables to be 1 and all others have to be 0 so that's a very simple linear constraint okay so with
+
+this you can then write the output of your deep neural network as a mixed integer optimization problem and so you the thing that you do now is you you write this activation function now in terms of this these implication
+
+constraints and down in a moment I'll tell you how to how to model those and then for a given input X 0 here this will just propagate through the system and you could measure the output for example at the top of of the variable K
+
+but the interesting thing now is that you can put a range here you can put lower and upper bounds on these on these input variables and that allows you to find nearby examples of your view from your training set that you can then
+
+force to fool your your deep neural network and so just to say how you how you can model this implication constraint you can do this algebraically instead of using implications you can use these Arabic equations to just to
+
+see that if Z is equal to 1 then MX is some big positive number X will be less than or equal to 0 of Z is equal to 1 and if Z is equal to 0 then X is unrestricted in s will be equal to 0 another big positive number and so the
+
+idea then is you you fix the weight in this problem this is now well-defined mixed integer linear optimization problem and then you're looking for the smallest perturbation for example of your input data that produces something
+
+in the output that that's undesirable for the deep neural network and you can have bounds on intermediate you can have bounce on the final layer and you can add objective functions here as well and so material did this for the digit
+
+classification they wrote this as a mixed integer problem and they were interested in actually misclassifying all possible digits from from a training set so they looked at examples where they wanted to miss classify as 0 as 5 1
+
+as 6 to a 7 and so on and they required that the activation of a wrong digit was at least 20% above that of all the other digits again that's something that you can write as a linear constraint in this
+
+optimization problem one of the things you need in order to solve this efficiently and and you can read this in their paper you need tight bounds on these upper bounds M X and M s that set the the activation function to 0 in the
+
+right way and getting those tight bounds is there's a simple trick that they use they propagate these bounds through the deep neural network up to the layer where they were they're interested in these bounds and so they solve a number
+
+of linear programs offline ahead of time in order to get the tightest possible bounds and if you do that then you can find adversarial examples for sort of deep neural networks I don't know they're called deep we've sort of up to
+
+five hidden layers with where this 20 and 10 nodes on each layer and you can solve these problems in sort of 180 seconds so three minutes of CPU time using state-of-the-art mixed integer linear solvers such as C flix
+
+for example and down here you see the digits 5 6 7 &amp; 8 so those of you are paying attention so this this is what the digits look like once they've been through Mateos falsification mixed integer problem okay
+
+the the last mixed integer sort of optimization application in machine learning that I wanted to talk about is support support vector machines and in particular sparse support vector machines so here's just a recap of what
+
+a support vector machine is we are given data that of course consists of features X J and or X I and and labels Y I that are as a minus 1 or 1 and the optimization problem that we typically solve then is we're trying to find the
+
+separating hyperplane that's described by W and B that maximizes the separation between these two sets of points that we have and you can write this problem as as just a quadratic optimization problem so this is just a continuous quadratic
+
+optimization problem you don't actually need the one norm here because X is non-negative so you're never going to sum up negative values there so that's a nice quadratic optimization problem your Hessian is the identity matrix and this
+
+problem is well studied in the literature now what we're interested in is to find solutions W where we have as few W is that are nonzero as possible because people believe that that's a good way of finding robust classifiers
+
+for example and I'll get back to that in later on so the idea then is to somehow minimize the cardinality also of this weight vector W so that's 0 norm is just the numbers of non zeros of W and of course that's not a norms if you're a
+
+student please don't write down that this is a norm if you're a professor it doesn't matter cool so this problem has been studied by a number of people so these guys looked at the zero norm penalty on W and and
+
+solve this is a mixed integer nonlinear problem so they it's difficult to minimize a problem where you have this zero norm as an objective so you want to reformulate it using binary variables and and so this is this
+
+model down here which uses conic constraints so let me let me explain how you get from the zero norm up here to this problem down here you introduce a binary variable ZJ that's one if if and only if WJ is positive and it's zero
+
+otherwise so WJ mod counts the number of non-zeros sorry Zi counts the number of non-zeros in W so then well where am I going there we go sorry about that so e transpose to one transpose Z is just a number of non-zeros in W so
+
+that's exactly the term the W zero term up there and then these two constraints down here ensure that first of all Z is a binary variable so W is either zero or positive that's going to taken care of by ZJ and then this constraint down here
+
+models the fact that if ZJ is equal to 0 then WJ is it's also equal to 0 right zj is 0 WJ squared must be 0 so WJ must be 0 on the other hand if ZJ is equal to 1 then effectively what we're saying is that UJ is now an upper bound on WJ
+
+squared and if you look at the objective here I'm summing up the U the use up here and so the U if if the Z is equal to 1 then U is equal to W J squared and it can't be any bigger than WJ squared because I'm minimizing you here so that
+
+pushing it down which means there can't be any slack and that's the same reason why if WJ is 0 then Z will also be 0 if Z was one then I have a penalty on this Z here and I would push it down to zero so this these two problems are
+
+entirely equivalent that's a nice formulation this is called a conic mixed integer problem effectively this formulation here something has something to do with the perspective of this function here so this is the quadratic the x squared
+
+function here and here now the binary variables y is equal to zero here and Y is equal to one there so as you go from the binary from zero to one you're tracing out these rays and that corresponds to the convex hull that
+
+you're tracing out there now this formulation unfortunately if you just pass this to your standard mixed integer nonlinear solver they will usually barf at this because at some point because this formulation violates a constraint
+
+qualification so it violates a sort of necessary condition for these I'll do all sufficient conditions for these algorithms to converge so in some cases they may not work the nonlinear service so there's a weaker Big M formulation
+
+but that turns out to make the relaxation really weak you no longer have the convex hull you have something that's bigger than the convex hull and so you're spending much much more time searching the branch and bound tree and
+
+so this is not really practical so no I'm Goldberg came up with her an equivalent reformulation that actually reformulates this this conic constraint as a as the sort of this tuned arm constraint here and then he applied a
+
+conic solver so he had a an an active set method a conic active set method that he wrote that he could apply to this problem and solve problems of second-order cone constraints he didn't actually minimize the number of Z J's in
+
+his objective he edited a sort of regularization to it and upper bound on the number of W J's that were non zero and he solved a relaxation so he wasn't interested in finding zero one solutions and so what he observed was first of all
+
+that I think his algorithm is this C Q SVM that it gets reasonably good classification accuracy here on the y-axis so that's reasonably good even for small values of the zero norm of W and then as s/he increases our he's kind
+
+of tracing out the the sort of the right number of non-zeros and w it's sort of almost lies on this on this r axis so he traces out almost the right number of non-zeros in w which is kind of a nice result there's an alternative
+
+formulation which is due to martin Labe and some of her colleagues from holland they looked at a mixed integer linear support vector machine so they're just minimizing the classification error sigh that's the that's the slack subject to
+
+again an upper bound on the number of non-zeros in your in your in your separating hyperplane and so for this budget constraint they again count the number of non-zeros with this z j they now have bounds on lower and upper
+
+bounds on the on these WJ and in fact some of the best results they get if they set the lower and upper bounds two to one and they can solve this problem and this is a much easier problem to solve because it's a mixed integer
+
+linear problem the previous one was a problem that had these conic constraints they're still convex constraints but they're much harder to solve numerically this is a much easier problem to solve you can warm start these problems and
+
+solve these problems to global optimality quite easily so for support vector machines this is if you're looking for sparse support vector machines there's a way of doing this using mixed integer programming
+
+okay so last a couple of minutes or so i talked a little bit about nonlinear robust optimization and so the interesting part about robust optimization is that it's related to optimization under uncertainty
+
+and it gives some insight as to why some of the regularization techniques that people used in machine learning might be the right way to prove to proceed and so here we're looking at optimization problems where
+
+we're minimizing again a nonlinear objective subject to this constraint that now has to hold for all u and u and u is not a finite set anymore it's it could be an interval for example or a region bounded bounded region and so
+
+this set of uncertain parameters is usually a closed convex set but that means that this constraint that we have this constraint here is now semi infinite constraint because I have an infinite number of indices or parameters
+
+for which this constraint has to hold and it's kind of interesting if you look at small examples then even though the constraint here in this example is a linear constraint in X that has to hold for all u if you trace this constraint
+
+out you actually get this nonlinear effect here now robust linear constraints and to some extent conic constraints are easy to solve so here's your one minute or so introduction into robust constraints so imagine and this
+
+is due to Benton and Morosky and other people imagine that your robust constraint is just this linear constraint where a so the this vector a here's uncertain it belongs to this uncertainty set which is also described
+
+by a set of fine or linear inequalities here then saying that this constraint holds for all a that are in this set is the same as saying that if I minimize this function here overall a and u then I'm greater equal to zero right that's
+
+like saying if we want to find ya and now I can apply duality to this optimization problem here so I just write down the Lagrangian introduced Lagrange multipliers lambda corresponding to these constraints down
+
+here be transposed a greater equal to C and if I write down the dual problem then it turns out that I can eliminate the variables AE now from this dual problem so this dual problem now is just a pro optimization problem maximization
+
+problem just in the dual variables lambda and this is just duality for linear programming and now you just that well if the maximum of this function over the set down here is greater equal to zero if and only if I
+
+can find a feasible point for which this assertion holds and so I've now replaced this semi infinite constraint up here that had to hold for all a that lie in this are fine set here so this is a bounded region I've replaced this by
+
+something with this nothing red anymore and so this is a finite set of inequalities so Retta Sapir red was the thing that caused us to have semi infinite constraints the same tractable extensions hold for other sets of
+
+constraints we have robust constraints and uncertainty sets if they're in general polyhedral you get a linear program I just showed you this case you can have ellipsoidal uncertainty sets so these will correspond to maybe
+
+uncertainties in terms of normal distributions and you can have even conic constraints and get similar results and so karemera sand but see but CMOS looked at problems sort of robust optimization for support vector machines and in
+
+particular they looked at having a location allocation error UI so the observations that you make X I is the true observation perturb by some UI and and this UI is unknown that's some unknown error but you're assuming that
+
+this lies for example in this ellipsoidal uncertainty set and then using similar arguments to the one that you just saw for linear programming you can show that this semi infinite constraint which is part of your which
+
+would be part of your robust support vector machine training problem where this UI comes from this ellipsoidal set here can be rewritten now in terms of this deterministic constraint so what you've added here is you've added a
+
+2-norm constraint that corresponds to the square root of Sigma Sigma is a diagonal scaling matrix for example certainly positive definite that you can add to it and so this is really nice this is now a second-order Khan
+
+constraint this algorithm is polynomial time rhythms interior point methods then can solve these problems and so this generalizes and I don't want to say too much about it I'm out of time already this generalizes to much more general
+
+constraints so you can have an uncertainty said you here where you have some distributed uncertainty with a parameter D and then what you end up having in your deterministic equivalent is this dual norm here that pops up here
+
+and that's exactly what you saw on the previous slide the dual norm of the two norm is the two norm itself and so that sort of explains this and there's a nice argument in this paper by by these guys that shows that regular eyes classifiers
+
+of more robust because they satisfy this worst-case principle and in fact you can provide even probabilistic interpretations of these ideas if you if you move to chance constraints which is a different concept in optimization
+
+under uncertainty okay so to conclude I'm sorry I'm over time I've showed you a little bit about mixed integer optimization and how that impacts machine learning in sort of three areas symbolic regression where you're
+
+manipulating the symbolic parts of your tree mixed integer problems for deep neural networks and support vector machines with zero norm regularizes and then I showed a little bit about robust optimization for machine learning and so
+
+there's lots of extensions and challenges I think where optimization can play a role I've just written two here but in terms of using optimization technology I think there's sort of interesting niche markets but ultimately
+
+it's not the panacea so this is a big problem that requires more technology than just optimizations thank you

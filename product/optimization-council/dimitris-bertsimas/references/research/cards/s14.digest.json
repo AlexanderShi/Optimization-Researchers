@@ -1,0 +1,245 @@
+[
+ {
+  "id": "S325",
+  "year": "2021",
+  "title": "Personalized prescription of ACEI/ARBs for hypertensive COVID-19 patients",
+  "read_level": "full",
+  "contribution": "Builds an EMR-plus-registry cohort of 3,643 hypertensive COVID-19 inpatients from five countries and an ensemble regress-and-compare voting rule that personalizes ACEI/ARB prescription; on an external cohort the rule is estimated to lower in-hospital mortality/morbidity by 1.0% against the standard of care, and an online tool ships with the paper (read as the medRxiv preprint).",
+  "problem_entry": "DA+ML+AP. Evidence on ACEI/ARBs for hypertensive COVID-19 patients was inconclusive with no consensus, RCTs were scarce, and causal methods give average effects (pp. 1-2); regress-and-compare is criticized for model-specific errors (p. 3). Asks per patient whether the drug class lowers in-hospital mortality/morbidity (p. 2).",
+  "key_idea": "Match treated and untreated patients and train six classifiers per arm. Each votes for treatment when predicted risk falls by at least 5% relative; the majority wins, with an AUC tie-break (p. 6). Builds on the group's coronary-artery-disease ensemble [8] (p. 3); five metrics stand in for the missing counterfactual (pp. 7-8).",
+  "assumptions": "medRxiv preprint read. 3,643 patients, 38 hospitals, five countries; derivation Spain, validation Italy/Germany/Ecuador/US (pp. 1, 3-5). 29 features, MICE imputation, features under 70% presence dropped (p. 4). Cardinality matching reaches SMD < 0.05 (pp. 6, 8). Drug effect taken in isolation, binary lab cut-offs, results not causal (p. 14). Derivation arm counts (2,706, p. 8) differ from the 2,842 stated on p. 3.",
+  "proof_devices": [
+   "n/a: no formulation or proof; cardinality matching [59] and OCT are cited tools (p. 6)",
+   "Decision rule: relative risk reduction of at least 5% per learner, majority vote of six, tie broken by the mean AUC of each side's voters (p. 6)",
+   "Evaluation formulas: PE on discordant patients, CPE rescaled by the new site's event rate, PR with each learner as ground truth for both arms and the range reported (p. 7)"
+  ],
+  "experiments": "Python 3.6.3 and Julia 1.2.0 (scikit-learn, XGBoost, Interpretable AI; p. 6). Arm-model AUC 0.819/0.800 on test and 0.744/0.731 on validation (Table 3, p. 11). Validation: PE -1.0%, CPE -0.5%, PR -0.7% to -4.5%, agreement 48.2%, prescription AUC 0.774; prescriptions rise from 35.0% to 46.8% (pp. 8-9; Table 5, p. 11). Test PE is +0.008, a worsening the text prints as '-0.8%' (p. 9). Threshold choice is in an appendix not in the file; no field test.",
+  "positioning": "Follows the group's ensemble voting prescriptions for coronary artery disease and hypertension [7, 8]. Placed after Rubin's potential outcomes, regress-and-compare (criticized), causal trees and forests, and optimal prescriptive trees (pp. 2-3).",
+  "writing": "Highlights plus a five-bullet contribution list; 'first' claims in the abstract and discussion (pp. 1, 11). Clinical findings are hedged as hypotheses for future studies (pp. 12-13). An explicit limitations section ends with 'not causal' (p. 14).",
+  "limits_future": "Limits: treatment taken in isolation; February-May 2020 data with timing confounders; binary cut-offs; not causal; outcome-blind harms such as birth defects (pp. 13-14). Future: N treatments by the same voting scheme, EMR integration, testing at other hospitals (p. 14).",
+  "method_links": [
+   {"method": "Method 5", "relation": "evidence", "note": "Prescriptions scored against the standard of care on the patients where they differ; agreement reported but declared not a target; validation in other countries; non-causality and outcome-blind harms printed. Variant aspects: the owner's rule is shifting practice, counterfactuals come from the prescribing models, no field test.", "pages": "pp. 7-9, 13-14"},
+   {"method": "Method 6", "relation": "evidence", "note": "The ensemble-prescription framework is reused from two earlier group papers [7, 8]; two ORC co-authors are marked as equal contributors (Orfanoudaki, Wiberg); a public interface (covidanalytics.io) ships with the paper.", "pages": "pp. 1, 3, 11"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "Counterfactual replay against the historical decision-maker", "evidence": "PE compares predicted risk under the recommended treatment with the observed event rate only where the recommendation differs from the doctors' choice; PR scores given and prescribed treatments with the same learner, range over six learners.", "pages": "p. 7; Table 5 p. 11"},
+   {"pattern": "Ship a public tool with the paper", "evidence": "An online application at covidanalytics.io lets clinicians enter admission data and see risk under each alternative.", "pages": "p. 11"},
+   {"pattern": "external validation at a partner hospital abroad", "evidence": "Models derived on Spanish registry and hospital-group data are validated on 801 patients from Italy, Germany, Ecuador and a Boston hospital.", "pages": "pp. 3-4, 9"}
+  ],
+  "transferable": [
+   "Score a prescription rule under several evaluators: the ensemble's own estimate (PE), a version rescaled by a new site's event rate (CPE), and each single learner as ground truth for both arms with the min-max range reported (PR) (p. 7; Table 5, p. 11).",
+   "Compute benefits only on patients whose recommendation differs from the care they received, and report agreement separately while saying it is not a target (pp. 7-8).",
+   "Require a minimum relative risk reduction (5%) before recommending treatment, so near-ties do not drive prescriptions (p. 6).",
+   "Split derivation and validation cohorts by country rather than at random (pp. 3-4)."
+  ],
+  "coauthors": "Alison Borenstein, Luca Mingardi (MIT Sloan); Omid Nohadani (Benefits Science Technologies); Agni Orfanoudaki and Holly Wiberg (MIT ORC, equal contributors); Bartolomeo Stellato (Princeton); Pankaj Sarin, Dirk J. Varelmann (Brigham and Women's); Vicente Estrada, Carlos Macaya, Ivan J. Nunez Gil (Hospital Clinico San Carlos) (p. 1)",
+  "quotes": [
+   {"text": "While the agreement rate is informative, the goal of the prescriptive algorithm is to improve upon the current standard of care and thus a high agreement rate is not necessarily desirable.", "page": 8},
+   {"text": "Finally, we note that these results are not causal and do not isolate the effect of ACEI/ARBs in patient outcomes.", "page": 14}
+  ]
+ },
+ {
+  "id": "S354",
+  "year": "2021",
+  "title": "Algorithmic insurance",
+  "read_level": "partial",
+  "contribution": "Models a classifier's threshold as CVaR minimization of scenario liability losses under a closed-form trigonometric calibration surrogate. Proves closed-form optimal thresholds plus gap and quadratic penalty bounds against accuracy maximization, and designs a dual-limit insurance contract whose mandated threshold turns insurance into governance, on a literature-calibrated mammography case (read as arXiv v3, 2026).",
+  "problem_entry": "DA+ML+AP. AI errors create liability that insurers cannot price and developers cannot link to design (pp. 1-2). The entry is the unpriced operational choice, the classification threshold, usually set by accuracy (pp. 3, 14); stated as CVaR minimization over the threshold, then contract design (pp. 10-11).",
+  "key_idea": "A one-parameter trigonometric calibration curve (k, alpha) makes false-positive and false-negative rates closed-form in the threshold, so the CVaR-optimal threshold has closed forms. Accuracy-optimal practice is priced against it, and a dual-limit contract mandates the optimal threshold as a coverage condition (pp. 8-11, 18-19).",
+  "assumptions": "arXiv v3 read. Uniform, calibrated scores; alpha the class-0 share, k in (0, pi/2] (p. 8); J cost scenarios (p. 10). Stationarity within a contract 'to ensure analytical tractability' (p. 32); scenario-based costs (p. 7); CVaR premiums (p. 18); no ties (p. 11); fixed tail set for sensitivities (p. 12); exponential drift (p. 22); multiplicative interpretability effect (p. 23). Case study sets alpha to cancer prevalence while Table 1 calls it the non-cancer rate, and k = 1.745 exceeds pi/2 (pp. 25-27).",
+  "proof_devices": [
+   "Rockafellar-Uryasev CVaR reformulation of threshold selection (pp. 10-11)",
+   "Theorem 1: closed-form optimum per fixed tail set in three regimes, global optimum by enumerating self-consistent tail sets; proof by convexity of tau -> CVaR (Lemma EC.8), first-order conditions per branch (EC.14-EC.17) and region exclusivity (Lemma EC.7) (p. 11; pp. 49-51)",
+   "Lemma 1: accuracy-optimal threshold solves P(Y=1|tau) = 1/2, independent of costs (p. 14)",
+   "Propositions 3-4: threshold gap linear in the tail-cost-ratio deviation via derivative bounds; CVaR penalty bounded quadratically in the gap via curvature constants (pp. 15-16; proofs pp. 53-54 not read)",
+   "Theorem 2: insurance value = risk transfer + capital relief + calibration gain (pp. 19-20); Propositions 5-7: value limits, contract length under drift, interpretability first-order condition (pp. 21-24)"
+  ],
+  "experiments": "Surrogate fitted to calibration curves of LR, RF and GB on synthetic data with alpha 0.40-0.60: 120 fits, median R2 0.879 (pp. 56-57); the main text says 80 and includes neural networks (p. 9). Literature-calibrated mammography case (claim emergence 2%/20%, 3%/35%; pp. 25-26). Accuracy thresholds cost 22.0%/2.9% (screening) and 73.7%/1,313% (diagnosis) more CVaR (Table 1, p. 27). Insurance value about 15%, 14-16%, up to 64.6% (pp. 28-29); contract lengths 33.8-16.4 months (p. 30). No real classifier or claims data.",
+  "positioning": "Bridges algorithm aversion and human-AI collaboration, OR work on threshold calibration (Kallus et al. 2022; Ban-Rudin 2019, profit not tail risk) and insurance economics, with CVaR from Rockafellar-Uryasev; industry reports motivate the market (pp. 2-6). No self-citation of Bertsimas's own work (pp. 33-37).",
+  "writing": "Structured OM abstract (problem definition, methodology/results, managerial implications) with headline percentages (p. 1); four contribution bullets (pp. 3-4). Each result is followed by an intuition and managerial reading (pp. 11-25); managerial-implications and limitations subsections (pp. 31-32). The prose order of regimes does not match Theorem 1's numbering (pp. 11-12).",
+  "limits_future": "Limits (p. 32): stationarity, binary classification only, scenario-based costs, simplified enforceability, single-organization view; surrogate validated only for alpha 0.40-0.60 (p. 57). Future (p. 32): regression, RL and generative AI; robust optimization against ambiguity in scenario probabilities and costs; market-level and multi-agent dynamics.",
+  "method_links": [
+   {"method": "Method 3", "relation": "variant", "note": "Property (low tail liability), knob (threshold, with beta), proved gap and quadratic penalty bounds, a price table, and a hand-off: the insurer mandates the knob. But the price is that of ignoring the property (accuracy maximization), and the bounds depend on the optimum and a stylized surrogate.", "pages": "pp. 15-17, 27-29"},
+   {"method": "Method 5", "relation": "variant", "note": "The threshold is judged by the liability of its decisions, not accuracy, against practice's rule (accuracy maximization); but there is no owner, partner data or field test, and every parameter is taken from the literature.", "pages": "pp. 14-17, 25-30"},
+   {"method": "Method 1", "relation": "variant", "note": "Tractability comes from a surrogate whose error rates integrate in closed form plus the CVaR LP form, not from keeping a solver class; the boundary (stationarity, binary classification) is printed.", "pages": "pp. 8-11, 32"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "analyzable surrogate of the practical learner", "evidence": "A one-parameter trigonometric calibration curve stands in for real classifiers so error rates integrate in closed form; its fit to LR, RF and GB calibration curves is reported (median R2 0.879), with the near-balanced validation range stated.", "pages": "pp. 8-10; pp. 56-57"}
+  ],
+  "transferable": [
+   "Pick a one-parameter surrogate of a learner's calibration curve whose error rates integrate in closed form, then fit it by least squares to real learners' calibration curves and report R2 by regime before relying on it (p. 9; pp. 56-57).",
+   "For a CVaR-optimal threshold: take the Rockafellar-Uryasev form, solve first-order conditions branch by branch for a fixed tail set, then enumerate tail sets for a self-consistent optimum (p. 11; pp. 49-51).",
+   "Measure practice against the optimum with a decision gap and a relative risk penalty, and bound the penalty quadratically in the gap with curvature constants (pp. 15-16).",
+   "Decompose an intervention's value into risk transfer, capital relief and calibration gain, and report each by firm type (pp. 19-20; Figure 5, p. 29).",
+   "Model claim friction as error-type-specific emergence rates that scale costs, and report results with and without friction (pp. 18, 26-27)."
+  ],
+  "coauthors": "Agni Orfanoudaki (Said Business School, Oxford; p. 1)",
+  "quotes": [
+   {"text": "Unlike traditional insurance that merely transfers risk, algorithmic insurance can function as both a financial instrument and an operational governance mechanism", "page": 1},
+   {"text": "Guided by current algorithmic insurance offerings, we adopt the assumption of stationarity within contract periods to ensure analytical tractability.", "page": 32}
+  ]
+ },
+ {
+  "id": "S366",
+  "year": "2021",
+  "title": "Frequency estimation in data streams: Learning the optimal hashing scheme",
+  "read_level": "full",
+  "contribution": "Replaces random hashing in streaming frequency estimation with an optimized hashing scheme learned from a stream prefix: an exact MILO, block coordinate descent, and an O(nb) DP for the feature-free case, plus a classifier for unseen elements. On AOL queries it beats Count-Min and an ideal-oracle learned Count-Min by one to two orders of magnitude in average error (read as arXiv v2).",
+  "problem_entry": "IO+ML. Streaming frequency estimation in sublinear space with an observed prefix and element features (pp. 1, 3). Count-Min hashes at random and the learned Count-Min 'remains heuristic' (pp. 2-4); the entry is to optimize the hashing scheme itself (p. 2).",
+  "key_idea": "Assign prefix elements to buckets to minimize lambda*estimation error (estimate = bucket average) + (1-lambda)*feature-similarity error, then train a classifier from features to buckets for unseen elements (pp. 4, 7). A Bloom-filter extension tracks new elements (p. 7).",
+  "assumptions": "arXiv v2 read. Prefix frequencies stand in for the stream's; uniform per-element error chosen over frequency weighting so rare elements are estimated well (p. 4); M >= max prefix frequency (p. 5). Synthetic: Gaussian feature groups (p = 2), arrival probability proportional to 1/g, prefix fraction g0 (pp. 7-8). Real: AOL log, 21M queries, day 1 as prefix, frequency-proportional subsample of 200,000+ unique queries (pp. 9, 11).",
+  "proof_devices": [
+   "Theorem 1: exact MILO with O(n^2 b) variables and constraints; multiply by bucket counts, linearize error x assignment with big-M and assignment x assignment with McCormick inequalities (p. 5; proof p. 13)",
+   "Size count (about 10^11 variables at case-study scale) licenses a block coordinate descent with incremental bucket statistics, O(n^2 b) per iteration, no global guarantee (pp. 5-6)",
+   "lambda = 1 reduces to 1-D k-median, solved exactly by dynamic programming in O(nb) and used as a warm start (pp. 5-6)"
+  ],
+  "experiments": "Python 3, Xeon E5-2690, Gurobi (version, limits, gap not given; pp. 8, 15); 10 repeats synthetic, 5 real. MILO barely improves on BCD at G = 6; BCD falls behind exact DP beyond G = 10; classifier results depend on the data-generating process (p. 9). AOL: vs Count-Min and ideal-oracle learned Count-Min at best hyperparameters (p. 10): one to two orders of magnitude lower average error, 45-90% lower weighted error (p. 12). Real runs use BCD at lambda = 1 although DP is exact; classifier memory uncounted; Bloom extension not evaluated.",
+  "positioning": "Same problem as Hsu-Indyk-Katabi-Vakilian's learned Count-Min (ICLR 2019), but replaces random hashing by optimization. Credits CMS guarantees and LCMS asymptotic optimality under distributional assumptions (pp. 3-4); placed in learning to hash and learning-augmented algorithms, citing the group's voice-of-optimization and online-MIO papers (p. 2).",
+  "writing": "Problem statement with an example first, three contribution bullets and a 'first' claim (pp. 1-3); five numbered synthetic experiments with bullet takeaways (pp. 8-9); headline improvement figures in the abstract and p. 12; no limitations or future-work paragraph (pp. 12-13).",
+  "limits_future": "No stated limitations or future work (pp. 12-13). Visible limits: BCD degrades beyond G = 10, results depend on the data-generating process, errors grow over time for all methods, the advantage narrows with memory, and there is no error guarantee comparable to Count-Min's (pp. 3, 9, 11-12).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "An object owned by the streaming-algorithms tradition (a random sketch) is rewritten as an exact MILO; the boundary is printed as a size count, beside the exactly solvable lambda = 1 case.", "pages": "pp. 4-6, 13"},
+   {"method": "Method 4", "relation": "evidence", "note": "DP optimum warm-starts BCD; exact MILO and DP on small instances measure the heuristic; incumbents dueled in their strongest form; says the method wins in low-memory regimes. Variant: no certificate or gap at scale, no solver version or limits (Heuristic 3 shape: size count, local search, MIO kept for small instances).", "pages": "pp. 5-6, 8-12"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "solution-as-label", "evidence": "Optimal bucket assignments of prefix elements become class labels for a classifier on features that hashes unseen elements.", "pages": "p. 7"},
+   {"pattern": "exact optimum on a small solvable instance as the certificate for a heuristic", "evidence": "MILO at G = 6 and the exact lambda = 1 DP up to G = 12 measure the suboptimality of block coordinate descent.", "pages": "pp. 8-9"},
+   {"pattern": "Size-count intractability verdict licensing a tailored heuristic", "evidence": "Formulation (2) would need about 10^11 variables and constraints at case-study scale, so a block coordinate descent is developed, with no timed exact attempt at that scale.", "pages": "p. 5"},
+   {"pattern": "optimistic upper bound for the incumbent", "evidence": "The learned Count-Min baseline gets an ideal heavy-hitter oracle (true test-period heavy hitters) and its best hyperparameters, so a win is conservative.", "pages": "p. 10"}
+  ],
+  "transferable": [
+   "Linearize a bucket-average objective: multiply error inequalities by bucket counts, replace error x assignment by big-M constraints with M the largest observed value, and assignment x assignment by McCormick inequalities (p. 13).",
+   "Solve the exactly solvable special case (lambda = 1 by DP) and use it as warm start and yardstick for the general heuristic (pp. 6, 9).",
+   "Use an optimal assignment of observed items as labels for a feature classifier, so the scheme extends to unseen items (p. 7).",
+   "Give the baseline an ideal oracle and its best hyperparameters, so a win is conservative (p. 10).",
+   "Report a uniformly weighted and a frequency-weighted error metric, and say which method wins where (pp. 11-12)."
+  ],
+  "coauthors": "Vassilis Digalakis Jr. (MIT ORC PhD candidate advised by Bertsimas; p. 15)",
+  "quotes": [
+   {"text": "In general, however, their approach remains heuristic, does not guarantee optimal performance, and possibly throws away information by taking hard, binary decisions.", "page": 4},
+   {"text": "Nevertheless, solving a mixed integer linear optimization problem of that size can still be prohibitive in the applications we consider.", "page": 5}
+  ]
+ },
+ {
+  "id": "S386",
+  "year": "2021",
+  "title": "A robust optimization approach to deep learning",
+  "read_level": "partial",
+  "contribution": "Derives two closed-form, backprop-trainable upper bounds of the adversarial loss from robust-optimization duality: aRUB (empirical, Lp) and RUB (provable, L1, via a convex-concave split of each ReLU layer). On 46 UCI and three vision data sets RUB leads at large radii and certifies L1 robustness (read as arXiv v2, 2023, retitled 'Robust Upper Bounds for Adversarial Training').",
+  "problem_entry": "RO+ML. Adversarial training uses heuristics that fail on larger or new attacks, or layerwise convex relaxations whose gaps propagate (pp. 2-3). ML has not used 'the more advanced tools' of RO (p. 3), but networks are neither convex nor concave and training must stay scalable (p. 5).",
+  "key_idea": "Bound the loss by per-class worst-case logit differences (Lemma 1, p. 7). aRUB linearizes the logits, not the loss, with a dual-norm penalty (p. 8). RUB applies conjugate duality layer by layer to a convex-concave split of each ReLU layer; with an L1 ball the dual is a maximum over 2M points, a provable closed-form bound (pp. 10-15).",
+  "assumptions": "arXiv v2 read. Feed-forward ReLU networks (p. 6); losses translation-invariant and monotone (cross-entropy, hinge, 0-1; not squared or absolute error) (pp. 6-7); provable only for L1 balls (p. 14); two-layer derivation, L layers in Appendix B (p. 11); t fixed at the sign pattern, valid for any t in [0, 1] (p. 15); memory grows with input dimension (pp. 3, 19).",
+  "proof_devices": [
+   "Lemma 1: loss bounded by plugging per-class worst-case logit differences into the nominal loss, using translation invariance and monotonicity (p. 7)",
+   "Lemmas 2-4: convex and concave conjugate (Fenchel) duality for compositions, conjugates of ReLU pieces (pp. 10-11)",
+   "Theorem 5 and Corollary 6: sup-inf form linear in the first layer, dual norm for the uncertainty set; aRUB recovered by setting s = t to the sign pattern (pp. 12-13)",
+   "Theorem 7: min-max inequality plus L1/L-infinity duality gives a maximum over 2M vertices (p. 14)",
+   "Empirical validity audit of the approximate bound against PGD loss (Table 1, p. 10)"
+  ],
+  "experiments": "46 UCI data sets plus MNIST, Fashion-MNIST, CIFAR; foolbox PGD/FGM at defaults (p. 15). Per-defense, per-attack, per-radius validation tuning; L1 radii scaled by sqrt(m); over 40,000 networks (p. 16). Baselines PGD, FGSM, COAP, a first-order Baseline, Nominal (pp. 16, 20). aRUB/PGD lead at small radius, RUB at large, except CIFAR (pp. 16, 21). Certified L1 accuracy 86.02%, 97.11%, 45.66% (p. 22). Throughput reported (pp. 18, 22). Code released (p. 24); RUB not run on CNNs (p. 35).",
+  "positioning": "Against layerwise relaxations (Wong-Kolter, Gowal et al., Raghunathan et al.) and heuristic adversarial training (Goodfellow, Madry PGD, Wong FGSM) (pp. 2-3). Lineage: Ben-Tal-den Hertog-Vial, the Bertsimas-den Hertog RO book and robust classification (S104) (pp. 3-5).",
+  "writing": "Two named methods with contrasting promises (empirical vs provable) set out in bullets (pp. 3-4); the three-step derivation announced before the theorems (p. 11); results narrated by radius regime; an explicit caveat that certified bounds do not show higher accuracy (p. 22); code link in abstract and p. 24.",
+  "limits_future": "Limits: guarantees only for L1, memory for high-dimensional inputs, poor CIFAR performance for all methods, aRUB valid only empirically (pp. 10, 14, 21-22). Future: other norms, tightness across layers (p. 23), RUB for CNNs (p. 35).",
+  "method_links": [
+   {"method": "Method 1", "relation": "variant", "note": "Duality yields a robust counterpart, but the class kept is the training pipeline (a closed-form, unconstrained loss trainable by backpropagation), stated as requirement (ii); the boundary (L1 only, 2M-point memory, no CNN bound) is printed.", "pages": "pp. 5, 10-15, 35"},
+   {"method": "Method 4", "relation": "evidence", "note": "Named incumbents dueled on 49 data sets under equal per-attack validation tuning; winners stated by radius regime, including the losing CIFAR case; speeds reported. Variant: no MIO; the certificate is a lower bound on adversarial accuracy, with the caveat that it does not show higher accuracy.", "pages": "pp. 15-22"},
+   {"method": "Method 3", "relation": "variant", "note": "The radius is the knob and accuracy-by-radius tables form the price curve; robust training raises natural accuracy at radius 0 (a negative price, also claimed for SVMs and trees); no knob-probability bound.", "pages": "pp. 4, 16, 21"},
+   {"method": "Method 6", "relation": "evidence", "note": "The RO-for-ML programme extends from robust classification to deep networks with the RO-book co-author and an ORC co-author; code released, relevant to the skill's reproducibility checkpoint.", "pages": "pp. 3-5, 24"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "score rivals with your own certificate", "evidence": "The RUB bound is applied to networks trained by every defense, with hyperparameters re-selected for the bound, to report certified lower bounds of adversarial accuracy for all methods, with the caveat that a better certificate is not a better accuracy.", "pages": "pp. 22-23"}
+  ],
+  "transferable": [
+   "For a loss depending only on logit differences and monotone in them, bound the adversarial loss by plugging per-class worst-case differences into the nominal loss (p. 7).",
+   "Split each ReLU layer into convex and concave parts and use conjugate duality to push the inner maximization down one layer at a time (pp. 10-12).",
+   "Choose the uncertainty norm whose dual is a finite maximum (L1 to L-infinity) to eliminate auxiliary maximization variables (p. 14).",
+   "Audit an approximate bound by the share of trained networks for which it upper-bounds the strongest attack's loss (Table 1, p. 10).",
+   "Scale radii across norms so the balls contain the same L2 ball, and tune each defense per attack type and radius on validation (p. 16).",
+   "Certify all competitors with your bound and state that a better certificate is not a better accuracy (p. 22)."
+  ],
+  "coauthors": "Xavier Boix (MIT Brain and Cognitive Sciences); Kimberly Villalobos Carballo (MIT ORC); Dick den Hertog (Amsterdam Business School) (p. 1)",
+  "quotes": [
+   {"text": "This expression may not always be an upper bound of the adversarial loss (Eq. (2)); however, we observe across a variety of experiments that usually it is indeed an upper bound (see Table 1).", "page": 8},
+   {"text": "While these results are only lower bounds for the adversarial accuracy and we cannot claim a better accuracy for RUB than for the rest of the methods", "page": 22}
+  ]
+ },
+ {
+  "id": "S395",
+  "year": "2021",
+  "title": "Toward an optimized staging system for pancreatic ductal adenocarcinoma: a clinically interpretable, artificial intelligence–based model",
+  "read_level": "full",
+  "contribution": "Uses SHAP to favour lymph node ratio over positive node count, then optimal classification trees on tumor size and LNR, to build an interpretable PDAC staging model on 4,105 patients from six centres. It beats AJCC 8th edition AUC (validation 0.638 vs 0.586 at 1 year, 0.675 vs 0.647 at 3 years) and nearly matches XGBoost on the same inputs.",
+  "problem_entry": "ML+AP. AJCC 8th edition treats T and N as independent and uses positive lymph nodes despite data favouring the lymph node ratio; AUC about 0.6 (p. 2). Entry: raise discrimination 'without introducing new factors' via LNR and T-N interactions (pp. 2-3).",
+  "key_idea": "Choose LNR over PLN by SHAP importance in multivariable XGBoost (pp. 3-5). Then train 1-year and 3-year OCTs on tumor size and LNR only, so the trees stay comparable with AJCC and show interactions as cutoffs; compare with AJCC and with XGBoost on the same two inputs (pp. 3-4, 8).",
+  "assumptions": "4,105 resected patients, 2000-2017, six institutions in five countries, after exclusions (pp. 3, 10); central report form and central staging (p. 3); horizon outcomes binarized with explicit censoring rules, 508 censored before 3 years excluded and compared (pp. 4-5, 13); random 70/30 split of pooled data, so validation is internal (p. 4); OCT depth and minimum leaf size by grid search and cross-validation (p. 4).",
+  "proof_devices": [
+   "n/a: no formulation, solver or proof in the article; OCT rationale and computing details are in the Data Supplement, not in the file (p. 4)"
+  ],
+  "experiments": "Validation AUC, OCT vs AJCC vs XGBoost: 0.638/0.586/0.654 at 1 year, 0.675/0.647/0.690 at 3 years (Table 2, p. 6); in the >= 15-node subgroup, OCT 0.647 and 0.698 (pp. 5-6). AUC only, no confidence intervals or calibration. Cutoffs cross-checked with SHAP interaction values from the multivariable XGBoost (pp. 5-6); 3-year tumor-size cutoffs 1.85/4.35 cm near AJCC's 2/4 cm (p. 6).",
+  "positioning": "Joins the PLN-versus-LNR debate in PDAC (refs 3-5, 12-15) and AJCC validation studies (refs 1, 2, 8). Presents OCT and SHAP as AI for clinicians; cites the group's POTTER calculator and Optimal Imputation (pp. 2-4, 9).",
+  "writing": "Clinical journal format with a Context box (key objective, knowledge generated, relevance) claiming the first AI-based modification of an AJCC system (p. 3); recommendations hedged ('if these observations are confirmed', p. 8); limitations paragraph (p. 7).",
+  "limits_future": "Limits: inter-centre heterogeneity, censored patients excluded, incomplete adjuvant chemotherapy data (p. 7). Future: external validation in other regions; multivariable OCT for more AUC at the cost of comparability; prescriptive applications (p. 8).",
+  "method_links": [
+   {"method": "Method 5", "relation": "variant", "note": "The owner's current rule (AJCC, 'the gold standard') is the baseline at matched inputs, but the score is a prognostic AUC, not a decision; prescriptive use is named only as a future direction.", "pages": "pp. 2, 6, 8"},
+   {"method": "Method 4", "relation": "variant", "note": "The incumbent is dueled at matched inputs and the black-box ceiling (XGBoost) is reported even though the OCT trails it slightly; no certificate, gap or solver details in the article.", "pages": "pp. 5-6, 8"},
+   {"method": "Method 6", "relation": "evidence", "note": "ORC co-authors (Wiberg, on an NSF graduate fellowship; Ma; Huang), the group's own tools (OCT, Optimal Imputation), and a calculator hosted at alexandriahealth.gitlab.io while Bertsimas discloses stock in Alexandria Health.", "pages": "pp. 2, 5, 8-9"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "confound-matched comparison: equalize the budget or dimension the rival could blame", "evidence": "The OCT uses only the two inputs of the AJCC schema (tumor size and nodal status), declining extra predictors that would raise AUC but preclude direct comparison.", "pages": "pp. 3, 8"},
+   {"pattern": "Ship a public tool with the paper", "evidence": "An online calculator gives patient-level 1-year and 3-year survival estimates from the trees.", "pages": "pp. 5, 9"},
+   {"pattern": "cross-method cutoff triangulation", "evidence": "Tree split points (for example 3.05 cm tumor size at 1 year) are checked against the points where SHAP interaction values from an XGBoost model change sign; agreement is presented as internal validation.", "pages": "pp. 5-6"}
+  ],
+  "transferable": [
+   "Give the challenger only the incumbent's inputs so any gain comes from cutoffs and interactions, and state what that costs (pp. 3, 8).",
+   "Settle a choice between two encodings of a variable by SHAP importance in a multivariable model before building the interpretable model (pp. 4-5).",
+   "Check tree split points against sign changes of SHAP interaction values from another model class (pp. 5-6).",
+   "Binarize survival at fixed horizons with written censoring rules and tabulate censored against uncensored patients (pp. 4, 13)."
+  ],
+  "coauthors": "Georgios Antonios Margonis (MSKCC and Johns Hopkins; corresponding; equal contribution); Yifei Huang, Holly Wiberg, Yu Ma (MIT ORC); 23 further co-authors, mostly surgeons, from ten institutions (pp. 2, 8)",
+  "quotes": [
+   {"text": "Although the inclusion of additional predictors would have improved the model’s AUC, it would have also precluded direct comparison with the AJCC schema and complicated the interpretation of interactions, thus frustrating the principal aims of the study.", "page": 8},
+   {"text": "Although external validation in patients from different geographic areas will have to await future studies", "page": 8}
+  ]
+ },
+ {
+  "id": "S421",
+  "year": "2021",
+  "title": "The price of diversity",
+  "read_level": "full",
+  "contribution": "Proposes a min-min MIO that flips a closed-form number of labels per group while training logistic regression (outer approximation) or an SVM (MIQO) under merit-preservation constraints to reach epsilon-demographic parity. Reports low and sometimes negative prices of diversity on law, COMPAS and credit data, and explains the flips with OCTs.",
+  "problem_entry": "ML+IO+AP. Historical selection data carry systemic bias that models reinforce; removing protected attributes fails (pp. 1-3). Pre-processing, post-processing and Lagrangian fairness methods have drawbacks (pp. 3-4), and demographic parity alone ignores merit within groups (p. 7). Goal: epsilon-parity with bounded merit change.",
+  "key_idea": "Flip exactly ceil(tau_w n_w) and ceil(tau_b n_b) labels while fitting LR or SVM, with constraints keeping the mean z-score of merit attributes among positives within delta (pp. 8-10). The budgets come in closed form from epsilon with total positives fixed (pp. 14-15). An OCT on the flips gives rules for decision makers (pp. 27-33).",
+  "assumptions": "Two groups per protected attribute (p. 8); diversity = demographic parity, merit = mean z-scores of chosen attributes (pp. 7, 9); alpha-bias not evidence of bias (p. 7); covariates standardized within groups (p. 15). LSAC 20,738 rows, COMPAS label as outcome, Taiwanese credit (pp. 17, 21, 24); epsilon 0.01 or 0.001 (pp. 18, 24). Delta, train/test split and non-LSAC sizes not stated (pp. 16-28).",
+  "proof_devices": [
+   "Big-M linearization of z x beta products and cross-multiplied linearization of merit-ratio constraints (p. 10)",
+   "Outer approximation with lazy-constraint callbacks for the convex MINLO; NLP step is a plain logistic regression on flipped labels; finite convergence cited from Fletcher-Leyffer (pp. 10-12)",
+   "SVM version as an MIQO for an off-the-shelf solver (p. 14)",
+   "Closed-form flip budgets from two linear equations (target gap, equal flip counts) (pp. 14-15)"
+  ],
+  "experiments": "Merit means by group for Data/SVM/DP-SVM/LR/DP-LR (Tables 1-3, pp. 18, 21, 24) and price curves against epsilon (Figures 2, 4, 5). Price small (under 0.15 SD for COMPAS) and negative for gender on LSAC (pp. 19-21, 24, 26). Out-of-sample AUC: DP-SVM at least SVM everywhere, DP-LR below LR on law students (Table 4, p. 26). OCT accuracy 0.80-0.94 (Table 5, p. 28). Only glmnet for Julia v1.5 named (p. 12); no solver version, run time, gap or fairness-method baseline.",
+  "positioning": "Sorts fairness work into pre-processing, post-processing and Lagrangian approaches with stated drawbacks (pp. 3-4); takes the label-flip budget from the group's robust classification paper and turns min-max into min-min (p. 4). Cites OCT and robust classification but not the 2011 price-of-fairness paper (pp. 33-36).",
+  "writing": "Three contribution items (p. 5); 'low and sometimes negative' price as the headline of abstract and conclusion (pp. 1, 33); results narrated table by table with numeric means; caption slips (Table 3, p. 24; Figure 8, p. 31); no limitations or future-work section (p. 33).",
+  "limits_future": "No stated limitations or future work (p. 33). Visible limits: two groups and demographic parity only, fixed epsilon, unreported delta, merit proxies taken as given, no fairness baselines or run times (pp. 8-28).",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "Property (diversity without loss of merit, for human decision makers), knob (epsilon, with delta), price curves including negative prices, and OCT rules handed to decision makers. Variant: no solution-independent bound, and the knob is fixed rather than set from data (the skill's correction).", "pages": "pp. 5, 16-33"},
+   {"method": "Method 1", "relation": "evidence", "note": "A problem owned by the fairness-in-ML literature is written as an exact MIO (convex MINLO by outer approximation; MIQO). Variant: no solve times or scale boundary printed.", "pages": "pp. 3-4, 8-14"},
+   {"method": "Method 4", "relation": "variant", "note": "Only vanilla LR and SVM are dueled although incumbent fairness methods are reviewed; global optimality is claimed for outer approximation but no certificate, gap or time is reported.", "pages": "pp. 3-4, 12, 26"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "explain the optimizer with an interpretable model", "evidence": "A three-class OCT (flip to positive, flip to negative, no change) is trained on the MIO's flips and read as rules for changing the selection process, with out-of-sample accuracy and residual epsilon and delta reported.", "pages": "pp. 27-33"},
+   {"pattern": "adversary's budget turned into a repair budget", "evidence": "Robust classification's min-max over a budget of adversarially flipped labels is turned into a min-min: a fixed number of labels per group is flipped to improve fit and reach parity.", "pages": "pp. 4, 8-9"}
+  ],
+  "transferable": [
+   "Turn a robust model's adversarial budget into a repair budget: flip a fixed number of labels per group jointly with fitting the classifier (pp. 4, 8-9).",
+   "Derive per-group flip budgets in closed form from the target parity gap while holding total positives fixed (pp. 14-15).",
+   "Write merit constraints as bounds on the mean z-score of the selected, and cross-multiply to make them linear (p. 10).",
+   "Solve a convex MINLO by outer approximation with lazy cuts, where the fixed-binary subproblem is the standard learner on modified labels (pp. 10-12).",
+   "Fit a shallow three-class OCT on the optimizer's flips and report its accuracy with residual epsilon and delta (Table 5, p. 28)."
+  ],
+  "coauthors": "Hari Bandi (MIT ORC; p. 1)",
+  "quotes": [
+   {"text": "Therefore, although this definition points to a possibility of systemic bias against a certain subgroup of students, it does not provide any evidence of bias.", "page": 7},
+   {"text": "We take inspiration from their approach to flip a subset of the labels so as to achieve diversity, but in our approach we formulate a min-min optimization problem to flip a subset of the labels and simultaneously optimize for the parameters of the classification model to improve the overall fit.", "page": 4}
+  ]
+ }
+]

@@ -1,0 +1,423 @@
+uh thank you everybody for coming back to the online seminar series machine learning needs mathematical optimization so today we are very pleased to have through the missionary from imperial college so ruth did her
+
+phd studies in princeton university and then he she returned to imperial college and was first royale academy of engineering fellow and she has done all the usual steps after achieving her professorship
+
+position last year she works on global optimization and optimization under incentive and among the applications she works on are protochemical bioprocesses we can name lots of prizes that ruth has received but i just
+
+have the latest one which is the 2020 cast outstanding yan researcher award and i can also add that ruth will be this year a keynote speaker at the euro conference in athens so we are very pleased to hear what ruth will tell
+
+us about partitioning base formulation for mixed integer optimization in neural networks thank you so much for joining today and the floor is it's yours all right thank you so much for the invitation um really the the organizers are doing a
+
+beautiful job of sort of doing as much interaction as we can at this time and it's making me really sad because in the participant list i see a lot of people i already know and i wish i could see you in
+
+person and look forward to seeing you very soon so what i'm presenting today is work that is done uh primarily by calvin say and john cronquist jan led one of the two papers that's going to appear in cpaior and calvin
+
+led a paper that is now posted to archive so here is the team and we're all at imperial except for john who is recently moving to kph as a new assistant professor so what i'm going to be talking about today is optimization over trained
+
+neural networks and so what i'm going to assume that we have already is we have a trained neural net already so there's there's a neural net and it has been trained um and then what we want to do is we
+
+want to do some sort of optimization over the neural net to do some kind of investigation of it so for instance i might have an image that's this image here the 9.
+
+it has a correct label j is equal to 9 and i might want to find an adversary say a k is equal to 4.
+
+if i perturb using say the l1 norm and i go a distance 4 away well then already maybe this particular trained neural net is going to predict now that this shape that's been changed a bit is a 4 and not a 9. if i was going to
+
+perturb using the l infinity norm in this particular case i would need a perturbation of 0.05 and again this image on the right hand side is going to be mistaken by this particular neural net as a 4. um so
+
+this is the famous verification problem or it's not quite the verification problem what the verification problem is is basically can you find an adversary labeled 4 basically something that the neural net
+
+predicts is a 4 within a given perturbation that's of course a feasibility problem is there a perturbation and then there are also optimal adversary problems minimal distorted adversary problems these are assorted other questions and
+
+then thiago and some of his team have thought about lossless compression basically how can i safely remove neural network nodes or layers so over and over again basically what this is is its optimization
+
+over an already trained neural net okay now so i'm already going to say that we have this particular big m formulation of the learned relu neural net and i should mention that for some amount of time there's been a big formulation of this
+
+relu neural net um and basically what happens is that for each particular node in the network so i'm going to zero in on one node you end up with all of these variables x these are your inputs and they mix together with your your
+
+weights w and you end up for the output of the node you get this soft max functions what happens is you multiply these parameters w times the variables x and then you add a parameter b you might notice that this is
+
+a different set of variables and parameters than you would have seen if you were training the neural net if you were training the neural net you would be choosing the variables w and b i'm assuming that those are now fixed and
+
+that the neural network architecture is fixed and i'm assuming rather that you can choose the input this would be something like choosing the adversary and that you can choose the output of each node rather that these are the
+
+variables in the optimization problem anyway um this is a paper of material fischetti and what mateo did is he took a look at this big m formulation and of course because it's a big n formulation you have to think carefully
+
+about choosing these big m coefficients uh as we see often in mixed integer programming okay um and the the uh the binary variable that is turning on and off these um this node is this uh sigma so sigma is saying
+
+whether or not uh that node is active basically whether we're we're having the zero or the w transpose x plus b okay so i want to improve on big m um and the reason that i want to do so is first off there are a lot of
+
+state-of-the-art verification tools that rely on big m um i'm particularly mentioning verification here because that's the biggest community that's sort of there's quite a number of them looking at this sort of thing but beyond just
+
+verification there is a number of other applications of that use big m i'm mentioning quite a number of them here and in particular what i want to be thinking about is developing alternatives to dynamic cut generation
+
+so there's a really nice paper of anderson at all that recently appeared in operations research that's going to develop exponentially many cuts from a node's convex hull so of course they can either develop
+
+exponentially many cuts or they can have a mixed integer formulation that's in a lifted space compared to the original number of variables they find that the optimization problem in the lifted space is fairly difficult to solve so they
+
+develop a method that works with exponentially many cuts the problem that people have had in recent years is that this method doesn't always scale well to large neural nets and in particular some of our recent
+
+work found that callback frequencies after really not very often at all balance computational burden and model tightening and so we want to be developing something that's different than big m because big m is basically
+
+state of the art in verification at this particular time okay so let's go uh back to uh the sort of single node in this neural network again the inputs x and the outputs y to my to each node in the neural net
+
+are my variables and my w's and my b's are parameters so okay um we have already a big m formulation for this particular problem um but why don't we go back to the sort of seminal work of polish i'm using a
+
+very recent reference but of course this work much predates the disjunctive programming work much predates 2018 um and we'll think about now this this disjunction and how we can manage it so either it's
+
+going to be true that y is equal to zero or it's going to be true that y is equal to this affine function right here so you're either your node is either off or it's on um if my node is on then it must be true
+
+that w transpose x plus b is greater than or equal to zero and if my node is off that must be true that w transpose x plus b is less than or equal to zero clearly i don't need both of these the two bottom equations and the
+
+disjunction but i'm going to keep them just for strengthening purposes okay so here's a formulation that is equivalent to the big m formulation except that it adds uh one additional variable and four additional constraints and the
+
+only thing that is happening here is that we are taking um basically a disjunctive programming relaxation right here um and we are reformulating according to polish um you'll notice that i in my formulation i have two extra variables
+
+there's the said a and the zb but we have this equality sign here and so um i can get rid of one of my z a's or z b's in our case we always happen to get rid of the z a's and so we only end up with this one
+
+extra variable z b okay well this is another possible formulation um to big m slightly bigger than big m but that's okay um but now maybe we ought to think about our um a different way of of managing things
+
+and what i'm going to do is i'm now going to think about uh partitioning the inputs to the node into two categories so there's going to be these inputs to the node of from x1 all the way up to xk and then they're going to be the inputs
+
+to the node from xk plus 1 all the way up to x theta and i'm going to rewrite the disjunction and the way that i'm going to rewrite the disjunction is again we have either that the node is deactivated and y is equal to
+
+zero or that we have that the node is activated and y is equal to the w transpose x plus b but instead of writing w transpose x i will instead write z one plus z two and what it's going to be is that um the w transpose x
+
+in the first partition basically the part of the dot product that goes from i is equal to one all the way up to k so i'm showing it here as this this partition is going to be uh equal to um my my dead one and my uh
+
+z2 is going to be uh x k plus 1 all the way up to x um again i'm going to use this uh z 1 a and this one b but i can knock one of the two of them out so i can do that by reformulating but in in total the z1s are going to correspond to the
+
+first partition the z2s correspond to the second partition okay here is a formulation that now includes two extra variables or it could include two extra variables the way i'm writing it it includes four
+
+extra variables but remember i can get rid of one of either z1a or z1b and one of either z2a or z2b but basically what's going on here is that we have a possibility here of maybe uh tighter bounds on these zeds than we
+
+could have had on the w transpose x's right because what we end up with is we end up with um uh zna is going on or off with now these uh different big m coefficients um and so what's happening is that um
+
+it's these different big m coefficients um and so what's happening is that if we can get tighter bounds on these parameters l b uh n a u b n a or l b and b or ubc then we're golden in terms of perhaps being having
+
+having an advantage in solving okay so this is really nice i have in this written out formulation i have four extra variables i could reduce it to two and i have a total of um four extra constraints actually it'll be eight
+
+extra constraints okay well i could keep doing this right um i already divided into two partitions that are coming into the node i could have divided three partitions into coming into the node four partitions coming into the node
+
+after a while it would be a bit silly to talk about this um but basically i keep saying over and over again that what i could do is i could take this entire w transpose x transpose and instead of writing it
+
+as one term i could disaggregate it and disaggregate it until i was maybe even going up to number of partitions equals a okay so here's our proposed formulation um from the previous slide the differences
+
+are going to be that i that we knocked out one of the two extra auxiliary variables um but um okay you can check that it's correct but let's talk about the differences first from the big m formulation first off
+
+the differences from the big m formulation we've added more things to decide when developing this formulation so first off there's this partition parameter a big n this partition parameter is how many sort of
+
+buckets we have to to divide that term uh w transpose x into then after having deciding how many buckets we do have to decide how to aggregate each of the um each of the weights into a bucket um so for instance in the
+
+previous slide i just said okay so one to maybe i don't know k minus one is in bucket one k isn't by two k plus one all the way up to a uh isn't bucket three but i could have done this in many many different ways of course
+
+um and we have n new auxiliary variables uh and four n new constraints i presented it as uh two n auxiliary variables but then there are all those equality signs and so we can knock them out so really here in green um at the top
+
+i'm really giving a number of disadvantages with respect to big m um i'm adding uh parameters right i'm adding sort of you have to choose what yours what your partition parameter is and you have to choose
+
+what are the subsets into which you divide this but there are some things that i'm really really excited about with this formulation so first off as we already mentioned n is equal to 1 is equivalent to big m you
+
+probably wouldn't want to use this formulation because it does still introduce a new auxiliary variable and four new constraints but but you do have something that's equivalent if i was to choose n is equal to eta
+
+then i would have something that was equivalent to the convex hull this is a lifted formulation you'll notice that i have these n new auxiliary variables so it's lifted to a higher dimensional space i could have alternatively decided
+
+to develop a non-lifted formulation that would have two to the end constraints so remember that a convex hole formulation will have two to the eta constraints um so i could make that fewer if i wish what i think is kind of
+
+fun about this in addition is that i can have a hierarchy of relaxations with with respect to increasing size and tightness if i do things in a careful sort of way right if um basically i had all of my ada
+
+in one bucket and then i divided that one bucket um then i would have a formulation that was at least as tight if i then strictly divided one of those two buckets uh into two i would have a formulation
+
+that was at least as tight etc um it's kind of no fair going from formulation to formulation swapping what goes in what bucket um but if we kind of just divide buckets as we go along increasing up the hierarchy level we do indeed get a
+
+hierarchy which is cool um and you might notice that what becomes key are these um lbs and ubs so these lbs and ub's they are the same as any big m parameter uh that we have all encountered before and so we might want to think about
+
+interval arithmetic for them or optimization based bounce tightening great um okay so good we have um a relaxation and what i'm going to do first is i'm just going to show us an example that was trained on a very
+
+simple problem so this is trained on the well-known ackly function it has two inputs um and in this particular example uh we only have uh the the layer of inputs the the output and then basically uh 20 a one one hidden layer
+
+and uh 20 um nodes in that layer so what we have here is n is equal to 20 is equal to the complex whole um so this is quite a small example um we're not going to use examples this small to try and motivate that we think
+
+this is an exciting new set of formulations to use um but the point here that we're trying to show is that if you're to use n is equal to one um you get these sort of loose bounds and this is what people will often get when
+
+they solve sort of verification problems and the like where basically this blue is this function is the sort of uh is the response surface of the neural net to different inputs x1 and x2 um the orange is the lower bound that
+
+you get if you develop a big m relaxation the green is the upper bound if you develop a big m relaxation if you develop a convex hole relaxation that's equal to n is equal to 20 and you end up with something that is
+
+much tighter as we all know a complex whole tends to be a tighter formulation than big m um but what i want to call your attention to is that in between if i have a value between n is equal to 1 and n is equal to 20 i'm
+
+just trying to appeal to your i to say that as we increase n we seem to increase the tightness of the formulation okay so that's one observation um the other observation is we mentioned that there were all of these parameters
+
+um that are effectively big m parameters um we can tighten them using interval arithmetic if we tighten them using interval arithmetic we get a picture on the top if we tighten them using optimize optimization based bounce
+
+tightening we get the picture on the bottom um and just to note that i mean optimization based bounce tightening has always been important to me because i really like minlp um but additionally in the specific
+
+verification literature is well known that optimization based bounce tightening helps um so basically it's known for n is equal to one going from uh interval arithmetic to optimization based bounds tightening is
+
+good um and we're saying that we get the exact same advantages out of our formulations great okay um another thing to mention is that we have introduced this new parameter right so um kind of no fair just sort of
+
+changing what my parameter value is and then telling you that i always get something uh better than big m right because that would be the equivalent of possibly trying a lot of n values um so let's let's stop that n
+
+uh parameter in detail um what this is is it's um taking a number of solved versus runtime and we're looking at optimal adversary um this is the same as in the anderson at owl paper and we're trying an optimal adversary on
+
+a convolutional neural net with two layers and a hundred uh hidden nodes per layer and then i should note that each line is a hundred different examples so basically we take a number of different examples
+
+from c4 and then we find a hundred of them and we find an optimal adversary for every single one um so what's common here is that the neural net is staying the same between each one of the runs okay so over time what you can see
+
+is that um big m is the one in pink it's always uh the the lowest you don't want to be low on this plot because low is you haven't solved a whole lot of problems so big m is performing the worst um it is not
+
+solving a whole lot of problems um the next thing i might call your attention to you is the orange line um it's quite bold this is the one that's n is equal to two you'll see that kind of at the beginning
+
+um it's solving maybe more problems than some of the others but that over time it's solving fewer um what's going on if you sort of dig into the data which you can't with this plot but i know from looking at it is that
+
+n is equal to 2 is solving the easy problems uh very very quickly and then the more difficult problems it's not able to to get the next thing that you might notice is that sort of some of these intermediate values of n
+
+sort of like n is equal to three or four or two um is going to be uh really quite good for the problem and then you get performance declining as n gets large uh like seven eight nine ten um this last um point is quite similar to the point
+
+that we would make when we would say well convict's whole is tighter than big m but we would prefer to use big m because we don't have a very very good performance this is basically the exact same thing
+
+okay the other thing we have to choose of course is what bins to put everything in so let's say i've decided to put uh to use two bins and i only have uh four inputs to this particular node of course uh you
+
+know even a small neural net is typically going to have a hundred inputs but let's um let's do a thought experiment here um so we have four inputs into this node and they have these weights let's say they have weights one 100 100.
+
+so one option that i might have is that remember i'm going to divide this basically this multiplication w transpose x uh into uh two parts and then i end up sort of turning on or off those those individual parts one option
+
+that i have would be um this x um i could put the x1 into one bin all by itself and then i could put the other three inputs all into a separate bin i would argue that this formulation on the left this sort of choice of the binning would be
+
+really good or a really good approximation for that first input so if i somehow knew that that first input was really important then maybe this would be a really great formulation because it would very well approximate
+
+the context whole for that particular input but it wouldn't be so good for those other inputs another option i might have is i could divide equally the inputs into bins so i could put two inputs into one bin and two inputs into
+
+another bin um now what i'm doing here in this in this center bit is that what if i put x1 and x3 into one bin and x2 and x4 into another bin now this would seem to be a pretty good um this top line would be a seem to be a
+
+pretty good estimate of x3 and this bottom line would seem to be a pretty good estimate of x4 but in both cases um this would seem to be a very bad estimate of x1 and x2 right because x1 and x2 are orders of
+
+magnitude different or rather their weights are order of orders of magnitude different than the weights that are on x3 and x4 and so somehow um the the result would be something that was close to the convex hole for x3 and x4
+
+um but not so much for x1 and x2 a final option that we might think about would be something like um we try to not only keep the the sort of the number in each bin equal but we also try to keep the orders of
+
+magnitude of the weights equal to one another um and this would then make it that uh maybe x1 and x2 and neither one of them would sort of we would neither one of them would maybe exactly uh represent the convex full of either x1 or x2 um
+
+but somehow this might be uh a nice um way of relaxing the problem okay so i've talked through these different uh variants and the truth is that ultimately i don't have a way of saying absolutely sort of
+
+hand on my heart i know how to um bin these particular weights or these particular inputs but we have a number of proposals the first proposal that we have is that we might want uh equal size partitions so this would be something
+
+like well if i'm going to have two partitions then i want in that top example i want two inputs and one partition and two inputs in another so i want the size all to be equal as much as possible and then i want the weights in each
+
+partition to be as similar as possible basically my proposal is that we do not want uh this um situation in the center where we end up with very different orders of magnitudes of the weights coming into the node
+
+we rather want this uh situation on the right hand side um another option would be something like equal range where basically we take the uh the very highest weights and the very lowest weights basically the ones that are
+
+complete outliers we put them in their own bin and then for everything in the middle um we put in bins things to get an equal range um and so what this second strategy would be is to say basically well we'd kind of like this situation
+
+where all of the coefficients are roughly equal to one another now i don't have a way of proving this and so what i'm trying to show rather than doing any proof is just a lot of experiments um and i'm going to compare these two
+
+partitioning strategies that we have to weak partitioning which would be dissimilar weights and so one would be sort of a random assignment where you just sort of let things fall where they may and then and an um an alternative that
+
+we posit would be even weaker would be uneven magnitudes and so basically what we have is we're trying to make a situation like this thing in the middle where you end up with as different weights as possible
+
+okay um that's the experimental conditions happy to talk about them more but basically let's look at at the results to begin with um on the left hand side we have the number solved the ones that are dotted up
+
+at the top these are with optimality-based balance tightening where basically we give all the different strategies sort of equal opportunity to do optimization based bounce tightening and then when that's done we solve the problems
+
+um and so of course if you're going to use optimization based bounce tightening you get better uh you get more problems solved and you solve them faster once you start solving them um so this this top block is optimization based
+
+balance tightening the bottom block is interval arithmetic and then within optimization based bounce tightening you'll notice that our sort of equal size and equal range um strategies are outperforming
+
+the random and uneven strategies similarly without optimization-based bounce tightening with only interval arithmetic the equal size and equal range are again outperforming random and uneven okay so that's great
+
+in particular this uneven strategy where we're making the coefficients as different as possible from one another seems to be performing the worst with respect to numbers solved great um so you want to be as high as possible on
+
+this left graph because you want to solve as many as possible on the right hand graph you want to be as low as possible because you want to solve quickly right um and so basically as expected optimization based bounds typing
+
+goes faster than interval arithmetic not a surprise but here what we have is that for optimization-based bounce tightening in particular the difference is obvious we end up with our partitioning strategies performing much better
+
+than the random strategies now a couple more things to mention about this this these are actually graphs with respect to n and so what you'll notice is that with respect to something like um average time solved um actually
+
+if you use a bad partitioning strategy you'll see that as n grows bigger you're very quickly worse than um basically the equivalent of big m which is n is equal to one however for our equal size and equal range
+
+strategy you can get an improvement for small n um similarly on the left hand side um in particular uh you can sort of solve more problems uh in both this top blue line and the bottom blue line um then n is equal to one with our
+
+particular partitioning strategies if you choose bad partitioning strategies then you're going to be worse than big m again this is a convolutional neural net with n layers uh sorry two layers and 100 hidden nodes per layer um and we're
+
+giving um an hour solve time and this is a hundred runs a hundred runs means that you pick a hundred different examples from mnist and then you find optimal adversaries for them okay cool so um the bad
+
+uh news is that if you want to use our work you've got to choose uh two basically new parameters one is this value of n and one is how to partition uh the the inputs but we argue from these last two slides
+
+that actually choosing these parameters tends to be fairly robust and we know how to do it um so basically we can tend to outperform uh other formulations so that's great is that if we have fairly constant uh parameter
+
+choices then we're fine okay so what this is now is just a very big table um this is a whole bunch of optimal adversary problems what you're doing here is you're kind of given a a perturbation a priori that's
+
+this column right here and we're choosing um that epsilon such that big m can solve some of the problems basically as this epsilon gets bigger everybody can solve these problems as epsilon gets smaller these things get
+
+more and more difficult for big m and so we're tuning that epsilon so that big m can solve some that way we have a good comparison point because we'd one like to be able to solve more problems than big m and
+
+two we'd like to be able to solve for problems that big m can already solve we'd like to be able to solve them faster each one of these rows is a hundred runs so 100 examples where we would find optimal adversaries
+
+and then uh the model is the size of the problem that we're looking at okay so what's great is that um for uh basically every single one of um the the problems where we have two partitions we are solving at least as many if uh
+
+big n is solving all of them uh with our two partitions possibly solving more um very often solving more problems with four partitions we are also typically solving more um we are also significantly faster um i
+
+should notice i should note that all of these are solved with our equal uh size strategy so we're not there's no funny business here with respect to sort of changing where the inputs are uh and and uh this is so this is
+
+basically one parameter choice is two partitions and one parameter choice is four partitions and you can see whether i choose two or four were um almost always going to be outperforming big n that's optimal adversary um another uh
+
+sort of optimization problem this is actually a feasibility problem that's important in this space is verification with verification you just want to know uh within a perturbation that you're going to allow is there an adversary
+
+again we chose this perturbation so that big m could solve some of the problems and again we're outperforming uh big m both with respect to the number of problems solved and also with respect to the amount of time
+
+that each problem takes to solve okay the last of my uh three examples is in this minimally distorted adversarial example where basically what you do is you find what's the smallest perturbation before um you're going to
+
+have an adversary where you're you know what's the smallest perturbation before i'm going to predict using that particular neural net of 4 when i wanted it to be a 9.
+
+again the 2 and 4 partitions with the equal size strategy are solving more problems and doing it significantly faster all right so so this is great um i really like optimization over neural nets and this is this is definitely important
+
+um but it would it would feel impoverished if this was sort of the only uh application that that i could manage and so um let's talk about sort of uh generalizations uh to different classes of problems
+
+so what we're going to be thinking about is we're going to be thinking about minilp with disjunctions um so we've we've got these uh disjunct indices d um and we're going to say basically one of one of these has to be true okay
+
+um i'm going to assume a number of things um the first thing that i'm going to assume is that the g's are convex additively separable that is that basically i can write the g's as a sum of h's where each one of the h's is convex and
+
+each um basically each one of the h's is just sort of maybe a monomial i don't strictly need this first assumption this would work also for something that was partially additively separable but anyway um for now it makes my proofs
+
+easier and there's already a lot of examples that have this particular structure i want my functions to be bounded um and then the last assumption that i'm making is that there are far fewer constraints
+
+the number of variables in each of the disjunctions i don't need this one at all for the proofs it is rather that we need this for um the for the practical case that we think that this particular line of thought is
+
+reasonable good okay um we think that there are a lot of applications that are relevant um we already mentioned uh relu neural nets out sort of uh quite a while just now um but we also think there are a number of other
+
+applications both in machine learning and also john kronquest who led this particular thread of research had also come up with some other optimization problems that we think are relevant good so what's the idea
+
+remember that we had these disjuncts uh g that we assumed were these convex additively separable functions h so basically each one of these h's is convex and it's a function of exactly uh one variable uh
+
+x um and then we have these e's that are parameters in my optimization problem um and now what we're going to do um and this is a work of young conquest again is that we're going to lift to a higher dimensional space right
+
+so the first thing that we're going to do is we're going to lift with uh the number of partitions times uh the the number of disjunctions uh new variables um remember that uh in our um our value neural net um we
+
+had d is equal to one and so we just had n new variables but this is a slightly more general case then what we're going to do is we're going to relax the splitted constraints to global constraints and so what we mean by that is that um
+
+i'm i'm pressing arrow key and it's not working okay there we go um so i should say we we lifted with n times d new variables these new variables are these alphas right so alpha one all the way up to alpha n
+
+um and i'll need as many of them um as i have indices d um and each of these alphas is now going to be the thing that bounds uh the h's and then the sum of the alphas is going to give me my my b's so in blue is what was
+
+there already in the optimization problem and these alphas are the new uh the new sort of kids in town um and so basically what we've done is we've added uh these new variables and now in this second step we're
+
+relaxing uh the splitted constraints to the global constraints which is to say that we are pulling uh these splitted constraints out of the the disjunction and and placing them here what we can prove is that the feasible x space doesn't
+
+change so that the the space of the x variables uh stays the exact same it's just that we're in a higher dimensional space okay so now um we have an n split um representation so what's going on here is that in this n split representation
+
+we have of course n times d new variables um and um we have pulled out constraints from the disjunction okay now what we need to do is that we take that n split disjunction on the previous page and we apply the extended formulation
+
+of polish so now we take the context whole not a convex hole in sort of the the basic step methodology methodology abolish but rather the convex hole in the sense that we're taking the convex hole of the
+
+n-split disjunction right we're taking the convex hole of of this thing right here um and we get uh what what is written on this slide and jan was able to prove quite a number of things uh related to this
+
+all of which i'm delighted about the first thing he was able to prove is that the feasible x space stays the same he was able to prove that if you have a one split that is if n is equal to one you have a relaxation
+
+that is equivalent to the big m if every one of the functions that you're relaxing are athene then an ada split that is something where you take uh every single one of the h's and you put it in its own separate bin
+
+then the ada split is equivalent to the convex hull from from polish and if h is affine remember that this is the relu neural net case um you can get a hierarchy of relaxations that go between a big m and context
+
+whole again you have to be fairly careful here because basically what you have to do is you have to end up sort of splitting the partitions and splitting them again and splitting them again to be able to get this hierarchy
+
+but you can get a hierarchy if you wish um so all of these or the proofs are easiest when we think about affine functions but remember that not all functions that we are interested in might be athlein um so jan developed this example that
+
+is on uh n splits with these non-linear functions um so the feasible space of this particular uh problem that's right here or this particular set of constraints are the two black dots the one split or the the big m formulation will give
+
+you a relaxation that goes with this gray circle and remember that this particular relaxation we're looking at is projected onto just two variables when really there are four variables that we're considering
+
+um we could think about a two split relaxation that would divide us into sort of x1 x2 and then also x3 x4 you can see visually that the two-split relaxation tightens things before split relaxation remember for
+
+relu neural nets and for anything that uh the functions are affine this is going to be equivalent to the convex hole you can see that the force split relaxation is not equivalent to this convex hole because you have these sneaky bits on
+
+the side here and the sneaky bits on the side here that are clearly sort of outside the convex hole however the four split relaxation is still tighter than the two split tighter than big m so that's nice
+
+for want of time i will not present the experimental results but just to note that we have experimental results that seem to indicate this works happy to talk about those more um but i just want to close by
+
+mentioning sort of what we have here what we have is that we have relaxations that are sort of intermediate to big m and convex hull and in particular if we have affine functions and we have specific assumptions that we're making
+
+we can get a hierarchy we do this by introducing basically two new choices one is this parameter n that's the number of splits then there's the aggregation choice of how to group things however for the the examples that
+
+we've tested and i've presented in detail uh the relu neural nets but then we've also looked at a number of other examples the parameter choices do seem to be robust across many uh instances particularly for relieve we're
+
+able to solve 25 more problems in an hour and get an average speed up from problems that could already be solved of uh more than two and there are promising computational results for other classes of problems
+
+so i i promised that i would finish in 45 minutes and i have um so i hope that i'll get a lot of questions thank you so much ruth for such a wonderful presentation um so we now can open the floor for questions
+
+so i suggest that if you have a question please unmute and if you can also show your video so i guess it was a very key it was all very clear um i could just mention this slide then that i skipped yeah thank you so basically what's
+
+happening here um is these are some instances these are these are clustering problems uh with with two different formulations at the top and at the bottom and then these are some problems that found conquest
+
+developed as part of his postdoc and basically what's happening here is that we are choosing um these splits and you'll notice that we have 2 4 8 16 32 um and then here at the bottom we have 14 28 56 196 392 and so one possible um sort of
+
+anxiety that that you might have with something like this is oh boy these people really just always need to be um sort of tuning their their their big n um that is sort of choosing the number of splits to get
+
+things that are better than the big m or context whole um but really what's going on here is that um the two split and this 14 split you end up because um uh the problems are very different sizes there's the same number roughly of
+
+variables in every single one of these problems and the same number of variables in 4 split versus 28 split for this particular problem and so these results are actually fairly robust across parameters with respect to number of
+
+variables in each one of the splits and what's happening here again um is that basically we are um now solving problems that couldn't be solved before and doing that significantly faster so may i ask so for the top clustering
+
+rows and for the bottom clustering rows what you are saying is that the clustering method is different i can't remember it's um they're different they're different optimization formulations um they're basically it's it's this
+
+clustering formulation versus this clustering formulation so that second one i think is the cluster m and this is the cluster g if i remember correctly thank you um so again i if the audience has uh questions yeah feel free yeah i see
+
+yeah i i wanted to ask about these clustering problems are they uh any specific clustering problems like k-means or k-center problems is it possible let me refresh myself on that um so the one that is m o right
+
+right so the g one is k means clustering yeah i had um i had forgotten this was another computational work that was done by jan and so basically what's going on is that um this clustering formulation right
+
+here is a k-means clustering and then i can't remember what is the difference with this one um all right i i can find it on the papers i guess yeah no no no it's basically i think the the overall point that we're trying to
+
+make is that um this is this is a formulations that's fairly robust to all the different problems that we're trying right yep yeah let's see okay thank you is there any other question from the audience
+
+yes i have a question thank you very much for the presentation i liked it very much and uh i'm i'm interested in uh how to split and how to cluster the inputs would you do this with another model for example a
+
+would you learn it from data or would you do data driven as well instead of so i i mean this is they think they're you know of course i i really like this point right because i don't claim that we have the very best partitioning
+
+strategies right is that we have something that sort of somehow seems to make sense to us is that somehow we wanted to sort of spread out the benefits from our formulation to as many inputs as possible
+
+um but i think the the point that you're making that's that's quite valid is that you know maybe it's that this uh first input really is more important than x2 x3 x4 right um and if that's so well then this formulation on the left
+
+would be great because it would be really nice to really nicely approximate uh x1 and then um you know who cares about the other ones they can have a worse relaxation associated with them right um so that's definitely something
+
+that that we could think about um i assume that would be uh quite a bit more work uh and at least for myself i don't know how theoretically to go about it so i think your point of doing this from a sort of
+
+data driven point of view is is reasonable thank you any other question uh hi ruth uh i really enjoyed our talk yeah yeah it's really great talk maybe a naive question is uh for your partitioning hierarchy is
+
+there any connections with the basic step hierarchy or there's no connection with that that's a really good question if there are we haven't thought through it that is a really good question i will have to get back to you on that
+
+okay thank you guess just curious yeah or no that's that's that's quite reasonable partitioning on the input space uh one thing i was wondering is whether considered partitioning on the states of the neurons
+
+yeah um so we basically in this is a lot of failed things before stuff worked right so um and basically i mean you know we keep the same partitioning strategy across all of our all of our results so so hopefully we're
+
+not cheating um but but and it's working for many different uh neural nets um but what you can see is that if i choose a bad partitioning strategy i'm just gonna do automatically worse than than big m right and so at least the things
+
+that we had thought about was we thought about sort of um maybe you know like these are images right so we thought well maybe some of the the inputs things that are close in euclidean distance are going to
+
+somehow they should be aggregated no that didn't work and we tried um all sorts of other things um and uh this was the closest this this is this is what worked for us um that's not to say that more ideas uh such as
+
+you're mentioning on on the the state of the neuron or something like that wouldn't be amazing right um i think there's a there's a lot of possibilities here and for us the difficulty became sort of uh testing uh what would be the the
+
+reasonable things to do and also having a good enough intuition right so this was you know our closest intuition is what i'm highlighting uh here which is that somehow we would like the relaxation to be good for all of the
+
+inputs but that might not be what you want in the end i'm not sure or rather i know that it's better than big m i don't know that it's better than you know some other partitioning strategy that would would be much better
+
+right i see i i tried to i tried to use i tried to come up with something like partitioning the input space to count linear regions but i was never successful doing what you did so so that's why i ended up moving the
+
+direction of looking at the states of the neurons because yeah in such they do things like that ah uh-huh yeah now that's a good point because i mean um we should revisit your paper for um how to for more ideas for partitioning
+
+because i mean we're just you know we're we're we just feel like we're in the dark on this i mean we have something that works right it works better than we're significantly better than big m but we don't you know it's not like oh
+
+you know solved no i mean this is a very hard formulation i mean i think this is a very convenient problem that everybody's talking about because the formulation is not easy this brings all the nightmares from
+
+integer programming to life right right right but i think i mean the important one of the important things to remember and i don't think we've fully wrestled with it yet is sort of this isn't just black box optimization
+
+right this really is like there's there's a there's a form there right and the the neural network is uh sort of you know it's there's an underlying structure and i think you deal with that quite well in like your
+
+lossless compression paper for instance um but um when you're you know reducing the the number of layers and this kind of stuff um but you know sort of deeper things with sort of recognizing underlying
+
+structure is where individual programmers can really get involved right and so sort of work like what you can do it done and sort of extending these sort of things is super important very cool work thank you are there any more questions
+
+okay so i think we you had lots of uh um people in the audience and lots of questions so i think it was a great presentation we thank you very much for joining us today and we also thank the audience for
+
+joining us today and next week we will have uh phoebe dianos uh also giving a seminar about the interface between machine learning and mathematicalization thank you all and see you soon thank you very much
+
+thank you

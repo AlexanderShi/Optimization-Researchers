@@ -13,7 +13,10 @@ fault line 的卡片 ID）。本脚本把这些变成确定性检查：引用必
     page-on-unread   引了页码，但该作品最深的卡片只到 abstract / metadata / unreadable 级（没有全文就没有页码）
     page-range       引用的页码超过 INDEX.md 的 Pages（读的就是那个文件）
     version          版本引用（见下）所引的卡片不存在，或卡片正文里没有提到那个版本
-    roundtable       圆桌里 [<slug> card …] 的 slug 不是队员；或该引用在那位成员处过不了上面的检查
+    roundtable       圆桌里 [<slug> card …] 的 slug 不是队员（理事会：也不是 guest_teams 里任何一队的成员）；
+                     或该引用在那位成员处过不了上面的检查
+    cross-member     成员文件（如领域文件的跨队一节）里 [<另一位成员的 slug> card …] 在那位成员处过不了上面的检查
+                     （slug 是本队或 guest_teams 里的成员时才这样解析；别的词开头的 […] 照常按本人的 ID 查）
 警告（⚠，不计入退出码）:
     skip-mention     只提到（不带页码）INDEX 里 Role=skip 的行，例如诚实边界里说明哪些行被排除
     roundtable-bare  圆桌里不带 [<slug> card …] 的裸卡片 ID，无法判定属于谁
@@ -30,8 +33,10 @@ fault line 的卡片 ID）。本脚本把这些变成确定性检查：引用必
 认得的版本词：TR、v<数字>、arXiv、preprint、report、manual、draft、precursor、substitute。
 
 扫描的文件（成员）：SKILL.md；references/*.md（technique-catalog、proof-playbook、open-problems、reading-path）；
-references/research/0[1-9]-*.md（不含 cards/：卡片本身是证据，不是引用）。团队目录时还查圆桌 SKILL.md 的
-[<slug> card …] 引用。轻量档成员（没有 cards/）不查卡片 ID，只报 DOI / arXiv 计数。
+references/research/0[1-9]-*.md（不含 cards/：卡片本身是证据，不是引用）；references/domains/*.md（按优化领域分的
+领域文件，有的成员才有）。团队目录时还查圆桌 SKILL.md 的 [<slug> card …] 引用；team.json 有 guest_teams（理事会）时，
+别队成员的 slug 到 product/<guest 队>/ 里解析。成员文件里写 [<另一位成员的 slug> card …]（领域文件的跨队一节常这样写）
+时，同样到那位成员处核对（问题类别 cross-member），不算本人的引用；只有 slug 是本队或 guest 队成员时才这样解析。轻量档成员（没有 cards/）不查卡片 ID，只报 DOI / arXiv 计数。
 不扫描：围栏代码块、front matter、行内代码 `…`（写法示例）、表格单元格之外的页码（| 不能跨）。
 
 引用写法（ID 规则与 check_ledger.py 相同：一个大写字母 + 3–4 位数字；字母限于 S D H R X B 和这位成员 works.json
@@ -228,13 +233,33 @@ def cites_in(line: str, letters: set[str]):
         yield m, cid, pages, version
 
 
-def scan_text(text: str, mem: Member, rel: str, report: dict):
-    """扫描一个文件的全部引用，问题写进 report。"""
+def scan_text(text: str, mem: Member, rel: str, report: dict, others: dict[str, Member] | None = None):
+    """扫描一个文件的全部引用，问题写进 report。others：别的成员（本队与 guest_teams），
+    [<他们的 slug> card …] 到他们那里核对，不算本人的引用。"""
     prose = [blank_code(l) for l in prose_lines(text)]
     heads = heading_at(prose)
-    cites = paged = versioned = 0
+    cites = paged = versioned = foreign = 0
     ids: set[str] = set()
     for no, line in enumerate(prose, 1):
+        for rm in RT_RE.finditer(line) if others else ():
+            slug, body = rm.group("slug"), rm.group("body")
+            if slug == mem.slug or slug not in others:
+                continue  # 本人的 slug，或不是成员 slug 的词：照常按本人的 ID 查
+            for seg in body.split(";"):
+                sm = SLUG_RE.match(seg)
+                if sm:
+                    slug, seg = sm.group("slug"), seg[sm.end():]
+                o = mem if slug == mem.slug else others.get(slug)
+                if o is None or not o.deep:
+                    continue
+                for _, cid, pages, version in cites_in(seg, o.letters):
+                    foreign += 1
+                    kind, detail = o.check_cite(cid, pages, version)
+                    if kind and not kind.startswith("~"):
+                        report["problems"].setdefault("cross-member", []).append(
+                            {"file": rel, "line": no, "section": heads[no - 1], "detail": f"[{slug} card …] {detail}",
+                             "text": line.strip()[:160]})
+            line = line[:rm.start()] + " " * (rm.end() - rm.start()) + line[rm.end():]
         for m, cid, pages, version in cites_in(line, mem.letters):
             cites += 1
             ids.add(cid)
@@ -247,7 +272,7 @@ def scan_text(text: str, mem: Member, rel: str, report: dict):
     joined = "\n".join(prose)
     dois = {d.rstrip(".").lower() for d in DOI_RE.findall(joined)}
     arx = set(ARXIV_RE.findall(joined))
-    report["files"][rel] = {"cites": cites, "paged": paged, "versioned": versioned, "ids": len(ids),
+    report["files"][rel] = {"cites": cites, "paged": paged, "versioned": versioned, "ids": len(ids), "foreign": foreign,
                             "dois": len(dois), "dois_own": len(dois & mem.dois),
                             "arxiv": len(arx), "arxiv_own": len(arx & mem.arxivs)}
 
@@ -290,7 +315,7 @@ def method_audit(mem: Member, min_ev: int) -> list[dict]:
     return out
 
 
-def check_member(team: Path, m: dict, args) -> dict:
+def check_member(team: Path, m: dict, args, others: dict[str, Member] | None = None) -> dict:
     mem = Member(team, m)
     report = {"slug": mem.slug, "deep": mem.deep, "files": {}, "problems": {}, "warnings": {}, "methods": []}
     if not mem.deep:
@@ -301,10 +326,11 @@ def check_member(team: Path, m: dict, args) -> dict:
         return report
     # 07-paper-cards.md 不扫：它是 digest 的投影（build_card_index.py），单元格里的页码是书目页，不是读到的页
     files = [mem.dir / f for f in MEMBER_FILES] + sorted(
-        p for p in (mem.dir / "references/research").glob("0[1-9]-*.md") if not p.name.startswith("07-"))
+        p for p in (mem.dir / "references/research").glob("0[1-9]-*.md") if not p.name.startswith("07-")) + sorted(
+        (mem.dir / "references/domains").glob("*.md"))  # 按优化领域分的领域文件（有的成员才有）
     for f in files:
         if f.exists():
-            scan_text(f.read_text(encoding="utf-8"), mem, f.relative_to(mem.dir).as_posix(), report)
+            scan_text(f.read_text(encoding="utf-8"), mem, f.relative_to(mem.dir).as_posix(), report, others)
     if args.methods:
         report["methods"] = method_audit(mem, args.min_evidence)
         if args.strict_methods:
@@ -412,11 +438,18 @@ def main():
         sys.exit(2)
 
     members = {m["slug"]: Member(team, m) for m in cfg.get("members", members_cfg)}
+    # 理事会（team.json 的 guest_teams）：圆桌里坐着别队的成员，[<slug> card …] 到他们自己的团队目录里解析
+    for g in cfg.get("guest_teams") or []:
+        gj = team.parent / g / "team.json"
+        if gj.exists():
+            for gm in json.loads(gj.read_text(encoding="utf-8")).get("members", []):
+                if gm.get("slug"):
+                    members.setdefault(gm["slug"], Member(team.parent / g, gm))
     reports = []
     if not a.roundtable:
         for m in members_cfg:
             if not only or m["slug"] in only:
-                reports.append(check_member(team, m, a))
+                reports.append(check_member(team, m, a, {s: x for s, x in members.items() if s != m["slug"]}))
     rt = None
     if not a.no_roundtable and cfg.get("roundtable"):
         rt = check_roundtable(team, cfg, members)
@@ -446,10 +479,12 @@ def main():
         ver = sum(f["versioned"] for f in r["files"].values())
         dois = sum(f["dois"] for f in r["files"].values())
         own = sum(f["dois_own"] for f in r["files"].values())
+        fo = sum(f.get("foreign", 0) for f in r["files"].values())
         n = n_problems(r)
         w = sum(len(v) for v in r["warnings"].values())
         print(f"{'❌' if n else '✅'} {r['slug']}: {cites} card citations ({paged} with pages, {ver} to another version) in "
-              f"{len(r['files'])} files; {dois} DOI(s) ({own} in works.json); {n} problem(s), {w} warning(s)")
+              f"{len(r['files'])} files" + (f", plus {fo} citation(s) of other members' cards" if fo else "") +
+              f"; {dois} DOI(s) ({own} in works.json); {n} problem(s), {w} warning(s)")
     if rt:
         for kind, entries in rt["problems"].items():
             print_entries(kind, entries, "✗", a.show)

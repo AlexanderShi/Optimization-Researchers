@@ -1,0 +1,406 @@
+[
+ {
+  "id": "S037",
+  "year": "2011",
+  "title": "An integer optimization approach to large-scale air traffic flow management",
+  "read_level": "full",
+  "contribution": "A 0-1 model for air traffic flow management that adds rerouting and speed control to the 1998 model through constraints only, strengthened by fork, joint and antichain inequalities with facet proofs, and solved to a 1% gap in about 5-12 minutes on random instances at regional and national scale.",
+  "problem_entry": "IO+AP: en route sectors have become bottlenecks, and no cited airport-and-sector model considers rerouting or speed control; the one rerouting model (Bertsimas and Stock Patterson 2000) was computationally inadequate at realistic scale (pp. 1-2). The problem is to choose, flight by flight, departure, route, sector times and arrival under airport and sector capacities (pp. 2-5).",
+  "key_idea": "Keep the 1998 cumulative variables ('arrived by t', called critical, p. 4) and represent routes as maximal chains of the poset of a flight's sectors, enforced by local mass-balance-like conditions with no new variables (pp. 2-5); strengthen with three classes of valid inequalities and two facet theorems (pp. 5-6, 15-17); capacity envelopes and superlinear (fair) delay costs also add no variables (pp. 4, 6-9).",
+  "assumptions": "Deterministic discrete-time 0-1 model with known capacities, no cancellations, acyclic route digraph (pp. 3-5); superlinear costs linearized as total delay minus a ground credit for exponents near zero (p. 4); a max term in the sector constraint added after Castelli and Corolli's remark (p. 5). Random grid instances with a moving weather front, uniform hub-and-spoke demand, sector sets of the shortest route plus neighbours of congested sectors (p. 9); regional capacity 'unrealistically high' (p. 10); no real schedule (p. 15).",
+  "proof_devices": [
+   "Route choice as maximal chains of a poset over an acyclic digraph, with local precedence conditions at forks and joints instead of path variables (pp. 3, 5)",
+   "Fork, joint and antichain valid inequalities (Propositions 1-3, pp. 5-6)",
+   "Facet proofs: at most |V| - 2 linearly independent o-d paths from the path-node incidence matrix (Proposition 4), a bounded number of 4D paths per flight (Proposition 5), and a block-diagonal matrix of affinely independent integer solutions (Theorem 1, Appendix pp. 15-17); Remark 2 shows the face is not a facet when the condition fails (p. 16); Theorem 2 'analogous' (p. 15)",
+   "Size bound |F|*D*N on variables (p. 9)",
+   "Capacity envelope: a convex polygon on (arrivals, departures) per airport and period, without new variables (pp. 7-8)"
+  ],
+  "experiments": "CPLEX 11.0 via AMPL, four AMD-Xeon 3 GHz processors with 8 GB RAM, 1% gap accepted, 3,600 s limit (p. 10). Regional: 20 airports, 113 sectors, about 3,000 flights; average 305 s; one instance misses the gap, 595 s at a 3% tolerance (pp. 10-11). National: 30 airports, 145 sectors, 6,475 flights; average 743 s, median 640 s; 522 s with capacity envelopes, no branching (pp. 13-14). Rerouting cuts cost by up to about 25%; 399 flights rerouted (6.1%), 58 onto longer routes (pp. 14-15). Without the inequalities a few tests failed within 3,600 s (p. 13). Random data only; 'one typical subset' of results reported (p. 9).",
+  "positioning": "Credits Odoni (1987) as the first formulation, and surveys (p. 1); judges Helme, Lindsay et al., Bertsimas and Stock Patterson (1998) and Lulli and Odoni one by one; presents itself as uniting the flexibility of the 2000 model with the polyhedral strength of the 1998 model; Sherali et al.'s APCDM is complementary (p. 2).",
+  "writing": "The abstract leads with scope and the compact rerouting device, then the practical claim ('short and reasonable' times, 'main engine', p. 1); constraints are explained in words and small figures (pp. 5-7); results hedged ('good, if not necessarily optimal', p. 11); the conclusion ranks computational viability as the most important contribution (p. 15).",
+  "limits_future": "Limits: tactical conflicts and altitudes not modelled (p. 2); airline fairness not examined (p. 9); random data. Future: CPLEX 12, a national database with Metron Aviation and NASA Ames, equity, a two-stage stochastic version, and use as a 'Tier 1' model guiding detailed 'Tier 2' models (p. 15).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Formulation kept in its class: rerouting, speed control and capacity envelopes enter as constraints on the 1998 variables with no new variables; tractability is measured as solve times and gaps at scale, and its source is named (the valid inequalities; without them the model failed in 3,600 s). An IO-native problem, so step 1 (another tradition's problem) does not apply. For Tension T4 this is 2011 practice on the strong-formulation side.",
+    "pages": "pp. 2, 4-8, 10-15"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "The honest-gap half only: solver version, machine, 1% gap, 3,600 s limit, and the instance that misses the gap with its 3% fallback are reported. No warm start, no incumbent heuristic; the comparison is the model with and without rerouting.",
+    "pages": "pp. 10-11, 14-15"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The owner (the FAA command center) is named and its 10-15-minute decision cycle is the run-time test, but instances are synthetic, the baseline is the model without rerouting rather than current practice, and field testing is future work.",
+    "pages": "p. 15"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Fairness is handled only through the curvature of the delay cost, shown on one instance (Figure 7); no price of fairness is computed. The value of rerouting is shown as a curve over capacity with its weak end printed (it diminishes at extreme congestion).",
+    "pages": "pp. 4, 8-9, 14"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Lineage step: fuses two models from his own ATFM line with Odoni and plans deployment with NASA Ames and Metron Aviation, NASA- and NSF-funded.",
+    "pages": "pp. 2, 15, 17"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "add decisions by constraints, not variables",
+    "evidence": "Rerouting, speed control and capacity envelopes are added to a model with a known strong relaxation by local conditions on its existing variables, so the new options inherit its polyhedral strength.",
+    "pages": "pp. 2, 4-6, 8, 15"
+   },
+   {
+    "pattern": "the owner's decision cycle as the run-time test",
+    "evidence": "Times of 10-15 minutes are judged against the decision cycles of the FAA's Air Traffic Control System Command Center.",
+    "pages": "p. 15"
+   },
+   {
+    "pattern": "tiered models",
+    "evidence": "A macroscopic national 'Tier 1' model, solved several times a day, says where detailed 'Tier 2' models (stochastic ground delay, APCDM) should run.",
+    "pages": "p. 15"
+   }
+  ],
+  "transferable": [
+   "Use cumulative 'by time t' binaries in time-indexed scheduling so that precedence and capacity become differences of consecutive variables and the relaxation stays strong (pp. 4-5).",
+   "Model route choice over an acyclic digraph with local flow-balance conditions at forks and joints instead of path variables, and add an antichain inequality, at most one sector per rank (pp. 3, 5-6).",
+   "Prove a facet with a block-diagonal matrix of affinely independent integer solutions built flight by flight (paths, then unit delays per sector), and show by a remark when the inequality is not a facet (pp. 15-17).",
+   "Rewrite a two-part superlinear cost as total delay minus a ground credit, which stays linear in cumulative variables and spreads delay (p. 4).",
+   "Report solver version, machine, cut settings, gap tolerance, time limit and preprocessed size, plus the instance that misses the target and what it takes to finish (pp. 10-11).",
+   "Run with-and-without ablations for the inequalities and for the new option, and say where the option stops helping (pp. 13-15)."
+  ],
+  "coauthors": "Guglielmo Lulli (University of Milano 'Bicocca'), Amedeo Odoni (MIT)",
+  "quotes": [
+   {
+    "text": "Thus, the model determines how to control a flight throughout its duration, not simply before its departure.",
+    "page": 2
+   },
+   {
+    "text": "In a few tests conducted without including the inequalities, the model failed to provide an acceptable solution within the allowed 3,600 seconds.",
+    "page": 13
+   }
+  ]
+ },
+ {
+  "id": "S194",
+  "year": "2013",
+  "title": "Revealing rival marginal offer prices via inverse optimization",
+  "read_level": "full",
+  "contribution": "Recovers the offer prices of rival producers that were marginal in an LP-cleared electricity pool from published quantities and LMPs by an inverse LP built on dual feasibility and strong duality, then estimates rival marginal costs; shown on a three-node example and the IEEE RTS with simulated data.",
+  "problem_entry": "LO+AP (DA-adjacent: inverse optimization): a strategic producer wants rivals' proprietary offer prices and sees only cleared quantities and LMPs; inverse optimization recovers the data of an optimization problem from its solution, while related methods for inverse demand curves (time series, clustering) are approximate (p. 1).",
+  "key_idea": "Write the optimality conditions of the LP market clearing in primal-dual form (observed primal outcomes, dual feasibility, strong duality) instead of KKT complementarity, so that the inverse problem, which keeps offers close to initial guesses in a weighted norm, becomes an LP that decomposes by day (pp. 3-5); marginal blocks are identified uniquely, non-marginal ones return the guess (p. 5); marginal cost is the minimum revealed offer (rule (6), p. 5).",
+  "assumptions": "LP clearing with a DC network, ramping and line limits, no discrete decisions, so not for non-convex unit commitment with side payments (pp. 2-3); published quantities and LMPs (EEX, Nord Pool, OMIE), public rival technical data, demand bids at a large constant or price cap, offer curves as the only strategic tool (admitted limitation) (p. 4); offers never below cost (p. 5). Data simulated from known offers: a three-node system and the 24-node IEEE RTS over 30 days (pp. 1, 5-8). Equations (1)-(7) and Tables I-X are missing from the text layer.",
+  "proof_devices": [
+   "Dual feasibility plus strong duality as LP optimality conditions, avoiding nonconvex complementarity; unique multipliers under non-degeneracy (p. 4)",
+   "Identifiability argument: a non-marginal block could be offered at other prices without changing any outcome, so it cannot be recovered (p. 5)",
+   "Decomposition of the inverse problem by day (p. 4)",
+   "Minimum-revealed-offer rule for marginal costs, with an average rule suggested if offers may fall below cost (p. 5)",
+   "Interval [min, max] of offered prices proposed as input to robust offering models (p. 7)"
+  ],
+  "experiments": "Three-node example: most offers and costs revealed; the never-marginal fifth block at node 3 cannot be estimated and a random-filling heuristic is suggested; estimates within the [min, max] intervals (p. 7). IEEE RTS, 30 days x 24 periods: good estimates except nodes 15, 22 and 23, whose blocks were never marginal; congestion helps (p. 8). No solver, run times, error metric, competing method or noisy data reported; efficiency asserted from the LP class (pp. 1, 9).",
+  "positioning": "Finds no prior use of inverse optimization to reveal rival offers in electricity markets; inverse-demand-curve methods called related but conceptually different (p. 1); credits Ahuja and Orlin and an MIT S.M. thesis for inverse optimization (p. 2) and departs from Ahuja and Orlin's KKT-based conditions (p. 4); cites Bertsimas-Brown-Caramanis and Baringo-Conejo for robust offering (p. 7).",
+  "writing": "Three numbered contributions and a four-step protocol (pp. 1-2); assumptions enumerated with one admitted limitation (p. 4); confident claims ('precise manner', 'accurately revealed', 'highly efficient', p. 1); 'Needless to say' twice (pp. 4-5); short conclusion (pp. 8-9).",
+  "limits_future": "Limits: only markets that publish outcomes, only convex clearing, offer curves as the only strategy, non-marginal blocks unidentifiable, small producers need longer horizons (pp. 3-5); how rule (6) treats non-marginal periods cannot be checked from the text layer (pp. 5, 8). Future use: revealed price intervals as inputs to robust offering (p. 7).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "A question usually handled by time series or clustering is written exactly as an LP; strong duality replaces complementarity to keep the class; LMPs are read as duals; the boundary is printed (non-convex unit commitment, unpublished markets, non-marginal blocks). Caveat: tractability asserted from the class with no solve times (SKILL Taste warning sign 2).",
+    "pages": "pp. 1, 3-5, 9"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The owner is a strategic producer, but the output is an estimate scored against known simulated truth; no offering decision is computed or scored and no competing method is run.",
+    "pages": "pp. 1, 7-8"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "inverse optimization through strong duality",
+    "evidence": "The data of an LP (rival offers) are recovered from observed primal quantities and dual prices by imposing dual feasibility and strong duality, keeping the inverse problem an LP.",
+    "pages": "pp. 3-5"
+   },
+   {
+    "pattern": "say what the observations can identify",
+    "evidence": "Only marginal (price-setting) blocks are recoverable; non-marginal ones default to the prior guess, and the deviations in the case study are explained this way.",
+    "pages": "pp. 5, 7-8"
+   },
+   {
+    "pattern": "simulate, then recover, with known truth",
+    "evidence": "Market clearing is simulated on known offers and the recovered offers are compared with them; S359 does the same by re-aggregating ground-truth trips (S359 p. 6).",
+    "pages": "p. 1"
+   }
+  ],
+  "transferable": [
+   "To invert an LP whose primal solution and duals are observed, impose dual feasibility and equality of primal and dual objectives; with the observed quantities fixed the conditions stay linear in the unknown cost data (p. 4; my reading, since the equations are not in the text layer).",
+   "Argue identifiability before reporting estimates: show which parameters can move without changing the observations and what the estimator returns for them (p. 5).",
+   "Evaluate an estimator by simulating the forward problem on known inputs and comparing recovered and true inputs (p. 1).",
+   "Turn the range of revealed values into an uncertainty interval for a downstream robust model (p. 7)."
+  ],
+  "coauthors": "Carlos Ruiz (Universidad Carlos III de Madrid), Antonio J. Conejo (Universidad de Castilla-La Mancha); Bertsimas is third author",
+  "quotes": [
+   {
+    "text": "On the other hand, the technique is highly efficient as it relies on solving a linear programming problem.",
+    "page": 1
+   },
+   {
+    "text": "Network congestion facilitates the revealing procedure.",
+    "page": 8
+   }
+  ]
+ },
+ {
+  "id": "S328",
+  "year": "2013",
+  "title": "A new local search algorithm for binary optimization",
+  "read_level": "full",
+  "contribution": "A general-purpose local search for binary programs that passes through slightly infeasible 'interesting' solutions pruned by trace memory, with depth parameter Q, a pseudo-polynomial run-time bound and a w^2/(2w-1) guarantee for w-set packing (ideal version), and a hashed implementation that matches or beats CPLEX 11.2 on many large random covering and packing instances after about 20 hours.",
+  "problem_entry": "IO+HS: solvers have advanced through cutting planes and heuristics (cuts believed to matter more), yet especially large and dense binary problems remain unsolvable and practice wants good feasible solutions without proofs; general-purpose binary heuristics are few (p. 2).",
+  "key_idea": "One-bit-flip local search over 'interesting' solutions: violation at most 1 per constraint, trace within distance Q of the incumbent, and better than every examined solution with the same trace, stored in trace boxes cleared at each improvement (pp. 3-4); Q sets the depth and the complexity-quality trade-off; no problem structure is used (p. 3).",
+  "assumptions": "Integer data, with the bound depending on ||c||_1 (pp. 3, 5); the guarantee assumes a FIFO list, an injective trace map and unweighted w-set packing with exactly w ones per column (pp. 5-6); the hashed implementation loses the guarantee (p. 9). Random covering and packing instances (m = 1,000, n = 2,500; w = 3, 5, 7 or random 3-7; large covering with m = 4,000, n = 10,000) and three MIPLIB 2003 instances, manna81 needing an adjusted algorithm (pp. 12-13).",
+  "proof_devices": [
+   "Run time O(||c||_1^2 n C(2m,Q) max(m,n)): count trace boxes as binary traces within distance Q, each updated at most ||c||_1 + 1 times (Lemma 1), times O(n max(m,n)) per examination with incremental update Ay - b = Ax - b +/- A_i (Lemma 2) (Theorem 1, pp. 4-5); strongly polynomial for c = e (p. 5)",
+   "Exchange lemma by counting tight constraints: a solution worse than (2w-1)/w^2 of optimal admits an improving exchange (Lemma 3, pp. 6-7)",
+   "Reachability by induction on generations under a FIFO list when Q >= T*w (Lemma 4, pp. 7-8), giving Z*/Z_H <= w^2/(2w-1) with Q = w^2 (Theorem 2, pp. 6, 8)",
+   "Comparison with Hurkens-Schrijver's w/2 + epsilon and the O(m^(w^2)) cost of Q = w^2 (p. 8)",
+   "Hashed version: run time O(||c||_1^2 N_TB n max(m, n N_H)) and no guarantee (eq. (25), p. 9)"
+  ],
+  "experiments": "Bit arrays, sparse traces, multiple hash functions, priority-queue extraction (pp. 9-11); staged runs raising Q and memory up to 6 GB, each warm-starting the next (pp. 11-12). CPLEX 11.2 at default settings (covering) and at MIP emphasis 0 and 4 (packing), emphasis 1 dropped as dominated (pp. 12-13); Xeon 5050 3.00 GHz, 8 GB (p. 11); checkpoints 5-20 h and 10-200 h (pp. 12-13). The algorithm tends to win after about 20 h, CPLEX in 1-2 h runs (p. 12); by my count CPLEX leads on most w = 3 and random-w packing rows (p. 14). MIPLIB: optimum on manna81, 8.04% and 4.96% short on fast0507 and seymour (p. 15).",
+  "positioning": "Claims generality against special-purpose covering and packing algorithms (pp. 2-3), concedes a weaker bound than Hurkens and Schrijver (pp. 3, 8), and treats CPLEX fairly: a comparison that 'might not be deemed entirely fair' but is meaningful, and 'in all fairness' CPLEX seeks provable optima (pp. 11, 13).",
+  "writing": "Five numbered contributions with the empirical one flagged 'Most importantly' (pp. 2-3); a three-variable worked example (p. 4); implementation choices 'by no means' exhaustive or optimal (p. 8); fairness hedges (pp. 11, 13); modest conclusion ('practical promise', 'competitive') (p. 15).",
+  "limits_future": "Limits printed: guarantee lost in the practical version (p. 9); weaker bound, expensive in Q (p. 8); CPLEX better in short runs (p. 12); MIPLIB gaps (p. 15). Motivated by dense problems (p. 2) but presented and tested for sparse ones (p. 15). Future work only implied: a larger Q (p. 15).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Roles reversed: the heuristic is the method and CPLEX the incumbent, dueled at equal memory over time checkpoints with the solver at its feasibility emphasis; losses printed; staged self-warm-starts. No certificate and no exact model. Bears on SKILL Heuristic 3, which cites this DOI: supports 'switch to local search' and 'change the claim', but shows no stalled exact model of their own, no restarts and no MIO kept for certification.",
+    "pages": "pp. 2, 9, 11-15"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "One interpretable knob (depth Q) with proved run-time and approximation bounds, but no quality curve per Q (Q and memory are raised together) and the bound fails for the hashed version.",
+    "pages": "pp. 3-9, 11"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "bounded-infeasibility search with trace memory",
+    "evidence": "The search admits solutions violating each constraint by at most one unit within trace distance Q of the incumbent, and prunes by the best objective per trace (hashed into fixed memory).",
+    "pages": "pp. 3, 9-10"
+   },
+   {
+    "pattern": "prove for the ideal version, run the scalable version, and say the guarantee is lost",
+    "evidence": "Theorem 2 needs a FIFO list and an injective trace map; the implementation hashes traces and the paper states the guarantee is lost. S028 has the same shape (exactness for N2 = 1, applications outside it; S028 pp. 8, 12-15).",
+    "pages": "pp. 5-9"
+   },
+   {
+    "pattern": "staged deepening with warm starts",
+    "evidence": "Runs proceed in stages of growing Q and memory, each started from the previous stage's best solution, because cold starts with large Q waste time clearing large lists.",
+    "pages": "p. 11"
+   }
+  ],
+  "transferable": [
+   "Let a local search cross infeasible space under explicit caps (violation <= 1 per constraint, trace distance <= Q) and prune by the best objective seen per trace (p. 3).",
+   "Bound a memory-based search by the number of storable states times the number of objective improvements per state (Lemma 1, pp. 4-5).",
+   "Prove a local-search ratio in two steps: an exchange lemma by counting tight constraints, then reachability by induction on generations under a FIFO list (Lemmas 3-4, pp. 6-8).",
+   "Fix memory as the budget (hash boxes = list size), use several hash functions against collisions, and keep N_TB/Q constant so Q stays a meaningful knob (pp. 9-10).",
+   "Run in stages of growing depth and memory, each warm-started by the previous stage (p. 11).",
+   "Duel a heuristic against a MIP solver at equal memory and several time checkpoints, with the solver on its feasibility emphasis, and add library instances with known optima (pp. 11-15)."
+  ],
+  "coauthors": "Dan A. Iancu (Stanford GSB), Dmitriy Katz (IBM T. J. Watson Research Center)",
+  "quotes": [
+   {
+    "text": "In real-world applications, there is a stringent desire to find feasible solutions that improve current practice, without necessarily having a proof of their optimality.",
+    "page": 2
+   },
+   {
+    "text": "For shorter running times (one-two hours), CPLEX tends to have an edge, although not in all cases.",
+    "page": 12
+   }
+  ]
+ },
+ {
+  "id": "S359",
+  "year": "2018",
+  "title": "From physical properties of transportation flows to demand estimation: An optimization approach",
+  "read_level": "full",
+  "contribution": "Estimates time-dependent origin-destination matrices from aggregate entry and exit counts by a convex quadratic program with soft constraints for data fit, temporal and spatial smoothness and symmetry, improving R^2 over maximum entropy by 0.05-0.09 on bike, taxi and subway data with ground truth and applied to Boston's subway.",
+  "problem_entry": "ML+AP (CP as engine): planning needs time-dependent OD demand, but flat-fare subways record only entries and exits and surveys are coarse, costly and rare; recovering a matrix from its marginals is 'generally underspecified' (p. 2); the paper uses only public, aggregate, privacy-preserving counts (p. 3).",
+  "key_idea": "Make the estimate unique by asking it to be physically plausible: one convex QO with squared slack penalties for row and column sums, temporal smoothness of proportions, spatial smoothness toward the nearest station and round-trip symmetry (pp. 3-5); the Lagrangian of maximum entropy shows it forces equal destination preferences across origins and ignores time, which the QO relaxes (pp. 5-6).",
+  "assumptions": "Periods long relative to trips (p. 3); slacks absorb exit undercounting and trips crossing periods (p. 4); smoothness on proportions, not volumes; nearest neighbour generalizable to a feature space; symmetry only in aggregate; weights N, squared neighbour distances and a volume normalization (pp. 4-5). Data: Hubway (4 municipalities, 131 stations), NYC taxis (266 districts), BART (46 stations) with ground truth, aggregated from trips (pp. 6-9); Boston MBTA turnstile counts without ground truth (p. 9).",
+  "proof_devices": [
+   "Convex QO with absolute-value constraints linearized and squared slack penalties, d >= 0 (pp. 4-5)",
+   "Lagrange conditions of the maximum-entropy problem give d = a*b/sum(b), exposing its proportionality assumption and separability in time (pp. 5-6)",
+   "No uniqueness or consistency result is proved, although uniqueness is claimed (pp. 4, 10)"
+  ],
+  "experiments": "R^2 and CVaR(0.1) of percentage error plus irregularity and imbalance measures; baseline ME closed form on perfect aggregates (p. 6). R^2 gains: 0.916 to 0.991, 0.360 to 0.413 (CVaR worse, 0.97 to 1.12), 0.805 to 0.870, 0.676 to 0.764 (Table 1, p. 6). Times 6 s to 8 h in Julia/JuMP on a laptop or server; solver not named (pp. 6-9). Assumption checks by predictive R^2 (Table 3, p. 8); ablation of spatial smoothing worsens CVaR (3.14 to 6.19) or R^2 (0.413 to 0.382) (p. 8); MBTA checked only qualitatively against survey transfer patterns, missing Green-Green trips (pp. 9-10).",
+  "positioning": "Surveys OD estimation from link counts (Bayesian, GLS, ML, multiobjective, state-space, ME, equilibrium) and tracking data (smart cards, AVI, phones) (pp. 2-3); claims kinship with ME and equilibrium but 'an interpretable list of desired physical properties', lighter than behavioural models (p. 3); credits Brenninger-Gothe et al. for weighting (p. 4) and names Liu and Zhou as an extension (p. 9).",
+  "writing": "Three numbered contributions (public data, privacy, light assumptions) (p. 3); one headline number in the abstract (p. 2); some strong phrases ('truly large-scale', 'computational validation of the formal result') (p. 8); negative results in the body with explanations (p. 8); MBTA extrapolation hedged (p. 9).",
+  "limits_future": "Limits: worse tail error on the noisy station-level data, weak nearest-neighbour regularity (p. 8), no ground truth and missing Green Line data for MBTA (pp. 9-10). Future: replace outdated surveys in planning and real-time estimation (p. 10); route-choice constraints for complex networks (p. 9).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "A problem owned by transportation statistics is written exactly as a convex QO; the rival's implicit assumption is read off its Lagrangian; solve times are printed per data set. Caveats: uniqueness claimed, not proved; solver not named.",
+    "pages": "pp. 2-10"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Owner (transit planners) and current rule (outdated surveys) are named, but estimates are scored by R^2 and CVaR against ground truth and the standard method (ME), not decisions; the target system gets only a qualitative survey comparison.",
+    "pages": "pp. 2, 6-10"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "The duel step (against the incumbent, on data with known truth) is present (ME on three ground-truth sets); no certificate is needed for a convex QO and there is no warm start.",
+    "pages": "p. 6"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "physical regularities as soft constraints for an underdetermined estimation",
+    "evidence": "Smoothness in time and space and round-trip symmetry, written as penalized slacks, make the OD estimate unique enough to beat maximum entropy.",
+    "pages": "pp. 4-5"
+   },
+   {
+    "pattern": "test each modelling assumption by its own predictive R^2, then ablate it",
+    "evidence": "Last-hour, nearest-neighbour and return-flow predictors are scored on ground truth (Table 3), and removing spatial smoothing is shown to hurt despite its weak R^2.",
+    "pages": "p. 8"
+   },
+   {
+    "pattern": "expose the rival method's hidden assumption through its Lagrangian",
+    "evidence": "The ME closed form derived from its Lagrangian implies equal destination preferences across origins and time separability, motivating the QO's relaxations.",
+    "pages": "pp. 5-6"
+   },
+   {
+    "pattern": "known-truth evaluation by re-aggregation",
+    "evidence": "Entry and exit counts are built from trip-level data with known OD truth, then the OD matrix is recovered and scored; cf. S194 p. 1.",
+    "pages": "p. 6"
+   }
+  ],
+  "transferable": [
+   "To recover a matrix from marginals, add soft constraints for believed regularities (temporal and spatial smoothness, symmetry) with squared slack penalties, weighted so no term dominates as the problem grows (pp. 4-5).",
+   "Impose smoothness on proportions (cell over marginal) rather than volumes so that peaks do not violate it (p. 4).",
+   "Derive the baseline's closed form from its Lagrangian and state the assumption it implies before experimenting (pp. 5-6).",
+   "Build test inputs by aggregating data with known disaggregated truth, and report a tail metric (CVaR of percentage error) beside R^2 (p. 6).",
+   "Validate each structural assumption with its own simple predictor on ground truth and ablate the corresponding constraints (p. 8)."
+  ],
+  "coauthors": "Julia Yan (MIT Operations Research Center)",
+  "quotes": [
+   {
+    "text": "we offer an interpretable list of desired physical properties rather than specifying maximum entropy alone.",
+    "page": 3
+   },
+   {
+    "text": "which indicates that in this case, the QO does not estimate the smaller matrix elements as well.",
+    "page": 8
+   }
+  ]
+ },
+ {
+  "id": "S028",
+  "year": "2019",
+  "title": "Adaptive distributionally robust optimization",
+  "read_level": "full",
+  "contribution": "Shows that two-stage adaptive distributionally robust linear optimization over SOC-representable ambiguity sets equals a classical robust problem, and that linear decision rules that also depend on the auxiliary variables of a lifted ambiguity set give tighter, always-feasible (complete recourse) and in one class exact approximations solvable as LPs or SOCPs, implemented in the ROC package and tested on appointment scheduling and inventory control.",
+  "problem_entry": "RO+CP (SD multistage; AP testbeds): uncertainty is often ignored because it is intractable (p. 2); dynamic models suffer the curse of dimensionality and regular LDRs can be infeasible even with complete recourse (pp. 3, 7); moment-based ambiguity sets may not give tractable counterparts (pp. 4-5); a general framework should run in software with reasonable effort (p. 3).",
+  "key_idea": "Lift the ambiguity set with auxiliary random variables u for the nonlinear moment functions so only linear expectations remain over an SOC-representable support (pp. 5-6); then adaptive DRO equals a classical robust problem (Theorem 1, p. 6), and a decision rule affine in (z, u) gives beta <= beta_E <= beta_L (Theorem 2, p. 7), is feasible under complete recourse (Theorem 3, p. 7) and is exact with one recourse variable (Theorem 4, p. 8); partial cross-moment sets approximate covariance information (p. 5).",
+  "assumptions": "Linear second stage with fixed recourse and data affine in z (p. 4); relatively complete recourse and a Slater condition for Theorem 1 (p. 6); SOC restriction 'for tractability considerations' (p. 2); full cross-moment sets excluded and partial cross-moment directions chosen by hand, later called ad hoc (pp. 5, 15). Synthetic instances: appointment scheduling after Mak et al. (N = 8 and 12-30) (pp. 12-13) and IMA(0,1,1) inventory after See and Sim (p. 14). Electronic companion proofs not read.",
+  "proof_devices": [
+   "Conic duality for the equivalence with a classical robust problem, avoiding functional-space analysis; intractable unless the dual recourse polyhedron has few extreme points (Theorem 1, p. 6; proof in EC.1, not read)",
+   "Marginal equivalence of the lifted ambiguity set (Proposition 1, pp. 5-6)",
+   "Composition argument: the lifted rule evaluated at u = g(z) is feasible for the original problem, ordering the bounds (Theorem 2, p. 7)",
+   "Counterexample y >= |z|: the regular LDR is infeasible under complete recourse (p. 7)",
+   "Negative result: a relatively complete recourse problem with N2 = 1 where every lifted LDR is infeasible because u is unbounded above (Proposition 3, p. 8)",
+   "Policy counterexample: (1 + z^2)/2 attains the worst-case optimum of |z| under a two-point worst-case distribution but is pointwise worse (pp. 9-10)",
+   "Partial Fourier-Motzkin elimination as an enhancement (p. 9); model sizes as functions of N (Table 2, p. 13)"
+  ],
+  "experiments": "Appointment scheduling: regular LDR ultraconservative (about 2,000 against 20-220); Exact MM marginally better than Approx MM; Approx PCM better at low correlation; Approx CM (SDP) lowest where verified by SDPT3, SeDuMi or MOSEK but unstable and failing at N = 30, time 7 to 378 against at most 2 for PCM (units not given) (pp. 12-13); out-of-sample Monte Carlo with 10,000 trials under truncated normal and log-normal (pp. 13-14). Inventory: PCM close to a DP lower bound under i.i.d. uniform factors (T = 30, alpha = 0: 740.8 vs 725.0; MM 838.6), gap growing with correlation (pp. 14-15). Solver versions and machine not reported; Approx CM values for instances 6-7 differ between Tables 1 and 5 (pp. 12, 14).",
+  "positioning": "Frames by risk vs ambiguity and RO's tractability, citing his own RO papers alongside RO's founders (p. 2); credits Wiesemann-Kuhn-Sim for lifted sets and traces LDR history (Garstka-Wets, Ben-Tal et al., Bertsimas-Iancu-Parrilo, deflected and segregated variants) (p. 3); acknowledges similar results by Isii, Bertsimas-Popescu and Shapiro-Kleywegt (p. 6); praises Mak et al.'s reformulation (p. 11); prefers 'adaptive' to 'adjustable' (p. 15).",
+  "writing": "Four numbered contributions (p. 3); abstract from 'modular and tractable' to a software package (p. 2); surprise markers ('More interestingly', 'Quite surprisingly') (pp. 2, 8); an explicit negative result and a caution about policies (pp. 8, 10); software as proof of concept (p. 10); proofs moved to the electronic companion (pp. 6-8).",
+  "limits_future": "Limits: Theorem 1 tractable only with few extreme points (p. 6); no exactness under relatively complete recourse (p. 8); decision rules are not policies and time consistency can fail (pp. 9-10); partial cross-moment sets ad hoc (p. 15). Advice: implement here-and-now and re-solve on a folding horizon (p. 10). Future: adapt infinitely constrained ambiguity sets (Chen, Sim and Xu) to adaptive problems (p. 15).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "A problem owned by stochastic programming and DRO is written as a classical robust problem and, via the lifted LDR, as an LP or SOCP for commercial solvers; tractability is the stated reason for the SOC restriction; the boundary is printed (cross-moment sets excluded, extreme-point intractability, a negative result); the dual reading gives a two-point worst case. Supports the Domain Map's 'adaptive policies with self-quantified limits'.",
+    "pages": "pp. 2-3, 5-8, 10"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Gaps are measured against an exact solution (Exact MM) and a DP lower bound, and SDP baselines count only when a solver confirms optimality; no warm start or heuristic incumbent, and the approximation's own gap is known only where such references exist.",
+    "pages": "pp. 12-15"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Decisions are scored out of sample by simulation, but against literature methods (Mak et al., Kong et al.) on synthetic instances, not an owner's current rule.",
+    "pages": "pp. 12-15"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "The RO programme continues with Sim (a former student per SKILL Academic Lineage; their 2004 paper is cited); the adoption channel is a modelling package (ROC; XProg emerged independently) justified by 'broader impact', not a course, book or company.",
+    "pages": "pp. 2-3, 10"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "lift, then let the decision rule see the lifted variables",
+    "evidence": "Auxiliary random variables turn nonlinear moment constraints into linear expectations, and decision rules affine in them are tighter, feasible under complete recourse, and exact for one recourse variable.",
+    "pages": "pp. 5-8"
+   },
+   {
+    "pattern": "exactness class with a counterexample just outside it",
+    "evidence": "Theorem 4 (complete recourse, N2 = 1) is paired with Proposition 3, a relatively complete recourse instance where every lifted LDR is infeasible.",
+    "pages": "p. 8"
+   },
+   {
+    "pattern": "do not read a bound-optimal decision rule as a policy",
+    "evidence": "A worked counterexample shows a rule with the optimal worst-case value that is pointwise worse; the paper advises implementing only the here-and-now decision on a folding horizon.",
+    "pages": "pp. 9-10"
+   },
+   {
+    "pattern": "a modelling package as part of the contribution",
+    "evidence": "Software implementability is stated as a goal for broader impact, and the paper ships ROC (C++) with automatic reformulation.",
+    "pages": "pp. 3, 10"
+   },
+   {
+    "pattern": "prove for the narrow case, run outside it, and report the gap",
+    "evidence": "Exactness needs one recourse variable, while the scheduling model has N + 1; the gap is reported against Exact MM and a DP bound (cf. S328 p. 9).",
+    "pages": "pp. 8, 10-15"
+   }
+  ],
+  "transferable": [
+   "Introduce one auxiliary random variable per nonlinear moment function so that the ambiguity set has only linear expectations, and let decision rules depend on these variables too (pp. 5, 7).",
+   "Order approximations by composition: a rule optimal for the lifted problem, evaluated at u = g(z), is feasible for the original (Theorem 2, p. 7).",
+   "Approximate a semidefinite covariance constraint by finitely many directional variance bounds, which only improve as directions are added (p. 5).",
+   "Mark the edge of a result with small explicit counterexamples (y >= |z| for the regular LDR, p. 7; a box-supported problem for the lifted LDR, p. 8).",
+   "Keep results from numerically fragile SDP baselines only when at least one of several solvers certifies optimality, and say so (p. 12).",
+   "Bound a robust policy from below by solving the DP under one distribution that belongs to the ambiguity set (pp. 14-15).",
+   "Implement the first-stage decision and re-solve on a folding horizon instead of committing to the decision rule as a policy (p. 10)."
+  ],
+  "coauthors": "Melvyn Sim (NUS Business School), Meilin Zhang (SUSS Business School)",
+  "quotes": [
+   {
+    "text": "we caution against using the optimal decision rule as a policy.",
+    "page": 10
+   },
+   {
+    "text": "However, the choice of such an ambiguity set appears ad hoc, and it begs an interesting question",
+    "page": 15
+   }
+  ]
+ }
+]

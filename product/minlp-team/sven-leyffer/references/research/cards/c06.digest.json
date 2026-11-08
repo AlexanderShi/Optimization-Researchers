@@ -1,0 +1,243 @@
+[
+ {
+  "id": "S008",
+  "year": "2006",
+  "title": "Local convergence of SQP methods for mathematical programs with equilibrium constraints",
+  "read_level": "unreadable",
+  "contribution": "Not read: the extracted text is a broken Type 3 font layer and needs OCR.",
+  "problem_entry": "",
+  "key_idea": "",
+  "assumptions": "",
+  "proof_devices": [],
+  "experiments": "",
+  "positioning": "",
+  "writing": "",
+  "limits_future": "",
+  "method_links": [],
+  "new_pattern_candidates": [],
+  "transferable": [],
+  "coauthors": "R. Fletcher, D. Ralph, S. Scholtes (from the work list; not verifiable in the garbled text)",
+  "quotes": []
+ },
+ {
+  "id": "S012",
+  "year": "2006",
+  "title": "Interior methods for mathematical programs with complementarity constraints",
+  "read_level": "full",
+  "contribution": "An interior-penalty framework for MPCCs with global convergence to C-/strongly stationary points, superlinear local convergence with the penalty eventually fixed, a relaxation-method corollary via KKT correspondence, and a dynamic penalty update tested on MacMPEC (preprint OTC 2004-10 / ANL/MCS-P1211-1204 read).",
+  "problem_entry": "The NLP form of an MPCC violates MFCQ everywhere; in 2002 tests LOQO and KNITRO 'as of 2002' were slower and less reliable than filterSQP on MacMPEC, so interior methods needed a regularization (p. 2); penalization chosen as a general tool for degenerate NLPs (p. 3).",
+  "key_idea": "Apply an interior method to the l1-penalty problem f + pi x1'x2 with a scale-free complementarity test ||min{x1,x2}|| <= eps_comp (pp. 4-5); update pi either after each barrier problem (Classic) or inside it when complementarity is above tolerance and not below 0.9 of its last-3 maximum (Dynamic) (pp. 20-21).",
+  "assumptions": "Inner algorithm assumed to succeed (p. 9); MPCC-LICQ for stationarity (p. 9); strong stationarity needs pi x -> 0 at corners or bounded pi (p. 12); local: C2 Lipschitz data, MPCC-LICQ, primal-dual strict complementarity, MPCC-SOSC, pi > pi* and rate conditions on mu, eps (pp. 14-17).",
+  "proof_devices": [
+   "multipliers from barrier terms sigma = mu/x - pi x, normalized by their max norm, inactive ones -> 0 via ratio x2i/x1i, boundedness by contradiction with MPCC-LICQ (pp. 10-11)",
+   "sign argument at corner indices for C-stationarity (p. 12)",
+   "nonmonotone vector penalty allowed in the theorem so that relaxation sequences can be mapped onto it (p. 12)",
+   "one-to-one KKT correspondence penalty <-> relaxation gives the relaxation result as a corollary (pp. 13-14)",
+   "penalty problem inherits LICQ, strict complementarity, SOSC for pi > pi* (Lemma 4.3, p. 15)",
+   "implicit function theorem + Newton analysis: near a regular solution one step per barrier problem passes both tests and pi stays fixed, superlinear rate (Theorem 4.5, pp. 17-19)",
+   "eps_comp = mu^0.4 justified by O(sqrt(mu)) distance without strict complementarity (p. 19)"
+  ],
+  "experiments": "74 problems <1,000 variables, mostly MacMPEC plus added badly scaled variants (pp. 21-22); NLP, Fixed (pi=1e4), Classic, Dynamic all in the MATLAB solver ipm-d (pp. 20-21); iteration performance profiles for pi0=1 and pi0=||grad f(x0)|| (p. 23); per-iteration traces on ralph2, scale1, bard3, bilin (pp. 23-25); failures listed with causes (pp. 25-26).",
+  "positioning": "Extends Hu-Ralph's exact-solve proof, relates to Anitescu's independent inexact analysis with stronger assumptions there (p. 12); re-proves Liu-Sun / Raghunathan-Biegler relaxation convergence via correspondence (pp. 12-14); Classic more flexible than fixed-pi off-the-shelf use (p. 26).",
+  "writing": "Three numbered small examples in Section 2 each yield a design lesson and are 'revisited' in Section 5 (pp. 5-7, 23-25); scope limits stated ('beyond the scope of this paper', p. 9); dated competitor versions (p. 2); modest conclusion (p. 26).",
+  "limits_future": "No inner-loop analysis (p. 9); small MATLAB prototype (p. 21); failures without multipliers or with extra degeneracy (pp. 25-26); plans: KNITRO implementation for large MPCCs and interior-penalty methods for general degenerate NLPs (p. 26).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Penalization chosen as a general tool for degenerate NLPs; MPCC handled by an existing interior NLP solver plus a penalty layer; conclusion returns to general degenerate NLPs.",
+    "pages": "pp. 3, 20, 26"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Three tiny two-variable MPCCs each break a penalty-update policy and set a design requirement; failures traced to violated hypotheses (no multipliers, extra degeneracy).",
+    "pages": "pp. 5-7, 25-26"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "MacMPEC as test bed; badly scaled variants added because the library is almost all well-scaled; scale4 is a rescaling of scholtes3.",
+    "pages": "pp. 21, 23, 25"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "All four methods in one solver; simple base solver chosen so production heuristics do not mask the effect; competitor codes dated 'as of 2002'; per-instance failure causes.",
+    "pages": "pp. 2, 20-21, 25-26"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Explains filterSQP's success by local equivalence of (1.3) to an MFCQ-satisfying NLP; reads per-iteration complementarity and pi traces as diagnostics.",
+    "pages": "pp. 2, 6-7, 23-25"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "KKT-correspondence transfer between regularizations",
+    "evidence": "Global convergence proved for the interior-penalty method, then transferred to interior-relaxation methods as a corollary by a one-to-one map between KKT points; theorem written with nonmonotone vector penalties to absorb the mapped sequence (close to Heuristic 5).",
+    "pages": "pp. 12-14"
+   },
+   {
+    "pattern": "Windowed progress test for adaptive penalties",
+    "evidence": "Dynamic raises pi only if complementarity exceeds eps_comp and is not below eta=0.9 times its maximum over the last m=3 iterates; bard3 shows why not to raise it below tolerance.",
+    "pages": "pp. 20-21, 24-25"
+   }
+  ],
+  "transferable": [
+   "Measure complementarity by ||min{x1,x2}|| (scale-free, dimension-free) rather than x1'x2 (p. 4).",
+   "Set eps_comp = mu^gamma with gamma < 1/2 so the test is satisfiable when iterates are O(sqrt(mu)) from the solution (p. 19).",
+   "Prototype a new outer strategy in a deliberately simple base solver and say why (p. 20).",
+   "Report profiles for a naive and a multiplier-estimate initial penalty (p. 23).",
+   "When the aggregate profile cannot separate two variants, add per-iteration traces on the few separating instances and say the library lacks the hard case (pp. 23-25).",
+   "Prove convergence for one regularization and obtain the other by a KKT-point correspondence (pp. 12-14)."
+  ],
+  "coauthors": "Gabriel López-Calva, Jorge Nocedal",
+  "quotes": [
+   {
+    "text": "The upward trend in complementarity should be taken as a warning sign that the penalty parameter is not large enough, since no progress is made toward satisfaction of (2.8).",
+    "page": 6
+   },
+   {
+    "text": "We chose to work with ipm-d because it is a simple interior solver that does not employ the regularizations, scalings, and other heuristics used in production packages that alter the MPCC, making it harder to assess the impact of the approach proposed in this paper.",
+    "page": 20
+   }
+  ]
+ },
+ {
+  "id": "S018",
+  "year": "2006",
+  "title": "Leader-Follower Equilibria for Electric Power and NO_x_ Allowances Markets",
+  "read_level": "full",
+  "contribution": "Formulates a PJM electricity/NOx-allowance Stackelberg game as a 20,000-variable MPEC with convex followers, solves it by an NCP feasibility phase (PATH) followed by chained NLP solves (SNOPT, FILTER), and shows a leader long in allowances profits by withholding them (Argonne preprint ANL/MCS-P1191-0804 read).",
+  "problem_entry": "An earlier Cournot heuristic failed to find the dominant producer's optimal joint emissions/electricity strategy and may underestimate market power (p. 3); Stackelberg with capacity-constrained followers forces an MPEC, which recent SQP results make tractable despite MFCQ failure (pp. 3-4).",
+  "key_idea": "Replace each convex follower problem (Cournot and price-taking generators, ISO with DC flow and quadratic losses, arbitrager) by KKT conditions with endogenous NOx price, let the leader choose output and withheld allowances, and solve the MPEC as an NLP from a feasible point computed by freezing the leader (pp. 6-14).",
+  "assumptions": "Follower convexity: LP for price takers, concave quadratic for Cournot players, convex ISO constraints for nonnegative losses (Lemmas 3.1-3.3, pp. 9-11); NOx trading only within PJM (p. 6); no vertical integration/forward contracts, fixed imports, no allowance imports/exports, each flagged as overestimating market power (pp. 19-20).",
+  "proof_devices": [
+   "per-player convexity lemmas giving sufficiency of KKT conditions (Lemmas 3.1-3.3, pp. 9-11)",
+   "Theorem 3.4: every MPEC-feasible point has globally optimal followers (p. 13)",
+   "remove degeneracy of the assembled equilibrium system by dropping an implied equation and adding a hub-price pin to get a square system (p. 12)"
+  ],
+  "experiments": "One public AMPL model, ~20,000 variables, 10,000 constraints (p. 13); SNOPT and FILTER fail on the plain NLP and from the PATH point; solved by SNOPT at fixed withholding then FILTER with variable withholding (p. 14); PATH 13.2 s (p. 15); CPU/iteration table for two leaders with linear-algebra explanation (p. 16); four economic scenarios in Tables 7-11 (pp. 16-20).",
+  "positioning": "Against simple-model (Sartzetakis) and heuristic Cournot (Chen-Hobbs) analyses and models with exogenous allowance prices or no quadratic losses (pp. 3-4); relies on Anitescu and Fletcher et al. SQP results for MPECs (p. 14).",
+  "writing": "Two-audience paper (economics framing pp. 2-6, methods pp. 13-14); negative solver results reported plainly (p. 14); conclusions about the computed point hedged by multiplier sizes ('probably not strongly stationary', 'likely B-stationary', p. 16); timings only illustrate difficulty (p. 15).",
+  "limits_future": "Stationarity type unverified (p. 16); three named modelling assumptions likely overstate market power (pp. 19-20); multiyear banking with capacity expansion would give a bilevel MINLP 'currently beyond any optimization solvers' (p. 20).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Solver log read (convergence to local minimizer of infeasibility); fixes are formulation/start-point fixes: NCP feasibility phase and grouped complementarity constraints to improve scaling; multiplier sizes read as evidence of stationarity type.",
+    "pages": "pp. 14, 16"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "MPECs-as-NLPs toolkit and filterSQP carried into an energy-economics Stackelberg game considered difficult.",
+    "pages": "pp. 3-4, 14"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Timings only illustrate difficulty; solver cost differences explained, not ranked; biasing modelling assumptions listed with direction.",
+    "pages": "pp. 15-16, 19-20"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Complete AMPL model released at a public URL (Munson's page), but as a single application model rather than a maintained, corrected library.",
+    "pages": "p. 13"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Feasibility phase by freezing the leader",
+    "evidence": "Recast the leader as a Cournot follower with withholding fixed at 0, solve the square NCP with PATH for an MPEC-feasible point, then chain NLP solvers (SNOPT at fixed withholding, FILTER with it free).",
+    "pages": "p. 14"
+   }
+  ],
+  "transferable": [
+   "Prove a convexity lemma per follower type so that one theorem certifies globally optimal followers at every MPEC-feasible point (pp. 9-13).",
+   "Get an MPEC-feasible start from the square equilibrium problem with the leader's extra variables frozen (p. 14).",
+   "Group complementarity products by block of equations instead of one aggregate x1'x2 <= 0 so unbounded multipliers touch fewer constraints (p. 14).",
+   "Report the largest multiplier at the computed solution and state what it implies about stationarity (p. 16).",
+   "Remove degeneracy from an assembled multi-player KKT system by dropping an implied equation and adding a pinning condition (p. 12)."
+  ],
+  "coauthors": "Yihsu Chen, Benjamin F. Hobbs, Todd S. Munson",
+  "quotes": [
+   {
+    "text": "No single nonlinear programming solver could solve the Stackelberg game even from the feasible starting point provided by the feasibility phase.",
+    "page": 14
+   },
+   {
+    "text": "These large values indicate that the computed solution is probably not strongly stationary because the multipliers do not appear to be bounded.",
+    "page": 16
+   }
+  ]
+ },
+ {
+  "id": "S019",
+  "year": "2006",
+  "title": "A brief history of filter methods",
+  "read_level": "full",
+  "contribution": "A consolidating history of NLP filter methods (SQP and interior filters, their convergence theory and local-convergence fixes) and of their extension to equations, nonsmooth, derivative-free and augmented Lagrangian methods (Argonne preprint ANL/MCS-P1372-0906 read).",
+  "problem_entry": "Global convergence of Newton-based NLP methods; penalty parameters depend on unknown multipliers and large ones shorten steps, while unmodified SQP already solves many problems, so the goal is a safeguard that lets the full step be taken more often (pp. 3-4).",
+  "key_idea": "Treat NLP as biobjective in (h, f) with domination-based acceptance, plus sloping envelope, switching condition with sufficient reduction, and feasibility restoration; SOC steps preferred for fast local convergence to keep f in the filter (pp. 4-9).",
+  "assumptions": "Smooth f, c (p. 3); compact iterates, C2 functions, bounded Hessians for the outline (p. 7); own proof's global-QP assumption called undesirable and later removed by [6] (pp. 8-9); others' bounded Jacobian inverse flagged as strong (p. 11).",
+  "proof_devices": [
+   "filter forces feasible limit points; trust-region reset to rho_bar guarantees f-type steps near feasible nonstationary points; Delta q monotone in rho under global QP solves (p. 8)",
+   "three-outcome convergence statement called as strong as can be expected for general NLPs (pp. 7-8)",
+   "analysis showed NW/SE corner rule and unblocking redundant (p. 7)",
+   "multidimensional filter with beta < 1/sqrt(p) guaranteeing an acceptable point exists (p. 13)",
+   "never adding h=0 points to the filter guarantees restoration success (p. 7)"
+  ],
+  "experiments": "none",
+  "positioning": "Filter as alternative to penalty functions (pp. 3-4, 15); developed independently of Surry et al.'s GA and Lemaréchal et al.'s bundle exclusion region, both credited (p. 7); rival filter variants described with trade-offs (pp. 8-12).",
+  "writing": "Short first-person history with an explicit goal sentence (p. 4); self-correction told as conjecture, confirmation, counterexample, redesign (p. 8); hedges on others' methods ('We are not sure...', p. 12); two-sentence forecast conclusion (p. 15).",
+  "limits_future": "Limits stated per method (global QP solves, bounded Jacobian, single-entry filter); only future direction is the forecast that filters will spread to more areas (p. 15).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Filter globalization carried from SQP into nonlinear equations, multidimensional filters, nonsmooth bundle methods and augmented Lagrangian QP methods (Leyffer coauthor), and surveyed in interior and derivative-free methods.",
+    "pages": "pp. 10-15"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Maratos-effect conjecture tested on the original example, then broken by a small circle-constrained example, leading to SOC steps; hypothesis audit applied to own global-QP assumption and others' assumptions.",
+    "pages": "pp. 8, 11-12"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Strip what the proof did not need",
+    "evidence": "Features of the original filter method (NW/SE corner rule, unblocking) were dropped once the convergence analysis showed them redundant.",
+    "pages": "p. 7"
+   },
+   {
+    "pattern": "Empirical baseline as design target",
+    "evidence": "The unmodified SQP method's success defines the safeguard's goal: interfere as little as possible with the full Newton step (already cited in SKILL.md Taste 4 / Heuristic 3).",
+    "pages": "p. 4"
+   }
+  ],
+  "transferable": [
+   "State a safeguard's goal as minimal interference with the base method and judge it by how often the full step is accepted (p. 4).",
+   "Tie each component of an acceptance test to the failure it prevents (envelope: infeasible limits; switching: arbitrary feasible limits; restoration: inconsistent QPs) (pp. 5-6).",
+   "Classify steps by predicted model decrease (f-type vs h-type) and never put h=0 points in the filter (p. 7).",
+   "In a p-dimensional filter choose beta < 1/sqrt(p) so an acceptable point always exists (p. 13).",
+   "After proving convergence, remove algorithm features the proof did not use (p. 7)."
+  ],
+  "coauthors": "Roger Fletcher, Philippe L. Toint",
+  "quotes": [
+   {
+    "text": "Yet we have noticed that the unmodified SQP method is able to quickly solve a large proportion of test problems without the need for modifications to induce global convergence.",
+    "page": 4
+   },
+   {
+    "text": "We are not sure that this device alone can guarantee convergence.",
+    "page": 12
+   }
+  ]
+ }
+]

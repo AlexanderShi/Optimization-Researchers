@@ -1,0 +1,115 @@
+[
+  {
+    "id": "S024",
+    "year": "2016",
+    "title": "Optimising heat exchanger network synthesis using convexity properties of the logarithmic mean temperature difference",
+    "read_level": "full",
+    "contribution": "Proves that the reciprocal of the log mean temperature difference, raised to any positive power, is C^2 and strictly convex on the positive quadrant once limits are added, and uses this to build an adaptively refined MILP outer approximation that gives tighter lower bounds on MINLPLib2 heat exchanger network synthesis instances than the bounds reported by global solvers.",
+    "problem_entry": "LMTD causes numerical difficulties and the usual fixes (Paterson/Chen approximations, 1e-6 perturbations) inject unaccounted error; general convex-envelope methods do not apply to LMTD; goal: approximate LMTD while accounting for the error (pp. 1-2).",
+    "key_idea": "Use RecLMTD = 1/LMTD, since area = q * RecLMTD; RecLMTD^beta is strictly convex for beta > 0, so tangent cuts outer-approximate it without binaries inside an iteratively refined MILP (nf4r McCormick for bilinears, secants for concave A^beta), with a variant distributing beta over the product (pp. 9, 11, 16-22).",
+    "assumptions": "Positive temperature differences with limits added on x = y; RecLMTD domain a box with positive bounds (Lipschitz); 0 < beta <= 1; tangent cuts valid because the objective minimises positive multiples of A^beta; MILP solved to global optimality (pp. 9-19).",
+    "proof_devices": [
+      "polar transformation separating RecLMTD into f(r)*g(theta) plus l'Hopital to get limits on the line x = y (Prop. 1, pp. 9-10)",
+      "Hessian of a power composition; limit Hessian on the diagonal with leading minors 5+3beta and 24(1+beta), Sylvester's criterion (pp. 11-12)",
+      "linearity in beta reduces the first-minor sign condition to the extreme case beta = -1 (p. 12)",
+      "substitutions w = x/y, w = e^n; positivity via vanishing low-order derivatives at 0 and a positive higher derivative (r'' p. 13; h^(4) p. 14)",
+      "'funnel of errors' convergence sketch: tolerances propagate through the approximation dependency graph to TAC, finite construction exists (pp. 19-21, Fig. 7)",
+      "order-of-operations maximal-error analysis composing the McCormick error bound with the concave secant error bound (pp. 30-32)"
+    ],
+    "experiments": "Three MINLPLib2 heatexch_gen instances; Pyomo + Gurobi 6.0.3; reference bounds taken from MINLPLib2 reports of ANTIGONE/BARON/Couenne/LINDO/SCIP, not re-run; implemented version drops the convergence-guaranteeing step; times 22 s-29,964 s; weak variants beat reported solver bounds in <= 33 s; found a feasible point below the library's 'global' value for Model 3 due to LMTD perturbation (pp. 23-32).",
+    "positioning": "Alternative, shorter proofs to Zavala-Rio et al. 2005 and Floudas-Ciric 1989 with four stated advantages; explains why the Escobar-Grossmann 2010 reformulation works; credits Najman-Mitsos 2016 for using an early version; proposes adding a rigorous bound to prior MILP HENS approximations (pp. 3, 15-17).",
+    "writing": "Numbered list of reasons the alternative proofs matter (p. 3); scale example of 57,713 nonconvex terms with an immediate hedge that complexity class is unchanged (pp. 7, 16); figure-heavy intuition; convergence explicitly called 'motivated' (p. 19).",
+    "limits_future": "Implementation lacks the global-convergence step, fresh MILP solves limit scalability, a realistic problem 'may not terminate'; future: reuse knowledge of the previous branching tree; speed-up may be problem specific; only three small instances (pp. 23, 28).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "An already-convex function hidden behind LMTD: plotted (Fig. 2), read off the plot, proved, exploited with binary-free tangent cuts; also explains a prior heuristic's success.", "pages": "pp. 10-17"},
+      {"method": "Method 5", "relation": "variant", "note": "Reference bounds taken from library reports on three instances instead of re-running competitors, but the library's reported optimum is checked and shown to rest on a perturbed LMTD; own numerical miss reported.", "pages": "pp. 24, 28"},
+      {"method": "Method 2", "relation": "variant", "note": "Two formulation variants (exponent outside vs distributed) compared by an error-bound argument rather than a parameterised family between extremes.", "pages": "pp. 29-32"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "relaxation composition order as a design choice", "evidence": "Applying the concave secant before the McCormick product gives a provably smaller maximal error (on average 24.2% lower bounds on error) and better early bounds than the opposite order.", "pages": "pp. 29-32"},
+      {"pattern": "approximate with accounted error instead of perturbing", "evidence": "Replaces epsilon-perturbation of the singular LMTD by an outer approximation with tracked, refinable error; exposes a library optimum that rested on a perturbation.", "pages": "pp. 2, 24"}
+    ],
+    "transferable": [
+      "Polar-coordinate separation plus l'Hopital to establish limits along a line of indeterminacy, reused for gradient and Hessian limits (pp. 9-11).",
+      "Prove one-variable positivity after w = e^n by vanishing derivatives at 0 and a positive higher derivative (pp. 13-14).",
+      "Mirror each new tangent of a function symmetric in y = x (Fig. 6, p. 20).",
+      "Funnel of errors through the approximation dependency graph to set graded termination tolerances 0.001/0.01/0.1 (pp. 21-23).",
+      "Run a weak relaxation without extra binaries as a fast lower-bound certificate and compare with published bounds (p. 29)."
+    ],
+    "coauthors": "Miten Mistry (first author, PhD student)",
+    "quotes": [
+      {"text": "The convexity result in this manuscript justifies why the Escobar and Grossmann (2010) model works better with the LMTD term moved to the objective.", "page": 16},
+      {"text": "The solvers appear to be finding the global solutions however providing a certificate is not so easy as the lower bounds placed on the problems are not informative.", "page": 33}
+    ]
+  },
+  {
+    "id": "S143",
+    "year": "2016",
+    "title": "In memoriam: Christodoulos Achilleus Floudas",
+    "read_level": "full",
+    "contribution": "Single-author obituary essay arguing that her PhD advisor Floudas opened deterministic global optimisation and made it industrially relevant by pushing the tractability boundary through applications, told through her own PhD episodes (solver release, real-scale insistence, the open question on piecewise approximations).",
+    "problem_entry": "Thesis stated up front: Floudas fundamentally opened deterministic global optimisation and pushed the tractability boundary using many applications; scoped to mathematical optimisation (p. 12).",
+    "key_idea": "Application-driven method development at real scale: GOP, alphaBB from Lennard-Jones clusters, alphaBB solver as a vehicle across applications, peptide design via QAP, energy systems, pooling's bipartite bilinear structure (pp. 12-13).",
+    "assumptions": "n/a (obituary essay)",
+    "proof_devices": [],
+    "experiments": "none (only the size of a 15,439-variable energy-systems model she objected to globally optimising, p. 13)",
+    "positioning": "Lineage Grossmann (CMU) -> Floudas -> Misener; her bilinear multiterm work extends Meyer-Floudas edge-concave facets; GloMIQO/ANTIGONE incorporate alphaBB, GGP, edge-concave underestimators and process-network transformations from his group; disclaims involvement where she had none (pp. 12-14).",
+    "writing": "Personal anecdotes each carrying a research value: father's advice, the objection to a huge model, the post-earthquake email quoted in full, the 2008 'you will not roll your eyes at your advisor!' exchange (pp. 12-14).",
+    "limits_future": "Carries forward Floudas's question why piecewise approximations work and how to remove parameter dependence, with a 'first answer' via Baltean-Lugojan; no limitations section (genre) (p. 13).",
+    "method_links": [
+      {"method": "Method 2", "relation": "evidence", "note": "Origin she names for the parameter question: Floudas asked how to eliminate the computational dependence on parameters of piecewise pooling relaxations; answered with Baltean-Lugojan.", "pages": "p. 13"},
+      {"method": "Method 1", "relation": "evidence", "note": "Pooling structure as a bipartite bilinear graph; GloMIQO/ANTIGONE include automatic transformations for process-network problems.", "pages": "pp. 13-14"},
+      {"method": "Method 5", "relation": "evidence", "note": "Weak: the Floudas-Pardalos Handbook of Test Problems praised as a standard test set for global solvers; insistence on real-scale instances.", "pages": "pp. 13-14"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "software release as a PhD commitment", "evidence": "Floudas required a promise to write and publicly release a global MINLP solver in her early-stage PhD assessment, leading to GloMIQO and ANTIGONE.", "pages": "p. 14"}
+    ],
+    "transferable": [
+      "Keep a mentor's or reviewer's unanswered 'why does it work?' question on file and report when a later structural result answers it (p. 13).",
+      "Test a new relaxation technique on a real application model with tens of thousands of variables before calling it relevant (p. 13)."
+    ],
+    "coauthors": "none (single author)",
+    "quotes": [
+      {"text": "But Chris was never interested in toy problems or proofs of concept.", "page": 13},
+      {"text": "Why did these piecewise approximations work so well? How could we eliminate the computational dependence on parameters?", "page": 13}
+    ]
+  },
+  {
+    "id": "S120",
+    "year": "2017",
+    "title": "Symmetry Detection for Quadratically Constrained Quadratic Programs Using Binary Layered Graphs",
+    "read_level": "full",
+    "contribution": "Proposes two matrix representations of a QCQP (a per-equation coefficient tensor and the coefficient matrix of its McCormick/RLT linearisation) and a binary layered graph encoding with logarithmically many layers so that nauty can compute the formulation symmetry group, illustrated on one example.",
+    "problem_entry": "Symmetry creates many equivalent optima and large B&B trees; handling requires detection first; problem-specific handling does not generalise (abstract p. 1; pp. 4-5); circle-packing prototype (p. 5).",
+    "key_idea": "Encode QCQP coefficients as integer labels written in binary over L = ceil(log2(l+1)) layers of vertex copies, with bilinear terms as edges/loops instead of operator nodes, and let nauty compute colour-preserving automorphisms (pp. 10-17).",
+    "assumptions": "Box-bounded QCQP; targets the formulation group (a subgroup of the solution symmetry group, per Liberti) because the feasible set is impractical to derive (pp. 1, 5-7); loose Statement 1 equating RLT linearisation with the QCQP (p. 2).",
+    "proof_devices": [
+      "counterexamples showing symmetry of a problem and of its relaxation are not nested in either direction (Examples 1-3, pp. 6-7)",
+      "Example 5: partial RLT (only x1^2) destroys the (x1, x2) symmetry, uniform RLT keeps it (pp. 8-9)",
+      "worst-case entry counting of the two matrix methods with crossover m > 3n^2+6n+3 (p. 11)",
+      "correctness delegated to cited results of Ramani-Markov, Liberti, McKay-Piperno, Margot (pp. 9, 12, 14)"
+    ],
+    "experiments": "One 4-variable worked example run through nauty's dreadnaut for both graph types, recovering the formulation groups; no test set or timings; concedes the DAG graph is smaller for this example (pp. 16-18).",
+    "positioning": "Builds on Margot's and Liberti's symmetry definitions and Liberti's DAG detection; surveys static and dynamic handling; positions itself on detection only and credits DAGs/orbital branching as easy to implement and general (pp. 4, 7-9, 17).",
+    "writing": "Heavily hedged ('may capture', 'may be useful'); long preliminaries; v4 still has draft traces ('Ussing' running head, 'this thesis', LPQ1/LQP1); three-sentence conclusion (pp. 1-4, 17-19).",
+    "limits_future": "BLG may conflate problems with the same symmetric structure but different formulations, loses exact formulation information, addresses detection not solving; no computational validation or future directions (p. 19).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "Symmetry as structure and a binary layered graph as the detector (SKILL step 3), but without step 5's validation against a labelled library: one example only.", "pages": "pp. 14-17"},
+      {"method": "Method 4", "relation": "contradiction", "note": "Detector not evaluated inside any branch-and-bound; the paper limits itself to detection, so no full-algorithm evidence backs the claimed benefit.", "pages": "pp. 17-19"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "check structure survives relaxation", "evidence": "Problem and relaxation symmetry groups differ in both directions; partial RLT destroys symmetry, so relax all orbit members uniformly.", "pages": "pp. 6-9"}
+    ],
+    "transferable": [
+      "Construct 2-3 variable examples for both inclusion directions before transferring a structural property between a problem and its relaxation (pp. 6-7).",
+      "Generate RLT/McCormick auxiliaries for every member of a variable orbit so the relaxation keeps the formulation's symmetry (pp. 8-9).",
+      "Encode edge labels as binary digits over layers of vertex copies when an automorphism tool accepts only vertex colours (pp. 14-15).",
+      "Compare two encodings by worst-case entry counts and state the crossover density (p. 11)."
+    ],
+    "coauthors": "Georgia Kouyialis (first author, PhD student)",
+    "quotes": [
+      {"text": "symmetry in the original problem does not imply the same symmetry in the relaxed problem and vice versa.", "page": 6},
+      {"text": "BLG may be associated with problems that have the exact same symmetric structure but different formulation.", "page": 19}
+    ]
+  }
+]

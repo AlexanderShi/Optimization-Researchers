@@ -1,0 +1,320 @@
+[
+ {
+  "id": "S074",
+  "year": "2003",
+  "title": "Restaurant Revenue Management",
+  "read_level": "full",
+  "contribution": "Optimization-based seating policies (an IP re-solved at each event, a three-scenario stochastic IP, and an ADP that uses the IP value as value function) plus a stochastic-gradient booking model raise simulated restaurant revenue over first-come-first-serve by up to about 13% without reservations and by 3.4-7.3% with reservations on one restaurant's data.",
+  "problem_entry": "{AP; IO engine, SD layer} Floor managers seat parties FCFS by intuition although POS systems record arrivals, sizes and service phases (pp. 1, 3); no rigorous dynamic seating model known (p. 2); lever is nesting, holding large tables for larger parties (p. 1); exact DP ruled out by dimensionality (p. 2).",
+  "key_idea": "Re-solve an IP with expected demand, waiting and nesting penalties and FCFS-within-size constraints at every arrival and departure (eqs. 1-9, pp. 3-5); refine to a 3-scenario stochastic IP (pp. 6, 12) and an ADP that scores each action by the IP value of the post-decision state (eq. 19, p. 7); with reservations, set booking levels by stochastic gradient and seat online by ADP (pp. 7-11).",
+  "assumptions": "Even party sizes, revenue increasing in size, service phases with expected durations, every party waits exactly Max periods then leaves, expected values only (pp. 2-3); Poisson approximation of no-shows, no nesting or queues in the booking model (pp. 8-9); a 'contrived restaurant' (9 tables, 16 periods, loads 0.68/0.93/1.54) and Soto's data for reservations (pp. 11-14); penalty weights 'chosen from empirical testing' (p. 12).",
+  "proof_devices": [
+   "IP re-solved at each arrival and departure on expected demand (eqs. 1-9, pp. 3-5)",
+   "big-M binary constraints enforcing FCFS within a party size (eqs. 5-8, pp. 4-5)",
+   "ADP one-step lookahead: immediate revenue minus nesting cost plus IP value of the post-decision state (eq. 19, p. 7)",
+   "bid-price benchmark from LP-relaxation duals (eq. 20, p. 7)",
+   "on-the-day booking model as single-commodity min-cost flow, so its value is jointly concave and submodular (p. 9)",
+   "unbiased stochastic-gradient estimate and Kushner-Clark convergence to Kuhn-Tucker points, cited not proved (Theorem 1, p. 9)"
+  ],
+  "experiments": "CPLEX, Pentium II (p. 12); vs Full-Nesting FCFS, ADP +2.11-2.96% (low/medium load) and +12.67-13.13% (high load) with similar waits, 0.21-1.07 s per decision; bid prices lose to FCFS in all 6 scenarios (Tables 2-3, p. 13); my reading: stochastic IP below deterministic IP in 3 of 6 scenarios despite the text's monotonicity claim, Full Nesting best FCFS variant in only 3 of 6, and at low constant load 1-Up FCFS beats both IPs (ADP +0.47% over it); DSAR +3.42% and +7.26% (Tables 4-5, p. 14), text's '3.5% to 6.9%' vs 3.4-6.0% from Table 4 by my arithmetic.",
+  "positioning": "Against strategic restaurant RM frameworks (Kimes' RevPASH, Sill's CMS) that lack a dynamic seating model (p. 2); borrows the airline bid-price heuristic and Karaesmen-van Ryzin's stochastic-gradient overbooking (pp. 7-9).",
+  "writing": "Abstract leads with percentage ranges per load level; three numbered contributions (p. 2); hedged conclusions ('We feel', 'Somewhat surprisingly', p. 15).",
+  "limits_future": "Admitted: simplified waiting behaviour (p. 3), restaurant-dependent parameters to tune by simulation (p. 12); future: movable tables, balking and reneging, more empirical tests via online reservation providers (p. 15).",
+  "method_links": [
+   {"method": "Method 5", "relation": "variant", "note": "Industry rule (FCFS, three versions) as baseline, decisions scored on revenue with waits and share served, one owner's data for reservations; but contrived restaurant for the main study, no field test, and the fixed reference is the strongest FCFS variant in only half the scenarios (step 2 holds in part).", "pages": "pp. 1, 7, 12-15"},
+   {"method": "Method 1", "relation": "variant", "note": "DP-owned seating problem re-solved as a small IP at each event, IP value standing in for the value function; called 'a viable heuristic', not an exact reformulation.", "pages": "pp. 2, 4, 7"},
+   {"method": "Method 3", "relation": "variant", "note": "Knobs M and gamma for waiting and table fit set by trial on the evaluation simulation; no revenue-waiting curve published (the knobs-fixed-arbitrarily correction).", "pages": "pp. 3, 12"},
+   {"method": "Method 2", "relation": "variant", "note": "The 'why now' is data availability (POS systems), not solver speed.", "pages": "pp. 1, 3"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "math programming as the value function inside dynamic programming", "evidence": "An intractable DP is approximated by re-solving an IP whose optimal value scores each candidate seating action; FCFS order handled by sequencing (S074); compare S142's DPMP, an LP over one-dimensional value functions.", "pages": "p. 7"}
+  ],
+  "transferable": [
+   "One-step lookahead with an IP value: score each feasible action by immediate reward minus a nesting cost plus the IP value of the post-decision state; deciding in arrival order removes the fairness constraints (eq. 19, p. 7).",
+   "In a stochastic-gradient scheme, choose an inner model whose value is a min-cost flow so that network structure supplies the concavity needed for convergence (p. 9).",
+   "Implement the incumbent rule in several variants and print them all, with the rival school's heuristic (bid prices from LP duals), next to your methods (pp. 7, 13).",
+   "Report run time per decision to show online feasibility (Table 3, p. 13)."
+  ],
+  "coauthors": "Romy Shioda",
+  "quotes": [
+   {"text": "However, capturing the states of the system exactly in a stochastic dynamic programming sense would be computationally intractable, thus making our IP model a viable heuristic.", "page": 4},
+   {"text": "These values were chosen from empirical testing, thus they may not be the optimal.", "page": 12}
+  ]
+ },
+ {
+  "id": "S207",
+  "year": "2003",
+  "title": "From fluid relaxations to practical algorithms for high-multiplicity job-shop scheduling: The holding cost objective",
+  "read_level": "full",
+  "contribution": "A fluid-synchronization rounding of the optimal fluid relaxation gives asymptotically optimal job-shop schedules under holding costs (relative error O(1/N) in the multiplicity N), and on 20 OR-library instances it beats dispatch rules only at high multiplicity.",
+  "problem_entry": "{SD IO; LO engine} Total holding cost (weighted completion time as special case) in a job shop with N copies per type (p. 1); no PTAS unless P = NP (p. 3); queueing papers interpreted fluid solutions heuristically with little performance analysis (p. 2); entry: round the fluid optimum with an asymptotic guarantee (pp. 1-2).",
+  "key_idea": "Solve the fluid relaxation once, make breakpoint queue lengths integral, discretize piece by piece with a revised fluid-synchronization algorithm in which no task starts before its nominal start time (pp. 3, 6-9).",
+  "assumptions": "Deterministic nonpreemptive job shop, integer processing times, alpha_i N initial jobs, no arrivals (pp. 2-4); Z_F is a lower bound only for stage-independent weights, otherwise Z_JS >= Z_F - O(N), more not proved (pp. 4-5); 20 OR-library instances, 5-20 machines, 5-50 job types, unit weights (p. 12).",
+  "proof_devices": [
+   "fluid relaxation as a continuous LP solved by the Luo-Bertsimas algorithm (pp. 2, 4)",
+   "piecewise-constant optimal fluid control (Proposition 1, p. 4)",
+   "scaling Z_F = CN^2 and fluidizing a discrete schedule: Z_JS >= Z_F - O(N) (Theorem 1, pp. 4-5)",
+   "integral breakpoint queue lengths at O(N) extra cost (Lemma 2, Proposition 2, pp. 5-6)",
+   "RFSA: no task before its nominal start time; completion-time bounds (Theorem 3, pp. 7-8)",
+   "per-piece O(N) error summed over a constant number of pieces gives ratio 1 + O(1/N) (Theorem 6, pp. 11-12)",
+   "single-machine example: every fluid-based algorithm has O(N) worst-case error (Remark, p. 12)"
+  ],
+  "experiments": "SUN workstation, under 2 min per run (p. 12); relative error vs fluid lower bound 1.27-2.89 at N = 1, 0.007-0.025 at N = 500 (Table 4, p. 12); vs 8 dispatch rules of similar implementation complexity: best on 6/20 at N = 1, SRPT wins all but 3 at N = 10, FSA-HC wins all at N = 500, best rule plateaus at 0.04-0.395 to N = 10,000 (Tables 5-9, pp. 13-16).",
+  "positioning": "Extends Bertsimas-Sethuraman (2002) makespan rounding to holding costs; contrasts with fluid heuristics without analysis (except Meyn) and with Maglaras' discrete-review policies (single solve, explicit rate); cites Hoogeveen et al. non-approximability (pp. 2-3).",
+  "writing": "Abstract states the losing regime; frames a 'conceptual contribution' (p. 3); admits an unproved lower-bound property (p. 4) and leaves a conjecture open (p. 14).",
+  "limits_future": "Fluid control complexity open (pp. 4, 13); constant about an order of magnitude worse than for makespan (p. 13); loses to the best dispatch rule at low multiplicity (p. 1); conjecture on the rules' limiting error unproved (p. 14).",
+  "method_links": [
+   {"method": "Method 1", "relation": "variant", "note": "Scheduling problem entered through the queueing tradition's fluid model, a continuous LP; relax-and-round with an asymptotic guarantee rather than an exact class-keeping reformulation; boundary printed (open complexity, O(N) worst-case error).", "pages": "pp. 2-4, 12-13"},
+   {"method": "Method 4", "relation": "variant", "note": "Duel with dispatch rules at matched implementation complexity and the winning regime stated, losing regime in the abstract (Heuristic 4); no exact solve or warm start; the gap to the fluid lower bound serves as the certificate.", "pages": "pp. 1, 12-16"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "scale sweep against a relaxation yardstick", "evidence": "Replicate each instance N times (1 to 10,000), measure every method's gap to the fluid bound, and report the crossover N where the asymptotically optimal method overtakes the dispatch rules.", "pages": "pp. 12-16"}
+  ],
+  "transferable": [
+   "Measure relative error against the relaxation's lower bound over a sweep of the scaling parameter; when the bound is valid the gap also bounds the true optimality gap (pp. 12-13).",
+   "Asymptotic-optimality skeleton: fluidize the discrete optimum, make breakpoints integral at O(N) cost, bound each piece's discretization error by O(N), sum over a constant number of pieces (pp. 4-6, 10-12).",
+   "Choose opponent heuristics of the same implementation complexity, say so, and report the best one per instance and its plateau at large N (pp. 13, 16)."
+  ],
+  "coauthors": "David Gamarnik, Jay Sethuraman",
+  "quotes": [
+   {"text": "For problems of low to moderate multiplicity,however,the relative errors of the heuristic methods are comparable to those of the proposed algorithm,and the best of these methods performs better overall than the proposed method.", "page": 1},
+   {"text": "While we have been unable to establish this result in general,we can prove the following theorem.", "page": 4}
+  ]
+ },
+ {
+  "id": "S246",
+  "year": "2003",
+  "title": "Dynamic classification of online customers",
+  "read_level": "full",
+  "contribution": "Mixtures of buy and non-buy Markov chains of variable order estimate the purchase probability click by click, and fixed-threshold or DP decision rules decide when to label a visit, tested on about 200,000 visits of a large computer retailer.",
+  "problem_entry": "{ML SD; AP testbed} A merchant must act during the visit; fixed-dimension classifiers cannot take variable-length click sequences (pp. 1-2); classification coupled with a stopping problem: buy, non-buy or wait after each click (p. 2).",
+  "key_idea": "Bayes-rule purchase probabilities from a mixture of Markov chains (zero, first, second and pruned variable order, with covariates or inter-click times), then decision rules: two fixed thresholds by exhaustive validation search, or time-dependent rules from a finite-horizon DP over discretized estimates (pp. 3-7).",
+  "assumptions": "11 URL categories by keyword (pp. 7-8); irreversible classifications (p. 3); discretized estimates evolve as a nonstationary Markov chain (p. 6); about 200,000 visits, 10.7 clicks per visit, about 2% purchases, split by user 50/33/17 (p. 7); cleaning filters not real-time implementable (p. 7).",
+  "proof_devices": [
+   "maximum-likelihood fit by normalized transition counts (p. 3)",
+   "variable-order transition tree pruned by data coverage (p. 4)",
+   "logistic links for covariates; discretized inter-click times (p. 5)",
+   "finite-horizon DP over discretized probability states with validation-estimated transitions, time proportional to H|P|^2 (pp. 6-7)",
+   "no theorem (n/a)"
+  ],
+  "experiments": "Second-order and pruned models give best lift on randomly clipped visits, covariates and timing add little (Fig. 3, p. 9); calibration monotone but off in magnitude (p. 9); on about 31,000 test visits threshold and DP rules detect more and sooner than a naive Checkout rule, but the naive rule is more precise (48% vs at most 38% at 90% detection, p. 10) and the cost-based comparison of threshold vs DP rules is inconclusive (p. 11); DP rules tuned by trial and error (p. 10).",
+  "positioning": "Against web-usage mining by sequential patterns and distance metrics, fixed-dimension classifiers, and Markov-chain clustering (Cadez et al.) and next-page prediction (Deshpande-Karypis); closest work (Li et al.) called more descriptive but less operational (p. 2).",
+  "writing": "The thesis line that when to decide matters as much as what (p. 1); inconclusive comparison stated plainly (p. 11); the probability estimates are described as usable (p. 11).",
+  "limits_future": "Calibration mismatch (p. 9), unknown real costs (p. 11), offline filtering (p. 7); future: other sites and goods, user-level prediction, multi-way targets such as segments, cross-channel sequences (p. 12).",
+  "method_links": [
+   {"method": "Method 5", "relation": "variant", "note": "Decisions (what and when) rather than predictions are optimized and scored on detection, speed, precision and cost; but estimation and decision are separate stages, the baseline is an author-built domain rule rather than the retailer's practice, and there is no field test.", "pages": "pp. 2, 6-7, 10-11"},
+   {"method": "Method 4", "relation": "variant", "note": "The optimized DP rules do not separate from the simpler threshold class and the naive rule wins on precision; both printed (Heuristic 4).", "pages": "pp. 10-11"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "decide when as well as what", "evidence": "An optimal-stopping DP is layered on a learned probability so that the timing of the classification is optimized, with transitions of the estimate process estimated on validation data.", "pages": "pp. 1-2, 6-7"}
+  ],
+  "transferable": [
+   "Optimal stopping on a learned score: bin the estimates, estimate per-click bin transition matrices on validation data, solve the finite-horizon DP (pp. 6-7, 9).",
+   "Use each bin's observed validation frequency as its probability rather than the model's average estimate (p. 9).",
+   "Clip each sequence at a random point before computing lift curves, so evaluation measures prediction during the process (p. 9).",
+   "Split by user into training (estimator), validation (decision-rule parameters) and test sets (p. 7)."
+  ],
+  "coauthors": "Adam J. Mersereau, Nitin R. Patel",
+  "quotes": [
+   {"text": "That is, we recognize that when to make a decision may be as important as what decision to make.", "page": 1},
+   {"text": "In the absence of a set of realistic cost parameters, this comparison method has been inconclusive in distinguishing the FT and DDR classifiers.", "page": 11}
+  ]
+ },
+ {
+  "id": "S055",
+  "year": "2004",
+  "title": "A robust optimization approach to supply chain management",
+  "read_level": "full",
+  "contribution": "Budgeted robust optimization turns multi-echelon inventory control into an LP or MIP of the nominal class whose optimum is the nominal (basestock) policy for a modified demand, and in one single-station test it matches or beats DP computed under a mis-specified distribution.",
+  "problem_entry": "{RO AP; LO and IO engines} DP gives basestock policies for simple systems but needs known distributions and suffers from dimensionality, so practice uses simpler suboptimal policies (p. 1); aim: little distributional information, network scale, kept policy structure (p. 1).",
+  "key_idea": "Interval demands with budgets on cumulative scaled deviations, Bertsimas-Sim robust counterpart (Theorem 2.1, p. 2); the robust optimum equals the nominal optimum for a modified deterministic demand, so basestock survives (Theorem 3.3, p. 4; Theorems 3.4-3.5, p. 5; Theorems 4.1-4.2, pp. 7-8).",
+  "assumptions": "Finite horizon, zero lead times, backlogging, piecewise-linear convex holding/shortage cost, fixed cost by binaries, p > c (pp. 2-3); Gamma_k increasing by at most 1 per period, read as a reasonable worst case (p. 3); tree networks via echelons with linearized coupling (pp. 5-6); version is a 9-page text deferring details to 'the full paper' (p. 8).",
+  "proof_devices": [
+   "Bertsimas-Sim robust counterpart keeps the LP/MIP class (Theorem 2.1, p. 2)",
+   "per-period budgets on cumulative scaled deviations (pp. 2-3)",
+   "fixing the optimal protection variables reduces the robust problem to a nominal one in a modified stock variable plus an extra-cost term (Theorem 3.3 and proof, pp. 4-5)",
+   "closed-form thresholds for i.i.d. demand (remark, p. 5)",
+   "my reading: protection A_k added to every period's holding and shortage constraint, so each period meets its own worst case; no small exactness check (Theorem 3.1, eq. 14, pp. 3-4)",
+   "two-installation counterexample: non-tree network with a non-basestock optimum (p. 7)"
+  ],
+  "experiments": "Single station, T = 10, mean demand 100 in [0, 200]; DP computed under binomial or 7-point Gaussian approximation, both evaluated on 1,000 samples of Gamma, lognormal or Gaussian demand with equal mean and sd (p. 8); robust beats DP by up to 8% (first case) and at most 0.3%, not significant (second); DP better for p/h above about 3 (pp. 8-9); prose only, no tables.",
+  "positioning": "Against DP (Clark-Scarf basestock, curse of dimensionality, full distributional knowledge; Zipkin) and built on Bertsimas-Sim among robust LP work of Soyster, Ben-Tal-Nemirovski and El Ghaoui (pp. 1-2).",
+  "writing": "Abstract and conclusion repeat the same five features word for word (pp. 1, 9); 'preliminary' experiments; an unresolved reference '(??)' (p. 5).",
+  "limits_future": "General non-tree networks lose basestock structure and the meaning of the modified demand (p. 7); DP wins at high p/h (p. 9); no future work beyond the full paper.",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "DP-owned inventory control written as a robust LP/MIP that keeps the nominal class, with structure (modified demand, basestock) read off the solution and the boundary printed by a non-tree counterexample.", "pages": "pp. 1-5, 7"},
+   {"method": "Method 1", "relation": "variant", "note": "Per-period robust counterpart without an exactness check, the device Method 1's correction flags in the 2006 OR version [05 4.3]; whether those critiques apply verbatim here was not checked.", "pages": "pp. 3-5"},
+   {"method": "Method 3", "relation": "variant", "note": "Gamma_k is the conservatism knob and the extra cost of robustness is a closed-form term (Theorem 3.3(d)), but Gamma_k is fixed by a formula from the full paper and no price curve is shown.", "pages": "pp. 2-4, 8"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "policy-structure inheritance", "evidence": "The robust optimum is the nominal policy applied to a modified demand, so basestock structure and closed-form thresholds carry over (S055); S122's data-driven optimum is a ranked historical demand with basestock form.", "pages": "pp. 4-5, 7-8"},
+   {"pattern": "moment-matched misspecification duel", "evidence": "The DP policy is computed under a distribution matching the true one only in mean and sd and compared with the robust policy across true distributions (S055); S122 varies the family at fixed mean and CV.", "pages": "pp. 8-9"}
+  ],
+  "transferable": [
+   "Show that the robust problem equals the nominal problem with modified data so that the policy class and closed-form thresholds carry over (Theorem 3.3, p. 4; remark, p. 5).",
+   "Budgets on cumulative deviations growing by at most one per period as a multiperiod uncertainty set (p. 3).",
+   "Test against the DP policy computed under a distribution matching only the first two moments, over several true distributions, and report where DP wins (pp. 8-9).",
+   "Mark the edge of a structural result with a two-node counterexample (p. 7)."
+  ],
+  "coauthors": "Aurélie Thiele",
+  "quotes": [
+   {"text": "The robust problem is of the same class as the nominal problem, that is, a linear programming problem if there are no fixed costs or a mixed integer programming problem if fixed costs are present, independently of the topology of the network.", "page": 1},
+   {"text": "the robust policy outperforms dynamic programming by at most 0.3%, which is not statistically significant.", "page": 8}
+  ]
+ },
+ {
+  "id": "S122",
+  "year": "2005",
+  "title": "A data-driven approach to newsvendor problems",
+  "read_level": "partial",
+  "contribution": "Maximizing the sample trimmed mean (tail conditional expectation) of profit over historical demands gives LP formulations and rank-based closed-form orders for the newsvendor and its extensions, with one trimming factor whose simulated risk-return curve suggests 10-15%.",
+  "problem_entry": "{RO DA; AP testbed, LO engine} Newsvendor theory assumes known distributions and risk neutrality; Scarf's moment minimax needs correct moments and ignores risk preferences; utilities are hard to articulate (pp. 1-2); entry: work directly with data and one risk parameter (p. 2).",
+  "key_idea": "Maximize the average of the N_alpha worst sample profits with trimming factor alpha as the only knob (pp. 2-5); an LP for concave piecewise-linear profit (Theorem 2.2, pp. 5-6); classical optimal order Q* = d(j), j = ceil(m/(m+t) N_alpha) (Theorem 3.1, p. 7).",
+  "assumptions": "Integer nonnegative demand data, profit concave in the order, convex or polyhedral feasible set (pp. 5-7); non-dominance via Levy-Kroll (Theorem 2.1, p. 4); no distribution in the model, i.i.d. demand in the experiments (pp. 21-22).",
+  "proof_devices": [
+   "Levy-Kroll: maximizing the tail conditional expectation is non-dominated for increasing concave utilities (Theorem 2.1, p. 4)",
+   "sorted-sum LP and its dual turn sample-CVaR maximization into an LP (Theorem 2.2, pp. 5-6)",
+   "breakpoint argument giving Q* as a ranked historical demand (Theorem 3.1, p. 7)",
+   "analytic comparison with Scarf's moment-based order: median vs mean (p. 8)",
+   "extensions keeping LP/MIP form: holding/shortage (Theorem 4.1, p. 9), fixed cost (Theorem 4.2, p. 12), budgeted multi-item MIP (Theorem 4.3, p. 14), multi-period LP with basestock form (Theorem 4.4, p. 16; p. 20)"
+  ],
+  "experiments": "Classical newsvendor; gamma, lognormal, Gaussian demand, mean 100, CV 0.1-1, N = 20-500, alpha step 0.05, c = 10, five prices and salvage values; fit on N points, score on the (N+1)-st, 5,000 repetitions; CVaR, CV of profit, ratio of relative decreases (pp. 20-22); similar trends across families and N, CVaR falls most for alpha <= 0.2, alpha = 0.10-0.15 recommended (pp. 22-28); only comparator is alpha = 0 and train/test share one distribution, so the motivating distribution shift is not tested (my reading).",
+  "positioning": "Departs from known-distribution, risk-neutral newsvendor theory, from Scarf's and Gallego et al.'s moment minimax, and from utility approaches (Lau; Eeckhoudt et al.); borrows one-sided trimming from his portfolio work (p. 2).",
+  "writing": "Five numbered contributions (p. 3); abstract calls results 'very encouraging'; insights summarized as bullets (pp. 27-28); conclusion claims strong empirical performance (p. 30).",
+  "limits_future": "No limits or future work stated (pp. 29-30); evaluation internal (alpha vs alpha = 0) and simulated only (pp. 21-28).",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "One interpretable knob (alpha) for risk aversion justified by non-dominance, class kept (LP), risk-return curve published with a recommended setting; the setting comes from simulation, not an owner's data.", "pages": "pp. 2-4, 20-28"},
+   {"method": "Method 1", "relation": "evidence", "note": "Owning traditions named (known-distribution newsvendor, Scarf minimax, utility theory); data-driven problem kept an LP by duality and its structure read off as an order statistic.", "pages": "pp. 2, 5-8, 20"},
+   {"method": "Method 5", "relation": "variant", "note": "Decisions scored out of sample, but only against the method's own alpha = 0 version; no owner, no real data, no Scarf order in the numerical study.", "pages": "pp. 21-22"},
+   {"method": "Method 6", "relation": "evidence", "note": "One thesis programme (Thiele's, refs [3], [15]) carries the robust and data-driven inventory line; a device moves from his finance work (Bertsimas-Lauprete-Samarov) to inventory.", "pages": "pp. 2, 30-31"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "policy-structure inheritance", "evidence": "The data-driven optimum is a ranked historical demand (also with fixed cost and over several periods) and keeps basestock form; S055 shows the robust optimum is the nominal policy for a modified demand.", "pages": "pp. 7, 12, 20"},
+   {"pattern": "moment-matched misspecification test", "evidence": "The distribution family is varied at fixed mean and CV to argue that performance depends on the first two moments only (S122); S055 duels DP computed under a moment-matched wrong distribution.", "pages": "pp. 21-27"}
+  ],
+  "transferable": [
+   "Write the average of the worst N_alpha outcomes as an LP through the dual of the sorted-sum LP; works for any concave piecewise-linear profit (Theorem 2.2, pp. 5-6).",
+   "Derive the optimal decision as a rank in the data to read off the role of cost and risk parameters (Theorem 3.1, p. 7).",
+   "Compare analytically with the moment-based minimax answer (median vs mean) to show when data and moments disagree (p. 8).",
+   "Report the risk-return trade-off as the ratio of relative decreases in standard deviation and mean and recommend the knob range where it is favourable (pp. 21, 25-28)."
+  ],
+  "coauthors": "Aurélie Thiele",
+  "quotes": [
+   {"text": "Therefore, using the historical data or assuming only that the first two moments are known can result in very different ordering strategies, in particular for skewed distributions.", "page": 8},
+   {"text": "In order to reduce uncertainty without overly decreasing the expected profit, it thus seems appropriate to use a trimming factor between 10 and 15%.", "page": 27}
+  ]
+ },
+ {
+  "id": "S142",
+  "year": "2005",
+  "title": "Special Issue Papers: Dynamic pricing and inventory control for multiple products",
+  "read_level": "full",
+  "contribution": "For periodic multi-product pricing and inventory control, the single-period problem is concave under log-concave noise, bounds depending on the demand coefficient of variation bracket static and dynamic revenue, and a DP-LP decomposition (DPMP) beats CEC and OLFC on synthetic airline networks.",
+  "problem_entry": "{AP SD; CP and LO engines} Airlines fix fares and control seats or price dynamically; few papers treat joint network pricing and allocation, and the multi-period DP's state is every resource's remaining capacity (pp. 1-2, 5); deterministic fluid models ignore randomness (p. 3).",
+  "key_idea": "(i) Eliminate each price as a function of availability; concave availability-revenue under log-concave noise (Young 1978), solved by Frank-Wolfe (Theorem 1, pp. 6-7); (ii) CV-dependent deterministic bounds on static and dynamic revenue (Theorems 2-4, pp. 8-9); (iii) DPMP: one-dimensional pricing DPs per product plus an LP allocating resources over piecewise-linear value functions (pp. 10-11).",
+  "assumptions": "D = alpha(p) + beta(p) Z, E[Z] = 1, no cross-elasticities (left for further study), lost sales, no salvage, inventory partitioned by product, called suboptimal for airlines (p. 4); concavity fails for Normal noise (p. 7); DPMP value-function concavity unproved but observed (p. 11); synthetic single-hub networks, linear demand with Erlang noise, Weatherford-based parameters (pp. 11-12); file is the SSRN copy of the March 2004 manuscript (p. 1).",
+  "proof_devices": [
+   "price elimination and concavity of the availability-revenue function under log-concave noise (Theorem 1, after Young 1978, pp. 6-7)",
+   "Jensen upper bound J <= J_det (Theorem 2, p. 8)",
+   "CV-dependent lower bound and J_LB <= static <= dynamic <= J_UB with equality as CV goes to 0 (Theorems 3-4, p. 9)",
+   "concave piecewise-linear value functions turn resource allocation into an LP (pp. 10-11)"
+  ],
+  "experiments": "1,000 simulation runs per policy (p. 13); centralized pricing up to 22.3% over p-infinity, a benchmark the authors call weak (Tables 1-2, pp. 13-14); dynamic over static 2.8-38.6% (Table 3, p. 14); DPMP over CEC 0.13-4.46% (Table 4, p. 15); DPMP over OLFC 0.01-2.36%, one loss (-0.04%), gains shrinking with network size (Tables 5-7, pp. 15-16).",
+  "positioning": "Extends newsvendor-with-pricing (Young and others) and single-product dynamic pricing (Gallego-van Ryzin) to multiple products; faults deterministic fluid models (Kachani-Perakis) for ignoring randomness (p. 3); reinterprets Gallego-van Ryzin and Paschalidis-Tsitsiklis asymptotics as an effect of reduced randomness (p. 15).",
+  "writing": "Self-description 'an interesting combination of linear and dynamic programming' (abstract); a list of insights 'For practitioners' (p. 3); candid about synthetic data (p. 11) and a weak benchmark (p. 14).",
+  "limits_future": "No cross-elasticities (future work, p. 4); partitioned inventory control (p. 4); unproved concavity (p. 11); DPMP decomposition weakens with network size (pp. 15-16).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "A revenue-management DP turned into a concave program (static) and an LP over one-dimensional value functions (dynamic); boundary printed by the Normal counterexample and unproved concavity.", "pages": "pp. 6-11"},
+   {"method": "Method 4", "relation": "variant", "note": "DPMP duels the standard large-DP heuristics (CEC, OLFC) and prints where its gain vanishes (Heuristic 4); no exact solve or certificate.", "pages": "pp. 11, 14-16"},
+   {"method": "Method 5", "relation": "variant", "note": "Synthetic data only, and the 22% headline is against a benchmark the authors call weak, the reverse of step 2 (prefer the stronger naive rule).", "pages": "pp. 11, 13-14"},
+   {"method": "Method 3", "relation": "variant", "note": "The value of modelling randomness is indexed by one quantity, the coefficient of variation, with proven bounds and curves over CV^2; the index is a property of demand, not a decision-maker's knob.", "pages": "pp. 8-9, 14-16"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "math programming inside dynamic programming", "evidence": "DPMP solves one-dimensional pricing DPs per product and allocates shared resources by an LP over their piecewise-linear value functions; S074 uses an IP value as the value function of a one-step lookahead.", "pages": "pp. 10-11"}
+  ],
+  "transferable": [
+   "Eliminate prices product by product as functions of availability and optimize over availabilities only; under log-concavity a non-concave joint problem becomes concave (pp. 6-7).",
+   "Bracket the value of stochastic and dynamic policies between deterministic programs whose gap is a function of the coefficient of variation (Theorems 3-4, p. 9).",
+   "Separate sources of value with a ladder of comparisons: centralized vs decentralized prices, dynamic vs static, stochastic vs deterministic, future price updates vs OLFC (pp. 13-16)."
+  ],
+  "coauthors": "Sanne de Boer",
+  "quotes": [
+   {"text": "Since we did not have real data to run numerical experiments, we have written a computer program that automatically generates test problems according to prespecified demand, network and fare settings.", "page": 11},
+   {"text": "The benchmark pricing policy p∞ is not a good one, since it can be shown (Young, 1978) it systematically sets the prices too low.", "page": 14}
+  ]
+ },
+ {
+  "id": "S499",
+  "year": "2006",
+  "title": "Multivariate exponential integral approximations: a moment approach",
+  "read_level": "partial",
+  "contribution": "Two hierarchies of SDP moment relaxations give monotonically converging lower and upper bounds on integrals of a polynomial times the exponential of a polynomial over compact sets, shown for normal probabilities in up to three dimensions.",
+  "problem_entry": "{CP} Multivariate integrals such as normal probabilities over compact sets are computed by Monte Carlo or cubature; most cubature formulas are restricted to special sets and need orthogonal polynomials (p. 1).",
+  "key_idea": "Write the integral as a linear functional of the moments of e^h dx on Omega; integration by parts gives linear moment recursions; maximize and minimize the functional under moment- and localizing-matrix constraints to get upper and lower SDP bounds (pp. 2-4).",
+  "assumptions": "g and h polynomials; Omega compact, defined by iterated polynomial bounds (eq. 9, p. 4); quadratic h for normal densities (p. 13); report dated January 2007 (p. 1).",
+  "proof_devices": [
+   "integral as a linear functional of moments, with integration-by-parts moment recursions (pp. 2-3)",
+   "moment and localizing matrices as necessary support conditions; max and min SDPs as upper and lower bounds (pp. 4, 6-7)",
+   "Lemma 1: the recursions define moment sequences of measures (p. 8)",
+   "Theorem 1: solvability for large r and monotone convergence of both bounds; added bound constraints inactive in the limit (pp. 10-12)"
+  ],
+  "experiments": "Matlab with SeDuMi, Pentium III, random normal distributions on [-1, 1]^n, tolerance 5e-5 on the half-gap (pp. 13-14); n = 1, 2 reach it at average order 3.5 and 4.3 within about 80 s; n = 3 cannot run r = 5 for memory and needs over 2000 s at r = 4 (Tables 1-3, pp. 14-15); no comparison with Monte Carlo or cubature.",
+  "positioning": "Contrasted with Monte Carlo (Niederreiter) and cubature (de la Harpe-Pache) (p. 1); builds on Lasserre's moment approach and Putinar's representation (references, p. 15).",
+  "writing": "Bivariate box case first for clarity of exposition (p. 2); the closing run-time sentence reads 'are yet very promising; however' and probably drops a 'not' (p. 15, my reading).",
+  "limits_future": "Memory and time limits beyond n = 2 (p. 14); future: eliminate moment variables through the recursions, rational integrands (p. 15).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "A numerical-integration question becomes a pair of SDP hierarchies over moments; boundary printed (memory at n = 3, r = 5; over 2000 s at r = 4).", "pages": "pp. 2-4, 10-14"},
+   {"method": "Method 4", "relation": "variant", "note": "Honest certificate (the half-gap between bounds is the reported error) but no duel with the incumbent methods named in the introduction.", "pages": "pp. 1, 13-15"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "two-sided relaxation sandwich", "evidence": "A maximizing and a minimizing SDP relaxation bracket the integral and half their gap is the reported error, with the order raised until a tolerance is met; S498's algorithm certifies optimality by a sandwich of inequalities.", "pages": "pp. 4, 14-15"}
+  ],
+  "transferable": [
+   "Use integration by parts to turn the integral of a polynomial times an exponential of a polynomial into linear relations among moments, then impose them as linear SDP constraints (p. 3).",
+   "Bracket the target between a maximizing and a minimizing relaxation and raise the order until the half-gap meets the tolerance (pp. 4, 13-14)."
+  ],
+  "coauthors": "Xuan Vinh Doan, Jean B. Lasserre",
+  "quotes": [
+   {"text": "Both are SDP-relaxations of the original problem (1), and so their respective optimal values provide upper and lower bounds on ρ.", "page": 4},
+   {"text": "Due to the large amount of memory needed for SeDuMi routine, we cannot run the algorithms with r = 5 for the case n = 3 to meet the 4-digit accuracy requirement.", "page": 14}
+  ]
+ },
+ {
+  "id": "S498",
+  "year": "2007",
+  "title": "Optimal data fitting: a moment approach",
+  "read_level": "partial",
+  "contribution": "A moment relaxation replaces per-point constraints in ellipsoidal covering and separation problems by two LMIs on measures supported on the data, exact at r = deg(theta) for suitable measures, with an active-set algorithm run on up to 100,000 points in three dimensions.",
+  "problem_entry": "{CP ML} Minimum-volume covering ellipsoids and ellipsoidal separation have LMI/IPM formulations that can become intractable for large data sets, and other semi-algebraic sets may be wanted (pp. 1-2).",
+  "key_idea": "Require the support of a probability measure on the data to lie in {theta >= 0} instead of one constraint per point: two localizing-matrix LMIs (pp. 2, 4); finite convergence in the moment order (Theorem 1, p. 5); exact at r = deg(theta) for suitable measures (Theorem 3, p. 9); active-set search for those measures (p. 10).",
+  "assumptions": "theta polynomial of degree d, Theta convex, f convex, Slater condition (p. 9); synthetic normal clusters mapped affinely into the unit ball (p. 13); report dated January 2007 (p. 1).",
+  "proof_devices": [
+   "PSD localizing matrices as necessary condition for measure support (p. 4)",
+   "finite convergence in moment order (Theorem 1, p. 5)",
+   "exactness when max |S_i| <= C(n+r, r), judged not very useful in practice (Proposition 2, pp. 6-7)",
+   "Helly-type theorem of Ben-Tal et al. giving exactness at r = d with suitable measures (Theorems 2-3, pp. 8-9)",
+   "active-set loop whose termination certifies optimality by sandwich inequalities (pp. 10-11)"
+  ],
+  "experiments": "Matlab 7.1, YALMIP 3, SDPT3 3.3, Pentium III (p. 13); covering ellipsoids for up to 100,000 points in 3D in about 6 iterations and 10,000 points in 10D, separation detects infeasibility (pp. 13-16); no run times and no comparison with the cited LMI/IPM methods; moment-matrix preparation O(n^7 m) (p. 13).",
+  "positioning": "Covering ellipsoids after John (1948), Vandenberghe et al., Sun-Freund; separation after Rosen, Barnes, Glineur, Calafiore; claims those formulations scale poorly in the number of points (pp. 1-2).",
+  "writing": "Three numbered contributions (p. 2); 'encouraging computational results' (abstract) supported by figures and counts rather than tables (pp. 13-16).",
+  "limits_future": "Unknown r0 in Theorem 1 (p. 6); suited to low dimensions (p. 13); future: initial-subset heuristics and a problem-specific SDP code (p. 14).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "Data fitting owned by convex programming and robust statistics recast as moment SDPs that keep the class; boundary printed (Proposition 2 impractical; high dimension).", "pages": "pp. 1-4, 7, 9, 13"},
+   {"method": "Method 4", "relation": "variant", "note": "Termination carries an optimality certificate, but the incumbent algorithms are not run and no times are given, while the abstract calls results encouraging.", "pages": "pp. 1, 10-11, 13-16"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "aggregate per-point constraints into one moment constraint, then choose the measure", "evidence": "Membership constraints for every data point become two LMIs on the moments of measures on the data; exactness is recovered by choosing which points carry the measure, via an active-set loop.", "pages": "pp. 2, 4, 10"}
+  ],
+  "transferable": [
+   "Replace the per-point constraints theta(x) >= 0 for every x in S by one PSD localizing-matrix constraint on the moments of a measure supported on S (p. 4).",
+   "Active-set loop: uniform measure on the current supporting set, add violated points, stop when none is violated, which certifies optimality (pp. 10-11).",
+   "Map data affinely into the unit ball so that moments have comparable magnitudes (p. 13)."
+  ],
+  "coauthors": "Xuan Vinh Doan, Jean B. Lasserre",
+  "quotes": [
+   {"text": "instead of imposing a constraint for each point in the dataset, we require that the support of any probability measure μ that is generated on the dataset is contained in Ω.", "page": 2},
+   {"text": "Clearly, this algorithm is more suitable for datasets in low dimensions with a large number of points.", "page": 13}
+  ]
+ }
+]

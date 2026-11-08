@@ -1,0 +1,314 @@
+[
+ {
+  "id": "S343",
+  "year": "2020",
+  "title": "Prescriptive analytics for reducing 30-day hospital readmissions after general surgery",
+  "read_level": "full",
+  "contribution": "On 722,101 NSQIP 2014 surgeries, readmission prediction reaches 73.6% AUC from pre-operative variables and 87.4% from all variables, and two prescriptive methods (P-SVM, Optimal Prescriptive Trees) that recommend 0-3 bags of pre-operative transfusion cut predicted readmissions of HCT<30 patients by 11.45-12.15% on average, scored by four predictive models (3.78-19.51% depending on the evaluator).",
+  "problem_entry": "DA+AP (ML). ACA readmission penalties may extend to general surgery (p. 2); prior work predicts readmissions and studies post-discharge interventions (p. 2); target: in-hospital personalized recommendations, with pre-operative hematocrit as the lever because it is measured, tied to risk and adjustable by transfusion (p. 2).",
+  "key_idea": "Predict with five classifiers, then prescribe the HCT increase (0/3/6/9%) by P-SVM (fixed sparse SVM hyperplane, then a per-patient HCT choice trading prevented readmissions against the increase) or by OPT (OCT with an objective mixing accuracy and readmission rate); score prescriptions with four predictive models after propagating the transfusion to HCT-correlated covariates (pp. 5-6, 8).",
+  "assumptions": "NSQIP 2014 only because definitions changed over 2011-2014: 722,101 surgeries, 5.49% readmitted, 231/187 post-/pre-operative variables, kNN imputation (pp. 3-5). Past transfusion doses are unrecorded, so the baseline treatment is assumed by HCT band (Table 1, pp. 3, 6). 88 pre-operative variables, 9% HCT cap (p. 5). Data not shareable (p. 1).",
+  "proof_devices": [
+   "n/a in the text: the P-SVM and OPT formulations are in DOCX appendices S1-S2, not read (p. 6)",
+   "Evaluation device: each evaluator's threshold set so the predicted readmission rate equals the training rate, specificity above 96% (pp. 7-8)",
+   "Prevented-readmission ratio over HCT<30 test patients predicted readmitted without treatment (p. 8)"
+  ],
+  "experiments": "Three 80/20 splits; AUC 72.7-73.6% pre-operative and 83.4-87.4% with all variables, GBM best, vs LACE 68.4% (Table 3, p. 7; p. 9). Prescriptions: 12.15% (OPT) and 11.45% (P-SVM) average reduction with about one bag per patient, vs 2.84-9.22% for one bag to every HCT<30 patient (Table 4, p. 8); the GBM evaluator gives 3.78-8.66%, the neural network 16.37-19.51% (pp. 7-8). Python, Matlab, Julia; no solver, run times or significance tests (pp. 6, 8).",
+  "positioning": "Claims to beat the LACE index (68.4% AUC) and a 2019 JAMA Network Open model (72%, 78-81% at discharge) (p. 9); builds on OCT (ref. 26), the Wang-Paschalidis prescriptive SVM (ref. 25) and opt.impute-style kNN imputation (ref. 16) (pp. 5-6, 12); contrasts with post-discharge interventions (p. 2).",
+  "writing": "Structured PLOS abstract with 12% and $20 million headlines; AUC called accuracy (p. 1); significantly used without a test (p. 8); a specific limitation paragraph (p. 10). Tension T6: the abstract's average hides the 4-20% evaluator spread (pp. 1, 8-9).",
+  "limits_future": "Stated: no ground truth for whether the interventions prevent readmissions, an RCT is needed and hoped for; no long-term outcomes in NSQIP (p. 10). Unstated: the assumed baseline doses (p. 3) and the evaluator spread behind the 12% headline (pp. 8-9).",
+  "method_links": [
+   {"method": "Method 5", "relation": "evidence", "note": "Owner, decision and data named (surgical departments, pre-operative transfusion, NSQIP); decisions scored (readmissions prevented), not only AUC; a naive one-bag-for-everyone rule is the baseline in the same table; the evaluation's blind spot (needs an RCT) is stated (step 6). Short of the full method: the hospitals' actual transfusion rule is unrecorded and assumed, and outcomes are predicted, not observed.", "pages": "pp. 2-3, 7-8, 10"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "held-out ground-truth ensemble for counterfactual scoring of prescriptions", "evidence": "Four predictors (LR, RF, GBM, NN) score the same prescriptions for stability, with second-order effects of the transfusion on correlated covariates; same name as c29's S097; the split on which the evaluators were trained is not stated.", "pages": "pp. 6, 8"}
+  ],
+  "transferable": [
+   "When the dose of a past treatment is unrecorded, print the assumed baseline as a table tied to the clinical threshold, so readers can contest it (Table 1, p. 3).",
+   "Score a prescription with several outcome models and report each one, next to a naive uniform-treatment rule in the same table (Table 4, p. 8).",
+   "Before re-predicting under treatment, move the covariates correlated with the actionable variable through regressions fitted on it (pp. 6, 8).",
+   "Fix each evaluator's threshold so its predicted base rate equals the training rate before counting prevented events (pp. 7-8)."
+  ],
+  "coauthors": "Michael Lingzhi Li (MIT ORC); Ioannis Ch. Paschalidis (Boston University, corresponding author; his former PhD student); Taiyao Wang (Boston University)",
+  "quotes": [
+   {"text": "Predicting readmission is only one step toward preventing readmissions.", "page": 7},
+   {"text": "A limitation of our study is the lack of the full ground truth for the impact of the proposed interventions, namely, whether they prevent readmissions.", "page": 10}
+  ]
+ },
+ {
+  "id": "S355",
+  "year": "2020",
+  "title": "Sparse hierarchical regression with polynomials",
+  "read_level": "full",
+  "contribution": "Hierarchical (k, l)-sparse polynomial regression is solved exactly as a big-M-free convex integer problem by outer approximation after a kernel-ridge input ranking; on synthetic data accuracy, false alarms and solve time switch together at n0 of about 600 and the exact method dominates the Lasso, while on 8 UCI data sets it is best on 3 and tied on 1 (arXiv v1).",
+  "problem_entry": "ML+IO. Kernel ridge regression is tractable in any feature dimension but overfits when f >> n; nonparametric methods lack power; the only sparse nonlinear method named is the l1-based SPORE (pp. 2-3). Stated as hierarchical (k, l)-sparsity: at most k inputs and l monomials, ridge-penalized (eq. 2, p. 3).",
+  "key_idea": "Two steps: rank inputs from one unconstrained kernel ridge solve by the coefficient-block norm per input, computable in O(n^2) (Prop. 1, Alg. 1, pp. 9-10); then solve the exact (k, l)-sparse problem on the top p0 inputs as a pure convex integer problem by outer approximation (Thm. 1, Alg. 2, pp. 7, 11). Changed vs Lasso/SPORE: exact cardinality plus hierarchy constraints s_j <= h_i instead of an l1 proxy (pp. 3, 6).",
+  "assumptions": "y = g(x) + e with g a degree-r polynomial, gamma by cross-validation (pp. 1-2); big-M needs a data-dependent M (pp. 6-7). Synthetic Gaussian inputs, +/-1 coefficients on a random (k, l)-sparse support, sqrt(SNR) = 20 (pp. 12-13). Phase-transition runs take l = 20 as known and impose no hierarchy (k = p) to match the Lasso (p. 13).",
+  "proof_devices": [
+   "Closed-form ridge loss via the matrix inversion lemma (Lemma 1, p. 7)",
+   "Elimination of w: big-M-free pure convex integer formulation in (s, h) with hierarchy constraints (Thm. 1, pp. 7-8)",
+   "Mercer kernel as the Hadamard power (XX^T + 1)^r after scaling monomials by the square root of their number of orderings (pp. 8-9)",
+   "Per-input coefficient-block norm gamma^2 alpha*^T K_i alpha*, O(n^2) per input (Prop. 1, p. 9)",
+   "Subgradient of the regression loss from the dual maximizer (Prop. 2, p. 10)",
+   "Outer approximation with finite convergence credited to Fletcher-Leyffer; exponentially many cuts possible in the worst case (Thm. 3, p. 11)",
+   "Single-tree implementation with lazy constraints (p. 12)"
+  ],
+  "experiments": "Julia/JuMP, Gurobi 6.5, Xeon E5-2690 2.9 GHz (p. 12). p = 25 cubic (f = 3,276), 20 data sets per point, 2-minute cap with the best solution kept: accuracy, false alarms and time switch at n0 of about 600 (pp. 13-14); cuts fall from more than 300 (n = 300-400) to 25-31 (n = 900-1,000) (Table 1, p. 15); exact beats Lasso on accuracy vs false alarms at n = 560 (pp. 15-16). Ranking keeps all relevant inputs with p0 = 286 at (2,000, 1,000) and 78 at (10,000, 1,000) (Table 2, p. 16). UCI: best on 3 of 8, tied on 1; ridge best on 2, kernel regression on 2 (Table 3, p. 17). The abstract's n of about 10,000 and p of about 1,000 rest on the ranking step; no exact-step times at that scale (pp. 1, 12-17).",
+  "positioning": "Against the convex-proxy school (Lasso, SPORE, group Lasso), credited with elegant theory under strong probabilistic assumptions (p. 3), and against kernel learning, which overfits (p. 2); builds on Bertsimas-King-Mazumder 2016 and Bertsimas-Van Parys 2017, then submitted to the Annals of Statistics (pp. 4-6, 18); Gamarnik-Zadik for the theoretical phase transition (p. 13); outer approximation from Duran-Grossmann and Fletcher-Leyffer (p. 11).",
+  "writing": "Contribution framed as a notion first, an algorithm second (p. 4); combative claims that the Lasso's main justification is removed and the old position should not be held any longer (pp. 5-6); a section titled The whole truth, and nothing but the truth (p. 15); a summary conclusion with no future work (p. 17).",
+  "limits_future": "Stated: possibly exponentially many cuts (p. 11); high false-alarm rate of the ranking step (p. 16); nonlinear features and sparsity do not help on all data sets (p. 17). No future directions named (p. 17). Unstated: l known in the phase-transition study (p. 13); no gaps reported for capped runs (p. 13).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "The big-M MIO is replaced by a big-M-free convex integer formulation whose outer-approximation master is a linear MIO: the device changes, not the solver.", "pages": "pp. 6-7, 11"},
+   {"method": "Method 2", "relation": "variant", "note": "The belief that integer optimization is impossible for statistics is named and declared obsolete, but the speed-up is cited from Bertsimas-King-Mazumder 2016, not rebuilt: the borrowed-figure case of the checkpoint.", "pages": "pp. 5-6"},
+   {"method": "Method 4", "relation": "variant", "note": "The Lasso incumbent is dueled through the same ranking step with a ridge refit; the heuristic is a screen, not a warm start (Algorithm 2's warm start unspecified); capped runs use the best solution found without gaps, and only Table 1's caption says the smallest n were not solved.", "pages": "pp. 11, 13, 15"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "computational phase transition: more data makes the exact problem easier", "evidence": "Accuracy, false alarms and solve time switch together at n0 of about 600; cuts fall from more than 300 to 25-31 as n grows; also S170 (smooth version).", "pages": "pp. 4-5, 13-15"},
+   {"pattern": "a priori screening before solving", "evidence": "One kernel ridge solve ranks inputs and cuts p to p0 before the exact cardinality-constrained solve; Table 2 measures how large p0 must be.", "pages": "pp. 4, 8-10, 16"},
+   {"pattern": "same selection layer for the baselines", "evidence": "The l1 benchmark gets the same input-ranking step and a ridge refit so that it has a comparable number of hyperparameters.", "pages": "p. 13"}
+  ],
+  "transferable": [
+   "In a cardinality-constrained ridge problem, eliminate the continuous coefficients with the closed-form ridge loss to get a big-M-free binary convex problem (Lemma 1, Thm. 1, p. 7).",
+   "Rank inputs from one unconstrained kernel solve: each input's coefficient-block norm is gamma^2 alpha*^T K_i alpha*, with K_i from Hadamard powers in O(n^2) (Prop. 1, pp. 9-10).",
+   "Run outer approximation inside one branch-and-bound tree with lazy-constraint callbacks (p. 12).",
+   "Report support recovery as two numbers, the share of true features found and the share of selected features that are false, and trace one against the other over l (pp. 5, 15).",
+   "Tabulate the number of cuts against n to show where exactness becomes cheap (Table 1, p. 15)."
+  ],
+  "coauthors": "Bart Van Parys (MIT ORC; his postdoc)",
+  "quotes": [
+   {"text": "The position that exact sparse regression is an unattainable goal only to be striven for via admittedly elegant convex heuristics such as Lasso should not be held any longer.", "page": 6},
+   {"text": "As one could expect, considering nonlinear monomial features is not beneficial for prediction in all data sets.", "page": 17}
+  ]
+ },
+ {
+  "id": "S157",
+  "year": "2021",
+  "title": "A pre-registered short-term forecasting study of COVID-19 in Germany and Poland during the second wave",
+  "read_level": "partial",
+  "contribution": "A preregistered ten-week real-time comparison of 14 COVID-19 forecast models from 13 teams for Germany and Poland: forecasts were heterogeneous and mostly overconfident, case forecasts rarely beat a naive baseline beyond one or two weeks, and ensembles did well (especially in coverage) without dominating; his group's DELPHI model scored worse than the naive baseline for cases and one-week deaths and better for two-week deaths (medRxiv preprint).",
+  "problem_entry": "AP+DA. Short-term forecasts, unlike scenario projections, can be checked against later data (p. 2); a protocol deposited at OSF on 8 Oct 2020 fixes a prospective comparison for 12 Oct-19 Dec 2020, the second-wave onset (pp. 1-2); five questions on horizons, calibration, agreement, reliable approaches and ensembles (p. 2).",
+  "key_idea": "Standardized weekly submissions of 23 quantiles for 1-4 weeks ahead (pp. 3-4); evaluation by WIS, absolute error and 50%/95% coverage, missing forecasts given the worst score (p. 5); three baselines (only the naive one prespecified) and median, mean and inverse-WIS ensembles (pp. 5-6).",
+  "assumptions": "Truth data from ECDC (primary) and JHU by reporting date (pp. 3, 5). DELPHI: country-level modified SEIR with changing interventions and under-detection (Table 1, p. 7), one of three models anticipating policy changes (p. 4).",
+  "proof_devices": [
+   "n/a (no proofs)",
+   "WIS as a quantile approximation of CRPS, equal to the absolute error for point forecasts (p. 5)",
+   "Worst-score imputation for missing forecasts, flagged by asterisks (p. 5; Tables 2-3, pp. 15-16)",
+   "Additive shift between truth sources for cumulative targets (p. 5)"
+  ],
+  "experiments": "DELPHI rows (asterisked, at least one week imputed): mean WIS above the naive KIT-baseline for incident cases at 1 and 2 weeks (Germany 29,517 vs 13,227 and 62,173 vs 25,840; Poland 23,656 vs 18,538 and 46,427 vs 35,848) and 1-week incident deaths (362 vs 272; 337 vs 281), below it for 2-week incident deaths (310 vs 523; 444 vs 541) (Tables 2-3, pp. 15-16); two German weeks missing, no cumulative case forecasts (Table 4, p. 26). Overall: almost no model beat the naive baseline for cases beyond 1-2 weeks; ensembles good but not dominant (pp. 1, 12, 14).",
+  "positioning": "Run in close exchange with the US COVID-19 Forecast Hub, with links to UK and Austrian efforts and the ECDC (p. 3); ensemble evidence from influenza and weather forecasting (pp. 2-3, 6).",
+  "writing": "Consortium voice of the coordinators (Bracher, Gneiting, Schienle wrote it, p. 21); hedged throughout (conclusions necessarily preliminary, p. 2); imputed scores flagged in the tables (pp. 15-16).",
+  "limits_future": "Ten weeks only; most models overconfident; inverse-WIS weighting gave no benefit (pp. 2, 14, 17). Next: regional forecasts, hospital and ICU targets, the vaccine phase (p. 17).",
+  "method_links": [
+   {"method": "Method 5", "relation": "variant", "note": "The checkpoint correction (score forecasts on the field's metric against the naive rule) is met by the external Hub, not by the group; DELPHI loses to the naive baseline for cases and one-week deaths and wins for two-week deaths, consistent with the US Hub result in 05 section 5.2; forecasts, not decisions. Also direct evidence for Heuristic 4 (an external prospective scoreboard).", "pages": "pp. 5, 15-16, 26"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "Consortium co-authorship as a contributing modeller", "evidence": "Authorship comes from contributing the DELPHI forecasts; the coordinators wrote the paper; same name as c27's S110, which lists this paper.", "pages": "pp. 21-22"}
+  ],
+  "transferable": [
+   "Deposit the evaluation protocol (period, targets, scores, rule for missing forecasts) before the first forecast (pp. 2, 5).",
+   "Score probabilistic forecasts with WIS from fixed quantiles; since WIS equals the absolute error for point forecasts, both kinds can be ranked together (p. 5).",
+   "Give a missing forecast the worst score any model got that week, and flag those entries in the tables (p. 5; Tables 2-3, pp. 15-16).",
+   "Report a naive baseline and say which baselines were added after the protocol (p. 5)."
+  ],
+  "coauthors": "38 authors led by J. Bracher and M. Schienle (KIT) with T. Gneiting (p. 1); from his DELPHI team M. L. Li (MIT ORC) and S. Soni (MIT Sloan) are authors, and the team list adds H. Tazi Bouardi and O. Skali Lami (p. 22)",
+  "quotes": [
+   {"text": "Firstly, forecasts are made in real time, as retrospective forecasting often leads to overly optimistic conclusions about performance.", "page": 2},
+   {"text": "Ensemble forecasts showed good relative performance, in particular in terms of coverage, but did not clearly dominate single-model predictions.", "page": 1}
+  ]
+ },
+ {
+  "id": "S170",
+  "year": "2021",
+  "title": "Sparse classification: a scalable discrete optimization perspective",
+  "read_level": "full",
+  "contribution": "Sparse logistic regression and SVM with a ridge term are written through duality as a binary convex problem and solved exactly by outer approximation with Lasso-seeded and stochastic cuts; on synthetic data the exact method recovers supports with fewer false features than ElasticNet and gets faster as n grows, and an information-theoretic sufficient condition n0 < C(2 + sigma^2) k log(p - k) is proved (arXiv v4).",
+  "problem_entry": "ML+IO. The l0-constrained classifier is NP-hard, so practice uses the Lasso, which finds true features but also false ones (pp. 1-2); a regime exists where recovery is possible but the Lasso fails (p. 2); support recovery is little studied for classification (p. 3).",
+  "key_idea": "Fenchel duality of ridge-regularized classification (Thm. 1, p. 8) makes the support choice a minimum over s of a maximum over alpha of functions linear in s, i.e. a binary convex problem (Thm. 2, pp. 10-11), solved by single-tree outer approximation from a rich root node (Lasso warm start, Lasso-path cuts) plus stochastic subsample cuts (pp. 12-14). Unlike Bertsimas et al. 2020 it needs no closed form (p. 4).",
+  "assumptions": "Convex loss (Assumption 1, p. 7); 0-1 loss excluded since strong duality fails (Remark 1, p. 10); gamma and k by cross-validated AUC (pp. 14-15). Synthetic: correlated Gaussian features, w_true in {-1, 0, 1}^p, labels sign(w^T x + eps) (p. 16); recovery figures at p = 1,000, k_true = 30, rho = 0.3, SNR -> infinity (pp. 17-21); Table 3 at SNR = 10 (p. 23). Theorem 4: Gaussian x, w* in {0, 1}^p, k known, p > 2k (pp. 27-28).",
+  "proof_devices": [
+   "Fenchel-conjugate dual of ridge-regularized classification with strong duality for convex losses (Thm. 1, p. 8)",
+   "Support choice as a min over s of a max over alpha of functions linear in s: binary convex problem (Thm. 2, pp. 10-11)",
+   "Subgradient in s read off the dual maximizer at no extra cost (p. 12)",
+   "Outer approximation with finite termination cited from Fletcher-Leyffer (Thm. 3, p. 12); lazy constraints and a rich root node (p. 13)",
+   "Stochastic cuts from subsample estimates with an acceptance test (Alg. 2, pp. 13-14)",
+   "Union bound over supports with l correct features, Hoeffding large-deviation bounds and normal orthant probabilities (Cramer) for the sufficient condition (Thm. 4, pp. 28, 31-34)"
+  ],
+  "experiments": "Xeon 2.3 GHz, 1 core, 8 GB; Julia 1.0, JuMP 0.21.1, Gurobi 8.1.0; baseline glmnet ElasticNet with both hyperparameters cross-validated the same way (p. 15). Exact selects the truth with somewhat fewer samples and better AUC (p. 17); 3-minute limit hit at low n, seconds at high n, glmnet under a second (pp. 17-18); stochastic cuts 2x (hinge) to 10x (logistic) faster (p. 21); k = 5, p = 50,000 under a minute, but p = 5,000, k = 20 leaves 40-46% gaps at 30 min (Table 3, p. 23). UCI: sparser on 7 of 8, ElasticNet more accurate on 3 (p. 23); lung cancer n = 1,145, p = 14,858: 38 genes, AUC 0.977 vs 378.4 genes, 0.982 (Table 5, p. 25).",
+  "positioning": "Lasso support-recovery theory (Wainwright) and its critics (Fan, Buhlmann, Su) (p. 2); information-theoretic limits (Wainwright, Gamarnik-Zadik, Scarlett-Cevher), against which Theorem 4 is placed (pp. 2-5, 28-30); claims more versatility than the concurrent integrality generation of Dedieu et al. 2020 (p. 4).",
+  "writing": "Four numbered contributions (pp. 4-5); subsections titled Selecting the truth and ...and nothing but the truth (pp. 16, 18); strong abstract scale claim of optimal solutions for n and p in the tens of thousands within minutes (p. 1), with the unsolved denser cases, gamma sensitivity and glmnet's speed admitted in the body (pp. 18, 21, 23): Tension T6.",
+  "limits_future": "Time grows sharply with gamma and no warm start across the gamma grid (p. 21); denser k unsolved in 30 min (p. 23); UCI sets make a weak case (p. 24); the intermediate sample regime may reflect proof weakness, an exciting direction (p. 30).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "Duality turns the cardinality-constrained classifier into a binary convex problem, and the same dual supplies the cuts.", "pages": "pp. 8-12"},
+   {"method": "Method 4", "relation": "evidence", "note": "Lasso warm start and initial cuts; stated limits, machine and solver version; gaps for unsolved instances; an upper/lower-bound trace showing time goes into the proof; an incumbent duel at matched tuning. Missing: the low-SNR regime critics would pick (recovery figures assume SNR -> infinity).", "pages": "pp. 13, 15, 17-19, 21, 23"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "computational phase transition: more data makes the exact problem easier", "evidence": "Cuts drop from thousands to under twenty and time from the 3-minute limit to seconds as n grows; here the transition is smooth, not sharp; also S355.", "pages": "pp. 5, 17, 20"},
+   {"pattern": "knob-matched baseline", "evidence": "ElasticNet is chosen because, like (gamma, k), it has two tuned hyperparameters, cross-validated by the same procedure.", "pages": "p. 15"}
+  ],
+  "transferable": [
+   "For any convex loss with a ridge term, write the support choice as a minimum over s of a maximum over alpha of functions linear in s; the dual maximizer at s gives the cut's subgradient at no extra cost (pp. 10-12).",
+   "Seed outer approximation with the Lasso solution and with cuts at the Lasso path's supports up to sparsity k + 1, rather than with dense Boolean-relaxation cuts (p. 13).",
+   "Generate cheap cuts from subsample estimates, and accept each only if it tightens the current lower approximation (pp. 13-14).",
+   "Plot the upper and lower bounds against time to show how much of a run only certifies (Fig. 5, pp. 18-19).",
+   "When a baseline has fewer knobs than your method, pick a variant with the same number and tune it with your own protocol (p. 15)."
+  ],
+  "coauthors": "Jean Pauphilet (MIT ORC; his PhD student, 2020); Bart Van Parys (MIT ORC and Sloan; postdoc)",
+  "quotes": [
+   {"text": "In contrast, while Lasso accurately detects all the true features, it persistently returns incorrect features, even as the number of observations increases.", "page": 1},
+   {"text": "Computational time evolves similarly: the algorithm reaches the time limit (here, 3 minutes) when n is low, but terminates in a few seconds for high values.", "page": 17}
+  ]
+ },
+ {
+  "id": "S196",
+  "year": "2021",
+  "title": "Computation of convex hull prices in electricity markets with non-convexities using Dantzig-Wolfe decomposition",
+  "read_level": "full",
+  "contribution": "Exact convex-hull (Lagrangian-dual) prices for non-convex electricity markets are computed by Dantzig-Wolfe column generation on the units' unchanged MILP models, with finite convergence and a market reading (sub-problem = self-scheduling, reduced cost = lost opportunity cost), shown on literature examples and a 1,011-unit FERC data set (arXiv v2).",
+  "problem_entry": "IO+LO+AP. Non-convex unit commitment means marginal prices cannot support the efficient dispatch, so markets pay uplift (p. 1); convex hull prices minimize uplift, but ISOs use approximations because exact prices are computationally hard and opaque (pp. 1-2); entry: compute them exactly and explain their formation (p. 2).",
+  "key_idea": "Write unit commitment as choosing one feasible schedule per unit (set partitioning); its LP relaxation is the Dantzig-Wolfe characterization and solves the Lagrangian dual (pp. 4-5). Column generation: master duals = prices and unit profits, sub-problem = each unit's own MILP at current prices; units' models used as is; borrowed from crew scheduling (pp. 2, 4-5, 8).",
+  "assumptions": "Mixed-integer linear unit models with bounded feasible sets (p. 4); penalized slack for master feasibility (p. 5). Stylized literature examples (pp. 6-7), a ramp-constrained example (pp. 8-9), a PJM-like FERC data set with 1,011 units, 24 hours, up to 10-block offers and some parameters set by assumption (pp. 9-10).",
+  "proof_devices": [
+   "Schedule-selection (set-partitioning) reformulation of unit commitment (eq. 6, p. 4)",
+   "LP relaxation of the schedule formulation equals the Lagrangian dual (refs. 35-36, p. 4)",
+   "Column generation with per-unit MILP pricing; finite convergence from the finitely many extreme points of polyhedral hulls (p. 5)",
+   "Reduced cost of the optimal self-schedule equals minus the lost opportunity cost; termination = minimum total LOC; duality gap = uplift (pp. 3, 5-6)"
+  ],
+  "experiments": "Ramp example: CH duality gap $365 vs $875.45 (integer relaxation) and $1,137.75 (extended formulation); a tuned subgradient method after 10,000 iterations stayed about 0.1 $/MWh off at best and near 206 instead of 276 with step 1/k (Fig. 1, p. 9). FERC: C with CPLEX 12.7, Core i7-5500U, 8 GB; a few tens of iterations from warm or flat starts; about 14 s per sequential iteration (master under 1 s, sub-problems about 10 ms); full parallelization estimated, not run, at well under a minute (p. 10).",
+  "positioning": "Against subgradient methods and extended formulations for convex hull pricing (pp. 1-2, 7-8); builds on the original convex hull pricing paper (ref. 7), Dantzig-Wolfe (ref. 34) and branch-and-price (ref. 38); the 2005-2017 switch of US ISOs from Lagrangian relaxation to MILP, worth $500M to more than $2B a year (ref. 16), as context (p. 1).",
+  "writing": "Exactness, tractability, parallelizability and intuition asserted repeatedly (pp. 1-2, 8); experiments called preliminary and parallel time estimated rather than measured (pp. 2, 10).",
+  "limits_future": "No known column-generation accelerations used; testing with actual market data at a large US ISO is ongoing (p. 10).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "A pricing problem owned by power economics is written exactly as an LP over schedules, prices and profits are read off its duals, and tractability is shown on a 1,011-unit data set, without changing the units' MILP models.", "pages": "pp. 4-5, 10"},
+   {"method": "Method 4", "relation": "variant", "note": "Exactness with finite convergence is set against the subgradient incumbent on a published example, and the master is warm-started from the MILP unit-commitment solution; no certificate issue since the method is exact by construction.", "pages": "pp. 9-10"},
+   {"method": "Method 5", "relation": "variant", "note": "Comparators are what ISOs use (integer-relaxation prices, ELMP) and extended formulations, scored by duality gap (uplift); no partner data, field test or ISO decision rule; the ISO test is ongoing.", "pages": "pp. 1-2, 9-10"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "small dual plus optimization oracle", "evidence": "The dual has one price per system constraint and hour and each unit's MILP is the oracle; the oracle steps get a market reading (sub-problem = self-scheduling, reduced cost = lost opportunity cost); same name as c02's S269.", "pages": "pp. 4-5, 8"}
+  ],
+  "transferable": [
+   "To get exact Lagrangian-dual (convex-hull) prices without reformulating component models, take each component's feasible plans as columns and solve the LP relaxation by column generation, with the component's own MILP as pricing problem (pp. 4-5).",
+   "Read the master's duals economically: lambda are prices and -pi each unit's profit; a negative reduced cost means the unit would gain by self-scheduling (p. 5).",
+   "Start the master from the MILP solution, or from trivial offline schedules with penalized slack (p. 5; Example 1, p. 6).",
+   "Benchmark exactness on a published small example against the practice approximation, an extended formulation and a tuned subgradient method, reporting each duality gap (p. 9)."
+  ],
+  "coauthors": "Panagiotis Andrianesis and Michael C. Caramanis (Boston University); William W. Hogan (Harvard)",
+  "quotes": [
+   {"text": "Computational performance is always an empirical question.", "page": 8},
+   {"text": "There was no use of any of the known methods that may enhance CG performance, although such strategies have been successful in other applications.", "page": 10}
+  ]
+ },
+ {
+  "id": "S215",
+  "year": "2021",
+  "title": "Probabilistic guarantees in robust optimization",
+  "read_level": "full",
+  "contribution": "A unified method gives a priori and a posteriori violation-probability bounds for robust solutions with any convex compact uncertainty set and any constraint concave in the uncertainty, driven by the set's robust complexity rho(Z) (the minimum over directions of its support function); it recovers known bounds (box-ellipsoid, budget set) and extends them to dependent sub-Gaussian noise and bounded-covariance noise.",
+  "problem_entry": "RO+CP. A priori bounds size uncertainty sets, but results were derived set by set and only catalogued (p. 3); no method for any convex set and any constraint, and no link from set geometry to the guarantee (p. 3); safe approximations, data-driven sets, DRO and the scenario approach each faulted (pp. 3-4).",
+  "key_idea": "Robust complexity rho(Z) = min over unit y of the support function, a robust analogue of Rademacher complexity (pp. 5, 11); a priori bound exp(-rho(Z)^2/2) for linear and concave-in-uncertainty constraints (Table 1, p. 6; Cors. 1-2, pp. 12-13); a tighter a posteriori bound exp(-(b - a^T x)^2 / (2||P^T x||^2)) (Thm. 1, p. 10); the support function links counterpart and bound (p. 2).",
+  "assumptions": "Z convex, compact, full-dimensional with 0 in its relative interior; f concave in the uncertainty, the convex case left out (p. 5); sub-Gaussian coordinates with variance proxy 1 (Assumption 1) and independence (Assumption 2) (p. 9); Section 5 drops independence (weaker exp(-rho^2/(2L))) and uses bounded covariance (pp. 18-20).",
+  "proof_devices": [
+   "Support function in the robust counterpart (Props. 1-2, pp. 7-8)",
+   "Sub-Gaussian tail of z^T P^T x with variance proxy ||P^T x||^2 plus robust slack at least the support function (Thm. 1, p. 10)",
+   "Robust complexity and the a priori bound by minimizing over directions (Def. 2, Cor. 1, pp. 11-12)",
+   "Concave conjugate for constraints concave in the uncertainty (Prop. 2, Thm. 2, pp. 8, 12)",
+   "Closed forms or bounds for norm balls, intersections and Minkowski sums (Props. 4-7, pp. 13-16)",
+   "rho(Z) as the radius of the largest centred inscribed ball (Prop. 8, p. 17)",
+   "Dependent case: weaker exponential bound and Chebyshev-type polynomial bounds (Thms. 3-4, pp. 18-19)"
+  ],
+  "experiments": "Facility location (10 facilities, 50 customers), demand within 20% of nominal, uniform/normal/Rademacher noise (p. 20); a posteriori bounds much tighter than a priori and closer to empirical (Fig. 4, p. 21); budget set about 10% less conservative than the sum set a priori at every protection level, less so a posteriori and empirically (Fig. 6, p. 22); union-bound joint guarantees exceed 1 for small Gamma (p. 23); dependent case with spiked covariance (p. 23).",
+  "positioning": "Unifies the Ben-Tal-Nemirovski box-ellipsoid bound, the Bertsimas-Sim budget-set bound (ref. [8], p. 25) and the catalogue papers (pp. 3, 5, 15); contrasts with safe approximations, data-driven sets including his own with Gupta and Kallus (ref. [6], p. 24; faulted for calibrating on a single constraint, p. 4), DRO and the scenario approach (pp. 3-4).",
+  "writing": "Abstract claims the method recovers and extends all results in the literature to the authors' knowledge (p. 2); summary tables first (Tables 1-2, pp. 6-7); an explicit no-generalization caveat on the experiment (p. 22).",
+  "limits_future": "The set comparison holds for this problem only (p. 22); future: constraints convex in the uncertainty via safe approximations, Bernstein-type bounds for dependent noise (pp. 23-24).",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "The knob (Gamma, or rho(Z)) gets a solution-independent bound under stated assumptions and can be set from a target epsilon (rho = sqrt(-2 ln eps) for the box-ellipsoid); the cost-violation curve is drawn for two set families with the uninformative case shown; the a posteriori bound adds an audit after solving.", "pages": "pp. 3, 10-12, 21-23"},
+   {"method": "Method 1", "relation": "evidence", "note": "The same support function carries the tractable counterpart and the guarantee; an epsilon target is met by one SOC constraint, inside the conic class.", "pages": "pp. 2, 6, 10"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "Robust analogue of another field's canonical concept", "evidence": "Robust complexity is Rademacher complexity with the expectation replaced by a worst case; same name as c10's S029.", "pages": "p. 11"},
+   {"pattern": "tightness audit of one's own bound", "evidence": "A priori, a posteriori and empirical violation rates are plotted together, and the union bound is shown to exceed 1 for small Gamma.", "pages": "pp. 21-23"}
+  ],
+  "transferable": [
+   "Bound the violation probability of a robust linear constraint by the sub-Gaussian tail of z^T P^T x, then replace the slack by the support function to get a bound that depends only on the set (pp. 10-12).",
+   "Compute rho(Z) as the radius of the largest l2 ball centred at 0 inside Z; this works for sets without closed forms (Prop. 8, p. 17).",
+   "After solving, report the a posteriori bound exp(-slack^2 / (2||P^T x||^2)), which costs nothing and is tighter (pp. 10, 21).",
+   "Compare uncertainty-set families by worst-case cost against violation probability (a priori, a posteriori, empirical) across protection levels (Fig. 6, p. 22)."
+  ],
+  "coauthors": "Dick den Hertog (University of Amsterdam); Jean Pauphilet (London Business School; his former PhD student)",
+  "quotes": [
+   {"text": "Little if no work, however, provides a disciplined methodology that enables to derive probabilistic guarantees for any uncertainty set U and any constraint function f.", "page": 3},
+   {"text": "This conclusion is of course valid for this particular problem only and we do not claim any generalization to other contexts.", "page": 22}
+  ]
+ },
+ {
+  "id": "S228",
+  "year": "2021",
+  "title": "Imputation of clinical covariates in time series",
+  "read_level": "partial",
+  "contribution": "Workshop version (arXiv v1, NeurIPS 2018 ML4H): med.impute adds a time-decayed same-patient term to the opt.impute kNN objective; on Framingham data with 10-50% MCAR missingness it gives the lowest imputation error and the best downstream stroke-risk AUC among mean, bpca, mice and opt.impute (MAE 0.343 vs 0.509, AUC 0.848 vs 0.768 at 50%). The 64-page journal article was not read.",
+  "problem_entry": "ML+AP. Missing values pervade EHR and observational data, and longitudinal data hold several visits per person that standard imputation ignores (p. 1); entry: extend opt.impute to panel data (pp. 1-2).",
+  "key_idea": "Per-feature weight alpha_d on distances to the same person's other visits, discounted by lambda_d^|t_i - t_j|, both cross-validated, added to the kNN imputation objective; mixed-binary model (3) solved by coordinate descent with random restarts alternating neighbours and imputed values (pp. 2-3).",
+  "assumptions": "Framingham Original Cohort: 1,107 patients with at least 10 visits, 10 most recent each (n = 11,070), 13 covariates; MCAR missingness generated at 10-50% on complete data used as ground truth (p. 3).",
+  "proof_devices": [
+   "n/a: formulation (3) only, solved by coordinate descent with random restarts; no theorem or convergence statement (pp. 2-3)"
+  ],
+  "experiments": "Baselines mean, bpca, mice, opt.impute; downstream l1-regularized logistic regression for 10-year stroke risk (pp. 3-4). At 50% missing: MAE 0.343 vs 0.509 (opt.impute), AUC 0.848 vs 0.768 (mean, bpca); error lowest with 4-5 visits per patient (p. 4). Statistically significant claimed without a reported test; no run times (p. 4).",
+  "positioning": "Extends opt.impute (ref. 1); baselines mean, bpca and mice; RNN approaches that impute inside a prediction task are mentioned (pp. 1-2).",
+  "writing": "Workshop format; significant and statistically significant claimed without test statistics (pp. 1, 4).",
+  "limits_future": "Future: SVM and tree versions (p. 4). Unstated: MCAR only, one data set, synthetic removal from a complete subset (p. 3).",
+  "method_links": [
+   {"method": "Method 5", "relation": "variant", "note": "Imputation is judged by the downstream model's AUC as well as by imputation error, but there is no decision, owner or rule.", "pages": "pp. 3-4"},
+   {"method": "Method 1", "relation": "variant", "note": "Imputation is written as a mixed-binary optimization but solved by local search with restarts, with no bound or certificate (the Heuristic 3 route from the start). Later contradicted by his group's S310 (S310 pp. 12-13), which finds sophisticated imputation predicts worse than mean imputation on real data and names this paper among those validated on synthetic removal.", "pages": "p. 3"}
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Add a per-feature, time-decayed same-person term to a kNN imputation objective, and learn its weight and decay by cross-validation (pp. 2-3).",
+   "Report imputation error and downstream AUC side by side as missingness grows (Fig. 1, p. 4).",
+   "Vary how many past visits per person are kept, to find how much history helps (Fig. 2, pp. 4-5)."
+  ],
+  "coauthors": "Agni Orfanoudaki (his PhD student, 2021); Colin Pawlowski (MIT Sloan and ORC)",
+  "quotes": [
+   {"text": "We demonstrate that med.impute leads to significant improvements in both imputation accuracy and downstream model AUC compared to state-of-the-art methods.", "page": 1},
+   {"text": "In our experiments, we generate patterns of missing data for various percentages ranging from 10% to 50% under the missing completely at random (MCAR) mechanism.", "page": 3}
+  ]
+ },
+ {
+  "id": "S310",
+  "year": "2021",
+  "title": "Simple Imputation Rules for Prediction with Missing Data: Contrasting Theoretical Guarantees with Empirical Performance",
+  "read_level": "full",
+  "contribution": "Impute-then-regress is asymptotically Bayes-optimal if and only if imputed values can be recognized as imputed, so mode imputation is inconsistent and mean imputation of continuous features is consistent; on synthetic, semi-real and 63 real data sets, sophisticated imputation (mice) rarely beats mean imputation outside synthetic MCAR settings, and real-data evidence on mode imputation is inconclusive (arXiv v3).",
+  "problem_entry": "ML. Missing-data practice for prediction copies inference (MAR, plausible imputations) (pp. 1-2), though prediction is a different task (p. 1); questions: when is impute-then-regress consistent, and does it need plausible imputations (p. 2).",
+  "key_idea": "With infinite data and a universally consistent learner, mu-imputation leads to a mixture weighted by alpha(x), the posterior probability that a value was imputed (Thm. 2.1, p. 4); Bayes-optimal iff alpha(x) = 1 or equal conditional means (Cor. 2.2, p. 5); hence missingness as its own category, mean imputation consistent, crude is good (pp. 5-7); NMAR can help prediction (Thm. 4.1, p. 10).",
+  "assumptions": "Theory: one missing covariate, infinite data, a universally consistent learner, no MAR needed (pp. 3-4, 10-11). Empirics: synthetic d = 10, n from 40 to 1,000, SNR = 2, linear or neural-network signals, MCAR or censoring, 8 missing fractions; 63 UCI/RDatasets data sets with real missingness and synthetic MAR/NMAR/adversarial or real signals (pp. 5-6, 17-18).",
+  "proof_devices": [
+   "Infinite-data local-mixture argument: the post-imputation predictor is an alpha(x)-weighted mixture of two conditional expectations (Thm. 2.1, p. 4; Appendix A, p. 15)",
+   "Consistency iff de-imputability alpha(x) = 1 or equal conditional means (Cor. 2.2, p. 5)",
+   "Constructed examples where NMAR beats MAR and the reverse (Thm. 4.1, Examples 4.2-4.3, p. 10; Appendix B, p. 16)",
+   "Paired t and Wilcoxon tests over data set x split comparisons (Tables 1-2, pp. 7-8)"
+  ],
+  "experiments": "Mode vs own category: significantly worse with synthetic signals (mean differences -0.03 to -0.13), not with real signals (+0.0122, p = 0.12) (Table 1, p. 7). mice vs mean: mice better on synthetic MCAR with few missing entries, worse under censoring (Fig. 1, p. 9); on semi-real and real data negative and significant in 5 of 7 cases, not significant in 2 (Table 2, p. 8); mice wins with linear downstream models and loses with random forests (Fig. 2, p. 11). Xeon E5-2690 v4, 8 GB (p. 17).",
+  "positioning": "Generalizes Josse et al. 2019 (constant imputation under MAR) and is presented as a weaker but more explicit version of Le Morvan et al. 2021 (p. 4); questions textbook treatments of MAR as favourable (p. 10); names the group's own imputation papers as validated on synthetic removal (pp. 12-13).",
+  "writing": "Title and abstract announce a contrast of theory and practice; the slogan crude can be good (p. 1); gaps between theory and practice stated in the abstract and written up as research directions (pp. 1, 10-12).",
+  "limits_future": "One missing covariate, asymptotics and universally consistent learners; finite-sample and parametric pipelines needed; the MAR/NMAR taxonomy questioned; more realistic synthetic missingness needed (pp. 10-12). Appendix C.2 still mentions the authors' adaptive regression models, absent from the v3 main text (p. 18).",
+  "method_links": [
+   {"method": "Method 4", "relation": "contradiction", "note": "The incumbent duel is run honestly and the crude incumbent (mean imputation) is proved asymptotically optimal; it matches mice with real signals and beats it on most semi-real tests. The premise that a sophisticated joint method beats simple practice (Taste mark 3, Tension T2) fails for imputation-for-prediction, including the group's own earlier line (opt.impute, S228).", "pages": "pp. 4-8, 12"},
+   {"method": "Method 5", "relation": "evidence", "note": "Imputation is judged by the downstream prediction, not by plausibility; an imputation good for prediction encodes missingness. Also evidence for Heuristic 4: inconclusive and unfavourable real-data results are in the abstract and body.", "pages": "pp. 1-2, 5, 7, 12"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "asymptotic optimality as the warrant for a simple heuristic", "evidence": "Mean imputation is recommended because it is asymptotically consistent, while mode imputation is not; same name as c03's S089.", "pages": "pp. 5-7"},
+   {"pattern": "self-revision within a programme", "evidence": "The group re-tests the value of sophisticated imputation, which its 2018 and 2021 papers promoted, against the crude rule on real data and reports the reversal; compare c40's S672 and card S228.", "pages": "pp. 12-13"}
+  ],
+  "transferable": [
+   "Before engineering a pre-processing step, derive what the downstream learner needs asymptotically: here only that imputed values be recognizable, alpha(x) = 1 (pp. 4-5).",
+   "Validate on three tiers (synthetic; semi-real, with real design and missingness but synthetic signals; real) and report where the tiers disagree (pp. 5-8, 12).",
+   "Test paired differences over data set x split comparisons with both a t-test and a Wilcoxon test, and report mean and pseudo-median differences (Tables 1-2, pp. 7-8).",
+   "Impute the training set alone, then the test set with the imputed training data, to mimic production, and compare the alternatives in an appendix (pp. 7, 22-23)."
+  ],
+  "coauthors": "Arthur Delarue (Georgia Tech; corresponding author; his former PhD student); Jean Pauphilet (London Business School; his former PhD student)",
+  "quotes": [
+   {"text": "In short, as far as prediction is concerned, crude is good.", "page": 5},
+   {"text": "On the contrary, we observe on real-world design matrices and missingness patterns (both for synthetic and real signals Y ) that an imputation method as sophisticated as mice leads, on average, to less accurate predictions than simple mean imputation.", "page": 12}
+  ]
+ }
+]

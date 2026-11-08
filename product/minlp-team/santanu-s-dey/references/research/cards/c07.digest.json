@@ -1,0 +1,91 @@
+[
+  {
+    "id": "S008",
+    "year": "2018",
+    "title": "Matrix minor reformulation and SOCP-based spatial branch-and-cut method for the AC optimal power flow problem",
+    "read_level": "full",
+    "contribution": "Rewrites the rank-one condition of lifted AC OPF as vanishing 2x2 minors (edge, 3-cycle, 4-cycle types), convexifies these substructures with SOC/LP hulls, envelopes and cycle cuts, and builds an SOCP-based spatial branch-and-cut that roughly halves the SDP gap on NESTA at lower average time (arXiv v1 read).",
+    "problem_entry": "SDP relaxations of AC OPF are exact only under restrictive conditions, scale poorly and leave large gaps on hard NESTA instances; prior global methods were tested only on root-solvable IEEE cases (arXiv pp. 2-3, 8).",
+    "key_idea": "Rank-one iff all 2x2 minors vanish (Prop. 3.1, p. 7); classify minors into edge/3-cycle/4-cycle types with an angle-sum physical meaning, convexify each small set without the SDP cone, and use cycle relaxations as separation oracles inside spatial branch-and-cut (pp. 3, 8-24).",
+    "assumptions": "Rectangular AC OPF with linear/convex quadratic costs; all envelopes need bounds on c, s and angles ('standing assumptions', p. 19), supplied by bound tightening; c > 0 for arctangent envelopes (p. 16); real/complex matrix equivalence cited from [48] (p. 18); parameters set 'After initial calibration' on the test family (pp. 14, 26).",
+    "proof_devices": [
+      "Rank-one <=> zero 2x2 minors + nonnegative diagonal via largest invertible submatrix (Prop. 3.1, arXiv p. 7)",
+      "conv(K=) = K<= ∩ conv(K>=) (Tawarmalani-Richard) plus Hillestad-Jacobsen polytope-minus-convex-set theorem, extreme points from the 32 box edges (Prop. 3.2, pp. 10-11; Algs. 3-5, pp. 35-36)",
+      "Edge cuts by hyperplane over-estimation of convex sqrt(c^2+s^2) and under-estimation of concave sqrt(cii cjj) (Props. 3.3-3.6, pp. 11-12)",
+      "Extreme-point perturbation argument showing all but one bilinear pair at bounds, then disjunction over T_alpha sets: conv(Sa) SOC representable, exponential disjunctions (Thm. 3.2, p. 12; App. C pp. 36-38)",
+      "Arctangent envelopes: corner planes shifted by exact maximal violation found by KKT enumeration on four 1-D boundary pieces (Props. 3.9-3.10, pp. 16-17; App. A pp. 34-35)",
+      "Generic conic separation dual with l-infinity normalization (36) (p. 19)",
+      "Dual-based bound tightening reusing bounding-SOCP duals (41)-(42) (p. 21)"
+    ],
+    "experiments": "NESTA 0.3.0 Typical/Congested/Small Angle, 3-2746 buses; C#, MOSEK 8, i5 PC with 16 GB; baselines plain SOCP, modified OPF Solver SDP under MOSEK and SDPT3 (SDPT3 used, more accurate), own earlier strong SOCP; gap vs MATPOWER local solution; root tables, 15/30-min branch-and-cut tables, cumulative gap curve; SDP still better on Typical class average (arXiv pp. 25-33).",
+    "positioning": "Local / relaxation / global map of OPF literature; extends principal-minor work [9,10,19] with non-principal minors; criticizes SDP exactness conditions and root-solvable test sets; candidly rates own predecessor [27] 2-3x worse and 'not very competitive' with SDP on easy instances (arXiv pp. 2-3, 9, 30-31).",
+    "writing": "Physical meaning of the algebra placed in the introduction (p. 3); computational headline (0.71% gap within 720 seconds) is in fact an average over 30-minute-capped runs (abstract p. 1 vs Table 5 p. 32); accuracy of outer approximations asserted from unreported extensive tests (pp. 11, 13); v1 formula typos (pp. 9, 16).",
+    "limits_future": "No SOCP warm start, nodes rebuilt from scratch (p. 25); exact hulls too large to use (pp. 11-12); largest Small Angle instances keep 2.5-4.6% gaps after 30 min (p. 32); future: multi-period OPF, transmission switching, LP outer-approximation B&C with warm starts (arXiv pp. 33-34).",
+    "method_links": [
+      {"method": "Method 5", "relation": "evidence", "note": "LP/SOC-only relaxation strengthened by structure (edge cuts, arctangent envelopes, cycle cuts), certified gap against a local solution on a stated PC, closed by own spatial branch-and-cut; SDP still wins on Typical average and the real/complex equivalence is only cited.", "pages": "arXiv pp. 8, 19-27, 30-33, 18"},
+      {"method": "Method 3", "relation": "evidence", "note": "Rank-one condition carries all nonconvexity; split into small recurring substructures (edge set, bilinear set Sa, cycle sets) convexified jointly rather than term by term.", "pages": "arXiv pp. 5-18"},
+      {"method": "Method 4", "relation": "variant", "note": "Only step 5 (cost of the constructive hull stated: up to 32 lambdas; disjunctions exponential in N); no tight examples or hypothesis-dropping in this computational paper.", "pages": "arXiv pp. 11-12"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "exact hull for the theorem, few-inequality outer approximation for the code", "evidence": "Prop. 3.2 extended hull replaced by four edge cuts; Thm. 3.2 SOC hull replaced by McCormick plus discretization", "pages": "arXiv pp. 10-14"},
+      {"pattern": "algebra-to-physics dictionary", "evidence": "each class of 2x2 minors mapped to an edge/3-cycle/4-cycle with the angle-sum-to-zero meaning, which then drives cycle-basis separation and branching on angle violation", "pages": "arXiv pp. 3, 8-9, 15-16, 23"}
+    ],
+    "transferable": [
+      "Rank-one => vanishing 2x2 minors => classify by index pattern => convexify each small class over a box (arXiv pp. 7-13)",
+      "Hull of a box minus an open convex set via the box's edges (Thm. 3.1 + Algs. 3-5, pp. 10, 35-36)",
+      "Two-coordinate perturbation argument to characterize extreme points of a bilinear equation over a box, then disjunctive SOC hull (App. C pp. 36-38)",
+      "Exact offset for valid envelope planes by KKT enumeration on boundary segments (App. A pp. 34-35)",
+      "l-infinity-normalized conic separation dual as a generic cut generator (p. 19)",
+      "Reuse bounding-problem duals to propagate bound improvements without re-solving (p. 21)",
+      "Modify the competitor's code to include your constraints, run it under two back-end solvers, compare against the more accurate run (pp. 25-26, 30)",
+      "Cumulative distribution of certified gaps across instances to show dominance (Fig. 3, p. 33)"
+    ],
+    "coauthors": "Burak Kocuk, X. Andy Sun",
+    "quotes": [
+      {"text": "In general, we should note that our approaches are much faster on large instances, more accurate on hard instances, and comparable to the SDP relaxation on small or easy instances.", "page": 30},
+      {"text": "Strong SOCP relaxations from our previous paper [27] improves the plain SOCP relaxation considerably but it is not very competitive against the SDP relaxation, especially for easier instances.", "page": 31}
+    ]
+  },
+  {
+    "id": "S011",
+    "year": "2018",
+    "title": "Theoretical challenges towards cutting-plane selection",
+    "read_level": "full",
+    "contribution": "Reviews cut families and the theoretical measures of cut strength, argues they do not address what solvers need for cut selection, lists the selection knobs with no theory, and presents the authors' sparse-cut and aggregation-cut results as preliminary first steps (arXiv v1 read).",
+    "problem_entry": "Cut selection is a solver practice that made general-purpose cuts work (Balas et al., mid-90s) yet has no scientific understanding; solver performance cannot be analysed directly, so proxy measures are needed (arXiv pp. 1-2, 4, 7-8).",
+    "key_idea": "Taxonomy of cut sources and strength measures, then a list of selection issues each ending in an open question, then own proxy results: sparse cuts (distance and chromatic-number bounds) and aggregation cuts (factor-2 for packing/covering vs arbitrarily strong for general MILPs) (arXiv pp. 2-20).",
+    "assumptions": "P in [0,1]^n as normalization; worst case over t-vertex polytopes; packing/covering with nonnegative data; pre-processed packing polyhedra; formulation sparsity as a block interaction graph; authors flag the setting as 'very stylized' and worst-case families as possibly 'very artificial' (arXiv pp. 11-20).",
+    "proof_devices": [
+      "Randomized coordinate-wise sparsification of the separating normal, Bernstein + union bound + Markov (Thm. 1 proof sketch, arXiv pp. 12-13)",
+      "Tightness for random 0/1 polytopes and lower-bound polytopes from [112] (pp. 12-14)",
+      "Packing interaction graph + fractional (mixed) chromatic number bound; 2-SSP corollary proved by two integer solutions from a stable-set cover (Thm. 2, Cor. 1, pp. 15-17)",
+      "Lemma 2: relaxations each alpha-approximating their own hull improve P by at most alpha, via scaling characterization V ⊆ alpha U (pp. 18-19)",
+      "Worst-case family separating 1-row and aggregation closures for general MILPs (Thm. 4, p. 19)"
+    ],
+    "experiments": "Almost none of their own: summary of [56]'s check that 1-row CG cuts are significantly weaker than general CG cuts on random equality and market-split instances (p. 20); borrowed context on MIPLIB 2010 density and a dense-row slowdown study (p. 11).",
+    "positioning": "Against judging cuts by worst-case strength, facetness or depth of cut alone (pp. 7-8, 10); credits computational practitioners (Balas et al., Andreello-Caprara-Fischetti, Achterberg, Crowder-Johnson-Padberg) and thanks solver developers; own works presented as 'preliminary theoretical underpinning' (abstract p. 1; pp. 14, 22).",
+    "writing": "Nine selection issues each end with a 'to the best of our knowledge' gap; theorems followed by plain-language meaning and scope hedge; a proof distilled into a quoted slogan (p. 18); explicit 'word of caution' paragraph and a defence of the programme (pp. 20-21); ends on an ML question (arXiv pp. 21-22).",
+    "limits_future": "Theory has 'so far failed to directly help' selection (p. 20); own results 'very preliminary' and far from answering §1.2 (p. 21); answers may be solver-specific; future: parallelism, number of cuts, stability, reverse rank, ML in concert with theory (arXiv pp. 9-10, 21-22).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "Solver habit (cut selection, sparse cuts) as object of study; proxy measures because direct analysis is impossible; one-sided sparse-cut question; step 7 in its report-the-mismatch form (theory has not helped yet).", "pages": "arXiv pp. 4, 11, 20-21"},
+      {"method": "Method 4", "relation": "evidence", "note": "Tight bound for random 0/1 polytopes plus lower-bound polytopes; paired positive/negative instance classes (packing/covering factor 2 vs general MILPs arbitrarily large; sign-pattern in between); tight examples for sparse-formulation bounds.", "pages": "arXiv pp. 12-14, 17-20"},
+      {"method": "Method 2", "relation": "variant", "note": "Only ground-truth-style comparison is 1-row vs full CG closure on two instance families; no stripped instrument in a review.", "pages": "arXiv p. 20"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "proof distilled into a selection slogan", "evidence": "Lemma 2 turned into the principle that relaxations with small integrality gap may yield weak cuts, offered as guidance for choosing relaxations", "pages": "arXiv pp. 18-19"},
+      {"pattern": "review as agenda", "evidence": "known theory -> list of solver knobs each with a no-theory-known sentence -> own results as first steps -> word of caution -> ML question", "pages": "arXiv pp. 4-22"}
+    ],
+    "transferable": [
+      "Randomized sparsification of a separating normal with concentration + union bound to prove sparse-cut approximation bounds (arXiv pp. 12-13)",
+      "Encode formulation sparsity as a block interaction graph and bound restricted-support closures by a fractional chromatic number via stable sets (pp. 15-17)",
+      "Use the blow-up (alpha-approximation) measure for packing/covering closures, with its scaling characterization (pp. 6, 19)",
+      "Pair a structured-class cuts-help-little theorem with a general-class cuts-help-arbitrarily-much family, then test the latter on natural instances (pp. 18-20)",
+      "For each solver knob without theory, write practice / measured evidence / an explicit no-theory-known sentence to build an agenda (pp. 8-10)"
+    ],
+    "coauthors": "Marco Molinaro",
+    "quotes": [
+      {"text": "given the complexity of solvers one cannot expect to be able to perform a theoretical analysis of this performance metric directly, and thus proxy measures are required.", "page": 4},
+      {"text": "these results have so far failed to directly help in actual cutting-plane selection.", "page": 20}
+    ]
+  }
+]

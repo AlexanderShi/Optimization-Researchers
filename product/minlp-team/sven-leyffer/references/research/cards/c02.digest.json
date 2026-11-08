@@ -1,0 +1,189 @@
+[
+  {
+    "id": "S003",
+    "year": "1994",
+    "title": "Solving mixed integer nonlinear programs by outer approximation",
+    "read_level": "full",
+    "contribution": "Generalizes Duran-Grossmann OA to MINLPs nonlinear in the integer variables, corrects its master program with Phase-I cuts for infeasible subproblems, gives a simpler finiteness proof, exhibits a worst case that visits every integer point, and proposes quadratic OA plus a nonsmooth exact-penalty OA.",
+    "problem_entry": "Three gaps in Duran-Grossmann OA: linear in y only, master wrong when NLP subproblems are infeasible (integer cuts binary-only), and evidence limited to problems linear in y; plus the question whether OA can perform badly (pp. 2, 6, 12).",
+    "key_idea": "Project onto y and replace each fixed-y NLP by its linearization (exact under a CQ); represent y in V by linearizations from a general weighted Phase-I feasibility problem; strict incumbent bound prevents repeats; add Lagrangian-Hessian term to the master (QOA); unify feasible and infeasible cases by exact penalty and convex composite OA (pp. 4-20).",
+    "assumptions": "X compact polyhedron, f and g convex and C^1, CQ at every fixed-y NLP solution, finite Y; convexity named the most serious restriction; nonsmooth case needs h convex and monotone; penalty equivalence needs small penalty parameter (A4) and second-order sufficiency (A5) (pp. 2, 16, 19).",
+    "proof_devices": [
+      "Lemma 1: KKT multipliers of the feasibility problem plus normal-cone inequality contradict positive infeasibility, so Phase-I linearizations exclude y^k (pp. 5-6)",
+      "Two-point counterexample y in {-1,1} showing the Duran-Grossmann master is not equivalent to P, plus a bad linearization point x=1/2 (p. 8)",
+      "Finite termination: optimality + CQ means no feasible descent direction, contradicting strict bound eta < UBD (p. 11)",
+      "Worst-case family f(y)=(y-delta)^2 on a grid with delta=2^-p, OA visits all points from an adjacent start (pp. 12-13, Fig. 1)",
+      "One-line counterexample -ln(x+1) on [0,2] showing the QOA master value is not a lower bound (p. 14)",
+      "Nonsmooth OA finiteness via subgradient inequality with X folded into a polyhedral composite t(r(x)) (pp. 18-19)",
+      "OA single cut vs Benders cut compared through first-order conditions; equal when x^j interior (pp. 20-21)"
+    ],
+    "experiments": "None in this version: only verbal claims (performance similar to Duran-Grossmann, p. 9; preliminary experience with strongly active cuts, p. 12); QOA results deferred to a later paper (p. 15).",
+    "positioning": "Extends and credits Duran-Grossmann but calls their master argument erroneous with a counterexample (pp. 8-9); simplifies Yuan et al., notes Viswanathan-Grossmann lack a no-repeat proof (p. 6); GBD as recurring foil, also hit by the worst case while NLP-B&B solves it in one step (pp. 3, 13, 20-21).",
+    "writing": "Abstract enumerates four contributions; theorems followed by interpretation (QOA as SQP for integers, OA as SLP) and usage advice on when QOA pays (pp. 1, 15); hedging confined to performance statements (pp. 12, 15).",
+    "limits_future": "Global guarantee needs convexity (p. 2); QOA loses the lower bound and needs MIQP software that hardly exists (p. 14); fewer cuts weaken the master (p. 12); future: MIQP B&B with improved lower bounds (pp. 14-15).",
+    "method_links": [
+      {"method": "Method 3", "relation": "evidence", "note": "Smallest breaking instance for the D&G master, worst-case family against OA, redesign to quadratic OA, and a counterexample to its own QOA lower bound; hypothesis check on D&G's narrow test class.", "pages": "pp. 8, 12-14"},
+      {"method": "Method 2", "relation": "evidence", "note": "Fletcher's Phase I, exact penalty and convex-composite machinery carried into MINLP; QOA read as SQP for integers.", "pages": "pp. 4-5, 15-21"},
+      {"method": "Method 6", "relation": "variant", "note": "Warns that linearizing reformulations can hide nonlinearities and defeat QOA, the reverse of 'linearize as much as possible'.", "pages": "p. 15"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "inherit convergence by preserving the classical invariant", "evidence": "QOA keeps OA finiteness because the master feasible region and supporting hyperplanes are unchanged; same move in S009 p. 7.", "pages": "p. 14"},
+      {"pattern": "one weighted feasibility problem for all Phase I variants", "evidence": "l1, l-infinity and constraint-by-constraint restoration written as one parametrized problem F so a single lemma covers any NLP solver.", "pages": "pp. 4-5"}
+    ],
+    "transferable": [
+      "No-cycling proof for decomposition: subproblem KKT plus CQ gives no feasible descent direction, contradicting the strict incumbent bound in the master (p. 11)",
+      "Worst-case construction on a geometric grid delta=2^-p with the start adjacent to (or at) the optimum (pp. 12-13)",
+      "Phase-I cuts valid for any NLP solver: linearize at the point where restoration stopped, written as a weighted feasibility problem (pp. 4-5, 8)",
+      "Compare cut families by substituting first-order conditions into one to see when it equals the other (pp. 20-21)",
+      "After stating an algorithm, name the continuous method it reduces to (OA=SLP, QOA=SQP) and derive usage advice (p. 15)"
+    ],
+    "coauthors": "Roger Fletcher",
+    "quotes": [
+      {"text": "This argument is erroneous as the following example indi ates.", "page": 8},
+      {"text": "Therefore quadrati outer approximation an be interpreted as a Sequential Quadrati Programming method generalized to integer programming.", "page": 15}
+    ]
+  },
+  {
+    "id": "S010",
+    "year": "1998",
+    "title": "Numerical experience with lower bounds for MIQP branch-and-bound",
+    "read_level": "full",
+    "contribution": "Derives cheap lower bounds for MIQP branch-and-bound children by one pivot-free step of the dual active-set method from the parent's final tableau, tests three branching rules built on them, and shows B&B is an order of magnitude faster than self-implemented GBD, OA and LP/QP-B&B on MIQPs.",
+    "problem_entry": "Quadratic OA needs MIQP masters; MIQP B&B had no improved lower bounds and the parent bound rarely fathoms (pp. 1, 4).",
+    "key_idea": "From the parent QP's final LCP tableau, move the new branching bound parametrically along one dual active-set step until a pivot would be needed; the Lagrangian there bounds the child (second-order term plus multiplier times remaining violation); unbounded ratio test fathoms the child unsolved (pp. 4-6).",
+    "assumptions": "Convex quadratic objective (positive definite G for the tableau properties), linear constraints, bounded region; active-set QP solver with recoverable tableau, null-space factors (pp. 2, 4, 6-7).",
+    "proof_devices": [
+      "Tableau algebra for A', G', H' from the inverse KKT matrix (pp. 6-7)",
+      "Dual ratio test steplength and closed-form bounds L+ and L- (pp. 5-6)",
+      "Operation count 5n^2+mn+k^2+O(n) and placement between most-fractional rule and a QP solve (p. 7)",
+      "Worked two-variable example closing 80% of the gap (p. 8)",
+      "Structural ceiling: bounds cannot prune more than 50% of nodes (p. 10)"
+    ],
+    "experiments": "15 MIQPs (literature, LPs made MIQP, QAP, index-tracking portfolios); SUN SPARC SLC, single precision, 2,000 s cap kept in tables; BR1/BR2/BR3 by QPs generated/solved and CPU; GBD, OA, LP/QP-B&B self-implemented on the same bqpd with best branching rule per problem; B&B order of magnitude faster, BR2 loses on 0-1 problems (pp. 9-12).",
+    "positioning": "Builds on Beale and Goldfarb-Idnani; rejects Korner's rule (wide trees) and pseudo-costs (via Gupta-Ravindran); groups GBD/OA/LP-QP as linearization methods ignoring higher-order terms; verdict restricted to MIQP, not MINLP (pp. 2, 4, 12).",
+    "writing": "One-sentence claims, hedged results ('modest improvement'), failure class named and explained, a mechanism paragraph (cheap child QPs, 1-2 pivots) explaining the ranking (pp. 10-12).",
+    "limits_future": "Pruning alone gives modest gains, 50% ceiling, BR2 worse on 0-1 QPs, ranking does not transfer to MINLP where nodes need several QPs (pp. 10-12).",
+    "method_links": [
+      {"method": "Method 5", "relation": "evidence", "note": "Self-built competitors on the same QP solver, best branching rule per problem for fairness, time-outs kept, failure class reported, class-specific conclusion.", "pages": "pp. 10-12"},
+      {"method": "Method 1", "relation": "evidence", "note": "Bounds built from what the owned QP solver already produced (final tableau, factors); six degrees of warm start in bqpd.", "pages": "pp. 3-7"},
+      {"method": "Method 2", "relation": "evidence", "note": "Fletcher's QP technology (bqpd, degeneracy resolution, tableau theorem) carried into integer programming.", "pages": "pp. 3, 6"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "cost-per-node mechanism for method rankings", "evidence": "B&B beats decomposition for MIQP because child QPs take 1-2 pivots; predicted not to hold for MINLP where nodes need several QPs.", "pages": "p. 12"}
+    ],
+    "transferable": [
+      "Child lower bound from one pivot-free dual active-set step on the parent's final tableau; fathom unsolved if the dual ratio test is unbounded (pp. 4-6)",
+      "Three-arm branching study: baseline, feature-only hybrid (BR3), full rule (BR2), reporting generated, solved and % solved plus CPU (pp. 9-10)",
+      "Report subproblem counts of every type (QPs and LPs) beside CPU to show why a method wins or loses (pp. 11-12)",
+      "Build MIQP test instances from standard LP test sets by adding integrality and a positive-definite quadratic objective (p. 9)"
+    ],
+    "coauthors": "Roger Fletcher",
+    "quotes": [
+      {"text": "In order to gain a fair comparison the best branching rule for each problem was used in the tests.", "page": 11},
+      {"text": "Note that one cannot expect to prune more than 50% of the nodes through lower bounds, which limits the scope for improvement through pruning for the hybrid branching rule BR3.", "page": 10}
+    ]
+  },
+  {
+    "id": "S014",
+    "year": "1998",
+    "title": "User manual for filterSQP",
+    "read_level": "full",
+    "contribution": "Documents filterSQP, a trust-region SQP solver with a filter and the bqpd QP solver, including Phase I restoration, scaled termination, scaling, warm starts for branch-and-bound, diagnostic output and a dated change log.",
+    "problem_entry": "Software description: NLP with bounds and two-sided general constraints, linear constraints flagged; filter used to promote global convergence (p. 1).",
+    "key_idea": "Trust-region SQP with l-infinity box, filter acceptance on (f, h), radius halved/doubled, bqpd null-space active-set QP with kmax cap, Phase I feasibility restoration, warm start for MINLP B&B, IEEE-exception flags in user routines (pp. 2-3, 9, 11-15).",
+    "assumptions": "Smooth functions with user-supplied gradients and Hessian of the Lagrangian via Wdotd; nonconvexity acknowledged; termination at non-KKT points allowed (pp. 2-3, 13-16).",
+    "proof_devices": [],
+    "experiments": "none (one shipped example, Duran-Grossmann TP1 relaxed NLP, p. 16)",
+    "positioning": "Cites only CUTE, Duran-Grossmann and own NA/171 filter report; no comparison with other SQP codes (p. 17).",
+    "writing": "Reference-manual structure with diagnostic guidance: large multiplier means nearly dependent active constraints, repeated restoration means tighten ubd/tt, per-iteration code records phase, step order and heuristics; dated change log (pp. 3, 10, 11, 17).",
+    "limits_future": "kmax storage O(kmax^2), double precision recommended for large or ill-conditioned problems, CUTE cannot pass scale factors, interfaces only on request (pp. 2, 5, 16-17).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "The owned instrument: warm-start entry for B&B, statistics returned to the caller, modular dense/sparse linear algebra.", "pages": "pp. 4-5, 9"},
+      {"method": "Method 6", "relation": "evidence", "note": "Phase I output tells the user which constraints cause local infeasibility so the model can be modified; evaluation crashes are explicit exit states and IEEE flags.", "pages": "pp. 3, 8, 12-15"},
+      {"method": "Method 4", "relation": "variant", "note": "Dated public change log of the software, the counterpart of the test library's dated correction log.", "pages": "p. 17"}
+    ],
+    "new_pattern_candidates": [],
+    "transferable": [
+      "Scale-free stopping test: KT residual divided by max{mu_max, 1}, mu_max the longest vector in the stationarity sum (p. 3)",
+      "Exit-code taxonomy separating local infeasibility with a solved feasibility problem, inconsistent linear constraints and evaluation crashes (p. 8)",
+      "One-line-per-iteration log encoding accept/reject, phase, step type and heuristic flags (p. 11)"
+    ],
+    "coauthors": "Roger Fletcher",
+    "quotes": [
+      {"text": "A new step is accepted whenever it improves the objective or the constraints compared to the filter.", "page": 2},
+      {"text": "The use of the normalized Kuhn-Tucker residual removes scaling anomalies from the termination criterion.", "page": 3}
+    ]
+  },
+  {
+    "id": "S023",
+    "year": "1999",
+    "title": "User manual for MINLP BB",
+    "read_level": "full",
+    "contribution": "Documents MINLP_BB, a depth-first branch-and-bound MINLP solver on top of filterSQP with priorities, maximal-fractional tie-breaking and SOS1 support for discrete-valued variables.",
+    "problem_entry": "Software for MINLP by branch-and-bound with the NLP part specified exactly as for filterSQP (p. 1).",
+    "key_idea": "Depth-first B&B with filterSQP relaxations, user priorities with maximal-fractional tie-break, discrete values reformulated as SOS1 binary combinations (pp. 1-3).",
+    "assumptions": "Global optimality only for convex problems; nonconvex accepted without guarantee; tree memory bounded by nstackmax (pp. 1, 3-4).",
+    "proof_devices": [],
+    "experiments": "none (makefile for the small example of the filterSQP manual, p. 2)",
+    "positioning": "Cites own MIQP B&B paper for the scheme and Williams for SOS1; claims more robustness than OA and Benders on nonconvex problems without evidence (p. 1).",
+    "writing": "Terse manual; ifail taxonomy includes integer infeasible and stack-overflow states with or without an incumbent (p. 4).",
+    "limits_future": "No global guarantee for nonconvex problems; interfaces to CUTE/AMPL only on request (pp. 1-2).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "Thin B&B layer over the owned NLP and QP solvers, distributed as one file suite with the same problem interface.", "pages": "pp. 1-2"},
+      {"method": "Method 6", "relation": "evidence", "note": "Discrete-valued variables reformulated as SOS1 binary combinations inside the manual.", "pages": "p. 1"},
+      {"method": "Method 5", "relation": "variant", "note": "Comparative robustness claim against OA and Benders made without test set, fairness rule or date.", "pages": "p. 1"}
+    ],
+    "new_pattern_candidates": [],
+    "transferable": [
+      "Give the MINLP layer the same problem interface as its NLP solver so models carry over unchanged (pp. 1, 4)",
+      "Resource-limit exit states that say whether an incumbent exists (stack overflow with/without integer feasible solution) (p. 4)"
+    ],
+    "coauthors": "",
+    "quotes": [
+      {"text": "Even though no guarantee can be given that a global solution is found in this case, the solver is more robust than outer approximation or Benders Decomposition which usually cut away large parts of the feasible region.", "page": 1}
+    ]
+  },
+  {
+    "id": "S009",
+    "year": "2001",
+    "title": "Integrating SQP and branch-and-bound for mixed integer nonlinear programming",
+    "read_level": "full",
+    "contribution": "Interleaves SQP iterations with the branch-and-bound tree search, branching after as little as one QP, replaces lower-bound computation by infeasibility of a surrogate-constrained QP, proves convergence by reduction to B&B, and reports fewer QPs and up to 3x speed-up over nonlinear B&B on 8 MINLPs.",
+    "problem_entry": "Classical MINLP methods decompose nonlinear and integer parts largely because of packaged software; Borchers-Mitchell's two-QP restriction came from the NAG code (pp. 1-2, 4).",
+    "key_idea": "Under convexity SQP linearizations are outer approximations: add f + grad f^T d <= U - eps to each QP and fathom when it is infeasible (free in a primal active-set solver); trust-region guard; early branching triggered by experimental order of convergence; nonconvex safe mode (pp. 5-10).",
+    "assumptions": "f, g smooth and convex, X, Y convex, finite integer set, globally convergent trust-region SQP; nonconvex case can wrongly fathom; tau=0.1 from Borchers-Mitchell (pp. 7-9).",
+    "proof_devices": [
+      "Lemma 1: infeasible surrogate QP implies FR3, since linearized constraints outer-approximate and linearized objective underestimates (p. 6)",
+      "Convergence by reduction: children still partition the parent after one QP and the new fathoming rule implies FR3, so B&B convergence applies (p. 7)",
+      "Theorem 1: finite tree plus global convergence of trust-region SQP (p. 8)",
+      "Trust-region case analysis separating binding radius from genuine infeasibility (p. 8)"
+    ],
+    "experiments": "8 public SIF MINLPs (MINLP_TP), NLP-B&B vs Algorithm 2 both on filterSQP via callback; nodes, QPs, CPU; QPs reduced 20-80%, 3x on largest; FEEDLOC convex-mode failure and slower nonconvex mode reported; reader check: BATCH is worse for Algorithm 2 (391 vs 371 QPs, 14.8 vs 8.9 s) and not mentioned (pp. 9-11).",
+    "positioning": "Three numbered improvements over Borchers-Mitchell; similar motivation to Quesada-Grossmann LP/NLP-B&B but solves usually one QP per node; criticizes decomposition (incl. Stubbs-Mehrotra) as a packaged-software artefact (pp. 2, 4, 7).",
+    "writing": "Contribution in contrast form ('an integrated approach'); packaged-software thesis in the abstract; observed pathology reported as reason for redesign; open problem in one line; typo FR2 for FR3 (pp. 1, 9, 11).",
+    "limits_future": "Lower bounds invalid for nonconvex problems, nonconvex mode less competitive, better nonconvex heuristics open; unstated: 8 small instances, single baseline, BATCH regression (pp. 9, 11).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "Core case: restriction traced to packaged NAG solver, removed by own solver; SQP linearizations reinterpreted as cuts; callback after each SQP step keeps filterSQP changes minimal.", "pages": "pp. 1-2, 4-6, 10"},
+      {"method": "Method 2", "relation": "evidence", "note": "Trust-region SQP, filter and feasibility restoration carried into B&B.", "pages": "pp. 3, 7-8"},
+      {"method": "Method 4", "relation": "evidence", "note": "Test problems published at the MINLP_TP URL in SIF plus integer-variable file.", "pages": "p. 10"},
+      {"method": "Method 5", "relation": "variant", "note": "Failures reported (FEEDLOC), but the 20-80% / factor-3 headline passes over BATCH where Algorithm 2 is worse; only baseline is own NLP-B&B.", "pages": "pp. 1, 11"},
+      {"method": "Method 6", "relation": "variant", "note": "Reading the solver's numbers applied to the algorithm: integrality gap and step norms diagnosed and turned into a new trigger.", "pages": "p. 9"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "inherit convergence by preserving the classical invariant", "evidence": "New fathoming rule implies FR3 and children partition the parent, so B&B convergence carries over; same move as S003 p. 14.", "pages": "p. 7"},
+      {"pattern": "self-tuning triggers from convergence rate", "evidence": "Experimental order of convergence replaces a fixed tolerance in the branching decision.", "pages": "p. 9"}
+    ],
+    "transferable": [
+      "Fathom by surrogate-QP infeasibility: add linearized objective <= U - eps to each SQP subproblem; under convexity infeasibility proves the node cannot improve (pp. 5-6)",
+      "Trust-region guard: fathom on QP infeasibility only if the trust region is inactive, otherwise go through restoration (p. 8)",
+      "Early-branching trigger p = ln||d_k|| / ln||d_{k-1}||: branch when p > 1.5 and ||d|| < tau (p. 9)",
+      "Nonconvex safe mode: fathom only when the classical method would have fathomed (p. 10)",
+      "Compare old and new tree search inside the same NLP solver attached through a callback so only the integration differs (p. 10)"
+    ],
+    "coauthors": "",
+    "quotes": [
+      {"text": "By using our own solver we are able to remove this unnecessary restriction, widening the scope for early branching.", "page": 2},
+      {"text": "However, better heuristics for nonconvex MINLP problems remain an open problem.", "page": 11}
+    ]
+  }
+]

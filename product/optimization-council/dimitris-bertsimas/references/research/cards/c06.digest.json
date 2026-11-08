@@ -1,0 +1,215 @@
+[
+ {
+  "id": "S043",
+  "year": "2000",
+  "title": "The traffic flow management rerouting problem in air traffic control: A dynamic network flow approach",
+  "read_level": "full",
+  "contribution": "Formulates weather-driven rerouting, ground holding and speed control of flights as one multicommodity integer dynamic network flow and solves it with a Lagrangian Generation Algorithm (Lagrangian/LP relaxation, randomized rounding into a path pool, set-packing IP) that reaches solutions within about 1% of the LP bound on FAA-based instances.",
+  "problem_entry": "{AP+IO+LO} Application gap: the command center and airline operations centers reroute by an iterative collaborative process with no formal optimization model (pp. 1-2); EUROCONTROL growth and delay figures (p. 2); dynamic rerouting claimed unaddressed in the literature, prior work only controlling release times and speeds (pp. 2-3).",
+  "key_idea": "Aggregate flights into commodity flows on a time-expanded sector network, with flight binaries only for continued flights (pp. 3-5); relax capacity constraints and integrality, use multiplier sweeps only to diversify fractional solutions, decompose them by random walks into candidate paths, and pick a feasible set with a packing IP certified by the LP bound (pp. 7-9).",
+  "assumptions": "Multicommodity integer dynamic network flow with bundled capacity and side constraints (pp. 5-6); known deterministic sector capacities (p. 4); aggregation over flights, continued flights tied to a predecessor commodity, no cancellations, admitted for tractability (pp. 4-5); fairness among airlines only proposed (pp. 6-7); 4 airports, 42 sectors, FAA schedules and times, simulated capacities, 71 or 200 flights (pp. 9-10, 12, 14).",
+  "proof_devices": [
+   "formulation (1)-(10): five-term delay objective with rerouting cost as actual minus scheduled flying cost (p. 5); four-node airport gadget (p. 4, Fig. 3)",
+   "Lagrangian relaxation of capacity constraints (7) plus dropped integrality; Lagrangian value equals the LP relaxation, used as lower bound (p. 7)",
+   "Everett-style multiplicative multiplier update driven only by the sign of the violation, with adaptive step sizes (p. 7)",
+   "randomized rounding by equal-probability random walks on positive-flow arcs; paths satisfy flow conservation only (p. 8)",
+   "set-packing IP (11)-(13) with capacity, one-path-per-flight and aircraft-continuity constraints (p. 9)",
+   "no theorem: quality certified empirically by the gap to the LP bound (pp. 10-15)"
+  ],
+  "experiments": "Sun Sparc 20, CPLEX network solver and presolve (pp. 7, 10); three weather scenarios: LP relaxations of about 25,000 constraints and 62,000-66,000 variables in 59-181 s; solutions within 0.4%, 1.2% and 0.92% of the LP bound in 330, 116 and 169 s, 0.08% and 0.09% after running past the stop (pp. 10, 12, 14-15; Tables I-V); delay split by type (pp. 10, 12, 15); parameters untuned (p. 10); no baseline (current procedure, ground holding only) is run.",
+  "positioning": "Continues the ground-holding literature (Terrab-Odoni, Richetta-Odoni, Vranas-Bertsimas-Odoni = S036) and his 1998 en-route model (pp. 2-3); sets aside dynamic network-flow theory as not directly relevant (p. 3); frames the model for the FAA's collaborative decision making (pp. 1-2) and claims priority (p. 3, p. 16).",
+  "writing": "Abstract compresses the pipeline with one headline (within 1% of the lower bounds, p. 1) and speaks of real problems, while Scenario II stops at 1.2% (p. 12) and capacities are simulated (p. 10); constraints explained node by node (p. 6); flight time lines make outputs concrete (pp. 11-12); hedged generalization in the conclusion (p. 16).",
+  "limits_future": "Stated: no cancellations (p. 5), fairness only sketched (pp. 6-7), untuned parameters (p. 10); visible: deterministic capacities despite weather uncertainty (p. 4), simulated capacities, one small region, no comparison with current practice; future: other dynamic-flow applications and reuse of the algorithmic design (p. 16).",
+  "method_links": [
+   {"method": "Method 1", "relation": "variant", "note": "Formulation first: rerouting, run by a human process with no formal model, is written as a multicommodity integer dynamic network flow with LP network-flow subproblems as engine; tractability comes from aggregation and a heuristic decomposition rather than an exact class-keeping device, and no tractability boundary is printed.", "pages": "pp. 1-7"},
+   {"method": "Method 4", "relation": "variant", "note": "Every reported solution carries a gap to the LP relaxation and the stopping rule is the gap; the exact IP is only the final packing step over heuristic columns; no incumbent heuristic is duelled and no time limit is set beyond the epsilon-stop.", "pages": "pp. 7, 10, 12, 14-15"},
+   {"method": "Method 5", "relation": "variant", "note": "Decisions (routes, delays) on the owner's network data with run times reported, but judged only against the LP bound, not against the command center's current process or ground holding alone; no field test.", "pages": "pp. 1-2, 10-15"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "relax-randomize-pack", "evidence": "Many fractional relaxation solutions are decomposed by randomized rounding into a path pool; an exact packing IP selects a feasible combination certified by the LP bound; the authors propose the design for other problems.", "pages": "pp. 7-9, 16"},
+   {"pattern": "aggregate, then disaggregate only where coupling needs it", "evidence": "Flights aggregated into commodity flows; flight-level binaries only for continued flights, at one extra constraint each.", "pages": "pp. 4-5"}
+  ],
+  "transferable": [
+   "Use the LP relaxation for the lower bound and a Lagrangian multiplier sweep only to diversify fractional solutions; decompose each into candidate columns by random walks on positive-flow arcs; select with a set-packing IP; stop at an epsilon gap to the LP bound (pp. 7-9).",
+   "Let generated columns satisfy only the easy constraints (flow conservation) and leave coupling constraints (capacity, aircraft continuity) to the packing master (p. 8).",
+   "Aggregate identical units into commodity flows and add unit-level binaries only where coupling demands them (pp. 4-5).",
+   "Model a transfer hub as a four-node gadget (arrivals, exits, turnaround, departures) with holding self-loops (p. 4, Fig. 3).",
+   "Update multipliers multiplicatively from the sign of each violation alone, enlarging the step on persistent violation and shrinking it on oscillation (p. 7).",
+   "Print a per-iteration table (Lagrangian time and value, violated constraints, IP time and value), split the objective into operational components, and run past the stopping rule once to show what it leaves on the table (pp. 10-16)."
+  ],
+  "coauthors": "Sarah Stock Patterson",
+  "quotes": [
+   {"text": "The problem of dynamically rerouting aircraft has not been addressed to the best of our knowledge in the literature.", "page": 3},
+   {"text": "The idea of extracting solutions using randomization and combining these solutions using integer programming may be useful in other problems as well.", "page": 16}
+  ]
+ },
+ {
+  "id": "S051",
+  "year": "2000",
+  "title": "Restless bandits, linear programming relaxations, and a primal-dual index heuristic",
+  "read_level": "full",
+  "contribution": "Gives a hierarchy of N increasingly strong LP relaxations of the PSPACE-hard restless bandit problem (first order = Whittle's relaxation, a new second order, the N-th exact) and a primal-dual priority-index heuristic built from the first-order LP's primal solution and reduced costs, so that a feasible policy comes with a suboptimality bound.",
+  "problem_entry": "{SD+LO, IO devices} Field contrast: combinatorial optimization rests on strong formulations, while stochastic optimization uses ad hoc methods and judges heuristics against heuristics without suboptimality information (p. 1); one step of the performance region programme (pp. 1-2); Whittle's restless bandit, PSPACE-hard unlike the Gittins-solvable classical bandit (pp. 2-3).",
+  "key_idea": "Write the problem exactly as an LP over discounted state-action frequencies and approximate the polytope by projections of polynomial-size lifted polytopes over k-tuples of projects (pp. 5-7); derive a policy from the first-order LP: positive active primals first, then reduced costs, which under a mixing assumption is a priority-index rule (pp. 8-9).",
+  "assumptions": "Discrete time, finite states, discount factor in (0,1), known initial states, exactly M of N projects active each epoch, Markovian policies (pp. 2-4); connectivity Assumption 1 only for the index interpretation (p. 8); seven synthetic instances, random or built so greedy fails, at most 10 projects with 7 states (p. 10).",
+  "proof_devices": [
+   "Theorem 1: performance region of a discounted MDP equals the flow-conservation polytope, vertices achieved by stationary deterministic policies, removing d'Epenoux's positivity assumption; proof by unique-maximizer vertex, support restriction, one positive action per state (pp. 4-5)",
+   "Propositions 1-2: complete formulations of projected first- and second-order polytopes by Theorem 1 on project and pair MDCs (pp. 5-6)",
+   "counting identities (8)-(10) for passive-passive, active-passive and active-active pairs and marginal consistency (11)-(12) (p. 6)",
+   "lift-and-project hierarchy P1 contains P2 ... contains PN = P, size O(N^k |S_max|^k) (p. 7)",
+   "reduced costs read as objective-decrease rates (Murty) to design the heuristic (pp. 7-8)",
+   "Proposition 3: vertex structure of P1 under Assumption 1, giving equivalence with a priority-index rule (pp. 8-9)"
+  ],
+  "experiments": "C simulation, GAMS with CPLEX, SUN 10 (p. 10); greedy and primal-dual values simulated with a 1e-5 running-average stop and no confidence intervals (p. 9); Z*, Z2, Z1 on 7 instances and discount factors 0.2-0.95: primal-dual essentially optimal on Problems 3-7, never worse than greedy, greedy degrading as discount approaches 1 (pp. 10-11); second-order LPs at most 10 minutes (p. 11); Whittle's index not compared (p. 10).",
+  "positioning": "Continues Coffman-Mitrani, Federgruen-Groenevelt, Shanthikumar-Yao and his conservation-law papers (pp. 1-2); reformulates Whittle's relaxation and faults his index only for needing indexability (p. 3); imports Lovasz-Schrijver lift-and-project and primal-dual heuristics from polyhedral combinatorics (p. 2, p. 11).",
+  "writing": "Field-contrast opening and an explicit programme sentence (p. 1); two-item contribution list (p. 2); claims rise from suggest (abstract, p. 1) to exceptionally accurate (p. 2, p. 10); slips: PSPACE result dated 1999 and 1994 (pp. 2-3), same comparison sign in both dual-stage branches of the extracted Table 1 (pp. 8-9).",
+  "limits_future": "Exact optima only for tiny instances, second-order bound loose on Problem 1, no comparison with Whittle's index, simulation without error bars (pp. 9-11); future: the same ideas for other stochastic optimization problems (p. 11).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "A PSPACE-hard DP problem is written exactly as an LP over the performance region, approximated inside the LP class by polynomial relaxations, its policy read off the dual (reduced-cost indices), and its boundary printed (polynomial only for fixed order); unlike SW1's ad hoc policies, the relaxation yields a principled policy.", "pages": "pp. 4-9"},
+   {"method": "Method 4", "relation": "variant", "note": "Policy plus certificate (relaxation bound) and an explicit critique of heuristic-versus-heuristic evaluation, but the duel is with greedy, not with Whittle's index, the incumbent named in its own review.", "pages": "pp. 1, 3, 10-11"},
+   {"method": "Method 6", "relation": "evidence", "note": "Explicitly one step of a larger programme (performance region approach), carried by a student's PhD dissertation and presented twice before submission.", "pages": "p. 1, p. 11"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "policy from the relaxation, certified by the same relaxation", "evidence": "Primal support and reduced costs of the first-order LP give the policy; Z1 and Z2 bound its suboptimality; compare S043's relax-randomize-pack.", "pages": "pp. 7-11"},
+   {"pattern": "order-k lifting hierarchy", "evidence": "Relaxations indexed by interaction order k trade bound strength for size and are exact at k = N.", "pages": "pp. 6-7, 11"}
+  ],
+  "transferable": [
+   "Write a discounted MDP's achievable region as the flow-conservation polytope of state-action frequencies and prove equality by showing every vertex is achieved by a stationary deterministic policy (pp. 4-5).",
+   "Lift a hard polytope with variables for k-tuples of subsystems, add identities by counting tuples of each action pattern per epoch, and link orders by marginalization constraints (pp. 6-7).",
+   "Turn a relaxation into a policy in two stages (activate on positive primals, rank the rest by reduced costs), then check whether it collapses to a priority-index rule under a mild assumption (pp. 8-9).",
+   "Tabulate heuristic values, exact optima where computable and a hierarchy of bounds side by side across the difficulty parameter, with one instance family designed to defeat the naive rule (p. 10)."
+  ],
+  "coauthors": "Jose Nino-Mora",
+  "quotes": [
+   {"text": "Furthermore, the quality of proposed heuristics is usually assessed by comparing their empirical performance with that of alternative heuristics, which gives little information about their degree of suboptimality.", "page": 1},
+   {"text": "We have proposed an approach that provides a feasible policy together with a guarantee for its suboptimality for the restless bandit problem.", "page": 11}
+  ]
+ },
+ {
+  "id": "S080",
+  "year": "2000",
+  "title": "When is time continuous?",
+  "read_level": "full",
+  "contribution": "Characterizes the asymptotic distribution of the tracking error of discretely rebalanced delta hedging by continuous-record asymptotics, showing RMSE = g/sqrt(N) + O(1/N) and defining the constant g (temporal granularity) as a measure of how continuous time is for a given derivative and price process, with closed forms for geometric Brownian motion and Ornstein-Uhlenbeck and Monte Carlo checks.",
+  "problem_entry": "{SD+AP} A philosophical question made operational: when is a continuous-time model a good approximation, answered through the replication error of delta hedging in discrete time (pp. 1-3); prior work covers local errors, unwieldy closed forms, or the error-cost trade-off in special cases (pp. 4-5).",
+  "key_idea": "Let the number of rebalancing dates grow on a fixed horizon: sqrt(N) times the tracking error converges to a stochastic integral driven by an independent Brownian motion, and the leading RMSE constant (granularity) gives a sizing rule of about g^2/d^2 trades for target RMSE d (pp. 3, 9-12).",
+  "assumptions": "Frictionless markets, zero rate by renormalization, a diffusion with volatility bounded below and completeness, equally spaced trading (pp. 6-7); six-times-differentiable payoffs for Theorem 1, piecewise-linear payoffs with extra smoothness for Theorem 2 (pp. 9-11); prices read as production costs under discrete trading (p. 7); simulation with GBM (drift 0.1, volatility 0.3), N = 10-100, 250,000 paths, plus OU cases (pp. 15-20).",
+  "proof_devices": [
+   "delta-hedge portfolio read as an approximation scheme for an SDE system; Euler comparison and Milstein's theorem give mean-square order 1/2 (Appendix A.1, pp. 27-29)",
+   "Milstein-scheme comparison isolates the leading error term; functional CLT gives an independent Brownian motion; Duffie-Protter lemma and Slutsky's theorem finish Theorem 1(b) (pp. 29-30)",
+   "isometry of stochastic integrals gives the granularity constant (p. 30)",
+   "tightness via Burkholder and Hoelder plus the continuous mapping theorem for path functionals and American options (pp. 21-22)",
+   "uncorrelatedness of X and Y^2 - 1 for jointly normal pairs gives joint limits with prices and other tracking errors (pp. 22-23)",
+   "Feynman-Kac PDE representation of g^2 (p. 24); delta method for general loss functions (pp. 24-25)"
+  ],
+  "experiments": "Monte Carlo only to check asymptotics: limit density indistinguishable from simulated densities at N = 10 (p. 16, Fig. 1); relative error of g/sqrt(N) against simulated RMSE from 0.04% to 8.9%, largest at N = 10 away from the money (Tables 1-3, pp. 16-18); qualitative patterns by moneyness and mean reversion (pp. 19-20); PDE results mentioned but not shown (p. 24); no market data.",
+  "positioning": "Generalizes Grannan-Swindle's Black-Scholes RMSE formula with the asymptotic distribution and stochastic time deformations (footnote 2, p. 10); reconciles with Boyle-Emanuel's skewed local errors (p. 10); studies only one side of the transaction-cost trade-off to gain generality (p. 5). Read against the skill: evidence for Tension T3 (probability practised, no optimization).",
+  "writing": "Question title, philosophical opener set aside for a practical question (p. 2); usable rule and counterintuitive non-monotonicity in volatility stated in the introduction (p. 3); intuition paragraphs after each theorem (pp. 10-13); only Theorem 1 proved in print (p. 27); non-invariance of the measure recast as a feature (p. 26).",
+  "limits_future": "Frictionless complete markets, equally spaced rebalancing, two closed forms only, proofs of Theorems 2-4 unpublished, no market data, cost side set aside (pp. 5-7, 11, 13-14); future: only the hope that granularity is one useful approach (pp. 26-27); the optimized hedge is S069.",
+  "method_links": [
+   {"method": "Method 3", "relation": "variant", "note": "Loose: one interpretable constant g prices the cost of discrete time, with the knob curve N about g^2/d^2 and its bad cases (near the money, non-monotone in volatility); but g is a descriptive asymptotic constant, not a knob in an optimization model, and no solver class is kept.", "pages": "pp. 3, 12-14, 19"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "graded measure of a binary property", "evidence": "The yes/no notion of continuous versus discrete time is replaced by the leading constant of an error expansion; S069 does the same for market completeness with epsilon*.", "pages": "pp. 3, 11-12, 26"},
+   {"pattern": "check the asymptotics by simulation at small N", "evidence": "Every asymptotic formula is compared with 250,000-path Monte Carlo at N = 10-100 and its relative error tabulated.", "pages": "pp. 14-18"}
+  ],
+  "transferable": [
+   "To get the error of a discretely implemented continuous-time policy, read the implementation as a numerical scheme for an SDE system and import scheme-accuracy theorems (Euler for the rate, Milstein for the leading term), then apply a functional CLT (pp. 27-30).",
+   "Name the leading constant of an error expansion and turn it into a sizing rule such as N about g^2/d^2 (p. 3, p. 12).",
+   "Check every asymptotic formula by Monte Carlo at the smallest practical N and tabulate its relative error (pp. 15-18).",
+   "Give the constant a Feynman-Kac PDE representation so that it can be computed without simulation (p. 24).",
+   "Prove weak convergence of the whole error process and use the continuous mapping theorem for path functionals such as the maximum error or the error at an exercise time (pp. 21-22)."
+  ],
+  "coauthors": "Leonid Kogan, Andrew W. Lo",
+  "quotes": [
+   {"text": "If one derivative-pricing model has twice the granularity of another, it would require four times as many delta-hedging transactions to achieve the same RMSE tracking error.", "page": 12},
+   {"text": "But we regard this as a positive feature of our approach, not a drawback.", "page": 26}
+  ]
+ },
+ {
+  "id": "S069",
+  "year": "2001",
+  "title": "Hedging derivative securities and incomplete markets: An ϵ-arbitrage approach",
+  "read_level": "full",
+  "contribution": "Solves mean-square optimal replication of arbitrary European payoffs under vector Markov dynamics by stochastic dynamic programming, with a value function quadratic in wealth, a linear optimal holding and exact backward recursions (and HJB PDEs in continuous time), and proposes the minimal replication error epsilon* as a measure of the degree of market incompleteness.",
+  "problem_entry": "{SD+AP} Dynamic spanning fails under stochastic volatility, jumps, frictions or discrete trading, and equilibrium pricing leaves open how close replication can come and what the best strategy is (p. 1); motive: dealers synthesize illiquid OTC derivatives by dynamic trading (p. 2).",
+  "key_idea": "Quadratic terminal loss plus a Markov state (P, Z) with unhedgeable Z keeps the cost-to-go quadratic in portfolio value and the optimal holding linear, giving recursions for the least-cost start V0* and the minimal error epsilon* (pp. 3-7); in the GBM limit the rule reduces to the delta plus a vanishing wealth correction (p. 6).",
+  "assumptions": "Frictionless markets, zero rate, a finite-dimensional Markov state not perfectly correlated with traded prices, known trading times (pp. 3-4); mean-squared error chosen for tractability and symmetry, no holding constraints because nonnegativity would make the problem intractable (pp. 4, 7-8); numerics with a 6-month put, 25 periods, GBM, truncated jump-diffusion, discretized stochastic volatility, a sell-at-the-high option (pp. 12-17).",
+  "proof_devices": [
+   "backward induction with first-order conditions; convexity in the holding from positivity of the quadratic coefficient (Theorem 1; Appendix A.1, pp. 5-6, 22)",
+   "HJB verification with algebra in Maple (Theorem 2; Appendix A.2, pp. 6-7, 22-24)",
+   "continuous-time limit by Taylor expansion recovering the Black-Scholes PDE and zero error; path-by-path coincidence with the BS hedge ratio via SDE uniqueness (pp. 8-9)",
+   "exact-replication conditions recovered for jump-diffusion and stochastic volatility (pp. 10-12)",
+   "perturbation expansion in a small jump amplitude: cost above Black-Scholes for convex payoffs, error of fourth order (p. 11)",
+   "state augmentation (running max, running average, knock-out indicator) to make path-dependent payoffs Markov (p. 5)"
+  ],
+  "experiments": "Grid representation with piecewise-quadratic interpolation and Gauss-Hermite quadrature, grid sizes and run times not reported (p. 12); against Black-Scholes delta hedging: one illustrative path lost, one won, average error $241.2 vs $248.0 over 250,000 paths (pp. 2-3); +/-25% and +/-50% parameter sensitivity figures (pp. 12-22); Table 2: 1,000 paths for six stochastic-volatility settings, realized errors track epsilon* falling from 0.0086 to 0.0060 (pp. 16-19); three calibrated models compared (pp. 18-21, Table 3 p. 24).",
+  "positioning": "Concedes the approach is a special case of Schweizer's mean-variance hedging but claims sharper results and an implementable procedure (p. 2); generalizes the transaction-cost special cases (p. 2); separates replication from pricing and predicts bounds over all martingale measures to be extremely wide without structure (pp. 7-8), the route S056 later takes with moment information.",
+  "writing": "Merton-led opening and a how-close question (p. 1); the brand epsilon-arbitrage; two hand-picked paths, one lost, labelled illustrative before the large-sample average (p. 2); objections answered under their own headings (pp. 7-8); modest close with no claim of generality (p. 21).",
+  "limits_future": "Symmetric quadratic loss, unconstrained holdings with possibly negative terminal value, Markov state, no frictions, sketched proofs, missing numerical details, a small average gain over delta hedging in the GBM example (pp. 2, 4, 7-8, 12, 22); future work unspecified (p. 22).",
+  "method_links": [
+   {"method": "Method 1", "relation": "variant", "note": "A finance problem is written as an optimization problem whose structure is kept by the device (quadratic loss plus Markov state keep the value quadratic and the policy linear, giving exact recursions), and the boundary is printed (nonnegativity constraints would make it intractable); the class is a quadratic DP recursion, not LP, conic or MIO.", "pages": "pp. 4-6"},
+   {"method": "Method 5", "relation": "evidence", "note": "Simulated: hedging decisions are scored by replication error against the practitioner's current rule (Black-Scholes delta hedging), including a path where the method loses and averages over 250,000 paths.", "pages": "p. 2"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "graded measure of a binary property", "evidence": "Market completeness becomes epsilon*, which ranks models by degree of incompleteness, something equilibrium models cannot give; S080 does the same for continuous time.", "pages": "pp. 2, 8, 17-19, 21"},
+   {"pattern": "objections under their own headings", "evidence": "Headed paragraphs on why V0* is not a price and why mean-squared error.", "pages": "pp. 7-8"}
+  ],
+  "transferable": [
+   "For a tracking or hedging problem, use a quadratic terminal loss with a Markov state so that the value stays quadratic in wealth and the policy linear, then minimize the quadratic in initial wealth for the least-cost start (pp. 5-6).",
+   "Make path-dependent objectives Markov by adding a running statistic to the state (p. 5).",
+   "Validate a new method by recovering known special cases: the complete-market continuous-time limit and the classical exact-replication conditions (pp. 8-12).",
+   "Expand around the complete-market solution in a small incompleteness parameter for closed-form corrections (p. 11).",
+   "Implement backward recursions on a grid with piecewise-quadratic interpolation and Gauss-Hermite quadrature (p. 12).",
+   "Calibrate competing models to the same first two moments before comparing their hedging errors (p. 18).",
+   "Show the incumbent rule beating you on one path before showing the average over many paths (p. 2)."
+  ],
+  "coauthors": "Leonid Kogan, Andrew W. Lo",
+  "quotes": [
+   {"text": "Perfect replication is impossible in dynamically incomplete markets, but how close can one come, and what does the optimal-replication strategy look like?", "page": 1},
+   {"text": "a gradient for market completeness seems more natural from an empirical and a practical point of view.", "page": 2}
+  ]
+ },
+ {
+  "id": "S056",
+  "year": "2002",
+  "title": "On the relation between option and stock prices: a convex optimization approach",
+  "read_level": "full",
+  "contribution": "Treats model-free option bounds under no-arbitrage as moment problems: best-possible bounds from moments by one semidefinite program, closed-form bounds on options and on the stock's mean and variance from other option prices, an arbitrage test under bid-ask spreads, polynomial-time but non-optimal multi-asset bounds, and NP-hardness of optimal multi-asset bounds.",
+  "problem_entry": "{CP+LO+AP} A long-standing finance question, option prices from no-arbitrage alone without a price-dynamics model (pp. 1-2), split into five numbered questions (p. 1), several posed as open by Grundy (p. 2), all instances of one moment problem (p. 2).",
+  "key_idea": "No-arbitrage gives a martingale measure, so bounds are moment problems; dualizing (Isii) yields polynomial nonnegativity constraints that become PSD Gram conditions, hence SDPs (pp. 2-5); option-from-option bounds are LPs with closed forms because valid call-price functions are exactly the decreasing convex ones (pp. 5-8).",
+  "assumptions": "No arbitrage, zero rate without loss of generality, known moments or option prices (p. 2); a finite price upper bound K for variance bounds (p. 9); interior moment vector for strong duality (p. 16); support relaxed from R^m_+ to R^m for computable multi-asset bounds (p. 13); data: WSJ closing quotes of 7 July 1998 for Microsoft, S&P 100, S&P 500, Yahoo and Amazon calls (pp. 6-7, 12).",
+  "proof_devices": [
+   "Proposition 1: nonnegative univariate polynomials as sums of squares / PSD Gram forms, interval cases by rational substitutions (pp. 3-4; Appendix p. 16)",
+   "Theorem 3: duality proof of Lo's closed-form bound via a dual quadratic tangent to the payoff line (p. 5)",
+   "discretized support plus weak and strong LP duality shows no loss and an extremal discrete distribution; closed form by enumerating binding constraints at a basic solution (Theorem 4, pp. 6-8)",
+   "variance lower bound as a separable quadratic network-flow problem solved by DP over d0 (Theorem 6, pp. 10-11)",
+   "bid-ask arbitrage test: existence of a convex decreasing function between bids and asks (Theorem 7, pp. 12-13)",
+   "Theorem 8: PSD condition and separation-optimization equivalence with Algorithm A for polyhedral partitions (pp. 13-15); Theorem 9: NP-hardness via copositivity (p. 15)"
+  ],
+  "experiments": "Illustrative only: market quotes give nonconvex call-price functions so some upper bounds fall below lower bounds, attributed to non-simultaneous closing prices and ignored transaction costs (p. 7); Microsoft January '99: standard deviation in [26.6677, 26.9851] given the Black-Scholes mean, implied volatility 0.3223-0.3259 vs 0.3241, and 23.7660-49.2101 over the option-implied mean interval (Table 1, p. 12); no SDP solved, no run times (p. 3); d0 = 0 heuristic claim without data (p. 11).",
+  "positioning": "Generalizes Lo (1987), Grundy (1991) and Boyle-Lin (1997) (p. 3); traces moment problems to Scarf, Isii, Karlin-Studden and Smith (pp. 2-3); claims convex optimization as the natural way for the whole question (pp. 1-2, 15) and calls the SDP link unexpected (p. 3).",
+  "writing": "Five numbered questions as roadmap (p. 1); simplest case posed first (p. 2); contribution list mislabels question numbers for sections 3-5 (p. 3 against p. 1); typo Thoerem 4 (p. 6); geometric figures for intuition (pp. 6, 11); conclusion restates the abstract (p. 15).",
+  "limits_future": "Stated: multi-asset bounds not best possible and best ones NP-hard (pp. 13, 15); visible: no computational study of the SDPs, a heuristic DP start, frictionless bounds violated on market data (pp. 7, 11, 12); no future work stated (p. 15).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "A finance question is written exactly as a moment problem, kept in solvable classes (SDP via dual polynomial nonnegativity; LP with closed forms), with structure read off the dual (extremal discrete distributions, convexity arbitrage test) and the boundary printed (NP-hard over R^m_+, polynomial over R^m); tractable means polynomial time without solve times, consistent with the Method 1 limitation on the word's early meaning.", "pages": "pp. 2-15"},
+   {"method": "Method 2", "relation": "variant", "note": "The why-now is a tool change (SDP solvable in theory and practice: Nesterov-Nemirovski, Vandenberghe-Boyd, SDPA), stated qualitatively without a figure.", "pages": "p. 3"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "closed form from an LP's basic solution", "evidence": "Discretize the support, prove equivalence by duality, enumerate the binding dual constraints at a basic optimal solution to get closed-form price bounds.", "pages": "pp. 6-8"},
+   {"pattern": "relax the support to regain polynomial solvability, then prove the unrelaxed problem NP-hard", "evidence": "Martingale measures over R^m give polynomial SDP bounds; over R^m_+ separation is copositivity testing, NP-hard.", "pages": "pp. 13-15"}
+  ],
+  "transferable": [
+   "For best-possible bounds on E[phi(X)] given moments: dualize, write the dual constraint as polynomial nonnegativity on intervals, map each interval to the real line by substitution, and impose PSD Gram matrices (pp. 3-4, 16).",
+   "Get closed forms by solving over a discrete support, showing with weak and strong LP duality that nothing is lost, and enumerating the binding dual constraints at a basic optimal solution (pp. 6-8).",
+   "Characterize valid pricing functions by shape (decreasing, convex) and turn bid-ask data into an arbitrage test: can a convex decreasing function pass between them (p. 6, p. 12).",
+   "When the exact problem is NP-hard through copositivity, relax the domain to R^m for an SDP bound and prove hardness via separation-optimization equivalence (pp. 13-15).",
+   "Illustrate bounds on public market quotes and compare them with the incumbent model's number, here Black-Scholes implied volatility (p. 12)."
+  ],
+  "coauthors": "Ioana Popescu",
+  "quotes": [
+   {"text": "This result leads to an unexpected connection between finance and semidefinite optimization.", "page": 3},
+   {"text": "We have demonstrated that convex optimization is the natural way to address the relation between option and stock prices without making distributional assumptions for the underlying price dynamics, using only the no-arbitrage assumption.", "page": 15}
+  ]
+ }
+]

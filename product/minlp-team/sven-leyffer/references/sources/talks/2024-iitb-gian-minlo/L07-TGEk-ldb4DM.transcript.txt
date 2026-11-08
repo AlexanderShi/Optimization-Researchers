@@ -1,0 +1,225 @@
+Transcript (YouTube auto-generated English captions, ASR; NOT checked against the audio)
+Talk: Lecture 7: Basic Modeling with Binary Variables, by Sven Leyffer. GIAN course, IIT Bombay, January 2024.
+Video: https://www.youtube.com/watch?v=TGEk-ldb4DM (length 2384 s; playlist PLREyhbtkeBNpTZtDBfcwLigIsAAEGQ1iR)
+Retrieved: 2026-10-10 with yt-dlp 2026.08.19 (--write-auto-subs --sub-langs en); converted with scripts/srt_to_transcript.py
+Used in: ../../../research/02-methodology.md
+----
+okay so we can slowly start again um so the this lecture now is going to be about basic modeling with binary variables we'll see some of the things we saw in the previous lecture again just to reinforce it and then the next
+
+lecture will be about more advanced modeling with binary variables including um support Vector machines so I'll talk about some modeling practices and then give you the main points again of this lecture so
+
+this this book this reference to Williams was up before modeling is really important for mixed integer linear optimization and it's even more important in mixed integer nonlinear optimization we saw in the last lecture
+
+that we can make easy Mistakes by uh formulating integrality conditions for example there nonlinear equations and because we have this flexibility now modeling both integer and nonlinear functions it's good to pay
+
+a little bit more attention to how we do the modeling in particular it's good to always reformulate things uh relationship so that they're convex um and the interaction of nonlinear functions with binary
+
+variables is also can also be sometimes tricky and we want to avoid modeling mistakes there um and then this is a sort of general statement that we always prefer linear over convex over non-convex formulations and The Great
+
+Divide between being able to solve problems at scale efficiently and not is this difference between convex and non-convex so once we're convex we have a fairly good handle on solving large problems non-convex is much
+
+harder okay so here's a theorem from Jeff lindroth who is a great mixed integer nonlinear Optimizer he solved more mixed integer nonlinear programming problems than anybody else in the world and he says that 97.23 eight% of all Min
+
+lows have integer variables for two purposes only namely to make multiple choices or to use them as indicators to turn on and off continuous variables or constraints um and so you should take this with a grain of salt of course we
+
+haven't looked at every single mixed Jal in optimization problem um multiple choice selections appear often for example um you could have pipe diameters that you're selecting if you're designing a water Network um the
+
+diameter of the pipe basically tells you how much water you can pump around and but pipes are more expensive if you have larger diameters and it's also more expensive to operate so you want to fit the diameter pipes to your network and
+
+they don't come as continuous variables because they would have to be manufactured especially for you so instead there are discrete choices and the second one as we saw in the last section lecture where we had a
+
+binary variable that if it's switched on then we want to enforce a constraint and this could be a constraint that has something to do with a particular unit that is being switched on and if the unit is not switched on then there are
+
+no constraints on the variables inside that unit so if you're not switching the unit on you're for example not using any electricity or um other things and this should be not forced um apparently I I'm
+
+not very good at putting um text in text so how do we model discrete choices that's actually very very easy and you've I think many of you have seen that um there is this notion of a special ordered set um and in this case
+
+um you you pick you have a number of binary variables and you have one binary variable per discrete choice so there were K discrete choices D1 through DK and I have one binary variable per discrete choice and the second
+
+constraint here says that exactly one of these binary varibles has to be equal to one so that means I pick exactly one the diam one diameter for example out of the choice of diameters and the diameter that I pick is the one that has a one
+
+here so that's the diameter that I pick that's also called a one hot encoding if you're a computer scientist that is a one hot encoding so that's another word for it um we'll see in a moment that he can also use this to linearize
+
+univariate functions and it generalizes to higher Dimensions so I'll show that in in subsequent slides so you can do this not just in onedimensional problems but higher dimensional problems and the nice thing is that solvers have a way of
+
+detecting this structure so this is a very special structure you have a set of binary variables exactly one of them is equal to one and they appear in one other constraint and this is structure that you can detect and you can uh
+
+there's special branching rules that we'll tell you about later that allow us to solve these problems efficiently so there there's an efficient way of solving these problems and it's actually um almost equivalent to writing a spef a
+
+spec spe specific solver that would branch on discrete values so discrete values are hard to handle you can handle the relaxation by just allowing D to be in the interval between D1 and DK but then it's not clear how you would branch
+
+on that and you would have a different branching routine for different sets of discrete values and so that makes it very hard so this is a much better way of introducing modeling it okay so here's uh a lead up to a
+
+little exercise and ashutosh Mahajan will talk tomorrow I believe about water Network um Network so you can do this exercise in a moment and then you'll have a head start on tomorrow's lecture so there are we're modeling the
+
+diameters of these pipes that's just copied from the previous slide D Little D is the parameter is a variable that denotes the diameter of the pipes and Yi are the special ordered set now within this water Network design
+
+problem there's something called the pressure drop along an arc so an arc goes from node I to a node J so you now have a network um of pipes um that somehow distributes water and uh one of the modeling equations that is
+
+used here is uh the head hi is is the is the is the pressure at node I uh there's a diameter of this pipe little di J um and um the distance and I apologize for this double notation the distance between the nodes I and J is this
+
+capital D J so I apologize for making that's not a very nice notation using Capital dij as the distance um and this equation is one that's been derived um empirically um it it approximates the solution to a
+
+partial differential equation in steady state um note that there are these funny coefficients 4.33 that have to do with what kind of medium is flowing through the pipes so for gas networks that will be a different exponent there's an
+
+absolute value there but it turns out that uh the numerator is actually differentiable continuously differentiable because the exponent is large enough um Okay so hi are the head Qi J uh is the flow from
+
+AR I to Arc J and uh D J is the uh diameter of AR i i j right so the little exercise here that you can do in the next uh four or five minutes I think is um look at this expression here 1/ D J squar so that's a
+
+nonlinear function and the question is can you linearize this using special ordered sets so you have uh F we don't need to carry around the uh the um subscripts f is one/ d uh and D is given as this discrete
+
+Choice variable uh one/ d^2 and the question is can you make this expression into a linear expression so here's a nonlinear relationship and I bet you $5 that you can make this into a linear relationship in the next four minutes or
+
+so and pet will pay you the $5 if I lose the bet so okay has anybody got it yet okay 1 2 okay 3 4 okay okay those who haven't got yet next time sit next to the guys who get it and copy their work okay so how do I
+
+do this do you want to tell us okay okay I I I think what you're saying is that F of D is you just gave me the answer y i * 1 / d i 2 okay so I'm I'm not as fast as that so I'm I'm slower so I start off with
+
+that's what I want to do I have my nonlinear expression there this is my nonlinear function so then what I do is I I compute one / di i^ S I can just pre-compute those values that's a constant and then I do this one trick
+
+where I just di j s i just substitute D J so that's the expression that I have up there at the very top for the special order set I just this is d j i substituted it Square it and now I realize I look at this a long time and I
+
+realize that the only values that this is going to take is oneid by uh DL squared for the particular L that I choose so I can sort of take out this summation over there I don't know this is how I see it but but you have a
+
+better way of seeing it immediately so um and this holds in general um and that's always holds because y l is this one hot encoding so you can always rewrite these nonlinear functions using this trick and it's an equivalent
+
+reformulation so that's that's kind of cool um we've actually used this for a um optimal control problem where we were solving an optimal control problem for a Quantum system and that problem is highly nonconvex but when you realize
+
+that you have this one hot encoding you can actually write down relaxation that are much nicer to solve and and so sometimes this is good so in tomorrow afternoon's lecture when Professor Mahajan is telling you about water
+
+networks one of you should say oh but why don't you do this one hot and coding formulation there you'll be impressed okay so um this is just a reminder we saw this in the last slide that when we have um a constraint that
+
+we want to hold when the B variable is equal to one then we model that with this known upper bound so we find an upper bound on GI of X it doesn't have to be positive oh sorry yes it has to be positive in this case
+
+um here's a cool question actually just occurred to me what happens if the upper bound on G of X were negative anybody know the quick answer to that so sorry the constraint is redundant right if I can show that the upper bound on G of X
+
+is2 then this constraint always holds I don't need to worry about it okay so M greater than zero is an upper bound then I enforce this constraint with this simple trick here and I also told you we do not want to multiply binary variable
+
+with a nonlinear expression it violates constraint qualifications for example and is also non-convex now there's there's an inverse or a reverse of this indicator which is called a lookout variable so this is a
+
+variable a binary variable that's set to one if a constraint becomes active so that's sort of the opposite you want you want act you want to take some action if um some unit goes above a certain threshold for example so what you want
+
+to do in this cases you have for example a linear constraint an upine constraint there and if that is less than to Z then you want to force y i to be equal to one and you can model this by now having little m is now a lower bound on your
+
+linear expression or nonlinear expression and Epsilon is a small tolerance and you probably want something around 10us 6 um the reason is that if the tolerance of your nonlinear solver is 10 Sorry 10us 4 if you Toler of your nonlinear
+
+server is about 10us 6 you want the tolerance of the nonlinear server to be distinguished from this small constant here um but this is again this is a modeling decision so what does this constraint do um let's just see what
+
+happens again by plugging in values for yi so if I do that then if Yi is equal uh to zero what do I get if y i is equal to Z I get AI transposed X Plus bi is greater or equal to zero right and if uh if oh that's not the right way
+
+around though um sorry I wanted the other way round so I'm going to look at my constraint AI transposed X plus bi I and if it is positive then the only way I can make it positive is uh if I set Yi equal to zero then
+
+that's not correct so I need to make Yi equals it's positive I need to make Yi equals zero yeah sorry did I get this right there's something not right here I need to check this um you only wanted if it's less than or
+
+equal to zero if it's less than or equal to zero then yeah there's something not right here I need to check this okay we'll come back to this um here's another little um problem that uh is is quite old now is sort of
+
+optimizing an old kind of broadband networks uh on resource sharing measures and the objective there is to minimize um interference between channels and to do that um you can assign channels to basic nodes within the network and and
+
+look at when channels in the network overlap um and so there's this sort of um this channel interference if you have two access points with the same channel um and so this is in general a non-convex mixed in nonlinear
+
+optimization problem and the model that I found in the literature has this really horrible constraint um and this Con this is the constraint here so it's um the constraint is z is equal to 1 / 1 + a th x - y to the power
+
+10 so I've plotted the constraint on the right hand side here and and so this is plotting Z versus the difference between X and Y so on the on the x axis here you have the difference between X and Y If X
+
+and Y if the difference is um is large then sorry let's go with the difference here if the difference is zero if x is equal to Y the difference is zero then you have 1 divid one is one if the difference between X and Y is
+
+1 then you have 1 to the^ 10 which is one so you have one divided by a th and one and if the difference is two then you have 2^ 10 um times a th000 and invert that and so this constraint is really horrible because
+
+it's got a lot of curvature um it's a very very nonlinear constraint it will be horrible to to solve this problem um but there's a cool model you can you can model this using binary variables really what the constraint is
+
+saying and you know you need to look at this nonlinear constraint a little bit and plot it um well this constraint is saying that Z is equal to one if x is equal to Y and Z is equal to zero If X is not equal to Y that's what they're
+
+trying to say now it's not exact notice that this this constraint here is different because this function is actually never zero because it's one divided by a massive number okay so in the next this is a bit harder so we'll do
+
+this in 10 minutes or so I think um but see if you can model this using binary variables so I should tell you one more thing that X and Y are integers in this model so I forgot to write this on the slide so we have
+
+X and Y are integers and we can assume without a l of generality that X and Y are in a finite set so let's say Z one just make it even easier one two up to capital k um that's all you need to know and then
+
+you want to model the condition that Z is equal to one if x is equal to Y and zero otherwise so you want to model this condition using whatever you have at your disposal so and while you're doing that I'll try
+
+to figure out the other question has anybody got it one anybody you got it half okay half is good um you've got it okay what do we do okay x - y would be less than or equal to K times okay let me see this so you've got
+
+x - y That's to the K one okay oneus Z yep minus k okay so does that do it if um let's see if um if x - Y is zero so we're going to check x - Y is equal to0 then I get Z is to K * 1 - Z and 0 is greater or equal to minus K *
+
+1 minus Z but that does I don't think that tells us that Z should be one because I no because so let's say k is equal to 10 right then um so make this 10 uh then this would be 10 and minus 10 and so all I'm saying
+
+is that zero is between sorry now all I'm saying is zero is between so Z could be zero and then this just says zero is between minus 10 and 10 so zal 0 is feasible here and zal 1 is also feasible what yeah if Z is equal to one it does
+
+the opposite it does exactly the opposite you're right if Z is equal to one then X is equal to Y so so we've done that case okay we have another one wait um okay let's do the next one so you're saying X - 1 is equal to
+
+X is equal to Y then Z is equal to one yeah okay so the first case is X is equal to Y implies Z is equal to 1 but what if x is 10 and Y is five then I have 10 - 5 is one minus Z right okay but that makes this that
+
+makes this infeasible now if I put that condition there okay you have another one okay let's try that Z less than or equal to x - y + 1 - x + y minus one or plus one + one okay this this could looks good let's check it so
+
+if x is equal to y Z is less than equal to one and Z is greater equal to one so Z is equal to one good okay I like this and if X is not equal to Y then we get yeah but I don't think I get it because let's let's try again again
+
+let's try the same again right if if x is 5 and Y is equal to 10 then I get uh Z less than or equal to uh 5 - 10 + 1 is -4 and Z is greater or equal to uh - 5 + 10 + 1 so - 5 uh six oh and unless I made a mistake okay I
+
+have another solution can I can I show you my who did it with special AIT sets let me ask that question did anybody use special audit sets no I need Petro I think I need your password again um sorry about that okay
+
+so so here's what I would do I would write X as VI * I I I = 1 to K and Y as I = 1 to K wi * I so I have two special ordered sets um okay and then I realized that um X is equal to Y so I now I I now have two hot
+
+en I I have these two encodings of my integer and xals to y what does that mean that means that I have the same binary string for both right so that means that the vector v has to be equal to W okay because they both pick out the
+
+same integer so V and W are vectors of zeros and ones so 0 0 1 0 0 0 if that's V 0 0 1 0 0 0 that's my encoding of so this is X is equal to 3 Y is equal to 3 so and they're both the same and a way of saying that they're
+
+both the same is to say V transpose W is equal to one right if V and W are the same Vector then if I multiply them out I get a one and if they're not the same then I get a zero so this is so if if x is equal to y or if and only if
+
+and V transpose W is equal to zero if and only if X is not equal to Y if they're not the same then that's the case so I'm going to say Z is V transpose W and I see some of you looking really suspicious at me now
+
+because I'm just multiplying binary variables way I'm introducing nonlinear Expressions this can't possibly work um but this is this is what we do so we introduce these binary expansions of X and Y so we we lift the problem we we
+
+introduce additional variables we make the problem harder in many ways and then we observe that X is equal to Y if the V components and W components match exactly that's the only way they can be the same so I have to have the same one
+
+encoding here and that's equivalent to saying V transpose W is is z so that if I multiply two binary vectors that have at most one non zero together they're either one or zero and they're one if they're the same and zero
+
+if they're different because then if they're not the same then these numbers don't overlap right if I have a zero and a four or three and a four then if I multiply them out they're zero okay now I just need to get rid of this
+
+nonlinearity here but that's a trick that we learned earlier so I now introduce a binary variable SI which is VI * wi so V transpose W is is the sum overall I of VI * wi so I introduced this binary variable
+
+and now I use the trick from earlier and I missed something on my slide um so I can rewrite this condition equivalently as SI less than or equal to vi si I less than or equal to w i so if either VI or W are zero then SI will this will make
+
+SI zero uh what I forgot here is a plus a minus one there should be a minus one there okay so I need to put that on the slid this is a minus one there so if both VI and wi are one then these two just say si has to be less than equal to
+
+one and this says SI is greater or equal to VI + wus 1 so 1 + 1 - 1 is 1 so I introduce a variable SI that's between zero and one and in fact it's an implied binary variable so I never need to branch on it or do anything with it si
+
+whenever VI and wi are both binary SI will also be binary and I forgot the same condition here so that should be VI + wi minus one and in fact there's a theorem that says that's the so this expression here
+
+is the convex Al I'm going to write it out on the board because I want to make sure I don't we don't copy anything down that's not correct don't mistakes on the slides so the condition is that I want sial VI *
+
+wi and that's equivalent with for the spary vares which is saying SI I is less than or equal to vi si I is less than or equal to Wi and Si is greater than or equal to VI plus wi I minus one and you can just easily
+
+see if you pluck in binary variables VI and wi if both of them are zero then SI will be zero if one of them is zero SI must be zero um and if they're only if both of them are one then you have less than or
+
+equal to ones here and greater or equal to one down here that's it I don't know if there's a better formulation so if you have a better formulation than this let me know I was but when you guys came up and said oh we
+
+can do this without the binary expansion I thought there was a better um a better way of writing it maybe there is I don't know it but this is one way of doing it so you do this calculus with binary variabl that's what you're doing and
+
+it's okay to be a little bit nonlinear because multiplying binary variables gives us these implied binary variables so there's a theorem that says if uh VI and wi are binary then SI is also binary and that's why it's called a
+
+implied binary variable cool that's it that's the model so it's actually that's actually a really nice model um so yes sorry Petro right so Petro ask if um if K is very large should we use a binary expansion
+
+so instead of VI * I we use VI times 2 to the I and we go maybe from zero to K uh and we can use the same here so what's so somebody has the answer so some can somebody answer Petro's question where does this break
+
+down sorry we can't do oh yeah the second constraint is not there okay I'm going to have to remove that yes otherwise we only get so we remove this constraint okay and this is still true so V is equal to W so everything up to
+
+here is okay but I I don't know how to use this trick now so V transpose W is no longer one because this is now a binary encoding and so um you know the binary encoding of can somebody tell me which number
+
+this is this is 1 plus 2 this is three right that's the binary encoding of three but now uh it's not it's not one so this no longer holds so that breaks down to use exclusive yes I I I don't know how to do
+
+that so Petra Will Tell Us in his lecture how to do this but that's a good point we have this is fewer variables because I can now I just need to look at the loog two I need or I can go to larger K right the loog to or
+
+exponential okay cool okay so more exercises we don't need to do this now um sos1 variables they're really cool this one hot encoding I just love it and and there's a bit of calculus that goes with it and
+
+you just need to figure out the cases um we talked about indicate and Lookout variables and please never multiply a nonlinear function by a binary function except when you want to do cool stuff with binary vectors then you can do
+
+other things you're allowed to do it again that's it so you have a question yes right so okay so I will not use this expression this expression the 1/ 1 + a 10000 x - y ^ 10 I delete that correct yes so what I add instead
+
+is the constraints down here with the minus one after VI plus wi okay so you think this is not good you don't like it it's good it's a lot more variables right instead of having three variables uh X Y and Z I now have I
+
+still have X Y and Z and in addition I have one to 3K additional variables but this is linear this is a linear expression um if you look at the hesan of this term it's horrible you can write down the hashen
+
+but it will have massive ter there's a lot of curvature here I mean this just goes up to one very fast so it's it's I think so the authors don't say that so I I read I read the paper and this expression just pops up and and
+
+they just say here's this this is what we use and you you need to I mean you need to plot what's going on and then you realize why this is there so I I don't give you the reference I don't want to talk negative about authors but I think
+
+this is a nicer formulation

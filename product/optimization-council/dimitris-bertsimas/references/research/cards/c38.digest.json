@@ -1,0 +1,255 @@
+[
+ {
+  "id": "S615",
+  "year": "2026",
+  "title": "Towards optimal valve prescription for transcatheter aortic valve replacement (TAVR) surgery: a machine learning approach",
+  "read_level": "full",
+  "contribution": "Builds an Optimal Policy Tree that prescribes the TAVR valve platform (Edwards Sapien vs Medtronic Evolut) to minimize permanent pacemaker implantation. The tree is trained on doubly robust reward estimates for 1,779 patients of a Connecticut hospital network and scored against the observed standard of care by a leaf-level analysis: a 21.5% relative reduction on the held-out half, 26.5% on train plus test, and 16.6% on 151 Greek patients (arXiv v2).",
+  "problem_entry": "DA+AP (cardiology), with ML as engine. No unified, outcome-targeted rule exists for choosing between the two approved TAVR platforms: prior advice is scenario-based and 'not evidence-based or quantitatively evaluated' (pp. 4-5). PPI is the target because of its clinical and cost weight (p. 4). The problem is stated as a two-treatment prescription problem with a binary outcome (p. 9).",
+  "key_idea": "Doubly robust counterfactual rewards feed an Optimal Policy Tree trained by coordinate descent (Eqs. 1-2, pp. 10-12); the rewards come from XGBoost outcome and propensity models, cross-fitted and fitted separately on the train and test halves. The policy is scored by a leaf-level analysis on observed outcomes (pp. 6, 18). The final tree is picked from 20 random splits by test performance, train-test consistency and consistency with medical insight (pp. 12-13).",
+  "assumptions": "A retrospective single-hospital cohort, Jan 2011-Sep 2022, with Sapien and Evolut valve models pooled into platforms and 47 features. Only 496 of 1,779 records are complete; mean imputation fills the rest, and CT features are 30-39% missing (pp. 6-8, 11-12, 38). The external Greek cohort has 151 patients, with taxonomies harmonised (pp. 7, 9). Admitted: counterfactuals are estimated, the causal link is uncertain, unobserved confounders may act, and an RCT is needed (p. 25); leaf-level scoring assumes within-leaf exchangeability (p. 18); the training population is not representative (p. 24).",
+  "proof_devices": [
+   "No theorems. Doubly robust reward Gamma_it = y_hat_it + 1{T_i=t}(y_i - y_hat_it)/p_it, after Dudik, Langford & Li (Eq. 1, pp. 10-11)",
+   "Card-writer's reading: with 'a min propensity score of one' (p. 12), Eq. 1 returns the observed outcome for the valve received, so the estimates 'match the historical ground truth exactly' (p. 14) by construction, not as validation",
+   "OPT objective min sum_i sum_t 1{tau(x_i)=t} Gamma_it as a weighted classification tree solved by coordinate descent; depth <= 8, leaves >= 50, complexity parameter on a 15% hold-out; no gap or certificate (Eq. 2, pp. 11-12, 42)",
+   "Leaf-level (node) analysis: within each leaf, the patients who got the non-prescribed valve take the observed PPI rate of those who got the prescribed one (p. 18; Tables 4-5, pp. 18-19)",
+   "Bootstrap intervals from 1,000 resamples of 95% of the test set, under both evaluations (p. 19)",
+   "Cross-calibration of outcome models between the halves (pp. 14, 38-40); concordance between near-best trees (p. 21); age subgroups (p. 40); imputation and one-vs-two-estimator checks (p. 42); t-tests on propensity features (p. 16)"
+  ],
+  "experiments": "Baseline: the historical policy only; no other prescriptive learner is run (pp. 11, 13). PPI falls from 14.05% to 10.32% on train+test (26.54%) and from 14.51% to 11.39% on the test half (21.5%); the estimator-based test figure is 16.92% (p. 19). Averaged over 20 splits, trees improve by 8.61-9.04% (Table C2, p. 42). Nuisance AUCs are 0.47-0.68 (p. 39). The bootstrap CIs differ between the text and the Figure 5 caption (pp. 19-20). External: 6.62% to 5.52% (16.62%) on 151 patients and 10 events, carried by node 11 (pp. 19-20); Table 7's node-6 entry cannot be reconciled with Table 2 (card-writer's arithmetic). Stricter settings give the trivial treat-all tree (p. 42). No implementation, solver, run time or code is reported (pp. 11, 25).",
+  "positioning": "Three literatures: ML in health-care management (the group's [15], card S115, and [19]); causal inference in health-care operations; the TAVR/PPI clinical literature (pp. 4-5). The criticism of qualitative guidance is direct but brief (p. 5), and the splits are reconciled with known risk factors (pp. 15, 24). 'first' claims appear on pp. 2-4, 6, 23 and 25. The method comes from the group (OPT, OCT, imputation), the implementation is unnamed, and no competing interests are declared (pp. 11, 25).",
+  "writing": "Contribution bullets mirror the abstract (p. 6). 26% and 16% come up front in the abstract, highlights, contributions and discussion, with the causal caveats at the end (pp. 2-3, 6, 23-25; Tension T6). Model selection is framed by a clinical analogy (p. 13). Slips: Sapien 3 called self-expanding (p. 24 vs pp. 7, 16); Table A2 repeats Table A1's conduction-defect counts (pp. 32, 35); Table A3 sums to 174 Greek patients against 151 (pp. 7, 37); Table 8's caption is copied (p. 20); the ethics statement mentions a survey (p. 25).",
+  "limits_future": "Stated: one training hospital; external tests needed elsewhere; missing anatomic features; more modalities; estimated counterfactuals, so an RCT is needed; no causal evidence; unobserved confounders (pp. 24-25). Unstated [reader]: test-set selection, weak nuisance models, the propensity floor, and only ten external events. Future: other institutions; radiology notes, images, ECGs and genomics (p. 24); real-world validation (p. 25); younger TAVR patients (p. 40).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Owner and decision: the heart team's valve choice. Baseline: the standard of care actually given. The policy is learned inside the decision (an OPT on estimated rewards) and scored by the PPI rate under the policy, not by prediction accuracy. There is an external site and a public calculator, and the limits are stated: no causal evidence, with an RCT and real-world validation named.",
+    "pages": "pp. 4-6, 9-11, 13, 18-20, 22, 24-25"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The decision score belongs to a policy chosen on test-set performance and consistency with medical insight. The abstract's internal 26% includes the training half, while trees average about 9% over 20 splits (Table C2). The external 16.6% rests on about ten events: about 1.7 fewer PPIs among 151 patients (card-writer's arithmetic).",
+    "pages": "pp. 2, 12-13, 19-21, 42"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Optimal Policy Trees are trained by coordinate descent, with no gap or certificate (Tension T1). The duel is with the historical policy only, not with other prescriptive learners. No implementation, solver version or run time is reported.",
+    "pages": "pp. 11-12, 42"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Counterfactual replay against the historical decision-maker",
+    "evidence": "A leaf-level form: inside each leaf of the policy tree, patients who got the other valve are given the observed PPI rate of the prescribed valve. The assumption is stated, and the result is reported beside a doubly robust evaluation. Same name as c17 S078, S143 and S079.",
+    "pages": "pp. 6, 18-19"
+   },
+   {
+    "pattern": "near-best tree pool across random splits, final pick by clinical consistency",
+    "evidence": "OPTs from 20 random splits; the top 30 by test performance; 13 unique trees; 3 finalists by train-test consistency; the final tree by consistency with medical insight. Concordance (0.71-0.85) and the finalists' results are reported.",
+    "pages": "pp. 12-13, 21-22, 43-45"
+   },
+   {
+    "pattern": "Ship a public tool with the paper",
+    "evidence": "An interactive prescription calculator for physicians' phones or hospital systems. Same name as c21 S054.",
+    "pages": "p. 22"
+   },
+   {
+    "pattern": "external validation at a partner hospital abroad",
+    "evidence": "A Greek hospital's 151 patients, with taxonomies and units harmonised with doctors from both hospitals, used only for validation. Compare c21 S054's Greek and Hartford validation sites.",
+    "pages": "pp. 7, 19-21"
+   }
+  ],
+  "transferable": [
+   "When the only credible comparator is current practice, score the learned policy leaf by leaf. Impute each patient's outcome under the prescribed treatment by the observed rate of that treatment in the same leaf, report it beside a doubly robust evaluation, and state the within-leaf exchangeability assumption (pp. 18-19).",
+   "When the final model is picked from a pool, print the pool's average beside the pick, and score the finalists on one common test set as well as on their own (pp. 21-22, 42).",
+   "Fit the outcome and propensity models separately on the train and test halves, with cross-fitting, and size the split so that both halves can support that fit (pp. 11-12).",
+   "Put bootstrap intervals on the policy improvement by resampling the test set (1,000 subsamples of 95%), under both evaluation methods (p. 19).",
+   "Cross-calibrate outcome models: apply the train-half model to the test patients who received that treatment, and vice versa (pp. 14, 38-40).",
+   "Check the improvement under other imputations of the test set, and the stability of the prescription by its concordance with near-best trees (pp. 21, 42).",
+   "Report the hyperparameter region where the tree collapses to treat-all, and the settings chosen to avoid it (p. 42)."
+  ],
+  "coauthors": "Phevos Paschalidis (Harvard SEAS, first author); Vasiliki Stoumpou, Lisa Everest and Yu Ma (MIT ORC); Talhat Azemi, Jawad Haider, Steven Zweibel, Robert C. Hagberg and Howard L. Haronian (Hartford HealthCare Heart & Vascular Institute); Jeff Mather (Hartford HealthCare Research Institute); Eleftherios M. Protopapas and George E. Sarris (Athens Heart Surgery Institute); Maciej Tysarowski (Yale). Bertsimas is last and corresponding author; there is no contribution statement (pp. 1, 25).",
+  "quotes": [
+   {
+    "text": "We then take a clinical approach to select the final OPT from these top three models; we choose the treatment strategy most consistent with the current medical insight.",
+    "page": 13
+   },
+   {
+    "text": "It is important to keep in mind that the projected reductions in PPI from applying optimal valve prescriptions are statistical in nature and would benefit from real-world validation.",
+    "page": 25
+   }
+  ]
+ },
+ {
+  "id": "S616",
+  "year": "2026",
+  "title": "A Causal DAG Prior for Synthetic Time-Series Classification Datasets",
+  "read_level": "full",
+  "contribution": "Introduces a synthetic causal-DAG prior, over typed tabular and series-valued nodes, that generates complete labelled multivariate time-series classification datasets. A fixed TabPFN v2.5 probe shows that finetuning on it beats both the unmodified model and a tabular-only ablation on 75 UCR/UEA datasets (Wilcoxon p = 3.0e-8 against the ablation on ROC-AUC).",
+  "problem_entry": "ML, with no optimization formulation. Two-stage TSC foundation-model pipelines cannot use the labelled training set as context, and 'the two stages optimise different objectives' (p. 1). In-context learning instead needs a prior over complete labelled datasets, which KernelSynth, CauKer and TiCT do not provide (p. 1).",
+  "key_idea": "Extend TabPFN's causal-DAG prior with series-valued nodes (GP roots; Conv1D mechanisms with causal padding and random dilation), so that tabular-to-series, cross-channel, temporal and trajectory-to-label effects coexist in one acyclic SCM, with the label a discretised node (p. 2; pp. 6-7). Probe the prior by finetuning TabPFN v2.5 with only shape-preserving input/output edits (pp. 3, 7).",
+  "assumptions": "A layered random DAG, with structural guarantees enforced by resampling; small-network, prototype and Conv1D mechanisms; normal, uniform and GP roots; warps, granularity, truncation and MCAR missingness; at most 10 classes (pp. 6-7). Ranges are given as symbols, except n in [30, 1400] and T in [6, 2000] (pp. 6-8). Evaluation is restricted to TabPFN's regime, K <= 10 and m*T <= 500: 75 datasets kept, 83 excluded (pp. 3, 10-11). The training budget is not stated (p. 8).",
+  "proof_devices": [
+   "No theorems. SCM z_i = f_i(z_PA(i), eps_i) on a typed DAG (p. 6)",
+   "Conv1D series mechanism with dilation D = floor(2^u) (Eq. 1, p. 6); GP root trajectories with a composed Lin/RBF/Per kernel (Eq. 2, p. 7)",
+   "PFN loss E[-log q_theta(y_test | X_test, D_train)] (p. 8)",
+   "Four-configuration attribution design: as-is, input/output edits only, finetuned on the full prior, finetuned on the series-ablated prior (p. 3)",
+   "Paired Wilcoxon signed-rank tests over 75 datasets, with win shares, and a critical-difference diagram (pp. 3-4)"
+  ],
+  "experiments": "Mean AUC at e=1: A .9372, B .9368, D .9354, C .9440; at e=8: .9405, .9399, .9393, .9444 (Table 1, p. 4). Tests (Table 2, p. 4): C vs D p_AUC 3.0e-8 (C wins 73.3% of datasets, D 12.0%); C vs A 4.4e-4, at e=1 only; D vs A 0.10. The gains are about 0.007 AUC and 0.012 accuracy at e=1 (card-writer's arithmetic). Per-dataset losses are printed, e.g. FordB AUC .874 to .727 (p. 8) and Wine accuracy .796 to .704 (p. 10). The generator takes 0.24 s per dataset on one CPU core (p. 8). No finetuning compute, seeds or code are reported.",
+  "positioning": "Builds on TabPFN (Hollmann 2023, 2025; Grinsztajn 2025) and PFNs (Muller 2022). Borrows KernelSynth's kernels, PatchTST's patching and TabPFN's value warps. Rivals are characterised by what they cannot generate, and dynamic SCMs are set aside for stability (pp. 1-3, 7). None of the 16 references is a group paper (p. 5).",
+  "writing": "Bold paragraph heads carry the argument (p. 1). The abstract ends on the ablation p-value (p. 1). Claims are scoped to the generator and to incremental value (p. 4), and the novelty claim is hedged with 'To our knowledge' (p. 4).",
+  "limits_future": "Stated: no backbone redesign; not state of the art; no leaderboard; regime limited to m*T <= 500 and K <= 10; incremental, not absolute, value; degradation on some datasets (p. 4). Unstated: the training budget, run-to-run variance and code. Future: 2-D and 3-D node types for images and video, multimodal DAGs, and other tokenisers or pretraining from scratch (p. 4).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Only the duel step survives, outside MIO. The incumbent (TabPFN v2.5) is both base and opponent at matched architecture ('equal footing'), the new component is ablated, and per-dataset wins and losses are printed. There is no exact model, certificate or time limit.",
+    "pages": "pp. 3-4, 8-10"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "A line outside optimization at MIT, whose first author corresponds, with Bertsimas last and his role unstated. None of Methods 1-5 appears, and no group work is cited. This matches the c28 S132 reading of a programme he sponsors rather than shapes, but without the contribution statement that grounded that reading.",
+    "pages": "pp. 1, 4-5"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "sponsor-and-edit senior authorship on student-led lines outside optimization",
+    "evidence": "Same name as c28 S132; the evidence is weaker here. There is only the last-author position: no contribution statement, no optimization content and no group citations, and the first author's student status is not stated.",
+    "pages": "pp. 1, 5"
+   },
+   {
+    "pattern": "fixed-backbone probe with a component-ablated data prior",
+    "evidence": "The model is held fixed and only shape-preserving input/output edits are made. The configurations separate the edits (B), finetuning on the full prior (C) and finetuning on the series-ablated prior (D). D is indistinguishable from A, so the gain is credited to the series mechanisms.",
+    "pages": "pp. 3-4"
+   }
+  ],
+  "transferable": [
+   "To credit a synthetic training distribution rather than a model, keep the backbone fixed, and add a configuration with only the input/output edits so that their effect is separated from finetuning (p. 3).",
+   "Ablate a new generator by switching off all its new components while keeping the finetuning recipe identical; a null result against the unmodified model rules out any shape-matched prior as the explanation (pp. 3-4).",
+   "Define the benchmark subset by the model's operating limits, and print the excluded datasets with K, m, T and the reason (pp. 3, 10-11).",
+   "Report paired Wilcoxon tests over datasets, with win/loss shares at two ensemble sizes and a critical-difference diagram, and print per-dataset tables so that losses are visible (pp. 3-4, 8-10).",
+   "In a random-graph generator, enforce the properties the task needs by resampling: a target exists, and a tabular bottleneck never cuts series ancestry (p. 6).",
+   "Report generation cost per dataset (mean, median, max) and what drives it (p. 8)."
+  ],
+  "coauthors": "Franco Martino O'Rourke (MIT; first and corresponding author) and Ana Trisovic (MIT). Bertsimas is last author; his role is not stated (p. 1).",
+  "quotes": [
+   {
+    "text": "The aim of these edits is not to improve the architecture, but to keep it on equal footing so that any change in performance reflects the synthetic prior alone.",
+    "page": 3
+   },
+   {
+    "text": "This is a paper about the generator: we did not redesign the backbone, so the resulting probe is not a state-of-the-art TSC foundation model",
+    "page": 4
+   }
+  ]
+ },
+ {
+  "id": "S617",
+  "year": "2026",
+  "title": "Patient outcome predictions improve operations at Hartford HealthCare",
+  "read_level": "full",
+  "contribution": "Reports the design, network-wide deployment and evaluation of daily XGBoost predictions for all inpatients of seven hospitals: discharge within 24 and 48 hours, ICU transfer, end-of-stay mortality and discharge disposition, delivered with alerts and SHAP explanations. The models beat physicians' expected discharge dates on AUC, and a difference-in-differences estimates a 0.67-day reduction in length of stay, projected at $55-72M a year (read as the 2023 preprint, arXiv 2305.15629v1).",
+  "problem_entry": "AP (hospital operations) + DA, with ML as engine. Entry: the deployment gap, since 'only a limited number of them are deployed in practice and make an impact' (p. 2), plus a partner's request for patient-level outcome predictions across seven hospitals (p. 1). Targets were chosen with the medical team for operational uses (pp. 5-7). The stated aim is impact, not prediction (p. 7). It differs from S115 by being multi-center and patient-level (p. 7).",
+  "key_idea": "An end-to-end system: nightly EMR extracts, patient-day features, per-hospital per-target XGBoost, isotonic calibration, green and red alerts, and SHAP waterfalls in a web tool (pp. 3-4, 8-11, 21-22). Interpretable OCT came first to earn trust, then XGBoost for accuracy (pp. 9-10). The model is combined with doctors' expected discharge dates by AND/OR rules (pp. 17-18). A champion pilot preceded a staggered roll-out (pp. 11-14).",
+  "assumptions": "180,682 patients and 1,375,215 patient days, from 2016, 2020 or 2021 depending on the hospital (pp. 8, 32). Chronological 50/20/30 splits per hospital (p. 9). Rule-based and sentinel imputation, then OptImpute, with per-hospital encoders and imputers (pp. 30-32). Separate models per hospital after a failed transfer (p. 14). The impact study is admitted to be descriptive: it assumes parallel trends with basic controls, its controls are contaminated, and LOS is heavy-tailed (p. 25).",
+  "proof_devices": [
+   "No optimization model or theorems. XGBoost per target and hospital, tuned on validation (p. 10)",
+   "Isotonic calibration on the first half of the test period; binned calibration MSE below 0.01 on the second half (pp. 10, 33-34)",
+   "Thresholds chosen on out-of-sample precision-recall curves at the owner's target precision; red alerts use a level threshold plus a day-over-day change threshold (pp. 15-16)",
+   "Doctors' expected discharge date converted to a score for AUC on the same patients; AND/OR combination rules (pp. 17-18)",
+   "Readmission association: 5% probability buckets, one-sided Welch t-tests, odds ratios (pp. 18-19)",
+   "Difference-in-differences on unit-group mean LOS, 15 vs 12 units, over calendar-matched windows 2021-2023: 0.67 = (5.85 - 4.96) - (4.98 - 4.76), with no standard error (pp. 23-25)",
+   "Two-scenario financial projection (no backfill vs full backfill), with the arithmetic shown (pp. 25-26)"
+  ],
+  "experiments": "AUC 0.757-0.925 over 8 tasks and 7 hospitals (Table 1, p. 15); two text ranges differ from the table (pp. 14-15). No table supports the claimed superiority of XGBoost over the alternatives (pp. 9-10). Alert precision/recall: 0.698/0.598 at first, 0.621/0.746 after the medical team asked for more recall; red alerts 0.477/0.705 (pp. 15-16, 36). Doctors' EDD AUC 0.524-0.732 against the models' 0.742-0.843; the AND rule adds 0.121-0.294 precision and the OR rule 0.100-0.287 recall (pp. 17-18). Readmission is lower after green alerts, p < 1e-8 for 30 days (p. 19). LOS falls 0.67 days by DiD (pp. 24-25) and 0.35 days in an uncontrolled pilot (p. 38); $55-72M is projected (pp. 25-26). Failures printed: the model transfer and the 8-hour data delay (pp. 14, 26). Cross-check of note 02 C6: 4.98 days observed vs a parallel-trends counterfactual of about 5.65 in Jan-Apr 2023 (card-writer's arithmetic from p. 24).",
+  "positioning": "The literature is organised by outcome, with surveys; state-of-the-art AUC is claimed without a side-by-side table (pp. 3, 5-7, 14). The nearest work is the group's own S115 (p. 7). Group components: OCT, sparse classification, OptImpute and the Interpretable AI software (pp. 9, 31, 39-40). A consultancy co-author (Dynamic Ideas LLC) and Interpretable AI are named, but there is no competing-interests, funding or ethics statement (pp. 1-2, 9, 28). His ties to both companies are recorded in note 01, not in the paper.",
+  "writing": "An INFORMS applied-analytics abstract and an early one-patient vignette (pp. 1, 3-4). Project management is written as method (pp. 11-14), and the RDW anecdote presents the model as a source of clinical learning (pp. 20-21). Headline vs caveat (Tension T6): recall increments are presented as more patient discharges; the readmission p-value is attached to a doctor-model combination it does not test; a significant LOS reduction is claimed without a test (pp. 1, 18-19, 25); AUC increments are restated as percent higher distinguishing power (p. 27).",
+  "limits_future": "Stated: missing variables and notes; once-daily data with an 8-hour delay; the DiD assumptions; contamination toward conservatism; heavy tails; the uncontrolled pilot (pp. 25-26, 38). Unstated [reader]: the adopting units were not chosen at random; the 0.67 carries no uncertainty; the projections apply it to all 49,424 patients. Future: wider deployment and longer evaluation, models inside the EMR, and readmission predictions (pp. 26-27).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "The owner is the network, with its physicians and case managers; the decisions are discharge planning and escalation. The owner's current rule (doctors' EDD) is the baseline on the same patients, and the alert's precision target is the owner's. Thresholds were moved when the medical team asked; there is a field test, and the authors report their own failures. This is the one applied paper per deployment of step 6.",
+    "pages": "pp. 2, 7, 11-19, 22-26"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Prediction, not prescription: no decision model is optimized, and clinicians decide. Scoring is by AUC, precision and recall plus a unit-level LOS difference-in-differences without uncertainty, not by a decision metric of recommendations.",
+    "pages": "pp. 7, 9-11, 17-19, 23-25"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "The alert threshold is the knob, and the precision-recall curve is handed to the owner, who chose about 0.7 precision and later moved the knob for recall (step 6). No bound links knob and property (no step 3). Interpretability is priced in words only (p. 10).",
+    "pages": "pp. 10, 15-16, 36"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "OCT appears only in the trust-building stage, and XGBoost replaces it for accuracy. There is no exact model, gap or certificate, and the duel is with doctors, not with a heuristic.",
+    "pages": "pp. 9-10"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "A decade-long partner with more than 20 projects, a consultancy co-author, and the group's components carried into production. Other authors do the writing while he 'directed the overall project'. Integrity Rule 5: the company ties are named but not declared (ties per note 01).",
+    "pages": "pp. 1-2, 9, 28, 31"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "field impact study of a decision-support tool: DiD against the prior year plus a within-period stratified comparison",
+    "evidence": "Same name as c25 S115. Here: three calendar-matched periods (2021-2023), with 15 fully adopting units against 12 not yet integrated and the counterfactual imputed by parallel trends. The hospital's finance team adds a separate, uncontrolled pilot estimate. There is no within-period stratified comparison.",
+    "pages": "pp. 22-25, 37-39"
+   },
+   {
+    "pattern": "Surrogate evaluation with stated bias direction",
+    "evidence": "Control units where some physicians used the tool are kept as controls, which 'could lead to a more conservative estimation of the effect'. Same name as c17 S078.",
+    "pages": "p. 25"
+   },
+   {
+    "pattern": "interpretable-first trust ladder, then a black box with post-hoc explanations",
+    "evidence": "OCT and sparse classification came first and were examined with doctors to build trust. XGBoost followed once doctors were receptive, with SHAP summary and waterfall plots. Ensembles and extra features were rejected, partly for interpretability.",
+    "pages": "pp. 9-11, 20-21"
+   },
+   {
+    "pattern": "human-model combination rules against the owner's own forecast",
+    "evidence": "Doctors' expected discharge dates are scored by AUC. Across seven hospitals, doctor AND alert raises precision by 0.121-0.294, and doctor OR alert raises recall by 0.100-0.287.",
+    "pages": "pp. 17-18"
+   },
+   {
+    "pattern": "physician-champion pilot, then a staggered roll-out that supplies the control group",
+    "evidence": "Four champions test the tool with weekly feedback, and the hospital's finance team evaluates the pilot. Roll-out then proceeds unit by unit, and the units not yet integrated become the control group of the impact study.",
+    "pages": "pp. 11-14, 22-23, 38-39"
+   }
+  ],
+  "transferable": [
+   "Turn the clinicians' own forecast (expected discharge date) into a score and compute its AUC on the same patients; report model vs human, plus AND (precision) and OR (recall) combinations (pp. 17-18).",
+   "Choose alert thresholds on out-of-sample precision-recall curves at the owner's stated precision, and record when users ask to move the threshold, and why (pp. 15-16).",
+   "Fire alerts on the day-over-day change in risk as well as on its level (pp. 11, 16).",
+   "Split chronologically per site (50/20/30); calibrate on the first half of the test period and assess calibration on the second (pp. 9-10, 33-34).",
+   "Before any learned imputer, impute by how the data are generated: a missing DNR means no DNR, and sentinels mark a missing surgery date or previous admission (pp. 30-31).",
+   "Use a staggered roll-out to build a difference-in-differences over calendar-matched windows, and state which way contamination biases the estimate (pp. 23-25).",
+   "Bracket financial impact by two scenarios (no beds backfilled vs all backfilled), and show the arithmetic (pp. 25-26).",
+   "Write a contribution statement that separates directing, modelling, writing, production and clinical supervision (p. 28)."
+  ],
+  "coauthors": "Liangyuan Na and Kimberly Villalobos Carballo (MIT ORC); Jean Pauphilet (London Business School); Ali Haddad-Sisakht (Dynamic Ideas LLC); Daniel Kombert, Melissa Boisjoli-Langlois, Andrew Castiglione, Maram Khalifa, Pooja Hebbal and Barry Stein (Hartford HealthCare). Bertsimas is last author, who 'directed the overall project' (pp. 1, 28).",
+  "quotes": [
+   {
+    "text": "Our objective, however, is not to predict for the sake of prediction but, more importantly, to implement our innovations in hospitals for real-world impact.",
+    "page": 7
+   },
+   {
+    "text": "D.B. directed the overall project, from concept and research to implementation, and edited the manuscript.",
+    "page": 28
+   }
+  ]
+ }
+]

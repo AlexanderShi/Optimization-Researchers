@@ -1,0 +1,410 @@
+[
+ {
+  "id": "S076",
+  "year": "2017",
+  "title": "Detecting symmetry in designing heat exchanger networks",
+  "read_level": "full",
+  "contribution": "Group-theoretic characterisation of the symmetry in one temperature interval of the MILP transshipment model of heat exchanger network synthesis: streams with equal heat-capacity flow rates form symmetric groups whose direct product describes the interval (arXiv v1 of the FOCAPO/CPC 2017 paper).",
+  "problem_entry": "Symmetry not characterised for HENS and not used by CPLEX 12.6 (toggling its symmetry feature leaves the tree unchanged); many equal-objective MILP transshipment optima posited to be symmetry (pp. 1-2).",
+  "key_idea": "Fix one temperature interval so continuous heat splitting no longer hides the structure; equal F(Cp) streams leave the residual change invariant and permute, giving S_nw per class and G(HP) x G(CP) per interval (Lemmas 2-3, Props. 4-7, Thm. 8, pp. 3-4).",
+  "assumptions": "Constant equal temperature change per interval; hot-to-cold matches only, no HU-CU matches; sequential LP/MILP/NLP route rather than the simultaneous MINLP (pp. 1-3).",
+  "proof_devices": [
+   "counting argument n^m for match configurations (Lemma 1, Appendix B, p. 6)",
+   "invariance of the residual change Delta R under swapping equal-F(Cp) streams (Lemma 2, Eq. 4, p. 4)",
+   "n! permutation count for the class symmetry group (Prop. 4, Appendix B, p. 6)",
+   "direct-product composition cited from Liberti 2012 / Costa et al. 2013 (Props. 6-7, Thm. 8, p. 4)"
+  ],
+  "experiments": "One minlp.org instance (Transshipment V1_5, 5 hot, 5 cold, 2 HU, 1 CU), GAMS model of Chen et al., CPLEX 12.6 solution pool; ten optimal solutions inspected to show swapped streams (pp. 4-5, Figs. 3-4).",
+  "positioning": "Builds on Margot 2010, Liberti 2012, Costa et al. 2013 and Ostrowski et al. 2015 class-based symmetry; keeps the Papoulias-Grossmann formulation because Chen et al. 2015 reweighting gave no advantage (pp. 2-4).",
+  "writing": "Short conference paper; 'for the first time' claim in the conclusion (p. 5); limits stated plainly (small test case, investment stage not examined, p. 5).",
+  "limits_future": "Characterisation only; exploitation via symmetry-breaking or reweighted objectives left to future work; single small test case; investment-cost NLP not examined (p. 5).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Structure named and stated algebraically (steps 1-3), but no detector implemented, validated or exploited inside B&B (steps 5-6 absent).",
+    "pages": "pp. 2-5"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "check the solver's own structure feature first",
+    "evidence": "Toggling CPLEX's symmetry feature does not alter the search tree, which motivates the study.",
+    "pages": "p. 2"
+   }
+  ],
+  "transferable": [
+   "Toggle the commercial solver's symmetry handling and compare search trees as empirical motivation for a structure paper (p. 2).",
+   "Use the solver's solution pool to enumerate equal-objective optima and tabulate them so symmetric optima become visible (pp. 4-5)."
+  ],
+  "coauthors": "G. Kouyialis (first author)",
+  "quotes": [
+   {
+    "text": "State-of-the-art solver software CPLEX does not seem to use problem symmetry in the MILP transshipment model;",
+    "page": 2
+   },
+   {
+    "text": "This paper has explored, for the first time, the symmetric structure of the HENS problem.",
+    "page": 5
+   }
+  ]
+ },
+ {
+  "id": "S095",
+  "year": "2017",
+  "title": "Bayesian multi-objective optimisation of neotissue growth in a perfusion bioreactor set-up",
+  "read_level": "full",
+  "contribution": "Closed-form expected hypervolume improvement for one black-box (GP-modelled) and one analytical objective, applied to bioreactor refreshment design and shown to beat NSGA-III on three test problems and the application.",
+  "problem_entry": "Two conflicting objectives, one an expensive simulator and one an analytical cost; standard Bayesian MOO treats both as black boxes and weighted sums need a-priori weights and miss concave fronts (pp. 1-3).",
+  "key_idea": "Put a Dirac delta on the deterministic objective so the EHVI integral collapses to one dimension over rectangles below the current front, giving a closed-form differentiable acquisition (Eqs. 1-3, pp. 3-4).",
+  "assumptions": "Two design variables (refreshment period, ratio); cost 1 + floor(504/r)*a with the floor ignored for the r-derivative; query-selection time negligible relative to evaluations (pp. 2, 5).",
+  "proof_devices": [],
+  "experiments": "EHVI vs NSGA-III on Fonseca-Fleming, Schaffer, Kursawe and the TE problem; 10 initial points + 50 iterations, mean of 25 runs, GD/MPFE/volume ratio; single baseline, no variance (pp. 4-5, Table 1).",
+  "positioning": "Extends Emmerich et al. 2008 EHVI; compares to genetic algorithms as 'the most common approach in literature' (pp. 1, 3).",
+  "writing": "Calls its own win 'unsurprising' given few variables and iterations and states when GAs are preferable (p. 5).",
+  "limits_future": "Advantage restricted to expensive evaluations and few variables; query time not counted (p. 5).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "contradiction",
+    "note": "Single GA baseline at fixed settings, averages only, query time excluded: far from the auditor protocol (a 6-page conference application).",
+    "pages": "pp. 5-6"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "model only the unknown part",
+    "evidence": "Known analytical objective kept exact (Dirac delta) inside the acquisition; only the simulator is GP-modelled.",
+    "pages": "pp. 3-4"
+   }
+  ],
+  "transferable": [
+   "Integrate out only the GP-modelled objective to get a closed-form, differentiable multi-objective acquisition (p. 4).",
+   "State the do-not-use regime (cheap evaluations, many variables -> GA) next to the win (p. 5)."
+  ],
+  "coauthors": "S. Olofsson (first), M. Mehrian, L. Geris, R. Calandra, M. P. Deisenroth",
+  "quotes": [
+   {
+    "text": "The computational time required to choose the next query point has not been taken into account since our focus is on applications where evaluating the black-box function is significantly more expensive than optimising for the next query point.",
+    "page": 5
+   },
+   {
+    "text": "Whereas genetic algorithms can be preferable for applications with cheap function evaluations and higher number of design variables",
+    "page": 5
+   }
+  ]
+ },
+ {
+  "id": "S142",
+  "year": "2017",
+  "title": "Designing Energy-Efficient Heat Recovery Networks using Mixed-Integer Nonlinear Optimisation",
+  "read_level": "full",
+  "contribution": "One-page invited-talk abstract summarising two lines: automatic structure recognition for a simultaneous heat-exchanger-network MINLP demonstrated in ANTIGONE, and a parametric study of sparsity and the P/NP boundary in the standard pooling problem.",
+  "problem_entry": "Energy efficiency of industrial heating and cooling (quarter of EU 2012 energy from industry, 73% of it heating/cooling); emphasis on large-scale industrial networks (p. 1).",
+  "key_idea": "Recognise and exploit special structure of heat recovery inside a deterministic global solver; for pooling, relate sparse active topologies to a piecewise objective and to where complexity crosses P/NP (p. 1).",
+  "assumptions": "Not stated beyond the p-formulation of the standard pooling problem (p. 1).",
+  "proof_devices": [],
+  "experiments": "Not described beyond demonstrating impact on ANTIGONE and benchmarking large-scale cases against heuristics (p. 1).",
+  "positioning": "n/a (abstract).",
+  "writing": "Abstract of an invited talk at an experimental-algorithms symposium.",
+  "limits_future": "None stated (p. 1).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "States automatic recognition and exploitation of heat-recovery structure.",
+    "pages": "p. 1"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Structure exploitation judged by its impact on the ANTIGONE solver (stated only).",
+    "pages": "p. 1"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [],
+  "coauthors": "R. Baltean-Lugojan, C. A. Floudas, M. Mistry",
+  "quotes": [
+   {
+    "text": "We automatically recognise and exploit special mathematical structures common in heat recovery.",
+    "page": 1
+   },
+   {
+    "text": "Finally, the presentation explains the conditions under which sparsity vanishes and where the combinatorial complexity emerges to cross over the P/NP boundary.",
+    "page": 1
+   }
+  ]
+ },
+ {
+  "id": "S155",
+  "year": "2017",
+  "title": "Integrating Mixed-Integer Optimisation and Satisfiability Modulo Theories: Application to Scheduling",
+  "read_level": "full",
+  "contribution": "Replaces constraint programming by SMT (Z3) in Hooker's logic-based Benders decomposition for planning and scheduling: strongest method on minimum cost, weaker than pure MILP or SMT on minimum makespan.",
+  "problem_entry": "Hybrid MILP/CP LBBD relies on bespoke CP constraints and may be poor without them; test SMT as the alternative subproblem solver (p. 1).",
+  "key_idea": "Keep Hooker 2007 formulations, cuts and relaxations; use SMT unsatisfiable cores directly as the conflicting task sets in Benders no-good and makespan cuts; reformulate the pure-SMT model as generalised 2-D bin packing so constraints become pairwise (Eqs. 16-29, pp. 3-4).",
+  "assumptions": "Hooker discrete-time planning/scheduling model with release/due times and cumulative resources; SMT as feasibility oracle with an iteratively tightened objective bound (pp. 2-4).",
+  "proof_devices": [
+   "no new proofs; correctness from Hooker 2007 LBBD and mutual unsatisfiability of the core (p. 4)"
+  ],
+  "experiments": "Hooker's 335 instances, <18-task instances discarded (230 left); Gurobi 6.0.3 vs Z3 vs hybrid, 3600 s, performance profiles and average times on 'c' instances (pp. 4-6, Figs. 1-2, Tables 2-3).",
+  "positioning": "Continues Jain-Grossmann 2001 and Hooker 2007 hybrid MILP/CP; positions SMT (De Moura-Bjorner) as the replacement for CP (pp. 1-3).",
+  "writing": "Negative makespan result placed in the abstract and conclusion (pp. 1, 6); mechanism-level explanation of where each method learns (pp. 5-6).",
+  "limits_future": "Hybrid weaker for makespan because the master learns only through cuts and per-facility subproblems block cross-facility learning (pp. 5-6).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Losses written into abstract and conclusion; written exclusion rule for toy instances with its reason.",
+    "pages": "pp. 1, 5-6"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Verdict split by objective class (cost vs makespan), but the component is a subproblem solver, not a relaxation inside B&B.",
+    "pages": "pp. 5-6"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "swap one component of a published hybrid for a neighbour-community tool",
+    "evidence": "Hooker's LBBD formulations, cuts and relaxations held fixed; only CP replaced by SMT.",
+    "pages": "p. 3"
+   }
+  ],
+  "transferable": [
+   "Hold a published decomposition fixed and change exactly one component to isolate its effect (p. 3).",
+   "Rewrite exponentially many subset constraints as pairwise disjunctions so infeasibility cores name small item sets (p. 3).",
+   "Discard toy instances from profiles with a stated reason (implementation bias) (p. 5)."
+  ],
+  "coauthors": "M. Mistry (first author)",
+  "quotes": [
+   {
+    "text": "But the hybrid MILP/SMT method is weaker than either MILP or SMT on a minimum makespan model.",
+    "page": 1
+   },
+   {
+    "text": "Results for these toy test cases may be biased towards implementation opposed to algorithm performance.",
+    "page": 5
+   }
+  ]
+ },
+ {
+  "id": "S030",
+  "year": "2018",
+  "title": "Maximizing neotissue growth kinetics in a perfusion bioreactor: an in silico strategy using model reduction and Bayesian optimization",
+  "read_level": "full",
+  "contribution": "Reduces a 3D level-set/CFD neotissue growth model to spatially homogenised ODEs (about 10^5 times faster), reparametrises and sensitivity-tests it, and uses Bayesian optimisation on reduced and full models to find that frequent, large medium refreshments maximise growth (partner-led; Misener 6th of 7 authors).",
+  "problem_entry": "Medium refreshment set by historical protocols; the 3D mechanistic model needs about 3 days per run, making optimisation almost intractable; evolutionary algorithms need too many evaluations (pp. 3, 5).",
+  "key_idea": "Reduce first (PDE to ODE, piecewise-linear shear/curvature fits, GA-fitted parameters, Sobol sensitivity), then optimise with BO, and cross-check the optimum on the full model and against experiments and literature (pp. 4-19).",
+  "assumptions": "Spatial heterogeneity irrelevant for the culture-strategy decision; Michaelis-Menten uptake; instantaneous refreshment; one averaged parameter set for all triply periodic scaffolds (pp. 5, 9, 21-22).",
+  "proof_devices": [],
+  "experiments": "Reduced vs 3D on five scaffolds, comparison with hPDC culture data, BO at day 7 and day 21 on both models; 3D BO stopped after about 30 evaluations and augmented by hand-picked samples (pp. 14-19).",
+  "positioning": "Positions BO against evolutionary algorithms for expensive simulators and cites Misener et al. 2014 RBC bioreactor optimisation as precedent (pp. 3-4, 20).",
+  "writing": "First-of-its-kind pipeline claim (pp. 4-5); limits stated in the discussion (p. 20); a caption/text inconsistency (Fig. 4 G10 vs text G7, pp. 16-17).",
+  "limits_future": "Homogenisation loses spatial mechanisms; no cost objective (multi-objective follow-up announced); averaged parameters lower maximum filling from 88% to 83% (pp. 19-22).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Optimum cross-checked across two models and literature, but the 3D BO is a single truncated run with manual samples.",
+    "pages": "pp. 18-19"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "reduce the simulator until rigorous optimisation fits, then cross-check on the full model",
+    "evidence": "PDE-to-ODE reduction (2 s vs 3 days), BO on both, optima compared.",
+    "pages": "pp. 4-5, 12, 17-19"
+   }
+  ],
+  "transferable": [
+   "Validate a reduced model three ways: against the full model, against dedicated experiments, and by re-running the same optimisation on both (pp. 14-19).",
+   "Screen with a cheap early-time output (day 7) before full-horizon runs after checking that it predicts the final outcome (p. 17).",
+   "Report how much compute the full-model optimisation consumed and where it was stopped (p. 19)."
+  ],
+  "coauthors": "M. Mehrian (first), Y. Guyot, I. Papantoniou, S. Olofsson, M. Sonnaert, L. Geris (last)",
+  "quotes": [
+   {
+    "text": "Due to the high computational costs of the 3D model, we stopped the optimization process after around 30 evaluations, representing about 2 months of computation time.",
+    "page": 19
+   },
+   {
+    "text": "Homogenizing the spatial variables reduces the mechanistic character of the model and does not address a number issues for which the spatial character is important.",
+    "page": 20
+   }
+  ]
+ },
+ {
+  "id": "S033",
+  "year": "2018",
+  "title": "Data-driven optimization of processes with degrading equipment",
+  "read_level": "partial",
+  "contribution": "Integrates Levy-process degradation models from condition-based maintenance into a robust MILP for joint production and maintenance scheduling, proves a worst-case deterministic surrogate robust-feasible, estimates failure probabilities from data, and tunes the uncertainty-set size by Bayesian optimisation (arXiv v2 read).",
+  "problem_entry": "Integrated maintenance-scheduling papers assume deterministic decay while CBM models are stochastic but single-unit; prior work fixes maintenance cost before optimisation so operating strategy cannot affect degradation (pp. 2-3).",
+  "key_idea": "Mode-dependent Levy increments as constraints, box uncertainty with a linear decision rule, Theorem 1 deterministic surrogate, logistic-regression frequency/Markov-chain estimators of failure probability, and BO over the set-size parameter alpha minimising cost plus expected failure cost (Eqs. 5-16, pp. 6-16).",
+  "assumptions": "SMAX threshold failure and AGAN reset; piecewise-constant operating modes; uncertainty revealed once; independent increments (box set); at most one failure per unit in the horizon (pp. 5-9, 16).",
+  "proof_devices": [
+   "Theorem 1: explicit construction of decision-rule coefficients (Eq. 11) and constraint-by-constraint check using nonnegative increments (p. 9; Appendix B, pp. 32-33)",
+   "robust counterpart via the Lappas-Gounaris affine decision-rule reformulation (p. 8; Appendix A not read)"
+  ],
+  "experiments": "Five STN instances, Pyomo + CPLEX 12.7.1; robust vs surrogate 25 runs each; estimator RMS/out-of-bound metrics against rolling-horizon solutions and an a-priori bound; BO vs random search, 5 runs; MIT-licensed code (pp. 20-29).",
+  "positioning": "Bridges CBM degradation modelling and PSE integrated scheduling; extends Biondi et al.'s STN; contrasts with Yildirim et al. and Basciftci et al. (pp. 2-4, 17).",
+  "writing": "Five bulleted contributions (p. 4); explicit scope sentences after the theorem and the surrogate comparison (pp. 9, 23).",
+  "limits_future": "Box sets ignore correlation; complex sets need the full robust problem; estimators are imperfect upper bounds (up to 48% of points above); costs noisy from non-optimal solves (pp. 9, 21-27).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "alpha parameterises a family from deterministic (0.5) to fully robust (0); the parameter is then removed from the user by an outer BO on expected cost.",
+    "pages": "pp. 9-10, 15-16, 27-29"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Estimators checked against independent rolling-horizon simulations and a published a-priori bound; repeated runs, random-search control, public code.",
+    "pages": "pp. 20, 24-29"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "prove the cheap surrogate feasible, measure the rest",
+    "evidence": "Theorem 1 guarantees feasibility only; the surrogate's cost and gap are measured against the robust model.",
+    "pages": "pp. 9, 22-23"
+   }
+  ],
+  "transferable": [
+   "Turn a robustness parameter into a one-dimensional expensive black-box problem (expected total cost vs alpha) and solve it by BO (pp. 15-16).",
+   "Prove robust feasibility of a worst-case surrogate by constructing the decision-rule coefficients explicitly (p. 9; pp. 32-33).",
+   "Grade a probability estimator as an upper bound with overall RMS, fraction of points above the bound, and RMS of those points (Eqs. 21a-c, p. 26).",
+   "Train a cheap surrogate for long horizons from short-horizon solves on Latin-hypercube demands (pp. 19-20)."
+  ],
+  "coauthors": "J. Wiebe (first), I. Cecilio (Schlumberger Cambridge Research)",
+  "quotes": [
+   {
+    "text": "Theorem 1 only guarantees solution feasibility, not optimality.",
+    "page": 9
+   },
+   {
+    "text": "Noticeably, none of these authors make use of the wealth of knowledge regarding degradation modeling and inference from data available from the CBM literature.",
+    "page": 3
+   }
+  ]
+ },
+ {
+  "id": "S058",
+  "year": "2018",
+  "title": "Satisfiability modulo theories for process systems engineering",
+  "read_level": "full",
+  "contribution": "Position-and-testbed paper proposing SMT for process systems engineering via three testbeds: SMT-core-based algorithms (incl. a branch-and-bound with push-back symmetry cuts) for 2-D bin packing, unsatisfiable cores for cut generation and model debugging, and SMT-based MINLP solvers (ManyOpt).",
+  "problem_entry": "PSE and computer science developed logic/optimisation hybrids separately; a strengths table shows SMT and MINLP are complementary (pp. 1-2, Table 1).",
+  "key_idea": "Use SMT as a feasibility oracle whose unsatisfiable cores drive cuts, branching and symmetry handling (ascending algorithm, SMT-BB, Lemmas 1-2), and as a debugging and warm-starting tool (pp. 5-13).",
+  "assumptions": "MINLP with inferable finite bounds and finite images; 2BP oriented and free cutting; ManyOpt limited to polynomial nonlinearities with exact rational arithmetic (pp. 2, 5, 11, 13).",
+  "proof_devices": [
+   "Lemma 1 push-back cuts preserve the best objective: contradiction via an explicit bin-permutation map (pp. 7-8)",
+   "Lemma 2 identical items may also be pushed back: bin-swap map (p. 8)",
+   "dominance filtering: an unsatisfiable item set dominates its supersets (p. 6)"
+  ],
+  "experiments": "500 Berkey-Wang 2BP instances, CPLEX 12.7, Gurobi 6.0.3, Z3 4.5.1, one thread, 1 h; time and heuristic performance profiles, per-class solved counts, Pisinger-Sigurd 'can solve' line; ManyOpt warm-start demos on prob03 and haverly (pp. 8-13).",
+  "positioning": "Reviews disjunctive programming, GDP, MLLP, optimisation modulo theories and LBBD (pp. 3-4); distinguishes rigorous (ManyOpt) from complete (ANTIGONE) methods in Neumaier's sense (p. 13).",
+  "writing": "Purpose stated as showing broad applicability (p. 1); §3.5 reuses S155's LBBD paragraph almost verbatim (p. 4); concessions on speed and scope (p. 13). Example 1's stated solution x1 = 5 violates its own x1 <= 1 conjunct (p. 3, own check).",
+  "limits_future": "About half the 2BP instances solved; small-item classes hard for all; SMT polynomial-only; ManyOpt frequently slower than state-of-the-art MINLP solvers; warm starting not guaranteed to help (pp. 8-13).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Bespoke Pisinger-Sigurd method shown as a 'can solve' line; ManyOpt's slowness conceded (step 7).",
+    "pages": "pp. 8, 13"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Per-class solved counts expose where SMT-BB loses and why; one-thread limits for all solvers.",
+    "pages": "pp. 8-9"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Bin-permutation symmetry and dominance exploited through logic-solver cores, not a detector inside a global MINLP solver.",
+    "pages": "pp. 6-8"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "unsatisfiable core as a debugging instrument",
+    "evidence": "Filtered core of 7 constraints exposes a local cut not removed when switching branches.",
+    "pages": "pp. 9-10"
+   }
+  ],
+  "transferable": [
+   "Debug a B&B implementation by asking an SMT solver for the unsatisfiable core of a node known to be feasible, after filtering trusted constraints (pp. 9-10).",
+   "Promote local cuts to global ones by adding the fixing item as an antecedent for sibling branches (p. 8).",
+   "Demonstrate warm starting by counting oracle calls warm vs cold after adding one constraint (p. 13).",
+   "Plot a specialised method's solved count as a 'can solve' line to show the gap to bespoke methods (p. 8)."
+  ],
+  "coauthors": "M. Mistry (first), A. Callia D'Iddio, M. Huth",
+  "quotes": [
+   {
+    "text": "The purpose and novelty of this paper is to show the broad applicability of SMT to PSE.",
+    "page": 1
+   },
+   {
+    "text": "ManyOpt is frequently slower than state-of-the-art MINLP solvers, but it offers the trade-off of a completely different method to address the problem.",
+    "page": 13
+   }
+  ]
+ },
+ {
+  "id": "S060",
+  "year": "2018",
+  "title": "Stem cell biomanufacturing under uncertainty: a case study in optimizing red blood cell production",
+  "read_level": "full",
+  "contribution": "Framework for stem-cell bioreactor design under uncertainty (high-fidelity models, sensitivity of the optimiser, global superstructure optimisation, robust optimisation, NPV analysis) applied to a dual hollow fibre red-blood-cell bioreactor: robust optimum $383 vs nominal $277 per unit, with NPV price targets.",
+  "problem_entry": "The earlier nominal global optimum ($277/unit) ignored uncertainty, so its design decisions could not be checked; cell therapy adds kinetic, spatial, temporal and uncertainty requirements absent in petrochemical optimisation (pp. 2, 10).",
+  "key_idea": "Six-component toolkit applied in a fixed recipe; convert model-form uncertainty into parameter ranges or a bounded cost shift (Krogh vs CFD; alternative hematopoiesis model moves $277 to $306 with unchanged design); then worst-case robust optimisation and NPV scenarios (pp. 2-10).",
+  "assumptions": "Strict uncertainty with ranges and no distributions, hence worst case; 30 parameters at 50-150% of nominal; model kept near 200 variables for 300 s global solves; NPV assumptions (i)-(v) (pp. 5, 7, 9).",
+  "proof_devices": [],
+  "experiments": "Computational: one- and two-parameter sensitivity of the global optimum, CFD stress test of the Krogh approximation, model swap, robust optimum and NPV scenarios at $800/$500/$225 (pp. 7-10).",
+  "positioning": "Transfers superstructure and robust optimisation from heavy industry to stem-cell bioprocessing; claims neither had been applied there (p. 10).",
+  "writing": "Futures-issue article; abstract says robustness costs about 15% while Results give $277 -> $383, about 38% (pp. 1, 8).",
+  "limits_future": "Worst-case estimate pessimistic, more data needed for reasonable uncertainty rules; $500/unit target requires better cell flux through ceramic fibres (pp. 8, 10).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "contradiction",
+    "note": "Abstract's robustness price (about 15%) does not match the Results figure ($277 -> $383, about 38%); an internal-consistency check of the kind Method 5 applies to competitors would flag it.",
+    "pages": "pp. 1, 8"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "fold model-form error into parameter ranges or a bounded cost shift",
+    "evidence": "CFD stress-test of the Krogh approximation and an alternative hematopoiesis model re-solved to bound the cost effect.",
+    "pages": "p. 8"
+   },
+   {
+    "pattern": "sensitivity of the optimiser, not the simulator",
+    "evidence": "Shadow prices rejected because of discrete design choices; sensitivities computed on the global optimum.",
+    "pages": "p. 4"
+   }
+  ],
+  "transferable": [
+   "Budget a sensitivity study by counting optimisation runs (435 pairs x 4^2 level combinations x 300 s = 24.2 CPU days; 902.2 for triples) before choosing a Morris-style screen (p. 4).",
+   "Bound model-form error by re-solving with a plausibly pessimistic alternative model and reporting the change in optimum and decisions (p. 8).",
+   "Report how robust decisions differ from nominal ones, not only the cost (p. 8).",
+   "Close with an NPV scenario table that turns the optimum into a price target and names the physical bottleneck (p. 10)."
+  ],
+  "coauthors": "M. C. Allenby, M. Fuentes-Gari, K. Gupta, T. Wiggins, N. Panoskaltsis, E. N. Pistikopoulos, A. Mantalaris",
+  "quotes": [
+   {
+    "text": "Using robust optimization, the nominal price for a unit of RBC increases from $277 to $383.",
+    "page": 8
+   },
+   {
+    "text": "we cannot tie ourselves to a single uncertainty analysis method; we want to build consensus between disparate analysis types.",
+    "page": 11
+   }
+  ]
+ }
+]

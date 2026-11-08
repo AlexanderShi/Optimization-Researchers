@@ -1,0 +1,131 @@
+[
+  {
+    "id": "S011",
+    "year": "2012",
+    "title": "Global optimization of mixed-integer quadratically-constrained quadratic programs (MIQCQP) through piecewise-linear and edge-concave relaxations",
+    "read_level": "full",
+    "contribution": "Integrates two complementary relaxations into one MIQCQP branch-and-bound. Dominant facets of low-dimensional (n<=3) edge-concave aggregations are added at every node; piecewise-linear relaxations cover the sparse remaining bilinear and concave terms. A cumulative in-solver ablation shows edge-concave cuts help across MIQCQP while piecewise-linear relaxations pay off only on process networks.",
+    "problem_entry": "Generalises her pooling-specific piecewise relaxations to MIQCQP, starting from the gap that the sum of termwise McCormick hulls is not the hull of a whole constraint; claims the first integration of Meyer-Floudas edge-concave relaxations into B&B (pp. 1-4).",
+    "key_idea": "Detect aggregations in preprocessing. Add only edge-concave facets that strictly dominate the termwise relaxation, reuse non-dominant facets for bounds tightening, and partition only variables of terms not covered by triplets, chosen greedily on a co-occurrence graph (pp. 5-8, 13-14).",
+    "assumptions": "Finite inferable bounds, upper-triangular Q (p. 2); n<=3 aggregations, each term in at most one aggregation, fixed in preprocessing (pp. 5, 7); fixed caps and factors (30 partitioned variables, ten eigenvectors, 0.95 volume, N=4 from earlier work) without derivation (pp. 13-15, 17).",
+    "proof_devices": [
+      "Chain of Observations from Tardella's sum-decomposability theorem: all three cross terms nonzero is necessary for a dominant cut (Obs. 3.1.1.8, p. 7)",
+      "Cheap sufficient dominance test: a facet not equal to any of the eight termwise underestimators is dominant (Obs. 3.1.1.9, p. 7)",
+      "Worked numeric example listing eight McCormick cuts vs six facets (Illustration 3.1.2.2, p. 8)",
+      "Negative result: process-network quality equations are sum decomposable, so no equation-wise cut can tighten them (Property 3.1.3.1, p. 9)",
+      "Interval example converging to [(1+sqrt5)/2, 2] via a non-dominant facet (p. 14)",
+      "Sharpness of log partitioning cited to an appendix of the Optimization Online version, not in this file (p. 12)"
+    ],
+    "experiments": "43 instances (14 point packing checked against packomania, pooling plus 3 GLOBALLib process networks, 6 non-sum-decomposable GLOBALLib) under 4 cumulative configurations (McC, +EC, +PW lin N=4, +PW log N=4; packing also N=2,8). 7200 s, 1e-6 gap; time and gap profiles, root gap closed, nodes with error bars. No competitor solvers, only a concession that APOGEE outperforms. Visible losses and a misprinted Meyer 4 gap in Table 5 (pp. 15-19, 26-29).",
+    "positioning": "Sorts prior MIQCQP tightening work into families and restates rather than attacks it. Bao et al. multiterm cuts are complementary (root vs every node), and the eigenvector approach follows Saxena-Bonami-Lee with two stated differences (pp. 3-4, 10).",
+    "writing": "Scoped novelty sentence (p. 4); theory as numbered Observations/Properties each with a worked example (pp. 6-9); names its method 'holistic' (p. 17); class-split one-sentence verdict (p. 20).",
+    "limits_future": "No symmetry inference (p. 16); generic code loses to APOGEE on pooling for lack of topological knowledge (p. 19); n<=3 restriction (p. 5); the only forward idea is a root/node hybrid with Bao et al. cuts (p. 10).",
+    "method_links": [
+      {"method": "Method 4", "relation": "evidence", "note": "Cumulative ablation inside the full B&B with time/gap profiles; class-split verdict (EC for any MIQCQP, PW for specific classes)", "pages": "pp. 17-20"},
+      {"method": "Method 1", "relation": "evidence", "note": "Structure analysed before relaxing: sum-decomposability tests, aggregation detection, co-occurrence graph", "pages": "pp. 6-9, 13"},
+      {"method": "Method 2", "relation": "variant", "note": "Piecewise family swept at N=2/4/8 only on packing; N=4 for pooling inherited from earlier work, not re-tested", "pages": "p. 17"},
+      {"method": "Method 5", "relation": "variant", "note": "Internal profiles and external correctness check (packomania) but no competitor solvers; only outside reference is a concession to APOGEE", "pages": "pp. 16, 19"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Prove where a cut cannot help, then route that class elsewhere", "evidence": "Property 3.1.3.1: process-network equations are sum decomposable, so EC and multiterm cuts cannot tighten them; PW/RLT are used instead, and packing gains are attributed to bounding only", "pages": "pp. 9, 18"},
+      {"pattern": "Assign terms to complementary relaxations by exclusion", "evidence": "Edges covered by EC triplets removed from the co-occurrence graph before choosing variables to partition", "pages": "p. 13"},
+      {"pattern": "Reuse non-dominant facets for bounds tightening", "evidence": "Facets redundant in the LP are fed to FBBT", "pages": "pp. 7, 14"}
+    ],
+    "transferable": [
+      "Derive a necessary condition and a cheap sufficient condition for a cut to dominate the default relaxation; generate only passing cuts, at every node (pp. 6-7)",
+      "Prove a 'no cut can help' property for an application class before testing on it, and use it to explain where gains come from (pp. 9, 18)",
+      "Split terms between two relaxation families by deleting covered edges from the second family's selection graph (p. 13)",
+      "Report a cumulative component ablation per class with time and remaining-gap profiles plus nodes with error bars (pp. 18-19)"
+    ],
+    "coauthors": "Christodoulos A. Floudas",
+    "quotes": [
+      {"text": "This holistic view makes the comparisons fairly subtle but also allows us to draw better-informed conclusions.", "page": 17},
+      {"text": "When McC or McC + EC are sufficient to solve the process network problem, they tend to do so faster than the piecewise schemes, but the best strategies for closing the gap on the most difficult problems are the piecewise methods.", "page": 19}
+    ]
+  },
+  {
+    "id": "S004",
+    "year": "2013",
+    "title": "GloMIQO: Global mixed-integer quadratic optimizer",
+    "read_level": "full",
+    "contribution": "Presents GloMIQO, an MIQCQP global solver that reformulates the user model, detects structure (RLT products, convex and edge-concave multivariable terms), builds MILP relaxations with several cut families and adaptive RLT, and bounds aggressively. On 399 instances it is fastest on about 68% and solves about 81%, ahead of BARON, Couenne, LindoGLOBAL and SCIP, with every answer re-checked.",
+    "problem_entry": "MIQCQP spans process networks, geometry and finance; automatic reformulations are common in MIP solvers but rare in MIQCQP solvers, so the solver is built around exploiting user-model structure (pp. 2-3).",
+    "key_idea": "Pipeline: eliminate/disaggregate to reach generalised-pooling form, add RLT products that create no new terms, split equations into separable multivariable terms (graph components) as the unit for convexity, eigenvector and edge-concave handling. Then MILP relaxations, adaptive RLT learned in the first 3 levels, tempered reliability branching and FBBT/OBBT/reduced-cost bounding (pp. 4-18).",
+    "assumptions": "Finite inferable bounds (pp. 1-2); reformulations targeted at process networks and a specific test collection (pp. 5, 8); convexity detected per term not per equation (p. 11); piecewise-linear off by default and one parameter setting for all runs (p. 13).",
+    "proof_devices": [
+      "n/a (no theorems); algorithmic devices only:",
+      "Graph partition of each equation into disjoint vertex sets justified by sum decomposability (pp. 10-11)",
+      "Worked decomposition of ex8_1_4 into three multivariable terms (p. 10)",
+      "Learn-then-freeze adaptive RLT rule: cuts used in at least half of the first-3-level nodes become permanent (p. 14)",
+      "Algorithm 1: pseudocost branching tempered by a halving domain-position threshold (pp. 15-16)",
+      "Equation factoring against interval overestimation; reduced-cost bound formulas (pp. 17-18)"
+    ],
+    "experiments": "399 MIQCQP instances in 11 groups vs BARON 10.1.2, Couenne 0.4, LindoGLOBAL 6.1.1.588 (vendor-supplied build), SCIP 2.1.0, latest as of January 2012. Feasibility tolerance 1e-6 for all, back-to-back runs, 7200 s. Perl feasibility check with benign/troublesome failures, profiles on 369 bounded cases, crashed SCIP gaps recovered from logs, added bounds removed from reformulated GLOBALLib, water models modified by PW approximation. Fastest on ~68%, ~81% solved; SCIP faster on small instances; BARON wrong optimum on waste; Couenne infeasible on over half. No component ablation (pp. 18-26).",
+    "positioning": "Lists predecessor codes with the component each contributes, singles out SCIP as the most informative comparison, states differences factually (more cuts than Couenne; per-term vs per-equation convexity), and calls competitors excellent and under active development (pp. 2-3, 11, 14, 18).",
+    "writing": "Implementation-level; each component tied to a worked instance (pp. 8, 23-26); direct advice to modellers on writing exploitable constraints (p. 9); the SCIP trade-off left as an explicit open question (p. 26); some promotional phrasing (pp. 3, 27).",
+    "limits_future": "Slower than SCIP on small instances and unclear whether it could switch strategy (p. 26); water results depend on reformulations (p. 6); reformulations tuned to a collection (p. 8); does not add extra bilinear terms for RLT (p. 9).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "Reformulation and structure detection precede relaxation; detected structure reused in relaxation and bounding; modeller advice", "pages": "pp. 4-11"},
+      {"method": "Method 4", "relation": "evidence", "note": "Piecewise-linear off by default because it slows instances that converge anyway; opt-in advice for hard pooling/process networks", "pages": "p. 13"},
+      {"method": "Method 4", "relation": "variant", "note": "No component ablation; gains attributed through worked instances (ex5_2_5, congruent c72, waste)", "pages": "pp. 8, 24-25"},
+      {"method": "Method 5", "relation": "evidence", "note": "Dated newest versions, vendor licences, harmonised tolerance, back-to-back runs, Perl check, benign/troublesome failures, log-recovered gaps, added bounds removed, losses written in", "pages": "pp. 18-22, 25-26"},
+      {"method": "Method 2", "relation": "evidence", "note": "Exactly one parameter setting across all 399 runs (never re-tuned per comparison)", "pages": "p. 13"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Learn-then-freeze cut selection in the top tree levels", "evidence": "Adaptive RLT adds 100 most violated stored cuts in first 3 levels, then makes permanent those used in >= half of the nodes", "pages": "p. 14"},
+      {"pattern": "Modelling advice as part of the solver contribution", "evidence": "Users told to write multipliable linear constraints; horizontal over diagonal symmetry breaking", "pages": "p. 9"}
+    ],
+    "transferable": [
+      "Use one parameter setting for every benchmark run and state it next to the default decision (p. 13)",
+      "Learn which stored cuts matter in the first n tree levels, then add those used in >= half the nodes everywhere (p. 14)",
+      "Temper pseudocost branching by excluding narrow or lopsided domains, halving the threshold until a candidate exists (pp. 15-16)",
+      "Benchmark with independent feasibility re-check, benign/troublesome failure split and log-recovered gaps for crashed competitors (pp. 19-20)",
+      "Remove convenience bounds others added to library instances so that bound inference stays in the test (p. 22)"
+    ],
+    "coauthors": "Christodoulos A. Floudas",
+    "quotes": [
+      {"text": "Therefore, the default in GloMIQO is not to use the piecewise-linear relaxations.", "page": 13},
+      {"text": "We do not know if it would be possible for GloMIQO to dynamically abandon its more elaborate approach under circumstances where a SCIP-like algorithm is more effective or if a slower solution time on the smaller problems is a price we pay for addressing the exceptionally large problems.", "page": 26}
+    ]
+  },
+  {
+    "id": "S001",
+    "year": "2014",
+    "title": "ANTIGONE: algorithms for continuous/integer global optimization of nonlinear equations",
+    "read_level": "full",
+    "contribution": "Presents ANTIGONE, a general MINLP global optimization framework. It extends GloMIQO and the MISO framework through a polymorphic term class (including new composite exponential, fractional and logarithmic terms) and is benchmarked on 2571 instances against BARON, Couenne, LINDO and SCIP, with strength located in quadratic instances.",
+    "problem_entry": "Consolidation: existing MIQCQP and MISO frameworks plus GloMIQO users; the purpose is to show how an extensible structure realises them, and the contribution is declared to be how the algorithms are tied together (pp. 1-2).",
+    "key_idea": "Rewrite every equation as a sum of typed terms in an inheritance hierarchy that knows convexity/edge-concavity regions and derivatives. Flatten expression trees, detect always/sometimes/never convex or edge-concave structure, and run a branch-and-cut that talks only to the term base class (pp. 3-8).",
+    "assumptions": "Finite inferable bounds and finite image (p. 3); functional forms limited to Table 1, with trig/min/max/erf and minus-infinity instances excluded (pp. 8-9); convexity detection without composition rules or symbolic methods (p. 8).",
+    "proof_devices": [
+      "n/a (no theorems); algorithmic devices only:",
+      "Closed-form second derivatives of three composite univariate terms plus interval arithmetic for convexity regions (p. 5)",
+      "Tree-flattening identities for logs and exponentials (Eq. 1, p. 7)",
+      "Worked reformulation of ex6_2_9 with an admitted missed composite-term detection (p. 14)"
+    ],
+    "experiments": "2571 instances: 115 minlp.org problems compiled by the authors because the site's test set is unusable, 482 MIQCQP, plus AMPL Book, Bonmin, GLOBALLib, LINLib, MacMOOPLib, MPLLib, MINLPLib, PrincetonLib, frozen 11 March 2013 with an exclusion rule. Competitors BARON 12.7.3, Couenne 0.4, LINDO 8.0, SCIP 3.0 (latest Feb 2014) at defaults except gap/time/iteration limits; back-to-back runs. Perl check with max(1e-4, 1e-4|V|) violation threshold, PTOOLS time and gap profiles, guessed-bound lower bounds discarded. Sliced by library and by structural class; some counts do not reconcile (528+2048 vs 2571; 2112 vs 1781 nonconvex). No component ablation (pp. 8-18).",
+    "positioning": "Delegates literature to reviews and calls Section 3 a critical literature review; lists solvers without evaluation; contrasts with auxiliary-variable-free underestimator systems; reports competitor errors factually (pp. 2-4, 14).",
+    "writing": "Short (18 text pages); purpose and architectural contribution on p. 2; results graded by adverb per library ('unusually strong' vs 'competitively'); scope sentence on quadratic strength placed in results (pp. 11-18).",
+    "limits_future": "Strength comes from quadratic instances (p. 17); no composition-rule convexity detection (p. 8); excluded functional forms (p. 9); missed composite-term detection admitted (p. 14); future direction only as extensibility for new literature advances (p. 18).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "Term classes with convexity/edge-concavity labels, tree flattening, RLT detection; stated gap (no composition rules) matches Method 1 limitation on missed convexity", "pages": "pp. 4-8"},
+      {"method": "Method 5", "relation": "evidence", "note": "2571 instances with freeze dates and exclusion rule, rebuilt minlp.org set, dated newest competitors, back-to-back runs, Perl check with explicit threshold, guessed-bound LBs discarded, gap profiles, scope sentence; tolerances left at defaults unlike S004", "pages": "pp. 8-11, 17"},
+      {"method": "Method 4", "relation": "variant", "note": "No component ablation inside the solver; judgement is solver-vs-solver, sliced by class", "pages": "pp. 17-18"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Architecture as the claimed contribution", "evidence": "Intellectual contribution declared to be how the algorithms are tied together; term class built for future underestimators", "pages": "pp. 2, 4, 18"},
+      {"pattern": "Slice the benchmark by structural class to locate the strength", "evidence": "Profiles by quadratic/signomial/other, discrete/continuous, convex/nonconvex lead to the quadratic-strength scope sentence", "pages": "pp. 17-18"}
+    ],
+    "transferable": [
+      "Make a polymorphic term class the single interface between relaxation libraries and branch-and-cut (pp. 4, 8)",
+      "Freeze library versions with a date, state an exclusion rule, and rebuild unusable community test sets with provenance (pp. 8-10)",
+      "Penalise infeasible returns with a stated violation threshold before profiling and discard lower bounds based on guessed bounds (pp. 10-11)",
+      "Slice results by nonlinearity type, discreteness and convexity, and write the scope sentence that follows (pp. 17-18)"
+    ],
+    "coauthors": "Christodoulos A. Floudas",
+    "quotes": [
+      {"text": "the intellectual contribution is the way ANTIGONE ties together its many constitutive algorithms.", "page": 2},
+      {"text": "ANTIGONE derives the core of its strength from quadratic instances.", "page": 17}
+    ]
+  }
+]

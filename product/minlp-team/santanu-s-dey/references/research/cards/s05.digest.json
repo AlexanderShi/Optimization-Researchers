@@ -1,0 +1,279 @@
+[
+ {
+  "id": "S083",
+  "year": "2020",
+  "title": "Upper bounds for model-free row-sparse principal component analysis",
+  "read_level": "full",
+  "contribution": "Gives polynomial-time-solvable second-order cone IP relaxations that certify dual bounds for model-free row-sparse PCA with an affine worst-case guarantee, paired with a monotone local-search heuristic, and shows they scale to d = 2000 where the SDP relaxation runs out of memory.",
+  "problem_entry": "Sparse PCA methods give primal solutions under statistical assumptions or stationary points, but none verify quality via dual bounds in the model-free case; Prop. 1.1 shows the sample-covariance gap certifies the population gap (pp. 1-3).",
+  "key_idea": "SOC-representable relaxation C' of Stiefel plus row-sparsity, then SOS-II piecewise-linear upper approximation of the convex-maximization objective, giving an SOCIP; thresholding, Bessel/trace cuts and symmetry breaking make it practical; swap heuristic for primal bounds (pp. 3-6).",
+  "assumptions": "Model-free covariance A, shared-support row sparsity; statistical assumptions only for the heuristic's Theorem 4 (appendix not in file) (pp. 1-5).",
+  "proof_devices": [
+   "Relaxation sandwich opt_F <= opt_C' <= (1+sqrt r)^2 opt_F (Theorem 1, p. 4)",
+   "Piecewise-linear approximation error bounded by r lambda_j theta_j^2/(4N^2), giving an affine guarantee (Prop. 2.4, p. 4)",
+   "Inapproximability cited to show the convex relaxation is NP-hard to optimize exactly (remark, p. 4)"
+  ],
+  "experiments": "Gurobi 7.0.2 on a laptop; gap (ub-lb)/lb vs top-k-diagonal bound and SDP on spiked covariance (d = 500) and real data (d = 79 to 2000); SOCIP-impl better, SDP out of memory at d >= 500 (pp. 7-8).",
+  "positioning": "Against regularized/ADMM and SDP sparse PCA methods and statistical-model estimators; extends convex-IP dual-bound frameworks from r = 1 to row-sparse r > 1 (pp. 2-3).",
+  "writing": "Opens with a section titled as a question ('How good are primal feasible solutions?' why should we ask this question, p. 1); ends with a 'no comparable results' claim (p. 8).",
+  "limits_future": "No limits or future directions stated; no tightness example for the (1+sqrt r)^2 factor (pp. 4, 8).",
+  "method_links": [
+   {"method": "Method 5", "relation": "evidence", "note": "Dual bounds from an SOC (not SDP) relaxation, scaled where SDP fails", "pages": "pp. 1, 3-4, 7-8"},
+   {"method": "Method 4", "relation": "variant", "note": "Affine guarantee stated without a tight example or matching lower bound", "pages": "p. 4"}
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Replace an SDP description of conv(Stiefel) by SOC constraints on columns and pairwise column sums/differences to scale a relaxation (p. 3).",
+   "Eigen-decompose a convex-maximization objective and upper-approximate each square with SOS-II pieces, bounding the error by theta^2/(4N^2) per term (p. 4).",
+   "Use the primal heuristic's value to set a threshold that removes most SOS-II variables while keeping the bound valid (p. 6)."
+  ],
+  "coauthors": "Guanyi Wang",
+  "quotes": [
+   {"text": "However, none of these methods can efficiently verify the quality of the solutions via comparing current objective values with their dual bounds, especially in model-free case.", "page": 1},
+   {"text": "To the best of our knowledge, there is no comparable theoretical or computational results for solving model-free SPCA.", "page": 8}
+  ]
+ },
+ {
+  "id": "S027",
+  "year": "2021",
+  "title": "Using submodularity within column generation to solve the flight-to-gate assignment problem",
+  "read_level": "full",
+  "contribution": "A per-gate column-generation scheme for delay-minimizing flight-to-gate assignment whose pricing uses the submodularity of the pricing objective (double-greedy 1/2-approximation), an exact pseudo-polynomial DP and a block-decomposition 2-approximation, solving a full day at Atlanta airport (read as arXiv v3).",
+  "problem_entry": "Compact MIPs too slow and a prior column-generation approach gave no explicit formulation or pricing method; objective restricted to arrival delay with gate independence justified by ramp operations (pp. 2-4).",
+  "key_idea": "Set-covering master, pricing decomposed by gate; pricing objective is non-monotone submodular, so randomized double greedy gives E f >= OPT/2; exact DP recursion, O(nc) for integer data; odd/even block decomposition 2-approximation (pp. 5-16).",
+  "assumptions": "Independent gates, no upper bound on park times, f(F') >= 0 for the 1/2 guarantee, integer data for the pseudo-polynomial DP (pp. 4-5, 10, 13).",
+  "proof_devices": [
+   "Submodularity by case analysis on which park times are pushed to the right (Lemma 4.2, p. 9)",
+   "Double-greedy guarantee adapted to the weaker condition f(F') >= 0 (Theorem 4.1, p. 10; App. A, p. 27)",
+   "Backward-induction count of recursive calls (Prop. 4.1, p. 12)",
+   "Odd/even block argument via an adjacency parameter sigma for a 2-approximation (Theorem 4.3, pp. 15-16)"
+  ],
+  "experiments": "37 synthetic and ATL Aug 2019 instances up to 1,125 flights/192 gates; Python + Gurobi 9.1, 8 h limit; compact MIP fails early, SM+DP best small/moderate, SM+rolling horizon best large, up to ~50% time saving on ATL; untuned parameters; instances posted online (pp. 18-26).",
+  "positioning": "Against compact MIP formulations, an unspecified prior column-generation scheme, metaheuristics, and SPPTWTC labeling (unsuitable without park-time bounds) (pp. 2-3, 14-15).",
+  "writing": "Numbered contribution list with 'to the best of our knowledge, first use' claim (p. 3); explicit reasons for unreported options (p. 24).",
+  "limits_future": "Gate interference and stochastic arrival/turn times left as extensions; sigma-based decompositions ineffective and unreported (pp. 24, 27).",
+  "method_links": [
+   {"method": "Method 5", "relation": "variant", "note": "LP lower bound vs binary-program upper bound reported as root gap, but the deliverable is solve speed, not a certified gap", "pages": "pp. 16-17, 21-26"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "structure-exploiting pricing in column generation", "evidence": "Pricing objective shown submodular, solved by double greedy plus exact DP instead of a MIP solver", "pages": "pp. 8-14, 21-22"}
+  ],
+  "transferable": [
+   "Test whether a column-generation pricing objective is submodular; if so, use linear-time double greedy to generate columns and keep an exact DP only for proving LP optimality (pp. 8-10, 21-22).",
+   "Get a 2-approximation for a long time-ordered pricing problem by solving blocks exactly and keeping the better of odd and even blocks (pp. 15-16).",
+   "Prefer a set-covering master and argue explicitly why a covering solution repairs to a partition without loss (p. 5)."
+  ],
+  "coauthors": "Yijiang Li, John-Paul Clarke",
+  "quotes": [
+   {"text": "To the best of our knowledge, this is the first use of submodularity property to efficiently solve pricing problems and improve the performance of column generation algorithm.", "page": 1},
+   {"text": "Furthermore, in contrast to the worse case theoretical analysis, the dynamic programming algorithm performs well.", "page": 21}
+  ]
+ },
+ {
+  "id": "S060",
+  "year": "2021",
+  "title": "Finite element model updating of an 18-story structure using branch-and-bound algorithm with epsilon-constraint",
+  "read_level": "full",
+  "contribution": "Reformulates modal-property-difference FE model updating as an explicit bilinear program by relaxing the eigen-equation to an epsilon band, and validates spatial branch-and-bound (BARON) with a global-optimality tolerance on simulated and shaking-table data of an 18-story steel frame.",
+  "problem_entry": "Model updating is non-convex; randomized local and stochastic search give no global guarantee; SOS methods are restricted and small; B&B never validated experimentally for model updating (pp. 3-4).",
+  "key_idea": "Lift eigenvalues/eigenvectors to variables and relax [K(alpha) - lambda M] psi = 0 to |.| <= epsilon, giving a bilinear program solvable by McCormick-based B&B (pp. 7-11).",
+  "assumptions": "Accurate mass, stiffness-only updating, 18-DOF shear model, 6 measured DOFs, +-30% bounds, ad hoc eigenpair bounds, epsilon by trial-and-error (pp. 5-8, 13-14, 20-21).",
+  "proof_devices": [],
+  "experiments": "Simulation: BARON L1, eps = 1e-8 k_max, e_avg 0.004% in 0.30 s vs 1,000-start interior point (best 0.03%) and GA; experiment: BARON 600 s leaves gap 0.3825 but upper-bound solution beats interior-point L1 optimum in cross-validation (pp. 14-25).",
+  "positioning": "Against randomized interior-point and genetic algorithms and SOS global methods; B&B framed as standard global optimization from process systems (pp. 3-4).",
+  "writing": "Engineering-journal style with generic B&B tutorial figure and pseudocode (pp. 8-10); repeated emphasis on the 'tolerance certificate' (pp. 18, 25-26).",
+  "limits_future": "Large remaining gap and slow convergence on experimental data; binary expansion to MILP and new relaxations/branching proposed; probabilistic updating open (p. 27).",
+  "method_links": [
+   {"method": "Method 5", "relation": "evidence", "note": "Selling point is the global-optimality tolerance certificate missing from local/stochastic search", "pages": "pp. 18, 25-26"},
+   {"method": "Method 5", "relation": "variant", "note": "On real data the certified gap (0.3825 vs UB 0.4993) is large, not small", "pages": "pp. 21-23"},
+   {"method": "Method 3", "relation": "evidence", "note": "Off-the-shelf McCormick B&B leaves a large gap on this bilinear structure, the application SKILL.md names as origin of the substructure line", "pages": "pp. 21-23, 27"},
+   {"method": "Method 2", "relation": "evidence", "note": "Planted 'actual' stiffness gives ground truth in simulation before real data", "pages": "pp. 13-18"}
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Make an implicit-function objective explicit by lifting implicit quantities (eigenpairs) to variables and relaxing their defining equation by epsilon; sweep epsilon to find where accuracy saturates (pp. 7, 17).",
+   "Benchmark a global solver against the strongest local baseline (1,000 random starts, analytical Jacobians) and cross-evaluate all solutions under all formulations (pp. 15, 24)."
+  ],
+  "coauthors": "Yu Otsuki, Dan Li, Masahiro Kurata, Yang Wang",
+  "quotes": [
+   {"text": "However, the application of the B&B algorithm on FE model updating has been scarce.", "page": 4},
+   {"text": "Since such randomized local optimization algorithms may or may not yield a good solution even with thousands of searches, there is a need for algorithms such as the B&B algorithm that can guarantee the tolerance of a solution from the global minimum.", "page": 27}
+  ]
+ },
+ {
+  "id": "S135",
+  "year": "2021",
+  "title": "Lifting Convex Inequalities for Bipartite Bilinear Programs",
+  "read_level": "partial",
+  "contribution": "Read as the extended arXiv version: shows convex seed inequalities for one bipartite bilinear row with bounds can always be lifted affinely when variables are fixed at bounds, builds a subadditive sequence-independent lifting framework, introduces the SOC-representable bilinear cover inequality with a factor-4 hull approximation, and lifts it in closed form.",
+  "problem_entry": "Lifting yields many of MILP's best cuts but is almost unused for nonlinear sets; single-row (knapsack) relaxations were the key first step in MILP, so study one bipartite bilinear row with bounds (pp. 1-2).",
+  "key_idea": "Theorem 1 (affine liftability at bounds), Prop. 1 (subadditive bound on the lifting function gives sequence-independent lifting), Theorem 3 (bilinear cover inequality for minimal-cover coefficients), Theorems 5-6 (two-slope subadditive bound and closed-form lifted bilinear cover inequality) (pp. 4-8).",
+  "assumptions": "Variables in [0,1], fixing at bounds and affine lifting (counterexamples otherwise, Examples 2-3), separable bilinear rows for sequence independence (pp. 3-4).",
+  "proof_devices": [
+   "Reduction to three-variable case analysis via extreme points of bipartite bilinear sets (Theorem 1, p. 4)",
+   "Disjunctive extended formulation plus approximate Fourier-Motzkin projection (Theorem 3, p. 6)",
+   "Scaling sandwich (4R) cap box within conv(Q) within R cap box via ratios of nonnegative linear objectives (Theorem 4, p. 7)",
+   "Exact lifting function near the origin extended by a linear bound to a two-slope subadditive function (Theorem 5, p. 7)",
+   "Dichotomy: minimal-cover partition exists or conv(Q) is polyhedral (Theorem 2, p. 6)"
+  ],
+  "experiments": "none",
+  "positioning": "Imports MILP lifting theory (subadditive sequence-independent lifting of [55]) into QCQP; dominates Tawarmalani et al.'s inequality (Prop. 2); cites intersection-cut and one-row QCQP convexification work (pp. 1-2, 6).",
+  "writing": "Contributions as four bullets, the first posed as a question ('Can we always lift?') (pp. 2-3); each positive theorem flanked by a small counterexample (pp. 3-4); future-directions section built around a worked example (pp. 8-9).",
+  "limits_future": "Characterize liftability with non-affine lifting functions, non-separable sequence-independent lifting, separation complexity, computational evaluation (p. 9).",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "Explicit import of MILP lifting, cover inequalities and subadditive lifting into a single bilinear row", "pages": "pp. 1-2, 4-8"},
+   {"method": "Method 4", "relation": "evidence", "note": "Counterexamples for dropped hypotheses, factor-4 strength, dichotomy with polyhedral case", "pages": "pp. 3-4, 6-7"}
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Prove a new nonlinear cut is strong via a scaling sandwich (theta R) cap box within conv(Q) within R cap box, comparing optimal values of nonnegative linear objectives (p. 7).",
+   "When the exact lifting function is not subadditive, compute it exactly near the origin and extend its linear bound globally to get a subadditive over-approximation (p. 7).",
+   "Pair each positive lifting theorem with a two-variable counterexample showing which assumption is needed (pp. 3-4)."
+  ],
+  "coauthors": "Xiaoyi Gu, Jean-Philippe P. Richard",
+  "quotes": [
+   {"text": "Generating valid inequalities for single row relaxations (together with bounds and integrality restrictions), i.e., for knapsack constraints, was the first, and arguably the most important step in the development of computationally useful cutting-planes in MILP.", "page": 2},
+   {"text": "To the best of our knowledge, this is the first study that derives lifted valid inequalities for general non-convex quadratic constraints with arbitrary number of variables.", "page": 2}
+  ]
+ },
+ {
+  "id": "S055",
+  "year": "2022",
+  "title": "Hyperbolic Relaxation of k-Locally Positive Semidefinite Matrices",
+  "read_level": "partial",
+  "contribution": "Shows the eigenvalue vectors of k-locally PSD matrices lie in the hyperbolicity cone of the k-th elementary symmetric polynomial, uses this to give a tight minimum-eigenvalue bound and an improved distance-to-PSD bound, and characterizes when this relaxation is exact (k = 1, n-1, n) or strict via a structure theorem for locally singular matrices.",
+  "problem_entry": "Enforcing PSD only on principal submatrices works empirically (OPF, BoxQP); quantify how close k-locally PSD matrices are to PSD (pp. 1-2).",
+  "key_idea": "Sums of principal minors of order <= k are nonnegative, so eigenvalues lie in H(e_k^n), a convex hyperbolicity cone; optimize over it (pp. 2-3).",
+  "assumptions": "Normalization by unitarily invariant norms or trace; 2 <= k <= n (p. 4).",
+  "proof_devices": [
+   "Convex relaxation over H(e_k^n), symmetry collapse to two variables, optimum on the cone boundary (proof of Theorem 2.1, pp. 8-9)",
+   "Attaining matrix G(n,k) shows tightness (Theorem 2.1, p. 4)",
+   "Cauchy interlacing to bound the number of negative eigenvalues (Corollary 2 proof, p. 9)",
+   "Dimension-count heuristic before the structure theorem (p. 6)",
+   "Quantifier elimination over real closed fields for the (4,2) case (Lemma 1, p. 7)"
+  ],
+  "experiments": "none",
+  "positioning": "Improves the earlier bound of [3] with better constant and all regimes of k, n; relates to factor-width cones, Renegar derivatives and principal-minor relations (pp. 2-3, 5-6).",
+  "writing": "Main results gathered in §2 before proofs; conclusions and open questions placed as §3, before preliminaries (pp. 4-7).",
+  "limits_future": "Convexity of eigenvalue sets for other k < n-1 open; classify singular boundary matrices; relaxations for structured submatrix collections (p. 7).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "Explains an empirically successful practice (sparse PSD enforcement) through a proxy measure, distance from the PSD cone", "pages": "pp. 1-2"},
+   {"method": "Method 4", "relation": "evidence", "note": "Tight bound with attaining matrix; exactness vs strictness of the relaxation characterized in k", "pages": "pp. 4-6"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "computer-algebra certificate for a small case", "evidence": "Lemma 1 for (n,k) = (4,2) proved via quantifier elimination; authors know no other proof", "pages": "p. 7"}
+  ],
+  "transferable": [
+   "Bound an extremal spectral quantity over a matrix cone by mapping the cone to a convex set of eigenvalue vectors (characteristic-polynomial coefficients, hyperbolicity cones), solving the symmetric relaxation, and exhibiting an attaining matrix (pp. 2-5, 8-9).",
+   "Use a dimension count (number of equations vs dimension) to predict that a boundary class is rare before proving a structure theorem (p. 6)."
+  ],
+  "coauthors": "Grigoriy Blekherman, Kevin Shu, Shengding Sun",
+  "quotes": [
+   {"text": "It has been empirically observed that the resulting relaxation has an optimal objective function value close to the optimal objective function of the original problem.", "page": 2},
+   {"text": "We do not know of a proof of this result that does not rely on computational methods.", "page": 7}
+  ]
+ },
+ {
+  "id": "S058",
+  "year": "2022",
+  "title": "A scalable lower bound for the worst-case relay attack problem on the transmission grid",
+  "read_level": "partial",
+  "contribution": "Shows that the network-flow restriction of the bilevel worst-case relay attack problem has provably valid unit dual bounds, is exact in injection space for uncongested grids (tight up to a constant), and empirically gives the best known attack in 113 of 120 instances on grids up to 6,468 buses about 150 times faster than heuristic-big-M MILPs.",
+  "problem_entry": "Exact single-level reformulations need valid bounds on DCOPF duals; valid ones are large and heuristic ones yield only lower bounds; big-M verification in bilevel problems is as hard as solving them (pp. 1-4).",
+  "key_idea": "Drop Ohm's law in the follower: the inner LP is totally unimodular with unit costs, so duals are bounded by 1, giving an exact MILP for the restriction; re-evaluate the attack under DCOPF (pp. 8-10).",
+  "assumptions": "One relay per bus controlling bus, generators and adjacent lines (demonstration), zero minimum dispatch, no angle-difference bounds, one generator per bus (pp. 7, 10, 14).",
+  "proof_devices": [
+   "Total unimodularity plus unit objective gives dual bounds of 1 (Observation 1, p. 8; proof in App. B, not read)",
+   "Thermal-limit condition on non-cut arcs making flow-feasible injections DCOPF-feasible (Theorem 1, p. 11)",
+   "Triangle-gadget digraph family showing the condition is tight up to a constant (Prop. 1, p. 12)"
+  ],
+  "experiments": "16 networks (118-6,468 buses, some deliberately congested), 10 budgets, Pyomo + Gurobi 9.0.2, 4 h; NFLB best in 113/120, else 89-99.9% of best; ~150x faster than heuristic-M MILP; competitor M set from LP duals (pp. 13-24).",
+  "positioning": "Revisits the network-flow restriction of Sundar et al. 2018; contrasts with duality/KKT reformulations (Alvarez, Salmeron, Motto, Arroyo) and Benders methods, summarized in a scalability table (pp. 2-4).",
+  "writing": "Two explicit research questions (tractability, quality) structure the computational section (p. 13); honest caveat that the gap reported is not a valid upper bound (p. 17).",
+  "limits_future": "No non-trivial upper bound known; future: upper bounds, exact scalable methods, AC restoration models, reuse of network flow in other DCOPF problems (pp. 14, 24).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "Theorem explains why a cheap practice works: real grids are rarely congested", "pages": "pp. 4, 11, 17"},
+   {"method": "Method 4", "relation": "evidence", "note": "Sufficient condition with a construction showing tightness up to a constant", "pages": "pp. 11-12"},
+   {"method": "Method 5", "relation": "contradiction", "note": "Deliverable is a scalable primal bound; no dual certificate available", "pages": "p. 14"}
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "In a min-max interdiction model, seek a follower restriction whose LP is totally unimodular with unit objective, so dual bounds of 1 are valid and no big-M must be guessed (p. 8).",
+   "Without an upper bound, report quality as a percentage of the best known solution across all methods and list the exceptions (pp. 15-17).",
+   "Report instance congestion (share of tight limits at no attack) so readers see when the theory's hypothesis holds (p. 15)."
+  ],
+  "coauthors": "Emma S. Johnson",
+  "quotes": [
+   {"text": "Valid dual bounds tend to be large, resulting in weak linear programming relaxations and hence making the problem more difficult to solve at scale.", "page": 1},
+   {"text": "This is difficult to answer since we do not know of a non-trivial upper bound for the worst-case relay attack problem.", "page": 14}
+  ]
+ },
+ {
+  "id": "S062",
+  "year": "2022",
+  "title": "Node-based valid inequalities for the optimal transmission switching problem",
+  "read_level": "partial",
+  "contribution": "Polyhedral study of a single-bus substructure of DC optimal transmission switching: NP-hardness, a layered-network extended formulation of its integer hull that is compact when line limits are small integer multiples, an O(n^2) outer approximation exact for equal limits, an original-space hull description, and cuts that solve 5 more of 175 benchmark instances.",
+  "problem_entry": "DC-OTS MILPs have weak big-M relaxations and only one prior polyhedral substructure study [8]; take one bus with its generator and incident switchable lines (pp. 2, 4).",
+  "key_idea": "Extreme points of the substructure enumerated as source-to-sink paths in a layered network (TU) give conv(S); compact under bounded multiples of a base limit; outer approximation and original-space inequalities (6) in the equal-limit case (pp. 5-11).",
+  "assumptions": "Limits multiples of a base value with ratio <= kappa-bar (holds for ~93% / 86% of substructures in 118/300-bus data); equal limits and no generator for the exact description (pp. 5, 9-11).",
+  "proof_devices": [
+   "Reduction from Subset-Sum (Prop. 1, pp. 4-5)",
+   "Total unimodularity of a layered network matrix (Prop. 3, p. 8)",
+   "Perturbation of fractional extreme points to prove integrality (Lemma 1, p. 9)",
+   "Disjunctive union of integral polytopes (Prop. 6, pp. 9-10)"
+  ],
+  "experiments": "CPLEX 12.8, 175 instances from [8], 1 h; feasibility-oriented setting halves unsolved (24 to 12); both cut families solve 5 more, but root gap closed only 0.00-0.38%, attributed to dual degeneracy (pp. 19-22).",
+  "positioning": "Follows the cycle-based DC-OTS polyhedral study [8]; contrasts with many heuristics for OTS (p. 2).",
+  "writing": "Short conclusion restating results; candid note that gap-closed results are 'not very surprising' given degeneracy (p. 22).",
+  "limits_future": "Same substructure for AC-OPF and gas/water networks (p. 22); computational gain modest in root gap (pp. 21-22).",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "Recurring local substructure of an application MILP, integer-hull study as for knapsack/flow sets", "pages": "pp. 2, 4-11"},
+   {"method": "Method 4", "relation": "evidence", "note": "NP-hardness paired with polynomial and exact special cases", "pages": "pp. 4-10"},
+   {"method": "Method 3", "relation": "variant", "note": "Near-zero gap closed reported, yet cuts kept for solve-count gains rather than stopped", "pages": "pp. 21-22"}
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "After a theorem under a structural hypothesis, measure how often the hypothesis holds on benchmark substructures and report the percentage (p. 5).",
+   "Build an extended formulation of a mixed-binary set from its extreme points as source-to-sink paths in a layered network, inheriting total unimodularity (pp. 6-8).",
+   "When cuts improve solve counts but not root gap, check for and name dual degeneracy (p. 22)."
+  ],
+  "coauthors": "Burak Kocuk, Nicole Redder",
+  "quotes": [
+   {"text": "Therefore, the assumptions of Theorem 1 are satisfied for the majority of the substructures that appear in instances from the literature.", "page": 5},
+   {"text": "The OTS Problem is known to have dual degeneracy (the cuts separate the current fractional point but there exist other optimal solutions of the LP with the same objective function value) and these results are not very surprising in this respect.", "page": 22}
+  ]
+ },
+ {
+  "id": "S086",
+  "year": "2022",
+  "title": "Lower bound on size of branch-and-bound trees for solving lot-sizing problem",
+  "read_level": "full",
+  "contribution": "Exhibits uncapacitated lot-sizing instances, solvable in polynomial time by DP, on which every branch-and-bound tree, even with general split disjunctions, has at least 2^((n/2)-1) leaves.",
+  "problem_entry": "Tree size measures B&B efficiency; exponential lower bounds for general B&B existed for cross-polytope, packing, covering, TSP; ask the same for a 'simple' polynomially solvable class (pp. 1-3).",
+  "key_idea": "Instance f_j = 1, p_j = n - j + 1, d_j = 1 with OPT in closed form; an exponential set of binary points no two of which can share a leaf (Theorem 1, pp. 3-5).",
+  "assumptions": "Uncapacitated lot-sizing MILP (1), branching on arbitrary integer split disjunctions (pp. 1-4).",
+  "proof_devices": [
+   "Exchange argument fixing the optimum OPT = n(n+1)/2 + n (Claim 1, p. 3)",
+   "Midpoint of two points in a common node, completed with constructed x, is LP-feasible (convexity of branching constraints) and has value OPT - 0.5 N_0.5 < OPT, so each leaf holds at most one point (pp. 4-5)"
+  ],
+  "experiments": "none",
+  "positioning": "Adds lot-sizing to the general-B&B lower-bound literature (Dadush-Tiwari, Dey-Dubey-Molinaro, Basu et al.) and contrasts with upper bounds on random IPs (p. 2).",
+  "writing": "Four-page note: context, theorem, proof; scare quotes on 'simple' carry the message (p. 3).",
+  "limits_future": "None stated (pp. 1-5).",
+  "method_links": [
+   {"method": "Method 4", "relation": "evidence", "note": "Negative result marking where B&B fails even with general disjunctions on a polynomially solvable class", "pages": "p. 3"},
+   {"method": "Method 1", "relation": "evidence", "note": "Part of the B&B theory programme with tree size as well-defined proxy measure", "pages": "pp. 1-2"}
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Exponential B&B lower bound template: an exponential set of integer points whose pairwise midpoints (with a completion) are node-feasible and strictly better than OPT, so each leaf holds at most one (pp. 4-5).",
+   "Choose instance data so an exchange argument fixes the optimum in closed form, making the LP-vs-OPT comparison exact (p. 3)."
+  ],
+  "coauthors": "Prachi Shah",
+  "quotes": [
+   {"text": "In this paper, we show that even though lot-sizing is such a “simple” problem, that is there is a polynomial-time dynamic programming algorithm to solve it, general branch-and-bound tree in the worst case may take exponential-time to solve the problem.", "page": 3},
+   {"text": "Clearly general branch-and-bound tree are expected to be smaller than simple branch-and-bound tree.", "page": 1}
+  ]
+ }
+]

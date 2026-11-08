@@ -1,0 +1,130 @@
+[
+  {
+    "id": "S039",
+    "year": "2022",
+    "title": "SnAKe: Bayesian optimization with pathwise exploration",
+    "read_level": "full",
+    "contribution": "Introduces BO with input-change costs and asynchronous observations and the SnAKe algorithm (Thompson-sampled batch ordered by a TSP, with epsilon-Point Deletion and a parameter-free length-scale variant), reaching regret close to classical BO at much lower input cost.",
+    "problem_entry": "Droplet microfluidic reactors break two BO assumptions at once: large input changes are costly (loss of steady state) and observations arrive with delay; problem set as max f with delay t_delay, known move cost C and simple regret (pp. 1-3, 15).",
+    "key_idea": "Decouple query selection from sequencing: Thompson-sample a large batch, order it by TSP over move costs, re-plan on new data; fix the stuck-at-local-optimum failure of naive resampling with epsilon-Point Deletion; cost-scale invariant (pp. 3-7).",
+    "assumptions": "f continuously differentiable on compact X, Gaussian noise, known cost, GP prior (p. 3); escape analysis assumes noise-free data and worst-case TSP (pp. 4-5); GP hyperparameter bounds from a simulated educated guess (p. 19).",
+    "proof_devices": [
+      "Binomial non-escape model: full escape probability (1-p_t)^(T-t) (Remark 3.3, p. 5)",
+      "Budget-independence argument: larger budget only lengthens time stuck (Remark 3.4, p. 5)",
+      "Point deletion with eps >= 2 delta gives escape when N_t <= q_t, expected exploitation time pT (p. 6)",
+      "Empirical validation of p_t by 5000 Thompson samples and of predicted escape iteration pT (App. D, pp. 16-18)"
+    ],
+    "experiments": "Synthetic sequential (6 functions, T=15-250) and asynchronous (delay 10, 25) benchmarks, SnAr reactor in Summit with physics-based cost, Ypacarai Lake (single and three objectives); baselines EI, UCB, PI, EIpu (gamma=1), TrEI, TSP-ordered random, LP/TS async; eps in {0,0.1,1} plus l-SnAKe; Perm10D and low budgets reported as failures; run counts 25 stated vs 10 used in async/SnAr (pp. 8-10, 19-25).",
+    "positioning": "Differentiated from process-constrained batch BO (fixes inputs) and cost-aware BO (region costs): here cost depends on the move, so paths not sets; three explicit objections to gamma-EIpu; look-ahead BO and RL set aside (pp. 2-3).",
+    "writing": "Abstract ties robustness to the single hyperparameter plus a parameter-free fallback; naive failure shown before the fix on a 1D picture; non-rigour disclaimed in text and checklist; departmental colleagues credited for point deletion (pp. 1, 4, 10, 14).",
+    "limits_future": "Needs enough iterations to fill the space, poor on Perm10D, ordinary at low budget; heuristic TSP with two unswept grid parameters; future: parallel SnAKes, multi-objective (pp. 7-8, 10, 17-18).",
+    "method_links": [
+      {"method": "Method 2", "relation": "evidence", "note": "eps swept over {0,0.1,1}, robustness claimed for nonzero eps, parameter-free l-SnAKe offered; eps=0 endpoint costs regret", "pages": "pp. 1, 8, 19, 23"},
+      {"method": "Method 2", "relation": "variant", "note": "adaptive-grid parameters N_l, N_g introduced with an assertion but no sweep", "pages": "p. 7"},
+      {"method": "Method 5", "relation": "variant", "note": "fairness moves (shifted Ackley, common seeds, single fixed gamma) but run counts inconsistent (25 stated, 10 used) and competitors not tuned although said to need tuning", "pages": "pp. 8, 19, 21, 25"},
+      {"method": "Method 3", "relation": "evidence", "note": "setting comes from the BASF partner's reactor; surrogate itself is a generic GP (weak)", "pages": "pp. 1, 10"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "select-then-sequence", "evidence": "choose the query set statistically (Thompson batch), order it with a combinatorial solver (TSP); yields cost-scale invariance and free handling of delays", "pages": "pp. 3-4, 7"}
+    ],
+    "transferable": [
+      "Separate set selection (Thompson batch) from sequencing (TSP with cost-weighted edges); re-plan only on new observations (Algorithm 2, p. 7)",
+      "Delete, for each past query, its nearest new sample within eps to stop resampling-induced over-exploitation; set eps from the GP length scale to remove the parameter (Algorithm 1, p. 6; p. 19)",
+      "Model a heuristic's failure mode as a Binomial escape process and check the predicted escape time on a 1D toy (pp. 5, 17-18)",
+      "Model physical input-change cost as first-order response time capped by the slowest variable (Eqs. (3)-(4), p. 9)",
+      "Plot regret against cost spent as well as against iterations, and include an order-only, never-learn baseline (p. 8)"
+    ],
+    "coauthors": "Jose Pablo Folch, Shiqiang Zhang, Calvin Tsay, Mark van der Wilk (Imperial); Robert M. Lee, Behrang Shafei, David Walz (BASF SE)",
+    "quotes": [
+      {"text": "We show the method is robust to the choice of its single hyper-parameter and provide a parameter-free alternative.", "page": 1},
+      {"text": "While we include some mathematical analysis in Sections 3.6 and 3.7, it is not fully rigorous and it is only meant to illustrate the importance of the Point Deletion heuristic.", "page": 14}
+    ]
+  },
+  {
+    "id": "S047",
+    "year": "2022",
+    "title": "Tree ensemble kernels for Bayesian optimization with known constraints over mixed-feature spaces",
+    "read_level": "full",
+    "contribution": "Uses the tree-ensemble kernel as a GP prior and formulates the UCB acquisition as a mixed-integer second-order cone program, giving uncertainty-aware BO with tree models that is optimised globally and accepts known (nonlinear, mixed-variable, hierarchical) input constraints (LEAF-GP).",
+    "problem_entry": "Two standing obstacles to tree ensembles in BO named by Shahriari et al.: uncertainty quantification and optimising a piecewise-constant acquisition; existing tools use empirical variance and random/local search and support no input constraints (pp. 1-2).",
+    "key_idea": "Tree kernel = fraction of shared leaves; with Misic's tree MILP plus linking constraints, a precomputed data-leaf matrix makes K_{x,X} linear in leaf binaries and the variance a one-sided SOC constraint, so UCB is a MISOCP with known constraints added directly; query = midpoint of optimal leaf box projected onto constraints (pp. 3-6).",
+    "assumptions": "Tree ensemble (LightGBM) and kernel hyperparameters trained separately; non-stationary prior over piecewise-constant functions; constraints linear/quadratic/polynomial; kappa and boosting parameters fixed across benchmarks (pp. 3, 5-6, 16).",
+    "proof_devices": [
+      "No theorems (checklist N/A, p. 15)",
+      "Kernel vector linear in leaf binaries via constant incidence matrix A (Eq. (8b), pp. 5-6)",
+      "Only the <= direction of the variance equality kept, recognised as a second-order cone (p. 6)",
+      "Midpoint-of-leaf-box query plus projection onto known constraints (Eqs. (9)-(11), p. 6)",
+      "Indicator and symmetry-breaking constraints for inactive NAS layers (Eqs. (18)-(19), p. 19; Eqs. (27), p. 26)"
+    ],
+    "experiments": "20 seeds, median and quartiles, common initial points; uncertainty test by capping tree agreement R; LEAF-GP vs LEAF-GP-RND (random 2000-point acquisition search) ablation; unconstrained (Hartmann6, Rastrigin10, Schwefel10, Styblinski-Tang10), constrained (G1, G3, G4, G6, G7, G10, Alkylation, Pressure Vessel), CIFAR-NAS 29D, VAE-NAS 32D; baselines SMAC3, SKOPT-GBRT/RF, BoTorch UCB/EI Matern, pymoo GA, penalty weights best of {1,10,100}; losses to BoTorch on Hartmann6 and SMAC on CIFAR-NAS stated (pp. 7-10, 16-24).",
+    "positioning": "Builds on Misic (2020), Mistry et al., ENTMOOT and OMLT; restates SMAC, TPE, SKOPT, ReLU-MIP BO (Papalexopoulos) and BOCS-based approaches without attacking them; novelty = addressing uncertainty and constraints simultaneously (pp. 2-5, 10).",
+    "writing": "Contributions paragraph mapped to sections; claims graded by setting (as good as SOTA unconstrained, outperforms constrained mixed); Limitations paragraph in the method section; weak setting announced before results (pp. 1-2, 6-8, 10).",
+    "limits_future": "Poor prior for purely continuous spaces; NP-hard acquisition for large data/high dimension with Gurobi as heuristic fallback; midpoint query is heuristic; no future-work list (pp. 6-7, 10).",
+    "method_links": [
+      {"method": "Method 3", "relation": "evidence", "note": "tree ensemble written as MILP constraints with ENTMOOT/OMLT formulations and BO acquisition solved globally as a MISOCP (step 8); BASF co-authors", "pages": "pp. 1, 4-6, 10"},
+      {"method": "Method 1", "relation": "evidence", "note": "exploits that the tree kernel is an inner product of leaf indicators; NAS hierarchies and symmetries enter as indicator constraints", "pages": "pp. 6, 10, 19"},
+      {"method": "Method 4", "relation": "evidence", "note": "exact acquisition optimisation judged in full BO runs against a sampling variant of the same algorithm (LEAF-GP-RND)", "pages": "p. 8"},
+      {"method": "Method 5", "relation": "variant", "note": "competitors strengthened (best penalty weight, SMAC hierarchies) and losses stated, but BoTorch restarts cut to five on constrained problems; G4 dimension inconsistent between text and figure", "pages": "pp. 8-10, 17-18, 23"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "validate the surrogate's uncertainty signal by constraining it in the optimiser", "evidence": "cap the tree agreement ratio R in the acquisition problem and plot relative prediction error against R", "pages": "pp. 7-8, 21"}
+    ],
+    "transferable": [
+      "Encode a tree-kernel GP's mean and standard deviation as a MISOCP via a precomputed data-leaf matrix and a one-sided cone constraint (Eqs. (6)-(8), pp. 5-6)",
+      "Resolve flat optima of piecewise-constant acquisitions by the leaf-box midpoint projected onto known constraints (Eqs. (9)-(11), p. 6)",
+      "Test an uncertainty proxy by capping it with a constraint and plotting prediction error against the cap (pp. 7-8)",
+      "Isolate the value of exact acquisition optimisation by swapping only the optimiser for random sampling (p. 8)",
+      "Give penalty-based competitors their best penalty weight from a small grid and plot only that run (p. 8)",
+      "Fix inactive-layer hyperparameters to defaults by indicator constraints to break symmetry in NAS spaces (pp. 10, 19)"
+    ],
+    "coauthors": "Alexander Thebelt, Calvin Tsay (Imperial); Robert M. Lee, David Walz, Behrang Shafei (BASF SE); Nathan Sudermann-Merx (Cooperative State University Mannheim)",
+    "quotes": [
+      {"text": "The method suffers from standard BO challenges where the tree kernel may not be a good prior for the underlying black-box function, e.g., purely continuous feature spaces.", "page": 6},
+      {"text": "Although LEAF-GP is not specialized to this setting, observe that it performs roughly equivalently to the state of the art on these continuous, unconstrained optimization problems.", "page": 8}
+    ]
+  },
+  {
+    "id": "S055",
+    "year": "2022",
+    "title": "A robust approach to warped Gaussian process-constrained optimization",
+    "read_level": "full",
+    "contribution": "Reformulates chance constraints that aggregate one (warped) GP-modelled black box over several decision points into deterministic constraints: exactly for standard GPs and conservatively for warped GPs via decision-dependent confidence-ellipsoid uncertainty sets and Wolfe duality, with convexity conditions, a global inner B&B for nonconvex cases, an a posteriori set-sizing procedure, and production-planning and drill-scheduling case studies (read: arXiv v1 2020).",
+    "problem_entry": "BO handles black-box constraints probabilistically while global optimisation replaces them by surrogates but rarely considers their uncertainty; new class sum_i g(y_i) x_i <= b with probability 1-alpha, motivated by degradation, routing, scheduling and drilling (pp. 2-3).",
+    "key_idea": "Standard GP: exact deterministic equivalent (mean + quantile x std). Warped GP: robust constraint over the warped alpha-confidence ellipsoid, inner max dualised by Wolfe duality and rewritten without Sigma^-1; global box B&B when the set is nonconvex; bisection on alpha for less conservatism (pp. 5-12).",
+    "assumptions": "Warped GP models the data-generating distribution well; monotone tanh warping; exact reformulation needs convex warped set, guaranteed for concave (convex) warping with x >= 0 (<= 0); drilling: known rock parameters, few maintenance events, degradation GP on 10 points from a published curve (pp. 5-6, 9, 15-16).",
+    "proof_devices": [
+      "Wolfe duality on the inner maximisation plus KKT stationarity/complementary slackness to remove Sigma^-1 (pp. 7-8)",
+      "Theorem 1: unique KKT point via latent-space convexity and the inverse-function derivative lemma (pp. 9-10)",
+      "Boundary optimality by perturbation (Lemma 2/6, pp. 10, 35); ellipsoid bounding box by stationarity (Lemma 3/7, pp. 35-36)",
+      "Monotone h^-1 makes box corners give bounds (Lemma 4, Theorem 2, pp. 10-11), driving the box B&B (Algorithm 1, p. 11)",
+      "Exchange argument plus induction bounding optimal maintenance depths (Lemma 5, p. 17)",
+      "Finite ellipsoid problem conservatively approximates a robust problem over function sets (App. B, pp. 33-35)"
+    ],
+    "experiments": "Pyomo with a GPy-to-Pyomo module, Ipopt 30-start multistart; production planning T=1,2,3,6, 30 confidence levels, four noise levels, feasibility on 1 million true-distribution samples; a posteriori procedure; drill scheduling 2 and 6 segments, depths 2000-4500 m, enumeration vs boundary vs no-degradation heuristics with times; reformulation checked a posteriori by global inner solve; no competing chance-constraint method (pp. 18-26).",
+    "positioning": "Bridges BO with black-box constraints, surrogate-based global optimisation (including Boukouvala-Misener-Floudas and Mistry et al.) and robust/chance-constrained optimisation (Charnes-Cooper, Ben-Tal et al.); distinct from adversarial-input robust BO and from sample/safe chance-constraint approximations (pp. 2-3, 5-6).",
+    "writing": "Contributions paragraph separates the known standard-GP reformulation from the new warped-GP pieces; captions state the conclusion; one-paragraph conclusion without limits; arXiv v1 has broken figure references and a misprinted loop condition (pp. 3, 11, 13, 16, 21, 25-26).",
+    "limits_future": "Conservatism varies with number of periods; a posteriori sizing costs computation and can violate the bound under model mismatch; continuous-depth model cannot pick the number of maintenance events; boundary heuristic without guarantee; Theorem 1 does not cover the drilling warping; no future work stated (pp. 16, 18-19, 21, 23, 25).",
+    "method_links": [
+      {"method": "Method 3", "relation": "evidence", "note": "trained warped GP turned into deterministic Pyomo constraints via a reusable GPy-to-Pyomo module; partner's degradation curve is the learned model", "pages": "pp. 15, 18"},
+      {"method": "Method 1", "relation": "evidence", "note": "global inner strategy exploits monotone warping and ellipsoid geometry; Lemma 5 exploits the structure of the no-degradation solution", "pages": "pp. 10-11, 17"},
+      {"method": "Method 2", "relation": "variant", "note": "confidence 1-alpha interpolates nominal (about 50% feasible) and fully robust (zero profit) solutions and is exposed as the user's lever with a bisection procedure; a probabilistic knob, not a formulation family", "pages": "pp. 11-12, 21-22"},
+      {"method": "Method 5", "relation": "variant", "note": "strong independent verification (1e6 true-distribution samples, a posteriori global check, enumeration as ground truth) but no competing method and a local outer solver", "pages": "pp. 18-20, 24-26"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "a posteriori validity check when a theorem's conditions fail", "evidence": "solve the cheap reformulation, verify feasibility with the exact inner B&B, solve the bilevel problem only on failure; never needed on the instances", "pages": "p. 19"}
+    ],
+    "transferable": [
+      "Exact deterministic equivalent for a GP-modelled linear aggregation constraint: mean + quantile x sqrt(x' Sigma x) <= b (Eq. (4), p. 5)",
+      "Robust counterpart over a decision-dependent warped ellipsoid via Wolfe duality, rewritten to avoid Sigma^-1 (Eqs. (11)-(13), pp. 7-8)",
+      "Box branch and bound for a monotone objective over an ellipsoid, bounded by box corners and pruned by inside/outside tests (Algorithm 1, pp. 10-11)",
+      "Bisection on uncertainty-set size against sampled feasibility to hit a target probability (Algorithm 2, pp. 11-12)",
+      "Event-based continuous segments instead of fine discretisation, plus bounded enumeration and an anytime boundary heuristic for discrete events (pp. 15-18)",
+      "Plot achieved vs target confidence with the diagonal, measured on a large sample from the true distribution (pp. 20-23)"
+    ],
+    "coauthors": "Johannes Wiebe (Imperial); Ines Cecilio, Jonathan Dunlop (Schlumberger Cambridge Research)",
+    "quotes": [
+      {"text": "For the instances considered in this work, the obtained solution always turns out to be feasible.", "page": 19},
+      {"text": "The a posteriori approach is clearly less conservative than the a priori approach, however, this comes at the cost of additional computational expense and also potential bound violations when the warped GP does not model the underlying distribution perfectly.", "page": 23}
+    ]
+  }
+]

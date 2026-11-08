@@ -1,0 +1,93 @@
+[
+ {
+  "id": "S043",
+  "year": "2010",
+  "title": "Modeling without categorical variables: a mixed-integer nonlinear program for the optimization of thermal insulation systems",
+  "read_level": "full",
+  "contribution": "Re-models a mixed-variable (categorical) thermal-insulation design problem, previously solved by filter pattern search, as a ladder of three standard MINLPs (with a facet-defining strengthening) and solves them with MINLP-BB and FilMINT to obtain better designs than the earlier work (read from preprint ANL/MCS-P1434-0607, 2007).",
+  "problem_entry": "Received MVP formulation from the pattern-search community; four listed obstacles (no relaxations of categorical variables, Simpson-rule integrals, bilevel stress constraint, discontinuous objective coefficient) plus a small integer example where MVP pattern search fails (pp. 3-4, 8-9).",
+  "key_idea": "Replace each categorical/nonsmooth element by integer and nonlinear modelling: ordered existence binaries with facet x-sum bounds, material selection binaries, grid enforcement of the min-constraint, trapezoidal integrals on refined data, binaries for the piecewise-constant coefficient, SOS-1 temperature discretization; three models (P-0, P-1, P-2) of graded smoothness (pp. 10-23).",
+  "assumptions": "Spline data replaced by finer piecewise-linear data; stress bound enforced only at grid or intercept temperatures; epsilon for strict inequalities; discretized temperatures justified by the belief that MINLP solutions are more sensitive to integer variables, followed by an NLP polish; nonconvex models solved heuristically (pp. 14-16, 18, 20, 24, 28).",
+  "proof_devices": [
+   "Theorem 3.1 facet proof by the scalar-multiple argument on explicit points of the face (Nemhauser-Wolsey Thm I.4.3.5), pp. 10-12",
+   "big-M implications for a piecewise-constant coefficient, pp. 18-19",
+   "partial-sum indicator p_is for 'grid point inside [t_{i-1}, t_i]' and implication cuts with B = 2N, p. 22"
+  ],
+  "experiments": "MINLP-BB with a per-node multistart switch and branching priorities on P-0/P-1; FilMINT basic LP/NLP with global vs local cuts on a reduced P-2; no time limits on a 120-node cluster; objective 1.0623 (Abramson) -> 1.039 (N=10), 0.988 (N=20), 0.983 (P-1, n=21); P-2 1.21-1.28, NLP polish 1.097; QPs-per-NLP table; no global bounds, no time comparison with pattern search (pp. 23-31).",
+  "positioning": "Alternative to the mixed-variable pattern-search line (Audet-Dennis, Kokkolaras et al., Abramson); specific criticism with a counterexample and a declined modelling argument; claims a blueprint for other categorical design problems (pp. 3-4, 8-9, 14, 31).",
+  "writing": "Challenge list, then one section per remedy, a tabulated model ladder, colourful phrases ('death-blow', 'smooth as a whistle'), hedges where approximations enter, and a message to simulation developers (pp. 4, 9, 15, 20, 23).",
+  "limits_future": "No global certificate for the nonconvex models; smooth P-2 too large for MINLP-BB and worse designs with FilMINT even after domain restriction ('only a little worse' is softer than the tables); stress constraint approximated on a grid; very long runs; no future-work list beyond the blueprint claim (pp. 24-31).",
+  "method_links": [
+   {"method": "Method 6", "relation": "evidence", "note": "Whole paper fixes the formulation before the method; divisions multiplied out for evaluability; negative objective in relaxations traced to fractional binaries and repaired; QPs per NLP used to judge formulations.", "pages": "pp. 8-9, 17, 19-20, 28"},
+   {"method": "Method 2", "relation": "evidence", "note": "Own MINLP toolkit (MINLP-BB, FilMINT/filterSQP) carried into a problem owned by the derivative-free mixed-variable community.", "pages": "pp. 24, 28"},
+   {"method": "Method 3", "relation": "evidence", "note": "Two-variable rotated-quadratic integer example where many points are pattern-optimal but only one is the minimum.", "pages": "p. 9"},
+   {"method": "Method 4", "relation": "variant", "note": "Three formulations kept side by side and data tables released, but models only available on request, not in a public library.", "pages": "pp. 6, 23"},
+   {"method": "Method 1", "relation": "evidence", "note": "Solver-level adaptations for nonconvexity: per-node multistart switch in MINLP-BB, local instead of global linearization cuts in FilMINT.", "pages": "pp. 24, 29"},
+   {"method": "Method 5", "relation": "variant", "note": "Baseline is a published objective value only; no fairness rule or time comparison; 'only a little worse' is softer than Tables 6 and 9.", "pages": "pp. 24-30"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "Discrete structure, then NLP polish", "evidence": "Discretize temperatures with SOS-1 binaries, solve the smooth MINLP for n and materials, then re-solve an NLP over the continuous variables.", "pages": "pp. 20, 29-31"},
+   {"pattern": "Coarse-model solutions restrict the fine model", "evidence": "Temperature windows and materials for the large P-2 taken from the P-0/P-1 solutions.", "pages": "p. 29"}
+  ],
+  "transferable": [
+   "Categorical choice -> ordered existence binaries y_i plus selection binaries z_ij with sum_j z_ij = y_i; properties as sum_j z_ij * data_j (pp. 10-13).",
+   "Aggregate variable upper bounds (tail sum <= L*y_i) and prove them facet-defining with the scalar-multiple argument (pp. 10-12).",
+   "Replace a min-over-interval constraint by grid enforcement on a refined piecewise-linear interpolant, at both interval ends where data are non-monotone (pp. 14-15).",
+   "Piecewise-constant coefficient -> one binary per piece and big-M inequalities; add a physical bound that fractional relaxations violate (pp. 18-20).",
+   "Per-node multistart flag inherited by children and switched off once restarts agree (p. 24).",
+   "Report QPs per NLP across a model ladder as a formulation-quality metric (p. 28)."
+  ],
+  "coauthors": "Kumar Abhishek, Jeffrey T. Linderoth",
+  "quotes": [
+   {"text": "Each of these points is a potential death-blow for standard optimization techniques.", "page": 9},
+   {"text": "In our view it is important to include optimization considerations in simulation tools from the start.", "page": 4}
+  ]
+ },
+ {
+  "id": "S040",
+  "year": "2012",
+  "title": "A nonmonotone filter method for nonlinear optimization",
+  "read_level": "full",
+  "contribution": "A trust-region filter SQP method with a standard g-filter and a nonmonotone l-filter, switching on interior trust-region steps and backtracking to the last g-acceptable point, proved globally convergent under MFCQ and q-superlinearly convergent without second-order corrections, with a preliminary prototype FASTr compared with filterSQP (read from preprint ANL/MCS-P1679-0909, 2009).",
+  "problem_entry": "Known Maratos-effect weakness of the home filter SQP method; each existing fix carries a cost (Ulbrich: Lagrangian in the filter, saddle risk; Wachter-Biegler: SOC steps; Gould-Toint: no fast-local proof) (p. 4).",
+  "key_idea": "Two filters: a g-filter for global convergence and an l-filter accepting points dominated by at most M entries, with a stricter switching condition (h~ <= zeta*||d||^tau, tau in (2,3]) and a weaker nonmonotone sufficient reduction; switch on ||d||_inf < rho, flush and backtrack to x_g with rho_g/2 on rejection; objective kept in both filters (pp. 4, 6-10).",
+  "assumptions": "A1-A4 (compactness, C2, bounded B_k, MFCQ at feasible limits) plus global QP solves (flagged as undesirable, removal sketched via the normal-tangential decomposition); restoration unspecified; local A5: Lipschitz Hessians, LICQ, strict complementarity, SOSC, exact Lagrangian Hessian (pp. 8, 10, 13, 15-16).",
+  "proof_devices": [
+   "Lemma 3.1 h -> 0 for nonmonotone filter entries: window-max geometric decrease vs neighbourhood-radius contradiction, pp. 10-12",
+   "Corollary 3.1 g-filter as the M = 0 case, p. 12",
+   "Lemmas 3.2-3.4 imported from Fletcher et al. 2002b with slight modifications, pp. 12-13",
+   "trust-region interval wider than a factor of two so halving lands in it, pp. 13, 15",
+   "Lemma 4.1 no strictly feasible descent direction, bounded and normalized cases, pp. 16-17",
+   "exact penalty Phi_psi = f + psi*h as a proof-only ruler with the Chamberlain et al. quadratic-growth bound, Lemma 4.5, pp. 19-20",
+   "Lemma 4.7 geometric acceptability via penalty lines (Figure 2), pp. 20-21",
+   "Lemma 4.8 induction that full steps are l-filter acceptable, p. 22"
+  ],
+  "experiments": "411 CUTEr problems (<100 variables or constraints, Vanderbei AMPL set); FASTr (M=2, no SOC) vs his own filterSQP, both with BQPD, measured by number of QPs; one performance profile; 'outperforms' claim with a believed explanation; no failure counts, M study or other solvers (p. 23).",
+  "positioning": "Continues Fletcher-Leyffer 2002 and Fletcher et al. 2002a,b, with definitions from Chin-Fletcher 2003; improves over Ulbrich, Wachter-Biegler and Gould-Toint, each criticised on one specific point (pp. 3-5, 24).",
+  "writing": "Contribution sentence early in the introduction, 'Unlike X ... unlike Y' contrast, a motivation paragraph per condition, imported lemmas cited not reproved, candid remarks on the global-QP assumption and on the penalty device, hedged numerics (pp. 4, 7-8, 12-15, 19, 23).",
+  "limits_future": "Global QP solves assumed (removal sketched); restoration unspecified; preliminary numerics against one solver with detailed tests left for later; local theory needs LICQ, SCC, SOSC; M = 2 not justified by reported data (pp. 8, 15-16, 23).",
+  "method_links": [
+   {"method": "Method 2", "relation": "evidence", "note": "Home filter base rebuilt from inside (two filters, new acceptance) rather than replaced; an early instance of Method 2 step 6.", "pages": "pp. 4, 9"},
+   {"method": "Method 3", "relation": "variant", "note": "Redesign answers a known failure mode (Maratos effect), but the paper does not build or run the breaking example itself.", "pages": "p. 4"},
+   {"method": "Method 1", "relation": "evidence", "note": "New solver built on his own BQPD; restoration folded into the main loop to make the code shorter and easier to maintain.", "pages": "p. 23"},
+   {"method": "Method 5", "relation": "variant", "note": "Same QP solver and a stated cost unit against a self-built baseline, but no failures, no version/date stamp and an unqualified 'outperforms' on one profile.", "pages": "p. 23"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "Two-regime acceptance with backtrack to last safe point", "evidence": "Strict global acceptance plus permissive local acceptance switched on an interior trust-region step; on rejection, flush the local memory and return to the last globally accepted iterate with a halved radius.", "pages": "pp. 7, 9-10"},
+   {"pattern": "Merit function as proof-only ruler", "evidence": "Exact penalty function used only in the analysis to show that a penalty-free filter method accepts Newton steps.", "pages": "pp. 19-21"}
+  ],
+  "transferable": [
+   "Generalize an acceptance rule by one parameter (dominated by at most M entries) so the old rule is the M = 0 case and the old lemma becomes a corollary (pp. 7, 12).",
+   "Trade a stricter switching condition (tau > 2) for a weaker sufficient-reduction test so Newton steps pass near a solution (pp. 7-8, 20).",
+   "Prove acceptance of Newton steps for a merit-free method with an exact penalty function as an auxiliary ruler plus a geometric acceptability lemma (pp. 19-21).",
+   "Show the good-step trust-region interval spans more than a factor of two so radius halving cannot skip it (pp. 13, 15).",
+   "Compare a new prototype with your established code on the same inner QP solver using an inner-solve count (p. 23).",
+   "State a proof-convenience assumption in the theorem and name the device and inequality that would remove it (p. 15)."
+  ],
+  "coauthors": "Roger Fletcher, Chungen Shen",
+  "quotes": [
+   {"text": "We emphasize that we use the penalty function only as a proof technique.", "page": 19},
+   {"text": "We are aware that requiring global solutions of the QP subproblems in our global convergence analysis is undesirable.", "page": 15}
+  ]
+ }
+]

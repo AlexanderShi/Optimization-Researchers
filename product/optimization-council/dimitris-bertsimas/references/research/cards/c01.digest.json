@@ -1,0 +1,221 @@
+[
+  {
+    "id": "S038",
+    "year": "1990",
+    "title": "A priori optimization",
+    "read_level": "full",
+    "contribution": "Defines a priori optimization (PTSP, PMST, PVRP, PTSFLP): one solution plus a trivial update rule, asymptotically as good as reoptimization on random Euclidean instances, NP-complete, with heuristics.",
+    "problem_entry": "SD+IO: re-solving a combinatorial problem for every random instance is costly; the stated motives are realistic randomness and the robustness of optimal deterministic solutions when instances change (p. 1); minimize the expected cost of an a priori solution under a simple update rule (eq. (1), p. 2).",
+    "key_idea": "Solve once and update by skipping absent nodes, with asymptotically no loss against reoptimization (Theorems 2-3, pp. 7-8); order-preserving heuristics such as the spacefilling curve inherit a guarantee on every instance (pp. 9-10).",
+    "assumptions": "Complete graph with node presence probabilities (p. 1); triangle inequality for the approximation results (p. 9); i.i.d. uniform points in the unit square with one coverage probability p for the asymptotics (pp. 6-7); proofs only sketched (p. 4); random 100-node instances, no real data (pp. 11-12).",
+    "proof_devices": [
+      "Binomial concentration (Chernoff bound) plus Steele's limit theorems for the reoptimization asymptotics (Theorem 2, p. 7; Appendix A, pp. 12-13)",
+      "Subadditive Euclidean functional: per-subsquare PTSP tours glued by a TSP tour through always-present representative points (Theorem 3, pp. 7-8; Appendix B, pp. 13-14)",
+      "Closed-form expected length from the probability that each link is used, giving NP membership; PMST hardness by reduction from EXACT COVER BY 3-SETS (Theorem 4, p. 8)",
+      "Guarantees of deterministic heuristics carried over, weakening as p -> 0, with an example where the deterministic optimum is arbitrarily bad (Theorems 5-6, p. 9)",
+      "Sorting along a spacefilling curve preserves order, giving O(log n) on every instance whatever the probabilities (Theorem 7, pp. 9-10); tightness via Bertsimas-Grigni refutes the constant-guarantee conjecture (p. 10)",
+      "Incremental O(n) update of h(i+1, T_SF) from h(i, T_SF) in the location heuristic (Theorem 8, p. 10)"
+    ],
+    "experiments": "Euclidean PTSP only: 10 random uniform 100-node instances averaged, E[L]/sqrt(np) read against beta_TSP ~ 0.765; spacefilling curve, 2-p-opt, 1-shift, TSP 2-opt and 3-opt (Figure 4, pp. 11-12). Limits reported: time and memory excessive beyond a few hundred nodes, small p below the asymptote, uncertain 3-opt threshold (pp. 11-12). No timings or real data.",
+    "positioning": "Joins Euclidean probabilistic analysis (Beardwood-Halton-Hammersley, Karp, Steele) and random-length analysis to the sparse PCOP literature; stochastic-programming VRPs set aside as differently defined, not attacked; credits Jaillet (PTSP) and Odoni (formulation prompted by mail delivery) (pp. 4-5).",
+    "writing": "General framework first, then two natural questions; the conjecture placed beside the theorem; emphasis on concepts and results rather than derivations, with proofs sketched (pp. 2, 4, 8); empirical claims hedged (p. 11).",
+    "limits_future": "Limits: node count and memory, small p, and a bound that says nothing as p -> 0 (pp. 9, 11-12). Future: general random demands and dynamic arrivals with queueing, the latter begun with van Ryzin (p. 12).",
+    "method_links": [
+      {"method": "Method 1", "relation": "variant", "note": "Formulation first: re-solving every instance is recast as one a priori problem with an expected-cost objective, and the boundary is printed (NP-completeness; a few hundred nodes). But no LP/MIO class is preserved; the analysis is probabilistic and heuristic.", "pages": "pp. 1-2, 8, 11-12"},
+      {"method": "Method 3", "relation": "variant", "note": "Prices one stable, easily updated solution against the reoptimization ideal: no loss asymptotically, and a worst case that grows as p -> 0. There is no knob or curve, only a comparison of asymptotic constants.", "pages": "pp. 8-9"},
+      {"method": "Method 4", "relation": "variant", "note": "The spacefilling-curve tour warm-starts local search, and an asymptotic constant is the benchmark. Optimality is inferred from reaching the same tour from every start, hedged as 'usually', with no certificate.", "pages": "pp. 10-12"},
+      {"method": "Method 6", "relation": "evidence", "note": "Lineage step only: the closing agenda (general random demands; dynamic arrivals) became S017, and S016/S032 with his student van Ryzin.", "pages": "p. 12"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "a priori solution with a cheap update rule, priced against re-solving", "evidence": "One a priori tour, tree or route, updated by skipping absent nodes, is compared with reoptimization asymptotically and in the worst case. In 1990 this answers the premise of SKILL Heuristic 5 (one optimization solved repeatedly) with an a priori policy instead of learning.", "pages": "pp. 1-2, 8-9"},
+      {"pattern": "asymptotic constant as the yardstick for heuristics", "evidence": "Heuristic tour lengths are scaled by sqrt(np) and read against beta_TSP; runs with small p are flagged as below the asymptote.", "pages": "pp. 10-12"},
+      {"pattern": "asymptotic regimes for sharp constants", "evidence": "The random Euclidean model yields sqrt(n) laws for both a priori and reoptimization strategies, so the two can be compared by their constants.", "pages": "pp. 6-8"},
+      {"pattern": "carry deterministic devices into the stochastic version and measure what survives", "evidence": "The paper's first natural question is how heuristics for the deterministic problem perform on the probabilistic one: their guarantees weaken with p, but the spacefilling curve keeps one on every instance.", "pages": "pp. 9-10"}
+    ],
+    "transferable": [
+      "When one problem is re-solved for many perturbed instances, define a solve-once problem with a trivial update rule, and judge it by expected cost against the re-solve ideal, in the worst case and asymptotically (pp. 1-2, 8-9).",
+      "Evaluate an expected cost over 2^n instances edge by edge, weighting each link by its probability of being used (p. 8).",
+      "Prove a sqrt(n) law for a stochastic Euclidean functional through Steele's conditions; for subadditivity, glue the subsquare solutions with a tour through always-present representatives (pp. 13-14).",
+      "Prefer heuristics whose output is unchanged by deleting points, such as sorting along a spacefilling curve: they inherit a guarantee on every instance and need no probabilities (pp. 9-10).",
+      "Benchmark heuristics on random instances against the asymptotic constant, and flag instances too small to reach it (pp. 11-12)."
+    ],
+    "coauthors": "Patrick Jaillet, Amedeo R. Odoni",
+    "quotes": [
+      {"text": "The second motivation is an interest in investigating the robustness, with respect to optimality, of optimal solutions to deterministic problems, when the instances for which these problems have been solved are modified.", "page": 1},
+      {"text": "Yet, a priori strategies behave asymptotically equally well on average with reoptimization strategies on Euclidean problems.", "page": 8}
+    ]
+  },
+  {
+    "id": "S016",
+    "year": "1991",
+    "title": "A stochastic and dynamic vehicle routing problem in the Euclidean plane",
+    "read_level": "full",
+    "contribution": "Introduces the dynamic traveling repairman problem and brackets its optimal policy: lower bounds over all policies, an optimal light-traffic policy, constant-factor heavy-traffic policies, and simulated constants.",
+    "problem_entry": "SD: the TSP is a deterministic, static approximation of problems that are stochastic, dynamic and judged by waiting, with applications in repair, inventory, emergency service and taxis (pp. 1-2); minimize the average system time under Poisson arrivals at uniform locations (p. 4).",
+    "key_idea": "Bound all policies first, then analyse simple policies against the bounds (p. 3); batching demands into TSP tours turns the sets into a GI/G/1 queue (p. 10); a policy stable for every rho < 1 must shrink travel per service as rho -> 1 (p. 8).",
+    "assumptions": "Convex bounded region, often a square for simplicity (p. 4); one uncapacitated unit-speed vehicle; Poisson arrivals, i.i.d. uniform locations, i.i.d. on-site service with positive mean; steady-state limits assumed (p. 4); no real data, with a numerical example at A = 1 and mean service 0.1 (pp. 12-13).",
+    "proof_devices": [
+      "Light-traffic lower bound: system time split into components, the server at the median as its best a priori location, and Little's law (Theorem 1, p. 5)",
+      "Heavy-traffic lower bound with gamma = 2/(3 sqrt(2 pi)) ~ 0.266, from a tagged demand, Wald's equation with a stopping time, and the Haimovich-Magnanti extremal result for the k-median with stochastic ordering (Theorem 2 and Lemma 1, pp. 5-6)",
+      "FCFS as M/G/1 via Pollaczek-Khinchin; SQM asymptotically optimal as lambda -> 0 against the bound over all policies (Theorem 3, pp. 7-8)",
+      "Partitioning policy whose projection rule makes start points uniform and independent, analysed as a symmetric cyclic queue; a stable policy exists for all rho < 1, whatever the geometry (Theorem 4, pp. 8-9)",
+      "TSP policy as a GI/G/1 queue of sets with Erlang interarrivals, analysed with Kingman's bound and the BHH asymptotics; the set size minimizes a convex upper bound after a change of variable (pp. 10-11)",
+      "SFC policy bounded by a quadratic inequality from Jensen's inequality and the 2 sqrt(NA) path bound (p. 11)"
+    ],
+    "experiments": "Simulation only for SFC and NN: batch means sized at 200 times the Theorem 2 minimum number in system, a t-test, and a stop once the 99% CI is narrower than 10% of the estimate; gamma_SFC ~ 0.66 and gamma_NN ~ 0.64 for rho 0.5-0.8 (p. 12). Policy comparison at A = 1, mean service 0.1, zero service variance, with PART and TSP tuned per rho: FCFS and SQM unstable above rho = 0.2, NN best (p. 13).",
+    "positioning": "Presents itself as a departure from static deterministic VRPs (pp. 1, 13). Proves Psaraftis's 1-median conjecture and claims a stronger result because the bound covers all policies, not only FCFS (pp. 2, 8). Places a priori optimization among the static approaches (p. 2).",
+    "writing": "Results stated in words in the abstract (p. 1); a toolkit section first (pp. 3-4); each bound followed by comments on its physical meaning (pp. 6-7). Candid about loose constants: gamma not tight, the PART factor about 15, the SFC constant probably too large, the NN assumption unproved (pp. 7, 9, 11-12).",
+    "limits_future": "Limits: no guarantee for NN, loose constants, a single uncapacitated vehicle (pp. 7, 9, 14). Future: multiple vehicles and capacity, under which stability depends on region size (p. 14).",
+    "method_links": [
+      {"method": "Method 1", "relation": "variant", "note": "Formulation first: the TSP's static approximation is replaced by a queueing-routing model whose objective is waiting. What is preserved is an analysable queue reached by policy design, not LP/MIO. Practice evidence for SD.", "pages": "pp. 1-2, 7-11"},
+      {"method": "Method 4", "relation": "variant", "note": "An honest certificate in analytic form: a lower bound over all policies is the certificate and the policy ratios are the gap. The looseness is printed, and the empirically best policy (NN) is never called guaranteed. No warm start or MIO.", "pages": "pp. 7, 9, 12, 14"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "lower bound over all policies, then constant-factor policies", "evidence": "Light- and heavy-traffic bounds hold for every policy; the FCFS, SQM, PART, TSP and SFC policies are then compared to them by ratio.", "pages": "pp. 3, 5-11"},
+      {"pattern": "asymptotic regimes for sharp constants", "evidence": "Light traffic (lambda -> 0) and heavy traffic (rho -> 1) give constants that rank the policies.", "pages": "pp. 5-14"},
+      {"pattern": "simulate only where proofs fail, with a stated statistical stopping rule", "evidence": "The SFC and NN constants are estimated by batch means with a stopping rule on the CI width; regenerative methods are rejected with a stated reason.", "pages": "p. 12"},
+      {"pattern": "print the looseness of your own constants and the conjecture that would close it", "evidence": "gamma is likely not tight and conjectured to be 1/2; the PART factor is about 15, or 4.2 under the conjecture; a simpler proof with a weaker constant was left out.", "pages": "pp. 7, 9"},
+      {"pattern": "carry deterministic devices into the stochastic version and measure what survives", "evidence": "Optimal TSP tours and the spacefilling curve from static routing become dynamic policies, measured against the bound over all policies.", "pages": "pp. 10-12"}
+    ],
+    "transferable": [
+      "Lower-bound every policy by giving the server its best a priori position (the median), and by a nearest-neighbour argument on a tagged customer with Wald's equation (pp. 5-6).",
+      "Make a dynamic policy analysable by batching demands into sets that form a GI/G/1 or cyclic queue, then apply Kingman's bound with the asymptotics of Euclidean TSP tours (pp. 9-11).",
+      "Add details that ease the analysis of a policy (a projection rule that makes start points uniform and independent), and say that in practice a smarter rule would be used (p. 8).",
+      "Set a policy's parameter by minimizing its upper bound, after rewriting the parameter as a ratio to the critical value allowed by stability (pp. 10-11).",
+      "Estimate unknown constants by simulation with batch means sized from the theoretical bound and a stopping rule on CI width; plot against the predicted scaling variable to check the slope (p. 12)."
+    ],
+    "coauthors": "Garrett van Ryzin",
+    "quotes": [
+      {"text": "Yet, in many practical applications, the TSP is a deterministic, static approximation to a problem which is, in reality, both probabilistic and time varying (dynamic).", "page": 1},
+      {"text": "First, we establish some lower bounds on the average system time for all policies.", "page": 3}
+    ]
+  },
+  {
+    "id": "S017",
+    "year": "1992",
+    "title": "A Vehicle Routing Problem with Stochastic Demand",
+    "read_level": "full",
+    "contribution": "Gives polynomial closed forms for the expected length of an a priori VRP sequence under stochastic demand, bounds and constant-factor heuristics, and asymptotic equivalence with reoptimization in two capacity regimes.",
+    "problem_entry": "SD+IO: one capacitated vehicle whose customers' demands are known only in distribution; the operator may lack the resources to re-solve daily and may value regularity and personalization of service (p. 1); find an a priori sequence of minimum expected length under Strategy a or b (pp. 1-2).",
+    "key_idea": "Track the probability that capacity is reached or exceeded at each node by a recursion on cumulative demand, so the expected cost over (K+1)^n instances takes polynomial time (pp. 4-6); bracket the a priori and reoptimization strategies with radial lower bounds and cyclic-heuristic upper bounds (pp. 7-9).",
+    "assumptions": "Symmetric distances with the triangle inequality (p. 3); independent discrete demands with known distributions and K <= Q (pp. 3, 6); identical demand distributions for the sharper bounds (pp. 8-9); i.i.d. uniform points in the unit square for the asymptotics (p. 10); no data.",
+    "proof_devices": [
+      "Closed forms with the detour s(i,j) = d(i,0) + d(0,j) - d(i,j) and capacity-hit probabilities from a recursion on cumulative demand (Theorems 1-2, pp. 4-6)",
+      "Ordering E[R_VRP] <= E[L^b] <= E[L^a] from the triangle inequality and optimality (Proposition 1, p. 7)",
+      "Radial lower bound: each subtour costs at least twice any customer's depot distance, weighted by demand over capacity (Proposition 2, p. 7)",
+      "Cyclic heuristic over all rotations of a TSP tour, with the number of breakpoints bounded through E[ceil(W/Q)] (Proposition 3, p. 8); nonidentical demands handled via min{E[D_i], 1} (Proposition 4, pp. 8-9); the Altinkemer-Gavish bound on reoptimization (Proposition 5, p. 9)",
+      "A factor-two guarantee for large n, and 2 + O(1/n) against reoptimization when every customer has positive demand (Theorem 3, p. 9); a ratio of at most Q + 1 for nonidentical demands (Theorem 4, p. 10)",
+      "Asymptotic regimes by capacity growth (Q constant; Q_n/sqrt(n) -> 0; Q_n/sqrt(n) -> infinity), radial against local terms, with Theta(sqrt(n)) left open (Theorem 5, pp. 10-11)"
+    ],
+    "experiments": "none: 'preliminary computational experience' is mentioned without numbers (p. 10), and a computational comparison with reoptimization is listed as future research (p. 12).",
+    "positioning": "Sets apart, without criticism, stochastic-programming VRPs that solve small problems optimally (p. 3); credits Jaillet's 1985 thesis with the a priori idea and his own 1988 thesis with its generalization (p. 3); builds on Haimovitch-Rinnooy Kan and Altinkemer-Gavish (pp. 7-10). As a sole-author SD paper that states and judges its approach (pp. 3, 12), it qualifies SKILL.md's view that SD rests only on co-authored papers with no stated methodology.",
+    "writing": "The operator's rationale first, then a worked figure, the applications and an outline that promises limitations (pp. 1-3); claims graded as analytical evidence and a fair conclusion (pp. 11-12); weak bounds and conjectures named as such (pp. 10-11).",
+    "limits_future": "Limits: loose bounds for nonidentical demand (an open problem), the Theta(sqrt(n)) regime uncovered, K <= Q assumed, no computational comparison (pp. 6, 10-12). Future: tighter bounds and a computational comparison with reoptimization (p. 12).",
+    "method_links": [
+      {"method": "Method 1", "relation": "variant", "note": "Class preservation in a 1992 sense: the device keeps the stochastic objective polynomially evaluable over (K+1)^n instances. The optimization stays NP-hard and is handled by heuristics with guarantees, not LP/MIO; the boundary is printed.", "pages": "pp. 4-6, 10-12"},
+      {"method": "Method 3", "relation": "variant", "note": "Prices the regularity and personalization the operator wants against reoptimization: a factor of two in the worst case, nothing asymptotically when Q is constant or o(sqrt(n)). There is no knob or curve; the capacity regime plays that role.", "pages": "pp. 1, 9-11"},
+      {"method": "Method 5", "relation": "variant", "note": "The operator's constraints shape the formulation, but the comparator is the full-information ideal of reoptimization, not the operator's current rule. No data or field test.", "pages": "pp. 1-4, 12"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "a priori solution with a cheap update rule, priced against re-solving", "evidence": "The a priori sequence under Strategies a and b is compared with reoptimization by worst-case ratio and asymptotically, and judged a serious and practical alternative.", "pages": "pp. 1-3, 9-12"},
+      {"pattern": "lower bound over all policies, then constant-factor policies", "evidence": "A radial lower bound holds for both the a priori and the reoptimization strategies; the cyclic heuristic's guarantees are measured against it.", "pages": "pp. 7-10"},
+      {"pattern": "asymptotic regimes for sharp constants", "evidence": "Three regimes of capacity growth relative to sqrt(n) decide which cost term dominates; the boundary regime is named as open.", "pages": "pp. 10-11"},
+      {"pattern": "carry deterministic devices into the stochastic version and measure what survives", "evidence": "The cyclic heuristic of the deterministic VRP, seeded with TSP, PTSP or Christofides tours, is analysed under stochastic demand.", "pages": "pp. 7-9"}
+    ],
+    "transferable": [
+      "For a recourse cost triggered by capacity, compute the probability that capacity is hit at each node by a recursion on cumulative demand, so a fixed sequence's expected cost takes polynomial time (pp. 4-6).",
+      "Radial lower bound: each subtour costs at least twice the depot distance of any customer on it; weight by demand and divide by capacity (p. 7).",
+      "Cyclic heuristic: evaluate every rotation of a good deterministic tour under the stochastic objective, keep the best, and bound it by the average over rotations (p. 8).",
+      "Split an asymptotic analysis by how fast a structural parameter grows (capacity against sqrt(n)); name the dominant term in each regime and the regime left open (pp. 10-11).",
+      "List the operator's reasons not to re-solve (resources, effort, regularity, when information arrives) before introducing an a priori model (p. 1)."
+    ],
+    "coauthors": "none (sole author)",
+    "quotes": [
+      {"text": "Even more importantly, the operator may have other priorities, such as regularity and personalization of service, by having the same vehicle and driver visit a particular customer every day.", "page": 1},
+      {"text": "It is a fair conclusion to say that a priori and re-optimization strategies perform comparably, on average.", "page": 12}
+    ]
+  },
+  {
+    "id": "S005",
+    "year": "1993",
+    "title": "Simulated annealing",
+    "read_level": "full",
+    "contribution": "A six-page review with Tsitsiklis: simulated annealing's convergence is characterized, but its rates are irrelevant, complexity results scarce and practical performance mixed, so rigorous justification is lacking.",
+    "problem_entry": "HS: simulated annealing is widely used but little justified; the review poses two questions: does it converge to the optimal set, and how fast (pp. 1-2).",
+    "key_idea": "Move the yardstick from convergence to complexity: the hitting time of the optimal or a near-optimal set as a function of instance size, over families of instances (p. 3), plus comparisons with the best specialized heuristics at equal time (p. 4).",
+    "assumptions": "Finite state space, symmetric neighbourhoods, nonincreasing cooling schedule (p. 1); irreducible aperiodic chains and d* > 0 (p. 2); q_ij = q_ji for reversibility, a condition that can be relaxed (p. 1); no data of their own.",
+    "proof_devices": [
+      "Surveyed: Hajek's necessary and sufficient condition sum exp(-d*/T(t)) = infinity, so T(t) = d/log t with d >= d*, explained by escape attempts and the Borel-Cantelli lemma (p. 2)",
+      "Surveyed: relaxation time of about exp(kd*) from the second-largest eigenvalue under a piecewise-constant schedule (pp. 2-3)",
+      "Surveyed: singularly perturbed Markov chains with large-deviation bounds (Tsitsiklis 1988, 1989) (p. 3)",
+      "Baseline check: the probability of never visiting the optimal set is A/(t*)^a for annealing against B exp(-b t*) for a random walk at fixed temperature, and there is no proof that annealing beats exhaustive search (p. 3)",
+      "Surveyed complexity results: polynomial matching on bounded-degree graphs, and impossibility without the bound (Sasaki-Hajek); Hajek's separable example, polynomial against 3^N (p. 3)"
+    ],
+    "experiments": "Surveyed only (Johnson et al.): graph partitioning at best about 5% better than Kernighan-Lin at equal time; colouring competitive but slower; on the TSP a consistent loser to Lin-Kernighan (p. 4); cooling schedules change quality by up to 10% (p. 5). No experiments of their own.",
+    "positioning": "A neutral survey that gives credit freely (Hajek, Geman and Geman, Tsitsiklis, Sasaki-Hajek, Johnson et al.); the comparators are exhaustive search, a random walk, multistart local search and problem-specific heuristics (pp. 2-5).",
+    "writing": "Two guiding questions, with an intuitive reading after each theorem (p. 2); plain verdicts such as 'largely irrelevant' and 'definite lack of rigorous results' (pp. 3-4); a balanced close that credits general applicability (p. 5).",
+    "limits_future": "Finite sets only (p. 1). Calls for complexity results, rapid mixing at low temperature, a theory of cooling schedules and more experiments (pp. 3-5).",
+    "method_links": [
+      {"method": "Method 4", "relation": "evidence", "note": "Judges a heuristic by guarantees and by duels with the best specialized heuristic at equal computation time. The equal-budget protocol, which SKILL.md labels critic-informed and not his practice, is the review's own criterion here (in reporting Johnson et al.). The closing rationale foreshadows annealing as a component, which softens Tension T2.", "pages": "pp. 3-5"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "judge an algorithm by complexity over a family of instances, not by single-instance time asymptotics", "evidence": "Time-asymptotic guarantees carry constants larger than the state space and are called largely irrelevant; the proposed yardstick is hitting time as a function of instance size. This adds a 1993 point to the drift from complexity to solve time noted in Method 1's limitations.", "pages": "p. 3"}
+    ],
+    "transferable": [
+      "Explain a convergence condition by its mechanism: an attempt to escape a local minimum of depth d* succeeds with probability about exp(-d*/T), and the Borel-Cantelli lemma does the rest (p. 2).",
+      "Before trusting a guarantee for a stochastic search, test it against two trivial baselines: exhaustive search, and a random walk at fixed temperature (p. 3).",
+      "Compare a general metaheuristic with the best problem-specific heuristic at equal computation time, and report by class of instance where each wins (p. 4).",
+      "State an algorithm's quality as the hitting time of the optimal or a near-optimal set, as a function of instance size (p. 3)."
+    ],
+    "coauthors": "John Tsitsiklis",
+    "quotes": [
+      {"text": "One can trace the inadequacy of the analytical methods mentioned so far to the fact that they deal with one instance at a time.", "page": 3},
+      {"text": "As far as theory is concerned, there is at present a definite lack of rigorous results justifying the use of SA.", "page": 4}
+    ]
+  },
+  {
+    "id": "S032",
+    "year": "1993",
+    "title": "Stochastic and dynamic vehicle routing in the Euclidean plane with multiple capacitated vehicles",
+    "read_level": "full",
+    "contribution": "Extends the dynamic traveling repairman analysis to m vehicles and capacity q: lower bounds, optimal light-traffic and constant-factor heavy-traffic policies, geometry-dependent stability, and a median depot result.",
+    "problem_entry": "SD: classical VRPs are static, deterministic and not always appropriate (pp. 1-2), and the authors' own model of one uncapacitated vehicle is somewhat unrealistic (p. 3); minimize expected system time for m vehicles that each serve at most q customers per tour (p. 3).",
+    "key_idea": "Keep the bracket of bounds, then policies. Radial wedges feeding a superposition queue remove the dependence on m and halve the best single-server time (pp. 8-9); capacity adds a radial collection term, so stability depends on geometry (p. 3); static tour partitioning moves into the dynamic model (pp. 13-15).",
+    "assumptions": "Bounded region, Poisson arrivals at uniform locations, general on-site service, velocity v (p. 2); each tour visits exactly q demands, for tractability, and q > 1 (p. 10); steady-state limits exist (p. 4); identical Voronoi cells for the multidepot results (p. 15); no data.",
+    "proof_devices": [
+      "A light-traffic bound through the m-median, and mSQM optimal via Voronoi cells, extended to capacity because the bound is a relaxation (Theorem 1, Proposition 1, pp. 4, 6, 12)",
+      "Heavy-traffic bound via a tagged demand, Wald's equation, and a union-of-discs area bound P{Z* <= z} <= n pi z^2/A that replaces the earlier k-median argument (Theorem 2, Lemmas 1-2, pp. 4-5)",
+      "G/G/m TSP policy via Kingman's heavy-traffic limit; modified G/G/m with k radial wedges via the Iglehart-Whitt superposition queue, with its constant tending to beta/sqrt(2) (pp. 7-9)",
+      "Capacitated lower bound from two random points of a tour, two radial legs and the nearest-neighbour hops between them; Lemma 3 on the mean index gap; the 1/3 factor flagged as an artefact of the proof (Theorem 4, pp. 10-11)",
+      "The median as optimal depot in heavy traffic, by contradiction: any other site makes the lower bound blow up while the qRP upper bound stays finite (Theorem 5, p. 13)",
+      "Tour partitioning (Haimovich-Rinnooy Kan) adapted to the dynamic setting with radial wedges (Propositions 8-9, pp. 13-15)"
+    ],
+    "experiments": "No simulation. One numerical illustration of the trade-off between travel and waiting: y* = 0.906 gives T = 578, and 10% less travel per demand (y = 0.81) raises T by 21% to 702 (Figure 2, p. 16). All other comparisons are analytical.",
+    "positioning": "Argues against classical VRPs and against rolling-horizon practice, judged inherently ad hoc for strategic planning (p. 2); claims the 1991 paper gave the first comprehensive results (p. 2); improves its own earlier constants and proof (pp. 3, 5, 9).",
+    "writing": "The 1991 results restated as the base, with one paragraph per extension giving intuitive insights and physical readings (pp. 2-3); candid self-judgements ('undesirable', 'somewhat unsatisfactory', 'somewhat troubling') and explicit admissions of what is not proved (pp. 7-8, 11, 16); an inconsistent claim about the earlier gamma value (p. 3, against S016 p. 5).",
+    "limits_future": "Open: Conjecture 1 on optimal partitioning; closing the gap at beta/sqrt(2), not proved; asymmetric multidepot cases; networks instead of the Euclidean metric (pp. 10, 15-16).",
+    "method_links": [
+      {"method": "Method 3", "relation": "evidence", "note": "Early form: one interpretable knob y indexes the trade-off between travel and system time. The curve and a worked price (10% less travel costs 21% more system time) go to a decision-maker, who sets y with a cost function; radial costs are flagged as not tradeable. It lacks a bound independent of the solution and any question of class.", "pages": "pp. 15-16"},
+      {"method": "Method 4", "relation": "variant", "note": "Certificates are analytic lower bounds and guarantees constant factors; open gaps are printed as conjectures, not as results.", "pages": "pp. 10-11, 16"},
+      {"method": "Method 1", "relation": "variant", "note": "A model instead of ad hoc rolling-horizon procedures, with the boundary printed (asymmetric depots, networks). What is preserved is an analysable queue, not LP/MIO.", "pages": "pp. 2, 15-16"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "lower bound over all policies, then constant-factor policies", "evidence": "Light-traffic, heavy-traffic and capacitated bounds hold for all policies; the RA, G/G/m, modified G/G/m, partitioning, qRP and qTP policies then get constant factors.", "pages": "pp. 3-15"},
+      {"pattern": "asymptotic regimes for sharp constants", "evidence": "The light-traffic and heavy-traffic limits give the optimal policy and the policy constants.", "pages": "pp. 4-16"},
+      {"pattern": "print the looseness of your own constants and the conjecture that would close it", "evidence": "RA is undesirable, G/G/m unsatisfactory and the 1/3 factor troubling; the conjecture gamma = beta/sqrt(2) is stated as not proved.", "pages": "pp. 7-8, 11, 16"},
+      {"pattern": "carry deterministic devices into the stochastic version and measure what survives", "evidence": "Static tour partitioning and the radial collection cost are carried into the dynamic capacitated model, with constant-factor guarantees.", "pages": "pp. 3, 13-15"}
+    ],
+    "transferable": [
+      "Bound the distance to the nearest of n points by the area of n discs: P{Z* <= z} <= n pi z^2/A (p. 5).",
+      "Prove that a design choice is optimal (a depot at the median) by contradiction: any other choice makes the lower bound blow up while the upper bound of a constructed policy stays finite (p. 13).",
+      "Remove a fleet-size factor from a guarantee by splitting the region into k wedges whose superposed renewal streams feed a SigmaGI/G/m queue, then let k grow (pp. 8-9).",
+      "Rewrite a policy's design variable as a ratio to its critical value and plot the objective against it, to give the decision-maker a trade-off curve (pp. 15-16).",
+      "When a bound behaves oddly in a limit, say which parameter is independent in the intended use, and trace the slack to the proof device (p. 11)."
+    ],
+    "coauthors": "Garrett van Ryzin",
+    "quotes": [
+      {"text": "Though useful for data-intensive tactical problems, they are inherently ad hoc and hence do not give the insight necessary for strategic planning.", "page": 2},
+      {"text": "If we decide to reduce the average travel cost per demand 10% to y = 0.81, the system time increases by 21% to 702.", "page": 16}
+    ]
+  }
+]

@@ -1,0 +1,502 @@
+[
+ {
+  "id": "S152",
+  "year": "2019",
+  "title": "Prescriptive analytics for human resource planning in the professional services industry",
+  "read_level": "full",
+  "contribution": "A two-stage affinely adaptive robust LP for consulting-firm hiring and staffing under uncertain deal forecasts (hires now; contractors, transfers and fulfilment adapt), compared on one quarter of Sapient data, through 500 simulated realizations, with a deterministic LP equivalent to a practice-like greedy rule and with a static robust LP.",
+  "problem_entry": "{RO AP} Hiring must precede contract closure by about a quarter on uncertain forecasts; prediction-only and point-estimate staffing work exists; stochastic programming is judged impractical (curse of dimensionality, distributions hard to estimate); no affinely adaptive RO model had been applied to HR planning (pp. 1-3).",
+  "key_idea": "A deterministic LP over requests x channels is shown equivalent to a greedy rule that the authors expect mimics ad hoc practice (pp. 2-3); a robust version uses an l1-norm set around the forecasts (p. 3); a two-stage version makes contractors y(u), transfers z(u) and fulfilment w(u) affine in realized requests, with the static robust model as a special case (pp. 3-4).",
+  "assumptions": "Continuous staffing (part-time allowed); contractors dearer than new hires; bench cost zero (pp. 2-3); a one-standard-deviation l1 set, two standard deviations judged over-conservative (p. 4); one quarter of Sapient financial-services data, travel-plus-training transfer costs, three business units solved separately (p. 4).",
+  "proof_devices": [
+   "feasible-direction argument that the greedy Algorithm 1 is optimal for the deterministic LP (p. 3)",
+   "affine decision rules as the tractable restriction of fully adaptive policies (p. 3)",
+   "robust counterpart delegated to JuMPeR; the class of the counterpart is not stated (p. 4)"
+  ],
+  "experiments": "500 simulations per method with normal noise sigma = 0.5d and the second stage re-solved; Julia/JuMP/JuMPeR on a laptop (p. 4); adaptive run times 1,327.1-1,832.6 s against <= 3.4 s for the others (Table 2, p. 5); the adaptive plan dominates in North America (mean $14.05M vs $12.66M deterministic and $12.76M robust), while the deterministic plan keeps the highest mean in Europe and India and the adaptive plan raises min and CVaR and lowers sd (Table 3, p. 5); India's small gains are explained by low labor and transfer costs (pp. 5-6).",
+  "positioning": "Set against stochastic programming and prediction-only sales analytics; extends affinely adaptive RO (Ben-Tal et al. 2004; Bertsimas-Goyal; Bertsimas-Iancu-Parrilo) to HR planning, where it is claimed not to have been applied (p. 2).",
+  "writing": "Two-item contribution list (p. 2); an informal greedy reading of the LP as a stand-in for practice (p. 3); results narrated per business unit with a structural explanation of the null case (pp. 5-6); the conclusion credits the adaptive plan with good expected performance and generality beyond what Table 3 shows (pp. 5-6).",
+  "limits_future": "Simplified two-stage timeline; multi-period and hiring-calendar extensions described, not built (p. 4); realizations simulated from the model's own noise family (p. 4); the adaptive mean beats the deterministic mean only in North America (Table 3, p. 5); no deployment reported.",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Partner data, a partner committee and a decision metric (profit distribution, CVaR) are present, but the baseline is a deterministic plan the authors expect mimics practice, not an observed current rule; no field test.",
+    "pages": "pp. 3-6"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "The set width (in standard deviations) is chosen against over-conservatism, and the bad case is printed: the robust plan loses mean and median profit in Europe and India; the India null result is explained (Heuristic 4).",
+    "pages": "pp. 4-6"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Show that the nominal LP is solved by a simple greedy rule that mirrors practice, and use that rule as the interpretable baseline the robust and adaptive plans must beat (p. 3).",
+   "Score a here-and-now plan by re-solving the recourse on many realizations; report min, CVaR at 0.1, median, mean and sd per segment next to run times (pp. 4-5).",
+   "When a segment shows no gain, explain it by the cost structure that makes recourse cheap there (pp. 5-6)."
+  ],
+  "coauthors": "Lauren Berk, Alexander M. Weinstein, Julia Yan",
+  "quotes": [
+   {
+    "text": "This conservatism is well-suited to robust optimization, which considers worst-case cost rather than expected cost.",
+    "page": 2
+   },
+   {
+    "text": "However, the robust method could be seen as over-conservative: although the median and mean robust profits are slightly better than the deterministic profits in North America, these metrics are significantly worse in Europe and India.",
+    "page": 5
+   }
+  ]
+ },
+ {
+  "id": "S184",
+  "year": "2019",
+  "title": "Certifiably optimal sparse principal component analysis",
+  "read_level": "full",
+  "contribution": "Optimal-SPCA, a custom branch-and-bound over support indicators with linear-algebra bounds (masked eigenvalue, truncated trace, Gershgorin sums) and a Yuan-Zhang primal heuristic, certifies l0-constrained sparse PCA optima where a general MINLP solver fails, finds the optimum as fast as heuristics, and proves optimality for most k = 5 problems up to 10,000 dimensions.",
+  "problem_entry": "{ML IO} Dense PCA loadings hurt interpretability and variable selection; relaxations, first-order methods and earlier exact attempts give no certificate or are too slow; the why-now is the MIO speed-up (solvers about 1,250,000 times faster, 2 trillion with hardware, 1990-2016); the l0-constrained form is chosen over penalized and l1 forms (pp. 2-7).",
+  "key_idea": "Branch on the support indicators of SPCA-MIO with nodes (l, u); bound nodes by lambda_max of the masked matrix, the truncated trace and Gershgorin sums (upper) and by eigenvector truncation and an adapted Yuan-Zhang truncated power iteration (lower); stop at epsilon-optimality (pp. 8-17).",
+  "assumptions": "Any PSD covariance of centered data, correlation versions too (p. 26); data Pitprops, Wine, MiniBooNE, Communities, breast-cancer gene expression (random subsets up to 10,000 variables) and Micromass (pp. 25-26, 33); parameters tuned on 500 draws of 80 of Communities' 101 variables (p. 18).",
+  "proof_devices": [
+   "correctness and finite termination of the branch-and-bound: nodes in {0,1}^{2n}, only dominated or partitioned nodes removed (Theorem 1, p. 12)",
+   "upper bounds from support relaxation (masked matrix), the trace inequality and the Gershgorin theorem, maximized over feasible supports through a truncation routine (pp. 13-16)",
+   "non-redundancy of two bounds shown by two 3x3 matrices (p. 18)",
+   "deflation for later components, without joint optimality (p. 12)"
+  ],
+  "experiments": "Certified optimum on every data set at k = 5 and 10 while every competitor misses at least one (Tables 6-7, pp. 26-28); proofs up to 167 s at Communities k = 10 (Table 10, p. 32); Couenne 0.5 on the same formulation often runs over an hour with huge gaps, against at most 339 s (Table 11, p. 34); k = 5 scaling to 10,000 dimensions with 91-100% proved within 1 h (Table 12, p. 34); early termination ties Yuan-Zhang in 94.5-99% of runs (Table 13, p. 36); Julia without a solver, run times confounded by language (pp. 25, 31); Table 6 lists a competitor above the asterisked optimum on Communities k = 5 without comment (p. 27).",
+  "positioning": "Joins the literature reconsidering statistics and ML problems through modern optimization (p. 3); reviews four SPCA formulations, first-order methods (fast, no certificate, good warm starts), preprocessing, parallelism and earlier exact attempts (Moghaddam et al. too slow; Carrizosa-Guerrero only local) (pp. 4-6).",
+  "writing": "Three numbered claims (p. 7) restated in the computational conclusions (p. 35); argues the l0-constrained form against l1 shrinkage (pp. 6-7); the abstract promises proofs in seconds for n in the hundreds and k in the tens, while the body reports minutes at k = 10 (pp. 1, 31-34).",
+  "limits_future": "Proof time grows with k (p. 31); no joint optimality over several components (pp. 12, 29); scaling tested only at k = 5 (p. 33); run-time comparisons confounded by language (p. 31); Communities used for both tuning and testing (pp. 18, 26); future: node bookkeeping, eigenvalue reuse as warm starts for lower nodes (p. 36), parallel branch-and-bound (p. 5).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "The fastest incumbent heuristic (Yuan-Zhang) is both the node lower-bound routine and the strongest opponent; certificates from Theorem 1; time-to-best reported apart from time-to-proof with the share proved in 1 h and 5 h; wins and ties stated; code released.",
+    "pages": "pp. 1, 12, 17, 25-36"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "The solver x hardware figure (1,250,000; 2 trillion, 1990-2016) is the why-now, but Optimal-SPCA uses no MIO solver and the general solver tested fails: the figure is borrowed, not measured on the tool used (Method 2 checkpoint).",
+    "pages": "pp. 5, 25, 33-34"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "The exact SPCA-MIO is nonconvex and leaves solver classes; a special-purpose exact algorithm built from linear-algebra bounds replaces a class-keeping device.",
+    "pages": "pp. 8-18"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "exact special-purpose algorithm when the formulation leaves solver classes",
+    "evidence": "Custom branch-and-bound with closed-form linear-algebra bounds after Couenne fails on SPCA-MIO; S303 does the same with closed-form worst cases and enumeration.",
+    "pages": "pp. 8, 13-18, 25, 33-34"
+   }
+  ],
+  "transferable": [
+   "For a cardinality-constrained eigenvalue problem, branch on support indicators and bound each node by cheap linear-algebra quantities (masked lambda_max, truncated trace, Gershgorin sums through one truncation routine), taking the minimum (pp. 13-18).",
+   "Show that two bounds are non-redundant with two tiny matrices, each dominated by the other bound (p. 18).",
+   "Run the fastest heuristic as the node lower-bound routine, so the exact method never does worse than the heuristic and adds a certificate (pp. 17, 25).",
+   "Report time-to-best and time-to-proof separately with the share of runs proved in 1 h and in 5 h, and run a general solver on the same formulation to justify a custom algorithm (Tables 11-12, p. 34)."
+  ],
+  "coauthors": "Lauren Berk",
+  "quotes": [
+   {
+    "text": "These speedups encourage us to rethink whether NP-hardness should in fact be synonymous with intractability.",
+    "page": 5
+   },
+   {
+    "text": "None of these methods provide a certificate of optimality, but are very useful as warm starts for exact methods.",
+    "page": 5
+   }
+  ]
+ },
+ {
+  "id": "S222",
+  "year": "2019",
+  "title": "Robust maximum likelihood estimation",
+  "read_level": "full",
+  "contribution": "Robust maximum likelihood estimators against adversarial (uncertainty-set) and distributional (bounded-support) data errors, computed by a Danskin-gradient robust local search with per-sample trust-region inner problems and by robust simulated annealing, which in simulation degrade less than nominal MLE inside an error-size window and on 491 radiation-therapy plans give more sample-stable estimates.",
+  "problem_entry": "{RO ML; HS as global search; AP} MLE assumes error-free data, and errors of several kinds can erase its advantages; the entry is to maximize the worst-case likelihood, unlike Huber's estimator-side robustness (pp. 2-3, Table 1).",
+  "key_idea": "The ARE maximizes over theta the minimum over per-sample l2-ball errors of the log-likelihood (p. 4); a Danskin gradient at the inner worst case drives the 2010 robust local search (p. 5); Gaussian data make the inner problem separate into trust-region problems (pp. 5-6); robust SA gives a global estimator (p. 6); the DRE reduces to an ARE with one shared error and is less conservative (pp. 6-7).",
+  "assumptions": "Errors much smaller than data, for identifiability; semiparametric (p. 4); simulated n = 400 samples in R^4 with 40 error matrices, normal then uniform-ball errors (pp. 7, 11); 491 delivered IMRT plans, 18 tumor sites, five DVH points, same protocol and software; normality justified by patient independence (pp. 12-13).",
+  "proof_devices": [
+   "descent-direction theorem for the worst-case cost restated from Bertsimas-Nohadani-Teo 2010 (Theorem 1, p. 5)",
+   "Danskin's theorem for the gradient of the inner minimum (eq. (10), p. 5)",
+   "per-sample separability into trust-region problems solved by Ye's O(log log(1/eps)) method (pp. 5-6)",
+   "projection of the descent direction to keep Sigma PSD (p. 6)",
+   "reduction of the distributionally robust problem with a common bounded support to an adversarial one with a shared error (eq. (16), p. 6)"
+  ],
+  "experiments": "Robust beats nominal log-likelihood by up to 10% (ARE) and 15% (DRE) for rho >= 1 (p. 8); an effectiveness window in a delta x rho grid (pp. 9-10); robust SA beats a 100-start local search for delta > 0.3 at about 215 s against 100 s (p. 10); uniform errors give similar trends (p. 11); factor analysis is better on covariances (p. 11); clinical subsampling (3,000 samples of 50 plans; an 80-sample check): robust means stable up to rho <= 2 Gy, Sigma_rob(D95, D2) narrower but worse for rho <= 0.8 (pp. 13-14).",
+  "positioning": "Contrasted with Huber's robust statistics in a table (p. 3); builds on El Ghaoui-Lebret and Calafiore-El Ghaoui (robust least squares and MLE in linear models) and on the authors' robust local search and robust SA (pp. 3, 5-6).",
+  "writing": "Broad application framing (finance, medical decisions, clinical trials) (p. 2); the negative factor-analysis result stated plainly in the summary (p. 12); the conclusion claims direct applicability to a wide variety of settings (p. 14).",
+  "limits_future": "Identifiability out of scope (p. 4); benefit only inside an error-size window (p. 12); worse than a correct parametric model (p. 12); other organs deferred to a dosimetric study (p. 12); savings in clinical-trial sample size (p. 14) and robustness to overfitting (p. 7) asserted, not tested; in simulation rho* is chosen against the true data (p. 10).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "One knob (Gamma, scanned as rho) with its effectiveness window printed at both failing ends and a clinical region where robust is worse; variant: in simulation the knob is set against the true data, not from data alone.",
+    "pages": "pp. 10, 12, 14"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "The robust MLE leaves convex classes; tractability comes from separable trust-region inner problems, first-order outer steps and SA, with no LP, conic or MIO counterpart.",
+    "pages": "pp. 5-6"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Delivered clinical plans with the institution's nominal estimators as baseline, but the score is estimator spread, not decisions or outcomes; clinical value is argued.",
+    "pages": "pp. 12-14"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Differentiate a max-min objective by Danskin's theorem, evaluating the gradient at the inner worst case only (eq. (10), p. 5).",
+   "Exploit separability over samples: with a Gaussian likelihood and l2-ball errors each sample's worst case is a trust-region problem (pp. 5-6).",
+   "Map a robust method's range of effectiveness on an error-size x set-size grid against ground truth, printing both the too-small and the too-large end (pp. 9-10, 12).",
+   "Pit the method against a correctly specified parametric competitor and print where the competitor wins (p. 11)."
+  ],
+  "coauthors": "Omid Nohadani",
+  "quotes": [
+   {
+    "text": "In data-driven applications, the analysis of the dip can be used reversely to motivate the appropriate size of the uncertainty set",
+    "page": 10
+   },
+   {
+    "text": "This demonstrates that although robust maximum likelihood estimation offers advantages to estimates of uncertain input data, it underperforms when the data-generating process is known and can be leveraged.",
+    "page": 12
+   }
+  ]
+ },
+ {
+  "id": "S224",
+  "year": "2019",
+  "title": "Robust and stochastic formulations for ambulance deployment and dispatch",
+  "read_level": "full",
+  "contribution": "Two-stage stochastic and robust ambulance deployment models with fully adaptive integer dispatch recourse and a hierarchical Poisson-quantile uncertainty set, solved exactly through recourse duality, binary expansion and column-and-constraint generation; on Washington DC data they cut shortfalls by about 22% at 50 ambulances against MEXCLP and MALP and match those models' 50-ambulance performance with 35.",
+  "problem_entry": "{RO IO AP} Covering models ignore busy ambulances or assume constant busy fractions; robust static models restrict dispatch and are conservative; fully adaptive models are intractable; C&CG and better EMS data reopen exact adaptive models without repositioning (pp. 1-2).",
+  "key_idea": "The recourse is the minimum shortfall under in-period optimal dispatch (p. 3); stochastic and robust first-stage models (pp. 3-4); D(alpha) bounds single-region, neighbourhood, catchment and city demand by Poisson quantiles (p. 4); recourse duality, binary expansion and big-M give an MILP oracle inside C&CG (pp. 4-5).",
+  "assumptions": "Integer deployment and dispatch; Poisson counts, called not fundamental; no probabilistic guarantee; alpha by cross-validation (pp. 4, 7); 179,160 DC EMS records, 3 months to build and 12 to test, weekdays, 217 regions, 10-minute OpenStreetMap drivetime (p. 6); closest available dispatch, no chute time, lognormal turnaround in three regimes (pp. 6-7).",
+  "proof_devices": [
+   "Proposition 1: any scenario lies in D(alpha) for alpha small enough (p. 4; proof p. 9)",
+   "Proposition 2: recourse duality turning the robust recourse into a bilinear maximization (p. 4; proof p. 9)",
+   "binary expansion of integer scenarios and big-M linearization into an MILP (p. 5)",
+   "finite convergence of C&CG via Zeng-Zhao (Propositions 3-4, pp. 6, 9)"
+  ],
+  "experiments": "Gurobi 6.0 and JuMP on a laptop; the stochastic deterministic equivalent with 500 scenarios takes about a minute; C&CG converges in fewer than 20 iterations and all robust runs finish within 10 minutes (p. 8); MEXCLP and MALP with q cross-validated to 0.654 (p. 8); fleets of 10-50, peak and off-peak, three turnaround regimes (pp. 6-7); at 50 ambulances shortfalls of 3.7 and 3.53 against 4.36 and 4.89 (about 22%), response times about 34.6% better at peak and 23% off-peak; gains only when the busy fraction is below 1; stochastic close to robust (p. 8); 35 ambulances match the probabilistic models' 50, about $7 million a year (pp. 8-9); per-fleet tables are images (pp. 11-14).",
+  "positioning": "Against the covering-model lineage (SCLP, MCLP, MEXCLP, MALP), chance-constrained or restricted-dispatch robust models and real-time redeployment work; credits Zeng-Zhao C&CG and Gabrel et al.'s linearization (pp. 1-2).",
+  "writing": "Four-item contribution list (p. 2); results translated into operational and money terms (pp. 8-9); the abstract leads with exact optimality within minutes and a 19 to 28% shortfall reduction (p. 1).",
+  "limits_future": "The best alpha is city-specific, so no general prescription (p. 7); saturation for alpha above 0.01 (p. 11); closest-idle dispatch assumed (pp. 2, 6); no field implementation, and the baselines are literature models rather than the agency's plan; future: real-time redeployment on top (p. 9).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "A two-stage robust problem with integer recourse is kept in MILP by duality, binary expansion and big-M and solved exactly by C&CG with measured times; the intermediate MIQP is called hard in general.",
+    "pages": "pp. 4-5, 8"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "One knob alpha scales all quantile bounds and is set by cross-validation on held-out data (the data-set knob of Method 3's correction); saturation is printed.",
+    "pages": "pp. 4, 7, 11"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Decisions are scored by simulated shortfall and response time on 12 held-out months and translated into money, but the baselines are tuned literature models, not the agency's deployment; no field test.",
+    "pages": "pp. 6-9"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "The why-now is an algorithmic advance (C&CG) plus better data, not a measured solver x hardware figure.",
+    "pages": "p. 2"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "resource saved at matched performance",
+    "evidence": "35 ambulances reach the probabilistic models' 50-ambulance performance, about $7 million a year; also S231 (children spared CT at an equal miss rate) and S303 (subjects needed for 80% power).",
+    "pages": "pp. 8-9"
+   }
+  ],
+  "transferable": [
+   "Build a data-driven polyhedral uncertainty set by bounding demand at several aggregation levels with Poisson quantiles and one alpha scaling all of them; bounds at a single level either concentrate adversarial demand or overstate the total (p. 4).",
+   "For integer recourse: dualize the recourse, write integer scenarios as sums of binary vectors, linearize the bilinear terms with big-M and run C&CG (pp. 4-5).",
+   "Tune the baseline fairly by cross-validating the competing models' parameter on the same data; train on the first months and test on the following year (pp. 6, 8).",
+   "Use a load statistic (here the busy fraction) to state when the method helps (p. 8)."
+  ],
+  "coauthors": "Yeesian Ng",
+  "quotes": [
+   {
+    "text": "The approach is data-driven, and does not rely on model-driven assumptions to provide any probabilistic guarantees on the resulting coverage provided by the model.",
+    "page": 4
+   },
+   {
+    "text": "This is expected as the stochastic and robust formulations consider the dispatch decisions, whereas the MEXCLP and MALP do not.",
+    "page": 8
+   }
+  ]
+ },
+ {
+  "id": "S231",
+  "year": "2019",
+  "title": "Comparison of machine learning optimal classification trees with the pediatric emergency care applied research network head trauma decision rules",
+  "read_level": "full",
+  "contribution": "OCT-based risk rules refit on PECARN's public head-trauma cohort and tuned to PECARN's miss rate raise validation specificity (69.3% vs 52.8% under 2 years; 65.6% vs 57.6% from 2 years) with no significant loss of sensitivity, so more children could be spared CT.",
+  "problem_entry": "{ML AP} CT is costly and irradiating; the PECARN rules are widely used and validated but simple; the entry is that simplicity may cost accuracy and that memorability is unnecessary where EHR decision support exists (pp. 1-2).",
+  "key_idea": "Refit with optimal classification trees on PECARN's data, weighting true positives 500 times false positives to match PECARN's miss rate, with PECARN-aligned risk cutoffs (1/1000, 3/100) and optimization-based imputation (p. 3).",
+  "assumptions": "42,412 children, 25 EDs, 2004-2006, GCS 14-15, two age strata; random development/validation split; 980 non-operational altered-mental-status labels treated as not altered; missing completely at random checked by logistic regressions (pp. 1-3).",
+  "proof_devices": [
+   "n/a: no formulation of its own; paired odds ratios and ratios of likelihood ratios with 95% CIs (p. 3)"
+  ],
+  "experiments": "Validation specificity 69.3% vs 52.8% and 65.6% vs 57.6%; sensitivity, NPV and LR- not significantly different (p. 1; Table 3, p. 6); misses 0 vs 1 and 10 vs 9 (pp. 1, 4); 32% fewer younger children in the CT group (p. 4); CART and complete-case analyses called congruent but not shown (p. 4); count labels swapped on p. 4, and the older-stratum gain given as 14% (p. 4) and 8% (p. 6).",
+  "positioning": "Secondary analysis of PECARN's data; presents OCT as an alternative to the CART-derived rules and leaves the choice to clinicians' preference for simple rules or personalized risks (pp. 2, 7-8).",
+  "writing": "JAMA structured abstract and Key Points (pp. 1-2); hedged clinical claims next to a methods claim that MIO fitting provably outperforms CART fitting (pp. 1, 3, 8); an explicit Limitations section (p. 8).",
+  "limits_future": "No external validation; internal validation no substitute; a prospective implementation is needed; the trees cannot be memorized and need the EHR; the effect on CT use is unknown since PECARN's own effect is unproven (p. 8); a web tool is provided (p. 8).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "The opponent is the field's deployed rule, met on its own development data at a matched miss rate; the paper states that accuracy is a surrogate and that external and prospective validation are needed.",
+    "pages": "pp. 2-4, 8"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "The CART duel exists only as an unreported sensitivity analysis; no solver, time limit or certificate status is given for the trees, while MIO fitting is said to provably outperform CART fitting.",
+    "pages": "pp. 3-4"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "The clinical result goes to a clinical journal with a web tool (Workflow E); Bertsimas obtained the funding and co-supervised.",
+    "pages": "p. 8"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "resource saved at matched performance",
+    "evidence": "More very-low-risk children identified (fewer CT scans) at the incumbent's miss rate; also S224 (ambulances) and S303 (trial subjects).",
+    "pages": "pp. 1, 3-4"
+   },
+   {
+    "pattern": "clinical pipeline: optimal imputation, OCT, public web tool",
+    "evidence": "Optimization-based imputation before OCT and a web tool to show use; S281 uses OptImpute, OptimalTrees and a webpage and app.",
+    "pages": "pp. 3, 8"
+   }
+  ],
+  "transferable": [
+   "Tune the new classifier to the incumbent's miss rate (here by weighting positives 500 times) and compete on the other error, with paired ratios and CIs (pp. 3, 6).",
+   "Use the incumbent's own public data and its own risk cutoffs so that only the model differs (pp. 2-3).",
+   "Say in the paper that predictive accuracy is a surrogate and list the studies still needed: external validation, prospective implementation, outcomes (pp. 4, 8)."
+  ],
+  "coauthors": "Jack Dunn, Dale W. Steele, Thomas A. Trikalinos, Yuchen Wang",
+  "quotes": [
+   {
+    "text": "improvements in predictive accuracy will not benefit patients unless the new tools are used in practice and lead to changes in diagnostic thinking and patient management",
+    "page": 4
+   },
+   {
+    "text": "For these reasons, it is debatable whether the PECARN rules’ apparent simplicity is always worth its price.",
+    "page": 8
+   }
+  ]
+ },
+ {
+  "id": "S281",
+  "year": "2019",
+  "title": "Targeted workup after initial febrile urinary tract infection: using a novel machine learning model to identify children most likely to benefit from voiding cystourethrogram",
+  "read_level": "full",
+  "contribution": "An optimal classification tree trained on the RIVUR placebo arm and CUTIE (500 children) after optimal tree imputation predicts recurrent febrile UTI with reflux from pre-VCUG data (test AUC 0.761) and is proposed to target VCUG after a first UTI.",
+  "problem_entry": "{ML AP} The AAP 2011 guideline defers VCUG until a second UTI unless ultrasound is abnormal, but ultrasound correlates poorly with reflux; the entry is to predict the joint outcome (recurrent febrile UTI and VUR) from data available before VCUG (pp. 2-4).",
+  "key_idea": "OptImpute, then OptimalTrees with oversampling and weighting; train/validation/test with 5-fold cross-validation; interactions made a priori; invasive (serum) variables dropped; fewer than 8 variables per patient (pp. 2, 4-7).",
+  "assumptions": "500 children (305 RIVUR placebo, 195 CUTIE), 90% female, 53 positives (10.6%); ages 2 months to 6 years; congenital anomalies excluded (pp. 2, 4-5, 7).",
+  "proof_devices": [
+   "n/a: no formulation of its own; OCT and OptImpute used by reference (p. 5)"
+  ],
+  "experiments": "Test AUC 0.761 (0.714-0.808) (pp. 2, 6); other learners only in an appendix not in the file (p. 6); no comparison with the AAP rule and no decision-level numbers; leaf probabilities of 76.4-100% (high-risk) and 0-23.3% (low-risk) against a 10.6% base rate and a 0.5 cutoff, with no statement on recalibration after oversampling (pp. 13, 17); Julia 0.6.0, Python 2.7.13, SAS 9.4 (p. 5).",
+  "positioning": "Framed against the controversial all-or-none AAP 2011 guideline (pp. 2-3); claims to be the first ML model predicting clinical outcomes in children with UTI (p. 6).",
+  "writing": "Clinical structure with group authorship (p. 2); worked patient examples to show interpretability (pp. 5-6); candid limits, calling the model imperfect (p. 7).",
+  "limits_future": "Age range, female predominance and exclusions limit generalizability; a small cohort, so the model is imperfect (p. 7); further validation needed, especially for urine ACR (p. 8); a webpage and an app (p. 8).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "contradiction",
+    "note": "Names the decision (VCUG now or defer) and the incumbent AAP 2011 rule, but scores predictions only (AUC); neither the guideline nor the model's VCUG decisions are scored.",
+    "pages": "pp. 3, 6"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "The duel with logistic regression, random forests and boosted trees sits in an appendix not in the file; no solver, limit or certificate details.",
+    "pages": "p. 6"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "clinical pipeline: optimal imputation, OCT, public web tool",
+    "evidence": "OptImpute, OptimalTrees and a free webpage with an app pending; S231 follows the same pipeline.",
+    "pages": "pp. 5, 8"
+   }
+  ],
+  "transferable": [
+   "Define the outcome as the conjunction that makes the test worth doing (reflux together with recurrent febrile infection), not as the test's finding alone (p. 4).",
+   "Drop variable groups that need invasive tests when model performance barely changes, and cap the per-patient variable count (p. 6)."
+  ],
+  "coauthors": "Jack Dunn, Michael Li, Daisy Zhuo (MIT ORC Personalized Medicine Group); Carlos Estrada, Caleb Nelson, Hsin-Hsiao Scott Wang (Boston Children's Hospital)",
+  "quotes": [
+   {
+    "text": "Unlike many machine learning techniques with “black-box” reputation, OCT models enable physicians to look “under the hood” while maintaining high performance.",
+    "page": 6
+   },
+   {
+    "text": "It is important to recognize that this prediction model is imperfect, primarily due to the inherent size limitation.",
+    "page": 7
+   }
+  ]
+ },
+ {
+  "id": "S292",
+  "year": "2019",
+  "title": "Clinical benefit, toxicity and cost of metastatic breast cancer therapies: systematic review and meta-analysis",
+  "read_level": "full",
+  "contribution": "A systematic review of 1,865 Phase II-III metastatic breast cancer drug trials (2,676 arms, 184,563 patients), synthesized by network meta-analysis, random-effects meta-analysis and lasso-standardized meta-analysis in 14 strata, published with drug costs as a public web tool (cancertrials.info) and checked prospectively on the next data pull.",
+  "problem_entry": "{AP; no optimization} Clinicians, trialists and guideline designers need fast reviews; guidelines omit many trials and NMAs cover subsets and RCTs only; the entry is all Phase II-III trials, randomized or not, with costs, in a web tool (pp. 1-2).",
+  "key_idea": "In each stratum: NMA of RCT hazard ratios and DLT risk differences, random-effects meta-analysis of all arms, and lasso standardization of arm outcomes to the stratum's average population (pp. 3-4).",
+  "assumptions": "Searches from Oct 2012 to Mar 2019, protocol not registered (p. 2); DLT from CTCAE grades; costs from Medicare ASP or GoodRx (p. 3); exponential survival for variances; mean imputation (pp. 3-4).",
+  "proof_devices": [
+   "n/a: no proofs; method-of-moments and DerSimonian-Laird random effects, I-squared, lasso with 10-fold cross-validation (pp. 3-4)"
+  ],
+  "experiments": "R 3.4.3 with caret, glmnet and netmeta (p. 4); 42 NMAs with average I-squared 22-29%, up to 76-79% for toxicity (p. 5); standardization lowers the OS I-squared by 4% (p = 0.002) (p. 6); on the March 2019 pull 13 of 15 survival arms (87%) and 13 of 16 DLT arms (81%) fall within the earlier CIs, with the misses explained (p. 6).",
+  "positioning": "Contrasted with ASCO and NCCN guidelines and with NMAs restricted to subsets; includes non-randomized arms to capture doses and populations (pp. 1-2).",
+  "writing": "Use-case vignettes for an oncologist and a trialist (p. 8); itemized limitations (pp. 8-9); conclusions phrased as what the tool would enable (p. 1).",
+  "limits_future": "Publication, search, blinding (15%) and reporting biases; unobserved confounding; variance assumptions; 42% of arms without median OS; cost heterogeneity (pp. 5, 8-9); future: monthly updates and other diseases (p. 9).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "A trial database kept up over 2012-2019 by former MIT graduate students and MIT and Wellesley undergraduates, with monthly updates planned; matches Heuristic 6, the tie to the earlier database being inferred.",
+    "pages": "pp. 2, 9"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Built for therapy choice by survival, toxicity and cost, with NCCN recommendation status displayed, but it prescribes nothing and scores no decision against the guidelines.",
+    "pages": "pp. 1, 7-8"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "prospective re-check of synthesized estimates on the next data pull",
+    "evidence": "Estimates frozen at the March 2018 pull; coverage of the new arms checked on the March 2019 pull; misses traced to population differences.",
+    "pages": "pp. 4, 6"
+   },
+   {
+    "pattern": "public web tool as the deliverable of a clinical paper",
+    "evidence": "cancertrials.info; S231 ships a web tool and S281 a webpage and app.",
+    "pages": "pp. 1, 6"
+   }
+  ],
+  "transferable": [
+   "Freeze the synthesized estimates at one data pull, test the coverage of the next pull's new arms and explain each miss (pp. 4, 6).",
+   "Standardize arm-level outcomes to a stratum's typical population with lasso on confounders before pooling, and report what this does to heterogeneity (pp. 3-4, 6).",
+   "List the biases specific to the data asset one by one, with how much each could matter, such as the 42% of arms with no median OS (pp. 8-9)."
+  ],
+  "coauthors": "John Silberholz, Linda Vahdat",
+  "quotes": [
+   {
+    "text": "In 13 of these arms (87%), the 95% confidence intervals for the standardized outcome from the new study arm overlapped the 95% confidence intervals from the meta-analyses for all survival outcomes in all relevant strata.",
+    "page": 6
+   },
+   {
+    "text": "This unobserved confounding can bias the resulting estimates of median overall survival, median PFS/TTP, and DLT proportion for drug combinations.",
+    "page": 9
+   }
+  ]
+ },
+ {
+  "id": "S303",
+  "year": "2019",
+  "title": "Covariate-adaptive optimization in online clinical trials",
+  "read_level": "full",
+  "contribution": "CA-RO, an online robust MIO for assigning sequentially arriving trial subjects, treats future covariates as uncertain in an ellipsoid, solves each step exactly by closed-form worst cases and enumeration, keeps randomization's bias protections by drawing Gamma at random, and in nonlinear-response settings reaches 80% power with 25-50% fewer subjects than the best covariate-adaptive randomization.",
+  "problem_entry": "{RO IO; AP} Randomization risks accidental covariate imbalance; the online state of the art is biased coins and matching; the offline OPT needs all covariates; the entry is to treat future arrivals as uncertain parameters (pp. 2-3).",
+  "key_idea": "At each arrival, minimize the largest pairwise discrepancy in means and approximate variances with future covariates in an ellipsoid around the running mean and covariance (pp. 4-5); closed-form worst cases turn each step into an enumeration of complexity 2^(mr), independent of N (pp. 3, 5); aggregation CA-RO(r), with CA-RO(N) = OPT (pp. 5-6); Gamma drawn from [0.5, 4] at each step and set to 0 near the end (pp. 6-7).",
+  "assumptions": "N and k known; exchangeable arrivals; normalized covariates (pp. 3-4); the Mayo PBC trial (312 patients, three of 20 covariates) (p. 7); synthetic NL, LIN and NR response models with two N(0,1) covariates and noise sd 0.75 (p. 9).",
+  "proof_devices": [
+   "closed-form worst cases of linear and quadratic functions over an ellipsoid by KKT conditions and eigenvalue optimization (p. 5; details in the e-companion, not read)",
+   "randomization test under Fisher's sharp null for power and Type I error (p. 8)",
+   "Proposition 1: Lipschitz bounds on the imbalance in unseen factors through matching problems (pp. 11-12; proof not read)",
+   "Weierstrass extension to continuous functions on compact supports (p. 12)"
+  ],
+  "experiments": "Lowest first- and second-moment imbalance among the online methods (Table 1, p. 7); power at N = 40, 80, 120: no gain under NR, equal after adjustment under LIN, large gains under NL (p. 9); 80% power with 58 vs 122 subjects per group at delta0 = 0.75 and 22 vs 30 at 1.75 against Pocock-Simon (pp. 9-10); Type I error 6.5-7.1% at N = 40, below Pocock-Simon (pp. 10-11); under one second per assignment (p. 6); no assignment sequence above 6% likelihood (p. 10).",
+  "positioning": "Extends the Bertsimas-Johnson-Kallus 2015 offline OPT to online arrivals; set against biased coin designs, Kapelner-Krieger matching and Bhat et al.'s DP; answers Efron's three advantages of randomization (pp. 2-3, 10-12).",
+  "writing": "Four-item benefits list (p. 3); the abstract leads with the 25-50% sample-size reduction, presented as one setting (p. 2); a practical-considerations list with defaults (p. 6).",
+  "limits_future": "Gains concentrate in nonlinear-response settings (p. 9); certifiability trades against selection bias (pp. 10-11); the allocation distribution is not uniform (p. 12); outlier exclusion left to future work (p. 6); no real trial run; Type I error above 5% at N = 40 not discussed (p. 11).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "The decision metric is power and sample size against the randomization rules the field uses, turned into trial cost and duration; no field test.",
+    "pages": "pp. 2-3, 9-10"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Duels the incumbent randomization designs and prints where the method does not help (NR; LIN after adjustment); no warm start or certificate, since enumeration is exact.",
+    "pages": "pp. 5, 9"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "The robust model leaves commercial solver classes; exactness is kept by closed-form worst cases and an enumeration independent of N.",
+    "pages": "pp. 3, 5"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Gamma is not priced but randomized to keep randomization's bias protection; a fixed Gamma trades that for certifiability.",
+    "pages": "pp. 5, 10-11"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "randomized robustness parameter as a randomization device",
+    "evidence": "Gamma drawn uniformly from [0.5, 4] at each step yields many distinct allocations (none above 6% likelihood) while keeping balance; a fixed Gamma gives certifiability.",
+    "pages": "pp. 5, 7, 10-11"
+   },
+   {
+    "pattern": "resource saved at matched performance",
+    "evidence": "Minimum subjects per group for 80% power (58 vs 122 at delta0 = 0.75); also S224 (ambulances) and S231 (CT scans).",
+    "pages": "pp. 9-10"
+   },
+   {
+    "pattern": "exact special-purpose algorithm when the formulation leaves solver classes",
+    "evidence": "Closed-form worst cases plus an enumeration of at most m scenarios, complexity independent of N; also S184 (custom branch-and-bound).",
+    "pages": "pp. 3, 5"
+   }
+  ],
+  "transferable": [
+   "Model future arrivals as uncertain parameters in an ellipsoid around the running sample mean and covariance; solve the worst cases in closed form and enumerate the current assignment (pp. 4-5).",
+   "Randomize the robustness parameter at each step to keep randomization's bias protection, and fix it when certifiability matters more (pp. 5, 10-11).",
+   "Report power under several hidden response models with both unadjusted and regression-adjusted estimators, so the regimes where the method does not help are visible (p. 9).",
+   "Evaluate against the rival school's own criteria (Efron's freedom from selection bias, freedom from accidental bias, reasoned basis for inference) (pp. 3, 10-12)."
+  ],
+  "coauthors": "Nikita Korolko, Alexander M. Weinstein",
+  "quotes": [
+   {
+    "text": "Formulation (2) takes the form of a mixed-binary quadratic robust optimization problem with conic uncertainty set, which cannot be solved using off-the-shelf commercial solvers.",
+    "page": 5
+   },
+   {
+    "text": "However, post hoc regression adjustment using ordinary least squares, which exactly replicates the covariate-response model with additive treatment effect, reduces the need for the a priori covariate balance provided by CA-RO.",
+    "page": 9
+   }
+  ]
+ }
+]

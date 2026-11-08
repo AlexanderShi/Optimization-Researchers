@@ -1,0 +1,87 @@
+[
+  {
+    "id": "S076",
+    "year": "2024",
+    "title": "On sparse canonical correlation analysis",
+    "read_level": "full",
+    "contribution": "Shows that sparse CCA with exact l0 constraints and possibly singular covariances reduces to support selection with a closed-form score, gives an equivalent MISDP and a branch-and-cut with closed-form cuts, proves the low-rank cases polynomial and the rank-one cross-covariance case NP-hard, and tests heuristics, SDP and perspective bounds on synthetic data (read: arXiv v1).",
+    "problem_entry": "The l1-penalty SCCA literature only approximates l0, and the prior exact branch and bound needs B, C positive definite. SCCA contains sparse PCA, sparse SVD and sparse regression as special cases, so it is NP-hard, which motivates a MIP lens (pp. 2-3).",
+    "key_idea": "CCA and its SDP relaxation share the closed-form value sigma_max(sqrt(B+)A sqrt(C+)) (Prop. 1, pp. 4-5). SCCA therefore becomes selection of three submatrices with a closed-form score (Thm 1, pp. 5-6), which yields greedy/local search, a big-M MISDP (Thm 2, p. 7) and Benders cuts from a closed-form dual (Prop. 3, pp. 8-9).",
+    "assumptions": "Only PSD of the joint covariance; B, C may be singular (pp. 2, 5). Norm bounds M1, M2 rely on the smallest nonzero eigenvalue and the smallest nonzero singular value over submatrices of the null-space eigenvectors (Prop. 2, p. 7); low-rank results assume fixed ranks (Thm 3, p. 10).",
+    "proof_devices": [
+      "Generalised Schur-complement PSD lemma with pseudo-inverses plus Lagrangian duality: exact SDP relaxation of CCA without positive definiteness (Lemma 1, Prop. 1, App. A.1, pp. 4-5, 17-18)",
+      "Bounded sparse optimal solution built by moving along null-space eigenvectors via a minimal nonsingular subsystem (Prop. 2, App. A.2, pp. 7, 18-19)",
+      "Sparsity from rank: subtracting null-space directions zeroes n-r coordinates because q_i^T A = 0, giving an O(n^{r-1} m^{r'-1}) algorithm (Thm 3, Cor. 2, App. A.4, pp. 10, 21-22)",
+      "Rank-one A separates into a product of two subproblems, each reduced to NP-hard sparse regression (Thm 4, App. A.5, pp. 10-11, 22-23)",
+      "epsilon-perturbed closed-form dual (theta* = f(z)/2, lambda* a largest eigenvalue) gives closed-form cuts, then epsilon -> 0 by closedness (App. A.3, pp. 19-20)"
+    ],
+    "experiments": "Synthetic planted-sparse covariances with 5,000 samples, Python/Gurobi 9.5.2/MOSEK 10 on a named PC, 1 h limit (pp. 11-12). Greedy = local search LB; SDP gap <= 8.16%; exact branch-and-cut only to n = 20, blamed on the weak bound of (9). Rank-one: perspective bound <= 11.3% gap within 15 s and exact MIQP to 100x100 (pp. 12-13). Table 1 row 120/10 is internally inconsistent; no real data.",
+    "positioning": "Against l1-penalty SCCA ([33],[35],[7]) and Watanabe et al. [34] (positive definiteness needed); sparse PCA/SVD algorithms do not transfer because three submatrices are selected; Prop. 1 generalises [7] and avoids the SVD/PD proofs of [26,31,38]; builds on Dey's sparse-PCA dual bounds [10,11] and Li-Xie [22,23] (pp. 2-3, 5, 20).",
+    "writing": "Numbered contribution list with section pointers (p. 2); 'To the best of our knowledge' priority hedges (pp. 2, 5); many unrepaired slips: swapped index ranges in Thm 1 (p. 5), 'A := a^T b' (p. 11), 's1 <= r' sufficient condition (p. 10), Algorithm 2 titled 'SSVD' (p. 24).",
+    "limits_future": "Limits are implicit: exact method stalls beyond n = 20 because of a weak relaxation bound, and the scalable route approximates A by rank one, which changes the problem (p. 12); no future-work section in v1 (p. 13).",
+    "method_links": [
+      {"method": "Method 5", "relation": "evidence", "note": "Dual bounds (SDP relaxation gap <= 8.16%, perspective relaxation chosen as 'stronger and easier to solve than the SDP relaxation') reported next to heuristics, hardware named", "pages": "pp. 11-13"},
+      {"method": "Method 4", "relation": "evidence", "note": "Complexity demarcated: polynomial for fixed ranks, SCCA = CCA once s >= rank, NP-hard already for rank-one A", "pages": "pp. 10-11, 21-23"},
+      {"method": "Method 2", "relation": "variant", "note": "No ground truth beyond n = 20; gaps for larger instances measured against heuristic LBs, no stripped instrument", "pages": "p. 12"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "closed-form inner value -> support-selection reformulation", "evidence": "One closed-form score per support drives greedy/local search, an exact MISDP and closed-form Benders cuts", "pages": "pp. 5-9, 24"},
+      {"pattern": "special-case embedding as hardness argument", "evidence": "SCCA shown to contain sparse PCA, sparse SVD and sparse regression via parameter settings, used to motivate exact MIP methods", "pages": "p. 2"}
+    ],
+    "transferable": [
+      "Write the problem as max over supports of a closed-form score; derive heuristics, an exact MISDP and cut oracle from the same formula (pp. 5-9, 24)",
+      "Prove SDP exactness with rank-deficient data via the Schur complement with pseudo-inverses and the range condition (I - BB+)A = 0 instead of assuming positive definiteness (pp. 4-5, 17)",
+      "Get closed-form Benders cuts by an epsilon-perturbed closed-form dual solution and a closedness limit (pp. 19-20)",
+      "Check whether a rank-one coupling makes the problem separable into a product of two simpler problems (pp. 10-11)",
+      "Report heuristic LB, relaxation UB with gap, and exact optimum per instance so the scaling limit of the certificate is visible (pp. 12-13)"
+    ],
+    "coauthors": "Yongchun Li, Weijun Xie (problem introduced by Rahul Mazumder, acknowledged p. 13)",
+    "quotes": [
+      {"text": "It is seen that the greedy and local search algorithms are quite scalable, and the SDP relaxation (5) yields a tight upper bound with an optimality gap at most 8.16%.", "page": 12},
+      {"text": "One reason may be because SCCA (9) has a weak relaxation bound.", "page": 12}
+    ]
+  },
+  {
+    "id": "S077",
+    "year": "2024",
+    "title": "Aggregations of quadratic inequalities and hidden hyperplane convexity",
+    "read_level": "full",
+    "contribution": "Introduces hidden hyperplane convexity (HHC) and proves that under HHC the convex hull of a set defined by any number of open quadratic inequalities is the intersection of good aggregations, generalising the m = 2 and m = 3 (PDLC) results, bounds the number of aggregations needed (m^2 - m, six for three quadratics with PDLC), and treats separable, sphere/halfspace and closed-inequality cases (read: arXiv v2).",
+    "problem_entry": "Farkas says implied linear inequalities are aggregations; aggregations are used for IP and MINLP cuts. Question: when is the hull of a quadratic set given by good aggregations? Three named gaps: general sufficient condition beyond m = 2, 3; finiteness (open question of [8]); closed inequalities without topological assumptions (pp. 1-2).",
+    "key_idea": "The separation proof of [8] only needs convexity of the quadratic image on one hyperplane, so assume it on every hyperplane (HHC, Def. 2.1, p. 4). HHC depends only on the span (Lemma 2.5) and equals hidden convexity of all (n-1)-dimensional compressions (Obs. 2.6), so Dines/Calabi give the old cases as corollaries (pp. 5-6); same road-map as [8] otherwise (p. 6).",
+    "assumptions": "Open quadratic inequalities, m >= 2, n >= 3 (p. 3). HHC with nonempty S and conv(S) != R^n (Thm 2.9, p. 6); HHC needs n-1 >= m for linearly independent Q_i (Remark 2.2, p. 4). Finiteness also needs PDLC for every triple (Thm 2.18, p. 10). Closed case: HHC plus Q_lambda != 0, checkable by LP (Remark 2.25, p. 13), chosen over a topological assumption 'hard to check computationally' (p. 2).",
+    "proof_devices": [
+      "Separation on the homogenised hyperplane: HHC makes image f^h|_H convex and disjoint from the open negative orthant; separating gives lambda >= 0, mu = 0, Q_lambda PSD on H, then Yildiran's one-negative-eigenvalue theorem (Thm 2.9 proof, pp. 16-17)",
+      "Quadratic image identified with the boundary of a Lorentz cone, and projection along a nontrivial kernel of a line-free closed convex set's boundary equals the projection of the set (Prop. 4.1, Lemma 4.2, Remark 4.3 counterexample, pp. 14-15)",
+      "Tightness bracket: hidden convexity not sufficient (Example 2.11) and HHC not necessary (diagonal maps, Example 2.4, Thm 2.12) (pp. 4-5, 7)",
+      "Diagonal case by substitution y = x o x into an open polyhedron; LP duality shows facets are nonnegative aggregations (Props. 8.1, 8.4, pp. 20-23)",
+      "Finiteness: improving an aggregation by a PSD combination with Weyl's inequality (Prop. 9.1), support reduction to <= 2 via PDLC triples (Prop. 9.2), generalised-eigenvalue interval endpoints suffice (Props. 9.5-9.6) (pp. 23-26)",
+      "Closed inequalities via the interlacing theorem (Thm 2.24, p. 26)"
+    ],
+    "experiments": "none (theory only; Figures 1-3 illustrate Examples 2.16, 2.21, 2.23 on pp. 9, 11, 13)",
+    "positioning": "Simultaneously generalises Yildiran [22] (m = 2) and Dey-Munoz-Serrano [8] (m = 3, PDLC), claimed to generalise all known aggregation-hull results; answers the finiteness question of [8]; drops the topological assumption of Modaresi-Vielma [14]; in the Dines-Brickman-Calabi-Polyak hidden-convexity and S-lemma tradition; separates itself from trust-region lifted-hull and algorithm work [21,1,12] (pp. 1-2, 8-9).",
+    "writing": "Three-bullet goals list (p. 2); all main results stated and explained in Section 2 before proofs in Sections 4-10 (p. 3); each theorem followed by its tightness example; conclusions turned into three numbered conjectures (pp. 13-14); two unresolved '[?]' citations in v2 (pp. 9, 15).",
+    "limits_future": "Concrete open conjectures: HHC set needing infinitely many aggregations (3.1); exactly six needed for m = 3 (3.2, best example needs four); unresolved non-emptiness certificate case (3.3) (pp. 13-14); unknown example with n constraints without PDLC (p. 9); conditions acknowledged as restrictive (p. 2); no general test for HHC is given.",
+    "method_links": [
+      {"method": "Method 3", "relation": "evidence", "note": "Farkas/IP aggregation-cut paradigm carried into QCQP; several quadratics convexified jointly; real-algebraic step done with mathematician coauthor Blekherman", "pages": "pp. 1-2, 27"},
+      {"method": "Method 4", "relation": "evidence", "note": "Hidden convexity not sufficient, HHC not necessary, n+1-constraint counterexample, open boundaries as conjectures, unknown tightness admitted", "pages": "pp. 7, 9, 13-14"},
+      {"method": "Method 5", "relation": "variant", "note": "No dual-bound computations; the only link is that finitely many good aggregations make the closure of the hull SOC-representable; checkability by LP/SDP stressed", "pages": "pp. 8, 10, 13"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "hyperplane-restricted strengthening of a classical property", "evidence": "HHC defined so the separation proof of [8] extends to any m; old theorems recovered via compression lemma", "pages": "pp. 4-6, 16-17"},
+      {"pattern": "improve-then-reduce-support finiteness argument", "evidence": "PSD improvements keep aggregations good and shrink support to two, then GEV endpoints counted", "pages": "pp. 10, 23-26"}
+    ],
+    "transferable": [
+      "Restrict a classical hypothesis to the objects the proof touches (every hyperplane), show it depends only on the span, and recover old theorems as corollaries (pp. 4-6)",
+      "Prove convexity of a quadratic image by identifying it with a cone boundary and projecting along a nontrivial kernel; give the counterexample when the cone contains a line (pp. 14-15)",
+      "Bracket a sufficient condition with a 'weaker condition fails' example and a 'new condition not necessary' class, then state the rest as numbered conjectures (pp. 7, 13-14)",
+      "Prove finiteness of certificates by monotone improvement inside the certificate cone followed by support reduction and counting on low-dimensional faces (pp. 10, 23-24)",
+      "Prefer hypotheses checkable by LP/SDP over topological ones and say so (pp. 2, 13)"
+    ],
+    "coauthors": "Grigoriy Blekherman, Shengding Sun (acknowledged: Gonzalo Munoz, Felipe Serrano)",
+    "quotes": [
+      {"text": "To the best of our knowledge, this result generalizes all known results regarding aggregations defining convex hulls.", "page": 1},
+      {"text": "Unfortunately, this assumption is hard to check computationally, and it does not hold in some interesting cases.", "page": 2}
+    ]
+  }
+]

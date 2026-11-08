@@ -1,0 +1,134 @@
+[
+  {
+    "id": "S017",
+    "year": "2022",
+    "title": "Using ℓ1-Relaxation and Integer Programming to Obtain Dual Bounds for Sparse PCA",
+    "read_level": "full",
+    "contribution": "Relaxes the ℓ0 constraint of sparse PCA to ℓ1 (proved within a factor ρ² ≈ 4), then upper-bounds the remaining nonconvex objective with a small SOS-2 convex integer program. This gives certified dual bounds that scale to 2000 × 2000 covariance matrices, where the SDP fails beyond about 300.",
+    "problem_entry": "SPCA heuristics give no certificates and rest on 'very strong and often unverifiable assumptions' (p. 2); SDP and spectral dual bounds do not scale beyond a few hundred variables (p. 3); goal: certificates of optimality via dual bounds (p. 3).",
+    "key_idea": "The ℓ1 relaxation makes the feasible region convex, so 'all the nonconvexity is in the objective' (p. 4). Split the spectrum at a heuristic λ, give only the few eigen-directions above λ a piecewise-linear SOS-2 upper bound, perturb A to drop the rest, and refine breakpoints iteratively (pp. 6-11).",
+    "assumptions": "A PSD covariance matrix; λ ≤ λ^k(A) from a heuristic; λ̄ < λ after a tie-breaking perturbation (p. 9); polynomial solvability only with N and |{λi > λ}| fixed (p. 8); N = 3 because θi is small in practice (p. 16).",
+    "proof_devices": [
+      "scaled-hull containment T_k ⊆ ρ·conv(S_k), then maximise a convex function over the scaled hull (pp. 11-14)",
+      "exchange argument showing top-k consecutive blocks give the optimal decomposition (Prop. 6, p. 12)",
+      "block-averaging ℓ1/ℓ2 inequality plus a two-case analysis on γ (pp. 13-14)",
+      "SOS-2 error bound (Δγ)²η(1-η) ≤ (Δγ)²/4, minimised by uniform breakpoints (p. 32)",
+      "enumerate (2N)^|Ipos| active SOS-2 patterns, each a convex program, for polynomial time (p. 32)",
+      "subadditivity of λ^k for the perturbation bound (p. 33)",
+      "approximation bound turned into an inapproximability corollary for the ℓ1 relaxation (p. 5)"
+    ],
+    "experiments": "MacBook Pro with Gurobi 7.0.2 and Mosek 8 (p. 14); 7200 s limit, k = 10 and 20; artificial instances from three earlier generators (n = 200-1000, 2 cases each) and real instances (Pitprops, Eisen, Colon, Lymphoma, a 2000-feature Reddit matrix released on the website) (pp. 16, 33-36); gap measured against the heuristic primal value (p. 17); SDP fails at ≥ 300, Pert-Convex-IP reaches 2000 (p. 17); ablations on splitting points and ℓ1 vs ℓ0 (pp. 18-20); a custom DADAL-SPCA baseline (pp. 37-42); failures reported (controlling sparsity n = 1000 at about 50-60%, p. 25); table inconsistencies (Table 2 CovColon rows repeat Eisen-2 values, p. 19; Table 16 CovColon 2.37% vs Table 11 6.89%, pp. 27, 41).",
+    "positioning": "Bounds called 'incomparable' to the SDP bounds (p. 3); novelty claimed for the use: 'ℓ1-relaxation has never been used to computationally obtain dual bounds for SPCA' (p. 4); Theorem 1 framed as an improvement on a Vershynin exercise (p. 4); the convex/concave split credited as well studied (p. 6).",
+    "writing": "'Main results' section first (p. 3); candid worst case ('almost 100% gap … far from ideal', p. 5) followed by the empirical counterweight; results hedged as 'preliminary observations' (p. 17); no conclusion or future-work section (p. 27).",
+    "limits_future": "Tightness of Theorem 1 unknown (p. 5); worst-case gap close to 100% (p. 5); only k ∈ {10, 20} and 2 random cases per size; no stated future work.",
+    "method_links": [
+      {"method": "Method 5", "relation": "evidence", "note": "Dual bound as the deliverable; a tractable relaxation strengthened by structure (spectral split, SOS-2, implied cut, sparse cut); certified gaps up to n = 2000 with hardware named", "pages": "pp. 3, 6-11, 14, 17"},
+      {"method": "Method 4", "relation": "evidence", "note": "States 'we do not know if this new bound is tight'; derives inapproximability; explains why polynomial-time Convex-IP does not contradict it", "pages": "pp. 5, 8"},
+      {"method": "Method 3", "relation": "variant", "note": "IP machinery (SOS-2 piecewise linear modelling, valid inequalities, fixed-dimension polynomial time) imported into a nonconvex statistics problem rather than a QCQP substructure", "pages": "pp. 5-8, 11"},
+      {"method": "Method 2", "relation": "variant", "note": "No exact ceiling is available, so the gap is measured against the heuristic primal value and backed by controlled ablations (ℓ1 vs ℓ0, breakpoints)", "pages": "pp. 17-20"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Push the nonconvexity into a low-dimensional part of the objective", "evidence": "The ℓ1 surrogate makes the feasible set convex; binaries go only to the eigen-directions above a heuristic threshold, and perturbation removes the rest", "pages": "pp. 4, 6-10"},
+      {"pattern": "Programme cross-feeding across parallel papers", "evidence": "S048 cites this paper (as 'A convex integer programming approach for optimal sparse PCA') and turns SPCA into its cut-separation oracle", "pages": "S048 pp. 6-7, 28"}
+    ],
+    "transferable": [
+      "Prove the quality of a relaxation by scaled-hull containment (relaxed set ⊆ ρ·conv(original)); for a maximised convex objective this gives a ρ² bound at once (p. 14).",
+      "Use a heuristic primal value to decide how many directions receive binaries, and handle the rest with one convex constraint or remove them by a perturbation (pp. 6, 9-10).",
+      "Refine the piecewise-linear discretisation iteratively, adding one breakpoint at each solution, instead of solving one fine model (p. 10).",
+      "Implement your own tailored version of the competitor's bounding algorithm and report it next to the off-the-shelf code (pp. 37-42).",
+      "When the optimum is unknown, measure gaps against your primal value and validate that primal heuristic separately against the standard heuristics (pp. 17, 36-37)."
+    ],
+    "coauthors": "Rahul Mazumder, Guanyi Wang",
+    "quotes": [
+      {"text": "Most conventional methods for solving SPCA are heuristics with no guarantees such as certificates of optimality on the solution-quality via associated dual bounds.", "page": 1},
+      {"text": "While we have improved upon the bound presented in [34], we do not know if this new bound is tight.", "page": 5}
+    ]
+  },
+  {
+    "id": "S035",
+    "year": "2022",
+    "title": "Sparse PSD approximation of the PSD cone",
+    "read_level": "full",
+    "contribution": "Gives a data-independent theory of why sparse SDP relaxations work: upper and lower bounds on the Frobenius distance between the k-PSD closure and the PSD cone, tight for small k (≤ √n) and for k = n − c and constant for k = rn, plus a result that a polynomial random sample of k × k blocks suffices.",
+    "problem_entry": "The empirical surprise that sparse SDP relaxations sometimes nearly match the SDP (p. 2); comparing objective values 'appears to be a very challenging problem', so the question is replaced by a data-independent one, the distance between the cones (pp. 1-3).",
+    "key_idea": "Measure the farthest unit-Frobenius matrix of S^{n,k} from S^n_+; upper bounds from averaging k-blocks ((n−k)/(n+k−2)) and from randomized sparsification of the negative eigenvector (O(((n−k)/n)^{3/2})); lower bounds from an explicit family and from RIP matrices; random block sampling achieves Thm 1 within (1+ε) (pp. 3-6).",
+    "assumptions": "No data; the Frobenius norm is used for both distance and normalisation (p. 3); Thm 2 requires n ≥ 97 and k ≥ 3n/4 (p. 4); Thm 4 requires r < 1/93 (p. 5); constants explicit but not optimised.",
+    "proof_devices": [
+      "averaging operator over all k-block restrictions, then rescaling to equalise the diagonal and off-diagonal factors (§5, p. 8)",
+      "exact projection distance √Σλi² onto the PSD cone (Prop. 1, p. 9)",
+      "Cauchy interlacing: at most n−k negative eigenvalues in S^{n,k} (Prop. 2, p. 10)",
+      "characterisation by k-sparse test vectors (Observation 1, p. 10)",
+      "probabilistic method: randomized sparsification of the eigenvector, with binomial median, Chebyshev, Markov and a union bound (Lemmas 1-4, pp. 11-13)",
+      "explicit matrix G(a,b,n) with closed-form spectrum (Prop. 4, Cors 1-2, pp. 13-14)",
+      "random Bernoulli RIP matrix W, M = −(1−δ)I + WᵀW, with negative eigenvalues from the kernel (Lemmas 5-6, pp. 14-16)",
+      "Chernoff and union bounds on pair-inclusion fractions for the sampling theorem (Lemmas 8-9, pp. 17-19)",
+      "2-designs (Wilson existence, Fisher's inequality) to reach Thm 1's bound with fewer blocks (p. 6)"
+    ],
+    "experiments": "none (a single numerical check of a probability bound inside the proof, p. 16)",
+    "positioning": "Framed as the first theory for sparse SDP practice reported by others (Qualizza et al., Baltean-Lugojan et al., Sojoudi-Lavaei) and by the authors (OPF, sparse QCQP cuts) (p. 2); linked to Dey's sparse-inequality theory for polytopes and MILPs and to factor width, SDD and DSOS/SDSOS (pp. 2-3).",
+    "writing": "'Surprisingly' in the abstract; the simplification move stated openly (p. 1); all results with plain-word proof ideas in §2, and the conclusion and open questions in §3, before the proofs (pp. 3-7); a regime table (p. 6); tightness assessed result by result (pp. 4-5).",
+    "limits_future": "Bounds not close as a function of k/n in the constant-ratio regime (open, p. 6); deterministic or strategic choice of submatrices open, perhaps via 2-designs with no explicit construction known (pp. 6-7); the data-independent measure does not bound a particular SDP's objective (p. 2).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "An unexplained practice (sparse SDP bounds near the SDP) becomes a proxy theorem through an explicitly data-independent measure; step 7 (return to data) is left to S048", "pages": "pp. 1-3"},
+      {"method": "Method 4", "relation": "evidence", "note": "Matching upper and lower bounds by regime, untightness flagged, the uncovered regime stated as an open question", "pages": "pp. 3-7"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Programme cross-feeding across parallel papers", "evidence": "The G(a,b,n) lower-bound construction is reused as the worst-case example (Examples 1-2) of the computational paper S048", "pages": "pp. 13-14; S048 pp. 7-8"}
+    ],
+    "transferable": [
+      "When the instance-level question is intractable, drop the data and ask a geometric question about the two cones with a fixed norm and normalisation (pp. 2-3).",
+      "Average locally certified pieces into a globally certified object and measure the rescaling error to bound the gap between a local closure and the global cone (p. 8).",
+      "To lower-bound such a gap, look for an object from another field that approximately preserves what the local constraints test (RIP preserves the norms of sparse vectors) (pp. 14-16).",
+      "Present results as a regime table (upper, lower, simplified form) and name the regime where the bounds do not meet as the open question (p. 6).",
+      "Show that a polynomial random sample of exponentially many local constraints keeps the bound within (1+ε) with high probability (pp. 5, 17-19)."
+    ],
+    "coauthors": "Grigoriy Blekherman, Marco Molinaro, Shengding Sun",
+    "quotes": [
+      {"text": "In order to simplify the question, we arrive at a data independent version of it, where we compare the sizes of SDP cone and the k-PSD closure", "page": 1},
+      {"text": "Ideally we would like to compare the objective function values of (1) and (2), but this appears to be a very challenging problem.", "page": 2}
+    ]
+  },
+  {
+    "id": "S048",
+    "year": "2022",
+    "title": "Cutting plane generation through sparse principal component analysis",
+    "read_level": "full",
+    "contribution": "Shows that separating sparse eigenvector cuts for the SDP relaxation of QCQPs is sparse PCA (hence NP-hard but heuristically solvable). It uses a truncated-power oracle plus rank-one deflation to produce many sparse cuts per round, and a dense-then-sparse HYBRID scheme that closes more than 90% of the LP-SDP gap on QCQPs with n ≤ 100 while keeping the LPs light.",
+    "problem_entry": "QCQP methods fail to scale; the SDP is strong but memory-intensive (p. 1); eigenvector cuts are dense and numerically unstable (p. 4); the effect of cut sparsity is underexplored (p. 2); goal: a lightweight linear approximation of the SDP for spatial B&B (p. 3).",
+    "key_idea": "Most-violated k-sparse eigencut = SPCA after a λmax shift (Prop. 1, Lemma 1, pp. 6-7); the TPower heuristic is the oracle (p. 15); Algorithm 1 deflates M by rank-one PSD updates to get many supports per LP (pp. 13-14); HYBRID adds dense cuts until a switching time and sparse cuts after it (p. 17).",
+    "assumptions": "QCQP with a McCormick LP base, though any valid linear relaxation works (p. 3, fn. 1); SDP + McCormick as the ceiling (p. 10); k = ⌊0.25(n+1)⌋, 5n cuts per iteration, 100 supports, a switching-time rule and tolerances (p. 18); parameters admittedly untuned for large instances (p. 23).",
+    "proof_devices": [
+      "one-line reduction from decision-SPCA to separation, giving NP-hardness (Prop. 1, pp. 6-7)",
+      "spectrum shift by λmax that turns an indefinite separation problem into SPCA (Lemma 1, p. 7)",
+      "worst-case matrices G(a,b) and a block-diagonal sparse version, both from S035 (Examples 1-2, pp. 7-8)",
+      "signature counting under rank-one PSD updates for finiteness (Lemma 3, pp. 13-14)",
+      "induction on cut validity and on the order in which cuts are cut off (Lemma 4, pp. 14-15)"
+    ],
+    "experiments": "Enumeration of all 31,465 supports on three BoxQP n = 30 instances, k = 4, gap closed against the SDP (pp. 9-12); Algorithm 1 benchmarked against the enumeration ceiling (p. 15); main study on 111 BoxQP (including own n = 200 and 250 instances from the same generator), 135 Biq (exclusions listed) and 151 MaxCut instances, reporting gap closed and last LP time by size group, 1 h single-threaded on the Béluga cluster (pp. 16, 19-25); 1-day runs (pp. 23, 25); failures explained (pp. 21-24); preliminary Barrier vs Simplex and orthogonal-support trials written in (pp. 13, 17-18).",
+    "positioning": "Builds on Shor, Sherali-Fraticelli and Qualizza et al.; sets out to 'substantially expand' on Baltean-Lugojan et al. (p. 2); distinguished from chordal sparsity (Fukuda et al., p. 4); intersection-cut and ILP approaches called complementary because they cut through the SDP (pp. 5-6, 19); uses its own S035 and S017 as working papers (pp. 27-28).",
+    "writing": "Contributions paragraph early (p. 4); experiments driven by three explicit questions (p. 9) and closed by a summary that says what was not considered (p. 12); hedged takeaways (p. 23); the summary's 'violation is a good heuristic' is slightly stronger than Table 2 (pp. 11-12); a quantified conclusion (p. 26).",
+    "limits_future": "All entries of X are created and stored, which blocks scaling and embedding in spatial B&B (future work, p. 26); interactions between supports not scored (p. 12); parameters untuned for large instances (p. 23); no full B&B run.",
+    "method_links": [
+      {"method": "Method 2", "relation": "evidence", "note": "Exhaustive enumeration ceiling computed first; 'the enumeration experiments justify how many sparse cuts we should generate at each round'; the heuristic reported against that ceiling", "pages": "pp. 9-12, 15"},
+      {"method": "Method 5", "relation": "evidence", "note": "The LP relaxation, the most tractable one, is made to emulate the SDP for use in spatial B&B; gap closed reported at benchmark scale with the hardware named", "pages": "pp. 3, 16, 21-26"},
+      {"method": "Method 4", "relation": "evidence", "note": "NP-hardness and worst-case matrices paired with the empirical study, with their scope stated", "pages": "pp. 6-8"},
+      {"method": "Method 1", "relation": "variant", "note": "Serves as the step-7 return to practice for the sparse-SDP line whose proxy theorem is S035", "pages": "pp. 2, 6, 26"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Programme cross-feeding across parallel papers", "evidence": "Reuses S035's G(a,b) as its worst-case example and S017's subject (SPCA) as its separation oracle; both cited as working papers", "pages": "pp. 6-8, 27-28"},
+      {"pattern": "Reduce separation to a well-studied problem of another field and adopt its heuristic as the oracle", "evidence": "k-sparse eigencut separation equals SPCA; TPower from statistics used as the oracle", "pages": "pp. 6-7, 15"}
+    ],
+    "transferable": [
+      "Enumerate exhaustively on small instances first and let that ceiling set the algorithm's knobs (cuts per round, whether dense cuts are allowed); then benchmark the scalable heuristic against the ceiling (pp. 9, 15).",
+      "Use a deflation-style rank-one PSD update of the separated point to get many distinct sparse cuts from one LP solution, with finiteness proved by counting signatures (pp. 13-14).",
+      "Use a hybrid schedule: put the strong-but-heavy cut family first and switch to the light family when the LP time crosses a threshold tied to the initial LP time (pp. 17-18).",
+      "Report bound strength and last-relaxation solve time side by side by size group, and add a long-horizon run to separate slowing from stalling (pp. 21-25).",
+      "After a worst-case negative result, state its scope in one sentence and move to empirical evidence (p. 8)."
+    ],
+    "coauthors": "Aleksandr M. Kazachkov, Andrea Lodi, Gonzalo Muñoz",
+    "quotes": [
+      {"text": "Our goal goes beyond solving the SDP and obtaining a good dual bound: we would like to obtain an outer approximation of the original set that can mimic the strength of the SDP relaxation, but that is lightweight and linear.", "page": 3},
+      {"text": "While the above examples are negative results, they are only informing us that we cannot hope to devise an efficient method that will work in the worst case. In practice, the story might be different.", "page": 8}
+    ]
+  }
+]

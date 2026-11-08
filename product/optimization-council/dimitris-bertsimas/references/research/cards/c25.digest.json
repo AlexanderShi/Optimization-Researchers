@@ -1,0 +1,189 @@
+[
+  {
+    "id": "S115",
+    "year": "2022",
+    "title": "Predicting inpatient flow at a major hospital using interpretable analytics",
+    "read_level": "full",
+    "contribution": "Builds an expert-defined, daily patient-state representation (600+ SQL features) from a hospital's EHR; predicts discharges, long stays, discharge destination and ICU need with off-the-shelf learners; deploys single-tree models in bed-management dashboards; and evaluates them in the field against nurses' estimates and by difference-in-differences.",
+    "problem_entry": "AP+ML (DA only as decision support: 'predictive only', p. 21). A hospital under financial and operational stress needs demand forecasts (p. 1). Deep-learning EHR representations had never been integrated into a real hospital's EHR, blocked by black boxes, cost, and notes unavailable in real time (pp. 2-3). Six operational tasks; ICU need within 24 h is claimed as new (pp. 4-5, 9).",
+    "key_idea": "A hospital-centric clock (one observation per inpatient-day at 11:59 pm) with 600+ expert-defined counts, levels and trends computed in SQL, fed to standard LR, CART, OT, RF and GBT. The methods are 'not novel'; the contribution is the representation, the deployment and the field evaluation (pp. 5, 7-8, 18).",
+    "assumptions": "BIDMC inpatients January 2017 - August 2018 with stated exclusions: 63,432 admissions, 323,274 patient-days, IRB waiver (pp. 6-7). Missing data handled by a missing category, interpolation and an optimization-based imputation; production trees send missing values the majority direction (pp. 8-9). Outcomes admitted to be endogenous to physicians' decisions, hence no recommendation engine (p. 10). Static variables assumed constant during a stay (p. 31); class-prevalence weights (p. 10).",
+    "proof_devices": [
+      "No optimization model is posed. OCT is used as a packaged learner, described by its authors as an MIO solved approximately by local search; no certificate or gap (p. 36)",
+      "Calendar split (train 2017 / validation Jan-Apr 2018 / test May-Aug 2018) to mimic deployment; random splits argued to overstate performance (p. 10)",
+      "AUC with 95% CIs from 1,000 bootstrap samples (p. 11)",
+      "Two-stage aggregation of individual scores into daily discharge counts: a training-calibrated correction factor by day of week vs threshold-then-sum; raw sums useless under class weighting (Appendix D, pp. 41-42, Table 14)",
+      "Tree stability: depth chosen by cross-validation across 10 folds as the training window grows (Figure 3, pp. 18-19)",
+      "Difference-in-differences with the same months of 2018 as control, day/hour controls, robust SEs (Table 8, pp. 22-23), plus a stratified ATE over 116 day x hour strata (Table 9, pp. 23-24)",
+      "Marginal value of data: training windows of 1-24 months tested on Jan-Aug 2019 (pp. 25-26)"
+    ],
+    "experiments": "LR (Lasso), CART, OT, RF, GBT tuned on validation (pp. 10, 36-37); Python 3.5.2 and Julia 1.0.1 on a MacBook Pro; no training times (p. 11). Test AUCs: same-day discharge 0.843 (RF), next-day 0.822, stay > 7 d 0.827-0.830 after day 1, > 14 d 0.826, destination about 0.77 (trees) vs 0.83 (ensembles), mortality 0.962 (about 0.90 without DNR), ICU need 0.968-0.977 (pp. 11-15). OT about equal to CART (Tables 3-4, pp. 13-14); CART lowest median absolute error for daily counts (6.0 beds, p. 13). Field: OCT median relative error 11.5% vs resource nurses 16.0% on 15 of 42 days, no test reported; production error about twice the retrospective one, attributed to decalibration (pp. 21-22). DiD off-service -0.043 (p < 0.01), boarding delay not significant (p. 23); stratified off-service median ATE 0.00 (p. 24). Error drift about +1 pp per quarter; about 14 months of data needed; retraining twice a year advised (pp. 25-26). Failures printed (pp. 14, 21-22, 25, 41-42).",
+    "positioning": "Against deep-learning EHR pipelines, chiefly Rajkomar et al. 2018: matched on accuracy, criticized on deployability (compute, notes, attributions drawn from a different model) (pp. 2-3, 18). Literature table limited to recent prediction work (p. 4). The temporal split is offered as making its numbers conservative (p. 10). Van Walraven-Forster credited for count aggregation (pp. 11, 41). Self-citations for components only (OCT, imputation) (pp. 8-9). The commercial OCT package is cited with no competing-interest statement in the preprint text (pp. 18, 27, 41).",
+    "writing": "MSOM structured abstract with two headline numbers: accuracy 'in the 80%+ range' (p. 1) and a '4% reduction (p-value < 0.01)' in off-service placements (p. 6). Candid 'not novel' (p. 5); 'In our opinion' hedges (pp. 2, 15, 24); a limitations subsection (p. 16). Headline vs table: the 4% is a DiD coefficient under parallel trends (pp. 22-23), while the within-period check gives an off-service median ATE of 0.00 (p. 24). Figures 6-7 share one caption (pp. 25-26).",
+    "limits_future": "Stated: single centre (p. 16); models absorb inefficiencies, and length of stay may be the wrong outcome (p. 16); EHR deployment excludes notes (p. 16); noisy, nurse-driven treatment assignment and few patients (p. 24); decalibration (pp. 21-22). Future: a second hospital (pp. 8, 16); tools turning predictions into actionable recommendations (p. 24); validating effects on quality of care (p. 27).",
+    "method_links": [
+      {
+        "method": "Method 5",
+        "relation": "evidence",
+        "note": "Owner: the office of bed management (dashboard designed with it, p. 19). Current rule: resource nurses' estimates, beaten in median relative error (11.5% vs 16.0%) on the days the tool was used. Field test on decision-level outcomes (boarding delay, off-service placement), with the evaluation's limits stated. Stakeholder involvement stated as instrumental (p. 2).",
+        "pages": "pp. 2, 19-24"
+      },
+      {
+        "method": "Method 5",
+        "relation": "variant",
+        "note": "Prediction, not prescription: the models are 'predictive only' and make no recommendation (p. 21) and must not serve as a recommendation engine because outcomes are endogenous (p. 10). Better information leading to better decisions is assumed, then tested in the field. Learning inside the decision is absent; tools that turn predictions into recommendations are future work (p. 24).",
+        "pages": "pp. 10, 21, 24, 27"
+      },
+      {
+        "method": "Method 3",
+        "relation": "variant",
+        "note": "A price of interpretability without a knob or bound: accuracy gaps between single trees or LR and ensembles are tabulated (LR within 4% of the best, p. 15), and the owner chose single trees because the accuracy gain was not worth the loss in interpretability (p. 18).",
+        "pages": "pp. 13-15, 18"
+      },
+      {
+        "method": "Method 4",
+        "relation": "variant",
+        "note": "OCT appears as a packaged learner: an MIO solved approximately by local search (p. 36), tuned on CART's grid, no certificate or gap. It nearly ties with CART (Tables 3-4) and was deployed over CART for the commercial package's ease of use (p. 18, fn. 1). No claim that OT wins, consistent with the skill's Workflow D checkpoint.",
+        "pages": "pp. 13-14, 18, 36"
+      },
+      {
+        "method": "Method 6",
+        "relation": "evidence",
+        "note": "Company channel: the commercial OCT package runs in production (p. 18, fn. 1), and its threshold convention is reported (p. 41, fn. 3). Data exploration to production in under twelve months (p. 5); a second hospital under way (p. 8). Caution: no competing-interest statement in the preprint text (Integrity Rule 5).",
+        "pages": "pp. 5, 8, 18, 41"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "field impact study of a decision-support tool: DiD against the prior year plus a within-period stratified comparison",
+        "evidence": "Off-service placement and boarding delay compared April vs July 2019, with 2018 as control and day/hour controls; then tool-use days vs other days within 116 day x hour strata of 2,117 ED patients, with the weaknesses of each design named.",
+        "pages": "pp. 22-24"
+      },
+      {
+        "pattern": "post-deployment maintenance study: error drift, marginal value of data, retraining cadence",
+        "evidence": "A year of production error tracked (about +1 pp per quarter; holiday errors); retraining on windows of 1-24 months finds about 14 months sufficient; the owner is advised to retrain twice a year with a fixed window.",
+        "pages": "pp. 25-26"
+      }
+    ],
+    "transferable": [
+      "(D3) Put observations on the operation's clock (one row per patient-day at a fixed time) so that predictions line up with shifts, rounds and data backups (pp. 7, 18).",
+      "(D3) Where notes are unavailable or private, use daily counts of events (orders, abnormal labs, documents written) as activity proxies; here they fill the top five predictors (Table 6, p. 16; pp. 8, 33).",
+      "(D5) Split train, validation and test by calendar time, not at random, and say why this makes your numbers conservative relative to randomly split studies (p. 10).",
+      "(D4) To turn class-weighted individual risk scores into a population count, multiply their sum by a training-calibrated correction factor per day of week; compare against raw sums and threshold-then-sum (pp. 41-42, Table 14).",
+      "(D5) Check single-tree stability before selling interpretability: plot the depth chosen by cross-validation across folds as the training window grows (Figure 3, pp. 18-19).",
+      "(D5) In a field test, record the incumbent's (the nurses') forecast alongside the tool's on the same days, compare against the midpoint of their interval, and report quartiles of relative error (pp. 21-22).",
+      "(D5) Estimate operational impact by difference-in-differences with the previous year's same months as control and day/hour controls, then check within the deployment period stratum by stratum (day x hour) (pp. 22-24).",
+      "(D5) After deployment, track rolling error, measure the data needed by retraining on m-month windows, and give the owner a retraining cadence (pp. 25-26).",
+      "(D7) Use the interpretable tree to audit features: here it exposed the DNR indicator as dominant, and models with and without it are reported (pp. 14-15)."
+    ],
+    "coauthors": "Jean Pauphilet (London Business School), Jennifer Stevens and Manu Tandon (Beth Israel Deaconess Medical Center) (p. 1)",
+    "quotes": [
+      {
+        "text": "Since our models are predictive only, we are not making any precise recommendation and do not translate predictions into precise guidelines on how to improve patient flows.",
+        "page": 21
+      },
+      {
+        "text": "for they did not view the gain in accuracy worth the loss in interpretability",
+        "page": 18
+      }
+    ]
+  },
+  {
+    "id": "S139",
+    "year": "2022",
+    "title": "Bootstrap robust prescriptive analytics",
+    "read_level": "full",
+    "contribution": "Robustifies nearest-neighbour and kernel (Nadaraya-Watson) prescriptions over a relative-entropy ball of reweighted training data. The robust problem stays convex (exponential-cone duals), stays consistent, and has a bootstrap-disappointment bound exp(-n r) that sets the radius in advance; the paper also proves that the KL ball is the least conservative choice with this rate. Illustrated on a synthetic newsvendor.",
+    "problem_entry": "DA+RO (CP as engine; ML local learners). The estimate-first-optimize-later prescriptions of Bertsimas-Kallus and others are consistent but have no remedy for overfitting: estimator variance, worst in high covariate dimension, is amplified by optimization into overly optimistic decisions (pp. 3-4). Data, not distributions, as the primitive (p. 2). The failure event is named 'disappointing' (p. 4); the aim is formulations whose bootstrap disappointment is controlled (pp. 6-7).",
+    "key_idea": "Replace the estimator's empirical distribution by the worst case over a KL ball of radius r on the training points. KL is the rate function of bootstrap resampling, so disappointment decays as exp(-n r) (Theorem 6, p. 15; Corollary 2, p. 16), and no smaller ball keeps the rate (Proposition 1, p. 16). The estimator, its consistency (Theorems 3-4, p. 14) and the problem's convexity (p. 8) are kept.",
+    "assumptions": "Finite-dimensional z and y; i.i.d. data, with time as a covariate (pp. 1-2). Loss convex in z (Assumption 1, p. 9) and bounded for consistency (p. 14). Bandwidth and k(n) scalings plus randomized tie-breaking (pp. 8, 14). Ambiguity set restricted to distributions on the observed points (p. 12). Admitted: no parametric class, so no out-of-sample theorem; the bootstrap is only hoped to be a good proxy (p. 7). Data: a synthetic newsvendor only, demand depending on temperature and weekend, evaluated at one context (pp. 18-19).",
+    "proof_devices": [
+      "LP characterization of kNN/kernel estimators on reweighted data via a scaling variable s with P = s*D (my label: Charnes-Cooper); nested neighbourhoods make the estimator a max of partial estimators (Theorem 1, p. 11; B.1, pp. 26-27)",
+      "Robust counterpart through the perspective constraint s*R(P/s, D) <= s*r, convex for any convex distance; min over z of a max of concave sups (Theorem 2, pp. 12-13; Corollary 1, p. 13)",
+      "Hanasusanto-Kuhn's robust Nadaraya-Watson shown to be the same program with s fixed (Remark 1, p. 13)",
+      "Consistency: Pinsker's inequality converts the KL radius to total variation; numerator and denominator of the ratio estimator bounded separately (Walk 2010); uniform consistency gives an optimality gap of at most 2 eps (Theorems 3-4, p. 14; Appendix A, pp. 25-26; B.4-B.5, pp. 28-30)",
+      "Bootstrap disappointment: Csiszar's finite-sample Sanov inequality on convex sets plus a union bound over neighbourhoods, giving sum_j exp(-n max{r, r_n^j}) and exp(-n r) for kernels (Theorems 5-6, pp. 14-15; Corollary 2, p. 16; B.6, p. 30)",
+      "Radius rules: r >= (log n + log(1/b))/n (kNN) or log(1/b)/n (kernels) for disappointment at most b; joint scalings for consistency with vanishing disappointment (pp. 16-17)",
+      "Optimality of KL: Sanov's lower bound plus a Hahn-Banach separation construction (Proposition 1, p. 16; B.2, p. 27)",
+      "Lagrangian duality with the Fenchel conjugate of lambda log lambda gives exponential-cone constraints under Slater (r > r_n^j) (Lemmas 1-2, pp. 17-18; B.7-B.8, pp. 30-32); boundary printed: O(n^2) terms for robust kNN (p. 17)"
+    ],
+    "experiments": "Julia, Convex.jl and ECOS on exponential-cone duals, versions not stated; h(n) and k(n) chosen by ten-fold CV; 20,000 resamples (pp. 18-19). Nominal methods disappoint about half the time; the robust ones decay with n, and fresh-data disappointment tracks the bootstrap proxy (Figure 6, pp. 19-20). Against Hanasusanto-Kuhn with matched in-sample budget: near tie over 250 training sets, HK slightly cheaper at 3 of 4 sizes, realized disappointment far below b = 0.1 (Table 1, p. 20). Spurious covariates: gains at d = 0 and limited room as d grows; the 'large statistical significance' claim names no test (Figure 7, Remark 2, p. 21). ERM with a factor encoding converges faster (Figure 8, p. 22). All solves under 1 s (Figure 9, p. 23). One context, scalar decision, n <= 800; no real data.",
+    "positioning": "Three-way taxonomy (ERM; estimate-first-optimize-later; robust budget minimization) placing itself in the third (pp. 3-4). ERM is criticized for bias (p. 3) and later credited when parametric assumptions hold (p. 22). Elmachtoub-Grigas's 'predict, then optimize' is named (p. 3). DRO precedents by ambiguity-set type, including his robust SAA and the second author's DRO-optimality work (pp. 4-5). The closest rival, Hanasusanto-Kuhn 2013, is restated as a special case (Remark 1, p. 13) and matched fairly (p. 19).",
+    "writing": "Modest abstract (a 'small newsvendor problem', p. 1); motivating example with a figure before the formalism (pp. 5-7); a named failure event, 'disappointing' (p. 4); the objection pre-empted in a 'careful reader may remark' paragraph (p. 7); three numbered contributions, one a code release (pp. 7-8). No conclusion section (p. 23). Slips survive in v2: varying names for its own term (pp. 6, 12), the Figure 6 caption's theorem number (p. 20), Lemma 1's variable list (p. 17).",
+    "limits_future": "Stated: no out-of-sample guarantee (pp. 7-8); radius for a target b only numerically (p. 16); O(n^2) terms (p. 17); loose kNN bound (p. 19); small advantage over HK (p. 19); limited room with spurious covariates (p. 21); parametric ERM better when its assumptions hold (p. 22). Future directions: not stated (no conclusion section).",
+    "method_links": [
+      {
+        "method": "Method 1",
+        "relation": "evidence",
+        "note": "The robust counterpart keeps the nominal class: convex whenever the nominal problem is (p. 8; Theorem 2), with exponential-cone duals solved by an off-the-shelf solver in under 1 s (Lemmas 1-2; Figure 9). Boundary printed (O(n^2) terms; radius only numerically). Structure read from duality and large-deviation geometry. The class is conic (CP), not LP or MIO.",
+        "pages": "pp. 8, 12-13, 16-18, 23"
+      },
+      {
+        "method": "Method 3",
+        "relation": "evidence",
+        "note": "One interpretable knob, the radius r, tied by a solution-independent bound to a probability the decision-maker feels (bootstrap disappointment b): exp(-n r) for kernels, sum_j exp(-n max{r, r_n^j}) for kNN. Set in advance from b; this calibration is the advantage claimed over Hanasusanto-Kuhn (p. 19).",
+        "pages": "pp. 6, 15-16, 19"
+      },
+      {
+        "method": "Method 3",
+        "relation": "variant",
+        "note": "The bound concerns a proxy (bootstrap data) and is admitted to promise nothing out of sample (p. 7). No cost-vs-r price curve is drawn. In the cost experiment r is chosen by CV (p. 19), and the cost comparison with HK is a near tie that HK edges at 3 of 4 sizes (Table 1, p. 20).",
+        "pages": "pp. 7, 19-21"
+      },
+      {
+        "method": "Method 4",
+        "relation": "variant",
+        "note": "Only the duel survives, outside MIO: nominal methods as r = 0, the rival robust method matched on in-sample budgeted cost, parametric ERM given the encoding under which it wins. No warm start, and no certificate beyond solving convex programs.",
+        "pages": "pp. 19-22"
+      },
+      {
+        "method": "Method 5",
+        "relation": "variant",
+        "note": "Decisions, not predictions, are scored: exact actual cost and fresh-data disappointment, between full-information and no-information costs. But there is no owner, current rule or real data (synthetic newsvendor). Against the skill's checkpoint: the paper names high covariate dimension as the source of optimism (p. 4), yet its spurious-covariate test shows the robust gain at d = 0 and limited room as irrelevant covariates grow (Figure 7, p. 21): the fix is shown for small samples, not for high dimension.",
+        "pages": "pp. 4, 19-22"
+      },
+      {
+        "method": "Method 6",
+        "relation": "evidence",
+        "note": "Programme step: a postdoc extends the From Predictive to Prescriptive Analytics line (Bertsimas-Kallus 2020) into DRO, with a public Julia implementation (p. 8).",
+        "pages": "pp. 1, 8, 23"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "provable guarantee on a resampling proxy, then an empirical check that the proxy tracks fresh data",
+        "evidence": "An out-of-sample guarantee is judged to need unjustifiable parametric assumptions, so the guarantee targets bootstrap disappointment (Theorems 5-6, Corollary 2). Figure 6 then plots bootstrap and fresh-validation disappointment side by side to show that the proxy holds.",
+        "pages": "pp. 6-7, 14-16, 19-20"
+      },
+      {
+        "pattern": "rival method as a special case or relaxation of one's own formulation",
+        "evidence": "Hanasusanto-Kuhn's robust Nadaraya-Watson is shown to equal the new program with the scaling variable s fixed (Remark 1), then compared at matched radius; compare card S010 in c16 (Lasso as a weaker relaxation, pp. 9-10).",
+        "pages": "p. 13; p. 19"
+      }
+    ],
+    "transferable": [
+      "(D4) To robustify any weighted-average estimator (kernel, kNN), write it as an LP in P = s*D, then replace the equality by a convex divergence ball in perspective form s*R(P/s, D) <= s*r; convexity in the decision is kept (pp. 11-13).",
+      "(D4) Handle a data-dependent kNN neighbourhood through nested neighbourhoods and a max over partial estimators (Theorem 1, p. 11).",
+      "(D4) For a guarantee on resampled data use the KL ball: Csiszar's finite-sample Sanov bound gives disappointment <= exp(-n r); for a target b take r >= log(1/b)/n (kernels) or (log n + log(1/b))/n (kNN) (pp. 14-16).",
+      "(D4) Prove that your divergence ball is the least conservative one with a given rate by combining Sanov's lower bound with a Hahn-Banach separation (Proposition 1, pp. 16, 27).",
+      "(D4) Dualize suprema over a KL ball with the Fenchel conjugate of lambda log lambda to get an exponential-cone program for ECOS-class solvers (Lemmas 1-2, pp. 17-18, 30-32).",
+      "(D4) Keep consistency while robustifying: Pinsker's inequality turns the KL radius into total variation, and the radius must vanish faster than the estimator's localization scale (h(n)^d, or k(n)/n) (Theorems 3-4, pp. 14, 28-30).",
+      "(D5) Test data-driven decisions on synthetic data with a known conditional distribution, so that actual cost is exact; draw the full-information and no-information costs as bounds (pp. 19, 21).",
+      "(D5) Plot the guarantee's target (bootstrap disappointment) and the real target (fresh validation disappointment) side by side (Figure 6, p. 20).",
+      "(D5) Compare against a rival robust method only after matching its radius on a common in-sample quantity, here the budgeted cost (p. 19).",
+      "(D5) Stress-test with d irrelevant N(0,1) covariates and say when robustification stops helping (Figure 7, Remark 2, p. 21).",
+      "(D7) Add a 'careful reader may remark' paragraph that says what is not proven, before a reviewer does (p. 7)."
+    ],
+    "coauthors": "Bart Van Parys (MIT Operations Research Center, p. 1; Swiss National Science Foundation Early Postdoc.Mobility fellowship, p. 23)",
+    "quotes": [
+      {
+        "text": "Although we do not prove that our bootstrap robust formulations enjoy guaranteed out-of-sample performance, we demonstrate empirically that this is nevertheless the case in the context of a small newsvendor problem discussed in Section 5.",
+        "page": 8
+      },
+      {
+        "text": "the main practical advantage of our bootstrap distance function is that its size r can be calibrated in advance to guarantee a certain bootstrap disappointment (here b = 0.1)",
+        "page": 19
+      }
+    ]
+  }
+]

@@ -1,0 +1,254 @@
+[
+  {
+    "id": "S008",
+    "year": "2020",
+    "title": "From predictive to prescriptive analytics",
+    "read_level": "full",
+    "contribution": "Turns local-learning ML predictors (kNN, kernels, LOESS, CART, random forests) into weights for a re-weighted SAA that prescribes decisions from auxiliary covariates, proves tractability and asymptotic optimality for the kNN, kernel and local-linear weights (also with decision-dependent uncertainty and censoring), defines the coefficient of prescriptiveness P, and reports P = 0.88 in a 150-week backtest at a media distributor (arXiv v4 read).",
+    "problem_entry": "{DA ML AP} OR/MS data are mostly auxiliary covariates; SAA ignores them and point predictions ignore residual uncertainty; stated as conditional stochastic optimization min_z E[c(z;Y)|X=x] with unknown distribution and only data (pp. 1-2, 6-7).",
+    "key_idea": "Read each predictor as weights w_{N,i}(x) over past observations and solve min_z sum_i w_{N,i}(x) c(z;y_i), which differs from SAA only in the weights; add the historical decision as a feature under ignorability when decisions affect Y; score policies by P, a decision analogue of R^2 (pp. 3, 10-14, 16, 21).",
+    "assumptions": "Equicontinuous costs and closed Z, bounded or coercive (Assumptions 3-5, pp. 18-19); iid in the main text, called a strong assumption, mixing processes in the supplement (pp. 18, 42-44); ignorability argued from how past managerial decisions were made (p. 14); conditional independence of demand and censoring (p. 25); four years of vendor data plus IMDb, Rotten Tomatoes and Google Trends, d_x = 91 (pp. 23-28); synthetic shipment LP with ARMA covariates (pp. 5-7, 53-54).",
+    "proof_devices": [
+      "Epigraph reformulation and ellipsoid method with subgradient separation: epsilon-optimal in time polynomial in the effective sample size (Theorem 2, pp. 16, 52)",
+      "Per-value solve or ball-cover discretization, exponential in d_z1, when decisions affect uncertainty; exact leaf enumeration for CART weights (Theorems 3-4, p. 17; proofs p. 52)",
+      "Asymptotic optimality: pointwise convergence from universal strong laws (Walk 2010) or kernel uniform rates (Hansen 2008), then a dense countable set with equicontinuity and weak convergence (Lemma 7, p. 47), uniform convergence on compacts (Lemma 5, p. 45), coercivity trapping the argmins (Lemma 6, pp. 45-47) (Theorems 5-10, pp. 19-20, 44-51)",
+      "Conditional Kaplan-Meier transformation of the weights, with Beran (1981) and the portmanteau lemma (eq. 24, Theorem 11, pp. 24-25, 51)",
+      "Multivariate Rademacher complexity and a vector-valued Ledoux-Talagrand comparison lemma for ERM decision rules (Theorem 13, Lemmas 1-3, pp. 39-41)",
+      "Lagrangian duality to show why the capacitated problem does not reduce to quantile regression (p. 24)"
+    ],
+    "experiments": "Synthetic shipment-planning LP with ARMA covariates: SAA best below N of about 64, RF no worse than SAA at small N and robust to noise dimensions, P tends to 0.46 (pp. 6-7, 22-23). Real case: 150-week rolling backtest over just under 20,000 European locations with an RF of 500 trees and Kaplan-Meier weights: P = 0.88 against perfect foresight, SAA++ and an RF point-prediction policy (0.85-0.90 vs 0.40-0.57 in four cities); scored at a quarter of capacity because of censoring; no solver, run times or vendor rule reported (pp. 28-31).",
+    "positioning": "Departs from data-driven OR that uses iid data on Y only (SAA, stochastic approximation, robust SAA, DRO, RO) and from ML that predicts without deciding; generalizes ERM decision rules (Rudin-Vahn, Kao et al.) but finds them unfit for constrained decisions; credits kernel weighting (Hanasusanto-Kuhn, Hannah et al.) while claiming broader ML links and rigorous asymptotics (pp. 2, 7-9, 38).",
+    "writing": "Abstract: a departure reflecting practical experience, ending on one headline number (88%); lettered contributions a)-g); synthetic duel in section 1.1 before the literature; P introduced by analogy with R^2; abstract and conclusion claim asymptotic optimality that the body withholds from CART and RF (Tension T6); v4 still refers to 'both' examples and gives 5 vs 4 warehouses (pp. 1, 3-7, 12, 19, 21, 32, 53).",
+    "limits_future": "Body limits: no theory for CART and RF, the methods used in the application (p. 19); exponential discretization when decisions affect uncertainty (p. 17); ERM rules fail with constraints (p. 38); ignorability needed (p. 14); censored-scoring workaround (p. 30). No future directions stated (p. 32).",
+    "method_links": [
+      {
+        "method": "Method 5",
+        "relation": "evidence",
+        "note": "Decisions, not predictions, are scored (P); the prediction R^2 of 0.67 is called secondary to the prescription's performance; ML weights put learning inside the decision; the naive baseline is strengthened (SAA++).",
+        "pages": "pp. 10-12, 21, 29, 31"
+      },
+      {
+        "method": "Method 5",
+        "relation": "variant",
+        "note": "The baseline is a constructed data-poor rule, not the vendor's current replenishment rule; the evaluation is a retrospective backtest of what they would have done, not a field test.",
+        "pages": "pp. 30-31"
+      },
+      {
+        "method": "Method 1",
+        "relation": "evidence",
+        "note": "Class kept by the weighting (same complexity as SAA, Theorem 2); boundary printed for decision-dependent uncertainty (non-convex, exponential discretization); Lagrangian duality read for structure in the real problem.",
+        "pages": "pp. 16-17, 24"
+      },
+      {
+        "method": "Method 2",
+        "relation": "variant",
+        "note": "The why-now argument is the explosion of data and advances in ML, stated without any figure.",
+        "pages": "p. 2"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "Synthetic duel of both schools up front",
+        "evidence": "A known-truth example in section 1.1 where both incumbent routes (SAA and point prediction) plateau above the full-information optimum while the proposal converges; repeated for the pricing variant.",
+        "pages": "pp. 5-7, 15"
+      },
+      {
+        "pattern": "Identification assumption defended by the decision process that generated the data",
+        "evidence": "Ignorability argued as particularly defensible because historical managerial decisions were made from observable quantities recorded in X.",
+        "pages": "p. 14"
+      }
+    ],
+    "transferable": [
+      "Turn a predictive method into a prescriptive one by extracting its implicit conditional distribution as weights on past observations and keeping the downstream optimization unchanged; truncate negative local-linear weights (LOESS*) to keep convexity without losing the asymptotics (pp. 3, 10-12).",
+      "When the decision moves the uncertainty (prices), add the historical decision as a feature and argue ignorability from how past decisions were made; with tree weights, enumerate the leaves reachable from x (pp. 13-14, 17).",
+      "For censored demand, transform the weights by a conditional Kaplan-Meier estimator; when scoring on censored history, shrink capacities so that censoring rarely binds, and state that this is for scoring only (pp. 24, 30).",
+      "Report a unitless decision metric P = 1 - (R(policy) - R(perfect foresight)) / (R(SAA) - R(perfect foresight)) on held-out data and show its distribution across sites (p. 21; Fig. 10, p. 30).",
+      "Evaluate with a rolling origin (retrain on the past only, score the next period) and strengthen the naive baseline before the duel (SAA++) (pp. 30-31).",
+      "Prove asymptotic optimality of a data-driven decision rule by pointwise convergence of the estimated conditional cost, a dense countable set with equicontinuity, uniform convergence on compacts, and coercivity to trap the argmins (Lemmas 5-7, pp. 45-47)."
+    ],
+    "coauthors": "Nathan Kallus",
+    "quotes": [
+      {
+        "text": "Although we do not have firm theoretical results on the asymptotic optimality of the predictive prescriptions based on CART (eq. (7)) and RF (eq. (8)), we have observed them to converge empirically in Section 1.1.",
+        "page": 19
+      },
+      {
+        "text": "Considering the uncertainty associated with new releases, we feel that this is a positive result, but at the same time what truly matters is the performance of the prescription in the problem.",
+        "page": 29
+      }
+    ]
+  },
+  {
+    "id": "S054",
+    "year": "2020",
+    "title": "COVID-19 mortality risk assessment: An international multi-center study",
+    "read_level": "full",
+    "contribution": "An XGBoost mortality-risk calculator for hospitalized COVID-19 patients, derived on 3,062 patients from Italy, Spain and the US and externally validated on 865 patients in Seville, Greece and Hartford (AUC 0.92, 0.87, 0.81), explained with SHAP and released as a public online tool under prospective validation at two sites.",
+    "problem_entry": "{AP ML} Early identification of high-risk COVID-19 inpatients for triage and resource allocation; earlier scores came mostly from Chinese cohorts or lacked comprehensive data; stated as binary classification of in-hospital death from admission data (pp. 1-2, 4).",
+    "key_idea": "XGBoost on 22 commonly available admission features, SHAP explanations, per-cohort thresholds at 80% sensitivity that clinicians recalibrate locally, and a public calculator; no optimization model (pp. 2, 4-9).",
+    "assumptions": "3,927 patients from 33 hospitals in six centers (derivation 3,062, validation 865), study dates 1 February to 15 May; first labs within about 24 h, comorbidities grouped by CCS, features over 40% missing dropped, kNN imputation; IRB minimal-risk with consent waived; data not publicly shareable (pp. 1-5).",
+    "proof_devices": [
+      "n/a for optimization; analysis devices: stratified 85/15 split and K-fold cross-validated AUC tuning of seven XGBoost hyperparameters with Optuna (p. 4)",
+      "SHAP additive attributions summing to each patient's risk, read for clinical cut-points and compared with reference ranges (pp. 6, 8)",
+      "Per-cohort threshold fixed at 80% sensitivity, metrics with 95% confidence intervals (p. 5)",
+      "Two-sided t-tests for survivor vs non-survivor features, binary ones included (Table 2, p. 4)"
+    ],
+    "experiments": "AUC 0.947 training, 0.90 test, 0.92 Seville, 0.87 Hellenic CSG, 0.81 Hartford; at 80% sensitivity specificity 0.87, 0.87, 0.74 and 0.58, precision 25.7% and 24.2% at the Greek and Hartford sites; weakest site printed and discussed; no comparison with clinical severity scores; other ML methods only in the unread supplement (pp. 4-8).",
+    "positioning": "Against early COVID-19 scores from Chinese cohorts and Pourhomayoun et al.; claims the first score trained and validated on European and US patients; clinical literature used to corroborate each risk factor; no OR or optimization literature cited (pp. 1-2, 6, 8).",
+    "writing": "Clinical-journal format with confidence intervals and a Limitations section; the abstract's 'currently in clinical use' is specified in the body as prospective validation at two sites; the conclusion's 'strong generalization' sits beside a Hartford specificity of 0.58 (Tension T6); author contributions place Bertsimas on conceptualization, funding, supervision and review, students on analysis, software and drafting (pp. 1, 6, 8, 10-12).",
+    "limits_future": "Capacity-driven selection of admitted patients and possible under-treatment at the peak; the Hartford gap and epidemic timing; features limited to those common across sites (no D-dimer, IL-6, BMI, imaging); future: more US cohorts, treatments, racial and socio-economic determinants (p. 10).",
+    "method_links": [
+      {
+        "method": "Method 5",
+        "relation": "evidence",
+        "note": "Partner hospitals' data and a live clinical problem; the tool is in use in Cremona's emergency room and integrated with Seville's EHR under prospective validation.",
+        "pages": "pp. 1-3, 8-10"
+      },
+      {
+        "method": "Method 5",
+        "relation": "contradiction",
+        "note": "Scored by prediction metrics (AUC; accuracy and specificity at fixed sensitivity), not by decisions, and not against the partners' current triage rule or an established severity score (PSI, CURB-65, SCAP cited only for risk factors); a black-box ensemble explained post hoc by SHAP where clinicians act.",
+        "pages": "pp. 4-9"
+      },
+      {
+        "method": "Method 3",
+        "relation": "variant",
+        "note": "The trade-off knob is the risk threshold, fixed at 80% sensitivity per cohort and handed to clinicians to set for their capacity; no trade-off curve in the body (ROC curves in the unread S1 Fig).",
+        "pages": "pp. 5, 8"
+      },
+      {
+        "method": "Method 4",
+        "relation": "variant",
+        "note": "No exact or optimal model in the body; the final model is a boosted ensemble (XGBoost) tuned by cross-validation; the comparison with other ML methods is only in the unread supplement.",
+        "pages": "pp. 2, 4"
+      },
+      {
+        "method": "Method 6",
+        "relation": "evidence",
+        "note": "Produced by a student and postdoc cohort under his supervision and funding, with hospital partners, and released as a public calculator.",
+        "pages": "pp. 1, 8, 11-12"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "Ship a public tool with the paper",
+        "evidence": "An online calculator with per-patient SHAP explanations released with the study and reported in use.",
+        "pages": "pp. 1, 8-10"
+      },
+      {
+        "pattern": "External validation by site with a per-site threshold",
+        "evidence": "Derivation in three hospital systems, validation in three others across countries; the threshold re-fixed per site at 80% sensitivity and left to local recalibration.",
+        "pages": "pp. 2-3, 5, 8"
+      }
+    ],
+    "transferable": [
+      "Split partner institutions into derivation and external-validation cohorts by site and country, and report each site separately with confidence intervals (pp. 2-3, 5).",
+      "Fix the sensitivity, report the threshold it needs at each site, and tell users to recalibrate the threshold on their own historical patients for their capacity (pp. 5, 8).",
+      "Read clinical cut-points off SHAP dependence plots coloured by age and compare them with reference ranges (pp. 6, 8).",
+      "Drop features missing in more than 40% of the derivation cohort and impute the rest by kNN (p. 4)."
+    ],
+    "coauthors": "Galit Lukin, Luca Mingardi, Omid Nohadani, Agni Orfanoudaki, Bartolomeo Stellato, Holly Wiberg, Sara Gonzalez-Garcia, Carlos Luis Parra-Calderón, Kenneth Robinson, Michelle Schneider, Barry Stein, Alberto Estirado, Lia a Beccara, Rosario Canino, Martina Dal Bello, Federica Pezzetti, Angelo Pan, The Hellenic COVID-19 Study Group",
+    "quotes": [
+      {
+        "text": "The CMR tool is available as an online application at covidanalytics.io/mortality_calculator and is currently in clinical use.",
+        "page": 1
+      },
+      {
+        "text": "Clinicians can determine the relevant threshold for their hospital’s needs.",
+        "page": 8
+      }
+    ]
+  },
+  {
+    "id": "S061",
+    "year": "2020",
+    "title": "Sparse high-dimensional regression: Exact scalable algorithms and phase transitions",
+    "read_level": "full",
+    "contribution": "Reformulates ridge-regularized l0-constrained regression as a big-M-free convex integer problem over the support, solves it to provable optimality for n and p in the 100,000s by single-tree outer approximation with cheap cuts and a dual warm start (faster than GLMNet's Lasso in every reported cell), and reports accuracy, false-alarm and computational phase transitions on synthetic data (arXiv v1 read).",
+    "problem_entry": "{ML IO; CP for the relaxation} Exact sparse regression was 'branded hopeless' and left to heuristics whose theory needs strong assumptions; the group's 2016 big-M MIO reached only the 1000s because M weakens the formulation; phase transitions of the exact estimator could not be checked (pp. 1-4).",
+    "key_idea": "Eliminate the weights in closed form (a kernel, dual view) to get a pure binary convex problem in the support, solve it by outer approximation in one branch-and-bound tree with lazy cuts, then use the exact solver to observe phase transitions in accuracy, false alarms and solve time (pp. 3-12, 14-18).",
+    "assumptions": "Synthetic Gaussian design with Toeplitz correlation rho, plus-or-minus-one coefficients, root-SNR in {3, 7, 20}; k known in timing and accuracy runs, cross-validation over k only for false alarms; n much larger than k for fast cuts; Gamarnik-Zadik theory for binary coefficients; no real data (pp. 1, 11-14, 16).",
+    "proof_devices": [
+      "Normal equations, matrix inversion lemma and Schur complement: an SDP-representable ridge loss (Lemma 1, pp. 5-6)",
+      "Bilevel split into support and weights with a closed-form inner problem: a convex integer formulation without big-M (Theorem 1, p. 6)",
+      "Vapnik's dual: subset selection in the space of kernels (Theorem 2, pp. 7-8)",
+      "Sion minimax swap and LP duality for the sum of the k largest terms: an SOCP relaxation instead of a large SDO (Theorem 3, pp. 8-9)",
+      "Outer approximation (Duran-Grossmann) with finite termination via Fletcher-Leyffer; worst case exponentially many cuts (Theorem 4, pp. 9-10)",
+      "Capacitance-matrix evaluation of the loss and gradient in O(k^3 + nk) (eq. 20, Algorithm 2, pp. 10-11)",
+      "Warm start from the k largest scores of the SOCP dual solution (eq. 21, pp. 11-12)"
+    ],
+    "experiments": "Julia and Gurobi 6.5 on a Xeon E5-2690: n up to 100k, p up to 200k, k up to 30 solved in 15.6-528.7 s vs 69.5-988.0 s for GLMNet's Lasso, memory exception at n = 100k, p = 200k (p. 13); phase transitions over 50 and 20 replications: exact full recovery at n_t = 120 vs about 180 for the Lasso, Lasso false alarms high under cross-validation (pp. 14-18); 15, 10 and 1 minute limits with best-found solutions and no gaps; nonlinear illustration with 160 features (pp. 19-20).",
+    "positioning": "Respects the convex-proxy literature but stresses its assumptions, weak support recovery and shrinkage bias; two orders of magnitude beyond its own 2016 MIO; borrows the dual view from kernel learning and outer approximation from MINLP (Duran-Grossmann, Fletcher-Leyffer); phase-transition context from Donoho-Tanner, Wainwright and Gamarnik-Zadik (pp. 2-4, 7, 9-10, 13).",
+    "writing": "Abstract in the Heuristic 9 shape (novel reformulation, the 100,000s, two orders of magnitude, reversal of traditional complexity theory, a superiority verdict); the reversal sentence recurs in six places, abstract included; strong verbs ('impeaches', 'game changing') next to hedges ('provide evidence', 'only as an illustration'); the whole-path timing admission only in the body (Tension T6) (pp. 1, 3-5, 13, 16, 19-20).",
+    "limits_future": "Worst-case exponential cuts (p. 10); no explanation of the speed (pp. 13-14); a statistically relevant but computationally infeasible region n0 < n < n_t (p. 16); memory limits (p. 13); no feature interactions in the nonlinear extension (p. 20); future: nonlinear feature discovery as a competitor to neural networks (pp. 5, 20).",
+    "method_links": [
+      {
+        "method": "Method 1",
+        "relation": "evidence",
+        "note": "Big-M-free convex integer reformulation; structure read off the dual (kernel view); a small SOCP relaxation instead of a large SDO; boundary printed (worst-case cuts, memory, infeasible region). Counter-evidence for Tension T4: formulation strength is the stated reason to leave big-M.",
+        "pages": "pp. 3, 6-10, 13, 16"
+      },
+      {
+        "method": "Method 2",
+        "relation": "evidence",
+        "note": "A belief dated (branded hopeless for decades) and refuted with solve times measured at n and p in the 100,000s; refuting it is called an important contribution.",
+        "pages": "pp. 2, 4, 13"
+      },
+      {
+        "method": "Method 2",
+        "relation": "variant",
+        "note": "The solver speed-up is cited from Bixby (2012) without a number; the enabling change is the reformulation plus lazy-constraint callbacks, not a rebuilt solver-times-hardware figure.",
+        "pages": "pp. 2, 10"
+      },
+      {
+        "method": "Method 4",
+        "relation": "evidence",
+        "note": "Warm start from the dual relaxation, exact solve, solver version and machine stated, duel against the incumbent's reference implementation (GLMNet) at matched sparsity.",
+        "pages": "pp. 11-13"
+      },
+      {
+        "method": "Method 4",
+        "relation": "variant",
+        "note": "Time limits of 15, 10 and 1 minutes with best-found solutions averaged in and no gaps reported (Tension T1); synthetic data only; the whole-path vs single-k timing asymmetry admitted but kept in the headline.",
+        "pages": "pp. 13-14, 17-18"
+      },
+      {
+        "method": "Method 6",
+        "relation": "evidence",
+        "note": "The ML programme continues with a postdoc on outside funding, and the computational result prompted theory by Gamarnik and Zadik.",
+        "pages": "pp. 4, 20"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "Eliminate the continuous part in closed form and cut on the binary support",
+        "evidence": "Ridge weights solved in closed form give a pure binary convex objective over micro kernels, solved by single-tree outer approximation without big-M constants.",
+        "pages": "pp. 5-11"
+      },
+      {
+        "pattern": "Exact solver as a scientific instrument",
+        "evidence": "Once the exact problem is solvable at scale, it is used to observe accuracy, false-alarm and complexity phase transitions, mapping solve time against n/k and SNR.",
+        "pages": "pp. 4, 14-19"
+      }
+    ],
+    "transferable": [
+      "If the continuous part of a mixed problem has a closed-form inner solution, substitute it to get a pure-binary convex objective and drop the big-M constants (Lemma 1, Theorem 1, pp. 5-6).",
+      "Run outer approximation in one branch-and-bound tree with lazy-constraint callbacks instead of re-solving an MIO per cut (p. 10).",
+      "Make each cut cheap: compute the loss and its gradient through the matrix inversion lemma in O(k^3 + nk) (eq. 20, Algorithm 2, pp. 10-11).",
+      "Warm-start from the continuous relaxation's dual by picking the k largest scores; keep the relaxation small through a minimax swap and the LP dual of the sum of the k largest terms (Theorem 3, eq. 21, pp. 8-12).",
+      "Phase-transition protocol: known truth, accuracy A% and false-alarm F%, n varied with one parameter at a time moved from nominal values, 20-50 replications with error bars (pp. 12, 14-18).",
+      "When timing against a path algorithm, choose a comparable path point (the least regularized with exactly k nonzeros) and disclose the asymmetry (p. 13)."
+    ],
+    "coauthors": "Bart Van Parys",
+    "quotes": [
+      {
+        "text": "The empirical computational results in this paper do away with the long held belief that exact sparse regression for practical problem sizes is a lost cause.",
+        "page": 4
+      },
+      {
+        "text": "Admittedly though, the GLMNet implementation returns an entire solution path for varying λ instead of a single regression model.",
+        "page": 13
+      }
+    ]
+  }
+]

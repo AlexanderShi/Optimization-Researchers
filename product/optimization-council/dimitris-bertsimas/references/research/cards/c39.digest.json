@@ -1,0 +1,367 @@
+[
+ {
+  "id": "S620",
+  "year": "2026",
+  "title": "Improving survival models in health care by balancing imbalanced cohorts: a novel approach",
+  "read_level": "full",
+  "contribution": "A clinical-informatics method that stratifies colorectal-liver-metastasis patients by baseline risk and undersamples dense strata by an exact one-to-one matching integer program (0.8 s for eight strata), then trains unchanged treatment-specific Cox models that gain discrimination in the under-represented low- and high-risk tails on internal (bias-corrected bootstrap) and two external cohorts.",
+  "problem_entry": "ML + AP (oncology prognosis), IO as a small engine: challenges the assumption that the natural risk distribution of an observational cohort 'is optimal for model learning' (p. 2); hypothesizes that 'risk distribution imbalance' biases models toward dense strata, which matters at the extremes where chemotherapy vs surgery-alone decisions are made (pp. 2-3); asks whether restructuring the training data, not the architecture, helps (p. 2).",
+  "key_idea": "Stratify by a baseline five-year mortality risk (Cox fitted on surgery-alone, applied to both arms), then within each stratum undersample by a minimum-distance one-to-one matching between arms with a floor of alpha pairs, yielding a set uniform across strata and balanced across arms; train per-arm Cox models 3A/3B; matching is repurposed from confounding control to representation balance (pp. 3-5, 8); Cox model unchanged (pp. 2-3).",
+  "assumptions": "Development cohort 1,799 resected CRLM patients (1,197 surgery + chemotherapy, 602 surgery alone) from 2,375, ten literature-chosen prognostic variables, five-year OS (pp. 3, 6); Cox PH for all models (p. 3); eight strata for 'intuitive presentation in probability deciles' (p. 6); alpha tuned by internal validation (p. 5); no caliper because stratification gives within-stratum comparability (p. 4); standardized features (p. 5); external French n = 660 (surgery + chemo) and Dutch n = 1,058 (surgery alone) (p. 7).",
+  "proof_devices": [
+   "n/a for proofs (no theorem); Problem1: min sum d_ij z_ij, each patient matched at most once, sum z_ij >= alpha, z binary, standardized Euclidean distances (p. 5); fallback when the smaller arm has fewer than alpha patients (pp. 4-5); relaxed version in the appendix, not read (p. 5)",
+   "Measured solve time: 0.8 s on average for eight strata (footnote, p. 6)",
+   "[inferred] bipartite matching with a cardinality floor = min-cost flow with an integral LP relaxation; the paper calls it an integer program (p. 4)",
+   "Efron's bias-corrected bootstrap instead of a train-test split, because a split leaves too few tail patients (p. 5)",
+   "External per-stratum C-index and time-dependent AUC with strata from a Cox model fitted on the external cohort and 'used only for binning' (pp. 5-6)"
+  ],
+  "experiments": "Internal bias-corrected C: Model 1 0.6115, 3A 1-1 0.6535, 3B relaxed 0.6747 (Table 3, pp. 12-13); the text's 'up to 15% higher bias-corrected C indices' (p. 7) matches the 5-year AUC column (0.7429 vs 0.6451), the largest C gain being 10.3% [my arithmetic]; ICI improves for 3A, worsens for 3B (0.0531, 0.0755 vs 0.0340) (pp. 12-13); intervals overlap, no test. External: 3B on French, 3A on Dutch; up to 19% (French tails), 32% and 14% (Dutch lowest/highest strata) (p. 7) vs the Discussion's 'up to 54%' (0.47 to 0.73, p. 8), not reconciled; baselines Model 1 ('current gold standard', p. 7) and SMOTE (appendix, not read; 'neither resampling method universally outperforms the other', p. 9); sensitivity over 7-10 strata and variable subsets in the appendix (p. 7); no external CIs, no matching-variant statement, no code/data statement in the file.",
+  "positioning": "Analogue of class imbalance in ML classification (Japkowicz & Stephen 2002), claimed novel for risk strata in survival analysis (pp. 2, 8); propensity- and prognostic-score matching reframed, not criticized ('our use of matching serves a different purpose', p. 8); SMOTE critiqued by mechanism (p. 9); clinical framing via Lenert 2019 and a 2024 CRLM model review (pp. 2-3); no OR literature and no Bertsimas self-citation (pp. 9-10).",
+  "writing": "Clinical-informatics format with a 100-word context summary and structured abstract (p. 2); thesis as a challenged assumption ('We challenge this assumption by asking', p. 2); 'novel' in title, summary, abstract, introduction and Discussion (pp. 1-3, 8); optimization reduced to one displayed program and a one-line footnote (pp. 5-6); strong verbs ('confirms ... not merely statistical artifacts', p. 9) beside overlapping intervals (pp. 12-13); typos (pp. 7, 13).",
+  "limits_future": "Method plus evaluation lens (pp. 2, 8-9). Stated: tail uncertainty (p. 7), internal estimates 'complementary rather than conclusive' (p. 8), a 'dedicated future study' of when SMOTE or this method wins (p. 9). Unstated [inferred]: Cox only; external comparisons only vs Model 1 (not 2A/2B), so arm-splitting and balancing are confounded (pp. 3, 7); outcome-informed external binning (pp. 5-6); ICI deterioration for 3B (p. 13); no decision analysis despite treatment-choice motivation (p. 3). Future: other healthcare applications (p. 9).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Baseline is the field's current practice (Model 1, 'the standard approach in prognostic models for CRLM patients', p. 3; 'current gold standard', p. 7), and the motivation is a treatment decision (p. 3); but scoring stays on prediction (C, AUC, ICI), with no decision metric, treatment rule or field test; per-arm models 3A/3B are not turned into a prescription.",
+    "pages": "pp. 2-3, 5-9"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Weak: a step practice does by random or ad hoc undersampling is written as an exact integer program with a measured solve time (0.8 s).",
+    "pages": "pp. 4-6"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "[inferred] The class is not examined: the matching with a cardinality floor is a min-cost-flow LP with integral relaxation, called an integer optimization problem.",
+    "pages": "pp. 4-5"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Incumbents dueled (Model 1; SMOTE in the appendix) and the paper says where neither wins (p. 9); no warm start or certificate role; the 'frequently surpasses SMOTE' claim rests on an appendix not in the file.",
+    "pages": "pp. 7, 9"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Clinical programme with a recurring surgeon partner (Margonis, CV nos. 241-335 per note 01 section 1.5), multi-institutional cohorts, an ORC PhD candidate as first author and a clinical-informatics venue (Workflow E step 2). Not counted: Taste mark 3 evidence (sample optimized, not drawn, p. 4); Tension T6 evidence ('up to 15%' C claim matched by the AUC column, pp. 7, 12-13; 54% vs 32% for the Dutch lowest stratum, pp. 7-8); Heuristic 4 partial (calibration variability and SMOTE tie printed, pp. 7, 9).",
+    "pages": "pp. 1, 9"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "optimize the training sample, not the model",
+    "evidence": "Matching-based rebalancing of risk strata with the Cox learner unchanged; 'rethinking how training data are structured'.",
+    "pages": "abstract p. 2; pp. 4, 9"
+   },
+   {
+    "pattern": "exact matching IO as a study-design tool",
+    "evidence": "One-to-one min-distance matching IP builds the training set (here); S667 assigns reviewers by an MIO matching (S667 p. 5).",
+    "pages": "pp. 4-6"
+   },
+   {
+    "pattern": "per-stratum external validation",
+    "evidence": "External cohorts binned by their own risk model to show tail gains hidden by global indices.",
+    "pages": "pp. 5-6, 8"
+   }
+  ],
+  "transferable": [
+   "(D2) Rebalance a training set by stratifying on a baseline risk model and matching within strata, retrain the unchanged model, and keep an unbalanced model of the same class (2A/2B) to isolate the effect of balancing (pp. 3-5).",
+   "(D4) Write undersampling as a min-distance one-to-one matching with a cardinality floor alpha per stratum, standardize features, tune alpha by internal validation (pp. 4-5); [inferred] solve it as a min-cost flow, whose LP relaxation is integral.",
+   "(D5) Use the bias-corrected bootstrap instead of a train-test split when the subgroups of interest are small (p. 5).",
+   "(D5) Report external results per risk stratum with the external cohort binned by its own risk model, tails and middle side by side; [inferred] state that the binning model uses outcomes (pp. 5-6, 8).",
+   "(D7) When quoting a percentage gain in the abstract, name the metric column it comes from (C vs AUC; in-sample vs bias-corrected) (pp. 7, 12-13)."
+  ],
+  "coauthors": "Catherine Ning (first, corresponding; MIT ORC PhD candidate), Johan Gagnière, Stefan Buettner, Per Eystein Lønning, Hideo Baba, Itaru Endo, Georgios Stasinos, Richard Burkhart, Federico N. Auecio, Felix Balzer, Cornelis Verhoef, Martin E. Kreis, Georgios Antonios Margonis (last; MIT ORC and MSKCC); Bertsimas second (p. 1)",
+  "quotes": [
+   {
+    "text": "The goal is not causal effect estimation, but rather to equalize representation across the spectrum of baseline prognostic risk.",
+    "page": 4
+   },
+   {
+    "text": "solving our integer optimization problem for eight strata requires only 0.8 seconds on average",
+    "page": 6
+   }
+  ]
+ },
+ {
+  "id": "S666",
+  "year": "2026",
+  "title": "Online LLM Personalization from Pairwise Preferences Across Users",
+  "read_level": "full",
+  "contribution": "Formulates inference-time LLM persona selection as a multi-user contextual dueling bandit with strong regret, releases the TutorDuel benchmark (LLM-simulated students, a judge checked against two authors), and proposes CODuel, which learns a gated Gaussian-mixture population prior with a lookahead pair rule and removes 44-48% of random pairs' excess regret on held-out students and topics, 54-57% of a hindsight per-user oracle, without a regret bound.",
+  "problem_entry": "SD (contextual dueling bandits) + ML (LLM personalization), AP (tutoring) as case: users' preferred answer styles are hidden and vary by user and question (p. 1); the platform starts with no data and users arrive once, so 'later users can benefit only from the log the policy itself created' (p. 2); prior work clusters recurring users (COLDB) or learns each user from scratch (UserAlign, T-POP, CoLSTIM) (pp. 2-3); stated as minimizing expected cumulative strong regret (p. 4).",
+  "key_idea": "CODuel: a population prior (Gaussian mixture plus isotropic fallback with weight >= alpha/(alpha+n), Dirichlet-process style) refit by EM after each session; within-session Bayesian updates; pairs chosen by a one-step knowledge-gradient lookahead on strong regret averaged over recent questions; an evidence gate enabling transfer only while it predicts completed users better than a no-transfer learner; a shared recalibration of rater scores (pp. 7-8). Versus Meta-TS/HierTS: mixture not a single mean, regret on both shown answers, lookahead not sampling; latent-bandit TS/UCB over the same components cost +213/+128 (p. 41).",
+  "assumptions": "Linear utility theta_i' phi(p,q) (eq. 1, p. 3); BTL feedback with known beta (eq. 2, p. 4); theta_i i.i.d. from unknown P, norm-bounded, fixed within a session; adversarial questions allowed (p. 3); stationarity (p. 11). TutorDuel: K = 6 personas, 24 questions per session, answers by gpt-5.6-terra, questions by gpt-5.6-sol, features from TypeSafe Jev (~$0.03 per 1,000 questions), judge gpt-6-luna with 16 sampled choices over orders and labels (pp. 5-6); BTL utilities with kappa = 8 (p. 6); development, held-out-topic, held-out-profile, Composite and Quirky rosters (pp. 5-6); simulator d = 8 with four populations plus a null (p. 5, 17); B_theta a fitted prior scale (p. 45). Admitted approximations: linear/BTL fit to the judge, Laplace and lookahead (p. 11).",
+  "proof_devices": [
+   "n/a for proofs: 'We provide no regret bound' (p. 11)",
+   "Laplace-approximated Bayesian logistic regression per user (p. 7)",
+   "EM with Laplace marginal-likelihood responsibilities, component birth/death, M-step pooling weighted comparisons instead of averaging posterior means (pp. 7, 44)",
+   "One-step knowledge-gradient lookahead J_t adapted to strong regret (eq. 6, p. 8)",
+   "Evidence gate: prequential log-likelihood ratio vs no-transfer learner, z = 0.5 s.e., n_min = 8 (p. 8)",
+   "Probit approximation for predicted choice probabilities (p. 44)",
+   "Benchmark score = share of random pairs' excess regret removed; per-user linear oracle by grid and coordinate descent reported as a lower bound on the oracle (p. 5)",
+   "Judge probabilities from smoothed log-odds of sampled choices, not token probabilities (p. 19)"
+  ],
+  "experiments": "Table 1 (p. 9): CODuel 48/44/46 on held-out profiles, Composite, Quirky vs best comparator 33/38/38; 54-57% of the oracle; 64 or 32 seeds (p. 18). Second judge Jev with re-tuned comparators: 59/55/53 vs 45/44/40 (p. 23). Human check: judge agrees with two authors 74.0% and 73.0% vs 69.6% between authors on 204 comparisons (pp. 6, 22); one author wrote the profiles (p. 22). Baselines: random, best fixed pair, best fixed pair per user, per-user oracle, RUCB, pooled, CoLSTIM, COLDB, COLDB-LR, Meta-TS, HierTS, AdaTS, ablations (pp. 6-7, 33). Equal tuning seeds separate from evaluation, grids extended at edges (p. 37); optimistic best-on-roster check still 34/39/40 (p. 39); matched randomness (pp. 4-5). Negative controls within 1% of no transfer; +13% without gate on the null (pp. 10-11, 42-43). Nulls printed: lookahead n.s. on development (p. 10), worse than greedy on Composite (p. 41); per-profile 29-61 (p. 32). Simulator: best in all 16 structured settings (pp. 11, 36). CPU-only reruns (p. 11); no wall-clock times.",
+  "positioning": "Five literatures: contextual dueling bandits (Yue 2012; Bengs 2021, 2022; Saha 2021; COLDB), priors across tasks (Meta-TS, AdaTS, HierTS, MixTS), latent bandits, personalization across users, simulated users and benchmarks (pp. 2-3); each separated by one protocol difference ('Our users instead arrive once, and their preferences need not form discrete clusters', p. 2); knowledge gradient credited to Frazier-Powell-Dayanik and Ryzhov-Powell-Frazier (p. 8); simulation critiques cited against its own data (p. 3); no Bertsimas self-citation, including his bandit work (pp. 12-16).",
+  "writing": "Modest framing ('We propose CODuel as a baseline'; oracle gap offered 'as a target for future methods', p. 2); scoped abstract ('On students and topics never used in development', p. 1); intervals everywhere, diagnostics in appendices; Ethics and Reproducibility statements (p. 11) and an LLM-use statement describing agent-searched variants under a pre-fixed protocol and script-recomputed numbers (p. 12); typo 'to starts' (p. 2).",
+  "limits_future": "Contributions: formulation, reproducible benchmark (Hugging Face, GitHub, CPU reruns), baseline (pp. 2, 11-12). Stated limits: judge-fitted utilities also generate feedback; two-author human check; no human satisfaction or learning outcomes; intervals ignore adaptive development; stationarity; no regret bound or guarantee against harmful transfer (p. 11). Future: narrow the oracle gap; human users (p. 11). Ethics: a testbed, not evidence of real students' preferences (p. 11).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Decisions (displayed pairs) are scored by strong regret, and the strongest naive rule (best fixed pair in hindsight) is a reference, as step 2 prefers (p. 6); but there is no owner, users are simulated, and the scored preference 'need not be what best supports learning' (p. 11); no field test.",
+    "pages": "pp. 4-6, 11"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "The duel discipline is the critic-informed one the skill lists as not his practice (matched randomness, equal tuning seeds, grid extension at edges, optimistic best-on-roster check), here practised in a 2026 student-led paper; no exact solve, and the certificate logic moves to the reference ('the oracle's true score is at least this high', p. 5).",
+    "pages": "pp. 4-5, 37-39"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Education strand of the Open Learning period (note 06 T13), carried by a PhD student who brought the tutoring topic (Puech et al. 2025, ACL Findings) and a new student (Salakhutdinov).",
+    "pages": "pp. 1, 11, 15"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "[inferred] Step 2 (he poses the student's first problem) does not fit: the tutoring topic predates the collaboration (p. 15). Not counted: Method 2 and Method 1 not engaged (no why-now figure; bandit return without reconnection to his 1996 work, pp. 12-16; no LP/conic/MIO, pp. 7-8); Tension T3 evidence for the practised side (Bayesian, Dirichlet-process, EM, pp. 7-8, 44-45); Heuristic 4 evidence (pp. 9-11, 32, 41-43); Tension T6 counter-example (pp. 1, 11); Taste mark 3 mixed (lookahead gain roster-dependent, p. 41).",
+    "pages": "p. 15"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "evaluation protocol fixed before an agentic variant search",
+    "evidence": "Coding agents proposed and tested CODuel variants on development seeds only under a protocol the authors fixed in advance; authors selected; scripts recompute every reported number.",
+    "pages": "p. 12"
+   },
+   {
+    "pattern": "bracketed benchmark score",
+    "evidence": "Share of random pairs' excess regret removed, between an unattainable distinct-pair floor and a hindsight per-user oracle reported as a lower bound.",
+    "pages": "pp. 4-5"
+   },
+   {
+    "pattern": "negative control for transfer",
+    "evidence": "Null population and scrambled-label roster; gate threshold set on development before running the controls.",
+    "pages": "pp. 6, 10-11, 43"
+   }
+  ],
+  "transferable": [
+   "(D3) When two options must be shown, score strong regret on both, subtract the distinct-pair floor, and report the share of a random policy's excess regret removed (pp. 4-5).",
+   "(D5) Fix every design choice on a development roster and only then run held-out rosters (new topics, new profiles, composed students); add redrawn rosters to show spread (pp. 4, 6, 32-33).",
+   "(D5) Tune comparators on equal tuning seeds separate from evaluation, extend grids whose optimum lies on an edge, and report each comparator's optimistic best-on-evaluation configuration as a second chance (pp. 37-39).",
+   "(D5) Test transfer methods on a negative control with no shared structure, with the gate threshold set beforehand (pp. 6, 10-11, 43).",
+   "(D5) Validate an LLM judge against inter-human agreement, check calibration by confidence band, and repeat with a second judge from another model family (pp. 6, 21-24).",
+   "(D4) Gate a population prior by its prequential log-likelihood advantage on completed users to switch off harmful transfer (p. 8).",
+   "(D7) Write an LLM-use statement saying what agents generated, which protocol bound them and how numbers were rechecked (p. 12)."
+  ],
+  "coauthors": "Romain Puech and Georgy Salakhutdinov (equal contribution; MIT); Bertsimas last (p. 1)",
+  "quotes": [
+   {
+    "text": "We provide no regret bound or guarantee against harmful transfer, including under preference drift, misspecified population models, or shifts in the question distribution.",
+    "page": 11
+   },
+   {
+    "text": "Coding agents also proposed and tested variants of CODuel on the development roster and the tuning seeds, under an evaluation protocol that the authors fixed in advance, and the authors selected the reported configuration.",
+    "page": 12
+   }
+  ]
+ },
+ {
+  "id": "S667",
+  "year": "2026",
+  "title": "Bespoke: Generating MOOC-Quality Industry-Personalized Lecture Videos at Scale",
+  "read_level": "full",
+  "contribution": "An LLM pipeline that regenerates a complete lecture video (objectives, retrieved-paper plan, narration, compiled HTML slides and charts, progressive reveal) for a stated industry from a seed transcript, evaluated by 25 domain-matched experts on 92 videos: 87% at or above the rubric's 'standard MOOC lecture' midpoint, similar on a 21-lecture held-out set, at about $0.22 API cost per minute; no learner outcomes and no seed baseline.",
+  "problem_entry": "AP (education) + ML (LLM generation), IO only for reviewer assignment: professionals from different industries watch the same recorded lecture whose generic example 'stays far from the workplace' (p. 1); hand rewriting does not scale; prior systems recommend recordings or add interaction, so 'Bespoke takes a third route: it regenerates the lecture' (pp. 1-2); RQ1 asks whether experts judge such videos adequate at scale (p. 2).",
+  "key_idea": "Regenerate from the transcript instead of editing the video (p. 3); compile code and markup (HTML slides with math, chart code, narration) rather than pixels (p. 3); a fixed five-stage DAG with objectives first (backward design, Bloom verbs), retrieval of an industry case paper with a fit judge, one-pass narration, parallel visuals, progressive reveal (pp. 3-4); bounded generate-validate-refine loops with a validator from another model family (Claude Sonnet 4.6 generates, GPT-5.2 validates, three iterations) and programmatic checks wherever possible (p. 3); on failure retry only execution (p. 4).",
+  "assumptions": "Inputs: seed transcript, learner profile (healthcare, finance, energy, generic), duration (5-15 min or up to ~45 min), optional objectives (p. 3); content assumed spoken or inferable from speech; no talking head by Mayer's image principle (p. 3); corpus of 31 seed lectures from graduate analytics, ML and optimization courses at one research university, 10 for development and 21 held out, 200+ videos (209 per the abstract), none hand-edited (pp. 1, 4).",
+  "proof_devices": [
+   "n/a for proofs, reformulations or bounds",
+   "Reviewer assignment as an optimal matching solved by MIO: videos to reviewers who listed all its topics, at most one reviewer per video, maximize minutes reviewed under a 120-minute and 6-video cap (p. 5)",
+   "Reviewer-clustered bootstrap intervals; random-intercept model on G (ICC 0.35, design effect ~1.9); mixed model for the B1 contrast (p. 5)",
+   "Mann-Whitney test and Spearman correlations (pp. 6-7)"
+  ],
+  "experiments": "25 volunteer domain-matched reviewers, 92 videos (healthcare 32, generic 31, finance 22, energy 7; medium 58, long 34), k = 1 (pp. 4-5); rubric A-D plus G with anchors (pp. 5, 8-9). Results: 87% G >= 3 (CI 76-96%), mean G 3.42 (SD 0.85), 48% G >= 4; A 4.03, B1 3.86, B2 3.52, C 3.57, D 3.41, voice D1 3.16 (p. 5); industry vs generic B1 +0.25 in a mixed model (CI -0.06 to 0.56, p = 0.11) (p. 5); held-out G 3.36 vs development 3.51 (difference -0.15, CI -0.48 to 0.18) (p. 7); ~$0.22 per minute, ~$5 per video (p. 7); 235 comments name voice, reveal lag, layout (p. 6). No baseline system, no seed or MOOC in the review set (p. 5), no learner outcomes (p. 7), no release statement in the file.",
+  "positioning": "Four HCI/learning-at-scale strands: lecture video as designed medium (Guo, Kim & Rubin 2014; VIVID), human-AI authoring (VIVID, PedaCo-Gen), personalization of what learners see (SAM, Generative Lecture, adaptive MOOCs, PAGE), evaluation of generated teaching artifacts (pp. 2-3); LASEV as closest compile-to-video system, separated by open-ended 5-45 minute lectures, a held-out set and domain experts (p. 2); pixel text-to-video dismissed (pp. 2-3); no OR literature and no Bertsimas paper cited (p. 8).",
+  "writing": "CHI-style RQ and two numbered contributions (p. 2); one running example (iris to hospital readmission) through all stages (pp. 3-4); abstract states the anchor precisely while the title says 'MOOC-Quality' (p. 1); hedged synthesis ('Taken together, overall quality does not drop sharply', p. 7); ethics paragraph disclosing recruitment through an author's department and no IRB review (p. 5).",
+  "limits_future": "Contributions: system and expert evaluation (p. 2). Stated limits: expert judgments only, no learner study; rater pool; k = 1 with no inter-rater reliability; 'standard MOOC' is a rubric midpoint; small unresolved industry increment (p. 7); copyright and consent at catalogue scale (p. 7). Future: instructor pass over compiled artifacts (p. 7); measure learning (p. 8). Unstated [inferred]: no head-to-head with the seed or other systems; energy n = 7 (p. 5); no release statement.",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Research follows the Open Learning role (note 06 T13): seeds from graduate courses in analytics, ML and optimization (p. 4; [inferred] his subject areas, owners not stated), reviewers via the university's MOOC service (p. 5), platform implications (p. 7); [inferred] the course becomes raw material for generated variants.",
+    "pages": "pp. 4-5, 7"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Owner (instructor or learning team with a seed) and own cost per minute named (step 5) (p. 7); but the owner's current artifact, the seed lecture, is never scored ('did not see other variants of the same topic or the seed', p. 5); an absolute rubric anchor replaces the baseline; no outcome metric (p. 7).",
+    "pages": "pp. 5, 7"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Largely not engaged: no incumbent (LASEV, the human seed) is run; quality control is cross-model critique inside the pipeline (p. 3). Not counted: Heuristic 4 evidence (voice, reveal lag, layout, non-significant increment printed, pp. 5-7); Tension T6 evidence (title 'MOOC-Quality' vs a midpoint anchor with no MOOC in the review set, pp. 1, 5, 7).",
+    "pages": "pp. 2-3, 5"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "exact matching IO as a study-design tool",
+    "evidence": "Reviewer assignment solved as a matching MIO maximizing reviewed minutes under time caps (cf. S620's matching IP for training data).",
+    "pages": "p. 5"
+   },
+   {
+    "pattern": "development and held-out discipline in a systems paper",
+    "evidence": "21 of 31 seed lectures unused while developing the pipeline; held-out vs development G reported with a CI.",
+    "pages": "pp. 4, 7"
+   }
+  ],
+  "transferable": [
+   "(D2) Generate artifacts as code and markup (HTML slides, chart code, narration script) and compile them, instead of generating pixels, so equations and diagrams stay deterministic and editable (p. 3).",
+   "(D2) Pair a generator with a validator from another model family in a bounded refine loop; run duration, schema and overflow checks in ordinary code and keep the LLM for semantic judgments (p. 3).",
+   "(D2) When a generated visual fails, retry only execution and keep the ideation plan (p. 4).",
+   "(D5) Assign raters by an MIO maximizing reviewed minutes under each rater's time cap, using only raters who listed all of an item's topics (p. 5).",
+   "(D5) With one rater per item, estimate reviewer ICC with a random-intercept model and report reviewer-clustered bootstrap intervals (p. 5).",
+   "(D5) Publish the rater instrument verbatim with behavioural anchors at i, iii and v and an independent global item (pp. 5, 8-9).",
+   "(D5) Keep a held-out set of seeds unused in development and report the development vs held-out difference with an interval (pp. 4, 7)."
+  ],
+  "coauthors": "Romain Puech (corresponding), Dewang Kumar Agarwal, Antonio Santamaría Escobar (MIT); Bertsimas last (Sloan) (p. 1)",
+  "quotes": [
+   {
+    "text": "We solve that matching with a mixed-integer program.",
+    "page": 5
+   },
+   {
+    "text": "A learner study of learning, transfer, completion, or engagement is future work.",
+    "page": 7
+   }
+  ]
+ },
+ {
+  "id": "S668",
+  "year": "2026",
+  "title": "Rapid drone-based wildfire detection at a fraction of current prevention spending",
+  "read_level": "full",
+  "contribution": "A statewide California case study that places charging stations, drones and ground sensors with a budgeted MIO and compares three routing strategies on 3,693 out-of-sample ignitions (2021-2024): a $100M five-year hardware budget detects 97.3% of fires (74% within the first hour), drones dominate ground sensors at current costs, placement governs detection and (for the best strategies) routing governs speed, and the network beats an optimistic coverage bound on the deployed ALERTCalifornia cameras up to a 32 km radius.",
+  "problem_entry": "AP (wildfire) + IO (placement and routing MIOs) + HS (PSO for team orienteering), DA (risk map drives decisions): 'current monitoring systems lack a quantitative framework for allocating detection infrastructure at scale' (p. 1); few statewide analyses combine deployment, operational constraints and routing (pp. 2-3); stated as an investment question, to 'quantify the investment required' (p. 1).",
+  "key_idea": "One budgeted placement-and-allocation MIO maximizing risk-weighted coverage, with ordered binaries for drones per station and a precomputed piecewise-linear diminishing-returns coverage (pp. 15-18); three routing strategies on the placed network: TOP via an adapted PSO heuristic, MaxCov rolling-horizon MIO from the group's benchmark, and a new LinearMinTime MIO with a linear surrogate for detection time (pp. 18-22); risk reset-and-linear-regrowth dynamics (p. 19); evaluation by replaying later ignitions against plans built from pre-2021 inputs (pp. 13, 24).",
+  "assumptions": "1 km grid 1309 x 805, hourly; operational cell = drone footprint (c = 5); 600 m/min; certain-detection radius 2,900 m; 1-hour battery (k = 7); 50 km transmission (non-binding) (pp. 15, 22, 24); five-year hardware TCO $100k sensor, $150k station, $50k drone, calibrated with California drone researchers and cross-checked (p. 23); Pyrologix static risk map 2006-2020, USFS ignitions 2021-2024 (30 outside the state excluded), Census urban areas, WFPI 2020 'To avoid temporal leakage' (pp. 13-14); admitted: deterministic detection radius, hourly time, fixed hardware, instant swaps, no collisions, hardware cost only, static risk (pp. 11-12, 24).",
+  "proof_devices": [
+   "n/a for proofs; placement MIO eqs. 1-17 with epsilon-weighted cost regularizer against over-deployment and BFS reachability sets (pp. 17-18)",
+   "TOP eqs. 18-27 with artificial depots, battery and symmetry-breaking constraints, no subtour elimination (connectivity inside the PSO) (pp. 19-20)",
+   "LinearMinTime eqs. 28-40: exact expected detection time is a nonlinear stochastic IP, replaced by linear cumulative undetected risk with visit-history variables (pp. 21-22)",
+   "First-order Taylor approximation of risk regrowth 1-(1-r0)^k ~ k r0 (p. 19)",
+   "Conservativeness argument for the step-function detection model (lower bound beyond r*, repeated passes inside) - an argument, not a proof [inferred] (p. 24)",
+   "Scale invariance: scaling aerial costs by alpha equals scaling the budget by 1/alpha when no sensors are chosen (p. 8)",
+   "PSO acceleration: split DP over depot markers O(nm) to ~O(k m log k) (~7x), skipping 40-85% of moves, route caching (~4x), each verified quality-neutral (pp. 31-32)",
+   "Computation: $75M placement MIO, Gurobi 12, 32 CPUs, 1800 s limit, 0.01% gap; routing per simulated hour 31.9/107.0/184.2 s; 53% of MaxCov subproblems proven optimal in 120 s (pp. 24-25)",
+   "Wilson intervals; Mann-Whitney U on detection delay (p. 25)"
+  ],
+  "experiments": "3,693 out-of-sample ignitions 2021-2024 (pp. 1, 13). TOP frontier 30.9/60.0/91.2/97.3/100.0% at $20/50/75/100/500M ($172.6M spent at $500M); unreachable fires 69% to 3% (pp. 5-6). At $100M: 97.3% (CI 96.7-97.8), 74% first hour (p. 4); routing 97.3/92.7/84.5% detection and 73.8/53.9/61.8% first hour for TOP/MaxCov/LinearMinTime (Table 1, p. 6). No ground sensors below $500M; mixed regime only at ~$11k-22k per sensor (pp. 5-6, 8). Incumbent: ALERTCalifornia's 699 cameras as perfect detection within r = 5-50 km, an upper bound (Table 2, p. 9); 2024 as cleanest year (p. 10); drones 97.2% vs cameras 92.8% at 32 km, but 100% at 50 km (pp. 9-10). Risk-map check 73.7-78.4% above background median (pp. 30-31). Failures printed: new LinearMinTime worst (p. 9); single miss explained (p. 5). Code (GitHub, MIT license) and data on Zenodo (p. 25).",
+  "positioning": "Placement [18, 19], routing [20-26], integrated planning [14, 27], suppression [28] (p. 2); classics TOP (Chao, Golden & Wasil 1996), maximal covering (Church & ReVelle 1974), PSO (Dang, Guibadj & Moukrim 2013) (pp. 18, 20, 29); only self-citation the companion benchmark WFDroneBench [14] (p. 27); deployed programme as comparator 'Rather than compare unpublished program costs' (p. 9); [inferred] no published wildfire-drone routing method run as comparator; policy yardsticks are state prevention spending and 2018 damages (pp. 4, 8).",
+  "writing": "Nature-style layout with claim-headed Results subsections ('Drones dominate ground sensors economically', p. 5) and 'Our contributions are fivefold' (p. 3); policy rhetoric shifting the question 'from whether ... to how' (p. 11) and implications for decision-makers (p. 13); qualifiers move between abstract and body (routing 'mainly determines detection speed', p. 1, vs 'the best-performing routing strategies', p. 8; 'the most generous camera-coverage geometry', p. 10, vs Table 2's 50 km row, p. 9); concrete numeric limits (pp. 11-12).",
+  "limits_future": "Contributions: investment frontier with threshold, technology-cost regimes, incumbent bound; placement MIO and LinearMinTime surrogate; accelerated PSO; open tools (pp. 3, 25). Stated limits: detection abstraction, hourly time, fixed hardware; hardware cost only, BVLOS at scale 'not authorized in the United States today', staffing and waivers 'would add a substantial multiple'; land, permitting, grid outside the model; static risk map; camera comparison only a geometry bound (p. 12). Future: fairness constraints, other regions, site restrictions (pp. 12-13, 17). Unstated [inferred]: only the $75M solve timed; exact TOP declared intractable without a timed attempt (p. 20); title compares hardware cost with total prevention spending; no owner partner.",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "The deployed incumbent (ALERTCalifornia) is the baseline, idealized in its favour, with a leakage-aware evaluation year; decision metrics (share detected, time to detection) against the state's spending; costs reported; implications for decision-makers.",
+    "pages": "pp. 4, 9-10, 12-13"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "No owner partner (costs calibrated with drone developers, p. 23); no field test and the programme is not legal at scale today; programme costs excluded (p. 12).",
+    "pages": "pp. 12, 23"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "A price-of-detection curve with one knob (budget), a knee (~$75-100M) and its bad region ('incremental investments below the coverage threshold yield limited value', p. 11), plus a technology-cost regime map (Fig. 4, p. 8), handed to decision-makers (p. 13); no solution-independent bound (step 3).",
+    "pages": "pp. 4-8, 11, 13"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Class-keeping devices so every model stays an MIO: footprint-matched coarsening, precomputed piecewise-linear coverage, linear surrogate for expected detection time, first-order risk regrowth.",
+    "pages": "pp. 15, 17-19, 21"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "[inferred] The surrogates' error against the exact objectives is not measured.",
+    "pages": "pp. 19, 21"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Honest labels (0.01% gap at the limit with solver, version and threads; share of MaxCov subproblems proven optimal; 'The reported TOP-based routing results in Table 1 are thus heuristic', p. 20), but the heuristic is the winner rather than a warm start, and the only external-to-paper routing comparator is the group's own MaxCov.",
+    "pages": "pp. 20, 24-25, 31-32"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "The why-now is hardware (autonomous flight, sensing, onboard AI, p. 2) priced in unit costs, not a solver figure; exact TOP is set aside as intractable without re-measurement (p. 20), opposite to steps 1-3.",
+    "pages": "pp. 2, 20"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Benchmark preprint (WFDroneBench, S522) and this policy preprint in the same month on one environment, carried by a student and a postdoc, with released code and data. Not counted: Tension T2 evidence (PSO heuristic beats both MIO routings and is 3-6x faster, Table 1 p. 6, pp. 24-25); Heuristic 4 evidence (new LinearMinTime underperforms, p. 9; single miss explained, p. 5); Tension T6 evidence (title vs programme-cost caveat, p. 12; abstract vs body routing qualifier, pp. 1, 8; 'most generous' geometry vs 50 km row, pp. 9-10).",
+    "pages": "pp. 3, 25, 27"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "optimistic upper bound for the incumbent",
+    "evidence": "ALERTCalifornia cameras modelled with perfect detection within a swept radius, so a drone win is conservative; 2024 used because siting saw 2021-2023 fires.",
+    "pages": "pp. 9-10"
+   },
+   {
+    "pattern": "scale invariance turns the budget frontier into a unit-cost sensitivity",
+    "evidence": "With a drones-only optimum, scaling aerial costs by alpha equals scaling the budget by 1/alpha.",
+    "pages": "p. 8"
+   },
+   {
+    "pattern": "benchmark preprint first, then an application paper on the same environment",
+    "evidence": "Simulation environment and architecture follow WFDroneBench [14], released the same month.",
+    "pages": "pp. 3, 27"
+   },
+   {
+    "pattern": "inputs frozen at a cut-off year for temporal out-of-sample evaluation",
+    "evidence": "Risk map calibrated to 2006-2020, WFPI 2020 chosen to avoid leakage, evaluation on 2021-2024.",
+    "pages": "pp. 13-14"
+   }
+  ],
+  "transferable": [
+   "(D3) Set the operational grid cell to the sensor footprint so one decision equals one observation; finer grids add variables without information (p. 15).",
+   "(D4) Model drones per station with ordered binaries z_k >= z_{k+1} and a precomputed piecewise-linear diminishing-returns coverage so placement stays an MIO (pp. 17-18).",
+   "(D4) Replace an expected-detection-time objective (nonlinear stochastic IP) by cumulative undetected risk between visits, a linear surrogate (p. 21).",
+   "(D5) Benchmark against a deployed incumbent through an optimistic idealization swept over its key parameter, and evaluate on a year after its siting decisions (pp. 9-10).",
+   "(D5) Freeze every input at a cut-off date (risk map, land-cover release) and evaluate only on later years (pp. 13-14).",
+   "(D5) If the optimum uses one technology, scaling its cost by alpha equals scaling the budget by 1/alpha, so one budget sweep also covers cost uncertainty (p. 8).",
+   "(D4) Accelerate a published metaheuristic by exploiting instance structure (DP over few depot markers, skipping moves that cannot change the outcome, caching untouched routes) and verify each change leaves solution quality unchanged (pp. 31-32).",
+   "(D5) Report solver, version, threads, time limit and final gap for the MIO, and for rolling-horizon MIOs the share of subproblems proven optimal (pp. 24-25)."
+  ],
+  "coauthors": "Romain Puech (MIT ORC; corresponding), Danique de Moor (MIT Sloan; NWO Rubicon grant), Ana Trišović (MIT CSAIL); Bertsimas last (Sloan) (pp. 1, 25)",
+  "quotes": [
+   {
+    "text": "The reported TOP-based routing results in Table 1 are thus heuristic.",
+    "page": 20
+   },
+   {
+    "text": "Staffing, waivers, and coordination with manned fire traffic would add a substantial multiple to the hardware figure we report.",
+    "page": 12
+   }
+  ]
+ }
+]

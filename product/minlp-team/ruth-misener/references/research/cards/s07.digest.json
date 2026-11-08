@@ -1,0 +1,152 @@
+[
+  {
+    "id": "S066",
+    "year": "2023",
+    "title": "Probabilistic predictions for partial least squares using bootstrap",
+    "read_level": "full",
+    "contribution": "A bootstrap-by-pairs predictive distribution for standard NIPALS PLS that captures latent-space uncertainty, applied to Design Space identification and prediction intervals for Eli Lilly process data.",
+    "problem_entry": "Practitioners' PLS has hard-to-model prediction uncertainty because data affect the latent space nonlinearly; the 1980s-90s linearised (zeroth-order, student-t) estimators were compute-era approximations, and bootstrap by residuals ignores input variation (pp. 1-4).",
+    "key_idea": "Resample (x,y) pairs, rerun unchanged NIPALS on each resample with its MLE noise variance, and average the B Gaussians; input-dependent spread comes from the bootstrap means (eqs. 15-21, Algorithm 1, pp. 4-6).",
+    "assumptions": "Normally distributed prediction error, PLS a reasonable model, training data drawn like future data (p. 2); no result known that PLS parameters are a joint MLE (p. 4); Design Space problems may not follow PLS latent structure (p. 7).",
+    "proof_devices": [
+      "bootstrap predictive distribution as an expectation over bootstrap data sets from the empirical distribution, Monte Carlo approximated, eqs. 17-19 (pp. 4-5)",
+      "Design Space probability by a normal c.d.f. difference (eq. 23) or Monte Carlo sampling (Algorithm 2) (p. 6)"
+    ],
+    "experiments": "Five case studies vs the zeroth-order method (synthetic with true Design Space, Michael addition, industrial reductive amination, wet granulation leave-one-out, confidential spectroscopy); visual comparisons, tie on spectroscopy reported (pp. 5-11).",
+    "positioning": "Builds on Denham (bootstrap by residuals) and Fushiki (bootstrap predictive distributions); older methods framed as compute-era approximations, probabilistic PLS rejected for abandoning NIPALS (pp. 2-4).",
+    "writing": "Claim scoped up front to low-data, non-standard-linear settings (p. 5); uncertainty about real-case accuracy admitted (p. 9).",
+    "limits_future": "Assumes linear model plus noise and cannot separate noise from model-mismatch uncertainty; future: model-mismatch uncertainty, experimental spaces, Real Time Release Testing (p. 12).",
+    "method_links": [
+      {"method": "Method 3", "relation": "variant", "note": "Keeps the partner's trusted model (PLS/NIPALS, 'speed, familiarity') and wraps uncertainty around it instead of encoding it as constraints.", "pages": "pp. 3-6"},
+      {"method": "Method 5", "relation": "variant", "note": "One widely used baseline, ground truth only where computable, tie written in; no coverage metric and no second competitor run (Denham discussed only).", "pages": "pp. 4-11"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "wrap uncertainty around the practitioner's standard estimator rather than replace it", "evidence": "NIPALS kept unchanged; probabilistic PLS rejected because it 'does not provide the same solution as the standard NIPALS algorithm'; bootstrap by pairs reruns NIPALS per resample.", "pages": "pp. 3-4"}
+    ],
+    "transferable": [
+      "Validate an uncertainty method first where the true answer is computable (synthetic generator with a true Design Space), then on real data by held-out coverage (pp. 7-11).",
+      "Include a case where the incumbent is known to work well and report the tie, showing no loss where the old method is trusted (p. 11)."
+    ],
+    "coauthors": "James Odgers, Chrysoula Kappatou, Salvador García Muñoz (Eli Lilly), Sarah Filippi (corresponding); Misener 3rd of 5",
+    "quotes": [
+      {"text": "The novelty of our method is in how to weight different sets of PLS parameters according to how well they describe the data.", "page": 2},
+      {"text": "One point which we would like to acknowledge is that Design Space identification problems often do not follow the latent structure implicitly assumed by PLS.", "page": 7}
+    ]
+  },
+  {
+    "id": "S071",
+    "year": "2023",
+    "title": "Data augmentation driven by optimization for membrane separation process synthesis",
+    "read_level": "full",
+    "contribution": "ADORO, a data-augmentation scheme that densifies an ANN surrogate's training data around multistart stationary points where surrogate and simulator disagree, giving membrane designs as good as a 343k-point model with at most 50k points.",
+    "problem_entry": "An ANN surrogate embedded in the membrane-design NLP avoids discretised-ODE trouble, but optimisation drives decisions into regions where the ANN is inaccurate, and a dense 343k data set costs more than 5 days to fit (pp. 1-5).",
+    "key_idea": "Grade and refine the surrogate where the optimiser goes: simulate all multistart stationary points over several purity/recovery scenarios, keep those with discrepancy above epsilon, perturb around them and retrain (S1-S4, eq. 2, pp. 9-10); baseline is gradient-direction adversarial augmentation (eq. 1, p. 7).",
+    "assumptions": "Three-input, two-output single-membrane ANN (one sigmoid hidden layer to keep NLP constraints simple) trained on MEMSIC data; SVM hyperplane of simulator failures imposed as a constraint; two-stage CO2/H2 case at 90/95/99% purity (pp. 3-5).",
+    "proof_devices": [
+      "linear SVM boundary of simulator-failure region used as an optimisation constraint (pp. 3-4)",
+      "discrepancy-filtered perturbation around stationary points, eq. 2 (p. 10)"
+    ],
+    "experiments": "Every best design re-simulated in MEMSIC; simulated purity and flow errors for sampling schemes, data-set sizes, AAD and ADORO (Tables 1, 4, 5, 7, pp. 5-10); normalised design cost (p. 11); total time including model building vs discretisation baseline (Table 9, p. 13); no seed repetitions.",
+    "positioning": "Against ML adversarial augmentation and PSE sampling-based surrogate work; related in the conclusion to batch and multi-fidelity BO including SnAKe (pp. 2-3, 13).",
+    "writing": "Introduction (Misener's per CRediT) opens with the decision problem; a box-plot vs feasibility contradiction is explained rather than hidden (pp. 1, 7, 13).",
+    "limits_future": "Single case study, one augmentation iteration, 50k-start ADORO runs omitted as disappointing, data not shareable; future: reuse augmented data across purity levels (pp. 10, 13).",
+    "method_links": [
+      {"method": "Method 3", "relation": "evidence", "note": "Trained ANN inserted as equality constraints in the NLP, architecture chosen for the optimisation model; SVM failure boundary as a learned trust-region variant of step 4.", "pages": "pp. 1, 3-4"},
+      {"method": "Method 4", "relation": "evidence", "note": "Surrogates graded by the simulated feasibility and cost of the optimiser's final design, not training error; authors show the two disagree.", "pages": "pp. 5, 7"},
+      {"method": "Method 5", "relation": "evidence", "note": "Every returned design re-checked by simulator, over- vs under-estimation separated, timings include model building, failed 50k ADORO runs reported as omitted.", "pages": "pp. 4-5, 10, 13"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "optimisation-driven data augmentation", "evidence": "Densify surrogate training data at multistart stationary points where surrogate and simulator disagree, across several requirement scenarios, rather than everywhere or only at the global optimum.", "pages": "pp. 3, 9-10, 13"}
+    ],
+    "transferable": [
+      "Grade a surrogate by re-simulating the optimiser's answer and report over- and under-estimation separately, since one gives infeasible and the other expensive designs (pp. 3, 5).",
+      "Learn the simulator's failure region with a simple classifier and impose its boundary as a constraint so the optimiser cannot exploit meaningless regions (pp. 3-4).",
+      "Augment around all multistart stationary points across scenarios, not just the global optimum, which yields too few and non-robust points (p. 3)."
+    ],
+    "coauthors": "Bernardetta Addis (corresponding), Christophe Castel, Amalia Macali, Veronica Piccialli; Misener 4th of 5, wrote introduction and literature review (CRediT, p. 13)",
+    "quotes": [
+      {"text": "The core idea is that the model accuracy must be high not everywhere, but only around some regions of interest, namely, the regions around the local optimum points.", "page": 3},
+      {"text": "focusing only on the global minimum point over the entire decision-making problem is therefore not enough to us", "page": 13}
+    ]
+  },
+  {
+    "id": "S083",
+    "year": "2023",
+    "title": "Practical path-based Bayesian optimization",
+    "read_level": "full",
+    "contribution": "Three practical extensions of SnAKe path-based BO (self-stopping with an uncertainty guard, truncation for maximum input change, random-scalarisation multi-objective) with synthetic and SnAr benchmarks.",
+    "problem_entry": "Entered from the group's own method's limits: SnAKe needs a fixed budget, allows unbounded single moves, and handles one objective (numbered I-III, p. 2).",
+    "key_idea": "Minimal modifications of SnAKe: EI-per-cost point deletion guarded by posterior variance (Algorithm 1, p. 3), step truncation to deltaMAX (Algorithm 2, p. 4), random-scalarisation Thompson sampling for the batch (Algorithm 3, p. 4); TSP ordering kept.",
+    "assumptions": "Cost = fixed experiment cost + input-change cost (eq. 2, p. 3); rate-of-change constraint emulated by a jump cost (p. 5); independent GPs per objective (p. 4).",
+    "proof_devices": [],
+    "experiments": "Branin2D, Hartmann3D/6D, Shekel and SnAr; 25 runs, ±0.5 std bands, average budget used reported; strengthened baseline EIpu+Std; NSGA-II reference Pareto front; losses to TrEI and EIpu+Std reported (pp. 4-6, 10-12).",
+    "positioning": "Within path-based BO (Ramesh, Mutny, MONGOOSE, Paulson); restores SnAr's original multi-objective form (pp. 2, 5).",
+    "writing": "Short paper with one subsection per numbered limitation; conclusion limited to empirical advantages (pp. 2-6).",
+    "limits_future": "No selection rule for thresholds delta and nu, synthetic benchmarks, narrow error bands; code promised after peer review (pp. 3-5, 10).",
+    "method_links": [
+      {"method": "Method 4", "relation": "evidence", "note": "Step 8, re-grade your own earlier work: opens by listing SnAKe's practical limits and its high cost for small gains.", "pages": "pp. 2, 5"},
+      {"method": "Method 5", "relation": "evidence", "note": "Step 3, strengthen the baseline: authors boost EIpu with their own variance criterion; losses written in. Scale is light (synthetic, ±0.5 std, no test).", "pages": "pp. 3-5, 10-12"},
+      {"method": "Method 2", "relation": "variant", "note": "New thresholds delta, nu and deltaMAX introduced without a robustness sweep; only robustness to the maximum budget shown.", "pages": "pp. 3, 5, 11"}
+    ],
+    "new_pattern_candidates": [],
+    "transferable": [
+      "Add a model-uncertainty guard to any BO stopping rule and show the vanilla rule stopping too early (Algorithm 1, p. 3; Fig. 1, p. 5).",
+      "Report average budget used next to regret and rerun with a larger cap to show the self-stopping spend does not scale with it (p. 5).",
+      "When a baseline wins a metric for a structural reason, show the metric's sensitivity with a relaxed definition rather than dropping it (p. 10)."
+    ],
+    "coauthors": "Jose Pablo Folch (first), James Odgers, Shiqiang Zhang, Robert M Lee, Behrang Shafei, David Walz (BASF), Calvin Tsay, Mark van der Wilk; Misener last of 9",
+    "quotes": [
+      {"text": "SnAKe is limited in some practical aspects.", "page": 2},
+      {"text": "Vanilla EIpu stops too early due to model misspecification; our modification that includes uncertainty criteria greatly improves performance.", "page": 5}
+    ]
+  },
+  {
+    "id": "S098",
+    "year": "2023",
+    "title": "Gaussian processes for monitoring air-quality in Kampala",
+    "read_level": "full",
+    "contribution": "An empirical study of GP kernels, outlier removal, weather inputs and sparse approximations for PM2.5 nowcasting and forecasting on AirQo's 66-sensor Kampala network.",
+    "problem_entry": "Sparse low-cost sensor networks in low- and middle-income cities need data-efficient models with uncertainty; prior GP studies used unavailable pollutant inputs and only forecast (pp. 1-2).",
+    "key_idea": "Stack modelling choices one at a time (periodic temporal kernel, training-outlier removal, weather inputs, SVGP/ST-SVGP) and evaluate on nowcasting (leave-one-site-out) and forecasting (last day held out) (pp. 3-4, 7-8).",
+    "assumptions": "Gaussian-noise GP regression; one month of calibrated hourly data from 66 sites; citywide weather from one station; non-sparse models on 1000 random points, 4 repeats (pp. 2-3, 7-8).",
+    "proof_devices": [],
+    "experiments": "Cumulative Tables 1-2 with min/average/max RMSE across sites; test outliers kept; negative results reported for weather inputs and ST-SVGP forecasting (p. 4).",
+    "positioning": "Against Reggente, Jang and Cheng GP air-quality studies, differentiated by available inputs and the nowcasting task (p. 2).",
+    "writing": "Short empirical note; conclusion names a non-stationary kernel and sensor placement as next steps (p. 4).",
+    "limits_future": "One month of data, single weather station, similar worst-site nowcasting error suggesting more sensors or non-stationary kernels needed (pp. 4, 8).",
+    "method_links": [
+      {"method": "Method 4", "relation": "variant", "note": "Cumulative ablation design (step 2) applied to a prediction pipeline instead of inside a B&B.", "pages": "p. 4"},
+      {"method": "Method 5", "relation": "evidence", "note": "Test outliers kept for fair comparison, worst-site error reported, negative results written in.", "pages": "p. 4"}
+    ],
+    "new_pattern_candidates": [],
+    "transferable": [
+      "Clean only the training set, leave test outliers in place and say so, so the error does not flatter the cleaning step (pp. 4, 8).",
+      "Report worst-site (max) RMSE next to the average to show where the model fails and motivate more sensors or non-stationary kernels (p. 4)."
+    ],
+    "coauthors": "Clara Stoddart, Lauren Shrack, Richard Sserunjogi, Usman Abdul-Ganiy, Engineer Bainomugisha, Deo Okure (AirQo), Jose Pablo Folch and Ruby Sedgwick (equal contribution); Misener 7th of 9",
+    "quotes": [
+      {"text": "We do not remove outliers from the test set for fair comparison.", "page": 4},
+      {"text": "The additional variables don’t seem to lead to any clear improvement in model performance.", "page": 4}
+    ]
+  },
+  {
+    "id": "S116",
+    "year": "2023",
+    "title": "Competitive Amplification Networks enable molecular pattern recognition with PCR",
+    "read_level": "unreadable",
+    "contribution": "",
+    "problem_entry": "",
+    "key_idea": "",
+    "assumptions": "",
+    "proof_devices": [],
+    "experiments": "",
+    "positioning": "",
+    "writing": "",
+    "limits_future": "",
+    "method_links": [],
+    "new_pattern_candidates": [],
+    "transferable": [],
+    "coauthors": "per work list: JP Goertz, R Sedgwick, F Smith, M Kaforou, VJ Wright, JA Herberg, ... (not visible in the extracted file)",
+    "quotes": []
+  }
+]

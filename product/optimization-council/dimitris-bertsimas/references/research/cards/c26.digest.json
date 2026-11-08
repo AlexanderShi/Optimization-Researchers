@@ -1,0 +1,173 @@
+[
+ {
+  "id": "S250",
+  "year": "2022",
+  "title": "Mixed-projection conic optimization: A new paradigm for modeling rank constraints",
+  "read_level": "full",
+  "contribution": "Introduces Mixed-Projection Conic Optimization. Rank constraints are modelled exactly with orthogonal projection matrices (Y^2 = Y, the matrix analogue of binaries), and a spectral or Frobenius regularizer makes the inner value function convex. The problem is then solved by outer approximation over a Gurobi nonconvex-QCQO master, with SDP relaxations, bounded eigenvalue rounding and Burer-Monteiro polishing. The paper proves the problem ∃R-complete, reports small absolute gaps on synthetic rank-one instances up to n = 30 and near-optimal solutions up to n = 600.",
+  "problem_entry": "IO+CP (ML and sensor-location test families): influential low-rank works call the problem intractable and offer relaxations or heuristics without assumption-free guarantees, and rank cannot be written in mixed-integer convex form, so MICO's advances do not apply. The problem is stated as a conic program with a rank penalty or constraint (pp. 1-4, 8).",
+  "key_idea": "Projection matrices are to rank what binaries are to cardinality: Rank(X) <= k iff X = YX with Y^2 = Y and tr Y <= k. A big-M-like spectral bound or a ridge-like Frobenius penalty makes f(Y) convex via duality, so MICO's toolkit (outer approximation, perspective relaxations, rounding, in-out cuts) carries over (pp. 10-21).",
+  "assumptions": "Conic problem with Assumption 1 (one of two regularizers) and Assumption 2 (strong duality or infeasibility per subproblem). Regularization is added artificially if absent, with a stated bias bound. Further assumptions: bounded duals for Lipschitz continuity; M from conic programs, not minimal; SOC approximations of the PSD constraint and Gurobi's piecewise-linear error admitted. Synthetic data only: Gaussian low-rank matrix completion and uniform sensor locations with noisy distances (pp. 12-19, 21, 27-29, 34).",
+  "proof_devices": [
+   "∃R-hardness by reduction from unit-distance graph embedding in R^2 (Schaefer 2013) to Euclidean distance embedding (Theorem 1; pp. 9, 41)",
+   "∃R membership for the PSD cone via the projection-matrix lift and Tarski-Seidenberg, hence ∃R-complete (Theorem 2; pp. 9, 41)",
+   "Undecidability under integrality by Jeroslow's quadratic-integer reduction and the Guttman rank identity; a regularizer restores finite solvability (Theorem 6, Remark 8; pp. 41-42)",
+   "Projection-matrix lift proved by SVD (Proposition 2; p. 10); two-sided version X = YXY' (Proposition 3; p. 45)",
+   "Regularizer conjugates linear in Y (Lemma 2, Table 2; pp. 13-14) via first-order conditions and Schur complements (Lemmas B.1-B.3; pp. 46-47)",
+   "Saddle-point reformulation by the substitution V = YX and Fenchel duality; f(Y) convex as a maximum of linear functions (Theorem 3, Remark 5; pp. 14-15)",
+   "Regularization read as a dual relaxation of the constraint Y alpha = 0 (Remark 4; p. 15)",
+   "Optimality cuts by Danskin's theorem, feasibility cuts by conic duality (pp. 15-16)",
+   "Lipschitz bound on f by Hölder with the dual spectral and nuclear norms (Lemma 3; p. 16)",
+   "Convex hull of rank-k projection matrices {0 <= Y <= I, tr Y <= k} (Lemma 1, Overton-Womersley; p. 11)",
+   "Bi-dual SDP relaxations: a matrix perspective relaxation (Lemma 4) and -MY <= X <= MY (Lemma 5) (pp. 17, 42)",
+   "Generalized reverse Huber penalty on singular values as the convex envelope (Lemma 6, Remark 7; pp. 17-18, 43)",
+   "Nuclear-norm minimization shown equal to the spectral-regularized relaxation (Lemmas 7-8; pp. 18, 43)",
+   "Big-M constants from auxiliary conic programs: maximum trace, maximum log-det, entrywise maxima (Section 3.5; pp. 18-19)",
+   "Finite convergence of outer approximation by a ball-packing volume argument, (LK/eps+1)^(n^2) iterations (Theorem 4; pp. 20, 43-44)",
+   "Dual certificate for the relaxation: h(alpha) minus the k largest eigenvalues of (gamma/2) alpha alpha^T (Lemma 10; pp. 24-25, 44)",
+   "Eigenbasis rounding bound (gamma/2) L^2 min(|R|, n-k) or M L min(|R|, n-k); greedy rounding minimizes the worst-case Lipschitz bound (Theorem 5; pp. 26, 44-45)"
+  ],
+  "experiments": "Julia 1.3, JuMP 0.20.1, Gurobi 9.0.1, Mosek 9.1; one Xeon E5-2690 v4 core with 32 GB; code on GitHub. Algorithm 2 matches Mosek's MSE on the relaxation and reaches n = 600 (38,470 s) where Mosek runs out of memory from n = 250, though Mosek is faster at n <= 100. Greedy rounding plus Burer-Monteiro beats the nuclear norm on Candès-Recht-style completion. Multi-tree outer approximation beats the direct Gurobi QCQO and single-tree OA at n = 10-20 (absolute gaps, same seeds). Rank 2-3 at n = 20-30 mostly stops at the cut limit after 170,000-305,000 s, with gaps up to 14.60. Out of sample, OA's MSE is about 0.6% below Burer-Monteiro at n = 25 and 50 (paired p-values), with no gaps reported for those runs. Sensor location is solved at n = 10-20. Gurobi's numerical failures are reported (pp. 27-36).",
+  "positioning": "Surveys three literatures (global optimization, relaxations and rounding, heuristics) and states each one's gap. Extends the authors' 2019 MICO framework and borrows Duran-Grossmann OA, Quesada-Grossmann single-tree, the Ben-Ameur-Neto in-out method as implemented by Fischetti et al., Günlük-Linderoth perspectives and Pilanci et al.'s reverse Huber. Credits Peng & Xia (2005) for projection matrices. Says, politely, that the NP-hardness argument 'needs to be revisited'. Guest-team links: Burer-Monteiro as opponent and polish; Biswas & Ye's sensor family; Nesterov's smoothing (pp. 2-8, 12, 17, 19-22, 34, 48).",
+  "writing": "A named paradigm in the title; a cardinality-to-rank dictionary table as the spine, with an explicit IOU ('we have not yet established most of the connections'). 'For the first time' claims are narrowed in the conclusion to 'moderate problem sizes', while the group's own 2017 certifiably optimal low-rank factor analysis is cited on p. 4. Hedges: 'To our knowledge', 'In our opinion', 'We believe'. Remarks after each theorem and a four-bullet summary of findings (pp. 1, 4, 6-8, 11, 35-37).",
+  "limits_future": "Exact solutions to n = 30 and near-exact ones to n = 600. Gurobi's piecewise handling of projection matrices is the bottleneck, and its certificates hold only up to that approximation. M is not minimal; IPMs fail beyond n of about 200 on a laptop. Future: a branch-and-bound tailored to projection matrices, dedicated SDP codes, and revisiting single- vs multi-tree as nonconvex solvers mature (pp. 1, 6, 18-19, 23, 27, 30-31, 34, 36-37).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Formulation-first in full: another tradition's problem written exactly, duality giving cuts and recasting the nuclear norm as a relaxation, the boundary printed (∃R-complete; n = 30 exact). But the class is not kept: MPCO is a new class with no native solver, and the hardness moves into a nonconvex-QCQO master solved by piecewise-linear spatial branch-and-bound. Against Tension T4, formulation strength is measured and kept (SOC inequalities, p. 23).",
+    "pages": "pp. 1-2, 8-12, 17-21, 23, 27"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "The intractable verdict is re-examined, but the 'why now' is an analogy to MICO's history plus one solver release (Gurobi 9.0's nonconvex QCQO branch-and-bound), not a rebuilt speed-up figure. The honest complexity re-map makes the problem look harder (∃R-complete), not easier. Step 6 is announced in advance ('this finding should be revisited'; scale 'as Gurobi improves their solver').",
+    "pages": "pp. 1-2, 8-9, 21, 31, 34"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Greedy rounding plus Burer-Monteiro is both warm start and opponent, and in-out cuts warm-start the lower bound. Solver versions, machine, limits and absolute gaps are stated, and code is released. Certificate honesty is mixed (Tensions T1, T6): Gurobi's false 'optimal' with 1-2% gaps is admitted, but 15 of 18 n = 30 rows stop at the 50-cut limit with open gaps, and the n = 50 runs behind the 0.6% out-of-sample gain carry no gap.",
+    "pages": "pp. 22-23, 27-32, 36"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "gamma is one knob pricing tractability against bias, with a bias bound, a rounding bound and printed runtime and MSE curves. But the property priced is solver tractability, not a decision-maker's property; the bad case is the runtime blow-up under light regularization.",
+    "pages": "pp. 12, 26, 33-36"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Weak: a programme extension carried by two lineage members (Cory-Wright, Pauphilet), mapped entry by entry onto the group's 2019 logical-constraints framework, with the code public.",
+    "pages": "pp. 1, 9-11, 27, 37"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "term-by-term dictionary from a solved class to a new object",
+    "evidence": "Table 1 maps cardinality to rank, binaries to projection matrices, l2^2 to the squared Frobenius norm, big-M and perspective forms to their matrix analogues, and coordinate rounding to SVD rounding. It flags that most entries are not yet established, and Sections 3-4 then prove them.",
+    "pages": "pp. 9-11"
+   },
+   {
+    "pattern": "Rival method as a relaxation of the exact formulation",
+    "evidence": "Nuclear-norm minimization is exactly the relaxation of the spectral-regularized MPCO (Lemmas 7-8). The Frobenius case gives a matrix perspective relaxation and a generalized reverse Huber penalty that still promotes low rank under tr X = k, where the nuclear norm cannot. Same name as the c16 S010 candidate.",
+    "pages": "pp. 17-18, 28-29"
+   },
+   {
+    "pattern": "regularize to convexify the value function, then price the regularizer",
+    "evidence": "The regularizer drives the convexity and smoothness of f(Y) and gives attainment and certifiable infeasibility; it is introduced artificially if absent. Its strength is then swept to show the gap, runtime and MSE trade-off.",
+    "pages": "pp. 12-13, 33-36"
+   },
+   {
+    "pattern": "relaxation gap as a measured difficulty index",
+    "evidence": "The in-sample relaxation gap grows with gamma, tracks single-tree runtime, and vanishes exactly where the matrix is recovered with high probability ('a deep connection between relaxation tightness and statistical recovery').",
+    "pages": "pp. 33-34, 36"
+   }
+  ],
+  "transferable": [
+   "For a parsimony constraint with no MIO representation, find its idempotent object (z^2 = z becomes Y^2 = Y), write X = YX, and build a two-column dictionary from the solved case, marking which entries are proved and which are only claimed (pp. 10-11).",
+   "Choose a regularizer whose conjugate is linear in the discrete-like variable. The value function is then a maximum of linear functions, every evaluation yields a Danskin cut, and attainment and certifiable infeasibility come for free (pp. 13-16).",
+   "Compute big-M constants by auxiliary conic programs (maximum trace, log-det, entrywise maxima), and say that they are not minimal (pp. 18-19).",
+   "Show that the field's standard convex surrogate equals your relaxation in a special case (the nuclear norm here), so gains are measured against your own bound (p. 18).",
+   "Prove finite convergence of outer approximation by packing balls of radius eps/L inside the feasible region (pp. 43-44).",
+   "Round a relaxation in its eigenbasis by keeping the k largest eigenvalues, bound the loss by the Lipschitz constant times the number of fractional eigenvalues, then polish with a local method started from the rounded point (pp. 26-27).",
+   "When the solver's relative gap is unreliable, report absolute gaps against an independent bound, solve every method on the same seeds and give paired p-values (pp. 30, 32).",
+   "Warm-start a decomposition's lower bound with cuts from a stabilised in-out solve of the relaxation, and show the root-bound gain in a convergence plot (pp. 22-23, 48).",
+   "Sweep the regularization parameter on a log scale and plot runtime and error together (pp. 33-35)."
+  ],
+  "coauthors": "Ryan Cory-Wright (MIT ORC), Jean Pauphilet (London Business School)",
+  "quotes": [
+   {
+    "text": "NP-hardness is a worst-case analysis statement. In practice, NP-hard optimization problems are often tractable.",
+    "page": 8
+   },
+   {
+    "text": "projection matrices are to rank constraints what binary variables are to cardinality constraints",
+    "page": 10
+   }
+  ]
+ },
+ {
+  "id": "S035",
+  "year": "2023",
+  "title": "Finding neurons in a haystack: Case studies with sparse probing",
+  "read_level": "full",
+  "contribution": "Sparse probing fits k-sparse linear probes on LLM MLP neurons, including an exact cardinality-constrained SVM from Bertsimas's group for small k. Across seven Pythia models (70M-6.9B) it finds superposition of polysemantic neurons in early layers, monosemantic context neurons in middle layers, and feature-specific scaling dynamics. The work is student-led; Bertsimas advised and edited.",
+  "problem_entry": "ML (IO as the tool): LLM internals are opaque; with superposition a 1:1 feature-neuron map is impossible; probing conflates ranking quality with classification quality and probes can memorise. Choosing the most predictive k of d neurons is posed as an NP-hard subset problem (pp. 1-2, 4).",
+  "key_idea": "Constrain the probe to at most k neurons and sweep k to measure how sparsely features are encoded: k = 1 localises single neurons. Selectors include a new adaptive thresholding and an exact OSP (cutting planes from [17]) for small k. Each probe-found neuron is then corroborated by ablation, vocabulary effects, weight statistics and random-basis controls (pp. 2, 4, 7-12, 19-20, 25).",
+  "assumptions": "Pythia V0 suite, 70M-6.9B parameters, all trained on The Pile; 14 datasets in 10 collections giving more than 100 binary features. Features are assumed to be linear directions and post-GELU neurons a privileged basis; binary features only. Admitted shortcuts: a top-1,024 mean-difference pre-filter; OSP on the top 50 with a 60 s timeout and high l2; hyperparameters tuned on a subset; mean aggregation for multi-token features. B.2 names Penn Treebank while Table 2 lists EWT (pp. 4-5, 12, 20-25).",
+  "proof_devices": [
+   "No theorems. Selector formulations: mean difference, mutual information, L1 logistic, F-statistic, adaptive thresholding with elastic net, and OSP as a cardinality-constrained hinge-loss SVM solved by cutting planes from [17] (pp. 4, 24-25)",
+   "Pigeonhole argument: with m >> n features on n neurons, neurons must be polysemantic (p. 6)",
+   "Idealised construction: n mutually exclusive binary features on a circle in 2D recovered by ReLU(WW^T x + b) with alpha^2(1 - cos 2pi/n) = 1 and b = -alpha^2 cos(2pi/n); weight norm times bias as a superposition fingerprint (Appendix C, p. 26; used pp. 6-7)",
+   "Interference split into alternating vs simultaneous; mutually exclusive n-grams admit no simultaneous interference (A.6-A.8; pp. 18-19)",
+   "Random-basis control: top neurons vs top directions of a random Gaussian rotation (A.10; pp. 19-20)"
+  ],
+  "experiments": "Metric: out-of-sample F1, with MCC as a check. Selector table, k = 1-8: OSP 0.831-0.902 F1 in 53 s, mean difference 0.832-0.890 in 0.29 s, L1 logistic 0.818-0.906 in 7.8 s, random 0.573-0.755; the top methods are within 1% and OSP's timeout is often reached. Random-projection and random-basis baselines. Case studies: compound-word superposition (three summed neurons separate 'social security'); context-neuron ablations (+8% loss per French sequence at 70M vs +0.2% at 6.9B); scaling dynamics. Negative results printed: no sparse falsehood neuron, prefixes and suffixes not sparse, factual-neuron ablations weak. Code and data released (pp. 5-11, 19-27).",
+  "positioning": "Sits in probing (Belinkov; pitfalls [13-15]) and mechanistic interpretability (Olah, Elhage et al.), building on toy-model superposition and neuroscience coding theory ('consilience'). Contrasts itself with gradient-based and causal-intervention localisation (too slow or coarse) and with unsupervised sparse autoencoders. OR enters only through [16, 17] and a cardinality survey (pp. 2-4, 7, 11).",
+  "writing": "Case-study narrative with a four-bullet list of findings, explicit strengths-and-weaknesses sections, and a 17-question FAQ appendix. Dense hedging ('extremely difficult to prove', 'compelling, although not always conclusive'). Natural-science framing; ends 'just start looking!'. Prints an author-contribution statement (pp. 2, 8, 11-13, 17-22).",
+  "limits_future": "Probing gives little causal insight and misses multi-layer features, cannot tell superposition from unions, may miss redundant neurons, and needs aggregation for multi-token features. One model family, at most 6.9B parameters, binary features only, analysis ad hoc. Future: superposition-free architectures or sparse coding validated by probing, probing outputs, neuron development over checkpoints, and a probing-dataset library for bias, fairness and safety (pp. 11-12).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Step 1 holds: the per-neuron ranking heuristic is replaced by one exact k-subset classifier. But the duel is a tie: OSP is within 1% of mean difference at about 180 times the runtime, and its optimality is relative to a top-50 pre-filter, a 60 s timeout 'frequently reached' and a high l2. The recommended design turns the protocol into a pipeline: fast heuristics locate, optimal methods 'improve and verify'. The intro promises proofs 'for small k' that the appendix narrows (Tensions T1, T6). Student-led work that Bertsimas advised and edited (p. 13).",
+    "pages": "pp. 2, 4, 13, 25"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Weak; advised work. Neuron probing, a problem owned by NLP interpretability, is restated as cardinality-constrained classification, the MIO class his group solves (ref. [17]).",
+    "pages": "pp. 4, 14, 25"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "sparsity sweep as a measurement instrument",
+    "evidence": "The k-sparse probe, exact for small k, is used to measure a property of a learned system (how many neurons carry a feature, and how this changes with model scale), not to make a decision. Advised work, so it is weak evidence of Bertsimas's own pattern.",
+    "pages": "pp. 1, 8-9, 25"
+   }
+  ],
+  "transferable": [
+   "When a field ranks candidates one at a time by a univariate score, pose the k-subset problem, run an exact solver on a pre-filtered pool for small k, and report it beside the cheap heuristics in one table with runtimes (pp. 4, 25).",
+   "Sweep the cardinality k from large to small and read the score-vs-k curve as a measurement of representational sparsity; compare the curves across model sizes (pp. 8-9, 25).",
+   "Add random baselines at the same k: random neurons, and random rotations of the activation space to test whether the basis itself is meaningful (pp. 19-20, 25, 27).",
+   "Read precision and recall separately to diagnose feature granularity (coarser vs finer than the label) (pp. 5, 11).",
+   "Design negative examples that separate the target from its correlates; for rare features, check raw counts as well as distributional statistics (pp. 4, 11).",
+   "Corroborate each probe-found unit with independent evidence: ablation with loss by context, output-logit effects, and a theoretical fingerprint (pp. 7-10, 26).",
+   "Print the negative results and an author-contribution statement (pp. 13, 22)."
+  ],
+  "coauthors": "Wes Gurnee (MIT, lead), Neel Nanda (independent), Matthew Pauly (Harvard), Katherine Harvey (Harvard), Dmitrii Troitskii (Northeastern)",
+  "quotes": [
+   {
+    "text": "Dimitris Bertsimas inspired, supported, and advised the investigation in addition to editing the paper.",
+    "page": 13
+   },
+   {
+    "text": "The top methods are always within 1% of each other, with no method strictly dominating the others.",
+    "page": 25
+   }
+  ]
+ }
+]

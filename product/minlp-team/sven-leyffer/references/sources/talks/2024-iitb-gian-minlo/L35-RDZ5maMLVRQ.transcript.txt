@@ -1,0 +1,289 @@
+Transcript (YouTube auto-generated English captions, ASR; NOT checked against the audio)
+Talk: Lecture 35: Computational Graphs and Factorable Forms, by Sven Leyffer. GIAN course, IIT Bombay, January 2024.
+Video: https://www.youtube.com/watch?v=RDZ5maMLVRQ (length 2476 s; playlist PLREyhbtkeBNpTZtDBfcwLigIsAAEGQ1iR)
+Retrieved: 2026-10-10 with yt-dlp 2026.08.19 (--write-auto-subs --sub-langs en); converted with scripts/srt_to_transcript.py
+Used in: ../../../research/02-methodology.md
+----
+okay so we'll continue our discussion of mixed integer nonlinear optimization problems with non-convex expressions and we looked at a broad outline of ways of creating outer approximations or underestimators and overestimators for
+
+non-convex expression in particular we we saw the momic underestimators and in this class I'm going to tell you about a general framework for constru constructing these um outer approximations or underestimators um and that's known as
+
+factorable forms so this is a generic relaxation strategy this will work for almost any functions there's some exceptions and I'll tell you what these ex or at least give an example of some of these exceptions and then I'll give an outline
+
+of the spatial branch and bound algorithm so this is now a formal way of describing what I sort of scribbled on the board earlier um and then we'll talk about some takeaways in summary so we're going to look at a
+
+general mixed integer nonlinear optimization problems uh that has functions f and g that are possibly non-convex in addition to so we have non-convexity of functions in addition to the non-convexity of the integer
+
+variables and we make one very important assumption here we assume that the functions we're dealing with are factorable and this term factorable means that we can express our function as the sum of products of unary
+
+functions of a finite set whose arguments of variables constants or other functions I think there could also be sum or products of unary functions this should be an or so in particular we're going to look at functions that
+
+are combinations of functions from a small set of operators so when you when you code up your function in ample Gams or python I'm going to assume that you're only using a finite alphabet of functional forms uh and and this would
+
+for example ex ex include all these operators here addition multiplication division exponentiation uh s cosine maybe allow your tangent exponentiation logarithm maybe absolute values what I'm not going to allow you to do is
+
+take functions that are for example integrals of other functions now I could relax this if I knew how to form this integral analytically and get again a factorable function then I could allow you to do this but it's easier to do
+
+this and in particular I I'm not allowing you to take functions that I can't see inside so those are called blackbox functions where you're not telling me what the functional forms are and and functions of this type can be
+
+expressed as an expression tree and this expression tree plays a critical role both in the constructions of these underestimators that we're going to construct but also it turns out there's another role for them in terms of
+
+automatic differentiation how you get gradients for these functions but I'm not going to talk about that here um so here is an expression tree and there's a qu that goes with the expression tree um I'm going to tell you how to read the
+
+expression tree and while I'm telling you how to read it you can try answering this question so this is an expression tree for the function f of X1 and X2 and the question is what is f of X1 and X2 so Pretend This is a quiz show or
+
+something so how do I read this expression tree I I actually start at the leaves and the leaves are either variables or constants and and then I follow the sort of arrows backwards and and I perform the
+
+operation that I see here so this is for example exponentiation of X2 with this constant three uh this would be taking the logarithm of X2 and here I would be multiplying whatever comes out of this which is the logarithm
+
+of X2 with X1 so has anybody guessed who the function is yes we have a winner okay so let's let's write your answer down can you tell us again X1 log X2 plus X2 Cub okay let us see what the board reveals so it's correct brilliant
+
+excellent um this decomposition is not unique so there's other ways of writing it um some times a cleaner way of writing it would be to um actually have only one Le flute note for X2 so that these two Leaf noes that I have here for
+
+X2 would actually be I could have them coded as the same Leaf node um but this is a very convenient way of writing down my nonlinear functions because it decomposes the function it splits it up into its individual components so now
+
+what I can do is I can look at um I have this expr here and if I have a way of finding an underestimator for this function here I'm minimizing then I have part of my underestimator already constructed for my
+
+objective and then here I have a bilinear term so I know how to construct underestimators for bilinear terms and then I just need to figure out what to do with the logarithm of X2 so it gives me a way of splitting the function up
+
+into very simple components and I only need to study how to construct underestimators or Auto approximation for these simpler components so I need don't need to do it for all possible functions I just need to do it for this
+
+alphabet of possible functions that I have okay so the way we then construct a relaxation is by by using this uh computational graph so in particular we're also going to combine expression trees of the objective and the
+
+constraint so we're going to write down what's maybe a forest of trees we have an objective function and we have constraints and for each of those we also have Associated bounds so for example for our uh inequality
+
+constraints is a lower bound of minus infinity and an upper bound of zero here the leaf nodes of the all trees are represented by variables so the x or the Y variables the continuous or the integer variables so that's and this
+
+gives a directed a cyclic graph and all the modeling languages use this representation or some form of representation like this internally um so ample and Gams have this directed asy graph and an API that allows you to
+
+interact with it an API that allows you to Traverse this graph or to to you could even copy the graph and then construct an a different graph that is potentially an underestimating graph so here's a slightly more complex dag
+
+this is of an optimization problem so now I have a nonlinear objective function X1 + X2 SAR so can somebody tell me which of these three functions up there is the objective function left right or the middle which
+
+one the first one okay correct um so the first one is X1 plus X2 2 that goes in there and then I have two more functions here two more nonlinear functions um this second one is obviously this one here because it
+
+involves the sign and then there's a function here that has a constant minus 5 that's being added that's over there and so the the nodes that don't have any entering arcs are the objectives or the constraints and I can construct my
+
+problem by writing it down in this way oh so the the the graph doesn't show that but um I assume that I have bounds that are connected to each of my my roots up here if you like so each of these would have bounds connected to it
+
+and each of the variables will have the leaves will also have bounds connected to it so the two variables have bounds and then then up here I will have bounds and and so the bounds are in a sense separate from from the representation of
+
+the ground um and and so in our case the bounds on the constraints are minus infinity and zero and on the objective is if we have an upper bound then we put that upper bound and otherwise it's minus infinity as well the lower bound
+
+so so the bounds are kind of separate from from the graph structure um and that's good because it allows me more freedom if I want to have if I had lower bounds for example or other other Expressions equality constraints and I
+
+might want to treat this differently okay so now what what I can now do is I have all my functions are expressed in terms of um simple um operations that are either things like multiplication of two variables taking a sign um or
+
+exponentiating a variable um and then just some additions here so all my functions are now expressed in terms of these very simple unary or binary operations and that means that I can I can rewrite my whole mixed integer null
+
+linear optimization Problem by sort of writing it in terms of of a new problem in which I look at having these unary and binary operators that are that are that I'm operating with that as I'm going through my my tree so um to make
+
+this a little bit easier I'm going to combine all my variables X and Y just into a single X so so from now on we're going to it's just going to be variables X we're not going to separate out the integer variables just because as far as
+
+this tree is concerned it's much easier to think of one vector of variables rather than carrying around the two and so what I'm going to do is I'm going to to introduce additional variables for each of the
+
+intermediate uh components in my directed aycc graph that I'm Computing so each of these Theta K is now one of the little functions that appears here so there's a sign here for example an exponentiation or a multiplication of
+
+two variables so each one of those becomes its own additional new variable so I'm introducing additional variable now and they could be quite a lot of these one corresponding to each of these operator nodes in my
+
+tree and then with these new variables um the the operators are now these simple functions so I had this alphabet of my of simple functions and I'm making up more complex functions out of these simple functions and each of these
+
+simple functions um allows me now to get an outer approximation so for example for the multiplication of two Val variables that's the momic envelope that we constructed so we know whenever we see multiplication of two variables we
+
+can replace this function that we have here if this were a multiplication of two variables but we can replace it by the momic envelope and similarly we have similar expressions for other functions so I showed you some for example for a
+
+cube I showed your expression for the square so you have to have you have to remember all of those they they then coded up and and you will construct these outter approximations for these functions and one additional point is
+
+that I also have bounce on my variables and even on the additional variables and I'll tell you in the next lecture how to get these bounce that's really important as well okay so here's a simple example
+
+where I'm sort of reformulating my mixed integer null optimization problem in factorable form and I've colorcoded the different Expressions here here so um my variables are um and I don't think this is correct so this there's already a
+
+mistake here so only X1 and X2 are integer variables the remaining variables are not necessarily integers because they're results of nonlinear Expressions so that's actually a mistake so I'll mark this up here and then for
+
+each of my nonlinear terms that I find here I introduce an additional variable so here I've introduced X3 for sin X2 two um and then I have another term x uh this is now uh this is now this inequality here X4 is X1 + x3 - 4 that's
+
+this less or equal inequality here yeah right yeah yeah so oh oh that's right so X3 and X4 are not in there yeah no you're right everybody else yeah okay so it is correct yeah so you have to be careful to remember that not every
+
+operation when you put an integer into it gives you an integer but somehow when I copied this or derived this I did I did the correct thing there so this is actually important that um we want as many constraints on these variables as
+
+possible thank you Pedro um and then the second one I introduce a variable X5 for my bilinear term and X6 for my Cube and then I write this constraint uh that's this constraint here X7 plus is X5 plus X6 minus 5 less
+
+than or equal to zero um and then I have just just one more nonlinear term which is X2 SAR which are called X8 so I've introduced 3 four five six 7 8 I've introduced six additional variables to do this so this might look really
+
+complicated but the reason I'm doing this is because now I only need to find underestimators out approximations for much simpler functions so all my functions are going to look like if I have a lot of X2 squar functions there
+
+then I just do this underestimator once and I can apply to all these functions I don't need to have a library of complex F of very complicated functions for more complicated nonlinear Expressions okay and then uh we have the
+
+the original bounce on X1 and X up there this between 10 I was looking for the Bounce Down oh there's there's the bounce on x2 and and so now I can use these bounds to derive bounds on X3 and X4 for example so let's let's do that so
+
+X3 is the sign of X2 so the sign no matter what you stick in there is going to be between minus one and one that's certainly valid um X4 is is this expression here and I'll just assume that I did the albra right
+
+let's do X5 next so it's X1 * X2 and X1 * X2 well the the lowest it can go is if I to choose X1 to be minus1 and X2 to be four then the product is minus 40 and I've choose X1 to be four and X2 to be four 10 then I get the upper bound of 40
+
+so that's a valid upper bound on these V new variables let's do one more X8 is X2 s so here is X8 and that's correct right it's I if X2 is between 0 and 10 then X8 is between 0o and 100 and I wrote it there integrality is
+
+inherited from functions so um in particular the sin X3 is not um necessarily if X1 and X2 are integers then that's not necessarily an integer and if X3 is not an integer then of course X4 is not an integer but all the other functions are
+
+now integers as well because the square of an integer is integer multiplying to integer gives you an integer and the cube of an integer is integer okay so everything is here is is correct this decomposition is not
+
+necessarily unique and and an a simple example is that if you take the expression X1 * X2 * X3 then I can either write this as um see I can do I can multiply X1 with X2 and then multiply the result with X3 or I can do
+
+another one where I first multiply X1 uh with X3 and then I multiply the result uh with X2 and then I can do another one so you can you can do many different ways of of write rewriting this and if you for more complex Expressions then
+
+again it's not unique right do I first um if you think about having uh s of X1 * cosine of X2 * X3 then there's different ways of doing that and maybe there's different nonlinear functions that are different properties um that might make
+
+one better than the other um but I've I've never looked into that and I don't know if anybody has okay so here's a little theorem that says the the original problem and the problem that we rewrote during this really difficult
+
+seemingly difficult and laborsome uh way of writing it as factorable function is equivalent and of course it's equivalent that's that's how we constructed it right we do the right math so we did all this and this problem
+
+that I've written down here this optimization problem down here is entirely equivalent to this problem up here it's it's much bigger it's got more variables it looks daunting but it's a much easier problem if you want to
+
+construct underestimators because you don't need to do that for every time you have uh Expressions such as these which would be much harder to do out approximations and so now what I get is I get that I have
+
+these non-convex sets which are rather simple non-convex sets so I have little pieces of non-convex sets and I write my original problem equivalently in this refact in this reformulated way so previously I
+
+had um I'd written my new variables defined them in terms of Expressions that are simple unary or binary expressions and I can write that also equivalent in this set notation here so I now have this this set of this
+
+collection of non-convex sets and the two problems are entirely equivalent I just rewrote it I made no mistake um and now the the the way to get comx relaxations is really easy because now I just need to relax each of these
+
+individual sets and so I do that by putting this little hash mark on top I need to really symbolically I need to do this and then I have a convex relaxation so now if I I have a function X2 Cube for example that's a
+
+non-convex nonlinear function um then I relax it by um for example taking um I can take these two SEC here and then joining them up and so I can relax I can relax this constraint to the set that's now this convex
+
+relaxation and so the critical part in this convex relaxation is that any feasible Point that's any point on the white line uh is still in my convex relax a but the nice thing is that I now have a convex set so I can minimize over this
+
+convex set and then I'm going to and this is sort looking forward I'm going to somehow separate this set and and split it up and create my branch and bound Tre so in general I get these convex relaxations and I can do this I know how
+
+to do this for all the functions I can study these functions and and find these convex relaxations but really what I'm interested in is finding uh polyhedral relaxations and so I'm assuming that or or I'm constructing myself a set of
+
+polyhedral relaxations that can just be written as a set of linear inequality constraints plus lower and upper bounds on all my variables and notice that each of these sets are very small so they're all only one or two dimensional sets
+
+they're not going to have many variables or two or threedimensional sets they're not going to have many variables in them so this is actually very efficient I split my function my problem up into these smaller boxes that I'm that I'm
+
+working with and so I can construct these polyhedral sets for simple functions so I've done it over here for the cubed that's a polyhedral relaxation I can do something similar for the momic under or when I get the mccomic
+
+underestimators for the bilinear terms and I can construct these sets and get a linear autox or linear optimization relaxation of a mixed inte nonlinear optimization problem and with that I can new I can
+
+now do branch and bound and and Smith and pantalis I think were the first to sort of realize that this comp the connection to the computational graph and that they could use this to actually create this whole mechanism
+
+automatically and this is now standard in the um optimization solver that we have and so I'm going to describe this bran in Bound routine um first of all I'm going to need a procedure to compute lower bounds for my
+
+sub problems and then I need to partition the feasible set so I have a null optimization of problem which is nominally this this non-convex problem here but I'm going to relax that to a linear optimization sub problem so this
+
+is a non-convex nonlinear optimization problem because I still it's still has these equality constraints here which I can relax to um an affine feasible set and so if I if I relax these inequalities to my Aline feasible set
+
+then I get a linear optimization problem on on this node in the branch in boundary that I can show solve and so what I do the the the procedure is then basically going to be I'm going to solve this linear
+
+optimization problem that is here if if the optimal solution is also or if this linear optimization problem is infeasible then I know that the original problem of which this is a relaxation is also infeasible so I can prune this note
+
+I don't need to look for Solutions in that part of the branch and Boundary otherwise I'll look at its solution and if the solution is feasible in my nonlinear optimization problem and hence you I mixed into a nonlinear
+
+version then I have a new incumbent and so whenever the solution of this polyhedral relaxation is feasible in the original nonlinear optimization problem then it also solves the original nonlinear optimization problem because
+
+the objectives are the same but generally the solution of this problem will not be feasible in my nonlinear optimization problem and then I need to branch and so I can either then Branch by picking a binary variable that's
+
+fractional and setting it to it's it's below its floor or above its ceiling that's the standard mixed integer nonlinear branching or I can find myself a violated um non-convex constraints and branch on that constraint and so in this
+
+example here if my solution to my relaxation we're here at the Red Dot then one way to Branch would be to say I'm going to separate on this line here and I'm going to create two new problems one where um
+
+my variable XI is less than equal to this threshold and one where uh it's greater equal to the threshold um but that in itself is not enough I also need to then refine this polyhedral relaxation in particular I
+
+need to separate I want to eliminate this point from the solution of both of these sub problems that I'm creating I now I'm now branching and I got one problem over here and another problem over here and so the way to separate
+
+then would be to say I'll construct myself a new polyhedral approximation so I can do for example I can do this on the left oops and then my new polyhedral approximation would be this one here and this point is not feasible
+
+there and on the right I can do something similar I can sort of add a cut here um I might also strengthen it maybe to I should probably strengthen it to lie there as well I should do the same here and then I
+
+have uh these two feasible sets now and and so I now have two two separate problems two different problems and what's critical is that the solution to the parent node is no longer feasible in either one of these so in addition to
+
+branching I need to do a little bit of extra work and refine this um refine this approximation that I'm having and if I keep do doing that then you can kind of you hopefully believe me that you get closer and closer to the
+
+nonlinear functions right once once the sets become really small so once my intervals on this axis become very small then the polyal sets that approximate this function will look almost like the function because the linearization gets
+
+Tighter and Tighter and so this was the example that we looked on earlier where we had um this large the non-convex feasible set is the dark black line um the polyhedral relaxation is the lighter gray area we
+
+found this solution here XJ had XI had XJ had we found a branching point and we found these two additional um cuts that we can now use to separate into the problem on the right and the problem on the left so very important um that you
+
+add these these Cuts otherwise um the the point remains potentially feasible in both these problems and I I had this slide earlier so it's it's important to to remember all the tricks we learned for mix into jol optimization here and
+
+the branching point just plays a even more critical role here so doing these tricks is even more important and in addition your branch in boundary is more complex you used to only branch on Integer variables now you're branching
+
+integer variables and these nonlinear expressions and so there are more things to branch on and the trees get larger and so it's more important to choose your branching variables wisely we want to minimize the size of this tree
+
+ideally okay so this is my last slide and I'll I'll go through this um for this talk um so this is the branch and Bound for nonconvex mixed integer nonlinear optimization and it's it's very similar to the bran and bound that
+
+we've seen earlier um you remove uh a null optimization problem from your HEAP you initially put the relaxation The Continuous relaxation of the mixed gen optimization problem on the heat Heap then you solve a relaxation so this
+
+gives you a lower bound and you let this solution be xlu um and you can possibly get an upper bound too so there's um if you want to you can do this as well and that could be useful if this linearization is
+
+infeasible then uh because we constructed this linearization to include the feasible set of the nonlinear true nonlinear nonlinear function then um we can prune this note it's infeasible we don't need to ever go
+
+back to this node if the solution at this node is dominated by an upper bound that we've somehow constructed then we can also prune this note because we already have a better solution and otherwise there are two
+
+things that we need to look at is the solution integer is it an integral value and do we satisfy all of the nonlinear constraints that we have in the problem and if if both of these are true then we found a new better point so
+
+we're now in this Branch where we we're no longer worse than what we had be found before so we can update our incumbent we have a new best solution and if if neither of these are true then we can either branch on a
+
+variable so we can either find an an integer variable which is non- integral and branch on it or we can branch on one of these nonlinear Expressions so we can branch on a constraint that's not satisfied so that's that's the two
+
+options that we have and um a lot of effort probably goes into finding out which one is the better way to do it and that also might be problem dependent um and it depends on how the nonlinear expressions depend on your integer
+
+variables okay so factoral programming factoral forms means that we have a gener generic way of constructing outo approximation underestimators or convex encloses of our non-convex nonlinear feasible set this will work as long as
+
+we take our functions and make them only out of the same simple building blocks so this is a bit like Lego you have the same build building blocks and you build complex functions out of always using the same building blocks things like
+
+exponentiation addition SS cosines and so on so this is a general recipe for constructing underestimators and with that I can then Define a spatial Branch inbound algorithm and I no longer need to worry
+
+about every possible function that somebody could give me I just need to worry about disentangling the nonlinear function that I get and constructing these individual underestimates and that's the basis of all the
+
+successful Global optimization solvers that are out there now so like Petro con quen or um Baron for example and with that I'll be happy to answer some more questions um any question yes oh how do I add the aine constraints
+
+okay let's go back so I I start off with these this set here which is or this nonlinear constraint which is a generic constraint and now I I say construct these ained sets and I've really only told you for
+
+one particular function how to do it and that's for the bilinear term so I I've only to told you for if you have you have a term X itimes XJ we had the momic we had the four momic underestimators and those
+
+were the four functions that I showed you for other functions um you you basically have have some recipe so you would say for x i s um you know that this function is convex but if if you have X k equals x i
+
+s then it's not convex but you can take you know that the secant so one of one of your inequalities would be the secant that comes from the lower bound on Li and the upper B sorry the lower bound on XI and
+
+the upper bound on XI so that's one you can do that and now you can depending on it's it's your choice as an algorithm developer you could set up a number of additional points at which you linearize the function and you know that each of
+
+these linearization is an underestimator so you could have for example a fixed number of these linearization points like in this case three and then you would need to add these these three cuts to it so here there would be I've
+
+constructed four um these four Cuts here and then I in in addition I have the lower and the upper bounds so that's that's how I construct this Con this set but I have to do it for for this limited number of functions that I have in my in
+
+my alphabet so let's see where's my alphabet um yeah so for that's right so for okay I can do s of X then I can so I I can look at where I am right I mean if I'm so now this depends where I am if I'm if my variable
+
+is between if my bounce tell me I'm between zero and Pi then I can use the fact that this guy is convex and I have a cant and if I'm in the other one oh sorry concave and the cun so I get I get those and if I'm in the other region
+
+then I need to do something else if I'm if I'm spread over two regions then I would I would again construct my underestimators but it's really Case by case you can do it um for for each of these functions you would figure out
+
+what a good way would be for you to construct them and that's that's sort of coded in in the in the code sorry correct it's it's for each function but it's only a small number of functions I only have to do it for one
+
+for this small number of functions so if if I had another con if I had um so this was sin X1 if I had an X2 squar here then I would I would separate I would separate them out yes I would always have to separate them out and they're
+
+not as they're probably not as tight as possibly the combination of these two if you take them together but you you may be able to find tighter not not for the addition I don't think for the addition but for multiplication for example you
+
+could find maybe tighter relaxations but you you would find tighter relaxation but you would need to have a much larger alphabet of functions for which you might have to do it so if I if I instead took multiplication
+
+here right then um I would separate this out I would have so this would be one function so this is my bar this is my Theta 1 of X1 and this would be a different function Theta 2 of X2 and I would introduce new
+
+variables um X3 which is Theta 1 of X1 X4 which is Theta 2 of X2 and then I would write X5 which is X3 * X4 and so I have I have three sets of these outo approximations that I need to create I create this one for X3
+
+then I go over there for this one and for the momic I need to go back up there but it's it's and you're right I can if you study this function long enough you can probably find something that is much tighter but the you have a
+
+much larger alphabet now for function for which you have to provide underestimators and so the there's a tradeoff between having code and functions that are easy to implement versus something that gets
+
+unwieldy but having said that I think all the salt qu is extensible so you could potentially write your own function in there if you wanted to and guess what if you have a stronger underestimator for this
+
+guy uh you will beat quen you you will write a paper that says I'm smarter than Petro so that's kind of cool great question yeah yeah if if you look at this problem here you start off with two variables so
+
+in a two-dimensional space and you lift this to a nine-dimensional space and so you can just imagine there's so much more room in in nine Dimensions than there are in two Dimensions um so just going from two to
+
+three is already much more space um so they they're typically very poor but it's General that's that's that's the nice thing about it yeah oh yeah over here yeah yeah yeah yeah so so here's the tree from which
+
+you would create your additional auxiliary nodes so each time you have a nonlinear expression there like um exponentiation you introduce a new variable sign you introduce a new variable multiplication each time you do that you
+
+introduce a new variable and so this tree can be you can you can make this as much as you want to but it's it's more variables that you need to introduce um and addition and subtraction you don't need to because
+
+you know that the addition of two convex functions is convex so there we don't need to do that that's that's the only help that we get

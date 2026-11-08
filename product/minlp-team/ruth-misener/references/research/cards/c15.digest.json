@@ -1,0 +1,162 @@
+[
+ {
+  "id": "S090",
+  "year": "2025",
+  "title": "Limeade: Let integer molecular encoding aid",
+  "read_level": "full",
+  "contribution": "Open-source MIP tool (Limeade) that generates feasible molecules instead of optimising them, translating SMARTS inclusion/exclusion requirements automatically into linear constraints, with post-hoc validation, IIS diagnostics and batch generation (read as arXiv v1).",
+  "problem_entry": "MIP-based CAMD is limited to tiny problems by search space and complex scores, and an optimal molecule may be meaningless if scores are imperfect; 'we take a step back' (abstract p. 1; p. 4).",
+  "key_idea": "Drop the objective and use the MIP feasible set plus Gurobi's solution pool as a constrained generator; SMARTS patterns become component-count constraints (exclusion S<M, big-M inclusion restricted to consecutive-index windows); symmetry breaking off, replaced by post-hoc dedupe (pp. 4, 9-12, 16-17).",
+  "assumptions": "Heavy atoms only, fixed molecule size, no aromatic bonds; feasibility is mathematical only; case-study feasibility proxy = radius-1 Morgan fingerprint seen at least 5 times in ChEMBL (pp. 4-6, 13, 17).",
+  "proof_devices": [
+   "matched-component count linearisation of substructure matching (Table 2, eqs. 1-2, p. 9)",
+   "big-M existence indicator plus covering constraint for inclusion (eqs. 3-5, p. 10)",
+   "consecutive-index window restriction cutting binaries from P(N,n) to O(N-n) (eq. 6, p. 11)",
+   "violation-probability estimate (~2e-5) to justify deferring large exclusions to validation (p. 10)",
+   "lexicographic symmetry-breaking constraints C24-C25 (p. 8; p. 23)"
+  ],
+  "experiments": "Aspirin retrieval in 4 constraint steps (1000 molecules per step, 6 feasible left, pp. 13-15) and an iterative N=20 case study raising the feasible fraction from 2/957 to 787/855, 55,498/63,973 at 1e5 molecules (pp. 18-19); no baselines, no timings.",
+  "positioning": "Within knowledge- vs data-driven CAMD and the hybrid MIP-over-trained-models line incl. her group's GNN work (pp. 2-3); concedes the principle is classic and basic functions already in the literature (pp. 4, 12); claims the bridge between chemical engineering and math programming (p. 5).",
+  "writing": "Tool-paper style with code listings and verbatim error messages (pp. 12-17); scoped claims; conclusion claims efficiency without timing data (p. 19); several copy-editing slips (pp. 4, 12, 14).",
+  "limits_future": "Fixed size, no aromatic bonds, large exclusions only checked afterwards, symmetric duplicates, IIS only in the Gurobi version (pp. 6, 9-10, 13, 16); no future-work paragraph (p. 19).",
+  "method_links": [
+   {"method": "Method 3", "relation": "variant", "note": "Same partner-model-to-toolkit pipeline (BASF, MIP encoding, open release with Pyomo path) but the trained score is dropped: generation instead of exact optimisation.", "pages": "pp. 1, 4, 11, 19"},
+   {"method": "Method 4", "relation": "evidence", "note": "The group's own symmetry-breaking constraints are switched off by default because they conflict with inclusion; a cheap post-hoc dedupe replaces them.", "pages": "pp. 11, 16"},
+   {"method": "Method 5", "relation": "contradiction", "note": "Scope-limited: tool paper with no baseline, no timing and one case study, yet the conclusion claims efficiency.", "pages": "pp. 13-19"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "generate, don't optimise", "evidence": "MIP solution pool used as a constrained sampler when the objective model is untrustworthy", "pages": "pp. 1, 4, 11"},
+   {"pattern": "encode cheap, check later", "evidence": "exponentially many exclusion constraints deferred to a validation filter, justified by an estimated violation probability", "pages": "pp. 9-10, 16"}
+  ],
+  "transferable": [
+   "Turn a pattern match into 'number of matched linear components equals M', giving linear exclusion and big-M inclusion constraints (pp. 8-10).",
+   "Restrict an existence disjunction over all subsets to consecutive-index windows to cut binaries from P(N,n) to O(N-n) (p. 11).",
+   "Report an IIS in the user's own vocabulary so non-experts see which requirements contradict (pp. 16-17).",
+   "Iterative constraint refinement: generate, score against a reference database, list top failure patterns with counts, exclude, repeat, report feasible fraction per iteration (pp. 17-19)."
+  ],
+  "coauthors": "Shiqiang Zhang, Christian W. Feldmann, Frederik Sandfort, Miriam Mathea (BASF SE), Juan S. Campos; Misener corresponding author",
+  "quotes": [
+   {"text": "Instead of pursuing optimality, this paper exploits the ability of MIP in molecular generation and proposes Limeade as an end-to-end tool from real-world needs to feasible molecules.", "page": 1},
+   {"text": "Such negligible possibility does not merit more efforts on the generation process: if the MIP generation procedure generates a molecule with an unwanted substructure, we just remove it from the candidates.", "page": 10}
+  ]
+ },
+ {
+  "id": "S093",
+  "year": "2025",
+  "title": "Global optimization of graph acquisition functions for neural architecture search",
+  "read_level": "full",
+  "contribution": "NAS-GOAT: an exact MIP encoding of general labelled graphs with reachability and shortest paths (bijection theorem), restricted to NAS DAGs, so that graph-GP acquisition functions are optimised globally inside a full BO loop on NAS-Bench-101/201.",
+  "problem_entry": "Graph BO for NAS optimises acquisition functions by sampling or mutation without optimality guarantees; the earlier MIP approach BoGrape needs strong connectivity, which NAS DAGs lack (pp. 1-2).",
+  "key_idea": "Encode existence, reachability, shortest distance and shortest-path membership as MIP variables without connectivity assumptions, prove exactness, recover BoGrape and NAS search spaces by adding constraints, and plug in shortest-path/node/edge kernels for LCB (pp. 4-7).",
+  "assumptions": "Distinctly labelled nodes, one source and one sink, fixed size per MIP (N=6,7 solved separately for NAS-Bench-101), beta^(1/2)=3, 1800 s Gurobi limit, deterministic setting in main results (pp. 4-5, 7, 17).",
+  "proof_devices": [
+   "necessary logical conditions C1-C8 rewritten as linear big-M constraints (pp. 13-14)",
+   "Lemma 1 surjection by direct check (p. 14)",
+   "reduction of smaller graphs to the n-node case (p. 15)",
+   "injection by induction on min(d_uv(G), d_uv) with two cases and delta=1/0 contradiction sub-cases (pp. 15-16)",
+   "one-hot count indicators to linearise squared path counts in k(x,x) (pp. 16-17)"
+  ],
+  "experiments": "Kernel study (50/400 split, 20 reps, RMSE/MNLL/Spearman, p. 8) and full BO loop (10 initial, 30 iterations, batch 5, 20 reps, median curves) vs 11 baselines on NAS-Bench-101/201, deterministic and noisy (pp. 7-9, 17-19); no MIP times or gaps reported.",
+  "positioning": "In the optimisation-over-trained-ML-models line incl. her group's work (p. 2); Table 2 makes it the only NAS method with a MIP acquisition optimiser (p. 7); direct successor of BoGrape (pp. 2, 4).",
+  "writing": "Four bulleted contributions (p. 2); constraint-design principle stated (p. 4); kernel-vs-optimisation trade-off caveat (pp. 8-9); abstract claims efficiency without time data (p. 1); duplicated equation label typo (p. 6).",
+  "limits_future": "Future: kernels beyond shortest-path, other graph decision problems (p. 9); variable-size normalisation handled by enumerating sizes (p. 17); MIP cost not discussed.",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "Step 8: GP posterior with a graph kernel written as MIP constraints and the acquisition optimised globally.", "pages": "pp. 3, 6-7, 9"},
+   {"method": "Method 1", "relation": "evidence", "note": "Graph properties made explicit variables; NAS structure (single source/sink, index ordering) added as constraints that also cut isomorphic copies.", "pages": "pp. 5-6"},
+   {"method": "Method 4", "relation": "evidence", "note": "Kernels compared in isolation and then inside the full BO loop; better kernel does not imply better optimisation, simpler kernel wins in the loop.", "pages": "pp. 8-9"},
+   {"method": "Method 5", "relation": "variant", "note": "NAS community protocol (published baseline code, 20 replications, noisy appendix) but no MIP times, gaps or time-limit hits.", "pages": "pp. 7, 9, 17-19"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "generalise, prove, then restrict", "evidence": "one exactness theorem for the most general graph encoding; the earlier encoding and each NAS domain are obtained by adding constraints", "pages": "pp. 4-6"}
+  ],
+  "transferable": [
+   "Encode shortest distances with n as infinity and big-M triangle inequalities switched by path indicators (p. 5; p. 14).",
+   "Prove a combinatorial MIP encoding exact by surjection plus injection by induction on shortest distance (pp. 14-16).",
+   "Linearise squared counts in a kernel with one-hot count indicators so k(x,x) stays linear (pp. 16-17).",
+   "Return the best k acquisition values from the solver's solution pool as the BO batch (p. 17)."
+  ],
+  "coauthors": "Yilin Xie, Shiqiang Zhang, Jixiang Qing, Calvin Tsay (corresponding)",
+  "quotes": [
+   {"text": "There are often multiple ways to encode a combinatorial problem, but insufficient constraints result in an unnecessarily large search space with symmetric solutions, while excessive constraints may cutoff feasible solutions from the search space.", "page": 4},
+   {"text": "Note that a better kernel may not necessarily translate to better optimization results", "page": 8}
+  ]
+ },
+ {
+  "id": "S097",
+  "year": "2025",
+  "title": "The catechol benchmark: Time-series solvent selection data for few-shot machine learning",
+  "read_level": "full",
+  "contribution": "First ML-ready transient-flow reaction dataset (1227 points, 24 solvents, continuous temperature/residence time/solvent-mixture inputs) with benchmarks for regression, GP extensions, transfer learning, active learning and (multi-objective) BO (read as arXiv v2).",
+  "problem_entry": "Chemical datasets are not ML-ready, and yield datasets cover discrete variables at fixed conditions; solvent effects are hard to model theoretically (pp. 1-3).",
+  "key_idea": "Use transient flow ramps (residence time, temperature, solvent ratio) to collect dense continuous condition data, choose solvent pairs by GP entropy active learning, and release data plus benchmark tasks (pp. 3-10).",
+  "assumptions": "Catechol rearrangement with online HPLC every 2 min; conditions reconstructed from flow history; mixture featurisation by weighted mean; acetic-acid runs excluded (p. 6) though App. A says acetonitrile too (p. 17); App. B.1.1 names allyl phenyl ether as reactant (p. 20).",
+  "proof_devices": [
+   "residence time from V = integral of cumulative flow rate (eqs. 2-3, pp. 5-6)",
+   "HPLC calibration by constrained least squares on mass balance, SLSQP from a 100,000-point grid (pp. 21-22)",
+   "missing Spange descriptors imputed by a multitask GP with Tanimoto kernel (p. 22)",
+   "solvent-blind BaselineGP as the floor (p. 7)"
+  ],
+  "experiments": "Leave-one-solvent/ramp-out CV with MSE and NLPD over GP, MLP, LLM-embedding and ODE models (Table 3, p. 7); GP extensions (Table 4, p. 8); transfer learning (Table 5, p. 9); active learning and EI/UCB BO over 30 initialisations (p. 9); MOBO vs random on GD/IGD/MPFE (Table 6, p. 10); graph-GP and neural-process results in Table 7 (p. 20).",
+  "positioning": "Against ORD/ORDerly/USPTO and discrete-variable curated yield datasets (pp. 2-3); AIchemy hub with SOLVE Chemistry (p. 1); cites the group's BO line (SnAKe, transition-constrained BO, BARK) as consumers (pp. 8-9, 15).",
+  "writing": "Strong priority claims ('first-ever', pp. 1, 2, 10), an appeal to the ML community and a separate Limitations paragraph (p. 10); negative results in the main text (pp. 7-8).",
+  "limits_future": "Only two reactions, depth only in GPs (p. 10); side-reaction robustness, fine-tuned LLM embeddings, heteroskedastic/non-stationary kernels, BNNs as future work (pp. 6-8, 10).",
+  "method_links": [
+   {"method": "Method 5", "relation": "evidence", "note": "Leave-one-group-out CV, NLPD next to MSE, quantiles over 30 initialisations, losses reported; gaps: exclusion rule stated two ways and a transfer conclusion broader than the MLP numbers.", "pages": "pp. 6-9, 17, 20"},
+   {"method": "Method 4", "relation": "evidence", "note": "Step 8: the group's own shortest-path graph kernels are benchmarked and ESP performs worst.", "pages": "p. 20"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "dataset as the contribution for the ML community", "evidence": "optimisation group releases a benchmark framed as a gap in ML-ready physical-science data", "pages": "pp. 1, 10"}
+  ],
+  "transferable": [
+   "Choose experiments by a GP entropy criterion over candidate pairs trained on a predecessor dataset (eq. 1, p. 5).",
+   "Include a baseline that ignores the input you claim matters, so every featurisation is judged against it (p. 7).",
+   "Use leave-one-group-out CV when the question is generalisation to an unseen category (pp. 6, 17).",
+   "Fit unmeasurable calibration constants by constrained regression on physical invariants (mass balance, yields at most 100%) (pp. 21-22)."
+  ],
+  "coauthors": "Toby Boyne (first), Juan S. Campos, Becky D. Langdon, Jixiang Qing, Yilin Xie, Shiqiang Zhang, Calvin Tsay, Daniel W. Davies, Kim E. Jelfs, Sarah Boyall, Thomas M. Dixon, Linden Schrecker, Jose Pablo Folch (corresponding)",
+  "quotes": [
+   {"text": "many of these models fail to outperform the baseline model, which does not use any solvent information.", "page": 7},
+   {"text": "Limitations of this paper include the focus on only two reactions, and while we touch on a large amount of machine learning models, we only go in depth with Gaussian processes due to their suitability to the small data regime.", "page": 10}
+  ]
+ },
+ {
+  "id": "S115",
+  "year": "2025",
+  "title": "Weighted-Sum of Gaussian Process Latent Variable Models",
+  "read_level": "full",
+  "contribution": "WS-GPLVM: a Bayesian GPLVM for signals that are weighted sums of pure-component signals varying with latent conditions, with an ELBO, a staged training procedure and applications to NIR spectroscopy, oil flow and rock classification (read as arXiv v4 with AISTATS header).",
+  "problem_entry": "Spectroscopic signal separation where pure-component signals vary with unobserved conditions, under three simultaneous constraints that rule out physical models, deep learning and pure-component-based methods (pp. 1-2).",
+  "key_idea": "Put a latent variable inside each GP-distributed pure-component signal, y = sum_c r_c f_c(h, lambda) + noise, with Dirichlet weights and Bayesian-GPLVM variational inference whose xi statistics generalise the psi statistics (pp. 1-5).",
+  "assumptions": "Linear mixing with iid Gaussian noise, simplex weights, transductive fitting with test spectra, shared ARD SE kernel for analytic expectations, SNV preprocessing, O(L^3 C^3) small-data regime (pp. 1-6).",
+  "proof_devices": [
+   "ELBO with analytically optimal q(U) following King and Lawrence 2006 (p. 5; App. B.1 p. 17)",
+   "degenerate-case check: one component collapses xi statistics to Bayesian GPLVM psi statistics (p. 5)",
+   "only Dirichlet moments needed, so weight distributions are swappable (p. 5)",
+   "PCA on static least-squares residuals for initialisation (eqs. 18-19, p. 6)",
+   "three-stage optimisation with noise inflation and annealing (p. 6; p. 23)"
+  ],
+  "experiments": "Toy (ARD keeps 1 of 5 latent dims, p. 6); NIR spectroscopy best MSE but NLPD worse than CLS-GP (p. 8); oil flow lost to inverse models PLS/ILMC (p. 8, Table 2 p. 24); rock classification 81.4% vs PLS 82.9% (p. 9); all baselines with five restarts, restart sufficiency study (pp. 7, 23); text/table mismatch on dispersion (p. 9 vs p. 25).",
+  "positioning": "GPLVM lineage (Lawrence; Titsias and Lawrence); differs from multi-output GPs, GPFA and Altmann et al. 2013 (pp. 2-3); PLS treated as the chemometrics standard (pp. 7, 22).",
+  "writing": "'Our key idea, and the starting point for this paper' (p. 1); surprise reported and explained (latent dim tracks water fraction via SNV, p. 8); hedged; leftover model name MO-GPLVM (pp. 6, 13, 20).",
+  "limits_future": "Small data due to O(L^3 C^3), stochastic VI as scaling route (p. 5); overconfidence (p. 8); losses on oil flow, parity on rock (pp. 8-9); other kernels need numerical expectations (p. 20); code to be released after publication (p. 6).",
+  "method_links": [
+   {"method": "Method 5", "relation": "evidence", "note": "Step 8: losses to inverse models and to CLS-GP on NLPD written in the main text; equal restarts for baselines; restart count tested. Reporting slip on dispersion statistic.", "pages": "pp. 7-9, 23, 25"},
+   {"method": "Method 4", "relation": "variant", "note": "Latent component ablated through nested baselines (CLS-GP = model without h; WS-GPLVM-ind), a statistical analogue of the cumulative solver ablation.", "pages": "pp. 7, 22, 24"},
+   {"method": "Method 1", "relation": "variant", "note": "Domain structure (Beer-Lambert additivity, simplex weights, wavelength smoothness) built into the probabilistic model rather than detected in an algebraic model.", "pages": "pp. 1-3, 6"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "staged fitting against a degenerate optimum", "evidence": "joint optimisation let the GPLVM ignore the weights; fixed by a three-stage schedule with noise annealing and a restart-sufficiency check", "pages": "pp. 6, 23"}
+  ],
+  "transferable": [
+   "Check a new variational bound by its degenerate case collapsing exactly to the known bound (p. 5).",
+   "Initialise latent variables by PCA on the residuals of the simplest static model (eqs. 18-19, p. 6).",
+   "Test restart sufficiency by running many more restarts on two datasets and reporting the plateau (p. 23).",
+   "Include the model minus your new component as a baseline to isolate its contribution (pp. 7, 22)."
+  ],
+  "coauthors": "James Odgers, Ruby Sedgwick, Chrysoula Kappatou, Sarah Filippi",
+  "quotes": [
+   {"text": "Optimizing all model parameters together resulted in the model not using the weights, instead relying only on the flexibility of the GPLVM.", "page": 6},
+   {"text": "In this experiment, the inverse models (PLS and ILMC) perform the best, likely due to the non-linear relationships between the weights and the spectra.", "page": 8}
+  ]
+ }
+]

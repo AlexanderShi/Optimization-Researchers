@@ -1,0 +1,117 @@
+[
+ {
+  "id": "S020",
+  "year": "2002",
+  "title": "Numerical experience with solving MPECs as NLPs",
+  "read_level": "full",
+  "contribution": "Shows on the new 137-problem MacMPEC library that MPECs reformulated as NLPs (with z1'z2 <= 0 and slacks) are solved robustly by SQP solvers (filterMPEC 0 catastrophic failures, SNOPT 1), better than interior-point solvers and at least competitive with special-purpose MPEC solvers.",
+  "problem_entry": "Contests the received verdict that MFCQ failure (unbounded multipliers) and disappointing past experience rule out NLP solvers for MPECs, using the strong-stationarity/KKT equivalence of [19] (pp. 2-3).",
+  "key_idea": "No new algorithm: careful NLP formulation (slacks, z1'z2 <= 0, relaxed complementarity linearization with restoration) plus a reliable filter-SQP solver behind an AMPL complements interface (filterMPEC) suffices (pp. 1, 3, 5-6).",
+  "assumptions": "MPEC form (1.1) with smooth data; recalled theory needs MPEC-LICQ and consistent QPs (known for vertical complementarity); NLP solvers assume a CQ, so failures are expected without MFCQ (pp. 3, 9).",
+  "proof_devices": [
+   "two-variable example min z1+z2, 0<=z1 perp z2>=0: z1z2=0 gives iterates 2^-k z(0) (linear), z1z2<=0 converges in one step (p. 3)",
+   "explicit construction of the unbounded multiplier ray and minimal multiplier (2.2), recalled from [19] (pp. 2-3)",
+   "hand analysis of the pathological instance dempe: limit x=0 violates MFCQ and is not B-stationary (pp. 11-12)"
+  ],
+  "experiments": "137 MacMPEC problems, filterMPEC/KNITRO/LOQO/SNOPT on NEOS; catastrophic vs soft failure taxonomy (Table 2, p. 9); cause-removal reruns with z1'z2 <= 1e-2 (Tables 3-4, pp. 10-12); iteration and CPU performance profiles with failures as asymptote (pp. 12-14); multiplier-size profile (Fig. 3, pp. 13-15); tentative comparisons with published MPEC-solver iteration counts (Tables 5-7, pp. 15-17).",
+  "positioning": "Builds on Fletcher-Leyffer-Ralph-Scholtes [19] and Anitescu [1]; surveys smoothing, penalty, Fischer-Burmeister SQP, PIPA, implicit programming; directly corrects Conn et al. and Ferris-Pang on the LANCELOT/LUBRIF failure attribution (pp. 3-4, 10); casts SQP as the benchmark for MPEC solvers (p. 18).",
+  "writing": "Time-stamped comparative claim in the abstract ('at present', p. 1); hedges concentrated on literature comparisons (tentative, pp. 14-17) and causal attributions; theory recalled only to explain numbers (pp. 3, 12).",
+  "limits_future": "Perturbation (3.4) properties under investigation (p. 6); one complementarity form not handled by the interface (p. 5); literature comparisons on non-identical instances (p. 15); linear convergence to B-stationary points when no strongly stationary point exists (p. 14); IPM improvements and more comparisons planned (pp. 13, 17-18).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "NLP base (filterSQP, filter) carried into MPECs through an AMPL interface; key idea is off-the-shelf NLP solvers",
+    "pages": "pp. 1, 5-6, 18"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "MacMPEC launched with classification scheme, comments, references, plots, online random generator, contributor acknowledgements",
+    "pages": "pp. 6-8, 15, 18"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "'at present' stamp, written failure taxonomy, failures penalized in profiles, iteration and CPU meters with rationale, literature comparisons labelled tentative",
+    "pages": "pp. 1, 9, 12, 14"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "baselines are NEOS solvers at defaults and published iteration counts, not self-built baselines at best settings",
+    "pages": "pp. 9, 14"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "z1'z2<=0 and slacks as formulation fixes; LUBRIF misattribution; relaxation rerun before blaming MFCQ; dempe failure attributed to formulation; water models re-cast from binaries to complementarity",
+    "pages": "pp. 1, 3, 5, 8, 10-12"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "two-variable instance with closed-form iterates shows linear convergence of the equality formulation; PIPA non-convergence cited from NA/208",
+    "pages": "pp. 3-4"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "own SQP solver extended through a thin interface with minor changes and negligible overhead",
+    "pages": "p. 5"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "cause-removal control rerun",
+    "evidence": "failed IPM instances rerun with complementarity relaxed to <= 1e-2; LOQO still fails 11 of 20, KNITRO solves 13 of 19, so failures are not solely due to MFCQ",
+    "pages": "pp. 10-12"
+   },
+   {
+    "pattern": "theory-quantity profile beside performance profiles",
+    "evidence": "relative complementarity-multiplier size profiled on the subset where all solvers agree; IPM multipliers orders of magnitude larger, curves track the iteration profile",
+    "pages": "pp. 12-13"
+   }
+  ],
+  "transferable": [
+   "Rerun only the failing instances with the suspected cause removed and tabulate per instance before attributing failures (Tables 3-4, pp. 10-12).",
+   "Split failures by exit reason (catastrophic vs locally infeasible) and penalize only catastrophic ones in performance profiles (pp. 9, 12).",
+   "Use both iteration and CPU performance profiles and state what each isolates (p. 12).",
+   "Profile a theory-predicted quantity (minimal multiplier) on the agreement subset to explain a performance gap (Fig. 3, p. 13).",
+   "For comparisons with published numbers: publish the instance generator, map problem names, argue comparable per-iteration work, label the comparison tentative (pp. 14-17).",
+   "Motivate a formulation choice with a two-variable example whose iterates are in closed form (p. 3).",
+   "Give library problems a classification string recording origin and structural type so conclusions can be drawn per class (p. 7)."
+  ],
+  "coauthors": "Roger Fletcher",
+  "quotes": [
+   {
+    "text": "The failure of knitro is a failure of the problem formulation, rather than of the method.",
+    "page": 12
+   },
+   {
+    "text": "Interior point methods are less robust, failing on about 15 % of problems.",
+    "page": 17
+   }
+  ]
+ },
+ {
+  "id": "S024",
+  "year": "2003",
+  "title": "An introduction to algorithms for nonlinear optimization",
+  "read_level": "unreadable",
+  "contribution": "",
+  "problem_entry": "",
+  "key_idea": "",
+  "assumptions": "",
+  "proof_devices": [],
+  "experiments": "",
+  "positioning": "",
+  "writing": "",
+  "limits_future": "",
+  "method_links": [],
+  "new_pattern_candidates": [],
+  "transferable": [],
+  "coauthors": "N. I. M. Gould",
+  "quotes": []
+ }
+]

@@ -1,0 +1,212 @@
+[
+  {
+    "id": "S103",
+    "year": "2023",
+    "title": "Forecasting COVID-19 and analyzing the effect of government interventions",
+    "read_level": "full",
+    "contribution": "DELPHI, an 11-state SEIR extension with a fitted parametric intervention curve, under-detection and separate death flows, forecasts COVID-19 in 167-216 areas (median country MAPE 5.8% on cases and 10.6% on deaths in spring 2020), ranks interventions by ratios of mean fitted infection-rate multipliers, and simulates earlier, absent and relaxed interventions for agencies, a hospital system and Janssen.",
+    "problem_entry": "AP+DA (HS as the calibration engine): what interventions did and when society can reopen (p. 1); concurrent, heterogeneous policies (p. 2); entered by extending SEIR with deaths, under-detection and an embedded intervention curve, because official policy and observed behaviour diverge (pp. 2, 4); users named: CDC ensemble, Federal Reserve, Hartford ICU planning, Janssen trial sites (pp. 2-3). Read: medRxiv preprint posted 27 June 2021.",
+    "key_idea": "Replace policy covariates by a fitted multiplier gamma(t) (arctan onset/strength plus a resurgence bump, pp. 7, 11) and split recovery and death flows so that the mortality share is its own parameter (p. 10); fix biology from a meta-analysis of over 190 papers and fit 12 parameters per area (pp. 6, 8); then reuse gamma(t) as the policy lever: category means price the interventions (pp. 19-20), shifts give counterfactuals (pp. 20-21), rescaling simulates reopening (p. 23).",
+    "assumptions": "11-state ODE (pp. 4-5); fixed Td = 2, Tbeta = 5, Tsigma = 10, Tkappa = 15 days, pd = 20% (called a major simplification; unidentifiable), ph = 15% (pp. 7-10); testing data excluded because they lowered accuracy (p. 9); cumulative cases and deaths, window of up to 4 months, after 100 cases (p. 8); Oxford/IHME policies Jan-May 2020 in 5 categories (p. 19); admitted: fixed constants, no asymptomatic state, cross-country policy comparability, symmetric reopening effects (pp. 26-27); the text's parameter count (11 fitted plus 2 initial-state parameters, said to make 12, with 10 symbols listed) does not add up (p. 8).",
+    "proof_devices": [
+      "Calibration as nonconvex weighted least squares: t^2/T^2 recency weights and death weight lambda = min{DT(T)/(3 DD(T)), 10}, 'obtained experimentally' (p. 8)",
+      "Dual-track optimization: truncated Newton daily, dual annealing (generalized simulated annealing) weekly to re-adjust when the mechanics change (pp. 8-9)",
+      "Compartment split I -> IR/ID so that the mortality share is not the artefact nu/(nu+tau) (p. 10; Figure 1c, p. 6)",
+      "Policy effect p_i = mean fitted gamma under policy i / mean under no measure, with SD treating areas as independent samples; no identification argument (pp. 19-20)",
+      "Counterfactuals by editing gamma: t0 shifted by m days, constant gamma(0), and a reopening correction scaled to keep gamma within [0, 2] (pp. 20-21, 23)"
+    ],
+    "experiments": "Python 3.7/SciPy/NumPy, code on GitHub (p. 12); 15-day out-of-sample windows after 27 Apr and after 21 Sep: median country MAPE, world 5.8%/10.6% then 6.5%/4.8% (Table 2, p. 15); failure table of areas with few deaths, MAPE 44-193% (Table 1, p. 14); US 4-week-ahead deaths against 7 CDC-ensemble models on the authors' own metric (point MAPE) and window (Jul-Sep): max 3.5%, rank 1 in 6 of 13 weeks (pp. 14-16); sensitivity: N(0, 0.2|theta|) refits against archived predictions, IQR mostly within +/-5% (pp. 16-18); scenarios: 280,000 deaths (68%) avoidable, 14.8 million without intervention, no intervals (p. 21); no run times or hardware.",
+    "positioning": "Places itself in the SEIR family and its refinements (age, severity, mobility covariates) and among non-mechanistic forecasters (pp. 3-4); differentiates by features (embedded curve, joint endpoints 'in contrast to' IHME, six continents) rather than criticism (p. 4); meets rivals on the CDC leaderboard (p. 14); frames limits via Holmdahl and Buckee (p. 27); uses the group's own clinical data set as parameter source (p. 6).",
+    "writing": "Abstract stacks headline numbers (p. 1); contributions paired with adoption claims (pp. 2-3); model changes logged 'for full transparency' (p. 6); a dedicated Limitations section (pp. 26-27); causal wording in the abstract against a ratio estimator in the body (pp. 1, 19-20); headlines beyond the body: 'months before' against a one-month example and no foresight of new waves (pp. 1, 12, 27), 'consistently outperforms all other models' with rank 1 in 6 of 13 weeks (p. 15), 'up to 90%' against 68% (pp. 3, 21), +/-6.7 against +/-6.6 (pp. 1, 20); the abstract's 'Median Absolute Percentage Error' against the body's median of per-area MAPE (pp. 1, 13, 15).",
+    "limits_future": "Stated: fixed constants, arctan mortality misses the Dec 2020 rise, no asymptomatic state, small populations, no foresight of new waves, cross-country policy comparability, permanent behaviour change on reopening (pp. 26-27); future: smoothed testing data (p. 10), a mortality bump (p. 26), an asymptomatic state once data allow (p. 27). Unstated: causal identification of policy effects, uncertainty on counterfactuals, outcome measures for the partners' decisions.",
+    "method_links": [
+      {
+        "method": "Method 5",
+        "relation": "variant",
+        "note": "Owners and decisions are named (Hartford ICU capacity, Janssen trial sites, CDC ensemble), but predictions, not decisions, are scored, and no partner outcome is measured ('successful deployment', p. 23); the CDC comparison uses the authors' own metric (point MAPE) and window, the practice targeted by the skill's Method 5 correction (05 §5.2: relative WIS 0.99 in S021).",
+        "pages": "pp. 2-3, 13-16, 21-23"
+      },
+      {
+        "method": "Method 1",
+        "relation": "variant",
+        "note": "Enters epidemiology by re-specifying that tradition's own SEIR model with a parametric lever, not by an LP, conic or MIO formulation; the optimization is a nonconvex calibration with no certificate.",
+        "pages": "pp. 4-11"
+      },
+      {
+        "method": "Method 3",
+        "relation": "variant",
+        "note": "Table 3 works as a stringency price list (residual infection rate 100% -> 88.9% -> 59.0% -> 41.7% -> 25.6%), with the social cost named as the other side of the 'dilemma', but there is no single knob, no bound and no priced cost.",
+        "pages": "pp. 19-20"
+      },
+      {
+        "method": "Method 6",
+        "relation": "evidence",
+        "note": "Adoption proxies of the impact gate: CDC ensemble, Federal Reserve, Hartford HealthCare, Janssen, public website, code on GitHub; the Janssen deployment has its own applied paper (INDEX S428, not read). Also evidence for Heuristic 4 (failure table, limitations section, prospective CDC submissions), Tension T2 (dual annealing in daily production) and Tension T6 (headlines beyond the body).",
+        "pages": "pp. 2-3, 12-14, 21-23, 26-27"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "Parametric lever inside a mechanistic model; counterfactuals by editing the lever",
+        "evidence": "One interpretable fitted curve gamma(t) is averaged by policy category to price interventions, shifted to simulate interventions one week earlier, frozen at gamma(0) for the no-intervention scenario, and rescaled for reopening.",
+        "pages": "pp. 7, 19-23"
+      },
+      {
+        "pattern": "Two-track recalibration (daily local refit, weekly global search)",
+        "evidence": "Truncated Newton runs daily and dual annealing weekly, so that the fit follows the data without drifting and re-adjusts after regime changes; consistent with the annealing-versus-TNC comparison recorded in note 03 B4.7.",
+        "pages": "pp. 8-9"
+      }
+    ],
+    "transferable": [
+      "When a compartment model fixes a quantity as an artefact of two rates (the mortality share nu/(nu+tau)), split the compartment so that the quantity becomes a parameter (p. 10; Figure 1c, p. 6)",
+      "For a nonconvex model refitted every day, run a fast local method daily and a global method weekly, and state the schedule (pp. 8-9)",
+      "Weight recent residuals by t^2/T^2 and balance two endpoints with a capped ratio, stating that the constants were set by experiment (p. 8)",
+      "Sensitivity protocol: perturb each fixed parameter by N(0, 0.2|theta|), refit, and compare the out-of-sample error with the archived prediction actually published that day (pp. 16-17)",
+      "Print a failure table showing the worst areas next to the counts that explain the failure (Table 1, p. 14)"
+    ],
+    "coauthors": "Michael Lingzhi Li, Hamza Tazi Bouardi, Omar Skali Lami (MIT ORC), Thomas A. Trikalinos (Brown), Nikolaos K. Trichakis (MIT Sloan)",
+    "quotes": [
+      {
+        "text": "To optimize over the highly non-convex search space, we utilize both the local truncated newton algorithm (Nocedal and Wright 2006) and the global optimization method of dual annealing (Xiang et al. 1997).",
+        "page": 8
+      },
+      {
+        "text": "DELPHI—like all SEIR-based models—is not designed to perform well on areas with small populations and interactions.",
+        "page": 13
+      }
+    ]
+  },
+  {
+    "id": "S110",
+    "year": "2023",
+    "title": "Predictive performance of multi-model ensemble forecasts of COVID-19 across European nations",
+    "read_level": "full",
+    "contribution": "A 129-author European COVID-19 Forecast Hub study (in the organizers' voice; Bertsimas is a contributing modeller with Li and Saksham) shows that a median quantile ensemble of 48 models' prospective weekly forecasts for 32 countries beat most component models on relative WIS (83% of case and 91% of death scores), that case forecasts degraded beyond 2 weeks while death forecasts held up, and that weighting by past performance gave no consistent gain.",
+    "problem_entry": "AP (DA only in that forecasts serve policy users; no optimization): varied methods and formats make forecasts hard to compare, which 'confounds the selection of a single representative forecast' (p. 5); a hub standardises targets and quantiles for like-for-like comparison and ensembles (pp. 5-6); question: ensemble performance for cases and deaths in 32 countries, 8 Mar 2021 - 7 Mar 2022 (pp. 3, 6). Voice: the hub organizers (Sherratt, Funk); Bertsimas is author 58 of 129 (p. 2).",
+    "key_idea": "A public, prospective, standardized hub: weekly forecasts for 1-4 weeks in up to 23 quantiles with automated validation; an equal-weight quantile-average ensemble, mean at first and median from 26 July 2021 after anomalous forecasts widened its intervals (pp. 3, 6); retrospective comparison of mean/median x unweighted/inverse-WIS-weighted ensembles (pp. 7-9).",
+    "assumptions": "JHU weekly incident counts over MMWR weeks (p. 6); open participation; 48 models, 29 evaluated, 5 left out of the ensemble for incomplete quantiles, no ensemble below 3 models (pp. 6, 9); forecasts around data later revised by more than 5% removed (p. 7); persistence baseline with expanding uncertainty (p. 7); relative performance only (pp. 6-7).",
+    "proof_devices": [
+      "Weighted interval score over all quantiles, a strictly proper scoring rule (p. 7)",
+      "Relative WIS by pairwise tournament: mean score ratios on shared targets, geometric means, scaled by the baseline (p. 7)",
+      "Coverage of the 50% and 95% central intervals for calibration (p. 7)",
+      "Quantile averaging (Genest 1992) with inverse relative-WIS weights and a Harrell-Davis weighted median (pp. 7-9)",
+      "No formal test of score differences; Diebold-Mariano named and set aside (p. 13)"
+    ],
+    "experiments": "2139 forecast scores (p. 9); ensemble median scaled relative WIS 0.71 (IQR 0.61-0.88) against 1.04 (0.82-1.36) for all models; beats 83% of case scores (N = 886, 23 models) and 91% of death scores (N = 763, 20 models) (p. 10); cases 0.62 -> 0.9 from 1 to 4 weeks, deaths 0.69 -> 0.76; case forecasts overconfident beyond 1 week (p. 10); the text reports that the median beat the mean except for 1-week cases (the unweighted pair ties at 0.69 for 2-week cases), the unweighted median is never worse than the weighted one, and weighting helps the mean for deaths (p. 10; Table 1, p. 12); the MIT team's model and score are not identified in the text.",
+    "positioning": "Hub tradition from climate modelling, dengue, US influenza and US COVID-19, with German/Polish hubs alongside (p. 5); compatible infrastructure (p. 6); mixed evidence on weighting (Taylor and Taylor against Bracher et al.) (pp. 8, 13); the median result agrees with Brooks and with Ray et al. (pp. 8-9, 13); 'Our results support previous findings' (p. 13).",
+    "writing": "Structured abstract with an N for every percentage (pp. 3-4); editor's evaluation printed (pp. 4-5); calibrated claims ('not strictly dominant', p. 13); a limitations paragraph (pp. 13-14); policy use through the ECDC weekly threat reports (p. 14); EPIFORGE and MDAR checklists, open data and code (p. 18).",
+    "limits_future": "Stated: no statistical test, dependence on metric and baseline, data revisions in an aggregated source, unsystematic method descriptions and undocumented model changes over time (pp. 13-14); future: trends and turning points, vaccination/variant/policy data, trimming and quantile-regression averaging, hospitalisations, longer-term scenarios (pp. 14-15).",
+    "method_links": [
+      {
+        "method": "Method 5",
+        "relation": "variant",
+        "note": "External judge, the field's metric: time-stamped prospective forecasts scored by relative WIS against a persistence baseline, plus coverage; Method 5's owner rule and decision metric are absent (forecasts, not decisions). Supports the skill's Method 5 correction ('score forecasts on the field's metric') against S103's self-chosen MAPE comparison; also evidence for Heuristic 4 (an external prospective scoreboard), although the text does not name the MIT team's model or report its score.",
+        "pages": "pp. 2, 6-7, 10, 13-14, 17"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "Consortium co-authorship as a contributing modeller",
+        "evidence": "His group (Bertsimas, Li, Saksham) appears among 129 authors with the standard 'Methodology, Writing – review and editing' role; the references list two German/Polish hub papers with 'Bertsimas D' among the authors (Bracher et al. 2021b/c = INDEX S294, S157; US hub S021, not read). Such papers are external evaluations of his group's forecasts, not his voice.",
+        "pages": "pp. 2, 17, 18"
+      }
+    ],
+    "transferable": [
+      "Score probabilistic forecasts with a proper score (WIS), and make partial participation comparable with the pairwise-tournament relative WIS scaled by a persistence baseline (p. 7)",
+      "Before scoring, drop forecasts made around data points that later releases revised by more than 5% (p. 7)",
+      "Combine component forecasts by the median, not the mean, when components can be anomalous; weighting by past scores did not reliably help (pp. 6, 10, 12-13)",
+      "Archive time-stamped forecasts before the outcome is known, so that out-of-sample claims can be checked (p. 14)"
+    ],
+    "coauthors": "129 authors led by Katharine Sherratt (LSHTM) and Sebastian Funk, with Johannes Bracher and others; Bertsimas (listed as 'Bertsimas Dimitris', author 58) with Michael Lingzhi Li and Soni Saksham (MIT)",
+    "quotes": [
+      {
+        "text": "Collating time-stamped predictions ensures that we can test true out-of-sample performance of models and avoid retrospective claims of performance.",
+        "page": 14
+      },
+      {
+        "text": "we did not document whether modellers changed the methods for a particular submitted model over time.",
+        "page": 14
+      }
+    ]
+  },
+  {
+    "id": "S150",
+    "year": "2023",
+    "title": "Dynamic optimization with side information",
+    "read_level": "full",
+    "contribution": "Sample robust optimization with side information (ML-weighted worst-case averages over balls around historical sample paths) is asymptotically optimal for multistage stochastic optimization with covariates, via a new Wasserstein concentration result for kNN and kernel weights; a multi-policy linear-decision-rule approximation solves 12-stage instances in under 40 s with lower out-of-sample cost than SAA, PtP, SRO and a residual tree.",
+    "problem_entry": "DA+RO (ML supplies the weights; SD as the multistage setting): multi-period decisions after side information is observed once (fashion retailer, fund manager), from i.i.d. data with no parametric structure (pp. 1-2); the weighted SAA becomes 'anticipative', 'a form of overfitting', for T >= 2 (Example 1, p. 3; endnote 1, p. 30); scenario-tree methods (Ban et al. 2019; Bertsimas and McCord 2019) take 'hours or days' for ten or fewer periods (p. 3). Read: arXiv v2.",
+    "key_idea": "Robustify the ML-weighted SAA: put an l_p ball of radius eps_N around each sample path and minimize the weighted average of the worst-case costs (eq. 4, p. 9), with kNN, kernel, CART or RF weights (pp. 9-10); Table 1's 2x2 makes SAA, Bertsimas-Kallus and Bertsimas et al. 2018a special cases (p. 22); tractability comes from a multi-policy approximation with one auxiliary linear decision rule per uncertainty set and stage (pp. 20-21).",
+    "assumptions": "Side information at time 0, fixed or slowly varying (p. 2); i.i.d. data (p. 8); Assumption 1: kNN with k_N = min(ceil(k3 N^delta), N - 1), delta in (1/2, 1), or Gaussian/triangular/Epanechnikov kernels, with eps_N = k1/N^p (p. 11), so the guarantee covers kNN and kernel weights only, although RF is in the abstract and CART in the experiments (pp. 1, 26); conditional sub-Gaussianity, conditional laws Lipschitz in d1, compact Gamma with a small-ball bound, each glossed in words (p. 13); growth and semicontinuity conditions borrowed from Bertsimas et al. 2018a and Mohajerin Esfahani-Kuhn (pp. 17-18); costs of form (15) for the approximation (p. 20); EC.4 assumes no constraints on decisions and nonnegative uncertainty (pp. 41-42); synthetic data from published generators (pp. 23, 25, 28).",
+    "proof_devices": [
+      "Theorem 2 (new): the weighted empirical conditional measure comes within eps_N of P_gamma in type-1 Wasserstein distance, almost surely for large N; the triangle inequality splits it into three terms (pp. 13-14)",
+      "Term 1 by the Kantorovich-Rubinstein dual, Jensen and the Lipschitz assumption with weight locality (p. 14); Term 2 by truncation to a growing box with a Gaussian tail inequality (p. 15)",
+      "Term 3 by approximating 1-Lipschitz functions with piecewise-constant functions on a dyadic partition, then a union bound, Hoeffding with the weights' MGF bound, and summability against 1/N^2 with Borel-Cantelli (pp. 16-17)",
+      "Theorem EC.1: kNN and kernel weights satisfy the locality and MGF conditions, via binomial tails, Hoeffding and Borel-Cantelli (pp. 33-35)",
+      "Theorem 1 (asymptotic optimality over general decision rules): the lower half adapts a lemma of Bertsimas et al. 2018a to weighted measures, the upper half follows Mohajerin Esfahani-Kuhn; SRO = type-infinity Wasserstein DRO (pp. 11, 18, 35-39)",
+      "Theorem 3: single-period conditional Wasserstein DRO is asymptotically optimal, by swapping Fournier-Guillin's concentration result for Theorem 2; tractability unchanged with 1/N -> w_N^i (pp. 19-20)",
+      "Theorem 4: the multi-policy problem (16) equals (4) for costs (15), by two inequalities (p. 21; pp. 39-40); the LDR restriction gives upper bounds; conic-duality reformulation with O(d_xi max{d_x, N d_y}) rule variables (pp. 40-42)"
+    ],
+    "experiments": "Synthetic data only; no solver, hardware or code reported. Inventory, T = 12 (Ban et al. parameters, N = 40, 100 x 100 replications, kNN k x eps grid): best 7195, against 8365 without multi-policy and 7320 without side information; eps = 0 with kNN gives 11346-16288, worse than no side information (8967), [my reading] the overfitting of Example 1, which the text does not comment on (Table 2, p. 24); [my arithmetic] multi-policy gives about 15% (8590 -> 7320), side information about 2% (7320 -> 7195); residual tree 27142 at B = 2, and B = 3 could not run within 10^3 s (pp. 23-24); Wilcoxon tests at the 0.05/63 threshold leave two neighbouring configurations non-significant despite 'these results are statistically significant' (pp. 23-24); 23-38 s per run (Table 4, p. 25). Portfolio CVaR (validation-tuned; SRO best 'typically', pp. 25-27). Shipment planning (eps in {100, 500}, k_N = 2N/5, outside Assumption 1's delta < 1; all Wilcoxon tests against PtP significant) (pp. 27-29).",
+    "positioning": "Data-driven DRO (Delage-Ye, Xu-Caramanis-Mannor, Mohajerin Esfahani-Kuhn, Van Parys et al.) and prescriptive analytics (Hannah et al., Ban-Rudin, Bertsimas-Kallus, Ho-Hanasusanto, Elmachtoub-Grigas) (pp. 2-3, 5); rivals Ban et al. 2019 and his own Bertsimas-McCord 2019 faulted for scenario trees (p. 3); credit stated openly: the final steps 'draw heavily from' Mohajerin Esfahani-Kuhn and Bertsimas et al. (p. 5), borrowed assumptions (p. 18), a swapped lemma (p. 19); closest schemes Chen-Sim-Xiong and Bertsimas-Shtern-Sturt (p. 6); 'unifies our understanding of these disparate models' (p. 4).",
+    "writing": "The abstract runs approach -> weights -> new concentration result -> optimality -> approximation -> 'up to 15%' and 'less than one minute ... twelve stages' (p. 1); concrete examples before notation (pp. 1-2); Example 1 shows the obvious extension failing (p. 3); contributions (a)-(f) with 'first' claims (pp. 4-6); practitioner choices come before the technical assumptions, each assumption glossed in words (pp. 11, 13); hedges only in the results ('We believe', 'typically', p. 26); the conclusion has no limits and no future work (p. 29).",
+    "limits_future": "No stated limitations; the restrictions sit inside the assumptions (pp. 11, 13, 17-18, 20, 41). Unstated: guarantee for kNN and kernel weights only; side information only at time 0, whereas the competitors handle it over time (p. 3); no rates; no gap bound for the multistage approximation (the two-stage result is credited to Bertsimas et al. 2019, p. 6); synthetic data; no solver, hardware or code. No future work stated (p. 29).",
+    "method_links": [
+      {
+        "method": "Method 1",
+        "relation": "evidence",
+        "note": "A problem owned by multistage stochastic programming (scenario trees, DP) is recast as a robust problem whose multi-policy LDR approximation reformulates by conic duality into one deterministic convex program; the class-keeping device is replacing 1/N by ML weights. The boundary is only partly printed (the competitor's O(B^T) failure; the method's own multistage test stops at T = 12, N = 40), and there is no certificate or gap for the approximation.",
+        "pages": "pp. 3, 20-25, 40-42"
+      },
+      {
+        "method": "Method 5",
+        "relation": "variant",
+        "note": "Decisions are scored out of sample (cost, profit), extending the prescriptive-analytics line (SW5) to T >= 2; but the baselines are the group's own Table 1 corners plus one external method, the data are synthetic, and there is no owner or current rule.",
+        "pages": "pp. 1-2, 21-29"
+      },
+      {
+        "method": "Method 3",
+        "relation": "variant",
+        "note": "eps is one robustness knob, and Table 2 prints the price in both directions ([my reading] overfitting at small eps, over-protection at large eps, best at 300-500; robustness prevents overfitting 'in the small data regime', p. 26); the knob is set by validation or an asymptotic schedule, not by a solution-independent violation bound, i.e. the data-set knob the skill's Method 3 correction recommends. Also a variant of Heuristic 1: robustness added to repair an estimator that overfits.",
+        "pages": "pp. 3, 9, 11, 24, 26"
+      },
+      {
+        "method": "Method 6",
+        "relation": "evidence",
+        "note": "A programme node merging two students' lines (McCord's multistage PtP, Sturt's SRO) and four earlier methods of the group into one 2x2.",
+        "pages": "pp. 3-4, 22"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "Fill the missing corner",
+        "evidence": "The group's earlier methods are arranged in a 2x2 of design choices (robustness eps, ML weights), so that the new method is the missing corner and SAA, Bertsimas-Kallus and Bertsimas et al. 2018a are special cases.",
+        "pages": "pp. 3-4, 22"
+      },
+      {
+        "pattern": "Swap the concentration lemma",
+        "evidence": "One new measure-concentration result (Theorem 2) is plugged into published consistency proofs (Mohajerin Esfahani-Kuhn; Bertsimas et al. 2018a) in place of their concentration step, and the borrowing is stated.",
+        "pages": "pp. 5, 18-19, 35-39"
+      }
+    ],
+    "transferable": [
+      "Prove Wasserstein concentration of a weighted empirical measure with a triangle-inequality split into bias (Lipschitz in the covariates), truncation (sub-Gaussian tails) and fluctuation terms; handle the last by a dyadic piecewise-constant approximation of 1-Lipschitz functions, a union bound, Hoeffding and Borel-Cantelli (pp. 14-17)",
+      "Reuse an existing asymptotic-optimality proof by swapping its concentration inequality for yours, and state which step was swapped (Theorem 3, p. 19)",
+      "When a data-driven multistage estimator becomes anticipative, put a small uncertainty ball around each sample path, optimize the weighted worst case, and show the eps = 0 failure in your own table (pp. 3, 9, 24)",
+      "Approximate a recourse cost that is convex in the uncertainty with one auxiliary linear decision rule per uncertainty set (multi-policy); prove the unrestricted version exact, then reformulate by conic duality (pp. 20-21, 40-42)",
+      "Report the full parameter grid (k x eps), averaged over 100 training sets, with run times and paired tests at a multiplicity-adjusted threshold (Tables 2-4, pp. 24-25)",
+      "Draw the 2x2 table that makes earlier methods special cases of yours (Table 1, p. 22)"
+    ],
+    "coauthors": "Christopher McCord, Bradley Sturt (MIT ORC)",
+    "quotes": [
+      {
+        "text": "Such anticipativity (a form of overfitting) is ultimately of practical importance, as it implies that the (2) can provide an unsuitable approximation of (1) even in the presence of big data.",
+        "page": 3
+      },
+      {
+        "text": "the final steps in our convergence result (Section 4.4) draw heavily from similar techniques from Mohajerin Esfahani and Kuhn (2018) and Bertsimas et al. (2018a).",
+        "page": 5
+      }
+    ]
+  }
+]

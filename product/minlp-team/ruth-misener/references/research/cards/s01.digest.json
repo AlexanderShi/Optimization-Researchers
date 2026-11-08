@@ -1,0 +1,343 @@
+[
+ {
+  "id": "S032",
+  "year": "2014",
+  "title": "A framework for globally optimizing mixed-integer signomial programs",
+  "read_level": "partial",
+  "contribution": "Extends GloMIQO to mixed-integer signomial programs by integrating existing techniques (expression-tree flattening, added interlinking nonconvex terms, dynamic RLT in branch-and-cut, node-specialised term underestimators) and shows on 257 instances that the framework, released in ANTIGONE, compares favourably with BARON, Couenne, LINDO and SCIP.",
+  "problem_entry": "Widen GloMIQO's MIQCQP class to MISO, which arose because convex posynomial GPs could not model engineering applications; the new class collapses to GloMIQO without signomial terms (pp. 2-3).",
+  "key_idea": "Novelty in the interconnections: flatten the factorable tree toward term-based structures, add nonconvex terms until each is a product of existing terms or has a known hull, run dynamic RLT in branch-and-cut, apply the most specific term relaxation by polymorphism (pp. 2, 5-8, 12).",
+  "assumptions": "Finite inferable bounds and a bounded-MILP relaxation; noninteger powers only on nonnegative variables; exponential transformation only on positive domains; edge-concavity tested per single term (pp. 3, 12).",
+  "proof_devices": [
+   "interval-Hessian diagonal test classifying terms as always/sometimes/never edge-concave, with locally valid cuts for 'sometimes' (pp. 11-12)",
+   "all (up to 28) convex-hull facets for terms of <=4 variables, generalised Meyer-Floudas dominance tests before the Rikun check (pp. 13-14)",
+   "RLT detection over all products with interaction-set partitioning (15,859 RLT equations in ~9 CPU s on johnall, p. 10)",
+   "cut loop until LP objective stalls, global vs locally valid cuts, cuts switched off deeper in the tree (pp. 14-15)",
+   "NLP multistart safeguards: avoid discontinuities, freeze infinite-derivative variables, remove redundant RLT equalities (p. 16)"
+  ],
+  "experiments": "257 MISO instances (minlp.org, GLOBALLib, MINLPLib+Bonmin, other) vs BARON 12.3.3, Couenne 0.4, LINDO 8.0, SCIP 3.0 (latest as of July 2013), default settings, gap 1e-6, 7200 s, back-to-back runs, Perl feasibility re-check, time and remaining-gap profiles (pp. 16-22).",
+  "positioning": "Places itself between operator-based factorable trees (BARON, Couenne, SCIP) and term-based alphaBB/SGO; admits that other solvers handle more functional forms (pp. 3-5).",
+  "writing": "Contribution sentence framed as integration of existing ideas; each component illustrated by one small worked example (Goldstein-Price, GMA ethanol, beryllium) (pp. 2, 8-9, 14).",
+  "limits_future": "Concrete limits: fewer functional forms than rivals; minlp.org wins largely due to GloMIQO core; validated interval arithmetic slows some classes and cannot be switched off; no future-work section (pp. 3, 15, 20, 23).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Recognition layer before relaxation: convexity look-ahead, interval-Hessian edge-concavity detection, RLT detection, term classes in an inheritance hierarchy with polymorphic relaxation choice.",
+    "pages": "pp. 6, 10-12"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Newest competitor versions with date, harmonised tolerances, back-to-back runs, Perl feasibility re-check relabelling infeasible claims as failures, time and remaining-gap profiles; wins attributed to old GloMIQO core.",
+    "pages": "pp. 18-20"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Stability preferred over speed (validated interval arithmetic) but fixed as a default with no user switch, unlike shipping class-specific trade-offs as options.",
+    "pages": "p. 15"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "integration-as-contribution",
+    "evidence": "Primary contribution stated as integrating existing ideas; the novel parts are the interconnecting components.",
+    "pages": "pp. 2, 23"
+   }
+  ],
+  "transferable": [
+   "Show a reformulation's effect by the root-node bound of one tiny classic instance across all solvers before the full benchmark (Goldstein-Price, p. 8).",
+   "Partition variables into interaction classes before enumerating pairwise RLT products (p. 10).",
+   "Strip redundant relaxation-only equalities before a local NLP solve: one model for the bound, one for the primal heuristic (p. 16).",
+   "Report a numerical-safety layer's trade-off by naming the classes that lost and gained (p. 15)."
+  ],
+  "coauthors": "Christodoulos A. Floudas",
+  "quotes": [
+   {
+    "text": "The primary contribution is to integrate existing ideas into an algorithmic framework for globally optimizing MISO.",
+    "page": 2
+   },
+   {
+    "text": "Instances where solvers returned infeasible points but claimed they were ε-global optimum points, local optimum points, or integer feasible points were automatically relabeled as failures (fl).",
+    "page": 18
+   }
+  ]
+ },
+ {
+  "id": "S123",
+  "year": "2014",
+  "title": "Mixed-integer nonlinear optimization problems: ANTIGONE 1.0 test suite",
+  "read_level": "partial",
+  "contribution": "Documents the 2571-problem test suite that validates ANTIGONE 1.0: sources, GAMS links, an explicit exclusion rule, a library freeze date and per-instance size tables.",
+  "problem_entry": "A solver validation needs a documented, reproducible test set; the report records where each of 2571 problems comes from (p. 1).",
+  "key_idea": "One summary table in three tiers (minlp.org, MIQCQP literature, standard libraries) with provenance sentences, instance lists and appendix size tables (pp. 2-12, 17-66).",
+  "assumptions": "Exclusion of unsupported functional forms (trigonometric, min/max, errorf) and of instances with unbounded objective at known feasible points; libraries frozen at 11 March 2013; own compilation from minlp.org because its Test Set files are unusable as distributed (pp. 1, 3).",
+  "proof_devices": [],
+  "experiments": "none (sizes only, no runs)",
+  "positioning": "Draws on minlp.org, GLOBALLib, MINLPLib, Bonmin, PrincetonLib and MIQCQP literature sets with citations per class (pp. 2-16).",
+  "writing": "Terse catalogue: one provenance sentence per class, then instance names (pp. 3-11).",
+  "limits_future": "No limits or future work stated; some per-class counts in Table 1 disagree with the section headings (e.g. Periodic Scheduling 13 vs 7; Reform. GLOBALLib 32 vs 37) (pp. 2, 4, 9).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Largest documented test set with provenance, freeze date and explicit exclusion rule (SKILL Method 5 step 1).",
+    "pages": "pp. 1-2"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Publish the benchmark as its own citable report: class summary table with sources, dated freeze, exclusion rule, per-instance size tables (pp. 1-2, 17).",
+   "When a community library is unusable as distributed, say why and document the collection built from it (pp. 1, 3).",
+   "Cross-check summary-table counts against per-class lists before release (pp. 2, 4-5, 9-10)."
+  ],
+  "coauthors": "Christodoulos A. Floudas",
+  "quotes": [
+   {
+    "text": "Recall that the standard libraries are dynamic entities; we are using the latest versions as of 11 March 2013.",
+    "page": 1
+   },
+   {
+    "text": "The examples excluded from the standard test libraries are those which either include functional forms that the current ANTIGONE implementation cannot handle (e.g., trigonometric, min/max, errorf)",
+    "page": 1
+   }
+  ]
+ },
+ {
+  "id": "S045",
+  "year": "2014",
+  "title": "Global superstructure optimisation of red blood cell production in a parallelised hollow fibre bioreactor",
+  "read_level": "partial",
+  "contribution": "Formulates the design and operation of a partner lab's hollow-fibre red-blood-cell bioreactor as a superstructure MINLP with discretised haematopoiesis kinetics, solves it globally with ANTIGONE, and shows a cost of about US$277 per unit, competitive with rare blood, with what-if and sensitivity analyses.",
+  "problem_entry": "The partner's bioreactor works but its best configuration is unknown and experiments are costly; prior hollow-fibre optimisation varied single degrees of freedom at steady state (pp. 2, 5).",
+  "key_idea": "Superstructure MINLP coupling topology (reactors, fibre number and type, size, inoculum) and operation (feeds, flow), with ODE kinetics discretised into 4 quasi-steady states, solved to global optimality (pp. 3, 5-6, 9).",
+  "assumptions": "Nominal model; every assumption justified in Table 1 and risky ones paired with violation implications and checks in Table 2 (Krogh approximation, zero-order reaction admitted incorrect, 5 representative species) (pp. 6-10).",
+  "proof_devices": [
+   "order-of-magnitude estimate of reactor count (NR ~ 250) checked against the optimum (NR = 339) (pp. 29-30)",
+   "start-up cost term added only to stop the optimiser exploiting the inoculum (p. 30)",
+   "variable and parameter scaling over 1e-15 to 1e12 called the key to fast solves (p. 30)",
+   "solve stopped at a 10% gap justified by parameter uncertainty (p. 30)"
+  ],
+  "experiments": "GAMS 24.1 / ANTIGONE 1.1, 261 variables (2 integer), 205 equations, 10% gap within 300 CPU s; what-if at physiological glucose/O2; one-at-a-time sensitivity on 29 parameters, 11 shift the optimum by >=10% (pp. 29-33).",
+  "positioning": "Extends Banga et al.'s discretise-and-solve bioreactor MINLP by explicit design and a haematopoiesis model; criticises prior hollow-fibre work for single degrees of freedom and steady state (p. 5).",
+  "writing": "Three named contribution levels (mathematical, engineering, industrial) repeated in introduction and conclusions (pp. 5, 33).",
+  "limits_future": "Cost excludes nutrients, materials, operator time and transport, so no claim against mainstream transfusion; malfunction cost unmodelled; full uncertainty analysis is the missing step (pp. 31, 33).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "The partner's model is the problem, but a mechanistic device-plus-kinetics model from the partner lab rather than a trained ML model; no public stand-in.",
+    "pages": "pp. 2-3"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "tolerance matched to model uncertainty",
+    "evidence": "Global solve stopped at a 10% gap because a tight duality gap is meaningless under uncertain parameters.",
+    "pages": "p. 30"
+   },
+   {
+    "pattern": "assumption-violation table",
+    "evidence": "Each risky modelling assumption paired with its implication if violated and how to check or mitigate it.",
+    "pages": "pp. 9-10"
+   }
+  ],
+  "transferable": [
+   "Write an 'implication if violated / how to check or mitigate' table for each risky modelling assumption (pp. 9-10).",
+   "Predict the optimum's order of magnitude by hand before solving and compare (pp. 29-30).",
+   "Add a small cost term solely to block an unphysical exploitation by the optimiser, and say so (p. 30).",
+   "Read design recommendations off which bounds the optimum hits (pp. 30-31)."
+  ],
+  "coauthors": "María Fuentes Garí, Maria Rende, Eirini Velliou, Nicki Panoskaltsis, Efstratios N. Pistikopoulos, Athanasios Mantalaris",
+  "quotes": [
+   {
+    "text": "a tight duality gap is meaningless for these uncertain parameters.",
+    "page": 30
+   },
+   {
+    "text": "We do not claim that the bioreactor is competitive with mainstream transfusion (US $ 225.42 / unit)",
+    "page": 31
+   }
+  ]
+ },
+ {
+  "id": "S085",
+  "year": "2014",
+  "title": "Robust superstructure optimisation of a bioreactor that produces red blood cells",
+  "read_level": "full",
+  "contribution": "First robust superstructure MINLP of a hollow-fibre red-blood-cell bioreactor: bounded mass-transfer uncertainty handled Lin-Janak-Floudas style, solved globally by ANTIGONE in under 60 CPU s, yielding a smaller reactor with more fibres priced against rare blood.",
+  "problem_entry": "Prior hollow-fibre optimisation varied individual degrees of freedom and ignored uncertainty; the device's best configuration is unknown and experiments are costly (pp. 1-2).",
+  "key_idea": "Treat diffusivity uncertainty (lumen +-20%, scaffold via porosity) as bounded model-inherent uncertainty; the uncertain equality becomes an inequality once one bound is known inactive (pp. 2, 4-5).",
+  "assumptions": "Cost is growth factors only; quasi-steady state instead of delay-differential kinetics; membranes no barrier; uncertainty in reaction, proliferation and exit rates left out (pp. 2, 4-5).",
+  "proof_devices": [
+   "10 x 10 axial-radial discretisation turning the mass-transfer model into an MINLP (p. 5)",
+   "bounded-uncertainty reformulation after Lin et al. (2004) (p. 5)"
+  ],
+  "experiments": "GAMS 24.1, 694 continuous + 2 binary variables, 1,069 constraints (41 bilinear, 31 signomial, 10 log terms); ANTIGONE 1.1 under 60 CPU s (p. 5).",
+  "positioning": "Floudas-lineage robust optimisation and Pistikopoulos's model-inherent uncertainty applied to a bioprocess; contrasted with single-parameter hollow-fibre studies (Davidson, Shipley) (pp. 2, 5).",
+  "writing": "Claims 'for the first time' twice (p. 2, p. 5); ends on a generalisation to bioprocess optimisation (p. 5).",
+  "limits_future": "Omitted uncertainty sources listed explicitly; future direction generic (bioprocess optimisation) (p. 5).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "The partner lab's device model is the optimisation problem, mechanistic rather than learned.",
+    "pages": "pp. 1-2"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "robust counterpart of a superstructure MINLP solved globally",
+    "evidence": "Bounded-uncertainty reformulation (Lin, Janak, Floudas 2004) applied to a bioprocess superstructure and solved with ANTIGONE.",
+    "pages": "pp. 2, 5"
+   }
+  ],
+  "transferable": [
+   "Justify the choice of a conservative uncertainty model by the decision's reliability requirement, and list the uncertainty sources not included (pp. 4-5).",
+   "Report the qualitative design shift caused by uncertainty, not only the cost (p. 5)."
+  ],
+  "coauthors": "Jonathan Chin, Min Lai, María Fuentes Garí, Eirini Velliou, Nicki Panoskaltsis, Efstratios N. Pistikopoulos, Athanasios Mantalaris",
+  "quotes": [
+   {
+    "text": "Observe here that robust optimisation is, as a conservative method for representing uncertainty, an appropriate choice for optimising a bioreactor where we have to prioritise consistent, effective cellular expansion and require a high degree of certainty that each individual bioreactor will operate.",
+    "page": 4
+   },
+   {
+    "text": "uncertainty in mass transfer leads us to design a smaller bioreactor with more hollow fibres.",
+    "page": 5
+   }
+  ]
+ },
+ {
+  "id": "H002",
+  "year": "2014",
+  "title": "Optimisation under uncertainty for a bioreactor that produces red blood cells",
+  "read_level": "full",
+  "contribution": "One-page TERMIS-EU meeting abstract presenting the robust global superstructure optimisation of the red-blood-cell bioreactor (the S085 model) to a tissue-engineering audience.",
+  "problem_entry": "The biomimetic bioreactor cuts growth-factor needs by an order of magnitude but its optimal design is unclear (p. 1).",
+  "key_idea": "Global robust superstructure optimisation over five operating choices, with growth rates and mass transfer as model-inherent deterministic uncertainty (p. 1).",
+  "assumptions": "Krogh cylinder, Poiseuille flow, Ma et al. kinetics, parameters from the partner's patent (p. 1).",
+  "proof_devices": [],
+  "experiments": "GAMS 24.1, 10 x 10 grid, 694 continuous + 2 binary variables, 1069 constraints; ANTIGONE under 60 CPU s (p. 1).",
+  "positioning": "Builds on the partner's patent and Ma et al. kinetics; cites GloMIQO and ANTIGONE (p. 1).",
+  "writing": "Standard meeting-abstract IMRaD; ends with a disclosure of solver co-authorship (p. 1).",
+  "limits_future": "Asserts generalisation to bioprocess optimisation; no limits stated (p. 1).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Partner's device model as the problem; mechanistic, not learned.",
+    "pages": "p. 1"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "disclose own-solver authorship",
+    "evidence": "Abstract discloses that R.M. co-authors ANTIGONE, which produced the results.",
+    "pages": "p. 1"
+   }
+  ],
+  "transferable": [
+   "Add a one-line disclosure when your own solver produces an application result (p. 1)."
+  ],
+  "coauthors": "Mark C. Allenby, María Fuentes Garí, Maria Rende, Eirini Velliou, Nicki Panoskaltsis, Stratos Pistikopoulos, Athanasios Mantalaris",
+  "quotes": [
+   {
+    "text": "R.M. is a co-author on the software ANTIGONE used to generate the results in this paper.",
+    "page": 1
+   }
+  ]
+ },
+ {
+  "id": "S054",
+  "year": "2014",
+  "title": "A framework for the design, modeling and optimization of biomedical systems",
+  "read_level": "full",
+  "contribution": "Overview of the Imperial BSEL/CPSE biomedical programme on leukaemia and blood production, linking 3D culture platforms, a hollow-fibre bioreactor, its global superstructure optimisation, a PK/PD chemotherapy model and cell-cycle/stress experiments into an in vitro / in silico loop.",
+  "problem_entry": "Biomedical modelling must bridge scales and patient data are scarce, so ex vivo platforms and in silico models are combined (pp. 1-3).",
+  "key_idea": "Five interconnected building blocks; Misener's block (section 4) solves the RBC bioreactor cost model with ANTIGONE 1.1 (pp. 3, 5-6).",
+  "assumptions": "For section 4: as in S085 (five representative species, Poiseuille flow, radial diffusion) (p. 6).",
+  "proof_devices": [],
+  "experiments": "No new optimisation runs reported beyond a summary; wet-lab and model-validation results belong to other blocks (pp. 6, 8-9).",
+  "positioning": "Positions superstructure global optimisation against previous single-parameter hollow-fibre studies (p. 6).",
+  "writing": "Programme overview; each block in one section (pp. 3-9).",
+  "limits_future": "Future: biomarker quantification for grey/white-box models of healthy and diseased blood (p. 10).",
+  "method_links": [],
+  "new_pattern_candidates": [
+   {
+    "pattern": "global optimisation as one block of a lab-wide in vitro / in silico loop",
+    "evidence": "Bioreactor superstructure optimisation presented as one of five blocks in an integrated biomedical framework.",
+    "pages": "pp. 3, 5-6"
+   }
+  ],
+  "transferable": [],
+  "coauthors": "Eirini Velliou, María Fuentes-Garí, Eleni Pefani, Maria Rende, Nicki Panoskaltsis, Athanasios Mantalaris, Efstratios N. Pistikopoulos (Misener 3rd of 8)",
+  "quotes": [
+   {
+    "text": "This approach uses superstructure optimization applied to hollow fiber bioreactors for the first time; previous attempts varied individual parameters instead of using deterministic global optimization for a simultaneous choice of design and operation.",
+    "page": 6
+   }
+  ]
+ },
+ {
+  "id": "S096",
+  "year": "2014",
+  "title": "Key environmental stress biomarker candidates for the optimisation of chemotherapy treatment of leukaemia",
+  "read_level": "full",
+  "contribution": "Review of how oxidative and starvation stress affect leukaemia growth and chemoresistance, proposing autophagy- and stress-related biomarker candidates to feed patient-specific chemotherapy optimisation models.",
+  "problem_entry": "Oxygen and glucose fluctuations within and across patients act as stress stimuli altering leukaemic kinetics and drug resistance (abstract; pp. 3-4).",
+  "key_idea": "Survey stress-response mechanisms and list candidate biomarkers (ULK1, mTOR, Atg7, FOXO3A, AMPK, P53/PTEN, HIF, FUMH) (Table 1, p. 4).",
+  "assumptions": "n/a (review)",
+  "proof_devices": [],
+  "experiments": "none",
+  "positioning": "Embedded in the Imperial in vivo / in vitro / in silico platform (Velliou et al. 2014a) and Pefani's PK/PD model (pp. 2-3).",
+  "writing": "Review compiled from an invited seminar by Velliou (p. 5).",
+  "limits_future": "Next steps: NGS to select biomarkers linked to in vitro drug resistance, then patient screening to cross-link in vivo and in vitro (p. 5).",
+  "method_links": [],
+  "new_pattern_candidates": [],
+  "transferable": [],
+  "coauthors": "Eirini G. Velliou, Susana Brito Dos Santos, María Fuentes-Garí, Eleni Pefani, Nicki Panoskaltsis, Athanasios Mantalaris, Efstratios N. Pistikopoulos (Misener 4th of 8)",
+  "quotes": [
+   {
+    "text": "Quantitative information on these key biomarkers could serve as an appropriate input for the construction of more detailed predictive models for the in silico description of the leukaemic evolution.",
+    "page": 5
+   }
+  ]
+ },
+ {
+  "id": "S037",
+  "year": "2015",
+  "title": "Towards unravelling the kinetics of an acute myeloid leukaemia model system under oxidative and starvation stress: a comparison between two-and three-dimensional cultures",
+  "read_level": "partial",
+  "contribution": "Compares K-562 AML cell proliferation and metabolism in 2D suspension vs 3D polyurethane scaffolds under physiological oxygen and glucose stress, finding that glucose matters more in 3D, especially under hypoxia, with implications for chemotherapy optimisation models.",
+  "problem_entry": "Ex vivo leukaemia studies are mostly 2D, and physiological stress levels are rarely studied in 3D (pp. 4, 6-7).",
+  "key_idea": "Factorial in vitro comparison (2D vs 3D x 5%/20% O2 x three glucose levels, 2 weeks) to derive kinetics for in silico chemotherapy optimisation (pp. 4, 7).",
+  "assumptions": "K-562 as the AML model system; duplicate experiments, triplicate counts, ANOVA at p<0.05 (pp. 7, 13).",
+  "proof_devices": [
+   "worst-case Fickian-diffusion PDE simulation in gPROMS with O2 consumption 20-50% above the literature maximum, plus SEM, to rule out diffusion and space limitation before attributing 2D/3D differences to biology (pp. 18-19)"
+  ],
+  "experiments": "Wet-lab growth and metabolite profiles; 2D boosts proliferation, glucose matters more in 3D under hypoxia (pp. 19-20).",
+  "positioning": "Builds on the group's 3D PU scaffold (Mortera-Blanco et al.) and literature linking oxidative/starvation stress to resistance (pp. 5-6).",
+  "writing": "Hypothesis hedged as speculation ('We, therefore, speculate') in the conclusion (p. 20).",
+  "limits_future": "Future: mechanisms of cell-scaffold interaction; stress combined with chemotherapy in 3D (p. 20).",
+  "method_links": [],
+  "new_pattern_candidates": [
+   {
+    "pattern": "worst-case simulation to exclude a physical confounder",
+    "evidence": "Diffusion PDE with inflated O2 consumption rules out transport limitation before attributing differences to biology (group practice; Misener middle author).",
+    "pages": "pp. 18-19"
+   }
+  ],
+  "transferable": [
+   "Exclude a transport confounder with a deliberately pessimistic simulation before attributing differences to the mechanism under study (pp. 18-19)."
+  ],
+  "coauthors": "Eirini G. Velliou, Susana Brito Dos Santos, Maria M. Papathanasiou, Maria Fuentes-Gari, Nicki Panoskaltsis, Efstratios N. Pistikopoulos, Athanasios Mantalaris (Misener 5th of 8)",
+  "quotes": [
+   {
+    "text": "the different behaviour in the 3D system is purely biological.",
+    "page": 20
+   }
+  ]
+ }
+]

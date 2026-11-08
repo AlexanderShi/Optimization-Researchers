@@ -15,7 +15,14 @@
     roundtable      圆桌 SKILL.md 存在，frontmatter name = team.json 的 roundtable；Team 表有每位成员的 `slug`；
                     座位表里每位成员至少主讲一行；3–6 条 fault line，每条引用至少两位成员
                     （深读档：每条两边都有 [<slug> card <ID> p. N] 卡片引用，引用的 ID 在该成员的卡片里都存在，
-                    不剩 "card evidence pending"）
+                    不剩 "card evidence pending"）。只有 1 位成员时跳过（—）：team-layer.js 不足 2 人不写圆桌，
+                    团队级的圆桌引用闭包同样跳过。
+                    理事会（team.json 有 guest_teams：别队的成员也坐上圆桌，如 product/optimization-council）不跳过：
+                    Team 表有本队与各 guest 队每位成员的 `slug`；本队成员每人至少主讲一行，每个 guest 队至少有一人入座；
+                    3–6 条 fault line，每条至少两位成员（可跨队），有卡片的成员一方必须是卡片证据、ID 在他自己团队目录的
+                    卡片里；本队成员与每个 guest 队都至少出现在一条 fault line 里
+    lead            team.json 有 lead（可选的团队总入口 skill，如理事会的 optimization-lead）时：<lead>/SKILL.md 存在，
+                    frontmatter name = lead；正文链接圆桌、本队每位成员的 skill 和每个 guest 队的文件夹。没有 lead 不报
     coverage        深读档：DEEP-READING.md 原样含 team_status.py --coverage 的表，README 原样含 --coverage --short 的表
   每位成员
     skill           SKILL.md 存在；quality_check.py 12/12（--skip-quality 跳过）；## Roundtable Card 的 7 项齐全
@@ -99,9 +106,31 @@ def digest_ids(member_dir: Path) -> set[str]:
     return ids
 
 
+def guest_members(team: Path, cfg: dict) -> dict[str, list[dict]]:
+    """理事会（team.json 的 guest_teams）：别队的成员也坐上圆桌。返回 {队名: [成员 dict（带 _dir）]}；读不到的队给空列表。"""
+    out = {}
+    for g in cfg.get("guest_teams") or []:
+        gj = team.parent / g / "team.json"
+        try:
+            gm = json.loads(gj.read_text(encoding="utf-8")).get("members", [])
+        except (OSError, json.JSONDecodeError):
+            gm = []
+        out[g] = [dict(m, _dir=team.parent / g / m["slug"]) for m in gm if m.get("slug")]
+    return out
+
+
 def check_roundtable(rep: Report, team: Path, cfg: dict, deep: bool, deep_members: set[str] | None = None):
     slugs = [m["slug"] for m in cfg["members"]]
     rt = team / cfg["roundtable"] / "SKILL.md"
+    guests = guest_members(team, cfg)
+    if guests:
+        check_council(rep, team, cfg, rt, guests, deep_members or set())
+        return
+    if len(slugs) < 2:
+        # 只有一位创始成员的团队：team-layer.js 不足 2 人不写圆桌，没有可查的座位表与 fault line
+        rep.add("team", "roundtable", None, f"{len(slugs)} member: no roundtable until a second member joins "
+                "(team-layer.js seats ≥2, playbook §一 recommends 3–6; add members per playbook §八)")
+        return
     if not rt.exists():
         rep.add("team", "roundtable", False, f"{rt} missing (team-layer.js, T2)")
         return
@@ -163,6 +192,102 @@ def check_roundtable(rep: Report, team: Path, cfg: dict, deep: bool, deep_member
             probs.append(f"fault line '{title[:50]}': cites {len(sides)} member(s) as [<slug> …], 2 needed")
     rep.add("team", "roundtable", not probs, "; ".join(probs) or
             f"{len(slugs)} members seated, {len(items)} fault lines with evidence from both sides")
+
+
+def check_council(rep: Report, team: Path, cfg: dict, rt: Path, guests: dict[str, list[dict]], deep_members: set[str]):
+    """理事会圆桌：本队成员（召集人）每行主讲，guest_teams 各队的成员按问题入座；fault line 的两边可以来自不同团队，
+    卡片 ID 到那位成员自己的团队目录里核对。只有一位本队成员也查（不像普通团队那样跳过）。"""
+    probs = [f"guest team {g}: no readable team.json with members" for g, ms in guests.items() if not ms]
+    if not rt.exists():
+        rep.add("team", "roundtable", False, f"{rt} missing (council layer)")
+        return
+    text = rt.read_text(encoding="utf-8")
+    m = re.search(r"^name:\s*(\S+)", text, re.M)
+    if not m or m.group(1) != cfg["roundtable"]:
+        probs.append(f"frontmatter name is {m.group(1) if m else 'missing'}, team.json says {cfg['roundtable']}")
+    own = cfg["members"]
+    everyone = {mm["slug"]: dict(mm, _dir=team / mm["slug"]) for mm in own}
+    for ms in guests.values():
+        for gm in ms:
+            everyone.setdefault(gm["slug"], gm)
+    team_tab = section(text, "## Team", re.compile(r"^## ", re.M))
+    missing = [s for s in everyone if f"`{s}`" not in team_tab]
+    if missing:
+        probs.append(f"not in the Team table: {', '.join(missing[:8])}" + (" …" if len(missing) > 8 else ""))
+    seat = section(text, "Step 1 · Seating", re.compile(r"^###? ", re.M))
+    leads, seated = [], []
+    for line in seat.splitlines():
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if line.lstrip().startswith("|") and len(cells) >= 2 and not set(cells[0]) <= set("-: ") \
+                and cells[1].lower() not in ("leads", "lead"):
+            leads.append(cells[1])
+            seated.append(" ".join(cells[1:]))
+    sur = lambda mm: mm.get("surname") or mm["name"].split()[-1]  # noqa: E731
+    if not leads:
+        probs.append("no seating table found under 'Step 1 · Seating'")
+    else:
+        idle = [mm["slug"] for mm in own if not any(sur(mm) in l for l in leads)]
+        if idle:
+            probs.append(f"leads no seating row: {', '.join(idle)}")
+        unseated = [g for g, ms in guests.items() if ms and not any(sur(gm) in s for s in seated for gm in ms)]
+        if unseated:
+            probs.append(f"guest team(s) seated in no row: {', '.join(unseated)}")
+    fl = section(text, "Documented fault lines", re.compile(r"^> 🔵|^###? ", re.M))
+    items = re.findall(r"^\d+\. \*\*(.+?)\*\*(.*)$", fl, re.M)
+    if not 3 <= len(items) <= 6:
+        probs.append(f"{len(items)} documented fault lines (3–6 expected)")
+    carded = {s for s, mm in everyone.items() if any((mm["_dir"] / "references/research/cards").glob("*.digest.json"))}
+    dm = carded | (set(deep_members) & set(everyone))
+    ids = {s: digest_ids(everyone[s]["_dir"]) for s in dm}
+    in_fl = set()
+    for title, body in items:
+        cites = [(s, t) for s, t in CITE.findall(body) if s in everyone]
+        sides = {s for s, _ in cites}
+        in_fl |= sides
+        if len(sides) < 2:
+            probs.append(f"fault line '{title[:50]}': cites {len(sides)} member(s) as [<slug> …], 2 needed")
+        uncarded = sorted(s for s in sides & dm if not any(s2 == s and re.match(r"cards?\b", t) for s2, t in cites))
+        if uncarded:
+            probs.append(f"fault line '{title[:50]}': deep-read member(s) {', '.join(uncarded)} cited without card evidence")
+        miss = sorted({f"{s} {i}" for s, t in cites if re.match(r"cards?\b", t) for i in CARD_ID.findall(t)
+                       if i not in ids.get(s, set())})
+        if miss:
+            probs.append(f"fault line '{title[:50]}': card ids not in the digests: {', '.join(miss[:8])}")
+        if "evidence pending" in body:
+            probs.append(f"fault line '{title[:50]}': still says 'card evidence pending'")
+    quiet = [mm["slug"] for mm in own if mm["slug"] not in in_fl]
+    if quiet:
+        probs.append(f"in no fault line: {', '.join(quiet)}")
+    absent = [g for g, ms in guests.items() if ms and not any(gm["slug"] in in_fl for gm in ms)]
+    if absent:
+        probs.append(f"guest team(s) in no fault line: {', '.join(absent)}")
+    n_guest = sum(len(ms) for ms in guests.values())
+    rep.add("team", "roundtable", not probs, "; ".join(probs) or
+            f"council: {len(own)} lead member(s) and {n_guest} guest members from {len(guests)} teams in the Team table, "
+            f"{len(items)} fault lines with evidence from both sides, every guest team seated and in a fault line")
+
+
+def check_lead(rep: Report, team: Path, cfg: dict):
+    """可选的团队总入口 skill（team.json 的 lead，如理事会的 optimization-lead：召集人领导各队，按问题分派、审各队答复）：
+    SKILL.md 存在，frontmatter name = lead；正文链接圆桌、本队每位成员的 skill 和每个 guest 队的文件夹。没有 lead 不报。"""
+    lead = cfg.get("lead")
+    if not lead:
+        return
+    f = team / lead / "SKILL.md"
+    if not f.exists():
+        rep.add("team", "lead", False, f"{lead}/SKILL.md missing")
+        return
+    text = f.read_text(encoding="utf-8")
+    probs = []
+    m = re.search(r"^name:\s*(\S+)", text, re.M)
+    if not m or m.group(1) != lead:
+        probs.append(f"frontmatter name is {m.group(1) if m else 'missing'}, team.json says {lead}")
+    if f"](../{cfg['roundtable']}/" not in text:
+        probs.append(f"no link to the roundtable ../{cfg['roundtable']}/")
+    probs += [f"no link to member ../{mm['slug']}/" for mm in cfg["members"] if f"](../{mm['slug']}/" not in text]
+    probs += [f"no link into guest team ../../{g}/" for g in cfg.get("guest_teams") or [] if f"](../../{g}/" not in text]
+    rep.add("team", "lead", not probs, "; ".join(probs) or
+            f"{lead}: links the roundtable, {len(cfg['members'])} member skill(s) and {len(cfg.get('guest_teams') or [])} guest team(s)")
 
 
 def check_member(rep: Report, team: Path, m: dict, deep: bool, skip_quality: bool, st: dict):
@@ -277,10 +402,14 @@ def main():
             "README.md missing" if not readme.exists() else
             (f"member rows missing: {', '.join(unlinked)}" if unlinked else "links every member"))
     check_roundtable(rep, team, cfg, deep, deep_members)
-    if deep:
+    check_lead(rep, team, cfg)
+    if deep and len(cfg["members"]) < 2 and not cfg.get("guest_teams"):
+        rep.add("team", "citations", None, "1 member: no roundtable to check (member citations are checked per member)")
+    elif deep:
         rc, out = run([sys.executable, str(HERE / "check_citations.py"), str(team), "--roundtable", "--show-warnings", "0"])
         rep.add("team", "citations", rc == 0, next((l.strip() for l in out.splitlines() if l.startswith(("✅", "❌")) and "roundtable" in l),
                                                    last_line(out)))
+    if deep:
         ordered = [sts[m["slug"]] for m in cfg["members"]]
         dr = team / "DEEP-READING.md"
         full, short = ts.coverage_md(ordered), ts.coverage_short_md(ordered)

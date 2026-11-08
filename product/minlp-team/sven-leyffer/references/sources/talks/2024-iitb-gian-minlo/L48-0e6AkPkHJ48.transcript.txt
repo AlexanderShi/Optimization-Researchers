@@ -1,0 +1,261 @@
+Transcript (YouTube auto-generated English captions, ASR; NOT checked against the audio)
+Talk: Lecture 48: Optimization Problems with Neural Network Constraints (Part 1), by Sven Leyffer. GIAN course, IIT Bombay, January 2024.
+Video: https://www.youtube.com/watch?v=0e6AkPkHJ48 (length 2163 s; playlist PLREyhbtkeBNpTZtDBfcwLigIsAAEGQ1iR)
+Retrieved: 2026-10-10 with yt-dlp 2026.08.19 (--write-auto-subs --sub-langs en); converted with scripts/srt_to_transcript.py
+Used in: ../../../research/02-methodology.md
+----
+we're changing GE a little bit now towards the end of the course um this is work that um I did with a student who was visiting me at Aron National Laboratory for two summers Dominic young um and and uh we worked on optimization
+
+problems with neuron Network constraints so we were interested in solving problems that have special structure in them and maybe formulating them as mixed inte non optimization problems so at the department of energy Labs like argon
+
+National Laboratory were interested in solving really challenging often multiphysics optimization problems and in many many times those those are problems that you can't necessarily formulate in modeling languages such as
+
+ample because they involve complex of multiphysics simulations so I I I write this here as an S ofx so s ofx is some simulation package that you're calling um it could be Phoenix for solving partial differential equations
+
+for example and then around that you have uh an optimization goal you want to minimize a function and you have some constraints um and often not always uh these simulations are computationally very expensive so that means we're we're
+
+running um if you for example think of running a climate simulation that would run on the biggest supercomputers of the world for hour wor and so those are really expensive computationally expensive simulations um but we still
+
+want to optimize over those things and so I have four examples here I'll just talk about two really quickly um the first one I was actually we worked on a little bit was the design of these concentrating solar plants um so what
+
+you see here these are all little mirrors that reflect the sunlight to go to this Tower the top of this Tower here and and there was a there was a part I think in a James Bond movie where Bond was sort of tied up there and sort of
+
+had to get out of that um they don't do that anymore um instead um they try to generate electricity with these concentrating solar power plants what they do is they run a cycle of molten salt so the table salt that you have on
+
+your table they melt that to about 800 Fahrenheit and they run this through a cycle and then there's a second cycle where you have a turbine you can sort of see some small buildings here in the center Center where you have a steam
+
+cycle and you generate electricity what's really cool about this is that you can generate electricity even if it's cloudy that's something you can't do with photovoltaics the normal solar cells in this case you can actually store the
+
+salt you can have storage containers of this molten salt and you can store it and generate electricity when it's dark outside for example and so these power plants um we're sort of trying to find out how to build build them in an
+
+optimal way and the simulation here would be you lay down an array of these um of these of these fields you have a certain dimension of your and size of your solar tower and the dimensionality of the of the molten salt cycle that you're
+
+building and you simulate forward in time maybe over a year or twoyear Horizon what this plant will be doing so the simulation packages that you can run the simulation packages themselves will be doing some scheduling operations
+
+there's uncertainty involved and there's no way to differentiate through these the second example I'm going to pick is is also related to solar cells uh this is um a snapshot of an idea that people at Sandia National La had where they
+
+want to build uh a sort of one-way mirror on top of photovoltaic cells the idea is that you want sunlight to go in or photons to go in but not to come back out if you can manage to do that if you can trap all the phot
+
+then you can potentially build a very effective solar cell so you don't want the sunlight to be reflected you want it to be trapped inside the solar cell and to do this they're designing these um Zia elements so those are uh that's a
+
+space filling curve design or space filling blocks here that you have and on each side of these blocks you can print um Nano these nanomaterials which is sort of little gold particles that you PR printing on the side and you have a
+
+finite number of angles that you can rotate them with and how you can arrange them and you're then solving a Max BS equation to simulate the the sort of solar beams sunbeams going through here while you're rearranging in a sense
+
+optimally trying to rearrange what what this looks like and so there's a very complex simulation that goes into it similar things happen for studying the brain or subsurface flow so they you're interested in um making sure that um
+
+contaminated sites don't contaminate the um Rivers for example in the Pacific Northwest very expensive simulations so it would be hard to optimize over these and and what people have started to do is we've started to build machine
+
+learning models so deep neural networks or other things that are surrogates cheaper and easier to evaluate surrogates of these complex simulations so rather than running the complex simulation you just evaluate this cheap
+
+surrogate that you trained on some training data and this has been applied wildly so in the design of new materials um there is a center for nanoscale materials at argon which is doing this in the design of energy systems um or in
+
+oil well scheduling and so I'm going to look at optimization problems that have um some kind of machine learning surrogate that approximates our nonlinear simulation so the the nonlinear simulation that I had earlier
+
+is approximated somehow and I'm assuming that I'm given this surit and I can just optimize over this surrogate now so I'm going to study optimization problems which have this form I'm minimizing an objective function that depends on my
+
+circuit and maybe the variables that I have and I have some nonlinear constraints I'll give you an example in a moment and these variables some of these variables could be integer variables that's what makes it
+
+interesting and um we're also going to in the second half going to talk about a formulation for this problem so one way of building the surrogates would be through a neural network um and so on the right here I picked a a picture
+
+again of of the of the internet which is a depiction of a neural network so the way to think about this is that you have an input layer and and in the input layer you encode the input um the the the sort of um signal that goes into the
+
+neuron Network on the output layer you encode the output so for example the input could be an image in which case uh there would be uh depending on the size of the image there would be per one input neuron those are those those round
+
+points here per per pixel and the output could be a classifier that says this image is a is it's a certain digit or it's a different digit or it's a cat or a dog that that will be one of the the ways of doing that and um the way these
+
+neural networks operate is that we have weighted edges that connect the neurons from one layer to another layer and the weights are these matrices W that basically take the input from one layer so the input from y l minus one you
+
+multiply this by this Matrix and and you add some offset and then you apply uh some a simple nonlinear trans transformation and that's um that's sort of an activation function and this is just the max function here for example
+
+so this is a a pointwise Max function that you would apply and you can you can write then this deep a deep neural network as just a concatenation of more and more of these Max function there's a zero missing here uh that that you sort
+
+of apply and in this talk I'm going to assume that this deep neuron network is given to me so somebody has trained it and I just want to optimize over this deep neuron Network so the challenge is that one I have this rather weird
+
+looking nonlinear function that's concatenated of all these Max functions that I need to deal with and I might have some integer variables as well in addition to that now the training this is just an asite how would you train
+
+these neuron Networks you're typically given data so you're given some uh input data XK those are the yellow nodes here and some classifier y LK that's the output and then most methods would somehow try to minimize the data Misfit
+
+between the um classifier that you're given uh and what the neural network computes for you as a classifier given the data and and so there's some kind of it could be a Le squares expression there could be additional terms where
+
+you're regularizing it could be a different um loss function that you could be applying there but conceptually that's what you're doing to find these weights is basically solve an optimization problem so that's just a
+
+little aside um and once you have the weights you can then plug in any value now not just the values on which you trained but any other value to predict uh what the outcome would be if if you put that value if you had that value
+
+here and there's a lot of literature and it's it's um I'm I'm simplifying this hugely uh that goes into how to train the neuron networks things like cross validation so you would train and then you would check on a set of um data that
+
+you haven't trained on whether this was a good training um the optimization needs um uh the these sums here are probably very large sums so that you often have a lot of training data millions of billions of examples and so
+
+you need you need to do some kind of sampling to get to get good and efficient methods but we not going to worry about that instead I'm going to look at um one particular example and then then tell you um how we're working
+
+on this so the the goal is to do optimization with these machine learning surrogates that that are plucked into our functions that make these functions really complicated and ideally I want to leverage everything I know about
+
+nonlinear optimization or mixed integer nonlinear optimization so that I don't reinvent anything um there's obviously some non- differentiability and nonconvexity that I need to handle because my my functions
+
+is this concatenation of these Max functions so I have to be a little bit careful there that's a non-s smooth function and what I'm going to look at in the remainder is for this machine learning model I'm going to use a deep
+
+neuron Network so like the one that I just showed you um but you can you can have other machine learning surrogates and then you you apply different tricks and so what we did was we um looked at the design and control of a combustion
+
+engine um and so um typically to simulate this that requires a lot of computational power and we we got a uh neuron Network that was changed by a couple of to colleagues of of us um that that trained and provided some good
+
+approximation properties and the goal that we're interested in is minimizing the emission for a set of drives so we want to we want to save the planet we want to reduce global warming so we want to minimize the emissions of sort of two
+
+uh things that are emitted subject two we we have to have some trip profile that we need to spe um satisfy and we have uh constraints on uh the fuel injection the revolutions per minute and the comp compression ratio and um that
+
+actually turns out to be an integer variable so so one of the things is that you the compression ratio in your engine is something that's prescribed by a sort of small set of integer values that you can choose and so the Deep neural
+
+network uh is basically a prediction it predicts what the emissions are and what the torque is uh for a given input variables that that we put in and all this is um time dependent so I'm I'm discoed time here so I do this at
+
+different time steps over my trip that I'm taking um the talk constraint really means the car is moving I'm moving forward because if I didn't have that constraint I would just not inject any fuel and not create any emissions so I
+
+would just minimize these numbers here okay so this is actually not such a difficult optimization problem anymore there are really uh depending on how big how long the trip is there is there's really only three variables per trip
+
+that I want to look at and and really there's only two decision variables namely the fuel injection and the RPMs that I'm running at and then the compression ratio is sort of one that's constant over the trip so that's like
+
+the design of the engine it's a very simple model that I'm looking at so we we looked at um the neural networks and and sort of what what the prediction is and um so here is sort Contours modeling for different values of fuel mass or
+
+injection and revolutions per minute we're modeling what the um this is the no emissions and this is the co emissions I think on the right and so we want the emissions to be as low as possible so we want them in the low blue
+
+values there but if I'm if I'm operating on those values then I might not be able to compute complete my trip so one of the things to look at is that these these functions are very non-con and then so when you look at the Contour
+
+plots that we did There's sort of um highly non-convex functions there and they're also non-s smooth functions so there may be many local minimizers and I'm not going to tell you how to handle the non-convexity I don't know how to do
+
+that I can tell you how to handle the nons smoothness that's as far as we got okay so the there's a second application that we're looking at and that's an adversarial attack generation problem and you might have seen that um the the
+
+question here is um you have training data for example there's this well-known set of amness training data where you have um a lot of um images of the digits from zero to nine and you want to train a classifier that correctly identifies a
+
+digit for something that is not in the training data and so those are handwritten digits that come from the Postal Service I think in the United States stes um and it's been observed that by just putting a small number of
+
+or perturbing a small number of pixels you can often get it to misclassify uh in in image and so we were interested in uh finding a misclassification or setting an aders adversarial attack problem so our our
+
+classifier um would sort of identify the correct problem and we we want to find uh an X basically that gives us a complete misclassification um where where Z is um a sort of binary reor here um so for this adversarial attack problem that's
+
+our second application um this is a bit of details that goes into what the um neuron Network looks like there's a final layer is the soft Max function that basically provides the probability of classifying um how to classify the
+
+problem correctly and um this has also been looked at by by fisti and one of his students um to to sort of optimally design these adversarial attacks so we're trying to perturb um the the the digits um to get them to make the wrong
+
+decision okay so I'll talk a little bit in the in the remainder how you can embed these um reu or deep neural networks in optimization problem s and and one way of doing this is to make use of the packages that are out there such
+
+as tensorflow and pytorch and so Dominic um he actually went to the trouble of writing an extension to IP opt that allows us to directly import um in this case um I think it's it's from pie torch um the gradients and the function values
+
+from py torch and so there's there's a way of expressing um these functions uh in a way that becomes that that is efficient and the the the caveat there was that um if you do that in traditional modeling
+
+languages then that's not very efficient the automatic differentiation isn't as efficient as it would be as the automatic differentiation that takes advantage of the fact that these are neuron networks so um the the automatic
+
+differentiation techniques that are implemented in tensorflow and pytorch are are very Advanced and very fast and so we wanted to take advantage of those um and so he defined some macros that allowed us to basically call the neural
+
+networks directly from from pytorch while we're solving the optimization problem and also to get gradients and so we're getting gradients and function values from pytorch and we import them into our nonlinear optimization solver
+
+um sort of doing that through rather than through umle um you can also do this in umle but it's a it's a little bit harder maybe um and we using this popular activation function this Max function so the reu function is simply the the point
+
+wise Max of zero and this linear aine function that that you've trained on and so here's a sort of picture of what the max looks like of zero over over X and and it has been speculated that that really this is not an issue so people
+
+have solved the you people have trained deep neuron networks with these Max functions in there for years for decades certainly um and and there doesn't seem to be an issue um they give very good classification results um and to some
+
+extent that's the industry standard however when we ran this so we were we were using so we set up an optimization problem like this we we had our automatic differentiation and the evaluation of these gradients um set up
+
+and we called a solver This was ipopt um and and this is the result that we got so let me um show you what this is at for a moment so it's um we plotted over the number of iterations we plotted first of all the objective function
+
+value so that looks okay um there's a result there at minus 50 which is great um and we also plotted the Dual and Primal infusibility and so what you see here is that the Primal infusibility so those that's the blue line here that
+
+goes down to maybe 10 the minus 5 or so but the Dual infeasibility and that is the I can um that's the norm of the Great of the lran so dual infeasibility that's the norm of the gradient of the lran with respect to
+
+X that is bounded away from zero and in this plot it's sort of you can see it's sort of greater equal to something like five which is greater than zero so you're doing 3,000 iterations and this dual INF
+
+feasibility this kkt error that should be zero is bounded away from zero 3,000 iterations is a lot I could have taken another solver here we took IP op because it has some nice features but any other solver would give you the same
+
+result or very similar looking result and so we looked at this a little bit and this is sort of uh not surprising so what we saw was that the step size over the iterations actually converge to zero and the reason for that is that we have
+
+we we cannot Al measure um but we're evaluating the activation function sorry the neural network we can measure how far away we are from this from this Kink so we measure the distance to the discontinuity so the the max function um
+
+has this discontinuity at zero and what we're measuring in this plot is how far away we are from the King either on the left or the right of the king we measure the distance to the king and what you can
+
+see in the picture is that initially we're far away from a king and then eventually on the sort of last 1500 iterations or so we just get closer and closer to the king and it looks like we're getting stuck because we're not
+
+reducing this dual infeasibility and Dominic then also plotted in just two variables what the nons smooth area look like so on the left here you see a two layer Network so that's a not a very deep neuronetwork
+
+two layers is not deep at all that's very shallow and uh the blue line and the green line correspond to the areas of discontinuity that you see in these two variables in the um fuel injection and revolutions per minute so on those
+
+two variables when you project it down this neuron Network you see the sort of lines of discontinuity and this gets worse if you add another layer so now you add the third layer and you can see there's lots
+
+of lines of discontinuity and some of these lines are actually overlapping and and this is sort of looking at neuron 27 uh and how far away we are from the from the hyperplane you can see that the the distance to
+
+discontinuity gets gets smaller and smaller so we what looks likely what we're happening is that we would like to take a step but we sort of bound it by bouncing into these discontinuities there okay so there's an alternative
+
+function that we could take and that's called the swish function and it's it's it's so developed at Google it's named after the swish that you have from Nike um and so it approximates uh the ru the reu function
+
+that you have here and if you take beta large enough then it becomes a very good approximation of the Ru function and so the swish function is a smooth function so that's a nicer function um the the classification is not quite as good um
+
+but it has nice smoothness properties and you can show that the swiish function parameterized in beta approximates um the REO function as beta goes to zero so when we use this function that's what happens with the solver on the
+
+right so on the left you see the bad convergence for the reu function the Dual infeasibility or kkt error was bounded away from zero here sort of above 10 that's the Orange Line while and the step size converges to zero so
+
+you really get stuck while on the right hand side you see beautiful and nice convergence so both the Primal and dual infusibility converge towards zero the values here are much much better 10 7 to 10us 13 and you only take about 25
+
+iterations and so ipops if you give it a smooth problem it works great and that's what we expect so the failure is really due to this non smooth behavior that we have and there there was a nice paper that came out in 2020 by Bolton pows
+
+where they looked at the probability of of hitting a non-s smooth point so they they did this little experiment where they designed um randomly chose a thousand sets of weights and offsets for a neural network
+
+so they didn't train the neuron Network they just randomly generated a thousand neuron networks and uh then depending on the the number of layers and and the the size of each layer so the number of layers on the x-axis the size of each
+
+layer on the y axis they evaluated each neuron Network each of those thousand neuron networks at a thousand points and and they ask themselves am I at a point that's discontinuous or not and it turns out
+
+that the probability that you're at a discontinuous point is actually nonzero so one or white is where it's nonzero and so for neuron networks that have a lot of layers that are maybe very narrow you get this probability that it's it's
+
+almost one that you hit a point of discontinuity um if if you have very few layers and the layers are very fat then you're likely not to hit one of those points and so the Insight here is that or the point here is that uh the point
+
+at which the discontinuity happens that point is a point of measure zero so if you if you sampled randomly on this on this image here um you you need to sample a lot of points before you get even close to this
+
+point so the Five Points that are just sampled randomly you're always away from discontinuity but you're now concatenating these Max functions and because you're concatenating them in this special way um you get this
+
+behavior that um if you have a lot of layers um and so you're doing a lot of concatenations of these Max functions then you suddenly start to see uh nonzero probability of encountering of Landing at this point here so the theory
+
+tells us it's a set of measure zero in practice it's not and that's that's sort of a really nice result and what this result tells us is that we shouldn't really be using this REO function if we want to do smooth optimization because
+
+we get into this Behavior where uh the algorithms just don't converge so 3,000 versus 30 iterations okay so here are my conclusions um I have three sets of conclusions deep neural networks with Freo activation
+
+functions are nons smooth they are really nons smooth believe me they are nons smooth and so in the next lecture after lunch I'll tell you I'll give I'll tell you how to resolve this using integer optimization so we'll go back to
+
+integer optimization after lunch and I give you one trick on how to solve these problem problems using integer variables in fact I show you two different ways of formulating these problems um but um the
+
+key observation is uh this is the picture that you should have in mind when you're doing when you want to do optimization over machine learning surrogates you have to be careful you need to be mindful of the fact that you
+
+could run into issues there and you will typically see these issues when you plot the Dual INF feasibility so when you look at kkt error and that's not going down to zero then you're probably fighting against the nons smoothness of
+
+these problems application one this one okay how did I formulate which this one here oh okay I I I understand what you mean yes um so we have emissions which are a function of time and so there's this n
+
+o of T and Co of T and let us assume I didn't put it here that they're both non- negative that's actually a constraint that we forgot and then re what we're interested in is we want to minimize we want to
+
+integrate so um draw a picture uh let's draw a picture first so over my time Horizon as I'm running my engine there's some emissions that come out of here so this could be my n of T and then I have my my other
+
+emissions uh Co of T and what I'm interested in is over the whole trip from zero to capital T I want to minimize the integral I want to make sure that so this is like um so this is instantaneous emission what comes out
+
+but I want to minimize the the the the tons of carbon that I put into the air for example so then we we formulate this as the integral from 0 to capital t uh n o of t plus Co of T DT and and this integral one way to
+
+approximate this integral a very crude way of approximating the integral is to look at the value at time T and then multiply by the time step by the by the discretization interval so I've what I've done is I've taken uh a finite
+
+number of time steps here this would be delta T and then in each interval I look at for example if I look at the midpoint point I replace my integral by sort of the summation of that I get at the midpoint maybe
+
+something like this so very simple oops and I just sum up I just sum up these values does that make sense oh Lambda ah Lambda is a great question Lambda is a parameter that allows me to trade off between the two
+
+so I have a Lambda here and Lambda is between Z and one so I can trade off these two emissions and uh I think we just set it to we just set it to one I think so we're just um uh because you might um it might
+
+reflect the fact that some emissions are more harmful to the atmosphere than others so you could put that you can model that in in your model for example Lambda yeah we don't know the so we do know the Deep neuron
+
+Network so I'm assuming that uh these guys there prasana and Ashish have given me a deep neuron Network this this is the Deep neuron Network that I'm given so I'm not I'm not training the neuron Network I have I have something that
+
+somebody has given me that I trust [Music] yeah you generate yeah you have you have it generated you use that and now you're using that neuron Network the tensorflow network yeah that's the plan yeah okay so I've I've trained my neuron
+
+networks on some data that I have for uh F and R and C but now but I don't have data everywhere and so I now let my variables roam free to find new values so the way to think of this is that um if I have
+
+two values um R of T and F of t then my training data corresponds to some discrete set of points uh at which I have at which I know what the talk is and and other values but now when I'm doing my optimization I want to drive my car
+
+maybe in a different way maybe I want to evaluate it here and and I don't have any data there so I'm using the neuron Network to predict what the value should be at this Point correct so so that I put these new
+
+I put the green star into into this equation and then that predicts what the output is and then and and so now I'm trying to minimize this output so I'm I'm sort of going backwards I need to find I need I need to move this x around
+
+somewhere to find values so that I minimize my objective function that's that's the plan yeah yeah okay then the question is how do do I change F and R so so these are my these are the variables over which I'm
+
+optimizing the f r and c and and if I just pluck in these values for a particular value of f andr then it it doesn't tell me how to how to change it so I want what I really want is I want gradients of of this DNN with respect to F and r
+
+okay this is uh great questions thank you

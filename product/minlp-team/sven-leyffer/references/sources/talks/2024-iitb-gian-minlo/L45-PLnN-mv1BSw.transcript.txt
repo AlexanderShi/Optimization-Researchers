@@ -1,0 +1,223 @@
+Transcript (YouTube auto-generated English captions, ASR; NOT checked against the audio)
+Talk: Lecture 45: Search Heuristics for MINLO, by Sven Leyffer. GIAN course, IIT Bombay, January 2024.
+Video: https://www.youtube.com/watch?v=PLnN-mv1BSw (length 1795 s; playlist PLREyhbtkeBNpTZtDBfcwLigIsAAEGQ1iR)
+Retrieved: 2026-10-10 with yt-dlp 2026.08.19 (--write-auto-subs --sub-langs en); converted with scripts/srt_to_transcript.py
+Used in: ../../../research/02-methodology.md
+----
+so we continue our little exploration of search tics for mixed integer nonlinear optimization and we saw in the last lecture that these play an important role throughout the branch and bound research and so in this lecture I'm
+
+going to talk about three particular search euristic so those are euristic that find us an initial integer and nonlinear feasible Point um the goal is be want to ideally find uh an integer feasible point that
+
+also satisfies the nonlinear constraints for our mixed integer nonlinear optimization problem that we're solving and so um there's a whole um host of these heuristics and I just wanted to I'm just going to talk about
+
+three of them so the feasibility pump and all its relatives uh are sort of a very famous set of urtic they're also very popular urss um so I'll talk a little bit about that and then I'll talk about something
+
+called the undercover euristic because it's got the coolest name and it's also got a cool connection to nonlinear optimization and Petro not in the next lecture but the next but one lecture will will have something similar that
+
+that he's talking about there but maybe in a slightly better setting and then I'll have some I'll tell you something about diving urtic because they are the simplest juristic so um um I'll talk about the the most important one or what
+
+everybody is doing the feasibility pump the one that I think is the coolest name and the one that is the easiest to explain so that was my choice for treating for these ristics so the feasibility pump is a search aristic for
+
+mixed integer nonlinear optimization um in general it's for convex mixed into Jal optimization but there have been extensions to non-convex problems as well and the goal the simp the basic idea is to treat the nonlinear constraints that
+
+we have and the integrality constraints in two separate sub problems and to somehow do projections between these two feasible sets um originally this was proposed a method like this was proposed by fisti
+
+and others for mixed integer linear optimization and that is actually a very efficient method um and it has more some more desirable properties than the um the feasibility pump has for mix into gen optimization um the the main part is
+
+that the mix integer linear optimization feasibility pump only solves linear optimization sub problems so it's very efficient in that sense at at what it does at every iteration the mix inte nonlinear version solves also integer
+
+optimization problems as sub problems so it's not as efficient and I can draw you a very quick picture of what this method is based on so imagine you have two non two convex constraints so here is a g one of X is
+
+less than or equal to zero and you have a second constraint here we go uh G2 of x less than or equal to zero and uh the there are classes of methods which basically work by alternating projections so uh you pick a point
+
+that's your starting point x x0 and you simply project it onto the first set so that's a projection and that gives you a point X1 and now you project this new point on to the second set so sort of there and that gives you
+
+X2 and so there's a method of alternating directions or alternating projections that's well studied and converges for convex problems of this type and you can have more more than one convex set there and so the question
+
+then is how do we generalize this to the mixed integer nonlinear World well we now how how to we know how to project onto nonlinear constraints what we don't know is how to project onto linear feasible mixed integer linear feasible
+
+sets um and the method can be made to be finitely convergent very much like Auto approximation so it's got a similar flavor to AO approximation and outo approximation Cuts play an important role so you recognize a lot of the
+
+Machinery because you've seen this already there are two sub problems involved here that I need to solve the first one I call it Milo one or mixed integer linear optimization with a one norm and um I'm
+
+basically um setting up a mixed integer linear optimization problem where I have a number of outo approximation Cuts just for the constraints so I don't I'm not interested in this part in the objective
+
+I want to find a Fe able point so I want to find a point that satisfies my nonlinear constraints and also integrality and so I can compute this the solution of this projection operator this is an L1 Norm projection the
+
+normally in projections the ones that I used here that's the torm projection the orthogonal projection that we are used to but projections can be defined in any norm and so this is just a one Norm projection there
+
+um and then I I also construct a continuous set of iterates which are the projection of this integer feasible point so I find an integer feasible Point here onto my nonlinear feasible set so this is the standard two Norm
+
+projection there shouldn't be a square there that's actually a mistake so I have these two alternating projections using two separate Norms so um just as a lead in why am I not using the two Norm here does anybody
+
+have any ideas why I'm not using the two Norm you want to solve a linear problem I want to solve a linear problem if I use the two Norm here it would be a nonlinear problem because I would have a square root here the one Norm I can
+
+always rewrite as a linear set of constraints and so that's why I'm I want the one Norm here okay and so here's what the algorithm does it it alternates between these two projections very much like an alternating projection method in the
+
+nonlinear smooth case so we initialize the mix we solve The Continuous relaxation of the mixed integer nonlinear optimization problem and we get X Prime and Y Prime here and then we initialize our L1 Norm
+
+projection mixed integer linear optimization Problem by linearizing around this first point and I then obtain an integer feasible Point by projecting onto the uh this relaxation onto this mixed integer
+
+linear optimization problem so this gives me an integer feasible point and then I'm going to see if I can project this point onto the nonlinear feasible set so that gives me two points y Prime and X Prime and then now I have a new set of
+
+points and I add those to my outer approximation so there's a one important difference here to Outer approximation and in outer approximation we used to fix the binary variables in this projection problem but here we don't
+
+they're actually free so the binary variables are free in this projection problem and we're just trying to find the closest point that sort of minimizes the projection of this integer Point onto the nonlinear feasible set and
+
+notice that if the the point why uh why dagger here were integer feasible so if this were if there were indeed a point such that this is that this is integer feasible then the solution would be y diamond and whatever
+
+Point comes out that makes this constraint feasible in X because that's the minimum that you can have in the norm here any other point would give you a value that's greater than zero if you put y Daga in there it's zero and it's a
+
+convex problem so we will find the global minimum so if we if we have a feasible point we will find it in this in this second step here and we can actually we could actually stop there right this is this is where we we find a
+
+feasible point we can stop if we don't find a feasible point then we add a linearization a cut to our Auto approximation and so you have these two sequences these points which are nonlinear feasible the X Prime y Prime
+
+and the points that are polyhedral feasible and the goal is that these these two points somehow converge to each other so you have some kind of zigzag that goes down that's the picture that I have in mind when I think of this
+
+method so this method is an alternating projection method it uh projects nonlinear feasible Point onto my outer approximations if I have a convex problem then my linearizations are outter approximations
+
+and I project onto the out approximation and the other problem project the integer feasible Point onto the nonlinear constraints that I have and I terminate as soon as I find an integer feasible Point um and we're
+
+using the L1 Norm because it's a fine it's linear and because I can equivalently write my one Norm which is just the sum of the absolute value difference between uh the solution that I'm looking for and my y Prime
+
+equivalently by introducing slack variables so if I introduce slack variables SI here then I can write the absolute values each of these absolute values with two inequalities and you've probably seen this before um either this site is non-
+
+negative in which case SI will be equal to this value or the other side is non- negative in which case SI will be equal to that and they're just a negative of one another um there's other ways of doing this but this is maybe the best
+
+way or it's one way of writing this as not um a set of inequality constraints cool um there is a nice lamama that there's some nice properties that these methods have so if I look at these two sequences the first sequence
+
+is the sequence of solutions to a mixed integer linear Master problem with the L1 Norm where I'm minimizing where I'm projecting using the L1 Norm onto the linear feasible set and the second set of problems are the projections onto the
+
+nonlinear feasible set so I generate these two sequences of points that are feasible integer polyhedral feasible and points that are nonlinear feasible and then if you make the assumption that you're using the same Norms in both
+
+projections which we're not doing we're using the one norm and the two Norm but if we somehow use the same Norms then you can show this little LMA here and this LMA just follows from the fact that the projections are optimal so you just
+
+look at the objective function values and you see that um the these results hold so um that's sort of easy to see so that just follows from the optimality of the projections which is which is a nice little result notice that it's just
+
+inequalities so it could be equal so potentially they could stagnate um but there's a theorem that says they don't stagnate and that is relies on a Lema that we'd seen earlier so you've seen this exact slide before
+
+this is the outer prox IM feasibility LMA which was I think in lecture 23 um so in the in outer approximation if the nonlinear optimization problem is infeasible then the nonlinear optimization solvers will return as a
+
+solution to an infusibility problem which provides a certificate for convex problems that these this nonlinear optimization problem is indeed infeasible and and then there is this nice Lemma that says if I now linearize
+
+my nonlinear functions around the point that comes out of this feasibility problem then if I plug the original value y hat back in here then this will be infusible and we showed that result here in class and it just follows from
+
+the first order conditions of this nonlinear feasibility problem and there's a similar result now for the feasibility pump so in the feasibility pump you solve a slightly different problem you solve this projection
+
+problem but if you linearize around the optimal solution of the projection problem you can again show that you can not not go back to the integer point that you PL plugged into the projection problem and so the algorithm is actually
+
+finite which is which is really nice you could also add objective Cuts if you wanted to so you could go back to my mixed integer linear optimization problem you could add your objective cuts and each time you add an objective
+
+cut you might you also have some upper bound possibly on the objective you certainly have lower bounds so you could add that as well if you wanted to you don't have to and then there is this nice paper by Claudia dambrosio and
+
+co-workers on a storm of feasibility pumps so you can do you can do many more things with these feasibility pumps and some of the results the norm result for example is lifted from this paper so um there's there's lots of euristic and and
+
+there's an increasing literature on feasibility pump so you can also come up with your own feasibility pump so I want to go back here and and just think about this a little bit because um you're you're
+
+you're doing P you're doing your PhD students so maybe some of you are interested in doing a new feasibility pump so what are the expensive steps in this algorithm we have four steps and I give you a hint setting L to oop sorry
+
+setting L to l+ one is not the most expensive step oh oh Asos had guessed l equals l+ one okay okay so these two steps these two steps where you're solving optimization problems are the most expensive ones so if you can come up
+
+with a way of not solving them or warm starting them or something and you have a new version of a feasibility pump that might be faster and just as effective and so um you know the projection maybe you
+
+solve this approximately I don't know but certainly the relaxation of a mixed integer linear optimization problem maybe you can do this with some branch and cut instead or something so there's there's ways there of improving it of of
+
+reworking these algorithms but here's a second juristic which is the one that has the coolest name um it sort of eludes you know um Timo bold and Ambrose gner they from the tset Centrum in Berlin and Berlin is of course the
+
+capital of the Spy capital of the world or was the Spy capital of the world in Germany and So Undercover there's lots of undercover agents and they thought they'll have an undercover euristic so the the idea here is that you try again
+
+to to apply mixed linear optimization techniques because they're the best developed techniques that are around and what they want to do is they want to linearize non-convex functions by fixing variables so that's actually a cool
+
+that's a sort of interesting concept right you can you can take a nonlinear function uh G of X1 X2 X3 and I just make something up uh X1 uh 2 * X2 + X3 so in this function uh which variable should I fix
+
+to make it a linear function X1 I hope right if I if I fix X1 then I have a function that's just an Ain function and so the goal is then but we want to fix as few variables as possible because each time we fix a
+
+variable we we incur a cost we we make the objective potentially worse because we're no longer optimizing over this variable and so what they do is they look at the sparity the nonzero pattern of the hesen of the lran so the lran
+
+function for our mixed intergen optimization problem is just the linear combination of the objective and the constraints weighted with these agan multipliers Lambda which are non- negative and this lran function now
+
+collects all the nonlinear terms that are in this optimization problem so both the objective and the constraints and the hesan tells us something about um how many of these terms are are nonlinear right the hesan term the
+
+second derivative with respect to linear terms vanishes and the second derivative with respect to quadratics is constant the second derivative of this term here will be non zero so I can look at the hesen
+
+of this term see if I can not make a mistake um I should probably write down the gradient first so that's uh 2X 1 X2 um X12 and X3 and then I can write down the hen here um so I get it two X2 uh if I different a two X1 and a
+
+zero um this is a zero oh 2x1 sorry go on X3 is I made a mistake here I made a mistake in the gradient yes this is one and then this is zero and then 2x1 this is zero uh and then the H in the rest is just
+
+zeros okay good so I can look at the nonzeros here and that tells me what are the nonlinear interactions that are happening and so all the nonlinear interactions correspond to this term here so that tells me potentially tells
+
+me which variables I should fix so I form the hen of the lanan rewriting the hen of the lanan and then they Define a graph where each vertex corresponds to one of the variables so a Vertex corresponds to one of the variables rows
+
+or Columns of my hen Matrix and there's an Edge in the graph if and only if there's a nonzero entry so there's an edge now between these because I have nonzero entries here there's an edge between these two vertices and there's
+
+an edge that is to itself for this other vertex there and the idea then is a minimum vertex cover gives the the sort of least number of variables that I need to fix in order to get a mixed integer linear
+
+optimization problem and so I have a little example that shows this a slightly different example um so here there are uh there's one objective and one nonlinear constraint five variables and if you write down the hesan graph
+
+then uh this is the graph of the hhan so let's just look at this real quick X2 uh that isn't connected nonlinear nonlinearly to anything so X2 is just isolated there's no Edge um there's an X1 cubed so that's got an edge to itself
+
+uh X3 and X4 are non connected they have an edge and four and five have an edge they're connected as well right that's what they're doing sorry that's um so we can linearize it by fixing X1 X3 and X5 that's but in the second bullet is
+
+exactly what you're saying you you you solv the minimum vertex cover problem you're you're perfectly right that um what we want to fix is X1 and X4 so we need to fix X1 and then if I fix X4 uh then all the vertices are sort of
+
+disconnected and so fixing two variables here X1 and X4 gives me a null in optimization problem that I can then Sol or sorry linear problem that I can then solve now there's a little bit more that goes into it if I fix
+
+x4 at zero uh then I'm in trouble right because if I fix X4 to be zero then 0 * 5 is certainly never going to be greater or equal to one so I need to be a little bit careful on how I do these fixings and maybe Lear know more about the
+
+functions that are involved and the bounds that I want on the variables in order to fix it no that's that's an easy problem to solve so finding the minimum vertex cover is an easy problem to solve that's
+
+a in graph Theory that's a well-known problem um so I can do this for very large graphs that's that's the main that's the point I think they can do it for very large systems yeah we want to find a good
+
+vertex cover and um fix as few variables as possible but there's probably something to look at also in terms of which how you fix the variables which I'm not doing here okay so if you find a minimum or
+
+near Optimum vertex cover then the idea is to basically fix the variables that are in this minimum vertex cover and most of the times those variables are likely to be continuous variables it's um because linear variabl often only
+
+appear linearly in the in the problem they're not going to be part of your vertex cover because they're already linear variables don't have to be in the vertex cover here there was one linear variable X2 and you don't need to put
+
+this into your vertex cover so most likely those are just continuous variables that you're fixing and then you fix your continuous variables at some value and and it's still to determin what is a good value for fixing
+
+these and now um the following problem then becomes a linear problem because we constructed the points in such or we constructed the vertic cover so that when we fix these variables the rest remainder of the problem is linear so we
+
+now solve a mixed integer linear optimization problem but because we fixed some of the variables this just gives us an upper bound on the optimal solution um but this is relatively quick um um you have to be kind of careful
+
+that um you know if if your function is is like this power grid function here then um you if fixing X1 and X2 still leaves me a nonlinearity so I need to know a little bit more than just the hhen information when I make the fixing
+
+so in particular in this case fixing X1 and X2 does not give me a linear problem it gives me a nonlinear problem um and those those were one of the power grid functions that I just lifted from there um so but but this is really fixed
+
+by instead of looking at the hhen what you should be looking at is probably the computational graph and analyzing the computational graph and and and that gives you more information about the functions the type of function that you
+
+can fix um just a question for you can you extend this so um sometimes we have problems that are composed of smaller parts and subp parts and components and there's this um notion of separability which we saw yesterday and partial
+
+separability where you can sort of partially separate the hens we had a little example in the tutorial yesterday um and there's an extension of that which is also an extension or generalization of sparcity called group
+
+partial separability so here you could think about looking analyzing functions that have a particular structure and then thinking about how would you apply these techniques in this setting again this is just sort of fruit for thought a
+
+little bit okay so I only talked about two I'll talk about the um diving your ristics in the next lecture so I talked about the feasibility pump which is probably the most popular um of URS for solving mixed interen nonlinear
+
+optimization problems there's a lot of variations of this method it alternates between a nonlinear optimization project problem that solves a projection onto the nonlinear feasible set and a mixed integer linear problem that collects AO
+
+approximations and corresponds to a projection onto the integer and the linearized or polyed feasible set and uh so so this method is you can interpret that as also as an alternating direct alternating projection
+
+method um and then I talked about undercover euristic but in this case you have to watch out a little bit for nonlinearities and so in addition to the um hessen you need to look at the computational graph in some cases as
+
+well um but it's okay as long as you're using for example um monomials and other functions you have enough information there okay so so that's all I wanted to say about search tics in the next slides I'm going to talk about Improvement
+
+euristic and and some of this Improvement juristic are diving Uris sixs I'll talk about that a little bit next but um let me know if there's questions please or if you have comments yes [Music] I think it's the feasibility pump I have
+
+not implemented them so I I I'm really just guessing but the feasibility pump solves a sequence of nonlinear and mixed integer linear optimization problems and the cover solves potentially only one mixed integer
+
+linear optimization problem but on the other hand if you don't find a feasible point then you may need to go back and unfix some of the variables and I I don't know if they've looked at this or how to do that
+
+sorry uh potentially maybe but but the feasibility pump doesn't necessarily give you better Solutions um just because you make you're doing more work um the undercover euristic Works maybe better in non-convex settings or you
+
+have nonlinearities where the feasibility pump once you add too many linearizations they become inconsistent and so you have to be a little bit careful there um I think they're just Alternatives um I actually like the undercover
+
+euristic better because it's potentially has a it's closer connection to nonlinear optimization and it it it if you implement it with the computational graph I think it has more promise than than the feasibility pump
+
+yes for I think I think for quadratics undercover will work very well and I think that's where they first thought about doing this for quadratic functions especially for problems where it is just the objective that's a quadratic so if
+
+only your objective is a quadratic then you know that no matter what you fix your your point is feasible and so in that case it's a very powerful euristic because you're fixing a subset of the variables to make the quadratic to
+
+linearize the quadratic and then solve that remaining linear optimization sub problem so for quadratics I think it works very well um and maybe there's a similar thing that works then for quadratic constraints um I don't know I I haven't
+
+enough experience with these things

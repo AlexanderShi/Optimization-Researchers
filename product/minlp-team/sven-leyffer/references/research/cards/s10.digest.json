@@ -1,0 +1,421 @@
+[
+ {
+  "id": "S110",
+  "year": "2020",
+  "title": "An augmented Lagrangian filter method",
+  "read_level": "full",
+  "contribution": "Replaces the forcing sequences of bound-constrained augmented Lagrangian methods by a filter on constraint violation and Lagrangian first-order error, adds restoration switching, an optional penalty estimate and EQP step, proves convergence to KKT/FJ points or infeasibility minimizers, and reports preliminary CUTEst results competitive with SQP solvers.",
+  "problem_entry": "Interior-point methods cannot warm-start for the thousands of related NLPs in MINLP, active-set methods do not scale to multicore; AL methods could do both but rely on forcing sequences (pp. 2-3); infeasible NLPs are frequent inside MINLP (p. 7).",
+  "key_idea": "Filter on (eta, omega_0) of the Lagrangian, checkable inside the AL inner solve because the Lagrangian gradient after the multiplier update equals the AL gradient (pp. 4-5, (2.8)); restoration switching conditions (3.15)-(3.16) (pp. 7-8); optional penalty estimate (3.14) and EQP step (pp. 6-7, 9).",
+  "assumptions": "A1 f, c twice continuously differentiable; A2 ||c(x)|| -> infinity as ||x|| -> infinity, replaceable by finite bounds (pp. 10-11); no bounded-multiplier assumption (p. 5); LICQ only at limits with unbounded penalty (p. 13); analysis without the EQP step (p. 10).",
+  "proof_devices": [
+   "Compactness from the filter's upper bound U on eta (Lemma 4.1, p. 11)",
+   "Filter-free neighbourhood of the origin from the sloping envelope (Lemma 4.2, p. 11)",
+   "Finite inner loop: sufficient reduction (3.18) would make the AL unbounded below (Lemma 4.3, pp. 11-12)",
+   "Inner-to-outer sufficient reduction via the multiplier update, c^T y bounded by a geometric series in beta from filter acceptance (Lemma 4.5, (4.21)-(4.22), pp. 12-13)",
+   "Unbounded-penalty case via an external AL theorem (Lemma 4.6, p. 13); three-outcome Theorem 4.1 (p. 13)"
+  ],
+  "experiments": "Preliminary C++ filter-al (L-BFGS-B + BQPD) on 429 small CUTEst problems vs filterSQP, SNOPT, MINOS, IPOPT, LANCELOT, metered by function evaluations with performance profiles; 34 failures classified (IEEE evaluation errors vs L-BFGS-B failures) (pp. 14-17, Table 1).",
+  "positioning": "Extends the AL filter for QPs [44] to NLP; contrasted with AL-then-crossover approaches [13], which it claims to integrate more naturally (p. 4); classical forcing-sequence AL (LANCELOT, ALGENCAN) as the baseline design (p. 3).",
+  "writing": "Outline deliberately vague first, then detailed components (p. 5); claims bounded to 'competitive' and 'preliminary' (pp. 15, 17); open conjecture stated as a remark (Remark 4.1, p. 14).",
+  "limits_future": "Implementation preliminary, L-BFGS-B inflates evaluation counts (p. 15); no second-order convergence proof, expected via second-order corrections or a nonmonotone filter (p. 17); MPEC conjecture on bounded penalties untested (p. 14).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Filter globalization carried from SQP into augmented Lagrangian methods, motivated by MINLP warm starts",
+    "pages": "pp. 2, 4"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Evaluation count chosen and justified as meter; failures kept and classified by cause",
+    "pages": "p. 15"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Prove the plain core, keep accelerators optional and harmless",
+    "evidence": "Analysis concentrates on the plain AL method; the penalty heuristic is shown bounded so it does not harm the algorithm; the EQP line search can fall back to the acceptable point",
+    "pages": "pp. 5-6, 9, 10"
+   }
+  ],
+  "transferable": [
+   "Analyse the plain algorithm; for each optional heuristic give the single property that keeps the theory intact (bounded estimate, fallback to an acceptable point) (pp. 6, 9)",
+   "Turn inner sufficient decrease into outer decrease by subtracting rho||c||^2 and absorbing it once feasibility is shown (p. 12)",
+   "Separate failures outside the solver's control (IEEE evaluation errors) from subproblem-solver failures in the failure table (p. 15)"
+  ],
+  "coauthors": "Charlie Vanaret",
+  "quotes": [
+   {
+    "text": "The Achilles’ heel of interior-point methods is the lack of efficient warm-start strategies.",
+    "page": 2
+   },
+   {
+    "text": "In practice, many NLPs are not feasible; this situation happens frequently, for example during the resolution of MINLPs.",
+    "page": 7
+   }
+  ]
+ },
+ {
+  "id": "S175",
+  "year": "2020",
+  "title": "Solving Combinatorial Optimization Problems on Quantum Computers",
+  "read_level": "full",
+  "contribution": "SIAM News overview that recasts QAOA in optimization terms (Boolean objective as a diagonal operator, combinatorial problem replaced by nonconvex parameter optimization) and lists the obstacles to understanding and realizing its potential, concluding it cannot compete classically until hundreds of high-fidelity qubits exist.",
+  "problem_entry": "No demonstrably faster quantum algorithm exists for combinatorial optimization; QAOA is the candidate; aim to separate hype from reality (p. 1).",
+  "key_idea": "Indicator/projector expansion turns f on {0,1}^n into a diagonal operator; QAOA replaces the combinatorial search by a nonconvex optimization over (beta, gamma) solved classically (pp. 1-2).",
+  "assumptions": "n/a (no theorem); gate counts assume full connectivity and CNOT as native gate (p. 2).",
+  "proof_devices": [],
+  "experiments": "none; one p = 1 MAXCUT landscape figure on an 8-node graph (p. 1, Fig. 1).",
+  "positioning": "Cites Hastings and the Goemans-Williamson symmetry result as upper bounds on QAOA; criticizes single local runs in QAOA packages, names multistart and learning approaches (p. 2).",
+  "writing": "Explicit hype-versus-reality framing (p. 1); obstacles split into understanding and realization (p. 2); opinion flagged as 'In our opinion' on ion traps (p. 2).",
+  "limits_future": "Parameter optimization for QAOA is 'largely an open question'; hardware with hundreds of qubits needed (p. 2).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Quantum object recast into the home class: combinatorial problem replaced by nonconvex continuous optimization over circuit parameters",
+    "pages": "p. 2"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Calibrated claim with a stated threshold (hundreds of qubits) and the classical baseline named",
+    "pages": "p. 2"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "For a hyped method, split obstacles into understanding vs realizing its potential and give a concrete threshold for when it could compete (p. 2)"
+  ],
+  "coauthors": "Yuri Alexeev, Jeffrey Larson, Ruslan Shaydulin",
+  "quotes": [
+   {
+    "text": "To disentangle the hype from reality, we first recap the mathematics of quantum computation and QAOA.",
+    "page": 1
+   },
+   {
+    "text": "Therefore, until quantum hardware with hundreds of qubits is accessible, QAOA will not be able to compete with classical state-of-the-art methods under the current approach.",
+    "page": 2
+   }
+  ]
+ },
+ {
+  "id": "H002",
+  "year": "2021",
+  "title": "Addressing Climate Change, Boosting Environmental Resilience, and Advancing Clean Energy",
+  "read_level": "full",
+  "contribution": "SIAM News summary of the SIAM Climate Task Force report (chaired by Leyffer): recommendations in four areas (climate prediction, resilient communities and environmental justice, clean energy innovation, workforce development) and cross-agency coordination.",
+  "problem_entry": "How applied mathematics and computational science can support climate science and mitigation; report for Congress and federal agencies (p. 1).",
+  "key_idea": "Four recommendation areas plus recurring cross-agency coordination (p. 1).",
+  "assumptions": "n/a (policy summary)",
+  "proof_devices": [],
+  "experiments": "none",
+  "positioning": "Aligns its recommendations with the IPCC Sixth Assessment Report (p. 1).",
+  "writing": "Committee report voice; bullet subsets per area (p. 1).",
+  "limits_future": "Details deferred to the full task force report (not read) (p. 1).",
+  "method_links": [],
+  "new_pattern_candidates": [],
+  "transferable": [],
+  "coauthors": "Alejandro Aceves, Hans Kaper",
+  "quotes": [
+   {
+    "text": "All three authors were members of the SIAM Climate Task Force, with Leyffer acting as chair.",
+    "page": 1
+   }
+  ]
+ },
+ {
+  "id": "S044",
+  "year": "2021",
+  "title": "Apprentice for event generator tuning",
+  "read_level": "full",
+  "contribution": "Describes the open-source tool apprentice for Monte Carlo event generator tuning: pole-free rational surrogates, a choice of chi-square minimizers with multistart, and automatic observable weighting by bilevel or single-level robust optimization, demonstrated on dark-matter limit setting and the ATLAS A14 tune.",
+  "problem_entry": "Professor's polynomial surrogates fail on ~1/x behaviour, its minimizer suite is limited and untested, and observable weights are tuned by hand (p. 2).",
+  "key_idea": "Rational surrogates (Stieltjes fit, constrained pole-free fit, linear-denominator case via LP duality) (p. 2); weights by bilevel optimization with an RBF-approximated merit or by a single-level robust formulation using interval endpoints and a coverage constraint (p. 3).",
+  "assumptions": "Experiment and simulation as independent random variables with mean R_b (p. 3); pole-free guarantee for box domains (p. 2).",
+  "proof_devices": [],
+  "experiments": "Dark-matter likelihood: rational (4,4) vs polynomial degree 7 with matched coefficient counts, ~30,000 evaluations, ~50x faster than full simulation (p. 6); ATLAS A14 retune vs expert and equal weights by observable class (p. 7, Fig. 2).",
+  "positioning": "Successor to Professor [1], 'sufficiently different from its predecessor to have its own name' (p. 2).",
+  "writing": "Tool paper with usage sections and script arguments (pp. 4-6); invitation to contribute via GitHub (pp. 7-8).",
+  "limits_future": "Future: derivative-free tuning on generator data, chi-square minimizers robust to local minima, ML for dimension reduction and weighting (p. 7).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Surrogate constrained to be pole-free so that downstream optimization problems are well defined",
+    "pages": "p. 2"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Weighting methods compared by observable class as trade-offs, no single winner",
+    "pages": "p. 7"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Robust and bilevel optimization formulations carried into generator tuning (weak)",
+    "pages": "p. 3"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Structural constraints that make a surrogate safe for its optimizer",
+    "evidence": "Pole-free constraint guarantees that subsequent optimization problems are well defined",
+    "pages": "p. 2"
+   }
+  ],
+  "transferable": [
+   "Robust counterpart with a convex square over a 1-D interval: replace the inner max by the two endpoints to get a single-level problem (p. 3)",
+   "Compare surrogate families at matched coefficient counts rather than matched degree (p. 6)"
+  ],
+  "coauthors": "Mohan Krishnamoorthy, Holger Schulz, Xiangyang Ju, Wenjing Wang, Zachary Marshall, Stephen Mrenna, Juliane Müller, James B. Kowalkowski",
+  "quotes": [
+   {
+    "text": "The dependence on minimizer, if any, needs to be explored.",
+    "page": 2
+   },
+   {
+    "text": "Clearly, the rational approximation faithfully represents the full simulation, while the polynomial approximation is only valid over a limited range.",
+    "page": 7
+   }
+  ]
+ },
+ {
+  "id": "S052",
+  "year": "2021",
+  "title": "Practical algorithms for multivariate rational approximation",
+  "read_level": "partial",
+  "contribution": "Two methods for multivariate rational least-squares surrogates: a Stieltjes-orthogonalized linear-algebra fit with degree reduction, and a pole-free fit posed as a linear semi-infinite least-squares problem solved by Polyak's outer approximation with multistart pole detection; plus a face-and-interior sampling design and a HEP likelihood application.",
+  "problem_entry": "Expensive HEP simulations need surrogates; polynomials cannot capture poles, rational fits are fragile with spurious poles that make the downstream objective unbounded (pp. 2-3).",
+  "key_idea": "Linearized fit min sum (p(x_k) - f_k q(x_k))^2; degree reduction while the smallest singular value is negligible (pp. 9-10); 'no poles in D' replaced by q(x) >= tau on D and handled by outer approximation with a global check of min q (pp. 11-13, Algorithm 4.1).",
+  "assumptions": "Sample points a set of linear independence (p. 5); D a box; degrees fixed in advance (p. 14); no true poles in the sampled domain (p. 23).",
+  "proof_devices": [
+   "Rank count showing W has a zero singular value in the interpolation case (p. 5)"
+  ],
+  "experiments": "Analytic test functions, degrees (5,5), K = 2(alpha(M)+alpha(N)), five seeds, noise 0/1e-6/1e-2, held-out L2 error and pole-like points; SG vs LHS vs d-LHD; CPU split fit/multistart; HEP likelihood 288 s vs 14,594 s at ~29,500 evaluations (pp. 13-26, Tables 3-4); multistart vs BARON at equal time (p. 33).",
+  "positioning": "Extends univariate linearized methods [8, 9, 16] to scattered multivariate data (p. 4); AAA set aside as univariate only (p. 2); outer approximation due to Polyak (p. 11).",
+  "writing": "Key idea stated in italics as a one-line rule (p. 9); claims bounded by explicit assumptions (p. 23).",
+  "limits_future": "Degree selection open, harder with noise (p. 27); multistart cost exponential in degrees of freedom (p. 23); tested up to 7 parameters, scalability open; other structural constraints such as monotonicity (p. 28).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Outer approximation carried from MINLP into surrogate fitting for a semi-infinite constraint",
+    "pages": "pp. 11-13"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Formulation changed (pole-free constraint, open condition made closed) so the downstream optimization is well posed",
+    "pages": "pp. 3, 11"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Cost of the expensive method decomposed and reported; equal-time comparison with BARON; claims bounded by the no-true-pole assumption",
+    "pages": "pp. 22-23, 33"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Structural constraints that make a surrogate safe for its optimizer",
+    "evidence": "Poles would make the optimization objective unbounded, so q(x) >= tau is enforced on D",
+    "pages": "pp. 3, 11"
+   }
+  ],
+  "transferable": [
+   "Turn an open 'never zero' requirement into a closed sign-and-margin constraint before optimizing (p. 11)",
+   "If the outer-approximation oracle only needs a violated point, stop the global search at the first violation and budget it by the exact solver's time (p. 33)",
+   "Choose a ridge weight by L-curve for singular designs and report the accuracy cost of regularization (pp. 14-16)"
+  ],
+  "coauthors": "Anthony P. Austin, Mohan Krishnamoorthy, Stephen Mrenna, Juliane Müller, Holger Schulz",
+  "quotes": [
+   {
+    "text": "The key idea is this: If there are many approximations that will work, one should use the approximation with the lowest-degree denominator.",
+    "page": 9
+   },
+   {
+    "text": "We note here that these claims are based on the assumption that the data are sampled over a domain that does not include any true poles.",
+    "page": 23
+   }
+  ]
+ },
+ {
+  "id": "S080",
+  "year": "2021",
+  "title": "Joint ptycho-tomography with deep generative priors",
+  "read_level": "partial",
+  "contribution": "ADMM framework for joint ptycho-tomography with a plug-and-play GAN denoiser under a Poisson model, with a denoiser-weight schedule that improves reconstructions of under-sampled noisy simulated data.",
+  "problem_entry": "Sequential phase retrieval then tomography needs large probe overlap; PnP denoisers are designed for Gaussian noise in linear problems, unlike the nonconvex Poisson ptycho-tomography problem (pp. 2-3).",
+  "key_idea": "AL/ADMM splitting into ptychography, tomography and regularization subproblems (p. 6); regularization replaced by TomoGAN via PnP (p. 7); blended denoiser step with weight alpha_k (p. 10, Algorithm 1).",
+  "assumptions": "Poisson MAP model (p. 5); implicit prior without explicit objective, so no formal optimization guarantee (p. 3).",
+  "proof_devices": [],
+  "experiments": "Two simulated 3D objects, three photon-count noise levels, 50% vs 25% overlap, 250 ADMM iterations with 4 inner CG steps; ML vs TV-MAP vs PnP-GAN by PSNR; six alpha schedules with primal/dual residual decay (pp. 10-16).",
+  "positioning": "Builds on the authors' ADMM framework [2] and TV work [36]; PnP from Venkatakrishnan et al. [49]; compared with offline denoising and TV (pp. 3-4).",
+  "writing": "Empirical section explicitly disclaims optimality of the parameter (p. 14).",
+  "limits_future": "Alpha schedule empirical; code not optimized; only synthetic data because no dedicated beamline exists yet (pp. 14, 16-17).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "AL/ADMM toolkit carried into imaging but with an implicit learned prior and no convergence guarantee, against Taste 3; Leyffer fifth of six authors, weak evidence",
+    "pages": "pp. 3, 7, 14"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Ramp a learned denoiser's weight inside ADMM and judge schedules by both image quality and primal/dual residual decay (pp. 15-16)"
+  ],
+  "coauthors": "Selin Aslan, Zhengchun Liu, Viktor Nikitin, Tekin Bicer, Doğa Gürsoy",
+  "quotes": [
+   {
+    "text": "Our results show that our optimizations can decrease the total number of required projections (with significantly fewer overlapped regions) by 75% compared with using adequately sampled data (based on Nyquist) while maintaining good image quality.",
+    "page": 4
+   },
+   {
+    "text": "The goal of this section is not to provide an optimal denoiser parameter, but to share valuable observations to decide on an effective one.",
+    "page": 14
+   }
+  ]
+ },
+ {
+  "id": "S084",
+  "year": "2021",
+  "title": "Inversion of convection-diffusion equation with discrete sources",
+  "read_level": "full",
+  "contribution": "Formulates source inversion for convection-diffusion as a large convex-objective binary MIPDECO, shows state-of-the-art MINLP solvers and naive rounding fail, and proposes physics-aware rounding (objective-gap-reduction, mass-preserving) followed by a Hamming-distance trust-region improvement solved as a knapsack, with open Julia and AMPL code.",
+  "problem_entry": "Identify number and location of pollutant sources from sparse sensors; a test of whether state-of-the-art MINLP solvers can handle MIPDECO (pp. 3-4).",
+  "key_idea": "Eliminate states with the factorized stiffness matrix (p. 12); rounding using the relaxation's objective or mass (pp. 13-15); l1 trust region on binaries = cardinality limit on flips, linear subproblem solved by sorting after sign cases and complementing (pp. 15-18).",
+  "assumptions": "Linear steady PDE with nonsingular stiffness matrix (p. 12); iid Gaussian noise with known sigma (p. 10); TV regularization with alpha from the L-curve (pp. 10, 20).",
+  "proof_devices": [
+   "Finite termination of the trust-region heuristic: bounded objective, finitely many binary points, integer radius with floor (p. 17)",
+   "Mass-preserving rounding keeps the mass difference below 1 (p. 15)",
+   "Knapsack reduction by sign case analysis and variable complementing (pp. 17-18)"
+  ],
+  "experiments": "2D finite-difference AMPL instances 16x8 to 256x128 on SCIP, Bonmin (BnB, Hyb, OA), Minotaur (BnB, QG) with 10 CPU-hours, nodes/bounds/gaps/IoU (pp. 20-24, Table 2); rounding schemes by objective, time, PDE solves (Table 3, p. 24); trust region from each rounding in 2D and 3D (pp. 25-30, Table 4).",
+  "positioning": "Relates to sum-up rounding/CIA, penalty methods and the trust-region steepest-descent method of Hahn et al., called closely related (pp. 8-9); feasibility pump judged impractical for MIPDECO (p. 13).",
+  "writing": "Negative result first (solvers and naive rounding fail), then the heuristic (pp. 3, 5); referee question reported in the conclusion (p. 31).",
+  "limits_future": "No optimality guarantee; neighbourhood variant cannot recover missed sources (p. 27); generalization to large MINLPs with convex objective and linear constraints open because states may not be eliminable (p. 31); IPOPT could reuse stiffness factorizations (p. 31).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Solver logs read: SCIP presolve adds 8,002 quadratic constraints though the problem is a bound-constrained NLP after eliminating states; Bonmin-OA returns only W = 0; IPOPT restoration failure",
+    "pages": "pp. 23-24"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Self-contained finite-difference AMPL instances and Julia code released for reproducibility and solver experimentation",
+    "pages": "pp. 5, 12, 18"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Per-solver bounds and gaps, OA exclusion explained, time limit raised from 2 to 10 hours without change",
+    "pages": "pp. 21-24"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Diagnosis that general solvers refactor the stiffness matrix every iteration; reusing one factorization makes the heuristic cheap",
+    "pages": "pp. 23, 29, 31"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Hamming-distance trust region on binaries solved as a knapsack",
+    "evidence": "l1 radius around a binary point limits flips; linearized subproblem reduces to a sorted knapsack",
+    "pages": "pp. 16-18"
+   }
+  ],
+  "transferable": [
+   "Run standard solvers on a mesh ladder with a generous limit, tabulate nodes/bounds/gaps, and raise the limit once to show bounds do not move (pp. 21-24)",
+   "An l1 trust region around a binary point is a flip-cardinality constraint; the linearized step is an exactly solvable knapsack (pp. 16-18)",
+   "Score reconstructions with a task metric (IoU vs ground truth) beside the objective value (p. 21)"
+  ],
+  "coauthors": "Meenarli Sharma, Mirko Hahn, Lars Ruthotto, Bart van Bloemen Waanders",
+  "quotes": [
+   {
+    "text": "We show empirically that current state-of-the-art mixed-integer solvers cannot solve this problem and that applying simple rounding heuristics to solutions of the relaxed problem can fail to identify the correct number and location of the sources.",
+    "page": 3
+   },
+   {
+    "text": "None of the off-the-shelf solvers exploit the special structure that is inherent in the discretized PDEs",
+    "page": 23
+   }
+  ]
+ },
+ {
+  "id": "S085",
+  "year": "2021",
+  "title": "Convergence of sum-up rounding schemes for cloaking problems governed by the Helmholtz equation",
+  "read_level": "partial",
+  "contribution": "Shows, for a Helmholtz cloaking MIPDECO with finitely many material values, that locally solving refined continuous relaxations and applying multidimensional sum-up rounding on order-conserving grids yields discrete controls whose objective values converge to those of the relaxation (weak* control convergence, norm state convergence), validated numerically with median filtering as a heuristic post-process.",
+  "problem_entry": "Cloak design treated before as topology optimization with fractional material [18]; the MIPDECO view seeks discrete-valued controls, possibly only an infimum (pp. 3-4).",
+  "key_idea": "Algorithm 1: refine and locally solve the relaxation, refine the rounding grid, apply O(N) SUR along a space-filling-curve order, median-filter (pp. 5, 12-15).",
+  "assumptions": "Wave number k0 sufficiently small (pp. 16-17, 19); domain regularity (Assumption 2.1, p. 6); order-conserving domain dissection with regular shrinkage (Definition 4.1, pp. 13-14); consistent relaxed controls (p. 14).",
+  "proof_devices": [
+   "Weak* convergence of SUR controls in L-infinity from [28] (Proposition 4.4, p. 15)",
+   "Complete continuity of the control-to-state operator from compactness of the Helmholtz solution operator (Lemmas 4.6, 4.9, pp. 16, 18)",
+   "Infimum of (P) equals minimum of (R) with a minimizing sequence of discrete controls (Theorem 4.7, p. 17)",
+   "Objective convergence of the algorithm's rounded iterates (Theorem 4.11, p. 19)"
+  ],
+  "experiments": "FEniCS/dolfin-adjoint/PETSc-Tao, Robin boundary, nine refinements to 2^9 x 2^9 cells (~12 h laptop), state errors and objective gaps for relaxed/SUR/filtered controls (pp. 20-22, Tables 1-2); wave-number sweep 0.24pi-750pi with convergence only for small k0 (p. 23).",
+  "positioning": "Takes the MIPDECO view against the topology-optimization treatment [18]; builds on Manns-Kirches multidimensional SUR [28]; digitizes [18]'s design to show results are not directly comparable (pp. 3-4, 12, 20-21).",
+  "writing": "Limitations (chattering, heuristic filtering, no minimizer) stated already in the introduction (p. 5).",
+  "limits_future": "Chattering unavoidable when the limit is fractional (p. 5); median filter has no guarantee and a counterexample exists (p. 19); proofs only for small k0 (p. 23); future: L1/multi-bang/BV regularization to promote discrete values (pp. 19-20).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Combinatorial integral approximation from mixed-integer optimal control carried into PDE cloaking design; MIPDECO view vs topology optimization",
+    "pages": "pp. 3-4, 12"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Counterexample to the authors' own median-filter post-processing (chattering SUR controls with zero median)",
+    "pages": "p. 19"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Competitor's design digitized and evaluated in their setup to show non-comparability",
+    "pages": "pp. 20-21"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Carried-in assumption (small k0 for unique solvability) checked numerically; method fails beyond it, matching the stated limitation",
+    "pages": "p. 23"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Sweep the theorem's smallness parameter past its range",
+    "evidence": "Wave number scaled from 0.24pi to 750pi; convergence observed only for small values, as the proofs require",
+    "pages": "p. 23"
+   }
+  ],
+  "transferable": [
+   "Carry a 1-D (time) rounding scheme to spatial controls by ordering cells along a space-filling curve whose refinements preserve the order (pp. 13-14)",
+   "Validate an approximation theorem by self-convergence of relaxed states and by the relaxed-vs-rounded gap on a fixed relaxed control as only the rounding grid is refined (pp. 20-22)",
+   "Digitize a competitor's design and evaluate it in your own model before comparing objective values (pp. 20-21)"
+  ],
+  "coauthors": "Paul Manns, Malte Winckler",
+  "quotes": [
+   {
+    "text": "We emphasize that the runtime complexity of SUR is O(N), where N is the number of cells that discretize the domain of the control input function.",
+    "page": 5
+   },
+   {
+    "text": "However, the filtering step is a heuristic, and we cannot guarantee that the approximation properties of the SUR approximation are conserved.",
+    "page": 5
+   }
+  ]
+ }
+]

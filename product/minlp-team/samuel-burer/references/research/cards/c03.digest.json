@@ -1,0 +1,211 @@
+[
+ {
+  "id": "S007",
+  "year": "2008",
+  "title": "A finite branch-and-bound algorithm for nonconvex quadratic programming via semidefinite relaxations",
+  "read_level": "full",
+  "contribution": "The first finite branch-and-bound for general bounded nonconvex QP: KKT-complementarity branching combined with SDP relaxations that, unlike the natural LP relaxations, are bounded and exact at the leaves, with two SDP relaxations (SDP1, SDP2) implemented by an augmented-Lagrangian solver and tested on box, inventory, scheduling, Globallib and random QPs.",
+  "problem_entry": "Existing global QP methods partition P and may need infinite trees in exact arithmetic; finite KKT branching (Vandenbussche-Nemhauser, box case) gives unbounded LP relaxations whose box-case fix does not generalise (pp. 2-3, 7).",
+  "key_idea": "Keep KKT branching, replace the LP node relaxation by an SDP relaxation in Y=(1;x)(1;x)^T joined to the multiplier constraints through the valid objective-equating constraint (3) Q~*Y = (b^Ty + c^Tx)/2, which makes the relaxation bounded; SDP2 lifts (x,y,z) and adds diag complementarity constraints (pp. 8-10, 14-15).",
+  "assumptions": "P bounded inside the unit box and with an interior (Assumptions 2.4-2.5, 'mild', p. 7); finiteness proved in exact arithmetic and in the bit model (p. 12); implementation drops (3) and uses preprocessed (y,z) bounds plus leaf LPs (p. 16).",
+  "proof_devices": [
+   "LP-duality argument with objectives d=e and d=0 and complementary slackness at an interior point for unboundedness of the LP relaxation (Prop. 2.2, Cor. 2.3), p. 7",
+   "Recession-cone argument: Ye_i in K bounded by Assumption 2.4, constraint (3) forces b^Ty=0 on a cone where b^Ty>0 (Prop. 3.1), p. 10",
+   "No gap at a KKT point implies optimality (Prop. 3.2), p. 10; correctness defined as every leaf fathomed, p. 11",
+   "Finiteness/correctness under two computation models; bit model via leaf SDP = exactly solvable LP (Thm 3.3), p. 12",
+   "Surrogate delta(x,H_x) and Prop. 4.1 characterising points cut off by SDP1, giving two ways to tighten, pp. 12-13"
+  ],
+  "experiments": "AL solver with CPLEX QP subproblems; SDP1 vs SDP2 x tolerances 1e-6 and 1e-2 on Pentium 4; 54 Vandenbussche-Nemhauser box QPs, 12 inventory, 15 scheduling, ~20 Globallib (CPLEX-failure instances omitted, disclosed), 24 random; few nodes, SDP1 always faster, SDP solve is the bottleneck, CPU up to days; no external global-solver baseline (pp. 15-23).",
+  "positioning": "Extends Vandenbussche-Nemhauser's finite box-QP method to general QP; claims the specific SDP relaxations are unstudied; reviews Lovasz-Schrijver, Kojima-Tuncel, Bomze-de Klerk, Sherali-Fraticelli, Anstreicher neutrally; local methods recommended if only a good solution is wanted (pp. 3-4).",
+  "writing": "Two goals (theoretical, practical) announced and mapped to sections (p. 4); theorem scoped to exact arithmetic explicitly (p. 11); empirical observations hedged as belief (p. 13); bulleted summary of findings before details (pp. 17-18).",
+  "limits_future": "SDP solution time is the bottleneck and better SDP solvers are the lever (p. 18); SDP2 numerical inaccuracy (pp. 17-18, 22); Globallib instances omitted for CPLEX failures (p. 23); SDP1 vs SDP0 tightness left open (p. 12).",
+  "method_links": [
+   {"method": "Method 5", "relation": "evidence", "note": "Theory-required constraint (3) dropped for speed with printed safeguards (preprocessed (y,z) bounds, leaf LP) and a constructed leaf counterexample justifying them; source of H7 quote", "pages": "p. 16"},
+   {"method": "Method 4", "relation": "variant", "note": "54-instance BoxQP set and disclosed omission of numerically failing Globallib instances, but no filtering to where a baseline fails and no external baseline", "pages": "pp. 18, 23"},
+   {"method": "Method 1", "relation": "variant", "note": "Lift Y=(1;x)(1;x)^T and lifted KKT system used as node relaxations inside branch-and-bound, not as an exact single-cone reformulation", "pages": "pp. 8-9, 14"},
+   {"method": "Method 3", "relation": "variant", "note": "Computation-led belief labelled as belief (SDP1 never beat SDP0), but floating-point concerns called 'quite irrelevant' (Tension 2 pole)", "pages": "pp. 3, 13"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "finite complementarity branching + bounded relaxation exact at leaves", "evidence": "KKT index-set branching with SDP relaxations; correctness = zero gap at every feasible leaf", "pages": "pp. 6, 10-12"},
+   {"pattern": "proof under two models of computation", "evidence": "Thm 3.3 proved in exact arithmetic and in the bit model via leaf SDP = LP", "pages": "p. 12"}
+  ],
+  "transferable": [
+   "Bound a relaxation unbounded in its multipliers by adding one valid equation tying the lifted objective to the dual objective (pp. 9-10).",
+   "Define correctness of a finite branch-and-bound as zero gap at every feasible leaf and prove it separately (p. 11).",
+   "When dropping a theory-required constraint for speed, compute substitute bounds once in preprocessing with it included and keep an exact fallback at the leaves (p. 16).",
+   "Normalise branching violations by a priori bounds on slacks and multipliers (p. 17).",
+   "Run every instance under both relaxation variants x two tolerances and plot variant against variant on log-log axes to separate strength from cost (pp. 17-22)."
+  ],
+  "coauthors": "Dieter Vandenbussche (Axioma, Inc.)",
+  "quotes": [
+   {"text": "We are unaware of any methods that can verify optimality in a finite number of nodes (using exact arithmetic).", "page": 3},
+   {"text": "Of course, it is theoretically unwise to ignore (3) because both the boundedness of (y, z) and the correctness of branch-and-bound depend on it.", "page": 16}
+  ]
+ },
+ {
+  "id": "S015",
+  "year": "2008",
+  "title": "Coordinating the supply chain in the agricultural seed industry",
+  "read_level": "full",
+  "contribution": "Models the bonus and bonus-penalty contracts actually used by a seed supplier, shows when pure bonus contracts cannot coordinate the channel and that a mixed system always can, and under uniform demand fully classifies all coordinating contracts and the achievable split of dealer profit with the wholesale price held fixed.",
+  "problem_entry": "Industry practice: full-credit returns make dealers over-order; a supplier the authors worked with uses pure bonus and, for new hybrids, mixed bonus-penalty contracts; the question is whether these mechanisms, as practised, coordinate the channel and why the bonus breaks down for new hybrids (pp. 3-4).",
+  "key_idea": "Write dealer expected profit with threshold functions max{l, beta Q} and max{l, pi Q}, differentiate piecewise, and with w exogenous use (b, beta, p, pi) as the only levers: sufficient non-coordination condition in general, an always-coordinating mixed system, and under uniform demand an iff condition Q*c > u/2 and hyperbola-plus-ray classifications (pp. 10-20).",
+  "assumptions": "Single supplier/dealer/product, sunk production cost, 0<s<w<r, s,w,r,t,c exogenous, w uniform across dealers (p. 8); demand on [l,u] smooth (p. 9); uniform demand called strong and justified by practice (p. 13) and by Perakis-Roels minimax regret (p. 14).",
+  "proof_devices": [
+   "Piecewise derivatives of expected profit at threshold kinks, eqs. (6)-(7), (14)-(15), pp. 10, 12",
+   "Lower bound on the right derivative at Q*c to exclude coordination (Prop. 3.1), p. 10",
+   "Truncated-normal counterexample to the converse of Prop. 3.1, p. 11",
+   "Comparison E^b = E^m + EP with EP convex increasing to order maximisers (Prop. 4.4), pp. 18-19",
+   "Derivative-sign argument along the coordinating curve for minimum dealer profit (Thm. 4.8), pp. 21-22",
+   "Cash-flow replication under every demand realisation, including a perfect-information state, to show non-equivalence with Pasternack, Taylor, Tsay (App. A), pp. 22-24"
+  ],
+  "experiments": "none (illustrative parameters for Fig. 2 on p. 16 and a back-of-envelope threshold c >= 53.75 on p. 17; no field data).",
+  "positioning": "Against Pasternack, Tsay, Taylor and Cachon-Lariviere: the seed model differs and those models are not implementable in the seed industry (fixed uniform w, no demand update); Pasternack shown to be a special case of the mixed system; a football-program consignment contract as an analogue (pp. 4-8, 13, 22-24).",
+  "writing": "Explicit scope statements ('We claim neither...', p. 3; 'miraculous feat', p. 8); industry voice attributed ('According to our sources', p. 4); closing paragraph on how to apply the formulas in practice (p. 22).",
+  "limits_future": "Single retailer only; multi-retailer limited supply 'extremely complicated' and left out (p. 7); unbounded dealer profit noted as unrealistic (p. 21); no explicit future directions.",
+  "method_links": [
+   {"method": "Method 3", "relation": "variant", "note": "Claims written at their level (sufficient condition, counterexample to the converse, iff under uniform demand), but the counterexample is analytic, not computational; Methods 1, 2, 4, 5 not present (outside the conic programme)", "pages": "pp. 10-11, 15"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "model the practice as it is, then characterise the full parameter set", "evidence": "Industry-fixed levers (w) treated as exogenous; all coordinating (b, beta, p, pi) classified as hyperbola union ray", "pages": "pp. 8, 16, 19-20"}
+  ],
+  "transferable": [
+   "Justify a strong distributional assumption twice: by what data exist in practice and by a theorem (minimax-regret equivalence) (pp. 13-14).",
+   "Present a full parameter classification as a table of cases before proving it (p. 18).",
+   "To show a model is not a special case of another, compare realised cash flows under every demand realisation, using an extreme state such as perfect information (p. 24).",
+   "Use the classification to answer the practitioner's design question directly (correct an existing bonus with a penalty; guarantee a profit level) (pp. 20-22)."
+  ],
+  "coauthors": "Philip C. Jones, Timothy J. Lowe (University of Iowa)",
+  "quotes": [
+   {"text": "We claim neither that these are the only mechanisms possible nor that they are in every sense optimal.", "page": 3},
+   {"text": "While such an outcome would be startling indeed, we do not claim to have accomplished this miraculous feat.", "page": 8}
+  ]
+ },
+ {
+  "id": "S004",
+  "year": "2009",
+  "title": "On the copositive representation of binary and continuous nonconvex quadratic programs",
+  "read_level": "full",
+  "contribution": "Proves that every nonconvex QP with linear equality constraints, nonnegative variables and any mix of binary and continuous variables is equivalent to a linear program over the completely positive cone (under a key assumption that is without loss of generality), with an x-free reduced form that can have an interior, an extension to complementarity constraints on bounded variables, and a comparison with all earlier special cases.",
+  "problem_entry": "Only a short list of NP-hard problems had copositive/CP representations; how far does the list extend, given that a CP representation packages the difficulty in one cone whose approximations transfer across problems (pp. 1-2)?",
+  "key_idea": "Lift to (1,x^T; x,X), keep each linear equation and add its square a_i^T X a_i = b_i^2, impose x_j = X_jj for binaries, and require complete positivity; under the key assumption (linear constraints imply 0<=x_j<=1 for binaries) this is exact (Prop. 2.1, Thm. 2.6, pp. 3-6).",
+  "assumptions": "Equality form, x>=0, nonempty feasible set; key assumption (1) w.l.o.g. via slacks (p. 3); unbounded L allowed via recession cone, equality of lifted sets needs boundedness (Cor. 2.5, p. 6); condition (8) for eliminating x (p. 7); two generalised assumptions for quadratic equality constraints (p. 10).",
+  "proof_devices": [
+   "Completely positive decomposition split into K+ (zeta_k>0) and K0 (zeta_k=0) (Lemma 2.2), p. 5",
+   "Equality case of Cauchy-Schwarz on original and squared equations forcing a_i^T z_k = b_i zeta_k, eqs. (4)-(6), p. 5",
+   "Sum of nonnegatives equals zero for binaries, lambda_k(v_kj - v_kj^2)=0 (Lemma 2.3), p. 6",
+   "Negative recession direction gives opt=-infinity (Lemma 2.7), p. 7",
+   "No-interior argument for (C) via one psd matrix orthogonal to the feasible set; interior of (C') via (1/n)I, p. 9",
+   "Two-variable counterexample showing remnant constraints cannot be dropped, p. 9"
+  ],
+  "experiments": "none (Section 5 discusses approximating C* by (K^r)* of size about O(n^r) and adding valid (x,X) constraints, without runs, pp. 15-16).",
+  "positioning": "Restates Bomze et al., de Klerk-Pasechnik, Povh-Rendl (tri-partitioning, QAP) and Sturm-Zhang in its own notation; sits 'naturally between' Bomze et al. and Sturm-Zhang; concedes it 'cannot be said to subsume previous analyses' (pp. 11-14).",
+  "writing": "Short theorem-driven structure (p. 2); key computational insight set off as a displayed statement (p. 16); explicit hedging ('not a magic bullet', p. 15; 'we feel', p. 16); ends with three open questions (pp. 16-17).",
+  "limits_future": "(C) is itself NP-hard; difficulty moved into C* (p. 15); open: more general quadratic constraints, extending Bomze-de Klerk bounds/PTAS, bounding hierarchy level r (pp. 16-17).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "Founding text: 'package' sentence, key assumption as the hypothesis making the cone exact, special cases covered, then tractable approximations of the cone plus valid (x,X) constraints; stop-rule wording 'not a magic bullet'", "pages": "pp. 2-3, 11-16"},
+   {"method": "Method 3", "relation": "evidence", "note": "Credit by name for an earlier error (Bomze, Proposition 2.3; content not in text) and open cases handed on as questions", "pages": "pp. 16-17"},
+   {"method": "Method 2", "relation": "variant", "note": "n=2 box-QP hull (Anstreicher-Burer) cited as a downstream success of the CP view: first trace of the small-substructure programme", "pages": "p. 16"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "square each linear equation and add it as a redundant quadratic equation", "evidence": "a_i^T X a_i = b_i^2 in (C); 'the original equation and its squared version are critical'", "pages": "pp. 4, 14"},
+   {"pattern": "restate every prior special case in your notation and say where you do not subsume it", "evidence": "Section 4 comparison with Bomze et al., de Klerk-Pasechnik, Povh-Rendl, Sturm-Zhang", "pages": "pp. 11-14"}
+  ],
+  "transferable": [
+   "To prove a conic lift exact, decompose a feasible point into rank-one pieces and use a tight inequality (Cauchy-Schwarz equality case) on paired original/squared constraints to force each piece feasible (p. 5).",
+   "Make an assumption without loss of generality by exhibiting the one-line reformulation that enforces it (pp. 3, 7).",
+   "After an exact reformulation, seek a reduced form with an interior (eliminate x into C*_n) (p. 9).",
+   "Give a two-variable counterexample to show a simplification cannot go further (p. 9)."
+  ],
+  "coauthors": "none (sole author)",
+  "quotes": [
+   {"text": "it does allow one to “package” the difficulty completely inside the convex cones of copositive and/or completely positive matrices.", "page": 2},
+   {"text": "Overall, it seems that the original equation and its squared version are critical for Theorems 2.6 and 3.1.", "page": 14}
+  ]
+ },
+ {
+  "id": "S011",
+  "year": "2009",
+  "title": "On non-convex quadratic programming with box constraints",
+  "read_level": "full",
+  "contribution": "Establishes the basic convex-geometric structure of QPB_n, the convex hull of {(x, xx^T)} over the box: full dimension, extreme points (all of S), vertices (binary points), invariance under permutation and switching, facet status of RLT and face dimensions of psd inequalities, the link to the Boolean quadric polytope with an iff test for which BQP facets lift (cut-type inequalities), a classification of valid inequalities by curvature with a finite recursive validity check, and a proof that RLT+psd+BQP is not the hull for n=3.",
+  "problem_entry": "QPB is fundamental and NP-hard but the structure of its convex hull is little understood; a complete linear description of QPB_3 was unknown (pp. 1-2).",
+  "key_idea": "Treat QPB_n with polyhedral-combinatorics tools and connect it to Padberg's Boolean quadric polytope (projection and projection of a face), transfer facets and symmetries, and classify valid inequalities by the convexity of their quadratic form (pp. 5-15).",
+  "assumptions": "Box [0,1]^n w.l.o.g. (p. 1); diagonal variables y_ii included (p. 2); Propositions 3-4 stated without proof via Pataki's psd-cone results (p. 9).",
+  "proof_devices": [
+   "Affine independence of listed points for full dimension (Lemma 1), p. 5",
+   "Each member of S is the unique minimiser of a separable objective, so every point of S is extreme (Lemma 2), pp. 5-6",
+   "Vertex iff binary via +/-epsilon perturbation of a fractional coordinate forcing an equation on all normal vectors (Thm. 1), p. 6",
+   "Switching invariance through extreme points (Prop. 1), p. 7",
+   "Face dimension of psd inequalities by multiplying v^Tx+s=0 by each variable (Thm. 2), p. 8; codimension preserved under canonical extension (Thm. 3), pp. 9-10",
+   "Fractional points as convex combinations of their binary roundings (Prop. 5, Lemma 6), pp. 10-11; iff facet-lifting condition (Thm. 4) and cut-type characterisation (Thm. 5), pp. 11-13",
+   "Indefinite quadratic maximised on the boundary gives a finite recursive validity check (Lemma 8, Prop. 10), p. 15",
+   "Explicit separating inequality and rational point with value 19/18 > 1 showing QPB_3 strictly inside Q_3, p. 16"
+  ],
+  "experiments": "none (only the hand-checkable n=3 counterexample; optimal value 'approximately 1.0929' reported without method, p. 16).",
+  "positioning": "Extends Yajima-Fujie significantly (pp. 5, 12); builds on Anstreicher-Burer's n<=2 exactness (pp. 4, 15-16); bridges to Padberg, Boros-Hammer, De Simone, Deza-Laurent (pp. 4-5, 12); careful folklore attribution (p. 4).",
+  "writing": "Polyhedral-paper style with n=1 figures as running illustrations (pp. 2-3, 6); section-by-section preview (p. 2); restrained evaluation ('surprisingly simple', 'huge class', p. 12); three open questions (p. 16).",
+  "limits_future": "Semi-infinite description hard to use (p. 15); no explicit description of QPB_3 (p. 16); some results omitted for brevity (pp. 9, 13); future: linear description of QPB_3, strengthening non-lifting BQP facets, algorithmic implications (p. 16).",
+  "method_links": [
+   {"method": "Method 2", "relation": "evidence", "note": "Hull of a small recurring substructure; boundary by dimension (exact for n<=2 via RLT+psd, strict gap at n=3); Q_3 = RLT+psd+BQP is the combined relaxation beaten", "pages": "pp. 4, 15-16"},
+   {"method": "Method 3", "relation": "evidence", "note": "Colleague's conjecture proved and credited (Anstreicher); negative claim certified by an exact rational point, not a solver run", "pages": "pp. 14, 16"},
+   {"method": "Method 1", "relation": "evidence", "note": "Step 5: the convex object studied for its own sake", "pages": "p. 2"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "transfer a combinatorial polytope's facets and symmetries to the continuous hull with an iff survival test", "evidence": "Switching/permutation from BQP; Thm. 4 and Thm. 5 on which BQP facets are QPB facets (fits H2)", "pages": "pp. 7, 11-13"},
+   {"pattern": "classify valid inequalities by curvature of the associated quadratic form", "evidence": "Concave -> psd, convex -> BQP+RLT, indefinite -> recursion", "pages": "pp. 13-15"}
+  ],
+  "transferable": [
+   "To show a candidate description is not the hull, certify an inequality valid for the hull by an exact finite procedure and exhibit a rational point of the candidate that violates it (p. 16).",
+   "Carry the symmetry group of a known combinatorial polytope (permutation, switching) to the continuous hull to turn one facet into a family (pp. 6-7).",
+   "Prove every feasible point extreme by building, for each, a separable objective it uniquely minimises (pp. 5-6).",
+   "Classify valid inequalities by curvature and reduce each class to a known set or a recursion (pp. 13-15).",
+   "Use the n=1 picture as a running sanity check for every general statement (pp. 2-3, 6, 9, 11)."
+  ],
+  "coauthors": "Adam N. Letchford (Lancaster University)",
+  "quotes": [
+   {"text": "(This result was conjectured to us by Anstreicher [2].)", "page": 14},
+   {"text": "Perhaps it is possible to simplify the description for larger n.", "page": 15}
+  ]
+ },
+ {
+  "id": "S018",
+  "year": "2009",
+  "title": "Globally solving box-constrained nonconvex quadratic programs with semidefinite-based finite branch-and-bound",
+  "read_level": "full",
+  "contribution": "Specialises the finite SDP-based KKT branch-and-bound to box-constrained QP with a compact relaxation in which the multipliers are eliminated and their fixings become linear constraints on x, re-proves correctness for the new relaxation, and shows on 90 instances (54 published plus 36 new with n=70-100) that it scales better than the LP-based branch-and-cut of Vandenbussche-Nemhauser.",
+  "problem_entry": "Specialise the general finite SDP branch-and-bound to the box case, where the LP-based finite branch-and-cut of Vandenbussche-Nemhauser is among the most successful methods, aiming for a compact relaxation that exploits branching information (pp. 1-2).",
+  "key_idea": "In the box case y=max(0,Qx+c), z=-min(0,Qx+c) is always in G_x, so multipliers are implicit and fixing y_j=0 or z_j=0 becomes a linear inequality in x; the node relaxation is the smaller SDP0 over P' with cone K' (pp. 7-8).",
+  "assumptions": "Box [0,1]^n, Q indefinite or psd (p. 2); logical implications F0 in Fy, F1 in Fz (p. 4); relative fathoming tolerance for floating point (pp. 7, 11).",
+  "proof_devices": [
+   "Correctness re-proved for the new relaxation by a three-case split at a feasible leaf (j in F0, F1, or Fy cap Fz) (Prop. 3.1), pp. 8-9",
+   "PSD principal-minor arguments (2x2 forces X_jj=1; rescaled 3x3 with determinant -(x_i - X_ji)^2 forces X_ji=x_i) showing the weaker cone implies the fixings (Prop. 3.2), pp. 9-10",
+   "Remark on why integer-programming 'fathoming by feasibility' does not transfer when the objective is linearised, p. 7"
+  ],
+  "experiments": "Baseline: Vandenbussche-Nemhauser LP branch-and-cut at its suggested settings, faster of two branching rules per instance; 90 instances (54 published + 36 new: n=70,80,90,100 x densities 25/50/75% x 3); default tolerance with 45,000 s limit and 1% with 20,000 s; B&C faster on small, SDP faster on large; B&C fails on 25 (26) of 90, SDP finishes all; max nodes 305 vs 181,958; termination gaps of failed B&C runs plotted; hardware not stated (pp. 11-13).",
+  "positioning": "Two classes of global methods (infinite partitioning vs finite KKT branching); related to Helmberg, Anstreicher et al. (QAP), Braun-Mitchell; high-level comparison with An and Tao concedes they solve n up to 550; no public global QPB code (pp. 2, 13-14).",
+  "writing": "Compact recap-specialise-compute structure (pp. 3-14); results as log-log plots with headline numbers (pp. 12-13); graded conclusion 'scales better' (p. 12); abstract claims 'state-of-the-art' (p. 1).",
+  "limits_future": "Strength vs solve-time trade-off (p. 13); B&C faster on smaller instances (p. 12); An and Tao reach larger n (p. 14); no future-work section.",
+  "method_links": [
+   {"method": "Method 4", "relation": "evidence", "note": "Ladder rung 54 -> 90 by adding larger and denser random instances where the incumbent LP method fails; baseline stopping state reported (gaps); also H5 (co-author's code at suggested settings, best of two schemes) and H8 (losses printed)", "pages": "pp. 11-14"},
+   {"method": "Method 5", "relation": "variant", "note": "Implementation choices from S007 reused (loose AL solves, crude warm start 'extremely helpful in practice'), but theory re-proved for the modified relaxation rather than left open", "pages": "pp. 8-11"},
+   {"method": "Method 1", "relation": "variant", "note": "Lift-and-project SDP0 used as node bound, not an exact single-cone reformulation", "pages": "pp. 4-5"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "specialise by eliminating auxiliary variables explicit in the primal, then re-prove the key property", "evidence": "Multipliers expressed via max/min of Qx+c; fixings become linear in x; correctness re-proved (Props. 3.1-3.2)", "pages": "pp. 7-10"}
+  ],
+  "transferable": [
+   "Check whether auxiliary variables are explicit functions of the primal; if so, eliminate them and turn their fixings into linear constraints (pp. 7-8).",
+   "When a relaxation is modified for speed, re-prove the one property the algorithm needs instead of citing the old theorem (pp. 8-9).",
+   "Show a PSD lift implies an equality via a 2x2 then 3x3 principal minor whose determinant is minus a square (pp. 9-10).",
+   "When a baseline times out, plot its final optimality gap per instance ordered by size and density (pp. 12-13).",
+   "Extend a published test set by a size x density grid with several seeds per cell, keeping the old instances (p. 12).",
+   "Run baselines at their authors' suggested settings and give them the better of their own options per instance (pp. 11-12)."
+  ],
+  "coauthors": "Dieter Vandenbussche (Axioma, Inc.)",
+  "quotes": [
+   {"text": "These numbers illustrate the tightness of the bounds provided by the SDP relaxation, but also point out the trade-off between the strength of a relaxation and the difficulty of solving it", "page": 13},
+   {"text": "Finally, An and Tao solve instances with n as high as 550, which exceeds the dimension solved in this paper.", "page": 14}
+  ]
+ }
+]

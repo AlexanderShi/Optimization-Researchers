@@ -1,0 +1,156 @@
+[
+ {
+  "id": "S120",
+  "year": "2026",
+  "title": "Probabilistic analysis of dual decomposition on two-stage stochastic integer programs",
+  "read_level": "full",
+  "contribution": "First average-case analysis of Branch-and-Price on random two-stage stochastic binary IPs: with probability at least 0.9999 - 1/n the tree has n^{O_m(log s)} nodes, via a bound O_m(s log s log^2 n / n) on the LP integrality gap.",
+  "problem_entry": "Decomposition methods work well in practice but guarantees are worst-case Theta(2^n) from counting first-stage solutions (pp. 1-2); narrowed to dual decomposition plus branching, i.e. Branch-and-Price (pp. 2-3).",
+  "key_idea": "Tree size is controlled by the integrality gap through a count of binary first-stage points with high Lagrangian value, using only the projection onto x0 to avoid exponential dependence on m*s (pp. 3, 5-8); the gap is bounded by extending Dyer-Frieze from one block to many under a stronger RHS assumption (p. 13).",
+  "assumptions": "Entries of c, A i.i.d. U[0,1]; b = beta*2n with beta in (1/4,1/2), the 1/4 bound 'for technical reasons' (p. 3); fixed m, growing n and s; exact dual-decomposition oracle (p. 3); binary and equal dimensions, extension to mixed-integer claimed without proof (p. 2).",
+  "proof_devices": [
+   "Best-bound argument: every internal node has DUAL(N) >= OPT (Lemma 3.1, pp. 6-7)",
+   "Charging nodes to binary points of high Lagrangian value, at most n per point, tree <= 2n|Omega|+1 (Lemma 3.2, pp. 7-8)",
+   "Lagrangian loss as distances of first-stage columns to the dual hyperplane, bucketed and counted with slab lemmas from [11] (Lemmas 3.4-3.6, pp. 8-10)",
+   "Gap decomposition into reduced-cost and slackness terms with LP solved on shrunk RHS b - 2d1 (Lemma 4.1, pp. 12, 15-16)",
+   "Dual-size bound by perturbation on typical instances with Chernoff bounds (Claims 4.2-4.3, pp. 16-18)",
+   "epsilon-net over duals plus union bound to count zeros of the LP solution (Claims 4.4-4.6, pp. 18-20, 27)",
+   "Conditioning on the zero set leaves columns uniform on a reduced-cost region; box-like subregion; Dyer-Frieze discrepancy lemma with probability boosting over independent groups (pp. 20-26, 28)"
+  ],
+  "experiments": "none",
+  "positioning": "Claims first average-case analysis of Branch-and-Price (p. 4); extends Dyer-Frieze [13] to multi-block two-stage IPs and reuses own SODA 2021 B&B argument [11] with the key difference stated (pp. 5, 9, 13); uses Borst-Dadush-Huiberts-Tiwari [5] (p. 13).",
+  "writing": "Informal main theorem first, then two components (pp. 3-4); 'high-level idea' lists and a 'Main Steps' subsection before proofs (pp. 5, 12-14); practical takeaway on LP-based heuristics (p. 4); proof-convenience choices labelled (pp. 3, 12).",
+  "limits_future": "Stated: exact oracle, fixed m, beta >= 1/4, Benders not covered (pp. 3, 26). Unstated: no lower bound or tight example, no experiment, constant success probability, unproved extension claim (p. 2).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "Explains an unexplained solver regularity (decomposition converges fast) by a proxy theorem on random instances and says what practice it explains", "pages": "pp. 1-4"},
+   {"method": "Method 4", "relation": "variant", "note": "No tight example, lower bound, or failure when beta >= 1/4 is dropped; extension asserted without proof", "pages": "pp. 2-3"},
+   {"method": "Method 5", "relation": "evidence", "note": "Gap theorem framed as support for dual bounds of LP-based decomposition with many scenarios (weak)", "pages": "p. 4"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "count near-optimal solutions to bound enumeration effort", "evidence": "Tree size <= 2n|Omega|+1 with Omega the binary first-stage points whose Lagrangian value is at least OPT", "pages": "pp. 6-8"},
+   {"pattern": "recycle own proof machinery", "evidence": "Lemma 3.5 proof 'the same as that of Lemma 5 of [11]'; overall argument similar to [11] with the m*s blow-up removed by projection", "pages": "pp. 5, 9"}
+  ],
+  "transferable": [
+   "Bound B&B tree size by counting binary points with Lagrangian value >= OPT and charging internal nodes to them (pp. 6-8)",
+   "Express flip cost as distances of data columns to the dual hyperplane, bucket by distance, use slab-count lemmas (pp. 8-10)",
+   "Solve the LP with a shrunk RHS so a later rounding that adds columns stays feasible; pay via dual sensitivity (pp. 12-16)",
+   "Condition on the LP support pattern to recover independence of the remaining data (p. 22)"
+  ],
+  "coauthors": "Marco Molinaro, Jingye Xu",
+  "quotes": [
+   {"text": "Despite their widespread use, however, existing theoretical guarantees are almost exclusively based on worst-case analyses, which predict exponential convergence behavior in the problem dimension and fail to explain the strong performance observed in practice.", "page": 1},
+   {"text": "These assumptions are made solely for notational simplicity and clarity of exposition.", "page": 2}
+  ]
+ },
+ {
+  "id": "S121",
+  "year": "2026",
+  "title": "Accelerating Column Generation in Highly Degenerate Integer Programming Problems with Template Pricing",
+  "read_level": "full",
+  "contribution": "Template pricing, which picks negative-reduced-cost columns most similar to a template taken from the current master solution, speeds up column generation on degenerate GAP instances by orders of magnitude over Dantzig and Pessoa pricing and yields near-optimal integer solutions.",
+  "problem_entry": "Column generation with Dantzig pricing converges slowly under dual degeneracy and independent subproblems return incompatible columns (pp. 1, 4); GAP with job/machine ratio as degeneracy proxy (p. 8).",
+  "key_idea": "Lexicographic pricing: maximize similarity (+1/0/-1 by near-integrality of the template) over good columns, reduced cost only as tie-breaker; exact via hierarchical MIP, heuristic via bisection on one Lagrangian weight that keeps the knapsack DP (pp. 5-7, 20).",
+  "assumptions": "Independent subproblems, integer costs, root node only, no primal heuristics (pp. 9, 16); 57 Yagiura and 1,735 ISA GAP instances (p. 8).",
+  "proof_devices": [],
+  "experiments": "C++/HiGHS, shared knapsack DP, per-method initialization and tuned column management; Yagiura 6 h x 5 seeds: LT/MT solve all, RMP time 15.4 s vs 5,285.2 s (D) and 2,642.3 s (P), 10x fewer and 10x faster pivots; ISA 1 h: 96.9% (LT) vs 58.3% (P) vs 76.7% (LR) (pp. 10-15, 22).",
+  "positioning": "Among dual-stabilization methods, Ghoniem-Sherali compatible pricing and dynamic constraint aggregation; Pessoa smoothing as strong baseline; LR as traditional choice for degenerate GAP (pp. 3-6, 8).",
+  "writing": "Contribution bullets and five numbered advantages (pp. 1-2, 6); a design-choices section before results (p. 8); fairness language recurs (pp. 8, 10); explanation of pivots hedged as 'possible' (p. 13).",
+  "limits_future": "Stated: no branch-and-price, simple similarity, Lagrangian heuristic may not suit complex subproblems, shared-subproblem classes need new templates (pp. 9, 15-16). Unstated: abstract's 43%/9% and 'all 1735' claims not backed by a body table read; LT solves 96.9% in 1 h (pp. 1, 15).",
+  "method_links": [
+   {"method": "Method 2", "relation": "evidence", "note": "Stripped instrument isolating pricing: RMP stabilizers and branching excluded, shared subproblem solver; no exact ceiling", "pages": "pp. 4, 9, 11"},
+   {"method": "Method 1", "relation": "variant", "note": "Empirical surprise (fewer, faster pivots) explained only as 'a possible explanation', no proxy theorem", "pages": "pp. 13, 16"},
+   {"method": "Method 5", "relation": "variant", "note": "Certified CG lower bounds used for termination, but headline metric is time, not certified gap", "pages": "p. 9"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "cover-not-fit parameter policy", "evidence": "Age threshold chosen by the smallest quadratic lying above all per-instance best thresholds, for robustness", "pages": "p. 21"}
+  ],
+  "transferable": [
+   "Coordinate independent pricing subproblems with templates from the current master primal and reduced cost as tie-breaker (pp. 5-6)",
+   "Scalarize a lexicographic subproblem with a bisected, warm-started weight to keep a specialized solver (pp. 6-7)",
+   "Test whether a common initialization is fair before using it; else give each method its own best start (p. 10)",
+   "Report pivots per column and pivots per second to separate fewer iterations from cheaper iterations (p. 13)"
+  ],
+  "coauthors": "Luke Marshall, Prachi Shah",
+  "quotes": [
+   {"text": "We exclude approaches that either modify the RMP or use alternative algorithms to solve the RMP, so that we can isolate the contribution of pricing.", "page": 4},
+   {"text": "One might think that using Template Phase I to initialize all methods gives a fair comparison; Table 1 and Figure 3 show that this is not the case.", "page": 10}
+  ]
+ },
+ {
+  "id": "S122",
+  "year": "2026",
+  "title": "Chvátal-Gomory Rounding of Eigenvector Inequalities for QCQPs",
+  "read_level": "full",
+  "contribution": "Defines Eigen-CG cuts by CG-rounding eigenvector inequalities for QCQPs, proves strictly nested subfamilies with equal conic closures (all equal to Boros-Hammer), shows they miss most BQP_6 facets and that dense ones are shallow over SDP+McCormick, and confirms computationally that sparse cuts carry the gains.",
+  "problem_entry": "Eigen-cuts are dense and numerically troublesome (p. 3); apply Chvatal-Gomory rounding via Burer-Letchford's BQP-to-QPB validity transfer (pp. 2-3).",
+  "key_idea": "Round coefficients of eigen-cuts to get Eigen-CG; through this lens BH = F0 and intermediate families F1, F2 arise; strict containment but equal closures; depth falls with support over SDP (pp. 3-14).",
+  "assumptions": "Compact QCQP on [0,1]^n (p. 1); depth results assume the point satisfies SDP and McCormick (pp. 12-14); experiments restricted to BH cuts, BH separator with |w_i| <= 2 and sum |w_i| <= 10 (pp. 14, 16).",
+  "proof_devices": [
+   "Small explicit counterexamples plus infeasible linear systems for strict containment (Lemma 2, pp. 6-7)",
+   "Square-free factorization normal form and two-BH nonnegative combination with half-integer shifts for closure equality (Prop. 2, Lemma 4, pp. 7-9)",
+   "Sign-pattern, 2x2 product-consistency and 3-cycle interval arguments certifying facets of BQP_6 are not Eigen-CG, automated over 113,088 facets (Props. 3-5, pp. 9-12)",
+   "Depth bound: SDP slack bounds the numerator by 1, forced nonzero rounded coefficients bound the norm, 1-D convex minimization gives 2/sqrt(k(k-2)) (Props. 6-7, pp. 12-14)"
+  ],
+  "experiments": "30 Biq Mac binary QPs as QCQPs; MOSEK SDPs, Gurobi separator and 4-h upper bounds; ladder McCormick -> triangles -> SDP -> violated BQP_4/BQP_5 facets from lookup tables closes or shrinks gaps to <0.5% (up to ~20,000 s); denser BH cuts add little over SDP but more without SDP (pp. 14-22).",
+  "positioning": "Within BQP/cut-polytope literature (Boros-Hammer, Deza-Laurent, Letchford-Sorensen), CG for BQP and for conic/SDP problems (de Meijer-Sotirov); BH-as-special-case known, new CG derivation; complementary to efficient BH separation; own sparse-PCA cuts and depth measure (pp. 3-5, 14).",
+  "writing": "Contributions with 'perhaps surprisingly' and an explicit unproved conjecture (p. 4); depth theorem framed as complementary to practice (p. 4); closing one-sentence research direction (p. 22).",
+  "limits_future": "Conjecture 1 open; Eigen-CG misses most BQP_6 facets; separation slow by design; no-SDP runs only be100 (pp. 9, 14, 21-22). Unstated: GAP uses a Gurobi UB, not proven optimum; Prop. 6 vacuous for k <= 2; separator caps limit density (pp. 15-16).",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "IP operation (CG rounding) imported into QCQP via Burer-Letchford transfer, located in BQP theory", "pages": "pp. 2-5"},
+   {"method": "Method 1", "relation": "evidence", "note": "Theorem-level explanation of the observed impact of sparse cuts over SDP, then experiment says how much it explains", "pages": "pp. 4, 12-14, 21"},
+   {"method": "Method 1", "relation": "variant", "note": "Uses depth of cut as the proxy measure, a yardstick listed among Dey's anti-patterns", "pages": "pp. 4, 12-14"},
+   {"method": "Method 4", "relation": "evidence", "note": "Strict containment vs equal closures, open conjecture stated with evidence, formal non-representability of BQP_6 facets", "pages": "pp. 6-12"},
+   {"method": "Method 2", "relation": "evidence", "note": "Exhaustive facet enumeration of BQP_4, BQP_5, BQP_6 as ground truth; instrument ignores efficiency to measure expressiveness", "pages": "pp. 9, 14-15"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "proof distilled into a selection slogan", "evidence": "Depth-vs-density theorem becomes the closing advice to pursue sparse, well-structured inequalities", "pages": "p. 22"},
+   {"pattern": "re-prove a known result by a more geometric route to obtain a reusable tool", "evidence": "BH = F0 re-derived through CG rounding, yielding the F1/F2 hierarchy and closure theorem", "pages": "pp. 3, 7-9"}
+  ],
+  "transferable": [
+   "Validity by transfer: derive and CG-round a cut for the binary set, lift validity to the continuous box set with Burer-Letchford (p. 5)",
+   "Prove closure equality by writing a larger-family cut as a two-term nonnegative combination of smaller-family cuts (pp. 7-9)",
+   "Bound depth of dense cuts over a relaxation by numerator slack and forced nonzero coefficients (pp. 12-13)",
+   "Automate cheap necessary conditions (sign patterns, 2x2 products) to certify non-membership of many enumerated facets (pp. 9-10)",
+   "Density ladder experiment run with and without the relaxation the theorem assumes (pp. 17-22)"
+  ],
+  "coauthors": "Nan Jiang, Aleksandr M. Kazachkov, Andrea Lodi, Gonzalo Muñoz",
+  "quotes": [
+   {"text": "To date, every computational test we have devised suggests that this conjecture is true, but we have not been able to find a proof.", "page": 9},
+   {"text": "Overall, our results suggest that progress in strengthening SDP relaxations for QCQPs is more likely to come from identifying and exploiting sparse, well-structured inequalities rather than from pursuing increasingly dense eigenvector-based cuts.", "page": 22}
+  ]
+ },
+ {
+  "id": "S123",
+  "year": "2026",
+  "title": "Extreme strong branching for QCQPs",
+  "read_level": "full",
+  "contribution": "Extends strong branching to spatial branch-and-bound by binary-searching branching points per variable with the MIP product score and byproduct bound tightening; in a custom McCormick B&B it beats basic and balance rules on MINLPLib pooling/water instances and solves more FEM model-updating instances than Gurobi (read as arXiv v1).",
+  "problem_entry": "Can MIP strong branching be extended to continuous variables, where a branching point must also be chosen? Prior extensions fix the point or learn it (pp. 1-2).",
+  "key_idea": "Binary search on each child side using monotonicity of child bounds in alpha, tighten bounds when a child is infeasible or above the incumbent, then score (variable, point) pairs by the product rule (pp. 2-5).",
+  "assumptions": "Linear objective for presentation (p. 2); McCormick node relaxations (p. 6); all continuous variables are candidates (p. 8); benchmark limited to <= 100 variables (p. 6); binary-search iteration limit not reported.",
+  "proof_devices": [],
+  "experiments": "Julia B&B on BranchAndBound.jl, HiGHS LPs without warm start, Ipopt, BARON 60 s incumbent passed in; MINLPLib QCQPs: esb mean time 12.30 s vs 57.89/148.52 on 35 solved, gap 8.81% vs ~50% on 9 unsolved; 20 FEM instances vs Gurobi: 8 vs 5 solved, mean gap 7.94% vs 11.26%, 58 vs 8.6M nodes (S123 arXiv pp. 5-8, 11-12).",
+  "positioning": "Reviews spatial branching rules (Tawarmalani-Sahinidis, Linderoth, Chen-Atamturk-Oren, Fischetti-Monaci, own SOCP rule, Hubner-Gupte-Rebennack) and strong-branching extensions (Belotti et al., Kannan et al.); bound tightening contrasted with FBBT/OBBT (pp. 1-2).",
+  "writing": "Short note: two numbered benefits, algorithm boxes, one illustrated example (pp. 2-5); assertive results prose ('consistently performs better', p. 7) hedged as 'preliminary' in conclusion (p. 8).",
+  "limits_future": "Stated: overhead with many variables, reliability-based variant, why it works for bipartite bilinear problems open (p. 8). Unstated: FEM geometric-mean time worse for esb (Tables 3-4, p. 8); BARON warm-start time accounting unstated; a Table 1/Table 5 inconsistency for wastewater04m1 (pp. 7, 11).",
+  "method_links": [
+   {"method": "Method 3", "relation": "variant", "note": "Imports an MILP algorithmic rule (strong branching, product score) into QCQP rather than a convexified substructure", "pages": "pp. 1-4"},
+   {"method": "Method 2", "relation": "evidence", "note": "Rules compared inside one stripped custom B&B with fixed BARON incumbent to isolate dual-bound effects; no exact ceiling", "pages": "pp. 5-6"},
+   {"method": "Method 5", "relation": "evidence", "note": "Cheap McCormick LP relaxation plus branching, deliverable is certified remaining gap, gains 'without the use of any advanced convexification techniques' (weak)", "pages": "pp. 6-8"},
+   {"method": "Method 1", "relation": "variant", "note": "No proxy theorem; why esb works on bipartite bilinear problems left open", "pages": "p. 8"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "byproduct bound tightening", "evidence": "Bound reductions read off child relaxations solved by the branching rule anyway (Remark 1)", "pages": "pp. 2-4"}
+  ],
+  "transferable": [
+   "Binary-search a continuous branching point using monotonicity of child bounds and record bound tightenings (pp. 3-4)",
+   "Fix the incumbent from a short external-solver run to isolate dual-bound effects of a branching rule (p. 5)",
+   "Split results into time ranges for commonly solved instances and remaining gaps for instances some method fails (p. 7)"
+  ],
+  "coauthors": "Dahye Han, Yang Wang",
+  "quotes": [
+   {"text": "This practice is similar to the standard practice of providing the best-known heuristic to isolate the evaluation of the dual bound improvement [10].", "page": 5},
+   {"text": "Although the commercial solvers have highly engineered and sophisticated internal strategies, these results show that a simple yet effective branching rule can lead to substantial performance gains without the use of any advanced convexification techniques.", "page": 8}
+  ]
+ }
+]

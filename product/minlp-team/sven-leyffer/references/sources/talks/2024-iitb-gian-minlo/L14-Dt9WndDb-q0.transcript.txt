@@ -1,0 +1,173 @@
+Transcript (YouTube auto-generated English captions, ASR; NOT checked against the audio)
+Talk: Lecture 14: Advanced Models of MINLO in Power Systems, by Sven Leyffer. GIAN course, IIT Bombay, January 2024.
+Video: https://www.youtube.com/watch?v=Dt9WndDb-q0 (length 1457 s; playlist PLREyhbtkeBNpTZtDBfcwLigIsAAEGQ1iR)
+Retrieved: 2026-10-10 with yt-dlp 2026.08.19 (--write-auto-subs --sub-langs en); converted with scripts/srt_to_transcript.py
+Used in: ../../../research/02-methodology.md
+----
+next lecture I'm going to discuss Advanced models of mlo in Power Systems and advanced here means that these slides were completed at 8:00 a.m.
+
+this morning or just before 8 amm this morning so this is how advanced they are um or well that's how long it took me to catch up with everybody else um so I'll discuss a little bit the challenges in these AC
+
+alternating current power flow equations and then there has been a lot of work over the last decade or so on convex relaxations of AC power flow equations and that's very interesting because they might allow us to get Global solutions
+
+for reasonable sized problems and then at the end I just have some uh little bit of results on the geomagnetic induced current blocker placement problem that we were solving at argon that shows why this is a very
+
+challenging problem to solve okay so here's just a reminder of the AC power flow equations in rectangular form um so there there are these three sets of equations that have to hold at every bus or every node in the power
+
+grid um and they defined over the sets of buses or notes and line L and the variables are here in blue and and the first thing you notice is that you have uh a lot of multilinear terms there in these equations um there's uh
+
+and so and you have a quadratic equation at the bottom so those are nonlinear expressions in general um and so the challenges are that you have typically a non-convex feasible set and and whenever you have a
+
+non-convex feasible set so here's an example very simple example of a nonconvex fusible set then uh even if you're minimizing a linear function you you have potential for multiple uh local optimizers so if I
+
+draw a linear uh lines here then there are certainly two there's a local Optimizer here and there's another local Optimizer here or Global optimizer over there and so even minimizing an aine function of a
+
+non-convex set gives you many local Minima and this is a very simple non-convex set um the linearizations that I introduced in the last lecture the DC direct current approximations are not really useful for planning or if the
+
+topology of your network changes so in in situations where it's critical to get good Solutions because you have cascading failures these DC appr approximations are probably not the right thing to do and solvers will most
+
+likely produce locally optimal solution that could be misleading in some of the uh questions that you're looking for to answer so there's there's a very good survey uh by Daniel msan and and and and his advisor um on AC power flow and I've
+
+taken these pictures out of their survey paper um so there's a three bu system on the left here and it's it's an illustration of the feasible set that sort of Loops back around itself so the the surface the colorful surface that
+
+you see there is the feasible set so this is a very complex feasible set and on the right is a nineb system so those are very small systems remember the US power grid will have something like 100,000 lines so this is a very tiny
+
+system and the the feasible set here are these three conic shapes that are sort of separated by this ball that's cut out around the middle and so there are a lot of local Solutions and only one Global Solutions and so the feasible space
+
+isn't even connected even if you had an algorithm that would stay within the same feasible set once you land in the wrong feasible set or the wrong part of the feasible set it's very hard to get to another
+
+part so the question then is how can we overcome this and one answer to this is to be derve convex relaxations another would be to derive approximations so we talked for example about PE wise linear approximations the difficulty with
+
+approximations is that they are not accurate and that they may result in slight errors whereas convex relaxations at least give you guarantees that you're enclosing the feasible set so convex relaxation of this feasible
+
+set would be a circle for example um but they might be very large the relaxation might be very large um okay so here's just again uh the first relaxation that I'm going to show you is is shaes relaxation for the AC
+
+power flow equation and it's derived for the rectangular form of the AC power flow equations so notice on the left hand side we don't need to worry about anything that's our those are linear Expressions while on the right hand side
+
+we have these bilinear terms so all the terms are there if you look very carefully you multiply them out they're all bilinear terms that involve either vdi or vdk or vqk and vqi VD there's a vqi there and
+
+so one way to construct a convex relaxation is to collect all these variables that are non-convex that give rise to non-convexity in one big Vector uh and I'm not going to tell you how to do this but there's a way of
+
+deriving new data matrices but this will become a parent once to see the problem on the next page so the first thing we're going to do is we're going to take the variables the subset of the variables that appear in these bilinear
+
+expressions and just stack them up into a single Vector X and so there is my single Vector X and there's some additional data that I need to that I need to construct but that I can easily construct and so this is the key idea or
+
+fundamental idea of STP or semi-definite programming relaxation so I should have spelled this out let me write this here um so you construct the m matx by by forming a rank one outer product of all your variables so the X remember
+
+that's the collection of all these variables that appear in these bilinear terms and you form an x x transpose that's an rank one outter product uh and you call this Matrix W you give it a name you can call it
+
+anything you like um and then you you you will be left with one non-convexity which will be this equation here which is a this has this still is by linear terms but you can relax that by observing that rank one matrices are
+
+positive semi definite and so you relax this inequality or this equation to this inequality here that W is positive semi-definite and you throw away the X variables so that you get a semi-definite relaxation by rewriting
+
+all my equations in terms of w and then using the trace to sum up and and then relax uh the equation that I have than one non-convex equation to this inequality and and so why does this work well if you uh if you form this outer
+
+product that I have up there so if my X is given up there and if I form x x transposed then this Matrix uh the first term is a vd1 squared and then I have a vd1 vd2 and so on so I will have all the possible bilinear terms all the possible
+
+bilinear combinations that is in this are in this Vector X and in particular I have all the bilinear terms that I need to reconstruct my equation here so whenever I find one of these bilinear terms there vdi time vdk I replace it
+
+somewhere in here that will be a v d i v DK and so this corresponds to some W uh I don't know LM so there some entry wlm and I just replace it by that that's all I do and and you can see that what when I do that then all these terms
+
+become linear expressions in W because all the bilinear terms there is somewhere in this Matrix there's a home for all these bilinear terms and so all my bilinear terms become linear expression so the right hand side of
+
+these equations is now also linear and I can write that then in a in a convenient way of of doing a matrix product with W that picks out the right elements and then taking the trace of this matrix product so that's a convenient way of
+
+writing this down and the data matrices are just constructed did by figuring out what what the summation was that you did on the previous slide so that's how you'd construct these data matrices so once you do that I think on a small
+
+example it's it's easy to see how you construct these data matrices okay so this is really cool because now you have uh a set of constraints that are all linear so all my constraints here are linear because
+
+Trace is a linear operator um everything in this equations is linear the remainder of the equations that I showed you also were linear so everything is now linearized in the optimal power flow equations and the
+
+only thing that you have to worry about is the semi-definite constraint so this constraint that says the Matrix W is positive semi-definite meaning all its IG values are non- negative and there are solvers for this
+
+so there's sdp semi-definite programming solvers but unfortunately they're not really scalable they they there have been a lot of progress but the complexity of these solvers is is still prohibitive for doing large
+
+systems um the nice thing is that if you get a w so if this W that you get out actually has rank one then that means you can write it uh as an outer product so if W so if the rank of w is equal to one then it follows
+
+that there exist some Vector Little W such that Big W is w w transpose and you can reconstruct your X variables out of this potentially um unfortunately um well any good idea somebody comes up with a counter example
+
+so there exists a small counter example uh where the rank of w is greater than one so it's not solved the relaxation is not exact and in fact there's a practical example uh from the French power grid with a very large optimality
+
+gap and so the optimality Gap here means that if I look at this picture um the optimal solution in my non-convex set would be here the optimal solution in my relaxation would lie out here so this is a small optimality gap
+
+between these two numbers but in this system it's a much larger Gap and that's probably not surprising because these sets are sort of forming and turning around on each other and and there's a lot of empty space in these sets and if
+
+you now convexify them then this empty space will allow solutions that could be very far away from the true optimal solution um so this is based on this um there there's another set of um relaxations and this is Java's second
+
+order cone relaxation so this is derived for a a different system in polar form so I said there are there are three different ways at least three different ways for writing down the power flow equations so here's another way of
+
+writing down the power flow equations in terms of polar coordinates uh the vi magnitudes and the voltage angles Theta I so the phaser V is is expressed at as here as the voltage magnitude time e uh to the
+
+I Theta I that's my voltage phaser here want I start off with and um if you look at this um and if you're smart like this person then you realize that you can write this as a second order cone formulation
+
+if uh you you make the following substitution so introduce new variable cik which corresponds to products of VI VK with cosine and similar in si K which corresponds to these variables here um and so if you do that
+
+then you can you get a relaxation if if you look at this cik here now in my my uh in my voltage equations that will be replacing the top left term there that will be replaced by C ik time gik the second term would be replaced by
+
+minus s ik time b i so this is now a linear set of equations if I do this little trick um there's one non-convexity left that I didn't put there and I forgot um but we'll see it on the next page and the one
+
+convexity uh that's left is this voltage magnitude equation that I need to write down and and so when I write down this equation uh the exact formulation would have an equation here and then I can relax this if I relax this in this way
+
+we've seen this before this was Jeff linder's ice cream cone this is a second or rotated second order cone so this is a convex structure again um and it's a a relatively small it's a small cone it only involves uh these four variables so
+
+it's a four variable cone and that relaxes this non-convex equation here so I've done this reformulation now I have a linear equations on the on the sort of for the power flow equations and then this one set of cones that I have to
+
+write down okay so so this is quite nice um second order cones are easier to deal with than uh than semi-definite programs so you can solve these problems much more efficiently um but the relaxation is not as tight um so there's examples
+
+that show this and in the last two minutes or so I think I think I need to speed up a little bit I was going to show you about GIC something about GIC blocker placement so this is a project we did at argon National
+
+Laboratory together with Los Alamos National Lab and uh Lawrence Berkeley national appb uh so we're interested in what happens if there's a big solar storm that induces a magnetic current and then forces these
+
+power lines to overload and and this is a really challenging problem so first of all you need to combine AC and DC power flow equations so you model the traditional power grid with AC equations and then you model the induced current
+
+from the GIC from the geomagnetic induced current using a DC powerflow because it's it's fairly it it doesn't change much over over large spaces so you have the traditional challenges of non non-convexity there's a large scale
+
+um you need to introduce these Transformers which are nons smooth and and and so this is a very challenging optimization problem um you can do something interesting here you can look at different formulations so you can
+
+compare polar and rectangular formulations and look at different sets of relaxation are solving non-convex problems um if you solve relaxations you might not get the correct answer if you solve non-convex
+
+problem you might not get the correct answer so um and then this is uh we looked at this in on two networks uh that is um AI 21 that I showed earlier this small Network and then with 21 L and uh uiu 150 um which is a sort of toy Network
+
+that comes from University of Illinois obana champagne um there are the blocker locations so the the the question here is at which point in the network do I place my blockers and so I have binary variables that place these blockers
+
+these blockers are basic grounding stations or Transformers that take care of any geomagnetic induced currents but they're very expensive they're not cheap and so you don't want to have too many of them uh and then one of our posts
+
+coded this up in Julian and got results and it turns out that if you want to get Exact Solutions to the minlp models uh the solvers really need a long time and so we we timed out after one hour War clock time um there was
+
+another solver that we we got urtic Solutions but reached time limits as well and so we're now exploring um other Uris to solve this problem where we're not looking at solving uh we're taking advantage of the fact that we can solve
+
+the power flow equations often very fast but the optimization problem is much harder to solve and this is just to show what happens if you if you don't have if you don't install blockers then as you increase increase the magnitude of the
+
+electric fields which is measured in volts per kilometer from 5 to 20 uh there's a sort of cost involved with the load shedding so you're you're losing customers basically because lines uh you have to shut down lines on the other hand if you
+
+start installing blockers the more the larger the magnetic field is the more blockers you need but you don't have any load shedding um and the E field electric field that we looked at here uh is sort of similar to an event that that
+
+happened in 1989 that shut down the hydro Quebec um distribution system um but still very small systems because these geomagnetic induced currents they're not local to very small areas they're really Global across all of the
+
+United States for example all of the planet okay so I looked at two convex relaxations sh semi-definite relaxation and the trick there is look for bilinear terms form this Matrix outer product Matrix W which is X x transposed that
+
+expresses every bilinear term now as a part of your Matrix W and then you can write all the constraints in terms of w and you have a relaxation if you relax this equality to an inequality and Java second order cone
+
+relaxation is sort of a little bit more intricate on how to get it uh both relaxation have examples that show that they're not exact so this is not the panace here but but they help us at least to develop algorithms and and
+
+think about these problems in terms of global convergence and with that I think um I'll stop and see if there are questions if not we're going to switch Yeah rela Poss right so the question is if I if I have
+
+a non-convex problem that's really hard to solve how do I know that my relaxation is far away or close to the solution of the truth true Optimum and so I can do two things right if I if I can find local Solutions like I do over
+
+here and then I can compare this local solution to my Global solution and and this would indicate that there's a large gap um I might do some multi starts on the non-convex problem um I think it's really hard I I think if
+
+you if the non-convex problem is really hard then finding this Gap is not easy but you can also often refine your relaxation so you can for example if if I thought the solution was here and I solved my relaxation and the solution is
+
+out there then I would say well something is off my relaxation is clearly a long way away from my true solution so what I'm going to do then is I'm just going to say I'm just going to split this problem in two I'm just going
+
+to split it in half and I'm going to say well solution has to lie in one of those halves right either this guy is right or my relaxation is to to too far away and this guy is close to the solution that's the only two things
+
+that could happen and so I now solve two problems but now I can get a tighter relaxation so once I do this I might be able to get a relaxation that sort of over here is much tighter and out here or maybe still quite big and now I solve
+
+these two separate problems so I went from solving one problem to having two problems so I had one original problem now I have two smaller problems when I solve this problem I'm going to find that my relaxation and my true Solutions
+
+are quite close together and when I solve this problem I find that while I'm still far away from what I really have and so I know that the solution will not lie in this area here so and this is called branch and bound and so that's
+
+probably one approach on how to how to do this so we don't just solve the relaxation and hope that we get get a good answer but we need to work on the relaxation refine the relaxation and make it better and and that's that's a
+
+sort of General framework for solving non-convex optimization problems in very broad terms and we'll talk about this tomorrow we'll start talking about that [Applause]

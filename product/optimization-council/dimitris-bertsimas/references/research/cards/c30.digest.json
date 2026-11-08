@@ -1,0 +1,206 @@
+[
+ {
+  "id": "S307",
+  "year": "2025",
+  "title": "Decarbonizing OCP",
+  "read_level": "full",
+  "contribution": "With the OCP Group, a multi-period LP co-optimizing yearly solar-and-battery investment and hourly operations, robustified by a data-driven RO set imposed on aggregated constraints and a KL-divergence DRO layer over scenario weights (LP plus exponential cones); OCP uses it to size an investment of about 20 billion MAD (70% emission cut at 10 billion MAD and 95% at 20 billion, both profitable).",
+  "problem_entry": "AP+RO (DA for the data-driven set and ML scenario reduction, LO engine, CP for DRO): the partner's pledge to decarbonize production with solar and batteries (57% non-renewable in 2020) and the view of decarbonization as a luxury developing economies cannot afford (pp. 1-3); scope narrowed to the electricity supply (p. 2); a prosumer perspective, with the model designed together with the prosumer (p. 5). Read: arXiv v2 (2209.06341v2).",
+  "key_idea": "One LP over two time scales (yearly investment, hourly operations), made tractable by k-means typical days with Wasserstein month weights; RO against daily forecast error through a data-driven set on aggregated constraints, and DRO (KL over scenario weights) against climate drift, chosen by the amount of data per source (p. 8); a real-time LP for operations (pp. 8-23, 33-34).",
+  "assumptions": "5 nodes, 24 h, 10 scenarios, 12 months, 20 years, with stated rates (discount 0.96, degradations, 20% sales cap) (pp. 11, 13); one simulated year of hourly solar capacity factors (PVsyst 7.2) extended by climate forecasts with a worst-case 1.5% degradation (pp. 14-15); demand from OCP sales forecasts (p. 24); yearly investments, cyclic daily storage, monthly weights only, exact daily forecast in SAA (pp. 9, 13, 16); most values, the data and the code withheld (pp. 9, 11, 24).",
+  "proof_devices": [
+   "Multi-period SAA LP (3a)-(3g): salvage through discount differences, Kirchhoff's law with transmission losses, budget, daily sales cap, battery recursion (p. 12)",
+   "Scenario reduction: k-means centroids plus month weights from a type-1 Wasserstein transport LP (4) (pp. 15-16); the clustering guarantee is cited from Wang et al. 2022, not proved (p. 15)",
+   "Data-driven uncertainty set (6): per-hour bound, hour-to-hour smoothness and a CLT budget, each a fraction gamma of an empirical maximum or sigma (pp. 18-20)",
+   "Constraint aggregation over nodes, hours and years to avoid the constraint-wise worst case (pp. 20-21); Lemma 1 by LP duality gives a linear counterpart with counted size (pp. 21-22, 33)",
+   "The robust model's feasible set Z omits the per-hour balance (3c) and the sales cap (3d), keeping only their aggregated robust forms (pp. 22-23)",
+   "KL-divergence DRO over scenario weights reformulated with dual exponential cones (Lemma 2, 'essentially due to Kocuk', no proof given; added variables and cones counted) (p. 23)",
+   "Real-time LP with past decisions fixed and O(T(|N|+|A|)) variables, end-of-day storage equal to start (pp. 14, 33-34); NPV measured against no investment, salvage excluded (p. 34)"
+  ],
+  "experiments": "No solver, machine or solve times ('can thus be solved at scale', p. 22; Mosek named, p. 23). Tuning by month-wise 20/4/4 day splits over {0,1}^3 x {0, 0.001, 0.01, 0.1, 1.0}, repeated ten times; the final (0.5, 0.5, 0.5, 0.01) is off-grid and set after discussions with OCP (pp. 24, 35, 39). Operating-cost gain over SAA at delta = 0.001: 16.26% (validation), 16.51% (test), 16.92% (perturbed test); CO2 2.55-3.47% (pp. 37-38); 0.4 billion MAD saved (p. 39). But the RO rows equal the no-RO rows except at delta = 1.0 (pp. 37-38). Budget sweep 0-50 billion MAD against no investment: 70% cut and NPV 5 billion at 10 billion; 95% and NPV 2 billion at 20 billion; 97% and NPV -2.5 billion at 30 billion (p. 25). Scenario-count and 48/72-hour checks: negligible change (pp. 40-41). No pure-solar baseline (p. 29); data and code withheld (p. 24).",
+  "positioning": "Joins capacity expansion (screening curves suboptimal under uncertainty; stochastic-integer and decomposition models; regulators' decarbonization models, p. 5) and data-driven multistage optimization (stochastic optimization's 'three main drawbacks', p. 6; the RO critique conceded, DRO as the remedy, pp. 6-7); the prosumer view is the stated difference (p. 5); a hedged first use of RO and DRO together (p. 8); credits Roos-den Hertog and Kocuk (pp. 20, 23).",
+  "writing": "MSOM structured abstract with headline numbers (p. 1); 'twofold' contributions (p. 7); 'As a philosophical remark' paragraphs (pp. 8, 17), a 'to the Rescue' section title (p. 22), 'numerically striking' (p. 24); hedges 'at least sometimes' and 'arguably' (pp. 3, 5, 15, 28); the title against an electricity-only scope and 'partially decarbonizing' (pp. 2, 29); a footnote revising earlier returns downward (p. 25).",
+  "limits_future": "Stated: effects emerge over time (p. 7); one year of data (pp. 14-15); sets may need redesign elsewhere (p. 17); end effects (p. 34); electricity only (p. 2); 100% decarbonization unprofitable (p. 28). Future: wind, other sites, desalination, yearly re-runs (pp. 14, 26, 29). Unstated: no solve times; data and code withheld (p. 24); RO's own gain about zero in the tables (pp. 37-38); balance held only in aggregate in the robust plan (pp. 22-23); no pure-solar baseline (p. 29).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "The owner's decision and data, with a joint calibration loop with OCP engineers (run, examine together, refine until both sides are satisfied); decision metrics (operating cost, CO2, NPV) against no investment and against SAA; adoption stated with the caveat that its effects emerge over time.",
+    "pages": "pp. 7, 9, 24-25, 29, 34-39"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The owner's contemplated rule (pure solar) is not scored as a baseline; data and code are withheld; returns were revised downward between versions.",
+    "pages": "pp. 24-25, 29"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "The class is kept by design: the robust counterpart stays an LP of counted size (Lemma 1) and DRO adds counted exponential cones (Lemma 2); the per-constraint pitfall behind the skill's Method 1 correction is recognized and avoided by aggregation.",
+    "pages": "pp. 17, 20-23"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "The stop rule is not met: there are no measured solve times at the target scale, and the conic step is asserted tractable with Mosek; aggregation drops hourly balance from the robust planning model.",
+    "pages": "pp. 22-23"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "A price of decarbonization: the knob is the budget B; the curve of cost, emissions and NPV, with its bad cases (NPV peaks near 7.5 billion, -2.5 billion at 30 billion, 100% unprofitable), is handed to OCP; the robustness knobs are cross-validated (the skill's correction), then set off-grid with OCP; no solution-independent bound is proved.",
+    "pages": "pp. 25, 28, 34-39"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "A programme with one partner: an earlier applied OCP paper (Becker et al. 2022) and planned follow-ups on wind, other sites and desalination; a former student and a current student carry it.",
+    "pages": "pp. 2, 26, 29-30"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "robustness layer matched to the data behind each uncertainty source",
+    "evidence": "RO for daily solar forecast errors, where data are plentiful; DRO over scenario weights for thinly observed climate drift; chosen explicitly by the amount of data",
+    "pages": "p. 8"
+   },
+   {
+    "pattern": "uncertainty set read off exploratory data analysis",
+    "evidence": "Figures 2-3 motivate three set constraints (bounded, smooth, CLT), each sized as a fraction of an empirical maximum or sigma, with the fractions cross-validated",
+    "pages": "pp. 18-20, 35"
+   },
+   {
+    "pattern": "joint calibration loop with the owner's engineers",
+    "evidence": "parameters set by running the model iteratively with OCP's values, examining the results jointly and refining until both sides were satisfied",
+    "pages": "pp. 9, 24"
+   },
+   {
+    "pattern": "partial relaxation of a tractability simplification as a check",
+    "evidence": "48- and 72-hour scenario sequences test the no-cross-day-storage assumption; 3-50 scenarios test the reduction",
+    "pages": "pp. 13-14, 40-41"
+   }
+  ],
+  "transferable": [
+   "(D2) Choose the robustness device per uncertainty source by the data you have: RO where many observations shape a set (daily forecast errors), DRO over scenario weights where data are thin (climate drift) (p. 8).",
+   "(D3) Build the uncertainty set from an exploratory look at forecast errors: one constraint per observed regularity (bounded per hour, smooth hour to hour, CLT in aggregate), each sized as a fraction gamma of an empirical maximum or sigma; cross-validate gamma (pp. 18-20, 35).",
+   "(D4) When an uncertain parameter enters many constraints, aggregate them before robustifying so the adversary cannot set every entry to its worst value at once, then dualize the aggregated inner LP; say what the aggregation drops from the nominal feasible set (pp. 20-23, 33).",
+   "(D4) Reduce days to typical days by k-means, then fit month-specific scenario weights with a Wasserstein transport LP, so that one scenario set serves every month (pp. 10, 16).",
+   "(D4) Put a KL ambiguity set on scenario weights, reformulate it with exponential cones, and report the added variables and cones (p. 23).",
+   "(D5) Cross-validate robustness parameters like ML hyperparameters: split days within each month into training, validation and test sets, repeat ten times, and report the mean and sd of the improvement over SAA on validation, test and a perturbed test set (pp. 35-38).",
+   "(D5) Check a tractability simplification by relaxing it partially in an appendix: 48- and 72-hour scenario sequences for storage across days, 3-50 scenarios for the reduction (pp. 13-14, 40-41).",
+   "(D5) Sweep the owner's budget and report cost, emissions and NPV with the point where NPV turns down, then hand the choice back to the owner (pp. 25, 34)."
+  ],
+  "coauthors": "Ryan Cory-Wright (Imperial College Business School; IBM T. J. Watson Research Center), Vassilis Digalakis Jr (MIT Operations Research Center)",
+  "quotes": [
+   {
+    "text": "Our modeling choice of RO vs DRO follows from the amount of data we have.",
+    "page": 8
+   },
+   {
+    "text": "directly imposing robustness constraint-wise is equivalent to simultaneously setting the capacity factors",
+    "page": 20
+   }
+  ]
+ },
+ {
+  "id": "S317",
+  "year": "2025",
+  "title": "Slowly varying regression under sparsity",
+  "read_level": "full",
+  "contribution": "Sparse regressions that vary slowly and sparsely over a similarity graph, written as an MIO and reformulated exactly as a binary convex program through a new pseudo-inverse identity, then solved to optimality by structure-exploiting cutting planes with a polynomial-time heuristic warm start and bisection tuning; the code is released, and on real data the method matches convex sum-of-norms on R2 with much sparser models.",
+  "problem_entry": "ML+IO (CP device): varying-coefficient regression needs one model that is sparse and varies slowly across vertices (p. 2); the exact problem with local, global and support-change cardinality limits (eqs. 1-4) 'is generally considered infeasible beyond toy scales' (p. 3), and exact sparse methods were long thought unscalable (p. 7); the group's own 2020 reformulation looks fortuitous and is to be systematized (pp. 7-8). Read: arXiv v5 (2102.10773v5).",
+  "key_idea": "Write every coefficient as Z beta so that the inner minimizer is a pseudo-inverse, then replace (Z(M + lambda I)Z)^+ Z by (lambda I + ZM)^-1 Z, which is equal on binary points and convex in z (Prop. 1, Thm. 1, p. 11); outer approximation with closed-form cuts, a separable-bound LP-rounding heuristic and bisection tuning (pp. 13-20).",
+  "assumptions": "lambda_beta > 0 and M PSD (pp. 10-11); equal N per vertex, which forces subsampling (pp. 2, 45, 47); a given similarity graph (pp. 44-48); the tuning guarantee covers only the sparsity levels and is asymptotic, with i.i.d. rows and correct specification (pp. 18-19); synthetic data built from the model's own structure (ER graph, truncated-normal or binary coefficients, Toeplitz correlation, SNR xi) (pp. 40-42); five public real data sets with admitted arbitrary preprocessing (pp. 43-48).",
+  "proof_devices": [
+   "MIO (10)-(16) with support binaries entering through Z and no big-M (pp. 8-9)",
+   "Lemma 1: quadratic form with M built from Gram matrices and graph terms, M PSD (pp. 10, 32)",
+   "Lemma 2: inner minimizer from the first-order condition and the Moore-Penrose pseudo-inverse (pp. 10, 32)",
+   "Prop. 1: (Z(M + lambda I)Z)^+ Z = (lambda I + ZM)^-1 Z for binary z, via Lemma 7 (closed-form pseudo-inverse checked against the Moore-Penrose conditions) and Lemma 8 (binomial inverse theorem) (pp. 11, 32-33); the printed Lemma 7 coefficient lambda should be 1/lambda (my numerical check, not in the paper), harmless for Prop. 1",
+   "Theorem 1: convexity in z by a direct Hessian computation ending in a PSD form (pp. 11, 33-34); the natural alternative (lambda I + ZMZ)^-1 Z is nonconvex, shown in one dimension (pp. 11-12)",
+   "Lemma 3: closed-form cut gradient by the chain rule (pp. 14, 34)",
+   "Lemma 4: cost and gradient in O(T^3 KL^2 + T^2 KL^3 + T^2 KL D) via reordering, blockwise inversion and a block tri-diagonal recursion (pp. 14, 34-36)",
+   "Theorem 2: finite termination of outer approximation by Fletcher-Leyffer 1994 (pp. 14-15)",
+   "Lemma 5: a separable upper bound (average univariate fit; fusion bounded by a degree-weighted ridge) giving an integer LP (pp. 15-16, 36-37); Algorithm 2 solves its LP relaxation, rounds up and removes features; Prop. 2 gives polynomial time via Cohen-Lee-Song (pp. 16-17, 37)",
+   "Prop. 3: the validation cost becomes elbow-shaped as N, N_V -> infinity, so the bisection of Kenney et al. (Lemma 6) recovers the true sparsity levels (pp. 17-19, 38)"
+  ],
+  "experiments": "Julia 1.6, JuMP 0.21, Gurobi 9.5, Xeon E5-2690; a 900 s limit for all methods; methods over 1 h in preliminary runs excluded; code on GitHub (pp. 39-40). Baselines: static sparse cutting plane and sum-of-norms l1/l2 with or without lasso, tuned on a 5x5 lambda grid plus bisection; the sqrt(lambda) refit is given only to the paper's methods and the static baseline (pp. 20, 39-40). Synthetic, 260 data sets: rank 1.0 on test R2 in every setting, but the lasso variant and the static baseline rank ahead on MAE and DS (Table 1, p. 22); scaling to 10,000 variables (pp. 23-24). Real data, 5 sets x 10 splits: sum-of-norms has the best mean R2 on every data set (Table 9, p. 48), while svar models are far sparser (Table 10, p. 49). svar_cutplane takes 577-30,281 s including tuning, about 4-48x slower than sum_of_norms_l1 on four data sets; svar_hybrid is comparable (Table 11, p. 49). One time-out without proof (p. 49). Tests of the relaxation family and of LP integrality (pp. 49-51); table glitches (pp. 26, 44, 46-47).",
+  "positioning": "Traces slowly varying regression to Hastie-Tibshirani 1993 and his own 1999 paper (p. 5); fused lasso, sum-of-norms, total variation and splicing are the closest work, differing by exact sparsity and an l2 fusion term (p. 6); SVC models set apart (p. 6); the group's 2020 reformulation is praised, then called fortuitous, and the paper is placed between Bertsimas-Van Parys 2020 and Bertsimas et al. 2021 (pp. 7-8); credits Kenney et al., Fletcher-Leyffer and Duran-Grossmann (pp. 13, 15, 18).",
+  "writing": "Contributions organized by four standpoints (pp. 4-5); 'to the best of our knowledge' and 'by no means obvious', with a one-dimensional intuition section (pp. 4, 11-13); hedges 'under certain assumptions' and 'albeit in limited scenarios' (pp. 1, 5); the abstract claims outperformance in estimation accuracy, predictive power and time (p. 1), conceded in the body and the appendix (pp. 22, 48), and the conclusion settles on 'superior or competitive' (p. 28); small slips (pp. 5, 16, 18, 39).",
+  "limits_future": "Stated: the heuristic's LP is not integral (p. 16); tuning guarantees are limited (p. 5); better convex relaxations as future work (p. 13); lasso-type regularization later (pp. 21, 28); arbitrary preprocessing (pp. 44-45, 48). Unstated: real-data R2 is not best on any data set (p. 48); the exact variant takes up to 8.4 h and is not comparable in time (p. 49); integrality is tested only for T, D <= 10 (p. 51).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "A statistics-owned problem (varying-coefficient regression, fused lasso) is written exactly as an MIO and carried into a binary convex program; the device is chosen for convexity among binary-exact relaxations; problem structure cuts the cost of each cut; the boundary is partly printed. No dual reading.",
+    "pages": "pp. 2-11, 14, 16, 23-24, 49-50"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "The belief (exact sparse formulations unscalable; toy scales only) is stated and challenged, but the why-now is the group's own algorithmic advance (Bertsimas-Van Parys 2020), not a rebuilt solver x hardware figure.",
+    "pages": "pp. 3, 7"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "A heuristic warm start, then an exact cutting plane with gap, cut count and time reported; one stack, one machine and one 900 s limit for all methods; duels at validation-tuned complexity on synthetic and real data; code released; adopts four of the five critic-informed checks (low SNR, equal limits, timing including tuning, released code).",
+    "pages": "pp. 13-24, 39-43, 49"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "The warm start is the authors' own LP-rounding heuristic, not the incumbent; a tune-cheap, refit-exact hybrid; on real data the convex incumbent equals or beats R2 everywhere (the Workflow D checkpoint case) while the abstract claims outperformance; the sqrt(lambda) refit is not given to sum-of-norms.",
+    "pages": "pp. 1, 16-19, 22, 40, 48"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "A lineage step, S010 -> S061 -> S175 -> this paper, carried by a student, with code released; it returns to his 1999 time-varying estimation work.",
+    "pages": "pp. 1, 5, 7-8, 39"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "binary-exact convex extension",
+    "evidence": "among infinitely many functions agreeing on binary points, choose the convex (lambda I + ZM)^-1 Z, and show in one dimension that the natural (lambda I + ZMZ)^-1 Z is nonconvex",
+    "pages": "pp. 11-13"
+   },
+   {
+    "pattern": "generalize your own fortuitous trick",
+    "evidence": "the group's 2020 convex binary reformulation is called fortuitous and re-derived to find the identity that extends it to graph-coupled sparse quadratics",
+    "pages": "pp. 7-8, 11"
+   },
+   {
+    "pattern": "tune cheap, refit exact",
+    "evidence": "svar_hybrid tunes with the heuristic's validation cost and refits once with the exact cutting plane, about 70 s more on average",
+    "pages": "pp. 19, 22"
+   },
+   {
+    "pattern": "bisection on elbow-shaped validation curves for cardinality hyperparameters",
+    "evidence": "Algorithms 3-4 with the asymptotic elbow shape of Prop. 3; sparsity levels tuned one at a time, penalties on a grid",
+    "pages": "pp. 17-20"
+   }
+  ],
+  "transferable": [
+   "(D4) When an inner QP has the Hessian Z(M + lambda I)Z with binary diagonal Z, write its minimizer through the pseudo-inverse, then replace (Z(M + lambda I)Z)^+ Z by (lambda I + ZM)^-1 Z: the same values on binary points, convex in z (pp. 10-11, 32-34).",
+   "(D4) Before committing to a relaxation, plot the candidates for a single variable (T = D = 1) to see which is convex between 0 and 1 (Figure 2, p. 12).",
+   "(D4) For outer approximation, compute cuts in closed form by the chain rule on K(z) = lambda I + ZM, restrict inversion to the support block, and exploit the block tri-diagonal structure a chain or graph induces (Lemmas 3-4, pp. 14, 34-36).",
+   "(D4) For a warm start, bound a coupled loss by a separable one (average of univariate fits; fusion bounded by a degree-weighted ridge), solve the LP relaxation of the resulting integer LP, round up, and remove features by average loss until the solution is feasible (Lemma 5, Algorithm 2, pp. 15-17).",
+   "(D5) Tune cardinality levels one at a time by bisection on the validation cost, holding the others at their maxima, and grid-search only the continuous penalties (Algorithms 3-4, pp. 17-20).",
+   "(D5) Tune with the heuristic and run the exact method once to refit: about 70 s more on average than the heuristic alone, close to the exact method's accuracy (pp. 19, 22).",
+   "(D5) Publish per-dataset raw tables beside mean-rank tables; here the raw tables show what the ranks hide: R2 margins of 0.001-0.008 and run times of up to 8.4 h (Tables 1-2 vs 9-11, pp. 22, 25, 48-49)."
+  ],
+  "coauthors": "Vassilis Digalakis Jr (HEC Paris; MIT Operations Research Center), Michael Lingzhi Li (Harvard Business School), Omar Skali Lami (McKinsey & Company; took part in discussions of an early version)",
+  "quotes": [
+   {
+    "text": "However, the transformation presented above seems to be quite fortuitous.",
+    "page": 7
+   },
+   {
+    "text": "Here, sum_of_norms_l1 and sum_of_norms_l2 perform best",
+    "page": 48
+   }
+  ]
+ }
+]

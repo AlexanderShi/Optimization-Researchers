@@ -1,0 +1,271 @@
+[
+  {
+    "id": "S116",
+    "year": "2012",
+    "title": "Modeling mixed-integer constrained optimal control problems in AMPL",
+    "read_level": "full",
+    "contribution": "AMPL extensions (user functions diff, eval, integral and a suffix type) that let mixed-integer ODE/DAE optimal control problems be stated without encoding a discretization, coupled through TACO to MUSCOD-II/MS-MINTOC on NEOS.",
+    "problem_entry": "Dynamic-optimization environments are tied to fixed discretizations and solvers, while the MINLP community models static problems in AMPL; the paper bridges the two tool chains (abstract, p. 1; §1, p. 1).",
+    "key_idea": "Mark time, states, controls and objective types through existing AMPL hooks and let the solver apply and refine its own discretization; no change to AMPL itself (§2, pp. 2-3; §2.5, p. 3).",
+    "assumptions": "MIOCP class (1) with finite integer control sets, free end time, path and point constraints; index-1 DAEs with regularity left to the modeller (pp. 1-2).",
+    "proof_devices": [],
+    "experiments": "none; one heavy-duty truck MIOCP written in extended AMPL as a showcase, no solutions or timings (§4, pp. 4-5).",
+    "positioning": "Contrasts gPROMS, Modelica, JModelica, PROPT as convenience-oriented and tied to few solvers; lists the AMPL-connected NLP/MINLP solvers as the target audience (pp. 1-2).",
+    "writing": "Short IFAC format: problem class, syntax by example, benefits list, one application listing; benefits stated as readability and flexibility (pp. 3, 5).",
+    "limits_future": "Future: implicit DAEs, switched systems, nonsmooth constraints, multistage setups, collocation schemes to open more NEOS solvers (§5, p. 5).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "structure exposed to the solver through the modelling layer; extension via existing hooks without intrusive changes", "pages": "p. 1; p. 3"},
+      {"method": "Method 2", "relation": "evidence", "note": "home MINLP infrastructure (AMPL, NEOS, MINLP solvers) carried into mixed-integer optimal control", "pages": "p. 2"},
+      {"method": "Method 4", "relation": "evidence", "note": "models with best known solutions in the public mintoc.de wiki library with a call for contributions (weak)", "pages": "p. 5"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "separate the model from the discretization", "evidence": "state the infinite-dimensional MIOCP in the modelling language; the solver chooses and refines the discretization", "pages": "pp. 3, 5"}
+    ],
+    "transferable": [
+      "Extend a modelling language through its existing extension points (user functions as markers, suffixes as type tags) so the extension runs wherever the language runs (pp. 2-3).",
+      "Infer variable roles from where a variable appears (e.g. inside diff) instead of requiring declarations (pp. 2-3)."
+    ],
+    "coauthors": "Christian Kirches (first author), Hans Georg Bock",
+    "quotes": [
+      {"text": "These extensions are easily realized and do not require intrusive changes to the AMPL language standard or implementation itself.", "page": 1},
+      {"text": "Uncluttered by any discretization code, the resulting AMPL model is easy to read, maintain, and extend.", "page": 5}
+    ]
+  },
+  {
+    "id": "S076",
+    "year": "2013",
+    "title": "TACO: a toolkit for AMPL control optimization",
+    "read_level": "partial",
+    "contribution": "Open-source TACO toolkit that reads AMPL stub.nl files, infers and checks the structure of mixed-integer optimal control problems, and couples them to MUSCOD-II and MS-MINTOC (read as ANL preprint P1948-0911).",
+    "problem_entry": "AMPL is finite-dimensional; optimal control in AMPL forces an explicit discretization into the model, and other environments are tied to few discretizations and solvers (§1.3, p. 5; §2, p. 6).",
+    "key_idea": "Detect optimal-control roles from expression DAGs, verify consistency before the solver runs, and reuse AMPL sparse derivatives inside IVP sensitivity computation (pp. 13-17, 20-21).",
+    "assumptions": "MIOCP (1) with point least-squares terms; explicit ODEs; C2 functions enforced by rejecting nonsmooth operators; index-1 DAEs (pp. 4, 8, 15-16).",
+    "proof_devices": [
+      "n/a (no theorems); automatic structural consistency checks on expression DAGs with named-constraint error reports (§4.2, pp. 15-16)"
+    ],
+    "experiments": "Demonstration only: COPS fluid-flow BVP and Lotka-Volterra fishing MIOCP solved in AMPL (Figs. 5, 7, pp. 12-13); 18 models added to mintoc.de (Table 1, p. 14); no timings or comparisons.",
+    "positioning": "Positions against gPROMS, PROPT, Dymola, Modelica, JModelica (tied to few schemes) and against COPS-style hand-coded collocation in AMPL (pp. 5, 10).",
+    "writing": "Software-paper structure with explicit limitations section; abstract and §1.4 promise three examples while §3 delivers two (pp. 3, 6, 10).",
+    "limits_future": "Implicit DAEs blocked by the AMPL solver library; multistage problems hard in AMPL syntax; nonsmooth operators would open complementarity/vanishing-constrained control; future collocation schemes (pp. 22-24).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "passes ODE structure to the solver instead of a flat NLP; reuses modelling-system derivatives inside the integrator", "pages": "pp. 10, 20-21"},
+      {"method": "Method 4", "relation": "evidence", "note": "18 models contributed to a public library; COPS models re-expressed beside the original encoding", "pages": "pp. 10-14"},
+      {"method": "Method 6", "relation": "evidence", "note": "formulation checks (smoothness, structure) before any solver run, errors per named constraint (weak)", "pages": "pp. 15-16"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "separate the model from the discretization", "evidence": "model equations and discretization scheme separated; contrast with explicit encoding in AMPL", "pages": "p. 23"}
+    ],
+    "transferable": [
+      "Walk each expression DAG before calling the solver and reject what the method's assumptions exclude, naming the offending constraint (pp. 15-16).",
+      "Offer a verbose dump of the detected problem structure so users see how their model was interpreted (p. 16).",
+      "Show the new compact model beside the old hand-discretized one to make the gain visible (Figs. 3-4, pp. 10-11)."
+    ],
+    "coauthors": "Christian Kirches (first author)",
+    "quotes": [
+      {"text": "In addition, our extension allows us to pass more structural information to the solver, such as the nature of the differential equation, which is lost in the COPS model, which is just interpreted as a large NLP.", "page": 10},
+      {"text": "Contrary to prior approaches at modeling such problems in AMPL by explicitly encoding a discretization scheme for the dynamic parts of the model, our approach separates model equations and the discretization scheme.", "page": 23}
+    ]
+  },
+  {
+    "id": "S129",
+    "year": "2012",
+    "title": "Optimal design and dispatch of distributed generation systems",
+    "read_level": "partial",
+    "contribution": "ANL preprint of S037: a nonconvex MINLP for distributed-generation design and dispatch bounded by an MILP envelope relaxation and an MILP fix-and-linearize heuristic, compared with five AMPL MINLP solvers.",
+    "problem_entry": "Same as S037: realistic DG operation (variable efficiency, tank temperature) makes a large nonconvex MINLP that existing solvers cannot handle beyond a few days (pp. 3-5, 26).",
+    "key_idea": "Convex envelopes give an MILP lower bound, bound tightening adds 1.6% on average, and fixing efficiencies and temperature gives an MILP upper-bounding heuristic (pp. 19, 21).",
+    "assumptions": "Deterministic data; capital costs lowered below literature values because higher costs give the no-DG solution (p. 25).",
+    "proof_devices": [],
+    "experiments": "One hotel, 1 day to 1 year; MINOTAUR, BONMIN, Couenne, FilMINT, MINLP-B&B with no-DG warm start, 1% gap, 36,000 s; only MINOTAUR reaches 4 days; (U)+(H) gaps 8.3-12.1% (pp. 26-27).",
+    "positioning": "Same introduction as S037: simulation/EA methods lack guarantees, prior B&B models lack operating detail (p. 5).",
+    "writing": "Candid about instance choice in the data section; claims 'two critical advantages' over existing solvers (pp. 25, 28).",
+    "limits_future": "Future uncertainty in demand, output and prices; sensitivity analyses for policy (pp. 28-29).",
+    "method_links": [
+      {"method": "Method 5", "relation": "variant", "note": "stated warm-start/gap/time rule and nonconvex-gap caveat, but AMPL-only solver set partly on NEOS and instance costs chosen to show the technique", "pages": "pp. 25-27"},
+      {"method": "Method 6", "relation": "evidence", "note": "MILP relaxation and MILP restriction of a nonconvex MINLP (details in S037)", "pages": "p. 19"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "custom bounding pair for instances no solver can handle", "evidence": "problem-specific MILP relaxation for lower bounds plus fix-and-linearize MILP heuristic for upper bounds, reported gap", "pages": "pp. 19, 27"}
+    ],
+    "transferable": [
+      "State in the preprint why instance parameters were chosen, so a revision can replace the choice with a justified scenario (p. 25; S037 p. 23)."
+    ],
+    "coauthors": "Kristopher A. Pruitt (first author), Alexandra M. Newman, Robert J. Braun",
+    "quotes": [
+      {"text": "we find that higher capital costs result in the “no DG” solution for most instances, which limits the ability to demonstrate our bounding techniques.", "page": 25},
+      {"text": "In all instances, we provide the solvers the “no DG” solution as an initial feasible solution, set an optimality gap of 1%, and enforce a time limit of 36,000 seconds.", "page": 26}
+    ]
+  },
+  {
+    "id": "S073",
+    "year": "2013",
+    "title": "Fast response to infection spread and cyber attacks on large-scale networks",
+    "read_level": "full",
+    "contribution": "A multiscale (AMG-style coarsening, interpolation, localized exact refinement) heuristic for the nonconvex binary infection-response problem on networks with tens of thousands of nodes (read as arXiv v1).",
+    "problem_entry": "SIS-based optimal response is a nonconvex integer nonlinear program that BARON and Couenne cannot solve beyond a few hundred variables (pp. 2-3).",
+    "key_idea": "Coarsen by algebraic distance in order of infection level, solve the coarsest problem exactly with MINOTAUR, then interpolate and refine with small exact subproblems (pp. 3-5, 11).",
+    "assumptions": "Independent infection events; aggregated probabilities and thresholds as normalized sums; one nonzero per restriction row (pp. 2, 10-11).",
+    "proof_devices": [
+      "n/a; no bounds or guarantees, named as future work (p. 9)"
+    ],
+    "experiments": "200 small Erdos-Renyi graphs vs exact optima (about half optimal, rest 90-100%); HIV (25,090 nodes) and Gnutella vs iterated local search: up to 20% better, 100-200x faster; 100 diverse graphs (pp. 6-9).",
+    "positioning": "Places the method in the multiscale/AMG family (Brandt, Safro) and cites Leyffer's own prior response models [1], [17] (pp. 3, 7).",
+    "writing": "Practical framing ('more useful in practice than are optimal ones'); results as objective ratios against one heuristic (pp. 3, 7-9).",
+    "limits_future": "Future: theoretical upper and lower bounds; SIR model with PDE-based constraints (p. 9).",
+    "method_links": [
+      {"method": "Method 1", "relation": "variant", "note": "own MINLP solver used as an exact building block on 40- and 15-variable subproblems inside a heuristic", "pages": "p. 11"},
+      {"method": "Method 5", "relation": "variant", "note": "calibration against exact optima on small instances, but large-scale claims rest on one heuristic baseline without bounds", "pages": "pp. 6-9"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "calibrate a heuristic on small exactly-solvable instances before scaling", "evidence": "200 random small networks solved exactly; ratio plot before large-scale runs", "pages": "pp. 6-7"}
+    ],
+    "transferable": [
+      "Generate a few hundred small instances, solve them exactly, and plot heuristic/optimal ratios before reporting large-scale results (pp. 6-7).",
+      "Coarsen a graph optimization problem by aggregating variables and carrying intra-aggregate interactions as a new linear objective term (p. 5).",
+      "Refine a projected solution by solving many tiny exact subproblems with boundary values fixed, in a parallel colouring order (p. 5)."
+    ],
+    "coauthors": "Ilya Safro",
+    "quotes": [
+      {"text": "Such methods are often more useful in practice than are optimal ones that take a long time to converge even for small instances.", "page": 3},
+      {"text": "Theoretical work involves rigorous analysis in order to identify upper and lower bounds.", "page": 9}
+    ]
+  },
+  {
+    "id": "S079",
+    "year": "2013",
+    "title": "Regularizing bilevel nonlinear programs by lifting",
+    "read_level": "partial",
+    "contribution": "A componentwise lifting of lower-level constraints that restores MPCC-LICQ for MPCCs from bilevel NLPs (and general MPCCs), with exact-penalty KKT equivalence and fewer filterSQP iterations on MacMPEC.",
+    "problem_entry": "SQP theory for MPCCs needs MPCC-LICQ; a two-variable bilevel example shows lower-level LICQ+SSOC does not give it (pp. 2-3, 5).",
+    "key_idea": "Replace h(x,y) >= 0 by h(x,y) >= w and penalize w (l1 exact with w >= 0 or squared l2); the extra variables regularize degenerate Jacobian rows; standard SQP solver unchanged (pp. 5-6, 9, 16).",
+    "assumptions": "C2 functions; lower-level LICQ and SSOC; pi > ||nu*||_inf for the exact penalty; smooth exact version loses MPCC-LICQ where h_i = z_i = w_i = 0; MPCC-bilevel equivalence set aside (pp. 2-3, 10-11).",
+    "proof_devices": [
+      "Block active-constraint Jacobian (2.14)-(2.15) and Schur-complement rank argument for Theorem 2.1 (pp. 6-7)",
+      "Counterexample (2.6) with explicit Jacobian of rank 5 (p. 5)",
+      "KKT equivalence by comparing dual-feasibility systems with multiplier bound pi > ||nu*||_inf (Props. 2.1-2.2, Cor. 2.1, pp. 10-11)",
+      "Full-column-rank Jacobian for lifted general MPCCs (§3, pp. 12-13)"
+    ],
+    "experiments": "filterSQP in AMPL on MacMPEC, iterations and performance profiles: bilevel 273 -> 222 (l1)/205 (l2), general 1288 -> 871/1090; failures labelled; 6+14 problems solved only after lifting, 2 only before; pi tuned per problem; 47 vs 48 bilevel problems stated (pp. 13-15).",
+    "positioning": "Builds on Fletcher et al. SQP-for-MPCC theory and MacMPEC; contrasts relaxation approaches [2,3] (no MPCC-LICQ guarantee) and multiphase smoothing [24] (p. 3).",
+    "writing": "Opens with the expected property and an example refuting it; summary claims 'more stable method with a better convergence behavior' (pp. 2, 16).",
+    "limits_future": "Penalty parameter needs tuning; smooth exact variant loses the CQ at triply degenerate points; no future work beyond general MPCCs stated (pp. 11, 14, 19-20).",
+    "method_links": [
+      {"method": "Method 3", "relation": "evidence", "note": "smallest breaking example for an expected inheritance property, rank computed, remedy checked on the same example and run", "pages": "pp. 5, 8-9, 13"},
+      {"method": "Method 6", "relation": "evidence", "note": "repair the formulation, keep the standard SQP solver", "pages": "p. 16"},
+      {"method": "Method 2", "relation": "evidence", "note": "filter SQP / MPEC-as-NLP stance carried into bilevel programs", "pages": "p. 3"},
+      {"method": "Method 4", "relation": "evidence", "note": "whole MacMPEC set used, unchanged problems excluded by a stated rule", "pages": "pp. 13-14"},
+      {"method": "Method 5", "relation": "variant", "note": "same-solver iteration counts and failures in tables, but penalty parameters tuned per problem on the test set", "pages": "pp. 13-15"}
+    ],
+    "new_pattern_candidates": [],
+    "transferable": [
+      "To restore a constraint qualification, add one lifting variable per degenerate constraint and drive it to zero with an exact penalty; check rank on the block Jacobian (pp. 5-7, 9-11).",
+      "Prove lifted and original problems share KKT points by comparing dual-feasibility systems with a multiplier bound on the penalty (p. 10).",
+      "Plot constraint violation per iteration on a log scale for one instance to show linear vs superlinear convergence (Fig. 4.3, p. 15)."
+    ],
+    "coauthors": "Kathrin Hatz (first author), Johannes P. Schlöder, Hans Georg Bock",
+    "quotes": [
+      {"text": "One would expect the resulting mathematical program with complementarity constraints (MPCC), whose constraints are the first-order optimality conditions of the lower-level NLP, to satisfy an MPEC-LICQ. We provide an example which demonstrates that this is not the case.", "page": 2},
+      {"text": "Furthermore, the lifting proposed in this paper does not require a tailored solver, standard SQP-solver can be used after adapting the problem formulation.", "page": 16}
+    ]
+  },
+  {
+    "id": "S142",
+    "year": "2013",
+    "title": "A new perspective on convex relaxations of sparse SVM",
+    "read_level": "full",
+    "contribution": "Second-order-cone perspective relaxations (CQ-SSVM, CQ01-SSVM) of the MINLP sparse SVM, avoiding big-M, with an exactness result for the zero-one-loss MINLP and UCI experiments (read as ANL preprint P2049-0212).",
+    "problem_entry": "The MINLP sparse SVM's indicator constraint w_j^2 <= z_j u_j is nonconvex and makes relaxations violate constraint qualification; prior work used big-M or norm-inequality relaxations (pp. 3-4).",
+    "key_idea": "Rewrite the indicator constraint as a rotated second-order cone, relax z to [0,1] with a cardinality budget, and apply the same device to slacks for a zero-one loss (pp. 4-6).",
+    "assumptions": "Integer data bounded by U for the exactness result; large penalties c, d (p. 5).",
+    "proof_devices": [
+      "Prop. 1 by contradiction via a basic feasible solution, Cramer's rule and the Hadamard inequality (pp. 5-6)",
+      "Integrality of z at the relaxation optimum whenever ||w||_0 <= r (p. 6)",
+      "Perspective vs big-M geometry figure (Fig. 1, p. 7)"
+    ],
+    "experiments": "SDPT3 4.0; integrality plots on Ionosphere; 9 UCI sets with 5x5-fold CV, c by inner CV, own r = 2 by inspection, competitor r = 0.1 per its authors; CQ01-SSVM best average accuracy 86.10%; LP-SVM solver failures reported (pp. 7-10).",
+    "positioning": "Builds on Gunluk-Linderoth perspective reformulation and Guan-Gray-Leyffer MINLP SVM; contrasts Chan et al. QCQP/SDP, smooth approximations and LP-SVM (pp. 2-3).",
+    "writing": "Short proceedings style; empirical claims hedged ('appear to be more robust'); acknowledges extra cost of CQ01-SSVM (pp. 9-10).",
+    "limits_future": "CQ01-SSVM costlier than QP alternatives; future dynamic constraint generation with first-order conic methods, online settings, adversarial label noise (p. 10).",
+    "method_links": [
+      {"method": "Method 6", "relation": "evidence", "note": "names a CQ failure in the natural formulation and changes the formulation (perspective -> SOC) before algorithm work", "pages": "pp. 3-4"},
+      {"method": "Method 2", "relation": "evidence", "note": "MINLP perspective machinery carried into machine learning", "pages": "p. 2"},
+      {"method": "Method 5", "relation": "variant", "note": "competitor at recommended setting and CV for c, but own r set by inspection and SDP baseline dropped after one dataset", "pages": "pp. 7-8"}
+    ],
+    "new_pattern_candidates": [],
+    "transferable": [
+      "Turn a bilinear indicator constraint x^2 <= z*u with u, z >= 0 into a 3-dimensional rotated second-order cone for a big-M-free convex relaxation (p. 4).",
+      "Judge a relaxation by how often its indicators come out integral, plotting achieved support size against the cardinality budget (pp. 6-8)."
+    ],
+    "coauthors": "Noam Goldberg (first author), Todd Munson",
+    "quotes": [
+      {"text": "Further, even general nonlinear programming solvers have difficulty in computing local minima for continuous relaxations of (3) because the constraints (3c) violate constraint qualification.", "page": 4},
+      {"text": "In all cases CQ-SSVM produced significantly sparser classifiers than LP-SVM.", "page": 9}
+    ]
+  },
+  {
+    "id": "S037",
+    "year": "2014",
+    "title": "A mixed-integer nonlinear program for the optimal design and dispatch of distributed generation systems",
+    "read_level": "partial",
+    "contribution": "A detailed nonconvex MINLP for commercial-building DG design and dispatch, solved for horizons up to one year by an MILP envelope relaxation with bound tightening and an MILP fix-and-linearize heuristic, against six MINLP solvers.",
+    "problem_entry": "Prior DG studies either lack optimality guarantees (simulation, EAs) or drop operating detail (B&B models); the paper seeks global optimality with realistic operation (pp. 2-3).",
+    "key_idea": "Nonlinearities are bilinear/trilinear equalities: convex envelopes give MILP (U); optimization-based tightening of three responsive bounds; fixing efficiencies and tank temperature (values derived from U) gives MILP heuristic (H) (pp. 15-21).",
+    "assumptions": "Deterministic data; simulated EnergyPlus loads with justification; capital costs at about 70% of pre-commercial values as a forward-looking scenario (pp. 4, 21, 23).",
+    "proof_devices": [
+      "n/a (bounds valid by construction; bounding scheme inside nonlinear B&B proposed, not implemented, pp. 3, 29)"
+    ],
+    "experiments": "BARON, Couenne, MINOTAUR-BnB/QPD, Bonmin, MINLP-B&B on one machine, default gaps, 36,000 s: global solvers time out, MINLP-B&B best on small horizons, segfaults at 31 days; (U)+(H) gaps 7.7-11.9% up to one year, MINOTAUR better at 24 h (pp. 24-28).",
+    "positioning": "Credits McCormick, Adjiman-Floudas envelopes and BARON's multilinear facets as possibly tighter; claims tailored bounds are faster (p. 24).",
+    "writing": "Claims 'provably globally minimum' design in the introduction while reporting 7.7-11.9% gaps; revision adds rationale paragraphs for data and costs; one solver-capability sentence (p. 16) not fully updated to Table 6 (pp. 3, 16, 21-23, 28).",
+    "limits_future": "Lower bounding needs weeks for the one-year instance; one building and price structure; future sensitivity analysis and uncertainty (pp. 28-30).",
+    "method_links": [
+      {"method": "Method 6", "relation": "evidence", "note": "nonconvex MINLP bounded by an MILP relaxation and an MILP restriction (linear over nonconvex)", "pages": "pp. 16, 18-19"},
+      {"method": "Method 5", "relation": "evidence", "note": "revision widens baselines, unifies machine, keeps time-outs/segfaults, reports where own method loses, flags invalid competitor gaps", "pages": "pp. 24-28"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "custom bounding pair for instances no solver can handle", "evidence": "envelope MILP lower bound plus relaxation-seeded fix-and-linearize MILP upper bound, reported gap up to one-year horizon", "pages": "pp. 16-21, 27-28"},
+      {"pattern": "preprint-to-journal revision broadens baselines and justifies instance choices", "evidence": "S129 five AMPL solvers and admitted cost choice vs S037 six solvers incl. BARON on one machine and projected-cost rationale", "pages": "S129 pp. 25-26; S037 pp. 23-25"}
+    ],
+    "transferable": [
+      "Seed the upper-bounding restriction with values recovered from the relaxation's solution (pp. 19-21).",
+      "Run optimization-based bound tightening on all bounds of a small instance, keep only those that move, and tighten only those on large instances (pp. 17-18).",
+      "When a competitor's gap rests on a nonconvex relaxation, state in the table note that it is not a global bound (p. 27)."
+    ],
+    "coauthors": "Kristopher A. Pruitt (first author), Alexandra M. Newman, Robert J. Braun",
+    "quotes": [
+      {"text": "Our testing indicates few existing MINLP solvers are capable of finding solutions to one-day instances of (P), and none of those tested can provide solutions for time horizons greater than one week.", "page": 16},
+      {"text": "Therefore, our bounding techniques provide two critical advantages over existing MINLP solvers: the capacity to solve large instances of (P) and an indication of the proximity of those solutions to global optimality.", "page": 28}
+    ]
+  },
+  {
+    "id": "S059",
+    "year": "2014",
+    "title": "Non-negative matrix analysis for effective feature extraction in X-ray spectromicroscopy",
+    "read_level": "full",
+    "contribution": "Regularized non-negative matrix approximation (sparseness plus cluster-similarity) for X-ray spectromicroscopy that avoids the negative thickness maps of cluster analysis, shown on human sperm data (Leyffer 6th of 8 authors).",
+    "problem_entry": "Physics requires nonnegative spectra and thickness maps; PCA/SVD and cluster analysis can produce negative thicknesses, shown with a constructed two-material example (pp. 2-5).",
+    "key_idea": "Lee-Seung multiplicative updates with an l1 sparseness term on t and a penalty pulling spectra toward cluster spectra, combined in one cost function; penalties instead of constraints for convergence speed (pp. 7-10).",
+    "assumptions": "Lambert-Beer linearity; no spatial correlation between pixels; number of components chosen by hand (pp. 2, 11-12).",
+    "proof_devices": [
+      "n/a (no convergence or uniqueness analysis; scaling non-uniqueness noted, p. 7)"
+    ],
+    "experiments": "One sperm dataset (133 energies) and a simulated two-material specimen; qualitative maps and spectra, regularization weights given; 10^4 iterations, about 10 min on a laptop (pp. 5, 7-13).",
+    "positioning": "Contrasts cluster analysis (own group's earlier method), PCA/SVD and standards-based inversion (Zhang et al.); cites Paatero-Tapper and Lee-Seung (pp. 3, 6-7).",
+    "writing": "Application-journal style; physics-first motivation; results qualitative ('nicely show') (abstract, p. 1; pp. 11-12).",
+    "limits_future": "Preliminary single-specimen study; choice of number of components left to future work; code in MANTiS (pp. 1, 12-13).",
+    "method_links": [
+      {"method": "Method 2", "relation": "evidence", "note": "optimization entering a laboratory-facility application through Argonne collaborators; Leyffer's own contribution not stated (weak)", "pages": "p. 1"},
+      {"method": "Method 6", "relation": "evidence", "note": "formulation fixed by physics (nonnegativity); constraint-based variant dropped for penalties because of slow convergence (weak)", "pages": "pp. 3, 7"}
+    ],
+    "new_pattern_candidates": [],
+    "transferable": [
+      "Show why a standard analysis fails with a constructed two-component example whose answer is known, before applying the new method to real data (pp. 3-5).",
+      "Use a cheap baseline's output (cluster spectra) both as the starting point and as a similarity regularizer for the expensive method (pp. 8-10)."
+    ],
+    "coauthors": "Rachel Mak (first author), Mirna Lerotic, Holger Fleckenstein, Stefan Vogt, Stefan M. Wild, Yefim Sheynkin, Chris Jacobsen (corresponding)",
+    "quotes": [
+      {"text": "Minimizing the cost function to make the NNMA factorization of mt as close as possible to the optical density data D is necessary but not sufficient for achieving a clear, easy-to-interpret analysis of X-ray spectromicroscopy data.", "page": 7},
+      {"text": "This result is not surprising given that NNMA has no expectation of what the reconstructions should look like as long as the cost function is minimized.", "page": 8}
+    ]
+  }
+]

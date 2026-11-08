@@ -1,0 +1,144 @@
+[
+ {
+  "id": "S132",
+  "year": "2024",
+  "title": "Universal neurons in gpt2 language models",
+  "read_level": "full",
+  "contribution": "A student-led empirical study, on which Bertsimas is a co-senior author who 'supported the project and edited the paper', finding that only 1-5% of GPT2 neurons are universal across five random seeds and that these neurons are mostly interpretable, fall into a few families and include prediction, suppression, entropy and attention-deactivation neurons.",
+  "problem_entry": "ML (mechanistic interpretability; outside the council's optimization scope, no optimization model): are neural mechanisms universal across models (abstract, p. 1)? Motivated by LLMs deployed 'in high-stakes settings' and by Olah et al.'s universality hypothesis read as a discovery strategy and a triage rule for the field (p. 1); five seeds of one architecture as the smallest variation, to bound universality under larger changes (pp. 2, 4).",
+  "key_idea": "Universality as an unsupervised filter: excess correlation = mean over seeds of the max activation correlation minus the same max against a random Gaussian rotation of the layer (eqs. 2-3, p. 4); study neurons with excess correlation > 0.5 (p. 5), label families with several hundred automated variance-reduction tests (p. 6), and read functional roles from weights (prediction/suppression/partition, entropy via LayerNorm, attention deactivation via BOS; pp. 7-10).",
+  "assumptions": "GPT2-small and GPT2-medium replications, five seeds each, plus Pythia-160m and Pythia 410M-6.9B (pp. 4-5, 8, 18); 100M Pile test tokens at context 512 without padding, BOS and newline tokens (p. 18); weights preprocessed so cosines have mean 0 (p. 18); a seed change taken as 'the smallest change' (p. 4); the 0.5 threshold admittedly unprincipled (p. 5); labels from vocabulary, spaCy, Pile subsets and an SVD topic model, leaving many neurons uncategorized (pp. 6-7).",
+  "proof_devices": [
+   "n/a for proofs, reformulations or bounds (empirical work); random-rotation baseline (a random Gaussian matrix applied to a layer's activations) to test whether the neuron basis is privileged (p. 4)",
+   "Excess correlation: mean over models of the max correlation minus the max baseline correlation (eq. 3, p. 4)",
+   "Variance-reduction score of a binary explanation, 1 - ((1-beta) var(v|y=0) + beta var(v|y=1)) / var(v), over several hundred automated tests (eq. 4, p. 6)",
+   "Moment signature of the vocabulary-effect vector W_U w_out: high kurtosis with positive skew = prediction, negative skew = suppression, high variance = partition (pp. 7-8)",
+   "Causal intervention fixing one neuron's activation, against 20 random neurons from the last two layers outside the top norm decile and bottom logit-variance decile (p. 9)",
+   "Heuristic score h_n = W_out^T W_Q^T k_BOS checked by zero path ablation (p. 10)",
+   "Streaming all-pairs correlation from running sums instead of storing 36 PB of activations (p. 18)"
+  ],
+  "experiments": "1,253 of 98,304 GPT2-medium-a neurons with excess correlation > 0.5; shares 1.23% (GPT2-medium), 1.26% (Pythia-160M), 4.16% (GPT2-small, unexplained outlier) (pp. 5, 11-12); families incl. alphabet neurons for 18 of 26 letters (p. 6); prediction/suppression depth pattern consistent across seeds and repeated on Pythia 410M-6.9B (p. 8); entropy/anti-entropy pair with cosine -0.886 (p. 9); baselines: random rotation, random neurons, random directions (pp. 4, 9, 10); unexplained results in 'Additional Mysteries' and an entropy-neuron counter-case printed (pp. 10-12); code and data released (p. 18). No solver, benchmark or decision metric.",
+  "positioning": "Builds on Olah et al. 2020b's universality hypothesis and the circuits programme (p. 1); representational-similarity work has 'yielded mixed conclusions' (p. 3); follows Voita et al. 2023 for position neurons (pp. 6-7); refines Geva et al. 2022 from promoting to promoting and suppressing (p. 8); claims the first documented uncertainty mechanism in language models (p. 10); cites the group's 2023 sparse-probing preprint (p. 15); no optimization or OR work cited (pp. 13-17).",
+  "writing": "Abstract: question, method with numbers, families, three functional roles (p. 1); Figure 1 as a visual abstract (p. 2); hypothesis-first, heavily hedged prose ('We intuit', p. 8; 'speculations', p. 5) in an informal register (p. 6); a separate 'Additional Mysteries' section (p. 11); concrete limitations and future work (pp. 12-13); a role-by-initials author contribution statement (p. 13).",
+  "limits_future": "Empirical-science contribution with released analysis code (pp. 12, 18). Limits stated specifically: small models (hundreds of millions of parameters), seed-only universality within one family, tokenization blocks cross-family study, all-pairs correlation cost, manual or algorithmic supervision, neuron basis ignores most computation (pp. 12-13). Future: overcomplete dictionary basis, adjacent-layer correlations for larger models, LLM-generated explanations, training dynamics and circuits (p. 13).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "A student-carried line with five other MIT authors (p. 1), continuing the group's 2023 preprint (p. 15), fits programme steps 2-3; but the hands-on method partner is a co-senior author from outside optimization ('NN gave frequent and detailed feedback on experiment design and analysis', p. 13), unlike the close-network co-advisers of step 3 [inferred], and his own part is stated as support and editing (p. 13); none of his methods appears: a programme he sponsors rather than shapes. Not counted: Heuristic 8 evidence (second adviser carries method feedback, p. 13); Taste mark 5 consistent (high-stakes interpretability, p. 1); Methods 1-5 not engaged, not counter-evidence given his stated role.",
+    "pages": "pp. 1, 13, 15"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "sponsor-and-edit senior authorship on student-led lines outside optimization",
+    "evidence": "Two senior authors marked (p. 1); 'WG led the project, conducted most of the analysis, and wrote most of the paper'; NN gave feedback on experiment design and analysis; 'DB supported the project and edited the paper' (p. 13); no optimization content anywhere (pp. 1-18).",
+    "pages": "pp. 1, 13"
+   }
+  ],
+  "transferable": [
+   "Test whether coordinates carry meaning with a random-rotation null: recompute the statistic after multiplying the layer by a random Gaussian matrix and report only the excess over that baseline (eqs. 2-3, p. 4).",
+   "Compute all pairwise correlations over 10^8 samples from running sums (means, sums of squares, cross-products) instead of storing the data (p. 18).",
+   "Auto-label units with a variance-reduction score for each binary candidate explanation, over hundreds of programmatic labels (eq. 4, p. 6).",
+   "Classify effect vectors by moments: kurtosis for concentration, sign of skew for promote vs suppress, variance for partition (pp. 7-8).",
+   "Intervene on a selected unit against a matched random control set that excludes the extremes of the selection criteria (p. 9), and repeat on a second model family to rule out an architectural artifact (p. 8).",
+   "Report unexplained observations in a section of their own and close with a role-by-initials contribution statement (pp. 11, 13)."
+  ],
+  "coauthors": "Wes Gurnee (MIT, lead), Theo Horsley (Cambridge), Zifan Carl Guo, Tara Rezaei Kheirkhah, Qinyi Sun, Will Hathaway (MIT), Neel Nanda (co-senior author)",
+  "quotes": [
+   {
+    "text": "Taken seriously, these hypotheses suggest a strategy for discovering important features and circuits: look for that which is universal.",
+    "page": 1
+   },
+   {
+    "text": "DB supported the project and edited the paper.",
+    "page": 13
+   }
+  ]
+ },
+ {
+  "id": "S330",
+  "year": "2024",
+  "title": "Robust and adaptive optimization under a large language model lens",
+  "read_level": "full",
+  "contribution": "A prompting demonstration, with his PhD student Margaritis, that ChatGPT 3.5 given his book's reformulation rules as step-wise context prompts can formulate simple LO problems, add user-specified uncertainty, derive robust and linear-decision-rule adaptive counterparts and write JuMP/Gurobi code, shown by curated transcripts with failure examples and no quantitative evaluation.",
+  "problem_entry": "RO+ML: an adoption gap, not a tractability gap: optimization needs modelling experts while ML packages need 'just a few lines of code' (pp. 1-2); RO and ARO need still more expertise (pp. 2-3); ChatGPT asserted to perform 'very poorly out-of-the-box' (p. 4, not measured); can prompting automate formulate, robustify, counterpart and code (abstract, p. 1; pp. 3-4)?",
+  "key_idea": "A four-step chain of thought (nominal LO, uncertain parameters, robust counterpart, Julia/JuMP/Gurobi code) with context prompts only for steps 2-4 that carry the book's rules: robustification template, closed-form or support-function counterparts with intersection and Minkowski rules, l1/linf linearization and SOC for l2, ARO with a linear decision rule (pp. 8-11, 21-23); targets the theorem-application step that NL4Opt-type work does not (pp. 3-4).",
+  "assumptions": "LO with (c, A, b) in a user-specified set, reduced to row-wise uncertainty in a_i (pp. 5-6); p-norm, polyhedral, intersection, Minkowski and entropy-type sets (pp. 7, 10); ARO with fixed recourse, constant RHS and an LDR, admitted as an approximation 'necessary to make the problem tractable' (p. 20); small toy instances with r = 0.1 in the first code (pp. 11-30, 13); ChatGPT 3.5 (p. 4); number of runs, sampling settings and transcript selection not stated, responses cut (p. 11).",
+  "proof_devices": [
+   "No new theorem, bound or algorithm; devices of Bertsimas and den Hertog (2022) restated as a teaching sequence (pp. 5-7, 20-21)",
+   "Epigraph moves objective uncertainty into the constraints; row-wise projection U_i and absorption of an uncertain b (eq. 3, pp. 5-6)",
+   "Support-function robust counterpart a^T x + delta*(P^T x | Z) <= b (eqs. 7-9, pp. 6-7)",
+   "Dual-norm counterparts for p-norm balls and LP duality for polyhedral sets (eqs. 11-13, p. 7)",
+   "Intersection of sets handled by splitting P^T x into a sum of w^i (eqs. 14-15, p. 7)",
+   "Linear decision rule y(z) = u + V^T z turns a fixed-recourse ARO constraint into a static robust one (eqs. 17-20, pp. 20-21)",
+   "Linearization of l1 and linf terms and an SOC for l2 as the solver-facing step (Prompt 2.4, p. 11)"
+  ],
+  "experiments": "Curated transcripts judged by author inspection: RO examples (pp. 11-19), ARO examples (pp. 23-27), failure cases: run-to-run inconsistency, a = [-99, 1] instead of [-99, -1], intersection treated as a Minkowski sum (pp. 28-31); no trial counts, success rates, test set, baseline or solver output. [my reading] RO Example 1's printed counterpart swaps the 2-norm and 1-norm between the two constraints (pp. 9, 11-14) yet is presented as correct; [my computation] the diet code has no radius r and is infeasible as printed (SciPy HiGHS: min cost 110 vs budget 50) though the text says it 'solves the problem with example data' (pp. 17-19).",
+  "positioning": "Related work: NL4Opt (Ramamonjison et al. 2023), a BERT/BART pipeline (Ramamonjison et al. 2022), a position paper (Tsouros et al. 2023) (p. 3); claims to be the first approach for RO/ARO (p. 4); RO background from his own book with den Hertog and the SIAM Review survey (pp. 2, 5-7, 20); no RO modelling software or other non-LLM route to counterparts cited (pp. 32-33).",
+  "writing": "Abstract: capabilities (i)-(iv), 'little to no errors', then 'some instances of erroneous execution' (p. 1); 'two-fold' contribution (p. 4); tutorial 'Let's' voice (pp. 6-7, 20); commentary lists challenges overcome (pp. 14, 19, 24); failures confined to Limitations (pp. 27-31); results 'surprising' and the ML-packages analogy close the paper (pp. 31-32); title reuses the under-a-lens programme brand (p. 1); typos and notation slips mark an early draft (pp. 1-3, 7, 20).",
+  "limits_future": "Demonstration-level contribution (p. 4). Limits stated with examples: inconsistency across runs, algebraic manipulation, choosing and applying theorems (pp. 28-31), attributed to 'inherent weaknesses of Large Language Models' (p. 31). Future: LLMs as a learning resource and formulation aid for non-experts, raising the field's visibility (pp. 31-32); no benchmark, tool or experiment proposed. [my reading] 'little to no errors' (p. 1) rests on showcased transcripts that contain unremarked problems (pp. 13-19).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "The prompts teach Method 1's class-keeping toolkit (dual norms, LP duality for polyhedra, linearized l1/linf, a cone for l2; a linear decision rule keeping ARO a static robust problem, approximation admitted, p. 20) so that the counterpart 'can be solved by traditional optimizers efficiently' (p. 3); evidence of the toolkit as he teaches it, not of new formulation work.",
+    "pages": "pp. 3-7, 9-11, 20-23"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "The skill cites this paper for step 6 (return when a tool changes): the return holds (ChatGPT 3.5 with in-context learning, pp. 3-4), but the reopened belief concerns accessibility, not intractability (pp. 1-3), nothing is conceded as once right, and the why-now is unquantified: out-of-the-box failure asserted, not measured (p. 4); no success rate for the prompted version (pp. 11-31).",
+    "pages": "pp. 1-4, 11-31"
+   },
+   {
+    "method": "Method 4",
+    "relation": "contradiction",
+    "note": "Outside the method's IO/ML home: no duel against any incumbent (out-of-the-box, human or software), no certificate that a counterpart is correct, no solver status for generated code; the headline 'little to no errors' (p. 1) rests on author inspection, which did not flag a swapped-norm counterpart (pp. 9, 11-14), and the text says the diet code 'solves the problem with example data' (p. 19) for an instance infeasible as printed (my computation, pp. 17-19).",
+    "pages": "pp. 1, 4, 11-19"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Stated purpose is teaching and adoption: a learning resource and formulation aid for non-experts, widening the field as ML packages did (pp. 31-32); the book's rules become the prompts (book to tool, pp. 5-7, 20); the co-author is his PhD student (ORC, p. 1). Supports the skill's inference that recent research follows his education role. Not counted: Heuristic 9 evidence (brand in the title, p. 1); Tension T6 headline vs caveat (pp. 1, 13-19, 27-31); Methods 3 and 5 not engaged (r fixed at 0.1 or absent, no price curve; no owner or decision metric).",
+    "pages": "pp. 1, 5-7, 20, 31-32"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "textbook as in-context curriculum",
+    "evidence": "Every rule in Prompts 2.1-2.6 restates Bertsimas and den Hertog (2022): robustification template, closed-form and support-function counterparts, combination rules, linearization, LDR counterpart; the LLM is tested on the steps an expert would perform (pp. 5-11, 20-23).",
+    "pages": "pp. 5-11, 20-23"
+   },
+   {
+    "pattern": "accessibility as the impact case",
+    "evidence": "Optimization is less popular than ML because it needs modelling experts while ML packages need a few lines of code (pp. 1-2); the aim is LLMs as a learning resource and formulation aid for non-experts that make the field more popular (pp. 31-32).",
+    "pages": "pp. 1-2, 31-32"
+   },
+   {
+    "pattern": "demonstration by curated transcripts",
+    "evidence": "Success transcripts followed by commentary on challenges overcome (pp. 14, 19, 24), failures in a separate Limitations section (pp. 27-31), responses cut (p. 11), no counts, rates or baseline (pp. 11-31).",
+    "pages": "pp. 11-31"
+   }
+  ],
+  "transferable": [
+   "Split an expert reformulation into stages (nominal model, uncertainty, counterpart, code) and give the LLM rule prompts only for the stages it cannot already do (p. 8).",
+   "Prepare two tiers of rule prompts, closed forms per set and a general support-function calculus with combination rules, and test whether the model can use the general one (pp. 9-10, 19).",
+   "Probe extrapolation by asking for a construct the prompts never describe (a quadratic decision rule after only linear ones, p. 24), and probe robustness by merging two steps into one prompt (p. 19).",
+   "Organize failures by type with one minimal reproducible transcript each: run-to-run inconsistency, algebraic rearrangement, wrong theorem (pp. 28-31).",
+   "Teach robust counterparts in this order: epigraph, row-wise projection, support function, closed forms per set, combination rules, then linearization and cones for the solver (pp. 5-7, 11).",
+   "[critic-informed, from this card's checks; not the paper's practice] Check every generated counterpart mechanically against a reference counterpart and run every generated program, reporting solver status; here inspection let a swapped norm and an infeasible instance through (pp. 13-19)."
+  ],
+  "coauthors": "Georgios Margaritis (Operations Research Center, MIT; his PhD student)",
+  "quotes": [
+   {
+    "text": "For simple Optimization Problems, we show that ChatGPT is able to perform these steps with little to no errors.",
+    "page": 1
+   },
+   {
+    "text": "LLMs that have been adapted to such specialized Optimization fields can (i) act as a helpful learning resource for non-experts",
+    "page": 31
+   }
+  ]
+ }
+]

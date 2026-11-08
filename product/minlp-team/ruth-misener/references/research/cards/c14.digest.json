@@ -1,0 +1,127 @@
+[
+ {
+  "id": "S081",
+  "year": "2025",
+  "title": "BARK: A fully Bayesian tree kernel for black-box optimization",
+  "read_level": "full",
+  "contribution": "Fully Bayesian tree-kernel GP for BO that samples forest structures by MCMC with BART-style priors while marginalising leaf values, and optimises the integrated UCB globally as a mixed-integer program over the tree encodings (read: arXiv v2).",
+  "problem_entry": "Tree surrogates lack uncertainty for BO; prior tree kernels (incl. the group's LeafGP) use a two-step fit, 'not principled and hence potentially sub-optimal', or a single MAP tree that overfits (pp. 1, 4).",
+  "key_idea": "BART's implicit GP: marginalise leaf values so each MCMC sample of tree structure is a GP; remove BART's k parameter, sample splits uniformly over the domain region reaching a node, and optimise the sample-averaged UCB as a MIP with an SOC variance constraint (pp. 3-6, 28).",
+  "assumptions": "Gaussian noise with inverse-gamma prior; m = 50 trees, depth prior (0.95, 2), sigma0^2 = 1 on standardised outputs; discontinuous non-stationary prior violates regret-bound assumptions; MIP solved to a 10% gap in 100 s (pp. 4-6, 16, 26-27).",
+  "proof_devices": [
+   "low-rank Woodbury and matrix-determinant-lemma updates per tree proposal, O(N^2 L_t) (p. 5)",
+   "Metropolis-Hastings ratio: split-rule probabilities cancel, acceptance independent of split distribution (p. 22)",
+   "softplus-transformed noise random walk with Jacobian correction (pp. 22-23)",
+   "integrated UCB convex in mu and sigma; variance equality relaxed to SOC inequality (pp. 6, 28)",
+   "reported failed regret-bound routes (Srinivas-type, bandit, combinatorial semi-bandit) (pp. 23-24)",
+   "Laplace-kernel limit theorem under Poisson depth, then 'chopping process' derivation showing the approximation fails for the true depth prior (pp. 24-26)"
+  ],
+  "experiments": "UCI regression vs BART (Table 1 p. 8); 4 mixed synthetic + 4 applied BO benchmarks, 20 runs median/IQR, 100 iterations, baselines BART (wall-clock-matched grid), GP-RBF, LeafGP, SMAC, Entmoot, BARKPrior ablation; MAX finite-candidate materials task; failure case DiscreteRosenbrock; wall-time and sensitivity studies (pp. 7-9, 16-23).",
+  "positioning": "Corrects the group's own LeafGP and Entmoot, uses Misic 2020 / Thebelt 2022a MIP encodings, builds on BART (Chipman 2010) and Linero 2017; 14-method comparison table (pp. 2, 6, 15).",
+  "writing": "Summary figure then three bulleted contributions and a roadmap (p. 2); method explained term by term as differences from BART (pp. 4-5); named failure case and a 'most significant limitation' subsection in the main text (pp. 7, 9).",
+  "limits_future": "Wall time ~50 s fit + up to 100 s acquisition (p. 9); O(N^3) training, 951.91 s per 1000 samples at n = 400 (p. 19); no regret bound (pp. 23-26); recommend other methods when evaluations are cheap (pp. 9, 20).",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "Tree-kernel surrogate encoded as binary constraints; integrated UCB optimised globally as a MIP (step 8); BASF co-authors and funding.", "pages": "pp. 1, 6, 9, 26-28"},
+   {"method": "Method 4", "relation": "evidence", "note": "Re-grades the group's 2022 LeafGP as not principled; BARKPrior and MAX benchmark separate optimiser gain from inference gain.", "pages": "pp. 1, 8"},
+   {"method": "Method 5", "relation": "variant", "note": "BO-community benchmarking: 20 seeds median/IQR, baseline budget matched to wall clock, losses and failure case reported; no answer re-check and MIP stopped at 10% gap.", "pages": "pp. 7-9, 17, 26"},
+   {"method": "Method 2", "relation": "variant", "note": "Only the parameter-hygiene steps: BART's k removed, defaults shown largely insensitive by an (alpha, beta) grid, 16-sample setting labelled a compromise; no two-extreme family.", "pages": "pp. 5, 20"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "publish the failed proof route", "evidence": "Appendix I records the regret-bound arguments tried (Srinivas-type, bandit, semi-bandit) and a derivation showing the Laplace-kernel approximation fails for the BART/BARK depth prior.", "pages": "pp. 23-26"},
+   {"pattern": "retrospective pool-based BO on an existing experimental dataset", "evidence": "MAX-phase benchmark over 403 known compounds used as a finite candidate set, ablating acquisition optimisation.", "pages": "pp. 8-9"}
+  ],
+  "transferable": [
+   "Marginalise leaf values analytically so each MCMC sample of a tree ensemble is a GP usable by standard acquisition functions (pp. 3, 5).",
+   "Low-rank Woodbury and determinant-lemma updates for per-tree MCMC proposals in a forest kernel (p. 5).",
+   "Optimise an integrated UCB over tree kernels as one MIP with the variance relaxed to an SOC inequality (p. 28).",
+   "Match a non-optimisable baseline's grid size to your method's wall-clock time and state it (p. 17).",
+   "Add a prior-only ablation of your own method to separate optimiser gain from inference gain (p. 8).",
+   "State the evaluation-cost regime (minutes, money) in which the method pays off beside the timing plot (p. 9)."
+  ],
+  "coauthors": "Toby Boyne, Jose Pablo Folch, Robert Matthew Lee (BASF), Behrang Shafei (BASF); Misener last author",
+  "quotes": [
+   {"text": "While this heuristic gives good results in a variety of benchmarks, it is not principled and hence potentially sub-optimal.", "page": 1},
+   {"text": "We therefore recommend BARK for BO settings where the objective is expensive to evaluate, taking at least several minutes, or having a large associated financial cost.", "page": 9}
+  ]
+ },
+ {
+  "id": "S082",
+  "year": "2025",
+  "title": "Transfer learning Bayesian optimization for competitor DNA molecule design for use in diagnostic assays",
+  "read_level": "full",
+  "contribution": "Transfer-learning BO workflow for designing many similar competitor DNA molecules, showing on real PCR data that a latent-variable multi-output GP surrogate predicts best and needs fewer experiments than no-transfer and linear-transfer GPs (read: arXiv v2).",
+  "problem_entry": "Many similar sequences, each needing expensive lab runs; optimising each from scratch discards information from previous tasks; concrete case: competitor DNA for a competitive-PCR diagnostic with a target rate and a drift threshold (p. 2).",
+  "key_idea": "LVMOGP surrogate with distributional latent positions per competitor, target-vector EI times probability of feasibility for drift, and reduction of sequence design to base pairs and GC content (pp. 5-9).",
+  "assumptions": "Gaussian noise, SE kernel and zero mean from a smoothness belief, standardised data, type-II ML with restarts (acknowledged to overfit at low data), latent dimension 10 in CV and 2 in BO (pp. 2, 27-31).",
+  "proof_devices": [
+   "informal model nesting: LMC recovers MOGP, LVMOGP with linear latent kernel recovers LMC (p. 5)",
+   "LVMOGP variational lower bound written out (Eq. 21, p. 26)",
+   "ARD switch-off of unneeded latent dimensions explains insensitivity to latent dimension (p. 29)"
+  ],
+  "experiments": "Three designed synthetic regimes (uncorrelated, linear, offset; 5 datasets) (pp. 9-10); CV on 34 competitors / 592 points, 70 repeats (pp. 8, 10-11); retrospective BO from a candidate set, 2 scenarios x 2 first-point rules, 24 seeds, cumulative regret; 36 vs 49 and 37 vs 57 experiments (pp. 11-13); initial-surface sensitivity (pp. 34-36).",
+  "positioning": "Against coregionalisation's linear-combination assumption and against latent-variable BO with point-estimate latents (Zhang 2020, Hutter 2021) (pp. 4-5); within biological BO and design-build-test-learn automation (pp. 1-2, 16).",
+  "writing": "Workflow figure first, toy figure for model mechanics, results as CV then single-objective then penalised BO; hedged 'we believe', 'may be due to' (pp. 2-3, 6, 10, 13, 16); written by the first author (p. 35).",
+  "limits_future": "Seed variance from hard hyperparameter optimisation, poor high-dimensional scaling, retrospective rather than closed-loop validation; future: better hyperparameter fitting, lab-automation pipelines, other function priors (pp. 11, 15-16).",
+  "method_links": [
+   {"method": "Method 4", "relation": "variant", "note": "Surrogate judged first by CV, then inside the full BO loop with two scenarios and two start rules; ranking depends on the start rule.", "pages": "pp. 10-13"},
+   {"method": "Method 5", "relation": "variant", "note": "Retrospective design stated openly, tolerance tied to measurement error, losses reported; but seed counts (24 vs 25) and the averaging rule for failed runs differ between sections.", "pages": "pp. 11-13, 31-34"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "retrospective pool-based BO on an existing experimental dataset", "evidence": "Closed-loop BO infeasible for cost, so BO restricted to already measured candidates; centre-point start as fair control.", "pages": "pp. 11-12"}
+  ],
+  "transferable": [
+   "Replace a combinatorial biological design space by a few continuous descriptors (length, GC content) and let a design tool realise each choice (pp. 8-9).",
+   "Combine target-distance EI with a probability-of-feasibility factor for 'hit a target, keep a nuisance below a threshold' (p. 7).",
+   "Include a no-correlation synthetic case to measure negative transfer (p. 9).",
+   "Run retrospective BO over the measured candidate set when the closed loop is unaffordable, and say so (p. 11).",
+   "Control first-point advantage with a common centre start for all models (p. 12).",
+   "Report experiments-to-best within the lab's measurement tolerance and convert to experiments saved (p. 13)."
+  ],
+  "coauthors": "Ruby Sedgwick, John P. Goertz, Molly M. Stevens, Mark van der Wilk; Misener co-supervised the ML aspects (p. 35)",
+  "quotes": [
+   {"text": "Rather than tackling the difficult combinatorial problem of optimizing the sequence directly, we reduce the problem to two key input variables", "page": 8},
+   {"text": "However, due to the cost of experiments, this was infeasible. Instead, we performed retrospective Bayesian optimization using the existing competitive DNA amplification dataset.", "page": 11}
+  ]
+ },
+ {
+  "id": "S086",
+  "year": "2025",
+  "title": "System-aware neural ODE processes for few-shot Bayesian optimization",
+  "read_level": "full",
+  "contribution": "SANODEP, a meta-learned neural ODE process conditioned on several trajectories, plus a model-agnostic two-stage BO framework for choosing initial conditions and measurement times under a minimum measurement delay, with a proposition halving the batch-size search range (read: arXiv v2).",
+  "problem_entry": "Optimise initial conditions and termination time of an unknown ODE system where switching initial conditions is costly and measurements come with a delay; GP kernels miss dynamics and Bayesian ODE models are slow (pp. 1, 3, 6).",
+  "key_idea": "Pool context points from many trajectories, each augmented with its initial condition, into a system latent; train with a Bernoulli mix of forecasting and interpolation; optimise with a two-stage batch BO under t_i - t_{i-1} >= Delta t (pp. 4-6, 20).",
+  "assumptions": "Lipschitz f drawn from a known stochastic family F (parametric kinetic models in practice), fixed known delay, known aggregation g; Section 7 varies prior strength from known kinetic form to a GP vector-field prior (pp. 3-7, 9-10, 19-20).",
+  "proof_devices": [
+   "Proposition 1: batch-size range reduced to {ceil(Nmax/2), ..., Nmax} for set-inclusion-monotone expected-utility acquisitions such as qEHVI (p. 6)",
+   "Lemma C.1 and Corollary C.1.1 (expectation preserves monotonicity) plus a gap-insertion argument (p. 19)",
+   "ELBO derivation for the bi-scenario loss (p. 17)",
+   "chain-rule argument for smooth activations to keep gradients in t and x0 (pp. 15-16)"
+  ],
+  "experiments": "Six ODE systems; MSE/NLL vs number of context trajectories on 10^4 test systems (GP on 5,000 trajectories), 5 training seeds (pp. 7-8, 21); few-shot BO with 1 + 10 trajectories, 10 seeds, hypervolume vs scaled time (pp. 8-9, 22); timing table (p. 23).",
+  "positioning": "Extends NODEP and Neural Processes; distinguishes from discrete-time or regular-grid meta-learned dynamics and from GP drop-in few-shot BO surrogates; relates to process-constrained BO and the group's SnAKe / transition-constrained BO (pp. 2-3, 6-7).",
+  "writing": "Four numbered contributions (p. 2); results under question headings (pp. 8-9); dedicated limitations paragraph (p. 10); several typographical slips in the arXiv text (p. 9).",
+  "limits_future": "NP underfitting trades few-shot ability against fit; without the kinetic form the model 'cannot be used out of the box'; oscillatory systems hard; PI training needed parameter clipping; future: more adaptable conditional distributions, meta-learned parameter estimation (pp. 10, 26-27).",
+  "method_links": [
+   {"method": "Method 1", "relation": "variant", "note": "Structure exploited in the acquisition problem (set-inclusion monotonicity cuts the integer range) and, when known, the kinetic form built into the model.", "pages": "pp. 6, 9, 19"},
+   {"method": "Method 3", "relation": "variant", "note": "One model-agnostic BO framework in which GP, NP, NODEP and SANODEP are switchable surrogates; not a partner's trained model.", "pages": "pp. 6, 8"},
+   {"method": "Method 2", "relation": "variant", "note": "Spectrum of prior strength (known kinetic form to GP vector-field prior) with a flexibility-fit trade-off, labelled preliminary, no proven ordering.", "pages": "pp. 9-10"},
+   {"method": "Method 5", "relation": "variant", "note": "Cost-driven GP subsampling and an impossible comparison named, timings reported; only 10 BO seeds and small mismatches between Tables 1 and 2.", "pages": "pp. 7-8, 21, 23"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "experimental-protocol constraints as first-class BO constraints", "evidence": "Measurement delay Delta t and costly initial-condition switches define the decision problem; links to the group's SnAKe and transition-constrained BO.", "pages": "pp. 1, 6-7"}
+  ],
+  "transferable": [
+   "Prove set-inclusion monotonicity of an expected-utility batch acquisition to cut the batch-size variable's range (pp. 6, 19).",
+   "Augment each context element with its run identifier (initial condition) before mean pooling (pp. 4-5).",
+   "Train a meta-learned surrogate on a Bernoulli mix of the prediction tasks the optimiser will need (p. 5).",
+   "Check surrogate differentiability w.r.t. decision variables and swap ReLU for smooth activations before gradient-based acquisition optimisation (pp. 15-16).",
+   "Report surrogate error against the number of context trajectories to show where meta-learning helps and where a GP overtakes (p. 8)."
+  ],
+  "coauthors": "Jixiang Qing, Becky D Langdon, Robert M Lee (BASF), Behrang Shafei (BASF), Mark van der Wilk, Calvin Tsay; Misener last author",
+  "quotes": [
+   {"text": "A meta-learned BO method specifically for dynamical systems is, to our best of knowledge, not revealed yet.", "page": 7},
+   {"text": "SANODEP still faces a trade-off between model fitting and prior flexibility, indicating that it cannot be used out of the box as a generic probabilistic model to optimize arbitrary dynamical system without knowing its kinetic form.", "page": 10}
+  ]
+ }
+]

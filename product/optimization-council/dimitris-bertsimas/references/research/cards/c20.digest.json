@@ -1,0 +1,214 @@
+[
+ {
+  "id": "S193",
+  "year": "2019",
+  "title": "From predictions to prescriptions in multistage optimization problems",
+  "read_level": "full",
+  "contribution": "Carries the predictive-to-prescriptive weighting into finite-horizon multistage problems: ML weights (kNN, CART, random forests) replace the conditional expectations of the dynamic program, with asymptotic optimality for all three learners, a first finite-sample regret bound for kNN, a weight-averaged SDDP algorithm, and synthetic inventory and lot-sizing runs where covariates cut cost by about 15% against SAA.",
+  "problem_entry": "DA+SD (ML weights; LO/IO engines in Appendix B): multistage optimization assumes known distributions and data-driven SAA leaves out auxiliary covariates (p. 2); point predictions ignore uncertainty (p. 2) and generative-model SAA is not asymptotically optimal (p. 3); Ban et al. assume uncertainty linear in covariates (p. 4); stated as the conditional DP (2) (p. 5). Read: arXiv v1.",
+  "key_idea": "Replace each conditional expectation by a weighted sum of next-stage value functions at the training observations, weights from kNN, CART or forests (pp. 6-7); SAA is w = 1/N (p. 6); nonnegative weights summing to one keep (3) a finite-scenario DP, so DP and SDDP machinery applies (pp. 7, 35-38); the theory swaps CART and Breiman forests for Wager-Athey honest, random-split, regular trees and subsampled forests (pp. 14-15, 20-21).",
+  "assumptions": "T+1 stages with known transitions and costs; uncertainty independent of state and past decisions (p. 2); Markov covariates, Y_t independent of the past given X_{t-1} (pp. 5, 9); Assumptions 1-4: compact feasible sets, finite expectations, equicontinuity, compact covariate support, exponential noise tails, continuity in x (p. 9), finite Z_t allowed (p. 9); covariates uniform 'for simplicity' and Lipschitz value functions for trees and forests (p. 15); small-ball and subgaussian assumptions for the rate (p. 22); synthetic data only: 12-stage inventory control and lot sizing, 3-dimensional AR(1) covariates, factor-model demand (pp. 28-30).",
+  "proof_devices": [
+   "Stage-wise telescoping: |min h - min g| <= sup|h - g| (Lemma 2) with the weights as a probability measure bounds the stage-0 error by a sum of T single-stage uniform estimation errors (pp. 11, 13-14)",
+   "Pointwise-to-uniform upgrade: countable dense subset plus equicontinuity (Lemma 4, p. 12), compactness via Bolzano-Weierstrass (Lemma 1, pp. 10-11), argmin limit points (Lemma 3, p. 11); kNN uniform consistency quoted from Biau-Devroye (Lemma 5, p. 12)",
+   "Tree leaf diameters shrink in probability: binomial lower bound on per-coordinate splits, Hoeffding and a union bound over at most N/k leaves (Lemma 6, pp. 16-17); uniform consistency by a bias-variance split (Lemma 7, pp. 17-18)",
+   "Covering-number argument (nu-net with nu = eps/(2L)) turning fixed-z bounds into sup-over-z bounds for Lipschitz functions (Lemma 8, p. 18); the weighted error shown 2L_{t+1}-Lipschitz in z (pp. 19-20)",
+   "Forest consistency by Jensen over a fixed number B of trees (Lemma 9, p. 21)",
+   "Finite-sample kNN bound: bias via the k-th neighbour distance, an eps/2-net and a binomial Hoeffding bound; variance via Biau-Devroye's (25^d/d)N^{2d} count of neighbour orderings and subgaussian Hoeffding (Lemma 10, pp. 23-25); union bound over stages and explicit constants (7) (pp. 25-27); rate O~(T/N^{1/(2d)}) for d >= 2 against O~(T/sqrt(N)) for SAA (p. 23)",
+   "Single-stage fixed-leaf forests: Wager-Athey bias theorem, McDiarmid with bounded differences 2s_N/N, Borel-Cantelli (Lemma 11 and Theorem 5, pp. 34-35)",
+   "SDDP with weight-averaged cuts, a CLT-based statistical upper bound and an eps-optimal stopping rule holding with probability >= 1 - alpha (Algorithm 1, pp. 35-37); Benders, integer optimality and Lagrangian cuts, binary expansion for mixed-integer states (p. 38)"
+  ],
+  "experiments": "Two synthetic 12-stage problems (inventory control, Fig. 1, p. 29; lot sizing with binary order options, Fig. 2, p. 30): out-of-sample expected cost against training size N (10 to 1000, log axis), averaged over 100 training sets (p. 28); curves SAA, kNN, RF and an 'OPT' never defined in the text (pp. 29-30), plus static-kNN/RF using only time-0 covariates (p. 31); reported cost cuts 'over 15%' (p. 29) and 'nearly 15%' (p. 31) from using covariates; not reported: CART runs, k, number of trees, whether the analyzed tree variants were used, the inventory algorithm, the basestock search, solver, hardware, run times, gaps, variability (pp. 28-31).",
+  "positioning": "Extends Bertsimas-Kallus, cited as the 2014 arXiv preprint (pp. 5, 32); DP/ADP, SAA, robust DP, DRO and adaptive RO (incl. his 2011 survey) listed as neighbours without criticism (pp. 3-4); RL said to struggle with OR constraints (p. 4); only Ban et al. (2018) criticized, for its parametric assumption, and not compared (p. 4); statistics and ML said to favour estimation and prediction over prescription (p. 4); tools borrowed and named: Wager-Athey, Biau-Devroye, Shapiro, Zou et al. (pp. 12, 14-17, 23-25, 35-38).",
+  "writing": "Abstract without a number: framework, asymptotic optimality 'under mild conditions', finite-sample guarantees, 'significant decrease in cost' (p. 1); section-keyed contribution list with per-learner novelty claims (pp. 5-6) and a first-to-our-knowledge finite-sample claim (p. 21); each theorem followed by a comparison paragraph (pp. 10, 21-23); 'practical tractability' (p. 6) and 'often tractable in practice' (p. 31) asserted without times; slips: the lot-sizing balance constraint copies objective terms and omits demand (p. 30), g0 counted twice in R_N (p. 22), Q0 for Q1 (p. 8).",
+  "limits_future": "Stated: decision-dependent uncertainty (pricing) and efficient application variants left open (pp. 31-32); fixed-leaf forests proved only single-stage (p. 21); dimension-dependent rate penalty (pp. 22-23); O(N^T) deterministic equivalent (p. 35); basestock not optimal for lot sizing (p. 31); integer optimality cuts ineffective (p. 38). Unstated: the experiments do not say whether the analyzed learners were used (pp. 15, 21 vs 28-31); no times, gaps or variability; synthetic data only; no comparison with Ban et al. or with decision rules.",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Step 4 (learn and decide in one model) carried to multistage: ML weights inside conditional stochastic optimization; policies scored by out-of-sample expected cost, not prediction error.",
+    "pages": "pp. 5-7, 28-31"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "No owner, partner or current rule: covariate-blind SAA is the baseline, on synthetic data; step 5's own-cost reporting is not followed (no run times although 'practical tractability' is claimed); no field test.",
+    "pages": "pp. 6, 28-31"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "The class is kept by a statistical device: probability weights keep (3) a finite-scenario DP (an LP for linear f, g), so existing machinery applies; the boundary is printed qualitatively (O(N^T), ineffective integer cuts, nonconvex lot-sizing value function) without solve times; most of the paper is asymptotic and finite-sample probability, evidence for Tension T3.",
+    "pages": "pp. 7, 8-27, 31, 35-38"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "A statistical certificate (upper bound within eps of the lower bound, eps-optimal with probability >= 1 - alpha) is designed in Appendix B, but no gap is reported in the experiments and the basestock policy carries no bound (Tension T1).",
+    "pages": "pp. 31, 36"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "A DA programme step carried by an ORC student (McCord), extending Kallus's single-stage framework with refined, reused lemmas.",
+    "pages": "pp. 1, 4-5, 10"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "In this DA paper the why-now is data availability stated qualitatively ('today's data-rich world'; data that 'continues to grow'), not a rebuilt solver-speed figure; consistent with SW5's why-then.",
+    "pages": "pp. 2, 32"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "subsume the incumbent as a special case",
+    "evidence": "SAA is the w = 1/N member of the weighted family and also the main baseline in both experiments.",
+    "pages": "pp. 6, 29-31"
+   },
+   {
+    "pattern": "static methods adapted to dynamic problems",
+    "evidence": "The single-stage predictive-to-prescriptive weighting is carried stage by stage into a multistage DP; the lot-sizing runs separate static (time-0) from dynamic covariates.",
+    "pages": "pp. 5-7, 31"
+   },
+   {
+    "pattern": "single-stage result lifted stage by stage",
+    "evidence": "Multistage regret bounded by a sum of T single-stage uniform estimation errors, with Bertsimas-Kallus lemmas refined and reused; one skeleton serves the kNN, tree and finite-sample proofs.",
+    "pages": "pp. 10-14, 19-20, 25-27"
+   },
+   {
+    "pattern": "analyzable surrogate of the practical learner",
+    "evidence": "Theorems proved for honest, random-split, regular trees and subsampled forests with growing leaves; the gap to standard CART and Breiman forests is stated; a separate single-stage theorem covers fixed-leaf forests.",
+    "pages": "pp. 14-15, 21, 34-35"
+   },
+   {
+    "pattern": "math-programming value approximation inside DP",
+    "evidence": "SDDP cuts from LP or Lagrangian duals approximate the value functions and are averaged with the ML weights.",
+    "pages": "pp. 35-38"
+   }
+  ],
+  "transferable": [
+   "Present a learner whose weights are nonnegative and sum to one as a reweighted SAA, so that every finite-scenario solver applies and SAA is both the special case and the baseline (pp. 6-7, 35).",
+   "Telescope a multistage regret into a sum of single-stage uniform estimation errors with |min h - min g| <= sup|h - g| and Jensen over the weights (pp. 11, 13-14).",
+   "Upgrade pointwise almost-sure convergence to uniform convergence via a countable dense subset, equicontinuity and compactness; for Lipschitz objectives use a nu-net with nu = eps/(2L) (pp. 10-12, 18).",
+   "Prove results for a named analyzable variant of the practical learner (honest, random-split, regular trees), state the difference, and add a theorem for the closest practical variant where it holds (pp. 14-15, 21, 34-35).",
+   "State a finite-sample rate beside the no-covariate SAA rate and explain the dimension penalty as the price of conditioning against a better baseline (pp. 21-23).",
+   "Value-of-information ladder: no covariates (SAA), time-0 covariates (static), covariates over time (dynamic) and a full-information reference, plotted against training size and averaged over many training sets (pp. 28-31).",
+   "For integer stages, parametrize the policy by covariate-indexed basestock levels (NT parameters); in SDDP, average cut coefficients with the learned weights and use Lagrangian cuts for binary states (pp. 31, 37-38)."
+  ],
+  "coauthors": "Christopher McCord (MIT Operations Research Center)",
+  "quotes": [
+   {
+    "text": "However, in general, auxiliary data has been ignored in modeling multistage problems, and this can lead to inadequate solutions.",
+    "page": 2
+   },
+   {
+    "text": "The standard implementation of the CART algorithm does not satisfy these definitions, but it is straightforward to modify the original algorithm so that it does.",
+    "page": 15
+   }
+  ]
+ },
+ {
+  "id": "S199",
+  "year": "2019",
+  "title": "The price of interpretability",
+  "read_level": "full",
+  "contribution": "Defines interpretability through interpretable paths of simple model updates, derives a coherent one-parameter loss whose limits recover sparsity and greedy construction, and computes the price of interpretability as a Pareto front by weighted-sum MIO (nested OCT-type trees, SOS-1 regression) and a local-improvement heuristic, on iris, a job-prestige set and California test scores.",
+  "problem_entry": "ML+IO (DA for human-in-the-loop uses): high-stakes predictions, a GDPR right to explanation and algorithm aversion demand interpretability (p. 1), but it is 'loosely defined and application-specific' (p. 1) and 'hard to define and even harder to quantify' (p. 2); post-hoc explanations and surrogates may mislead (p. 2); goal: a definition from which the accuracy trade-off can be computed (pp. 1-2). Read: arXiv v1.",
+  "key_idea": "A model is the endpoint of a path of interpretable steps from a base model (pp. 3-4); a model's loss is its best path's loss (eq. 1, p. 5); path length recovers sparsity, splits and clusters (p. 5) but misses incrementality (p. 6); coherent weighted-sum losses with alpha_k = gamma^k (pp. 7-8) interpolate between complexity (gamma -> infinity) and greedy construction (gamma -> 0) (Theorem 1, p. 8); the price is the Pareto front, computed by weighted sums (Propositions 1-2, p. 9).",
+  "assumptions": "Model space with a positive, possibly regularized cost c(m) (p. 2); nonempty step neighbourhoods (p. 3); bounded costs (Theorem 1), c_min <= c <= c_max and gamma >= 1 (Proposition 2) (pp. 8-9); S, m0 and gamma are modelling choices (pp. 3, 12), gamma = 1 in regression (p. 12); data: 50-point two-class iris subsample (p. 3), toy age OLS with correlation 0.9 (p. 6), 100-row job-prestige set (p. 13), California test scores 1998-1999 starting from an existing one-feature model (MSE 0.122 vs 0.095) (p. 14); no train/test split described.",
+  "proof_devices": [
+   "Lift from models to paths: a model's loss is the minimum loss over paths reaching it (eq. 1, p. 5); the K-step problem generalizes best subset, best tree of given size and K-means (p. 5)",
+   "Coherence axioms: the loss depends only on the cost sequence; weak Pareto dominance; deleting the last step cannot hurt (Definition 2 and Remark, p. 7)",
+   "Theorem 1 limits: split the weighted sums at the shorter path, bound the prefix by c_max times a geometric sum and let the extra gamma^k terms dominate (gamma -> infinity); factor out gamma^K at the first lexicographic difference (gamma -> 0) (p. 8; proof pp. 17-18)",
+   "Weighted-sum scalarization gives Pareto-optimal models; the inner problem is (10) with coefficients (lambda alpha_1, ..., (1 + lambda) alpha_K) (Proposition 1, p. 9; proof p. 18)",
+   "Path-length bound K_max: the empty model's value, at most c_max, beats lambda c_min sum gamma^k (Proposition 2, p. 9; proof p. 19)",
+   "Nested-tree MIO: K OCT-type trees, tree k with exactly k active splits, monotone activation and split variables, equal thresholds by big-M-type links (14c-14f) (p. 11)",
+   "SOS-1 convex integer program for regression paths (17); outer index-sequence / inner convex QP split (18); q-step randomized local improvement (Algorithm 1) (pp. 12-13)"
+  ],
+  "experiments": "Toy OLS Pareto fronts for gamma = 1, 0.5 and 10, unreachable points dashed (Figs. 5-6, pp. 9-10); iris depth-2 trees by MIO, t_good with L = 9 (Fig. 7, p. 11); job prestige, K = 10: Gurobi certified optimum in 5.078 s vs local improvement 0.004 s (gap 0.02%, q = 1) and 0.019 s (gap 0.00%, q = 2) (Table 2, p. 14); California: price curve (Fig. 8), log lambda ~ -1.65, a four-step update to MSE 0.097 vs 0.095 optimal, compared with forward stagewise and a direct path (pp. 14-15); not reported: solver version, hardware, repeated heuristic runs, out-of-sample error, a user study, rival interpretability measures.",
+  "positioning": "Framed by Breiman (prediction vs information, p. 1; best model at a given interpretability, p. 5); prior work sorted into interpretable model classes, sparse regression (LASSO, stagewise and LARS called 'heuristics'; his MIO work 'scalable mixed-integer approaches'), post-hoc explanations and surrogates (pp. 1-2); Lipton and Doshi-Velez-Kim for the definitional gap (p. 2); claims to generalize many approaches (p. 5) and to answer 'a central question' of the literature (p. 9); links to incremental approximation, prioritization and scoring systems (p. 12).",
+  "writing": "Title echoes 'The price of robustness' [inferred]; abstract without a number: stakes, 'However' the concept is loosely defined, framework, recovered proxies, parametrized family, the 'price' in quotation marks (p. 1); worked examples before axioms (pp. 3-6), then axioms, family and limit theorem (pp. 7-8); specific hedges ('a modeling choice', 'a hard question', 'may not scale', 'application-dependent'; pp. 3, 6, 11, 12); slips: 'Bersimas' (p. 1), L_gamma for L_alpha (p. 8), undefined 'coordinate paths' (p. 9), 'interprtability' and 'Table 9a' (p. 14).",
+  "limits_future": "Stated: weighted sums miss non-convex parts of the front (p. 9); MIO may not scale and exactness is often unnecessary (p. 11); exact regression only for d <= 10, K <= 10 (p. 13); each application has its own challenges, left as 'an opportunity for further research' (p. 14). Unstated: no human-subject validation (cf. p. 2), very small data, in-sample MSE only, no guidance for choosing S, m0 or gamma, no scalar price, no comparison with other interpretability measures.",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Property named with those who want it (individuals, regulators, algorithm-averse decision makers); knobs defined; class kept (MIO for trees and regression); price curves on a toy, a benchmark and a real data set; a point picked on the curve by diminishing returns (log lambda ~ -1.65) and the choice of complexity left to a decision maker in section 5.3; the method's bad case printed (unreachable Pareto points dashed).",
+    "pages": "pp. 1, 8-12, 14"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Two knobs, not one: gamma fixes what interpretability means and lambda traces the price; the guarantee is a limit theorem plus a path-length bound, not a solution-independent bound on the property; the price is a Pareto front with no scalar headline.",
+    "pages": "pp. 8-9, 17-19"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "A property owned by ML and human factors written exactly as MIO (nested OCT-type trees) and an SOS-1 convex integer program (regression), opening on 'Most machine learning problems can be viewed through the lens of optimization'; boundary printed (d <= 10, K <= 10; 'may not scale').",
+    "pages": "pp. 2, 5, 11-13"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Exact MIO used as the certificate that measures a local-improvement heuristic on a small instance (Heuristic 3), with the concession that provable optimality is often unnecessary (Tension T1); greedy forward stagewise is an in-sample opponent along the path and is priced rather than replaced: it is the gamma -> 0 limit, with its first-step virtue stated, which qualifies Taste warning sign 3.",
+    "pages": "pp. 6, 8, 11, 13-15"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The deployed model is the path's start m0 and the path explains the update from it (the current rule as starting point, not only as baseline); but the metric is MSE, no owner or decision is named, and nothing is field-tested.",
+    "pages": "pp. 14-15"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "nest the incumbent rule as a limiting case of the priced model",
+    "evidence": "Sparsity (complexity) is the gamma -> infinity limit and greedy construction the gamma -> 0 limit of L_gamma; the K-step problem generalizes best subset, best tree of a given size and K-means.",
+    "pages": "pp. 5, 8, 17-18"
+   },
+   {
+    "pattern": "axioms, then metric",
+    "evidence": "Coherence axioms (dependence on the cost sequence only, weak Pareto dominance), then the weighted family L_alpha, then the one-parameter L_gamma.",
+    "pages": "pp. 7-8"
+   },
+   {
+    "pattern": "exact optimum on a small solvable instance as the certificate for a heuristic",
+    "evidence": "Gurobi's certified optimum on a 100-row instance measures the local-improvement heuristic's time and gap (0.02% and 0.00%).",
+    "pages": "pp. 13-14"
+   },
+   {
+    "pattern": "define the property on the construction path, not only on the endpoint",
+    "evidence": "Interpretability is a loss on paths of interpretable steps; a model inherits the loss of its best path; equal-complexity trees are separated by their intermediate costs.",
+    "pages": "pp. 3-6"
+   },
+   {
+    "pattern": "incumbent model as the start of an explainable update path",
+    "evidence": "The California study starts the path at an existing one-feature model and reaches a near-optimal model in four readable coefficient changes.",
+    "pages": "pp. 14-15"
+   }
+  ],
+  "transferable": [
+   "Define a vague property through a step neighbourhood S and a base model m0: put the loss on paths and give each model the loss of its best path (pp. 3-5).",
+   "Axioms first, then a weighted family that satisfies them, then a one-parameter member (alpha_k = gamma^k) whose limits provably recover the field's proxies (pp. 7-8, 17-18).",
+   "Compute a price as a Pareto front by weighted-sum scalarization, bound the number of subproblems, and draw the non-convex parts the scalarization cannot reach (pp. 9-10, 18-19).",
+   "Encode a nested sequence of models as K coupled copies with monotone activation and equal-split linking constraints (p. 11).",
+   "Split a path problem into an outer combinatorial index sequence and an inner convex QP; improve by re-optimizing q randomly chosen steps over all index choices (p. 13).",
+   "Calibrate a heuristic against the exact MIO on a small real instance and print time and gap side by side (Table 2, p. 14).",
+   "Set the step weights to the probabilities that a decision maker picks complexity k (alpha_k = p_k) to obtain a nested family that minimizes expected cost over that choice (p. 12).",
+   "Start the path at the deployed model, so that an update reads as a short sequence of coefficient changes with the MSE after each (pp. 14-15)."
+  ],
+  "coauthors": "Arthur Delarue (MIT ORC), Patrick Jaillet (MIT EECS), Sebastien Martin (MIT ORC)",
+  "quotes": [
+   {
+    "text": "However, the concept of interpretability remains loosely defined and application-specific.",
+    "page": 1
+   },
+   {
+    "text": "In general, mixed-integer optimization formulations such as (14) may not scale. However, in many cases a provably optimal solution is not necessary and scalable heuristics such as local improvement may be employed.",
+    "page": 11
+   }
+  ]
+ }
+]

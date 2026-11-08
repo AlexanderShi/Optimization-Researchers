@@ -1,0 +1,201 @@
+[
+ {
+  "id": "S669",
+  "year": "2026",
+  "title": "Catastrophe Insurance Pricing: An Adaptive Robust Optimization Approach",
+  "read_level": "full",
+  "contribution": "Prices catastrophe (flood) insurance premiums by robust and adaptive robust optimization over a CLT set fitted to historical losses and a set built from ML flood-risk forecasts. The counterparts come in closed form and by LP duality, and the models are tested on NFIP data for 2013-2022 against NFIP's actual premiums and a moving-average rule (read as arXiv v1, 2024).",
+  "problem_entry": "RO+AP (DA via the ML-informed set). Rare catastrophes defeat actuarial methods that lack history, climate change makes history underestimate risk, and the NFIP runs a deficit of 19 billion dollars (pp. 2-3). The problem: set premiums for N locations over T years to minimize the total damped premium, subject to covering uncertain losses plus a buffer and to slow variation (eqs. (1)-(5), pp. 6-7). The paper claims the first ARO approach to disaster-insurance pricing (pp. 1, 3).",
+  "key_idea": "The losses enter one constraint, so the inner maximization has a closed form, both over the CLT set (eq. (7), p. 8) and over the ML set built from q_{i,k} widened by ε (eqs. (9)-(10), p. 9). The worst-case totals are T·l̄+γ2·σ·√T and Θ·min{1, q+ε} (Proposition, pp. 11-13). The ARO step makes premiums affine in last year's loss and dualizes each constraint over the polyhedral CLT set into an LP (pp. 13-20).",
+  "assumptions": "Decisions: state-level annual premiums for 52 jurisdictions, 2013-2022 (p. 21). The CLT set assumes i.i.d. losses per location; the ML set assumes at most one major event in k years (pp. 7-9). One piecewise-linear demand damping serves all states, 'For the illustrative purpose of this work' (p. 22). The ARO model drops damping and the ML set (eq. (28), pp. 14-15). Data: FEMA OpenFEMA NFIP claims (2,570,089 lines) and policies (228,664 lines). Parameters are fitted on 1975-2012 (pp. 20-21); Appendix B.2 gives a 1975-2011 / 2012-2022 split for the ML models (p. 37).",
+  "proof_devices": [
+   "Closed-form inner maximization: the inner problem splits into a CLT and an ML subproblem and the larger is taken (pp. 10-11); the absolute value is dropped because the adversary maximizes, and the sum constraint binds (pp. 11-12)",
+   "Binary event indicators relaxed to [0, 1] 'Without loss of generality' by treating their sum as one variable, giving Θ·min{1, q+ε} (p. 12)",
+   "Decomposition by location, since the constraints of different locations do not interact (p. 14)",
+   "Affine decision rule in the previous period's loss (Chapter 7 of the 2022 book), with smoothness moved onto the rule coefficients; epigraph step from its Chapter 2 (pp. 13-15)",
+   "LP duality per constraint over the polyhedral CLT set; the inner minimum is dropped because any feasible dual point suffices; the final counterpart (52)-(56) is an LP (the class is the card's reading) (pp. 15-20)",
+   "Convexity asserted, not shown: piecewise-linear damping is chosen to preserve convexity (p. 13), but f(p)·p = p - m·p·(p - P0) is concave on the damping segment, so minimizing (1) is not convex there (card's check of (1) with (57), pp. 6, 22)"
+  ],
+  "experiments": "Out-of-sample test, 2013-2022, state level. RO1 (CLT set), RO2 (CLT and ML sets) and ARO are compared with NFIP's actual premiums (Hist) and a cumulative moving average of losses (CMA) (pp. 23-25). The ML risk models are logistic regression and XGBoost with 3-fold CV; out-of-sample AUC 0.743-0.992 (Table 1, p. 24; Table 6, p. 37). Metrics: insolvent states, surplus or deficit, absolute deviation (pp. 24, 28). γ2 is swept over 0-2 on the test window itself (pp. 26-30). Results: Hist leaves 52 states insolvent, CMA 36, and the robust models 11-12 at γ2 = 2; at γ2 = 2, ARO has 12 insolvent states with a surplus of 3.82e9, against 12 states and 18.41e9 for RO1 (Tables 3-4, pp. 28, 30); RO2 adds little to RO1 (p. 28). Not reported: the ML-set parameters used, γ3 and γ4, how the ARO rule is applied to realized losses, and solve times; the code link is a placeholder (p. 39). Not remarked on: Hist has the lowest absolute deviation (p. 30), and the text's '8 million' stands against Table 4's -8.31e9 (pp. 25, 28, 30).",
+  "positioning": "Joins three literatures: CAT modelling (AIR, RMS, EQECAT, HAZUS; scarce data and hard-to-combine what-if scenarios), disaster management (including stochastic optimization of flood insurance by Ermolieva et al.) and climate finance (pp. 4-5). Prior work is restated, not criticized; the paper 'fills in the gap' (p. 5). RO is cited to his own survey and to the 2022 book; reference [5] is garbled as a Princeton UP book (p. 32), while works.json records S003 (SIAM Review 2011).",
+  "writing": "The contribution and the ARO recommendation are repeated nearly verbatim in the abstract, the contributions and the conclusion (pp. 1, 4, 30). Claims are strong and lightly hedged ('superior performance', 'first', generality to wildfires asserted) (pp. 1, 3-4, 30), and tables are summarized favourably. Many draft slips: the section outline (p. 4), the damping rate (p. 26), formula slips (pp. 7-8, 12) and the Figure 8 caption (p. 39).",
+  "limits_future": "No limitations paragraph or future-work list. The simplifications (common damping, i.i.d. losses, an ARO model without damping or the ML set) are presented as conveniences (pp. 7-9, 14, 22). The only forward claim is that the framework extends to other perils (pp. 1, 4). Card's reading: the recommended ARO model uses neither the ML set featured in the abstract nor damping (pp. 1, 14-15).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "The owner's current rule (NFIP's actual premiums) is the baseline, together with a stronger naive rule (CMA). Results are scored on decision metrics (insolvent states, surplus, absolute deviation), not on forecast accuracy, although AUCs are reported.",
+    "pages": "pp. 4, 23-28"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "No owner takes part: public FEMA data, no partner, no field test or deployment, and a placeholder code link.",
+    "pages": "pp. 20-21, 39"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "One knob (γ2) and its curves (surplus against γ2; insolvent states against surplus as an 'efficient frontier') are handed to policymakers. But no solution-independent bound links γ2 to a violation probability, and the knob is swept on the test window instead of being set from data.",
+    "pages": "pp. 26-30"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "The counterparts come in closed form and by LP duality, and the ARO counterpart stays an LP. But the nominal 'LP' with demand damping is neither linear nor convex (card's check), convexity is asserted, and no solve time is reported.",
+    "pages": "pp. 6, 11-20, 39"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "The 2022 book with den Hertog supplies the toolkit (CLT set, epigraph from its Chapter 2, affine rules from its Chapter 7), and a former student carries the application: the book step feeding later papers.",
+    "pages": "pp. 7, 13-14, 32"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "ML forecasts as uncertainty-set parameters",
+    "evidence": "A classifier's probability q of a major flood within k years, widened by a confidence radius ε, defines a prospective set beside a retrospective CLT set fitted to history; the set's worst case is Θ·min{1, q+ε}. Compare S307's robustness layer matched to the data behind each uncertainty source (card c30).",
+    "pages": "pp. 8-9, 12-13, 22-23"
+   }
+  ],
+  "transferable": [
+   "When the uncertain data enter a single constraint through their sum, solve the inner problem in closed form: drop the absolute value, let the sum constraint bind, and substitute the worst-case total into the nominal model (pp. 10-13).",
+   "For an adaptive pricing rule, make the price affine in the last period's realized loss, move the smoothness constraints onto the rule's coefficients, and dualize the inner LP of each uncertain constraint separately (pp. 14-20).",
+   "Turn a classifier's probability q of a threshold event within k years into the set {|Σz - q| ≤ ε, Σz ≤ 1, Σl ≤ Θ·Σz}; its worst case is Θ·min{1, q+ε} (pp. 8-9, 12-13).",
+   "Score a pricing policy against both the owner's actual historical prices and a naive moving-average rule, using a failure count (insolvent units) and a cost measure (surplus, absolute deviation), and plot failures against cost as the knob varies (pp. 23-29).",
+   "Set the knob on a validation window that is not the window reporting the results (the card's lesson from pp. 26-30, where γ2 is swept on the test years)."
+  ],
+  "coauthors": "Cynthia Zeng (Operations Research Center, MIT; a former student, now at NYU Abu Dhabi per note 04 §B.12)",
+  "quotes": [
+   {
+    "text": "In particular, we recommend policy makers to choose an ARO model, with conservative parameter values, to achieve superior performance in both effectiveness and efficiency in covering losses.",
+    "page": 4
+   },
+   {
+    "text": "To preserve the convexity property of the overall problem, we model the behavior using piece-wise linear functions under the scope of this work.",
+    "page": 13
+   }
+  ]
+ },
+ {
+  "id": "S672",
+  "year": "2026",
+  "title": "Robust Optimization for Green Ammonia Production",
+  "read_level": "full",
+  "contribution": "For OCP's planned US$7 billion green-ammonia plant: a capacity-planning MILO with Haber-Bosch hot-idling and shutdowns, strengthened by an LP warm start and bilinear cuts; a robust scenario reduction that turns the worst case of a CLT or budget set inside each k-means cluster into hourly adversarial trajectories; and an adaptive rolling-horizon operational model with affine rules over an ellipsoid-box set. Out of sample, the plans stay feasible where the group's earlier constraint aggregation fails, and adaptive policies trade production against brittle failures.",
+  "problem_entry": "RO+IO, AP (energy, partner OCP). A partner's US$7 billion investment (p. 1). The central challenge is meeting the HB minimum load under renewable intermittency, with costly shutdowns (pp. 1-2); the decisions are capacities that stay feasible through long low-renewable periods and hourly flows under forecast error (p. 2). Literature gap: perfect foresight over one year, uncertainty handled through an inflated minimum load, no hot-idling or shutdowns; clustering smooths away low-generation events (p. 3).",
+  "key_idea": "Solve the robust problem inside each k-means cluster once, since the adversary separates from the nonnegative capacities, and impose its worst-case perturbation hour by hour as a synthetic adversarial trajectory. This lies between constraint-wise robustness and S307's constraint aggregation (pp. 11-14). Representative years are chosen by Wasserstein matching (p. 10), and the strategic MILO is strengthened by an LP warm start and bilinear cuts (p. 9). Operations use stage-wise affine rules over a coupled ellipsoid-box set (pp. 17-19).",
+  "assumptions": "25 years of hourly solar and wind capacity factors (PVGIS, ECMWF Reanalysis v5), split 15 years for planning and 10 for testing, leap days dropped (pp. 2, 4, 25). Seven capacity components, hourly flows, storage and degradation, with parameters in Table 6 (pp. 4-7, 27). LCOA is linear because OCP's contracts fix production at 1 MT a year (p. 5). Binaries for hot-idling and shutdown, with at most 10 shutdowns a year and a 24-hour transition (pp. 7-8, 20). Sets: the CLT-inspired polyhedral set of S307 (ρ, Γ, Δ), its one-sided budget version (pp. 11-12), and an ellipsoid-box set on forecast errors (p. 18). Admitted: perfect-foresight look-ahead bias (p. 9); storage not linked across representative years (p. 11); independence for the distribution-free bound (p. 28). Forecasts are realized values plus Gaussian noise growing with √t (p. 23).",
+  "proof_devices": [
+   "Warm start from the nested model: binaries at zero recover the LO, whose solution is MILO-feasible and gives an upper bound at once (p. 9)",
+   "Bilinear cuts (2v')-(2x'), logically equivalent to the indicator constraints, tighten the LO relaxation at the cost of an MIQCP (p. 9)",
+   "Representative years chosen by a MILO that minimizes the 1-Wasserstein distance between cluster distributions (eqs. (5a)-(5f), pp. 10-11)",
+   "Separation of the adversary from the nonnegative capacities (eq. (10)); Proposition 3.1: the counterpart with the minimizer û, plus a conservative closed form via the CLT bound that is exact when the bound binds (p. 13)",
+   "Proposition 3.2: F_full ⊆ F_one ⊆ F_agg under the budget set, using the sign û ≤ 0; the paper notes it need not hold for the CLT set (p. 14)",
+   "Diversifying degenerate worst cases: fix the optimal value ζ*, sample uniformly within the bounds, and project onto the optimal face by a QP (pp. 14-15)",
+   "Stage-wise affine decision rules (O(T) instead of O(T^2) coefficients), with grid import as implicit recourse (p. 17)",
+   "Set choice by class: constraint-wise separable sets make adaptivity worthless (Marandi-den Hertog); budget sets for mixed-integer models, the ellipsoid only for the continuous operational model (p. 18)",
+   "Proposition 4.1: the AARC by box dualization and the ellipsoid's support function, a second-order-cone constraint (pp. 18-19; proof in B.2, p. 29)",
+   "Calibration of Ω: Gaussian quantile (Lemma B.1); truncated Gaussian by conditioning (Proposition B.2); distribution-free sub-Gaussian bound Ω = √(2 ln(1/ε)) under bounded support (Lemma B.3, Proposition B.4) (pp. 27-29)"
+  ],
+  "experiments": "Gurobi 11.0.0 on MIT SuperCloud (32 threads, 192 GB, Xeon Platinum 8260), with a 0.01% gap tolerance and a 72-hour limit (p. 20). Study 1 (one year, CAPEX only): the cold start found no feasible solution in 10.6 hours and kept a 21.1% gap after 72 hours; the LO warm start ($7.212B) was proved optimal for the hot-idle model, so hot-idling was never chosen; three cuts reduced the root gap from 21.2% to 0.01% for hot-idle, but on the shutdown and full models the no-cut variants ended with smaller 72-hour gaps (2.56% and 2.28%, against 3.95% and 5.22%); shutdowns saved 0.73% at a 3.95% gap (pp. 20-21, Table 2); only a higher minimum load makes flexibility pay (-0.27% and -3.25%) (Table 3, pp. 21-22). Study 2 (perfect forecasts, no binaries, n = 5 years): capacities in Table 4; the aggregation plan has no solar; LCOA is withheld; in a 10-year out-of-sample simulation the perfect-foresight, CLT and budget plans stay feasible (2876, 3052 and 3032 t/day), while aggregation violates the HB minimum load even under perfect forecasts (pp. 22-23). Study 3 (one year, Gaussian forecast noise): nominal production is highest but uses 59.3 MW of grid power; static Ω = 1 cuts grid use by 84% for 7.3% less ammonia; adaptive produces more at every Ω but fails in 41.7% of intervals at Ω = 1 and 0.3% at Ω = 3 (Table 5, pp. 23-24). Card's reading: failed intervals are excluded from the averages, and adaptive grid use rises with Ω (p. 23). Not reported: solve times for the scenario-reduced and operational models, the (ρ, Γ, Δ) used for Table 4, the tuning data, the ε for each Ω, and code; the multi-year MILO that motivated scenario reduction is never run (pp. 9-10, 19, 22).",
+  "positioning": "Green-ammonia optimization: Salmon and Bañares-Alcántara (2023), the closest model, is criticized concretely; Wang (2025) and Yu et al. (2023) use few scenarios or simple sets and no multi-decade data. Clustering-based scenario reduction suppresses low-generation events (Teichgraeber and Brandt) (p. 3). The group's own S307 device is scoped, not attacked ('While effective in that setting', p. 3), then shown failing (p. 23). The RO toolkit is cited to his own and his co-authors' papers (Bertsimas-Sim 2004; Bertsimas-den Hertog-Pauphilet 2021; Bertsimas-Na-Stellato-Wang 2024; Marandi-den Hertog 2018) (pp. 11-12, 17-18, 25).",
+  "writing": "The abstract opens with the central challenge and closes with the negative half of the trade-off: adaptive policies give weaker protection outside the set (p. 1); contribution 3 repeats it (p. 4). Findings are hedged to what the gaps allow ('no measurable benefit', p. 20; 'magnitude cannot be precisely quantified', p. 21). The failure mode is named 'brittle failures' and read as overfitting, citing the group's own preprint (p. 24). Limitations get a subsection (§2.7, p. 9), and each design choice gets a one-sentence reason (pp. 10, 17-18).",
+  "limits_future": "Printed limits: perfect-foresight bias (p. 9); hot-idling is worthless at base parameters (p. 20); the cuts hurt the harder models (pp. 20-21); the size of the shutdown benefit is uncertain (p. 21); the hierarchy holds only for the budget set (p. 14); adaptive brittleness, with gains only incremental to model predictive control (p. 24). Not discussed: the LCOA price of robustness (withheld, p. 22), a combined run of the MILO with scenario reduction, field use by OCP. No future-work list (p. 24).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "The warm start is the nested LO (binaries at zero), giving a valid upper bound. Solver version, machine, threads, gap tolerance and time limit are printed; gaps are reported at the root, 24 and 72 hours; the cold-start failure is printed; and the shutdown claim is narrowed to what the gap allows.",
+    "pages": "pp. 9, 20-21"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "The duel is against two model choices, perfect foresight and the group's own constraint aggregation (S307), judged out of sample by feasibility and production, not against an incumbent heuristic. There is no certificate for the operational policies and no solve times for the scenario-reduced models.",
+    "pages": "pp. 3, 22-24"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Class-keeping devices chosen deliberately: the contract-fixed production makes LCOA linear; the aggregated adversary separates from the capacities; budget sets are kept for mixed-integer models and the ellipsoid only for the continuous operational model, to avoid MISOCPs; the AARC is a second-order-cone constraint.",
+    "pages": "pp. 5, 13, 18-19"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "The bilinear cuts take the MILO into an MIQCP class, and the measured cost is printed: tighter roots but larger 72-hour gaps on the shutdown and full models. The class change is measured as the stop rule asks, but the cost is reported rather than resolved.",
+    "pages": "pp. 9, 20-21"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "The knob Ω comes with solution-independent probability bounds for calibration (Appendix B.1). Its curve (production, grid use and failure rate at Ω = 0-3) is printed with its bad case, 41.7% brittle failures at Ω = 1, and a recommendation follows: the static policy is the most reliable.",
+    "pages": "pp. 23-24, 27-29"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "The strategic knobs (ρ, Γ, Δ) are not reported for the capacity results, and the cost of robustness (LCOA) is withheld for confidentiality, so no cost curve reaches the reader.",
+    "pages": "pp. 15, 22"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "The owner's decision (OCP's capacity plan), the owner's contract terms in the model and the owner's engineers as co-authors. Decisions are judged by out-of-sample feasibility, production and grid use, not by forecast accuracy.",
+    "pages": "pp. 1, 5, 22-24"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The baselines are the literature's perfect-foresight model and the group's own earlier device, not OCP's current plan; costs are withheld; no field test.",
+    "pages": "pp. 3, 22"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "One partner, a programme of papers: S307 (with Cory-Wright and Digalakis), then this paper with a new student, whose own methods preprint (Zhu and Bertsimas 2025) supplies the reading of the failure mode.",
+    "pages": "pp. 3, 24-25"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "worst case of a robust counterpart as an adversarial scenario",
+    "evidence": "When the adversary separates from the decisions (nonnegative capacities), solve once for the worst-case perturbation in each cluster and impose it in every hourly constraint. This lies between constraint-wise and aggregated robustness, with F_full ⊆ F_one ⊆ F_agg proved for the one-sided budget set.",
+    "pages": "pp. 13-14"
+   },
+   {
+    "pattern": "self-revision within a partner programme",
+    "evidence": "The group's own S307 constraint aggregation (whose hourly feasibility card c30 flagged as undiscussed) is re-tested on the same partner's next problem, scoped as 'effective in that setting', shown unable to operate out of sample even under perfect forecasts, and replaced.",
+    "pages": "pp. 3, 12-14, 22-23"
+   },
+   {
+    "pattern": "diversifying a degenerate worst case",
+    "evidence": "The solver returns nearly identical adversarial trajectories, so the optimal value is fixed, uniform samples are drawn within the bounds, and each is projected onto the optimal face by a QP.",
+    "pages": "pp. 14-15"
+   }
+  ],
+  "transferable": [
+   "When a MILO adds optional operating modes to an LP, warm-start it with the LP solution (binaries at zero); it is feasible by construction and gives an upper bound before branching (p. 9).",
+   "Try the bilinear form of indicator constraints, but report root and late gaps for each family of cuts: a stronger relaxation can slow the search (pp. 9, 20-21).",
+   "Choose representative periods with a small MILO that minimizes the Wasserstein distance between the cluster histogram of the selected periods and that of the full data (pp. 10-11).",
+   "If the robust adversary does not depend on the first-stage decisions, compute its worst case once and use it as a scenario in every hourly constraint; prove F_full ⊆ F_one ⊆ F_agg where the set is one-sided (pp. 13-14).",
+   "To get diverse worst-case scenarios from a degenerate LP, fix the optimal value and project random samples from the box onto that optimal face with a quadratic objective (pp. 14-15).",
+   "Before adopting adaptive rules, check whether the uncertainty set is constraint-wise separable; if it is, adaptivity adds nothing, so pick a set coupled across time (p. 18).",
+   "Report a robustness knob's curve with three columns for static and adaptive policies side by side: the objective, the recourse used and the unrecoverable failure rate; state how failed intervals enter the averages (pp. 23-24).",
+   "Evaluate capacity plans by simulating operations on held-out years with a rolling-horizon model, so that hourly infeasibility shows up even under perfect forecasts (pp. 22-23)."
+  ],
+  "coauthors": "Karl Zhu (Operations Research Center, MIT; named among his students in a 2025 homepage post, note 04), Yassine Bohafid and Omar Kadir (OCP Group, Casablanca)",
+  "quotes": [
+   {
+    "text": "While effective in that setting, constraint aggregation is less suitable for green ammonia systems, where feasibility is highly sensitive to hourly renewable availability due to the HB minimum-load constraints.",
+    "page": 3
+   },
+   {
+    "text": "We therefore interpret the results as evidence that shutdown flexibility provides some benefit, although its magnitude cannot be precisely quantified.",
+    "page": 21
+   }
+  ]
+ }
+]

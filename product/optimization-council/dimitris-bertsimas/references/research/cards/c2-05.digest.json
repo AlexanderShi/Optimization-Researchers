@@ -1,0 +1,285 @@
+[
+ {
+  "id": "S067",
+  "year": "2021",
+  "title": "Interpretable clustering: an optimization approach",
+  "read_level": "full",
+  "contribution": "ICOT builds a clustering tree whose leaves are the clusters by optimizing a Silhouette or Dunn criterion of the whole partition; it is written as an OCT-style model but solved by coordinate descent with K-means/OCT warm starts and gap-restricted split search, handles mixed data, and is comparable to K-means on internal indices while more interpretable.",
+  "problem_entry": "ML (IO as the written model, HS as the solver, AP cases): clustering gives little insight into why points belong to clusters; centroids and PCA plots fail, two-step cluster-then-tree methods build clusters with another architecture, and CUBT is greedy with a fixed criterion (pp. 1-2); build one tree whose leaves are clusters, optimizing a validity index of the whole partition (pp. 2-3, 5).",
+  "key_idea": "Replace OCT's accuracy-plus-complexity objective by a whole-partition cluster-quality criterion (Silhouette or Dunn) with each leaf a cluster, so the number of clusters is an output; implement it by greedy trees plus local search with restarts instead of solving the MIO (pp. 5, 8-9).",
+  "assumptions": "Features normalized to [0,1], axis-parallel splits, minimum leaf size N_C (pp. 3-4, 9); mixed distance alpha*d_N + (1-alpha)*d_C with alpha the numerical share by default (p. 10); data: 9 FCPS synthetic sets, 200 Framingham participants, 1,000 Hubway trips, 26 countries x 9 employment shares (pp. 11-21); the MIO is not solved, and coordinate descent and threshold pruning are chosen for tractability (pp. 8, 10); the Framingham covariate count is inconsistent (8 announced, 6 listed, p = 6; p. 14).",
+  "proof_devices": [
+   "Silhouette model with K_t, c_it = (1/K_t) sum_j d_ij z_jt, r_i, big-M binaries for the second-closest cluster and s_i = (q_i - r_i)/m_i (eqs. 13-22, pp. 5-7); my reading: ratios and products make it a mixed-integer nonlinear program, and constraint (16) bounds q_i only from below while the objective rewards a large q_i, so as printed s_i can be pushed toward 1; the model is never solved (p. 8)",
+   "Coordinate descent: a greedy tree on a random feature, then node moves (delete, re-split, split a leaf) accepted only on improvement, restarted from many greedy trees (Algorithm 1, p. 8); no convergence or quality statement, restart count not given",
+   "Restricted geometric search: scan only thresholds above the T-th percentile of the gaps between sorted values (p. 10)",
+   "K-means warm start: K-means over several K chosen by the criterion, OCT fitted to the labels, each leaf its own cluster (p. 11)",
+   "Fig. 1 sets a greedy tree (0.688) against a 'globally optimal partition' (0.758) without saying how optimality was established (p. 7)"
+  ],
+  "experiments": "FCPS (9 sets, Table 1, p. 12): matches or beats the two-step K-means+OCT on every set, with one tie (average +25.7% Silhouette, +656% Dunn, p. 11); against K-means 8/9 wins or ties on Dunn (+8.8%) and 4/9 on Silhouette (-4.2%); fails on Atom and Hepta; scores above the true labels on 5/9 and 2/9 sets (p. 12). The contribution list gives other figures (282%, 17%, p. 3), and Table 2's averages do not match Table 1 (my recomputation). Criterion sensitivity 9.4% and 10.1% (p. 12). Scaling cuts run time by 77.4%/59.1% at T = 0.99 and 96.7%/97.0% with the warm start, at -0.25%/+4.4% quality (pp. 12-13); no absolute times, machine or solver. Framingham, Hubway (K-means wins at alpha = 0.9) and Europe against CUBT (trees copied from the CUBT paper) on internal indices, with K-means run without normalization (pp. 14-23). Interpretability is argued from tree read-outs only.",
+  "positioning": "Builds on OCT (pp. 2-3); argues against centroids, PCA plots and two-step hybrids (pp. 1-2); reviews tree-based clustering, faulting Liu et al. for not making clustering the objective and CUBT for greedy splits and a fixed criterion (p. 2); meets CUBT only on its own example (p. 21); the Hubway data come from his book The Analytics Edge (pp. 3, 17, 24).",
+  "writing": "Six numbered contributions, only the fifth with numbers (pp. 2-3); 'globally optimal clustering trees' (p. 2) beside 'approximates' (p. 1) and 'well-approximating' (p. 2), with no gap reported; the price of interpretability accepted in words (p. 23); the conclusion calls ICOT 'an ideal tool for exploratory data analysis' (p. 24).",
+  "limits_future": "Printed limits: parallel splits miss non-separable clusters (p. 12); no scaling beyond thousands of observations and hundreds of covariates (p. 23); the tree is not hierarchical (p. 24); the metric is left to the user (p. 23); N_C must be cross-validated (p. 9). Future: subsampling and feature screening (p. 23). Unprinted: the hours-scale claim for P in the hundreds is not exercised; the largest P is 9 (pp. 13, 19, 21).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "One joint tree and a K-means/OCT warm start are present; there is no exact solve, time limit, gap or certificate, though contribution 1 promises globally optimal trees; on real data the baselines are not run under matched normalization. Shape of Heuristic 3 and Tension T1.",
+    "pages": "pp. 1-4, 8, 11-15, 19"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "The price of interpretability is quantified once (-4.2% Silhouette against K-means on FCPS) and accepted in words; the knobs N_C and alpha are shown at three settings each, depth is not varied, and no curve is drawn.",
+    "pages": "pp. 12, 14-21, 23"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Clustering, owned by statistics and data mining, is written in OCT's class, but the model leaves the linear MIO class and is never solved; the boundary is printed as a scale limit.",
+    "pages": "pp. 3-7, 23"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "The Optimal Trees programme goes from workshop (S470, card in s01) to journal with two students of the health cohort, who later co-wrote the 2025 book; the Hubway case comes from his 2016 book The Analytics Edge.",
+    "pages": "pp. 2-3, 17, 24"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "promote the evaluation metric to the training objective",
+    "evidence": "The cluster-validity index normally used after clustering becomes the objective, so the number of clusters is an output; second instance after S470 (s01).",
+    "pages": "pp. 4-5, 9"
+   }
+  ],
+  "transferable": [
+   "Make an internal validation index the training objective, so the number of clusters is an output and depth is only a cap (pp. 5, 9).",
+   "Restricted geometric search: scan only split thresholds with the largest gaps between consecutive sorted values; at T = 0.99 it cut run time by 77.4% (Silhouette) for -0.25% average quality (pp. 10, 12-13).",
+   "Warm-start a tree search from cluster labels: K-means over several K chosen by the criterion, a classification tree on the labels, each leaf its own cluster (p. 11).",
+   "For mixed data use d = alpha*d_N + (1-alpha)*d_C with alpha the numerical share by default instead of one-hot encoding (pp. 9-10).",
+   "Score the ground-truth labels with the same internal metrics and report when the truth loses (p. 12).",
+   "Report the cross-criterion cost of training on one index (Table 2, p. 12)."
+  ],
+  "coauthors": "Agni Orfanoudaki, Holly Wiberg (MIT ORC)",
+  "quotes": [
+   {
+    "text": "In practice, the algorithm is implemented using a coordinate-descent procedure which allows it to scale to much higher dimensions than directly solving the optimization problem.",
+    "page": 8
+   },
+   {
+    "text": "We thus accept a slight decrease in the Silhouette Metric for the gain in interpretability.",
+    "page": 23
+   }
+  ]
+ },
+ {
+  "id": "S127",
+  "year": "2021",
+  "title": "Machine learning for real-time heart disease prediction",
+  "read_level": "full",
+  "contribution": "A real-time ECG classifier: 110 hand-built and TSFRESH features from single-lead signals, XGBoost tuned by Optuna and calibrated by temperature scaling, with weighted F1 of 0.93-0.99 within and across three public ECG collections and under 30 ms per prediction.",
+  "problem_entry": "AP/ML, no optimization model: AF and other anomalies are often asymptomatic and need trained readers, and earlier studies used unrealistic or non-public data (p. 1); classify short single-lead ECGs into seven classes in real time for a wearable (pp. 1-2).",
+  "key_idea": "Engineer features of inter-beat (QRS) timing plus generic time-series descriptors, feed them to XGBoost, simulate the wearable by keeping only lead II, calibrate by temperature scaling, and test across data sources (pp. 2-5).",
+  "assumptions": "Multi-class softmax with cross-entropy (p. 3); Physionet 2017 (8,828, wearable, 300 Hz), Tianchi 2019 (20,019) and Chapman-Shaoxing (10,646), the last two 10-s 500-Hz 12-lead hospital ECGs reduced to lead II (p. 2); Physionet's 300 validation ECGs or 70/30 splits, one recording per patient (p. 4); admitted: labels from different expert panels assumed equivalent, and the hidden test sets are out of reach, so random splits are assumed (p. 8).",
+  "proof_devices": [
+   "No proofs. Signal processing: Butterworth high-pass and band-pass filters, then standardization (p. 2)",
+   "Pan-Tompkins R peaks; RR statistics; HRV indices; P, Q, S, T found in windows around R peaks set by experiment; moving averages and derivative analysis dropped (pp. 2-3)",
+   "Feature selection: the union of top-50 XGBoost importances over five tasks gives 110 of 880 features; whether only training data were used is not stated (p. 3)",
+   "Optuna TPE over seven XGBoost hyperparameters, 500 iterations maximizing average 70-fold CV F1 (pp. 3-4)",
+   "Temperature scaling and a 10-bin expected calibration error (pp. 4-5)"
+  ],
+  "experiments": "Weighted F1: Physionet 0.94, Chapman 0.96, Tianchi 0.99, Chapman->Tianchi 0.99, Physionet->Chapman 0.93 (pp. 5-7); ECE 0.035/0.006/0.001/0.0008/0.02, with no calibration gain on Physionet (pp. 5, 10-11); latency under 30 ms per ECG, by step with 95% CIs, machine not stated (p. 7); no rival rerun: published scores of the original papers (Physionet 0.93 against the challenge winner's 0.83; Chapman 0.96 against 0.97), which the authors call not objective (p. 8); the tables survive only as captions.",
+  "positioning": "Against earlier ECG studies with unrealistic data and deep-network projects with non-public data (p. 1); claims a first for high performance across hospitals, countries and recording standards (pp. 1, 8); cites none of his group's optimization-based machine learning (p. 11).",
+  "writing": "Numbers-first abstract (p. 1); superlatives such as 'extremely strong performance' and 'enormous potential impact' (p. 8); a limitations section that argues label equivalence from the models' own generalization (p. 8); slips such as RR intervals 'longer than 50 seconds' (p. 5).",
+  "limits_future": "Printed limits: hidden test sets unavailable, different labellers per dataset (p. 8), Physionet calibration not improved (p. 5). Future: real-time monitoring on wearables for patients at risk (p. 8). Not addressed: prospective validation and the costs of the referral decision.",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "contradiction",
+    "note": "Prediction accuracy is the end metric; the referral decision (non-Normal calls go to a doctor) is named but not scored; no owner's current rule is the baseline; the comparison is with other papers' scores on other test sets (SKILL Warning sign 4).",
+    "pages": "pp. 1, 5, 7-8"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "No exact model; the incumbents' numbers are quoted, not rerun under matched conditions; the tuning protocol is stated.",
+    "pages": "pp. 3-4, 8"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "The feature set is reused as a component of the group's 2026 Hartford ejection-fraction paper (S678, card in c41, ref. 9 there).",
+    "pages": "cross-card: S678 pp. 4, 13, 20"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "gradient-boosted trees plus post-hoc SHAP for applied clinical prediction",
+    "evidence": "XGBoost with SHAP explanations instead of optimal trees in a health paper, again in S678 (c41) five years later; at odds with Taste mark 5's interpretable-by-design stance.",
+    "pages": "p. 4"
+   },
+   {
+    "pattern": "shape the evaluation to the deployment device",
+    "evidence": "Training data are cut down to the wearable's single lead, and per-step latency with 95% CIs is set against a refresh rate of 20 predictions per second.",
+    "pages": "pp. 2, 7"
+   }
+  ],
+  "transferable": [
+   "Simulate the deployment sensor by cutting richer training data down to what the device records: lead II only, from 12-lead hospital ECGs (p. 2).",
+   "Cross-source test: train on one source and test on another, on the labels the two share (pp. 3, 6-7).",
+   "Calibrate multi-class outputs by temperature scaling and report the ECE with a reliability diagram per model (pp. 4-5, 10-11).",
+   "Time each inference step with 95% CIs, stratified by input length, and state the refresh rate the latency allows (p. 7)."
+  ],
+  "coauthors": "Luca Mingardi (MIT ORC), Bartolomeo Stellato (Princeton ORFE)",
+  "quotes": [
+   {
+    "text": "The datasets that we have worked on are proprietary data of external companies, thus we don’t have access to its entirety, preventing from making an objective comparison to evaluate directly the performances of our model.",
+    "page": 8
+   },
+   {
+    "text": "On the contrary, the fact that our models generalize so well on such different populations is a good indicator that the labeling standards are very similar across datasets.",
+    "page": 8
+   }
+  ]
+ },
+ {
+  "id": "S021",
+  "year": "2022",
+  "title": "Evaluation of individual and ensemble probabilistic forecasts of COVID-19 mortality in the United States",
+  "read_level": "full",
+  "contribution": "The US COVID-19 Forecast Hub's evaluation of 28 models' probabilistic forecasts of weekly COVID-19 deaths (April 2020-October 2021): the median ensemble was the most consistently accurate (relative WIS 0.61), individual models varied widely, and accuracy fell with horizon; his group's DELPHI scored at the baseline level (relative WIS 0.99).",
+  "problem_entry": "AP (DA only in that forecasts inform decisions; no optimization): forecasts informed staffing, school closures and supplies, and the CDC used the ensemble in official communication; how reliable were the individual and ensemble forecasts of weekly deaths? (pp. 1-2).",
+  "key_idea": "A standardized, prospective hub with 23 quantiles, pre-designated primary models and a quantile-median ensemble, judged by WIS, interval coverage, standardized ranks and a difficulty-adjusted relative WIS against a naive persistence baseline (pp. 2, 9-10).",
+  "assumptions": "JHU CSSE deaths differenced to weekly incidence (pp. 8-9); eligibility (25 of 51 locations, all 1-4-week targets, complete quantiles, 47 of 79 weeks) leaves 28 models; truth frozen at 16 November 2021 minus the last 2 weeks; negative counts and two territories excluded; 50-state aggregates; 230 of 3,555 late submissions accepted with attestations (p. 9); 'unconditional' forecasts requested but most models conditional (p. 1).",
+  "proof_devices": [
+   "No proofs. WIS as weighted interval scores, decomposed into dispersion, underprediction and overprediction, with a worked example and the proper-score rationale (p. 10)",
+   "Standardized rank 1 - (r-1)/(n-1) per forecasted observation (p. 10)",
+   "Relative WIS and relative MAE adjusted for each model's covered targets using all models; procedure in the SI, not read (p. 10)",
+   "Empirical coverage of 50% and 95% prediction intervals (p. 10)",
+   "No significance test; the post hoc wave analysis is flagged as liable to reward models that predict extreme change (p. 7)"
+  ],
+  "experiments": "28 models, 1,791 files, 556,050 predictions, 55 locations, 79 weeks (p. 2; the 3,555 submissions of p. 9 are not reconciled with this); ensemble relative WIS 0.61, 18 models below 1 and 10 at or above (p. 2; Table 1, p. 4); DELPHI: 11,064 forecasts, 95% coverage 0.82, 50% coverage 0.46, relative WIS 0.99, relative MAE 1.01, 17th of 28 (pp. 4, 8); 4-week forecasts carry about 76% more error than 1-week, and 20-week WIS is 2.9-4 times the 1-week value (p. 5); the ensemble's 95% coverage fell under 80% in the North Dakota and Florida waves (p. 4); public code and data, R 4.0.2, EPIFORGE checklist (p. 10).",
+  "positioning": "Ensemble evidence from weather, influenza, Ebola and dengue and early COVID-19 studies (p. 2), which the paper confirms (p. 5); framed by the CDC partnership (p. 1). Written by the hub team; Bertsimas is a contributing modeller.",
+  "writing": "Numbers-first abstract and significance statement; the claim that the ensemble beat all contributing models (p. 1) is hedged to 'most, if not all' in the discussion (p. 5); key findings as bullets and two paragraphs of limitations (pp. 6-8).",
+  "limits_future": "Limits: correlated errors, uneven coverage of locations and horizons, models changing over time, inclusion rules, revised truth data, deaths only, no experimental data on model features (pp. 7-8). Future: test which data streams help; prepare submission formats for future pandemics (p. 8).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "An external judge, the field's proper score and a naive persistence baseline (Method 5 step 2), but forecasts, not decisions. Verifies the skill's correction figure: DELPHI relative WIS 0.99 against 1.00, relative MAE 1.01, 95% coverage 0.82. S103's own MAPE comparison (c27) differs in metric, scope and window, so the two differ in the judge, not in a fact.",
+    "pages": "pp. 2, 4, 9-10"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "consortium co-authorship as a contributing modeller",
+    "evidence": "His name is on a hub paper written by others that scores his group's DELPHI at the baseline level; second instance after S110 (c27); treat as external evaluation in the evidence ledger.",
+    "pages": "pp. 1, 4, 10-11"
+   }
+  ],
+  "transferable": [
+   "Score probabilistic forecasts by WIS and report its three components (dispersion, underprediction, overprediction) to show why a model loses (pp. 5, 10).",
+   "Compare models that cover different targets by a standardized rank per target, 1 - (r-1)/(n-1), and plot its distribution (p. 10; Fig. 2, p. 5).",
+   "Fix the evaluation in advance: one designated primary model, coverage thresholds, truth data frozen at a date, the last two weeks of revisable data skipped (p. 9).",
+   "Judge a new forecaster against both the naive persistence baseline and the multi-model median ensemble, the incumbent to beat (relative WIS 0.61) (pp. 2, 4, 9)."
+  ],
+  "coauthors": "About 295 authors (my count, pp. 10-11); written by E. Y. Cramer, E. L. Ray, V. K. Lopez, J. Bracher and N. G. Reich (corresponding); MIT team M. L. Li, D. Bertsimas, O. Skali Lami, S. Soni, H. Tazi Bouardi",
+  "quotes": [
+   {
+    "text": "This demonstrates that an ensemble model provided a reliable and comparatively accurate means of forecasting deaths during the COVID-19 pandemic that exceeded the performance of all of the models that contributed to it.",
+    "page": 1
+   },
+   {
+    "text": "Due to the operational, real-time orientation of the project, the Hub did not collect data on experimental modeling studies for which certain features can be included or left out to explicitly test what features of a model increase predictive accuracy.",
+    "page": 8
+   }
+  ]
+ },
+ {
+  "id": "S133",
+  "year": "2022",
+  "title": "Data-driven optimization: A reproducing kernel hilbert space approach",
+  "read_level": "full",
+  "contribution": "Two RKHS-based prescriptive methods for min_z E[c(z;y)|x]: kernel objective prediction (regress the cost on covariates) and kernel optimizer prediction (learn the decision rule), with finite-sample bounds, asymptotic optimality, a scalable convex reformulation and synthetic experiments in which the optimizer method beats the local weighted methods of Bertsimas-Kallus with far fewer samples.",
+  "problem_entry": "DA+ML (LO and convex QP as engines): the local learners (kNN, CART, random-forest weights) of Bertsimas-Kallus discard distant data, need much data, extrapolate poorly and suffer a curse of dimensionality, worse when the whole conditional distribution is needed (pp. 2-4); build general, asymptotically optimal prescriptive methods on loss-minimizing learners (p. 6).",
+  "key_idea": "Only the conditional expected cost is needed, not the conditional distribution: regress c(z;Y) on X by kernel ridge regression (weights K(X,x0)^T (K + lambda n I)^-1), or learn z(x) directly in an RKHS; the representer theorem makes both finite convex programs (pp. 4-5, 10, 15-16).",
+  "assumptions": "i.i.d. data; bounded kernel and costs (Prop. 2, p. 13); convex Lipschitz cost with c(0;y) <= C0 (Prop. 4, p. 19); compact X, continuous optimal rule, universal kernel, lambda -> 0 with lambda^2 n / log(1/lambda) -> infinity (Prop. 5, pp. 20-21); constants admitted useless in finite samples (p. 14); kerobj weights clipped at zero in the experiments (p. 11); synthetic newsvendor and product-placement data only (pp. 27, 32-34).",
+  "proof_devices": [
+   "Representer theorem turns both functional problems into finite convex programs (Prop. 1, p. 9; EC.2 not read; pp. 10, 16)",
+   "Finite-sample bound uniform over z for objective prediction via Rademacher complexity, rate sqrt(log(1/delta)/n) (Prop. 2, pp. 12-14)",
+   "Asymptotic optimality of objective prediction with a polynomial kernel of growing degree via the Weierstrass approximation theorem (Prop. 3, pp. 14-15)",
+   "Finite-sample bound for optimizer prediction via algorithmic stability and McDiarmid's inequality (Prop. 4, pp. 18-19); asymptotic optimality for universal kernels (Prop. 5, pp. 20-21)",
+   "Change of variables to decision values plus spectral regularization: 40 s at n = 800 against no finish in 2 h at n = 300 for the original form (pp. 17-18)",
+   "Big-O comparison with kNN (pp. 11-12, 17); squared-hinge constraint penalty keeping the guarantees (Corollary 1, pp. 21-23)",
+   "My reading: Prop. 3 assumes a polynomial kernel, while the experiments use a Gaussian kernel with clipped weights (pp. 11, 14, 26)"
+  ],
+  "experiments": "Synthetic only. Methods: kerobj, keropt, Bertsimas-Kallus cart/nn/rf, point prediction (linear, kNN), SAA and the simulated optimum (p. 25); relative cost between SAA (0) and the true optimum (1) plus a prescriptive signal-to-noise ratio (p. 25); hyperparameters for all methods by validation decision cost, kernel ranges set by hand, 30 replications, test sets of 100, scikit-learn 0.21.2, JuMP 0.19.2, Gurobi 8.1.1 (pp. 25-26). keropt with n = 50 beats the best local method with n = 800 in both problems (pp. 27, 34); under covariate truncation the kernel methods lead (newsvendor inner cut: only kerobj and keropt beat linear point prediction; product placement inner cut: keropt best), and with the outer 20% held out only keropt and linear point prediction recover the optimum (pp. 29-30, 35-36); local methods degrade with covariate dimension and keropt does not (pp. 32, 36); keropt takes about 10 times nn's time in the newsvendor and is about 10 times faster with test = training size in product placement (pp. 28, 34); machine not stated.",
+  "positioning": "Stochastic programming and RO do not take data as a primitive; SAA, DRO and data-driven RO lack auxiliary data; the closest work uses local methods (Hannah et al., Hanasusanto-Kuhn, Bertsimas-Kallus, Bertsimas-McCord) (pp. 5-6); claims the first general, asymptotically optimal approach on global learners (pp. 6-7); Ban-Rudin limited to the newsvendor (p. 7); reframes rather than attacks his group's S008 (p. 3); no Elmachtoub-Grigas entry in the references (pp. 41-43).",
+  "writing": "Hedged abstract ('suggest', 'at least the second method', p. 1); derivation with ordinary least squares before kernels (pp. 4-5); each proposition followed by a discussion of binding assumptions (pp. 14-15, 19-20); admissions in the body (pp. 14, 22, 34); a stronger conclusion ('every condition tested', p. 38) and 'scaled similarly' although keropt is about 10 times slower than nn in level (pp. 28, 40).",
+  "limits_future": "Printed: large constants (p. 14), possibly negative kerobj weights and kerobj's curse of dimensionality (pp. 11, 32), the unguaranteed projection variant (p. 22), local minima when decisions affect y (p. 23). Unprinted: synthetic data only; the multistage method untested; no identification assumption for the decision-dependent case, which the conclusion calls the causal inference setting (p. 38). Future: the RKHS framework for other problems; multistage as a preliminary proposal (pp. 7, 24, 38).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "A problem owned by statistics and stochastic programming is written as convex programs that stay LPs for two-stage linear costs; the device (representer theorem, change of variables, spectral regularization) is chosen so Gurobi solves it, with measured solve times and the failing formulation printed; the boundary (Big-O costs, nonconvexity when decisions affect parameters) is printed.",
+    "pages": "pp. 9-11, 16-18, 23, 33"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Decisions are scored with SAA as the zero point and point prediction as a baseline, and keropt learns inside the decision; but no owner, real data or field test. Also evidence for the Method 5 checkpoint on ML weights in high covariate dimension: the local methods degrade 'exponentially' with dimension; the fix here is a global learner, where S139 (c25) added a bootstrap-robust layer.",
+    "pages": "pp. 25-37"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "The incumbents (his group's S008 methods, SAA, point prediction) are dueled out of sample under one validation protocol, and point prediction's unfair edge is named; no MIO or warm start, and convex programs make certificates moot.",
+    "pages": "pp. 25-27, 34"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "The DA programme continues with another ORC member, positioned against the group's own S008 (c21) and S193 (c20).",
+    "pages": "pp. 2-7"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "re-derive the estimand from the decision",
+    "evidence": "Predict the cost, or the decision itself, instead of the conditional distribution of the uncertain parameter.",
+    "pages": "pp. 4-5, 7, 15-16"
+   },
+   {
+    "pattern": "subsume the incumbent as a special case",
+    "evidence": "kerobj's estimate has S008's weighted form, and keropt with a linear kernel and lambda = 0 is the linear decision rule of Ban-Rudin and S008's companion; second instance after S193 (c20).",
+    "pages": "pp. 5, 16"
+   },
+   {
+    "pattern": "extrapolation test by truncating the covariate distribution",
+    "evidence": "Train on covariate quantiles 0-40% and 60-100% and test on 40-60%, and the reverse with the outer 20%, in both test problems.",
+    "pages": "pp. 29-30, 35-36"
+   }
+  ],
+  "transferable": [
+   "Regress the cost, not the outcome: for each z, kernel-ridge-regress c(z; y^i) on x^i; the weights plug into an existing weighted-SAA solver; clip negative weights to keep convexity (pp. 4-5, 10-11).",
+   "For decision rules in an RKHS, optimize over the decision values with the penalty z^T K^-1 z, using an eigendecomposition with a small spectral floor; this turned a 2-hour non-finish into a 40-second solve (pp. 17-18).",
+   "For constraints on a learned decision rule, a squared-hinge penalty keeps convexity and the consistency theorem; project at test time if infeasible (pp. 21-23).",
+   "Finite-sample bounds: Rademacher complexity uniformly over z for objective prediction; algorithmic stability with McDiarmid's inequality for the regularized rule (pp. 12-13, 19).",
+   "Report relative cost between SAA (0) and the simulated true optimum (1), with the prescriptive signal-to-noise ratio that says how much of the perfect-information gap is attainable (p. 25).",
+   "Test extrapolation by training on the outer covariate quantiles and testing on the middle 20%, and the reverse (pp. 29-30, 35-36).",
+   "Tune every method by decision cost on a validation set and publish the grids, including how the new method's ranges were set (pp. 25-26).",
+   "Introduce the method with ordinary least squares, then generalize it to kernels (pp. 4-5)."
+  ],
+  "coauthors": "Nihal Koduri (MIT ORC)",
+  "quotes": [
+   {
+    "text": "Nevertheless, they do create large constants that preclude the usefulness of Proposition 2 in any real finite sample setting.",
+    "page": 14
+   },
+   {
+    "text": "In the largest computational example we considered in Section 7, formulation (16) solves in 40 seconds with n = 800 (around 90,000 decision variables), and formulation (14) does not finish solving in 2 hours with n = 300 (around 35,000 decision variables).",
+    "page": 18
+   }
+  ]
+ }
+]

@@ -1,0 +1,320 @@
+[
+ {
+  "id": "S248",
+  "year": "2017",
+  "title": "Accept or decline? An analytics-based decision tool for kidney offer evaluation",
+  "read_level": "full",
+  "contribution": "Random forests trained on OPTN registry and match-run data predict the probability that a waitlisted candidate is offered a kidney at KDPI 0.2, 0.4 or 0.6 or better within 3, 6 or 12 months (out-of-sample AUC 0.862–0.881). The tool is offered as proof of principle for the accept/decline decision, which is left to a future optimal stopping model.",
+  "problem_entry": "{ML+AP; DA as the stated aim} Kidney offer acceptance rests on a practitioner's experience and intuition (p. 1). The waitlist nearly doubled to more than 96,000 by 2013, and up to 50% of high-KDPI kidneys are discarded (p. 1). Entry: predict the chance of a better offer within a horizon (pp. 1–2). The decision itself is framed as optimal stopping and deferred (p. 6).",
+  "key_idea": "One random forest per KDPI threshold and horizon, on 14 patient-specific registry and offer-history features: OPO, blood group, wait time, expected DR mismatches, offer frequency by KDPI band, mean sequence number, cPRA and month (p. 2). The output informs the physician's judgement and educates candidates (p. 6).",
+  "assumptions": "Data: OPTN STAR waitlist data (1994–2013) and PTR match runs of eventually accepted kidneys (2007–2013): 38,806 runs, 535 removed, 287,283 patients (p. 2). Observations: 8 random dates per waitlist-year in the 10 largest OPOs, with censoring rules (p. 2). Offers declined by more than 50 candidates are excluded, and a sequence-number cutoff of 500 is set by validation (p. 2). Admitted: discards are missing, which biases the data (p. 7); the data predate the December 2014 allocation change (pp. 5–6).",
+  "proof_devices": [
+   "chronological training, validation and test windows separated by gaps equal to the label horizon (12 months; 3 months for the 3-month model) (pp. 2–3)",
+   "trees and variables per tree chosen by validation AUC, then a refit on training plus validation before a single test evaluation (p. 3)",
+   "rolling-horizon re-splits on 3 to 6 years of data, to measure how much data a new allocation regime needs (pp. 3, 5)",
+   "calibration of predicted against actual offer rates within clusters of similar patients (pp. 3, 5)"
+  ],
+  "experiments": "Out-of-sample AUC 0.862–0.881 in nine specifications (Table 1, p. 3); calibration within clusters and a worked patient across five OPOs (pp. 5–6). Baselines (p. 7): CART reaches AUC 0.814/0.809/0.792 against 0.878/0.881/0.870; logistic regression reaches 0.852/0.851/0.841, and its individual predictions are far off. [my reading] Two of the five worked-patient predictions fall outside the actual ranges (Table 2, p. 6). No software or run times are given.",
+  "positioning": "Positions against experience-based acceptance (pp. 1, 5). Cites Volk et al.'s liver offer decision-support tool and argues that kidneys, with dialysis as a fallback, are where such a tool matters most (p. 6). Methods are credited to Breiman (random forests, CART) and to the group's Analytics Edge textbook (pp. 2, 7).",
+  "writing": "Clinical-journal structure with a worked patient (J.S.) to make the tool concrete (p. 5). The conclusions are hedged ('proof of principle', p. 7). The author-contribution statement separates the approach (Bertsimas, Kung, Trichakis) from the implementation (Kung, Trichakis) (p. 1).",
+  "limits_future": "Limits: discards are missing from the data; random forests are not easily interpretable and CART loses AUC; the new allocation rules need data (p. 7). Future work: a dynamic optimization of accept/decline including the patient's condition on dialysis, and a controlled prospective assessment (p. 6).",
+  "method_links": [
+   {"method": "Method 5", "relation": "variant", "note": "The owner (physician and candidate) and the current rule (experience and intuition) are named, but predictions (AUC, calibration) are scored, not decisions; the accept/decline policy and a prospective test are deferred.", "pages": "pp. 1, 5–6"},
+   {"method": "Method 6", "relation": "evidence", "note": "Opens the organ-allocation programme with a student (Kung) and a clinical partner (Vagefi), continued by S094.", "pages": "p. 1"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "price of simplicity", "evidence": "Reversed case: CART's AUC loss against the random forest is printed (0.814 vs 0.878 at 3 months), the simple model is rejected, and the lost interpretability is admitted. Contrast S190 in this batch, which keeps the tree.", "pages": "p. 7"},
+   {"pattern": "data-sufficiency curve for a regime change", "evidence": "Models are refit on 3 to 6 years of data to show how AUC grows and levels off, which tells the partner how much data the post-2014 allocation regime needs before retraining.", "pages": "pp. 3, 5"}
+  ],
+  "transferable": [
+   "Separate chronological training, validation and test windows by a gap equal to the label horizon, so that no label leaks across splits (pp. 2–3).",
+   "Refit on growing data windows to tell a partner how much data a new policy regime needs before the model can be retrained (pp. 3, 5).",
+   "Report calibration inside clusters of similar patients, and one worked individual case, beside AUC (pp. 5–6)."
+  ],
+  "coauthors": "Jerry Kung, Nikolaos Trichakis (MIT ORC); David Wojciechowski, Parsia A. Vagefi (Massachusetts General Hospital)",
+  "quotes": [
+   {"text": "the current experience-based paradigm lacks scientific rigor and is subject to the inaccuracies that plague anecdotal decision-making", "page": 1},
+   {"text": "can be thought of as an optimal stopping problem: how long should a patient wait before accepting an offered kidney that best suits their needs?", "page": 6}
+  ]
+ },
+ {
+  "id": "S257",
+  "year": "2017",
+  "title": "Automated dynamic resource allocation for wildfire suppression",
+  "read_level": "full",
+  "contribution": "Casts wildfire suppression as an MDP and compares Monte Carlo tree search (with double progressive widening, genetic action generation and a Floyd–Warshall rollout heuristic) against a deterministic fluid MILO re-solved at each step. On synthetic grids, the MILO matches or beats MCTS and pulls ahead as the state and action spaces grow, at a fixed per-step budget.",
+  "problem_entry": "{SD+IO+HS; AP} Allocating suppression resources is a subjective process resting on commanders with insufficient information (p. 1). Dynamic resource allocation problems are MDPs (p. 1). Entry: MCTS on DRA had not been empirically studied (p. 2); the contest is framed as approximate solution of an exact model (MCTS) against exact solution of an approximate model (MO) (p. 2).",
+  "key_idea": "MO: replace the stochastic fire dynamics by a deterministic smoothed fluid model with continuous fuel and intensity. Write it as a MILO with binary team assignments and binary fuel-sufficiency variables, re-solve each step and apply the first allocation (model predictive control) (pp. 10–11); an LP relaxation with an index serves heavily constrained cases (p. 11). MCTS: double progressive widening, Q-weighted genetic action generation, Floyd–Warshall rollout weights (pp. 8–10).",
+  "assumptions": "Grid MDP: a burning indicator and fuel per cell, sparse neighbour ignition P(x,y), suppression success Q(x) independent across attempts, and any resource able to reach any cell each step (pp. 4–6). P(x,y) is calibrated from Canadian Fire Behavior Prediction System spread rates (p. 7). Experiments use synthetic grids only: grid one with ignition 0.06 and Q = 0.8; grid two with exponential rewards and spread 0.02 (pp. 12–13). MO parameters assume no intervention, infinite fuel and transmission rate 1 (p. 11).",
+  "proof_devices": [
+   "deterministic smoothed fluid approximation of the MDP as a MILO, re-solved in receding horizon (model predictive control) (pp. 10–11)",
+   "fluid idea credited to queueing networks (Avram, Bertsimas and Ricard) and revenue management (Gallego and van Ryzin) (p. 10)",
+   "LP relaxation of the assignment variables with the index v(x) = sum over teams of A(x,i) (p. 11) [my reading of a garbled formula]",
+   "no bound links the fluid MILO to the MDP optimum; MCTS converges only asymptotically, in the limit of samples (p. 2)"
+  ],
+  "experiments": "Custom C++ MCTS against Gurobi 5.0 on 2.2 GHz cores with 4 GB, single thread (pp. 11–12); a randomized straw man and the FW heuristic as baselines (p. 12); 256 runs per setting; grids up to k = 30; MO capped at 120 s per step (p. 13). Results: MO better on tail-hard instances (p. 14); not significant at k = 10 (p. 16); at k = 20 MO beats FW for all team sizes, while MCTS is worse than FW with 16 or 32 teams (p. 17). Failure printed: MO sometimes needs hundreds of seconds for a feasible solution (p. 16).",
+  "positioning": "Presents MCTS as untested on DRA and MIO as the operations-research alternative; credits fluid approximations in queueing and revenue management (pp. 2, 10); reviews deterministic (FARSITE, Prometheus) and stochastic fire-spread models (p. 4).",
+  "writing": "A laboratory-journal article with sidebars (MDPs, MILO, the Game of Life), a bulleted contributions list (p. 3), two headline insights before the experiments (p. 11), and statistical tests that qualify the visual comparisons (pp. 14–17). [my reading] A figure caption overstates the k = 10 result against the ANOVA (p. 16).",
+  "limits_future": "Calibrate with real wildfire data and compare with experienced decision makers; MCTS hyperparameters are poorly understood; the MO is only one way to approximate the MDP; a hybrid MO–MCTS is proposed (p. 18). A prototype decision-support tool is described in the appendix (pp. 19–21).",
+  "method_links": [
+   {"method": "Method 2", "relation": "variant", "note": "The why-now is a 200-billion speed-up over 25 years, a figure SKILL Method 2 dates to the 2014 Morse lecture, reused in 2017 rather than rebuilt; the paper does add measured solve times for its own model.", "pages": "pp. 3, 13–16"},
+   {"method": "Method 1", "relation": "variant", "note": "The MDP enters the MILO class only through a deterministic fluid approximation: the exact solution of an approximate model.", "pages": "pp. 2, 10–11"},
+   {"method": "Method 4", "relation": "evidence", "note": "Solver version, hardware, single thread and time limits are stated; time-limited runs are said to be typically not optimal; two baselines and statistical tests. No heuristic warm-starts the MILO.", "pages": "pp. 11–17"},
+   {"method": "Method 5", "relation": "variant", "note": "The commanders' current practice is named but is not a baseline; the comparison with experienced decision makers is future work.", "pages": "pp. 1, 18"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "deterministic fluid model first, randomness second", "evidence": "A smoothed deterministic fluid MILO, re-solved in receding horizon, produces the allocations, which are then evaluated in the stochastic fire simulator. Compare s2-02 S580 and s04 S130.", "pages": "pp. 10–11"},
+   {"pattern": "exact model, approximate solution vs approximate model, exact solution", "evidence": "MCTS (sampling the exact MDP) and MO (solving a fluid approximation exactly) are compared at equal per-step budgets as state and action spaces grow.", "pages": "pp. 2–3, 13–17"}
+  ],
+  "transferable": [
+   "Frame a rival comparison as approximate solution of the exact model against exact solution of an approximate model, and test where each wins as the state and action spaces grow, at a fixed per-step budget (pp. 2–3, 13–17).",
+   "Replace stochastic dynamics by a deterministic fluid version, solve it as a MILO, apply only the first decision and re-solve (pp. 10–11).",
+   "Name the naive baseline a straw man and add a second, tailored heuristic, so that gains are read against both (p. 12)."
+  ],
+  "coauthors": "J. Daniel Griffith, Robert J. Moss (MIT Lincoln Laboratory); Mykel J. Kochenderfer (Stanford); Velibor V. Mišić (UCLA); Vishal Gupta (USC)",
+  "quotes": [
+   {"text": "MCTS is attempting to approximate the solution to an exact model, whereas MO is attempting to find the exact solution to an approximate model", "page": 2},
+   {"text": "Over the last 25 years, a 200-billion-factor speedup in these codes has resulted from algorithmic advances and improved computer hardware.", "page": 3}
+  ]
+ },
+ {
+  "id": "H009",
+  "year": "2018",
+  "title": "Optimal classification and regression trees with hyperplanes are as powerful as classification and regression neural networks",
+  "read_level": "partial",
+  "contribution": "Proves constructively that feedforward, convolutional and recurrent networks with perceptron or ReLU activations can be emulated on the training set by OCT-H/ORT-H of stated depth, and that an OCT-H can be emulated by a two-hidden-layer perceptron network, so the two are equivalent in modeling power for classification. On seven data sets, shallow OCT-Hs match sigmoid networks.",
+  "problem_entry": "{ML; IO through the trees} Neural networks rely on training heuristics, it is unclear when and why they work, and they are not interpretable (pp. 2–3). Trees are interpretable, and OCT/OCT-H improve on CART (p. 3). Question: is OCT-H as powerful as neural networks? (p. 1, p. 4).",
+  "key_idea": "Two-way constructive emulation. First-layer perceptrons become one split per depth, and 2^N1 leaves enumerate the binary first-layer outputs (Theorem 1, pp. 12–14). ReLU layers become explicit linear functions of x on each branch, with q − 1 pairwise-comparison levels for the argmax (Theorem 2, pp. 16–19). CNN and RNN analogues follow (Theorems 3–6, pp. 23, 25, 30, 37). Conversely, an OCT-H maps to a two-hidden-layer perceptron network (Theorem 7, pp. 42–46).",
+  "assumptions": "All the theorems concern training-set accuracy and assume an optimal OCT-H of the stated depth (pp. 14–15). Activations are perceptron or ReLU, and RNNs have one hidden layer (pp. 4–5). Experiments use seven data sets (Framingham teaching data plus six UCI sets, 210 to 245,057 points) (p. 48).",
+  "proof_devices": [
+   "constructive emulation: one first-layer perceptron per tree depth, leaves enumerating binary activation patterns, leaf labels by a forward pass (Theorem 1, pp. 12–14)",
+   "propagating ReLU outputs as explicit linear functions of x on each branch; argmax by pairwise-comparison splits (Theorem 2, pp. 16–19)",
+   "optimality hinge: the constructed tree is feasible, so the optimal OCT-H is at least as accurate on the training data (pp. 14–15)",
+   "converse construction with weights 1/N_r and −2 and offset biases so that exactly one second-layer node fires per leaf (Theorem 7, pp. 42–46)"
+  ],
+  "experiments": "OCT/OCT-H from the Optimal Tree software, cross-validated; TensorFlow networks with sigmoid activations sized from Theorem 7 (N1 = splits, N2 = leaves), 50 random starts and a grid over step size and regularization (p. 47). Accuracy is very similar on six of seven sets; on Letter Recognition OCT-H reaches 80.3% against 67.0% for the best network (pp. 49–50). No run times, gaps or repeated splits [my reading].",
+  "positioning": "Builds on Bertsimas–Dunn OCT (2017) and the Optimal Trees book (2018) (pp. 3, 11, 50); cites neural-network history and universal approximation, and Breiman's grading of trees as A+ on interpretability (pp. 1–3).",
+  "writing": "Contribution tables map each network type to a tree depth and section (Tables 1–2, pp. 4–6); worked XOR and ReLU examples follow the proofs (pp. 14–15, 20); a three-reason significance paragraph (pp. 6–7); a hedged conclusion (p. 50). [my reading] The contributions say six data sets, §7 uses seven (pp. 6, 47).",
+  "limits_future": "The constructions require deep trees that may be impractical to compute, and more empirical research is needed (p. 50). Proposed: stochastic gradient methods for optimal trees, and MIO and local search for neural networks (p. 7). The experiments test sigmoid networks, which the theorems do not cover (p. 47) [my reading].",
+  "method_links": [
+   {"method": "Method 4", "relation": "variant", "note": "The theorem needs a globally optimal OCT-H, but the experiments use software the paper calls near optimal (MIO plus local search) and report no certificate (Tension T1). The duel is at matched complexity, with the network sized from the tree by Theorem 7, as in step 5.", "pages": "pp. 3, 11, 14–15, 47"},
+   {"method": "Method 3", "relation": "variant", "note": "Interpretability is priced by a theorem (no loss of modeling power) and an accuracy table across depths, not by a knob–bound curve; the depth the theorem needs is admitted to be impractical.", "pages": "pp. 7, 48–50"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "subsume the incumbent as a special case", "evidence": "Every feedforward, convolutional or recurrent network (perceptron or ReLU) is emulated by an OCT-H of stated depth, so on the training set the rival class sits inside the tree class.", "pages": "pp. 12–19, 23–37"},
+   {"pattern": "two-way constructive emulation to claim parity between model classes", "evidence": "Networks are built inside trees (Theorems 1–6) and trees inside two-layer perceptron networks (Theorem 7), giving equivalence of modeling power; the converse also sizes the rival in the experiments.", "pages": "pp. 12–19, 42–47"}
+  ],
+  "transferable": [
+   "To argue that a new model class loses nothing against a dominant rival, build the rival inside your class constructively (training-set equivalence), prove the converse, and report the size blow-up openly (pp. 12–19, 42–47, 50).",
+   "Use the converse construction to size the rival in the experiments (splits become first-layer nodes, leaves become second-layer nodes), so that the duel is at matched complexity (p. 47)."
+  ],
+  "coauthors": "Rahul Mazumder (MIT Sloan); Matthew Sobiesk (MIT ORC)",
+  "quotes": [
+   {"text": "Since an OCT-H does at least as well as T1 in classifying the training data, it must do at least as well as N1 too.", "page": 14},
+   {"text": "While our constructions require deep trees that may be impractical to compute, we have also found that in seven data sets that the modeling power of OCT-Hs and FNNs is indeed very similar even if the trees have small depth.", "page": 50}
+  ]
+ },
+ {
+  "id": "S190",
+  "year": "2018",
+  "title": "Applied informatics decision support tool for mortality predictions in patients with cancer",
+  "read_level": "full",
+  "contribution": "Builds 60-, 90- and 180-day mortality predictions at the start of an anticancer regimen from Dana-Farber EHR data (23,983 patients, 46,646 treatment lines, 401 predictors), using optimal classification trees with optimization-based imputation. Reaches AUC 0.83–0.86, second to gradient boosted trees, and releases the trees as an adaptive web questionnaire.",
+  "problem_entry": "{ML+AP; IO inside the methods} Oncologists rely on intuition-based assessment, physicians overestimate prognosis, and futile chemotherapy is the most pervasive superfluous practice (p. 1). Prior tools use small cohorts or registry data at diagnosis (AUC 0.71–0.87), and black boxes do not suit interactive tools (pp. 1–4).",
+  "key_idea": "OCT chosen for interpretability without the usual accuracy loss (p. 4), with optimal-impute for the many missing values (p. 2). The tree is turned into an adaptive questionnaire whose questions are its splits (oncomortality.com) (p. 4).",
+  "assumptions": "Single-centre EHR data (Dana-Farber/Brigham and Women's, 2004–2014) with Social Security death linkage and censoring rules (p. 2). 401 predictors, 289 of them gene mutations, which were too sparse to be selected (p. 8). A temporal split: 2004–2011 training, 2012–2014 validation (pp. 2, 4); tuning on a separate holdout set (p. 4). Events are rare: 5.6% of lines are followed by death within 60 days (p. 5).",
+  "proof_devices": [
+   "n/a: OCT and optimal-impute are used, not developed (refs. 29–30, p. 11); no solver, depth, time limit or certificate is reported (pp. 2, 4) [my reading]",
+   "temporal split by treatment start year as the out-of-sample test (pp. 2, 4)"
+  ],
+  "experiments": "Baselines: two logistic regressions, regularized logistic regression, CART and gradient boosted trees (Table 2, p. 8). OCT reaches AUC 0.86/0.84/0.83 against 0.90/0.89/0.87 for boosting and 0.81/0.81/0.79 for CART; PPV at sensitivity 0.6 is 20.2/27.5/43.1 against 28.2/34.7/53.4 (p. 8). Published tools could not be compared (p. 4). [my reading] The abstract's claim of significantly higher quality than the benchmarks (p. 1) fails against boosting.",
+  "positioning": "Tabulates 14 prior mortality-prediction studies (Table 1, pp. 3–4); contrasts with black-box tools (p. 2); credits the algorithmic novelty to the group's own optimization methods (refs. 29–30, p. 11); compares qualitatively with IMPAC (pp. 8–9).",
+  "writing": "A six-item list of the tool's practical value (personalized, clinically cogent, evidence-driven, actionable, validated, novel ML) (p. 2). The abstract's claims are stronger than the body's, which states the loss to boosting plainly (pp. 1, 6).",
+  "limits_future": "Single-institution retrospective data, internal validation only, models to be refit for new drugs (p. 9). Planned: external prospective validation, and studies of informed consent, mortality, hospice enrolment and quality of life (p. 9).",
+  "method_links": [
+   {"method": "Method 3", "relation": "variant", "note": "Interpretability is priced as one point against the black box (AUC 0.86 vs 0.90) and argued away, with no curve over a knob such as depth.", "pages": "pp. 4, 7–8"},
+   {"method": "Method 4", "relation": "variant", "note": "An out-of-sample duel prints the loss to boosting, but the abstract headline overstates the result (Tension T6); no solver, limit or certificate is given.", "pages": "pp. 1, 6, 8"},
+   {"method": "Method 5", "relation": "variant", "note": "The oncologist's intuition is the named current rule but not a baseline; treatment comparisons are not scored; a prospective study is planned.", "pages": "pp. 1–2, 9"},
+   {"method": "Method 6", "relation": "evidence", "note": "The group's OCT and optimal-impute are carried by students and former students into a clinical journal and a public tool.", "pages": "pp. 2, 4, 10"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "Ship a public tool with the paper", "evidence": "The trained trees are released as an adaptive questionnaire at oncomortality.com, whose questions follow the tree's splits. Same name as c21 S054, c38 S615 and s14 S325, S395.", "pages": "pp. 1, 4–5"},
+   {"pattern": "price of simplicity", "evidence": "What the single tree loses against gradient boosted trees (AUC 0.86 vs 0.90; PPV 20.2 vs 28.2 at 60 days) is printed and argued away on interpretability.", "pages": "pp. 4, 6–8"}
+  ],
+  "transferable": [
+   "Turn a trained tree into an adaptive questionnaire: each split becomes the next question, so the clinician enters only the variables on the patient's path (p. 4).",
+   "When published risk tools cannot be rerun on your population, say so, and train the standard alternatives (logistic, regularized, CART, boosting) on the same split as proxies (pp. 4, 8).",
+   "For a rare outcome, report PPV at a fixed sensitivity beside AUC, rather than accuracy at a 50% threshold (pp. 4–5, 8)."
+  ],
+  "coauthors": "Jack Dunn, Colin Pawlowski, John Silberholz, Alexander Weinstein, Ying Daisy Zhuo (MIT); Eddy Chen (MGH Cancer Center); Aymen A. Elfiky (Dana-Farber, corresponding)",
+  "quotes": [
+   {"text": "The only method that improves over optimal classification trees is the black-box method of gradient boosted trees.", "page": 6},
+   {"text": "Unfortunately, among the identified studies, no such comparison could be conducted.", "page": 4}
+  ]
+ },
+ {
+  "id": "S249",
+  "year": "2018",
+  "title": "Optimal healthcare decision making under multiple mathematical models: application in prostate cancer screening",
+  "read_level": "full",
+  "contribution": "A framework for decisions under several competing models: an efficient frontier trading the models' average assessment against the most pessimistic one, computed by iterated local search over 10.4 million PSA screening strategies under three published prostate-cancer models. Its 64 frontier strategies dominate 22 published expert strategies, and 41 stay beneficial in all 80 one-way sensitivity scenarios.",
+  "problem_entry": "{RO (across models)+HS+AP; DA} Model assumptions are largely unverifiable, so comparative modeling runs several models, and when they disagree the reporting challenge is unmet (p. 2). Comparative modeling evaluates few predefined strategies and had not been used to optimize prostate screening (pp. 2–3).",
+  "key_idea": "For each strategy, the average A(s) and the pessimistic P(s) = min over models. Maximize λA + (1 − λ)P over a grid of λ by constrained iterated local search, and keep all strategies encountered to build the frontier (pp. 3–4, 11), analogous to α-maxmin expected utility (pp. 4, 8).",
+  "assumptions": "Three models from a systematic search (547 + 75 citations, 36 full texts): G (CISNET microsimulation) and U, Z (discrete-time Markov), screened by a single reviewer (pp. 3–5). Re-implemented or obtained from their authors, adapted to QALE with common ERSPC utilities (p. 3). Strategy space: annual or biennial, cutoffs 0.5–6.0 ng/mL per 5-year band, non-decreasing in age, more than 10.4 million strategies (p. 3). Equal model weights (p. 3). Admitted: U and Z assume perfect adherence, and include neither clinical detection nor active surveillance (p. 8).",
+  "proof_devices": [
+   "efficient frontier of average vs most pessimistic model assessment, from maximizing λA(s) + (1 − λ)P(s) for λ in {0, 0.1, ..., 1} and keeping every strategy encountered (pp. 3–4; App. C, p. 11)",
+   "constrained iterated local search: one age band's threshold set to each of 12 values with minimal monotonicity repairs, random band order, starting from no screening (pp. 11–12)",
+   "certificate by exhaustive enumeration of 10.4 million strategies for models Z and U (60.1 and 369.1 CPU hours); not done for G or the frontier objectives (p. 12)",
+   "normalizing each model's assessment as a check on the aggregation (App. E, p. 12)"
+  ],
+  "experiments": "Single-model optima of 0.5, 4.8 and 6.7 months of QALE; U's best is worse than no screening under G (p. 4). 64 frontier strategies (57 biennial) dominate all 22 expert strategies by at least 0.5 months on average or 0.05 months pessimistic (pp. 1, 4, 6). Of 80 one-way scenarios, all are survived by 41 frontier strategies (pp. 6–7). With pessimistic utilities, 73 of 112 frontier strategies beat no screening under all models (p. 7). Normalization leaves a six-strategy frontier (pp. 8, 12). Runs take 11–338 min in Python on two 8-core Xeons (p. 12).",
+  "positioning": "Builds on CISNET comparative modeling and on α-maxmin and maxmin expected utility (pp. 2–4, 8). Complements model averaging and structural sensitivity analysis (p. 8). Cites the linear optimization textbook for optimization (ref. 5).",
+  "writing": "Opens with a fictitious three-model, five-strategy table that makes the trade-off concrete before the application (Table 1, p. 2). Limitations are framed as limits of the example, not of the framework (p. 8).",
+  "limits_future": "The example cannot inform public health decisions; the main obstacle is finding validated models, so the method suits established consortia (pp. 8–9). Extensions: ratios, rank-based aggregations, multi-criteria frontier surfaces in 2M dimensions, and aleatory uncertainty (p. 9).",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "One knob (λ) gives a price curve between average and pessimistic performance, handed to decision makers; the bad case (normalization changes the frontier) is printed. There is no solution-independent bound.", "pages": "pp. 8, 11–12"},
+   {"method": "Method 5", "relation": "evidence", "note": "Decisions (strategies) are scored against the field's current recommendations, 22 published expert-generated strategies, with the limit that the example cannot inform policy.", "pages": "pp. 4, 8"},
+   {"method": "Method 4", "relation": "variant", "note": "The heuristic is certified by enumeration for two single-model objectives only; there is no gap for model G or for the frontier.", "pages": "p. 12"},
+   {"method": "Method 1", "relation": "variant", "note": "No solver class: the models stay black-box simulators searched by local search.", "pages": "pp. 3–4, 11–12"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "frontier instead of a criterion", "evidence": "Instead of choosing between model averaging and maxmin, the whole average-vs-pessimistic frontier is computed and handed to decision makers. Compare s2-05 S448 and s09 S232.", "pages": "pp. 4, 8"},
+   {"pattern": "exact optimum on a small solvable instance as the certificate for a heuristic", "evidence": "Full enumeration of 10.4 million strategies for models Z and U confirms the local-search optimum; the paper says it was not done for G or the frontier.", "pages": "p. 12"},
+   {"pattern": "robustness across competing published models", "evidence": "Epistemic uncertainty is represented by a finite set of independently built, published models, and decisions are protected against the most pessimistic of them rather than against a parameter set.", "pages": "pp. 2–4, 8"}
+  ],
+  "transferable": [
+   "When several credible models disagree, optimize a convex combination of the average and the worst model's assessment over a grid of weights, and build the frontier from all solutions encountered (pp. 3–4, 11).",
+   "Certify a heuristic by full enumeration on the subproblems where enumeration is affordable, and say where it was not done (p. 12).",
+   "Report how many frontier strategies survive every one-way sensitivity scenario (pp. 6–7)."
+  ],
+  "coauthors": "John Silberholz (MIT Sloan/ORC, corresponding); Thomas Trikalinos (Brown University, Center for Evidence-based Medicine)",
+  "quotes": [
+   {"text": "We provide decision makers with tunable control by computing an efficient frontier of optimal strategies that trade off between performing well on average across models and performing well on the most pessimistic model.", "page": 8},
+   {"text": "The local search heuristic had identified the global optimal solution for models Z and U.", "page": 12}
+  ]
+ },
+ {
+  "id": "S432",
+  "year": "2018",
+  "title": "Multitarget tracking via mixed integer optimization",
+  "read_level": "full",
+  "contribution": "Solves multitarget data association and trajectory estimation jointly as an MIO with an ℓ1 fit and no probabilistic assumptions on detections, warm-started by randomized local search, relaxation-and-rounding and alternating minimization, and extended to missed detections and false alarms with two penalties. On simulated 1-D scenarios it matches or beats GNN and JPDAF in easier regimes and with more scans, and loses in dense, noisy or ambiguous ones.",
+  "problem_entry": "{IO+AP; HS} MTT is predominantly probabilistic (MHT, JPDAF); MHT is considered intractable for large scenarios and needs tuning (pp. 1–2), and earlier optimization serves MHT (p. 2). Entry: one joint MIO with no probabilistic assumptions (pp. 1–2). The why-now is a borrowed 800-billion speed-up figure (p. 2).",
+  "key_idea": "Binary assignment variables plus continuous initial positions and velocities; an ℓ1 fit linearized so that the MIO stays linear (eqs. 4–9, pp. 3–4). Warm starts: swap local search scored with closed-form ℓ2, recursive relaxation and rounding, and alternating minimization (pp. 4–5). Ambiguity adds false-alarm and missed-detection binaries with big-M and penalties, and fixed-P models are solved in parallel over [N0, N1] (pp. 5–7).",
+  "assumptions": "Constant velocity, independent targets and a fixed number of targets (Assumption 1, p. 3); no missed or false detections in the basic model (Assumption 2, p. 3); at most one detection per target per scan in the robust model (Assumption 3, p. 5). Simulated 1-D scenarios on [−20, 20] with P, T in {4, 6, 8, 10}, crossing and parallel trajectories, Gaussian noise σ = 0.1–5.0 (pp. 8–9); miss probability up to 0.2 and Poisson false alarms (p. 11).",
+  "proof_devices": [
+   "ℓ1 trajectory-fit objective linearized by ψ_jt, so the joint assignment–estimation problem is a linear MIO (eqs. 4–9, pp. 3–4)",
+   "robust MIO with false-alarm and missed-detection binaries, big-M link M_t and penalties θ, φ; identical to the basic model without ambiguity (eqs. 10–14, pp. 6–7)",
+   "fixed-P models solved in parallel over [N0, N1] instead of the intractable joint model (pp. 5–6; App. B, p. 15)",
+   "warm starts by randomized swap local search with closed-form ℓ2 scoring, recursive relaxation and rounding, and alternating minimization with a cited stationarity result (pp. 4–5)",
+   "difficulty index ρ from true-trajectory proximity, and Ideal solutions as bounds on accuracy and error (pp. 7–8)"
+  ],
+  "experiments": "Julia 0.5.0, JuMP and Gurobi 7.0.1 on one core, MIT cluster (p. 8); the MIO stops after 2T s, warm-started from 1,000 RLSH starts or R3+AM (pp. 9–10). JPDAF (1–10 h per instance) and GNN+KF are given full knowledge of the detection process (p. 8). Results: within about 10% of Ideal, GNN better for ρ ≤ 0.8 and the MIO for ρ > 0.8 (p. 10); with 50 scans R3+AM equals Ideal while GNN drops 25% (p. 10); GNN better for σ ≥ 2 (p. 11) and for eight targets under ambiguity (pp. 13–14). No gaps are reported [my reading].",
+  "positioning": "Contrasts with MHT, JPDAF, GNN with a Kalman filter, Viterbi and network-flow association, Lagrangian MHT and energy minimization (pp. 1–2). Claims generality from the absence of probabilistic assumptions and simplicity from at most two tuning parameters (p. 1).",
+  "writing": "A numbered four-item contribution list (p. 2); numbered assumptions before each model (pp. 3, 5); numbered result summaries after each experiment (pp. 11, 14); candid explanations of losses, namely overfitting and penalty tuning (pp. 10, 13). [my reading] Typos in the false-alarm set (p. 11) and a γ = 0.8 case (p. 13).",
+  "limits_future": "Under ambiguity, performance declines as targets increase, and penalties tuned for one number of targets misestimate others (pp. 13–14). Future work: recursive sliding-window use, more complex penalties, nonlinear trajectories, and the birth and death of targets (p. 14).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "A problem owned by Bayesian filtering is written as an MIO kept linear by the ℓ1 norm; the boundary is printed: the joint unknown-P model is not tractable, so fixed-P models run in parallel.", "pages": "pp. 2–3, 5–6, 15"},
+   {"method": "Method 2", "relation": "variant", "note": "The 800-billion speed-up figure is borrowed from the OCT paper (ref. [16]), not rebuilt.", "pages": "pp. 2, 16"},
+   {"method": "Method 4", "relation": "evidence", "note": "Protocol followed: heuristic warm starts, stated solver, core and time limit, a duel against GNN and JPDAF given full probabilistic knowledge, and the regimes where the incumbent wins printed. Certificate missing: no MIO gap is reported, and the abstract's near-optimality rests on none.", "pages": "pp. 1, 8–14"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "bound-referenced quality yardstick for heuristics and policies", "evidence": "Ideal solutions with perfectly known assignments, or with the true trajectories, bound the estimation error and the association accuracy that any method can reach.", "pages": "p. 8"},
+   {"pattern": "inner-easy/outer-hard decomposition", "evidence": "Outer swaps of detection assignments with the inner trajectory fit in closed form (RLSH), and alternating minimization between closed-form trajectories and per-scan assignment problems.", "pages": "pp. 4–5"},
+   {"pattern": "instance-difficulty index computed after generation to stratify results", "evidence": "ρ, computed from the proximity of the true trajectories relative to the noise, is used to group scenarios and plot every method's accuracy against difficulty.", "pages": "pp. 7–10"}
+  ],
+  "transferable": [
+   "Use a cheap norm (ℓ2, closed form) inside the warm-start heuristic and the solver-friendly norm (ℓ1, linear) inside the MIO, since the heuristic only has to seed the solver (p. 5).",
+   "When a joint model with an unknown count is intractable, solve the fixed-count models in parallel and pick the count by the normalized objective (pp. 5–6, 11).",
+   "Define an instance-difficulty index computed after generation and plot every method's accuracy against it (pp. 7–10).",
+   "Give the probabilistic incumbents full knowledge of the noise model, so that any win by the assumption-free method is conservative (p. 8)."
+  ],
+  "coauthors": "Zachary Saunders (MIT M.S., U.S. Air Force); Shimrit Shtern (MIT Sloan postdoctoral associate)",
+  "quotes": [
+   {"text": "Although MIOs are generally thought to be intractable (NP-Hard), the total combined effective improvement of software and hardware advancements is on the scale of 800 billion in the past 25 years", "page": 2},
+   {"text": "Thus, in more difficult scenarios, the MIO model might be inaccurate, in the sense, that it might cause data overfitting, resulting in low predictive ability and, thus, poorer performance", "page": 10}
+  ]
+ },
+ {
+  "id": "S094",
+  "year": "2019",
+  "title": "Development and validation of an optimized prediction of mortality for candidates awaiting liver transplantation",
+  "read_level": "full",
+  "contribution": "OPOM, an optimal-classification-tree prediction of 3-month waitlist death or removal trained on 1.6 million STAR check-in observations, beats MELD in AUC (0.859 vs 0.841 MELD-Na and 0.823 Match MELD). Swapped for Match MELD in SRTR's allocation simulator (LSAM), it averts about 418 deaths a year (17.6%), with total transplants unchanged.",
+  "problem_entry": "{ML+DA+AP} MELD has ranked liver candidates since 2002; its exception points are arbitrary, over-prioritize HCC candidates, and leave candidates without exceptions at higher risk (pp. 1–2). Problem: probability of death or unsuitability within 3 months (p. 2).",
+  "key_idea": "Train OCTs (OPOM) on all check-in observations, then test the decision by substituting rescaled OPOM scores for Match MELD inside the regulator's simulator, LSAM, keeping every other simulator feature, including its acceptance model (pp. 2–3).",
+  "assumptions": "STAR data from 2002 to 2016: 1,618,966 observations, 28 variables, 20 of them MELD components with trajectories (p. 2). 374,666 observations whose outcome is hidden by a transplant are excluded; imputation gave statistically similar results (pp. 2–3). Separate non-HCC and HCC models; a random patient split of 50/20/30; depth and minimum leaf size chosen by validation (p. 3). LSAM replays 2007–2011 under the 2014 policy (p. 3).",
+  "proof_devices": [
+   "n/a: OCT is used, not developed; described as MIO sweeping all candidate trees and as solved to global optimality, without a reported certificate (pp. 2, 9) [my reading]",
+   "score substitution into LSAM, rescaled to MELD's 6–40 range and distribution, with all other simulator features kept (p. 3)",
+   "cross-stratified AUC: each score's AUC is computed within severity strata defined by the other score (p. 4)"
+  ],
+  "experiments": "AUC 0.859 for OPOM against 0.841 and 0.823 for the MELD variants; MELD degrades with severity, with gaps up to 16% (pp. 5, 7). LSAM: 417.96 (17.6%) fewer deaths a year, gains in every region (11.4–23%) and MELD band, transplants stable (6138.92 vs 6177.56), HCC transplants down from 1178.72 to 690.96 (pp. 5, 7). Adopted policy changes are put on the same scale: 52 for MELD-Na and 30 for the HCC delay (p. 9). [my reading] The ranges are undefined, and two in Table 4 do not contain their means (p. 7).",
+  "positioning": "Against MELD's exception-point policy (Massie et al.; Berry and Ioannou) and the fixes adopted (MELD-Na, the HCC delay and cap) (pp. 2, 6, 9). Presents OCT as a state-of-the-art ML method that outperforms CART (p. 9).",
+  "writing": "The abstract leads with the simulated lives saved (p. 1), and the 418-lives framing recurs (pp. 7, 9). Caveats sit in the discussion (p. 9). A sample match-run table shows which candidates move up (Table 5, p. 8).",
+  "limits_future": "LSAM may overestimate the deaths averted, cannot capture changes in listing or acceptance behaviour, and assesses only waitlist deaths well; OPOM does not address geographic disparity; non-HCC exception groups are pooled; Black and Asian candidates receive fewer transplants (p. 9).",
+  "method_links": [
+   {"method": "Method 5", "relation": "evidence", "note": "The owner's current rule (Match MELD, MELD-Na) is the baseline; the decision is scored in the owner's own policy simulator by deaths a year, set against the rule changes the owner adopted, with the simulator's limits stated.", "pages": "pp. 3, 5, 9"},
+   {"method": "Method 4", "relation": "contradiction", "note": "OCTs are called solved to global optimality with no certificate, gap, solver or limit reported, and there is no duel against CART or another learner at matched complexity, only against the three-variable MELD.", "pages": "pp. 5, 9"},
+   {"method": "Method 6", "relation": "evidence", "note": "The second paper of the transplant line with the same student and clinical partners as S248, now with a public tool (opom.online, built with Dunn's help).", "pages": "pp. 1, 10"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "Counterfactual replay against the historical decision-maker", "evidence": "LSAM replays the 2007–2011 allocation history with OPOM in place of Match MELD, and both rules are scored on simulated deaths and transplants.", "pages": "pp. 3, 5"},
+   {"pattern": "Ship a public tool with the paper", "evidence": "OPOM is released at opom.online with the paper.", "pages": "pp. 1, 10"},
+   {"pattern": "score on the owner's official evaluation simulator", "evidence": "The proposal is tested in SRTR's LSAM, the simulator the regulator uses to assess national policy changes, so its numbers are directly comparable to MELD-Na's and the HCC delay's.", "pages": "pp. 3, 9"}
+  ],
+  "transferable": [
+   "Test a new priority score by swapping it into the regulator's own allocation simulator, rescaled to the old score's range and distribution, so that every other part of the simulator stays fixed (p. 3).",
+   "Compute AUC within severity strata, defining each score's strata by the other score, so that neither side picks favourable strata (p. 4).",
+   "Put the policy changes the regulator actually adopted on the same simulator scale as the proposal (p. 9)."
+  ],
+  "coauthors": "Jerry Kung, Nikolaos Trichakis, Yuchen Wang (MIT ORC); Ryutaro Hirose (UCSF); Parsia A. Vagefi (UT Southwestern)",
+  "quotes": [
+   {"text": "OCTs are decision trees similar to the classification and regression trees (CARTs), but are solved to global optimality with a novel method using mixed-integer optimization that outperforms the classical CART algorithms.", "page": 9},
+   {"text": "Although the actual number of waitlist deaths averted with LSAM under OPOM allocation may represent an overestimation, it is important to note the ability of LSAM to predict the overall directionality of change.", "page": 9}
+  ]
+ },
+ {
+  "id": "S151",
+  "year": "2019",
+  "title": "Travel time estimation in the age of big data",
+  "read_level": "full",
+  "contribution": "Estimates a travel time for every arc of a city network from taxi origin–destination records alone. The shortest-path fit is posed as an MIO, then solved at scale by iterating path generation and fixed-path SOCPs with a convex max-ratio loss and a continuity regularizer. On Manhattan (4,324 nodes) the estimates sit near the data's noise floor and give sensible paths; the method beats k-NN when data are scarce and loses slightly when they are plentiful.",
+  "problem_entry": "{IO+CP; DA/AP} Taxi OD data are public at scale but barely used for travel time estimation (p. 3). Inferring paths and times jointly is close to the NP-hard inverse shortest path length problem (p. 3). Entry: arc times whose shortest paths reproduce the observed OD times (pp. 2–4).",
+  "key_idea": "Fit arc times by mean squared log error of shortest-path lengths plus a neighbour-continuity regularizer (pp. 4–6). Exact MIO with path binaries and big-M, with path generation inspired by cutting planes (p. 6). At scale: fix each pair's path at the previous shortest path, use the convex max-ratio loss with absolute values, solve an SOCP, recompute the paths, and stop on the mean path difference (pp. 7–8).",
+  "assumptions": "Independent OD sampling (p. 4); drivers take shortest paths, which the paper questions (p. 5); static traffic within a window; neighbouring arcs of the same type have similar speeds (pp. 5–6). Synthetic 192- and 400-node networks with lognormal noise (pp. 9–11). Manhattan OpenStreetMap graph with 9,518 arcs; May 2016 weekday taxi trips (about 415,000 training, 275,000 test) (p. 12); at most 100,000 OD pairs (p. 13).",
+  "proof_devices": [
+   "exact MIO with one binary per candidate path and big-M shortest-path constraints (eqs. 7a–7f, p. 6)",
+   "iterative path generation inspired by cutting planes, with no guarantee of the global optimum (p. 6)",
+   "path fixing at the previous iterate's shortest path to drop the binaries (eqs. 8a–8b, p. 7)",
+   "convex max-ratio surrogate agreeing with the squared log loss to second order, then absolute values, giving one SOCP per iteration (eqs. 9–12, p. 7)",
+   "noise floor: the input log variance, estimated from each trip's k nearest trips, as the reference for the achievable error (p. 13)"
+  ],
+  "experiments": "Synthetic: under 10 iterations and under 2 minutes; bias 0.041 and 0.069 against input log s.d. 0.35 on grids that break the continuity assumption (pp. 10–11). Manhattan: λ = 1000 by cross-validation, under 2 hours, out-of-sample RMSLE just over 0.36 against a noise floor of about 0.31 (p. 13); restarts agree on paths (pp. 14–15). Against k-NN: k-NN wins with 100,000 and 10,000 trips, the method with 1,000 and 100; Zhan et al. is worse and 10–20 times slower (pp. 17–18). [my reading] Table 2 reports 0.31 for the same window (p. 15).",
+  "positioning": "Distinguishes OD data from loop-sensor and floating-car data, and from earlier k-NN, smoothing and probabilistic path-selection uses of taxi data (pp. 3, 16). Relates the problem to the NP-hard inverse shortest path length problem (p. 3).",
+  "writing": "The contributions name properties (few assumptions, interpretability, tractability) (p. 3). Each simplification is followed by its cost and a promise of empirical justification (p. 7). Self-limiting remarks: a table to take with a grain of salt (p. 10), operating at the limit of the solvers (p. 15).",
+  "limits_future": "Shortest-path and static-traffic assumptions (pp. 5, 12); no global optimality guarantee (p. 6); at the limit of what the solvers can handle (p. 15); k-NN is more accurate when data are plentiful (p. 17). The conclusion lists no future work (p. 18).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "A traffic-estimation problem is written exactly as an MIO, then kept in a class solvers handle at scale (an SOCP per iteration), because only LP and SOCP solvers take hundreds of thousands of variables; the boundary is printed.", "pages": "pp. 6–7, 15"},
+   {"method": "Method 4", "relation": "variant", "note": "No certificate for the iteration, but a duel against k-NN and Zhan et al. at matched data budgets with tuned k and λ, and the regimes where the incumbent wins printed.", "pages": "pp. 6, 17–18"},
+   {"method": "Method 5", "relation": "variant", "note": "Judged by estimation error and interpretability, not by a decision or against an owner's current rule.", "pages": "pp. 13, 17"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "constraint generation as the scaling engine", "evidence": "Candidate paths are added only when the current arc times produce a shorter path, an iteration the paper calls inspired by cutting-plane algorithms.", "pages": "p. 6"},
+   {"pattern": "inner-easy/outer-hard decomposition", "evidence": "The outer combinatorial choice (each OD pair's path) is fixed at the previous shortest path, and the inner problem over arc times is a convex SOCP; then the paths are recomputed.", "pages": "pp. 7–8"},
+   {"pattern": "restart agreement as a soft certificate", "evidence": "Random initial speeds (1–130 kph) and paths converge after five iterations to near-identical routes, read as evidence of a stable solution. Same name as c42 S681.", "pages": "pp. 14–15"},
+   {"pattern": "noise floor as the yardstick for an estimator", "evidence": "The input log variance is estimated by comparing each trip with its k nearest trips, and accuracy is judged by how close the model's MSLE comes to that floor.", "pages": "p. 13"}
+  ],
+  "transferable": [
+   "Estimate the irreducible noise of the data, by comparing each observation with its k nearest neighbours, and judge the estimator by its distance from that floor (p. 13).",
+   "Turn a min-over-paths constraint into linear constraints by fixing the combinatorial choice at the previous iterate's shortest path, recompute the choice, and stop on the mean change of the choice (pp. 7–8).",
+   "Replace a nonconvex squared log-ratio loss by the convex (max(T/T̂, T̂/T) − 1)², which agrees to second order and is symmetric in over- and under-estimation, and then by its absolute-value version, an SOCP (p. 7).",
+   "Duel against the data-driven incumbent across data densities to show where each method wins (Table 3, p. 17)."
+  ],
+  "coauthors": "Arthur Delarue, Sébastien Martin (MIT ORC PhD candidates); Patrick Jaillet (MIT EECS/LIDS, ORC co-director)",
+  "quotes": [
+   {"text": "Once more, we trade some modeling rigor for the ability to use more data, and we will show that this choice is empirically justified.", "page": 7},
+   {"text": "These results are obtained with a large number of data points, and in fact we operate at the limit of what our solvers can handle.", "page": 15}
+  ]
+ }
+]

@@ -1,0 +1,213 @@
+[
+ {
+  "id": "S083",
+  "year": "2022",
+  "title": "Where to locate COVID‐19 mass vaccination facilities?",
+  "read_level": "full",
+  "contribution": "Embeds the group's DELPHI epidemic forecaster, extended with vaccination and age classes, as discretized constraints of a site-location and dose-allocation model solved by alternating simulation with linear optimization, estimating about 20% more lives saved than a top-cities rule (about 9% more than a case-based rule) and robust to parameter perturbations, while the federal plan itself was not implemented.",
+  "problem_entry": "AP+DA (IO for site selection, HS for the simulate-optimize loop): a live federal decision, where to put 100 mass vaccination sites with at least one per state (pp. 1-2); vaccine OR centres on predictable influenza (p. 4) and prior epidemic models sit inside simulation, enumeration or simple heuristics, so embed SEIR dynamics directly in the optimization (p. 5); small sites and politics left out (pp. 3-4). Read: arXiv v2.",
+  "key_idea": "DELPHI-V (age risk classes, four vaccination states; pp. 8-10) discretized by forward differences into constraints of a three-objective location-allocation model (deaths, exposed at the horizon, weighted distance; pp. 11-14); coordinate descent alternates Simulate (ODEs for a fixed allocation, O(MKT)) and Optimize (infected totals fixed at simulated values, so the bilinear constraints become linear), started from feasible interpretable baselines and stopped at a 0.1% relative objective change (pp. 16-17, 21).",
+  "assumptions": "Nonconvex bilinear mixed-binary model with binary sites x and assignments W (pp. 12-15); vaccinated people still transmit, effects instantaneous, all-or-nothing, single-dose (pp. 8-9); rates uniform across age classes (p. 12); one representative vaccine (p. 12); vaccination only in one's own state but doses movable between sites within a state (p. 14); initial S, E, I split by class size (p. 18); data: DELPHI fitted on NYT counts, census ages, CDC age data to January 2021, 500 candidate cities, 3,006 counties, six age groups, February-April 2021, 90% effectiveness, 1 million doses a day (pp. 18-21); objective weights and fairness-knob values unreported (pp. 14, 23).",
+  "proof_devices": [
+   "Forward-difference discretization of the ODEs written as one-sided inequalities (28)-(36), with equalities only for deaths and immunity (37)-(38); whether the inequalities bind is not discussed (pp. 13-14)",
+   "Intractability argued by counting: 4mT(K+1)^2 bilinear terms, nearly 900,000 at 51 states, 6 age groups, 90 days; no timed solve of (P) at any size (p. 15)",
+   "Coordinate descent: fix the infected totals from simulation so that constraints (28)-(31) become linear; Optimize step called an LP solved by barrier although x and W are binary; no convergence or quality guarantee (pp. 16-17, 21, 30)",
+   "Per-region nonconvex program reconciling CDC age ratios with DELPHI regional mortality: reference rates (40), bilinear identity m X = D (44), monotonicity in time and risk class (45)-(46), Gurobi 9.0 to a 1% gap within minutes (pp. 20-21)",
+   "Baselines as absolute-deviation apportionment integer programs with sum of site counts 100 and at least one per state (pp. 17-18)"
+  ],
+  "experiments": "Gurobi 9.0, 2.3 GHz, 4 cores, barrier tolerance 1e-6, dt = 1 day, eps = 0.1% (p. 21); lives saved vs no vaccination: top-cities 19,045, population 19,709, cases 21,037, optimized locations 23,622, fully optimized 25,615, proposed fair 23,000 (+20.8% vs top-cities; about +9.3% vs cases and a 2,615-life fairness cost by my computation; Table 2, p. 23); per-state equity, no state worse by more than 100 (pp. 24-25); robustness with sites fixed and doses re-optimized over effectiveness 0.8-0.95, budget 0.5-2 million, age-dependent infection, no transmission and 50 random +/-20% scenarios: gains 12.5-30% and 17.5-25% (pp. 26-29); ex post FEMA check, 24 sites in 13 states, same-side agreement 9/13 sites and 7/13 doses (pp. 25, 34-37); no run times, iteration counts, gaps or knob values reported; Figure 5 and p. 22 text (6 to 10 sites) disagree with Table 3 (Texas 11, New York 5) (pp. 22, 35).",
+  "positioning": "Vaccine supply-chain OR (including Bandi-Bertsimas 2020; p. 4) and allocation epidemiology (p. 5); prior work characterized by its method (simulation, enumeration, simple heuristics) rather than attacked; closest Matrajt et al. 2020 and Grauer et al. 2020 (p. 5); DELPHI credentialed by the CDC ensemble, J&J Phase III site selection and a MAPE among the lowest of the ensemble (pp. 2, 8), not by the field's WIS metric.",
+  "writing": "Question title; abstract leads with the policy actor and decision, then method, then 20% / 4,000 lives (p. 1); contributions by standpoint (modeling, computational, practical; p. 4); 'obvious' or 'obviously' 12 times and 'highly robust' 6 times; gain recast as each vaccine 'worth' 1.2 vaccines (p. 24); 50-scenario robustness called 'guarantees' and heuristic outputs 'optimal' (pp. 27-29) against the conclusion's no-guarantee admission (p. 30); non-implementation printed (p. 25) beside an unsourced claim of influence on state allocations (p. 25); v2 editing residue such as a stray 'edit' (p. 25) and 'extra 4,000 extra lives' (p. 1).",
+  "limits_future": "Stated: age is the only risk partition, no heterogeneous mixing, first-order vaccine effects only, no theoretical guarantee from discretization plus coordinate descent (p. 30); small sites, politics and an apples-to-apples comparison with the realized plan set aside (pp. 3, 4, 25); future: second doses (p. 9), small sites (p. 3). Unstated: no run-time or gap evidence for the main algorithm; headline measured against the weakest benchmark; forecast skill on the authors' own metric; fairness knob values and the announced sensitivity analyses on them (p. 21).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "An owner's decision (federal site locations under the one-per-state rule) is scored in lives saved, not forecast accuracy; strategic sites are separated from revisable doses and stress-tested by re-optimizing only the doses; the plan's non-adoption is printed in the body, matching the skill's Workflow D correction (not implemented, not delayed).",
+    "pages": "pp. 2, 21-29, 25, 34-37"
+   },
+   {
+    "method": "Method 5",
+    "relation": "contradiction",
+    "note": "Baselines are constructed rules, not the owner's current rule (unknown at the time; the FEMA comparison is ex post and directional); the 20% / 4,000-lives headline is measured against the weakest of them (top-cities), while the gain over the case-based rule is about 9.3% by my computation, against step 2's preference for the stronger naive rule.",
+    "pages": "pp. 1, 17-18, 23, 25, 36-37"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "The incumbent rules are both warm start and opponent: they satisfy every constraint, so they initialize the coordinate descent and serve as the benchmarks.",
+    "pages": "pp. 3, 16-18, 23"
+   },
+   {
+    "method": "Method 4",
+    "relation": "contradiction",
+    "note": "No certificate, gap, time limit or run time for the main model ('short runtimes' claimed on p. 4), yet re-optimized coordinate-descent outputs are called 'optimal' and 'near-optimal (or even optimal)'; a gap is reported only for the small decoupled mortality program (1% within minutes). Tension T1 evidence.",
+    "pages": "pp. 4, 15, 21, 27, 29, 30"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "The predictor takes the model out of the LP/MIO class (bilinear, nonconvex); the linear class is regained per iteration by fixing infections at their simulated values, not by an exact reformulation; leaving the class is justified by a size count (about 900,000 bilinear terms), not by the measured solve time the Method 1 stop rule asks for; the Optimize step is called an LP though x and W are binary.",
+    "pages": "pp. 13-17, 21"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Fairness is a named property with three knobs (Theta_L, theta_V, theta_P) whose values are unreported; its price appears as one point (fully optimized 25,615 vs proposed 23,000 lives, a 2,615-life cost or about 10% of the benefit by my computation), framed as a remaining 20% gain rather than a cost; no curve.",
+    "pages": "pp. 15, 21, 23-24"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "One applied paper of the group's COVID-19 line: the DELPHI forecaster, the clinical-outcomes database and the predictions-to-prescriptions paper feed this vaccine model. Also Heuristic 4 evidence (non-implementation and a dominated 500,000-dose case printed, pp. 25, 27) and Tensions T2 and T6 evidence.",
+    "pages": "pp. 2, 7, 31, 33"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Simulation-fixed linearization",
+    "evidence": "A bilinear SEIR-embedded planning model is solved by alternating a simulation of the dynamics under the current decision with a linear model in which the coupling term (infected totals) is fixed at its simulated value, starting from feasible baseline rules and stopping on relative objective change.",
+    "pages": "pp. 15-17, 21"
+   },
+   {
+    "pattern": "Robustness check with strategic decisions fixed and tactical ones re-optimized",
+    "evidence": "For each perturbed model, evaluate the benchmark, the nominal solution with its strategic decisions (sites) fixed and its tactical ones (doses) re-optimized, and a full re-optimization; the gap between the last two is the cost of committing now.",
+    "pages": "pp. 26-29"
+   },
+   {
+    "pattern": "Optimization as data reconciliation",
+    "evidence": "A per-region nonconvex program merges CDC age-level and DELPHI region-and-time mortality, keeping one source's ratios and the other's totals under monotonicity constraints, solved by Gurobi 9.0 to a 1% gap within minutes.",
+    "pages": "pp. 19-21"
+   },
+   {
+    "pattern": "Size-count intractability verdict licensing a tailored heuristic",
+    "evidence": "The full model is declared intractable by counting about 900,000 bilinear terms, with no timed solve, and replaced by coordinate descent; S092 in this batch makes the same move for its pruning MILO (p. 14).",
+    "pages": "p. 15"
+   }
+  ],
+  "transferable": [
+   "Embed a bilinear dynamic model in a planning model by alternation: simulate under the current decision, fix the coupling factor at its simulated trajectory, solve the resulting linear model, repeat until the relative objective change is below a tolerance, starting from a feasible interpretable rule (pp. 16-17, 21).",
+   "Build every baseline so that it satisfies all of the model's constraints, so that each serves as both initialization and benchmark (pp. 17-18).",
+   "Add a small end-of-horizon penalty on people still exposed so that a finite-horizon death-minimizing model does not waste doses near its end (p. 11).",
+   "Reconcile a granular but aggregated data source with a coarse but reliable one by an optimization that keeps the ratios of one and the totals of the other under monotonicity constraints, decoupled by region so that a global nonconvex solver reaches a stated gap (pp. 19-21).",
+   "Robustness with three arms per perturbation: benchmark re-evaluated, proposed solution with strategic decisions fixed and tactical ones re-optimized, full re-optimization; report the gap between the last two as the cost of committing now (pp. 26-29).",
+   "Put the unconstrained and the fair solutions in the same table so that the price of fairness constraints can be read off (Table 2, p. 23).",
+   "After deployment, compare realized and proposed allocations state by state by the sign of their deviation from the population share (Tables 5-6, pp. 35-37)."
+  ],
+  "coauthors": "V. Digalakis Jr., A. Jacquillat, M. L. Li, A. Previero",
+  "quotes": [
+   {
+    "text": "Problem (P) remains intractable with existing commercial solvers, motivating the development of a tailored algorithm.",
+    "page": 15
+   },
+   {
+    "text": "Therefore, the full plan was not implemented and instead FEMA has opened just 24 facilities in 13 states, as compared to the original 100 planned ones.",
+    "page": 25
+   }
+  ]
+ },
+ {
+  "id": "S092",
+  "year": "2022",
+  "title": "Online mixed-integer optimization in milliseconds",
+  "read_level": "full",
+  "contribution": "Extends the Voice of Optimization framework to online parametric MIQO: a neural network predicts the optimal strategy (tight constraints and integer values) and a cached KKT factorization decodes it, giving a parameter-independent online flops count and maximum times of 0.01-0.22 s against up to 2,529 s for Gurobi on fuel-cell, portfolio and motion-planning examples.",
+  "problem_entry": "DA+IO: MIO is 'still considered harder to solve than convex optimization' and so rare online despite a trillion-fold speed-up attributed to [Bix10] (p. 2); online use needs hard time limits but only parameters change, so data from past solves can be reused (p. 2); each rival line lacks one thing: parametric awareness, prediction or guarantees, integer support, memory, use of data, or benefit from warm starts (pp. 5-8). Read: arXiv v4.",
+  "key_idea": "Learn the map from parameters to the optimal strategy (tight constraints plus integer values) as multiclass classification with a feedforward NN; online, decode the top-k strategies through offline-cached KKT factorizations of the reduced equality-constrained QP and keep the best feasible one, so no solver or iterative routine runs online (pp. 1, 3, 9-10, 17-18).",
+  "assumptions": "Parametric MIQO with P positive semidefinite, MILO as P = 0 (p. 17); caching only when theta enters q and b, not P or A (pp. 18, 28); LICQ bounds the tight constraints by n (p. 9); linear g for equality tight constraints (p. 10); independent samples for the Good-Turing bound (p. 12); KKT nonsingularity not discussed; data: fuel cell from [FDM15] sampled around a 10,000-step closed-loop trajectory, S&P 100 2008-2013 with synthetic forecasts the authors call not real, 2-D motion planning with T = 60 and tau = 0.1 s (pp. 23-32); 100,000 training samples, 80/20 split, 10,000 test samples, tolerances 1e-4 (pp. 20-23).",
+  "proof_devices": [
+   "Strategy s(theta) = (tight constraints, optimal integer values); LICQ bounds the tight set by n; with the strategy fixed the reduced problem (3) is continuous and convex (pp. 9-10)",
+   "KKT linear system (10) of size q = n + |T| + d for the equality-constrained QP; sparse permuted LDL^T at O(q^3) to factor and O(q^2) per solve, or MINRES (pp. 17-18)",
+   "Offline factorization caching per strategy when the parameters enter only the linear cost and right-hand side (p. 18)",
+   "Online flops bound (12) O(n_M n_{L-1} + (n + |T| + d)^2), independent of the parameter values; counts one decoded strategy, not the top-k evaluation that dominates measured time (pp. 18-19, 21)",
+   "Missing-strategies bound imported from [BS21]: G + c sqrt((1/N) ln(3/beta)) with c = 2 sqrt(2) + sqrt(3), used as a stopping rule for sampling (pp. 12-13)",
+   "Strategy-pruning MILO (7) ruled out by size (200 million reduced problems, millions of binaries) and replaced by a frequency heuristic that halves alpha until every reassigned sample is within relative epsilon (pp. 14-16)"
+  ],
+  "experiments": "Princeton PICSciE: 16 Broadwell e5-2680v4 cores for data collection, NVIDIA P100 for training, CPUs online; Gurobi version and online thread counts not stated (pp. 21-22); Good-Turing condition met at 0.001 (p. 22); baselines Gurobi default and heuristic mode (TimeLimit = 1 s, MIPFocus = 1), both warm-started (p. 21); maximum times: fuel cell MLOPT 0.0096-0.0130 s vs Gurobi 0.0089-114.81 s; portfolio 0.0113-0.0137 s vs 19.67-2,529.39 s; motion planning 0.0263-0.2213 s vs 3.53-809.34 s (Tables 1-3, pp. 25, 29, 35); ratios 0.9 to about 185,000 by my computation; 8-obstacle worst case of 0.2213 s exceeds the 0.1 s deadline, uncommented (pp. 32, 35); motion-planning accuracy mostly below 10% (pp. 32-33); pruning fails for the portfolio (p. 29); training a few hours to under a day (p. 22).",
+  "positioning": "Extends the authors' [BS21] and Stellato's embedded-solver work (OSQP); each rival line (learning to branch, reinforcement learning, active-set learning, embedded convex solvers, explicit MPC, feasibility pump and ADMM heuristics, warm-started branch-and-bound, value functions) is credited and given one limitation (pp. 5-8); first-time claim hedged with 'To the authors knowledge' (p. 6); his own textbooks back the hardness facts (p. 16); MINRES cited to the LSQR entry [PS82] (pp. 18, 42).",
+  "writing": "Title promises milliseconds; speed-up stated as 'from two to three orders of magnitude' (p. 1), 'more than two' (p. 2), 'up to three' (pp. 4, 35) and '100 to 1000 fold' (p. 36), against table ratios of 0.9 to about 185,000; 'extremely fast' three times (pp. 1, 2, 36); MIQO said to cover 'the vast majority of real-world optimization problems' (p. 36); numbered contributions (pp. 3-4); a borrowed trillion-fold figure as the Method 2 why-now (p. 2); typos and slips (pp. 12, 14, 25, 28-29, 32-33).",
+  "limits_future": "Stated: training needs optimal solutions, so the method does not apply where Gurobi takes hours; future: specialized NN architectures, suboptimal training solutions, strategy reduction for large purely discrete problems, use of the previous solution as warm starts do (p. 36). Unstated: no online feasibility or optimality guarantee; the coverage bound is tied to the offline sampling distribution (pp. 12, 24-25, 28); the flops count omits the top-k evaluation (pp. 19, 21); the 8-obstacle deadline miss (p. 35); Gurobi version and threads.",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Duel with the incumbent solver: Gurobi warm-started at default settings and in a time-limited heuristic mode (TimeLimit = 1 s, MIPFocus = 1); suboptimality and infeasibility measured against its optima on 10,000 test samples; code released (MLOPT); the T = 10 case where Gurobi is faster stays visible in Table 1.",
+    "pages": "pp. 20-23, 25, 29, 35"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "The exact solver moves offline as the teacher that labels strategies; online there is no certificate, only a Good-Turing coverage bound and measured statistics; the paper never calls online answers certified and states its own limit (no use where Gurobi needs hours). Also Heuristic 3 evidence: the exact pruning MILO is kept for small problems (p. 15).",
+    "pages": "pp. 12-13, 15, 20, 22-23, 36"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "The speed-up ('over a trillion times' in 25 years) is borrowed from [Bix10], not rebuilt, and used to concede that MIO is still too slow online; the operative why-now is the data of repeated parametric solves plus fast NN classifiers. Data point for the skill's figure series (200 billion, 450 billion, 800 billion, 2 trillion): a 2021 text citing over a trillion from a 2010 source, not checked against Bixby 2010.",
+    "pages": "pp. 2, 6"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Class-keeping turned around: fixing the integers and the tight constraints reduces the online MIQO to a KKT linear system, so no solver runs online; caching depends on the parameters entering only the linear cost and right-hand side.",
+    "pages": "pp. 9-10, 17-19"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Predictions are scored as decisions (a strategy is accurate if its decoded solution is feasible and within 1e-4 suboptimality, whatever its label), but there is no owner or current rule, and the motivating closed-loop uses (control performance, portfolio backtests) are not evaluated.",
+    "pages": "pp. 22-23, 29"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "My reading: a price-of-speed curve; the knob k trades time against suboptimality, infeasibility and accuracy (Figures 2, 4, 7) and the flops bound does not depend on the solution, but the bad cases (T = 10; 8 obstacles over the 0.1 s deadline) are not discussed.",
+    "pages": "pp. 19, 25-26, 29-30, 34-35"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Programme line with software: [BS21] (interpretability), then this paper (speed), then [CCS+20] (robotics), carried by MLOPT on GitHub. This is also the source paper of the skill's Heuristic 5 (learn the optimizer's strategy offline); claim narrowing from v1 to v4 not checked (v1 not read). Tension T6 evidence: headline speed-up vs table ratios and an uncommented deadline miss.",
+    "pages": "pp. 2-3, 8, 20"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Deadline-first evaluation",
+    "evidence": "Maximum solve times per instance size are tabulated against the application's sampling time, and the online cost is given as a flops count independent of the parameter values; predictability, not only average speed, is the selling point.",
+    "pages": "pp. 4, 19-20, 25, 29, 32-35"
+   },
+   {
+    "pattern": "Good-Turing stopping rule for offline data collection",
+    "evidence": "Parameters are sampled until the Good-Turing bound on the probability of an unseen strategy falls below epsilon (met at 0.001 in all examples).",
+    "pages": "pp. 12-13, 22"
+   },
+   {
+    "pattern": "Size-count intractability verdict licensing a tailored heuristic",
+    "evidence": "The exact strategy-pruning MILO is ruled out by size (200 million reduced problems, millions of binaries) and replaced by a frequency heuristic said to match the MILO on small problems, with no numbers shown; S083 in this batch makes the same move (p. 15).",
+    "pages": "pp. 14-15"
+   }
+  ],
+  "transferable": [
+   "For a parametric MIQO solved repeatedly, label each sampled instance with its strategy (tight constraints and integer values), learn parameters to strategy as multiclass classification, and decode by fixing the integers and solving the KKT system of the equality-constrained QP (pp. 9-10, 17).",
+   "When the parameters enter only the linear cost and the right-hand side, factor each strategy's KKT matrix offline and cache it, so that the online step is forward-backward substitution (p. 18).",
+   "Hedge classifier errors by decoding the top-k classes in parallel and keeping the best feasible one; plot time, suboptimality, infeasibility and accuracy against k (pp. 12, 18; Figures 2, 4, 7).",
+   "Stop sampling when the Good-Turing bound on the probability of an unseen strategy, G + c sqrt((1/N) ln(3/beta)), falls below a target epsilon (pp. 12-13).",
+   "Prune classes with a frequency heuristic: keep the strategies covering a 1 - alpha fraction of samples, reassign the rest, halve alpha until every reassigned sample is within relative epsilon of its optimum; check against the exact MILO on small instances (pp. 14-16).",
+   "When several labels give equally good solutions, define accuracy by decision quality (feasible and within 1e-4 suboptimality), not label match (pp. 22-23).",
+   "Report maximum, not only average, solve times per instance size against the application's hard deadline, and benchmark against both the default solver and a time-limited heuristic mode, both warm-started (pp. 21, 25, 29, 35).",
+   "Count the online flops as a function of the dimensions to show that run time does not depend on the parameter values (p. 19)."
+  ],
+  "coauthors": "B. Stellato",
+  "quotes": [
+   {
+    "text": "In [Bix10] the authors analyzed the impressive rate at which the computational power of MIO grew in the last 25 years providing over a trillion times speedups.",
+    "page": 2
+   },
+   {
+    "text": "Therefore, the current approach does not apply to problems that take hours to solve with Gurobi.",
+    "page": 36
+   }
+  ]
+ }
+]

@@ -1,0 +1,239 @@
+Transcript (YouTube auto-generated English captions, ASR; NOT checked against the audio)
+Talk: Lecture 1: What is MINLO? Components of an Optimization Model, by Sven Leyffer. GIAN course, IIT Bombay, January 2024.
+Video: https://www.youtube.com/watch?v=42ZqZHXjJt8 (length 2026 s; playlist PLREyhbtkeBNpTZtDBfcwLigIsAAEGQ1iR)
+Retrieved: 2026-10-10 with yt-dlp 2026.08.19 (--write-auto-subs --sub-langs en); converted with scripts/srt_to_transcript.py
+Used in: ../../../research/02-methodology.md
+----
+okay it's time I'm I'm glad we didn't lose too many people um it's a great pleasure to be here to be part of this course um I'm not sure I'm allowed to say this but petro ashitosh and I are writing a book on mixed inder nonlinear
+
+optimization and you are not part of a Guan course you're actually Guinea pcks on which we're trying out some of this material so welcome to this little lab experiment um and before we start um whatever you
+
+do in this course this is the most important slide of the whole course so if you do not get this slide you're in trouble um please ask question so um you know there are no stupid questions um there's only people who can't explain what
+
+they're doing um and believe me because I've I've seen it myself if you have a question then somebody sitting next to you has probably the same question I've been in a in a talk with a I was sitting next to a member of the
+
+National Academy of Sciences of the United States Margaret Wright and I turned to her and said do you know what matroids are and she turned to me and said no and I thought okay so we're both in the same vot here so please ask
+
+questions and then if you ask questions at least I know you're interested and not solving Suduko puzzles on your phone most importantly I'm not a teacher I work at argon National Laboratory which is a department of energy lab we do open
+
+science research there we work on uh energy uh things things related to energy we work on uh new materials for energy uh um scheduling of renewable energy we have a very large computer but I'm not a teacher so I learn from your questions
+
+and we learn from your questions as to what do we need to put into the book okay so I'm going to go quite slowly here initially and talk about um the components of an optimization problem and I I I should
+
+really apologize because most of you when you introduce yourself we're basically saying okay we're we're seasoned optimizers you all do supply chain optimization or scheduling of patients in in uh in hospitals or
+
+scheduling of renewable energy so you knew all you know all these question so um but just to sort of go from the start optimization is really the art of finding the best solution from a collection of Alternatives um and when we solve an
+
+optimization problem a lot of times it's very hard to actually ensure that you have the best solution so that's actually a very very strong statement and Petro will later tell you why this is very hard often um you know if you if
+
+you see somebody who's really tall you might be tempted to say wow you're the tallest person on in on the planet but to make that statement you have to know everybody other person on the Planet so that's a that's a strong statement and
+
+assuming there's no Guinness Book of Records um uh optimization happens in in all areas and one of the exciting parts of working at a government lab is that I see scientists from many disciplines working in
+
+optimization um I'll show you one in a moment design of experiments so we have physical experiments that we're conducting they're often expensive like your drilling holes in the Arctic to get ice cores and extract information about
+
+um about about the sea ice for example or anarctica about the ice shelves and that's very important to predict how these ice shelves are going to behave for the next 50 or 100 years um that's that's a very challenging problem um
+
+many of you probably know about power grid control and design so how do you design an efficient power power grid how do you control this power grid how do you make sure the lights stay on that's non-trivial and in fact the um one
+
+person wants describe someone wants to describe the US power grid which is probably much much smaller than the Indian power grid as the most complex machine ever built really complex problem Finance there are many
+
+applications um in medicine the dose design for radiation therapy for example so you you you have a human body and somewhere in the body there's a there's a tumor and so you want to zap it with x-rays or
+
+radiation and and the more you zap the tumor the better because the tumor dies so that's that's great at the same time next to the tumor there's often other things like eyes and noses and and organs that are very important to the
+
+person so you don't want to zap those because you're going to kill the patient so that's very interesting optimization problem you're balancing actually two different objectives kill the tumor but let the
+
+patient live um and I don't know you can probably decide which one is more important um economics so we have somebody here from with an economics background um there's an interesting problem in the optimal transition to
+
+clean energies you can formulate this problem and uh design policies on how you encourage consumers for example to adopt electric cars or alternative energies and so this optimal transition is something that happens a bit like a
+
+um logarithmic L transform over time and if you have an objective of doing this as quick as possible then you can think about what incentives you provide tax incentives reduced or money that you give to the um Pur people and then
+
+lastly Big Data machine learning the training of neural networks that's a sort of emerging area and there's a lot of optimization in it in terms of training these networks reducing loss function um there's some integer optimization that
+
+one could apply there that has been applied where you're selecting the depth of your network and the breadth of your network those are integer variables or you can optimize the individual activation function inside your networks
+
+and we're trying to give some detailed examples throughout the course so um there's lots of optimization and if you want to know more um I I I know a lot of optimization problem I'm not going to be able to tell you about all of
+
+these but here's one problem that I'm working on right now at argon and that's the optimal placement of environmental sensors so on this slide you see two problems actually on the left hand side is a very these first two pictures are a
+
+very simple toy problem toy example exle the right hand one um does anybody know what's depicted there what what is shown does anybody recognize this country or irand Greenland brilliant okay um so um what we have in these examples is we
+
+have a model of the physical world so in in this first example here uh this is maybe a a very simple urban area there's two houses here it's a two-dimensional Urban area so it's very simple but we can do this in 3D as well and somewhere
+
+in this urban area uh there's some contaminant that is released and then this contaminant passes through this area um following an advection diffusion equation that's a partial differential equation that tells you how this this is
+
+an initial condition will be distributed over time what we're interested in is um we don't really not typically we don't know where this um initial contaminant is and so we're interested in finding out where
+
+a contamination happen so that we can take we can send a team there to remediate it somehow shut it down in some way uh and so typically what we do is we have locations these yellow dots are sensor locations so you could
+
+imagine having sensors on your houses that tell that measure the air quality for example and what you want to do is you want to place these sensors at location so here I have 16 potential locations but you can imagine having many many
+
+more locations and the goal of a design of experiment problems is to uh tell me where do I place these sensors so that no matter where the initial release happened I detected as quickly as possible so I want to be able to from
+
+the measurements I only make measurements at discrete locations I I can't make measurements everywhere from these measurements I want to be able to invert for the initial location but now I want to have an arbitrary initial
+
+location so no matter where the initial location is I want to find out as quickly as possible where this was and so the placement of the sensors those are binary decision variables you either place a sensor or not the sensors are
+
+expensive so you probably have an upper bound on how many you can afford and there's a nonlinear process that goes then from the measurements that you make of the sensors back to the initial condition and typically we
+
+maximize some kind of Information Gain or minimize the variance so that we get as accurate picture as possible so we're looking at this at the moment um but really what we want to understand is the uncertainty of the CIS in Greenland and
+
+so what you see on the right here is um is the uncertainty in the magnitude and the depth of the CIS so does anybody know how deep the sea ice is in in Greenland how many meters or gas kilometer a kilometer anybody has
+
+more than one kilometer 3 kilometers that's the thickness of this ice um if that all melts there's just a chain of islands left around Greenland the uncertainty is about 600 meters and so knowing this uncertainty measure and and reducing
+
+this uncertainty is important for us to understand how quickly the SE ice moves off Greenland because the thickness allows us to understand what's actually underneath the c i which is the the friction the basil friction and we want
+
+to understand these basil friction parameters to predict when the CIS is going to move off now I don't know if you can see it but they what they do typically is they fly aircraft in straight lines across Greenland to
+
+measure the thickness um with ground penetrating radar um what we want to do is basically have curvy flights that fly that pick up reduce the uncertainty in a better way and so designing a trajectory is a really hard
+
+problem and this is a very challenging problem so this is to model the CIS here you can no longer use an advection diffusion equation you have a Stokes flow those are very complicated complex codes with complex
+
+disz okay so that sort of the motivation and I'm going way too slow so um ingredients of an optimization problem so here is a way of writing down an optimization problem we will use this notation throughout the course or a
+
+similar notation we have an objective function and there's a spelling mistake there there should be an i there so I need to correct that um that basically tells us how well we're doing so minimize the cost of placing the sensors
+
+for example um our decision variables are X and Y and we typically use x for continuous and Y for discrete decisions or integers and then we have what I wrote down is three classes of constraints and there's actually more classes more
+
+distinctions within these classes so the simplest ones are these simple bounds that just say your X has to lie between some lower bound and some upper Bound for example and the lower or the upper bound could be
+
+infinite so in in some cases those could be zero lower bounds so the uh the pressure for example if if you look at Stokes flow the pressure is non- negative um why and and you have bounds on Y and then there are some aine or
+
+linear constraints and again we can write them either with lower or upper bounds if the lower bound is the same as the upper bound then those are equations or equality constru straints and the most General
+
+constraints are these nonlinear constraints here where we have a nonlinear function G of X and Y that is between these two bounds and again if the bounds are equal we have an equation and then any of the bounds can be either
+
+minus infinity or Infinity if they're both minus infinity and infinity then there's nothing no constraint okay that's okay I hope you you've seen optimization problems before um I'm going to write this more
+
+compactly in in many of the cases because there's just so much room on the only so much room on the slides so I'm just going to write F ofx and Y that's the same objective but now I just assume I have these nonlinear constraints and
+
+some integrality condition on my integers y but I can take any other problem that I have and put it into this form and you probably seen slack variables or Surplus variables that you add to your problem to make it look like
+
+this problem and of course any linear function can be expressed as a nonlinear function that's just a linear function just a special case of a nonlinear function so there's no loss of generality here but it will make it
+
+easier for us to explain the algorithms and so just for some ter terminology these constraints there's a there's M of these constraints and so each of these these individual functions then Maps RN and Z to the P so those are
+
+our integers into R so our constraints are real our objective function is real um you can have complex constraints by the way and then and complex variables but then you need to split them up into real and imaginary part and that will
+
+happen when we look at the power grid so um um we're going to make some basic blanket assumptions and and we'll violate them towards the end so the first is that our problems are finite dimensional so our variables live in a
+
+vector space RN cross Z to the p and n and p are finite so we're not not looking at Hilbert spaces function spaces yet we we'll do that later um but then we'll always discutie and the problems I showed you at the very start
+
+with the advection diffusion equation those are not finite dimensional those are infinite dimensional function spaces and we're also going to assume that the functions that we have and this typ here this should be a g uh they are
+
+smooth or at least twice continuously differentiable so I can differenti those functions I can use traditional first order conditions for example for optimization and I'm allowed to do that we can we can relax some of those
+
+conditions but it makes the gener a lot easier and then whenever I have a more general form of problem then I can get back to this I can rewrite it in this problem either by pretending that my linear function is really is my one of
+
+my nonlinear functions is a special case of a linear function or the other way around um but solvers the solvers that we'll introduce and talk about they will in general exploit additional structure so the additional structure if it's
+
+there we want to expose it to the solver and they exploit things like linearity for example okay so one of the things we do here is optimizers seem to always minimize um and you can say what about if I want to I don't want to minimize my
+
+profit I want to maximize my profit the good news is you can just turn this function your objective function upside down so if you have if you want to M maximize a function f ofx that's this blue function here you want to find a
+
+maximum point this point here then what you do is you just invert the sign of f ofx you just flip it around uh the zero axis here and now you have a function that looks like this and it turns out that if
+
+you find the minimum of this function then that corresponds to the maximum of the other other function and you just have to remember that there's now A minus sign that goes with the objective value that you need to carry
+
+out so we will only considerer minimization does everybody know what WL is it's a weird logarithm or without loss of generality okay good excellent I have all these abbreviations in there and please ask um
+
+some of them are from my time when I did my PhD um so we've already talked a little bit about notation if I have a vector in RN an N dimensional Vector then I just call the components A1 through a n and for two vectors inequality means
+
+that it's component it's taking component Vice the inequality over each of the components um I'm not going to stick to this in fact on the next lecture I will have used uppercase letters to denote individual variables but most of the
+
+time I try to stick to a notation where I use Matrix are capitalized and we try to use calligraphic type to indicate sets uh that could be finite or infinite so for example they could be index sets a could indicate which activities are
+
+happening or they could be subsets of RN like uh a box with lower and upper bounds and then um you've heard this probably and this will happen throughout the course um we're trying to use optimization to denote optimization
+
+problems um a few years ago there was a big debate about whether we should move there and people still some people still prefer programming um and so sometimes optimization problems are also called programs and that goes back to some of
+
+the work that George danik who was one of the Pioneers the grandfathers of optimization was doing in World War II when he was solving linear programs which were basically scheduling problems to get supplies out to the Pacific for
+
+the American forces fighting there um so so that was a program that was that was done then but since then if you think of a program you think of something like python C++ maybe foran um so we prefer the to use optimization here and I will
+
+no doubt use programs uh somewhere in my so you can you can just correct me at that point please okay um so one of the things uh that we we'll try to emphasize here a little bit is modeling and I I know you have done a
+
+lot of modeling because you you've done you know supply chain modeling and other modeling you do Crew Scheduling and uh but there's some aspects that in mixed into the non optimization that are sort of more um flexible give us more
+
+opportunity for doing cool stuff but also for making mistakes and so we we place some emphasis on the modeling and there's a very nice book by um somebody called Williams who was at the University of Southampton on mixed
+
+integer linear programming or Milo modeling um and so we'll look at some of the aspects in nonlinear optimization here that that are important um there are we we often like to um reformulate nonlinear relationships uh so that they're convex
+
+or maybe even linear because then it's easier so the best way to solve a mixed integer nonlinear optimization problem does anybody know what the best way to solve a mixed integer nonlinear optimization problem is what AAR yes you
+
+solve a linear program if you can reformulate is a linear program if you don't have nonlinear you're done you're golden so um if you can do that that's always good that doesn't always happen um and so we we like linear which is
+
+better than easier than convex which is easier than non-convex and we'll we'll talk keep talking about this throughout the course so here's a little example that comes from uh Chris flu's book on mixed
+
+integer nonlinear Pro programming it's a chemical engineering process synthesis problem um synthesis there is a chemical engineer here who's the chemical engineer yes synthesis means design right so it's just another word for
+
+design um and the goal here is you have some output C you have some raw materials a and B1 and you want or A and B and you want to create there's another type of there this is terrible um you want to create
+
+C uh from these two raw materials and but in doing that you have the option of splitting uh this a material you can either process it in this process three which gives an intermediate B B3 or you can process it in process two which
+
+gives an intermediate product B2 and so the question is which one of those two should you choose um to maximize your your profit in the end so we can model this we we introduce some processed choices binary variables y1 2 and three
+
+that basically tell me is this process present or not do I want this process or not um and then with these binary variables also com some bounds that tell us the the flow that goes out so if if I don't if I don't choose to do y1 if I
+
+don't choose have this process then there's no C that's being produced all these bound all these variables are non- negative similarly for B2 if I don't do process two then there's no B2 produced and the objective is basically
+
+cost minus Revenue um so you want to maximize Revenue which is why we negate here but and minimize the cost um and then the objective is um put together out of two parts there's an in uh there's an investment cost and some
+
+Revenue so if you build these processes there's a certain investment cost those are just numbers uh and there's some cost involved in in that um and then the revenue is however much you produce of the C minus some costs of the raw
+
+materials that are either the A's or the b1s and then you can set it all together for a final objective function value um there's some nonlinear constraints here that have to do with uh Mass balances in the
+
+network um so there's a mass balance here which involves uh B B2 B3 and C so whatever comes out of this process is a combination of B B3 B2 and B1 um so there's some loss obviously there so that tells you how much of C2
+
+you're producing given the inputs B1 B2 and B3 and then the other two processes have some nonlinear relationship that produce uh B3 and B2 out of A3 and A2 and this are just logarithms for example uh and then There's a constraint that
+
+says you can have at most one of these two processes equal to one um so this constraint together with the fact that these variables are binary implies that um you can have y1 Y 2 equals to 1 Y3 equals to 1 but not both
+
+but you can also set them both to zero right 1 + 1 is two that's too big yeah sorry yeah what is the upper for yeah that's just an in this case the upper Bound for C is just one it's an and but we could have had another upper
+
+bound so it could have been whatever material whatever how big this this would be a reactor topically in chemical engineering and so the capacity of that reactor yeah yeah yeah absolutely um this is just for Simplicity I think that
+
+uh Chris used this good question okay so so the final model um there there's sort of this mix of some nonlinearities some binary choices and they're all coming together in one optimization problem so that was
+
+sort of the a first simple example and our chemical engineering expert can give you much more complicated examples you can design this stallation columns for example where you have a product flow coming in and then you have trays and
+
+you can optimize the number of trays for example in the distination column to make sure that the product that comes out of the top has a certain Purity that's a very interest nice problem okay so um we showed you an optimization
+
+problem it's ingredients so there's an objective there are variables there's constraints so that's fairly standard that's the same that you have in all all your optimization problems um and I sort of briefly
+
+introduced this very first problem but please do what your friend did at the back and ask questions that's that's really great um and with that we're finishing two minutes early so that means you have two minutes to ask more
+
+questions yeah yeah oh next yes process is cus 0.9 so can you explain the first process one uh it will go up to 1 or 0.9 how it will proceed like C - 0.9 B1 B2 B3 uh so will take up to maximum Val of one yeah and then other part
+
+0.9 b123 so it will take the max 9 so what will be the value of13 just asking how the equation will satisfy oh okay so I have an upper bound on C which is one now let's assume that I do uh B1 plus B2 and uh so B2 had an upper bound of
+
+0.9 so now 0.9 * 0.9 you need to help me out that's 0 81 but that means the the most I can put in in terms of B1 is of0 one n okay um but I can also have less of a product or less of B2 if I if I want to make less of B2 then I would
+
+make less I would put in less of A1 so I have this balance thing that I can do I can choose how much I put in to this product stream here versus the product stream at the top and and somehow they're both combined to make this
+
+product this is a very very simple example I think I don't think this is a realistic one um but I can I can mix or I can generate C2 there's some loss that happens inside this process which means not everything that goes in comes out
+
+there's this factor of 0.9 and and I can now choose how I balance these things yeah cool yeah oh gosh yeah me no there's no unit of measurement here so I'm not do there's no this is not a realistic example so
+
+it's just it's just an arbitrary one is an arbitrary number here but we could have had different ones we could have had units of flow um and then could be kilogram per hour or something and then that would be
+
+a different unit that would depend on the size of these reactors for example that are happening there so the one is not a good it's not a good constant one because it's too generic but that's the simplest example
+
+that I could find so I apologize for that yes it it could be yeah but it's it's a little bit cooked up because the other numbers are 0. N I think so it's so those two are 0. n so I don't know if it's I don't know how realistic this is
+
+actually if you divide everything by c yeah any number we can this we could yeah yeah yeah so it's it's a unitless problem it's not don't don't take too much stock of this problem it's not a good example
+
+maybe the main thing was the functional forms you have linearities inequalities nonlinear Expressions an objective and constraints and a picture that tells you something is happening there and you want to optimize
+
+this cool yes question about history so in digit programming the early examples uh tend to be about traveling salesman from 1960s or that time so do you remember you know what were the early examples of minlps or art chemical
+
+Engineers the first ones to start thinking about them yeah so so the chemical Engineers were sort of the first group of people who thought about mixing nonlinear optimization mainly I think driven by applications like
+
+distillation column design um and it was there there was a group at carneg University with art Westerberg uh Larry beer and ignasio grman who were Pioneers early Pioneers in mixed inder nonlinear optimization and so that was sort of in
+
+the I I wasn't around then but I think it was in the 80s or so that they started it off and then Chris fluers um is a student of ignasius I think and so they were all there's a group of chemical Engineers that have worked on
+
+this for a long time [Applause]

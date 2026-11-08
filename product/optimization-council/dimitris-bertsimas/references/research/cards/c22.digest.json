@@ -1,0 +1,311 @@
+[
+ {
+  "id": "S095",
+  "year": "2020",
+  "title": "Sparse Regression: Scalable Algorithms and Empirical Performance",
+  "read_level": "full",
+  "contribution": "A practitioner-oriented benchmark of five sparse-regression methods on accuracy, false discovery rate and time, plus a scalable dual sub-gradient algorithm for the Boolean relaxation of ridge-regularized best subset (Julia package SubsetSelection); the cardinality-constrained estimator gives the fewest false discoveries in most regimes.",
+  "problem_entry": "ML+IO (CP as the relaxation device): practitioners lack guidance amid many sparse methods (abstract, p. 1); the target is reframed from prediction to selection accuracy A and FDR (pp. 2, 10); Lasso needs strong assumptions and adds false features (pp. 2, 8); the exact problem is 'believed to be intractable in practice' (p. 4); HTT 2017 [29] is answered in its own frame (pp. 10, 21, 23). Read: arXiv v2.",
+  "key_idea": "A benchmark with a two-fold convergence yardstick (A -> 1 and FDR -> 0 as n grows; pp. 1, 30) plus a dual projected sub-gradient for the Boolean relaxation whose primal is recovered by sorting at the averaged dual (pp. 6-7), scaled two orders beyond Pilanci et al.; the exact solver is outer approximation on a ridge-regularized convex integer reformulation (pp. 4-5).",
+  "assumptions": "Convex loss + (1/2 gamma)||w||^2 s.t. ||w||_0 <= k, equivalent to min_s max_alpha f(alpha, s) via Fenchel conjugates (Theorem 1 cited from [7], pp. 4-5); relaxation tight under an unambiguous top-k condition that 'seems often fulfilled' (Theorem 2, p. 6); bounded subgradients (Theorem 3, p. 7); Gaussian Toeplitz designs over rho in {0.2, 0.7}, SNR in {6, 1, 0.05}, p up to 20,000 (Table 2, p. 11), a design violating mutual incoherence (p. 16), and TCGA lung cancer (n = 1,145, p = 14,858) with synthetic responses and real tumour labels (pp. 21, 28).",
+  "proof_devices": [
+   "Convex integer reformulation through Fenchel conjugates; closed-form inner maximum c(s) = 1/2 Y^T (I + gamma X_s X_s^T)^-1 Y for least squares (Theorem 1 cited from [7], pp. 4-5)",
+   "Outer approximation (Duran-Grossmann) as lazy constraints in one branch-and-bound tree, with cuts reused across k because c(s) does not depend on k (Algorithm 2.1, pp. 5-6)",
+   "Boolean relaxation tight iff a saddle point has an unambiguous top-k set, via Sion's minimax theorem and linearity in s (Theorem 2 from Pilanci et al., p. 6)",
+   "Dual projected sub-gradient with a sort-and-keep-k step in s; primal recovered by partial minimization at the averaged dual instead of primal averaging; O(1/sqrt(T)) value rate from Bertsekas (Algorithm 2.2, Theorem 3, pp. 6-7); Polyak-type adaptive step (p. 8)",
+   "Own Theorem 4: the relaxation of the cardinality-penalized version is tight if (lambda - gamma/2 alpha^T X_j X_j^T alpha)_j has no zero entry at a saddle point; proof by Slater's condition and uniqueness of the minimizer in s (pp. 32-33)"
+  ],
+  "experiments": "CIO (Julia/JuMP, Gurobi 7.5.0) with 60 s (regression) and 180 s (classification) limits, SS with Tmax 150 or 200 depending on the figure, glmnet (1.9-5) and ncvreg (no version) on a 2.3 GHz Xeon, 1 CPU, 16 GB (pp. 5, 10-12, 39); A, FDR, out-of-sample MSE and 1-AUC over 10 data sets, k fixed at k_true or cross-validated, ROC-style curves over one sparsity range, time relative to glmnet in the same language (pp. 11-12); losses printed: ENet/SCAD in high noise and correlation (p. 12), MCP's fewer false guesses on the real design (p. 21), slower CIO/SS accuracy in classification (p. 25), MCP's edge at given k (p. 39); real labels: CIO AUC 0.9798 vs 0.9821/0.9814/0.9806 (Table 7, p. 28); no gap or certification count for the time-limited runs (p. 5); hinge vs logistic losses in classification (p. 23); Table 10 stops below the claimed p = 1,000,000 (pp. 3, 32).",
+  "positioning": "Credits Lasso's algorithms, code and theory, then lists its selection deficiencies from statisticians' own work (p. 2); recasts l1 as a robustness device whose selection ability 'ought to be challenged' (pp. 9, 23); credits MCP/SCAD (pp. 2, 9, 16); claims the most scalable provably optimal method (pp. 2, 4); adopts HTT's PVE formula and SNR grid and concedes in part (pp. 10, 21, 23); Hazimeh-Mazumder cited but not benchmarked (p. 2); Pilanci et al. credited for the relaxation (p. 6).",
+  "writing": "A review 'with an application-oriented eye' (p. 1) with a coined two-fold convergence (pp. 1, 30), guidelines and a pros/cons table (pp. 21, 23, 31); 'In our opinion' (pp. 16, 30, 33) and 'To the best of our knowledge' (pp. 2, 4, 16); headline vs body: 'comparable' times mean a factor of 10-100 (pp. 1, 12, 36); the conclusion's 'clearly outperforms all other methods, in all settings' (p. 30) vs exceptions on pp. 12, 21, 39; 'MCP and SCAD provide the sparsest classifiers' vs Table 7 (p. 28).",
+  "limits_future": "Stated: a commercial solver and extra time for CIO, SS a heuristic (Table 8, p. 31), the O(1/sqrt(T)) rate 'disappointingly slow' (p. 7), no support-recovery theory for CIO/SS (p. 16), cross-validation's ability to pick the best model open (p. 21); recommends Lasso screening, then a nonconvex selector 'if time permits' (p. 23). Unstated: certification of the time-limited CIO runs; the direction of the bias from unmatched classification losses.",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "The relaxation's support is the warm start ('a good warm-start in exact approaches'), with stated 60 s / 180 s limits, Gurobi 7.5.0 and the machine, and an out-of-sample duel against glmnet and ncvreg on synthetic data with known truth and on a real design; regimes where CIO loses are printed. Confirms SKILL.md's BPV line (60 s cap).",
+    "pages": "pp. 5-6, 10-30, 39"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "The certificate step is dropped by design: the time limit is 'guided by confidence in the quality of the initial solution' and no gap or count of certified runs is reported, while results carry the exact method's name. As in S010, the warm start is the authors' own heuristic and the incumbents are opponents only. A Tension T1 instance in the paper that answers the critics.",
+    "pages": "pp. 5, 10-30"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "A statistics-owned estimator written as a convex integer program via Fenchel duality; structure read off the dual (closed-form inner maximum, tightness from the saddle point's dual vector, Theorem 4 by strong duality); the boundary printed (commercial solver; minutes for n and p in the 10,000s).",
+    "pages": "pp. 4-7, 30, 32-33"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "The intractability belief is named and answered by a scale ladder (n, p in the 10s, then 1,000s, then 100,000s) and by times measured relative to glmnet on the same machine; no solver x hardware speed-up figure appears (text searched for 'billion' and 'speedup'). This is the measured 'why now' the Method 2 checkpoint asks for.",
+    "pages": "pp. 4, 12"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "The programme's next pair (Pauphilet, Van Parys) carries the line; code is released 'in an attempt to bridge the gap between theoretical advances and practical adoption'; the conclusion ties the findings' worth to their availability to practitioners.",
+    "pages": "pp. 1-3, 6, 8, 23, 30"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "cross-community bake-off",
+    "evidence": "The rival community's standard implementations (glmnet Lasso/ENet, ncvreg MCP/SCAD) are tuned by validation and compared with the OR methods under one protocol on synthetic and real designs.",
+    "pages": "pp. 2-3, 10-30"
+   },
+   {
+    "pattern": "audit the field's headline metric before competing on it",
+    "evidence": "A literature that 'has focused solely on accuracy' gets the false discovery rate as a second yardstick; prediction is demoted to a derivative measure that depends on more than the selected features.",
+    "pages": "pp. 10, 30"
+   },
+   {
+    "pattern": "level the field and say which way it still tilts",
+    "evidence": "Time is reported relative to glmnet in the same language on the same data and one sparsity range is shared by all methods; the unmatched classification losses (hinge vs logistic) are disclosed, but the direction of the tilt is not stated.",
+    "pages": "pp. 11-12, 23"
+   },
+   {
+    "pattern": "two-fold convergence as the yardstick",
+    "evidence": "A selector is judged by whether accuracy goes to 1 and the false detection rate to 0 as n grows, measured empirically in each noise and correlation regime.",
+    "pages": "pp. 1, 3, 30"
+   }
+  ],
+  "transferable": [
+   "Judge a feature-selection method by two curves along n at fixed noise and correlation (accuracy to 1, FDR to 0); fix k = k_true in one experiment (A = 1 - FDR) and cross-validate k in another (pp. 11-12, 16, 30).",
+   "Compare codes written in different languages by time relative to the incumbent's implementation in the same language on the same data (p. 11).",
+   "Add a design where the rival provably fails (a covariance violating mutual incoherence) to check that the experiment reproduces known theory (pp. 16, 22).",
+   "Use ROC-style true-vs-false-feature curves over one common sparsity range; calibrate penalty parameters to hit each k and interpolate linearly where they cannot (p. 12).",
+   "Solve a min-max Boolean relaxation by dual sub-gradient ascent and recover the primal by partial minimization at the averaged dual (a sort that keeps k), not by averaging, so the output stays binary; track the best c(s^t) and stop on the duality gap or a stall count (pp. 6-8).",
+   "Implement outer approximation as lazy constraints in one branch-and-bound tree and reuse the cuts across k when the convex function does not depend on k (pp. 5-6).",
+   "Prove tightness of a Boolean relaxation by showing that the minimizer in s at a saddle point is unique, hence binary (Theorem 4, pp. 32-33).",
+   "When answering a critic, adopt the critic's grid and formula (SNR 0.05 to 6 via PVE = SNR/(1 + SNR)), say which of their findings survive, and release code for the methods that had none (pp. 3, 10, 21, 23)."
+  ],
+  "coauthors": "Jean Pauphilet, Bart Van Parys (both MIT Operations Research Center, p. 1)",
+  "quotes": [
+   {
+    "text": "Indeed, as often in discrete optimization, the algorithm can quickly find the optimal solution, but spends a lot of the time proving its optimality.",
+    "page": 5
+   },
+   {
+    "text": "Our experiments suggest that their observations are still valid but less obvious as soon as the best subset selection estimator is regularized as well",
+    "page": 23
+   }
+  ]
+ },
+ {
+  "id": "S144",
+  "year": "2020",
+  "title": "Machine learning and natural language processing methods to identify ischemic stroke, acuity and location from radiology reports",
+  "read_level": "full",
+  "contribution": "A clinician-led comparison of three text featurizations and seven classifiers (including OCT and OCT-H) for stroke presence, MCA location and acuity in radiology reports, with neurovascular GloVe embeddings; GloVe/RNN discriminates best internally and in an external hospital.",
+  "problem_entry": "AP+ML: ICD codes misclassify ischemic stroke and miss acuity and location (abstract, p. 1); only 68% of reports from billing-coded patients show a stroke (p. 10); hypothesis that counting featurizations miss stroke language (p. 2); uses named: triage, intervention eligibility, research cohorts (pp. 1-3).",
+  "key_idea": "Domain-trained GloVe (UpToDate neurology, stroke and neuroradiology textbooks, 10,000 held-out reports; pp. 5-6) crossed with 7 classifiers x 3 featurizations x 3 tasks (Table 2, p. 8); external validation of only the two extremes, BOW/logistic regression and GloVe/RNN (p. 6).",
+  "assumptions": "60,564 reports of 17,864 patients (MGH, BWH, 2003-2018, p. 3); 1,359 double-labelled reports of 297 patients with neurologist adjudication, indeterminate labelled absent, agreement 87-98% (pp. 3-4); external cohort of 500 reports from Boston Medical Center (p. 3); prevalences 925/350/522 and 266/90/106 (p. 8); five random 75/25 splits, patient-level separation not stated (p. 6).",
+  "proof_devices": [
+   "n/a: purely empirical; OCT and OCT-H used as off-the-shelf classifiers ('OCT considers all splits at once', Table 1, p. 7) with no formulation, solver, time limit or gap reported"
+  ],
+  "experiments": "10-fold CV grid search, threshold for sensitivity > 90%, calibration curves, McNemar, bootstrap CIs; R 3.5.2, scikit-learn, TensorFlow (pp. 6-8); internal AUC GloVe/RNN 0.961/0.976/0.925 vs BOW/logistic regression 0.951/0.959/0.898 (Table 2, p. 8); OCT below CART in all 9 cells (4 with non-overlapping CIs), OCT-H above CART in 6 of 9, not discussed (p. 8); external BOW/LR 0.892/0.857/0.797 vs GloVe/RNN 0.92/0.893/0.925 (Table 3, p. 12); Wikipedia embeddings 0.74/0.75/0.693 (pp. 12-13). My computation: Table 3b's accuracies and 'Precision' match only with sensitivity and specificity swapped and precision read as NPV (external sensitivities then 0.75/0.70/0.69); Table 2b's acuity precision is inconsistent; McNemar p = 0.023 and 0.031 reported as 'equivalent performances' (pp. 7, 9).",
+  "positioning": "Agrees with Zech et al. and Kim et al. that simple methods suffice for simple tasks (pp. 2, 12); other embeddings acknowledged and one kept (p. 12); BERT and other deep structures left for future work (p. 12); OCT introduced through Bertsimas-Dunn 2017 and the 2019 book (refs 13-14, p. 15).",
+  "writing": "Clinical-journal format with Limitations and Strengths sections (p. 13); 'True to our hypothesis' (p. 11); interpretability graded per method (Table 1, p. 7), yet the low-interpretability RNN is favoured (pp. 11, 13); the text's external sensitivities of 0.90-0.92 (p. 9) are inconsistent with Table 3b's accuracies (p. 12).",
+  "limits_future": "Stated: two training hospitals; CT/MRI heterogeneity (p. 13). Future: hybrid rule-based and ML methods (p. 13), other NLP structures (p. 12), more stroke features and other diseases (p. 13). Unstated: no workflow test or decision metric, no scoring of the ICD-code rule, the McNemar and Table 3b problems, OCT's loss to CART.",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The owner's current rule (billing codes) motivates the work (68% agreement) but is never a scored baseline; models are judged by AUC against hand labels, and the named decisions (triage, thrombectomy eligibility) are not modelled or scored. Clinician-led paper; Bertsimas's listed roles exclude analysis and methodology.",
+    "pages": "pp. 1, 6-10, 14"
+   },
+   {
+    "method": "Method 4",
+    "relation": "contradiction",
+    "note": "Outcome, not protocol: in a partner application the group's axis-aligned OCT loses to CART out of sample in all 9 featurization x task cells (4 with non-overlapping 95% CIs), against SW4's 1-2% average gains; OCT-H wins 6 of 9. No warm start, limit or gap is reported and the text is silent.",
+    "pages": "p. 8"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Health-programme cohort step: ORC co-authors (Orfanoudaki, Zhang, Caprasse) run the analysis and software with a clinician as first author; the group's methods enter a clinical venue; code and embeddings are released.",
+    "pages": "pp. 1-2, 6, 14"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "interpretable-versus-complex pair carried to external validation",
+    "evidence": "The full featurization x classifier grid is run internally; only BOW/logistic regression and GloVe/RNN are validated on a demographically different hospital, where the complex model generalizes better.",
+    "pages": "pp. 6, 9, 12"
+   }
+  ],
+  "transferable": [
+   "Train embeddings on a curated domain corpus (reference texts plus held-out reports) and report the drop when general-purpose embeddings replace them (pp. 5-6, 12-13).",
+   "Label protocol for clinical text: double labelling, adjudication by senior clinicians, agreement on a 10% sample, and agreement against the underlying images for a subset (pp. 3-4).",
+   "Run the full featurization x classifier grid internally, then carry only the simplest interpretable and the most complex model to an external cohort with a different population (pp. 6, 9, 12).",
+   "Check every threshold table arithmetically: accuracy must equal prevalence x sensitivity + (1 - prevalence) x specificity, and precision must follow from the same three numbers; here the check exposes swapped columns (pp. 8, 12)."
+  ],
+  "coauthors": "Charlene Jennifer Ong (first and corresponding; Boston University School of Medicine, Boston Medical Center, Harvard Medical School, MIT ORC), Agni Orfanoudaki, Rebecca Zhang, Francois Pierre M. Caprasse (MIT ORC), Hutch, Ma, Fard, Balogun, Miller, Minnig, Saglam, Prescott, Greer, Smirnakis; Bertsimas last author (p. 1); roles on p. 14",
+  "quotes": [
+   {
+    "text": "Similar to other NLP studies, we used this test to validate the hypothesis that the two predictive models are equivalent [25].",
+    "page": 7
+   },
+   {
+    "text": "We found that BOW/Logistic Regression (AUCs 0.89, 0.86 and 0.80 respectively for stroke, location, acuity) did not generalize as well as GloVe/RNN (AUC 0.92, 0.89, 0.93) in the external population (Table 3).",
+    "page": 9
+   }
+  ]
+ },
+ {
+  "id": "S204",
+  "year": "2020",
+  "title": "Learning mixed-integer convex optimization strategies for robot planning and control",
+  "read_level": "full",
+  "contribution": "CoCo learns offline a classifier from problem parameters to canonical logical strategies of parametrized MICPs (pruning redundant integer labels and decomposing separable logic), so that online a robot solves only a few convex problems; on three robotics benchmarks it finds feasible, mostly globally optimal solutions one to three orders of magnitude faster than Gurobi or Mosek.",
+  "problem_entry": "IO+DA (AP robotics as testbed): MICP speed-ups of 'several orders of magnitude' are granted, but online control is still too slow and the solvers are not embeddable (p. 1); MLOPT's labels are ill-posed under big-M implication and OR constraints and too many to classify (pp. 1-3). Read: arXiv v2.",
+  "key_idea": "Logical strategy = integer assignment + set of tight big-M constraints, one label per equivalent optimum (p. 3); task-specific decomposition of separable logic with one shared classifier (pp. 4, 7); online, top-n_evals convex solves with the integers fixed (Algorithms 1-2, pp. 4-5). Changed from MLOPT: the labels and the decomposition; unchanged: the offline/online split and strategy classification.",
+  "assumptions": "Parametrized MICP with convex objective and constraints, big-M constraints as the only link between x and delta (p. 3); well-posed problems (unique continuous minimizer), ill-posed cases neglected (pp. 3-4); theta from a known distribution (p. 3); cart-pole MIQP with 40 binaries, free-flyer MIQCQP with 160, grasp MISOCP with 30 (Table I, pp. 5-8); 90/10 train/test split (p. 5).",
+  "proof_devices": [
+   "Big-M modelling of logic after Bemporad-Morari, with M_i(theta) = sup g_i (p. 3)",
+   "Definition of a tight big-M constraint, which makes a strategy unique for a given continuous solution and the classification well-posed (pp. 3-4)",
+   "Decomposition of a conjunction F_1 ^ ... ^ F_l into sub-formula strategies, with the stated trade-off that all l predictions must be right ('diminishing returns', p. 4)",
+   "No theorem or guarantee: 'CoCo forgoes the optimality guarantees' of branch-and-bound, defended by receding-horizon control (p. 5); online gap bounds left to future work (p. 9)"
+  ],
+  "experiments": "Julia 1.2, JuMP, PyTorch/ADAM, three-layer ReLU nets; Gurobi and Mosek with presolve and multithreading disabled except for grasps; hardware, solver versions and n_evals not stated (p. 5); baselines: the exact solver, the Masti-Bemporad regressor, MLOPT (free-flyer), most-common and random modes (pp. 5, 7, 9); cart-pole: 99% feasible vs 58%, one QP for 95% vs about 50 QPs, 99% optimal (p. 6); free-flyer: 516 vs about 81 thousand strategies, 92% feasible vs 18% and 35%, 92% optimal (p. 7); grasp: 99% optimal, tens of ms vs seconds (pp. 8-9); slips: '92% of the training set' (p. 7), Figure 9 on training problems (p. 9), the truncated branch-and-bound claim not shown (p. 5), 1-2 vs 2-3 orders of magnitude (pp. 1, 9).",
+  "positioning": "MLOPT (Bertsimas-Stellato) as base and foil (pp. 1-3, 7); learned warm starts for continuous problems, learning to branch, Masti-Bemporad (14 binaries), LVIS and Hogan et al. as less suited to online MICP (p. 2); explicit MPC and meta-learning as inspirations (p. 2).",
+  "writing": "Conference format with a contributions list (p. 2) and claim-bearing captions (Fig. 3, p. 6); one limitations paragraph argued from deployment (p. 5); 'globally optimal' percentages measured against offline exact solves (pp. 6-9); speed-up headline of 1-2 orders vs 2-3 for grasps (pp. 1, 9).",
+  "limits_future": "Stated: no online optimality guarantee (p. 5), ill-posed problems neglected (p. 4), diminishing returns of decomposition (p. 4), possible failure (Algorithm 2, p. 4). Future: theory for sampling the strategy space and bounding online optimality gaps; mixed-integer nonconvex problems such as task planning (p. 9).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "The tool-change argument is turned around: decades of MICP speed-up are granted qualitatively (Bixby) and judged insufficient for millisecond embedded control, so the exact solver moves offline to label data; no figure is rebuilt.",
+    "pages": "p. 1"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "The certificate moves offline: exact solves label the data and score online answers against the global optimum (99%, 92%, 99%); online answers are uncertified and the paper says so; the duel is against the exact solver and rival learners, not an incumbent heuristic.",
+    "pages": "pp. 5-9"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "The robotics MICPs are borrowed from that literature; the class is kept by learning rather than by reformulation: with the predicted integers fixed, the online problem is a QP, QCQP or SOCP.",
+    "pages": "pp. 2-3, 5-8"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The learned predictor is scored by the decisions it yields (feasibility, cost relative to the global optimum, convex solves needed), not by classification accuracy; but there is no owner or current rule, and the parameter distribution is synthetic.",
+    "pages": "pp. 3, 6-9"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "canonical strategy labels",
+    "evidence": "The learning label is the integer assignment plus the set of tight big-M constraints, so that equivalent optima share one class and the classification is well-posed.",
+    "pages": "p. 3"
+   },
+   {
+    "pattern": "one shared classifier for repeated sub-decisions",
+    "evidence": "Separable logic (one obstacle at one time step) is decomposed and one network, queried with a one-hot index, predicts every sub-strategy; about 81 thousand strategies become 516 and feasibility rises from 35% (MLOPT) to 92%.",
+    "pages": "pp. 4, 7"
+   }
+  ],
+  "transferable": [
+   "Before learning a solver's output, canonicalize the labels: map each optimal integer assignment to the integer values plus the set of constraints that only those values satisfy, so equivalent optima share one class (p. 3).",
+   "When the logic is a conjunction of repeated, separable sub-formulas, train one classifier for the sub-decision with a one-hot index of the instance, and state the trade-off that all l predictions must be right (pp. 4, 7).",
+   "Online fallback: try the top-n_evals predicted strategies, each a convex solve with the integers fixed; return the first feasible one and report failures explicitly (Algorithm 2, p. 4).",
+   "Score a learned optimizer by decision outcomes (% feasible, time, convex solves, cost relative to the offline optimum) against the exact solver, a rival learner and trivial baselines such as the most common mode and random modes (Figs. 3, 5, 8-9).",
+   "Run the exact baseline under the deployment platform's limits (no presolve, one thread) and say so (p. 5)."
+  ],
+  "coauthors": "Abhishek Cauligi and Preston Culbertson (equal contribution), Mac Schwager, Marco Pavone (Stanford), Bartolomeo Stellato (Princeton ORFE); Bertsimas fourth of six (MIT ORC) (p. 1)",
+  "quotes": [
+   {
+    "text": "Despite these advances, MICP has been rarely applied to real-world robotic control because the solution times are still too slow for online applications.",
+    "page": 1
+   },
+   {
+    "text": "Thus, some suboptimality in relatively rare instances can be tolerated if fast execution enables safe behavior and, in some cases, a well-tuned terminal cost can also account for long horizon behavior.",
+    "page": 5
+   }
+  ]
+ },
+ {
+  "id": "S099",
+  "year": "2021",
+  "title": "From predictions to prescriptions: A data-driven response to COVID-19",
+  "read_level": "full",
+  "contribution": "A 21-author end-to-end COVID-19 analytics pipeline: a 160-study clinical database, XGBoost mortality and infection calculators, the DELPHI epidemic model with policy scenarios, and a ventilator-pooling MIO fed by DELPHI, with deployments at hospitals, a bank and the CDC forecast ensemble.",
+  "problem_entry": "DA+AP (ML for the calculators, IO for the ventilator model): the owners' pandemic decisions (triage, care, social distancing 'at a steep economic price', p. 1); missing outcome data (p. 2); the questions treated 'as interdependent challenges' (p. 2). Read: arXiv v1; appendix absent from the file.",
+  "key_idea": "A descriptive -> predictive -> prescriptive chain with parameter hand-offs (Fig. 1, p. 2): database parameters feed DELPHI and the ventilator model, and DELPHI's hospitalization forecasts become ventilator demand (pp. 3, 7-9); DELPHI adds underdetection and an arctan government-response factor to SEIR (p. 6); a regression tree maps policies to that factor (p. 7).",
+  "assumptions": "133,600 patients from 160 studies, mortality projected from closed cases (pp. 2-3); calculators on 2,831 (mortality) and 3,135 (infection) patients from Cremona and HM Hospitals, first-day data, kNN imputation, at most 20 features (pp. 3-5); DELPHI with 13 parameters, six from the database and seven fitted per state, states assumed independent (p. 7); ventilators: 25% of hospitalized patients ventilated, a worst-case buffer, a deterministic model (pp. 8-9); MIO formulation in the unread appendix.",
+  "proof_devices": [
+   "DELPHI: 11-state SEIR extension with undetected states and gamma(t) = (2/pi) arctan(-(t - t0)/k) + 1, read as three phases of response with t0 the start and k the strength (p. 6)",
+   "Per-state nonlinear least-error fit of seven parameters, six others calibrated from the clinical database (p. 7; details in the unread appendix)",
+   "Regression tree from seven policy classes to the fitted gamma(t), then scenario simulation with the predicted factor (p. 7)",
+   "Bi-objective deterministic multi-period MIO (shortages including a worst-case buffer; inter-state transfers) traced as a Pareto frontier over the maximum pooled share (pp. 8-9; formulation in the unread appendix)"
+  ],
+  "experiments": "Calculators: 40 random partitions with bootstrap CIs; AUC 93.8%/90.5% (mortality with/without labs) and 91.8%/83.1% (infection); accuracies of 65-80% at >= 90% sensitivity; no external cohort or clinical-score comparator (p. 5). DELPHI backtest fitted to April 27 and scored on April 28-May 12: median MAPE 8.5% for cases and 7.8% for deaths, with percentiles; no comparator forecast; failures in small and late states printed (p. 7). Policy tree out-of-sample R^2 0.8; NY scenarios (p. 7). Ventilators from April 15: baseline 'without transfers', shortages eliminated, pooling at most 10% of supply suffices (p. 9); no solver, times or gaps in the file. Deployment claims without outcome measures (pp. 1, 2, 5, 7, 9).",
+  "positioning": "Against 'a series of isolated problems' (p. 2); DELPHI vs other COVID-19 models on underdetection and government response (p. 6); the ventilator model vs Huang et al. and Mehrotra et al. (p. 8); public-health symptom lists vs at least 15 observed symptoms (p. 3); priority claims: the largest dataset (p. 2) and the first assessment of projections (p. 7).",
+  "writing": "PNAS format with a Significance Statement (p. 1); each method section closes with 'Discussion and Impact' naming users (pp. 3, 5, 7, 9); impact first (pp. 1, 2, 10); superlatives (pp. 1, 2, 7); the calculators are hedged as associations (p. 5) but the policy tree is read causally (p. 7).",
+  "limits_future": "Stated: no treatments in the mortality model; associations, not causality (p. 5); DELPHI errors in small and late states; state independence (p. 7). Future: treatments in the calculators (p. 5); other scarce resources and inter-country allocation (pp. 8-9). Unstated: a forecast comparator, prospective scoring, deployment outcomes, the protection the ventilator buffer buys.",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Owners and decisions are named (triage, ICU capacity, ventilator transfers, return to work, distancing); prediction feeds prescription in one pipeline (DELPHI -> ventilator MIO); the tools were deployed with partners (Cremona, Hartford, a Peruvian bank, CDC).",
+    "pages": "pp. 1-2, 5, 7-9"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Decisions are not scored against the owners' current rules: the ventilator baseline is 'without transfers' rather than the isolated transfers that happened, and DELPHI is scored by its own MAPE backtest with no naive comparator yet called 'suggestive of excellent out-of-sample performance'. This is where SKILL.md's DELPHI correction starts (relative WIS 0.99 vs the naive 1.00).",
+    "pages": "pp. 7, 9"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "A price curve with one knob: the Pareto frontier of transfer distance against shortage for maximum pooled shares of 5-20%, with a headline point (10%); no solution-independent bound; the robustness buffer is not priced in this file.",
+    "pages": "p. 9"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "A cohort response: 19 MIT ORC co-authors and one from a company, a public website, partner deployments and spin-off papers ([18], [34]).",
+    "pages": "pp. 1-2, 10"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "descriptive-predictive-prescriptive chain with parameter hand-offs",
+    "evidence": "A transcribed clinical database sets six DELPHI parameters, the ventilation rate and the length of stay; DELPHI's hospitalization forecasts become ventilator demand for the MIO.",
+    "pages": "pp. 2-3, 7-9"
+   },
+   {
+    "pattern": "ML on a mechanistic model's fitted parameters for policy scenarios",
+    "evidence": "The per-state fitted government-response factor gamma(t) is regressed on seven policy classes with a tree (out-of-sample R^2 0.8), and the predicted factor drives reopening scenarios.",
+    "pages": "pp. 6-7"
+   }
+  ],
+  "transferable": [
+   "When outcome data are missing, build the data asset from published cohort studies with a fixed transcription protocol, then reuse it to set model parameters downstream (pp. 2-3, 7, 9).",
+   "Give a compartmental model a policy-response factor with interpretable parameters (start t0, strength k), fit it per region, then regress the fitted factor on policy categories with a tree to run reopening scenarios (pp. 6-7).",
+   "Backtest a forecaster by fitting to a cut-off date and scoring the next two weeks per region with MAPE percentiles; score a naive forecast the same way, which this paper does not do (p. 7).",
+   "Present an allocation model as a Pareto frontier over a politically meaningful knob (the maximum share of its own supply a state pools) and read off the smallest knob that removes shortages (p. 9).",
+   "Close each method section with a 'Discussion and Impact' subsection that names the users (pp. 3, 5, 7, 9)."
+  ],
+  "coauthors": "20 co-authors: Boussioux, Cory-Wright, Delarue, Digalakis, Jacquillat, Lahlou Kitane, Lukin, Li, Mingardi, Orfanoudaki, Papalexopoulos, Paskov, Pauphilet, Skali Lami, Stellato, Tazi Bouardi, Villalobos Carballo, Wiberg, Zeng (MIT ORC; Jacquillat also Sloan) and Nohadani (Benefits Science Technologies); D.B. designed research and wrote the paper (p. 1)",
+  "quotes": [
+   {
+    "text": "Given the high level of uncertainty and variability in the disease’s spread, this level of accuracy is suggestive of excellent out-of-sample performance.",
+    "page": 7
+   },
+   {
+    "text": "Overall, states do not have to share more than 10% of their supply at any time to efficiently eliminate shortages.",
+    "page": 9
+   }
+  ]
+ }
+]

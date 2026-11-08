@@ -1,0 +1,397 @@
+[
+ {
+  "id": "S052",
+  "year": "2021",
+  "title": "Exact lexicographic scheduling and approximate rescheduling",
+  "read_level": "partial",
+  "contribution": "Two-stage robust P||Cmax in which a lexicographically optimal plan plus binding-decision recovery gets a tight price of robustness (2 for one perturbation, O(f(1+k/(m-k))(f+k)(1+delta/m)) for many) where an arbitrary optimal plan gets Omega(m); with a vectorial-bound LexOpt branch-and-bound (read: arXiv v3).",
+  "problem_entry": "Price of robustness for P||Cmax called an open question; two-stage recovery with bounded modification of the nominal schedule (pp. 1-5).",
+  "key_idea": "LexOpt planning imposes optimal substructure (Lemma 4) that makes LPT recovery of free jobs provably good; stage-1 LexOpt solved by branch-and-bound with fractional pseudo-schedule vectorial bounds (pp. 9-15).",
+  "assumptions": "Uncertainty set U(f,k,delta): at most k unstable jobs beyond factor f, delta surplus machines; recovery keeps all binding job-machine assignments (pp. 3, 9, 13).",
+  "proof_devices": [
+   "strong NP-hardness of the recovery problem (Theorem 2, p. 13)",
+   "degenerate-instance lower bound Omega(m) for arbitrary optimal plans (Theorem 3, p. 14)",
+   "optimal-substructure lemma for LexOpt schedules (Lemma 4, pp. 14-15; Lemma 5, p. 16)",
+   "per-perturbation-type guarantees composed in a fixed order (Table 1, p. 17; Theorem 5 Type-1 proof pp. 18-19)",
+   "vectorial lower/upper bounds via fractional pseudo-schedules (Algorithms 1-2, Lemmas 2-3, pp. 10-12)"
+  ],
+  "experiments": "CPLEX/Gurobi via Pyomo; well-formed instances (3 sizes x 3 distributions) and degenerate instances at the phase transition kappa* = log2 m/(m-1); performance profiles vs sequential, weighting and highest-rank-objective methods; scatter of plan closeness to LexOpt vs recovered makespan (pp. 19-23, 44-46).",
+  "positioning": "Extends recoverable robustness (Liebchen et al.) and price of robustness (Bertsimas-Sim) to P||Cmax; adapts existing LexOpt methods as rivals (pp. 2-5, 20).",
+  "writing": "Positive/negative result pairing announced in the contributions paragraph; proofs split between main text and a supplement (pp. 5-6).",
+  "limits_future": "B&B converges on only >30% of intermediate/hard instances; highest-rank heuristic gives best primal results; extensions to facility location and network design (pp. 21, 24).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Exploited structure is the optimal substructure imposed by choosing a LexOpt plan, not structure detected in a user's model.",
+    "pages": "pp. 14-17"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Three rival exact LexOpt methods adapted and run under one tolerance and time limit; performance profiles; phase-transition-calibrated degenerate instances; own-method timeouts reported.",
+    "pages": "pp. 20-21, 44-45"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "lexicographic first stage as a robustness device",
+    "evidence": "LexOpt plan gives tight price of robustness 2 vs Omega(m) for an arbitrary optimal plan; recovered quality improves as plan approaches LexOpt (also S079).",
+    "pages": "pp. 14-17, 23"
+   }
+  ],
+  "transferable": [
+   "Generate hard instances at a known phase-transition threshold and report them separately from easy ones (pp. 19, 44-45).",
+   "Draw a pool of diverse near-optimal plans from the solver's solution pool and scatter normalised plan quality against normalised recovered quality (pp. 21-23).",
+   "Pair each positive guarantee with a degenerate instance showing the failure without the structural choice (Theorems 3-4, pp. 14-15)."
+  ],
+  "coauthors": "Dimitrios Letsios (KCL, first author), Miten Mistry (Imperial)",
+  "quotes": [
+   {
+    "text": "Faced with the lack of strong lower bounding techniques for LexOpt scheduling, we develop a new branch-and-bound algorithm, based on vectorial bounds.",
+    "page": 24
+   },
+   {
+    "text": "Numerical results with randomly generated instances demonstrate that the closest to LexOpt the initial solution is, the better the recovered solution quality we get.",
+    "page": 24
+   }
+  ]
+ },
+ {
+  "id": "S063",
+  "year": "2021",
+  "title": "A disjunctive cut strengthening technique for convex MINLP",
+  "read_level": "partial",
+  "contribution": "Strengthens ESH/OA-type cuts for convex MINLP over an exclusive-selection disjunction by solving one small convex NLP per disjunct, giving a single-RHS cut and a dominating per-disjunct-RHS cut that cut geometric-mean iterations from 94 to 39 on big-M MINLPLib and p_ball instances.",
+  "problem_entry": "OA/ECP/ESH speed depends on outer-approximation tightness; ESH cuts are not supporting hyperplanes of the integer hull, worst for big-M disjunctions (pp. 1-4).",
+  "key_idea": "Per-disjunct NLPs max alpha'x with x_i = 1 give RHS values b_i; ST uses max b_i, MT uses sum b_i x_i; infeasible disjuncts fix x_i = 0; Rule 1 picks the selection constraint by variable connections (pp. 6-10).",
+  "assumptions": "Convex C1 constraints, compact linear set, Slater, at least one exclusive-selection constraint; continuous NLPs assumed cheap relative to MILP relaxations (pp. 3-4).",
+  "proof_devices": [
+   "validity of single-tightened cut from optimality of the disjunctive program (Proposition 1, p. 7)",
+   "validity of multi-tightened cut by contradiction via exclusivity (Theorem 1, p. 7)",
+   "dominance via b_i = z* - Delta_i, Delta_i >= 0 (Theorem 2, pp. 7-8)",
+   "infeasible disjunct NLP implies variable fixing (Proposition 2, p. 8)",
+   "epsilon right-hand-side relaxation for NLP inexactness (p. 11)"
+  ],
+  "experiments": "Basic ESH (MATLAB/OPTI, IPOPT, Gurobi) on 43 big-M instances (clay, flay, slay, sssd, tls, stockcycle, p_ball), 2 h limit (96 h stockcycle); ESH vs ESH+ST vs ESH+MT, plus big-M vs hull vs big-M+MT; rsyn/syn no-gain reported (pp. 14-19).",
+  "positioning": "Alternative to lift-and-project and separation-based disjunctive cuts (Stubbs-Mehrotra, Ceria-Soares, Trespalacios-Grossmann); same idea as tighter big-M for GDP (pp. 2, 11).",
+  "writing": "Running toy example EX1 with figures for each cut and each integer assignment; computational trade-off stated explicitly against separation cuts (pp. 5-12).",
+  "limits_future": "Preliminary proof of concept; NLPs not parallelised; separation cuts can be stronger; little effect on hull formulations or easy linear disjunctions; applicable to OA, ECP, GBD (pp. 11-19).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Big-M (weak) and hull (heavy) treated as two extremes; MT cut on big-M compared with both on the same instances.",
+    "pages": "pp. 4, 17-19"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Exclusive-selection constraints identified as the disjunctive structure; Rule 1 chooses by direct and step-one connections.",
+    "pages": "pp. 3-4, 10"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Judged in a deliberately stripped-down ESH as a proof of concept, not inside a full solver.",
+    "pages": "pp. 12, 14"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "No-gain classes (rsyn, syn) reported with averages.",
+    "pages": "p. 17"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "decompose the hull into independent per-disjunct subproblems in the original space",
+    "evidence": "Per-disjunct convex NLPs replace the lifted perspective formulation, avoid division by zero, parallelise and detect infeasible disjuncts.",
+    "pages": "pp. 6, 11-12"
+   }
+  ],
+  "transferable": [
+   "Solve |D| small per-disjunct problems in the original space instead of the lifted hull problem (pp. 6, 11).",
+   "Design cuts so numerical error enters only the right-hand side, then relax by epsilon (p. 11).",
+   "Publish a parametrisable synthetic family (p_ball: balls x points x dimension) next to library instances (pp. 14, 27).",
+   "Report the cut on the weak formulation against both weak and strong formulations (Table 3, p. 18).",
+   "Count variables fixed as a side effect and check that LP-based bounds tightening cannot fix them (p. 15)."
+  ],
+  "coauthors": "Jan Kronqvist (first author)",
+  "quotes": [
+   {
+    "text": "These are preliminary results and are mainly intended as a proof of concept.",
+    "page": 12
+   },
+   {
+    "text": "Therefore, the trade-off of our cut strengthening approach is a reduced computational complexity at the expense of a possibly weaker cut.",
+    "page": 12
+   }
+  ]
+ },
+ {
+  "id": "S079",
+  "year": "2021",
+  "title": "Approximate and robust bounded job start scheduling for Royal Mail delivery offices",
+  "read_level": "partial",
+  "contribution": "Introduces bounded job start scheduling from Royal Mail van gates, with LPT tightly 2-approximate, 5/3 on long and optimal on short instances, a 1.985-approximate long-short mixing algorithm, and a lexicographic two-stage robust approach scored by van augmentation on 300 real instances (read: arXiv v2).",
+  "problem_entry": "Royal Mail van exit gate bounds job starts per time unit; fixed working day makes makespan-based price of robustness unsuitable, so robustness is measured by extra vans (pp. 2, 4-5).",
+  "key_idea": "Split instances into long/short classes, prove per-class ratios, then run both classes in parallel (LSM); robust stage 1 lexicographically minimises job completion times plus theta x vans, stage 2 keeps start times (pp. 5, 15-17, 21-23).",
+  "assumptions": "Integer processing times, identical machines, analysis for g = 1 (justified by discretisation), m >= 7 for LSM, perturbation factor F; B = 2 and theta chosen empirically (pp. 5, 15, 20-22).",
+  "proof_devices": [
+   "NP-hardness from 3-Partition for g = 1 (Theorem 1, p. 6)",
+   "Omega(log n) integrality gap of the natural IP (Theorem 2, p. 8)",
+   "concave relaxation bounding idle machine time before the last job start (pp. 3, 5)",
+   "long/short instance classification with per-class LPT ratios (Theorems 4-5, pp. 12, 14)"
+  ],
+  "experiments": "300 instances from three delivery offices (15-min discretisation, g from data); heuristics for m in [5, 50]; MILP vs historical schedules saves at least 10/25/10 vans per day; +/-50% processing-time noise robustness scatter (pp. 23-32).",
+  "positioning": "Relates BJSP to P||Cmax, forbidden-set and forbidden-start-time scheduling; adapts the authors' S052 LexOpt approach with machine augmentation (pp. 3-6, 19-21).",
+  "writing": "Industrial context with network numbers first, then a two-fold contribution statement; long list of open questions in the conclusion (pp. 2, 32-33).",
+  "limits_future": "Robust approach only empirical, price of robustness open; sub-2 ratio without augmentation open; vehicle sharing across offices and vehicle routing as directions (pp. 32-33).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Baseline is the partner's historical practice rather than rival solvers; the gap to practice is the headline.",
+    "pages": "p. 28"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "lexicographic first stage as a robustness device",
+    "evidence": "Lex-min of job completion times plus van count as stage-1 objective; lower characteristic value gives fewer vans after recovery (with S052).",
+    "pages": "pp. 21-22, 30-32"
+   },
+   {
+    "pattern": "approximation algorithms for process systems engineering",
+    "evidence": "Paper framed as part of 'larger aims towards approximation algorithms for process systems engineering'; greedy heuristics with guarantees adoptable by practitioners.",
+    "pages": "pp. 2, 32"
+   }
+  ],
+  "transferable": [
+   "When the partner's objective is fixed by the business, measure robustness in the resource the partner can buy (vans) (pp. 4-5, 20-21).",
+   "Classify instances by a threshold tied to the machine count, prove per-class ratios, then design an algorithm that mixes the classes (pp. 5, 15).",
+   "Check real data for the share of each theoretical class before optimising for one (pp. 24-25)."
+  ],
+  "coauthors": "Dimitrios Letsios (KCL, first author), Jeremy T. Bradley (Royal Mail), Suraj G, Natasha Page (Imperial)",
+  "quotes": [
+   {
+    "text": "Furthermore, any Royal Mail instance can be converted to g = 1 using small discretization.",
+    "page": 5
+   },
+   {
+    "text": "This finding is a strong indication that more efficient fleet management might be possible in Royal Mail delivery offices.",
+    "page": 28
+   }
+  ]
+ },
+ {
+  "id": "S080",
+  "year": "2021",
+  "title": "Design of dynamic experiments for black-box model discrimination",
+  "read_level": "partial",
+  "contribution": "Extends analytical design of dynamic experiments for model discrimination to process, control, initial-state and parameter uncertainty, and to black-box dynamic models by placing GP surrogates on the one-step state transition (read: arXiv v2, titled 'Using Gaussian Processes to Design Dynamic Experiments for Black-Box Model Discrimination under Uncertainty').",
+  "problem_entry": "Rival mechanistic models often all fit existing data; industrial models in legacy code have no gradients; analytical vs Monte Carlo design split (abstract, pp. 1-3).",
+  "key_idea": "GP prior on (x_k, u_k, theta) -> x_{k+1} keeps surrogate input dimension independent of horizon; Taylor moment propagation with GP gradients; a third mode uses the true black box for means and the GP only for gradients (pp. 8-10, 18).",
+  "assumptions": "Gaussian noises and parameter posterior (Laplace), known noise covariances, first-order state-space form, linear observation map, open-loop design; linearisation admitted for tractability (pp. 7, 17-18).",
+  "proof_devices": [],
+  "experiments": "Yeast fermentation case (Espie-Macchietto; constants Chen-Asprey): published optima reproduced and improved by 7.8%/8%; mean vs cone constraints over 25 simulations with 100-sample Monte Carlo violation levels; control-covariance misspecification 2x2; GP surrogates marginally worse than analytical (pp. 12-17).",
+  "positioning": "Hybridises analytical (Chen-Asprey style) and data-driven design, extending Olofsson et al. ICML 2018 from static to dynamic models (abstract, pp. 3, 18-19).",
+  "writing": "Opens with a three-panel toy figure (step, random, optimised control) showing why naive inputs fail to discriminate (pp. 2-3).",
+  "limits_future": "Linearisation and GP errors accumulate over long horizons; prior covariance shrunk to make the first experiment feasible; closed-loop design too costly; future advanced GPs and hybrid mechanistic/data-driven models (pp. 17-19).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Learned surrogate embedded in the optimisation problem, but as a smooth GP feeding local gradients rather than piecewise structure solved globally.",
+    "pages": "pp. 8-10"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Published optima re-evaluated with the original criterion before extending; Monte Carlo verification of constraint violations.",
+    "pages": "pp. 13-15"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "reproduce the classic published instance before extending",
+    "evidence": "Espie-Macchietto optimum recovered from perturbed starts; Chen-Asprey objective recomputed (2601 vs 2805) with the gap attributed to 20 years of solver progress.",
+    "pages": "pp. 13-14"
+   }
+  ],
+  "transferable": [
+   "Learn the one-step transition map, not the trajectory map, to keep surrogate input dimension fixed over long horizons (p. 18).",
+   "Re-solve the classic published instance under the original formulation and report both objectives before claiming improvement (p. 13).",
+   "Cross modelled vs true uncertainty (small/large x small/large) and report success, failure and inconclusive rates separately (p. 16)."
+  ],
+  "coauthors": "Simon Olofsson (first author), Eduardo S. Schultz, Adel Mhamdi, Alexander Mitsos (RWTH Aachen), Marc Peter Deisenroth (UCL)",
+  "quotes": [
+   {
+    "text": "Since the problem formulation is identical, we assume this discrepancy is due to the improvement in optimisation solvers after 20 years.",
+    "page": 13
+   },
+   {
+    "text": "Hence, we are punished less for conservative estimates of the control covariance than for overly optimistic estimates.",
+    "page": 16
+   }
+  ]
+ },
+ {
+  "id": "S035",
+  "year": "2022",
+  "title": "Multi-objective constrained optimization for energy applications via tree ensembles",
+  "read_level": "partial",
+  "contribution": "Extends ENTMOOT to constrained multi-objective black-box optimisation by combining tree-ensemble MIP encodings, a distance/similarity exploration term and a weighted Chebyshev acquisition, outperforming NSGA-II on synthetic, wind-farm and battery-design benchmarks (read: arXiv v1).",
+  "problem_entry": "Energy design problems are expensive black boxes with multiple objectives, categorical inputs and explicit input constraints; evolutionary methods are sample-hungry and handle constraints poorly (pp. 2-4).",
+  "key_idea": "Weighted Chebyshev scalarisation of normalised tree-ensemble predictions minus kappa x exploration, single-levelled by an epigraph variable; solved as a nonconvex MIQP with input constraints so proposals are feasible (pp. 9-10, 14).",
+  "assumptions": "Black-box evaluation dominates cost; observed min/max normalisation unless bounds given; 400 trees depth 3, kappa = 1.96 fixed across runs; 100 s Gurobi limit once feasible (pp. 10, 15-16).",
+  "proof_devices": [],
+  "experiments": "Synthetic bi-objective benchmarks (GD, IGD, MPFE, VR vs NSGA-II-approximated true fronts); 16-turbine wind farm and PyBaMM battery design (bounded hypervolume); 25 fixed seeds, identical initial points, medians and quartiles (pp. 15-29).",
+  "positioning": "Builds on ENTMOOT (Thebelt et al. 2021) and Misic tree encoding; contrasts with GP-based ParEGO/TSEMO and NSGA-II, the only rival run (pp. 4, 8, 10, 15).",
+  "writing": "Problem framed from energy-systems needs before method; benefits attributed to sample efficiency, categorical handling and constraints (pp. 3-4, 30).",
+  "limits_future": "MIQP does not scale well with data and dimension; time limit only on own method; only bi-objective cases tested; future applications with more objectives (pp. 14-16, 30).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Trained tree ensemble written as MIP constraints and optimised with input constraints; BASF co-authors; code released.",
+    "pages": "pp. 10, 14-15"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Fairness protocol (same initial points, 25 seeds, default competitor settings, disclosed time-limit asymmetry), but only NSGA-II and sampling baselines are run.",
+    "pages": "pp. 4, 15-16"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Write known input constraints, including symmetry-breaking supporting constraints, into the MIP acquisition problem so every proposal is feasible (pp. 21, 25).",
+   "Give every method the same seeded initial design and report medians with quartiles over fixed seeds (pp. 15, 18).",
+   "Include a pure feasible-sampling baseline to separate the value of feasibility from the value of the surrogate (p. 24).",
+   "Compare with the source benchmark's published best to show what a continuous formulation buys (p. 25)."
+  ],
+  "coauthors": "Alexander Thebelt (first author), Calvin Tsay, Robert M. Lee (BASF), Nathan Sudermann-Merx, David Walz (BASF), Tom Tranter (UCL)",
+  "quotes": [
+   {
+    "text": "We note that this procedure only affects the method presented here, and not other tools that we compare against.",
+    "page": 16
+   },
+   {
+    "text": "Based on preliminary studies we found that the performance of different algorithms is highly dependent on the quality of the initial population.",
+    "page": 18
+   }
+  ]
+ },
+ {
+  "id": "S057",
+  "year": "2022",
+  "title": "ROmodel: modeling robust optimization problems in Pyomo",
+  "read_level": "full",
+  "contribution": "Open-source Pyomo extension (UncParam, UncSet, AdjustableVar) with reformulation, cutting-plane and nominal solvers, automatic recognition of uncertainty-set geometry, and an extension interface demonstrated with (warped) GP uncertainty sets on six case studies (read: arXiv v1).",
+  "problem_entry": "Many robust-optimisation variants and required expertise discourage practitioners; no common platform to compare approaches; existing tools are solvers or tied to Julia (pp. 1-3).",
+  "key_idea": "Model robust problems in close analogy to the math inside Pyomo; reformulation solver detects set geometry per constraint and applies the matching transformation; new sets/reformulations plug in via library classes and _check_applicability/_reformulate (pp. 4-14).",
+  "assumptions": "Uncertain constraints must match a known geometry to be reformulated; cutting planes need convex sets and suitable solvers; GP sets decision-dependent and linear in the uncertain parameter; only linear decision rules (pp. 8-13).",
+  "proof_devices": [],
+  "experiments": "Six case studies (portfolio, knapsack, pooling, facility location, GP-priced production planning, drill scheduling), 30 set sizes each; median times reformulation 74 ms vs cuts 330 ms, cuts better on pooling-ellipsoidal and facility; transformation median 3.2 ms; conservatism by set geometry (pp. 14-17).",
+  "positioning": "Modelling layer versus robust solvers ROME, RSOME, ROC++, PyROS; closest to JuMPeR but tied more tightly to its modelling language; open versus AIMMS (pp. 2-3).",
+  "writing": "Three numbered aims, then code listings for every object; conclusion of two sentences (pp. 2, 4-8, 17).",
+  "limits_future": "Not every modelled set can be solved; only linear decision rules; positioned as a prototyping and comparison platform (pp. 6, 8, 17).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Rival reformulations and uncertainty sets become switchable options behind one modelling interface; GPy-trained GPs enter the model as uncertainty sets.",
+    "pages": "pp. 2, 6, 11-12, 15"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Automatic recognition of uncertainty-set geometry before applying a transformation.",
+    "pages": "p. 3; Fig. 1 p. 9"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Per-class verdict: reformulation faster overall, cutting planes better on nonconvex pooling with ellipsoidal sets and on facility location.",
+    "pages": "pp. 15-16"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Design the extension interface as detect-applicability plus reformulate so new reformulations plug in without touching models (p. 13).",
+   "Report solver time and the layer's own transformation time separately (p. 16).",
+   "Ship every case study as an importable example so results are one call away (p. 14)."
+  ],
+  "coauthors": "Johannes Wiebe (first author)",
+  "quotes": [
+   {
+    "text": "However, not every set that can be modeled with Pyomo constraints can necessarily also be solved.",
+    "page": 6
+   },
+   {
+    "text": "The reformulation solver generally outperforms the cutting plane solver with median times of 74ms and 330ms respectively.",
+    "page": 15
+   }
+  ]
+ },
+ {
+  "id": "S056",
+  "year": "2023",
+  "title": "An optimization approach coupling preprocessing with model regression for enhanced chemometrics",
+  "read_level": "partial",
+  "contribution": "Optimises spectral preprocessing parameters and the number of PLS latent variables jointly with ENTMOOT, for accuracy or a new moment-matching robustness metric against known variability sources, checked by complete enumeration on simulated and NIR/Raman data.",
+  "problem_entry": "Preprocessing is chosen by trial and error before PLS, missing the synergy between the steps; model selection uses accuracy (RMSEP) alone (pp. 1-2).",
+  "key_idea": "Decision vector u = (SG window, polynomial order, derivative order, latent variables); robustness = weighted sum of pairwise distances of prediction means and variances across realisations of a known nuisance factor (pp. 4-6).",
+  "assumptions": "Unimodal outputs; nuisance realisations uncorrelated with other variation and categorical; similar concentration levels across classes; beta weight set by trial and error; small integer grid enabling enumeration (pp. 4-5, 7, 11).",
+  "proof_devices": [],
+  "experiments": "Simulated example and two NIR/Raman literature datasets; ENTMOOT with 90 initial points and 200 iterations; accuracy models up to seven latent variables vs one or two for robustness; complete enumeration agrees except one case within 1%; random-split sensitivity and extra test sets (pp. 7-15).",
+  "positioning": "Places PLS preprocessing selection within hyperparameter optimisation (grid/random search, BO); contrasts with sequential DoE and genetic-algorithm selection (pp. 1-2).",
+  "writing": "Two-fold scope-and-novelty statement; simple simulated example first to build intuition before industrial data (pp. 2, 8-9).",
+  "limits_future": "Robust models sometimes less accurate; only extreme objectives optimised, trade-off left open; more preprocessing steps and their order; decomposition for scale; third example code withheld for confidentiality (pp. 7, 15-16).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Black-box optimiser answers independently checked by complete enumeration on a deliberately coarsened domain.",
+    "pages": "pp. 7, 12, 15"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "In-house tree-ensemble optimiser ENTMOOT reused on an industrial partner's problem.",
+    "pages": "p. 7"
+   },
+   {
+    "method": "Method 2",
+    "relation": "contradiction",
+    "note": "Two extremes (accuracy, robustness) each optimised but the interpolating family is not built; trade-off left as future work.",
+    "pages": "p. 16"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "validate a black-box optimiser by complete enumeration on a coarsened domain",
+    "evidence": "Window-size step of 5 chosen so enumeration is feasible; enumeration confirms ENTMOOT optima except one case within 1%.",
+    "pages": "pp. 7, 12, 15"
+   }
+  ],
+  "transferable": [
+   "Turn robustness to a known nuisance factor into a loss by matching prediction means and variances across nuisance levels (pp. 4-5).",
+   "Choose the decision grid so complete enumeration stays feasible and report where BO and enumeration disagree (pp. 7, 15).",
+   "Hold out an entire nuisance level (keeping the middle one in training) to test which model complexity still predicts it (p. 9)."
+  ],
+  "coauthors": "Chrysoula D. Kappatou (first author), James Odgers (Imperial), Salvador Garcia-Munoz (Eli Lilly)",
+  "quotes": [
+   {
+    "text": "Complete enumeration serves here as a validation tool to ensure successful termination of the ENTMOOT solver.",
+    "page": 7
+   },
+   {
+    "text": "However, this comes in some cases together with an inferior performance in terms of model prediction.",
+    "page": 15
+   }
+  ]
+ }
+]

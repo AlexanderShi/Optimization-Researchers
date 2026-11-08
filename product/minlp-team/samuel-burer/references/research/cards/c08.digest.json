@@ -1,0 +1,99 @@
+[
+ {
+  "id": "S049",
+  "year": "2025",
+  "title": "A slightly lifted convex relaxation for nonconvex quadratic programming with ball constraints",
+  "read_level": "full",
+  "contribution": "Inserts one artificial scalar beta between x'x and the linear parts of the ball constraints, giving a polynomially sized, non-disjunctive SDP relaxation (one PSD variable) that is exact for two balls and for ||x|| <= min{1, g+h'x}, empirically far stronger and faster than Shor+Kron for m >= 3, and that solves all 212 hard TTRS benchmark instances (arXiv v2 read).",
+  "problem_entry": "QP over m balls is polynomial for fixed m. Shor is exact for m=1, and Kelly et al. get m=2 exactness only with a disjunctive two-PSD-variable SDP. No explicit tractable exact representation is known for m>=3. Goal: one non-disjunctive SDP that is strong irrespective of the data (pp. 1-3).",
+  "key_idea": "Sandwich x'x <= beta <= rho_i^2 - c_i'c_i + 2c_i'x, which swaps m-1 cone constraints for m linear ones. Homogenize, then apply Shor+RLT+SOCRLT in dimension n+2 ('Beta'). For m=2 add the linearized complementarity l1'Wl2=0. The same idea extends to min{1,g+h'x} and to TTRS with n artificial beta_j plus Kron (pp. 3, 11-14, 18-19).",
+  "assumptions": "Q symmetric (not PSD); balls with rho_i>0, wlog unit first ball; (QP) feasible (p. 2). The generic cone is bounded and implies x1>=0 (p. 5). TTRS: full-rank H_i, diagonalized H2 (p. 19). Exactness is proved only for m=2 and for min{1,g+h'x} (Theorems 1-2).",
+  "proof_devices": [
+   "Hull equality via 'every extreme ray of the relaxation has rank one', following Burer 2015 [8] (Section 5, pp. 20-24)",
+   "Lemma 1: J maps SOC to SOC and v'Jv=0 on the boundary (p. 20)",
+   "Lemma 2: rank-one extreme rays of the Shor-type set via Pataki's rank bound (p. 21)",
+   "Lemma 3: three-case analysis (interior / boundary with W l=0 / boundary with W l!=0) and rank-one perturbation W - eps vv' with v=W l in Range(W) (pp. 21-22)",
+   "Lemma 4: an extreme ray of cone intersected with a half-space is extreme in the cone or a sum of two extreme rays ([8] Lemma 5, p. 22)",
+   "Main proof: in the interior case rank(W)<=2 and the bordered matrix U shows Range(W)=span{v1,v2}, contradicting extremality; in the boundary case one of W - eps_i v_i v_i' is feasible (pp. 22-24)"
+  ],
+  "experiments": "MOSEK 10.0.37 Fusion/Python on an M2 MacBook Air, public GitHub repo (p. 4). 'Solved' = rel. gap<1e-4 AND eigenvalue ratio>1e4 (p. 10). Example 1 with envelope plots (pp. 13-14). m=2 Martinez instances with Shor-solved excluded: Kron 955/884/882 vs Beta 1000/1000/1000 (Table 1, p. 15); all 267 Eltved-Burer unsolved instances solved (p. 15). m>=3 max-norm instances: Beta 977/973/908 vs Kron 208/412/2, gap closure by joint status, none solved by Kron only (Tables 2-3, pp. 16-17). Timing to (64,64) at 40.6 s (Table 4, p. 17). TTRS: all 212 solved vs 77/29/211, '0.374 seconds on average' for n=20 (p. 20). Scan count before filtering not reported; 1,000 vs 3,000 wording on p. 15.",
+  "positioning": "Benchmarks against Kelly et al.'s disjunctive m=2 exactness (pp. 2, 8). Eltved & Burer is the closest prior (p. 8). Anstreicher's Kron is credited though never known to give exactness (p. 8). Builds on Sturm-Zhang, Burer-Yang and Ye-Zhang exactness (pp. 8, 20). Consolini-Locatelli 211/212 is the prior TTRS best (p. 20).",
+  "writing": "Goals enumerated (i)-(iii) (p. 2); candid project origin (p. 3); intuition paragraph before the formalism (p. 3); notation-overload caution (p. 5); main proof deferred to the last section (p. 20); empirical regularities flagged as unproved (p. 16); four open questions (p. 24); Anstreicher credited for the key observation (p. 24). 'Inexact for m>=3' is announced on p. 3 but supported only numerically (pp. 16-17).",
+  "limits_future": "Inexact for m>=3; no proof that Beta is at least as strong as Kron or as the Eltved-Burer method; Theorem 1 not extended beyond two constraints; not embedded in global B&B (pp. 2, 16, 24).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "The slight lift to n+1 (n+2 homogenized) puts the m=2 problem exactly into one PSD variable with linear and SOC constraints.", "pages": "pp. 3, 11-14"},
+   {"method": "Method 2", "relation": "evidence", "note": "Kitchen sink Shor+RLT+SOCRLT+Kron built explicitly, an extra ingredient (Zhen et al.) tested and found to add nothing; explicit non-disjunctive description exact at m=2, not beyond, against a disjunctive prior.", "pages": "pp. 2-3, 5-9"},
+   {"method": "Method 3", "relation": "evidence", "note": "Two-signal 'solved' rule; Beta>=Kron left as an empirical suggestion without proof; open questions handed on.", "pages": "pp. 10, 16, 24"},
+   {"method": "Method 3", "relation": "variant", "note": "Inexactness for m>=3 is announced as shown but rests on numerical 'unsolved' counts, not a certified counterexample.", "pages": "pp. 3, 16-17"},
+   {"method": "Method 4", "relation": "evidence", "note": "Martinez generator with Shor-solved instances excluded; ladder kept by reusing the 267 Eltved-Burer and 212 TTRS (2013) hard instances.", "pages": "pp. 15-16, 20"},
+   {"method": "Method 4", "relation": "variant", "note": "Filter disclosed but scan count not; the 1,000-per-size vs 3,000 counts on p. 15 read inconsistently. v2 wording differs from the v1 quotes in SKILL.md.", "pages": "p. 15"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "artificial-variable sandwich", "evidence": "One auxiliary scalar inserted between a shared nonlinear term and several linear bounds turns many cone constraints into one cone plus linear constraints (balls, min{1,g+h'x}, TTRS with beta_j >= x_j^2).", "pages": "pp. 3, 11, 18-19"},
+   {"pattern": "rank-one extreme-ray proof by rank-one perturbation", "evidence": "Hull equality proved by showing every extreme ray is rank one via case splits and W - eps vv' with v=W l, reusing the 2015 survey lemma.", "pages": "pp. 20-24"}
+  ],
+  "transferable": [
+   "Sandwich an artificial scalar between a shared quadratic term and the linear parts of several constraints so that RLT/SOCRLT apply to one cone plus linear constraints (pp. 3, 11-12).",
+   "Fix the slack of the artificial variable with a complementarity product and linearize it to l1'Wl2=0 to obtain exactness (pp. 13-14).",
+   "Prove hull equality by showing every extreme ray has rank one, using an eps*vv' perturbation with v=W l in Range(W) (pp. 21-24).",
+   "Break gap closure down by joint solve status (both unsolved / only new / only old / both) so that 'never worse' can be read straight from the table (Table 3, p. 17).",
+   "Before the large tables, show a 2-D example with each relaxation's projected lower envelope against the true objective (Figure 1, pp. 13-14)."
+  ],
+  "coauthors": "none (sole author); Kurt Anstreicher acknowledged for the observation behind Theorem 1",
+  "quotes": [
+   {"text": "In this paper, however, we seek a relaxation that is strong irrespective of the data.", "page": 2},
+   {"text": "This suggests empirically that Beta is always at least as strong as Kron, although we do not have a formal proof establishing this.", "page": 16}
+  ]
+ },
+ {
+  "id": "S048",
+  "year": "2025",
+  "title": "A semidefinite relaxation for sums of heterogeneous quadratic forms on the Stiefel manifold",
+  "read_level": "full",
+  "contribution": "Gives a new SDP relaxation for maximizing sums of heterogeneous quadratic forms over the Stiefel manifold, a cheap LMI certificate (k scalar variables) of global optimality for any local solution, tightness in a neighbourhood of jointly diagonalizable data, and a proof that HPPCA data approach that regime (arXiv v3 read).",
+  "problem_entry": "Max sum u_i'M_i u_i over St(k,d) arises in HPPCA and related signal-processing problems. No analytical solution or convex method is known beyond commuting M_i, and local solvers lack global guarantees, so a certificate for their output is valuable (pp. 1-2, 5-6).",
+  "key_idea": "Lift X_i = u_i u_i', relax the binary eigenvalues of sum X_i to sum X_i <= I with tr X_i = 1 and drop the rank constraints (a Fantope decomposition). Build a dual certificate from a candidate U alone, and prove tightness near commuting data by continuity of the dual optimal set from the assignment-LP case (pp. 3, 6-10).",
+  "assumptions": "M_i PSD (wlog via shift) and k<d (pp. 4, 8); coefficients in bounded C; unique diagonal-LP optimum assumed and called generic (p. 8). Theorem 4.1 needs an exact stationary point, hence the epsilon version (pp. 6-7). Gaussian HPPCA model with distinct lambdas and variances (p. 9). The neighbourhood size is not quantified (p. 9).",
+  "proof_devices": [
+   "One-line weak duality proof in the main text (p. 4)",
+   "Slater's condition via the strictly feasible point X_i = I/d (Lemma A.1, p. 16)",
+   "ROP iff optimal, via a trace-of-square orthogonality argument (Lemma A.2, p. 17)",
+   "Complementary slackness: rank(Z_i)=d-1 forces rank-one X_i (Lemma 2.4, p. 17)",
+   "KKT-built certificate Y=U(Lambda-D_nu)U', Z_i=Y+nu_i I-M_i, 'Similar to the work in [42]' (pp. 17-18)",
+   "nu>=0 by contradiction via a shift that lowers the dual objective when k<d (Lemma B.2, p. 18)",
+   "epsilon-KKT: shift the dual by eps*I so that the duality gap equals eps*d (pp. 19-20)",
+   "Parametric conic duality: interior feasibility plus a data-independent bounding constraint give convergence of dual optimal sets and continuity of the nearest-point selection (Assumptions C.0.1-C.0.2, Lemmas C.1-C.2, Prop. C.3, pp. 20-22)",
+   "Goldman-Tucker strict complementarity for the assignment LP (p. 22)",
+   "Extension of Lin's theorem to k-tuples of almost commuting matrices (Lemma F.13, p. 9)",
+   "Explicit d=4, k=2 counterexample: the feasible set is not the convex hull, by a rank bound on convex combinations (Appendix G.2, pp. 39-41)",
+   "Non-commuting M_i with ROP, showing the sufficient condition is not necessary (Prop. G.2, pp. 41-42)"
+  ],
+  "experiments": "MATLAB R2018a, CVX/SDPT3, MacBook Pro, public GitHub code, tolerance caveat (p. 10). 'Tight' = eigenvalue error <1e-5, a single signal (pp. 11, 13). ROP fractions on random HPPCA instances (100 or 20 trials) rise to 1 with n or equal variances and fall to 0.35 at large d,k with small n (Tables 1-3, pp. 11-12). Random-PSD M_i fall to 0 at k=10 (supplement, p. 43). StMM solutions certified on synthetic CJD (d=10, k=3) and HPPCA (d=50, k=5), with three-way markers; >95% global where tight (pp. 13-14). StMM+certificate about 60x (k=3) and 15x (k=10) faster than the SDP, medians of 10 trials (p. 14). The Stiefel projection is called Procrustes on p. 11 and QR on p. 44.",
+  "positioning": "Extends Bolla et al. (commuting case only) to almost commuting data; ref [35]'s conditions are judged hard to check; the relaxation is related to but distinct from the Fantope; the certificate follows Won-Zhou-Lange; Burer-Monteiro landscape results and ref [16] perturbation theory are distinguished (pp. 2-6, 27-28).",
+  "writing": "Footnote defining 'heterogeneous' (p. 1); hedging footnote that the certificate rests on a sufficient condition (p. 6); 'by no means necessary' with a counterexample in the supplement (p. 9); 15-page main text with proofs in appendices; the finder of an earlier error credited by name (p. 15).",
+  "limits_future": "Certificate needs O(d^2) storage; region of Theorem 4.6 unquantified; no analytical certificate (Z_i not monotone in nu_j, p. 30); not the convex hull (G.2). Future: randomized scalable SDP, sharper ROP conditions, applying ref [16] (p. 15).",
+  "method_links": [
+   {"method": "Method 1", "relation": "variant", "note": "One lifted convex object, but a strict relaxation (counterexample G.2). Effort shifts to the data regime where it is tight, not exactness.", "pages": "pp. 3-4, 7-9, 39-41"},
+   {"method": "Method 3", "relation": "evidence", "note": "Certified explicit counterexample bounds the claim; sufficient-not-necessary stated with an example; earlier-version error credited by name.", "pages": "pp. 9, 15, 39-42"},
+   {"method": "Method 3", "relation": "variant", "note": "'Tight' rests on a single numerical signal (eigenvalue error <1e-5), not the two-signal rule.", "pages": "pp. 11, 13"},
+   {"method": "Method 4", "relation": "variant", "note": "Random instances from the application's generative model with unconditional fractions; no engineered hard pool or baseline filter; losses reported only in the supplement.", "pages": "pp. 11-12, 43"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "certify the local solver, don't replace it", "evidence": "Relaxation used to build a cheap LMI certificate for the output of any Stiefel solver; StMM+certificate beats the full SDP on time.", "pages": "pp. 5-7, 14"},
+   {"pattern": "tightness by perturbation from an LP-exact case", "evidence": "Strict complementarity at the commuting (assignment-LP) case plus continuity of the dual optimal set gives a neighbourhood of tightness.", "pages": "pp. 7-8, 20-22"}
+  ],
+  "transferable": [
+   "Build a global-optimality certificate from a candidate solution alone so that complementarity holds by construction and only an LMI feasibility in k scalars remains (pp. 6, 17-18).",
+   "Make the certificate robust to inexact stationarity: minimize eps over the eps-relaxed LMIs and report the bound p* - eps*d (pp. 7, 19-20).",
+   "Prove tightness near a solvable case via strict complementarity there plus continuity of the dual optimal-set map, since the rank condition is open (pp. 8, 20-22).",
+   "Bound the dual feasible set with an objective-level constraint built from a data-independent interior point to get uniform compactness over the data set (pp. 21-22).",
+   "Refute a convex-hull claim with a small explicit instance whose rank exceeds what any convex combination of feasible points allows (pp. 39-41).",
+   "Plot local-solver outcomes with three markers (certified global / relaxation not tight / tight but local max) (p. 13)."
+  ],
+  "coauthors": "Kyle Gilman, Laura Balzano (University of Michigan, EECS)",
+  "quotes": [
+   {"text": "Thus, we can solve the nonconvex problem posed in (1.1) using any choice of solver on the Stiefel manifold and perform a fast check of its terminal output for global optimality.", "page": 14},
+   {"text": "We also would like to mention and give special thanks to Alex Wang who pointed out an error in a previous version of this manuscript and for his discussions on how to correct it.", "page": 15}
+  ]
+ }
+]

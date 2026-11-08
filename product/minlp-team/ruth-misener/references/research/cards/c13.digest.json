@@ -1,0 +1,149 @@
+[
+ {
+  "id": "S059",
+  "year": "2024",
+  "title": "Transition constrained Bayesian optimization via Markov decision processes",
+  "read_level": "full",
+  "contribution": "Extends Bayesian optimisation to known Markov transition constraints by greedily optimising a maximiser-identification utility over policies, relaxed to a convex problem over state-action visitations and solved by Frank-Wolfe with dynamic-programming (discrete) or MPC-like (continuous) subproblems, with receding-horizon re-planning giving non-Markovian policies.",
+  "problem_entry": "Standard BO assumes the search space can be queried arbitrarily; transient flow reactors, movement constraints, monotone variables and transition-dependent noise break this (p. 1, p. 2).",
+  "key_idea": "Utility = max pairwise variance of differences among potential maximisers (Eq. 4, p. 3); with finite-rank features it depends only on visited states, not order (p. 4), so planning becomes convex over the visitation polytope, solved by Frank-Wolfe + RL/DP oracles with receding-horizon re-planning (pp. 5-7).",
+  "assumptions": "GP prior with known kernel, known Gaussian (possibly heteroscedastic) noise, known transitions, finite-rank kernel approximation, fixed hyperparameters; theory needs episodic feedback and an unproved condition (*) on shrinkage of Z_t; continuous case only linear dynamics (pp. 2, 4, 7, 8, 21-22).",
+  "proof_devices": [
+   "Gaussian tail bound on misidentification probability, worst case over composite hypothesis, log-Bayes-factor bound (App. C.1, pp. 18-20)",
+   "Gap bound eliminating the distribution of f(x*), yielding the XY-allocation objective of Fiez et al. (App. C.2, p. 20)",
+   "Additivity of the objective in state-action pairs via Mercer decomposition (Lemma D.1, p. 24); Sherman-Morrison-Woodbury and matrix inversion lemmas (p. 25)",
+   "Proposition C.1: Frank-Wolfe-type rate against a privileged oracle knowing x*, extension of Thm 3 of Mutny et al. (pp. 21-22); C_t rate only conjectured (p. 21)",
+   "Physics-informed ODE kernel from linearisation at two equilibria plus sigmoid interpolation and RBF correction, checked numerically (p. 9; App. H pp. 30-34)"
+  ],
+  "experiments": "Knorr pyrazole transient-flow reactor, Lake Ypacarai with obstacles, free-electron laser with movement-dependent noise, synthetic Branin/Michalewicz/Hartmann/Levy/SnAr with local box constraints (sync/async); baselines Greedy-UCB, MDP-EI, TrSnAKe, LSR; 25 runs, medians and 10/90 quantiles; solve times; ablations on mixture size, K and XY vs G allocation; losses to LSR and MDP-EI reported (pp. 8-10, 17-18, 26-30).",
+  "positioning": "Builds on Mutny et al. Markov-chain experiment design and convex RL; objective coincides with Fiez et al. linear-bandit design; contrasted with exponential-cost look-ahead BO and truncation heuristics of movement-cost BO including the group's own SnAKe (pp. 3-5, 16).",
+  "writing": "Three contribution bullets, 'Interestingly'/'Surprisingly' flags, labelled conjectures, a visual abstract mapping each reduction to its literature and the intractable routes not taken, a concession sentence on specialist baselines (pp. 2, 10, 16, 20-21, 28).",
+  "limits_future": "Continuous case limited to linear dynamics with heuristic subproblems; condition (*) unproved; fixed hyperparameters; future: more general continuous transition dynamics and new objectives (pp. 7, 8, 10, 21).",
+  "method_links": [
+   {"method": "Method 4", "relation": "evidence", "note": "Concedes that specialist baselines (LSR, SnAKe) match the method in their domain; drops the mixture-policy option when the single component is as good.", "pages": "pp. 9-10, 28"},
+   {"method": "Method 2", "relation": "variant", "note": "Parameter discipline without a formulation family: candidate-set size K swept and robust, mixture size reduced to its simplest value.", "pages": "pp. 28-29"},
+   {"method": "Method 1", "relation": "variant", "note": "Exploited structure is order-invariance of the utility and known reaction kinetics turned into a kernel, not algebraic MINLP structure.", "pages": "pp. 4, 9"},
+   {"method": "Method 5", "relation": "evidence", "note": "Partial: shared fixed hyperparameters for all algorithms, quantiles over 25 runs, solve times and hardware, losses reported; no independent answer verification.", "pages": "pp. 9, 17-18, 27"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "relaxation mindset exported to BO planning", "evidence": "Intractable trajectory optimisation relaxed to a convex problem over state-action visitation distributions and solved by Frank-Wolfe linearisations with exact DP oracles.", "pages": "pp. 4-7"},
+   {"pattern": "physics-informed kernel with nonparametric correction", "evidence": "Linearised mechanistic ODE gives a feature kernel; an RBF term absorbs model mismatch; prior on the ODE weight encodes chemist knowledge.", "pages": "p. 9; pp. 27, 30-34"}
+  ],
+  "transferable": [
+   "Reformulate a trajectory experiment-design objective additive in visited states as a convex function of state-action visitations; solve with Frank-Wolfe plus an RL/DP oracle and receding-horizon re-planning (pp. 4-7).",
+   "Use maximiser identification (variance of pairwise differences over a confidence set of candidate maximisers) instead of regret when a reported best point is the deliverable (pp. 3, 6).",
+   "Model movement-dependent noise inside the design matrix and show the cost of the stateless worst-case alternative (p. 10; p. 27).",
+   "Include specialist methods as baselines and present matching them in their home domain as the result (p. 10).",
+   "Ablate every new knob in an appendix and present only the simplest variant that is as good (pp. 28-30)."
+  ],
+  "coauthors": "J. P. Folch, C. Tsay, R. M. Lee, B. Shafei, W. Ormaniec, A. Krause, M. van der Wilk, M. Mutny",
+  "quotes": [
+   {"text": "This reveals an essential observation that the utility depends only on the visited states; not their order.", "page": 4},
+   {"text": "It is important to highlight that SnAKe and LSR are specialist heuristic algorithms for local box-constraints, and therefore it is not surprising they perform strongly.", "page": 10}
+  ]
+ },
+ {
+  "id": "S077",
+  "year": "2024",
+  "title": "Dependence in constrained Bayesian optimization: When do we need it and how does it help?",
+  "read_level": "full",
+  "contribution": "Removes the usual independence assumption between black-box constraints in constrained BO (multi-output GP plus EPMGP for a dependent probability of feasibility), proves it converges to the independent version away from the feasible boundary, and finds empirically that it rarely helps, licensing the simple assumption.",
+  "problem_entry": "Most cBO methods assume independent constraints for tractability (Table 1, p. 3; p. 2); the paper asks when dropping that assumption matters (subtitle, p. 1; p. 2).",
+  "key_idea": "Dep-PoF via MOGP + EPMGP as a drop-in replacement for PoF in cEI (product form) and cAS (sum form), everything else held fixed (pp. 3, 6-7).",
+  "assumptions": "Expensive black-box objective and p > 1 inequality constraints on a compact box, homotopic data, noise-free benchmarks; analysis in the ideal case where the predictive mean equals the constraints and posterior covariance vanishes; exact inference for both arms (pp. 4, 6, 8, 9).",
+  "proof_devices": [
+   "Proposition 1: Dep-PoF -> PoF at non-boundary points via continuity of the multivariate Gaussian cdf and (1-delta)^p bounds (p. 8)",
+   "Proposition 2: PoF -> 1/2^q at boundary points with q active constraints, explaining slow search for boundary optima (pp. 8-9)",
+   "Complexity comparison: O(pn^3) vs O(p^3 n^3) training; O(p) vs O(p^3 + m p^2) probability evaluation (p. 9)"
+  ],
+  "experiments": "cEI, Dep-cEI, cAS, Dep-cAS, random search; 10 LHS points, 100 evaluations, 50 replications, mean +/- SE; constructed repeated-constraint Gardner case as best-case bound; 9 synthetic problems with feasible ratio and active sets; 4 engineering design problems; Dep-PoF helps only on tiny feasible regions (G7, G10) (pp. 9-13).",
+  "positioning": "Table of 14 cBO methods classified by acquisition, PoF use, constraint counts, status, dependence, model; distinguished from Gelbart et al. multi-task BO; broad acquisition comparison delegated to Eriksson and Poloczek (pp. 2-3, 5).",
+  "writing": "Question in the subtitle, negative result in the abstract, discussion as bold claim-sentences, user-facing conclusion ('a user will not feel guilty to assume independence'), hedged explanations (pp. 1, 10, 13-14).",
+  "limits_future": "Dep-PoF may pay only when constraints and their dependence are unknown and experiments extremely expensive, and only early; no general measure of dependence; only two acquisitions tested; no future-work agenda (pp. 1, 5, 10, 14).",
+  "method_links": [
+   {"method": "Method 4", "relation": "evidence", "note": "Component judged inside full BO runs across benchmark classes; verdict split by class (tiny feasible regions vs rest); simple default (independence) kept.", "pages": "pp. 10, 12, 14"},
+   {"method": "Method 2", "relation": "evidence", "note": "Stop rule: negative result published as such; extra parameters (Dep-cAS weights, feasible-region relaxation) flagged as a cost.", "pages": "pp. 1, 7, 9, 14"},
+   {"method": "Method 5", "relation": "variant", "note": "Instead of oracle solver runs, a constructed best case (duplicated constraints) bounds the possible gain; exact inference on both arms removes a confounder.", "pages": "pp. 9-10"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "negative result as licence for a simplifying assumption", "evidence": "Paper sets out to test the field's independence assumption, finds no gain in most cases and frames this as permission to keep the simple model.", "pages": "pp. 1, 14"},
+   {"pattern": "constructed extreme case as upper bound on a component's benefit", "evidence": "Repeating one constraint p times makes dependence maximal; the result is read as an upper bound for real benchmarks.", "pages": "pp. 9-10"}
+  ],
+  "transferable": [
+   "Swap one modelling component for its refined version while holding everything else fixed, including exact inference on both sides, to isolate the assumption (pp. 3, 9).",
+   "Bound the best-case benefit with a duplicated-constraint construction before general benchmarks (pp. 9-10).",
+   "Report feasible-volume ratio and active set at the optimum for each constrained benchmark to explain where a method helps (Table 2, p. 12).",
+   "Pair limit propositions (equivalence away from the boundary, 1/2^q decay on it) with complexity counts to argue cost versus benefit (pp. 8-9, 14).",
+   "State a negative result in the abstract and convert it into user guidance on when to keep the simple assumption (pp. 1, 14)."
+  ],
+  "coauthors": "S. Zhang, R. M. Lee, B. Shafei, D. Walz",
+  "quotes": [
+   {"text": "Our results are largely negative: incorporating dependence between the constraints does not help much.", "page": 1},
+   {"text": "These (negative) results are useful because they allow us to make a simplifying assumption without concerns.", "page": 14}
+  ]
+ },
+ {
+  "id": "S044",
+  "year": "2025",
+  "title": "BoFire: Bayesian optimization framework intended for real experiments",
+  "read_level": "full",
+  "contribution": "Short software paper (arXiv v1 read) presenting BoFire, an industry-consortium open-source Python package that combines Bayesian optimisation and classical design of experiments over constrained mixed-type chemistry domains, with JSON-serialisable problem and strategy objects for self-driving labs.",
+  "problem_entry": "Existing BO and active-learning software needs substantial adaptation before industrial chemistry deployment, and inconsistent data handling blocks lab-pipeline integration (pp. 1-2).",
+  "key_idea": "Domain (typed inputs, outputs, practitioner constraints such as NChooseK and interpoint equality) separated from objectives, strategies (classical DoE or BoTorch-based BO, extensible e.g. with ENTMOOT) and surrogates; Pydantic data models split from functional code (pp. 2-4).",
+  "assumptions": "Requirements rather than mathematical assumptions: self-driving labs and human-in-the-loop use, RESTful communication with data integrity, constrained mixed-type input spaces (pp. 2-3).",
+  "proof_devices": [],
+  "experiments": "none (one illustrative paint-formulation example with code listing; unquantified daily-deployment claim) (pp. 2-4)",
+  "positioning": "Against Ax (adds chemoinformatics, classical DoE, serialisation), BayBE (adds DoE, serialisation, true multi-objective), commercial DoE software Modde/JMP (constrained mixed spaces); built on BoTorch (pp. 2-4).",
+  "writing": "Four pages of text; each feature section closed by an indented continuation of one user story; mission stated as fast-tracking research into industrial use via maintainable open-source software (pp. 1-4).",
+  "limits_future": "No limitations stated; positioned as a channel for academic strategies and surrogates into practice, e.g. practical multi-fidelity modelling (p. 4).",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "Her group's ENTMOOT plugged in as a custom strategy; modular problem/strategy/surrogate split is the one-interface, switchable-component design. Company voice, not her own design account.", "pages": "pp. 3-4"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "practitioner-constraint vocabulary as first-class objects", "evidence": "NChooseK, interpoint equality, close-to-target and sigmoid objectives defined as typed, serialisable objects for chemists.", "pages": "pp. 2-3"}
+  ],
+  "transferable": [
+   "Define objectives separately from measured outputs so outputs stay physically meaningful (p. 3).",
+   "Offer classical DoE and BO behind one interface with a stepwise switch from space-filling to predictive strategies (p. 3).",
+   "Make problem and strategy objects JSON-serialisable and separate data models from functional code for lab orchestration (p. 3).",
+   "Carry one realistic user story with a code listing through every feature section of a software paper (pp. 2-4)."
+  ],
+  "coauthors": "J. P. Durholt, T. S. Asche, J. Kleinekorte, G. Mancino-Ball, B. Schiller, S. Sung, J. Keupp, A. Osburg, T. Boyne, R. Eldred, W. Steuer Costa, C. Kappatou, R. M. Lee, D. Linzner, D. Walz, N. Wulkow, B. Shafei",
+  "quotes": [
+   {"text": "However, in an industrial chemistry setting, existing BO and active learning software would require substantial adaptation prior to deployment.", "page": 2},
+   {"text": "Through BoFire, we offer the possibility for researchers to use our platform to translate new strategies and surrogates into practice.", "page": 4}
+  ]
+ },
+ {
+  "id": "S028",
+  "year": "2025",
+  "title": "Cross-disciplinary perspectives on the potential for artificial intelligence across chemistry",
+  "read_level": "full",
+  "contribution": "Ten-voice Chem Soc Rev perspective on AI across chemistry; Misener's part (with R. Sedgwick) is §8, a taxonomy of discrete/mixed input types, surrogate families and acquisition-optimisation strategies for experimental design, ending with an adoption and education agenda.",
+  "problem_entry": "§8: expensive data acquisition calls for experimental design, but discrete and mixed inputs are heterogeneous, so no one surrogate/decision policy fits all (p. 14).",
+  "key_idea": "§8: classify variables (categorical, ordinal, combinatorial, mixed), then map to surrogate families (parallel surrogates, continuous relaxation, trees, specialist kernels, latent space, others incl. piecewise-affine for MIP) and to acquisition optimisation, including global MIP over tree models (pp. 14-16).",
+  "assumptions": "§8 framing: surrogate plus decision policy; BO vs active learning vs Bayesian quadrature; each family's assumption named (scaling of parallel surrogates, ordering for relaxation, smoothness for latent spaces) (pp. 14-16).",
+  "proof_devices": [],
+  "experiments": "none (review; no primary results, p. 23)",
+  "positioning": "§8 surveys rivals evenly; her group's BARK, BoGrape, tree-MIP acquisition, BoFire, neural ODE processes and Sedgwick et al. appear as options among many; packages listed without ranking (pp. 15-17; refs pp. 33-35).",
+  "writing": "Taxonomy-first with one figure panel per family; each approach's use cases and limitation in the same paragraph; outlook names adoption as the problem (pp. 15-17).",
+  "limits_future": "Uptake of these methods is slow; software should teach experimentalists to map problems to methods and understand assumptions; future: meta-learned acquisitions, time-varying decisions, causal experimental design (p. 17).",
+  "method_links": [
+   {"method": "Method 1", "relation": "variant", "note": "Classify the problem's variable types before choosing a surrogate: a detection-first step applied to BO inputs, not algebraic MINLP structure.", "pages": "p. 17"},
+   {"method": "Method 3", "relation": "evidence", "note": "Tree surrogates with globally optimised acquisition via mixed-integer programming; piecewise-affine surrogates valued for MIP and constraint handling.", "pages": "p. 16"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "taxonomy-first survey", "evidence": "§8 classifies discrete variable types before surrogate families and acquisition strategies, with limitations paired to each.", "pages": "pp. 14-17"}
+  ],
+  "transferable": [
+   "Before choosing a BO surrogate for mixed inputs, classify each discrete variable and decide how much information to share between its levels (pp. 14-15).",
+   "Organise a methods survey as problem-type taxonomy x model family x acquisition-optimisation strategy, one figure panel per family (Fig. 4, p. 15).",
+   "For tree surrogates, keep global acquisition optimisation by MIP as an option instead of local search (p. 16)."
+  ],
+  "coauthors": "A. M. Mroz, A. R. Basford, F. Hastedt, I. S. Jayasekera, I. Mosquera-Lois, R. Sedgwick (co-author of §8), P. J. Ballester, J. D. Bocarsly, E. A. del Rio Chanona, M. L. Evans, J. M. Frost, A. M. Ganose, R. L. Greenaway, K. K. Hii, Y. Li, A. Walsh, D. Zhang, K. E. Jelfs",
+  "quotes": [
+   {"text": "This means there is no one-size-fits-all solution to which surrogate model and decision policy should be used, and how uncertainty should be handled.", "page": 14},
+   {"text": "The methods outlined here have all been proven to work for several chemistry applications, however, uptake of such methods is slow.", "page": 17}
+  ]
+ }
+]

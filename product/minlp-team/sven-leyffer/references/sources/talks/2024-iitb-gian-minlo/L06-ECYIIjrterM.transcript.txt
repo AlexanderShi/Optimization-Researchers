@@ -1,0 +1,227 @@
+Transcript (YouTube auto-generated English captions, ASR; NOT checked against the audio)
+Talk: Lecture 6: Modeling Nonlinear Problems, by Sven Leyffer. GIAN course, IIT Bombay, January 2024.
+Video: https://www.youtube.com/watch?v=ECYIIjrterM (length 2005 s; playlist PLREyhbtkeBNpTZtDBfcwLigIsAAEGQ1iR)
+Retrieved: 2026-10-10 with yt-dlp 2026.08.19 (--write-auto-subs --sub-langs en); converted with scripts/srt_to_transcript.py
+Used in: ../../../research/02-methodology.md
+----
+okay so welcome back um we today we'll talk a lot about modeling modeling with integer variables modeling with nonlinear variables and I'll start with modeling nonlinear problems and then tomorrow we actually have a case study a
+
+couple of case studies one on the design of a thermal insulation layer for the large hadon collider and another one on the power grid um basic nonlinear modeling tips um and we're we're going to do something to the lights here in a moment
+
+to make it easier to see okay so for now for this lecture we're going to ignore the binary variables and we're just going to look at uh problems that are nonlinear optimization problems just over continuous variables so here we have a
+
+non optimization problem it's got an objective function that tells us the goal of what we're trying to optimize it has a set of constraints nonlinear constraints and typically we can have much more General nonlinear constraints
+
+but we allow both lower and upper bounds so you don't need to write your problem in this specific format G of x s equal to zero um and we also assume there's some simple bounds and and there's the set X which is the set of simpler
+
+constraints so in this case for example polyhedral constraints linear constraints and you want to often separate those out because the solver can take advantage of these constraints so for starters when you form gradients or when
+
+the when the modeling package forms gradients and you can have other classes of constraints so if you're interested you can have differential algebra like equations so that's a system of equations where you have control
+
+variables that are discretized over or that live on a Time Horizon and ordinary differential equations or part or you can even generalize this to partial differential equations but we're not going to talk about these in this
+
+course okay so here's the first small modeling trick and this is something that arises for example uh in uh inverse proper when you when you prepare weather forecast there's a problem called 4D VAR which stands for um which is the the
+
+problem where you um assimilate data into your weather model and in these problems what you often see is there's often a low rank hhan Matrix so here we have a at the top there is a quadratic function q ofx that could for example be
+
+your objective function and the hashan Matrix w has the special structure where W is made up of this product of Z transposed R inverse Z and don't worry about our inverse for a moment that's typically a non- singular
+
+covariance Matrix that's why the inverse is there you you work directly with this Matrix you typically don't uh work with inverse matrices but Z The Matrix or Z The Matrix Z has many fewer rows than columns so so that means that uh this
+
+product up there this W if I write it out uh W can be a is a square a big Square Matrix and it's made up of Z transposed so Z transposed is a long and skinny Matrix then you have a little Matrix R inverse and a shorten fat Matrix
+
+Z and so this is a low rank Matrix and the rank of this Matrix is at most M the number of uh rows in Z and if you do that there's a very simple trick you can introduce an additional variable so you just introduce this new variable called
+
+Z which is just the product of Z * X and uh if you do that then your objective function or the quadratic term X transpose WX just becomes zpos R inverse Z you can just check that on the right hand side here the Z
+
+becomes a z * X so that's okay if you compare the red W there and then the Z transpose and you can often exploit sparity for example if there's sparity in Z then this additional equation can be solved efficiently so this is this is
+
+sort of a simple modeling trick that sometimes arises and I've seen it mostly in inverse problems um and it turns out that if you do this you can solve this problem much more much faster also because W's of can often be a dense
+
+Matrix whereas this product is much more efficient and you can store it much more efficiently as well so this is very this is quite important um the second modeling trick is we were talking yesterday that it's
+
+better to have convex or linear constraints and so here's a little trick that shows you how to get from a non-convex expression to a convex one so we start off with this bilinear term X1 * X2 and I'm going to assume that my my
+
+second variable here X2 is a binary variable so then if X2 is a binary variable then this bilinear term X1 X2 can just have two things that come out it's either zero if X2 is zero then the product of X1 and X2 is zero and if X2
+
+is one then you get X1 coming out so there's only two Val values that come out or two ranges of values that come out uh you can model this by introducing a new variable I call this X12 to indicate that it sort
+
+of concerns this product of X1 * X2 and then you introduce these constraints and the constraints at First Site might look a bit um much but it's actually easy to see that they encode exactly what you need to do and to see
+
+that uh what what I do typically is I just substitute the two cases so if X2 is equal to zero uh then this first equation here gives me that X12 is equal to zero I get that and then over here I have uh some upper bound
+
+that I have so this negative upper bound X2 is zero that lies between the um difference between X1 and X12 so um so whatever X1 is it will satisfy this constraint which is just um minus U less than equal to X1 minus
+
+X12 less than equal to U and then the second case there's only two cases X2 is equal to one then this first constraint is sort of the inactive constraints or the floppy constraint so it just says X12 is less than or equal to U
+
+and the second constraint now if X2 is equal to 1 then I get a zero is less than or equal to X1 minus X12 is less than equal to zero on the right hand side and so I get out of that that X12 is equal to
+
+X1 and that's it and so very simple modeling trick but very effective and we use this a lot um those kind of constraints where you have an upper bound constraint on X1 they're also called variable upper bound
+
+constraints and the solvers sometimes can exploit those directly here's a more complex or more uh involved variable transformation this comes from a multiproduct bch plan design this is one of ignasio Grossman's
+
+problems that he looked at um so I talked to you about that he's sort of the grandfather of mix inte nonlinear programming and if you look at these the first expression up there you have an objective function it's not the complete
+
+model it's just uh two of the constraints in the objective function and this looks really wild so the the variables here are n the NJ VJ c i NJ and b i and CI those are my variables here um so everything that's
+
+colored are variables and this is certainly a nonlinear non-convex optimization problem but in this case it turns out you can transform the variable so instead of looking at the variable VJ you look at a little VJ which is the
+
+logarithm of VJ and similar for N B and C so you transform all your variables using this logarithmic transformation and then you need to remember your high school math which is not always easy and it then turns out
+
+that okay so the first term is NJ * VJ to the beta so you can sort of work this out that um e to the little NJ Plus what's the one BJ or beta J time VJ that's the same as e to the natural logarithm of capital
+
+NJ plus the natural logorithm of beta J oh sorry of uh V VJ times bet to J and so that just turns out to be NJ then you have to remember that the plus becomes a multiplication and the beta J becomes an
+
+exponent so that's exactly the expression that you had there before how you come up with these Transformations I don't know um so people like ignasio they write smart papers but they don't tell you how they came up with these
+
+smart reformulations but there are a lot of these around for example for multiproduct batch plants but also for cutting stock problems there's other reformulations and the nice thing about this reformulation is that these
+
+Expressions down here are now convex so we started off of a non-convex problem we did this variable transformation we have new variables and the new problem is convex so here for example this is just a linear constraint
+
+with a right hand side that you can evaluate an next exponential functions are convex right and so you have now you have a nice convex optimization problem and we can solve convex problems much more efficiently than General nonlinear
+
+ones now the next little pieces that I have are from a book that I that I found recently let let me just go forward yeah this Adam ley's book and it's a really nice book an introduction to optimization that
+
+came out I think in 22 or so um and and he has the Simple Rules which I think which I love so one is keep it simple so when you when you're modeling there's there's a tendency to model what what's in the physical world so you would say
+
+well I I have a ratio of two quantities and I want to keep this ratio between certain bounds and that's okay but you can reformulate that expression on the left there equivalently provided that the denominator is non zero so so take
+
+this equivalent sign with that one carat you can re equivalently by simply multiplying through by 4x3 - 2x4 and pushing that on the right hand side and so now what I did was I had a nonlinear expression it became a linear
+
+expression in fact I had a nonconvex expression and now I have a convex expression um another really important aspect is to keep it lean um so we want to have small coefficients and again in when you're
+
+modeling things there might be a tendency to work uh I don't know in Italian L versus German Deutch Mark but a thousand l or one Doge Mark and so you could also reformulate your problem and have smaller units that that you're
+
+working with um a very important part of optimization is also that you want to avoid having coefficients which are very unbalanced I've seen models where you have coefficients that are of the of 10us 6 and then coefficients that are of
+
+the order one and so those are very bad constraints because the numerically they introduce numerical issues when you do Matrix factorizations so again we prefer linear aine constraints they Ure convexity and
+
+this is a really nice reference it's a nice little introduction to optimization um I just go yeah um another thing to do is you you want to help your solver so nonlinear optimization solvers are very well
+
+developed there's a lot of theory has gone into it but it's a much harder problem than linear optimization problems and so as a consequence they they they're they're a little bit more fragile so but you can help your solver
+
+by for example uh if you have linear Expressions to keep them separate and here here's a sort of simple rule that app appes to almost all nonlinear optimization solvers um so I can guarantee constraint
+
+F satisfaction up to certain tolerances depending on what kind of constraints I look at for example if I have simple bounds then one of the solers that I wrote guarantees that if XK is greater equal to zero any subsequent XK will be
+
+greater or equal to zero in in on your on your computer so so it's not it's not uh up to Precision this is exact and you can do that by by just truncating very small values it's it's okay to do that linear constraints they
+
+hold accurately so the solvers will guarantee that if if a linear constraint is satisfied initially or in the end then the residual between uh the sort of left hand side a a transposed X and B is less than weal copper where copper is a
+
+small constant and for most solvers for active set Sol this CA will be about 10 the minus 12 so it's it's non zero often you can't and you can't make it zero uh typically it's something like the it depends on the condition number of your
+
+Matrix a and it's a constant times that condition number so most servers will ensure that these constraints will hold very accurately um but nonlinear constraints they only hold in the limit and and so this is
+
+sort of where K goes to infinity and of course we never go to Infinity you don't want to wait that long for your solver to finish so typically the termination condition for these Sol for nonlinear constraints is something like 10us 6 so
+
+we have three types of constraints here L uh simple bounds you will get exact you will get it exact greater or equal to zero or if it's less than equal to one exactly less than or equal to one there is no round of error in these
+
+constraints you can ensure there's no round of error for linear constraints you have errors that are of the proportional to the unit round of error on your or machine Precision on your laptop so 10 minus 12 something like
+
+that and for nonlinear constraints you just have an Epsilon that's 10us 6 so 0 10 - 12 10- 6 that's the accuracy you can sort of expect roughly a lot of that also depends on conditioning um so here's a mini exercise and uh you
+
+could do this now um and I think we should do this now so so grab a piece of paper this is this is really cool so you have a constraint that says the logarithm of X2 cubed + 1 plus 2x1 is less than or equal to zero there are no
+
+other constraints in your problem so there's no bounds on X1 or X2 you know that you can't evaluate logarithms for negative numbers so how do we make sure that we stay safe which constraints should we add to
+
+ensure that we stay safe that we never evaluate a negative logarithm so I'll give you um I don't know couple of minutes so do it right now and then I'll go over with the over the solution with you guys and there are three
+
+answers for okay does anybody have does anybody know why there are three well there are three answers only one is correct but why there why are there three answers quick guess anybody X2 should be greater or equal to
+
+what oh okay that should work yes um there are three ways of doing it and and you got the best way already there are three ways because you can effectively use those three techniques that we have there um so here's the bad one the one
+
+that you don't want to do um uh so there's a bad formulation which is to Simply say oh I take whatever is inside my logarithm and I just add a constraint that says X2 Cub + 1 greater or equal to zero but I just told you that the solver
+
+will not guarantee that this holds they will only hold this will only hold in the limit so it might still evaluate this for negative numbers so that's not a good idea now you had a better idea um actually yours is better than
+
+mine so what I do is is a sort of general idea which is I introduce a slack variable um s and then I set s equal to X2 cubed + one and I have S non- negative but you're right if I just ensure that X2 is greater equal to minus
+
+one then that's a much much better solution so I like your solution better so um this is the good solution this is okay um the the one that I have here is sort of a general form if you can't if you somehow can't solve this expression
+
+right if I had made it more complex if I had more variables in here then it might easily come up with a linear or simple bounds there so um if if I did instead of this if I did the logarithm of X2 cubed - X1 + 1 then it's it's it's
+
+harder to see what you need to do right now um so so introducing a slack variable putting the slack variable into the logarithm and then just safeguarding it that's it um there's one additional thing you need to do and you're not yet
+
+you're not yet safe um we're going to talk about modeling languages later on and modeling languages when you write these constraints down they have an initial guess that they assign to variables and the default for the
+
+initial guess is what what do you think is the default for an initial variable guess zero of course it's zero why why would it be anything else so so that means if I just wrote this down like this my initial guess for this nonlinear
+
+solver would be zero and it would already stop at iteration zero and tell me that I'm trying to valuate a logarithm at zero but I can change that and simply have an initial guess that's positive here anything will
+
+work okay here's a very important slide never replace a binary variable by a nonlinear expression and people have written papers about this so so there's there's literature on this and every 20 years or so somebody comes up with this
+
+very same idea so I can look at this binary variable Y which is be uh 01 and I can replace this equivalently by saying Y is between 0o and one a continuous variable and If I multiply y by 1 minus y it has to be zero so this looks like
+
+um this why uh here is y * 1 - y there's zero there's one that's what it looks like and this function is zero at exactly two points right you can actually relax this you can also say y * 1 minus y less than
+
+or equal to zero which means this nonlinear function has to be less than or equal to zero so it has to lie below the half plane here but because Y is between zero and one there are just these two points um another way of writing this is
+
+um as a complementarity constraint so complimentarity here means that either the left is satisfied dis equality or the right is satisfied equality but they can't both be or they Sorry either the left is positive or the
+
+right has a positive residual but they can't both be positive residuals and again that's if you reformulate this some nonlinear solers reform this complimentarity constraint by just multiplying the left by the right and
+
+you end up with that same expression so there's papers in the literature that tell you to solve problems like this and in topology optimization that's actually what um what what some of the algorithms do there is they uh they assign material
+
+to different finite elements in your domain and then they sum over all the finite elements and they have a term like this that they're trying to drive to zero penalty term in the objective function but we don't want to do that
+
+because there's structure in the binary variables that will exploit in the algorithms that we'll tell you about tomorrow um now here's another bad nonlinear model um uh you want to switch on and off a nonlinear constraint so here I have a
+
+nonlinear constraint G of X but I want this constraint only to be enforced if Y is equal to one so if you remember the flow sheet that I had in my first slide that was the there's a condition there that says basically if if the um if I
+
+choose to do a certain process then for that process I have a set of nonlinear constraints and if I don't have that process then I can ignore this so a very tempting way to do this is to Simply multiply y * G of X and you can quickly
+
+check that that imply that actually exactly implements this constraint if Y is equal to one you have G of x equal to Z if Y is equal to Z then you don't care what G of X is because 0 * anything finite will be less than or equal to
+
+zero or equal to zero so you're okay um but we don't like doing that um this's really two reasons one it introduces potentially introduces non-convexity and two and that's less well known somebody mentioned constraint
+
+qualifications yesterday this actually violates mangasarian from of its con constraint qualification so who ever mentioned constraint qualifications yesterday I can't remember who you were but um you should be happy now that there at least
+
+we can talk about that here um instead what you should do is you find an upper bound on your function by maximizing over the range of variables that you can put there and this could be also constrained by other constraints in your
+
+nonlinear optimization problem and then you write this upper bound constraint here and so now if Y is equal to one that will be zero so G of X is enforced if Y is zero then G of X is below the upper bound and that's a valid upper
+
+bound and G of X so that means you inactivated this constraint so this is a much cleaner formulation why do I want to do this oh because uh yesterday I had an example um I we had uh a product stream that we could
+
+split into two streams and there were two process boxes here so we had a process three and here we had a process two uh there was another input that came out and here was another process and we had binary variables Y 2 and Y3 that
+
+told us which of these processes is active and so if I'm not if Y 2 is zero then I'm not using this process I don't want to constrain my variables by whatever is in here um let me see if I can think of another
+
+example really quick um does anybody know a good example here um right that so so this this is valid yeah was that your question okay so so G of X is always less than R to you because you found the largest value for for G of X so this is
+
+always it's if it's if Y is one then the right hand side is zero Y is zero it's gone and the reason is that we're switching constraints on and off depending on what we're doing in in air Crew Scheduling for example you
+
+decide uh what size plane you're flying from Mumbai to Delhi once you decide you're going to fly um a 787 you need more crew you have you have a constraint that says I need I don't know 15 people 15 crew if you're only
+
+flying uh a 737 Max n which I hope you don't because they T to falling out of the sky if you fly flying those you need fewer people right and so the constraint is different so you can't you don't want to enforce
+
+the 737 constraint on a 787 because it's a different aircraft so you make the decision which aircraft you fly and then depending on which decision you make you either have one set of constraints or a different set of constraints and that's
+
+also called disjunctive programming sometimes okay good question um okay I haven't really given you much time to ask questions um so um nonlinear constraints are a really powerful modeling Paradigm we can Model A lot of
+
+things with nonlinear constraints in particular we we could model binary variables with nonlinear constraints but we don't want to do it and so I like this quote that with great power comes great responsibility so please use your
+
+nonlinear constraints responsibly um and then we're reemphasizing this linear constraints are easier to solve easier to manage than non constraints um there sometimes useful nonlinear Transformations for convexity
+
+and there exists a number of those in the literature um you can often simplify by linear terms and the one thing we should not do is multiply a constraint a nonlinear constraint by a bilinear function there's other ways of handling those
+
+constraints and they're more efficient okay so let me see if there's any more questions doesn't look like it um we're going to be yes yes yes yes yes please please do that never do this this is red warning you
+
+should not not do this um because you lose structure the nonlinear solver will not realize that if you give him this these constraints it's very hard for the nonlinear solver to realize what you really mean is that Y is a binary
+
+variable and our solution techniques are much better for binary variables we have a much better handle on that um sorry yes both are bad yes good good point yes please read all the slides and I should read all the slides so here's
+
+what a nonlinear solver would do if you gave this to to Petro solver let's see if I can get this right he can correct me if I'm wrong um um one way of handling uh this constraint would be for example oh sorry
+
+this is not necessarily what P does but one way to handle it might be uh to replace it by a piecewise linear function that's one way of handling it um another way of handling it would be to find uh supporting hyperplanes and build
+
+the convex H so I can also find uh two functions and maybe even a third and and now I replace this constraint by the condition that I have to lie inside this set so this is a this is now a convex relaxation of
+
+this quadratic constraint and so these are just tangent PLS that I've drawn here so I I can do this potentially um but now I've changed the problem before I had two feasable points I had this point here and this point here that were
+
+feasible now I have this whole region that is feasible and so that means when I solve this relaxation I will end up at a point somewhere out here and then I have to do some some mechanism for getting rid of
+
+this point some branching and bounding and it's horrible so um so we don't want to do that in principle the solice could detect that because that's structure that you could look for but I don't think they're doing
+
+that at the moment so yeah don't do do what's on this slide never do what's on this slide um if there's red things red is warning don't do the red things I hope any more questions if not then we'll take a we'll
+
+take a short 15 minute break or so and we'll back here just before 10 o' thanks

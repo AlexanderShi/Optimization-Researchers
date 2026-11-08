@@ -1,0 +1,233 @@
+[
+ {
+  "id": "S070",
+  "year": "2002",
+  "title": "An approximate dynamic programming approach to multidimensional knapsack problems",
+  "read_level": "full",
+  "contribution": "An ADP framework for the multidimensional knapsack problem that uses a base heuristic (best: a new LP-based adaptive-fixing heuristic) as the cost-to-go estimate; on random and literature instances it reaches near-LP-bound quality about 75 times faster than CPLEX 6.0 at matched quality and much faster than a genetic algorithm of slightly better quality, while parametric and nonparametric value approximations are reported not competitive (pp. 1, 11-15).",
+  "problem_entry": "Method-first (IO+HS): tests whether ADP, successful mainly on stochastic problems, is a realistic alternative for large deterministic MKPs, judged by speed, quality and robustness (p. 2); the MKP is motivated by applications and the set-cover reduction (pp. 1, 3); exact DP needs O(n b*^m) work (p. 3).",
+  "key_idea": "DP over items and residual capacity (pp. 2-3) with the value function replaced by (a) a base heuristic's value rescaled to a common percentage gap below the truncated LP bound, plus reduced-cost fixing, early termination and lag fixing (ADP-BH, pp. 3-5); (b) a stagewise linear fit motivated by probabilistic asymptotics (ADP-P, p. 7); (c) kernel interpolation over sampled states (ADP-N, p. 8); new base heuristic: LP adaptive fixing with threshold delta (p. 6).",
+  "assumptions": "MKP with nonnegative data (p. 2); random uncorrelated, weakly and strongly correlated instances, 10 per class and size, b = 0.5 sum a_ij, up to m = 100, n = 1000 (p. 9); Chu-Beasley's largest instances (p. 11); ADP-P rests on i.i.d. columns with b = n*beta, under which Z_LP/n and Z_MKP/n share a limit (p. 7); uniform state sample kept after stratified and random samples did no better (p. 7).",
+  "proof_devices": [
+   "DP recursion (3)-(4) and complexity count O(n b*^m) (p. 3)",
+   "Reduced-cost fixing with the heuristic value as the incumbent bound, citing Nemhauser-Wolsey (p. 4)",
+   "Both branch estimates scaled to the same percentage gap below the truncated LP bound, (1 - delta*)U (p. 4)",
+   "Subproblem optimality tests when the heuristic value equals the LP upper bound (pp. 4-5)",
+   "Least-absolute-deviation fit rewritten as an LP and solved with CPLEX (p. 7)",
+   "Kernel regression over a uniform state sample with a Fan-Gijbels kernel (p. 8)",
+   "No approximation guarantee for any ADP variant; the only theory is imported probabilistic asymptotics (p. 7)"
+  ],
+  "experiments": "Dell Precision 410 under Linux; instances posted online (p. 9); quality = % deviation from the LP value (p. 9); adaptive fixing best of six heuristics (PE 1.14/1.81/2.49, p. 10); ADP-H2 PE 0.68/1.11/1.51, about 30% better than H2 (p. 11); vs the Chu-Beasley GA on its own instances with GA times halved for machine speed: GA PE 0.56 vs 0.74-0.80 but 1,287.15 s vs 87.06 s (pp. 11, 13); vs CPLEX 6.0 at matched quality (EPGAP = PE/100, 250 MB, 6,000 s, default and tuned settings): target reached on 44-45 of 120 instances, 565.84/592.19 s vs 7.52 s, and PE 3.94/2.35 vs 0.93 at the limit (pp. 13, 15); ADP-P and ADP-N need sample-size tuning and are not competitive (pp. 10-11, 15).",
+  "positioning": "ADP literature reviewed as a toolkit (Bellman, Bertsekas-Tsitsiklis, look-ahead schemes of Sarkar et al. and Bertsimas-Teo-Vohra) (p. 2); MKP heuristics grouped into greedy, aggregation, tabu and genetic, exact methods dismissed in one clause (p. 3); the Chu-Beasley GA chosen as the strongest rival (pp. 3, 11); predecessors judged by numbers only.",
+  "writing": "Abstract lists four findings (a)-(d), the last negative (p. 1); objective stated as a question (p. 2); five numbered evaluation questions (p. 9); three numbered conclusions including a serendipitous and a negative one (p. 15); hedged register (pp. 1, 15).",
+  "limits_future": "No guarantees; the GA is better on quality (p. 13); ADP-P and ADP-N need tuning and are not competitive (pp. 11, 15); sizes up to n = 1000; next step: ADP for generic binary IP (Bertsimas and Demir 2001, p. 15).",
+  "method_links": [
+   {"method": "Method 4", "relation": "variant", "note": "The protocol exists in heuristic form in 2002: incumbent heuristic as the starting solution, an LP bound instead of an MIO certificate, and a duel with literature heuristics, the Chu-Beasley GA and CPLEX 6.0 (default and tuned) with machine, limits and speed normalization stated; here the heuristic wins and the exact solver loses. Also card-level evidence for Heuristic 4 (negative result printed in abstract and conclusions) and Tension T2 (a heuristic engine as the product).", "pages": "pp. 1, 4-5, 9-15"},
+   {"method": "Method 2", "relation": "variant", "note": "Pre-speed-up data point: in his own matched-quality test CPLEX 6.0 needs about 75 times as long as ADP-H2 and on most instances does not reach its quality within 6,000 s, the belief Method 2 later concedes was right when formed.", "pages": "pp. 13, 15"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "matched-quality benchmarking against a commercial MIP solver", "evidence": "EPGAP set to the heuristic's achieved LP gap, 250 MB and 6,000 s limits, default and tuned CPLEX settings, time-to-quality and quality-at-limit both reported", "pages": "pp. 13-15"},
+   {"pattern": "math-programming value approximation inside DP", "evidence": "base-heuristic value scaled by the truncated LP bound as cost-to-go; also S034's LP-relaxation value function", "pages": "pp. 3-5"},
+   {"pattern": "bound-referenced quality yardstick for heuristics and policies", "evidence": "all quality reported as % deviation from the LP relaxation, which upper-bounds the optimality gap; also S034's LP and perfect-information bounds", "pages": "p. 9"},
+   {"pattern": "asymptotic probabilistic analysis as a design prior", "evidence": "a linear-in-b value approximation chosen because Z_MKP/n and Z_LP/n converge to the same constant", "pages": "p. 7"}
+  ],
+  "transferable": [
+   "Matched-quality solver benchmark: set the MIP solver's gap tolerance to the heuristic's achieved bound gap, cap time and memory, run default and tuned settings, and report time-to-quality, quality-at-limit and the number of instances reaching the target (pp. 13-15).",
+   "In a two-branch look-ahead, scale both heuristic estimates to the same percentage gap below a common LP bound before comparing them (p. 4).",
+   "Adaptive LP fixing as a primal heuristic: fix variables at 1, zero those below delta, zero the least fractional and re-solve; delta trades time for quality and delta = 1 is plain truncation (p. 6).",
+   "Report heuristic quality as % deviation from the LP bound so every table entry is also an upper bound on the optimality gap (p. 9).",
+   "Define algorithmic robustness as the spread of time and quality across same-size instances and report min/avg/max (pp. 9-10, 14).",
+   "Rescale a rival's published times by a stated machine-speed ratio, and publish your own instances (pp. 9, 11)."
+  ],
+  "coauthors": "Ramazan Demir (MIT Operations Research Center)",
+  "quotes": [
+   {"text": "the ADP approach based on parametric and nonparametric approximations, while producing reasonable solutions, is not competitive.", "page": 1},
+   {"text": "Although not the main focus of the paper the adaptive fixing heuristic for the MKP was surprisingly strong. It is fast and accurate.", "page": 15}
+  ]
+ },
+ {
+  "id": "S004",
+  "year": "2003",
+  "title": "Robust discrete optimization and network flows",
+  "read_level": "full",
+  "contribution": "Extends the budgeted (Γ) uncertainty model to discrete optimization: the robust MIP stays a MIP of moderately larger size, 0-1 problems with cost uncertainty are solved by n + 1 nominal problems so polynomial solvability and α-approximability carry over, and robust min-cost flow reduces to a logarithmic number of nominal flows on a modified network (pp. 1-15).",
+  "problem_entry": "RO+IO (LO for flows): stochastic programming needs distributions rarely known and suffers scenario blow-up (p. 1); Soyster is over-conservative, ellipsoidal counterparts are conic and not directly applicable to discrete problems, and Kouvelis-Yu or minimax-regret robustness make polynomial problems NP-hard (p. 2); goal: tunable conservatism and tractability 'both practically and theoretically' (pp. 1-2).",
+  "key_idea": "Dualize the budgeted adversary: the robust MIP stays a MIP (Theorem 1, pp. 5-6); for 0-1 cost uncertainty a threshold θ makes the objective piecewise linear with breakpoints at the d_j, so n + 1 (or f + 1) nominal solves suffice (Theorem 3, Algorithm A, pp. 8-10); α-approximations transfer (Theorem 4, pp. 10-11); robust min-cost flow via an arc-splitting gadget and binary search over θ (Theorems 5-7, pp. 12-15).",
+  "assumptions": "Model U: independent, symmetric, bounded constraint coefficients with unknown distribution, costs in [c_j, c_j + d_j] (pp. 3-4); Γ_i fractional, Γ_0 integer (p. 4); 0-1 variables critical for Theorem 3 (p. 10); no probabilistic assumption on costs, hence no suboptimality claims (p. 7); finite arc capacities without loss of generality (p. 13).",
+  "proof_devices": [
+   "Inner maximum as an LP over z in [0,1] with sum z <= Γ, then strong duality; counterpart size 2n + m + l (Theorem 1, pp. 5-6)",
+   "Violation bound imported from S001, independent of x* (Theorem 2 and remarks, pp. 6-7)",
+   "Threshold dualization with the 0-1 identity max(d_j x_j - θ, 0) = max(d_j - θ, 0) x_j and interval decomposition of θ with endpoint optimality (Theorem 3, pp. 8-9)",
+   "Approximation transfer Z_B <= α(G_l - d_l) + d_l <= αG_l, with a TSP triangle-inequality counter-remark (Theorem 4, p. 11)",
+   "Four-arc gadget turning the positive part into a min-cost flow (Theorem 5, Fig. 1, pp. 12-13)",
+   "Convexity of Z(θ) and an |A|-Lipschitz bound via Lagrangian duality (Theorem 6, pp. 14-15)",
+   "Binary search with 2 ceil(log2(|A|θ̄/ε)) + 3 flow solves (Theorem 7, p. 15); as extracted, the proof gives an additive error ε while the statement is relative (1 + ε) [reader's note]"
+  ],
+  "experiments": "Robust knapsack n = 200 with CPLEX 7.0 on a Pentium II 400 PC, 0.05-50 s: Γ = 36.8 gives a 5.71e-3 bound for a 1.54% loss, full protection costs 5.5%, and over 20 instances a 2% loss brings the bound below 1e-3 (pp. 16-17; S001 reports the same run as CPLEX 6.0); robust sorting: Algorithm A finds all Γ in under a second vs CPLEX 7.0 at 30-80 min per Γ, and simulated cost jumps (p = 0.2, 20,000 samples) show σ down 32.1% for +20.37% nominal cost with CDF dominance (pp. 18-19); robust shortest path on 300 nodes and 1,475 arcs, Dijkstra |A| + 1 times, non-dominated Γ left to risk preference (p. 22); no comparison with Kouvelis-Yu or minimax regret; no failure case.",
+  "positioning": "Placed against stochastic programming, Soyster, Ben-Tal-Nemirovski and El Ghaoui, Kouvelis-Yu, minimax regret and Averbakh (pp. 1-2); credits its own working paper [7] for the LP approach and Theorem 2 (pp. 2, 6); claims a unique position: it retains complexity or approximability unlike all other approaches (p. 22).",
+  "writing": "Contribution-list abstract with the complexity results as headline (p. 1), contributions repeated (pp. 2-3); 'surprisingly' before the polynomiality result (p. 7); each theorem followed by a Remark marking where it breaks (pp. 10, 11, 13); hedged 'We feel' conclusion (p. 22); paragraphs shared nearly verbatim with S001 (pp. 4, 16-17).",
+  "limits_future": "0-1 requirement (p. 10); approximation transfer requires modified instances to stay in the approximable subclass (p. 11); no suboptimality claims under cost uncertainty (p. 7); parametric method not polynomial (p. 13); no future work beyond practical usefulness (p. 22).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "Source of step 3's n + 1 nominal solves: the robust MIP stays a MIP, cost-robust 0-1 problems keep polynomial solvability and α-approximability, and robust min-cost flow stays a sequence of flows; boundaries printed.", "pages": "pp. 5-15"},
+   {"method": "Method 1", "relation": "variant", "note": "On its Limitations line: in 2003 'tractable' already pairs complexity class with measured time ('both practically and theoretically'; Algorithm A under a second vs CPLEX 30-80 min per Γ), so the 2004-2019 drift is one of emphasis, not meaning.", "pages": "pp. 1-2, 18"},
+   {"method": "Method 3", "relation": "evidence", "note": "One Γ knob per constraint and for the objective, a solution-independent violation bound, price curves on knapsack, sorting and shortest path, the over-conservative end shown and a non-dominated case left to risk preference; no bad case like PILOT4.", "pages": "pp. 4, 6, 16-22"},
+   {"method": "Method 4", "relation": "variant", "note": "The duel is a structure-exploiting algorithm against a general MIP solver on the same robust model, not a warm-started MIO against a heuristic.", "pages": "p. 18"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "out-of-model stress test of decisions", "evidence": "robust solutions evaluated under cost jumps with probability p over 20,000 samples, with σ and CDF dominance; also S001 p. 12 and S034 pp. 17-19", "pages": "pp. 18-22"},
+   {"pattern": "oracle reduction transferring complexity and approximability", "evidence": "robust problem solved by a counted number of nominal-solver calls (n + 1, f + 1, or a logarithmic number of flows)", "pages": "pp. 8-15"},
+   {"pattern": "staged companion papers from one model", "evidence": "cites S001 as a 2001 working paper and shares paragraphs with it; S019 later restates both as norms", "pages": "pp. 4, 16-17, 22"}
+  ],
+  "transferable": [
+   "Budgeted-cost robustness for 0-1 problems: dualize the adversary to a threshold θ, use max(d_j x_j - θ, 0) = max(d_j - θ, 0) x_j, solve one nominal problem per breakpoint, and count only distinct d_j values (pp. 8-10).",
+   "When transferring an approximation guarantee through modified instances, check that they stay in the approximable subclass, as with the triangle inequality for TSP (p. 11).",
+   "Arc-splitting gadget: a capacity-θ/d branch at cost 0 plus an overflow branch at cost d models max(x - θ/d, 0) inside a network flow (pp. 12-13).",
+   "For a one-parameter family of nominal problems, prove convexity and a Lipschitz constant, then binary search with the number of nominal solves stated as a function of ε (pp. 14-15).",
+   "Evaluate robust solutions under a perturbation model other than the design set (20,000 samples, standard deviation, CDF dominance), and say when a non-dominated knob value is left to the user's risk preference (pp. 18-22)."
+  ],
+  "coauthors": "Melvyn Sim (MIT Operations Research Center)",
+  "quotes": [
+   {"text": "We next show that surprisingly, the robust counterpart of a polynomially solvable combinatorial optimization problem is also polynomially solvable.", "page": 7},
+   {"text": "Unlike all other approaches that create robust solutions for combinatorial optimization problems, the proposed approach retains the complexity of the nominal problem or its approximability guarantee", "page": 22}
+  ]
+ },
+ {
+  "id": "S034",
+  "year": "2003",
+  "title": "Revenue management in a dynamic network environment",
+  "read_level": "full",
+  "contribution": "Proposes certainty equivalent control for network revenue management, pricing each request by the difference of two LP-relaxation values (unique and non-additive), proves its structural relation to the industry's additive bid prices, extends it to cancellations and overbooking, and shows in simulation that it is near-optimal and more robust to forecast error than bid-price control (pp. 2-21).",
+  "problem_entry": "SD+LO+AP: enters through industry practice: revenue management's documented impact (p. 2) and two named defects of the widely used additive bid prices, non-uniqueness under multiple dual solutions and blindness to basis changes from group and multileg requests (p. 4); accept or reject requests to maximize expected revenue (pp. 2-3).",
+  "key_idea": "Approximate the DP value by the LP relaxation and set the opportunity cost of request j to LP(n, D) - LP(n - A_j, D) (p. 8); a generic MP-policy for any value-approximating program (pp. 8-9); rollout, Monte Carlo demand sampling and overbooking via oversale variables with adjusted revenues and capacities (pp. 9, 13-14); network-flow form for OD and linear networks (p. 8).",
+  "assumptions": "At most one request per period (p. 3); demand independent of the control policy, admitted as a simplification (p. 3); independent demands (p. 6); unbiased expected-demand forecasts (p. 7); cancellation and no-show probabilities independent of booking time and no goodwill effects (p. 13); synthetic networks N2-N4.2 under homogeneous and non-homogeneous Poisson demand (pp. 14-15).",
+  "proof_devices": [
+   "DP <= perfect-hindsight value <= LP via Jensen on the concave LP value (Proposition 1, p. 7; full proof in Popescu 1999)",
+   "Network-flow integrality for OD fares (Proposition 2, p. 8)",
+   "Sandwich BP_j(n) <= OC_LP_j <= BP_j(n - A_j) by evaluating each LP at the other's optimal dual solution (Proposition 3, p. 10)",
+   "Acceptance structure from complementary and strict complementary slackness (Propositions 4-5, Table 1, pp. 10-11)",
+   "Four-node hub example realizing four cases, including a counterexample to decreasing differences (pp. 11-12)",
+   "Asymptotic optimality in the Talluri-van Ryzin fluid scaling 'by imitating their proof' (pp. 9-10)",
+   "Dual bound on forecast bias E[LP(n, D + eps)] - LP(n, D) <= (R - v'A)^+ E[eps] (p. 17)",
+   "Overbooking extensions of Proposition 1 and Section 4 asserted without proof (p. 14)"
+  ],
+  "experiments": "Exact expected values on two-leg networks (exact DP about two hours at 50 seats per leg and T = 300, p. 15); simulations on common random numbers in MATLAB 4.0 on a 450 MHz Celeron with NT = 100 trials (pp. 14, 17); C on a Pentium III for overbooking (p. 19); LP and perfect-information upper bounds (p. 21); CEC near-optimal at long horizons while BPC is off by a constant (p. 16); up to 2% better on larger networks (p. 17); CEC more robust to biased and noisy forecasts (pp. 17-19); rollout about +10% for BPC (p. 18); Monte Carlo poor with 30 or fewer trials (p. 18); BPC better at cancellation probability 0.30 (p. 19); BPC dual choice not enforced in the authors' code (p. 16); reader's notes: text claims do not match extracted Tables 4, 8 and 9 (pp. 17-21).",
+  "positioning": "Reviews single-leg RM, threshold-time results, bid prices (Simpson, Williamson) and dynamic network models (Talluri-van Ryzin, Chen et al., Gunther et al.), none with cancellations (pp. 5-6); candid credit: Bitran-Mondschein proposed a similar LP heuristic without analysis, the LP is Williamson's, the network flow that of Glover et al. and Chen (p. 6); rollout from Bertsekas-Tsitsiklis (p. 9).",
+  "writing": "Numbered contributions with headline numbers (pp. 4-5); a structure paragraph and a notation section (pp. 4-5); one worked example reused as a test network (pp. 11, 14-15); 'Interestingly' and 'Surprisingly' (pp. 5, 12); bullet conclusions defining 'robust' in three senses (pp. 20-21); one open idea stated twice (pp. 9, 18).",
+  "limits_future": "Policy-independent demand (p. 3); no goodwill effects (p. 13); small instances (p. 14); unclear regime near load factor one (p. 20); BPC wins at a high cancellation rate (p. 19); rollout values costly to compute and store (p. 18); future: which preprocessing simulations to store for rollout (pp. 9, 18).",
+  "method_links": [
+   {"method": "Method 5", "relation": "evidence", "note": "The baseline is the industry's current rule (the widely used bid-price control) and policies are scored by expected revenue with running times reported; but demand is synthetic and there are no owner's data.", "pages": "pp. 2, 4, 14-21"},
+   {"method": "Method 1", "relation": "evidence", "note": "The dynamic stochastic problem is approximated within LP (a network flow for OD and linear networks); structure is read off the dual (Propositions 3-5); the boundary is printed (a CEC-suboptimal case; the threshold property fails in networks).", "pages": "pp. 4, 8, 10-12"},
+   {"method": "Method 4", "relation": "variant", "note": "Duel with the incumbent policy on common random numbers, with exact DP values and LP and perfect-information upper bounds in place of certificates.", "pages": "pp. 7, 14, 16, 21"},
+   {"method": "Method 6", "relation": "evidence", "note": "Weak: the paper draws on Popescu's 1999 thesis, which holds the full proofs; an earlier student's thesis on the same topic (Chi) appears only in the references (Heuristic 7, weak; student list from note 06). Also card-level evidence for Heuristic 4 (negative cases printed) and Tension T6 (text headlines vs extracted tables).", "pages": "pp. 6, 7, 10, 22"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "math-programming value approximation inside DP", "evidence": "generic MP-policy: any program approximating the value function yields an opportunity-cost rule; CEC uses the LP relaxation; also S070", "pages": "pp. 8-9"},
+   {"pattern": "structural comparison theorem with the incumbent before simulation", "evidence": "the CEC opportunity cost sandwiched between bid prices at two states, plus an accept/reject table by primal structure", "pages": "pp. 10-11"},
+   {"pattern": "out-of-model stress test of decisions", "evidence": "policies given biased and correlated-noise forecasts while the simulator uses true demand, with bias scaled by 1, 2 and 4; also S001 and S004", "pages": "pp. 17-19"}
+  ],
+  "transferable": [
+   "Opportunity cost as an LP-value difference, LP(n, D) - LP(n - A_j, D): unique where dual prices are not, and sensitive to bundle effects (p. 8).",
+   "A sandwich inequality against the incumbent's price from cross-evaluated dual solutions, plus an accept/reject table by primal structure (pp. 10-11).",
+   "One small example that realizes every qualitative case, including a counterexample to the structural property the field hoped would extend (pp. 11-12).",
+   "Simulation protocol: common random numbers, exact DP where computable, and LP and perfect-information upper bounds beside every simulated value (pp. 14, 16, 21).",
+   "Forecast-error robustness test: the policy sees biased or correlated-noise forecasts while the simulator uses the true demand, bias scaled by 1, 2 and 4, paired with a dual bound on how bias moves the LP value (p. 17).",
+   "Put cancellations and no-shows into the LP through adjusted revenues and capacities plus an explicit oversale variable, so overbooking becomes dynamic and implicit in admission control (pp. 13-14)."
+  ],
+  "coauthors": "Ioana Popescu (INSEAD)",
+  "quotes": [
+   {"text": "Capturing and quantifying this type of feedback phenomenon is a subtle task that goes beyond the scope of this work. We will thus make the simplifying assumption that the demand process is independent of the control policy.", "page": 3},
+   {"text": "We restricted our attention to smaller instances with the explicit objective to obtain insights into the behavior of both BPC and CEC.", "page": 14}
+  ]
+ },
+ {
+  "id": "S001",
+  "year": "2004",
+  "title": "The price of robustness",
+  "read_level": "full",
+  "contribution": "Introduces the budget-of-uncertainty robust LP, whose counterpart stays an LP (or MIP) with a per-constraint knob Γ_i, proves tight solution-independent violation bounds for symmetric data and a dual-based marginal price of protection, and maps the price of robustness on a knapsack, a portfolio and NetLib PILOT4, where it stays high (pp. 1-16).",
+  "problem_entry": "RO+LO (IO in the knapsack, AP in the portfolio): Soyster's robust LP is too conservative, and the ellipsoidal counterparts of Ben-Tal-Nemirovski and El Ghaoui are nonlinear and unattractive for discrete problems (pp. 1-3); motivated by the rival's NetLib finding (p. 1); aim: decrease 'what we call the price of robustness' (p. 1).",
+  "key_idea": "Protect each constraint against at most floor(Γ_i) coefficients at their bounds plus one partial deviation ('nature will be restricted'), interpolating between nominal (Γ = 0) and Soyster (Γ = |J_i|) (p. 3); the protection LP dualizes into an LP counterpart that preserves sparsity (Theorem 1, p. 4); deterministic plus probabilistic guarantees (p. 4); a factor model for correlated data (p. 9).",
+  "assumptions": "Model U: symmetric bounded coefficients with unknown distribution, independent for the bounds (pp. 2, 5); objective made certain via an epigraph variable (p. 2); correlated model C with independent symmetric sources (p. 9); nondegeneracy for the sensitivity result (p. 9); data: a random knapsack, Ben-Tal-Nemirovski's 150-stock portfolio and NetLib PILOT4 with 2% perturbations (pp. 10, 12, 14).",
+  "proof_devices": [
+   "LP duality of the protection function (Proposition 1, Theorem 1, pp. 3-4)",
+   "Exchange argument reducing violation to Pr(sum γ_ij η_ij >= Γ_i) with γ_ij <= 1 (Proposition 2, pp. 4-5)",
+   "Moment-generating-function bound exp(-Γ^2/2|J_i|) via Markov's inequality and symmetry (Theorem 2, p. 5)",
+   "Best possible binomial bound by induction on n, tight for symmetric ±1 variables (Theorem 3(a)-(b), appendix pp. 16-18)",
+   "Computable bound via Robbins' Stirling inequalities, and CLT and De Moivre-Laplace asymptotics (Theorem 3(c)-(d), pp. 5-6, 18)",
+   "Numerical comparison of four bounds and the Γ needed for 1% violation: 33.9 of 200 but 5 of 5 (Figs. 1-3, Table 1, pp. 6-8)",
+   "Worst- and average-case protection comparison with ellipsoids (n^{1/4} vs a constant), declared inconclusive (p. 8)",
+   "Marginal price dObjective/dΓ_i = -z*_i q*_i via the matrix inversion lemma (Theorem 4, p. 9)",
+   "Correlated-data bound asserted 'analogously', without proof (p. 9)"
+  ],
+  "experiments": "Knapsack N = 200 with CPLEX 6.0 on a Pentium II 400 PC in 0.05-50 s: a 0.57% bound for a 1.54% loss, Soyster -5.5% (pp. 10, 12); Ben-Tal-Nemirovski's portfolio: phase transitions in Γ, 10,000 simulations at the tight two-point distribution with the bound close to the empirical frequency, minimum return above 12% from Γ = 15 (pp. 12, 14); PILOT4 (411 x 1,000, at most 29 uncertain coefficients per row): +3.68% even at violation probability 0.5 and +7.11% at full protection, diagnosed by the few uncertain coefficients per row (pp. 14, 16); no computational comparison with the ellipsoidal counterpart; the solver version differs from S004's report of the same knapsack.",
+  "positioning": "Soyster as the Γ = |J_i| endpoint and Ben-Tal-Nemirovski and El Ghaoui as the ellipsoidal rival (pp. 1-3); claims to be 'at least as flexible ... and possibly more' (p. 2) though its own comparison ends inconclusive (p. 8); uses the rival's portfolio and NetLib cases (pp. 12, 14); novelty claimed 'To the best of our knowledge' (pp. 2, 10).",
+  "writing": "Abstract runs history, concern and coined term (p. 1); key insights enumerated (pp. 10, 14-16); calibrated hedges ('some insight, but not conclusive evidence', 'admittedly unclear', 'We feel', pp. 6, 8, 16); a Remark discounts the paper's own first bound (p. 5).",
+  "limits_future": "Symmetric, bounded, independent or factor-structured data (pp. 2, 9); poor value with few uncertain coefficients per row (pp. 14, 16); comparison with ellipsoids unresolved (p. 8); future: computation in real problems as the ultimate criterion (p. 8).",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "Source paper matching the SKILL steps: the property, one knob per constraint, solution-independent bounds, the class kept, curves on the rival's test problems and NetLib, and the PILOT4 bad case printed and diagnosed; extension: a marginal price by LP sensitivity.", "pages": "pp. 1, 3-5, 9-16"},
+   {"method": "Method 1", "relation": "evidence", "note": "The robust LP stays an LP that preserves sparsity; the robust MIP stays a MIP solvable like the nominal; sizes compared with the SOCP counterpart.", "pages": "pp. 3-4, 10"},
+   {"method": "Method 4", "relation": "variant", "note": "The duel is only with Soyster (the Γ = |J_i| endpoint) in every experiment; the ellipsoidal incumbent is compared analytically and inconclusively, never computationally.", "pages": "pp. 8, 10, 12, 14"},
+   {"method": "Method 2", "relation": "variant", "note": "[stated-joint] Computation is named the ultimate criterion, and NP-hard knapsacks of moderate size are 'often solved to optimality' by MIP solvers: measured tractability without a speed-up figure. Also card-level evidence for Heuristic 4 (PILOT4 printed).", "pages": "pp. 8, 10"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "bound ladder with an operational table", "evidence": "simple, tight, computable and asymptotic bounds compared in figures, then Table 1 of the Γ needed for 1% violation by |J_i|", "pages": "pp. 5-8"},
+   {"pattern": "out-of-model stress test of decisions", "evidence": "10,000 portfolio simulations under the tight two-point distribution, bound vs empirical frequency; also S004 and S034", "pages": "p. 12"},
+   {"pattern": "marginal price of protection via LP sensitivity", "evidence": "derivative of the objective in Γ_i equals -z*_i q*_i under nondegeneracy", "pages": "p. 9"}
+  ],
+  "transferable": [
+   "A fractional budget (floor(Γ) full deviations plus one partial) makes the robustness knob continuous while the inner problem stays an LP with a closed-form optimum (pp. 3-4).",
+   "Bound ladder: Chernoff-type, then tight combinatorial, then a computable Stirling-based bound, then the asymptotic; compare them in figures and tabulate the knob needed for 1% violation by problem size (pp. 5-8).",
+   "Marginal price of protection: -z*_i q*_i from the optimal primal and dual of the counterpart (p. 9).",
+   "Check a probability bound by simulating the distribution that makes it tight and plotting bound vs observed violation frequency (p. 12).",
+   "Run the method on the rival school's own instances (portfolio, NetLib) and print where it does not pay, with the structural reason (pp. 12, 14, 16).",
+   "Model correlated uncertainty by a few independent sources loading on all coefficients of a row, and put the budget on sources rather than coefficients (p. 9)."
+  ],
+  "coauthors": "Melvyn Sim (MIT Operations Research Center)",
+  "quotes": [
+   {"text": "Moreover, we think that the ultimate criterion for comparing the degree of conservatism of these methods will be computation in real problems.", "page": 8},
+   {"text": "We attribute this to the fact that there are very few uncertain coefficients in each constraint (Table 4), and thus probabilistic protection is quite close to deterministic protection.", "page": 14}
+  ]
+ },
+ {
+  "id": "S019",
+  "year": "2004",
+  "title": "Robust linear optimization under general norms",
+  "read_level": "full",
+  "contribution": "Characterizes the robust LP counterpart for any norm-ball uncertainty set through the dual norm, recovering the ellipsoidal SOCP and the budget LP (as the D-norm) as special cases, bounds the D-norm against the Euclidean norm, and gives violation guarantees under arbitrary dependence with known mean and covariance (pp. 1-7).",
+  "problem_entry": "RO+CP (LO): a structural entry: under ellipsoids the counterpart's class escalates from LP to SOCP to SDP to NP-hard, early approaches are not easy to generalize and very conservative, while the budget approach stays an LP (p. 2); goal: characterize the counterpart for arbitrary norms with guarantees allowing arbitrary dependencies (pp. 1-2).",
+  "key_idea": "For U = {A : ||M(vec A - vec Ā)|| <= Ω} each constraint becomes ā_i'x + Ω||M^{-1}x_i||* <= b_i (Theorem 2, p. 3); the Euclidean norm gives an SOCP and L1/L∞ give LPs (pp. 3-4); the budget set is the D-norm with dual max(||s||∞, ||s||1/p), recovering the LP of [7] (Proposition 2, pp. 4-5); proximity bounds to the Euclidean norm (Proposition 3, pp. 5-6).",
+  "assumptions": "Norm-ball uncertainty around the nominal matrix with invertible M (p. 3); Theorem 1 for compact convex sets taken from Ben-Tal-Nemirovski's lectures (pp. 2-3); for guarantees: an arbitrary unknown distribution with known mean and covariance, arbitrary dependencies, M = Σ^{-1/2} (p. 6); no data.",
+  "proof_devices": [
+   "Support function of a compact convex deviation set (Theorem 1, p. 3)",
+   "Change of variables to the unit ball and the definition of the dual norm (Theorem 2, p. 3)",
+   "Dual of the D-norm by LP duality applied twice (Proposition 2, p. 4)",
+   "Norm proximity: convex maximization over a polytope at its extreme points, minimization by KKT (Proposition 3, pp. 5-6)",
+   "Bertsimas-Popescu one-sided multivariate Chebyshev bound P(X in S) <= 1/(1 + d^2) with d^2 from a KKT Mahalanobis projection (Theorem 3, p. 6)"
+  ],
+  "experiments": "none (n/a: a theory letter without computations)",
+  "positioning": "Soyster and Falk as early conservative work (pp. 1-2); Ben-Tal-Nemirovski and El Ghaoui as the revival, with class escalation (p. 2); his own budget LP [7] (p. 2); presented as a unified treatment of [1,2,7,9,10] (p. 5); concedes that [7] has stronger bounds under independence and symmetry (p. 6).",
+  "writing": "Seven-page letter; framing 'emerging as a leading methodology' (p. 1) and 'shed some new light' (p. 2); theorem-proof throughout; no conclusions section, ending on the weaker-but-wider trade-off (pp. 6-7).",
+  "limits_future": "Bounds weaker than those of [7] when independence and symmetry hold (pp. 6-7); no computations; no future directions stated.",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "The class of the robust counterpart is read off the dual norm and the budget LP is recovered as a special case: 'read structure off the dual' in its plainest form.", "pages": "pp. 3-5"},
+   {"method": "Method 3", "relation": "variant", "note": "The guarantee becomes distribution-free given mean and covariance, weaker than [7]'s but valid under dependence; no price curve and no bad case.", "pages": "pp. 6-7"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "unify-then-compare via a dual object", "evidence": "rival uncertainty sets written as norm balls, class read off dual norms, proximity bounds between the D-norm and the Euclidean norm", "pages": "pp. 2-6"},
+   {"pattern": "cross-programme lemma reuse", "evidence": "the CP programme's optimal inequality (Bertsimas-Popescu) is the probability engine of an RO guarantee", "pages": "p. 6"},
+   {"pattern": "staged companion papers from one model", "evidence": "third paper on the budget set within two years, restating S001 and S004 as the D-norm", "pages": "pp. 1-2, 4-5"}
+  ],
+  "transferable": [
+   "Put rival uncertainty sets on a common footing as norm balls and read each counterpart's class off its dual norm (pp. 3-5).",
+   "Compute an unfamiliar dual norm by writing the norm as an LP and dualizing twice (p. 4).",
+   "Bound the distance of a new norm from the Euclidean norm (extreme points for the maximum, KKT for the minimum) and carry the constants into probability guarantees (pp. 5-6).",
+   "Distribution-free violation bound from mean and covariance: the one-sided Chebyshev inequality with the Mahalanobis distance to the violation set (p. 6).",
+   "When a new bound is weaker than an earlier one under stronger assumptions, end the paper by stating that trade-off explicitly (pp. 6-7)."
+  ],
+  "coauthors": "Dessislava Pachamanova (Babson College); Melvyn Sim (NUS Business School)",
+  "quotes": [
+   {"text": "In this way, we shed some new light to the nature and structure of the robust counterpart of an LP.", "page": 2},
+   {"text": "Under the stronger assumption that the data in each constraint are independently distributed according to a symmetric distribution [7] proves stronger bounds.", "page": 6}
+  ]
+ }
+]
