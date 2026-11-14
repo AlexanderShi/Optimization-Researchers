@@ -11,9 +11,9 @@
 |---|---|---|---|
 | H1 | 2001 | decision | integer solutions in the thesis code: how far to go beyond the root node |
 | H2 | 2020 | decision | what the solver's landing page may claim, and which papers stay on its list |
-| H3 | 2016 | decision (answering critics) | central or decentral planning, after readers push back on a blog post |
+| H3 (unsealed) | 2016 | decision (answering critics) | central or decentral planning, after readers push back on a blog post |
 | H4 | 2026 | decision | NP-hard separation of a constraint family in a branch-and-price algorithm |
-| H5 | 2020 | decision | publisher, access model and review model of a new journal |
+| H5 (unsealed) | 2020 | decision | publisher, access model and review model of a new journal |
 
 ---
 
@@ -65,29 +65,6 @@
 
 ---
 
-## H3
-
-**Source.** M. Lübbecke, blog *café opt*, post "#industrie40: zentral oder dezentral?", 2016-03-02, https://mluebbecke.wordpress.com/2016/03/02/industrie40-zentral-oder-dezentral/, and his four replies in its comment thread (WordPress.com public API, comment ids 117, 120, 122 and 124; 2016-03-03 11:15, 2016-03-04 08:57 and 09:25, 2016-03-08 14:24). Opened as `blog/posts.txt` and `blog/comments.txt` (API text). The other commenters are private persons and are not named here.
-
-**Question.** In March 2016 you publish a blog post on "Industrie 4.0". With hospital appointment scheduling and car navigation as examples you argue for central planning, and you conclude that "decentralisation" is either something you have not understood or plain nonsense for tomorrow's production. Within two days readers from industry reply: a central planner cannot react in real time, the connection to it can fail, so subsystems must be able to act on their own; one of them proposes central planning plus local re-planning. How do you answer, and what do you propose yourself?
-
-**What they actually said or did.**
-1. He concedes at once and names his own exaggeration: "Vielen Dank, dass Du meine Überspitzung zu einer differenzierten Darstellung verknetest." [translation: Thank you for kneading my exaggeration into a differentiated account.] He finds the compromise "sehr sinnvoll" and "sogar für mathematisch/algorithmisch spannend" [translation: very sensible; even exciting mathematically and algorithmically] (comment 117).
-2. He agrees on the mix and adds that the mix must itself be flexible: "Bei Deinem Fazit (Mix global/lokal) sind wir uns einig, der Mix selbst muss wohl auch flexibel sein, wenn die Möglichkeit gegeben ist, wird globale Information verwendet; und sonst lokal nachgesteuert." [translation: On your conclusion (a global/local mix) we agree; the mix itself must be flexible: where possible global information is used, otherwise one adjusts locally.] (comment 122)
-3. He does not rest on robust central plans: plans can be laid out robustly, "da gibt es aber noch wenig praktisch Verwertbares" [translation: but there is little of practical use there yet] (comment 120).
-4. His own proposal: give each vehicle an algorithm, not a route. "jedes Fahrzeug bekommt keine individuelle Route, sondern einen kleinen, schnellen, individuellen Algorithmus mit, der unter den "dezentral beobachteten Umständen" die Fortsetzung der Route berechnet" [translation: each vehicle gets no individual route but a small, fast, individual algorithm that computes the continuation of the route under the circumstances observed decentrally]. Local errors are unavoidable, but the set of algorithms is designed together: "Die individuellen Algorithmen wurden also koordiniert so erstellt, dass sie – wenn sie dann jeweils lokal entscheiden müssen – weniger Staus produzieren. Vielleicht hilft hier die Spieltheorie?" [translation: the individual algorithms are created in a coordinated way so that, when each must decide locally, they produce fewer jams. Perhaps game theory helps here?] (comments 120, 122)
-5. His criterion for what is decided where, and the price of scale: "Je größer das zu planende/optimierende System, desto größer das Potenzial, aber natürlich auch: desto größer die Zerbrechlichkeit der Lösung." It will depend on "Durchführbarkeit/Robustheit/Echtzeitfähigkeit" which decisions are taken centrally and which decentrally. [translation: the larger the system planned or optimized, the larger the potential, but also the more fragile the solution; feasibility, robustness and real-time capability will decide.] (comment 124)
-
-**Why this one.** It shows how he answers critics on a claim he had put bluntly: he concedes the overstatement, then turns the objection into a research idea of his own (centrally designed, locally executed algorithms). A reader who knows him expects the concession and the turn to an algorithmic question; a good researcher who does not will either defend central optimization or agree to a hybrid without the "algorithm instead of route" idea.
-
-**Where it appears in the notes.**
-- `02-methodology.md` §8, table row "2016" ("Retracted in part ..."). Leave out.
-- `02-methodology.md` §0, last line ("Below threshold but recurring ..."): the item "decentralised vs central planning (S11 and its comments, 2016)". Leave out.
-- `02-methodology.md` Sources, S12: the comments of 2016-03-03 and 2016-03-04 cited for this exchange.
-- Not sealed (the post itself, which the question states): `02-methodology.md` C7, second sentence; `06-trajectory.md` T9, "two German posts on Industry 4.0", and §6 item 8, third bullet.
-
----
-
 ## H4
 
 **Source.** F. Ciccarelli, F. Furini, C. Hojny, M. Lübbecke, "Branch-and-price strikes back for the k-vertex cut problem", arXiv:2602.04984v2 (2026-06-05), Section 3.1.4 (p. 20) and Appendix F (pp. 38–41, Proposition 6, Table F.1). Four authors with Lübbecke last; the code is the first author's (Zenodo DOI 10.5281/zenodo.17897865), so the decision is the team's. Unreviewed preprint. Opened as `01/papers/arxiv_2602.04984.txt` (text of the v2 PDF).
@@ -108,9 +85,32 @@
 - `03-process-evidence.md` §7, table row "2022–2026", last phrase "components measured and then dropped". Leave that phrase out.
 - Not sealed: every other use of this preprint in the notes (baselines re-run, ablations, LP solver choice, symmetry handling, abstract v1 against v2, Appendix G).
 
----
+## Unsealed (2026-11-14)
 
-## H5
+Moved here on 2026-11-14, before the skill was built, at the user's decision: H3 (a blog comment thread on central versus decentral planning) and H5 (a journal's publisher and review model) are not research decisions of the kind the test needs. The synthesis did not use them; they are no longer test material and may be used as evidence.
+
+### H3
+
+**Source.** M. Lübbecke, blog *café opt*, post "#industrie40: zentral oder dezentral?", 2016-03-02, https://mluebbecke.wordpress.com/2016/03/02/industrie40-zentral-oder-dezentral/, and his four replies in its comment thread (WordPress.com public API, comment ids 117, 120, 122 and 124; 2016-03-03 11:15, 2016-03-04 08:57 and 09:25, 2016-03-08 14:24). Opened as `blog/posts.txt` and `blog/comments.txt` (API text). The other commenters are private persons and are not named here.
+
+**Question.** In March 2016 you publish a blog post on "Industrie 4.0". With hospital appointment scheduling and car navigation as examples you argue for central planning, and you conclude that "decentralisation" is either something you have not understood or plain nonsense for tomorrow's production. Within two days readers from industry reply: a central planner cannot react in real time, the connection to it can fail, so subsystems must be able to act on their own; one of them proposes central planning plus local re-planning. How do you answer, and what do you propose yourself?
+
+**What they actually said or did.**
+1. He concedes at once and names his own exaggeration: "Vielen Dank, dass Du meine Überspitzung zu einer differenzierten Darstellung verknetest." [translation: Thank you for kneading my exaggeration into a differentiated account.] He finds the compromise "sehr sinnvoll" and "sogar für mathematisch/algorithmisch spannend" [translation: very sensible; even exciting mathematically and algorithmically] (comment 117).
+2. He agrees on the mix and adds that the mix must itself be flexible: "Bei Deinem Fazit (Mix global/lokal) sind wir uns einig, der Mix selbst muss wohl auch flexibel sein, wenn die Möglichkeit gegeben ist, wird globale Information verwendet; und sonst lokal nachgesteuert." [translation: On your conclusion (a global/local mix) we agree; the mix itself must be flexible: where possible global information is used, otherwise one adjusts locally.] (comment 122)
+3. He does not rest on robust central plans: plans can be laid out robustly, "da gibt es aber noch wenig praktisch Verwertbares" [translation: but there is little of practical use there yet] (comment 120).
+4. His own proposal: give each vehicle an algorithm, not a route. "jedes Fahrzeug bekommt keine individuelle Route, sondern einen kleinen, schnellen, individuellen Algorithmus mit, der unter den "dezentral beobachteten Umständen" die Fortsetzung der Route berechnet" [translation: each vehicle gets no individual route but a small, fast, individual algorithm that computes the continuation of the route under the circumstances observed decentrally]. Local errors are unavoidable, but the set of algorithms is designed together: "Die individuellen Algorithmen wurden also koordiniert so erstellt, dass sie – wenn sie dann jeweils lokal entscheiden müssen – weniger Staus produzieren. Vielleicht hilft hier die Spieltheorie?" [translation: the individual algorithms are created in a coordinated way so that, when each must decide locally, they produce fewer jams. Perhaps game theory helps here?] (comments 120, 122)
+5. His criterion for what is decided where, and the price of scale: "Je größer das zu planende/optimierende System, desto größer das Potenzial, aber natürlich auch: desto größer die Zerbrechlichkeit der Lösung." It will depend on "Durchführbarkeit/Robustheit/Echtzeitfähigkeit" which decisions are taken centrally and which decentrally. [translation: the larger the system planned or optimized, the larger the potential, but also the more fragile the solution; feasibility, robustness and real-time capability will decide.] (comment 124)
+
+**Why this one.** It shows how he answers critics on a claim he had put bluntly: he concedes the overstatement, then turns the objection into a research idea of his own (centrally designed, locally executed algorithms). A reader who knows him expects the concession and the turn to an algorithmic question; a good researcher who does not will either defend central optimization or agree to a hybrid without the "algorithm instead of route" idea.
+
+**Where it appears in the notes.**
+- `02-methodology.md` §8, table row "2016" ("Retracted in part ..."). Leave out.
+- `02-methodology.md` §0, last line ("Below threshold but recurring ..."): the item "decentralised vs central planning (S11 and its comments, 2016)". Leave out.
+- `02-methodology.md` Sources, S12: the comments of 2016-03-03 and 2016-03-04 cited for this exchange.
+- Not sealed (the post itself, which the question states): `02-methodology.md` C7, second sentence; `06-trajectory.md` T9, "two German posts on Industry 4.0", and §6 item 8, third bullet.
+
+### H5
 
 **Source.** M. Lübbecke, P. M. Pardalos, "Welcome to SN Operations Research Forum!", SN Operations Research Forum 1 (2020) 1, DOI 10.1007/s43069-020-0001-1 (CC BY 4.0; published 2020-02-05), pp. 2–3: the paragraphs on open access, on publication speed and on the choice of publisher. Two authors; his voice cannot be separated. Opened as `dl_orf2020/orf.txt` (text of the publisher PDF).
 
