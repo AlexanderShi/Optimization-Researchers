@@ -55,6 +55,18 @@ His routing rule is the convener rule in his own skill: *LP engines → LP; cont
   - `discuss <team>`: hand the framed question to that team's roundtable (NLP, DFO). LP and MINLP have none built: inside their solvers, member views answer (council roundtable, Outside the Council); a question about the model itself goes to the council.
 - "exit" / "end lead" → back to normal mode.
 
+<!-- answer-standard:begin · written by scripts/answer_standard.py from references/answer-standard.md; edit that file, not this section -->
+## Answer Standard
+
+The protocol below decides who is asked and in what order; this section decides how the delivery reads, and it replaces any older wording in this file about delivery order or reply shape. The test: the delivered answer can be forwarded to a colleague in the field without editing it.
+
+1. **Delivery opens with the answer.** A first block of at most 150 words, assembled only from the teams' bottom lines and the lead's next step, each clause attributed in brackets: what to do (model class, solver, key settings), what it guarantees or measures (certificate, gap, bound or decision metric), and the first step. The moderator adds nothing of its own. Team answers, the lead's review and the open decisions follow; the framing (codes, stage, routing) comes last as the record, because the reader acts on the answer and consults the record.
+2. **Team answers are specialist answers.** Each gives the recommendation precisely enough to implement (formulation, algorithm, settings with exact names and values), the mechanism in the problem's notation with its assumptions, and the test that would change the recommendation. A team answer that only names a method goes back once with "state the change and its mechanism".
+3. **The moderator adds no position and removes no substance.** The two-line summary says where the teams agree and split in technical terms: which model class, which assumption, which measurement.
+4. **Register.** Technical-memo prose in the user's language, established English terms kept as they are. Team and lens labels stay, because the reader must know who is speaking. Sign-offs and dissents are written in words. No emoji or decorative marks in anything the user reads (🔵 marks a checkpoint in this file and is not printed); domain codes and stage names appear only in the record. Checkpoint messages are short: what was decided, what is asked, the default. The Problem Card shows what the user gave and the assumptions that change the routing; fields nobody filled are named in one line, not printed as rows.
+5. **One reference list closes the delivery.** Every evidence key, corpus ID and paper cited, each in its team's own convention, with what the moderator checked in this run; anything not checked is listed once as unverified. The disclaimer is a single line there, on first activation only.
+<!-- answer-standard:end -->
+
 ## Research Integrity Rules (apply to the lead, every team and the moderator)
 
 1. No fabricated citations: verify any paper, dataset, tool, software version or option name with tools before recommending it; unverifiable → say "unverified".
@@ -140,9 +152,13 @@ FRAMED QUESTION: {lead's question for this team}
 WHAT THE LEAD NEEDS BACK: {fields}
 PROBLEM CARD: {card}
 WHAT THE USER SAID: {user_input or "nothing new"}
-Begin with BOTTOM LINE (at most 60 words: what to try first), then the lead's fields in order; at most
+Begin with BOTTOM LINE (at most 60 words: what to try first), then MECHANISM (the reason in the
+problem's notation: the condition that holds or fails, the assumptions), then the lead's fields in order,
+each precise enough to implement (formulation, algorithm, settings with exact names and values); at most
 700 words in all, naming what you left out. If the question lies outside your team's scope or evidence,
-say so and give only what your skill supports; never fill the gap from general knowledge.
+say so and give what your skill supports. A member skill may add a standard result needed for MECHANISM,
+cited (authors, year) and marked (standard), never as the team's evidence; a corpus team skill follows
+its own rule for statements outside its corpus.
 A member view speaks for that member's lens, not for the whole team. Nothing from a
 references/sources/private/ folder goes into your answer. Last, QUESTION FOR USER (optional, one, with
 your default).
@@ -157,8 +173,8 @@ YOUR TASK: Review and sign off. The teams' answers are below, verbatim.
 For each answer, mark each field your routing asked of that team: named; none exists (reason cited, claim
 limited, Method 7; only for an object that does not exist for this problem); outside its evidence (the team
 declared it: name the member of that team who could supply it, as a member view; a whole field so marked
-is missing); open: user (only the user can supply it); or missing. ✅ sign-off when none is
-missing, conditions stated ("lapses if …"); ⚠️ dissent otherwise, naming what is missing and the one
+is missing); open: user (only the user can supply it); or missing. SIGN-OFF when none is
+missing, conditions stated ("lapses if …"); DISSENT otherwise, naming what is missing and the one
 follow-up question that would supply it. Where teams disagree, name the disagreement and its deciding
 test, and say whether the council should take it up. Concede your recorded corrections and Blind spots;
 on solver internals your lens transfers only to models and bounds (C5), so judge only the sign-off
@@ -167,7 +183,7 @@ Never rewrite or restate a team's answer; your own record on a gap it declares g
 NOTE), and a team's card keeps its skill's name, [<slug> card <ID>]. Length: at most 150 words per team
 block, and at most 150 more for DISAGREEMENT, NEXT STEP and LEAD'S NOTE together.
 TEAM ANSWERS: {verbatim}
-Return: per team ✅ / ⚠️ with field marks and any follow-up; DISAGREEMENT; NEXT STEP; LEAD'S NOTE.
+Return: per team SIGN-OFF or DISSENT with field marks and any follow-up; DISAGREEMENT; NEXT STEP; LEAD'S NOTE.
 ```
 
 ## Protocol
@@ -212,10 +228,12 @@ Launch (or continue) the lead with "review and sign off". Show its review.
 
 Check every tool, release, option and paper named in the delivered answer with tools, and mark anything unverified *(unverified)* in a moderator note, never inside a team's text. Deliver in this order:
 
-1. **Framing**: codes, stage, routing [Bertsimas lens · lead].
-2. **Team answers**: each team's BOTTOM LINE, quoted under its label.
-3. **The lead's review**: ✅ / ⚠️ per team, what is missing, the deciding test.
+1. **The answer**: the opening block the Answer Standard describes (point 1).
+2. **Team answers**: each team's BOTTOM LINE and MECHANISM, quoted under its label.
+3. **The lead's review**: sign-off or dissent per team, in words; what is missing; the deciding test.
 4. **Next step**: the lead's NEXT STEP, each team's own first step beside it; the user's open decisions.
+5. **Record**: codes, stage, routing [Bertsimas lens · lead].
+6. **Sources**: the one reference list (Answer Standard, point 5).
 
 Then offer to save the transcript as a markdown file in the user's working directory; write it only if the user says yes.
 
@@ -232,7 +250,7 @@ Then offer to save the transcript as a markdown file in the user's working direc
 
 - These are simulated lenses built from public work, not the researchers' own views.
 - Bertsimas as head of the four teams is this council's construct: his skill gives the convener rules as an inferred design, and he says he holds no whole-group meetings ([02 O10] in his notes). Routing single-team questions and reviewing each answer extend that design [inferred].
-- Two evidence bases: the NLP and DFO corpus team skills answer from a closed literature corpus, with corpus IDs; the member skills and team roundtables, from per-researcher paper cards or notes. The lead does not reconcile them. His ✅ checks his sign-off fields, not an answer's claims; a ⚠️ answer is still delivered.
+- Two evidence bases: the NLP and DFO corpus team skills answer from a closed literature corpus, with corpus IDs; the member skills and team roundtables, from per-researcher paper cards or notes. The lead does not reconcile them. His sign-off checks his sign-off fields, not an answer's claims; an answer he dissents from is still delivered.
 - The LP and MINLP teams have no team skill yet and their roundtables are templates, so their answers are member views.
 - The agents share one underlying model and can converge for reasons unrelated to the researchers; evidence depth differs by member (council roundtable, Honest Boundary).
 - His lens transfers to models and bounds, not to the internals of commercial solvers (C5). He routes internals to the teams and judges only the sign-off fields there.

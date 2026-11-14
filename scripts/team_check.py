@@ -24,6 +24,8 @@
     lead            team.json 有 lead（可选的团队总入口 skill，如理事会的 optimization-lead）时：<lead>/SKILL.md 存在，
                     frontmatter name = lead；正文链接圆桌、本队每位成员的 skill 和每个 guest 队的文件夹。没有 lead 不报
     coverage        深读档：DEEP-READING.md 原样含 team_status.py --coverage 的表，README 原样含 --coverage --short 的表
+    answer-std      answer_standard.py --check <team> 0 ✗：每位成员、圆桌和 lead 的 SKILL.md 里「Answer Standard」一节
+                    与 references/answer-standard.md 一致，研究者 skill 的三处旧条款带有位置说明（缺了就跑 --apply）
   每位成员
     skill           SKILL.md 存在；quality_check.py 12/12（--skip-quality 跳过）；## Roundtable Card 的 7 项齐全
     works           深读档：validate_works.py 0 errors；INDEX.md 行数 = 去重后的研究作品数
@@ -403,6 +405,8 @@ def main():
             (f"member rows missing: {', '.join(unlinked)}" if unlinked else "links every member"))
     check_roundtable(rep, team, cfg, deep, deep_members)
     check_lead(rep, team, cfg)
+    rc, out = run([sys.executable, str(HERE / "answer_standard.py"), "--check", str(team.resolve())])
+    rep.add("team", "answer-std", rc == 0, last_line(out))
     if deep and len(cfg["members"]) < 2 and not cfg.get("guest_teams"):
         rep.add("team", "citations", None, "1 member: no roundtable to check (member citations are checked per member)")
     elif deep:

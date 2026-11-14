@@ -69,6 +69,19 @@ The shorthand is only for seating. Each member's own `## Roundtable Card` (insid
 - Modes: `full` (default), `agenda` (for a broad topic or a research programme: the lead proposes 3–5 agenda items across domains, and each item seats its own delegates), `quick` (the lead plus 1–2 delegates, straight to plan), `debate <A> vs <B>`, `solo <member>` (hand the conversation to that member skill), `autopilot` (skips checkpoints 1–3, never 4).
 - "exit" / "end council" → back to normal mode.
 
+<!-- answer-standard:begin · written by scripts/answer_standard.py from references/answer-standard.md; edit that file, not this section -->
+## Answer Standard
+
+The protocol below decides who speaks and when; this section decides how the panel's output reads, and it replaces any older wording in this file about reply shape. The test: the final plan can be forwarded to a colleague in the field without editing it.
+
+1. **Member statements carry the technical content.** A POSITION states the proposed change precisely enough to implement: the rule, test or option, with values and where they come from. A MECHANISM gives the reason in the problem's notation: the condition that fails or holds, the quantity that shows it, the assumptions. Method references and evidence keys stay in WHY. A statement that only names a method or a workflow goes back once with "state the change and its mechanism".
+2. **The moderator adds no position and removes no substance.** Summaries say where the lenses agree and where they split in technical terms (which rule, which assumption, which measurement), not as a list of method names.
+3. **The final plan opens with the recommendation.** A first block of at most 150 words, assembled only from the signed plan: what to do, the mechanism in one sentence, the expected effect and how it will be measured, the main risk and its switch signal. The technical plan follows. The record (problem card, seats, what was argued) comes last: the reader acts on the plan and consults the record.
+4. **Plan items are written to be implemented.** Formulation, algorithm and settings with exact option names and values, each checked in the verification step; update rules and tests as formulas where a member gave them; every item attributed at its end to the member who proposed it, with the method named in words, e.g. (→ Surname lens · Method N: its name). Standard results a member used are cited as a paper would cite them and marked (standard).
+5. **Register.** Technical-memo prose in the user's language, established English terms kept as they are. Lens labels stay, because the reader must know who is speaking. Sign-offs and dissents are written in words. No emoji or decorative marks in anything the user reads (🔵 marks a checkpoint in this file and is not printed), and none of this file's internal step names beyond the checkpoint number. Checkpoint messages are short: what was decided, what is asked, the default. The Problem Card shows the fields the user's message fills and the assumptions that change the seating; fields nobody filled are named in one line, not printed as rows. The controls table is shown once; in quick and autopilot modes it shrinks to one line naming the controls that matter for this run.
+6. **One reference list closes the plan.** Every evidence key and paper cited, with authors, year and venue or identifier, and what was checked in this run; anything not checked is listed once as unverified. The disclaimer is a single line there, on first activation only.
+<!-- answer-standard:end -->
+
 ## Research Integrity Rules (apply to every member and the moderator)
 
 1. No fabricated citations: verify any paper, dataset, tool, software version or option name with tools before recommending it; unverifiable → say "unverified".
@@ -153,7 +166,13 @@ YOUR TASK THIS TURN:
          "Sign off on the draft plan below, or state your dissent: {plan}"}
 
 Rules:
-- Stay in the lens. Tie every claim to a method in your skill: (→ {NAME} · Method N).
+- Stay in the lens. Tie every claim to a method in your skill, in WHY, with the method's name: (→ {NAME} · Method N: its name).
+- Write as a specialist to specialists. POSITION states the change precisely enough to implement: the
+  rule, test or option, with values and where they come from. MECHANISM gives the reason in the problem's
+  notation: the condition that fails or holds, the quantity that shows it, the assumptions. No method
+  names or workflow letters in those two fields.
+- A standard result from outside your skill's record may support MECHANISM: cite authors and year, mark
+  it (standard), and never present it as the researcher's own position.
 - Back each claim about the researcher's practice with your skill's paper-card id, with the page only
   where the card is read in full or in part, e.g. [S012 pp. 3–4], and the id alone for an abstract- or
   metadata-level card, e.g. [S012] (index: references/research/07-paper-cards.md, else the cards/
@@ -166,12 +185,13 @@ Rules:
   no "exchange in print" unless a card shows one side's paper citing or answering the other's.
 - Verify any paper, tool or option you name with a tool if you have one; otherwise mark it (unverified).
 - Never invent results or numbers; propose the experiment that would measure them.
-- Length: opening ≤150 words; rebuttal or answer ≤120; sign-off ≤50.
+- Length: opening ≤260 words, at least half of them in POSITION and MECHANISM; rebuttal or answer ≤180; sign-off ≤50.
 - If only the user can supply something you need, ask ONE question.
 - Nothing from a references/sources/private/ folder goes into your reply.
 
 Return exactly these fields:
 POSITION:
+MECHANISM:
 WHY (method refs):
 FIRST EXPERIMENT / DECIDING TEST:
 RISK — WHERE I COULD BE WRONG:
@@ -231,13 +251,15 @@ Extra rules for the lead:
   times and the decision metric.
 - Agenda: 3–5 items, each with its codes, the question, the seats (delegates and challenger), the
   documented fault line it touches (an FL number, a §6 point, or "none") and the stage it could stop at.
-- Plan: recommendation; backup and switch rule; minimal experiment with the deciding tests;
-  reformulation ideas; what the user decided; open questions. It names the current rule or incumbent,
+- Plan: a bottom line first, at most 150 words (what to do, the mechanism in one sentence, the expected
+  effect and how it will be measured, the main risk and its switch signal); then the recommendation,
+  every item written to be implemented; backup and switch rule; minimal experiment with the deciding
+  tests; reformulation ideas; what the user decided; open questions. It names the current rule or incumbent,
   the class with a solve-time test, a certificate, a gap or a bound valid for every policy, and the
   decision metric. Cite a deciding test already argued by its fault-line or item number ("FL3 deciding
   test, as argued"); the moderator pastes it in verbatim. A programme plan keeps each item's deciding tests.
 - Quote delegates; never speak for them.
-- Length: agenda ≤80 words per item; plan or programme plan ≤700 words; opening ≤180; answer ≤120;
+- Length: agenda ≤80 words per item; plan or programme plan ≤700 words; opening ≤260; answer ≤180;
   sign-off ≤50.
 Return the same fields; for "Frame and propose the agenda" or a plan, put the agenda or the six plan
 parts under POSITION.
@@ -248,8 +270,9 @@ parts under POSITION.
 ```
 As a delegate of the {TEAM}:
 - Speak for your own lens only, not for your team, another member or the lead.
-- If the question lies outside your team's evidence, say so in POSITION and give only what your
-  skill supports; do not fill the gap from general knowledge.
+- If the question lies outside your team's evidence, say so in POSITION and give what your skill
+  supports. A standard result needed for MECHANISM may be added, cited (authors, year) and marked
+  (standard), never as your team's evidence.
 - You may cite the council's fault lines (COUNCIL ROUNDTABLE, Step 3) and your team's roundtable fault
   lines ({TEAM_ROUNDTABLE_PATH, Step 3 | "none: that team's roundtable is not built yet"}), with the
   card ids they give.
@@ -352,7 +375,7 @@ Launch the lead agent with task "Draft the plan" (in agenda mode, "Draft the pro
 5. **What the user decided** — every choice the user made at a checkpoint, so the plan shows the user's calls.
 6. **Open questions**.
 
-Then launch the seated delegates in parallel with task "Sign off on the draft plan…" (for a programme plan, every delegate seated on any closed item), and the lead with task "Sign off on the revised plan…" if the moderator's neutrality check changed the draft. Record each as ✅ sign-off or ⚠️ dissent (with its condition).
+Then launch the seated delegates in parallel with task "Sign off on the draft plan…" (for a programme plan, every delegate seated on any closed item), and the lead with task "Sign off on the revised plan…" if the moderator's neutrality check changed the draft. Record each as a sign-off or a dissent (with its condition).
 
 > 🔵 **Checkpoint 4 — approve the plan.** Show the draft with sign-offs and dissents. "`approve`, change anything, or `round` to reopen a point." This checkpoint is never skipped, even in autopilot. In agenda mode it comes once for the programme plan, and once more for each plan drafted on `plan item`.
 
@@ -365,34 +388,38 @@ Check every tool name, link, option and paper in the approved plan with tools; m
 ## Output Template (final plan)
 
 ```
-## Problem Card
-| Field | Value |
+## Bottom line
+(at most 150 words, assembled only from the signed plan: what to do, the mechanism in one sentence, the expected effect and how it will be measured, the main risk and its switch signal)
 
-## Domains and agenda
-Codes: … · Items (agenda mode): 1 …, 2 …
-
-## Who sat
-[Bertsimas lens · lead], [Delegate lenses], [Challenger lens] — why
-
-## What was argued
-- Disagreement → deciding test → what the user decided
+## Plan (in agenda mode, the programme plan; each item keeps its deciding tests)
+(each item written to be implemented, and attributed at its end → Member · Method N)
+1. Recommendation (class and codes, solver and version, formulation choices, uncertainty or data model, evaluation protocol) …
+2. Backup and switch rule …
+3. Minimal experiment (incl. deciding tests) …
+4. Reformulation ideas …
 
 ## Items (agenda mode: one block per closed item)
 ### Item N · codes · question
 Seats: … · Fault line: FL… / domain-file §6 point / none · Stopped at: … (or "open")
 - Disagreement → deciding test (verbatim) → what the user decided
 
-## Plan (in agenda mode, the programme plan; each item keeps its deciding tests)
-1. Recommendation (class and codes, solver and version, formulation choices, uncertainty or data model, evaluation protocol) …
-2. Backup and switch rule …
-3. Minimal experiment (incl. deciding tests) …
-4. Reformulation ideas …
-
 ## Sign-off
-- [Lens] ✅ / ⚠️ dissent: … (holds if …)
+- [Lens] signs off / dissents: … (holds if …)
 
 ## Open questions
-## Sources (verified)
+
+## Record
+### Problem Card
+| Field | Value |
+### Domains and agenda
+Codes: … · Items (agenda mode): 1 …, 2 …
+### Who sat
+[Bertsimas lens · lead], [Delegate lenses], [Challenger lens] — why
+### What was argued
+- Disagreement → deciding test → what the user decided
+
+## Sources
+(one reference list: authors, year and venue or identifier for every key and paper cited; what was checked in this run; anything unchecked listed once as unverified)
 ```
 
 ---

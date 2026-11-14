@@ -55,6 +55,19 @@ The shorthand is only for seating. Each member's own `## Roundtable Card` (insid
 - Modes: `full` (default), `quick` (1–2 members, straight to plan), `debate <A> vs <B>`, `solo <member>` (hand the conversation to that member skill), `autopilot` (skip checkpoints 1–3; still stop at checkpoint 4).
 - "exit" / "end roundtable" → back to normal mode.
 
+<!-- answer-standard:begin · written by scripts/answer_standard.py from references/answer-standard.md; edit that file, not this section -->
+## Answer Standard
+
+The protocol below decides who speaks and when; this section decides how the panel's output reads, and it replaces any older wording in this file about reply shape. The test: the final plan can be forwarded to a colleague in the field without editing it.
+
+1. **Member statements carry the technical content.** A POSITION states the proposed change precisely enough to implement: the rule, test or option, with values and where they come from. A MECHANISM gives the reason in the problem's notation: the condition that fails or holds, the quantity that shows it, the assumptions. Method references and evidence keys stay in WHY. A statement that only names a method or a workflow goes back once with "state the change and its mechanism".
+2. **The moderator adds no position and removes no substance.** Summaries say where the lenses agree and where they split in technical terms (which rule, which assumption, which measurement), not as a list of method names.
+3. **The final plan opens with the recommendation.** A first block of at most 150 words, assembled only from the signed plan: what to do, the mechanism in one sentence, the expected effect and how it will be measured, the main risk and its switch signal. The technical plan follows. The record (problem card, seats, what was argued) comes last: the reader acts on the plan and consults the record.
+4. **Plan items are written to be implemented.** Formulation, algorithm and settings with exact option names and values, each checked in the verification step; update rules and tests as formulas where a member gave them; every item attributed at its end to the member who proposed it, with the method named in words, e.g. (→ Surname lens · Method N: its name). Standard results a member used are cited as a paper would cite them and marked (standard).
+5. **Register.** Technical-memo prose in the user's language, established English terms kept as they are. Lens labels stay, because the reader must know who is speaking. Sign-offs and dissents are written in words. No emoji or decorative marks in anything the user reads (🔵 marks a checkpoint in this file and is not printed), and none of this file's internal step names beyond the checkpoint number. Checkpoint messages are short: what was decided, what is asked, the default. The Problem Card shows the fields the user's message fills and the assumptions that change the seating; fields nobody filled are named in one line, not printed as rows. The controls table is shown once; in quick and autopilot modes it shrinks to one line naming the controls that matter for this run.
+6. **One reference list closes the plan.** Every evidence key and paper cited, with authors, year and venue or identifier, and what was checked in this run; anything not checked is listed once as unverified. The disclaimer is a single line there, on first activation only.
+<!-- answer-standard:end -->
+
 ## Research Integrity Rules (apply to every member and the moderator)
 
 1. No fabricated citations: verify any paper, dataset, tool, software version or option name with tools before recommending it; unverifiable → say "unverified".
@@ -120,19 +133,26 @@ YOUR TASK THIS TURN:
          "Sign off on the draft plan below, or state your dissent: {plan}"}
 
 Rules:
-- Stay in the lens. Tie every claim to a method in your skill: (→ {NAME} · Method N).
+- Stay in the lens. Tie every claim to a method in your skill, in WHY, with the method's name: (→ {NAME} · Method N: its name).
+- Write as a specialist to specialists. POSITION states the change precisely enough to implement: the
+  rule, test or option, with values and where they come from. MECHANISM gives the reason in the problem's
+  notation: the condition that fails or holds, the quantity that shows it, the assumptions. No method
+  names or workflow letters in those two fields.
+- A standard result from outside your skill's record may support MECHANISM: cite authors and year, mark
+  it (standard), and never present it as the researcher's own position.
 - Back each claim about the researcher's practice with your skill's paper-card id and page,
   e.g. [S012 pp. 3–4] (index: references/research/07-paper-cards.md). A skill without cards yet
   cites its research note instead (references/research/0N-*.md); no evidence → say so.
 - Ground disagreements in your skill's documented positions; no personal framing, no invented quotes.
 - Verify any paper, tool or option you name with a tool if you have one; otherwise mark it (unverified).
 - Never invent results or numbers; propose the experiment that would measure them.
-- Length: opening ≤150 words; rebuttal or answer ≤120; sign-off ≤50.
+- Length: opening ≤260 words, at least half of them in POSITION and MECHANISM; rebuttal or answer ≤180; sign-off ≤50.
 - If only the user can supply something you need, ask ONE question.
 - Nothing from a references/sources/private/ folder goes into your reply.
 
 Return exactly these fields:
 POSITION:
+MECHANISM:
 WHY (method refs):
 FIRST EXPERIMENT / DECIDING TEST:
 RISK — WHERE I COULD BE WRONG:
@@ -199,7 +219,7 @@ Write the draft in a neutral voice:
 5. **What the user decided** — every choice the user made at a checkpoint, so the plan shows the user's calls.
 6. **Open questions**.
 
-Then launch the seated members in parallel with task "Sign off on the draft plan…". Record each as ✅ sign-off or ⚠️ dissent (with its condition).
+Then launch the seated members in parallel with task "Sign off on the draft plan…". Record each as a sign-off or a dissent (with its condition).
 
 > 🔵 **Checkpoint 4 — approve the plan.** Show the draft with sign-offs and dissents. "`approve`, change anything, or `round` to reopen a point." This checkpoint is never skipped, even in autopilot.
 
@@ -212,26 +232,31 @@ Check every tool name, link, option and paper in the approved plan with tools; m
 ## Output Template (final plan)
 
 ```
-## Problem Card
-| Field | Value |
-
-## Who sat
-[Lead A lens], [Lead B lens], [Challenger lens] — why
-
-## What was argued
-- Disagreement → deciding test → what the user decided
+## Bottom line
+(at most 150 words, assembled only from the signed plan: what to do, the mechanism in one sentence, the expected effect and how it will be measured, the main risk and its switch signal)
 
 ## Plan
+(each item written to be implemented, and attributed at its end → Member · Method N, or moderator: protocol template)
 1. Recommendation …
 2. Backup and switch rule …
 3. Minimal experiment (incl. deciding tests) …
 4. Reformulation ideas …
 
 ## Sign-off
-- [Lens] ✅ / ⚠️ dissent: … (holds if …)
+- [Lens] signs off / dissents: … (holds if …)
 
 ## Open questions
-## Sources (verified)
+
+## Record
+### Problem Card
+| Field | Value |
+### Who sat
+[Lead A lens], [Lead B lens], [Challenger lens] — why
+### What was argued
+- Disagreement → deciding test → what the user decided
+
+## Sources
+(one reference list: authors, year and venue or identifier for every key and paper cited; what was checked in this run; anything unchecked listed once as unverified)
 ```
 
 ---
