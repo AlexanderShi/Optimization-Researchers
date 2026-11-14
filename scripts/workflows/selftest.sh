@@ -6,6 +6,10 @@
 # Without a team only parts 1 (no --forbid), 3 (without team_check.py) and 4 run; give a finished team for the full test.
 # 1. The nine example previews (examples/*.args.json + *.answers.json) with dry_run.mjs --strict, plus the variants that
 #    take other branches (base-tier team-layer; team-synthesize / team-increment resumed with from: "review" / "fix").
+#    team-base-skills also (the steps ported from nuwa v2): sealed questions reach the validate step's two arms and judge
+#    only, and the prompts before it carry the sealed-material rule; the arms and the prior agent get no house rules and
+#    no member hint, the arms no question kinds; the judge gets the right answers under each set and its scores are
+#    checked; seven from/to segments run on their own.
 #    --forbid is built from the finished team's team.json (team and roundtable slugs, member surnames), so nothing of
 #    that team may leak into the generic workflows.
 # 2. make_args.mjs for every workflow on the finished team, and dry_run.mjs --team <team> (no args file) --strict for
@@ -95,6 +99,96 @@ for w in synthesize increment; do
     a=$(python3 -c 'import json,sys;d=json.load(open(sys.argv[1]));d["from"]=sys.argv[2];[d.pop(k,None) for k in ("find","since","what")];print(json.dumps(d))' "scripts/workflows/examples/team-$w.args.json" "$f")
     dry "team-$w from $f" "$w" "$a" "scripts/workflows/examples/team-$w.answers.json"
   done
+done
+
+# T1's steps ported from nuwa v2 (prior snapshot, sealed holdout, the validate step's increment test), on the example's
+# fictional answers. What is checked is in the messages below; v2check.py reads the rendered prompts and return.json.
+V2=$TMP/v2-port
+B=scripts/workflows/examples/team-base-skills
+cat > "$TMP/v2check.py" <<'PY'
+import glob, json, os, re, sys
+out, mode = sys.argv[1], sys.argv[2]
+files = lambda pat: sorted(glob.glob(os.path.join(out, pat)))
+read = lambda p: open(p, encoding="utf-8").read()
+probs = []
+if mode == "sealed":
+    Q = "fictional sealed question"
+    before = [p for pat in ("*-synthesis_*", "*-build_*", "*-exam_*", "*-answer_*", "*-grade_*", "*-fix_*", "*-refine*") for p in files(pat)]
+    after = [p for pat in ("*-arm-skill_*", "*-arm-bare_*", "*-judge_*") for p in files(pat)]
+    if len(before) < 14 or len(after) != 6:
+        probs.append(f"{len(before)} prompt(s) before the validate step and {len(after)} arm and judge prompt(s) found (expected at least 14 and 6)")
+    probs += [f"{os.path.basename(p)} carries a sealed question" for p in before if Q in read(p)]
+    probs += [f"{os.path.basename(p)} lacks the sealed questions" for p in after if Q not in read(p)]
+    rule = [p for pat in ("*-synthesis_*", "*-build_*", "*-exam_*", "*-fix_*", "*-refine-A_*", "*-refine-B_*", "*-refine-apply_*") for p in files(pat)]
+    probs += [f"{os.path.basename(p)} does not name holdout.md (the sealed-material rule)" for p in rule if "holdout.md" not in read(p)]
+    ok = f"{len(after)} arm and judge prompts carry the sealed questions, none of the {len(before)} prompts before the validate step does, and {len(rule)} synthesis, build, exam, fix and refine prompts carry the sealed-material rule"
+elif mode == "arms":
+    arms = files("*-arm-skill_*") + files("*-arm-bare_*")
+    plain = arms + files("*-prior_*")
+    if len(arms) != 4 or len(plain) != 6:
+        probs.append(f"{len(arms)} arm prompt(s) and {len(plain) - len(arms)} prior prompt(s) found (expected 4 and 2)")
+    for p in plain:
+        t = read(p)
+        probs += [f"{os.path.basename(p)} carries {what}" for what, hit in (("the house rules", "House rules" in t), ("the member hint from team.json", "FICTIONAL placeholder" in t)) if hit]
+    for p in arms:
+        t = read(p)
+        probs += [f"{os.path.basename(p)} shows {what}" for what, hit in (("a question kind", '"kind"' in t), ("a sealed id", re.search(r'"qid":"H\d', t)), ("the word holdout", "holdout" in t)) if hit]
+    ok = "the two arms and the prior agent get no house rules and no member hint; the arms see neutral ids, no question kinds and no sealed ids"
+elif mode == "judge":
+    inc = {m["member"]: m.get("increment") or {} for m in json.load(open(os.path.join(out, "return.json"), encoding="utf-8"))["members"]}
+    for slug, want in (("ada-example", ("Y", 4, 1, False)), ("bo-sample", ("X", 4, 3, True))):
+        i = inc.get(slug, {})
+        got = (i.get("skill_set"), i.get("with_skill"), i.get("without_skill"), i.get("tie"))
+        if got != want:
+            probs.append(f"{slug}: set, with, without, tie = {got} (expected {want})")
+        j = files(f"*-judge_{slug}*")
+        t = read(j[0]) if len(j) == 1 else ""
+        sets = dict(re.findall(r"^Set ([XY]): (.*)$", t, re.M))
+        other = "X" if want[0] == "Y" else "Y"
+        if "with-skill answer" not in sets.get(want[0], "") or "unaided answer" not in sets.get(other, "") or "with-skill answer" in sets.get(other, ""):
+            probs.append(f"{slug}: the judge prompt does not show the with-skill answers as set {want[0]} and the unaided ones as set {other}")
+        if "methods_used" in t or re.search(r'"qid":"t\d', t):
+            probs.append(f"{slug}: the judge prompt carries methods_used or the neutral ids given to the arms")
+    ok = "set Y is the skill arm of the first member (4 against 1), set X of the second (4 against 3, a tie); the judge gets the answers under the real ids, without methods_used"
+elif mode == "badjudge":
+    inc = {m["member"]: m.get("increment") or {} for m in json.load(open(os.path.join(out, "return.json"), encoding="utf-8"))["members"]}
+    for slug, i in inc.items():
+        got = (i.get("with_skill"), i.get("without_skill"), i.get("tie"))
+        if got != (None, None, None) or i.get("sealed_items") != 2:
+            probs.append(f"{slug}: with, without, tie = {got}, sealed_items {i.get('sealed_items')} (expected no totals for 2 sealed items)")
+    if len(inc) != 2:
+        probs.append(f"{len(inc)} member(s) in return.json")
+    ok = "a judge that scores a sealed question 7, or scores a question that is not sealed in its place, gives no totals"
+if probs:
+    sys.exit("\n".join(probs))
+print(ok)
+PY
+v2() {  # label, mode, rendered folder
+  local r rc
+  r=$(python3 "$TMP/v2check.py" "$3" "$2" 2>&1); rc=$?
+  if [ $rc -eq 0 ]; then ok "team-base-skills $1: $r"; else bad "team-base-skills $1: $(head -1 <<<"$r")"; tail -n +2 <<<"$r" | head -6 | sed 's/^/    /'; fi
+}
+if node scripts/workflows/dry_run.mjs scripts/workflows/team-base-skills.js "$B.args.json" --answers "$B.answers.json" --quiet --strict --out "$V2" > /dev/null 2>&1; then
+  v2 "sealed questions" sealed "$V2"
+  v2 "arms and prior" arms "$V2"
+  v2 "blind judge" judge "$V2"
+else bad "team-base-skills: dry_run.mjs --out failed on the example"; fi
+cat > "$TMP/v2badjudge.py" <<'PY'
+import json, sys
+d = json.load(open(sys.argv[1], encoding="utf-8"))
+for k in [k for k in d if k.startswith("^judge:")]:
+    d.pop(k)
+one = lambda name, score, second: {"set": name, "holdout": [{"qid": "H1", "score": score, "reason": "r"}, {"qid": second, "score": 2, "reason": "r"}]}
+d["^judge:"] = {"sets": [one("X", 7, "H2"), one("Y", 2, "T1")], "difference": "fictional"}
+json.dump(d, open(sys.argv[2], "w", encoding="utf-8"))
+PY
+python3 "$TMP/v2badjudge.py" "$B.answers.json" "$TMP/v2-badjudge.answers.json"
+if node scripts/workflows/dry_run.mjs scripts/workflows/team-base-skills.js "$B.args.json" --answers "$TMP/v2-badjudge.answers.json" --quiet --out "$V2-badjudge" > /dev/null 2>&1; then
+  v2 "judge scores are checked" badjudge "$V2-badjudge"
+else bad "team-base-skills: dry_run.mjs --out failed with a judge that scores out of range"; fi
+for seg in 'prior prior' 'research review' 'holdout synthesis' 'synthesis synthesis' 'test refine' 'refine refine' 'validate validate'; do
+  a=$(python3 -c 'import json,sys;d=json.load(open(sys.argv[1]));d["from"],d["to"]=sys.argv[2].split();print(json.dumps(d))' "$B.args.json" "$seg")
+  dry "team-base-skills from ${seg% *} to ${seg#* }" base-skills "$a" "$B.answers.json"
 done
 
 [ -n "$TEAM" ] && echo "2. make_args.mjs and dry_run.mjs --team on $TEAM"

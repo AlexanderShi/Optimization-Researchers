@@ -751,7 +751,7 @@ Phase 4 验证通过后，自动启动双Agent精炼，进一步提升Skill可�
 | 步 | 命令 / 工作流 | 闸门 |
 |---|---|---|
 | T0 定义 | `python3 scripts/new_team.py --init <team> --field "…" --members "A;B;C"` → 补 `team.json`（scholar、hint、living、student_mode、chase_hints；`--lookup` 从 DBLP 补 dblp/orcid/homepage，`--set-member` 改字段；非数学领域写 `card_dimensions`）→ `python3 scripts/new_team.py product/<team>/team.json`（确定只做轻量档加 `--base-tier`） | 模板里不剩 `{{`；`surname` 队内唯一（撞姓会警告） |
-| T1 基础Skill | `team-base-skills.js`，每人一个并行；`to: "review"` → `from: "synthesis", to: "synthesis"` → `from: "build"` 对应 Phase 1.5 / 2.5 检查点 | `quality_check.py` 12/12；每人有 `## Roundtable Card` |
+| T1 基础Skill | `team-base-skills.js`，每人一个并行；`to: "review"` → `from: "holdout", to: "synthesis"` → `from: "build"` 对应 Phase 1.5 / 2.5 检查点（`prior`、`holdout`、`validate` 三步见 `research-extraction-framework.md` 第十三节） | `quality_check.py` 12/12；每人有 `## Roundtable Card` |
 | T2 团队层 | `team-layer.js`，`members` 放**全体**（轻量档 `deep_tier: false`） | `check_links.py` 0；fault line 双方有据；轻量档 `grep -rn --include='*.md' -e '{{' -e '\[TODO' product/<team>` 为空（或 `python3 scripts/team_check.py product/<team> --tier base` 退出码 0）。圆桌不跑 `quality_check.py` |
 | T3.1–T3.4 发表与全文 | `team-harvest.js` → `validate_works.py` → 主会话后台跑 `acquire_fulltexts.py` → `team-chase.js`（含 `merge_chase.py`）→ `plan_reading_batches.py product/<team> --out-dir <scratch>`（每轮一条） | `validate_works.py` 0 errors，条目数与 Scholar（或 DBLP、CV）对得上 |
 | T3.5 读卡 | `team-read.js`（每轮一次）→ `verify_card_quotes.py` → `mark_read_from_cards.py` | 摘录 NOT FOUND = 0；最后一轮后没有未读行 |
@@ -770,11 +770,11 @@ product/<team>/
 └── <member-slug>/
     ├── SKILL.md                      # T1 写，末尾是 Roundtable Card
     └── references/
-        ├── research/                 # 01–06；深读档另有 cards/、07–09
+        ├── research/                 # 00-prior、01–06、holdout；深读档另有 cards/、07–09
         └── sources/                  # RESOURCES.md、publications/、papers/、talks/、essays/、software/、private/（git 忽略）
 ```
 
-**成本**：T1 每人 16–20 个 agent，T2 每人 2 个 + 团队 4–5 个；深读档每人再多约 45 个 agent、1,100 万 token（DFO 实测：5 人、795 张卡片，约 220 agent、5,500 万 token），开跑前报给用户选档。
+**成本**：T1 每人 23–27 个 agent，T2 每人 2 个 + 团队 4–5 个；深读档每人再多约 45 个 agent、1,100 万 token（DFO 实测：5 人、795 张卡片，约 220 agent、5,500 万 token），开跑前报给用户选档。
 
 ### 中国人物 vs 西方人物
 - **中国人物**：B站原始视频/演讲、小宇宙播客、权威媒体采访（36氪/晚点/财新/极客公园）、本人著作/微博。知乎和微信公众号永远排除

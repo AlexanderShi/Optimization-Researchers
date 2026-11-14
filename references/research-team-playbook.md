@@ -142,7 +142,7 @@ apt-get update && apt-get install -y tesseract-ocr ghostscript     # OCR；ps2pd
 | 步 | 命令 / 工作流 | 输入 → 输出 | 闸门（通过标准） | 成本（每人） | 并行 |
 |---|---|---|---|---|---|
 | T0 定义 | `new_team.py --init` → 补 `team.json`（`--lookup` 从 DBLP 补 id，`--set-member` 改字段）→ `new_team.py`（只做轻量档加 `--base-tier`）。有客座时写进 `team.json` 的 `guests`（`--init` 加 `--guests "home/slug;…"`，或照 `team.example.json` 手写） | 选人结果 → `team.json`、团队目录骨架、README / 圆桌 / DEEP-READING 模板；客座只在 README 和圆桌里有行，不铺目录 | `.md` 里不剩 `{{`；`[TODO: …]` 就是待办，每条都写明由哪一步填；没有撞姓警告；`check_links.py` 0 broken（README 指向各人 SKILL.md 的链接记为 pending，T1 写）；每位客座都能解析（`new_team.py` 报错就停，多半是他主队的分支还没合进来。只有客座解析不了、别的都没问题时，本队自己的成员可以先铺：把这几位从 `team.json` 的 `guests` 里拿掉再跑（`--init` 时从 `--guests` 里拿掉；`--guests` 只写了这几位时，不带 `--guests`），等他们能解析了再写回 `guests`、跑 `--add-guest`（第八节「加一位客座成员」第 2–3 步）；客座都是在等主队（主队的 `team.json` 不在，他不在那队的 `members` 里、也没有只差大小写的 slug，或他在主队还没有文件夹）时，`new_team.py` 会打印这条提示，其余原因照报错那一行就地改）；客座的链接指向 `../<home>/<slug>/SKILL.md`，他主队的 T1 跑到一半（有笔记、还没有 SKILL.md）时算坏链 | 0 | — |
-| T1 基础Skill | `team-base-skills.js`（`to` / `from` 分段，见下方人工检查点；`tier: "quick"` 只跑调研 01–03）；只给本队成员，客座的 T1 在他的主队跑 | 成员信息 → `<M>/SKILL.md`（含 Roundtable Card）、`research/01–06` | `quality_check.py` 12/12 | 16–20 agent（quick 档 13–17） | 每人一个工作流 |
+| T1 基础Skill | `team-base-skills.js`（`to` / `from` 分段，见下方人工检查点；`tier: "quick"` 只跑调研 01–03）；只给本队成员，客座的 T1 在他的主队跑 | 成员信息 → `<M>/SKILL.md`（含 Roundtable Card）、`<M>/FIDELITY.md`、`research/00-prior.md`、`01–06`、`holdout.md` | `quality_check.py` 12/12 | 23–27 agent（quick 档 20–24） | 每人一个工作流 |
 | T2 团队层 | `team-layer.js`（`members` 放**全体**；只做轻量档时 `deep_tier: false`）。有客座时，等每位客座在本分支上都有 SKILL.md 再跑（先合并他主队的分支）；客座由 `make_args.mjs` 放进 `guests`，只读 | 各人的 Roundtable Card → README、圆桌 SKILL.md、各人 RESOURCES.md（客座的文件只读、不改） | `check_links.py` 0；每人都有 Roundtable Card；每条 fault line 双方都有证据；模板闸门：轻量档没有输出，深读档只剩标给 T3 各步的 TODO。圆桌不跑 `quality_check.py` | 每人 2 个，团队另加 4–5 个；每位客座另加 1 个只读的（客座的 T1、T3、T4 在他的主队跑，T3.8 只多读一遍他的文件，不另加 agent） | 团队一次 |
 | T3.1 发表全表 | `team-harvest.js`（DBLP 走 `dblp_works.py`；`acquire` 默认 false，T3.2 在主会话里跑） | Scholar id、DBLP、Crossref → `works.json`、`scholar.md`；再做独立审计 | `validate_works.py` 0 errors；`S` 行数与 Scholar 总数对得上。没有 Scholar 主页时，改为与 `dblp_works.py --pid` 的记录数对账（`D` 行；差额要逐条说得清，例如并进正式版的 CoRR 预印本、重复、编辑的文集），`H` 行与主页 CV 对账 | 3 agent / 40 万 token | 每人一个 |
 | T3.2 开放全文 | `acquire_fulltexts.py` | `works.json` → PDF、`txt/`、`INDEX.md`、`abstracts.json` | INDEX 行数 = `works.json` 里不是重复（`dup_of` 为空）的条目数（`team_status.py` 的 Indexed 列打 ✓；书的开放部分 B### 另计） | 0 agent；arXiv 请求间隔 3 秒 | 每人一个后台进程 |
@@ -173,8 +173,10 @@ node scripts/workflows/make_args.mjs team-base-skills --team product/<team> --se
 
 **人工检查点。** 对应主 `SKILL.md` 的 Phase 1.5 和 2.5：
 1. T1 先用 `to: "review"` 跑，把调研摘要摆给用户看。这时就 commit 调研笔记 01–06（`bash scripts/team_commit.sh $T/$M "research($M): notes 01–06"`），用户看摘要期间容器可能被回收；
-2. 再用 `from: "synthesis", to: "synthesis"` 跑，把提炼结果和 Roundtable Card 摆给用户看，确认视角没有重叠、座位表排得开；
-3. 最后用 `from: "build"` 跑完。
+2. 再用 `from: "holdout", to: "synthesis"` 跑（先封存 3–5 件一手材料当考题，再提炼），把封存清单、提炼结果和 Roundtable Card 摆给用户看，确认视角没有重叠、座位表排得开；
+3. 最后用 `from: "build"` 跑完（最后一步是 `validate`），把每人的验证结果（返回值的 `members[].increment` 和成员目录的 `FIDELITY.md`）摆给用户看：封存题带 Skill 与不带的总分（差 2 分以内算打平）、任务题里有据和编造的依据各几条、边界题合不合格。
+
+先验快照（`prior`，调研之前）、封存（`holdout`，提炼之前）和两臂增量测试（`validate`，精修之后的最后一步）是 2026-11 从女娲 v2 移植的，规则在 [research-extraction-framework.md 第十三节](research-extraction-framework.md)。三点要记住：封存件在验证做完之前不进 `SKILL.md`；工作流不按增量测试的结果修 Skill（修的人要读笔记，一修就把考题抄进去了），结果不好由用户决定要不要回到提炼；以后手工改过 Skill，重跑 `from: "validate"`；调研笔记在移植之前就写好的成员，先单跑 `from: "prior", to: "prior"` 再 `from: "holdout"`。
 
 第 2 步的提炼记录放在 `<scratch>/base-skills/<slug>/`，不在 git 里。scratch 丢了，第 3 步就没有输入：重跑 `from: "synthesis"`（每人约 1 个 agent），不用从调研重来。
 
@@ -369,7 +371,7 @@ DFO 深读档的实测：5 人，Scholar 935 行，421 篇开放全文，795 张
 | 发表全表 T3.1 | 15 / 190 万 | 3 / 40 万 | 3% |
 | 团队整合 T3.8 | 4 / 100 万 | 团队一次 | 2% |
 
-合计：深读档每人约 45 个 agent、1,100 万 token；这 220 个 agent 共约 32 agent-小时（每人约 6.5）。轻量档按工作流结构估：T1 每人 16–20 个 agent（quick 档 13–17），T2 每人 2 个、团队另加 4–5 个（圆桌、README、两位核查员，有问题时再加一位修复）；DFO 这两步没有计量 token。T3.8 现版每次 6–7 个；T4 现版多一位复核员，一批时每人 5–6 个。实际耗时 ≈ agent-小时 ÷ 同时在跑的 agent 数，所以要按第二节的办法把并行开足。
+合计：深读档每人约 45 个 agent、1,100 万 token；这 220 个 agent 共约 32 agent-小时（每人约 6.5）。轻量档按工作流结构估：T1 每人 23–27 个 agent（quick 档 20–24），T2 每人 2 个、团队另加 4–5 个（圆桌、README、两位核查员，有问题时再加一位修复）；DFO 这两步没有计量 token。T3.8 现版每次 6–7 个；T4 现版多一位复核员，一批时每人 5–6 个。实际耗时 ≈ agent-小时 ÷ 同时在跑的 agent 数，所以要按第二节的办法把并行开足。
 
 **WebSearch 的分配。** 每个会话约 200 次，所有 agent 共用，用完为止（DFO 在后期用完过）。工作流的 `search_budget` 默认按下面分（5 人团队）；按阶段分会话跑，每个会话都在预算内：
 

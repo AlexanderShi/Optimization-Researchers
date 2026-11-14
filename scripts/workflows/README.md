@@ -12,7 +12,7 @@
 
 | 步 | 工作流 | 做什么 | `members` | 产出 | 工作流里跑的闸门 | 典型成本 |
 |---|---|---|---|---|---|---|
-| T1 | `team-base-skills.js` | 每人走女娲研究Skill的 Phase 1–5：6 个调研 agent（01–06）→ 1.5 复核 → 四重验证提炼 → 按 `research-skill-template.md` 写 SKILL.md（含 Roundtable Card）→ 盲测与修 → 双视角精修 | 一位 | `<M>/SKILL.md`、`references/research/01–06`、`RESOURCES.md` 行；学生模式另有 3 个文件；scratch 里的 Phase 2 记录 | `merge_research.py`、`quality_check.py` 12/12、`check_links.py` | 每人 16–20 个 agent（quick 档 13–17）；DFO 未计量 token |
+| T1 | `team-base-skills.js` | 每人走女娲研究Skill的 Phase 1–5：先验快照 → 6 个调研 agent（01–06）→ 1.5 复核 → 封存 3–5 件一手材料 → 四重验证提炼（先对照先验筛增量）→ 按 `research-skill-template.md` 写 SKILL.md（含 Roundtable Card）→ 盲测与修 → 双视角精修 → 验证（两臂增量测试：带 Skill 对不带，盲评）| 一位 | `<M>/SKILL.md`、`<M>/FIDELITY.md`、`references/research/00-prior.md`、`01–06`、`holdout.md`、`RESOURCES.md` 行；学生模式另有 3 个文件；scratch 里的 Phase 2 记录 | `merge_research.py`、`quality_check.py` 12/12、`check_links.py` | 每人 23–27 个 agent（quick 档 20–24）；DFO 未计量 token |
 | T2 | `team-layer.js` | 核对或补写每人的 Roundtable Card；按模板和各人的卡片写圆桌 SKILL.md 与团队 README（fault line 要两边都有证据）；核对各人 RESOURCES.md；两个只读核查员 + 修复。`deep_tier: false`（轻量档）时还把 DEEP-READING.md 换成模板开头的轻量档说明、RESOURCES.md 去掉深读档占位行；在已深读的团队上重跑（如加了成员）时保留 T3.8 写的卡片证据 | 全体（少了谁会记日志） | 团队 `README.md`、`<roundtable>/SKILL.md`、各人 Roundtable Card 与 `RESOURCES.md`、缺失的 `private/README.md`；轻量档另有 `DEEP-READING.md` | `check_links.py` 0、不剩 `{{`、只剩留给后续步骤的 TODO（轻量档一个不剩）、每位成员 12/12、`team_status.py`。圆桌不是研究Skill，不跑 `quality_check.py` | 每人 2 个 + 团队 4–5 个 |
 | T3.1 | `team-harvest.js` | Google Scholar（WebFetch，逐字行 prompt + TOTAL）+ DBLP（SPARQL，`dblp_works.py`）+ Crossref/DataCite → 发表全表；再按年份排序独立审计一遍 | 一位 | `publications/works.json`、`scholar.md`、整行重写的 `RESOURCES.md` 第 1 行（没有 Scholar 主页时 Link 写 DBLP 个人页或主页列表）；`acquire: true` 时还有 `papers/INDEX.md` 等 | `validate_works.py` 0 errors；第 1 行不剩 `[TODO`、`{{` | DFO 实测每人 3 个 / 40 万 token |
 | T3.3 | `team-chase.js` | 计划 agent 跑 `chase_chunks.py` 切块（算好每篇的目标路径）；获取脚本没拿到全文的作品，每 20 篇一个 agent，按 `chase_hints` → 通用开放来源去找合法全文和逐字摘要；最后合并、重建索引，书的开放部分线索记进 `book-leads.json` | 一位 | 放在精确目标路径的 PDF（不进 git）、`abstracts-chase-<date>-r<run>-<块>.json`（同一天重跑 run 加 1，不覆盖没合并的文件）→ `abstracts.json`；`works.json` 的 `urls`；`papers/book-leads.json` | `merge_chase.py`、`validate_works.py` | DFO 实测每人 5 个 / 90 万 |
@@ -53,7 +53,7 @@ T3.2（`acquire_fulltexts.py`）和 T3.4（`plan_reading_batches.py --out-dir <s
 
 | 工作流 | 特有参数 |
 |---|---|
-| `team-base-skills.js` | `from` / `to`：`research`、`review`、`synthesis`、`build`、`test`、`refine` 中的一段（全部）；`tier`：`standard` / `quick`（只跑调研 01–03）；`dims`：如 `["02","06"]`，只跑这几个调研 agent，覆盖 `tier`；`user_context`：用户自己的领域和阶段；`word_budget`（8000）；`example_team`：一支已完成团队的目录，只学形状；`search_budget`（每人 36：复核 3、资源表 1、每轮评分 1，其余均分给调研 agent，标准档每个 5） |
+| `team-base-skills.js` | `from` / `to`：`prior`、`research`、`review`、`holdout`、`synthesis`、`build`、`test`、`refine`、`validate` 中的一段（全部）；`tier`：`standard` / `quick`（只跑调研 01–03）；`dims`：如 `["02","06"]`，只跑这几个调研 agent，覆盖 `tier`；`user_context`：用户自己的领域和阶段；`word_budget`（8000）；`example_team`：一支已完成团队的目录，只学形状；`search_budget`（每人 36：复核 3、资源表 1、每轮评分 1，其余均分给调研 agent，标准档每个 5） |
 | `team-layer.js` | `roundtable`（`team.json` 的 `roundtable`）；`deep_tier`（true：保留留给 T3.1、T3.6、T3.8 的 TODO；false：轻量档，DEEP-READING.md 换成轻量档说明、RESOURCES.md 第 1 行记 not harvested (base tier) 并删掉深读档占位行、README 删掉深读档专用部分，一个 TODO 都不留）；`example_team` |
 | `team-harvest.js` | `audit`（true）；`acquire`（false；true 时每人再跑一次 `acquire_fulltexts.py`，很慢）；`search_budget`（每人 2） |
 | `team-chase.js` | `chunk_size`（20）；`max_searches`（每篇最多搜几次，4）；`skip_ids`：`{"<slug>": ["S012", …]}`；`only_chunks`：`{"<slug>": [1, 3]}`，只（重）跑这几块；`merge`（true）；`search_budget`（每人 24，按块均分） |
@@ -85,7 +85,7 @@ Workflow({ scriptPath: "<repo>/scripts/workflows/team-read.js", args: { /* make_
 - **`args` 传 JSON 对象。** 传字符串脚本也能解析，但一不小心就会变成整段字符串。
 - **每人一个工作流，并行启动。** 每个工作流的并发上限是 min(16, CPU 数 − 2)，4 核容器只有 2。按成员的工作流（T1、T3.1–T3.7、T4）给每人各起一个，`members` 只放这一位，在同一条消息里一起发出。T2 和 T3.8 要等全体，只起一个。
 - **续跑。** 工作流中断、被停或改了脚本以后，用同样的 `scriptPath` 和 `args` 加上一次结果里的 `runId`：`Workflow({scriptPath, args, resumeFromRunId: "<runId>"})`。没改过的 agent 调用直接返回缓存结果，从第一个改动过的调用开始重新跑。脚本自己也有续跑的办法：T1 的 `from`/`to`，T3.5 的 `overwrite: false` 与 `only`，T3.3 的 `only_chunks`，T3.6 和 T4 的 `from`（人工修好 SKILL.md 后用 `from: "verify"` 只重跑复核和修复，每人省下约 240 万 token 的重新挖卡片）。
-- **人工检查点。** T1 先用 `to: "review"` 跑，把调研摘要给用户看；再用 `from: "synthesis", to: "synthesis"`，看提炼结果和 Roundtable Card；最后 `from: "build"` 跑完。
+- **人工检查点。** T1 先用 `to: "review"` 跑，把调研摘要给用户看；再用 `from: "holdout", to: "synthesis"`（先封存 3–5 件一手材料当考题，再提炼），看封存清单、提炼结果和 Roundtable Card；最后 `from: "build"` 跑完，最后一步 `validate` 在精修之后的 `SKILL.md` 上做两臂增量测试：看 `members[].increment` 和每人的 `FIDELITY.md`（封存题带 Skill 与不带的总分，差 2 分以内算打平；工作流不按这项测试去修 Skill，结果不好由用户决定）。以后手工改过 Skill，重跑 `from: "validate"`。`prior`、`holdout`、`validate` 三步是 2026-11 从女娲 v2 移植的，都是可选的：`from: "research"` 不写先验，`from: "synthesis"` 不封存（`validate` 就没有封存题，`FIDELITY.md` 会写明），`to: "refine"` 不验证。调研笔记在移植之前就写好的成员：先 `from: "prior", to: "prior"`（那个 agent 不读任何文件，先验仍是盲写的），再 `from: "holdout"`。规则见 `references/research-extraction-framework.md` 第十三节。
 - **每一步做完就 commit，长阶段中途也 commit。** 容器是临时的：`bash scripts/team_commit.sh <路径> "<说明>"`（先暂存，暂存区里有 PDF、PostScript、DjVu、EPUB、`txt/` 或 `private/` 下的文件就停下，退出码 3）。T3.2、T3.5、T3.6 这种一跑几小时的阶段，每 30–60 分钟提交一次检查点（已完成批次的卡片可以先提交）。每个工作流的返回值里有 `next`，写着该 commit 什么、下一步跑什么。
 
 ## 四、先预览：`dry_run.mjs`
