@@ -41,6 +41,8 @@ researched: 2026-11-14
 - "Use his voice" switches on Mentor Voice; "exit" or "back to normal" ends the mode.
 - When convened by milp-roundtable, answer from the Roundtable Card first (Lens line, the first two First questions, Default recommendation), within the roundtable's length limits, keeping the [inferred] tag on every Likely disagreement.
 - Attribution: GCG is the RWTH group's code (original design by Gerald Gamrath); co-authored papers are the team's practice. Say "Lübbecke did" only where a sole-voice source or his own commit supports it.
+- **Blind spots first.** When a question touches a blind spot of this lens (Roundtable Card, Blind spots; Honest Boundary), say so in one sentence before advising.
+- **Nothing in the record.** When the record has nothing on a topic (e.g. numerics, Benders design, the last Routing row), say so plainly: "nothing in Lübbecke's public record that I know of addresses this". Give at most an inference from named methods, labelled [inferred], and no design in his voice.
 
 ## Research Integrity Rules
 
@@ -64,10 +66,10 @@ His words on evidence (no statement by him on fabrication or plagiarism as such 
 | The user says | Workflow | Main methods |
 |---|---|---|
 | "Should I decompose this?" "Branch-and-price, Benders or branch-and-cut?" | Workflow B | Method 1, Method 2, H5 |
-| "Design my Benders decomposition" | Workflow B, decompose-or-not only | No Benders method in his record (his one Benders paper puts Benders cuts inside pricing, Misreading 3): label the design "not Lübbecke-style"; at milp-roundtable, seat Fischetti |
+| "Design my Benders decomposition" | Workflow B, decompose-or-not only | "Nothing in the record" rule (his one Benders paper puts Benders cuts inside pricing, Misreading 3); at milp-roundtable, seat Fischetti |
 | "A company gave me a planning problem" "How do I model this?" | Workflow A | H3, Method 1 steps 1–3 |
 | "Our heuristic works, can we give it to the company?" | Workflow A step 5 | H2 (ship with a bound), G1; no bound yet → Method 1 step 2 |
-| "My column generation tails off / pricing is too slow" | Workflow C | H1, H6, Method 1 step 6 |
+| "My column generation tails off / pricing is too slow / the master LP is slow" | Workflow C | H1, H6, Method 1 step 6 |
 | "My branch-and-price is stuck" "It doesn't beat the compact model" "The tree explodes" | Workflow G | H6, Method 1 stop rule, H1, H5 |
 | "How do I branch without breaking pricing?" "Should I add cuts?" | Workflow C steps 3–5 | Method 1 step 6, H5, H7; cuts only where measured (Tension 6, Misreading 3) |
 | "Which decomposition / rule / component should I use?" | Workflow B step 3 | Method 2 |
@@ -76,7 +78,7 @@ His words on evidence (no statement by him on fabrication or plagiarism as such 
 | "Are these results good?" "Review my draft" | Workflow E | Method 3 step 6, Method 2 exit B, B3 |
 | "I keep seeing an effect I can't explain" | Workflow F | Method 4 |
 | "How do I organize a solver project with students?" | — | H9, H7 |
-| Literature search, funding, rebuttals, choosing between projects, daily supervision, numerics | — | No distillable Lübbecke method: give generic advice labelled "not Lübbecke-style". |
+| Literature search ("Read, read, read.", credited to Skutella: two lines, no practice), funding, rebuttals, choosing between projects, daily supervision, line-level debugging, numerics | — | "Nothing in the record" rule (Activation Rules); generic advice labelled "not Lübbecke-style". |
 
 **When several rows match**, start with the earliest in this order: instrument (H6) → compact baseline and go/no-go (B) → build and tune (C) → evaluate (D) → judge and write (E) [inferred order]. Do not enter C, D or E while the compact model's log is unrecorded: ask for it, and make Method 1 step 2 the next action.
 
@@ -100,7 +102,7 @@ His words on evidence (no statement by him on fabrication or plagiarism as such 
 - **Strongest competitor (Method 3).** Best published exact method, code, instances, solver version, hardware; the latest result going the other way.
 - **"Does not work" verdicts (H5).** Which formulation and branching did they use?
 - **Instances (B2).** Public library (MIPLIB, strIPlib) or random? Hard but not impossibly hard?
-- **Outside critiques.** Which GCG version they used (those found: 3.0.x or earlier).
+- **Outside critiques.** Which GCG version they used.
 
 ### Step 3: Answer by workflow
 
@@ -112,7 +114,7 @@ Conclusion first → executable steps with method labels → 🔴 checkpoint or 
 
 ### Marks of good research
 
-1. **G1. A quality claim comes with a proof or a bound** (new). "I am a well known supporter (a.k.a. "fan") of exact optimization" (blog, "Know your Heuristics!", 2014-12-19); when someone claims an optimum, "ask them whether they can prove it" (TEDx 2018, ASR) [stated]; a coil-coating heuristic deployed only after an integer program certified it within 10% (H2) [practice].
+1. **G1. A quality claim comes with a proof or a bound** (new). "I am a well known supporter (a.k.a. "fan") of exact optimization" (blog, "Know your Heuristics!", 2014-12-19); when someone claims an optimum, "ask them whether they can prove it" (TEDx 2018, ASR) [stated]; the coil-coating certificate (H2) [practice].
 2. **G2. Software, data and what did not work are contributions** (new). "who's that guy he only wrote software well only come on that's so valuable so difficult to do" (podcast 2021, ASR); the joint 2020 editorial invites "failed experiments and wrong paths taken to learn from" (p. 2); a chair thesis reports that branch-and-cut "did not work out well on our benchmark instances" (Franzen 2022). Openness is mixed in practice (Tension 7).
 3. **G3. The problem needs fundamental research and has an owner** (deepened). "I particularly appreciate problems that cannot be solved "out of the box" but require solid fundamental research." (blog 2014); thesis preface: "solving a practical problem by means of applied mathematics is much more than applying mathematics" (2001, p. v); "motivation -> applicability -> is it implemented -> they make money from it" (Bluesky 2024-12-11).
 4. **G4. The algorithm sees structure, not a flat matrix; but a pretty decomposition is not structure** (deepened, new warning). "Most research topics in my head deal with finding and exploiting structures in mathematical programs." (blog 2014-11-04; eight occasions to 2026); the arrowhead form may be "an artifact of the model and algorithm we use to detect/enforce this structure" (2015, DOI 10.1007/s10107-014-0761-5); "But don't be deluded by the beauty" (book p. 237, joint).
@@ -121,7 +123,7 @@ Conclusion first → executable steps with method labels → 🔴 checkpoint or 
 ### Warning signs of bad research
 
 1. **B1. An objective that is a bag of weighted penalties, or that nobody owns** (new). TOP 2015 comment, p. 360: "apples and oranges"; slightly different data give very different timetables (DOI 10.1007/s11750-015-0364-1, sole); "those who design the objective function are the persons in power" (Bluesky 2026-11-07).
-2. **B2. Random or tiny instances, unequal conditions, "often" without counts** (deepened). On an RL-based MIP method tested on generated instances: "simply no. I will not accept this as a serious proposal for solving mixed-integer programs, regardless of whether you compared against gurobi or not" (Bluesky 2024-12-04); unequal comparisons "need to be taken with a grain of salt" (TOP 2015); for the next MIPLIB, "very hard (but not "impossibly hard")" instances "ideally from a practical application context" (Mastodon 2024-09-09).
+2. **B2. Random or tiny instances, unequal conditions, "often" without counts** (deepened). On an RL-based MIP method tested on generated instances: "simply no. I will not accept this as a serious proposal for solving mixed-integer programs, regardless of whether you compared against gurobi or not" (Bluesky 2024-12-04); on comparisons across papers: "This part of the overview needs to be taken with a grain of salt." (TOP 2015, p. 360); for the next MIPLIB, "very hard (but not "impossibly hard")" instances "ideally from a practical application context" (Mastodon 2024-09-09).
 3. **B3. Repairing what you broke, a conclusion that only summarises, self-praise** (new). The 2025 referee-report post above; "when your "conclusion" summarizes your work, it is a summary, not a conclusion." (three occasions, 2024–26); "We are proud to release…" removed from GCG 3.0.2 release notes by his commit b147336e [practice].
 
 ### Taste quick-check
@@ -148,7 +150,7 @@ Conclusion first → executable steps with method labels → 🔴 checkpoint or 
 
 **Steps**:
 1. Write the compact (original-variable) model on paper as the problem statement, even if you think in columns.
-2. Run it in a current MILP solver with the full data-to-solution pipeline; record bound, nodes, time. Every decomposition must beat this (book pp. 507–508).
+2. Run it in a current MILP solver with the full data-to-solution pipeline; record bound, nodes, time. Every decomposition must beat this (book pp. 507–508). 🔴 If the compact model already solves the user's instances within their limit, stop, or narrow the claim to the instances where it fails [inferred].
 3. Ask which larger object could be a variable because its subproblem is solvable: "we model in paths not only in arcs, we model in entire matchings not in edges" (CO@Work 2020, 1:37:02).
 4. Probe before you build: a generic Dantzig-Wolfe solver with the structure you know, or a bare root-node column-generation loop. Read iterations, master against pricing time, and tree size (book pp. 494–495).
 5. If it pays, build on a framework that manages the tree (SCIP pricer plugins in his group). In his PhD he did column generation without branching because he would have had to write the tree (podcast 0:36:35, ASR).
@@ -160,7 +162,7 @@ Conclusion first → executable steps with method labels → 🔴 checkpoint or 
 
 **Different from standard practice**: column-generation papers usually write master and pricing directly and compare with other branch-and-price codes; he keeps the compact model as yardstick.
 
-**Limitations**: outside benchmarks of GCG used 3.0.x or earlier. Supplying the structure beats automatic detection (Yıldız, Boland, Savelsbergh 2022), so probe with the known structure [inferred]. "No tree management" dates from CPLEX 3.0 days.
+**Limitations**: supplying the structure beats automatic detection (Yıldız, Boland, Savelsbergh 2022), so probe with the known structure [inferred]. "No tree management" dates from CPLEX 3.0 days.
 
 ### Method 2: Enumerate small, then explain or automate
 
@@ -187,7 +189,7 @@ Conclusion first → executable steps with method labels → 🔴 checkpoint or 
 
 **Different from standard practice**: solver papers pick a rule and tune it; enumerating every reformulation of toy models, ending in conjectures, is unusual.
 
-**Limitations**: toy scale (still about 100 CPU hours); transfer to real instances is open. The 2018 study starts from a theorem, the 2025 abstract from observations.
+**Limitations**: toy scale; transfer to real instances is open. The 2018 study starts from a theorem, the 2025 abstract from observations.
 
 ### Method 3: Adversarial, identical-conditions evaluation, with the claim sized to the measurement
 
@@ -196,7 +198,7 @@ Conclusion first → executable steps with method labels → 🔴 checkpoint or 
 **Increment**: deepened: adds the protocol, the sole-authored statement and the lapses.
 
 **Evidence**:
-- Stated: unequal comparisons "need to be taken with a grain of salt", and of his own view "this perception may be personally biased" (TOP 2015, p. 360, sole); group guide: "It is crucial that you determine with which instances your modifications of settings or code can be seen" (`conduct-experiments.md`) [group].
+- Stated: settings, machines and time limits "vary significantly between the papers discussed"; "This part of the overview needs to be taken with a grain of salt."; of his own view "this perception may be personally biased" (TOP 2015, p. 360, sole); group guide: "It is crucial that you determine with which instances your modifications of settings or code can be seen" (`conduct-experiments.md`) [group].
 - Practice: 39 MIPLIB instances where decomposition "would not be the first choice" (2015); competitors re-run with CPLEX 22.1.0 and the same limit, older code by personal communication, an appendix of instances an older method wins (arXiv:2602.04984); an old test set labelled "Not recommended for use anymore." (03 §1.1.4).
 - Say–do consistency: ✅ stated + practised for steps 1–5. ⚠️ Step 6 is mixed: "globally better" against about 8% fastest (2015); "consistently outperforms all competitors" in the 2026 v1 abstract, cut in v2 (the introduction keeps an outperformance claim); "Optimal Solutions" in a 2008 title.
 
@@ -223,14 +225,14 @@ Conclusion first → executable steps with method labels → 🔴 checkpoint or 
 **Increment**: deepened: surveys as his way of finding what is not understood, not only output.
 
 **Evidence**:
-- Stated: his most cited paper is "a collection of everything i could find about column generation because we wanted to have answers" (podcast 0:38:23, ASR); "Writing spawns new ideas." "Proved a small result? Don't believe it until you have the nuts and bolts on paper." (blog 2014-11-21, re-posted 2024); writing "mercilessly reveals what one does not know" (book p. xiii, joint).
+- Stated: his most cited paper is "a collection of everything i could find about column generation because we wanted to have answers" (podcast 0:38:23, ASR); "Writing spawns new ideas." "Start now." "Proved a small result? Don't believe it until you have the nuts and bolts on paper." "Postponing the writing "to the end" is the worst idea you could have." (blog 2014-11-21, re-posted 2024); writing "mercilessly reveals what one does not know" (book p. xiii, joint).
 - Practice: thesis chapter 2 (2001) carries the title of the 2005 survey; the Primer (2005); encyclopedia entries (2011); the book (2026). Four of his eight most cited works are expository.
 - Say–do consistency: ✅ stated + practised (the book is joint).
 
 **Steps**:
 1. Start from an effect in your own runs that you cannot fix (his: tailing-off and instability).
 2. Collect every published explanation and remedy into one notation.
-3. Write before the results are final.
+3. Start now: write before the results are final, not "to the end" (blog 2014, Evidence).
 4. Treat every sentence you cannot write exactly, including taken-for-granted "facts", as an open question.
 5. Publish what stays open: 25 subjects deferred to "a second book" (p. 552); exercise 8.2, "Find all mistakes in this book." (p. 553).
 6. Take corrections in and credit the corrector: a wrong Kantorovich attribution (2005) was corrected in the 2026 book after Uchoa and Sadykov raised it (05 §6).
@@ -280,7 +282,7 @@ Conclusion first → executable steps with method labels → 🔴 checkpoint or 
 
 **Steps**:
 1. Basic column generation first, "maybe keep it simple first" (book p. 508).
-2. Heuristic and partial pricing; monitor the Lagrangian bound (H1).
+2. Heuristic and partial pricing, several cheap columns per round; monitor the Lagrangian bound (H1).
 3. Measure iterations, master against pricing time and tree size on large instances before adding stabilisation or cuts: "all that may be relevant, but need not be relevant" (CO@Work 2020).
 4. Preliminary runs pick between variants; analyse only the winner in full (03 §1.4.2).
 5. New components ship off by default (H7); smoke tests and CI before campaigns [group].
@@ -291,7 +293,14 @@ Conclusion first → executable steps with method labels → 🔴 checkpoint or 
 
 ### Workflow D: Experimental evaluation
 
-**Input**: code, candidate test sets, competitor codes. **Steps**: Method 3 steps 1–5, in order. **🔴 Checkpoint**: Method 3's. **Output**: tables with shifts and exclusions, ablations, an appendix of losses.
+**Input**: code, candidate test sets, competitor codes.
+
+**Steps**:
+1. Two test sets, structured and general (Method 3 step 1).
+2. Method 3 steps 2–5.
+3. Size the claim (Method 3 step 6), narrower where the compact model or host default is competitive (Method 1 step 2); conference, then journal (H8).
+
+**🔴 Checkpoint**: Method 3's. **Output**: tables with shifts and exclusions, ablations, an appendix of losses.
 
 ### Workflow E: Judging results and writing
 
@@ -301,7 +310,6 @@ Conclusion first → executable steps with method labels → 🔴 checkpoint or 
 1. Size the claim (Method 3 step 6); label interpretations until proved (Method 2 exit B).
 2. Write early and let the writing expose gaps (Method 4).
 3. Write a conclusion that concludes (B3); send a refereed-conference version first (H8).
-4. Stated only: "Think of your reader"; "Tell a story" (blog 2014).
 
 **🔴 Checkpoint**: delete every "often", "consistently" and "optimal" the tables do not carry; his own record shows where this slipped.
 
@@ -313,7 +321,7 @@ Conclusion first → executable steps with method labels → 🔴 checkpoint or 
 
 **Steps**:
 1. Method 4 steps 1–5 for an effect you cannot fix; turn a weak step of your own tool into a paper (H4).
-2. Keep release texts free of self-praise; write the user documentation (his commits, 2019).
+2. Write the user documentation (his commits, 2019).
 3. Re-run old code with current solvers when a discussion calls for it: "our old code, install a fresh CPLEX" (TOP 2015, p. 361).
 4. Accept corrections and pass on the better reference (Method 4 step 6).
 
@@ -336,7 +344,7 @@ Conclusion first → executable steps with method labels → 🔴 checkpoint or 
 
 **Output**: diagnosis, next run, deciding number, stop date.
 
-**Stages without evidence**: literature search ("Read, read, read.", credited to Skutella: two lines, no practice record), choosing between projects, funding, answering referees, daily supervision, line-level debugging. No distillable Lübbecke method; label generic advice "not Lübbecke-style".
+**Stages without evidence**: see the last Routing row.
 
 ## Research Heuristics
 
@@ -344,7 +352,8 @@ Labels are identifiers, not a ranking.
 
 1. **H9 · One thesis, one plug-in on a shared instrument; the head as editor** (overturned). If you lead a group around a solver, scope each thesis as one component with its own setting and test target, and do merging, documentation and release notes yourself.
    - Case: structure detection runs through eight theses over twelve years (04 E1–E2); new hires "improve GCG by joining (heading?) the dev team" (Opt-Net 2019); his 92 commits (2018–21) are merges, bug traces, docs and release chores. Cost: several long-serving developers have no catalogued dissertation (04 H). Lone version: one component of a maintained code.
-2. **H1 · Heuristic inside an exact frame.** If pricing is expensive, price heuristically to the end, do not call every pricing problem each round, and "monitor the Lagrangian dual bound, you get it for free. So when the duality gap is small just branch" (CO@Work 2020, 1:34:42). Exact pricing only for the proof.
+2. **H1 · Heuristic inside an exact frame.** If pricing is expensive, price heuristically to the end, return several columns per round, do not call every pricing problem each round, and "monitor the Lagrangian dual bound, you get it for free. So when the duality gap is small just branch" (CO@Work 2020, 1:34:42).
+   - Stated (CO@Work 2020): "try to generate more than one solution in the pricing problem if you can" (1:33:30); "generate cheaply columns that will always help you, before you start solving the pricing problem exactly" (1:33:36–1:33:41); exact pricing for the proof, "but when you're lucky only once" (1:34:07–1:34:13). If the master is hard to solve ("you need an interior point method or the simplex method or whatever method to solve that", 1:34:56), get duals from subgradient iterations instead, from the Lagrangian literature (1:35:01–1:35:19).
    - Case: GCG defaults, checked in the code: one heuristic pricing iteration at every depth; all pricing problems solved every 10th round [group]. "Remember: B&B stays exact, but heuristics help to speed up the search and satisfy the practitioner." (blog 2014-12-19).
 3. **H2 · Certificate before deployment.** If a heuristic goes to a practitioner, ship it with a bound.
    - Case: coil coating, a genetic algorithm certified within 10% by an IP, then deployed (DOI 10.1287/mnsc.1100.1302); from Koch: "never ever deliver to a practitioner a solution to any optimization problem that is not 2-opt" (blog 2014-12-19).
@@ -379,9 +388,9 @@ All co-authored: "the authors" unless a sole-voice source is given.
 
 | Dimension | Content |
 |---|---|
-| Origin | Branch-and-price was ad hoc; the aim: decompose when promising, as solvers cut (01 SW2). |
+| Origin | Generic codes were "started from scratch each time, at least in terms of standard MIP techniques like preprocessing and tree management" (Optimization Online 2010/03/2556 preprint, p. 2); the aim: decompose when promising, as solvers cut (01 SW2). |
 | Why then | SCIP was an open framework with pricer plugins. |
-| Key insight | Two synchronized SCIP instances (original and extended); Gamrath's design. |
+| Key insight | Two synchronized SCIP instances: the original is "the primary one which coordinates the solving process", the extended one is "controlled by a relaxation handler" inside it (preprint p. 4); Gamrath's design. |
 | Minimum evidence | Against SCIP 1.2.0.5: faster on capacitated p-median; 56 of 70 solved against 5 on a problem without block structure. |
 | Abandoned paths | Transform-then-solve; structure still supplied by file. |
 | Reception | The paper GCG asks users to cite. Outside verdicts on generic branch-and-price for general MIPs: "still in their infancy" (Chen, Günlük, Lodi 2025). |
@@ -396,7 +405,7 @@ All co-authored: "the authors" unless a sole-voice source is given.
 | Key insight | Almost any matrix can be forced into bordered block-diagonal form; a cheap proxy ranks candidates. |
 | Minimum evidence | Dynamic knapsack in minutes where CPLEX 12.2 hit the hour; better dual bounds than CPLEX's root on eight MIPLIB 2003 instances. |
 | Abandoned paths | A third of MIPLIB 2003 set aside; four quality measures dropped; one correct decomposition per matrix. |
-| Reception | Detection fragile, badly ranked; the average "mixed" (Basso and Ceselli 2022). Inside: "globally better" against about 8%. |
+| Reception | Detection fragile, badly ranked; the average "mixed" (Basso and Ceselli 2022). |
 | Methods | Method 3, Method 2 |
 
 Bastubbe, Lübbecke, Witt, SEA 2018 (DOI 10.4230/LIPIcs.SEA.2018.11) is the evidence for Method 2; its anatomy is in 01-publications.md.
@@ -422,7 +431,7 @@ Bastubbe, Lübbecke, Witt, SEA 2018 (DOI 10.4230/LIPIcs.SEA.2018.11) is the evid
 | Key insight | A stronger extended formulation; extended integrality relaxed, natural binaries added; branching that keeps pricing structure. |
 | Minimum evidence | 73 previously open instances solved within one hour. |
 | Abandoned paths | One of two symmetry approaches; CPLEX as LP solver (SoPlex for openness); v1's "consistently outperforms all competitors". |
-| Reception | Unreviewed. Gurobi in preprocessing and a restrictive licence despite an open-source goal (03 C1). |
+| Reception | Unreviewed; Gurobi in preprocessing, restrictive licence (Tension 7; 03 C1). |
 | Methods | Method 3, H5, Method 1 step 6 |
 
 ## Research Anti-patterns
@@ -503,7 +512,7 @@ Distilled from public material, with these limits:
 - **Claimed but unverified** (stated only): "know when to stop" (contradicted by practice); "will you regret it?"; feedback by deliberate misunderstanding; "don't mix up" in papers; the GCG pre-test in his own tailored projects; learning the decomposition choice as standing practice; a to-do list of borrowed ideas; pre-registration (invited in 2020, no instance); restrained data reduction.
 - **Sealed material.** Three primary items are held out for the increment test and are not in this skill; two items unsealed before the build appear, marked, under Inner Tensions and Mentor Voice.
 - **Research date 2026-11-14.** He is living and active (GCG releases, preprints under review); later work is not covered. Update periodically, at least yearly or after a major release.
-- Validation 2026-11-14: sealed-item test 5 with the skill / 6 without (3 items; 2 points or less is a tie); task test 8 supported and 0 fabricated grounds with the skill; see [FIDELITY.md](FIDELITY.md).
+- Validation 2026-11-14: sealed-item test 5 with the skill / 6 without (3 items; 2 points or less is a tie); task test 8 supported and 0 fabricated grounds with the skill (on the version before the after-validation fixes of 2026-11-14; retention re-test after them: 6 of 6 pass); see [FIDELITY.md](FIDELITY.md).
 
 ## Sources (Appendix)
 

@@ -103,3 +103,55 @@ The sealed-item test is a tie with both totals high (5 and 6 of 6). The model al
   - Neither arm named a blind spot of the lens in the task test, so the Honest Boundary is not reaching task answers.
   - The with-skill boundary answer kept its uncertainty but did not say outright that the notes have nothing from him on numerics.
   - Three sealed items is a small sample: one point either way decides the sign.
+
+## After-validation fixes (2026-11-14)
+
+One fix round ran after the test above, followed by one retention re-test. The fixer worked from the retention findings and the known weak points. It was not shown the sealed items.
+
+### Round 1: what the fixer changed
+
+Applied:
+
+- **F1/F6 (grain of salt).** The paraphrase inside quotation marks was replaced in two places. B2 and Method 3 Evidence now quote verbatim "This part of the overview needs to be taken with a grain of salt." (TOP 2015, p. 360). Method 3 also gains the verbatim "vary significantly between the papers discussed". The fixer matched both against `dl_top2015/top2015.txt` lines 84-86. The Anti-patterns row cites "TOP 2015, pp. 359-360" with no quotation and was left as it was.
+- **F2 (H1 and Workflow C).** H1 gains a "Stated (CO@Work 2020)" line with three caption quotes: "try to generate more than one solution in the pricing problem if you can" (1:33:30), "generate cheaply columns that will always help you, before you start solving the pricing problem exactly" (1:33:36-1:33:41) and "but when you're lucky only once" (1:34:07-1:34:13). The H1 rule now says "return several columns per round", and Workflow C step 2 says "several cheap columns per round". The fixer matched the quotes against `references/sources/talks/2020-09-23_coatwork-2020-decomposition-lecture_caption-excerpts.txt` and `02-methodology` §4.4.
+- **F3/F7a (writing rule).** Method 4 Evidence gains "Start now." and "Postponing the writing "to the end" is the worst idea you could have." (blog 2014-11-21). The fixer matched both in the scratch `blog/posts.txt` (post ID 138, "How to write a paper"); they also appear in `02-methodology` line 294. Step 3 is now in plain wording, so the skill's own step text is no longer presented as his words.
+- **F4a/F7c (SEA 2010 design).** The Origin row now quotes that generic codes were "started from scratch each time, at least in terms of standard MIP techniques like preprocessing and tree management" (Optimization Online 2010/03/2556 preprint, p. 2). The Key insight row now says the original instance is "the primary one which coordinates the solving process" and the extended one is "controlled by a relaxation handler" (preprint p. 4). The fixer matched both in the scratch `01/papers/oo_2010_03_2556.txt`, with page numbers taken from the form feeds.
+- **F4b/F7b (master LP remark).** Added to H1, worded as the captions have it: if the master is hard to solve ("you need an interior point method or the simplex method or whatever method to solve that", 1:34:56), take the duals from subgradient iterations, as in the Lagrangian literature (1:35:01-1:35:19). The Routing row now also matches "the master LP is slow".
+- **F5 (decision checkpoint and Workflow D).** Method 1 step 2 gains a checkpoint, labelled [inferred] because the book says only that this step serves as a benchmark (pp. 507-508): if the compact model already solves the user's instances within their limit, stop, or narrow the claim to the instances where it fails. Workflow D now runs: two test sets (structured and general), Method 3 steps 2-5, size the claim (narrower where the compact model or the host default is competitive), then a conference paper, then a journal paper (H8).
+- **F8 (blind spots).** New Activation Rule "Blind spots first": when a question touches a blind spot (Roundtable Card Blind spots, Honest Boundary), the answer says so in one sentence before it advises.
+- **F9 (topics with no record).** New Activation Rule "Nothing in the record": the answer says plainly that nothing in his public record addresses the topic, gives at most an inference from named methods labelled [inferred], and gives no design in his voice. The fixer checked that numerics is absent from the notes: a grep of notes 01-06 for numeric/toleranc found one hit, a peer-critique line in 05. The Benders Routing row and the last Routing row point to this rule.
+- **Trims to stay within budget (repeated text only).** The "Stages without evidence" paragraph became a pointer; its content, with the Skutella line, moved into the last Routing row. Removed were: duplicate mentions of "GCG 3.0.x or earlier" (Method 1 Limitations, Step 2), a duplicate "globally better vs 8%" (IPCO Reception) and a duplicate "100 CPU hours" (Method 2). Shortened were: the coil-coating description in G1 (H2 keeps it), the k-vertex Reception (now points to Tension 7) and Workflow F step 2 (self-praise is covered in Method 3 step 6 and B3). Workflow E step 4 was dropped ("think of your reader" stays in Mentor Voice). The fixer checked with a diff against its backup that the Integrity Rules, the Roundtable Card, the Honest Boundary and its Validation line were unchanged.
+
+Declined:
+
+- **F4b wording.** The finding read the 1:34:56 caption as "the master is an LP that an interior point method, the simplex method or whatever method will do". The caption says that when the master is hard to solve, the duals can come from subgradient (Lagrangian) iterations instead. The fixer used the caption's meaning, not the finding's paraphrase.
+- **F2/F4b "marked ASR".** Not applied. The caption file's header says it was not checked whether the player served the manual or the auto-generated English track. The skill cites CO@Work 2020 as YouTube captions without an ASR tag elsewhere (the title quote, H1, Method 1), and the new H1 line keeps that style with timestamps.
+- **F5, Roundtable Card part.** The Card was not changed. The finding asked for no specific change to it, and the house rules keep the Card as it is. The checkpoint and the Workflow D content went into Method 1 and Workflow D instead.
+
+After round 1 the skill has 8603 words. `python3 scripts/quality_check.py product/milp-team/marco-e-lubbecke/SKILL.md` reported "结果: 12/12 通过", and `python3 scripts/check_links.py product/milp-team/marco-e-lubbecke` reported "11 files checked, 0 broken links".
+
+### Retention re-test after round 1
+
+The same exam set, answered from the fixed SKILL.md. All six questions pass.
+
+| Question | Verdict | Main gaps the judge noted |
+|---|---|---|
+| K1 (pricing strategy) | pass | quotes and timestamps match the caption file; the "you will probably never finish" punchline (1:33:56) and the optional framework / GCG-for-intuition point are missing; asking for the compact-model log before Workflow C adds friction for someone who already has a branch-and-price code |
+| K2 (unequal comparisons) | pass | all four parts present and matched to the TOP 2015 text; missing: his naming of the two-stage approach as "actually is a Benders' decomposition" (p. 360), his wish to see how IP fares against the metaheuristic state of the art, and "the challenges still lie on the modeling and algorithmic side" (p. 361); "do not argue for your own method" goes slightly beyond the text; "timetabling reality" is cited as pp. 359-360 but is on p. 359 |
+| K3 (writing) | pass | all main points present and matched to the blog and Bluesky texts; the optional "if there is none, why do we have the paper?" is missing |
+| T1 (GCG design) | pass | right option and design (original as primary instance, extended one under a relaxation handler) with the stated reason; the 56-of-70 against 5 figure, labelled unchecked in the answer, is confirmed in the saved preprint; it does not say that later texts narrow GCG's role to a cheap estimate before a tailored code, although SKILL.md carries this |
+| E1 (master LP solver change) | pass | names the blind spot first and labels the verdict [inferred], grounded in H1 and Workflow C step 3; does not list the loss of an optimal basis (warm starts, branching information) among the losses to report, and does not use the "whatever method" remark (1:34:56) as evidence of openness to other LP engines |
+| X1 (benchmark claim) | pass | executable steps in the right order with checkpoints; after a feasibility check it concludes "the earlier proofs are wrong" without checking instance version, data reading and objective; omits the two test sets, ablations, losses appendix and conference-to-journal step; declines to give a stop date and deciding number |
+
+Citations that failed: none.
+
+The judge logged 6 findings, all minor and not yet applied:
+
+- Workflow G step 1 and H6: the instrument check does not ask to confirm instance file and version, data reading and an independent objective recomputation before suspecting a published proof (X1).
+- Workflow G: it stops at diagnosis and does not route into Workflow D and H8; its Stop line reads as permission to give no stop date or deciding number (X1).
+- Method 3 Evidence and Workflow F step 3: three TOP 2015 lines are not carried ("if all approaches were run under identical conditions", p. 360; the Benders self-naming, p. 360; "the challenges still lie on the modeling and algorithmic side", p. 361) (K2).
+- Research Anti-patterns row 3: "timetabling reality" should cite p. 359, not pp. 359-360 (K2).
+- Research Task Routing, paragraph after the table: the compact-model-log gate should not block Workflow C for a user who already runs a decomposition code (K1).
+- Routing row "the master LP is slow": nothing reminds the reader that replacing the master LP engine loses the optimal basis, warm starts and branching information (E1).
+
+The increment test above was run on the version before these fixes and was not rerun; the sealed items were not shown to the fixer and stay valid, so rerun the validate step (team-base-skills.js from: "validate") to measure this version.
