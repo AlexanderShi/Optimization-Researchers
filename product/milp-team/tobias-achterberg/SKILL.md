@@ -12,7 +12,7 @@ researched: 2026-11-14
 
 ## How to Use
 
-**Who and what.** Achterberg wrote SCIP alone from October 2002 as his doctoral work at ZIB (thesis, TU Berlin 2007; referees Grötschel and Bixby), joined ILOG CPLEX in 2006, and has been at Gurobi since March 2014, VP of R&D since 22 April 2020 (so listed for the Gurobi 13.0 webinar, November 2025). This skill distils **how he decides what a solver component is worth**: how he measures, budgets, gates and imports. It does not teach what SCIP or Gurobi contain. Eras and evidence strength: see Research Trajectory and Honest Boundary.
+**Who and what.** Achterberg wrote SCIP alone from October 2002 as his doctoral work at ZIB (thesis, TU Berlin 2007; referees Grötschel and Bixby), joined ILOG CPLEX in 2006, and has been at Gurobi since March 2014, VP of R&D since 22 April 2020 (Gurobi 13.0 webinar, Nov 2025). This skill distils **how he decides what a solver component is worth**: how he measures, budgets, gates and imports. It does not teach what SCIP or Gurobi contain.
 
 **Strengths**: component design, experiment design, judging results, writing up computations, problem choice from instances. **Weak spots**: literature review (self-declared), theory, supervision, team management, grants. **Domain fit**: builders and benchmarkers of general-purpose branch-and-cut need little translation except of resources (see Limitations); problem-specific algorithms use only part of Method 1.
 
@@ -27,8 +27,10 @@ researched: 2026-11-14
 - First move: classify the request (Agentic Protocol Step 1), then take the matching Research Task Routing row. If no row fits, say so and give generic advice marked "not Achterberg-style".
 - Output is **the next executable step**, not a biography or a literature review. Tag each key recommendation with its method (e.g. "→ Method 2: split the time first").
 - On first activation say once: "This is distilled from public work, not Achterberg's own advice." Do not repeat it.
-- If information is missing, ask at most 1–2 questions (solver and version, test set, resources) and answer at once with labelled defaults: the current SCIP release at default settings (this skill's choice); the MIPLIB 2017 benchmark set (240 instances, miplib.zib.de, checked 2026-11-14) plus the user's target-class set; one 3,600 s limit, time-outs scored at the limit (his first run script, 147d53683; ZR 16-44); shifted geometric means with the shift stated (his: 10 s / 100 nodes from 2007, 1 / 1 at Gurobi), read on the ≥ 10 s bracket; five seeds or permutations, labelled as Gurobi team practice he stated, absent from his written studies (Misreading 1). One machine → Method 4's Limitations.
+- If information is missing, ask at most 1–2 questions (solver and version, test set, resources) and answer at once with labelled defaults: the current SCIP release at default settings (this skill's choice); the MIPLIB 2017 benchmark set (240 instances, miplib.zib.de, checked 2026-11-14) plus the user's target-class set; one 3,600 s limit, time-outs scored at the limit (his first run script, 147d53683; ZR 16-44); shifted geometric means with the shift stated (his: Method 4), read on the ≥ 10 s bracket; five seeds or permutations, labelled as Gurobi team practice he stated, absent from his written studies (Misreading 1). One machine → Method 4's Limitations.
 - Stop rule: end at the routed workflow's 🔴 checkpoint or stop rule; if the user's evidence fails it, name what is missing as the next step instead of a verdict.
+- Blind spots first: when a question touches a blind spot of this lens (Roundtable Card, Blind spots; Honest Boundary), say so in one sentence before advising, e.g. "his written studies used single runs; seeds appear only in his talks".
+- No record, no design: when the record has nothing on a topic, say so plainly ("nothing in Achterberg's public record that I know of addresses this"), give at most an inference from named methods, labelled *inferred*, and no design in his voice or first person.
 - Hand off: exact rational MIP or certificates → Gleixner; decomposition or branch-and-price → Lübbecke; LP engine internals → lp-team; MINLP → minlp-team. Gurobi internals: the code is closed; give only what a public source shows; never guess current Gurobi defaults.
 - "Use his voice" → Mentor Voice, documented features only; quotation marks only for verbatim, sourced text.
 - Convened by milp-roundtable: answer from the Roundtable Card first, in one short paragraph; name a Likely disagreement only with a seated member.
@@ -60,17 +62,13 @@ researched: 2026-11-14
 | "Review my computational paper" | E: writing | M4, H10, H6 | loss in the abstract, open questions listed |
 | Literature review, proofs, research agenda, supervision, team management, grants, answering critics | No distillable Achterberg method; generic advice marked "not Achterberg-style" | — | — |
 
-Only rows with evidence are kept; the last row names the stages without it.
-
 ## Agentic Protocol
 
 ### Step 1: Classify
 
-| Type | Signal | Action |
-|---|---|---|
-| Needs facts | a paper, solver version, MIPLIB set, prior technique | check first (Step 2) |
-| Pure method | benchmark design, default decision, reporting | go to the workflow |
-| Mixed | the user's component plus a method question | check what the method depends on, then the workflow |
+- Needs facts (a paper, solver version, MIPLIB set, prior technique) → check first (Step 2).
+- Pure method (benchmark design, default decision, reporting) → go to the workflow.
+- Mixed (the user's component plus a method question) → check what the method depends on, then the workflow.
 
 ### Step 2: Achterberg-style fact-finding
 
@@ -81,11 +79,11 @@ Only rows with evidence are kept; the last row names the stages without it.
 - **Proxy against time (M2)**: total time reported, or only nodes, root gap, cuts or reductions? Shift stated? Time-outs scored how?
 - **Detectability (M1)**: is the target class recognisable from the matrix alone? What happens on the rest?
 - **Prior and parallel work (M6; his weak step)**: Optimization Online, arXiv math.OC, ZIB-Reports, and the SAT or CP source literature, before any novelty claim.
-- **Variability (Misreading 1)**: seeds or permutations used? His written studies used none; add them and say so.
+- **Variability (Misreading 1)**: seeds or permutations used?
 
 ### Step 3: Answer
 
-Conclusion first → steps tagged with methods → 🔴 checkpoint or stop rule → the method's limitation for this user.
+Conclusion first → steps tagged with methods → the 🔴 checkpoint or stop rule, written with its 🔴 marker → for an *inferred* or edge verdict, the observation that would reverse it → the method's limitation for this user.
 
 ---
 
@@ -93,11 +91,11 @@ Conclusion first → steps tagged with methods → 🔴 checkpoint or stop rule 
 
 ### Marks of good research
 
-1. **A gain in total time on a broad set** *(new)*: ZR 05-19 abstract (nodes −50 %, time +15 % on feasible MIPs, reported as such); THESIS pp. 69–70 (full strong branching: smallest trees, cost not justified); a cut can cut off the LP point, tighten the bound and still lose, while presolve ideas usually pay (WEB 9.1 1:19:14; INT 2023 41:08–41:38).
-2. **Default-robust: helps its class, silent elsewhere** *(new)*: the MCF separator's detector (ZR 09-38 pp. 1, 29); the hybrid branching default (THESIS p. 70); formulation-independent strategies are worth finding (ZR 08-29 pp. 1, 6, 10, co-signed).
+1. **A gain in total time on a broad set** *(new)*: ZR 05-19 abstract and THESIS pp. 69–70 (Method 2); a cut can cut off the LP point, tighten the bound and still lose, while presolve ideas usually pay (WEB 9.1 1:19:14; INT 2023 41:08–41:38).
+2. **Default-robust: helps its class, silent elsewhere** *(new)*: the MCF separator's detector (ZR 09-38 pp. 1, 29); the hybrid branching default (THESIS p. 70).
 3. **Small measured wins are progress** *(new)*: twenty Gurobi 11.0 MIP changes of 0.3–2.1 % each (11.0 deck slides 12–13); a cut family touching 10 % of models for 2.5 % (WEB 13.0 0:04:39). A year of work for 19 % he calls not very impressive (WEB 9.5 0:15:53).
 4. **One explainable rule, incumbents as special cases** *(new)*: the 2002 machinery reduced to one parameter (Method 3); a learner reduced to its feature (H1); decision trees over SVMs because he wanted to understand the rule (WEB 9.1 0:59:59).
-5. **Fair before interesting** *(new)*: equal gap tolerances with CPLEX (ZR 02-32 p. 10; ZR 05-19 p. 15 fn. 4); only the MIP part compared, since SCIP used CPLEX's LP solver (THESIS p. 377); CP against MIP only with expert models on both sides (INT 2023 1:14:46–1:15:46).
+5. **Fair before interesting** *(new)*: equal gap tolerances with CPLEX (ZR 02-32 p. 10; ZR 05-19 p. 15 fn. 4); only the MIP part compared, since SCIP used CPLEX's LP solver (THESIS p. 377).
 6. **Evidence is a large, rule-selected, class-balanced set** *(known)*: THESIS pp. 320–322; ZR 16-44 p. 17.
 7. **Engineering detail deserves print** *(known)*: ZR 16-44 p. 2; INT 2023 50:27–53:35.
 
@@ -128,8 +126,8 @@ Conclusion first → steps tagged with methods → 🔴 checkpoint or stop rule 
 **One line**: a component is on by default only if it recognises its models from the matrix and is silent, and cheap, everywhere else.
 
 **Evidence**:
-- Stated: design for practical instances but always safeguard the worst case (SEA 2022 slides 20–21). ZR 09-38 p. 1 (co-signed) opens from Bixby and Rothberg's remark (DOI 10.1007/s10479-006-0091-y) that a method should recognise its models and cost little elsewhere. Automatic decomposition: mixed across classes, so the user supplies the partition (INT 2023 1:00:45–1:02:20, caption).
-- Practice: the MCF separator detects a multi-commodity network in the matrix, measures its inconsistency, and generates no cuts when inconsistent; tuned for network design without slowing general MIPs, checked on four sets, in SCIP and CPLEX (ZR 09-38 pp. 1–3, 16–17, 22, 29). Hybrid branching default because inference branching wins only on feasibility sets (THESIS p. 70); restarts only after the root (pp. 4, 163). Multi-row redundancy checks off for MIP because they hurt (RAMP 2014 p. 192). 2008 commits revert changes not good overall (7827f4f11), keep a pump-timing change as a default-off parameter (1c685467e), switch pairwise presolving off (b9cd8fd36). Counter-example kept: Chvátal–Gomory strengthening gains nothing and stays on (ZR 16-44 p. 12).
+- Stated: design for practical instances but always safeguard the worst case (SEA 2022 slides 20–21). ZR 09-38 p. 1 (co-signed) opens from Bixby and Rothberg's remark (DOI 10.1007/s10479-006-0091-y) that a method should recognise its models and cost little elsewhere. Automatic decomposition: warning sign 2.
+- Practice: the MCF separator detects a multi-commodity network in the matrix, measures its inconsistency, and generates no cuts when inconsistent; tuned for network design without slowing general MIPs, checked on four sets, in SCIP and CPLEX (ZR 09-38 pp. 1–3, 16–17, 22, 29). Releasing the network-inconsistency threshold alone helped SCIP but not CPLEX, so the default stayed conservative with both refusal thresholds (network and arc) active; releasing both hurt (pp. 27–28). Hybrid branching default because inference branching wins only on feasibility sets (THESIS p. 70). Multi-row redundancy checks off for MIP because they hurt (RAMP 2014 p. 192). 2008 commits revert changes not good overall (7827f4f11), keep a pump-timing change as a default-off parameter (1c685467e), switch pairwise presolving off (b9cd8fd36). Counter-example kept: Chvátal–Gomory strengthening gains nothing and stays on (ZR 16-44 p. 12).
 - Say–do consistency: ✅ stated + practised.
 
 **Steps**:
@@ -137,7 +135,7 @@ Conclusion first → steps tagged with methods → 🔴 checkpoint or stop rule 
 2. Make the component a no-op when the fit is poor.
 3. Tune on the target sets under a second goal: no slowdown on general sets.
 4. Report three numbers: target-class gain, change on public general sets, change on the broadest set available.
-5. Neutral or better elsewhere → on; otherwise a default-off parameter. If the gain needs information the solver cannot detect, ask the user for it.
+5. Neutral or better elsewhere → on; otherwise a default-off parameter. A gain that shows in only one of two codes or sets does not loosen the default. If the gain needs information the solver cannot detect, ask the user for it; where possible through a model-type parameter whose default detects the type automatically (the MCF separator's directed/undirected `modeltype`, ZR 09-38 p. 22).
 6. Revert after release what does not look good overall.
 
 **Applies to stage**: design; judging results.
@@ -152,13 +150,13 @@ Conclusion first → steps tagged with methods → 🔴 checkpoint or stop rule 
 
 **Evidence**:
 - Stated: full strong branching's node savings do not justify its cost (THESIS pp. 69–70; ZR 04-13 pp. 10–11). Conflict analysis pays only at moderate effort; the discard policy is a key factor (THESIS p. 181).
-- Practice: ZR 05-19 splits basic time from conflict time: the node saving is worth about 10 % of basic time, the analysis (re-solving LPs) costs more (pp. 15–16). The 2007 default uses conflicts for propagation only, at most 10 per infeasible subproblem, with aging; the rejected variants are printed (bound-exceeding LPs cut nodes, not time; strong-branching LPs slightly worse; aggressive slower almost everywhere); result more than 10 % faster (THESIS pp. 5, 178–181). Strong-branching iterations kept below half the node-LP iterations plus 100,000 (pp. 65–66).
+- Practice: ZR 05-19 splits time into basic, switching (setting up subproblems, local constraints and bounds) and conflict time: the node saving is worth about 10 % of basic time, but the analysis costs more, its largest part continuing bound-exceeding LPs to optimality to get initial conflict sets, and switching time grows with the added local constraints (pp. 15–16). The 2007 default uses conflicts for propagation only, never as LP cuts (reason not stated; *inferred*: avoids the LP-row and switching overhead of 2005), at most 10 per infeasible subproblem, with aging; the rejected variants are printed (bound-exceeding LPs cut nodes, not time; strong-branching LPs slightly worse; aggressive slower almost everywhere); result more than 10 % faster (THESIS pp. 5, 178–181). Strong-branching iterations kept below half the node-LP iterations plus 100,000 (pp. 65–66).
 - Say–do consistency: ✅ stated + practised.
 
 **Steps**:
 1. Report the proxy and total time side by side per test set; a proxy gain with a time loss goes into the abstract.
-2. Split the time: base solve against time inside the component, side costs included.
-3. List variants along the cost axis (what to analyse, how many objects to keep, how long); one column each against the default.
+2. Split the time: base solve, switching, and time inside the component, side costs included; name the dominant cost. Count the side effects node counts miss (domain reductions and cutoffs found in the component's own LPs; THESIS pp. 69–70, Gamrath pp. 57–59). Checkpoint (this skill's, *inferred* from ZR 05-19 pp. 15–16): if the component's time exceeds the base-time saving on most brackets, reject the variant as it stands.
+3. List variants along the cost axis (what to analyse, how many objects to keep, how long); one column per effort level against the component switched off (THESIS Table 11.1, p. 179); count the objects produced (conflicts and their average length, ZR 05-19 Table 2, p. 17).
 4. Budget in a solver-internal unit (iterations relative to node-LP iterations, objects per event, aging), not wall-clock.
 5. Keep the variant positive in time across sets; print the rejected ones with numbers.
 
@@ -166,7 +164,7 @@ Conclusion first → steps tagged with methods → 🔴 checkpoint or stop rule 
 
 **Different from standard practice**: "nodes down, time up" is a negative result until the cost is located, and the budget becomes part of the component.
 
-**Limitations**: most of full strong branching's node reduction comes from side effects not counted as nodes (Gamrath, DOI 10.14279/depositonce-10710, pp. 57–59), which he named but did not measure. Time to optimality misjudges primal heuristics, which he conceded (THESIS p. 4); see the primal integral (Berthold, DOI 10.1016/j.orl.2013.08.007, not read).
+**Limitations**: most of full strong branching's node reduction comes from side effects (Gamrath, DOI 10.14279/depositonce-10710, pp. 57–59), which he named but did not measure (step 2 adds the count). Time to optimality misjudges primal heuristics, which he conceded (THESIS p. 4); see the primal integral (Berthold, DOI 10.1016/j.orl.2013.08.007, not read).
 
 ### Method 3: Nest the incumbents in one parameter family and sweep it *(new)*
 
@@ -192,11 +190,11 @@ Conclusion first → steps tagged with methods → 🔴 checkpoint or stop rule 
 
 ### Method 4: Knock-out from the default, read in brackets *(deepened; see Misreadings 1–2)*
 
-**One line**: switch the feature off in the full default, run the whole library, and read the table per time bracket with affected counts, as a ranking that does not add up.
+**One line**: switch the feature off in the full default, run the whole library, and read the table per time bracket with affected counts, as a ranking that does not add up. Era: the bracket form is in his papers from 2014 (RAMP 2014, ZR 16-44, credited to A&W 2013); the thesis (2007) reports shifted-geometric-mean ratios against the default with faster/slower counts (p. 2 fn. 1, p. 325). Do not read earlier work as if it used brackets.
 
 **Evidence**:
-- Stated: measured in the geometric mean relative to SCIP's default; +100 % means twice as long when disabled (THESIS p. 2 fn. 1); every Part II chapter ends with such experiments. Cuts: all off, one off, one on alone, after Bixby et al. 2000 (DOI 10.1007/978-0-387-35514-6_2; THESIS p. 111). Brackets by the slower run, discussion on ≥ 10 s, models ≥ 10 % faster or slower counted, affected models reported (ZR 16-44 pp. 3–4, co-signed; form credited to A&W 2013, not read).
-- Practice: 244 instances × 115 settings = 28,060 runs (THESIS p. 2). Reductions off in the master solve only, on in sub-MIPs; no benchmark for fixed-variable removal because model size drives heuristic decisions (ZR 16-44 pp. 3, 19). Faster/slower counts and an equal-path split (same nodes and iterations) (THESIS p. 325). Example A.1: one data set gives +27 % (geometric), −6 % (shifted geometric), −89 % (arithmetic) (pp. 321–322). Shift 10 s / 100 nodes from 19 Apr 2007 (1e98661db), 1 / 1 at Gurobi. Time-outs at the limit, bias stated (p. 319); single-class sets as three pseudo-instances (p. 322); 48 affected SOS models called too few (ZR 16-44 p. 17); four targets (first feasible, 10 %, 1 % gap, optimality) on 8,611 models (MIPW 2025 slides 25–26).
+- Stated: measured in the geometric mean relative to SCIP's default; +100 % means twice as long when disabled (THESIS p. 2 fn. 1). Cuts: all off, one off, one on alone, after Bixby et al. 2000 (DOI 10.1007/978-0-387-35514-6_2; THESIS p. 111). Brackets by the slower run, discussion on ≥ 10 s, models ≥ 10 % faster or slower counted, affected models reported (ZR 16-44 pp. 3–4, co-signed; form credited to A&W 2013, not read).
+- Practice: 244 instances × 115 settings = 28,060 runs (THESIS p. 2). Reductions off in the master solve only, on in sub-MIPs; no benchmark for fixed-variable removal because model size drives heuristic decisions (ZR 16-44 pp. 3, 19). Faster/slower counts and an equal-path split (same nodes and iterations) (THESIS p. 325). Example A.1: one data set gives +27 % (geometric), −6 % (shifted geometric), −89 % (arithmetic) (pp. 321–322). Shift 10 s / 100 nodes from 19 Apr 2007 (1e98661db), 1 / 1 at Gurobi. Time-outs at the limit, bias stated (p. 319); single-class sets as three pseudo-instances each, so the total counts 105 instances + 21 pseudo-instances; geometric means and totals go to the appendix tables (p. 322); 48 affected SOS models called too few (ZR 16-44 p. 17); four targets (first feasible, 10 %, 1 % gap, optimality) on 8,611 models (MIPW 2025 slides 25–26).
 - Say–do consistency: ✅ stated + practised.
 
 **Steps**:
@@ -212,15 +210,15 @@ Conclusion first → steps tagged with methods → 🔴 checkpoint or stop rule 
 
 **Different from standard practice**: knock-out is common *(known)*; the reading rules are his increment.
 
-**Limitations**: descriptive statistics only; time-limit censoring underestimates long-horizon speed-ups (Koch et al., DOI 10.1016/j.ejco.2022.100031); Gurobi sets are private. Brackets need hundreds of affected models. A single researcher reports, per setting, the shifted-geometric-mean ratio against the default with faster/slower counts (THESIS p. 2 fn. 1, p. 325), adds seeds, and skips any bracket with only a few dozen affected models (48 he called too few, ZR 16-44 p. 17).
+**Limitations**: descriptive statistics only; time-limit censoring underestimates long-horizon speed-ups (Koch et al., DOI 10.1016/j.ejco.2022.100031); Gurobi sets are private. Brackets need hundreds of affected models; with a few dozen, use the thesis form (One line) plus seeds.
 
 ### Method 5: Instrument first *(deepened)*
 
 **One line**: the solver, its harness and its comparison tools exist before the study, and an older frozen version picks the test set.
 
 **Evidence**:
-- Stated: two years of coding to get a basis for the actual research; research on branching needs the source of a state-of-the-art solver, and SIP spared him reinventing the wheel (THESIS p. ix); SCIP offered as a nearly competitive open code for others' ideas (pp. 6, 59).
-- Practice: the first SCIP commit (23 Oct 2002, 147d53683) holds test lists, known optima, a run script with a 3,600 s limit, SIP's checking report generator and a CPLEX run script. 0.2 (26 Mar 2003) solves complete problems with no special components (3c603242f). Debug solution 2005 (67238f422; H4). `cmpres.awk` (2006, 1dbb9bbf0) averages only over instances no solver failed on, failures counted. SCIP 0.82d frozen to select the thesis set, final runs with 0.90f (THESIS pp. 319–320; the purpose is *inferred*). Observed: the code was in excellent shape at hand-over (Berthold 2014, p. v).
+- Stated: two years of coding to get a basis for the actual research; research on branching needs the source of a state-of-the-art solver, and SIP spared him reinventing the wheel (THESIS p. ix).
+- Practice: the first SCIP commit (23 Oct 2002, 147d53683) holds test lists, known optima, a run script with a 3,600 s limit, SIP's checking report generator and a CPLEX run script. 0.2 (26 Mar 2003) solves complete problems with no special components (3c603242f). Debug solution 2005 (67238f422; H4). `cmpres.awk` (2006, 1dbb9bbf0) averages only over instances no solver failed on, failures counted. SCIP 0.82d frozen to select the thesis set, final runs with 0.90f (THESIS pp. 319–320; the purpose is *inferred*). The selection rule (p. 320), on publicly available sets with their origins listed: CPLEX 10.0.1 and SCIP 0.82d, with and without conflict analysis, on all 575 instances; drop any that neither solves in 1 h; remove coral's duplicates of milp; on coral and mik drop those both solve within 10 s, then thin coral by removing every second instance in CPLEX-time order; drop trivial alu instances and those too hard numerically; 244 remain. Memory-outs (1.5 GB) count as time-outs with nodes scaled; 180 of 28,060 runs hit it (p. 319). CPLEX reference runs use SCIP's gap tolerances (mipgap 0, absmipgap 10⁻⁹; p. 320).
 - Say–do consistency: ✅ stated + practised.
 
 **Steps**:
@@ -251,7 +249,7 @@ Conclusion first → steps tagged with methods → 🔴 checkpoint or stop rule 
 2. Put the smallest piece in within days where it maps one to one.
 3. Generalise to MIP objects (infeasible LPs explained by duals; general integers by bound disjunctions).
 4. Test each habit alone; expect the source field's default not to transfer.
-5. Print what failed; name the source field's next technique as future work (ZR 05-19: clause-database management).
+5. Print what failed; name the next techniques as future work (ZR 05-19 p. 18: faster derivation of conflicts from infeasible LPs; SAT clause-database management).
 6. Check parallel work before claiming novelty (his weak step).
 
 **Applies to stage**: design; problem choice.
@@ -311,12 +309,12 @@ Conclusion first → steps tagged with methods → 🔴 checkpoint or stop rule 
 **Input**: the tables.
 
 **Steps**:
-1. Time beside the proxy; split and budget (Method 2).
+1. Time beside the proxy; split, name the dominant side cost, budget (Method 2).
 2. ≥ 10 s bracket, affected counts, small sets refused (Method 4).
 3. Default gate (Method 1); non-additivity as a finding.
 4. Metric wrong for the user's goal → change it and rerun (H8); revert what is not good overall (H9).
 
-**🔴 Stop rule**: nodes down and time up is negative until the cost is located; a gain on a few dozen affected models is no conclusion; one class up and others down is a parameter, not a default.
+**🔴 Stop rule**: any wrong answer, or disagreement with a known optimum, stops the judgement until fixed (H4; Workflow C checkpoint); nodes down and time up is negative until the cost is located; a gain on a few dozen affected models is no conclusion; one class up and others down is a parameter, not a default.
 
 **Output**: per feature, default on / default-off parameter / rejected, with numbers.
 
@@ -326,7 +324,7 @@ Conclusion first → steps tagged with methods → 🔴 checkpoint or stop rule 
 
 **Steps** (this skill's ordering of his methods, *inferred*; stop at the first step that explains the stall):
 1. Correctness and numerics: debug solution on, tolerances checked (H4, H7). Fix any wrong answer before more tuning.
-2. Sets, not instances: on a few dozen models, or only those that moved, switch to a rule-selected set; read the ≥ 10 s bracket and affected count (H5, Method 4). Swapping wins and losses on a small set are noise until seeds show otherwise (seeds: Misreading 1).
+2. Sets, not instances: on a few dozen models, or only those that moved, switch to a rule-selected set; read the ≥ 10 s bracket and affected count (H5, Method 4). Swapping wins and losses on a small set are noise until seeds show otherwise.
 3. Split the time (Method 2): if the component's own time eats the gain, try a budget variant, not another score tweak.
 4. Class split (Method 1): wins on one class, losses elsewhere → a detector or a default-off parameter.
 5. Try the opposite once (H9).
@@ -350,7 +348,7 @@ Conclusion first → steps tagged with methods → 🔴 checkpoint or stop rule 
 
 ### Stages without evidence
 
-The last routing row: literature review is a self-declared weakness (INT 2023 1:20:24–1:22:29); no reply or erratum to critics was found.
+The last routing row (Honest Boundary); no reply or erratum to critics was found.
 
 ---
 
@@ -361,7 +359,7 @@ The last routing row: literature review is a self-declared weakness (INT 2023 1:
 3. **Fair yardstick** *(new)*: baseline at its best, equal tolerances, print the loss. Case: the strongest of MiniSat 1.14, Siege v4 and zChaff chosen, Siege's time reported where it wins (THESIS pp. 299, 303); the pump run with its authors' parameters (ZR 05-42 p. 5); SCIP 0.78 about 2× slower than CPLEX 9.03, reasons given (ZR 04-19 pp. 23, 25).
 4. **Debug solution** *(new)*: check every derived cut, bound change, implication and conflict against a known optimum. Case: `debug.c`, 29 Apr 2005 (67238f422); not described in the thesis (practice only).
 5. **Instances trigger, sets conclude** *(deepened)*: chase named instances for bugs and ideas (commits on noswot, blend2, alu8_9, fast0507, the rococo set); conclude and tune only on sets (ZR 04-13 p. 9; INT 2023 1:06:27–1:07:30).
-6. **A failed reproduction is a study** *(new)*: when a published formulation (Van Vyve and Wolsey, DOI 10.1007/s10107-005-0663-7) behaved erratically: 128 variants in CPLEX 10.0.1 and 130 runs in SCIP on one TSPLIB instance, 27 s against unsolved in 24 h, model files posted, exact formulation demanded (ZR 08-29 pp. 1, 4–7, co-signed). Single project.
+6. **A failed reproduction is a study** *(new)*: when a published formulation (Van Vyve and Wolsey, DOI 10.1007/s10107-005-0663-7) behaved erratically: 128 variants in CPLEX 10.0.1 and 130 runs in SCIP 0.90e on att48 (TSPLIB), 1 h limit, SCIP probing off and CPLEX as its LP solver for comparability (p. 4); identical runs explained by what presolve deduces, leaving 52 distinct CPLEX instances, sizes reported after preprocessing (p. 6); 27 s against unsolved in 24 h, a factor above 3,200 between two same-size variants differing only in integrality declarations (p. 6; above 1,000 in the abstract); geometric means per factor setting (Table 4); the failure of his own code printed: SCIP's implicit-integer declaration did worse than bounded continuous variables (p. 7). Concluded: state the exact formulation (p. 7); omitting seemingly useful redundant information can speed up solving (p. 1); one formulation in one solver does not prove a model intractable; seek formulation-independent strategies; implicit integers proposed as a first way to pass redundant information to the solver (p. 10). Model files posted (ZR 08-29, co-signed). Single project.
 7. **Model and numerics before settings** *(new)*: tolerances 1e-9 for chip instances with coefficients up to 2^(2n) (ZR 05-19 p. 15); absolute bound feasibility after alu8_9 (510555962); improve the model before tuning (INT 2023 1:07:30–1:10:35).
 8. **Metric by the user's goal** *(new)*: heuristics cost only 14 % in time to optimality, so a gap-target run follows (THESIS pp. 4, 129); the primal integral (CPAIOR 2017 slides 65–67); first-feasible targets (MIPW 2025).
 9. **Try it, try the opposite, revert** *(new)*: defaults from gut feeling, a test, failure, then the opposite, which sometimes works for no known reason (INT 2023 about 1:05–1:06, caption, team); reverts in the SCIP log.
@@ -369,7 +367,7 @@ The last routing row: literature review is a self-declared weakness (INT 2023 1:
 
 ## Common Misreadings
 
-1. **"He separates gains from noise with seeds or permutations."** No written study of his has them: the thesis uses single runs on identical machines, reruns suspicious ones and treats up to 2 % as noise (THESIS p. 319); a text search of the thesis, ZR 08-29, ZR 09-38, RAMP 2014, ZR 16-44 and his 2017–2023 decks found none. The five-seed "consistent win" rule is spoken only, as Gurobi team practice (WEB 9.1 1:11:31; INT 2023 1:05:30; WEB 13.0 0:11:49; captions).
+1. **"He separates gains from noise with seeds or permutations."** No written study of his has them: the thesis uses single runs on identical machines, reruns suspicious ones and treats up to 2 % as noise (THESIS p. 319); text searches of his reports and 2017–2023 decks found none. The five-seed "consistent win" rule is spoken only, as Gurobi team practice (WEB 9.1 1:11:31; INT 2023 1:05:30; WEB 13.0 0:11:49; captions).
 2. **"A knock-out percentage is that component's contribution."** Switching off single heuristic classes, or single cut families, costs much less in sum than switching off all of them (THESIS p. 128); Koch et al. 2022 (DOI 10.1016/j.ejco.2022.100031, pp. 12–13) cite him for it. The numbers rank; they do not add.
 3. **"Reliability branching is a SCIP invention; SCIP began from nothing."** History and reliability branching were built and measured in Martin's SIP (ZR 02-32 p. 1; ZR 04-13 p. 12); SCIP's first commit carries SIP's check scripts and most SIP ideas (THESIS p. 6).
 4. **"A hand-rules man, opposed to ML."** Reliability branching came out of an ML experiment (H1), about 15 years before Khalil et al. 2016; he still uses ML to find interpretable rules (WEB 9.1 0:59:59).
@@ -381,7 +379,7 @@ The last routing row: literature review is a self-declared weakness (INT 2023 1:
 
 | Dimension | Finding |
 |---|---|
-| Origin | *Stated*: the CS diploma project (2000–2001) learning branching inside SIP; the learners pointed to one history feature (ORIGINS 2022 slides 6–7). Diploma thesis not found |
+| Origin | *Stated*: the CS diploma project's learners inside SIP (2000–2001) pointed to one history feature (H1). Diploma thesis not found |
 | Why then | *Inferred*: strong branching was available through SIP's CPLEX API; baseline Linderoth and Savelsbergh (DOI 10.1287/ijoc.11.2.173; ZR 02-32 p. 5) |
 | Key insight | Pseudocosts are unreliable until both directions are observed a set number of times; strong branching only on unreliable candidates; one parameter spans the old rules |
 | Minimum evidence | 2002: 22 MIPLIB 3.0 instances, 3,533.5 s in total against 12,966.7 s (hybrid pseudocost) and 12,342.1 s (CPLEX 7.5) (ZR 02-32 p. 10). 2004: the full grid and its knee (ZR 04-13 pp. 9–12) |
@@ -411,7 +409,7 @@ The last routing row: literature review is a self-declared weakness (INT 2023 1:
 | Minimum evidence | Orders of magnitude faster than SAT on some chip circuits, SAT faster on counter-examples (p. 6); 575 instances filtered to 244 by stated rules; 28,060 runs |
 | Abandoned paths | SIP as platform; no abandoned SCIP design found (unknown) |
 | Reception | Dantzig Dissertation Award, second place (2008); prizes for the MPC paper (Beale–Orchard-Hays 2009, INFORMS Optimization Society Young Researchers 2011) |
-| Methods shown | Method 5, Method 4. Cuts and heuristics partly Wolter's and Berthold's, credited (pp. 101, 118) |
+| Methods shown | Method 5, Method 4; Wolter's and Berthold's parts credited (pp. 101, 118) |
 
 ### Presolve Reductions in Mixed Integer Programming (INFORMS J. Comput. 32(2):473–506, 2020, DOI 10.1287/ijoc.2018.0857)
 
@@ -422,7 +420,7 @@ The last routing row: literature review is a self-declared weakness (INT 2023 1:
 | Key insight | A complete taxonomy of Gurobi 6.5's presolve, more than thirty reductions, each with a knock-out table in one layout |
 | Minimum evidence | Presolve off: 504 models fail to finish in 3,600 s; about ninefold on ≥ 10 s (pp. 3–4) |
 | Negative results | CG strengthening, probing on single equations, global probing at nodes, subsumed-row removal; removing redundant rows hurts, with a hypothesis (pp. 12, 16, 26, 27, 63) |
-| Reception | 138 Crossref citations. Five authors, alphabetical, roles not stated; journal version not read |
+| Reception | 139 Crossref citations (14 Nov 2026). Five authors, alphabetical, roles not stated; journal version not read |
 | Methods shown | Method 4, Method 1 |
 
 ### The Mcf-separator (Math. Program. Comput. 2(2):125–165, 2010, DOI 10.1007/s12532-010-0015-3), with Christian Raack
@@ -431,30 +429,28 @@ The last routing row: literature review is a self-declared weakness (INT 2023 1:
 |---|---|
 | Origin, why then | Unknown from his side; *inferred*: Raack's network-design work (file author from 9 Jul 2008), while he worked in SCIP and CPLEX at once |
 | Key insight | Detect the structure from the matrix, measure its inconsistency, stay silent without it (ZR 09-38 pp. 1–3) |
-| Minimum evidence | Order-of-magnitude gains on network design; almost no degradation elsewhere (pp. 16–17, 22, 29) |
-| Abandoned paths / reception | Not documented; 31 Crossref citations; journal version not read |
+| Minimum evidence | Network design: a factor of two on average, many solvable in 1 h only with it (abstract; p. 29); an order-of-magnitude speed-up was the tuning aim, not the result (p. 22). Consistent networks in roughly 10 % of general MIPs, time −18 % on those; almost no degradation on the rest (p. 29) |
+| Abandoned paths / reception | A looser gate with a SCIP-only gain (Method 1); 31 Crossref citations; journal version not read |
 | Methods shown | Method 1 |
 
 ## Research Anti-patterns
 
-| Anti-pattern | Why he opposes it (source) | Instead |
-|---|---|---|
-| Habits nobody measured; single-instance conclusions or tuning; proxy gains read as speed-up | Warning signs 1, 3; H5 | M4, H5, M2 |
-| Unequal tolerances; a model translated directly into the other paradigm | ZR 02-32 p. 10; INT 2023 1:14:46 | H3 |
-| An uninterpretable learned model inside the solver | WEB 9.1 0:59:59; INT 2023 1:16:16 | H1 |
-| Fixed-LP duals as MIP sensitivity | WEB 9.0 0:38:59 | say it has no mathematical meaning |
-| No exact formulation; "intractable" from one formulation and one solver | ZR 08-29 pp. 7, 10 | H6 |
-| Tuning before fixing numerics | INT 2023 1:07:30 | H7 |
-| Worst-case bounds as verdicts on practice; "polynomial" as "fast" | SEA 2022 slides 20–21 | M1 safeguards |
+Each with its source, then the remedy:
+- Habits nobody measured; single-instance conclusions or tuning; proxy gains read as speed-up (warning signs 1, 3; H5) → M4, H5, M2.
+- Unequal tolerances; a model translated directly into the other paradigm; CP against MIP without expert models on both sides (ZR 02-32 p. 10; INT 2023 1:14:46–1:15:46) → H3.
+- An uninterpretable learned model inside the solver (WEB 9.1 0:59:59; INT 2023 1:16:16) → H1.
+- Fixed-LP duals as MIP sensitivity (WEB 9.0 0:38:59) → say it has no mathematical meaning.
+- No exact formulation; "intractable" from one formulation and one solver (ZR 08-29 pp. 7, 10) → H6.
+- Tuning before fixing numerics (INT 2023 1:07:30) → H7.
+- Worst-case bounds as verdicts on practice; "polynomial" as "fast" (SEA 2022 slides 20–21) → M1 safeguards.
 
 ## Research Trajectory
 
-| Period | Direction | Trigger | Representative work |
-|---|---|---|---|
-| 1999–2002 | ML for branching in SIP → history branching | a CS diploma needing a MIP solver; Koch | ZR 02-32 |
-| 2002–2007 | SCIP; constraint integer programming; chip verification; SAT techniques | SIP could not hold CP; Valse-XT (from Aug 2003); Novikov | ORL 2005; Discrete Optim. 2007; thesis; Hybrid Branching, CPAIOR 2009 with Berthold (DOI 10.1007/978-3-642-01929-6_23, not read) |
-| 2006–2014 | ILOG / IBM CPLEX; SCIP commits until March 2009 | a 2005 workshop talk, an ILOG offer (his account) | ZR 08-29; MPC 2010; A&W 2013 (DOI 10.1007/978-3-642-38189-8_18, not read) |
-| 2014– | Gurobi: MIP performance, presolve, non-convex MIQCP (9.0), VP of R&D 2020 | Gu and Rothberg (his account) | IJOC 2020; MIPLIB 2017; RLT cuts (DOI 10.1007/s10107-024-02104-0) |
+Period: direction (trigger) → representative work.
+- **1999–2002**: ML for branching in SIP → history branching (a CS diploma needing a MIP solver; Koch) → ZR 02-32.
+- **2002–2007**: SCIP; constraint integer programming; chip verification; SAT techniques (SIP could not hold CP; Valse-XT from Aug 2003; Novikov) → ORL 2005; Discrete Optim. 2007; thesis; Hybrid Branching (CPAIOR 2009).
+- **2006–2014**: ILOG / IBM CPLEX; SCIP commits until March 2009 (a 2005 workshop talk, an ILOG offer, his account) → ZR 08-29; MPC 2010; A&W 2013.
+- **2014–**: Gurobi: MIP performance, presolve, non-convex MIQCP (9.0), VP of R&D 2020 (Gu and Rothberg, his account) → IJOC 2020; MIPLIB 2017; RLT cuts (DOI 10.1007/s10107-024-02104-0).
 
 ### Latest
 
@@ -462,20 +458,20 @@ The last routing row: literature review is a self-declared weakness (INT 2023 1:
 
 ## Academic Lineage
 
-Korte → Grötschel → **Achterberg** (TU Berlin 2007; referees Grötschel, Bixby; CS diploma with Obermayer). Code: Martin's SIP → SCIP; Koch the peer who brought him to SIP and told him to write. Informal students: Wolter, Berthold; SCIP successors include Pfetsch, Heinz, Gamrath, Gleixner. No formal doctoral students. Industry: CPLEX (Gu, Wunderling), Gurobi (Bixby, Gu, Rothberg).
+Korte → Grötschel → **Achterberg** (TU Berlin 2007; referees Grötschel, Bixby; CS diploma with Obermayer). Code: Martin's SIP → SCIP; Koch the peer who brought him to SIP and told him to write. Informal students: Wolter, Berthold; SCIP successors include Pfetsch, Heinz, Gamrath, Gleixner. Industry: CPLEX (Gu, Wunderling), Gurobi (Bixby, Gu, Rothberg).
 
 ## Inner Tensions
 
-- **Sets conclude, instances drive** (tension of method): conclusions and tuning only on sets (ZR 04-13 p. 9; INT 2023 1:06:27), yet fixes and defaults are tied to named instances in the commit log.
+- **Sets conclude, instances drive** (tension of method): conclusions and tuning only on sets (H5), yet the commit log ties fixes and defaults to named instances.
 - **Tune or write**: he overran his deadline improving SCIP and says most solver progress cannot be written up (THESIS p. x; INT 2023 50:27–53:35), yet took Koch's advice to write, and the thesis won three prizes.
 - **From scratch or reuse**: he always wants to build it himself (INT 2023 1:20:24–1:21:28), yet SIP's ideas and harness went into SCIP (THESIS pp. ix, 6), and he adopted PSD cuts and Turner's criterion.
 - **Which baseline counts**: in 2023 academic work should improve its host framework, not beat Gurobi (INT 2023 51:29); his own academic work measured itself against CPLEX each time (ZR 02-32 p. 10; THESIS p. 377).
-- **Explainable rules, unexplained defaults**: features over learners (H1), yet defaults that work for reasons nobody knows (INT 2023 about 1:05–1:06).
+- **Explainable rules, unexplained defaults**: features over learners (H1), yet defaults that work for no known reason (H9).
 
 ## Mentor Voice
 
 Documented features only; no essay or lecture on how to do research was found, and he has no formal students.
-- Reports each change with its measured percentage; calls small gains real; says when a year's work produced little (WEB 9.5 0:15:53).
+- Reports each change with its measured percentage, small or disappointing (taste mark 3).
 - *Observed* (Berthold 2014 p. v, paraphrase): recruits with a ten-minute primer on how a MIP solver really works, then a concrete task (a feasibility pump and local branching in SCIP); readable papers first.
 - Credits per component, in prose and file headers (THESIS pp. 101, 118).
 - Derived questions (not quotes): "What happens to total time when you switch it off?" "Where does the time go?" "What does it do outside your class?" "What got worse?"
@@ -490,7 +486,7 @@ Documented features only; no essay or lecture on how to do research was found, a
 - **Likely disagreements** (inferred from methods; no dispute documented):
   - *Lübbecke*: automatic Dantzig–Wolfe detection in defaults: "not yet, the user supplies the partition" (INT 2023, stated; Method 1) against GCG (DOI 10.1007/978-3-642-13193-6_21; DOI 10.1007/s10107-014-0761-5; not read).
   - *Gleixner*: tolerances with disagreeing models excluded (ZR 16-44 p. 3) against exact solving with certificates (DOI 10.1007/s10107-021-01749-5); graph-based (ZR 05-19) against cut-based conflicts (arXiv:2410.15110). Shared: MIPLIB 2017, RLT.
-  - *Fischetti*: objective-weighted pump (DOI 10.1016/j.disopt.2006.10.004) against objective cutoff (DOI 10.5281/zenodo.22810777, unreviewed); variability averaged away against exploited (DOI 10.1287/opre.2013.1231).
+  - *Fischetti*: objective-weighted pump (DOI 10.1016/j.disopt.2006.10.004) against objective cutoff (reproducibility package, Zenodo 2026, DOI 10.5281/zenodo.22810777; no reviewed paper found); variability averaged away against exploited (DOI 10.1287/opre.2013.1231).
   - *Bixby* (guest): mostly agreement (knock-out after Bixby et al. 2000). *Forrest* (guest): none documented.
 - **Blind spots**: literature (self-declared); no seeds in written studies; no certificates; worst-case and proof strength; node counts with side effects; non-additive knock-outs; class structure averaged away; private evidence since 2007.
 
@@ -504,7 +500,7 @@ This skill is distilled from public information, with these limits:
 - **Evidence quality**: interview and webinars read as automatic captions; webinars are product talks. Journal versions not read (the ZIB-Reports were); A&W 2013, the stated origin of the bracket form, not read; diploma theses not found; no rejected paper, erratum or reply found. Gurobi's test-set size varies by source (more than 5,000 in 2021 to 8,611 in 2025); no trend claimed. Critics are mostly successors re-measuring his ZIB-era methods in SCIP.
 - **Self-declared weak point** (caption): he does not follow the literature well and relies on collaborators (INT 2023 1:20:24–1:22:29). Pair this lens with a literature check.
 - **Research date**: 2026-11-14 (notes 2026-11-08). He is living and active; later work is not covered. Re-run the research periodically (yearly, or after a new paper or talk) and update this skill.
-- **Validation 2026-11-14**: sealed-item test 7 with the skill / 8 without (5 items; 2 points or less is a tie); task test 9 supported and 0 fabricated grounds with the skill; see [FIDELITY.md](FIDELITY.md).
+- **Validation 2026-11-14**: sealed-item test 7 with the skill / 8 without (5 items; 2 points or less is a tie); task test 9 supported and 0 fabricated grounds with the skill (on the version before the after-validation fixes of 2026-11-14; retention re-test after them: 6 of 6 pass); see [FIDELITY.md](FIDELITY.md).
 
 ## Sources (Appendix)
 
