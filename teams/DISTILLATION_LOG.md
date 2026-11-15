@@ -1,5 +1,83 @@
 # 蒸馏记录
 
+## 2026-11-14 (16) · 回答标准：32 个 skill 统一交付形式（先给答案、讲机理、可执行细节、依据后置）
+
+- 用户请求：「优化一下我的Optimization Researchers skills 现在觉得回答还是有点不够专业」。分支 `pro-answers`（独立
+  worktree `Optimization-Researchers-pro-answers`，基于 `origin/main` 0d999b8，即 PR #1 合并后的状态），未推送。
+  条目编号按 origin/main 顺延；MILP 会话若也加了 (16)，合并时顺延即可
+- 诊断：读了用户唯一一次实际调用的记录（2026-11-05「Bertsimas 推荐两个 simplex developer」）和全部 32 个 SKILL.md。
+  skill 只规定「推荐什么」，不规定「怎么交给用户」：
+  - 研究者 skill 的 Step 3 固定格式是「结论 → 每条挂方法标签的步骤 → 🔴 检查点 → 局限」，首次激活的长免责声明
+    放在开头，每条建议后挂「(→ Method N)」「generic, not X-style」，10 位要求首行报路由（"Route: Workflow C"）
+  - 圆桌成员开场 ≤150 词，只剩立场、没有机理；Lead 的交付先报 CODES / STAGE / ROUTING
+  - 语料团队遇到精确常数一律只答「常数需查原文」
+- 基线测试（`scripts/answer_eval/questions.json` 六道题：Curtis、Powell、Grossmann、NLP Team、nonlinear-roundtable、
+  optimization-lead；每题旧 skill / 新 skill / 不带 skill 各一份，零上下文 agent 读完整个 SKILL.md 后作答）
+- 改动（提交 adf26d7 及其后一个提交）：
+  - `references/answer-standard.md`：回答标准的唯一正文，四个块。research-craft 块八条：先给技术答案（问题的每一部分
+    都要答）；机理与成立条件（用上题目里的数字）；可执行细节（公式、取值和出处、选项名；本轮跑过的东西带设置报告）；
+    备选与判定实验；只校准一次（凭描述作的诊断是假设，自己的阈值说是自己的）；可以用标准结果但要引；备忘录语体
+    （全篇包括脚注都不出现内部记号，正文按论文方式引用，证据键只出现在脚注）；依据脚注（用白话写，不加论文来给
+    视角背书）。roundtable 块：成员 POSITION 加 MECHANISM；最终方案按「结论 → 计划 → 签署 → 记录 → 参考文献」排列；
+    决定目标的手段若在全体成员记录之外，不以「未论证」搁置，由主持人连同已核实的文献写进草案。lead 块与之对应。
+    corpus-team 块（中文七条）：精确表述可对 `01-canon.md` 已收录的来源现查原文，逐字引用并在依据里说明（仍不凭记忆）；
+    正文按作者-年份引用，语料 ID 列在依据里
+  - `scripts/answer_standard.py`：`--apply` 把对应的块写进每个 SKILL.md 两行标记之间，`--check`、`--installed` 核对，
+    `--lint` 保证块里没有像引用的记号；研究者 skill 三处旧条款（方法标注、首次说明、Step 3）后补一句位置说明，不删原文
+  - 圆桌与理事会：brief 加 MECHANISM 字段，开场 150 → 260 词，签署用文字；Lead 的团队回答加 MECHANISM，交付先给答案
+  - 10 位研究者「首行报路由」改为不打印路由；两份语料团队 skill、`standards/skill-template.md` 的引用纪律改为
+    「正文作者-年份，依据里对应到语料 ID」；`standards/grounding.md` §3.3 写明现查原文的规则
+  - `team_check.py` 新增 `answer-std`；模板、DISTILL.md、distill-gates、RUNBOOK、TEAM-KIT、路由 skill 同步；
+    `scripts/answer_eval/`（六道题、评审 prompt、prep / summary / form）
+- 盲评第一轮（每题两位零上下文评审，三份回答以 A/B/C 呈现、两位评审的字母错开一位；六维各 1–5 分，满分 30；
+  Lead 题的新版回答在用量上限前没有跑完，第一轮只有五题；圆桌只评最终方案那一段）：
+
+  | 题 | 旧 skill | 新 skill（第一版） | 不带 skill |
+  |----|---------|------------------|-----------|
+  | Curtis | 17.5 | 27.5 | 27.5 |
+  | Powell | 20.0 | 26.0 | 27.0 |
+  | Grossmann | 18.5 | 28.0 | 27.5 |
+  | NLP Team | 17.5 | 23.5 | 28.5 |
+  | 圆桌 | 17.0 | 21.0 | 27.0 |
+  | 平均（10 份评审） | 18.1 | 25.2 | 27.5 |
+
+  旧 skill 10 份评审里 0 次排第一、0 次愿意原样转发；新 skill 2 次、2 次；不带 skill 8 次、10 次。分维度：新 skill 的
+  rigor 5.0（不带 skill 4.1）最高，economy 3.1、register 3.4 最低。评审对新版最一致的批评：脚注里仍有内部记号
+  （Workflow C0、Method 2、Heuristic 1）；把人格当交接对象（「交给 Scheinberg 的视角」）；圆桌把最关键的杠杆
+  （condensed-space KKT + GPU / Cholesky）以「两位成员的记录之外，未论证」搁置；语料团队正文满是 [NLP-R3]
+- 按评审意见修订（v2–v4，都只改 `references/answer-standard.md` 再 `--apply`）：脚注与正文都不出现内部记号；凭描述的
+  诊断说是假设；问题的每一部分都答；交接写方法与文献，镜头指针放脚注；本轮跑过的实验带设置；圆桌与 Lead 不搁置
+  记录外的关键杠杆、引用解析到出版信息而不是成员目录里的文件、签署一行；语料团队遇到缺口去检索一手文献、付费墙先找
+  公开版本、语料 ID 移到依据里
+- 复核（Opus 5.5 重跑，一位评审，三方：第一版（Fable）/ 修订版（Opus）/ 不带 skill（Fable）。不带 skill 用的是更强的
+  Fable，这一比较对修订版不利）：
+  - Grossmann（v2）：修订版 27、不带 skill 24、第一版 24，修订版排第一，也是唯一愿意原样转发的一份
+  - NLP Team（v2，在 v4 移走正文语料 ID 之前）：不带 skill 28，修订版 23，第一版 23。剩下的差距一半是正文的语料 ID 与
+    过程标记（v4 已改，未复测），一半是内容：Nesterov (2004) 的定理原文在付费墙后、语料里也没有，2015 年以后的
+    heavy ball 结果（Ghadimi 等；Goujaud、Taylor、Dieuleveut）不在语料。这要补语料，不是改写法能解决的
+  - 圆桌（v3）：圆桌（v3：保留记录外的杠杆、引用解析到出版信息、签署一行）：不带 skill 26、第一版 22、修订版 20。改动生效了（condensed-space KKT 作为本席之外的杠杆，连同 Pacaud 等人已核实的数据写进了计划；没有文件路径和方法号），但评审仍把最终方案读成会议纪要：几乎每条带镜头标签，有签署与席位小节和过程旁白，参考文献把各成员开场引过的文献全列进来；还保留了一条它自己引的证据说不会见效的步骤（换别的 LDLᵀ 代码）。随后改为 v5：最终方案写成一份备忘录（不逐条标镜头，谁提的哪条在记录里列一次），记录放在参考文献之后作附录，参考文献只列方案引用的，核实到的证据与成员建议矛盾时签署前先问该成员。v5 未复测
+  - Lead（v2）：Lead（v2，早于 v3 的「不搁置杠杆、不给文件路径」和 v5 的「autopilot 每步一行进度」）：不带 skill 28、修订版 19、旧版（Fable 跑的）16。修订版的技术核心最严（下界链及其前提、聚合写法的闭式松弛），但被路由与签署文字、autopilot 下重复打印的段落、与问题无关的 Bertsimas 卡片引用（医疗、排队、空管）埋住，也没有验证两小时内跑得完。之后的修订针对的就是这些，未复测
+- 结论：研究者 skill（24 个）已与不带 skill 持平或更好；圆桌、理事会、Lead 和两份语料团队 skill 都比旧版好（每份评审都把旧版排在最后），但仍不如同一模型直接作答。差距一部分来自格式（面板的讨论记录、封闭语料的引用方式），这部分已按评审意见改到 v5、未复测；一部分来自语料内容（NLP 语料缺 Nesterov (2004) 的定理原文和 2015 年以后的 heavy ball 结果），要按语料维护流程补
+- 闸门：`answer_standard.py --check` 32/32；`team_check.py` dfo 39 项 0 失败、nonlinear 30/0、council 16/0（minlp 7 项、
+  lp 1 项失败在 main 上原本就有，同一批）；`distill_check.py` 两队 0 ✗（⚠ 与改动前相同：dfo 7、nlp 4）；`check_links.py`
+  五队 0 断链；`selftest.sh` 通过
+- 运行教训：
+  - Fable 用量上限在 15:07 左右打断 6 个 agent；其中圆桌新版回答、Lead 旧版回答和 Curtis 题的一位评审在打断前已写完
+    文件，直接沿用；其余改在 Opus 5.5 上重跑。跨模型的比较只用来确认方向（更强的模型放在对照组）
+  - Lead 在 autopilot 下自己召开了理事会，一次运行带出 4–5 个嵌套 agent；停掉父 agent 后，子 agent 回报时会把它
+    唤醒，要连子 agent 一起停。误停了修订版 Lead 运行自己的定题 agent，已通知它重开
+  - 评审与写手分开；评审只读自己的目录（问题、三份回答、说明）；圆桌与 Lead 只给最终方案，否则检查点的长篇记录
+    会暴露哪份来自 skill
+  - 评审一致认为最不专业的不是内容，而是读者解不开的内部记号：方法号、路由、卡片键、语料 ID、文件路径
+- 成本：已记录的子 agent 约 790 万 token（作答 18 份约 600 万，评审 11 份约 195 万），另有被用量上限打断和被停掉的
+  运行（含一次自动召开的理事会，已知约 130 万）未计入，总数估计在 1,000 万上下
+- 安装：安装：2026-11-14 覆盖了 `~/.claude/skills` 下已装的 30 个 skill 的 SKILL.md（只换这一个文件，references 等未动；
+  lp-roundtable、minlp-roundtable 是模板，没装）。覆盖前逐个核对：29 个与 origin/main 一致，qi-huangfu 与 lp-team 一致。
+  qi-huangfu 用 lp-team 的版本加本次改动生成，保留 lp-team 上尚未合入 main 的 LP 更正；其余 29 个与本分支逐字节一致。
+  `answer_standard.py --check --installed` 62/62，`distill_check.py --installed` 两队「与仓库一致」。回退：29 个用
+  `git show origin/main:<路径>`，qi-huangfu 用 `git show lp-team:product/lp-team/qi-huangfu/SKILL.md`
+- 模型：Fable 5.2（诊断、第一版、基线与第一轮评审），Opus 5.5（修订、复核与收尾）
+
 ## 2026-10-31 (15) · optimization-lead：Bertsimas 作为四支优化团队的总入口
 
 - 用户请求：「我是希望Bertsimas领导所有的optimization team 要不单开一个optimization lead?」，随后「按方案建」。

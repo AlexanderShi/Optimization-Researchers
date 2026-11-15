@@ -55,7 +55,7 @@ Nocedal、MINLP、语料线闸门）。这些坑每个都至少花过一次重�
 - 新成员的 SKILL.md、新圆桌写完后跑 `python3 -X utf8 scripts/answer_standard.py --apply product/<team>`（写入
   Answer Standard 一节，并在研究者 skill 的三处旧条款后补位置说明）；`team_check.py` 的 `answer-std` 一项核对。
   要改回答的写法只改 `references/answer-standard.md` 再 `--apply`，不要逐个改 SKILL.md；改完用同一批题对新旧版本
-  各答一遍再盲评（LOG 条目 (14) 的做法），写法好不好只有读回答才看得出来。
+  各答一遍再盲评（`teams/DISTILLATION_LOG.md` 2026-11-14「回答标准」一条的做法），写法好不好只有读回答才看得出来。
 
 ## 5. 语料流水线（DISTILL.md）
 

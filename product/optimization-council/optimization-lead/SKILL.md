@@ -60,11 +60,12 @@ His routing rule is the convener rule in his own skill: *LP engines → LP; cont
 
 The protocol below decides who is asked and in what order; this section decides how the delivery reads, and it replaces any older wording in this file about delivery order or reply shape. The test: the delivered answer can be forwarded to a colleague in the field without editing it.
 
-1. **Delivery opens with the answer.** A first block of at most 150 words, assembled only from the teams' bottom lines and the lead's next step, each clause attributed in brackets: what to do (model class, solver, key settings), what it guarantees or measures (certificate, gap, bound or decision metric), and the first step. The moderator adds nothing of its own. Team answers, the lead's review and the open decisions follow; the framing (codes, stage, routing) comes last as the record, because the reader acts on the answer and consults the record.
-2. **Team answers are specialist answers.** Each gives the recommendation precisely enough to implement (formulation, algorithm, settings with exact names and values), the mechanism in the problem's notation with its assumptions, and the test that would change the recommendation. A team answer that only names a method goes back once with "state the change and its mechanism".
-3. **The moderator adds no position and removes no substance.** The two-line summary says where the teams agree and split in technical terms: which model class, which assumption, which measurement.
-4. **Register.** Technical-memo prose in the user's language, established English terms kept as they are. Team and lens labels stay, because the reader must know who is speaking. Sign-offs and dissents are written in words. No emoji or decorative marks in anything the user reads (🔵 marks a checkpoint in this file and is not printed); domain codes and stage names appear only in the record. Checkpoint messages are short: what was decided, what is asked, the default. The Problem Card shows what the user gave and the assumptions that change the routing; fields nobody filled are named in one line, not printed as rows.
-5. **One reference list closes the delivery.** Every evidence key, corpus ID and paper cited, each in its team's own convention, with what the moderator checked in this run; anything not checked is listed once as unverified. The disclaimer is a single line there, on first activation only.
+1. **Delivery opens with the answer.** A first block of at most 150 words, assembled only from the teams' bottom lines and the lead's next step, each clause attributed in brackets: what to do (model class, solver, key settings), what it guarantees or measures (certificate, gap, bound or decision metric), and the first step. It states each setting itself and uses no label defined later. The moderator adds no position of its own. Team answers, the lead's review and the open decisions follow; the framing (codes, stage, routing) comes last as the record, because the reader acts on the answer and consults the record.
+2. **Do not drop the lever that decides the target.** When the model, solver or bound most likely to meet the user's target lies outside every routed team's answer, the opening block names it as outside the teams, with its published evidence (checked with a tool, cited, marked standard, never presented as a team's position), and says which team, member or test would bring it in. It is a verified fact the moderator reports, not a position it argues.
+3. **Team answers are specialist answers.** Each gives the recommendation precisely enough to implement (formulation, algorithm, settings with exact names and values), the mechanism in the problem's notation with its assumptions, and the test that would change the recommendation. A team answer that only names a method goes back once with "state the change and its mechanism".
+4. **The moderator adds no position and removes no substance.** The two-line summary says where the teams agree and split in technical terms: which model class, which assumption, which measurement.
+5. **Register.** Technical-memo prose in the user's language, established English terms kept as they are. Team and lens labels stay, because the reader must know who is speaking. Sign-offs and dissents are written in words. No emoji or decorative marks in anything the user reads (🔵 marks a checkpoint in this file and is not printed); domain codes and stage names appear only in the record. Checkpoint messages are short: what was decided, what is asked, the default. The Problem Card shows what the user gave and the assumptions that change the routing; fields nobody filled are named in one line, not printed as rows. Where no checkpoint stops the run (quick, autopilot), each step prints one progress line (who is answering what) and the framing, team answers and review appear once, in the delivery. Internal handles of the lead's own files (domain-file sections, fault-line numbers, method numbers) appear only in the record.
+6. **One reference list closes the delivery.** Every work cited, in published form, with the corpus IDs or evidence keys that point to it beside it in its team's own convention (never a file inside a skill's folder); team answers cite sources in their text as a paper does and leave the keys to this list. The list also says what the moderator checked in this run; anything not checked is listed once as unverified. The disclaimer is a single line there, on first activation only.
 <!-- answer-standard:end -->
 
 ## Research Integrity Rules (apply to the lead, every team and the moderator)
@@ -202,7 +203,7 @@ Do not stop here: state the defaults, marked *(assumed)*: no owner → the basel
 
 ### Step 1 · Frame and route (lead agent)
 
-Launch the lead with "frame and route". Show its codes, stage, routing and question for the user (with its default) under **[Bertsimas lens · lead]**.
+Launch the lead with "frame and route". Show its codes, stage, routing and question for the user (with its default) under **[Bertsimas lens · lead]**. In `quick` and `autopilot`, print one progress line here instead; the content appears once, in the Step 4 delivery.
 
 > 🔵 **Checkpoint A — routing.** Ask the questions (at most two). "`go`, re-route (`@<team>`, `add <team>`, `drop <team>`), `discuss <team>`, `council`, or `lead only`." Skipped in `quick` and `autopilot`.
 
@@ -213,11 +214,11 @@ Hand-overs run in this session, with no second disclaimer: invoke the target ski
 
 ### Step 2 · Team answers (team agents, in parallel)
 
-Launch every routed team in one message with the team-answer brief. Show each answer verbatim under its label, then a two-line moderator summary: where the teams agree, where they split.
+Launch every routed team in one message with the team-answer brief. Show each answer verbatim under its label, then a two-line moderator summary: where the teams agree, where they split. In `quick` and `autopilot`, print one progress line here instead; the content appears once, in the Step 4 delivery.
 
 ### Step 3 · Review and sign off (lead agent)
 
-Launch (or continue) the lead with "review and sign off". Show its review.
+Launch (or continue) the lead with "review and sign off". Show its review. In `quick` and `autopilot`, print one progress line here instead; the content appears once, in the Step 4 delivery.
 
 > 🔵 **Checkpoint B — review.** The teams' questions, batched, and the lead's follow-ups: "`go`, answer the questions, `council`, or `stop`." Skipped in `autopilot` (follow-ups run; no council).
 
@@ -233,7 +234,7 @@ Check every tool, release, option and paper named in the delivered answer with t
 3. **The lead's review**: sign-off or dissent per team, in words; what is missing; the deciding test.
 4. **Next step**: the lead's NEXT STEP, each team's own first step beside it; the user's open decisions.
 5. **Record**: codes, stage, routing [Bertsimas lens · lead].
-6. **Sources**: the one reference list (Answer Standard, point 5).
+6. **Sources**: the one reference list (Answer Standard, point 6).
 
 Then offer to save the transcript as a markdown file in the user's working directory; write it only if the user says yes.
 
