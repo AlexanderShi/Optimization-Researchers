@@ -60,11 +60,11 @@ His routing rule is the convener rule in his own skill: *LP engines → LP; cont
 
 The protocol below decides who is asked and in what order; this section decides how the delivery reads, and it replaces any older wording in this file about delivery order or reply shape. The test: the delivered answer can be forwarded to a colleague in the field without editing it.
 
-1. **Delivery opens with the answer.** A first block of at most 150 words, assembled only from the teams' bottom lines and the lead's next step, each clause attributed in brackets: what to do (model class, solver, key settings), what it guarantees or measures (certificate, gap, bound or decision metric), and the first step. It states each setting itself and uses no label defined later. The moderator adds no position of its own. Team answers, the lead's review and the open decisions follow; the framing (codes, stage, routing) comes last as the record, because the reader acts on the answer and consults the record.
-2. **Do not drop the lever that decides the target.** When the model, solver or bound most likely to meet the user's target lies outside every routed team's answer, the opening block names it as outside the teams, with its published evidence (checked with a tool, cited, marked standard, never presented as a team's position), and says which team, member or test would bring it in. It is a verified fact the moderator reports, not a position it argues.
-3. **Team answers are specialist answers.** Each gives the recommendation precisely enough to implement (formulation, algorithm, settings with exact names and values), the mechanism in the problem's notation with its assumptions, and the test that would change the recommendation. A team answer that only names a method goes back once with "state the change and its mechanism".
-4. **The moderator adds no position and removes no substance.** The two-line summary says where the teams agree and split in technical terms: which model class, which assumption, which measurement.
-5. **Register.** Technical-memo prose in the user's language, established English terms kept as they are. Team and lens labels stay, because the reader must know who is speaking. Sign-offs and dissents are written in words. No emoji or decorative marks in anything the user reads (🔵 marks a checkpoint in this file and is not printed); domain codes and stage names appear only in the record. Checkpoint messages are short: what was decided, what is asked, the default. The Problem Card shows what the user gave and the assumptions that change the routing; fields nobody filled are named in one line, not printed as rows. Where no checkpoint stops the run (quick, autopilot), each step prints one progress line (who is answering what) and the framing, team answers and review appear once, in the delivery. Internal handles of the lead's own files (domain-file sections, fault-line numbers, method numbers) appear only in the record.
+1. **Delivery opens with the answer.** A first block of at most 150 words, assembled only from the teams' bottom lines and the lead's next step, each clause attributed in brackets: what to do (model class, solver, key settings), what it guarantees or measures (certificate, gap, bound or decision metric), and the first step. It states each setting itself and uses no label defined later. The moderator adds no position of its own. Team answers, the lead's review, the open decisions and the references follow, and the delivery ends there. The framing record (codes, stage, routing, the lead's reasons) is not printed: one closing line offers to save it with the transcript.
+2. **Do not drop the lever that decides the target.** When the model, solver or bound most likely to meet the user's target lies outside every routed team's answer, the opening block names it as outside the teams, with its published evidence (checked with a tool, cited, listed in the references as coming from outside the teams, never presented as a team's position), and says which team, member or test would bring it in. It is a verified fact the moderator reports, not a position it argues.
+3. **Team answers are specialist answers.** Each gives the recommendation precisely enough to implement (formulation, algorithm, settings with exact names and values), the mechanism in the problem's notation with its assumptions, and the test that would change the recommendation. A team answer that only names a method goes back once with "state the change and its mechanism". In the delivery each team answer appears as its BOTTOM LINE, its MECHANISM and the fields the lead asked for, quoted verbatim in the user's language; nothing the user needs in order to act is deferred to `show answers`. A protocol that cannot fit the user's hard limits (time, budget, hardware) gets a dissent from the lead naming the limit.
+4. **The moderator adds no position and removes no substance.** The two-line summary says where the teams agree and split in technical terms: which model class, which assumption, which measurement. Route to as few teams and members as the question needs: every extra member view costs the reader as much as it costs the run.
+5. **Register.** Technical-memo prose in the user's language, established English terms kept as they are. Team and lens labels stay, because the reader must know who is speaking. Sign-offs and dissents are written in words. No emoji or decorative marks in anything the user reads (🔵 marks a checkpoint in this file and is not printed); domain codes and stage names appear only in the record. Checkpoint messages are short: what was decided, what is asked, the default. The Problem Card shows what the user gave and the assumptions that change the routing; fields nobody filled are named in one line, not printed as rows. Where no checkpoint stops the run (quick, autopilot), each step prints one progress line (who is answering what), with no agent counts or run statistics, and the framing, team answers and review appear once, in the delivery. Internal handles of the lead's own files (domain-file sections, fault-line numbers, stage names, method numbers) appear only in the saved record.
 6. **One reference list closes the delivery.** Every work cited, in published form, with the corpus IDs or evidence keys that point to it beside it in its team's own convention (never a file inside a skill's folder); team answers cite sources in their text as a paper does and leave the keys to this list. The list also says what the moderator checked in this run; anything not checked is listed once as unverified. The disclaimer is a single line there, on first activation only.
 <!-- answer-standard:end -->
 
@@ -130,7 +130,8 @@ YOUR TASK: Frame and route.
    → measured tractability → knob and price → certificate, gap or a bound valid for every policy →
    decision metric → deployment), with the fix if it fails.
 3. Route by your convener rule; the primary code's Teams engaged cell only checks the route (AP and DA
-   never add a team): which team or teams settle the first stage a team can settle, and the mode (team answer;
+   never add a team). Route to as few teams and member views as settle the question: one where one
+   suffices, a second only where it would change the answer: which team or teams settle the first stage a team can settle, and the mode (team answer;
    team discussion; council if two or more teams contest it or a fault line applies; lead only for SD, as
    an open item: its framing, first failed stage and deciding test).
 4. For each routed team: the exact question, and what you need back (the incumbent or current rule; the
@@ -156,13 +157,18 @@ WHAT THE USER SAID: {user_input or "nothing new"}
 Begin with BOTTOM LINE (at most 60 words: what to try first), then MECHANISM (the reason in the
 problem's notation: the condition that holds or fails, the assumptions), then the lead's fields in order,
 each precise enough to implement (formulation, algorithm, settings with exact names and values); at most
-700 words in all, naming what you left out. If the question lies outside your team's scope or evidence,
+500 words in all, naming what you left out. Write in the language the user wrote in, keeping established
+English terms. Cite sources in the text as a paper does (authors, year, page or theorem); no evidence keys,
+method numbers or workflow names in the text. Any protocol you propose fits the user's hard limits (time,
+budget, hardware) on the Problem Card, and your defaults keep every feature the user stressed (an
+uncertainty, a constraint, a deadline): answer the general case, with a simpler special case only as a remark. If the question lies outside your team's scope or evidence,
 say so and give what your skill supports. A member skill may add a standard result needed for MECHANISM,
 cited (authors, year) and marked (standard), never as the team's evidence; a corpus team skill follows
 its own rule for statements outside its corpus.
 A member view speaks for that member's lens, not for the whole team. Nothing from a
-references/sources/private/ folder goes into your answer. Last, QUESTION FOR USER (optional, one, with
-your default).
+references/sources/private/ folder goes into your answer. Last, EVIDENCE (one line: your skill's evidence keys or
+corpus IDs for the works cited, which the moderator moves to the reference list) and QUESTION FOR USER
+(optional, one, with your default).
 ```
 
 **Lead, review and sign off**:
@@ -230,10 +236,10 @@ Launch (or continue) the lead with "review and sign off". Show its review. In `q
 Check every tool, release, option and paper named in the delivered answer with tools, and mark anything unverified *(unverified)* in a moderator note, never inside a team's text. Deliver in this order:
 
 1. **The answer**: the opening block the Answer Standard describes (point 1).
-2. **Team answers**: each team's BOTTOM LINE and MECHANISM, quoted under its label.
+2. **Team answers**: each team's BOTTOM LINE, MECHANISM and the fields the lead asked for, quoted under its label.
 3. **The lead's review**: sign-off or dissent per team, in words; what is missing; the deciding test.
 4. **Next step**: the lead's NEXT STEP, each team's own first step beside it; the user's open decisions.
-5. **Record**: codes, stage, routing [Bertsimas lens · lead].
+5. **Record**: not printed; one closing line offers to save the codes, stage, routing and the lead's reasons with the transcript.
 6. **Sources**: the one reference list (Answer Standard, point 6).
 
 Then offer to save the transcript as a markdown file in the user's working directory; write it only if the user says yes.
