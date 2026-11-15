@@ -4,6 +4,7 @@
 > 均全文已读；论文 [LP-S1] 依 ERA 条款只作短引），另加两条相关记录：FICO 博客 [LP-S58]（只核实其存在，正文未读）与 COAP 2015 奖公告
 > [LP-S59]（只读首页）。版本：PAMI 论文以 ERGO-14-011 [LP-S2] 为阅读主本，arXiv v1 [LP-S3] 与 MPC 2018 [LP-S4] 作版本对照；更新技术读
 > ERGO-13-001 报告 [LP-S5]（COAP 期刊版正文未读）；ParISS 读 ERGO-11-007 报告 [LP-S6]（LNCS 版正文未读）。
+> 2026-11-05 勘误按 01-canon 所注页码补读的原文（LP-S22、LP-S50、LP-S60）只用于文中标「原文核对」的几处，不扩大档案依据。
 > **语料中没有个人主页、简历、访谈或第三方传记**——身份信息只来自文献的署名、致谢、作者句与讲者简介。
 > 方法论立场按 `standards/researcher-extraction.md` 做三重验证；凡出自与 Hall 合著文本的立场，无法单独归于 Huangfu（见「信息不足」）。
 
@@ -31,7 +32,10 @@
 
 在 02-schools 的五张图里，来源标为新提出的、署有他名字的工作落在三格：B（基更新——与 Hall 的 APF、MPF、CFT）、C（定价——LiDSE 与超稀疏性提升的诠释；over-weighting 与 Hall 合作）、
 E（并行——PAMI 与 SIP）。在 A（对偶 vs 原始）与 D（比率检验）两格他是集成者而非发明者：DSE、BFRT、Harris、EXPAND、扰动、对偶 phase I 都取自前人（F7），
-他的增量在实现层——离基行 DSE 权重核查、Harris 组与 BFRT 的结合、BOXED 变量在 phase I 中的处理 [LP-S1 §3.2.2–§3.2.4, PDF pp. 54–60]。
+他的增量在实现层，如离基行 DSE 权重核查（更新值小于重算值的 0.5 倍就放弃这次选择、重做 CHUZR）[LP-S1 §3.2.2, PDF pp. 54–55]。原文核对：Harris 组与 BFRT 的结合，
+Koberstein 2005 已有算法实现（Alg. 18），并自称受 COIN LP 启发、与 Clp 的 dualColumn 相似 [LP-S60 PDF pp. 92, 117]；phase I 中 BOXED（与 FIXED）变量不参与、
+靠翻界取得对偶可行，也已明写在 Koberstein 2005 的子问题法里（§4.1.2，Alg. 8 第 1 步）[LP-S60 PDF pp. 53–54, 56]。论文对这两点都没有自称首创，
+只说 Koberstein–Suhl 2007 年文对后一点 "not clearly expressed" [LP-S1 §3.2.3–§3.2.4, PDF pp. 58–60]（2007 年文未读），所以不能把它们记作他的增量。
 
 ## 核心贡献（逐条带锚点）
 
@@ -39,7 +43,7 @@ E（并行——PAMI 与 SIP）。在 A（对偶 vs 原始）与 D（比率检�
 - 线性代数：实现 Suhl–Suhl 稀疏 LU [LP-S1 §2.2.6, PDF p. 28]；为置换因子写出两阶段 DFS 超稀疏求解的伪代码（论文称 Gilbert–Peierls 只简略提过）
   [LP-S1 §2.3.3, PDF pp. 32–33]；写出维护行式表示与超稀疏结构的 FT 更新实现，论文称此前 "never been documented" [LP-S1 §2.4.3, PDF p. 36]。
 - 对偶算子：离基行 DSE 权重核查（r = 0.5）与对偶超稀疏 CHUZR [LP-S1 §3.2.2, PDF p. 55]；BFRT 与 Harris 组的结合、对偶 EXPAND 零步、Koberstein 扰动的
-  简化不加权版 [LP-S1 §3.2.3, PDF pp. 58–59]。
+  简化不加权版 [LP-S1 §3.2.3, PDF pp. 58–59]——这些是 HSOL 实现了什么，不是首创（Harris 组与 BFRT 的结合见上一节的原文核对）。
 - 质量：论文称与 Clp 的对偶单纯形 comparable（LP-R11）；期刊版测得 hsol 比 Clp 1.15 快 2.29 倍（LP-R10）。
 
 ### 2. 三种基更新：APF、MPF、CFT [LP-S5; LP-S1 §2.5]
@@ -72,20 +76,25 @@ E（并行——PAMI 与 SIP）。在 A（对偶 vs 原始）与 D（比率检�
   Shu 的高加速来自老式 PRICE [LP-S1 §4.1.2, PDF p. 73]。
 
 ### 心智模型 2 为暴露并行而换用（稍劣的）算法变体，再用控制机制补回损失 ✅三重通过
-- **跨域复现**：定价层——复活被遗忘的 suboptimization，只为取得任务并行，并用 ψ 截断控制候选质量 [LP-S2 §2.3, §3.3, PDF pp. 8, 13–14]；线性代数层——设计 APF
+- **跨域复现**：定价层——重新启用在现代实现中作为定价规则已 "largely forgotten" 的 suboptimization（同段也说原始 suboptimization 支撑了 Hall–McKinnon 的
+  并行工作 [LP-S2 §2.3, PDF p. 8]；原文核对：Wunderling 1996 的并行实现也用过一次选多个下标的 block pivoting，并在对偶单纯形上测量 [LP-S50 PDF pp. 120–122, 176–177]），
+  只为取得任务并行，并用 ψ 截断控制候选质量 [LP-S2 §2.3, §3.3, PDF pp. 8, 13–14]；线性代数层——设计 APF
   让多个 FTRAN 合成一次、设计 CFT 让 minor iterations 之后仍能用 FT [LP-S5 §3.1.1, §3.2, PDF pp. 7–12]；对照方案 SIP 不换变体，只能取单次迭代内的有限并行
   [LP-S1 §4.4.1, PDF p. 90]。
 - **生成力**：面对一条串行依赖链，他会问：有没有代数上等价或略劣的变体能暴露并行，再用什么控制补回？可检验：论文为串行的 INVERT 提出「后台分解 + FT 追赶」
   的重叠方案 [LP-S1 ch. 5, PDF p. 95]。
-- **排他性**：与 Bixby–Martin 只并行常规方法组件的路线相对 [LP-S52，据 LP-S2 §2.2.4, PDF p. 6]，也与「suboptimization 已被淘汰」的通行看法相对
+- **排他性**：与 Bixby–Martin 只并行常规方法组件的路线相对 [LP-S52，据 LP-S2 §2.2.4, PDF p. 6]，也与「在现代修正单纯形实现里，suboptimization 作为定价规则已基本被遗忘」的通行看法相对
   [LP-S2 §2.3, PDF p. 8]。
 
 ### 心智模型 3 从意外的计算现象出发，用剖面找机制，再把机制做成新技巧 ✅三重通过
-- **跨域复现**：定价层——扰动带来不成比例的提速 → 统计超稀疏率与翻界次数 → BFRT 诠释 → LiDSE、partial CHUZR [LP-S1 §3.3, PDF pp. 61–68]；同一路线在 APMOD12
+- **跨域复现**：定价层——扰动带来不成比例的提速 → 统计超稀疏率与翻界次数 → BFRT 诠释 → LiDSE，并用已有的 partial CHUZR 做避开稠密行的试验（论文自己说对偶的 partial CHUZR "is not a novel idea at all" [LP-S1 §3.3.3, PDF p. 64]）[LP-S1 §3.3, PDF pp. 61–68]；同一路线在 APMOD12
   走到 over-weighting [LP-S7 §1–§3, PDF pp. 1–5; LP-S8 PDF pp. 9–27]；并行层——组件剖面（LP-R1）→ CHUZC2 不并行、SIP 的结构、解释 PAMI 最好与最差的个例
   [LP-S1 §4.2–§4.4, PDF pp. 76–93; LP-S2 §5.2, PDF p. 22]。
 - **生成力**：遇到「迭代只少 10%、时间却少 60%」这类现象，他会把时间拆到组件与稀疏率上，问路径是否经过了更超稀疏的顶点——这正是 [LP-S7 §1, PDF p. 2] 的提问方式。
-- **排他性**：与文献很少讨论扰动为何有效、Bixby 不给解释、Koberstein 的加权扰动没有数值证据的状况相对 [LP-S1 §3.3.2, PDF p. 62]。
+- **排他性**：与论文所描述的文献状况相对：很少讨论扰动为何有效、Bixby 没有给进一步的解释、Koberstein 的加权扰动没有数值证据 [LP-S1 §3.3.2, PDF p. 62]。
+  原文核对：Bixby 2002 没有说明 7.1 的对偶扰动「更激进」指什么、为何能提速，并把 Cplex 7.1 在 PDS 上的表现归于稀疏、扰动、bound flipping 三点 [LP-S22 TR01-20 pp. 10, 14]；论文引的 Koberstein 是 2008 年
+  期刊文（正文未读），其 2005 年博士论文的权重与论文表 3.3 所转述的相同（与 2008 年文是否全同未核）[LP-S60 PDF p. 99; LP-S1 §3.2.3, PDF p. 60]，给了加权的理由、但没有单独检验加权 [LP-S60 PDF pp. 98–99, 138–140]；论文的否定同样没有列出加权与不加权的对比，
+  只说本研究的计算经验未能证实 [LP-S1 §3.2.3, PDF p. 60]（02-schools「分歧」1、2）。对比仍成立：Bixby 与 Koberstein 都没有用剖面去找扰动起作用的机制（推断）。
 
 ### 工作信条（未全过三重验证，按标准降级）
 - **实现简单是一等设计目标**：MPF 被推荐给 "an industrial context where an independent code-base is necessary" [LP-S5 §5, PDF p. 18]；HSOL 故意保持简单以便设计并行方案
@@ -105,7 +114,8 @@ E（并行——PAMI 与 SIP）。在 A（对偶 vs 原始）与 D（比率检�
 4. **partial CHUZR**（领域性）：网络 LP 上正面（与 Hall 合作）、pds 上负面（论文）——见 02-schools「分歧」6。
 5. **推荐 MPF 却不用 MPF**：报告推荐 MPF [LP-S5 §5, PDF p. 18]，但 hsol/h2gmp 与 pami 都不用它 [LP-S15 PDF p. 19; LP-S13 PDF p. 32]。
 6. **「第一个」通用并行修正单纯形**：期刊称其工作是第一个 "parallel revised simplex solver of general utility"，同文却引了更早的并行修正单纯形（Bixby–Martin、PARSMI、ASYNPLEX）；
-   关键在未定义的 general utility [LP-S2 abstract, §1, §2.3, PDF pp. 1–2, 8]。
+   关键在未定义的 general utility [LP-S2 abstract, §1, §2.3, PDF pp. 1–2, 8]。原文核对：更早的还有 Wunderling 1996 年的并行对偶单纯形实现与计时
+   [LP-S50 PDF pp. 172, 176, 203–207]；ERGO 版通篇没有提 Wunderling（全文检索），MPC 版只据 Hall 综述把他记作原始 suboptimization 的试验者 [LP-S4 §2.3, PDF p. 9]。
 7. **FICO 相关措辞随版本变**：arXiv v1 有 FICO "advertising copy and blogs" 的句子，ERGO 与 MPC 版删去 [LP-S3 §5.4, PDF p. 24; LP-S2 §5.4, PDF p. 23; LP-S4 §5.4, PDF p. 24]。
 
 ## 信息不足

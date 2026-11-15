@@ -50,13 +50,21 @@
 
 ## 一、选人
 
-1. **3–6 人。** 少于 3 人争不起来（圆桌默认坐 3 人）。多于 6 人，座位表难排，成本也按人数线性增长。
+1. **3–6 人。** 少于 3 人争不起来（圆桌默认坐 3 人）。多于 6 人，座位表难排，成本也按人数线性增长。人数按入座的人算：本队成员加客座（第 7 条）。成本主要随本队成员增长：客座的 T1、T3、T4 在他的主队跑，本队不为他跑；每位客座只让本队的 T2 多一个只读的 agent（读他的 Roundtable Card 和研究笔记），T3.8 多读一遍他的文件（不另加 agent）。
 2. **视角互补。** 开始调研前，先给每人写一行 lens，再按问题信号草拟座位表（每行 2 位主讲 + 1 位挑战者）。有人哪一行都不主讲，或者每一行都主讲，就换人或重新划分视角。
 3. **分歧有据。** 挑在论文里真正意见不同的人。立队时列出预计的 3–5 条 fault line，每条写明双方是谁。T3 之后，每条都要有双方各自的卡片证据（写法如 `[<member> card S093 pp. 3–4]`）；找不到证据的，标为「推断」或删掉。证据强弱依次是：成员之间在论文里的直接交锋，已发表方法的对照，推断。
 4. **先写清边界。** 不在队里的学派（DFO 的例子是贝叶斯优化和进化方法）写进 README 第一段和圆桌的 `Outside the Team`。
 5. **看证据量。** 立队前，先看每人的 Google Scholar 条目数和方法论自述（访谈、讲义、学生回忆）。来源太少的人，提炼出的方法会很薄：要么换人，要么在诚实边界里写明。
    - **没有 Scholar 主页的人**（历史人物常见，尤其是在 Scholar 个人主页出现以前就去世的人）：用 `python3 scripts/dblp_works.py --name "<Name>"` 看 DBLP 记录数和年份范围，再看主页或 CV 的发表列表。`team.json` 的 `scholar` 留空；harvest 会先在 Scholar 上按姓名搜一次主页，找不到就以 DBLP + 主页为主列表（ID 用 `D`、`H`），T3.1 闸门改为与 DBLP 记录数和 CV 对账（见第三节）。`python3 scripts/new_team.py $T/team.json --lookup` 从 DBLP 补空着的 `dblp`、`orcid`、`homepage`（按 Scholar 链接或 ORCID 匹配到的可靠；只按姓名匹配到的会提示对照 hint 核对）；harvest 找到的 Scholar id、DBLP pid，照它返回的 `next` 用 `--set-member <slug> scholar=… dblp=…` 记回去，不用手改 JSON。`new_team.py` 先把这人 `RESOURCES.md` 第 1 行的 Link 写成 `— (no Scholar profile in team.json; list from DBLP/homepage)`（轻量档是 `—`），harvest 的审计再把整行改写成实际用的 DBLP 个人页或主页列表。
 6. **姓氏在队内唯一。** 圆桌的 `[Surname lens]`、`@<Surname>`、`add/drop <Surname>` 都靠 `surname` 区分成员。撞姓时（例如数值线性代数的 Nicholas Higham 和 Desmond Higham）写成 `"N. Higham"`、`"D. Higham"`。`new_team.py` 起草、铺目录和 `--add-member` 时都会检查，撞姓就警告，照提示改 `team.json` 的 `surname`。`surname` 只是标签：工作流核对作者、拼检索词用的是姓（`name` 的最后一个词，如 "Higham"；姓不在最后的名字写可选的 `family_name`），所以 "N. Higham" 不会让核对第 1 页作者的 agent 把正确的文本当成错的。
+7. **客座成员（guests）。** 别队的成员也可以坐进本队的圆桌，称为客座；他所在的那支队是他的主队（`home`）。`team.json` 的 `guests` 写 `{"slug": "<他在主队的 slug>", "home": "<主队在 product/ 下的目录名>"}`，只写这两个键（格式与规则见 `team-templates/team.example.json`）。
+   - 一个人只在一支队里当成员，skill、笔记、卡片只在 `product/<home>/<slug>/` 有一份；在别的队他只能当客座。slug 在整个 `product/` 里唯一（安装是平铺的 `~/.claude/skills/<slug>/`）。本队不复制、不链接、不给客座建文件夹：圆桌先找同级目录，副本会先被读到。
+   - 本队至少要有一位自己的成员（`members` 不能为空）；客座算座位（第 1 条）。只有客座、没有本队成员的队不成立。
+   - 客座的名字、姓、`living`、hint、各种 id、`student_mode` 都从主队的 `team.json` 原样读，要改也在那里改；那里没写的键（如 `living`），本队也不写、不推断。档位、语言、`card_dimensions`、`chase_hints` 都跟主队走。
+   - 视角（第 2 条）：他的 Roundtable Card 是为主队写的，本队不改。T2 在圆桌 Team 表下给每位客座写一段「Guest seat」：在本队领域里什么时候主讲、和本队的人可能在哪里分歧（双方各从自己的文件里找证据）、给他的 agent 的简报说明。他在座位表里至少入座一行（主讲或挑战者），至少进一条 fault line。他和没在本队入座的主队队友之间的分歧，不变成这里的 fault line。
+   - 证据（第 3 条）：客座一方引他自己文件夹里的证据：主队给他写了卡片就必须引卡片（ID 在他的卡片里），还没有卡片就引研究笔记 01–06。他的 skill 是按主队的领域和 hint 提炼的，本队领域里超出这个范围的说法没有他自己的证据，标「推断」或删掉，并在 `Outside the Team` 和诚实边界里写明他在这里覆盖到哪里。
+   - 撞姓（第 6 条）：姓氏在成员和客座之间也要唯一。撞了先改本队成员的 `surname`：客座的姓记在主队的 `team.json` 里。两位客座撞姓时，只能在其中一位的主队 `team.json` 里改。
+   - 加客座、主队改动或移除一位在别队做客的成员，步骤见第八节。
 
 **DFO 的例子。** 这五人可以看成「两个学派 × 理论 / 实践，外加一个新方向」。五条 fault line 各至少涉及 2 人，每人至少出现在 2 条里，这是可以参照的形状：
 
@@ -133,9 +141,9 @@ apt-get update && apt-get install -y tesseract-ocr ghostscript     # OCR；ps2pd
 
 | 步 | 命令 / 工作流 | 输入 → 输出 | 闸门（通过标准） | 成本（每人） | 并行 |
 |---|---|---|---|---|---|
-| T0 定义 | `new_team.py --init` → 补 `team.json`（`--lookup` 从 DBLP 补 id，`--set-member` 改字段）→ `new_team.py`（只做轻量档加 `--base-tier`） | 选人结果 → `team.json`、团队目录骨架、README / 圆桌 / DEEP-READING 模板 | `.md` 里不剩 `{{`；`[TODO: …]` 就是待办，每条都写明由哪一步填；没有撞姓警告；`check_links.py` 0 broken（README 指向各人 SKILL.md 的链接记为 pending，T1 写） | 0 | — |
-| T1 基础Skill | `team-base-skills.js`（`to` / `from` 分段，见下方人工检查点；`tier: "quick"` 只跑调研 01–03） | 成员信息 → `<M>/SKILL.md`（含 Roundtable Card）、`research/01–06` | `quality_check.py` 12/12 | 16–20 agent（quick 档 13–17） | 每人一个工作流 |
-| T2 团队层 | `team-layer.js`（`members` 放**全体**；只做轻量档时 `deep_tier: false`） | 各人的 Roundtable Card → README、圆桌 SKILL.md、各人 RESOURCES.md | `check_links.py` 0；每人都有 Roundtable Card；每条 fault line 双方都有证据；模板闸门：轻量档没有输出，深读档只剩标给 T3 各步的 TODO。圆桌不跑 `quality_check.py` | 每人 2 个，团队另加 4–5 个 | 团队一次 |
+| T0 定义 | `new_team.py --init` → 补 `team.json`（`--lookup` 从 DBLP 补 id，`--set-member` 改字段）→ `new_team.py`（只做轻量档加 `--base-tier`）。有客座时写进 `team.json` 的 `guests`（`--init` 加 `--guests "home/slug;…"`，或照 `team.example.json` 手写） | 选人结果 → `team.json`、团队目录骨架、README / 圆桌 / DEEP-READING 模板；客座只在 README 和圆桌里有行，不铺目录 | `.md` 里不剩 `{{`；`[TODO: …]` 就是待办，每条都写明由哪一步填；没有撞姓警告；`check_links.py` 0 broken（README 指向各人 SKILL.md 的链接记为 pending，T1 写）；每位客座都能解析（`new_team.py` 报错就停，多半是他主队的分支还没合进来。只有客座解析不了、别的都没问题时，本队自己的成员可以先铺：把这几位从 `team.json` 的 `guests` 里拿掉再跑（`--init` 时从 `--guests` 里拿掉；`--guests` 只写了这几位时，不带 `--guests`），等他们能解析了再写回 `guests`、跑 `--add-guest`（第八节「加一位客座成员」第 2–3 步）；客座都是在等主队（主队的 `team.json` 不在，他不在那队的 `members` 里、也没有只差大小写的 slug，或他在主队还没有文件夹）时，`new_team.py` 会打印这条提示，其余原因照报错那一行就地改）；客座的链接指向 `../<home>/<slug>/SKILL.md`，他主队的 T1 跑到一半（有笔记、还没有 SKILL.md）时算坏链 | 0 | — |
+| T1 基础Skill | `team-base-skills.js`（`to` / `from` 分段，见下方人工检查点；`tier: "quick"` 只跑调研 01–03）；只给本队成员，客座的 T1 在他的主队跑 | 成员信息 → `<M>/SKILL.md`（含 Roundtable Card）、`<M>/FIDELITY.md`、`research/00-prior.md`、`01–06`、`holdout.md` | `quality_check.py` 12/12 | 23–27 agent（quick 档 20–24） | 每人一个工作流 |
+| T2 团队层 | `team-layer.js`（`members` 放**全体**；只做轻量档时 `deep_tier: false`）。有客座时，等每位客座在本分支上都有 SKILL.md 再跑（先合并他主队的分支）；客座由 `make_args.mjs` 放进 `guests`，只读 | 各人的 Roundtable Card → README、圆桌 SKILL.md、各人 RESOURCES.md（客座的文件只读、不改） | `check_links.py` 0；每人都有 Roundtable Card；每条 fault line 双方都有证据；模板闸门：轻量档没有输出，深读档只剩标给 T3 各步的 TODO。圆桌不跑 `quality_check.py` | 每人 2 个，团队另加 4–5 个；每位客座另加 1 个只读的（客座的 T1、T3、T4 在他的主队跑，T3.8 只多读一遍他的文件，不另加 agent） | 团队一次 |
 | T3.1 发表全表 | `team-harvest.js`（DBLP 走 `dblp_works.py`；`acquire` 默认 false，T3.2 在主会话里跑） | Scholar id、DBLP、Crossref → `works.json`、`scholar.md`；再做独立审计 | `validate_works.py` 0 errors；`S` 行数与 Scholar 总数对得上。没有 Scholar 主页时，改为与 `dblp_works.py --pid` 的记录数对账（`D` 行；差额要逐条说得清，例如并进正式版的 CoRR 预印本、重复、编辑的文集），`H` 行与主页 CV 对账 | 3 agent / 40 万 token | 每人一个 |
 | T3.2 开放全文 | `acquire_fulltexts.py` | `works.json` → PDF、`txt/`、`INDEX.md`、`abstracts.json` | INDEX 行数 = `works.json` 里不是重复（`dup_of` 为空）的条目数（`team_status.py` 的 Indexed 列打 ✓；书的开放部分 B### 另计） | 0 agent；arXiv 请求间隔 3 秒 | 每人一个后台进程 |
 | T3.3 补搜、合并 | `team-chase.js`（最后自动跑 `merge_chase.py`） | 仍为 no-oa 的作品（每块 20 篇）→ PDF、`abstracts-chase-<date>-r<run>-<块>.json` → 并入 `abstracts.json`、`abstract-sources.json`，重跑获取 | 只用合法开放来源；在首页核对作者；报告新增全文数 | 5 / 90 万 | 每人一个 |
@@ -148,7 +156,7 @@ apt-get update && apt-get install -y tesseract-ocr ghostscript     # OCR；ps2pd
 
 成本列里 T3.1–T3.7 和 T4 是 DFO 的实测（第六节）；T1、T2、T3.8 的 agent 数，以及现版 T4 的数字，按现在的工作流结构估算，DFO 没有单独计量这几步。
 
-**工作流参数。** 五个共用参数（`repo`、`team`、`scratch`、`date`、`members`）、可选的 `request`（用户原话里的请求）和各工作流的特有参数，见 [README 第二节](../scripts/workflows/README.md#二参数约定)。**不要手抄**：`node scripts/workflows/make_args.mjs <工作流> --team $T [--member a,b] [--set KEY=JSON]` 从 `team.json` 生成现成的 `{scriptPath, args}`，每人一个（T2、T3.8 一个），scratch 固定为 `${TMPDIR:-/tmp}/<team>-scratch`，所有阶段都用这一个。参数名一律 `snake_case`（如 `batch_files`、`word_budget`、`max_words`、`target_words`、`max_growth`、`root_readme`、`new_fault_lines`）；早期版本用过的 camelCase 旧名（`batchFiles`、`maxGrowth` 等）仍当别名接受，运行开头记一行日志提醒改名，新旧都给时用新名。按成员跑的工作流，`members` 只放一位（从 `team.json` 原样拷贝），每人起一个，在同一条消息里一起发出。T2 和 T3.8 放**全体**：圆桌要读每个人的卡片；`team-layer.js` 少了谁，圆桌 agent 会在返回值里报 `NOT-IN-RUN <slug>`，日志记一行 `team.json members missing from this run: …`；那人在圆桌里原有的行不删也不更新，要带全体重跑。一个完整的调用：
+**工作流参数。** 五个共用参数（`repo`、`team`、`scratch`、`date`、`members`）、可选的 `request`（用户原话里的请求）和各工作流的特有参数，见 [README 第二节](../scripts/workflows/README.md#二参数约定)。**不要手抄**：`node scripts/workflows/make_args.mjs <工作流> --team $T [--member a,b] [--set KEY=JSON]` 从 `team.json` 生成现成的 `{scriptPath, args}`，每人一个（T2、T3.8 一个），scratch 固定为 `${TMPDIR:-/tmp}/<team>-scratch`，所有阶段都用这一个。参数名一律 `snake_case`（如 `batch_files`、`word_budget`、`max_words`、`target_words`、`max_growth`、`root_readme`、`new_fault_lines`）；早期版本用过的 camelCase 旧名（`batchFiles`、`maxGrowth` 等）仍当别名接受，运行开头记一行日志提醒改名，新旧都给时用新名。按成员跑的工作流，`members` 只放一位（从 `team.json` 原样拷贝），每人起一个，在同一条消息里一起发出。T2 和 T3.8 放**全体**：圆桌要读每个人的卡片；`team-layer.js` 少了谁，圆桌 agent 会在返回值里报 `NOT-IN-RUN <slug>`，日志记一行 `team.json members missing from this run: …`；那人在圆桌里原有的行不删也不更新，要带全体重跑。团队有客座时，`make_args.mjs` 给这两个工作流另加 `guests`（每位客座在他主队 `team.json` 里的条目原样，加 `home`、`dir`；见 README 第二节）；客座不放进 `members`，按成员跑的工作流也不给客座跑（`--member <客座 slug>` 报错，要到 `product/<home>` 跑）。一个完整的调用：
 
 ```bash
 node scripts/workflows/make_args.mjs team-base-skills --team product/<team> --set to=review --request "<用户的请求原话>"
@@ -161,12 +169,14 @@ node scripts/workflows/make_args.mjs team-base-skills --team product/<team> --se
 **续跑与预览。**
 - 中断以后续跑：同样的调用加上 `resumeFromRunId: "<上次的 runId>"`。
 - 第一次在真团队上跑之前，先用 `dry_run.mjs`（Node ≥ 18）预览每个 agent 会收到的 prompt，不花 token：`node scripts/workflows/dry_run.mjs scripts/workflows/team-<name>.js --team product/<team> --member <slug> --set KEY=JSON --out /tmp/<team>-prompts --strict --forbid 'bandit|Ada Example|Bo Sample'`。不给参数文件，参数就和 `make_args.mjs` 为真启动生成的一样；别拿 `examples/` 的参数文件预览自己的团队（那是虚构示例团队的值）。`team-layer.js`、`team-integrate.js` 预览时不给 `--member`：它们要全体成员。
-- 改过工作流脚本或套件脚本，闸门是 `bash scripts/workflows/selftest.sh product/<一支已完成的团队>`（九个示例的 `--strict` 预览、已完成团队上的 `make_args.mjs` 与 `dry_run.mjs --team`、脚本编译、`team_check.py`；见 [README 第七节](../scripts/workflows/README.md#七改工作流之后)）。**别用 `node --check`**：运行时把脚本包进一个 async 函数，脚本末尾的顶层 `return` 是合法的，`node --check` 却一定报 "Illegal return statement"。
+- 改过工作流脚本或套件脚本，闸门是 `bash scripts/workflows/selftest.sh product/<一支已完成的团队>`（九个示例的 `--strict` 预览、已完成团队上的 `make_args.mjs` 与 `dry_run.mjs --team`、脚本编译、`team_check.py`，以及客座 fixture：临时目录里两支虚构的团队，一支请另一支的成员作客座，不需要已完成的团队；见 [README 第七节](../scripts/workflows/README.md#七改工作流之后)）。**别用 `node --check`**：运行时把脚本包进一个 async 函数，脚本末尾的顶层 `return` 是合法的，`node --check` 却一定报 "Illegal return statement"。
 
 **人工检查点。** 对应主 `SKILL.md` 的 Phase 1.5 和 2.5：
 1. T1 先用 `to: "review"` 跑，把调研摘要摆给用户看。这时就 commit 调研笔记 01–06（`bash scripts/team_commit.sh $T/$M "research($M): notes 01–06"`），用户看摘要期间容器可能被回收；
-2. 再用 `from: "synthesis", to: "synthesis"` 跑，把提炼结果和 Roundtable Card 摆给用户看，确认视角没有重叠、座位表排得开；
-3. 最后用 `from: "build"` 跑完。
+2. 再用 `from: "holdout", to: "synthesis"` 跑（先封存 3–5 件一手材料当考题，再提炼），把封存清单、提炼结果和 Roundtable Card 摆给用户看，确认视角没有重叠、座位表排得开；
+3. 最后用 `from: "build"` 跑完（最后一步是 `validate`），把每人的验证结果（返回值的 `members[].increment` 和成员目录的 `FIDELITY.md`）摆给用户看：封存题带 Skill 与不带的总分（差 2 分以内算打平）、任务题里有据和编造的依据各几条、边界题合不合格。
+
+先验快照（`prior`，调研之前）、封存（`holdout`，提炼之前）和两臂增量测试（`validate`，精修之后的最后一步）是 2026-11 从女娲 v2 移植的，规则在 [research-extraction-framework.md 第十三节](research-extraction-framework.md)。三点要记住：封存件在验证做完之前不进 `SKILL.md`；工作流不按增量测试的结果修 Skill（修的人要读笔记，一修就把考题抄进去了），结果不好由用户决定要不要回到提炼；以后手工改过 Skill，重跑 `from: "validate"`；调研笔记在移植之前就写好的成员，先单跑 `from: "prior", to: "prior"` 再 `from: "holdout"`。
 
 第 2 步的提炼记录放在 `<scratch>/base-skills/<slug>/`，不在 git 里。scratch 丢了，第 3 步就没有输入：重跑 `from: "synthesis"`（每人约 1 个 agent），不用从调研重来。
 
@@ -291,7 +301,7 @@ bash scripts/team_commit.sh $T/$M "increment($M): <label>"   # 之后带全体�
 | 模板 | `grep -rn --include='*.md' -e '{{' -e '\[TODO' <team>` | 没有输出 | 轻量档 T2 之后；深读档 T3.8 之后；交付之前 |
 | 提交 | `bash scripts/team_commit.sh <路径> "<说明>"`（查整个暂存区，退出码 3 = 停下） | 没有任何文件夹里的 PDF、PostScript、DjVu、EPUB，没有 `txt/`，`private/` 下只有 `README.md` | 每次 commit |
 | 工作流脚本 | `node scripts/workflows/dry_run.mjs <工作流> <参数> --strict` | 退出码 0，没有警告。不用 `node --check`（顶层 `return` 在运行时合法，它一定报错） | 改过任何工作流之后 |
-| 圆桌 | `team_check.py <team>` 的 roundtable 一项（加 `check_links.py`）；不跑 `quality_check.py` | 每位成员都在 Team 表里、在座位表里至少主讲一行、都有 7 项齐全的 Roundtable Card；3–6 条 fault line，每条都引用两位以上成员（深读档：两边都是 `[<slug> card <ID> p. N]`，卡片 ID 在该成员的卡片里都存在，不剩 "card evidence pending"）；不剩 `{{`，`[TODO` 只剩标给后续步骤的。能否真正辩起来仍要人看一眼 | T2、T3.8 |
+| 圆桌 | `team_check.py <team>` 的 roundtable 一项（加 `check_links.py`）；不跑 `quality_check.py` | 每位成员都在 Team 表里、在座位表里至少主讲一行、都有 7 项齐全的 Roundtable Card；3–6 条 fault line，每条都引用两位以上成员（深读档：两边都是 `[<slug> card <ID> p. N]`，卡片 ID 在该成员的卡片里都存在，不剩 "card evidence pending"）；不剩 `{{`，`[TODO` 只剩标给后续步骤的。有客座时：每位客座也在 Team 表里、至少入座一行（主讲或挑战者）、至少进一条 fault line；卡片按座位查（客座在主队有卡片，他那一方就要引卡片，ID 在他自己的卡片里），"card evidence pending" 只在本队成员全部按深读档查时才判 ✗（有 `guest_teams` 的理事会一律判 ✗）；有客座在主队有卡片时，团队级的 `citations`（圆桌引用闭包）不论档位都跑。能否真正辩起来仍要人看一眼 | T2、T3.8 |
 | **交付（全部）** | `python3 scripts/team_check.py <team> [--tier base\|deep]` | 退出码 0：上面各行一次查完（team.json、链接、模板、git、README、圆桌、覆盖表；每人 12/12 与 Roundtable Card；深读档每人发表全表与索引、未读行、07–09 与 technique catalog、摘录、账本）。新容器里没有 `txt/` 时摘录一项跳过（—），先重跑 `acquire_fulltexts.py` | 轻量档 T2 之后；深读档 T3.8 之后；交付之前 |
 
 ---
@@ -361,7 +371,7 @@ DFO 深读档的实测：5 人，Scholar 935 行，421 篇开放全文，795 张
 | 发表全表 T3.1 | 15 / 190 万 | 3 / 40 万 | 3% |
 | 团队整合 T3.8 | 4 / 100 万 | 团队一次 | 2% |
 
-合计：深读档每人约 45 个 agent、1,100 万 token；这 220 个 agent 共约 32 agent-小时（每人约 6.5）。轻量档按工作流结构估：T1 每人 16–20 个 agent（quick 档 13–17），T2 每人 2 个、团队另加 4–5 个（圆桌、README、两位核查员，有问题时再加一位修复）；DFO 这两步没有计量 token。T3.8 现版每次 6–7 个；T4 现版多一位复核员，一批时每人 5–6 个。实际耗时 ≈ agent-小时 ÷ 同时在跑的 agent 数，所以要按第二节的办法把并行开足。
+合计：深读档每人约 45 个 agent、1,100 万 token；这 220 个 agent 共约 32 agent-小时（每人约 6.5）。轻量档按工作流结构估：T1 每人 23–27 个 agent（quick 档 20–24），T2 每人 2 个、团队另加 4–5 个（圆桌、README、两位核查员，有问题时再加一位修复）；DFO 这两步没有计量 token。T3.8 现版每次 6–7 个；T4 现版多一位复核员，一批时每人 5–6 个。实际耗时 ≈ agent-小时 ÷ 同时在跑的 agent 数，所以要按第二节的办法把并行开足。
 
 **WebSearch 的分配。** 每个会话约 200 次，所有 agent 共用，用完为止（DFO 在后期用完过）。工作流的 `search_budget` 默认按下面分（5 人团队）；按阶段分会话跑，每个会话都在预算内：
 
@@ -429,11 +439,25 @@ DFO 深读档的实测：5 人，Scholar 935 行，421 篇开放全文，795 张
 4. 深读档：为这个人跑 T3.1–T3.7。
 5. 深读档：带全体成员跑 `team-integrate.js`，补上新成员的卡片证据和覆盖数字。
 6. 跑第四节的链接和模板闸门。
+7. 这支队整队坐在别的团队里（那队 `team.json` 的 `guest_teams` 列着它，如 `product/optimization-council` 列着 `lp-team`、`nonlinear-team`、`dfo-team`、`minlp-team`；`git grep -l '"guest_teams"' -- 'product/*/team.json'` 列出有 `guest_teams` 的团队，再看本队在不在它们的 `guest_teams` 里）时，新成员也要进那队圆桌的 Team 表：那队 `team_check.py` 的 roundtable 一项要 Team 表里有每支 guest 队每位成员的 slug，少一位就判 ✗（`not in the Team table: <slug>`）。工作流不读 `guest_teams`，在那队手动给他补一行 Team 表（入座和 fault line 按整队查，不必为他另加），再跑那队的 `team_check.py`。那队只在合并了本队分支的分支上才看得到他：在哪个分支上合并，就在那里补。本队 `team_check.py` 的 `hosts` 一项不报经 `guest_teams` 的入座。
 
 **减一个成员**：
-1. 从 `team.json` 删掉，移走这个人的目录。
+1. 从 `team.json` 删掉，移走这个人的目录。他在别队作客座时，先照下面「主队改动或移除一位在别队做客的成员」办。
 2. 带剩下的成员重跑 `team-layer.js`，删掉圆桌和 README 里提到这个人的地方（座位表、fault lines、成员表）；深读档接着跑 `team-integrate.js`，更新 DEEP-READING 和覆盖表，同样用 `git diff` 核对留下的卡片证据没被改掉。
 3. `check_links.py` 必须为 0。
+
+**加一位客座成员**（别队的成员，见第一节第 7 条；按这个顺序）：
+1. 先看他的主队：他在主队 `team.json` 的 `members` 里，T1 已经做完（`SKILL.md` 里有 7 项齐全的 `## Roundtable Card`）。他的 Roundtable Card 和研究笔记要撑得起本队领域里至少一行座位；撑不起就别请，扩他的范围是主队的事（先问用户）。
+2. 等主队的 T1 给他写出 `SKILL.md` 之后，再把主队的分支合进本队的分支：本分支上要看得到 `product/<home>/team.json` 里的他和 `product/<home>/<slug>/SKILL.md`。主队的 T1 还没写完（他的文件夹里已有研究笔记、还没有 `SKILL.md`）就合进来，README 里指向他的那一行（第 3 步加）在 `check_links.py` 里算坏链，不算 pending，链接闸门一直过不了，直到主队的 T1 写出 `SKILL.md`。合并带进主队分支上的全部改动，主队新加的其他成员也在内：本分支上有整队请了主队的团队时（主队在那队的 `guest_teams` 里，如理事会），合并之后那队的 roundtable 一项判 `not in the Team table: <新成员>`，照「加一个成员」第 7 步补上那队的 Team 表。
+3. 在本队 `team.json` 的 `guests` 里加 `{"slug": "<slug>", "home": "<home>"}`（只写这两个键），跑 `python3 scripts/new_team.py $T/team.json --add-guest <slug>`。它先解析这位客座（报错就照提示修），再在 README 成员表最后一位成员或客座之后插一行，指向 `../<home>/<slug>/SKILL.md`；不建任何文件夹，不改圆桌和 DEEP-READING。有撞姓警告时，先改本队成员的 `surname`（两位客座撞姓时，到其中一位的主队 `team.json` 里改）。
+4. 带全体成员重跑 `team-layer.js`（`make_args.mjs` 自己从 `team.json` 加上 `guests`，客座只读）。第 3 步只加了 README 成员表里他那一行；别处写到客座的句子还只列着之前的客座（他是第一位客座时，这些句子还没有），都由 T2 补上、改对：README 开头一句的客座子句，两段安装命令（bash 和 PowerShell）里他的复制行（每支主队的复制行上面单独一行注释 `# guest(s) from the <主队 title>: …`：他是本队第一位来自他主队的客座时，T2 连这行注释一起加；本队原来只有一位来自他主队的客座时，注释开头的 `guest` 改成 `guests`）；圆桌的 description、`Members:` 一行、首次激活的免责声明、Loading the Team 里客座的那一句、卡片位置那一句，以及 Team 表里他的一行、他的「Guest seat」说明、座位表和 fault lines。DEEP-READING 里指向主队的那一句，轻量档由 T2 改，深读档由 T3.8（第 5 步）改。每一句的准确写法由 `python3 scripts/new_team.py $T/team.json --guest-text` 按现在的 `guests` 打印出来（只读，什么都不写；有客座解析不了时退出码 1），T2、T3.8 照它核对。
+5. 深读档：再跑 `team-integrate.js`（T3.8）。fault line 里他那一方用他自己文件夹里的证据：主队给他写了卡片，就引卡片（ID 在他的卡片里）；还没有卡片，就引他的研究笔记或 `SKILL.md`，不标「(card evidence pending…)」（这个标记只留给本队还没读完的成员）。DEEP-READING 和 README 的覆盖表仍只列本队成员，他只有一行指向主队的 `DEEP-READING.md`（照 `--guest-text` 打印的那一句）。T3.8 只在本队至少有一位成员写出了 `08-deep-reading-synthesis.md`（T3.6）时才整合；还没有时它什么都不改（返回 `skipped: "no member ready"`），DEEP-READING 里那一句也等它第一次真正整合时再改。以后主队给他写了卡片，或他的卡片、覆盖变了（轻量档的团队也一样）：本队已有成员写出 08 时，在这里再跑一次 T3.8，改成卡片引用；还没有时（轻量档的团队一直没有），重跑 `team-layer.js`（T2），它不论档位都按卡片引用有卡片的客座。在那之前，`team_check.py` 的 roundtable 一项不过：有卡片的座位必须引卡片。
+6. 跑 `check_links.py $T`、第四节的模板闸门和 `team_check.py $T`（`guests` 一项要过）。
+
+**主队改动或移除一位在别队做客的成员**（在主队做）：
+1. 先查谁请了他：在主队跑 `team_check.py product/<home>`，`hosts` 一项（只提示，不算失败）列出把主队成员请作客座的团队和人。它只看得到这个 checkout 里有的团队：要么在已经合并了各个请客团队分支的地方跑，要么在改动或移除之前，对其余每个分支查一遍 `git grep '"home": "<home>"' <branch> -- 'product/*/team.json'`（列出的每个 `product/<team>/team.json` 都是一支请了主队成员的团队；一次可以写多个分支）。整队经 `guest_teams` 请了主队的团队（如理事会）不在 `hosts` 一项里，也不在这条 `git grep` 里，另用 `git grep -l '"guest_teams"' <branch> -- 'product/*/team.json'` 列出有 `guest_teams` 的团队，再看主队在不在它们的 `guest_teams` 里；这些团队圆桌的 Team 表里也有他，改动或移除他时那里一样要改。
+2. 改动之后：重跑他的 T1、T3.5–T3.7、T4，或者改了他的 Roundtable Card、卡片、`surname`、slug，都会改那些团队的输入。在每个请了他的团队里重跑：Roundtable Card 或座位相关的变了跑 `team-layer.js`（T2）；卡片或覆盖变了，那队已有成员写出 `08-deep-reading-synthesis.md`（T3.6）时跑 `team-integrate.js`（T3.8），还没有时（轻量档的团队一直没有）重跑 `team-layer.js`（T2），它不论档位都按卡片引用有卡片的客座（T3.8 这时什么都不整合，它返回的 `next` 也这样说）；再跑那队的 `check_links.py` 和 `team_check.py`。
+3. 移除他（或改他的 slug）：先在每个请了他的团队里删掉 `guests` 里那一项（删之前在那队跑一次 `python3 scripts/new_team.py product/<那队>/team.json --guest-text`，它打印的就是下面这些写到客座的句子的准确写法），在那队重跑 `team-layer.js`（深读档再跑 `team-integrate.js`），删掉圆桌、README 和 DEEP-READING.md 里提到他的地方（README 两段安装命令里除了他的复制行，还有复制行上面那支主队的注释行：那队已没有别的客座来自他的主队时一起删，还剩一位时把注释开头的 `guests` 改成 `guest`），`check_links.py` 为 0；然后才在主队照「减一个成员」办。这些地方闸门只抓得到还引着他的 fault line（`team_check.py` 的 roundtable 一项：每条 fault line 要引到 2 个座位），别的都查不出来：主队还没移走他的文件夹时，`check_links.py` 和 `readme` 一项照样通过。DEEP-READING.md 开头那段末尾（轻量档是那一段说明的末尾）`Guests are read by their home teams: …` 一句里他的那部分：轻量档的 T2 每次都照模板的轻量档说明重写整个文件，会跟着改掉；深读档的 T2 不改这个文件，T3.8 只在那队已有成员写出 `08-deep-reading-synthesis.md`、而且还剩别的客座时才照 `--guest-text` 改这一句，别的时候手动删。他是那队最后一位客座时，T2、T3.8 的 prompt 里不再有任何写到客座的话，`new_team.py` 和 T2 为客座写下的句子没有哪一步会再去改，都要手动删掉：README 开头一句的客座子句、两段安装命令（bash 和 PowerShell）里的客座复制行和每支主队复制行上面那一行注释（`# guest(s) from the <主队 title>: …`）、成员表里的客座行；圆桌 description 和首次激活免责声明里列着的客座名字、`Members:` 一行的客座子句、Team 表里的客座行和「Guest seat」说明、Loading the Team 里客座的那一句、卡片位置那一句；深读档 DEEP-READING.md 里的那一整句。顺序反过来，那些团队的客座解析、README 链接和圆桌座位会断，主队自己的闸门却全都通过。
 
 ---
 
@@ -447,5 +471,6 @@ DFO 深读档的实测：5 人，Scholar 935 行，421 篇开放全文，795 张
 - [ ] `team_status.py --coverage` 的表原样贴进了 DEEP-READING.md；README 诚实边界的 5 列摘要原样是 `team_status.py --coverage --short` 的输出
 - [ ] `check_links.py product/<team>` 0 broken；`grep -rn --include='*.md' -e '{{' -e '\[TODO' product/<team>` 没有输出（轻量档也一样：DEEP-READING.md 和 RESOURCES.md 里给深读档留的项按模板的轻量档写法改掉了）
 - [ ] 每次提交都用了 `scripts/team_commit.sh`：git 里没有任何文件夹下的 PDF、PostScript、DjVu、EPUB，没有 `txt/`，`private/` 下只有 `README.md`（`git ls-files product/<team> | grep -Ei '\.(pdf|ps|ps\.gz|djvu|epub)$|/txt/|/private/'` 只列出 `private/README.md`）；每一步都已 commit
+- [ ] 有客座时：每位客座都在他主队 `team.json` 的 `members` 里，他的文件夹和 `SKILL.md`（7 项 Roundtable Card）都在本分支上；他在座位表里至少入座一行、至少进一条 fault line，Team 表下有他的「Guest seat」说明，README 的两段安装命令（bash 和 PowerShell）里都有他那一行；他在本队领域覆盖到哪里写进了 `Outside the Team` 和诚实边界；`team_check.py` 的 `guests` 一项通过
 - [ ] `python3 scripts/team_check.py product/<team>` 退出码 0（上面能自动查的都在里面；摘录一项显示 — 时先重跑 `acquire_fulltexts.py` 恢复 `txt/`）
 - [ ] 用一个真实问题试一次圆桌：4 个检查点都出现，最终方案每条都有归属，并有 ✅ 签字或 ⚠️ 异议

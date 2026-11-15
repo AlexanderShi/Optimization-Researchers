@@ -5,7 +5,7 @@
 | Researcher | Qi Huangfu (皇甫琦; "Huangfu Qi" on his own 2025 slides). Original author of HSOL, the dual revised simplex code that became the simplex core of HiGHS; PAMI/SIP parallel dual simplex; implemented PAMI in the FICO Xpress simplex solver; COPT developer at Cardinal Operations (杉数科技). Living. |
 | Dimension | Research agent 02 of 06: stated methodology. These are his claims about how solver research should be done, sorted into the seven layers of `references/research-extraction-framework.md` §一. Whether he practises them is agent 03's job. |
 | Research date | 2026-10-27 |
-| Sources consulted | 29 sources read and listed under Sources: 18 primary (4 written or spoken by Huangfu alone, 14 co-authored) and 11 secondary, observed or metadata. A further 9 press pages were checked and do not name him. WebSearch: 5 of 5 calls used. Everything else came from curl, WebFetch, the arXiv and Crossref APIs, `gh` and yt-dlp. |
+| Sources consulted | 29 sources read and listed under Sources: 18 primary (4 written or spoken by Huangfu alone, 14 co-authored) and 11 secondary, observed or metadata. A further 9 press pages were checked and do not name him. WebSearch: 5 of 5 calls used. Everything else came from curl, WebFetch, the arXiv and Crossref APIs, `gh` and yt-dlp. On 2026-11-05 five originals behind relayed claims were reopened; they are listed under Sources and the corrections are marked in the text. |
 | Local corpus | `references/sources/{papers,talks,essays,software}` held only `.gitkeep` placeholders, so there was no user-supplied material. `private/` was not opened. |
 | Saved this run | `../sources/talks/juliacon-2022-copt-and-its-julia-interface.transcript.txt` (caption transcript with a provenance header) |
 
@@ -82,7 +82,9 @@ The journal papers are co-authored with his PhD supervisor Julian Hall. The slid
 
 - On cost perturbation: "Nevertheless, despite its wide application, the discussion of why perturbation works is relatively rare." Thesis p.61.
 - On Bixby's advice to treat perturbation as an algorithmic technique: he "unfortunately did not provide any further explanation or detail." Thesis p.61.
+  - **Correction (original reopened 2026-11-05):** Bixby gave no advice. In his paper (read as the Rice report TR01-20, p. 14; see Sources) the words "treating this idea as an algorithmic technique rather than simply a remedy for degeneracy" are a parenthesis describing what CPLEX 7.1 does. The sentence gives three unranked reasons for 7.1's performance on the PDS models: it fully exploits sparsity, perturbs more aggressively in the dual, and uses bound flipping. The paragraph then points to Applegate et al. (2002) for a description. The thesis's version on the same page, that the major improvement from CPLEX 5.0 to 7.1 came from the perturbation, drops the other two reasons and adds a ranking. Elsewhere the paper lists perturbation among the devices against degeneracy and stalling (TR01-20 pp. 9–10, 12).
 - On Koberstein's claim linking weighted perturbation and sparsity (Koberstein, *Computational Optimization and Applications* 41(2):185–204, 2008, DOI 10.1007/s10589-008-9207-4): "However, this claim is neither supported by any numerical results nor got confirmed during this research." Thesis p.61.
+  - **Correction (originals reopened 2026-11-05):** the rejection prints no numbers either. The thesis's §3.3 tables compare perturbation on and off, never weighted against unweighted (pp. 59–67). Koberstein's 2005 thesis gives a rationale: picking entering columns with few nonzeros keeps the LU-update spike sparser and adds less fill (PDF pp. 98–99). It also has no isolated test, since perturbation enters in the same version step as the BFRT (PDF pp. 138–140). So neither side printed a weighted-versus-unweighted comparison; the 2008 paper the thesis cites was not read. The weighting was not Koberstein's alone either: Clp weighted its cost perturbation by column length by October 2003 (commit 29f4248e63e3), and Koberstein calls his procedure "similar to the one implemented in the COIN LP code" (PDF p. 98).
 - Co-authored (APMOD 2012 extended abstract, Hall corresponding author): "Hitherto, there has been relatively little understanding of how it occurs and how greater degrees of hyper-sparsity may be achieved when solving a given problem." The APMOD 2012 slides (p.27) summarise the result as a "Partial answer to "why?"".
 
 **1.4 Numerical robustness and determinism are first-class concerns.** [stated] Count 2 for numerics (2019, 2022) and 2 for determinism (2013 co-authored, 2022), so both are below the threshold of three.
@@ -120,7 +122,8 @@ The journal papers are co-authored with his PhD supervisor Julian Hall. The slid
 
 **2.1 Choose a problem whose context has changed (R4).** [stated] Count 4.
 
-- Thesis p.15–16 (repeated nearly verbatim on p.78). The dual simplex replaced the primal as the preferred variant after dual steepest edge and the bound-flipping ratio test. Yet the only published dual-simplex parallelization (Bixby and Martin, "Parallelizing the Dual Simplex Method", *INFORMS Journal on Computing* 12(1):45–56, 2000, DOI 10.1287/ijoc.12.1.45.11902) "neither included the BFRT nor the hyper-sparse linear system solution technique." This summary is a faithful paraphrase, with his words in quotation marks.
+- Thesis p.15–16 (repeated nearly verbatim on p.78). The dual simplex replaced the primal as the preferred variant after dual steepest edge and the bound-flipping ratio test. Yet, he writes, the only published dual-simplex parallelization (Bixby and Martin, "Parallelizing the Dual Simplex Method", *INFORMS Journal on Computing* 12(1):45–56, 2000, DOI 10.1287/ijoc.12.1.45.11902) "neither included the BFRT nor the hyper-sparse linear system solution technique." This summary is a faithful paraphrase, with his words in quotation marks.
+  - **Correction (original reopened 2026-11-05):** "only" is his claim and does not hold. Wunderling's 1996 thesis (ZIB Technical Report TR 96-9), which the thesis cites but describes as primal work (p. 72), tabulates parallel dual simplex runs (PDF pp. 172, 176, 203–207). The MPC version hedges: "known to the authors" (MPC p.120). The BFRT and hyper-sparsity point stands: the Bixby–Martin preprint (ZIB SC-95-45, December 1995) mentions neither.
 - Same passage: "nowadays, when every desktop computer is a multi-core machine, any speedup is desirable in terms of solution time reduction for daily usage."
 - MPC p.120 (co-authored) adds the consequence for experiments: "Thus we have used a relatively standard architecture to perform computational experiments."
 - Thesis p.89 applies the same move to a sub-problem. Because hyper-sparsity changed the relative costs of the FTRAN operations, "the parallelization scope of ftran operations deserves further consideration".
@@ -470,6 +473,14 @@ External papers named above, each with its identifier checked on Crossref in thi
 - Koberstein 2008, DOI 10.1007/s10589-008-9207-4
 - Hall and McKinnon 2005, DOI 10.1007/s10589-005-4802-0
 - Elwes 2012, *New Scientist*, DOI 10.1016/S0262-4079(12)62078-8
+
+Originals reopened on 2026-11-05 for the corrections marked in the text (PDF pages unless noted):
+
+- R. E. Bixby, "Solving real-world linear programs: a decade and more of progress", *Operations Research* 50(1):3–15, 2002, DOI 10.1287/opre.50.1.3.17780; read as Rice University technical report TR01-20 (October 2001), https://hdl.handle.net/1911/101981 (scanned, no text layer; pages are the report's printed pages, which equal its PDF pages).
+- R. E. Bixby, A. Martin, "Parallelizing the dual simplex method", ZIB Preprint SC-95-45, December 1995, https://opus4.kobv.de/opus4-zib/files/211/SC-95-45.pdf (preprint of Bixby and Martin 2000; the journal text was not read).
+- R. Wunderling, "Paralleler und objektorientierter Simplex-Algorithmus", doctoral thesis, TU Berlin, ZIB Technical Report TR 96-9, December 1996, https://opus4.kobv.de/opus4-zib/files/538/TR-96-09.pdf (German).
+- A. Koberstein, "The dual simplex method, techniques for a fast and stable implementation", doctoral thesis, Universität Paderborn, 2005, https://d-nb.info/978580478/34.
+- COIN-OR Clp source, https://github.com/coin-or/Clp, commit 29f4248e63e3 (2003-10-15): `ClpSimplexDual.cpp` l. 3131–3190 (cost perturbation weighted by column length).
 
 Press pages checked with no mention of "皇甫" (2026-10-27):
 

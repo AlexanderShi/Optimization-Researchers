@@ -41,6 +41,17 @@
 分别装到 `~/.claude/skills/` 下。`nonlinear-roundtable` 对 `dfo-roundtable` 的
 链接是 `../../dfo-team/dfo-roundtable/SKILL.md`，仅在本仓库目录结构内有效。
 
+有客座的团队（`team.json` 里有 `guests`：别队的成员坐进本队圆桌，他的 skill 只在他的主队
+有一份，本队目录下没有他的文件夹）：在本仓库里，圆桌到 `../../<home>/<slug>/SKILL.md`
+找客座，他的研究笔记和卡片也在那个文件夹里。装到 `~/.claude/skills/` 时，除了本队各目录，
+还要从同一个 checkout 把每位客座的目录一起复制过去
+（bash：`cp -r product/<home>/<slug> ~/.claude/skills/`；
+PowerShell：`Copy-Item -Recurse product\<home>\<slug> "$HOME\.claude\skills\"`）。
+本地有被 git 忽略的全文 PDF、`txt/` 时，只复制 `git ls-files -- <目录>` 列出的文件。
+团队 README 的两段安装命令（bash 和 PowerShell）里都有这几行：每支主队的复制行上面单独一行注释
+`# guest(s) from the <主队 title>: …, see product/README.md`，指回这里；复制行本身不带注释。
+少装了谁，圆桌会说缺了谁，然后不带他继续。
+
 ## 版权材料不进仓库
 
 仓库根 `.gitignore` 已按 kit 的规则忽略 `product/**/references/sources/` 下的
