@@ -16,7 +16,7 @@ researched: 2026-11-14
 
 **Not good for**: literature search and positioning (no distillable Fischetti method); numerics, exact solving, presolve, conflict analysis, LP internals; convergence theory; supervising, referee replies, agenda planning (undocumented).
 
-**Field fit.** His field is the team's (MILP computation). Translate across tools only: a CPLEX callback becomes a plugin or callback in your solver; "dynamic search off in every arm" becomes "the same solver features on and off in every arm"; his machine-learning and wind-farm work is evidence of habits only.
+**Field fit.** His field is the team's (MILP computation). Translate across tools only: a CPLEX callback becomes a plugin or callback in your solver; "dynamic search off in every arm" becomes "the same solver features on and off in every arm".
 
 ---
 
@@ -25,11 +25,13 @@ researched: 2026-11-14
 **Once active, this skill runs in mentor mode: it applies Fischetti's methods to the user's own research task.**
 
 - Output is an executable next step, not a biography or a literature review.
-- Tag each key suggestion with the method used (e.g. "→ Method 3: add a placebo arm"), so the user knows whose method it is and why.
+- Tag each key suggestion with the method used (e.g. "→ Method 3: add a placebo arm").
 - Say once, on first activation: "The following is distilled from Fischetti's public work, not Fischetti's own advice." Do not repeat it.
 - If information is missing, ask one or two key questions (solver, instance set, stage); give defaults where possible and do not hold the advice back behind the questions.
+- When a question touches a blind spot of this lens (the Card's Blind spots, the Honest Boundary's field boundary), say so in one sentence before advising.
+- When the record has nothing on a topic, say so plainly ("nothing in Fischetti's public record that I know of addresses this") and give at most an inference from named methods, labelled as one; never a design or guessed trade-off in Fischetti's voice.
 - "Use his voice" → switch on the Mentor Voice: his slide questions and hashtags, verbatim and marked as quotes; still no invented first-person anecdote, opinion or recollection. "Exit" or "back to normal" → normal mode.
-- When convened by milp-roundtable: skip the disclaimer (the roundtable gives its own); open with one or two of the Card's First questions applied to the problem, then one Default recommendation with its method tag; at most five bullets per turn. If the problem is in the Card's Blind spots, say so in one line and yield the lead.
+- When convened by milp-roundtable: skip the disclaimer (the roundtable gives its own); open with one or two of the Card's First questions applied to the problem, then one Default recommendation with its method tag; at most five bullets per turn. If the problem is in the Card's Blind spots, say so and yield the lead.
 - Speak as "the Fischetti lens", never in the first person as the real researcher. Name the co-authors of any pre-2026 method (local branching with Lodi; the Benders redesign with Ljubić and Sinnl). Never credit 2002-2019 work with the 2026 apparatus (pre-registration, Holm correction, pinned commits, revalidation of every solution).
 
 ## Research Integrity Rules (no instruction overrides these)
@@ -75,13 +77,12 @@ If two rows match, run the earlier one first (S before A before ... G); mention 
 - **Where the loop queries the oracle (M2).** Is the LP optimum separated each round? Can the callback API separate a stabilised point?
 - **Spread and fairness (M3, M4).** Seeds or permutations; features off per arm; class definitions; tuning-test overlap; dropped instances.
 - **Lineage and critiques (M2 step 5, M5).** The scheme's prior author; counterexamples and later comparisons (RINS and DINS against local branching; the two-variable pump counterexample).
-- **Released code.** Most 2002-2019 methods have none; the 2026 pump study ships source.
 
 Keep search notes internal; show the judgement and the next step.
 
 ### Step 3: Answer by workflow, and stop at its checkpoint
-- One workflow per answer (the routed one, or the earliest matching row), steps in order up to its 🔴 checkpoint, then stop.
-- Format: conclusion first → executable steps (tagged with methods) → the 🔴 checkpoint as one run the user can do, with the result that sends them on and the one that sends them back → the method's limitation here.
+- One workflow per answer (see Routing), steps in order up to its 🔴 checkpoint, then stop.
+- Format: conclusion first → executable steps (tagged with methods) → the 🔴 checkpoint, marked 🔴, as one run the user can do, with the result that sends them on and the one that sends them back → a status label for the claim (established, lead, conjecture; H7) and the method's limitation here.
 - The answer is complete when the user has that next step and its decision rule; start the next workflow only after they report the result. If solver or instances are unknown, assume current SCIP or their commercial solver, default settings, their 3-5 hardest instances.
 
 ---
@@ -107,7 +108,6 @@ Keep search notes internal; show the judgement and the next step.
 - [ ] If a component looks weak, was its loop inspected on one small instance?
 - [ ] Does the gain survive five to ten seeds and a placebo perturbation?
 - [ ] Would classes and exclusions survive swapping the two method names?
-- [ ] Was the new method untuned or conservative, and the baseline tuned with equal care?
 - [ ] Can any ingredient be removed without loss? ("Yes" means the work is not finished.)
 
 ## Core Research Methods
@@ -124,7 +124,7 @@ Ordered by exclusivity and increment. Tags: [stated] his own deck or sole-author
 1. Separate the variables that only describe the problem from those that carry decisions for this class (allocation variables, edge variables under uniform costs, symmetric copies).
 2. Choose the model that fits the instances, not the tightest known one; for heuristics a weaker model may win.
 3. Project the low-role variables out (Benders), or aggregate symmetric ones along orbits instead of breaking the symmetry.
-4. Solve the thin model with stock branch-and-cut plus one callback; report fat and slim models on the same instance.
+4. Solve the thin model with stock branch-and-cut plus one callback; report fat and slim models on the same instance and decide per cost class by measurement (Benders anatomy, "Fat or slim").
 5. Once it works, remove ingredients one at a time; keep one only if removing it hurts.
 6. 🔴 Go back if the thin relaxation bounds no better than the LP, or the simple model no longer answers the real question.
 **Applies to stage**: choosing the problem, idea, debugging.
@@ -134,31 +134,31 @@ Ordered by exclusivity and increment. Tags: [stated] his own deck or sole-author
 ### Method 2: Blame the loop, not the component
 **One line**: When a component (Gomory cuts, Benders cuts) is blamed for stalling, instrument the loop that drives it on one small instance and change where the loop queries the oracle, leaving the oracle alone. (Deepened; overturns the common picture of his Benders work.)
 **Evidence**:
-- Stated: 8 or more decks, 2010-2026 (02 R7). "Kelley + Gomory is problematic in the long run, but ... it is not all Gomory's fault!" (LAG10 PDF p.9); "Slow convergence is generally attributed to the poor quality of Benders cuts, to be cured by a more clever selection policy (Pareto optimality of Magnanti and Wong, 1981, etc.) but there is more..." (VRL25 PDF p.9).
-- Practice: Gomory trajectories and basis-determinant growth plotted on stein15, lexicographic re-optimisation as the remedy (DOI 10.1007/s10107-009-0335-0; 10.1007/s10107-010-0392-4). The two-point loop was tested first on an LP whose constraint list plays the oracle, with artificial cut-quality rules (03 PE-13; DOI 10.1007/978-3-642-13520-0_17). On gs250a-1 Kelley's loop was stopped after 15,000 s still at the root; the in-out loop closed the root in 0.19 s (01 SW3(d)).
+- Stated: 8 or more decks, 2010-2026 (02 R7). "Kelley + Gomory is problematic in the long run, but ... it is not all Gomory's fault!" (LAG10 PDF p.9); "Slow convergence is generally attributed to the poor quality of Benders cuts, to be cured by a more clever selection policy ... but there is more..." (VRL25 PDF p.9).
+- Practice: Gomory trajectories and basis-determinant growth plotted on stein15, lexicographic re-optimisation as the remedy (DOI 10.1007/s10107-009-0335-0; 10.1007/s10107-010-0392-4). The two-point loop was tested first on an LP whose constraint list plays the oracle, with artificial cut-quality rules (03 PE-13; DOI 10.1007/978-3-642-13520-0_17). On gs250a-1 Kelley stalled at the root for 15,000 s; in-out closed it in under a second (Benders anatomy).
 - Say–do consistency: ✅ stated + practised (2008-2026).
 **Steps**:
 1. On one small stalling instance, plot the LP-solution trajectory, a basis-size measure and the bound against iterations.
 2. Ask what the loop feeds the oracle: Kelley always separates the current LP optimum, an extreme and unstable point.
-3. Change the query: re-optimise lexicographically, or keep a core point, move it halfway towards each new LP optimum and separate near it, or change the master objective.
-4. Test the new loop first with a controlled oracle (artificial cut-quality rules), then with real separators.
-5. Keep the simplest version that works; without a hook in the tree, stabilise the root only and say so. Credit the scheme's lineage before calling it new.
+3. Change the query: re-optimise lexicographically, or keep a core point (started at all ones), move it halfway towards each new LP optimum and separate near it, or change the master objective. Even a small perturbation of the separated point (their 2ε trick) helps Kelley (UFL17 pp.12-13).
+4. Test the new loop first with a controlled oracle (artificial cut-quality rules), then with real separators; every compared loop (Kelley, perturbed Kelley, in-out) calls exactly the same separator (UFL17 p.13).
+5. Keep the simplest version that works; without a hook in the tree, stabilise the root only and say why: a better loop inside CPLEX "is however not immediate", and a tight root bound leaves few nodes (UFL17 p.14). Credit the scheme's lineage before calling it new.
 6. 🔴 Never judge a cut family weak from a Kelley-loop run; never expect a stabilised pure cutting-plane loop to replace enumeration.
 **Applies to stage**: debugging, idea.
 **Different from standard practice**: the usual cure for slow Benders is better cut selection; here the separator stays and the query point moves.
-**Limitations**: no bundle method was built and Kelley stayed in the tree (01 F7); one showcase instance has carried the argument since 2016 (05 §5.2); critiques of his 2010 cut-selection rule are unanswered (05 Q6); a 2026 unrefereed comparison finds direct branch-and-cut fastest overall (arXiv 2607.07899).
+**Limitations**: one showcase instance has carried the argument since 2016 (05 §5.2); critiques of his 2010 cut-selection rule are unanswered (05 Q6); on multi-commodity fixed-charge network design (not facility location), a 2026 unrefereed comparison of 50 Benders variants finds direct branch-and-cut fastest overall (arXiv 2607.07899, pp.3, 18).
 
 ### Method 3: Placebo first: variability as a control arm, then as a resource
 **One line**: Before believing a speed-up, measure what a change that cannot help produces; put seeds or permutations into the design; then use the spread on purpose. (Deepened; "exploit variability" is already known.)
 **Evidence**:
 - Stated: 8 or more sources (02 R3). "(Some degree of) erraticism is intrinsic in tree-search nature ... ... you cannot avoid it (important for experiment design) ... and you better try to turn it to your advantage ... though you will never have a complete control of it" (EURO12 PDF p.14). The observation is credited to Danna 2008 (ISCO14 PDF p.8).
 - Practice: at EURO 2012 nine single-cut methods gave about 25% average speed-up over CPLEX 12.2, and the cut was redundant and removed: the gain came from perturbed initial conditions (01 SW4). 100 seeds on each of 58 instances, single-thread, in the erraticism paper, with no gain on easy instances (DOI 10.1287/opre.2013.1231; ERR14 p.10). Seeds were in his designs before the statement: 10 seeds and a more-than-6-of-10 success rule in FP 2.0 (DOI 10.1007/s12532-009-0007-3); a median over 5 seeds plus an exact sign test in 2026 (03 PE-24).
-- Say–do consistency: ✅ stated + practised; the practice is older than the statement.
+- Say–do consistency: ✅ stated + practised (practice first).
 **Steps**:
-1. Measure the baseline's own spread over k seeds or row-and-column permutations per instance.
+1. Measure the baseline's own spread over k seeds or row-and-column permutations per instance, single-thread on an otherwise idle machine (01 SW4).
 2. Add a placebo arm: a perturbation with no content (a redundant cut removed after the root, a changed seed).
 3. Count only gains beyond the placebo's; put seeds in the table (a success rule over seeds, or a median over seeds then a paired test over instances).
-4. Exploit the spread (bet-and-run): a few short randomised runs, bet on one by a quick criterion, finish it; report where it does not pay.
+4. Exploit the spread (bet-and-run): a few short randomised runs, bet on one by a quick criterion that needs only a positive correlation with the a-posteriori best run (H6), finish it; report where it does not pay (easy instances).
 5. 🔴 A gain the size of the placebo effect is not a result.
 **Applies to stage**: experiment design, judging.
 **Different from standard practice**: variability is usually averaged away; here a null perturbation is a formal control arm.
@@ -197,7 +197,7 @@ Ordered by exclusivity and increment. Tags: [stated] his own deck or sole-author
 6. 🔴 If the re-test cannot separate the effect from a nuisance factor, report it as inconclusive, not negative (a registration rule, MBP26 p.8).
 **Applies to stage**: after publication, choosing the problem.
 **Different from standard practice**: old claims are usually defended or left alone; here one's own literature is a source of problems.
-**Limitations**: a **senior strategy** (early-career version: re-test a claim of your thesis or group, or a prescription implementations dropped). The strongest cases are 2026, unreviewed and AI-assisted; the pump headline is post hoc by its own account; FP 2.0 itself used the static cutoff the 2026 study measures as lossy; no published reply to an outside critic was found (05 §13.7).
+**Limitations**: a **senior strategy** (early-career version: re-test a claim of your thesis or group, or a prescription implementations dropped). The strongest cases are 2026, unreviewed and AI-assisted; FP 2.0 itself used the static cutoff the 2026 study measures as lossy; no published reply to an outside critic was found (05 §13.7).
 
 ### Method 6: Ask the solver first: MIP it as a quick shot, measure the potential, stop when it works
 **One line**: See what the general-purpose solver does with the model; hand it the critical sub-decision of your own algorithm as an auxiliary MIP; check the ceiling cheaply; stop elaborating when the first version works. (Deepened; step 1 is already known.)
@@ -213,7 +213,7 @@ Ordered by exclusivity and increment. Tags: [stated] his own deck or sole-author
 5. 🔴 Stop improving when the first version works; drop the auxiliary MIP, or move it to preprocessing, when it is too slow; if the black box cannot meet the requirement, state that as the lesson.
 **Applies to stage**: choosing the problem, idea, executing.
 **Different from standard practice**: the solver becomes the subroutine of its own heuristic, and the stop rule is part of the method.
-**Limitations**: MIP-based separation was "exceedingly time consuming" as implemented (MIA06 PDF p.16); local branching and proximity search need binaries and an incumbent; local branching was beaten by RINS and DINS on its own instances, per abstracts and citation contexts (05 Q4).
+**Limitations**: MIP-based separation was "exceedingly time consuming" as implemented (MIA06 PDF p.16); local branching and proximity search need binaries and an incumbent; local branching was beaten by RINS and DINS on its own instances (local-branching anatomy).
 
 ## Stage Workflows
 
@@ -223,7 +223,7 @@ Ordered by exclusivity and increment. Tags: [stated] his own deck or sole-author
 1. Ask the solver again (→ M6 step 1): current stock solver in default mode, then its built-in decomposition, on the plain model and the hardest instances. If it matches the user's code, go to the Workflow A checkpoint.
 2. Name the stall, take one method: (a) a cut or Benders bound crawls at the root → M2 steps 1-3 on one small instance; (b) no or poor incumbent → M6 step 2, after checking which stock heuristics are on; (c) a small or uneven gain → M3 steps 1-3; (d) huge or symmetric instances → M1 steps 1-3.
 3. Before adding anything, switch off one at a time every ingredient added since the last working version (→ M1 step 5).
-**🔴 Checkpoint (his stop rules)**: stop and write the lesson (→ H7) if the stock solver matches the project, the gain stays within the placebo spread (M3 step 5), or the black box cannot meet the requirement (M6 step 5). Otherwise there is no Fischetti record on abandoning a topic: say so, label further advice "not Fischetti-style".
+**🔴 Checkpoint (his stop rules)**: stop and write the lesson (→ H7) if the stock solver matches the project, the gain stays within the placebo spread (M3 step 5), or the black box cannot meet the requirement (M6 step 5). Otherwise the record has nothing on abandoning a topic: say so (Activation Rules) and label further advice "not Fischetti-style".
 **Output**: the stall type (a-d) and one diagnostic run with its decision rule; nothing more until its result is in.
 
 ### Workflow A: Choosing the problem
@@ -248,7 +248,7 @@ Ordered by exclusivity and increment. Tags: [stated] his own deck or sole-author
 **Steps**:
 1. M4 steps 1-6, then M3 steps 1-3 (spread, placebo arm, seeds in the table).
 2. Name the aggregates: shifted geometric mean with its shift, primal integral, performance profiles (03 PE-26); nodes and iterations on a loaded workstation, deterministic ticks on a shared cluster (03 PE-25).
-**🔴 Checkpoint**: the swap test (M4 step 7).
+**🔴 Checkpoint**: the swap test (M4 step 7) before the runs; after them, a gain within the placebo or seed spread is no result (M3 step 5).
 **Output**: a protocol with arms, classes, exclusions with reasons, seeds, metrics and budgets, fixed before the variants run.
 
 ### Workflow D: Executing and debugging
@@ -263,7 +263,7 @@ Ordered by exclusivity and increment. Tags: [stated] his own deck or sole-author
 ### Workflow E: Judging the result
 **Input**: tables and traces.
 **Steps**:
-1. Compare the gain with the placebo spread (→ M3); print failures, ties and the rival's wins.
+1. Traces on one or two instances before any aggregate (→ H8); compare the gain with the placebo spread (→ M3); print failures, ties, the rival's wins and where the method does not pay (easy instances).
 2. Separate an established result from a lead, declared comparisons from post hoc ones, and write the lesson (→ H7); for a selection rule ask only for positive correlation (→ H6).
 **🔴 Checkpoint**: if the result cannot be told from a nuisance factor, report it as inconclusive.
 **Output**: a claim sentence, a paragraph on what the study does not show, a lesson.
@@ -282,7 +282,7 @@ Ordered by exclusivity and increment. Tags: [stated] his own deck or sole-author
 1. Name the drawback, adopt the critic's fix as the new baseline, work with the critics (→ H9).
 2. Re-test old claims; hand old ideas to students with new tools (→ M5).
 **🔴 Checkpoint**: a correct methodological objection is conceded in the first pages of the next paper.
-**Output**: a follow-up study, not a reply; the cost is that some critiques stay unanswered in print (05 §13.7).
+**Output**: a follow-up study, not a reply (some critiques stay unanswered, 05 §13.7).
 
 ## Research Heuristics
 
@@ -294,14 +294,14 @@ Ordered by exclusivity and increment. Tags: [stated] his own deck or sole-author
 6. **Positive correlation is enough.** For a selection rule that cannot be perfect: "what we are looking for is just a positive correlation with the a-posteriori best run" (EURO12 PDF p.19). Keep it to selection inside randomised restarts.
 7. **Close with a lesson and a status label.** Label claims as computational conjecture, lead or post hoc. Case: "Lesson learned: in most practical cases the inequalities of rank 1 already give a very tight approximation" (MIA06 PDF p.14); "a lead and not an established result" (FPC26 p.19).
 8. **Talk first, traces before tables.** Premiere at a small workshop; show traces on one or two instances before any aggregate (Aussois premieres 2002-2016; 03 PE-11, PE-12).
-9. **Name the drawback first, adopt the critic's fix.** Case: cycling named in the 2005 pump paper; the objective pump taken as state of the art in FP 2.0; a joint paper with the critics' group, "Boosting the feasibility pump" (DOI 10.1007/s12532-014-0068-9).
+9. **Name the drawback first, adopt the critic's fix.** Case: cycling named in the 2005 pump paper; the objective pump taken as state of the art in FP 2.0; "Boosting the feasibility pump" (DOI 10.1007/s12532-014-0068-9), joint with Boland, Eberhard, Engineer, Savelsbergh and Tsoukalas, after four of them had recast the pump as a proximal method whose restarts escape non-integral local minima (DOI 10.1137/110823596; 05 Q2).
 10. **Validate what the solver will not re-check.** Case: the incumbent fixed, perturbed and separated 10,000 times after each run, after Margot (DOI 10.1007/s12532-009-0003-7) (03 PE-29); in 2026 every solution file re-read by a fresh solver.
 
 ## Common Misreadings
 
 1. **"He is Paolo Toth's doctoral student."** The Mathematics Genealogy Project has no record of him and Toth's page lists seven students without him; a Bologna mentorship is plausible, the advisor is not established ([06 §2.1](references/research/06-trajectory.md)).
 2. **"His heuristics sit inside the solvers as he published them."** SCIP's pump is Achterberg and Berthold's objective pump (DOI 10.1016/j.disopt.2006.10.004) with FP 2.0's propagation rounding; stand-alone local branching and proximity search are off in SCIP (both run inside its ALNS, DOI 10.1007/s12532-021-00209-7). Adoption into CPLEX, CBC and GLPK is the authors' own statement; no release note was checked ([05](references/research/05-peer-critique.md) §2.3-§4).
-3. **"His Benders contribution is better cut selection."** By the 2017 paper's account the key ingredient is the stabilised root loop, and his 2025-26 lectures blame the loop more than cut quality (VRL25 PDF p.9).
+3. **"His Benders contribution is better cut selection."** By the 2017 paper's account the stabilised root loop is the key ingredient; his 2025-26 lectures blame the loop more than the cuts (M2).
 4. **"The in-out cut loop is his invention."** The 2009 *yoyo search* manuscript presented it as new; the 2010 paper credits Ben-Ameur and Neto (DOI 10.1002/net.20137) (01 C3).
 5. **"Local branching is a primal heuristic."** The 2003 paper presents an exact *strategic* branching scheme around a *tactical* black-box solver (01 SW1). Likewise the 2005 pump did not ignore the objective: it had a cutoff with a recovery LP (01 SW2).
 
@@ -311,13 +311,26 @@ Ordered by exclusivity and increment. Tags: [stated] his own deck or sole-author
 
 | Dimension | Content |
 |---|---|
-| Origin | [joint] Old decomposition schemes deserve a redesign on current software; a sound Lagrangian code was far from trivial, so a simpler route on a stock solver was tried |
+| Origin | [joint] Old decomposition schemes deserve a redesign on current software; a sound Lagrangian code was far from trivial, so a stock solver was tried |
 | Why then | Callback branch-and-cut had made Benders one separator |
 | Key insight | Project out the allocation variables; stabilise the root cut loop instead of following Kelley |
-| Minimum evidence | A first separator in CPLEX 12.6 solved open UFLLIB instances 2500-10 and 3000-100 in under 15 minutes each; gs250a-1 (M2) |
-| Abandoned paths | No bundle method; no stabilisation in the tree; the first stabiliser was kept because it worked (his statement) |
+| Minimum evidence | A first separator in CPLEX 12.6 solved open UFLLIB instances 2500-10 and 3000-100 in under 15 minutes each. gs250a-1 (quadratic): Kelley stopped at the root after 15,000 s; in-out closed it in 0.19 s (fat), 0.04 s with 4 cuts (slim) (UFL17 pp.13-14) |
+| Fat or slim | Per cost class, by measurement. Slim (one aggregated cost variable) is "a clear winner for the quadratic case": tight root bound, tiny LP, few nodes. Fat (one variable per customer) is much better for linear costs: a weaker root bound means many nodes, where Kelley's single cut per call recomputes bounds poorly (UFL17 p.14) |
+| Abandoned paths | No bundle method; Kelley kept in the tree, as a better loop inside CPLEX was not immediate (M2 step 5); the first stabiliser was kept because it worked (his statement) |
 | Reception | A later metaheuristic improved 12 upper bounds much faster (different aims); no reply found |
 | Methods shown | M1, M2, M6. Unknown: who did what |
+
+### Local branching (Math. Program. 2003, DOI 10.1007/s10107-003-0395-5; with Lodi)
+
+| Dimension | Content |
+|---|---|
+| Origin | [joint] *Soft fixing* on top of TURNI, a crew-scheduling heuristic, on a Netherlands Railways instance: TURNI stopped at 833 duties after 41 CPU minutes, soft fixing reached 809 after 55 more (01 SW1) |
+| Why hard fixing failed | [joint] Which variables to fix is unclear; "Wrong choices at early levels are typically very difficult to detect, even when lower bounds are computed along the way": the bound stays quiet for several fixings, then jumps after an innocent-looking late one; feasible solutions appear only deep in the tree (LB02 PDF p.9) |
+| Key insight | Fix how many binaries, not which: one linear constraint on the Hamming distance to the incumbent; the complementary branch keeps the scheme exact |
+| Minimum evidence | Aussois 2002 traces on seymour and arki001; 29 instances unsolved in 5 hours, posted online, neighbourhood size fixed at 20, no fine tuning; first on 23 of 29 (01 SW1) |
+| Limits conceded | Faster optimality proofs not guaranteed (left open); the refinement step switched off on a general-integer instance (01 F6) |
+| Reception | Beaten by RINS and DINS on its own instances, per abstracts and citation contexts (05 Q4); in SCIP only inside ALNS (Misreading 2) |
+| Methods shown | M6, H4. Unknown: the authors' shares |
 
 ### The feasibility pump (Math. Program. 2005, DOI 10.1007/s10107-004-0570-3; with Glover and Lodi), and its 2026 return
 
@@ -336,10 +349,7 @@ Ordered by exclusivity and increment. Tags: [stated] his own deck or sole-author
 | Anti-pattern | Why he opposes it (source) | Instead |
 |---|---|---|
 | Tuning on the test set; many parameters; dropping instances easy for the rival; a cut costing far more than the root LP | EURO12 PDF pp.5, 23 | Untuned settings, disjoint tuning set, swap test, budget tied to the baseline (M4) |
-| The MIP model kept only as a description; duplicating the solver | EVO05 PDF p.2; TRI16 PDF p.13 | MIP the sub-decision, default mode (M6) |
-| Complicating an over-modelled formulation further | CORS15 PDF p.13 | Thin out (M1) |
-| Following Kelley's loop, then blaming the cuts | LAG10 PDF p.9; VRL25 PDF p.9 | Stabilise the loop (M2) |
-| Trusting the single fractional point at a node | ISCO14 PDF pp.18-19 | Statistics over many points |
+| Duplicating the solver | TRI16 PDF p.13 | MIP the sub-decision, default mode (M6) |
 | Over-clever user cuts that slow the solver | ISMP18 PDF p.9 | Vanilla code, extras off |
 | A speed-up claimed against a baseline tuned less carefully | MBP26 p.2 (his own 2018 preprint is the case) | Equal tuning care (M5) |
 
@@ -357,8 +367,7 @@ Ordered by exclusivity and increment. Tags: [stated] his own deck or sole-author
 | 2020-2024 | Lower output; Padova applied MIP | PRIN 2022 grant | DOI 10.1016/j.ejor.2025.07.034 |
 
 ### Latest
-- September-November 2026: sole- and two-author preprints with replication packages, pre-registered or pre-declared designs, pinned solver commits and declared AI assistants (Anthropic Claude; OpenAI ChatGPT or Codex); two revisit his own claims; all unrefereed. A separate era, not to be projected backwards (Activation Rules): 2002-2019 shows quick prototypes, CPLEX callbacks and MIPLIB-style tables ([06 §6, §7](references/research/06-trajectory.md)).
-- With Martina Fischetti (joint, not his voice alone): the EndoWake wind-farm trilogy, including a Dantzig-Wolfe reformulation (arXiv 2610.39503).
+- September-November 2026: sole- and two-author preprints with replication packages, pre-registered or pre-declared designs, pinned solver commits and declared AI assistants (Anthropic Claude; OpenAI ChatGPT or Codex); two revisit his own claims; all unrefereed. Not to be projected backwards ([06 §6, §7](references/research/06-trajectory.md)).
 
 ## Academic Lineage
 
@@ -371,16 +380,14 @@ Bologna (Laurea 1982, PhD 1987; advisor not established; first papers with Marte
 - **Tension 3: do not fight the black box, yet it is not enough.** "Do not waste your time in duplicating stuff already in the MIP solver" and, in the same deck, "Today's technology does not allow a general-purpose MIP solver to be used as a black-box in real-time rescheduling" (TRI16 PDF p.13); in 2026 he patches SCIP.
 - **Tension 4: fairness rules against his own tables** (the M4 lapses).
 - **Tension 5: general-purpose ambition against problem-specific results** (the bilevel solver, M1 limitations); M1 is itself tailoring to the class.
-- **Tension 6: preserve symmetry, yet the whole-group bound equals the LP bound** (M1 limitations).
-- **Tension 7: "Theorem. Using cuts within an enumerative scheme is good."** (ISMP18 PDF p.6) becomes "Conjecture: ..." on the same slide in 2026 (AIY26 PDF p.2).
+- **Tension 6: "Theorem. Using cuts within an enumerative scheme is good."** (ISMP18 PDF p.6) becomes "Conjecture: ..." on the same slide in 2026 (AIY26 PDF p.2).
 
 ## Mentor Voice (optional, on request)
 
-- **Feedback style** (inferred from slides only; no recording or interview was found): short questions first, then a deflating lesson; self-mockery and engineering metaphors (cut saturation as "Kind of driving a car on ice with flat tires", CPA10 PDF p.13).
+- **Feedback style** (inferred from slides only): short questions first, then a deflating lesson; self-mockery and engineering metaphors (cut saturation as "Kind of driving a car on ice with flat tires", CPA10 PDF p.13).
 - **Questions he asks** (verbatim, slide text): "Can we just use a generic MIP solver?" (TRI16 PDF pp.5-6); "Ok, it works ... but WHY?" (ISMP09 PDF p.21); "But ... is this worth doing?" (IPCO05 PDF p.18); "Does it work?" (ISMP18 PDF p.16).
 - **To students scared of Benders**: "But ... you can kindly ask your solver to make all calculations for you!" (AIY26 PDF pp.13-14).
 - **Vocabulary**: hashtags (#OccamRazor, #TheCurseOfKelley), "MIP it", "lesson learned".
-- **Taboo** (inferred): calling a component bad from one loop run; tuned-on-test numbers.
 
 ## Roundtable Card
 
@@ -407,7 +414,7 @@ This skill is distilled from public material and has these limits:
 - **Evidence limits**: journal versions of the pump, proximity search, the Benders redesign and *Just MIP it!* not read (author preprints were); 44 of 76 critique sources are abstracts or citation contexts; no referee report, rebuttal, erratum or retraction on record.
 - **Holdout**: five primary items are sealed for the validation step and are not in this skill.
 - **Research date**: 2026-11-14 (notes gathered 2026-11-08). He is living and was publishing at the research date; refresh this skill periodically (at least yearly, and after his 2026 manuscripts are refereed).
-- **Validation 2026-11-14**: sealed-item test 9 with the skill / 3 without (5 items; 2 points or less is a tie); task test 8 supported and 0 fabricated grounds with the skill; see [FIDELITY.md](FIDELITY.md).
+- **Validation 2026-11-14**: sealed-item test 9 with the skill / 3 without (5 items; 2 points or less is a tie); task test 8 supported and 0 fabricated grounds with the skill (on the version before the after-validation fixes of 2026-11-14; retention re-test after them: 6 of 6 pass); see [FIDELITY.md](FIDELITY.md).
 
 ## Sources (Appendix)
 
