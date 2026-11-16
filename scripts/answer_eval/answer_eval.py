@@ -14,9 +14,14 @@ Commands (from the repository root; Windows: python3 -X utf8):
         (judge_prompt.md with the folder filled in). Which letter is which arm goes to <run>/key.json,
         outside the judge folders. For roundtable and lead replies, pass the final deliverable only
         (cut the checkpoint transcript before saving the reply), so that all three are single documents.
+    python3 scripts/answer_eval/answer_eval.py swaps <run>
+        Run before summary. A judge can file its findings under the wrong letter. For each verdict this
+        looks up the passages quoted in each letter's findings in A.md, B.md and C.md; where every letter's
+        quotes occur only in another letter's reply, it writes verdict_corrected.json with the letters
+        mapped back (summary then reads that file) and says so; a partial mismatch is only reported.
     python3 scripts/answer_eval/answer_eval.py summary <run> [--detail old|new|none] [--only ID_j1 ...]
-        Unblinds every verdict.json, prints rankings and scores per arm and the means, and writes
-        <run>/verdicts.json.
+        Unblinds every verdict (verdict_corrected.json where swaps wrote one), prints rankings and scores
+        per arm and the means, and writes <run>/verdicts.json.
     python3 scripts/answer_eval/answer_eval.py form <run>
         Counts what a reader sees that is process rather than content: inline method tags, workflow
         handles, provenance labels, a disclaimer in the first lines, a footer, mathematical symbols,
@@ -71,13 +76,67 @@ def prep(run: Path, only: list[str]) -> None:
     key_path.write_text(json.dumps(key, ensure_ascii=False, indent=1), encoding="utf-8")
 
 
+QUOTED = re.compile(r"「([^」]{6,})」|'([^']{6,})'|“([^”]{6,})”|\"([^\"]{6,})\"|‘([^’]{6,})’")
+
+
+def quoted_passages(items: list[str]) -> list[str]:
+    out = []
+    for item in items:
+        for m in QUOTED.finditer(item):
+            for part in re.split(r"…|\.\.\.", next(g for g in m.groups() if g)):  # judges elide with an ellipsis
+                if len(part.strip()) >= 6:
+                    out.append(part.strip())
+    return out
+
+
+def swaps(run: Path) -> None:
+    for folder in sorted((run / "judge").iterdir()):
+        vpath = folder / "verdict.json"
+        if not vpath.exists():
+            continue
+        v = json.loads(vpath.read_text(encoding="utf-8"))
+        texts = {L: (folder / f"{L}.md").read_text(encoding="utf-8") for L in "ABC"}
+        hits = {}
+        for L in "ABC":
+            qs = quoted_passages(v["unprofessional"].get(L, []) + v["technical_errors"].get(L, []))
+            hits[L] = {F: sum(q in texts[F] for q in qs) for F in "ABC"}
+        best = {L: max(h, key=h.get) for L, h in hits.items() if any(h.values())}
+        moved = {L: F for L, F in best.items() if F != L}
+        if not best:
+            print(f"{folder.name}: no quoted passage found in the replies; check the letters by reading the verdict")
+            continue
+        if not moved:
+            print(f"{folder.name}: quotes match their letters")
+            continue
+        clean = (len(best) == 3 and sorted(best.values()) == ["A", "B", "C"]
+                 and all(hits[L][L] == 0 for L in moved))
+        print(f"{folder.name}: quotes filed under " + ", ".join(f"{L} occur in {F}.md" for L, F in moved.items())
+              + " " + str(hits))
+        if not clean:
+            print("   partial mismatch: not corrected; read the verdict before unblinding it")
+            continue
+        fixed = {}
+        for k, val in v.items():
+            if isinstance(val, dict) and set(val) >= set("ABC"):
+                fixed[k] = {best[L]: val[L] for L in val}
+            elif k == "ranking":
+                fixed[k] = [best[L] for L in val]
+            else:
+                fixed[k] = val
+        fixed["correction"] = "letters mapped back by quoted passages: " + ", ".join(f"{L}->{F}" for L, F in moved.items())
+        (folder / "verdict_corrected.json").write_text(json.dumps(fixed, ensure_ascii=False, indent=1), encoding="utf-8")
+        print("   wrote verdict_corrected.json")
+
+
 def summary(run: Path, detail: str | None, only: list[str]) -> None:
     key = json.loads((run / "key.json").read_text(encoding="utf-8"))
     rows, agg, firsts, forwards = {}, {}, {}, {}
     for name in sorted(key):
         if only and name not in only:
             continue
-        vpath = run / "judge" / name / "verdict.json"
+        vpath = run / "judge" / name / "verdict_corrected.json"
+        if not vpath.exists():
+            vpath = vpath.with_name("verdict.json")
         if not vpath.exists():
             continue
         v = json.loads(vpath.read_text(encoding="utf-8"))
@@ -151,12 +210,14 @@ def main(argv: list[str]) -> int:
     if argv[:1] in (["-h"], ["--help"]):
         print(__doc__)
         return 0
-    if len(argv) < 2 or argv[0] not in ("prep", "summary", "form"):
+    if len(argv) < 2 or argv[0] not in ("prep", "swaps", "summary", "form"):
         print(__doc__)
         return 2
     cmd, run, rest = argv[0], Path(argv[1]), argv[2:]
     if cmd == "prep":
         prep(run, rest)
+    elif cmd == "swaps":
+        swaps(run)
     elif cmd == "summary":
         detail = None
         if "--detail" in rest:
