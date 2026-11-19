@@ -1,5 +1,28 @@
 # 蒸馏记录
 
+## 2026-11-19 (19) · LP Team 与 MILP Team 接入回答标准，Lead 分派到 MILP Team
+
+- 用户请求：「进一步提高LP team 和MILP team」。分支 `lp-milp-pro`（worktree `../Optimization-Researchers-lp-milp-pro`），从 `main`（184882d，条目 (16)–(18)）开出，先 merge `origin/main`（d2a12bd，PR #3：MILP Team 四位成员与 milp-roundtable 模板、LP Team 的 Forrest 与 Bixby、kit 的 T1 封存题验证）。未推送
+- 合并：两处冲突。`TEAM-KIT.md` 两边新增的行都留，distill_check 那一行取 origin/main 的（表格里的竖线转义）；`scripts/team_check.py` 先跑 answer-std 一项，再接 origin/main 按客座计数的判断。其余六个两边都改过的文件自动合并，逐一核对两边改动都在（Lead 的 LP 行、理事会的 Forrest/Bixby 行、Huangfu 的更正、两份模板）。RUNBOOK 要求两边都改团队层文件时重做 T3.8：LP、MILP 是轻量档，没有 T3.8；理事会的 T3.8 内容（fault lines、DEEP-READING）两边都没动，没有重跑，以 `team_check.py` 与 `check_links.py` 代替核对
+- 改动：
+  - 回答标准写进 PR #3 带来的 7 个 skill（Forrest、Bixby；Gleixner、Lübbecke、Achterberg、Fischetti；milp-roundtable）；Forrest、Bixby 的「第一行写出路由行 / 工作流」改成静默选择（与 (16) 改过的十位一致）。`answer_standard.py` 的旧条款识别放宽：句中的「tag key advice / each key recommendation with its method」和以「Say once」开头的免责声明也补位置说明；其余 32 个 skill 的状态不变
+  - Lead 改为领导五队：路由表加 MILP Team 一行（求解器内的分支切割、分解、MIP 基准测试；哪类问题由哪位成员视角主答），Bertsimas 的召集规则早于 MILP Team，本 skill 把「混合整数」拆开用（线性 → MILP，非线性与全局 → MINLP），标为 inferred；frame 简报、`@MILP` 控制词、免责声明、诚实边界（理事会圆桌尚未给 MILP Team 座位）同步；理事会 README 的五队说明与安装循环（装 milp-team，跳过 milp-roundtable 模板）
+  - `product/README.md` 的团队表补上 lp-team、milp-team、minlp-team（成员与档位取自各队 team.json 与 `team_check.py`）
+  - 评测集加 T8（Achterberg：新割平面分离器要不要默认开启）、T9（Forrest：自写 dual simplex 在客户 LP 上不收敛或误报不可行）
+- 评测（全部 Opus 5.5；三方盲评，每题两位零上下文评审，字母错开；满分 30；`swaps` 核对四份评审字母无误）：
+
+  | 题 | origin/main 版（无回答标准） | 本分支 | 不带 skill |
+  |----|----|----|----|
+  | T8 MILP · Achterberg | 19.5 | 28.5 | 27.5 |
+  | T9 LP · Forrest | 18.5 | 27.5 | 25.5 |
+
+  四份评审都把本分支排第一，并都愿意原样转发；origin/main 版被点名的是正文里的内部句柄（→ H5、Workflow D、Rung、🔴、语料编号）和一处技术错误（T9 把残留的成本扰动当成误报不可行的原因，而不可行证书与成本无关）。本分支剩下的批评：开头一段塞了结论、五个步骤和预期结论；数据出来前先写「我的预期」（回答标准第 1 条要求写出预期的改动，评审读作先入为主）；自定阈值没有容差；依据里的证据键与「本轮 Crossref 核对」这类过程用语；提交号这类出处细节。研究者块作用于 30 多个 skill，这一轮没有改它
+- 闸门：`answer_standard.py --check` 39/39、`--installed` 75/75；`team_check.py` dfo 39 项 0 失败、nonlinear 30/0、council 16/0；lp 2 项、milp 2 项、minlp 7 项失败，与 origin/main（d2a12bd）上逐项相同（LP、MILP、MINLP 的圆桌仍是模板，团队层 T2 未运行；MINLP 深读成员的卡片问题），本分支只多出通过的 answer-std 一项；`distill_check.py` 两队 0 ✗（dfo 7 ⚠、nlp 4 ⚠，同前，含 `--installed`）；`check_links.py` 六队与 teams/ 0 断链；`selftest.sh` 通过（UTF-8 模式）
+- 安装：新装 6 位成员的整个文件夹（Forrest、Bixby、Gleixner、Lübbecke、Achterberg、Fischetti；与仓库跟踪的文件逐个一致）；覆盖 council-roundtable 与 optimization-lead 的 SKILL.md（原文件另存）；lp-roundtable、milp-roundtable 是模板，不装。`--installed` 75/75。回退：删掉这 6 个文件夹，两个 SKILL.md 用 `git show 184882d:<路径>` 恢复
+- 未做（档位由用户定）：LP、MILP 两队的团队层 T2（填圆桌的入座表、fault lines、README）；成员深读档 T3
+- 成本：作答 6 份约 145 万 token（每份 19–31 万、16–22 分钟）、评审 4 份约 70 万，合计约 215 万
+- 模型：Opus 5.5
+
 ## 2026-11-15 (18) · Lead 由 lead 综合成一份答复（「Lead synthesizes」）
 
 - 用户请求：「Lead synthesizes」（接条目 (17)：我提议交付里不再逐队引用各队回答，而由 lead 依据各队回答写一份答复，各队原文保留、按需给出）。同一分支 `pro-answers`，未推送
