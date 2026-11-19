@@ -78,9 +78,11 @@ SUPERSEDED = {
 STEP3_RE = re.compile(r"^### Step 3\b.*$", re.M)
 ACTIVATION_RE = re.compile(r"^## (?:Activation Rules|激活规则)\b.*$", re.M)
 NEXT_H2_RE = re.compile(r"^## ", re.M)
-LABEL_BULLET_RE = re.compile(r"^- \*{0,2}(?:Label|Tag)\b")
+LABEL_BULLET_RE = re.compile(  # 以 Label / Tag 开头，或句中「tag key advice / each key recommendation with its method」
+    r"^- (?:\*{0,2}(?:Label|Tag)\b|.*\b(?:[Ll]abel|[Tt]ag) (?:each |every )?(?:key )?"
+    r"(?:recommendation|advice|suggestion)s?\b.*\bmethod)")
 DISCLAIMER_BULLET_RE = re.compile(
-    r"^- \*{0,2}(?:One-time disclaimer|Disclaimer once|State once|Once, on first activation|"
+    r"^- \*{0,2}(?:One-time disclaimer|Disclaimer once|State once|Say once|Once, on first activation|"
     r"On first activation|At first activation)\b")
 
 # 标准块里不许出现的东西：会被 check_citations.py / distill_check.py / check_links.py 当真去核对。
