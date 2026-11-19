@@ -1,12 +1,12 @@
 # answer_eval · 回答质量的盲评
 
-改了 `references/answer-standard.md`，或者改了某类 skill 的回答方式之后，用这里的七道题检验：同一道题由
+改了 `references/answer-standard.md`，或者改了某类 skill 的回答方式之后，用这里的九道题检验：同一道题由
 旧版 skill、新版 skill、不带 skill 各答一遍，交给只看得到三份回答的评审 agent 盲评。写法好不好，闸门脚本
 查不出来，只有读回答才看得出来。
 
 | 文件 | 用途 |
 |------|------|
-| `questions.json` | 七道题：研究者 skill 三道（Curtis、Powell、Grossmann）、语料团队一道（NLP Team）、圆桌一道、Lead 两道（仓库选址；每日运输 LP，5 分钟时限、无商业授权） |
+| `questions.json` | 九道题：研究者 skill 五道（Curtis、Powell、Grossmann；MILP 的 Achterberg、LP 的 Forrest）、语料团队一道（NLP Team）、圆桌一道、Lead 两道（仓库选址；每日运输 LP，5 分钟时限、无商业授权） |
 | `judge_prompt.md` | 评审 agent 的说明：六个维度各 1–5 分、排名、能否原样转发、不专业之处、技术错误 |
 | `answer_eval.py` | `prep` 建盲评目录与 key.json；`swaps` 核对评审有没有把意见记错字母；`summary` 揭盲并汇总；`form` 数流程用语、标签、免责声明的位置 |
 

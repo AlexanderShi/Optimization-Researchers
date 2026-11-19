@@ -22,14 +22,14 @@ Bertsimas's lens is the "Lens (one line)" of his `## Roundtable Card`; "known fo
 
 ## Install (Claude Code)
 
-The council needs its four guest teams installed alongside it. The roundtable seats guest members from the LP, NLP, DFO and MINLP teams and finds every member, Bertsimas included, as a sibling folder, where it also reads that member's cards and notes. So copy the skill folders of `product/optimization-council`, `product/lp-team`, `product/nonlinear-team`, `product/dfo-team` and `product/minlp-team` into the same skills directory: 28 folders on 2026-10-31, namely the council's three (`optimization-lead`, `dimitris-bertsimas` and `council-roundtable`), the 23 guest members, and the NLP and DFO roundtables. The LP and MINLP roundtables are left out: they are still unfilled templates (their team layer, T2, has not run), and the council sends their questions to the member skills instead. For a team's one-voice answer the lead also uses the NLP and DFO corpus team skills, `nlp-team` and `dfo-team` (folders `teams/nlp-team` and `teams/dfo-team`, each installed on its own; see the corpus note at the top of each). Without them, the lead offers a member view or `discuss <team>` (that team's roundtable).
+The council needs its four guest teams installed alongside it, and the lead also routes to the MILP Team. The roundtable seats guest members from the LP, NLP, DFO and MINLP teams and finds every member, Bertsimas included, as a sibling folder, where it also reads that member's cards and notes. So copy the skill folders of `product/optimization-council`, `product/lp-team`, `product/nonlinear-team`, `product/dfo-team`, `product/minlp-team` and `product/milp-team` into the same skills directory: 28 folders on 2026-10-31, namely the council's three (`optimization-lead`, `dimitris-bertsimas` and `council-roundtable`), the 23 guest members, and the NLP and DFO roundtables. The LP and MINLP roundtables are left out: they are still unfilled templates (their team layer, T2, has not run), and the council sends their questions to the member skills instead. For a team's one-voice answer the lead also uses the NLP and DFO corpus team skills, `nlp-team` and `dfo-team` (folders `teams/nlp-team` and `teams/dfo-team`, each installed on its own; see the corpus note at the top of each). Without them, the lead offers a member view or `discuss <team>` (that team's roundtable).
 
 ```bash
-# macOS / Linux — global install of the council and its four guest teams
+# macOS / Linux — global install of the council, its four guest teams and the MILP Team
 mkdir -p ~/.claude/skills
-for t in optimization-council lp-team nonlinear-team dfo-team minlp-team; do
+for t in optimization-council lp-team nonlinear-team dfo-team minlp-team milp-team; do
   for d in product/$t/*/; do
-    case "$d" in */lp-roundtable/|*/minlp-roundtable/) continue ;; esac   # templates until their team layer runs
+    case "$d" in */lp-roundtable/|*/minlp-roundtable/|*/milp-roundtable/) continue ;; esac   # templates until their team layer runs
     cp -R "${d%/}" ~/.claude/skills/
   done
 done
@@ -37,8 +37,8 @@ done
 ```powershell
 # Windows PowerShell
 New-Item -ItemType Directory -Force "$HOME\.claude\skills" | Out-Null
-foreach ($t in "optimization-council", "lp-team", "nonlinear-team", "dfo-team", "minlp-team") {
-  Get-ChildItem "product\$t" -Directory | Where-Object { $_.Name -notin "lp-roundtable", "minlp-roundtable" } |
+foreach ($t in "optimization-council", "lp-team", "nonlinear-team", "dfo-team", "minlp-team", "milp-team") {
+  Get-ChildItem "product\$t" -Directory | Where-Object { $_.Name -notin "lp-roundtable", "minlp-roundtable", "milp-roundtable" } |
     ForEach-Object { Copy-Item -Recurse $_.FullName "$HOME\.claude\skills\" }
 }
 ```
