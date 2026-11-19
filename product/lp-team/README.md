@@ -11,7 +11,7 @@
 
 Research-craft skills distilled from the public work of Qi Huangfu, plus a roundtable skill that convenes them on your problem.
 
-Field: linear programming solver engineering, centred on the revised simplex method and above all the dual revised simplex method (pricing and CHUZR, bound-flipping ratio tests, dual steepest edge, sparse LU factorization and its updates, hyper-sparsity, parallel simplex) as built into research and production LP solvers; interior-point / barrier, first-order (PDLP-type) LP, crossover, presolve-centred and MIP traditions are not yet represented by a member.
+Field: linear programming solver engineering, centred on the revised simplex method and above all the dual revised simplex method (pricing and CHUZR, bound-flipping ratio tests, dual steepest edge, sparse LU factorization and its updates, hyper-sparsity, parallel simplex), together with the primal simplex, start bases and crash, sifting, and the measurement of production LP codes on real models, as built into research and production LP solvers; the MIP work of two members (John J. H. Forrest: Cbc and earlier MIP codes; Robert E. Bixby: CPLEX and Gurobi MIP progress measurement) is seated in the MILP Team (product/milp-team, where they sit as guests from lp-team) and is not this team's centre; interior-point / barrier, first-order (PDLP-type) LP, crossover and presolve are not the centre of any member's work.
 
 [TODO: one sentence on scope: which tradition of the field this selection follows, and which neighbouring traditions are not represented; from the T0 scope decision; team-layer.js (T2)]
 
@@ -20,6 +20,8 @@ Field: linear programming solver engineering, centred on the revised simplex met
 | Member | Lens · known for | Status |
 |--------|------------------|--------|
 | [Qi Huangfu](qi-huangfu/SKILL.md) | lens: [TODO] | T0 scaffold |
+| [John J. H. Forrest](john-j-h-forrest/SKILL.md) | lens: [TODO] | T0 scaffold |
+| [Robert E. Bixby](robert-e-bixby/SKILL.md) | lens: [TODO] | T0 scaffold |
 | `lp-roundtable` | Convenes the members to discuss your problem and produce a plan | roundtable |
 
 [TODO: after T1, replace each "lens: …" cell with the member's one-line lens and what they are known for (signature works, software, books), and each status cell with the member's stage from `python3 scripts/team_status.py product/lp-team`; mark any member with a **student mode** (proof playbook, open problems, reading path, pre-meeting review); team-layer.js (T2), refreshed by team-integrate.js (T3.8). Then delete this line.]

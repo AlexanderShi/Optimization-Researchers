@@ -13,10 +13,12 @@ fault line 的卡片 ID）。本脚本把这些变成确定性检查：引用必
     page-on-unread   引了页码，但该作品最深的卡片只到 abstract / metadata / unreadable 级（没有全文就没有页码）
     page-range       引用的页码超过 INDEX.md 的 Pages（读的就是那个文件）
     version          版本引用（见下）所引的卡片不存在，或卡片正文里没有提到那个版本
-    roundtable       圆桌里 [<slug> card …] 的 slug 不是队员（理事会：也不是 guest_teams 里任何一队的成员）；
-                     或该引用在那位成员处过不了上面的检查
+    roundtable       圆桌里 [<slug> card …] 的 slug 不是队员（理事会：也不是 guest_teams 里任何一队的成员；有客座时：
+                     也不是 guests 里能解析的客座）；或该引用在那位成员处过不了上面的检查
     cross-member     成员文件（如领域文件的跨队一节）里 [<另一位成员的 slug> card …] 在那位成员处过不了上面的检查
-                     （slug 是本队或 guest_teams 里的成员时才这样解析；别的词开头的 […] 照常按本人的 ID 查）
+                     （slug 是本队、guest_teams 里的成员或 guests 里的客座时才这样解析；别的词开头的 […] 照常按本人的 ID 查）；
+                     slug 是 guests 里列着、但解析不了的客座时，也报在这一类（与 roundtable 一类同样的说法），不当本人的 ID 查；
+                     以本人 slug 开头的 [<本人> card …; <客座> card …] 里客座的段也这样查（别的成员的段照旧按本人的 ID 查）
 警告（⚠，不计入退出码）:
     skip-mention     只提到（不带页码）INDEX 里 Role=skip 的行，例如诚实边界里说明哪些行被排除
     roundtable-bare  圆桌里不带 [<slug> card …] 的裸卡片 ID，无法判定属于谁
@@ -35,8 +37,10 @@ fault line 的卡片 ID）。本脚本把这些变成确定性检查：引用必
 扫描的文件（成员）：SKILL.md；references/*.md（technique-catalog、proof-playbook、open-problems、reading-path）；
 references/research/0[1-9]-*.md（不含 cards/：卡片本身是证据，不是引用）；references/domains/*.md（按优化领域分的
 领域文件，有的成员才有）。团队目录时还查圆桌 SKILL.md 的 [<slug> card …] 引用；team.json 有 guest_teams（理事会）时，
-别队成员的 slug 到 product/<guest 队>/ 里解析。成员文件里写 [<另一位成员的 slug> card …]（领域文件的跨队一节常这样写）
-时，同样到那位成员处核对（问题类别 cross-member），不算本人的引用；只有 slug 是本队或 guest 队成员时才这样解析。轻量档成员（没有 cards/）不查卡片 ID，只报 DOI / arXiv 计数。
+别队成员的 slug 到 product/<guest 队>/ 里解析；有 guests（客座：别队的单个成员）时，客座的 slug 到 product/<home>/<slug>/
+里解析（new_team.seated_guests，与 team_check.py 同一个解析器；别的团队都在团队目录绝对路径的上级里找（new_team.teams_root，
+不跟随链接），在团队目录或成员目录里跑 check_citations.py . 也对）。成员文件里写 [<另一位成员的 slug> card …]（领域文件的跨队一节常这样写）
+时，同样到那位成员处核对（问题类别 cross-member），不算本人的引用；只有 slug 是本队成员、guest 队成员或客座时才这样解析。轻量档成员（没有 cards/）不查卡片 ID，只报 DOI / arXiv 计数。
 不扫描：围栏代码块、front matter、行内代码 `…`（写法示例）、表格单元格之外的页码（| 不能跨）。
 
 引用写法（ID 规则与 check_ledger.py 相同：一个大写字母 + 3–4 位数字；字母限于 S D H R X B 和这位成员 works.json
@@ -63,6 +67,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -71,6 +76,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 from check_links import prose_lines  # noqa: E402  front matter / 围栏代码块换成空行，行号不变
 import team_status as ts  # noqa: E402  INDEX.md 解析
+import new_team  # noqa: E402  入座的别队成员与客座（seated_guests）
 
 LEVEL_RANK = {"full": 4, "partial": 3, "abstract": 2, "metadata": 1, "unreadable": 0}
 UNREAD = {"abstract", "metadata", "unreadable"}
@@ -233,32 +239,65 @@ def cites_in(line: str, letters: set[str]):
         yield m, cid, pages, version
 
 
-def scan_text(text: str, mem: Member, rel: str, report: dict, others: dict[str, Member] | None = None):
-    """扫描一个文件的全部引用，问题写进 report。others：别的成员（本队与 guest_teams），
-    [<他们的 slug> card …] 到他们那里核对，不算本人的引用。"""
+def scan_text(text: str, mem: Member, rel: str, report: dict, others: dict[str, Member] | None = None,
+              unresolved: set[str] | None = None, guests: set[str] | None = None):
+    """扫描一个文件的全部引用，问题写进 report。others：别的成员（本队的、guest_teams 各队的，和 guests 里能解析的
+    客座），[<他们的 slug> card …] 到他们那里核对，不算本人的引用。unresolved：team.json 的 guests 里列着、但解析不了的
+    客座的 slug——[<这样的 slug> card …] 报为 cross-member（与圆桌一项同样的说法：解析不了，原因看 team_check.py 的
+    guests 一项），也不当本人的 ID 查。guests：team.json 的 guests 里列着的 slug（不是本队成员的；能解析的也在 others
+    里）——以本人 slug 开头的方括号里，客座的段（[di-example card S010 p. 1; cy-sample card S003 p. 1] 的后一段）同样到
+    客座处核对或报解析不了，不当本人的 ID 查；这种方括号里别的成员的段照旧按本人的 ID 查（加客座之前就是这样）。"""
     prose = [blank_code(l) for l in prose_lines(text)]
     heads = heading_at(prose)
     cites = paged = versioned = foreign = 0
     ids: set[str] = set()
+    others, unresolved, guests = others or {}, unresolved or set(), guests or set()
+
+    def check_seg(slug: str, seg: str, no: int, line: str):
+        """[<slug> card …] 里属于 slug 的一段：到那位处核对，问题记为 cross-member；slug 是解析不了的客座时报出来。"""
+        nonlocal foreign
+        if slug in unresolved and slug not in others:
+            report["problems"].setdefault("cross-member", []).append(
+                {"file": rel, "line": no, "section": heads[no - 1],
+                 "detail": f"[{slug} card …]: '{slug}' is a guest in team.json but does not resolve "
+                           "(team_check.py's guests row says why)", "text": line.strip()[:160]})
+            return
+        o = mem if slug == mem.slug else others.get(slug)
+        if o is None or not o.deep:
+            return
+        for _, cid, pages, version in cites_in(seg, o.letters):
+            foreign += 1
+            kind, detail = o.check_cite(cid, pages, version)
+            if kind and not kind.startswith("~"):
+                report["problems"].setdefault("cross-member", []).append(
+                    {"file": rel, "line": no, "section": heads[no - 1], "detail": f"[{slug} card …] {detail}",
+                     "text": line.strip()[:160]})
+
     for no, line in enumerate(prose, 1):
-        for rm in RT_RE.finditer(line) if others else ():
+        for rm in RT_RE.finditer(line) if (others or unresolved) else ():
             slug, body = rm.group("slug"), rm.group("body")
-            if slug == mem.slug or slug not in others:
+            if slug == mem.slug and guests:
+                # 本人开头的方括号：客座的段（没有 "<slug> card" 的段跟前一段的人）到客座处核对、从行里抹掉，
+                # 其余的段留在行里，下面照常按本人的 ID 查
+                spans, pos = [], rm.start("body")
+                for seg in body.split(";"):
+                    start, pos = pos, pos + len(seg) + 1
+                    sm = SLUG_RE.match(seg)
+                    if sm:
+                        slug = sm.group("slug")
+                    if slug != mem.slug and slug in guests:
+                        check_seg(slug, seg[sm.end():] if sm else seg, no, line)
+                        spans.append((start, start + len(seg)))
+                for s, e in spans:
+                    line = line[:s] + " " * (e - s) + line[e:]
+                continue
+            if slug == mem.slug or (slug not in others and slug not in unresolved):
                 continue  # 本人的 slug，或不是成员 slug 的词：照常按本人的 ID 查
             for seg in body.split(";"):
                 sm = SLUG_RE.match(seg)
                 if sm:
                     slug, seg = sm.group("slug"), seg[sm.end():]
-                o = mem if slug == mem.slug else others.get(slug)
-                if o is None or not o.deep:
-                    continue
-                for _, cid, pages, version in cites_in(seg, o.letters):
-                    foreign += 1
-                    kind, detail = o.check_cite(cid, pages, version)
-                    if kind and not kind.startswith("~"):
-                        report["problems"].setdefault("cross-member", []).append(
-                            {"file": rel, "line": no, "section": heads[no - 1], "detail": f"[{slug} card …] {detail}",
-                             "text": line.strip()[:160]})
+                check_seg(slug, seg, no, line)
             line = line[:rm.start()] + " " * (rm.end() - rm.start()) + line[rm.end():]
         for m, cid, pages, version in cites_in(line, mem.letters):
             cites += 1
@@ -315,7 +354,8 @@ def method_audit(mem: Member, min_ev: int) -> list[dict]:
     return out
 
 
-def check_member(team: Path, m: dict, args, others: dict[str, Member] | None = None) -> dict:
+def check_member(team: Path, m: dict, args, others: dict[str, Member] | None = None,
+                 unresolved: set[str] | None = None, guests: set[str] | None = None) -> dict:
     mem = Member(team, m)
     report = {"slug": mem.slug, "deep": mem.deep, "files": {}, "problems": {}, "warnings": {}, "methods": []}
     if not mem.deep:
@@ -330,7 +370,8 @@ def check_member(team: Path, m: dict, args, others: dict[str, Member] | None = N
         (mem.dir / "references/domains").glob("*.md"))  # 按优化领域分的领域文件（有的成员才有）
     for f in files:
         if f.exists():
-            scan_text(f.read_text(encoding="utf-8"), mem, f.relative_to(mem.dir).as_posix(), report, others)
+            scan_text(f.read_text(encoding="utf-8"), mem, f.relative_to(mem.dir).as_posix(), report, others, unresolved,
+                      guests)
     if args.methods:
         report["methods"] = method_audit(mem, args.min_evidence)
         if args.strict_methods:
@@ -351,6 +392,7 @@ def check_roundtable(team: Path, cfg: dict, members: dict[str, Member]) -> dict:
     if not cfg.get("roundtable") or not rt.exists():
         return report
     prose = [blank_code(l) for l in prose_lines(rt.read_text(encoding="utf-8"))]
+    guest_slugs = {g["slug"] for g in new_team.guest_entries(cfg)}  # team.json 没经过 load_config：形状不对的项跳过
 
     def add(kind: str, no: int, detail: str, line: str):
         entry = {"file": report["file"], "line": no, "detail": detail, "text": line.strip()[:160]}
@@ -367,6 +409,10 @@ def check_roundtable(team: Path, cfg: dict, members: dict[str, Member]) -> dict:
                 if sm:
                     slug, seg = sm.group("slug"), seg[sm.end():]
                 mem = members.get(slug)
+                if mem is None and slug in guest_slugs:
+                    add("roundtable", no, f"[{slug} card …]: '{slug}' is a guest in team.json but does not resolve "
+                                          "(team_check.py's guests row says why)", line)
+                    continue
                 if mem is None:
                     add("roundtable", no, f"[{slug} card …]: '{slug}' is not a member slug in team.json", line)
                     continue
@@ -424,32 +470,63 @@ def main():
         cfg = json.loads((team / "team.json").read_text(encoding="utf-8"))
         members_cfg = cfg.get("members") or []
     elif (p / "SKILL.md").exists():
-        team = p.parent
+        here = Path(os.path.abspath(p))  # 绝对路径（不跟随链接）：在成员目录里跑 check_citations.py . 也对
+        # 团队目录：p.parent 与 here.parent 是同一个文件夹时照旧用 p.parent（加客座之前的写法，报错里的路径也相同）
+        team, name = (p.parent if Path(os.path.abspath(p.parent)) == here.parent else here.parent), here.name
         cfg = json.loads((team / "team.json").read_text(encoding="utf-8")) if (team / "team.json").exists() else {}
-        members_cfg = [m for m in cfg.get("members", []) if m.get("slug") == p.name] or [{"slug": p.name, "name": p.name}]
+        members_cfg = [m for m in cfg.get("members", []) if m.get("slug") == name] or [{"slug": name, "name": name}]
         a.no_roundtable = True
     else:
         print(f"❌ {p}: neither a team folder (team.json) nor a member folder (SKILL.md)", file=sys.stderr)
         sys.exit(2)
+    root = new_team.teams_root(team)  # 别的团队（guest_teams、guests 的 home 队）都在这里找：团队目录给的是 . 也对
+    # 本脚本不跑 load_config：guests 形状不对时不崩，提示一句（team_check.py 的 team.json 一项判 ✗），说的是下面的实际做法
+    for e in new_team.guest_shape_errors(cfg):
+        print(f"⚠ {new_team.display(team / 'team.json')}: {e} (team_check.py rejects this team.json; here a guest that "
+              "still resolves is checked as a guest; a citation of any other string slug listed under guests is reported "
+              "as a guest that does not resolve, unless that slug is also a member of this team or of a guest team, "
+              "which is checked as that member; a guests value that is not a list, and an entry without a string slug, "
+              "are ignored)", file=sys.stderr)
     only = [x for x in a.member.split(",") if x]
     unknown = [x for x in only if x not in {m["slug"] for m in members_cfg}]
+    gh = {g["slug"]: g.get("home") for g in new_team.guest_entries(cfg)}
+    if any(x in gh for x in unknown):  # 客座：他的文件在 home 队查
+        print("❌ --member: " + "; ".join(
+            f"{x} is a guest from {gh[x]}: check it in its home team (check_citations.py "
+            f"{new_team.display(root / str(gh[x]) / x)})" if x in gh else f"not in team.json: {x}" for x in unknown),
+            file=sys.stderr)
+        sys.exit(2)
     if unknown:
         print(f"❌ --member: not in team.json: {', '.join(unknown)}", file=sys.stderr)
         sys.exit(2)
 
     members = {m["slug"]: Member(team, m) for m in cfg.get("members", members_cfg)}
-    # 理事会（team.json 的 guest_teams）：圆桌里坐着别队的成员，[<slug> card …] 到他们自己的团队目录里解析
+    # team.json 的 guests 里列着、又不是本队成员的 slug（以本人 slug 开头的方括号里，这些段也到客座处查）
+    guest_seats = {g["slug"] for g in new_team.guest_entries(cfg)} - set(members)
+    # 理事会（team.json 的 guest_teams）：圆桌里坐着别队的成员，[<slug> card …] 到他们自己的团队目录里解析。与加客座之前
+    # 相同：那队没有 team.json 就跳过；有、却读不了或不是合法 JSON 时照旧停下（traceback，退出码 1），不当作那队没有成员
+    # （那样圆桌一项可能报 0 problems，或把那队成员的引用报成 "not a member slug"）。别队在 root 里找；团队目录以文件夹名
+    # 结尾时（product/<team>）team.parent 就是 root 的原写法，照旧用它，traceback 里的路径也与以前相同（. 时它指错地方）
+    gbase = team.parent if Path(os.path.abspath(team.parent)) == root else root
     for g in cfg.get("guest_teams") or []:
-        gj = team.parent / g / "team.json"
+        gj = gbase / g / "team.json"
         if gj.exists():
             for gm in json.loads(gj.read_text(encoding="utf-8")).get("members", []):
                 if gm.get("slug"):
-                    members.setdefault(gm["slug"], Member(team.parent / g, gm))
+                    members.setdefault(gm["slug"], Member(gbase / g, gm))
+    # guests 里的单个客座（new_team.seated_guests 的客座部分，与 team_check.py 同一个解析器）：[<slug> card …] 到他 home 队的
+    # 文件夹里解析（_dir = product/<home>/<slug>）
+    for unit in new_team.seated_guests(cfg, root, teams=False).values():
+        for gm in unit:
+            members.setdefault(gm["slug"], Member(Path(gm["_dir"]).parent, gm))
+    # 列在 guests 里、但解析不了的客座：成员文件里的 [<slug> card …] 报为 cross-member，不当本人的 ID 查
+    unresolved = {g["slug"] for g in new_team.guest_entries(cfg)} - set(members)
     reports = []
     if not a.roundtable:
         for m in members_cfg:
             if not only or m["slug"] in only:
-                reports.append(check_member(team, m, a, {s: x for s, x in members.items() if s != m["slug"]}))
+                reports.append(check_member(team, m, a, {s: x for s, x in members.items() if s != m["slug"]}, unresolved,
+                                            guest_seats))
     rt = None
     if not a.no_roundtable and cfg.get("roundtable"):
         rt = check_roundtable(team, cfg, members)

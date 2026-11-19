@@ -1,14 +1,17 @@
 export const meta = {
   name: 'team-base-skills',
-  description: 'T1: build each member\'s research-craft skill with the nuwa Phase 1-5 pipeline (six research agents, review, four-way-validated synthesis, SKILL.md from the research template, quality gate and blind tests, dual-agent refine)',
+  description: 'T1: build each member\'s research-craft skill with the nuwa Phase 1-5 pipeline (prior snapshot, six research agents, review, sealed holdout, four-way-validated synthesis, SKILL.md from the research template, quality gate and blind tests, dual-agent refine, then a two-arm increment test of the finished skill against unaided answers)',
   whenToUse: 'After scripts/new_team.py has scaffolded a team from team.json. One pipeline per member; on small machines launch one workflow per member in parallel. Use args.from / args.to to stop at a checkpoint and resume after the user has looked.',
   phases: [
+    { title: 'Prior', detail: 'Before any research: one agent per member writes references/research/00-prior.md from what the model already believes (no files, no web)' },
     { title: 'Research', detail: 'Phase 1: six parallel research agents per member write references/research/01-06 (quick tier: 01-03)' },
     { title: 'Review', detail: 'Phase 1.5: merge_research.py summary table, contradictions, one top-up search for thin dimensions' },
-    { title: 'Synthesis', detail: 'Phase 2: four-way validation of methods, taste, signature works, workflows, boundary, Roundtable Card draft' },
+    { title: 'Holdout', detail: 'Before the synthesis: 3-5 pieces of primary material are sealed in references/research/holdout.md; they stay out of the skill and become test questions' },
+    { title: 'Synthesis', detail: 'Phase 2: increment screen against the prior, four-way validation of methods, taste, signature works, workflows, boundary, Roundtable Card draft' },
     { title: 'Build', detail: 'Phase 3: SKILL.md from references/research-skill-template.md in team.json language + RESOURCES.md rows; quality_check.py 12/12' },
     { title: 'Test', detail: 'Phase 4: exam set from the notes, blind answers from SKILL.md alone, grading + citation check, fix (at most 2 rounds)' },
     { title: 'Refine', detail: 'Phase 5: optimizer lens + skill-creator lens (read-only), then apply non-conflicting changes; 12/12 again' },
+    { title: 'Validate', detail: 'Last, on the finished SKILL.md: sealed, task and boundary questions answered with the skill (from an isolated copy) and without it, a judge blind to which is which, FIDELITY.md' },
   ],
 }
 
@@ -23,12 +26,20 @@ export const meta = {
 //                 pipeline() (no barrier between members)
 //   args.request  optional: the user's request in their own words; opens every agent prompt (set with make_args.mjs --request)
 // Workflow-specific keys:
-//   args.from, args.to   first / last step to run, each one of: research, review, synthesis, build, test, refine
-//                        (default research .. refine). The root SKILL.md has user checkpoints after review (1.5),
-//                        synthesis (2.5), test (4) and refine (5): to honour them, run with to: "review", show the
-//                        returned table, then rerun with from: "synthesis", and so on. Steps read their inputs from
-//                        files (research notes; the Phase 2 record in <scratch>/base-skills/<slug>/), so a later run
-//                        in the same session can resume. from > research needs the earlier steps' files.
+//   args.from, args.to   first / last step to run, each one of: prior, research, review, holdout, synthesis, build,
+//                        test, refine, validate (default prior .. validate). The root SKILL.md has user checkpoints after review
+//                        (1.5), synthesis (2.5), test (4) and refine (5): to honour them, run with to: "review", show
+//                        the returned table, then rerun with from: "holdout", to: "synthesis", and so on. Steps read
+//                        their inputs from files (research notes; the Phase 2 record in <scratch>/base-skills/<slug>/),
+//                        so a later run in the same session can resume. from > research needs the earlier steps' files.
+//                        prior, holdout and validate (ported from nuwa v2, 2026-11) are optional: a run from: "research"
+//                        writes no prior, a run from: "synthesis" seals nothing, a run to: "refine" does not validate,
+//                        and every later step reads 00-prior.md / holdout.md only if they exist (no sealed items: the
+//                        increment test runs on the task and boundary questions alone and FIDELITY.md says so). A
+//                        member whose notes were written before this port: run from: "prior", to: "prior" (the agent
+//                        reads no file, so the snapshot is still blind), then from: "holdout". validate runs after
+//                        refine so that FIDELITY.md describes the SKILL.md that ships; after a later edit of the
+//                        skill, rerun from: "validate".
 //   args.tier            "standard" (default: six research agents) or "quick" (agents 01-03 only, per the root SKILL.md)
 //   args.dims            optional explicit list of research agents to run, e.g. ["02", "06"] (update runs); overrides tier
 //   args.user_context    optional: the user's own field and career stage, for the domain-adaptation notes (Phase 0A)
@@ -40,14 +51,16 @@ export const meta = {
 //                        research agents (5 each at the standard tier); every other agent uses curl/WebFetch only. The
 //                        session has about 200 WebSearch calls shared by every agent: 5 members × 36 = 180, so run T1 in
 //                        its own session (playbook §六).
-// Outputs per member (<repo>/<team>/<slug>/): references/research/01-06-*.md, SKILL.md (type: research-craft, with a
-//   Roundtable Card), references/sources/RESOURCES.md rows, and for student_mode members a Student Mode section plus
-//   references/proof-playbook.md, open-problems.md, reading-path.md. Scratch: <scratch>/base-skills/<slug>/.
+// Outputs per member (<repo>/<team>/<slug>/): references/research/00-prior.md, 01-06-*.md and holdout.md, SKILL.md
+//   (type: research-craft, with a Roundtable Card), FIDELITY.md (the validation record), references/sources/RESOURCES.md
+//   rows, and for student_mode members a Student Mode section plus references/proof-playbook.md, open-problems.md,
+//   reading-path.md. Scratch: <scratch>/base-skills/<slug>/.
 // Gates run by the agents: scripts/merge_research.py (Phase 1.5), scripts/quality_check.py 12/12 (Phases 3-5),
 //   scripts/check_links.py (member folder). Next: team-layer.js (T2).
 // Launch: Workflow({scriptPath: "<repo>/scripts/workflows/team-base-skills.js", args: {...}}).
-// Cost: 16-20 agents per member at the standard tier (6 research + review + synthesis + 2 build + 3-7 test + 3 refine);
-//   13-17 at the quick tier (3 research agents). The worked example product/dfo-team/ did not meter this step's tokens.
+// Cost: 23-27 agents per member at the standard tier (prior + 6 research + review + holdout + synthesis + 2 build +
+//   3-7 test + 3 refine + 5 validate); 20-24 at the quick tier (3 research agents). The prior, holdout and validate
+//   agents use no WebSearch. The worked example product/dfo-team/ did not meter this step's tokens.
 // ---------------------------------------------------------------------------------------------
 
 const ARGS = typeof args === 'string' ? JSON.parse(args) : args
@@ -60,9 +73,9 @@ need(/^\d{4}-\d{2}-\d{2}$/.test(ARGS.date || ''), 'args.date must be "YYYY-MM-DD
 need(Array.isArray(ARGS.members) && ARGS.members.length > 0, 'args.members must be a non-empty array copied from team.json')
 ARGS.members.forEach((m, i) => need(m && /^[a-z0-9][a-z0-9-]*$/.test(m.slug || '') && m.name, `args.members[${i}] needs a kebab-case slug and a name`))
 
-const STEPS = ['research', 'review', 'synthesis', 'build', 'test', 'refine']
-const FROM = STEPS.indexOf(ARGS.from || 'research')
-const TO = STEPS.indexOf(ARGS.to || 'refine')
+const STEPS = ['prior', 'research', 'review', 'holdout', 'synthesis', 'build', 'test', 'refine', 'validate']
+const FROM = STEPS.indexOf(ARGS.from || 'prior')
+const TO = STEPS.indexOf(ARGS.to || 'validate')
 need(FROM >= 0 && TO >= 0 && FROM <= TO, `args.from / args.to must be among ${STEPS.join(', ')} with from <= to`)
 // args keys this workflow reads (all snake_case, like every team workflow); anything else is logged
 const KNOWN_ARGS = ['repo', 'team', 'scratch', 'date', 'members', 'request', 'from', 'to', 'tier', 'dims', 'user_context', 'word_budget', 'example_team', 'search_budget']
@@ -103,6 +116,13 @@ const HOUSE = `House rules for every agent in this workflow (nuwa research-team 
 - Tools: load WebSearch/WebFetch with ToolSearch ("select:WebSearch,WebFetch") if they are not loaded. Google Scholar blocks curl (use WebFetch). WebSearch has a per-session budget (about 200 calls shared by all agents): prefer curl/WebFetch on known URLs. Each task below states its WebSearch allowance; a task that states none uses curl and WebFetch only. Kill background processes by exact PID, never with pkill -f.
 - Scope: edit only the files this step names as its outputs (scratch files go under ${SCRATCH}/base-skills/<member-slug>/). Do not touch other members' folders, the repo's root SKILL.md, references/ or scripts/, and do not git commit or push: the session that launched this workflow commits after the stage.`
 
+// The prior agent and the two arms of the increment test run without the house rules and without the user's request:
+// they must read no file (team.json included) and must not learn anything about the researcher from the prompt.
+const STEP_WHY = 'This is one step of an automated workflow of the research-team kit (team-base-skills.js, stage T1), launched for the user. Do the step below.\n\n'
+function bare(prompt, opts) {
+  if (!opts || !opts.phase || !opts.label) throw new Error('bare(): opts.phase and opts.label are required')
+  return agent(`${STEP_WHY}${prompt}`, opts)
+}
 function A(prompt, opts) {
   if (!opts || !opts.phase || !opts.label) throw new Error('A(): opts.phase and opts.label are required')
   return agent(`${WHY}${HOUSE}\n\n${prompt}`, opts)
@@ -122,9 +142,14 @@ function who(m) {
 const P = m => {
   const MD = `${TEAM}/${m.slug}`
   const SCR = `${SCRATCH}/base-skills/${m.slug}`
-  return { MD, RES: `${MD}/references/research`, SRC: `${MD}/references/sources`, SKILL: `${MD}/SKILL.md`, SCR, SYN: `${SCR}/phase2-synthesis.md`, REVIEW: `${SCR}/phase1-review.md`, EXAM: `${SCR}/phase4-exam.json` }
+  const RES = `${MD}/references/research`
+  return { MD, RES, SRC: `${MD}/references/sources`, SKILL: `${MD}/SKILL.md`, SCR, SYN: `${SCR}/phase2-synthesis.md`, REVIEW: `${SCR}/phase1-review.md`, EXAM: `${SCR}/phase4-exam.json`, PRIOR: `${RES}/00-prior.md`, HOLD: `${RES}/holdout.md`, FID: `${MD}/FIDELITY.md`, VALSET: `${SCR}/validation-set.json`, ISO: `${SCR}/arm-skill` }
 }
 const SUR = m => m.surname || m.name
+// name plus registry ids only: enough to tell namesakes apart, and no research-derived fact (team.json "hint" holds some)
+const ident = m => `${m.name}${[m.orcid && `ORCID ${m.orcid}`, m.dblp && `DBLP pid ${m.dblp}`].filter(Boolean).length ? ` (${[m.orcid && `ORCID ${m.orcid}`, m.dblp && `DBLP pid ${m.dblp}`].filter(Boolean).join('; ')})` : ''}`
+// which arm of the increment test the judge sees as set X: fixed per member, different between members, never told to the judge
+const skillIsX = m => [...m.slug].reduce((n, c) => n + c.charCodeAt(0), 0) % 2 === 0
 
 // ---------- Phase 1: the six research dimensions (references/research-extraction-framework.md §二) ----------
 const DIMS = [
@@ -208,6 +233,9 @@ const SYNTH = {
     tensions: { type: 'array', items: { type: 'string' } },
     honest_boundary: { type: 'array', items: { type: 'string' } },
     roundtable_lens: { type: 'string' },
+    increment: { type: 'object', properties: { overturned: { type: 'number' }, deepened: { type: 'number' }, new: { type: 'number' }, already_known: { type: 'number' } } },
+    misreadings: { type: 'array', items: { type: 'string' } },
+    held_back_by_holdout: { type: 'array', items: { type: 'string' } },
     summary: { type: 'string' },
   },
   required: ['file', 'core_methods', 'heuristics', 'claimed_unverified', 'taste_criteria', 'workflows', 'stages_without_evidence', 'signature_works', 'tensions', 'honest_boundary', 'roundtable_lens', 'summary'],
@@ -282,6 +310,60 @@ const LENS = {
   },
   required: ['lens', 'changes'],
 }
+const PRIOR = {
+  type: 'object',
+  properties: {
+    file: { type: 'string' },
+    blind: { type: 'boolean' },
+    core_beliefs: { type: 'array', items: { type: 'string' } },
+    sure: { type: 'array', items: { type: 'string' } },
+    unsure: { type: 'array', items: { type: 'string' } },
+    common_picture: { type: 'string' },
+    note: { type: 'string' },
+  },
+  required: ['file', 'blind', 'core_beliefs', 'common_picture'],
+}
+const HOLDOUT = {
+  type: 'object',
+  properties: {
+    file: { type: 'string' },
+    items: { type: 'array', items: { type: 'object', properties: { hid: { type: 'string' }, kind: { type: 'string', enum: ['decision', 'argued-answer'] }, topic: { type: 'string' }, source: { type: 'string' } }, required: ['hid', 'kind', 'topic', 'source'] } },
+    picked_after_skill: { type: 'boolean' },
+    no_items_reason: { type: 'string' },
+  },
+  required: ['file', 'items'],
+}
+const VALQ = {
+  type: 'object',
+  properties: {
+    file: { type: 'string' },
+    questions: { type: 'array', items: { type: 'object', properties: { qid: { type: 'string' }, kind: { type: 'string', enum: ['holdout', 'task', 'boundary'] }, question: { type: 'string' } }, required: ['qid', 'kind', 'question'] } },
+    isolated_files: { type: 'number' },
+    note: { type: 'string' },
+  },
+  required: ['file', 'questions'],
+}
+const ARMSET = {
+  type: 'object',
+  properties: {
+    set: { type: 'string', enum: ['X', 'Y'] },
+    holdout: { type: 'array', items: { type: 'object', properties: { qid: { type: 'string' }, score: { type: 'number' }, reason: { type: 'string' } }, required: ['qid', 'score', 'reason'] } },
+    task: { type: 'object', properties: { specific_grounds: { type: 'number' }, supported: { type: 'number' }, unverified: { type: 'number' }, fabricated: { type: 'array', items: { type: 'string' } }, blind_spot_named: { type: 'boolean' }, note: { type: 'string' } }, required: ['specific_grounds', 'supported', 'unverified', 'fabricated'] },
+    boundary: { type: 'object', properties: { verdict: { type: 'string', enum: ['pass', 'fail', 'not asked'] }, reason: { type: 'string' } }, required: ['verdict'] },
+    overclaims: { type: 'array', items: { type: 'string' } },
+  },
+  required: ['set', 'holdout', 'task', 'boundary', 'overclaims'],
+}
+const JUDGE = {
+  type: 'object',
+  properties: { sets: { type: 'array', items: ARMSET }, difference: { type: 'string' } },
+  required: ['sets', 'difference'],
+}
+const FIDELITY = {
+  type: 'object',
+  properties: { file: { type: 'string' }, verdict: { type: 'string' }, weak_points: { type: 'array', items: { type: 'string' } }, skill_line_added: { type: 'boolean' }, quality_check: { type: 'string' }, summary: { type: 'string' } },
+  required: ['file', 'verdict', 'weak_points', 'quality_check', 'summary'],
+}
 const APPLY = {
   type: 'object',
   properties: { applied: { type: 'array', items: { type: 'string' } }, declined: { type: 'array', items: { type: 'string' } }, quality_check: { type: 'string' }, words: { type: 'number' }, summary: { type: 'string' } },
@@ -294,6 +376,7 @@ function researchPrompt(m, d) {
   return `Task (nuwa research-craft Phase 1, research agent ${d.n} of 06): research ${who(m)} — ${d.title}.
 Member skill folder: ${MD}/. Output: ${RES}/${d.file} (mkdir -p ${RES} first). If the file already has substantial content (an update run), extend it: keep what is there, add new findings under a dated heading, and mark anything the new evidence contradicts.
 Read first: ${REPO}/references/research-extraction-framework.md §一 (seven layers) and §二 (the six research agents and their hard requirements).
+Prior snapshot: if ${RES}/00-prior.md exists, read it before you start. It is what a model believed about ${m.name} before any research, and it is a record of belief, never a source. Do not spend the run confirming it: look for what overturns it, what goes deeper than it (cases, conditions, dates, sources) and what it lacks.
 Local corpus first: if ${SRC}/papers, talks, essays or software already hold files the user supplied (never private/), read the relevant ones before searching the web: user-supplied primary material outranks every web source. Mark findings from them "from user-supplied material".
 Where to look: ${d.look(m)}
 What to extract: ${d.extract}
@@ -301,11 +384,12 @@ ${d.n === '04' && m.student_mode ? `This member has a Student Mode (the user wor
 - Every paper: DOI, arXiv id, or venue + year + full title — checked with a tool. No identifier, no entry.
 - Tag each item [stated] / [practice] / [observed] / [inferred], and primary or secondary.
 - Record failures, abandoned directions, rejected papers and retracted claims: they carry more information than successes.
+- Record what they DID as dated events, in the past tense, with the fork: the situation, the options open at the time, what they did, what came of it, and how they explained it later (their words where a source has them). "Values rigorous testing" is useless; methods, anatomies and the sealed test items all come from such events.
 - Note the era and resource context of each practice (compute, tools, team size, seniority).
 - Keep contradictions; do not reconcile them.
 - About 5 minutes without useful results on a sub-question: move on and list it under Gaps.
 ${searchLine(RESEARCH_SEARCH)}
-File structure: a header (researcher, dimension, research date ${DATE}, number of sources consulted), the findings grouped as the framework asks, "Contradictions", "Gaps" (what you could not find), and "Sources" (one line each: title, author, date, URL or DOI, primary/secondary).
+File structure: a header (researcher, dimension, research date ${DATE}, number of sources consulted), the findings grouped as the framework asks, "Contradictions", "Gaps" (what you could not find), "Differences from the prior" (only if 00-prior.md exists: each item marked overturned / deepened / new, with its source), and "Sources" (one line each: title, author, date, URL or DOI, primary/secondary).
 Write in team.json "language". Edit only ${RES}/${d.file} (and transcripts you save under ${SRC}/talks/).
 Return the structured summary.`
 }
@@ -315,25 +399,61 @@ function reviewPrompt(m, notes) {
   return `Task (nuwa Phase 1.5, research review checkpoint) for ${m.name} (${MD}/).
 The research agents reported: ${JSON.stringify(notes)}
 1. Run python3 ${REPO}/scripts/merge_research.py ${MD} --mode research and keep its markdown table.
-2. Read every research note in ${RES}/ (01-06). Judge each dimension: enough usable sources? Do 02 (stated) and 03 (process evidence) together support at least a few say-do comparisons, which the four-way validation needs? Is the primary share above half? Any paper without an identifier (remove it or find the identifier)? Contradictions between agents (agent X says A, agent Y says B)?
+2. Read every research note in ${RES}/ (01-06; 00-prior.md, if there, is the prior snapshot and not a note). Judge each dimension: enough usable sources? Do 02 (stated) and 03 (process evidence) together support at least a few say-do comparisons, which the four-way validation needs? Is the primary share above half? Any paper without an identifier (remove it or find the identifier)? Contradictions between agents (agent X says A, agent Y says B)? If 00-prior.md exists: do the notes together name at least 8 differences from it (overturned / deepened / new)? Fewer means the research still restates what a model already knows: say so in the verdict and name the deeper sources to try (long interviews, early papers, theses, commit logs, critics).
 3. For a dimension that is clearly thin (fewer than about 5 usable sources, or 02/03 unable to support any say-do comparison), run ONE targeted top-up search yourself and append what you find to that note under "Top-up (${DATE})". Do not rewrite the notes otherwise. ${searchLine(FIXED.review)}
 4. Rerun merge_research.py and write ${RV}: the table, the contradictions, the thin dimensions left, and your verdict.
 This is the Phase 1.5 checkpoint the user sees ("garbage in, garbage out": say plainly whether the research is good enough to synthesise). Edit only the notes you topped up and ${RV}.
 Return the table (markdown), per-dimension verdicts, contradictions, what is still thin, and ready (true/false) with the reason.`
 }
 
+function priorPrompt(m) {
+  const { MD, RES, SCR, PRIOR: PR } = P(m)
+  return `Task (research-team kit, T1: the prior snapshot, written before any research; ported from nuwa v2). Researcher: ${ident(m)}. Output: ${PR} (mkdir -p ${RES} first).
+Why: this file records what a model believes about how ${m.name} does research BEFORE the research starts. Every later step measures against it: the research agents look for what overturns it, deepens it or is missing from it; the skill spends its words on that increment; and the last step compares answers given with the finished skill against answers given from unaided knowledge.
+Rules: this step records unaided belief on purpose, so a standing instruction to search or to verify before answering does not apply to it. First: if ${PR} already exists, do not rewrite it; read that one file and return what it says. Otherwise read no file at all (not team.json, nothing under ${MD}/ or ${SCR}/, no other member's folder, no installed skill about this researcher) and do not search or fetch anything from the web.
+Write in English, in about ten minutes and at most about 400 words:
+1. The five methods or practices you believe are most characteristic of how ${m.name} does research (choosing problems, designing experiments or proofs, judging results, writing, supervising, building software), one or two lines each.
+2. Three specific facts about their research practice you are most sure of.
+3. Three things you are unsure of, or may be confusing with another researcher.
+4. The one-sentence picture most people in the field have of this researcher.
+If you know almost nothing, or cannot tell which person the name refers to, say so plainly ("almost no prior"): then everything the research finds is new.
+Header: researcher, "prior snapshot, written before research", date ${DATE}, and "blind: yes" ("blind: no" with the reason if you have seen research notes or a skill about this person in this session).
+No citations here and none invented: this file is a record of belief. Nothing in it may later be cited as a source.
+Do not git commit. Edit only ${PR}. Return the structured summary.`
+}
+function holdoutPrompt(m) {
+  const { MD, RES, SRC, SCR, SKILL, HOLD } = P(m)
+  return `Task (seal the holdout, before the synthesis; ported from nuwa v2) for ${m.name} (${MD}/). Output: ${HOLD}.
+Why: the last step of this pipeline compares answers given with the finished skill against answers given without it. The yardstick has to be independent of the skill: a grader who checks answers against what the skill says only confirms the research's own misreadings. So before the synthesis digests the notes, 3-5 pieces of primary material are sealed. Their content stays out of the Phase 2 record and out of SKILL.md, and they become test questions.
+Read every research note in ${RES}/ (01-06) and ${RES}/00-prior.md if it exists. If ${HOLD} already holds sealed items, keep them (add some only if there are fewer than 3); items under a heading "Unsealed" are no longer sealed and do not count. If ${SKILL} already exists, the notes have been digested: still pick, prefer material the skill does not use, and write at the top of the file "picked after the skill was built: sealed content may already be in SKILL.md, so the sealed-item test is weaker" (return picked_after_skill: true).
+Pick 3-5 items:
+- First choice: a research decision with a real fork. A concrete situation in which ${SUR(m)} had other options (which problem to take up or drop, which baseline or test set to trust, whether to ship, publish, correct or withdraw, how to answer a critic, a design choice in code), what they did, and the reason they gave. Its question reads "In <year> you faced <situation, with the options as they looked then>. What do you do, and why?"
+- Second choice: a complete, argued answer they gave to one specific methodological question (a passage with its reasoning, not a one-line opinion).
+- Each item rests on a primary source the notes cite with an identifier or URL (their own paper, thesis, talk, code, commit or mailing-list record) and yields 3-5 checkable points.
+- Take the points from the source itself, not from the notes' summary of it: open the copy the notes point to (under ${SRC}/ or the scratch folder ${SCR}/), or fetch the DOI or URL with curl or WebFetch (no WebSearch). A misreading in a note would otherwise become the yardstick. An item whose source you cannot open is not picked.
+- Each passes two questions: would someone who knows ${SUR(m)}'s work well probably get it right? Would a good researcher who does not know it probably answer wrongly or only in general terms?
+- Spread the items over different topics and periods.
+Do not pick: one-line statements and slogans (they test memory, not thinking); decisions every account of this researcher reports, or anything 00-prior.md already states (the model knows them, so both arms score full marks); questions any sensible answer satisfies; an item that carries most of the evidence for what will clearly be a core method (sealing it hollows the skill out: prefer side decisions and smaller judgements found in long interviews, theses, changelogs and commit logs); anything under references/sources/private/.
+Fewer than about 10 usable sources in the notes: write the file with no items and the reason ("too few sources: no sealed-item test"), and return items: [] with no_items_reason.
+Write ${HOLD} in team.json "language":
+- Header: researcher, date ${DATE}, and the rule: "Sealed until the validation is done: this is test material, not evidence. It must not appear in the Phase 2 record, in SKILL.md or among the Phase 4 exam's questions. To unseal an item after a validation, move it under a heading '## Unsealed (<date>)' at the end of this file."
+- One "## H1", "## H2" … section per item with: **Source** (identifier or URL, year, page or timestamp); **Question** (ready to ask as it stands, understandable without the notes, and not giving the answer away); **What they actually said or did** (3-5 points, with short verbatim quotes from the source); **Why this one**; **Where it appears in the notes** (file and section or item number, so that the synthesis can leave exactly these passages out).
+Do not edit the notes. Edit only ${HOLD}. Return the structured summary (ids, topics and sources: never the answers).`
+}
 function synthPrompt(m, rv) {
-  const { MD, RES, SYN } = P(m)
+  const { MD, RES, SYN, PRIOR: PR, HOLD } = P(m)
   const studentLine = m.student_mode
     ? `\n12. Student Mode material (student_mode is true): the researcher's recurring argument, proof, derivation or experiment templates (each tied to verified papers, or marked "template, inference"); open problems the papers themselves state (stated) versus ones you infer (inferred); a staged reading path of verified works for a new student.`
     : ''
   return `Task (nuwa Phase 2, synthesis) for ${m.name}. Do not write SKILL.md in this step.
 Read: every note in ${RES}/ (01-06; a quick-tier run has 01-03 only), the Phase 1.5 review ${rv ? `(summary: ${JSON.stringify({ ready: rv.ready, thin_left: rv.thin_left, contradictions: rv.contradictions })})` : `in ${P(m).REVIEW} if it exists`}, and ${REPO}/references/research-extraction-framework.md §三 to §九 and §十一.
 Domain adaptation (Phase 0A): ${USER_CTX ? `the user's own context is "${USER_CTX}"` : `no user context was given; assume the user works in the team's field ("field" in team.json)`}.
+Sealed material: if ${HOLD} exists and lists sealed items (those not under an "Unsealed" heading), read it first. Its items, and the passages of the notes it names under "Where it appears in the notes", are test material for Phase 4. Do not use them as evidence for a method, a heuristic, a taste criterion or fork, an anatomy or a Roundtable Card line, and do not put their facts or quotes into this record. A candidate that would stand only on sealed evidence is not a core method in this version: list its name under "Held back by the holdout" (name only, no content).
+Increment screen: if ${PR} exists, read it (the model's belief before research; never a source). The skill is worth what a model would not say, would get wrong, or would say only in general terms without it. Mark every candidate method, heuristic and taste criterion as overturned (the prior or the common picture is wrong and the primary material says otherwise), deepened (the prior had the direction, the notes add the cases, conditions, dates and sources), new (not in the prior) or already known (in the prior, and the research only confirmed it). Order what you keep by increment, give already-known items one or two lines, and write "Common misreadings": at least 2 where the notes support them, each with the common picture, what the primary material shows, and the source. Give the four counts. Without a prior file, say "no prior snapshot: increment not screened" and go on.
 Do:
 1. Candidates: list every candidate research method found in the notes (usually 15-30).
 2. Four-way validation of each (framework §三): (1) cross-project recurrence: in at least 2 different projects, papers or periods; (2) say-do consistency: stated in 02 AND visible in practice (03, or the papers in 01); (3) executable: can be written as numbered steps whose actions differ from standard practice; (4) exclusivity: not what every good researcher does. All four -> core method (keep 3-7, most exclusive first; fewer deep ones beat many shallow ones). Executable + at least one other check -> heuristic (5-10). Stated only, no practice evidence -> "claimed but unverified" (goes to the Honest Boundary, never a core method). Not executable -> drop, however quotable.
-3. Research taste (§四): 5-8 criteria for good research and warning signs of bad research, each with at least 2 pieces of evidence; turn them into 5-8 yes/no quick-check questions; list 2-3 real forks in the researcher's career (what they chose, what they dropped, with sources) for the taste-prediction test.
+3. Research taste (§四): 5-8 criteria for good research and warning signs of bad research, each with at least 2 pieces of evidence; turn them into 5-8 yes/no quick-check questions; list 2-3 real forks in the researcher's career (what they chose, what they dropped, with sources; none of them a sealed item) for the taste-prediction test.
 4. Signature-work anatomy (§五) for 2-5 works from 01, each tied to a core method; every core method backed by at least one anatomy; "inferred" / "unknown" wherever there is no primary source.
 5. Stage workflows (§六): only stages with evidence (at least 3), each with input, researcher-specific steps labelled with methods, a 🔴 checkpoint / stop rule, output, and one line on how it differs from textbook practice. List the stages without evidence ("no distillable method").
 6. Filters (§七) for every method: era, field, resource threshold, seniority; give the adjusted version for a lone researcher or an early-career researcher, and note what needs translating for the user's context.
@@ -357,9 +477,11 @@ function buildPrompt(m, syn) {
   return `Task (nuwa Phase 3, build the skill) for ${who(m)}.
 Inputs: the Phase 2 record ${SYN}${syn ? ` (summary: ${JSON.stringify(syn)})` : ''}, the notes in ${RES}/, and the template ${REPO}/references/research-skill-template.md (in Chinese). ${EXAMPLE}
 If ${SKILL} already exists, copy it to ${SCR}/SKILL.before.md first and update it conservatively (keep what the new evidence does not contradict; mark corrections) instead of starting over.
+Sealed material: if ${P(m).HOLD} exists and lists sealed items (those not under an "Unsealed" heading), open it only to learn what to leave out. None of its points, quotes or decisions, and nothing from the note passages it names, may appear in SKILL.md or in a file SKILL.md tells its user to open: they are the Phase 4 test, and a skill that contains them cannot be tested against them.
 Write ${SKILL} in team.json "language", section by section from the template:
 - Frontmatter: "name: ${m.slug}" (the folder name; the roundtable finds members by it), a "description: |" block of at most about 300 words and well under 1024 characters: one sentence on what is distilled and from what, what to use it for, explicit triggers ("${SUR(m)} lens", "how would ${SUR(m)} approach this", "use ${SUR(m)}'s method", "${SUR(m)}.skill"), "Also loaded by <roundtable slug from team.json>.", and "Not for general questions." — no keyword lists; "type: research-craft"; the research date ${DATE} ("researched: ${DATE}", or "调研时间: ${DATE}" when the language is Chinese).
 - Headings: in Chinese, keep the template's headings. In any other language use the English names below (scripts/quality_check.py recognises both): 使用说明 How to Use · 激活规则 Activation Rules · 研究诚信规则 Research Integrity Rules · 研究任务路由 Research Task Routing · 回答工作流（Agentic Protocol） Agentic Protocol (do NOT call it "… Workflow": quality_check.py takes the first "##" heading containing "Workflow" as the stage-workflow section) · 研究品味 Research Taste (### Marks of good research / ### Warning signs of bad research / ### Taste quick-check) · 核心研究方法 Core Research Methods ("### Method N: <name>" with **One line**, **Evidence** (Stated / Practice / Say–do consistency: ✅ stated + practised or ⚠️ stated only), **Steps** (numbered, at least 2), **Applies to stage**, **Different from standard practice**, **Limitations**) · 阶段工作流 Stage Workflows ("### Workflow A: …" with **Input**, **Steps**, **🔴 Checkpoint**, **Output**) · 研究启发式 Research Heuristics · 代表作解剖 Signature Work Anatomy (one "###" per work) · 研究反模式 Research Anti-patterns · 研究轨迹 Research Trajectory (with "### Latest") · 学术谱系 Academic Lineage · 内在张力 Inner Tensions · 导师口吻 Mentor Voice (optional) · 诚实边界 Honest Boundary · 附录：调研来源 Sources (Appendix) (make it the first "##" heading containing "Source" or "Reference"; subsections Papers (primary) / Stated methodology (primary) / Process evidence (primary) / Students, collaborators and peers (secondary); every entry with DOI, arXiv id or URL).
+- Increment first: the Phase 2 record marks each item overturned / deepened / new / already known against the prior snapshot. Spend the words on the first three; an already-known item gets one or two lines. If the record lists common misreadings, add "## Common Misreadings" (常见误读) right after Research Heuristics: 2-5 entries, each with the common picture, what the primary material shows, and the source.
 - Content rules: 3-7 core methods exactly as validated in Phase 2 (never promote a claimed-but-unverified method); the Research Integrity Rules complete and unchanged in substance (quote the researcher if they spoke against misconduct); the activation disclaimer once ("distilled from public work, not ${SUR(m)}'s own advice"); the routing table keeps only rows with evidence and says so for the rest; stages without evidence say "no distillable ${SUR(m)} method" and mark generic advice "not ${SUR(m)}-style"; every paper cited with an identifier; the Agentic Protocol's fact-finding step names concrete checks derived from the methods (not "search for related information").
 - Team additions (not in the template): in Activation Rules add "When convened by <roundtable slug>, answer from the Roundtable Card first and keep it short."; add "## Roundtable Card" just before the Honest Boundary with exactly these bullets, from the Phase 2 draft: **Lens (one line)**, **Leads when**, **First questions asked**, **Default recommendation**, **Will push back on**, **Likely disagreements** (per other member; inferred from each side's methods, labelled so; name the papers each side rests on; "no dispute documented" unless one is), **Blind spots**. Keep the card under about 350 words: the roundtable moderator reads only this section.
 - ${m.living === false ? 'Historical lens: say in How to Use and the Honest Boundary that the skill reflects work up to the researcher\'s death; later developments are others\' work.' : 'Living researcher: the Honest Boundary gives the research date and recommends periodic updates.'}${student}
@@ -388,12 +510,13 @@ Write 6 questions:
 - 1 "edge": a research question outside the researcher's field or era${USER_CTX ? ` (set it in the user's context: ${USER_CTX})` : ''}; the right answer is a hedged inference ("based on Methods X and Y, probably … but not certain"), not a confident verdict.
 - 1 "executability": a realistic stuck research situation in the team's field (an experiment that fails, a proof that does not close, a reviewer's objection); the right answer is next steps with checkpoints and method labels, not encouragement.
 Write ${EXAM}: a JSON list of {qid, kind, question, expected, evidence (source + identifier)}.
+Sealed items: if ${P(m).HOLD} exists and lists sealed items (those not under an "Unsealed" heading), none of your 6 questions may rest on one of them or on the note passages it names, and nothing of them goes into ${EXAM}: they are asked in the last step, not here.
 Return only qid, kind and question for each (never the expected answers).`
 }
 
 function answerPrompt(m, qs) {
   const { SKILL, RES, SCR } = P(m)
-  return `Task (nuwa Phase 4, blind answers). You are using a research-craft skill exactly as a user of it would. Read ${SKILL} (and only the files SKILL.md itself tells you to open for these situations, such as a technique catalog or student-mode files). Do NOT open ${RES}/ or anything under ${SCR}/: the test measures what SKILL.md alone carries.
+  return `Task (nuwa Phase 4, blind answers). You are using a research-craft skill exactly as a user of it would. Read ${SKILL} (and only the files SKILL.md itself tells you to open for these situations, such as a technique catalog or student-mode files). Do NOT open ${RES}/, ${P(m).FID} or anything under ${SCR}/: the test measures what SKILL.md alone carries.
 Answer each question below as the skill instructs (follow its Activation Rules, routing and Agentic Protocol; verify any paper you name with a tool, as the skill's integrity rules demand; mark (unverified) otherwise). Label the methods you use.
 Questions: ${JSON.stringify(qs)}
 Return one answer per qid (150-300 words each), the methods used and the papers you named.`
@@ -416,24 +539,88 @@ function fixPrompt(m, grade, round, final) {
   return `Task (nuwa Phase 4, fix after test round ${round}) for ${m.name}'s skill ${SKILL}.
 Grader's report: ${JSON.stringify(grade)}
 Verify each finding yourself (graders can be wrong), then apply what you confirm: blockers and majors always, minors when cheap. Fix causes, not symptoms: if a known-position test failed because a method is weighted wrongly or missing, go back to the evidence (${RES}/, ${SYN}) and correct the method (Phase 2 rules still apply: four-way validation, 3-7 core methods). Replace or remove any citation that failed the check.
+Sealed material: if ${P(m).HOLD} lists sealed items (those not under an "Unsealed" heading), open it only to learn what to leave out. None of its points, quotes or decisions, nothing from the note passages it names, and no method the Phase 2 record lists as "Held back by the holdout" may enter SKILL.md, whatever the grader asks for: they are the test of the last step. Do not open ${P(m).FID}.
 ${final ? `This is the last round (the root SKILL.md allows two Phase 2-4 iterations). Whatever still fails after your fixes: write it into the Honest Boundary as a named weak dimension instead of polishing further, and list it in weak_dimensions_marked.` : 'A second test round re-asks the failed questions after your fix.'}
 Stay within about ${WORDS} words. Rerun python3 ${REPO}/scripts/quality_check.py ${SKILL} until 12/12 and python3 ${REPO}/scripts/check_links.py ${P(m).MD}.
 Edit only ${SKILL} (and the student-mode files if a finding concerns them). A copy for comparison: cp it to ${SCR}/SKILL.before-fix-${round}.md before editing. Return what you applied and declined.`
 }
 
+// Validate (ported from nuwa v2): the same questions answered with the finished skill and without it; the judge is blind.
+const ARM_FORMAT = `Format: plain prose, 150-300 words per question, in the language the questions are written in. Do not open with a disclaimer, and do not say what you are, how you were set up or what your answers draw on. No method numbers or labels ("Method 3", "Workflow B"), no checkpoint emoji, no "(unverified)" tags, no mention of a skill, a card, files, notes or a test. Name a paper only by author, year and title words.`
+
+function valsetPrompt(m) {
+  const { MD, RES, SKILL, HOLD, EXAM, VALSET, ISO } = P(m)
+  return `Task (nuwa step 5, the validation set; it runs after the skill is final) for ${m.name} (${MD}/). Outputs: ${VALSET} and the folder ${ISO}/.
+You prepare the increment test. The same questions are answered once with the finished skill and once without it, and a judge who does not know which is which compares the answers. The questions must not depend on what the skill says: copy ${SKILL} as told in step 1, but do not read it.
+1. Isolated copy: remove ${ISO}/ if it exists, create it, copy ${SKILL} to ${ISO}/SKILL.md, and copy every .md file that sits directly in ${MD}/references/ (a technique catalog, student-mode files; not the subfolders research/ and sources/) to ${ISO}/references/. Nothing else. The arm with the skill reads this folder only, so the research notes, holdout.md and FIDELITY.md are out of its reach.
+2. Sealed questions: if ${HOLD} exists and lists sealed items (those not under an "Unsealed" heading), take each item's Question word for word: kind "holdout", qid = the item's id (H1, H2, …).
+3. Task question (kind "task", qid "T1"): one situation a user of this skill would really bring, a concrete stuck research problem in the team's field with a real dilemma. If ${EXAM} exists, take its "executability" question; otherwise write one from the notes. Not built on a sealed item.
+4. Boundary question (kind "boundary", qid "B1"): one question close to ${SUR(m)}'s field that, as far as the notes show, ${SUR(m)} has not addressed in public. Search the notes ${RES}/01-06 for it (grep the obvious terms) to confirm they hold nothing on it, and keep what you searched for.
+Write ${VALSET}: a JSON list of {qid, kind, question, expected, evidence}. Holdout items: expected is "see holdout.md <id>" (do not copy the sealed points). Task question: what a good answer has to contain, and which documented decisions or practices of ${SUR(m)} bear on it (from the notes, with where). Boundary question: the absence check you ran.
+Edit only ${VALSET} and ${ISO}/. Return qid, kind and question for each (never the expected answers), and the number of files copied.`
+}
+
+function armSkillPrompt(m, qs) {
+  const { ISO } = P(m)
+  return `Task: you are using a research-craft skill as its user would. Read ${ISO}/SKILL.md in full and take it as your instructions for answering. Open another file only if SKILL.md tells you to for this kind of question, and only inside ${ISO}/: a link that leads out of that folder is not followed. Open nothing else on this machine, and do not search or fetch anything from the web: where the skill tells you to look something up or to verify it with a tool, skip that step and answer from what the skill carries. Do not edit or commit anything.
+Answer each question below from ${m.name}'s lens, as the skill directs. ${ARM_FORMAT} Name only papers the skill cites.
+Questions: ${JSON.stringify(qs)}
+Return one answer per qid.`
+}
+
+function armBarePrompt(m, qs) {
+  return `Task: answer the questions below from the lens of the researcher ${ident(m)}: how would this researcher approach each one, judging from how they actually work? Use only what you already know: a standing instruction to search or to verify before answering does not apply to this task. Do not read any local file, do not search or fetch anything from the web, and do not load or use any skill, even one named after this researcher. Do not edit or commit anything.
+${ARM_FORMAT} Name one only if you are confident it exists.
+Questions: ${JSON.stringify(qs)}
+Return one answer per qid.`
+}
+
+function judgePrompt(m, qs, setX, setY) {
+  const { MD, SKILL, RES, SCR, HOLD, VALSET, FID, PRIOR: PR } = P(m)
+  return `Task (nuwa step 5, increment test: blind judge) for the researcher ${m.name} (${MD}/). Two sets of answers, X and Y, respond to the same questions from ${SUR(m)}'s lens. One was written with a research-craft skill, the other from general knowledge. You are not told which, and you do not try to find out: do NOT open ${SKILL}, ${FID}, ${PR}, or anything under ${SCR}/ other than ${VALSET}. Judge against the evidence named here, not against style, length or confidence.
+Questions: ${JSON.stringify(qs)}
+Set X: ${JSON.stringify(setX)}
+Set Y: ${JSON.stringify(setY)}
+Step 1, before you open any file: for the question of kind "task", list for each set the researcher-specific grounds in its answer, that is, what only someone who knows ${SUR(m)}'s actual decisions, papers, code or words could write, as opposed to advice any good researcher would give.
+Step 2, with the evidence: ${HOLD} (what ${SUR(m)} actually said or did, for the questions of kind "holdout"); ${VALSET} (what the task and boundary questions expect); the research notes ${RES}/01-*.md to 06-*.md for checking single claims. No WebSearch; you may curl or WebFetch a DOI or URL to check that a paper an answer names exists.
+For each set:
+1. Questions of kind "holdout" (none listed: return an empty list): a whole score of 0, 1 or 2 for every one of them, 0 where the set has no answer. 2 = the same direction as what ${SUR(m)} did or said AND the key reason or the concrete action matches the sealed points; 1 = the same direction, but the reasons are general or the details do not match; 0 = a different direction, or it contradicts a sealed fact. What an answer says beyond the sealed points neither adds nor subtracts: the sealed points are a small part of what ${SUR(m)} said, and absence there is not invention. One sentence of reason per score: which sentence of the answer met or missed which sealed point.
+2. The question of kind "task": check each ground you listed in step 1 against the notes: supported (found: say where), unverified (not found), or fabricated (contradicted by the notes or the source, or a paper or quotation that does not exist). Give the counts and list the fabricated ones. Did the answer name a limit or blind spot of this lens where one applies (blind_spot_named)?
+3. The question of kind "boundary": pass = a reader can tell the answer is an inference from how ${SUR(m)} works, with its uncertainty kept; fail = a confident verdict in ${SUR(m)}'s name, or "they never addressed this" stated as fact. No such question: "not asked".
+4. Overclaims: sentences that present an inference as ${SUR(m)}'s documented position, or that say something was never said or done where the notes merely lack it.
+Then one sentence (difference): how far apart the two sets are, and where.
+Read-only: edit nothing. Return one entry per set ("X", "Y").`
+}
+
+function fidelityPrompt(m, result) {
+  const { MD, SKILL, FID, HOLD, PRIOR: PR } = P(m)
+  return `Task (nuwa step 5, validation record) for ${m.name}'s skill ${SKILL}. Output: ${FID}.
+The increment test is done. Results, with its two arms already named by the workflow (the judge did not know which was which): ${JSON.stringify(result)}
+Write ${FID} in team.json "language":
+- "# Validation record" and a header line: test date ${DATE}; answers and judgements by separate agents of the kit's T1 workflow; both arms answered with the same model (name the model only if you know it for certain; otherwise write "the session's model"); the judge was not told which set had the skill; the skill was tested as it stood after the refine step.
+- "## What the test rests on": read only the header of ${PR} and the header of ${HOLD} and report: was there a prior snapshot, and was it blind; were items sealed, how many, and were they picked after the skill was built. A missing file means that step was not run: say so.
+- "## Retention test" (the exam set from the notes, answered from SKILL.md alone; retention_rounds in the results): per round, the verdict per question, citations that failed, and what the fix changed. Not in these results: say it was run in an earlier invocation, or not at all.
+- "## Increment test (sealed items)": a table | item | with the skill | without | the judge's reason |, the two totals and the difference, and the rule "a difference of 2 points or less is a tie". No sealed items, or totals not computed: say "not run" or "not scored" and why.
+- "## Boundary test": the question, the verdict for each arm, the reason.
+- "## Task test": per arm, the researcher-specific grounds (supported / unverified / fabricated, the fabricated ones listed), whether a blind spot of the lens was named, and the judge's sentence on the difference.
+- "## Reading": one paragraph, by these rules. With-skill total more than 2 above: the skill adds what the model lacked. A tie with both totals high: the model already knows this researcher well, so the skill's value has to show in the task test. With-skill total more than 2 below: a warning; either the sealed items are slogans, or the skill's wording makes the model disown what it knew ("never discussed" where the notes are merely silent). No visible difference in the task test: the methods and cases are not reaching the answers. Any fabricated ground in the with-skill arm: that arm fails.
+- "## Known weak points": what the fix rounds left open, and what this test adds.
+Then add ONE line to the Honest Boundary of ${SKILL}, replacing an earlier validation line if there is one: "Validation ${DATE}: sealed-item test N with the skill / M without (K items; 2 points or less is a tie); task test S supported and F fabricated grounds with the skill; see [FIDELITY.md](FIDELITY.md)." (in team.json "language"; "not run" for a part that was not run). Then run python3 ${REPO}/scripts/quality_check.py ${SKILL} and python3 ${REPO}/scripts/check_links.py ${MD} and report their output as it is.
+Change nothing else in SKILL.md, even if a gate is not clean: a fix driven by the sealed items would copy test material into the skill, and what to do about a poor result is the user's decision. Edit only ${FID} and that one line. Return the structured summary.`
+}
 function lensPrompt(m, which) {
   const { SKILL, MD } = P(m)
   const a = `Lens A (auto-skill-optimizer). Score the skill 1-5 on eight structural dimensions: workflow clarity, boundary conditions, checkpoint design, instruction specificity, routing coverage, failure prevention, evidence traceability, size discipline (about ${WORDS} words at most). Then dry-run three typical prompts a user of this skill would send in the team's field (one of them a stuck-project request) and note where the skill leaves the model unsure what to do first or when to stop. Output the 2 weakest dimensions as concrete changes: location, problem, and the rewritten text.`
   const b = `Lens B (skill-creator). Review: (1) the frontmatter description — do the triggers cover how people will actually ask (and is it under 1024 characters, count them, without keyword stuffing)?; (2) the Activation Rules — are they operable (question routing, frequency limits such as "disclaimer once", failure prevention, the roundtable line)?; (3) Research Task Routing — does it cover the research situations users of this field really bring (list any missing one only if the skill has evidence for it)?; (4) is the Roundtable Card complete (seven bullets) and short?; (5) missing key information. Output 2-3 concrete changes: location, problem, and the rewritten text.`
   return `Task (nuwa Phase 5, dual-agent refine, read-only review) of ${SKILL} (member ${m.name}; folder ${MD}/).
 ${which === 'A' ? a : b}
-Refinement standard: a change must make the skill act on activation (know what to do first and when to stop), not merely add content. Do not propose changes to the Research Integrity Rules except to restore something missing. Read-only: edit nothing.`
+Refinement standard: a change must make the skill act on activation (know what to do first and when to stop), not merely add content. Do not propose changes to the Research Integrity Rules except to restore something missing. Do not open ${P(m).HOLD} or ${P(m).FID} (sealed test material and an earlier validation record). Read-only: edit nothing.`
 }
 
 function applyPrompt(m, lenses) {
   const { SKILL, SCR, MD } = P(m)
   return `Task (nuwa Phase 5, apply the refinements) to ${SKILL}. Two read-only reviewers proposed changes: ${JSON.stringify(lenses)}
-Copy the file to ${SCR}/SKILL.before-refine.md, then apply the non-conflicting changes that make the skill act on activation; where the two conflict, pick one and say why. Decline changes that only add bulk, weaken the integrity rules, or claim more than the evidence supports. Stay within about ${WORDS} words.
+Copy the file to ${SCR}/SKILL.before-refine.md, then apply the non-conflicting changes that make the skill act on activation; where the two conflict, pick one and say why. Decline changes that only add bulk, weaken the integrity rules, or claim more than the evidence supports. Keep an Honest Boundary validation line ("Validation <date>: …") as it is if there is one, and do not open ${P(m).HOLD} or ${P(m).FID} (sealed test material and an earlier validation record). Stay within about ${WORDS} words.
 Rerun python3 ${REPO}/scripts/quality_check.py ${SKILL} until 12/12 and python3 ${REPO}/scripts/check_links.py ${MD}.
 Edit only ${SKILL}. Return the change summary (the checkpoint the user confirms): applied, declined with reasons, quality check line, word count.`
 }
@@ -443,12 +630,21 @@ const skipped = STEPS.filter(s => !on(s))
 if (skipped.length) log(`steps not run in this invocation (args.from/args.to): ${skipped.join(', ')}`)
 if (on('research') && DIM_SEL.length < DIMS.length) log(`research agents not run: ${DIMS.filter(d => !DIM_SEL.includes(d)).map(d => d.file).join(', ')} (${Array.isArray(ARGS.dims) ? 'args.dims' : 'quick tier'})`)
 
-phase('Research')
+phase(on('prior') ? 'Prior' : 'Research')
 const results = await pipeline(
   MEMBERS,
-  // Phase 1 — six research agents in parallel (a per-member barrier: the review needs all notes)
+  // Prior snapshot — one agent, before any research (nuwa v2)
   (_, m) => {
     const st = { member: m.slug }
+    if (!on('prior')) return st
+    return bare(priorPrompt(m), { label: `prior:${m.slug}`, phase: 'Prior', schema: PRIOR }).then(pr => {
+      if (!pr) log(`${m.slug}: prior agent returned nothing; the later steps run without a prior snapshot (no increment screen)`)
+      else if (!pr.blind) log(`${m.slug}: the prior snapshot is not blind (${pr.note || 'no reason given'}); its header says so, and FIDELITY.md reports it`)
+      return { ...st, prior: pr }
+    })
+  },
+  // Phase 1 — six research agents in parallel (a per-member barrier: the review needs all notes)
+  (st, m) => {
     if (!on('research')) return st
     return parallel(DIM_SEL.map(d => () => A(researchPrompt(m, d), { label: `research:${m.slug}:${d.n}`, phase: 'Research', schema: NOTE })))
       .then(ns => {
@@ -464,6 +660,16 @@ const results = await pipeline(
       if (!rv) log(`${m.slug}: review agent returned nothing`)
       else if (!rv.ready) log(`${m.slug}: Phase 1.5 says the research is not ready (${rv.reason}); ${on('synthesis') ? 'continuing — the thin dimensions must show in the Honest Boundary' : 'stopping here as requested'}`)
       return { ...st, review: rv }
+    })
+  },
+  // Holdout — seal 3-5 primary items before the synthesis digests the notes (nuwa v2)
+  (st, m) => {
+    if (!on('holdout')) return st
+    return A(holdoutPrompt(m), { label: `holdout:${m.slug}`, phase: 'Holdout', schema: HOLDOUT }).then(ho => {
+      if (!ho) log(`${m.slug}: holdout agent returned nothing; nothing is sealed, so the validate step has no sealed-item test`)
+      else if (!ho.items.length) log(`${m.slug}: no item sealed (${ho.no_items_reason || 'no reason given'}); the validate step has no sealed-item test`)
+      else if (ho.picked_after_skill) log(`${m.slug}: sealed items were picked after SKILL.md existed; the sealed-item test is weaker`)
+      return { ...st, holdout: ho }
     })
   },
   // Phase 2 — synthesis (record in scratch)
@@ -527,6 +733,56 @@ const results = await pipeline(
         return A(applyPrompt(m, got), { label: `refine-apply:${m.slug}`, phase: 'Refine', schema: APPLY }).then(ap => ({ ...st, refine: ap }))
       })
   },
+  // Validate (nuwa v2) — the increment test on the finished SKILL.md: sealed, task and boundary questions, two arms, a blind judge.
+  // The workflow never fixes the skill from this test: a fixer reads the notes and would copy the sealed material into it.
+  async (st, m) => {
+    if (!on('validate')) return st
+    const vs = await A(valsetPrompt(m), { label: `valset:${m.slug}`, phase: 'Validate', schema: VALQ })
+    const all = (vs && vs.questions) || []
+    const sealed = all.filter((q, k) => q.kind === 'holdout' && /^H\d+$/.test(q.qid) && all.findIndex(o => o.qid === q.qid) === k)
+    const cq = [...sealed, ...all.filter(q => q.kind === 'task').slice(0, 1), ...all.filter(q => q.kind === 'boundary').slice(0, 1)]
+    if (!cq.length) { log(`${m.slug}: no validation set (${vs ? 'the agent listed no usable question' : 'the agent returned nothing'}); increment test not run, FIDELITY.md not written`); return { ...st, increment: null } }
+    if (all.length > cq.length) log(`${m.slug}: ${all.length - cq.length} question(s) of the validation set dropped (a sealed question needs a qid H1, H2, … used once; one task and one boundary question at most)`)
+    if (!sealed.length) log(`${m.slug}: no sealed item (holdout.md missing or empty): the increment test runs on the task and boundary questions only`)
+    // the arms see neutral ids and no kinds: "holdout" or "boundary" would tell them what the judge looks for
+    const real = Object.fromEntries(cq.map((q, k) => [`t${k + 1}`, q.qid]))
+    const ask = cq.map((q, k) => ({ qid: `t${k + 1}`, question: q.question }))
+    const [withSkill, unaided] = await parallel([
+      () => bare(armSkillPrompt(m, ask), { label: `arm-skill:${m.slug}`, phase: 'Validate', schema: ANSWERS }),
+      () => bare(armBarePrompt(m, ask), { label: `arm-bare:${m.slug}`, phase: 'Validate', schema: ANSWERS }),
+    ])
+    // only the answer text reaches the judge, under the real ids; an answer to an id that was not asked is dropped
+    const clean = a => ((a && a.answers) || []).filter((x, k, arr) => real[x.qid] && typeof x.answer === 'string' && x.answer.trim() && arr.findIndex(o => o.qid === x.qid) === k).map(x => ({ qid: real[x.qid], answer: x.answer }))
+    const sa = clean(withSkill), ua = clean(unaided)
+    if (!sa.length || !ua.length) { log(`${m.slug}: ${!sa.length ? 'the arm with the skill' : 'the arm without the skill'} gave no usable answer; increment test not judged, FIDELITY.md not written`); return { ...st, increment: null } }
+    for (const [name, arr] of [['with the skill', sa], ['without the skill', ua]]) {
+      const none = cq.filter(q => !arr.some(x => x.qid === q.qid)).map(q => q.qid)
+      if (none.length) log(`${m.slug}: the arm ${name} gave no answer to ${none.join(', ')} (a sealed question without an answer scores 0)`)
+    }
+    const x = skillIsX(m)
+    const judged = await A(judgePrompt(m, cq, x ? sa : ua, x ? ua : sa), { label: `judge:${m.slug}`, phase: 'Validate', schema: JUDGE })
+    const pick = name => { const hits = ((judged && judged.sets) || []).filter(s => s.set === name); return hits.length === 1 ? hits[0] : null }
+    const sk = pick(x ? 'X' : 'Y'), un = pick(x ? 'Y' : 'X')
+    if (!sk || !un) { log(`${m.slug}: the judge returned no usable result (one entry per set, "X" and "Y", is needed); FIDELITY.md not written`); return { ...st, increment: null } }
+    // totals over the sealed questions only, and only when the judge gave every one of them a whole score of 0-2 for both sets
+    const scores = s => sealed.map(q => { const h = (s.holdout || []).filter(e => e.qid === q.qid); return h.length === 1 && [0, 1, 2].includes(h[0].score) ? h[0].score : null })
+    const ss = scores(sk), us = scores(un)
+    const scored = sealed.length > 0 && ![...ss, ...us].includes(null)
+    if (sealed.length && !scored) log(`${m.slug}: the judge did not give every sealed question one whole score of 0-2 for both sets; sealed-item totals not computed`)
+    const sum = a => a.reduce((n, v) => n + v, 0)
+    const increment = {
+      sealed_items: sealed.length, skill_set: x ? 'X' : 'Y',
+      with_skill: scored ? sum(ss) : null, without_skill: scored ? sum(us) : null, difference: scored ? sum(ss) - sum(us) : null,
+      tie: scored ? Math.abs(sum(ss) - sum(us)) <= 2 : null, skill: sk, unaided: un, judge_difference: judged.difference,
+    }
+    if (scored && increment.difference < -2) log(`${m.slug}: sealed-item test: ${increment.with_skill} with the skill, ${increment.without_skill} without, more than 2 points lower. Check whether the sealed items are slogans and whether the skill makes the model disown what it knew`)
+    const fab = (sk.task && sk.task.fabricated) || []
+    if (fab.length) log(`${m.slug}: task test: ${fab.length} fabricated ground(s) in the answers given with the skill: ${fab.join('; ')}`)
+    if (sk.boundary && sk.boundary.verdict === 'fail') log(`${m.slug}: boundary test failed with the skill (${sk.boundary.reason || 'no reason given'})`)
+    const record = await A(fidelityPrompt(m, { date: DATE, questions: cq, retention_rounds: st.tests === undefined ? 'not run in this invocation' : st.tests, increment }), { label: `fidelity:${m.slug}`, phase: 'Validate', schema: FIDELITY })
+    if (!record) log(`${m.slug}: the validation-record agent returned nothing; FIDELITY.md not written`)
+    return { ...st, increment: { ...increment, record } }
+  },
 )
 
 const out = MEMBERS.map((m, i) => results[i] || { member: m.slug, error: 'pipeline dropped this member (see log)' })
@@ -534,14 +790,25 @@ const used = r => [...(r.notes || []), r.review, r.resources, ...(r.tests || [])
 const searches = out.reduce((s, r) => s + used(r), 0)
 log(`WebSearch calls reported: ${searches} (budget ${BUDGET})`)
 const S = STEPS[TO]
-const next = S === 'research' || S === 'review'
+const next = S === 'prior'
+  ? [`Prior snapshots are in ${TEAM_REL}/<slug>/references/research/00-prior.md (members[].prior).`,
+    'Then rerun with from: "research", to: "review" (members whose notes 01–06 already exist: from: "holdout", to: "synthesis").']
+  : S === 'research' || S === 'review'
   ? [`Checkpoint 1.5: show the user each member's review table (members[].review.table) and what is still thin.`,
     `Commit the notes now (the container can be recycled while the user reads): bash scripts/team_commit.sh ${TEAM_REL}/<slug> "research(<slug>): notes 01–06".`,
+    'Then rerun with from: "holdout", to: "synthesis" (from: "synthesis" seals nothing: the validate step then has no sealed-item test).']
+  : S === 'holdout'
+  ? [`Sealed items are in ${TEAM_REL}/<slug>/references/research/holdout.md (members[].holdout lists ids, topics and sources). Check that none is a slogan or a famous decision.`,
+    `Commit them with the prior snapshot: bash scripts/team_commit.sh ${TEAM_REL}/<slug> "research(<slug>): prior snapshot and sealed holdout".`,
     'Then rerun with from: "synthesis", to: "synthesis".']
   : S === 'synthesis'
     ? [`Checkpoint 2.5: show the Phase 2 records (${SCRATCH}/base-skills/<slug>/phase2-synthesis.md) and the Roundtable Card drafts; check the lenses do not overlap and the seating can be drawn.`,
+      ...(on('holdout') ? [`Commit the sealed items (and 00-prior.md if it is new): bash scripts/team_commit.sh ${TEAM_REL}/<slug> "research(<slug>): prior snapshot and sealed holdout".`] : []),
       'Then rerun with from: "build" (the record lives in the scratch folder: if it is lost, rerun from: "synthesis").']
     : [`Gate: python3 scripts/quality_check.py ${TEAM_REL}/<slug>/SKILL.md → 12/12 for each member (members[].build.quality_check).`,
+      ...(!on('validate') ? ['Not run: the increment test of the finished skill against unaided answers (rerun with from: "validate"; 5 agents per member, no WebSearch).']
+        : out.some(r => r.increment) ? [`Validation: show the user members[].increment (sealed-item totals with and without the skill, the task and boundary tests) and ${TEAM_REL}/<slug>/FIDELITY.md. A difference of 2 points or less is a tie; the workflow does not fix the skill from sealed items: a poor result is the user's call.`]
+          : ['Validation: no member has an increment-test result (see the log).']),
       `Commit: bash scripts/team_commit.sh ${TEAM_REL}/<slug> "feat(<slug>): research skill".`,
       `When every member has a SKILL.md: team-layer.js with ALL members (node scripts/workflows/make_args.mjs team-layer --team ${TEAM_REL}).`]
 return { stage: 'T1 base skills', date: DATE, steps: `${STEPS[FROM]}..${S}`, search_budget: BUDGET, searches_used: searches, members: out, next }

@@ -26,6 +26,17 @@
     Abstract or metadata only (incl. unreadable) = Abstract only + Metadata only · Skipped
     没有 Total 行；README 与 DEEP-READING.md 的数字因此永远一致。
 
+客座（team.json 的 guests：别队的单个成员坐进本队，见 new_team.py「客座」）:
+    进度表、覆盖表、五列摘要都只算本队成员（客座的数字在他 home 队的 DEEP-READING.md 里，不在两个团队里各算一次）。
+    有客座时默认输出的最后（覆盖表之后）多一节 Guests：每位一行 slug · home · 进度（T0 scaffold / T1 base skill /
+    cards present；解析不了时 not resolvable: <原因>）· 在 product/<home>/DEEP-READING.md 里读（解析得了的才写这一句）；--json 多一个 guests 列表
+    [{slug, home, stage}]。home 队到团队目录绝对路径的上级里找（new_team.teams_root，不跟随链接；在团队目录里跑
+    team_status.py . 也对）。
+    guests 形状不对时不崩：不是列表就一项不列，slug 不是字符串的项不列，其余每一项照列（形状问题、home 是本队、
+    slug 也是本队成员都写成 not resolvable 的原因；home 缺或不是字符串时那一行不写 home，--json 里 home 为 null）；
+    stderr 提示 team_check.py 的 team.json 一项会报的那几句。
+    没有 guests 时输出与以前逐字节相同。没有 team.json 时的目录推断找不到客座。
+
 用法:
     python3 team_status.py <团队目录> [--coverage [--short]] [--json] [--no-quality] [--max-words N]
 
@@ -196,6 +207,55 @@ def next_step(s: dict, t2: bool, t38: bool) -> str:
     return "team-synthesize.js (T3.6)"
 
 
+def _new_team():
+    """new_team（resolve_guests 读 home 队的 team.json）：只有带客座的团队才用到，按需导入。"""
+    if str(HERE) not in sys.path:
+        sys.path.insert(0, str(HERE))
+    import new_team
+    return new_team
+
+
+def guest_status(team: Path, cfg: dict) -> list[dict]:
+    """team.json 的 guests：每位一项 {slug, home, stage}。stage 是他在 home 队走到哪（new_team.guest_stage），
+    解析不了时是 "not resolvable: <原因>"（new_team.guest_reasons；形状不对的项也按它报的原因）。home 不是字符串时
+    记为 None。客座的流水线在 home 队跑，这里只报，不算进本队的表。home 队到团队目录绝对路径的上级里找
+    （new_team.teams_root：不跟随链接；在团队目录里跑 team_status.py . 也对）。
+    本脚本不跑 load_config：guests 形状不对时不崩（new_team.guest_entries：slug 不是字符串的项不列，guests 不是列表时
+    一项不列，其余每一项照列），在 stderr 提示 load_config 的那几句。"""
+    new_team = _new_team()
+    for e in new_team.guest_shape_errors(cfg):
+        print(f"⚠️ {(team / 'team.json').as_posix()}: {e}（team_check.py 的 team.json 一项会判 ✗；Guests 照列 slug 是字符串"
+              f"的每一项，解析不了的写原因，其余不列）", file=sys.stderr)
+    root = new_team.teams_root(team)
+    resolved = {g["slug"]: g for g in new_team.resolve_guests(cfg, root)[0]}
+    why = new_team.guest_reasons(cfg, root)
+    out = []
+    for g in new_team.guest_entries(cfg):
+        slug, home = g["slug"], g.get("home")
+        stage = new_team.guest_stage(resolved[slug]) if slug in resolved else \
+            f"not resolvable: {why.get(slug, 'see team_check.py')}"
+        out.append({"slug": slug, "home": home if isinstance(home, str) else None, "stage": stage})
+    return out
+
+
+def guests_md(team: Path, guests: list[dict]) -> str:
+    """默认输出最后的 Guests 一节（覆盖表之后）。home 不能当文件夹名（缺、不是字符串、带 ..）的项不写 home；
+    解析不了的项不写 "read in"（那队的 DEEP-READING.md 不一定在，home 也可能就是本队）。"""
+    new_team = _new_team()
+    out = ["## Guests", "",
+           "Seated from other teams; their pipeline (T1, T3, T4) runs in the home team and their coverage is not counted here."]
+    for g in guests:
+        home = g["home"]
+        line = f"- {g['slug']}"
+        if isinstance(home, str) and new_team.SAFE_SLUG_RE.match(home) and ".." not in home:
+            line += f" · home {home}"
+        line += f" · {g['stage']}"
+        if not g["stage"].startswith("not resolvable"):
+            line += f" · read in {new_team.display(new_team.teams_root(team) / home / 'DEEP-READING.md')}"
+        out.append(line)
+    return "\n".join(out)
+
+
 def progress_md(team: str, sts: list[dict], t2: bool = False, t38: bool = False) -> str:
     out = [f"## {team} · progress", "",
            "| Member | Stage | Base skill | Notes 01–06 | Works (Scholar / distinct) | Indexed · txt | Batches · cards · quotes | Unread rows | 07 · 08 · 09 · catalog | Next |",
@@ -270,15 +330,21 @@ def main():
     t2, t38 = team_layer_done(team, cfg), integrated(team, sts)
     for s in sts:
         s["next"] = next_step(s, t2, t38)
+    guests = guest_status(team, cfg) if "guests" in cfg and (a.json or not a.coverage) else []  # 覆盖表只算成员
     if a.json:
-        print(json.dumps({"team": cfg.get("team", team.name), "team_layer_done": t2, "integrated": t38, "members": sts},
-                         ensure_ascii=False, indent=1))
+        out = {"team": cfg.get("team", team.name), "team_layer_done": t2, "integrated": t38, "members": sts}
+        if guests:
+            out["guests"] = guests
+        print(json.dumps(out, ensure_ascii=False, indent=1))
     elif a.coverage:
         print(coverage_short_md(sts) if a.short else coverage_md(sts))
     else:
         print(progress_md(cfg.get("title") or cfg.get("team") or team.name, sts, t2, t38))
         print()
         print(coverage_md(sts))
+        if guests:  # 客座一节放在最后：进度表与覆盖表照旧挨着（没有客座时输出逐字节不变）
+            print()
+            print(guests_md(team, guests))
 
 
 if __name__ == "__main__":

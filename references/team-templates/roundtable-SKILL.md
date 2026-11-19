@@ -1,7 +1,7 @@
 ---
 name: {{ROUNDTABLE_SLUG}}
 description: |
-  Personal research team for {{FIELD}}. Runs the research-craft skills of {{MEMBER_LIST}} as separate agents
+  Personal research team for {{FIELD}}. Runs the research-craft skills of {{SEATED_LIST}} as separate agents
   that discuss the user's [TODO: the kind of problem the team takes, in one phrase, from the members' "Leads when" fields; team-layer.js (T2)],
   with the user in the loop at every round, and converge on a concrete plan ([TODO: the parts a plan in this field must name, e.g. approach, tool, settings, test protocol, fallback; team-layer.js (T2)]).
   Triggers: "{{TEAM_TITLE}}", "ask the team", "convene the roundtable", "{{ROUNDTABLE_SLUG}}", "what would the team do",
@@ -27,13 +27,13 @@ type: roundtable
 
 ## Team
 
-Members: {{MEMBER_LIST}}.
+Members: {{MEMBER_LIST}}{{GUEST_CLAUSE}}.
 
 | Member skill | Researcher | Lens (shorthand) |
 |--------------|-----------|------------------|
 {{ROUNDTABLE_MEMBER_TABLE}}
 
-The shorthand is only for seating. Each member's own `## Roundtable Card` (inside that member's `SKILL.md`) is authoritative.
+The shorthand is only for seating. Each member's own `## Roundtable Card` (inside that member's `SKILL.md`) is authoritative.{{GUEST_SEATS_TODO}}
 
 ---
 
@@ -47,7 +47,7 @@ The shorthand is only for seating. Each member's own `## Roundtable Card` (insid
 
 ## Activation Rules
 
-- **Disclaimer once**, on first activation: "This is a simulated discussion using research methods distilled from the public work of {{MEMBER_LIST}} — not their actual opinions." Do not repeat it.
+- **Disclaimer once**, on first activation: "This is a simulated discussion using research methods distilled from the public work of {{SEATED_LIST}} — not their actual opinions." Do not repeat it.
 - Members appear as labeled lenses — **[Surname lens]**, one per member, using the researcher's surname — never in the first person as the real researcher.
 - Show each member's reply close to verbatim (trim only for length, never change a position). Add a two-line moderator summary: where they agree, where they split.
 - Never answer a member's question on the user's behalf. If the user skips it, state the assumption you will pass on and mark it *(assumed)*.
@@ -98,7 +98,7 @@ Free text works too: anything else the user says is treated as new information a
 
 ## Loading the Team
 
-1. Resolve each member's `SKILL.md` to an **absolute path**: sibling folder of this skill (`../<member-slug>/SKILL.md`), else `~/.claude/skills/<member-slug>/SKILL.md`, else `.claude/skills/<member-slug>/SKILL.md`. Member agents get this path in their brief.
+1. Resolve each member's `SKILL.md` to an **absolute path**: sibling folder of this skill (`../<member-slug>/SKILL.md`), else `~/.claude/skills/<member-slug>/SKILL.md`, else `.claude/skills/<member-slug>/SKILL.md`. Member agents get this path in their brief.{{GUEST_RESOLUTION}}
 2. The moderator reads **only the `## Roundtable Card`** of each member (for seating). A card has: **Lens (one line)**, **Leads when**, **First questions asked**, **Default recommendation**, **Will push back on**, **Likely disagreements** (per other member, publication-based) and **Blind spots**. Member agents read their own full skill.
 3. A member is missing → say which one and continue without it. Never improvise a missing member.
 
@@ -203,7 +203,7 @@ Launch every seated member with task "Opening statement". Present the replies in
 
 For the chosen disagreement, launch the members on each side in parallel, each with the other side's position quoted and the user's latest input. Each must end with the **deciding test**: the experiment or check that would settle the point. Members not involved sit out unless the user adds them.
 
-Documented fault lines (use before inventing new ones). Each is checked against the members' paper cards: `[<member-slug> card S012 pp. 3–4]` is card S012 in `../<member-slug>/references/research/cards/*.md` (index: that member's `references/research/07-paper-cards.md`); card ids are per member.
+Documented fault lines (use before inventing new ones). Each is checked against the members' paper cards: `[<member-slug> card S012 pp. 3–4]` is card S012 in `../<member-slug>/references/research/cards/*.md` (index: that member's `references/research/07-paper-cards.md`); card ids are per member.{{GUEST_CARDS}}
 
 1. **[TODO: fault line title]** ([TODO: Surname A] ↔ [TODO: Surname B]) — [TODO: 3–6 documented fault lines in all. Each gives both positions in one or two sentences, with card evidence from both sides ([<member-slug> card <id> p. N]); says whether it is an exchange in print between members or a contrast of published methods; names what is still contested; and names the measurement that would settle it. First draft from the members' Roundtable Cards ("Likely disagreements") by team-layer.js (T2), each marked "(card evidence pending)"; rewritten with card evidence from both sides by team-integrate.js (T3.8). Drop any fault line the cards do not support.]
 

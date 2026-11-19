@@ -9,7 +9,7 @@
 
 # {{TEAM_TITLE}} · Personal Research Advisors
 
-Research-craft skills distilled from the public work of {{MEMBER_LIST}}, plus a roundtable skill that convenes them on your problem.
+Research-craft skills distilled from the public work of {{MEMBER_LIST}}{{GUEST_CLAUSE}}, plus a roundtable skill that convenes them on your problem.
 
 Field: {{FIELD}}.
 
@@ -30,11 +30,11 @@ Copy every skill folder into your skills directory. The roundtable finds its mem
 
 ```bash
 # macOS / Linux — global install
-for d in product/{{TEAM_SLUG}}/*/; do cp -r "$d" ~/.claude/skills/; done
+for d in product/{{TEAM_SLUG}}/*/; do cp -r "${d%/}" ~/.claude/skills/; done{{GUEST_INSTALL}}
 ```
 ```powershell
 # Windows PowerShell
-Get-ChildItem product\{{TEAM_SLUG}} -Directory | ForEach-Object { Copy-Item -Recurse $_.FullName "$HOME\.claude\skills\" }
+Get-ChildItem product\{{TEAM_SLUG}} -Directory | ForEach-Object { Copy-Item -Recurse $_.FullName "$HOME\.claude\skills\" }{{GUEST_INSTALL_PS}}
 ```
 
 Restart Claude Code so it picks up the new skills.

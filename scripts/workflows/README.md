@@ -12,7 +12,7 @@
 
 | 步 | 工作流 | 做什么 | `members` | 产出 | 工作流里跑的闸门 | 典型成本 |
 |---|---|---|---|---|---|---|
-| T1 | `team-base-skills.js` | 每人走女娲研究Skill的 Phase 1–5：6 个调研 agent（01–06）→ 1.5 复核 → 四重验证提炼 → 按 `research-skill-template.md` 写 SKILL.md（含 Roundtable Card）→ 盲测与修 → 双视角精修 | 一位 | `<M>/SKILL.md`、`references/research/01–06`、`RESOURCES.md` 行；学生模式另有 3 个文件；scratch 里的 Phase 2 记录 | `merge_research.py`、`quality_check.py` 12/12、`check_links.py` | 每人 16–20 个 agent（quick 档 13–17）；DFO 未计量 token |
+| T1 | `team-base-skills.js` | 每人走女娲研究Skill的 Phase 1–5：先验快照 → 6 个调研 agent（01–06）→ 1.5 复核 → 封存 3–5 件一手材料 → 四重验证提炼（先对照先验筛增量）→ 按 `research-skill-template.md` 写 SKILL.md（含 Roundtable Card）→ 盲测与修 → 双视角精修 → 验证（两臂增量测试：带 Skill 对不带，盲评）| 一位 | `<M>/SKILL.md`、`<M>/FIDELITY.md`、`references/research/00-prior.md`、`01–06`、`holdout.md`、`RESOURCES.md` 行；学生模式另有 3 个文件；scratch 里的 Phase 2 记录 | `merge_research.py`、`quality_check.py` 12/12、`check_links.py` | 每人 23–27 个 agent（quick 档 20–24）；DFO 未计量 token |
 | T2 | `team-layer.js` | 核对或补写每人的 Roundtable Card；按模板和各人的卡片写圆桌 SKILL.md 与团队 README（fault line 要两边都有证据）；核对各人 RESOURCES.md；两个只读核查员 + 修复。`deep_tier: false`（轻量档）时还把 DEEP-READING.md 换成模板开头的轻量档说明、RESOURCES.md 去掉深读档占位行；在已深读的团队上重跑（如加了成员）时保留 T3.8 写的卡片证据 | 全体（少了谁会记日志） | 团队 `README.md`、`<roundtable>/SKILL.md`、各人 Roundtable Card 与 `RESOURCES.md`、缺失的 `private/README.md`；轻量档另有 `DEEP-READING.md` | `check_links.py` 0、不剩 `{{`、只剩留给后续步骤的 TODO（轻量档一个不剩）、每位成员 12/12、`team_status.py`。圆桌不是研究Skill，不跑 `quality_check.py` | 每人 2 个 + 团队 4–5 个 |
 | T3.1 | `team-harvest.js` | Google Scholar（WebFetch，逐字行 prompt + TOTAL）+ DBLP（SPARQL，`dblp_works.py`）+ Crossref/DataCite → 发表全表；再按年份排序独立审计一遍 | 一位 | `publications/works.json`、`scholar.md`、整行重写的 `RESOURCES.md` 第 1 行（没有 Scholar 主页时 Link 写 DBLP 个人页或主页列表）；`acquire: true` 时还有 `papers/INDEX.md` 等 | `validate_works.py` 0 errors；第 1 行不剩 `[TODO`、`{{` | DFO 实测每人 3 个 / 40 万 token |
 | T3.3 | `team-chase.js` | 计划 agent 跑 `chase_chunks.py` 切块（算好每篇的目标路径）；获取脚本没拿到全文的作品，每 20 篇一个 agent，按 `chase_hints` → 通用开放来源去找合法全文和逐字摘要；最后合并、重建索引，书的开放部分线索记进 `book-leads.json` | 一位 | 放在精确目标路径的 PDF（不进 git）、`abstracts-chase-<date>-r<run>-<块>.json`（同一天重跑 run 加 1，不覆盖没合并的文件）→ `abstracts.json`；`works.json` 的 `urls`；`papers/book-leads.json` | `merge_chase.py`、`validate_works.py` | DFO 实测每人 5 个 / 90 万 |
@@ -43,6 +43,8 @@ T3.2（`acquire_fulltexts.py`）和 T3.4（`plan_reading_batches.py --out-dir <s
 
 `team.json` 里还有几个工作流会用到的可选键：`card_dimensions`（非数学领域里 D1–D8 各指什么，读卡 agent 照用）、成员的 `family_name`（作者核对和检索用的姓；默认取 `name` 的最后一个词，`surname` 只作圆桌的视角标签，撞姓时可以写成 "N. Higham"）、`source_labels`（`acquire_fulltexts.py` 给手工补来的全文标来源）。见 [team.example.json](../../references/team-templates/team.example.json)。
 
+**客座（`args.guests`）。** `team.json` 有 `guests`（别队的成员坐进本队圆桌，见手册第一节第 7 条）时，团队级工作流 `team-layer.js`、`team-integrate.js` 多一个参数 `guests`；按成员的工作流没有它，没有客座的团队也不带这个键。它由 `make_args.mjs` 从 `team.json` 生成，不手写；`dry_run.mjs --team` 生成同样的参数，预览与真启动一致。每位客座一个对象：他在主队（home，他当成员的那支队）`team.json` 里的成员条目原样（那里有什么键就有什么键，不补任何键），加 `"home": "<home>"` 和 `"dir": "<放团队的那层目录>/<home>/<slug>"`（相对 `repo`，正斜杠；团队在 `product/` 下时就是 `product/<home>/<slug>`）。工作流开头逐项核对：`slug`、`home` 是小写连字符，有 `name`，`dir` 等于 `<放团队的那层目录>/<home>/<slug>`、不含 `..`，`slug` 不在 `members` 里、不重复。`guests` 是保留键：`--set guests=…` 报错（`set guests in team.json`）。解析不了的客座（他主队的 `team.json` 不在、不合法或写的是别的队，他不是那队的成员或只是那队的客座，他的文件夹不在，本队目录里有同名的影子文件夹）让 `make_args.mjs` 报错停下，措辞与 `new_team.py` 相同；他只是还没有 `SKILL.md` 时不算错，stderr 提示一行，工作流像对待还没有 `SKILL.md` 的成员一样处理他（T2 要至少两个座位有 `SKILL.md`、其中至少一位是本队成员，才写圆桌和 README；T2、T3.8 都不给他排座，它们返回的 `next` 让先把他主队写出 `SKILL.md` 的 T1 合进来、在本队重跑 T2，T3.8 之后再跑）。客座不进 `members`，按成员跑的工作流也不给客座跑：`--member <客座 slug>` 报错，要到他主队的文件夹（`<放团队的那层目录>/<home>`，通常是 `product/<home>`）跑。工作流只读客座的文件夹，从不改它。README、圆桌和 DEEP-READING 里写到客座的每一句（客座子句、两段安装命令里的复制行、两张 Team 表的客座行等）的准确写法，由 `python3 scripts/new_team.py <team>/team.json --guest-text` 打印（只读），T2、T3.8 照它核对。闸门 `team_check.py` 对有客座的团队：圆桌里的 "card evidence pending" 只在本队成员全部按深读档查时才判 ✗（有 `guest_teams` 时一律判 ✗）；有客座在主队有卡片时，团队级的 `citations`（圆桌引用闭包）不论档位都跑。
+
 各工作流的特有参数（都可省略，括号里是默认值）。参数名一律 `snake_case`。早期版本里有五个工作流用过 `camelCase`（`batchFiles`、`wordBudget`、`maxWords`、`targetWords`、`maxGrowth`、`rootReadme`、`newFaultLines`），这些旧名仍然当别名接受，运行开头会记一行日志提醒改名；新旧两个名字都给时用新名。写错的键不会报错，只会在运行开头记一行 `ignores args key(s)` 的日志，`dry_run.mjs` 也会警告（`make_args.mjs --set` 直接拒绝）。
 
 **按成员的映射参数**（`only`、`only_chunks`、`skip_ids`、`batch_files`、`batches`、`notes`、`what`）以成员 slug 为键。键不是这次运行里的成员时记一行日志；`only`、`only_chunks` 还会在「这次运行里有成员没有对应的键」时直接停下：slug 拼错会让 `only` 失效、把这位成员的所有批次（或块）重跑一遍，加上 `overwrite: true` 还会覆盖已有卡片。
@@ -51,7 +53,7 @@ T3.2（`acquire_fulltexts.py`）和 T3.4（`plan_reading_batches.py --out-dir <s
 
 | 工作流 | 特有参数 |
 |---|---|
-| `team-base-skills.js` | `from` / `to`：`research`、`review`、`synthesis`、`build`、`test`、`refine` 中的一段（全部）；`tier`：`standard` / `quick`（只跑调研 01–03）；`dims`：如 `["02","06"]`，只跑这几个调研 agent，覆盖 `tier`；`user_context`：用户自己的领域和阶段；`word_budget`（8000）；`example_team`：一支已完成团队的目录，只学形状；`search_budget`（每人 36：复核 3、资源表 1、每轮评分 1，其余均分给调研 agent，标准档每个 5） |
+| `team-base-skills.js` | `from` / `to`：`prior`、`research`、`review`、`holdout`、`synthesis`、`build`、`test`、`refine`、`validate` 中的一段（全部）；`tier`：`standard` / `quick`（只跑调研 01–03）；`dims`：如 `["02","06"]`，只跑这几个调研 agent，覆盖 `tier`；`user_context`：用户自己的领域和阶段；`word_budget`（8000）；`example_team`：一支已完成团队的目录，只学形状；`search_budget`（每人 36：复核 3、资源表 1、每轮评分 1，其余均分给调研 agent，标准档每个 5） |
 | `team-layer.js` | `roundtable`（`team.json` 的 `roundtable`）；`deep_tier`（true：保留留给 T3.1、T3.6、T3.8 的 TODO；false：轻量档，DEEP-READING.md 换成轻量档说明、RESOURCES.md 第 1 行记 not harvested (base tier) 并删掉深读档占位行、README 删掉深读档专用部分，一个 TODO 都不留）；`example_team` |
 | `team-harvest.js` | `audit`（true）；`acquire`（false；true 时每人再跑一次 `acquire_fulltexts.py`，很慢）；`search_budget`（每人 2） |
 | `team-chase.js` | `chunk_size`（20）；`max_searches`（每篇最多搜几次，4）；`skip_ids`：`{"<slug>": ["S012", …]}`；`only_chunks`：`{"<slug>": [1, 3]}`，只（重）跑这几块；`merge`（true）；`search_budget`（每人 24，按块均分） |
@@ -73,7 +75,7 @@ node scripts/workflows/make_args.mjs team-layer --team product/<team>           
 node scripts/workflows/make_args.mjs team-base-skills --team product/<team> --member a,b --set to=review
 ```
 
-它打印 `[{scriptPath, args}, …]`：按成员的工作流每人一个，`team-layer.js`、`team-integrate.js` 一个（给 `--member` 会报错）。`args` 里是 `repo`、`team`、`scratch`（默认固定的 `${TMPDIR:-/tmp}/<team>-scratch`，没有就建）、`date`（默认今天）、从 `team.json` 原样拷来的 `members`，`team-layer.js` 还有 `team.json` 的 `roundtable`；`--set KEY=JSON` 加特有参数（键必须是这个工作流读的；按成员的映射只能用本队的 slug，每个调用只带自己那一项）；`--request "…"` 给每个调用加上 `request`（没给时 stderr 提示一行，不报错）。`--args-only` 只打印一个 `args`（配合 `dry_run.mjs`），`--out DIR` 另存成文件。把打印出来的每个对象原样交给 Workflow 工具：
+它打印 `[{scriptPath, args}, …]`：按成员的工作流每人一个，`team-layer.js`、`team-integrate.js` 一个（给 `--member` 会报错）。`args` 里是 `repo`、`team`、`scratch`（默认固定的 `${TMPDIR:-/tmp}/<team>-scratch`，没有就建）、`date`（默认今天）、从 `team.json` 原样拷来的 `members`，`team-layer.js` 还有 `team.json` 的 `roundtable`，团队有客座时 `team-layer.js`、`team-integrate.js` 还有 `guests`（见第二节）；`--set KEY=JSON` 加特有参数（键必须是这个工作流读的；按成员的映射只能用本队的 slug，每个调用只带自己那一项）；`--request "…"` 给每个调用加上 `request`（没给时 stderr 提示一行，不报错）。`--args-only` 只打印一个 `args`（配合 `dry_run.mjs`），`--out DIR` 另存成文件。把打印出来的每个对象原样交给 Workflow 工具：
 
 ```js
 Workflow({ scriptPath: "<repo>/scripts/workflows/team-read.js", args: { /* make_args.mjs 打印的 args */ } })
@@ -83,7 +85,7 @@ Workflow({ scriptPath: "<repo>/scripts/workflows/team-read.js", args: { /* make_
 - **`args` 传 JSON 对象。** 传字符串脚本也能解析，但一不小心就会变成整段字符串。
 - **每人一个工作流，并行启动。** 每个工作流的并发上限是 min(16, CPU 数 − 2)，4 核容器只有 2。按成员的工作流（T1、T3.1–T3.7、T4）给每人各起一个，`members` 只放这一位，在同一条消息里一起发出。T2 和 T3.8 要等全体，只起一个。
 - **续跑。** 工作流中断、被停或改了脚本以后，用同样的 `scriptPath` 和 `args` 加上一次结果里的 `runId`：`Workflow({scriptPath, args, resumeFromRunId: "<runId>"})`。没改过的 agent 调用直接返回缓存结果，从第一个改动过的调用开始重新跑。脚本自己也有续跑的办法：T1 的 `from`/`to`，T3.5 的 `overwrite: false` 与 `only`，T3.3 的 `only_chunks`，T3.6 和 T4 的 `from`（人工修好 SKILL.md 后用 `from: "verify"` 只重跑复核和修复，每人省下约 240 万 token 的重新挖卡片）。
-- **人工检查点。** T1 先用 `to: "review"` 跑，把调研摘要给用户看；再用 `from: "synthesis", to: "synthesis"`，看提炼结果和 Roundtable Card；最后 `from: "build"` 跑完。
+- **人工检查点。** T1 先用 `to: "review"` 跑，把调研摘要给用户看；再用 `from: "holdout", to: "synthesis"`（先封存 3–5 件一手材料当考题，再提炼），看封存清单、提炼结果和 Roundtable Card；最后 `from: "build"` 跑完，最后一步 `validate` 在精修之后的 `SKILL.md` 上做两臂增量测试：看 `members[].increment` 和每人的 `FIDELITY.md`（封存题带 Skill 与不带的总分，差 2 分以内算打平；工作流不按这项测试去修 Skill，结果不好由用户决定）。以后手工改过 Skill，重跑 `from: "validate"`。`prior`、`holdout`、`validate` 三步是 2026-11 从女娲 v2 移植的，都是可选的：`from: "research"` 不写先验，`from: "synthesis"` 不封存（`validate` 就没有封存题，`FIDELITY.md` 会写明），`to: "refine"` 不验证。调研笔记在移植之前就写好的成员：先 `from: "prior", to: "prior"`（那个 agent 不读任何文件，先验仍是盲写的），再 `from: "holdout"`。规则见 `references/research-extraction-framework.md` 第十三节。
 - **每一步做完就 commit，长阶段中途也 commit。** 容器是临时的：`bash scripts/team_commit.sh <路径> "<说明>"`（先暂存，暂存区里有 PDF、PostScript、DjVu、EPUB、`txt/` 或 `private/` 下的文件就停下，退出码 3）。T3.2、T3.5、T3.6 这种一跑几小时的阶段，每 30–60 分钟提交一次检查点（已完成批次的卡片可以先提交）。每个工作流的返回值里有 `next`，写着该 commit 什么、下一步跑什么。
 
 ## 四、先预览：`dry_run.mjs`
@@ -114,6 +116,7 @@ node scripts/workflows/dry_run.mjs scripts/workflows/team-read.js --team product
 | `--items N` | 假结果里每个数组放 N 项，字符串换成 `<字段>` 占位符（默认数组为空、字符串为空） |
 | `--bools MODE` | `happy`（默认：布尔值为 true，但 blocked、skipped、failed、missing 这类字段为 false，走正常路径）、`true`、`false`（走「没通过」「没准备好」的分支） |
 | `--answers FILE` | 按 label 指定假结果：`{"<label 正则>": 值}`，第一个匹配的键生效。值是对象时按 schema 合并进假结果（没给的字段自动补齐）；`null` 表示 agent 死了；数组表示依次调用的结果（最后一个重复用）。以 `_` 开头的键是注释 |
+| `--check-answers` | answers 给了某个 agent 的 schema 里没有的字段（嵌套字段和数组项也查）时警告：真 agent 不会被要这个字段，它驱动的分支可能根本走不到；加 `--strict` 时退出码为 2 |
 | `--team DIR` / `--member a,b` | 从 `<repo>/DIR/team.json` 读成员并设置 `args.team`；`--member` 只留这几位。不给参数文件时参数由 `make_args.mjs` 生成（可加 `--set KEY=JSON`、`--request "…"`） |
 | `--repo PATH` / `--scratch PATH` | args 里字符串 `$REPO`、`$SCRATCH` 替换成什么（默认：本仓库，以及 `<tmpdir>/nuwa-dry-run/<team>`） |
 | `--forbid RE` | prompt 匹配这个正则就警告，如 `--forbid 'dfo\|powell\|/home/'`，查有没有漏掉的旧团队内容 |
@@ -167,10 +170,10 @@ T4 增量        team-increment.js（以后有新材料时），之后再跑一�
 改完任何一个工作流或套件脚本，先跑自检，全部 `✓` 再提交：
 
 ```bash
-bash scripts/workflows/selftest.sh product/dfo-team    # 参数是一支已完成的团队（这里用实例）；不给就只跑示例预览和脚本检查
+bash scripts/workflows/selftest.sh product/dfo-team    # 参数是一支已完成的团队（这里用实例）；不给就跳过第 2 部分和 team_check.py，其余照跑（示例预览不带 --forbid）
 ```
 
-它做三件事：九个示例和几个分支变体（轻量档 T2、T3.6/T4 的 `from`）的 `--strict` 预览，`--forbid` 由已完成团队的 `team.json` 生成（团队、圆桌 slug 和成员的姓，不许漏进通用工作流）；对已完成团队的每个工作流跑 `make_args.mjs` 和 `dry_run.mjs --team`；所有脚本能编译、能 `--help`，`team_check.py <team>` 退出码 0。退出码是失败项数。
+它分四部分：1. 九个示例和几个分支变体（轻量档 T2、T3.6/T4 的 `from`）的 `--strict` 预览，`--forbid` 由已完成团队的 `team.json` 生成（团队、圆桌 slug 和成员的姓，不许漏进通用工作流）；2. 对已完成团队的每个工作流跑 `make_args.mjs` 和 `dry_run.mjs --team`；3. 所有脚本能编译、能 `--help`，`team_check.py <team>` 退出码 0；4. 客座 fixture：在临时目录里搭两支虚构的团队，host 队把 home 队的一位成员请作客座，查 `new_team.py`（`--dry-run`、铺目录、`--guest-text`、`--add-guest`、`--base-tier`）、`make_args.mjs` 与 `dry_run.mjs --team --strict`（另用 answers 文件走到客座的各个分支，每个都加 `--check-answers`）、`team_check.py`（`guests`、`hosts` 两项，在 host 目录里跑 `team_check.py .`）、`team_status.py` 的 Guests 一节和 `check_links.py`，再拿几份反例核对 `new_team.py`、`make_args.mjs`、`dry_run.mjs`、`team_check.py` 报错的措辞一致（主队 `team.json` 的读法也一致），`new_team.py` 停下时「先铺本队成员」那句提示只在每条客座错误都在等主队时才打印；这一部分不需要已完成的团队。四部分都不花 token，临时目录退出时删掉。退出码是失败项数。
 
 写工作流的规矩：
 - 用纯 JavaScript，开头是纯字面量的 `export const meta = {...}`；

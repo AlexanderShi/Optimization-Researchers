@@ -16,7 +16,7 @@
 
 # Deep reading · {{TEAM_TITLE}}
 
-This is the record of how the skills of {{MEMBER_LIST}} are deepened. Each researcher's publications are read in full or in part wherever an open copy exists, and not just as search snippets. Cards and syntheses are written in {{LANGUAGE}}.
+This is the record of how the skills of {{MEMBER_LIST}} are deepened. Each researcher's publications are read in full or in part wherever an open copy exists, and not just as search snippets. Cards and syntheses are written in {{LANGUAGE}}.{{GUEST_DEEP_READING}}
 
 ## Status ({{DATE}})
 
