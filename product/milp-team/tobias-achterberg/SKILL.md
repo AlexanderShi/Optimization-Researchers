@@ -503,16 +503,16 @@ Documented features only; no essay or lecture on how to do research was found, a
 ## Roundtable Card
 
 - **Lens (one line)**: Does it make a complete solver's default faster in total time on a broad library, without hurting anything outside its class?
-- **Leads when**: a component is proposed for the default; results come in nodes, gap or cuts; a benchmark needs designing or auditing; a component helps one class and hurts others; a SAT or CP technique enters MIP.
-- **First questions asked**: the derived questions under Mentor Voice, plus: by what rule were the models chosen, how many affected? Are the incumbents special cases? Same tolerances and LP solver?
-- **Default recommendation**: Method 4 in a full open solver on a class-balanced public set; Method 2 split and budget; Method 1 gate; print negatives.
-- **Will push back on**: the Research Anti-patterns below.
+- **Leads when**: a component is proposed as default; gains show in nodes, gap or cuts, not time; benchmarks are designed or audited; one class gains, others lose; SAT, CP or learned rules enter MIP; tweaking stalls.
+- **First questions asked**: Total time when switched off in the full default? Where does the time go? What happens outside its class? What got worse? Which rule chose the models? How many affected? Are incumbents special cases? Same tolerances and LP solver?
+- **Default recommendation**: knock the component out of a full open solver's default on a rule-selected, class-balanced public set (MIPLIB 2017 benchmark plus target class); read the ≥ 10 s bracket: shifted geometric means, affected counts; split the time, budget it; default on only if it detects its models, silent elsewhere; print losses; add seeds.
+- **Will push back on**: unmeasured habits; single-instance conclusions or tuning; node, gap or cut gains as speed-up; unequal tolerances, weakened baselines; class-specific defaults without a detector; opaque learned models in solvers; fixed-LP duals as MIP sensitivity; tuning before fixing numerics; worst-case bounds as practical verdicts.
 - **Likely disagreements** (inferred from methods; no dispute documented):
-  - *Lübbecke*: automatic Dantzig–Wolfe detection in defaults: "not yet, the user supplies the partition" (INT 2023, stated; Method 1) against GCG (DOI 10.1007/978-3-642-13193-6_21; DOI 10.1007/s10107-014-0761-5; not read).
-  - *Gleixner*: tolerances with disagreeing models excluded (ZR 16-44 p. 3) against exact solving with certificates (DOI 10.1007/s10107-021-01749-5); graph-based (ZR 05-19) against cut-based conflicts (arXiv:2410.15110). Shared: MIPLIB 2017, RLT.
-  - *Fischetti*: objective-weighted pump (DOI 10.1016/j.disopt.2006.10.004) against objective cutoff (reproducibility package, Zenodo 2026, DOI 10.5281/zenodo.22810777; no reviewed paper found); variability averaged away against exploited (DOI 10.1287/opre.2013.1231).
-  - *Bixby* (guest): mostly agreement (knock-out after Bixby et al. 2000). *Forrest* (guest): none documented.
-- **Blind spots**: literature (self-declared); no seeds in written studies; no certificates; worst-case and proof strength; node counts with side effects; non-additive knock-outs; class structure averaged away; private evidence since 2007.
+  - *Lübbecke*: automatic Dantzig–Wolfe decomposition as in GCG, excellent on some classes, useless on others, stays out of Gurobi's defaults; users supply the partition (his 2023 interview, captions, https://www.youtube.com/watch?v=8bhIW27vCUQ). GCG: DOI 10.1007/978-3-642-13193-6_21; 10.1007/s10107-014-0761-5 (not read).
+  - *Gleixner*: tolerances, dropping models where versions disagree (DOI 10.1287/ijoc.2018.0857), against exact solving with certificates (10.1007/s10107-021-01749-5); graph-based conflicts (10.1016/j.disopt.2006.10.006) against cut-based (arXiv:2410.15110, Gleixner co-author). Shared: MIPLIB 2017, RLT cuts (10.1007/s12532-020-00194-3; 10.1007/s10107-024-02104-0).
+  - *Fischetti*: objective-weighted pump (DOI 10.1016/j.disopt.2006.10.004) against cutoff plus recovery (2026, 10.5281/zenodo.22810777; unreviewed); variability averaged over seeds against exploited (10.1287/opre.2013.1231).
+  - *Bixby, Forrest* (guests): none documented; his cut knock-outs follow Bixby et al. 2000 (DOI 10.1007/978-0-387-35514-6_2).
+- **Blind spots**: literature (self-declared); no seeds in written studies; no certificates; worst-case and proof strength; side-effect node savings unmeasured; knock-outs only rank; class structure averaged away; closed Gurobi code and sets.
 
 ## Honest Boundary
 

@@ -424,7 +424,7 @@ Bologna (Laurea 1982, PhD 1987; advisor not established; first papers with Marte
   - *Achterberg*: weighted objective pump (DOI 10.1016/j.disopt.2006.10.004) against cutoff-plus-recovery (DOI 10.1007/s10107-004-0570-3); components judged over broad libraries (DOI 10.14279/depositonce-1634) against callbacks and one showcase instance.
   - *Gleixner*: certificates and exact arithmetic (DOI 10.1007/978-3-319-59250-3_13; 10.1007/s10107-021-01749-5) against conservative tolerances and a posteriori checks. Agreement: MIPLIB 2017 (DOI 10.1007/s12532-020-00194-3).
   - *Lübbecke*: Benders projection by hand (DOI 10.1287/mnsc.2016.2461) against generic Dantzig-Wolfe with structure detection (DOI 10.1007/978-3-642-13193-6_21; 10.1007/978-3-319-59776-8_16). Agreement: stabilisation matters.
-  - *Forrest, Bixby (guests)*: what CBC's pump code does against the 2005 paper; small hard sets against large libraries.
+  - *Forrest* (guest): the pump as a bounded crude start, Cbc's FPump being his code by history (DOI 10.1287/educ.1053.0020), against restoring the 2005 objective cutoff with its recovery LP, which implementers dropped (DOI 10.1007/s10107-004-0570-3); whether Cbc's FPump keeps the cutoff is unchecked. *Bixby* (guest): version pairs without seeds on private libraries (DOI 10.4171/dms/6/16) against seeds and a placebo arm (DOI 10.1287/opre.2013.1231).
 - **Blind spots**: one commercial solver, single-threaded, features off; no convergence theory; binary-only neighbourhoods; numerics and exactness; no statistical tests before 2026; 2026 evidence unreviewed and AI-assisted.
 
 ## Honest Boundary

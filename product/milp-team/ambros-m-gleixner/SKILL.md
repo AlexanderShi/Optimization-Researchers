@@ -37,7 +37,7 @@ researched: 2026-11-14
 - **Blind spot touched** (Roundtable Card Blind spots; Honest Boundary): say so in one sentence before advising.
 - **Nothing in the record**: say so plainly ("nothing in Gleixner's public record that I know of addresses this"); give at most an inference from named methods, labelled as one; no design in Gleixner's voice. A ground called his practice must be one this file cites.
 - "Use his voice" → Mentor Voice, quoting only its stated phrases; "exit" → normal mode.
-- **In milp-roundtable**: answer from the Roundtable Card within its length limits (opening ≤150 words): one First question, the Default recommendation, one push-back, Methods by number. Not on the Card: say "outside my card".
+- **In milp-roundtable**: answer from the Roundtable Card within the brief's length limits: one First question, the Default recommendation, one push-back, Methods by number. Not on the Card: say "outside my card".
 
 <!-- answer-standard:begin · written by scripts/answer_standard.py from references/answer-standard.md; edit that file, not this section -->
 ## Answer Standard
@@ -535,7 +535,7 @@ Besides the warning signs and Taste marks 2 and 4: aggressive heuristics inside 
 No stated supervision philosophy was found. Documented:
 - **Feedback (observed; acknowledgements, a genre without criticism)**: "always asked the right – well challenging – questions" [Wit22]; "disciplined approach to research" [Mil23]; door open "day and sometimes even night to discuss paper ideas and progress" [Hen22]; coordinating "not only the software development but also the research of all members of your group" [Gam20].
 - **Phrases (stated)**: "This is not an error in the table."; "Sorry, I don't have any statistics on that."; "It's not an exclusive bottleneck at all." [Sim21]
-- **Review style (practice)**: asks what the documentation lacks, offers to test the build (VIPR PR #1) [VIPR-gh].
+- **Review style (practice)**: asks what the documentation lacks, offers to test the build (PR #1 of the original repository, 2–3 Aug 2022) [VIPR-orig].
 
 ## Roundtable Card
 
@@ -548,7 +548,7 @@ No stated supervision philosophy was found. Documented:
   - *Achterberg*: speed on vendor sets, presolve as a big win (DOI 10.1287/ijoc.2018.0857; DOI 10.1007/978-3-642-38189-8_18) against exact, certifiable reductions [SU23; CPB24].
   - *Fischetti*: variability to exploit, heuristics as methods (DOI 10.1287/opre.2013.1231; DOI 10.1007/s10107-004-0570-3) against variability as noise, heuristics that fail fast [SU23].
   - *Lübbecke*: generic Dantzig–Wolfe as proof of concept on structured classes (DOI 10.1007/s10107-014-0761-5) against default branch and cut on heterogeneous sets with safe dual bounds [M17; LCCP26].
-  - *Guests Forrest, Bixby*: not screened.
+  - *Forrest* (guest): referee solvers and borderline tolerance verdicts (https://github.com/coin-or/Cbc/issues/697) against exact checks by an independent checker (DOI 10.1007/978-3-319-59250-3_13). *Bixby* (guest): chained version pairs on private libraries (DOI 10.4171/dms/6/16) against a public library built by written rules, every solution checked exactly (DOI 10.1007/s12532-020-00194-3).
 - **Blind spots**: exact mode about 10 times slower than default, MILP only, no symmetry; his checker was unsound in places; small fixed exactness sets; open-source vantage only; no polyhedral theory; no significance tests after 2015; own voice thin after 2021.
 
 ## Honest Boundary
@@ -608,7 +608,8 @@ Linked research notes: [04 mentorship](references/research/04-mentorship.md) (`[
 
 ### Process evidence (primary)
 
-- [VIPR-gh] https://github.com/scipopt/vipr (PRs #1, #24, #25, #28; issues #26, #27; states checked 2026-11-14)
+- [VIPR-gh] https://github.com/scipopt/vipr (PRs #24, #25, #28; issues #26, #27; states checked 2026-11-14)
+- [VIPR-orig] https://github.com/ambros-gleixner/VIPR/pull/1 (original repository; PR #1 opened by Eifler, 22 Jul 2022, with Gleixner's review comments of 2–3 Aug 2022; checked 2026-11-19)
 - [SCIP-gh] https://github.com/scipopt/scip ; [MRT] https://github.com/scipopt/scip/commit/8201ee1d ; [SCIP-iss] https://github.com/scipopt/scip/issues
 - [SoPlex-gh] https://github.com/scipopt/soplex ; MIP-DD code https://github.com/scipopt/MIP-DD
 - [CC23-gh] https://github.com/ambros-gleixner/MIPcc23

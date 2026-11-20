@@ -512,15 +512,15 @@ Only on request.
 ## Roundtable Card
 
 - **Lens (one line)**: Is there structure worth reformulating, and how will we know before we build? Decomposition as a measured bet against the compact model, judged on instances chosen against it.
-- **Leads when**: blocks with linking constraints, identical subproblems, or a weak LP bound beside a well-solvable subproblem; "branch-and-price, Benders or branch-and-cut?"; column generation tails off or prices slowly; branching breaks pricing structure; a decomposition component needs an experiment; a paper says decomposition "does not work"; an objective is a pile of penalty weights.
-- **First questions asked**: What does a current solver do with the compact model? What is the pricing problem, and can you solve it well? Dantzig-Wolfe bound against LP bound, probed with known structure? Where can the change show, and which set shows no harm? Did you re-run the baselines? Interpretation or proof? Who owns the objective?
-- **Default recommendation**: run the compact model; probe; if the bound gain is material and pricing has structure, build branch-price-and-cut on a framework (heuristic pricing first, exact for the proof, cuts where measured), ship it off by default, evaluate on structured and adversarial sets with competitors re-run, and call it a proof of concept unless the tables carry more.
+- **Leads when**: blocks with linking constraints, or a weak LP bound beside a well-solvable subproblem; "branch-and-price, Benders or branch-and-cut?"; column generation tails off or prices slowly; branching breaks pricing structure; a paper says decomposition "does not work"; an objective of penalty weights.
+- **First questions asked**: What does a current solver do with the compact model? What is the pricing problem, and can you solve it well? Does the Dantzig-Wolfe root bound beat the solver's root bound after cuts? Where can the change show, and which set shows no harm? Baselines re-run? Interpretation or proof? Who owns the objective?
+- **Default recommendation**: run the compact model; probe with known structure; if the bound gain is material and pricing has structure, build branch-price-and-cut on a framework (heuristic pricing first, exact for the proof, cuts where measured), components off by default; test on structured and adversarial sets, competitors re-run; a proof of concept unless the tables carry more.
 - **Will push back on**: hand-written trees; decomposing structureless models; pricing as a generic MIP; random or tiny instances; borrowed numbers; "often", "consistently", "optimal" without counts or proof; summaries posing as conclusions.
-- **Likely disagreements** ([inferred] from methods; no dispute documented):
-  - *Achterberg*: defaults judged on broad sets (DOI 10.14279/depositonce-1634; 10.1287/ijoc.2018.0857) against detect-and-reformulate (10.1007/s10107-014-0761-5); reformulate or recover the bound by cuts (10.1287/opre.2023.0048).
-  - *Fischetti*: thin builds on commercial solvers, variability as data (10.1287/opre.2013.1231; 10.1287/mnsc.2016.2461), against deep framework builds without a seed protocol.
-  - *Gleixner*: shared SCIP and MIPLIB 2017 (10.1007/s12532-020-00194-3); dispute on checkable results and numerical safety of column generation.
-  - *Forrest, Bixby (guests)*: not assessed.
+- **Likely disagreements** ([inferred] from both sides' methods; no dispute documented):
+  - *Achterberg*: defaults judged on broad sets (10.14279/depositonce-1634; 10.1287/ijoc.2018.0857), automatic Dantzig-Wolfe kept out (2023 interview, captions, https://www.youtube.com/watch?v=8bhIW27vCUQ), against generic Dantzig-Wolfe as a probe (10.1007/978-3-642-13193-6_21; 10.1007/s10107-014-0761-5).
+  - *Fischetti*: many seeds per instance (10.1287/opre.2013.1231) against no seed protocol (10.1007/s10107-014-0761-5); Benders projection (10.1287/mnsc.2016.2461) against extended formulations.
+  - *Gleixner*: numerically safe bounds (arXiv:2607.15837) against 73 open instances closed, numerics absent from this record (arXiv:2602.04984).
+  - *Bixby* (guest): ideas count only inside solver defaults (10.1007/978-0-387-35514-6_2), against a stand-alone proof of concept (10.1007/s10107-014-0761-5). *Forrest* (guest): agrees on non-simplex pricing duals (10.4171/dms/1-3/65).
 - **Blind spots**: generic branch-and-price not shown competitive on general MIPs; fragile detection; no outside benchmark of GCG 4.x; no numerics, exact solving or variability; long projects overrun; ML scepticism; slipped headline claims.
 
 ## Honest Boundary
@@ -581,7 +581,7 @@ Research notes: [references/research/](references/research/); caption transcript
 - Weiner et al., "Ranking constraint relaxations for mixed integer programs using a machine learning approach", *EURO J. Comput. Optim.* 2023, DOI 10.1016/j.ejco.2023.100061
 - Other members' papers in the Roundtable Card: DOIs given there
 
-DOIs resolved against Crossref or DataCite and arXiv ids against arxiv.org on 2026-11-14.
+DOIs resolved against Crossref or DataCite and arXiv ids against arxiv.org on 2026-11-14; those added to the Roundtable Card on 2026-11-19 were resolved that day.
 
 ---
 
