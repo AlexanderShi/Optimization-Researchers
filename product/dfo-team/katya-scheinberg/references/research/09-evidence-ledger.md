@@ -2,9 +2,11 @@
 
 > Date: 2026-09-27. The full evidence behind `SKILL.md`. When SKILL.md was tightened on 2026-09-27 (17136 words before, 11995 after; 12376 after the review fixes, which put the Method 1 thresholds, some Method 3 devices and the Workflow B settings table back in SKILL.md, so those also appear there), every long evidence list, per-paper case list, say–do tally, variant or contradiction explanation and long anatomy row was moved here **verbatim**. SKILL.md keeps, per item, the strongest statement and cards, a one-line say–do count, at most four variant/correction bullets, and a link to the matching section below. Nothing here is new: each section reproduces the SKILL.md item as it stood before tightening, including its cross-references ("Corrections log" there is the section [Corrections from the full texts](#corrections) here). **Exception (k01):** lines marked **(k01)** and the section [Book material](#book-material) were added on 2026-09-27, when the open material of the 2009 IDFO book (batch `k01`, cards B001–B006) was integrated; they are new evidence, not moved text (SKILL.md 12376 words before that integration, 12759 after).
 
+> **Second tightening (2026-11-20).** The word budget became at most ~11500 words outside the Answer Standard block, which `scripts/answer_standard.py` writes into every skill and the budget does not count (13070 such words before, 11451 after; 11547 after the review fixes, which restored in SKILL.md, in short form, points that some condensed lines had lost or overstated: Method 4's book line as Stated evidence, Method 1's function-estimate bounds, Workflow F steps 2 and 5, the anti-pattern fixes, two inner tensions, the routing methods and the id pointers; the moved wording below is unchanged, so some of it also appears in SKILL.md). The rule was the same: nothing deleted, only moved. The SKILL.md wording this tightening shortened or removed is kept verbatim at the end of the matching section below, under **Moved from SKILL.md on 2026-11-20**; the source entries it took out of the SKILL.md appendix are in [Sources](#sources). New anchors: `#anatomy-storm`, `#anatomy-self-correcting-geometry` and `#anatomy-adaptive-step-search` (the same sections as the `#signature-…` anchors) and `#sources`.
+
 **How to read.** `[card S012, pp. 20–21]` is paper card S012 in `07-paper-cards.md`, at the PDF page of the version named on the card (usually arXiv); look up the journal page before citing it in a paper. S043 and D001 are one paper and are cited as D001. Heuristic numbers are the 2026-09-27 numbering; the cards use the old numbers (mapping in `08-deep-reading-synthesis.md` §12). Say–do counts are distinct papers read in full or in part (the five same-text pairs counted once); a paper can count as both evidence and variant, so the parts can sum to more than the total. Per-card method links (✅ evidence, ⚠ variant, ✗ contradiction) are in the `Methods linked` column of `07-paper-cards.md`; the synthesis is `08-deep-reading-synthesis.md`; named proof devices, experiment protocols and writing moves are in `../technique-catalog.md`.
 
-**Scope.** Sections exist for the SKILL.md items that were condensed: the two taste lists and the taste quick-check, Methods 1–6, the routing table, the fact-finding step of the agentic protocol, Workflows A–H (Workflow B includes the published starting-settings table), Heuristics 1–10, the three signature-work anatomies, the anti-patterns table, the research-trajectory prose and Latest list, the academic lineage, the inner tensions, the mentor-voice questions, the corrections log and the card key. Items not listed (frontmatter, How to Use, activation rules, student mode, integrity rules, the rest of the agentic protocol, roundtable card, honest boundary apart from its corrections list, source lists) were not condensed and remain complete in SKILL.md.
+**Scope.** Sections exist for the SKILL.md items that were condensed: the two taste lists and the taste quick-check, Methods 1–6, the routing table, the fact-finding step of the agentic protocol, Workflows A–H (Workflow B includes the published starting-settings table), Heuristics 1–10, the three signature-work anatomies, the anti-patterns table, the research-trajectory prose and Latest list, the academic lineage, the inner tensions, the mentor-voice questions, the corrections log and the card key. Items not listed (frontmatter, How to Use, activation rules, student mode, integrity rules, the rest of the agentic protocol, roundtable card, honest boundary apart from its corrections list, source lists) were not condensed and remain complete in SKILL.md. Since 2026-11-20 the Step 1 table of the agentic protocol and the source lists are condensed too (see [Agentic protocol](#agentic-protocol) and [Sources](#sources)).
 
 ## Contents
 
@@ -39,9 +41,9 @@
 - [Heuristic 9: measure every threshold and constant](#heuristic-9)
 - [Heuristic 10: a failed extension becomes a named open problem](#heuristic-10)
 - [Signature work: anatomies kept elsewhere](#signature-note)
-- [Signature work: Stochastic optimization using a trust-region method and random models (Mathematical Program…](#signature-storm)
-- [Signature work: Self-correcting geometry in model-based algorithms for derivative-free unconstrained optimi…](#signature-self-correcting-geometry)
-- [Signature work: High probability complexity bounds for adaptive step search based on stochastic oracles (SI…](#signature-adaptive-step-search)
+- [Signature work (anatomy): Stochastic optimization using a trust-region method and random models (Mathematical Program…](#anatomy-storm) (also `#signature-storm`)
+- [Signature work (anatomy): Self-correcting geometry in model-based algorithms for derivative-free unconstrained optimi…](#anatomy-self-correcting-geometry) (also `#signature-self-correcting-geometry`)
+- [Signature work (anatomy): High probability complexity bounds for adaptive step search based on stochastic oracles (SI…](#anatomy-adaptive-step-search) (also `#signature-adaptive-step-search`)
 - [Research anti-patterns (full sources per row)](#anti-patterns)
 - [Research trajectory: full-text view, recognition and latest](#research-trajectory)
 - [Academic lineage](#academic-lineage)
@@ -49,6 +51,7 @@
 - [Mentor voice](#mentor-voice)
 - [Book material (IDFO 2009): what was read and what it supports](#book-material)
 - [Corrections from the full texts](#corrections)
+- [Sources (Appendix): entries moved from SKILL.md](#sources)
 - [Card key (ids used in SKILL.md before tightening)](#card-key)
 
 <a id="routing"></a>
@@ -73,6 +76,26 @@
 | (Student) "What should I read?" | `references/reading-path.md` (stage by current task) | — |
 | Writing style, mentoring, lab organisation, grants | No distillable public Scheinberg method for mentoring, lab organisation or grants. Paper-writing moves from the full texts are in `references/technique-catalog.md`. Otherwise give generic advice labelled "not Scheinberg-style". In student mode, point to the user's own notes in `references/sources/private/` | — |
 
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+| User task | Workflow | Methods |
+|---|---|---|
+| "Is this problem a DFO problem? What should I even assume?" | Workflow A | Method 1, Method 6 + Taste quick-check |
+| "Which algorithm should I use / design for my noisy black box?" | Workflow B | Method 2, Method 4, Method 1 |
+| "How do I prove convergence / complexity?" | Workflow C (Workflow F for the detailed scaffold) | Method 3, Method 1 + Heuristic 8 |
+| "Does an existing framework already cover my algorithm?" | Method 3 step 1 + `references/proof-playbook.md` §0 | Heuristic 8 |
+| "Which gradient estimator / how many samples / what radius?" | Workflow D | Method 5, Method 1 |
+| "How tight is my bound? Does practice match the theory?" | Workflow H | Method 3, Method 5 + Heuristic 9 |
+| "Review my DFO / zeroth-order paper" | Workflow E | All methods + Anti-patterns |
+| "My method stalls / is noisy / radius collapses" | Workflow B (steps 4–6) + Heuristics 2, 5 | Method 2, Method 4 |
+| "My proof breaks at one inequality" | Workflow F step 2 + `references/proof-playbook.md` §0.2 (symptom → device) | Method 3, Method 2 |
+| "Which proof trick / experiment protocol / writing move fits here?" | `references/technique-catalog.md` | — |
+| (Student) "Prove complexity for my algorithm" | Workflow F + `references/proof-playbook.md` | Method 3, Method 2, Method 1 |
+| (Student) "Pick / scope a thesis problem" | `references/open-problems.md` + Taste quick-check, then Workflow A on the chosen row | Method 1, Method 3, Method 4 |
+| (Student) "Prepare a draft / result for a supervisor meeting" | Workflow G | All methods |
+| (Student) "What should I read?" | `references/reading-path.md` (stage by current task) | — |
+| Writing style, mentoring, lab organisation, grants | Paper-writing moves: `references/technique-catalog.md`. No public Scheinberg method for mentoring, lab organisation or grants: give generic advice labelled "not Scheinberg-style"; in student mode, point to the user's notes in `references/sources/private/` | — |
+
 <a id="agentic-protocol"></a>
 
 ## Agentic protocol: Step 2: Scheinberg-style fact finding (use tools, never memory)
@@ -85,6 +108,25 @@ Check the local corpus first: `references/research/07-paper-cards.md` indexes 12
 - **Competing estimators**: What do the ML papers in the user's area use (Gaussian smoothing, evolution strategies)? This sets up the head-to-head comparison.
 
 Keep search results internal. The user sees the judgement and the next steps.
+
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+*Step 1, classify the request:*
+
+| Type | Signal | Action |
+|---|---|---|
+| Needs facts | Asks about specific solvers, papers, the state of the art, or known complexity results | Search first (Step 2), then answer |
+| Pure method | Framing, oracle design, proof strategy, experiment design | Go straight to the matching workflow (Step 3) |
+| Mixed | The user's own problem plus a method question | Verify the relevant literature and solvers, then run the workflow |
+
+*Step 2, fact finding:*
+
+Check the local corpus first (`references/research/07-paper-cards.md`: 131 cards, 6 of them on the open IDFO book material, 78 papers read in full or in part, with page references; `references/technique-catalog.md`: devices by name; `references/research/09-evidence-ledger.md`), then WebSearch / arXiv / publisher pages / GitHub for:
+- **Oracle facts**: deterministic (numerical) or stochastic (sampling) noise? Biased (smoothing, finite differences, simulation)? Controllable sample size per evaluation? Cost of one evaluation?
+- **Classical baseline**: which trust-region, Armijo or Powell-style code already fits, and is it maintained (e.g., PDFO, Py-BOBYQA, DFO-LS on GitHub)?
+- **Known guarantees** for this oracle class: `references/sources/RESOURCES.md` and the card index first, then search.
+- **Structure**: least-squares, separable, composite, or a known component?
+- **Competing estimators** in the user's area (Gaussian smoothing, evolution strategies), for the head-to-head comparison.
 
 <a id="taste-marks"></a>
 
@@ -112,6 +154,24 @@ Evidence below is from the full texts. Abstract-level evidence was dropped where
 9. **Prior work is positioned by its assumptions, not attacked.** Earlier papers, including the group's own, are restated in one oracle language and criticised for what they assume; a concurrent paper's advantage is conceded.
    - Evidence: prior assumptions drawn as sets on the accuracy–probability plane [card S041, pp. 2–7]; the group's own earlier papers listed with the assumption each new result removes [card D001, pp. 2–3]; a concurrent method credited, its advantage conceded [card S012, pp. 5–6]; a competitor's encouraging results credited, then a 2-D counterexample shows its method can converge to a non-stationary point [card S143, p. 4].
 
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+*Research Taste, section note:*
+
+At most three cards per item; full lists, variants and the original quick-check: `references/research/09-evidence-ledger.md#taste-marks`, `#taste-warnings`, `#taste-quick-check`.
+
+*Marks of good research:*
+
+1. **The problem is defined by an oracle contract, not by a noise story**: the accuracy each estimate needs, relative to the step or radius, with a fixed probability [cards S012, pp. 3, 8–9; S013, p. 11; S041, pp. 2–7].
+2. **Deterministic parity.** Complexity of the deterministic or best-known order, randomness costing only constants [cards S014, pp. 16, 19, 20, 26; S026, pp. 13, 20, 22–23]; for sample complexity, the stochastic lower bound [card S057, pp. 2, 15–16, 19].
+3. **Classical adaptive methods are analysed, not replaced** (trust region, Armijo backtracking, Powell-style interpolation) [cards S018, p. 1; S041, p. 11; S104, p. 4]; scope: the adaptive / DFO line (C2).
+4. **A guarantee comes with numbers, in algorithm and software papers** [cards S012, pp. 27–32; S104, pp. 26–30]; pure-analysis papers are theory-only [card S030, p. 4] (C1).
+5. **Find the minimal safeguard, backed by a negative result**: show what cannot be dropped, then pay for it rarely [cards S143, p. 4; S030, pp. 3, 8–15; S088, Thm 4.6, pp. 11–12].
+6. **DFO and ML zeroth-order optimization are one field** [cards D003, pp. 6–7; S006, pp. 2–3, 31; S031, p. 2].
+7. **Guarantees get stronger over time**: almost-sure [card S018, pp. 10–11] → expected → high probability [card D001, pp. 7–13] → sample complexity → heavy tails [card S083, pp. 16–17].
+8. **A new variant costs a checklist, not a new proof** (→ Heuristic 8) [cards S093, p. 10; S015, pp. 7–8; S098, pp. 19–20].
+9. **Prior work is positioned by its assumptions, not attacked**; a concurrent paper's advantage is conceded [cards S041, pp. 2–7; D001, pp. 2–3; S012, pp. 5–6].
+
 <a id="taste-warnings"></a>
 
 ## Taste: warning signs of bad research
@@ -127,6 +187,18 @@ Evidence below is from the full texts. Abstract-level evidence was dropped where
 8. **An iteration bound presented as if it were a cost bound.** The step parameter is not bounded away from zero, so the sample cost needs its own proof [cards S057, pp. 1–2; S041, p. 3; S137, pp. 1, 3].
 9. **Thresholds and constants that were never computed or measured.** The group plugs textbook constants into its conditions and sweeps experiments across the theoretical threshold [cards S012, pp. 20–21, 30–32; S041, pp. 30–33].
 
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+1. **A stochastic method with a hand-tuned step schedule** where an adaptive classical method would do [cards D001, p. 28; S047, pp. 1–2]; schedules computed from known μ and L are exempt [card S009, pp. 2, 5, 13].
+2. **Assuming unbiased, well-behaved estimates** when the estimator is biased by construction (finite differences, smoothing) [cards S012, p. 26; D001, p. 25].
+3. **Comparing gradient estimators without fixing the accuracy target and the sample and radius budget** [card S006, pp. 4–5, 25].
+4. **Dropping geometry safeguards in model-based DFO without an argument** [card S030, pp. 8–11].
+5. **Only almost-sure or expected results for a method sold as practical**, where a single run matters (the 2019 → 2024 progression to tail bounds [cards S013, pp. 4, 9; D001, pp. 7–13]).
+6. **Complexity claims that hide the dependence on the success probability or the dimension** [cards S014, p. 13; S088, pp. 9–11; S104, p. 16].
+7. **Sample-size rules written in quantities the algorithm cannot know** (the true gradient norm, the target ε) [cards S015, pp. 2, 7; S047, p. 9].
+8. **An iteration bound presented as if it were a cost bound** (the step parameter is not bounded away from zero) [cards S057, pp. 1–2; S137, pp. 1, 3].
+9. **Thresholds and constants that were never computed or measured** [cards S012, pp. 20–21, 30–32; S041, pp. 30–33].
+
 <a id="taste-quick-check"></a>
 
 ## Taste quick-check
@@ -141,11 +213,27 @@ Evidence below is from the full texts. Abstract-level evidence was dropped where
 - [ ] Does any structure (least-squares residuals, low rank, separability, a known prox term) beat treating the objective as a scalar black box?
 - [ ] Can the result be pushed from expected to high-probability complexity, and from iterations to samples?
 
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+- [ ] Can you write the oracle contract: accuracy per iteration (tied to the step or radius) and the probability it holds?
+
+- [ ] Is there a classical adaptive method (trust region, line search, Powell-style interpolation) to keep instead of a new one?
+- [ ] Do a published framework's hypotheses already cover your algorithm (→ Heuristic 8)?
+- [ ] Does the expected result match the deterministic ε-order, randomness costing only constants?
+- [ ] Are bias and irreducible noise handled, with convergence to a stated neighbourhood?
+- [ ] Will you compare competing estimators or solvers at equal accuracy, counting function evaluations?
+- [ ] Does structure (residuals, low rank, separability, a known prox term) beat a scalar black box?
+- [ ] Can the result go from expected to high-probability complexity, and from iterations to samples?
+
 <a id="methods-note"></a>
 
 ## Core research methods: counting note
 
 Say–do counts are distinct papers read in full or in part (the five same-text pairs counted once). A paper can count as both evidence and variant, so the parts can sum to more than the total. Variants, deterministic ancestry and per-paper detail are in `references/research/08-deep-reading-synthesis.md` §2–3.
+
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+Say–do counts: distinct papers read in full or in part (five same-text pairs counted once); a paper can be both evidence and variant. Full evidence and pre-tightening Steps: `references/research/09-evidence-ledger.md`; deterministic ancestry: `references/research/08-deep-reading-synthesis.md` §2–3. Inline (C…) tags: the Corrections list under Honest Boundary.
 
 <a id="method-1"></a>
 
@@ -167,6 +255,12 @@ Say–do counts are distinct papers read in full or in part (the five same-text 
 **Different from standard practice**: standard stochastic practice fixes a noise model (unbiased, bounded variance) and designs variance reduction or step schedules. Here the requirement adapts with the step size, bias is allowed, and occasional arbitrary failures (probability 1−p) are tolerated. Scope by method and order: in first-order trust region (STORM, Blanchet et al.) both model and function-estimate failures may be arbitrary, with probability 1 − α and 1 − β, because the true change on a wrongly accepted step is bounded through ‖s_k‖ ≤ δ_k and L-smoothness [cards S012, p. 3; S013, p. 17]. Second-order trust region (E|F − f| ≤ κ_F δ_k³ [card S013, p. 28]), the line search (a variance condition [card S015, pp. 5–7, 14]), high-probability step search (mean plus subexponential tail [card D001, pp. 1–5]) and heavy tails (q-th moments [card S083, pp. 16–17]) add a bound on function-estimate errors.
 **Limitations**: p is rarely known in practice, as the papers themselves say [cards S012, p. 3; S083, pp. 15, 22; S098, p. 16]. The contract presumes you can control sample sizes. The verified work assumes smooth objectives. Constants that depend on p can dominate on small budgets.
 
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+- ⚠ Which failures may be arbitrary depends on the method: only first-order trust region lets both model and function-estimate failures be arbitrary [cards S012, p. 3; S013, p. 17]; second-order trust region (E|F − f| ≤ κ_F δ_k³ [card S013, p. 28]), line search (a variance condition [card S015, pp. 5–7, 14]), high-probability step search (subexponential tail [card D001, pp. 1–5]) and heavy tails (q-th moments [card S083, pp. 16–17]) bound them.
+
+**Different from standard practice**: standard practice fixes a noise model (unbiased, bounded variance) and designs variance reduction or step schedules; here the requirement adapts with the step size, bias is allowed, and occasional failures (probability 1−p) are tolerated, arbitrary only where the method allows (⚠ above).
+
 <a id="method-2"></a>
 
 ## Method 2: Keep the classical adaptive method; change only what the weaker oracle breaks
@@ -186,6 +280,10 @@ Say–do counts are distinct papers read in full or in part (the five same-text 
 **Applies to stage**: algorithm design; debugging a stalling method.
 **Different from standard practice**: the usual reflex is either a bespoke algorithm for each noise setting or SGD with a tuned schedule. This lens keeps the trusted algorithm and moves the novelty into the oracle condition and the analysis.
 **Limitations**: the result inherits the classical method's scope (local, smooth, mostly unconstrained). It may leave performance on the table compared with bespoke methods such as momentum or acceleration; the verified work covers FISTA with backtracking in the convex composite case [card S068, pp. 15–21] and finds that acceleration may not help proximal quasi-Newton methods [card S054, pp. 1, 22, 29]. It does not describe the group's variance-reduction papers.
+
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+- Peer view of the co-authored 2009 book (D. Orban, *SIAM Review* 2011): "the clearly stated similarities and differences between trust-region methods for smooth problems and for derivative-free problems" [card B006, p. 2].
 
 <a id="method-3"></a>
 
@@ -210,6 +308,11 @@ Say–do counts are distinct papers read in full or in part (the five same-text 
 **Different from standard practice**: stochastic-gradient analyses usually bound expected optimality after a fixed schedule. Here the analysis follows an *adaptive* step parameter as a random walk and treats the complexity as a stopping time.
 **Limitations**: steps 1–2 were first reconstructed from abstract-level descriptions; the full texts confirm that version for template (a) only and add templates (b) and (c) [08 §3 row 1], so check which template the closest canonical paper uses before relying on one. Heavy technical overhead. Worst-case constants can be loose (Θ carries a 1/1800 factor in the stochastic trust-region bound [card S013, p. 16]). The results say little about typical-case behaviour on small budgets. A stopping time defined through x_{k+1} is not a stopping time with respect to the past, which blocked one extension [card S047, p. 12].
 
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+- Say–do: ✅ stated + practiced; 34 papers (17 evidence, 23 variant, 0 contradiction); most variants are deterministic precursors or other proof skeletons.
+- ✗ Steps 1–3 rewritten from the full texts; the earlier single-potential version holds for template (a) only (C4) [cards D001, pp. 7–13; S041, pp. 16–21].
+
 <a id="method-4"></a>
 
 ## Method 4: Geometry is the price of model-based DFO; pay only the minimum
@@ -231,6 +334,17 @@ Say–do counts are distinct papers read in full or in part (the five same-text 
 **Different from standard practice**: Powell-style practice manages geometry by careful heuristics. Conn-style theory certifies it at every iteration. This lens proves the necessary minimum and randomizes the rest.
 **Limitations**: model building costs O(n) evaluations for linear models and O(n²) for full quadratics, so it is expensive in high dimension without subspaces. The verified work covers smooth objectives with few or no constraints. The complexity theory covers linear Lagrange polynomials; the best practical variant is not covered, and a competitive practical random-subspace method "remains difficult" [card S104, pp. 24–25, 27, 29–30].
 
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+- Stated in the co-authored book's organisation (2009): about 100 pages on sampling, models and geometry, ending in a chapter on ensuring well poisedness, come before any optimization framework [card B001, pp. 1–2]; reviewers single out poisedness ("the key notion", Nazareth; one of two paradigms, Orban) [cards B005, p. 2; B006, p. 2]. Title level; the minimal-safeguard stance is not visible there (C8).
+
+1. Choose the model class for the budget: linear (n+1 points), quadratic / minimum-norm underdetermined, or certify only n points and fit the rest by least squares [card S104, pp. 10–12].
+2. Bound the model error by poisedness constant × radius and decide which iterations need the certificate: typically unsuccessful iterations before a radius shrink, and criticality checks [card S007, pp. 13–14]. Theory: Λ = 1 + O(1/n), since the Λ-dependence is tight [card S088, pp. 10–12]; practice: Λ = 1000 [card S104, p. 27].
+3. Spend geometry evaluations only there, or in the criticality step, triggered by a small model gradient [card S030, p. 3]; recycle rejected trial points as repairs; count geometry steps with a potential (e.g. −log|det Y|) [card S088, pp. 8, 12–13].
+4. In high dimension, use random directions or **random subspaces** with a probability-p quality guarantee; redraw only when the radius changes, so geometry iterations stay deterministic [card S088, pp. 16, 18].
+5. With noise, keep the sampling radius above a noise floor (Δ_min = Θ(√ε_f) in subspaces [card S104, pp. 18, 22]) so interpolation does not amplify the noise.
+6. Benchmark against Powell-family codes (PDFO, Py-BOBYQA; NEWUOA via PRIMA) on CUTEst via S2MPJ, the budget ending every run [card S104, pp. 24–30].
+
 <a id="method-5"></a>
 
 ## Method 5: Compare estimators head-to-head at equal accuracy (theory + experiment)
@@ -251,6 +365,10 @@ Say–do counts are distinct papers read in full or in part (the five same-text 
 **Applies to stage**: experiment design; method selection; reviewing.
 **Different from standard practice**: many ML papers adopt one estimator by convention and compare iteration counts. This lens compares the cost of meeting an accuracy guarantee.
 **Limitations**: conclusions depend on the noise model and smoothness. With tiny budgets, asymptotic sample bounds can mislead. Sufficient sample counts can be loose; the FoCM necessity bound is weak and was probed by simulation [card S006, pp. 16–18].
+
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+- Practice: one accuracy target, N and σ per estimator [card S006, pp. 4–5, 25–31]; equal-N comparison [card D003, pp. 7, 10–11]; FD vs REINFORCE at equal sample cost [card S073, pp. 6–7, 11]; benchmark protocol [card S104, pp. 26–30].
 
 <a id="method-6"></a>
 
@@ -285,6 +403,14 @@ Say–do counts are distinct papers read in full or in part (the five same-text 
 **🔴 Checkpoint**: if you cannot state even a heuristic accuracy-vs-cost relation for the estimates (no control over samples, unknown noise), stop designing algorithms. First run a noise-estimation experiment (repeated evaluations at fixed points, differences along a line). If the objective is nonsmooth or discontinuous, hand over to another lens.
 **Output**: a one-paragraph problem statement with the oracle contract, the reachable accuracy, detected structure, and a go / hand-over decision.
 
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+1. Classify the noise (none, deterministic, stochastic) and known bias (smoothing, finite differences, simulation); estimate its level from repeated calls at fixed points (SASS: slack = ⅕ × std of 30 oracle calls, re-estimated each epoch) [card D001, p. 26]. (→ Method 1)
+2. Write the oracle contract, separating controllable from irreducible error, and state the reachable neighbourhood (Method 1 step 3). (→ Method 1)
+3. Look for structure (residual vector, a prox term, cheap constraints, low rank) and classify constraints by what the oracle returns [card S019, pp. 3, 6–8]; for residuals under stochastic noise, flag Method 6 step 1's caveat. (→ Method 6)
+4. Check smoothness and constraints honestly: for nonsmooth or hidden-constraint problems, flag that this lens is weak and point to a direct-search lens (e.g., Audet in the roundtable); composite f + φ with a cheap, exact prox is inside the lens [card S098, pp. 2–4].
+5. Run the Taste quick-check.
+
 <a id="workflow-b"></a>
 
 ## Workflow B: Algorithm design for noisy / stochastic DFO
@@ -310,6 +436,18 @@ Published starting settings (from the papers' experiments, not recommendations; 
 **🔴 Checkpoint**: after a pilot run, compare the plateau of f̃ with the floor predicted in Workflow A step 2. If f̃ plateaus at that level, stop: the noise floor has been reached. If it plateaus well above it while the radius keeps shrinking, the oracle contract is not being met: increase samples or raise Δ_min, and check with an adversarial oracle that stays inside the contract (Workflow H step 3) [card S041, pp. 30–33]. Do not add heuristics to hide this. Also report how often each safeguard fired [card S005, p. 19].
 **Output**: pseudocode with the oracle contract per step, parameter defaults taken from the classical method (and the published settings above where they apply), and a list of the assumptions the design relies on.
 
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+1. Pick the classical base method: an interpolation trust region (expensive, low n), adaptive step search with estimated gradients (larger n), or a random-subspace model method (large n); for a heuristic code, find "the closest theoretically convergent algorithm to the practical implementations" [card S143, p. 5]. (→ Method 2, Method 4)
+2. Choose the estimator, sampling radius and sample counts via Method 5 bounds (σ = O(√ε_f) for randomized finite differences [card D001, p. 25]).
+3. Tie per-iteration accuracy to Δ_k or α_k with adaptive sampling in knowable quantities; theory asks for O(Δ_k^{-4}) function samples, STORM used about 1/δ_k "after testing various other rates" [card S012, pp. 28, 30]: start there and ablate. Draw fresh estimates at the current and trial points; do not average biased failures. (→ Method 1)
+4. Under noise, relax the acceptance test (r = 2ε_f in ρ_k) and increase the radius only if ‖g_k‖ ≥ η₂Δ_k [card S041, p. 11]; if the oracle may be wrong more often than right, make the increase factor exceed the decrease factor. (→ Method 2; Heuristic 5)
+5. Keep geometry maintenance minimal (unsuccessful or criticality iterations, or randomized). (→ Method 4)
+6. Define the stopping rule by the noise floor, not by a gradient tolerance the oracle cannot resolve [card S023, p. 19].
+
+**🔴 Checkpoint**: after a pilot run, compare the plateau of f̃ with the floor predicted in Workflow A step 2. At that level, stop: the noise floor is reached. Well above it while the radius keeps shrinking, the contract is not met: increase samples or raise Δ_min, and test with an adversarial oracle inside the contract (Workflow H step 3) [card S041, pp. 30–33]. Do not hide this with heuristics; report how often each safeguard fired [card S005, p. 19].
+**Output**: pseudocode with the oracle contract per step, classical parameter defaults (the published settings above where they apply), and the assumptions the design relies on.
+
 <a id="workflow-c"></a>
 
 ## Workflow C: Probabilistic complexity analysis
@@ -324,6 +462,15 @@ Published starting settings (from the papers' experiments, not recommendations; 
 **🔴 Checkpoint**: if the ε-order is worse than the deterministic order, decide explicitly whether this is intrinsic (lower bound known?) or a proof artefact. Do not publish a weaker order without that diagnosis. If p must tend to 1, the fixed-probability framework is not delivering. Say so. If an extension fails, state it as a conjecture and name the inequality that breaks (Heuristic 10).
 **Output**: a theorem statement (order + constants + probability), a proof skeleton, and a list of the lemmas to verify rigorously.
 
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+1. Check whether a published framework's hypotheses cover the algorithm (Method 3 step 1; Heuristic 8); if so, write the checklist theorem and go to step 4 [card S093, p. 10]. Otherwise rerun the deterministic proof with the contract and mark the first failing inequality. (→ Method 2)
+2. Pick template (a), (b) or (c), define Φ_k or Z_k and the success indicators, and show the biased-random-walk behaviour of the step parameter. (→ Method 3)
+3. Bound the expected stopping time, then the high-probability tail; with unbounded noise, bound the sum of damages rather than each one [card D001, pp. 11–12]; for other failures use the playbook's symptom → device table (§0.2). (→ Method 3)
+4. Compare with the deterministic order (explicit p- and n-dependence); on an ε-order tie, compete on constants and assumptions in a complexity table with an additional-assumption column [card S104, pp. 2–3]. (→ Method 3)
+5. Check that the probability threshold is achievable by the Workflow B sampling scheme, and convert the iteration bound into a sample bound (Heuristic 4). (→ Method 1)
+**🔴 Checkpoint**: if the ε-order is worse than the deterministic order, decide whether this is intrinsic (lower bound known?) or a proof artefact before publishing it. If p must tend to 1, say that the fixed-probability framework is not delivering. If an extension fails, state it as a conjecture naming the inequality that breaks (Heuristic 10).
+
 <a id="workflow-d"></a>
 
 ## Workflow D: Estimator & experiment design
@@ -336,6 +483,13 @@ Published starting settings (from the papers' experiments, not recommendations; 
 4. Report function evaluations to tolerance, success rates, and behaviour near the noise floor. Include failure cases. Outside DFO, count the dominant unit of work and state each method's per-iteration charge [card D001, p. 27].
 **🔴 Checkpoint**: if one method wins only after per-problem tuning, or only on iteration counts, the comparison is invalid. Redo it with fixed parameters and evaluation counts.
 **Output**: an experiment protocol (problems, noise, budgets, metrics, parameter settings) ready to run.
+
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+1. Fix the accuracy target and the noise model shared by all competitors. (→ Method 5)
+2. Derive or look up N and σ per estimator for the experiment table; check estimator accuracy at trajectory points against the theorem's threshold before running end-to-end [card S006, pp. 29–30]. (→ Method 5)
+3. Use the same outer algorithm, problems, seeds and budget. Include Powell-family and standard DFO codes as baselines (verify each exists before naming it), each at its best configuration [card S003, pp. 15–17]; add a baseline variant that removes one assumption violation, and a competitor that violates your assumption [cards S012, p. 28; S137, p. 6]. (→ Method 4, Method 5)
+4. Report function evaluations to tolerance, success rates and behaviour near the noise floor, failures included; outside DFO, count the dominant unit of work and state each method's per-iteration charge [card D001, p. 27].
 
 <a id="workflow-e"></a>
 
@@ -351,6 +505,14 @@ Published starting settings (from the papers' experiments, not recommendations; 
 **🔴 Checkpoint**: if the main claim depends on an oracle assumption that the paper's own estimator violates (e.g., an unbiasedness assumption paired with a smoothing estimator), mark it as a major issue before anything else.
 **Output**: a review with major issues (assumptions, guarantee), minor issues (constants, experiments), and 2–3 concrete fixes, each labelled with its method.
 
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+1. Extract the oracle assumptions: unbiased? bounded? always accurate? Could they be weakened to "accurate with probability p"? Audit each against the paper's function class (e.g., bounded gradients are false for strongly convex f) [cards S009, p. 2; S032, p. 3]. (→ Method 1)
+2. Check whether the algorithm is classical-plus-minimal-change or a new construction, and whether the novelty is justified. (→ Method 2)
+3. Check the guarantee type (almost sure / expected / high probability), its order against the deterministic method, the hidden constants, and whether it counts iterations, samples or evaluations. (→ Method 3)
+4. Check the geometry handling for model-based methods. (→ Method 4)
+5. Check comparison fairness: same accuracy target, evaluation counts, standard baselines. (→ Method 5)
+
 <a id="workflow-f"></a>
 
 ## Workflow F: Complexity proof scaffold (student mode)
@@ -364,6 +526,15 @@ Published starting settings (from the papers' experiments, not recommendations; 
 5. **Sanity check against the canonical paper.** Fill the playbook's sanity-check table. Compare the ε-order with the deterministic counterpart. Check that every probability is conditional. Check that bad function estimates are controlled. Check that the constants have the same form (e.g., a p/(2p−1) or 2p/(2p−1)² blow-up) as the canonical theorem, after reading the theorem, not the playbook. Zero the noise and probability parameters and check that the deterministic bound returns.
 **🔴 Checkpoint**: stop and bring it to the supervisor (do not polish further) if (a) the ε-order is worse than the deterministic one and you cannot say whether that is intrinsic, (b) the argument needs p → 1 or unconditional independence, or (c) no canonical template or symptom row matches after step 2, which means you may be on new ground and should confirm the setting first. A proof sketch from this workflow is a draft to verify line by line, never a finished theorem (Integrity rule 3).
 **Output**: a one-page proof plan: contract, template used and where it breaks, lemma list with status (done / sketched / open), theorem statement draft, the sanity-check table, and 2–3 questions for the supervisor.
+
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+1. **Oracle contract.** Write I_k and J_k (good-gradient/model and good-function-estimate events), the accuracy form relative to α_k or Δ_k, p conditioned on the past, and the failure mode (bounded error, expected-error bound, or arbitrary corruption). (→ Method 1; playbook §0 M1)
+2. **Map to the closest classical method and canonical template**, by algorithm (Armijo / trust region / ARC / Powell-style interpolation) and oracle class (playbook T0–T15; e.g. exact f → T1/T3, random f → T2/T4/T5, biased/probabilistic → T7/T8, corrupted → T11, model-based DFO → T0/T13). If a framework's hypotheses fit, write the checklist theorem (Heuristic 8); otherwise rerun that paper's deterministic core, mark the first failing inequality, and look it up in the playbook (§0.2). (→ Method 2, Method 3)
+3. **Stochastic-process argument.** Choose expected (renewal-reward, T4; or counting, T3) or high-probability (deterministic counting + concentration on Σ I_k, T7). If the step parameter can collapse, add the lower-bound lemma (T9). (→ Method 3)
+4. **Bound.** State order in ε, guarantee type, complexity measure (iterations / samples / function evaluations), p-dependence, n-dependence (DFO), and the noise-floor neighbourhood.
+5. **Sanity check against the canonical paper** (the playbook's sanity-check table): ε-order against the deterministic counterpart; every probability conditional; bad function estimates controlled; constants of the same form as the canonical theorem (e.g. a p/(2p−1) or 2p/(2p−1)² blow-up), checked in the theorem, not the playbook; the deterministic bound returning when noise and probability parameters are zeroed.
+**🔴 Checkpoint**: stop and bring it to the supervisor (do not polish further) if (a) the ε-order is worse than the deterministic one and you cannot say whether that is intrinsic, (b) the argument needs p → 1 or unconditional independence, or (c) no canonical template or symptom row matches after step 2 (possibly new ground: confirm the setting first). A proof sketch from this workflow is a draft to verify line by line, never a finished theorem (Integrity rule 3).
 
 <a id="workflow-g"></a>
 
@@ -380,6 +551,17 @@ Published starting settings (from the papers' experiments, not recommendations; 
 **🔴 Checkpoint**: if items 1 or 3 cannot be answered, make them the *first* agenda item ("I am not sure what my oracle contract is" is a good meeting question). Do not hide the gap behind experiments. If private feedback from an earlier meeting has not been addressed, list it at the top.
 **Output**: a one-page brief with a one-sentence claim, the oracle contract, the deterministic analogue and change, the bound (or "not yet"), the experiment protocol summary, open issues ranked, and 3 questions to ask. Footer: *"Prepared with a skill distilled from public work. Scheinberg's feedback overrides it."*
 
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+**Input**: the student's draft, result, plot or proof sketch, the meeting's purpose, and any prior feedback in `references/sources/private/feedback/` (if present, read it first: were earlier comments addressed?).
+
+1. **Oracle contract stated?** In one place: what each estimate must satisfy, how often, and what happens when it fails? (→ Method 1)
+2. **Deterministic analogue?** Which classical method, what changed, and why only that? (→ Method 2)
+3. **Complexity order vs deterministic?** ε-order, guarantee type (a.s. / expected / high-probability), measure (iterations / samples / evaluations), p- and n-dependence; flag any gap from the deterministic order. (→ Method 3)
+4. **Equal-evaluation comparisons?** Function or oracle evaluations, the same accuracy target, noise, seeds and budgets, standard baselines (a Powell-family code for DFO)? The papers use Moré–Wild or CUTEst via S2MPJ with data profiles [cards S023, pp. 17–19; S104, pp. 26–30]. *Check the group's current convention with the supervisor; the papers show past practice only.* (→ Method 5)
+5. **Geometry and noise floor.** For model-based work, how is geometry maintained and counted? For noisy work, is the stopping rule above the noise floor? (→ Method 4, Method 1)
+6. **Relation to the group's recent papers.** Which reading-path / playbook item is closest? Does a framework already cover it (→ Heuristic 8)? What is new relative to it, in one sentence?
+
 <a id="workflow-h"></a>
 
 ## Workflow H: Measuring a theorem (tightness and theory-vs-practice probe)
@@ -394,6 +576,16 @@ Published starting settings (from the papers' experiments, not recommendations; 
 6. Write the deviation list: every place the implementation departs from the assumptions, each with its reason [cards S098, p. 24; S104, p. 27; D001, p. 26].
 **🔴 Checkpoint**: if the measured behaviour contradicts the theorem itself, not just its constants, stop and diagnose before writing: either the proof has a gap or the experiment violates an assumption. If the theory cannot explain an observed regime, say so in the paper rather than smoothing it over [card S041, p. 33].
 **Output**: a table of theoretical against measured thresholds and floors, the deviation list, and one remark for the paper interpreting the gap.
+
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+1. Plug textbook parameter values into every probability condition and constant, and print their size [card S012, pp. 20–21]. (→ Method 3)
+2. Compute the theoretical threshold on a toy instance and sweep experiments across it, drawing it on the plot [card S012, pp. 30–32]; if your necessity bound is weak, simulate the extremal instance [card S006, pp. 16–18].
+3. Build an adversarial oracle inside the contract (worst admissible noise, Bernoulli(p) flags on good iterations) and compare its plateau with the theorem's noise floor [card S041, pp. 30–33].
+4. Sweep multiples of each theory-prescribed parameter in a practical code (e.g. r ∈ {0, 1, 2, 4, 8}·ε_f), including the zero ablation [card S041, pp. 33–36]. (→ Method 5)
+5. Pair the upper bound with a construction that attains it or with a lower bound [card S088, Thm 4.6].
+6. Write the deviation list: every place the implementation departs from the assumptions, with its reason [card S104, p. 27].
+**🔴 Checkpoint**: if the measured behaviour contradicts the theorem itself, not just its constants, stop and diagnose before writing (a proof gap or a violated assumption). If the theory cannot explain an observed regime, say so in the paper [card S041, p. 33].
 
 <a id="heuristic-1"></a>
 
@@ -413,17 +605,29 @@ Published starting settings (from the papers' experiments, not recommendations; 
 
 3. **If** evaluations are noisy and you need gradients, **then** choose the estimator, sample count and radius from derived bounds instead of defaulting to Gaussian smoothing. Case: Berahas et al., FoCM 2022 (https://doi.org/10.1007/s10208-021-09513-z) [card S006, pp. 5, 25, 32].
 
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+3. **If** evaluations are noisy and you need gradients, **then** choose the estimator, sample count and radius from derived bounds instead of defaulting to Gaussian smoothing [card S006, pp. 5, 25, 32].
+
 <a id="heuristic-4"></a>
 
 ## Heuristic 4: from expected to high-probability and sample complexity
 
 4. **If** you have an expected-complexity result, **then** push it to a high-probability tail bound, and then lower-bound the step parameter with high probability and convert iterations into total oracle or sample cost. Cases: Blanchet et al. 2019 → Jin–Scheinberg–Xie 2024 (https://doi.org/10.1137/22M1512764) [card D001, p. 3]; Jin–Scheinberg–Xie, Math. Program. 209 (2025) (https://doi.org/10.1007/s10107-024-02078-z) [cards S137, p. 3; S057, pp. 7–13; S093, pp. 17–18].
 
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+4. **If** you have an expected-complexity result, **then** push it to a high-probability tail bound, lower-bound the step parameter, and convert iterations into total sample cost [cards D001, p. 3; S137, p. 3; S057, pp. 7–13].
+
 <a id="heuristic-5"></a>
 
 ## Heuristic 5: bounded noise, biased or inconsistent oracles
 
 5. **If** f is only known up to bounded noise, or oracles may be biased or inconsistent, **then** relax the acceptance test by a noise slack, update the radius or step cautiously, and prove convergence to a stated neighbourhood, not to stationarity. Cases: Berahas–Cao–Scheinberg, SIOPT 31 (2021) (https://doi.org/10.1137/19M1291832) [card S026, pp. 4–5, 15–16]; Cao–Berahas–Scheinberg, Math. Program. 2024 (https://doi.org/10.1007/s10107-023-01999-5) [card S041, pp. 11–12]; a zero slack performs badly [card D001, p. 26].
+
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+5. **If** f is only known up to bounded noise, or oracles may be biased or inconsistent, **then** relax the acceptance test by a noise slack (a zero slack performs badly), update the step cautiously, and prove convergence to a stated neighbourhood [cards S026, pp. 4–5, 15–16; S041, pp. 11–12; D001, p. 26].
 
 <a id="heuristic-6"></a>
 
@@ -444,12 +648,20 @@ Published starting settings (from the papers' experiments, not recommendations; 
 8. **If** you are about to prove complexity for a new variant, **then** first check whether a published framework's hypotheses already cover it and, if so, write a hypothesis-checklist theorem that imports the bound unchanged; if you have proved one algorithm, extract the properties the proof used as axioms on an abstract model class or process, so later variants cost a checklist. Cases: the fully linear class proved once and instantiated for interpolation and regression [card S007, pp. 7–13]; one process theorem instantiated for four settings [card S014, pp. 8, 13, 16–26]; axioms (i)–(v) glossed one per line and imported by stochastic cubic regularization, with the stopping time shifted by one [cards D001, p. 7; S093, p. 10]. (A heuristic, not a core method: the reuse is inside her own group, so exclusivity is not shown; 08 §4.)
 - **(k01)** Weak, title-level support: the 2009 book states the trust-region framework and its conditions on the models (§§10.1–10.2) before the concrete methods that satisfy them (Ch. 11: the "DFO" approach, Powell's methods, wedge methods) [card B001, p. 3]. Co-authored; no promotion.
 
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+8. **If** you are about to prove complexity for a new variant, **then** first check whether a published framework's hypotheses cover it and import its bound by a checklist theorem; after one proof, extract the properties it used as axioms [cards S007, pp. 7–13; D001, p. 7; S093, p. 10]. A heuristic, not a method: the reuse is inside her group (08 §4).
+
 <a id="heuristic-9"></a>
 
 ## Heuristic 9: measure every threshold and constant
 
 9. **If** your theorem has a threshold or constant (minimum success probability, noise floor, sample count), **then** compute it on a toy instance, run experiments across it (including an adversarial oracle that stays inside the contract), list every place the implementation departs from the assumptions, and pair the upper bound with a construction that attains it or with a lower bound. Cases: theory needs (1 − σ) > 0.999 at n = 10, yet 100% of runs succeed at 0.998 [card S012, pp. 30–32]; adversarial oracle plateaus compared with the noise floor [card S041, pp. 30–33]; a weak necessity bound followed by a 10,000-run simulation [card S006, pp. 16–18]; a Sherman–Morrison family shows the poisedness dependence is tight [card S088, Thm 4.6]. (→ Workflow H)
 - **(k01)** ⚠ Variant: the 2009 book computes Λ on toy sample sets and prints it in figure captions, which made the numbers checkable; the 2015 errata correct them (294, 5324, 492624) and replace a sentence that reconciled two values by a scaling argument with the corrected number [card B002, pp. 2–3]. Illustrations of Λ-poisedness, not tests of a theorem's threshold.
+
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+9. **If** your theorem has a threshold or constant, **then** compute it on a toy instance, test across it (adversarial oracle included), list the deviations, and pair the bound with an attaining construction or a lower bound (→ Workflow H) [cards S012, pp. 30–32; S041, pp. 30–33; S088, Thm 4.6].
 
 <a id="heuristic-10"></a>
 
@@ -463,6 +675,11 @@ Published starting settings (from the papers' experiments, not recommendations; 
 
 Three anatomies are kept here; BSV 2014, FoCM 2022 and the 2026 Powell-style paper are in `references/research/01-publications.md` (section "Signature work anatomies moved from SKILL.md").
 
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+Full rows: `references/research/09-evidence-ledger.md#signature-storm`, `#signature-self-correcting-geometry`, `#signature-adaptive-step-search`; BSV 2014, FoCM 2022 and the 2026 Powell-style paper: `references/research/01-publications.md`.
+
+<a id="anatomy-storm"></a>
 <a id="signature-storm"></a>
 
 ## Signature work: Stochastic optimization using a trust-region method and random models (Mathematical Programming 2018, DOI 10.1007/s10107-017-1141-8) [card S012, read in full, arXiv v2]
@@ -477,6 +694,18 @@ Three anatomies are kept here; BSV 2014, FoCM 2022 and the 2026 Powell-style pap
 | Reception | Became a named algorithm (STORM). Complexity followed in Blanchet et al. 2019, which also drops the restrictive η₂ ≥ κ_ef [card S013, pp. 12, 19]; total sample complexity O(σ_g² ε^{-4} log(1/ε)) gradient samples [card S057, p. 16]. ProxSTORM (arXiv:2510.03187), Scheinberg's own paper with R. J. Baraldi, A. Javeed and D. P. Kouri (Sandia), extends STORM to f + φ, recovers STORM when φ ≡ 0, and shows that only function differences need estimating, O(Δ^{-2}) samples under common random numbers [card S098, pp. 1–3, 7, 9, 23] (an earlier version called it third-party; Corrections log C11). |
 | Methods shown | Method 1, Method 2, Method 3, Method 5 (benchmark protocol) |
 
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+| Dimension | Content |
+|---|---|
+| Origin | Stated: BSV assumed "that the function values at the current iterate and the trial point can be computed exactly" (p. 8); dropping that came next. |
+| Why then | DFO was built for deterministic functions though noise matters most; SG methods are slow and parameter-dependent (pp. 1–2). |
+| Key insight | Models **and** function estimates accurate "with high enough, but fixed, probability", accuracy tied to the radius, failures arbitrary (pp. 3, 8–9). |
+| Minimal evidence | Almost-sure ΣΔ_k² < ∞ via Φ_k = νf + (1 − ν)Δ_k² (pp. 14–19); 53 CUTEr problems; 100% success at α ≈ 0.27, far below theory (pp. 27–32). |
+| Abandoned paths | The η₂ restriction is not used in the experiments (p. 21); about 1/δ_k sampling instead of 1/δ_k⁴, "after testing various other rates" (pp. 28, 30). |
+| Reception | STORM; complexity [card S013, pp. 12, 19]; sample complexity [card S057, p. 16]; her own ProxSTORM for f + φ [card S098, pp. 1–3]. |
+
+<a id="anatomy-self-correcting-geometry"></a>
 <a id="signature-self-correcting-geometry"></a>
 
 ## Signature work: Self-correcting geometry in model-based algorithms for derivative-free unconstrained optimization (SIAM J. Optim. 20, 2010, DOI 10.1137/090748536) and the Optima 79 essay (May 2009) [cards S030 and S143, both read in full]
@@ -491,6 +720,17 @@ Three anatomies are kept here; BSV 2014, FoCM 2022 and the 2026 Powell-style pap
 | Reception | Its counterexample became the standard citation for "geometry cannot be totally ignored" in the 2017 survey chapter [card S046, pp. 3–4]. Self-correction returned as a step of the 2026 Powell-style method, now with complexity [card S104, pp. 10, 12]. |
 | Methods shown | Method 4, Method 2; Heuristic 8 (algorithm written against the fully linear class [card S143, p. 3]) |
 
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+| Dimension | Content |
+|---|---|
+| Origin | An anomaly: ignoring geometry "may in fact perform quite well in practice" [card S030, p. 4]; "So do we need to be concerned about the geometry of sample sets or not?" [card S143, p. 4]. |
+| Why then | Practical codes (NEWUOA, DFO) computed model-improvement steps without knowing how necessary they were [card S143, p. 3]. |
+| Key insight | Necessity first (2-D examples where ignoring geometry fails [card S030, pp. 8–11]), then self-correction by the rejected trial point at no extra evaluation (pp. 14–15); geometry work only in the criticality step (p. 12). |
+| Minimal evidence | liminf ‖∇f(x_k)‖ = 0 (Thm 5.8, pp. 17–18); no numerics, the aim being "to advance the understanding of the role of geometry in model based DFO methods, rather than to suggest a new practical optimization scheme." (p. 4). |
+| Abandoned paths | Stated future work: second order, unbounded Hessians, convex constraints, noisy objectives (p. 18). |
+
+<a id="anatomy-adaptive-step-search"></a>
 <a id="signature-adaptive-step-search"></a>
 
 ## Signature work: High probability complexity bounds for adaptive step search based on stochastic oracles (SIAM J. Optim. 34, 2024, DOI 10.1137/22M1512764; NeurIPS 2021 conference version) [card D001, read in full, arXiv v5]
@@ -504,6 +744,16 @@ Three anatomies are kept here; BSV 2014, FoCM 2022 and the 2026 Powell-style pap
 | Abandoned paths | Stated: the step-size cap and the NeurIPS version's independence assumption on function-estimate errors are removed (pp. 3–4); practical variants with adaptive mini-batches and the choice of γ and ε′_f are left open (p. 26). |
 | Reception | Its axioms (i)–(v) are imported unchanged by stochastic cubic regularization [card S093, p. 10]; the trust-region counterpart takes its counting idea [card S041, p. 3]; the unreliable-inputs framework generalises it to p < 1/2 and heavy tails and recovers it as a special case [card S083, p. 22]. |
 | Methods shown | Method 1, Method 2, Method 3; Heuristic 8 |
+
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+| Dimension | Content |
+|---|---|
+| Origin | Stated: the limits of the group's own step-search analyses (expected complexity only, a step-size cap, exact or bounded zeroth-order oracles, O(L³)) (pp. 2–3). |
+| Why then | ML oracles are mini-batches of capped size (p. 2); SGD with Armijo needs per-sample smoothness (pp. 3–4). |
+| Key insight | Same Berahas–Cao–Scheinberg algorithm, novelty in the oracles (pp. 1, 4): "The engine of the analysis is a key lemma showing that if the stopping time has not been reached and a large enough number of iterations are true, then there must be a large number of good iterations." (p. 8). |
+| Minimal evidence | Tail bounds for nonconvex, convex and PL functions (pp. 15–23); O(L) instead of O(L³) (p. 17); 64 PMLB datasets, three networks, split outcomes reported (pp. 26–28). |
+| Abandoned paths | Step-size cap and the NeurIPS independence assumption removed (pp. 3–4); adaptive mini-batches left open (p. 26). |
 
 <a id="anti-patterns"></a>
 
@@ -522,6 +772,24 @@ Three anatomies are kept here; BSV 2014, FoCM 2022 and the 2026 Powell-style pap
 | New algorithm when a reanalysis would do | Classical methods kept across 2014–2026 papers | Rerun the classical proof and repair only the failing step (Method 2) |
 | Re-proving every variant from scratch | Published frameworks are imported by checklist [cards S093, p. 10; S015, pp. 7–8; S098, pp. 19–20] | Check the axioms of an existing framework first (Heuristic 8) |
 | A threshold or constant that nobody computed or tested | The group plugs in textbook constants and sweeps across thresholds [cards S012, pp. 20–21, 30–32; S041, pp. 30–33] | Workflow H |
+
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+Why: the matching Warning sign (Research Taste), or the cards in the row; sources per row: `references/research/09-evidence-ledger.md#anti-patterns`.
+
+| Anti-pattern | Do instead |
+|---|---|
+| Tuned step-size schedule for a noisy black box | Adaptive step search or trust region under an oracle contract (Methods 1–2) |
+| Assuming unbiased estimates from a biased estimator | Contract with a bias term and a neighbourhood result; fresh estimates, no averaging of biased failures (Method 1) |
+| Gaussian smoothing "because ML uses it" | Derive N and σ per estimator and compare evaluation counts (Method 5) |
+| Sample sizes set from the true gradient norm or the target ε | Guess-and-increase sampling in knowable quantities (Method 1 step 2) |
+| Dropping geometry safeguards without an argument | Confine or randomize them (Method 4) |
+| Claiming practicality from almost-sure convergence only | Tail bound on iteration complexity (Method 3) |
+| Reporting an iteration bound as the cost of the method | Lower-bound the step parameter and state sample complexity (Heuristic 4) |
+| Scalar black-box modelling of a residual vector | Model the components (Method 6) [card S023, pp. 2, 5, 16–17] |
+| New algorithm when a reanalysis would do | Rerun the classical proof and repair only the failing step (Method 2) [cards S018, p. 8; S026, pp. 4–5] |
+| Re-proving every variant from scratch | Check the axioms of an existing framework first (Heuristic 8) [cards S093, p. 10; S015, pp. 7–8] |
+| A threshold or constant that nobody computed or tested | Workflow H |
 
 <a id="research-trajectory"></a>
 
@@ -543,6 +811,21 @@ Recognition: Lagrange Prize in Continuous Optimization 2015 (with Conn and Vicen
 
 **(k01)** The book's afterlife and reception (not a Latest item; no new edition is in the material read): a two-page addendum deriving Theorem 4.13 (27 Jan 2011) [card B004, p. 1]; errata for the first printing (18 items) and the second printing (3 items), both dated 17 May 2015, so a second printing exists (its date is not stated) [cards B002, p. 1; B003, p. 1]. Reviews: J. L. Nazareth, *Mathematics of Computation* 79(271), July 2010 [card B005, pp. 1–3]; D. Orban, *SIAM Review* 53(2), 2011, Book Reviews pp. 395–396 [card B006, pp. 1–2] (✗ earlier listed as 2010; corrected from the authors' book page, 08 §13.6 item 10). A third review (MAA Reviews, 24 June 2009) is listed on the authors' book page but was not read. Details: [Book material](#book-material).
 
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+*Research Trajectory, prose after the table:*
+
+Full-text view: `references/research/06-trajectory.md` §9–13, `references/research/08-deep-reading-synthesis.md` §8–9, `references/research/09-evidence-ledger.md#research-trajectory`. One senior partner per era (Conn–Toint, Conn–Vicente, Goldfarb), then a student or postdoc per line from about 2012; sole-authored work is rare [cards S022; S143; S044]. Author order is not evidence of who led.
+
+Recognition: Lagrange Prize 2015 (with Conn and Vicente, IDFO book); Farkas Prize 2019; SIAM Fellow 2025; INFORMS Fellow; ICM 2026 section lecturer (secondary source); past Editor-in-Chief of *Mathematics of Operations Research*.
+
+Reception of the IDFO book (reviewers' voice): D. Orban (*SIAM Review* 2011) expected it to become "the de facto authoritative text" and valued that it teaches the methods' limitations; J. L. Nazareth (*Math. Comp.* 2010) praised it but noted few numerics, no implementation detail and no adequate treatment of the DFO–nonsmooth intersection [cards B006, p. 1; B005, p. 3]. Companion sheets: a 2011 addendum and 2015 errata for two printings [cards B002–B004].
+
+*Latest:*
+
+- **2025–2026**: Powell-style DFO with complexity guarantees (arXiv:2609.09441) [card S104]; model-based DFO complexity [card S088]; unreliable inputs [card S083]; comparison oracles [card S087]; ProxSTORM [card S098]; stochastic cubic regularization in *INFORMS J. Optim.* [card S093]; ICM 2026 section lecture. Third party, same question: Cartis & Roberts (arXiv:2608.17307).
+- Direction: probabilistic and complexity tools applied to Powell's interpolation methods; a wider oracle model. Thesis candidates: `references/open-problems.md`; full list: `references/research/09-evidence-ledger.md#research-trajectory`.
+
 <a id="academic-lineage"></a>
 
 ## Academic lineage
@@ -556,6 +839,12 @@ Recognition: Lagrange Prize in Continuous Optimization 2015 (with Conn and Vicen
 - **Other junior co-authors** (relation not confirmed): H. Zhang, A. S. Bandeira, B. Jin, L. M. Nguyen, T. H. Tran, Z. Xiong, S. Sun. Author order in this group is often alphabetical, so do not read it as a statement of who led.
 - **Community**: MOS Chair (from July 2025); co-editor of Mathematical Programming; past EiC of Mathematics of Operations Research and of the SIAM-MOS book series; past chair of SIAG/OPT; co-editor of Optima (with A. Caprara, under editor A. Lodi, in 2009) [card S143, p. 10].
 
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+- **Peer collaborators on theory**: C. Cartis, J. Blanchet, K. Choromanski, D. Goldfarb, S. Ma, F. E. Curtis [cards S047; S031]; R. J. Baraldi, A. Javeed and D. P. Kouri (Sandia) [card S098].
+- **PhD students and postdocs (verified)**: R. Chen, X. Tang, M. Menickelly, L. Cao (Lehigh PhDs); M. Xie (Cornell PhD); postdocs C. Paquette, A. S. Berahas (Lehigh) and A. Chaudhry (Georgia Tech). Details: `references/research/04-mentorship.md`.
+- **Community**: MOS Chair (from July 2025); co-editor of Mathematical Programming; past EiC of Mathematics of Operations Research; co-editor of Optima in 2009 [card S143, p. 10]. Full lineage: `references/research/09-evidence-ledger.md#academic-lineage`.
+
 <a id="inner-tensions"></a>
 
 ## Inner tensions
@@ -566,6 +855,14 @@ Recognition: Lagrange Prize in Continuous Optimization 2015 (with Conn and Vicen
 - **Tension between elegant assumptions and checkable assumptions.** Fixed-probability oracle contracts (Method 1) give clean deterministic-order theorems, but p is rarely known, and the assumptions have been weakened step by step (unbiased → biased → corrupted or heavy-tailed, 2018 → 2025). The papers say so themselves [cards S012, p. 3; S098, p. 16], and the 2025 framework turns the threshold into a design parameter (p > 1/(m+1)) and replaces p by a conservative lower bound [card S083, pp. 15, 22].
 - **Tension between deterministic safeguards and randomization.** In 2010, geometry steps "cannot be completely eliminated". From 2014 on, randomness (random models, random subspaces) replaces much of the deterministic geometry work. The lens holds both positions, depending on whether the guarantee needed is deterministic or probabilistic; in the 2025 subspace method the geometry iterations are kept free of randomness so they can be counted deterministically [card S088, p. 18].
 - **Tension between theory-prescribed and practice-chosen parameters.** The theorems fix parameters from worst-case constants, while the implementations deliberately depart from them and say so: 1/δ_k instead of 1/δ_k⁴ sampling and no η₂ test [card S012, pp. 21, 28]; Λ = 1000, a tiny η₂ and a huge Hessian bound [card S104, p. 27]; a fixed mini-batch whose oracle properties are not checked [card D001, p. 26]. The lens resolves it by disclosure (deviation lists, Heuristic 9), not by closing the gap.
+
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+- **Tension between guarantee-first and Powell's practice-first tradition.** The lens prizes worst-case guarantees, yet its latest work (arXiv:2609.09441) shows Powell-style geometry handling, trusted *before* any guarantee, is complexity-competitive; one paper refutes the geometry-free guarantee and explains its practical success on the same page [cards S030, pp. 4, 18; S143, pp. 4–5]. A 2010 reviewer (J. L. Nazareth) already placed the co-authored book on the theory side, not the "algorithmic engineering" side [card B005, p. 3].
+- **Tension between classical conservatism and the ML bridge.** ML problems, but line search and trust region as the core; no momentum (arXiv:2604.15526 is another group's) and acceleration a gap (open-problems.md row 5); the 2017–2022 estimator papers used tuned or prescribed steps [cards S002; S009; S055], against the 2020 overview [card S047, pp. 1–2].
+- **Tension between elegant assumptions and checkable assumptions.** Fixed-probability contracts give clean theorems, but p is rarely known [cards S012, p. 3; S098, p. 16]; assumptions weakened from unbiased to biased to corrupted or heavy-tailed (2018 → 2025), and the threshold became a design parameter [card S083, pp. 15, 22].
+- **Tension between deterministic safeguards and randomization.** Geometry steps "cannot be completely eliminated" (2010), yet randomness replaces much of that work from 2014; the 2025 subspace method keeps geometry iterations deterministic to count them [card S088, p. 18].
+- **Tension between theory-prescribed and practice-chosen parameters.** Implementations depart from worst-case parameters and say so [cards S012, pp. 21, 28; S104, p. 27; D001, p. 26]; the lens resolves this by disclosure (Heuristic 9), not by closing the gap.
 
 <a id="mentor-voice"></a>
 
@@ -585,6 +882,12 @@ Constructed from the framing of Scheinberg's paper abstracts and talk abstracts,
   - "Is there already a framework whose hypotheses your method satisfies?"
   - "Where is your assumption stronger than the prior paper's, and did you say so?"
 - Avoid: praise with no content, and claims about Scheinberg's personal opinions on specific people or papers.
+
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+Constructed from the framing of Scheinberg's paper and talk abstracts and the full texts of her papers. Recorded talks exist (YouTube: NeurIPS 2022 OPT plenary, MICDE seminar, 2025 Aisenstadt lectures), but **no transcript was read**: a style guide, not a quotation. In student mode, the student's own notes of real feedback (`references/sources/private/feedback/`, if present) replace this section.
+
+- Recurring questions (derived from paper and talk framing, not quoted; the Taste quick-check items and `references/research/09-evidence-ledger.md#mentor-voice` add more):
 
 <a id="book-material"></a>
 
@@ -636,6 +939,95 @@ Each entry quotes the wording that the full texts or the 2026-09-27 review corre
 - **C13** ✗ Blind spots, "nonsmooth and discontinuous objectives; … integer or categorical variables" → black-box nonsmooth and integer DFO only [cards S098, pp. 2–4; S017, pp. 7–16].
 - **C14** ✗ "Feedback style: diagnostic questions first …"; "Scheinberg wants … / accepts … / Scheinberg's default for noisy problems …"; "Scheinberg is merging the two arcs" → rephrased as statements about the papers; no feedback or statement of intent was read.
 - **C15** ✗ Method 7, "Prove it once for an abstract object, then instantiate by checklist" (added in the full-text pass) → Heuristic 8; exclusivity not shown [08 §4].
+
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+Earlier wording, verbatim: `references/research/09-evidence-ledger.md#corrections`; details: `references/research/08-deep-reading-synthesis.md` §3, §10, §12.
+- **C1** ✗ Taste mark 4 as general → algorithm and software papers only [card S030, p. 4].
+- **C2** ✗ Taste mark 3, Method 2 as general → the adaptive / DFO line [cards S002, pp. 2–3; S009, pp. 3, 5].
+- **C3** ✗ Method 1 step 5, one 1/2-type threshold → thresholds differ by paper; a first correction's "only model failures may be arbitrary" was wrong for first-order STORM [cards S012, pp. 3, 20–22; S015, p. 16; S013, p. 17].
+- **C4** ✗ Method 3 steps 1–3, one potential (from abstracts) → template (a) only [cards D001, pp. 7–13; S041, pp. 16–21].
+- **C5** ✗ Method 3, Scheinberg–Xie 2023 as a numerical claim → an order claim [cards S061, p. 3; S093, p. 3].
+
+- **C8** ✗ Method 4, position held for 17 years → dates from 2009–2010 [card S016, p. 18].
+- **C9** ✗ Method 6, no explicit statement → co-authored statements [card S004, p. 17].
+- **C10** ✗ Old Heuristic 4, "final stage" → the criticality step (now Heuristic 2) [card S030, p. 3].
+- **C11** ✗ ProxSTORM as third-party → her own paper [card S098, p. 1].
+
+- **C13** ✗ Blind spots: all nonsmooth and integer settings → only black-box nonsmooth and integer DFO [cards S098, pp. 2–4; S017, pp. 7–16].
+
+<a id="sources"></a>
+
+## Sources (Appendix): entries moved from SKILL.md
+
+Added 2026-11-20. The source lists of SKILL.md keep authors, venue, year and link for the most-cited works; the full entries (titles included), the works cited only a few times, the talk links and the secondary sources are kept here, verbatim.
+
+**Moved from SKILL.md on 2026-11-20** (verbatim: the SKILL.md wording that the second tightening shortened or removed, in SKILL.md order; SKILL.md keeps the shorter form. A changed numbered list moves whole; other lines already verbatim in this section are not repeated):
+
+*Sources (Appendix), notes:*
+
+Research details are in `references/research/01-publications.md` … `06-trajectory.md`; the full source table is in `references/sources/RESOURCES.md`. Student-mode references: `references/proof-playbook.md`, `references/open-problems.md`, `references/reading-path.md`; transferable techniques: `references/technique-catalog.md`.
+
+**Full-text corpus**: publication list `references/sources/publications/scholar.md` (Google Scholar profile + DBLP + Crossref; `works.json`); full-text index with read status `references/sources/papers/INDEX.md`; paper cards `references/research/07-paper-cards.md` (131 entries, 6 of them on the IDFO book material; batch files in `references/research/cards/`); synthesis applied here `references/research/08-deep-reading-synthesis.md`; **evidence ledger** (the full evidence behind every condensed item of this file) `references/research/09-evidence-ledger.md`.
+
+*Papers (primary):*
+
+- **S004** Conn, Scheinberg, Toint. Recent progress in unconstrained nonlinear optimization without derivatives. Math. Program. 79 (1997). https://doi.org/10.1007/BF02614326
+- **S016** Conn, Scheinberg, Vicente. Geometry of interpolation sets in derivative free optimization. Math. Program. 111 (2008). https://www.mat.uc.pt/~lnv/papers/csv.pdf
+
+- **S030** Scheinberg, Toint. Self-correcting geometry in model-based algorithms for derivative-free unconstrained optimization. SIAM J. Optim. 20 (2010). https://doi.org/10.1137/090748536
+- **S023** Zhang, Conn, Scheinberg. A derivative-free algorithm for least-squares minimization. SIAM J. Optim. 20 (2010). https://www.math.lsu.edu/~hozhang/papers/GlobalDFLS.pdf
+- **S003** Fine, Scheinberg. Efficient SVM training using low-rank kernel representations. JMLR 2 (2001). https://www.researchgate.net/publication/2865065_Efficient_SVM_Training_Using_Low-Rank_Kernel_Representations
+- **S010** Scheinberg, Ma, Goldfarb. Sparse inverse covariance selection via alternating linearization methods. NIPS 23 (2010). https://papers.nips.cc/paper/4099-sparse-inverse-covariance-selection-via-alternating-linearization-methods
+- **S018** Bandeira, Scheinberg, Vicente. Convergence of trust-region methods based on probabilistic models. SIAM J. Optim. 24 (2014). https://arxiv.org/abs/1304.2808
+- **S012** Chen, Menickelly, Scheinberg. Stochastic optimization using a trust-region method and random models. Math. Program. 169 (2018). https://doi.org/10.1007/s10107-017-1141-8
+- **S014** Cartis, Scheinberg. Global convergence rate analysis of unconstrained optimization methods based on probabilistic models. Math. Program. 169 (2018). https://doi.org/10.1007/s10107-017-1137-4
+- **S013** Blanchet, Cartis, Menickelly, Scheinberg. Convergence rate analysis of a stochastic trust-region method via supermartingales. INFORMS J. Optim. 1 (2019). https://ora.ox.ac.uk/objects/uuid:798e9ee8-baa2-4497-b53a-1377c4c2f748
+- **S015** Paquette, Scheinberg. A stochastic line search method with expected complexity analysis. SIAM J. Optim. 30 (2020). https://doi.org/10.1137/18M1216250
+- **S006** Berahas, Cao, Choromanski, Scheinberg. A theoretical and empirical comparison of gradient approximations in derivative-free optimization. FoCM 22 (2022). https://doi.org/10.1007/s10208-021-09513-z
+- **D001** Jin, Scheinberg, Xie. High probability complexity bounds for adaptive step search based on stochastic oracles. SIAM J. Optim. 34 (2024). https://doi.org/10.1137/22M1512764
+- **S041** Cao, Berahas, Scheinberg. First- and second-order high probability complexity bounds for trust-region methods with noisy oracles. Math. Program. 207 (2024). https://doi.org/10.1007/s10107-023-01999-5
+- **S088** Chaudhry, Scheinberg. On complexity of model-based derivative-free methods. arXiv (2025). https://arxiv.org/abs/2510.14935
+- **S083** Scheinberg, Xie. Stochastic adaptive optimization with unreliable inputs. arXiv (2025). https://arxiv.org/abs/2511.19411
+- **S104** Chaudhry, Scheinberg, Sun. Powell-style model-based derivative-free optimization with complexity guarantees. arXiv (2026). https://arxiv.org/abs/2609.09441
+- **S026** Berahas, Cao, Scheinberg. Global convergence rate analysis of a generic line search algorithm with noise. SIAM J. Optim. 31 (2021). https://doi.org/10.1137/19M1291832
+- **S043** Jin, Scheinberg, Xie. High probability complexity bounds for line search based on stochastic oracles. NeurIPS 34 (2021). https://proceedings.neurips.cc/paper/2021/hash/4cb811134b9d39fc3104bd06ce75abad-Abstract.html
+- **S057** Jin, Scheinberg, Xie. Sample complexity analysis for adaptive optimization algorithms with stochastic oracles. Math. Program. 209 (2025). https://doi.org/10.1007/s10107-024-02078-z
+- **S093** Scheinberg, Xie. First- and second-order stochastic adaptive regularization with cubics. arXiv (2023). https://arxiv.org/abs/2308.13161 ; INFORMS J. Optim. (2026), https://doi.org/10.1287/ijoo.2025.0123
+- **S068** Nguyen, Scheinberg, Tran. Stochastic ISTA/FISTA adaptive step search algorithms for convex composite optimization. JOTA 205 (2025). https://doi.org/10.1007/s10957-025-02621-8
+- **D003** Berahas, Cao, Choromanski, Scheinberg. Linear interpolation gives better gradients than Gaussian smoothing in derivative-free optimization. arXiv (2019). https://arxiv.org/abs/1905.13043
+- **S029** Tang, Scheinberg. Practical inexact proximal quasi-Newton method with global complexity analysis. Math. Program. 160 (2016). arXiv:1311.6547
+- **S002** Nguyen, Liu, Scheinberg, Takáč. SARAH. ICML 2017. https://proceedings.mlr.press/v70/nguyen17b.html
+- **S098** Baraldi, Javeed, Kouri, Scheinberg. ProxSTORM — a stochastic trust-region algorithm for nonsmooth optimization. arXiv (2025). https://arxiv.org/abs/2510.03187
+- **S087** Scheinberg, Xiong. Function-free optimization via comparison oracles. arXiv (2026). https://arxiv.org/abs/2604.26867
+
+*Stated methodology (primary):*
+
+- **S143** Scheinberg. Geometry in model-based algorithms for derivative-free unconstrained optimization. Optima 79 (MPS newsletter), May 2009 (title verified in the full text; Nocedal's discussion column follows in the same issue). https://www.mathopt.org/Optima-Issues/optima79.pdf
+- Scheinberg. Stochastic First Order Oracles and Where to Find Them (INFORMS 2021). https://pubsonline.informs.org/do/10.1287/orms.2021.05.48n/full/
+- Scheinberg. Stochastic Oracles and Where to Find Them (NeurIPS 2022 OPT plenary). https://neurips.cc/virtual/2022/55786
+- Scheinberg. Stochastic Oracles and Where to Find Them (lecture, Lehigh, 2025). https://engineering.lehigh.edu/node/172051
+- Distinguished Tutte Lecture, University of Waterloo (2024). https://uwaterloo.ca/combinatorics-and-optimization/events/distinguished-tutte-lecture-katya-scheinberg
+- Scheinberg. Overview of Adaptive Stochastic Optimization Methods (talk abstract). https://orc.mit.edu/events/overview-adaptive-stochastic-optimization-methods ; video https://www.youtube.com/watch?v=OVSnPO3FBxY
+- Scheinberg. Aisenstadt Chair lectures, CRM (2025): Introduction to derivative-free and zeroth order optimization I–II; A study of stochastic and noisy oracles in unconstrained continuous optimization. https://www.youtube.com/watch?v=Szz3J0eBCWk ; https://www.youtube.com/watch?v=5j8LvlbzsJQ ; https://www.youtube.com/watch?v=1zS8v_B1JPM
+- Scheinberg. Using Second-order Information in Training Large-scale Machine Learning Models (SIAM OP17 plenary). https://archive.siam.org/meetings/op17/invited.php
+- **S047** Curtis, Scheinberg. Adaptive stochastic optimization. IEEE Signal Processing Magazine 37(5) (2020). https://ieeexplore.ieee.org/document/9194022/ ; arXiv:2001.06699
+- **S031** Curtis, Scheinberg. Optimization methods for supervised machine learning. INFORMS TutORials (2017). https://doi.org/10.1287/educ.2017.0168
+- **S046** Custódio, Vicente, Scheinberg. Methodologies and software for derivative-free optimization. In *Advances and Trends in Optimization with Engineering Applications*, SIAM (2017). https://doi.org/10.1137/1.9781611974683.ch37
+
+*Others (secondary):*
+
+- Georgia Tech ISyE profile. https://www.isye.gatech.edu/users/katya-scheinberg
+- KAUST speaker bio (awards, editorial roles). https://obd.kaust.edu.sa/speakers/detail/katya-scheinberg
+- Wikipedia entry. https://en.wikipedia.org/wiki/Katya_Scheinberg
+- Cornell ORIE spotlight "Welcome Katya Scheinberg". https://www.orie.cornell.edu/spotlights/welcome-katya-scheinberg
+- Google Research Visiting Researcher page. https://research.google/programs-and-events/visiting-researcher-program/katya-scheinberg/
+- Lab pages listing PhD students (primary for the list): https://coral.ise.lehigh.edu/katyas/students/ ; https://scheinberg.engineering.cornell.edu/students/
+- Theses: R. Chen (Lehigh 2015) https://preserve.lehigh.edu/etd/2548 ; X. Tang (Lehigh) https://preserve.lehigh.edu/etd/2837/ ; M. Menickelly (Lehigh 2017) https://www.genealogy.math.ndsu.nodak.edu/id.php?id=227823
+- Lehigh ISE postdocs article (Paquette, Berahas). https://engineering.lehigh.edu/news/article/postdocs-lehigh-ise-tradition-excellence
+- Prizes: SIAM Fellow 2025 https://www.isye.gatech.edu/news/coca-cola-foundation-chair-katya-scheinberg-selected-2025-class-siam-fellows ; Farkas 2019 https://connect.informs.org/optimizationsociety/prizes/farkas-prize/2019 ; Lagrange 2015 https://www.uc.pt/en/fctuc/dmat/noticias/LagrangePrize
+- ICM 2026 section lecture (Georgia Tech news). https://math.gatech.edu/news/school-mathematics-professor-john-etnyre-speak-icm-2026
+- Related, not Scheinberg's: Moré, Wild (2009) https://doi.org/10.1137/080724083 ; Larson, Menickelly, Wild (2019) https://doi.org/10.1017/S0962492919000060 ; Gratton, Royer, Vicente, Zhang (2018) https://doi.org/10.1093/imanum/drx043 ; Cartis, Roberts (2026) https://arxiv.org/abs/2608.17307 ; Zhang, Liao, Han, Guo (2026) https://arxiv.org/abs/2604.15526
 
 <a id="card-key"></a>
 
