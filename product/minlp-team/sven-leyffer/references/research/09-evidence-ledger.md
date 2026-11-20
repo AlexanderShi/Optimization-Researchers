@@ -1,6 +1,6 @@
 # Sven Leyffer · Evidence ledger
 
-> Date: 2026-11-19 (stage T3.6, first synthesis round). The full evidence behind `SKILL.md`. SKILL.md keeps, per item, the strongest statement and cards, a one-line say–do count, at most four variant/correction bullets and a pointer to the matching section here. Sections have up to three parts: **Full-text evidence** (from the paper cards, copied from `08-deep-reading-synthesis.md`, which is traceable to `cards/`), **Added in T3.6** (what this pass wrote or changed, with card ids) and **Before T3.6 (moved verbatim)** (the SKILL.md item as it stood before this pass, built from web research, so nothing is lost; its `[02 §1.1]`-style citations point to the web-research notes `01-…06-*.md` in this folder). In moved text, heading lines are shown in bold and relative links are rewritten to resolve from this folder; the text is otherwise unchanged.
+> Date: 2026-11-19 (stage T3.6, first synthesis round; stage T3.7, tightening, and its review fixes, the same day). The full evidence behind `SKILL.md`. SKILL.md keeps, per item, the strongest statement and cards, a one-line say–do count, at most four variant/correction bullets and a pointer to the matching section here. A section has some of these parts, in this order: **Full-text evidence** (from the paper cards, copied from `08-deep-reading-synthesis.md`, which is traceable to `cards/`; an anatomy section has **Full rows in SKILL.md after T3.6** instead, the table as it stood after T3.6), **Added in T3.6** (what this pass wrote or changed, with card ids), **Review fixes (T3.6)** (what the T3.6 review changed), **Before T3.6 (moved verbatim)** (the SKILL.md item as it stood before this pass, built from web research, so nothing is lost; its `[02 §1.1]`-style citations point to the web-research notes `01-…06-*.md` in this folder), **Before T3.7 (moved verbatim)** and **Review fixes (T3.7)** (both below). Some sections also hold verbatim copies from 08 under headings that name their source (for example **Promotion table (08 §4)**, **Proposal (08 §5, verbatim)**, **08 §3.2, verbatim**) or card detail (**Further detail from the cards**). Stage T3.7 took SKILL.md from 12,613 to 11,487 words (`wc -w`) and added a part to each section whose SKILL.md lines it shortened or moved: **Before T3.7 (moved verbatim)**, those lines as they stood before the pass, with the context they need (the SKILL.md subsection in bold, the Evidence or Steps label, the table header); unchanged lines are not repeated, and the anatomy rows it shortened are the rows given above them under **Full rows in SKILL.md after T3.6**. Its review then put some of that wording back into SKILL.md (11,652 words after the fixes); **Review fixes (T3.7)** says what came back and why, and the copies under **Before T3.7** stay as they were. In moved text, heading lines are shown in bold and relative links are rewritten to resolve from this folder; the text is otherwise unchanged.
 
 **How to read.** `[S012 p. 9]` is paper card S012 in `07-paper-cards.md`, at the `[[page N]]` page of the file read (as listed in `../sources/papers/INDEX.md`). Many core works were read in a report, preprint or arXiv version, not the journal: a version word (`TR`, `arXiv`, `preprint`) marks some, as the card says; others are mostly unmarked here, notably S001, S003, S009, S015, S048 (reports, preprints) and S031, S065, S119, S126, D001 (arXiv); SKILL.md and the review-fix notes mark S126 and D001 as arXiv [08 §1]. Catalog ids: P, D, V (evaluation protocols, named E before the review fix), W. Abstract-, metadata- and unreadable-level cards are cited by id only. Related texts count once: S020 and S013 are the same NA/210 report text; S129 is the preprint of S037; S067 and D001 are two versions of the PIPA counterexample; H014 is the preprint of S121; S165 extends S160; S162 corrects S096 [08 §1]. Most works are coauthored, and from about 2013 on Leyffer is often a middle or last author, so a practice in a team paper is evidence about the team's record [08 §1, §9]. Quotes are copied from cards that copied them verbatim (`verify_card_quotes.py`: 329 found, 0 not found); where the text extraction dropped letters, a quote either keeps the damage, as the cards do, or restores the letters in brackets (`[c]onvergen[c]e`). Cards that record typos or internal inconsistencies of a work are reading notes and are not used here. Named proof devices, design moves, evaluation protocols and writing moves are in `../technique-catalog.md`.
 
@@ -72,6 +72,23 @@
 4. **Safeguards interfere as little as possible with Newton's method; robustness counts alongside speed.** "the development of global optimization safeguards that interfere as little as possible with Newton's method" (2006) [01 S3]; failures kept in the statistics [03 E10].
 5. **It leaves infrastructure others can extend.** Praise of Fletcher's open QP code (2016) [02 §1.3]; Minotaur and Uno aims [02 §7.2].
 
+### Before T3.7 (moved verbatim)
+
+T3.7 shortened or moved these SKILL.md lines; their wording before that pass follows (unchanged lines are not repeated).
+
+**Marks of good research**
+
+1. **It crosses the integer/continuous divide by integration, not by decomposition along software lines.** "I really like this trick because it sort of goes from the integer side back to the continuous side" (2024, ASR) [02 §1.8]; NA/182 callbacks, FilMINT, MIPDECO [01 S2, S4, S5; S009 p. 10].
+2. **It makes a received "unsafe" or "hopeless" verdict obsolete through careful formulation plus a reliable solver.** MPECs as NLPs [06 Turn E; S020 pp. 1–2]; thermal insulation from black box to smooth MINLP [02 §3.8; S043 pp. 8–9].
+3. **A result is only as good as the guarantee behind it.** "I don't even know what it means if you're converging to a stationary point" (2024, ASR) [02 §1.5]; even robust NLP solvers need "a proof such as the one given in Subsection 5.2 to ascertain the quality of the solutions they produce" [S031 p. 18]. Method 7 gives this judgement steps.
+4. **Safeguards interfere as little as possible with Newton's method; robustness counts alongside speed.** "the development of global optimization safeguards that interfere as little as possible with Newton's method" (2006) [01 S3]; safeguards rarely fire [S001 pp. 23–24]; failures kept in the statistics [03 E10; S001 pp. 18, 21–22].
+5. **It leaves infrastructure others can extend.** Praise of Fletcher's open QP code (2016) [02 §1.3]; Minotaur and Uno [02 §7.2; S119 p. 3].
+6. **It prints its own boundary.** "better heuristics for nonconvex MINLP problems remain an open problem" [S009 p. 11]; an untreated case named [S126 arXiv p. 25].
+
+### Review fixes (T3.7)
+
+- Item 4: his 2006 statement is back before the practice, so the bold title is attributed again: "the development of global optimization safeguards that interfere as little as possible with Newton's method" (2006) [01 S3]. Item 1's 2024 lecture quote stays here only (auto-caption wording, approximate; word budget).
+
 <a id="taste-warnings"></a>
 
 ## Taste: warning signs of bad research
@@ -105,6 +122,33 @@
 - [ ] Will the test set, known values and formulation variants be public and correctable? (no → Method 4)
 - [ ] Does the comparison state its fairness rule, filter bias, date and versions? (no → Method 5)
 - [ ] Is there a convergence guarantee, and does stationarity mean anything for this model? (no → Taste 3)
+
+### Before T3.7 (moved verbatim)
+
+T3.7 shortened or moved these SKILL.md lines; their wording before that pass follows (unchanged lines are not repeated).
+
+**Warning signs of bad research**
+
+1. **Brute force or black boxes where structure could be exposed.** "exascale machine would run longer than age of universe!" (2013) [02 §1.7]; "Snag: Solver looses model insight" (2016) [02 §4.9].
+2. **One good example, or a narrow test class, taken as evidence.** "the following example shattered the hope that filter methods can avoid the Maratos effect in general" [02 §3.4; S019 p. 8; example also in S001 pp. 7–8]; "the test problems are limited to the case where f and g are both linear functions in y" [03 E43].
+3. **A hard-looking problem whose difficulty comes from its formulation.** The IEEE 802.11 "one horrible constraint", taught 2013, 2016, 2018 [02 §1.10]; "I'm just predicting complete garbage" for surrogates outside their training data (2024, ASR) [02 §2.6].
+4. **A stopping point that admits a descent direction (in method design), or success counted by solver status.** Weaker notions "allow first-order descent directions, making them too weak as practical stopping criteria" [S126 arXiv p. 3]; "spurious stationary points" [S069 preprint p. 3; S042 pp. 5–7]. The second half is inferred from practice: competitors graded by certificate, not status [S126 arXiv pp. 34, 40].
+5. **A hand-set parameter that an acceptance test could decide.** "we remove the need for the arbitrary parameters in [2] by interpreting these parameters as a trust-region radius" [S048 p. 3]; penalty parameters as a burden on users [S001 pp. 1–2].
+
+**Taste quick-check**
+
+- [ ] Does the method rely on a restriction from the software rather than the mathematics? (yes → Method 1)
+- [ ] Can you state your base in one sentence, and list its assumptions that may fail here? (no → Method 2)
+- [ ] Have you built the smallest failing example and checked it against the theory's hypotheses? (no → Method 3)
+- [ ] Is there an untried linear or convex reformulation; have you read the log for a CQ failure? (Method 6)
+- [ ] Will the test set, known values and formulation variants be public and correctable? (no → Method 4)
+- [ ] Does the comparison state its fairness rule, filter bias, date and versions? (no → Method 5)
+- [ ] Is there a convergence guarantee, and does stationarity mean anything for this model? (no → Taste 3)
+- [ ] Does termination certify the notion the user needs, and is every competitor graded by it? (no → Method 7)
+
+### Review fixes (T3.7)
+
+- Taste quick-check: each question again says which answer sends the reader to a method (yes → Method 1; no → the others). The fourth question, as T3.7 shortened it, points to Method 6 on "no" for both of its halves, so it carries "no →" as well.
 
 <a id="method-1"></a>
 
@@ -173,6 +217,35 @@ Six methods passed the four Phase 2 checks (recurrence, say–do, executable, ex
 
 **Limitations**: Minotaur and Uno were written mainly by postdocs (Mahajan, Vanaret) [03 E70]; his code share is small. Alone, modify one open solver through its callbacks; do not write a framework. Owning the tree can cost speed: "The performance difference between Minotaur-QG and AOA are significant, even though they utilize the same basic algorithm." (doi:10.1007/s11081-018-9411-8) [05 §2.3].
 
+### Before T3.7 (moved verbatim)
+
+T3.7 shortened or moved these SKILL.md lines; their wording before that pass follows (unchanged lines are not repeated).
+
+**Epigraph (top of SKILL.md)**
+
+> "By using our own solver we are able to remove this unnecessary restriction, widening the scope for early branching." — Leyffer, "Integrating SQP and branch-and-bound for Mixed Integer Nonlinear Programming", Dundee report NA/182 (1998), p. 2 [S009 p. 2]; journal version Comput. Optim. Appl. 18(3) (2001), doi:10.1023/A:1011241421041
+
+**Core Research Methods (section text)**
+
+Seven methods. Methods 1-6 passed the four Phase 2 checks (recurrence, say–do, executable, exclusive) on web research, most exclusive first [02, 03], and were re-tested on the full texts [08 §2-§3]; Method 7 was promoted from them [08 §4]. Say–do counts: distinct cards linking the method (evidence / variant / contradiction). Catalog ids (P, D, E, W): [technique catalog](../technique-catalog.md).
+
+**Method 1: Own the instrument: integrate at the iteration level, strip tooling restrictions, expose building blocks**
+
+**One line**: Many MINLP habits are artefacts of packaged software; control the inner solver, interleave the outer algorithm with its iterations, drop restrictions the mathematics does not need, expose the parts as building blocks.
+
+**Evidence** (full evidence: references/research/09-evidence-ledger.md#method-1):
+- Say–do: ✅ stated + practised, 1993–2026; full texts: 60 cards (47 / 13 / 0).
+
+**Steps**:
+1. List each restriction of the method you want to improve and ask: mathematics or packaged solver? (Borchers and Mitchell's two QPs before branching came from packaged code [S009 pp. 1–2].)
+2. Get control of the inner solver (own code or a modifiable open framework); add a callback after each inner iteration, changing the inner code minimally [S009 p. 10].
+3. Reinterpret what the inner solver already produces as what the outer algorithm needs: SQP linearizations as cuts, hot-started QPs for branching, child bounds from the parent's tableau (D1, D14).
+5. Read the outer proof for its minimal requirements and spend the slack on inexact inner solves [S002 pp. 24, 29; S126 arXiv pp. 29–30] (D17).
+6. Decompose shared machinery into swappable building blocks ("eight building blocks" for Lagrange-Newton methods [02 §3.6]) (D16).
+7. Validate by imitation: rebuild known solvers as presets and compare on the same instances, logs published [03 E05].
+
+**Limitations**: Minotaur and Uno were written mainly by postdocs [03 E70]; alone, modify one open solver through its callbacks. The framework aims at no overhead, not top speed [S032 TR p. 16], and owning the tree can cost speed: "The performance difference between Minotaur-QG and AOA are significant, even though they utilize the same basic algorithm." (doi:10.1007/s11081-018-9411-8) [05 §2.3].
+
 <a id="method-2"></a>
 
 ## Method 2: Base and extension: carry the home NLP toolkit into a new class
@@ -225,6 +298,27 @@ Six methods passed the four Phase 2 checks (recurrence, say–do, executable, ex
 
 **Limitations**: carried-in assumptions break: CQs and exact NLP solves in OA (arXiv:2606.26897) [05 §1.3]; upper-level strict complementarity for MPEC-SQP [05 §4.2]; unique PDE solvability, fixed in the 2026 Correction [05 §5.2]. After 2013 the extensions came through collaborators and laboratory facilities [06 §9.5]; a junior lacks that pull.
 
+### Before T3.7 (moved verbatim)
+
+T3.7 shortened or moved these SKILL.md lines; their wording before that pass follows (unchanged lines are not repeated).
+
+**Method 2: Base and extension: carry the home NLP toolkit into a new class**
+
+**Evidence** (full evidence: references/research/09-evidence-ledger.md#method-2):
+- Stated: his research statement, unchanged December 2008 to September 2026: "I am interested in the development of reliable methods for solving large-scale nonlinear optimization problems and in the implementation and analysis of filter type algorithms." [06 §0]
+- Practice: Fletcher's phase I and exact-penalty machinery carried into MINLP [S003 pp. 4–5, 15–21]; trust regions into integer control in function space [S065 pp. 2, 5–6, 17]; ReLU networks recast as MINLP and MPCC [S064 pp. 14–16, 22–23].
+- Say–do: ✅ stated + practised, 1994–2026; full texts: 128 cards (110 / 19 / 0).
+- Variants/corrections:
+  - ✗ Correction: step 5 is practised, not only inferred: assumptions graded in print, the inner solver's behaviour a numbered assumption [S002 p. 22; S126 arXiv pp. 24–25].
+  - ⚠ What travels is usually an acceptance test that replaces a hand-set parameter, or a trust region on a new space [S048 p. 3; S084 pp. 16–18]; some facility-led papers carry no home toolkit [S160 arXiv pp. 3–5].
+
+**Steps**:
+3. Re-cast the new field's objects into a home class (ReLU networks as MINLP or MPCC; quantum pulses as TV-regularized binary control). Carry an acceptance test or a trust region, not a parameter: a funnel instead of a penalty schedule [S164 p. 4], an ℓ1 ball on binary or integer-valued controls with an ared/pred test [S084 pp. 16–18; S065 pp. 5–6] (D3, D4).
+4. Name the class publicly with its challenges and a starting library ("On-going work: Building library of test problems", MIPDECO) [02 §2.4, §4.5; S112 pp. 1–2].
+5. List the home-theory assumptions you carry in (CQs, exact subproblem solves, strict complementarity, unique PDE solvability), check each, grade them in print and name the untreated case [S002 p. 22; S126 arXiv pp. 24–25].
+
+**Limitations**: carried-in assumptions break: CQs and exact NLP solves in OA (arXiv:2606.26897) [05 §1.3]; upper-level strict complementarity for MPEC-SQP [05 §4.2]; unique PDE solvability, fixed in the 2026 Correction [S162 p. 1]. After 2013 the extensions came through collaborators and facilities [06 §9.5]; a junior lacks that pull.
+
 <a id="method-3"></a>
 
 ## Method 3: Counterexample discipline: smallest breaking example, hypothesis check, run it, redesign
@@ -274,6 +368,19 @@ Six methods passed the four Phase 2 checks (recurrence, say–do, executable, ex
 
 **Limitations**: needs analysable algorithms with explicit hypotheses; harder for heuristic-rich commercial solvers. Era-free. His own 1994 OA statement and early filter proof were corrected by others [05 §1.1].
 
+### Before T3.7 (moved verbatim)
+
+T3.7 shortened or moved these SKILL.md lines; their wording before that pass follows (unchanged lines are not repeated).
+
+**Method 3: Counterexample discipline: smallest breaking example, hypothesis check, run it, redesign**
+
+**Evidence** (full evidence: references/research/09-evidence-ledger.md#method-3):
+- Practice: at least seven hand-computed counterexamples in the thesis, one against his own quadratic OA [S016 pp. 49, 62–66, 69, 93–95]; PIPA broken, run and tabulated [S067 pp. 3–7]; stationarity notions broken on two-variable examples, his own approach included [S042 pp. 5–8].
+- Say–do: ✅ stated + practised, 1993–2026; full texts: 48 cards (39 / 11 / 0).
+
+**Steps**:
+1. Ask whether the evidence for a method rests on a narrow test class ("the test problems are limited to the case where f and g are both linear functions in y") [03 E43].
+
 <a id="method-4"></a>
 
 ## Method 4: The test library as a maintained research instrument
@@ -317,6 +424,16 @@ Six methods passed the four Phase 2 checks (recurrence, say–do, executable, ex
 **Different from standard practice**: maintained for decades with dated corrections, not a by-product of one paper.
 
 **Limitations**: AMPL-era; today contribute instances and corrections to MINLPLib, QPLIB or CUTEst instead of starting a collection. Instances tend to be small [05 §7]. Maintenance needs a stable post.
+
+### Before T3.7 (moved verbatim)
+
+T3.7 shortened or moved these SKILL.md lines; their wording before that pass follows (unchanged lines are not repeated).
+
+**Method 4: The test library as a maintained research instrument**
+
+**Evidence** (full evidence: references/research/09-evidence-ledger.md#method-4):
+- Practice: thesis test problems published with relaxation value and integer optimum [S016 pp. 81, 106–113]; MacMPEC launched with classification, generator and contributor credit [S020 pp. 6–8, 15, 18]; a public generator for the hard case [S126 arXiv pp. 33, 35–36, 41–43].
+- Say–do: ✅ for algorithm test libraries, ⚠ for application models; full texts: 32 cards (24 / 6 / 2).
 
 <a id="method-5"></a>
 
@@ -376,6 +493,21 @@ Six methods passed the four Phase 2 checks (recurrence, say–do, executable, ex
 
 **Limitations**: self-built baselines are expensive against today's commercial solvers; use the same-solver rule and pinned versions. Why the Uno claims were narrowed is undocumented.
 
+### Before T3.7 (moved verbatim)
+
+T3.7 shortened or moved these SKILL.md lines; their wording before that pass follows (unchanged lines are not repeated).
+
+**Method 5: Calibrated claims on self-built, fairness-stated baselines**
+
+**Evidence** (full evidence: references/research/09-evidence-ledger.md#method-5):
+- Say–do: ✅ with recurring, documented gaps; full texts: 103 cards (65 / 42 / 3).
+- Variants/corrections:
+  - ✗ Correction: the thesis rule of thumb has a third row, dated and qualified in step 5 [S016 p. 83].
+  - ⚠ Baselines run as NEOS solvers, apparently at defaults (2002) [S020 pp. 9, 14]; no external baseline in several 2022–2025 integer-control papers [S091 p. 42].
+
+**Steps**:
+5. Conclude with a rule of thumb by class, not a winner: LP/NLP for binary MINLPs, nonlinear B&B for a small integrality gap [03 E47]; the 1993 third row, QP/NLP-based B&B for general-integer problems with a large gap, rests on five self-built codes and 22 problems [S016 pp. 78, 83], and QP/NLP-BB gives no lower bounds: "A detailed numerical comparison of the two approaches is still outstanding." (2001) [S101 p. 7].
+
 <a id="method-6"></a>
 
 ## Method 6: Read the solver's numbers, then fix the formulation before the method
@@ -428,6 +560,24 @@ Six methods passed the four Phase 2 checks (recurrence, say–do, executable, ex
 **Different from standard practice**: the solver log is primary evidence and the formulation the first suspect.
 
 **Limitations**: the least exclusive of the six (Grossmann and Misener also stress formulation); step 3 and the ordering are his. The ordering rests on the 2012-era MILP vs NLP maturity gap [02 §4.1]; re-test it with today's global and conic solvers.
+
+### Before T3.7 (moved verbatim)
+
+T3.7 shortened or moved these SKILL.md lines; their wording before that pass follows (unchanged lines are not repeated).
+
+**Method 6: Read the solver's numbers, then fix the formulation before the method**
+
+**Evidence** (full evidence: references/research/09-evidence-ledger.md#method-6):
+- Say–do: ✅ stated + practised; full texts: 85 cards (77 / 8 / 0).
+- Variants/corrections:
+  - ✗ Correction: the ordering is a default, not a law: a nonconvex form beat the convexified one [S016 pp. 67, 81]; convex big-M and hull forms ran about 100 and 375 times slower than nonconvex forms under nonlinear B&B (one instance, a three-story frame) [S070 preprint p. 20].
+
+**Steps**:
+3. Read the iteration log: slow linear convergence after good progress points to a CQ failure ("the nonlinear optimization for solvers failed because you can show that this formulation here violates a constraint qualification", 2024, ASR) [02 §4.3]; a stalled KKT error warns about surrogates outside their data; exit codes carry diagnoses: "We note also that ifail=5, the trust-region converging to zero, frequently occurs if the gradients are wrong." [S199 p. 14]; ifail=4 flags CQ failure [S199 p. 14]; infeasibility comes back as a local minimizer of the violation [S199 p. 4].
+
+### Review fixes (T3.7)
+
+- Variant bullet: "than nonconvex forms" is back, so the 100 and 375 times compare the convex big-M and hull forms with the nonconvex SOS and equality forms, as in the Full-text evidence above [S070 preprint p. 20].
 
 <a id="method-7"></a>
 
@@ -502,6 +652,32 @@ The skill has six core methods; one promotion keeps it within 3–7. Each cluste
 - Limitations: the LPEC cost is stated both ways: worst case exponential [S126 arXiv p. 15], but on MacMPEC with early termination only LPs were needed, and in Phase I on the synthetic set a single LP always sufficed [S126 arXiv pp. 34–37]; the VaR certificate is one illustrative example and its lower bounding is problem dependent [S031 pp. 13, 18].
 - Different from standard practice: "his papers" became "co-signed papers" [S069 preprint p. 3; S126 arXiv pp. 3, 34].
 
+### Before T3.7 (moved verbatim)
+
+T3.7 shortened or moved these SKILL.md lines; their wording before that pass follows (unchanged lines are not repeated).
+
+**Method 7: Certify the notion you claim: grade every method by it, print what is not certified**
+
+**One line**: Decide which stationarity or optimality notion the user needs, design the method so that its termination certifies that notion, judge every competitor by the same certificate, and say in print what the output does not certify.
+
+**Evidence** (full evidence: references/research/09-evidence-ledger.md#method-7):
+- Stated (co-signed papers): "Weaker stationarity notions exist, but most allow first-order descent directions, making them too weak as practical stopping criteria [46]." [S126 arXiv p. 3]; also [S031 p. 18; S069 preprint p. 3]; on meaningless stationarity, a 2024 lecture (ASR) [02 §1.5].
+- Say–do: ✅ co-signed statements + practised; promoted from the full texts: 25 evidence cards, 1999–2026; 6 variant cards (two also evidence); 1 contradiction (H004). Grading competitors by one certificate rests on one work so far (S126, first author Nurkanović). Exclusivity partial: shared with the LPEC-based MPEC family [S126 arXiv p. 4] and, for global optimality, with global solvers; distinctive here: local stationarity certificates, post-hoc grading, printed non-coverage [08 §4].
+- Variants/corrections:
+  - ✗ Contradiction (his own voice, 2017): "reliable NLP solvers are still the best approach for solving MPECs" despite convergence to spurious stationary points; SLPEC only where they fail [H004 p. 9]: certification governs method design, not every solve.
+
+**Steps**:
+2. Make termination certify it: choose the subproblem whose trivial solution is that notion [S042 p. 10], or the convention that makes the reformulation's KKT points equal it [S022 pp. 9, 12]; let the model choose only the branch and the NLP solver the point [S126 arXiv pp. 4, 11] (D5, D6).
+4. When a local answer matters, build the smallest proof that certifies it, or certify the part you can [S031 pp. 12–15; S099 preprint pp. 12–14] (P16); for an integer control, re-solve the MINLP restricted to a small L1 ball around the returned control and report the relative gap, clipped at the solver tolerance [S065 pp. 23–25] (V7).
+
+**Different from standard practice**: the common alternative stops wherever the solver stops and counts success by solver status (this skill's judgement, not a card finding); co-signed papers argue against it [S069 preprint p. 3; S126 arXiv pp. 3, 34].
+
+**Limitations**: local notions; the LPEC worst case is exponential, though with early termination MacMPEC needed only LPs [S126 arXiv pp. 15, 34–35]; the VaR certificate is shown on one example, with problem-dependent lower bounds [S031 pp. 13, 18]; a priori certificates help only on fine meshes [S096 arXiv p. 32]. No talk or essay states it as a method.
+
+### Review fixes (T3.7)
+
+- Say–do: back in SKILL.md are "first author Nurkanović" and the distinctive part of the method, "local stationarity certificates, post-hoc grading, printed non-coverage" [08 §4]; what it shares with the LPEC-based MPEC family [S126 arXiv p. 4] stays under Review fixes (T3.6) above.
+
 <a id="heuristic-1"></a>
 
 ## Heuristic 1: Ablate from a plain baseline, one feature at a time
@@ -519,6 +695,14 @@ SKILL.md adds the full-text evidence [S015 pp. 9, 12–25] and catalog entry V12
 ### Before T3.6 (moved verbatim)
 
 1. **Ablate from a plain baseline, one feature at a time**, confounders off, code revision recorded. Case: "By turning on each feature individually, we obtain an indication of which MILP techniques have the biggest impact." (FilMINT) [03 E25, E26].
+
+### Before T3.7 (moved verbatim)
+
+T3.7 shortened or moved these SKILL.md lines; their wording before that pass follows (unchanged lines are not repeated).
+
+**Research Heuristics (section text)**
+
+Ten heuristics, the framework's cap; the full texts add a coarse-to-fine clause to Heuristic 8 and a drafting practice to the Stages table [08 §5]. Evidence: ledger `references/research/09-evidence-ledger.md#heuristic-1` to `#heuristic-10`; the two full-text items: `#heuristic-11`, `#heuristic-12`.
 
 <a id="heuristic-2"></a>
 
@@ -538,6 +722,14 @@ Weak full-text evidence only: validate on the univariate case before scaling [S0
 
 2. **Prototype up a ladder of tiny classics** (NLPs → MILPs → simple MINLPs → library), a printed check at each step, deficiencies in the README. Case: 2011 OA example; Uno commits on hs015 and synthes1-3 [03 E32, E34].
 
+### Before T3.7 (moved verbatim)
+
+T3.7 shortened or moved these SKILL.md lines; their wording before that pass follows (unchanged lines are not repeated).
+
+**Research Heuristics, item 2**
+
+2. **Prototype up a ladder of tiny classics** (NLPs → MILPs → simple MINLPs → library), a printed check at each step, deficiencies in the README [03 E32, E34]. Weak in the full texts [S061 p. 10].
+
 <a id="heuristic-3"></a>
 
 ## Heuristic 3: Numbers first, theory second
@@ -555,6 +747,18 @@ SKILL.md adds the full-text evidence [S001 pp. 2, 7, 13] and the extension propo
 ### Before T3.6 (moved verbatim)
 
 3. **Numbers first, theory second** when an unmodified method already solves most problems: find the globalization that lets it take the full step more often, then prove it [02 §3.2]. Contested: MPEC theory before numbers; conDFO proof before prototype [06 C12; 03 E73].
+
+### Before T3.7 (moved verbatim)
+
+T3.7 shortened or moved these SKILL.md lines; their wording before that pass follows (unchanged lines are not repeated).
+
+**Research Heuristics, item 3**
+
+3. **Numbers first, theory second** when an unmodified method already solves most problems: find the globalization that lets it take the full step more often, prove it, then strip what the proof did not use [02 §3.2; S001 pp. 2, 7, 13, 15]. Contested: MPEC theory, conDFO, the bundle filter and FASTr came theory first [06 C12; 03 E73; S026 pp. 1–15; S108 p. 12].
+
+### Review fixes (T3.7)
+
+- The contested side names its theory-first lines again (MPEC theory, conDFO, the bundle filter, FASTr) and cites [03 E73]; the card refs stay at three [S001; S026; S108].
 
 <a id="heuristic-4"></a>
 
@@ -574,6 +778,18 @@ Full-text evidence [S016 p. 16; S010 p. 1; S069 preprint p. 3; S143 pp. 4–5].
 
 4. **A subproblem your method creates can be the next line.** "The introduction of MIQP master programs in Chapter 5 caused me to become interested in MIQP problems" (1993) → SIAM J. Optim. 1998, doi:10.1137/S1052623494268455 [06 Turn B].
 
+### Before T3.7 (moved verbatim)
+
+T3.7 shortened or moved these SKILL.md lines; their wording before that pass follows (unchanged lines are not repeated).
+
+**Research Heuristics, item 4**
+
+4. **A subproblem your method creates can be the next line.** "The introduction of MIQP master programs in Chapter 5 caused me to become interested in MIQP problems" (1993) → doi:10.1137/S1052623494268455 [06 Turn B; S016 p. 16]; LPCCs from the MPEC filter [S069 preprint p. 3].
+
+### Review fixes (T3.7)
+
+- The 1993 thesis sentence is quoted again in place of the T3.7 paraphrase (the thesis's MIQP masters led to MIQP branch-and-bound) [06 Turn B; S016 p. 16].
+
 <a id="heuristic-5"></a>
 
 ## Heuristic 5: Transfer and combine proofs; state novelty as the gap a known area leaves
@@ -591,6 +807,14 @@ Sharpened (08 §2): put the change where the analysed invariant survives [S003 p
 ### Before T3.6 (moved verbatim)
 
 5. **Transfer and combine proofs; state novelty as the gap a known area leaves.** "Transfer as much of the proofs from the DFO paper and the filter paper." (2026) [02 §3.7].
+
+### Before T3.7 (moved verbatim)
+
+T3.7 shortened or moved these SKILL.md lines; their wording before that pass follows (unchanged lines are not repeated).
+
+**Research Heuristics, item 5**
+
+5. **Transfer and combine proofs; state novelty as the gap a known area leaves.** "Transfer as much of the proofs from the DFO paper and the filter paper." (2026) [02 §3.7]; put the change where the analysed invariant survives [S003 p. 14; S009 p. 7] (P4).
 
 <a id="heuristic-6"></a>
 
@@ -610,6 +834,14 @@ No card evidence (outside the carded works). SKILL.md shortened the agent-writte
 
 6. **(2026, era-bound) Write the brief yourself; let agents draft and attack.** Purpose, two key references, novelty, numbered choices, proof outline; dated logbook and status file; "single-agent findings were treated as claims to verify, not facts." (agent-written) [03 E71, E72].
 
+### Before T3.7 (moved verbatim)
+
+T3.7 shortened or moved these SKILL.md lines; their wording before that pass follows (unchanged lines are not repeated).
+
+**Research Heuristics, item 6**
+
+6. **(2026, era-bound) Write the brief yourself; let agents draft and attack.** Purpose, two key references, novelty, numbered choices, proof outline; dated logbook; agent findings treated as claims to verify [03 E71, E72]. No carded work bears on it.
+
 <a id="heuristic-7"></a>
 
 ## Heuristic 7: Let the downstream use choose the upstream research
@@ -627,6 +859,14 @@ Full-text evidence [S039 p. 5; S077 p. 2; S108 p. 4; S110 pp. 2, 7; S049 pp. 4�
 ### Before T3.6 (moved verbatim)
 
 7. **Let the downstream use choose the upstream research.** Ask what the B&B tree needs from the inner solver (warm starts, infeasibility detection) [02 §2.2]. Premise contested by Bonami et al. 2005 [05 §2.1].
+
+### Before T3.7 (moved verbatim)
+
+T3.7 shortened or moved these SKILL.md lines; their wording before that pass follows (unchanged lines are not repeated).
+
+**Research Heuristics, item 7**
+
+7. **Let the downstream use choose the upstream research**: what the B&B tree needs from the inner solver (warm starts, infeasibility detection) [02 §2.2; S077 p. 2; S110 pp. 2, 7]. Premise contested by Bonami et al. 2005 [05 §2.1].
 
 <a id="heuristic-8"></a>
 
@@ -650,6 +890,18 @@ Full-text evidence [S096 arXiv pp. 7–8, 29, 32; S091 p. 42; S065 pp. 2, 22; S1
 
 8. **Do the brute-force arithmetic first.** If it exceeds the age of the universe, do analysis (function space first, discretize second) [02 §1.7]; Bonmin and Minotaur fail on 256 × 128 meshes (2019) [05 §2.4].
 
+### Before T3.7 (moved verbatim)
+
+T3.7 shortened or moved these SKILL.md lines; their wording before that pass follows (unchanged lines are not repeated).
+
+**Research Heuristics, item 8**
+
+8. **Do the brute-force arithmetic first.** If it exceeds the age of the universe, analyse (function space first) [02 §1.7; S096 arXiv pp. 7–8, 29]; Bonmin and Minotaur fail on 256 × 128 meshes [05 §2.4]. The 2015 MIPDECO abstract discretizes first [S112 pp. 1–2]. Team papers led by others add a coarse-to-fine clause: keep the model separate from its discretization, relax on a coarse grid, round or warm-start on finer ones, report mesh dependence [S116 p. 5; S145 arXiv pp. 11, 16; S150 pp. 21–23] (D12); that is the team's record, not his stated rule (function space first), so say–do ⚠ [08 §5]; not exclusive.
+
+### Review fixes (T3.7)
+
+- The variant from a Leyffer-coauthored text is back in SKILL.md: the 2015 MIPDECO abstract discretizes first [S112 pp. 1–2]. The coarse-to-fine clause keeps both of its cards, because they support different halves: relax coarse and round finer [S145 arXiv pp. 11, 16], warm-start finer and report the falling iteration count [S150 pp. 21–23]. Heuristic 8 therefore carries four card refs, one more than T3.7 allowed per heuristic. The clause "keep the model separate from its discretization" [S116 p. 5] and the remark "not exclusive" remain in the Before T3.7 copy above and in `#heuristic-11`.
+
 <a id="heuristic-9"></a>
 
 ## Heuristic 9: When corrected, credit the corrector and change method rather than argue
@@ -667,6 +919,14 @@ Full-text evidence [H004 pp. 4–5; S002 p. 32; S089 p. 10]; the 2026 Correction
 ### Before T3.6 (moved verbatim)
 
 9. **When corrected, credit the corrector and change method rather than argue.** "Later, Bonami et al. corrected our convergence proof" (2017) [02 §5.3]; the Acta survey adopts both corrections [05 §1.1, §1.2].
+
+### Before T3.7 (moved verbatim)
+
+T3.7 shortened or moved these SKILL.md lines; their wording before that pass follows (unchanged lines are not repeated).
+
+**Research Heuristics, item 9**
+
+9. **When corrected, credit the corrector and change method rather than argue.** "Later, Bonami et al. corrected our convergence proof" (2017) [02 §5.3; H004 pp. 4–5; S002 p. 32]; the 2026 Correction names no corrector [S162 pp. 1–2].
 
 <a id="heuristic-10"></a>
 
@@ -854,6 +1114,63 @@ Reasons, for the last row of Research Task Routing:
 | Refereeing | No public reviews; no OpenReview profile [03 Gaps] |
 | Leaving a line | Every exit is silent; "When to stop a line of work: no statement found." [02 §2.7] |
 
+### Before T3.7 (moved verbatim)
+
+T3.7 shortened or moved these SKILL.md lines; their wording before that pass follows (unchanged lines are not repeated).
+
+**Workflow A: Problem choice**
+
+**Input**: your base competence; a candidate class; any collaborator or facility bringing it.
+
+**Steps**:
+2. Does the field's verdict ("unsafe", "hopeless") rest on formulation or tooling, not mathematics? List the pathologies it rests on; test which are harmless [S057 p. 15] (→ Taste 2, Method 6; W4).
+3. Do the brute-force arithmetic; if hopeless, plan analysis instead: function space first, coarse to fine (→ Heuristic 8; integer-control brief).
+5. Name the class, its challenges, and start a small library from one tiny reproducible instance [S112 p. 2] (→ Method 2 step 4, Method 4).
+
+**Workflow B: Idea generation**
+
+**Steps**:
+4. Transfer proofs lemma by lemma and mark the gaps; change only what keeps the analysed invariant [S003 p. 14] (→ Heuristic 5; D2, P4).
+6. Era-bound variant (2026): write the brief yourself and let agents draft and attack (→ Heuristic 6).
+
+**Workflow C: Experiment design and execution**
+
+**Steps**:
+1. Climb a ladder of tiny classics with a printed check at each step (→ Heuristic 2).
+5. Keep failures in the statistics with a per-instance failure taxonomy (→ Method 5 step 3); grade every method by one certificate (→ Method 7 step 5).
+
+**🔴 Checkpoint**: separate the tuning set from the comparison set before tuning defaults (inferred from the FilMINT record [03 E22]; not stated by him). The full texts show the merge recurring [S028 TR pp. 7, 17].
+
+**Workflow D: Diagnosis**
+
+**Steps**:
+3. Before attributing the failure, rerun the failing instances with the suspected cause removed [S020 pp. 10–12] (→ Method 6 step 4; V4).
+5. Watch the tree by hand when the solver abandons good subtrees; redesign the rule [03 E38]. Report bugs to the maintainer [03 E33].
+6. For convex-MINLP algorithm choice, a dated rule of thumb to re-test against doi:10.1007/s11081-018-9411-8: LP/NLP-based B&B by default; NLP-BB for highly nonlinear, small-gap problems (→ Method 5 step 5, with the 1993 third row and its caveat).
+
+**Workflow E: Judging results**
+
+**Steps**:
+4. Ask what the guarantee means for this model: which notion is certified, and is every method graded by it [S126 arXiv pp. 34, 40]? (→ Taste 3, Method 7; V8).
+
+**Output**: a claims table: claim / test class / date / versions / failures / notion certified.
+
+**Workflow F: After publication**
+
+**Steps**:
+2. Publish corrections in print when errors are found (2026 Correction) [01 F10]: count the mistakes, give the mechanism, print the corrected statements [S162 pp. 1–2] (W8).
+
+**Stages without a distillable Leyffer method**
+
+| Stage | Why no Leyffer method |
+|---|---|
+| Drafting and editing papers | No stated method: only closing-slide habits and a survey scope cut [02 §6.3, §6.4]. Practice seen in the papers: show every technique on one tiny computed example and thread one running example through theory, reformulation and code [S016 pp. 49, 62–66; S126 arXiv pp. 11–14; S021 TR pp. 11, 13, 15] (W1; ledger `#heuristic-12`); writing moves W2–W11 |
+
+### Review fixes (T3.7)
+
+- Workflow D step 6 ends again "(→ Method 5 step 5, with the 1993 third row and its caveat)": it is the Workflow D step that correction 2 names (08 §3.2 item 2; step 5 before the T3.6 renumbering), and the routing row for convex-MINLP algorithm choice sends readers to this step alone.
+- Stages table, drafting row: the running-example half of Heuristic 12 is back, "thread one running example through theory, reformulation and code" [S021 TR pp. 11, 13, 15] (10-claim-audit.md, k=12: supported).
+
 <a id="routing"></a>
 
 ## Research task routing and agentic protocol (earlier wording)
@@ -913,6 +1230,37 @@ Stop checking when each item is settled or needs the user's own log, instances o
 Form and order: the Answer Standard above. The text below lists what the reply must contain; the methods behind the steps are credited in the Basis footer, in words, rather than tagged inline; the workflow's name is not printed; and 🔴 is this file's mark for a workflow checkpoint, never printed in the reply.
 
 Conclusion first → at most five numbered next steps, each labelled with its method → the workflow's 🔴 checkpoint → one limitation in the user's setting → the one item you need next from the user, if any. If the case fails a 🔴 checkpoint, stop there: say what blocks it and what would clear it.
+
+### Before T3.7 (moved verbatim)
+
+T3.7 shortened or moved these SKILL.md lines; their wording before that pass follows (unchanged lines are not repeated).
+
+**Research Task Routing (section text)**
+
+| User says | Workflow | Main methods |
+|---|---|---|
+| "My MPEC / complementarity model fails in the NLP solver" | Workflow D steps 1-3, then E | Method 6 (slacks), Method 3, Method 7. Contested: 2017 "reliable NLP solvers are still the best approach for solving MPECs" vs 2026 coauthored "less competitive than the MPEC-tailored methods" [05 §4.3, C8]. Large MPECs violating MPEC-LICQ: plain NLP mostly timed out; regularization or MPECopt (https://github.com/nosnoc/mpecopt) [S126 arXiv pp. 33, 36–38] |
+| "My mixed-integer optimal control / PDE problem is too big for branch-and-bound" | Workflow A step 3, then B | Integer-control brief (below); Heuristic 8 [05 §2.4]; Method 2 steps 3, 5 [05 §5.2]; Method 7 step 1; McCormick anatomy; catalog D11, D13, V7; ledger `#anatomy-slip` |
+
+**Several rows match**: take the first of D → E → B → A (formulation before theory before a new idea before a new class; inferred from the Workflow D checkpoint [02 §4.3]). One workflow per answer.
+
+**Stuck-project triage** (no Leyffer statement on stuck projects exists [04 Gaps]; this is routing, not his advice). Ask what was tried last and what it produced, then run one workflow: solver fails or stalls → D; works on some instances only, or a proof step breaks → E step 1, Method 3; does not beat the baselines → C step 2 (is the comparison fair?), then B; the class looks hopeless → A step 3, Heuristic 4. Whether to abandon the line: no Leyffer method; his exits were silent [02 §2.7].
+
+**Integer-control brief** (team papers; full rows: ledger `#anatomy-slip`). Branch-and-bound on a fine mesh stalls: on released 2-D source-inversion instances (16 × 8 to 256 × 128) only B&B solved the two smallest meshes in 10 CPU-hours, and SCIP's presolve added 8,002 quadratic constraints to a problem that is bound-constrained once the states are eliminated [S084 pp. 5, 20–24]. Eliminate the states or superpose precomputed PDE solves [S084 p. 12; S093 pp. 23–24] (D11); add TV regularization so minimizers exist [S065 pp. 2–3]; relax, round, then improve each rounding with an integer trust region [S084 pp. 13–17, 25–30] (D13, D4). Baselines to beat: MIQP (better objectives for N ≤ 128, far slower) and CIA rounding (better at N = 64, 128) [S065 p. 22]; the authors call SLIP "computationally less attractive than the combinatorial integral decomposition" [S065 p. 26]. SLIP's theory covers d = 1 [S065 p. 8]; for d ≥ 2 no efficient subproblem solver is known [05 §5.1]; the set-space method is not competitive in topology optimization [S091 p. 42].
+
+**Step 2: Check only what the workflow needs (tools, never memory)**
+
+| Workflow | Check |
+|---|---|
+| D | Log (Method 6 step 3): rate, KKT error trend, restoration, evaluation errors, node failures, exit codes. Control rerun (step 4). Formulation (steps 5-6): undefined iterates, CQ failure (complementarity, perspective forms), linearizable terms, missing slacks. Then tooling (Method 1): callbacks, warm or hot starts, infeasibility certificates |
+| E, B | Known worst cases (Method 3): OA worst case and exponential version (doi:10.1007/BF01581153; doi:10.1287/ijoc.1120.0545); corrected OA characterization (doi:10.1016/j.disopt.2006.10.011); CQs and cycling in OA (arXiv:2606.26897); hypotheses relied on; the notion certified against the one needed (Method 7). B also: tooling (Method 1) |
+| C | Benchmark state (Methods 4, 5): library for the class (MINLPLib, QPLIB, CUTEst, MacMPEC) with known values; dated Mittelmann page (https://plato.asu.edu/ftp/minlp.html); latest convex-MINLP comparison (doi:10.1007/s11081-018-9411-8); competitor versions; the certificate all methods will be graded by |
+
+### Review fixes (T3.7)
+
+- Integer-control brief: the baselines and the authors' verdict are back verbatim, MIQP better for N ≤ 128 and CIA rounding better at N = 64, 128 [S065 p. 22], SLIP "computationally less attractive than the combinatorial integral decomposition" [S065 p. 26], and so is the set-space limit in topology optimization [S091 p. 42]. T3.7's shorter "beat MIQP and CIA rounding" read as a win that the cited page contradicts; the restored sentence is the one the claim audit had checked (10-claim-audit.md, k=1: supported).
+- MPEC row: the contest over plain NLP as the default is placed within his own record (2017 essay vs 2026 coauthored benchmark) [05 §4.3, C8]; the two quotes stay in the Before T3.7 copy above.
+- Agentic Protocol, row D: "CQ failure (complementarity, perspective forms)" is back, with its two places to look.
 
 <a id="how-to-use"></a>
 
@@ -984,6 +1332,16 @@ Extra full-text detail: the master program comes from projection plus linearizat
 | Reception | Corrected characterization (doi:10.1016/j.disopt.2006.10.011); exponential worst case (doi:10.1287/ijoc.1120.0545); quadratic master criticised (doi:10.1007/s10107-018-1356-3); CQ assumptions questioned (arXiv:2606.26897) [05 §1] |
 | Methods | 3, 2, 5 |
 
+### Before T3.7 (moved verbatim)
+
+T3.7 shortened these rows of the SKILL.md table: Origin, Key insight, Minimum evidence, Abandoned paths. Their full wording before T3.7 is the table above (the SKILL.md rows as they stood after T3.6), unchanged; it is not repeated here.
+
+Other SKILL.md lines T3.7 shortened or moved, as they stood before that pass:
+
+**Signature Work Anatomy (section text)**
+
+Rows rest on the full texts where read (version named on each card); full rows, earlier versions and a further anatomy (integer trust regions, `references/research/09-evidence-ledger.md#anatomy-slip`) are in the ledger.
+
 <a id="anatomy-sqp-bb"></a>
 
 ## Anatomy: Integrating SQP and Branch-and-Bound for MINLP (Leyffer, Comput. Optim. Appl. 18(3), 2001, doi:10.1023/A:1011241421041), with FilMINT (doi:10.1287/ijoc.1090.0373) and Minotaur (doi:10.1007/s12532-020-00196-1)
@@ -1021,6 +1379,10 @@ Extra full-text detail: a callback after each SQP step keeps filterSQP changes m
 | Abandoned paths | Lagrangian-dual bound dropped; fails on nonconvex FEEDLOC; "a factor of about 3" became "a factor of up to 3" [01 F7]; group moved to LP/NLP-based B&B (FilMINT) [05 §2.2] |
 | Reception | NEOS "MINLP" solver; warm-start premise contested [05 §2.1]; split verdict on NLP-BB in 2019 [05 §2.3] |
 | Methods | 1, 4, 5; Heuristic 1 |
+
+### Before T3.7 (moved verbatim)
+
+T3.7 shortened these rows of the SKILL.md table: Abandoned paths. Their full wording before T3.7 is the table above (the SKILL.md rows as they stood after T3.6), unchanged; it is not repeated here.
 
 <a id="anatomy-filter"></a>
 
@@ -1065,6 +1427,10 @@ Extra full-text detail: restoration on the QP solver's phase I partition with ho
 | Reception | Lagrange Prize 2006; IPOPT filter line search; restoration criticised (doi:10.1137/080738222); funnel rival (doi:10.1007/s10107-008-0244-7); his deflation: "the choice of method is really a question of personal preference" (2017) [02 C1] |
 | Methods | Heuristic 3; 3, 5 |
 
+### Before T3.7 (moved verbatim)
+
+T3.7 shortened these rows of the SKILL.md table: Origin, Minimum evidence, Abandoned paths, Reception. Their full wording before T3.7 is the table above (the SKILL.md rows as they stood after T3.6), unchanged; it is not repeated here.
+
 <a id="anatomy-mpec"></a>
 
 ## Anatomy: MPECs solved as NLPs (Fletcher and Leyffer, Optim. Methods Softw. 19(1), 2004, doi:10.1080/10556780410001654241; with Ralph and Scholtes, SIAM J. Optim. 17(1), 2006, doi:10.1137/S1052623402407382; MacMPEC)
@@ -1107,6 +1473,14 @@ Extra full-text detail: a two-variable example shows the equality form convergin
 | Abandoned paths | Interior methods (doi:10.1137/040621065); PIPA counterexample (doi:10.1080/10556780500140078); 2007 SLPEC filter never reached a journal [05 §4.3] |
 | Reception | "quite successful, particularly on the MacMPEC set" (Benson et al.) [05 §4.1]; assumptions called restrictive [05 §4.2]; in 2026 plain NLP "less competitive than the MPEC-tailored methods" (doi:10.1007/s10589-026-00832-x) [05 §4.3] |
 | Methods | 2, 4, 5, 6 |
+
+### Before T3.7 (moved verbatim)
+
+T3.7 shortened these rows of the SKILL.md table: Reception. Their full wording before T3.7 is the table above (the SKILL.md rows as they stood after T3.6), unchanged; it is not repeated here.
+
+### Review fixes (T3.7)
+
+- Reception: the 2026 sentence is labelled as his coauthored paper again, with its DOI (doi:10.1007/s10589-026-00832-x), because it is self-assessment, not outside reception (10-claim-audit.md, k=16: partial for that reason).
 
 <a id="anatomy-mccormick"></a>
 
@@ -1151,6 +1525,10 @@ Extra full-text detail: the 2013 survey already names mixed-integer optimal cont
 | Reception | Too recent; limits of the companion SLIP method repaired by Manns's group [05 §5.1] |
 | Methods | 2, 5; Heuristic 8 |
 
+### Before T3.7 (moved verbatim)
+
+T3.7 shortened these rows of the SKILL.md table: Origin, Minimum evidence. Their full wording before T3.7 is the table above (the SKILL.md rows as they stood after T3.6), unchanged; it is not repeated here.
+
 <a id="anatomy-b-stationarity"></a>
 
 ## Anatomy: Certified B-stationarity, from the SLPEC filter (2007) to MPECopt (2026)
@@ -1190,6 +1568,14 @@ Read in full: S042 (2007 ANL preprint), S069 preprint, S126 arXiv v5; journal ve
 
 - Read line names the versions: S042 is the 2007 ANL preprint, S069 the preprint, S126 arXiv v5; journal versions were not compared.
 - Reception: the row is the paper's own benchmark (external reception not carded). It now gives the MacMPEC rate per method with the authors' caveat, "Many MacMPEC problems are small or easily solved by all examined algorithms." [S126 arXiv pp. 34–35], and the synthetic set that separates the methods: MPECopt 96.16%, regularization and ℓ∞ penalty 94.67%, plain NLP 16.00%, mostly 45-minute timeouts [S126 arXiv pp. 36–37].
+
+### Before T3.7 (moved verbatim)
+
+T3.7 shortened these rows of the SKILL.md table: Reception. Their full wording before T3.7 is the table above (the SKILL.md rows as they stood after T3.6), unchanged; it is not repeated here.
+
+### Review fixes (T3.7)
+
+- Reception: "regularization and ℓ∞ penalty 94.67%" is back on the 75 generated instances, so the row no longer reads as MPECopt against plain NLP alone [S126 arXiv pp. 36–37].
 
 <a id="anatomy-slip"></a>
 
@@ -1241,6 +1627,17 @@ Read in full [S065; S091].
 | Hiding functions from the solver | "I'm not allowing you to take functions that I can't see inside" (2024, ASR) [02 §4.9] | Method 6 |
 | Publishing a model the solver cannot handle; trusting surrogates outside their data | Warning sign 3 [02 §1.10, §2.6] | Method 6 steps 2-5 |
 | Calling a theorem wrong without checking hypotheses | practice: "the assumptions usually exclude our example" [03 E44] | Method 3 step 3 |
+
+### Before T3.7 (moved verbatim)
+
+T3.7 shortened or moved these SKILL.md lines; their wording before that pass follows (unchanged lines are not repeated).
+
+**Research Anti-patterns (section text)**
+
+| Anti-pattern | Why he opposes it (source) | Instead |
+|---|---|---|
+| Stopping at a point that admits descent | "too weak as practical stopping criteria" [S126 arXiv p. 3; S042 pp. 5–7] | Method 7 |
+| A parameter the user must tune where a test could decide | "we remove the need for the arbitrary parameters" [S048 p. 3; S001 pp. 1–2] | Method 2 step 3 |
 
 <a id="trajectory"></a>
 
@@ -1304,6 +1701,26 @@ Eleven undated rows and the 1971 junk row are omitted.
 
 Oct 2025 to Oct 2026 [06 §7]: no arXiv submission after 24 Sep 2025; earlier work reached print (funnel SQP, filter-ADMM, Uno and its R package, MPEC B-stationarity, McCormick Correction); July-September 2026, AI-assisted repositories conDFO, BestPractices4AI and QuantumOpt26.
 
+### Before T3.7 (moved verbatim)
+
+T3.7 shortened or moved these SKILL.md lines; their wording before that pass follows (unchanged lines are not repeated).
+
+**Research Trajectory (section text)**
+
+| Period | Direction | Trigger | Representative work |
+|---|---|---|---|
+| 2001-2016 | Side lines (grid, computational economics, HPC load balancing, inexact computing), all left silently | Institution [06 Turn F; S053 pp. 2, 7–8] | arXiv:1610.02606; doi:10.1109/SC.2012.62 |
+
+Constant: an NLP acceptance test carried into each class, smallest counterexamples, same-solver comparisons, formulation before method [08 §8]; sole-authored research articles end in 2010 [08 §9].
+
+**Latest**
+
+Oct 2025 to Oct 2026 [06 §7]: no arXiv submission after 24 Sep 2025; earlier work reached print (funnel SQP, filter-ADMM, Uno and its R package, MPEC B-stationarity, McCormick Correction); July-September 2026, AI-assisted repositories conDFO, BestPractices4AI and QuantumOpt26.
+
+### Review fixes (T3.7)
+
+- Latest: "earlier work reached print (funnel SQP, filter-ADMM, Uno and its R package, MPEC B-stationarity, McCormick Correction)" is back, so the covered year does not read as only AI-assisted repositories [06 §7].
+
 <a id="academic-lineage"></a>
 
 ## Academic lineage and collaboration pattern
@@ -1333,6 +1750,14 @@ Counts are carded works (full, partial, abstract or unreadable; metadata rows, c
 
 Colin M. Reeves → Roger Fletcher → **Leyffer** (PhD Dundee, thesis dated December 1993) [06 §1.1]; partnership with Fletcher to 2012. No formal PhD students (Mathematics Genealogy: "No students known"); juniors come through laboratory programmes. Lines carried by juniors: Minotaur (Mahajan), Uno (Vanaret), MIPDECO analysis (Manns); newer coauthors Kiessling, Nurkanović, Yang [06 §1.2; 04 §2]. What passes down (inferred from practice): build on the group's codes and libraries, use the senior's code as yardstick, document gaps, publish corrections [04 K1, K4, K5].
 
+### Before T3.7 (moved verbatim)
+
+T3.7 shortened or moved these SKILL.md lines; their wording before that pass follows (unchanged lines are not repeated).
+
+**Academic Lineage (section text)**
+
+Colin M. Reeves → Roger Fletcher → **Leyffer** (PhD Dundee, thesis dated December 1993) [06 §1.1]; partnership with Fletcher to 2012 (16 carded works), then Munson and Wild [08 §9]. No formal PhD students (Mathematics Genealogy: "No students known"); juniors come through laboratory programmes. Lines carried by juniors: Minotaur (Mahajan), Uno (Vanaret), MIPDECO analysis (Manns), MPECopt (Nurkanović) [06 §1.2; 04 §2]. What passes down (inferred from practice): build on the group's codes and libraries, use the senior's code as yardstick, document gaps, publish corrections [04 K1, K4, K5].
+
 <a id="inner-tensions"></a>
 
 ## Inner tensions
@@ -1360,6 +1785,21 @@ Colin M. Reeves → Roger Fletcher → **Leyffer** (PhD Dundee, thesis dated Dec
 - **NLP vs polyhedral relaxations in the tree.** SQP-based NLP-BB (2001) and "reliable NLP solvers are still the best approach for solving MPECs" (2017) — against "Use LP solvers as much as possible in MINLP" (2013) and Quesada-Grossmann "arguably the best" (2017) [05 §2.2, §4.3; 02 §4.1, C3].
 - **Loud self-correction vs silent exits.** Credits correctors and publishes corrections — but leaves five lines without a word, and QP-diving and the 2007 MPEC filter unpublished [05 §8; 06 §0].
 - **Generality vs restraint.** MINLP is "one of the most general modeling paradigms in optimization" (2017) — against "Teach a man about nonlinear functions and you will lead a troubled life." [02 C7].
+
+### Before T3.7 (moved verbatim)
+
+T3.7 shortened or moved these SKILL.md lines; their wording before that pass follows (unchanged lines are not repeated).
+
+**Inner Tensions (section text)**
+
+- **Real problems vs test libraries.** Agrees "test problems are often very badly selected" (2015) — yet builds and benchmarks on libraries 2000-2026 [02 §1.1, C5; H005 p. 5].
+- **Fairness rules vs self-favouring choices.** Fairness rules in papers 1993-2026 [03 E01-E05] — against tuning on the comparison suite, 2015-era competitors kept in 2020, thesis runs dropped [03 E22, E55, E23; S028 TR pp. 7, 17].
+- **Champion vs deflator of the filter.** "We believe filter methods achieve this goal." (2006) — against "the choice of method is really a question of personal preference" (2017) and penalty functions revisited; yet filter-based DFO and ADMM continue [02 C1; 06 C10].
+- **Numbers first vs theory first.** Filter numbers 1997, proof 1998 — against MPEC theory before numbers, conDFO proof before prototype, the bundle filter proved before any run [06 C12; 03 E73; S026 pp. 1–15].
+- **NLP vs polyhedral relaxations in the tree.** SQP-based NLP-BB (2001) and "reliable NLP solvers are still the best approach for solving MPECs" (2017) — against "Use LP solvers as much as possible in MINLP" (2013) [05 §2.2, §4.3; 02 §4.1, C3].
+- **Loud self-correction vs silent exits.** Credits correctors and publishes corrections — but leaves five lines without a word, and QP-diving and the 2007 MPEC filter unpublished [05 §8; 06 §0].
+- **Generality vs restraint.** MINLP is "one of the most general modeling paradigms in optimization" (2017) — against "Teach a man about nonlinear functions and you will lead a troubled life." [02 C7].
+- **Certify vs ship (team record).** The algorithm papers certify and grade competitors [S126 arXiv pp. 34, 40] — several applied team papers led by others ship labelled heuristics or defer the proof [S135 pp. 8, 11; S123 arXiv p. 22]; whose choice that is cannot be told [08 §9]. In his own voice, plain NLP solvers stay the practical MPEC default [H004 p. 9].
 
 <a id="roundtable-card"></a>
 
@@ -1434,7 +1874,7 @@ This skill is distilled from public information and has these limits:
 
 ## Corrections from the full texts
 
-SKILL.md lists eleven corrections, one line each; this section gives them in full. Source: 08 §3.2 (copied verbatim below), §3.1 and §10.
+SKILL.md lists ten corrections, one line each (eleven until item 11, 08 item 13, was dropped after T3.6, when the Activation Rules took it over; see the How to Use section above); this section gives them in full. Source: 08 §3.2 (copied verbatim below), §3.1 and §10.
 
 ### 08 §3.2, verbatim
 
@@ -1454,7 +1894,7 @@ SKILL.md lists eleven corrections, one line each; this section gives them in ful
 
 ### How SKILL.md numbers them
 
-1 = 08 item 1; 2 = item 2; 3 = items 3 and 4; 4 = item 5; 5 = item 6; 6 = item 7; 7 = item 8; 8 = item 9; 9 = items 10 and 11; 10 = item 12; 11 = item 13.
+1 = 08 item 1; 2 = item 2; 3 = items 3 and 4; 4 = item 5; 5 = item 6; 6 = item 7; 7 = item 8; 8 = item 9; 9 = items 10 and 11; 10 = item 12; 11 = item 13 (dropped after T3.6: the Activation Rules' roundtable line now tells briefs to cite paper cards).
 
 ### Contradiction links and rejected updates (08 §3.1, §10, verbatim)
 
@@ -1485,6 +1925,24 @@ None of these removes a method: the methods describe his algorithm papers; the c
 
 - SKILL.md item 8 read "MIPDECO dates to 2013, public in 2015, not 2017", which made 2015 the first public naming; the 2013 workshop deck was already public [02 §2.4, §2.5]. Item 8 now reads "MIPDECO dates to 2013 (position paper and public workshop deck), not 2017" [S112 p. 2; 02 §2.4]. The 08 §3.2 copy above follows the corrected 08.
 - Item 3 adds the version read [D001 arXiv pp. 4, 8]; item 11 says that the Roundtable Card now tells briefs how to cite.
+
+### Before T3.7 (moved verbatim)
+
+T3.7 shortened or moved these SKILL.md lines; their wording before that pass follows (unchanged lines are not repeated).
+
+**Corrections from the full texts**
+
+1. Method 6 step 1: the linear > convex > nonconvex order is a default to re-test [S070 preprint p. 20].
+3. Method 3: the faulty PIPA step was named only in revision [S067 pp. 6–7; D001 arXiv pp. 4, 8]; the Maratos example is in the filter papers [S001 pp. 7–8].
+4. Method 2 step 5: practised since 2013, not only inferred [S126 arXiv pp. 24–25].
+5. Method 4: application models often shared only on request [S043 p. 23].
+6. Heuristic 3: the theory-first side is wider [S026 pp. 1–15].
+8. McCormick anatomy: MIPDECO dates to 2013 (position paper and public workshop deck), not 2017 [S112 p. 2; 02 §2.4].
+9. Journal texts once "not read" were read as preprints or reports; OA journal numerics still unread [S003].
+
+### Review fixes (T3.7)
+
+- Items 4 and 5 read again as before T3.7 ("practised since 2013", "shared only on request"). The count at the top of this section said eleven, stale since item 11 was dropped after T3.6; it now says ten.
 
 <a id="candidate-pool"></a>
 
@@ -1531,6 +1989,14 @@ SKILL.md now gives DOIs inline and points to the card key below; the earlier lis
 - Vanaret, Leyffer, "Implementing a unified solver for nonlinearly constrained optimization", Math. Program. Comput. (2026), doi:10.1007/s12532-026-00310-9
 - Further Leyffer papers: identifiers are given inline where cited (each Crossref-checked 2026-10-10); not inline elsewhere: IMA volume doi:10.1007/978-1-4614-1927-3; Uno R package doi:10.32614/cran.package.uno
 
+### Before T3.7 (moved verbatim)
+
+T3.7 shortened or moved these SKILL.md lines; their wording before that pass follows (unchanged lines are not repeated).
+
+**Papers (primary)**
+
+- DOIs inline where cited; every carded work by id, with authors, venue and DOI or arXiv id, in the ledger's card key (references/research/09-evidence-ledger.md#card-key); the earlier paper list: references/research/09-evidence-ledger.md#sources-papers.
+
 <a id="sources-secondary"></a>
 
 ## Sources: students, collaborators and peers
@@ -1551,6 +2017,14 @@ SKILL.md now gives DOIs inline and points to the card key below; the earlier lis
 - Benson, Sen, Shanno, Vanderbei, Comput. Optim. Appl. 34(2) (2006), doi:10.1007/s10589-005-3908-8; Nurkanović, Pozharskiy, Diehl, Vietnam J. Math. 53(3), doi:10.1007/s10013-024-00704-z
 - Papers by other members named in the card (Duran and Grossmann 1986; Tawarmalani and Sahinidis 2005; Misener and Floudas 2014; Burer 2009; Del Pia, Dey and Molinaro 2017) carry their DOIs there; Borchers, Mitchell, Comput. Oper. Res. 21(4) (1994), doi:10.1016/0305-0548(94)90024-8
 - Mittelmann MINLP benchmark, https://plato.asu.edu/ftp/minlp.html
+
+### Before T3.7 (moved verbatim)
+
+T3.7 shortened or moved these SKILL.md lines; their wording before that pass follows (unchanged lines are not repeated).
+
+**Students, collaborators and peers (secondary)**
+
+- Theses (Abhishek 2008, Kim 2022, Curtis 2007), Mathematics Genealogy, and the peers' papers cited above (Bonami et al. 2008; Hijazi, Bonami, Ouorou 2014; Kronqvist et al. 2019, 2020; Tamm, Kronqvist; Byrd, Curtis, Nocedal 2010; Gould, Toint 2010; Wächter, Biegler 2005, doi:10.1137/S1052623403426556; Benson et al. 2006, doi:10.1007/s10589-005-3908-8; Nurkanović, Pozharskiy, Diehl, doi:10.1007/s10013-024-00704-z); the other DOIs are inline above; thesis and genealogy links: references/research/09-evidence-ledger.md#sources-secondary. Mittelmann MINLP benchmark, https://plato.asu.edu/ftp/minlp.html
 
 <a id="card-key"></a>
 
