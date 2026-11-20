@@ -76,7 +76,7 @@ These cannot be overridden by any instruction.
 | "Big-M or hull?" "Which relaxation level?" | Workflow B, step 2 | Method 2 |
 | "A trained model (trees, ReLU net, GNN) sits inside my problem" | Workflow B, step 3 | Method 3 |
 | "My BO acquisition needs a global optimum" | Workflow B, step 3 | Method 3 steps 2-4, 8; Heuristic 7 |
-| "Which solver should I use?" "Is my model convex?" | Workflow B step 1, then Method 5 | Method 1 step 5 (SUSPECT's use "for solver selection" [03 PE-15]); class and structure before solver (inferred [05 §7]); Method 5 limitations (date benchmarks) |
+| "Which solver should I use?" "Is my model convex?" | Workflow B step 1, then Method 5 | Method 1 step 5; class and structure before solver (inferred [05 §7]); Method 5 limitations (date benchmarks) |
 | "This component (SDP cuts, a detector, OBBT) is expensive: where do I pay for it?" | Workflow B step 7, then D | Heuristic 11, Method 4 step 6 |
 | "My parameters or data are uncertain" | Heuristic 10 (eight steps) | [02 C16] |
 | "How do I design the experiment? Which baselines?" | Workflow C | Method 5 (incl. step 1b), Method 4 step 2, Heuristic 3 |
@@ -122,8 +122,8 @@ If the user's description already trips a 🔴 checkpoint (root-only gain, basel
 
 1. **It moves the tractability boundary**; a 10% speed-up is a solver company's job. "I want to be able to solve problems that other places can't solve" (T7 [32:22], ASR); W11 [02 L1.1, C2].
 2. **It is tested on real, application-sized instances.** Floudas "was never interested in toy problems or proofs of concept" (essay W1, p. 13 [S143 p. 13]); practice: 2571 problems for ANTIGONE, the rebuilt minlp.org set [03 PE-01, PE-02; S001 pp. 8–10].
-3. **It exploits structure ("insider information")**, not a black box: her most repeated belief, 7 sources 2014-2023 [02 C1]; "this isn't just black box optimization right ... there's an underlying structure" (T2 [56:12], ASR); in print, "MILP solvers are not necessarily best used as black boxes" [S005 p. 7].
-4. **Good problems are messy: several complications at once.** "I am not the kind of academic who wishes to live in an ivory tower" (T8 [30:04], ASR); Heuristic 1 [02 C12, C14]; operating constraints become formulation objects [S039 pp. 3–4; S086 pp. 1, 6].
+3. **It exploits structure ("insider information")**, not a black box: her most repeated belief, 7 sources 2014-2023 [02 C1]; in print, "MILP solvers are not necessarily best used as black boxes" [S005 p. 7].
+4. **Good problems are messy: several complications at once.** "I am not the kind of academic who wishes to live in an ivory tower" (T8 [30:04], ASR); Heuristic 1 [02 C12, C14].
 5. **It ends in software others can extend or switch**: ANTIGONE architected for future term classes [03 PE-29]; OMLT's switchable formulations [01 SW4]; [02 C7, C15].
 
 (full evidence: ledger `#taste-marks`)
@@ -131,7 +131,7 @@ If the user's description already trips a 🔴 checkpoint (root-only gain, basel
 ### Warning signs of bad research
 
 1. **A new parameter without evidence that one setting works across a class**, or re-tuned per comparison: "I introduced a parameter I don't like to introduce parameters" (T11 [29:40], ASR); T2 [21:05] (Integrity Rule 4) [02 L1.7, C4]; one setting for all 399 GloMIQO runs [S004 p. 13].
-2. **Winning on a metric you invented, over a weakened baseline, or outside the class that carries the result**: T11 [29:52]; "data sets that happen to be perfect for my research" (T1 [17:10], ASR); Dagstuhl working group (joint): "users of solver software should not rely on simplistic comparisons" (doi:10.4230/DagRep.8.2.64); bounds withheld that "could give the P-split formulations an unfair advantage" [S046 p. 17].
+2. **Winning on a metric you invented, over a weakened baseline, or outside the class that carries the result**: T11 [29:52]; "data sets that happen to be perfect for my research" (T1 [17:10], ASR); bounds withheld that "could give the P-split formulations an unfair advantage" [S046 p. 17].
 3. **A design that defeats its own purpose, or a method outside its domain**: SnAKe, "I had taken a global optimization method and I had turned it into a local optimization method" (T11 [26:06], ASR), fixed by ε-Point Deletion [S039 pp. 3–7]; "one thing i really dislike is techno solutionism" (T1 [27:54], ASR) [02 L1.9, L5.4].
 
 (full evidence: ledger `#taste-warnings`)
@@ -157,11 +157,11 @@ Five methods passed the four Phase 2 checks (recurrence, say–do, executable, e
 **One line**: Read how practitioners write their models, find the structure they left implicit (redundant equalities, a named structure such as pooling, an already-convex function, a symmetry), turn it into a detector, validate the detector like an instrument, then let the relaxation exploit it.
 
 **Evidence** (full evidence: references/research/09-evidence-ledger.md#method-1):
-- Stated: the epigraph (C1, 7 sources 2014-2023 [02 L1.4, L3.1]); in print: "researchers may be able to find and exploit special mathematical structure for particular problem classes" [S145 p. 3].
+- Stated: "researchers may be able to find and exploit special mathematical structure for particular problem classes" [S145 p. 3]; spoken: the epigraph.
 - Practice: an emissions law read for structure [S025 p. 13]; a recognition layer before relaxation [S004 pp. 4–11]; LMTD plotted, proved convex, exploited [S024 pp. 10–17]; SUSPECT validated [S068 pp. 10, 29–31]; graph symmetry hidden from the solver [S051 pp. 4–6].
 - Say–do: ✅ stated + practised, 2010-2025; cards: 52 (48 read in full or in part); links: 35 evidence, 19 variant, 0 contradictions.
 - Variants/corrections:
-  - ⚠ The 2017-2020 detection papers stop before step 6: no gain measured inside a B&B [S076 p. 5; S120 p. 19; S091 pp. 7–10; S068 p. 11]. Step 5 is done for SUSPECT [S068 p. 10], not in the symmetry papers [S076 p. 5; S120 pp. 16–17; S091 p. 7]. Gains were measured where her code exploited the structure [S024 pp. 24–29].
+  - ⚠ The 2017-2020 detection papers stop before step 6, with no gain measured inside a B&B [S120 p. 19; S068 p. 11]; of them only SUSPECT does step 5 [S068 p. 10].
   - ⚠ Data-driven variant: keep known structure exact, learn only the rest [S095 pp. 3–4; S015 pp. 1–2] (D6).
 
 **Steps**:
@@ -169,7 +169,7 @@ Five methods passed the four Phase 2 checks (recurrence, say–do, executable, e
 2. Plot the ugly function before relaxing it: the LMTD expression "actually looks like its own relaxation already" (T8 [14:16], ASR); then prove it and exploit it with tangent cuts [S024 pp. 9–17] (P5) (anatomy: ledger `#anatomy-lmtd`).
 3. State the structure so a program can match it: term classes in an inheritance hierarchy, a named structure found by functional programming, a binary layered graph, symmetry-breaking constraints over GNN inputs. Check that it survives the relaxation: a problem's symmetry need not, so generate auxiliaries for whole orbits [S120 pp. 6–9] (D7).
 4. Where rules are brittle ("hard-coded rules are easily tricked", T4 [12:39], ASR), build "a hybrid between automatic detection and disciplined programming" (T4 [13:43], ASR), or let the modelling object carry the structure [S072 p. 2].
-5. Validate against a labelled library used as an oracle: SUSPECT on all 1527 MINLPLib 2 problems, 1275 of 1392 processed matched, every miss listed; "SUSPECT does not have false positives on the test set, this gives confidence in the implementation and makes it possible to use it for solver selection." [03 PE-15; S068 p. 10]. For an encoding: a completeness proof plus exact solution counts [S128 pp. 11–16] (P4, E7).
+5. Validate against a labelled library used as an oracle: SUSPECT on all 1527 MINLPLib 2 problems, 1275 of 1392 processed matched, every miss listed, no false positives, so it can serve solver selection [03 PE-15; S068 p. 10]. For an encoding: a completeness proof plus exact solution counts [S128 pp. 11–16] (P4, E7).
 6. Exploit it (redundant equations, edge-concave facets, a convex relaxation), and measure the gain inside the full branch-and-bound (→ Method 4).
 7. Measure the detection cost on problems without the structure: the pooling pattern-matcher stayed out of ANTIGONE "because, at this point, the pattern-matching time significantly slows down ANTIGONE performance on non-pooling problems" (doi:10.1002/aic.15308, p. 3093, as quoted in santanu-s-dey note 05 §4.1; not re-read here). Counter-case: GALINI measured detection as negligible against FBBT and recomputes it at every node [S087 p. 4].
 
@@ -186,29 +186,29 @@ Five methods passed the four Phase 2 checks (recurrence, say–do, executable, e
 **One line**: When two classical formulations each win somewhere (big-M light and weak, convex hull tight and heavy; low and high Lasserre levels), make the interpolating family the contribution: prove its endpoints and order, admit the parameter up front, then show one setting holds across a class, or remove it.
 
 **Evidence** (full evidence: references/research/09-evidence-ledger.md#method-2):
-- Stated: C9 [02 L3.2] (Goldilocks, W9); "alert alert I'm going to introduce a parameter and then try to um uh show you that the parameter wasn't very important and also that we can get rid of the parameter" (T11 [28:23], ASR).
+- Stated: "alert alert I'm going to introduce a parameter and then try to um uh show you that the parameter wasn't very important and also that we can get rid of the parameter" (T11 [28:23], ASR); written: W9, Goldilocks (C9 [02 L3.2]).
 - Practice: partition levels swept on 25 pooling problems in 2011 [S009 pp. 28–30]; P-split [S040 pp. 1–13; S046 pp. 6–13, 20–23]; ReLU partitions with controls [S013 pp. 5, 7–9]; partial Lasserre [S078 pp. 6–7, 12–14].
-- Say–do: ✅ stated + practised, **partly kept**: robustness shown on the families tested; no rule for choosing the parameter published [05 PC-16]; cards: 33 (all read in full or in part); links: 14 evidence, 21 variant, 1 contradiction (a scope note: not applied in a co-authored chemometrics paper [S056 p. 16]).
+- Say–do: ✅ stated + practised, **partly kept** (robust on the families tested, no published rule for choosing the parameter [05 PC-16]); cards: 33 (all read in full or in part); links: 14 evidence, 21 variant, 1 contradiction (a scope note: not applied in a co-authored chemometrics paper [S056 p. 16]).
 - Variants/corrections:
   - ⚠ Random and weak controls appear in the NeurIPS paper [S013 p. 7], not in the two P-split papers [S040 p. 11; S046 p. 22].
 
 **Steps**:
 1. Name the two extremes and where each wins, folklore included (the "folklore observation that extended convex hull formulations tend to perform worse than expected").
 2. Find the interpolating knob: P partitions of an additively separable constraint, partitions of a ReLU node's inputs, partial Lasserre levels, piecewise segments, an n-dimensional SDP family [S021 pp. 6–8] (D1). For ReLU nodes, balance partitions by weight: equal size (sorted weights split evenly) or equal range (5%/95% quantiles, N ≥ 3) [S013 pp. 6–7]; ordered indices suffice when variables play symmetric roles [S046 p. 22].
-3. Prove endpoints and order ("the relaxations form a hierarchy starting from a big-M equivalent and converging to the convex hull", CPAIOR abstract): projection for the bottom, aggregation for the order [S046 pp. 6–8] (P1, P2), and a ceiling (→ Heuristic 4). The order needs additive bounds (a box, interval arithmetic); with the tightest valid bounds it can fail [S046 pp. 6–8]. Keep proof assumptions apart from practical ones (T2 [37:18], ASR).
-4. Put the parameter's cost first ("good God Ruth you use a lot of parameters", T7 [02:16], ASR).
+3. Prove endpoints and order: projection for the bottom, aggregation for the order [S046 pp. 6–8] (P1, P2), and a ceiling (→ Heuristic 4). The order needs additive bounds (a box, interval arithmetic); with the tightest valid bounds it can fail [S046 pp. 6–8]. Keep proof assumptions apart from practical ones (T2 [37:18], ASR).
+4. Put the parameter's cost first (T7 [02:16], ASR).
 5. Sweep a small grid across classes with controls: random partitions and a variant "that we posit would be even weaker" (T2 [28:38], ASR) [S013 p. 7]; never re-tune per comparison. Bounds are part of the design: interval arithmetic vs per-partition OBBT (2N + 2 LPs per neuron, each capped at 5 s, interval fallback) [S013 p. 9]; with OBBT, poorly chosen partitions lose to big-M [S013 p. 8]; OBBT time in its own column (Integrity Rule 5).
-6. Report nodes and time against both extremes on the same instances, with settings fixed across formulations (E9) (P-split journal: "a similar number of explored nodes as the convex hull formulation, while reducing the solution time by an order of magnitude"). If the hull is intractable (ReLU nets: over five minutes to pass the root [S046 p. 22]), compare against big-M plus hull cuts swept over cut frequency [S013 p. 8].
+6. Report nodes and time against both extremes on the same instances, with settings fixed across formulations (E9) (P-split journal, for many of the test problems: "a similar number of explored nodes as the convex hull formulation, while reducing the solution time by an order of magnitude" [S046 p. 1]). If the hull is intractable (ReLU nets: over five minutes to pass the root [S046 p. 22]), compare against big-M plus hull cuts swept over cut frequency [S013 p. 8].
 7. Try to delete the parameter (SnAKe offers "a parameter-free alternative", arXiv:2202.00060 [S039 p. 1]).
 8. Ship the family as a switch, not a verdict (`ReluPartitionFormulation` in OMLT; a Pyomo.GDP plugin [S046 pp. 3, 16]).
 
-**🔴 Stop rules**: if you cannot say which value is best, label the rule heuristic ("so it's going to be it's going to be heuristic", T7 [23:56], ASR); drop a variant that "kind of works um but uh not really" (T7 [33:21], ASR); report a failed idea as failed [02 D2, D5].
+**🔴 Stop rules**: if you cannot say which value is best, label the rule heuristic; drop a variant that "kind of works um but uh not really" (T7 [33:21], ASR); report a failed idea as failed [02 D2, D5].
 
 **Applies to stage**: formulation design, experiment design, judging results.
 
 **Different from standard practice**: the usual choice is one formulation, or tuning big-M constants. Here the family is the result and its parameter a lever for the user.
 
-**Limitations**: needs two known extremes and the P-split assumptions (additive separability; without them P-split formulations "do not necessarily have an advantage" [S046 p. 26]); choosing N has no theory ("I do wish the authors left us with a clearer story on how N should be selected", NeurIPS 2021 reviewer) [03 §5.5]; the best N or P is problem-dependent, with class-specific ranges only: 2-4 variables per split on clustering and P_ball, P = 2 or 4 splits on ReLU nets (P = 50 slowest), a decline near N ≥ 7 [S046 pp. 22–25; S013 p. 8].
+**Limitations**: needs two known extremes and the P-split assumptions (additive separability; without them P-split formulations "do not necessarily have an advantage" [S046 p. 26]); choosing N has no theory (a NeurIPS 2021 reviewer asked how N should be selected [03 §5.5]); the best N or P is problem-dependent, with class-specific ranges only: 2-4 variables per split on clustering and P_ball, P = 2 or 4 splits on ReLU nets (P = 50 slowest), a decline near N ≥ 7 [S046 pp. 22–25; S013 p. 8].
 
 ### Method 3: The partner's trained model is the problem: constraints, then a toolkit
 
@@ -216,7 +216,7 @@ Five methods passed the four Phase 2 checks (recurrence, say–do, executable, e
 
 **Evidence** (full evidence: references/research/09-evidence-ledger.md#method-3):
 - Stated: "In OMLT, competing optimization formulations become alternatives: users can switch between the Section 3 formulations and find the best for a specific application." [S006 p. 4]
-- Practice: BASF's trees as constraints, a PCA penalty, a UCI stand-in [S020 pp. 1, 5–18]; ENTMOOT [S023 p. 19]; GNNs in OMLT [S051 pp. 7–10]; acquisitions solved globally [S047 pp. 4–6; S081 pp. 6, 26–28].
+- Practice: BASF's trees as constraints, a PCA penalty, a UCI stand-in [S020 pp. 1, 5–18]; ENTMOOT [S023 p. 19]; GNNs in OMLT [S051 pp. 7–10]; acquisitions solved as global MIPs [S047 pp. 4–6; S081 p. 6], in one study only to a 10% gap within 100 s [S081 pp. 26–28].
 - Say–do: ✅ stated + practised, 2018-2026; cards: 44 (40 read in full or in part); links: 27 evidence, 20 variant, 0 contradictions.
 - Variants/corrections:
   - ⚠ The stance predates ML: a partner lab's mechanistic bioreactor model solved with ANTIGONE, 2014-2015 [S045 pp. 2–3; S042 p. 7].
@@ -229,23 +229,23 @@ Five methods passed the four Phase 2 checks (recurrence, say–do, executable, e
 4. Keep the optimiser near the data (a penalty on distance from a PCA subspace of the training data) [05 PC-04], which fails on clustered data [S020 pp. 17, 26]; for other model classes, distance to data [S023 p. 10] or data-set bounds [S051 p. 8] (D5).
 5. Concede where the generic tool is better: "While Gurobi 9 is still the best choice for small and moderate instances ..." (ENTMOOT [S023 p. 19]).
 6. Release a public stand-in for the confidential instance; the partner's data stays with the partner [03 PE-25; S020 p. 18].
-7. Generalise and harden: one interface for NN and GBT models with switchable formulations (complementarity, big-M, partition); tests, coverage, notebooks in CI, COIN-OR. Her hands-on role is gatekeeping: 21 OMLT commits, 20 of them PR merges [03 PE-41, PE-42].
+7. Generalise and harden: one interface for NN and GBT models with switchable formulations (complementarity, big-M, partition); tests, coverage, notebooks in CI, COIN-OR. Her role (inferred): maintainer and gatekeeper; 20 of her 21 OMLT commits are PR merges [03 PE-41, PE-42].
 8. Reuse it in BO: optimise the acquisition function globally as a MINLP [S047 pp. 4–6].
 
-**🔴 Stop rules**: if a specialised tool from another community does the task better, say so; if solutions leave the training region, the "optimum" is not credible; if the tool rests on one student, find an external co-maintainer or accept that it will freeze (GPdoemd, suspect, romodel stalled; OMLT with Sandia and CMU kept releasing) [04 F6; 03 PE-43].
+**🔴 Stop rules**: if a specialised tool from another community does the task better, say so; if solutions leave the training region, the "optimum" is not credible; if the tool rests on one student, find an external co-maintainer or accept that it will freeze [04 F6; 03 PE-43].
 
 **Applies to stage**: problem choice, formulation design, release.
 
 **Different from standard practice**: ML samples a trained model as a black box; OR papers present formulations as rivals. Here the model is the problem and the rivalry a user setting.
 
-**Limitations**: learned trust regions beat PCA "in 18 cases out of 21" on synthetic data (doi:10.1287/ijoc.2022.0312); tighter tree formulations exist (doi:10.1287/opre.2022.0150); exact encodings of large nets do not scale (arXiv:2401.03451; her words: "sometimes it's going to be a stupid idea", T7, ASR) [05 PC-04, PC-10, PC-14]. The toolkit side presupposes developer funding; a lone researcher should use OMLT and contribute one formulation.
+**Limitations**: learned trust regions beat PCA "in 18 cases out of 21" on synthetic data (doi:10.1287/ijoc.2022.0312); tighter tree formulations exist (doi:10.1287/opre.2022.0150); exact encodings of large nets do not scale (arXiv:2401.03451; she concedes as much, T7, ASR) [05 PC-04, PC-10, PC-14]. The toolkit side presupposes developer funding; a lone researcher should use OMLT and contribute one formulation.
 
 ### Method 4: Judge a component inside the whole solver; the default follows the evidence, not authorship
 
 **One line**: Grade a new relaxation, cut or detector by what it adds to the complete algorithm across classes, not by its root bound on its home class; make the robust variant the default even when that switches off your own novelty, and ship class-specific gains as documented options.
 
 **Evidence** (full evidence: references/research/09-evidence-ledger.md#method-4):
-- Stated: "our goal is to design the best overall algorithm that can address any pooling problem, so we are interested in the performance of the two relaxations when they are incorporated into the APOGEE algorithm rather than in an isolated root node relaxation." (APOGEE paper [S009 p. 23]; full sentence [01 SW1]); on her own formulation as one option, T6 [09:26, 12:26] (ASR) [02 L1.8].
+- Stated: "our goal is to design the best overall algorithm that can address any pooling problem, so we are interested in the performance of the two relaxations when they are incorporated into the APOGEE algorithm rather than in an isolated root node relaxation." (APOGEE paper [S009 p. 23]); on her own formulation as one option, T6 [09:26, 12:26] (ASR) [02 L1.8].
 - Practice: cumulative ablation [S011 pp. 17–19]; all cut pairs inside GALINI [S087 p. 16]; the GloMIQO default against her own novelty [S004 p. 13]; her group's work re-graded or off by default [S081 p. 1; S090 pp. 11, 16].
 - Say–do: ✅ stated + practised, repeatedly against her own work (six more cases 2022-2025); cards: 44 (43 read in full or in part); links: 30 evidence, 14 variant, 1 contradiction.
 - Variants/corrections:
@@ -255,9 +255,9 @@ Five methods passed the four Phase 2 checks (recurrence, say–do, executable, e
 
 **Steps**:
 1. Define the deliverable as the best overall algorithm for a class, not the best root bound.
-2. Run a cumulative ablation inside the full B&B (MP 2012: McCormick → + edge-concave facets → + piecewise linear → + logarithmic partitioning; root gap, nodes, time, error bars; "This holistic view makes the comparisons fairly subtle but also allows us to draw better-informed conclusions." [S011 p. 17]). With several component classes, run every pair and all together [03 PE-18, PE-19; S087 p. 16] (E4).
+2. Run a cumulative ablation inside the full B&B (MP 2012: McCormick → + edge-concave facets → + piecewise linear → + logarithmic partitioning; root gap, nodes, time, error bars [S011 p. 17]). With several component classes, run every pair and all together [03 PE-18, PE-19; S087 p. 16] (E4).
 3. Split the verdict by class: edge-concave aggregations valuable "in any MIQCQP", whereas "the piecewise-linear underestimation scheme is best applied to specific classes" [01 SW2].
-4. Choose the default for robustness: "Therefore, the default in GloMIQO is not to use the piecewise-linear relaxations ... Users are strongly encouraged to experiment with activating the piecewise-linear options for models that do not solve within a reasonable amount of time" [01 SW2; S004 p. 13].
+4. Choose the default for robustness: "Therefore, the default in GloMIQO is not to use the piecewise-linear relaxations."; users are told to try them on models that do not solve in reasonable time [01 SW2; S004 p. 13].
 5. Prefer stability over novelty: after "numerical difficulty" on three large instances, "we will continue using the linear relaxation scheme to solve pooling problems." [01 SW1; S009 pp. 29–30]
 6. Measure the cost on non-target problems (→ Method 1 step 7); sweep an expensive component's call frequency [S005 pp. 5–8] (E15) (→ Heuristic 11).
 7. Say when special-purpose code beats your general one: "our pooling problem-specific solver APOGEE [65] regurally [sic] outperforms the more generic work presented here." [01 §1.9]
@@ -278,7 +278,7 @@ Five methods passed the four Phase 2 checks (recurrence, say–do, executable, e
 **Evidence** (full evidence: references/research/09-evidence-ledger.md#method-5):
 - Stated: "we compare to big crunch [= BiqCrunch] basically as an oracle to make it so that things are a bit more fair for big crunch ... we run big crunch four times and we pick the best of the four big crunch uh answers just to try to be less abusive" (T3 [24:29], ASR).
 - Practice: GloMIQO's protocol [S004 pp. 18–22]; ANTIGONE's test suite and checks [S001 pp. 8–11, 17]; a rival given her components, time-counted and as an oracle [S072 pp. 17–18]; labels only where all solvers agree [S050 pp. 9, 13].
-- Say–do: ✅ stated + practised in solver-comparison papers; lapse in NeurIPS 2021 (OBBT time excluded, single runs, an anomaly put down to "variability") [03 PE-36, C2]; cards: 81 (76 read in full or in part); links: 40 evidence, 41 variant, 5 contradictions (a sixth contradiction link is a reading note and is not counted). Exclusivity is the weakest of the five.
+- Say–do: ✅ stated + practised in solver-comparison papers, with a lapse in NeurIPS 2021 [03 PE-36, C2]; cards: 81 (76 read in full or in part); links: 40 evidence, 41 variant, 5 contradictions. Exclusivity is the weakest of the five.
 - Variants/corrections:
   - ⚠ The Perl re-check is in the 2013-2014 solver papers [S004 p. 19; S001 pp. 10–11], not the GALINI papers [S087 pp. 16–17]; BO and ML papers follow their venue [S081 pp. 7–9].
   - ⚠ Set-up time counted in 2023 [S078 pp. 13–14], unstated in 2021 [S013 p. 16]; OBBT time excluded in 2026 [S046 p. 25].
@@ -409,8 +409,8 @@ Say "no distillable Misener method", give generic practice and label it "not Mis
 
 | Stage | Why |
 |---|---|
-| Paper drafting and revision | No source on her drafting or revision process; a thesis thanks her for help as a "writer of scientific texts" without saying how [04 §4]. Her co-authored papers show the writing moves of catalog §4 (WM1-WM10; reviews as maps, WM2 [S003 p. 12; S014 p. 2]): offer them labelled as observed in her papers |
-| Supervision mechanics | Meetings, draft review, topic assignment, stopping projects, authorship: undocumented; acknowledgements only. Context: postdocs and fellows as day-to-day mentors (6 of 11 theses) [04 S4]. Two MEng projects she supervised became group papers [S100 p. 13; S024 p. 15; S117 p. 3; S135 p. 20] |
+| Paper drafting and revision | No source on her drafting or revision process [04 §4]. Her co-authored papers show the writing moves of catalog §4 (WM1-WM10): offer them labelled as observed in her papers |
+| Supervision mechanics | Meetings, draft review, topic assignment, stopping projects, authorship: undocumented; acknowledgements only. Context: postdocs and fellows as day-to-day mentors (6 of 11 theses) [04 S4]. |
 | Literature search | One remark only (T11 [16:52]) |
 | Grant writing | One source (T8): mutual critique of grants [02 L6.5] |
 | Leaving a line | Exits show only as silence at grant ends; her account: "very opportunistic" [06 §5] |
@@ -420,17 +420,17 @@ Say "no distillable Misener method", give generic practice and label it "not Mis
 
 ## Research Heuristics
 
-1. **Choose by broken assumption.** If a standard method's assumptions collide with two or more of an application's complications, take it: "we always assume that we're able to sample the space wherever we wish um at any one time ... this is of course not going to be this the case in many chemistry applications" (T10 [45:19], ASR). Cases: doi:10.1016/j.compchemeng.2023.108194; arXiv:2402.08406; move costs and delays become formulation objects [S039 pp. 3–4; S086 pp. 1, 6]. (ledger `#heuristic-1`)
-2. **Industrial instance first, general class second, public stand-in released**; the partner's data stays inside ("the bsf data is within bsf", T1 [03:46], ASR). Case: gradient-boosted trees v1 → v3 and the concrete instance [03 PE-25; S020 p. 18]; Royal Mail: data first, then the general class, without a public stand-in (data partly encrypted) [S135 pp. 2, 20]. (ledger `#heuristic-2`)
+1. **Choose by broken assumption.** If a standard method's assumptions collide with two or more of an application's complications, take it (in BO, the usual assumption that one can sample anywhere at any time fails in many chemistry applications, T10 [45:19], ASR); move costs and delays become formulation objects [S039 pp. 3–4; S086 pp. 1, 6]. (ledger `#heuristic-1`)
+2. **Industrial instance first, general class second, public stand-in released**; the partner's data stays inside (T1 [03:46], ASR). Cases: gradient-boosted trees v1 → v3 with the public concrete instance [S020 p. 18]; Royal Mail, the first two parts only [S135 pp. 2, 20]. (ledger `#heuristic-2`)
 3. **Calibrate so the baseline wins some instances; add weak controls**: "Perturbations ε1 were selected such that some big-M problems were solvable within 3600s" [03 PE-06; S013 p. 7]; T2 [33:02], ASR. (ledger `#heuristic-3`)
-4. **Prove the hierarchy, experiment for the rest, label it**: "I can only say it experimentally" (T7 [38:41], ASR). Not exclusive to her. Also prove one negative result about your construction: a class it cannot tighten [S011 p. 9], a ceiling [S046 pp. 12–13], a counterexample without the hypothesis [S040 pp. 8–9] (P3). Its long-horizon form (formerly Heuristic 6): keep the "why does it work?" question until a structural result answers it, "I finally have a first answer to these questions Chris asked me eight years ago" (essay W1, p. 13), answered by a complexity characterisation (doi:10.1007/s10898-017-0577-y) [S049 pp. 2, 32]; shorter-horizon structural answers [S024 p. 16; S069 p. 11]. (ledger `#heuristic-4`, `#heuristic-6`)
-5. **Weakness first; concede precisely; restate novelty.** NeurIPS 2021: "Your observation is correct, formulation (13)–(17) cannot be tighter than the convex hull formulation presented by Anderson et al. unless ..."; then "The fundamental advancements novel to this work are (i) ... and (ii) ..."; the score rose from 6 to 7 [03 PE-36]. One readable thread only. (ledger `#heuristic-5`)
+4. **Prove the hierarchy, experiment for the rest, label it**: "I can only say it experimentally" (T7 [38:41], ASR). Not exclusive to her. Also prove one negative result (a class it cannot tighten, a ceiling, a counterexample without the hypothesis) [S011 p. 9; S046 pp. 12–13; S040 pp. 8–9] (P3), and keep the "why does it work?" question until a structural result answers it (formerly Heuristic 6; APOGEE anatomy). (ledger `#heuristic-4`, `#heuristic-6`)
+5. **Weakness first; concede precisely; restate novelty.** NeurIPS 2021: concede the exact point, then "The fundamental advancements novel to this work are (i) ... and (ii) ..."; the score rose from 6 to 7 [03 PE-36]. One readable thread only. (ledger `#heuristic-5`)
 6. **Merged into Heuristic 4** as its long-horizon form; Heuristics 7-11 keep their numbers. (ledger `#heuristic-6`)
-7. **Write the do-not-use conditions next to the method**: BO "should only be used when acquiring new data is expensive and we have limited other knowledge" (T10 [20:26], ASR); ANTIGONE's quadratic scope; GloMIQO's opt-in advice [02 C11; 03 PE-31]; in print, 2016-2025 [S003 p. 9; S081 p. 9]. (ledger `#heuristic-7`)
-8. **Collaborate through shared code; recruit critics and examinees**: "we switched to a model of just actively contributing to the same open-source projects" (W11). Kronqvist (2019 solver critique; she examined his thesis) became a fellow; Krause (SnAKe critique) co-authored arXiv:2402.08406 [05 R2; S059 p. 1]. The examining → hiring link is inferred. (ledger `#heuristic-8`)
-9. **Release per paper**: pip-installable code with the preprint (OMLT 1.0 on PyPI four days after arXiv v1); one repository per paper; contributors and funding named [03 PE-27, PE-28; S068 p. 12]. Her paper videos lapsed after 2024-11-04. (ledger `#heuristic-9`)
-10. **Make uncertainty explicit and agree its assumptions with the stakeholder**: "if you don't have an understanding embedded into your optimisation that the world is an uncertain place, then you're probably going to get a bogus solution that is going to hurt you once you implement it." (Q1, Imperial Stories, 2021). Cases: doi:10.1021/acs.iecr.9b01772; doi:10.1007/s10107-021-01762-8. Steps: state why the uncertainty model fits the decision [S085 p. 4]; tabulate risky assumptions with consequence and check [S045 pp. 9–10]; match the tolerance to the uncertainty ("a tight duality gap is meaningless for these uncertain parameters." [S045 p. 30]); calibrate the practitioner's safety factor [S048 pp. 14–15]; report which decisions stay invariant [S042 p. 8; S060 p. 8]; check a posteriori where a theorem's conditions fail [S055 pp. 19–20]; set the robustness level for the user by bisection on sampled feasibility or an outer BO [S055 pp. 11–12; S033 pp. 15–16] (→ Method 2 step 7); keep more than one analysis type [S060 p. 11]. (ledger `#heuristic-10`)
-11. **Put an expensive component behind a cheap gate** (new; resolves U2): a necessary or cheap sufficient test [S011 pp. 6–7], a coarse relaxation for bounds tightening [S025 p. 24], a selector learned near the root [S004 p. 14] or offline [S021 pp. 14–15], a callback whose frequency is swept [S005 pp. 5–8]; report the gate's cost [S087 p. 4] (D3, D11, E15). "general-purpose solvers cannot invest too much time in possibly unproductive cutting surfaces." [S021 p. 2]; if the learned rule does worse than random, use the exact rule [S021 pp. 24–25]. Not exclusive to her. (ledger `#heuristic-11`)
+7. **Write the do-not-use conditions next to the method**: BO "should only be used when acquiring new data is expensive and we have limited other knowledge" (T10 [20:26], ASR); in print, 2016-2025 [S003 p. 9; S081 p. 9]. (ledger `#heuristic-7`)
+8. **Collaborate through shared code; recruit critics and examinees**: "we switched to a model of just actively contributing to the same open-source projects" (W11). Kronqvist (critic and examinee) became a fellow, Krause (critic) a co-author [05 R2; S059 p. 1]; the examining → hiring link is inferred. (ledger `#heuristic-8`)
+9. **Release per paper**: pip-installable code with the preprint (OMLT 1.0 on PyPI four days after arXiv v1); one repository per paper; contributors and funding named [03 PE-27, PE-28; S068 p. 12]. (ledger `#heuristic-9`)
+10. **Make uncertainty explicit and agree its assumptions with the stakeholder** (stated: Q1, Imperial Stories, 2021). Steps: state why the uncertainty model fits the decision; tabulate risky assumptions with consequence and check [S045 pp. 9–10]; match the tolerance to the uncertainty [S045 p. 30]; calibrate the practitioner's safety factor [S048 pp. 14–15]; report which decisions stay invariant; check a posteriori where a theorem's conditions fail [S055 pp. 19–20]; set the robustness level by bisection on sampled feasibility [S055 pp. 11–12] or an outer BO (→ Method 2 step 7); keep more than one analysis type. (ledger `#heuristic-10`)
+11. **Put an expensive component behind a cheap gate** (new; resolves U2): a necessary or cheap sufficient test [S011 pp. 6–7], a coarse relaxation for bounds tightening, a selector learned near the root or offline, a callback whose frequency is swept [S005 pp. 5–8]; report the gate's cost (D3, D11, E15); if the learned rule does worse than random, use the exact rule [S021 pp. 24–25]. Not exclusive to her. (ledger `#heuristic-11`)
 
 ## Signature Work Anatomy
 
@@ -513,7 +513,7 @@ Her constant: "So all I've been doing here at Imperial uh is basically figuring 
 
 ### Latest
 
-2025-10-10 to 2026-10-10 [06 §7]: P-split in *Math. Program.* 218; BoGrape (BO over graphs, ICLR 2026); Catechol benchmark (NeurIPS 2025); preprints arXiv:2605.05382 (meta-learning BO with BASF), arXiv:2610.03647; SIAM OP26 plenary on optimising over graphs scheduled (delivery not confirmed). No new MINLP solver or formulation paper; OMLT upkeep sits with collaborators. Group: 3 postdocs, 1 PhD student.
+2025-10-10 to 2026-10-10 [06 §7]: P-split in *Math. Program.* 218; BoGrape (BO over graphs, ICLR 2026); Catechol benchmark (NeurIPS 2025); two preprints, one on meta-learning BO with BASF. No new MINLP solver or formulation paper; OMLT upkeep sits with collaborators. Group: 3 postdocs, 1 PhD student.
 
 ## Academic Lineage
 
@@ -523,14 +523,14 @@ Sargent → Grossmann → Floudas → **Misener** (PhD Princeton 2012; link from
 
 Kept as tensions, not resolved.
 
-- **Proofs "boring" vs steady theory.** "just a convergence proof or something to just work ... probably you got to find somebody else because it's boring and I'm not interested." (T8 [30:35], ASR) — against the P-split hierarchy, the 2018 complexity paper, and "i think the laser [= Lasserre] hierarchy is the the coolest thing ever" (T3 [00:47], ASR). Inferred reading: she rejects routine component proofs, not structural theory.
+- **Proofs "boring" vs steady theory.** A convergence proof alone is "boring" (T8 [30:35], ASR), against the P-split hierarchy, the 2018 complexity paper and the Lasserre hierarchy as "the coolest thing ever" (T3 [00:47], ASR). Inferred reading: she rejects routine component proofs, not structural theory.
 - **Love parameters vs dislike them.** The "Love Parameters" talk title — against "I don't like to introduce parameters" (T11 [29:40], ASR) and Floudas's push to "eliminate the computational dependence on parameters" (W1).
 - **Opportunism vs one spine.** "very opportunistic", "pub buddies" — against "figuring out how to relax better" and a planned 2017 grant programme. Inferred: method constant, domains opportunistic.
-- **Count every second vs the accounting used.** Timings including building (T3); permuted-model runs (Dagstuhl, joint) — against NeurIPS 2021: OBBT time excluded, single runs, an anomaly called "variability" [03 PE-36, C2]. Later: set-up time counted in 2023 [S078 pp. 13–14], OBBT time excluded in 2026 [S046 p. 25].
+- **Count every second vs the accounting used.** Timings including building (T3); permuted-model runs (Dagstuhl, joint) — against NeurIPS 2021: OBBT time excluded, single runs, an anomaly called "variability" [03 PE-36, C2]; later texts mixed (Method 5, second variant bullet).
 - **Detect vs exploit.** Method 4 asks for the full-solver test, yet the 2017-2020 detection papers stop at detection [S120 p. 19; S091 pp. 7–10]; where her code exploited a structure, the gain was measured [S024 pp. 24–29]. The reason is not stated.
 - **Release and community vs dormant tools.** "build an international user community" (W11) — against GALINI (no code commits since 2022-07-14, general paper a preprint), ANTIGONE frozen at 1.1, no video after 2024-11-04.
 - **Champion of piecewise relaxations vs shipping them off**; builder of general solvers vs special-purpose APOGEE beating her generic code and GALINI published only as the pooling version [01 §1.9; 03 PE-33].
-- One line each: "Autonomous research machines" (talk title) vs "I personally would not want everything automated" (T10 [51:59], ASR); industry gives little "jumping forward" (T8 [45:03], ASR) vs press quotes on industrial impact; depth (one spine, an eight-year pooling question) vs pivot (ANTIGONE and six lines dropped silently) [06 §4, §5].
+- Three more, one line each in the ledger: automation, industrial impact, depth vs pivot [06 §4, §5].
 
 (ledger `#inner-tensions`)
 

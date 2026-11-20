@@ -1,13 +1,5 @@
 # Ruth Misener · Evidence ledger
 
-> Date: 2026-11-19 (stage T3.6, first synthesis round). The full evidence behind `../../SKILL.md`. SKILL.md keeps, per item, the strongest statement and cards, a one-line say–do count, at most four variant/correction bullets and a pointer to the matching section here. Each section below has up to four parts: **Full-text evidence** (copied from `08-deep-reading-synthesis.md`, which is traceable to `cards/`), **Variants and contradictions** (08 §3), **Added in T3.6** (what this pass wrote into SKILL.md, with card ids) and **Before T3.6 (moved verbatim)** (the SKILL.md item as it stood on 2026-10-10, built from web research, so nothing is lost; its `[02 L1.4]`-style citations point to the web-research notes `01-…06-*.md` in this folder, and its links were re-pointed to work from this folder).
-
-**How to read.** `[S011 p. 17]` is paper card S011 in [07-paper-cards.md](07-paper-cards.md), at the page of the file the card read (mostly an arXiv or author preprint; journal pagination was not read; check the journal page before citing it in a paper). Abstract- and metadata-level cards are cited without pages. Per-card method links (✅ evidence, ⚠ variant, ✗ contradiction) are in the `Methods linked` column of 07; proof devices (P), design moves (D), experiment protocols (E) and writing moves (WM; renamed from W on 2026-11-19 so they do not collide with her written statements W1-W14 of note 02) are in [../technique-catalog.md](../technique-catalog.md). Quotation marks enclose only text copied from a card's verified quote list (`verify_card_quotes.py`, 2026-11-19: 222 quotes, 222 exact) or from the pre-synthesis SKILL.md (whose quotes come from the web-research notes; spoken quotes are YouTube auto-captions, ASR). Cards that record typos or internal inconsistencies of a paper are reading notes and are not used here; 08 §7.4 keeps one neutral general lesson.
-
-**Scope.** Sections exist for every SKILL.md item that this pass condensed or changed: the two taste lists, Methods 1–5, Heuristics 1–11, the workflows, the seven signature-work anatomies (since the fix pass, LMTD and GALINI only here), the anti-patterns, the trajectory, the inner tensions, the Honest Boundary, the corrections, the sources moved out of SKILL.md and the card key. The routing table, the Agentic Protocol and the Roundtable Card additions are recorded under [Workflows and routing](#workflows). Frontmatter, Activation Rules (only the first-activation disclaimer changed), Answer Standard, Research Integrity Rules, the taste quick-check, Mentor Voice and Academic Lineage are complete in SKILL.md.
-
-**Fix pass (2026-11-19, after three read-only reviews).** Four claims were corrected (Method 1's detection line, Method 5 step 6's citation, the LMTD minimum evidence, Heuristic 2's Royal Mail case); the LMTD and GALINI anatomies and some T3.6 bookkeeping moved back here; Heuristic 6 was folded into Heuristic 4; the catalog's writing moves became WM1-WM10. Each affected section has a **Fix pass** line saying what changed and keeps the text it replaced; replaced T3.6 SKILL.md wording is set in italics, not quotation marks, since it is neither card text nor pre-synthesis text.
-
 ## Contents
 
 - [Taste: marks of good research](#taste-marks) · [Taste: warning signs](#taste-warnings)
@@ -17,6 +9,18 @@
 - Anatomies: [APOGEE](#anatomy-apogee) · [GloMIQO](#anatomy-glomiqo) · [ANTIGONE](#anatomy-antigone) · [trained models](#anatomy-trained-models) · [P-split](#anatomy-p-split) · [LMTD](#anatomy-lmtd) · [GALINI](#anatomy-galini)
 - [Anti-patterns](#anti-patterns) · [Trajectory](#trajectory) · [Inner tensions](#inner-tensions)
 - [Honest Boundary](#honest-boundary) · [Corrections](#corrections) · [Sources](#sources) · [Card key](#card-key)
+
+> Date: 2026-11-19 (stage T3.6, first synthesis round). The full evidence behind `../../SKILL.md`. SKILL.md keeps, per item, the strongest statement and cards, a one-line say–do count, at most four variant/correction bullets and a pointer to the matching section here. Each section below has up to four parts: **Full-text evidence** (copied from `08-deep-reading-synthesis.md`, which is traceable to `cards/`), **Variants and contradictions** (08 §3), **Added in T3.6** (what this pass wrote into SKILL.md, with card ids) and **Before T3.6 (moved verbatim)** (the SKILL.md item as it stood on 2026-10-10, built from web research, so nothing is lost; its `[02 L1.4]`-style citations point to the web-research notes `01-…06-*.md` in this folder, and its links were re-pointed to work from this folder).
+
+**How to read.** `[S011 p. 17]` is paper card S011 in [07-paper-cards.md](07-paper-cards.md), at the page of the file the card read (mostly an arXiv or author preprint; journal pagination was not read; check the journal page before citing it in a paper). Abstract- and metadata-level cards are cited without pages. Per-card method links (✅ evidence, ⚠ variant, ✗ contradiction) are in the `Methods linked` column of 07; proof devices (P), design moves (D), experiment protocols (E) and writing moves (WM; renamed from W on 2026-11-19 so they do not collide with her written statements W1-W14 of note 02) are in [../technique-catalog.md](../technique-catalog.md). Quotation marks enclose only text copied from a card's verified quote list (`verify_card_quotes.py`, 2026-11-19: 222 quotes, 222 exact) or from the pre-synthesis SKILL.md (whose quotes come from the web-research notes; spoken quotes are YouTube auto-captions, ASR). Cards that record typos or internal inconsistencies of a paper are reading notes and are not used here; 08 §7.4 keeps one neutral general lesson.
+
+**Scope.** Sections exist for every SKILL.md item that this pass condensed or changed: the two taste lists, Methods 1–5, Heuristics 1–11, the workflows, the seven signature-work anatomies (since the fix pass, LMTD and GALINI only here), the anti-patterns, the trajectory, the inner tensions, the Honest Boundary, the corrections, the sources moved out of SKILL.md and the card key. The routing table, the Agentic Protocol and the Roundtable Card additions are recorded under [Workflows and routing](#workflows). Frontmatter, Activation Rules (only the first-activation disclaimer changed), Answer Standard, Research Integrity Rules, the taste quick-check, Mentor Voice and Academic Lineage are complete in SKILL.md.
+
+**Fix pass (2026-11-19, after three read-only reviews).** Four claims were corrected (Method 1's detection line, Method 5 step 6's citation, the LMTD minimum evidence, Heuristic 2's Royal Mail case); the LMTD and GALINI anatomies and some T3.6 bookkeeping moved back here; Heuristic 6 was folded into Heuristic 4; the catalog's writing moves became WM1-WM10. Each affected section has a **Fix pass** line saying what changed and keeps the text it replaced; replaced T3.6 SKILL.md wording is set in italics, not quotation marks, since it is neither card text nor pre-synthesis text.
+
+**Tighten pass (2026-11-19, stage T3.7).** SKILL.md was condensed from 12030 to 11370 words (`wc -w`) without loss. Every SKILL.md line this pass shortened is kept here word for word, in a **Before T3.7 (moved verbatim)** part at the end of its section: Methods 1–5, both taste lists, Heuristics 1, 2, 4, 5, 7, 8, 9, 10 and 11, the routing row on solver choice and two rows of the stages table (under [Workflows and routing](#workflows)), the trajectory's Latest paragraph and three inner tensions. SKILL.md keeps each method's strongest statement and at most three cards per heuristic; Heuristics 1, 2, 10 and 11 now cite their sources without quoting them (the quotes are here); the extra quotes, case lists, case DOIs and the examples behind the stop rules are here. This partly reverses the fix pass (Method 1's detection bullet, the Stated pointers of Methods 2 and 4, Heuristic 4's long-horizon examples, the per-step and per-gate cards of Heuristics 10 and 11, the stages table's drafting quote and MEng sentence) and drops T3.6's WM2 cards from the drafting row; the **Fix pass** lines in those sections describe the state before T3.7, which is the text of each **Before T3.7** part, and each of those parts says what T3.7 cut. Frontmatter, How to Use, Activation Rules, Answer Standard, Research Integrity Rules, the anatomies, the Roundtable Card, the Honest Boundary and its corrections list were not changed.
+
+**T3.7 fix round (2026-11-19, after a read-only review).** Eight minor findings, each checked against the cards, the notes or the full text before use; SKILL.md went from 11370 to 11493 words. Back in SKILL.md: Method 1's stop-rule parenthetical on the withdrawn theorem, word for word [03 PE-34]; Method 2's written-statement pointer (C9, W9), the contradiction named in its say–do line [S056 p. 16], the P-split journal outcome in step 6 with the abstract's qualifier outside the quotation marks [S046 p. 1] (card c16 confirms the claim on pp. 1 and 26; the quoted words are the abstract's, and the conclusion restates them in other words), and the NeurIPS reviewer's request worded as asked [03 §5.5]; Method 3 step 7's role sentence, now marked inferred as 03 PE-41 marks it; Method 4's T6 pointer as the fix pass had it, and the card's GloMIQO default sentence in step 4 [S004 p. 13]; Heuristic 1's broken assumption as a paraphrase (T10 [45:19]); Heuristic 10's cards for steps 3 and 7 [S045 p. 30; S055 pp. 11–12], still three cards in all. Each section's **Before T3.7** part gives the details; T3.7 wording that this round replaced is set in italics there. In this ledger: the routing row moved under [Workflows and routing](#workflows) has a three-column header again (under a two-column header GFM drops a row's third cell), and a claim-audit note follows the supervision row. Rows 13, 14, 16 and 17 of [10-claim-audit.md](10-claim-audit.md) cite SKILL.md lines whose audited clauses are no longer in SKILL.md: they are here ([Workflows and routing](#workflows), [Heuristic 11](#heuristic-11)), and the cards of rows 13 and 16-17 also in catalog WM2 and D3; that file is append-only and outside this step, so its dated note is left to the operator, as is narrowing its k=8 partial (Method 3 Practice, [S081 pp. 6, 26–28]), which predates T3.7.
 
 <a id="taste-marks"></a>
 
@@ -39,6 +43,18 @@
 4. **Good problems are messy: several complications at once.** "I am not the kind of academic who wishes to live in an ivory tower" (T8 [30:04], ASR); Heuristic 1 [02 C12, C14].
 5. **It ends in software others can extend or switch**: ANTIGONE architected for future term classes [03 PE-29]; OMLT's switchable formulations [01 SW4]; [02 C7, C15].
 
+### Before T3.7 (moved verbatim)
+
+Condensed in SKILL.md on 2026-11-19 (stage T3.7, tighten). The SKILL.md text as it stood before this pass, word for word:
+
+*Mark 3:*
+
+3. **It exploits structure ("insider information")**, not a black box: her most repeated belief, 7 sources 2014-2023 [02 C1]; "this isn't just black box optimization right ... there's an underlying structure" (T2 [56:12], ASR); in print, "MILP solvers are not necessarily best used as black boxes" [S005 p. 7].
+
+*Mark 4:*
+
+4. **Good problems are messy: several complications at once.** "I am not the kind of academic who wishes to live in an ivory tower" (T8 [30:04], ASR); Heuristic 1 [02 C12, C14]; operating constraints become formulation objects [S039 pp. 3–4; S086 pp. 1, 6].
+
 <a id="taste-warnings"></a>
 
 ## Taste: warning signs of bad research
@@ -54,6 +70,14 @@
 1. **A new parameter without evidence that one setting works across a class**, or re-tuned per comparison: "I introduced a parameter I don't like to introduce parameters" (T11 [29:40], ASR); T2 [21:05] (Integrity Rule 4) [02 L1.7, C4].
 2. **Winning on a metric you invented, over a weakened baseline, or outside the class that carries the result**: T11 [29:52]; "data sets that happen to be perfect for my research" (T1 [17:10], ASR); Dagstuhl working group (joint): "users of solver software should not rely on simplistic comparisons" (doi:10.4230/DagRep.8.2.64).
 3. **A design that defeats its own purpose, or a method outside its domain**: SnAKe, "I had taken a global optimization method and I had turned it into a local optimization method" (T11 [26:06], ASR); "one thing i really dislike is techno solutionism" (T1 [27:54], ASR) [02 L1.9, L5.4].
+
+### Before T3.7 (moved verbatim)
+
+Condensed in SKILL.md on 2026-11-19 (stage T3.7, tighten). The SKILL.md text as it stood before this pass, word for word:
+
+*Warning 2:*
+
+2. **Winning on a metric you invented, over a weakened baseline, or outside the class that carries the result**: T11 [29:52]; "data sets that happen to be perfect for my research" (T1 [17:10], ASR); Dagstuhl working group (joint): "users of solver software should not rely on simplistic comparisons" (doi:10.4230/DagRep.8.2.64); bounds withheld that "could give the P-split formulations an unfair advantage" [S046 p. 17].
 
 <a id="method-1"></a>
 
@@ -124,6 +148,26 @@ No contradiction link targets Method 1. The 2017-2020 detection papers are recor
 **Different from standard practice**: textbook spatial B&B relaxes the model term by term. Here a recognition layer comes first, and detection quality is itself an experimental object with misses listed.
 
 **Limitations**: only as good as its structure library and bound inference: factorable relaxations still "abstract away much of the nonlinear structure" (doi:10.1137/22m1515537); missed convexity (doi:10.1007/s11081-018-9411-8); guessed bounds gave a "grossly suboptimal" result (doi:10.1007/s11590-015-0880-9) [05 PC-01-PC-05].
+
+### Before T3.7 (moved verbatim)
+
+Condensed in SKILL.md on 2026-11-19 (stage T3.7, tighten). T3.7 cut back fix-pass wording here under the tighten rule (one-line variant bullets): the first variant bullet kept two of the four detection papers' cards [S120 p. 19; S068 p. 11] and lost the symmetry papers' step 5 cards and the measured-gain clause, which SKILL.md keeps in the inner tension *Detect vs exploit* [S024 pp. 24–29]; the **Fix pass** line above describes the text below. The T3.7 fix round put the stop-rule parenthetical back word for word. The SKILL.md text as it stood before this pass, word for word:
+
+*Evidence, Stated:*
+
+- Stated: the epigraph (C1, 7 sources 2014-2023 [02 L1.4, L3.1]); in print: "researchers may be able to find and exploit special mathematical structure for particular problem classes" [S145 p. 3].
+
+*Variants/corrections, first bullet:*
+
+  - ⚠ The 2017-2020 detection papers stop before step 6: no gain measured inside a B&B [S076 p. 5; S120 p. 19; S091 pp. 7–10; S068 p. 11]. Step 5 is done for SUSPECT [S068 p. 10], not in the symmetry papers [S076 p. 5; S120 pp. 16–17; S091 p. 7]. Gains were measured where her code exploited the structure [S024 pp. 24–29].
+
+*Step 5:*
+
+5. Validate against a labelled library used as an oracle: SUSPECT on all 1527 MINLPLib 2 problems, 1275 of 1392 processed matched, every miss listed; "SUSPECT does not have false positives on the test set, this gives confidence in the implementation and makes it possible to use it for solver selection." [03 PE-15; S068 p. 10]. For an encoding: a completeness proof plus exact solution counts [S128 pp. 11–16] (P4, E7).
+
+*Stop rules:*
+
+**🔴 Stop rules**: a detector with false positives stays out of the default path; detection that slows the general case becomes a plug-in or option; a failed structure theorem is withdrawn publicly and replaced by a counterexample (arXiv:1712.05222 v3: "Theorem 1,2 are incorrect"; filed by the student, her role not recorded) [03 PE-34].
 
 <a id="method-2"></a>
 
@@ -206,6 +250,38 @@ Corrections of SKILL.md claims (08 §3.3):
 
 **Limitations**: needs two known extremes and the P-split assumptions (additive separability); choosing N has no theory ("I do wish the authors left us with a clearer story on how N should be selected", NeurIPS 2021 reviewer) [03 §5.5]. Full texts of P-split and NeurIPS 2021 not read.
 
+### Before T3.7 (moved verbatim)
+
+Condensed in SKILL.md on 2026-11-19 (stage T3.7, tighten). T3.7 also dropped the Stated pointer that the fix pass had put back (see **Fix pass** above) and the step 6 outcome. The T3.7 fix round restored the pointer as *written: W9, Goldilocks (C9 [02 L3.2])*, named the contradiction in the say–do line again, put the step 6 outcome back with its qualifier outside the quotation marks, *(P-split journal, for many of the test problems: [the quoted words] [S046 p. 1])*, and replaced the T3.7 Limitations wording *(a NeurIPS 2021 reviewer asked for one [03 §5.5])*, which read the reviewer's wish for a clearer story on choosing N as a request for a theory, with *(a NeurIPS 2021 reviewer asked how N should be selected [03 §5.5])*. The SKILL.md text as it stood before this pass, word for word:
+
+*Evidence, Stated:*
+
+- Stated: C9 [02 L3.2] (Goldilocks, W9); "alert alert I'm going to introduce a parameter and then try to um uh show you that the parameter wasn't very important and also that we can get rid of the parameter" (T11 [28:23], ASR).
+
+*Evidence, Say–do:*
+
+- Say–do: ✅ stated + practised, **partly kept**: robustness shown on the families tested; no rule for choosing the parameter published [05 PC-16]; cards: 33 (all read in full or in part); links: 14 evidence, 21 variant, 1 contradiction (a scope note: not applied in a co-authored chemometrics paper [S056 p. 16]).
+
+*Step 3:*
+
+3. Prove endpoints and order ("the relaxations form a hierarchy starting from a big-M equivalent and converging to the convex hull", CPAIOR abstract): projection for the bottom, aggregation for the order [S046 pp. 6–8] (P1, P2), and a ceiling (→ Heuristic 4). The order needs additive bounds (a box, interval arithmetic); with the tightest valid bounds it can fail [S046 pp. 6–8]. Keep proof assumptions apart from practical ones (T2 [37:18], ASR).
+
+*Step 4:*
+
+4. Put the parameter's cost first ("good God Ruth you use a lot of parameters", T7 [02:16], ASR).
+
+*Step 6:*
+
+6. Report nodes and time against both extremes on the same instances, with settings fixed across formulations (E9) (P-split journal: "a similar number of explored nodes as the convex hull formulation, while reducing the solution time by an order of magnitude"). If the hull is intractable (ReLU nets: over five minutes to pass the root [S046 p. 22]), compare against big-M plus hull cuts swept over cut frequency [S013 p. 8].
+
+*Stop rules:*
+
+**🔴 Stop rules**: if you cannot say which value is best, label the rule heuristic ("so it's going to be it's going to be heuristic", T7 [23:56], ASR); drop a variant that "kind of works um but uh not really" (T7 [33:21], ASR); report a failed idea as failed [02 D2, D5].
+
+*Limitations:*
+
+**Limitations**: needs two known extremes and the P-split assumptions (additive separability; without them P-split formulations "do not necessarily have an advantage" [S046 p. 26]); choosing N has no theory ("I do wish the authors left us with a clearer story on how N should be selected", NeurIPS 2021 reviewer) [03 §5.5]; the best N or P is problem-dependent, with class-specific ranges only: 2-4 variables per split on clustering and P_ball, P = 2 or 4 splits on ReLU nets (P = 50 slowest), a decline near N ≥ 7 [S046 pp. 22–25; S013 p. 8].
+
 <a id="method-3"></a>
 
 ## Method 3: The partner's trained model is the problem: constraints, then a toolkit
@@ -275,6 +351,22 @@ No contradiction link targets Method 3. Corrections of SKILL.md claims (08 §3.3
 **Applies to stage**: problem choice, formulation design, release.
 
 **Different from standard practice**: ML samples a trained model as a black box; OR papers present formulations as rivals. Here the model is the problem and the rivalry a user setting.
+
+**Limitations**: learned trust regions beat PCA "in 18 cases out of 21" on synthetic data (doi:10.1287/ijoc.2022.0312); tighter tree formulations exist (doi:10.1287/opre.2022.0150); exact encodings of large nets do not scale (arXiv:2401.03451; her words: "sometimes it's going to be a stupid idea", T7, ASR) [05 PC-04, PC-10, PC-14]. The toolkit side presupposes developer funding; a lone researcher should use OMLT and contribute one formulation.
+
+### Before T3.7 (moved verbatim)
+
+Condensed in SKILL.md on 2026-11-19 (stage T3.7, tighten). The T3.7 fix round gave step 7 its role sentence back, marked as inferred, as 03 PE-41 marks it: *Her role (inferred): maintainer and gatekeeper; 20 of her 21 OMLT commits are PR merges [03 PE-41, PE-42].* The SKILL.md text as it stood before this pass, word for word:
+
+*Step 7:*
+
+7. Generalise and harden: one interface for NN and GBT models with switchable formulations (complementarity, big-M, partition); tests, coverage, notebooks in CI, COIN-OR. Her hands-on role is gatekeeping: 21 OMLT commits, 20 of them PR merges [03 PE-41, PE-42].
+
+*Stop rules:*
+
+**🔴 Stop rules**: if a specialised tool from another community does the task better, say so; if solutions leave the training region, the "optimum" is not credible; if the tool rests on one student, find an external co-maintainer or accept that it will freeze (GPdoemd, suspect, romodel stalled; OMLT with Sandia and CMU kept releasing) [04 F6; 03 PE-43].
+
+*Limitations:*
 
 **Limitations**: learned trust regions beat PCA "in 18 cases out of 21" on synthetic data (doi:10.1287/ijoc.2022.0312); tighter tree formulations exist (doi:10.1287/opre.2022.0150); exact encodings of large nets do not scale (arXiv:2401.03451; her words: "sometimes it's going to be a stupid idea", T7, ASR) [05 PC-04, PC-10, PC-14]. The toolkit side presupposes developer funding; a lone researcher should use OMLT and contribute one formulation.
 
@@ -348,6 +440,22 @@ Correction of a SKILL.md claim (08 §3.3):
 **Different from standard practice**: papers usually test a relaxation at the root or on its home class, then turn it on. Here authorship earns no default.
 
 **Limitations**: needs a full solver to ablate inside (not pure theory); switching off your own novelty is easier with a reputation; a one-class user needs a plug-in (GALINI pooling, doi:10.1016/j.compchemeng.2022.107660), not a default.
+
+### Before T3.7 (moved verbatim)
+
+Condensed in SKILL.md on 2026-11-19 (stage T3.7, tighten). T3.7 dropped the Stated pointer T6 [09:26, 12:26] that the fix pass had put back (see **Fix pass** above) and the provenance note *full sentence [01 SW1]* (the full sentence is on S009 p. 23 of the full text; the card verifies its opening), and condensed step 4's quote. The T3.7 fix round restored the pointer word for word and put the card's sentence back in step 4 [S004 p. 13], replacing the T3.7 paraphrase *GloMIQO ships its piecewise-linear relaxations off and tells users to try them on models that do not solve in reasonable time* with the quoted sentence followed by *users are told to try them on models that do not solve in reasonable time*. The SKILL.md text as it stood before this pass, word for word:
+
+*Evidence, Stated:*
+
+- Stated: "our goal is to design the best overall algorithm that can address any pooling problem, so we are interested in the performance of the two relaxations when they are incorporated into the APOGEE algorithm rather than in an isolated root node relaxation." (APOGEE paper [S009 p. 23]; full sentence [01 SW1]); on her own formulation as one option, T6 [09:26, 12:26] (ASR) [02 L1.8].
+
+*Step 2:*
+
+2. Run a cumulative ablation inside the full B&B (MP 2012: McCormick → + edge-concave facets → + piecewise linear → + logarithmic partitioning; root gap, nodes, time, error bars; "This holistic view makes the comparisons fairly subtle but also allows us to draw better-informed conclusions." [S011 p. 17]). With several component classes, run every pair and all together [03 PE-18, PE-19; S087 p. 16] (E4).
+
+*Step 4:*
+
+4. Choose the default for robustness: "Therefore, the default in GloMIQO is not to use the piecewise-linear relaxations ... Users are strongly encouraged to experiment with activating the piecewise-linear options for models that do not solve within a reasonable amount of time" [01 SW2; S004 p. 13].
 
 <a id="method-5"></a>
 
@@ -445,6 +553,14 @@ Corrections of SKILL.md claims (08 §3.3):
 
 **Limitations**: needs licences and compute. Comparisons age when one side freezes: ANTIGONE fell from 2nd of 5 to 5th of 7 in Mittelmann's MINLP benchmark (Apr 2017 → Feb 2024), was dropped in 2025, yet in May 2026 still solved the most continuous nonconvex QPLIB instances (35 of 102) [05 §4, PC-06]. Date every comparison; say which side is frozen.
 
+### Before T3.7 (moved verbatim)
+
+Condensed in SKILL.md on 2026-11-19 (stage T3.7, tighten). The SKILL.md text as it stood before this pass, word for word:
+
+*Evidence, Say–do:*
+
+- Say–do: ✅ stated + practised in solver-comparison papers; lapse in NeurIPS 2021 (OBBT time excluded, single runs, an anomaly put down to "variability") [03 PE-36, C2]; cards: 81 (76 read in full or in part); links: 40 evidence, 41 variant, 5 contradictions (a sixth contradiction link is a reading note and is not counted). Exclusivity is the weakest of the five.
+
 ---
 
 <a id="heuristic-1"></a>
@@ -459,6 +575,14 @@ Corrections of SKILL.md claims (08 §3.3):
 
 1. **Choose by broken assumption.** If a standard method's assumptions collide with two or more of an application's complications, take it: "we always assume that we're able to sample the space wherever we wish um at any one time ... this is of course not going to be this the case in many chemistry applications" (T10 [45:19], ASR). Cases: doi:10.1016/j.compchemeng.2023.108194; arXiv:2402.08406.
 
+**Before T3.7 (moved verbatim)**:
+
+Condensed in SKILL.md on 2026-11-19 (stage T3.7, tighten). T3.7 left the T10 pointer without saying which assumption broke; the T3.7 fix round says it as a paraphrase, without quotation marks: *in BO, the usual assumption that one can sample anywhere at any time fails in many chemistry applications, T10 [45:19], ASR*. The SKILL.md text as it stood before this pass, word for word:
+
+*Heuristic 1:*
+
+1. **Choose by broken assumption.** If a standard method's assumptions collide with two or more of an application's complications, take it: "we always assume that we're able to sample the space wherever we wish um at any one time ... this is of course not going to be this the case in many chemistry applications" (T10 [45:19], ASR). Cases: doi:10.1016/j.compchemeng.2023.108194; arXiv:2402.08406; move costs and delays become formulation objects [S039 pp. 3–4; S086 pp. 1, 6]. (ledger `#heuristic-1`)
+
 <a id="heuristic-2"></a>
 
 ## Heuristic 2: Industrial instance first, general class second, public stand-in released
@@ -472,6 +596,14 @@ Corrections of SKILL.md claims (08 §3.3):
 **Before T3.6 (moved verbatim)**:
 
 2. **Industrial instance first, general class second, public stand-in released**; the partner's data stays inside ("the bsf data is within bsf", T1 [03:46], ASR). Case: gradient-boosted trees v1 → v3 and the concrete instance [03 PE-25].
+
+**Before T3.7 (moved verbatim)**:
+
+Condensed in SKILL.md on 2026-11-19 (stage T3.7, tighten). The SKILL.md text as it stood before this pass, word for word:
+
+*Heuristic 2:*
+
+2. **Industrial instance first, general class second, public stand-in released**; the partner's data stays inside ("the bsf data is within bsf", T1 [03:46], ASR). Case: gradient-boosted trees v1 → v3 and the concrete instance [03 PE-25; S020 p. 18]; Royal Mail: data first, then the general class, without a public stand-in (data partly encrypted) [S135 pp. 2, 20]. (ledger `#heuristic-2`)
 
 <a id="heuristic-3"></a>
 
@@ -510,6 +642,14 @@ Four-way check of the boundary cluster (08 §4):
 
 4. **Prove the hierarchy, experiment for the rest, label it**: "I can only say it experimentally" (T7 [38:41], ASR). Not exclusive to her.
 
+**Before T3.7 (moved verbatim)**:
+
+Condensed in SKILL.md on 2026-11-19 (stage T3.7, tighten). T3.7 cut the fix pass's long-horizon form (see **Fix pass** above) to a pointer under the tighten rule (heuristics: one or two lines, at most three cards): SKILL.md names the question and points to the APOGEE anatomy, whose header and closure row carry the DOI and [S049 pp. 2, 32]; the Floudas quote and the shorter-horizon answers [S024 p. 16; S069 p. 11] are in the text below ([S024 p. 16] also in SKILL.md's corrections list). The SKILL.md text as it stood before this pass, word for word:
+
+*Heuristic 4:*
+
+4. **Prove the hierarchy, experiment for the rest, label it**: "I can only say it experimentally" (T7 [38:41], ASR). Not exclusive to her. Also prove one negative result about your construction: a class it cannot tighten [S011 p. 9], a ceiling [S046 pp. 12–13], a counterexample without the hypothesis [S040 pp. 8–9] (P3). Its long-horizon form (formerly Heuristic 6): keep the "why does it work?" question until a structural result answers it, "I finally have a first answer to these questions Chris asked me eight years ago" (essay W1, p. 13), answered by a complexity characterisation (doi:10.1007/s10898-017-0577-y) [S049 pp. 2, 32]; shorter-horizon structural answers [S024 p. 16; S069 p. 11]. (ledger `#heuristic-4`, `#heuristic-6`)
+
 <a id="heuristic-5"></a>
 
 ## Heuristic 5: Weakness first; concede precisely; restate novelty
@@ -521,6 +661,14 @@ Four-way check of the boundary cluster (08 §4):
 **Before T3.6 (moved verbatim)**:
 
 5. **Weakness first; concede precisely; restate novelty.** NeurIPS 2021: "Your observation is correct, formulation (13)–(17) cannot be tighter than the convex hull formulation presented by Anderson et al. unless ..."; then "The fundamental advancements novel to this work are (i) ... and (ii) ..."; the score rose from 6 to 7 [03 PE-36]. One readable thread only.
+
+**Before T3.7 (moved verbatim)**:
+
+Condensed in SKILL.md on 2026-11-19 (stage T3.7, tighten). The SKILL.md text as it stood before this pass, word for word:
+
+*Heuristic 5:*
+
+5. **Weakness first; concede precisely; restate novelty.** NeurIPS 2021: "Your observation is correct, formulation (13)–(17) cannot be tighter than the convex hull formulation presented by Anderson et al. unless ..."; then "The fundamental advancements novel to this work are (i) ... and (ii) ..."; the score rose from 6 to 7 [03 PE-36]. One readable thread only. (ledger `#heuristic-5`)
 
 <a id="heuristic-6"></a>
 
@@ -548,6 +696,14 @@ Four-way check of the boundary cluster (08 §4):
 
 7. **Write the do-not-use conditions next to the method**: BO "should only be used when acquiring new data is expensive and we have limited other knowledge" (T10 [20:26], ASR); ANTIGONE's quadratic scope; GloMIQO's opt-in advice [02 C11; 03 PE-31].
 
+**Before T3.7 (moved verbatim)**:
+
+Condensed in SKILL.md on 2026-11-19 (stage T3.7, tighten). The SKILL.md text as it stood before this pass, word for word:
+
+*Heuristic 7:*
+
+7. **Write the do-not-use conditions next to the method**: BO "should only be used when acquiring new data is expensive and we have limited other knowledge" (T10 [20:26], ASR); ANTIGONE's quadratic scope; GloMIQO's opt-in advice [02 C11; 03 PE-31]; in print, 2016-2025 [S003 p. 9; S081 p. 9]. (ledger `#heuristic-7`)
+
 <a id="heuristic-8"></a>
 
 ## Heuristic 8: Collaborate through shared code; recruit critics and examinees
@@ -560,6 +716,14 @@ Four-way check of the boundary cluster (08 §4):
 
 8. **Collaborate through shared code; recruit critics and examinees**: "we switched to a model of just actively contributing to the same open-source projects" (W11). Kronqvist (2019 solver critique; she examined his thesis) became a fellow; Krause (SnAKe critique) co-authored arXiv:2402.08406 [05 R2]. The examining → hiring link is inferred.
 
+**Before T3.7 (moved verbatim)**:
+
+Condensed in SKILL.md on 2026-11-19 (stage T3.7, tighten). The SKILL.md text as it stood before this pass, word for word:
+
+*Heuristic 8:*
+
+8. **Collaborate through shared code; recruit critics and examinees**: "we switched to a model of just actively contributing to the same open-source projects" (W11). Kronqvist (2019 solver critique; she examined his thesis) became a fellow; Krause (SnAKe critique) co-authored arXiv:2402.08406 [05 R2; S059 p. 1]. The examining → hiring link is inferred. (ledger `#heuristic-8`)
+
 <a id="heuristic-9"></a>
 
 ## Heuristic 9: Release per paper
@@ -571,6 +735,14 @@ Four-way check of the boundary cluster (08 §4):
 **Before T3.6 (moved verbatim)**:
 
 9. **Release per paper**: pip-installable code with the preprint (OMLT 1.0 on PyPI four days after arXiv v1); one repository per paper; contributors and funding named [03 PE-27, PE-28]. Her paper videos lapsed after 2024-11-04.
+
+**Before T3.7 (moved verbatim)**:
+
+Condensed in SKILL.md on 2026-11-19 (stage T3.7, tighten). The SKILL.md text as it stood before this pass, word for word:
+
+*Heuristic 9:*
+
+9. **Release per paper**: pip-installable code with the preprint (OMLT 1.0 on PyPI four days after arXiv v1); one repository per paper; contributors and funding named [03 PE-27, PE-28; S068 p. 12]. Her paper videos lapsed after 2024-11-04. (ledger `#heuristic-9`)
 
 <a id="heuristic-10"></a>
 
@@ -604,6 +776,14 @@ Four-way check of the uncertainty cluster (08 §4):
 **Before T3.6 (moved verbatim)**:
 
 10. **Make uncertainty explicit and agree its assumptions with the stakeholder**: "if you don't have an understanding embedded into your optimisation that the world is an uncertain place, then you're probably going to get a bogus solution that is going to hurt you once you implement it." (Q1, Imperial Stories, 2021). Cases: doi:10.1021/acs.iecr.9b01772; doi:10.1007/s10107-021-01762-8. Executable only in outline.
+
+**Before T3.7 (moved verbatim)**:
+
+Condensed in SKILL.md on 2026-11-19 (stage T3.7, tighten). T3.7 cut the fix pass's per-step cards (see **Fix pass** above) to three under the tighten rule (heuristics: at most three cards) and dropped the Q1 quote and the case DOIs. The T3.7 fix round put back the cards of step 3 [S045 p. 30] and of step 7's bisection [S055 pp. 11–12], so SKILL.md cites S045, S048 and S055 on steps 2, 3, 4, 6 and 7; the cards of steps 1, 5 and 8 [S085 p. 4; S042 p. 8; S060 p. 8; S060 p. 11] and of step 7's outer BO [S033 pp. 15–16] are in the eight steps above and in the text below. The SKILL.md text as it stood before this pass, word for word:
+
+*Heuristic 10:*
+
+10. **Make uncertainty explicit and agree its assumptions with the stakeholder**: "if you don't have an understanding embedded into your optimisation that the world is an uncertain place, then you're probably going to get a bogus solution that is going to hurt you once you implement it." (Q1, Imperial Stories, 2021). Cases: doi:10.1021/acs.iecr.9b01772; doi:10.1007/s10107-021-01762-8. Steps: state why the uncertainty model fits the decision [S085 p. 4]; tabulate risky assumptions with consequence and check [S045 pp. 9–10]; match the tolerance to the uncertainty ("a tight duality gap is meaningless for these uncertain parameters." [S045 p. 30]); calibrate the practitioner's safety factor [S048 pp. 14–15]; report which decisions stay invariant [S042 p. 8; S060 p. 8]; check a posteriori where a theorem's conditions fail [S055 pp. 19–20]; set the robustness level for the user by bisection on sampled feasibility or an outer BO [S055 pp. 11–12; S033 pp. 15–16] (→ Method 2 step 7); keep more than one analysis type [S060 p. 11]. (ledger `#heuristic-10`)
 
 <a id="heuristic-11"></a>
 
@@ -640,6 +820,14 @@ Four-way check (08 §4):
 **Added in T3.6**: SKILL.md item 11 with [S011 pp. 6–7; S087 p. 4; S021 pp. 2, 24–25]; Honest Boundary U2 marked resolved; Workflow B step 7 and a routing row point here; catalog D3, D11, E15. Exclusivity fails, so it is a heuristic, not a method ("Not exclusive to her").
 
 **Fix pass**: the T3.6 title, *Spend the expensive relaxation only where a cheap one has failed* (08's cluster name, kept in the copied tables above and below), claimed escalation after a cheap step fails; most cards show gating or selection instead (dominance tests [S011 pp. 6–7], a coarse relaxation for OBBT [S025 p. 24], learn-then-freeze RLT [S004 p. 14], an offline selector [S021 pp. 14–15]); only the coarse-to-fine case is escalation [S088 pp. 10–12]. The item is retitled *Put an expensive component behind a cheap gate*; each gate now carries its card in SKILL.md, the swept callback [S005 pp. 5–8] is named, and the tags D3, D11, E15 appear there. U2 left the Honest Boundary's unverified list (a "Resolved" line follows it). The Roundtable Card no longer lists the cheap gate in its default recommendation, since the heuristic fails exclusivity.
+
+**Before T3.7 (moved verbatim)**:
+
+Condensed in SKILL.md on 2026-11-19 (stage T3.7, tighten). T3.7 cut the per-gate cards that the fix pass had written into SKILL.md (see **Fix pass** above) to three under the tighten rule (heuristics: at most three cards): the necessary or cheap sufficient test [S011 pp. 6–7], the swept callback [S005 pp. 5–8] and the stop rule [S021 pp. 24–25]. The other gates' cards, the coarse relaxation [S025 p. 24], the selector learned near the root [S004 p. 14] or offline [S021 pp. 14–15] and the gate's cost [S087 p. 4], are in the cards and steps above, in catalog D3 and D11 and in the text below; the quote [S021 p. 2] is in the cards above and in the text below. The SKILL.md text as it stood before this pass, word for word:
+
+*Heuristic 11:*
+
+11. **Put an expensive component behind a cheap gate** (new; resolves U2): a necessary or cheap sufficient test [S011 pp. 6–7], a coarse relaxation for bounds tightening [S025 p. 24], a selector learned near the root [S004 p. 14] or offline [S021 pp. 14–15], a callback whose frequency is swept [S005 pp. 5–8]; report the gate's cost [S087 p. 4] (D3, D11, E15). "general-purpose solvers cannot invest too much time in possibly unproductive cutting surfaces." [S021 p. 2]; if the learned rule does worse than random, use the exact rule [S021 pp. 24–25]. Not exclusive to her. (ledger `#heuristic-11`)
 
 <a id="workflows"></a>
 
@@ -766,6 +954,30 @@ Say "no distillable Misener method", give generic practice and label it "not Mis
 | Grant writing | One source (T8): mutual critique of grants [02 L6.5] |
 | Leaving a line | Exits show only as silence at grant ends; her account: "very opportunistic" [06 §5] |
 | Refereeing | Only Top Reviewer (NeurIPS 2022, 2023) and Area Chair (2024) records [06 §1.1] |
+
+### Before T3.7 (moved verbatim)
+
+Condensed in SKILL.md on 2026-11-19 (stage T3.7, tighten). In the stages table T3.7 cut back the fix pass's drafting quote and MEng sentence (see **Fix pass (2026-11-19)** above) and T3.6's WM2 cards; the rows below are the state before T3.7. The T3.7 fix round gave the routing row its three-column header (Research Task Routing's) in place of the stages table's two-column one, so the row's third cell renders; the row text is unchanged. The SKILL.md text as it stood before this pass, word for word:
+
+*Research Task Routing, solver-choice row:*
+
+| User says | Workflow | Main methods |
+|---|---|---|
+| "Which solver should I use?" "Is my model convex?" | Workflow B step 1, then Method 5 | Method 1 step 5 (SUSPECT's use "for solver selection" [03 PE-15]); class and structure before solver (inferred [05 §7]); Method 5 limitations (date benchmarks) |
+
+*Stages without a distillable Misener method, drafting row:*
+
+| Stage | Why |
+|---|---|
+| Paper drafting and revision | No source on her drafting or revision process; a thesis thanks her for help as a "writer of scientific texts" without saying how [04 §4]. Her co-authored papers show the writing moves of catalog §4 (WM1-WM10; reviews as maps, WM2 [S003 p. 12; S014 p. 2]): offer them labelled as observed in her papers |
+
+*Stages without a distillable Misener method, supervision row:*
+
+| Stage | Why |
+|---|---|
+| Supervision mechanics | Meetings, draft review, topic assignment, stopping projects, authorship: undocumented; acknowledgements only. Context: postdocs and fellows as day-to-day mentors (6 of 11 theses) [04 S4]. Two MEng projects she supervised became group papers [S100 p. 13; S024 p. 15; S117 p. 3; S135 p. 20] |
+
+Claim audit 2026-11-19 k=14 ([10-claim-audit.md](10-claim-audit.md)): the S135 p. 20 part is partial (the card links S135 to the MEng line only through authorship).
 
 ---
 
@@ -967,6 +1179,14 @@ The SKILL.md paragraph after the table names the biomedical-consortium turn [S04
 
 Her constant: "So all I've been doing here at Imperial uh is basically figuring out how to relax better." (T8 [05:37], ASR). Her variable: domains, "very opportunistic".
 
+### Before T3.7 (moved verbatim)
+
+Condensed in SKILL.md on 2026-11-19 (stage T3.7, tighten). The SKILL.md text as it stood before this pass, word for word:
+
+*Research Trajectory, Latest:*
+
+2025-10-10 to 2026-10-10 [06 §7]: P-split in *Math. Program.* 218; BoGrape (BO over graphs, ICLR 2026); Catechol benchmark (NeurIPS 2025); preprints arXiv:2605.05382 (meta-learning BO with BASF), arXiv:2610.03647; SIAM OP26 plenary on optimising over graphs scheduled (delivery not confirmed). No new MINLP solver or formulation paper; OMLT upkeep sits with collaborators. Group: 3 postdocs, 1 PhD student.
+
 <a id="inner-tensions"></a>
 
 ## Inner tensions
@@ -985,6 +1205,22 @@ Kept as tensions, not resolved.
 - **Count every second vs the accounting used.** Timings including building (T3); permuted-model runs (Dagstuhl, joint) — against NeurIPS 2021: OBBT time excluded, single runs, an anomaly called "variability" [03 PE-36, C2].
 - **Release and community vs dormant tools.** "build an international user community" (W11) — against GALINI (no code commits since 2022-07-14, general paper a preprint), ANTIGONE frozen at 1.1, no video after 2024-11-04.
 - **Champion of piecewise relaxations vs shipping them off**; builder of general solvers vs special-purpose APOGEE beating her generic code and GALINI published only as the pooling version [01 §1.9; 03 PE-33].
+- One line each: "Autonomous research machines" (talk title) vs "I personally would not want everything automated" (T10 [51:59], ASR); industry gives little "jumping forward" (T8 [45:03], ASR) vs press quotes on industrial impact; depth (one spine, an eight-year pooling question) vs pivot (ANTIGONE and six lines dropped silently) [06 §4, §5].
+
+**Before T3.7 (moved verbatim)**:
+
+Condensed in SKILL.md on 2026-11-19 (stage T3.7, tighten). The SKILL.md text as it stood before this pass, word for word:
+
+*Proofs "boring" vs steady theory:*
+
+- **Proofs "boring" vs steady theory.** "just a convergence proof or something to just work ... probably you got to find somebody else because it's boring and I'm not interested." (T8 [30:35], ASR) — against the P-split hierarchy, the 2018 complexity paper, and "i think the laser [= Lasserre] hierarchy is the the coolest thing ever" (T3 [00:47], ASR). Inferred reading: she rejects routine component proofs, not structural theory.
+
+*Count every second vs the accounting used:*
+
+- **Count every second vs the accounting used.** Timings including building (T3); permuted-model runs (Dagstuhl, joint) — against NeurIPS 2021: OBBT time excluded, single runs, an anomaly called "variability" [03 PE-36, C2]. Later: set-up time counted in 2023 [S078 pp. 13–14], OBBT time excluded in 2026 [S046 p. 25].
+
+*One line each (three more tensions):*
+
 - One line each: "Autonomous research machines" (talk title) vs "I personally would not want everything automated" (T10 [51:59], ASR); industry gives little "jumping forward" (T8 [45:03], ASR) vs press quotes on industrial impact; depth (one spine, an eight-year pooling question) vs pivot (ANTIGONE and six lines dropped silently) [06 §4, §5].
 
 <a id="honest-boundary"></a>
@@ -1101,6 +1337,7 @@ This skill is distilled from public information and has these limits:
 13. Activation Rules, roundtable line "(no paper cards yet)": **not edited** (protected section; only the first-activation disclaimer may change in this step). The line predates the cards: 145 works now have cards (07), so a roundtable brief's evidence field may cite `[ruth-misener card S011 p. 17]`. Fix pass: the citing rule now sits in the Roundtable Card, which a convened member must read, and says it supersedes the old wording; changing the protected line itself is left to the operator. After T3.6 (2026-11-19) the operator rewrote the line to cite paper cards first, dropped the Roundtable Card's "supersedes" sentence, and changed "U1-U9" in the method-label line to "U1 or U3-U9" (U2 is now Heuristic 11).
 14. Method 1 Limitations: the self-reported convexity gap [S001 pp. 8, 14].
 15. Fix pass (2026-11-19, after three read-only reviews): Method 1's detection-line bullet (step 6 missing in all four papers, step 5 done for SUSPECT [S068 p. 10]); Method 5 step 6's citation [S001 pp. 10–11; S004 p. 19]; the LMTD minimum evidence (two of three instances comparable [S024 pp. 24, 29]); Heuristic 2's Royal Mail case (no public stand-in [S135 p. 20]); Method 4's ✗ bullet split; Method 5's contradiction count (5, plus one reading note); Misener & Biegler 2023 read in a six-page conference-format version [S015]. Each is detailed under its section's **Fix pass** line.
+16. Tighten (T3.7) and its fix round (2026-11-19): items 11 and 12 now land partly in this ledger. Heuristic 6's instances are in [Heuristic 4](#heuristic-4) (SKILL.md keeps [S049 pp. 2, 32] in the APOGEE anatomy and [S024 p. 16] in its corrections list); the stages table's WM2 cards and MEng seeds are in [Workflows and routing](#workflows). Item 15's Method 1 bullet keeps two of its four cards in SKILL.md (see [Method 1](#method-1)).
 
 ### Promotions considered (08 §4, copied)
 
