@@ -15,8 +15,9 @@
 
 字数预算不算这一节（2026-11-20 用户决定）：它由本脚本统一生成、各 skill 都一样，不是成员自己的内容。
 T3.6（team-synthesize.js 的 word_budget / max_words）、T3.7（team-tighten.js）和 team_status.py 的 --max-words
-都按 --words 的数比：每行先打印预算词数，再打印路径、总词数和这一节（连同两行标记）的词数。词数按空白切分，
-与 wc -w 相同；标记缺一行或次序颠倒时这一节记 0，整篇都算。
+都按 --words 的数比：每行先打印预算词数，再打印路径、总词数和这一节（连同两行标记）的词数。词数按空白切分
+（Python 的 str.split()，与 team_status.py 一直用的数法相同）；C locale 下的 wc -w 不把只由 →、✗、≤ 这类
+非 ASCII 符号组成的词算进去，会少约 1%，所以闸门不用 wc -w。标记缺一行或次序颠倒时这一节记 0，整篇都算。
 
 skill 类型的判定与插入位置：
     type: research-craft          → research-craft 块，插在「## Research Integrity Rules」/「## 研究诚信规则」之前
@@ -180,7 +181,7 @@ def current_block(text: str) -> str | None:
 
 
 def word_counts(text: str) -> tuple[int, int]:
-    """(总词数, 这一节连同两行标记的词数)。按空白切分，与 wc -w 相同；标记不成对时这一节记 0。"""
+    """(总词数, 这一节连同两行标记的词数)。按空白切分（str.split()，与 team_status.py 相同）；标记不成对时这一节记 0。"""
     text = text.replace("\r\n", "\n")
     total = len(text.split())
     b, e = BEGIN_RE.search(text), END_RE.search(text)
