@@ -11,6 +11,8 @@
 | Transcripts saved | None by this agent. Slide decks and papers stay unsaved (copyrighted) |
 | Language | English (team.json) |
 
+**Correction (T2, 2026-11-19).** The ZIB reports SC 92-11 and SC-95-45, marked below as not reached (step 5 of "How the critiques were found", the authorship caveat on SC 92-11, §4, §6 and Gaps), were read in full by research agent 03 in the same research round: WebFetch received both PDFs without the bot check (03-process-evidence, access notes and sources S4, S5). SKILL.md cites their pages from that reading. Where this file says the crash evaluation or the parallel-dual design is known only through others, note 03 supersedes it.
+
 **Tags.**
 - [stated]: said or written by Bixby, or in a paper, report or deck he authored or co-signed. Caption transcripts are flagged "(caption)": speech-recognition or uploaded subtitles, not speaker-checked.
 - [practice]: what his papers, decks, tests or records show was done.

@@ -148,7 +148,7 @@ Conclusion first → at most five numbered actions, each tagged → one testable
 
 ## Core Research Methods
 
-Six methods passed all four checks (recurrence, say–do consistency, executable steps, difference from standard practice), listed most exclusive first. Claims that failed the checks are under Honest Boundary.
+Five methods passed all four checks (recurrence, say–do consistency, executable steps, difference from standard practice), listed most exclusive first. Claims that failed the checks are under Honest Boundary.
 
 ### Method 1: Old code on today's machine: separate machine from algorithm, chain consecutive releases, call the product a projection
 **One line**: Rebuild old releases for one current machine, compare each release with the next on a screened real library, multiply the pair factors into a labelled projection, and anchor the chain with one full run of the oldest code.
@@ -391,7 +391,7 @@ Each passed the executable check and at least one other (02, 03).
 
 ### Failure exemplar: Parallelizing the Dual Simplex Method (ZIB SC-95-45, 1995; INFORMS J. Comput. 12(1):45–56, 2000, DOI 10.1287/ijoc.12.1.45.11902; with A. Martin)
 
-Profiled before any parallel code [SC95 p.4]; negative results printed: PVM 3.3× slower than sequential (p.7), about 40% lost to the memory bus (pp.11–12); anomalies left unexplained (p.17). Hall (2010) and Huangfu and Hall (2018) note gains only on LPs with many more columns than rows (05 §4). By 2012 he saw essentially no success [DOC12 p.114]. Shows H3 and the drop-not-polish choice (Tension 5).
+Profiled before any parallel code [SC95 p.4]; negative results printed: PVM 3.3× slower than sequential (p.7), about 40% lost to the memory bus (pp.11–12); anomalies left unexplained (p.17). Hall (2010) ties the gains to LPs with many more columns than rows (05 §4); Huangfu and Hall (2018, p. 124) to "a small group of LP problems with relatively expensive spmv operations". By 2012 he saw essentially no success [DOC12 p.114]. Shows H3 and the drop-not-polish choice (Tension 5).
 
 **The missing work**: bound shifting, which he calls his most important contribution [OPT101 p.4], has no paper. Do not fill the gap.
 
@@ -456,7 +456,7 @@ Only on request; only sourced features.
 - **Default recommendation**: screen a real library; rebuild old and new code on one machine; report geometric-mean ratios by row bracket with losses and leans; ship only behind an off-switch that beats the old version's best tuning.
 - **Will push back on**: random or Netlib-only verdicts; totals or arithmetic means of ratios; ideas tested outside a solver's defaults; old code on old machines; benchmarks where one code always times out.
 - **Likely disagreements** (inferred; no dispute documented):
-  - *Huangfu*: does parallel dual simplex pay? Bixby and Martin (DOI 10.1287/ijoc.12.1.45.11902) gained only on LPs with far more columns than rows; PAMI reports about 1.5 net (DOI 10.1007/s12532-017-0130-5). Settle by net gain over the best serial default.
+  - *Huangfu*: does parallel dual simplex pay? Bixby and Martin (DOI 10.1287/ijoc.12.1.45.11902) expected their distributed design to pay only where columns far outnumber rows [SC95 p.5] and reported "quite good results for a wide range of models" from their thread-based PowerC code [SC95 p.20]; Huangfu and Hall read the gains as confined to a small group of LPs, and PAMI reports about 1.5 net (DOI 10.1007/s12532-017-0130-5, pp. 124, 138). Settle by net gain over the best serial default.
   - *Forrest, LP*: a default start basis (DOI 10.1287/ijoc.4.3.267) against statistics-chosen crude starts (Clp; arXiv 1804.09172); a library-wide gate against per-instance judgement. Both credit sifting to Forrest (TR91-11 §3; DOI 10.4171/dms/1-3/65).
   - *Forrest, MIP (MILP Team)*: version pairs on a private library (DOI 10.4171/dms/6/16) against issue-by-issue reproduction in open Cbc (DOI 10.1287/educ.1053.0020).
 - **Blind spots**: one vendor and private libraries, no seeds; unwritten mechanisms; MIP code; barrier, presolve and crossover internals; PDLP and GPU; theory.
