@@ -419,7 +419,7 @@ Citation counts name their index (GS = Google Scholar, S2 = Semantic Scholar, OA
 | Key insight | Finite KKT branching needs bounded relaxations; SDP relaxations "are bounded and hence suitable for use with finite KKT-branching" [S007 p. 1]; also [S007 pp. 8-10] |
 | Minimum evidence | "the dual multipliers converged reasonably well even when the subproblems were solved very loosely" (note, p. 568) [H001 p. 2]; no external global-solver baseline [S007 pp. 15-23] |
 | Abandoned paths | 0-1 IPs; instances with CPLEX failures omitted and said so [S007 p. 23]; box-QP part split off into COAP 2009 (DOI 10.1007/s10589-007-9137-6; reason not stated) [S018 p. 14] |
-| Reception | COAP Best Paper 2009; BoxQP instances became a standard test set; later overtaken (Tension 4) |
+| Reception | Its box-QP companion won the COAP Best Paper Award 2009 [H001 p. 1]; BoxQP instances became a standard test set; later overtaken (Tension 4) |
 | Methods shown | H1, H7, M1 (D8 variant), M4, M5 |
 
 ### Second-order-cone constraints for extended trust-region subproblems (SIAM J. Optim. 23:432–451, 2013, DOI 10.1137/110826862; with Anstreicher) [S012, preprint read] · [ledger](references/research/09-evidence-ledger.md#anatomy-soc-trs)
@@ -530,18 +530,18 @@ Evidence per tension, with the pre-synthesis wording: [ledger](references/resear
 
 ## Roundtable Card
 
-- **Lens (one line)**: Which convex object captures this nonconvex quadratic structure exactly, and how far is the strongest known stack of relaxations (the "kitchen sink") from it?
-- **Leads when**: a nonconvex quadratic core (box QP, QCQP, bilinear/switching terms, ball or trust-region constraints) and the question is relaxation strength; SDP/DNN/CP/SOC exactness; explicit hulls of small substructures; unexplained cut families; tightness protocols; SDPs too large for interior-point codes (low-rank factorization with a dual certificate).
-- **First questions asked**: (1) What small substructure recurs here? (2) Can it be written exactly over one cone, under what hypothesis? (3) What is the kitchen sink, and does it already give the hull? (4) In what dimension can you prove the hull, where is the first counterexample, and is every "tight" backed by two signals and an exact certificate? (5) Which instances make the baseline fail, how were they filtered, and if the solver is nonconvex, where does the valid bound come from?
-- **Default recommendation**: lift to (x, X); intersect known relaxations; test on hard, filtered instances; derive SOC-RLT-type or lifted inequalities that beat the kitchen sink in the smallest dimension; publish the boundary with a certified counterexample.
+- **Lens (one line)**: Which convex object captures this nonconvex quadratic structure exactly, and how far is the "kitchen sink" of known relaxations from it?
+- **Leads when**: a nonconvex quadratic core (box QP, QCQP, bilinear/switching terms, ball or trust-region constraints) and the question is relaxation strength; SDP/DNN/CP/SOC exactness; hulls of small substructures; unexplained cut families; SDPs too large for interior-point codes (low-rank factorization with a dual certificate).
+- **First questions asked**: What small substructure recurs here? Can it be written exactly over one cone, under what hypothesis? Does the kitchen sink already give the hull? In which dimension does the hull proof stop, and is every "tight" backed by two signals and an exact certificate? Which filtered instances make the baseline fail, and where does a nonconvex solver's valid bound come from?
+- **Default recommendation**: lift to (x, X); intersect known relaxations; test on hard, filtered instances; derive SOC-RLT-type or lifted inequalities beating the kitchen sink in the smallest dimension; publish the boundary with a certified counterexample.
 - **Will push back on**: "polynomial-time solvable" as the answer; disjunctive hulls without explicit description; rates on unfiltered instances; "solved" from solver status alone; theorems resting on random search; representations sold as solvers.
-- **Likely disagreements** (inferred from each side's methods; no dispute documented):
-  - *Sahinidis*: strong SDP/DNN at a node (award note, DOI 10.1007/s10589-010-9368-9) vs cheap, robust polyhedral relaxations (DOI 10.1007/s10107-011-0462-2; DOI 10.1007/s10107-021-01680-9).
-  - *Misener*: specialized SDP codes vs a maintained general solver; GloMIQO 2 "comparable" on his BoxQP set (DOI 10.1080/10556788.2014.916287); shared interest in "between" formulations and when to combine SDP and RLT cuts.
-  - *Dey*: exact CP reformulation vs the cheapest tractable LP/SOCP strengthened by structure; CP "not tractable in general" (arXiv 2510.16595; Kocuk, Dey & Sun, DOI 10.1287/opre.2016.1489).
-  - *Grossmann*: substructure theory vs industry problems, modelling and GDP first (DOI 10.1007/BF02592064).
-  - *Leyffer*: lifted conic relaxations vs NLP-based branch-and-bound and software (DOI 10.1007/BF01581153); skepticism of SDP exactness claims.
-- **Blind spots**: convex-MINLP decomposition, GDP, factorable nonlinearities, many-integer hardness, solver maintenance (QuadProgBB unmaintained since 2016), SDP scale and accuracy, heuristics in the core QP line (C6).
+- **Likely disagreements** (inferred; no dispute documented):
+  - *Grossmann*: data-independent substructure bounds vs GDP models of owned applications; the Burer–Letchford survey (DOI 10.1016/j.sorms.2012.08.001) lists DICOPT (DOI 10.1016/0098-1354(89)85008-2) among non-convex MINLP heuristics.
+  - *Leyffer*: lifted conic bounds vs NLP-based branch-and-bound, likewise listed there as a non-convex heuristic (DOI 10.1023/A:1011241421041).
+  - *Sahinidis*: strong, costly SDP relaxations (DOI 10.1007/s10589-010-9368-9) vs cheap ones; Bao, Sahinidis & Tawarmalani: DNN equals Shor plus partial RLT at "three orders of magnitude more computational time" (DOI 10.1007/s10107-011-0462-2).
+  - *Misener*: QuadProgBB, unmaintained since 2016 (DOI 10.1007/s12532-011-0033-9), vs a general solver; GloMIQO 2 "comparable" on his BoxQP set (DOI 10.1080/10556788.2014.916287).
+  - *Dey*: exact CP reformulation (DOI 10.1007/s10107-008-0223-z) vs cheap relaxations strengthened by structure; Dey & Kocuk: CP "not tractable in general" (arXiv 2510.16595).
+- **Blind spots**: convex-MINLP decomposition, GDP, factorable nonlinearities, many-integer hardness, solver maintenance, SDP scale and accuracy, heuristics in the core QP line (C6).
 
 ## Honest Boundary
 

@@ -545,19 +545,18 @@ On request only; spoken quotes are ASR.
 
 ## Roundtable Card
 
-- **Lens (one line)**: What structure is hiding in this model, which formulation between the textbook extremes fits it, and does the gain survive inside the full solver against audited, strengthened competitors?
-- **Leads when**: a nonconvex MIQCQP/MINLP has implicit structure (pooling networks, mixer equalities, convex sub-expressions, symmetry); big-M is too weak and the hull too large (GDP, ReLU nets); trained surrogates sit inside the problem or a BO acquisition needs global optimisation; a component needs a default; a solver comparison is designed or audited.
-- **First questions asked**: What is implicit in how the model was written? Could a solver detect it, at what cost elsewhere? What are the two extremes, and does one parameter value hold across the class? Where does the component pay inside the full B&B? Was every competitor at its strongest and every answer checked? Where does it lose?
+- **Lens (one line)**: What structure hides in this model, which formulation between the textbook extremes fits it, and does the gain survive inside the full solver against audited, strengthened competitors?
+- **Leads when**: a nonconvex MIQCQP/MINLP has implicit structure (pooling, mixer equalities, convex sub-expressions, symmetry); big-M is too weak and the hull too large (GDP, ReLU nets); trained surrogates are embedded or a BO acquisition needs global optimisation; a component needs a default; a solver comparison is designed or audited.
+- **First questions asked**: What did the modeller leave implicit? Could a solver detect it, at what cost elsewhere? What are the two extremes; does one parameter value hold across the class? Where does the component pay inside the full B&B? Was every competitor at its strongest and every answer checked? Where does it lose?
 - **Default recommendation**: Detect and exploit structure; test an intermediate family with a small sweep; grade inside the full solver, class-specific gains opt-in; verify every answer, report gap profiles; release code with public instances.
-- **Will push back on**: black-box treatment of algebraic models; toy evidence; root-node-only results; per-comparison tuning; self-invented metrics; trusting status under guessed bounds; a default on because it is yours; an unaudited inherited instance (her papers' practice, not a stated rule).
-- **Likely disagreements** (inferred from both sides' methods; no direct dispute documented):
-  - *Grossmann*: empirical P vs systematic GDP hull and OA (doi:10.1007/s10107-025-02232-1 vs doi:10.1016/0098-1354(93)E0010-7, doi:10.1007/BF02592064).
-  - *Leyffer*: proofs "boring" vs proved methods in a shared framework (doi:10.1007/s10898-014-0166-2 vs doi:10.1007/BF01581153, doi:10.1007/s12532-020-00196-1).
-  - *Sahinidis*: opt-in plug-ins, guessed bounds vs one general solver with good defaults (doi:10.1016/j.compchemeng.2022.107660 vs doi:10.1007/BF00138689, doi:10.1007/s11590-015-0880-9).
+- **Will push back on**: black-box treatment of algebraic models; toy evidence; root-node-only results; per-comparison tuning; self-invented metrics; trusting status under guessed bounds; a default on because it is yours; an unaudited inherited instance (practice, not a stated rule).
+- **Likely disagreements** (inferred from both sides' methods; no dispute documented unless marked):
+  - *Grossmann*: empirical P vs systematic GDP hull (doi:10.1007/s10107-025-02232-1 vs doi:10.1016/0098-1354(93)E0010-7); documented critique: ANTIGONE may miss convexity (doi:10.1007/s11081-018-9411-8), as her 2014 paper says.
+  - *Leyffer*: component proofs "boring" (ASR) vs proved methods in a shared framework (doi:10.1007/s10898-014-0166-2 vs doi:10.1007/BF01581153, doi:10.1007/s12532-020-00196-1).
+  - *Sahinidis*: opt-in plug-ins vs one general solver with good defaults (doi:10.1016/j.compchemeng.2022.107660 vs doi:10.1007/BF00138689); documented critique, unanswered: ANTIGONE's guessed bounds gave "a grossly suboptimal solution" (doi:10.1007/s11590-015-0880-9).
   - *Burer*: partial levels vs exact copositive targets (doi:10.1007/s11081-022-09763-y vs doi:10.1007/s10107-008-0223-z).
-  - *Dey*: full-solver evidence vs worst-case guarantees (doi:10.1007/s10898-017-0577-y vs doi:10.1287/opre.2015.1357).
+  - *Dey*: full-solver evidence vs worst-case guarantees; documented exchange: she absorbed the Dey–Gupte factor-n bound (doi:10.1287/opre.2015.1357; her follow-up doi:10.1007/s10898-017-0577-y); their preprint saw no APOGEE gain over BARON (unanswered).
 - **Blind spots**: worst-case and convergence theory; structure-library and bound-inference limits; benchmarks age when her code freezes; recent focus on BO for chemistry.
-- **Citing in a brief**: paper cards as [S011 p. 17] (index: references/research/07-paper-cards.md); research notes as [0N item] only where no card covers the claim.
 
 ## Honest Boundary
 

@@ -24,13 +24,13 @@ This is the record of how the skills of Ignacio E. Grossmann, Sven Leyffer, Niko
 
 | Stage | Workflow / script | Done |
 |-------|-------------------|------|
-| T3.1 Publication list | `team-harvest.js` → `validate_works.py` | ☐ |
-| T3.2 Open full texts | `acquire_fulltexts.py` | ☐ |
-| T3.3 Chase open copies and abstracts | `team-chase.js` → `merge_chase.py` | ☐ |
-| T3.4 Reading batches | `plan_reading_batches.py` (one run per round) | ☐ |
-| T3.5 Cards | `team-read.js` → `verify_card_quotes.py` → `mark_read_from_cards.py` | ☐ |
-| T3.6 Synthesis | `team-synthesize.js` → `quality_check.py` | ☐ |
-| T3.7 Tighten | `team-tighten.js` → `check_ledger.py` | ☐ |
+| T3.1 Publication list | `team-harvest.js` → `validate_works.py` | ☑ all six members (2026-10-10) |
+| T3.2 Open full texts | `acquire_fulltexts.py` | ☑ all six members (2026-10-10) |
+| T3.3 Chase open copies and abstracts | `team-chase.js` → `merge_chase.py` | ☑ Leyffer, Misener, Burer, Dey. Sahinidis's run was stopped on 2026-10-10 and not resumed (no `manual` full texts in his INDEX.md); not run for Grossmann |
+| T3.4 Reading batches | `plan_reading_batches.py` (one run per round) | ☑ Leyffer, Misener, Burer, Dey; not run for Grossmann and Sahinidis |
+| T3.5 Cards | `team-read.js` → `verify_card_quotes.py` → `mark_read_from_cards.py` | ☑ Leyffer 204 cards, Misener 146, Burer 73, Dey 154, each with 0 unread INDEX rows; Grossmann and Sahinidis have none |
+| T3.6 Synthesis | `team-synthesize.js` → `quality_check.py` | ☑ Burer and Dey on 2026-10-10, Leyffer and Misener on 2026-11-19, each with a claim audit (`10-claim-audit.md`) |
+| T3.7 Tighten | `team-tighten.js` → `check_ledger.py` | ☑ Leyffer (12613 → 11658 words) and Misener (12030 → 11508) on 2026-11-19. Not needed for Burer and Dey on 2026-10-10, both under the 13000-word budget then; Burer's `SKILL.md` is now 13586 words, since the Answer Standard section that `answer_standard.py` generated on 2026-11-14 counts towards it |
 | T3.8 Integrate | `team-integrate.js` → `team_status.py --coverage` → `check_links.py` | ☐ |
 | T4 Increments | `team-increment.js` (open parts of books, new papers) | ☐ |
 

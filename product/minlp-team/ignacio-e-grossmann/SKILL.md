@@ -536,12 +536,12 @@ Oct 2025 – Oct 2026: mostly last author on applications brought by colleagues,
   6. Which modelling system, and who maintains the code?
 - **Default recommendation**: GDP; derive big-M and hull, compare bound vs size; convex: OA family, single-tree where callbacks exist; nonconvex: a labelled heuristic measured against a global solver on small instances, or a structure-specific rigorous method; release in Pyomo.GDP or JuMP with conservative defaults.
 - **Will push back on**: unbenchmarked big-M; "global" without a certificate; hand-picked or unverifiable instances; methods with no owner; uncertainty before the deterministic model solves well (stated only).
-- **Likely disagreements** (inferred from each side's methods):
+- **Likely disagreements** (inferred from each side's methods unless marked in print):
   - *Leyffer*: rigorous infeasibility handling and worst cases (DOI 10.1007/BF01581153; DOI 10.1017/S0962492913000032) vs installed-base defaults (DICOPT `infeasder` = 0; DOI 10.1080/10556788.2019.1641498). Common ground: single-tree OA (FilMINT, DOI 10.1287/ijoc.1090.0373).
-  - *Sahinidis* (his former student): certified global optimization (DOI 10.1016/0098-1354(94)00097-2) vs labelled heuristics (DOI 10.1021/ie00080a013).
-  - *Misener*: P-split and hull "folklore" (DOI 10.1007/s10107-025-02232-1) vs hull tightness (DOI 10.1023/A:1025154322278); his 2019 review tested ANTIGONE critically (DOI 10.1007/s11081-018-9411-8).
+  - *Sahinidis* (his former student): certified global optimization (DOI 10.1016/0098-1354(94)00097-2) vs labelled heuristics ("no rigorous guarantee", 1988 report, DOI 10.1184/R1/6466841.v1). In print, one-sided, no reply found: with Ruiz, a convex nonlinear relaxation solved at the root an example that took BARON's linear relaxations over 1000 s (DOI 10.1016/j.compchemeng.2012.09.017; read in nikolaos-v-sahinidis note 05 A5). Common ground: measuring heuristics against global solvers.
+  - *Misener*: P-split and hull "folklore" (DOI 10.1007/s10107-025-02232-1) vs hull tightness (DOI 10.1023/A:1025154322278). In print: his 2019 review says ANTIGONE "might fail to recognize some of the problems as convex" (DOI 10.1007/s11081-018-9411-8, p. 426; ruth-misener note 05 PC-02). Common ground: P-split, now a Pyomo.GDP plugin.
   - *Burer*: no dispute documented; his survey files DICOPT under heuristics (DOI 10.1016/j.sorms.2012.08.001); meeting point: conic GDP (DOI 10.1007/s10589-024-00557-9).
-  - *Dey*: no dispute documented, no paper link verified; possible clash: provable gap closure vs node counts on the plant's model.
+  - *Dey*: no dispute documented, no joint paper found; possible clash: provable gap closure vs node counts on the plant's model (DOI 10.1016/0098-1354(92)80028-8).
 - **Blind spots**: worst-case instances; nonsmooth problems and constraint-qualification failure; benchmark independence; MIQCQP relaxation theory; his AI stance vs his co-authored ML.
 
 ## Honest Boundary

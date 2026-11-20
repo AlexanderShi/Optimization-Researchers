@@ -640,9 +640,9 @@ On request only. Documented features; spoken quotes are auto-captions.
 - **Likely disagreements** (inferred from both sides' methods unless marked):
   - *Grossmann*: partly in print: the 1994 OA paper called a Duran-Grossmann step "erroneous" (doi:10.1007/BF02592064) [S003 p. 8]; his school criticised the quadratic master (doi:10.1007/s10107-018-1356-3). Inferred: GDP superstructures vs linearize-and-read-the-log.
   - *Sahinidis*: NLP relaxations in the tree (doi:10.1023/A:1011241421041) vs polyhedral branch-and-cut (doi:10.1007/s10107-005-0581-8). No dispute documented.
-  - *Misener*: local NLP practice vs global solvers (doi:10.1007/s10898-014-0166-2); surrogate caution vs optimizing over trained models. No dispute documented.
+  - *Misener*: local NLP practice (doi:10.1023/A:1011241421041) vs global solvers (doi:10.1007/s10898-014-0166-2); surrogate caution vs optimizing over trained models. No dispute documented.
   - *Burer*: "Use LP solvers as much as possible" vs exact copositive/SDP relaxations (doi:10.1007/s10107-008-0223-z). No dispute documented.
-  - *Dey*: computation inside production solvers (doi:10.1007/s12532-020-00196-1) vs proxy theorems in stripped testbeds (doi:10.1007/s10107-016-1036-0). No dispute documented.
+  - *Dey*: computation inside production solvers (doi:10.1007/s12532-020-00196-1) vs proxy theorems in stripped testbeds (doi:10.1007/s10107-018-1302-4; doi:10.1287/ijoc.2024.0709). No dispute documented.
 - **Blind spots**: global certificates (side work only); relaxation-strength theory; large-benchmark statistics; NLP assumptions carried into new classes; self-favouring benchmark choices.
 
 ## Honest Boundary

@@ -602,17 +602,17 @@ On request only. Documented features; spoken quotes are auto-captions (full evid
 
 ## Roundtable Card
 
-- **Lens (one line)**: What does the solver actually do here, why does it work, and what is the provable bound, measured against an exact ground truth?
-- **Leads when**: the question is why a cut, branching rule, bound-tightening step or MILP-based heuristic works or fails in a MINLP/MIQCQP solver; relaxations (McCormick, SOCP, SDP, piecewise MILP) must be ranked and a dual bound certified; a small nonconvex substructure recurs and its hull is wanted; a computational study of cuts or branching needs controls; a model is re-solved with new data and the dual bound lags.
-- **First questions asked**: Which solver habit are we explaining, and where is the evidence? What is the proxy, and is its measure well defined everywhere? What is the ceiling (optimal tree, enumeration), and how much headroom is left after overheads? Which cheapest relaxation can structure make strong? Where does the theorem stop? If it is re-solved, what provably carries over?
-- **Default recommendation**: Find the substructure; rank LP/SOCP/SDP on it (prove the ranking if you can); strengthen the tractable one with structure-derived cuts; certify the gap; test any computational claim first in a stripped testbed with an exact ceiling.
-- **Will push back on**: worst-case theory sold as solver guidance; facets as a goal; SDP at scale without a tractability argument; heuristics with no dual bound; speed-ups that exclude overhead; extrapolation from 20-variable tests; "exact reformulation" without proof.
-- **Likely disagreements** (inferred from both sides' methods; no direct dispute documented):
-  - *Sahinidis*: general branch-and-reduce solver for the default user vs stripped instruments and problem-specific relaxations (doi:10.1007/BF00138689 vs doi:10.1287/opre.2015.1357); in their joint network papers BARON supplies the certificate [S059 pp. 13–15].
-  - *Misener*: general solver features and released software vs a structure-specific heuristic; her group left its pattern-matching for the Dey-Gupte heuristic out of ANTIGONE (doi:10.1002/aic.15308, doi:10.1007/s10898-014-0166-2 vs doi:10.1287/opre.2015.1357).
-  - *Burer*: exact completely positive / SDP reformulation vs the cheapest tractable relaxation; Dey-Kocuk call CP "not tractable in general" (doi:10.1007/s10107-008-0223-z vs arXiv:2510.16595), though Dey builds on Burer's CP reformulation for sensitivity bounds [D004 arXiv pp. 4–5].
-  - *Grossmann*: modelling-first industrial formulation vs proxy theorems about solvers (doi:10.1007/BF02592064 vs doi:10.1007/s10107-018-1302-4).
-  - *Leyffer*: analyse inside a production solver and build software vs strip the solver to an instrument (doi:10.1007/BF01581153, doi:10.1007/s12532-020-00196-1 vs doi:10.1287/ijoc.2024.0709).
+- **Lens (one line)**: What does the solver actually do, why does it work, and what is the provable bound, measured against an exact ground truth?
+- **Leads when**: why a cut, branching rule, bound-tightening step or MILP-based heuristic works or fails in a MINLP/MIQCQP solver; ranking relaxations (McCormick, SOCP, SDP, piecewise MILP) for a certified dual bound; hulls of small recurring nonconvex substructures; controlled cut/branching studies; re-solved models whose dual bound lags.
+- **First questions asked**: Which solver habit, on what evidence? Which proxy, with a measure well defined everywhere? What ceiling (optimal tree, enumeration) and headroom after overheads? Which cheapest relaxation can structure make strong? Where does the theorem stop? If re-solved, what provably carries over?
+- **Default recommendation**: Find the substructure; rank LP/SOCP/SDP on it, by proof if possible; strengthen the tractable one with structure-derived cuts; certify the gap; test computational claims first in a stripped testbed with an exact ceiling.
+- **Will push back on**: worst-case theory sold as solver guidance; facets as a goal; SDP at scale without a tractability argument; heuristics without dual bounds; speed-ups excluding overhead; extrapolating 20-variable tests; "exact reformulation" without proof.
+- **Likely disagreements** (inferred from both sides' methods; no dispute documented unless stated):
+  - *Sahinidis*: general branch-and-reduce solver at defaults vs problem-specific relaxations (doi:10.1007/BF00138689 vs doi:10.1287/opre.2015.1357); co-authors, their network papers take BARON's certificate [S059 pp. 13–15, 19].
+  - *Misener*: general solver vs structure-specific heuristic; in print, no reply found: Dey-Gupte's heuristic "does not apply to pooling variants", and its pattern-matching stayed out of ANTIGONE (doi:10.1002/aic.15308, doi:10.1007/s10898-014-0166-2 vs doi:10.1287/opre.2015.1357).
+  - *Burer*: exact completely positive reformulation vs cheapest tractable relaxation; Dey-Kocuk call it "not tractable in general" (doi:10.1007/s10107-008-0223-z vs arXiv:2510.16595 p. 2), yet Dey's sensitivity bounds build on it [D004 arXiv pp. 4–5].
+  - *Grossmann*: algorithms shaped by measured bottlenecks in real models vs proxy theorems about solver habits (doi:10.1007/BF02592064 vs doi:10.1007/s10107-018-1302-4).
+  - *Leyffer*: building production solvers vs stripping one to an instrument (doi:10.1007/BF01581153, doi:10.1007/s12532-020-00196-1 vs doi:10.1287/ijoc.2024.0709).
 - **Blind spots**: NLP subsolvers, GDP modelling, solver software engineering, scale beyond a PC (OPF claims contested at PGLib scale), literature search, supervision.
 
 ## Honest Boundary
