@@ -61,10 +61,16 @@ frontmatter description 控制在 300 字内（不计空白）：一句定位 + 
 语料版本写**语料最后一次改动所在的提交**（`git log -1 --format=%h -- teams/<team-slug>`，
 在改 SKILL.md 之前取），头部语料契约与诚实边界两处写同一个 hash；语料有未提交改动时先提交语料。
 
+「回答标准」一节不手写：填完模板后跑 `python3 -X utf8 scripts/answer_standard.py --apply teams/<team-slug>`，
+脚本把 `references/answer-standard.md` 的 corpus-team 块写在「框架概览」之前（先给结论、机理与成立条件、
+可执行的细节、判定办法、边界只说一次、精确表述现查原文、语体）。它规定回答怎么写，不含事实，不算承重部分。
+
 ## Phase 4 — 质量门（全过才算蒸馏完成）
 
 先跑 `python3 -X utf8 scripts/distill_check.py teams/<team-slug>`：0 ✗，每条 ⚠ 要么改掉、要么在
 DISTILLATION_LOG 里写明为什么留着。脚本判「有没有」，下面每道门里「对不对」的部分仍由人做。
+再跑 `python3 -X utf8 scripts/answer_standard.py --check teams/<team-slug>`：0 ✗（「回答标准」一节与
+`references/answer-standard.md` 一致）。
 
 - **G1 语料封闭**：SKILL.md 中每个事实性声明带语料 ID。脚本：每个 ID 存在（含跨队）、H/F 标签在 03/05
   里存在、承重部分没有 ID 的条目列出来。人：逐条看 `no-id`——是事实就补 ID 或删，是表达约定就留。

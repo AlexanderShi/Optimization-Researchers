@@ -163,7 +163,7 @@ Every paper carries an identifier checked in this run through Crossref, arXiv or
 | 2021 | "Chair, SIAM Climate Task Force (2021)" | T05 | [stated · primary] |
 | 3 Nov 2021 | Virtual talk in the Computing Research Leadership Council (CRLC) seminar series, advertised by the UC Merced SIAM Student Chapter (flyer) and the Charles University SIAM chapter. The flyer promises questions about "his nearly twenty years of professional experiences in a National Laboratory" | T36 | [observed · primary] |
 | 30 Nov 2021 | Elected SIAM president-elect; to "serve as president from January 1, 2023, to December 31, 2024" | T23 | [observed · primary] |
-| 2022 | Vogt, Leyffer, Munson, SIAM J. Sci. Comput. 44(1) B29–B50, DOI 10.1137/20M1315993; Kirches, Larson, Leyffer, Manns, SIAM J. Optim. 32(1) 75–99, DOI 10.1137/20M1370501; Leyffer & Manns, ESAIM COCV 28 66, DOI 10.1051/cocv/2022059; Attia, Leyffer, Munson, SIAM J. Sci. Comput. 44(2) B395–B427, DOI 10.1137/21M1404363; Yang, Balaprakash, Leyffer, COAP 83(3) 759–800, DOI 10.1007/s10589-022-00404-9 | T18 | [practice · primary] |
+| 2022 | Vogt, Leyffer, Munson, SIAM J. Sci. Comput. 44(1) B29–B50, DOI 10.1137/20M1315993; Kirches, Larson, Leyffer, Manns, SIAM J. Optim. 32(1) 75–99, DOI 10.1137/20M1370501; Leyffer & Manns, ESAIM COCV 28 66, DOI 10.1051/cocv/2022059; Attia, Leyffer, Munson, SIAM J. Sci. Comput. 44(2) `B395–B427`, DOI 10.1137/21M1404363; Yang, Balaprakash, Leyffer, COAP 83(3) 759–800, DOI 10.1007/s10589-022-00404-9 | T18 | [practice · primary] |
 | 6 Jul 2022 | Leyffer & Mahajan (Salil), "Improving Earth System Predictability with Artificial Intelligence", SIAM News 55(6) | T33 | [stated · primary, coauthored] |
 | Dec 2022 | Argonne profile title "Senior Computational Mathematician / R&D Leader" | T25 (capture 7 Dec 2022) | [observed · primary] |
 | Jan 2023 | Fei, Brady, Larson, Leyffer, Shen, "Binary Control Pulse Optimization for Quantum Systems", Quantum 7 892, DOI 10.22331/q-2023-01-04-892 | T18 | [practice · primary] |
@@ -624,3 +624,72 @@ Secondary (T38–T40)
 - T41 · Springer landing page of R. Fletcher, S. Leyffer, "Solving mixed integer nonlinear programs by outer approximation", Math. Program. 66 (1994) 327–349 (abstract) · fetched 2026-10-10 · https://link.springer.com/article/10.1007/BF01581153 (DOI 10.1007/BF01581153) · primary (listed last because it was added after the audit)
 
 Leads read but not counted as sources: research notes 01 (publications) and 04 (mentorship) of this run, and a sibling agent's saved copies of SIAM News issues (2017–2023).
+
+
+---
+
+## Update 2026-11-19 (full-text pass, T3.6)
+
+From the paper cards (`07-paper-cards.md`) and the synthesis (`08-deep-reading-synthesis.md` §8–§9); the sections above are the web-research record of 2026-10-10 and are kept. Citations like [S042 pp. 3, 5] point to a card and the page of the version it read.
+
+### 10. Topics by period (from 08 §8, verbatim)
+
+Carded works per five-year period by topic (in brackets: full or partial). Topic assignment is this synthesis's, from title and contribution; ML includes surrogates and tuning; Global includes conic and robust work; Service includes editorials, community reports and essays.
+
+| Period | MINLP | NLP | MPEC | Int. control | Global | Applications | Imaging/OED | ML | HPC | Service | All |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1990–94 | 2 (2) | – | – | – | – | – | – | – | – | – | 2 |
+| 1995–99 | 4 (4) | 4 (3) | – | – | – | – | – | – | – | – | 8 |
+| 2000–04 | 3 (3) | 7 (2) | 5 (4) | – | 1 (1) | 2 (2) | – | – | – | 3 (1) | 21 |
+| 2005–09 | 2 (1) | 5 (5) | 7 (6) | – | 2 (2) | – | – | 2 (2) | – | 4 (2) | 23 (+1 junk) |
+| 2010–14 | 6 (5) | 4 (3) | 3 (3) | 2 (2) | – | 13 (10) | 3 (2) | 3 (1) | 3 (2) | 8 (5) | 45 |
+| 2015–19 | 1 (1) | 1 (1) | – | 2 (2) | 2 (1) | 9 (6) | 7 (5) | 2 (1) | 2 (2) | 6 (5) | 32 |
+| 2020–24 | 1 (1) | 3 (3) | 2 (2) | 10 (9) | 3 (3) | 7 (7) | 3 (2) | 10 (8) | – | 3 (2) | 42 |
+| 2025–26 | – | 4 (4) | 1 (1) | 6 (6) | – | – | 4 (4) | 2 (1) | – | 2 (2) | 19 |
+
+Eleven undated rows and the 1971 junk row are omitted.
+
+### 11. Turns, as the full texts show them (from 08 §8, verbatim)
+
+**Turns visible in the texts.**
+1. *From a packaged solver to his own (1993–2001).* The thesis runs on NAG and names its limits [S016 pp. 77, 80]; filterSQP and MINLP_BB follow [S014 pp. 1–5; S023 pp. 1–2]; the integrated SQP–B&B is the payoff [S009 pp. 1–2].
+2. *MPECs as NLPs (2002–2004), then certification (2007 onward).* Numbers on a new library overturn the verdict [S020 pp. 1–2, 9–17; S057 p. 15]; spurious stationary points lead to LPEC-based methods [S042 p. 3; S069 preprint p. 3; S092 pp. 6–7; S126 pp. 2–4].
+3. *A global-optimization excursion (2004–2008)* [S031 pp. 1–2; S048 pp. 1–3; S041 pp. 3–5], not in the skill's trajectory.
+4. *Team MINLP software and synthesis (2009–2013, consolidated 2021)* [S029 pp. 5–6; S015 pp. 3–4; S149 pp. 3–4; S049 pp. 4–5; S028 TR p. 3; S002 pp. 5, 7; S032 TR pp. 1–5].
+5. *Laboratory applications (2010–2021):* energy, networks, HPC, imaging and tomography, generator tuning [S054 p. 7; S073 p. 3; S053 pp. 2, 7–8; S059 p. 1; S090 pp. 2–3; S044 p. 3], mostly with other first authors.
+6. *Integer optimal control in function space (2012–2026):* from separating the model from its discretization [S116 pp. 1–5] and naming MIPDECO [S112 pp. 1–2] to trust-region methods on integer controls [S065 pp. 2–6; S091 pp. 3, 42; S115 pp. 2–3] and certified lower bounds [S096 arXiv pp. 1–3]; quantum control as a binary-control application [S088 pp. 3, 16; S134 arXiv pp. 2–5; S145 arXiv pp. 3–5].
+7. *Rebuilding the NLP base (2020–2026)* [S110 pp. 2, 4; S114 arXiv pp. 2–3, 11; S119 pp. 1–5].
+
+How these map onto the turns above: 1 = Turns A–D; 2 = Turn E, extended by the certification line (2007 onward) that the turns above do not separate; 3 is new (a global-optimization excursion, 2004–2008); 4 = Turn G; 5 widens Turn F and Turn I (the imaging and tomography collaborations start in 2014 [S059 pp. 1, 3–10], not 2018); 6 = Turn H; 7 = Turn J.
+
+### 12. What stayed constant (from 08 §8, verbatim)
+
+**What stayed constant.** An NLP acceptance test as the carried device [S001 pp. 4–6; S026 pp. 4–7; S071 pp. 4–5; S065 pp. 5–6; S164 p. 4]; smallest computed counterexamples with closed-form iterates [S016 p. 49; S055 p. 5; D001 pp. 4–8; S042 p. 8; S034 p. 15; S145 arXiv pp. 16–17]; same-solver comparisons with failures kept [S016 p. 78; S022 pp. 23–27; S126 pp. 32–34]; termination taxonomies that read CQ failure [S014 p. 8; S199 p. 14; S074 pp. 14–15; S119 pp. 18–19]; formulation before method [S016 p. 81; S020 pp. 10–12; S043 pp. 8–9; S032 TR pp. 22–23; S124 pp. 2–3].
+
+### 13. Collaboration pattern (from 08 §9, verbatim)
+
+Counts are carded works (full, partial, abstract or unreadable; metadata rows, committee reports and junk rows excluded) on which the person is a coauthor.
+
+| Period | Carded works | Distinct coauthors | Median coauthors per work | Most frequent coauthors |
+|---|---|---|---|---|
+| 1993–99 | 10 | 6 | 1 | Fletcher 6, Grothey 2 |
+| 2000–06 | 27 | 22 | 1 | Fletcher 9, Toint 5, Gould 3, Nocedal 2 |
+| 2007–12 | 36 | 45 | 1.5 | Munson 6, Linderoth 4, Mahajan 4, Abhishek 2, Friedlander 2, Newman 2, Kirches 2 |
+| 2013–18 | 34 | 65 | 3 | Wild 10, Munson 5, Goldberg 4, Di 4, Jacobsen 4 |
+| 2019–22 | 38 | 78 | 3 | Gursoy 5, Krishnamoorthy 5, Wild 5, Munson 5, Larson 4 |
+| 2023–26 | 27 | 48 | 2 | Fei, Brady, Shen, Larson, Lynn, Manns, Medlin, Raghavan 3 each |
+
+- **Longest partnerships.** Fletcher: 16 carded works, 1994–2012 (e.g. S003, S010, S014, S001, S020, S040). Munson: 20, 2006–2025 (e.g. S018, S042, S011, S069, S021, S123, S144). Wild: 16, 2013–2026, mostly imaging, inexact computing and DFO (e.g. S082, S090, S094). Then Di 9, Linderoth 7, Mahajan 7, Larson 7, Toint 6, Newman 6, Kirches 6, Manns 6.
+- **Sole-authored research works end in 2010:** the thesis [S016], the MINLP_BB manual [S023], the SQP–B&B paper [S009], the OA entry [S101], the PIPA counterexample [S067; D001], the 2003 MPEC survey [S057], the 2005 active-set note [S077], the NCP paper [S022], the FASTr manual [S199], the multiobjective MPCC paper [S063] and the branching paper [S149]. Later sole-authored items are not research articles: proposal-writing slides [H006], the Fletcher interview [H005] and the 2017 newsletter essay [H004]. Every carded work from 2019 on has coauthors.
+- **First authorship moves to others.** At least 15 of the 27 carded works of 2023–2026 name another first author (Fei, Aretz, Choudhary, Lu, Medlin, Ryu, Vanaret, Nurkanović, Kim, Hahn, Li, Ganko and others) [S145; S150; S164; S165; S167; S124; S119; S126; S087; S091; S120; S152].
+- **Who carries which line.** Minotaur by Mahajan [S032], Uno by Vanaret [S119], the MPECopt method by Nurkanović [S126], function-space integer control by Manns, Hahn and Sager [S065; S091; S115], quantum control by Fei, Brady, Larson and Shen [S088; S134; S145]. This matches the skill's lineage note and Method 1's limitation that juniors write the frameworks.
+- **Voice.** In collaborations led by facility or laboratory scientists his share is not identifiable [S045; S102; S153; S136], and committee reports are not his voice [S025; S133; S163]. These are counted for trajectory and collaboration, not as method evidence.
+
+### 14. Corrections to earlier sections
+
+- **§0 Timing ("He named and promoted MIPDECO as a 'new class of problems' in 2019")**: the class name is credited to an August 2013 ExaMath13 position paper [S112 p. 2], a public August 2013 DOE exascale-workshop deck already bore the class name (02 §2.4, §2.5), and the 2015 Oberwolfach abstract is the first carded text that uses the name [S112 pp. 1–2]; the 2013 survey already treats mixed-integer optimal control as a class with a library [S002 pp. 87–94].
+- **Turn F side lines**: HPC load balancing runs 2012–2015 [S053 pp. 2, 7–8; S222 p. 1]; generator tuning for high-energy physics runs 2017–2022 [S180; S044 p. 3; S052 pp. 3, 11; S136 p. 12]; both are led by laboratory scientists, and his share is not identifiable [08 §9].
+- **Turn I**: imaging and tomography begin in 2014 (X-ray spectromicroscopy [S059 pp. 1, 3–10]), then joint fluorescence and transmission tomography [S066 pp. 8–9] and ptycho-tomography [S045 pp. 3–4; S090 pp. 2–4; S103 arXiv pp. 3–10].
+- **New turn: a global-optimization excursion (2004–2008)**: a small proof tree certifying a local solver's VaR answer [S031 pp. 12–15, 18], a trust-region global method [S048 pp. 3, 7–10] and branch-and-refine for nonconvex MINLP [S041 pp. 16–20]; coauthored global methods return from 2021 [S094 arXiv pp. 2, 18; S099 preprint pp. 12–14; S096 arXiv pp. 1–3].
+- **Gaps, "Branch-and-refine (2008–2009): preprint not read"**: read in full [S041 pp. 3–5, 16–20]; still no later paper in the records checked.
+- **Exits**: the full texts do not document a reason for any exit; why the 2007 MPEC filter [S042] and QP-diving [S049] stayed reports is not in any carded work [08 §11].

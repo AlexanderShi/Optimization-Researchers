@@ -1,12 +1,13 @@
 # 质量门的机械部分与声明抽审（distill-gates.md）
 
 DISTILL.md Phase 4 的七道门里，能由脚本判定的部分全部交给脚本；人只处理脚本判不了的那一层。
-两个脚本都只用 Python 标准库，从仓库根运行（Windows 用 `python3 -X utf8` 或 `PYTHONUTF8=1`）：
+脚本都只用 Python 标准库，从仓库根运行（Windows 用 `python3 -X utf8` 或 `PYTHONUTF8=1`）：
 
 | 脚本 | 管什么 | 何时跑 |
 |------|--------|--------|
 | `scripts/distill_check.py teams/<team>` | 语料 lint + G1–G6 的机械部分 + 语料版本戳 + （`--installed`）安装漂移 | 改语料后（`--lint`）、Phase 3 填完模板后、Phase 5 安装后 |
 | `scripts/distill_audit.py teams/<team>` | G7 声明→语料抽审：抽声明配语料证据成审计包，交零上下文 agent 判定，写 `teams/<team>/CLAIM-AUDIT.md` | Phase 4 末、交付前；增量重蒸馏后再抽一轮 |
+| `scripts/answer_standard.py --check teams/<team>` | SKILL.md 的「回答标准」一节与 `references/answer-standard.md` 一致（写法标准，不是事实门；`--apply` 写入，`--installed` 连已安装的副本一起查） | Phase 3 填完模板后（`--apply`）、Phase 4、Phase 5 安装后 |
 
 为什么要有它们：2026-10-09 起的六次蒸馏，G1–G6 全靠蒸馏 agent 自己「扫描」「grep 核对」，没有一条
 记录能被第三方复跑；team-kit 那条线 2026-10-10 补了 `check_citations.py` / `audit_claims.py` 之后，

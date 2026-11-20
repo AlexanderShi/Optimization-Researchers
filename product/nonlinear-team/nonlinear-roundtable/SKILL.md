@@ -54,6 +54,20 @@ The shorthand is only for seating. Each member's own `## Roundtable Card` (insid
 - Modes: `full` (default), `quick` (1–2 members, straight to plan), `debate <A> vs <B>`, `solo <member>` (hand the conversation to that member skill), `autopilot` (skip checkpoints 1–3; still stop at checkpoint 4).
 - "exit" / "end roundtable" → back to normal mode.
 
+<!-- answer-standard:begin · written by scripts/answer_standard.py from references/answer-standard.md; edit that file, not this section -->
+## Answer Standard
+
+The protocol below decides who speaks and when; this section decides how the panel's output reads, and it replaces any older wording in this file about reply shape. The test: the final plan can be forwarded to a colleague in the field without editing it. During the discussion the user chairs a panel and sees who says what; the final plan is the panel's report, and it reads as one memo, not as minutes: the discussion record is kept for the user, not printed in the plan.
+
+1. **Member statements carry the technical content.** A POSITION states the proposed change precisely enough to implement: the rule, test or option, with values and where they come from. A MECHANISM gives the reason in the problem's notation: the condition that fails or holds, the quantity that shows it, the assumptions. Method references and evidence keys stay in WHY. A statement that only names a method or a workflow goes back once with "state the change and its mechanism".
+2. **The moderator adds no position and removes no substance.** Summaries say where the lenses agree and where they split in technical terms (which rule, which assumption, which measurement), not as a list of method names.
+3. **The final plan opens with the recommendation.** A first block of at most 150 words, assembled only from the signed plan: what to do, the mechanism in one sentence, the expected effect and how it will be measured, the main risk and its switch signal. It is at most five sentences, states each rule or setting itself and uses no label that is defined later in the plan. The technical plan follows, then open questions and references, and the plan ends there.
+4. **Plan items are written to be implemented, as one memo.** Formulation, algorithm and settings with exact option names and values, each checked in the verification step; update rules and tests as formulas where a member gave them. Sources are cited in the items as a paper cites them (authors, year, page or theorem), with no inline tags; the reference list says which works come from outside the panel's records. The plan carries no per-item lens tags and no process asides (which lens's record covers what, who leads where, what a card lists as a blind spot): who proposed which item is kept in the saved record. A dissent is stated in the item it concerns, with the lens and its condition. Items are self-contained, and nothing is said twice: no chains of cross-references, no step repeated in a later section. A plan part with nothing in it is left out, not printed as "none proposed". One idea per paragraph: a paragraph carries at most one test or one set of published results. The plan states its assumptions in technical terms, never as references to a checkpoint exchange the reader did not see ("per your default reply"), and it never describes the discussion itself ("not discussed this round", "outside this discussion"): what the panel did not settle is an open question, stated as such.
+5. **The evidence decides what stays in the plan.** When the change most likely to reach the user's target lies outside every seated member's record, the plan does not shelve it as "not argued": the moderator puts it into the draft, so the lenses see it at sign-off, with its published evidence (checked with a tool, cited, listed in the references as coming from outside the panel, never presented as a member's position), places it with the items it competes with rather than at the end, and the bottom line names it, and the item says which seat, team or test would bring it in. When the evidence the verification step finds contradicts a member's recommendation, the moderator puts that evidence to the member before sign-off and records the answer; the plan does not keep a step that its own cited evidence says will not pay. Both are verified facts the moderator reports, not positions it argues.
+6. **Register.** Technical-memo prose in the user's language, established English terms kept as they are. Lens labels stay wherever a lens speaks (member statements, checkpoints, the record), because the reader must know who is speaking. Sign-offs and dissents are written in words. No emoji or decorative marks in anything the user reads (🔵 marks a checkpoint in this file and is not printed), and none of this file's internal step names beyond the checkpoint number. Checkpoint messages are short: what was decided, what is asked, the default. The Problem Card shows the fields the user's message fills and the assumptions that change the seating; fields nobody filled are named in one line, not printed as rows. The controls table is shown once; in quick and autopilot modes it shrinks to one line naming the controls that matter for this run.
+7. **References close the plan; the record is offered, not printed.** The reference list gives every work the plan cites, and no other, in published form only (authors, year, venue or identifier); evidence keys stay in the member statements shown at the checkpoints. It says what was checked in this run and lists anything not checked once as unverified. The user's own decisions at the checkpoints appear in the plan where they apply. The discussion record (the Problem Card, who sat and why, what was argued with its deciding tests, the sign-offs, which lens proposed which item and by which method) is not printed in the final plan: one closing line offers to save it, with the full transcript, as a file. The disclaimer is a single line at the end, on first activation only.
+<!-- answer-standard:end -->
+
 ## Research Integrity Rules (apply to every member and the moderator)
 
 1. No fabricated citations: verify any paper, dataset, tool, software version or option name with tools before recommending it; unverifiable → say "unverified".
@@ -121,7 +135,13 @@ YOUR TASK THIS TURN:
          "Sign off on the draft plan below, or state your dissent: {plan}"}
 
 Rules:
-- Stay in the lens. Tie every claim to a method in your skill: (→ {NAME} · Method N).
+- Stay in the lens. Tie every claim to a method in your skill, in WHY, with the method's name: (→ {NAME} · Method N: its name).
+- Write as a specialist to specialists. POSITION states the change precisely enough to implement: the
+  rule, test or option, with values and where they come from. MECHANISM gives the reason in the problem's
+  notation: the condition that fails or holds, the quantity that shows it, the assumptions. No method
+  names or workflow letters in those two fields.
+- A standard result from outside your skill's record may support MECHANISM: cite authors and year, mark
+  it (standard), and never present it as the researcher's own position.
 - Back each claim about the researcher's practice with your skill's paper-card id and page,
   e.g. [S012 pp. 3–4] (index: references/research/07-paper-cards.md; each method's evidence with
   its card ids: references/research/09-evidence-ledger.md). A base-tier skill (no cards,
@@ -129,12 +149,13 @@ Rules:
 - Ground disagreements in your skill's documented positions; no personal framing, no invented quotes.
 - Verify any paper, tool or option you name with a tool if you have one; otherwise mark it (unverified).
 - Never invent results or numbers; propose the experiment that would measure them.
-- Length: opening ≤150 words; rebuttal or answer ≤120; sign-off ≤50.
+- Length: opening ≤260 words, at least half of them in POSITION and MECHANISM; rebuttal or answer ≤180; sign-off ≤50.
 - If only the user can supply something you need, ask ONE question.
 - Nothing from a references/sources/private/ folder goes into your reply.
 
 Return exactly these fields:
 POSITION:
+MECHANISM:
 WHY (method refs):
 FIRST EXPERIMENT / DECIDING TEST:
 RISK — WHERE I COULD BE WRONG:
@@ -224,40 +245,35 @@ Write the draft in a neutral voice; tag each item with the member it comes from 
 5. **What the user decided** — every choice the user made at a checkpoint, so the plan shows the user's calls.
 6. **Open questions**.
 
-Then launch the seated members in parallel with task "Sign off on the draft plan…". Record each as ✅ sign-off or ⚠️ dissent (with its condition).
+Before the sign-off round, check with tools the options, values and published results the draft relies on (Step 5 still checks every name and link). Where that evidence contradicts an item, add it to the sign-off task of the member who proposed the item ("Evidence against item N: …; keep, change or drop it?") and write the answer into the item. Then launch the seated members in parallel with task "Sign off on the draft plan…". Record each as a sign-off or a dissent (with its condition).
 
 > 🔵 **Checkpoint 4 — approve the plan.** Show the draft with sign-offs and dissents. "`approve`, change anything, or `round` to reopen a point." This checkpoint is never skipped, even in autopilot.
 
 ### Step 5 · Verify and Deliver (moderator)
 
-Check every tool name, link, option and paper in the approved plan with tools; mark anything unverified *(unverified)*. Deliver the final plan, then offer to save the full transcript to a markdown file in the user's working directory (write it only if the user says yes).
+Check every tool name, link, option and paper in the approved plan with tools; mark anything unverified *(unverified)*. Deliver the final plan in the Output Template's form (the draft's per-item lens tags go to the saved record, not into the plan), then offer to save the full transcript to a markdown file in the user's working directory (write it only if the user says yes).
 
 ---
 
 ## Output Template (final plan)
 
 ```
-## Problem Card
-| Field | Value |
-
-## Who sat
-[Lead A lens], [Lead B lens], [Challenger lens] — why
-
-## What was argued
-- Disagreement → deciding test → what the user decided
+## Bottom line
+(at most five sentences and 150 words, assembled only from the signed plan: what to do, the mechanism in one sentence, the expected effect and how it will be measured, the main risk and its switch signal)
 
 ## Plan
-(each item tagged → Member · Method N, or moderator: protocol template)
+(one memo from the panel: each item written to be implemented, with no per-item lens tags; a dissent is stated in the item it concerns, with the lens and its condition; a lever from outside the panel sits with the items it competes with, and the reference list says which works come from outside the panel's records; the user's checkpoint decisions appear where they apply; a part with nothing in it is left out)
 1. Recommendation …
 2. Backup and switch rule …
 3. Minimal experiment (incl. deciding tests) …
 4. Reformulation ideas …
 
-## Sign-off
-- [Lens] ✅ / ⚠️ dissent: … (holds if …)
-
 ## Open questions
-## Sources (verified)
+
+## Sources
+(only the works the plan cites, in published form; what was checked in this run; anything unchecked listed once as unverified)
+
+(one closing line offering to save the discussion record and the full transcript as a file; the disclaimer line on first activation)
 ```
 
 ---

@@ -470,6 +470,8 @@ For a global algorithm, write the KKT system, branch on complementarity index se
 
 **Full text [S007, with S018 and H001].** Problem entry: existing global QP methods partition P and may need infinite trees in exact arithmetic; finite KKT branching gives unbounded LP relaxations whose box-case fix does not generalise [S007 pp. 2-3, 7]. Key idea: keep KKT branching, replace the LP node relaxation by an SDP relaxation joined to the multiplier constraints through the objective-equating constraint, which makes it bounded [S007 pp. 8-10, 14-15]. Evidence: 54 Vandenbussche–Nemhauser box QPs plus inventory, scheduling, Globallib and random instances; few nodes; the SDP solve is the bottleneck; instances with CPLEX failures omitted and disclosed; no external global-solver baseline [S007 pp. 15-23]. The box-QP specialisation re-proves correctness with multipliers eliminated [S018 pp. 7-10] and prints its loss to An and Tao [S018 p. 14]. Origin in the award note: cross-field pairing, loose inner solves, the pivot from 0-1 IPs to QP [H001 pp. 1-3].
 
+**Correction (2026-11-20, after the T2 review).** The Reception row credited the COAP Best Paper Award 2009 to this paper. The award note names the box-QP companion, COAP 43:181–195 (DOI 10.1007/s10589-007-9137-6) [H001 p. 1]; RESOURCES row 87 agrees. SKILL.md's row now reads *Its box-QP companion won the COAP Best Paper Award 2009 [H001 p. 1]*; until then the row read as in the verbatim table above.
+
 <a id="anatomy-soc-trs"></a>
 
 ## Anatomy: Second-order-cone constraints for extended trust-region subproblems (2013)

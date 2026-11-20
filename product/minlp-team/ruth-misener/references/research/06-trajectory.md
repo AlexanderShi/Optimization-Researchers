@@ -54,7 +54,7 @@
 | 2014-03 | Job talk, Department of Computing: "Mixed-Integer Nonlinear Optimization: Foundations and Applications" | [practice] (P) | CV S03 |
 | 2014-03-20 | ANTIGONE paper online, *J. Global Optim.* 59(2–3):503–526. DOI 10.1007/s10898-014-0166-2 | [practice] (P) | Crossref |
 | 2014 | Lecturer, Department of Computing (2014–17). W. David Smith, Jr. award. First PhD student (Kouyialis, 2014–18) and first MEng student (Mistry, 2014–15). Joins INFORMS; member of CPSE (2014–) | [practice] (P) | CV pp.1–2, 24–26; homepage, Professional Activities |
-| 2015 | Co-investigator on EPSRC U2 (2015–19, £765k) and on the EU H2020 networks ModLife and SyMBioSys (2015–19). First Bayesian-optimisation item: an MSc project co-supervised with M. P. Deisenroth (arXiv:1511.05385, 17 Nov 2015) | [practice] (P) | CV p.28; arXiv API |
+| 2015 | Co-investigator on EPSRC U2 (2015–19, £765k) and on the EU Horizon 2020 networks ModLife and SyMBioSys (2015–19). First Bayesian-optimisation item: an MSc project co-supervised with M. P. Deisenroth (arXiv:1511.05385, 17 Nov 2015) | [practice] (P) | CV p.28; arXiv API |
 | 2016-08-14 | Floudas dies. Essay: "Born August 31, 1959"; "In 2015, Chris moved to Texas A&M University" | [stated] (P) | essay p.12 |
 | 2016-10 | Essay "Christodoulos Achilleus Floudas", *SIAG/OPT Views and News* 24(1):12–16 | [stated] (P) | PDF |
 | 2016–2018 | Elected Director, AIChE Computing & Systems Technology (CAST) Division; then programming coordinator (2018–21) | [practice] (P) | CV p.29 |
@@ -605,3 +605,49 @@ Compute resources over time (GPUs, clusters) are not documented in the sources r
 - Tretiakov et al., arXiv:2610.03647, 2026
 - Kronqvist, Misener, Tsay (P-split), *Math. Program.* 218(1–2):57–94. DOI 10.1007/s10107-025-02232-1; arXiv:2202.05198
 - Langdon et al., "A Meta-Learning Approach for Few-Shot Bayesian Optimization of Batch Chemical Processes", 2025 AIChE Annual Meeting (venue + year + title from Google Scholar)
+
+---
+
+## Update 2026-11-19 (full-text pass, T3.6)
+
+Source: `08-deep-reading-synthesis.md` §8–§9, built from the paper cards (`07-paper-cards.md`; 100 of 147 indexed works read in full or in part). Citations like [S011 p. 17] point to the card and the page of the file it read (mostly a preprint). The earlier sections of this note stay as the web-research record; where the full texts change the picture, this section says so.
+
+### 8. Topics by period (works with a card; read in full or in part in brackets; from 08 §8)
+
+| Period | Works [read] | Main topics (cards) |
+|---|---|---|
+| 2005-09 | 5 [0] | Pooling reviews and piecewise-linear comparisons, abstract level only [S007; S008; S022; S125; S153] |
+| 2010-14 | 30 [15] | Pooling with emissions constraints and APOGEE [S025; S152; S009]; piecewise approximations [S012]; MIQCQP relaxations, GloMIQO, ANTIGONE, the signomial framework and the test suite [S011; S004; S001; S032; S123]; a bioreactor MINLP in a biomedical consortium [S045; S085; H002; S054] |
+| 2015-19 | 52 [36] | Biomedical consortium papers, mostly as a middle author [S042; S043; S070; S060]; structure and symmetry detection [S076; S120; S091]; heat recovery and approximation algorithms [S024; S100; S061; S135]; SMT and argumentation [S155; S058; S017]; BO and design of experiments [S029; S095; S075; S034; S041]; robust optimisation [S033; S048]; pooling complexity [S049]; ML inside the solver [S021]; community work [S003; S143; S119; S010]; Lasserre multilevel [S088] |
+| 2020-24 | 41 [35] | Optimisation over trained models: trees, ReLU nets, GNNs, OMLT [S020; S005; S013; S023; S006; S035; S051; S038; S050]; intermediate formulations [S040; S063]; GALINI and SUSPECT [S087; S072; S068]; robust GP constraints and ROmodel [S055; S057]; surrogate perspectives [S014; S015]; BO with BASF [S039; S047; S031; S083; S059; S077]; partial Lasserre [S078]; chemometrics and statistics [S056; S066; S098] |
+| 2025-26 | 17 [14] | BO over graphs and molecules [S093; S067; S128; S090]; tree kernels and meta-learned BO [S081; S086; S113]; datasets and frameworks for chemistry [S097; S044; S028]; GPLVMs [S115; S126]; the journal P-split paper [S046] |
+
+### 9. Turns, as the full texts show them
+
+1. **Pooling to general solvers, 2011-2014.** The thesis abstract states the arc: "Effectively, the arc of this dissertation is to begin with modeling and globally optimizing pooling problems and expand into an optimization framework that broadly addresses MIQCQP and MISO." [S092]; the 2012 relaxation paper is the bridge from pooling-specific to generic relaxations [S011 p. 2]; then GloMIQO and ANTIGONE [S004; S001 p. 2]. Confirms T1-T2.
+2. **Computational partner in a biomedical consortium, 2014-2018.** The partner lab's bioreactor model was the optimisation problem, written as an MINLP and solved with her own solver: "The model is implemented in GAMS 24.1 and solved using the MINLP solver ANTIGONE 1.1 (Misener and Floudas, 2013; 2014)." [S042 p. 7; S045 pp. 2–3]; a robust follow-up [S060 pp. 2, 4]; middle-author biology papers [S037; S096]. Refines T3: she is first and corresponding author on the bioreactor optimisation papers [S045; S085; H002] and the consortium's optimiser, not a biologist.
+3. **C++ solvers to Python tools and theory, 2016-2022.** SUSPECT in Pyomo [S068 pp. 2, 6]; GALINI as an extensible solver [S087 p. 3; S072 p. 2]; structure theory for pooling [S049 pp. 2-3]; approximation algorithms [S069 p. 2]. The detection line stops at detection: no branch-and-bound run in the 2017 and 2019 symmetry papers [S120 p. 19; S091 pp. 7–10], solver integration deferred in SUSPECT [S068 p. 11]. Refines T5's exit.
+4. **ML inside the solver, then optimisation over trained models, 2018-2022.** The SDP cut-scoring preprint is now read: an offline-trained network selects which cuts to generate; the evidence stops at the root cut loop [S021 pp. 1–3, 26, 31–32]; the 2018 conference abstract describes integration into ANTIGONE [S136]; the Dagstuhl report moves per-node selection offline [S119 pp. 6–7]. Confirms T7 (no journal version on the cards). Then trees, nets and the toolkit [S020; S013; S006] (T8).
+5. **BO for chemistry with BASF, then graphs, 2022-2026.** [S039 p. 1; S047 pp. 1, 10; S081 pp. 1, 9; S067 pp. 2–3]; from 2022 the model is often chosen because it can be encoded: "Therefore, it is not that we chose shortest-path kernel first for specific reasons then developed necessary formulations, but that the fundamental advances in graph optimization led us to shortest-path kernels." [S067 p. 20]. The group's statistics line with Filippi, where she is a middle author [S066 p. 12; S115; S126]. Refines T9-T10.
+6. **Formulation theory kept on the side throughout.** P-split 2021-2026 [S040; S013; S046]; Lasserre 2019-2023 [S088; S078].
+
+### 10. What stayed constant
+
+Structure first, from the 2010 emissions law [S025 p. 13] to the 2025 graph encodings [S128 pp. 10–16]; pooling as the test bed, 2010 to 2022 [S025; S009; S011; S049; S048; S072; S057 pp. 15–16]; exact or global solves where possible [S020 pp. 8–14; S047 pp. 5–6; S067 pp. 2–3]; losses written in, 2012 to 2026 [S011 p. 19; S004 p. 26; S155 p. 1; S072 p. 21; S115 p. 8; S046 p. 26]; parameter scepticism, 2013 to 2025 [S004 p. 13; S143 p. 13; S039 p. 1; S081 p. 5] [08 §8].
+
+### 11. Collaboration pattern (from 08 §9)
+
+- Floudas co-authors 29 of the works with a card; the solver and pooling papers are two- or three-author papers with him [S012; S011; S004; S001; S032; S123; S152]. Two pieces are single-author: the 2014 CPSE newsletter [S145] and the 2016 Floudas essay [S143].
+- Biomedical consortium (2013-2018): Panoskaltsis (23 works), Mantalaris (21), Pistikopoulos (19), Fuentes-Garí (19), Velliou (13).
+- Students and fellows (2016-2026): from 2016 the student is first author and she is last or corresponding author [S128; S090; S081; S086; S067]; two-author papers with a student carry several lines [S049; S024; S120; S076; S155; S072; S057; S128].
+- Industry: BASF from the tree paper onward [S020; S023; S047; S081; S113]; Schlumberger [S033; S048; S055]; Royal Mail [S117 p. 3; S135; S079]; Eli Lilly [S066 p. 13; S056]; IBM CPLEX developers [S021; S136].
+- Students' projects as seeds: two MEng projects she supervised became group papers [S100 p. 13; S024 p. 15; S117 p. 3; S135 p. 20].
+
+### 12. Corrections to earlier sections
+
+- **§1.1, PhD thesis "not read"**: its text is now on disk (an archived copy of the Princeton record) and the abstract is carded [S092]; the body is still not read.
+- **T3**: add that the biomedical work is optimisation of the partner's mechanistic model with her own solver [S042 p. 7; S085 pp. 1–2], a precursor of Method 3's stance; the exit date (last joint optimisation paper online December 2017) is consistent with the cards [S060].
+- **T5**: the symmetry and detection papers stop before a solver run [S120 p. 19; S091 pp. 7–10]; the LMTD line reached a solver result only where the group's own code exploited the convexity [S024 pp. 24–29].
+- **T7**: the cut-scoring preprint is read [S021]; no card shows a journal version, so T7's finding stands; its evidence is root-node only [S021 pp. 26, 31–32].
+- **T8**: the v1 "risk control" framing left the title, not the body of v3 [S020 pp. 1, 5]; the 2018 seminar abstract still carries it in its title [S119 p. 17].
+- **§7 (last 12 months)**: the journal P-split paper is read as arXiv v3 [S046]; the 2026 BoGrape paper [S067] and the fed-batch meta-learning paper [S113] are read in full.

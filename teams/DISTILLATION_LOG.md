@@ -1,5 +1,228 @@
 # 蒸馏记录
 
+## 2026-11-20 (20) · LP、MILP、MINLP 三队的团队层与 MINLP 深读收尾：team_check 全部 0 失败
+
+- 用户请求：「Fix这些失败」（接条目 (19)：`team_check.py` lp 2 项、milp 2 项、minlp 7 项失败，与 origin/main 相同）。分支 `team-layers`（worktree `../Optimization-Researchers-team-layers`），从 `main`（8d5c157）开出，完成后快进合入本地 main。未推送
+- 失败的来由：LP、MILP、MINLP 三队的圆桌与 README 还是模板（团队层 T2 没跑）；MINLP 深读成员 Leyffer、Misener 只有卡片，没有 T3.6 综合（07–09、technique-catalog），团队 T3.8 也没跑
+- 顺序：LP、MILP 的 T2（轻量档，`deep_tier: false`）与 Leyffer、Misener 的 T3.6 四个工作流并行（文件互不重叠）；两位综合过闸后跑 MINLP 的 T2（`deep_tier: true`），再跑 T3.8
+- LP Team T2（11 个 agent，约 418 万 token，93 分钟）：lp-roundtable 三人入座、4 条 fault lines（两边都有证据；7 条单边对照删去并写明缺哪一边）；README、DEEP-READING 换成轻量档说明；三份 RESOURCES.md 逐行核对（Huangfu 从 T0 骨架补到 110 行）。两位只读复核 20 条意见（1 条严重：圆桌诚实边界写「没读过全文」，与成员 skill 引的页码矛盾），修了 17 条，2 条有理由不修
+- MILP Team T2（15 个 agent，约 497 万 token，95 分钟）：milp-roundtable 四人加 LP Team 两位客座（Forrest、Bixby）入座、6 条 fault lines；Lübbecke、Achterberg 的圆桌卡重写；四份 RESOURCES.md 核对。复核 21 条（4 条严重），修 15 条；客座文件夹的改动按规则留给主队
+- 两次运行报告的成员层问题，我逐条到原处核对后改了（不在工作流的改动范围内）：
+  - Forrest：零半割（2013）是 Caprara 写的生成器（Cbc `doc/cbc-parameters.md`：「This implementation was written by Alberto Caprara」；Cgl AUTHORS 里 Forrest 只是 PM），他的部分是把它接进 Cgl（提交 18d1a34f，2013-01-10）；CbcSymmetry 与轨道分支是共写（.cpp 头「hacked from CouenneSymmetry.cpp」「Jim Ostrowski (the good bits - rest JJHF)」，.hpp 署名 Belotti、Wächter；文件由他在 72cfa4f 加入），不再算「大部分是他的」；激活规则点名 milp-roundtable
+  - Bixby：方法数「六」改「五」（H11 在 T1 闸门降级后没改）；失败范例里 Huangfu-Hall 2018 的说法改为原文 p. 124「a small group of LP problems with relatively expensive spmv operations」（本地 PDF 第 8 页即印刷页 124）；笔记 05 加一条更正（SC 92-11、SC-95-45 当轮已由笔记 03 经 WebFetch 全文读过）
+  - Huangfu：[Ko05] 链接换成能打开的 Paderborn 副本（HTTP 200，172 页；PDF 第 98、117 页即笔记引的两处）
+  - Gleixner：评审风格的例子是原仓库 ambros-gleixner/VIPR 的 PR #1（2022-08-02/03 他的评审意见），不是 scipopt/vipr 的 #1（2024 年另一个 PR）；新加 [VIPR-orig]；圆桌字数限制改为以 brief 为准（brief 允许开场 260 词）
+  - Lübbecke：卡片新增标识符的解析日期（8 个 DOI 302、2 个 arXiv 200，本轮核对）
+- kit：`team_status.py`、`team_check.py` 在 cp1252 控制台打印 ✓ 会崩（两次运行的 agent 都碰到），加上与 quality_check.py 相同的 stdout/stderr UTF-8 设置；不加 `-X utf8` 复现崩溃、修后 exit 0；`selftest.sh product/dfo-team` 全过
+- MINLP · Leyffer、Misener 的 T3.6（各约 2 小时；Leyffer 6 个 agent 约 311 万 token，Misener 7 个约 320 万）：
+  - Leyffer：204 张卡（120 全读）；核心方法 6 → 7，新 Method 7「证明你声称的那个概念，用它给每个方法打分，写明没证明的部分」（25 篇）；新启发式 H11（模型与离散分开、由粗到细）、H12（每个技巧配一个可算的小例子）；没有方法降级，按全文收窄几处（Method 6 的「线性 → 凸 → 非凸」改为待复测的默认，全局证书改为「副线，不是没有」，MIPDECO 命名早到 2013）。复核 43 条，修 41 条
+  - Misener：146 张卡（77 全读）；仍是 5 个核心方法；新 H11「便宜的松弛失败处才上贵的」（11 篇，原未核实的 U2 解决），H6 并入 H4，H10 写成可执行步骤；Method 5 收窄到求解器对比论文，Perl 复核限定在 2013–2014 的求解器论文。复核 51 条，修 49 条；引用闸门卡在笔记 03 里的 Xeon 型号 X5650（检查器把它当卡片 ID），我把它放进行内代码（检查器设计好的豁免写法）
+  - 两人激活规则里的圆桌一行还写「no paper cards yet」，T3.6 只许改免责声明行；我在 T3.6 闸门之后作为操作者改成先引卡片，删掉两处「已过时」的说明，账本各加一条日期说明；与汇总前副本逐行比对，只有免责声明行和这一行（Misener 另有 U1 或 U3–U9 一处）变了
+  - T3.7 精简（两人都超 11,500 词）：Leyffer 12,613 → 11,658（3 个 agent 约 122 万 token，73 分钟；复核 14 条全修），Misener 12,030 → 11,508（约 94 万，49 分钟；8 条全修）；两人 `check_ledger --before`（不加 --allow）无损
+  - 声明抽审（各 20 条，seed 1，零上下文审计 agent，各约 19 万 token）：两人都是 18 supported、2 partial、0 unsupported。partial 逐条到卡片和全文核对后收窄：Misener 的 BARK 采集函数 MIP 只求到 10% gap / 100 s；MEng 一句在 T3.7 已移出 SKILL.md、账本里加注；Leyffer 的 S031 p. 18 在 T3.7 已从 Method 7 删去；2026 年对比论文那一行补上卡片的成功率（MacMPEC 90.00% 对 92.14–94.24%），引文在 arXiv 全文 PDF 第 34 页逐字核对。两份 10-claim-audit.md 各追加一节 Follow-up
+- MINLP Team T2（17 个 agent，约 662 万 token，120 分钟；`deep_tier: true`，两位综合过闸后才跑）：minlp-roundtable 六人入座、6 条 fault lines（两边都有证据；9 条单边对照删去并写明缺哪一边）；README 填好；六份 Roundtable Card 核对，五份改了分歧行（Misener 的卡原写「没有记录在案的争论」，她的笔记 05 其实记了三处），Sahinidis 未改；六份 RESOURCES.md 核对。两位只读复核 17 条意见（0 blocker、4 major），修 16 条；DEEP-READING 状态表不在本步可改范围，留下
+- 我核对后改的（不在 T2 改动范围内）：
+  - Burer：COAP 2009 最佳论文奖记在 2008 年 Math. Program. 那篇（S007）的 Reception 行，奖状原文（H001 p. 567）写的是 box-QP 那篇（COAP 43:181–195，S018）；改了该行，账本加更正
+  - Grossmann、Sahinidis：两人深读停在 T3.2（全文已取，没有卡片），`team_check.py` 按无卡片判为轻量档，模板扫描不放过 RESOURCES.md 里留给 T3.6 的占位行；改成真实的全文索引行（1312 行 442 篇全文；381 行 28 篇），以后跑 T3.6 时按 kit 规则追加新行
+  - DEEP-READING.md 阶段表：T3.1–T3.7 按条目 (9) 与本轮记录打勾。复核员的建议写「T3.7：Leyffer、Misener、Dey」，查日志后 Dey 没跑过 T3.7（2026-10-10 时低于 13000 词，不需要），按实际写
+  - Misener 账本：补记 T2 删去卡片里与激活规则不一致的引用规则行
+  - 抽查 T2 新写的 4 处引文（Fletcher–Leyffer 1994「erroneous」、P-split 的 folklore 一句及其引用的 Trespalacios–Grossmann 2015、Dey S129、Burer S043），都在本地全文里逐字找到
+- MINLP T3.8（6 个 agent，约 232 万 token，73 分钟）：
+  - README、DEEP-READING 按实际状态重写：Leyffer、Misener、Dey 完成；Burer 完成到 T3.6，`SKILL.md` 13,586 词超出 13,000 词预算（2026-11-14 生成的回答标准一节算在内），`team_status.py` 给出的下一步是 T3.7；Grossmann、Sahinidis 写成进行中（T3.2），不留 TODO。覆盖表逐字取自 `team_status.py --coverage` 与 `--coverage --short`，连同它的提示行（1460 篇已索引未读 = 1172 + 288）。四位成员的卡片摘录重核：Leyffer 329 条（323 逐字、6 条忽略空白与符号后一致）、Misener 222、Burer 138、Dey 258 逐字，0 条找不到
+  - minlp-roundtable：入座表补上 Burer、Dey 在 T3.6 新增的方法 6；fault line 不加不减（六条已是上限）。FL4 改以 box-QP 论文本身为据（S018 pp. 12–13：SDP 分支定界 90 例全解，LP 分支切割 25 例失败、小规模上更快），补 Chen–Burer 对 Couenne 的胜负两面（S008 p. 16）与 Dey 一侧自己的记录（S067：灵敏度界从 Burer 重构的余正对偶出发，规模「limited by the SDP solver」）；FL5 补 Misener 2016 年纪念文章（S143，只算致意，不算答复）与 Ceccon–Misener 2022（S072），「在 Dey–Gupte 启发式上构建」改为原文的「state of the art」；FL2 的 hull folklore 句改引 Misener 自己的卡片 S046 p. 2，参考文献 [66] 归 Grossmann 笔记 05 §3.1（卡片没记）
+  - 两位只读复核 18 条（2 条阻断，都是 DEEP-READING 的圆桌一行把 FL2 记成新增了卡片；3 条重要，其一是 Misener 2016 年 AIChE J. 论文 S064 在 Imperial Spiral 有 CC BY 4.0 的出版版本，追全文时漏掉）。修复轮 18 条都采纳，两条部分不改：给 S046 卡片补参考文献编号（成员卡片不在本步范围，缺口记进 DEEP-READING「What is still missing」）；S064 没有本地全文，「How to extend」单列保存与抽取一步
+  - 我抽查 FL4 的新证据：S018 卡片 pp. 12–13 的 90 例与 25 例、S008 卡片 p. 16 Couenne 胜出的原话、S067 全文 p. 36「limited by the SDP solver」（txt 里跨行）、Crossref 上 Cifuentes–Dey–Xu 的 Math. Program. 216(1–2), 379–424（2025-08-25 在线，2026-03 印刷，圆桌按卷期写 2026），都对上
+- 文档（三队圆桌填好之后）：
+  - optimization-lead：路由表的团队讨论一列写上三个圆桌（lp-roundtable 3 人全入座；milp-roundtable 4 人加 LP Team 2 位客座、默认入座 3 人；minlp-roundtable 6 人、默认入座 3 人）；`discuss <team>` 五队都可用；诚实边界改为「没有语料团队 skill，一声答复是成员视角；圆桌 2026-11-19 填好，走 `discuss <team>`」
+  - council-roundtable：载入步骤与代表简报不再把 LP、MINLP 圆桌称作模板（找不到时写「not installed」）；Outside the Council 把 LP 求解器内部与逻辑密集的工程设计分别指向 lp-roundtable、minlp-roundtable；诚实边界注明两队圆桌晚于理事会的 FL1–FL6，后者不引它们
+  - 理事会 README：安装 37 个文件夹，两段安装循环不再跳过三个圆桌；LP、MINLP 状态行（MINLP：混合档，四位深读，T2 2026-11-19、T3.8 2026-11-20）与状态日期；用法与诚实边界同步。`product/README.md` 去掉三处「模板：团队层 T2 未运行」
+- 闸门（合入前）：`team_check.py` lp 11 项 0 失败（1 项跳过：Forrest、Bixby 在 milp-team 作客座的提示）、milp 12/0、minlp 35/0（0 跳过）、dfo 39/0、nonlinear 30/0、council 16/0（跳过的是本 worktree 里没有 txt 的摘录核对：dfo 5、nonlinear 2、council 1）；`answer_standard.py --check` 39/39、`--installed` 78/78；`distill_check.py teams --installed` 0 ✗（dfo 7 ⚠、nlp 4 ⚠，同前）；`check_citations.py --roundtable` minlp 49 处成员卡片引用 0 问题，lp、milp 0 问题；`check_links.py` product 403 个文件、teams 33 个，0 断链；三队与理事会的 `.md` 里没有 `{{`、`[TODO`
+- 安装：本分支改过的 18 个文件夹按 `git ls-files` 复制进 `~/.claude/skills`（543 个文件，逐字节一致，无多余文件）：15 个覆盖（覆盖前核对已装副本与 main 一致，只有 Grossmann 的 `works.json` 还缺 1c7b716 补的 H027 arXiv 编号；原文件夹另存一份），lp-roundtable、milp-roundtable、minlp-roundtable 首次安装。37 个已装文件夹与本分支逐个比对一致，跟踪文件合计 56 MB；`--installed` 78/78。回退：删掉三个圆桌文件夹，其余 15 个按 8d5c157 的跟踪文件重装
+- 未做：
+  - Burer 的 T3.7：他的 `SKILL.md` 只因回答标准一节（1,203 词）超出 13,000 词预算；算上这一节，Audet、Scheinberg、Conn、Nocedal、Bertsimas 也超，不算只有 Scheinberg 超（13,070）。是精简这几位还是预算不计回答标准一节，由用户定
+  - Grossmann、Sahinidis 的深读（T3.3 追全文起），之后重跑 T3.8
+  - 已在本地的全文只有摘要或元数据卡：Leyffer S033、S127，Misener S092（博士论文）、S150、S151；需 OCR 的：Leyffer 6 篇、Misener S116；S064 的开放全文待保存
+  - 客座卡片没写 MILP 成员的分歧行（Forrest 写「none documented」，Bixby 只写 Huangfu、Forrest），要补得在 LP 跑卡片步再重跑 MILP T2；LP、MILP 成员深读档
+- 成本：工作流与审计共 70 个 agent，约 2,694 万 token（LP T2 418 万、MILP T2 497 万、Leyffer T3.6 311 万、Misener T3.6 320 万、T3.7 两人 216 万、声明抽审两份约 38 万、MINLP T2 662 万、T3.8 232 万）
+- 模型：Opus 5.5
+
+## 2026-11-19 (19) · LP Team 与 MILP Team 接入回答标准，Lead 分派到 MILP Team
+
+- 用户请求：「进一步提高LP team 和MILP team」。分支 `lp-milp-pro`（worktree `../Optimization-Researchers-lp-milp-pro`），从 `main`（184882d，条目 (16)–(18)）开出，先 merge `origin/main`（d2a12bd，PR #3：MILP Team 四位成员与 milp-roundtable 模板、LP Team 的 Forrest 与 Bixby、kit 的 T1 封存题验证）。未推送
+- 合并：两处冲突。`TEAM-KIT.md` 两边新增的行都留，distill_check 那一行取 origin/main 的（表格里的竖线转义）；`scripts/team_check.py` 先跑 answer-std 一项，再接 origin/main 按客座计数的判断。其余六个两边都改过的文件自动合并，逐一核对两边改动都在（Lead 的 LP 行、理事会的 Forrest/Bixby 行、Huangfu 的更正、两份模板）。RUNBOOK 要求两边都改团队层文件时重做 T3.8：LP、MILP 是轻量档，没有 T3.8；理事会的 T3.8 内容（fault lines、DEEP-READING）两边都没动，没有重跑，以 `team_check.py` 与 `check_links.py` 代替核对
+- 改动：
+  - 回答标准写进 PR #3 带来的 7 个 skill（Forrest、Bixby；Gleixner、Lübbecke、Achterberg、Fischetti；milp-roundtable）；Forrest、Bixby 的「第一行写出路由行 / 工作流」改成静默选择（与 (16) 改过的十位一致）。`answer_standard.py` 的旧条款识别放宽：句中的「tag key advice / each key recommendation with its method」和以「Say once」开头的免责声明也补位置说明；其余 32 个 skill 的状态不变
+  - Lead 改为领导五队：路由表加 MILP Team 一行（求解器内的分支切割、分解、MIP 基准测试；哪类问题由哪位成员视角主答），Bertsimas 的召集规则早于 MILP Team，本 skill 把「混合整数」拆开用（线性 → MILP，非线性与全局 → MINLP），标为 inferred；frame 简报、`@MILP` 控制词、免责声明、诚实边界（理事会圆桌尚未给 MILP Team 座位）同步；理事会 README 的五队说明与安装循环（装 milp-team，跳过 milp-roundtable 模板）
+  - `product/README.md` 的团队表补上 lp-team、milp-team、minlp-team（成员与档位取自各队 team.json 与 `team_check.py`）
+  - 评测集加 T8（Achterberg：新割平面分离器要不要默认开启）、T9（Forrest：自写 dual simplex 在客户 LP 上不收敛或误报不可行）
+- 评测（全部 Opus 5.5；三方盲评，每题两位零上下文评审，字母错开；满分 30；`swaps` 核对四份评审字母无误）：
+
+  | 题 | origin/main 版（无回答标准） | 本分支 | 不带 skill |
+  |----|----|----|----|
+  | T8 MILP · Achterberg | 19.5 | 28.5 | 27.5 |
+  | T9 LP · Forrest | 18.5 | 27.5 | 25.5 |
+
+  四份评审都把本分支排第一，并都愿意原样转发；origin/main 版被点名的是正文里的内部句柄（→ H5、Workflow D、Rung、🔴、语料编号）和一处技术错误（T9 把残留的成本扰动当成误报不可行的原因，而不可行证书与成本无关）。本分支剩下的批评：开头一段塞了结论、五个步骤和预期结论；数据出来前先写「我的预期」（回答标准第 1 条要求写出预期的改动，评审读作先入为主）；自定阈值没有容差；依据里的证据键与「本轮 Crossref 核对」这类过程用语；提交号这类出处细节。研究者块作用于 30 多个 skill，这一轮没有改它
+- 闸门：`answer_standard.py --check` 39/39、`--installed` 75/75；`team_check.py` dfo 39 项 0 失败、nonlinear 30/0、council 16/0；lp 2 项、milp 2 项、minlp 7 项失败，与 origin/main（d2a12bd）上逐项相同（LP、MILP、MINLP 的圆桌仍是模板，团队层 T2 未运行；MINLP 深读成员的卡片问题），本分支只多出通过的 answer-std 一项；`distill_check.py` 两队 0 ✗（dfo 7 ⚠、nlp 4 ⚠，同前，含 `--installed`）；`check_links.py` 六队与 teams/ 0 断链；`selftest.sh` 通过（UTF-8 模式）
+- 安装：新装 6 位成员的整个文件夹（Forrest、Bixby、Gleixner、Lübbecke、Achterberg、Fischetti；与仓库跟踪的文件逐个一致）；覆盖 council-roundtable 与 optimization-lead 的 SKILL.md（原文件另存）；lp-roundtable、milp-roundtable 是模板，不装。`--installed` 75/75。回退：删掉这 6 个文件夹，两个 SKILL.md 用 `git show 184882d:<路径>` 恢复
+- 未做（档位由用户定）：LP、MILP 两队的团队层 T2（填圆桌的入座表、fault lines、README）；成员深读档 T3
+- 成本：作答 6 份约 145 万 token（每份 19–31 万、16–22 分钟）、评审 4 份约 70 万，合计约 215 万
+- 模型：Opus 5.5
+
+## 2026-11-15 (18) · Lead 由 lead 综合成一份答复（「Lead synthesizes」）
+
+- 用户请求：「Lead synthesizes」（接条目 (17)：我提议交付里不再逐队引用各队回答，而由 lead 依据各队回答写一份答复，各队原文保留、按需给出）。同一分支 `pro-answers`，未推送
+- 改动（`references/answer-standard.md` 的 lead 块、`optimization-lead/SKILL.md`、理事会 README、`scripts/answer_eval/`）：
+  - lead 增加第三个任务「综合」（同一个 lead agent，在复核签署之后）：依据各队原文、追问和自己的审阅写一份答复，先给建议，再给模型与机理、方案与判定试验、风险与切换信号、只有用户能定的事；队与队给出不同选项时写成选项加判定试验，不说谁主张哪个
+  - 主持人交付前逐条对照各队原文核对：数字与设置都有出处，关键前提没丢，默认值保留用户强调的特征、且该特征在模型里能改变决策，不把用户没提的要求当默认，方案符合用户原话的硬限制，前后一致，只引用答复自己给出的结果，关于界与 gap 的说法只说它证明了什么，引文确实支撑所附结论；不合格退回 lead 一次
+  - 交付只有：答复 → 简短依据（本次核对了什么、怎么核对、没核对什么；首次激活时一句中性的免责声明）→ 参考文献（只给出版信息，证据键与语料 ID 留在各队原文和存档）→ 一句白话提议给出运行脚本和完整记录。不打印进度行、agent 计数、问题卡（quick/autopilot 下）、队名或视角标签、签署、草稿过程、临时路径；成本规则只在 lead 模式的检查点 A 说明
+  - 新控制词 `show answers`（原样打印各队回答与 lead 的审阅）、`save`（存档并拷贝运行脚本；只在用户同意时写文件）
+  - 团队 brief：决定推荐的求解时间、gap 或界，能在 10 分钟内用用户规模的合成实例测的就测（不安装软件，保留脚本），报告运行条件；测试时的权宜做法（私有接口、旧版本）不作为生产建议；引文只用于它确实证明的结论
+  - 审阅 brief：默认值丢掉用户强调的特征、或把它放在不能改变决策的位置、或方案超出硬限制时写异议；检查界与 gap 论断的逻辑
+  - 评测：`questions.json` 加 T7（每日运输 LP，5 分钟时限、无商业授权），Lead 现有两道题；`answer_eval.py` 加 `swaps`（按评审意见里引用的原文核对字母，整组记错时写 `verdict_corrected.json`，`summary` 优先读它）
+- 评测（全部 Opus 5.5；三方盲评，每题两位零上下文评审，字母错开；满分 30）：
+  - 第一轮，综合版 v7 对上一提交 v6（2208b87，T7 由一个 2208b87 的临时 worktree 作答，用完已删）与不带 skill：
+
+    | 题 | v6 | v7 | 不带 skill |
+    |----|----|----|-----------|
+    | T5 仓库选址 | 13.0 | 22.5 | 27.0 |
+    | T7 每日运输 LP | 16.5 | 20.5 | 26.5 |
+
+    四份评审一致：v7 的计算证据是三者中最强的（T5 按仓 Lagrangean 松弛在全尺寸合成实例上 86 s 证到 0.55%；T7 全尺寸合成实例实测、presolve 里相关方程搜索的开销），但被进度行、成员视角归属、签署记录、`show answers` 命令和证据键包着，两位评审说改成单一作者的备忘录「可能成为最好的回答」；各有一处推理错误（T5「剩余差距来自方案，不来自下界」；T7 把有结构变化的夜晚判为不能 hot start，并误述一篇 IPM 热启动论文）
+  - 第二轮，去掉过程痕迹的 v8 对 v7 与不带 skill：
+
+    | 题 | v7 | v8 | 不带 skill |
+    |----|----|----|-----------|
+    | T5 仓库选址 | 18.5 | 20.5 | 25.5 |
+    | T7 每日运输 LP | 19.0 | 24.5 | 25.5 |
+
+    一份 T7 评审把 B、C 的意见对调记录（意见里引用的原文只出现在另一封回答里），按引文改回后计分；这就是 `swaps` 的来由。T7 上 v8 与不带 skill 只差 1 分，严谨与可信两项最高。T5 上 v8 只派了一份成员视角，选了无容量 p-median 加风险项，评审指出它自己的价格曲线显示风险项只改变一个仓、需求不确定性等于没起作用；开头一行 agent 计数、角色化的出处句、「按问题卡的成本口径」也被点名
+  - 据此改出 v9（agent 信息不打印、中性免责声明、依据不写由哪几队回答、不引用问题卡、用户强调的特征要放在能改变决策的模型里、只写与决策有关的内容），T5 复测，v8 对 v9 对不带 skill：
+
+    | 题 | v8 | v9 | 不带 skill |
+    |----|----|----|-----------|
+    | T5 仓库选址 | 20.0 | 24.5 | 26.5 |
+
+    v9 用带容量、逐周情景重新分配需求的两阶段随机模型，在全尺寸合成实例上给出两小时内的认证 gap；一位评审把 v9 排第一（26 对 25）并愿意原样转发，这是 Lead 第一次排在不带 skill 之上；另一位 23 对 28。两位都指出：v9 把用户没提的 95% 服务水平当默认交付、把两小时改成从清洗好的数据算起、生产建议用了测试时的私有 SciPy 接口、开头一段塞了太多参数
+  - 最后据此小改（未复测）：用户没提的要求只作选项、硬限制按用户原话、生产建议给受支持的接口、开头只放决定结果的设置；外来依据的「不是团队答复」不再写进正文，只在参考文献里标出；只引用答复自己给出的结果
+- 闸门：`answer_standard.py --check` 32/32、`--installed` 62/62；`team_check.py` dfo 39 项 0 失败、nonlinear 30/0、council 16/0（minlp 7 项、lp 1 项为 main 上原有）；`distill_check.py` 两队 0 ✗（dfo 7 ⚠、nlp 4 ⚠，同前）；`check_links.py` 五队 0 断链；`check_citations.py` optimization-lead 0 问题；`selftest.sh` 通过（需 UTF-8 模式：Windows 下不开时 5 项 `--help` 因 cp1252 控制台编码失败，与本次改动无关）
+- 安装：只有 optimization-lead 的 SKILL.md 变了；覆盖前核对已装副本与 2208b87 一致（仅换行符不同），原文件另存一份，覆盖后 `--installed` 62/62。回退：`git show 2208b87:product/optimization-council/optimization-lead/SKILL.md`
+- 成本：作答 7 份约 214 万 token（Lead 每份 28–36 万，不含其内部的团队与 lead agent；不带 skill 一份 18 万）、评审 10 份约 171 万，合计约 384 万。Lead 每份 50–108 分钟（最多四份并行，含合成实例实测与追问）
+- 模型：Opus 5.5
+
+## 2026-11-14 (17) · 回答标准第二轮：同模型复测与圆桌、Lead、语料团队的修订
+
+- 用户请求：「continue the improvement」（接条目 (16)）。同一分支 `pro-answers`，未推送
+- 复测（三题：NLP Team、圆桌、Lead；前一版修订、当前版、不带 skill 三方都在 Opus 5.5 上跑，消除跨模型的偏差；
+  每题两位零上下文评审，字母错开一位；满分 30）：
+
+  | 题 | 前一版修订 | 当前版 | 不带 skill |
+  |----|-----------|-------|-----------|
+  | NLP Team | 22.5 | 25.5 | 27.0 |
+  | 圆桌 | 19.0 | 22.0 | 28.0 |
+  | Lead | 16.0 | 15.5 | 27.5 |
+
+  NLP Team 的当前版有一位评审愿意原样转发；剩下的批评是依据里的语料 ID 与语料术语（入库候选、model-knowledge 级）、
+  书目旁注、一格表里塞五个结论、一句以偏概全。圆桌两位评审打分完全一致：记录附录仍像会议纪要（入座、签署、提出者），
+  参考文献带成员证据键，留着「4. 重构思路 — 本次未提出」这样的空标题；内容上，不带 skill 的回答用上了成员记录之外的
+  实践杠杆（电网孤岛参考角造成的零空间、Ipopt 只升不降的主元容差、只做数值分解）。Lead 这次分派到五个成员视角，
+  交付把五份回答原样贴出（英文、满是证据键和方法号），还有 agent 计数，测试方案不顾两小时的限制
+- 修订（只改 `references/answer-standard.md`、圆桌与 Lead 的协议文字，再 `--apply`）：
+  - 圆桌：签署前先用工具核对草案依赖的选项、取值和已发表结果，证据与某条建议矛盾时写进该成员的签署任务；最终方案到
+    参考文献为止，讨论记录不再打印，末尾一行提议存成文件；参考文献只给出版信息，证据键留在检查点的成员发言里；没有
+    内容的部分整段省略；结论最多五句，一段一个意思
+  - Lead：团队回答 brief 要求用用户的语言、正文按论文方式引用、证据键放最后一行 EVIDENCE、方案符合用户的硬限制、
+    上限 700 → 500 词；交付里每队只引 BOTTOM LINE 与 MECHANISM，全文留给 `show answers` 和存档；autopilot 下不打印
+    agent 计数；分派时只派能定下问题的最少几队、几位成员；方案不符合时限的由 lead 写明异议
+  - 语料团队：依据用白话写，最后一行集中列语料对照（ID → 文献或结论），不写流水线术语与书目旁注，表格每格一个结论；
+    `standards/grounding.md` 同步
+  - 研究者：脚注里不再带方法号；被圆桌或 Lead 召集时，回答也用用户的语言，证据键只放在 brief 给的字段
+- 确认运行（Opus，一位评审，三方：前一版 / 本轮修订 / 不带 skill）：
+  - Lead（v6：每队只引 BOTTOM LINE 与 MECHANISM、用用户的语言、正文无证据键、只派最少的队、不打印 agent 计数）：不带 skill 28、v6 16、v5 14。这次只派了一队（Grossmann），篇幅从 54 KB 降到 22 KB；但评审指出该队把仓容量默认成没有，问题里强调的需求不确定性因此不起作用，实施细节被挪到 `show answers` 后面，记录段仍有 lead 的内部术语与牵强的引用。随后再改：默认值不许把用户强调的特征假设掉，交付里照引 lead 要的各字段，记录不打印、末尾一行提议存档。这一版未复测
+  - 圆桌（v6：计划到参考文献为止、记录存档、参考文献只给出版信息、空部分省略）：不带 skill 28、v6 24、v5 20，差距从 6 分缩到 4 分。剩下的批评是引用读者看不到的检查点回复（「按你在检查点上的默认回复」）、描述讨论本身的过程用语、正文里的 (standard) 标记、塞得过满的段落；已按此再改一版（v7），未复测
+- 闸门：`answer_standard.py --check --installed` 62/62；`team_check.py` dfo 39 项 0 失败、nonlinear 30/0、council 16/0（minlp 7 项、lp 1 项为 main 上原有）；`distill_check.py` 两队 0 ✗、install 与仓库一致；`check_links.py` 五队 0 断链；`selftest.sh` 通过
+- 安装：第二次覆盖 30 个已装 skill 的 SKILL.md（覆盖前核对与第一次安装逐字节一致、无漂移，原文件另存一份）；qi-huangfu 仍由 lp-team 的版本加本次改动生成，保留尚未合入 main 的 LP 更正；`--installed` 核对通过。回退：29 个用上一提交的版本（`git show 3132397:<路径>`），qi-huangfu 用 lp-team 的版本
+- 成本：复测 6 份作答约 180 万 token、评审 6 份约 100 万；确认运行 2 份约 68 万、评审 2 份约 37 万；合计约 385 万（Lead 运行内嵌套的成员 agent 未计入）
+- 模型：Opus 5.5
+
+## 2026-11-14 (16) · 回答标准：32 个 skill 统一交付形式（先给答案、讲机理、可执行细节、依据后置）
+
+- 用户请求：「优化一下我的Optimization Researchers skills 现在觉得回答还是有点不够专业」。分支 `pro-answers`（独立
+  worktree `Optimization-Researchers-pro-answers`，基于 `origin/main` 0d999b8，即 PR #1 合并后的状态），未推送。
+  条目编号按 origin/main 顺延；MILP 会话若也加了 (16)，合并时顺延即可
+- 诊断：读了用户唯一一次实际调用的记录（2026-11-05「Bertsimas 推荐两个 simplex developer」）和全部 32 个 SKILL.md。
+  skill 只规定「推荐什么」，不规定「怎么交给用户」：
+  - 研究者 skill 的 Step 3 固定格式是「结论 → 每条挂方法标签的步骤 → 🔴 检查点 → 局限」，首次激活的长免责声明
+    放在开头，每条建议后挂「(→ Method N)」「generic, not X-style」，10 位要求首行报路由（"Route: Workflow C"）
+  - 圆桌成员开场 ≤150 词，只剩立场、没有机理；Lead 的交付先报 CODES / STAGE / ROUTING
+  - 语料团队遇到精确常数一律只答「常数需查原文」
+- 基线测试（`scripts/answer_eval/questions.json` 六道题：Curtis、Powell、Grossmann、NLP Team、nonlinear-roundtable、
+  optimization-lead；每题旧 skill / 新 skill / 不带 skill 各一份，零上下文 agent 读完整个 SKILL.md 后作答）
+- 改动（提交 adf26d7 及其后一个提交）：
+  - `references/answer-standard.md`：回答标准的唯一正文，四个块。research-craft 块八条：先给技术答案（问题的每一部分
+    都要答）；机理与成立条件（用上题目里的数字）；可执行细节（公式、取值和出处、选项名；本轮跑过的东西带设置报告）；
+    备选与判定实验；只校准一次（凭描述作的诊断是假设，自己的阈值说是自己的）；可以用标准结果但要引；备忘录语体
+    （全篇包括脚注都不出现内部记号，正文按论文方式引用，证据键只出现在脚注）；依据脚注（用白话写，不加论文来给
+    视角背书）。roundtable 块：成员 POSITION 加 MECHANISM；最终方案按「结论 → 计划 → 签署 → 记录 → 参考文献」排列；
+    决定目标的手段若在全体成员记录之外，不以「未论证」搁置，由主持人连同已核实的文献写进草案。lead 块与之对应。
+    corpus-team 块（中文七条）：精确表述可对 `01-canon.md` 已收录的来源现查原文，逐字引用并在依据里说明（仍不凭记忆）；
+    正文按作者-年份引用，语料 ID 列在依据里
+  - `scripts/answer_standard.py`：`--apply` 把对应的块写进每个 SKILL.md 两行标记之间，`--check`、`--installed` 核对，
+    `--lint` 保证块里没有像引用的记号；研究者 skill 三处旧条款（方法标注、首次说明、Step 3）后补一句位置说明，不删原文
+  - 圆桌与理事会：brief 加 MECHANISM 字段，开场 150 → 260 词，签署用文字；Lead 的团队回答加 MECHANISM，交付先给答案
+  - 10 位研究者「首行报路由」改为不打印路由；两份语料团队 skill、`standards/skill-template.md` 的引用纪律改为
+    「正文作者-年份，依据里对应到语料 ID」；`standards/grounding.md` §3.3 写明现查原文的规则
+  - `team_check.py` 新增 `answer-std`；模板、DISTILL.md、distill-gates、RUNBOOK、TEAM-KIT、路由 skill 同步；
+    `scripts/answer_eval/`（六道题、评审 prompt、prep / summary / form）
+- 盲评第一轮（每题两位零上下文评审，三份回答以 A/B/C 呈现、两位评审的字母错开一位；六维各 1–5 分，满分 30；
+  Lead 题的新版回答在用量上限前没有跑完，第一轮只有五题；圆桌只评最终方案那一段）：
+
+  | 题 | 旧 skill | 新 skill（第一版） | 不带 skill |
+  |----|---------|------------------|-----------|
+  | Curtis | 17.5 | 27.5 | 27.5 |
+  | Powell | 20.0 | 26.0 | 27.0 |
+  | Grossmann | 18.5 | 28.0 | 27.5 |
+  | NLP Team | 17.5 | 23.5 | 28.5 |
+  | 圆桌 | 17.0 | 21.0 | 27.0 |
+  | 平均（10 份评审） | 18.1 | 25.2 | 27.5 |
+
+  旧 skill 10 份评审里 0 次排第一、0 次愿意原样转发；新 skill 2 次、2 次；不带 skill 8 次、10 次。分维度：新 skill 的
+  rigor 5.0（不带 skill 4.1）最高，economy 3.1、register 3.4 最低。评审对新版最一致的批评：脚注里仍有内部记号
+  （Workflow C0、Method 2、Heuristic 1）；把人格当交接对象（「交给 Scheinberg 的视角」）；圆桌把最关键的杠杆
+  （condensed-space KKT + GPU / Cholesky）以「两位成员的记录之外，未论证」搁置；语料团队正文满是 [NLP-R3]
+- 按评审意见修订（v2–v4，都只改 `references/answer-standard.md` 再 `--apply`）：脚注与正文都不出现内部记号；凭描述的
+  诊断说是假设；问题的每一部分都答；交接写方法与文献，镜头指针放脚注；本轮跑过的实验带设置；圆桌与 Lead 不搁置
+  记录外的关键杠杆、引用解析到出版信息而不是成员目录里的文件、签署一行；语料团队遇到缺口去检索一手文献、付费墙先找
+  公开版本、语料 ID 移到依据里
+- 复核（Opus 5.5 重跑，一位评审，三方：第一版（Fable）/ 修订版（Opus）/ 不带 skill（Fable）。不带 skill 用的是更强的
+  Fable，这一比较对修订版不利）：
+  - Grossmann（v2）：修订版 27、不带 skill 24、第一版 24，修订版排第一，也是唯一愿意原样转发的一份
+  - NLP Team（v2，在 v4 移走正文语料 ID 之前）：不带 skill 28，修订版 23，第一版 23。剩下的差距一半是正文的语料 ID 与
+    过程标记（v4 已改，未复测），一半是内容：Nesterov (2004) 的定理原文在付费墙后、语料里也没有，2015 年以后的
+    heavy ball 结果（Ghadimi 等；Goujaud、Taylor、Dieuleveut）不在语料。这要补语料，不是改写法能解决的
+  - 圆桌（v3）：圆桌（v3：保留记录外的杠杆、引用解析到出版信息、签署一行）：不带 skill 26、第一版 22、修订版 20。改动生效了（condensed-space KKT 作为本席之外的杠杆，连同 Pacaud 等人已核实的数据写进了计划；没有文件路径和方法号），但评审仍把最终方案读成会议纪要：几乎每条带镜头标签，有签署与席位小节和过程旁白，参考文献把各成员开场引过的文献全列进来；还保留了一条它自己引的证据说不会见效的步骤（换别的 LDLᵀ 代码）。随后改为 v5：最终方案写成一份备忘录（不逐条标镜头，谁提的哪条在记录里列一次），记录放在参考文献之后作附录，参考文献只列方案引用的，核实到的证据与成员建议矛盾时签署前先问该成员。v5 未复测
+  - Lead（v2）：Lead（v2，早于 v3 的「不搁置杠杆、不给文件路径」和 v5 的「autopilot 每步一行进度」）：不带 skill 28、修订版 19、旧版（Fable 跑的）16。修订版的技术核心最严（下界链及其前提、聚合写法的闭式松弛），但被路由与签署文字、autopilot 下重复打印的段落、与问题无关的 Bertsimas 卡片引用（医疗、排队、空管）埋住，也没有验证两小时内跑得完。之后的修订针对的就是这些，未复测
+- 结论：研究者 skill（24 个）已与不带 skill 持平或更好；圆桌、理事会、Lead 和两份语料团队 skill 都比旧版好（每份评审都把旧版排在最后），但仍不如同一模型直接作答。差距一部分来自格式（面板的讨论记录、封闭语料的引用方式），这部分已按评审意见改到 v5、未复测；一部分来自语料内容（NLP 语料缺 Nesterov (2004) 的定理原文和 2015 年以后的 heavy ball 结果），要按语料维护流程补
+- 闸门：`answer_standard.py --check` 32/32；`team_check.py` dfo 39 项 0 失败、nonlinear 30/0、council 16/0（minlp 7 项、
+  lp 1 项失败在 main 上原本就有，同一批）；`distill_check.py` 两队 0 ✗（⚠ 与改动前相同：dfo 7、nlp 4）；`check_links.py`
+  五队 0 断链；`selftest.sh` 通过
+- 运行教训：
+  - Fable 用量上限在 15:07 左右打断 6 个 agent；其中圆桌新版回答、Lead 旧版回答和 Curtis 题的一位评审在打断前已写完
+    文件，直接沿用；其余改在 Opus 5.5 上重跑。跨模型的比较只用来确认方向（更强的模型放在对照组）
+  - Lead 在 autopilot 下自己召开了理事会，一次运行带出 4–5 个嵌套 agent；停掉父 agent 后，子 agent 回报时会把它
+    唤醒，要连子 agent 一起停。误停了修订版 Lead 运行自己的定题 agent，已通知它重开
+  - 评审与写手分开；评审只读自己的目录（问题、三份回答、说明）；圆桌与 Lead 只给最终方案，否则检查点的长篇记录
+    会暴露哪份来自 skill
+  - 评审一致认为最不专业的不是内容，而是读者解不开的内部记号：方法号、路由、卡片键、语料 ID、文件路径
+- 成本：已记录的子 agent 约 790 万 token（作答 18 份约 600 万，评审 11 份约 195 万），另有被用量上限打断和被停掉的
+  运行（含一次自动召开的理事会，已知约 130 万）未计入，总数估计在 1,000 万上下
+- 安装：安装：2026-11-14 覆盖了 `~/.claude/skills` 下已装的 30 个 skill 的 SKILL.md（只换这一个文件，references 等未动；
+  lp-roundtable、minlp-roundtable 是模板，没装）。覆盖前逐个核对：29 个与 origin/main 一致，qi-huangfu 与 lp-team 一致。
+  qi-huangfu 用 lp-team 的版本加本次改动生成，保留 lp-team 上尚未合入 main 的 LP 更正；其余 29 个与本分支逐字节一致。
+  `answer_standard.py --check --installed` 62/62，`distill_check.py --installed` 两队「与仓库一致」。回退：29 个用
+  `git show origin/main:<路径>`，qi-huangfu 用 `git show lp-team:product/lp-team/qi-huangfu/SKILL.md`
+- 模型：Fable 5.2（诊断、第一版、基线与第一轮评审），Opus 5.5（修订、复核与收尾）
+
 ## 2026-10-31 (15) · optimization-lead：Bertsimas 作为四支优化团队的总入口
 
 - 用户请求：「我是希望Bertsimas领导所有的optimization team 要不单开一个optimization lead?」，随后「按方案建」。

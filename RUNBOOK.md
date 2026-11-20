@@ -52,10 +52,16 @@ Nocedal、MINLP、语料线闸门）。这些坑每个都至少花过一次重�
 - 读的是替代版本（报告版、预印本、后一版手册）就写版本引用 `[S025 TR pp. 3–12]`，卡片正文写明。
 - 审计包必须给整张卡片（曾因截到 9,000 字符误判 unsupported）；同样深的卡片取最晚一轮（OCR 重读后的）。
 - 写 skill 的 agent 与审计 / 复核的 agent 必须是两个；每条声明两位审计员、有分歧第三位裁定更稳。
+- 新成员的 SKILL.md、新圆桌写完后跑 `python3 -X utf8 scripts/answer_standard.py --apply product/<team>`（写入
+  Answer Standard 一节，并在研究者 skill 的三处旧条款后补位置说明）；`team_check.py` 的 `answer-std` 一项核对。
+  要改回答的写法只改 `references/answer-standard.md` 再 `--apply`，不要逐个改 SKILL.md；改完用同一批题对新旧版本
+  各答一遍再盲评（`teams/DISTILLATION_LOG.md` 2026-11-14「回答标准」一条的做法），写法好不好只有读回答才看得出来。
 
 ## 5. 语料流水线（DISTILL.md）
 
 - 改语料前后都跑 `python3 -X utf8 scripts/distill_check.py teams/<team> --lint`；填完模板跑全量；装完跑 `--installed`。
+- 「回答标准」一节不手写：填完模板跑 `python3 -X utf8 scripts/answer_standard.py --apply teams/<team>`，装完跑
+  `--check --installed`。
 - G7：`scripts/distill_audit.py --sample` → 新 agent 只读审计包 `.md` → `--report`；unsupported = 0，partial 逐条收窄。
 - 语料版本戳 = 语料最后一次改动的提交（先提交语料，再写 skill）；头部契约与诚实边界两处一致。
 - 跨队 ID（NLP skill 引 `[DFO-R7]`）合法，脚本到对方语料解析；两队语料必须同在 `teams/` 下。

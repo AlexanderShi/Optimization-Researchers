@@ -80,7 +80,7 @@ Every item carries an identifier checked in this run; "(Scholar)" marks report-t
 
 **2015-2019 · Farkas Prize 2016.**
 - Active-set method for SOC-constrained QP (with Goldberg), SIAM J. Optim. 25(3) (2015) 1455-1477, DOI 10.1137/140958025; two-level MIP for buildings, Comput. Optim. Appl. 65(1) (2016) 1-46, DOI 10.1007/s10589-016-9842-0. [practice · primary]
-- Imaging with Wild and Di: SIAM J. Imaging Sci. 9(1) (2016) 1-23, DOI 10.1137/15M1021404; SIAM J. Sci. Comput. 41(3) (2019) B497-B521, DOI 10.1137/18M121993X. Inexact computing, arXiv 1610.02606. [practice · primary]
+- Imaging with Wild and Di: SIAM J. Imaging Sci. 9(1) (2016) 1-23, DOI 10.1137/15M1021404; SIAM J. Sci. Comput. 41(3) (2019) `B497-B521`, DOI 10.1137/18M121993X. Inexact computing, arXiv 1610.02606. [practice · primary]
 - PDE-constrained integer problems begin: Leyffer, Cay, Kouri, van Bloemen Waanders, "Mixed-integer PDE-constrained optimization", ANL/MCS-P5429-1015 (Nov 2015; known only from his 2017 reference list); Hahn, Leyffer, Zavala, gas networks (Optimization Online 2017/12/6381). [practice · primary]
 - Minotaur preprint ANL/MCS-P8010-0817 (Optimization Online 2017/10/6275). Diesel, PV and battery system design with A. Newman, Optim. Eng. 18(3) (2017) 755-792, DOI 10.1007/s11081-017-9355-4. [practice · primary]
 - Pattern [inferred]: junior first authors appear; applied lines with Wild and Di.
@@ -90,7 +90,7 @@ Every item carries an identifier checked in this run; "(Scholar)" marks report-t
 - MINLP software in print: Minotaur, Math. Program. Comput. 13(2) (2021) 301-338, DOI 10.1007/s12532-020-00196-1. [practice · primary]
 - NLP globalization again: augmented-Lagrangian filter (with Vanaret), Math. Methods Oper. Res. 92(2) (2020) 343-376, DOI 10.1007/s00186-020-00713-X; the Uno solver, arXiv 2406.13454; funnel SQP, arXiv 2409.09208. Survey of nonlinear robust optimization, INFOR 58(2) (2020) 342-373, DOI 10.1080/03155986.2020.1730676. [practice · primary]
 - Bilevel and MPEC: Kim, Leyffer, Munson (2020), DOI 10.1007/978-3-030-52119-6_12; Dandurand, Kim, Leyffer, SIAM J. Optim. 31(1) (2021) 702-726, DOI 10.1137/19M127611X; Kirches, Larson, Leyffer, Manns, SIAM J. Optim. 32(1) (2022) 75-99, DOI 10.1137/20M1370501. [practice · primary]
-- Near machine learning and the lab's science: symbolic regression, INFORMS J. Comput. 35(6) (2023) 1383-1403, DOI 10.1287/ijoc.2022.0050; neural-network surrogates, Comput. Optim. Appl. 83(3) (2022) 759-800, DOI 10.1007/s10589-022-00404-9; binary optimal design of experiments, SIAM J. Sci. Comput. 44(2) (2022) B395-B427, DOI 10.1137/21M1404363; quantum control, Quantum 7 (2023) 892, DOI 10.22331/q-2023-01-04-892; convex black-box integer optimization, J. Glob. Optim. 80(2) (2021) 439-477, DOI 10.1007/s10898-020-00978-w. [practice · primary]
+- Near machine learning and the lab's science: symbolic regression, INFORMS J. Comput. 35(6) (2023) 1383-1403, DOI 10.1287/ijoc.2022.0050; neural-network surrogates, Comput. Optim. Appl. 83(3) (2022) 759-800, DOI 10.1007/s10589-022-00404-9; binary optimal design of experiments, SIAM J. Sci. Comput. 44(2) (2022) `B395-B427`, DOI 10.1137/21M1404363; quantum control, Quantum 7 (2023) 892, DOI 10.22331/q-2023-01-04-892; convex black-box integer optimization, J. Glob. Optim. 80(2) (2021) 439-477, DOI 10.1007/s10898-020-00978-w. [practice · primary]
 - Pattern [inferred]: arXiv-first; most papers have a junior first author.
 
 **2025-2026** (details in §1.7): McCormick relaxations in function space plus a published Correction; funnel SQP in Math. Program.; filter methods for ADMM; MPEC B-stationarity; ADMM for integer topology optimization; experimental design; microscopy paths; quantum control. Pattern [inferred]: a late return to NLP globalization and MPECs, now through software architecture.
@@ -399,3 +399,52 @@ Secondary
 31. WebSearch summaries (2 queries, 2026-10-10) of Argonne pages that return HTTP 403 (anl.gov/node/76866; wiki.mcs.anl.gov/leyffer). Secondary; used only for the 2002 Argonne start and the postdoc stations, marked unverified.
 
 Third-party works cited for context, checked through Crossref (part of source 5): Duran and Grossmann 1986, DOI 10.1007/BF02592064; Quesada and Grossmann 1992, DOI 10.1016/0098-1354(92)80028-8; Borchers and Mitchell 1994, DOI 10.1016/0305-0548(94)90024-8; Bonami et al. 2008, DOI 10.1016/j.disopt.2006.10.011; Hijazi, Bonami, Ouorou 2014, DOI 10.1287/ijoc.1120.0545.
+
+
+---
+
+## Update 2026-11-19 (full-text pass, T3.6): coverage from the Google Scholar list
+
+The publication list is now complete at the level of the Google Scholar profile, and most works were read in full text. Sources: `../sources/publications/scholar.md` (Google Scholar profile https://scholar.google.com/citations?user=UubsxcAAAAAJ, cross-checked with DBLP 91/745, arXiv, Crossref/DataCite and the homepage list; machine-readable in `works.json`), the full-text index `../sources/papers/INDEX.md`, the paper cards indexed in `07-paper-cards.md`, the synthesis `08-deep-reading-synthesis.md` and the evidence ledger `09-evidence-ledger.md`. Citations like [S009 pp. 1–2] point to a card and the page of the version it read; a version word (TR, arXiv, preprint) marks a card read in that version.
+
+### Coverage
+
+| Item | Count | Note |
+|---|---|---|
+| Google Scholar rows | 224 | 29 marked duplicate or junk (`dup_of` in `works.json`) |
+| Distinct works indexed | 211 | 195 from Scholar (7 of them non-publication rows kept as kind other), 2 DBLP-only (D001, D002), 14 homepage-only (H001–H014); 125 with a DOI, 35 with an arXiv id |
+| Works with an open full text | 164 | `txt` in INDEX.md; 47 are `no-oa` |
+| Card entries / works with a card | 204 / 204 | 36 batch files: core c01–c20 (61 cards), supplement s01–s14 (101), abstract and metadata a2-01, a2-02 (42); the 7 indexed works without a card are Role = skip |
+| **Read in full text** | **155** | 120 in full, 35 in part; related texts count once when projects are counted: S020 = S013 (the NA/210 text), S129 → S037, S067 = D001, H014 → S121, S165 → S160 [08 §1] |
+| Abstract-level | 22 | for example the MINLP volume with Lee [S004], the MacMPEC page [S030], the 2000 filter-SQP report [S132], state elimination for MIOCP [S127] |
+| Metadata-level | 21 | for example the methods-and-software report with Mahajan [S035]; S179 is probably misattributed and S200 unidentified (their cards say so) |
+| Unreadable (broken text layer) | 6 | S005, S008, S017, S024, S038, S109: the filter-SQP and MPEC local convergence papers, the multidimensional filter, an introduction to algorithms, filter algorithms for equations, the SLP-filter proof |
+| Skipped | 7 | not his work or not research (INDEX Role = skip) |
+| Card quotes verified | 329 | 323 exact, 6 equal up to spacing or symbols, 0 not found (`verify_card_quotes.py`, 2026-11-19) |
+
+Rows that are not research evidence: S050, S197, S209, S210, S212, S219 and S221 are junk or masthead rows; committee or community voices, not his: S025, S133, S163, S148, S193 [08 §1]. Many core works were read in a preprint, report or arXiv version rather than the journal typesetting, each card says which: S001 (NA/171 revision of 2000), S003 (1996 Dundee version), S009 (NA/182), S015 (2008 preprint), S028 (2011 TR), S032 (2017 TR), S096 and S114 (arXiv), S119 (arXiv v2), S126 (arXiv v5) [08 §1].
+
+### Research lines in the full list
+
+The topic-by-period table of the carded works is in `06-trajectory.md` (Update 2026-11-19). In short: MINLP and NLP dominate 1990–2009; MPECs peak 2000–2009; laboratory applications and service peak 2010–2019; integer optimal control, imaging and experimental design, and machine learning dominate 2020–2026 [08 §8].
+
+### Gaps of this note now resolved by the full texts
+
+| Gap (section "Gaps") | Resolution | Cards |
+|---|---|---|
+| PhD thesis not read | Read in full: OA rebuilt for MINLPs nonlinear in y, quadratic OA, QP/NLP-based B&B, a five-code comparison and a three-row Rule of Thumb [S016 pp. 77–83]; the supervisor is not named in the file read | S016 |
+| Full texts of the 1994 OA paper, the 2002 filter paper, the 2001 SQP plus B&B paper, FilMINT, Minotaur and the McCormick paper not read | Read in preprint, report or arXiv versions: OA as the 1996 Dundee version, which has no numerics [S003 pp. 9, 12, 15]; filter as the NA/171 revision of 2000, numerics included [S001 pp. 17–22]; SQP plus B&B as NA/182 [S009 pp. 9–11]; FilMINT as the 2008 preprint without its per-instance appendix [S015]; Minotaur as the 2017 report [S032 TR pp. 1–5]; McCormick as arXiv v5 [S096 arXiv pp. 1–3]. Journal versions were not compared | S003, S001, S009, S015, S032, S096 |
+| Acta Numerica survey read only in parts | Read in full; it already treats mixed-integer optimal control as a class with a library [S002 pp. 87–94] and grades assumptions in print [S002 p. 22] | S002 |
+| Whether arXiv v5 of the McCormick paper already contains the corrections | Still open: the two-page Correction does not say how its added hypothesis bears on the paper's worked example [S162 pp. 1–2] | S096, S162 |
+| Journal publication of the SLP-filter report NA/183 | Still open: the carded file is unreadable [S109] | S109 |
+
+### Corrections to §3 (signature works)
+
+- **S1**: the version read has no numerics [S003 pp. 9, 12, 15], so the journal numerics remain unread; the thesis numerics are read [S016 pp. 77–83]. The two-point counterexample to the Duran-Grossmann master and the worst case on a geometric grid are on [S003 pp. 8, 12–13].
+- **S3**: the report version's numerics are read: CUTE comparisons against a self-built Sℓ1QP at its most favourable penalty and LANCELOT [S001 pp. 17–22]. The Maratos example that broke the hope is in the filter papers [S001 pp. 7–8; S019 p. 8].
+- **S5**: the MIPDECO name is credited to an August 2013 ExaMath13 position paper [S112 p. 2], and a public August 2013 DOE exascale-workshop deck already bore the class name (02 §2.4, §2.5); the 2015 Oberwolfach abstract is the first carded text that uses the name [S112 pp. 1–2]. All three are earlier than the 2017 outlook quoted in S5.
+- **§4 candidates M1–M10**: kept as SKILL.md Methods 1–6, Heuristics 3 and 9 and Taste 4 with card evidence (08 §2); the full texts add Method 7, certify the notion you claim (08 §4), a coarse-to-fine clause in Heuristic 8 and a drafting practice in the Stages table (proposed in 08 §5 as H11 and H12).
+
+### Signature-work anatomies
+
+SKILL.md now rests the five anatomies of §3 on the full texts (version named on each card) and adds one: certified B-stationarity, from the SLPEC filter (2007) to MPECopt (2026) [S042; S069 preprint; S126]. A further anatomy (trust regions on integer controls [S065; S091]) and the earlier web-research versions are in `09-evidence-ledger.md`. §3 is kept as the web-research record.

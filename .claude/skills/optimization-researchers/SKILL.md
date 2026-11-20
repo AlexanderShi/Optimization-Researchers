@@ -23,6 +23,7 @@ description: |
 | 「强化 / 加强 X 的蒸馏」（X 是已在 product/ 里的研究者） | **team-kit · 升档** | playbook 第五节（T3.1–T3.8 深读档）或 T4 增量 | 同上，深读档多出 cards/、07–10、technique-catalog |
 | 新领域的研究顾问团（几位研究者 + 圆桌） | **team-kit · 新团队** | `TEAM-KIT.md` → playbook 第一至七节 | `product/<new-team>/`（常配一份 `teams/<new-team>/` 封闭语料 + 团队级 skill） |
 | 「强化蒸馏技能本身」「质量门」「抽审」（改的是流程不是某个团队） | **协议维护** | `standards/distill-gates.md`、`scripts/distill_check.py`、`scripts/distill_audit.py`；kit 侧 `references/claim-audit.md`、`check_citations.py`、`audit_claims.py` | 改脚本/标准后在两队语料上跑一遍，记入 LOG |
+| 「回答不够专业」「回答太像流程 / 太啰嗦」「改回答的写法」（改的是所有 skill 的交付形式，不是某个团队的内容） | **回答标准** | `references/answer-standard.md`（唯一正文）→ `python3 -X utf8 scripts/answer_standard.py --apply` | 每个 SKILL.md 的「Answer Standard / 回答标准」一节；`--check` 0 ✗，`team_check.py`（含 `answer-std`）与 `distill_check.py` 照常；用同一批题对新旧版本各答一遍并盲评，记入 LOG |
 
 分不清时问一句：「要的是**团队口吻、事实可追溯到语料 ID** 的 skill，还是**某位研究者本人的研究方法**
 skill？」前者走语料蒸馏，后者走 team-kit。team-kit 加成员 / 强化成员时再问一句**档位**：轻量档（T1 + 带全体
@@ -44,6 +45,7 @@ skill？」前者走语料蒸馏，后者走 team-kit。team-kit 加成员 / 强
     `--report` 写 `teams/<team>/CLAIM-AUDIT.md`；unsupported = 0，partial 收窄后换 seed 再抽。
 - 语料版本戳 = 语料最后一次改动的提交（先提交语料再写 skill），头部契约与诚实边界两处一致。
 - 产物 `teams/<team>/SKILL.md` 只复制这一个文件到 `~/.claude/skills/<team>/`，`distill_check.py --installed` 核对。
+- 「回答标准」一节不手写：填完模板后 `answer_standard.py --apply teams/<team>` 写入，`--check` 核对。
 - 每次蒸馏在 `teams/DISTILLATION_LOG.md` 顶部记一条（语料版本、范围、✗/⚠ 处理、G6 试答、G7 计数、模型）。
 
 ## team-kit（TEAM-KIT.md）
@@ -56,7 +58,7 @@ skill？」前者走语料蒸馏，后者走 team-kit。team-kit 加成员 / 强
   → `python3 scripts/new_team.py product/<team>/team.json --add-member <slug>` → 只为他跑 T1
   （`scripts/workflows/team-base-skills.js`）→ 带全体成员重跑 `team-layer.js`（混合档团队用 `deep_tier: true`）
   → 深读档再跑 T3 → `team-integrate.js`。闸门：`quality_check.py --mode research` 12/12、`check_links.py` 0 断链、
-  `team_check.py` 0 failed。深读档另加两道证据闸门：`check_citations.py` 0 problems（引用闭包：每条
+  `team_check.py` 0 failed（含 `answer-std`：新写的 SKILL.md 先跑 `answer_standard.py --apply product/<team>`）。深读档另加两道证据闸门：`check_citations.py` 0 problems（引用闭包：每条
   `[card S012 pp. …]` 指向存在、读过、页码在范围内的卡片；替代版本写成 `[ID TR pp. …]`）和 `audit_claims.py`
   声明抽审 unsupported = 0（零上下文 agent 判定，协议 `references/claim-audit.md`）。
 - 新团队：`python3 scripts/new_team.py --init <slug> --field "…" --members "A;B;C"` →

@@ -38,6 +38,8 @@
                     frontmatter name = lead；正文链接圆桌、本队每位成员的 skill 和每个 guest 队的文件夹（有客座时还有每位
                     客座的 ../../<home>/<slug>/）。没有 lead 不报
     coverage        深读档：DEEP-READING.md 原样含 team_status.py --coverage 的表，README 原样含 --coverage --short 的表
+    answer-std      answer_standard.py --check <team> 0 ✗：每位成员、圆桌和 lead 的 SKILL.md 里「Answer Standard」一节
+                    与 references/answer-standard.md 一致，研究者 skill 的三处旧条款带有位置说明（缺了就跑 --apply）
   每位成员
     skill           SKILL.md 存在；quality_check.py 12/12（--skip-quality 跳过）；## Roundtable Card 的 7 项齐全
     works           深读档：validate_works.py 0 errors；INDEX.md 行数 = 去重后的研究作品数
@@ -478,6 +480,9 @@ def check_member(rep: Report, team: Path, m: dict, deep: bool, skip_quality: boo
 
 
 def main():
+    for _s in (sys.stdout, sys.stderr):  # Windows: the console / redirected output defaults to cp1252; the report prints ✓
+        if hasattr(_s, "reconfigure"):
+            _s.reconfigure(encoding="utf-8", errors="replace")
     ap = argparse.ArgumentParser(description="研究团队交付闸门（一次跑完手册第四节的检查）")
     ap.add_argument("team_dir")
     ap.add_argument("--tier", choices=["auto", "base", "deep"], default="auto")
@@ -548,6 +553,8 @@ def main():
                 "README.md missing" if not readme.exists() else ("; ".join(missing) or "links every member and guest"))
     check_roundtable(rep, team, cfg, deep, deep_members)
     check_lead(rep, team, cfg)
+    rc, out = run([sys.executable, str(HERE / "answer_standard.py"), "--check", str(team.resolve())])
+    rep.add("team", "answer-std", rc == 0, last_line(out))
     # 有卡片的客座（在他 home 队的文件夹里）：圆桌里他那一方按卡片引用，轻量档团队也是（team-layer.js），
     # 所以本队成员都还没有卡片时，团队级的圆桌引用闭包也要跑（页码、版本、读到哪一级只有 check_citations.py 查）
     carded_guests = [g["slug"] for g in new_team.resolve_guests(cfg, teams_root(team))[0]

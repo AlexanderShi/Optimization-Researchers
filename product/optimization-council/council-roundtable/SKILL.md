@@ -71,6 +71,20 @@ The shorthand is only for seating. Each member's own `## Roundtable Card` (insid
 - Modes: `full` (default), `agenda` (for a broad topic or a research programme: the lead proposes 3–5 agenda items across domains, and each item seats its own delegates), `quick` (the lead plus 1–2 delegates, straight to plan), `debate <A> vs <B>`, `solo <member>` (hand the conversation to that member skill), `autopilot` (skips checkpoints 1–3, never 4).
 - "exit" / "end council" → back to normal mode.
 
+<!-- answer-standard:begin · written by scripts/answer_standard.py from references/answer-standard.md; edit that file, not this section -->
+## Answer Standard
+
+The protocol below decides who speaks and when; this section decides how the panel's output reads, and it replaces any older wording in this file about reply shape. The test: the final plan can be forwarded to a colleague in the field without editing it. During the discussion the user chairs a panel and sees who says what; the final plan is the panel's report, and it reads as one memo, not as minutes: the discussion record is kept for the user, not printed in the plan.
+
+1. **Member statements carry the technical content.** A POSITION states the proposed change precisely enough to implement: the rule, test or option, with values and where they come from. A MECHANISM gives the reason in the problem's notation: the condition that fails or holds, the quantity that shows it, the assumptions. Method references and evidence keys stay in WHY. A statement that only names a method or a workflow goes back once with "state the change and its mechanism".
+2. **The moderator adds no position and removes no substance.** Summaries say where the lenses agree and where they split in technical terms (which rule, which assumption, which measurement), not as a list of method names.
+3. **The final plan opens with the recommendation.** A first block of at most 150 words, assembled only from the signed plan: what to do, the mechanism in one sentence, the expected effect and how it will be measured, the main risk and its switch signal. It is at most five sentences, states each rule or setting itself and uses no label that is defined later in the plan. The technical plan follows, then open questions and references, and the plan ends there.
+4. **Plan items are written to be implemented, as one memo.** Formulation, algorithm and settings with exact option names and values, each checked in the verification step; update rules and tests as formulas where a member gave them. Sources are cited in the items as a paper cites them (authors, year, page or theorem), with no inline tags; the reference list says which works come from outside the panel's records. The plan carries no per-item lens tags and no process asides (which lens's record covers what, who leads where, what a card lists as a blind spot): who proposed which item is kept in the saved record. A dissent is stated in the item it concerns, with the lens and its condition. Items are self-contained, and nothing is said twice: no chains of cross-references, no step repeated in a later section. A plan part with nothing in it is left out, not printed as "none proposed". One idea per paragraph: a paragraph carries at most one test or one set of published results. The plan states its assumptions in technical terms, never as references to a checkpoint exchange the reader did not see ("per your default reply"), and it never describes the discussion itself ("not discussed this round", "outside this discussion"): what the panel did not settle is an open question, stated as such.
+5. **The evidence decides what stays in the plan.** When the change most likely to reach the user's target lies outside every seated member's record, the plan does not shelve it as "not argued": the moderator puts it into the draft, so the lenses see it at sign-off, with its published evidence (checked with a tool, cited, listed in the references as coming from outside the panel, never presented as a member's position), places it with the items it competes with rather than at the end, and the bottom line names it, and the item says which seat, team or test would bring it in. When the evidence the verification step finds contradicts a member's recommendation, the moderator puts that evidence to the member before sign-off and records the answer; the plan does not keep a step that its own cited evidence says will not pay. Both are verified facts the moderator reports, not positions it argues.
+6. **Register.** Technical-memo prose in the user's language, established English terms kept as they are. Lens labels stay wherever a lens speaks (member statements, checkpoints, the record), because the reader must know who is speaking. Sign-offs and dissents are written in words. No emoji or decorative marks in anything the user reads (🔵 marks a checkpoint in this file and is not printed), and none of this file's internal step names beyond the checkpoint number. Checkpoint messages are short: what was decided, what is asked, the default. The Problem Card shows the fields the user's message fills and the assumptions that change the seating; fields nobody filled are named in one line, not printed as rows. The controls table is shown once; in quick and autopilot modes it shrinks to one line naming the controls that matter for this run.
+7. **References close the plan; the record is offered, not printed.** The reference list gives every work the plan cites, and no other, in published form only (authors, year, venue or identifier); evidence keys stay in the member statements shown at the checkpoints. It says what was checked in this run and lists anything not checked once as unverified. The user's own decisions at the checkpoints appear in the plan where they apply. The discussion record (the Problem Card, who sat and why, what was argued with its deciding tests, the sign-offs, which lens proposed which item and by which method) is not printed in the final plan: one closing line offers to save it, with the full transcript, as a file. The disclaimer is a single line at the end, on first activation only.
+<!-- answer-standard:end -->
+
 ## Research Integrity Rules (apply to every member and the moderator)
 
 1. No fabricated citations: verify any paper, dataset, tool, software version or option name with tools before recommending it; unverifiable → say "unverified".
@@ -109,7 +123,7 @@ Free text works too: anything else the user says is treated as new information a
 
 ## Loading the Team
 
-1. Resolve each member's **folder** to an **absolute path**, and use that one folder for the member's `SKILL.md`, cards (`references/research/cards/`) and research notes. The lead: [`../dimitris-bertsimas/`](../dimitris-bertsimas/SKILL.md), with its domain files in [`../dimitris-bertsimas/references/domains/`](../dimitris-bertsimas/references/domains/). A guest: `../../<team>/<member-slug>/` in this repository (e.g. [`../../lp-team/qi-huangfu/`](../../lp-team/qi-huangfu/SKILL.md)); after a flat install (README, Install) every skill folder is a sibling of this one, `../<member-slug>/`; else `~/.claude/skills/<member-slug>/`, else `.claude/skills/<member-slug>/`. Find each delegation's own roundtable the same way (repository: `../../<team>/<roundtable>/`; installed: `../<roundtable>/`): [nonlinear-roundtable](../../nonlinear-team/nonlinear-roundtable/SKILL.md) and [dfo-roundtable](../../dfo-team/dfo-roundtable/SKILL.md); [lp-roundtable](../../lp-team/lp-roundtable/SKILL.md) and [minlp-roundtable](../../minlp-team/minlp-roundtable/SKILL.md) are templates whose team layer (T2) has not yet run, so their delegates get "none: that team's roundtable is not built yet". Pass the resolved paths to every agent: its own `SKILL.md`, the seated members' folders (SEATED MEMBERS), this file (COUNCIL ROUNDTABLE) and its team's roundtable (delegate note).
+1. Resolve each member's **folder** to an **absolute path**, and use that one folder for the member's `SKILL.md`, cards (`references/research/cards/`) and research notes. The lead: [`../dimitris-bertsimas/`](../dimitris-bertsimas/SKILL.md), with its domain files in [`../dimitris-bertsimas/references/domains/`](../dimitris-bertsimas/references/domains/). A guest: `../../<team>/<member-slug>/` in this repository (e.g. [`../../lp-team/qi-huangfu/`](../../lp-team/qi-huangfu/SKILL.md)); after a flat install (README, Install) every skill folder is a sibling of this one, `../<member-slug>/`; else `~/.claude/skills/<member-slug>/`, else `.claude/skills/<member-slug>/`. Find each delegation's own roundtable the same way (repository: `../../<team>/<roundtable>/`; installed: `../<roundtable>/`): [nonlinear-roundtable](../../nonlinear-team/nonlinear-roundtable/SKILL.md), [dfo-roundtable](../../dfo-team/dfo-roundtable/SKILL.md), [lp-roundtable](../../lp-team/lp-roundtable/SKILL.md) and [minlp-roundtable](../../minlp-team/minlp-roundtable/SKILL.md) (the last two filled by their team layer, T2, on 2026-11-19). A delegation whose roundtable is not found gets "none: that team's roundtable is not installed". Pass the resolved paths to every agent: its own `SKILL.md`, the seated members' folders (SEATED MEMBERS), this file (COUNCIL ROUNDTABLE) and its team's roundtable (delegate note).
 2. The moderator reads **only the `## Roundtable Card`** of each member (for seating), plus the lead's Domain Map (for framing). A card has: **Lens (one line)**, **Leads when**, **First questions asked**, **Default recommendation**, **Will push back on**, **Likely disagreements** (per other member, publication-based) and **Blind spots**. Member agents read their own full skill; the lead also reads the domain files of the item's codes.
 3. A member is missing → say which one and continue without it. Never improvise a missing member.
 
@@ -155,7 +169,13 @@ YOUR TASK THIS TURN:
          "Sign off on the draft plan below, or state your dissent: {plan}"}
 
 Rules:
-- Stay in the lens. Tie every claim to a method in your skill: (→ {NAME} · Method N).
+- Stay in the lens. Tie every claim to a method in your skill, in WHY, with the method's name: (→ {NAME} · Method N: its name).
+- Write as a specialist to specialists. POSITION states the change precisely enough to implement: the
+  rule, test or option, with values and where they come from. MECHANISM gives the reason in the problem's
+  notation: the condition that fails or holds, the quantity that shows it, the assumptions. No method
+  names or workflow letters in those two fields.
+- A standard result from outside your skill's record may support MECHANISM: cite authors and year, mark
+  it (standard), and never present it as the researcher's own position.
 - Back each claim about the researcher's practice with your skill's paper-card id, with the page only
   where the card is read in full or in part, e.g. [S012 pp. 3–4], and the id alone for an abstract- or
   metadata-level card, e.g. [S012] (index: references/research/07-paper-cards.md, else the cards/
@@ -168,12 +188,13 @@ Rules:
   no "exchange in print" unless a card shows one side's paper citing or answering the other's.
 - Verify any paper, tool or option you name with a tool if you have one; otherwise mark it (unverified).
 - Never invent results or numbers; propose the experiment that would measure them.
-- Length: opening ≤150 words; rebuttal or answer ≤120; sign-off ≤50.
+- Length: opening ≤260 words, at least half of them in POSITION and MECHANISM; rebuttal or answer ≤180; sign-off ≤50.
 - If only the user can supply something you need, ask ONE question.
 - Nothing from a references/sources/private/ folder goes into your reply.
 
 Return exactly these fields:
 POSITION:
+MECHANISM:
 WHY (method refs):
 FIRST EXPERIMENT / DECIDING TEST:
 RISK — WHERE I COULD BE WRONG:
@@ -233,13 +254,15 @@ Extra rules for the lead:
   times and the decision metric.
 - Agenda: 3–5 items, each with its codes, the question, the seats (delegates and challenger), the
   documented fault line it touches (an FL number, a §6 point, or "none") and the stage it could stop at.
-- Plan: recommendation; backup and switch rule; minimal experiment with the deciding tests;
-  reformulation ideas; what the user decided; open questions. It names the current rule or incumbent,
+- Plan: a bottom line first, at most 150 words (what to do, the mechanism in one sentence, the expected
+  effect and how it will be measured, the main risk and its switch signal); then the recommendation,
+  every item written to be implemented; backup and switch rule; minimal experiment with the deciding
+  tests; reformulation ideas; what the user decided; open questions. It names the current rule or incumbent,
   the class with a solve-time test, a certificate, a gap or a bound valid for every policy, and the
   decision metric. Cite a deciding test already argued by its fault-line or item number ("FL3 deciding
   test, as argued"); the moderator pastes it in verbatim. A programme plan keeps each item's deciding tests.
 - Quote delegates; never speak for them.
-- Length: agenda ≤80 words per item; plan or programme plan ≤700 words; opening ≤180; answer ≤120;
+- Length: agenda ≤80 words per item; plan or programme plan ≤700 words; opening ≤260; answer ≤180;
   sign-off ≤50.
 Return the same fields; for "Frame and propose the agenda" or a plan, put the agenda or the six plan
 parts under POSITION.
@@ -250,10 +273,11 @@ parts under POSITION.
 ```
 As a delegate of the {TEAM}:
 - Speak for your own lens only, not for your team, another member or the lead.
-- If the question lies outside your team's evidence, say so in POSITION and give only what your
-  skill supports; do not fill the gap from general knowledge.
+- If the question lies outside your team's evidence, say so in POSITION and give what your skill
+  supports. A standard result needed for MECHANISM may be added, cited (authors, year) and marked
+  (standard), never as your team's evidence.
 - You may cite the council's fault lines (COUNCIL ROUNDTABLE, Step 3) and your team's roundtable fault
-  lines ({TEAM_ROUNDTABLE_PATH, Step 3 | "none: that team's roundtable is not built yet"}), with the
+  lines ({TEAM_ROUNDTABLE_PATH, Step 3 | "none: that team's roundtable is not installed"}), with the
   card ids they give.
 ```
 
@@ -354,47 +378,35 @@ Launch the lead agent with task "Draft the plan" (in agenda mode, "Draft the pro
 5. **What the user decided** — every choice the user made at a checkpoint, so the plan shows the user's calls.
 6. **Open questions**.
 
-Then launch the seated delegates in parallel with task "Sign off on the draft plan…" (for a programme plan, every delegate seated on any closed item), and the lead with task "Sign off on the revised plan…" if the moderator's neutrality check changed the draft. Record each as ✅ sign-off or ⚠️ dissent (with its condition).
+Before the sign-off round, check with tools the options, values and published results the draft relies on (Step 5 still checks every name and link). Where that evidence contradicts an item, add it to the sign-off task of the member who proposed the item ("Evidence against item N: …; keep, change or drop it?") and write the answer into the item. Then launch the seated delegates in parallel with task "Sign off on the draft plan…" (for a programme plan, every delegate seated on any closed item), and the lead with task "Sign off on the revised plan…" if the moderator's neutrality check changed the draft. Record each as a sign-off or a dissent (with its condition).
 
 > 🔵 **Checkpoint 4 — approve the plan.** Show the draft with sign-offs and dissents. "`approve`, change anything, or `round` to reopen a point." This checkpoint is never skipped, even in autopilot. In agenda mode it comes once for the programme plan, and once more for each plan drafted on `plan item`.
 
 ### Step 5 · Verify and Deliver (moderator)
 
-Check every tool name, link, option and paper in the approved plan with tools; mark anything unverified *(unverified)*. Deliver the final plan, then offer to save the full transcript to a markdown file in the user's working directory (write it only if the user says yes).
+Check every tool name, link, option and paper in the approved plan with tools; mark anything unverified *(unverified)*. Deliver the final plan in the Output Template's form (the draft's per-item lens tags go to the saved record, not into the plan), then offer to save the full transcript to a markdown file in the user's working directory (write it only if the user says yes).
 
 ---
 
 ## Output Template (final plan)
 
 ```
-## Problem Card
-| Field | Value |
-
-## Domains and agenda
-Codes: … · Items (agenda mode): 1 …, 2 …
-
-## Who sat
-[Bertsimas lens · lead], [Delegate lenses], [Challenger lens] — why
-
-## What was argued
-- Disagreement → deciding test → what the user decided
-
-## Items (agenda mode: one block per closed item)
-### Item N · codes · question
-Seats: … · Fault line: FL… / domain-file §6 point / none · Stopped at: … (or "open")
-- Disagreement → deciding test (verbatim) → what the user decided
+## Bottom line
+(at most five sentences and 150 words, assembled only from the signed plan: what to do, the mechanism in one sentence, the expected effect and how it will be measured, the main risk and its switch signal)
 
 ## Plan (in agenda mode, the programme plan; each item keeps its deciding tests)
+(one memo from the council: each item written to be implemented, with no per-item lens tags; a dissent is stated in the item it concerns, with the lens and its condition; a lever from outside the panel sits with the items it competes with, and the reference list says which works come from outside the panel's records; the user's checkpoint decisions appear where they apply; a part with nothing in it is left out)
 1. Recommendation (class and codes, solver and version, formulation choices, uncertainty or data model, evaluation protocol) …
 2. Backup and switch rule …
 3. Minimal experiment (incl. deciding tests) …
 4. Reformulation ideas …
 
-## Sign-off
-- [Lens] ✅ / ⚠️ dissent: … (holds if …)
-
 ## Open questions
-## Sources (verified)
+
+## Sources
+(only the works the plan cites, in published form; what was checked in this run; anything unchecked listed once as unverified)
+
+(one closing line offering to save the discussion record and the full transcript as a file; the disclaimer line on first activation)
 ```
 
 ---
@@ -404,9 +416,9 @@ Seats: … · Fault line: FL… / domain-file §6 point / none · Stopped at: �
 This council represents the mathematical-optimization traditions of the lead and the four delegations, with the Bertsimas lens convening; his lens transfers to models and bounds, not to the internals of solvers (dimitris-bertsimas SKILL.md, How to Use, "Domain fit"). Say so plainly when another tradition, or one team on its own, fits better:
 
 - **A question for the teams that needs no discussion** → [optimization-lead](../optimization-lead/SKILL.md). There Bertsimas frames the question, routes it to the team that settles it and reviews that team's answer. It convenes this council when two or more teams contest the question.
-- **Inside a solver** → that team's own roundtable where it is built, else the member skills directly, not the council. The LP engine (dual simplex pricing under hyper-sparsity, basis-factorization updates, tolerances, parallel sparse LP) → `solo qi-huangfu`; crash, sifting, algorithm and pricing defaults, or a wrong or slow simplex answer to debug from the instance up → `solo john-j-h-forrest`; what an LP or MIP code builds next, or a release or algorithm benchmark on real models → `solo robert-e-bixby`; solo, since the LP Team's [lp-roundtable](../../lp-team/lp-roundtable/SKILL.md) is a template (team layer not yet run). GPU first-order LP (PDLP) lies outside these lenses, co-signed only by Huangfu. A smooth NLP or NLP subproblem that fails, stalls or misreports (restoration, inertia correction, KKT factorization), the local solves inside his Benders, outer-approximation and repair loops included → Wächter's failure-diagnosis ladder, with Curtis on infeasibility, Fletcher on step acceptance, and Gould and Gill on KKT linear algebra; noisy function values or derivatives in a smooth fit → Nocedal ([nonlinear-roundtable](../../nonlinear-team/nonlinear-roundtable/SKILL.md)). A nonconvex MINLP that stalls inside a global solver (bound tightening, probing, cut or branching choice, NLP failures at nodes) → `solo nikolaos-v-sahinidis`, with `solo santanu-s-dey` or `solo sven-leyffer` for cuts and node failures, or a council item seating Sahinidis, Dey and Leyffer when the model itself is in question; the MINLP Team's [minlp-roundtable](../../minlp-team/minlp-roundtable/SKILL.md) is a template (team layer not yet run).
+- **Inside a solver** → that team's own roundtable where it is built, else the member skills directly, not the council. The LP engine (dual simplex pricing under hyper-sparsity, basis-factorization updates, tolerances, parallel sparse LP) → `solo qi-huangfu`; crash, sifting, algorithm and pricing defaults, or a wrong or slow simplex answer to debug from the instance up → `solo john-j-h-forrest`; what an LP or MIP code builds next, or a release or algorithm benchmark on real models → `solo robert-e-bixby`; the LP Team's [lp-roundtable](../../lp-team/lp-roundtable/SKILL.md) when the question needs the three lenses together. GPU first-order LP (PDLP) lies outside these lenses, co-signed only by Huangfu. A smooth NLP or NLP subproblem that fails, stalls or misreports (restoration, inertia correction, KKT factorization), the local solves inside his Benders, outer-approximation and repair loops included → Wächter's failure-diagnosis ladder, with Curtis on infeasibility, Fletcher on step acceptance, and Gould and Gill on KKT linear algebra; noisy function values or derivatives in a smooth fit → Nocedal ([nonlinear-roundtable](../../nonlinear-team/nonlinear-roundtable/SKILL.md)). A nonconvex MINLP that stalls inside a global solver (bound tightening, probing, cut or branching choice, NLP failures at nodes) → `solo nikolaos-v-sahinidis`, with `solo santanu-s-dey` or `solo sven-leyffer` for cuts and node failures, or the MINLP Team's [minlp-roundtable](../../minlp-team/minlp-roundtable/SKILL.md) seating them together; a council item seating Sahinidis, Dey and Leyffer when the model itself is in question.
 - **An expensive blackbox with no algebraic form** (tens to hundreds of evaluations, bounds or linear constraints) → Powell's model-based codes (NEWUOA, BOBYQA, LINCOA, COBYLA, run through PRIMA, https://github.com/libprima/prima, or PDFO), with Conn when the output is a sum of squares; a simulator that crashes or has hidden constraints, nonsmooth outputs, or integer and categorical inputs → Audet's NOMAD 4 (https://github.com/bbopt/nomad) ([dfo-roundtable](../../dfo-team/dfo-roundtable/SKILL.md)). His own simulation methods need gradients [dimitris-bertsimas card S090 pp. 2–3] or cheap evaluations with automatic differentiation [dimitris-bertsimas card S266 pp. 32–33].
-- **Logic-rich engineering design** (process superstructures with on/off units and zero-flow singularities, mixed-integer optimal control, PDE-constrained integer design, MPECs solved numerically) → Grossmann and Leyffer: `solo ignacio-e-grossmann` or `solo sven-leyffer`, or a council item seating both, until the MINLP Team's roundtable is built; no superstructure, process-synthesis or flowsheet model is on his cards (searched).
+- **Logic-rich engineering design** (process superstructures with on/off units and zero-flow singularities, mixed-integer optimal control, PDE-constrained integer design, MPECs solved numerically) → Grossmann and Leyffer: `solo ignacio-e-grossmann` or `solo sven-leyffer`, or [minlp-roundtable](../../minlp-team/minlp-roundtable/SKILL.md) seating both; no superstructure, process-synthesis or flowsheet model is on his cards (searched).
 - **Stochastic programming as its own tradition** (multistage recourse, scenario trees and their decomposition) → not represented. Partly covered: Curtis and Wächter on sampled chance constraints, Dey on chance constraints as k-violation MIPs, and his own sample-based robust optimization (data-driven sets, robust SAA).
 - **Approximate dynamic programming and reinforcement learning, statistical learning theory, constraint programming** → not represented. Partly covered: Scheinberg treats RL returns and ML losses as sampled oracles whose accuracy can be bought; the Bottou–Curtis–Nocedal survey's split of error into approximation, estimation and optimization terms is the nearest any member comes to learning theory; nothing in the council covers constraint programming.
 
@@ -471,8 +483,8 @@ Fault line (FL) and the member cards that read each paper; a paper known only th
 
 - The discussion is simulated from methods distilled from public work; it is not what these researchers would actually say.
 - Member agents are separate model instances reading different skill files. That makes their positions more independent than a single-context simulation, but they share one underlying model and can converge for reasons that have nothing to do with the researchers.
-- Coverage: the lead's full-text reading (read in full, in part, abstract or metadata only) is in [`../DEEP-READING.md`](../DEEP-READING.md) and his own Honest Boundary; each guest's is in that team's record: [LP Team](../../lp-team/DEEP-READING.md), [NLP Team](../../nonlinear-team/DEEP-READING.md), [DFO Team](../../dfo-team/DEEP-READING.md), [MINLP Team](../../minlp-team/DEEP-READING.md); these records, the council's included, are repository files, not part of an installed skill. Guests with paper cards: Curtis and Nocedal (NLP); Powell, Conn, Scheinberg, Vicente and Audet (DFO); Leyffer, Misener, Burer and Dey (MINLP, whose reading is in progress: Burer and Dey have their card index and synthesis, Leyffer and Misener their cards only, and that team's `DEEP-READING.md` still reads "Not started"). Guests resting on web research only (research notes 01–06): Huangfu (LP); Wright, Ye, Wächter, Gill, Toint, Gould, Fletcher, Nesterov and Robinson (NLP); Grossmann and Sahinidis (MINLP).
-- The LP and MINLP teams' roundtables are unfilled templates (their team layer, T2, has not run), and the LP Team's `DEEP-READING.md` is an unfilled template too: those delegates have no team fault lines to cite, and the council sends questions inside those solvers to the member skills (Outside the Council).
+- Coverage: the lead's full-text reading (read in full, in part, abstract or metadata only) is in [`../DEEP-READING.md`](../DEEP-READING.md) and his own Honest Boundary; each guest's is in that team's record: [LP Team](../../lp-team/DEEP-READING.md), [NLP Team](../../nonlinear-team/DEEP-READING.md), [DFO Team](../../dfo-team/DEEP-READING.md), [MINLP Team](../../minlp-team/DEEP-READING.md); these records, the council's included, are repository files, not part of an installed skill. Guests with paper cards: Curtis and Nocedal (NLP); Powell, Conn, Scheinberg, Vicente and Audet (DFO); Leyffer, Misener, Burer and Dey (MINLP; each with a card index and a synthesis since 2026-11-19). Guests resting on web research only (research notes 01–06): Huangfu, Forrest and Bixby (LP); Wright, Ye, Wächter, Gill, Toint, Gould, Fletcher, Nesterov and Robinson (NLP); Grossmann and Sahinidis (MINLP).
+- The LP and MINLP teams' roundtables were filled on 2026-11-19, after FL1–FL6 were drawn, so no fault line here cites theirs; questions inside those solvers go to those roundtables or the member skills (Outside the Council).
 - Fault lines rest on paper cards from both sides, or, for a member without cards, on that member's skill and research notes. Three of the six rest on exchanges in print, each one way: Conn and Vicente (2012) rerun a two-dimensional robust example of Bertsimas, Nohadani and Teo, inferred to be Example I of the 2010 *Operations Research* paper from its unconstrained setting and its start labels A and B (FL4); Dey and Kocuk (2025) build power-cone inequalities on the RPT of Zhen, de Moor and den Hertog and of Bertsimas et al., and his 2025 integer paper cites and duels Sahinidis's BARON (FL5); Zhu and Burer (2026; arXiv 2024) place the enlarged hull of Maragno et al. (2025) among decision-space validity domains and propose an extended hull, and OMLT (Ceccon et al., 2022) lists OptiCL among tools that each cover a subset (FL6). FL1–FL3 contrast published methods. None is a recorded debate.
 - FL1–FL6 are not the whole carded record. Three carded exchanges that criticise the lead are kept in his domain files' §6 only: Günlük, Kalagnanam, Li, Menickelly and Scheinberg fault optimal classification trees for ignoring categorical structure and for a regularizer whose effect "cannot be known a priori" [katya-scheinberg card S017 arXiv p. 4], with no reply on his cards (ML §6.3, point 11); Cho, Burer and Campbell find that the budget model needs |E| + 1 TSPs on the interval TSP, took up to about 33,000 s at n = 175 and has no analogue of their trade-off bounds [samuel-burer card S053 pp. 2–4, 18–19, 21] (IO §6); Xu and Burer fault the moment-based sets of "Bertsimas et al." for not converging as samples grow [samuel-burer card S044 arXiv p. 3] (CP §6.2).
 - The 2020 *Statistical Science* discussion of his sparse-regression paper by Sahinidis's group is on no card (both teams' notes record it), so no numbered fault line rests on it; his ML domain file labels it an exchange in print from the notes alone, and the lead variant tells the lead to cite it as recorded in notes, on no card (FL2 mentions it the same way).
