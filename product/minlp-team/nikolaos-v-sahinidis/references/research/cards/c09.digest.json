@@ -1,0 +1,406 @@
+[
+ {
+  "id": "S190",
+  "year": "2025",
+  "title": "New bounds and formulations for the deterministic global optimization of Lennard–Jones clusters",
+  "read_level": "full",
+  "contribution": "Optimality-based diameter bounds, a lexicographic symmetry-breaking MINLP with transitivity cuts and the coordinate-space convex envelope of the Lennard-Jones potential, the envelopes implemented as cuts in BARON, give the first global certificates for the putative 5- and 6-atom optima and new energy lower bounds for 7-35 atoms.",
+  "problem_entry": "Certification gap: heuristics supply putative optima (Cambridge Cluster Database) but global optimality is open beyond the smallest clusters, and the one earlier deterministic method gave incorrect certificates (abstract p. 1; p. 3); experiment-theory discrepancies for argon and fullerene clusters are the stake (p. 3).",
+  "key_idea": "Hand a general spatial B&B three problem-specific aids: iterative slice-based diameter bounds against the incumbent (pp. 4-8), binary lexicographic ordering with transitivity inequalities (pp. 9-10), and the convex envelope over one orthant with distance bounds (Theorem 3, pp. 11-13), the envelopes coded as C cutting planes inside BARON (p. 15).",
+  "assumptions": "Scaled convexoconcave potential, increasing for r >= 1 (p. 2); every x-slice occupied at an optimum and the putative value as incumbent (pp. 4, 7); the N=5 sublevel bound needs an energy gap below 1 (pp. 8-9); Theorem 3 needs rL <= 1 <= rU and a single orthant (p. 12); squared distances in computations (p. 15).",
+  "proof_devices": [
+   "closed-form optimum of the slice-assignment 0-1 QP by symmetry fixing, a -1 bound on free-free pairs and an exchange argument (Prop. 1, pp. 6-7, Fig. 3)",
+   "iterative decrement of the assumed diameter until the relaxed energy no longer exceeds the putative optimum (Algorithm 1, pp. 7-8)",
+   "interval-arithmetic sublevel set from the incumbent energy giving rij in [0.894922, 1.629842] for N=5 (p. 8)",
+   "1-D convex envelope of a convexoconcave function through a tangent root, after the 2002 book (Prop. 2, p. 11)",
+   "four-region coordinate-space envelope proved by the gradient inequality region by region, underestimation, and maximality via convex combinations of epigraph points (Theorem 3, pp. 12-13)",
+   "percentage of relaxation gap closed, eq. 14 (p. 14)",
+   "aggregation of all M-subset inequalities with the certified 6-atom optimum into a per-atom energy bound (eqs. 15-17, p. 17)"
+  ],
+  "experiments": "One instance (N=5) in a factorial of formulation x bounds x cuts on BARON 24.5.10, Gurobi 11.0.1, SCIP 8.1 and LINDOGLOBAL 3.17P under GAMS 46.4.0, Xeon E5-1620 3.50 GHz, single thread, an implied 3600 s limit, tolerances not stated; ANTIGONE 1.1 named but absent from Table 3 (pp. 14-16). Only BARON solves; new bounds help little and sometimes hurt (BARON 378 vs 396 s; SCIP gap 12.0 to 45.7%) (Table 3, p. 16). BARON cuts cut time by 42-53% (p. 15); N=6 solved in 114,086 s (p. 17); an 85% gain seen under BARON 22.10.13 is gone in 24.5.10 (p. 15).",
+  "positioning": "Improves Blanc's rU <= N diameter bound (p. 4) and joins the distance lower-bound line (p. 3); corrects Maranas and Floudas 1992 directly (p. 3); beats the Tawarmalani-Sahinidis factorable relaxation (p. 14); heuristic literature cast as the supplier of putative optima (p. 3).",
+  "writing": "Question-first abstract; contributions in one sentence (p. 3); 'proof of global optimality' wording (p. 1) for BARON runs with unstated tolerances (pp. 14-17); candid null results and hedges (pp. 8, 15, 17); conflict of interest disclosed (p. 18).",
+  "limits_future": "Diameter bound linear in N against N^(1/3) for putative optima (p. 8); sublevel argument fails for N >= 6 (pp. 8-9); symmetric solutions remain (p. 10); envelope valid only in single-orthant nodes (p. 14); per-atom bound weaker than the stability constant beyond 34 atoms (p. 17). Future: stronger diameter bounds; joint Euclidean and permutational symmetry elimination (pp. 17-18).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Domain reduction driven by the incumbent: slice-based diameter bounds proved against the putative optimum and, for N=5, interval-arithmetic distance bounds that work only while the energy gap is below 1 (step 2, reductions scale with U - L); the measured effect of the bounds inside solvers is small and mixed.",
+    "pages": "pp. 4-9, 16"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Envelope judged first by gap closed against the factorable and 1-D relaxations, then by BARON run time; availability weighed (distance-space cuts at every node, coordinate-space only in single-orthant nodes); both cut families together slower than coordinate cuts alone (194 vs 185 s).",
+    "pages": "pp. 14-15"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Cuts land in BARON as C routines, versions named, an older-version gain reported as gone; but the protocol is not the 500 s / 1e-6 / X5650 one (E5-1620, implied 3600 s, tolerances unstated), a single instance, and ANTIGONE named but not reported.",
+    "pages": "pp. 14-16"
+   },
+   {
+    "method": "Heuristic 1",
+    "relation": "evidence",
+    "note": "A special class whose small instances defeat current solvers: three of the four reported solvers time out on N=5.",
+    "pages": "pp. 1, 3, 16"
+   },
+   {
+    "method": "Heuristic 2",
+    "relation": "evidence",
+    "note": "Problem knowledge (distance bounds, symmetry breaking, envelope cuts) handed to general-purpose solvers rather than a tailored algorithm.",
+    "pages": "pp. 1, 3, 14-15"
+   },
+   {
+    "method": "Heuristic 7",
+    "relation": "variant",
+    "note": "Tension 7: 'proof of global optimality' wording for floating-point B&B runs whose optimality tolerances are not stated.",
+    "pages": "pp. 1, 14-17"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "report the vanished gain",
+    "evidence": "An 85% run-time reduction from the lexicographic formulation under BARON 22.10.13 is reported as absent under BARON 24.5.10, with a hypothesis (advances in spatial branching), instead of being dropped.",
+    "pages": "p. 15"
+   },
+   {
+    "pattern": "certified small instance as a bound for larger ones",
+    "evidence": "The certified 6-atom optimum, aggregated over all 6-atom subsets, yields energy-per-atom lower bounds for 7 <= N <= 35.",
+    "pages": "pp. 17-18"
+   }
+  ],
+  "transferable": [
+   "Prove a domain bound by contradiction against the incumbent through a relaxed assignment problem with a closed-form optimum; decrement until the relaxed bound no longer exceeds the incumbent (Prop. 1, Algorithm 1, pp. 6-8).",
+   "When the primal-dual gap is smaller than the best value of a single term, derive per-term variable bounds from the sublevel set by interval arithmetic (p. 8).",
+   "Derive an envelope on the node shape branching actually produces (one orthant of coordinate differences), not on a generic box (p. 11).",
+   "Break permutation symmetry with binary order variables plus transitivity inequalities, then re-test the formulation on the current solver version (Table 2, p. 10; p. 15).",
+   "Map percentage of gap closed (eq. 14) against each competing relaxation before timing any cut (Fig. 6, pp. 14-15).",
+   "Print the full factorial (formulation x bounds x cuts x solver) including the cells that got worse (Table 3, p. 16).",
+   "Aggregate all M-subset inequalities with a certified M-instance optimum to bound larger instances (eqs. 15-17, p. 17)."
+  ],
+  "coauthors": "A Kuznetsov (first author)",
+  "quotes": [
+   {
+    "text": "A deterministic global optimization method was developed in [24], but a non-physical choice of an algorithmic parameter in the dual bound calculation led to incorrect optimality certificates",
+    "page": 3
+   },
+   {
+    "text": "It is possible that part of this run time reduction was due to the spatial branching induced by branching on the binary variables, and that advances in spatial branching over the last few years have rendered this technique no longer necessary.",
+    "page": 15
+   }
+  ]
+ },
+ {
+  "id": "S205",
+  "year": "2025",
+  "title": "Algorithm-Guided Experimentation for Optimization of High-Performance Perovskite Solar Cells",
+  "read_level": "full",
+  "contribution": "A batch loop in which SNOBFIT proposes processing conditions for fabricated perovskite solar cells, growing from 2 to 6 variables across three device layers (the last two varied by hand), raised the best reverse-scan PCE from 20.3% to 22.8% (23.1% with an antireflective coating) with fewer than 100 tested designs.",
+  "problem_entry": "PSC optimization runs by trial and error; ML on compiled data suffers from cross-lab irreproducibility and scarce in-house data; BO scales poorly and has been applied to single layers, not to the device stack (pp. 1-2).",
+  "key_idea": "Run a noise-tolerant local-surrogate DFO solver (SNOBFIT) on directly controllable processing variables with dial resolution, median-of-replicates outputs and batch-wise human bound revision, adding one device layer's variables at a time (pp. 2-7).",
+  "assumptions": "PCE as a noisy nonconvex black box (p. 5); experimenter-set bounds and resolution, a three-level flow rate (pp. 4, 6); noise handled by medians over up to 24 pixels (p. 4); HTL variables varied by hand, not by SNOBFIT (p. 7); SI Methods not read.",
+  "proof_devices": [],
+  "experiments": "Fewer than 100 designs in total (p. 7). 2D: median PCE 19.6 to 20.2%, maximum 20.3 to 20.8%, FF below reference (pp. 4-5). 4D: improved design found during the 17-point LHS initial sampling, median 21.8%, maximum 22.3%, search unfinished (p. 6). 6D with hand-set HTL changes: 22.8%, 23.1% with antireflective coating (p. 7, Table 1). GIWAXS and microscopy point to surface morphology (p. 6). No comparison arm and no repeated campaign; comparison only to the lab reference device (pp. 4-7).",
+  "positioning": "Lists BO precedents with dimensions and test counts (p. 2); supports DFO over BO with self-citations (Rios and Sahinidis 2013, BAM, HybridTuner) (p. 2) and SNOBFIT's noise performance with a 2014 CMU thesis (p. 4).",
+  "writing": "Letter with the headline 20.3 to 23.1% 'without altering chemical ingredients or device configuration' in the abstract (p. 1), where 23.1% includes an antireflective coating (p. 7); hedged physics (p. 6); framework presented as general (p. 7).",
+  "limits_future": "Stated: 4D search unfinished (p. 6); HTL variables not yet in the optimization (p. 7). Not stated: no baseline arm or repeat, and the 4D gain came from initial sampling (p. 6). Future: more degrees of freedom, characterization, ML on the collected data (p. 7).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "The black box stays black: SNOBFIT local surrogates steer fabrication, no algebraic model is fitted, ML deferred to post-hoc analysis; step 7's derivative-free fallback with the scarce-data argument against complex ML; no discrete design decisions beyond dial resolution and a three-level flow rate.",
+    "pages": "pp. 1-2, 4, 6-7"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Solver picked from the group's earlier benchmarks (step 7), but the campaign has no comparison arm, no repeat, and success is measured against the lab's reference device.",
+    "pages": "pp. 2, 4-7"
+   },
+   {
+    "method": "Heuristic 10",
+    "relation": "evidence",
+    "note": "The DFO engine moves to a new problem source, a Georgia Tech materials-science group.",
+    "pages": "p. 1"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "grow the design space by layer",
+    "evidence": "Perovskite variables first (2D), then ETL variables added and all re-optimized jointly (4D), then HTL variables (6D), with a per-stage results table.",
+    "pages": "pp. 4-7, Table 1"
+   },
+   {
+    "pattern": "replicate-and-median noise handling",
+    "evidence": "Duplicate devices with eight pixels each, up to 24 pixels per condition; only the median PCE is fed to the optimizer.",
+    "pages": "p. 4"
+   }
+  ],
+  "transferable": [
+   "Restrict a DFO solver's proposals to settings the lab can dial, through its resolution vector (p. 4).",
+   "Feed back the median over duplicate devices and pixels as the objective value of a design (p. 4).",
+   "Fix the search-mix schedule in advance: space-filling batches with one model-based point each, then a stated model-based to size-based ratio (p. 5).",
+   "Grow the design space one device layer at a time, re-optimizing earlier variables jointly with the new ones (pp. 4-7).",
+   "Give a per-stage table (degrees of freedom, layer, variables, PCE, VOC, JSC, FF, stabilized efficiency) (Table 1, p. 7).",
+   "Characterize high-, medium- and low-performing designs to locate where the gain comes from (p. 6)."
+  ],
+  "coauthors": "D Oh (first author), S Kim, CAR Perini, J-P Correa-Baena (co-corresponding)",
+  "quotes": [
+   {
+    "text": "The batch-based experimentation provided flexibility to make decisions between batches whether to continue sampling within the same bounds or to adjust the input space when certain regions show significantly lower performance than the rest of the design space.",
+    "page": 4
+   },
+   {
+    "text": "We were able to identify a design with an improved median PCE during this sampling",
+    "page": 6
+   }
+  ]
+ },
+ {
+  "id": "S206",
+  "year": "2025",
+  "title": "Surrogate modeling and optimization of the leaching process in a rare earth elements recovery plant",
+  "read_level": "full",
+  "contribution": "A systematic comparison of six surrogate techniques for a 2-input, 30-output leaching unit of the PrOMMiS REE flowsheet, judged by accuracy, build time, embedded global-optimization time and true-objective deviation against EO and DFO, recommends ALAMO sparse quadratics trained on about 10 points (author manuscript read).",
+  "problem_entry": "No systematic study of surrogate quality for complex critical-mineral and REE processes; scarce, slow leaching data demand small-sample surrogates; DFO does not scale (abstract p. 1; pp. 2-3).",
+  "key_idea": "Train ANN, LASSO, ALAMO, PySMO polynomial, RBF and kriging surrogates on nested LHS sets, embed each as equality constraints in one BARON model (OMLT for ANNs), and compare with EO (BARON on the full model) and DFO (MCS) against the EO optimum (pp. 9-16).",
+  "assumptions": "Simulator within its fitted range as ground truth (p. 7); fixed feed composition (p. 7); data scaled to [0,1] (p. 13); data generated by BARON because IPOPT 3.13.2 failed in over 15% of runs (p. 13); ANN grid search in typical-user mode (pp. 13-14).",
+  "proof_devices": [
+   "evaluation device: R2, RMSE and number of terms on an independent 1000-point test set (pp. 13, 16)",
+   "evaluation device: relative deviation of the true objective at the surrogate optimum from the surrogate prediction (eq. 11, p. 16)",
+   "evaluation device: EO optimum from a global solver as ground truth (pp. 16, 23)"
+  ],
+  "experiments": "Training sets of 10-1000 LHS points, one 1000-point test set (p. 13); nonlinear surrogates R2 > 0.99, linear about 0.98 (p. 17); ANNs need 50 points to match 10-point quadratics (p. 21); complex models two to six orders slower to train, up to three orders more parameters (p. 18); optimum 5128.2 mg/h at the upper-bound corner, all surrogates within 2% (pp. 23-24); ANN big-M infeasible at 50-500 points, kriging and RBF time out, polynomials 0.02-0.11 s (pp. 24-25); adaptive sampling 253 measurements (p. 26); EO 2.81 s, MCS 919 evaluations and 464 s (p. 27); 3.5 GHz CPU, 32 GB, BARON 24.5.8, tolerances and threads not stated (p. 17).",
+  "positioning": "ALAMO set among ANN, kriging and RBF per Bhosekar and Ierapetritou (pp. 2-3); builds on embedded-ANN work and OMLT (pp. 3, 15); self-citations for DFO scaling and for ALAMO (pp. 3, 10); code availability names minlp.com for ALAMO and BARON (p. 32); no conflict-of-interest statement in this manuscript file (pp. 31-32).",
+  "writing": "Plain contribution sentence (p. 3); headline ratios of two orders fewer measurements and up to four orders faster (p. 1; p. 28) rest on optimization time vs the whole MCS run (p. 27), with training reported only as under a second (p. 18) and sampling time not reported, and on 10-point models validated with a 1000-point test set, while adaptive sampling took 253 measurements (p. 26).",
+  "limits_future": "Two inputs, an optimum at a box corner (p. 24), one objective, one DFO solver, ANN in typical-user mode (pp. 13-14), all my reading; future: larger CM and REE flowsheets and supply chains (p. 28), where benefits are expected but untested (p. 27).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Core case: best-subset sparse quadratics with BIC from 10 points match complex surrogates in accuracy at a fraction of build and optimization time, are embedded in a deterministic global solver, argued interpretable, with adaptive sampling and a direct comparison against DFO on the raw simulator.",
+    "pages": "pp. 12, 17-27"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Certified ground truth (EO by BARON) and a DFO solver picked from the 2013 benchmark, but one unit, one DFO solver, a single-winner verdict rather than a portfolio, and an ANN baseline in typical-user rather than strongest fair mode (Heuristic 4).",
+    "pages": "pp. 13-16, 21-28"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Analogue: surrogates ranked by accuracy together with build time, optimization time and solver failures (ANN big-M infeasible, kriging and RBF time-outs), bound-per-second reasoning moved from relaxations to surrogate models.",
+    "pages": "pp. 18-26"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "The group's tools are the instruments (ALAMO at defaults, BARON 24.5.8 named), but the protocol is not the GAMS / X5650 / 1e-6 one (3.5 GHz CPU, 32 GB, tolerances not stated).",
+    "pages": "pp. 14, 17"
+   },
+   {
+    "method": "Heuristic 4",
+    "relation": "variant",
+    "note": "The ANN baseline is tuned the way typical users do (grid search, 5-fold CV), not in its strongest fair mode; the authors concede simpler ANNs might exist.",
+    "pages": "pp. 13-14"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "global solver as robust simulator",
+    "evidence": "Training data generated with BARON solving the simulator's equations because IPOPT 3.13.2 made incorrect infeasibility claims in over 15% of runs.",
+    "pages": "p. 13"
+   },
+   {
+    "pattern": "optimizability as a selection criterion",
+    "evidence": "The ANN chosen by cross-validated predictive accuracy is not the easiest to optimize; surrogates are judged by solve time and feasibility inside the global solver.",
+    "pages": "pp. 24-25"
+   }
+  ],
+  "transferable": [
+   "Generate nested training sets (10 to 1000 LHS points) plus one independent 1000-point test set to find the smallest adequate sample for each model family (p. 13).",
+   "Report total parameters and total training time over all output models next to R2 and RMSE (Figs. 3-4, pp. 18-20).",
+   "Score a surrogate by the relative deviation of the true objective at its optimum from its own prediction (eq. 11, p. 16), with the true optimum from EO by a global solver (p. 23).",
+   "Compare surrogate families after embedding them in the same global solver: solve time, feasibility, true-objective deviation (pp. 15-16, 23-26).",
+   "For ReLU networks try both big-M and complementarity encodings; for smooth activations both full- and reduced-space forms (p. 15).",
+   "When a local solver fails on the simulator's equation system, generate the data with a global solver and say why (p. 13)."
+  ],
+  "coauthors": "DM Fardis (first author), D Oh, A Garciadiego (NETL), A Lee (NETL)",
+  "quotes": [
+   {
+    "text": "IPOPT (version 3.13.2) failed in over 15% of the runs, for which it made incorrect infeasibility claims.",
+    "page": 13
+   },
+   {
+    "text": "This highlights the fact that optimization performance depends heavily on model complexity.",
+    "page": 25
+   }
+  ]
+ },
+ {
+  "id": "S211",
+  "year": "2025",
+  "title": "Constructing Tight Quadratic Relaxations for Global Optimization: I. Outer-Approximating Twice-Differentiable Convex Functions",
+  "read_level": "full",
+  "contribution": "A convergent cutting-plane algorithm computes the tightest scaling parameter alpha of the Su et al. second-order Taylor quadratic underestimator for general low-dimensional twice-differentiable convex functions, tested on 31 functions from MINLPLib and COCONUT, with an extension that exploits linear constraints (arXiv v1 read).",
+  "problem_entry": "Linear outer approximation of convex relaxations is weak for highly nonlinear functions while QP/QCQP solvers have improved (p. 2); Su et al. left the tightest alpha open beyond coordinate-wise monotonic cases, and other quadratic constructions need a priori constants or lack convexity guarantees (pp. 3-4).",
+  "key_idea": "Keep the alpha-scaled Taylor form and find the largest alpha with q <= f on the box by one vertex-enumeration outer approximation of the epigraph that lowers alpha whenever a new vertex shows overestimation, stopping when LB > -epsilon (pp. 5-7); intersect the box with linear constraints for tighter cuts (pp. 15-16).",
+  "assumptions": "Twice-differentiable convex f on a box (p. 5); 1-4 variables (p. 12); alpha <= 1 (p. 5); Assumption 1 that alpha is lowered at least once, with two named exceptions (p. 9); epsilon-overestimation repaired by subtracting the final lower bound (p. 8); feasible construction point for the extension (p. 15).",
+  "proof_devices": [
+   "monotonicity of q in alpha (Observation 1, p. 6) used to prune vertices (Remark 5, p. 8)",
+   "convergence via Hoffman (1981): Lemmas 2-3 reused, Lemma 1 re-proved for a changing objective (pp. 8-9)",
+   "Property 1, at least two coincidence points, and Property 2, largest alpha consistent with all enumerated vertices, by contradiction (pp. 9-10)",
+   "Remark 11 on keeping epsilon out of the alpha update (p. 10)",
+   "degeneracy removal by perturbing b and bisection for the boundary point (Remarks 6-7, p. 8)",
+   "qualitative convergence analysis with iteration counts 1387/45/36 and 1387/804/46 (pp. 10-11, Figs. 2-3)"
+  ],
+  "experiments": "Library from 233 convex MINLPLib problems (CONVEX==TRUE, MBNLP/MINLP), fbbt bounds, over 9,000 expressions reduced to 19 forms plus 12 from COCONUT, 31 functions with provenance tables (pp. 11-13, Tables 2-5); scaling to [-1,1], epsilon 1e-3, 5 LHS construction points; hypervolume metric vs the linear tangent (eq. 5, p. 13). Average metric 0.533/0.575/0.399/0.354 for 1-4D, CPU 4-51 ms average, 182 ms maximum, up to 1951 vertices (Table 1, p. 14); Python on a laptop (p. 13). No other quadratic construction and no B&B or OBBT run compared (section 3). Extension shown on one 2-D example (p. 16).",
+  "positioning": "Extends Su et al. (2018) directly (p. 3); contrasts with Buchheim and Trieu, Olama et al., Streeter and Dillon (pp. 3-4); cites Tawarmalani and Sahinidis 2005 for linear outer approximation and Puranik and Sahinidis 2017 for OBBT and fbbt (pp. 2, 11).",
+  "writing": "Three bulleted contributions (p. 4); broad generality claim (p. 3); 'to the best of our knowledge' (p. 4); plain limits: exponential vertex growth, Python, 'rudimentary implementation' (pp. 13-14, 17).",
+  "limits_future": "Single alpha limits quality in higher dimensions (p. 14); exponential vertex growth (p. 14); exact quadratics slow and should be skipped (p. 11); payoff in B&B or OBBT time not measured (section 3, my reading); Part II on d.c. functions (p. 18).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Premise is step 7 (re-test the linear-only stance as QP/QCQP solvers improve) and step 3 (a cheaper object between LP cuts and convex NLP); tightness and construction cost measured, but not bound per second of quadratic node relaxations or their failures.",
+    "pages": "pp. 2, 13-14"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Weak: OBBT over a quadratic outer approximation named as an application; fbbt supplies realistic bounds before underestimation.",
+    "pages": "pp. 2, 11-12"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Public libraries with stated admission filters and full provenance, but the only baseline is the linear tangent at the same point; competing quadratic constructions are not run.",
+    "pages": "pp. 3-4, 11-14"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Co-authored, Gounaris-led: a Python prototype on a laptop, not a module switched on and off inside a production solver.",
+    "pages": "p. 13"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "underestimate only where feasible",
+    "evidence": "Intersecting the box with known linear constraints (including derived cuts) lets the quadratic overestimate in infeasible regions, raising alpha from 0.3456 to 0.5261 in the example.",
+    "pages": "pp. 15-16"
+   },
+   {
+    "pattern": "distil a benchmark library into representative functional forms",
+    "evidence": "Over 9,000 expressions from convex MINLPLib problems reduced to 19 forms, plus 12 COCONUT forms, each tabulated with instance, constraint, location and bounds.",
+    "pages": "pp. 11-13, 18-21"
+   }
+  ],
+  "transferable": [
+   "Cast the test whether q underestimates f on B as concave minimization over the epigraph and solve it by vertex-enumeration outer approximation (pp. 5-7).",
+   "Turn the search for the tightest parameter into one monotone outer-approximation run that updates the parameter while it enumerates (pp. 5-7).",
+   "Use monotonicity in the parameter to prune vertices that can never violate again (Observation 1, Remark 5, pp. 6, 8).",
+   "Subtract the final lower bound to turn an epsilon-terminated underestimator into a valid one (Remark 4, p. 8).",
+   "When adapting a classical convergence proof to a moving objective, re-prove only the monotonicity lemma (pp. 8-9).",
+   "Scale every function into [-1,1] so one epsilon acts as a relative tolerance across the library (p. 13).",
+   "Measure a new underestimator by hypervolume reduction against the standard cut at the same construction point (eq. 5, p. 13)."
+  ],
+  "coauthors": "WR Strahl (first author), AU Raghunathan (MERL), CE Gounaris (corresponding)",
+  "quotes": [
+   {
+    "text": "Moreover, recent advances in the algorithms solving problems with quadratic objectives and/or constraints [Mittelmann, 2023] suggests an intermediate option",
+    "page": 2
+   },
+   {
+    "text": "The number of vertices generated by the algorithm shows an exponential increase in relationship to the dimension and manifests the main tractability limitation.",
+    "page": 14
+   }
+  ]
+ },
+ {
+  "id": "S212",
+  "year": "2025",
+  "title": "Learning to deactivate probing with graph convolutional network for mixed-integer nonlinear programming",
+  "read_level": "full",
+  "contribution": "A tripartite variable-constraint-operator graph of the factorable reformulation feeds a shallow GCN that decides per instance whether to switch off BARON's probing, beating handcrafted-feature classifiers on AUC and scaled time on pooled MINLP and NLP libraries, measured against a per-instance ceiling of about 40% and 25%.",
+  "problem_entry": "Probing is costly and rationed by rules; since it is on by default, learn when to switch it off; ML for B&B is mostly MILP, and handcrafted MINLP features are incomplete (pp. 2-3).",
+  "key_idea": "Encode any MINLP as a tripartite graph (pp. 4-6), apply LayerNorm embedding, one round of bipartite convolutions, attention pooling and a problem node (pp. 6-8), optionally adding PCA-reduced global features as an auxiliary node (p. 9).",
+  "assumptions": "One static decision per instance after root presolve (p. 9); labels from BARON with and without probing at 500 s and 1e-6 gaps, ambiguous (<10%) instances dropped, labels specific to BARON's probing implementation, stratified 70/30 split (p. 10); BARON version, machine and threads not stated (pp. 9-10).",
+  "proof_devices": [
+   "design device: tripartite graph from the factorable reformulation with auxiliary indices above their arguments and +/-1 ratio edges (pp. 4-6)",
+   "design device: one convolution round to limit parameters for small data (p. 8)",
+   "interpretation device: auxiliary-node weights and principal components (Table 4, pp. 12-13)",
+   "interpretation device: attention heatmaps over variable nodes (Figs. 6-7, pp. 13-15)"
+  ],
+  "experiments": "7713 NLPs and 3702 MINLPs from four libraries, filtered to 835 MINLPs (563 positive, 272 negative) and 623 NLPs (336, 287) (pp. 9-10, Table 1); ceiling default vs best 24.8 vs 14.7 s and 16.1 vs 12.0 s (p. 10); three rounds of five-fold CV with accuracy, recall, F1, AUC-ROC and scaled time (pp. 10-12). MINLP: GCN AUC 0.74-0.75 vs 0.47-0.53, scaled time 0.83-0.84 vs 0.86-0.93, accuracy 0.65 (Table 2, p. 11); NLP: GCN_VCOP 0.77 scaled time, GCN_VCO 1.01 (Table 3, p. 12). Pooled over libraries, no majority-class baseline (positive class 67% of the MINLP set by my arithmetic, above all reported MINLP accuracies).",
+  "positioning": "Generalizes the bipartite MILP graph of Gasse et al. (pp. 4, 16); nearest precedents Nannicini et al. (SVM for probing) and Bonami et al. (MIQP linearization classifier) (pp. 2-3); solver side carried by self-citations (p. 17).",
+  "writing": "Abstract claims robustness, speed and 'promising generalization capabilities' (p. 1); body more guarded on variance (p. 11); a concession about large dense problems only in the introduction (p. 3); hedged interpretation (p. 14); COI declared (p. 16).",
+  "limits_future": "Stated: retraining per probing implementation (p. 10), one convolution round (p. 8), higher variance (p. 11). Not stated: shipping in BARON, per-library behaviour, library hold-out. Future: node-level dynamic deactivation with dynamic features; multiclass or ranking outputs for more options (p. 16).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Probing as domain reduction and a learned rule for whether to spend it, judged against the per-instance ceiling (step 4); per instance only, node-level control left for future work.",
+    "pages": "pp. 2, 10, 16"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Labels from switching probing on and off inside BARON on public libraries under the 500 s / 1e-6 protocol, declared implementation-specific; BARON version and machine not reported (against Heuristic 6).",
+    "pages": "pp. 9-10"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Whole public libraries with a stated filter, but a random stratified split of pooled libraries instead of a hold-out library, no per-library results, and generalization claimed from that split (Workflow C checkpoint).",
+    "pages": "pp. 1, 10-12"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "ALAMO best subset is one baseline and loses on accuracy and AUC; simplicity appears as a shallow GCN rather than a sparse algebraic model.",
+    "pages": "pp. 8-9, 11-12"
+   },
+   {
+    "method": "Heuristic 5",
+    "relation": "evidence",
+    "note": "Ceiling measured by solving every instance with and without probing; ambiguous labels (<10% difference) dropped.",
+    "pages": "p. 10"
+   },
+   {
+    "method": "Heuristic 6",
+    "relation": "variant",
+    "note": "Fixed 500 s limit and 1e-6 gaps, but the BARON version, machine and thread count are not named in the main text.",
+    "pages": "pp. 9-10"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "learn the off-switch of a default-on component",
+    "evidence": "Because probing is enabled by default, the learning target is the set of instances where deactivating it helps.",
+    "pages": "p. 3"
+   }
+  ],
+  "transferable": [
+   "Before training a selector, solve every instance under each setting and tabulate default vs best (Table 1, p. 10).",
+   "Drop labels whose run-time difference is below 10% (p. 10).",
+   "Encode a MINLP as a tripartite graph from its factorable form, indexing each auxiliary variable above its arguments (pp. 4-6).",
+   "Feed handcrafted global features as an extra problem node, then read its weights to test whether those features matter (pp. 9, 12-13).",
+   "Report a scaled-time column (shifted geometric mean with predicted settings over default) next to classification scores (Tables 2-3, pp. 11-12)."
+  ],
+  "coauthors": "Y Zhang (first author, The Optimization Firm)",
+  "quotes": [
+   {
+    "text": "Since probing is typically integrated and enabled by default in most solvers, we focus on identifying cases where deactivating probing would be beneficial, specifically for problems that gain little advantage or are adversely affected by probing.",
+    "page": 3
+   },
+   {
+    "text": "Overall, we observe that perfectly selecting the probing settings can reduce solution times by approximately 40% for the MINLP collection and 25% for the NLP collection.",
+    "page": 10
+   }
+  ]
+ }
+]

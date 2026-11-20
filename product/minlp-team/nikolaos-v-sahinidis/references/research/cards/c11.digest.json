@@ -1,0 +1,292 @@
+[
+ {
+  "id": "S239",
+  "year": "2026",
+  "title": "A novel linear optimization presolve technique based on Fourier-Motzkin elimination",
+  "read_level": "full",
+  "contribution": "A growth-controlled Fourier-Motzkin elimination presolve for general LPs, with primal, dual and basis postsolve, embedded in BARON, that shrinks CPLEX-presolved LPs further (about 8-10% on the 1,114 of 1,931 LPs it changes) and speeds the harder affected LPs by 6/8/11% under primal/dual/barrier, with the worst deteriorations named.",
+  "problem_entry": "FME was never used as presolve because elimination adds m+ x m- rows and known redundancy rules cannot guarantee a size reduction; global MINLP solvers solve vast numbers of LPs and would gain from better LP presolve (pp. 1, 3, 5-6, 20).",
+  "key_idea": "Eliminate only inequality-only columns, one at a time, choosing the variable with the largest predicted nonzero reduction (eqs. 4-7), dropping redundant new rows by bound propagation and stopping when every prediction is negative; recover primal, dual and basis in reverse order (pp. 7-14).",
+  "assumptions": "LP with bounds folded into Ax <= b, equality columns excluded from FME (pp. 2, 7); size prediction assumes no redundant new row and the cheap estimate may miss the best variable (pp. 7-8); FME only on coefficients in [1e-3, 1e3], combined rows scaled to keep the feasibility tolerance (p. 19).",
+  "proof_devices": [
+   "No new theorem; Chernikov/Kohler redundancy and acceleration theorems cited (Theorems 1-3, pp. 5-6)",
+   "Constructive dual postsolve: duals of eliminated rows as sums of the duals of the rows generated from them give a feasible original dual (pp. 11-12, Algorithm 4)",
+   "Basis postsolve as the implicit inverse of a row-operation transform T, slack identity s_ii' = s_i/a_ij - s_i'/a_i'j and four propagation rules; correctness asserted, not proved (p. 13, Algorithm 5)",
+   "Nonzero-count prediction ne_new = m+ ne- + m- ne+ - sum_k p+_k p-_k (eq. 4, p. 8)",
+   "One worked example (Example 1 reused as Example 2) carried through elimination and all three postsolves (pp. 4-5, 14-16)"
+  ],
+  "experiments": "1,931 LPs (78 MittelmannLib, 355 MeszarosLib, 142 NetLib, 1,356 new MINLPrLPLib root relaxations from SCIP 8.0); BARON 25.3 parser + FMEpre module, CPLEX 22.1.1, 3,600 s, 1e-6 tolerances, Xeon X5650, threads not stated; FME on/off size study (about 5% overall, 8-10% on 1,114 affected); FMEpre applied after CPLEX presolve; CPLEX aggregator 2x/10x as stronger baseline; primal/dual/barrier pinned, trivial and always-timeout removed (207/186/127), shifted geometric means by hardness group, win/tie/loss counts, named deteriorations, per-library performance profiles; design choices tuned on the same collection (pp. 16-31).",
+  "positioning": "Joins the LP presolve canon (Brearley-Mitra-Williams, Andersen & Andersen, Gondzio, Meszaros & Suhl, Achterberg et al.) and the FME literature from Fourier and Dines to Bastrakov et al. and Jing et al.; restates prior work, names its limit in one sentence, claims the first FME-based presolve for general LPs (pp. 2-6).",
+  "writing": "Four contribution bullets plus a library; the core difficulty in one sentence; one running example; modest gains given as numbers ('up to 6%, 8% and 11%'); hedged closing claim; a code-availability line (pp. 3, 6, 14-16, 28-29, 32).",
+  "limits_future": "Cheap estimate may miss the best variable; slowdowns on hard problems under primal simplex and barrier; LP methods react differently to FME; not integrated inside CPLEX presolve; no hold-out although choices were tuned on the evaluation collection; no future-work section beyond LPs inside MILP/MINLP solvers (pp. 8, 16, 21, 24, 28).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Reduction ethic carried to LP presolve: routines ordered by cost with expensive ones once per round (step 1), bound propagation drops redundant rows and detects infeasibility, the expensive reduction rationed by its predicted payoff (step 4), numerical guards (step 5); motive is the LPs inside global MINLP solvers",
+    "pages": "pp. 8-10, 17, 19-20"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Code embedded in BARON; BARON 25.3 parser and FMEpre with/without FME as the ablation unit; per-library reporting; root relaxations published as MINLPrLPLib; deteriorations named",
+    "pages": "pp. 20, 23-27, 32"
+   },
+   {
+    "method": "Method 4",
+    "relation": "contradiction",
+    "note": "Step 7 hold-out not applied to his own algorithm: implementation choices made on the same >1,900 LPs used for the claims, disclosed, with no separate test set (Tension 5 pattern)",
+    "pages": "p. 16"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "compose after a closed rival's presolve",
+    "evidence": "CPLEX source is closed, so FMEpre is applied to CPLEX-presolved models and fed back to CPLEX, isolating the added step",
+    "pages": "p. 21"
+   },
+   {
+    "pattern": "permuted replicas for order-sensitive design choices",
+    "evidence": "Presolve routine order chosen over five row/column-permuted copies of each LP with distinct seeds, standard deviations reported",
+    "pages": "pp. 17-18"
+   },
+   {
+    "pattern": "any-solver envelope in profiles",
+    "evidence": "Performance profiles carry a CANSOLVE line beside withFME and withoutFME (also S270's Solvable curve)",
+    "pages": "pp. 27-31"
+   }
+  ],
+  "transferable": [
+   "Predict each candidate elimination's nonzero change (eq. 4 or the cheaper eq. 5), apply the best, break ties by rows (eq. 7), stop when all predictions are negative (pp. 8-10)",
+   "Keep the predictions in a heap and recompute only variables sharing rows with the eliminated one: linear update, O(1) selection (pp. 19-20)",
+   "Scale each combined row by s = a_ij a_i'j / (a_ij + a_i'j) so the feasibility tolerance keeps its meaning (p. 19)",
+   "Recover the duals of eliminated rows by summing the duals of the rows generated from them (Algorithm 4, p. 12)",
+   "When the rival's code is closed, apply your module after its presolve and feed the result back to it (p. 21)",
+   "Test order-sensitive design choices on several row/column permutations of each instance and report the spread (pp. 17-18)",
+   "Pin the LP algorithm instead of the solver's automatic choice, drop trivial and always-timeout instances, report by hardness group (pp. 23-24)",
+   "Report win/tie/loss counts with stated thresholds and name the worst cases beside the best (pp. 26-27)",
+   "Build and publish a test library from the root LP relaxations an open MINLP solver generates on MINLPLib (p. 20)"
+  ],
+  "coauthors": "Y. Zhang (The Optimization Firm), N. Ploskas (University of Western Macedonia)",
+  "quotes": [
+   {
+    "text": "Since we do not have access to CPLEX’s internal source code and cannot directly integrate FME into its presolve phase, we instead apply the FMEpre algorithm to models already presolved by CPLEX, then feed them back into CPLEX for solving.",
+    "page": 21
+   },
+   {
+    "text": "The code developed during this research is embedded in the BARON solver.",
+    "page": 32
+   }
+  ]
+ },
+ {
+  "id": "S269",
+  "year": "2026",
+  "title": "Speeding Up Mixed-Integer Programming Solvers with Sparse Learning for Branching",
+  "read_level": "full",
+  "contribution": "Lasso-selected sparse quadratic models of strong-branching scores, with under 4% of a GNN's parameters and CPU-only inference, solve the four Gasse et al. MIP families faster on average than SCIP's default rule and than a GPU-run GNN, also when trained on small size-matched data sets, though the GNN predicts SB better (arXiv v1).",
+  "problem_entry": "GNN imitation of strong branching needs large data and GPUs and loses to SCIP's default on CPUs; entry through the cost of the learned rule rather than its accuracy (pp. 1-2, 5).",
+  "key_idea": "Keep the imitation pipeline but fit lasso (glmnet, lambda by validation MSE) on quadratic expansions of Khalil/Gasse features recomputed at every node, with neighbour summaries instead of a graph and fractional candidates only, plus a 25,000-observation size-matched training regime (pp. 5-9).",
+  "assumptions": "Four Gasse et al. generator families with their sizes; train and test within a family (and size for QS); SCIP 8.0.0 with SoPlex 6.0.0, no presolve restarts, root-only cuts; SB data at 5% of nodes, l2-normalised SB scores, numerically failing nodes discarded (pp. 6-8).",
+  "proof_devices": [
+   "No theorems (empirical paper)",
+   "Accuracy as top-1 agreement with strong branching on held-out tuples (Table 3, p. 10)",
+   "Model-size sweep with glmnet dfmax from 25 to 1,000 coefficients (Table 5, pp. 12, 14)",
+   "Ablation of quadratic terms, LL vs QL (Table 6, pp. 12, 15)",
+   "Standardized coefficients and features kept in all 20 models (p. 15; Fig. 2, p. 16)"
+  ],
+  "experiments": "20 small/medium/large instances per family x 5 seeds = 100 problems per cell; 1 h, single thread in isolation, Xeon Gold 6226, GNN-G inference on a V100; baselines SCIP default, vanilla full strong branching, GNN-C, GNN-G, tuned on validation sets; solved counts, 1-shifted geometric mean time and nodes with stated timeout rules; QL fastest on small instances, QS 25% faster than SCIP on large CA, memory up to +10% vs 5-15x for GNNs; GNN more accurate; on large IS QL solves 34 and QS 40 vs SCIP 41 (pp. 6, 10-15).",
+  "positioning": "Builds on Khalil et al. 2016 and Gasse et al. 2019 (features, generators, protocol); contrasts with Gupta et al. 2020 hybrids ('does not depend on deep learning components'); surveys ML inside branch-and-bound and RL branching; no mention of best-subset selection or ALAMO (pp. 2, 4-6).",
+  "writing": "Three testable contribution claims; the GNN's higher accuracy and smaller trees conceded in results and conclusion; thesis framed as accuracy vs speed (pp. 2, 10, 16).",
+  "limits_future": "No limitations or future-work section; observable: four synthetic families only, per-family models, fewer large IS instances solved than SCIP, feature set fixed after unspecified exploratory experiments, no code or data release statement (pp. 6, 11, 13, 16).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Strength-versus-speed judgement transposed from relaxations to learned branching: rules ranked by solve time, memory and data cost, not by prediction accuracy alone",
+    "pages": "pp. 9-12"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Smallest readable model preferred over a GNN (under 4% of parameters, interpreted terms), but chosen by lasso on the glmnet path rather than best-subset integer programming (step 3), and the object is a branching-score predictor, not a simulator surrogate; SKILL.md lists it as evidence",
+    "pages": "pp. 7, 9-10, 15-16"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Module built in SCIP through its C API, not in BARON: the lone version of the method, with no release statement",
+    "pages": "p. 11"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "deployment-cost accounting for learned solver components",
+    "evidence": "CPU-only inference, training-data volume, model size and peak memory reported beside accuracy and time; the GNN run with CPU and with GPU inference",
+    "pages": "pp. 9-12"
+   }
+  ],
+  "transferable": [
+   "Recompute root features at every node and summarise a candidate's constraint neighbourhood by mean/max/min instead of a graph (pp. 6-7)",
+   "Restrict learned branching to fractional candidates; integral ones carry near-zero product scores (pp. 7-8)",
+   "Train size-matched models on about 25,000 observations with per-instance node caps so no instance dominates (p. 8)",
+   "Sweep model size with glmnet's dfmax to find the smallest model that still performs (pp. 12, 14)",
+   "Run the deep baseline with both CPU and GPU inference and report peak memory (pp. 11-12)",
+   "Treat instance x seed as separate problems (20 x 5) and drop node counts where a baseline's side effects distort them (pp. 11-12)"
+  ],
+  "coauthors": "S. Bayramoğlu (first author), G. L. Nemhauser",
+  "quotes": [
+   {
+    "text": "prediction accuracy alone does not determine solver performance, especially as problem size grows.",
+    "page": 10
+   },
+   {
+    "text": "faster branching decisions can outweigh modest increases in tree size.",
+    "page": 11
+   }
+  ]
+ },
+ {
+  "id": "S270",
+  "year": "2026",
+  "title": "Algorithm-guided experimentation for autonomous AI systems in self-driving laboratories",
+  "read_level": "full",
+  "contribution": "A talk that re-runs the Rios-Sahinidis 2013 derivative-free benchmark protocol (502 problems, 2,500 evaluations, 10 starts, median-of-10 success test) on 42 implementations, reports BAM best at 81%, all solvers together 88% and an eight-solver minimal portfolio, and demonstrates black-box optimization on an in-silico flow reactor for self-driving labs.",
+  "problem_entry": "Self-driving labs for critical-minerals separation need black-box optimizers, but BBO results depend on problem type, dimension and budget and studies disagree, while benchmarking papers are few (Scopus count) (pp. 2-3).",
+  "key_idea": "Reuse the 2013 set and rules, tag solvers as same/updated/new, report data profiles overall, by solver family and by dimension band, and compute a minimal covering solver set (pp. 4-16).",
+  "assumptions": "502 problems with n from 1 to 300, convex/nonconvex x smooth/nonsmooth, public at minlp.com; budget 2,500 evaluations; success f(y) <= f(x*) + max(0.01|f(x*)|, 0.01) on the median of 10 runs; constraint types, noise, certification of x* and tuning history not stated (pp. 7-8).",
+  "proof_devices": [
+   "No proofs (talk slides)",
+   "Data profiles of fraction solved vs evaluations, overall, by family and by dimension band (pp. 9-13, 15)",
+   "Any-solver 'Solvable' envelope drawn with the individual curves (pp. 14-15)",
+   "Minimal covering solver set with marginal counts at the full budget (p. 16)"
+  ],
+  "experiments": "42 solvers (5 same, 14 updated, 23 new; 28 deterministic, 14 stochastic; 23 global, 19 local); BAM 81%, CMA-ES 31%, Bayesian optimization 9%, any solver 88%; by band best 98/80% (n up to 9), BAM 88/64% (n 10-300), set 100/91/93/72%; minimal set BAM 404, GLCCLUSTER 23, MULTIMIN 4, MCS 2, SNOBFIT 2, CMAES 2, BOBYQA 1, DFSA 1; in-silico SNAr flow reactor, 4 variables, 3 objectives, five solvers reach the same plateau within about 50 evaluations; plot values read from slide images (pp. 5-6, 12-18).",
+  "positioning": "An update of Rios & Sahinidis 2013 (22 solvers, 502 problems, 112,448 instances); three 2013 solvers (TOMLAB OQNLP, TOMLAB LGO, DFO) absent without comment; no other benchmark study named; reactor case from Hone et al. 2017 and Felton et al. 2021 (pp. 3-5, 17).",
+  "writing": "Talk arc from application to benchmark to demonstration; research question in red; the single-winner sentence on BAM repeated beside a portfolio statement; no conflict-of-interest note (pp. 3, 14, 19).",
+  "limits_future": "Future: more state-of-the-art solvers, realistic science and engineering problems, BAM on critical-minerals separation; unstated limits: no hold-out or developer rounds, headline results at 2,500 evaluations against a 50-experiment lab budget, demonstration does not separate solvers (pp. 8, 14, 18-19).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "The 2013 set and rules reused, public problems, explicit success test on medians, results split by family and dimension, smallest covering portfolio as the conclusion",
+    "pages": "pp. 4-5, 7-8, 10-16, 19"
+   },
+   {
+    "method": "Method 4",
+    "relation": "contradiction",
+    "note": "BAM, per SKILL.md the firm's own product, ranked first on the same 502 problems with no hold-out, no developer rounds and no disclosure, plus a single-winner sentence (Tension 5)",
+    "pages": "pp. 8, 14, 19"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Self-driving-lab route goes straight to black-box optimization (4 continuous variables, 50 experiments) with no surrogate-then-global step; fits the boundary clause, but no reason is given",
+    "pages": "pp. 2, 17-18"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "longitudinal re-run of a field benchmark under the original protocol",
+    "evidence": "The 2013 set, budget, starting points and success rule reused 13 years later; solvers tagged same/updated/new",
+    "pages": "pp. 4-5, 8"
+   },
+   {
+    "pattern": "any-solver envelope in profiles",
+    "evidence": "A 'Solvable' curve (best of all solvers) drawn with the individual data profiles, overall and by dimension band (also S239's CANSOLVE line)",
+    "pages": "pp. 14-15"
+   }
+  ],
+  "transferable": [
+   "Motivate a benchmark with a dated bibliometric count of method papers against benchmarking papers (p. 3)",
+   "Tag each solver in a re-run as same, updated or new relative to the earlier study (p. 5)",
+   "Draw the any-solver envelope with the individual data profiles to show the headroom (pp. 14-15)",
+   "Report a minimal covering solver set with each member's marginal count (p. 16)",
+   "Use f(y) <= f(x*) + max(0.01|f(x*)|, 0.01) on the median of 10 runs as the success test for stochastic or multi-start solvers (p. 8)",
+   "Split the profiles by solver family and by dimension band before naming winners (pp. 10-13)"
+  ],
+  "coauthors": "D. Oh (first author)",
+  "quotes": [
+   {
+    "text": "Benchmarking across such diversity remains nontrivial; different studies often reach inconsistent conclusions.",
+    "page": 3
+   },
+   {
+    "text": "BAM with an 81% success rate outperformed all other algorithms",
+    "page": 19
+   }
+  ]
+ },
+ {
+  "id": "S271",
+  "year": "2026",
+  "title": "MINLP for regularized symbolic regression with applications to data-driven discovery of physical laws",
+  "read_level": "full",
+  "contribution": "A talk that puts a BIC objective (complexity = tree depth written in the assignment binaries) into the MINLP formulation of symbolic regression, solves it with STAR's relaxation-and-randomized-rounding scheme, and shows on a rare-earth leaching unit that the regularized models fit 30 outputs from 10 points and give surrogate optima within about 0.04% of the equation-oriented optimum, at 4-5 orders of magnitude more training time than ALAMO quadratics.",
+  "problem_entry": "Data-driven models trade complexity against accuracy; GP-based symbolic regression is called inefficient and existing MINLP symbolic regression minimizes SSR; critical-minerals leaching needs simple accurate models (pp. 2, 5, 7, 11).",
+  "key_idea": "Replace SSR by BIC in the GDP/big-M MINLP for symbolic regression, with depth L = max_n l_n sum_o z_no, and solve with STAR: relax, round randomly, add slope and intercept, fit parameters, keep the lowest-BIC tree, with the incumbent BIC turned into an SSR cutoff (pp. 6-10).",
+  "assumptions": "Binary trees of given depth over a fixed operator set; finite node-value bounds for big-M; the BIC form presumes Gaussian errors (inference); 2 inputs, 30 outputs, data from the leaching model; noise and train/test split not stated; penalty written L ln n on p. 9 and k ln n on p. 10 (pp. 4, 6, 9-12).",
+  "proof_devices": [
+   "No proofs (talk slides)",
+   "GDP to big-M value-defining constraints per node, data point and operator (p. 6)",
+   "Tree-defining and redundancy-eliminating constraints, e.g. no operations between constants (p. 7)",
+   "Depth written in assignment binaries via the level l_n = ceil(log2(n+1)) - 1 (p. 9)",
+   "BIC-to-SSR inversion turning the incumbent criterion into a cutoff (p. 10)",
+   "Randomized rounding of relaxation probabilities (p. 8)"
+  ],
+  "experiments": "Leaching unit (solid feed 50-100 lb/h, acid 0.025-0.075 mol/L, 30 outputs); star_bic vs star vs alamo_quad: R2 near 1 for star_bic and alamo_quad, star down to about 0.74 and 0.62; parity plots from 10 points; training about 1,300-7,500 s for star_bic vs near zero for alamo_quad, SR runs only up to about 50 points; deviation of the surrogate optimum from the EO optimum 5,128.2 mg/h: star_bic about 0.04% at 10 points, star 0.7%, alamo_quad 0.14-0.27%; the optimum lies at the upper bounds of both inputs (45.36 kg/h = 100 lb/h, my arithmetic); plot values read from slide images (pp. 11-16).",
+  "positioning": "Against GP-based symbolic regression (Koza, Eureqa, SRBench, gplearn, Operon, AI Feynman, PySR) and within MINLP symbolic regression (Cozad 2014; Cozad & Sahinidis 2018; Austel et al.; Kim et al. 2023), building on STAR (Sarwar 2022) and PySTAR (Kim et al. 2025); ALAMO's accuracy-efficiency balance cited from Fardis et al. 2025 (pp. 5-6, 8, 13).",
+  "writing": "Talk arc trade-off chart, formulation, algorithm, case, accuracy, price, conclusions; the cost slide is plain; 'No overfitting' asserted as a bullet; no law-discovery example despite the title (pp. 2-17).",
+  "limits_future": "Training cost 4-5 orders of magnitude above ALAMO and doubled by BIC; symbolic regression efficient only for moderate data; future: other complexity metrics and selection criteria (BIC, AIC, HQIC); unstated: no global certificate for the chosen tree, no held-out evidence (pp. 15, 17).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Information criterion inside an integer program (step 3), symbolic regression as an MINLP (step 7), price stated as 4-5 orders of magnitude (step 8), surrogates embedded in optimization",
+    "pages": "pp. 6-10, 12, 15-16"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "The MINLP is not solved to global optimality: STAR randomly rounds a relaxation and no bound or certificate is reported",
+    "pages": "pp. 8, 10"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Surrogates judged by the deviation of their optimum from the equation-oriented model's optimum, not by fit alone; certification of that optimum not stated, and it lies at a corner of the input box",
+    "pages": "pp. 11, 16"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Incumbent cutoff carried into model search: the best BIC so far becomes an SSR upper bound for the next tree's fit",
+    "pages": "p. 10"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "relaxation-guided randomized rounding in place of a global solve for learning MINLPs",
+    "evidence": "STAR solves the continuous relaxation, reads assignment probabilities, rounds m times and keeps the best tree by BIC",
+    "pages": "pp. 8, 10"
+   }
+  ],
+  "transferable": [
+   "Write model complexity in the assignment binaries (l_n = ceil(log2(n+1)) - 1, L = max_n l_n sum_o z_no) so an information criterion can be the MINLP objective (p. 9)",
+   "Turn the incumbent's BIC into an SSR cutoff for the next candidate fit, SSR = n exp((BIC - k ln n)/n) (p. 10)",
+   "Judge a surrogate by the deviation of its optimum from the first-principles optimum across training-set sizes, not only by R2 (pp. 13, 16)",
+   "Plot the new learner's training time against the simple baseline on the same axis (p. 15)"
+  ],
+  "coauthors": "D. Fardis (first author), R. Tumbalam Gooty (NETL)",
+  "quotes": [
+   {
+    "text": "Training times are 4-5 orders of magnitude larger for SR models",
+    "page": 15
+   },
+   {
+    "text": "Regularized SR models trained with 10 points provide the lowest deviation",
+    "page": 16
+   }
+  ]
+ }
+]

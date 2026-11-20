@@ -1,0 +1,209 @@
+[
+ {
+  "id": "S014",
+  "year": "2004",
+  "title": "A finite branch-and-bound algorithm for two-stage stochastic integer programs",
+  "read_level": "full",
+  "contribution": "A finite global branch-and-bound for two-stage stochastic programs with pure-integer recourse and continuous or mixed-integer first stage: searching in the tender variables χ = Tx makes the recourse value function piecewise constant on axis-parallel half-open boxes, so lower-corner bounds and branching on discontinuities terminate finitely; faster than Carøe and Schultz et al. on their own test sets.",
+  "problem_entry": "Integer recourse makes Q(·,ω) only lower semicontinuous, so stochastic-LP decomposition breaks down; existing B&B branches on first-stage variables, whose discontinuities are oblique to the axes, giving only convergent schemes for continuous first stages (pp. 2-6).",
+  "key_idea": "Change variables to χ = Tx; integrality of D^s makes the value function constant on boxes C(k) (Lemma 2, Thms. 3-4, pp. 8-10); partition only at possible discontinuities, bound each half-open box at its lower corner + an a priori ε (exact on boxes without discontinuities), branch where the current second-stage solutions become infeasible (pp. 11-14); Benders and restricted Lagrangian bounds plug in (pp. 15-17).",
+  "assumptions": "(A1) finite discrete distribution, (A2) pure-integer recourse, (A3) deterministic T, (A4) compact X, (A5) complete recourse 'for simplicity of exposition', (A6) dual feasibility, (A7) integral D^s by scaling (pp. 5-6); dropping A2 loses finiteness unless continuous recourse moves to the first stage or second-stage integers are branched on; a random T needs S×m2 tender variables (p. 18).",
+  "proof_devices": [
+   "Existence via lower semicontinuity (Blair-Jeroslow), Fatou and Weierstrass (Thm. 1, p. 7)",
+   "Equivalence of the transformed problem by contradiction (Thm. 2, p. 7)",
+   "Integer-rounding argument for piecewise constancy on unit half-open intervals (Lemma 2, p. 8)",
+   "Partition into full-dimensional half-open boxes and finiteness of the boxes meeting a compact set by bounding the integer vector k (Thms. 3-4, pp. 8-10)",
+   "Validity of the lower-corner bound and its exactness on constant boxes, hence fathoming (Props. 1-3, pp. 13-14)",
+   "Finiteness via Horst-Tuy finite consistency (Def. 1, Lemmas 3-4, Thm. 5, p. 15)",
+   "Dominance chain: lower-corner bound <= restricted Lagrangian dual <= box infimum (Prop. 4, pp. 16-17)"
+  ],
+  "experiments": "Three literature test sets with the rivals' published numbers (no reruns): Carøe's set (fewer scenario IPs, 6,615 vs 9,702; 0.06 vs 25.1 s on machines with printed LINPACK ratings, p. 20); Schultz et al.'s set (28 vs 121 and 10 vs 19 E[Q] evaluations, pp. 20-21); SIZES3/5/10 with mixed-integer recourse run inside BARON with CPLEX 6.0 (two of three gaps closed, better upper bounds for all three, p. 22); the text and Table 7 disagree on the time limit and machine (p. 22).",
+  "positioning": "Maps the rivals by assumption and cost (Laporte-Louveaux, Carøe-Tind, Carøe, Norkin et al., Schultz et al., pp. 2-4); keeps Schultz et al.'s constancy insight and re-proves it in tender space while replacing their enumeration (pp. 4, 8); finiteness theory from Horst-Tuy (p. 15).",
+  "writing": "Key concept in one paragraph with (a) branching and (b) bounding enumerated, plus 'not only of theoretical significance' (p. 4); numbered assumptions with one-line justifications (pp. 5-6); paired figures of the value function in x-space and χ-space (pp. 9-10); moderate hedging (abstract p. 1, p. 18).",
+  "limits_future": "Finiteness lost for mixed-integer recourse (p. 18); a random T multiplies the branching dimension (p. 18); SIZES10 left open (p. 22); no future-work section beyond the plug-in bounds of §7 (pp. 15-18).",
+  "method_links": [
+   {"method": "Method 2", "relation": "evidence", "note": "The hardest test set is solved with BARON maintaining the branch-and-bound tree and CPLEX 6.0 for the LPs: a thesis algorithm lands in the group's production code.", "pages": "p. 22"},
+   {"method": "Method 1", "relation": "variant", "note": "No range reduction; domain structure enters as a precomputed breakpoint grid and as branching restricted to breakpoints (where to cut, not how far to shrink).", "pages": "pp. 11-14"},
+   {"method": "Method 4", "relation": "variant", "note": "Enters stochastic integer programming with its own algorithm, not a benchmark; judged on the rivals' own published test sets and numbers with machine-independent counts, without reruns or a certified-optima library.", "pages": "pp. 18-22"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "Change variables so the nonconvexity becomes axis-aligned, then branch only on it", "evidence": "Tender variables χ = Tx turn oblique discontinuities into axis-parallel ones; branching only at breakpoints gives finiteness.", "pages": "pp. 6-10, 14-15"},
+   {"pattern": "Machine-independent work counts against published baselines", "evidence": "Counts of scenario IPs solved and of E[Q] evaluations, plus LINPACK ratings, when the rivals' numbers come from other machines or lack CPU times.", "pages": "pp. 20-21"}
+  ],
+  "transferable": [
+   "Search in the linking (tender) variables χ = Tx so that value-function discontinuities become axis-parallel and rectangular branching can isolate them (pp. 6-10).",
+   "Lower-corner bound: for a nondecreasing piecewise-constant value function on half-open boxes (l, u], solve the subproblems at l + ε with ε precomputed from the data; boxes without breakpoints are fathomed in one step (pp. 12-14).",
+   "Branch at the value where the current scenario solutions become infeasible, p_j = min_s{(D^s y^s)_j - h^s_j}, on the axis with the most central cut (p. 14).",
+   "Prove finiteness via Horst-Tuy finite consistency: every unfathomed cell contains one of finitely many breakpoints (p. 15).",
+   "Against published baselines on other hardware, report counts of the expensive oracle calls and a standard machine rating (pp. 20-21)."
+  ],
+  "coauthors": "Shabbir Ahmed, Mohit Tawarmalani",
+  "quotes": [
+   {"text": "Since the discontinuities are, in general, not orthogonal to the variable axes, there would always be some rectangular cell that contains a discontinuity in the interior.", "page": 6},
+   {"text": "The issue of finiteness is not only of theoretical significance – our computational experiments using standard test problems indicate faster convergence of the proposed algorithm in comparison to existing strategies in the literature.", "page": 4}
+  ]
+ },
+ {
+  "id": "S003",
+  "year": "2005",
+  "title": "A polyhedral branch-and-cut approach to global optimization",
+  "read_level": "full",
+  "contribution": "Proves that outer-approximating the decomposed (lifted) form of a composite convex function is tighter than linearizing it directly, exponentially so for separable functions, so factorable decompositions exploit convexity without detecting it; implements polyhedral branch-and-cut in BARON 7.2 with a CONVEX EQUATIONS construct, closing root gaps on 87 globallib/minlplib problems and cutting solve times on 26 full solves.",
+  "problem_entry": "Nonlinear and SDP relaxations matter only if solved fast and reliably, but NLP codes are slower and numerically unstable compared with LP; multivariate outer approximation had no implementation (abstract p. 1, pp. 1-2).",
+  "key_idea": "Linearize g and each inner f_i of h = g∘f in lifted variables: S2(h) ⊆ S1(h) (Thm. 1), equality cases (Props. 2-3), strict gaps (Remarks 2-3), r^n vs r cuts for separable sums (Prop. 5); the composition rule subsumes convexity-detection rules (pp. 9-10); x/y cuts, the L_g minorant and envelopes (pp. 10-14); BARON 7.2 implementation with four initial hyperplanes and violated cuts at the LP solution kept local and reused in probing (p. 15).",
+  "assumptions": "Factorable functions (p. 9); g convex and non-decreasing in the range of the non-affine f_i (p. 2); differentiability, with a non-constructive nondifferentiable extension (pp. 8-9); finite bounds (p. 10); BARON 7.2 supports products, powers, logarithms and exponentials (p. 18); no convexity information supplied in the computational study (p. 17).",
+  "proof_devices": [
+   "Convexity of compositions via projection of a lifted convex set (Prop. 1, pp. 2-3)",
+   "Chain-rule containment S2(h) ⊆ S1(h) (Thm. 1, pp. 3-4)",
+   "Equality cases next to numerical strict-gap counterexamples with plots (Props. 2-3, Remarks 2-3, Figs. 1-2, pp. 4-6)",
+   "Fourier-Motzkin elimination showing that S2 equals S1 built on r^n points (Prop. 5, p. 7)",
+   "Subdifferential chain rule for the nondifferentiable case (Lemma 1, Thm. 2, pp. 8-9)",
+   "Conjugate characterization of the convex non-decreasing minorant L_f and the envelope of coercive univariate compositions (Props. 6-8, Thm. 3, pp. 12-14)"
+  ],
+  "experiments": "Dell 1.7 GHz Xeon; two worked examples (85.5% of the gap in 6 rounds, 7 vs 47 nodes; 99.5%, 35 vs 1793 nodes, pp. 16-17); 87 filtered problems, root gaps with and without up to 10 cut rounds reported per library (globallib average 48%, minlplib average 20% with one explained deterioration, pp. 18-21); 26 full solves with a 25,200 s limit, 9 timeouts without cuts and none with, mean CPU -93% (pp. 21-23); effect-class table, tls4 slowdown explained, tolerance-dependent ex8_4_7 and a new tls4 optimum (pp. 22-23); self-ablation only. Reading notes: Table 5 shows no 2x-worse cases although four problems slow down 3-5x by Table 4, ex1233 also slows, and five of the 26 are not in the listed 87 (pp. 18, 21-23).",
+  "positioning": "Continues McCormick and the authors' univariate work [21]; claims to improve classical convex outer approximation (Kelley, Griffith-Stewart, Duran-Grossmann); subsumes convexity-detection rules (Maheshwari-Neumaier-Schichl); first general-purpose primal branch-and-cut, set against class-specific (Audet et al., Vandenbussche) and Lagrangian (Nowak) approaches (pp. 2, 9-10).",
+  "writing": "The speed-and-reliability stance opens abstract and introduction (p. 1); a section contribution map (p. 2); theorems alternate with tiny counterexamples (pp. 4-6, 13); hedges on the implementation ('albeit preliminary', p. 15); the prose claims an order-of-magnitude gain for two thirds while Table 5's top row counts factor-two gains (pp. 22-23); the conclusion repeats the headline numbers (p. 24).",
+  "limits_future": "Cuts need not give the convex envelope (p. 13); convex bodies outside the composition rule need the modeller (p. 14); no cuts for bilinear or concave QPs (p. 18); tls4 slower (p. 22). Future: effect on classical convex programming, the optimal mix of cutting and branching, partial convex hulls from feasibility and optimality arguments (p. 24).",
+  "method_links": [
+   {"method": "Method 5", "relation": "evidence", "note": "The stated LP-over-NLP rationale is carried through: entirely polyhedral relaxation, an experimentally chosen hyperplane count, cuts only when violated and kept local, the tls4 loss explained by LP cost per node. Correction for the signature-work entry: the operative insight is lifted outer approximation; constructive envelopes appear only as Prop. 8.", "pages": "pp. 1-7, 13-15, 22"},
+   {"method": "Method 2", "relation": "evidence", "note": "Implemented in BARON 7.2 and judged as BARON with cuts on vs off on one machine, reported per library; CONVEX EQUATIONS ships in the same year's manual (S012 p. 12).", "pages": "pp. 15, 17-23"},
+   {"method": "Method 1", "relation": "evidence", "note": "Domain reduction precedes relaxation (the box is shrunk before the first LP), bounds the auxiliary variables for the product underestimator, and the cuts feed the probing LPs.", "pages": "pp. 11, 15-16"},
+   {"method": "Method 4", "relation": "variant", "note": "Publishes certified values, first solutions and a corrected optimum for public-library problems, but compares only against itself, on a test set filtered to where the cuts apply and a solve set chosen by likely solvability.", "pages": "pp. 18, 21, 23"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "Lift, then linearize (outer-approximate the decomposed form)", "evidence": "Two-step outer approximation of g∘f is tighter than direct linearization, exponentially so for separable sums; composition rules make detection unnecessary.", "pages": "pp. 2-7, 9-10"},
+   {"pattern": "A modeling channel for knowledge the solver cannot infer", "evidence": "CONVEX EQUATIONS lets the modeller declare convexity the composition rule cannot see (99.5% gap reduction, 35 vs 1793 nodes); also RELAXATION ONLY EQUATIONS in S069 and equclass in S012.", "pages": "pp. 14-15, 17"},
+   {"pattern": "Ablation reported as effect-class counts per metric", "evidence": "Table 5 counts problems by size of improvement or deterioration for iterations, memory and CPU separately, with the slowdowns explained.", "pages": "pp. 22-23"}
+  ],
+  "transferable": [
+   "Introduce a variable per inner function and linearize composite convex functions layer by layer; for separable sums this reaches what direct linearization needs r^n cuts to reach (pp. 3-7).",
+   "Start each convex univariate term with four supporting hyperplanes placed by angular trisection, add a cut at the LP solution only when violated, keep cuts local to the node and reuse them in probing LPs (p. 15).",
+   "Exclude in writing the problem classes for which the new cuts generate nothing (bilinear, concave QP) and report root-gap effects per library (pp. 18-21).",
+   "Report an on/off ablation as counts of effect classes per metric and explain each slowdown by mechanism (pp. 22-23).",
+   "Print tolerance-dependent optima with both values and both tolerances (p. 23)."
+  ],
+  "coauthors": "Mohit Tawarmalani",
+  "quotes": [
+   {"text": "This problem is mostly linear and the cutting planes, apparently, reduce the size of the search tree at the expense of larger and more time consuming LP relaxations.", "page": 22},
+   {"text": "Yet, the above analysis shows that automatic detection of convexity is not essential for constructing polyhedral outer approximators of convex functions recognizable using Proposition 2.", "page": 10}
+  ]
+ },
+ {
+  "id": "S012",
+  "year": "2005",
+  "title": "BARON 7.2.5: Global optimization of mixed-integer nonlinear programs",
+  "read_level": "full",
+  "contribution": "The GAMS user's manual of BARON 7.2.5 (31 March 2005): model requirements (finite bounds on variables and expressions, allowed functions), log and termination statuses paired with user actions, features (no starting point, numsol multiple solutions in one tree, multistart use) and an option list that exposes branch-and-reduce component by component, with LP relaxation and all range-reduction families on by default.",
+  "problem_entry": "Software manual: opens with the guarantee and its price, global optima under fairly general assumptions that include finite bounds on variables and expressions, against convexity-dependent NLP and MINLP algorithms; model requirements precede options (pp. 1-2).",
+  "key_idea": "Branch-and-reduce exposed as options: LP relaxation by default with outer-approximator counts (p. 9); five switchable range-reduction families on by default, probing rationed by level and variable type, reduce/re-relax passes capped per node with improvement thresholds (pp. 9-10); dynamic branching on original variables (pp. 10-11); multiple solutions in one tree (pp. 5-6).",
+  "assumptions": "Finite bounds on all nonlinear variables and expressions (1/x on [0,1] as counterexample), otherwise no guarantee (p. 2); exp, ln, powers and |x| only, no trigonometric functions (p. 2); a licensed LP solver is required (p. 2); declared relaxation-only and convex classes are used as declared, with no check described (p. 12).",
+  "proof_devices": [
+   "n/a: software manual, no proofs; the guarantee is asserted (p. 1)",
+   "Termination taxonomy pairing each status with a user action, and nodeopt return codes (-3, -2, -1, i) saying where the best solution came from (pp. 4-5)"
+  ],
+  "experiments": "None beyond an annotated gear.gms log with time split by component (pp. 3-4) and a numsol example with 18 solutions (pp. 5-6); defaults epsa 1e-9, epsr 0.1 (= GAMS optcr), maxtime 1200 s, contol 1e-5 (pp. 8-9), looser than the tolerances set in S003 (S003 p. 21).",
+  "positioning": "Contrasted only with traditional convexity-dependent NLP and MINLP algorithms (p. 1) and with integer-cut enumeration of multiple solutions (p. 5); refers to the Tawarmalani-Sahinidis book (p. 5).",
+  "writing": "Imperative and user-facing; statuses written as instructions (report numerical difficulties to the developers, p. 4; fix the formulation or accept a possibly non-global solution, p. 5); asks for physically meaningful bounds (p. 7); usage tips inside option tables (p. 12); small cross-reference slips (pp. 2, 6).",
+  "limits_future": "Written: missing bounds void the guarantee (pp. 2, 5), no trigonometric functions (p. 2), numerical difficulties and memory limits (pp. 3-4). Unwritten: Normal Completion at the GAMS default allows a 0.1 relative gap (pp. 4, 8); declarations are unchecked (p. 12); no uncertified-value warning for multistart (p. 6). No future directions.",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "All five range-reduction families on by default and individually switchable; probing rationed by level (pfreq 3) and off for binaries; the reduce/re-relax loop capped per node; reduction also in multistart preprocessing.", "pages": "pp. 6, 9-10"},
+   {"method": "Method 5", "relation": "evidence", "note": "LP relaxation is the default and nonlinear relaxation an option; four outer approximators per convex univariate function and a grid for multivariate ones match the S003 implementation (S003 p. 15), though S003's root study allowed up to 10 cut rounds against the default 4 (S003 p. 19).", "pages": "p. 9"},
+   {"method": "Method 2", "relation": "evidence", "note": "Every component is a named switch (an ablation unit); version and build date in every log; the 2005 papers' constructs ship as equclass options.", "pages": "pp. 3, 9-13"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "Per-component time accounting in the log", "evidence": "The log reports time on parsing, preprocessing, navigating, relaxed, local, tightening, marginals and probing; see also S069 Tt/Tp/Tl and S015 profiling.", "pages": "p. 3"},
+   {"pattern": "A modeling channel for relaxation knowledge", "evidence": "equclass marks constraints as relaxation-only, convex or convex relaxation-only; first-order optimality conditions are suggested as relaxation-only constraints.", "pages": "p. 12"}
+  ],
+  "transferable": [
+   "Give each reduction family its own switch and cap the reduce/re-relax passes per node with an improvement threshold (maxredpass, maxnodepass, redreltol), so one mechanism serves rationing and ablation (pp. 9-10).",
+   "Ration probing by tree level (pstart, pend, pfreq) and by variable type (pbin) (p. 10).",
+   "Map every termination status to a user action and report where the best solution was found (pp. 4-5).",
+   "Log time per algorithm component, reductions included (p. 3).",
+   "Find the best K solutions in a single search tree instead of re-solving with integer cuts (pp. 5-6)."
+  ],
+  "coauthors": "Mohit Tawarmalani",
+  "quotes": [
+   {"text": "BARON implements algorithms of the branch-and-bound type enhanced with a variety of constraint propagation and duality techniques for reducing ranges of variables in the course of the algorithm.", "page": 2},
+   {"text": "Note that providing finite bounds on variables is not sufficient to guarantee finite bounds on nonlinear expressions arising in the model.", "page": 2}
+  ]
+ },
+ {
+  "id": "S069",
+  "year": "2005",
+  "title": "Accelerating branch-and-bound through a modeling language construct for relaxation-specific constraints",
+  "read_level": "full",
+  "contribution": "Adds RELAXATION ONLY EQUATIONS to BARON's modeling language so that valid but local-search-hostile constraints (RLT products for pooling, first-order conditions for polynomials, clause conditions for SAT) strengthen relaxation and range reduction without entering local search; documents BARON's branch-and-reduce loop in detail; concedes that the construct's global-search CPU gain over plain addition of the constraints is not significant.",
+  "problem_entry": "Modeling languages pass a single model; nonlinear reformulations tighten relaxations but hurt local search, shown on a degree-50 polynomial where the stationarity condition gives BARON a root-node proof but makes MINOS declare local infeasibility (abstract p. 1, pp. 2, 8-9).",
+  "key_idea": "Two models for one problem: constraints declared relaxation-only go through reformulation, relaxation and propagation but not into local search (p. 9); demonstrated on pooling RLT constraints (pp. 10-15), univariate polynomial first-order conditions (pp. 15-18) and SAT (pp. 18-21); the branch-and-reduce engine is unchanged and described (pp. 3-7).",
+  "assumptions": "Factorable functions (p. 3); bounded variables (p. 4); validity of the relaxation-only constraints left to the modeller, no check described (pp. 9-10, 20); 32 MB memory (pp. 14, 20); 1200 s for pooling (p. 16).",
+  "proof_devices": [
+   "n/a: no theorems; dominance over McCormick's relaxation and finiteness of the branching rule are cited ([35] p. 4; [25] p. 6)",
+   "Mechanism explanations: the root proof attributed to feasibility-based range reduction plus the objective cut (p. 9); local-solver failures to the nonconvexity of the first-order condition (p. 17)",
+   "Time split into total, preprocessing and in-tree local search to locate the gain (pp. 20-21)"
+  ],
+  "experiments": "One Dell 1.7 GHz Xeon with 32 MB; three strategies (original, strengthened, strengthened relaxation-only) per application; the local solvers CONOPT and MINOS measure the harm. Pooling (14 problems): q times out on six at 1200 s, pq solves all, global time at most 5x local time, strategy 3 not faster in total (12 vs 10 s) (pp. 12-16). Polynomials (7): 90% fewer nodes, local solvers fail on p2 and p3 (pp. 17-18). SAT (10 DIMACS): nodes -60%, memory -94%, CPU -57%; strategy 3 vs 2 about 3% CPU, local-search time from 44+20 s to 2+3 s (pp. 20-21). No other global solver.",
+  "positioning": "Modeling-language tradition (GAMS, AMPL) and global-optimization languages (BARON, NUMERICA, NOP-2) (p. 2); McCormick's relaxation recast and dominated (p. 4); RLT from Sherali-Adams (p. 10); first relaxation use of first-order conditions, previously used only for exclusion tests in GlobSol and Numerica (p. 15); symmetry breaking as a further case (p. 18).",
+  "writing": "One result sentence per application in the abstract (p. 1); two-models framing (pp. 1-2, 9); the conclusion concedes no significant global-search gain over plain addition and rests on motivating modellers (p. 22); hedges 'apparently', 'seems to serve its purpose', 'We conjecture' (pp. 9, 20, 22); the construct is misspelled RELXATION (pp. 9-10).",
+  "limits_future": "The construct's global-search gain over simply adding the constraints is not significant (p. 22); foulds3 and ii8a2 exceptions (pp. 14, 20); not a competitive SAT solver (p. 19). Future: automate RLT reformulation together with RLT relaxations of first-order conditions and constraint filtering; automatic relaxations of optimality conditions; convexified relaxation-only constraints for local search (p. 22).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "Branch-and-reduce is named for its emphasis on bound reduction; cheap reductions at every node; probing rationed to gap-carrying variables; incumbent cut propagated; the section 4 gain explained by range reduction; Fourier-Motzkin bound LPs (credited to Shectman and Sahinidis 1998) as an early form of the later FM presolve.", "pages": "pp. 2, 4-7, 9"},
+   {"method": "Method 5", "relation": "evidence", "note": "The default relaxation is polyhedral because LP solves it efficiently and reliably; the construct is judged by what it costs the local solvers.", "pages": "pp. 4, 12-21"},
+   {"method": "Method 2", "relation": "evidence", "note": "The modeling language is a vehicle for automated, systematic testing of algorithms; specialized modules for special classes came first, then the modeling language and a considerable rewrite; the feature is evaluated as three strategies inside BARON on one machine and ships in the 7.2.5 manual (S012 p. 12).", "pages": "pp. 2, 7, 13-21"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "Two models for one problem: relaxation model vs local-search model", "evidence": "RELAXATION ONLY EQUATIONS and the proposed LOCAL ONLY EQUATIONS separate bound-tightening constraints from the local-search model; the same channel as CONVEX EQUATIONS (S003 p. 15) and equclass (S012 p. 12).", "pages": "pp. 1-2, 9"},
+   {"pattern": "Redundant constraints that tighten relaxations without entering local search", "evidence": "RLT products for pooling, stationarity for polynomials, clause conditions for SAT: each hurts the local solvers but cuts nodes for the global solver.", "pages": "pp. 10-20"}
+  ],
+  "transferable": [
+   "Declare valid but local-search-hostile constraints (RLT products, first-order conditions, problem-specific optimality conditions) as relaxation-only (pp. 9-20).",
+   "Evaluate with three arms (original, strengthened, strengthened relaxation-only) and show the local solvers on the strengthened model next to the global solver (pp. 12-21).",
+   "Split CPU time into total, preprocessing and in-tree local search (Tt, Tp, Tl) when the claim is about local-search cost (pp. 20-21).",
+   "Express global-solve time as a multiple of local-solve time on the same instances (p. 15).",
+   "Propagate the objective cut f(x) <= f* each time the incumbent improves, and approximate the bound LPs by one-constraint Fourier-Motzkin steps when few bounds have changed (p. 5).",
+   "Spend probing LPs only on the variables that carry the relaxation gap at the current solution; use cheaper propagation for the rest (pp. 5-6)."
+  ],
+  "coauthors": "Mohit Tawarmalani",
+  "quotes": [
+   {"text": "The work is motivated by the observation that nonlinear problem reformulations can often tighten the relaxation process of a branch-and-bound algorithm while making local search considerably more difficult.", "page": 2},
+   {"text": "CPU time gains by using this construct as opposed to merely adding the nonlinear constraints to the nonlinear formulation were not significant as far as global search is concerned", "page": 22}
+  ]
+ },
+ {
+  "id": "S015",
+  "year": "2011",
+  "title": "GPU-BLAST: using graphics processors to accelerate protein sequence alignment",
+  "read_level": "full",
+  "contribution": "An open-source GPU acceleration of NCBI-BLAST (blastp) built inside the NCBI code, with identical output and interface, a profiled choice of the phases to parallelize, memory placement by access pattern, length-sorted databases and concurrent CPU work; speed-ups mostly 3-4x over single-threaded NCBI-BLAST on env_nr.",
+  "problem_entry": "BLAST's ubiquity makes any speed-up valuable; large speed-ups need inaccessible hardware, and the faster commodity versions change the alignments (PLAST, Ling-Benkrid, Liu's code different on all 51 queries), which users will not accept (abstract p. 1, pp. 1-2).",
+  "key_idea": "Build on top of NCBI-BLAST; profile and parallelize only seeding and ungapped extension (over 95% / 75% of the time); place data structures by size and access pattern; sort the database by length once to cut warp divergence; fixed slots with CPU overflow; a concurrent CPU share; -gpu F reverts to the NCBI path (pp. 2-5).",
+  "assumptions": "NVIDIA Fermi C2050 with a six-core Xeon host (p. 5); CUDA only (NVIDIA), OpenCL promised (p. 5); blastp only (pp. 5, 7); the GPU database is built once and amortized (p. 5).",
+  "proof_devices": [
+   "n/a: no proofs",
+   "Accounting analysis: 8x peak-GFLOPS ratio vs observed ~4x attributed to warp divergence; ungapped vs gapped speed-up from the 95% vs 75% movable share; short queries limited by the smaller phase share (p. 6)"
+  ],
+  "experiments": "env_nr (6,031,291 sequences, 1.3 GB) and 51 mouse queries of length 2-4998 shipped with the code (p. 5); baselines NCBI-BLAST at 1 and 6 threads and 1-6 CPU threads beside the GPU; start-to-finish wall clock including output (pp. 5-7); losses: no speed-up for the length-2 query and, at six threads, for sequences under 500 amino acids; inherited sublinear scaling (p. 6); one database and one GPU; no timing comparison with the other GPU BLASTs.",
+  "positioning": "Custom hardware, Blue Gene, multicore BLAST+, PLAST and other GPU BLASTs (pp. 1-2); rivals judged on output identity first; a caution that CPU-good algorithms may not be GPU-good (Elble et al. 2010, p. 1).",
+  "writing": "Structured abstract with the code URL (p. 1); citation counts as the impact argument (p. 1); 'identical results' repeated (pp. 1-2, 6); hedged speed claims ('mostly', 'nearly', 'likely') (pp. 1-2, 7); headline figures vary with the baseline (pp. 1-2, 6).",
+  "limits_future": "blastp only, NVIDIA only, inherited sublinear CPU scaling, no gain on short sequences at six threads (pp. 5-6); future: PSI-BLAST (almost identical profile, similar speed-ups likely) and OpenCL (pp. 5-7).",
+  "method_links": [
+   {"method": "Method 2", "relation": "variant", "note": "The new component is built inside an existing production code with an exact on/off switch and evaluated on vs off; the host is NCBI's code, which matches Method 2's lone version (a module in an open code) rather than the BARON pattern.", "pages": "pp. 2, 5-7"},
+   {"method": "Method 4", "relation": "variant", "note": "The yardstick is the reference implementation's exact output (an analogue of certified ground truth), and a rival was run against it on the same 51 queries; there is no head-to-head speed benchmark of the existing GPU codes.", "pages": "p. 2"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "Profile, then accelerate only the dominant phases", "evidence": "Profiling shows seeding and ungapped extension dominate; only they are parallelized, and their shares explain the achieved speed-ups; per-component time accounting also in S012 p. 3 and S069 pp. 20-21.", "pages": "pp. 2-3, 6"},
+   {"pattern": "Identical output to the reference code as the acceptance test", "evidence": "Rivals are rejected because their alignments differ from NCBI-BLAST's; GPU-BLAST is built on the NCBI code to guarantee identical results.", "pages": "pp. 1-2, 6"}
+  ],
+  "transferable": [
+   "Profile the reference code by phase before parallelizing and use the phase shares to predict the achievable speed-up (pp. 2-3, 6).",
+   "Place data by access pattern: uniformly read data in constant memory, small hot tables in shared memory, large tables in global memory (p. 4).",
+   "Sort the workload once at database-build time so that the threads of a warp get similar-length work (p. 4).",
+   "Use fixed-size result slots for the common case and hand the overflow cases to the CPU (p. 4).",
+   "Ship the benchmark inputs with the code, time start to finish including output, and report speed-up against instance size and threads, saying where it stops paying (pp. 5-6)."
+  ],
+  "coauthors": "Panagiotis D. Vouzis",
+  "quotes": [
+   {"text": "However, most users of bioinformatics software are reluctant to use implementations of BLAST that may produce alignments that are not identical to those obtained from NCBI-BLAST.", "page": 2},
+   {"text": "Based on these observations, we decided to focus our parallelization efforts on the seeding and ungapped extension steps.", "page": 2}
+  ]
+ }
+]

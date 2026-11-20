@@ -1,0 +1,216 @@
+[
+ {
+  "id": "S046",
+  "year": "2017",
+  "title": "Domain reduction techniques for global NLP and MINLP optimization",
+  "read_level": "full",
+  "contribution": "Surveys domain-reduction techniques for global NLP and MINLP under one taxonomy (removal of infeasible vs suboptimal regions) and one duality-based derivation, and shows by switching reduction off inside BARON, Couenne and SCIP on 1740 library problems that every solver loses heavily in nodes and time on every library.",
+  "problem_entry": "Solvers routinely use presolve and domain reduction matters most for nonconvex NLP/MINLP; reduction is not needed for convergence but speeds it up and smaller boxes give tighter relaxations; aims: review, link to CP and interval arithmetic, measure the impact on three solvers (abstract p. 1; pp. 2, 9).",
+  "key_idea": "Taxonomy by what is removed: infeasible regions (bound problems (11)-(13) at three cost levels, propagation, consistency, probing/shaving, implications, conflicts; OBBT deliberately filed here) vs suboptimal regions (duality-based cuts (22)-(25), contraction problem (26)-(27), pruning, optimality conditions, cluster effect); effort per node as the design variable; ablation in three production solvers (pp. 5-6, 9-15).",
+  "assumptions": "MINLP with explicit variable bounds (p. 1), factorable relaxations on a DAG (pp. 2-3); duality cuts need relaxation value L, an active bound with multiplier lambda_j > 0 and an incumbent U (p. 11); floating-point rounding named as a hazard, interval methods rigorous but slower, safe implementation cited (pp. 4, 11); experiments compare defaults with reduction switched off via listed options (p. 16; Tables 2, 4, 6).",
+  "proof_devices": [
+   "range-reduction cut x_j^l >= x_j^u - (U - L)/lambda_j from 'Theorem 2 in [158]' with a value-function picture (eq. (22), p. 11; Fig. 4, p. 12)",
+   "mirror cut at a lower bound, probing version by fixing at a bound, constraint version (eqs. (23)-(25), p. 11); suboptimal multipliers can reduce more (p. 12)",
+   "unified duality derivation: domain-reduction master problem from Lagrangian subproblems; (a, a0) = e_j recovers eq. (25), LP duality on a one-row relaxation recovers propagation rules (15)-(16) (Problems (29)-(32), pp. 12-13)",
+   "counterexample: two-variable, four-constraint system where one-at-a-time propagation reduces nothing but Problem (11) gives [-1, 3] (pp. 7-8)",
+   "counterexample: x1 + x2 = 0, x1 - q x2 = 0, propagation converges only in the limit while LP stops at once (p. 9)",
+   "worked propagation example (17)-(18) and factorable example (2)-(4) carried through (pp. 3, 7, 9)"
+  ],
+  "experiments": "1740 problems (GlobalLib 369, PrincetonLib 980, CMU-IBM 142, MINLPLib 249, Table 1 p. 21), per library; Xeon X5650, CentOS 7, 500 s, 1e-6 tolerances, GAMS (pp. 15-16); BARON, Couenne, SCIP default vs reduction off (ANTIGONE, LindoGlobal excluded: no switch, p. 15); PAVER profiles with 'solved' = best among compared solvers (p. 16); node increases +21% to +1180%, time +12% to +141% (Tables 3, 5, 7; pp. 24-25, 35); BARON's no-reduction profile catches up on NLP libraries (lower bounds, not heuristics, fail) but fails to find good solutions on MINLP (p. 16); averaging rule not stated; no list of instances where reduction hurt.",
+  "positioning": "Bridges SAT, CP, AI and interval analysis with explicit equivalences (probing/shaving = singleton consistency, propagation = label inference; pp. 7, 9); credits Belotti, Nannicini et al., Caprara-Locatelli, Zamora-Grossmann (pp. 8, 10, 12, 15); places Gleixner et al.'s Lagrangian variable bounds as an instance of a Tawarmalani-Sahinidis remark (p. 13); at least 21 of 202 references by Sahinidis (my count, pp. 21-33).",
+  "writing": "Survey order from representation to infeasible, suboptimal, implementation, computation (p. 2); toy example or figure per technique (pp. 2, 7-8, 11-12); reading instructions for profiles (p. 16); strong computational adjectives ('huge', pp. 16, 21) next to time increases of +12% to +26% for Couenne (Table 5, p. 25).",
+  "limits_future": "Stated: per-technique impact beyond scope (p. 16), two solvers untestable (p. 15); unstated: no certified optima as yardstick (p. 16), averaging rule missing, 'BARON dominates' verdict (p. 21) without third-party numbers; future: global filtering from sets of constraints for structured classes, pooling, protein folding, network design (p. 21).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Duality-based reduction at every node from the relaxation alone, probing rationed to root and some nodes, effort balanced per node, safe floating-point implementation named, contribution shown by switching reduction off in three production solvers per library; refinement: reduction is not needed for convergence (pp. 2, 9), so Method 1 is a speed claim.",
+    "pages": "pp. 2, 6, 9, 11-12, 15-16, 21; Tables 3, 5, 7 (pp. 24-25, 35)"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "One fixed protocol (Xeon X5650, 500 s, 1e-6, GAMS), competitors chosen by the ablation switch they allow, named option sets as ablation units, results per library.",
+    "pages": "pp. 15-16; Tables 2, 4, 6 (pp. 21, 24, 34)"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Bound problems ranked by cost (nonconvex, convex NLP, LP) with LP chosen for efficiency and robustness; Lagrangian variable bounds approximate Problem (27) at every node without solving it (Method 5 step 3).",
+    "pages": "pp. 5-6, 13-14"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Whole public libraries, but the profile yardstick is the best solution among compared solvers rather than a certified optimum, and an aggregated profile supports a single-winner sentence about the authors' own solver; also a variant of Workflow D step 2 (strong adjectives for modest time effects).",
+    "pages": "pp. 16, 21; Fig. 17 (p. 24); Table 5 (p. 25)"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "dual unification of the reduction toolbox",
+    "evidence": "Propagation rules and duality-based cuts are derived as special cases of one Lagrangian domain-reduction master problem; bound problems (11)-(13) are classified by what they remove (infeasible regions), not by the optimization they solve.",
+    "pages": "pp. 6, 12-13"
+   },
+   {
+    "pattern": "profile-tail attribution of an ablated component (primal vs dual)",
+    "evidence": "A no-reduction profile that catches up means heuristics still find solutions but lower bounds cannot prove them; failure to find good solutions on MINLP shows a primal effect too; a flip of SCIP and Couenne's order when reduction is removed is read as SCIP depending more on reduction.",
+    "pages": "pp. 16, 21"
+   }
+  ],
+  "transferable": [
+   "Ablate a whole component family inside several production solvers through their own options, print the exact option lists and report node and time changes per library (Tables 2-7; pp. 21, 24-25, 34-35).",
+   "Include only competitors that allow the same switch, and name the excluded ones and why (p. 15).",
+   "Read the right end of a performance profile: a catching-up ablated variant means the component mainly serves the proof, not the search (p. 16); an order flip between two solvers shows which depends more on the component (p. 21).",
+   "Rank bound-tightening subproblems by cost (exact nonconvex, convex NLP, LP) and spend the expensive ones by a stated rule: root only, a subset of variables, or every node to depth L and probability 2^(L-d) below (pp. 5-6, 11, 15).",
+   "Present a toolbox through one dual master problem and recover each known rule as a choice of its objective coefficients (pp. 12-13).",
+   "Use a two-variable linear system to show the limit of one-constraint-at-a-time propagation against the full bound LP (pp. 7-8)."
+  ],
+  "coauthors": "Y. Puranik (first author, CMU Chemical Engineering, p. 1; Sahinidis's PhD student)",
+  "quotes": [
+   {
+    "text": "Thus, there exists a need to balance the effort involved in domain reduction in order to reduce the average effort per node.",
+    "page": 15
+   },
+   {
+    "text": "Linear relaxations may provide weaker bounds than nonlinear ones, but can be solved very efficiently.",
+    "page": 6
+   }
+  ]
+ },
+ {
+  "id": "S031",
+  "year": "2019",
+  "title": "QPLIB: a library of quadratic programming instances",
+  "read_level": "full",
+  "contribution": "Builds QPLIB, a library of 453 continuous and mixed-integer quadratic programming instances selected from about 8500 gathered ones by stated hardness filters run with complete solvers, with a three-letter taxonomy, a new file format and a metadata website, while deliberately reporting no solver comparison.",
+  "problem_entry": "No single library covered all kinds of QP instances, unlike MIPLIB for MILP; 'interesting' operationalized as challenging for a significant set of solution methods (p. 2); QP as the least-nonlinear nonlinear class and a sweet spot between MILP and MINLP (pp. 2-3).",
+  "key_idea": "OVC taxonomy ordered by containment (pp. 6-7); two-filter cascade with complete solvers in GAMS: drop if >= 30% of complete solvers solve within 30 s, then remove near-duplicates per donor and drop if a complete QGQ solver proves optimality within 120 s (pp. 15-16; Table 3, p. 16); instances kept in natural, unreformulated form (p. 8); .qplib format and website (pp. 20-21, 38-42).",
+  "assumptions": "General MIQCQP with possibly infinite bounds (p. 5); convexity by eigenvalues beyond +-1e-12 and sufficient condition only, so SOC constraints may be labelled nonconvex (pp. 6, 8, 15); Neumaier's completeness classes, none of the solvers rigorous, 'exact' a stretch for floating point (pp. 10-13).",
+  "proof_devices": [
+   "n/a for proofs; containment ordering of the taxonomy with a partial order on the variable field, used to propagate method applicability (pp. 6-7)",
+   "complexity landmarks to place classes: LIQ undecidable (p. 7), QCQ NP-hard with one negative eigenvalue (p. 9), QCL decision version in NP (p. 12)",
+   "completeness ladder C > A > I > blank to fill the solver-by-class table with each solver's strongest algorithm (Table 2, p. 11)"
+  ],
+  "experiments": "No solver comparison by design (pp. 2, 21); computation only for selection with the complete GAMS solvers per class (Table 2, p. 11; p. 15); call from January 2014 for ten months plus seven libraries including the BARON library (pp. 13-14); about 8500 instances to 453 (Tables 3-4, p. 16); manual near-duplicate filter (p. 16); no solver versions, GAMS version, machine, or name of the 120 s solver stated (pp. 13-16); feasible points for most instances, no optima (pp. 20-21).",
+  "positioning": "Modelled on MIPLIB 2010 (p. 2) and MINLPLib 2 tools (p. 20); performance deferred to Mittelmann's benchmarks (pp. 4-5); Sahinidis's work cited as BARON [133-135] and two applications [39], [122], 5 of 147 references (pp. 3, 11).",
+  "writing": "13-author 'we'; scare quotes for soft words (pp. 2, 8, 18); scope negation stated twice (pp. 2, 21); the selection process offered as guidance for benchmark builders (p. 2).",
+  "limits_future": "Stated: a snapshot to be extended, links to literature planned (p. 21); unstated: hardness relative to 2014-15 solvers and limits, selection runs not exactly repeatable, no certified optima (pp. 13-16, 20-21).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Large public library with written admission rules and an explicit refusal to rank solvers, but feasible points instead of certified optima, and filters beyond triviality (a 120 s hardness cut and a manual near-duplicate cut); his personal role not stated.",
+    "pages": "pp. 2, 15-16, 20-21"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Joint and weak: instances from the BARON library flow into a community library (Method 2 step 5); also evidence for Heuristic 7 and Integrity Rule 5 (global solvers called complete, not rigorous or exact, pp. 11-13); a variant of Heuristic 6 (selection runs without versions or hardware, pp. 15-16).",
+    "pages": "pp. 11-16"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "admission rule by solver-fraction thresholds",
+    "evidence": "'Interesting' defined as challenging for a significant set of methods, implemented as: drop if at least 30% of complete solvers solve within 30 s; after de-duplication, drop if a complete solver proves optimality within 120 s.",
+    "pages": "pp. 2, 15-16"
+   },
+   {
+    "pattern": "natural-form instances, no reformulation",
+    "evidence": "Instances are kept as contributed because reformulations make an instance easier for one class of solvers, a bias the library refuses to add.",
+    "pages": "p. 8"
+   }
+  ],
+  "transferable": [
+   "Write the admission rule as solver-fraction thresholds: drop an instance if at least 30% of complete solvers solve it within 30 s; after near-duplicate removal per donor, drop it if one complete solver proves optimality within 120 s (pp. 15-16).",
+   "Store instances as contributed, never reformulated, and say why (p. 8).",
+   "Give every instance a three-letter class code ordered by containment and publish a CSV of per-instance metadata so users can build their own subsets (pp. 6-7, 21).",
+   "Grade each solver per class as incomplete, asymptotically complete, complete or rigorous, and call floating-point global solvers complete (pp. 10-13).",
+   "Define property labels by an explicit numerical test (eigenvalues beyond +-1e-12) and state its known misclassification (SOC constraints labelled nonconvex) (pp. 8, 15).",
+   "Ship a minimal text format of defaults plus non-default exceptions, with a worked example (pp. 38-42)."
+  ],
+  "coauthors": "F. Furini, E. Traversi, P. Belotti, A. Frangioni, A. Gleixner, N. Gould, L. Liberti, A. Lodi, R. Misener, H. Mittelmann, S. Vigerske, A. Wiegele (Sahinidis 11th of 13; alphabetical after the first two)",
+  "quotes": [
+   {
+    "text": "Thanks to these extensive preliminary tests, we discarded all instances that are solved by at least 30% of the complete solvers within a time limit of 30 seconds.",
+    "page": 15
+   },
+   {
+    "text": "Since none of the solvers we are using can be classified as rigorous, we limit ourselves to declaring solvers complete.",
+    "page": 11
+   }
+  ]
+ },
+ {
+  "id": "S182",
+  "year": "2020",
+  "title": "A discussion on practical considerations with sparse regression methodologies",
+  "read_level": "full",
+  "contribution": "A published discussion that sets the Hastie-Tibshirani-Tibshirani and Bertsimas-Pauphilet-Van Parys sparse-regression comparisons side by side, reruns released code to test their divergences (the relaxed lasso inside the other protocol; penalized L0Learn against cardinality-constrained CIO/SS), faults a mismatched timing comparison and ends with a convenience-ordered recommendation for practitioners.",
+  "problem_entry": "Two new Statistical Science comparisons reach conclusions that are not completely aligned; the discussion summarizes and compares them to give users clarity (abstract p. 1; p. 2); regression only (p. 2).",
+  "key_idea": "Side-by-side tables of setups and conclusions (Tables 1-2, pp. 3-4), then targeted reruns with released code: relaxed lasso in the Medium noise, High correlation setting (p. 5, Fig. 1), regularized L0Learn and forward stepwise against CIO/SS (p. 7, Figs. 2-3), plus critiques of fixed-k design, scaling confounds, timing basis and hyperparameter-path cost (pp. 5-7).",
+  "assumptions": "Synthetic linear-model data with Gaussian error (p. 2); (p, ktrue, SNR, rho, MIC) = (1e4, 50, 1, 0.7, true), validation set of size n, 10 trials, CIO/SS values taken from the original figures (fn. 7, p. 5); R defaults for lasso and MCP, stated grids for rlasso, FS and L0Learn with CDPSI (captions pp. 6, 8, 9); no hardware stated.",
+  "proof_devices": [
+   "n/a for proofs; like-for-like timing check: one cardinality-constrained solve vs glmnet's full path (p. 6)",
+   "cost extrapolation: 60 s limit per (gamma, k), 100 x 10 grid, 30 s average gives > 8 h before K-fold CV (fn. 8, pp. 6-7)",
+   "matched-scaling comparison of (1e3, 50, 5) and (1e4, 500, 50) to isolate which ratio in (p, n, ktrue) drives differences (p. 5)",
+   "transplant test: one study's overall winner run inside the other study's protocol (p. 5)"
+  ],
+  "experiments": "Fig. 1: relaxed lasso appears superior to MCP, CIO/SS lower FDR, rlasso competitive with SS and more accurate (p. 5); own MCP differs from the original (implementation difference suspected, p. 5); Fig. 2: regularized subset methods beat unregularized ones, regularized L0Learn beats CIO/SS while faster (p. 7); Fig. 3 training times over different tuning grids (pp. 6, 8, 9), a mismatch of the kind faulted on p. 6 (my reading; a rejoinder not read here called it misleading, per note 05).",
+  "positioning": "Commends both groups' open code and uses it (pp. 2, 5), posts own scripts (p. 2); agrees on the lasso's high FDR, disputes BPV's timing basis and fixed-k design (pp. 5-6); own work cited neutrally as Cozad et al. 2014 and 2015 ([7], [8]; pp. 5, 7) without the name ALAMO.",
+  "writing": "Hedged referee voice ('In our view', 'appears to be', 'seemingly chosen'; pp. 5-6); own views added parenthetically to the summary table (Table 2, p. 4); practitioner section (p. 7) and a convenience-ordered decision ladder with explicit avoid cases (pp. 8-9); closes by stating its limit and inviting continuation (p. 9).",
+  "limits_future": "Stated: no broad advice possible, experiments cover only a portion of configurations (p. 9); L0BnB and L0Learn's faster default not tested (pp. 7-8); future: empirical comparisons with scaling in mind (p. 5) and translating experiments into prescriptions (p. 9).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "The group's own advice for noisy data is shrinkage on top of a sparsity term and to avoid unregularized subset selection; exact cardinality-constrained estimators not recommended in the general case on cost; the 2014 formulation is called penalized, so whether ALAMO's unshrunk best subset falls under the avoid sentence is not settled (corroborates note 05 C9).",
+    "pages": "pp. 5, 7, 9"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Constraints on the response surface named as the reason for a dedicated model builder (step 4); the computational price of exact subset selection stated (step 8).",
+    "pages": "pp. 6-7"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Yardstick known by construction (true support scored as Accuracy and FDR), others' released code rerun, conditional scope-bounded recommendations instead of a single winner; also Heuristic 4 evidence (like-for-like timing critique p. 6, stronger CDPSI option fn. 12 p. 8) with a variant in the paper's own Fig. 3 (different grids, pp. 6, 8, 9).",
+    "pages": "pp. 3, 5, 7-9"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "cross-protocol transplant test",
+    "evidence": "The overall winner of one comparison (relaxed lasso) is run inside the other comparison's protocol with released code, and the penalized L0Learn is tested in the same setting against the cardinality-constrained methods.",
+    "pages": "pp. 5, 7"
+   },
+   {
+    "pattern": "price the whole tuning path",
+    "evidence": "A speed claim for one solve is re-priced over the hyperparameter grid (100 values of k x 10 of gamma at 30-60 s each, more than 8 h before cross validation).",
+    "pages": "pp. 6-7, fn. 8"
+   }
+  ],
+  "transferable": [
+   "Tabulate two competing studies' estimators, scales, structures, SNR, metrics and experiments side by side, then their conclusions, before arguing (Tables 1-2, pp. 3-4).",
+   "Run one study's overall winner inside the other study's protocol with released code, and report where your reproduction of a baseline differs (p. 5).",
+   "Check timing claims for equal tasks (one solve vs a whole solution path) and apply the same check to your own timing figure (pp. 6, 8, 9).",
+   "Price the whole tuning path: grid points times the per-solve limit, before cross validation (fn. 8, pp. 6-7).",
+   "Compare configurations with identical linear scaling of (p, n, ktrue) to isolate which ratio drives a difference (p. 5).",
+   "End with a convenience-ordered decision ladder for the typical user, with explicit avoid cases (pp. 8-9)."
+  ],
+  "coauthors": "Owais Sarwar (first author), Benjamin Sauk (both CMU, p. 1)",
+  "quotes": [
+   {
+    "text": "We would also avoid unregularized subset-selection algorithms like forward-selection, BSS, or the corresponding configuration in L0Learn because of their poor performance on noisy data.",
+    "page": 9
+   },
+   {
+    "text": "If a user cannot quickly find an implementation for a new algorithm online, they will just use an established method.",
+    "page": 7
+   }
+  ]
+ }
+]

@@ -1,0 +1,415 @@
+[
+ {
+  "id": "S090",
+  "year": "2020",
+  "title": "On the impact of running intersection inequalities for globally solving polynomial optimization problems",
+  "read_level": "full",
+  "contribution": "Proves that separating flower inequalities for the multilinear polytope is NP-hard, gives an O(|E|^2) separation algorithm for running intersection inequalities on fixed-rank hypergraphs, and embeds it at every node of BARON, cutting average CPU time by 60%, 43% and 63% on degree-3, degree-4 and image-restoration test sets.",
+  "problem_entry": "Termwise factorable bounding of multilinear terms, deployed in all general-purpose global solvers, gives very poor bounds in general; the entry is the separation problem for running intersection inequalities, a facet-defining family of the multilinear polytope introduced by two of the authors (pp. 2, 4).",
+  "key_idea": "NP-hard in general (Theorem 1), but for fixed rank a reduced separation system keeps a maximally violated inequality (Proposition 1), giving O(|E|^2) separation (Corollary 1); in BARON the point-independent recognition runs once at the root and each cut round costs O(|E|), with local bounds by scaling and a cut pool that keeps the most violated share (pp. 7-8, 12-16).",
+  "assumptions": "Variables scaled to [0,1] or with nonnegative finite bounds; fixed hypergraph rank, justified because test libraries have r <= 5; the hardness result takes the rank as input; the routines are switched off above a few thousand variables (pp. 2, 5, 7, 11, 16-17).",
+  "proof_devices": [
+   "polynomial reduction from 3-dimensional matching through perfect matchings with costs on a hypergraph augmented with loops (Theorem 1, pp. 8-11)",
+   "exchange argument: replace each neighbor by the edge with the same intersection that maximizes z, and each chosen node by the one minimizing z; the violation does not decrease (Proposition 1, pp. 12-13)",
+   "induction on the number of center nodes covered by neighbors, bounding the neighbors by |e0| - 1 (Lemma 1, pp. 13-14)",
+   "operation counts against explicit enumeration: O(n^(r^2)) down to O(n^(2r)) when |E| = Theta(n^r) (p. 14)"
+  ],
+  "experiments": "BARON 18.6.19 development version with and without the cuts (GAMS 25.1.1, one thread, 1e-6, 500 s, Xeon X5650) on 440 random degree-3/4 problems and 45 vision instances: CPU time -60%/-43%/-63%, solved 208->216, 168->180, 37->44; factor-band tables count slowdowns (up to 6% of degree-4 problems at least 2x slower); 2x2 ablation BarBasic/BarMult/BarRI/BarBoth; no other solver, no hold-out (pp. 17-27).",
+  "positioning": "Builds on Del Pia and Khajavirad's multilinear-polytope theory and on BARON's multilinear cuts of Bao et al. 2015; contrasts with termwise factorable bounds and quadratization approaches; finds the two cut families complementary (pp. 3-4, 19-20, 25-27).",
+  "writing": "Numbers in the abstract and the contributions paragraph; theory, then implementation, then per-test-set results; limits stated where they arise; no separate conclusion section (pp. 1, 5, 16-17, 25).",
+  "limits_future": "No visible improvement on dense hypergraphs (autocorrelation set); too expensive above a few thousand variables, where BARON deactivates it; memory grows with the degree; no future work stated (pp. 16-17, 22, 24-25).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "steps 3 and 6: a polyhedral family chosen because its separation can be made cheap; cut-pool share keeps the LP small; automatic deactivation on large problems; slowdowns from larger LPs reported",
+    "pages": "pp. 16-17, 22, 24"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "steps 3-5: named builds BarBasic/BarMult/BarRI/BarBoth inside BARON under the fixed protocol (GAMS, one thread, 1e-6, 500 s, Xeon X5650), per-test-set tables, random test problems released on the firm's site",
+    "pages": "pp. 17-18, 22-27, 30"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "stated only: the inequalities are said to serve local feasibility- and optimality-based range reductions as well; section 5 describes only cut generation",
+    "pages": "p. 5; pp. 14-17"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "parameterize hardness by a library statistic",
+    "evidence": "separation NP-hard with the rank as input (Theorem 1), polynomial for fixed rank (Corollary 1), the fixed-rank assumption justified because the test libraries have rank at most 5; also Heuristic 1 (special classes first)",
+    "pages": "pp. 5, 8, 11, 14"
+   }
+  ],
+  "transferable": [
+   "When a cut family's separation is NP-hard in general, find the parameter your test libraries keep small (here the rank, at most 5), give an algorithm polynomial for fixed values of it, and state the library evidence next to the assumption (pp. 5, 11, 14).",
+   "Split separation into a point-independent recognition step done once at the root and a cheap per-round step; recheck a structural condition only at nodes where branching or range reduction has fixed a variable that can change it (pp. 14-16).",
+   "Derive the cuts on [0,1] and scale them by the node's upper bounds, so they use local bounds without rebuilding the structure (inequality (7), p. 7).",
+   "Test a new cut family against the incumbent one in a 2x2 design (neither, old, new, both) and claim complementarity only if 'both' is fastest on every test set (Table 3, p. 27).",
+   "Report effects in factor bands (at least 2x better ... at least 2x worse) for time, iterations and nodes, so slowdowns are counted next to gains (Table 1, p. 22)."
+  ],
+  "coauthors": "Alberto Del Pia, Aida Khajavirad",
+  "quotes": [
+   {
+    "text": "Constructing strong and cheap to compute convex relaxations is key to the efficiency of global optimization algorithms.",
+    "page": 2
+   },
+   {
+    "text": "For such problems BARON automatically deactivates its expensive cut generation routines, including the one proposed in this paper.",
+    "page": 17
+   }
+  ]
+ },
+ {
+  "id": "S134",
+  "year": "2020",
+  "title": "GPU parameter tuning for tall and skinny dense linear least squares problems",
+  "read_level": "full",
+  "contribution": "Benchmarks four QR libraries on square and tall-and-skinny matrices, then tunes MAGMA's block size and memory mode with 31 DFO and 4 SO solvers scored against complete enumeration, giving a 1.8x speed-up over MAGMA's defaults on the largest matrices and a five-solver set that finds the optimum an order of magnitude faster than enumeration.",
+  "problem_entry": "GPU solvers are designed for one architecture and the parameters-to-speed map has no explicit model, while autotuning by heuristics and enumeration cannot certify optimality; entry: tune MAGMA's QR-based least-squares solver for communication-bound tall and skinny matrices (pp. 1-2, 5, 7).",
+  "key_idea": "Compare the existing QR codes first, pick the most promising (MAGMA), then treat it as a black box over block size and pinned memory and benchmark every available DFO/SO solver against the enumerated true optimum of the 1000-point space (pp. 6-8, 12).",
+  "assumptions": "GFLOPs from timings averaged over ten random uniform matrices per size (conditioning irrelevant); integer parameters handled by rounding inside the simulator for continuous solvers; timings noisy from OS scheduling; results specific to one Tesla K40 (pp. 5, 12-13, 15, 17).",
+  "proof_devices": [
+   "n/a: no analysis; odd results explained by enumeration plots of the response and by profiling GPU occupancy against transfer rate (pp. 15-17)"
+  ],
+  "experiments": "26 tall-skinny sizes (500 columns, 1000-126000 rows), 20 evaluations per solver from a pilot, same starting point, five trials with different starts; 1.8x at 126000 rows; optimal block size 8 vs MAGMA's 64 from 41000 rows; many solvers worse than default (BOBYQA, NEWUOA -73%, PRAXIS -74%); three of four SO solvers worse than default even with 200 evaluations (pp. 7, 12-18).",
+  "positioning": "Places itself against autotuning by heuristics and enumeration, notes that DFO tuning of algorithms is not new (Audet and Orban), and adds to the DFO-comparison literature that Rios and Sahinidis 2013 called still in its infancy (pp. 2-3).",
+  "writing": "Three numbered contributions; surprising results flagged and explained by enumeration and profiling; scope stated (K40 only) (pp. 2-3, 7, 15-17).",
+  "limits_future": "Optimal values hold only for the Tesla K40; SO codes judged not mature enough for this problem; future: a finer lookup table (per 1000 rows or columns) usable as default and as a DFO starting point (pp. 17-20).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "steps 1-6: existing QR codes compared before tuning; every DFO/SO solver run under the same budget and starts; ground truth by complete enumeration instead of a global solver (a variant of step 2 for a small finite space); losses to the default tabulated; covering five-solver portfolio as verdict; the 1.8x headline is the best solver per size",
+    "pages": "pp. 5-8, 12, 15-18"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "last step: derivative-free search used because no explicit algebraic model links tuning parameters and performance",
+    "pages": "p. 8"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Pick a tuning space small enough to enumerate (here 1000 combinations), so that every black-box solver's answer is scored against the true optimum and against the default (p. 12).",
+   "Compare the candidate host codes before tuning, then tune the one with the most headroom (section 3, pp. 5-8).",
+   "Report two numbers per solver, the mean improvement over the default and the number of problems on which it found the best option, and build the smallest covering set of solvers from the second (Table 4, pp. 15-16).",
+   "When continuous solvers handle integer parameters by rounding, check whether they keep evaluating the same rounded point; the integer version of GLCCLUSTER did almost 60% better here (p. 15).",
+   "Turn per-instance tuning into one default for the whole set, and state the hardware it was tuned on (p. 17)."
+  ],
+  "coauthors": "Benjamin Sauk, Nikolaos Ploskas",
+  "quotes": [
+   {
+    "text": "Autotuning approaches cannot provide a certificate of optimality to ensure that they identify the best possible parameters since an exhaustive search of all parameter options is prohibitively expensive.",
+    "page": 2
+   },
+   {
+    "text": "For the problem under study, there are 1000 possible combinations of parameters, thus affording us the possibility to determine an optimal solution via complete enumeration.",
+    "page": 12
+   }
+  ]
+ },
+ {
+  "id": "S181",
+  "year": "2020",
+  "title": "An industrial application of deep reinforcement learning for chemical production scheduling",
+  "read_level": "full",
+  "contribution": "Reports a deep reinforcement learning scheduler, trained on a data-driven simulator of a Dow reactor and packaging line, that raised product availability from 85% (human planners) to 99% in back-tests and has run for six months under human review.",
+  "problem_entry": "Math-programming schedules are little used in industry because of stochasticity and model size and are abandoned by planners; entry: replace the optimizer by a learned policy that reschedules daily (pp. 1-2).",
+  "key_idea": "Simulator built from historical data; PPO policy (eight fully connected layers of 256 units) sequencing the packaging stage, reactor schedule back-calculated; population-based training of 48 agents tunes reward weights by episode profit (p. 3).",
+  "assumptions": "Fixed run rates so sequence is the only decision; six products, forbidden and costly type changes, seven-day frozen period, daily data refresh; values rescaled for confidentiality (pp. 2-3).",
+  "proof_devices": [
+   "n/a: no analysis"
+  ],
+  "experiments": "Historical 52-week back-tests from the plant's initial conditions plus simulated demand ('100 years' in the text, '1,000 simulated years' in the Figure 3 caption); availability 85% -> 99%; six months live with drops tied to state drift in PCA space, an outage and double-counted orders; no optimization model or bound compared (pp. 3-5).",
+  "positioning": "Cites the history of process scheduling and math programming under uncertainty (including Sahinidis 2004) as rarely used in practice; builds on Hubbs et al. 2020, which benchmarked against MILP models, and on OR-Gym (pp. 1-2).",
+  "writing": "Workshop format (problem, methods, results, deployment, broader impact); the broader-impact section asserts that economic theory and history agree automation is a net benefit, without citation (p. 5).",
+  "limits_future": "State drift and data errors degrade performance; future: alerts for human intervention, an ensemble of models, full automation, multi-agent RL across plants (p. 5).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "contradiction",
+    "note": "co-authored industrial paper (Sahinidis 4th of 5): data-driven simulator plus a large neural policy, no algebraic model, no global optimization, no certificate; marks the range of lines he co-signs, not a method he states",
+    "pages": "pp. 3-4"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "yardstick is the owner's current practice (human planners over the same historical windows) and live operation, not certified optima; the MILP comparison is in the earlier paper",
+    "pages": "pp. 2, 4"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "deploy a learned policy with a drift alarm (industry co-author voice)",
+    "evidence": "live states projected on principal components of training states; distance from the training center tracked against reward; alerts for human intervention proposed",
+    "pages": "pp. 4-5"
+   }
+  ],
+  "transferable": [
+   "Monitor a deployed learned policy by projecting live states onto the principal components of the training states and tracking their distance from the training center against reward; raise an alert for human review when it grows (pp. 4-5).",
+   "Back-test a scheduler on consecutive historical 52-week windows started from the plant's own initial conditions, and compare with what the human planners did in the same windows (pp. 3-4)."
+  ],
+  "coauthors": "Christian D. Hubbs, Adam Kelloway, John M. Wassick, Ignacio E. Grossmann",
+  "quotes": [
+   {
+    "text": "The DRL system outperforms actual human planners over the same horizon with an average 99% Product Availability Rate compared to 85%.",
+    "page": 4
+   },
+   {
+    "text": "We hypothesized that the DRL agent's performance would degrade as operational states becomes increasingly dissimilar from training states.",
+    "page": 4
+   }
+  ]
+ },
+ {
+  "id": "S191",
+  "year": "2020",
+  "title": "BARON user manual v. 2021.1.13",
+  "read_level": "full",
+  "contribution": "The January 2021 stand-alone BARON manual: the model contract (algebraic functions, finite expression bounds), the branch-and-reduce option set with all range-reduction families on and probing, local search and subsolver choice decided automatically by default, and termination statuses that separate solved-within-tolerances from runs whose globality is not guaranteed.",
+  "problem_entry": "Users of algebraic NLP/MINLP need global optima, which traditional algorithms guarantee only under convexity; BARON guarantees them under fairly general assumptions, first among them finite bounds on nonlinear expressions (p. 2).",
+  "key_idea": "Branch-and-bound enhanced with constraint propagation and duality-based range reduction; TDo, LBTTDo, MDo, OBTTDo on and probing amount decided by BARON (PDo -2); several or all solutions from one search tree; IIS search for every problem type; automatic recognition of complementarity (pp. 2, 16, 19-21, 24-25).",
+  "assumptions": "Explicit algebraic functions only (exp, ln, x^a, b^x; |x| and x^y reformulated automatically only under AIMMS, AMPL, GAMS and MATLAB; no trigonometric functions); finite variable bounds do not imply finite expression bounds; convex and relaxation-only declarations offered with no warning in this edition (pp. 3-4, 6, 8).",
+  "proof_devices": [
+   "n/a: a user manual"
+  ],
+  "experiments": "none (a gear-train example log and a PUMA robot system with 14 solutions; pp. 9-11, 16-19)",
+  "positioning": "BARON set against traditional NLP/MINLP algorithms that need convexity; parts credited to UIUC and CMU; the log asks users to cite Kilinc and Sahinidis 2018; the bibliography is a pointer to minlp.com (pp. 2, 11, 30).",
+  "writing": "Contract first (model requirements before installation), then input, log, statuses and output files, features, option tables with defaults; guarantees phrased as 'within tolerances' and 'may not be valid' (pp. 2-30).",
+  "limits_future": "No trigonometric functions; globality not guaranteed when bounds are missing; NumSol and IIS detection slow the search; DeltaTerm nondeterministic; no future work (pp. 3-4, 13, 16, 20, 22).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "steps 1 and 4: range reduction is part of the one-paragraph definition; every family on by default with its own switch; probing rationed automatically (PDo -2); cross-edition per the s03 cards: probing off (2000), scheduled (2005), automatic (2021)",
+    "pages": "pp. 2, 12, 24-25"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "steps 2 and 4: MIP relaxations dominate time for integer problems; convex functions as outer approximators; NLP subsolvers switched by problem characteristics and solver performance; FilterSD still allowed by default (before the 2022.1.19 change SKILL.md cites)",
+    "pages": "pp. 21, 24, 28"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "step 4 instrument: each reduction family, local search, subsolver choice and cut-round count is an option with a documented default, the switches ablations rely on; the log names a group paper to cite",
+    "pages": "pp. 11, 21-30"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "self-deciding defaults",
+    "evidence": "many options default to 'decided by BARON' (PDo -2, NumLoc -2, NLPSol -1, LPSol -1, DoLocal 1, BrVarStra/BrPtStra/NodeSel 0); maxredpass, maxnodepass, pfreq and nlpdolin of the 2005 edition (per the s03 card of S185) are absent from the 2021 option tables",
+    "pages": "pp. 21-30"
+   }
+  ],
+  "transferable": [
+   "In a solver's output, separate certificates from estimates: print a distinct status when the premise of the guarantee fails (missing bounds), and say that the printed bounds may then be invalid (pp. 12-13).",
+   "Give each expensive component an automatic default plus an explicit off value, so that users get adaptive behavior and experimenters a clean switch (pp. 24-26).",
+   "Document which options make runs nondeterministic and why (DeltaTerm relies on CPU-time measurements) (p. 22)."
+  ],
+  "coauthors": "none (sole author line, The Optimization Firm)",
+  "quotes": [
+   {
+    "text": "Even though relaxation bounds are printed on the screen to give the user a feeling for convergence, these bounds may not be valid for the problem at hand.",
+    "page": 13
+   },
+   {
+    "text": "Because it relies on CPU time measurements, which may depend on machine load, this option may result in nondeterministic behavior.",
+    "page": 22
+   }
+  ]
+ },
+ {
+  "id": "S304",
+  "year": "2020",
+  "title": "Announcement: Howard Rosenbrock Prize 2019",
+  "read_level": "full",
+  "contribution": "Editorial announcement under his sole name, in OPTE's voice, of the 2019 Rosenbrock Prize to Burlacu et al. for a global MINLP approach to gas-network storage capacity; the praise of the paper is the selection committee's citation.",
+  "problem_entry": "n/a: an annual prize announcement (best OPTE paper of the previous year, $500 from Springer) (p. 1).",
+  "key_idea": "n/a; the committee's citation (not his words) credits a transient gas-physics MINLP with discrete switching, a new space-time discretization and adaptive MIP relaxations with problem-specific bound improvements (pp. 1-2).",
+  "assumptions": "n/a",
+  "proof_devices": [],
+  "experiments": "none",
+  "positioning": "n/a",
+  "writing": "Formulaic: purpose of the prize, past winners, winners and affiliations, committee and its verbatim citation, the journal's scope and call for papers (pp. 1-2).",
+  "limits_future": "n/a; his own lines state the prize's aim (bridging optimization and engineering) and OPTE's scope ('algorithms, software, and theory') (p. 2).",
+  "method_links": [],
+  "new_pattern_candidates": [],
+  "transferable": [],
+  "coauthors": "none (committee: Marina Epelman, chair; Michel Gamache; Luis Zuluaga)",
+  "quotes": [
+   {
+    "text": "The Rosenbrock Prize recognizes excellent research contributions that exemplify the commitment to bridge the gap between optimization and engineering that characterized the original work of the award's namesake, Howard Rosenbrock.",
+    "page": 2
+   },
+   {
+    "text": "Researchers from around the world are encouraged to submit high-quality papers exploring algorithms, software, and theory at the interface of optimization and engineering.",
+    "page": 2
+   }
+  ]
+ },
+ {
+  "id": "H012",
+  "year": "2021",
+  "title": "Announcement: Howard Rosenbrock Prize 2020",
+  "read_level": "full",
+  "contribution": "Announcement under his sole name, in OPTE's voice and with a Georgia Tech byline, of the 2020 Rosenbrock Prize to Labbe, Plain and Schmidt for feasibility and complexity results on European gas-market bookings; the praise of the paper is the selection committee's citation.",
+  "problem_entry": "n/a: an annual prize announcement (p. 1).",
+  "key_idea": "n/a; the committee's citation (not his words) credits a characterization of robustly feasible bookings, coNP membership, a polynomial dynamic program on trees and class P for linear potentials (pp. 1-2).",
+  "assumptions": "n/a",
+  "proof_devices": [],
+  "experiments": "none",
+  "positioning": "n/a",
+  "writing": "Same template as the 2019 announcement; the journal's scope now reads 'algorithms, applications, and theory' where 2020 had 'algorithms, software, and theory' (p. 2; S304 p. 2).",
+  "limits_future": "n/a; the work-list note says its correction notice is S297 (not read).",
+  "method_links": [],
+  "new_pattern_candidates": [],
+  "transferable": [],
+  "coauthors": "none (committee: Luis Zuluaga, chair; Michel Gamache; Frauke Liers)",
+  "quotes": [
+   {
+    "text": "The prize recognizes outstanding research contributions that demonstrate Howard Rosenbrock's own dedication to bridging the gap between optimization and engineering.",
+    "page": 1
+   },
+   {
+    "text": "We feature cutting-edge optimization research as well as challenging and successful optimization implementations in engineering.",
+    "page": 2
+   }
+  ]
+ },
+ {
+  "id": "S070",
+  "year": "2021",
+  "title": "Process systems engineering perspective on the design of materials and molecules",
+  "read_level": "full",
+  "contribution": "A six-author PSE perspective, from the FIPSE-4 meeting, that sets out open questions for integrated molecular and process design, heterogeneous catalyst design and organic photovoltaic materials, including the role of global MINLP, surrogate models and DFO portfolios.",
+  "problem_entry": "Molecules and materials are still found largely by trial and error; PSE can supply systematic design methods; three areas are surveyed by their open problems (pp. 1-4).",
+  "key_idea": "Argument by numbered open questions; in BARON molecular design motivated the move from nonlinear to LP relaxations and multiple/all-solution search; Scharber's linear OPV efficiency model judged inadequate; ALAMO and DFO portfolios proposed for OPV design (pp. 8, 13, 26-27).",
+  "assumptions": "n/a: no model of its own; assumptions discussed are those of others' methods (e.g., single-descriptor volcano plots) (pp. 15-19).",
+  "proof_devices": [
+   "n/a: a perspective"
+  ],
+  "experiments": "none (illustrative figures from cited work, pp. 8, 18, 22)",
+  "positioning": "Frames PSE contributions to materials design; cites Theodorou's call to join molecular simulation and systems research; places the Sahinidis group's CAMD, ALAMO and DFO papers in the agenda (pp. 9, 13, 25, 27).",
+  "writing": "Sections built from numbered open questions with one subsection each; sections not attributed to authors; only author-specific line is an NVS acknowledgment (pp. 8, 19, 29).",
+  "limits_future": "Common challenges: reliable structure-property models, more properties, uncertainty across scales, cost with scarce data, reliable solution of the optimization problems; future: closer work with molecular modelers and experimentalists (p. 29).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "origin of the stance: molecular design named as what moved BARON from nonlinear to LP relaxations (ref. 12, the 2003 refrigerant paper)",
+    "pages": "pp. 13, 30"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "an application class became engine features of the production solver (LP relaxations; lists of best or all feasible designs), still documented in the 2021 manual (S191 pp. 16, 24); consistent with Heuristic 3",
+    "pages": "p. 13"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "ALAMO-built empirical models proposed to guide experiments, but DFO coupled to experiments is called especially appealing because it may remove the need for predictive models",
+    "pages": "p. 27"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "a portfolio of DFO algorithms recommended over a single one (Sun et al. 2020)",
+    "pages": "p. 27"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Before adopting a widely used simple model, check the scope of the data it was built from (one acceptor, 26 devices) and whether practice has already beaten its predicted limit (11%) (p. 26).",
+   "Write a perspective as numbered open questions, each with its own subsection, so a reader can pick a problem (p. 8; pp. 9-15, 19-21, 24-27)."
+  ],
+  "coauthors": "Claire S. Adjiman, Dionisios G. Vlachos, Bhavik Bakshi, Christos T. Maravelias, Christos Georgakis",
+  "quotes": [
+   {
+    "text": "In the context of the BARON project for global MINLP optimization, molecular design motivated the transition from nonlinear to linear programming relaxations and the development of techniques for finding not just the best design but a list of designs or even all feasible designs",
+    "page": 13
+   },
+   {
+    "text": "Especially appealing in this context is the ability of DFO algorithms to optimize in conjunction with collecting experimental measurements, thus potentially eliminating the need for predictive models.",
+    "page": 27
+   }
+  ]
+ },
+ {
+  "id": "S116",
+  "year": "2021",
+  "title": "Spectral relaxations and branching strategies for global optimization of mixed-integer quadratic programs",
+  "read_level": "full",
+  "contribution": "Introduces eigenvalue-based convex QP relaxations (EIG, GEIG, EIGNS) for nonconvex QPs and MIQPs, proves each equal to a particular SDP and EIGNS best in its class, adds an eigenvector-based branching rule, and ships both as BARON's default, at least ten times faster than BARON without them on nearly half of the nontrivial solved instances.",
+  "problem_entry": "Polyhedral relaxations are weak and SDPs costly; the well-known smallest-eigenvalue convexification, despite its simplicity, is often much tighter than solvers' polyhedral relaxations, so it is refined (pp. 2, 4, 8, 10).",
+  "key_idea": "Convexify x'Qx by uniform diagonal perturbation using lambda_min of Q, of (Q, I + A'A), or of Z'QZ (approximated by a delta limit without computing Z), re-derived at every node on the unfixed submatrix; branch on the largest eigenvector entry; in BARON add the QP class to the LP/NLP/MILP portfolio with a KKT check and dynamic LP/QP frequencies (pp. 7-14, 19-23).",
+  "assumptions": "Finite bounds; Q symmetric, possibly indefinite; Cx <= d not used for convexification; strong duality needs a strictly interior point; spectral branching only for nonconvex binary QPs (pp. 1, 8, 11, 19, 22).",
+  "proof_devices": [
+   "Lagrangian dual of a generic SDP with quadratic constraints (Proposition 1, pp. 6-7)",
+   "Slater's condition by an explicit strictly feasible pair built from concave envelopes of x_i^2 (Propositions 2 and 5, pp. 8, 11)",
+   "when Slater fails, weak duality plus an explicit primal construction X = xx' + gamma Zv(Zv)' attaining the QP value (Proposition 9, pp. 14-16)",
+   "Rayleigh-quotient orderings and a monotone limit in delta of generalized eigenvalues (Propositions 3-4, 7-8, pp. 9-13)",
+   "four-step recipe (R1)-(R4) and feasible-set inclusion of SDPs giving best-in-class (Theorem 1, pp. 16-18); ordering against SDPs (Theorem 2, p. 19)",
+   "Gershgorin-circle argument behind the approximate spectral branching rule (pp. 20-21)"
+  ],
+  "experiments": "GAMS 30.1.0, Xeon X5650, one thread, 1e-6, 500 s, CPLEX/GUROBI forced into global mode, 1551 instances (CBQP, QSAP, BoxQP, EIQP); SDPs 1-2 orders of magnitude slower than spectral QPs; BARON vs BARONnoqp >=10x faster on nearly 50% of 412; >=2x faster than CPLEX on 80% of 445 and than GUROBI on >60% of 380; vs BARONqcr weaker root bounds (85%/93%) yet >=10x faster on nearly 70% of 442; no hold-out (pp. 23-30).",
+  "positioning": "Places itself among convex quadratic relaxations (separable, d.c./alphaBB, QCR); revisits a very well-known technique; differs from QCR in three ways (no reformulation, per-node update, eigenvalue instead of SDP); extends Faye and Roupin's equivalence (pp. 2, 5-6, 10, 18).",
+  "writing": "Four numbered contributions; each relaxation followed by its SDP-equivalence proposition; 'despite its simplicity' framing; brief conclusion without limitations (pp. 2-3, 8, 30).",
+  "limits_future": "Many BoxQP and EIQP instances unsolved by all solvers; gaps similar to GUROBI's on most unsolved instances; QCR's root bound is tighter; no limitation or future work stated in the conclusion (pp. 27, 29-30).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "steps 1, 3, 4, 5: root gap and solve time compared together; cheap QPs reproduce much of the SDP bound; per-node switching between LP and QP from observed bounds; KKT check on QP answers; the stronger static QCR root bound loses to cheaper per-node relaxations",
+    "pages": "pp. 19, 22-25, 30"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "steps 3-4: fixed protocol; named builds BARONnoqp/BARONnosb/BARON and a rival method rebuilt inside BARON (BARONqcr); the feature became the default version",
+    "pages": "pp. 23-24, 26, 29"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "other solvers compared on the authors' own libraries without a hold-out (the say-do gap SKILL.md records for his own products); baselines in their strongest fair mode (Heuristic 4)",
+    "pages": "pp. 23, 27-29, 32"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "re-derive cheap relaxations per node rather than adopt a stronger static reformulation",
+    "evidence": "QCR's SDP-based reformulation gives better root bounds on 85% (CBQP) and 93% (QSAP) of instances, yet BARON's spectral QPs recomputed on each node's unfixed submatrix are at least 10x faster on nearly 70% of 442 instances",
+    "pages": "pp. 10, 30"
+   }
+  ],
+  "transferable": [
+   "Before building an expensive relaxation, test whether a classical cheap one (smallest-eigenvalue convexification) already beats the solver's default, and refine it only then (pp. 2, 8; section 6.1).",
+   "Place a cheap relaxation exactly in the hierarchy by proving it equal to a specific SDP: Slater by an explicit interior point, and where Slater fails, weak duality plus an explicit primal construction (pp. 8, 11, 14-16).",
+   "Approximate an expensive projected quantity by a monotone limit computed once at the root in a few multiplicative steps (delta times 10, at most 5 iterations, relative tolerance 1e-3) (pp. 12-13, 22).",
+   "Score a cheap heuristic rule against the exact enumeration rule and the worst rule with a normalized percentage gap before putting it in the solver (pp. 20-21).",
+   "Run two relaxation classes side by side and adapt their solve frequencies multiplicatively from the observed bound difference (pp. 22-23).",
+   "To compare with a rival method, rebuild it inside your own solver as a named variant, so that only the relaxation and the branching differ (p. 29)."
+  ],
+  "coauthors": "Carlos J. Nohra, Arvind U. Raghunathan",
+  "quotes": [
+   {
+    "text": "The relaxation solution returned by the QP subsolver is used at the current node only if it satisfies the KKT conditions.",
+    "page": 22
+   },
+   {
+    "text": "Even though BARONqcr reports tighter root-node lower bounds than BARON for most of the instances considered in this comparison, during the branch-and-bound search, the lower bounds obtained by BARON improve much more quickly than those provided by BARONqcr.",
+    "page": 30
+   }
+  ]
+ }
+]
