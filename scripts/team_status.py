@@ -310,6 +310,9 @@ def coverage_short_md(sts: list[dict]) -> str:
 
 
 def main():
+    for _s in (sys.stdout, sys.stderr):  # Windows: the console / redirected output defaults to cp1252; the table prints ✓
+        if hasattr(_s, "reconfigure"):
+            _s.reconfigure(encoding="utf-8", errors="replace")
     ap = argparse.ArgumentParser(description="研究团队进度与深读覆盖统计")
     ap.add_argument("team_dir")
     ap.add_argument("--coverage", action="store_true", help="只输出覆盖表（markdown）")

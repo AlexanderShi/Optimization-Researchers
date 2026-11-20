@@ -480,6 +480,9 @@ def check_member(rep: Report, team: Path, m: dict, deep: bool, skip_quality: boo
 
 
 def main():
+    for _s in (sys.stdout, sys.stderr):  # Windows: the console / redirected output defaults to cp1252; the report prints ✓
+        if hasattr(_s, "reconfigure"):
+            _s.reconfigure(encoding="utf-8", errors="replace")
     ap = argparse.ArgumentParser(description="研究团队交付闸门（一次跑完手册第四节的检查）")
     ap.add_argument("team_dir")
     ap.add_argument("--tier", choices=["auto", "base", "deep"], default="auto")
