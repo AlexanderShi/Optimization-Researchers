@@ -9,8 +9,14 @@
     python3 scripts/answer_standard.py --apply [路径 …]      # 写入或刷新；已一致的文件不动
     python3 scripts/answer_standard.py --check --installed   # 另核对 ~/.claude/skills 里已安装的同名 skill
     python3 scripts/answer_standard.py --lint                # 只查标准块本身
+    python3 scripts/answer_standard.py --words [路径 …]      # 字数预算的词数：不算这一节
 
 路径可以是目录（递归找 SKILL.md）或某个 SKILL.md。退出码：有 ✗ 为 1，否则为 0。
+
+字数预算不算这一节（2026-11-20 用户决定）：它由本脚本统一生成、各 skill 都一样，不是成员自己的内容。
+T3.6（team-synthesize.js 的 word_budget / max_words）、T3.7（team-tighten.js）和 team_status.py 的 --max-words
+都按 --words 的数比：每行先打印预算词数，再打印路径、总词数和这一节（连同两行标记）的词数。词数按空白切分，
+与 wc -w 相同；标记缺一行或次序颠倒时这一节记 0，整篇都算。
 
 skill 类型的判定与插入位置：
     type: research-craft          → research-craft 块，插在「## Research Integrity Rules」/「## 研究诚信规则」之前
@@ -173,6 +179,22 @@ def current_block(text: str) -> str | None:
     return text[b.end():e.start()].strip("\n")
 
 
+def word_counts(text: str) -> tuple[int, int]:
+    """(总词数, 这一节连同两行标记的词数)。按空白切分，与 wc -w 相同；标记不成对时这一节记 0。"""
+    text = text.replace("\r\n", "\n")
+    total = len(text.split())
+    b, e = BEGIN_RE.search(text), END_RE.search(text)
+    if not b or not e or e.start() < b.end():
+        return total, 0
+    return total, len(text[b.start():e.end()].split())
+
+
+def budget_words(text: str) -> int:
+    """字数预算算的词数：这一节之外的部分（T3.6、T3.7 与 team_status.py 的 --max-words 都用它）。"""
+    total, block = word_counts(text)
+    return total - block
+
+
 def apply_block(text: str, kind: str, body: str) -> tuple[str | None, str]:
     """返回 (新文本或 None, 状态)。文本已规范成 \\n。"""
     b, e = BEGIN_RE.search(text), END_RE.search(text)
@@ -327,10 +349,19 @@ def main() -> int:
     mode.add_argument("--check", action="store_true", help="核对，不改文件")
     mode.add_argument("--apply", action="store_true", help="写入或刷新")
     mode.add_argument("--lint", action="store_true", help="只查标准块本身")
+    mode.add_argument("--words", action="store_true",
+                      help="只数词：每个 SKILL.md 打印字数预算算的词数（不算这一节）、总词数和这一节的词数")
     ap.add_argument("--installed", action="store_true",
                     help="--check 时另核对 ~/.claude/skills 里已安装的同名 skill 是否带同一份标准块")
     ap.add_argument("paths", nargs="*", help="目录或 SKILL.md；默认 product/ 与 teams/")
     args = ap.parse_args()
+
+    if args.words:
+        missing = [raw for raw in args.paths if not (Path(raw) if Path(raw).is_absolute() else REPO / raw).exists()]
+        for path in find_targets(args.paths or DEFAULT_ROOTS):
+            total, block = word_counts(path.read_text(encoding="utf-8"))
+            out(f"{total - block}  {rel(path)}  （总 {total} 词，其中 Answer Standard 一节 {block} 词）")
+        return 1 if missing else 0
 
     blocks = load_blocks()
     out(f"Answer Standard · {STANDARD.relative_to(REPO).as_posix()}")

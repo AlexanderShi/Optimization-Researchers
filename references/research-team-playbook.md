@@ -332,7 +332,7 @@ bash scripts/team_commit.sh $T/$M "increment($M): <label>"   # 之后带全体�
 | 重跑获取后，旧团队的 INDEX.md 最后一行（汇总行）变了 | 旧版脚本写的汇总行格式不同（如 DFO 的 Conn、Scheinberg、Audet） | 正常：只有这一行变，内容不变，跟着这一次的提交一起提交即可 |
 | `check_ledger.py` 退出码 2 | `--before` 的备份不存在：没跑 T3.7，或 scratch 丢了 | 没跑 T3.7 的成员只跑不带 `--before` 的锚点检查；scratch 丢了，用 `git show <精简前的提交>:<M>/SKILL.md` 取回 |
 | `check_ledger.py --before` 报 front matter、Activation Rules 不同 | 拿汇总前（`before-synth`）或增量前（`before-<label>`）的备份对比，没加 `--allow`：这两步按设计会改 researched 日期、description 和免责声明里的覆盖数字 | 用 `--allow` 放行：T3.6 `frontmatter,activation-disclaimer`，T4 `frontmatter-date,activation-numbers`；T3.7 不放行。放行后剩下的每一行 ✗ 都是问题，不凭眼睛判断「是不是故意的」 |
-| SKILL.md 膨胀到约 21k 词（DFO 当时） | 汇总时没有给字数预算 | `team-synthesize.js` 现在默认给 11,500 词预算并同时写 `09-evidence-ledger.md`；仍超预算再跑 T3.7 |
+| SKILL.md 膨胀到约 21k 词（DFO 当时） | 汇总时没有给字数预算 | `team-synthesize.js` 现在默认给 11,500 词预算并同时写 `09-evidence-ledger.md`；仍超预算再跑 T3.7。预算不算 Answer Standard 一节（各 skill 统一生成的标准块），用 `answer_standard.py --words` 量 |
 | 汇总提出的新方法站不住 | 排他性不过关 | 保留质疑复核；新的核心方法要有 ≥3 篇论文支撑，并过四重验证 |
 | 容器重启，工作丢了 | 容器是临时的 | 每一步 commit；T1 在 `to: "review"` 之后就 commit 调研笔记；scratch 里的提炼记录丢了，重跑 T1 的 `from: "synthesis"` |
 | 交付前模板闸门还有 `[TODO` | 某一步没清掉模板里标给它的项；轻量档留下了给深读档的项（DEEP-READING.md、RESOURCES.md 第 1 行和深读档占位行） | 每条 TODO 都写明由哪一步、按什么来源填：照它补上，数字只取脚本输出；轻量档照模板里的轻量档（base tier）写法改 |

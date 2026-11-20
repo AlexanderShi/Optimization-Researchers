@@ -249,7 +249,7 @@ Agent 3（过程证据）的prompt要额外强调：**找行为而不是找言�
 8. **汇总**：按卡片模板第三节的保守更新规则，先写 `08-deep-reading-synthesis.md`，再改 SKILL.md。
    - DFO 团队的流程是：汇总提案 → 保守修改 → 三个只读质疑者复核 → 修正。
    - 改完重跑 `quality_check.py`。
-   - 开写前就给 SKILL.md 定字数预算（团队模式默认约 11,500 词），长证据同时写进 `09-evidence-ledger.md`。仍超预算时再精简：把长证据移进账本，用 `python3 scripts/check_ledger.py <skill目录> --before <精简前的副本>` 证明无损（卡片 ID、页码引用、引文都还在，账本锚点都能解析）。
+   - 开写前就给 SKILL.md 定字数预算（团队模式默认约 11,500 词，不算 `scripts/answer_standard.py` 统一写入的 Answer Standard 一节，用它的 `--words` 量），长证据同时写进 `09-evidence-ledger.md`。仍超预算时再精简：把长证据移进账本，用 `python3 scripts/check_ledger.py <skill目录> --before <精简前的副本>` 证明无损（卡片 ID、页码引用、引文都还在，账本锚点都能解析）。
 
 需要网络可达 arxiv.org、api.unpaywall.org、api.crossref.org，以及各作者主页和机构仓库。没有开放全文的论文只写摘要级卡片，用户可以按上面的文件名补 PDF。PDF 与抽取文本不提交（版权）。以后的新论文、书的开放部分（目录、勘误、增补、前言、已发表书评）按增量处理（团队模式：`team-increment.js`，见手册第八节）。完整实例见 `product/dfo-team/DEEP-READING.md`。
 

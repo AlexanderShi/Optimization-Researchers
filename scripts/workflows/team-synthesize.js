@@ -26,8 +26,9 @@ export const meta = {
  *
  * Args specific to team-synthesize:
  *   args.word_budget target SKILL.md length in words (default 11500; the kit's lesson: ~11-12k, with the exhaustive
- *                    evidence in references/research/09-evidence-ledger.md written in the same pass)
- *   args.max_words   hard gate for wc -w SKILL.md (default word_budget + 1500)
+ *                    evidence in references/research/09-evidence-ledger.md written in the same pass). Words are counted
+ *                    outside the Answer Standard block: the first number of scripts/answer_standard.py --words
+ *   args.max_words   hard gate for that count (default word_budget + 1500)
  *   args.notes       optional {slug: "member-specific notes for the synthesis"} (e.g. known name collisions); a key that
  *                    is not a member of this run is logged
  *   args.from        optional first stage: "mine" (default), "edit" (08 exists; redo the SKILL.md edit), "verify" (alias
@@ -89,6 +90,9 @@ const SCR = String(a.scratch).replace(/\/+$/, '')
 const DATE = a.date
 const BUDGET = Number(arg('word_budget') || 11500)
 const MAXW = Number(arg('max_words') || BUDGET + 1500)
+// The budget does not count the Answer Standard block (scripts/answer_standard.py writes the same block into every
+// skill; 2026-11-20): measure with this command and read the first number it prints.
+const WC = sk => `python3 ${REPO}/scripts/answer_standard.py --words ${sk}/SKILL.md`
 const ALLOW = 'frontmatter,activation-disclaimer' // check_ledger.py --allow: what synthesis changes by design
 const MEMBERS = a.members
 if (a.notes !== undefined && a.notes !== null) {
@@ -161,7 +165,7 @@ function editPrompt(m, mine) {
 
 The synthesis note is ${SK}/references/research/08-deep-reading-synthesis.md and the card index is 07-paper-cards.md (mining summary: ${mine ? JSON.stringify(mine) : 'not available: this run resumed at Edit (args.from), so read 08 and 07'}).
 Your job (EDIT): update the skill conservatively so it is deeper and more usable, following paper-reading-card.md section 三.
-Word budget: SKILL.md is loaded into a model's context on activation, so distil, do not paste. It must end at about ${BUDGET} words or fewer (wc -w; hard limit ${MAXW}). Write the exhaustive evidence into ${SK}/references/research/09-evidence-ledger.md IN THE SAME PASS (not as a later clean-up): one section per SKILL.md item, each preceded by an explicit anchor line such as <a id="method-1"></a> and then a heading "## Method 1: <name>" (likewise heuristic-N, taste-marks, taste-warnings, anatomy-<short-name>, corrections, card-key). In SKILL.md put a pointer after each item, e.g. "(full evidence: references/research/09-evidence-ledger.md#method-1)". If a ledger already exists, extend it under the same anchors.
+Word budget: SKILL.md is loaded into a model's context on activation, so distil, do not paste. It must end at about ${BUDGET} words or fewer (hard limit ${MAXW}), counted by ${WC(SK)}: the first number it prints is the words outside the Answer Standard block, which scripts/answer_standard.py writes into every skill and the budget does not count. Leave that block, between its two marker lines, exactly as it is. Write the exhaustive evidence into ${SK}/references/research/09-evidence-ledger.md IN THE SAME PASS (not as a later clean-up): one section per SKILL.md item, each preceded by an explicit anchor line such as <a id="method-1"></a> and then a heading "## Method 1: <name>" (likewise heuristic-N, taste-marks, taste-warnings, anatomy-<short-name>, corrections, card-key). In SKILL.md put a pointer after each item, e.g. "(full evidence: references/research/09-evidence-ledger.md#method-1)". If a ledger already exists, extend it under the same anchors.
 0. Save a copy first: mkdir -p ${SCR} && cp -n ${SK}/SKILL.md ${backup(m)} (keep an existing copy: it is the pre-synthesis state).
 SKILL.md (use the section names the skill already has, in its language):
 - Core research methods: for each method keep **One line**; **Evidence**, reduced to Stated (the single strongest statement; verbatim with card and page if it is a quote), Practice (the 3–5 strongest cards with pages, e.g. "[card S012, pp. 9–11]"), Say–do (one line with the counts, e.g. "✅ stated + practiced; full texts: N cards"), Variants/corrections (at most 4 one-line bullets, each with its ✗/⚠ mark and card ref); the ledger pointer; **Steps**; **Applies to stage**; **Different from standard practice**; **Limitations**. Promote only what 08 promotes, in the same house format. Keep 3–7 core methods and the existing numbering. Never delete a method or its evidence: if the full texts contradict it, mark the contradiction and correct the claim, citing the card (the detail goes to the ledger).
@@ -178,7 +182,7 @@ Also:
 - Student mode: update references/proof-playbook.md (add or correct templates from the full texts; keep "inference" labels where a proof form is still inferred), references/open-problems.md (open problems the works themselves state in their conclusions, with card ids) and references/reading-path.md (re-rank with what the full texts show; every entry verified).` : ''}
 - Update ${SK}/references/research/01-publications.md (coverage from works.json and scholar.md) and 06-trajectory.md (from 08).
 - ${SK}/references/sources/RESOURCES.md: replace the template's deep-tier placeholder row (row 3, "[TODO: type] | [TODO: placeholder for the deep-tier rows…]") with the real rows, ✅ verified, numbered on from there; if there is no such row (the member was scaffolded at the base tier and upgraded), append the same rows after the last row, numbered on, and change a row-1 note "not harvested (base tier)" only if team-harvest.js has not already rewritten it (it normally has). The rows: the full-text index (papers/INDEX.md: counts of txt and no-oa; the texts stay local), the paper cards (../research/07-paper-cards.md: counts per read level, quotes verified), the deep-reading synthesis (../research/08-deep-reading-synthesis.md), the evidence ledger (../research/09-evidence-ledger.md) and the technique catalog (../technique-catalog.md). Row 1 (the publication list) belongs to team-harvest.js: do not add a second publication-list row. Where the full texts confirm a ⚠️ lead, upgrade it to ✅ with the card id in Notes. Resolve every [TODO: …] in RESOURCES.md that names team-synthesize.js or T3.6; a TODO that names an earlier step (T1, T3.1) and is still open means that step did not finish: leave it and report it, never guess its content.
-Gates (rerun until they pass): python3 ${REPO}/scripts/quality_check.py ${SK}/SKILL.md → 12/12; wc -w ${SK}/SKILL.md ≤ ${MAXW}; python3 ${REPO}/scripts/check_ledger.py ${SK} (every 09-evidence-ledger.md#… anchor in SKILL.md resolves); python3 ${REPO}/scripts/check_citations.py ${SK} → 0 problems (every card citation in SKILL.md, the ledger, the catalog and the notes names an existing card, pages only on cards read in full or in part and within the file's length; a substitute version is cited as [ID TR pp. …] with the version named on the card); python3 ${REPO}/scripts/check_links.py ${SK} → 0 broken links; grep -n -e '\\[TODO' -e '{{' ${SK}/references/sources/RESOURCES.md → no output; RESOURCES.md has a row linking each of papers/INDEX.md, 07-paper-cards.md, 08-deep-reading-synthesis.md, 09-evidence-ledger.md and technique-catalog.md (grep -c for each file name ≥ 1).
+Gates (rerun until they pass): python3 ${REPO}/scripts/quality_check.py ${SK}/SKILL.md → 12/12; ${WC(SK)} → first number ≤ ${MAXW}; python3 ${REPO}/scripts/check_ledger.py ${SK} (every 09-evidence-ledger.md#… anchor in SKILL.md resolves); python3 ${REPO}/scripts/check_citations.py ${SK} → 0 problems (every card citation in SKILL.md, the ledger, the catalog and the notes names an existing card, pages only on cards read in full or in part and within the file's length; a substitute version is cited as [ID TR pp. …] with the version named on the card); python3 ${REPO}/scripts/check_links.py ${SK} → 0 broken links; grep -n -e '\\[TODO' -e '{{' ${SK}/references/sources/RESOURCES.md → no output; RESOURCES.md has a row linking each of papers/INDEX.md, 07-paper-cards.md, 08-deep-reading-synthesis.md, 09-evidence-ledger.md and technique-catalog.md (grep -c for each file name ≥ 1).
 Edit only: SKILL.md, 01-publications.md, 06-trajectory.md, 09-evidence-ledger.md, technique-catalog.md, RESOURCES.md${m.student_mode ? ', the three student-mode files' : ''} (and 07/08 only to fix a link or a count).
 Return the structured summary (methods_before/after = number of method headings).`
 }
@@ -198,7 +202,7 @@ function lenses(m) {
 3. New heuristics / taste items / anti-patterns: ≥2 card ids each.
 4. Frontmatter description: count characters (must be < 1024; target ≈300 words at most) and check there is no keyword stuffing; "researched:" is ${DATE}.
 5. Honest Boundary and activation statement: do the coverage numbers match this member's row of python3 ${REPO}/scripts/team_status.py ${TEAM} --coverage? Are the remaining gaps stated?
-6. Word budget: wc -w SKILL.md ≤ ${MAXW} (target ${BUDGET}); the ledger exists; every 09-evidence-ledger.md#anchor in SKILL.md resolves (python3 ${REPO}/scripts/check_ledger.py ${SK}); python3 ${REPO}/scripts/check_links.py ${SK} is clean.
+6. Word budget: ${WC(SK)} → first number ≤ ${MAXW} (target ${BUDGET}; the Answer Standard block is not counted); the ledger exists; every 09-evidence-ledger.md#anchor in SKILL.md resolves (python3 ${REPO}/scripts/check_ledger.py ${SK}); python3 ${REPO}/scripts/check_links.py ${SK} is clean.
 6b. Deletion detector: python3 ${REPO}/scripts/check_ledger.py ${SK} --before ${backupRef(m)} --allow ${ALLOW} lists every card id, page reference and ≥20-character quote of the pre-synthesis SKILL.md that is now in neither SKILL.md nor the ledger, and protected sections that changed. The --allow items are the two changes synthesis makes by design (the frontmatter: researched: date and description; the first-activation disclaimer line in Activation Rules, now with the coverage): the script prints them as "~ allowed" lines, not problems. Every "✗" line it prints is a finding; do not excuse one by judgement.
 7. Language: new text in SKILL.md is in team.json "language".
 8. python3 ${REPO}/scripts/quality_check.py ${SK}/SKILL.md is 12/12.` },
@@ -223,7 +227,7 @@ Then run every gate and report each in gates (name, command, passed, detail):
 - ledger: python3 ${REPO}/scripts/check_ledger.py ${SK} → every SKILL.md → ledger anchor resolves
 - citations: python3 ${REPO}/scripts/check_citations.py ${SK} → 0 problems
 - links: python3 ${REPO}/scripts/check_links.py ${SK} → 0 broken
-- words: wc -w ${SK}/SKILL.md → ≤ ${MAXW}
+- words: ${WC(SK)} → first number ≤ ${MAXW}
 - templates: grep -n -e '\\[TODO' -e '{{' ${SK}/references/sources/RESOURCES.md → no output (a TODO naming an earlier step, T1 or T3.1, is reported in detail, never guessed), and RESOURCES.md has rows for papers/INDEX.md, 07, 08, 09 and technique-catalog.md (append any missing one)
 - index: python3 ${REPO}/scripts/build_card_index.py ${SK} --check → 07 matches the digests (after a card fix, rerun it without --check; exit 2 means a hand-built 07 in its own format: check its rows against the digests by hand instead)
 If a script does not exist in this checkout, do the equivalent check with python and say so in detail.
