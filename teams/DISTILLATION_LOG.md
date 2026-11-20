@@ -1,5 +1,23 @@
 # 蒸馏记录
 
+## 2026-11-20 (21) · 字数预算不计回答标准一节；Scheinberg 精简（T3.7）
+
+- 用户请求：「Merge and Push接着做」；问接下来做哪几项、回答标准一节算不算进预算时，选了「Sahinidis 深读」（另起分支，见下一条）和「不计入，只精简 Scheinberg (Recommended)」。分支 `word-budget`（worktree `../Optimization-Researchers-word-budget`），从 `main`（d18e4ef，PR #4 合并后）开出；合入 main 后按用户的「Merge and Push」推送
+- 来由：2026-11-14 起每个研究者 skill 多了回答标准一节（1,203 词），`team_status.py` 按整篇数，Burer 13,586、Audet 14,019、Scheinberg 14,273、Conn 13,087、Nocedal 13,088、Bertsimas 14,203 都过了 13,000 的 T3.7 门槛
+- kit（d181096、6e6d200）：
+  - `answer_standard.py --words`：每个 SKILL.md 一行，先是预算词数（不算这一节连同两行标记），再是路径、总词数和这一节的词数；`word_counts()`、`budget_words()`；路径不存在退出码 1
+  - `team_status.py`：`skill_words` 和 `--max-words`（13000）改用 `budget_words()`；导入不到 `answer_standard` 时整篇都算
+  - `team-synthesize.js`、`team-tighten.js`：目标、上限和闸门从 `wc -w` 改为 `--words` 的第一列，prompt 写明这一节原样不动
+  - 数法是 `str.split()`，与 `team_status.py` 原来一样。C locale 下的 `wc -w` 不算只由 →、✗、≤ 这类符号组成的词：Scheinberg 的 SKILL.md 上是 12,585 对 12,750，差的正好是 165 个这样的词（C.UTF-8 下 12,748）。所以以前工作流的 `wc -w` 闸门和 `team_status.py` 一直差约 1%，现在两边用同一个数
+  - 文档：工作流 README 参数表、手册失败模式一行、提炼框架 §十一、TEAM-KIT 本地修改表、RUNBOOK §4；`selftest.sh product/dfo-team` 全过（UTF-8 模式）
+- 新数法下的预算词数：Scheinberg 13,070（唯一超出）；Bertsimas 13,000（正好在上限，不算超）；Audet 12,816；Burer 12,383；Nocedal 11,885；Conn 11,884；Curtis 11,742；Dey 11,639；Powell 11,491；Vicente 11,365；Leyffer 10,533；Misener 10,393。圆桌不是研究 skill，不在预算内（council-roundtable 16,234）
+- 文档（16ce197）：MINLP README 的状态列换成新数，README、DEEP-READING 不再说 Burer 待 T3.7；理事会 README 的 MINLP 一行同步，Bertsimas 一行注明按新数法正好 13,000
+- Scheinberg T3.7（3 个 agent，约 113 万 token，73 分钟）：预算词数 13,070 → 11,547（总词数 14,273 → 12,750），账本 16,414 → 24,275 词（wc -w）。复核 9 条全部采纳，其中 1 条只采纳一半：Papers 列表不恢复题目（Burer、Misener、Leyffer 精简后的列表也没有题目，题目都在账本 #sources），改为注明引用前到账本核对；路由表去掉 Methods 一列（方法仍写在各工作流的步骤里）
+- 我重跑的闸门：`check_ledger.py --before`（不加 `--allow`）无损（58 个卡片 ID、216 处页码、62 段引文都在；front matter、Activation Rules、Research Integrity Rules、Student Mode 逐字不变）；`quality_check.py` 12/12；`check_citations.py` 0 problems；`team_check.py` 六队 0 失败（lp 11 项、milp 12、minlp 35、dfo 39、nonlinear 30、council 16；跳过的是本 worktree 里没有 txt 的摘录核对和客座提示）；`answer_standard.py --check` 39/39、`--installed` 78/78；`check_links.py` product 403 个文件、teams 33 个，0 断链
+- 安装：`katya-scheinberg` 按 `git ls-files` 复制进 `~/.claude/skills`（71 个文件，逐字节一致，无多余文件；覆盖前与 main 一致，原文件夹另存）。回退：按 d18e4ef 的跟踪文件重装这个文件夹
+- 成本：Scheinberg T3.7 约 113 万 token（3 个 agent）
+- 模型：Opus 5.5
+
 ## 2026-11-20 (20) · LP、MILP、MINLP 三队的团队层与 MINLP 深读收尾：team_check 全部 0 失败
 
 - 用户请求：「Fix这些失败」（接条目 (19)：`team_check.py` lp 2 项、milp 2 项、minlp 7 项失败，与 origin/main 相同）。分支 `team-layers`（worktree `../Optimization-Researchers-team-layers`），从 `main`（8d5c157）开出，完成后快进合入本地 main。未推送

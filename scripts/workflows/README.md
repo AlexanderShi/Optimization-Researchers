@@ -58,8 +58,8 @@ T3.2（`acquire_fulltexts.py`）和 T3.4（`plan_reading_batches.py --out-dir <s
 | `team-harvest.js` | `audit`（true）；`acquire`（false；true 时每人再跑一次 `acquire_fulltexts.py`，很慢）；`search_budget`（每人 2） |
 | `team-chase.js` | `chunk_size`（20）；`max_searches`（每篇最多搜几次，4）；`skip_ids`：`{"<slug>": ["S012", …]}`；`only_chunks`：`{"<slug>": [1, 3]}`，只（重）跑这几块；`merge`（true）；`search_budget`（每人 24，按块均分） |
 | `team-read.js` | `round`（1；`plan_reading_batches.py --out-dir` 打印的轮次）；`batch_files`：`{"<slug>": "<绝对路径>"}`（默认 `<scratch>/batches-<slug>-r<round>.json`）；`batches`：`{"<slug>": [{"bid","mode"}]}`，跳过计划 agent；`only`：`{"<slug>": ["c01", …]}`；`overwrite`（false：已有卡片的批次跳过，可续跑）；`retry`（true）；`search_budget`（每人 8，只给摘要批次） |
-| `team-synthesize.js` | `word_budget`（11500，09 同时写）；`max_words`（预算 + 1500）；`notes`：`{"<slug>": "给汇总 agent 的提醒"}`；`from`：`mine`（默认）、`edit`、`verify`（别名 `review`：人工改过 SKILL.md 之后只重跑三位复核员和修复，不重新挖卡片）、`fix`（只跑闸门和修复） |
-| `team-tighten.js` | `target_words`（11500）；`max_words`（目标 + 1500）；`force`（false） |
+| `team-synthesize.js` | `word_budget`（11500，09 同时写；词数不算 Answer Standard 一节，按 `answer_standard.py --words` 的第一列）；`max_words`（预算 + 1500，同一个数）；`notes`：`{"<slug>": "给汇总 agent 的提醒"}`；`from`：`mine`（默认）、`edit`、`verify`（别名 `review`：人工改过 SKILL.md 之后只重跑三位复核员和修复，不重新挖卡片）、`fix`（只跑闸门和修复） |
+| `team-tighten.js` | `target_words`（11500，与 T3.6 一样不算 Answer Standard 一节）；`max_words`（目标 + 1500）；`force`（false） |
 | `team-increment.js` | `label`（`inc-<date>`）；`find`：`["book-parts", "new-papers"]` 的子集（`[]`：不搜，只读手工准备的批次文件；`book-parts` 先看补搜留下的 `papers/book-leads.json`）；`batch_files`（默认 `<scratch>/batches-<slug>-<label>.json`；给了就不搜）；`round`；`since`（默认 `works.json` 的 `harvested`）；`what`：`{"<slug>": "新材料是什么"}`；`max_growth`（400 词）；`search_budget`（每人 10，给找材料的 agent）；`from`：`prepare`（默认）、`read`、`integrate`、`verify`（别名 `review`）、`fix`，同一个 `label` 续跑 |
 | `team-integrate.js` | `root_readme`（false）；`new_fault_lines`（2） |
 

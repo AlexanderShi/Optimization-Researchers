@@ -24,8 +24,9 @@ export const meta = {
  *   args.request  optional: the user's request in their own words; opens every agent prompt (set with make_args.mjs --request)
  *
  * Args specific to team-tighten:
- *   args.target_words target SKILL.md length in words (default 11500)
- *   args.max_words    hard gate for wc -w after tightening (default target_words + 1500)
+ *   args.target_words target SKILL.md length in words (default 11500), counted outside the Answer Standard block:
+ *                     the first number of scripts/answer_standard.py --words
+ *   args.max_words    hard gate for that count after tightening (default target_words + 1500)
  *   args.force        default false: tighten even when SKILL.md is already within target_words
  *   (old names targetWords / maxWords are still accepted, with a log line)
  *
@@ -33,7 +34,7 @@ export const meta = {
  *   Backup before tightening: <scratch>/<slug>-SKILL.before-tighten-<date>.md (kept if it already exists).
  * Gates: scripts/check_ledger.py --before <backup>, with NO --allow: tightening changes neither the frontmatter nor
  *   Activation Rules, so any "verbatim" problem is a real one (card ids + quotes before ⊆ after ∪ ledger; anchors resolve),
- *   scripts/quality_check.py 12/12, scripts/check_links.py, wc -w ≤ max_words.
+ *   scripts/quality_check.py 12/12, scripts/check_links.py, answer_standard.py --words ≤ max_words.
  * Next: commit per member; then team-integrate.js.
  * Cost baseline (worked example product/dfo-team/): ~3 agents and ~0.7M tokens per member.
  */
@@ -75,6 +76,9 @@ const TEAM = `${REPO}/${TEAM_REL}`
 const SCR = String(a.scratch).replace(/\/+$/, '')
 const DATE = a.date
 const TARGET = Number(arg('target_words') || 11500)
+// The budget does not count the Answer Standard block (scripts/answer_standard.py writes the same block into every
+// skill; 2026-11-20): measure with this command and read the first number it prints.
+const WC = sk => `python3 ${REPO}/scripts/answer_standard.py --words ${sk}/SKILL.md`
 const MAXW = Number(arg('max_words') || TARGET + 1500)
 const MEMBERS = a.members
 
@@ -108,7 +112,7 @@ function tightenPrompt(m) {
   return `${ctx(m)}
 
 Your job (TIGHTEN, lossless): bring SKILL.md to at most ~${TARGET} words without losing information or traceability.
-0. Measure: wc -w ${SK}/SKILL.md. ${a.force ? 'Tighten even if it is already within the target (args.force).' : `If it is already ≤ ${TARGET} words AND every 09-evidence-ledger.md#… link in SKILL.md resolves, change nothing and return skipped=true.`}
+0. Measure: ${WC(SK)}. The first number it prints is the count the budget uses: the words outside the Answer Standard block, which scripts/answer_standard.py writes into every skill and the budget does not count; leave that block, between its two marker lines, exactly as it is. ${a.force ? 'Tighten even if it is already within the target (args.force).' : `If it is already ≤ ${TARGET} words AND every 09-evidence-ledger.md#… link in SKILL.md resolves, change nothing and return skipped=true.`}
 1. Save a copy first: mkdir -p ${SCR} && cp -n ${SK}/SKILL.md ${backup(m)} (keep an existing copy: it is the pre-tighten state).
 2. Create or extend ${ledger(m)}: the full evidence behind SKILL.md, one section per SKILL.md item, each preceded by an explicit anchor line (<a id="method-1"></a>, then "## Method 1: <name>"; likewise heuristic-N, taste-marks, taste-warnings, anatomy-<short-name>, corrections, card-key). Move there, verbatim, every long evidence list, every per-work case list beyond the strongest few, long say–do tallies, long variant/contradiction explanations and long anatomy table rows. Start the ledger with a short Contents list of its anchors.
 3. In SKILL.md keep, for every core method: One line; Evidence reduced to Stated (the single strongest statement, verbatim with card and page if it is a quote), Practice (the 3–5 strongest cards with pages), Say–do (one line with the counts), Variants/corrections (at most 4 one-line bullets, each keeping its ✗/⚠ mark and card ref); a pointer "(full evidence: references/research/09-evidence-ledger.md#method-N)"; Steps; Applies to stage; Different from standard practice; Limitations. Heuristics and taste items: one or two lines each with at most 3 card refs, plus a ledger pointer. Signature work anatomy: keep the anatomies but at most ~2 lines per row. Research trajectory: keep the table, trim the prose. Keep a short "Corrections from the full texts" list (one line each) near the Honest Boundary so the corrections stay visible.
@@ -127,7 +131,7 @@ SKILL.md has just been tightened (report: ${JSON.stringify(t)}); the pre-tighten
 Check with scripts, not by eye:
 1. Lossless: python3 ${REPO}/scripts/check_ledger.py ${SK} --before ${backup(m)} (no --allow; every "✗" line it prints is a finding, none is excused by judgement): every card id, page reference and quotation in the pre-tighten copy appears in the new SKILL.md or in the ledger, and every SKILL.md → ledger anchor resolves. Every ✗/⚠ correction still appears somewhere, and each method's corrections are at least mentioned in SKILL.md.
 2. Frontmatter, Activation Rules, Research Integrity Rules${m.student_mode ? ' and Student Mode' : ''} are byte-identical to the pre-tighten copy (check_ledger.py --before checks this; the equivalent headings in another language count); the method numbering and headings, the Honest Boundary facts and coverage numbers and the Roundtable Card are unchanged in substance, and How to Use changed at most by a pointer (diff them).
-3. python3 ${REPO}/scripts/quality_check.py ${SK}/SKILL.md is 12/12; wc -w ≤ ${MAXW}; python3 ${REPO}/scripts/check_links.py ${SK} is clean; every 09-evidence-ledger.md#anchor linked from SKILL.md exists; python3 ${REPO}/scripts/check_citations.py ${SK} reports 0 problems.
+3. python3 ${REPO}/scripts/quality_check.py ${SK}/SKILL.md is 12/12; ${WC(SK)} → first number ≤ ${MAXW}; python3 ${REPO}/scripts/check_links.py ${SK} is clean; every 09-evidence-ledger.md#anchor linked from SKILL.md exists; python3 ${REPO}/scripts/check_citations.py ${SK} reports 0 problems.
 4. Usefulness: read the new SKILL.md end to end. Is each method still executable (steps intact), and is the strongest evidence still visible next to each claim? Is anything important now only in the ledger that should be back in SKILL.md?
 Report findings with severity (blocker = information lost or a protected section changed; major = gate failing or a method no longer usable; minor = polish) and a concrete fix each.`
 }
@@ -143,7 +147,7 @@ Then run every gate and report each in gates (name, command, passed, detail):
 - citations: python3 ${REPO}/scripts/check_citations.py ${SK} → 0 problems
 - quality_check: python3 ${REPO}/scripts/quality_check.py ${SK}/SKILL.md → 12/12
 - links: python3 ${REPO}/scripts/check_links.py ${SK} → 0 broken
-- words: wc -w ${SK}/SKILL.md → ≤ ${MAXW}
+- words: ${WC(SK)} → first number ≤ ${MAXW}
 If a script does not exist in this checkout, do the equivalent check with python and say so in detail.
 Edit only SKILL.md and 09-evidence-ledger.md. Report words before/after, the gates and what you declined.`
 }

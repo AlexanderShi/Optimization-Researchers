@@ -13,7 +13,8 @@
     cards     卡片批次文件数 · 卡片数 · 摘录数 · INDEX 里还没读的行（Read 列为 —，不含 skip）
     synth     07 / 08 / 09 / technique-catalog 是否存在
     stage     推断的当前阶段（T0 骨架 → T1 基础Skill → T3.1 发表列表 → T3.2 全文 → T3.5 卡片 → T3.6 汇总；
-              汇总后 SKILL.md 超过 --max-words 时注明要跑 T3.7。T3.6 与 T3.7 都写 09，所以不单列「T3.7 已跑」）
+              汇总后 SKILL.md 超过 --max-words 时注明要跑 T3.7。T3.6 与 T3.7 都写 09，所以不单列「T3.7 已跑」。
+              词数不算 Answer Standard 一节，与 answer_standard.py --words 的第一列相同）
     next      下一步该跑什么（团队层：T2 看圆桌里还有没有标 T2 的 TODO；T3.8 看 DEEP-READING.md 的覆盖表是否等于 --coverage）
 
 覆盖表（--coverage）:
@@ -61,6 +62,12 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 READ_LEVELS = ("carded", "skimmed", "abstract", "metadata", "unreadable")
+
+try:  # 字数预算不算 Answer Standard 一节（answer_standard.py 统一写入的标准块；2026-11-20）
+    from answer_standard import budget_words
+except ImportError:  # kit 单独拷走、没有 answer_standard.py 时整篇都算
+    def budget_words(text: str) -> int:
+        return len(text.split())
 
 
 def load_members(team: Path) -> tuple[dict, list[dict]]:
@@ -125,7 +132,7 @@ def member_status(team: Path, m: dict, with_quality: bool, max_words: int = 1300
 
     work_rows = [r for r in rows if not r.get("ID", "").startswith("B")]
     distinct = [w for w in works if not w.get("dup_of")]
-    skill_words = len((sk / "SKILL.md").read_text(encoding="utf-8").split()) if (sk / "SKILL.md").exists() else 0
+    skill_words = budget_words((sk / "SKILL.md").read_text(encoding="utf-8")) if (sk / "SKILL.md").exists() else 0
     book_rows = [r for r in rows if r.get("ID", "").startswith("B")]
     active = [r for r in work_rows if r.get("Role") != "skip"]
     read = {k: sum(1 for r in active if r.get("Read") == k) for k in READ_LEVELS}
@@ -319,7 +326,7 @@ def main():
     ap.add_argument("--short", action="store_true", help="与 --coverage 一起用：团队 README 的五列摘要（由全表相加）")
     ap.add_argument("--json", action="store_true", help="输出 JSON")
     ap.add_argument("--no-quality", action="store_true", help="不跑 quality_check.py（更快）")
-    ap.add_argument("--max-words", type=int, default=13000, help="汇总后 SKILL.md 超过这个词数就提示跑 T3.7（默认 13000）")
+    ap.add_argument("--max-words", type=int, default=13000, help="汇总后 SKILL.md（不算 Answer Standard 一节）超过这个词数就提示跑 T3.7（默认 13000）")
     a = ap.parse_args()
     if a.short and not a.coverage:
         ap.error("--short goes with --coverage")
