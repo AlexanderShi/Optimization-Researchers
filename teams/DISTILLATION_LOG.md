@@ -1,5 +1,51 @@
 # 蒸馏记录
 
+## 2026-11-20 (20) · LP、MILP、MINLP 三队的团队层与 MINLP 深读收尾：team_check 全部 0 失败
+
+- 用户请求：「Fix这些失败」（接条目 (19)：`team_check.py` lp 2 项、milp 2 项、minlp 7 项失败，与 origin/main 相同）。分支 `team-layers`（worktree `../Optimization-Researchers-team-layers`），从 `main`（8d5c157）开出，完成后快进合入本地 main。未推送
+- 失败的来由：LP、MILP、MINLP 三队的圆桌与 README 还是模板（团队层 T2 没跑）；MINLP 深读成员 Leyffer、Misener 只有卡片，没有 T3.6 综合（07–09、technique-catalog），团队 T3.8 也没跑
+- 顺序：LP、MILP 的 T2（轻量档，`deep_tier: false`）与 Leyffer、Misener 的 T3.6 四个工作流并行（文件互不重叠）；两位综合过闸后跑 MINLP 的 T2（`deep_tier: true`），再跑 T3.8
+- LP Team T2（11 个 agent，约 418 万 token，93 分钟）：lp-roundtable 三人入座、4 条 fault lines（两边都有证据；7 条单边对照删去并写明缺哪一边）；README、DEEP-READING 换成轻量档说明；三份 RESOURCES.md 逐行核对（Huangfu 从 T0 骨架补到 110 行）。两位只读复核 20 条意见（1 条严重：圆桌诚实边界写「没读过全文」，与成员 skill 引的页码矛盾），修了 17 条，2 条有理由不修
+- MILP Team T2（15 个 agent，约 497 万 token，95 分钟）：milp-roundtable 四人加 LP Team 两位客座（Forrest、Bixby）入座、6 条 fault lines；Lübbecke、Achterberg 的圆桌卡重写；四份 RESOURCES.md 核对。复核 21 条（4 条严重），修 15 条；客座文件夹的改动按规则留给主队
+- 两次运行报告的成员层问题，我逐条到原处核对后改了（不在工作流的改动范围内）：
+  - Forrest：零半割（2013）是 Caprara 写的生成器（Cbc `doc/cbc-parameters.md`：「This implementation was written by Alberto Caprara」；Cgl AUTHORS 里 Forrest 只是 PM），他的部分是把它接进 Cgl（提交 18d1a34f，2013-01-10）；CbcSymmetry 与轨道分支是共写（.cpp 头「hacked from CouenneSymmetry.cpp」「Jim Ostrowski (the good bits - rest JJHF)」，.hpp 署名 Belotti、Wächter；文件由他在 72cfa4f 加入），不再算「大部分是他的」；激活规则点名 milp-roundtable
+  - Bixby：方法数「六」改「五」（H11 在 T1 闸门降级后没改）；失败范例里 Huangfu-Hall 2018 的说法改为原文 p. 124「a small group of LP problems with relatively expensive spmv operations」（本地 PDF 第 8 页即印刷页 124）；笔记 05 加一条更正（SC 92-11、SC-95-45 当轮已由笔记 03 经 WebFetch 全文读过）
+  - Huangfu：[Ko05] 链接换成能打开的 Paderborn 副本（HTTP 200，172 页；PDF 第 98、117 页即笔记引的两处）
+  - Gleixner：评审风格的例子是原仓库 ambros-gleixner/VIPR 的 PR #1（2022-08-02/03 他的评审意见），不是 scipopt/vipr 的 #1（2024 年另一个 PR）；新加 [VIPR-orig]；圆桌字数限制改为以 brief 为准（brief 允许开场 260 词）
+  - Lübbecke：卡片新增标识符的解析日期（8 个 DOI 302、2 个 arXiv 200，本轮核对）
+- kit：`team_status.py`、`team_check.py` 在 cp1252 控制台打印 ✓ 会崩（两次运行的 agent 都碰到），加上与 quality_check.py 相同的 stdout/stderr UTF-8 设置；不加 `-X utf8` 复现崩溃、修后 exit 0；`selftest.sh product/dfo-team` 全过
+- MINLP · Leyffer、Misener 的 T3.6（各约 2 小时；Leyffer 6 个 agent 约 311 万 token，Misener 7 个约 320 万）：
+  - Leyffer：204 张卡（120 全读）；核心方法 6 → 7，新 Method 7「证明你声称的那个概念，用它给每个方法打分，写明没证明的部分」（25 篇）；新启发式 H11（模型与离散分开、由粗到细）、H12（每个技巧配一个可算的小例子）；没有方法降级，按全文收窄几处（Method 6 的「线性 → 凸 → 非凸」改为待复测的默认，全局证书改为「副线，不是没有」，MIPDECO 命名早到 2013）。复核 43 条，修 41 条
+  - Misener：146 张卡（77 全读）；仍是 5 个核心方法；新 H11「便宜的松弛失败处才上贵的」（11 篇，原未核实的 U2 解决），H6 并入 H4，H10 写成可执行步骤；Method 5 收窄到求解器对比论文，Perl 复核限定在 2013–2014 的求解器论文。复核 51 条，修 49 条；引用闸门卡在笔记 03 里的 Xeon 型号 X5650（检查器把它当卡片 ID），我把它放进行内代码（检查器设计好的豁免写法）
+  - 两人激活规则里的圆桌一行还写「no paper cards yet」，T3.6 只许改免责声明行；我在 T3.6 闸门之后作为操作者改成先引卡片，删掉两处「已过时」的说明，账本各加一条日期说明；与汇总前副本逐行比对，只有免责声明行和这一行（Misener 另有 U1 或 U3–U9 一处）变了
+  - T3.7 精简（两人都超 11,500 词）：Leyffer 12,613 → 11,658（3 个 agent 约 122 万 token，73 分钟；复核 14 条全修），Misener 12,030 → 11,508（约 94 万，49 分钟；8 条全修）；两人 `check_ledger --before`（不加 --allow）无损
+  - 声明抽审（各 20 条，seed 1，零上下文审计 agent，各约 19 万 token）：两人都是 18 supported、2 partial、0 unsupported。partial 逐条到卡片和全文核对后收窄：Misener 的 BARK 采集函数 MIP 只求到 10% gap / 100 s；MEng 一句在 T3.7 已移出 SKILL.md、账本里加注；Leyffer 的 S031 p. 18 在 T3.7 已从 Method 7 删去；2026 年对比论文那一行补上卡片的成功率（MacMPEC 90.00% 对 92.14–94.24%），引文在 arXiv 全文 PDF 第 34 页逐字核对。两份 10-claim-audit.md 各追加一节 Follow-up
+- MINLP Team T2（17 个 agent，约 662 万 token，120 分钟；`deep_tier: true`，两位综合过闸后才跑）：minlp-roundtable 六人入座、6 条 fault lines（两边都有证据；9 条单边对照删去并写明缺哪一边）；README 填好；六份 Roundtable Card 核对，五份改了分歧行（Misener 的卡原写「没有记录在案的争论」，她的笔记 05 其实记了三处），Sahinidis 未改；六份 RESOURCES.md 核对。两位只读复核 17 条意见（0 blocker、4 major），修 16 条；DEEP-READING 状态表不在本步可改范围，留下
+- 我核对后改的（不在 T2 改动范围内）：
+  - Burer：COAP 2009 最佳论文奖记在 2008 年 Math. Program. 那篇（S007）的 Reception 行，奖状原文（H001 p. 567）写的是 box-QP 那篇（COAP 43:181–195，S018）；改了该行，账本加更正
+  - Grossmann、Sahinidis：两人深读停在 T3.2（全文已取，没有卡片），`team_check.py` 按无卡片判为轻量档，模板扫描不放过 RESOURCES.md 里留给 T3.6 的占位行；改成真实的全文索引行（1312 行 442 篇全文；381 行 28 篇），以后跑 T3.6 时按 kit 规则追加新行
+  - DEEP-READING.md 阶段表：T3.1–T3.7 按条目 (9) 与本轮记录打勾。复核员的建议写「T3.7：Leyffer、Misener、Dey」，查日志后 Dey 没跑过 T3.7（2026-10-10 时低于 13000 词，不需要），按实际写
+  - Misener 账本：补记 T2 删去卡片里与激活规则不一致的引用规则行
+  - 抽查 T2 新写的 4 处引文（Fletcher–Leyffer 1994「erroneous」、P-split 的 folklore 一句及其引用的 Trespalacios–Grossmann 2015、Dey S129、Burer S043），都在本地全文里逐字找到
+- MINLP T3.8（6 个 agent，约 232 万 token，73 分钟）：
+  - README、DEEP-READING 按实际状态重写：Leyffer、Misener、Dey 完成；Burer 完成到 T3.6，`SKILL.md` 13,586 词超出 13,000 词预算（2026-11-14 生成的回答标准一节算在内），`team_status.py` 给出的下一步是 T3.7；Grossmann、Sahinidis 写成进行中（T3.2），不留 TODO。覆盖表逐字取自 `team_status.py --coverage` 与 `--coverage --short`，连同它的提示行（1460 篇已索引未读 = 1172 + 288）。四位成员的卡片摘录重核：Leyffer 329 条（323 逐字、6 条忽略空白与符号后一致）、Misener 222、Burer 138、Dey 258 逐字，0 条找不到
+  - minlp-roundtable：入座表补上 Burer、Dey 在 T3.6 新增的方法 6；fault line 不加不减（六条已是上限）。FL4 改以 box-QP 论文本身为据（S018 pp. 12–13：SDP 分支定界 90 例全解，LP 分支切割 25 例失败、小规模上更快），补 Chen–Burer 对 Couenne 的胜负两面（S008 p. 16）与 Dey 一侧自己的记录（S067：灵敏度界从 Burer 重构的余正对偶出发，规模「limited by the SDP solver」）；FL5 补 Misener 2016 年纪念文章（S143，只算致意，不算答复）与 Ceccon–Misener 2022（S072），「在 Dey–Gupte 启发式上构建」改为原文的「state of the art」；FL2 的 hull folklore 句改引 Misener 自己的卡片 S046 p. 2，参考文献 [66] 归 Grossmann 笔记 05 §3.1（卡片没记）
+  - 两位只读复核 18 条（2 条阻断，都是 DEEP-READING 的圆桌一行把 FL2 记成新增了卡片；3 条重要，其一是 Misener 2016 年 AIChE J. 论文 S064 在 Imperial Spiral 有 CC BY 4.0 的出版版本，追全文时漏掉）。修复轮 18 条都采纳，两条部分不改：给 S046 卡片补参考文献编号（成员卡片不在本步范围，缺口记进 DEEP-READING「What is still missing」）；S064 没有本地全文，「How to extend」单列保存与抽取一步
+  - 我抽查 FL4 的新证据：S018 卡片 pp. 12–13 的 90 例与 25 例、S008 卡片 p. 16 Couenne 胜出的原话、S067 全文 p. 36「limited by the SDP solver」（txt 里跨行）、Crossref 上 Cifuentes–Dey–Xu 的 Math. Program. 216(1–2), 379–424（2025-08-25 在线，2026-03 印刷，圆桌按卷期写 2026），都对上
+- 文档（三队圆桌填好之后）：
+  - optimization-lead：路由表的团队讨论一列写上三个圆桌（lp-roundtable 3 人全入座；milp-roundtable 4 人加 LP Team 2 位客座、默认入座 3 人；minlp-roundtable 6 人、默认入座 3 人）；`discuss <team>` 五队都可用；诚实边界改为「没有语料团队 skill，一声答复是成员视角；圆桌 2026-11-19 填好，走 `discuss <team>`」
+  - council-roundtable：载入步骤与代表简报不再把 LP、MINLP 圆桌称作模板（找不到时写「not installed」）；Outside the Council 把 LP 求解器内部与逻辑密集的工程设计分别指向 lp-roundtable、minlp-roundtable；诚实边界注明两队圆桌晚于理事会的 FL1–FL6，后者不引它们
+  - 理事会 README：安装 37 个文件夹，两段安装循环不再跳过三个圆桌；LP、MINLP 状态行（MINLP：混合档，四位深读，T2 2026-11-19、T3.8 2026-11-20）与状态日期；用法与诚实边界同步。`product/README.md` 去掉三处「模板：团队层 T2 未运行」
+- 闸门（合入前）：`team_check.py` lp 11 项 0 失败（1 项跳过：Forrest、Bixby 在 milp-team 作客座的提示）、milp 12/0、minlp 35/0（0 跳过）、dfo 39/0、nonlinear 30/0、council 16/0（跳过的是本 worktree 里没有 txt 的摘录核对：dfo 5、nonlinear 2、council 1）；`answer_standard.py --check` 39/39、`--installed` 78/78；`distill_check.py teams --installed` 0 ✗（dfo 7 ⚠、nlp 4 ⚠，同前）；`check_citations.py --roundtable` minlp 49 处成员卡片引用 0 问题，lp、milp 0 问题；`check_links.py` product 403 个文件、teams 33 个，0 断链；三队与理事会的 `.md` 里没有 `{{`、`[TODO`
+- 安装：本分支改过的 18 个文件夹按 `git ls-files` 复制进 `~/.claude/skills`（543 个文件，逐字节一致，无多余文件）：15 个覆盖（覆盖前核对已装副本与 main 一致，只有 Grossmann 的 `works.json` 还缺 1c7b716 补的 H027 arXiv 编号；原文件夹另存一份），lp-roundtable、milp-roundtable、minlp-roundtable 首次安装。37 个已装文件夹与本分支逐个比对一致，跟踪文件合计 56 MB；`--installed` 78/78。回退：删掉三个圆桌文件夹，其余 15 个按 8d5c157 的跟踪文件重装
+- 未做：
+  - Burer 的 T3.7：他的 `SKILL.md` 只因回答标准一节（1,203 词）超出 13,000 词预算；算上这一节，Audet、Scheinberg、Conn、Nocedal、Bertsimas 也超，不算只有 Scheinberg 超（13,070）。是精简这几位还是预算不计回答标准一节，由用户定
+  - Grossmann、Sahinidis 的深读（T3.3 追全文起），之后重跑 T3.8
+  - 已在本地的全文只有摘要或元数据卡：Leyffer S033、S127，Misener S092（博士论文）、S150、S151；需 OCR 的：Leyffer 6 篇、Misener S116；S064 的开放全文待保存
+  - 客座卡片没写 MILP 成员的分歧行（Forrest 写「none documented」，Bixby 只写 Huangfu、Forrest），要补得在 LP 跑卡片步再重跑 MILP T2；LP、MILP 成员深读档
+- 成本：工作流与审计共 70 个 agent，约 2,694 万 token（LP T2 418 万、MILP T2 497 万、Leyffer T3.6 311 万、Misener T3.6 320 万、T3.7 两人 216 万、声明抽审两份约 38 万、MINLP T2 662 万、T3.8 232 万）
+- 模型：Opus 5.5
+
 ## 2026-11-19 (19) · LP Team 与 MILP Team 接入回答标准，Lead 分派到 MILP Team
 
 - 用户请求：「进一步提高LP team 和MILP team」。分支 `lp-milp-pro`（worktree `../Optimization-Researchers-lp-milp-pro`），从 `main`（184882d，条目 (16)–(18)）开出，先 merge `origin/main`（d2a12bd，PR #3：MILP Team 四位成员与 milp-roundtable 模板、LP Team 的 Forrest 与 Bixby、kit 的 T1 封存题验证）。未推送
