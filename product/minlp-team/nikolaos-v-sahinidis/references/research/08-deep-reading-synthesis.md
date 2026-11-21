@@ -12,7 +12,7 @@
 |---|---|---|
 | Card entries | 294 in 30 batch files: round 1 core c01–c12 (41 cards) and supplement s01–s10 (72); round 2 abstract/metadata a2-01–a2-06 (176); round 3 core c3-01 (2) and supplement s3-01 (3) | digests; 07 |
 | Read level | full 110 · partial 5 · abstract 116 · metadata 60 · unreadable 3 | digests |
-| Works with a card | 288 distinct IDs (S 280, H 13, D 1). Six works have two cards: S025, S010, S032, S028, S053 (abstract card in round 2, full card in round 3) and S147 (metadata and unreadable) | digests |
+| Works with a card | 288 distinct IDs (S 274, H 13, D 1). Six works have two cards: S025, S010, S032, S028, S053 (abstract card in round 2, full card in round 3) and S147 (metadata and unreadable) | digests |
 | Index | INDEX.md has 381 rows. All 270 rows not marked skip have a card; of the 111 Role = skip rows, 18 carry metadata or unreadable cards (no method link, no candidate) and 93 have none | INDEX.md after `mark_read_from_cards.py` (carded 110, skimmed 5, abstract 111, metadata 60, unreadable 2, — 93) |
 | Coverage row (`team_status.py`) | 409 Scholar rows · 381 distinct works indexed · 115 open full texts · 110 read in full · 5 in part · 111 abstract only · 44 metadata only incl. unreadable · 111 skipped · 0 book material · 435 quotes verified | 07 |
 | Quote gate (2026-11-20) | 435 quotes: 435 exact, 0 equal up to spacing or symbols, 0 not found | `verify_card_quotes.py` |
