@@ -187,7 +187,9 @@ def main():
         before_idx, before_txt = index_status(papers), txt_ids(papers)
         cmd = [sys.executable, str(HERE / "acquire_fulltexts.py"), str(skill)]
         print("running: " + " ".join(cmd))
-        out = subprocess.run(cmd, capture_output=True, text=True)
+        # acquire_fulltexts.py writes UTF-8 (it reconfigures stdout); decoding with the locale's code page (cp1252 on a
+        # Windows console) raised UnicodeDecodeError in the reader thread and left out.stdout as None (2026-11-20)
+        out = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace")
         tail = [line for line in out.stdout.strip().splitlines() if line.strip()][-3:]
         for line in tail:
             print("  " + line)
