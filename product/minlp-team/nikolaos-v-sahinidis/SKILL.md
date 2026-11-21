@@ -162,7 +162,7 @@ Six methods pass the four checks (recurrence, say–do, executable, exclusive); 
 - Say–do: ✅ stated + practised, 2000–2026; 60 cards (46 / 15 / 0), 42 read in full or in part.
 - Variants/corrections:
   - ⚠ A speed device, not a convergence requirement [S046 arXiv pp. 2, 9].
-  - ⚠ Step 4 by edition: probing off by default in 2000–02, depth-scheduled from 2003, automatic from 2015, learned in 2025 [S077 p. 49; S162 p. 43; S095 p. 10; S159 v15.2 pp. 22–23; S212 p. 16].
+  - ⚠ Step 4 by edition: probing off by default in 2000–02, depth-scheduled from 2003, automatic from 2015 [S077 p. 49; S162 p. 43; S095 p. 10; S159 v15.2 pp. 22–23]; a learned on/off rule for probing was proposed in 2025, without saying whether it ships in BARON [S212 pp. 3, 10–12].
   - ⚠ A reduction can remove enumeration altogether (an IP reduced to a linear system over F2) [S198 pp. 2–5].
 
 **Steps**:
@@ -198,14 +198,14 @@ Six methods pass the four checks (recurrence, say–do, executable, exclusive); 
 3. Fix a protocol (modeling system, threads, time limit, tolerances, machine) and keep it across papers; the group's 2014–2026 default: GAMS, one thread, 500 s, optca and optcr 10^-6, one Xeon `X5650` machine class [03 §B1]. Print version, build and the paper to cite in every log [S112 v17.4.1 p. 10].
 4. Evaluate every idea as a named build with the feature on and off (DM8), against only those solvers that allow the same switch; report library by library, with the exact option lists (EP1).
 5. Turn each paper's instances into a public library and add it to the development set.
-6. Track progress by rerunning old versions on the same hardware and set (EP9); report an old gain that is gone [S190 p. 15].
+6. Track progress by rerunning an old protocol on its problem set, each solver tagged same, updated or new (EP9) [S270 p. 5]; report an old gain that is gone [S190 p. 15].
 7. Keep a dated release log naming serious bugs and their sources; switch off, fix, reactivate in public.
 
 **Applies to stage**: algorithm design, experiment design, release.
 
 **Different from standard practice**: not a fresh prototype per paper; the cumulative production code is instrument and judge, and the paper follows the code.
 
-**Limitations**: era- and resource-bound (a code under his control since 1991, a company since 2001) [03 §A1]; the solver-line code is closed or "on request" [03 §F2]; the development set contains the libraries later used in claims, so overtraining is possible [03 §A2, E2]; TOF staff first-author the BARON-internal papers of 2025–26 [S212 pp. 1, 16; S239 p. 1]; his own coding share is undocumented. Lone version: contribute modules to an open solver; keep one protocol and changelog across papers; if the solver is closed, test through its channels (EP10) [S044 p. 16; S239 p. 21].
+**Limitations**: era- and resource-bound (a code under his control since 1991, a company since 2001) [03 §A1]; the solver-line code is closed or "on request" [03 §F2]; the development set contains the libraries later used in claims, so overtraining is possible [03 §A2, E2]; TOF staff first-author two BARON-internal papers of 2025–26 [S212 pp. 1, 16; S239 p. 1], and a third, first-authored at Georgia Tech, put its cuts into BARON as C routines [S190 pp. 1, 15]; his own coding share is undocumented. Lone version: if the solver is closed, test through its channels (EP10) [S044 p. 16; S239 p. 21]; contributing modules to an open solver and keeping one protocol and changelog across papers is this skill's inference.
 
 ### Method 3: Make the black box algebraic, and keep the algebra small
 
@@ -280,7 +280,7 @@ Six methods pass the four checks (recurrence, say–do, executable, exclusive); 
   - ⚠ In 2004 LP-only was argued, not measured, while the code still linked NLP and SDP solvers [S006 pp. 3, 7, 23].
 
 **Steps**:
-1. For each candidate relaxation, measure gap closed, time and numerical failures on a library; never accept "stronger" without the other two; count effects in classes, losses included (EP3) [S003 pp. 22–23]. A proven dominance order (PD4 [S006 pp. 12–16; S028 pp. 3–14; S018 pp. 2–3, 8, 16]) drops a candidate only when another is at least as strong and no more expensive; price the rest, dominated ones included, and keep a cheap balance relaxation when the strongest is orders of magnitude slower (700 QCQPs: DNN/SRLT about 3% gap at about 400 s, DLG1 13% in a few seconds, SD 19% [S018 pp. 1, 18–19, 27]; the (R7) LP chosen over the tighter, slower (R8) [S053 pp. 21–22]).
+1. For each candidate relaxation, measure gap closed and time on a library, and weigh reliability: nonlinear relaxations pay off "only if they can be solved with sufficient speed and reliability" [S003 p. 1]; never accept "stronger" without the time; count effects in classes per metric [S003 pp. 22–23] and keep the losses in the count (EP3) [S239 pp. 26–27; S190 p. 16]. A proven dominance order (PD4 [S006 pp. 12–16; S028 pp. 3–14; S018 pp. 2–3, 8, 16]) drops a candidate only when another is at least as strong and no more expensive; price the rest, dominated ones included, and keep a cheap balance relaxation when the strongest is orders of magnitude slower (700 QCQPs: DNN/SRLT about 3% gap at about 400 s, DLG1 13% in a few seconds, SD 19% [S018 pp. 1, 18–19, 27]; the (R7) LP chosen over the tighter, slower (R8) [S053 pp. 21–22]).
 2. Default node subproblems to LP (MIP with integers); represent convex pieces by outer-approximating cuts, lifted layer by layer and added only when violated (DM3, DM4) [S003 pp. 3–7, 15].
 3. When a stronger relaxation is too slow, find a cheaper object that reproduces most of its bound (quadratic cuts, multiterm or lifted LP inequalities) and ship that, the expensive step at the root only (DM1) [S133 arXiv pp. 18–19].
 4. Admit a nonlinear relaxation only with a fail-safe path, switching relaxations per node from observed performance (DM10) [S116 arXiv pp. 22–23].
@@ -523,7 +523,7 @@ Say "no distillable Sahinidis method" and label any generic advice "not Sahinidi
 - **2007-2020**: at CMU with DOE NETL and industry: DFO benchmarks, ALAMO, ML with optimization, BARON's second generation (doi:10.1007/s10898-012-9951-y); the crystallography and protein line thins out and is absent from the cards after 2015 [08 §8].
 - **2020-**: at Georgia Tech ISyE: MIP/MINLP theory with colleagues, ML for solvers, norm convexification, BAM, self-driving labs (doi:10.1007/s10898-024-01424-x); co-supervised network design with Dey, built partly outside BARON [S128 arXiv pp. 17–19].
 
-Turns follow institutional moves and funding with a 1-3 year lag; the engine stays (inferred) [06 §4]; the full texts agree [08 §8]. Constant: certified optima as the yardstick (1999–2026) and duality-based reduction (2000–2025) [S025 pp. 14–15; S272 p. 8; S077 p. 12; S190 pp. 4–9]. ([full evidence](references/research/09-evidence-ledger.md#trajectory))
+Turns follow institutional moves and funding with a 1-3 year lag; the engine stays (inferred) [06 §4]; the full texts agree [08 §8]. Recurring, but not constant: a known optimum as the yardstick, certified by BARON in 1999 [S025 pp. 12, 15], the best value the compared solvers found in 2009, 2017 and 2025 [S044 p. 15; S046 p. 16; S170 p. 26], and of unstated origin in the 2026 slides [S272 p. 8]; range reduction, duality-based in 2000 [S077 p. 12] and driven by the incumbent in 2025 [S190 pp. 4–9]. ([full evidence](references/research/09-evidence-ledger.md#trajectory))
 
 ### Latest
 
@@ -590,7 +590,7 @@ This skill is distilled from public information and has these limits:
 One line each; detail in the [ledger](references/research/09-evidence-ledger.md#corrections).
 
 - Methods 1, 3, 5: "not read" → read [S077 p. 15; S006 p. 15; S039 manuscript pp. 7–9; S003 pp. 1–2]; still abstract-level: 1995–96 [S008; S013], 2014 [S009], 2018 [S030].
-- Method 2: TOF staff first-author the BARON-internal papers [S212 p. 1; S239 p. 1], code authorship undocumented; the fixed protocol dates from the 2010s [S006 pp. 22–26].
+- Method 2: TOF staff first-author two BARON-internal papers [S212 p. 1; S239 p. 1], a Georgia Tech first author a third [S190 p. 1], code authorship undocumented; the fixed protocol dates from the 2010s [S006 pp. 22–26].
 - Method 4: the 2013 hold-out is an affine transform [S001 p. 41]; 2022 lacks developer rounds and hold-out [S063 p. 13].
 - Honest Boundary: the science of heuristics is practised, now Method 6 [S119 preprint p. 18].
 - Workflow B1 step 3: co-authored sources exist [H007 pp. 14, 17; S165 manuscript p. 11].

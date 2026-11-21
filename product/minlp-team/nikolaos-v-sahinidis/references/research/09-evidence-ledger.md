@@ -9,7 +9,7 @@
 - Heuristics: [1](#heuristic-1) · [2](#heuristic-2) · [3](#heuristic-3) · [4](#heuristic-4) · [5](#heuristic-5) · [6](#heuristic-6) · [7](#heuristic-7) · [8](#heuristic-8) · [9](#heuristic-9) · [10](#heuristic-10) · [11](#heuristic-11) · [12](#heuristic-12)
 - Anatomies: [branch-and-reduce 1996](#anatomy-branch-and-reduce) · [MINLP study 2004](#anatomy-minlp-2004) · [polyhedral branch-and-cut 2005](#anatomy-polyhedral-branch-and-cut) · [approximation algorithms 2004](#anatomy-approximation-hens) · [DFO review 2013](#anatomy-dfo-review) · [ALAMO 2014](#anatomy-alamo) · [hybrid LP/NLP 2018](#anatomy-hybrid-lp-nlp)
 - [Anti-patterns](#anti-patterns) · [Trajectory](#trajectory) · [Lineage and collaboration](#lineage) · [Inner tensions](#inner-tensions) · [Roundtable Card](#roundtable-card)
-- [Honest Boundary](#honest-boundary) · [Corrections](#corrections) · [Rejected updates](#rejected) · [Sources](#sources) · [Card key](#card-key)
+- [Honest Boundary](#honest-boundary) · [Corrections](#corrections) · [Rejected updates](#rejected) · [Claim audit](#claim-audit) · [Sources](#sources) · [Card key](#card-key)
 
 > Date: 2026-11-20 (stage T3.6, first synthesis round). The full evidence behind `../../SKILL.md`. SKILL.md keeps, per item, the strongest statement and cards, a one-line say–do count, at most four variant or correction bullets and a pointer to the matching section here. Each section has up to four parts: **Full-text evidence** (copied word for word from `08-deep-reading-synthesis.md`, which is traceable to `cards/`, or taken from the named cards), **Variants, contradictions and proposals** (08 §3 and §5.3), **Added in T3.6** (what this pass wrote into SKILL.md, with card ids) and **Before T3.6 (moved verbatim)** (the SKILL.md item as it stood on 2026-10-10, built from web research, so nothing is lost; its `[02 I5]`-style keys point to the web-research notes `01-…06-*.md` in this folder, its headings are set in bold and its links are re-pointed to work from this folder). After the stage's three read-only reviews (fidelity, rules, usefulness), **Review fixes (T3.6)** blocks record what changed and why, with card ids; where one contradicts an *Added in T3.6* line, the Review fixes block describes the current SKILL.md. Copied 08 text is left as copied and corrected in these blocks (08 itself is edited only for links and counts).
 
@@ -1884,6 +1884,38 @@ This skill is distilled from public information and has these limits:
 
 - Item 7: the verdict *inside Method 3's own scope clause* holds for S086 only; S181 and S183 are kept as marked contradictions, the range of co-signed work rather than a change of method ([Method 3](#method-3)). Method 3 is still not deleted or narrowed, as item 7 rejects.
 - Item 4 now lands in Method 5's *Different from standard practice* line and quick-check item 7; the warning sign of the same name left the taste list to keep the criteria at eight ([warning signs](#taste-warnings)).
+
+<a id="claim-audit"></a>
+
+## Claim audit (2026-11-20)
+
+Two independent auditors judged 20 sampled claims against their cards ([10-claim-audit.md](10-claim-audit.md)): 15 supported, 5 partial, 0 unsupported. The partial ones, and the lines the auditors flagged outside the sample, were checked on the cards and the full texts and narrowed in SKILL.md. The lines as they stood before the audit:
+
+### Before the claim audit (moved verbatim)
+
+**Method 1, evidence by edition (outside the sample: the S212 card says it is not stated whether the learned rule ships in BARON, and S212 p. 16 holds future work and the conflict-of-interest note)**
+
+  - ⚠ Step 4 by edition: probing off by default in 2000–02, depth-scheduled from 2003, automatic from 2015, learned in 2025 [S077 p. 49; S162 p. 43; S095 p. 10; S159 v15.2 pp. 22–23; S212 p. 16].
+
+**Method 2 step 6 (k = 3: S190 p. 15 shows an old gain that is gone, not reruns on the same hardware; the rerun of an old protocol with solvers tagged same, updated or new is S270 p. 5)**
+
+6. Track progress by rerunning old versions on the same hardware and set (EP9); report an old gain that is gone [S190 p. 15].
+
+**Method 2 Limitations (k = 6: S044 p. 16 and S239 p. 21 support only testing a closed solver through its channels; outside the sample, S190 pp. 1, 15 is a 2025 BARON-internal paper first-authored at Georgia Tech)**
+
+**Limitations**: era- and resource-bound (a code under his control since 1991, a company since 2001) [03 §A1]; the solver-line code is closed or "on request" [03 §F2]; the development set contains the libraries later used in claims, so overtraining is possible [03 §A2, E2]; TOF staff first-author the BARON-internal papers of 2025–26 [S212 pp. 1, 16; S239 p. 1]; his own coding share is undocumented. Lone version: contribute modules to an open solver; keep one protocol and changelog across papers; if the solver is closed, test through its channels (EP10) [S044 p. 16; S239 p. 21].
+
+**Method 5 step 1 (k = 9: the S003 card records no count of numerical failures, and its effect classes are not where that paper keeps its losses; S003 p. 1 states the reliability criterion, and S239 pp. 26–27 and S190 p. 16 keep the losses in the count)**
+
+1. For each candidate relaxation, measure gap closed, time and numerical failures on a library; never accept "stronger" without the other two; count effects in classes, losses included (EP3) [S003 pp. 22–23]. A proven dominance order (PD4 [S006 pp. 12–16; S028 pp. 3–14; S018 pp. 2–3, 8, 16]) drops a candidate only when another is at least as strong and no more expensive; price the rest, dominated ones included, and keep a cheap balance relaxation when the strongest is orders of magnitude slower (700 QCQPs: DNN/SRLT about 3% gap at about 400 s, DLG1 13% in a few seconds, SD 19% [S018 pp. 1, 18–19, 27]; the (R7) LP chosen over the tighter, slower (R8) [S053 pp. 21–22]).
+
+**Research Trajectory (k = 18 and 19: S190 pp. 4–9 hold incumbent-driven reductions, S272 p. 8 does not say how its optima were obtained, and S044 p. 15, S046 p. 16 and S170 p. 26 score against the best value found)**
+
+Turns follow institutional moves and funding with a 1-3 year lag; the engine stays (inferred) [06 §4]; the full texts agree [08 §8]. Constant: certified optima as the yardstick (1999–2026) and duality-based reduction (2000–2025) [S025 pp. 14–15; S272 p. 8; S077 p. 12; S190 pp. 4–9]. ([full evidence](#trajectory))
+
+**Corrections, Method 2 (outside the sample: the same S190 counterexample)**
+
+- Method 2: TOF staff first-author the BARON-internal papers [S212 p. 1; S239 p. 1], code authorship undocumented; the fixed protocol dates from the 2010s [S006 pp. 22–26].
 
 <a id="sources"></a>
 
