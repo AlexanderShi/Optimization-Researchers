@@ -484,3 +484,46 @@ Could not be accessed:
 55. Old BARON manual PDF link, https://minlp.com/downloads/docs/baron%20manual.pdf: HTTP 404; the current manual (source 17) was used instead
 
 All other papers named in this note carry DOIs or arXiv ids verified on 2026-10-10 through DBLP SPARQL or Crossref. Those I list without "read" were verified bibliographically only, and their contents were **not read**.
+
+---
+
+## Update 2026-11-20 (full-text pass, T3.6): coverage from the Google Scholar list
+
+The publication list is complete at the level of the Google Scholar profile, and every work outside the skip rows now has a paper card. Sources: `../sources/publications/scholar.md` (the profile https://scholar.google.com/citations?user=PTXe50QAAAAJ, cross-checked with DBLP 123/7012, Crossref, arXiv and the homepage CV; machine-readable in `works.json`), the full-text index `../sources/papers/INDEX.md`, the paper cards indexed in `07-paper-cards.md` and the synthesis `08-deep-reading-synthesis.md`. Citations like [S006 p. 15] point to a card and the page of the file it read; a version word (manuscript, preprint, arXiv, manual, v15.2) names a file that is not the journal edition. The sections above stay as the web-research record of 2026-10-10; where the full texts change them, this section says so.
+
+### Coverage
+
+| Item | Count | Note |
+|---|---|---|
+| Google Scholar rows | 409 | matched one-to-one to the S rows of `works.json` in the 2026-10-10 audit (`scholar.md`) |
+| `works.json` entries | 423 | 409 Scholar (S), 13 homepage or CV only (H), 1 DBLP only (D); 42 marked `dup_of` |
+| Distinct works indexed | 381 | INDEX.md roles: core 64, supplement 206, skip 111 |
+| Open full texts | 115 | `txt` in INDEX.md (Source column: 90 `manual`, supplied by hand; 14 arXiv; 9 Unpaywall; 2 author or repository URLs); 266 `no-oa` |
+| **Read in full / in part** | **110 / 5** | INDEX Read column: carded 110, skimmed 5 |
+| Abstract only | 111 | from Springer, Crossref or publisher abstracts |
+| Metadata only (incl. unreadable) | 44 | non-skip rows |
+| Skipped | 111 | not his work or not research: 92 talks, 13 other rows (session listings, committee lists, forewords), 3 journal rows by other authors, 1 conference row, 1 thesis, 1 patent; 18 of them carry metadata-level cards with no method link |
+| Card entries / works with a card | 294 / 288 | six works carry two cards (08 §1) |
+| Card quotes verified | 435 | 435 exact (`verify_card_quotes.py`, 2026-11-20) |
+
+The 270 works outside the skip rows, by kind and read depth (full / part / abstract / metadata): journal 185 (73 / 2 / 93 / 17); report and manual 36 (22 / 3 / 5 / 6); conference 17 (7 / 0 / 5 / 5); chapter 17 (1 / 0 / 5 / 11); preprint 7 (5 / 0 / 0 / 2); other 6 (2 / 0 / 2 / 2); the 2002 book 1 (abstract); thesis 1 (metadata).
+
+Full-text reads by period (full or partial cards, digest years; 08 §1): 1985–95: 0 · 1996–2000: 6 · 2001–05: 22 · 2006–10: 7 · 2011–15: 14 · 2016–20: 29 · 2021–26: 36 · undated: 1. 47 of the 115 files read are manuscripts, preprints, arXiv versions, a report or BARON manual editions (43 cards read in another version than the listed one, which 08 §1 names, plus four manual editions read as listed: S077, S162, S095, S185); cited pages are those of the version read. Two pairs of cards read byte-identical files (S077 = S097, the v4.0 manual; S012 = S185, the 2005 GAMS chapter), so they count once.
+
+### Leads of §1–§4 settled by the full texts
+
+| Lead (section) | Resolution | Cards |
+|---|---|---|
+| SW1: the 1995 and 1996 full texts not read | Still abstract-level cards [S008; S013; S004]. The reduction rule is read in full in the 2000 manual [S077 pp. 12, 15, 20–21], the 2000 applications paper [S058 preprint pp. 6–7] and the 2004 restatement, under which the 1996 cut is the same as or weaker than a duality-based cut [S006 p. 15] | S077, S058, S006 |
+| SW1 / SKILL.md: Ryoo's M.S. thesis dated 1995 (CV) | The 1996 paper's own reference list dates it 1994 (its Springer page, read for the abstract-level card [S013]); the thesis itself could not be looked up, so SKILL.md now gives no year | S013 |
+| SW2: the 2004 and 2005 articles not read | Both read in full [S006; S003]. The 2005 paper's operative insight is lifted outer approximation [S003 pp. 3–7]; the body's average root-gap reductions are 48% on globallib and 20% on minlplib, beside the abstract's "by up to 100%" [S003 pp. 1, 19–21]; the 2004 paper unifies the reduction rules in one Lagrangian problem [S006 pp. 12–19] | S003, S006 |
+| SW2: 164 portal users, October 1999 to August 2002 (book acknowledgments) | The 2002 GAMS/BARON 5.0 manual gives 163 researchers and users, October 1999 to July 2002 [S162 p. 2]; the two end dates differ, so both counts stand with their sources | S162 |
+| SW3: introduction, setup and conclusions read | Read in full [S001]: 22 solvers, 502 problems [S001 pp. 14, 20]; optima certified "for most" problems [S001 p. 21]; the unseen set is the same problems after an affine change of variables with condition number 2 [S001 p. 41] | S001 |
+| SW4: the 2014 and 2015 papers | 2014 is an abstract-level card [S009]; 2015 is read in full and is the source of first-principles constraints certified by a global solve [S039 manuscript pp. 4–5, 7–9]; 2017 is read in full [S017] | S009, S039, S017 |
+| SW5: the 2018 hybrid paper | Abstract-level [S030]; per-node switching is read in its 2021–22 forms [S116 arXiv pp. 22–25; S133 arXiv pp. 21–22] | S030, S116, S133 |
+| §1.7: the 2004 uncertainty review read only in its FOCAPO 2003 version | The journal manuscript is read in full [S002]; its sentence on general-purpose algorithms matches FOCAPO 2003, the following sentence differs by version [S002 manuscript p. 22] (08 §3.3) | S002 |
+| §3 item 9: the "science of heuristics" programme went dormant after 2004 | Confirmed and dated: four full texts written 2000–2004 practise it (complexity first, LP-based heuristics with proven and computed bounds) [S024 manuscript pp. 10–25; S029 preprint pp. 9–26; S119 preprint pp. 6–22; S118 preprint pp. 9–21], and two reviews state it [S002 manuscript p. 18 (sole); S010 preprint p. 8]; S118 was written in 2000 and published in 2008 [S118 preprint p. 1]; echoes in 2021 [S213] and 2026 [S238 manuscript pp. 10–17]. SKILL.md now carries it as Method 6, no longer as "claimed but unverified" | see Method 6 |
+
+### Signature-work anatomies
+
+SKILL.md now rests its five anatomies of §2 on the full texts where they exist and adds two works read in full: the 2004 *Math. Program.* study (doi:10.1007/s10107-003-0467-6) [S006] and the 2004 approximation algorithms for heat-exchanger network synthesis (doi:10.1021/ie049978l) [S119]. Their rows and the earlier web-research versions are in `09-evidence-ledger.md` (`#anatomy-…` sections). §2 above is kept as the web-research record.
