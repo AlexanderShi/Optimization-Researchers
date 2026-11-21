@@ -1,0 +1,97 @@
+[
+ {
+  "id": "S025",
+  "year": "1999",
+  "title": "A Lagrangian approach to the pooling problem",
+  "read_level": "full",
+  "contribution": "Introduces a Lagrangian relaxation of the pooling problem whose subproblem splits by pool and is solved exactly as a small MILP, proves that it equals the McCormick LP bound for one quality and is at least as strong (strictly on a constructed instance) for several, and shows on 13 problems, four of them new multi-quality ones, that BARON finds every literature pooling instance easy.",
+  "problem_entry": "Refinery pooling is multi-extremal (Haverly: local values 0 and -100, global -400) and worth millions (Texaco); entered through a gap in bounding theory: no known way to build a Lagrangian bound strictly stronger than the LP bound, made the paper's primary purpose for pooling (pp. 1-3).",
+  "key_idea": "Dualize mass balances, quality definitions, demands and specifications; the subproblem separates by pool, attains its optimum at box vertices and becomes an exact MILP with one binary per quality; it convexifies each pool's multi-term bilinear form jointly, so it equals termwise McCormick for one quality (Rikun's lemma) and can beat it for several; the dual is solved by a cutting-plane master whose cuts are indexed by bounds for reuse at child nodes (pp. 5-10, 13-16).",
+  "assumptions": "Linear mixing; finite bounds on all flows and qualities (eqs. 13-15), on which McCormick and the vertex argument rest; inequality multipliers nonnegative, equality multipliers free; theory exact over the box, Rikun's lemma used without proof; the number of qualities l is the structural parameter (pp. 2-3, 5-9).",
+  "proof_devices": [
+   "Separability after dualization: no constraint couples pools once (9)-(12) are priced, so p + 1 independent subproblems (Proposition 4.1, p. 6)",
+   "Vertex attainment by alternating linearity: flows to the bound picked by the sign of their coefficient, then an LP in qualities with an optimal vertex (Proposition 4.2, Corollary 4.3, p. 6)",
+   "Exact binarization q_w = q_w^L + (q_w^U - q_w^L) y_w with y binary and McCormick exact for binary factors; equivalence proved both ways with equal objectives (Theorem 4.4, pp. 6-7)",
+   "Lagrangian subproblem as convexification: linear objective over X equals over conv(X), so the subproblem minimizes over the convex envelope of the pool's bilinear form (Lemma 5.1, Theorem 5.2, pp. 7-8)",
+   "Rikun's lemma for terms sharing one interval variable: envelope of the sum = sum of envelopes, so termwise McCormick is exact for one quality (Lemma 5.3, Theorem 5.4, p. 8)",
+   "Bound comparison through the LP's own Lagrangian dual (no duality gap), whose subproblem is the y-relaxed MILP (Theorem 6.3, p. 10)",
+   "Strictness by one constructed instance, Example 1: -939.29 vs -999.31 (Theorem 6.4, p. 10)",
+   "Cut reuse argued, not proved: cuts indexed by the bounds that generate them and transformed after branching (pp. 15-16)"
+  ],
+  "experiments": "13 problems (8 single-quality from the literature, Ben-Tal 5, 4 constructed with 4-5 qualities; all data printed); 100 MINOS starts per problem with and without BARON range contraction on an RS/6000 43P (Tables 7-11); root bounds LP vs Lagrangian vs BARON-certified optimum (Tables 12-13: equal for one quality; on Examples 1-4 the Lagrangian closes 13.4%, 9.4%, 5.6% and 17.8% of the LP gap, computed for this card; no times); BARON'99 vs published rivals on other machines and tolerances (Table 14); one Lagrangian branch-and-bound run, 23 nodes, with cut counts per node (Table 15) (pp. 10-16). Losses: range contraction raised CPU on 7 of 13 problems and lowered the best-value frequency on Foulds 2 and Example 1 (my tally, Tables 7-11, p. 14).",
+  "positioning": "Table 2 classifies prior pooling work by method family, number of qualities and local vs global; rivals criticized by named failures (recursion non-convergent and unstable, SLP local, Floudas-Aggarwal GBD to non-KKT points by Sahinidis & Grossmann 1991, GOP termination per Gourdin et al., McCormick B&B rows regenerated at every node); builds on Ben-Tal et al., Dur & Horst, McCormick, Al-Khayyal & Falk, Rikun; 7 of 41 references include Sahinidis (pp. 4-5, 8, 11-12, 17).",
+  "writing": "Abstract and introduction worded more strongly ('tighter', 'does not provide bounds that are as tight') than Theorems 6.3-6.4 ('at least as strong', strict on one instance); categorical results sentences ('superior performance'); the closing 'very far from the global optimum' fits a single MINOS run but not the best of 100 runs (Tables 11, 13); short Proposition-Theorem-Corollary chain; the conclusion separates proof from conjecture (pp. 1-2, 6-12, 14-17).",
+  "limits_future": "Stated: theoretical emphasis; cut reuse a conjecture from one example; testing needs implementation issues solved because the procedure is 'drastically different' from existing B&B codes. Not stated: time to compute the Lagrangian bound, growth with the number of qualities (at most 2^l LPs per pool, my inference from p. 7). Future: computational testing inside B&B; global optimization for refinery pooling (pp. 7, 15-17).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "BARON's 1999 range contraction, feasibility-based (LP min/max per variable) and optimality-based (incumbents with duality), raises the best-value frequency of local search on 10 of 13 problems, with CPU cost and exceptions in the tables; five literature problems close in one BARON iteration.", "pages": "pp. 11, 14-15"},
+   {"method": "Method 5", "relation": "variant", "note": "A relaxation argued by strength alone: dominance proved, cost counted only as cuts per node on one example against 64 McCormick rows, no times; it closes 6-18% of the LP root gap on the hard instances (computed here); BARON kept the McCormick LP. The strength comes from joint convexification of a pool's multi-term bilinear form, the kind of object Method 5 step 3 names.", "pages": "pp. 7-10, 12, 15-16"},
+   {"method": "Method 2", "relation": "variant", "note": "BARON is the instrument of record (global optima, range contraction, comparison), but the paper's own bound lives outside the code, and implementing it in branch-and-bound raises 'several implementation issues': paper before module.", "pages": "pp. 11-12, 15-16"},
+   {"method": "Method 4", "relation": "contradiction", "note": "Dated 1999, before the 2013 protocol: rivals' published numbers from other machines and tolerances, node counts beside GOP iterations, and a single-winner conclusion, against identical conditions and a portfolio verdict; defended by the direction of the authors' own handicaps (slower computer, stricter tolerance); no rival result on the new instances.", "pages": "pp. 12, 15"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "Transfer integer-programming devices into global optimization", "evidence": "existing candidate: Held-Karp Lagrangian relaxation, an exact MILP for the Lagrangian subproblem and a cutting-plane master for the dual (Bazaraa et al.) carried into pooling.", "pages": "pp. 1, 6-7, 13-14"},
+   {"pattern": "Linearize through discreteness of the domain", "evidence": "existing candidate: the subproblem's optimum lies at box vertices, so each quality is replaced by a binary on its bounds and the bilinear products are linearized exactly (Theorem 4.4).", "pages": "pp. 6-7"},
+   {"pattern": "Prove where the cheap relaxation sits", "evidence": "existing candidate: the McCormick LP equals the Lagrangian bound for one quality (Rikun's lemma) and is no stronger, strictly weaker on Example 1, for several qualities (Theorems 6.1, 6.3, 6.4).", "pages": "pp. 8-10"},
+   {"pattern": "price of local search on the literature's own instances", "evidence": "existing candidate: distributions of local values over 100 MINOS starts on the literature's pooling instances and four new ones, with and without range contraction, beside BARON-certified optima.", "pages": "pp. 11, 14-15, 17"},
+   {"pattern": "hand-built hard instances on the contribution's structural axis", "evidence": "new: BARON finds every literature pooling instance easy, so four instances with 4-5 qualities are built and published, on which the new bound is strictly stronger; close to *structural-knob instance generator* (S018) but hand-built along one axis.", "pages": "pp. 10, 12-13"}
+  ],
+  "transferable": [
+   "Exact MILP for a box-constrained bilinear subproblem: show the optimum is at vertices, write each variable as lower bound plus range times a binary, linearize the products exactly with McCormick (Proposition 4.2, Theorem 4.4, pp. 6-7)",
+   "Compare a Lagrangian bound with an LP bound through the LP's own Lagrangian dual: if the LP's subproblem is the continuous relaxation of yours, yours is at least as strong (Theorem 6.3, p. 10)",
+   "Explain a bound's strength by the nonconvex aggregate it convexifies jointly, then prove where termwise envelopes are already exact (Rikun's lemma) (Theorems 5.2, 5.4, pp. 7-8)",
+   "Prove a strictness theorem of the form 'may provide a strictly stronger lower bound' with one constructed instance and publish its full data (Theorem 6.4, p. 10)",
+   "When the literature's instances are easy for your solver, build harder ones along the axis your method targets and show the gain there (Table 3, p. 10; pp. 12-13)",
+   "Judge a preprocessing step for local search by the distribution of local values over 100 starts with and without it, plus total CPU (Tables 7-11, p. 14)",
+   "Index Lagrangian cuts by the bounds that generated them so child nodes transform rather than regenerate them (pp. 15-16)",
+   "In the conclusion, label each claim as proved, observed on one example, or conjectured, and name the implementation work its test needs (p. 16)"
+  ],
+  "coauthors": "Nilanjan Adhya (first author), Mohit Tawarmalani; Sahinidis corresponding (p. 1)",
+  "quotes": [
+   {"text": "all pooling problems currently in the open literature are easy problems", "page": 12}
+  ]
+ },
+ {
+  "id": "S010",
+  "year": "2002",
+  "title": "A critical review and annotated bibliography for heat exchanger network synthesis in the 20th century",
+  "read_level": "full",
+  "contribution": "An annotated and classified bibliography of 20th-century heat exchanger network synthesis (446 entries in the April 2001 preprint read here), with the two solution paradigms and their drawbacks, 20 milestones, eight classification tables crossed with periods, and five open problems that ask for analytic quality guarantees for heuristics, approximation algorithms given strong NP-hardness, global optimization of simultaneous formulations and assumption-free models.",
+  "problem_entry": "HENS, the most studied process-synthesis problem, already has two thorough reviews; entered as a complement to them, to cover what they missed, give a critical review that drives future research and compile the century's citations, under a stated coverage rule (English, journals first) (pp. 1-2).",
+  "key_idea": "A four-layer map: solution methods (sequential by targets vs simultaneous MINLP, each with its drawback), dated milestones and a timeline, eight classification tables crossed with three periods, and one annotation per work; the critique is concentrated in five numbered open problems (pp. 2-8, 10-80).",
+  "assumptions": "Scope: 20th century, English, journals first, plus important theses and conference papers; the field modeled as sequential vs simultaneous synthesis; the tractability assumptions of HENS models (fixed HRAT, isothermal mixing, no split stream through more than one exchanger, no bypass, linear area cost, arithmetic-mean temperature difference) carried as named limits (pp. 2-4, 8, 53, 66, 68).",
+  "proof_devices": [
+   "n/a for original theorems (a review); argument devices follow",
+   "Coverage gaps of two earlier reviews as the reason to write (p. 2)",
+   "Milestones as dated firsts, condensed into a timeline (p. 5; Figure 1, p. 80)",
+   "Field statistics as trend evidence: papers per year peaking in the late 1980s and early 1990s, papers per journal (p. 8; Figures 2-3, pp. 81-82)",
+   "One-line assumption flags in annotations, e.g. no stream splits, forbidden matches not considered, not guaranteed optimal ([1] p. 10; [91] pp. 22-23; [399] p. 64; [418] p. 66)",
+   "A hardness result turned into an agenda: strong NP-hardness [95] motivates approximation algorithms with guarantees (p. 8)"
+  ],
+  "experiments": "none (a review); bibliometrics: papers per year (Figure 2, bars lost in extraction) and per journal, 120 of 408 in Computers & Chemical Engineering (Figure 3); test-problem provenance recorded entry by entry (6SP2-20SP1, 4SP1, 6SP1, 5SP1, 7SP1, 7SP2, 10SP1, 4SP2, 7SP4, collections with best-known solutions, Shenoy's 43 problems) and gathered in Table 8 (pp. 8, 20, 22, 25, 40, 46-47, 51-52, 57, 79, 81-82).",
+  "positioning": "Complements Gundersen & Naess and Jezowski ('excellent reviews') rather than correcting them; praises other surveys; pinch (Linnhoff, about 33 entries) and mathematical-programming (Grossmann, about 36) schools annotated descriptively, critique spread over open problems 1 and 3-4; disputes recorded neutrally; one self-citation ([95]) and no BARON paper although open problem 3 calls for more efficient global optimization (pp. 2, 5, 8, 10-71).",
+  "writing": "Critical voice held back to the last body page and a numbered list of five open problems; yardstick sentence favors analytic results over computational comparisons; [95] stated as refuting fast exact algorithms, without S024's own 'highly unlikely' and without P != NP; the theory-practice gap called 'essentially nonexistent' from counts of case studies and software; errata, reprints and replies given cross-linked entries (pp. 1, 8, 19, 21-23, 25, 27, 41, 46, 55).",
+  "limits_future": "Stated limits: coverage by language and venue, software outside the scope beyond the tables, heat-integration table not inclusive. Future: (1) quality of existing heuristics, analytic results 'long overdue'; (2) polynomial approximation algorithms with performance guarantees; (3) local optima of simultaneous formulations, robust formulations or more efficient global optimization; (4) assumption-free formulations; (5) HENS within whole-process synthesis (pp. 2, 6-8). Problem 2 became S119 (2004).",
+  "method_links": [
+   {"method": "Method 4", "relation": "variant", "note": "Enters an application field by mapping everything that exists before any own method (as S024 in c01): 446 works annotated and classified by method and period, the field's test problems and best-known solutions collected. The instrument is a census, not a computational benchmark, and the yardstick asked for is analytic worst-case guarantees 'as opposed to computational comparisons and case studies', where Method 4 judges by computation against certified optima.", "pages": "pp. 2, 8, 10-79"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "complexity before algorithms, then bounded heuristics", "evidence": "existing candidate (S024, S002): open problem 2 rests the call for polynomial-time approximation algorithms with performance guarantees on the strong NP-hardness of HENS [95].", "pages": "pp. 8, 23"},
+   {"pattern": "Heuristics with proven guarantees, paired with relaxation bounds (science of heuristics)", "evidence": "existing candidate: open problem 1 asks whether any decomposition heuristic is guaranteed within a predetermined range of the optimum and calls analytic results overdue; annotations flag 'not guaranteed optimal' and 'valid lower and upper bounds'.", "pages": "pp. 8, 19, 64"},
+   {"pattern": "taxonomy-first review with one unifying lens", "evidence": "existing candidate (a2-02, abstract level): in full text the classification is by topic, model and technique crossed with three periods; the only unifying split is sequential vs simultaneous synthesis, so the unifying-lens half stays weak.", "pages": "pp. 2-7, 72-79"},
+   {"pattern": "a review's open problems as the group's own agenda", "evidence": "new: open problem 2 rests on the group's own hardness result [95] and is the subject of the group's next HENS paper (S119, 2004, approximation algorithms with guarantees; s02 card), listed as submitted in S002 (c01 card).", "pages": "pp. 8, 23"}
+  ],
+  "transferable": [
+   "State a survey's coverage rule (language, venue type, period) at the start so omissions follow a checkable rule (p. 2)",
+   "Cross every classification table with period columns so it shows what was done and when (Tables 1-6, 8, pp. 72-77, 79)",
+   "Flag each method's simplifying assumptions in its one-line annotation so the method table doubles as a table of limits (pp. 10, 22-23, 53, 64, 66, 68)",
+   "Record test-problem provenance and best-known solutions inside the bibliography, making it the field's benchmark registry (pp. 20, 22, 25, 40, 46, 51-52, 57, 79)",
+   "Give errata, reprints and revised versions their own cross-linked entries (pp. 19, 21-22, 25, 27, 41, 46, 55)",
+   "Circulate the draft bibliography to the field's mailing list before submission and acknowledge it (CAST e-mail list, p. 9)",
+   "Close a review with numbered open problems, each tied to the result that makes it open, e.g. a hardness proof motivating approximation algorithms with guarantees (p. 8)"
+  ],
+  "coauthors": "Kevin C. Furman (first author); Sahinidis corresponding (p. 1)",
+  "quotes": [
+   {"text": "Analytical results–as opposed to computational comparisons and case studies–are long overdue.", "page": 8}
+  ]
+ }
+]

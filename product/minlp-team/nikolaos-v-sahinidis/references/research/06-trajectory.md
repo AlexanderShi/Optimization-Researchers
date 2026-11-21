@@ -334,3 +334,62 @@ Secondary (S)
 40. Khalil, E., Le Bodic, P., Song, L., Nemhauser, G. & Dilkina, B., "Learning to Branch in Mixed Integer Programming", *AAAI* 30(1), 2016. DOI 10.1609/aaai.v30i1.10080 (field context). S
 41. Hastie, T., Tibshirani, R. & Tibshirani, R., "Best Subset, Forward Stepwise or Lasso? Analysis and Recommendations Based on Extensive Comparisons", *Statist. Sci.* 35(4):579–592, 2020. DOI 10.1214/19-STS733 (field context). S
 42. Bertsimas, D., Pauphilet, J. & Van Parys, B., "Sparse Regression: Scalable Algorithms and Empirical Performance", *Statist. Sci.* 35(4):555–578, 2020. DOI 10.1214/19-STS701 (field context). S
+
+---
+
+## Update 2026-11-20 (full-text pass, T3.6)
+
+Source: `08-deep-reading-synthesis.md` §8–§9, built from the paper cards (`07-paper-cards.md`; 115 works read in full or in part, 111 at abstract level, 44 at metadata level). Citations like [S006 p. 15] point to the card and the page of the file it read; a version word (manuscript, preprint, arXiv, manual) names a file that is not the journal edition. §§1–8 above stay as the web-research record of 2026-10-10; where the full texts change the picture, this section says so.
+
+### 9. Topics and turns in the full texts (08 §8, copied)
+
+Topic counts are carded works per period (non-skip; any read level), classified by this note from titles and cards; *full* is the number read in full or in part.
+
+| Period | Carded works (full) | Main topics in the cards | Full-text anchors |
+|---|---|---|---|
+| 1987–1995 | 20 (0) | Planning, scheduling and capacity expansion (13, eleven of them with Grossmann); GBD convergence; the first global papers | Abstracts and metadata only [S023; S036; S008; S013] |
+| 1996–2000 | 25 (6) | Global optimization and BARON (8), planning under uncertainty and the heuristics line (6), robust control (3) | [H010; S025; S079; S058; S077] |
+| 2001–2005 | 39 (22) | Convexification and relaxations (9), BARON manuals (7), complexity and approximation (5), stochastic programming (3), crystallography (3) | [S032; S028; S053; S101; S006; S003; S024; S010; S029; S119; S014; S002; S069; S168; S198; S035] |
+| 2006–2010 | 28 (7) | Crystallography, proteins and drug delivery (12), global algorithms (3), relaxations (2) | [S161; S361; S044; S204; S254; S218; S118] |
+| 2011–2015 | 40 (14) | Surrogates and CCSI (14), relaxations (9), LP and GPU linear algebra (3), molecular design (3) | [S217; S173; S347; S052; S039; S018; S109; S001; S015] |
+| 2016–2020 | 59 (29) | ALAMO, ML and RL (15), editorial service (8), DFO and tuning (6), relaxations (6), global algorithms (6), planning (5), molecular design (5) | [S017; S104; S046; S084; S031; S022; S007; S182; S090; S159; S112; S191] |
+| 2021–2026 | 58 (36) | Surrogates and symbolic regression (13), DFO benchmarks (8), relaxations (6), molecular and materials design (5), networks with Dey (4), Euclidean-norm problems (4), ML inside solvers (3), self-driving labs (3) | [S116; S133; S128; S165; S238; H007; S190; S284; S212; S269; S170; S205; S206; S239; S272; H009] |
+
+**Turns visible in the full texts.**
+- *The heuristics line* runs in full texts from a 2000 manuscript to 2004 [S118 preprint p. 1; S119 preprint p. 1] and then goes quiet, with echoes in 2021 [S213] and 2026 [S238 manuscript pp. 10–14] (Method 6).
+- *Convexification feeds the engine*: the theory papers of 2001–2002 [S032; S028; S053; S101] become BARON's 2004–2005 relaxation machinery [S006 pp. 4–7; S003 pp. 15–23].
+- *The move to CMU (2007)* adds sponsor-driven surrogate work [S217; S347; S173] and benchmark-first DFO [S001]; the crystallography and protein line thins out (12 carded works in 2006–10, 3 in 2011–15, none later).
+- *Georgia Tech (from 2021)* adds co-supervised theory and applications with ISyE colleagues [S128; S165; S238; S388; H009; S284; S269], with method development moving outside BARON (§2, Method 2), and a return to large DFO benchmarks around BAM [S270; S272; S273; S277].
+- *The relaxation stance moves with subsolver technology* (§3.2 item 10).
+
+**What stayed constant.** Certified global optima as the yardstick, from 1999 [S025 pp. 14–15] to 2026 [S272 p. 8]; duality-based reduction, from 2000 [S077 pp. 12, 15] to 2025 [S190 pp. 4–9; H007 pp. 18–25]; BARON as the instrument, from the 2000 manual [S077 pp. 7–9] to a 2026 presolve [S239 p. 32]; LP-first relaxations with cheaper emulations of strong ones, from 2005 [S003 p. 1] to 2022 [S133 arXiv p. 1]; small algebraic models, from 2013 [S052 manuscript p. 10] to learned branching in 2026 [S269 arXiv pp. 9–10].
+
+**Against note 06.** The full texts agree that turns follow institutional moves (UIUC → CMU → Georgia Tech), and they date the end of the heuristics line more precisely: last manuscripts 2000–2004, not only a gap after 2004 [06 §4.2].
+
+### 10. Collaboration pattern (08 §9, copied)
+
+Counts are carded works (non-skip, any read level) with the coauthor named on the card.
+
+| Period | Most frequent coauthors (carded works) | Pattern seen in the full texts |
+|---|---|---|
+| 1987–1995 | Grossmann 12 (all but two in 1991–92) | PhD-era planning MILP/MINLP with his adviser; first global papers with Ryoo [S008] |
+| 1996–2000 | M. L. Liu 5, Shectman 3, Ahmed 3, VanAntwerp and Braatz 3, Vander Wiel 2, Tawarmalani 2 | Two-author papers, student first and he last; a robust-control collaboration with a colleague's group in the same department [S079 p. 1]; the manual is his alone and credits 17 students [S077 pp. 8–9] |
+| 2001–2005 | Tawarmalani 18 of 39, Ahmed 6, Furman 4, Vaia 3 | The convexification years with one former student, then at Purdue; the complexity and approximation papers with Furman and Ahmed [S024; S010; S119; S029] |
+| 2006–2010 | W. Xie 6, A. B. Smith 4, Chang 2, Bao 2, Elble 2 | Students on crystallography, proteins and GPU computing; a phasing module released inside another group's program, SnB [S161 manuscript pp. 1, 3, 7–8] |
+| 2011–2015 | D. C. Miller (NETL) 9, Cozad 4, Khajavirad 4, Yan Zhang 3, Chang 3, Zorn 3 | Consortium papers in which he is one of many authors [S217 p. 3; S347 p. 3] beside two-author student papers [S052; S039] |
+| 2016–2020 | Puranik 5, Ploskas 5, Wassick (Dow) 5, Grossmann 5, Agarwal 5, Austin 4, Trahan (Dow) 4, Kılınç 4 | Dow-sponsored projects with company engineers as co-authors [S007 arXiv p. 1; S022 arXiv p. 1; S183 p. 1]; CMU students and postdocs; editor-in-chief notices [H011; S306; S318; S304] |
+| 2021–2026 | Dey 7, D. Oh 7, Kuznetsov 5, K. Ma 5, Rajagopalan (Dow) 5, Y. Zhang (TOF) 4, Raghunathan (MERL) 4, Fardis 4 | Students co-supervised with Dey (Li, Choudhary; per note 04) [S128 arXiv p. 1; S238 manuscript p. 1]; papers with Nemhauser and Bayramoglu [S284 p. 1; S269 arXiv p. 1] and with Gounaris, who is corresponding author [S189 arXiv p. 1]; BARON work with TOF staff [S239 p. 1]; NETL and DOE programmes [S165 manuscript p. 30; S206 manuscript p. 1] |
+
+**Across the career.** Tawarmalani is the most frequent coauthor (25 coauthored works, 1999–2015), then Grossmann (19, 1989–2020), D. C. Miller (12, 2011–2018), Ahmed (12, 1998–2019), Ploskas (8, 2018–2026) and Raghunathan (7, 2018–2025). Sole-authored items are manuals, the 2004 review, a 1996 book review, editorials and prize notices [S077; S159; S112; S191; S002; H010; S038; S306].
+
+**Partners.** Dow (2015–2025), DOE/NETL (2011–2026), MERL (2018–2025) and TOF (2020–2026) supply problems, co-authors and funding [S007 arXiv p. 1; S183 p. 8; S165 manuscript pp. 1, 30; S074 arXiv p. 1; S239 p. 1]. Students carry topics to him as well as from him: in the acknowledgments of the 2003–04 review, his former students Liu and Ahmed "introduced me to many of the topics discussed in this paper" [S002 manuscript p. 22] (the FOCAPO version has the same sentence); black-box applications were MS theses [S001 pp. 41–47].
+
+**Editorial practice, one instance.** As guest editor, his co-authored submission to the special issue was handled by a co-editor, and he saw nothing of its review [S208 p. 5] (§10 item 6).
+
+### 11. Corrections and refinements to §§1–8
+
+- **§5 row "Science of heuristics" and §6 (the stated long-term goal "not pursued")**: the line was pursued and practised before it went quiet. Four full texts written 2000–2004 prove hardness first and give LP-based heuristics with proven and computed bounds [S024 manuscript pp. 10–25; S029 preprint pp. 9–26; S118 preprint pp. 9–21; S119 preprint pp. 6–22], and two reviews state the paradigm, one in his sole voice [S002 manuscript p. 18; S010 preprint p. 8]; S118 was written in 2000 and published in 2008; the last manuscripts date from 2000 to 2004 [S118 preprint p. 1; S119 preprint p. 1]; echoes follow in 2021 [S213] and 2026 [S238 manuscript pp. 10–17]. What stays unpursued is the stated goal of provably optimal heuristics. SKILL.md now carries the line as Method 6.
+- **§4.2 item 4 (exits are silent)**: still no stated reason for any exit; the full texts only date the end of the heuristics line more precisely (above) and show the crystallography and protein line thinning after the move to CMU (12 carded works in 2006–10, 3 in 2011–15, none later; 08 §8).
+- **Relaxation stance (BARON's second generation, §1 and §4)**: not one change from polyhedral (2005) to hybrid (2018) but a dated sequence that follows subsolver technology: in 2000 the IQP module defaulted to a quadratic relaxation (the NLP module to a linear one) and a mixed-integer SDP module shipped [S077 pp. 40, 53, 92–95]; SDPs argued on strength in 2001 [S032 pp. 2, 20]; an LP chosen by gap and time in 2002 [S053 pp. 21–25]; LP-only in 2004–05 [S006 pp. 3, 7; S003 pp. 1–2]; SDPs priced at three orders of magnitude more time in 2011 [S018 pp. 18–19]; hybrid LP/NLP in 2018 [S030]; SDP-quality bounds from convex quadratic cuts in 2021–22 [S133 arXiv pp. 12, 18–22]; quadratic relaxations re-tested in 2025 [S189 arXiv pp. 1–2] (08 §3.2 item 10).
+- **Georgia Tech period (§1, §2)**: the theory and application lines with Dey (co-supervised), Nemhauser and Gounaris prototype in Python/Pyomo or SCIP: with Dey, BARON or SCIP as baseline or bound source [S128 arXiv pp. 17–19; S165 manuscript pp. 23–24]; with Nemhauser, a module in SCIP with no BARON [S269 arXiv p. 11]; with Gounaris, BARON as comparator [S189 arXiv pp. 19, 21]; the BARON-internal papers of 2025–26 are first-authored by TOF staff [S212 pp. 1, 16; S239 p. 1] (08 §2, Method 2; corrected at the T3.6 review).
+- **Turns follow institutional moves (§4.2)**: confirmed by the full texts (08 §8, "Against note 06").

@@ -1,0 +1,240 @@
+[
+ {
+  "id": "S165",
+  "year": "2025",
+  "title": "Optimizing the design and operation of water networks: Two decomposition approaches",
+  "read_level": "full",
+  "contribution": "Unified multi-period design-and-operation MINLP for produced-water networks plus two primal heuristics (a CVXNLP budget decomposition carried over from gas networks and a peak-period time decomposition) whose incumbents, handed to SCIP, give feasible designs in every scenario (time decomposition: gaps at most 8.92% for T = 24 and 13.53% for T = 53) where SCIP alone finds feasible points in 2 of 10 scenario runs.",
+  "problem_entry": "Produced-water networks need joint pipe sizing, pump placement and multi-period pump scheduling; a preliminary BARON/SCIP study gave good dual bounds but trouble finding feasible points, so the paper targets primal solutions (pp. 1-3, 11).",
+  "key_idea": "Generate only incumbents with problem-specific decompositions (a budget master built from a convex program whose stationarity gives the pressure-drop law, a feasibility subproblem, no-good cuts and a cheapest-first budget search; or solve the high-production first periods, fix the design and check the rest) and pass them to SCIP, which keeps the full model and the dual bound (pp. 13-24).",
+  "assumptions": "Steady-state Hazen-Williams (or Darcy) pressure drop; a pump raises pressure in either flow direction; unbounded valve reduction; at most N pumps; one-variable min-up/min-down without start-up costs; pump cost only as a cap on pump-on periods; fixed reservoir pressures; construction-cost objective; the time decomposition assumes production decreasing over time (pp. 7-11, 17-20, 23).",
+  "proof_devices": [
+   "n/a for proofs (no theorems); convex program (CVXNLP) whose first-order conditions reduce to the pressure-drop equations, used as the master objective (p. 14)",
+   "cost-ordered design enumeration (cheapest-diameter master, feasibility subproblem, no-good cuts): the first feasible design is optimal if each infeasibility answer is proven (p. 16)",
+   "integer no-good cuts and budget doubling on time-out (p. 16)",
+   "physical monotonicity argument justifying the peak-period restriction (pp. 17-18)",
+   "proportional scaling of the pump-hours cap across the split horizon, eqs. 41 and 49 (pp. 18, 20)",
+   "boundary fixing of min-up/min-down states, Algorithm 2 (p. 21)"
+  ],
+  "experiments": "One PARETO-derived network (19 sources, 7 sinks, 29 in-nodes, 58 pipes), T = 24 and 53, stress factors 0.1-2.0, SCIP via GAMS (chosen over BARON), 5 h in total; SCIP alone finds feasible points in 2 of 10 runs, the time decomposition in all 10 (gaps at most 8.92% and 13.53%); the CVXNLP pipeline ends worse than SCIP alone at T = 24, stress 2.0 (26.23% vs 11.54%) and fails at T = 53, stress 2.0; the T~ and epsilon sets, times to first solution, solver versions (except Gurobi 9.5.1) and repeated runs are not reported (pp. 23-29).",
+  "positioning": "Restates water-network design work (Bragalli et al., Raghunathan, Rajagopalan, Pecci et al., Caballero and Ravagnani) and pump-scheduling work (Ghaddar et al., Bonvin et al.), borrows unit-commitment min-up/min-down polytopes and rolling-horizon ideas; novelty claimed is joint design and operation; continues Li, Dey and Sahinidis 2024 on gas networks (pp. 3-6, 13).",
+  "writing": "Two-item contributions paragraph; constraint blocks named in a table and each subproblem written as block changes; explanations of SCIP's successes offered as belief; modest conclusion (pp. 3, 12, 15, 19-20, 27, 30).",
+  "limits_future": "The restricted problem may become too slow for larger networks or more periods (the CVXNLP decomposition could solve it); non-monotone production needs a changed fixing step; future: pump and valve costs in the objective; no code or instance release mentioned (pp. 20, 29-30).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Step 2 (get a good incumbent early) practised for a different reason: solvers bound well but cannot find feasible points, so an outside incumbent is handed to SCIP, which then improves the dual bound; a co-authored source for the Workflow B1 step 3 diagnosis that SKILL.md says no source states.",
+    "pages": "pp. 11, 24, 26"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "BARON tested and set aside because SCIP did slightly better; the new methods live outside any solver and are judged against the solver alone, not by switching a module off inside a production code.",
+    "pages": "pp. 23-24"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "A two-solver preliminary study precedes the algorithm, but there is no public library and no certified optimum: one network, stress-factor scenarios, gaps against SCIP's dual bound.",
+    "pages": "pp. 11, 23-24, 28-29"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "decompose for the incumbent, let the general solver bound",
+    "evidence": "Problem-specific decompositions supply only primal solutions; SCIP keeps the full model and produces the dual bound for the rest of the 5-hour budget.",
+    "pages": "pp. 11, 24, 26"
+   },
+   {
+    "pattern": "peak-period restriction",
+    "evidence": "Solve the high-production first periods to a target gap, fix diameters and pump locations, check feasibility of the remaining periods, scanning the split point and the gap.",
+    "pages": "pp. 17-22"
+   }
+  ],
+  "transferable": [
+   "Diagnose a primal vs a dual stall with two global solvers before choosing what to build (p. 11).",
+   "Budget loop: MINLP master under a cost budget, feasibility subproblem with the design fixed, no-good cut on infeasibility, budget doubling on time-out (pp. 13-16).",
+   "Cheapest-first design enumeration with a feasibility oracle as an optimality certificate (p. 16).",
+   "Peak-period time decomposition with proportional scaling of shared resources and boundary fixing of min-up/min-down states (pp. 18-22).",
+   "Stress-factor scenario families from one case study, reported as primal/dual/gap per scenario for solver-alone vs heuristic-then-solver at equal total time (pp. 23-24, 28-29).",
+   "Check the solution of a simplified physics model (the Darcy MIQP) against the original law before using it (p. 27).",
+   "Name the compact model's constraint blocks once and write each decomposition subproblem as a list of block changes (pp. 12, 15, 19-20)."
+  ],
+  "coauthors": "Yijiang Li, Santanu S. Dey (Georgia Tech ISyE); Naresh Susarla, Miguel A. Zamarripa (NETL support contractor; Zamarripa also NETL); Markus G. Drouven (NETL)",
+  "quotes": [
+   {
+    "text": "able to improve the dual bounds consistently but have trouble obtaining primal (feasible) solutions",
+    "page": 11
+   },
+   {
+    "text": "we found that SCIP performs slightly better and decided to use SCIP in the experiments",
+    "page": 24
+   }
+  ]
+ },
+ {
+  "id": "S170",
+  "year": "2025",
+  "title": "Model-and-search: a derivative-free local optimization algorithm",
+  "read_level": "full",
+  "contribution": "MAS, a bound-constrained local DFO algorithm combining reuse of evaluated points, line search, sensitivity-ordered incomplete quadratic models minimised globally by BARON, and positive-basis completion, proved to converge to KKT points and reported to solve the most problems (46% at 300 evaluations) of the 501-problem Rios-Sahinidis library against DFO, BOBYQA, IMFIL, DAKOTA/PATTERN and NOMAD.",
+  "problem_entry": "A local DFO solver for bound-constrained deterministic black boxes that reaches near-local minima within a small evaluation budget, designed as the refiner for global-search methods such as the group's Branch-and-Model (pp. 2-3, 31).",
+  "key_idea": "Spend information before evaluations: reuse points in an annulus around the incumbent, complete a linear basis only if needed, grow an incomplete quadratic model term by term by gradient sensitivity while interpolation stays full rank, minimise it with BARON, line-search any improving direction, and end each unsuccessful iteration with a positive basis of bounded-below cosine measure (pp. 4-16).",
+  "assumptions": "f continuously differentiable and bounded below, gradient bounded on the box, forcing function with rho(x)/x -> 0; deterministic f and box constraints only; the tests include 178 non-smooth problems that the theory does not cover (pp. 1-2, 6, 17, 19, 24).",
+  "proof_devices": [
+   "stationarity measure chi(x) from Conn, Gould and Toint (pp. 16-17)",
+   "Theorem 1: r_k -> 0 by contradiction on lim inf and lim sup, using sufficient decrease and f bounded below (pp. 17-18)",
+   "Proposition 1: polar decomposition into the cone of nearby active-bound normals and its dual, bounded with the cosine measure (pp. 18-19)",
+   "Theorem 2: chi(x_k) -> 0 in two cases via the cosine measure, the mean value theorem and the unsuccessful-iteration inequality (19) (pp. 19-20)",
+   "design rule as convergence hook: every unsuccessful iteration ends with a positive basis whose cosine measure is at least gamma* (pp. 12, 22)"
+  ],
+  "experiments": "501 bound-constrained problems of the 2013 library (dimension 1-300; 238 convex, 178 non-smooth), five local rivals (DFO 2.0, BOBYQA, IMFIL 1.02, DAKOTA/PATTERN 6.9, NOMAD 3.9.1), 300 evaluations, ten shared random starts, median run, data profiles against the best value found by any solver at tau = 1e-6, 1e-5, 1e-4; MAS 46% vs about 41% for NOMAD and BOBYQA at 300 evaluations, 78% at dimension 1-10 and 10% at 11-300; NOMAD better on nonconvex problems at larger budgets; ablation of the model steps (about 10% and 2%); no CPU times, tuning protocol or hold-out (pp. 24-31).",
+  "positioning": "Presented as a synthesis of earlier features (reuse of points, incomplete models, positive spanning, line search) with both model-based and direct-search elements; the proof follows Conn, Gould and Toint; rivals restricted to local solvers sharing design ideas; Cartis et al. cited but not compared (pp. 2-3, 16, 24).",
+  "writing": "Ten algorithms in pseudo-code, a short theory section and a worked camel6 trace; strong single-winner claims (outperforms over the whole range; best local solver under 100 evaluations) next to reported rival wins (pp. 5-30).",
+  "limits_future": "Curse of dimensionality (about 10% or less solved at 11-300 variables), bound constraints and deterministic f only, no CPU times; future: MAS as the local search of a global DFO framework; data from the 2013 library page, code only on request (pp. 1-2, 29-31).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Benchmark first, own method later on the same library: the group's own local solver is judged on the 2013 study's 501-problem library and data page, with random starts shared by all solvers and median scoring.",
+    "pages": "pp. 24, 26, 31"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Step 2: solved is measured against the best value found by the solver pool, not against a certified optimum.",
+    "pages": "p. 26"
+   },
+   {
+    "method": "Method 4",
+    "relation": "contradiction",
+    "note": "Steps 6-7: single-winner verdict although NOMAD wins on nonconvex problems at larger budgets; no hold-out set or tuning protocol for the defaults is mentioned; Sahinidis is corresponding author, so this extends Inner Tension 5 to a 2025 algorithm paper.",
+    "pages": "pp. 1, 24-29"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "The local model is a small algebraic model (an incomplete quadratic with only the terms the data support) minimised globally by BARON, but terms are picked by gradient sensitivity rather than best-subset integer programming, and the function itself stays a black box (step 7's fallback).",
+    "pages": "pp. 1-2, 10-11"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "BARON is the embedded subsolver of a new algorithm; the code is on request only, matching Method 2's stated limitation and Inner Tension 4.",
+    "pages": "pp. 11, 31"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "exact global solve of the surrogate inside a local method",
+    "evidence": "Each model step minimises a possibly nonconvex quadratic surrogate globally with BARON.",
+    "pages": "p. 11"
+   },
+   {
+    "pattern": "build the component for the engine",
+    "evidence": "The local solver is designed and judged for the small budgets of a refiner inside a global DFO method (Branch-and-Model, ref. [22]).",
+    "pages": "pp. 3, 28-29, 31"
+   }
+  ],
+  "transferable": [
+   "Put the convergence guarantee into one checkable end-of-iteration state (a positive basis with cosine measure at least gamma*) and reuse the generating-set-search proof from there (pp. 12, 17-20).",
+   "Grow an incomplete quadratic model one second-order term at a time, ranked by the gradient components it multiplies, until the interpolation system loses rank (pp. 10-11).",
+   "Choose model points from an annulus of 0.3 r_k to 1.5 r_k around the incumbent (pp. 12, 25).",
+   "Order candidate points by their angle with the previous gradient estimate so the first evaluations are the likely improving ones (p. 13).",
+   "Radius update that rewards several improving points in one line search (eq. 5, p. 16).",
+   "Benchmark from ten fixed random starts shared by all solvers, score the median run, and split data profiles by convexity, smoothness and dimension at several tolerances, plus a component ablation (pp. 26-31).",
+   "Trace one small instance through the first iterations in the algorithm's own vocabulary (pp. 20-23)."
+  ],
+  "coauthors": "Kaiwen Ma (CMU), Luis Miguel Rios (End-to-End Analytics), Hua Zheng (Airbnb), Sreekanth Rajagopalan (Dow); Sahinidis corresponding author",
+  "quotes": [
+   {
+    "text": "MAS outperforms the other DFO solvers over the entire range of function evaluations.",
+    "page": 26
+   },
+   {
+    "text": "Code availability Interested readers should contact N. V. Sahinidis.",
+    "page": 31
+   }
+  ]
+ },
+ {
+  "id": "S189",
+  "year": "2025",
+  "title": "Constructing tight quadratic relaxations for global optimization: II. underestimating difference-of-convex (DC) functions",
+  "read_level": "full",
+  "contribution": "Extends Part I's cutting-plane construction of convex quadratic underestimators to twice-differentiable d.c. functions and builds a hierarchy (scalar, diagonal and matrix scaling, each with an optional downward shift, all updated by LPs) whose convex QCQP relaxations beat BARON's default root bound on 23 of 24 generated d.c. problems in 1-4 variables, closing on average 78.8-94.5% of the root gap, at a higher but unquantified computing time (read as arXiv v1).",
+  "problem_entry": "Faster, more robust convex QCQP solvers make tighter but costlier convex quadratic relaxations worthwhile; no existing method gives convex quadratic underestimators of general d.c. functions (alphaBB does so only for quadratics) (pp. 1-4).",
+  "key_idea": "Rewrite the underestimation check for f = h - g as concave minimisation over a convex set (partial epigraph on h) so Part I's cutting-plane algorithm runs unchanged, then generalise the quadratic's scaling (scalar, diagonal, diagonally dominant matrix) and add a downward shift, each update an LP constrained to keep the quadratic monotone (pp. 5-14).",
+  "assumptions": "Twice-differentiable d.c. functions with a known split h - g on a box; locally convex points of construction; diagonal dominance as a sufficient PSD condition; alpha capped at 1; finite Latin-hypercube sample of 100n points; monotone updates; underestimation enforced to a tolerance epsilon = 1e-3 (pp. 5-13, 15, 19, 22).",
+  "proof_devices": [
+   "d.c. partial-epigraph reformulation keeping the cutting-plane lower bounds monotone, so Part I's Hoffman-based convergence proof carries over unchanged (pp. 5-6)",
+   "Observation 1 (monotonicity of q in alpha) generalised by never-increase LP constraints on A and on the shift gamma (pp. 8-14)",
+   "diagonal dominance on A*Lambda and on (A^(k) - A)*Lambda giving convexity and monotone updates at once (pp. 10-11)",
+   "Observation 2: the sampled-objective LP gives the tightest parameters in the limit of infinitely many sample points (p. 9)",
+   "vertical shift making local convexity at x0 sufficient for a valid quadratic underestimator (p. 12)",
+   "hypervolume-reduction tightness metric (6) against the linear underestimator at the same point (p. 9)"
+  ],
+  "experiments": "Hierarchy study on 10 COCONUT d.c. functions in 1-2 variables (25 locally convex construction points each; 2-D metric 0.384 for S up to 0.502 for MS at 35-133 ms; shifted methods valid at every point) and root-node study on 24 generated d.c. problems in 1-4 variables, where the DS-based convex QCQP solved by IPOPT 3.14.13 beats BARON 24.5.8 at defaults (with its bound tightening) on 23 of 24 and closes 78.8%, 92.1%, 94.4% and 94.5% of the root gap on average by dimension; time admitted higher but not measured; source of the optimal values, branch-and-bound runs and bound verification not reported (pp. 15-21, 23).",
+  "positioning": "Separates itself from alphaBB and variants, McCormick, RLT and the reformulation-perspectification technique, none giving convex quadratic relaxations of general d.c. functions; builds on Su et al. 2018 as the series' foundation; BARON as the state-of-the-art comparator; the group's own convex-quadratic relaxation work for MIQPs (INDEX S133) not cited (pp. 3-4, 19, 29-33).",
+  "writing": "Four contribution bullets and a roadmap, a hierarchy diagram ordered by tightness and cost, figures of valid and invalid construction points, results with absolute and relative changes; strong claims on bounds, the time question deferred to a compiled implementation (pp. 4, 7, 13-15, 17-18, 21).",
+  "limits_future": "More computing time than BARON and a Python implementation; diagonal-dominance and monotonicity restrictions; root node only, at most four variables (visible, not discussed); future: the full PSD cone, parameters on the first-order term, removing monotonicity while keeping efficiency and convergence (pp. 19-22).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Step 7: the relaxation type is reconsidered because convex QCQP solvers became faster and more robust; within the hierarchy the cost per underestimator is measured and DS is chosen as the trade-off between quality and tractability.",
+    "pages": "pp. 1-2, 18-19"
+   },
+   {
+    "method": "Method 5",
+    "relation": "contradiction",
+    "note": "Steps 1 and 5: the BARON comparison ranks by root bound only; time is admitted to be higher but not measured, failures are not counted, and no check of the IPOPT bound is described.",
+    "pages": "pp. 19, 21"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Because d.c. benchmarks are scarce, a library is generated and published as .nl files, but the source and certification of the optimal values are not stated.",
+    "pages": "pp. 19-21, 23"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "The idea is judged against BARON's default root bound, not built into BARON and ablated there; it is a Python prototype.",
+    "pages": "pp. 19, 21"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "controlled-tightness instance generator",
+    "evidence": "Test problems are built by adding linear, convex and then d.c. constraints, each right-hand side set by binary search to remove 20% of the remaining sampled feasible points, with a linking term against separability; instances released as .nl files.",
+    "pages": "pp. 20-21"
+   },
+   {
+    "pattern": "relaxation ladder with monotone LP updates",
+    "evidence": "Nested parameterisations (scalar, diagonal, matrix; with or without shift) where every update is an LP that may never raise the quadratic, so one convergence argument covers all.",
+    "pages": "pp. 8-14"
+   }
+  ],
+  "transferable": [
+   "Turn the check whether q underestimates f = h - g into concave minimisation over a convex set by a partial epigraph on h, and reuse the convex-case cutting-plane machinery (pp. 5-6).",
+   "Use a downward shift when the tangent at a locally convex point is not a global underestimator (pp. 12-13).",
+   "Seed the first parameter LP with all sample points and later LPs with the violated point only (pp. 9-10).",
+   "Measure tightness as the hypervolume reduction against the linear underestimator built at the same point (p. 9).",
+   "Generate a test library with controlled difficulty and publish the instances and construction points (pp. 20-21).",
+   "When comparing with a solver's root bound, let it keep its defaults and auxiliary techniques and match its outer-approximation density (p. 19)."
+  ],
+  "coauthors": "William R. Strahl (CMU, graduate student), Arvind U. Raghunathan (MERL), Chrysanthos E. Gounaris (CMU, corresponding author)",
+  "quotes": [
+   {
+    "text": "although more expensive to compute, provide tighter bounds than their classical linear counterparts",
+    "page": 1
+   },
+   {
+    "text": "the latter requires more computation time than BARON",
+    "page": 21
+   }
+  ]
+ }
+]

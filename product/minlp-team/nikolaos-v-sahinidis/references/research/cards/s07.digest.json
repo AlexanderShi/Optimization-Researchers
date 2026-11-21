@@ -1,0 +1,255 @@
+[
+ {
+  "id": "S084",
+  "year": "2019",
+  "title": "Tuning BARON using derivative-free optimization algorithms",
+  "read_level": "full",
+  "contribution": "With 27 DFO codes tuning 11 BARON options on 126 GLOBALLib and MINLPLib problems (author preprint), per-instance tuning cuts BARON's CPU time by 57% on average and one setting for the whole set by 34%; global DFO tuners beat local ones (49% vs 30%), PSWARM leads per instance and SNOBFIT for the set, and the tuning effort is often not recovered by the savings.",
+  "problem_entry": "Defaults rest on limited computational experience and may do poorly on specific instances; earlier tuning studies covered MILP and local NLP solvers but no global solver, and the 2013 DFO comparison was not run on a true black box (pp. 1-2, 6).",
+  "key_idea": "Treat the tuning of 11 of BARON's 50+ options (8 discrete, 3 continuous) as a nonsmooth black-box problem with CPU time as the objective, and hand it to 27 DFO codes with 1,000 evaluations each, per instance and for the whole set with default-normalized times (pp. 3-8, 11).",
+  "assumptions": "Only CPU time is tuned because BARON finds the same solution whenever it solves within the limit; 126 problems that solve within 20 s at defaults; a ±10% runtime noise band and a 5% tie band for best; integer options rounded; BARON 15.5 on two Xeon E5-2660 v3 (pp. 7-8, 13-14).",
+  "proof_devices": [
+   "runtime-reduction score rr in [-1, 1], positive when the tuned options are faster; as printed in the preprint the two case conditions are swapped relative to that range (p. 8)",
+   "sum of default-normalized times as the objective for one setting across a set (p. 11)",
+   "minimal covering subset of tuners for the best results (p. 14)",
+   "effort-quality plane of average evaluations vs average reduction, redrawn for problems solved within 1, 2, 5 and 10 s (pp. 16-19)"
+  ],
+  "experiments": "Per instance: 57% average CPU-time reduction, 125 of 126 problems improved by more than 10%, node probing switched off in the best settings for nvs20 (pp. 8, 11); one setting for the set: 34% (SNOBFIT), and on all 580 library problems the TOMLAB/LGO setting saves 5% and solves 12 more within 500 s (p. 11); global tuners 49% vs local 30% at 937 vs 325 evaluations (pp. 20-21); most tuners have at least one failure worse than -10% (p. 13).",
+  "positioning": "Extends the 2013 Rios-Sahinidis comparison to a true black box and re-checks it: mostly consistent, with DAKOTA/EA and GLOBAL better and FMINSEARCH worse than in 2013 (pp. 2, 6, 15).",
+  "writing": "The conclusion grades its findings by surprise: not surprising, somewhat surprising, even more surprising (p. 23).",
+  "limits_future": "Tuning time (up to hours) is often not recovered by the seconds saved, so tuning is advised only for instances representative of many later solves (p. 9); tuning and evaluation share the 126 problems (p. 11); problems that take over 20 s at defaults are excluded (p. 7); future: tune other global solvers this way (p. 23).",
+  "method_links": [
+   {"method": "Method 4", "relation": "evidence", "note": "27 codes covering most state-of-the-art DFO algorithms on a public library under one evaluation budget, failures counted per solver, and a portfolio verdict (no single solver dominated, so a minimal covering subset is reported); the 2013 ranking is re-tested on a true black box and the disagreements are named.", "pages": "pp. 6-7, 13-15"},
+   {"method": "Method 4", "relation": "variant", "note": "The tuning problem has no certified optimum, so best means best found, possibly local; there is no separate hold-out, since the wider 580-problem check contains the 126 tuning problems.", "pages": "pp. 11, 13"},
+   {"method": "Method 2", "relation": "evidence", "note": "BARON offers many options because the project is an experimentation platform for its developers, and its defaults come from years of experiments on benchmark sets; the per-instance best (57%) against one setting for all (34%) measures what a single default leaves, the comparison Heuristic 5 later makes against a perfect-selection ceiling. 04-mentorship lists an MS thesis of the same title (2012), which fits Heuristic 9; the paper does not mention it.", "pages": "pp. 3, 5, 8, 11"},
+   {"method": "Method 1", "relation": "evidence", "note": "Weak: probing is rationed by two options because range-reduction subproblems are expensive if not done in moderation; on nvs20 all four best settings switch node probing off (PDo = 0).", "pages": "pp. 4, 11"},
+   {"method": "Method 5", "relation": "evidence", "note": "Weak: tree size does not track time; SNOBFIT's setting explores about as many nodes as the default and CMA-ES's about three times fewer, yet both save about 30%, so CPU time is the yardstick.", "pages": "pp. 11-12"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "own solver as a true black box for benchmarking DFO codes", "evidence": "BARON's option tuning serves as a real black box for 27 DFO codes because the 2013 comparison ran on algebraic problems only.", "pages": "pp. 2, 6"},
+   {"pattern": "a gain counts net of the cost of finding it", "evidence": "Tuning effort (hours) is set against the seconds it saves, tuners are compared by evaluations spent as well as by reduction, and tuning is advised only for representative instances.", "pages": "pp. 9, 15-17"}
+  ],
+  "transferable": [
+   "Benchmark black-box optimizers on the option tuning of a solver you control: option values in, CPU time out, the default setting as the baseline (pp. 2, 5-6).",
+   "Declare a noise band before comparing runtimes (here ±10%) and a tie band for best (here 5%) (pp. 13-14).",
+   "When tuning one setting for a set, divide each instance's time by its default time before summing, so that a few long instances do not decide (p. 11).",
+   "Report the tuning cost next to the savings and name the case where tuning pays: instances representative of many later solves (p. 9)."
+  ],
+  "coauthors": "Jianfeng Liu, Nikolaos Ploskas (CMU Chemical Engineering); Sahinidis is the corresponding author",
+  "quotes": [
+   {"text": "A primary objective of the BARON project is to provide its developers with a platform for experimentation with various branch-and-bound algorithms.", "page": 3},
+   {"text": "Finally, it is worth noting that runtime reduction due to optimized configurations is oftentimes insufficient to recover the computational effort required for solving the corresponding tuning problems.", "page": 9}
+  ]
+ },
+ {
+  "id": "S104",
+  "year": "2019",
+  "title": "Automated learning of chemical reaction networks",
+  "read_level": "full",
+  "contribution": "A cardinality-constrained MINLP selects reactions and estimates Arrhenius parameters from a physics-built superset of stoichiometries and mechanisms, sized by BIC, with piecewise ALAMO for derivatives and error-maximization sampling (RBFOpt) to choose each new experiment; on three cases (accepted-manuscript preprint) it recovers the true network from few points where equal-size LHS and random designs fail.",
+  "problem_entry": "Kinetic model identification needs expensive data; expert design or exhaustive search becomes prohibitive as candidate reactions grow, factorial designs scale badly and ignore model knowledge, and Fisher-information designs suffer from correlated rate coefficients and activation energies (p. 2).",
+  "key_idea": "One binary per stoichiometry-mechanism pair with big-M links to the Arrhenius parameters, at most one mechanism per stoichiometry, a cardinality bound swept upward until BIC rises (RIPE), and error-maximization sampling that adds the point of largest scaled model error until it falls below a tolerance (EMS) (pp. 4, 7-9, 14-17).",
+  "assumptions": "Explicit algebraic rate laws; Gaussian noise with species-specific variance; the superset contains the true reactions; adsorption constants known in advance; big-M bounds from scaled local fits; global optimality of the BIC loop asserted from the convex form of BIC, not proved (pp. 5-6, 8, 10, 14, 18).",
+  "proof_devices": [
+   "logic cuts against linearly dependent reaction sets and for the lower-order alternative, e.g. y1 + y2 + y3 <= 2 and y1 + y2 + 2y3 <= 2 (pp. 8-9)",
+   "BIC stopping rule over increasing cardinality (pp. 14-15)",
+   "recursive splitting of the time domain for derivative estimation with piecewise ALAMO, n_min = 5 and delta set to R^2 = 0.95 (p. 13)"
+  ],
+  "experiments": "Simulated CSTR (12 candidate stoichiometries, 3 true): the correct network with seven data points in six iterations, MINLPs in seconds with BARON (pp. 18-20); literature chemical-looping data: piecewise ALAMO changes the selected NiO/Al2O3 oxidation model (pp. 23-24); 35 candidate reactions: correct network from 16 points, minutes per MINLP, 5.98% error vs 3.92% for the true model, while equal-size LHS and ten random designs never find it (pp. 26-27).",
+  "positioning": "Against factorial and Fisher-information designs and MINLP model-reduction work, with Tsay et al. named as the closest approach; builds on ALAMO (pp. 2-4).",
+  "writing": "The contribution is stated as four key features (p. 4); the mass-balance limitation is argued away rather than fixed (p. 20).",
+  "limits_future": "BIC-sized models may violate species mass balances (p. 20); batch reactors in time only (p. 14); flow reactors need measured profiles (p. 29); accuracy-only sampling objective (pp. 16-17); the chemical-looping study is not compared with published mechanisms (p. 23); future: a confidence-level stopping rule and more logic constraints (pp. 20-21, 29).",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "A black-box reactor made algebraic and small: best-subset selection by MINLP over a physics-built superset, BIC sizing, adaptive error-maximization sampling, and derivative-free search only for the black-box system; equal-size LHS and random designs fail where EMS succeeds, the comparison design of the 2017 sampling study.", "pages": "pp. 4, 7-9, 14-17, 27"},
+   {"method": "Method 3", "relation": "variant", "note": "First-principles consistency is not imposed on the fitted model (unlike step 4): RIPE may return models that violate mass balances and the extra logical constraints are declined; physics enters only through elemental-balance-consistent candidates and logic cuts.", "pages": "pp. 8-9, 18, 20"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "logic cuts on selection binaries encode domain rules", "evidence": "Cuts forbid linearly dependent reaction sets and prefer the lower-order reaction; integer variables can also admit side reactions only with their main reaction and keep conflicting mechanisms apart.", "pages": "pp. 8-9, 11-12, 28-29"}
+  ],
+  "transferable": [
+   "Write model discrimination as a superstructure: one binary per alternative mechanism of each stoichiometry, big-M links to its parameters, at most one mechanism per stoichiometry and a cardinality bound; sweep the cardinality upward and stop at the first BIC increase (pp. 7-9, 14-15).",
+   "Prefer the simpler of dependent alternatives with a weighted logic cut: y1 + y2 + 2y3 <= 2 admits the third-order reaction only if neither second-order one is chosen (p. 9).",
+   "Get big-M bounds by scaling local least-squares fits of each sub-model (p. 8).",
+   "Validate adaptive sampling on a case with a known true model against an equal-size LHS design and several random designs, giving the true model's own error as the floor (p. 27)."
+  ],
+  "coauthors": "Zachary T. Wilson (first author, CMU Chemical Engineering); Sahinidis is the corresponding author",
+  "quotes": [
+   {"text": "The fundamental advantage of a MINLP approach comes in the systematic consideration of many alternative models.", "page": 5},
+   {"text": "The randomly selected data does not succeed in selecting the correct model in any case.", "page": 27}
+  ]
+ },
+ {
+  "id": "S130",
+  "year": "2019",
+  "title": "Evaluating and ranking patents with multiple criteria: How many criteria are required to find the most promising patents?",
+  "read_level": "full",
+  "contribution": "Patents found by Quid are ranked by TOPSIS on eight network and citation criteria whose weights come from a goal-programming LP over ordinal constraints instead of expert elicitation; the method is implemented as a web decision-support system with SABIC co-authors (author preprint), and a subset study finds that at least five criteria are needed to reproduce the eight-criteria top lists.",
+  "problem_entry": "Citation analysis misses recent patents, and all earlier multicriteria patent methods need expert estimates that are subjective, not repeatable and block automation (pp. 2, 8-9, 12).",
+  "key_idea": "Encode beliefs about criteria as LP constraints (group and within-group orders, a 0.25 cap on citation weights, bounds [0.05, 0.33], weights summing to 1) with deviation variables, solve to zero deviation with two alternative optima, and rank by distance to the ideal (TOPSIS) instead of a weighted sum (pp. 9-20).",
+  "assumptions": "The constraints are subjective but intuitive and can be changed by decision makers; Quid supplies the network and the analyst removes irrelevant patents by hand; a weighted sum is rejected for assuming independent criteria and letting one scale dominate (pp. 17, 20).",
+  "proof_devices": [
+   "goal programming with deviation variables on 25 soft constraints and a hard sum-to-one constraint (pp. 15-17)",
+   "TOPSIS with vector normalization and distances to ideal and anti-ideal solutions (pp. 18-20)",
+   "paired weight perturbations at constant sum (pp. 27-29)",
+   "exhaustive enumeration of criteria subsets of sizes 1-7 with maximum, minimum and average overlap of top lists (pp. 34-36)"
+  ],
+  "experiments": "Top-five lists for ammonia (166 patents), olefins (102) and polyethylene (116) under weights A, B and equal weights, judged by domain reading (pp. 23-26); a weighted sum fails because betweenness dominates, over 95% of the sum in one case (pp. 32-33); on 22 capstone design projects fewer than five criteria miss at least 15% of the top five and 25% of the top ten, and five find 95% (pp. 34-37).",
+  "positioning": "Against citation-based ranking and expert-weighted multicriteria methods; claims the first multicriteria patent method that needs no decision-maker estimates (pp. 3-9).",
+  "writing": "The title's question is answered with a number, five criteria (pp. 1, 35); case-study validation rests on domain plausibility (pp. 24-25).",
+  "limits_future": "Subjective constraints (p. 17); the criteria-count study measures agreement with the paper's own eight-criteria ranking with equal weights, which the paper says can mislead (pp. 26, 34); the conclusions name a case (direct propylene oxidation) that the body does not study (pp. 25-26, 37); the printed LP reverses the stated rule wB <= wI (pp. 14, 16); future: customized constraints (p. 17).",
+  "method_links": [
+   {"method": "Method 4", "relation": "variant", "note": "The criteria-count study is exhaustive and reports the spread, but its yardstick is the proposed method's own ranking, not ground truth, and the case studies are judged by domain plausibility.", "pages": "pp. 24-26, 34-36"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "ordinal-constraint LP instead of expert weights", "evidence": "Expert beliefs become LP constraints with deviation variables; zero total deviation shows they are jointly consistent, alternative optima (A, B) show what they leave open, and the constraints are argued to be easier to negotiate and to allow automation.", "pages": "pp. 3, 12-18"}
+  ],
+  "transferable": [
+   "Encode experts' qualitative beliefs about criteria weights as ordinal LP constraints with deviation variables, minimize total deviation, then rank with more than one optimal weight vector to see how much the beliefs leave open (pp. 13-18, 23-26).",
+   "Before adopting a normalized distance method, show on the same data how a weighted sum fails and name the criterion that dominates and its share of the sum (pp. 32-34).",
+   "Size a criteria set by enumerating all subsets of each size and reporting the maximum, minimum and average overlap of the top-k lists (pp. 34-36)."
+  ],
+  "coauthors": "Nikolaos Ploskas, Tong Zhang (CMU Chemical Engineering), Flor Castillo, Krishnan Sankaranarayanan (SABIC Americas); Sahinidis is the corresponding author",
+  "quotes": [
+   {"text": "Such a process is subjective and likely introduces biases based on experts backgrounds.", "page": 12},
+   {"text": "While subjective, the above constraints and goals are intuitive.", "page": 17}
+  ]
+ },
+ {
+  "id": "S214",
+  "year": "2019",
+  "title": "Heat exchanger circuitry design by decision diagrams",
+  "read_level": "full",
+  "contribution": "A relaxed decision-diagram MIP models all manufacturable heat-exchanger circuitries compactly (about 6 GB down to 300 KB at 40 tubes), and CPLEX's solution pool supplies 2,500 diverse feasible designs for a simulator to score, reaching 128 tubes and on average 9% more heat capacity than the industrial baseline (read in the MERL TR version).",
+  "problem_entry": "Engineers choose circuitries for 60-200 tubes by expert knowledge and enumerated simulations; the space is huge and performance discontinuous, and the authors' earlier DFO formulation was dense and stopped at 36 tubes (TR pp. 4, 6, 8).",
+  "key_idea": "Treat pre-bent tube pairs as super-nodes and model circuitries as flows in a relaxed decision diagram with a 0-node for circuit ends, each super-node entered once; since the objective exists only in a simulator, set it to a constant and let the MIP solution pool generate diverse feasible designs to simulate (TR pp. 6-9).",
+  "assumptions": "Fixed geometry and inlet conditions; five manufacturing rules: pre-connected column pairs, far-end links across rows only at the edge, no plugged tubes, near-end inlets and outlets, no merges or splits (TR pp. 5-6).",
+  "proof_devices": [
+   "formulation-size counts: |S|^3 - |S|^2 + 3|S| - 1 variables and |S|^2 + 2|S| + 2 constraints (TR p. 8)",
+   "size table against the earlier formulation, including the 16-tube case where the new one is larger (TR p. 8)"
+  ],
+  "experiments": "Seven coils of 4-128 tubes against the two-circuit industrial baseline and the earlier approach: on average +9% and +4% heat capacity, +8,826% and +90% Q/dP; the heat-capacity gain falls from 26% at 4 tubes to 1% at 128; run times are not tabulated (TR pp. 9-10).",
+  "positioning": "Extends the authors' 2018 DFO formulation and imports decision diagrams from the CP and OR literature (TR p. 4).",
+  "writing": "Results are given as average percentage gains over a baseline and over the earlier approach (TR p. 9).",
+  "limits_future": "The 2,500-evaluation budget caps the results on large coils; truncating the diagram for pressure drop and removing forbidden arcs are left to future work; sampling gives no bound on the distance to the optimum (TR pp. 8-10).",
+  "method_links": [
+   {"method": "Method 3", "relation": "variant", "note": "The simulator stays a black box; the algebra models only the feasible set, and the search scores a diverse pool of MIP-feasible designs instead of running a DFO code; problem knowledge enters as manufacturing constraints (Heuristic 2).", "pages": "TR pp. 6, 8-10"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "solution-pool sampling for a simulator objective", "evidence": "A constant objective plus CPLEX's solution pool (PopulateLim, SolnPoolCapacity, SolnPoolReplace) enumerates 2,500 diverse feasible circuitries that CoilDesigner then scores.", "pages": "TR p. 9"}
+  ],
+  "transferable": [
+   "When the objective exists only in a simulator but the feasible set is combinatorial and algebraic, give the MIP a constant objective and use the solver's solution pool to generate thousands of diverse feasible designs, then simulate each (TR p. 9).",
+   "Model circuits or routes as flows through a layered decision diagram with an end-of-path node, and forbid repeats with one cover constraint per node instead of cycle-elimination inequalities, which keeps the matrix sparse (TR pp. 6-8).",
+   "Report formulation sizes against the old formulation across instance sizes, including the size at which the new one is larger (TR p. 8)."
+  ],
+  "coauthors": "Nikolaos Ploskas (University of Western Macedonia), Christopher Laughman and Arvind U. Raghunathan (Mitsubishi Electric Research Laboratories); Sahinidis last author",
+  "quotes": [
+   {"text": "Current design processes typically involve the manual choice of the configuration based upon expert knowledge and the results of an enumerated set of simulations.", "page": 4},
+   {"text": "We replaced the objective in (1) by a constant and applied the mixed integer programming solver CPLEX on (2)-(6) to produce 2, 500 feasible circuitry configurations.", "page": 9}
+  ]
+ },
+ {
+  "id": "S306",
+  "year": "2019",
+  "title": "Status report for optimization and engineering",
+  "read_level": "full",
+  "contribution": "Sole-authored editorial at the end of his second year as editor-in-chief of Optimization and Engineering: the journal's history, growth from 20 to over 40 articles a year, its special issues (including his MIP issue with Grossmann and his MINLP issue), a rejection rate over 83%, 109 days to first decision and an impact factor of 1.824.",
+  "problem_entry": "n/a (editorial)",
+  "key_idea": "n/a (editorial)",
+  "assumptions": "n/a",
+  "proof_devices": [],
+  "experiments": "none",
+  "positioning": "n/a",
+  "writing": "A list of journal metrics; the closing call for papers on algorithms, software, theory and interfaces with engineering reappears almost word for word in the same year's prize announcement S318 (p. 2).",
+  "limits_future": "n/a; no editorial policy beyond growth, which the publisher encourages (p. 2).",
+  "method_links": [],
+  "new_pattern_candidates": [],
+  "transferable": [],
+  "coauthors": "none (sole author, as editor-in-chief)",
+  "quotes": [
+   {"text": "As this issue marks the end of my second year as editor-in-chief of Optimization and Engineering (OPTE), I am delighted to provide a brief status report for our journal.", "page": 1},
+   {"text": "I encourage submissions of high-quality papers exploring optimization algorithms, software, and theory, and the interfaces between optimization and engineering.", "page": 2}
+  ]
+ },
+ {
+  "id": "S318",
+  "year": "2019",
+  "title": "Announcement: Howard Rosenbrock Prize 2018",
+  "read_level": "full",
+  "contribution": "Editorial announcement, in his voice as editor-in-chief, of the 2018 Rosenbrock Prize of Optimization and Engineering for Hoeltgen et al. 2018 on sparse l1 regularisation for acoustic source characterisation; the prize citation it reprints is the selection committee's (Ohsaki, Epelman, Zuluaga), not his.",
+  "problem_entry": "n/a (announcement)",
+  "key_idea": "n/a (announcement)",
+  "assumptions": "n/a",
+  "proof_devices": [],
+  "experiments": "none",
+  "positioning": "n/a",
+  "writing": "Prize facts, the committee's citation, then the journal's scope in the same sentence as S306 (pp. 1-2).",
+  "limits_future": "n/a",
+  "method_links": [],
+  "new_pattern_candidates": [],
+  "transferable": [],
+  "coauthors": "none (sole author line; the prize citation is by the committee Makoto Ohsaki, Marina Epelman and Luis Zuluaga)",
+  "quotes": [
+   {"text": "This prize is awarded annually to honor the authors of the best paper published in OPTE in the previous year.", "page": 1},
+   {"text": "Our journal encourages submissions of high-quality papers exploring optimization algorithms, software, and theory, and the interfaces between optimization and engineering.", "page": 2}
+  ]
+ },
+ {
+  "id": "S319",
+  "year": "2019",
+  "title": "Ignacio Grossmann of Carnegie Mellon University",
+  "read_level": "full",
+  "contribution": "A ChE Educator profile of Ignacio Grossmann co-signed by four CMU colleagues (their voice about Grossmann, not Sahinidis's method): his path from Sargent's group at Imperial College to CMU, outer approximation (1986), DICOPT, BONMIN and LOGMIP, energy-integration and scheduling work, the CAPD and EWO consortia, and his teaching and outreach.",
+  "problem_entry": "n/a (profile)",
+  "key_idea": "n/a (profile)",
+  "assumptions": "n/a",
+  "proof_devices": [],
+  "experiments": "none",
+  "positioning": "Genre praise; the priority claims for outer approximation and DICOPT are given without references (p. 2).",
+  "writing": "Biographical profile in the collective voice of four colleagues (pp. 1-5).",
+  "limits_future": "n/a",
+  "method_links": [],
+  "new_pattern_candidates": [],
+  "transferable": [],
+  "coauthors": "Lorenz Biegler, Chrysanthos Gounaris, B. Erik Ydstie (CMU)",
+  "quotes": [
+   {"text": "Working with Prof. Roger W. H. Sargent, a key founder and pioneer of process system engineering (PSE), Ignacio addressed three important problems: optimization of heat exchanger networks, optimization under uncertainty, and optimal design of multipurpose plants.", "page": 1},
+   {"text": "His development of Outer Approximation in 1986 was the first rigorous decomposition algorithm for solving MINLPs.", "page": 2}
+  ]
+ },
+ {
+  "id": "S034",
+  "year": "2020",
+  "title": "Or-gym: A reinforcement learning library for operations research problems",
+  "read_level": "full",
+  "contribution": "OR-Gym (arXiv v2) is an open-source Gym-interface library of operations research environments (knapsack, virtual-machine packing, multi-echelon inventory, asset allocation) whose PPO agents are benchmarked against MILP, LP, oracle and robust-optimization models and heuristics: RL loses on offline knapsack and beats static policies or the heuristic where uncertainty matters.",
+  "problem_entry": "RL beats humans at games but has few industrial uses, standard RL suites lack the structure and relevance of optimization problems, and the MDP framing is unfamiliar to optimizers (pp. 1-2).",
+  "key_idea": "Re-frame classic OR problems as MDP environments, train one PPO architecture on all of them with minimal tuning, and benchmark each against exact models and heuristics (pp. 2, 4).",
+  "assumptions": "Per-problem MDP state, action and reward; infeasible actions penalized or masked; 30-day inventory episodes; Gaussian asset prices with a terminal-only reward (pp. 5-6, 8-9, 14-15, 20-21).",
+  "proof_devices": [
+   "performance ratio against the MILP optimum or a perfect-information oracle LP (pp. 7, 10, 17-18)",
+   "big-M reformulation of the min and max operators so that a MILP finds optimal static base-stock levels over a sample path (p. 16)",
+   "action masking as a hard constraint (pp. 9, 23)"
+  ],
+  "experiments": "Offline knapsack: RL ratios 1.32 and 1.11 vs MILP, worse than the greedy heuristic; online: 1.8 vs the heuristic's 2.02 (p. 7); VM packing: masked RL about 9% better than First Fit and 16% worse than the shrinking-horizon MILP (p. 10); inventory: RL 1.2 and 1.3 vs the oracle, better than static DFO and MIP base-stock policies, worse than the shrinking-horizon LP (p. 18); asset allocation: higher mean but wider spread than robust optimization, which solves in minutes while RL trains for hours (p. 22).",
+  "positioning": "Builds on and absorbs the Balaji et al. benchmarks; prefers robust optimization to multistage stochastic programming on Ben-Tal et al.'s arguments (pp. 2, 21).",
+  "writing": "Addressed to both the RL and OR communities; verdicts given per problem class, with conditions (pp. 1-2, 7, 23).",
+  "limits_future": "RL is not worth it for offline knapsack; end-of-horizon inventory draining; training cost; future: rules extracted from policies, RL-mathematical-programming hybrids, graph neural networks (pp. 7, 18, 22-23).",
+  "method_links": [
+   {"method": "Method 4", "relation": "evidence", "note": "Weak (fourth of six authors): a new method class is entered by benchmarking against exact optima and a perfect-information oracle, with heuristics as further baselines and losses reported class by class; the oracle LP that knows the realized demand is the ceiling of Heuristic 5. The offline-knapsack verdict also fits Taste warning sign 2.", "pages": "pp. 7, 10, 17-18, 22-23"},
+   {"method": "Method 4", "relation": "variant", "note": "One generated instance family per environment, averages over 100 episodes, no public library and no hold-out.", "pages": "pp. 7, 10, 18"}
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Judge a learned policy by its ratio to the exact optimum and to a perfect-information oracle, problem class by problem class, and report where it loses (pp. 7, 10, 17-18).",
+   "Use one architecture and minimal hyperparameter tuning across all environments, so that per-problem tuning does not flatter the method (p. 4).",
+   "Enforce hard constraints by masking infeasible actions, and report the unmasked run that learns to end episodes early (pp. 9-11).",
+   "Get optimal static base-stock levels over a sample path by writing the min and max operators of the inventory recursion with big-M binaries (p. 16)."
+  ],
+  "coauthors": "Christian D. Hubbs, Hector D. Perez, Owais Sarwar, Ignacio E. Grossmann (CMU Chemical Engineering), John M. Wassick (Dow Chemical)",
+  "quotes": [
+   {"text": "For simple, off-line cases it seems best to resort to heuristics or optimal solutions rather than RL.", "page": 7},
+   {"text": "Both approaches are compared to an oracle model, which is a LP model that determines the optimal dynamic reorder policy for that run by using the actual demand values for each time period.", "page": 17}
+  ]
+ }
+]

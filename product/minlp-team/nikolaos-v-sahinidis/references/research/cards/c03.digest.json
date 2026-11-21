@@ -1,0 +1,234 @@
+[
+ {
+  "id": "S018",
+  "year": "2011",
+  "title": "Semidefinite relaxations for quadratically constrained quadratic programming: A review and comparisons",
+  "read_level": "full",
+  "contribution": "Proves a dominance chain among SDP relaxations of nonconvex QCQP. DNN equals Shor plus partial first-level RLT and dominates the others, and a new SDP relaxation for bilinear programs equals the diagonal-envelope Shor relaxation. On 700 random QCQPs, DNN/SRLT gets gaps of about 3% at three orders of magnitude more time, while the Lagrangian-derived DLG1 gets about 13% in seconds.",
+  "problem_entry": "Which of the many SDP relaxations of nonconvex QCQP is most appropriate in practice, in tightness and tractability, for global optimization; answered by theory first, then computation (p. 2).",
+  "key_idea": "Prove the chain vLG = vShor = vDShor <= vSD <= vSC <= vSRLT = vDNN <= f*, with vDShor <= vDLG1 <= vSRLT; SD and DLG1 are incomparable (a one-variable instance for one direction, computed instances for the other) (pp. 2-3). Then price the non-dominated relaxations by CPU time on random QCQPs (pp. 17-19). New relaxations: DLG1 (squared linear equalities), KKT1/KKT2, and BL for bilinear programs (pp. 7, 12-15, 20-26).",
+  "assumptions": "Finite bounds scaled to [0,1]^n and symmetric Q^k (p. 2); a Slater-type Condition 1 from p. 6 on; a nonempty relative interior for Prop. 11 (p. 23). Shor alone can be unbounded because the lifted X is not bounded (p. 8).",
+  "proof_devices": [
+   "Weak duality plus conic duality (Ben-Tal-Nemirovski Thm 2.4.1) identify the Lagrangian dual with the Shor SDP (Props. 1-2, p. 6)",
+   "Two-way feasibility maps between relaxations; implications such as 'x - diag X >= 0 and diag X >= 0 imply x >= 0' order SD, SC and SRLT (Props. 4, 9, 10 and Theorem 1; pp. 8, 16)",
+   "PSD square root: a^T(X - xx^T)a = 0 with X - xx^T = B^2 gives Ba = 0, hence Xa = dx, so DNN = SRLT (Prop. 9, p. 16)",
+   "Completely positive lifting with slacks (Burer's Prop. 2.1), then relaxing CP to DNN; exactness when every quadratic constraint is redundant over F or holds in reverse over all of F (Props. 5-7, pp. 10-12)",
+   "KKT lifting: stationarity premultiplied by x^T gives an objective identity; the multipliers are lifted into one PSD matrix, and complementarity is dropped to shrink it (Prop. 8, pp. 13-14)",
+   "Vertex-generated convex envelope of multilinear functions (Rikun) gives X' = sum phi_t pi_t pi_t^T with diag X' = x; SDP duality under Slater then passes to BL (Props. 11-12, pp. 23-26)",
+   "Diagonal shift X' = X + diag z leaves a bilinear objective unchanged, so the new BL equals SD (Prop. 13, p. 26)",
+   "One-variable counterexample min{-3x^2 + 2x : 0 <= x <= 1}, on which SD beats DLG1 (p. 3)"
+  ],
+  "experiments": "700 random QCQPs: n = 20-60, four (m, q) settings, densities 25/50/100%, 25-100% negative eigenvalues via Z D Z^T, five per specification. Gaps are measured against the best feasible value from BARON/MINOS/CONOPT/SNOPT at 10,000 s each. CSDP was chosen after an SDPA/CSDP/DSDP pilot, with the solver's share of each gap at most 1%. Results: DNN/SRLT ~3% at ~400 s, SC 9% at 359 s, DLG1 13% in seconds, SD 19%; KKT1/KKT2 no better than SD. Root bounds only, no failure counts (pp. 17-22).",
+  "positioning": "Recasts Burer's recent DNN relaxation as equal to Shor plus partial first-level RLT and credits Burer's analogous result (abstract, p. 16). Builds on Anstreicher's SDP-plus-RLT finding and Wolkowicz's Lagrangian view (p. 8). Names Burer's decomposition algorithm for DNN as the way forward (p. 27).",
+  "writing": "The theorem chain is stated on p. 2, before any definitions. The abstract pairs the dominance result with numbers: three orders of magnitude, 3% against up to 19%, 13% in a few seconds (p. 1). Short coded names for relaxations. Hedged, time-stamped verdict, 'At the time of this writing' (p. 27). The group's own losing relaxations are reported plainly (pp. 19, 26).",
+  "limits_future": "DNN/SRLT is time-consuming for current SDP solvers; the comparison is root-only; implementations untuned (pp. 17, 27). Future: decomposition for DNN, approximate solution of the DNN/SRLT dual, comparisons inside branch and bound (p. 27). Unstated: random instances, no release mentioned.",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Dominance is proven first, then every relaxation is priced by CPU time. SC is dropped because its time follows the stronger DNN/SRLT, and the recommendation is the balance relaxation DLG1. SDP codes are chosen for embeddability in branch and bound. No failure counts; random instances, not a library.",
+    "pages": "pp. 1, 17-19, 27"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "The area is entered with a systematic comparison, but the yardstick is the best feasible value from four solvers (not certified), the instances are random with no release mentioned, and the group's own new relaxations sit inside the comparison (reported as losing or equivalent).",
+    "pages": "pp. 2, 17, 19, 26"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "The study runs on standalone SDP codes outside BARON; the production solver enters only through the embeddability criterion and the deferred branch-and-bound comparison.",
+    "pages": "pp. 18, 27"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "dominance lattice, then price",
+    "evidence": "A partial order of the relaxations is proved, with equivalences (DNN = SRLT; BL = SD) and an incomparability instance, before computation decides among the non-dominated ones.",
+    "pages": "pp. 2-3, 16-19, 26"
+   },
+   {
+    "pattern": "calibrate the instrument before ranking",
+    "evidence": "Three SDP solvers are piloted on the hardest relaxation; CSDP is chosen, and the solver's share of every reported gap is bounded by 1%.",
+    "pages": "p. 18"
+   },
+   {
+    "pattern": "structural-knob instance generator",
+    "evidence": "Random QCQPs varied factorially in m, q, density and fraction of negative eigenvalues, with one figure per knob.",
+    "pages": "pp. 17, 19-22"
+   },
+   {
+    "pattern": "taxonomy-first review with one unifying lens",
+    "evidence": "All SDP relaxations are read as Lagrangian relaxations of reformulated primals; which reformulation closes the gap is left open.",
+    "pages": "p. 8"
+   }
+  ],
+  "transferable": [
+   "Present a relaxation zoo as a dominance lattice: prove equivalences by two-way feasibility maps and settle every incomparable pair with a small instance, then let computation decide only among the non-dominated relaxations (pp. 2-3, 16, 19)",
+   "Use the conic solver's dual value as the bound, and state the solver tolerance as an upper limit on its share of each reported gap (p. 18)",
+   "When a stronger and a weaker relaxation cost about the same, drop the weaker; when the strongest is orders of magnitude slower, add a cheap balance relaxation as a second recommendation (pp. 19, 27)",
+   "Square linear equalities and add box-derived redundant quadratic constraints before dualizing, so that a Lagrangian-derived SDP keeps the information in the linear constraints (p. 7; Fig. 3, p. 19)",
+   "Generate random nonconvex QCQPs with a controlled fraction of negative eigenvalues via Q = Z D Z^T and vary one structural knob per figure (p. 17)",
+   "Test a claimed dominance on a one-variable instance before computing anything (p. 3)"
+  ],
+  "coauthors": "Xiaowei Bao (UIUC Chemical and Biomolecular Engineering), Mohit Tawarmalani (Purdue Krannert)",
+  "quotes": [
+   {
+    "text": "The primary motivation is that, even when a dominance relationship has been established, the practical solvability of tight relaxations still needs to be investigated.",
+    "page": 17
+   },
+   {
+    "text": "Comparisons of these relaxations in the context of a branch-and-bound algorithm should be addressed by future research.",
+    "page": 27
+   }
+  ]
+ },
+ {
+  "id": "S001",
+  "year": "2013",
+  "title": "Derivative-free optimization: a review of algorithms and comparison of software implementations",
+  "read_level": "full",
+  "contribution": "Reviews derivative-free algorithms and benchmarks 22 solvers on 502 bound-constrained problems (112,448 runs, 2,500 evaluations each) against BARON/LINDOGLOBAL global optima, with developer rounds and a transformed unseen set. It concludes that no solver dominates and that four solvers together give the best results in most cases.",
+  "problem_entry": "A counted gap: the last broad comparison (1998) had six solvers and eleven problems, the number of solvers has more than quadrupled since, and other comparisons favour the authors' own algorithms; four user questions frame the study (p. 2).",
+  "key_idea": "Classify algorithms (direct/model-based, local/global, deterministic/stochastic) and read every method as a rule for choosing the next point to evaluate, with or without partitioning the space (pp. 2-3, 11-13). Then compare all implementations under identical bounds, starting points, budgets and default settings against known global optima, by several criteria (pp. 19-41).",
+  "assumptions": "Deterministic f, bound constraints only, n <= 300 (p. 19). The algebraic test problems are hidden behind a function-value interface (p. 21). Missing bounds were set to [-10,000, 10,000] (p. 20); 357 problems lacked lower and upper bounds on at least one variable (p. 21). Constraints and noise are excluded (p. 41).",
+  "proof_devices": [
+   "n/a: no proofs of its own. Reported from the literature: McKinnon's Nelder-Mead counterexample (p. 4); GSS converges to stationary points that may be maxima or saddles (p. 4); MADS second-order and probability-1 local results (p. 5); DIRECT converges to a KKT point (p. 7); MCS convergence as s_max grows (p. 8); no finite-time guarantee for simulated annealing (p. 10)"
+  ],
+  "experiments": "2,500 evaluations per run (about 200 CPU days for a bioremediation model) and a 10-minute CPU cap whose hits are reported (pp. 20, 22). Ten shared random starts (112,448 runs). Success if f <= max(1.01 f*, f* + 0.01), with optima from BARON, certified 'for most' problems, and LINDOGLOBAL (p. 21). Defaults per Neumaier et al., with developer rounds (pp. 22-23). Criteria: fraction solved per class, best among solvers, Moré-Wild improvement, minimal solver subsets, size groups, variance, bound availability, refinement (pp. 23-37). Unseen set: an affine transform with c = 2 (p. 41).",
+  "positioning": "Against small comparisons run by the authors of the methods compared (p. 2). Protocol borrowed from Neumaier et al.'s comparison of complete global solvers and from Moré-Wild's improvement test (pp. 22-23, 28). Terminology reconciled (p. 3). History told by citation counts (p. 13). Model-based methods and convergence proofs credited as the field's most important results (p. 41).",
+  "writing": "The abstract carries the counts and names the winners per criterion with hedges (p. 1). Four questions structure the paper (p. 2). Surprises are named ('It is strange that ...') and explained by test-set composition (pp. 23-24, 26, 28-30, 36), once citing a table that has no size column (pp. 21, 36). A camel6 gallery shows search behaviour (pp. 18-19).",
+  "limits_future": "Constraints and noise 'warrant further study on their own'; much work remains for the constrained case (p. 41). Defaults only, no restarts (pp. 22-23). The black-box application claim rests on MS theses (pp. 41-47). Unstated: the unseen set is a mild change of variables of the same functions, and the leading TOMLAB codes were revised during the rounds (pp. 37, 41).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "The source paper. Comparison before own method; optima from a global solver plus a second for unreadable functions; identical bounds, starts and budget tied to an application; defaults plus developer rounds and an unseen set; explicit success test, median and best runs; problems and results published; portfolio conclusion with scope. Precision: optima certified 'for most' problems; the unseen set is an affine transform of the same problems (supports the weak hold-out reading).",
+    "pages": "pp. 2-3, 20-23, 30-33, 37, 41"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "The production solver BARON judges another field's benchmark rather than being ablated; the default-settings rule is borrowed from the comparison of complete global solvers that tested BARON (Workflow E step 5).",
+    "pages": "pp. 21-23, 45"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Runs Method 3 backwards: algebraic problems are hidden as black boxes to get a yardstick. The rankings (deterministic global solvers and a multistart method on top) support the step 7 fallback to a deterministic derivative-free method.",
+    "pages": "pp. 17, 21, 41"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "No reduction, but bounds decide success: problems bounded in all variables are solved far more often, and missing bounds hurt stochastic solvers most (Heuristic 2).",
+    "pages": "pp. 20, 36, 41"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "explain surprising rankings by test-set composition first",
+    "evidence": "Nonconvex classes solved more often than convex ones, inflated improvement rates and the ordering of bound classes are explained by size and term structure before any credit goes to algorithms; one explanation cites a table without sizes.",
+    "pages": "pp. 26, 28-30, 36"
+   },
+   {
+    "pattern": "audit the measurement before the ranking",
+    "evidence": "CPU-limit hits reported per solver and size; a transformed unseen set checks for overtraining after the developer rounds.",
+    "pages": "pp. 22, 41"
+   },
+   {
+    "pattern": "questions-first benchmark",
+    "evidence": "Four user questions stated on p. 2 are each answered by a section of experiments and again in the conclusion.",
+    "pages": "pp. 2, 41"
+   },
+   {
+    "pattern": "taxonomy-first review with one unifying lens",
+    "evidence": "Every DFO iteration is read as choosing the next point(s) to evaluate; methods are then grouped by whether they partition the space.",
+    "pages": "pp. 2-3, 11-13"
+   }
+  ],
+  "transferable": [
+   "Success test with a mixed tolerance, f <= max(1.01 f*, f* + 0.01); median of ten shared random starts as the average case and best of ten as the best case (p. 21)",
+   "Tie the evaluation budget to the run time of a named real application, and report how often the CPU cap rather than the budget ended a run (pp. 20, 22)",
+   "For solvers that cannot take bounds, return one constant large objective value outside the box, the same for all iterations and solvers (p. 21)",
+   "After developer rounds on your test set, rerun on an unseen copy made by a random affine change of variables with a chosen condition number (c = 2) (p. 41)",
+   "Conclude with minimal covering solver subsets for each budget instead of one winner (pp. 30-33)",
+   "Compare variability across problems of different scale with the scaled objective 1 - (f - f_L)/(f_W - f_L) (p. 36)",
+   "Before interpreting a difference between problem classes, check the size distribution of the classes in the test-set table (pp. 20, 26)"
+  ],
+  "coauthors": "Luis Miguel Rios (CMU Chemical Engineering)",
+  "quotes": [
+   {
+    "text": "These additional test problems were obtained from the original ones via a transformation of variables that preserves smoothness and convexity characteristics but otherwise changes the problems considerably, including the shape of the objective functions and location of all local solutions.",
+    "page": 41
+   },
+   {
+    "text": "Careful examination of Table 3, however, reveals that the nonconvex problems in the test set contain, on average, fewer variables.",
+    "page": 26
+   }
+  ]
+ },
+ {
+  "id": "S007",
+  "year": "2016",
+  "title": "Simulation optimization: a review of algorithms and applications",
+  "read_level": "full",
+  "contribution": "Surveys simulation optimization (objectives and constraints evaluated by stochastic simulation). It places SO against mathematical programming, DFO, stochastic programming and machine learning, classifies discrete and continuous algorithm families with pseudocode, tabulates applications and software, and names the missing comparison on large test beds as the field's main gap. Read as the arXiv accepted manuscript.",
+  "problem_entry": "A contrast with mathematical programming: no algebraic model, expensive runs, noisy outputs and no usable derivatives (pp. 1-2); an update of the 2014 4OR review that adds the DFO relation, test beds and ML links (pp. 2-3).",
+  "key_idea": "Organize SO by what is known about the model: a 2x2 of algebraic model available against uncertainty present (p. 5) and a discrete/continuous by local/global classification (p. 7), with pseudocode per family (pp. 8-14); 'the key lies in the statistics of how noise is handled' (p. 6).",
+  "assumptions": "P1 with expected-value objective and constraints, deterministic constraints, bounds, continuous and discrete inputs (p. 2); scope limited to methods that see only noisy observations (p. 4); an iteration is a fixed number of evaluations (pp. 3-4); integer-ordered variables kept integer-ordered (p. 6).",
+  "proof_devices": [
+   "n/a: no proofs. Reported results: O(1/sqrt(k)) best rate by the central limit theorem, so practical runs end on a budget (pp. 4-5); SPSA's two-point estimate has the same asymptotic rate as n + 1 points (p. 11); certifying global optimality needs infinite observations (p. 6); 'global convergence' means something different in SO (p. 9)"
+  ],
+  "experiments": "n/a: no experiments. Section 5 discusses comparison practice: no large test-bed comparison exists (SO lags behind DFO, whose first comprehensive comparison was S001); obstacles are the unknown optimum, noisy estimates, a common wrapper, irreproducible randomized solvers and missing test simulations; current reporting hides behaviour across budgets and differences in variance; SimOpt had only 20 continuous problems (pp. 15-18).",
+  "positioning": "Builds on prior SO reviews and claims recency and breadth (pp. 2-3); bridges mathematical and stochastic programming, DFO, ML and statistics (pp. 4-5, 18); self-cites the 2014 version, S001 and Sahinidis 2004 (pp. 2, 4, 15, 18, 26); the group's ALAMO/Cozad surrogate line is absent from the file, and neural networks are listed among RSM forms without comment (p. 9); names a research-practice gap (p. 18).",
+  "writing": "Survey register with long tables (applications p. 7; software pp. 16-17) and pseudocode for newcomers (p. 6); others' claims marked as claims (p. 9); a plain exhortation to post executables or source code (p. 18); the list of future directions numbers '(2)' twice (p. 18).",
+  "limits_future": "No new method or experiment; scope limited to methods that see only noisy observations (p. 4). Future (p. 18): combined discrete/continuous problems, constraints, parallelism, multiple outputs, risk measures, hybrids, automatic differentiation, convergence guarantees, ease of comparison, commercial uptake.",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Names the missing large-test-bed comparison as SO's main deficit, measured against the group's own 2013 DFO comparison, spells out the obstacles and reporting faults, and names S001's library as the de facto test source. Also a variant: no benchmark is run here, and certified ground truth is unavailable for true black boxes.",
+    "pages": "pp. 15, 17-18"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Framing only: SO is defined by what an absent algebraic model costs (fast evaluation, derivatives, a dual); RSM and sample-path methods are routes back to mathematical programming; automatic differentiation is a direction. The group's sparse algebraic surrogates are not mentioned.",
+    "pages": "pp. 4, 9, 11, 18"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Weak, one sentence: domain knowledge first, including scaling and range reduction of decision variables and good initial guesses (Heuristic 2).",
+    "pages": "p. 4"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "taxonomy-first review with one unifying lens",
+    "evidence": "A 2x2 of algebraic model available against uncertainty present places SO among neighbouring fields before the algorithm catalogue; Table 3 classifies the families.",
+    "pages": "pp. 5, 7"
+   }
+  ],
+  "transferable": [
+   "Before running any SO algorithm, list the domain knowledge to put in: screen the inputs, scale and reduce variable ranges, give good starting guesses, use known structure such as derivative estimates (p. 4)",
+   "Keep integer-ordered decisions integer-ordered instead of binary-encoding them, so that a method can exploit correlation between neighbouring values (p. 6)",
+   "Start a survey with a 2x2 of what neighbouring fields assume (algebraic model or not, deterministic or noisy) to show which tools are lost and which can be borrowed (p. 5)",
+   "When judging a comparison of noisy solvers, ask for performance across budgets (profiles) and for sample variances, not only end-of-budget macroreplicate averages (p. 17)",
+   "Separate the yardstick problem (unknown optimum, noisy estimates) from the logistics (common wrapper, reproducibility of randomized solvers, test simulations) when reviewing benchmark practice (p. 15)"
+  ],
+  "coauthors": "Satyajith Amaran (CMU, then Dow Core R&D), Bikram Sharda and Scott J. Bury (Dow Core R&D)",
+  "quotes": [
+   {
+    "text": "A note of caution while using SO methods is to incorporate as much domain specific knowledge as possible in the use of an SO algorithm.",
+    "page": 4
+   },
+   {
+    "text": "One difficulty lies in the inherent difficulty of comparing solutions between algorithms over true black-box simulations, as one does not usually know the true optimal point and can only compare between noisy estimates observed by the solvers.",
+    "page": 15
+   }
+  ]
+ }
+]

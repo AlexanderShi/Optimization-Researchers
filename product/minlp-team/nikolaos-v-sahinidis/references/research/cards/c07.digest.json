@@ -1,0 +1,241 @@
+[
+  {
+    "id": "S128",
+    "year": "2024",
+    "title": "A reformulation-enumeration MINLP algorithm for gas network design",
+    "read_level": "full",
+    "contribution": "A decomposition for discrete-diameter gas network design with compressors, valves and control valves: a convex master over flows (CVXNLP, which minimizes the integrated potential-loss function, extended with diameter and active-element binaries and a budget constraint), a fixed-binary nonconvex nomination-validation check with integer no-good cuts, bisection on the budget and an integer initial lower bound; it finds feasible designs for all 25 GasLib-582 instances (12 optimal), with BARON supplying the lower bounds (arXiv v3 pp. 2, 11-15, 23-24).",
+    "problem_entry": "Design-from-scratch gas network MINLP (discrete diameters, active elements, general networks, minimum pipe cost); entered through a gap of scale and features: no prior design-from-scratch paper had an instance over 500 nodes or handled active elements, discrete diameters and non-tree networks together (pp. 2, 4, 7-9).",
+    "key_idea": "Use the convex CVXNLP equivalent of the network analysis equations (Theorem 1) as the master for the discrete choices under a budget constraint, check potentials in a nonconvex subproblem with binaries fixed, cut infeasible configurations with no-good cuts, and bisect on the budget starting from an integer lower bound (pp. 9-15, Algorithms 1-2); the master encoding was chosen by speed among cubic, SOC and quadratic-lifting forms (pp. 16-17).",
+    "assumptions": "Steady-state loss law pi_v - pi_w = alpha|q|q with pi = p^2, q_max proportional to pipe area, the Babonneau-Nesterov-Vial compressor model, resistors as pipes, four diameter options per pipe, no existing pipes and no operating costs, big-M or nonlinear on/off constraints; Theorem 1 needs a strictly increasing loss function with phi(0) = 0, and potential bounds are checked separately (pp. 2, 5-9, 11, 16).",
+    "proof_devices": [
+      "Theorem 1 via the KKT system of CVXNLP: an exchange argument rules out simultaneously positive q+ and q- (strict monotonicity), flow-conservation multipliers are identified with node potentials, the converse constructs multipliers, convexity gives sufficiency and uniqueness; adapted from Raghunathan 2013 (pp. 11, 27-28)",
+      "MISOC relaxation for the adapted baseline: McCormick envelopes of (x+ - x-)(pi_v - pi_w), gamma >= alpha q^2 and its perspective z gamma >= alpha q^2 (pp. 29-30)",
+      "Integer no-good cut (58) and budget bisection (Algorithm 1); no finite-termination argument is given, and the paper notes that each no-good cut removes only one binary point (pp. 13-14, 24)"
+    ],
+    "experiments": "GasLib-11/24/40/134/582 (4197 dropped as too hard), nominations scaled by stress levels 0.1-2.0; Pyomo with Gurobi 9.5.1, 10 min initial search, 5 h bisection, 45 min per check; baselines BARON on the better of two MINLP formulations (CPLEX inapplicable, Gurobi returned constraint violations, SCIP weaker) and an adapted MISOC method that found no feasible solution; perspective on/off ablation; metrics gap (U-L)/L, time to 20% gap, budgets checked and cuts; all 25 GasLib-582 instances feasible, 12 optimal, gaps up to 255.99%; Table 6 gap entries for the perspective rows are inconsistent with their lower bounds (pp. 15-26).",
+    "positioning": "Restates the gas-network literature (Pfetsch et al., Babonneau-Nesterov-Vial, Borraz-Sanchez et al., bilevel, bundle and tree methods) without direct criticism, transfers Raghunathan's water-network CVXNLP and its proof to gas, adopts the cost, compressor and stress-level designs of [3] and [4]; self-citations only to BARON (pp. 3-5, 9-11, 16, 31-32).",
+    "writing": "Contributions paragraph closing with a 'first paper' claim (p. 2); constraint blocks named once (Table 1) and reused to define master and subproblems (pp. 10-15); results hedged by network and stress level; limitations in the results sections, while the conclusion credits the combination with BARON; minor slips (Appendix 6, cold 4218 vs 4128) (pp. 19, 24, 26).",
+    "limits_future": "GasLib-4197 out of reach; infeasible budgets never proved on GasLib-582 because each no-good cut removes one binary point; large gaps at high stress and cold nominations; lower bounds from BARON; no operating costs; no code or data release mentioned. Future: operating costs with simple modifications (pp. 2, 15, 17, 19, 23-24, 27).",
+    "method_links": [
+      {
+        "method": "Method 5",
+        "relation": "evidence",
+        "note": "Three equivalent encodings of the convex master (cubic for BARON/SCIP, SOC for MOSEK, quadratic lifting with perspective for Gurobi) were implemented and the fastest kept; perspective strengthening was judged by both gap gain and master cost; Gurobi was dropped as MINLP baseline for constraint violations (subsolver answers checked).",
+        "pages": "pp. 16-19, 24"
+      },
+      {
+        "method": "Method 4",
+        "relation": "variant",
+        "note": "Whole public library (GasLib), named nominations, stated stress-level design and the baseline's better formulation, but no certified optima; the verdict is a two-tool combination (framework for incumbents, BARON for bounds) rather than a portfolio over many solvers.",
+        "pages": "pp. 15-19, 24"
+      },
+      {
+        "method": "Method 2",
+        "relation": "variant",
+        "note": "The method is a Python/Pyomo prototype on Gurobi; BARON is a named baseline and lower-bound supplier, and the text says nothing of the method entering BARON.",
+        "pages": "pp. 17-19, 24"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "tailored primal, general-solver dual",
+        "evidence": "On GasLib-582 BARON improves lower bounds but is slow to find feasible solutions while the framework finds them efficiently; BARON is run 45 min for the lower bound, the better bound of each is reported, and the conclusion claims effectiveness when combined with BARON.",
+        "pages": "pp. 19, 24"
+      },
+      {
+        "pattern": "variational convex master for network design",
+        "evidence": "The convex CVXNLP equivalent of the network analysis equations (Theorem 1; minimization of the integrated potential-loss function over flows) becomes the master for discrete diameters and active elements; nonconvex potential bounds are checked with the binaries fixed.",
+        "pages": "pp. 10-13, 27-28"
+      }
+    ],
+    "transferable": [
+      "When network physics has an equivalent convex minimization over flows (here the integrated potential-loss function), use it as the master for the discrete design and check the nonconvex bounds in a fixed-binary subproblem; prove the equivalence through the KKT system, identifying flow-conservation multipliers with potentials (pp. 10-13, 27-28).",
+      "Bisect on the objective (budget) so that each feasibility check yields an upper or a lower bound, and start from a cheap physics-free relaxation (cheapest diameters plus no-good cuts) as the first lower bound (pp. 13-15).",
+      "Solve a master problem only to a time limit when only its binaries are passed on (p. 17).",
+      "Implement each equivalent encoding of a convex subproblem (native cubic, SOC, quadratic lifting with perspective) and keep the fastest (pp. 16-17).",
+      "Report time to a 20% gap beside the final gap, and count budgets checked and no-good cuts (pp. 18-19).",
+      "Build instance families from a public library by scaling demands with stress levels and generating discrete options from multipliers of the given design (p. 16)."
+    ],
+    "coauthors": "Yijiang Li, Santanu S. Dey (Sahinidis third author)",
+    "quotes": [
+      {
+        "text": "To the best of our knowledge, this is the first paper that solves the gas network design problem on such large-scale instances.",
+        "page": 2
+      },
+      {
+        "text": "While a large number of binary solutions are feasible to the master problem (Pm), each integer no-good cut only invalidates one of them.",
+        "page": 24
+      }
+    ]
+  },
+  {
+    "id": "S242",
+    "year": "2024",
+    "title": "Surrogate modeling of the leaching process in a rare earth elements recovery plant",
+    "read_level": "full",
+    "contribution": "A conference poster (AIChE Annual Meeting 2024) comparing ANN, LASSO, ALAMO and PySMO polynomial, RBF and kriging surrogates of a rare-earth acid leaching unit, concluding that quadratic surrogates are the most appropriate and that surrogate-based optimization is up to three orders of magnitude cheaper than DFO and EO (p. 1).",
+    "problem_entry": "Opens with the question whether chemical processes can be modeled and optimized accurately with simple surrogate models, applied to an acid leaching tank in a rare-earth recovery flowsheet whose data come from a process simulator (p. 1).",
+    "key_idea": "Train several surrogate families on simulator data, judge them by predictive metrics, training time and parameter count, embed the chosen models in optimization and compare SBO with DFO and EO (p. 1).",
+    "assumptions": "Not stated in the text layer: no input dimension, sampling plan, noise model, bounds or optimization problem statement; DFO and EO are not expanded or specified (p. 1).",
+    "proof_devices": [],
+    "experiments": "Text-only statements (plots are images): all models predict very well; complex models train 2-6 orders of magnitude slower; ANNs and RBFs carry up to three orders of magnitude more parameters than polynomials; SBO finds the correct solution point with little objective deviation, DFO needs one order more measurements and three more of CPU time, and SBO is two orders faster than EO; no metric values, solvers or reference solution given (p. 1).",
+    "positioning": "No references in the text layer; sets the group's own ALAMO against generic ML (ANN, LASSO) and PySMO polynomial, RBF and kriging models, with NETL co-authors (p. 1).",
+    "writing": "Question-led poster panels followed by bullet verdicts in orders of magnitude; one unhedged categorical verdict that ANNs, kriging and RBFs are not practical (p. 1).",
+    "limits_future": "One unit; results only as orders of magnitude. Future: more complex processes and additional surrogate modeling frameworks (p. 1).",
+    "method_links": [
+      {
+        "method": "Method 3",
+        "relation": "evidence",
+        "note": "The simplest adequate algebraic surrogate (quadratic) is chosen over ANN, kriging and RBF, with parameter count and training time as criteria beside accuracy, and it is embedded in optimization instead of running DFO on the simulator.",
+        "pages": "p. 1"
+      },
+      {
+        "method": "Method 4",
+        "relation": "variant",
+        "note": "Every candidate technique is compared before one is recommended, but on a single unit, without a public library, hold-out or stated reference for the correct solution point.",
+        "pages": "p. 1"
+      }
+    ],
+    "new_pattern_candidates": [],
+    "transferable": [
+      "When choosing a surrogate that will be optimized, tabulate parameter count and training time next to accuracy, and take the smallest algebraic model when accuracies are similar (p. 1).",
+      "Validate surrogate-based optimization against both a derivative-free run on the simulator and the full model, counting simulator calls and CPU time (p. 1)."
+    ],
+    "coauthors": "Dimitrios Fardis, Donghyun Oh, Alejandro Garciadiego, Andrew Lee (Sahinidis third of five, as Nick Sahinidis)",
+    "quotes": [
+      {
+        "text": "Is it possible to model and optimize chemical processes accurately using simple surrogate models?",
+        "page": 1
+      },
+      {
+        "text": "DFO requires 1 order of magnitude more measurements and 3 orders of magnitude more CPU time than SBO",
+        "page": 1
+      }
+    ]
+  },
+  {
+    "id": "S284",
+    "year": "2024",
+    "title": "Learning to Branch with Interpretable Machine Learning Models",
+    "read_level": "full",
+    "contribution": "A talk deck showing that sparse linear models (LASSO, L0L1, L0L2) trained offline to imitate strong-branching scores speed up SCIP against its default rule (5% to 81% on large instances of four Gasse et al. families), with at most 50 to under 2,000 parameters against 64,000 for a GNN, no GPU and minutes of training (slides pp. 9, 13, 18-22).",
+    "problem_entry": "Strong branching solves two LPs per fractional candidate and prior learning-to-branch work imitates it with SVMrank, ExtraTrees, GNNs and DNNs; the entry is to imitate it with interpretable sparse models (pp. 2, 4-5, 7-8).",
+    "key_idea": "Collect strong-branching scores on many similar instances, fit sparse linear models on the Khalil and Gasse features (with quadratic transformations), and branch in SCIP with the learned score; train at the test size with 25K observations instead of 120K (pp. 8, 10-11, 13, 17).",
+    "assumptions": "Score linear in the features; penalties on nonzeros and coefficient norm (glmnet, L0Learn); test instances from the training family and, for the -P models, of the training size (pp. 7-8, 11, 17).",
+    "proof_devices": [],
+    "experiments": "Set covering, combinatorial auctions, maximum independent set and facility location at three sizes (from Gasse et al. 2019); baselines SCIP default RPB and a GNN trained on small problems; headline gains on large instances 9%, 27%, 81% and 5%; training 0.02-1.14 h vs 1.23-8.73 h for the GNN; an AC-network unit-commitment MINLP from minlp.org with 5% gap and 1 h CPU limits against seven other rules, results only in a chart (pp. 12, 17-24).",
+    "positioning": "Placed among AI/ML-for-MIP work (Bonami, Kannan, Khalil, Xavier) and the branching literature from pseudocosts to hybrid branching; the rival is the GNN, called a state-of-the-art ML rule, met on its own features and benchmark families (pp. 3-5, 10, 12, 25).",
+    "writing": "Results-first deck: a MAIN RESULTS slide before the method, each benchmark slide titled with one percentage against the default rule, unhedged bullet conclusions (pp. 9, 18-21, 25).",
+    "limits_future": "No limits stated; one benchmark source, training and test at the same size, gains vary 5-81% by family, and the GNN compared on large instances was trained on small problems. Future: understand why certain features are selected (pp. 12, 17-21, 25).",
+    "method_links": [
+      {
+        "method": "Method 3",
+        "relation": "evidence",
+        "note": "Method 3's keep-the-algebra-small principle carried into a learned solver component: sparse regression with at most 50 to under 2,000 parameters against 64,000, CPU-only, data-lean and meant to be read; a 2024 statement of the point SKILL.md cites from the same authors' arXiv:2604.00094.",
+        "pages": "pp. 9, 11, 13, 17, 25"
+      },
+      {
+        "method": "Method 5",
+        "relation": "variant",
+        "note": "Step 3's move (reproduce an expensive component with a cheaper object) applied to branching rather than relaxations: strong-branching scores, two LPs per candidate, emulated by a linear score.",
+        "pages": "pp. 4, 8, 13"
+      },
+      {
+        "method": "Method 2",
+        "relation": "variant",
+        "note": "The lab notebook is SCIP, not BARON: the learned rule is judged inside SCIP against SCIP's default RPB, the open-solver lone version of Method 2.",
+        "pages": "pp. 9, 24"
+      }
+    ],
+    "new_pattern_candidates": [],
+    "transferable": [
+      "Before training a GNN to imitate strong branching, fit LASSO, L0L1 and L0L2 models on the same features and report parameter count, training hours and CPU-only deployment time beside solve time (pp. 11, 13, 22).",
+      "Train on instances of the size you will solve with a capped sample (25K observations) instead of training small and transferring (p. 17).",
+      "Run the ML rival on both CPU and GPU and keep the classical rules (full strong, pseudocost, most infeasible, random, solver default) in the same comparison (p. 24)."
+    ],
+    "coauthors": "Selin Bayramoglu, George Nemhauser (Sahinidis third author, as Nick Sahinidis)",
+    "quotes": [
+      {
+        "text": "Models with fewer parameters can be trained with a smaller sample size",
+        "page": 17
+      },
+      {
+        "text": "L0L2-P reduces solving time by 81% compared to RPB",
+        "page": 20
+      }
+    ]
+  },
+  {
+    "id": "H007",
+    "year": "2025",
+    "title": "Nonconvex optimization problems involving the Euclidean norm: Challenges, progress, and opportunities",
+    "read_level": "full",
+    "contribution": "A review that unifies a dozen hard geometric and physical problems (kissing number, Steiner tree, k-means, Lennard-Jones and Morse clusters, Thomson, Tammes, circle packing, planar facility location) as nonconvex Euclidean-norm programs, releases the 1,352-instance EuclidLib, shows that five global solvers certify only 5.7% of it in 3600 s, traces the slow dual bound to Euclidean plus permutation symmetry and reverse-convex distance constraints, and proposes fundamental-domain cuts and geometric simultaneous convexification (manuscript pp. 1-27).",
+    "problem_entry": "Capability gap: even small instances of Euclidean-norm problems cannot be solved to global optimality, and the class contains famous open questions whose solution needs certificates (abstract p. 1; pp. 2-13).",
+    "key_idea": "Unify the class under formulation (1.1), build a library sized to settle open questions, benchmark general solvers on it, diagnose the dual bound as the bottleneck and attribute it to symmetry and reverse-convex structure, then derive a symmetry and convexification agenda (pp. 1-27).",
+    "assumptions": "Nonconvexity allowed throughout (1.1); synthetic uniform instances for Steiner, k-means and p-median, k-means in at most five dimensions, Morse rho = 6, obnoxious facility D in {1/N, 1/(2N)}; solved means zero gap within 3600 s (pp. 1, 13-14, 16).",
+    "proof_devices": [
+      "Orbit-size lower bound: symmetric optima of (4.1) counted by triangles in a triangulation of the convex hull of atomic positions, with an explicit symmetric pair for N = 5 (pp. 19-20)",
+      "Projection argument: the convex hull of a two-circle non-overlap constraint in the unit square is the box, so single-row relaxation drops it (p. 23)",
+      "conv of an intersection is contained in the intersection of convex hulls, as the case for simultaneous convexification (p. 22)",
+      "Fundamental-domain inequalities alpha'x <= alpha'g(x), separated over the Birkhoff polytope or the convex hull of rotation matrices (p. 26)",
+      "Vertex argument: x_j lies outside the balls around the vertices of X_i, as a basis for geometric convexification (p. 27)",
+      "Surveyed: Locatelli-Raber sub-square branching and wave-effect domain reduction (pp. 21, 24-25); Wang-Gounaris polygon branching (pp. 23-24); Khajavirad clique inequalities (p. 24)"
+    ],
+    "experiments": "EuclidLib, 1,352 instances in GAMS, JuMP and Pyomo; BARON 24.4.30, SCIP 8.1, Gurobi 11.0.1, ANTIGONE 1.1, LINDOGLOBAL 3.17P via GAMS 46.4.0, 4 GHz, 5 GB, 3600 s; BARON and SCIP each solve 38 (2.9%), 73 (5.7%) solved by any solver, solved instances average 42 variables; scaled-time profiles show dual bounds weaker and slower than primal bounds, with the warning not to use them for solver comparison (pp. 12-17).",
+    "positioning": "Credits tailored heuristics and custom branch-and-bound codes and states each family's certified frontier; one direct critique of Maranas and Floudas's invalidated Lennard-Jones optimality proofs; draws on MILP symmetry handling and on convexification by Santana-Dey, Anstreicher-Burer, Munoz-Serrano and Tawarmalani (pp. 2, 5, 7, 9-12, 18, 22, 26).",
+    "writing": "Review in five parts (applications, library and study, challenges, opportunities, conclusions); the community-challenge sentence repeated in abstract, p. 13 and p. 27; each application paragraph ends with the largest certified instance; opinions flagged with 'we believe' and 'In our view' (pp. 1-2, 5, 9-13, 25-27).",
+    "limits_future": "Single 3600 s limit and 5 GB memory, synthetic instances for several families, qualitative profiles only, proposals not implemented. Future: automatic detection and elimination of Euclidean and permutation symmetries, fundamental-domain cuts, computational-geometry simultaneous convexification extendable to l1 norms (pp. 13-14, 17, 25-27).",
+    "method_links": [
+      {
+        "method": "Method 4",
+        "relation": "evidence",
+        "note": "Enters the class with a benchmark before any own algorithm: a public 1,352-instance library in three modeling languages, five named solver versions under identical limits, timeouts counted, and a covering count (73 instances solvable by any solver); certified optima are what the library lacks, with only putative optima for many families.",
+        "pages": "pp. 7, 9, 12-14, 16"
+      },
+      {
+        "method": "Method 1",
+        "relation": "evidence",
+        "note": "Symmetry elimination framed as reducing the domain so that each orbit meets it as little as possible; coordinate bounds from distance bounds; an incumbent turned into a valid non-overlap constraint; the wave-effect optimality-based reduction.",
+        "pages": "pp. 18-19, 23-25"
+      },
+      {
+        "method": "Method 5",
+        "relation": "variant",
+        "note": "The case for stronger simultaneous convexification rests on the root-bound weakness of single-row relaxations and qualitative profiles, not on measured bound per second; cost is noted only for polygon branching (more child nodes).",
+        "pages": "pp. 17, 22-24"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "primal-vs-dual bottleneck diagnosis",
+        "evidence": "Scaled-time convergence profiles of the solved instances are used to decide whether the primal or the dual bound took longer; dual bounds start weaker and improve more slowly. A stated source for the test SKILL.md's Workflow B1 step 3 marks as having none (cf. S128 p. 19 for the opposite case).",
+        "pages": "pp. 14, 17"
+      },
+      {
+        "pattern": "library sized to settle open problems",
+        "evidence": "Instance ranges are chosen so that solving them would decide kissing numbers for d = 2-10 (LB(d) to UB(d)+1) and cluster structures up to N = 150; solving all of EuclidLib is posed as a community goal.",
+        "pages": "pp. 1, 13, 16, 27"
+      }
+    ],
+    "transferable": [
+      "To show why a relaxation is weak, project the constraint onto the difference variables and show that its convex hull is the whole box (p. 23).",
+      "Size the symmetry problem first: count the symmetric copies of a known (putative) optimum from its geometry and plot the count against N (pp. 19-20).",
+      "Diagnose primal vs dual bottleneck by plotting scaled bound progress against scaled time for solved instances, and state what the plot cannot be used for (pp. 14, 17).",
+      "Choose instance ranges so that solving the library answers named open questions, and publish instances in several modeling languages (pp. 13, 16).",
+      "End each application paragraph with the largest instance ever certified and the method that certified it (pp. 5, 9, 10, 12)."
+    ],
+    "coauthors": "Anatoliy Kuznetsov (Sahinidis second and last author)",
+    "quotes": [
+      {
+        "text": "Yet, the solution of even small instances of many nonconvex optimization problems involving the Euclidean norm to global optimality remains beyond the reach of modern global optimization methods.",
+        "page": 1
+      },
+      {
+        "text": "To assess whether improving the primal bound or the dual bound took longer in our study, we analyzed solver convergence for the instances solved to global optimality.",
+        "page": 14
+      }
+    ]
+  }
+]
