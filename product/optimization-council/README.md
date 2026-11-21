@@ -42,7 +42,7 @@ foreach ($t in "optimization-council", "lp-team", "nonlinear-team", "dfo-team", 
 }
 ```
 
-In a checkout that also holds the git-ignored full texts (Bertsimas's `papers/*.pdf` and `txt/`, about 600 MB), the loop copies those too. The skills never need them, since the evidence is on the cards, so copy only the tracked files instead: for each folder, the files `git ls-files -- <folder>` lists. The install of 2026-11-20 did this, recopying the 18 folders that had changed (the LP, MILP and MINLP roundtables for the first time): 37 folders installed, 56 MB.
+In a checkout that also holds the git-ignored full texts (Bertsimas's `papers/*.pdf` and `txt/`, about 600 MB), the loop copies those too. The skills never need them, since the evidence is on the cards, so copy only the tracked files instead: for each folder, the files `git ls-files -- <folder>` lists. The installs of 2026-11-20 and 2026-11-21 did this, recopying only the folders that had changed (18 on 2026-11-20, the LP, MILP and MINLP roundtables for the first time, then Scheinberg's; 4 on 2026-11-21, after Sahinidis's deep reading): 37 folders installed, 59 MB of tracked files.
 
 Run either from the repository root. `${d%/}` drops the trailing slash, so that macOS `cp` copies each folder and not just its contents; the skills directory is created first, so that the first copy does not become the directory itself. Restart Claude Code so it picks up the new skills. The deep-reading records (`DEEP-READING.md`) and the team READMEs stay in the repository, so links to them from an installed skill work only in a checkout.
 

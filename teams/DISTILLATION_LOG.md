@@ -1,5 +1,41 @@
 # 蒸馏记录
 
+## 2026-11-21 (22) · Sahinidis 深读（T3.3–T3.7、声明抽审）与 MINLP T3.8 重跑
+
+- 用户请求：「Merge and Push接着做」；问接下来做哪几项时选了「Sahinidis 深读」（T3.3 → T3.5 → T3.6 → 声明抽审 → 重跑 MINLP 的 T3.8）。分支 `sahinidis-deep`（worktree `../Optimization-Researchers-sahinidis-deep`），从 `main`（d18e4ef）开出，中途 merge main（39cad7c，PR #5，f7d41a8），此后字数一律是 `answer_standard.py --words` 的预算词数；合入 main 后按「Merge and Push」推送
+- T3.3 追全文（`team-chase.js`，15 个 agent，约 370 万 token；40d3855）：新增开放全文 85 篇（共 113），摘要 79 条（共 120），书籍线索 8 条
+- T3.5 读卡（`team-read.js` 三轮，`plan_reading_batches.py` 分批）：
+  - 第一轮（24 个 agent，约 860 万；dde06ba）：22 批 113 张卡（核心 c01–c12、补充 s01–s10），217 条摘录逐字；S167、S040、S147 判为文件不对（下载到的不是这一篇）
+  - 第二轮（8 个，约 264 万；d8cccb3）：6 批 176 张摘要与元数据卡（a2-01…a2-06）；轮中新找到 24 条摘要、5 篇开放全文
+  - 第三轮（4 个，约 102 万；8bc1fa8）：为第二轮找到的 5 篇写全文卡（c3-01、s3-01）。合计 294 张卡、288 篇，435 条摘录全部逐字
+  - 我做的：工作流建议 `--drop S167,S017,S040,S007,S147`，核对后只删 S167、S040、S147 三个错文件，S017、S007 的文件是对的；INDEX 里 16 行（不是他的作品或不是研究）标 Role = skip，S167、S040 因文件不对也标 skip；笔记里的 Xeon X5650、Matlab R2010a 放进行内代码（引用检查器把它们当卡片 ID，3c95841）；kit：`merge_chase.py` 在 cp1252 控制台读 `acquire_fulltexts.py` 的输出时 UnicodeDecodeError、退出 1，改为按 UTF-8 解码（05e17cb；先复现再修，修后 exit 0，INDEX 不变；TEAM-KIT 补一行，a5ab9b4）
+- T3.6 综合（6 个 agent，约 331 万；a5e61c2）：
+  - 核心方法 5 → 6，新 Method 6「先证明问题难，再给启发式一个界」（7 篇全文，2000–2004，2021、2026 年有回声），解决了诚实边界里「science of heuristics」一项
+  - 提出的 H11（看哪一侧的界停住，据此分工）、H12（排序的候选池）写进 Workflow B1 第 3 步和 Workflow D 第 6 步，启发式仍是 10 条；IP 技巧、有限分支并入 B2，「统一再排序」并入 Method 5 第 1 步，算例设计并入 Method 4 第 8 步；没有方法降级，Method 3 没收窄
+  - 17 处更正，例如 2005 年的关键想法是 lifted outer approximation；Inner Tension 2 写成 2000–2025 的时间序列；2013 年的留出集是仿射变换；删去 Ryoo 博士论文的年份；Heuristic 3 的计数是 163
+  - 复核 40 条，采纳 38 条；预算词数 12,034
+- T3.7 精简（3 个 agent，约 98 万；0ec84c1）：12,034 → 11,595，`check_ledger --before`（不加 `--allow`）无损
+- 声明抽审（两位审计员各自判同一份 20 条样本，约 48 万；9235f6a）：A 判 17 supported、3 partial，B 判 15、5，都没有 unsupported；k = 3、6 两条有分歧，取较严的，结果 15 / 5 / 0。5 条 partial 和审计员在样本外指出的 3 处，逐条到卡片和全文核对后收窄：以认证最优值作标尺只有 1999 年是 BARON 认证的，2009、2017、2025 年是各求解器找到的最好值，2026 年的幻灯片没说来源；2025 年的范围缩减由 incumbent 驱动，不是基于对偶；2025 年只是提出一个学习得到的探测开关规则，没说进了 BARON；2025–26 年的 BARON 内部论文有一篇第一作者在 Georgia Tech（S190）；「同一硬件上重跑旧版本」改引 S270 p. 5；S003 只支持「速度与可靠性」这一判据。原句逐字移进账本 `#claim-audit`；之后无损检查（不加 `--allow`）、引用、12/12、链接都过，预算词数 11,730
+- 理事会 FL5：Sahinidis 有卡之后，理事会 `team_check` 一项失败（分歧线上有卡的成员必须引卡）。为这一条重跑理事会 T3.8 太贵，我手工把他那一方的 5 条说法改引卡片 S003、S018、S133、S116、S001，数字与两段引文到全文核对；Relation 一句改引 S182 p. 1；理事会 16/0
+- MINLP T3.8 重跑（6 个 agent，约 217 万，66 分钟；f8570fc）：
+  - FL3、FL4、FL6 上他那一方改以 10 张卡为据；FL4 改为「已发表方法的对照，不是争论」：他自己 2011 年综述的卡片（S018 p. 16）把一个类似结果记在 Burer 2008 年报告名下，p. 27 把 Burer 的分解算法列为更现实的路线。圆桌诚实边界里有单边书面批评的只剩 FL2、FL3
+  - 成员表里 Sahinidis 的视角一行加上 Method 6 的问题（启发式有没有证明或算出的界）；README、DEEP-READING 按五位深读、Grossmann 停在 T3.2 重写，覆盖表逐字取自 `team_status.py`
+  - 复核 15 条（0 阻断、3 重要），采纳 13 条，2 条不在本步范围（见下）
+- 我核对后改的（不在 T3.8 的改动范围内）：
+  - 抽查 FL3、FL4、FL6 上他那一方：S006 pp. 23–24 的 6 到 23 倍 CPU 时间、S053 的八种松弛与 MINOS 失败、S133 的四个算例与 BARON 20.4 只在根节点用 QCP、S046 的 1740 题与「catches up」，卡片上都有；S018 的「at more realistic computing times」在全文第 27 页
+  - Sahinidis：激活规则的圆桌一行还写「07 出现以前引笔记」（08 §3.2 第 17 条建议改，T3.6 没改），改为先引卡片、没有卡片才引笔记，与 Leyffer、Misener、Burer 一致；08 §1 的「S 280」改为 S 274（按卡片标题重数：294 张卡、288 个 ID，S 274、H 13、D 1）。`check_ledger --before --allow activation-disclaimer` 只放行这一行，12/12；预算词数 11,743，README 状态列和 DEEP-READING 里说「现在」的一处同步（1890cbd、87e3a93）
+  - 理事会：S182（2020 年《Statistical Science》讨论，全读）有卡之后，FL2、主持人变体、诚实边界、FL5 文献表里的「no card」都改了：讨论引 S182（p. 6 的计时比较在全文第 6 页核对），回应文章仍不在卡上；Bao–Sahinidis–Tawarmalani 2011 改记 S018；Ruiz–Grossmann 2013 仍无卡，改记笔记 05 §A5。Bertsimas 的 ML 领域文件里同一句改成文字说明，不写编号（`check_citations.py` 会把成员文件里的裸 S### 当成本人的卡片）。理事会 README：MINLP 一行、状态日期、有卡客座名单加上 Sahinidis、安装说明；`product/README.md` 的 MINLP 一行（5fe2c2b）。首次会话记录（2026-10-31）是当日的记录，不改
+- 闸门（合入前）：`team_check.py` dfo 39 项 0 失败（5 项跳过）、nonlinear 30/0（2）、lp 11/0（1）、milp 12/0、minlp 40/0（0 跳过）、council 16/0（1）；跳过的是本 worktree 里没有 txt 的摘录核对与客座提示；`answer_standard.py --check` 39/39、`--installed` 78/78；`distill_check.py teams --installed` 0 ✗（11 ⚠，同前）；`check_citations.py --roundtable` minlp 83 处、council 183 处成员卡片引用，0 问题 0 警告；`check_links.py` product 408 个文件、teams 33 个，0 断链；全仓库 468 个文件有 2 个断链（`references/fidelity-scorecard.md` 指向 `../COMMUNITY.md`、`../CONTRIBUTING.md`），main 上同样有，不是本分支带来的；`selftest.sh` 全过；两队 `.md` 里没有 `{{`、`[TODO`
+- 安装：4 个文件夹按 `git ls-files` 复制进 `~/.claude/skills`（nikolaos-v-sahinidis 88 个文件、dimitris-bertsimas 245、minlp-roundtable 1、council-roundtable 1，共 335 个，逐字节一致，无多余文件；覆盖前核对已装副本与 main 39cad7c 一致，原文件夹另存）。37 个已装文件夹的跟踪文件合计 59 MB。回退：按 39cad7c 的跟踪文件重装这 4 个文件夹
+- 未做：
+  - 拿不到的开放全文：KiltHub 返回 403（S263、S023、S036、S062、S054、S021）；PMC 作者稿被拦（S197、S049）；CC BY 或免费 PDF 被机器人检查挡住（S020、S111、S135、S099、S139、S150、S241、S264、S268、S050）；S068 的 Wayback 副本被权限系统拒绝。没有手动下载
+  - works.json 元数据的修正建议：S081、H002、S372、S072、S354、S357、S343、H007、S191、S237、S387、S388；S382、S342 可能该标 Role = skip
+  - T3.8 复核里不在本步范围的一条：`mark_read_from_cards.py`、`quality_check.py` 不响应 `--help`（kit 改动，另做）
+  - 圆桌入座表没有 Sahinidis 新的「Leads when」一行（需要证明或算出界的启发式由他主答），重跑 T2 才会加
+  - Grossmann 的深读（T3.3 起），之后再重跑 T3.8
+- 成本：工作流与审计共 68 个 agent，约 2,290 万 token（T3.3 370 万、读卡三轮 1,226 万、T3.6 331 万、T3.7 98 万、声明抽审约 48 万、T3.8 217 万）
+- 模型：Opus 5.5
+
 ## 2026-11-20 (21) · 字数预算不计回答标准一节；Scheinberg 精简（T3.7）
 
 - 用户请求：「Merge and Push接着做」；问接下来做哪几项、回答标准一节算不算进预算时，选了「Sahinidis 深读」（另起分支，见下一条）和「不计入，只精简 Scheinberg (Recommended)」。分支 `word-budget`（worktree `../Optimization-Researchers-word-budget`），从 `main`（d18e4ef，PR #4 合并后）开出；合入 main 后按用户的「Merge and Push」推送
