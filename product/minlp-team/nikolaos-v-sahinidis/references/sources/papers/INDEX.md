@@ -19,8 +19,8 @@
 | 7 | S007 | 2016 | Simulation optimization: a review of algorithms and applications | Annals of Operations Research | 820 | journal | arXiv | txt | 28 | core | carded |
 | 8 | S008 | 1995 | Global optimization of nonconvex NLPs and MINLPs with applications in process design | Computers & Chemical Engineering | 785 | journal | — | no-oa |  | core | abstract |
 | 9 | S009 | 2014 | Learning surrogate models for simulation‐based optimization | AIChE Journal | 645 | journal | — | no-oa |  | core | abstract |
-| 10 | S010 | 2002 | A critical review and annotated bibliography for heat exchanger network synthesis in the 20th century | Industrial & Engineering Chemistry Research | 614 | journal | manual | txt | 82 | core | abstract |
-| 11 | S011 | 2012 | OPTI: lowering the barrier between open source optimizers and the industrial MATLAB user | Foundations of computer-aided process operations | 526 | other | — | no-oa |  | core | metadata |
+| 10 | S010 | 2002 | A critical review and annotated bibliography for heat exchanger network synthesis in the 20th century | Industrial & Engineering Chemistry Research | 614 | journal | manual | txt | 82 | core | carded |
+| 11 | S011 | 2012 | OPTI: lowering the barrier between open source optimizers and the industrial MATLAB user | Foundations of computer-aided process operations | 526 | other | — | no-oa |  | skip | metadata |
 | 12 | S012 | 2005 | BARON 7.2. 5: Global optimization of mixed-integer nonlinear programs | User's manual | 520 | report | manual | txt | 13 | core | carded |
 | 13 | S013 | 1996 | A branch-and-reduce approach to global optimization | Journal of global optimization | 516 | journal | — | no-oa |  | core | abstract |
 | 14 | S014 | 2004 | A finite branch-and-bound algorithm for two-stage stochastic integer programs | Mathematical Programming | 371 | journal | manual | txt | 23 | core | carded |
@@ -34,14 +34,14 @@
 | 22 | S022 | 2016 | Computer-aided molecular design: An introduction and review of tools, applications, and solution techniques | Chemical Engineering Research and Design | 259 | journal | arXiv | txt | 38 | core | carded |
 | 23 | S023 | 1991 | Convergence properties of generalized Benders decomposition | Computers & Chemical Engineering | 228 | journal | — | no-oa |  | core | abstract |
 | 24 | S024 | 2001 | Computational complexity of heat exchanger network synthesis | Computers & Chemical Engineering | 218 | journal | manual | txt | 38 | core | carded |
-| 25 | S025 | 1999 | A Lagrangian approach to the pooling problem | Industrial & Engineering Chemistry Research | 213 | journal | manual | txt | 17 | core | abstract |
+| 25 | S025 | 1999 | A Lagrangian approach to the pooling problem | Industrial & Engineering Chemistry Research | 213 | journal | manual | txt | 17 | core | carded |
 | 26 | S026 | 1991 | MINLP model for cyclic multiproduct scheduling on continuous parallel lines | Computers & chemical engineering | 209 | journal | — | no-oa |  | core | metadata |
 | 27 | S027 | 2018 | Exploiting integrality in the global optimization of mixed-integer nonlinear programming problems with BARON | Optimization Methods and Software | 207 | journal | — | no-oa |  | supplement | abstract |
-| 28 | S028 | 2002 | Convex extensions and envelopes of lower semi-continuous functions | Mathematical programming | 197 | journal | manual | txt | 17 | supplement | abstract |
+| 28 | S028 | 2002 | Convex extensions and envelopes of lower semi-continuous functions | Mathematical programming | 197 | journal | manual | txt | 17 | supplement | carded |
 | 29 | S029 | 2003 | An approximation scheme for stochastic integer programs arising in capacity expansion | Operations Research | 195 | journal | manual | txt | 40 | supplement | carded |
 | 30 | S030 | 2018 | A hybrid LP/NLP paradigm for global optimization relaxations | Mathematical Programming Computation | 180 | journal | — | no-oa |  | core | abstract |
 | 31 | S031 | 2019 | QPLIB: a library of quadratic programming instances | Mathematical Programming Computation | 172 | journal | unpaywall | txt | 42 | core | carded |
-| 32 | S032 | 2001 | Semidefinite relaxations of fractional programs via novel convexification techniques | Journal of Global Optimization | 170 | journal | manual | txt | 22 | supplement | abstract |
+| 32 | S032 | 2001 | Semidefinite relaxations of fractional programs via novel convexification techniques | Journal of Global Optimization | 170 | journal | manual | txt | 22 | supplement | carded |
 | 33 | S033 | 2009 | Paclitaxel delivery from PLGA foams for controlled release in post-surgical chemotherapy against glioblastoma multiforme | Biomaterials | 168 | journal | — | no-oa |  | supplement | abstract |
 | 34 | S034 | 2020 | Or-gym: A reinforcement learning library for operations research problems | arXiv preprint arXiv:2008.06319 | 157 | preprint | arXiv | txt | 29 | supplement | carded |
 | 35 | S035 | 2003 | Design of alternative refrigerants via global optimization | AIChE Journal | 157 | journal | manual | txt | 15 | supplement | carded |
@@ -54,7 +54,7 @@
 | 42 | S042 | 2001 | Analysis of bounds for multilinear functions | Journal of Global Optimization | 138 | journal | manual | txt | 23 | supplement | carded |
 | 43 | S043 | 1998 | A finite algorithm for global minimization of separable concave programs | Journal of Global Optimization | 137 | journal | — | no-oa |  | supplement | abstract |
 | 44 | S044 | 2009 | Multiterm polyhedral relaxations for nonconvex, quadratically constrained quadratic programs | Optimization Methods & Software | 136 | journal | manual | txt | 21 | supplement | carded |
-| 45 | S045 | 2003 | Quelques pistes pour le traitement des collocations | Travaux et recherches en linguistique appliqu�e. S�rie E, Lexicologie et�… | 136 | other | — | no-oa |  | supplement | metadata |
+| 45 | S045 | 2003 | Quelques pistes pour le traitement des collocations | Travaux et recherches en linguistique appliqu�e. S�rie E, Lexicologie et�… | 136 | other | — | no-oa |  | skip | metadata |
 | 46 | S046 | 2017 | Domain reduction techniques for global NLP and MINLP optimization | Constraints | 130 | journal | arXiv | txt | 35 | core | carded |
 | 47 | S047 | 2008 | A branch-and-bound algorithm for the continuous facility layout problem | Computers & Chemical Engineering | 124 | journal | — | no-oa |  | supplement | abstract |
 | 48 | S048 | 2013 | Optimization‐based framework for computer‐aided molecular design | AIChE Journal | 123 | journal | — | no-oa |  | supplement | abstract |
@@ -62,7 +62,7 @@
 | 50 | S050 | 2014 | Carbon capture simulation initiative: a case study in multiscale modeling and new challenges | Annual review of chemical and biomolecular engineering | 109 | journal | — | no-oa |  | supplement | abstract |
 | 51 | S051 | 1995 | Global optimization algorithms for chip layout and compaction | Engineering Optimization+ A35 | 99 | journal | — | no-oa |  | supplement | abstract |
 | 52 | S052 | 2013 | Uncertainty Quantification in CO2 Sequestration Using Surrogate Models from Polynomial Chaos Expansion | Industrial & Engineering Chemistry Research | 95 | journal | unpaywall | txt | 35 | supplement | carded |
-| 53 | S053 | 2002 | Global optimization of 0-1 hyperbolic programs | Journal of Global Optimization | 95 | journal | manual | txt | 32 | supplement | abstract |
+| 53 | S053 | 2002 | Global optimization of 0-1 hyperbolic programs | Journal of Global Optimization | 95 | journal | manual | txt | 32 | supplement | carded |
 | 54 | S054 | 1992 | Reformulation of the multiperiod MILP model for capacity expansion of chemical processes | Operations Research | 93 | journal | — | no-oa |  | supplement | abstract |
 | 55 | S055 | 2018 | A global MINLP approach to symbolic regression | Mathematical Programming | 87 | journal | — | no-oa |  | core | abstract |
 | 56 | S056 | 2017 | A COSMO-based approach to computer-aided mixture design | Chemical Engineering Science | 83 | journal | — | no-oa |  | supplement | abstract |
@@ -167,7 +167,7 @@
 | 155 | S160 | 2012 | SAS-Pro: Simultaneous residue assignment and structure superposition for protein structure alignment | PloS one | 9 | journal | unpaywall | txt | 10 | supplement | carded |
 | 156 | S161 | 2008 | SnB version 2.3: triplet sieve phasing for centrosymmetric structures | Applied Crystallography | 9 | journal | manual | txt | 10 | supplement | carded |
 | 157 | S162 | 2002 | GAMS/BARON 5.0: Global optimization of mixed-integer nonlinear programs | GAMS Corporation Inc | 9 | report | manual | txt | 49 | supplement | carded |
-| 158 | S164 | 1997 | Robust nonlinear control of plasma etching | Silicon Nitride and Silicon Dioxide Thin Insulating Films: Proceedings of... | 9 | other | — | no-oa |  | supplement | metadata |
+| 158 | S164 | 1997 | Robust nonlinear control of plasma etching | Silicon Nitride and Silicon Dioxide Thin Insulating Films: Proceedings of... | 9 | other | — | no-oa |  | skip | metadata |
 | 159 | S165 | 2025 | Optimizing the design and operation of water networks: Two decomposition approaches | Computers & Chemical Engineering | 8 | journal | manual | txt | 34 | core | carded |
 | 160 | S166 | 2022 | Stochastic analysis and modeling of pharmaceutical screw feeder mass flow rates | International Journal of Pharmaceutics | 8 | journal | — | no-oa |  | supplement | abstract |
 | 161 | S167 | 2016 | The ALAMO approach to machine learning | Computer Aided Chemical Engineering | 8 | conference | — | no-oa |  | skip | unreadable |
@@ -223,7 +223,7 @@
 | 211 | S227 | 2009 | Global optimization | Taylor & Francis | 2 | journal | — | no-oa |  | supplement | abstract |
 | 212 | S228 | 2009 | Optimization techniques for phase retrieval based on single-crystal X-ray diffraction data | Encyclopedia of Optimization | 2 | chapter | — | no-oa |  | supplement | metadata |
 | 213 | S229 | 2009 | Time-Dependent Traveling Salesman Problem | Encyclopedia of Optimization | 2 | chapter | — | no-oa |  | supplement | metadata |
-| 214 | S231 | 2008 | Optimization techniques for phase retrieval based on single-crystal X-ray diffraction data | University of Illinois at Urbana-Champaign | 2 | thesis | — | no-oa |  | supplement | metadata |
+| 214 | S231 | 2008 | Optimization techniques for phase retrieval based on single-crystal X-ray diffraction data | University of Illinois at Urbana-Champaign | 2 | thesis | — | no-oa |  | skip | metadata |
 | 215 | S232 | 2007 | Automatic convexity detection for global optimization | University of Illinois at Urbana-Champaign | 2 | talk | — | no-oa |  | skip | — |
 | 216 | S233 | 2001 | Reformulations of Rational Functions of 0− 1 Variables | manuscript | 2 | preprint | — | no-oa |  | supplement | metadata |
 | 217 | S235 | 2001 | Time-Dependent Traveling Salesman Problem | Encyclopedia of Optimization | 2 | chapter | — | no-oa |  | supplement | metadata |
@@ -236,7 +236,7 @@
 | 224 | S242 | 2024 | Surrogate modeling of the leaching process in a rare earth elements recovery plant | NETL | 1 | report | manual | txt | 1 | core | carded |
 | 225 | S243 | 2023 | Optimizing the designs and operations of water networks: A decomposition approach | NETL | 1 | report | manual | txt | 34 | supplement | carded |
 | 226 | S244 | 2022 | Techno-Economic Analysis of Ultrasound Technology for Ethanol-Water Mixture Separation Process | AIChE Annual Meeting | 1 | talk | — | no-oa |  | skip | — |
-| 227 | S245 | 2021 | Foundations in Process Analytics and Machine Learning (FOPAM) | Computers & Chemical Engineering | 1 | other | — | no-oa |  | supplement | metadata |
+| 227 | S245 | 2021 | Foundations in Process Analytics and Machine Learning (FOPAM) | Computers & Chemical Engineering | 1 | other | — | no-oa |  | skip | metadata |
 | 228 | S246 | 2019 | A Deep Reinforcement Learning Approach for Production Scheduling | AIChE Annual Meeting | 1 | talk | — | no-oa |  | skip | — |
 | 229 | S247 | 2018 | A Comparison of Mathematical Optimization and Deep Reinforcement Learning for Supply Chain Materials Planning | AIChE Annual Meeting | 1 | talk | — | no-oa |  | skip | — |
 | 230 | S248 | 2018 | Infeasibility resolution for multi-purpose batch process scheduling | Computers & Chemical Engineering | 1 | journal | — | no-oa |  | supplement | abstract |
@@ -247,7 +247,7 @@
 | 235 | S254 | 2010 | Exploiting physical properties in protein structure alignment | BMC Bioinformatics | 1 | conference | manual | txt | 1 | supplement | carded |
 | 236 | S255 | 2010 | Hartree fock self-consistent calculations: Global optimization of electronic structure | Proceedings of 10th AIChE Annual Meeting. AIChE | 1 | talk | — | no-oa |  | skip | — |
 | 237 | S256 | 2005 | Dna sequencing by hybridization with errors via integer programming | 05AIChE: 2005 AIChE Annual Meeting and Fall Showcase | 1 | talk | — | no-oa |  | skip | — |
-| 238 | S257 | 2003 | CENTER FOR ADVANCED PROCESS DECISION-MAKING | — | 1 | other | — | no-oa |  | supplement | metadata |
+| 238 | S257 | 2003 | CENTER FOR ADVANCED PROCESS DECISION-MAKING | — | 1 | other | — | no-oa |  | skip | metadata |
 | 239 | S258 | 2003 | Global Optimization with GAMS Applications and Performance | — | 1 | talk | — | no-oa |  | skip | — |
 | 240 | S261 | 2001 | Chemical process planning | Encyclopedia of Optimization | 1 | chapter | — | no-oa |  | supplement | metadata |
 | 241 | S263 | 1989 | MINLP model for multiproduct scheduling on continuous parallel lines | Carnegie Mellon University | 1 | report | — | no-oa |  | supplement | abstract |
@@ -267,8 +267,8 @@
 | 255 | S277 | 2025 | A large-scale benchmarking of deterministic and stochastic black-box optimization algorithms | National Energy Technology Laboratory (NETL)... | — | report | manual | txt | 18 | core | carded |
 | 256 | S278 | 2024 | Optimization and Machine Learning Nexus: Model-Based and Data-Driven Approaches | 2024 AIChE Annual Meeting | — | talk | — | no-oa |  | skip | — |
 | 257 | S279 | 2024 | Systematic Engineering of Perovskite Solar Cells through Algorithm-Guided Experimentation | 2024 AIChE Annual Meeting | — | talk | — | no-oa |  | skip | — |
-| 258 | S280 | 2024 | 10A: In Honor of Professor Ignacio Grossmann's 75th Birthday-I (Invited Talks) | 2024 AIChE Annual Meeting | — | other | — | no-oa |  | core | metadata |
-| 259 | S281 | 2024 | 10C: In Honor of Prof. Ignacio Grossmann's 75th Birthday-II (Invited Talks) | 2024 AIChE Annual Meeting | — | other | — | no-oa |  | core | metadata |
+| 258 | S280 | 2024 | 10A: In Honor of Professor Ignacio Grossmann's 75th Birthday-I (Invited Talks) | 2024 AIChE Annual Meeting | — | other | — | no-oa |  | skip | metadata |
+| 259 | S281 | 2024 | 10C: In Honor of Prof. Ignacio Grossmann's 75th Birthday-II (Invited Talks) | 2024 AIChE Annual Meeting | — | other | — | no-oa |  | skip | metadata |
 | 260 | S282 | 2024 | A Global Optimization Approach for the Symbolic Design of Iterative Algorithms | 2024 AIChE Annual Meeting | — | talk | — | no-oa |  | skip | — |
 | 261 | S283 | 2024 | Surrogate-Based Optimization for the Recovery of Critical Minerals and Rare Earth Elements | 2024 AIChE Annual Meeting | — | talk | — | no-oa |  | skip | — |
 | 262 | S284 | 2024 | Learning to Branch with Interpretable Machine Learning Models | National Energy Technology Laboratory (NETL)... | — | report | manual | txt | 26 | core | carded |
@@ -329,12 +329,12 @@
 | 317 | S340 | 2017 | Chapter 16: The Pooling Problem | Advances and Trends in Optimization with Engineering Applications | — | chapter | — | no-oa |  | supplement | abstract |
 | 318 | S341 | 2016 | COSMO-based approach for the design of solvents to optimize reaction rates | ABSTRACTS OF PAPERS OF THE AMERICAN CHEMICAL SOCIETY | — | talk | — | no-oa |  | skip | — |
 | 319 | S342 | 2014 | Preface: Honoring the 60th birthday of Panos M. Pardalos | Journal of Global Optimization | — | journal | manual | txt | 1 | supplement | carded |
-| 320 | S343 | 2014 | International Programming Committee | Computer Aided Chemical Engineering | — | other | — | no-oa |  | supplement | metadata |
+| 320 | S343 | 2014 | International Programming Committee | Computer Aided Chemical Engineering | — | other | — | no-oa |  | skip | metadata |
 | 321 | S344 | 2013 | A trust region-based algorithm for continuous optimization via simulation | Proceedings of the 2013 Winter Simulation Conference: Simulation: Making... | — | talk | — | no-oa |  | skip | — |
 | 322 | S345 | 2013 | Biological sequence alignment with GPU-BLAST | ABSTRACTS OF PAPERS OF THE AMERICAN CHEMICAL SOCIETY | — | talk | — | no-oa |  | skip | — |
-| 323 | S346 | 2012 | FOCAPO 2012 Foreword | COMPUTERS & CHEMICAL ENGINEERING | — | journal | — | no-oa |  | supplement | metadata |
+| 323 | S346 | 2012 | FOCAPO 2012 Foreword | COMPUTERS & CHEMICAL ENGINEERING | — | journal | — | no-oa |  | skip | metadata |
 | 324 | S347 | 2012 | Annual Report: Carbon Capture Simulation Initiative | National Energy Technology Laboratory (NETL), Pittsburgh, PA, Morgantown, WV... | — | report | manual | txt | 41 | supplement | carded |
-| 325 | S349 | 2012 | FOCAPO 2012 (Foundations of Computer-Aided Process Operations) | Computers & chemical engineering | — | journal | — | no-oa |  | supplement | metadata |
+| 325 | S349 | 2012 | FOCAPO 2012 (Foundations of Computer-Aided Process Operations) | Computers & chemical engineering | — | journal | — | no-oa |  | skip | metadata |
 | 326 | S350 | 2011 | Optimization of Carbon Capture Systems Using Surrogate Models of Simulated Processes | National Energy Technology Laboratory-In-house Research; National Energy... | — | report | — | no-oa |  | supplement | abstract |
 | 327 | S351 | 2010 | A computational methodology for learning low-complexity surrogate models of process from experiments or simulations.(Paper 679a) | National Energy Technology Laboratory-In-house Research; National Energy... | — | talk | — | no-oa |  | skip | — |
 | 328 | S352 | 2010 | Synthesis of optimal adsorptive carbon capture processes. | National Energy Technology Laboratory-In-house Research; National Energy... | — | report | — | no-oa |  | supplement | abstract |
@@ -365,17 +365,17 @@
 | 353 | S385 | 1992 | Multiperiod investment model for processing networks with dedicated and flexible plants.[Erratum to document cited in CA114 (26): 250093n] | Industrial & Engineering Chemistry Research | — | journal | — | no-oa |  | supplement | metadata |
 | 354 | S387 | — | MINLP for regularized symbolic regression with applications to data-driven modeling of critical minerals processes | — | — | preprint | manual | txt | 1 | supplement | carded |
 | 355 | S388 | — | The Treewidth-Convex HullTheorem and DP for Cut Generation in MINLP | — | — | preprint | manual | txt | 1 | supplement | carded |
-| 356 | S391 | — | Accelerating the Simplex Algorithm Via Novel Crash Procedures | — | — | other | — | no-oa |  | supplement | metadata |
-| 357 | S393 | — | GLAZIER, TJ CMU-ISR-17-119 KANG, Won Gu CMU-ISR-17-110 LEVINE, Joel CMU-ISR-17-115 LIU, Frederick CMU-ISR-17-118 | — | — | other | — | no-oa |  | supplement | metadata |
-| 358 | S394 | — | Workshop on computational optimization | — | — | other | — | no-oa |  | supplement | metadata |
+| 356 | S391 | — | Accelerating the Simplex Algorithm Via Novel Crash Procedures | — | — | other | — | no-oa |  | skip | metadata |
+| 357 | S393 | — | GLAZIER, TJ CMU-ISR-17-119 KANG, Won Gu CMU-ISR-17-110 LEVINE, Joel CMU-ISR-17-115 LIU, Frederick CMU-ISR-17-118 | — | — | other | — | no-oa |  | skip | metadata |
+| 358 | S394 | — | Workshop on computational optimization | — | — | other | — | no-oa |  | skip | metadata |
 | 359 | S395 | — | THE BRANCH-AND-REDUCE APPROACH | — | — | talk | — | no-oa |  | skip | — |
 | 360 | S396 | — | GLOBAL OPTIMIZATION WITH BRANCH-AND-REDUCE | — | — | talk | — | no-oa |  | skip | — |
 | 361 | S399 | — | Computing in chemical engineering: Three decades in the development of algorithms and software | — | — | talk | — | no-oa |  | skip | — |
 | 362 | S400 | — | OPTIMIZATION IN THE NEW BIOLOGY | — | — | talk | — | no-oa |  | skip | — |
 | 363 | S402 | — | Optimal Combinatorial Library Design from a Computational Complexity Perspective | — | — | talk | — | no-oa |  | skip | — |
 | 364 | S403 | — | Third Generation Branch-and-Reduce Algorithms and Software | — | — | talk | — | no-oa |  | skip | — |
-| 365 | S404 | — | Khajavirad, A., Carnegie Mellon University | — | — | other | — | no-oa |  | supplement | metadata |
-| 366 | S405 | — | Zorn, Jr., K., Carnegie Mellon University | — | — | other | — | no-oa |  | supplement | metadata |
+| 365 | S404 | — | Khajavirad, A., Carnegie Mellon University | — | — | other | — | no-oa |  | skip | metadata |
+| 366 | S405 | — | Zorn, Jr., K., Carnegie Mellon University | — | — | other | — | no-oa |  | skip | metadata |
 | 367 | S409 | — | Finiteness and Convexification Issues in Mixed-Integer Nonlinear Programming | — | — | talk | — | no-oa |  | skip | — |
 | 368 | D001 | 2009 | Chemical Process Planning | Encyclopedia of Optimization (2nd edition) | — | chapter | — | no-oa |  | supplement | metadata |
 | 369 | H001 | 1991 | Multiperiod capacity expansion for optimal design of industrial complexes | Operations Research '90 (H. Bradley, ed.), Pergamon Press, London | — | chapter | — | no-oa |  | supplement | metadata |
