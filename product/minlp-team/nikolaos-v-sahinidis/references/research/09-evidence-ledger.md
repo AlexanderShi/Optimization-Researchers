@@ -17,6 +17,10 @@
 
 **Scope.** One section per SKILL.md item that this pass condensed or changed: How to Use (with the front matter and the first-activation disclaimer), routing and protocol, both taste lists, Methods 1–6, Workflows A–F with the stages table, Heuristics 1–12 (11 and 12 written into Workflow B1 step 3 and Workflow D step 6 at review), seven anatomies, anti-patterns, trajectory, lineage, inner tensions, the Roundtable Card, the Honest Boundary, the corrections, the rejected updates, the sources line and the card key. Answer Standard, Research Integrity Rules, the rest of Activation Rules and Mentor Voice are unchanged and complete in SKILL.md; the Latest paragraph gained one item at review ([Trajectory](#trajectory)). Counts: `team_status.py --coverage` on 2026-11-20 (409 Scholar rows · 381 distinct works indexed · 115 open full texts · 110 read in full · 5 in part · 111 abstract only · 44 metadata only incl. unreadable · 111 skipped · 0 book material · 435 quotes verified).
 
+**T3.7 (tightening, 2026-11-20).** SKILL.md was brought under its word budget by moving evidence here, not by deleting it: wherever a SKILL.md line was shortened or moved, the line as it stood before is kept word for word under **Before T3.7 (moved verbatim)** at the end of the matching section (links re-pointed to work from this folder). Sections with such a block: Method 1 (the Core Research Methods intro), taste marks, Methods 2–6, Workflows B1, D and F, Heuristics 1–11 (11: the closing line on Heuristics 11 and 12), five anatomies, the trajectory and the inner tensions. Nothing else in this ledger changed.
+
+**T3.7 review fixes (2026-11-20).** Where an *Added in T3.6* or *Review fixes (T3.6)* line quotes SKILL.md wording that T3.7 shortened, the Before T3.7 block of that section holds that wording; SKILL.md has the shortened line, unless it was restored after the read-only review of the tightening. Restored then, from those blocks and rechecked against the cards: Workflow B1 step 3's incumbent recipe, now in parentheses [S128 arXiv pp. 9–17; S165 manuscript pp. 13–17, 24], and step 4's pooling result [S069 preprint pp. 9–20]; Method 3's step-6 say–do clause [S173 p. 4; S017 pp. 8–14] and S086's scope clause (*where the design's discreteness is not stated*); the authors' counter-position in Method 4's 2013 bullet [S001 p. 41]; Method 5 step 1's numbers [S018 pp. 1, 18–19, 27; S053 pp. 21–22]; the 1996 anatomy's two documents and its finding that the 1996 cut is the same or weaker [S077 pp. 12, 15, 20–21; S006 p. 15]; the 2005 anatomy's *constructive envelopes are one proposition* [S003 pp. 13–14]; Inner Tension 1's *whose next sentence differs* [S002 manuscript p. 22]; a stray space before a comma in Method 3's say–do line was removed. Method 5 step 1, Workflow B1 step 4 and the 2005 key insight now stand in SKILL.md as they did before T3.7; every Before T3.7 block is kept as moved. Budget count after these fixes: 11595 words by `answer_standard.py --words` (11458 after the tightening; target about 11500, hard limit 13000).
+
 <a id="how-to-use"></a>
 
 ## How to Use, front matter and the first-activation disclaimer
@@ -116,6 +120,22 @@ description: |
 3. **It carries a certificate**, or a heuristic is paired with one. "Genetic algorithms lack optimality certifications and are typically stochastic in nature." (2018, co) [02 T3]; as editor he accepts a heuristic with "a convex relaxation to demonstrate that their heuristic provides near-optimal solutions" (2019, sole) [02 T7].
 4. **The simplest adequate model.** Belief B1, nine dated instances 2014-2026 [02 §1]; "Avoid gratuitous nonlinearity." (manual §7.2, firm) [02 X5].
 5. **A measurable jump on a hard public library, or a first.** "When I first started working on them, we were able to solve about 5-10% of them. Now, we can solve about two-thirds" (press 2021) [02 T4]; per-library reporting [02 X4].
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-20) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Mark 2:*
+
+2. **It is general and automated**, usable at defaults. "The math underneath is the same. Application agnostic algorithms can be applied by many people in different domains, and that was what particularly fascinated me." (press 2021) [02 T2]; users "rarely explore software options" (2013, co) [02 X1]; solved in an "entirely automated fashion" (2004) [S006 p. 2].
+
+*Mark 3:*
+
+3. **It carries a certificate**, or a heuristic is paired with one. "Genetic algorithms lack optimality certifications and are typically stochastic in nature." (2018, co) [02 T3]; as editor he accepts a heuristic with "a convex relaxation to demonstrate that their heuristic provides near-optimal solutions" (2019, sole) [02 T7]; his group's heuristics carry a computed bound: an a posteriori ratio on every problem [S119 preprint pp. 18, 20], the gap to the LP bound where the exact solver fails [S029 preprint p. 26]; the negative case, heuristics justified by testing alone, is what those papers replace [S119 preprint p. 1; S118 preprint p. 4] (→ Method 6).
+
+*Mark 5:*
+
+5. **A measurable jump on a hard public library, or a first.** "When I first started working on them, we were able to solve about 5-10% of them. Now, we can solve about two-thirds" (press 2021) [02 T4]; per-library reporting [02 X4]; "the first approximation algorithms for process synthesis" [S119 preprint pp. 2–3, 22].
 
 <a id="taste-warnings"></a>
 
@@ -232,6 +252,14 @@ No contradiction link targets this method (08 §3.1).
 
 **Limitations**: needs finite bounds on nonlinear expressions ("This is BARON's most consequential modeling requirement", manual, firm [05 A3 3e]); floating point, so valid within tolerances, not interval-rigorous [05 A1]; tailored methods still win on structured classes [05 A6]; the 1995-96 full texts were not read.
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-20) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Core Research Methods intro:*
+
+Six methods pass the four checks (recurrence, say–do, executable, exclusive); on the 115 full texts (113 distinct, 102 linking Methods 1–5), Methods 1–5 held and Method 6 was promoted [08 §1–§4]. Say–do counts: cards linking the method (evidence / variant / contradiction; one card can carry two kinds of link, so the three can sum to more than the total).
+
 <a id="method-2"></a>
 
 ## Method 2: The production solver is the lab notebook
@@ -303,6 +331,14 @@ No contradiction link targets this method (08 §3.1).
 **Different from standard practice**: not a fresh prototype per paper; the cumulative production code is instrument and judge, and the paper follows the code.
 
 **Limitations**: era- and resource-bound (a code under his control since 1991, a company since 2001) [03 §A1]; the solver-line code is closed or "on request" [03 §F2]; the development set contains the libraries later used in claims, so overtraining is possible [03 §A2, E2]; who writes the code today is undocumented. Lone version: contribute modules to an open solver; keep one protocol and changelog across papers.
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-20) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Evidence, Practice:*
+
+- Practice: a dated version history, 17 students credited [S077 pp. 7–9]; the paper's construct shipped in BARON 7.2 and judged on and off per library [S003 pp. 15, 17–23]; a rival's method rebuilt inside BARON, the new relaxation made default [S116 arXiv pp. 26, 29]; an application class became an engine feature (K-best solutions, from molecular design) [S035 p. 11].
 
 <a id="method-3"></a>
 
@@ -387,6 +423,18 @@ No contradiction link targets this method (08 §3.1).
 
 **Limitations**: "the number of input variables is modest, typically fewer than a few dozen" (ALAMO manual §1.1, firm) [05 A8 8c]; noise: unregularized subset selection has "poor performance on noisy data" (doi:10.1214/20-STS806) [05 A8 8d]; the 2014 and 2015 full texts were not read.
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-20) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Evidence, Say–do:*
+
+- Say–do: ⚠ partial; 58 cards (38 / 28 / 3), 39 read in full or in part. Simplicity and best subset ✅; first-principles constraints ✅ from 2015; adaptive sampling ⚠ stated, not the default until 2024 (Inner Tension 6) [03 C8]: teach step 5 as the published method, not as what ALAMO users got by default; step 6 shown in application papers, not in the 2017 methods paper's examples [S173 p. 4; S017 pp. 8–14].
+
+*Variants/corrections, contradiction bullet:*
+
+  - ✗ Contradiction links (weak voice, kept): direct black-box search beat both surrogate routes where the design's discreteness is not stated (abstract) [S086]; co-signed industrial lines run a neural policy on a data-driven simulator [S181 pp. 3–4] and sweep integer staffing one role at a time on an agent-based simulator [S183 pp. 17, 19]: the range he co-signs, not a change of method.
+
 <a id="method-4"></a>
 
 ## Method 4: Enter with a benchmark; judge by certified ground truth and portfolios
@@ -466,6 +514,18 @@ No contradiction link targets this method (08 §3.1).
 **Different from standard practice**: the comparison comes before any own method, the yardstick is a certified optimum, and the verdict is a portfolio.
 
 **Limitations**: both DFO studies are bound-constrained only (arXiv:1505.07881); rankings age (arXiv:2209.05759) [05 A7]; certified ground truth needs algebraic test problems; the data URLs printed in the papers no longer resolve [03 §A2].
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-20) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Variants/corrections, 2013 bullet:*
+
+  - ⚠ 2013: optima certified "for most" problems [S001 p. 21]; the unseen set is the same problems after an affine change of variables, a weak hold-out by this skill's reading, while the authors hold that the change reshapes the objectives and moves all local solutions [S001 p. 41].
+
+*Step 8:*
+
+8. When the public library is easy for your solver or lacks the structure, build instances on the claim's axis, with ground truth by construction or certification and written admission rules: "Thanks to these extensive preliminary tests, we discarded all instances that are solved by at least 30% of the complete solvers within a time limit of 30 seconds." [S031 p. 15]; sizes that settle open questions [H007 pp. 13, 16].
 
 <a id="method-5"></a>
 
@@ -547,6 +607,18 @@ No contradiction link targets this method (08 §3.1).
 
 **Limitations**: a single nonlinear relaxation can close a gap where BARON's linear relaxations take over 1000 s (Ruiz & Grossmann 2013, doi:10.1016/j.compchemeng.2012.09.017) [05 A5]; reduced-space schools argue full-space auxiliary variables blow up flowsheets [05 A4]; full texts of the 2004, 2005 and 2018 papers were not read.
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-20) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Step 1:*
+
+1. For each candidate relaxation, measure gap closed, time and numerical failures on a library; never accept "stronger" without the other two; count effects in classes, losses included (EP3) [S003 pp. 22–23]. A proven dominance order (PD4 [S006 pp. 12–16; S028 pp. 3–14; S018 pp. 2–3, 8, 16]) drops a candidate only when another is at least as strong and no more expensive; price the rest, dominated ones included, and keep a cheap balance relaxation when the strongest is orders of magnitude slower (700 QCQPs: DNN/SRLT about 3% gap at about 400 s, DLG1 13% in a few seconds, SD 19% [S018 pp. 1, 18–19, 27]; the (R7) LP chosen over the tighter, slower (R8) [S053 pp. 21–22]).
+
+*Limitations:*
+
+**Limitations**: a single nonlinear relaxation can close a gap where BARON's linear relaxations take over 1000 s (Ruiz & Grossmann 2013, doi:10.1016/j.compchemeng.2012.09.017) [05 A5]; reduced-space schools argue full-space auxiliary variables blow up flowsheets [05 A4]; 2004 and 2005 are read in full [S006 p. 3; S003 pp. 1–2], but the 2018 hybrid paper only as an abstract [S030], so step 7's 2018 revision rests on it and per-node switching is read in its 2021–22 forms [S116 arXiv pp. 22–25].
+
 <a id="method-6"></a>
 
 ## Method 6: Prove the problem hard, then bound the heuristic
@@ -602,6 +674,22 @@ No contradiction link targets this method (08 §3.1).
 ### Before T3.6
 
 Not in SKILL.md before T3.6. The pre-synthesis Honest Boundary listed the programme as *claimed but unverified*; that bullet is kept word for word in [Honest Boundary](#honest-boundary).
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-20) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Evidence, Practice:*
+
+- Practice: ten published heat-exchanger-network problems classified, the utility targets in P and the matches and simultaneous formulations NP-hard in the strong sense [S024 manuscript pp. 5, 10–27]; an LP-based capacity-expansion heuristic proved asymptotically optimal [S029 preprint pp. 9–26]; the same for technology selection [S118 preprint pp. 9–21]; five approximation algorithms with an input-computable guarantee [S119 preprint pp. 6–22].
+
+*Variants/corrections, era bullet:*
+
+  - ⚠ Era-bound: 1995–2004 at UIUC (with Vander Wiel, Liu, Ahmed and Furman); no new manuscript in the line after 2004 (S118, written in 2000, appeared in 2008) [S118 preprint p. 1; S119 preprint p. 1; 08 §8].
+
+*Step 5:*
+
+5. On every run report the gap to the relaxation bound and label it: "It should be noted that the gap of 10.7% is with respect to the LP relaxation value." [S029 preprint p. 26]; claim optimality only where the a posteriori ratio is 1 [S119 preprint pp. 18, 20].
 
 <a id="workflow-a"></a>
 
@@ -681,6 +769,18 @@ Not in SKILL.md before T3.6. The pre-synthesis Honest Boundary listed the progra
 **🔴 Stop rules**: stop and report when (a) the log shows normal completion, no globality warning and a gap within tolerance: "global within tolerances", never "rigorous"; (b) step 5 sends the model to another tool; (c) step 6 is reached: a capability gap. Never call the incumbent global while a globality warning or open gap remains (→ Heuristic 7).
 
 **Output**: the step that explained the stall, the changed model or settings, and the status.
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-20) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Step 3:*
+
+3. **Locate the bottleneck** ([ledger](#heuristic-11)). Read primal bound, dual bound and gap apart, in two general solvers if possible, and the time per component (DM7). Upper bound still improving late, or a multistart finds a better point → the incumbent is the bottleneck: supply a good starting point, since duality-based reductions scale with U - L; no feasible point at all [S165 manuscript p. 11] → a tailored incumbent method beside the general solver's bound: e.g. a convex master whose optimality conditions reproduce the network equations, a fixed-binary feasibility check, no-good cuts, a budget search, the incumbent passed to the solver as a start, compared at equal total time (PD9) [S128 arXiv pp. 9–17; S165 manuscript pp. 13–17, 24]. Upper bound settled, lower bound flat → the relaxation or reduction is: go to step 4. The sources read profiles of solved library instances [H007 pp. 14, 17; S046 arXiv p. 16]; the test on one user's log is this skill's inference.
+
+*Step 4:*
+
+4. **Reformulate before tuning.** Remove gratuitous nonlinearity; pass valid relaxation-only constraints (doi:10.1007/s10898-004-2705-8) (→ Heuristic 2; DM5): RLT products (the pq-formulation for pooling), first-order conditions, problem-specific optimality conditions, kept out of local search because they harm it (pooling: q timed out on 6 of 14 problems, pq solved all, mostly at the root, but gave CONOPT worse local optima on 8) [S069 preprint pp. 9–20]. Only then try options; extra threads help little on NP-hard problems (manual §13.3, firm) [03 §D4].
 
 <a id="workflow-b2"></a>
 
@@ -790,6 +890,14 @@ Not in SKILL.md before T3.6. The pre-synthesis Honest Boundary listed the progra
 
 **Output**: findings with scope and losses.
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-20) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Step 2:*
+
+2. List instances that got worse; call modest effects modest (Nohra "average reductions of 19%"; Fourier-Motzkin "up to 6%, 8% and 11%") [03 §E3]; count wins, ties and losses by stated thresholds [S239 pp. 26–27].
+
 <a id="workflow-e"></a>
 
 ## Workflow E: Release and after publication
@@ -862,6 +970,22 @@ Say "no distillable Sahinidis method" and label any generic advice "not Sahinidi
 - Referees and rebuttals: none public; two papers took 3.5 and 4.6 years to acceptance, reasons unknown [01 §3].
 - Leaving a line: exits are silent [06 §4.2]; meeting routines, draft review, his current coding share [04 Gaps].
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-20) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Step 2:*
+
+2. Give freedom inside a funded area, insight on request: "Thank you for giving me the freedom to explore different ideas and for offering your acute insight when I needed it." (Sun 2021, doi:10.1184/R1/19145945.v1) [04 §1.1].
+
+*Step 3:*
+
+3. Question until each conclusion can be explained briefly: "His insightful questions have challenged me to understand the fundamental concepts of my work, and to succinctly explain any conclusion that I reach." (Sauk 2020, doi:10.1184/R1/13194722.v1) [04 §1.2].
+
+*Step 4:*
+
+4. Pass solver know-how through postdocs; make the sponsor's engineer a co-mentor; land each thesis as a module [04 §3.2, §3.4]. Students bring topics too: two "introduced me to many of the topics discussed in this paper" (2004, sole) [S002 manuscript p. 22].
+
 <a id="heuristic-1"></a>
 
 ## Heuristic 1: Special classes first, then generalize
@@ -879,6 +1003,14 @@ Say "no distillable Sahinidis method" and label any generic advice "not Sahinidi
 ### Before T3.6 (moved verbatim)
 
 1. **Special classes first, then generalize**: if the general problem stalls, solve named classes where small instances defeat solvers, then fold the modules into the general code. Case: "Therefore, about ten years ago, we decided to concentrate on special classes of mixed-integer nonlinear programs" (2002 preface, co) [02 P1]; 12 specialized modules in 1998, none in 2026 [03 §C1].
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-20) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Heuristic 1:*
+
+1. **Special classes first, then generalize**: if the general problem stalls, solve named classes where small instances defeat solvers, then fold the modules into the general code. Case: "Therefore, about ten years ago, we decided to concentrate on special classes of mixed-integer nonlinear programs" (2002 preface, co) [02 P1]; 12 specialized modules in 1998, none in 2026 [03 §C1]; the general module checked against the specialized one on its class [S006 pp. 23–24]. ([ledger](#heuristic-1))
 
 <a id="heuristic-2"></a>
 
@@ -902,6 +1034,14 @@ Say "no distillable Sahinidis method" and label any generic advice "not Sahinidi
 
 2. **Problem knowledge into the model before solver options**: finite physical bounds, no huge "safe" bounds, convexity declared only when proven, relaxation-only constraints passed to the solver. Case: "Tight bounds based on physical or problem-specific knowledge are often more valuable than any algorithmic option in this manual." (manual §4.1, firm) [02 X5]; doi:10.1007/s10898-004-2705-8 [02 I6].
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-20) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Heuristic 2:*
+
+2. **Problem knowledge into the model before solver options**: finite physical bounds, no huge "safe" bounds, convexity declared only when proven, relaxation-only constraints passed to the solver (DM5). Case: "Tight bounds based on physical or problem-specific knowledge are often more valuable than any algorithmic option in this manual." (manual §4.1, firm) [02 X5]; doi:10.1007/s10898-004-2705-8 [02 I6]; a convexity declaration: 35 vs 1793 nodes [S003 p. 17]. ([ledger](#heuristic-2))
+
 <a id="heuristic-3"></a>
 
 ## Heuristic 3: Users' models as bug finder and agenda
@@ -920,6 +1060,14 @@ Say "no distillable Sahinidis method" and label any generic advice "not Sahinidi
 
 3. **Users' models as bug finder and agenda**: ask for the failing model, credit the source in the log. Case: "If everything else fails, send us the .bar file with your model." (manual §13.3) [03 §C5]; 164 users submitted over 6100 problems to the BARON portal, 1999-2002 (2002 book acknowledgments) [02 I4].
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-20) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Heuristic 3:*
+
+3. **Users' models as bug finder and agenda**: ask for the failing model, credit the source in the log. Case: "If everything else fails, send us the .bar file with your model." (manual §13.3) [03 §C5]; 163 researchers and users sent over 6,100 problems, October 1999 to July 2002 (2002 manual) [S162 p. 2]; the book counts 164 to August 2002 [02 I4]. ([ledger](#heuristic-3))
+
 <a id="heuristic-4"></a>
 
 ## Heuristic 4: Each baseline in its strongest fair mode; filter honestly
@@ -937,6 +1085,14 @@ Say "no distillable Sahinidis method" and label any generic advice "not Sahinidi
 ### Before T3.6 (moved verbatim)
 
 4. **Each baseline in its strongest fair mode; filter honestly**: force MIP solvers into global mode, wrap closed code, best hardware for ML baselines, list deteriorations. Case: "set the CPLEX option optimalitytarget to 3 and the GUROBI option nonconvex to 2" (Nohra §3.6) [03 §B3]. Practice only.
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-20) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Heuristic 4:*
+
+4. **Each baseline in its strongest fair mode; filter honestly**: force MIP solvers into global mode, wrap closed code, best hardware for ML baselines, list deteriorations. Case: "set the CPLEX option optimalitytarget to 3 and the GUROBI option nonconvex to 2" (Nohra §3.6) [03 §B3]; a stronger CPLEX setting as second baseline [S239 p. 22]. Practice only. ([ledger](#heuristic-4))
 
 <a id="heuristic-5"></a>
 
@@ -960,6 +1116,14 @@ Say "no distillable Sahinidis method" and label any generic advice "not Sahinidi
 
 5. **Measure the ceiling before learning a rule**: solve every instance under each setting; judge the learned rule against the per-instance best; drop ambiguous labels (<10% difference). Case: probing paper [03 §B2]. Practice only.
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-20) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Heuristic 5:*
+
+5. **Measure the ceiling before learning a rule**: solve every instance under each setting; judge the learned rule against the per-instance best; drop ambiguous labels (<10% difference). Case: in the probing paper, picking the setting per instance would cut solve times by about 40% (MINLP) and 25% (NLP), the ceiling the learned rule is judged against [S212 p. 10]; tuning per instance 57% against one setting 34% [S084 preprint pp. 8, 11]. Practice only. ([ledger](#heuristic-5))
+
 <a id="heuristic-6"></a>
 
 ## Heuristic 6: Reproducible by construction
@@ -977,6 +1141,14 @@ Say "no distillable Sahinidis method" and label any generic advice "not Sahinidi
 ### Before T3.6 (moved verbatim)
 
 6. **Reproducible by construction**: named versions, deterministic work limits, single thread, pinned seeds. Case: "Random seeds are now pinned in BARON's subsolvers for deterministic behavior across runs." (2026.9.10) [03 §D3]; cite BARON by "mentioning the version of the software utilized" [03 §F1].
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-20) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Heuristic 6:*
+
+6. **Reproducible by construction**: named versions, deterministic work limits, single thread, pinned seeds. Case: "Random seeds are now pinned in BARON's subsolvers for deterministic behavior across runs." (2026.9.10) [03 §D3]; cite BARON by "mentioning the version of the software utilized" [03 §F1]; nondeterministic options flagged [S191 p. 22]. ([ledger](#heuristic-6))
 
 <a id="heuristic-7"></a>
 
@@ -996,6 +1168,14 @@ Say "no distillable Sahinidis method" and label any generic advice "not Sahinidi
 
 7. **Keep evidence and proof apart**: never present a multistart value as a global optimum. Case: "It does not prove global optimality." (manual §10.4) [02 J4]; outputs ending "*** Globality is therefore not guaranteed ***" [03 §D4].
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-20) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Heuristic 7:*
+
+7. **Keep evidence and proof apart**: never present a multistart value as a global optimum. Case: "It does not prove global optimality." (manual §10.4) [02 J4]; outputs ending "*** Globality is therefore not guaranteed ***" [03 §D4]; local values beside certified optima since 1999 [S025 pp. 14–15]. ([ledger](#heuristic-7))
+
 <a id="heuristic-8"></a>
 
 ## Heuristic 8: Keep the rival's insight, replace the part that clashes with practice
@@ -1013,6 +1193,14 @@ Say "no distillable Sahinidis method" and label any generic advice "not Sahinidi
 ### Before T3.6 (moved verbatim)
 
 8. **Keep the rival's insight, replace the part that clashes with practice**. Case: on DIRECT, "the interesting thing that I feel uh Jones came up with was a way to do this selection of boxes" and "what I don't like though about this algorithm is this tri-section" (TAMU 2025, ASR [0:45:29]-[0:45:46]) [02 I8].
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-20) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Heuristic 8:*
+
+8. **Keep the rival's insight, replace the part that clashes with practice**. Case: on DIRECT, "the interesting thing that I feel uh Jones came up with was a way to do this selection of boxes" and "what I don't like though about this algorithm is this tri-section" (TAMU 2025, ASR [0:45:29]-[0:45:46]) [02 I8]; in print [S014 pp. 4, 8; S170 pp. 3, 23]. ([ledger](#heuristic-8))
 
 <a id="heuristic-9"></a>
 
@@ -1036,6 +1224,14 @@ Say "no distillable Sahinidis method" and label any generic advice "not Sahinidi
 
 9. **Probe options with cheap, complete student projects**. Case: "This problem will serve to train Keith in the area of global optimization, before he embarks on the study of more complex problems." (CAPD, Jan 2008) [03 §C4]; 38 MS students 2015-19 [06 §2]. Practice only.
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-20) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Heuristic 9:*
+
+9. **Probe options with cheap, complete student projects**. Case: "This problem will serve to train Keith in the area of global optimization, before he embarks on the study of more complex problems." (CAPD, Jan 2008) [03 §C4]; 38 MS students 2015-19 [06 §2]; MS theses carried the 2013 study's black-box applications [S001 pp. 41–47]. Practice only. ([ledger](#heuristic-9))
+
 <a id="heuristic-10"></a>
 
 ## Heuristic 10: When the problem source moves, keep the engine
@@ -1053,6 +1249,14 @@ Say "no distillable Sahinidis method" and label any generic advice "not Sahinidi
 ### Before T3.6 (moved verbatim)
 
 10. **When the problem source moves, keep the engine**. Case: turns follow institutional moves with a 1-3 year lag (inferred) [06 §4.2]; "In our group, we also develop the algorithms ourselves and then we apply them to many application domains" (press 2018) [04 §1.6].
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-20) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Heuristic 10:*
+
+10. **When the problem source moves, keep the engine**. Case: turns follow institutional moves with a 1-3 year lag (inferred) [06 §4.2]; "In our group, we also develop the algorithms ourselves and then we apply them to many application domains" (press 2018) [04 §1.6]; the DFO engine taken to a materials group's devices [S205 p. 1]. ([ledger](#heuristic-10))
 
 <a id="heuristic-11"></a>
 
@@ -1092,6 +1296,14 @@ Say "no distillable Sahinidis method" and label any generic advice "not Sahinidi
 ### Before T3.6
 
 Not in SKILL.md before T3.6; Workflow B1 step 3 called its test *inferred from Method 1; no source states this test* (kept in [Workflow B1](#workflow-b1)).
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-20) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Closing line of Research Heuristics (Heuristics 11 and 12):*
+
+Written into steps instead (they fail exclusivity): which bound stalls (Workflow B1 step 3); the ranked pool when the data are estimates (Workflow D step 6).
 
 <a id="heuristic-12"></a>
 
@@ -1159,6 +1371,14 @@ Not in SKILL.md before T3.6.
 - **Key insight**: range contraction from duals and the incumbent, at every node. **Minimum evidence**: Ryoo's 1995 MS thesis on range reduction [01 SW1].
 - **Abandoned**: the direct general attempt; molecular mechanics (no 1990s paper). **Reception**: Neumaier et al. 2005 found it fastest and most robust, with wrong claimed optima before fixes [05 A1]. **Shows**: Methods 1-2, Heuristic 1.
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-20) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Key insight and Minimum evidence:*
+
+- **Key insight**: range contraction from duals and the incumbent, at every node (1995–96 papers abstract-level [S008; S013; S004]; read in the 2000 manual [S077 pp. 12, 15, 20–21] and a 2004 restatement under which the 1996 cut is the same or weaker [S006 p. 15]). **Minimum evidence**: Ryoo's MS thesis on range reduction [01 SW1] (year disputed between primary records).
+
 <a id="anatomy-minlp-2004"></a>
 
 ## Anatomy: Global optimization of mixed-integer nonlinear programs: a theoretical and computational study (2004)
@@ -1203,6 +1423,14 @@ Not in SKILL.md before T3.6 (new anatomy of a work read in full).
 - **Origin**: student-driven theory (Tawarmalani MS 1997, PhD 2001). **Why then**: LP robust, NLP not (2005 abstract).
 - **Key insight**: constructive convex envelopes; entirely linear relaxations. **Minimum evidence**: root gaps on 87 GlobalLib/MINLPLib problems reduced "by up to 100%".
 - **Abandoned**: the 2000 mixed-integer SDP module (gone by 2026, reason unknown); polyhedral-only stance revised 2018. **Reception**: INFORMS Computing Society Prize 2004, Beale-Orchard-Hays Prize 2006 [01 SW2]. **Shows**: Methods 5, 2.
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-20) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Key insight:*
+
+- **Key insight** (corrected): lifted outer approximation, linearizing a composition layer by layer, which for separable sums matches what direct linearization needs exponentially many cuts to reach [S003 pp. 3–7]; constructive envelopes are one proposition [S003 pp. 13–14].
 
 <a id="anatomy-approximation-hens"></a>
 
@@ -1251,6 +1479,14 @@ Not in SKILL.md before T3.6 (new anatomy of a work read in full).
 - **Key insight**: judge black-box solvers against optima certified by an algebraic global solver. **Minimum evidence**: CAPD Jan 2008, 225 problems and 18 solvers; final study 22 solvers, 502 problems [03 §C3].
 - **Abandoned**: the promised unified DFO interface [03 §E5]. **Reception**: his most-cited paper; critiques on constraints, ageing, aggregation [05 A7]; the 2022 sequel won the JOGO Best Paper Award. **Shows**: Method 4.
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-20) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Key insight and Minimum evidence:*
+
+- **Key insight**: judge black-box solvers against optima certified by an algebraic global solver [S001 p. 21]. **Minimum evidence**: CAPD Jan 2008, 225 problems and 18 solvers [03 §C3]; final study 22 solvers, 502 problems [S001 pp. 14, 20], its unseen set an affine transform of the same problems [S001 p. 41].
+
 <a id="anatomy-alamo"></a>
 
 ## Anatomy: Learning surrogate models for simulation-based optimization (2014)
@@ -1279,6 +1515,14 @@ Not in SKILL.md before T3.6 (new anatomy of a work read in full).
 - **Key insight**: best subset by integer programming + adaptive sampling + first-principles constraints. **Minimum evidence**: in 2017, error-maximization sampling beat equal-size LHS in 120 of 150 problems, with losses to LHS-50 reported.
 - **Abandoned**: not documented. **Reception**: R&D 100 (2016); the finite-basis critique answered by the 2018 MINLP formulation [05 A8]. **Shows**: Method 3.
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-20) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Key insight and Minimum evidence:*
+
+- **Key insight**: best subset by integer programming + adaptive sampling + first-principles constraints (2014 abstract only [S009]; read in its 2015 and 2017 forms). **Minimum evidence**: in 2017, error-maximization sampling beat equal-size LHS in 120 of 150 problems, with losses to LHS-50 reported [S017 pp. 11–12].
+
 <a id="anatomy-hybrid-lp-nlp"></a>
 
 ## Anatomy: A hybrid LP/NLP paradigm for global optimization relaxations (2018)
@@ -1302,6 +1546,14 @@ Not in SKILL.md before T3.6 (new anatomy of a work read in full).
 - **Origin and why then** (inferred): rival solvers multiplied, NLP subsolvers matured; a chain of student and postdoc modules.
 - **Key insight**: polyhedral and nonlinear relaxations with fail-safes and learned switching. **Minimum evidence**: "increases by 30% the number of problems that are solvable to global optimality within 500 s".
 - **Abandoned**: the polyhedral-only doctrine; FilterSD off by default [03 §H]. **Reception**: SCIP 8 study, "a small lead of BARON before SCIP" (doi:10.1007/s10898-023-01345-1) [05 A2]. **Shows**: Methods 5, 2, 1.
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-20) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Key insight and Minimum evidence:*
+
+- **Key insight**: polyhedral and nonlinear relaxations with fail-safes and learned switching. **Minimum evidence**: "increases by 30% the number of problems that are solvable to global optimality within 500 s" (abstract-level card [S030]; per-node switching read in its 2021–22 forms [S116 arXiv pp. 22–25]).
 
 <a id="anti-patterns"></a>
 
@@ -1377,6 +1629,14 @@ Topic counts are carded works per period (non-skip; any read level), classified 
 
 Turns follow institutional moves and funding with a 1-3 year lag; the engine stays (inferred) [06 §4].
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-20) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Closing paragraph:*
+
+Turns follow institutional moves and funding with a 1-3 year lag; the engine stays (inferred) [06 §4]; the full texts agree [08 §8]. Constant: certified optima as the yardstick from 1999 [S025 pp. 14–15] to 2026 [S272 p. 8]; duality-based reduction from 2000 [S077 p. 12] to 2025 [S190 pp. 4–9]. ([full evidence](#trajectory))
+
 <a id="lineage"></a>
 
 ## Academic Lineage and collaboration pattern
@@ -1446,6 +1706,18 @@ Counts are carded works (non-skip, any read level) with the coauthor named on th
 - **Tension 5: hold-out discipline vs product claims**: the 2013 overtraining check vs BAM claims on its development libraries [03 C1].
 - **Tension 6: published method vs shipped default**: adaptive sampling published 2014, effectively off until 2020, default only from 2024 [03 C8].
 - **Tension 7: certificates vs floating point.** Global guarantees as a mark of quality vs "BARON as a whole is not claimed to give mathematically rigorous results" (Kearfott 2011) and wrong optimal values found by independent testers [05 A1].
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-20) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Tension 1:*
+
+- **Tension 1: general-purpose vs problem-specific.** "Application agnostic algorithms ... that was what particularly fascinated me" (press 2021) vs, for integer and nonlinear stochastic programs, "It appears unlikely that general-purpose algorithms will solve such problems exactly." (FOCAPO 2003, sole; also in the 2004 journal manuscript, whose next sentence differs [S002 manuscript p. 22]) and "Many of the papers develop tailored algorithms that outperform general-purpose MINLP solvers." (2019, sole) [02 C1]. In practice: a co-supervised 2024 paper (Li, Dey & Sahinidis) pairs a tailored incumbent with the general solver's bound [S128 arXiv p. 24].
+
+*Tension 2:*
+
+- **Tension 2: the relaxation stance moves with subsolver technology**, a dated sequence, not one change: in 2000 the IQP module defaulted to a quadratic relaxation (the NLP module to a linear one) and a mixed-integer SDP module shipped [S077 pp. 40, 53, 92–95]; LP-only in 2004–05 [S006 p. 3; S003 pp. 1–2]; hybrid LP/NLP in 2018 [S030]; SDP-quality bounds from quadratic cuts in 2021–22 [S133 arXiv pp. 12, 18–22]. The stated grounds stay speed and robustness [01 C8]; the 2001, 2002, 2011 and 2025 steps are in the ledger.
 
 <a id="roundtable-card"></a>
 

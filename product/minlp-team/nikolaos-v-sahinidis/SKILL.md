@@ -122,10 +122,10 @@ Run only the Step 2 checks the routed row's First move needs. Answer: conclusion
 ### Marks of good research
 
 1. **It ends as something others can run**: software, executables, libraries, raw data. "The ultimate goal is to provide, through BARON, a precise and valuable computational tool to engineers and scientists." (group site) [02 T1]; 13 of BARON's 23 development libraries come from his papers [03 §A2].
-2. **It is general and automated**, usable at defaults. "The math underneath is the same. Application agnostic algorithms can be applied by many people in different domains, and that was what particularly fascinated me." (press 2021) [02 T2]; users "rarely explore software options" (2013, co) [02 X1]; solved in an "entirely automated fashion" (2004) [S006 p. 2].
-3. **It carries a certificate**, or a heuristic is paired with one. "Genetic algorithms lack optimality certifications and are typically stochastic in nature." (2018, co) [02 T3]; as editor he accepts a heuristic with "a convex relaxation to demonstrate that their heuristic provides near-optimal solutions" (2019, sole) [02 T7]; his group's heuristics carry a computed bound: an a posteriori ratio on every problem [S119 preprint pp. 18, 20], the gap to the LP bound where the exact solver fails [S029 preprint p. 26]; the negative case, heuristics justified by testing alone, is what those papers replace [S119 preprint p. 1; S118 preprint p. 4] (→ Method 6).
+2. **It is general and automated**, usable at defaults. "The math underneath is the same. Application agnostic algorithms can be applied by many people in different domains, and that was what particularly fascinated me." (press 2021) [02 T2]; users "rarely explore software options" (2013, co) [02 X1].
+3. **It carries a certificate**, or a heuristic is paired with one. "Genetic algorithms lack optimality certifications and are typically stochastic in nature." (2018, co) [02 T3]; as editor he accepts a heuristic with "a convex relaxation to demonstrate that their heuristic provides near-optimal solutions" (2019, sole) [02 T7]; his group's heuristics carry a computed bound [S119 preprint pp. 18, 20], replacing justification by testing alone [S119 preprint p. 1] (→ Method 6).
 4. **The simplest adequate model.** Belief B1, nine dated instances 2014-2026 [02 §1]; "Avoid gratuitous nonlinearity." (manual §7.2, firm) [02 X5].
-5. **A measurable jump on a hard public library, or a first.** "When I first started working on them, we were able to solve about 5-10% of them. Now, we can solve about two-thirds" (press 2021) [02 T4]; per-library reporting [02 X4]; "the first approximation algorithms for process synthesis" [S119 preprint pp. 2–3, 22].
+5. **A measurable jump on a hard public library, or a first.** "When I first started working on them, we were able to solve about 5-10% of them. Now, we can solve about two-thirds" (press 2021) [02 T4]; "the first approximation algorithms for process synthesis" [S119 preprint pp. 2–3, 22].
 
 ([full evidence](references/research/09-evidence-ledger.md#taste-marks))
 
@@ -150,7 +150,7 @@ Run only the Step 2 checks the routed row's First move needs. Answer: conclusion
 
 ## Core Research Methods
 
-Six methods pass the four checks (recurrence, say–do, executable, exclusive); on the 115 full texts (113 distinct, 102 linking Methods 1–5), Methods 1–5 held and Method 6 was promoted [08 §1–§4]. Say–do counts: cards linking the method (evidence / variant / contradiction; one card can carry two kinds of link, so the three can sum to more than the total).
+Six methods pass the four checks (recurrence, say–do, executable, exclusive); on the 115 full texts (113 distinct, 102 linking Methods 1–5), Methods 1–5 held and Method 6 was promoted [08 §1–§4]. Say–do counts: cards linking the method (evidence / variant / contradiction; a card can carry two kinds).
 
 ### Method 1: Reduce before you branch (branch-and-reduce)
 
@@ -186,7 +186,7 @@ Six methods pass the four checks (recurrence, say–do, executable, exclusive); 
 
 **Evidence** ([full evidence](references/research/09-evidence-ledger.md#method-2)):
 - Stated: "A primary objective of the BARON project is to provide its developers with a platform for experimentation with various branch-and-bound algorithms." (2019, co) [S084 preprint p. 3].
-- Practice: a dated version history, 17 students credited [S077 pp. 7–9]; the paper's construct shipped in BARON 7.2 and judged on and off per library [S003 pp. 15, 17–23]; a rival's method rebuilt inside BARON, the new relaxation made default [S116 arXiv pp. 26, 29]; an application class became an engine feature (K-best solutions, from molecular design) [S035 p. 11].
+- Practice: a dated version history, 17 students credited [S077 pp. 7–9]; the paper's construct shipped in BARON 7.2 and judged on and off per library [S003 pp. 15, 17–23]; a rival's method rebuilt inside BARON, the new relaxation made default [S116 arXiv pp. 26, 29].
 - Say–do: ✅ 1991–2022, ⚠ 2023–2026; 85 cards (53 / 35 / 0), 61 read in full or in part.
 - Variants/corrections:
   - ⚠ 2023–26: Georgia Tech lines build outside BARON: with Dey, BARON as baseline and bound source [S128 arXiv pp. 17–19]; with Nemhauser, a module in SCIP [S269 arXiv p. 11].
@@ -214,12 +214,12 @@ Six methods pass the four checks (recurrence, say–do, executable, exclusive); 
 **Evidence** ([full evidence](references/research/09-evidence-ledger.md#method-3)):
 - Stated: "ALAMO returns the simplest regression model possible that fits the data well. As a result, humans can inspect ALAMO’s models and confirm the physical correctness of these models before using them." (his signed brochure, in a 2017 third-party report) [S249 p. 81].
 - Practice: exact best subset, certified bounds and error-maximization sampling beating same-size LHS in 120 of 150 problems [S017 pp. 5–8, 11, 13–14]; first-principles constraints certified by a global solve [S039 manuscript pp. 4–5, 7–9]; sparse quadratics from 10 points set against DFO on the raw simulator [S206 manuscript pp. 12, 17–27].
-- Say–do: ⚠ partial; 58 cards (38 / 28 / 3), 39 read in full or in part. Simplicity and best subset ✅; first-principles constraints ✅ from 2015; adaptive sampling ⚠ stated, not the default until 2024 (Inner Tension 6) [03 C8]: teach step 5 as the published method, not as what ALAMO users got by default; step 6 shown in application papers, not in the 2017 methods paper's examples [S173 p. 4; S017 pp. 8–14].
+- Say–do: ⚠ partial; 58 cards (38 / 28 / 3), 39 read in full or in part: simplicity and best subset ✅; first-principles constraints ✅ from 2015; adaptive sampling ⚠ stated, not the default until 2024, so teach step 5 as the published method (Inner Tension 6) [03 C8]; step 6 shown in application papers, not in the 2017 methods paper's examples [S173 p. 4; S017 pp. 8–14].
 - Variants/corrections:
   - ⚠ Step 4 uneven: clipping after fitting in 2013 [S052 manuscript p. 19]; constraints at sample points only in 2022 [S108 manuscript pp. 14–16].
   - ⚠ Step 7: the 2026 symbolic-regression MINLP is solved by randomized rounding, with no bound reported [S271 pp. 8, 10].
   - ⚠ Noisy data: the group adds shrinkage to the sparsity term [S182 arXiv pp. 5, 9].
-  - ✗ Contradiction links (weak voice, kept): direct black-box search beat both surrogate routes where the design's discreteness is not stated (abstract) [S086]; co-signed industrial lines run a neural policy on a data-driven simulator [S181 pp. 3–4] and sweep integer staffing one role at a time on an agent-based simulator [S183 pp. 17, 19]: the range he co-signs, not a change of method.
+  - ✗ Contradiction links (weak voice, kept): direct black-box search beat both surrogate routes where the design's discreteness is not stated (abstract) [S086]; co-signed industrial lines run a neural policy or a one-role-at-a-time staffing sweep on simulators [S181 pp. 3–4; S183 pp. 17, 19]: the range he co-signs, not a change of method.
 
 **Steps**:
 1. Ask whether an algebraic model exists or can be derived cheaply; if the design has discrete decisions, do not go straight to a derivative-free solver.
@@ -246,7 +246,7 @@ Six methods pass the four checks (recurrence, say–do, executable, exclusive); 
 - Practice: 22 solvers on 502 problems against BARON-certified optima, identical bounds and starts, a covering portfolio [S001 pp. 3, 14, 20–23, 30–33]; the 2022 mixed-integer sequel [S063 pp. 3, 13–14, 27]; a new class entered with a 1,352-instance library [H007 pp. 12–14]; the 2013 design (502 problems, 2,500 evaluations, ten shared starts) rerun on 42 codes in 2026 [S272 pp. 4–5, 8, 14–16].
 - Say–do: ✅ steps 1–3, 5, 6; ⚠ step 4 (2013 only); ✗ step 7 for own algorithms and BAM; 74 cards (30 / 51 / 7), 61 read in full or in part.
 - Variants/corrections:
-  - ⚠ 2013: optima certified "for most" problems [S001 p. 21]; the unseen set is the same problems after an affine change of variables, a weak hold-out by this skill's reading, while the authors hold that the change reshapes the objectives and moves all local solutions [S001 p. 41].
+  - ⚠ 2013: optima certified "for most" problems [S001 p. 21]; the unseen set is an affine transform of the same problems, a weak hold-out by this skill's reading, while the authors hold that the change reshapes the objectives and moves all local solutions [S001 p. 41].
   - ⚠ 2022: no developer rounds or hold-out; a bare 2,500-evaluation budget [S063 p. 13].
   - ✗ Step 7 unmet for the group's own algorithms and BAM [S170 pp. 24–29; S239 p. 16; S270 pp. 8, 14, 19].
   - ⚠ Early form (1999–2005): certified optima against the literature's local designs on small sets, no portfolio [S025 pp. 14–15; S058 preprint pp. 13–15].
@@ -259,7 +259,7 @@ Six methods pass the four checks (recurrence, say–do, executable, exclusive); 
 5. Define success explicitly (a mixed-tolerance test on the median of ten shared starts, f ≤ max(1.01 f*, f* + 0.01), EP5 [S001 p. 21]); report median and best runs; publish problems and raw results.
 6. Conclude with the smallest covering portfolio and a virtual-best envelope (EP7), and list what the study did not cover.
 7. Use the benchmark to pick components for your tools; when your own algorithm enters, apply step 4's hold-out to it too.
-8. When the public library is easy for your solver or lacks the structure, build instances on the claim's axis, with ground truth by construction or certification and written admission rules: "Thanks to these extensive preliminary tests, we discarded all instances that are solved by at least 30% of the complete solvers within a time limit of 30 seconds." [S031 p. 15]; sizes that settle open questions [H007 pp. 13, 16].
+8. When the public library is easy for your solver or lacks the structure, build instances on the claim's axis, with ground truth by construction or certification and written admission rules (QPLIB dropped instances that at least 30% of the complete solvers solve within 30 s [S031 p. 15]); sizes that settle open questions [H007 pp. 13, 16].
 
 **Applies to stage**: problem choice, experiment design, judging results.
 
@@ -292,7 +292,7 @@ Six methods pass the four checks (recurrence, say–do, executable, exclusive); 
 
 **Different from standard practice**: theory ranks relaxations by the hull they reach; this ranks them by bound per second with failure risk priced in, and prices tuning, learned components and surrogates the same way, their own cost included [S084 preprint pp. 9, 15–17; S269 arXiv pp. 9–12; S206 manuscript pp. 18–26].
 
-**Limitations**: a single nonlinear relaxation can close a gap where BARON's linear relaxations take over 1000 s (Ruiz & Grossmann 2013, doi:10.1016/j.compchemeng.2012.09.017) [05 A5]; reduced-space schools argue full-space auxiliary variables blow up flowsheets [05 A4]; 2004 and 2005 are read in full [S006 p. 3; S003 pp. 1–2], but the 2018 hybrid paper only as an abstract [S030], so step 7's 2018 revision rests on it and per-node switching is read in its 2021–22 forms [S116 arXiv pp. 22–25].
+**Limitations**: a single nonlinear relaxation can close a gap where BARON's linear relaxations take over 1000 s (Ruiz & Grossmann 2013, doi:10.1016/j.compchemeng.2012.09.017) [05 A5]; reduced-space schools argue full-space auxiliary variables blow up flowsheets [05 A4]; step 7's 2018 revision rests on an abstract [S030], per-node switching on its 2021–22 forms [S116 arXiv pp. 22–25].
 
 ### Method 6: Prove the problem hard, then bound the heuristic
 
@@ -300,17 +300,17 @@ Six methods pass the four checks (recurrence, say–do, executable, exclusive); 
 
 **Evidence** ([full evidence](references/research/09-evidence-ledger.md#method-6)):
 - Stated: "The distinguishing feature of this solution paradigm is the analytical derivation of bounds for the quality of the solutions obtained by heuristics that run in polynomial time." (2004 review, sole) [S002 manuscript p. 18].
-- Practice: ten published heat-exchanger-network problems classified, the utility targets in P and the matches and simultaneous formulations NP-hard in the strong sense [S024 manuscript pp. 5, 10–27]; an LP-based capacity-expansion heuristic proved asymptotically optimal [S029 preprint pp. 9–26]; the same for technology selection [S118 preprint pp. 9–21]; five approximation algorithms with an input-computable guarantee [S119 preprint pp. 6–22].
+- Practice: ten published heat-exchanger-network problems classified: utility targets in P, matches and simultaneous formulations strongly NP-hard [S024 manuscript pp. 5, 10–27]; an LP-based capacity-expansion heuristic proved asymptotically optimal [S029 preprint pp. 9–26]; the same for technology selection [S118 preprint pp. 9–21]; five approximation algorithms with an input-computable guarantee [S119 preprint pp. 6–22].
 - Say–do: ✅ stated in two reviews [S002 manuscript p. 18 (sole); S010 preprint p. 8 (co)] and practised in the four full texts above, written 2000–2004; four abstracts [S061; S088; S138; S213]; echoes in 2021 and 2026 [S213; S238 manuscript pp. 10–17].
 - Variants/corrections:
-  - ⚠ Era-bound: 1995–2004 at UIUC (with Vander Wiel, Liu, Ahmed and Furman); no new manuscript in the line after 2004 (S118, written in 2000, appeared in 2008) [S118 preprint p. 1; S119 preprint p. 1; 08 §8].
+  - ⚠ Era-bound: 1995–2004 at UIUC; no new manuscript in the line after 2004 (S118, written in 2000, appeared in 2008) [S118 preprint p. 1; S119 preprint p. 1; 08 §8].
 
 **Steps**:
 1. Classify the complexity on the simplest restriction (one period, unit costs), then carry it through each richer published formulation (PD5) [S024 manuscript pp. 10–25].
 2. Read hardness as a brief: exact general-purpose algorithms are unlikely, so aim at heuristics with analytical quality bounds; keep a weaker hardness proof if its source problem suggests algorithms [S024 manuscript pp. 25, 36; S010 preprint p. 8].
 3. Build the heuristic on the LP relaxation around one counting property (shifting adds at most one expansion per facility beyond the LP) [S029 preprint pp. 9–16; S118 preprint pp. 12–15].
 4. Prove the guarantee: a ratio computable from the input before solving [S119 preprint p. 18], or asymptotic optimality almost surely under stated probability models (PD6) [S029 preprint pp. 16–24]; show that naive rounding is unboundedly worse [S029 preprint p. 15].
-5. On every run report the gap to the relaxation bound and label it: "It should be noted that the gap of 10.7% is with respect to the LP relaxation value." [S029 preprint p. 26]; claim optimality only where the a posteriori ratio is 1 [S119 preprint pp. 18, 20].
+5. On every run report the gap to the relaxation bound and label it (e.g. as a gap to the LP relaxation value) [S029 preprint p. 26]; claim optimality only where the a posteriori ratio is 1 [S119 preprint pp. 18, 20].
 6. Use the theory to explain the computations (gaps that do not grow with the horizon) [S118 preprint pp. 11–12, 20–21]; stress-test the parameter the bound depends on (EP12) [S238 manuscript p. 17].
 7. When no heuristic dominates, run the suite and say so [S119 preprint pp. 21–22].
 
@@ -347,7 +347,7 @@ Six methods pass the four checks (recurrence, say–do, executable, exclusive); 
 **Steps** (stop at the first step that explains the stall):
 1. **Status.** If the log ends with "*** Globality is therefore not guaranteed ***" or reports missing bounds, the run is not yet a global solve; go to step 2 (→ Heuristic 7).
 2. **Bounds and declarations.** Give every nonlinear expression a finite physical bound; replace "safe" bounds such as ±10^10. Recheck every convexity or relaxation-only declaration: "These three declarations are believed by BARON without verification, and an incorrect one produces a wrong answer silently." (manual §13.4, firm) [03 §D4]. Rerun (→ Heuristic 2).
-3. **Locate the bottleneck** ([ledger](references/research/09-evidence-ledger.md#heuristic-11)). Read primal bound, dual bound and gap apart, in two general solvers if possible, and the time per component (DM7). Upper bound still improving late, or a multistart finds a better point → the incumbent is the bottleneck: supply a good starting point, since duality-based reductions scale with U - L; no feasible point at all [S165 manuscript p. 11] → a tailored incumbent method beside the general solver's bound: e.g. a convex master whose optimality conditions reproduce the network equations, a fixed-binary feasibility check, no-good cuts, a budget search, the incumbent passed to the solver as a start, compared at equal total time (PD9) [S128 arXiv pp. 9–17; S165 manuscript pp. 13–17, 24]. Upper bound settled, lower bound flat → the relaxation or reduction is: go to step 4. The sources read profiles of solved library instances [H007 pp. 14, 17; S046 arXiv p. 16]; the test on one user's log is this skill's inference.
+3. **Locate the bottleneck** ([ledger](references/research/09-evidence-ledger.md#heuristic-11)). Read primal bound, dual bound and gap apart, in two general solvers if possible, and the time per component (DM7). Upper bound still improving late, or a multistart finds a better point → the incumbent is the bottleneck: supply a good starting point, since duality-based reductions scale with U - L; no feasible point at all [S165 manuscript p. 11] → a tailored incumbent method beside the general solver's bound (e.g. a convex master whose optimality conditions reproduce the network equations, a fixed-binary feasibility check, no-good cuts, a budget search), its incumbent passed as a start and compared at equal total time (PD9) [S128 arXiv pp. 9–17; S165 manuscript pp. 13–17, 24]. Upper bound settled, lower bound flat → the relaxation or reduction is: go to step 4. The sources read profiles of solved library instances [H007 pp. 14, 17; S046 arXiv p. 16]; the test on one user's log is this skill's inference.
 4. **Reformulate before tuning.** Remove gratuitous nonlinearity; pass valid relaxation-only constraints (doi:10.1007/s10898-004-2705-8) (→ Heuristic 2; DM5): RLT products (the pq-formulation for pooling), first-order conditions, problem-specific optimality conditions, kept out of local search because they harm it (pooling: q timed out on 6 of 14 problems, pq solved all, mostly at the root, but gave CONOPT worse local optima on 8) [S069 preprint pp. 9–20]. Only then try options; extra threads help little on NP-hard problems (manual §13.3, firm) [03 §D4].
 5. **Check the tool fits** (manual §4, firm) [03 §D4]. A model known to be convex: a local solver may reach the global optimum faster; hand convex MINLP to Grossmann or Leyffer. Only a good solution needed quickly: multistart local search, labelled "not certified".
 6. **Escalate.** Lower bound still flat on small instances after steps 1-5 → a research problem, not a tuning failure: name the hard structure, narrow to that class (→ Heuristic 1), offer Workflow B2.
@@ -393,7 +393,7 @@ Six methods pass the four checks (recurrence, say–do, executable, exclusive); 
 
 **Steps**:
 1. Separate evidence from proof (→ Heuristic 7); print an optimum that depends on the feasibility tolerance with both values [S003 p. 23].
-2. List instances that got worse; call modest effects modest (Nohra "average reductions of 19%"; Fourier-Motzkin "up to 6%, 8% and 11%") [03 §E3]; count wins, ties and losses by stated thresholds [S239 pp. 26–27].
+2. List instances that got worse; call modest effects modest [03 §E3]; count wins, ties and losses by stated thresholds [S239 pp. 26–27].
 3. Read learned models against physics (→ Method 3).
 4. Conclude with a portfolio when nothing dominates; state the uncovered scope (→ Method 4).
 5. Compare with old versions on the same hardware (→ Method 2).
@@ -426,9 +426,9 @@ Evidence: thesis acknowledgements (genre-biased), rosters, CV [04 §0]; not his 
 
 **Steps**:
 1. Start with a training problem or an MS thesis as a complete first project (→ Heuristic 9).
-2. Give freedom inside a funded area, insight on request: "Thank you for giving me the freedom to explore different ideas and for offering your acute insight when I needed it." (Sun 2021, doi:10.1184/R1/19145945.v1) [04 §1.1].
-3. Question until each conclusion can be explained briefly: "His insightful questions have challenged me to understand the fundamental concepts of my work, and to succinctly explain any conclusion that I reach." (Sauk 2020, doi:10.1184/R1/13194722.v1) [04 §1.2].
-4. Pass solver know-how through postdocs; make the sponsor's engineer a co-mentor; land each thesis as a module [04 §3.2, §3.4]. Students bring topics too: two "introduced me to many of the topics discussed in this paper" (2004, sole) [S002 manuscript p. 22].
+2. Give freedom inside a funded area, insight on request (Sun 2021, doi:10.1184/R1/19145945.v1) [04 §1.1].
+3. Question until each conclusion can be explained briefly (Sauk 2020, doi:10.1184/R1/13194722.v1) [04 §1.2].
+4. Pass solver know-how through postdocs; make the sponsor's engineer a co-mentor; land each thesis as a module [04 §3.2, §3.4].
 
 **🔴 Checkpoint**: not documented; how and when he stops a student's line is unknown.
 
@@ -443,25 +443,23 @@ Say "no distillable Sahinidis method" and label any generic advice "not Sahinidi
 
 ## Research Heuristics
 
-1. **Special classes first, then generalize**: if the general problem stalls, solve named classes where small instances defeat solvers, then fold the modules into the general code. Case: "Therefore, about ten years ago, we decided to concentrate on special classes of mixed-integer nonlinear programs" (2002 preface, co) [02 P1]; 12 specialized modules in 1998, none in 2026 [03 §C1]; the general module checked against the specialized one on its class [S006 pp. 23–24]. ([ledger](references/research/09-evidence-ledger.md#heuristic-1))
-2. **Problem knowledge into the model before solver options**: finite physical bounds, no huge "safe" bounds, convexity declared only when proven, relaxation-only constraints passed to the solver (DM5). Case: "Tight bounds based on physical or problem-specific knowledge are often more valuable than any algorithmic option in this manual." (manual §4.1, firm) [02 X5]; doi:10.1007/s10898-004-2705-8 [02 I6]; a convexity declaration: 35 vs 1793 nodes [S003 p. 17]. ([ledger](references/research/09-evidence-ledger.md#heuristic-2))
-3. **Users' models as bug finder and agenda**: ask for the failing model, credit the source in the log. Case: "If everything else fails, send us the .bar file with your model." (manual §13.3) [03 §C5]; 163 researchers and users sent over 6,100 problems, October 1999 to July 2002 (2002 manual) [S162 p. 2]; the book counts 164 to August 2002 [02 I4]. ([ledger](references/research/09-evidence-ledger.md#heuristic-3))
-4. **Each baseline in its strongest fair mode; filter honestly**: force MIP solvers into global mode, wrap closed code, best hardware for ML baselines, list deteriorations. Case: "set the CPLEX option optimalitytarget to 3 and the GUROBI option nonconvex to 2" (Nohra §3.6) [03 §B3]; a stronger CPLEX setting as second baseline [S239 p. 22]. Practice only. ([ledger](references/research/09-evidence-ledger.md#heuristic-4))
-5. **Measure the ceiling before learning a rule**: solve every instance under each setting; judge the learned rule against the per-instance best; drop ambiguous labels (<10% difference). Case: in the probing paper, picking the setting per instance would cut solve times by about 40% (MINLP) and 25% (NLP), the ceiling the learned rule is judged against [S212 p. 10]; tuning per instance 57% against one setting 34% [S084 preprint pp. 8, 11]. Practice only. ([ledger](references/research/09-evidence-ledger.md#heuristic-5))
-6. **Reproducible by construction**: named versions, deterministic work limits, single thread, pinned seeds. Case: "Random seeds are now pinned in BARON's subsolvers for deterministic behavior across runs." (2026.9.10) [03 §D3]; cite BARON by "mentioning the version of the software utilized" [03 §F1]; nondeterministic options flagged [S191 p. 22]. ([ledger](references/research/09-evidence-ledger.md#heuristic-6))
-7. **Keep evidence and proof apart**: never present a multistart value as a global optimum. Case: "It does not prove global optimality." (manual §10.4) [02 J4]; outputs ending "*** Globality is therefore not guaranteed ***" [03 §D4]; local values beside certified optima since 1999 [S025 pp. 14–15]. ([ledger](references/research/09-evidence-ledger.md#heuristic-7))
-8. **Keep the rival's insight, replace the part that clashes with practice**. Case: on DIRECT, "the interesting thing that I feel uh Jones came up with was a way to do this selection of boxes" and "what I don't like though about this algorithm is this tri-section" (TAMU 2025, ASR [0:45:29]-[0:45:46]) [02 I8]; in print [S014 pp. 4, 8; S170 pp. 3, 23]. ([ledger](references/research/09-evidence-ledger.md#heuristic-8))
-9. **Probe options with cheap, complete student projects**. Case: "This problem will serve to train Keith in the area of global optimization, before he embarks on the study of more complex problems." (CAPD, Jan 2008) [03 §C4]; 38 MS students 2015-19 [06 §2]; MS theses carried the 2013 study's black-box applications [S001 pp. 41–47]. Practice only. ([ledger](references/research/09-evidence-ledger.md#heuristic-9))
-10. **When the problem source moves, keep the engine**. Case: turns follow institutional moves with a 1-3 year lag (inferred) [06 §4.2]; "In our group, we also develop the algorithms ourselves and then we apply them to many application domains" (press 2018) [04 §1.6]; the DFO engine taken to a materials group's devices [S205 p. 1]. ([ledger](references/research/09-evidence-ledger.md#heuristic-10))
-
-Written into steps instead (they fail exclusivity): which bound stalls (Workflow B1 step 3); the ranked pool when the data are estimates (Workflow D step 6).
+1. **Special classes first, then generalize**: if the general problem stalls, solve named classes where small instances defeat solvers, then fold the modules into the general code. Case: "Therefore, about ten years ago, we decided to concentrate on special classes of mixed-integer nonlinear programs" (2002 preface, co) [02 P1]; 12 specialized modules in 1998, none in 2026 [03 §C1]. ([ledger](references/research/09-evidence-ledger.md#heuristic-1))
+2. **Problem knowledge into the model before solver options**: finite physical bounds, no huge "safe" bounds, convexity declared only when proven, relaxation-only constraints passed to the solver (DM5). Case: "Tight bounds based on physical or problem-specific knowledge are often more valuable than any algorithmic option in this manual." (manual §4.1, firm) [02 X5]; a convexity declaration: 35 vs 1793 nodes [S003 p. 17]. ([ledger](references/research/09-evidence-ledger.md#heuristic-2))
+3. **Users' models as bug finder and agenda**: ask for the failing model, credit the source in the log. Case: "If everything else fails, send us the .bar file with your model." (manual §13.3) [03 §C5]; 163 researchers and users sent over 6,100 problems in 1999–2002 (2002 manual) [S162 p. 2]. ([ledger](references/research/09-evidence-ledger.md#heuristic-3))
+4. **Each baseline in its strongest fair mode; filter honestly**: force MIP solvers into global mode, wrap closed code, best hardware for ML baselines, list deteriorations. Case: "set the CPLEX option optimalitytarget to 3 and the GUROBI option nonconvex to 2" (Nohra §3.6) [03 §B3]. Practice only. ([ledger](references/research/09-evidence-ledger.md#heuristic-4))
+5. **Measure the ceiling before learning a rule**: solve every instance under each setting; judge the learned rule against the per-instance best; drop ambiguous labels (<10% difference). Case: choosing the probing setting per instance would cut solve times by about 40% (MINLP) and 25% (NLP) [S212 p. 10]. Practice only. ([ledger](references/research/09-evidence-ledger.md#heuristic-5))
+6. **Reproducible by construction**: named versions, deterministic work limits, single thread, pinned seeds. Case: "Random seeds are now pinned in BARON's subsolvers for deterministic behavior across runs." (2026.9.10) [03 §D3]. ([ledger](references/research/09-evidence-ledger.md#heuristic-6))
+7. **Keep evidence and proof apart**: never present a multistart value as a global optimum. Case: "It does not prove global optimality." (manual §10.4) [02 J4]; local values beside certified optima since 1999 [S025 pp. 14–15]. ([ledger](references/research/09-evidence-ledger.md#heuristic-7))
+8. **Keep the rival's insight, replace the part that clashes with practice**. Case: on DIRECT he credits Jones's box selection and dislikes its tri-section (TAMU 2025, ASR [0:45:29]-[0:45:46]) [02 I8]; in print [S014 pp. 4, 8; S170 pp. 3, 23]. ([ledger](references/research/09-evidence-ledger.md#heuristic-8))
+9. **Probe options with cheap, complete student projects**. Case: "This problem will serve to train Keith in the area of global optimization, before he embarks on the study of more complex problems." (CAPD, Jan 2008) [03 §C4]; MS theses carried the 2013 study's black-box applications [S001 pp. 41–47]. Practice only. ([ledger](references/research/09-evidence-ledger.md#heuristic-9))
+10. **When the problem source moves, keep the engine**. Case: "In our group, we also develop the algorithms ourselves and then we apply them to many application domains" (press 2018) [04 §1.6]; the DFO engine taken to a materials group's devices [S205 p. 1]. ([ledger](references/research/09-evidence-ledger.md#heuristic-10))
 
 ## Signature Work Anatomy
 
 ### A branch-and-reduce approach to global optimization (Ryoo & Sahinidis, J. Glob. Optim. 8(2), 1996, doi:10.1007/BF00138689; also doi:10.1016/0098-1354(94)00097-2, doi:10.1007/BF00138693)
 
 - **Origin**: stated (co, 2002): no software solved small MINLPs globally, so special classes first; inferred: molecular-structure grant and talks 1992-93 [06 Turn B]. **Why then** (inferred): an industrial-engineering post where reduced-cost fixing was standard; GAMS for prototyping.
-- **Key insight**: range contraction from duals and the incumbent, at every node (1995–96 papers abstract-level [S008; S013; S004]; read in the 2000 manual [S077 pp. 12, 15, 20–21] and a 2004 restatement under which the 1996 cut is the same or weaker [S006 p. 15]). **Minimum evidence**: Ryoo's MS thesis on range reduction [01 SW1] (year disputed between primary records).
+- **Key insight**: range contraction from duals and the incumbent, at every node (1995–96 papers abstract-level [S008; S013; S004]; read in the 2000 manual [S077 pp. 12, 15, 20–21] and a 2004 restatement under which the 1996 cut is the same or weaker [S006 p. 15]). **Minimum evidence**: Ryoo's MS thesis on range reduction [01 SW1] (year disputed).
 - **Abandoned**: the direct general attempt; molecular mechanics (no 1990s paper). **Reception**: Neumaier et al. 2005 found it fastest and most robust, with wrong claimed optima before fixes [05 A1]. **Shows**: Methods 1-2, Heuristic 1. ([full evidence](references/research/09-evidence-ledger.md#anatomy-branch-and-reduce))
 
 ### Global optimization of mixed-integer nonlinear programs: a theoretical and computational study (Tawarmalani & Sahinidis, Math. Program. 99(3), 2004, doi:10.1007/s10107-003-0467-6)
@@ -488,19 +486,19 @@ Written into steps instead (they fail exclusivity): which bound stalls (Workflow
 ### Derivative-free optimization: a review of algorithms and comparison of software implementations (Rios & Sahinidis, J. Glob. Optim. 56(3), 2013, doi:10.1007/s10898-012-9951-y)
 
 - **Origin**: simulator and lab applications (NIH, NETL, NSF). **Why then**: "the number of available derivative-free optimization solvers has more than quadrupled" (§1).
-- **Key insight**: judge black-box solvers against optima certified by an algebraic global solver [S001 p. 21]. **Minimum evidence**: CAPD Jan 2008, 225 problems and 18 solvers [03 §C3]; final study 22 solvers, 502 problems [S001 pp. 14, 20], its unseen set an affine transform of the same problems [S001 p. 41].
+- **Key insight**: judge black-box solvers against optima certified by an algebraic global solver [S001 p. 21]. **Minimum evidence**: CAPD Jan 2008, 225 problems and 18 solvers [03 §C3]; final study 22 solvers, 502 problems [S001 pp. 14, 20].
 - **Abandoned**: the promised unified DFO interface [03 §E5]. **Reception**: his most-cited paper; critiques on constraints, ageing, aggregation [05 A7]; the 2022 sequel won the JOGO Best Paper Award. **Shows**: Method 4. ([full evidence](references/research/09-evidence-ledger.md#anatomy-dfo-review))
 
 ### Learning surrogate models for simulation-based optimization (Cozad, Sahinidis & Miller, AIChE J. 60(6), 2014, doi:10.1002/aic.14418; also arXiv:1705.10918, doi:10.1007/s10107-018-1289-x)
 
 - **Origin**: DOE NETL fellowship and the Carbon Capture Simulation Initiative [06 Turn G]. **Why then**: "integer optimization algorithmic advances combined with improved hardware have recently allowed for the best subset problem to be practically solved" (2017, co) [02 P4].
-- **Key insight**: best subset by integer programming + adaptive sampling + first-principles constraints (2014 abstract only [S009]; read in its 2015 and 2017 forms). **Minimum evidence**: in 2017, error-maximization sampling beat equal-size LHS in 120 of 150 problems, with losses to LHS-50 reported [S017 pp. 11–12].
+- **Key insight**: best subset by integer programming + adaptive sampling + first-principles constraints (2014 abstract only [S009]). **Minimum evidence**: in 2017, error-maximization sampling beat equal-size LHS in 120 of 150 problems, with losses to LHS-50 reported [S017 pp. 11–12].
 - **Abandoned**: not documented. **Reception**: R&D 100 (2016); the finite-basis critique answered by the 2018 MINLP formulation [05 A8]. **Shows**: Method 3. ([full evidence](references/research/09-evidence-ledger.md#anatomy-alamo))
 
 ### A hybrid LP/NLP paradigm for global optimization relaxations (Khajavirad & Sahinidis, Math. Program. Comput. 10(3), 2018, doi:10.1007/s12532-018-0138-5)
 
 - **Origin and why then** (inferred): rival solvers multiplied, NLP subsolvers matured; a chain of student and postdoc modules.
-- **Key insight**: polyhedral and nonlinear relaxations with fail-safes and learned switching. **Minimum evidence**: "increases by 30% the number of problems that are solvable to global optimality within 500 s" (abstract-level card [S030]; per-node switching read in its 2021–22 forms [S116 arXiv pp. 22–25]).
+- **Key insight**: polyhedral and nonlinear relaxations with fail-safes and learned switching. **Minimum evidence**: "increases by 30% the number of problems that are solvable to global optimality within 500 s" (abstract-level card [S030]).
 - **Abandoned**: the polyhedral-only doctrine; FilterSD off by default [03 §H]. **Reception**: SCIP 8 study, "a small lead of BARON before SCIP" (doi:10.1007/s10898-023-01345-1) [05 A2]. **Shows**: Methods 5, 2, 1. ([full evidence](references/research/09-evidence-ledger.md#anatomy-hybrid-lp-nlp))
 
 ## Research Anti-patterns
@@ -525,7 +523,7 @@ Written into steps instead (they fail exclusivity): which bound stalls (Workflow
 - **2007-2020**: at CMU with DOE NETL and industry: DFO benchmarks, ALAMO, ML with optimization, BARON's second generation (doi:10.1007/s10898-012-9951-y); the crystallography and protein line thins out and is absent from the cards after 2015 [08 §8].
 - **2020-**: at Georgia Tech ISyE: MIP/MINLP theory with colleagues, ML for solvers, norm convexification, BAM, self-driving labs (doi:10.1007/s10898-024-01424-x); co-supervised network design with Dey, built partly outside BARON [S128 arXiv pp. 17–19].
 
-Turns follow institutional moves and funding with a 1-3 year lag; the engine stays (inferred) [06 §4]; the full texts agree [08 §8]. Constant: certified optima as the yardstick from 1999 [S025 pp. 14–15] to 2026 [S272 p. 8]; duality-based reduction from 2000 [S077 p. 12] to 2025 [S190 pp. 4–9]. ([full evidence](references/research/09-evidence-ledger.md#trajectory))
+Turns follow institutional moves and funding with a 1-3 year lag; the engine stays (inferred) [06 §4]; the full texts agree [08 §8]. Constant: certified optima as the yardstick (1999–2026) and duality-based reduction (2000–2025) [S025 pp. 14–15; S272 p. 8; S077 p. 12; S190 pp. 4–9]. ([full evidence](references/research/09-evidence-ledger.md#trajectory))
 
 ### Latest
 
@@ -537,8 +535,8 @@ Roger W. H. Sargent → Ignacio E. Grossmann (PhD advisor, CMU 1990) → **Sahin
 
 ## Inner Tensions
 
-- **Tension 1: general-purpose vs problem-specific.** "Application agnostic algorithms ... that was what particularly fascinated me" (press 2021) vs, for integer and nonlinear stochastic programs, "It appears unlikely that general-purpose algorithms will solve such problems exactly." (FOCAPO 2003, sole; also in the 2004 journal manuscript, whose next sentence differs [S002 manuscript p. 22]) and "Many of the papers develop tailored algorithms that outperform general-purpose MINLP solvers." (2019, sole) [02 C1]. In practice: a co-supervised 2024 paper (Li, Dey & Sahinidis) pairs a tailored incumbent with the general solver's bound [S128 arXiv p. 24].
-- **Tension 2: the relaxation stance moves with subsolver technology**, a dated sequence, not one change: in 2000 the IQP module defaulted to a quadratic relaxation (the NLP module to a linear one) and a mixed-integer SDP module shipped [S077 pp. 40, 53, 92–95]; LP-only in 2004–05 [S006 p. 3; S003 pp. 1–2]; hybrid LP/NLP in 2018 [S030]; SDP-quality bounds from quadratic cuts in 2021–22 [S133 arXiv pp. 12, 18–22]. The stated grounds stay speed and robustness [01 C8]; the 2001, 2002, 2011 and 2025 steps are in the ledger.
+- **Tension 1: general-purpose vs problem-specific.** "Application agnostic algorithms ... that was what particularly fascinated me" (press 2021) vs, for integer and nonlinear stochastic programs, "It appears unlikely that general-purpose algorithms will solve such problems exactly." (FOCAPO 2003, sole; also in the 2004 manuscript, whose next sentence differs [S002 manuscript p. 22]) and "Many of the papers develop tailored algorithms that outperform general-purpose MINLP solvers." (2019, sole) [02 C1]. In practice: a co-supervised 2024 paper (Li, Dey & Sahinidis) pairs a tailored incumbent with the general solver's bound [S128 arXiv p. 24].
+- **Tension 2: the relaxation stance moves with subsolver technology**, a dated sequence, not one change: in 2000 the IQP module defaulted to a quadratic relaxation and a mixed-integer SDP module shipped [S077 pp. 40, 53, 92–95]; LP-only in 2004–05 [S006 p. 3; S003 pp. 1–2]; hybrid LP/NLP in 2018 [S030]; SDP-quality bounds from quadratic cuts in 2021–22 [S133 arXiv pp. 12, 18–22]. The stated grounds stay speed and robustness [01 C8]; the 2001, 2002, 2011 and 2025 steps are in the ledger.
 - **Tension 3: academic voice vs firm voice.** Papers conclude with portfolios and losses; firm pages claim "the fastest and most robust MINLP solver" and misquote their sources [05 2h].
 - **Tension 4: open code praised vs closed solver.** "We wholeheartedly encourage researchers to post their executable files, if not their source code." (2016, co) vs BARON, BAM and recent algorithms closed or on request [02 C7; 03 §F2].
 - **Tension 5: hold-out discipline vs own claims**: the 2013 overtraining check vs BAM claims on its development libraries [03 C1], defaults tuned on the instances that report the gain (2008) [S161 manuscript pp. 4–5] or set with no hold-out reported (2025) [S170 pp. 24–29], and 2025–26 slides ranking BAM first [S270 pp. 8, 14, 19].
