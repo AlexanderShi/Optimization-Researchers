@@ -1,0 +1,321 @@
+# Team workflows (scripts/workflows/)
+
+English | [中文](README.md)
+
+Nine saved workflows for building a research team (several researchers × research skills × a roundtable), plus:
+`make_args.mjs`, which builds launch arguments from `team.json`; `dry_run.mjs`, a previewer that spends no tokens;
+`selftest.sh`, the suite's self-test; and `examples/`, example arguments for a fictitious team.
+
+- For the end-to-end procedure (choosing people, environment, gates, failure modes, cost, adding and removing members),
+  see [research-team-playbook.md](../../references/research-team-playbook.md) (in Chinese). This file covers only the
+  workflows themselves: what they do, which arguments they take, how to launch them and how to preview them.
+- The worked example is `product/dfo-team/` (derivative-free optimization, 5 people). All cost figures come from it; the
+  workflows hard-code none of its field, members or paths, and everything comes from the arguments and `team.json`.
+- The workflows' prompts are in English; agents first read `<repo>/<team>/team.json` and take `language`, `field` and
+  various hints from it, so a new field or language needs no change to the scripts.
+
+---
+
+## 1. The nine workflows
+
+| Step | Workflow | What it does | `members` | Output | Gates run inside the workflow | Typical cost |
+|---|---|---|---|---|---|---|
+| T1 | `team-base-skills.js` | For each person, Phases 1–5 of Nuwa's research skill: prior snapshot → 6 research agents (01–06) → 1.5 review → seal 3–5 primary items → extraction with four-way verification (first filtering what is new against the prior) → write SKILL.md from `research-skill-template.md` (with the Roundtable Card) → blind test and fix → refinement from two perspectives → validation (two-arm increment test: with the skill against without it, judged blind) | one | `<M>/SKILL.md`, `<M>/FIDELITY.md`, `references/research/00-prior.md`, `01–06`, `holdout.md`, `RESOURCES.md` rows; 3 more files in student mode; Phase 2 records in scratch | `merge_research.py`, `quality_check.py` 12/12, `check_links.py` | 23–27 agents per person (quick tier 20–24); tokens not measured for DFO |
+| T2 | `team-layer.js` | Check or complete each person's Roundtable Card; write the roundtable SKILL.md and the team README from the template and the cards (a fault line needs evidence on both sides); check each person's RESOURCES.md; two read-only verifiers + a fix. With `deep_tier: false` (base tier) it also replaces DEEP-READING.md with the template's base-tier note and removes the deep-tier placeholder rows from RESOURCES.md; rerun on a team that is already deep-read (for example after adding a member), it keeps the card evidence T3.8 wrote | all (a missing member is logged) | team `README.md`, `<roundtable>/SKILL.md`, each person's Roundtable Card and `RESOURCES.md`, any missing `private/README.md`; at base tier also `DEEP-READING.md` | `check_links.py` 0, no `{{` left, only the TODOs reserved for later steps left (none at base tier), 12/12 for every member, `team_status.py`. The roundtable is not a research skill and gets no `quality_check.py` | 2 per person + 4–5 for the team |
+| T3.1 | `team-harvest.js` | Google Scholar (WebFetch, a verbatim-row prompt + TOTAL) + DBLP (SPARQL, `dblp_works.py`) + Crossref/DataCite → publication list; then an independent audit sorted by year | one | `publications/works.json`, `scholar.md`, row 1 of `RESOURCES.md` rewritten whole (without a Scholar profile, the Link is the DBLP person page or the homepage list); with `acquire: true` also `papers/INDEX.md` and more | `validate_works.py` 0 errors; no `[TODO` or `{{` left in row 1 | DFO measured 3 per person / 400k tokens |
+| T3.3 | `team-chase.js` | A planning agent runs `chase_chunks.py` to cut chunks (with each work's target path computed); for the works the acquisition script found no full text for, one agent per 20 works searches the `chase_hints` and then general open sources for legitimate full texts and verbatim abstracts; finally merge, rebuild the index, and record leads to open parts of books in `book-leads.json` | one | PDFs at their exact target paths (not in git), `abstracts-chase-<date>-r<run>-<chunk>.json` (a rerun on the same day adds 1 to run and overwrites no unmerged file) → `abstracts.json`; `urls` in `works.json`; `papers/book-leads.json` | `merge_chase.py`, `validate_works.py` | DFO measured 5 per person / 900k |
+| T3.5 | `team-read.js` | One agent per batch from `plan_reading_batches.py`'s batch files writes D1–D8 cards (four reading modes: core / supplement / book / abstract); a failed batch is retried once; a gate agent merges the digests, fixes quotes and fills the Read column | one | `cards/<bid>.md` + `<bid>.digest.json`; the Read column of `INDEX.md` | `verify_card_quotes.py` all pass, `mark_read_from_cards.py`, `merge_chase.py`, `team_status.py` | DFO measured 22 per person / 5.8M (about 36k tokens per card) |
+| T3.6 | `team-synthesize.js` | Cards → 07 card index (generated by `build_card_index.py`), 08 deep-reading synthesis; update SKILL.md conservatively within the word budget, writing `09-evidence-ledger.md` and the technique catalog at the same time; three challengers review (deletion check with `check_ledger.py --before … --allow frontmatter,activation-disclaimer`); fix until the gates pass | one | `07`, `08`, `09`, `technique-catalog.md`, SKILL.md, `01`/`06`; the deep-tier placeholder row of `RESOURCES.md` (row 3) replaced by the real rows | the whole person is stopped unless every quote passes; `quality_check.py` 12/12, `check_ledger.py`, `check_citations.py` (citation closure), `check_links.py`, word count; no `[TODO` or `{{` left in `RESOURCES.md` | DFO measured 6 per person / 2.4M |
+| T3.7 | `team-tighten.js` | When SKILL.md is still over budget, move long evidence losslessly into `09-evidence-ledger.md`; members already within budget are skipped | one | SKILL.md, `09-evidence-ledger.md`; a backup from before tightening in scratch | `check_ledger.py --before` (without `--allow`), 12/12, `check_links.py`, word count | DFO measured 3 per person / 700k |
+| T3.8 | `team-integrate.js` | Refresh the team README, DEEP-READING.md and the roundtable's fault lines (card evidence on both sides) from `team_status.py`'s coverage tables and each person's 08; resolve every TODO the templates leave for T3.8 | all | team `README.md`, `DEEP-READING.md`, the roundtable SKILL.md (optional: one line in the root README) | DEEP-READING coverage table = `team_status.py --coverage`, README five-column summary = `--coverage --short`; `check_links.py` 0; the card IDs on both sides of each fault line exist and the pages are in range (`check_citations.py --roundtable`); `grep -rn --include='*.md' -e '{{' -e '\[TODO' <team>` prints nothing (except inside the folders of members not yet finished); the roundtable gets no `quality_check.py` | 6–7 per team run; DFO measured 4 / 1M (older version) |
+| T4 | `team-increment.js` | When new material appears later: (optional) find open parts of books and new papers and register them → write cards → merge them conservatively into 07/08/09 and SKILL.md (with growth capped) → review → fix | one | new `works.json` rows and files, new cards, an "Increment <label>" section in 08, SKILL.md and more | as in T3.5–T3.7; deletion check with `check_ledger.py --before … --allow frontmatter-date,activation-numbers` | DFO measured 4 per book author / 1M (older version; now with one more review, 5–6 per person for one batch) |
+
+**Run status (2026-09-27)**: `team-read.js` passed a real run on a scratch copy of one DFO member with a 4-page paper:
+plan → cards → gate, 3 agents, about 220k tokens, 5 minutes, 234/234 quotes verbatim, and it recognized that the paper
+had already been read in an earlier batch. The other eight workflows have only been run as `dry_run.mjs` previews and in
+`selftest.sh`. The "DFO measured" figures above are from their predecessors (the one-off scripts used to build DFO). The
+first time you use a workflow on a new team, try it on one member and a small batch, look at the return value, then scale
+up.
+
+T3.2 (`acquire_fulltexts.py`) and T3.4 (`plan_reading_batches.py --out-dir <scratch>`) are scripts, not workflows. The
+DFO deep tier took about 45 agents and 11M tokens per person in all; see section 6 of the playbook.
+
+Every workflow's return value has a `next`: what to commit (`bash scripts/team_commit.sh …`) and what to run next,
+written as commands wherever possible (for example, the Scholar id or DBLP pid found by T3.1 goes into `team.json` with
+`new_team.py --set-member`, and the REOCR / WRONG-TEXT reports of T3.5 are handled with
+`acquire_fulltexts.py --reocr / --drop` and `plan_reading_batches.py --reread`).
+
+## 2. Arguments
+
+The nine workflows share 5 required arguments and 1 optional one, `request`. **Do not write them by hand**:
+`make_args.mjs` generates them from `team.json` (section 3).
+
+| Argument | Meaning |
+|---|---|
+| `repo` | absolute path of the nuwa repository (holding `scripts/`, `references/`) |
+| `team` | team folder relative to `repo`, such as `"product/bandit-team"` (it holds `team.json`) |
+| `scratch` | absolute path of the scratch folder for batch plans, chase chunks, backups and intermediate records (agents may write there). Keep it outside the repository; `make_args.mjs` defaults to the fixed `${TMPDIR:-/tmp}/<team>-scratch`, and **every stage must use the same one**: T3.5's default batch files, the chase chunks and the SKILL.md backups of T3.6/T3.7/T4 all live there, and with another folder a workflow cannot find them and skips the member. Do not delete it before a stage is finished |
+| `date` | `"YYYY-MM-DD"`. Workflow scripts cannot call `Date.now()`; the date can only be passed in |
+| `members` | array of member objects copied verbatim from `team.json` (slug, name, surname, living, hint, scholar, dblp, orcid, homepage, chase_hints, student_mode, optional family_name). Per-member workflows usually hold one; T2 and T3.8 hold all |
+| `request` | optional, recommended. The user's request in their own words (a string). If given, it opens every agent's prompt with a short paragraph, `Why this agent runs: … the user asked: "<request>" …`, saying which of the user's requests this step serves. Agents in a workflow see only their own prompt and the user's **latest** message in the session; when that message is about something else, they refuse on the grounds that this is not what the user asked for. Set it with `make_args.mjs --request "…"`; copy only what the user said, and never add consent the user did not give. A value that is not a string is logged in one line and ignored |
+
+`team.json` also has some optional keys that the workflows use: `card_dimensions` (what D1–D8 mean in a field that is
+not mathematical; card agents use it as given), a member's `family_name` (the surname for author checks and searches; by
+default the last word of `name`; `surname` is only the roundtable's lens label and can be written like "N. Higham" when
+surnames clash), and `source_labels` (labels that `acquire_fulltexts.py` gives to hand-supplied full texts). See
+[team.example.json](../../references/team-templates/team.example.json).
+
+**Guests (`args.guests`).** When `team.json` has `guests` (members of another team who sit at this team's roundtable; see
+item 7 of section 1 of the playbook), the team-level workflows `team-layer.js` and `team-integrate.js` take one more
+argument, `guests`; the per-member workflows do not, and teams without guests carry no such key. `make_args.mjs`
+generates it from `team.json`, so it is not written by hand, and `dry_run.mjs --team` generates the same argument, so
+the preview matches the real launch. Each guest is one object: their member entry from the `team.json` of their home
+team (the team they are a member of), as it is (with whatever keys it has and none added), plus `"home": "<home>"` and
+`"dir": "<folder holding the teams>/<home>/<slug>"` (relative to `repo`, with forward slashes; `product/<home>/<slug>`
+when the teams are under `product/`). At the start the workflow checks each item: `slug` and `home` are lowercase with
+hyphens, there is a `name`, `dir` equals `<folder holding the teams>/<home>/<slug>` and contains no `..`, and `slug` is
+neither in `members` nor repeated. `guests` is a reserved key: `--set guests=…` is an error (`set guests in team.json`).
+A guest that cannot be resolved (their home team's `team.json` is missing, invalid or names another team; they are not a
+member of that team, or only a guest there; their folder is missing; this team's folder has a shadow folder of the same
+name) makes `make_args.mjs` stop with an error worded as in `new_team.py`. A guest who merely has no `SKILL.md` yet is
+not an error: stderr gets one line, and the workflow treats them like a member without a `SKILL.md` (T2 writes the
+roundtable and the README only when at least two seats have a `SKILL.md`, at least one of them a member of this team;
+neither T2 nor T3.8 seats them, and the `next` they return says to merge the T1 that writes the guest's `SKILL.md` in the
+home team first, rerun T2 here, and run T3.8 after that). Guests are not in `members`, and the per-member workflows do
+not run for guests: `--member <guest slug>` is an error, and they are run in the home team's folder
+(`<folder holding the teams>/<home>`, usually `product/<home>`). Workflows only read a guest's folder and never change
+it. The exact wording of every sentence about guests in the README, the roundtable and DEEP-READING (the guest clause,
+the copy lines in both install blocks, the guest rows of both Team tables, and so on) is printed, read-only, by
+`python3 scripts/new_team.py <team>/team.json --guest-text`, and T2 and T3.8 check against it. For teams with guests,
+the `team_check.py` gate counts "card evidence pending" in the roundtable as ✗ only when all members of this team are
+checked at deep tier (always ✗ when there are `guest_teams`); when a guest has cards in their home team, the team-level
+`citations` row (roundtable citation closure) runs whatever the tier.
+
+Workflow-specific arguments (all optional; defaults in parentheses). Argument names are all `snake_case`. In earlier
+versions five workflows used `camelCase` (`batchFiles`, `wordBudget`, `maxWords`, `targetWords`, `maxGrowth`,
+`rootReadme`, `newFaultLines`); these old names are still accepted as aliases, and a log line at the start asks you to
+rename them; when both names are given, the new one wins. A misspelled key raises no error, only a log line
+`ignores args key(s)` at the start; `dry_run.mjs` warns about it too (and `make_args.mjs --set` refuses it outright).
+
+**Per-member map arguments** (`only`, `only_chunks`, `skip_ids`, `batch_files`, `batches`, `notes`, `what`) are keyed
+by member slug. A key that is not a member of this run is logged; `only` and `only_chunks` also stop outright when some
+member of the run has no key: a misspelled slug would make `only` ineffective and rerun all of that member's batches (or
+chunks), and with `overwrite: true` it would overwrite existing cards.
+
+**WebSearch budget** (`search_budget`; T1, T3.1, T3.3, T3.5, T4): how many WebSearch calls the whole run may make (all
+members together). The workflow splits it evenly by person and by agent and writes it into each prompt ("at most N
+calls"); agents report their use in `searches_used`, and a total is logged at the end. A session has about 200 WebSearch
+calls, shared by all agents, and the defaults are split for a 5-person team (section 6 of the playbook); curl and
+WebFetch do not count.
+
+| Workflow | Specific arguments |
+|---|---|
+| `team-base-skills.js` | `from` / `to`: a stretch of `prior`, `research`, `review`, `holdout`, `synthesis`, `build`, `test`, `refine`, `validate` (all of them); `tier`: `standard` / `quick` (research 01–03 only); `dims`: such as `["02","06"]`, run only these research agents, overriding `tier`; `user_context`: the user's own field and stage; `word_budget` (8000); `example_team`: the folder of a finished team, for its shape only; `search_budget` (36 per person: 3 for the review, 1 for the resource table, 1 per scoring round, the rest split among the research agents, 5 each at the standard tier) |
+| `team-layer.js` | `roundtable` (the `roundtable` of `team.json`); `deep_tier` (true: keep the TODOs reserved for T3.1, T3.6 and T3.8; false: base tier, DEEP-READING.md replaced by the base-tier note, row 1 of RESOURCES.md records not harvested (base tier) and the deep-tier placeholder rows are deleted, the deep-tier-only parts of the README are deleted, and no TODO is left); `example_team` |
+| `team-harvest.js` | `audit` (true); `acquire` (false; true also runs `acquire_fulltexts.py` once per person, which is slow); `search_budget` (2 per person) |
+| `team-chase.js` | `chunk_size` (20); `max_searches` (searches per work at most, 4); `skip_ids`: `{"<slug>": ["S012", …]}`; `only_chunks`: `{"<slug>": [1, 3]}`, (re)run only these chunks; `merge` (true); `search_budget` (24 per person, split evenly by chunk) |
+| `team-read.js` | `round` (1; the round printed by `plan_reading_batches.py --out-dir`); `batch_files`: `{"<slug>": "<absolute path>"}` (default `<scratch>/batches-<slug>-r<round>.json`); `batches`: `{"<slug>": [{"bid","mode"}]}`, skipping the planning agent; `only`: `{"<slug>": ["c01", …]}`; `overwrite` (false: batches that already have cards are skipped, so a run can resume); `retry` (true); `search_budget` (8 per person, for abstract batches only) |
+| `team-synthesize.js` | `word_budget` (11500, also written to 09; the count leaves out the Answer Standard section and is the first column of `answer_standard.py --words`); `max_words` (budget + 1500, the same count); `notes`: `{"<slug>": "a reminder for the synthesis agent"}`; `from`: `mine` (default), `edit`, `verify` (alias `review`: after a hand edit of SKILL.md, rerun only the three reviewers and the fix, without mining the cards again), `fix` (only the gates and the fix) |
+| `team-tighten.js` | `target_words` (11500, leaving out the Answer Standard section as in T3.6); `max_words` (target + 1500); `force` (false) |
+| `team-increment.js` | `label` (`inc-<date>`); `find`: a subset of `["book-parts", "new-papers"]` (`[]`: no search, only read hand-prepared batch files; `book-parts` first looks at the `papers/book-leads.json` the chase left); `batch_files` (default `<scratch>/batches-<slug>-<label>.json`; if given, there is no search); `round`; `since` (default: `harvested` in `works.json`); `what`: `{"<slug>": "what the new material is"}`; `max_growth` (400 words); `search_budget` (10 per person, for the agents that find material); `from`: `prepare` (default), `read`, `integrate`, `verify` (alias `review`), `fix`, resuming with the same `label` |
+| `team-integrate.js` | `root_readme` (false); `new_fault_lines` (2) |
+
+The comment at the top of each script says the same; the script is authoritative.
+
+## 3. Launching
+
+Workflows can only be launched in a session that has the Workflow tool, and only with the user's consent. **Generate the
+arguments with `make_args.mjs`**; do not copy `team.json` by hand:
+
+```bash
+node scripts/workflows/make_args.mjs team-read --team product/<team> --set round=1 --request "<the user's request, verbatim>"   # one call per person
+node scripts/workflows/make_args.mjs team-layer --team product/<team>                     # team level: one call, all members
+node scripts/workflows/make_args.mjs team-base-skills --team product/<team> --member a,b --set to=review
+```
+
+It prints `[{scriptPath, args}, …]`: one per person for the per-member workflows, and one for `team-layer.js` and
+`team-integrate.js` (giving `--member` is an error). `args` holds `repo`, `team`, `scratch` (by default the fixed
+`${TMPDIR:-/tmp}/<team>-scratch`, created if missing), `date` (by default today) and `members` copied verbatim from
+`team.json`; `team-layer.js` also gets the `roundtable` of `team.json`, and when the team has guests `team-layer.js` and
+`team-integrate.js` also get `guests` (section 2). `--set KEY=JSON` adds a specific argument (the key must be one this
+workflow reads; per-member maps may only use this team's slugs, each call carrying only its own entry); `--request "…"`
+adds `request` to every call (without it, stderr notes one line; no error). `--args-only` prints just one `args` (for
+`dry_run.mjs`), and `--out DIR` also saves them as files. Hand each printed object to the Workflow tool as it is:
+
+```js
+Workflow({ scriptPath: "<repo>/scripts/workflows/team-read.js", args: { /* the args make_args.mjs printed */ } })
+```
+
+- **Pass the user's words (`--request`).** Agents in a workflow cannot see the whole conversation, only their own prompt
+  and the user's latest message; if the user asks something else midway, every agent may refuse or answer that instead.
+  Add `--request "<the user's request, verbatim>"` whenever you generate arguments, so that each prompt opens by saying
+  which of the user's requests the step serves.
+- **Pass `args` as a JSON object.** The scripts can parse a string too, but it easily turns into one long string by
+  mistake.
+- **One workflow per person, launched in parallel.** Each workflow runs at most min(16, CPUs − 2) agents at once; a
+  4-core container gets 2. Start one per-member workflow (T1, T3.1–T3.7, T4) for each person, with only that person in
+  `members`, all in the same message. T2 and T3.8 need everyone and run as one.
+- **Resume.** After a workflow is interrupted or stopped, or its script has changed, run the same `scriptPath` and
+  `args` with the last result's `runId`: `Workflow({scriptPath, args, resumeFromRunId: "<runId>"})`. Unchanged agent
+  calls return their cached results, and the run restarts from the first changed call. The scripts have their own ways
+  to resume too: T1's `from`/`to`, T3.5's `overwrite: false` and `only`, T3.3's `only_chunks`, and the `from` of T3.6 and
+  T4 (after fixing SKILL.md by hand, `from: "verify"` reruns only the reviews and the fix, saving about 2.4M tokens of
+  card mining per person).
+- **Human checkpoints.** Run T1 first with `to: "review"` and show the research summaries to the user; then
+  `from: "holdout", to: "synthesis"` (first seal 3–5 primary items as test questions, then extract) and look at the
+  sealed list, the extraction and the Roundtable Card; finally run `from: "build"` to the end. The last step,
+  `validate`, runs the two-arm increment test on the refined `SKILL.md`: look at `members[].increment` and each person's
+  `FIDELITY.md` (the total scores on the sealed questions with and without the skill; within 2 points counts as a tie;
+  the workflow does not fix the skill based on this test, and a poor result is the user's call). After a later hand
+  edit of the skill, rerun `from: "validate"`. The `prior`, `holdout` and `validate` steps were ported from Nuwa v2 in
+  2026-11 and are all optional: `from: "research"` writes no prior, `from: "synthesis"` seals nothing (then `validate`
+  has no sealed questions, and `FIDELITY.md` says so), and `to: "refine"` skips validation. For members whose research
+  notes were written before the port: first `from: "prior", to: "prior"` (that agent reads no files, so the prior is
+  still written blind), then `from: "holdout"`. The rules are in section 13 of
+  `references/research-extraction-framework.md`.
+- **Commit after every step, and during long stages too.** The container is temporary:
+  `bash scripts/team_commit.sh <path> "<message>"` (it stages first, and stops with exit code 3 if the staging area
+  holds a PDF, PostScript, DjVu or EPUB file, a `txt/` file or anything under `private/`). For stages that run for
+  hours, such as T3.2, T3.5 and T3.6, commit a checkpoint every 30–60 minutes (the cards of finished batches can be
+  committed early). Each workflow's return value has a `next` that says what to commit and what to run next.
+
+## 4. Preview first: `dry_run.mjs`
+
+`dry_run.mjs` runs a workflow in a sandbox with Node (≥ 18) and behaves like the Workflow runtime, except that `agent()`
+dispatches no agent and builds a fake result from `opts.schema` instead. It spends no tokens, does not touch the
+repository, and writes nothing except with `--out`. Use it to see, before spending money, what prompt each agent will
+get and whether every stage is reached.
+
+```bash
+# the example team: every stage is reached
+node scripts/workflows/dry_run.mjs scripts/workflows/team-read.js scripts/workflows/examples/team-read.args.json \
+  --answers scripts/workflows/examples/team-read.answers.json
+
+# your own team: no argument file; the arguments are the same as make_args.mjs generates for a real launch; all prompts go to one folder to read at leisure
+node scripts/workflows/dry_run.mjs scripts/workflows/team-read.js --team product/<team> --member <slug> \
+  --set round=1 --out /tmp/<team>-prompts --strict --forbid 'bandit|Ada Example|Bo Sample'
+# preview team-layer.js / team-integrate.js without --member: they need all members (with it they warn, and with members missing team-layer does not even write the roundtable)
+```
+
+Do not use the argument files in `examples/` with `--team` as a real preview: they describe the fictitious example team.
+If you do, `--team` replaces `roundtable` with the one in `team.json`, drops the example-only values (`request`,
+`user_context`, `notes`, `what`, `skip_ids`, `batch_files`, `batches`, `only`, `only_chunks`, `since`, `label`) and sets
+the date to today, printing one `note` line for each; but a real launch always uses the arguments `make_args.mjs`
+generates.
+
+The output, in order: `meta` (name, description, phases); for each agent call its number, phase, label, schema fields and
+the start of its prompt (a prefix it shares with an earlier prompt, such as the common rules, is collapsed into one
+line); every `log()` line; the return value; and finally a summary (agent count, distribution by phase, total prompt
+length, phases not reached, warnings).
+
+| Option | Effect |
+|---|---|
+| `--full` | print the full prompts |
+| `--out DIR` | write each prompt as `DIR/NNN-<label>.md`, plus `calls.json` and `return.json` |
+| `--chars N` | how many characters of each prompt to show (500) |
+| `--quiet` | show no prompts, only the logs and the summary |
+| `--items N` | put N items into every array of the fake results and replace strings with `<field>` placeholders (by default arrays and strings are empty) |
+| `--bools MODE` | `happy` (default: booleans are true, but fields such as blocked, skipped, failed and missing are false, so the normal path is taken), `true`, `false` (take the "did not pass" and "not ready" branches) |
+| `--answers FILE` | fake results by label: `{"<label regex>": value}`, and the first matching key wins. An object value is merged into the fake result by schema (missing fields are filled in); `null` means the agent died; an array gives the results of successive calls (the last one repeats). Keys starting with `_` are comments |
+| `--check-answers` | warn when the answers give a field that is not in that agent's schema (nested fields and array items are checked too): a real agent is never asked for that field, so the branch it drives may never be reached; with `--strict` the exit code is 2 |
+| `--team DIR` / `--member a,b` | read the members from `<repo>/DIR/team.json` and set `args.team`; `--member` keeps only these. Without an argument file the arguments are generated by `make_args.mjs` (`--set KEY=JSON` and `--request "…"` can be added) |
+| `--repo PATH` / `--scratch PATH` | what the strings `$REPO` and `$SCRATCH` in args become (default: this repository, and `<tmpdir>/nuwa-dry-run/<team>`) |
+| `--forbid RE` | warn when a prompt matches this regex, such as `--forbid 'dfo\|powell\|/home/'`, to catch leftovers from an old team |
+| `--strict` | exit code 2 when there are warnings (1 when the workflow throws or has a syntax error) |
+
+It checks:
+- whether the script parses the way the runtime parses it (the runtime wraps the whole script in an async function, so
+  the scripts end with a top-level `return`; do not check them with `node --check file.js`, which always reports
+  "Illegal return statement");
+- whether `meta` is a pure literal, and whether every `phase()` and `opts.phase` is in `meta.phases`;
+- whether each agent call has a label and a phase, and whether its schema can be satisfied;
+- whether prompts and logs contain `undefined`, `[object Object]` or `NaN`;
+- whether `Date.now()`, `Math.random()` or `new Date()` is used (they throw in the sandbox as they do in the runtime);
+- whether args has keys the script never reads (most likely misspelled);
+- whether the per-member map arguments use slugs that are not in `members` (a misspelling silently disables options
+  such as `only`);
+- whether a team-level workflow was given only some of the members;
+- items that threw inside `pipeline()` or `parallel()` and were dropped.
+
+`pipeline()` and `parallel()` behave as they do in the runtime: an item that throws becomes `null` and is logged; the
+first stage of a `pipeline` receives the member itself, each stage receives `(previous result, member, index)`, and when
+a stage returns `null`, the later stages are not run for that item.
+
+It does **not** check whether files exist, whether the scripts run through or whether agents can complete their tasks,
+and it cannot estimate the real cost. The first time on a real team, try one member at a small scale.
+
+## 5. Order
+
+```
+T0 define         new_team.py → team.json, folder skeleton, templates
+T1 base skill     team-base-skills.js (per person)               gate: quality_check 12/12
+T2 team layer     team-layer.js (all)                            gate: check_links 0, a Roundtable Card for each person
+―― the base tier ends here; the deep tier continues ――
+T3.1 publications team-harvest.js (per person)                   gate: validate_works 0 errors
+T3.2 open texts   acquire_fulltexts.py (one background process per person)
+T3.3 chase        team-chase.js (per person)
+T3.4 batches      plan_reading_batches.py <team> --out-dir <scratch> --no-abstract (one line per round: it picks the round and excludes other rounds' plans by itself)
+T3.5 cards        team-read.js (per person, once per round)      gate: verify_card_quotes all pass
+T3.6 synthesis    team-synthesize.js (per person)                gate: 12/12, word count, check_ledger
+T3.7 tighten      team-tighten.js (only those still over budget) gate: check_ledger --before
+T3.8 integrate    team-integrate.js (all)                        gate: team_check.py <team> exit code 0
+T4 increment      team-increment.js (when new material appears), then team-integrate.js once more
+```
+
+The commands to run between steps (including the gates above) are in
+[sections 3 and 4 of the playbook](../../references/research-team-playbook.md#三流水线-t0t4).
+
+## 6. `examples/`
+
+A fictitious team, `product/example-team`, whose field is given as "multi-armed bandits". The example arguments hold two
+members, Ada Example and Bo Sample, both placeholders and not real people. The team's folder does not exist; the
+examples are only for `dry_run.mjs`. The two are deliberately different (one deceased with no Scholar id; one living,
+with all ids and student mode on), so that every branch of the prompts shows.
+[`references/team-templates/team.example.json`](../../references/team-templates/team.example.json) is the same team:
+these two copied verbatim, plus a third, Cleo Placeholder (it takes three people to make a roundtable). Trying
+`new_team.py` with it gives three people; previewing the workflows still gives two.
+
+- `team-<name>.args.json`: that workflow's arguments. Paths are written as `$REPO` and `$SCRATCH`, replaced by
+  `dry_run.mjs`; for a real launch they become absolute paths.
+- `team-<name>.answers.json`: fake results that make the preview reach every stage. For example, the `team-read` plan has
+  one batch for each of the four reading modes, one of which fails the first time and succeeds on the retry; in
+  `team-chase` one person is chased for the first time that day and one is rerun on the same day (the run in the
+  abstract file name becomes r2); in `team-integrate` one person is synthesized and one is still reading.
+- To see other branches without changing the examples, pass inline arguments, for example the base-tier T2:
+  `node scripts/workflows/dry_run.mjs scripts/workflows/team-layer.js "$(jq -c '.deep_tier=false' scripts/workflows/examples/team-layer.args.json)" --answers scripts/workflows/examples/team-layer.answers.json`.
+
+## 7. After changing a workflow
+
+After changing any workflow or suite script, run the self-test first, and commit only when everything shows `✓`:
+
+```bash
+bash scripts/workflows/selftest.sh product/dfo-team    # the argument is a finished team (here the worked example); without it, part 2 and team_check.py are skipped and the rest runs (the example previews run without --forbid)
+```
+
+It has four parts:
+1. `--strict` previews of the nine examples and some branch variants (base-tier T2, the `from` of T3.6/T4), with a
+   `--forbid` built from the finished team's `team.json` (the team, the roundtable slug and the members' surnames must not
+   leak into the generic workflows);
+2. `make_args.mjs` and `dry_run.mjs --team` for every workflow on the finished team;
+3. every script compiles and answers `--help`, and `team_check.py <team>` exits 0;
+4. a guest fixture: in a temporary folder two fictitious teams are set up, the host team invites one member of the home
+   team as a guest, and the part checks `new_team.py` (`--dry-run`, scaffolding, `--guest-text`, `--add-guest`,
+   `--base-tier`), `make_args.mjs` and `dry_run.mjs --team --strict` (with answers files driving each guest branch, each
+   with `--check-answers`), `team_check.py` (the `guests` and `hosts` rows, and `team_check.py .` inside the host folder),
+   the Guests section of `team_status.py`, and `check_links.py`; then a few counterexamples check that `new_team.py`,
+   `make_args.mjs`, `dry_run.mjs` and `team_check.py` word their errors the same way (and read the home team's
+   `team.json` the same way), and that `new_team.py`, when it stops, prints the hint to scaffold this team's members
+   first only when every guest error is waiting on the home team. This part needs no finished team.
+
+None of the four parts spends tokens, and the temporary folders are deleted on exit. The exit code is the number of
+failed items.
+
+Rules for writing workflows:
+- plain JavaScript, starting with a pure-literal `export const meta = {...}`;
+- every agent call goes through `A()` (which puts the `request` paragraph and the shared rules in front of the prompt),
+  carries `opts.phase` and `opts.label`, and uses a schema;
+- `log()` everything that is skipped or dropped;
+- no `Date.now()`, `Math.random()` or `new Date()`, and no filesystem API;
+- no hard-coded paths, teams, researchers or fields;
+- prompts in English, telling agents to read `team.json` first;
+- new arguments go into the comment at the top of the script, into `KNOWN_ARGS` and into section 2 of this file.

@@ -77,3 +77,5 @@ Nocedal、MINLP、语料线闸门）。这些坑每个都至少花过一次重�
 - 新研究者装进 `~/.claude/skills` 后，在 `~/.claude/settings.json` 的 `skillOverrides` 里给他加一行 `"name-only"`，
   只有入口（总入口、各队圆桌、理事会圆桌、语料团队）保留描述（`product/README.md` 安装一节）。
 - 合入 main 后告知用户是否推送；不要自行 `git push`。
+- README 一定要有英文版：中文的 `README.md` 旁边放 `README.en.md`，两份顶部互相链接（`[English](README.en.md) | 中文`、
+  `English | [中文](README.md)`）；改其中一份时同一次提交里改另一份，内容、数字、链接保持一致。各队的 README 本来就是英文。

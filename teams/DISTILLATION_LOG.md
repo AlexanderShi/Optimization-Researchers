@@ -1,5 +1,16 @@
 # 蒸馏记录
 
+## 2026-11-26 (25) · README 配上英文版
+
+- 用户请求：「read me一定要有英文版本」。分支 `readme-en`（worktree `../Optimization-Researchers-readme-en`），从 `main`（35c4333）开出
+- 盘点：仓库跟踪的 README 里，各队 README、模板和 26 份 `private/README.md` 本来就是英文；只有中文的四个：仓库首页 `README.md`、`product/README.md`、`scripts/workflows/README.md`、`scripts/answer_eval/README.md`
+- 新增四份 `README.en.md`，逐段翻译，段落、表格、代码块、链接与中文版一一对应（脚本比对过标题数、表格行数、代码块数和链接集合，四对都一致）；两份顶部互相链接（`[English](README.en.md) | 中文`、`English | [中文](README.md)`），原来指向 `README.md` 的链接不变
+- 中英两版同步改掉的过时说法：首页目录树的 `product/` 一行（原来只写 dfo-team、nonlinear-team，改为六个队）；`product/README.md` 开头（原来写「DFO Team / NLP Team 的逐人研究者 skill」）；同一文件理事会一行里的 MINLP「四位深读」，Sahinidis 完成后改为五位
+- 规则：RUNBOOK §6 加一条，README 一定要有英文版，改其中一份时同一次提交里改另一份；TEAM-KIT 本地修改表加一行（`scripts/` 下的两份英文版和中文版的切换行）
+- 闸门：`check_links.py .` 472 个文件 0 断链；`selftest.sh` 全过
+- 未改：`scripts/workflows/README.md` 的「实跑状态（2026-09-27）」一段是 kit 原文，说除 `team-read.js` 外只跑过预览，已经过时（之后 T2、T3.3、T3.5–T3.8 都在本仓库的队上实跑过）；中英两版都照原文
+- 模型：Opus 5.5
+
 ## 2026-11-26 (24) · skill 列表只留入口：30 位研究者设为 name-only
 
 - 用户请求：「帮我发一下researchers的skills结构 以后researchers增加不可能所有东西都放到一个skill里」；看过结构说明页（claude.ai 私有页面）后：「嗯 就这么做 按领域划分就行」
