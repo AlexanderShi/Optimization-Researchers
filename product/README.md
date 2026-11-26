@@ -55,6 +55,13 @@ PowerShell：`Copy-Item -Recurse product\<home>\<slug> "$HOME\.claude\skills\"`�
 `# guest(s) from the <主队 title>: …, see product/README.md`，指回这里；复制行本身不带注释。
 少装了谁，圆桌会说缺了谁，然后不带他继续。
 
+装好之后，只让入口占 skill 列表：在 `~/.claude/settings.json` 的 `skillOverrides` 里把每位研究者设为
+`"name-only"`（列出名字、不带描述），总入口 `optimization-lead`、五个队的圆桌、`council-roundtable` 和语料团队
+`dfo-team`、`nlp-team` 保留描述。Claude Code 把每个已装 skill 的描述放进每一轮的上下文，列表有字符预算
+（`skillListingBudgetFraction`，默认为上下文窗口的 1%），超出后从调用最少的 skill 开始去掉描述；30 位研究者的
+描述合计约 25,000 字符（2026-11-26），会把入口的描述挤掉。圆桌和总入口按路径读成员文件，不受影响；要单独用某位
+研究者，走圆桌的 `solo <成员>`，或直接输入 `/<成员 slug>`。新加一位研究者，就在 `skillOverrides` 里加一行。
+
 ## 版权材料不进仓库
 
 仓库根 `.gitignore` 已按 kit 的规则忽略 `product/**/references/sources/` 下的

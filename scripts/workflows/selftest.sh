@@ -206,9 +206,6 @@ done
 echo "3. scripts and the delivery gate"
 for f in scripts/*.py; do
   python3 -m py_compile "$f" 2>/dev/null || { bad "py_compile $f"; continue; }
-  case $(basename "$f") in
-    merge_research.py|mark_read_from_cards.py|srt_to_transcript.py|quality_check.py) continue ;;  # no argparse --help
-  esac
   python3 "$f" --help > /dev/null 2>&1 || bad "$f --help"
 done
 ok "py_compile + --help"

@@ -1,5 +1,41 @@
 # 蒸馏记录
 
+## 2026-11-26 (24) · skill 列表只留入口：30 位研究者设为 name-only
+
+- 用户请求：「帮我发一下researchers的skills结构 以后researchers增加不可能所有东西都放到一个skill里」；看过结构说明页（claude.ai 私有页面）后：「嗯 就这么做 按领域划分就行」
+- 依据：Claude Code 每一轮都把每个已装 skill 的描述放进上下文，列表超出预算（`skillListingBudgetFraction`，默认 1%，本机设为 0.02）后，从调用最少的 skill 开始去掉描述。当时本仓库 39 个 skill 的描述共 32,377 字符，占已装 213 个 skill 描述的 44%；本会话的列表里已有 10 位研究者只剩名字（Bixby、Fletcher、Misener、Burer、Dey、Wright、Leyffer、Achterberg、Ye、Nesterov）
+- 改动（本机）：`~/.claude/settings.json` 加上 `skillOverrides`，30 位研究者设为 `"name-only"`，按领域排列（LP、MILP、NLP、DFO、MINLP、理事会）；9 个入口保留描述：`optimization-lead`、五个队的圆桌、`council-roundtable`、`dfo-team`、`nlp-team`。原有设置逐键比对未变，改前备份了一份
+- 写法核对：`skillOverrides` 以 skill 名字为键，取值 on、name-only、user-invocable-only、off（Claude Code 的设置 schema，与 code.claude.com/docs/en/skills 一致）；30 个键与已装 SKILL.md 的 `name:` 一一对应
+- 文档：`product/README.md` 安装一节写明这条规则和原因（30 位研究者的描述合计约 25,000 字符）；RUNBOOK §6 加一条：新研究者装好后在 `skillOverrides` 里加一行
+- 结构说明页内容：三层结构（总入口、六个圆桌、研究者文件夹）、一位研究者的文件夹里有什么、圆桌怎么调成员、加一位研究者要改的地方、随人数增长的东西、几种做法
+- 未验证：本会话的 skill 列表是否已按新设置刷新；新会话里看 `/context` 的 Skills 一行
+- 成本：一个查文档的 agent，约 14 万 token
+- 模型：Opus 5.5
+
+## 2026-11-26 (23) · 小修：Sahinidis 的元数据、两个旧断链、四个脚本的 --help
+
+- 用户请求：「先修小问题」（条目 (22) 未做项里的三件：核对 Sahinidis 的元数据修正建议，修掉两个旧断链和 `--help`）。分支 `small-fixes`（worktree `../Optimization-Researchers-small-fixes`），从 `main`（1e2cdd5）开出；合入本地 main，是否推送由用户定
+- Sahinidis 的 `works.json`：建议来自读卡第二轮和 T3.6 复核（原话在工作流记录里），每条先查来源再改；改动脚本先断言旧值，旧值不符就停：
+  - 补 DOI（Crossref 核对）：S081、H002 是两期特刊编者写的 Prologue（Optim. Eng. 3(3):223–225，2002；4(1-2):5–6，2003；H002 原备注「Crossref 没有记录」不对）；S343（FOCAPD 2014 委员名单 pp. xvi–xvii，53 人，含 Sahinidis）；S357、S372（Interfaces 的 Book Reviews 栏目，DOI 属于整个栏目，备注写明）；S245（FOPAM 社论，不是他的，skip 行）
+  - S072：Crossref 另有一条重复记录 10.1016/s0098-1354(97)00037-9（只列一位作者），保留三位作者的原 DOI，写进备注
+  - S354：作者补上 Xiaowei Bao（Crossref、zbMATH、CV 一致）
+  - H007：DOI 10.1137/24m1665027，SIAM Review 68(4):697–748，2026（2026-11-12 在线）；标题保留读过的手稿（2024 年 6 月 Optimization Online 版）的标题，正式标题写进备注，卡片上的页码仍是手稿页码
+  - S191：出处补 The Optimization Firm，年份按手册首页改为 2021（1 月 13 日；Scholar 写 2020）
+  - S237：Zenodo 数据集 10.5281/zenodo.7867206（2023-04-25 发布）；说明文档本身没有日期，2020 年 10 月的 S116 已引它
+  - S387：OSTI 10.2172/3027686，ACS Spring 2026（亚特兰大）的海报；S388：MIP Workshop 2024 的海报；两条的 kind 由 preprint 改为 conference
+  - H009：Dey 主页上的公开预印本（HEAD：HTTP 200，300,013 字节，与读过的本地文件一样大），原备注「没有公开版本」改掉；条目 (22) 第一轮读卡时提出的「这份手稿能不能引」随之有了答案
+  - INDEX 用 `acquire_fulltexts.py --only NONE` 离线重建（不联网），只变了 S191、S237、S387、S388、H007 五行（年份、出处、类型）；`validate_works.py` 0 错误，警告 150 → 144
+  - 年份是本地文件名 slug 的一部分，这五篇的 txt（主 checkout 里还有 PDF）要按 `acquire_fulltexts.slug` 改名，否则 `acquire_fulltexts.py` 找不到会重新下载；本 worktree 里改名后 435 条摘录仍全部逐字。RUNBOOK §4 那一条改成「标题或年份」
+  - S342（序言）、S382（1999 年委员名单）不改 Role：读过全文的服务类条目（编者按、状况报告、序言、人物介绍）全队都留 `supplement`、算作全读，只有元数据的同类条目才标 `skip`（DEEP-READING 的 *Skipped* 一条）；两张卡都没有方法链接。账本 T3.6 复核一节加一条 Follow-up 记下这些
+  - DEEP-READING 的 *Uneven periods*：Sahinidis 的「2020s 41/26、undated 3/0」改为「2020s 44/26」（三篇有了年份）；按 INDEX 重算，旧数与原文一致
+- 断链：`references/fidelity-scorecard.md` 有一条社区收录规则指向原仓库的 `../COMMUNITY.md`、`../CONTRIBUTING.md`，改为不带链接的说明；全仓库 `check_links.py .` 468 个文件 0 断链
+- kit：`mark_read_from_cards.py`、`quality_check.py`、`merge_research.py`、`srt_to_transcript.py` 响应 `-h` / `--help`（打印模块说明，退出 0）；`mark_read_from_cards.py` 参数不对时打印用法、退出 2，路径不对时一行报错、退出 1（原来是 traceback）；`quality_check.py` 也接受 skill 目录；后两个脚本加上 UTF-8 输出设置（不开 UTF-8 模式、输出重定向时 `--help` 也不崩）；`selftest.sh` 去掉这四个脚本的 `--help` 豁免。在 Sahinidis 文件夹的副本上跑 `mark_read_from_cards.py`，INDEX 一行不变。TEAM-KIT 本地修改表加两行
+- 闸门：`team_check.py` dfo 39 项 0 失败（5 项跳过）、nonlinear 30/0（2）、lp 11/0（1）、milp 12/0、minlp 40/0（4）、council 16/0（1），跳过的是本 worktree 里没有 txt 的摘录核对与客座提示（Sahinidis 的 txt 复制进来了，他的 435 条逐字）；`answer_standard.py --check` 39/39、`--installed` 78/78；`distill_check.py teams --installed` 0 ✗（11 ⚠，同前）；`selftest.sh product/minlp-team` 全过（「py_compile + --help」现在查全部脚本）
+- 安装：`nikolaos-v-sahinidis` 按 `git ls-files` 复制进 `~/.claude/skills`（88 个文件，逐字节一致，无多余文件；覆盖前与 main 1e2cdd5 一致，原文件夹另存）。回退：按 1e2cdd5 的跟踪文件重装
+- 未做：主 checkout 里这五篇全文的改名，等这些改动进了它所在的分支再做（RUNBOOK §4）；条目 (22) 列的 18 篇拿不到的开放全文；圆桌入座表里 Sahinidis 的「Leads when」一行；Grossmann 的深读
+- 成本：没有用 agent；联网只查了 Crossref、Zenodo、OSTI 的元数据接口和 H009 链接的 HEAD
+- 模型：Opus 5.5
+
 ## 2026-11-21 (22) · Sahinidis 深读（T3.3–T3.7、声明抽审）与 MINLP T3.8 重跑
 
 - 用户请求：「Merge and Push接着做」；问接下来做哪几项时选了「Sahinidis 深读」（T3.3 → T3.5 → T3.6 → 声明抽审 → 重跑 MINLP 的 T3.8）。分支 `sahinidis-deep`（worktree `../Optimization-Researchers-sahinidis-deep`），从 `main`（d18e4ef）开出，中途 merge main（39cad7c，PR #5，f7d41a8），此后字数一律是 `answer_standard.py --words` 的预算词数；合入 main 后按「Merge and Push」推送

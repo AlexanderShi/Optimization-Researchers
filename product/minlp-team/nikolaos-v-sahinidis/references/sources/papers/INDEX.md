@@ -190,7 +190,7 @@
 | 178 | S188 | 1999 | BARON on the Web | — | 6 | talk | — | no-oa |  | skip | — |
 | 179 | S189 | 2025 | Constructing tight quadratic relaxations for global optimization: II. underestimating difference-of-convex (DC) functions | Journal of Global Optimization | 5 | journal | arXiv | txt | 33 | core | carded |
 | 180 | S190 | 2025 | New bounds and formulations for the deterministic global optimization of Lennard–Jones clusters | Journal of Global Optimization | 5 | journal | manual | txt | 20 | core | carded |
-| 181 | S191 | 2020 | BARON user manual v. 2021.1. 13 | — | 5 | report | manual | txt | 30 | supplement | carded |
+| 181 | S191 | 2021 | BARON user manual v. 2021.1. 13 | The Optimization Firm (BARON user manual) | 5 | report | manual | txt | 30 | supplement | carded |
 | 182 | S192 | 2018 | Institute for the design of advanced energy systems process systems engineering framework (IDAES PSE framework) | Lawrence Berkeley National Laboratory (LBNL), Berkeley, CA (United States) | 5 | report | — | no-oa |  | supplement | abstract |
 | 183 | S193 | 2018 | BARON 18.5. 9: Global Optimation of Mixed-integer Nonlinear Programs | Users manual | 5 | report | — | no-oa |  | supplement | metadata |
 | 184 | S194 | 2014 | Global optimization with GAMS/BARON | — | 5 | talk | — | no-oa |  | skip | — |
@@ -228,7 +228,7 @@
 | 216 | S233 | 2001 | Reformulations of Rational Functions of 0− 1 Variables | manuscript | 2 | preprint | — | no-oa |  | supplement | metadata |
 | 217 | S235 | 2001 | Time-Dependent Traveling Salesman Problem | Encyclopedia of Optimization | 2 | chapter | — | no-oa |  | supplement | metadata |
 | 218 | S236 | 1995 | Planning under Uncertainty, Solving Large-Scale Stochastic Linear Programs | Interfaces | 2 | journal | — | no-oa |  | supplement | metadata |
-| 219 | S237 | — | A test set of quadratic, binary quadratic and integer quadratic programs | — | 2 | report | manual | txt | 3 | supplement | carded |
+| 219 | S237 | 2023 | A test set of quadratic, binary quadratic and integer quadratic programs | Zenodo (dataset MIQP-TestSet) | 2 | report | manual | txt | 3 | supplement | carded |
 | 220 | S238 | 2026 | Water network design and operation optimization: Leveraging approximations | EURO Journal on Computational Optimization | 1 | journal | manual | txt | 27 | core | carded |
 | 221 | S239 | 2026 | A novel linear optimization presolve technique based on Fourier-Motzkin elimination | Mathematical Programming Computation | 1 | journal | manual | txt | 34 | core | carded |
 | 222 | S240 | 2025 | Automated Discovery of Optimization Algorithms | AIChE Annual Meeting | 1 | talk | — | no-oa |  | skip | — |
@@ -363,8 +363,8 @@
 | 351 | S383 | 1996 | Nonlinear Programming: Theory and Algorithms | Interfaces | — | journal | — | no-oa |  | supplement | metadata |
 | 352 | S384 | 1992 | GLOBAL MINIMA OF MOLECULAR MECHANICS FORMULATIONS | ABSTRACTS OF PAPERS OF THE AMERICAN CHEMICAL SOCIETY | — | talk | — | no-oa |  | skip | — |
 | 353 | S385 | 1992 | Multiperiod investment model for processing networks with dedicated and flexible plants.[Erratum to document cited in CA114 (26): 250093n] | Industrial & Engineering Chemistry Research | — | journal | — | no-oa |  | supplement | metadata |
-| 354 | S387 | — | MINLP for regularized symbolic regression with applications to data-driven modeling of critical minerals processes | — | — | preprint | manual | txt | 1 | supplement | carded |
-| 355 | S388 | — | The Treewidth-Convex HullTheorem and DP for Cut Generation in MINLP | — | — | preprint | manual | txt | 1 | supplement | carded |
+| 354 | S387 | 2026 | MINLP for regularized symbolic regression with applications to data-driven modeling of critical minerals processes | ACS Spring 2026, Atlanta (poster) | — | conference | manual | txt | 1 | supplement | carded |
+| 355 | S388 | 2024 | The Treewidth-Convex HullTheorem and DP for Cut Generation in MINLP | MIP Workshop 2024 (poster) | — | conference | manual | txt | 1 | supplement | carded |
 | 356 | S391 | — | Accelerating the Simplex Algorithm Via Novel Crash Procedures | — | — | other | — | no-oa |  | skip | metadata |
 | 357 | S393 | — | GLAZIER, TJ CMU-ISR-17-119 KANG, Won Gu CMU-ISR-17-110 LEVINE, Joel CMU-ISR-17-115 LIU, Frederick CMU-ISR-17-118 | — | — | other | — | no-oa |  | skip | metadata |
 | 358 | S394 | — | Workshop on computational optimization | — | — | other | — | no-oa |  | skip | metadata |
@@ -384,7 +384,7 @@
 | 372 | H004 | 1991 | Design of a chemical complex | CACHE Design Case Study Volume 6: Chemical Engineering Optimization Models with GAMS (I. E. Grossmann, ed.), CACHE Corporation | — | chapter | — | no-oa |  | supplement | metadata |
 | 373 | H005 | 1991 | Multiperiod MILP model for planning chemical processes | CACHE Design Case Study Volume 6: Chemical Engineering Optimization Models with GAMS (I. E. Grossmann, ed.), CACHE Corporation | — | chapter | — | no-oa |  | supplement | metadata |
 | 374 | H006 | 2016 | Innovative computational tools and models for the design, optimization and control of carbon capture processes | Computer Aided Chemical Engineering 38 | — | conference | unpaywall | txt | 6 | supplement | carded |
-| 375 | H007 | 2025 | Nonconvex optimization problems involving the Euclidean norm: Challenges, progress, and opportunities | SIAM Review (accepted) | — | journal | manual | txt | 34 | core | carded |
+| 375 | H007 | 2026 | Nonconvex optimization problems involving the Euclidean norm: Challenges, progress, and opportunities | SIAM Review 68(4) | — | journal | manual | txt | 34 | core | carded |
 | 376 | H008 | 1987 | A comparative study of LQC, DMC and extended STR control strategies | Proceedings of the 10th IFAC World Congress on Automatic Control (IFAC Proceedings Volumes) | — | conference | — | no-oa |  | supplement | metadata |
 | 377 | H009 | 2026 | New proofs of exact LP reformulations for binary polynomial optimization with bounded treewidth | Discrete Optimization (submitted) | — | preprint | manual | txt | 17 | core | carded |
 | 378 | H010 | 1996 | Book review: C. A. Floudas and P. M. Pardalos (eds.), State of the Art in Global Optimization. Computational Methods and Applications | Optima 52 | — | journal | manual | txt | 16 | supplement | carded |

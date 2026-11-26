@@ -249,7 +249,7 @@ Never read references/sources/private/. Edit no file other than the batch's own 
   - Grossmann (in progress): 12 book rows, none with an open text, among them *Systematic methods for chemical process design* (S001), *Advanced optimization for process systems engineering* (S270), *Chemical engineering optimization models with GAMS* (S617) and three CACHE design case studies (H048–H050).
 - **Uneven periods.** Open full text / no open text per decade (INDEX.md, skip rows left out):
   - Leyffer: 1990s 10/0; 2000s 36/8; 2010s 58/19; 2020s 56/5; undated 4/7; plus the 1971 junk row S050, without a text.
-  - Sahinidis: 1980s 0/3; 1990s 4/34; 2000s 30/36; 2010s 37/56; 2020s 41/26; undated 3/0. No work before 1996 has an open text in his index; the four of the 1990s are the 1996 book review H010, two 1999 papers (S025, S079) and the 1999 committee roster S382.
+  - Sahinidis: 1980s 0/3; 1990s 4/34; 2000s 30/36; 2010s 37/56; 2020s 44/26 (S237, S387 and S388, undated in the index until 2026-11-26, now carry the years of their Zenodo, OSTI and MIP 2024 records). No work before 1996 has an open text in his index; the four of the 1990s are the 1996 book review H010, two 1999 papers (S025, S079) and the 1999 committee roster S382.
   - Misener: 2000s 0/5; 2010s 54/28; 2020s 50/8. Her 2009 papers are known from abstracts and metadata only.
   - Burer: 2000s 25/3; 2010s 29/1; 2020s 13/0.
   - Dey: 2000s 3/4; 2010s 55/12; 2020s 63/7; undated 2/8. His work before 2010 is thin in full text (his 08 §1).

@@ -72,6 +72,12 @@ def clean_vtt(content: str) -> str:
 
 
 def main():
+    for _s in (sys.stdout, sys.stderr):  # Windows: the console / redirected output defaults to cp1252; it prints ❌ …
+        if hasattr(_s, "reconfigure"):
+            _s.reconfigure(encoding="utf-8", errors="replace")
+    if any(a in ('-h', '--help') for a in sys.argv[1:]):
+        print(__doc__.strip())
+        sys.exit(0)
     if len(sys.argv) < 2:
         print("用法: python3 srt_to_transcript.py <input.srt|input.vtt> [output.txt]")
         sys.exit(1)
