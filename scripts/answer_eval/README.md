@@ -1,5 +1,7 @@
 # answer_eval · 回答质量的盲评
 
+[English](README.en.md) | 中文
+
 改了 `references/answer-standard.md`，或者改了某类 skill 的回答方式之后，用这里的九道题检验：同一道题由
 旧版 skill、新版 skill、不带 skill 各答一遍，交给只看得到三份回答的评审 agent 盲评。写法好不好，闸门脚本
 查不出来，只有读回答才看得出来。

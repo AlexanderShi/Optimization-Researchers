@@ -97,6 +97,7 @@ bash scripts/workflows/selftest.sh product/dfo-team              # kit 自检（
 | `scripts/merge_chase.py`（2026-11-20） | 调 `acquire_fulltexts.py` 的 `subprocess.run` 加 `encoding="utf-8", errors="replace"` | 子进程按 UTF-8 输出（它自己重配置了 stdout），Windows 控制台下 `text=True` 按 cp1252 解码，读线程抛 UnicodeDecodeError、`out.stdout` 为 None，合并做完之后在第 191 行以 AttributeError 退出（退出码 1）。Sahinidis 第 2 轮读卡的闸门 agent 碰到；不设 `PYTHONUTF8` 复现退出码 1，修后同一环境退出码 0、INDEX.md 不变 |
 | `scripts/mark_read_from_cards.py`、`scripts/quality_check.py`、`scripts/merge_research.py`、`scripts/srt_to_transcript.py`（2026-11-26） | `-h` / `--help` 打印模块说明（含用法）后退出 0；`mark_read_from_cards.py` 参数个数不对时打印用法、退出 2，找不到 `<目录>/references/sources/papers/INDEX.md` 时一行报错、退出 1；`quality_check.py` 也接受 skill 目录（查其中的 SKILL.md）；后两个脚本加上与其余脚本相同的 stdout/stderr UTF-8 设置。`selftest.sh` 去掉这四个脚本的 `--help` 豁免 | 原来 `--help` 被当成路径：`mark_read_from_cards.py` 抛 FileNotFoundError（不带参数抛 IndexError），`quality_check.py` 报「文件不存在: --help」、传目录则 PermissionError（MINLP T3.8 的复核记下了前两个） |
 | `references/fidelity-scorecard.md`（2026-11-26） | 「与女娲流程的关系」一节的社区收录一条去掉指向 `../COMMUNITY.md`、`../CONTRIBUTING.md` 的链接，写明那是原仓库的规则、本仓库不适用 | 两个文件不在本仓库，`check_links.py .` 一直报 2 个断链 |
+| `scripts/workflows/README.en.md`、`scripts/answer_eval/README.en.md`（新增，2026-11-26）；`scripts/workflows/README.md`、`scripts/answer_eval/README.md` | 两个 README 的英文版；中文版标题下加一行语言切换 `[English](README.en.md) \| 中文` | 用户要求每个 README 都有英文版（RUNBOOK §6） |
 
 除此之外 `scripts/`、`references/` 与 nvwa-skill `eb012fa` 逐字节一致。再从 nvwa 同步时注意
 不要覆盖掉这些修改（或同步后重跑 `selftest.sh` 和 `check_citations.py product/dfo-team` 确认）。

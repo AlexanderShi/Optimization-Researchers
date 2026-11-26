@@ -1,5 +1,7 @@
 # 团队工作流（scripts/workflows/）
 
+[English](README.en.md) | 中文
+
 搭一支研究团队（多位研究者 × 研究Skill × 圆桌）要用的九个保存好的工作流，外加：从 `team.json` 生成启动参数的 `make_args.mjs`，不花 token 的预览器 `dry_run.mjs`，套件自检 `selftest.sh`，和一套虚构团队的示例参数 `examples/`。
 
 - 端到端的做法（选人、环境、闸门、失败模式、成本、增删成员）见 [research-team-playbook.md](../../references/research-team-playbook.md)。本文只讲工作流本身：做什么、传什么参数、怎么启动、怎么预览。

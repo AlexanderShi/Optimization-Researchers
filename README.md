@@ -1,5 +1,7 @@
 # Optimization-Researchers
 
+[English](README.en.md) | 中文
+
 两个虚拟研究团队的**自包含蒸馏语料库**：
 
 - **DFO Team** — 无导数优化（derivative-free / zeroth-order / blackbox optimization）
@@ -25,7 +27,7 @@
 ## 目录结构
 
 ```
-README.md                 本文件
+README.md、README.en.md   本文件（中文、英文）
 DISTILL.md                蒸馏协议（自包含，从这里开始）
 RUNBOOK.md                两条流水线共用的运行纪律：分支/worktree、用量窗口、Windows、常见坑
 standards/
@@ -45,7 +47,7 @@ references/               team-kit 文档与模板：playbook、研究提炼框�
 scripts/                  team-kit 脚本：发表全表、全文、读卡、台账、团队状态；workflows/ 为 T1–T4；
                           本仓库新增 check_citations.py（引用闭包）、audit_claims.py（声明抽审，协议 references/claim-audit.md）；
                           语料线的 distill_check.py（lint + G1–G6 + 版本戳）、distill_audit.py（G7 抽审，协议 standards/distill-gates.md）
-product/                  team-kit 产物：逐人研究者 skill + 圆桌（dfo-team、nonlinear-team = NLP Team）
+product/                  team-kit 产物：逐人研究者 skill、各队圆桌和理事会（六个队，见 product/README.md）
 .claude/skills/
   optimization-researchers/ 项目级 skill：在本仓库内把蒸馏请求分流到 DISTILL.md / TEAM-KIT.md
 ```

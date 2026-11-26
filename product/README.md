@@ -1,6 +1,8 @@
 # product/ · 逐人研究者 Skill（team-kit 产物）
 
-本目录是 **DFO Team / NLP Team 的逐人研究者 skill**，由仓库根的 team-kit
+[English](README.en.md) | 中文
+
+本目录是各优化团队（六个队，见下表）的**逐人研究者 skill**，由仓库根的 team-kit
 （`scripts/` + `references/`，见 [TEAM-KIT.md](../TEAM-KIT.md)）生产与维护。
 与 `teams/<team>/SKILL.md`（按 DISTILL.md 从封闭语料蒸馏的团队级 skill）并列，两条流水线互不引用。
 
@@ -11,7 +13,7 @@
 | [`lp-team/`](lp-team/README.md) | **LP Team**（线性规划引擎） | Qi Huangfu、John J. H. Forrest、Robert E. Bixby 三位 + `lp-roundtable` | 轻量档（公开来源调研，未做全文深读） |
 | [`milp-team/`](milp-team/README.md) | **MILP Team**（混合整数线性规划：求解器里的分支切割、分解、MIP 基准测试） | Ambros M. Gleixner、Marco E. Lübbecke、Tobias Achterberg、Matteo Fischetti 四位，LP Team 的 Forrest、Bixby 作客座 + `milp-roundtable` | 轻量档（公开来源调研；T1 用封存题验证过） |
 | [`minlp-team/`](minlp-team/README.md) | **MINLP Team**（混合整数非线性与全局优化） | Grossmann、Leyffer、Sahinidis、Misener、Burer、Dey 六位 + `minlp-roundtable` | 混合档：Leyffer、Sahinidis、Misener、Burer、Dey 深读档；Grossmann 的深读停在 T3.2（全文已取，还没有卡片），按轻量档检查 |
-| [`optimization-council/`](optimization-council/README.md) | **Optimization Council**（优化理事会：Bertsimas 召集并主持 LP、NLP、DFO、MINLP 四队的跨队讨论；总入口 optimization-lead 另把 MILP 问题分派给 MILP Team） | Dimitris Bertsimas 一位（召集人；技能按九个优化领域分为九个领域文件：LO、IO、RO、CP、SD、ML、DA、HS、AP）+ [`optimization-lead`](optimization-council/optimization-lead/SKILL.md)（总入口：他按领域与阶段门定性，把问题分派给该管的队，再审各队答复）+ `council-roundtable`（跨队讨论）；四队成员作为客座代表团入座，须与四队一并安装 | 深读档：Bertsimas（2026-10-29 深读并写九个领域文件，2026-10-31 写领域图；413 篇全文精读、59 篇部分，1125 条摘录逐字核对，另读 21 项书籍公开部分；见 `DEEP-READING.md`）；客座四队按本队档位（DFO 深读档；NLP 混合档；MINLP 混合档，四位深读；LP 轻量档）。首次会话记录：[`first-session-2026-10-31.md`](optimization-council/first-session-2026-10-31.md)（议题「精确性的代价」，四队十位代表，计划 v2 待你在检查点 4 批准） |
+| [`optimization-council/`](optimization-council/README.md) | **Optimization Council**（优化理事会：Bertsimas 召集并主持 LP、NLP、DFO、MINLP 四队的跨队讨论；总入口 optimization-lead 另把 MILP 问题分派给 MILP Team） | Dimitris Bertsimas 一位（召集人；技能按九个优化领域分为九个领域文件：LO、IO、RO、CP、SD、ML、DA、HS、AP）+ [`optimization-lead`](optimization-council/optimization-lead/SKILL.md)（总入口：他按领域与阶段门定性，把问题分派给该管的队，再审各队答复）+ `council-roundtable`（跨队讨论）；四队成员作为客座代表团入座，须与四队一并安装 | 深读档：Bertsimas（2026-10-29 深读并写九个领域文件，2026-10-31 写领域图；413 篇全文精读、59 篇部分，1125 条摘录逐字核对，另读 21 项书籍公开部分；见 `DEEP-READING.md`）；客座四队按本队档位（DFO 深读档；NLP 混合档；MINLP 混合档，五位深读；LP 轻量档）。首次会话记录：[`first-session-2026-10-31.md`](optimization-council/first-session-2026-10-31.md)（议题「精确性的代价」，四队十位代表，计划 v2 待你在检查点 4 批准） |
 
 每个团队目录下的 `README.md`、`DEEP-READING.md`、`team.json` 是团队说明与成员清单，
 `python3 scripts/team_status.py product/<team>` 可随时重算进度与覆盖表。
