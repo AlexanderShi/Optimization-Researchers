@@ -1,5 +1,28 @@
 # 蒸馏记录
 
+## 2026-11-26 (26) · MILP Team 深读起步：四位的发表全表（T3.1）与开放全文（T3.2）
+
+- 用户请求：「继续强化MILP Team」；问怎么强化时选了「先收四位的发表全表 (Recommended)」（T3.1 发表全表 + T3.2 开放全文，跑完给出每人的作品数、开放全文数和深读估价，再定谁读、读多少）。分支 `milp-deep`（worktree `../Optimization-Researchers-milp-deep`），从 `main`（e33a9c6）开出
+- T3.1（`team-harvest.js`，每人一个工作流，四个并行；每个 2 个 agent，合计 8 个 agent、约 294 万 token，各约 51–52 分钟）：
+  - Gleixner 116 篇（Scholar 107 行，`DUFnBNcAAAAJ`，取自他 ZIB 主页上的链接）；Lübbecke 127 篇（120 行，`cYIpR60AAAAJ`，取自 DBLP 登记的主页）；Fischetti 222 篇（198 行，`5rOdaqAAAAAJ`，DBLP 与主页都链着这个编号）
+  - Achterberg 57 篇，没有 Scholar 页面：Scholar 搜索要登录、普通检索停在验证页，都没有绕过；合作者的 Scholar 列表里也没有他。全表以 DBLP 23 条、ZIB 报告系列 22 条为主，另有 Crossref 补的条目和专利；他的引用数取自 Crossref，27 篇为空，T3.4 按引用数挑核心论文时要留意
+  - 三个 Scholar 编号我逐个打开页面核对名字后写进 `team.json`（`new_team.py --set-member`）；四份 `validate_works.py` 0 错误；独立审计（按年份重抓，或对照 DBLP、zbMATH、OpenAlex、存档的 ZIB 个人页）都没发现漏收
+  - Fischetti 的 harvest agent 用 WebFetch 看主页上的 PDF 时，把 6 个 PDF 存进了会话的 tool-results 目录（不在仓库，没有使用）
+- kit：`dblp_works.py --pid 24/5951`（Lübbecke）在 DBLP 把一条 DOI 写成 `10.48550/ARXIV.CS/0310034` 时抛 IndexError（区分了大小写）；新增 `arxiv_from_doi()`，6 个用例和一次对 DBLP 的实跑（58 条，取到 `cs/0310034`）都通过（6cb7a29）
+- T3.2（`acquire_fulltexts.py`）：
+  - 第一次四个进程并行（各 `--delay 8`）：arXiv 每人回 13–17 次 429，Fischetti 在第 28/201 篇因 `ConnectionResetError`（WinError 10054）退出码 1。另外三个随即停掉：`TaskStop` 只停了外层 shell，三个 python 子进程另用 `Stop-Process` 结束
+  - kit：`acquire_fulltexts.py` 的网络异常统一为 `NET_ERRORS`，连接被重置也重试，单个下载链接失败只跳过这一个、不再让整次运行退出；模拟重置的测试通过（e013546）
+  - 按顺序重跑（默认 `--delay 3`，带 `--recheck`），再对仍被限流的 7 篇跑 `--only … --recheck`，都没有再收到 429
+  - 标题检索把同一份 arXiv 预印本同时挂到会议版和期刊版，下了 8 份相同的文件（sha1 相同；Gleixner 6 份，Lübbecke、Fischetti 各 1 份）：按 T3.1 的归属删回多挂的编号，行备注写明归属，`--drop` 掉文件
+  - 结果：Gleixner 57/103、Fischetti 84/201、Lübbecke 10/116、Achterberg 4/54 篇有开放全文（合计 155/474）；每人的 PDF、txt 与 INDEX 的 txt 行一一对应。Fischetti 的 S047 文字层丢了数字，本机没有 tesseract，留待 `--reocr`
+  - Achterberg 的博士论文（D004，TU Berlin 2007）和 ZIB 报告、Lübbecke 的 GERAD 与 Optimization Online 报告挂在仓储的详情页上，不是 .pdf 链接，下载脚本不抓，留给 T3.3 补搜
+- RUNBOOK §4 加两条：T3.2 的下载进程按顺序跑；T3.2 之后查 `same arxiv`，删回多挂的编号，T3.3 时把这几篇放进 `skip_ids`（Gleixner D004、D001、S051、S056、S057、S077，Lübbecke S030，Fischetti S187）
+- 闸门：`team_check.py product/milp-team` 12 项 0 失败（仍按轻量档查）；`answer_standard.py --check --installed` 78/78
+- 安装：四个成员文件夹按 `git ls-files` 复制进 `~/.claude/skills`（共 88 个文件，逐字节一致，无多余文件；覆盖前与 main e33a9c6 一致，原文件夹另存）。回退：按 e33a9c6 的跟踪文件重装
+- 未做（等用户定）：T3.3 起的深读；Fischetti S047 的 OCR；Lübbecke 旧 worktree（`../Optimization-Researchers-milp-team`）里 3 份没提交的演讲字幕，深读他时再处理
+- 成本：T3.1 共 8 个 agent，约 294 万 token；T3.2 是脚本，不花 token
+- 模型：Opus 5.5
+
 ## 2026-11-26 (25) · README 配上英文版
 
 - 用户请求：「read me一定要有英文版本」。分支 `readme-en`（worktree `../Optimization-Researchers-readme-en`），从 `main`（35c4333）开出
