@@ -74,4 +74,6 @@ Nocedal、MINLP、语料线闸门）。这些坑每个都至少花过一次重�
 - `teams/DISTILLATION_LOG.md` 顶部记一条：用户原话、档位、分支、产物、闸门结果（含每条 ⚠ 的处理）、
   G6 试答摘要 / G7 计数、运行教训、成本、执行模型。
 - 语料线安装只复制 `teams/<team>/SKILL.md` 到 `~/.claude/skills/<team>/`；team-kit 产物按 `product/README.md`。
+- 新研究者装进 `~/.claude/skills` 后，在 `~/.claude/settings.json` 的 `skillOverrides` 里给他加一行 `"name-only"`，
+  只有入口（总入口、各队圆桌、理事会圆桌、语料团队）保留描述（`product/README.md` 安装一节）。
 - 合入 main 后告知用户是否推送；不要自行 `git push`。

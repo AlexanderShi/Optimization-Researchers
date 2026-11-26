@@ -1,5 +1,17 @@
 # 蒸馏记录
 
+## 2026-11-26 (24) · skill 列表只留入口：30 位研究者设为 name-only
+
+- 用户请求：「帮我发一下researchers的skills结构 以后researchers增加不可能所有东西都放到一个skill里」；看过结构说明页（claude.ai 私有页面）后：「嗯 就这么做 按领域划分就行」
+- 依据：Claude Code 每一轮都把每个已装 skill 的描述放进上下文，列表超出预算（`skillListingBudgetFraction`，默认 1%，本机设为 0.02）后，从调用最少的 skill 开始去掉描述。当时本仓库 39 个 skill 的描述共 32,377 字符，占已装 213 个 skill 描述的 44%；本会话的列表里已有 10 位研究者只剩名字（Bixby、Fletcher、Misener、Burer、Dey、Wright、Leyffer、Achterberg、Ye、Nesterov）
+- 改动（本机）：`~/.claude/settings.json` 加上 `skillOverrides`，30 位研究者设为 `"name-only"`，按领域排列（LP、MILP、NLP、DFO、MINLP、理事会）；9 个入口保留描述：`optimization-lead`、五个队的圆桌、`council-roundtable`、`dfo-team`、`nlp-team`。原有设置逐键比对未变，改前备份了一份
+- 写法核对：`skillOverrides` 以 skill 名字为键，取值 on、name-only、user-invocable-only、off（Claude Code 的设置 schema，与 code.claude.com/docs/en/skills 一致）；30 个键与已装 SKILL.md 的 `name:` 一一对应
+- 文档：`product/README.md` 安装一节写明这条规则和原因（30 位研究者的描述合计约 25,000 字符）；RUNBOOK §6 加一条：新研究者装好后在 `skillOverrides` 里加一行
+- 结构说明页内容：三层结构（总入口、六个圆桌、研究者文件夹）、一位研究者的文件夹里有什么、圆桌怎么调成员、加一位研究者要改的地方、随人数增长的东西、几种做法
+- 未验证：本会话的 skill 列表是否已按新设置刷新；新会话里看 `/context` 的 Skills 一行
+- 成本：一个查文档的 agent，约 14 万 token
+- 模型：Opus 5.5
+
 ## 2026-11-26 (23) · 小修：Sahinidis 的元数据、两个旧断链、四个脚本的 --help
 
 - 用户请求：「先修小问题」（条目 (22) 未做项里的三件：核对 Sahinidis 的元数据修正建议，修掉两个旧断链和 `--help`）。分支 `small-fixes`（worktree `../Optimization-Researchers-small-fixes`），从 `main`（1e2cdd5）开出；合入本地 main，是否推送由用户定
