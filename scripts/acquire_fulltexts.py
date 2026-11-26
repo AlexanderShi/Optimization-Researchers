@@ -46,6 +46,7 @@ from __future__ import annotations
 
 import argparse
 import html
+import http.client
 import json
 import os
 import re
@@ -60,6 +61,8 @@ from pathlib import Path
 
 UA = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) nuwa-skill/acquire_fulltexts (research skill distillation)"}
 UNPAYWALL_EMAIL = "nuwa-skill@users.noreply.github.com"
+# A reset or dropped connection comes out of getresponse() raw, not wrapped in URLError (Windows: WinError 10054)
+NET_ERRORS = (urllib.error.URLError, TimeoutError, ConnectionError, http.client.HTTPException)
 ARXIV_ID_RE = re.compile(r"arxiv\.org/(?:abs|pdf)/([a-z\-]+(?:\.[A-Z]{2})?/\d{7}|\d{4}\.\d{4,5})(?:v\d+)?", re.I)
 STOP = {"the", "and", "for", "with", "from", "into", "via", "its", "their", "using", "based", "on", "of", "in", "a", "an", "to"}
 
@@ -90,7 +93,7 @@ def http_get(url: str, timeout: int = 60, tries: int = 3) -> bytes:
                 time.sleep(10 * (attempt + 1))
                 continue
             raise
-        except (urllib.error.URLError, TimeoutError):
+        except NET_ERRORS:
             if attempt < tries - 1:
                 time.sleep(5 * (attempt + 1))
                 continue
@@ -173,7 +176,7 @@ def arxiv_author_papers(researcher: str, delay: float, limit: int = 1000) -> lis
 def arxiv_abstract(arx: str) -> str:
     try:
         page = http_get(f"https://arxiv.org/abs/{arx}").decode("utf-8", "replace")
-    except (urllib.error.URLError, TimeoutError):
+    except NET_ERRORS:
         return ""
     m = re.search(r'<blockquote class="abstract[^"]*">(.*?)</blockquote>', page, re.S)
     if not m:
@@ -184,7 +187,7 @@ def arxiv_abstract(arx: str) -> str:
 def unpaywall_pdfs(doi: str) -> list[str]:
     try:
         data = json.loads(http_get(f"https://api.unpaywall.org/v2/{urllib.parse.quote(doi)}?email={UNPAYWALL_EMAIL}", tries=2))
-    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError):
+    except NET_ERRORS + (json.JSONDecodeError,):
         return []
     urls = []
     for loc in [data.get("best_oa_location") or {}] + list(data.get("oa_locations") or []):
@@ -198,7 +201,7 @@ def unpaywall_pdfs(doi: str) -> list[str]:
 def crossref_abstract(doi: str) -> str:
     try:
         data = json.loads(http_get(f"https://api.crossref.org/works/{urllib.parse.quote(doi)}", tries=2))
-    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError):
+    except NET_ERRORS + (json.JSONDecodeError,):
         return ""
     a = (data.get("message") or {}).get("abstract") or ""
     return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", a))).strip()
@@ -322,7 +325,7 @@ def try_pdf(url: str, work: dict, pdf: Path, txt: Path) -> tuple[str, int]:
     """下载并校验。返回 (状态, 页数)：txt / mismatch / notpdf / fail。"""
     try:
         data = http_get(url, timeout=90, tries=2)
-    except (urllib.error.URLError, TimeoutError, ValueError):
+    except NET_ERRORS + (ValueError,):
         return "fail", 0
     if not data.startswith(b"%PDF"):
         return "notpdf", 0
@@ -459,14 +462,14 @@ def run(skill_dir: Path, works_path: Path, delay: float, only: set[str], recheck
             if not arx:
                 try:
                     arx = arxiv_search(w["title"], surname)
-                except (urllib.error.URLError, TimeoutError) as e:
+                except NET_ERRORS as e:
                     print(f"  ⚠️ arXiv search failed: {w['title'][:60]} ({e})")
                 time.sleep(delay)
                 if not arx:
                     if author_papers is None:
                         try:
                             author_papers = arxiv_author_papers(researcher, delay)
-                        except (urllib.error.URLError, TimeoutError) as e:
+                        except NET_ERRORS as e:
                             print(f"  ⚠️ arXiv author listing failed: {researcher} ({e})")
                             author_papers = []
                         time.sleep(delay)

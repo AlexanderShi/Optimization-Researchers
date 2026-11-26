@@ -99,6 +99,7 @@ bash scripts/workflows/selftest.sh product/dfo-team              # kit 自检（
 | `references/fidelity-scorecard.md`（2026-11-26） | 「与女娲流程的关系」一节的社区收录一条去掉指向 `../COMMUNITY.md`、`../CONTRIBUTING.md` 的链接，写明那是原仓库的规则、本仓库不适用 | 两个文件不在本仓库，`check_links.py .` 一直报 2 个断链 |
 | `scripts/workflows/README.en.md`、`scripts/answer_eval/README.en.md`（新增，2026-11-26）；`scripts/workflows/README.md`、`scripts/answer_eval/README.md` | 两个 README 的英文版；中文版标题下加一行语言切换 `[English](README.en.md) \| 中文` | 用户要求每个 README 都有英文版（RUNBOOK §6） |
 | `scripts/dblp_works.py`（2026-11-26） | DataCite 的 arXiv DOI 不论大小写都能取出 arXiv 编号（新增 `arxiv_from_doi()`；旧式编号照 arXiv 的写法，archive 小写、学科分类大写） | DBLP 把一条 DOI 写成 `10.48550/ARXIV.CS/0310034`，原来的 `d.split("arXiv.", 1)[1]` 区分大小写，`--pid 24/5951`（Lübbecke）抛 IndexError；MILP T3.1 的 agent 用临时包装绕过。修后重跑：退出码 0，58 条记录，取到 `cs/0310034` |
+| `scripts/acquire_fulltexts.py`（2026-11-26） | 网络异常统一为 `NET_ERRORS`（`URLError`、`TimeoutError`、`ConnectionError`、`http.client.HTTPException`）：`http_get` 对连接被重置也重试，`try_pdf`、arXiv、Unpaywall、Crossref 的取数失败只记这一项，不再让整次运行退出 | MILP T3.2 里 Fischetti 的运行在第 28/201 篇因 `ConnectionResetError`（WinError 10054，`getresponse()` 原样抛出，不包在 `URLError` 里）退出码 1；模拟重置后 `try_pdf` 返回 fail、运行继续。另：四个进程并行时 arXiv 回 429，每人一个进程要么串行，要么把 `--delay` 设到合计不超过每 3 秒一次 |
 
 除此之外 `scripts/`、`references/` 与 nvwa-skill `eb012fa` 逐字节一致。再从 nvwa 同步时注意
 不要覆盖掉这些修改（或同步后重跑 `selftest.sh` 和 `check_citations.py product/dfo-team` 确认）。
