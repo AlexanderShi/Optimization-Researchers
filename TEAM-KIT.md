@@ -98,6 +98,7 @@ bash scripts/workflows/selftest.sh product/dfo-team              # kit 自检（
 | `scripts/mark_read_from_cards.py`、`scripts/quality_check.py`、`scripts/merge_research.py`、`scripts/srt_to_transcript.py`（2026-11-26） | `-h` / `--help` 打印模块说明（含用法）后退出 0；`mark_read_from_cards.py` 参数个数不对时打印用法、退出 2，找不到 `<目录>/references/sources/papers/INDEX.md` 时一行报错、退出 1；`quality_check.py` 也接受 skill 目录（查其中的 SKILL.md）；后两个脚本加上与其余脚本相同的 stdout/stderr UTF-8 设置。`selftest.sh` 去掉这四个脚本的 `--help` 豁免 | 原来 `--help` 被当成路径：`mark_read_from_cards.py` 抛 FileNotFoundError（不带参数抛 IndexError），`quality_check.py` 报「文件不存在: --help」、传目录则 PermissionError（MINLP T3.8 的复核记下了前两个） |
 | `references/fidelity-scorecard.md`（2026-11-26） | 「与女娲流程的关系」一节的社区收录一条去掉指向 `../COMMUNITY.md`、`../CONTRIBUTING.md` 的链接，写明那是原仓库的规则、本仓库不适用 | 两个文件不在本仓库，`check_links.py .` 一直报 2 个断链 |
 | `scripts/workflows/README.en.md`、`scripts/answer_eval/README.en.md`（新增，2026-11-26）；`scripts/workflows/README.md`、`scripts/answer_eval/README.md` | 两个 README 的英文版；中文版标题下加一行语言切换 `[English](README.en.md) \| 中文` | 用户要求每个 README 都有英文版（RUNBOOK §6） |
+| `scripts/dblp_works.py`（2026-11-26） | DataCite 的 arXiv DOI 不论大小写都能取出 arXiv 编号（新增 `arxiv_from_doi()`；旧式编号照 arXiv 的写法，archive 小写、学科分类大写） | DBLP 把一条 DOI 写成 `10.48550/ARXIV.CS/0310034`，原来的 `d.split("arXiv.", 1)[1]` 区分大小写，`--pid 24/5951`（Lübbecke）抛 IndexError；MILP T3.1 的 agent 用临时包装绕过。修后重跑：退出码 0，58 条记录，取到 `cs/0310034` |
 
 除此之外 `scripts/`、`references/` 与 nvwa-skill `eb012fa` 逐字节一致。再从 nvwa 同步时注意
 不要覆盖掉这些修改（或同步后重跑 `selftest.sh` 和 `check_citations.py product/dfo-team` 确认）。
