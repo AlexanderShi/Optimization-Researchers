@@ -107,6 +107,12 @@ def find_contradictions(files: dict[str, str], agents: dict = AGENTS) -> list[st
 
 
 def main():
+    for _s in (sys.stdout, sys.stderr):  # Windows: the console / redirected output defaults to cp1252; it prints ❌ …
+        if hasattr(_s, "reconfigure"):
+            _s.reconfigure(encoding="utf-8", errors="replace")
+    if any(a in ('-h', '--help') for a in sys.argv[1:]):
+        print(__doc__.strip())
+        sys.exit(0)
     args = sys.argv[1:]
     mode = None
     if '--mode' in args:

@@ -9,7 +9,7 @@
   检查研究方法/操作步骤/言行一致/研究品味/阶段工作流/代表作解剖/研究诚信规则
 
 用法:
-    python3 quality_check.py <SKILL.md路径> [--mode persona|research]
+    python3 quality_check.py <SKILL.md路径或skill目录> [--mode persona|research]
 
 示例:
     python3 quality_check.py .claude/skills/elon-musk-perspective/SKILL.md
@@ -254,6 +254,9 @@ def main():
         if hasattr(_s, "reconfigure"):
             _s.reconfigure(encoding="utf-8", errors="replace")
     args = sys.argv[1:]
+    if any(a in ('-h', '--help') for a in sys.argv[1:]):
+        print(__doc__.strip())
+        sys.exit(0)
     mode = None
     if '--mode' in args:
         i = args.index('--mode')
@@ -263,11 +266,13 @@ def main():
             print(f"❌ 未知模式: {mode}（可选: persona, research）")
             sys.exit(1)
     if not args:
-        print("用法: python3 quality_check.py <SKILL.md路径> [--mode persona|research]")
+        print("用法: python3 quality_check.py <SKILL.md路径或skill目录> [--mode persona|research]")
         sys.exit(1)
 
     skill_path = Path(args[0])
-    if not skill_path.exists():
+    if skill_path.is_dir():  # a skill folder: check its SKILL.md
+        skill_path = skill_path / 'SKILL.md'
+    if not skill_path.is_file():
         print(f"❌ 文件不存在: {skill_path}")
         sys.exit(1)
 

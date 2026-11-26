@@ -42,7 +42,7 @@ Nocedal、MINLP、语料线闸门）。这些坑每个都至少花过一次重�
 - Google Scholar 作者搜索已需登录：Scholar id 从 DBLP 人员记录（sparql.dblp.org 的 `dblp:webpage`）、ORCID
   `researcher-urls`、或研究者主页取；找不到就留空，不要猜。Scholar 个人页（`citations?user=ID`）仍可直接抓。
 - `fetch_publications.py`（OpenAlex）**不需要 API key**；`publications/` 为空时手工跑一遍。
-- 改了 `works.json` 的标题，PDF / txt 的文件名 slug 跟着变：按 `acquire_fulltexts.slug(row)` 给本地文件改名，
+- 改了 `works.json` 的标题或年份（年份为空时 slug 里写 `nd`），PDF / txt 的文件名 slug 跟着变：按 `acquire_fulltexts.slug(row)` 给本地文件改名，
   否则报 "rows keep their committed txt/pdf status without a local file"。
 - 1990–2000 年代的作者 PDF 常有「正文完好、数字和希腊字母全丢」的文字层：`acquire_fulltexts.py` 自动判定并 OCR
   （tesseract 在 PATH 时）；之前抓的用 `--reocr ID,…` + `plan_reading_batches.py --reread`。按 txt 的数字占比排序能找出来。

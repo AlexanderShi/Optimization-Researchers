@@ -71,7 +71,7 @@
 
 - 女娲Phase 4的通过标准是**内部质检**（生成过程中的关卡）
 - 评分卡是**对外报告**（生成完成后的出厂检验，任何人可复跑验证）
-- 社区贡献的人物skill申请收录进 [COMMUNITY.md](../COMMUNITY.md) 索引时，评分卡≥B是准入门槛（见 [CONTRIBUTING.md](../CONTRIBUTING.md)）
+- 原 kit 在这里写的是 nvwa-skill 仓库的社区收录规则：社区贡献的人物skill申请收录进那个仓库的 COMMUNITY.md 索引时，评分卡≥B是准入门槛（见那个仓库的 CONTRIBUTING.md）。本仓库没有社区索引，这两个文件也不在本仓库，这一条在这里不适用
 
 ## 反作弊
 

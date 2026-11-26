@@ -23,8 +23,13 @@ def main():
     for _s in (sys.stdout, sys.stderr):  # Windows: redirected output defaults to cp1252; titles carry ℓ, ε, …
         if hasattr(_s, "reconfigure"):
             _s.reconfigure(encoding="utf-8", errors="replace")
+    if len(sys.argv) != 2 or sys.argv[1] in ("-h", "--help"):
+        print(__doc__.strip())
+        sys.exit(0 if sys.argv[1:] in (["-h"], ["--help"]) else 2)
     sk = Path(sys.argv[1])
     index = sk / "references/sources/papers/INDEX.md"
+    if not index.is_file():
+        sys.exit(f"❌ {index} not found: pass a member's skill folder (the one holding references/sources/papers/INDEX.md)")
     level = {}
     for dj in sorted((sk / "references/research/cards").glob("*.digest.json")):
         for c in json.loads(dj.read_text(encoding="utf-8")):
