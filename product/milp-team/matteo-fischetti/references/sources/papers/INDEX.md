@@ -10,36 +10,36 @@
 
 | # | ID | Year | Title | Venue | Cites | Kind | Source | Full text | Pages | Role | Read |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| 1 | S001 | 2003 | Local branching | Mathematical programming 98 (1), 23-47, 2003 | 1357 | journal | — | no-oa |  | supplement | — |
-| 2 | S002 | 2002 | Modeling and solving the train timetabling problem | Operations research 50 (5), 851-861, 2002 | 883 | journal | — | no-oa |  | supplement | — |
+| 1 | S001 | 2003 | Local branching | Mathematical programming 98 (1), 23-47, 2003 | 1357 | journal | manual | txt | 24 | supplement | — |
+| 2 | S002 | 2002 | Modeling and solving the train timetabling problem | Operations research 50 (5), 851-861, 2002 | 883 | journal | manual | txt | 24 | supplement | — |
 | 3 | S003 | 2000 | Algorithms for the set covering problem | Annals of Operations Research 98 (1), 353-371, 2000 | 708 | journal | url | txt | 12 | supplement | — |
-| 4 | S004 | 1999 | A heuristic method for the set covering problem | Operations research 47 (5), 730-743, 1999 | 652 | journal | — | no-oa |  | supplement | — |
-| 5 | S005 | 1997 | A branch-and-cut algorithm for the symmetric generalized traveling salesman problem | Operations Research 45 (3), 378-394, 1997 | 645 | journal | — | no-oa |  | supplement | — |
+| 4 | S004 | 1999 | A heuristic method for the set covering problem | Operations research 47 (5), 730-743, 1999 | 652 | journal | manual | txt | 27 | supplement | — |
+| 5 | S005 | 1997 | A branch-and-cut algorithm for the symmetric generalized traveling salesman problem | Operations Research 45 (3), 378-394, 1997 | 645 | journal | manual | txt | 36 | supplement | — |
 | 6 | S006 | 2006 | Combinatorial Benders' cuts for mixed-integer linear programming | Operations Research 54 (4), 756-766, 2006 | 644 | journal | url | txt | 22 | supplement | — |
 | 7 | S007 | 2005 | The feasibility pump | Mathematical programming 104 (1), 91-104, 2005 | 631 | journal | url | txt | 15 | supplement | — |
-| 8 | S008 | 2018 | Deep neural networks and mixed integer linear optimization | Constraints 23 (3), 296-309, 2018 | 524 | journal | unpaywall | txt | 13 | supplement | — |
-| 9 | S009 | 1998 | Solving the orienteering problem through branch-and-cut | INFORMS Journal on Computing 10 (2), 133-148, 1998 | 478 | journal | — | no-oa |  | supplement | — |
+| 8 | S008 | 2018 | Deep neural networks and mixed integer linear optimization | Constraints 23 (3), 296-309, 2018 | 524 | journal | url | txt | 15 | supplement | — |
+| 9 | S009 | 1998 | Solving the orienteering problem through branch-and-cut | INFORMS Journal on Computing 10 (2), 133-148, 1998 | 478 | journal | manual | txt | 31 | supplement | — |
 | 10 | S010 | 2009 | Light robustness | Robust and online large-scale optimization: Models and techniques for… | 417 | chapter | url | txt | 21 | supplement | — |
 | 11 | S011 | 2017 | Redesigning Benders decomposition for large-scale facility location | Management Science 63 (7), 2146-2162, 2017 | 368 | journal | url | txt | 25 | supplement | — |
 | 12 | S012 | 1997 | Algorithms for railway crew management | Mathematical programming 79 (1), 125-141, 1997 | 361 | journal | url | txt | 20 | supplement | — |
-| 13 | S013 | 2001 | Solving the asymmetric travelling salesman problem with time windows by branch-and-cut | Mathematical programming 90 (3), 475-506, 2001 | 346 | journal | — | no-oa |  | supplement | — |
-| 14 | S014 | 2006 | An algorithmic framework for the exact solution of the prize-collecting Steiner tree problem | Mathematical programming 105 (2), 427-449, 2006 | 321 | journal | — | no-oa |  | supplement | — |
+| 13 | S013 | 2001 | Solving the asymmetric travelling salesman problem with time windows by branch-and-cut | Mathematical programming 90 (3), 475-506, 2001 | 346 | journal | manual | txt | 35 | supplement | — |
+| 14 | S014 | 2006 | An algorithmic framework for the exact solution of the prize-collecting Steiner tree problem | Mathematical programming 105 (2), 427-449, 2006 | 321 | journal | manual | txt | 25 | supplement | — |
 | 15 | S015 | 2009 | The new Dutch timetable: The OR revolution | Interfaces 39 (1), 6-17, 2009 | 297 | journal | unpaywall | txt | 13 | supplement | — |
 | 16 | S016 | 2017 | A new general-purpose algorithm for mixed-integer bilevel linear programs | Operations Research 65 (6), 1615-1637, 2017 | 296 | journal | unpaywall | txt | 43 | supplement | — |
 | 17 | S017 | 1998 | Modeling and solving the crew rostering problem | Operations research 46 (6), 820-830, 1998 | 294 | journal | url | txt | 26 | supplement | — |
-| 18 | S018 | 2009 | Fast approaches to improve the robustness of a railway timetable | Transportation Science 43 (3), 321-335, 2009 | 271 | journal | — | no-oa |  | supplement | — |
+| 18 | S018 | 2009 | Fast approaches to improve the robustness of a railway timetable | Transportation Science 43 (3), 321-335, 2009 | 271 | journal | manual | txt | 29 | supplement | — |
 | 19 | S019 | 1994 | A branch-and-bound algorithm for the capacitated vehicle routing problem on directed graphs | Operations Research 42 (5), 846-859, 1994 | 271 | journal | — | no-oa |  | supplement | — |
 | 20 | S020 | 1993 | The delivery man problem and cumulative matroids | Operations Research 41 (6), 1055-1064, 1993 | 255 | journal | — | no-oa |  | supplement | — |
 | 21 | S021 | 1989 | A branch and bound algorithm for the multiple depot vehicle scheduling problem | Networks 19 (5), 531-548, 1989 | 254 | journal | — | no-oa |  | supplement | — |
-| 22 | S022 | 1996 | {0, 1/2}-Chvátal-Gomory cuts | Mathematical Programming 74 (3), 221-235, 1996 | 251 | journal | — | no-oa |  | supplement | — |
+| 22 | S022 | 1996 | {0, 1/2}-Chvátal-Gomory cuts | Mathematical Programming 74 (3), 221-235, 1996 | 251 | journal | manual | txt | 18 | supplement | — |
 | 23 | S023 | 2016 | Benders decomposition without separability: A computational study for capacitated facility location problems | European Journal of Operational Research 253 (3), 557-569, 2016 | 243 | journal | manual | txt | 28 | supplement | — |
-| 24 | S024 | 2010 | A note on the selection of Benders’ cuts | Mathematical Programming 124 (1), 175-182, 2010 | 243 | journal | — | no-oa |  | supplement | — |
+| 24 | S024 | 2010 | A note on the selection of Benders’ cuts | Mathematical Programming 124 (1), 175-182, 2010 | 243 | journal | manual | txt | 8 | supplement | — |
 | 25 | S025 | 1995 | The precedence-constrained asymmetric traveling salesman polytope | Mathematical programming 68 (1), 241-265, 1995 | 241 | journal | — | no-oa |  | supplement | — |
 | 26 | S026 | 2007 | A feasibility pump heuristic for general mixed-integer problems | Discrete Optimization 4 (1), 63-76, 2007 | 216 | journal | url | txt | 23 | supplement | — |
 | 27 | S027 | 2018 | On the use of intersection cuts for bilevel optimization | Mathematical Programming 172 (1), 77-103, 2018 | 187 | journal | manual | txt | 28 | supplement | — |
-| 28 | S028 | 2000 | A polyhedral study of the asymmetric traveling salesman problem with time windows | Networks: An International Journal 36 (2), 69-79, 2000 | 185 | journal | — | no-oa |  | supplement | — |
+| 28 | S028 | 2000 | A polyhedral study of the asymmetric traveling salesman problem with time windows | Networks: An International Journal 36 (2), 69-79, 2000 | 185 | journal | manual | txt | 21 | supplement | — |
 | 29 | S029 | 2016 | On handling indicator constraints in mixed integer programming | Computational Optimization and Applications 65 (3), 545-566, 2016 | 184 | journal | unpaywall | txt | 18 | supplement | — |
-| 30 | S030 | 1995 | The symmetric generalized traveling salesman polytope | Networks 26 (2), 113-123, 1995 | 184 | journal | — | no-oa |  | supplement | — |
+| 30 | S030 | 1995 | The symmetric generalized traveling salesman polytope | Networks 26 (2), 113-123, 1995 | 184 | journal | manual | txt | 25 | supplement | — |
 | 31 | S031 | 1989 | An additive bounding procedure for combinatorial optimization problems | Operations Research 37 (2), 319-328, 1989 | 178 | journal | — | no-oa |  | supplement | — |
 | 32 | S032 | 2006 | A new ILP-based refinement heuristic for vehicle routing problems | Mathematical Programming 105 (2), 471-499, 2006 | 174 | journal | url | txt | 32 | supplement | — |
 | 33 | S033 | 2007 | Optimizing over the first Chvátal closure | Mathematical Programming 110 (1), 3-20, 2007 | 173 | journal | url | txt | 14 | supplement | — |
@@ -49,27 +49,27 @@
 | 37 | S037 | 2011 | Heuristics in mixed integer programming | Wiley Encyclopedia of Operations Research and Management Science. John Wiley… | 158 | chapter | — | no-oa |  | supplement | — |
 | 38 | S038 | 2019 | Interdiction Games and Monotonicity, with Application to Knapsack Problems | INFORMS Journal on Computing 31 (2), 390-410, 2019 | 154 | journal | url | txt | 28 | supplement | — |
 | 39 | S039 | 1987 | The fixed job schedule problem with spread-time constraints | Operations Research 35 (6), 849-858, 1987 | 150 | journal | — | no-oa |  | supplement | — |
-| 40 | S040 | 2017 | Thinning out Steiner trees: a node-based model for uniform edge costs | Math. Program. Comput. 9(2), 203-229 | 148 | journal | — | no-oa |  | supplement | — |
+| 40 | S040 | 2017 | Thinning out Steiner trees: a node-based model for uniform edge costs | Math. Program. Comput. 9(2), 203-229 | 148 | journal | manual | txt | 51 | supplement | — |
 | 41 | S041 | 2009 | Feasibility pump 2.0 | Mathematical Programming Computation 1 (2), 201-222, 2009 | 148 | journal | url | txt | 24 | supplement | — |
 | 42 | S042 | 2012 | A Lagrangian heuristic for robustness, with an application to train timetabling | Transportation Science 46 (1), 124-133, 2012 | 147 | journal | url | txt | 16 | supplement | — |
 | 43 | S043 | 1997 | A polyhedral approach to the asymmetric traveling salesman problem | Management Science 43 (11), 1520-1536, 1997 | 146 | journal | — | no-oa |  | supplement | — |
 | 44 | S044 | 1992 | An additive bounding procedure for the asymmetric travelling salesman problem | Mathematical programming 53 (1), 173-197, 1992 | 146 | journal | — | no-oa |  | supplement | — |
-| 45 | S045 | 2012 | Cutting plane versus compact formulations for uncertain (integer) linear programs | Mathematical Programming Computation 4, 239-273, 2012 | 140 | journal | — | no-oa |  | supplement | — |
+| 45 | S045 | 2012 | Cutting plane versus compact formulations for uncertain (integer) linear programs | Mathematical Programming Computation 4, 239-273, 2012 | 140 | journal | manual | txt | 19 | supplement | — |
 | 46 | S046 | 2009 | Mixed-integer programming models for nesting problems | Journal of Heuristics 15 (3), 201-226, 2009 | 140 | journal | url | txt | 34 | supplement | — |
 | 47 | S047 | 2002 | The generalized traveling salesman and orienteering problems | The traveling salesman problem and its variations, 609-662, 2002 | 140 | chapter | url | txt | 62 | supplement | — |
 | 48 | S048 | 1989 | The fixed job schedule problem with working-time constraints | Operations Research 37 (3), 395-403, 1989 | 140 | journal | — | no-oa |  | supplement | — |
-| 49 | S049 | 1988 | An additive approach for the optimal solution of the prize-collecting traveling salesman problem | Publication of: Dalctraf, 1988 | 136 | chapter | — | no-oa |  | supplement | — |
+| 49 | S049 | 1988 | An additive approach for the optimal solution of the prize-collecting traveling salesman problem | Publication of: Dalctraf, 1988 | 136 | chapter | manual | txt | 26 | supplement | — |
 | 50 | S050 | 1997 | Branch-and-cut algorithms | Annotated bibliographies in combinatorial optimization, 45-64, 1997 | 135 | chapter | — | no-oa |  | supplement | — |
 | 51 | S051 | 2025 | Matheuristics by Examples | Handbook of Heuristics, 1-35, 2025 | 131 | chapter | — | no-oa |  | supplement | — |
 | 52 | S052 | 2014 | Proximity search for 0-1 mixed-integer convex programming | Journal of Heuristics 20 (6), 709-731, 2014 | 125 | journal | url | txt | 26 | supplement | — |
-| 53 | S053 | 1999 | Solution of large-scale railway crew planning problems: The Italian experience | Computer-Aided Transit Scheduling: Proceedings, Cambridge, MA, USA, August…, 1999 | 123 | chapter | — | no-oa |  | supplement | — |
+| 53 | S053 | 1999 | Solution of large-scale railway crew planning problems: The Italian experience | Computer-Aided Transit Scheduling: Proceedings, Cambridge, MA, USA, August…, 1999 | 123 | chapter | manual | txt | 17 | supplement | — |
 | 54 | S054 | 2017 | Deep neural networks as 0-1 mixed integer linear programs: A feasibility study | arXiv preprint arXiv:1712.06174, 2017 | 109 | preprint | arXiv | txt | 13 | supplement | — |
 | 55 | S055 | 2014 | Exploiting erraticism in search | Operations Research 62 (1), 114-122, 2014 | 108 | journal | url | txt | 13 | supplement | — |
-| 56 | S056 | 2002 | Exact methods for the asymmetric traveling salesman problem | The traveling salesman problem and its variations, 169-205, 2002 | 108 | chapter | — | no-oa |  | supplement | — |
-| 57 | S057 | 2001 | A polyhedral approach to simplified crew scheduling and vehicle scheduling problems | Management Science 47 (6), 833-850, 2001 | 108 | journal | — | no-oa |  | supplement | — |
-| 58 | S058 | 2000 | On the separation of maximally violated mod-k cuts | Mathematical Programming 87 (1), 37-56, 2000 | 104 | journal | — | no-oa |  | supplement | — |
+| 56 | S056 | 2002 | Exact methods for the asymmetric traveling salesman problem | The traveling salesman problem and its variations, 169-205, 2002 | 108 | chapter | manual | txt | 44 | supplement | — |
+| 57 | S057 | 2001 | A polyhedral approach to simplified crew scheduling and vehicle scheduling problems | Management Science 47 (6), 833-850, 2001 | 108 | journal | manual | txt | 32 | supplement | — |
+| 58 | S058 | 2000 | On the separation of maximally violated mod-k cuts | Mathematical Programming 87 (1), 37-56, 2000 | 104 | journal | manual | txt | 20 | supplement | — |
 | 59 | S059 | 2017 | Using a general-purpose mixed-integer linear programming solver for the practical solution of real-time train rescheduling | European Journal of Operational Research 263 (1), 258-264, 2017 | 102 | journal | url | txt | 15 | supplement | — |
-| 60 | S060 | 1995 | Exact and approximate algorithms for the index selection problem in physical database design | IEEE Transactions on Knowledge and Data Engineering 7 (6), 955-967, 1995 | 98 | journal | — | no-oa |  | supplement | — |
+| 60 | S060 | 1995 | Exact and approximate algorithms for the index selection problem in physical database design | IEEE Transactions on Knowledge and Data Engineering 7 (6), 955-967, 1995 | 98 | journal | manual | txt | 15 | supplement | — |
 | 61 | S061 | 2001 | Crew scheduling for Netherlands railways “destination: customer” | Computer-aided scheduling of public transport, 181-201, 2001 | 95 | chapter | url | txt | 15 | supplement | — |
 | 62 | S062 | 1993 | A lifting procedure for the asymmetric traveling salesman polytope and a large new class of facets | Mathematical Programming 58 (1), 325-352, 1993 | 94 | journal | — | no-oa |  | supplement | — |
 | 63 | S063 | 2013 | Backdoor branching | INFORMS Journal on Computing 25 (4), 693-700, 2013 | 93 | journal | url | txt | 13 | supplement | — |
@@ -78,31 +78,31 @@
 | 66 | S066 | 1996 | A heuristic algorithm for the set covering problem | International Conference on Integer Programming and Combinatorial…, 1996 | 89 | conference | — | no-oa |  | supplement | — |
 | 67 | S067 | 2012 | Three ideas for the quadratic assignment problem | Operations research 60 (4), 954-964, 2012 | 87 | journal | url | txt | 17 | supplement | — |
 | 68 | S068 | 2011 | On the separation of disjunctive cuts | Mathematical Programming 128 (1), 205-230, 2011 | 87 | journal | url | txt | 24 | supplement | — |
-| 69 | S069 | 1999 | Models and algorithms for the 2-dimensional cell suppression problem in statistical disclosure control. | Mathematical Programming 84 (2), 1999 | 87 | journal | — | no-oa |  | supplement | — |
+| 69 | S069 | 1999 | Models and algorithms for the 2-dimensional cell suppression problem in statistical disclosure control. | Mathematical Programming 84 (2), 1999 | 87 | journal | manual | txt | 30 | supplement | — |
 | 70 | S070 | 2007 | Embedding {0, ½}-Cuts in a Branch-and-Cut Framework: A Computational Study | INFORMS Journal on Computing 19 (2), 229-238, 2007 | 85 | journal | url | txt | 16 | supplement | — |
 | 71 | S071 | 1991 | Facets of the asymmetric traveling salesman polytope | Mathematics of Operations Research 16 (1), 42-56, 1991 | 84 | journal | — | no-oa |  | supplement | — |
-| 72 | S072 | 2001 | Solving the cell suppression problem on tabular data with linear constraints | Management Science 47 (7), 1008-1027, 2001 | 80 | journal | — | no-oa |  | supplement | — |
-| 73 | S073 | 2000 | Models and algorithms for optimizing cell suppression in tabular data with linear constraints | Journal of the American Statistical Association 95 (451), 916-928, 2000 | 80 | journal | — | no-oa |  | supplement | — |
+| 72 | S072 | 2001 | Solving the cell suppression problem on tabular data with linear constraints | Management Science 47 (7), 1008-1027, 2001 | 80 | journal | manual | txt | 20 | supplement | — |
+| 73 | S073 | 2000 | Models and algorithms for optimizing cell suppression in tabular data with linear constraints | Journal of the American Statistical Association 95 (451), 916-928, 2000 | 80 | journal | manual | txt | 13 | supplement | — |
 | 74 | S074 | 2011 | Lexicography and degeneracy: can a pure cutting plane algorithm work? | Mathematical programming 130 (1), 153-176, 2011 | 77 | journal | url | txt | 26 | supplement | — |
 | 75 | S075 | 1992 | Approximation algorithms for fixed job schedule problems | Operations Research 40 (1-supplement-1), S96-S108, 1992 | 76 | journal | — | no-oa |  | supplement | — |
 | 76 | S076 | 2022 | Learning to search in local branching | Proceedings of the aaai conference on artificial intelligence 36 (4), 3796-3803, 2022 | 68 | conference | arXiv | txt | 25 | supplement | — |
-| 77 | S077 | 2002 | Exact algorithms for minimum routing cost trees | Networks: An International Journal 39 (3), 161-173, 2002 | 68 | journal | — | no-oa |  | supplement | — |
+| 77 | S077 | 2002 | Exact algorithms for minimum routing cost trees | Networks: An International Journal 39 (3), 161-173, 2002 | 68 | journal | manual | txt | 13 | supplement | — |
 | 78 | S078 | 2020 | Heuristic algorithms for the wind farm cable routing problem | Applied Energy 278, 115617, 2020 | 67 | journal | unpaywall | txt | 40 | supplement | — |
 | 79 | S079 | 2020 | A branch-and-cut algorithm for mixed-integer bilinear programming | European Journal of Operational Research 282 (2), 506-514, 2020 | 67 | journal | url | txt | 21 | supplement | — |
 | 80 | S080 | 1993 | An efficient algorithm for the min-sum arborescence problem on complete digraphs | ORSA Journal on Computing 5 (4), 426-434, 1993 | 67 | journal | — | no-oa |  | supplement | — |
-| 81 | S081 | 2001 | Solution of real-world train timetabling problems | Proceedings of the 34th annual Hawaii international conference on system…, 2001 | 63 | conference | — | no-oa |  | supplement | — |
+| 81 | S081 | 2001 | Solution of real-world train timetabling problems | Proceedings of the 34th annual Hawaii international conference on system…, 2001 | 63 | conference | manual | txt | 24 | supplement | — |
 | 82 | S082 | 2018 | Array designer: automated optimized array design for functional near-infrared spectroscopy | Neurophotonics 5 (3), 035010-035010, 2018 | 62 | journal | url | txt | 20 | supplement | — |
 | 83 | S083 | 2008 | Projected Chvátal–Gomory cuts for mixed integer linear programs | Mathematical Programming 113 (2), 241-257, 2008 | 62 | journal | url | txt | 16 | supplement | — |
 | 84 | S084 | 2000 | A polyhedral approach to an integer multicommodity flow problem | Discrete Applied Mathematics 101 (1-3), 13-36, 2000 | 62 | journal | — | no-oa |  | supplement | — |
 | 85 | S085 | 2008 | Repairing MIP infeasibility through local branching | Computers & operations research 35 (5), 1436-1445, 2008 | 61 | journal | url | txt | 10 | supplement | — |
 | 86 | S086 | 2016 | Proximity Benders: a decomposition heuristic for stochastic programs | Journal of Heuristics 22 (2), 181-198, 2016 | 60 | journal | url | txt | 13 | supplement | — |
-| 87 | S087 | 2005 | Solving the prize-collecting Steiner tree problem to optimality | ALENEX/ANALCO 2005, 68-76, 2005 | 57 | conference | — | no-oa |  | supplement | — |
+| 87 | S087 | 2005 | Solving the prize-collecting Steiner tree problem to optimality | ALENEX/ANALCO 2005, 68-76, 2005 | 57 | conference | manual | txt | 9 | supplement | — |
 | 88 | S088 | 2019 | Introduction to mathematical optimization | M. Fischetti, 2019 | 54 | book | — | no-oa |  | supplement | — |
 | 89 | S089 | 1991 | Facets of two Steiner arborescence polyhedra | Mathematical Programming 51 (1-3), 401-419, 1991 | 54 | journal | — | no-oa |  | supplement | — |
 | 90 | S090 | 2018 | A dynamic reformulation heuristic for Generalized Interdiction Problems | European Journal of Operational Research 267 (1), 40-51, 2018 | 53 | journal | unpaywall | txt | 31 | supplement | — |
 | 91 | S091 | 2004 | Combinatorial Benders’ cuts | International Conference on Integer Programming and Combinatorial…, 2004 | 52 | conference | — | no-oa |  | supplement | — |
 | 92 | S092 | 2018 | Least cost influence propagation in (social) networks | Mathematical Programming 170 (1), 293-325, 2018 | 51 | journal | url | txt | 25 | supplement | — |
-| 93 | S093 | 2003 | Partial cell suppression: a new methodology for statistical disclosure control | Statistics and Computing 13 (1), 13-21, 2003 | 51 | journal | — | no-oa |  | supplement | — |
+| 93 | S093 | 2003 | Partial cell suppression: a new methodology for statistical disclosure control | Statistics and Computing 13 (1), 13-21, 2003 | 51 | journal | manual | txt | 9 | supplement | — |
 | 94 | S094 | 2016 | Improving branch-and-cut performance by random sampling | Mathematical Programming Computation 8 (1), 113-132, 2016 | 50 | journal | url | txt | 21 | supplement | — |
 | 95 | S095 | 2011 | A relax-and-cut framework for Gomory mixed-integer cuts | Mathematical Programming Computation 3 (2), 79-102, 2011 | 50 | journal | url | txt | 26 | supplement | — |
 | 96 | S096 | 2009 | Just MIP it! | MATHEURISTICS: Hybridizing metaheuristics and mathematical programming, 39-70, 2009 | 50 | chapter | url | txt | 28 | supplement | — |
@@ -123,7 +123,7 @@
 | 111 | S111 | 2014 | Self-splitting of workload in parallel computation | International Conference on Integration of Constraint Programming… | 34 | conference | url | txt | 12 | supplement | — |
 | 112 | S112 | 2009 | Minimal infeasible subsystems and Benders cuts | Mathematical Programming to appear, 2009 | 34 | report | url | txt | 17 | supplement | — |
 | 113 | S113 | 1992 | The fixed-outdegree 1-arborescence polytope | Mathematics of Operations Research 17 (4), 1001-1018, 1992 | 34 | journal | — | no-oa |  | supplement | — |
-| 114 | S114 | 1995 | Experiments with a multi-commodity formulation for the symmetric capacitated vehicle routing problem | Proceedings of the 3rd Meeting of the EURO Working Group on Transportation… | 33 | conference | — | no-oa |  | supplement | — |
+| 114 | S114 | 1995 | Experiments with a multi-commodity formulation for the symmetric capacitated vehicle routing problem | Proceedings of the 3rd Meeting of the EURO Working Group on Transportation… | 33 | conference | manual | txt | 5 | supplement | — |
 | 115 | S115 | 2008 | How tight is the corner relaxation? | Discrete Optimization 5 (2), 262-269, 2008 | 30 | journal | url | txt | 11 | supplement | — |
 | 116 | S116 | 1995 | Clique tree inequalities define facets of the asymmetric traveling salesman polytope | Discrete Applied Mathematics 56 (1), 9-18, 1995 | 30 | journal | — | no-oa |  | supplement | — |
 | 117 | S117 | 2015 | MIP‐and‐refine matheuristic for smart grid energy management | International Transactions in Operational Research 22 (1), 49-59, 2015 | 28 | journal | url | txt | 18 | supplement | — |
@@ -135,7 +135,7 @@
 | 123 | S123 | 2016 | Mixed-Integer Linear Programming Heuristics for the PrePack Optimization Problem | Discret. Optim. 22, 195-205 | 23 | journal | url | txt | 20 | supplement | — |
 | 124 | S124 | 2010 | Pruning moves | INFORMS Journal on Computing 22 (1), 108-119, 2010 | 23 | journal | url | txt | 25 | supplement | — |
 | 125 | S125 | 2001 | A branch-and-cut algorithm for the multiple depot vehicle scheduling problem | — | 21 | report | url | txt | 25 | supplement | — |
-| 126 | S126 | 2025 | A fix-propagate-repair heuristic for mixed integer programming | Mathematical Programming Computation 17 (1), 111-139, 2025 | 20 | journal | — | no-oa |  | supplement | — |
+| 126 | S126 | 2025 | A fix-propagate-repair heuristic for mixed integer programming | Mathematical Programming Computation 17 (1), 111-139, 2025 | 20 | journal | manual | txt | 29 | supplement | — |
 | 127 | S128 | 1992 | Three Facet-Lifting Theorems for the Asymmetric Traveling Salesman Polytope. | IPCO, 260-273, 1992 | 17 | conference | — | no-oa |  | supplement | — |
 | 128 | S129 | 2006 | Robust optimization through branch-and-price | Proceedings of the 37th annual conference of the Italian operations research… | 16 | conference | — | no-oa |  | supplement | — |
 | 129 | S130 | 2022 | An integrated local-search/set-partitioning refinement heuristic for the capacitated vehicle routing problem | Mathematical Programming Computation 14 (4), 749-779, 2022 | 14 | journal | url | txt | 27 | supplement | — |
@@ -143,9 +143,9 @@
 | 131 | S132 | 2007 | Integer Programming and Combinatorial Optimization: 12th International IPCO Conference, Ithaca, NY, USA, June 25-27, 2007, Proceedings | Springer, 2007 | 12 | book | — | no-oa |  | supplement | — |
 | 132 | S133 | 2018 | Faster SGD training by minibatch persistency | arXiv preprint arXiv:1806.07353, 2018 | 11 | preprint | arXiv | txt | 7 | supplement | — |
 | 133 | S134 | 2010 | On the knapsack closure of 0-1 Integer Linear Programs | Electronic Notes in Discrete Mathematics 36, 799-804, 2010 | 10 | journal | url | txt | 6 | supplement | — |
-| 134 | S135 | 2003 | Optimisation of the interconnecting network of a UMTS radio mobile telephone system | European Journal of Operational Research 144 (1), 56-67, 2003 | 10 | journal | — | no-oa |  | supplement | — |
+| 134 | S135 | 2003 | Optimisation of the interconnecting network of a UMTS radio mobile telephone system | European Journal of Operational Research 144 (1), 56-67, 2003 | 10 | journal | manual | txt | 12 | supplement | — |
 | 135 | S137 | 2018 | Chasing first queens by integer programming | International Conference on the Integration of Constraint Programming… | 8 | conference | url | txt | 14 | supplement | — |
-| 136 | S139 | 1999 | On the Separation of Maximally Violated mod-k Cuts | International Conference on Integer Programming and Combinatorial… | 8 | conference | — | no-oa |  | supplement | — |
+| 136 | S139 | 1999 | On the Separation of Maximally Violated mod-k Cuts | International Conference on Integer Programming and Combinatorial… | 8 | conference | manual | txt | 12 | supplement | — |
 | 137 | S140 | 2006 | New facets of the STS polytope generated from known facets of the ATS polytope | Discrete Optimization 3 (1), 3-19, 2006 | 6 | journal | url | txt | 32 | supplement | — |
 | 138 | S141 | 1990 | A new linear storage, polynomial-time approximation scheme for the subset-sum problem | Discrete applied mathematics 26 (1), 61-77, 1990 | 5 | journal | — | no-oa |  | supplement | — |
 | 139 | S142 | 2007 | Mipping closures: An instant survey | Graphs and Combinatorics 23 (Suppl 1), 233-243, 2007 | 4 | journal | url | txt | 12 | supplement | — |
@@ -162,18 +162,18 @@
 | 150 | S161 | 2026 | Just sort it! A note on the LP behind rank-one anti-loop edits | arXiv preprint arXiv:2611.21432, 2026 | — | preprint | arXiv | txt | 4 | supplement | — |
 | 151 | S162 | 2026 | A Dantzig-Wolfe reformulation of the EndoWake model for optimal wind farm layouts | arXiv preprint arXiv:2610.39503, 2026 | — | preprint | arXiv | txt | 25 | supplement | — |
 | 152 | S163 | 2026 | Minibatch persistency, eight years later: what batch reuse costs in steps and joules, and what it saves in data | arXiv preprint arXiv:2609.13922, 2026 | — | preprint | arXiv | txt | 36 | supplement | — |
-| 153 | S164 | 2026 | Feasibility Pump with Objective Cutoff: A Computational Study | — | — | preprint | — | no-oa |  | supplement | — |
+| 153 | S164 | 2026 | Feasibility Pump with Objective Cutoff: A Computational Study | — | — | preprint | manual | txt | 25 | supplement | — |
 | 154 | S165 | 2026 | A digital twin of Fermat in 1637: reconstructing the marvellous proof and locating where it fails | — | — | preprint | — | no-oa |  | supplement | — |
 | 155 | S166 | 2025 | An improved compact formulation for the assortment optimization problem with small consideration sets | Journal of the Operational Research Society 76 (10), 2060-2070, 2025 | — | journal | — | no-oa |  | supplement | — |
-| 156 | S168 | 2022 | A Vehicle Routing heuristic based on accelerated LKH-3 coupled with Set Partitioning | 12th DIMACS Implementation Challenge: Vehicle Routing Problems, 2022 | — | conference | — | no-oa |  | supplement | — |
+| 156 | S168 | 2022 | A Vehicle Routing heuristic based on accelerated LKH-3 coupled with Set Partitioning | 12th DIMACS Implementation Challenge: Vehicle Routing Problems, 2022 | — | conference | manual | txt | 7 | supplement | — |
 | 157 | S170 | 2013 | Proximity Search | 10th Metaheuristics International Conference, 42-42, 2013 | — | conference | — | no-oa |  | supplement | — |
-| 158 | S171 | 2013 | Alberto Caprara (1968-2012): Scientific Contributions | OPTIMA, 1-11, 2013 | — | other | — | no-oa |  | supplement | — |
-| 159 | S172 | 2012 | A Benders Decomposition Approach to the Time Window Assignment Traveling Salesperson Problem with Stochastic Travel Times | Book of Abstracts 60 (4), 228, 2012 | — | conference | — | no-oa |  | supplement | — |
+| 158 | S171 | 2013 | Alberto Caprara (1968-2012): Scientific Contributions | OPTIMA, 1-11, 2013 | — | other | manual | txt | 16 | supplement | — |
+| 159 | S172 | 2025 | A Benders Decomposition Approach to the Time Window Assignment Traveling Salesperson Problem with Stochastic Travel Times | ODS 2025, International Conference on Optimization and Decision Science (AIRO), Milan, e-book of abstracts | — | conference | manual | txt | 1 | supplement | — |
 | 160 | S173 | 2010 | Towards a MIP-Cut metascheme | International Conference on Integration of Artificial Intelligence (AI) and… | — | conference | — | no-oa |  | supplement | — |
 | 161 | S174 | 2009 | Yoyo search: a bisection cutting-plane method | — | — | report | url | txt | 13 | supplement | — |
-| 162 | S176 | 2008 | 8th Workshop on Algorithmic Approaches for Transportation Modeling, Optimization, and Systems (ATMOS'08) | Schloss Dagstuhl-Leibniz-Zentrum für Informatik GmbH, 2008 | — | book | — | no-oa |  | supplement | — |
-| 163 | S178 | 2008 | ATMOS 2008 Preface--8th Workshop on Algorithmic Approaches for Transportation Modeling, Optimization, and Systems | 8th Workshop on Algorithmic Approaches for Transportation Modeling… | — | other | — | no-oa |  | supplement | — |
-| 164 | S180 | 2001 | Combining complete and partial cell suppression methodologies in statistical disclosure control | Statistical Journal of the United Nations Economic Commission for Europe 18… | — | journal | — | no-oa |  | supplement | — |
+| 162 | S176 | 2008 | 8th Workshop on Algorithmic Approaches for Transportation Modeling, Optimization, and Systems (ATMOS'08) | Schloss Dagstuhl-Leibniz-Zentrum für Informatik GmbH, 2008 | — | book | manual | txt | 203 | supplement | — |
+| 163 | S178 | 2008 | ATMOS 2008 Preface--8th Workshop on Algorithmic Approaches for Transportation Modeling, Optimization, and Systems | 8th Workshop on Algorithmic Approaches for Transportation Modeling… | — | other | manual | txt | 5 | supplement | — |
+| 164 | S180 | 2001 | Combining complete and partial cell suppression methodologies in statistical disclosure control | Statistical Journal of the United Nations Economic Commission for Europe 18… | — | journal | manual | txt | 7 | supplement | — |
 | 165 | S184 | 1994 | Odd cut-sets, odd cycles, and 0-1/2 Chvatal-Gomory cuts | Univ. of Michigan, Ann Arbor, MI (United States), 1994 | — | conference | — | no-oa |  | supplement | — |
 | 166 | S185 | 1987 | Modelli e algoritmi per problemi di routing e di scheduling dottorato di ricerca in ingegneria dei sistemi | Alma Mater Studiorum-Università di Bologna, 1987 | — | thesis | — | no-oa |  | supplement | — |
 | 167 | S186 | 2026 | Replication package for" EndoWake: Modeling Wind by Linear Programming for Wind Farm Layout Optimization" | Zenodo, 0 | — | other | — | no-oa |  | supplement | — |
@@ -189,15 +189,15 @@
 | 177 | S198 | — | Exact and Heuristic Methods for Nesting Problems | — | — | other | — | no-oa |  | supplement | — |
 | 178 | D001 | 1993 | On the monotonization of polyhedra | IPCO, 23-38 | — | conference | — | no-oa |  | supplement | — |
 | 179 | D002 | 2005 | Mixed-Integer Cuts from Cyclic Groups | IPCO, 1-11 | — | conference | — | no-oa |  | supplement | — |
-| 180 | D003 | 2005 | Optimizing over the First Chvàtal Closure | IPCO, 12-22 | — | conference | — | no-oa |  | supplement | — |
-| 181 | D004 | 2007 | Fast Approaches to Robust Railway Timetabling | ATMOS | — | conference | — | no-oa |  | supplement | — |
-| 182 | D005 | 2008 | ATMOS 2008 Abstracts Collection - 8th Workshop on Algorithmic Approaches for Transportation Modeling, Optimization, and Systems | ATMOS | — | other | — | no-oa |  | supplement | — |
+| 180 | D003 | 2005 | Optimizing over the First Chvàtal Closure | IPCO, 12-22 | — | conference | manual | txt | 11 | supplement | — |
+| 181 | D004 | 2007 | Fast Approaches to Robust Railway Timetabling | ATMOS | — | conference | manual | txt | 16 | supplement | — |
+| 182 | D005 | 2008 | ATMOS 2008 Abstracts Collection - 8th Workshop on Algorithmic Approaches for Transportation Modeling, Optimization, and Systems | ATMOS | — | other | manual | txt | 7 | supplement | — |
 | 183 | D006 | 2008 | Can Pure Cutting Plane Algorithms Work? | IPCO, 416-434 | — | conference | — | no-oa |  | supplement | — |
-| 184 | D007 | 2009 | Robustness in Train Timetabling | CTW, 171-174 | — | conference | — | no-oa |  | supplement | — |
+| 184 | D007 | 2009 | Robustness in Train Timetabling | CTW, 171-174 | — | conference | manual | txt | 4 | supplement | — |
 | 185 | D008 | 2010 | A Relax-and-Cut Framework for Gomory's Mixed-Integer Cuts | CPAIOR, 123-135 | — | conference | — | no-oa |  | supplement | — |
 | 186 | D009 | 2010 | On the enumerative nature of Gomory's dual cutting plane method | Math. Program. 125(2), 325-351 | — | journal | url | txt | 25 | supplement | — |
 | 187 | D010 | 2011 | Backdoor Branching | IPCO, 183-191 | — | conference | — | no-oa |  | supplement | — |
-| 188 | D011 | 2012 | A hard integer program made easy by lexicography | Math. Program. 135(1-2), 509-514 | — | journal | — | no-oa |  | supplement | — |
+| 188 | D011 | 2012 | A hard integer program made easy by lexicography | Math. Program. 135(1-2), 509-514 | — | journal | manual | txt | 5 | supplement | — |
 | 189 | D012 | 2012 | Branching on nonchimerical fractionalities | Oper. Res. Lett. 40(3), 159-164 | — | journal | url | txt | 13 | supplement | — |
 | 190 | D013 | 2012 | Orbital Shrinking | ISCO, 48-58 | — | conference | url | txt | 11 | supplement | — |
 | 191 | D014 | 2013 | Approximating the Split Closure | INFORMS J. Comput. 25(4), 808-819 | — | journal | url | txt | 26 | supplement | — |
@@ -212,4 +212,4 @@
 | 200 | H004 | 1999 | I Turni delle Locomotive | in S. Pallottino, A. Sciomachen (eds.), Scienze delle Decisioni per i Trasporti, Collana Trasporti, Franco Angeli, 476-494 | — | chapter | — | no-oa |  | supplement | — |
 | 201 | H005 | — | Lezioni di Ricerca Operativa | — | — | book | — | no-oa |  | supplement | — |
 
-201 works · txt 84 · pdf 0 · no-oa 117
+201 works · txt 127 · pdf 0 · no-oa 74
