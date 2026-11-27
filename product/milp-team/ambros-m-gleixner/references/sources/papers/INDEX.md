@@ -10,60 +10,60 @@
 
 | # | ID | Year | Title | Venue | Cites | Kind | Source | Full text | Pages | Role | Read |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| 1 | S001 | 2011 | MIPLIB 2010: mixed integer programming library version 5 | Mathematical Programming Computation 3 (2), 103-163 | 593 | journal | — | no-oa |  | supplement | — |
-| 2 | S002 | 2021 | MIPLIB 2017: data-driven compilation of the 6th mixed-integer programming library | Mathematical Programming Computation 13 (3), 443-490 | 538 | journal | — | no-oa |  | supplement | — |
-| 3 | S003 | 2017 | The SCIP Optimization Suite 5.0 | — | 430 | report | arXiv | txt | 36 | supplement | — |
+| 1 | S001 | 2011 | MIPLIB 2010: mixed integer programming library version 5 | Mathematical Programming Computation 3 (2), 103-163 | 593 | journal | manual | txt | 47 | supplement | — |
+| 2 | S002 | 2021 | MIPLIB 2017: data-driven compilation of the 6th mixed-integer programming library | Mathematical Programming Computation 13 (3), 443-490 | 538 | journal | manual | txt | 48 | supplement | — |
+| 3 | S003 | 2017 | The SCIP Optimization Suite 5.0 | — | 430 | report | url | txt | 43 | supplement | — |
 | 4 | S004 | 2021 | The SCIP optimization suite 8.0 | arXiv preprint arXiv:2112.08872 | 422 | report | arXiv | txt | 114 | supplement | — |
-| 5 | S005 | 2020 | The SCIP optimization suite 7.0 | — | 339 | report | arXiv | txt | 36 | supplement | — |
-| 6 | S006 | 2018 | SCIP: global optimization of mixed-integer nonlinear programs in a branch-and-cut framework | Optimization Methods and Software 33 (3), 563-593 | 326 | journal | — | no-oa |  | supplement | — |
+| 5 | S005 | 2020 | The SCIP optimization suite 7.0 | — | 339 | report | url | txt | 48 | supplement | — |
+| 6 | S006 | 2018 | SCIP: global optimization of mixed-integer nonlinear programs in a branch-and-cut framework | Optimization Methods and Software 33 (3), 563-593 | 326 | journal | manual | txt | 42 | supplement | — |
 | 7 | S007 | 2024 | The SCIP optimization suite 9.0 | arXiv preprint arXiv:2402.17702 | 284 | report | arXiv | txt | 36 | supplement | — |
-| 8 | S008 | 2009 | LP-based disaggregation approaches to solving the open pit mining production scheduling problem with block processing selectivity | Computers & Operations Research 36 (4), 1064-1089 | 258 | journal | — | no-oa |  | supplement | — |
+| 8 | S008 | 2009 | LP-based disaggregation approaches to solving the open pit mining production scheduling problem with block processing selectivity | Computers & Operations Research 36 (4), 1064-1089 | 258 | journal | manual | txt | 26 | supplement | — |
 | 9 | S009 | 2019 | QPLIB: a library of quadratic programming instances | Mathematical Programming Computation 11 (2), 237-265 | 180 | journal | unpaywall | txt | 42 | supplement | — |
-| 10 | S010 | 2016 | The SCIP Optimization Suite 3.2 | ZIB Report, 15-60 | 152 | report | arXiv | txt | 36 | supplement | — |
-| 11 | S011 | 2017 | Three Enhancements for Optimization-Based Bound Tightening | Journal of Global Optimization 67 (4), 731-757 | 147 | journal | — | no-oa |  | supplement | — |
+| 10 | S010 | 2016 | The SCIP Optimization Suite 3.2 | ZIB Report, 15-60 | 152 | report | url | txt | 34 | supplement | — |
+| 11 | S011 | 2017 | Three Enhancements for Optimization-Based Bound Tightening | Journal of Global Optimization 67 (4), 731-757 | 147 | journal | manual | txt | 72 | supplement | — |
 | 12 | S012 | 2021 | Learning to schedule heuristics in branch and bound | Advances in Neural Information Processing Systems 34, 24235-24246 | 129 | conference | arXiv | txt | 18 | supplement | — |
-| 13 | S013 | 2016 | Iterative Refinement for Linear Programming | INFORMS Journal on Computing 28 (3), 449-464 | 127 | journal | — | no-oa |  | supplement | — |
-| 14 | S014 | 2017 | The SCIP Optimization Suite 4.0 | — | 124 | report | arXiv | txt | 36 | supplement | — |
+| 13 | S013 | 2016 | Iterative Refinement for Linear Programming | INFORMS Journal on Computing 28 (3), 449-464 | 127 | journal | manual | txt | 100 | supplement | — |
+| 14 | S014 | 2017 | The SCIP Optimization Suite 4.0 | — | 124 | report | url | txt | 83 | supplement | — |
 | 15 | S015 | 2023 | Enabling research through the SCIP optimization suite 8.0 | ACM Transactions on Mathematical Software 49 (2), 1-21 | 120 | journal | arXiv | txt | 25 | supplement | — |
 | 16 | S016 | 2022 | The machine learning for combinatorial optimization competition (ml4co): Results and insights | NeurIPS 2021 competitions and demonstrations track, 220-231 | 99 | conference | arXiv | txt | 13 | supplement | — |
-| 17 | S017 | 2012 | Towards globally optimal operation of water supply networks | Numerical Algebra, Control and Optimization 2 (4), 695-711 | 85 | journal | — | no-oa |  | supplement | — |
-| 18 | S018 | 2014 | Undercover: a primal MINLP heuristic exploring a largest sub-MIP | Mathematical Programming A 144 (1-2), 315-346 | 74 | journal | — | no-oa |  | supplement | — |
+| 17 | S017 | 2012 | Towards globally optimal operation of water supply networks | Numerical Algebra, Control and Optimization 2 (4), 695-711 | 85 | journal | manual | txt | 20 | supplement | — |
+| 18 | S018 | 2014 | Undercover: a primal MINLP heuristic exploring a largest sub-MIP | Mathematical Programming A 144 (1-2), 315-346 | 74 | journal | manual | txt | 29 | supplement | — |
 | 19 | S019 | 2017 | Verifying integer programming results | International Conference on Integer Programming and Combinatorial… | 72 | conference | arXiv | txt | 13 | supplement | — |
-| 20 | S020 | 2012 | Improving the accuracy of linear programming solvers with iterative refinement | ISSAC 2012. Proceedings of the 37th International Symposium on Symbolic and… | 71 | conference | — | no-oa |  | supplement | — |
+| 20 | S020 | 2012 | Improving the accuracy of linear programming solvers with iterative refinement | ISSAC 2012. Proceedings of the 37th International Symposium on Symbolic and… | 71 | conference | manual | txt | 12 | supplement | — |
 | 21 | S021 | 2025 | The SCIP optimization suite 10.0 | arXiv preprint arXiv:2511.18580 | 70 | report | arXiv | txt | 49 | supplement | — |
-| 22 | S022 | 2023 | A computational status update for exact rational mixed integer programming | Mathematical Programming 197 (2), 793-812 | 61 | journal | arXiv | txt | 17 | supplement | — |
-| 23 | S023 | 2012 | Solving mixed integer linear and nonlinear problems using the SCIP Optimization Suite | — | 49 | report | — | no-oa |  | supplement | — |
+| 22 | S022 | 2023 | A computational status update for exact rational mixed integer programming | Mathematical Programming 197 (2), 793-812 | 61 | journal | — | no-oa |  | supplement | — |
+| 23 | S023 | 2012 | Solving mixed integer linear and nonlinear problems using the SCIP Optimization Suite | — | 49 | report | manual | txt | 25 | supplement | — |
 | 24 | S024 | 2021 | Learn to relax: Integrating 0-1 integer linear programming with pseudo-Boolean conflict-driven search | Constraints 26 (1), 26-55 | 48 | journal | unpaywall | txt | 34 | supplement | — |
-| 25 | S025 | 2008 | Solving large-scale open pit mining production scheduling problems by integer programming | Master's thesis, Technische Universität Berlin | 43 | thesis | — | no-oa |  | supplement | — |
+| 25 | S025 | 2008 | Solving large-scale open pit mining production scheduling problems by integer programming | Master's thesis, Technische Universität Berlin | 43 | thesis | manual | txt | 127 | supplement | — |
 | 26 | S026 | 2023 | PaPILO: A Parallel Presolving Library for Integer and Linear Optimization with Multiprecision Support | INFORMS Journal on Computing 35 (6), 1329-1341 | 42 | journal | arXiv | txt | 23 | supplement | — |
 | 27 | S027 | 2022 | A massively parallel interior-point solver for LPs with generalized arrowhead structure, and applications to energy system models | European Journal of Operational Research 296 (1), 60-71 | 42 | journal | unpaywall | txt | 13 | supplement | — |
-| 28 | S028 | 2012 | Analyzing the computational impact of MIQCP solver components | Numerical Algebra, Control and Optimization 2 (4), 739-748 | 38 | journal | — | no-oa |  | supplement | — |
+| 28 | S028 | 2012 | Analyzing the computational impact of MIQCP solver components | Numerical Algebra, Control and Optimization 2 (4), 739-748 | 38 | journal | manual | txt | 13 | supplement | — |
 | 29 | S029 | 2020 | Linear programming using limited-precision oracles | Mathematical Programming 183 (1), 525-554 | 36 | journal | arXiv | txt | 27 | supplement | — |
-| 30 | S030 | 2012 | Comparing MIQCP solvers to a specialised algorithm for mine production scheduling | Modeling, Simulation and Optimization of Complex Processes: Proceedings of… | 36 | conference | — | no-oa |  | supplement | — |
-| 31 | S031 | 2020 | Two-row and two-column mixed-integer presolve using hashing-based pairing methods | EURO Journal on Computational Optimization 8 (3), 205-240 | 32 | journal | — | no-oa |  | supplement | — |
-| 32 | S032 | 2015 | Exact and fast algorithms for mixed-integer nonlinear programming | Technische Universität Berlin | 30 | thesis | — | no-oa |  | supplement | — |
+| 30 | S030 | 2012 | Comparing MIQCP solvers to a specialised algorithm for mine production scheduling | Modeling, Simulation and Optimization of Complex Processes: Proceedings of… | 36 | conference | manual | txt | 22 | supplement | — |
+| 31 | S031 | 2020 | Two-row and two-column mixed-integer presolve using hashing-based pairing methods | EURO Journal on Computational Optimization 8 (3), 205-240 | 32 | journal | manual | txt | 36 | supplement | — |
+| 32 | S032 | 2015 | Exact and fast algorithms for mixed-integer nonlinear programming | Technische Universität Berlin | 30 | thesis | manual | txt | 353 | supplement | — |
 | 33 | S033 | 2020 | Speeding up energy system models-a best practice guide | — | 29 | report | manual | txt | 175 | supplement | — |
 | 34 | S034 | 2021 | Conflict-driven heuristics for mixed integer programming | INFORMS Journal on Computing 33 (2), 706-720 | 25 | journal | manual | txt | 28 | supplement | — |
-| 35 | S035 | 2010 | Undercover – a primal heuristic for MINLP based on sub-MIPs generated by set covering | European Workshop on Mixed Integer Nonlinear Programming (EWMINLP), 103-112 | 23 | conference | — | no-oa |  | supplement | — |
+| 35 | S035 | 2010 | Undercover – a primal heuristic for MINLP based on sub-MIPs generated by set covering | European Workshop on Mixed Integer Nonlinear Programming (EWMINLP), 103-112 | 23 | conference | manual | txt | 10 | supplement | — |
 | 36 | S036 | 2024 | Safe and verified Gomory mixed-integer cuts in a rational mixed-integer program framework | SIAM Journal on Optimization 34 (1), 742-763 | 20 | journal | manual | txt | 33 | supplement | — |
 | 37 | S037 | 2016 | Towards an accurate solution of wireless network design problems | ISCO 2016: Combinatorial Optimization, 135-147 | 19 | conference | manual | txt | 13 | supplement | — |
 | 38 | S038 | 2024 | Certifying MIP-Based Presolve Reductions for 0-1 Integer Linear Programs | International Conference on the Integration of Constraint Programming… | 18 | conference | manual | txt | 19 | supplement | — |
-| 39 | S039 | 2013 | Learning and Propagating Lagrangian Variable Bounds for Mixed-Integer Nonlinear Programming | Integration of AI and OR Techniques in Constraint Programming for… | 17 | conference | — | no-oa |  | supplement | — |
+| 39 | S039 | 2013 | Learning and Propagating Lagrangian Variable Bounds for Mixed-Integer Nonlinear Programming | Integration of AI and OR Techniques in Constraint Programming for… | 17 | conference | manual | txt | 13 | supplement | — |
 | 40 | S040 | 2023 | Online learning for scheduling MIP heuristics | International Conference on Integration of Constraint Programming… | 16 | conference | arXiv | txt | 10 | supplement | — |
 | 41 | S041 | 2020 | Price-and-verify: a new algorithm for recursive circle packing using Dantzig–Wolfe decomposition | Annals of Operations Research 284 (2), 527-555 | 16 | journal | arXiv | txt | 48 | supplement | — |
 | 42 | S042 | 2022 | A safe computational framework for integer programming applied to chvátal's conjecture | ACM Transactions on Mathematical Software (TOMS) 48 (2), 1-12 | 15 | journal | arXiv | txt | 14 | supplement | — |
 | 43 | S043 | 2020 | Using two-dimensional projections for stronger separation and propagation of bilinear terms | SIAM Journal on Optimization 30 (2), 1339-1365 | 15 | journal | arXiv | txt | 72 | supplement | — |
 | 44 | S044 | 2023 | A computational study of perspective cuts | Mathematical Programming Computation 15 (4), 703-731 | 14 | journal | arXiv | txt | 23 | supplement | — |
-| 45 | S045 | 2019 | Tackling industrial-scale supply chain problems by mixed-integer programming | Journal of Computational Mathematics, 866-888 | 13 | journal | — | no-oa |  | supplement | — |
-| 46 | S046 | 2018 | Optimizing large-scale linear energy system problems with block diagonal structure by using parallel interior-point methods | Operations Research Proceedings 2017: Selected Papers of the Annual… | 13 | conference | — | no-oa |  | supplement | — |
+| 45 | S045 | 2019 | Tackling industrial-scale supply chain problems by mixed-integer programming | Journal of Computational Mathematics, 866-888 | 13 | journal | manual | txt | 22 | supplement | — |
+| 46 | S046 | 2018 | Optimizing large-scale linear energy system problems with block diagonal structure by using parallel interior-point methods | Operations Research Proceedings 2017: Selected Papers of the Annual… | 13 | conference | manual | txt | 8 | supplement | — |
 | 47 | S047 | 2020 | On the relation between the extended supporting hyperplane algorithm and Kelley's cutting plane algorithm | Journal of Global Optimization 78 (1), 161-179 | 12 | journal | arXiv | txt | 18 | supplement | — |
-| 48 | S048 | 2015 | Branching on multi-aggregated variables | International Conference on Integration of Constraint Programming… | 12 | conference | — | no-oa |  | supplement | — |
+| 48 | S048 | 2015 | Branching on multi-aggregated variables | International Conference on Integration of Constraint Programming… | 12 | conference | manual | txt | 15 | supplement | — |
 | 49 | S049 | 2025 | Hybrid genetic search for dynamic vehicle routing with time windows | International Conference on Operations Research, 273-280 | 11 | conference | arXiv | txt | 7 | supplement | — |
 | 50 | S050 | 2025 | Combining precision boosting with LP iterative refinement for exact linear optimization | INFORMS Journal on Computing 37 (4), 933-944 | 10 | journal | arXiv | txt | 15 | supplement | — |
 | 51 | S051 | 2020 | On generalized surrogate duality in mixed-integer nonlinear programming | International Conference on Integer Programming and Combinatorial… | 10 | conference | — | no-oa |  | supplement | — |
-| 52 | S052 | 2016 | Methoden zur Reduktion der Rechenzeit linearer Optimierungsmodelle in der Energiewirtschaft-Eine Performance-Analyse | EnInnov 2016: 14. Symposium Energieinnovation | 10 | conference | — | no-oa |  | supplement | — |
+| 52 | S052 | 2016 | Methoden zur Reduktion der Rechenzeit linearer Optimierungsmodelle in der Energiewirtschaft-Eine Performance-Analyse | EnInnov 2016: 14. Symposium Energieinnovation | 10 | conference | manual | txt | 13 | supplement | — |
 | 53 | S053 | 2018 | Mixed-integer programming for cycle detection in nonreversible Markov processes | Multiscale Modeling & Simulation 16 (1), 248-265 | 9 | journal | arXiv | txt | 23 | supplement | — |
-| 54 | S054 | 2013 | Undercover Branching | Experimental Algorithms, 12th International Symposium, SEA 2013, Rome, Italy… | 9 | conference | — | no-oa |  | supplement | — |
+| 54 | S054 | 2013 | Undercover Branching | Experimental Algorithms, 12th International Symposium, SEA 2013, Rome, Italy… | 9 | conference | manual | txt | 15 | supplement | — |
 | 55 | S055 | 2024 | The MIP Workshop 2023 Computational Competition on reoptimization | Mathematical Programming Computation 16 (2), 255-266 | 8 | journal | arXiv | txt | 9 | supplement | — |
 | 56 | S056 | 2023 | Efficient separation of RLT cuts for implicit and explicit bilinear products | International Conference on Integer Programming and Combinatorial… | 8 | conference | — | no-oa |  | supplement | — |
 | 57 | S057 | 2022 | Accelerating domain propagation: An efficient GPU-parallel algorithm over sparse matrices | Parallel Computing 109, 102874 | 8 | journal | — | no-oa |  | supplement | — |
@@ -73,45 +73,45 @@
 | 61 | S061 | 2025 | Scylla: a matrix-free fix-propagate-and-project heuristic for mixed-integer optimization | International Conference on Operations Research, 65-72 | 7 | conference | arXiv | txt | 7 | supplement | — |
 | 62 | S062 | 2023 | Improving conflict analysis in MIP solvers by pseudo-Boolean reasoning | CP 2023, LIPIcs 280, 27:1-27:19 | 7 | conference | arXiv | txt | 15 | supplement | — |
 | 63 | S063 | 2022 | On generalized surrogate duality in mixed-integer nonlinear programming | Mathematical Programming 192 (1), 89-118 | 7 | journal | arXiv | txt | 72 | supplement | — |
-| 64 | S064 | 2019 | A massively parallel interior-point solver for linear energy system models with block structure | — | 7 | report | — | no-oa |  | supplement | — |
+| 64 | S064 | 2019 | A massively parallel interior-point solver for linear energy system models with block structure | — | 7 | report | manual | txt | 33 | supplement | — |
 | 65 | S065 | 2026 | MIP-DD: Delta debugging for mixed-integer programming solvers | INFORMS Journal on Computing 38 (2), 414-423 | 6 | journal | arXiv | txt | 17 | supplement | — |
-| 66 | S066 | 2012 | Factorization and update of a reduced basis matrix for the revised simplex method | ZIB-Report | 6 | report | — | no-oa |  | supplement | — |
+| 66 | S066 | 2012 | Factorization and update of a reduced basis matrix for the revised simplex method | ZIB-Report | 6 | report | manual | txt | 13 | supplement | — |
 | 67 | S067 | 2020 | Accelerating domain propagation: An efficient gpu-parallel algorithm over sparse matrices | 2020 IEEE/ACM 10th Workshop on Irregular Applications: Architectures and… | 5 | conference | arXiv | txt | 22 | supplement | — |
 | 68 | S068 | 2020 | First experiments with structure-aware presolving for a parallel interior-point method | Operations Research Proceedings 2019: Selected Papers of the Annual… | 5 | conference | arXiv | txt | 8 | supplement | — |
-| 69 | S069 | 2018 | Feature-based algorithm selection for mixed integer programming | Zuse Institute Berlin | 5 | report | — | no-oa |  | supplement | — |
+| 69 | S069 | 2018 | Feature-based algorithm selection for mixed integer programming | Zuse Institute Berlin | 5 | report | manual | txt | 24 | supplement | — |
 | 70 | S070 | 2025 | Efficient separation of RLT cuts for implicit and explicit bilinear terms | Mathematical Programming 210 (1), 47-74 | 4 | journal | arXiv | txt | 28 | supplement | — |
-| 71 | S071 | 2012 | SCIP Optimization Suite を利用した混合整数 (線形/非線形) 計画問題の解法 | 24th RAMP Symposium, 165-192 | 4 | conference | — | no-oa |  | supplement | — |
+| 71 | S071 | 2012 | SCIP Optimization Suite を利用した混合整数 (線形/非線形) 計画問題の解法 | 24th RAMP Symposium, 165-192 | 4 | conference | manual | txt | 24 | supplement | — |
 | 72 | S072 | 2025 | Analyzing the numerical correctness of branch-and-bound decisions for mixed-integer programming | International Conference on the Integration of Constraint Programming… | 3 | conference | arXiv | txt | 17 | supplement | — |
 | 73 | S073 | 2025 | A diving heuristic for mixed-integer problems with unbounded semi-continuous variables | EURO Journal on Computational Optimization 13, 100107 | 3 | journal | arXiv | txt | 19 | supplement | — |
 | 74 | S074 | 2024 | Certified Constraint Propagation and Dual Proof Analysis in a Numerically Exact MIP Solver | arXiv preprint arXiv:2403.13567 | 3 | preprint | arXiv | txt | 16 | supplement | — |
-| 75 | S075 | 2010 | Extending SCIP for solving MIQCPs | European Workshop on Mixed Integer Nonlinear Programming (EWMINLP), 181-196 | 3 | conference | — | no-oa |  | supplement | — |
+| 75 | S075 | 2010 | Extending SCIP for solving MIQCPs | European Workshop on Mixed Integer Nonlinear Programming (EWMINLP), 181-196 | 3 | conference | manual | txt | 16 | supplement | — |
 | 76 | S076 | 2026 | CHAP: A Hybrid GPU-CPU Heuristic for MIP | arXiv preprint arXiv:2605.05086 | 2 | preprint | arXiv | txt | 16 | supplement | — |
 | 77 | S077 | 2022 | An algorithm-independent measure of progress for linear constraint propagation | Constraints 27 (4), 432-455 | 2 | journal | — | no-oa |  | supplement | — |
 | 78 | S078 | 2026 | Distributed Parallel Structure-Aware Presolving for Arrowhead Linear Programs | arXiv preprint arXiv:2603.03498 | 1 | preprint | arXiv | txt | 30 | supplement | — |
 | 79 | S079 | 2025 | Clique Probing for Mixed-Integer Programs | arXiv preprint arXiv:2512.17551 | 1 | preprint | arXiv | txt | 12 | supplement | — |
 | 80 | S080 | 2025 | Cut-based conflict analysis in mixed integer programming | INFORMS Journal on Computing | 1 | journal | arXiv | txt | 25 | supplement | — |
 | 81 | S081 | 2025 | Investigating Round-Up Properties for the Length-Constrained Cycle Partition Problem | International Conference on Operations Research, 193-198 | 1 | conference | — | no-oa |  | supplement | — |
-| 82 | S082 | 2025 | Sorting criteria for line-based periodic timetabling heuristics | International Conference on Operations Research, 348-354 | 1 | conference | — | no-oa |  | supplement | — |
+| 82 | S082 | 2025 | Sorting criteria for line-based periodic timetabling heuristics | International Conference on Operations Research, 348-354 | 1 | conference | manual | txt | 8 | supplement | — |
 | 83 | S083 | 2023 | Strengthening SONC relaxations with constraints derived from variable bounds | arXiv preprint arXiv:2304.12145 | 1 | preprint | arXiv | txt | 23 | supplement | — |
-| 84 | S084 | 2018 | Designing and implementing algorithms for mixedinteger nonlinear optimization | Report from Dagstuhl Seminar 18081 | 1 | report | — | no-oa |  | supplement | — |
+| 84 | S084 | 2018 | Designing and implementing algorithms for mixedinteger nonlinear optimization | Report from Dagstuhl Seminar 18081 | 1 | report | manual | txt | 24 | supplement | — |
 | 85 | S085 | 2026 | A Numerically-safe Branch-Price-and-Cut Algorithm for the Length-Constrained Cycle Partition Problem | arXiv preprint arXiv:2607.15837 | — | preprint | arXiv | txt | 31 | supplement | — |
 | 86 | S087 | 2025 | Branch and price for nonlinear production-maintenance scheduling in complex machinery | arXiv preprint arXiv:2511.07143 | — | preprint | arXiv | txt | 35 | supplement | — |
 | 87 | S088 | 2025 | Based on Joint Work With... | — | — | other | — | no-oa |  | supplement | — |
 | 88 | S091 | 2024 | Branch and Cut for Partitioning a Graph into a Cycle of Clusters | International Symposium on Combinatorial Optimization, 97-108 | — | conference | arXiv | txt | 12 | supplement | — |
 | 89 | S092 | 2024 | Branch and price for the length-constrained cycle partition problem | arXiv preprint arXiv:2401.17937 | — | preprint | arXiv | txt | 12 | supplement | — |
-| 90 | S096 | 2022 | SCIP8: rethinking nonlinear constraint representation and recent progress | 23ème congrès annuel de la Société Française de Recherche Opérationnelle et… | — | conference | — | no-oa |  | supplement | — |
-| 91 | S098 | 2020 | Realisierung von Beschleunigungsstrategien der anwendungsorientierten Mathematik und Informatik für optimierende Energiesystemmodelle | — | — | report | — | no-oa |  | supplement | — |
+| 90 | S096 | 2022 | SCIP8: rethinking nonlinear constraint representation and recent progress | 23ème congrès annuel de la Société Française de Recherche Opérationnelle et… | — | conference | manual | txt | 3 | supplement | — |
+| 91 | S098 | 2020 | Realisierung von Beschleunigungsstrategien der anwendungsorientierten Mathematik und Informatik für optimierende Energiesystemmodelle | — | — | report | manual | txt | 45 | supplement | — |
 | 92 | S099 | 2020 | BEAM-ME: Accelerating Linear Energy Systems Models by a Massively Parallel Interior Point Method | NIC Symposium 2020 50, 345-352 | — | conference | — | no-oa |  | supplement | — |
 | 93 | S101 | 2018 | Mathematical Optimization at the 5th International Conference on Mathematical Software, 11-14 July 2016, Berlin, Germany Preface | OPTIMIZATION METHODS & SOFTWARE 33 (3), 419-419 | — | other | — | no-oa |  | supplement | — |
 | 94 | S107 | 2022 | Safe Verified Gomory Mixed Integer Cuts for Exact Rational MIP | Let's SCIP it! A workshop to celebrate 20 years of Solving Constraint Integer Programs, Zuse Institute Berlin | — | talk | — | no-oa |  | skip | — |
 | 95 | D001 | 2019 | Linear Programming Using Limited-Precision Oracles | IPCO, 399-412 | — | conference | — | no-oa |  | supplement | — |
 | 96 | D002 | 2021 | A Computational Status Update for Exact Rational Mixed Integer Programming | IPCO, 163-177 | — | conference | arXiv | txt | 17 | supplement | — |
 | 97 | D003 | 2021 | An Algorithm-Independent Measure of Progress for Linear Constraint Propagation | CP, 52:1-52:17 | — | conference | arXiv | txt | 15 | supplement | — |
-| 98 | D004 | 2018 | The SCIP Optimization Suite 6.0 | ZIB-Report 18-26 | — | report | — | no-oa |  | supplement | — |
+| 98 | D004 | 2018 | The SCIP Optimization Suite 6.0 | ZIB-Report 18-26 | — | report | url | txt | 42 | supplement | — |
 | 99 | D005 | 2019 | BEAM-ME: Ein interdisziplinärer Beitrag zur Erreichung der Klimaziele | OR-News : das Magazin der GOR 66, 6-8 | — | other | — | no-oa |  | supplement | — |
-| 100 | D006 | 2020 | Learn to Relax: Integrating 0-1 Integer Linear Programming with Pseudo-Boolean Conflict-Driven Search | Integration of AI and OR Techniques in Constraint Programming. CPAIOR 2020, LNCS 12296, xxiv-xxvi | — | conference | — | no-oa |  | supplement | — |
+| 100 | D006 | 2020 | Learn to Relax: Integrating 0-1 Integer Linear Programming with Pseudo-Boolean Conflict-Driven Search | Integration of AI and OR Techniques in Constraint Programming. CPAIOR 2020, LNCS 12296, xxiv-xxvi | — | conference | manual | txt | 3 | supplement | — |
 | 101 | D007 | 2022 | Strengthening SONC Relaxations with Constraints Derived from Variable Bounds | Proceedings of the Hungarian Global Optimization Workshop HUGO 2022, 41-44 | — | conference | arXiv | txt | 4 | supplement | — |
-| 102 | H001 | 2011 | On the computational impact of MIQCP solver components | ZIB-Report 11-01 | — | report | — | no-oa |  | supplement | — |
+| 102 | H001 | 2011 | On the computational impact of MIQCP solver components | ZIB-Report 11-01 | — | report | manual | txt | 9 | supplement | — |
 | 103 | H002 | 2026 | Boolean Algebra–Driven Sepsis Diagnosis | arXiv preprint arXiv:2605.29686 | — | preprint | arXiv | txt | 16 | supplement | — |
 
-103 works · txt 57 · pdf 0 · no-oa 46
+103 works · txt 90 · pdf 0 · no-oa 13
