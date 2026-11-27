@@ -51,8 +51,11 @@ Nocedal、MINLP、语料线闸门）。这些坑每个都至少花过一次重�
 - 调研笔记里的 MATLAB 版本号（R2015b）会被 `check_citations.py` 当作作品 ID：写成行内代码。
 - T3.2 的下载进程按顺序跑，不要并行：arXiv 按来源 IP 限流（每 3 秒一次），四个进程即使各隔 8 秒也会收到 429，被限流的作品
   记成 no-oa。用默认 `--delay 3` 一个一个跑，跑完 `grep 429` 日志，对那几篇再跑 `--only <ID,…> --recheck`（2026-11-26，MILP Team）。
-- T3.2 之后看 `validate_works.py` 有没有 `same arxiv`：`acquire_fulltexts.py` 按标题检索 arXiv 时，会把一份预印本同时挂到会议版
-  和期刊版上、下两份相同的文件。按 T3.1 的归属把多挂的编号删掉、`--drop` 那一行，T3.3 时把这几篇放进 `team-chase.js` 的 `skip_ids`。
+- 一篇全文只挂一个作品。T3.2 之后、每次 `merge_chase.py` 之后都看 `acquire_fulltexts.py` 结尾的 `identical texts`（文本逐字节
+  相同的作品）和 `validate_works.py` 的 `same arxiv`：文件留给它本来是的那一篇（报告就留在报告那一行，预印本留在带 arXiv ID 的
+  那一行），其余 `--drop`、备注写明，chase 加到别的行上的同一链接删掉；T3.2 之后删掉的放进 T3.3 的 `skip_ids`。标题检索已经不再
+  配版本号不同的标题、不再挂别的作品已有的 arXiv ID，但 chase 手挂的链接和以前留下的文件只有这一行能查出来（2026-11-26，MILP
+  Team：T3.2 时 8 份，T3.3 之后又查出 20 份）。
 - 读的是替代版本（报告版、预印本、后一版手册）就写版本引用 `[S025 TR pp. 3–12]`，卡片正文写明。
 - 审计包必须给整张卡片（曾因截到 9,000 字符误判 unsupported）；同样深的卡片取最晚一轮（OCR 重读后的）。
 - 写 skill 的 agent 与审计 / 复核的 agent 必须是两个；每条声明两位审计员、有分歧第三位裁定更稳。
