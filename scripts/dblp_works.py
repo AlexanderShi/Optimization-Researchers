@@ -69,6 +69,20 @@ PERSON_PREDICATES = [
     "dblp:orcid", "dblp:primaryHomepage", "dblp:homepage", "dblp:webpage", "dblp:wikipedia",
 ]
 ARXIV_RE = re.compile(r"arxiv\.org/(?:abs|pdf)/([a-z\-]+(?:\.[A-Z]{2})?/\d{7}|\d{4}\.\d{4,5})(?:v\d+)?", re.I)
+ARXIV_DOI_PREFIX = "10.48550/arxiv."
+
+
+def arxiv_from_doi(doi: str) -> str:
+    """arXiv id from a DataCite arXiv DOI in any letter case (DBLP also spells 10.48550/ARXIV.CS/0310034).
+    An old-style id keeps arXiv's spelling: archive in lower case, subject class in upper case (math.GT/0309136)."""
+    ident = doi[len(ARXIV_DOI_PREFIX):]
+    if "/" in ident:
+        archive, rest = ident.split("/", 1)
+        head, dot, sub = archive.partition(".")
+        ident = f"{head.lower()}{dot}{sub.upper()}/{rest}"
+    return ident
+
+
 
 
 class SparqlError(Exception):
@@ -304,7 +318,7 @@ def fetch_records(pid: str) -> list[dict]:
         if not arxiv and first("publishedInJournal") == "CoRR" and volume and volume.startswith("abs/"):
             arxiv = volume[4:]
         if not arxiv:
-            arxiv = next((d.split("arXiv.", 1)[1] for d in dois if d.lower().startswith("10.48550/arxiv.")), None)
+            arxiv = next((arxiv_from_doi(d) for d in dois if d.lower().startswith(ARXIV_DOI_PREFIX)), None)
         title = first("title") or ""
         year = first("yearOfPublication")
         out.append({

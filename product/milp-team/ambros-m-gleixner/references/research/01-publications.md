@@ -243,7 +243,7 @@ Chosen as: his most cited work as contribution-ordered first author (SW4), the t
 - **Minimum evidence.** [practice, P] Thesis pp. 64–65, §3.2.1 (A First Experiment): warm-start QSopt_ex from the refined basis, which needs only two existing libraries linked together. To avoid a biased comparison, the reference is QSopt_ex warm-started from SoPlex's unrefined basis, not plain QSopt_ex (p. 64). On the 23 instances where refinement changed the final basis, total time fell to 18% on average (factor 5.5; p. 65). Thesis p. 3: precision 10^-50 costs only 3% (easy) and 7% (hard) average slowdown against a standard 10^-9 floating-point solve.
 - **Abandoned paths and limits.** [stated, P] Iterative refinement breaks down when the LP is too ill-conditioned for the floating-point solver (p. 55); 7 of 1,202 LPs failed this way, and QSopt_ex solved 6 of them (p. 89). Two proposed fixes (pp. 88–89): (a) run the rational factorization in a background thread while reconstruction continues (no later record found in this run); (b) integrate precision boosting into the refinement loop. [practice, P] (b) was carried out eight years later by Eifler, Nicolas-Thouvenin and Gleixner (W72, arXiv Nov 2023, IJOC 2025; S18 abstract). [practice] The ISSAC version covered only primal and dual feasible LPs solved by simplex (thesis p. 5).
 - **Reception.** [observed, S] GS 125 (W17) and 70 (W7); Crossref 42 and 24. [stated, P] SoPlex became a standard plug-in of the COBRApy package, and NEOS offered SoPlex with 80-bit precision and exact extensions (thesis p. 6). [practice, P] The theory came afterwards: W33's abstract says it gives a foundation for understanding the methods that work best in practice for exact LP (S7 p. 1). Extension to QP: W32.
-- **Era and resources.** 2011–2015; ZIB cluster of Xeon X5672 at 3.2 GHz with 48 GB, one job per node; GMP rationals; QSopt_ex 2.5.10 as baseline; 1,202 public LPs from Netlib, Mittelmann, Mészáros, COR@L and MIPLIB relaxations, 40 excluded for memory or time with a bias argument (thesis pp. 10, 13–14).
+- **Era and resources.** 2011–2015; ZIB cluster of Xeon `X5672` at 3.2 GHz with 48 GB, one job per node; GMP rationals; QSopt_ex 2.5.10 as baseline; 1,202 public LPs from Netlib, Mittelmann, Mészáros, COR@L and MIPLIB relaxations, 40 excluded for memory or time with a bias argument (thesis pp. 10, 13–14).
 - **Stated research stance.** [stated, P] Thesis p. 10: his experiments aim less at competitive testing than to "analyze the reasons for their behavior by controlled scientific testing" (citing Hooker 1995).
 - **Methods it shows.** CM1, CM2, CM3, CM5.
 
@@ -412,3 +412,45 @@ Secondary:
 - S29 arXiv author search "Gleixner, Ambros", 48 results, arxiv.org/search (fetched 2026-11-08) — secondary
 - S30 Google Scholar profile DUFnBNcAAAAJ (pages 1–2), scholar.google.com/citations?user=DUFnBNcAAAAJ, via WebFetch 2026-11-08 — secondary
 - S31 Crossref REST API (api.crossref.org/works) metadata for 25 DOIs, 2026-11-08 — secondary
+
+---
+
+## Update 2026-11-28 (full-text pass, T3.6): coverage from the Google Scholar list
+
+The publication list is complete at the level of the Google Scholar profile, and every work outside the skip rows now has a paper card. Sources: `../sources/publications/scholar.md` (the profile https://scholar.google.com/citations?user=DUFnBNcAAAAJ, harvested and audited 2026-11-26, cross-checked with DBLP 07/3479, Crossref, arXiv, ZIB OPUS and the homepage; machine-readable in `works.json`), the full-text index `../sources/papers/INDEX.md`, the paper cards indexed in `07-paper-cards.md` and the synthesis `08-deep-reading-synthesis.md`. Citations like [S022 p. 17] point to a card and the page of the file it read, often a report or arXiv version even without a version word (the card key of `09-evidence-ledger.md` names the file); a version word (TR, arXiv, report, draft) marks cards always cited with their version. The sections above stay as the web-research record of 2026-11-08; where the full texts change them, this section says so. The sealed passages named in `holdout.md` are not restated here.
+
+### Coverage
+
+| Item | Count | Note |
+|---|---|---|
+| Google Scholar rows | 107 | one-to-one with the S rows of `works.json` (`scholar.md`, audit 2026-11-26) |
+| `works.json` entries | 116 | 107 Scholar (S), 7 DBLP, OPUS or arXiv only (D), 2 homepage only (H); 13 marked `dup_of` |
+| Distinct works indexed | 103 | INDEX.md roles: core 60, supplement 40, skip 3 |
+| Open full texts | 92 | `txt` in INDEX.md (Source column: 44 arXiv, 40 `manual`, supplied by hand, 5 author or repository URLs, 3 Unpaywall); 11 `no-oa` |
+| **Read in full / in part** | **90 / 2** | INDEX Read column: carded 90, skimmed 2 (S063, S064) |
+| Abstract only | 6 | D001, S051, S056, S057, S077, S081 |
+| Metadata only | 2 | S099, S101 |
+| Skipped | 3 | S059 and S107 (talks), S088 (a junk Scholar row) |
+| Card entries / works with a card | 103 / 101 | D005 and S022 carry an earlier abstract- or metadata-level card and a later full card (08 §1) |
+| Card quotes verified | 197 | 197 exact (`verify_card_quotes.py`, 2026-11-28) |
+
+The 100 works outside the skip rows, by kind and read depth (full / part / abstract / metadata): journal 36 (33 / 1 / 2 / 0); conference 34 (29 / 0 / 4 / 1); report 16 (15 / 1 / 0 / 0); preprint 10 (10 / 0 / 0 / 0); thesis 2 (2 / 0 / 0 / 0); other 2 (1 / 0 / 0 / 1).
+
+Works with a card by period (08 §8): 2008–2012: 13 · 2013–2017: 13 · 2018–2022: 41 · 2023–2026: 33. He is first-listed (alphabetical bylines included) or sole author in 4, 5, 7 and 1 of them. Many cards read a ZIB-Report or arXiv version (among them S001, S013, S017, S020, S011, S029, S058, S067, S078, S082, S085, S015, S026, S060, S007, D002, D003, D005); only the exact-MIP status update was compared across versions [D002; S022] (08 §11).
+
+### Leads of §0–§4 settled by the full texts
+
+| Lead (section) | Resolution | Cards |
+|---|---|---|
+| Reading depth: ISSAC 2012, IJOC 2016 and JOGO 2017 not read as published | Read in their report versions [S020 TR; S013 TR] and in full [S011]; the 3% / 7% slowdowns and the 7 of 1,202 failures are in the journal report [S013 TR pp. 19–20] and the thesis, while ISSAC 2012 has its own smaller study [S020 TR pp. 9–10] (08 §3.2) | S020, S013, S011, S032 |
+| Reading depth and Gaps: MIPLIB 2010 and the SCIP release reports not read | Read: MIPLIB 2010 [S001 TR], the Suite reports 3.2 to 10.0 [S010; S014; S003; D004; S005; S004; S007; S021] and the 8.0 journal paper [S015]; release reports credit him with named features [S010 p. 28; S003 p. 37; D004 p. 39; S004 p. 83; S007 p. 27; S021 p. 39] | Suite series |
+| SW3 (VIPR) | Read in full in the revised ZIB-Report version: 107 instances, 17 runs at the 10 GB cap, 10 GB trimmed to 8 kB [S019 p. 10]; the version read cannot show whether an earlier one excluded an instance (S019 card) | S019 |
+| SW4 (MIPLIB 2017) | Read in full [S002]. Three statements of SKILL.md corrected: instances are licensed CC BY-SA 4.0 by default [S002 p. 6] (CC BY 4.0 is the article's own [S002 p. 44]); the solution checker computes in GMP arithmetic but accepts by tolerances [S002 p. 22], objective values recomputed exactly [S002 p. 42]; the count of five exchanged instances is the changelog's, not the paper's [S002 pp. 43–44] | S002 |
+| SW5 (exact MIP status update) | Both versions read [D002; S022]: the journal's quoted sentence is on printed p. 809 [S022 p. 17]; it opens with four questions, the IPCO version with three [S022 p. 8; D002 p. 8]; certificate overheads differ by version [D002 pp. 13–14; S022 p. 16] | D002, S022 |
+| §1.4 Author position: alphabetical until 2017 | Alphabetical bylines appear before and after 2017 [S020 TR p. 3; S039 p. 3; S019 p. 3; S041 p. 3; S068 p. 3; S060 p. 1; S085 p. 1]; a non-alphabetical first-author byline in 2016/2017 [S011 pp. 1, 3]; release reports put the lead first and the rest alphabetically [S003 pp. 3, 41; S021 p. 1]: byline order is not a reliable signal of his role (08 §3.2) | as listed |
+| Gaps: the ML papers and works from 2022 on not read | Read in full: the ML papers [S012; S016; S040; S069] and the exact, presolve, conflict-analysis, GPU and HTW-era papers of 2022–2026 (07 and 08 §8) | see 07 |
+| §3 Unwritten papers: the background rational factorization and the MIPLIB hindsight study | Still not found: the factorization is proposed again in 2020 [S029 p. 25] and taken up in no later card; the hindsight study is not reported [S002 p. 43] (08 §11) | S029, S002 |
+
+### Signature-work anatomies
+
+SKILL.md now rests its four anatomies of §2 on the full texts where they exist and adds two works read in full: Gleixner and Steffy, *Linear programming using limited-precision oracles*, Math. Program. 183 (2020), DOI 10.1007/s10107-019-01444-6 [S029], and Hoen and Gleixner, *Analyzing the numerical correctness of branch-and-bound decisions for mixed-integer programming*, CPAIOR 2025, DOI 10.1007/978-3-031-95976-9_3 [S072]. Their rows and the earlier web-research versions are in `09-evidence-ledger.md` (`#anatomy-…` sections). In the T3.6 review fixes (2026-11-28) the oracle paper joined the iterative-refinement anatomy as its theory sequel, so SKILL.md has five anatomies. §2 above is kept as the web-research record.

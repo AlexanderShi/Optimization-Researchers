@@ -1,0 +1,247 @@
+[
+  {
+    "id": "S124",
+    "year": "2010",
+    "title": "Pruning moves",
+    "read_level": "full",
+    "contribution": "Makes his 1988 Fischetti-Toth node-dominance test usable inside a commercial MILP solver by storing each successful auxiliary-MILP test as a 'pruning move' (a nogood, or for general integers an improving move from test-set theory) in a pool checked cheaply at every node, with a tie-break proved correct after a counterexample to a 'deterministic' criterion of the 1988 paper; on Cplex 11 it gives geometric-mean time ratios of 16.47 on hard knapsacks and 4.78 on network loading, test-beds chosen for dominance structure.",
+    "problem_entry": "Classical dominance is unused in MILP codes because the relation is 'too vague'; his own 1988 procedure needs no stored nodes but 'tends to be excessively time consuming', and that overhead is the obstacle the paper removes (p. 2).",
+    "key_idea": "Keep the auxiliary MILP XP^alpha over the fixed variables, harvest each success as a move Delta = [J^alpha, x^beta - x^alpha] stored in a pool checked at every node (a search akin to separation), and make the auxiliary problem cheaper and more successful: a fixed random second-level objective, an optimality constraint, a local-branching radius k, and an incumbent local search with equality constraints that seeds the pool (pp. 5, 9-13).",
+    "assumptions": "MILP with Ax <= b, bounds and integer set J; dominance needs equal fixed sets, a partial cost not worse and shared completions; correctness assumes a bounded projection on the integer variables; test-beds chosen for structure that triggers dominance: Pisinger spanner knapsacks (60-90 items) and single-path network loading on random grids (pp. 4-5, 8, 15-18).",
+    "proof_devices": [
+      "Counterexample: a five-variable binary problem and a size-dependent 'deterministic' greedy tie-break that fathom both optima, refuting a criterion proposed in his 1988 paper, pp. 6-8 (Figure 1, p. 7)",
+      "Proposition 1 by an exchange argument on the lexicographically minimal optimum x*: z = x^beta on the fixed set and x* elsewhere would be cheaper or lexicographically smaller, pp. 8-9",
+      "Proof reduced to two properties of the order (well order, inheritance), so a random second-level objective fixed for the whole search may replace the lexicographic order, pp. 9, 11",
+      "Pool hygiene: minimal moves (unchanged components dropped) and an absorption rule (J1 subset of J2 and |delta1_j| <= |delta2_j|), p. 10",
+      "Placement and budget rules: test skipped before the first incumbent, run only in a depth window and at a depth interval, after the node LP and just before branching, node limits N1 and N2 and a call cap M, pool checked at every node, p. 14"
+    ],
+    "experiments": "Cplex 11.0 default, Q6600 2.4 GHz, one run per instance with one fixed seed 'for a fair comparison', seven hand-set parameters; 16 hard knapsacks: geometric means >98.78 s against 6.00 s (time ratio 16.47; the text's '23 times' are the arithmetic-mean ratios and its '2-3 orders of magnitude' match the node ratios); 16 network-loading grids: time ratio 4.78, node ratio 7.68, LD success 1.51%; ablation by removal: no pool 'disastrous', no pool and no cap about 5x slower on knapsack and at the 1-hour limit on 11 of 16 network instances, no incumbent search faster on knapsack (0.74) but kept for hard instances; no MIPLIB run (pp. 15-22).",
+    "positioning": "Credits Kohler-Steiglitz, Ibaraki and Papadimitriou-Steiglitz and says why dominance fails in MILP; borrows nogoods from CP (Hooker and Yan, Kim and Hooker, Codato-Fischetti) and improving moves from test sets (Graver, Scarf, Thomas-Weismantel); places the scheme near logic cuts and Margot's isomorphic pruning and beside his own local branching and Chvatal-closure MIP as 'MIPping' (pp. 2-5, 10).",
+    "writing": "The abstract names his 1988 procedure as the starting point and renames a borrowed concept for its new use; counterexample and proof precede the engineering; hedged claims ('can lead to a considerable speedup'); contribution sentence 'In our view, a main contribution of our work is the innovative use of improving moves'; one mismatch on p. 16 (23 times against 2-3 orders of magnitude) (pp. 1, 6-9, 16, 23).",
+    "limits_future": "Pays only on structures that trigger dominance; can postpone incumbents; fathoming very unlikely early in the search; large relative overhead when node LPs are cheap; right-hand-side relaxation left out; seven parameters set by hand and changed per class; no class where it fails is run. Future: adaptive parameter tuning and a tighter CP integration (pp. 12-16, 18, 23).",
+    "method_links": [
+      {"method": "Method 6", "relation": "evidence", "note": "The node-dominance sub-decision is written as an auxiliary MILP and solved 'possibly in a heuristic way' by a general-purpose solver (MIPping the dominance test, step 2); the solver's multiple-solution mode feeds the pool; node limits and a call cap, after which the cheap pool takes over (a mild form of step 5).", "pages": "pp. 5, 13-14"},
+      {"method": "Method 5", "relation": "evidence", "note": "His own 1988 procedure, never taken up by general-purpose codes, reopened (step 1); the obstacle to adoption (overhead) conceded on the second page (step 3); a tie-break criterion of the 1988 paper shown by counterexample to give wrong answers. The text does not mention the master's thesis named in SKILL.md's Method 5 practice line.", "pages": "pp. 2, 6-8"},
+      {"method": "Method 1", "relation": "variant", "note": "Ablation by removal (pool, cap M, incumbent search), but the incumbent search is kept although removing it lowers knapsack time (geometric ratio 0.74), because it pays on the hard instances: step 5 applied per instance, not on average.", "pages": "pp. 18, 20-22"},
+      {"method": "Method 3", "relation": "variant", "note": "Dated (2008): one fixed seed in all runs 'for a fair comparison', so spread is controlled away rather than measured; effect sizes (geometric time ratios 16.47 and 4.78) far exceed the seed effect M3 cites.", "pages": "pp. 16, 19"},
+      {"method": "Method 4", "relation": "variant", "note": "Same solver, seed and code with components switched off for the ablation, but the test-bed is declared structure-friendly instead of being built by a neutral rule, and no class where the method does not pay is run.", "pages": "pp. 15-16, 18"},
+      {"method": "Heuristic 3", "relation": "evidence", "note": "Nogoods borrowed from constraint programming and improving moves from test-set theory.", "pages": "pp. 2-3, 9"},
+      {"method": "Heuristic 2", "relation": "evidence", "note": "The test-set move is kept and its use moved from improving the incumbent to fathoming nodes.", "pages": "p. 23"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Harvest the by-products of expensive oracle calls", "evidence": "A successful auxiliary MILP yields a pruning move stored in a pool and checked cheaply at every node, while the MILP itself runs only at gated nodes; the same move appears in D012 (each strong-branching LP updates all candidates it informs) and S063 (slave runs supply covering rows and pseudocosts for free).", "pages": "pp. 9-10, 14"},
+      {"pattern": "Strip a correctness proof to the properties it uses, then substitute", "evidence": "The proof of Proposition 1 needs only well order and inheritance of the tie-break order, so a fixed random second-level objective replaces the lexicographic order, which cannot be written as a linear objective without huge coefficients.", "pages": "pp. 9-11"}
+    ],
+    "transferable": [
+      "Model a node-level yes/no test as a small MILP over the fixed variables, solve it under a node limit, and store each success as a reusable move or nogood (pp. 5, 9-10, 14).",
+      "Keep stored moves minimal (drop unchanged components) and drop moves absorbed by others, so the pool stays short without losing fathoming power (p. 10).",
+      "Seed the pool early with a short local search around each new incumbent that keeps every constraint at its incumbent activity, so every pair of solutions found yields a move (p. 13).",
+      "Gate an expensive node test by a depth window, a depth interval, a call cap and the existence of a first incumbent, and place it after the node LP, just before branching (p. 14).",
+      "Before claiming a pruning rule correct, build the smallest instance on which a plausible variant of it cuts off every optimum (pp. 6-8).",
+      "Print each component's overhead and success rate (pool time and success, test time and success) next to the node and time ratios (pp. 17, 19).",
+      "List what a correctness proof needs from a tie-break order (well order, inheritance) and use the cheapest order with those properties (pp. 9, 11)."
+    ],
+    "coauthors": "Domenico Salvagnin",
+    "quotes": [
+      {"text": "In a sense, we are using here the approach of “MIPping the dominance test” (i.e., of modeling it as a MILP)", "page": 5},
+      {"text": "These moves are not used to improve the incumbent, as in the classical test set environment, but rather to fathom nodes in the enumeration tree—hence the name “pruning moves”.", "page": 23}
+    ]
+  },
+  {
+    "id": "S074",
+    "year": "2011",
+    "title": "Lexicography and degeneracy: can a pure cutting plane algorithm work?",
+    "read_level": "full",
+    "contribution": "Implements the lexicographic dual simplex of Gomory's finiteness proof (by fixings and reoptimizations of a black-box LP solver), with a rounding direction consistent with it and epsilon-valid floors, and shows on 25 pure ILPs that Gomory's fractional cutting-plane method then keeps cut coefficients and condition numbers small and solves instances such as stein15, stein27 and bm23 by cuts alone (12 of 25 single-cut, 13 multi-cut), explaining the textbook method's failure as a degenerate feedback loop; discretized GMI cuts do not help.",
+    "problem_entry": "Pure Gomory cutting planes are not used because they stall; branching is a 'symptomatic cure' that hides the cause, so the cut loop is studied alone, aiming at a method not knocked out by numerical difficulties even if not competitive with branch-and-bound (pp. 1-2).",
+    "key_idea": "Exploit the massive dual degeneracy of cutting-plane LPs to hand the separator the lexicographically minimal optimal vertex, which keeps the tableau and the next cuts clean; the cut is unchanged, the query point and the rounding direction change; two heuristics mimic it by objective perturbation (pp. 5-9).",
+    "assumptions": "Pure ILP Ax = b, x >= 0 integer, integer data (possibly after scaling), bounded P, the objective as an integer variable x0; finite convergence needs the lexicographic simplex plus a consistent rounding (details deferred to Gomory); validity defined relative to the LP solver's optimality tolerance; 25 instances, mainly MIPLIB 3 and 2003, plus two hard knapsacks and two 2-matching instances (pp. 4, 7-8, 10-11).",
+    "proof_devices": [
+      "Convergence sketch from the lexicographic sign pattern: each j in J+ has a row t < i with a_tj < 0, so every cut forces a lexicographic step, pp. 7-8",
+      "Validity certificate: a GFC has Chvatal rank 1, and the reduced-cost equation s = f_i0 - sum f_ij x_j shows the current basis maximizes its slack function at f_i0 < 1, p. 10",
+      "epsilon-validity (Definition 1) ties cut validity to the LP solver's reduced-cost test; floor(a) = floor(a + epsilon) preserves it, epsilon conservative (1e-8), pp. 10-11",
+      "Lexicographic simplex by fixing nonbasic variables with nonzero reduced cost and reoptimizing the next variable over smaller degenerate subspaces, around a black-box LP solver, pp. 6-7",
+      "Purge rule: slack cuts removed only after a strict objective change unless the method guarantees lexicographic progress, because looping was observed, p. 12",
+      "Diagnostics: maximum coefficient and condition number, LP-vertex trajectories by multidimensional scaling, fractional spectrography, cut depth and optima distance, pp. 12, 14-17",
+      "d-GMI: delta_j replaced by k_j/alpha, a weakening of GMI dominating GFC, slacks kept as multiples of 1/alpha, pp. 22-23"
+    ],
+    "experiments": "Q6600, 1 h and 2 GB per instance, one run per method, exit codes O/T/M/N; single-cut: TB stopped for lack of acceptable cuts in 60% of cases, Lex optimal on 12 of 25 (the text says one Lex stop of type N, the table shows two); multi-cut: Lex optimal on 13 ('26 instances' in the text, 25 in Table 1); TB closes more gap than Lex on 5 single-cut and 3 multi-cut instances, undiscussed; Heur2 out of memory on 18 of 25; in the extracted Table 4 the Heur1 columns repeat TB's multi-cut entries on all 25 rows except kappa and the exit code; an LP-restart control is mentioned but not reported; d-GMI on bm23 at most 9% fewer iterations with exponentially growing coefficients (pp. 11-25).",
+    "positioning": "Builds on Gomory and on Balas-Ceria-Cornuejols-Natraj; separates tableau cuts from separation on the original polyhedron (Fischetti-Lodi, Balas-Saxena) as 'intrinsically different'; takes Margot's invalid-cut finding as motivation; criticizes Cook et al.'s safe GMI cuts for a pure cutting-plane context; distinguishes d-GMI from Letchford-Lodi (pp. 1-2, 5, 9-10, 22).",
+    "writing": "Question title; the introduction told as two surprises with plots before any table; a medical metaphor carries the thesis; hedged explanations ('the method seems to work pretty well in practice'); a plain negative result on d-GMI ('This is quite unsatisfactory'); the idea credited to the youngest coauthor (pp. 1-3, 14, 25).",
+    "limits_future": "Not competitive with branch-and-bound on most problems; no guarantee against numerical trouble; GMI cuts intrinsically harder to handle than GFCs. Future: the lexicographic simplex with other cuts, GMI included. Undiscussed: TB's wins, the heuristics' memory stops, the unreported restart control (pp. 2, 14, 25).",
+    "method_links": [
+      {"method": "Method 2", "relation": "evidence", "note": "The failure blamed on Gomory cuts is traced to the loop, a degenerate feedback loop that grows the determinant; trajectory and determinant plotted on one small instance, stein15 (step 1); the query point moved by lexicographic reoptimization with the cut unchanged (step 3); the not-competitive caveat matches step 6. Already in SKILL.md's Method 2 practice.", "pages": "pp. 2, 5-7, 14-15"},
+      {"method": "Method 3", "relation": "variant", "note": "A cheap intervention predicted to partly reproduce the effect (an LP restart) helps TB partly, and a deliberately wrong rounding sign serves as a contrast arm; but the restart runs are not reported, TB's random row choice gets one run, and no spread is measured.", "pages": "pp. 8, 12, 16"},
+      {"method": "Method 6", "relation": "evidence", "note": "Step 3 (do not duplicate the solver): the lexicographic simplex is mimicked by fixings and reoptimizations of the black-box LP solver, since a clever approach should not interfere too much with it.", "pages": "pp. 6-7"},
+      {"method": "Method 4", "relation": "variant", "note": "All methods share the LP solver, the cut derivation and epsilon, but the purge rule differs by necessity and the losses in Tables 2-3 go undiscussed.", "pages": "pp. 11-13, 18"},
+      {"method": "Heuristic 1", "relation": "evidence", "note": "Dual degeneracy, usually fought, is used to choose the cleanest LP solution; 'the stronger the cut, the better' is questioned, and GMI is found harder to handle than GFC.", "pages": "pp. 2, 5-6, 25"},
+      {"method": "Heuristic 8", "relation": "evidence", "note": "Bound plots on air04 and stein27 open the paper; trajectories on stein15 come before the aggregates are discussed.", "pages": "pp. 3, 14-16"},
+      {"method": "Heuristic 10", "relation": "evidence", "note": "Cut validity certified with a conservative epsilon tied to the LP solver's tolerance, after Margot's finding on invalid cuts.", "pages": "pp. 9-11"},
+      {"method": "Research Taste mark 3", "relation": "variant", "note": "The d-GMI failure is printed, but Lex's losses appear only in the tables.", "pages": "pp. 13, 18, 25"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Take the proof device seriously as an algorithm", "evidence": "The lexicographic dual simplex, which Gomory used to simplify a finiteness proof and did not advocate for practice, is implemented and turns out to be the practical remedy for coefficient and determinant growth.", "pages": "p. 2"},
+      {"pattern": "Mechanism probe arm", "evidence": "If the explanation (correlated optimal bases) holds, an LP restart from scratch should partly reproduce the effect; it does for the textbook method, though not to the level of the lexicographic method (results not reported).", "pages": "p. 16"}
+    ],
+    "transferable": [
+      "Implement a lexicographic reoptimization on top of any LP solver by fixing the nonbasic variables with nonzero reduced cost and reoptimizing the next variable over the remaining optimal face (pp. 6-7).",
+      "When an LP has many optimal vertices, choose on purpose which one to hand to the separator instead of whichever vertex the solver returns (pp. 5-7).",
+      "Tie a cut's validity tolerance to the LP solver's own optimality tolerance, and derive the cut in integer arithmetic (pp. 10-11).",
+      "Report numerical-health indicators (maximum coefficient, condition number, determinant) as results next to the bound, with an exit code per run that says why it stopped (pp. 12-13).",
+      "Visualize a cut loop by projecting the separated LP vertices with multidimensional scaling and by a pseudo-colour plot of variable values over iterations (pp. 14-16).",
+      "Keep a deliberately wrong variant (wrong rounding direction) as a contrast arm to show that a design choice matters (p. 8).",
+      "Test a proposed mechanism with a cheap intervention it predicts should help partly, and report that run (p. 16).",
+      "Allow cut removal only where it cannot cause looping (after a strict objective change), unless the method guarantees monotone progress (p. 12)."
+    ],
+    "coauthors": "Arrigo Zanette (first author), Egon Balas",
+    "quotes": [
+      {"text": "From the cutting plane point of view, however, the cure is even worse than the disease, in that it hides the real source of the problems.", "page": 1},
+      {"text": "As new degenerate vertices are created by the cuts themselves, the textbook method enters a feedback loop that is responsible for the exponential growth of the determinant of the current basis, as reported in Figure 4(d).", "page": 14}
+    ]
+  },
+  {
+    "id": "D012",
+    "year": "2012",
+    "title": "Branching on nonchimerical fractionalities",
+    "read_level": "full",
+    "contribution": "Three cheaper versions of full strong branching for MIP, without pseudocosts: parametrized FSB (bounds with exactness flags, every strong-branching LP updating all candidates it informs, the same tree as FSB), perseverant branching (only variables branched on before stay candidates) and asymmetric branching (no up-branch LPs), giving about 2x over FSB in Cplex 12.2 callbacks on 60 instances, on par with reliability branching.",
+    "problem_entry": "A break-even taken from Achterberg's SCIP study (FSB cuts nodes by 75% at doubled time, so a 2x faster FSB would be the fastest option), with pseudocosts deliberately excluded to force alternatives (p. 2).",
+    "key_idea": "Separate chimerical fractionalities (fixable at a small objective loss) from nonchimerical ones and treat FSB as an expensive detector of the latter; obtain FSB's information with fewer LPs by bound bookkeeping (PFSB), by restricting candidates to earlier branching variables (PPFSB) and by dropping up-branch LPs (APPFSB) (pp. 3-5).",
+    "assumptions": "MIP min{c^T x : Ax <= b, x_j integer}; single-variable branching; monotone score; dual-pivot limits may invalidate the bounds; the asymmetric rule depends on 0-1 structure (covering, packing, big-M) and is not invariant under complementing binaries; test set from Achterberg-Koch-Martin, Karzan et al. (not easy) and MIPLIB 2010 benchmark/hard/tree, root-preprocessed, minus instances standard FSB cannot solve in 10,000 s: 60 instances (pp. 1, 3-6).",
+    "proof_devices": [
+      "Algorithm 1: upper bounds LB0/LB1 with exactness flags, each LP solution updating every candidate whose value it already rounds, stop when the best-scoring candidate is exact on both sides, p. 4",
+      "Monotone-score argument: the same selection as FSB with fewer LPs, pp. 3-4",
+      "Identical-tree invariant used as a correctness check: FSB and PFSB share the lexicographic tie-break, so node counts differ only by very rare numerical issues, p. 7",
+      "Pivot-limit caveat: with 20 dual pivots the bounds may be invalid; viability checked empirically, pp. 4, 7-8"
+    ],
+    "experiments": "Cplex 12.2 callbacks, single thread, i5 2.67 GHz, 10,000 s, 20 dual pivots; preprocessing, heuristics and cuts off, optimal value as cutoff, default node selection kept because numerics change the path 'in an erratic way'; FSB coded without CPXstrongbranch while RB uses it; geometric means (no shift stated): FSB 471.00 s, PFSB 355.68, PPFSB 214.08, APPFSB 199.41, RB 226.19; pivot limits 10/50/unlimited; hybrids with pseudocosts 10% and a further 30% faster, Cplex default 48.00 s; theta tuned on the same 60 instances; performance profiles; one run per instance, no seeds (pp. 6-12).",
+    "positioning": "Surveys most-fractional (no better than random), FSB (Applegate-Bixby-Chvatal-Cook), pseudocosts, reliability branching (Achterberg-Koch-Martin), Patel-Chinneck, Pryor-Chinneck, inference branching, Karzan et al. and his own backdoor branching; credits Mahajan's dissertation for an independent similar technique; claims Cplex uptake on the strength of a private communication from R. Wunderling (pp. 1-3, 9, 13).",
+    "writing": "A coined metaphor (chimerical) carries the paper; the target is set from published numbers; proof-of-concept framing; fairness choices explained at each comparison; scope hedges ('at least, in the considered SCIP environment', 'at least, in our implementation') (pp. 1-3, 6, 9).",
+    "limits_future": "Asymmetric rule 'has to be used with some care'; pivot limits remove the bound guarantee; the commercial solver is much faster; APPFSB unattractive in the hybrid; unstated: theta tuned on the test set, no seeds. Future: integration with pseudocost strategies and into full solvers (pp. 4-5, 8-9, 11).",
+    "method_links": [
+      {"method": "Method 4", "relation": "evidence", "note": "Everything but branching switched off with the optimal value as cutoff; the baseline FSB denied the internal CPXstrongbranch so it runs through the same machinery as the variants (step 1), while RB keeps it, a stated bias towards the rival (step 6); the commercial solver reported where it wins, with the reason (step 6); test set fixed by a baseline run decided in advance (step 3). Dated lapse (2011): the hybrid's theta tuned on the evaluation instances (against step 5).", "pages": "pp. 6, 9-11"},
+      {"method": "Method 3", "relation": "variant", "note": "Dated (2011): the erratic effect of numerics on the search path is named but met only by keeping the default node selection; one run per instance; only PFSB's identical-tree design makes its gain immune to that effect.", "pages": "p. 7"},
+      {"method": "Method 6", "relation": "variant", "note": "Step 4 (measure the potential first) met by a break-even taken from a published study (2x) rather than by running an ideal version.", "pages": "p. 2"},
+      {"method": "Method 2", "relation": "variant", "note": "The oracle (one LP per branch side) is left alone and the strong-branching loop changed so it asks fewer questions; carried from cut loops to a selection loop, without an instrumented stalling instance.", "pages": "pp. 3-4"},
+      {"method": "Heuristic 1", "relation": "evidence", "note": "The field's mixture of strong branching and pseudocosts is refused on purpose, 'so as to be forced to find valid alternatives'.", "pages": "p. 2"},
+      {"method": "Heuristic 2", "relation": "evidence", "note": "Each variant moves one piece of FSB: bound bookkeeping, candidate list, one side's flags.", "pages": "pp. 3-5"},
+      {"method": "Honest Boundary", "relation": "evidence", "note": "Claimed adoption: the Cplex uptake ('a first step ... by the IBM ILOG Cplex's team') rests on a private communication from R. Wunderling.", "pages": "pp. 9, 13"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Harvest the by-products of expensive oracle calls", "evidence": "Every LP solved to score one strong-branching candidate updates the bounds of all candidates whose value it already rounds, so FSB's information is obtained with fewer LPs (also S124 pruning moves, S063 covering rows).", "pages": "pp. 3-4"},
+      {"pattern": "Self-imposed ban on the dominant ingredient", "evidence": "Pseudocosts, the standard partner of strong branching, are excluded from all new methods to escape the 'local optimal' common practice and force alternatives; they return only in the future-work hybrid.", "pages": "pp. 2, 8"},
+      {"pattern": "Identical-decision arm", "evidence": "PFSB uses the same lexicographic tie-break as FSB and so builds the same tree; node counts check correctness and the time difference is a pure per-node saving, insensitive to search variability.", "pages": "p. 7"}
+    ],
+    "transferable": [
+      "Before proposing a cheaper version of an expensive rule, derive the speedup it needs from a published nodes-against-time comparison (p. 2).",
+      "When a selection rule queries an expensive oracle candidate by candidate, keep bounds plus exactness flags for all candidates and let every answer update each candidate it informs (p. 4).",
+      "Implement the cheaper rule so that, with identical tie-breaking, it reproduces the reference rule's decisions, and use equal node counts as a correctness test (p. 7).",
+      "Deny the baseline any internal shortcut the new arms cannot use (here CPXstrongbranch), and say which rival keeps one (p. 6).",
+      "Compare branching rules with heuristics, cuts and further preprocessing off and the optimal value as cutoff, keeping the solver's default node selection (pp. 6-7)."
+    ],
+    "coauthors": "Michele Monaci",
+    "quotes": [
+      {"text": "As a consequence, a speedup of 2x in the FSB implementation would suffice to make it be the fastest option—at least, in the considered SCIP environment.", "page": 2},
+      {"text": "In particular, we deliberately avoided to exploit any pseudocost information in our methods, so as to be forced to find valid alternatives", "page": 2}
+    ]
+  },
+  {
+    "id": "S067",
+    "year": "2012",
+    "title": "Three ideas for the quadratic assignment problem",
+    "read_level": "full",
+    "contribution": "Solves the esc instances of QAPLIB with three ideas: clone shrinking (interchangeable facilities aggregated into types, giving a rectangular QAP), a compact sparse Kaufman-Broeckx/Xia-Yuan-type MILP solved first by black-box Cplex and then by a B&C with orbital branching on the Hamming symmetries, and facility-flow splitting (opt(a1) + opt(a2) <= opt(a)); it proves esc32h and esc128 optimal for the first time (esc128 in seconds) and solves esc32c, esc32d and esc64a in under half an hour on one quad-core PC.",
+    "problem_entry": "A public challenge: apparently very small QAPLIB instances unsolved by the state of the art even with tremendous computing power, seven esc instances open in early 2011; Anstreicher's remark that their structure matters is the pointer, and esc128 sets the scalability requirement (pp. 2, 5).",
+    "key_idea": "Exploit the symmetry of the instance rather than of the formulation: shrink clone facilities into types, keep a compact model that does not hide symmetry, let the solver or a custom orbital branching exploit what remains, and bound the hardest cases by splitting the flow matrix so that both parts gain clones, an idea born from the anomaly that zeroing flows improved the bound after a fixed enumeration (pp. 2-5, 9-13).",
+    "assumptions": "Koopmans-Beckmann QAP with nonnegative a, b, c and a_ff = b_ii = 0; esc instances have zero facilities, a single b-orbit (checked with nauty) and b given by Hamming distances minus 1; almost no clones in QAPLIB b matrices; evenness needs symmetric integer a, b and even c; Theorem 4 assumes c = 0 and criterion (i) integer a; PORTA shows the disjunctive hull has 1693 facets on a 5x5 toy (pp. 1, 4-6, 9, 11, 13).",
+    "proof_devices": [
+      "Theorem 1 (shrunken model valid): cost-preserving maps both ways, the inverse built by scanning nodes and marking used clones, p. 4",
+      "Theorem 3: reduced-cost coefficients made sparse and lifted; validity for x_iu = 1 by the reduced-cost property, for x_iu = 0 via the last incompatible pair in the lifting sequence, p. 8",
+      "Theorem 4 (flow splitting): the cost of any feasible solution splits across a1 and a2, so opt(a1) + opt(a2) <= opt(a), p. 13",
+      "PORTA facet enumeration on a toy disjunctive hull (1693 facets, coefficients up to 84) to justify one constraint per pair, p. 6",
+      "Orbital branching with pointwise stabilizers of the Hamming-distance group; fixing i_fix = n removes bit flips, leaving 7! = 5,040 precomputed bit permutations for esc128; Cplex symmetry features and dual reductions switched off for correctness, pp. 11-12"
+    ],
+    "experiments": "Quad-core Xeon 3.2 GHz, 16 GB, Cplex 12.2 with 8 threads; black box: esc16*, esc32e, esc32g within 131 s, esc32c 9,643.82 s, esc32d 2,973.26 s, esc64a 509.87 s, tai64c 18,250.40 s; rival times quoted from Nyberg and Westerlund 'on a similar PC', not re-run, and their esc32a success printed; B&C about 8x faster with 24x fewer nodes; splitting proves esc32h (438) and esc128 (64, 9.63 s) optimal and bounds esc32a at 128 of 130 and esc32b at 136; one variability probe (200 perturbed priority orders, bound after 50,000 nodes from 4 to 46); single runs; files and logs on request (pp. 9-15).",
+    "positioning": "Generous credit: Kaibel's zero facilities as a special case, de Klerk-Sotirov for SDP symmetry and the same fixing, Margot and Ostrowski et al. for symmetry-aware branching, Balas-Fischetti 1993 for clones, Kaufman-Broeckx, Xia-Yuan and Zhang et al. for the model lineage (one small improvement over Xia-Yuan noted), Patel-Chinneck for the priorities; verifies no overlap with the rival Nyberg-Westerlund draft and reports their later esc32b proof (pp. 2-5, 7, 9, 11, 15).",
+    "writing": "Three numbered steps told as a sequence of attempts ('Our first quick shot', 'Our next step', an 'apparently strange behavior'); surprise voiced and esc128 called 'the big fish'; lessons written as lessons; short proofs with the models (pp. 1-2, 7, 9-10, 12, 16).",
+    "limits_future": "esc32a and esc32b unsolved; splitting needs a cluster-like flow structure and is unbalanced on esc32b; results 'at least for esc instances'; no QAP family beyond esc and tai64c tried. Future: other unsolved QAP classes (pp. 10, 14-16).",
+    "method_links": [
+      {"method": "Method 1", "relation": "evidence", "note": "Model chosen for the instances (O(n^2) because the goal is esc128, step 2), symmetric facilities aggregated into clone types instead of breaking symmetry (step 3), the simple symmetry-preserving form preferred to over-sophisticated ones; a counter-case to the M1 limitation on the root bound: here the root bound 'is not a discriminating factor' among forms. Already in SKILL.md's Method 1 practice.", "pages": "pp. 3-5, 7"},
+      {"method": "Method 6", "relation": "evidence", "note": "'Our first quick shot': the model written to a file and solved by black-box Cplex (step 1), then an ad-hoc B&C on top of the same solver; the black box steered only by priorities and parameters.", "pages": "pp. 9-10"},
+      {"method": "Method 3", "relation": "variant", "note": "Dated (2011): spread measured as a diagnostic (200 perturbed priority orders, bound 4 to 46), not as a control for the reported times, which are single 8-thread runs.", "pages": "pp. 10, 12, 15"},
+      {"method": "Method 4", "relation": "variant", "note": "Dated lapse (2011): the rival's times are taken from its report 'on a similar PC', the kind of lapse SKILL.md lists for the 2017 bilevel paper; the rival's success on esc32a is printed (step 6).", "pages": "p. 10"},
+      {"method": "Heuristic 1", "relation": "evidence", "note": "Symmetry exploited rather than broken ('can one actually take advantage of symmetry?'); a cost reduction used to improve a bound.", "pages": "pp. 3, 12-13"},
+      {"method": "Heuristic 4", "relation": "evidence", "note": "Public-challenge version: QAPLIB's open esc instances.", "pages": "p. 2"},
+      {"method": "Heuristic 7", "relation": "evidence", "note": "A stated lesson closes the modelling discussion: the simpler the formulation, the fewer nasty side effects.", "pages": "p. 7"},
+      {"method": "Heuristic 10", "relation": "evidence", "note": "The solver's own symmetry handling and dual reductions switched off when the custom orbital branching runs, to ensure correctness.", "pages": "p. 11"},
+      {"method": "Research Taste mark 1", "relation": "evidence", "note": "A hard open instance falls on ordinary hardware (esc128 in seconds, the three hard esc instances in under half an hour), but on a single quad-core PC with 8 threads, not on the notebook of the later deck phrase.", "pages": "pp. 2, 9-10, 15"},
+      {"method": "Inner Tension 2", "relation": "evidence", "note": "Model files and logs available on request only.", "pages": "p. 10"},
+      {"method": "Workflow A", "relation": "evidence", "note": "Step 2, an anomaly in the tool: the flow-reduction anomaly on esc128 starts the third idea.", "pages": "pp. 12-13"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Weaken the data to create exploitable structure", "evidence": "Zeroing some flow entries of esc128 created clones and symmetry and gave a better bound after a fixed enumeration than the full instance; Theorem 4 turns this into a valid decomposition bound, on the ground that the structure of an instance matters even more than its size.", "pages": "pp. 12-15"}
+    ],
+    "transferable": [
+      "Pick an open benchmark instance whose difficulty you suspect is structural, and let the largest open instance set the scalability requirement for every modelling choice (pp. 2, 5).",
+      "Detect interchangeable objects in the data (clones) and aggregate them into types with multiplicities before modelling; solutions map back by any assignment of the copies (pp. 3-4).",
+      "Before writing a compact formulation, enumerate the facets of the exact disjunctive hull on a toy instance (PORTA) to see whether a complete description is plausible (p. 6).",
+      "Pass a black-box solver a branching-priority file computed from the model's own coefficients (p. 9).",
+      "Generate local cuts only where cheap and likely to matter (a window on the number of fixings, a minimum number of violated cuts), because adding rows costs more than separating them (pp. 10-11).",
+      "When implementing your own symmetry handling inside a commercial solver, switch off the solver's symmetry features and dual reductions (p. 11).",
+      "Bound a hard instance by splitting its cost data into two nonnegative parts chosen to make both subproblems more symmetric; the two optima add up to a valid bound (pp. 13-15).",
+      "When a result hinges on an ordering heuristic, rerun with many random perturbations of the order and report the range of the bound at a fixed node count (p. 12)."
+    ],
+    "coauthors": "Michele Monaci, Domenico Salvagnin",
+    "quotes": [
+      {"text": "The lesson learned is that, in some cases, the simpler the formulation, the more likely it will not introduce nasty side effects.", "page": 7},
+      {"text": "In other words, we had the evidence that reducing the costs can in fact improve the bound obtained after a fixed amount of enumeration.", "page": 12}
+    ]
+  },
+  {
+    "id": "S063",
+    "year": "2013",
+    "title": "Backdoor branching",
+    "read_level": "full",
+    "contribution": "Defines MIP compactness (the minimum number of branching variables of a certificate tree) as a set covering problem over the fractional supports of LP vertices cheaper than the optimum, and turns it into backdoor branching: sampling restarts of black-box Cplex 12.2 collect low-cost fractional solutions, a pseudocost-weighted set covering picks a small priority set, and a final default-mode run uses it; on 70 'not too easy nor hopeless' instances it solves three more than Cplex under the same settings with about 15% less arithmetic-mean time, nearly equal geometric means.",
+    "problem_entry": "Branching-variable choice entered through the AI notion of a backdoor (Dilkina et al.: tiny variable sets suffice for some MIPLIB 2003 problems): first an exact model of the minimum backdoor, then backdoor information used on the fly (pp. 2-3, 5).",
+    "key_idea": "Treat every LP vertex cheaper than v(P) as an obstacle whose fractionality the branching set must cover; a master-slave multi-restart alternates a set covering master and a black-box slave that only receives priorities, lowering the cost threshold when no compact cover exists, and finishes with one default-mode run (pp. 3-7).",
+    "assumptions": "MIP with integer and continuous variables, bounds in Ax >= b; certificate trees assume pure branch-and-bound and a known v(P); the compactness model restricted to 0-1 MIPs, general integers heuristic; without v(P) the backdoor can be over-estimated in degenerate cases; instances from MIPLIB 2003, COR@L and MIPLIB 2010 (pp. 1-5, 7).",
+    "proof_devices": [
+      "Vertex preservation under 0-1 branching: each branching moved into the objective with a large constant M, so node vertices are vertices of P and obstacles can be collected at the root, p. 4",
+      "Conceptual exact constraint-generation loop (Benders-like): solve SCP(F), compute L(S), add the optimal x~ if cheaper than v(P), repeat (Figure 1), p. 4",
+      "Heuristic master-slave loop with Kmax = 10, R = 10, Gamma = 5 and the threshold reduction (8) (Figure 2), pp. 5-7",
+      "Pseudocost-weighted cover costs gamma_j = M - p_j with never-branched variables treated as continuous, to avoid redundant covers and break ties, pp. 6-7",
+      "Accounting rule: all sampling and final runs summed, the shared root counted once; final-run time reported separately, pp. 8, 10"
+    ],
+    "experiments": "i5 750 2.67 GHz, single thread, 10,000 s, 8 GB; test-bed rule against bias: solved by Cplex default within the limit, not within 1,000 nodes or 100 s, not solved at the root under the experimental settings, solved by at least one code: 70 instances; both codes with optimal cutoff, no heuristics, no cuts, no aggregation; solved 70 (CPX default) / 63 (Cplex) / 66 (Backdoor); arithmetic means 2,172.45 / 2,637.60 / 2,274.25 s; geometric means 1,108.64 / 711.33 / 712.78 s; penalized geometric means 1108 / 985 / 813 s; four Backdoor time-outs where Cplex solves, two of them rows with identical node counts; strong-branching sampling variant did not pay; one run per instance, no seeds; the exact compactness model not run (pp. 7-11).",
+    "positioning": "Bridges AI and MIP (Williams-Gomes-Selman, Dilkina et al., Chvatal's resolution search); restarts in the spirit of Karzan-Nemhauser-Savelsbergh, whose fairness protocol is adopted; Hutter-Hoos-Leyton-Brown for penalized means; the commercial solver as the named baseline (pp. 1-3, 8-9).",
+    "writing": "Modest abstract claim ('some speedup can be achieved'); proof-of-concept repeated; steps announced as 'first order of business' and 'second step'; the risk of the definition named by the authors; a surprise reported and explained; the conclusion puts implementation first (pp. 1, 3, 6, 9, 11).",
+    "limits_future": "Static priorities and no access to branching decisions; full integration would require access to source code; the strong-branching variant does not pay; CPX default solves more; unstated: the gain rests on arithmetic means and three instances, geometric means nearly equal. Future: full integration into state-of-the-art solvers (pp. 8, 10-11).",
+    "method_links": [
+      {"method": "Method 6", "relation": "evidence", "note": "The critical sub-decision (which variables to branch on first) written as a set covering model (step 2); the black-box solver run in its default mode with only a priority list (step 3); the ideal object (minimum backdoor) modelled first but not measured in this text, a variant of step 4.", "pages": "pp. 1, 3-6"},
+      {"method": "Method 4", "relation": "evidence", "note": "'Not too easy nor hopeless' rule stated as a bias control (step 3); restricted settings for both codes (step 1); the default solver's wins printed with the reason (step 6); swap test: the last filter is symmetric, the earlier ones depend only on the baseline. Already in SKILL.md's Method 4 practice.", "pages": "pp. 7-8"},
+      {"method": "Method 3", "relation": "contradiction", "note": "Dated (2011): the gain over Cplex (about 15% arithmetic-mean time, three more instances; geometric means 711.33 vs 712.78) is no larger than the roughly 25% 'speed-up' a redundant cut gave over the same Cplex 12.2 in his EURO 2012 deck (SKILL.md Method 3 practice), from one run per instance with no seed or placebo arm; by step 5 it would not count as a result.", "pages": "pp. 8-10"},
+      {"method": "Heuristic 3", "relation": "evidence", "note": "Backdoors borrowed from AI, resolution search from Chvatal.", "pages": "pp. 2-3"},
+      {"method": "Research Taste mark 3", "relation": "evidence", "note": "Modest claim in the abstract; the default solver's lead and Backdoor's time-outs printed.", "pages": "pp. 1, 8-10"},
+      {"method": "Inner Tension 3", "relation": "evidence", "note": "The black box is used untouched, yet full integration 'would require a complete access to source codes'.", "pages": "pp. 1, 11"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Harvest the by-products of expensive oracle calls", "evidence": "Every fractional solution met during a slave run is stored as a covering row, and pseudocosts are read for free when a slave is interrupted (also S124 pruning moves, D012 strong-branching LPs).", "pages": "pp. 5-6"},
+      {"pattern": "Model the ideal object exactly first, then approximate it on the fly", "evidence": "The minimum backdoor is first modelled exactly as a set covering problem with constraint generation, then approximated by a heuristic multi-restart inside the solution process.", "pages": "pp. 3-5"}
+    ],
+    "transferable": [
+      "Use restarts to collect evidence (fractional solutions that block the bound) and let a small combinatorial model turn it into one decision handed to the unmodified solver (pp. 5-7).",
+      "Build a test-bed by a stated rule: solved by the default baseline within the limit, not within 1,000 nodes or 100 s, not at the root under the experimental settings, solved by at least one arm (pp. 7-8).",
+      "Pass a new branching idea to a commercial solver only as priorities, and switch off for every arm the features that interfere with priorities (variable aggregation) (p. 8).",
+      "Weight a covering or selection model by pseudocosts collected from interrupted runs, and treat never-branched variables as continuous (pp. 6-7).",
+      "Show that 0-1 branching creates no new vertices by moving the branching into the objective with a large constant, so obstacles can be collected at the root polyhedron (p. 4).",
+      "Sum all runs of a restart scheme, count the shared root once, and report the final run separately (pp. 8, 10).",
+      "Report arithmetic and geometric means and, where arms hit time limits differently, a penalized mean (tenfold time for unsolved runs) (p. 9)."
+    ],
+    "coauthors": "Michele Monaci",
+    "quotes": [
+      {"text": "Our testbed was constructed to contain “not too easy nor hopeless” instances, selected according to the following procedure intended to reduce biasing in favor of one of two codes under comparison.", "page": 7},
+      {"text": "To counteract this distorted behavior of geometric means, it was recently proposed in [10] to penalize the unsolved instances by multiplying by 10 their computing time.", "page": 9}
+    ]
+  }
+]

@@ -1,0 +1,82 @@
+[
+  {
+    "id": "S013",
+    "year": "2017",
+    "title": "The SCIP optimization suite 4.0",
+    "read_level": "full",
+    "contribution": "Co-signed 21-author release report of the SCIP Optimization Suite 4.0 whose RWTH section (§6, by Lübbecke, Puchert and Witt) documents GCG 2.1.2 as a bugfix release of a generic branch-price-and-cut solver (doubly-bordered block structure from a file or from detection, Dantzig-Wolfe or Lagrangian decomposition, original and master trees kept node for node) without any computation, while the rest documents SCIP 4.0, SoPlex 3.0 and UG 0.8.3 features under a seed- and permutation-based evaluation protocol with explicit default decisions.",
+    "problem_entry": "Software practice, not a research question: solvers must now build on flexible frameworks and the report presents changes with their computational consequences (pp. 3-4); §6 enters through exploitable model structure, trading a hopefully stronger relaxation against the burden of column generation (p. 59).",
+    "key_idea": "GCG 2.1.2: doubly-bordered block-diagonal structure from .dec/.blk/.ref files or (hyper)graph-partitioning detection; classical Dantzig-Wolfe without linking variables, otherwise linking variables duplicated per block and a Lagrangian decomposition; identical blocks aggregated with bliss; fully generic branch-price-and-cut with the original problem driving SCIP's main loop and the master as a relaxator plugin in a second, synchronized tree (pp. 59-60).",
+    "assumptions": "Input LPs and MILPs with a (permutable) doubly-bordered block-diagonal matrix; classical Dantzig-Wolfe needs zero linking columns, linking variables handled by duplication; staircase forms only by experimental detectors that are off; pricing problems general MIPs unless a dedicated solver is supplied; no correctness argument or instance library in §6 (pp. 59-60). Co-signed sections state their assumptions (bounded feasible set for the KKT reformulation, p. 29; Slater for Lagrangian variable bounds, p. 35) and test on MIPLIB 2010 benchmark, MMM, a 254-instance union, line-planning, supply-chain and MINLPLib2 sets (pp. 10-14, 20, 28, 71-72).",
+    "proof_devices": [
+      "Two branch-and-bound trees, original driving the main loop and master as a relaxator plugin, kept in one-to-one node correspondence with a solution mapping (§6, p. 60)",
+      "Linking-variable duplication with copy-identity constraints in the master (Lagrangian decomposition) for doubly-bordered matrices (§6, p. 60)",
+      "Identical-block aggregation through bliss automorphism detection to remove symmetry (§6, p. 60)",
+      "Experimental detectors shipped off by default (§6, p. 60)",
+      "Co-signed, other authors: aggregation of v-bounds around a cycle into a self-bound giving a valid bound or infeasibility (pp. 8-9)",
+      "Co-signed, other authors: Farkas proof constraint reused for propagation through maximal-activity residuals (pp. 27-28)",
+      "Co-signed, other authors: KKT reformulation of a mixed binary QP as a complementarity-constrained program via z_j = x_j lambda_j (pp. 29-30)",
+      "Co-signed, other authors: Lagrangian variable bound from the KKT conditions of a convex NLP (pp. 35-36)",
+      "Co-signed, other authors: Lemma 4.1, column and row bases regular together, by a determinant identity (pp. 55-56)",
+      "Co-signed, other authors: deterministic clock by Lasso regression with leave-one-instance-out cross-validation, and delayed reads at communication points for deterministic concurrency (pp. 41-42)"
+    ],
+    "experiments": "None for GCG (§6, pp. 59-60). Co-signed: SCIP 4.0 against 3.2.1 on the 87 MIPLIB 2010 benchmark instances plus four permuted copies each, solved only if solved in all, per-instance arithmetic means before shifted geometric means (10 s, 100 nodes), 7200 s, 35 GB, Xeon E5-2670 v2, SoPlex 2.2.1 against 3.0 (7% faster over permutations, 1% slower on the default order with two more solved); 115 MINLPLib2 instances with a column of runs whose bounds contradict the library; component tests with five seeds, leave-one-out settings and affected subsets; failures and slowdowns printed (pp. 9, 14, 25-28, 39, 49, 53, 70-73).",
+    "positioning": "§6 cites Dantzig-Wolfe 1960, Benders 1962, the group's SEA 2010, 2015 detection, heuristics and cut papers and the GCG site (five of eleven references), Ryan-Foster, Vanderbeck and bliss, and names DIP only as a similar framework sharing the file formats; no other decomposition code is compared or criticized. The collective introduction places SCIP among commercial and non-commercial MIP solvers via Mittelmann's benchmarks and Bixby's history (pp. 4-5, 59-60).",
+    "writing": "§6: four short paragraphs, no numbers, no first person; an opening on structure and cost with a hedge, the release status in one clause, the architecture in the present tense, the detection redesign announced. Collective: a Feature description and a Computational results paragraph per feature ending in a default decision with its reason, explicit hedges, an expected loss reported as intended; the roadmap mis-signposts GCG, the final remarks summarise, and a code-contributions paragraph maps sections to initials (pp. 6, 9, 12, 59-60, 70-74).",
+    "limits_future": "No GCG limits beyond experimental detectors kept off and a detection loop under redesign, and no GCG benchmark (pp. 59-60). Co-signed limits are specific: test sets of limited size, components needing more tuning, the decomposition-based dual simplex of no value as a general algorithm, separators off for their slowdowns (pp. 12, 39, 53, 70). Future: the next major GCG release with the redesigned detection (p. 60), bottlenecks of the decomposition-based dual simplex (p. 54), PolySCIP (p. 67), UG bound sharing beyond racing (p. 58).",
+    "method_links": [
+      {
+        "method": "Method 1",
+        "relation": "evidence",
+        "note": "Steps 4-6, co-signed and group: branch-and-price through SCIP's pricer plugin without developing a tree search (collective introduction); known structure supplied as a .dec/.blk/.ref file instead of detection; original and master problem both keep a tree, the main loop runs on the original, branching and separators act on original variables.",
+        "pages": "pp. 5, 60"
+      },
+      {
+        "method": "Method 1",
+        "relation": "variant",
+        "note": "Dating of the increment: in March 2017 the co-signed text still presents GCG as support for non-experts and as a research platform running a fully generic branch-price-and-cut; nothing presents it as a probe or estimate of whether a tailored code will pay, so the skill's 'since 2017 GCG is a first try and an estimate' is not visible in this report.",
+        "pages": "pp. 5, 60"
+      },
+      {
+        "method": "Method 3",
+        "relation": "evidence",
+        "note": "Co-signed collective practice, not §6: a targeted and a general set reported side by side (supply chain against MIPLIB, the general set deciding the components default), one-component baselines, shifts stated in most tables, failures and slowdowns printed, the benchmark claim called a rough indication; §6 itself makes no performance claim (step 6 by omission).",
+        "pages": "pp. 9, 12, 14, 20, 25-28, 31, 39, 49, 53, 57-60, 70"
+      },
+      {
+        "method": "Method 3",
+        "relation": "variant",
+        "note": "The skill's limitation (no seed or permutation protocol) holds for his own record, but he co-signed one: five seeds with all-seeds solved counting and the fastest-to-slowest spread, permuted copies averaged per instance, a default-order bias accepted on purpose. It sits in a section by GG and BM (§2.1.4) and in the unattributed §8; his own section has no computation.",
+        "pages": "pp. 14, 70-71, 74"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "host-framework hooks for decomposition",
+        "evidence": "[inferred] Three co-signed host features carry branch-and-price needs: enforcement of relaxator solutions (TG, GG, BM), reoptimization motivated by the sequence of pricing MIPs in column generation (JW), and the column representation of the basis for added variables (§4.4, unattributed); GCG's master is itself a relaxator plugin. The report does not say that GCG asked for or uses any of them; check the 6.0, 8.0 and 10.0 suite reports before pooling.",
+        "pages": "pp. 14-15, 26, 56, 60, 74"
+      }
+    ],
+    "transferable": [
+      "Doubly-bordered block-diagonal matrix: with no linking columns apply classical Dantzig-Wolfe; otherwise duplicate each linking variable once per block it appears in and enforce equality of the copies in the master, a Lagrangian decomposition (p. 60)",
+      "Run the framework's tree on the original model and represent the master as a relaxation plugin, keeping the two trees in one-to-one node correspondence with a solution mapping, so that branching (original variables, Ryan-Foster, Vanderbeck) and cut separation are stated in original variables (p. 60)",
+      "Remove symmetry between identical pricing blocks by detecting them with a graph-automorphism tool (bliss) and aggregating them into one subproblem (p. 60)",
+      "Accept a decomposition from a file in a format other frameworks read (.dec, .blk, .ref, shared with DIP) besides automatic detection, so that a known structure can be tested directly (p. 60)",
+      "Default rule for a new component: switch it on only when a general benchmark shows a gain or no harm; if it helps only on a structured set (supply chain), ship it off behind a parameter and print the reason next to the result (pp. 9, 12, 49)",
+      "Variability protocol for a solver change: k seeds or k permuted copies per instance, solved only if solved in all, per-instance arithmetic mean before the shifted geometric mean (shifts 10 s and 100 nodes), default order reported separately, and the fastest-to-slowest seed spread reported (pp. 14, 70-71)",
+      "Report a feature on three nested sets: all instances, the affected subset (feature acted at least 100 times) and the highly affected subset (at least 50,000 times), with time-outs counted in each (p. 28)",
+      "In a many-author software report, map every section to its authors' initials in a code-contributions paragraph (p. 74)"
+    ],
+    "coauthors": "Stephen J. Maher, Tobias Fischer, Tristan Gally, Gerald Gamrath, Ambros Gleixner, Robert Lion Gottwald, Gregor Hendel, Thorsten Koch, Matthias Miltenberger, Benjamin Müller, Marc E. Pfetsch, Christian Puchert, Daniel Rehfeldt, Sebastian Schenker, Robert Schwarz, Felipe Serrano, Yuji Shinano, Dieter Weninger, Jonas T. Witt, Jakob Witzig (§6 GCG by Lübbecke, Puchert and Witt, p. 74)",
+    "quotes": [
+      {
+        "text": "supports users in employing Dantzig-Wolfe decomposition, even as a non-expert",
+        "page": 5
+      },
+      {
+        "text": "Technically, the main solving loop works on the original problem",
+        "page": 60
+      }
+    ]
+  }
+]

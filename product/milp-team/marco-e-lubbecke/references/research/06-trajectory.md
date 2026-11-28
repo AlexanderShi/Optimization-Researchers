@@ -467,6 +467,56 @@ Repost noted once, not as his words: on 2026-09-26 he reposted Matteo Fischetti'
   - correcting the group's own impact list (§6.11).
 - **Layer 4, execution**: whether "limitations drive creativity" (P7 p. vi; P4 0:06:24–0:07:17) shows in GCG code style should be checked in 03-process-evidence, not assumed here.
 
+---
+
+## 10. The trajectory as the full texts show it (deep reading, added 2026-11-28)
+
+Source: the paper cards ([07-paper-cards.md](07-paper-cards.md)) and their synthesis, [08-deep-reading-synthesis.md](08-deep-reading-synthesis.md) §8–§9. Card citations such as `[S027 p. 40]` use the `[[page N]]` file pages of the texts the cards read (`../sources/papers/INDEX.md`); a word after the id names the version read (card key in [09-evidence-ledger.md](09-evidence-ledger.md#card-key)). Nothing in §0–§9 is changed; where this section refines a row above, it says so. Coverage on 2026-11-28: 116 distinct works indexed, 94 open full texts, 89 read in full, 3 in part, 7 abstract only, 10 metadata only, 7 skipped. Two independence rules from 08 apply: the book counts as one source, and the Braunschweig switching-engine project (S027, S024, S054, S033, S066, S037) as one project.
+
+### 10.1 Periods in the full texts (from 08 §8)
+
+| Period | Main line in the full texts | Turn and its trigger | Representative cards |
+|---|---|---|---|
+| 1996–2001, TU Braunschweig | polyhedral enumeration (Diplom 1996, first journal paper 1998); group MIP applications; the switching-engine project and the thesis | from enumeration codes on CPLEX's library [S083 pp. 61–65] to column generation for a grant-funded industrial project [S027 p. 6] | S083, S020, S037, S063, S067, S027 |
+| 2001–2008, TU Berlin | the survey and the primer with Desrosiers; exact IP brought into computational geometry and combinatorics (stabbing, rectangle covers, permutation partitions, stacking); rail, steel and cargo applications with certificates | the survey turns the thesis chapter into an agenda [S027 pp. 7, 37; S001 report p. 2]; the primer's vision of off-the-shelf column generation [S002 pre-publication p. 26] | S001, S002, S021, S030, S053, S112, S051, S034, S022, S023, S036, S028, D002 |
+| 2009–2012, TU Darmstadt, RWTH from 2010 | generic Dantzig-Wolfe on SCIP; encyclopedia entries; partial convexification of general MIPs; applied branch-and-price | the generic idea traced to the primer's material, and general MIPs set aside for structured instances [S070 p. 5] | S011, S007, S008, S032, S070, S040, S035, S029, S010 |
+| 2013–2018, RWTH | automatic reformulation and learning when to decompose; theory and enumeration of reformulation strength; LP degeneracy with Gauthier and Desrosiers; cut packing and generic cuts in branch-and-price; energy, robotics and districting collaborations; suite reports | from automating the choice [S015; S009] to explaining it [D006; S052; S058] | S015, S009, S052, S058, S031, S039, S061, S044, S065, S068, S025, S080, S013, S005 |
+| 2019–2023 | hypergraph separation; Benders cuts inside pricing; MIPLIB 2017; SCIP 8; ML-based similarity as fifth author | the tool's detection step made a research problem [S050 preprint p. 1]; a null result published [S074 manuscript p. 23] | S018, S050, S074, S003, S006, S014, S043, S091 |
+| 2024–2026 | GCG 4.0 in SCIP 10; the book; chair preprints on tailored branch-price-and-cut and on Benders design | tailored codes built directly on SCIP [S089 p. 22; S115 p. 22]; Benders on Gurobi [S075 p. 22; S076 p. 28] | S019, S077, S084, S088, S089, S115, S075, S076 |
+
+Distinct works per five-year period (best card per id; read in full or in part in brackets, 08 §1.1): 1996–2000 6 [5]; 2001–2005 14 [14]; 2006–2010 20 [16]; 2011–2015 24 [16]; 2016–2020 24 [22]; 2021–2026 19 [19], eight of them the book's chapters; undated 3 [0]. The topic split by period is in 08 §8.
+
+### 10.2 Turns and constants visible in the full texts (from 08 §8)
+
+- **The combinatorics-with-IP line** (fourteen works from 1996 to 2008, most of them 2003–2008: vertex enumeration, stabbing numbers, rectangle covers, permutation partitions, stacking and sorting, a paint shop problem; 08 §8) is not in §1–§3 as a line of its own; it ends with the move to Darmstadt and Aachen [S030 arXiv pp. 10–12; S053 p. 11; S112 p. 8; S051 p. 10].
+- **The generic decomposition line comes out of the survey work** [S070 p. 5] and is framed for non-experts from 2012 [S070 pp. 1, 7] to 2025 [S005 p. 29; S019 p. 26]; the probe framing (GCG as a cheap estimate of whether a tailored code will pay) is in print from 2021 and 2023 [S006 pp. 76–77; S014 arXiv p. 14], after his CO@Work 2020 lecture (§1, 23 Sep 2020), so the two framings run side by side.
+- **Reformulation strength went theory first and enumeration second**: the 2015 manuscript settles both extremes of the stable-set case and announces experiments [D006 p. 11]; the SEA 2018 study computes what lies in between [S058 pp. 1–2].
+- **The 2026 chair preprints add Benders design** [S075; S076] to tailored branch-price-and-cut [S089; S115]; all four are unreviewed.
+- **Constant**: the compact model as the reference object [S027 p. 40; S084 p. 25]; heuristics inside an exact frame [S027 pp. 125, 133; S060 p. 17]; original variables for branching and cutting [S001 report p. 24; D004 p. 5]; claims framed as proofs of concept [S016 p. 2; S032 manuscript p. 2; S029 p. 6; S035 p. 15]; open questions published at the end [S020 p. 8; D004 p. 8]; code and data released [S020 p. 6; S012 report p. 9; S089 p. 23]; a framework rather than an own tree, with one exception [S032 manuscript p. 7].
+
+### 10.3 Collaboration by period (from 08 §9)
+
+| Period | Works | Main coauthors | His position |
+|---|---|---|---|
+| 1996–2000 | 6 | Bussieck 4, Zimmermann 2 | sole Diplom thesis [S083]; corresponding author of his first journal paper [S020] |
+| 2001–2005 | 14 | Zimmermann 4, Desrosiers 3, Fekete and Meijer | three sole works [S027; S066; S033]; first author with his advisor and with Desrosiers [S024; S054; S001] |
+| 2006–2010 | 20 | Möhring 6, König 4 | TU Berlin applications with Möhring's group; the first GCG paper with Gamrath first [S011] |
+| 2011–2015 | 24 | Desrosiers 5, Gauthier 4, Bergner 3, Witt 3 | the last sole texts [S008; S070; S048]; third author in the degeneracy line |
+| 2016–2020 | 24 | Witt 5, Goderbauer 5 | doctoral researchers first; first and corresponding author of the stable-set theory paper [S052] |
+| 2021–2026 | 19 (book 8) | the book's co-authors; Donkiewicz and Gaul 2 | supervisor in CRediT terms [S075 p. 28; S115 p. 31]; last author [S089]; coordinator of GCG [S019 p. 40] |
+
+Pattern (08 §9): one 25-year line with Desrosiers, from co-referee of the thesis [S027 p. 1] through the survey and the degeneracy line to the book; a sequence of RWTH researchers who each lead one line as first or drafting author, one component per companion paper integrated into one code [S075 pp. 3–4, 28]; alphabetical author lists in several group papers, so position says little; co-signing of large community reports from 2017 on [S013 p. 74; S006 pp. 82–83; S019 pp. 39–40].
+
+### 10.4 Refinements of rows above
+
+- **1996 (Diplom)**: the Diplom work is an enumeration code built on CPLEX's library [S083 pp. 61–65]; the 1998 journal paper continues it [S020].
+- **2001 (PhD)**: chapter 2 of the thesis, under the later survey's title, claims no new results but a new accumulation of sources, organised by the dual view [S027 pp. 38, 51, 84].
+- **Mar 2004 – Dec 2005**: the survey was read as TU Berlin report 2004/08 (revised March 2004) [S001], the primer as a pre-publication copy [S002]; the published texts were not compared.
+- **2007–2011 (applications)**: heuristics delivered with certified gaps run through the stacking, coil-coating and later application papers [S022 pp. 1, 9–12; D002 pp. 21–22; S035 pp. 13–16]; the coil-coating module was in use from December 2009 [S035 p. 17].
+- **2012 (SEA status report)**: read in full: the generic idea is traced to collecting material for the primer [S070 p. 5], and a success criterion is stated in his sole voice, failure included, after the general-MIP proof of concept of IPCO 2011 [S070 pp. 5, 7].
+- **2016**: the cut-packing study concludes that a problem-specific code "still considerably pays" [S073 p. 14].
+- **2026**: four chair preprints read in full (k-vertex cut [S089]; station location [S115]; power grids [S075]; LP-free Benders subproblems [S076]); his CRediT roles there: conceptualization, methodology, supervision and review [S075 p. 28; S115 p. 31].
+
 ## Contradictions (kept, not reconciled)
 
 1. **Machine learning.** Around 2019–21 his GERAD bio names the overlap of ML and integer programming as a topic of special current interest (P2). The 2026 book, co-signed, still calls ML "a strong tendency" (P7 p. 552). But on 2026-02-27 he asks for a discrete-optimization stream *without* machine learning (P9), and no ML-for-MIP paper after 2022 was found (S8, S9).

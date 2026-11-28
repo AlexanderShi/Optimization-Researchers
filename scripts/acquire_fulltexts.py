@@ -4,10 +4,13 @@
 
 读取通用格式的 works.json（Google Scholar 列表 + DBLP/Crossref 补全，见下），为每篇论文依次尝试：
   1. 已知 arXiv ID → arxiv.org/pdf/<id>
-  2. arXiv 网页标题检索（arxiv.org/search，标题相似度 ≥ 0.9 且作者姓出现）；
-     搜不到时在研究者的 arXiv 论文列表里按相似度 ≥ 0.9 再找（预印本标题常和发表版差一两个词）
+  2. arXiv 网页标题检索（arxiv.org/search，标题相似度 ≥ 0.9、标题里的数字一致、且作者姓出现）；
+     搜不到时在研究者的 arXiv 论文列表里按同样的条件再找（预印本标题常和发表版差一两个词）
   3. DOI → Unpaywall 开放获取位置（只用 OA 链接，不绕过付费墙）
   4. works.json 里给出的候选 PDF 链接（作者主页、机构仓库、DBLP ee）
+一篇全文只挂一个作品：works.json 里别的作品已有的 arXiv ID（会议版与期刊版共用一份预印本），标题检索到了也不挂，
+Unpaywall 给的指向它的 arXiv 链接也跳过（urls 里手填的链接照用）；运行结束时列出文本逐字节相同的作品（identical texts），
+留一个、其余 --drop。
 下载后校验：必须是 PDF，且前两页文本包含标题的大部分关键词，否则丢弃并标 mismatch。
 抽取纯文本（扫描版PDF没有文字层、或文字层是字体乱码时，若装了 tesseract 则自动逐页 OCR），维护可提交的 INDEX.md（角色、全文状态、阅读状态；Role/Read 手改会保留）。
 
@@ -45,7 +48,9 @@ works.json 格式:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import html
+import http.client
 import json
 import os
 import re
@@ -60,6 +65,8 @@ from pathlib import Path
 
 UA = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) nuwa-skill/acquire_fulltexts (research skill distillation)"}
 UNPAYWALL_EMAIL = "nuwa-skill@users.noreply.github.com"
+# A reset or dropped connection comes out of getresponse() raw, not wrapped in URLError (Windows: WinError 10054)
+NET_ERRORS = (urllib.error.URLError, TimeoutError, ConnectionError, http.client.HTTPException)
 ARXIV_ID_RE = re.compile(r"arxiv\.org/(?:abs|pdf)/([a-z\-]+(?:\.[A-Z]{2})?/\d{7}|\d{4}\.\d{4,5})(?:v\d+)?", re.I)
 STOP = {"the", "and", "for", "with", "from", "into", "via", "its", "their", "using", "based", "on", "of", "in", "a", "an", "to"}
 
@@ -90,7 +97,7 @@ def http_get(url: str, timeout: int = 60, tries: int = 3) -> bytes:
                 time.sleep(10 * (attempt + 1))
                 continue
             raise
-        except (urllib.error.URLError, TimeoutError):
+        except NET_ERRORS:
             if attempt < tries - 1:
                 time.sleep(5 * (attempt + 1))
                 continue
@@ -107,6 +114,11 @@ def norm_title(t: str) -> str:
 
 def title_ratio(a: str, b: str) -> float:
     return SequenceMatcher(None, norm_title(a), norm_title(b)).ratio()
+
+
+def title_numbers(t: str) -> list[str]:
+    """标题里的数字（版本号、年份、编号）。「The SCIP Optimization Suite 5.0」与「… 9.0」相似度 0.97，却是两篇。"""
+    return re.findall(r"\d+", norm_title(t))
 
 
 def key_words(title: str) -> list[str]:
@@ -138,8 +150,11 @@ def arxiv_results(page: str) -> list[tuple[str, str, str]]:
 
 def best_arxiv_match(title: str, results: list[tuple[str, str, str]], surname: str = "") -> str | None:
     best, best_ratio = None, 0.0
+    nums = title_numbers(title)
     for arx, t, authors in results:
         if surname and norm_title(surname) not in authors:
+            continue
+        if title_numbers(t) != nums:
             continue
         r = title_ratio(title, t)
         if r > best_ratio:
@@ -173,7 +188,7 @@ def arxiv_author_papers(researcher: str, delay: float, limit: int = 1000) -> lis
 def arxiv_abstract(arx: str) -> str:
     try:
         page = http_get(f"https://arxiv.org/abs/{arx}").decode("utf-8", "replace")
-    except (urllib.error.URLError, TimeoutError):
+    except NET_ERRORS:
         return ""
     m = re.search(r'<blockquote class="abstract[^"]*">(.*?)</blockquote>', page, re.S)
     if not m:
@@ -184,7 +199,7 @@ def arxiv_abstract(arx: str) -> str:
 def unpaywall_pdfs(doi: str) -> list[str]:
     try:
         data = json.loads(http_get(f"https://api.unpaywall.org/v2/{urllib.parse.quote(doi)}?email={UNPAYWALL_EMAIL}", tries=2))
-    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError):
+    except NET_ERRORS + (json.JSONDecodeError,):
         return []
     urls = []
     for loc in [data.get("best_oa_location") or {}] + list(data.get("oa_locations") or []):
@@ -198,7 +213,7 @@ def unpaywall_pdfs(doi: str) -> list[str]:
 def crossref_abstract(doi: str) -> str:
     try:
         data = json.loads(http_get(f"https://api.crossref.org/works/{urllib.parse.quote(doi)}", tries=2))
-    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError):
+    except NET_ERRORS + (json.JSONDecodeError,):
         return ""
     a = (data.get("message") or {}).get("abstract") or ""
     return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", a))).strip()
@@ -322,7 +337,7 @@ def try_pdf(url: str, work: dict, pdf: Path, txt: Path) -> tuple[str, int]:
     """下载并校验。返回 (状态, 页数)：txt / mismatch / notpdf / fail。"""
     try:
         data = http_get(url, timeout=90, tries=2)
-    except (urllib.error.URLError, TimeoutError, ValueError):
+    except NET_ERRORS + (ValueError,):
         return "fail", 0
     if not data.startswith(b"%PDF"):
         return "notpdf", 0
@@ -410,6 +425,14 @@ def run(skill_dir: Path, works_path: Path, delay: float, only: set[str], recheck
     surname = researcher.split()[-1]
     works = [w for w in data.get("works") or [] if w.get("title") and not w.get("dup_of")]
     works.sort(key=lambda w: -(w.get("cites") or 0))
+    arxiv_owner = {w["arxiv"]: w["id"] for w in works if w.get("arxiv")}
+
+    def unclaimed(arx: str | None, wid: str, how: str) -> str | None:
+        """一篇全文只挂一个作品：别的作品已有的 arXiv ID 不再挂到这一行。"""
+        if arx and arxiv_owner.get(arx, wid) != wid:
+            print(f"  ⚠️ {wid}: arXiv {arx} ({how}) is already {arxiv_owner[arx]}'s; not attached here (one text per work)")
+            return None
+        return arx
 
     papers = skill_dir / "references" / "sources" / "papers"
     (papers / "txt").mkdir(parents=True, exist_ok=True)
@@ -434,8 +457,8 @@ def run(skill_dir: Path, works_path: Path, delay: float, only: set[str], recheck
                     f.unlink()
                     print(f"  --drop {w['id']}: deleted {f.name}")
             if prev.get("Source") in ("arXiv", "url"):
-                print(f"  ⚠️ --drop {w['id']}: the wrong file came from its {prev['Source']} candidate; remove that arXiv id / url "
-                      f"from works.json before any --recheck, or it will be downloaded again")
+                print(f"  ⚠️ --drop {w['id']}: the wrong file came from its {prev['Source']} candidate; if works.json holds that "
+                      f"arXiv id or url, remove it before any --recheck, or it will be downloaded again")
             source, pages, skip_net = "—", "", True
         elif w["id"] in reocr:
             if pdf.exists():
@@ -458,21 +481,22 @@ def run(skill_dir: Path, works_path: Path, delay: float, only: set[str], recheck
             arx = w.get("arxiv")
             if not arx:
                 try:
-                    arx = arxiv_search(w["title"], surname)
-                except (urllib.error.URLError, TimeoutError) as e:
+                    arx = unclaimed(arxiv_search(w["title"], surname), w["id"], "title search")
+                except NET_ERRORS as e:
                     print(f"  ⚠️ arXiv search failed: {w['title'][:60]} ({e})")
                 time.sleep(delay)
                 if not arx:
                     if author_papers is None:
                         try:
                             author_papers = arxiv_author_papers(researcher, delay)
-                        except (urllib.error.URLError, TimeoutError) as e:
+                        except NET_ERRORS as e:
                             print(f"  ⚠️ arXiv author listing failed: {researcher} ({e})")
                             author_papers = []
                         time.sleep(delay)
-                    arx = best_arxiv_match(w["title"], author_papers)
+                    arx = unclaimed(best_arxiv_match(w["title"], author_papers), w["id"], "author list")
                 if arx:
                     w["arxiv"] = arx
+                    arxiv_owner[arx] = w["id"]
             candidates = []
             if arx:
                 candidates.append(("arXiv", f"https://arxiv.org/pdf/{arx}"))
@@ -480,6 +504,9 @@ def run(skill_dir: Path, works_path: Path, delay: float, only: set[str], recheck
                 candidates += [("unpaywall", u) for u in unpaywall_pdfs(w["doi"])]
             candidates += [("url", u) for u in (w.get("urls") or []) if u.lower().endswith(".pdf")]
             for src, url in candidates:
+                m = ARXIV_ID_RE.search(url)  # urls 里手填的链接（如另一版本 2211.13545v1）照用；结尾的 identical texts 兜底
+                if src == "unpaywall" and m and m.group(1) != arx and not unclaimed(m.group(1), w["id"], "Unpaywall link"):
+                    continue
                 st, np_ = try_pdf(url, w, pdf, txt)
                 time.sleep(delay if src == "arXiv" else 0.5)
                 if st in ("txt", "pdf"):
@@ -513,6 +540,15 @@ def run(skill_dir: Path, works_path: Path, delay: float, only: set[str], recheck
     write_index(index_path, researcher, rows, note)
     abs_path.write_text(json.dumps(abstracts, ensure_ascii=False, indent=1), encoding="utf-8")
     works_path.write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8")  # 回写新找到的 arXiv ID
+    same = {}  # 同一份文件挂在两个作品上（会议版与期刊版、报告版与正式版）：读卡会读两遍、引用会分到两个编号
+    for w in works:
+        t = papers / "txt" / f"{slug(w)}.txt"
+        if t.exists():
+            same.setdefault(hashlib.sha1(t.read_bytes()).hexdigest(), []).append(w["id"])
+    for ids in same.values():
+        if len(ids) > 1:
+            print(f"  ⚠️ identical texts: {', '.join(sorted(ids))} (one text per work: keep it on the work it is, "
+                  f"--drop the others and say why in their note)")
     if kept_without_file:
         print(f"  ⚠️ {kept_without_file} rows keep their committed txt/pdf status without a local file "
               f"(PDFs and txt/ are git-ignored; restore them before re-extracting or verifying quotes)")

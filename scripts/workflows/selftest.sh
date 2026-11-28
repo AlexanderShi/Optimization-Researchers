@@ -9,7 +9,8 @@
 #    team-base-skills also (the steps ported from nuwa v2): sealed questions reach the validate step's two arms and judge
 #    only, and the prompts before it carry the sealed-material rule; the arms and the prior agent get no house rules and
 #    no member hint, the arms no question kinds; the judge gets the right answers under each set and its scores are
-#    checked; seven from/to segments run on their own.
+#    checked; seven from/to segments run on their own. The same rule is in the prompt of every writing agent of
+#    team-synthesize, team-tighten, team-increment and team-integrate (they write the skill and roundtable files).
 #    --forbid is built from the finished team's team.json (team and roundtable slugs, member surnames), so nothing of
 #    that team may leak into the generic workflows.
 # 2. make_args.mjs for every workflow on the finished team, and dry_run.mjs --team <team> (no args file) --strict for
@@ -189,6 +190,18 @@ else bad "team-base-skills: dry_run.mjs --out failed with a judge that scores ou
 for seg in 'prior prior' 'research review' 'holdout synthesis' 'synthesis synthesis' 'test refine' 'refine refine' 'validate validate'; do
   a=$(python3 -c 'import json,sys;d=json.load(open(sys.argv[1]));d["from"],d["to"]=sys.argv[2].split();print(json.dumps(d))' "$B.args.json" "$seg")
   dry "team-base-skills from ${seg% *} to ${seg#* }" base-skills "$a" "$B.answers.json"
+done
+
+# The sealed-material rule (holdout.md) also reaches every agent of the later workflows that write skill or roundtable
+# files: T3.6 synthesize, T3.7 tighten, T4 increment, T3.8 integrate (the increment's planning agent writes none).
+for w in synthesize tighten increment integrate; do
+  if node scripts/workflows/dry_run.mjs "scripts/workflows/team-$w.js" "scripts/workflows/examples/team-$w.args.json" \
+       --answers "scripts/workflows/examples/team-$w.answers.json" --quiet --strict --out "$TMP/sealed-$w" > /dev/null 2>&1; then
+    n=$(ls "$TMP/sealed-$w"/*.md 2>/dev/null | grep -vc -- '-plan_')
+    miss=$(grep -L 'holdout.md' "$TMP/sealed-$w"/*.md 2>/dev/null | grep -v -- '-plan_')
+    if [ -z "$miss" ] && [ "$n" -gt 0 ]; then ok "team-$w: the $n prompts of its writing agents carry the sealed-material rule"
+    else bad "team-$w: prompts without the sealed-material rule (holdout.md): $(for p in $miss; do basename "$p"; done | tr '\n' ' ')"; fi
+  else bad "team-$w: dry_run.mjs --out failed on the example"; fi
 done
 
 [ -n "$TEAM" ] && echo "2. make_args.mjs and dry_run.mjs --team on $TEAM"

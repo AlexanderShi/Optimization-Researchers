@@ -1,0 +1,273 @@
+[
+ {
+  "id": "S078",
+  "year": "2018",
+  "title": "Optimization of the reconfiguration planning of cyber-physical production systems with delta-like architecture",
+  "read_level": "full",
+  "contribution": "Engineering-led application paper: selects p of 6,552 Delta-robot configurations and allocates 5,150 synthetic handling tasks to them at minimum energy, with a CSP pre-reduction of the design space and column generation for the uncapacitated p-median, chosen for memory.",
+  "problem_entry": "A reconfigurable line of p handling systems facing a known, diverse task stream; the earlier p-median model was 'limited due to high memory usage in case of large data sets' (feasible for 200 tasks and 2,250 configurations), so three additions: column generation, a CSP-reduced configuration space, a minimum transmission requirement (pp. 1, 3).",
+  "key_idea": "Reformulate the binary p-median, following Lorena and Senne, as a set partitioning/covering master over configurations; price one configuration at a time, a task entering the column when its reduced cost is negative (no capacity row); branch-and-bound afterwards; keep the compact model when memory suffices (Fig. 3) (pp. 4-5). [My reading] the pricing has the integrality property, so the master LP bound equals the compact LP bound (S084 p. 27): memory, not bound.",
+  "assumptions": "Pure binary uncapacitated p-median with penalty or infinite costs for infeasible pairs (pp. 4-5, 7); 5,150 synthetic tasks from market shares with randomly rotated paths, 6,552 configurations after discretization, 33,742,800 energy costs from inverse dynamics by Kane's equations with length-scaled masses, minimum transmission index cos 50 deg (pp. 5-7); real process figures 'currently unavailable' (p. 5).",
+  "proof_devices": [
+   "CSP pre-reduction: each design dimension minimized and maximized subject to eleven mandatory constraints in AIMMS with CP Optimizer, exact ranges instead of sampling (p. 6)",
+   "pricing by a sign test: a task enters configuration j's column when its reduced cost is negative; the column is added when its value is below the cardinality dual (p. 5)",
+   "switch rule in the pipeline: compact model if memory suffices, column generation otherwise (Fig. 3, p. 4)",
+   "no proof; whether columns are priced inside the tree is not stated, so the optimality claim is unargued (pp. 5, 8)"
+  ],
+  "experiments": "One illustrative instance (p = 6, 6,552 configurations, 5,150 tasks): Table III configurations and energy savings of 4.5%, 12.1% and 17.1% against single-configuration baselines (pp. 7-8); compact model against column generation only in one sentence, memory usage decreased 'at the cost of solving time', with no time, memory, column counts or hardware (p. 8).",
+  "positioning": "Extends the authors' RA-L 2017 p-median paper [6] (S047); column generation from the cutting-stock case, Nemhauser (2012), the Desrosiers-Lübbecke Primer and Lorena and Senne (2004) (pp. 3-4).",
+  "writing": "Engineering register; 'innovatively employed' for the OR techniques (pp. 1, 8) and 'a novel and rigorous approach' for the authors' earlier paper (p. 3); optimality asserted without argument (p. 8).",
+  "limits_future": "An economic evaluation needs set-up times and costs, procurement and operating costs, capacities and occupancy; finer discretization of questionable practical benefit (p. 9); better starting solutions for faster column generation (p. 8); transfer to factory layout planning with fixed configurations (p. 9).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Compact p-median first, column generation only when memory runs out (Fig. 3), which is Method 1's order; but the go reason is memory, which Workflow B's checkpoint does not list, the pricing cannot raise the bound [my reading via S084 p. 27], and the probe's numbers are not reported. Co-authored, engineering-led.",
+    "pages": "pp. 3-5, 8"
+   },
+   {
+    "method": "Method 3",
+    "relation": "contradiction",
+    "note": "'both approaches yield optimal solutions' and 'This proves to be beneficial' rest on one instance with no memory or time figure; the two approaches run in Python and MATLAB; the text praises its own techniques (Taste B3). Voice caveat: first author Brinker, Lübbecke's share not identifiable.",
+    "pages": "pp. 1, 3, 7-8"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "textbook column generation carried into an engineering partner's model, unmeasured",
+    "evidence": "Column generation introduced from the cutting-stock case and the Desrosiers-Lübbecke Primer, motive memory, gain not measured; S094 is the same project, so not independent evidence",
+    "pages": "pp. 3-4, 8"
+   }
+  ],
+  "transferable": [
+   "Before building column generation, check whether the pricing problem has the integrality property (here binaries with no other row, p. 5); if it has, the master bound equals the compact LP bound (S084 p. 27), so the reformulation can only buy memory or speed, and those are what to measure.",
+   "Before enumerating candidate configurations, compute exact ranges of each design parameter by minimizing and maximizing it subject to the mandatory constraints only (a CSP in a CP solver), instead of experience-based cut-offs that can discard valid candidates (p. 6)."
+  ],
+  "coauthors": "Jan Brinker, Dominic Ring, Burkhard Corves (RWTH Aachen, mechanism theory), Yukio Takeda (Tokyo Institute of Technology)",
+  "quotes": [
+   {
+    "text": "excessive memory usage of solving the original model formulation can be decreased at the cost of solving time",
+    "page": 8
+   },
+   {
+    "text": "Note that both approaches yield optimal solutions.",
+    "page": 8
+   }
+  ]
+ },
+ {
+  "id": "S094",
+  "year": "2018",
+  "title": "Optimization of the Reconfiguration Planning of Cyber-Physical Production Systems",
+  "read_level": "full",
+  "contribution": "Two-page extended abstract (Vierte IFToMM D-A-CH Konferenz 2018) announcing the two techniques of S078 for Delta-robot reconfiguration planning: a CSP reduction of the configuration space and column generation for the p-median.",
+  "problem_entry": "Energy as the target is expensive to optimize because 'each potential allocation needs to be evaluated', so larger data sets need 'more elaborate modeling and solution techniques' (p. 2).",
+  "key_idea": "Reduce the configuration space from mandatory requirements only, as a constraint satisfaction problem, without discarding viable candidates; then replace the Python/Gurobi p-median by column generation over configuration subsets (pp. 2-3).",
+  "assumptions": "Binary p-median; extended Delta robots with rotational actuation, claimed to apply to any production line with adaptable systems or workstations; no data (p. 2).",
+  "proof_devices": [
+   "CSP pre-reduction of the design-parameter intervals from mandatory requirements (p. 2)",
+   "column generation on the p-median, cited to the Primer [4] (pp. 2-3)"
+  ],
+  "experiments": "none",
+  "positioning": "Builds on the authors' RA-L 2017 paper [2] (S047); column generation cited to the Desrosiers-Lübbecke Primer [4] (pp. 2-3).",
+  "writing": "A hedged 'may' for the new technique next to 'a novel and rigorous approach' for the group's earlier paper (p. 2).",
+  "limits_future": "No results or limits stated; the expected gain ('may be improved while still solving optimally', p. 2) becomes in the full paper S078 a memory gain at the cost of solving time, still without numbers (S078 p. 8).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Compact model first and column generation for larger data, stated as an expectation before any measurement; the full paper S078 resizes it to memory against time without numbers.",
+    "pages": "p. 2; S078 p. 8"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Hedged 'may' for the new technique, but 'a novel and rigorous approach' for the group's own earlier paper. Voice caveat as in S078 (engineering-led).",
+    "pages": "p. 2"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "textbook column generation carried into an engineering partner's model, unmeasured",
+    "evidence": "Same project as S078, so not independent: column generation cited to the Primer and expected to improve efficiency",
+    "pages": "pp. 2-3"
+   }
+  ],
+  "transferable": [],
+  "coauthors": "Jan Brinker, Dominic Ring, Yukio Takeda, Burkhard Corves",
+  "quotes": [
+   {
+    "text": "using the total energy consumption as target value for optimization leads to expensive computational effort",
+    "page": 2
+   },
+   {
+    "text": "efficiency may be improved while still solving optimally",
+    "page": 2
+   }
+  ]
+ },
+ {
+  "id": "S080",
+  "year": "2018",
+  "title": "Neueinteilung der Bundestagswahlkreise mithilfe mathematischer Optimierung",
+  "read_level": "full",
+  "contribution": "Chair report (repORt 2018-050) commissioned by the Bundeswahlleiter: complete re-divisions of Germany into 250 and 200 Bundestag districts by MILP methods and MILP-based local search, with legal rules as constraints, two owner-weighted criteria, certified gaps mostly at most 5%, a documented data set and a decision-support tool.",
+  "problem_entry": "The record size of the 2017 Bundestag triggers a debate on fewer than 299 districts; minimal-change revision is impossible when the number changes and the admissible divisions are too many to survey, so the division should follow objective criteria derived from the law (pp. 1-2).",
+  "key_idea": "Separate hard constraints (25% limit, contiguity, state and Regierungsbezirk borders, Gemeindeverbände kept whole) from scored criteria (county-border conformity, population deviation), score each district on [0,1] (piecewise-linear deviation; share of the outer boundary that is a county boundary) and maximize the owner-weighted sum (pp. 3-4, 9).",
+  "assumptions": "Districting MILP (not printed) on a contiguity graph of Gemeindeverbände, municipalities and city subdivisions with virtual adjacencies for islands and exclaves; districts apportioned to states and Regierungsbezirke by the divisor method (BAZI 2014.11); Basiskarte 30.09.2017 plus sub-municipal data for the 17 largest cities, register counts scaled to official totals; RB Gießen merged with Kassel in the 200 scenario (pp. 4, 10-18).",
+  "proof_devices": [
+   "bound-based quality guarantee: best value L and upper bound U bracket the optimum, L = U proves optimality, otherwise a guaranteed percentage explained as a pessimistic estimate (p. 8)",
+   "piecewise-linear deviation score that treats small deviations alike and penalizes large ones disproportionately (p. 9)",
+   "administrative conformity as the share of a district's outer boundary that is a county boundary, i.e. minimizing non-county boundary length (p. 9)",
+   "virtual adjacencies by official key so that contiguity stays satisfiable for islands and exclaves (pp. 17-18)",
+   "divisor method with standard rounding for apportionment and for scaling register counts to official totals (pp. 10, 16)"
+  ],
+  "experiments": "Per-district scatter plots and histograms for the current 299 and the computed 250/200 divisions; 230 of 250 and 168 of 200 within 10%; four districts over 20% forced by apportionment; fewer districts fully conforming than now; one weight-variation example; gaps mostly at most 5% within minutes, optimality for a few states or Regierungsbezirke; no solver, hardware or run times (pp. 6-8).",
+  "positioning": "Sets optimization sharply against heuristic and manual procedures that evaluate only a few plausible alternatives, while its own solutions come from bound-certified MILP-based local searches (pp. 2, 8); builds on Goderbauer's master's thesis, a Goderbauer-Lübbecke software working paper and a Goderbauer-Winandy review (p. 3).",
+  "writing": "Written for a public client: excluded inputs listed (no political, cultural or economic data), optimality explained for lay readers, data repairs documented down to single municipalities; one summary sentence ('werden bestmöglich erfüllt', p. 1) is stronger than the appendix (pp. 1, 8, 12-18).",
+  "limits_future": "Few optimality proofs, more expected from longer runs; with 200 districts small population moves could leave Saarland or Bremen without an admissible division; future: lower the upper bound faster for this problem class, and ask which number of districts fits best (pp. 2, 8, 10).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Claim sized in the appendix in the manner of Taste G1 and Heuristic H2 (MILP-based local search handed over with certified gaps, optimality claimed only where proven, the bound explained as pessimistic; losses and their structural causes reported), but the summary says the principles 'werden bestmöglich erfüllt' and the only comparison is the current 299-district division, shown 'zur Einordnung', not a competing method.",
+    "pages": "pp. 1, 6, 8"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "neutral decision support for a public client",
+    "evidence": "Legal rules as constraints and practice-based additions declared; criteria as scores whose weights the owner set equal; a weight shift shown and the trade-off handed back to the decision makers; excluded inputs listed; the user keeps every decision in the tool. Practice evidence for Heuristic H3 and Workflow A step 3 (data on pp. 12-18); Taste B1 variant (a weighted objective, but an owned one).",
+    "pages": "pp. 1, 3-5, 8"
+   }
+  ],
+  "transferable": [
+   "Turn each legal or client rule into either a hard constraint or a scored criterion, and declare every rule you add from practice (pp. 3-4).",
+   "Score each unit per criterion on [0,1] (piecewise linear for deviation, boundary-length share for administrative conformity), let the owner set the weights, and show one example of what a different weight does to the optimum (pp. 4, 8-9).",
+   "When runs stop at a time limit, report each solution's guaranteed gap, tell lay readers it is a pessimistic estimate, and call optimal only what is proven (p. 8).",
+   "Keep contiguity constraints satisfiable with virtual adjacencies for islands and exclaves, listed by official key (pp. 17-18).",
+   "Reconcile register counts with official totals by the divisor method with standard rounding, and document the rule (p. 16)."
+  ],
+  "coauthors": "Sebastian Goderbauer (doctoral researcher), Georg Wicke (student assistant), both at the RWTH Aachen OR chair",
+  "quotes": [
+   {
+    "text": "Das Büro des Bundeswahlleiters gab vor, dass für unsere Arbeit beide Einteilungsziele als gleich gewichtig anzusehen seien.",
+    "page": 4
+   },
+   {
+    "text": "Für wenige Bundesländer/Regierungsbezirke konnten wir Optimalität nachweisen.",
+    "page": 8
+   }
+  ]
+ },
+ {
+  "id": "S090",
+  "year": "2022",
+  "title": "SCIP8: rethinking nonlinear constraint representation and recent progress",
+  "read_level": "full",
+  "contribution": "Two-page ROADEF 2022 talk abstract by Mathieu Besançon for the SCIP development team (the 35 release-report authors, Lübbecke among them) announcing SCIP 8's constraint-expression framework for nonlinear constraints and its discrete-structure improvements, with degraded subsets named.",
+  "problem_entry": "An overview of SCIP 8 with emphasis on the new representation of nonlinear constraints and on improvements exploiting specific discrete structures (p. 2).",
+  "key_idea": "Rewrite nonlinear constraints as constraint expressions, detect quadratic and second-order-cone structure instead of having users declare it, and extend discrete-structure techniques: symmetry handling for MINLP and general integers, mixing cuts for chance-constrained mixed-binary rows, the Penalty Alternating Direction Method and a new Dynamic Partition Search heuristic for block structure (p. 2).",
+  "assumptions": "MILP, MINLP and constraint integer programs; MIPLIB and MINLPLib (p. 2).",
+  "proof_devices": [
+   "none in the abstract; components named only (p. 2)"
+  ],
+  "experiments": "SCIP 8 against the previous major release on MIPLIB and MINLPLib plus feature studies: MILP faster, more so on harder instances; MINLP better overall with more instances solved; some subsets degraded; no numbers, settings or hardware in the abstract (p. 2).",
+  "positioning": "Points to the SCIP Optimization Suite 8.0 release report (S006) for authors and details (pp. 2-3).",
+  "writing": "Future-tense talk abstract ('The talk will provide', 'We will present') that names a degradation within two pages (p. 2).",
+  "limits_future": "The degraded subsets are the only limit named (p. 2).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Collective SCIP-team voice, not Lübbecke's: the abstract names subsets where the new framework degraded performance and compares with the previous release on public libraries. With Taste G4: quadratic and second-order-cone structures are detected, not declared.",
+    "pages": "p. 2"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Name where a release got worse in the abstract itself, next to the gains, even when there is room for two pages only (p. 2).",
+   "Detect special structure (quadratic, second-order cone) inside a general expression representation instead of asking users to declare it (p. 2)."
+  ],
+  "coauthors": "Mathieu Besançon for the SCIP development team, i.e. the 35 authors of the SCIP Optimization Suite 8.0 report (Lübbecke among them)",
+  "quotes": [
+   {
+    "text": "special nonlinear structures such as quadratic constraints, second-order cone constraints are detected within the linear expression instead of being declared separately by users",
+    "page": 2
+   },
+   {
+    "text": "but also some subsets where the new framework degraded performance",
+    "page": 2
+   }
+  ]
+ },
+ {
+  "id": "S118",
+  "year": "2018",
+  "title": "Eliminating redundant columns from column generation subproblems using classical Benders’ cuts",
+  "read_level": "full",
+  "contribution": "Slides of a SCIP workshop 2018 talk (Aachen) on the work later published as S074: strong redundancy, Farkas-based feasibility and optimality cuts added to GCG pricing problems, and a first root-node study on lot sizing, unit commitment and a MIPLIB subset with mixed results.",
+  "problem_entry": "Redundant columns (Vanderbeck-Savelsbergh) had been fought only by domain propagation in the subproblems (Vanderbeck-Savelsbergh 2006; Gamrath-Lübbecke 2010); this talk adds cuts to the subproblems against strongly redundant columns (p. 12).",
+  "key_idea": "Check a column by the LP of the other block with z^UB in place of z* and integrality dropped; its dual polyhedron is independent of the column, so a Farkas ray (or a dual solution) gives a classical Benders feasibility or optimality cut valid for every non-strongly-redundant column; add it to pricing and price again (pp. 15-31).",
+  "assumptions": "IPs in bordered block form, written for two blocks, discretization with binary lambda (pp. 2, 15); no cuts on bin packing, capacitated p-median, coloring, with problem structure and weak original LP relaxations listed next to it (p. 37); lot sizing and unit commitment under period and horizon decompositions, a MIPLIB subset with GCG detection by maximum white score (pp. 41-44).",
+  "proof_devices": [
+   "relaxation chain for the redundancy check: z^UB in place of z*, integrality of the other block dropped (pp. 18-22)",
+   "Farkas' lemma on an LP whose dual feasible set does not depend on the fixed column, giving an inequality valid for every non-strongly-redundant column (pp. 23-26)",
+   "case split on the objective-row multiplier: zero gives a feasibility subproblem cut, negative (normalized to -1) an optimality subproblem cut; alternatively duals that maximize the violation (pp. 27-30)",
+   "GCG implementation: master separator whose SEPAEXECLP/SEPAEXECSOL callbacks return SCIP_REDUCEDDOM, called from the pricer, run in probing mode of the original problem, new parameter misc/alwaysgetduals (p. 34)"
+  ],
+  "experiments": "Root node, check in every pricing iteration, stabilization and other separators off; 11 sets (Derstroff 98 instances each, Trigeiro 69, unit commitment 42, MIPLIB 39): subcuts faster on 7 sets, slower on 3 (incl. MIPLIB), more solved on 3, fewer on 1 [my count]; profiles, gap of the original LP closed, pricing time per round; no shift or hardware, 3,600 s inferred (pp. 37, 45-53).",
+  "positioning": "Continues Vanderbeck-Savelsbergh 2006 and the domain propagation of Gamrath-Lübbecke 2010; test classes from the lot-sizing and unit-commitment decomposition literature and Bergner et al. 2015 (pp. 12, 41).",
+  "writing": "Slide deck with a plus/minus list for the method (p. 31), an API-level implementation slide (p. 34) and hedged readings of the results ('usually increases', 'unpredictable', p. 45).",
+  "limits_future": "Costs: one LP per subproblem solution, possibly harder subproblems (p. 31); no cuts on the classical classes (p. 37); longer root times (p. 45); future: control of pricing difficulty, more classes with time-dependent structure, other decompositions for MIPLIB, effect on the price-and-branch heuristic (p. 54).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Steps 1, 5, 6: structured sets and a general MIPLIB subset side by side; losses left in the table (three slower sets including MIPLIB, one fewer solved); costs listed next to gains; the null result on classical classes stated; readings hedged.",
+    "pages": "pp. 31, 37, 41, 45"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Steps 3 and 5: isolation baseline with stabilization and other separators off, so 'default' in the table is not GCG's default [my reading from the plot legends]; no shift, hardware or limit printed. The journal version S074 later uses GCG's defaults (S074 p. 23) but drops the general set, which here showed a small slowdown. With Heuristic H8 variant: an unrefereed workshop talk before the journal.",
+    "pages": "pp. 37, 45-47, 53; S074 p. 23"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Step 6, original variables in view: the check is an LP of the original problem with the column fixed, run in probing mode of the original problem, and progress is the gap of the original LP closed. With Heuristic H4 [inferred link]: it starts from the domain propagation already in GCG.",
+    "pages": "pp. 12, 18-22, 34, 47, 53"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "null result explained from the textbook model, then the predicted structure tested (proposed in card S074)",
+    "evidence": "No cuts on bin packing, p-median and coloring with the weak original LP named, then classes with time-dependent structure; same project as S074, so not independent evidence",
+    "pages": "pp. 37, 41-44"
+   },
+   {
+    "pattern": "talk-to-journal narrowing",
+    "evidence": "The 2018 talk has 11 sets including a MIPLIB subset under an isolation baseline; the 2021 journal version S074 keeps four sets (81 Derstroff instances instead of 98), has no MIPLIB set and uses GCG's defaults as baseline",
+    "pages": "S118 pp. 37, 45; S074 pp. 23, 26, 28"
+   }
+  ],
+  "transferable": [
+   "To run a check LP on the original problem from inside a GCG pricer, implement it as a master separator whose callbacks return a domain reduction, call its public methods from the pricer, run it in SCIP probing mode with changed bounds and objective, and make sure duals are always computed (the slides add the parameter misc/alwaysgetduals) (p. 34).",
+   "Measure a new pricing component first with stabilization and other separators off, to isolate it (p. 37), then against the host default before publishing, as S074 did (S074 p. 23).",
+   "Report each decomposition granularity of the same instances (period, horizons 2, 4, 8, 12) as a test set of its own (p. 45).",
+   "Write the cut in the application's own variables (a setup cover for a period and a product subset) so that an abstract Benders cut becomes readable (p. 48)."
+  ],
+  "coauthors": "Stephen Maher (Lancaster University), Jonas Witt (RWTH Aachen University)",
+  "quotes": [
+   {
+    "text": "no cuts on binpacking, capacitated p-median, coloring etc.",
+    "page": 37
+   },
+   {
+    "text": "time to solve root usually increases with subcuts",
+    "page": 45
+   }
+  ]
+ }
+]

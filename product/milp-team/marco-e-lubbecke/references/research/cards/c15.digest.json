@@ -1,0 +1,125 @@
+[
+ {
+  "id": "S085",
+  "year": "2026",
+  "title": "Vehicle Routing and Crew Scheduling Problems",
+  "read_level": "full",
+  "contribution": "Textbook application chapter (joint voice) that reformulates the VRPTW and three routing and crew-scheduling variants (SPDP, PDPTW, crew pairing with base constraints) into set-partitioning masters with resource-constrained shortest-path pricing, explains labeling with dominance, unreachability and ng-route relaxations, compares five pricing relaxations on six Solomon instances, and derives a linear compact VRPTW formulation by time expansion.",
+  "problem_entry": "Routing problems as decades-old testbeds and the birthplace of branch-and-price (school bus routing, Desrosiers et al. 1984); their shared network structure makes pricing an SPPRC; goal: column generation for the LP relaxation, integer solutions left to ch. 7; elementary pricing is highly time-consuming with wide windows, hence relaxations (pp. 3, 18).",
+  "key_idea": "Dantzig-Wolfe-reformulate the compact arc-flow model with identical vehicle blocks into a set-partitioning master over routes (one binary column per route, since schedules are not encoded) and solve pricing by labeling with resources, windows, non-decreasing REFs and dominance; trade bound for time by relaxing elementarity (SPPTWC, ng-routes between the two extremes); model each new problem feature as a new resource (pp. 7-12, 18-29).",
+  "assumptions": "VRPTW: single depot, identical capacitated vehicles, hard windows with waiting, unconstraining fleet; integer data, positive cycle durations and the triangle inequality 'to reflect practice' (the last needed for unreachability); compact model with big-M M = b_j - a_i; the ESPPRC needs a positive bounded resource on every cycle and non-decreasing REFs; crew pairing as one simple variant (no deadheading or overnight flights) with cost max{l_p, alpha s_p} from the collective agreement and soft base limits with two-piece penalties whose owner is not named; data: a four-customer toy, a three-request PDPTW toy, six Solomon instances (pp. 4-9, 15, 26-27, 33, 38-40, 49).",
+  "proof_devices": [
+   "componentwise dominance (5.19)/(5.35) is sufficient for Definition 5.3 when every REF is non-decreasing (pp. 14, 27-28; proof as Exercise 5.5, p. 51)",
+   "label-setting order: extending labels by increasing time with t_ij > 0 on arcs out of customers extends only permanent labels and minimizes extensions; a selection resource that can decrease makes it label-correcting (pp. 16, 27)",
+   "cycle elimination through a resource with positive consumption and bounded windows, which takes one value per node (Note 5.4, p. 11; p. 26)",
+   "unreachability resources strengthen dominance; two of the reachability tests are valid only under the triangle inequality on travel times (Def 5.4, pp. 15-16)",
+   "relaxed pricing kept valid by the master: a_ip >= 2 forces lambda_p = 0 in every integer solution of (5.8), so cycling columns can only weaken z_MP (p. 19)",
+   "ng-memory update M_p' = (M_p U {h}) n NG_h with dominance M_p subset of M_p'; NG_i = {i} gives the SPPTWC and NG_i = C the ESPPTWC (Notes 5.8-5.9, pp. 22-23)",
+   "composition of non-decreasing functions is non-decreasing, so complex REFs are built from add, subtract, max-with-bound and reset (Note 5.11, pp. 28-29; Exercise 5.16, p. 53)",
+   "dominance conditions on the on/notOn resources equivalent to equal onboard sets, stated as provable (p. 37; Exercise 5.23, p. 54)",
+   "arc-replacement argument: after the Røpke-Cordeau cost shift restores the triangle inequality at delivery nodes, dominance needs only O_p subset of O_p' (Def 5.5, pp. 37-38)",
+   "max-of-two-components reduced cost carried by unconstrained resources rCostF and rCostS with rCost = their max ((5.55)-(5.57a), pp. 43-45)",
+   "time-expanded network with minimal-wait arcs (5.58) gives a linear compact model; a bijection between extreme points of conv(D) and routes is stated without proof, so convexification and discretization give the same master (pp. 46-48)",
+   "toy enumeration: all 51 labels of the four-customer SPPTWC run tabulated with feasibility and dominating label (Table 5.1, pp. 20-21)"
+  ],
+  "experiments": "One comparison: six Solomon 100-customer instances (R104, R108, R110 narrow; R202, R203, R205 wide windows), five pricing problems (SPPTWC, ng rho = 5/10/15, ESPPTWC) in one code with tabu-search heuristic pricing and bidirectional labeling, Intel i7-4770, CPLEX 12.6; metrics T, z_MP and gap closed (5.32); R1 7-15 s for every variant; R2 ESPPTWC 139/3650/232 s against ng-15 69/156/76 s, with equal bounds on R202 and R205; the ESPPTWC bound is still 0.45-2.0% below z_IMP (computed from the table); no compact-model baseline, single runs, no time limit, no selection criterion; one extracted cell (R108 ng-5) does not recompute from (5.32) (pp. 23-25).",
+  "positioning": "Montréal lineage from Desrosiers et al. 1983-84 and Desrochers 1988 via Desrochers et al. 1992a, Feillet et al. 2004 and Baldacci et al. 2011-12 to Pecin et al. 2017a (all 56 Solomon instances after 25 years); crew pairing from Lavoie et al. 1988 to Desaulniers et al. 2020c; credits a rejected seminal work, an unpublished R208 result and a master's thesis; cites Lübbecke once (completion bounds, Lübbecke 2005 = S033); no alternative to column generation is discussed (pp. 3, 18, 49-51).",
+  "writing": "Joint textbook voice: Cameron epigraph, one toy network carried through every illustration, a boxed one-line lesson per example, five definitions and no propositions (validity as 'It can be proven', 'We can show' or exercises), titled notes, photos of researchers and a history exercise; hedges on modelling generalities, a sized results paragraph; a few slips survive (typos, cnxMin/cnxMax, two conventions for rho) (pp. 1, 5-6, 20-24, 28-30, 32, 37-38, 43-54).",
+  "limits_future": "LP relaxation only (integers in ch. 7); dominance data structures and accelerations out of scope; simple problem variants; only the masters of the examples written; pruning the time-expanded network harder with wide windows; not stated as limits: six hand-picked instances, single runs, no compact baseline; no open question posed, directions only as exercises (bidirectional labeling, ng with unreachability, VRP with backhauls, new pairing rules) and larger Gehring-Homberger instances (pp. 3, 17-18, 23-24, 30, 38-46, 50-54).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Compact arc-flow model (5.1) written first and reformulated into (5.7)-(5.8); the stated reason is the bound (Prop 4.1); Exercise 5.4 compares both LP relaxations on a three-customer toy (Workflow B step 2 at toy scale); pricing has a named algorithm, labeling, instead of its MIP model (Workflow B condition b, Taste G4); step 6: Section 5.4 supplies a linear compact formulation behind the set-partitioning model, the convexity row is kept for branching, and the PDPTW dominance is tied to the compact formulation's arcs during the integer search. Also H1: several negative-reduced-cost labels per pricing call, heuristic pricing listed and used.",
+    "pages": "pp. 3, 6-12, 18, 20, 24, 38, 45-49, 51"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "In routing and crew scheduling the extended formulation is the state of the art, so decomposition is the default, not a measured bet: the compact model is never run or compared, the SPDP and PDPTW compact models are not written, and the crew-pairing master is 'directly proposed' (the standard practice Method 1 sets him apart from, here in a book he co-authored); the measured choice moves inside the decomposition, to the strength of the pricing relaxation.",
+    "pages": "pp. 10, 18-24, 30-31, 34, 42"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Five pricing problems in one code with the same accelerations, machine and CPLEX version; one class where elementarity should matter (R2, wide windows) and one where it should not (R1); gap closed defined by formula (5.32); time losses and the R203 exception stated; claims sized ('can be quite weak', 'a good compromise').",
+    "pages": "pp. 23-25"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Six instances called representative without a selection criterion; single runs, no time limit, no variability; code and run date not named; no compact-model baseline; one extracted cell (R108 ng-5) does not recompute from (5.32).",
+    "pages": "pp. 23-24"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Textbook scale: the ng family is written down between its extremes (NG_i = {i} gives the SPPTWC, NG_i = C the ESPPTWC) and measured at both ends and three points between, the best point depending on the instance class; all 51 labels of the four-customer run enumerated to explain dominance.",
+    "pages": "pp. 20-24"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "One notation (resources, windows, REFs, dominance) for the pricing of the VRPTW, SPDP, PDPTW and crew pairing; Reference Notes give history with credit (a rejected seminal SPPRC work in facsimile, an unpublished R208 result, a master's thesis); step 5 is absent: no open question is posed; slips survive (typos, a resource-name mismatch, two conventions for rho), material for the book's 'Find all mistakes' exercise.",
+    "pages": "pp. 6, 22-23, 25-45, 49-54"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "extremes first, then in between",
+    "evidence": "Note 5.8 places the ng-SPPTWC between the SPPTWC (NG_i = {i}) and the ESPPTWC (NG_i = C); Table 5.2 measures both extremes and rho = 5, 10, 15 on six instances; the best point depends on the class (rho = 15 for R2, any for R1). Joint textbook voice.",
+    "pages": "pp. 22-24"
+   },
+   {
+    "pattern": "Name what the reformulation buys: bound, size, symmetry or non-linear cost",
+    "evidence": "VRPTW: the stated gain is the bound (Prop 4.1); crew pairing: the collective-agreement cost max{l_p, alpha s_p} becomes a column cost computed in pricing by two unconstrained resources and a max REF; schedules stay out of the column (Note 5.2).",
+    "pages": "pp. 9-10, 25, 40, 43-45"
+   },
+   {
+    "pattern": "pricing-compatibility filter for cuts and branching",
+    "evidence": "The Røpke-Cordeau relaxed dominance for the PDPTW is valid only if every arc that can be part of a feasible path stays in A, at all times during the search for an integer solution; that arc-removing branching would break it is [inferred].",
+    "pages": "p. 38"
+   },
+   {
+    "pattern": "bounding carried from branch-and-bound into the pricing DP",
+    "evidence": "Citation only: Note 5.6 lists completion bounds among the standard ESPPTWC accelerations, citing Lübbecke (2005) (resolved in the book's bibliography, S017 text file p. 673, to 'Dual variable based fathoming in dynamic programs for column generation', S033), Baldacci et al. (2008) and Martinelli et al. (2014); not described further.",
+    "pages": "p. 18"
+   },
+   {
+    "pattern": "monotone extension functions as the modelling contract of DP pricing",
+    "evidence": "Componentwise dominance is valid only for non-decreasing REFs (Exercise 5.15 asks why); REFs are assembled from add, subtract, max-with-bound and reset by composition (Note 5.11); each example closes by checking that its REFs are non-decreasing (SPDP, PDPTW, crew pairing).",
+    "pages": "pp. 14, 27-29, 32, 37, 45, 53"
+   },
+   {
+    "pattern": "relax the pricing domain where the master's rows repair it",
+    "evidence": "Routes with cycles are admitted as columns because a customer visited twice gives a_ip >= 2 and the set-partitioning row forces lambda_p = 0 in every integer solution, so only the MP bound weakens; Exercise 5.8 drops the load resource and repairs load-infeasible routes by infeasible-path cuts in the master.",
+    "pages": "pp. 18-19, 52"
+   }
+  ],
+  "transferable": [
+   "Labeling for resource-constrained pricing: per node, unprocessed and processed labels; extend the minimum-time label along every arc with the REFs; drop labels outside the windows; check dominance in both directions; keep predecessor pointers to recover the path (Algorithm 5.1, pp. 16-17, 20).",
+   "Before relying on componentwise dominance, list every resource with its window and REF and check that each REF is non-decreasing; build complex REFs by composing add, subtract, max{b, t + a} and reset (pp. 27-29, 32, 37, 45).",
+   "Unreachability resources (Feillet et al. 2004): mark a customer when it is visited or can no longer be reached in time or capacity, which makes more labels comparable and lets you skip extensions to marked customers; valid only if travel times satisfy the triangle inequality (pp. 15-17).",
+   "ng-route relaxation with memories M_p' = (M_p U {h}) n NG_h and dominance by M_p subset of M_p'; NG_i = {i} gives the SPPTWC and NG_i = C the ESPPTWC; choose rho per instance class (pp. 20-24).",
+   "When pricing admits cycles, count visits in a_ip and subtract the dual at every visit (Note 5.7, p. 19).",
+   "Pricing-relaxation table: same code and machine; per instance, time, bound and gap closed GP(A) = (z_MP(A) - z_MP(weakest)) / (z_IMP - z_MP(weakest)), plus the ratio to the strongest bound; one class where the relaxation should matter and one where it should not (Table 5.2, Fig. 5.2, pp. 23-25).",
+   "Max-of-linear column cost: carry each linear component in its own unconstrained resource and set the reduced-cost resource to their max (crew pairing, (5.55)-(5.57a), pp. 43-45).",
+   "Interval constraint on a duration: one count-down resource for the minimum (extended by max{t - E, 0}, window [0, 0] where the interval must be complete) and one count-up resource for the maximum, both reset when a duty starts (Table 5.4 and (5.57d)-(5.57e), pp. 44-45; Exercise 5.25, p. 54).",
+   "Røpke-Cordeau cost shift for pickup-and-delivery pricing: move delta_u from the arcs leaving u+ to the arcs leaving u- to restore the triangle inequality at delivery nodes, recompute it at every iteration, then dominate with O_p subset of O_p' instead of equality; keep every possibly feasible arc in A during the integer search (pp. 37-38).",
+   "Preprocess the pricing network with provably valid arc-elimination rules from capacity, precedence and time windows: the VRPTW keeps only arcs with q_i + q_j <= Q and a_i + t_ij <= b_j (p. 4); the SPDP and PDPTW add capacity and precedence rules, the latter ten conditions in all (pp. 31, 33-34).",
+   "Encode in the column only what the master reads: if no master row or cost uses the schedule, keep one representative schedule per route and binary lambda; re-encode when synchronization or time-dependent costs appear (Notes 5.2-5.3, p. 9).",
+   "Time-expanded network for a linear compact model: one node copy per integer time unit, an arc only for the exact travel time or a necessary minimal wait (5.58), and the elementarity rows (5.60) added to the pricing domain (pp. 45-48)."
+  ],
+  "coauthors": "Jacques Desrosiers, Guy Desaulniers, Jean Bertrand Gauthier (joint voice throughout; chapter 5 of S017)",
+  "quotes": [
+   {
+    "text": "Because of this advantage, the state-of-the-art is to solve this extended formulation of the VRPTW by branch-price-and-cut, see Chapter 7.",
+    "page": 10
+   },
+   {
+    "text": "Observe, however, that, for the R203 instance, a much better lower bound can be achieved with the ESPPTWC but at the expense of a very large computation time.",
+    "page": 24
+   }
+  ]
+ }
+]

@@ -1,0 +1,230 @@
+[
+  {
+    "id": "H003",
+    "year": "1998",
+    "title": "Experiments with Controlled Rounding for Statistical Disclosure Control in Tabular Data with Linear Constraints",
+    "read_level": "full",
+    "contribution": "Models and LP-based algorithms for zero-restricted controlled rounding of tables under any linear system (vertex-based rounding; network flow and a circulation rounding for 2-D; LP-based branch-and-bound for 3-D; a branch-and-cut with Gomory and {0, 1/2}-cuts for a relaxed-window model), embedded in τ-ARGUS, with the finding that 4-D tables often have no zero-restricted rounding while slightly enlarged windows always restored feasibility in the test bed (pp. 1, 4-12).",
+    "problem_entry": "Statistical offices need consistent roundings of tables; prior exact work covers 2-/3-D tables with marginals, so the entry is generality (any linear system Ma = b, covering k-D, hierarchical and linked tables) and feasibility, the main practical issue when no objective is given (pp. 1-3).",
+    "key_idea": "CRP is finding an integer point of a never-empty polytope that contains the nominal table; its vertices have at most rank(M) fractional entries, are integral under total unimodularity (2-D) and nearly integral in 3-D, so vertex-based rounding, network flow, LP-based branch-and-bound and, for infeasible cases, rounding windows enlarged at a large weight do the job (pp. 4-10).",
+    "assumptions": "General-integer rounding variables in windows [floor(a_i), ceil(a_i)] under linear equalities Ma = b (full row rank for the vertex procedure, base b scaled to 1); polynomial for k <= 2, strongly NP-hard for k >= 3; random tables generated as in Kelly, Golden, Assad and Baker 1990 (entries 0 with probability d, else 1 or 2, base 3); no real tables (pp. 2, 4, 5, 7, 12).",
+    "proof_devices": [
+      "Constructive vertex existence: move the point along a null-space direction supported on the fractional set until a bound is hit, one more integral component per step (p. 4)",
+      "Total unimodularity of 2-D tables: one-to-one correspondence between consistent roundings and integer circulations, solved as min-cost flow by CPLEX 3.0 network simplex (pp. 4-5)",
+      "Circulation rounding without an LP solver: each circuit of the incremental network removes one fractional flow (p. 6)",
+      "LP-based branch-and-bound for 3-D after Kelly et al. (p. 7)",
+      "Relaxed rounding windows priced by large weights (rule 2), usable directly because the weights keep enlargements to the minimum (p. 10)",
+      "Branch-and-cut after Padberg and Rinaldi with Gomory cuts and {0, 1/2}-cuts at every node, CPLEX 3.0 as LP solver (pp. 10, 12)"
+    ],
+    "experiments": "PC Pentium/75, CPLEX 3.0, averages (maxima) per size-density cell: 3,000 2-D instances (at most 25.28 s average optimal, 10.06 s feasibility-only), 20,000 3-D tables with 60 entries (never above 0.5 s, at most 156 of 1,000 branching), relaxed-window B&C with 10 instances per cell up to 1,602.96 s (3-D) and 3,357.11 s (4-D) average; 193 of 450 4-D instances lack a zero-restricted rounding (my count), rule 2 always feasible; no rival code, no time limit (pp. 5-12).",
+    "positioning": "Extends Cox-Ernst network flows (2-D), the Causey-Cox-Ernst 3-D infeasibility example and the Kelly-Golden-Assad-Baker LP-based branch-and-bound and generator to general linear systems; companion of the authors' cell-suppression work in the ESPRIT SDC project and tau-ARGUS (pp. 3, 7, 10).",
+    "writing": "Opens with the agency's privacy trade-off and a worked 3x3 example (pp. 1-2), derives the vertex procedure tutorial-style from LP theory (p. 4), and ends with the last results paragraph, without conclusions (p. 12).",
+    "limits_future": "No limits or future work stated; the generality claimed for hierarchical and linked tables is not tested (only random k-dimensional tables with marginals) and no other code is compared (pp. 1, 3, 5-12).",
+    "method_links": [
+      {
+        "method": "Method 1",
+        "relation": "variant",
+        "note": "The method is fitted to the structure by table dimension: total unimodularity makes 2-D a flow problem, and without an objective the LP solver is dropped for a circulation rounding with a considerable time saving; the thinning is of the algorithm and of the question asked (feasibility before optimality), not of the model's variables.",
+        "pages": "pp. 3, 5-6"
+      },
+      {
+        "method": "Method 6",
+        "relation": "variant",
+        "note": "Era: in 1998 the general-purpose component is the LP engine (CPLEX 3.0 network simplex; CPLEX 3.0 under the authors' own branch-and-cut); the text reports no run of a stock MIP solver on the ILP, unlike the black-box stance of his work from 2003 on.",
+        "pages": "pp. 5, 12"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "Big-penalty slack so every solve returns a point",
+        "evidence": "Rule 2 prices window enlargements with large weights, so one model returns the zero-restricted rounding when it exists and the least enlargement otherwise; also H006 (high-cost slacks in a heuristic start) and S086 (soft cutoff, penalized second-stage slacks).",
+        "pages": "p. 10"
+      },
+      {
+        "pattern": "Near-integral LP points as the heuristic's lever",
+        "evidence": "A vertex has at most rank(M) fractional components and is a good start for rounding; branch-and-bound is cheap because 3-D vertices are almost integral; also S086 p. 2 (relaxation grip).",
+        "pages": "pp. 4, 8"
+      }
+    ],
+    "transferable": [
+      "To make a fractional feasible point near-integral without an LP solve, move it along null-space directions of the constraint matrix supported on its fractional components until a bound is hit; each step fixes one more component; on network matrices the directions are circuits of the incremental network (pp. 4, 6).",
+      "When a hard requirement may make the model infeasible, widen only the windows that the requirement fixes and price the widening with a large weight, so one model returns the strict solution when it exists and the least relaxation otherwise (p. 10).",
+      "Generate random instances exactly as the closest predecessor did and report, per size and density cell, how many instances needed branching and the nodes of those that did (pp. 7-8)."
+    ],
+    "coauthors": "Juan-José Salazar-González",
+    "quotes": [
+      {
+        "text": "An interesting outcome is that 4-dimensional tables often admit no zero-restricted rounding, whereas slightly enlarged rounding windows produced feasible instances in all the cases in our test bed.",
+        "page": 1
+      },
+      {
+        "text": "a vertex of the polytope PCRP associated with 3-dimensional tables very likely has (almost) all integer components",
+        "page": 8
+      }
+    ]
+  },
+  {
+    "id": "H006",
+    "year": "2009",
+    "title": "Robustness by cutting planes and the Uncertain Set Covering Problem",
+    "read_level": "full",
+    "contribution": "Shows that the Bertsimas-Sim robust counterpart is solved faster by robustness cuts in the original variables on most of 12 NETLIB LPs, and introduces the Uncertain Set Covering Problem, where a compact log-weight knapsack-cover model (same integer set as the cut model, Theorem 1) beats the cut model, plus an NP-hard uncertain connectivity problem where Gomory-like rounded cuts separated before the cut constraints pay off (pp. 2-17).",
+    "problem_entry": "The Bertsimas-Sim counterpart is compact but can be enforced by exponentially many robustness cuts in the original variables, and no computational comparison existed; uncertainty made of yes-no events cannot be dualized as BS needs, leaving cuts as the only option (pp. 1-2, 6).",
+    "key_idea": "Separate BS robustness cuts by picking the Gamma largest a-hat_ij x*_j per row in O(n); for set covering with independently disappearing columns, take w = -ln p so row coverage becomes a knapsack cover, compare the cut model M1 with the compact M2 (same integer set) and with M2' (Gomory-like rounded cuts), and carry the cut model to uncertain connectivity separated by minimum cut (pp. 4-5, 7-11, 15-16).",
+    "assumptions": "LPs with x >= 0, interval uncertainty in inequality rows with at most Gamma_i coefficients at their worst (integer Gamma_i, equality rows certain); binary covering and connectivity models with independent disappearance probabilities and one probability condition per row or per cut; M2's validity needs SCP's 0-1 coefficients and right-hand sides (pp. 3, 5, 7-9, 15).",
+    "proof_devices": [
+      "Projection of the BS dual variables: robustness cuts (12) separated by selecting the Gamma_i largest profits with an O(n) partial-sorting technique (pp. 4-5)",
+      "Logarithmic transformation w_j = -ln p_j, W_i = -ln(1 - P_i) turning a product of probabilities into a knapsack cover (p. 8)",
+      "Theorem 1 (M1 and M2 have the same integer solutions) by contradiction in both directions using the separation problem's optimal set (pp. 9-10)",
+      "Example 1: a three-column instance showing no dominance between the two LP bounds (p. 10)",
+      "Inequality (31) by a rounding argument similar to Gomory's fractional cuts, called numerically more stable (p. 10)",
+      "Theorem 2 (strong NP-hardness of uncertain connectivity) by reduction from min-cost 2-edge-connected subgraph with p = 1/2 and P = 3/4 (p. 15)",
+      "Min-cut separation of (36) and of (31) with modified capacities (pp. 15-16)",
+      "Greedy initial heuristic from three starts, one with high-cost slacks to ensure feasibility (pp. 10-11)"
+    ],
+    "experiments": "CPLEX 11.0 default, AMD Athlon 4200+ (p. 5). Robust LPs: arithmetic means over 12 NETLIB instances (BS 62.74 s vs cuts 2.73 s at Gamma = 1), 93-98% of the BS total from the 3 infeasible instances, cuts slower in 7 of 36 cases; '1-2 orders of magnitude' holds for DEGEN3 and roughly PILOT, not D2Q06C (my arithmetic, p. 6). USCP, 1,800 s, 59 ORLIB instances x 4 thresholds: M2 solves 218 of 236, M1 144, M2' 211 (pp. 11-13); features-off check shown on one instance (p. 14). Connectivity, 10,000 s, 14 TSPLIB graphs: M2' 34 of 56 solved vs M2 16; 'all instances with n <= 26' fails for gr24 at 0.85 (pp. 16-17). No repeated draws or seeds.",
+    "positioning": "Builds on Bertsimas-Sim (against Soyster and Ben-Tal-Nemirovski), the authors' light robustness and the probabilistic set covering of Beraldi-Ruszczynski and Saxena et al.; claims the first computational comparison of compact and cutting-plane BS (pp. 2-3, 7).",
+    "writing": "Preliminary draft with typos; abstract and introduction promise a 'considerable speedup' and 'up to 2 orders of magnitude', the conclusions only 'comparable or better' (pp. 1-2, 18); a null result is introduced as 'Quite surprisingly' and explained (p. 11).",
+    "limits_future": "No limits or future work stated; the cuts-only framing of Section 3 is qualified by the compact M2 winning on USCP (pp. 6, 11); connectivity is imposed cut by cut, which (my reading) is only necessary for the whole graph to stay connected with probability P (p. 15).",
+    "method_links": [
+      {
+        "method": "Method 1",
+        "relation": "evidence",
+        "note": "Step 3 (project out) and steps 2 and 4 (choose the model by measurement): the BS auxiliary variables are projected out and replaced by cuts in the original space, where the compact model needs up to 44,330 extra variables (PILOT); for the USCP three models with the same integer solutions are measured on the same instances and the compact one in the original variables wins.",
+        "pages": "pp. 2, 5, 9, 11"
+      },
+      {
+        "method": "Method 6",
+        "relation": "evidence",
+        "note": "Step 3 (do not duplicate the solver): the authors expected M2's knapsacks to be very challenging for MIP solvers, found CPLEX's preprocessing and cut generation quite effective, and saw their own cuts (31) slow M2 down because the solver had already squeezed out their information, checked by switching those features off.",
+        "pages": "pp. 10, 11, 14"
+      },
+      {
+        "method": "Method 4",
+        "relation": "variant",
+        "note": "Dated lapse: both robust-LP arms pass through the same CPLEX with its own choice of algorithm for the first LP, but the headline rests on arithmetic means dominated by the infeasible instances and the cases where the cuts lose are printed without comment; this is the averaging SKILL.md reports (via Bertsimas, Dunning and Lubin) for the 2012 robust study; whether S045 kept this table is not verified.",
+        "pages": "p. 6"
+      },
+      {
+        "method": "Method 3",
+        "relation": "contradiction",
+        "note": "Dated lapse (2009): a randomized ILP study with one set of random probabilities per instance and no seeds or repeated runs mentioned.",
+        "pages": "pp. 11, 16"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "Strengthening cuts pay only where presolve is blind",
+        "evidence": "The same inequalities (31) slow down the compact USCP model, whose constraints the solver preprocesses and squeezes, but pay off in the connectivity model, whose constraints are generated at run time so that preprocessing and cut generation are ineffective.",
+        "pages": "pp. 11, 14, 16"
+      },
+      {
+        "pattern": "Chvátal–Gomory derivation as validity proof and separation handle",
+        "evidence": "Inequality (31) is proved valid by a Gomory-fractional rounding and separated by min-cut with modified capacities in the connectivity model.",
+        "pages": "pp. 10, 16"
+      },
+      {
+        "pattern": "Big-penalty slack so every solve returns a point",
+        "evidence": "The third heuristic start restricts the nominal problem to high-weight columns and adds high-cost slacks to each row so as to ensure feasibility; also H003 p. 10, S086 pp. 2-3.",
+        "pages": "pp. 10-11"
+      }
+    ],
+    "transferable": [
+      "Turn an independent-failure probability requirement into a linear knapsack-cover constraint with w_j = -ln p_j and W = -ln(1 - P); for a MIP solver, multiply by 1,000 and round to integers (pp. 8, 11).",
+      "Prove that a compact model and a cut model have the same integer solutions, show with a three-variable example that their LP bounds do not dominate each other, then decide between them by measurement on the same instances (pp. 9-11).",
+      "When a user cut does not help a compact model, rerun with the solver's preprocessing and cut generation off; if the cut now helps, the solver was already deriving its information (pp. 11, 14).",
+      "Separate interval-robustness cuts for one row by selecting the Gamma largest values a-hat_ij x*_j with a linear-time selection instead of a sort (p. 5)."
+    ],
+    "coauthors": "Michele Monaci",
+    "quotes": [
+      {
+        "text": "Quite surprisingly, the addition of constraints (31) in M2’ did not improve the overall performance—actually, it produced a certain slow-down.",
+        "page": 11
+      },
+      {
+        "text": "This is not surprising, since the robust connectivity constraints are generated at run time, so the initial MIP preprocessing and cut generation procedures are ineffective.",
+        "page": 16
+      }
+    ]
+  },
+  {
+    "id": "S086",
+    "year": "2016",
+    "title": "Proximity Benders: a decomposition heuristic for stochastic programs",
+    "read_level": "partial",
+    "contribution": "Proximity Benders: proximity search run on a Benders master solved by a black-box MILP solver (Hamming objective, soft cutoff, slack-augmented second stages, monotone repair), proposed as a heuristic for stochastic programs too large for a MILP solver and tested on facility location, network interdiction and 2,000-scenario network design (pp. 2-12).",
+    "problem_entry": "Huge stochastic programs need decomposition, but Benders can converge too slowly to be useful as a heuristic; proximity search improves a feasible solution step by step, so the two complement each other on instances a MILP solver cannot load or whose root LP is prohibitive (pp. 1-2).",
+    "key_idea": "Run proximity search on the Benders master (cutoff at U - theta, Hamming objective, soft cutoff variable with large cost, black-box MILP master), generate cuts from slack-augmented second stages, move the incumbent when all slacks vanish and the cost improves, repair infeasible y under monotonicity; changing the master objective changes the master points and the cuts (pp. 2-5).",
+    "assumptions": "Binary first stage, K continuous recourse LPs once y is fixed (block structure), an easy-to-find feasible solution, monotone feasibility for the repair; instances from Bodur et al. (facility location; interdiction classes 3-4) and Crainic et al. (network design, scenarios regenerated to 2,000) (pp. 3, 5, 6, 8, 10).",
+    "proof_devices": [
+      "Proximity search with incumbent on the master: Hamming objective and a soft cutoff with a continuous variable z0 of large cost M0 (pp. 2-3)",
+      "Slack-augmented second-stage LPs (z_k, v_k, penalty M_k) after Fischetti, Salvagnin and Zanette 2010: z_k > 0 gives a feasibility cut, z_k = 0 and v_k > 0 an optimality cut (pp. 3-4); Algorithm 2 (p. 4)",
+      "Repair heuristic under monotone feasibility, raising y through auxiliary problems (p. 5; Algorithm 3)",
+      "Minimum improvement theta proportional to the incumbent value under a non-aggressive, decreasing policy (factor garbled in this text, p. 5)",
+      "No proofs (n/a)"
+    ],
+    "experiments": "Single thread, 1 h, Xeon E3-1220V2 3.10 GHz, 16 GB; Cplex 12.6.1 default on the full MILP, a second arm whose bullet is empty but which Figure 1 names Benders, and ProxyBenders; primal integral, wins, improved instances and improving solutions at 100/600/3,600 s; prose only (tables unreadable here): ProxyBenders leads on facility location at short limits and loses its edge as Cplex solves all but two instances in the hour; Cplex cannot solve 20 network-design root LPs in an hour, ProxyBenders reasonably effective on classes 8-10; no seeds or repeated runs mentioned (pp. 5-6, 10, 12).",
+    "positioning": "Proximity search (Fischetti-Monaci 2014) related to LNS and local branching (p. 1); the Benders cut recipe of Fischetti-Salvagnin-Zanette 2010 (p. 3); reverses Rei et al.'s local branching inside Benders (p. 4); primal integral of Achterberg et al. and Berthold (p. 5); likened to the feasibility pump (p. 12).",
+    "writing": "Proof-of-concept framing with a strong 'method of choice' claim scoped to very large stochastic programs (pp. 2, 12); one test set conceded as inadequate and the next ones called more appropriate to show the benefits (pp. 6, 8); words are missing in the document itself (pp. 1, 3-5, 6, 8, 10, 12).",
+    "limits_future": "Untailored implementation; parallelization asserted, not tested; future: sensitivity to the initial solution, more aggressive theta schemes, cut management, not solving every subproblem at each iteration, randomization as in the feasibility pump, tailored implementations (p. 12).",
+    "method_links": [
+      {
+        "method": "Method 2",
+        "relation": "evidence",
+        "note": "Step 3, change the master objective: the cut recipe of [11] stays and the master objective becomes a proximity function, which changes the sequence of master points and their Benders cuts.",
+        "pages": "pp. 3-4"
+      },
+      {
+        "method": "Method 6",
+        "relation": "evidence",
+        "note": "The modified master can be solved by any black-box MILP solver, and proximity search applies the MILP solver as a black box.",
+        "pages": "pp. 2-3"
+      },
+      {
+        "method": "Method 4",
+        "relation": "variant",
+        "note": "The facility-location set, on which Cplex catches up within the hour, is kept and its weakness conceded, but the next sets are chosen as (somewhat) more appropriate to show the benefits and, for interdiction, restricted to the more difficult instances.",
+        "pages": "pp. 6, 8"
+      },
+      {
+        "method": "Method 3",
+        "relation": "contradiction",
+        "note": "Dated lapse (2015): heuristics compared by primal integral with no seeds or repeated runs in the text, although the work was funded by a project on exploiting randomness in MILP; randomization appears only as future work, credited to the feasibility pump.",
+        "pages": "pp. 5, 12"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "Role reversal of nested methods",
+        "evidence": "An outer proximity search drives an inner black-box Benders, the reverse of Rei et al.'s local branching inside Benders (same work as the s07 card, so no new paper for the count).",
+        "pages": "p. 4"
+      },
+      {
+        "pattern": "Big-penalty slack so every solve returns a point",
+        "evidence": "Soft cutoff with a continuous z0 of large cost M0 on the master; slack-augmented second stages whose large M_k enforces feasibility in many cases, the repair heuristic covering the rest; also H003 p. 10, H006 pp. 10-11.",
+        "pages": "pp. 2-3, 12"
+      },
+      {
+        "pattern": "Near-integral LP points as the heuristic's lever",
+        "evidence": "The proximity objective improves the relaxation grip: LP solutions have many integer components, which raises the success rate of the solver's heuristics, in particular where feasibility is enforced by cut generation; also H003 pp. 4, 8.",
+        "pages": "p. 2"
+      }
+    ],
+    "transferable": [
+      "Turn an exact Benders code into a heuristic by changing only the master: Hamming objective to the incumbent, a soft cutoff with a heavily priced slack, all cuts kept, and the incumbent moved whenever every second-stage slack is zero and the cost improves (pp. 3-4).",
+      "Add two penalized slacks to each second-stage LP so that it is always solvable and one solve tells whether to add a feasibility cut (z_k > 0) or an optimality cut (v_k > 0) (pp. 3-4).",
+      "When raising first-stage variables cannot destroy feasibility, repair an infeasible first-stage point by raising components through one auxiliary problem per infeasible scenario (p. 5)."
+    ],
+    "coauthors": "Natashia Boland, Michele Monaci, Martin Savelsbergh",
+    "quotes": [
+      {
+        "text": "In doing so, we modify the objective function of the master problem, thus drastically changing the sequence of points provided by the various masters, as well as their associated Benders cuts.",
+        "page": 4
+      },
+      {
+        "text": "Finally, we observe that our proof-of-concept implementation did not target a specific problem, and we anticipate that tailored implementations for specific problems would likely be far more efficient.",
+        "page": 12
+      }
+    ]
+  }
+]

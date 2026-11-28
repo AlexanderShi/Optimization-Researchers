@@ -1,0 +1,228 @@
+[
+ {
+  "id": "S078",
+  "year": "2026",
+  "title": "Distributed Parallel Structure-Aware Presolving for Arrowhead Linear Programs",
+  "read_level": "full",
+  "contribution": "A distributed, structure-preserving presolve and postsolve framework inside the parallel interior-point solver PIPS-IPM++ for arrowhead LPs. On 82 mostly energy-system LPs it is about 6 times faster than Gurobi's presolve and 19 times faster than PaPILO's on one 64-process node, and 20 to 115 times faster than Gurobi's on multiple nodes for large instances with small linking parts, while removing fewer nonzeros. It raises PIPS-IPM++'s solved count from 37 to 48, whereas external presolve with automatic re-annotation lets PIPS-IPM++ solve at most 21.",
+  "problem_entry": "Presolve for structure-exploiting parallel IPMs is serial and structure-agnostic, can become the bottleneck and can destroy the arrowhead structure the solver needs; general libraries, including the group's own PaPILO, lose the block assignment (pp. 1–3).",
+  "key_idea": "Classify reductions as local (one block, no communication) or global (linking parts, synchronization points); keep one postsolve stack per process with buffered linking updates; enforce the arrowhead form as an invariant; add a Permutation and a blockwise LinDependencies presolver. The reductions themselves come from the literature (pp. 5–11).",
+  "assumptions": "Continuous LP (equality and ranged rows, possibly infinite bounds, no integers) in arrowhead form, with the modeller's block annotation read through GAMS; one block per process and the 0-block on every process; 82 instances, almost all energy-system models with nearly equal block sizes, 69 public; full row rank of A0 and of every B_i gives full row rank without the linking rows (pp. 4, 7, 9–10, 12–13).",
+  "proof_devices": [
+   "Structure invariant: no presolver may destroy the arrowhead form or create linking rows or columns, even if it could improve size or stability (p. 7)",
+   "Local and global reduction classes, with global reductions as synchronization points and one postsolve stack per process (pp. 7–8)",
+   "Buffered linking quantities, with synchronization events recorded on the stack and replayed in postsolve (pp. 10–11)",
+   "Blockwise rank argument and MA50-like elimination on [B_i I] with pivots restricted to the block's columns; dependencies through linking rows left to the Schur-complement factorization (pp. 9–10)",
+   "Permutation presolver without fixed-point iteration (columns before rows, detect all candidates, then move); 0-link variables as sparse, communication-free Schur-complement blocks, Eq. (6) (pp. 8–9, 21)",
+   "Two-level hashing with a custom-operator Allreduce of support hashes and an AND-Allreduce of per-process parallelism flags, Algorithms 1–2 (pp. 11–12, 24–26)",
+   "Deterministic MPI collectives through Intel MPI's conditional numerical reproducibility, I_MPI_CBWR=2 (p. 13)",
+   "Scaling explained by Amdahl's sequential fraction, Spearman correlations with structure, and a decomposition of communication into collectives × cost per collective plus local work (pp. 14, 17, 26–27)"
+  ],
+  "experiments": "Setup: 82 LPs (69 public with scripts and logs), LRZ terrabyte full nodes, PaPILO 3.0.1, Gurobi 13.0.0, PIPS-IPM++ d34cee38, SGM shifts 1 s and 1%, single deterministic runs. Scaling on 8 large instances chosen by a written rule: 30–50× at 64 processes, sequential fraction 0.4–1.8%; only 23× and 7× with large linking parts. Presolvers: 6× faster than Gurobi and 19× than PaPILO (25× on the 69 common instances), leaving 68.4% of nonzeros against 61.7% and 66.7%. Inside the IPM: 48 against 37 solved and −40% SGM, with the failures of the no-presolve runs classified. External presolve: at most 21 solved with automatic re-annotation, about as many with the hand-built inherited annotation, slower end to end. Determinism costs 4.45 → 3.7 s; multi-node runs vary more than 2× on 14 of 71 instances; no significance tests (pp. 12–20, 26–27).",
+  "positioning": "Places itself between the LP presolve literature (Andersen and Andersen 1995, Gondzio 1997, Achterberg et al. 2020) and structure-exploiting arrowhead solvers. Criticizes general-purpose libraries, including the group's own PaPILO, and measures PaPILO gaining only 1.25 from 1 to 64 threads on these LPs (compare S026's MIPLIB scaling). Gurobi is the reference for reduction strength. Extends S068 (pp. 3–4, 6, 11, 14).",
+  "writing": "The abstract prints losses next to the speed-ups; three contributions; a 'Scope and limitations' paragraph before the results, with the hedge that carrying the results over to other AHLPs is not tested. Unreconciled numbers: the 64-process SGM appears as 4.39, 4.45 and 4.49 s; Gurobi presolves 82 of 82 instances but only 17 of the 18 large ones; 'do not make the IPM noticeably faster' against 124 → 118 s. A co-authored AI-use disclosure (pp. 1, 3, 13, 15, 17, 19, 26–27).",
+  "limits_future": "Limits: energy models only; dependent on the modeller's annotation, which cannot yet be automated; two arrowhead-specific presolvers; no block-size balancing; little multi-node gain with large linking parts; dependencies through linking rows undetected; a reduction gap to Gurobi not explained by structure preservation. Future: make the presolve available to other structure-exploiting methods, add presolvers and tune, combine or overlap collectives (pp. 10, 13, 17, 20, 27).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "no stripped rival (Gurobi is closed, PaPILO general-purpose); instead the same hardware, rival timing without MPS reading, the rival's best case (inherited annotation) built by hand, the reduction mismatch printed and tested downstream, and the common-set factor 25 beside the different-set headline 19",
+    "pages": "pp. 13, 15, 17–20"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "a rewrite of the 2020 proceedings version (S068) that prints its gaps with numbers (reductions missing against Gurobi, scaling limits with large linking parts, a communication floor of about 2 s) and names the next steps; the group's own PaPILO is printed losing",
+    "pages": "pp. 4, 13, 15, 17, 20, 26–27"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "the claim that presolve buys numerical robustness is counted per failure type of the no-presolve runs (3 wrong infeasibility claims, 3 iteration limits, 4 time limits, 3 crashes; 2 instances lost with presolve); per run, not per decision",
+    "pages": "pp. 1, 18"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "a model library rather than a rule-built benchmark, but published with scripts and logs (69 of 82), the scaling subset chosen by a written rule with named exceptions, and its bias stated; no exact solution checks",
+    "pages": "pp. 13–14"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "structure-preservation invariant over reduction strength",
+    "evidence": "no presolver may destroy the arrowhead form or add linking rows or columns, even if it could improve size or stability; communication is balanced against reduction strength, occasionally weakening presolve; the reductions given up are then measured downstream",
+    "pages": "pp. 7, 12, 17, 19, 26"
+   },
+   {
+    "pattern": "rival's best case built by hand",
+    "evidence": "rivals timed without MPS reading; the modeller's annotation reconstructed for their output from variable names and verified by nonzero counts, 'a best case that is not available to users'; end-to-end costs reported separately",
+    "pages": "pp. 13, 18–20"
+   },
+   {
+    "pattern": "judge a preprocessing gap by its downstream effect",
+    "evidence": "Gurobi removes 6.7 percentage points more nonzeros at about six times the presolve time; the IPM gains only 124 → 118 s, which the longer presolve absorbs",
+    "pages": "pp. 17, 19"
+   },
+   {
+    "pattern": "deterministic parallelism by fixed-order application",
+    "evidence": "fixed reduction order inside MPI collectives (I_MPI_CBWR=2), with its price measured: SGM 4.45 → 3.7 s without it, concentrated on five instances, 7.3 instead of 6.1 times faster than Gurobi; compare PaPILO's fixed-order transactions (S026)",
+    "pages": "pp. 13, 15"
+   },
+   {
+    "pattern": "Amdahl sequential fraction as the scaling summary",
+    "evidence": "speed-ups of 30–50× at 64 processes summarized as a sequential fraction of 0.4–1.8%; also in S026 (pp. 12–14)",
+    "pages": "p. 14"
+   },
+   {
+    "pattern": "AI-use disclosure with author verification",
+    "evidence": "Claude Code wrote evaluation, job and packaging scripts and helped with language editing; the authors checked all scripts, results and text (co-authored; SKILL.md's Research Integrity section says no statement on AI use was found)",
+    "pages": "p. 27"
+   },
+   {
+    "pattern": "text-table slips in computational sections (negative)",
+    "evidence": "64-process SGM printed as 4.39 s, 4.45 s and 4.49 s; Gurobi presolves 82 of 82 instances in Table 3 but 17 of the 18 large ones in the text; 'do not make the IPM noticeably faster' against 124 → 118 s",
+    "pages": "pp. 15, 17, 19, 26"
+   }
+  ],
+  "transferable": [
+   "(D4) Split reductions into local ones (one block, no communication) and global ones (linking rows or columns, the only synchronization points); keep one postsolve stack per process and record deferred global updates as synchronization events on that stack (pp. 7–8, 10–11)",
+   "(D4) Write the structure the downstream solver needs as an invariant no reduction may break (no new linking rows or columns); afterwards, measure downstream whether the reductions you gave up would have mattered (pp. 7, 17, 19)",
+   "(D4) Detect linear dependencies block by block: eliminate on [B_i I] with pivots restricted to the block's own columns, drop fully dependent rows or prove infeasibility from them, move rows that keep a linking part into the linking block and eliminate there jointly, and leave dependencies through linking rows to the downstream factorization (pp. 9–10)",
+   "(D4) Distribute parallel-row detection over two collectives: combine the support hashes with a custom-operator Allreduce, then combine each process's flags for which row pairs are parallel on its own blocks with an AND-Allreduce, before any process applies a reduction (pp. 11–12, 24–26)",
+   "(D5) Make parallel runs deterministic by fixing the order of reductions inside collectives; check that outputs are identical across repeated runs and process counts, and print what determinism costs and on which instances (pp. 13, 15)",
+   "(D5) Give rivals their best case (time them without file reading; reconstruct the modeller's annotation for their output where possible, verified by nonzero counts) and report the end-to-end cost separately (pp. 13, 18–20)",
+   "(D5) Explain a scaling result instead of only plotting it: Spearman correlations of the speed-up with size, block count and linking share, plus a decomposition of communication into the number of collectives × the time per collective plus local work, with the fastest process's MPI share as a lower bound on communication cost (pp. 17, 26–27)",
+   "(D5) Report the SGM over instances both arms solve together with an all-instance SGM that counts unsolved runs at the limit, and classify the weaker arm's failures (wrong infeasibility, iteration limit, time limit, crash) (p. 18)",
+   "(D7) Put a 'Scope and limitations' paragraph in the setup section, before the first result (p. 13)"
+  ],
+  "coauthors": "Nils-Christian Kempke (first author), Stephen J. Maher, Daniel Rehfeldt, Thorsten Koch, Svenja Uslu; Gleixner fourth of six; no contribution statement",
+  "quotes": [
+   {
+    "text": "This is a best case that is not available to users and that we could construct for only 62 of the 82 instances.",
+    "page": 19
+   },
+   {
+    "text": "The authors used the generative AI tool Claude Code (Anthropic Opus 5.5) to write evaluation, job, and packaging scripts and for language editing. The authors checked all scripts, results, and text and take full responsibility for the content.",
+    "page": 27
+   }
+  ]
+ },
+ {
+  "id": "S085",
+  "year": "2026",
+  "title": "A Numerically-safe Branch-Price-and-Cut Algorithm for the Length-Constrained Cycle Partition Problem",
+  "read_level": "full",
+  "contribution": "A set-partitioning branch-price-and-cut for the length-constrained cycle partition problem. Its label-setting pricing exploits the undirected symmetry (one-direction bidirectional search), together with an ng-relaxation, symmetry breaking by critical time, triangle-inequality exploitation, and subset-row and clique cuts. Numerically safe dual bounds come from integer-scaled duals and exact integer pricing. It solves 51 of 84 benchmark instances (52 with cuts respected in pricing), with up to 76 nodes, against 37 (40 warm-started) for the SEC branch and cut on Gurobi. Safety costs about 40% extra time and never changed a certified bound.",
+  "problem_entry": "Compact MTZ and SEC models of LCCP have weak relaxations and symmetry (solved up to 29 and 52 nodes); a set partitioning over cycles promises tight bounds, while floating-point column generation can return too-large bounds or miss columns (pp. 2–3, 13).",
+  "key_idea": "Solve SP by branch-price-and-cut, with: label-setting pricing per start node (dominance, one-direction bidirectional merge, ng-relaxation with a Lagrangian bound, greedy pricing first); covering rows for nodes that satisfy the triangle inequality; SRC and clique cuts lifted to new columns; and safe bounds by scaling the duals to integers and pricing in exact integer arithmetic (pp. 4–17).",
+  "assumptions": "Undirected graph, travel times ≥ 0 possibly non-metric, critical times > 0, duals free in sign, integral objective; pricing strongly NP-hard (Theorem 1); the 84-instance standard set of Hoppmann-Baum et al. 2022 ('14 to 100 nodes', though one instance has 124); how travel times are stored, and whether length feasibility is checked exactly, is not stated (pp. 3–4, 13, 17, 28).",
+  "proof_devices": [
+   "Theorem 1: strong NP-hardness of pricing by reduction from Hamiltonian cycle with unit data (p. 4)",
+   "Feasibility pruning by induction over label extensions; Lemma 1 (dominance) via inclusion of extension sets and the monotone minimum critical time (pp. 5–6)",
+   "Theorem 2: completeness of one-direction bidirectional search with dominance, via the first forward label past the halfway point and transitivity of dominance (pp. 7–8)",
+   "Lemma 2: zero-dual nodes that satisfy the triangle inequality can be skipped, by a shortcut argument; covering-to-partitioning post-processing (pp. 9–10)",
+   "Lagrangian bound z*_MP ≥ z*_RMP + Σ_s min{0, z*_s}, valid under the ng-relaxation and rounded up by integrality; early branching (pp. 9, 16)",
+   "Dual repair, Algorithm 1: M = 10^15, π^int = ⌊M·π^inf⌋, exact integer check of dual feasibility over all RMP columns, M ← M/10 until feasible; cut duals and negative covering duals set to zero; pricing and bounds in integer arithmetic (pp. 13–14, 16)",
+   "Integrality argument: a safe bound changes a decision only when it crosses an integer boundary (pp. 13–14)"
+  ],
+  "experiments": "Setup: a Rust SCIP wrapper with parallel pricing (the rest of SCIP sequential) against the SEC branch and cut on Gurobi 13.0.1; 2 h limit, Xeon Gold 6338, exclusive nodes, 16 threads each; 84 instances; SGM (shift 1 s, timeouts at the limit) per table over the instances solved by any configuration listed there. Solved: 37 (bnc-sec), 46 (bnp-mcv, same start as bnc-sec), 51 (bnp-full), 40 (bnc-full, same best known start as bnp-full). Like-for-like factors 7.4× and 10.9×; the headline 14.7× comes from the unequal pair. Root gap 0.4% against 30.3%. One-at-a-time ablation with virtual best. Safety costs about 40% time, with no bound failures. Cuts separate on only 3 and 2 instances; SRCs respected in pricing give 52. Recount of Table 5: 15 instances solved only by bnp-full and 1 only by bnc-sec; Table 1's SGMs imply two instances solved only by bnc-full or bnp-mcv (inference). No seeds or significance tests (pp. 17–22, 25–28).",
+  "positioning": "Reformulates the earlier LCCP models of co-author Mexi (Hoppmann et al. 2020; Hoppmann-Baum et al. 2022) with vehicle-routing and kidney-exchange machinery. The safe bounds follow Fukasawa and Poirrier 2017 and Baldacci et al. 2024, with Eifler and Gleixner 2023 and 2024 as background; the solver mismatch (SCIP against Gurobi) is argued to be conservative. As a problem-specific branch-price-and-cut by Gleixner's group, it does not fit SKILL.md's Roundtable contrast with Lübbecke (default branch and cut, [M17; LCCP26]) or the Honest Boundary (no decomposition research) (pp. 2–4, 12, 19).",
+  "writing": "Worked examples on a 5-node instance; four numbered questions; light hedging. The headline denominators drift (14 previously unsolved, 14 more than bnc-sec, 52 against 40, while Table 5 gives 15), and the introduction's 14.7× uses the unequal pair. Slips: a 124-node instance against '14 to 100 nodes'; 11 cuts in one round against a limit of 10; 'same root bound quality' against root gaps of 1.9% and 0.2%; root gaps labelled 'average optimality gap'. Several typos (pp. 1–3, 8–9, 12–13, 17–23, 28).",
+  "limits_future": "Limits: instances beyond 76 nodes unsolved and pricing dominates the time; the round-up property fails on t84 eil51; cuts rarely separate; heuristic dual bounds carry no guarantee; what happens when the dual repair fails is not described. Future: parallel or GPU-accelerated labeling, then a parallel tree search and more cuts once pricing is no longer the bottleneck (pp. 14, 19, 22–23).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "floating-point RMP solves, cut separation and violation checks produce; repaired integer duals, integer-arithmetic pricing and the bound decide; heuristic variants are best run unsafe; safety costs about 40% time and changed no certified bound",
+    "pages": "pp. 12–14, 16, 21"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "the IOS 2024 version (S092) is extended by the missing cuts and safe bounds; the safe-bound mechanism is imported from exact branch and price for vehicle routing and bin packing; pricing is printed as the bottleneck, with the next projects",
+    "pages": "pp. 3, 12, 23"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "the initial primal bound is controlled across arms (same MCV start; the rival warm-started with the same best known solution), 'a fair comparison'; the solver mismatch is argued to be conservative; equal thread budgets; the predecessor's benchmark set is reused",
+    "pages": "pp. 17–19"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "the like-for-like factors 7.4× and 10.9× are printed, but the introduction's 14.7× and the '14 more' come from the unequal pair, and the conclusion switches to bnc-full's 40",
+    "pages": "pp. 3, 18–19, 23"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "the risk of unsafe column generation is checked by comparing final rounded safe and unsafe bounds per instance, and reported as not observed; per instance, not per decision, and on the standard set only",
+    "pages": "pp. 13–14, 21, 23"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "numerical safety by exact integer arithmetic inside the solver, with no certificate and no independent check; the safety argument covers the dual bound and the cuts, not the travel-time arithmetic",
+    "pages": "pp. 12–14"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "rounded-bound agreement as the test of numerical safety",
+    "evidence": "with an integer objective a safe bound matters only if it rounds differently; safe and unsafe rounded bounds agree on every instance where both converge, so safety never changed a certified bound, at about 40% extra time",
+    "pages": "pp. 13–14, 21"
+   },
+   {
+    "pattern": "weaken the setting to expose a component's effect",
+    "evidence": "branching rules compared without the improved initial upper bounds, because with them almost all instances close at the root; reported outside the ablation table",
+    "pages": "p. 21"
+   },
+   {
+    "pattern": "instance-level attribution of a variant's losses",
+    "evidence": "the two instances that the triangle-inequality variant loses are exactly the two where its root bound is one unit weaker",
+    "pages": "p. 21"
+   },
+   {
+    "pattern": "negative variants and preliminary failures reported in the text",
+    "evidence": "three alternatives that improve one isolated metric but not overall performance (triangle inequality, Ryan-Foster branching, dual stabilization); cuts that lose instances when they are only added to the RMP",
+    "pages": "pp. 21–22"
+   },
+   {
+    "pattern": "text-table slips in computational sections (negative)",
+    "evidence": "'14 to 100 nodes' against kro124p with 124; at most 10 cuts per family per round against 11 in one round; 'same root bound quality' against root gaps of 1.9% and 0.2%; '52 nodes for the branch-and-cut baseline' not in Table 5's bnc-sec column; '14 previously unsolved' against 15 per Table 5",
+    "pages": "pp. 1, 3, 12, 17–22, 25–28"
+   },
+   {
+    "pattern": "one-run instance counts decided by a near-limit instance (negative)",
+    "evidence": "the 52-against-51 headline of withsrc+pricing rests on t62 hk48, where no subset-row cut was added, which also flips in unsafe mode, and on which bnc-sec needs 6026.9 s; no seeds or permutations, and whether the parallel pricing is deterministic is not stated (inference: variability not excluded; against H8)",
+    "pages": "pp. 17, 21–22, 26"
+   }
+  ],
+  "transferable": [
+   "(D4) For an undirected pricing problem with symmetric resources, extend labels in one direction only, up to half the resource bound, and merge pairs that share only their end node; prove completeness with the first forward label past the halfway point plus transitivity of dominance (pp. 6–8)",
+   "(D4) Add neighbours that are already unreachable to the visited set, which strengthens subset-based dominance without affecting correctness (p. 6)",
+   "(D4) Break symmetry across per-node pricing problems by generating each cycle only from its node with the smallest critical time (index as tie-break), which also balances their effort; skip a pricing problem when a fixed edge points to a node earlier in this order (p. 15)",
+   "(D4) Make a floating-point column-generation bound safe: set cut duals and negative covering duals to zero, scale the duals by M = 10^15 and round down, check every RMP column in integer arithmetic dividing M by ten until feasible, then price and bound in integer arithmetic (pp. 13–14, 16)",
+   "(D4) With an integer objective, round the safe bound up and test whether safety ever matters by comparing rounded safe and unsafe bounds per instance; run the heuristic variants unsafe (pp. 13–14, 21)",
+   "(D4) When pricing ignores a cut's dual, still lift the cut to every new column (p. 12)",
+   "(D5) Control the shared input across arms: start both methods from the same heuristic solution, and warm-start the rival with the same best known solution as your own method (pp. 18–19)",
+   "(D5) Fix the primal side, using the best known solutions as initial upper bounds, for all component experiments, so that the comparison isolates the dual task (p. 17)",
+   "(D5) When most instances close at the root, compare branching rules in a rerun without the strong initial bounds so that the trees are large enough, and report it outside the main ablation (p. 21)",
+   "(D5) Attribute a variant's losses instance by instance (the two lost instances are exactly the two with a root bound one unit weaker) (p. 21)",
+   "(D5) State for each table which instances its SGM is taken over, and warn that absolute SGMs are not comparable across tables (p. 17)"
+  ],
+  "coauthors": "Mohammed Ghannam (first author), Edward Lam, Gioni Mexi; byline alphabetical, Gleixner second of four (the 2024 version listed him last); no contribution statement",
+  "quotes": [
+   {
+    "text": "In our experiments neither situation occurred: on every instance where both the safe and the unsafe configuration converge, the rounded safe and unsafe bounds agree (see Sec. 7.3), so ensuring numerical safety never changed a certified bound.",
+    "page": 14
+   },
+   {
+    "text": "Since both are initialized with the same MCV solution, this is a fair comparison.",
+    "page": 19
+   }
+  ]
+ }
+]

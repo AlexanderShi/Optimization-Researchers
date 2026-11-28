@@ -1,0 +1,114 @@
+[
+ {
+  "id": "S013",
+  "year": "2016",
+  "title": "Iterative Refinement for Linear Programming",
+  "read_level": "full",
+  "contribution": "A refinement-based algorithm that builds extended-precision LP solutions with a floating-point LP solver as black-box subroutine, by repeatedly solving scaled residual LPs with the same matrix, with auxiliary LPs and an infeasibility box for infeasible and unbounded LPs, implemented in SoPlex and tested on 1,202 LPs, faster exact LP via QSopt_ex warm starts being a byproduct (pp. 3, 6-16).",
+  "problem_entry": "Floating-point LP codes can be unreliable and exact LP is a subroutine of exact MIP; the state of the art QSopt_ex (verify basis, repeat in higher precision, Algorithm 1, p. 5) is slow when extended-precision pivots are needed; entry via Wilkinson's iterative refinement of linear systems, taken one step further to the whole LP (pp. 3, 5-6).",
+  "key_idea": "Theorem 3.1: replace b, l, c by residuals scaled by Delta_P, Delta_D (same A); corrections divide violations by the scale factors with one-to-one correspondence of optimal bases; Algorithm 2 iterates with capped scale factors (alpha), the LP solver as black-box oracle, simplex warm-started from the previous basis; scaling is what differs from classical refinement (Remark 3.4) (pp. 6-9, 15-16).",
+  "assumptions": "Rational-data LPs in standard form, A full row rank (p. 4), general form in App. B (pp. 28-32); Assumption 3.5 absolute-tolerance oracle (p. 9), conceded not to hold in general (pp. 10, 15); 1,202 primal and dual feasible LPs from Netlib, Mittelmann, Meszaros, COR@L and MIPLIB relaxations, 7 memory-outs and 33 LPs floating-point SoPlex could not solve excluded (pp. 18, 33); no infeasible or unbounded LP in the set (reader's note, p. 33).",
+  "proof_devices": [
+   "Theorem 3.1 correspondence by direct algebra on violations, duality gap and basis conditions (pp. 6, 26)",
+   "Corollary 3.6 linear convergence by induction over k (pp. 10, 26-27)",
+   "reductio: absolute-tolerance oracle with arbitrarily large scaling would give any precision in one step (p. 10)",
+   "rational work only two matrix-vector products per round, scale factors rounded to powers of two (p. 11)",
+   "feasibility LP (4) with Farkas proof, Lemma 4.1 (pp. 11-12, 27)",
+   "infeasibility box rho = d0/||d||1 from aggregated Farkas cut, Algorithm 3 (pp. 12-14)",
+   "tau compared with 1 - delta_S,k+1 rather than a fixed threshold (p. 14)",
+   "unboundedness test on Av = 0, v >= 0, c^T v = -1 (pp. 14-15)",
+   "rejection of wrong infeasible/unbounded oracle claims and retry with other settings, Figure 3 (pp. 15-16)",
+   "SoPlex implementation: GMP/EGlib, hot start with shifting, nonbasics set exactly to bounds, sparse residual updates (pp. 16-17)",
+   "general form: reduced cost charged to nearest bound, ranged rows via slacks (16), failed fixing variant Remark B.2 (pp. 28-30)"
+  ],
+  "experiments": "SoPlex9 vs SoPlex50/SoPlex250 on 1,202 LPs, exact LP via QSopt_ex warm-started from SoPlex9 vs SoPlex50 bases, perPlex verification; 1,195 converge, 7 named failures; +3%/+7% overhead for 10^-50; exact LP factor 5.5 on 23 R0 >= 1 instances, 9 more solved; reader's recount finds 5.5 conservative (pp. 17-22, 56-100).",
+  "positioning": "LP analogue of Wilkinson's refinement (pp. 5-6, 22); surveys rational simplex, basis verification with precision boosting (QSopt_ex), rational reconstruction; uses rather than attacks QSopt_ex (pp. 4-6, 17, 22); extends Neumaier-Shcherbina Farkas cut (p. 12); qualifies Dhiflaoui/Koch observation (p. 20); hedged priority with named partial precedents (pp. 6, 8).",
+  "writing": "Contribution on first page (p. 3); numerical and geometric reading plus two two-variable examples before the algorithm (pp. 7-8); assumption followed by its critique (p. 10); proofs in appendix (pp. 26-27); footnotes name every failing instance (pp. 19-21, 33); two conclusion sentences looser than results (pp. 22-23).",
+  "limits_future": "Breaks down on LPs too ill-conditioned for the floating-point solver, remedy raise working precision (pp. 10, 23); Assumption 3.5 fails in general (pp. 10, 15); seven failures (pp. 19-20); directions: faster 10^-250 refinement (p. 21), extended instead of rational precision (p. 11), interval box (p. 14); reader: certificates untested on truly infeasible/unbounded LPs and oracle failures excluded (p. 33).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "the design itself: LP solves in floating point, residuals, termination checks and corrections in rational arithmetic, LP solver a black-box oracle; steps 3 and 6 present, step 5 (raise precision on failure) only proposed; oracle infeasibility/unboundedness claims decided by exact tests",
+    "pages": "pp. 3, 6, 9, 10, 11, 15-16, 23"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "early instance (2015): plain QSopt_ex rejected as biased reference, baseline QSopt_ex warm-started from SoPlex9's basis; all arms parse exactly; recount shows the exclusion leans against the new method",
+    "pages": "pp. 17, 79-100"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "belief that floating-point bases are optimal counted per instance with an independent verifier and qualified for more than 14%; violation of Assumption 3.5 on world given a mechanism",
+    "pages": "pp. 18-20"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "limits printed with counts and named instances and a named remedy (raise working precision), traced to [PB25]; cost of SoPlex250 with three named techniques; import from Wilkinson and QSopt_ex boosting",
+    "pages": "pp. 5-6, 10, 19-21, 23"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "step 4 cross-check without the producing solver: perPlex verifies SoPlex9 and final refined bases",
+    "pages": "pp. 17, 20"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "infeasibility box proves exactly a weaker statement (no feasible point with ||x||inf < R), shaped for the user rather than a minimal checker",
+    "pages": "p. 13; p. 32"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "test set from all major public LP sources with written, counted, named exclusions, but no selection model and the bias of keeping only oracle-solvable LPs is not argued",
+    "pages": "p. 33"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "exact certificate of a weaker, user-readable statement",
+    "evidence": "when an approximate infeasibility proof cannot be made a full certificate, prove exactly no feasible point inside a box of radius R; in general form certify variable bounds only",
+    "pages": "pp. 12-14, 32"
+   },
+   {
+    "pattern": "new component as a front end to the incumbent, not a rival",
+    "evidence": "feed the refined basis to QSopt_ex and compare against the same solver fed the floating-point basis",
+    "pages": "pp. 17, 21-22"
+   },
+   {
+    "pattern": "oracle contract stated, then audited",
+    "evidence": "black-box solver with written accuracy assumption, convergence proved against it, failure explained, guarded in implementation, failures shown in experiments",
+    "pages": "pp. 9-10, 15-19"
+   }
+  ],
+  "transferable": [
+   "[D2] Refine a whole LP, not only its linear systems: replace right-hand side, bounds and objective by residuals scaled with the inverse of the largest violation, capped by a growth limit α, and keep the matrix (Theorem 3.1 and Algorithm 2, pp. 6–9).",
+   "[D4] Round refinement scale factors to powers of two to keep the rational encoding short (pp. 11, 18).",
+   "[D4] In the correction step set nonbasic variables exactly to their bounds, and update residuals from the sparse correctors (pp. 16–17).",
+   "[D4] With two-sided bounds, charge each reduced cost to the bound nearest the primal value, not by its sign, when measuring dual violation and duality gap (p. 28).",
+   "[D4] Use the feasibility LP with a homogenizing column τ to obtain either a feasible point or a Farkas proof from one primal and dual feasible LP, and divide the primal termination test by τ (pp. 11–12).",
+   "[D4] Convert an approximate Farkas proof into an exact infeasibility box by aggregation, ρ = d₀/‖d‖₁ and bound strengthening in sorted order (Algorithm 3, p. 13).",
+   "[D4] Treat every infeasible or unbounded verdict of the floating-point solver as a claim to be tested, and retry with other settings when it is rejected (Figure 3, pp. 15–16).",
+   "[D5] Measure the effect of a better starting point for the incumbent exact solver by warm-starting it from both the plain and the refined basis (p. 17).",
+   "[D5] Class instances by rounds to the final basis and report overhead per class with stated shifts (pp. 20–21).",
+   "[D5] Print the number of rounds the tolerances predict next to the observed number (p. 21).",
+   "[D7] Open with a two-variable example whose 10⁻⁶ violation becomes visible only after the shift and scale (pp. 7–8)."
+  ],
+  "coauthors": "Daniel E. Steffy, Kati Wolter",
+  "quotes": [
+   {
+    "text": "Exact computation is used to compute and store the exact representation of the transformed problems, while numeric computation is used for solving LPs.",
+    "page": 3
+   },
+   {
+    "text": "Comparing this to the plain QSopt ex performance would be biased, however, since the underlying floating-point simplex implementations in SoPlex and QSopt ex are significantly different.",
+    "page": 17
+   }
+  ]
+ }
+]

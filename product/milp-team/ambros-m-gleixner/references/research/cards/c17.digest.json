@@ -1,0 +1,414 @@
+[
+ {
+  "id": "S070",
+  "year": "2025",
+  "title": "Efficient separation of RLT cuts for implicit and explicit bilinear terms",
+  "read_level": "full",
+  "contribution": "Detects bilinear product relations hidden in pairs of MILP constraints with a binary variable (Theorem 1, redundancy filtering) and separates RLT cuts by row marking with projection filtering, implemented independently in SCIP and Gurobi. RLT cuts help MINLP considerably (SCIP: 15% faster on clean instances, 123 more solved) and MILP slightly on hard instances; row marking cuts the share of MILP solving time spent in RLT separation from 54.6% to 2.8%.",
+  "problem_entry": "RLT gives strong relaxations but too many cuts at a prohibitive separation cost, and MILPs already contain bilinear products of a binary and a bounded variable that RLT could exploit (pp. 2–3, 5).",
+  "key_idea": "Derive product relations from two linear constraints on the same three variables (Theorem 1) and filter the redundant ones; separate only the (row, bound factor) pairs whose signs can raise the violation (row marking); check projected cuts first (pp. 5–13).",
+  "assumptions": "Mixed-binary NLPs in extended form with auxiliary product variables; general integers treated like continuous ones; implicit products need a binary multiplier and finite bounds. Theorem 1 needs b1b2 > 0 and γ ≠ 0, plus two implementation conditions. Projection equivalence holds only if all McCormick inequalities are present. Test sets: 1357 MINLPLib instances and 195 MILPs (MIPLIB 3–2017, Cor@l) with bilinear terms (pp. 3, 5–7, 11–13).",
+  "proof_devices": [
+   "Theorem 1 proved by matching coefficients of the implications for xi = 1 and xi = 0 with equal-sign scaling factors (pp. 5–6)",
+   "Non-redundancy interval for the derived relation, by case analysis on the signs of b1 and b2 (pp. 8–9)",
+   "Sign rule choosing the bound factor from the violation sign and the row coefficient; row marks LT/GT/BOTH stored as bit flags (pp. 9–11, Algorithm 1)",
+   "Projection filtering justified by McCormick tightness at bounds: equivalence when all McCormick inequalities hold, prioritisation of McCormick cuts otherwise (pp. 11–13)",
+   "Products stored with uplocks and downlocks, after Achterberg's thesis (p. 8)"
+  ],
+  "experiments": "Setup: SCIP dev (dd6c54a9d7) with SoPlex 5.0.2.4, PaPILO 1.0.0.1 and Ipopt 3.12.11; Xeon E5-2670 v2; 1 h. Metrics: shifted geometric means (shifts 1 s and 100 nodes) on clean instances, with affected, [x,timelim] and all-optimal subsets; permuted copies (4 permutations in Table A1); failures counted per setting. Arms: Off/ERLT/IERLT and single-feature ablations (No-mark, RPfilter, No-proj), an instance-size table, and a control run with forced McCormick inequalities. Replication: Gurobi 10.0 beta on its internal set, 10,000 s. No significance tests; several text-table slips (pp. 13–22, 26).",
+  "positioning": "Continues Adams–Sherali RLT; restates Sherali–Tuncbilek, reduced RLT and compact/inductive linearization as earlier ways to limit RLT cuts; new against creating products by multiplication; independent implementations in SCIP and Gurobi (pp. 2, 21–22).",
+  "writing": "Two contributions announced as first and second; a mechanism sentence per table; negative results stated plainly ('slightly detrimental'); a two-paragraph conclusion without future work; text-table slips (pp. 2–3, 15, 17–22).",
+  "limits_future": "Implicit-product cuts slightly hurt MINLP on average and help only challenging MILPs, so their use depends on the problem; projection filtering is nearly neutral and may keep useful cuts out of the pool. No future work and no default status are stated (pp. 16, 20, 22).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "The constructed baselines are single-feature ablations of the new method (standard separation as baseline; IERLT against No-mark, RPfilter, No-proj), not an incumbent reduced to the new code's features. The Gurobi replication states the setup mismatch instead of removing it.",
+    "pages": "pp. 9, 17, 21"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Losses are printed per subset with numbers, but no next project or future direction is named.",
+    "pages": "pp. 15–16, 19–20, 22"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "The second-solver evidence uses Gurobi's internal test set, described only by a design rule, with no instance list; the SCIP runs use public libraries.",
+    "pages": "pp. 13, 21"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "independent re-implementation in a second solver as replication",
+    "evidence": "The same detection and separation algorithms are implemented independently in SCIP and Gurobi 10.0 beta; tendencies are compared, numbers are not pooled.",
+    "pages": "abstract; pp. 21–22"
+   },
+   {
+    "pattern": "test the suspected mechanism's remedy and print the null",
+    "evidence": "A control experiment forces all McCormick inequalities to test why projection filtering is neutral; it stays neutral (+2% time).",
+    "pages": "p. 20"
+   },
+   {
+    "pattern": "text-table slips in computational sections (negative)",
+    "evidence": "The text gives separation shares of 54.2/15.1/2.4% where Table 6 prints 54.6/16.7/2.6. Table 8 lists 288 affected instances with 586 solved. The text's 'slowdown of 7%' meets a time ratio of 1.03 in Table 10. Gurobi MILP solved-only counts favour off (41 against 37), while the text reports no slowdown.",
+    "pages": "pp. 17–20, 22"
+   }
+  ],
+  "transferable": [
+   "Find hidden structure in pairs of model rows by writing both rows and the target relation as implications on a binary variable and matching coefficients; then drop derived relations that are redundant over the variable's domain (pp. 5–9).",
+   "Before separating a large cut family, mark the (row, factor) pairs that can raise the violation, using only the sign of the current violation and the signs of row coefficients, and separate only those (pp. 9–11).",
+   "Report component effects on clean instances, with difficulty brackets, the affected subset and an all-optimal subset for nodes, and print each setting's failure count with its cause (p. 14).",
+   "When a mechanism is suspected behind a neutral result, run a control that removes it (here: force all McCormick inequalities) and print the outcome even when it is null (p. 20).",
+   "Replicate a component's effect with an independent implementation in a second solver and report the agreement of tendencies without pooling numbers across setups (pp. 21–22).",
+   "Judge a separation-speed technique by the share of solving time it takes and how that share is distributed over instances, not only by mean time (Table 6, pp. 17–18)."
+  ],
+  "coauthors": "Ksenia Bestuzheva (first and corresponding author, ZIB), Tobias Achterberg (Gurobi GmbH); Gleixner second of three (ZIB and HTW Berlin)",
+  "quotes": [
+   {
+    "text": "We report our results on clean instances only since it is unclear how to compute the contribution of failed instances to the mean time and number of nodes.",
+    "page": 14
+   },
+   {
+    "text": "Although in Tables 1 and 3 the addition of RLT cuts for implicit products leads to slowdowns on most instance subsets, there exist problems that clearly benefit from these cuts, and the decision on whether to employ them depends on the problem.",
+    "page": 16
+   }
+  ]
+ },
+ {
+  "id": "S072",
+  "year": "2025",
+  "title": "Analyzing the numerical correctness of branch-and-bound decisions for mixed-integer programming",
+  "read_level": "full",
+  "contribution": "The first a posteriori check, in exact arithmetic, of every critical decision of a floating-point LP-based branch and bound (SCIP 9.3). All decisions are correct on 55 of 57 FPEasy instances and on about half of the NumDiff instances; wrong leaves are a tiny fraction (0.0002% and 0.0054%), and floating-point safe bounding alone verifies 93.76–99.69% of leaves.",
+  "problem_entry": "The field widely accepts that floating-point MIP solvers are numerically robust, yet wrong answers are documented and nobody had checked whether the individual branch-and-bound decisions are exactly correct (p. 2).",
+  "key_idea": "Instrument the unchanged solver through events and verify each leaf decision (infeasible, pruned, integer feasible) with a cost ladder: safe dual bound, rational reconstruction, exact factorization of the basis, exact LP last. Only pruning decisions are critical (pp. 2, 4, 6–8).",
+  "assumptions": "Rational-data MIP; pure LP-based branch and bound mimicking Cook et al. [6], with only simple presolving and rational propagation to shrink infinite bounds. Error classes: solution, bound, gap and infeasibility errors, each weak or strong by hindsight. Checks are judged against the solver's registered primal bound. Test sets FPEasy (57) and NumDiff (50), original and permuted (pp. 3–8).",
+  "proof_devices": [
+   "Safe dual bound by exact correction of the dual residual into the bound duals, eqs. (1)–(2); also for Farkas proofs (p. 6)",
+   "Classification of decisions into heuristic ones (branching variable, node order: any choice keeps correctness) and critical ones (pruning) (p. 4)",
+   "Error taxonomy with a weak/strong split by hindsight justification (pp. 4–5)",
+   "Global safe lower bound as the minimum of the safe bounds at error leaves, certifying the optimum in [ẑ, z*] (p. 6)",
+   "Verification ladder: rational reconstruction by continued fractions, exact LU of the simplex basis, Exact-SoPlex (p. 7)"
+  ],
+  "experiments": "Setup: SCIP 9.3 (b7906251d5) with SoPlex 8.0 (7b9bd461) as floating-point and exact LP solver; Xeon E7-8880 v4; 10,800 s including the analysis; FPEasy and NumDiff, original and permuted. Tables: aggregate correct/fail counts (Table 1); per-instance leaf errors (Tables 2–4); exact-SCIP values (Table 5; c7bd4be7b9, 18,800 s); the verification method per leaf (Table 6, seed 0). A tighter feasibility tolerance (1e-9) is tested in prose only. No times, node aggregates or analysis cost; text-table slips (pp. 7–14).",
+  "positioning": "Builds on the safe bounds of Neumaier–Shcherbina and Steffy–Wolter, rational reconstruction and SoPlex's exact LP; set against studies that compare only final results; linked to the group's exact SCIP and VIPR (pp. 2, 6–7, 9, 15).",
+  "writing": "Guiding questions in prose before the study; error classes defined before any data; a two-sided conclusion ('On the one hand' / 'On the other hand'); hedges 'typically single-digit' and 'Surprisingly'; 'significant' without a test (pp. 4–5, 7, 12, 14–15).",
+  "limits_future": "Pure LP-based branch and bound only. Exactly infeasible subproblems with slightly violated solutions are the problem case, and tighter tolerances help only partly; unbounded variables drive the exact LP calls. Future: partial VIPR certificates, completed by re-exploring discarded subproblems with higher precision or an exact MIP solver; extend the analysis to presolving and cutting planes (pp. 12, 14–15).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "The SKILL's [NC25]: belief stated; per-decision check defined; unchanged solver observed through events; one set where the belief should hold and one built to break it, both permuted; counts per error class; mechanism named and remedy tested; conclusion read for robustness.",
+    "pages": "pp. 2, 4–12, 14"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "The SKILL's '25 (original) and 27 (permuted) of 50' follows the text; Table 1's permuted row gives 13 + 13 = 26 fully correct and sums to 51 instances.",
+    "pages": "p. 9"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Cheapest check first, exact LP only as the last resort; floating-point techniques settle 93.76–99.69% of leaves; rational propagation is used only to shrink infinite bounds for safe bounding.",
+    "pages": "pp. 6–8, 14"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "No certificate yet, but the analysis audits the reasoning, recording weak errors that are justified in hindsight; partial VIPR certificates are future work.",
+    "pages": "pp. 5, 15"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "The printed limits become the next steps: partial certificates, completion, presolving and cutting planes.",
+    "pages": "pp. 14–15"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Step 7: the predecessor's FPEasy and NumDiff are reused, but no harder public set is added.",
+    "pages": "p. 8"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "verify only the decisions that decide correctness",
+    "evidence": "Branching-variable and node-order choices are heuristic and cannot make branch and bound incorrect, so only pruning, acceptance and infeasibility decisions are checked.",
+    "pages": "p. 4"
+   },
+   {
+    "pattern": "test the suspected mechanism's remedy and print the null",
+    "evidence": "A tighter feasibility tolerance (1e-9) removes some solution errors but not all, raises node counts and makes blend2 unverifiable.",
+    "pages": "pp. 12, 14"
+   },
+   {
+    "pattern": "text-table slips in computational sections (negative)",
+    "evidence": "Table 1's permuted row sums to 51, and the text's 27 fully correct runs meet 26 in the table. 'alu10 9' is named for the 46 infeasibility errors of alu16_1. The exact LP share is 0.06% in the text and 0.27% in Table 6.",
+    "pages": "pp. 9–11, 14"
+   }
+  ],
+  "transferable": [
+   "Split an algorithm's decisions into heuristic ones (any choice keeps it correct: branching variable, node order) and critical ones (pruning, accepting a solution, declaring infeasibility), and verify only the critical ones (p. 4).",
+   "Define error classes before measuring, each split into weak and strong by whether a later event justifies the decision in hindsight, so that a correct final answer can still be scored for wrong reasoning (pp. 4–5).",
+   "Check each decision with a cost ladder: a floating-point safe bound from an exact dual-residual correction, then rational reconstruction, then exact factorization of the solver's own basis, then exact LP; report which rung decided each leaf (pp. 6–7; Table 6, p. 14).",
+   "Judge each pruning decision from the solver's own state at the time (its registered primal bound), so that one error type does not contaminate the count of another (p. 6).",
+   "Run one set where the belief should hold and one built to break it, each original and permuted, and report per-instance leaf counts per error class (pp. 8–12).",
+   "Test the obvious remedy (a tighter feasibility tolerance) and report its side effects too (more nodes, a newly unverifiable instance) (p. 12)."
+  ],
+  "coauthors": "Alexander Hoen (first author, ZIB); Gleixner second of two (ZIB and HTW Berlin)",
+  "quotes": [
+   {
+    "text": "We still record these errors, because we are interested not only in the correctness of the final result but in the correctness of the floating-point solver’s reasoning that led to the result.",
+    "page": 5
+   },
+   {
+    "text": "On the one hand, they quantify the widely accepted belief that floating-point MIP solvers are generally numerically robust for well-behaved input data.",
+    "page": 14
+   }
+  ]
+ },
+ {
+  "id": "S073",
+  "year": "2025",
+  "title": "A diving heuristic for mixed-integer problems with unbounded semi-continuous variables",
+  "read_level": "full",
+  "contribution": "Indicator Diving, a SCIP diving heuristic for MILPs with semi-continuous variables in indicator formulation, works whether or not their upper bounds are finite. On SAP supply-chain, public Cellphone and MIPLIB indicator instances it cuts the root primal gap by 5–21% and the primal integral by 2–17%, at negligible time.",
+  "problem_entry": "Semi-continuous variables in practice often have huge or infinite upper bounds. Big-M is numerically risky, unbounded semi-continuous sets are not MIP-representable, and the literature mostly treats the bounded case (pp. 2–5).",
+  "key_idea": "Dive with indicator variables first. Candidates include integral indicators whose indicator constraint is violated, scored by how far ŷ lies inside (0, s); each is fixed to 1 or 0 by whether ŷ ≥ 0.5 s, so one variable's bound depends on another's LP value. Other candidates use Farkas diving scores mapped below (pp. 6–8).",
+  "assumptions": "MILP with semi-continuous and semi-integer variables, unit and set-up costs, in an indicator formulation whose LP relaxation drops the indicator constraint. Test sets: SCM (588 private SAP instances), Cellphone (192 public artificial SAP instances) and 42 unfiltered MIPLIB 2017 instances with indicator constraints. Presolve bounds nearly all unbounded variables, and the MIPLIB instances have none (pp. 2–6, 10–11).",
+  "proof_devices": [
+   "NP-hardness of the decision version by reduction from 0-1 integer programming (p. 3)",
+   "Order-preserving sigmoid that maps non-indicator scores into [−300, −100] (pp. 7–8)",
+   "Cross-variable rounding rule: fix z by the LP value of y relative to 0.5 s (p. 8)",
+   "Random tie-breaking among equal scores against input-order dependence (p. 10)"
+  ],
+  "experiments": "Setup: pre-release SCIP 9.0 (7cc9c068bc), SoPlex 6.0.3, single thread, Xeon Gold 6326; three seeds as observations (1764/576/126 runs). Root experiment (5 h): calls, solutions found, best at the end of the root, primal gap ratios 0.79/0.92/0.95, wins/losses at 1e-4. Tree search (20 min): primal integral ratios 0.83–0.98; ID time at most 4.456 s; solving-time ratios 1.01/0.91/0.99; SCM time-outs 277 against 262. A premise check counts violated indicators. No significance tests (pp. 8–14).",
+  "positioning": "Placed within the semi-continuous literature (mostly the bounded case) and indicator-constraint handling (Belotti et al., Bonami et al.); a transfer of Beale's and de Farias's branching; differs from known diving heuristics only in the cross-variable bound rule (pp. 3, 5–8).",
+  "writing": "Contributions listed by section; a complexity argument justifies a heuristic; candid admissions (the MIPLIB subset is unfiltered and lacks the motivating property); claims given as ranges that match the table extremes; one summary sentence ('neutral or increases') conflicts with Table 3 (pp. 3, 10–11, 13–14).",
+  "limits_future": "Presolve removes most of the motivating property and the MIPLIB subset lacks it; extra SCM time-outs are put down to variability. Future: stronger presolve to bound semi-continuous variables, and cuts that use indicator information lost in the simplex tableau. Default status not stated (pp. 10–11, 13–14).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Small scale: the paper's own premise is counted (the share of indicator variables violated by LP solutions; the motivating structure before and after presolve).",
+    "pages": "pp. 10–12"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "The printed observation that presolve bounds nearly all unbounded semi-continuous variables becomes the first future question; indicator-aware cuts are the second.",
+    "pages": "pp. 10–11, 14"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "The industry partner publishes an artificial twin (Cellphone) of its private set, and the MIPLIB subset is taken unfiltered with the mismatch admitted; there are no admission criteria beyond containing indicator constraints.",
+    "pages": "pp. 10–11, 14"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "public artificial twin of a private industrial test set",
+    "evidence": "SAP generated 192 artificial supply-chain instances from real-world models and published them beside its 588 private instances.",
+    "pages": "pp. 10, 14"
+   },
+   {
+    "pattern": "formulation chosen for numerical safety over relaxation strength",
+    "evidence": "Indicator constraints are kept although their LP relaxation is weaker than big-M's, because a huge M risks numerical trouble (1/M near tolerances) and cutting off optimal solutions.",
+    "pages": "pp. 4–6"
+   },
+   {
+    "pattern": "text-table slips in computational sections (negative)",
+    "evidence": "The summary says total solving time is neutral or increases, while Table 3 shows a 9–10% decrease on Cellphone.",
+    "pages": "pp. 13–14"
+   }
+  ],
+  "transferable": [
+   "Before claiming that a structure matters, count it in the original problem and in the presolved problem the component actually receives (Table 1, pp. 10–11).",
+   "If the industrial instances are private, have the partner publish an artificial set generated from the same real models, and report results on both (pp. 10, 14).",
+   "To rank two kinds of candidates in one dive, map the second kind's scores into a range below the first kind's with an order-preserving sigmoid (pp. 7–8).",
+   "Break ties among equal scores with a random factor so the choice does not depend on the input order, then run several seeds (p. 10).",
+   "For a primal heuristic, report how often it is called, finds a solution and keeps the best solution, the primal gap at its call and at the end of the root, wins and losses at a stated threshold, the primal integral and its own running time (Tables 2–3, Fig. 1, pp. 11–13)."
+  ],
+  "coauthors": "Katrin Halbig (first and corresponding author, FAU Erlangen-Nürnberg), Alexander Hoen (ZIB), Jakob Witzig (SAP SE), Dieter Weninger (FAU); Gleixner third of five (ZIB and HTW Berlin)",
+  "quotes": [
+   {
+    "text": "At this point, Indicator Diving differs from well-known diving heuristics in the literature, since the bounding step for one variable depends on the LP solution value of another variable.",
+    "page": 8
+   },
+   {
+    "text": "We have not filtered these further, so they do not necessarily conform to our specifications, but necessary ones are checked when Indicator Diving is called.",
+    "page": 10
+   }
+  ]
+ },
+ {
+  "id": "S079",
+  "year": "2025",
+  "title": "Clique Probing for Mixed-Integer Programs",
+  "read_level": "full",
+  "contribution": "Clique probing in PaPILO probes the n + 1 (or n) assignments of a clique instead of 2n single-variable fixings, with a six-value-per-variable data structure and early termination. It finds more reductions on the first PaPILO call and speeds up SCIP by 3% on MIPLIB 2017 instances with cliques (8% at ≥ 1000 s), solving 324 against 321 runs.",
+  "problem_entry": "Probing is an important presolve technique whose scoring and termination rules are unpublished, and solvers exploit structure such as cliques elsewhere but not in probing (pp. 1–2).",
+  "key_idea": "Probe clique assignments rather than variables: fewer propagations, several fixings at once, tighter bounds for long cliques, and use of the infeasible all-zero assignment of exactly-one cliques; the probing rules are adapted in Definition 2 (p. 3).",
+  "assumptions": "Explicit cliques of the presolved model only (PaPILO has no clique table, and SCIP does not share its own); PaPILO runs on a problem SCIP has already reduced. Test set: MIPLIB 2017 benchmark with four seeds, minus instances neither setting solves and instances without cliques: 93 instances, 372 runs (pp. 3, 6–7, 10).",
+  "proof_devices": [
+   "Counting argument: n + 1 assignments (n for exactly-one) against 2n single-variable propagations (p. 3)",
+   "Definition 2: rules for infeasibility, bounds, substitution and implications adapted to cliques; upgrade to an exactly-one clique when all-zero is infeasible (p. 3)",
+   "Six values per variable (extremes, second extremes, argmin/argmax) giving the reductions and an upper bound on the remaining ones for early abort (p. 4)",
+   "Thread-local copies synchronised in batches without locks (pp. 5–6)"
+  ],
+  "experiments": "Builds: PaPILO 3.0 (0e1165d6) against default PaPILO (32328a5c, a verbose variant of d808e1f3) inside SCIP 10.0 dev (80c1fbfe1b); sequential; Xeon E7-8880 v4; 2 h. First-call reductions in a log-log scatter with a stated omission rule and explained outliers. SCIP metrics: sgm1 time and sgm100 nodes on all, affected and bracket subsets; 324 against 321 solved; time ratios 1.03 to 1.08. Per-instance table in the repository; propagation counts mostly rise. No significance tests or failure counts; small text-table slips (pp. 6–10, 12).",
+  "positioning": "Builds on Savelsbergh's probing and Achterberg's thesis; summarises probing in SCIP and HiGHS; novelty claimed to the best of the authors' knowledge (pp. 1–2).",
+  "writing": "A short paper; two questions before the study, introduced as 'The first two questions'; outliers explained by mechanism; hedged claims; an argument why small reduction gains matter (pp. 6, 8–9).",
+  "limits_future": "Explicit cliques only; implications cannot be passed to the solver; an abort discards a clique's progress. Future: similar probing on other structures such as SOS2 constraints. Default status not stated (pp. 9–10).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Two printed limits with their causes (no clique table in PaPILO, no implication interface) and a named next structure (SOS2); the paper starts from a documentation gap in practice.",
+    "pages": "pp. 2, 10"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Like-for-like by build control: the same library at a named commit, built verbose to count reductions, with sequential runs so that parallelism does not confound; no reduced-and-default pair applies.",
+    "pages": "pp. 6–7"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "new component as a front end to the incumbent, not a rival",
+    "evidence": "Clique probing runs first, and standard probing continues on the variables it did not touch.",
+    "pages": "p. 5"
+   },
+   {
+    "pattern": "success-gated execution",
+    "evidence": "Clique probing is disabled for later rounds when it finds no reduction and is aborted after two consecutive unsuccessful cliques.",
+    "pages": "pp. 5–7"
+   },
+   {
+    "pattern": "text-table slips in computational sections (negative)",
+    "evidence": "square47's probing time is 68.5 s in the text and 69.5 s in Table 2; neos8's fixings start from 1233 in the text and 1223 in Table 2; 'The first two questions' introduces a list of two.",
+    "pages": "pp. 6, 8, 12"
+   }
+  ],
+  "transferable": [
+   "Count the assignments a structure allows (n + 1 for an at-most-one clique, n for exactly-one) and probe assignments instead of single variables (p. 3).",
+   "Per variable, keep the extreme and second-extreme bound values with their indices instead of every propagated bound vector; they yield the final reductions and an upper bound on the remaining ones, usable for early termination (p. 4).",
+   "Run a new presolver first, let the incumbent routine continue on what it did not touch, and switch the new one off for later rounds when it finds nothing (pp. 5–6).",
+   "Compare against the same library at a named commit, built verbose and run single-threaded, so that only the algorithm differs (pp. 6–7).",
+   "In a scatter plot of reduction counts, omit only instances with identical counts and runtime within a stated tolerance, and explain each outlier by mechanism (p. 8)."
+  ],
+  "coauthors": "Jacob von Holly-Ponientzietz (first author, ZIB), Alexander Hoen (ZIB and HTW Berlin), Mark Turner (ZIB); Gleixner last of four (ZIB and HTW Berlin)",
+  "quotes": [
+   {
+    "text": "Despite the importance of both probing and the subsequent solving process, we are not aware of any published work describing scoring methods or termination criteria.",
+    "page": 2
+   },
+   {
+    "text": "Since PaPILO does not maintain a clique table, and SCIP does not share its clique table with PaPILO, we are currently limited to detecting only those cliques that appear explicitly in the model",
+    "page": 10
+   }
+  ]
+ },
+ {
+  "id": "S080",
+  "year": "2025",
+  "title": "Cut-based conflict analysis in mixed integer programming",
+  "read_level": "full",
+  "contribution": "Restates pseudo-Boolean cut-based conflict analysis as MIP cut separation, with a new cMIR-based reduction proved to dominate the earlier reductions, an extension to mixed binary programs through the propagation history, and a heuristic for general integers. Added to SCIP 9.0 beside graph-based analysis, it solves 644 instead of 636 MIPLIB 2017 runs and is 5% faster (15% at ≥ 1000 s).",
+  "problem_entry": "Graph-based conflict analysis in MIP is resolution on clauses, a weak proof system, while pseudo-Boolean solvers learn in the exponentially stronger cutting-planes system; the paper restates that approach and brings it into MIP (pp. 2–4).",
+  "key_idea": "The pseudo-Boolean reduction of a reason constraint is a cut separating the fractional vertex of its one-row LP. Complementing instead of weakening and then applying MIR gives the strongest reduction, the GMI cut of the one-row LP. For mixed binary programs, continuous variables are first resolved with their reasons from the history (pp. 3, 9, 12–17).",
+  "assumptions": "MIP with real data, in three classes: pure binary, mixed binary (branching only on binaries) and general MIP. Assumption 1 normalises the reason without loss of generality. There is no guarantee when general integers contribute non-global bounds. Test set: MIPLIB 2017 benchmark with five permutations, minus the models no setting solves: 795 (pp. 4–5, 11, 17–19).",
+  "proof_devices": [
+   "Remark 1: resolution as Fourier–Motzkin elimination; Example 1 as a counterexample to naive generalized resolution (p. 8)",
+   "Prop. 1 by maximal activity: a tightly propagating reason keeps the resolvent infeasible (p. 9)",
+   "Geometric characterization of non-tight propagation by a non-integer vertex of the one-row LP (p. 9)",
+   "Prop. 2: tightness of the cMIR reduction; Remark 2: it equals the GMI cut of the one-row LP (p. 12)",
+   "Prop. 3: dominance of cMIR over wMIR via equal fractional parts, hence over Chvátal–Gomory (pp. 13–14)",
+   "Example 2: impossibility shown with two integer-feasible points whose midpoint lies in the local domain (pp. 14–15)",
+   "Prop. 4 and Remark 3: eliminating a continuous variable propagates at least as strongly, and a sign change proves earlier infeasibility (pp. 15–16)",
+   "Termination of Algorithm 3 via the lexicographic order of states; Figure 3 for the general-integer impossibility (pp. 17–18)"
+  ],
+  "experiments": "Setup: SCIP 9.0, Xeon Gold 5122, single thread, 2 h, MIPLIB 2017 benchmark × 5 permutations (795). Isolation experiment: conflict-generation and exploitation runs with deterministic limits (50,000 nodes, 5,000 conflict calls) on 704 instances; solved 553/562/562, conflicts used 31.2%/44.9%/45.4%. Integration (794 instances): solved 636 → 644; time ratio 0.95 on all, 0.92 on affected, 0.85 at ≥ 1000 s; nodes 0.95 on both-solved; a post-hoc 6 h rerun of the differing time-outs. Mean type and shift not stated; no significance tests (pp. 18–22).",
+  "positioning": "Brings SAT and pseudo-Boolean conflict analysis (Chai–Kuehlmann, Elffers–Nordström, Gocht et al.) into MIP, beside graph-based analysis (Achterberg 2007a) and dual-proof analysis (Witzig et al. 2021); extends the authors' CP 2023 paper; claims to bridge the pseudo-Boolean and MIP views (pp. 1–4, 14, 22).",
+  "writing": "Contributions ordered by problem class; two bulleted questions before the experiments; positive and negative results both announced; 'only rarely in practice' where the paper's own counts are 28% and 19%; the promised future directions are absent; small text-table slips (pp. 3–4, 18–20, 22–23).",
+  "limits_future": "No guarantee with general integers; graph-based fallback in about 19% of calls; length limits needed. No future directions are given despite the outline, and default status is not stated (pp. 4, 17–19, 21, 23).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Step 4: a rival community's mechanism (pseudo-Boolean cut-based conflict analysis) is imported and developed with that community (Nordström), first at CP 2023 and extended here; limits are printed with counts.",
+    "pages": "pp. 2–4, 18–19"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Like-for-like applied to the inputs: all algorithms face identical infeasibilities through the generation and exploitation runs, and the incumbent's length restriction is switched off to avoid skew; the integration is measured as default against default plus the component.",
+    "pages": "pp. 19–21"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "Step 9: instances with numerically inconsistent results are dropped, but only as 'a few', neither counted nor named; one more is dropped for numerical issues.",
+    "pages": "pp. 20–21"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "shadow-mode instrumentation for unbiased per-node data",
+    "evidence": "The conflict-generation run collects conflicts without letting them act, so every algorithm sees the same tree and the same infeasibilities (here for conflicts rather than per-node data).",
+    "pages": "p. 19"
+   },
+   {
+    "pattern": "deterministic effort proxy instead of wall-clock time",
+    "evidence": "Limits of 50,000 nodes and 5,000 conflict calls replace the non-deterministic wall-clock limit in paired runs.",
+    "pages": "p. 20"
+   },
+   {
+    "pattern": "counterexample before reusing an approximation algorithm from a neighbouring setting",
+    "evidence": "Examples 1 and 2 show that naive generalized resolution and the naive mixed-binary extension fail before the new reductions are designed (here a reasoning rule from SAT, not an approximation algorithm).",
+    "pages": "pp. 8, 14–15"
+   },
+   {
+    "pattern": "translate an imported mechanism into the host field's terms, then strengthen it with host-field tools",
+    "evidence": "The pseudo-Boolean reduction is read as separating a one-row LP vertex and then strengthened by MIR/GMI, with a dominance proof.",
+    "pages": "pp. 3–4, 9, 12–14"
+   },
+   {
+    "pattern": "proof-system strength as a design argument",
+    "evidence": "Graph-based analysis corresponds to resolution and cut-based analysis to cutting planes, which is exponentially stronger.",
+    "pages": "p. 2"
+   },
+   {
+    "pattern": "text-table slips in computational sections (negative)",
+    "evidence": "The text says both cut-based variants solve eight more instances, against 562 − 553 = 9 in Table 1; the caption lists an instance column the table lacks.",
+    "pages": "p. 20"
+   }
+  ],
+  "transferable": [
+   "Restate a neighbouring field's rule in your field's language (here the pseudo-Boolean reduction becomes separating the fractional vertex of a one-row LP), apply your field's strongest tool to it (MIR, GMI), and prove dominance over the original (pp. 3, 9, 12–14).",
+   "Before generalizing an algorithm, build the smallest counterexample on which the naive extension fails, then design the fix against that example (Examples 1–3, pp. 8, 14–17).",
+   "Show that no valid inequality can exist with two feasible points whose convex combination lies in the local domain (Example 2, pp. 14–15).",
+   "To compare learning components fairly, split the work into a generation run (collect, but do not use) and an exploitation run (add from the start), so that every variant sees identical inputs (pp. 19–20).",
+   "In paired runs, replace wall-clock limits by deterministic work limits such as nodes and calls (p. 20).",
+   "For instances only one setting solves, rerun with a longer limit and report how many swaps survive (p. 22).",
+   "Compare node counts only on instances both settings solve (p. 22)."
+  ],
+  "coauthors": "Gioni Mexi (first author, ZIB), Felipe Serrano (COPT GmbH), Timo Berthold (FICO and TU Berlin), Jakob Nordström (University of Copenhagen and Lund University); Gleixner fourth of five (HTW Berlin and ZIB)",
+  "quotes": [
+   {
+    "text": "To achieve this, we split the generation and the exploitation of the conflicts into two separate runs.",
+    "page": 19
+   },
+   {
+    "text": "This result constitutes a substantial performance improvement for a single technique in the mature field of MIP solving.",
+    "page": 23
+   }
+  ]
+ }
+]

@@ -540,3 +540,61 @@ GitHub commit search, author name containing "Gleixner", default branch, run on 
 *Attempted, not read, not counted*: the ZIB OPUS search (Anubis wall); Argonne event 389 and Simons Institute node 17354 (Cloudflare challenge); a Dec 2018 Wayback snapshot of scip.zib.de (overwritten before reading).
 
 *Counting*: entries [1]–[115] are all used; the numbers are not grouped by type. Primary: [1]–[30], [32], [33], [35]–[41], [44], [45], [50]–[110] (102 entries). Secondary: [31], [34], [42], [43], [46]–[49], [111]–[115] (13 entries).
+
+
+---
+
+## Update 2026-11-28 (full-text pass, T3.6)
+
+Source: `08-deep-reading-synthesis.md` §8–§9, built from the paper cards (`07-paper-cards.md`; 92 works read in full or in part, 6 at abstract level, 2 at metadata level). Citations like [S022 p. 17] point to the card and the page of the file it read, often a report or arXiv version even without a version word (the card key of `09-evidence-ledger.md` names the file); a version word (TR, arXiv, report, draft) marks cards always cited with their version. §§0–9 above stay as the web-research record of 2026-11-08; where the full texts change the picture, this section says so.
+
+### A. Topics and turns in the full texts (08 §8, copied)
+
+| Period | Works with a card | First-listed (alphabetical bylines included) or sole | Main topics (works) |
+|---|---|---|---|
+| 2008–2012 | 13 | 4: S025, S017, S020, S066 | MINLP components in SCIP (4); applications: mining, water networks (4); Suite overview (2, one work); MIPLIB 2010 (1); exact LP begins (1); LP linear algebra (1) |
+| 2013–2017 | 13 | 5: S039, S032, S013, S011, S003 | MINLP components (4); exact LP and certificates (3); Suite reports (3; 5.0 as lead); applications (2); branching (1) |
+| 2018–2022 | 41 | 7: D004, S002, S029, S041, S068, S101, D001 | applications and the energy HPC consortium (8); MINLP components with students (7); parallel, HPC and GPU (7); exact and certified (5); benchmark libraries and competitions (4); Suite reports (4; 6.0 as lead); presolve, propagation and conflict analysis (4); ML for MIP (2) |
+| 2023–2026 | 33 | 1: S026 | exact and certified (8: S022 journal, S036, S074, S050, S072, S060, S038, S085); applications at HTW (7); presolve, conflict analysis, heuristics (5); MINLP cuts (4); Suite reports (3; 10.0 ships exact mode); GPU and distributed (3); ML for MIP (1); debugging (1); competitions (1) |
+
+**Turns.**
+1. From applied IP to solver numerics in 2012: first contact with ZIB through SCIP in the 2008 Diplom thesis [S025 p. 7]; mining in 2008–2009 [S025; S008]; the first exact-LP paper in 2012 [S020 TR p. 3].
+2. From author to lead of group instruments, 2017–2021: the 5.0 release report with him first [S003 p. 3], the 6.0 report likewise [D004], and MIPLIB 2017 as first of 16 [S002 p. 1].
+3. From author to supervisor and co-author after 2018: first-listed or sole in 4 of 13, 5 of 13, 7 of 41 and 1 of 33 works per period (table). Credited own code shrinks to single features [S004 p. 83; S007 p. 27; S021 p. 39].
+4. Exactness into the mainline, one component at a time, 2021–2025 [D002 p. 14; S036 pp. 2, 26–27; S074 p. 12; S021 pp. 7, 9].
+5. HTW-era applications 2024–2026 [S091; S092; S082 report p. 3; S087; H002 p. 13].
+
+**Constant across the periods.** The producing/deciding split from 2012 to 2026 [S020 TR pp. 3, 5; S085 pp. 12–14]; limits printed with counts in most works (Method 3); like-for-like baselines from 2012–2013 [S017 TR pp. 15–17; S039 pp. 7–8] to 2026 [S085 pp. 17–19]; shifted geometric means and both-solved subsets [S028 p. 7; S003 pp. 6–8; S022 p. 9; S078 arXiv p. 18].
+
+---
+
+### B. Collaboration pattern in the full texts (08 §9, copied)
+
+**Most frequent co-authors per period** (distinct works; Suite reports and committee or consortium works excluded; conference and journal versions counted separately):
+
+| Period | Works | Co-authors (works) |
+|---|---|---|
+| 2008–2012 | 12 | Berthold 6, Vigerske 5, Heinz 5, Koch 3 |
+| 2013–2017 | 10 | Berthold 5, Weltge 3, Steffy 3, Müller 2, Wolter 2 |
+| 2018–2022 | 25 | Pokutta 5, Müller 4, Serrano 4, Sofranac 4, Koch 4, Lodi 3, Rehfeldt 3 |
+| 2023–2026 | 29 | Hoen 8, Eifler 6, Mexi 6, Bestuzheva 5, Ghannam 4, Nordström 3, Berthold 3 |
+
+Sources: the coauthor lines of the cards, e.g. [S039 p. 3; S029 p. 3; S072 p. 1; S065 p. 1].
+
+- **Peers early, students later.** Up to 2017 the co-authors are peers of the ZIB team (Berthold, Vigerske, Heinz, Steffy, Weltge); from 2018 the first authors are students and postdocs, with Gleixner second or last.
+- **Own hand on record.** Contribution statements of the release reports credit him with the nonlinearity score and exact SoPlex [S010 p. 28]; OBBT-based bilinear inequalities, nonzero cancellation, the constraint classification with Hendel and an LP-solver integration [S003 p. 37]; conflict-driven diving with Witzig, LP-interface support and ring packing [D004 p. 39]; PaPILO's dual postsolving with Hoen [S004 p. 83]; the HiGHS LP interface with Mexi and Hoen [S007 p. 27]; contributions and revisions to the exact mode whose main author is Eifler [S021 p. 39]; in an interdisciplinary paper, the limitations, exceptions and thresholds [H002 p. 13]. No contribution statement exists for the 2- to 6-author papers, so their voice is read from byline position only.
+- **Partners from rival communities.** Nordström from pseudo-Boolean solving, 2020–2025 [D006 pp. 1–2; S024; S062 p. 1; S080 p. 1; S038 p. 1]; Biere acknowledged for delta debugging [S065 p. 13]; Achterberg as co-author of a component replicated in Gurobi [S070 pp. 1, 21–22] besides MIPLIB 2017 [S002 p. 1]; Pokutta and Lodi on learning and GPU work [S012; S040 p. 1; S067 arXiv p. 1]; Sager on QP refinement [S058 p. 3]; Pedroso on two decomposition applications [S041 p. 3; S087 p. 1].
+- **Consortia and committees.** The energy HPC project with DLR, GAMS, Jülich and HLRS, 2016–2020, gives no author his own section [S098 p. 2; S033; D005 draft p. 1]; MIPLIB selection by eight author teams in 2010 [S001 TR p. 7] and by a committee of 21 with nine solver teams in 2017 [S002 p. 2]; industry partners SAP [S045; S073 pp. 10, 14] and Siemens [S017 TR p. 3].
+
+---
+
+### C. Against note 06
+
+- **§0, T9 and §8: the CHAP first place.** The CHAP paper says the framework was developed for the 2026 Land-Doig MIP Competition and evaluates it on the competition's 50 instances under its constraints; it reports no ranking [S076 pp. 1–2, 9]. The first place rests on the competition and workshop pages [38][39] alone, which were not reread in this step (08 §3.2, §11).
+- **T10: proof logging.** Learn to relax contains no proof log; its soundness comes from exact reasoning plus a cross-solver check [S024 pp. 6, 15], and it starts the collaboration with Nordström [D006 pp. 1–2]. Proof logging itself appears in the presolve certification paper, the proof-system preprint and the 9.0 release [S038 pp. 2, 6–11; S060 pp. 1–2; S007 p. 17] (08 §3.2).
+- **T2 and T7: MINLP after 2015.** The MINLP-side line continues as co-authored work with students to 2025 [S043 pp. 19–25; S047 pp. 14–16; S063 pp. 12, 24; D007 p. 3; S083 pp. 2, 10–11; S044 pp. 9–13; S070 pp. 21–22]: his own line to 2017, then as supervisor (08 §3.2).
+- **Decomposition.** Co-authored decomposition papers exist: price-and-verify with Dantzig–Wolfe for circle packing, first-listed [S041 pp. 3, 14–16]; ring packing in the 6.0 release [D004 pp. 26–27, 39]; branch and price and branch-price-and-cut at HTW [S092 pp. 3–7; S085 pp. 1–3, 12–16; S087 pp. 14–25]. No methodological line of his own is shown (08 §3.2).
+- **T5 and §9: author position.** Byline order is not a reliable signal of his role: alphabetical bylines appear before and after 2017, and release reports put the lead first and the rest alphabetically (08 §3.2). First-listed or sole in 4 of 13, 5 of 13, 7 of 41 and 1 of 33 carded works per period (A above).
+- **T11: exactness into the mainline**, dated in the full texts: the remaining gap printed with the next missing technique [D002 p. 14; S022 p. 18], safe Gomory cuts [S036 pp. 2, 26–27], certified propagation [S074 p. 12], the release with exact mode and its open gaps [S021 pp. 7, 9].
+- **T3: exact LP.** The 2016 rational reconstruction did not simply give way in 2025: basis verification by rational factorization already beat reconstruction on average in the thesis, about 46% faster [S032 p. 100], restated in 2020 [S029 p. 25] and confirmed in 2025 [S050 p. 10]; both shipped in 2016 [S010 p. 20] (dating corrected in the T3.6 review fixes, 2026-11-28). The no-recovery limit of refinement was printed in 2016 with its remedy [S013 TR p. 23] and in 2023 [S022 p. 7]; precision boosting provides recovery from 2025 [S050 pp. 2, 5–6] (08 §3.2).
+- **§6: unrealized plans.** The background parallel factorization is proposed again in 2020 [S029 p. 25] and taken up in no later card; the MIPLIB hindsight study is not reported [S002 p. 43] (08 §11).

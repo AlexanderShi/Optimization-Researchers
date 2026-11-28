@@ -1,0 +1,109 @@
+[
+ {
+  "id": "D023",
+  "year": "2025",
+  "title": "Efficient separation of RLT cuts for implicit and explicit bilinear terms",
+  "read_level": "full",
+  "contribution": "Widens and speeds up bilinear RLT by detecting implicit products in linear constraints (Theorem 1) and by separating RLT cuts with row marking and projection filtering, implemented in SCIP and independently in Gurobi 10.0 beta and tested in a computational study (pp. 1-3, 22).",
+  "problem_entry": "RLT relaxations are strong but cost separation time and LP size; earlier work restricts which cuts are added, and MILP uses only create products by multiplication, so the paper enters on applicability (products hidden in MILPs) and on separation cost, named the main obstacle (pp. 2-3).",
+  "key_idea": "(a) Theorem 1 derives implicit product relations from two linear constraints on a binary, w_ij and x_j, with detection and redundancy filtering (pp. 5-9); (b) row marking by a violation-sign test at the LP point and projection filtering skip candidates that cannot be violated (pp. 9-12).",
+  "assumptions": "Mixed-binary nonlinear programs in extended form with auxiliary w_ij, general integers treated as continuous (p. 3); bound factors need finite bounds (p. 4), Theorem 1 needs x_i binary and finite bounds on x_j (p. 5); projection exact only if all McCormick inequalities hold (p. 11); MINLPLib and MIPLIB/Cor@l reduced to 1357 MINLPs and 195 MILPs with products (p. 13); Gurobi internal set of 5011 MILPs and 806 MINLPs (pp. 21-22).",
+  "proof_devices": [
+   "Theorem 1 by undetermined coefficients (implications for x_i = 1 and 0, scaling by alpha and beta, coefficient matching) (pp. 6-7)",
+   "nonredundancy interval from solving each constraint for w_ij (pp. 8-9)",
+   "violation-sign test for substitutions giving the bound-factor table behind row marking (p. 10)",
+   "McCormick tightness at a bound: projected cut violated iff full cut, given McCormick inequalities hold (pp. 12-13)"
+  ],
+  "experiments": "SCIP (githash dd6c54a9d7, SoPlex 5.0.2.4, 1 h limit) with Off/ERLT/IERLT and knock-outs No-mark, RPfilter, No-proj on Clean/Affected/[x,timelim]/All-optimal subsets, shifted geomeans, separation-share table (pp. 13-21); row marking -63 % time on MILPs (Table 5, p. 17), explicit products -15 % time on MINLPs (Table 2, p. 15); permuted copies run (p. 14, Table A1 pp. 26-27); Gurobi 10.0 beta on/off ratio 0.99-0.89 MILP, 0.73-0.12 MINLP (Table 12, pp. 21-22).",
+  "positioning": "Continues Adams and Sherali's RLT with McCormick as solver standard; restates cut-reduction literature without criticism and sets itself apart by mechanism (products recovered from the model, separator skipping non-violable combinations); no other solver's RLT compared; extended version of IPCO 2023 (pp. 1-3, 23-25).",
+  "writing": "Two contributions announced in the introduction plus section map (pp. 2-3); abstract gives no result (p. 1); losses printed with numbers in the body (pp. 15, 16, 19, 20) but conclusion lists gains only (p. 22); text and tables disagree in places (pp. 17-20, 22).",
+  "limits_future": "Implicit products pay on some groups and hurt on others (p. 16); projection may keep useful cuts out of the pool (p. 20); general integers as continuous (p. 3); no constraint factors (p. 5); SCIP and Gurobi not directly comparable (p. 21); no detector for implicit products, no default status, LP-size cost unmeasured; no future-work statement (p. 22).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Root-bound gain printed beside total time and judged not to carry over; separation cost named the bottleneck and measured as share of total time (54.6 % -> 2.8 % MILP, 16.7 % -> 2.6 % MINLP); effort capped in solver units with RLT-only cut selection; node increase checked on All-optimal. Not split: residual IERLT slowdown on Clean MILPs and the LP-size cost.",
+    "pages": "Table 4, pp. 3, 13-18"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Each feature knocked out from IERLT and every table read by Clean, Affected, [x,timelim] brackets and All-optimal with shifted geometric means; Gurobi table uses same brackets plus solved-by-one-only counts; size-group table. Differences: no 10 % faster/slower counts (card count 32 vs 33 on Table A1), hard-bracket conclusion on 96 runs incl. permuted copies, 1 s shift not 10 s, default status not stated.",
+    "pages": "pp. 14-22, 26-27"
+   },
+   {
+    "method": "Method 4",
+    "relation": "contradiction",
+    "note": "Against step 7 and Misreading 1 (no seeds in written studies): this co-signed study runs permuted copies in SCIP (failure counts include permuted instances, Table A1 suffixes .1-.4, counts fit five runs per instance); procedure not described; Gurobi part mentions neither seeds nor permutations. The skill's claim holds at most for his sole-authored and ZIB-era studies.",
+    "pages": "pp. 14-15, 21-22, 26-27"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Cut family fed by a detector on the constraint matrix with two redundancy filters, and checked in a second, independently written code on a class-balanced Gurobi set (on/off ratio at most 0.99 on MILP brackets, 0.73 to 0.12 on MINLPs); whether the 5011 MILPs were limited to models with products is not stated.",
+    "pages": "pp. 5-9, 18, 21-22"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Implicit products end in a class split without a detector of the paying classes (warning sign 2); SCIP study only on instances with products; on MILPs the two codes differ on the full set and agree only on hard brackets; no default decision stated.",
+    "pages": "pp. 13, 15-16, 21-22"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Build stated exactly and failures counted then excluded, but the test set is selected by the detector under study and re-derived for RPfilter, so each comparison has its own Clean set, not a set fixed beforehand by a frozen older version.",
+    "pages": "pp. 13-20"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "A global-optimization technique (RLT) brought into MILP at the data-structure level, re-implemented in a second solver, each piece tested alone with failures printed; implicit-product cuts do not transfer uniformly to MILPs; the import runs from MINLP into MILP rather than from SAT or CP.",
+    "pages": "pp. 7-8, 10, 15-21"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "necessary-condition pruning before separation",
+    "evidence": "row marking by a violation-sign test and projection filtering skip candidates that cannot be violated",
+    "pages": "pp. 9-13, 17-18"
+   },
+   {
+    "pattern": "reverse the modeller's linearization",
+    "evidence": "products hidden in big-M pairs and linear constraints recovered by detection",
+    "pages": "pp. 2, 5-8, 13-14"
+   },
+   {
+    "pattern": "second-solver replication",
+    "evidence": "independent implementations in SCIP and Gurobi 10.0 beta; the Mcf-separator's SCIP and CPLEX check cited under Method 1 would be the second instance",
+    "pages": "pp. 1, 21-22"
+   },
+   {
+    "pattern": "control run for the explanation",
+    "evidence": "node increase checked on All-optimal; control run forcing all McCormick inequalities into the LP",
+    "pages": "pp. 17, 20"
+   }
+  ],
+  "transferable": [
+   "Implicit-product detection: for two linear constraints on (x_i binary, w_ij, x_j) with b1 b2 > 0 and γ = c2 b1 − b2 c1 ≠ 0, add A x_i + B w_ij + C x_j + D ≤ x_i x_j (b1 γ > 0) or ≥ (b1 γ < 0) with A = (b2(a1 − d1) + b1 d2)/γ, B = b1 b2/γ, C = b1 c2/γ, D = −b1 d2/γ; take candidate pairs from a hashtable of variable triples, sorted implied-bound arrays and the clique table (pp. 5–8).",
+   "Row marking for RLT separation: for each product violated at the LP point, mark every row containing x_j by the sign of a_rj (w*_ij − x*_i x*_j); with MARK_LT multiply ≤ rows by the lower and ≥ rows by the upper bound factor, with MARK_GT the reverse, with MARK_BOTH both, and equations by x_i (Algorithm 1, pp. 10–11).",
+   "Projection filtering: check the RLT cut of the row projected onto the variables strictly inside their bounds, build the full cut only if that one is violated; exact when all McCormick inequalities hold, otherwise it gives McCormick cuts priority (pp. 11–13).",
+   "Redundancy filter for derived relations: keep a product only if the interval of x_j where it is nonredundant meets the domain of x_j; a stricter variant demands that the interval cover at least 0.3 of the domain (pp. 8–9, 18).",
+   "Effort limits in solver units for an expensive separator: at most 20 unknown product terms per row–factor product, a call every 10 nodes, 1 round per node and 10 at the root, plus a family-internal cut selection before general cut selection (pp. 13–14).",
+   "Subset definitions for knock-out tables: Clean = no failure in any setting; Affected = LP-iteration count differs; [x,timelim] = at least x s with one setting and solved by one; All-optimal = solved by both; shifted geometric means with shifts 1 s and 100 nodes (p. 14).",
+   "A separation-time table: mean and maximum share of total time and counts in < 5 %, 5–20 %, 20–50 % and 50–100 % per setting, failures counted, runs of at most 0.1 s dropped (Table 6, pp. 17–18).",
+   "A root dual-bound table: relative difference (γ2 − γ1)/γ1 in the ranges 0.01–0.2, 0.2–0.5, 0.5–1.0 and > 1.0, counted for each side and printed beside the time tables (Table 4, pp. 15–16).",
+   "Check a node increase that follows a time saving on the All-optimal subset (Table 5, p. 17).",
+   "Test why a filter is neutral with a control run that forces the suspected interaction (all McCormick inequalities in the LP) (p. 20).",
+   "A size-group table: geometric mean time by number of nonzeros (0–10 up to 100000–1000000) for each knock-out, to show where each feature pays (Table 11, p. 21).",
+   "Replicate in a second, independently implemented solver with the same algorithms, and compare directions and brackets rather than absolute numbers (pp. 21–22)."
+  ],
+  "coauthors": "Ksenia Bestuzheva, Ambros M. Gleixner",
+  "quotes": [
+   {
+    "text": "although this does not always translate into an improvement in overall solver performance",
+    "page": 16
+   }
+  ]
+ }
+]

@@ -401,6 +401,52 @@ Rule for the skill: "Achterberg did X" can be backed for SCIP up to 2009 (commit
 
 ---
 
+## 10. The trajectory as the full texts show it (deep reading, added 2026-11-28)
+
+Source: the paper cards (`07-paper-cards.md`; batch files under `cards/`) and their synthesis, `08-deep-reading-synthesis.md` §8–§9. Card citations such as `[R004 p. 17]` use the `[[page N]]` file pages of the texts the cards read (`../sources/papers/INDEX.md`); `TR` marks a report version read in place of the published one. Nothing in §0–§9 is changed; where this section refines a row above, it says so. Coverage on 2026-11-28: 55 distinct works indexed, 36 open full texts, 34 read in full and 2 in part, 11 abstract only, 6 metadata only, 2 skipped; 39 studies after merging report and journal pairs.
+
+### 10.1 Studies per period (pairs merged; *full* = with a full or partial text)
+
+| Period | Studies (full) | Main topics in the cards | Full-text anchors |
+|---|---|---|---|
+| 2000–2004 | 5 (4) | Branching in SIP (2), application modelling in a group (1), the SCIP framework (1); a polyhedral diploma thesis (metadata) | [R001; D024 TR; R002; R003]; D036 |
+| 2005–2009 | 16 (13) | SCIP/CIP framework, conflict analysis, chip verification, MIPLIB 2003, the objective pump, counting, formulation sensitivity, teaching software, structure detection (Mcf), an LP heuristic for an interval method | [R004; R005; R006; R007; D004; R008; R009; R010; R011; R012; D010; D026; R013] |
+| 2010–2014 | 11 (7) | Parallel search, MIPLIB 2010, rounding heuristics and the primal integral, multi-row presolve, editorial work; abstracts: hybrid solving, implied literals, 12 years of progress | [R014; R015; R017; R016; R019; R018; D030] |
+| 2015–2019 | 2 (2) | Parallel records, the presolve taxonomy | [R020; R021] |
+| 2020–2025 | 5 (5) | Parallel records, an exact feedback-arc-set method, MIPLIB 2017, RLT cuts (two versions) | [R022; D020; D021; D022; D023] |
+
+### 10.2 Turns visible in the full texts
+
+- *From a rule inside another solver to his own framework*: the 2002 rule runs in SIP with CPLEX as LP solver [R001 p. 11]; SCIP was begun in October 2002 [D004 p. 20] and described as version 0.78 in 2004 [R003 pp. 2, 24].
+- *SAT and CP into MIP, pulled by an application*: conflict analysis (2005) takes its infeasible test set from chip verification [R004 pp. 2–3, 16]; the CIP class and the property checker follow [R008 pp. 2–3; D004 pp. 199–202; R009 p. 2; D010 pp. 29–37].
+- *The evaluation protocol consolidates in steps*: totals over a set the code selected (2002) [R001 pp. 10–11] → on/off in the default with both-solved subsets (2005) [R004 pp. 16–17] → the thesis protocol (2007) [D004 pp. 333–340] → slower-run subsets with affected rows (2009–10) [R013 pp. 26–27; D011 pp. 33–34] → the bracket table and refusals of small affected sets (2014–16) [D030 pp. 10–12; R021 pp. 5–6, 19, 22, 40, 42] → brackets with all-optimal subsets in two codes (2022–25) [D022 pp. 10–14; D023 pp. 14–22].
+- *After 2009 the written record is co-signed* community, library and parallel work; the last sole-authored paper (a 2013 patent aside, not read) is the 2009 SCIP paper, written at ZIB and acknowledging his move to CPLEX [D010 pp. 1, 38].
+- *Gurobi (from 2014)*: documentation of a production solver's components with measured impact [D030 pp. 1, 15; R021 pp. 4, 67]; joint work with ZIB on RLT cuts for bilinear products, measured in both SCIP and Gurobi [D022 p. 14; D023 pp. 21–22]; the library line continues [D021 p. 2].
+- *What stayed constant*: knock-out against the full default, read per set, from 2005 [R004 pp. 16–17] to 2025 [D023 pp. 14–22]; time printed beside node counts, from 2002 [R001 p. 11] to 2025 [D023 p. 16]; budgets in solver-internal units, from 2004 [R002 p. 6] to 2023 [D022 p. 10]; failures and exclusions counted and named, from 2004 [R003 p. 25] to 2025 [D023 p. 14]; three MIPLIB editions, 2005, 2010 and 2021 [R005 p. 3; D013 p. 2; D021 p. 2].
+
+### 10.3 Collaboration by employer period (pairs merged; from 08 §9)
+
+| Period | Studies (full) | Most frequent coauthors (studies) | Pattern |
+|---|---|---|---|
+| 2000–2007, ZIB | 12 (10) | Koch 6, Martin 4, Grötschel 2 | Sole-authored core papers: the framework report, the conflict report and the thesis [R003; R004; D004]; branching and the 2003 library with Koch and Martin [R001; R002; R005]; a project report with eight authors in alphabetical order [D024 TR p. 2]; credits by chapter in the thesis [D004 pp. 75, 115, 132, 199] |
+| 2008–2013, ILOG/IBM | 19 (13) | Koch 8, Berthold 8, Heinz 6, Shinano 4, Wolter 3 | One sole-authored paper [D010]; CIP and counting reports with ZIB colleagues [R009; R010; R012]; the Mcf-separator with Raack [D011]; a 16-author library [R015; D013]; heuristics with Berthold and Hendel [R017]; the parallel line with Shinano first [R014; R018; R019] |
+| 2014–2025, Gurobi | 8 (8) | Gleixner 3, Koch 3, Berthold 3, Shinano 3 | Five-author presolve papers with Gurobi's founders, alphabetical, roles not stated [D030 p. 1; R021 p. 3]; ParaSCIP records, Shinano first [R020; R022]; MIPLIB 2017, 4th of 16 [D021 p. 2]; RLT, last author [D023 p. 1]; feedback arc sets, last author [D020 p. 1]. No sole-authored text |
+
+Apart from the one part a text names as his ("Achterberg's heuristic" [D026 p. 7]) and MIPLIB 2010's credit of its variability work to Danna [R015 p. 22], no co-signed text states roles; until 2011 most bylines are alphabetical, so position says little, and sole authorship is the only firm signal, among papers ending in 2009 (08 §9).
+
+### 10.4 Refinements of rows in §1 (timeline)
+
+- **2000** (mathematics diploma thesis): the work is indexed as D036, under his former name Tobias Pfender (metadata only). The texts tie the names: MIPLIB 2003 cites the thesis for the aflow instances and lists Achterberg as their originator [R005 pp. 4, 13–14]; MIPLIB 2010 credits aflow40b to T. Achterberg with the thesis as reference [D013 pp. 19, 60]; the 2002 branching report uses six randomly generated instances of its arborescence-flow problem [R001 pp. 11, 16].
+- **28 March 2002** (new row): ZIB-Report 02-16, the MOMENTUM report on UMTS network configurations, eight authors in alphabetical order with Pfender among them, six months before the history-branching report [D024 TR pp. 1–3]. The 2003 chapter (row *2003*) is its published version, not read.
+- **4 Oct 2002** (ZR 02-32): the title page is dated 7 October 2002 [R001 p. 2]; the OAI date stays as recorded above.
+- **2005** (conflict analysis): the report studies SCIP 0.79a [R004 p. 15]; SCIP 0.78 was described in 2004 [R003 p. 24].
+- **2009** (MPC paper and the Mcf work): the MPC paper is his last sole-authored paper (a 2013 patent aside) [D010 pp. 1, 38]; the Mcf report of December 2009 already reads CPLEX results in ≥ 10 s and ≥ 100 s subsets by the slower run [R013 p. 27], the earliest written form of the brackets found.
+- **2011** (heuristics with Berthold and Hendel): the report is the first written form of the primal integral, co-signed, first of three in alphabetical order [R017 pp. 3, 5–7].
+- **2014 and 2016** (presolve papers): they measure Gurobi 5.6.3 [D030 p. 10] and Gurobi 6.5 [R021 p. 4].
+- **2022–2025** (RLT): the Gurobi 10.0 beta runs on Gurobi's internal set are the only part needing Gurobi access [D022 p. 14]; each code is measured only against itself [D023 p. 21].
+
+---
+
 ## Contradictions (kept, not reconciled)
 
 - **C1. Who wrote SCIP by 2009.**

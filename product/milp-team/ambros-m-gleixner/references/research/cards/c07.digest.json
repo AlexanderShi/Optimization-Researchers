@@ -1,0 +1,202 @@
+[
+ {
+  "id": "S014",
+  "year": "2017",
+  "title": "The SCIP Optimization Suite 4.0",
+  "read_level": "full",
+  "contribution": "A group release report for SCIP Optimization Suite 4.0 (SCIP 4.0, SoPlex 3.0, UG, GCG, SCIP-Jack, PolySCIP, SCIP-SDP) that presents implementation changes and their computational consequences, ending each feature with a default decision tied to a measurement, plus small algorithmic results (cycle bounds, KKT reformulation, LVB generalisation, row/column basis lemma); no code is credited to Gleixner (p. 74).",
+  "problem_entry": "Release report, not a research question: a snapshot of the development process (pp. 3-4); features enter from observed misbehaviour or motivating applications (toy instance for cycle detection p. 9, propagation-loop side effect pp. 12-13, line planning p. 10, supply networks pp. 11-12, over-tuning risk p. 16).",
+  "key_idea": "Each feature ends with a default decision tied to a measurement: off when no gain (cycle detection p. 9, NLOBBT p. 36, gauge/projection separators pp. 38-39, polishing p. 49), on when neutral or better (dual-ray analysis p. 28, row basis switch p. 56); randomization parameters (Table 1, p. 17) and deterministic concurrent solver (pp. 39-42).",
+  "assumptions": "CIP framework (MINLP, MIQCP, MBQP, MIP) with linear objective (pp. 4-5); assumptions stated where arguments are given (bounded feasible set pp. 29-30, Slater p. 35, RELAX_INCLUDESLP p. 15, interior point p. 37); libraries MMM, MIPLIB 2010, MINLPLib2 subsets, QP sets, 215 LPs (pp. 14-72); no exact or rational arithmetic anywhere.",
+  "proof_devices": [
+   "v-bound aggregation along a cycle giving infeasibility or bound beta/(1-alpha) (pp. 8-9)",
+   "clique partitioning by connected components first (p. 10)",
+   "KKT-based MBQP to MBPCC equivalence (pp. 29-30)",
+   "Lagrangian variable bound from KKT and convexity, generalising Gleixner-Weltge [72] (pp. 34-36)",
+   "Lemma 4.1 row/column basis regularity via determinants (p. 55)",
+   "Farkas proof constraint reused for propagation (pp. 27-28)",
+   "gauge binary search and projection via eigendecomposition plus Newton (pp. 37-39)",
+   "power-of-2 scaling (p. 46)",
+   "persistent scaling interface layer (p. 47)",
+   "NLP tolerance 10^-8 vs 10^-6 for NLOBBT bounds (p. 36)",
+   "MOSEK tolerance conversion (p. 68)",
+   "deterministic clock fitted by Lasso with leave-one-instance-out CV (p. 41)",
+   "delayed communication-point reading (Fig. 5, p. 42)"
+  ],
+  "experiments": "Feature on/off in one build on MMM with five seeds (solved = all seeds, seed-spread variability 7.6% to 5.5%, p. 14), leave-one-out heuristics (p. 25), affected subsets (pp. 28, 56), separator netting (p. 39); release SCIP 4.0 vs 3.2.1 on MIPLIB 2010 and 115 MINLPLib2 with four permutations, 'failed' column (pp. 70-73); text-table mismatches pp. 31-34; no significance test.",
+  "positioning": "Continues SCIP 3.2 report [63]; beside CPLEX, Gurobi, Xpress, Cbc, SYMPHONY (pp. 4-5); credits reused ideas (Achterberg et al. [4] p. 20, patent [3] p. 48, Fischetti et al. p. 40, Elhallaoui et al. pp. 45, 49); Gleixner's own work only as cited sources [70]-[72] (pp. 34-35, 54).",
+  "writing": "Per-feature template (motivation, feature description, computational results, default status); explicit local hedges (pp. 12, 37, 51, 53, 57); some causal attributions beyond data (pp. 59, 63, 72); per-section code contributions paragraph (p. 74).",
+  "limits_future": "Results 'only a rough indication' (p. 70); de-tuning bias ~11% default vs ~2% over permutations (p. 71); MINLP solved count falls, read as 3.2.1 over-tuning (p. 72); future: compare with seeds not permutations (p. 71), reduce separator effort (p. 39), DBDS targets (p. 54), UG sharing (p. 58), PolySCIP (pp. 66-67).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "group level: each component's measured gap printed with a number, default decision and next step (cycle detection, component handling, polishing, gauge/projection separators, DBDS negative result, MINLP solved count drop); step 1 only, no cross-paper ledger",
+    "pages": "pp. 9, 12, 39, 49, 53-54, 72-73"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "group level: constructed comparators (DBDS vs default_compare, ConcurrentSCIP with FiberSCIP racing settings, SCIP 3.2.1 previous version, identical CPLEX in MINLP arms, on/off in one build); DBDS only against aligned comparator",
+    "pages": "pp. 14, 25, 28, 36, 49, 53, 57-58, 70-72"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "group level: beliefs measured at instance level (over-tuning to seeds/default permutation, seed spread), not per decision; counter-case persistent scaling measured only for runtime neutrality",
+    "pages": "pp. 14, 47, 71-72"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "group level: final answers checked against external reference values (MINLP 'failed' column), not certificates or exact arithmetic; improvement credited to bug fixes",
+    "pages": "pp. 72-73"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "group level: floating-point safeguards where a number becomes a bound or scaled problem (power-of-2 scaling, tighter NLP tolerance, MOSEK conversion), no exact arithmetic; silent on SoPlex rational mode",
+    "pages": "pp. 35-36, 46, 68"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "group level: per-feature internal test sets with counted inclusion/exclusion rules (DBDS 1235 to 215, BoxQP, LibsQP, NLOBBT 318); DBDS set conditioned on its own successful runs",
+    "pages": "pp. 31, 36, 53, 70"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "price the de-tuning",
+    "evidence": "accept and measure a loss on the default permutation when removing over-tuning, call the bias intended, read default-vs-permutation divergence as over-tuning",
+    "pages": "pp. 71-72"
+   },
+   {
+    "pattern": "seed spread as a variability metric",
+    "evidence": "fastest vs slowest seed shifted geometric mean",
+    "pages": "p. 14"
+   },
+   {
+    "pattern": "per-section code-contribution statement in a multi-author release report",
+    "evidence": "Code Contributions of the Authors paragraph",
+    "pages": "p. 74"
+   },
+   {
+    "pattern": "flag arbitrary and intuition-based constants as such in print",
+    "evidence": "constants called arbitrarily set/chosen; locks heuristic's 67% defended only as reasonable in experiments",
+    "pages": "pp. 25, 37, 51, 53"
+   }
+  ],
+  "transferable": [
+   "Solved = solved under every seed or permutation; average each instance's time over seeds or permutations, then take the shifted geometric mean (shift 10 s; 100 nodes) (pp. 14, 70).",
+   "Report variability as the relative gap between the fastest-seed and slowest-seed shifted geometric means (p. 14).",
+   "Three-tier reporting for a component: all instances, affected (it fired at least a stated number of times), highly affected (p. 28).",
+   "Net out a separator's own running time and filter easy instances to separate cut quality from separator cost (p. 39).",
+   "A \"failed\" column for final bounds that contradict published reference values (p. 72).",
+   "For a research prototype that forces settings, build an aligned comparator with exactly those settings and measure in an implementation-independent unit (iterations) when time is not the question (pp. 52-53).",
+   "Power-of-2 scaling factors and a tighter inner tolerance where an inner result becomes an outer bound (pp. 36, 46).",
+   "Before releasing a de-tuning change, measure its cost on the default order and on permutations separately (p. 71).",
+   "Per-section code-contribution paragraph (p. 74)."
+  ],
+  "coauthors": "S. J. Maher, T. Fischer, T. Gally, G. Gamrath, R. L. Gottwald, G. Hendel, T. Koch, M. E. Lübbecke, M. Miltenberger, B. Müller, M. E. Pfetsch, C. Puchert, D. Rehfeldt, S. Schenker, R. Schwarz, F. Serrano, Y. Shinano, D. Weninger, J. T. Witt, J. Witzig",
+  "quotes": [
+   {
+    "text": "Despite the improvement, more evidence is needed before this can be activated by default.",
+    "page": 39
+   },
+   {
+    "text": "Note that SCIP 4.0 does not contain new features that systematically improve numerics, but several numerical bugs in the code were continuously corrected during the last development phase.",
+    "page": 72
+   }
+  ]
+ },
+ {
+  "id": "S019",
+  "year": "2017",
+  "title": "Verifying Integer Programming Results",
+  "read_level": "full",
+  "contribution": "Proposes a certificate format (VIPR) for MIP results as a flat list of statements each checked by a few inference rules (linear inference, rounding, assumption, unsplitting), with reference software (exact rational checker, tightener, viewer), certificate output from a modified exact rational SCIP, and a computational demonstration on 107 instances.",
+  "problem_entry": "MIP software can return wrong results (floating point, and programming errors in exact solvers); formal verification too ambitious, MIP certificates not obvious, solvers hide trees and cuts, current practice is cross-solver comparison or solution checking; applications circuit verification and Frankl's conjecture (pp. 3-4).",
+  "key_idea": "Flatten the branch-and-bound tree into a bottom-up list of derived constraints justified by linear inequality inference, rounding (CG cuts), assumptions and unsplitting; the checker deduces assumption lists on the fly; general disjunctions and split cuts representable; price: no direct reading of leaves (pp. 5-8).",
+  "assumptions": "MILP with rational data, specified and solved in exact rational arithmetic (p. 5); split disjunction branching and cuts derivable as split cuts (p. 6); easy (57) and hard (50) sets of Cook, Koch, Steffy, Wolter [13] (p. 9; Table 1, p. 10).",
+  "proof_devices": [
+   "linear inequality inference via LP duality (p. 5)",
+   "rounding rule for integral left-hand sides (p. 6)",
+   "assumption and unsplitting rules (pp. 7-8)",
+   "split cuts via assume, derive both sides, unsplit (Remark 3, p. 8)",
+   "viprchk exact rational checker with GMP (p. 8)",
+   "viprttn dependency-graph tightening with DFS topological sort (pp. 8-9)",
+   "vipr2html viewer (p. 8)",
+   "last-referencing index stored per derived constraint for early memory freeing (p. 8)",
+   "hybrid producer: CPLEX floating-point LP plus QSopt_ex exact LP, Project-and-shift and Exact LP certificates (p. 9)"
+  ],
+  "experiments": "107 instances, exclusive Xeon jobs, 1 h and 10 GB certificate cap; arms SCIP, SCIP+C, VIPR; categories all/solved/memout/timeout, shifted geometric means (p. 9); certificate run ~2.1x (easy) and ~1.8x (hard), checking about half/quarter of the solve, I/O ~7%, 17 memouts, tightening >50%, markshare1_1 10 GB to 8 kB (Table 1, p. 10); no significance test, no second checker.",
+  "positioning": "Against formal code verification (p. 3) and cross-solver comparison or the MIPLIB checker (p. 4); simpler than Applegate et al. and Carr et al.; first public general MIP certificate software 'To the best of our knowledge' (pp. 4-5); borrows from SAT proof checking, DRAT-trim, Hooker's inference duality (pp. 4-5); safe bounds and safe Gomory cuts as related (pp. 3, 10).",
+  "writing": "Conceptual paper, file spec moved to the repository (p. 5); builds LP to IP to branch and cut with worked Examples 1-3 (pp. 5-8); explicit hedges (pp. 3-4); enumerated observations (pp. 9-10); 'significantly' without a test (p. 10); 'the first step of many' (p. 10).",
+  "limits_future": "Certificates only for two dual-bounding methods, producer available on request, 17 memouts, redundant output with two named fixes (pp. 9-10); forecast closer to plain exact SCIP since I/O ~7% (p. 10); future: floating-point certificates via directed rounding and interval arithmetic, approximate certificates for debugging and measuring numerical violation, HOL Light (pp. 10-11); unwritten: presolve, propagation and conflict analysis not exercised, no test of the checker.",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "origin of steps 1-2: limited inference rules, verification independent of how statements were created, exact rational checker 'merely a reference', timings hosted; step 7 (testing the checker) not done, simplicity offered instead; coverage only implicit",
+    "pages": "pp. 3-4, 8-9"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "hybrid producer (floating-point CPLEX LP, exact QSopt_ex and Project-and-shift for valid dual bounds), fully rational checker; future floating-point certificates with directed rounding and interval arithmetic (step 4)",
+    "pages": "pp. 8-10"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "gaps printed with counts (39/57, 14/50 vs 54, 23; 17 memouts) and two named fixes; future-work list holds later projects; mechanism imported from SAT proof checking (step 4); overhead forecast not checkable here",
+    "pages": "pp. 4, 10-11"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "only default exact SCIP as baseline; SCIP+C differs by restricted bounding methods and file output, only I/O share measured; no reduced baseline; predecessor's sets reused (step 7)",
+    "pages": "pp. 9-10"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "stated as future work: measuring maximum or average numerical violation over all derivations with approximate certificates, a per-derivation measurement proposal; motive is not distrust",
+    "pages": "pp. 3, 10"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "naive online producer, separate offline trimming pass",
+    "evidence": "certificate printed during the solve, then dependency-graph tightening; 10 GB to 8 kB on markshare1_1",
+    "pages": "pp. 8-10"
+   },
+   {
+    "pattern": "verify what an unfinished run has proved",
+    "evidence": "checking the bounds in the intermediate certificate of memout and timeout runs",
+    "pages": "p. 9"
+   }
+  ],
+  "transferable": [
+   "Write a certificate as a flat list of derived constraints, each justified by one rule (sign-constrained linear combination, rounding, assumption, unsplitting), so the checker needs no knowledge of the producing algorithm (pp. 5-8).",
+   "Flatten a branch-and-bound tree into a bottom-up derivation: branching constraints enter as assumptions, pairs of contradictions are unsplit, and the checker tracks assumption lists on the fly (pp. 7-8).",
+   "Represent split cuts the same way: assume each side, derive the cut on both, unsplit (p. 8).",
+   "Store the last referencing index after each statement so checkers can free memory (p. 8).",
+   "Trim a naively printed certificate with a dependency-graph pass that keeps only the component reaching the final claim (p. 9).",
+   "Report overhead on both-solved instances and file runs that hit the memory or time cap in their own rows (p. 9).",
+   "Measure the I/O share of an overhead before forecasting how far it can shrink (p. 10)."
+  ],
+  "coauthors": "Kevin K. H. Cheung, Daniel E. Steffy",
+  "quotes": [
+   {
+    "text": "We again emphasize that the format was designed with simplicity in mind; the certificate verification program we have provided is merely a reference and others should be able to write their own verifiers without much difficulty.",
+    "page": 8
+   },
+   {
+    "text": "based on this we believe that future modifications to the code will allow us to solve and print certificates in times much closer to those in the SCIP column",
+    "page": 10
+   }
+  ]
+ }
+]

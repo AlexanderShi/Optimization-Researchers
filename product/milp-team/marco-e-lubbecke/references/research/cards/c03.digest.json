@@ -1,0 +1,402 @@
+[
+ {
+  "id": "S016",
+  "year": "2010",
+  "title": "A constraint integer programming approach for resource-constrained project scheduling",
+  "read_level": "full",
+  "contribution": "A proof of concept that integrates CP propagation of the cumulative constraint, LP relaxation bounds and SAT-style conflict analysis in one SCIP branch-and-bound tree for the RCPSP, makes the cumulative constraint generically available in SCIP, and improves five PSPLib lower bounds (pp. 2-5).",
+  "problem_entry": "A benchmark no single community (IP, CP, SAT) has cracked, with 60-job PSPLib instances open for years; the best method is a CP-SAT hybrid, so adding IP is called the logical next step (pp. 1-2).",
+  "key_idea": "Constraint integer programming in SCIP: core-time propagation of the cumulative constraint with explanations for conflict analysis, LP bounds from a time-indexed binary model with knapsack cuts, an LP-guided list-scheduling heuristic, all in one tree (pp. 2-4).",
+  "assumptions": "RCPSP with non-preemptive jobs, renewable resources, precedence graph, makespan; time-indexed binary IP next to the CP model; PSPLib 30-job and 60-job sets (480 each), 120-job instances for bounds only (pp. 2-4).",
+  "proof_devices": [
+   "2x2 feature ablation (LP relaxation, conflict analysis) plus a per-instance best-of-four row 'bestset' (Table 1, p. 4)",
+   "shifted geometric means with shifts 10 s and 100 nodes, the shift justified (p. 4)",
+   "core-time propagation of the cumulative constraint with explicit explanation sets for conflict analysis (p. 3)",
+   "global disjunctive bounds constraint for incompatible job pairs, cuts from forbidden sets (p. 3)",
+   "list-scheduling heuristic ordered by LP start times, with justification improvement (pp. 3-4)"
+  ],
+  "experiments": "Xeon 2.66 GHz, SCIP 1.2.0.6 with CPLEX ('12.10' as printed), 1 h per instance; 2x2 ablation plus bestset and lazyFD; optima 460/480 and 385/480 with default vs lazyFD 480 and 429; by shifted geometric mean time default ranks third of four (norelax and none faster); lazyFD figures without provenance or times; five 120-job bounds improved; no seeds (pp. 4-5).",
+  "positioning": "Builds on SCIP and the CIP paradigm and on hybrid branching; lazyFD (Schutt et al.) is the best known approach, whose recent upper bounds were met independently; no criticism of others (pp. 2, 4).",
+  "writing": "Five-page short paper; the register rises from a proof of concept (p. 2) to 'competitive to the current best known method' (p. 4) and 'shown the power' (p. 5); the conclusion summarises; details deferred to a ZIB-Report (p. 4).",
+  "limits_future": "Basic implementation; future work on cutting planes for the LP relaxation and dynamic edge-finding with re-propagation; NP-hardness of minimum explanations left open (pp. 3, 5).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Step 5: per-feature 2x2 ablation plus a best-of-four row; shifted geometric means with each shift stated and justified.",
+    "pages": "p. 4"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Steps 3 and 6: lazyFD figures without provenance, nodes or times; 'competitive' and 'shown the power' while lazyFD proves more optima (480 vs 460; 429 vs 385); 'best performance' holds for optima and total time, not shifted geometric mean time.",
+    "pages": "pp. 2, 4-5"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Step 5 outside decomposition: the hybrid is built into SCIP's tree rather than a hand-written search; the cumulative constraint becomes a reusable SCIP component (H9, Taste G2); proven bounds on named open instances (Taste G1).",
+    "pages": "pp. 2-3, 5"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "oracle column next to the rule",
+    "evidence": "'bestset' (best of four settings per instance) next to each single setting; same device as DWR best (S015 p. 22) and OPT (S009 pp. 5-6) in card c04 and Best alpha in S035 (pp. 15-16)",
+    "pages": "p. 4"
+   },
+   {
+    "pattern": "explanations from a global constraint for generic conflict analysis",
+    "evidence": "core-time propagation returns the jobs whose cores cause the bound change; the complexity of minimum explanations is left open",
+    "pages": "p. 3"
+   }
+  ],
+  "transferable": [
+   "Ablate component by component (each off, both off, both on) and add a per-instance best-of-settings row, so the reader sees each component's share and the ceiling of the portfolio (p. 4).",
+   "Report shifted geometric means with the shift for each measure and the reason for it (p. 4).",
+   "Report nodes and time side by side and say when a reduction of the search space does not pay in time (p. 4).",
+   "Make a problem-specific propagator return its explanation so that the solver's generic conflict analysis can learn from it (p. 3).",
+   "Order a list-scheduling heuristic by the LP solution's start times, with a bound-based fallback when no LP solution exists (p. 3).",
+   "State improved bounds on named open benchmark instances with their values (p. 5)."
+  ],
+  "coauthors": "Timo Berthold, Stefan Heinz (ZIB), Rolf H. Möhring, Jens Schulz (TU Berlin); alphabetical order; Lübbecke at TU Darmstadt",
+  "quotes": [
+   {
+    "text": "It is the purpose of this study to evaluate the potential of such a hybrid and to give a proof-of-concept.",
+    "page": 2
+   },
+   {
+    "text": "We use a shift s = 10 for time and s = 100 for nodes in order to decrease the strong influence of the very easy instances in the mean values.",
+    "page": 4
+   }
+  ]
+ },
+ {
+  "id": "S007",
+  "year": "2011",
+  "title": "Branch-Price-and-Cut Algorithms",
+  "read_level": "full",
+  "contribution": "An expository synthesis that organises branch-price-and-cut around the relation between the original and the extended (Dantzig-Wolfe) formulation, in its convexification and discretization versions, and derives from it where cuts and branching decisions go and what to implement (pp. 1-14).",
+  "problem_entry": "Naive cutting and branching may entirely ruin the advantages of a decomposition; understanding branch-and-bound, column generation and cuts is where the story begins, not where it ends (p. 2).",
+  "key_idea": "Answer each cut, branching and implementation question by its place in the original-extended relation; for pure column models, reverse the decomposition (K copies of the pricing domain) to obtain an original formulation (pp. 3-7, 10-13).",
+  "assumptions": "MIP with a 'relatively easy' set X, assumed pure integer; bounded X for discretization; identical blocks bring symmetry; the reversal needs an integer bound K on the number of columns (pp. 3-7).",
+  "proof_devices": [
+   "convexification (Minkowski-Weyl) versus discretization (integer representation) of X (pp. 3-5)",
+   "aggregation of identical subproblems and lexicographic projection (24) to a unique original solution (pp. 5, 11-12)",
+   "reversing Dantzig-Wolfe: K copies of the pricing domain give an original formulation (11) (pp. 6-7)",
+   "inequality (22): branching in the pricing problem convexifies the bound change (p. 11)",
+   "cut duals in pricing; extra pricing variables y = g(Ax) for non-linear master cuts such as Chvatal-Gomory rank-1 (p. 9)",
+   "Ryan-Foster through auxiliary pair variables; nested partition of the convexity constraint with polynomially bounded depth (pp. 12-13)"
+  ],
+  "experiments": "n/a: no experiments and no numbers; only pointers to successful applications and to good experience with capacity- and time-indexed cuts (pp. 2, 10).",
+  "positioning": "Theory credited to Vanderbeck, Vanderbeck-Wolsey, Desaulniers-Desrosiers-Spoorendonk and Ralphs-Galati; Barnhart et al. called a bit outdated; frameworks and generic codes listed without ranking, GCG described as an attempt; reference slips: duplicate [14]/[15], 2005 survey listed with Desrosiers first (pp. 4, 8-16).",
+  "writing": "Teaching register with cross-references to other entries; candid about implementation effort ('a whole lot of work, even in 2010'); ranked answers in 'When everything fails'; shortcuts named for what they are ('not elegant, but it often works'); the term credited to Letchford (pp. 2, 13-15).",
+  "limits_future": "Generic cuts on original variables often add little and problem-specific cuts are 'the alternative to go'; cuts on master variables reported for very few problems; non-basic x* unsolved, crossover untried (pp. 8-9, 14).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Steps 1 and 6: argues from the original formulation throughout; constructs one for column models by reversing Dantzig-Wolfe; branching on original variables; explicit master keeps them accessible.",
+    "pages": "pp. 4, 6-7, 10-14"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Measured bet and Workflow B checkpoint (b): pricing ideally has a combinatorial algorithm, otherwise a slow IP solver; implementation is a whole lot of work. Section 5.2 is a stated order for Workflow G (research the structure, profile, then heuristic) and for H5 (re-think the formulation).",
+    "pages": "pp. 4, 13-14"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Encyclopedia entry that states the open points (generic cuts, master-variable cuts, non-basic x*) and credits the sources of ideas and names (Letchford; Galati and Forrest).",
+    "pages": "pp. 8-9, 14-15"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "reverse the decomposition to obtain an original formulation",
+    "evidence": "for a pure column model, K copies of the pricing domain give a block-diagonal original problem on which branching and cuts are designed",
+    "pages": "pp. 6-7"
+   },
+   {
+    "pattern": "enforce decisions in the pricing domain when tractable",
+    "evidence": "pricing-side bound changes and cuts are convexified and give stronger bounds ((15), (22)); practised in S035 p. 14; compare card c13 S077",
+    "pages": "pp. 8, 11"
+   },
+   {
+    "pattern": "ranked answers when the exact method fails",
+    "evidence": "most honorable: research the structure (combinatorial pricing, cuts, reformulation); most practicable: profile and accelerate; quickest: heuristic (price-and-branch with fixing and more columns); S008 p. 14 ends the same way",
+    "pages": "p. 14"
+   }
+  ],
+  "transferable": [
+   "For a pure column model, reverse the decomposition: K copies of the pricing domain give an original formulation on which to design branching and cuts (pp. 6-7).",
+   "Enforce an original-variable branching decision in the pricing problem when pricing stays tractable (the bound change is convexified, (22)); otherwise add it as a master row whose dual enters the pricing objective (p. 11).",
+   "Put the duals of master-variable cuts into pricing from the start, and carry a non-linear cut coefficient as an extra pricing resource (p. 9).",
+   "With identical subproblems, aggregate and recover a unique original solution by lexicographic projection before branching (p. 12).",
+   "When the code fails, research the structure first, profile second, go heuristic last; if you go heuristic, fix variables and keep generating columns (p. 14)."
+  ],
+  "coauthors": "Jacques Desrosiers (HEC Montréal and GERAD), first author; Lübbecke at TU Darmstadt",
+  "quotes": [
+   {
+    "text": "Even when the whole lot of work of implementing a branch-price-and-cut algorithm will pay off, it will be a whole lot of work, even in 2010.",
+    "page": 13
+   },
+   {
+    "text": "The most honorable answer to that is: Research your problem!",
+    "page": 14
+   }
+  ]
+ },
+ {
+  "id": "S008",
+  "year": "2011",
+  "title": "Column generation",
+  "read_level": "full",
+  "contribution": "A sole-authored expository entry that explains column generation from the dual side (restricted master as dual oracle, pricing as dual separation, tailing off from dual instability) and ends with implementation advice on heuristic pricing, frameworks, tolerances, exact arithmetic and acceleration (pp. 1-14).",
+  "problem_entry": "Corrects a framing first: column generation never became competitive for LPs but is a real winner in integer programming, whose primary use is inside branch-and-price (pp. 2, 5).",
+  "key_idea": "The dual view organises every choice: master solvers, pricing schemes and stabilization are choices about dual information; the Dantzig-Wolfe and Lagrangian bounds coincide (pp. 5-6, 9-10).",
+  "assumptions": "LP master with many columns; Dantzig-Wolfe with block-diagonal or staircase structure; for IPs the bound gain requires a subproblem without the integrality property, a trade-off between bound strength and subproblem manageability (pp. 2-4, 9).",
+  "proof_devices": [
+   "Lagrangian dual bound v(RMP) + kappa v(PP) <= v(MP), (5) (p. 3)",
+   "Farkas pricing: zero costs against the dual ray of an infeasible restricted master (pp. 6-7)",
+   "equivalence of Dantzig-Wolfe and Lagrangian bounds, L(pi) = v(RMP) + v(PP) (p. 5)",
+   "column generation as a cutting-plane method for the Lagrangian dual (p. 6)",
+   "misprice guarantee of dual smoothing: the gap shrinks by at least a factor (1 - alpha)^-1 (p. 12)",
+   "dual-optimal inequalities (18) for cutting stock (p. 12)",
+   "early branching on tailing off with the parent's bound; stop at equal rounded-up bounds for integer costs (p. 6)"
+  ],
+  "experiments": "n/a: no own experiments; literature results reported with their sources (a factor of eight on 1,600 set-partitioning rows by aggregation; no clear winner between bundle and classical stabilization) (pp. 8, 11).",
+  "positioning": "Stabilization credited to non-linear programming and convex analysis; smoothing a re-discovery of Wentges' weighted decomposition; SCIP as framework and source of the name Farkas pricing; GCG not mentioned; 2005 survey listed with Desrosiers first (pp. 7, 10-17).",
+  "writing": "Emphatic imperative register ('We cannot overstress', 'This point cannot be overestimated'); repeated punchline ('Again: Think of heuristics everywhere.'); at least six uncounted 'often' about practice; manuscript slips; the conclusion sentence apparently lacks a 'not' (pp. 1-2, 5, 13-14).",
+  "limits_future": "Open: column-selection criteria, practical impact of dual facets, stabilizing pricing rules, barrier warm start; agenda: generic implementations wanted, tailoring the driving force meanwhile, cuts and columns to be integrated; one uncounted claim about problems no commercial solver handles (pp. 7, 9, 14).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Step 5: a framework manages the branch-and-price tree; step 6: the original formulation guides branching and cutting; Workflow B trade-off (integrality property, bound vs manageability). Also H1 in his own 2010 words: heuristic pricing first, several columns per call, avoid exact pricing too often, branch on tailing off.",
+    "pages": "pp. 6, 8-9, 13-14"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Workflow C step 3 and Workflow G: profile first (pricing usually, sometimes the master), then stabilization and fewer exact pricing calls; when everything fails, research the problem.",
+    "pages": "p. 14"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "The 2005 survey rewritten as an entry (based on [47]); open questions published (column selection, dual facets, stabilizing pricing rules).",
+    "pages": "pp. 9, 15"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Step 6 and Mentor Voice: at least six uncounted 'often' about practice and an uncounted claim that branch-and-price solves problems no standard commercial solver could cope with.",
+    "pages": "pp. 5, 9, 13-14"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "tolerances named at the master-pricing interface; exact arithmetic only for mission-critical problems",
+    "evidence": "tolerances for negative reduced cost, bound match and perturbation size of 1e-3 to 1e-6; testing against 0.0 loops; rational arithmetic only for mission-critical programs; repeated in the 2026 book (card c11, S060 pp. 23-24); contradicts the Honest Boundary line 'nothing on numerics, exact arithmetic'",
+    "pages": "p. 13"
+   },
+   {
+    "pattern": "when everything fails, research your problem",
+    "evidence": "after the list of tricks, a proof that optimal solutions have a particular structure may restrict the search a lot; S007 p. 14 ends the same way",
+    "pages": "p. 14"
+   }
+  ],
+  "transferable": [
+   "Use the Lagrangian bound v(RMP) + kappa v(PP) to stop early, and with integer costs stop at equal rounded-up bounds (pp. 3, 6).",
+   "When a node tails off, branch early and give the children the parent's bound (p. 6).",
+   "Make an infeasible restricted master feasible by Farkas pricing: zero costs, the dual ray as pricing objective (pp. 6-7).",
+   "Smooth duals by a convex combination with the duals of the best bound; a misprice still moves the bound by at least alpha times the gap (pp. 11-12).",
+   "Add dual-optimal inequalities when the dual order is known (cutting stock: pi_i <= pi_j when w_i < w_j, generalised by (18)) (p. 12).",
+   "Name each tolerance (negative reduced cost, bound match, perturbation size) and never test reduced costs against 0.0 (p. 13).",
+   "Profile first; then tune the number of columns added per iteration and remove columns that stayed non-basic for too many iterations (p. 14)."
+  ],
+  "coauthors": "none (sole author, TU Darmstadt)",
+  "quotes": [
+   {
+    "text": "Fortunately, the dual bound gives a guarantee on its quality at any time. Heuristics should be used to construct or improve primal and dual solutions as often as it seems useful. This point cannot be overestimated.",
+    "page": 13
+   },
+   {
+    "text": "An alternative is to resort to exact (rational) arithmetic; but due to performance reasons this is only advisable for mission critical linear and integer programs.",
+    "page": 13
+   }
+  ]
+ },
+ {
+  "id": "S032",
+  "year": "2011",
+  "title": "Partial convexification of general MIPs by Dantzig-Wolfe reformulation",
+  "read_level": "full",
+  "contribution": "A tool that reads any LP file, forces an arrowhead structure by hypergraph partitioning, partially convexifies the blocks by Dantzig-Wolfe reformulation and solves the LP relaxation by column generation, with a proof-of-concept study on dynamic knapsack and MIPLIB 2003 instances and two a-posteriori measures for choosing a decomposition (pp. 2-9).",
+  "problem_entry": "Lists the field's reservations against Dantzig-Wolfe reformulation and sets out to (in-)validate them; asks the deliberately bold question of working with the integer hull, then three questions of increasing ambition, the last of which the community answers in the negative (pp. 1-2).",
+  "key_idea": "Automatic partial convexification: hypergraph with one node per nonzero and costed row and column hyperedges, heuristic min k-equicut by hMETIS with dummy nodes, linking variables split, Dantzig-Wolfe reformulation of the blocks, stabilized column generation; an arrowhead form is always present (pp. 2-5).",
+  "assumptions": "General MIP with P bounded for presentation; bound gain only if P_IP is strictly inside P; six dynamic 0-1 knapsack instances with 1,280 rows and MIPLIB 2003 with a third set aside as too difficult or too big; eight selected and 24 appendix instances (pp. 2-8, 12).",
+  "proof_devices": [
+   "hypergraph with a node per nonzero and costed row and column hyperedges; heuristic min k-equicut by hMETIS with dummy nodes for unequal blocks (pp. 4-5)",
+   "splitting of linking variables into copies with equality constraints (p. 3)",
+   "partial convexification equals implicitly adding all valid inequalities of P_IP (p. 3)",
+   "du Merle stabilization with the box narrowed to a fixed share of the absolute duality gap (p. 5)",
+   "very basic depth-first branch-and-price on the most fractional original variable (p. 7)",
+   "a-posteriori quality measures tested against gap closed; two kept (pp. 8-9)"
+  ],
+  "experiments": "i7 single thread, CPLEX 12.2, 1 h; knapsack k sweep vs CPLEX: CPLEX hits the hour on 4 of 6 (the text says all but I65), DWR plus branch-and-price solves all six within 362 s; MIPLIB: better root bound than CPLEX on 7 of 8 selected (10teams tie, pp08a +0.6 points), on 13 of 24 in the appendix, protfold value invalid; Tables 3 and 4 show different decompositions; bound time compared with CPLEX solve time; no seeds (pp. 5-8, 12).",
+  "positioning": "Extends Sherali et al.'s partial convexification cuts; generic Dantzig-Wolfe codes (BaPCod, DIP, G12, GCG) need the structure as input; borrows matrix re-ordering from numerical linear algebra (Ferris-Horn, Aykanat et al.); parallel to multi-row cut selection; cuts have more than 15 years of headway (pp. 3-5, 10).",
+  "writing": "Bold opening question with a self-aware hedge; strong words ('impressive computational results', 'strongly support', 'even beating') next to the proof-of-concept sentence and 'One should not conceal the fact'; several sentences reappear in the 2015 journal version (pp. 1-2, 8-10).",
+  "limits_future": "Inner approximation: column generation to the end, not reversible, a single-shot decomposition; mostly root node, retention in the tree open; four directions: characterise a good decomposition, re-ask what makes a model suitable for DWR, extended formulations as a computational tool, dynamic updates (pp. 9-10).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Option space written down (penalty sets, k, dummy share) and sampled on real instances; two measures kept (number of blocks, average block integrality gap), the others dropped as inconsistent; a rule (start with many blocks) evaluable a priori.",
+    "pages": "pp. 6, 8-9"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Step 1: a structured class without block-diagonal form plus general MIPLIB instances; step 3: CPLEX 12.2 re-run on the same machine, single-threaded; exclusions given in aggregate with reasons.",
+    "pages": "pp. 1, 5-6"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Step 6: three text claims contradicted by Tables 2-3 (CPLEX at the limit on all knapsack instances but one; a considerable improvement on eight instances; a much better bound in all cases); stabilization gain asserted without numbers; invalid protfold value unflagged; Table 3 selection rule unstated; the journal version later tightened the protocol (H8).",
+    "pages": "pp. 5-8, 12"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Step 2: CPLEX on the original model as yardstick; step 6: explicit linking constraints kept despite the overhead; stop rule visible as the exclusion of a third of MIPLIB 2003.",
+    "pages": "pp. 6-8"
+   },
+   {
+    "method": "Method 1",
+    "relation": "contradiction",
+    "note": "Step 5 (mild): the authors wrote their own very basic depth-first branch-and-price, called simple-minded, inside a CPLEX and hMETIS tool rather than on a tree-managing framework.",
+    "pages": "pp. 5, 7"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "study designed to invalidate a listed reservation",
+    "evidence": "the abstract lists the reservations against DWR and the experiments are set up to (in-)validate them on a structured non-block class and on general MIPLIB instances",
+    "pages": "pp. 1-2"
+   },
+   {
+    "pattern": "time to bound against time to solve, refined later to time to the same bound",
+    "evidence": "DWR root-bound time compared with CPLEX's solve time here; the 2015 version measures the time CPLEX needs to reach the DWR bound (card c04, S015 p. 25)",
+    "pages": "p. 8"
+   }
+  ],
+  "transferable": [
+   "Build the hypergraph with one node per nonzero and costed row and column hyperedges, and solve a heuristic min k-equicut with dummy nodes for unequal blocks (pp. 4-5).",
+   "Split each linking variable into one copy per nonzero with equality constraints to reach a bordered block-diagonal form (p. 3).",
+   "Narrow the stabilization box to a fixed share of the absolute duality gap each time the dual bound improves (p. 5).",
+   "Show the whole parameter sweep for each instance (bound, root time, tree time in separate columns) instead of a single tuned value (p. 7).",
+   "Test candidate quality measures against the gap closed and keep only those with a consistent influence (p. 8).",
+   "Start with many blocks and decrease their number while that stays computationally easy (p. 9).",
+   "State the disadvantages of an inner approximation next to the positive result (p. 9)."
+  ],
+  "coauthors": "Martin Bergner (RWTH, first author), Alberto Caprara, Fabio Furini, Enrico Malaguti, Emiliano Traversi (DEIS, Bologna); alphabetical order; Lübbecke at RWTH",
+  "quotes": [
+   {
+    "text": "Of course, at the moment, our work is not intended to produce a competitive tool, but to provide a proof-of-concept and demonstrate that the direction is promising.",
+    "page": 2
+   },
+   {
+    "text": "When looking for a good number of blocks, start with many. As long as this is computationally easy, decrease the number of blocks.",
+    "page": 9
+   }
+  ]
+ },
+ {
+  "id": "S035",
+  "year": "2011",
+  "title": "Integrated Sequencing and Scheduling in Coil Coating",
+  "read_level": "full",
+  "contribution": "For coil coating with shuttle coaters: an interval model of concurrent setup scheduling as maximum-weight independent set in 2-union graphs (polynomial for a fixed number of coaters, NP-hard otherwise), a heuristic derived from it inside a genetic algorithm, deployed at Salzgitter Flachstahl with over 13% average makespan reduction, and a branch-and-price lower bound that certifies short-term FIFO solutions within 10% (pp. 1-17).",
+  "problem_entry": "Entered through the plant and its software vendor: an integrated sequencing and concurrent setup scheduling problem with a 180 s planning requirement, makespan as the accepted objective, and almost no prior literature (pp. 1-3, 11).",
+  "key_idea": "Saving rectangles turn the fixed-sequence scheduling subproblem into maximum-weight independent set in a 2-union graph; the exact dynamic program inspires an alpha-weighted per-coater heuristic; a bounded look-back relaxation solved by branch-and-price bounds the result (pp. 5-14).",
+  "assumptions": "Two tanks per coater, setup durations multiples of t, one work team, plant safety rules; results for arbitrary setup times and any r but two tools only; real SZFG data, 16 long-term and an unstated number of short-term instances, normalised under NDA; the bound is valid only for online tank rules (pp. 3-4, 13-15).",
+  "proof_devices": [
+   "saving rectangles: concurrent setup scheduling as maximum-weight independent set in a 2-union graph (pp. 5-8)",
+   "Lemma 1: greatest-common-divisor bound on setup-interval end points (pp. 7-8)",
+   "Theorem 1: strong NP-hardness by reduction from 3SAT (pp. 9-10)",
+   "Theorem 2: NP-hardness for any fixed r < m via 1-in-3-3SAT (appendix, pp. 18-19)",
+   "Theorem 3: dynamic program over m-tuples of nodes, longest path in a DAG of compatible states (pp. 10-11)",
+   "alpha-weighted per-coater interval heuristic with earliest-deadline-first setup scheduling (pp. 12-13)",
+   "bounded look-back relaxation (concatenated subsequences) solved by branch-and-price with brute-force pricing and branching on original x through pricing (pp. 13-14)"
+  ],
+  "experiments": "Genetic algorithm tuned once by rigorous testing, 180 s; against planners up to 25% and over 13% average makespan reduction; long-term: independent-set heuristic beats FIFO on 12 of 16 with the best alpha, better on 8 and worse (at most 1%) on 4 with alpha 0.5; short-term on a par; IP bound within 10% of the FIFO-restricted optimum for short-term instances only, bound times not reported; no seeds (pp. 15-17).",
+  "positioning": "First thorough treatment with shuttles and concurrent setups; contrasts the local-setup scheduling literature and common-server models; exploits structure to partially circumvent the APX-hardness of independent set in 2-union graphs; column generation via Barnhart et al. and the 2005 survey (pp. 2, 5, 8-9, 13).",
+  "writing": "Management Science arc from plant to computation; the 10% claim loses its qualifiers (short-term, FIFO) in the abstract and introduction; planner verdicts as evidence; candid asides (bound certainly improvable, times huge); referees credited for r > 1; summary-style conclusion (pp. 1-2, 13-18).",
+  "limits_future": "Optimum out of reach; no uniform alpha; bound only for online rules and short subsequences, tank-indexed IP intractable; two tools only; future: other applications with concurrent setups and other coil coating lines (pp. 2, 4-5, 11, 14-16).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Losses and parity reported (fixed alpha worse in four cases, short-term on a par), ex-post best alpha next to a fixed default, real data validated by planners and on site (H3 and Workflow A practice in full text; Taste G1, B1).",
+    "pages": "pp. 3, 14-16"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Step 6 and H2: the abstract's unqualified 10% covers only short-term FIFO solutions against the FIFO-restricted optimum, on makespan; use since December 2009 precedes submission and the order of certificate and deployment is not stated; improvements in most cases without a count; bound times not reported; normalised data.",
+    "pages": "pp. 1-2, 13-17"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Branch-and-price as a bounding instrument for a relaxation, not as the solver; brute-force enumeration pricing; no compact-model baseline; steps 5 and 6 practised (SCIP, branching on original variables through pricing).",
+    "pages": "pp. 11, 13-15"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "oracle column next to the rule",
+    "evidence": "Best alpha (ex post, per instance) next to fixed alpha = 0.5 and FIFO; fourth paper with this device after S015 and S009 (card c04) and S016 p. 4",
+    "pages": "pp. 15-16"
+   },
+   {
+    "pattern": "exact algorithm as blueprint for the heuristic",
+    "evidence": "the polynomial dynamic program for a fixed number of coaters is too slow; its interval model, decoupled per coater with an alpha-weighted concurrent-work term, becomes the heuristic",
+    "pages": "pp. 12-13"
+   },
+   {
+    "pattern": "bound with a named validity condition",
+    "evidence": "the concatenated-subsequence relaxation is a lower bound only for online tank rules, so it is computed for FIFO and the claim is restricted to it",
+    "pages": "pp. 13-14, 17"
+   },
+   {
+    "pattern": "decomposition as a bounding instrument for a deployed heuristic",
+    "evidence": "branch-and-price in SCIP solves a relaxation to certify a genetic algorithm; brute-force pricing is accepted because subsequences are short",
+    "pages": "pp. 13-16"
+   }
+  ],
+  "transferable": [
+   "Model a scheduling subproblem with long-range setup dependence as a maximum-weight independent set of saving rectangles, and check which projections must not intersect (pp. 5-7).",
+   "Turn an exact but slow dynamic program into a heuristic by decoupling the cells and folding the coupling into an alpha-weighted term (pp. 12-13).",
+   "Bound a heuristic by a relaxation that limits look-back (concatenated subsequences of a few coils), solved by branch-and-price, and state its validity condition (pp. 13-14).",
+   "Seed the restricted master with the columns of the heuristic solution, and branch on original position variables by removing a coil from a position in pricing (p. 14).",
+   "Report the ex-post best parameter next to a fixed default, with the cases where the default loses (p. 15).",
+   "Validate plans with the planners through visualizations of the full schedule (pp. 14-15)."
+  ],
+  "coauthors": "Wiebke Höhn, Felix G. König, Rolf H. Möhring (TU Berlin); Lübbecke (RWTH Aachen) listed last",
+  "quotes": [
+   {
+    "text": "Assessing the quality of heuristic solutions is not only a theoretical contribution, but an important question in practice: How much optimization potential is left?",
+    "page": 13
+   },
+   {
+    "text": "Its implementation is not tuned to performance because we used it as a proof of concept only, so we do not report computation times for lower bounds (which were huge).",
+    "page": 15
+   }
+  ]
+ }
+]

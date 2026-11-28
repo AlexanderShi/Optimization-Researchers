@@ -1,0 +1,363 @@
+[
+  {
+    "id": "S092",
+    "year": "2024",
+    "title": "Branch and price for the length-constrained cycle partition problem",
+    "read_level": "full",
+    "contribution": "Branch and price for the length-constrained cycle partition problem with a set-partitioning model, bidirectional labeling that extends in one direction only and is proved correct under dominance, symmetry breaking, early branching and parallel pricing; 14.6 times faster than the previous branch and cut and 13 open instances closed (up to 76 nodes).",
+    "problem_entry": "Compact MTZ and SEC models solved LCCP only up to 29 and 52 nodes and suffer from symmetry, weak relaxations and ineffective branching; the paper enters with a set-partitioning model over length-feasible cycles (pp. 1–2).",
+    "key_idea": "Column generation with a labeling pricer per start node; symmetric travel times allow bidirectional search with extensions in one direction only (labels extended while t < q/2, then merged), plus index-based symmetry breaking, heuristic pricing, early branching by objective integrality and set covering under the triangle inequality (pp. 2–8).",
+    "assumptions": "Undirected graph, critical times q_i > 0, travel times t_ij ≥ 0, possibly non-metric; binary set partitioning over exponentially many cycles; Lemma 3 assumes the triangle inequality; the 84 benchmark instances of [11] with 14–100 nodes plus a metric-closed copy (pp. 2–4, 8, 10).",
+    "proof_devices": [
+      "Feasibility pruning t(ℓ) > q(ℓ) by induction over extensions (p. 4)",
+      "Dominance Lemma 1 (same end node, reduced cost and time no larger, node set a subset) with proof (p. 5)",
+      "Lemma 2: correctness of bidirectional search with dominance via the first forward label past the halfway point and substitution of a dominating label in the merge (p. 6)",
+      "Lagrangian bound rounded up by objective integrality; early branching when the child's first RMP value rounds up to the parent's bound (p. 7)",
+      "Lemma 3 (zero-dual nodes can be ignored under the triangle inequality) stated without proof; strong NP-hardness of the pricing problem claimed without proof (pp. 3, 8)"
+    ],
+    "experiments": "84 instances, 2 h, Xeon Gold 5122; arms bnc-sec (predecessor on Gurobi 10.0.3), bnp-basic, bnp-full and four one-technique-off ablations, all started from the MCV solution; shifted geometric mean of time (shift 1 s) on instances solved by at least one arm: bnc-sec 142.8 s and 39 solved, bnp-full 9.8 s and 52, ablations 1.3–4.4 times slower; root column generation converged on 56 of 84; root gap 1.1% against 23.6%; metric-closed set slower for both arms, 55 solved and 7.5 s when the triangle inequality is exploited; one run per instance, no seeds; Gurobi thread count not stated (pp. 8–10).",
+    "positioning": "Supersedes Hoppmann-Baum et al. [9, 11], criticised for symmetry; borrows from vehicle-routing branch-price-and-cut, bidirectional labeling, kidney-exchange cycle models and Mehrotra–Trick early branching (pp. 2, 5, 7).",
+    "writing": "Contributions listed by section with the 14.6 headline up front; three numbered questions plus one asked out of curiosity; a counter-intuitive result flagged as such; the conclusion concedes that the gain depends on nontrivial techniques (pp. 3, 8, 10).",
+    "limits_future": "Root column generation fails on 28 of 84 instances; start-heuristic bounds rarely improved when both arms time out; future: cutting planes inside branch and price and transfer to kidney exchange; numerical safety not named (pp. 9–10).",
+    "method_links": [
+      {
+        "method": "Method 3",
+        "relation": "evidence",
+        "note": "step 1: limits printed with counts where they arise (28 of 84 root LPs not solved; only 2 of 13 new optima found by the start heuristic)",
+        "pages": "p. 9"
+      },
+      {
+        "method": "Method 3",
+        "relation": "variant",
+        "note": "the printed future work is cutting planes and kidney exchange; the SKILL.md ledger edge to a numerically safe version [LCCP26] is not printed as a gap here",
+        "pages": "p. 10"
+      },
+      {
+        "method": "Method 2",
+        "relation": "variant",
+        "note": "headline factor against the published predecessor rerun with Gurobi 10.0.3, not a feature-matched baseline; thread counts neither matched nor stated; component questions answered by one-at-a-time ablations inside the new code on the predecessor's set; also Heuristic 6 (numbered questions)",
+        "pages": "pp. 8–10"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "assumption-ablation companion set",
+        "evidence": "the benchmark is transformed so that an assumption holds (travel times replaced by shortest-path distances) and every arm is run on both versions; both arms got slower, and exploiting the assumption recovered speed",
+        "pages": "p. 10"
+      }
+    ],
+    "transferable": [
+      "Prove bidirectional labeling correct by taking the first forward label past the halfway point, bounding the reverse remainder by half the cycle length, and substituting a dominating label in the merge (Lemma 2, p. 6)",
+      "Use objective integrality twice: round the Lagrangian bound up and skip pricing at a child whose first RMP value rounds up to the parent's bound (p. 7)",
+      "Return only a fixed number (50) of the lowest reduced-cost columns per pricing call to keep RMP re-optimization cheap (p. 6)",
+      "Ablation table with one row per disabled technique (time ratio to the full method, solved count) plus a solved-over-time plot (Table 1, Fig. 2, p. 10)",
+      "Count how often the warm-start heuristic already had the optimum on old and on newly solved instances to see which side the method helps (p. 9)",
+      "Build a companion benchmark by one assumption-enforcing transformation (metric closure) and run every arm on both sets (p. 10)"
+    ],
+    "coauthors": "Mohammed Ghannam (first author; HTW Berlin, ZIB, felmo GmbH), Gioni Mexi (ZIB), Edward Lam (Monash University)",
+    "quotes": [
+      {
+        "text": "Curiously, this change makes the instances harder to solve for both approaches.",
+        "page": 10
+      },
+      {
+        "text": "the results also show that this is only possible with the help of some nontrivial improvement techniques",
+        "page": 10
+      }
+    ]
+  },
+  {
+    "id": "S021",
+    "year": "2025",
+    "title": "The SCIP optimization suite 10.0",
+    "read_level": "full",
+    "contribution": "Release report of the SCIP Optimization Suite 10.0, which ships a numerically exact solving mode for rational MILPs with VIPR certificates (main author Eifler, with contributions and revisions by Gleixner and Kamp) besides implied-integer detection, reflection symmetries, cut-based conflict analysis, GCG 4.0, PaPILO 3.0 and MIP-DD 2.0; exact mode 2.6–3.6 times slower than feature-matched and 6.8–10.8 times slower than default floating-point SCIP.",
+    "problem_entry": "Floating-point solvers by design cannot guarantee results unaffected by roundoff nor produce independently verifiable certificates; the report highlights the features of the new release (pp. 2, 6–7).",
+    "key_idea": "Exact mode as hybrid precision: safe directed-rounding floating point replaces symbolic computation at many places, exact LP only as fallback and at scheduled points, exact repair of heuristic solutions, VIPR certificates; per-plugin safety flags so that only plugins marked safe run in exact mode (pp. 7–11).",
+    "assumptions": "Exact mode restricted to MILPs with rational data read exactly from MPS, LP, CIP, OPB/WBO and ZIMPL files; release test sets: 349 MILPs that previous releases could solve × 3 seeds and 169 MINLPLib instances × 5 seeds; exact evaluation on the MIPLIB 2017 benchmark set with 3 seeds; Hoffman–Kruskal argument for implied integrality (pp. 3–4, 7–8, 11–13).",
+    "proof_devices": [
+      "Implied integrality via a network or transposed-network (totally unimodular) submatrix and Hoffman–Kruskal integrality of the y-subproblem for every integer fixing of x (pp. 12–13)",
+      "Floating-point bounds kept as safe outward roundings of the exact bounds (p. 8)",
+      "Safe dual bounds by bound shift and project-and-shift with exact-LP fallback and scheduled exact LPs (root end, depths 2^k, near-integral solutions, bounds near the cutoff, all integers fixed) (p. 9)",
+      "VIPR derivations by conic combination, Chvátal–Gomory rounding and disjunction with unsplitting; presolve uncertified, primal bound checked in the original space; C++ checker and a CakeML/HOL4 verified checker (pp. 10–11)",
+      "Exact repair of floating-point heuristic solutions: fix the rounded integers, solve the remaining LP exactly (p. 10)",
+      "PaPILO column dominations compressed into a directed forest so that transactions never conflict (p. 34)"
+    ],
+    "experiments": "SCIP 10.0 against 9.0 and against bugfix 9.2.4, Xeon Gold 5122, one single-threaded run per machine, 5400 s MILP and 3600 s MINLP, shifts 1 s and 100 nodes, subsets all, affected, brackets and both-solved, with runs with numerically inconsistent results removed from 'all' (1 of 1047 MILP, 36 and 29 of 845 MINLP by the tables); MILP time 0.98 and 0.96, MINLP 0.94 and 0.91 (MINLP with CPLEX 12.10 as LP solver); exact-mode table taken from Eifler's dissertation: 161/235/342 solved (exact/fp-reduced/fp-default), slowdown 2.6 and 3.6 against fp-reduced and 10.8 and 6.8 against fp-default (one-solved/both-solved); implied integers detected for 18.8% of variables but performance-neutral, so off by default; the CONOPT text swaps the time and node changes of Table 8 (pp. 4–7, 11–14, 19, 25).",
+    "positioning": "Exact mode set against virtually all floating-point MIP solvers and built on the Cook–Koch–Steffy–Wolter and Jarck prototype; the implied-integer result contrasted with Gurobi's published gain; conflict analysis and delta debugging imported from pseudo-Boolean, SAT and SMT practice (pp. 6, 9, 13, 17, 38–39).",
+    "writing": "Feature-by-feature report with exact parameter names, a reason for every feature shipped off by default, and a contributions-of-the-authors section; the exact-mode summary 'between 3 and 4' and 'around 10' rounds the measured 2.6/3.6 and 10.8/6.8 (pp. 7–11, 13, 19–21, 32, 39–40).",
+    "limits_future": "Exact mode: MILP only, presolve certified only for binary programs with integer data, strong branching unsafe, only GMI cuts, about 10 times slower than default; implied integrality not yet exploited; several features off by default; future: exploit implied integrality, deterministic parallel pricing, an exact mode for the verified pseudo-Boolean categories (pp. 7, 9, 11, 13, 19–21, 32, 39).",
+    "method_links": [
+      {
+        "method": "Method 3",
+        "relation": "evidence",
+        "note": "step 6: the exact line ships in the default distribution behind one parameter, with certificate output; open gaps (presolve certification, unsafe strong branching, a single cut family) printed in the same section",
+        "pages": "pp. 7, 9"
+      },
+      {
+        "method": "Method 5",
+        "relation": "evidence",
+        "note": "hybrid precision as the guiding principle; safe outward rounding of bounds; exact LP only as fallback and at scheduled points; floating-point heuristics with exact repair",
+        "pages": "pp. 7–10"
+      },
+      {
+        "method": "Method 2",
+        "relation": "evidence",
+        "note": "fp-reduced and fp-default factors printed on one-solved and both-solved; releases compared with the previous major and its last bugfix release, third-party versions listed per arm",
+        "pages": "pp. 4, 11–12"
+      },
+      {
+        "method": "Method 2",
+        "relation": "variant",
+        "note": "the exact-mode table is taken from the dissertation [35] with no version stated; the summary 'between 3 and 4' does not contain the one-solved like-for-like factor 2.6",
+        "pages": "pp. 11–12"
+      },
+      {
+        "method": "Method 4",
+        "relation": "evidence",
+        "note": "certificates checkable by independent proof checkers; coverage printed (presolve outside, primal bound checked in the original space); CakeML-verified checker named; proven exactness of an algorithm declared not sufficient for a correct implementation",
+        "pages": "pp. 7, 10–11"
+      },
+      {
+        "method": "Method 4",
+        "relation": "variant",
+        "note": "states that a certificate guarantees correct reasoning and a correct optimal solution without a word on the reference checker's own soundness or version; the overhead bound is asserted without data",
+        "pages": "p. 10"
+      },
+      {
+        "method": "Method 6",
+        "relation": "evidence",
+        "note": "step 9: runs with numerically inconsistent results kept out of the 'all' statistics, their number not stated (inferable from the tables); also Heuristics 2, 3 and 4(c) as group practice (24 of 51 bugs; features off by default with reasons; MIP-DD instances in ctest)",
+        "pages": "pp. 5–7, 13, 19–21, 32, 38"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "safety whitelist for an exact mode",
+        "evidence": "every critical plugin type carries a flag and the SCIP core executes only callbacks of plugins marked safe for exact solving, so that an unsafe user plugin cannot compromise correctness",
+        "pages": "pp. 7–8"
+      },
+      {
+        "pattern": "author-contribution statement in software reports",
+        "evidence": "a 'Contributions of the Authors' section names who implemented which feature, e.g. Eifler as main author of the exact mode with contributions and revisions by Gleixner and Kamp",
+        "pages": "pp. 39–40"
+      }
+    ],
+    "transferable": [
+      "Guard an exact or safe mode by a per-plugin safety flag checked by the core (pp. 7–8)",
+      "Keep floating-point copies of exact bounds as safe outward roundings so that fast propagation and dual bounding stay valid (p. 8)",
+      "Schedule the exact LP: fallback for safe bounding, plus root end, depths 2^k and situations close to a decision (p. 9)",
+      "Repair floating-point heuristic solutions by fixing rounded integers and solving the rest exactly, buffering candidates by approximate objective (p. 10)",
+      "Compare a release with the previous major release and its latest bugfix release to separate bugfix and feature effects (p. 4)",
+      "Define the 'affected' subset mechanically as the instances on which the arms differ in dual simplex iterations (p. 5)",
+      "Report an exact solver against a feature-matched floating-point solver and against default, on one-solved and both-solved subsets (p. 11)",
+      "Reduce each bug-triggering instance with a delta debugger and add it to the regression pipeline (p. 38)"
+    ],
+    "coauthors": "Christopher Hojny (first author) and 33 others in alphabetical order, among them Leon Eifler (main author of the exact mode), Dominik Kamp, Alexander Hoen, Gioni Mexi, Mohammed Ghannam, Thorsten Koch, Marco Lübbecke, Marc E. Pfetsch and Sebastian Pokutta (35 authors in total)",
+    "quotes": [
+      {
+        "text": "Mathematically proven exactness of an algorithm is clearly not sufficient to ensure that the algorithm is implemented without errors.",
+        "page": 10
+      },
+      {
+        "text": "Overall these results suggest a slowdown factor between 3 and 4 for solving MIPs exactly with the same features and a current slowdown of around 10 times compared to fp-default.",
+        "page": 11
+      }
+    ]
+  },
+  {
+    "id": "S049",
+    "year": "2025",
+    "title": "Hybrid genetic search for dynamic vehicle routing with time windows",
+    "read_level": "full",
+    "contribution": "Adapts Hybrid Genetic Search to the dynamic VRPTW of the EURO meets NeurIPS 2022 competition (variable-size giant tours, a normalized fitness with a lateness term, dispatch-changing local search) without pre-training; median cost 7.82% below the best organizer baselines on the 250 competition instances.",
+    "problem_entry": "Any VRPTW method can be lifted to the dynamic setting by fixing the dispatched subset per epoch; the paper instead decides dispatch and routes in an integrated way inside HGS, without training (p. 2).",
+    "key_idea": "Make HGS work on variable-size solutions: variable giant tours, an initial population with random removal of optional customers, ordered crossover on variable sizes, a fitness normalized by dispatched nodes and epoch progress plus a lateness term, and delete, add and swap-out operators (pp. 4–5).",
+    "assumptions": "VRPTW with time windows, demands and capacity; DVRPTW over epochs with must-go customers; the 250 competition instances; no assumption stated for the fitness design (pp. 1–2, 5).",
+    "proof_devices": [
+      "n/a for proofs; design devices follow",
+      "Fitness (p_dist S_dist + p_cap S_cap + p_time S_time + p_late S_late) / (((t − 1)/T + 1)(n + 1)) with p_late = 100 (pp. 4–5)",
+      "Initial population from random orderings with optional customers removed with probabilities {0, 0.1, 0.5, 1} (p. 4)",
+      "Delete, add and swap-out operators run before the original route-improvement heuristics (p. 5)"
+    ],
+    "experiments": "250 competition instances; organizer baselines (greedy, lazy, random, oracle, supervised, dqn) that all use HGS and differ only in the dispatch strategy; Xeon Gold 5122, single-threaded, 5 min per epoch; violin plot; median cost 7.82% below greedy and dqn and 10.37% above the oracle; better than the oracle on 7 instances, worse than greedy and dqn on 19, worst of all on 3 (stuck at the trivial start solution); no seeds, no test behind 'significantly', no ablation (pp. 5–6).",
+    "positioning": "Exact branch-price-and-cut reaches about 200 customers, hence metaheuristics; HGS won the 12th DIMACS challenge; learned baselines lose to greedy while the top competition entries were ML-based (pp. 1–2, 6).",
+    "writing": "Short proceedings paper; motivation set by contrast; failures given with counts and a cause; unedited sentences remain in the preprint (pp. 2, 4, 6).",
+    "limits_future": "Higher variance than the baselines, with counted bad cases and their cause; future: combine ML-based customer selection with DHGS (p. 6).",
+    "method_links": [
+      {
+        "method": "Method 2",
+        "relation": "variant",
+        "note": "arms share the HGS engine, start solution and time limit and differ in the dispatch decision (third-party parts identical), but DHGS also modifies HGS itself and no arm isolates its modifications",
+        "pages": "pp. 4–5"
+      },
+      {
+        "method": "Method 3",
+        "relation": "evidence",
+        "note": "step 1 only: bad cases printed with counts and a suspected cause; the proposed next step is a combination with ML, not a project on the printed failure; Heuristic 8 not followed (no seeds for a randomized method)",
+        "pages": "pp. 5–6"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "competition data and organizer baselines as a public protocol",
+        "evidence": "the full set of 250 released competition instances and the organizers' six baselines, which share HGS and differ only in the dispatch strategy, form the whole experimental protocol",
+        "pages": "pp. 5–6"
+      },
+      {
+        "pattern": "untrained method against learned baselines",
+        "evidence": "DHGS needs no pre-training and is set against imitation-learning and reinforcement-learning baselines, whose failure (supervised worse than greedy; dqn learned the greedy strategy) is printed",
+        "pages": "pp. 2, 6"
+      }
+    ],
+    "transferable": [
+      "Lift a static heuristic to an online selection problem by allowing variable-size solutions and normalizing the fitness by the number of selected items and by progress through the horizon (p. 4)",
+      "Add selection-changing moves (delete, add, swap-out) to the local search and run them before the route-improving moves (p. 5)",
+      "Use baselines that share the subroutine and differ only in the decision under study (p. 5)",
+      "Show per-instance distributions (violin plot) and count the instances on which the method loses, with the cause of the worst ones (Fig. 1, p. 6)"
+    ],
+    "coauthors": "Mohammed Ghannam (first author; HTW Berlin and ZIB)",
+    "quotes": [
+      {
+        "text": "However, on 19 instances DHGS is also worse than greedy and dqn, and on 3 instances it has the highest cost of all strategies.",
+        "page": 6
+      },
+      {
+        "text": "The supervised baseline, although trained on the oracle results, performs worse than the trivial greedy strategy.",
+        "page": 6
+      }
+    ]
+  },
+  {
+    "id": "S050",
+    "year": "2025",
+    "title": "Combining precision boosting with LP iterative refinement for exact linear optimization",
+    "read_level": "full",
+    "contribution": "Precision boosting embedded as a fallback inside LP iterative refinement in SoPlex: refinement runs in double precision and boosts only on numerical trouble, stalling or contradicted status claims; it solves as many LPs as pure boosting, is faster than it, and removes all failed exact-LP calls in exact SCIP with a small speed-up.",
+    "problem_entry": "Iterative refinement beats precision boosting in most cases but has no reliable recovery when the floating-point LP fails, as seen on pure LPs and in exact MIP branch and cut (pp. 1–2).",
+    "key_idea": "Keep refinement as the main loop, boost precision only on three failure types and restart refinement at the higher precision with re-approximated data, scaled zero tolerances and stored warm-start bases; feasibility and optimality tolerances stay fixed (pp. 5–8).",
+    "assumptions": "LP min{cᵀx | Ax = b, x ≥ ℓ} with rational A of full row rank, zero tolerances, simplex methods; limited-precision LP oracle (4a)–(4d) for convergence; test sets lplib, cutlib (100 hard LPs from exact SCIP) and 132 MIPLIB 2017 benchmark instances × 3 seeds (pp. 2, 8–9).",
+    "proof_devices": [
+      "Failure triggers: non-optimal status or residuals near one, stalling (two iterations with violation reduction below a factor 2^4), infeasibility or unboundedness claims contradicted by exactly solved auxiliary LPs (pp. 5–6)",
+      "Zero tolerances 10^(−⌊p′c⌋) with p′ = p log 2/log 10, c = 1 and c = 0.625 (p. 7)",
+      "Warm-start bases stored at power-of-two iteration counts and at least every 10,000 iterations (p. 7)",
+      "Convergence argument: arbitrary precision makes a limited-precision oracle constructible, so refinement converges with a fixed η < 1; detailed proof beyond scope, conditioned on a backward-stable LU update (Bartels–Golub, not Forrest–Tomlin) (pp. 8–9)"
+    ],
+    "experiments": "SoPlex 6.0.3, GMP 6.1.2, Xeon Gold 5122, 7200 s; settings ir-double, boosting-pure and ir-boosting, all with a final-basis factorization; only LPs whose initial basis is not optimal (84 lplib, 91 cutlib), timed after the shared initial solve; solved 79/44/79 and 91/26/91; the all-solved subset is biased toward ir-double, as stated; a text slip (17.3% 'faster than ir-double' where Table 2 gives 31.1% faster than boosting-pure); MIP: 146 boosted instance-seed runs, boosting 3.8% and 4.4% faster, exact-LP failures 5.4 and 50.8 reduced to 0.0 (pp. 9–13).",
+    "positioning": "A natural combination of QSopt_ex-style precision boosting (Applegate, Cook, Dash, Espinoza) with the authors' own iterative refinement; first implementation of both in one LP solver; the literature lacks a convergence proof for pure boosting (pp. 2, 8–9).",
+    "writing": "Literature expectation stated before the test; a hope stated before the MIP test (boosting may remove the need for cut weakening) answered against itself (a complementary technique); a theoretical claim on an intuitive argument; two definitions of speed-up in one section (pp. 8–9, 12–13).",
+    "limits_future": "No quad-precision step; boosting from the start is often faster on cutlib; the rational LU of the final basis can be a major bottleneck; future: roundoff-error-free LU factorization and a 128-bit step (pp. 6, 10–11, 14).",
+    "method_links": [
+      {
+        "method": "Method 5",
+        "relation": "evidence",
+        "note": "step 5: double-precision refinement first, precision raised only on named failures; rational arithmetic only for corrections and the final basis check",
+        "pages": "pp. 4–6, 10"
+      },
+      {
+        "method": "Method 3",
+        "relation": "evidence",
+        "note": "steps 1 and 4: the predecessors' printed gap (no recovery; failing exact LPs in [9]) becomes the project; the mechanism is imported from the rival code QSopt_ex; the next gaps are printed",
+        "pages": "pp. 2, 6, 9, 14"
+      },
+      {
+        "method": "Method 2",
+        "relation": "evidence",
+        "note": "both methods implemented in the same LP solver to re-test the literature's expectation; same floating-point simplex and final check in all settings; timing after the shared initial solve; bias of the all-solved subset named (also Heuristic 8)",
+        "pages": "pp. 9–10"
+      },
+      {
+        "method": "Method 6",
+        "relation": "variant",
+        "note": "cutlib is built from the predecessor project's hard exact LPs by a rule that is not spelled out here",
+        "pages": "p. 9"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "failure harvesting into the next test set",
+        "evidence": "the 100 subproblems that proved difficult for exact SCIP's LP solver in the safe-cut project [9] become cutlib, and exact-LP failures become the target metric of the MIP experiment",
+        "pages": "pp. 9, 12–13"
+      }
+    ],
+    "transferable": [
+      "Wrap a fast but fragile method with an expensive robust one: list the failure signals, escalate only on them, and restart the fast loop at the higher precision (pp. 5–8)",
+      "Re-approximate the rational data at each precision level, since roundoff in the data can cause a wrong basis (p. 6)",
+      "Scale zero tolerances with the precision as 10^(−⌊p′c⌋), with c chosen per tolerance to reproduce the double-precision defaults (p. 7)",
+      "Store warm-start bases at power-of-two iteration counts so that a restart after numerical trouble can go back to an earlier basis (p. 7)",
+      "Report only instances on which the arms can differ and time only what follows the shared initial solve (p. 10)",
+      "Name which arm a success-dependent subset favours and add a comparison on a set that the compared arms solve identically (p. 10)",
+      "Add the subroutine's failure count (exlpfails) to the table besides time and solved counts (Table 3, p. 13)"
+    ],
+    "coauthors": "Leon Eifler (first author, ZIB), Jules Nicolas-Thouvenin",
+    "quotes": [
+      {
+        "text": "The LP iterative refinement procedure has no reliable way of recovering if the floating-point LP subroutine aborts with a failure due to numerical issues.",
+        "page": 2
+      },
+      {
+        "text": "As this is the first time both methods were implemented inside the same LP solver, we want to verify if this is still the case.",
+        "page": 9
+      }
+    ]
+  },
+  {
+    "id": "S061",
+    "year": "2025",
+    "title": "Scylla: a matrix-free fix-propagate-and-project heuristic for mixed-integer optimization",
+    "read_level": "full",
+    "contribution": "Scylla, a feasibility-pump-like MIP heuristic that replaces LP solves by a few warm-started PDLP iterations under a loose, geometrically tightened tolerance and rounds by fix-and-propagate; it loses to a simplex-based feasibility pump overall but finds solutions in 42 more instance-seed runs and is about four times faster when the root LP takes more than 60 s.",
+    "problem_entry": "LP-based heuristics assume optimal LP solutions and cheap re-optimization, which fails during presolving (no LP solution yet), in applications with costly simplex re-optimization, and for large stand-alone use (pp. 1–2).",
+    "key_idea": "A feasibility pump with the projection replaced by limited-precision PDHG (PDLP) and rounding by fix-and-propagate, plus an objective update toward an ℓ1 distance; matrix-free, using only sparse matrix-vector products (pp. 2–4).",
+    "assumptions": "General MIP min{cᵀx : Ax ≥ b, ℓ ≤ x ≤ u, x_j ∈ Z for j ∈ I}; 283 instances from MIPLIB 2017 and the FP 2.0 set after removing those solved in SCIP presolve (the MIPLIB 2017 subset is not stated) (pp. 3, 5).",
+    "proof_devices": [
+      "n/a for proofs; design devices follow",
+      "PDLP stopping tolerance ε^(1) = 0.01 and ε^(K+1) = max{0.98 ε^(K), 10^-8}, warm start from the previous primal-dual pair (pp. 3–4)",
+      "Objective update ĉᵀx = α^K (√|I|/‖c‖) cᵀx + (1 − α^K) Δ(x, x̂^(K)) with α = 0.9 (Algorithm 1.1, p. 3; p. 4)",
+      "Fix-and-propagate that continues past empty domains and always returns an integer point; random perturbation on cycling (p. 4)"
+    ],
+    "experiments": "Baseline: the open-source feasibility pump of [16] with SoPlex 6.0.2, extended with PDLP; Xeon Gold 6338, 3600 s, ten seeds, 2830 instance-seed runs; metrics: solutions found, wins, shifted geometric means of gap and time (shifts not stated), model-building overhead; overall the FP is better (gap 27.46 against 40.92, time 10.06 s against 17.30 s); root LP 1–60 s: the FP finds more solutions, Scylla is faster; root LP above 60 s: Scylla 205 against 163 solutions found and 234.80 s against 974.66 s ('nearly four times', table ratio 4.15) (pp. 5–6).",
+    "positioning": "Continues the feasibility-pump line (Fischetti, Glover and Lodi; Bertacco et al.; Achterberg and Berthold; FP 2.0) and fix-and-propagate heuristics; builds on PDLP (pp. 2–4).",
+    "writing": "The overall loss reported first and explained; implementation overhead separated from the method; the claim restricted to the subset with hard root LPs (pp. 5–6).",
+    "limits_future": "Loses on the whole test set; the OR-Tools interface rebuilds the model in every iteration; the parallelism of sparse matrix-vector products is unused; future: multithreaded sparse BLAS, MIQPs with diagonal Hessian, an ℓ2 distance (pp. 5–6).",
+    "method_links": [
+      {
+        "method": "Method 5",
+        "relation": "variant",
+        "note": "accuracy of the producing LP matched to its role (loose 0.01 tolerance, tightened geometrically) with a separate feasibility check as the deciding step; the decision is floating-point feasibility, not exact arithmetic",
+        "pages": "pp. 3–4"
+      },
+      {
+        "method": "Method 2",
+        "relation": "evidence",
+        "note": "steps 5–6 and 9: the baseline is the same feasibility-pump framework with the LP engine swapped; implementation overhead printed in its own column and attributed (also Heuristic 8: ten seeds, claim restricted to one bracket)",
+        "pages": "pp. 5–6"
+      },
+      {
+        "method": "Method 3",
+        "relation": "evidence",
+        "note": "step 1: the overall loss and its cause printed with numbers; the implementation limits become the stated next steps",
+        "pages": "pp. 5–6"
+      }
+    ],
+    "new_pattern_candidates": [],
+    "transferable": [
+      "Solve a guiding LP with a first-order method to a loose tolerance tightened geometrically per outer iteration, warm-started from the previous primal-dual pair (pp. 3–4)",
+      "Make the rounding step always return an integer point by continuing fix-and-propagate past empty domains (p. 4)",
+      "Create the baseline by swapping one engine inside an existing open-source framework (p. 5)",
+      "Bracket instances by the cost of the step the method avoids (root LP time) and state the claim only where it holds (Table 1, p. 6)",
+      "Report implementation overhead in its own column so that a loss can be attributed (Table 1, p. 6)"
+    ],
+    "coauthors": "Gioni Mexi (first and corresponding author), Mathieu Besançon, Suresh Bolusani, Antonia Chmiela, Alexander Hoen (all ZIB)",
+    "quotes": [
+      {
+        "text": "This error can be relaxed compared to what would be expected in “standard” LP solving since the resulting fractional solution is then guiding a rounding procedure.",
+        "page": 4
+      },
+      {
+        "text": "This is an expected result since the LPs in the FP iterations are for most instances easily solved to optimality, and warm-starting of simplex LP solvers is very effective.",
+        "page": 5
+      }
+    ]
+  }
+]

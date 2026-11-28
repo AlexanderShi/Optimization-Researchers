@@ -1,0 +1,304 @@
+[
+ {
+  "id": "S005",
+  "year": 2018,
+  "title": "The SCIP Optimization Suite 6.0",
+  "read_level": "full",
+  "contribution": "A release report presenting SCIP 6.0's Benders framework and new search and cut components, and GCG 3.0's redesigned structure detection, classification, scoring and pricing loop for generic decomposition (pp. 4-6, 29-36, 38).",
+  "problem_entry": "Release gaps: Benders needed problem-specific understanding (p. 8); GCG's old static hmetis detection missed textbook decompositions, e.g. p2050-1 (p. 30, Fig. 4); old pricing loop did no exact pricing early (p. 35); aim: decomposition for non-experts (p. 29).",
+  "key_idea": "GCG 3.0 builds partial decompositions ('seeeds') in rounds of small detectors (p. 31), classifies constraints and variables and assigns whole classes (p. 32), votes block numbers by GCDs of class cardinalities (pp. 32-33), scores textbook decompositions (p. 33), detects Benders structure (p. 34), prices through a job priority queue (p. 35); SCIP 6.0 adds Benders plugins, Farkas/conflict diving, lookahead branching, CMIR scaling, directed cutoff distance (pp. 6-20).",
+  "assumptions": "MIP and nonconvex MINLP in CIP (pp. 4-5); Benders on bordered block-diagonal forms (p. 6); GCG single-bordered and staircase forms (pp. 30-31); modellers define constraint sets that go wholly to blocks or master (p. 32); test sets 425 MIPs and 113 MINLPs (p. 13), 361 MIPLIB 2010 instances for detection (p. 34).",
+  "proof_devices": [
+   "Branch-and-check via cons_benders / cons_benderslp enforcement priorities (pp. 10-11)",
+   "Subproblem merging into the master as fallback (pp. 9, 12)",
+   "Presolve bounding of auxiliary variables (pp. 12-13)",
+   "SCIP-mode fallback: empty master, one block (p. 31)",
+   "Detection on the original problem with translation, presolvers left out (p. 32)",
+   "Column pool, root-only dual stabilization, original LP first, numerically safe big-M artificials, discretization, price-and-branch heuristic (p. 36)",
+   "Farkas ray double-check and OPTIMAL_UNSCALED_VIOLATIONS status (pp. 22-23)",
+   "Observation 2.1: a conflict lock implies a model lock in the same direction (p. 18)"
+  ],
+  "experiments": "SCIP 6.0 vs 5.0 with five seeds, instance-seed pairs, shifted geometric means, brackets (pp. 13-14): MIP ratio 1.08, MINLP 1.23 (pp. 14-15); component claims on shorter runs (pp. 17-20); UG five repeated runs (pp. 36-37); GCG only 'Preliminary results' without numbers (p. 29), detection counts not solve outcomes (p. 34), CPLEX Benders comparison without counts (p. 34).",
+  "positioning": "Suite as coordinated development (p. 4); Benders lineage credited (pp. 6-12); uniqueness claims without systematic comparison (pp. 11-13, 38); GCG against Wang-Ralphs voting (pp. 32-33), CPLEX 12.8 Benders (p. 34), Bergner et al. 2015 (p. 33).",
+  "writing": "Release-report genre with parameter names and a code-contribution paragraph (p. 39); hedges ('Preliminary results', p. 29; p. 33) beside promotional framing (p. 29); joke footnote on 'seeed' (p. 31); research rationale of a generic framework (p. 38).",
+  "limits_future": "Preprocessing/detection balance unaddressed (p. 32); aggressive detection expensive (p. 32); Benders score experimental (p. 34); root-only stabilization (p. 36); untuned conflict diving and UG (pp. 18, 37); future: Benders enhancements and structure detection for Benders (p. 38), structure information in the next MIPLIB (p. 34).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "The compact model stays inside the generic tool: SCIP-mode, subproblem merging, original LP first; probing with known structure supported by dec files, name-based classes and detector advice",
+    "pages": "pp. 9, 12, 31-33, 36"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "The 2018 group text frames GCG as a general-purpose solver whose user need not know any structure, not as a probe or estimate; questions the skill's dating and shows Inner Tension 2 (promise vs advice to steer detection)",
+    "pages": "pp. 29, 32, 38"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Option space generated and one decomposition chosen by an experimentally weighted score; detection evaluated by how often decompositions are found, not by bound or time (the proxy case); Heuristic H4 evidence [inferred]: S058 studies this open choice the same year",
+    "pages": "pp. 30, 33-35"
+   },
+   {
+    "method": "Method 3",
+    "relation": "contradiction",
+    "note": "'fails less often' from preliminary results without counts, and a CPLEX comparison without numbers, in a report whose SCIP part runs a five-seed protocol",
+    "pages": "pp. 13-14, 29, 34"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "With Heuristic H7: a loss stated (CPLEX faster), two MINLP features switched off after deterioration, conflict diving off until evaluated, staircase detectors off by default, root-only stabilization",
+    "pages": "pp. 15, 18, 31, 34, 36"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "constraint classes as the unit of structure",
+    "evidence": "GCG 3.0 assigns whole modeller-defined constraint classes to the master and derives block-number candidates from class sizes; S058 reads DW gains by MIPLIB constraint type",
+    "pages": "pp. 32-33; S058 pp. 7-8, 11"
+   }
+  ],
+  "coauthors": "Ambros Gleixner (first) and 23 further co-authors, among them Michael Bastubbe, Stephen J. Maher, Christian Puchert, Matthias Walter, Jonas T. Witt, L. Eifler, T. Gally, G. Gamrath, R. L. Gottwald",
+  "transferable": [
+   "Evaluate a solver version against its predecessor with five seeds, each instance-seed pair as one observation, numerically inconsistent runs excluded, shifted geometric means with stated shifts (1 s, 100 nodes), and the subsets affected, [t,T], both-solved and diff-timeout (pp. 13–15).",
+   "Detect decomposable structure by classifying constraints (nonzeros, constraint handler, MIPLIB type, names within small edit distance) and assigning whole classes to the master; propose block numbers by voting for GCDs of class cardinalities (pp. 32–33).",
+   "Build detection as rounds of detectors on partial decompositions with propagate/finish/postprocess callbacks and duplicate filtering, and write the family tree out for inspection (pp. 31, 36).",
+   "Organize pricing as a priority queue of (pricing problem, solver, heuristic flag) jobs, abort when a share of the pricing problems has produced improving columns or enough columns exist, and retry heuristic pricing with increased limits before pricing exactly (p. 35).",
+   "Keep two monolithic fallbacks in a decomposition code: the compact model when no structure is found, and merging a subproblem into the master when no cut can be produced (pp. 9, 12, 31)."
+  ],
+  "quotes": [
+   {
+    "text": "It has always been GCG’s ambition to not require the user to have any knowledge about problem or model structure or the decomposition algorithms to exploit such structure.",
+    "page": 29
+   },
+   {
+    "text": "Preliminary results indicate that GCG 3.0 is faster than the previous version GCG 2.1.4 on structured instances and fails less often on unstructured ones.",
+    "page": 29
+   }
+  ]
+ },
+ {
+  "id": "S052",
+  "year": 2018,
+  "title": "The strength of Dantzig–Wolfe reformulations for the stable set and related problems",
+  "read_level": "full",
+  "contribution": "Characterizes exactly when a Dantzig-Wolfe reformulation of the stable set edge formulation equals the LP relaxation (G′ bipartite) and when it gives the stable set polytope (G′ contains all odd induced cycles), with transfers to clique, node cover, matching and partly set packing (pp. 4-19).",
+  "problem_entry": "In general only the sandwich (1) and Geoffrion's necessary condition (2) are known (p. 2); focus on one problem, stay generic in reformulations; stable set chosen for compared relaxations and conflict-graph relevance; earlier work 'rather empirical' (pp. 2-3).",
+  "key_idea": "Identify convexified constraints with a subgraph G′ and characterize both extremes: DW = FRAC iff G′ bipartite (Thm 2, pp. 4-5); DW = STAB iff G′ contains all odd induced cycles (Thms 3, 6, 7, pp. 5-9) via a weighted Andrásfai theorem (Thm 5, pp. 6-7); transfers to clique, node cover, matching, set packing (pp. 10-17).",
+  "assumptions": "Pure IPs with bounds (p. 1); maximum weight stable set edge formulation (p. 3); matching node formulation MP(G, V′) (p. 11); set packing with conflict graph G(A) (pp. 13-14); results are polytope identities, objective-independent, while the actual strengthening depends on the objective (p. 19).",
+  "proof_devices": [
+   "Half-integral odd-cycle witness (Thms 2-3, p. 5; Thms 12-13, pp. 12-13; Cor. 4, p. 17)",
+   "Five-node counterexample: odd cycles cannot replace odd induced cycles (p. 5)",
+   "Weighted Andrásfai via symmetric difference, component exchange and shortest path (Thm 5, pp. 6-7)",
+   "Induction adding back the edges of a minimal critical set (Lemma 2, pp. 7-8)",
+   "Modified deletion order for α_π-critical subgraphs after Lipták-Lovász and Sewell (Lemma 3, p. 8; Thm 6, p. 9)",
+   "Reformulation identity read as a polyhedral theorem on odd pairs (Thm 8, p. 9)",
+   "Complement graph and x ↦ 1 − x for clique and node cover (p. 10)",
+   "Gadget graph making MP(G, V′) an ordinary matching polytope (Lemma 4, pp. 11-12; Thms 10-11, Cor. 1)",
+   "Perfect-graph sandwich via Chvátal's perfect-matrix theorem for set packing (Prop. 1, pp. 14-15)"
+  ],
+  "experiments": "none",
+  "positioning": "Geoffrion 1974 as the only general predecessor (pp. 1, 3); polyhedral tools credited by name (pp. 4-14); earlier stable-set decompositions labelled empirical (pp. 2-3); Reed credited with Thm 7's polyhedral reading (p. 9); own SEA 2015 paper cited as practical evidence (p. 19).",
+  "writing": "Unhedged 'first non-trivial general results' in the abstract (p. 1), 'To the best of our knowledge' in the body (p. 3); computational disclaimer (p. 3); 'a seminal step' (p. 18); theorem-proof style; alternative proof kept with a stated reason (p. 9); open problems stated precisely (p. 16).",
+  "limits_future": "Recognizing edges in odd induced cycles NP-complete, W[1]-complete by hole size (p. 19); strongest reformulation's LP likely too hard (p. 19); set-packing gap open (pp. 16, 19); future: reformulations between the extremes, e.g. odd induced cycles up to size k, and comparison with other relaxations (p. 19).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Exit B: pattern proved for one class, extended where complete hull descriptions exist, and what resists published as open (set packing; reformulations in between)",
+    "pages": "pp. 13-19"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Order: the theorem comes before the enumeration; the paper computes nothing and S058 cites the 2015 report version as its start, confirming the skill's limitation note",
+    "pages": "p. 19; S058 p. 2"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Claim sized in a theory paper: no viable procedure implied, computation out of scope, NP-completeness, theory vs practice; counterpoint Taste B3 variant: unhedged priority claim and 'seminal step'",
+    "pages": "pp. 1, 3, 18, 19"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "extremes first, then in between",
+    "evidence": "Both extremes are characterized and the family between them is named as the next step; S058 then asks what happens in between these extremes",
+    "pages": "pp. 3-4, 9, 18-19; S058 p. 1"
+   }
+  ],
+  "coauthors": "Jonas T. Witt",
+  "transferable": [
+   "Prove that a decomposition does not improve on the LP, or does not reach the hull, with the half-integral odd-cycle point: 1/2 on the cycle violates the odd-cycle inequality, and as half the sum of the two alternating stable sets it lies in the reformulated polytope when one cycle edge is left out (pp. 5, 12–13, 17).",
+   "Prove that a decomposition reaches the hull facet by facet: for each non-trivial facet, find a subgraph inside the convexified part on which the facet is already valid (an α_π-critical subgraph whose edges all lie in odd induced cycles) (pp. 8–9).",
+   "Generalize an unweighted critical-graph theorem to weights through the symmetric difference of two maximum weight solutions, a component exchange and a shortest path (pp. 6–7).",
+   "Turn a partially relaxed polytope (degree constraints only on V′) into a standard one with a gadget graph, so that known complete descriptions apply (Lemma 4, pp. 11–12).",
+   "Close a structural theory paper with the complexity barriers to using it (NP-completeness, W[1]-completeness) and a candidate family in between that might stay tractable (p. 19)."
+  ],
+  "quotes": [
+   {
+    "text": "We stress that at this time, our work is not meant to imply any computationally viable solution procedure for the stable set problem.",
+    "page": 3
+   },
+   {
+    "text": "Then again, the actual strengthening of the formulation by Dantzig–Wolfe reformulation also depends on the objective function, and a theoretically weak reformulation may be strong in practice (and vice versa).",
+    "page": 19
+   }
+  ]
+ },
+ {
+  "id": "S058",
+  "year": 2018,
+  "title": "A Computational Investigation on the Strength of Dantzig-Wolfe Reformulations",
+  "read_level": "full",
+  "contribution": "Computes the DW bound of every subset of constraints on 20 small instances and level-0 gains on 38 MIPLIB instances, giving the first computational map of DW reformulation strength and a validated low-level proxy (pp. 2-11).",
+  "problem_entry": "Every constraint subset gives its own reformulation, so 'the' strength is not useful and theory is very scarce (Geoffrion; own stable-set result; nothing in between) (p. 2); entry: compute every reformulation of small models for general computational intuition, claimed first of its kind (p. 2).",
+  "key_idea": "Compute z_DW(I′) for all 2^|I| subsets by column generation (pp. 2-3), read poset chains as relaxation hierarchies and minimal reformulations (p. 3); few distinct bounds and minimal reformulations (p. 4), weak bounds frequent, |I′| no indicator (p. 5), BIN and KNA gains far ahead (p. 7), low-level gain predicts average gain, so MIPLIB uses level 0 (pp. 7-8).",
+  "assumptions": "Pure and mixed IPs, min form (p. 2); toy instances with at most 18 constraints from six structured classes plus flugpl, mod008, p0033, too-hard ones dropped, positive gap (p. 3); 20 instances in Table 1 (p. 4); MIPLIB 2010 constraint types (p. 7); one objective per instance (pp. 2, 9); Geoffrion rules out level-0 gain for several types (p. 8).",
+  "proof_devices": [
+   "GCG detector enumerating all 2^|I| reformulations, each solved to optimality by column generation; cuts and integral rounding off, presolve off for structured models (p. 3)",
+   "Poset chains as relaxation hierarchies (p. 3)",
+   "Normalized gap closed (4) and constraint gains (5)-(8) per level (pp. 5, 7)",
+   "Power-of-two frequencies from non-influencing constraints (cpmp1, p. 4)",
+   "Distinct-elements sample-complexity argument Θ(2^|I|/|I|) against random sampling (p. 6)",
+   "Dilworth's theorem for the width of the minimal-reformulation poset (p. 11)"
+  ],
+  "experiments": "Over one million relaxations by column generation in about 100 hours, no hardware, LP solver or limit stated (pp. 2-3); Table 1 per-instance counts (p. 4); figures (pp. 5-11); MIPLIB level-0 gains on 38 instances, positive on 12 (p. 8), Fig. 6 type counts (p. 11); card's count: nmin ≤ 2·ndbs on 12 of 20 (p. 4); deterministic, objective not varied (p. 9).",
+  "positioning": "Geoffrion 1974 and Vanderbeck-Savelsbergh (p. 2); own stable-set result as the only other result (p. 2); Bergner et al. 2015 for the MIPLIB DW relaxations (p. 8); Chvátal-Gomory-type hierarchies as frame (p. 3); 'first of its kind' (p. 2).",
+  "writing": "Readings labelled as readings and conjectures (pp. 4-11); last section states conclusions and ends with questions (pp. 9, 11); 'often' three times, only the third backed by counts in Fig. 6 (pp. 4, 6, 8, 11).",
+  "limits_future": "Toy scale, too-hard instances dropped (p. 3); conjecture impractical to verify at larger |I| (p. 6); objective dependence untested (p. 9); MIPLIB only at level 0 (p. 8); future: random objectives (p. 9), poset substructure, efficient computation, recognizing minimality, Klee-Minty-like instances, output-sensitive algorithms (p. 11).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "The fullest instance: option space written down, instances shrunk and too-hard ones dropped, map read for surprises, proxy tested against full enumeration before use at scale, exit B as conjectures and questions",
+    "pages": "pp. 2-11"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Step 3 'sample widely' replaced: random sampling rejected by a sample-complexity argument and the validated level-0 proxy used; the study starts from the stable-set theorem",
+    "pages": "pp. 2, 6, 8"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "GCG as a measuring instrument, here for a research question rather than a build decision",
+    "pages": "p. 3"
+   },
+   {
+    "method": "Method 3",
+    "relation": "contradiction",
+    "note": "Minor: 'often' without counts on pp. 4 and 6, the first only partly borne out by Table 1 (12 of 20); the interpretations are labelled as such",
+    "pages": "pp. 4, 6"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "extremes first, then in between",
+    "evidence": "The study asks what happens in between these extremes, after S052 characterized the extremes",
+    "pages": "pp. 1-2"
+   },
+   {
+    "pattern": "constraint classes as the unit of structure",
+    "evidence": "Gains are read by MIPLIB constraint type, as GCG 3.0's classifiers assign whole constraint classes",
+    "pages": "pp. 7-8, 11; S005 p. 32"
+   }
+  ],
+  "coauthors": "Michael Bastubbe (first author), Jonas T. Witt",
+  "transferable": [
+   "Exhaustive-enumeration protocol for a reformulation choice: textbook formulations with as few, weak coupling constraints as possible; instances shrunk to at most 18 constraints; cuts, presolve and integral rounding of bounds off; every relaxation solved to optimality; too-hard instances named and dropped (p. 3).",
+   "Normalize bounds as gap closed (z_DW − z_LP)/(z_IP − z_LP) and per-constraint gains by level, so that instances of different classes can be compared (pp. 5, 7).",
+   "Validate a cheap proxy (level-0 to level-2 gains) against the exhaustive answer before using it on large instances (pp. 7–8, 10).",
+   "Explain zero gains by Geoffrion's condition per constraint type before looking for anything deeper (p. 8).",
+   "Report per-instance raw counts so that \"often\" can be checked (p. 4)."
+  ],
+  "quotes": [
+   {
+    "text": "Unfortunately, there is little hope that we even obtain a statistical statement from a random sampling of DW reformulations unless we have further information about the structure of the model: the sample size would need to be too large.",
+    "page": 6
+   },
+   {
+    "text": "It is fair to say that for bin packing using “the correct” DW reformulation is crucial for obtaining a strong dual bound – and this is precisely a reformulation that we would find in a textbook.",
+    "page": 9
+   }
+  ]
+ },
+ {
+  "id": "S018",
+  "year": 2019,
+  "title": "Ship traffic optimization for the Kiel Canal",
+  "read_level": "full",
+  "contribution": "Models the Kiel Canal ship traffic control problem, proves greedy realizability of precedence structures, gives a discretization-free quickest-path routine, and builds a rolling-horizon local search over precedences that cut waiting by some 25% and supported the enlargement decision (pp. 3, 13-31).",
+  "problem_entry": "New practical problem STCP: who waits for whom, where and how long, minimizing total waiting (pp. 1-2); entries: the planners' distance-time diagram (pp. 4-5) and the enlargement question (p. 2); placed between train scheduling and AGV routing, neither fits (pp. 3, 9-10); APX-hard / NP-hard (p. 10).",
+  "key_idea": "Separate combinatorics (precedences per segment) from geometry (routes in space-time) (pp. 2, 11); greedy realization of precedence structures (Thm 1, Alg. 1, pp. 13-14); interval-label quickest paths with forbidden entry windows (§4, pp. 15-21); since sequential routing can be arbitrarily bad (Lemma 2, p. 21), local search on precedences with backtracking repair in a rolling horizon (pp. 22-26).",
+  "assumptions": "Geometric model of segments, sidings, requests and distances (pp. 5-8); constant full speed, no overtaking, one wait per siding, two-hour look-ahead (pp. 4-5, 7); compact MIP (1)-(8) with big-M and trivial LP bound (pp. 10-12); knapsack siding capacity weaker (p. 8); data: GPS of about 43,000 ships in 2007, 365 daily instances (p. 25).",
+  "proof_devices": [
+   "Unified precedence condition with asymmetric, possibly negative Δ (pp. 10-12)",
+   "Lemma 1 by loop invariant and induction, cyclic dependency contradiction (pp. 13-14); Corollary 1 unique earliest-arrival solution (p. 14)",
+   "Label-setting with interval labels and inclusion dominance; label splitting by forbidden windows (Algs. 2-3, pp. 16, 20)",
+   "Polynomial running-time bound (p. 21); Corollary 2 for the knapsack relaxation (p. 21)",
+   "Lemma 2 cyclic waiting-pattern counterexample (pp. 21-22)",
+   "Local search with myopic estimates, taboo list and surrogate objective Σ_i (a_i w_i)^f (pp. 23-24)"
+  ],
+  "experiments": "Java on a desktop PC, average waiting per ship, unrouted ships charged 2 h (p. 25); TS-OPT dropped without numbers (p. 25); SeqR, LS-240, RH-1, RH-3 on 365 days with Table 1 (pp. 26-27); CPLEX 12.3 bounds on 21 sub-instances, gap about 5 min (p. 28); siding loss 8%, about 30% for 2025 not reported (p. 28); vs re-realized GPS plans waiting down some 25% (p. 29); no seeds or tests (pp. 1, 26, 30).",
+  "positioning": "Merges single-track train scheduling and AGV routing (pp. 3, 9, 15); other waterways and lock scheduling as neighbours (pp. 8-9); firm claims against the literature (pp. 3, 9); complexity from Disser, Klimm and E. Lübbecke (p. 10); TS-OPT from Schlechte (p. 25).",
+  "writing": "Four numbered contributions (p. 3); abstract states planner approval and use (p. 1); distance-time diagrams carry the argument (pp. 5-7, 11, 22-23); hedged results beside unqualified 'significantly' and 'fullest satisfaction' (pp. 1, 3, 26, 29, 30); acknowledgments mention educational short movies (p. 31).",
+  "limits_future": "Constant speed (p. 4); weak MIP not strengthened (p. 12); bounds only on 2-hour sub-instances (p. 28); about one unrouted ship per day (p. 27); future: variable speed, transfer to train scheduling and networks, lock-scheduling integration (p. 31).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "The compact MIP of the relaxation is problem statement and yardstick bounding the heuristic; a time-discretized model probed and dropped; the method built is a combinatorial heuristic, not a decomposition",
+    "pages": "pp. 10-12, 25, 28"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Components ablated on 365 days, unrouted ships counted and charged, human baseline re-realized, quality bounded on sub-instances (Heuristic H2 and Taste G1, partly), headline hedged",
+    "pages": "pp. 25-29"
+   },
+   {
+    "method": "Method 3",
+    "relation": "contradiction",
+    "note": "Claims without numbers or tests: 'exorbitant', the 2025 result not reported, 'significantly'; the 24-hour comparison is against a relaxed heuristic, not a bound",
+    "pages": "pp. 1, 25, 26, 28, 30"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "search the combinatorics, realize the geometry",
+    "evidence": "Precedences are searched and each candidate realized by an exact polynomial routine",
+    "pages": "pp. 2-3, 11-14, 21-24"
+   },
+   {
+    "pattern": "weighted surrogate inside, owner's measure outside",
+    "evidence": "Surrogate Σ_i (a_i w_i)^f used in the search for acceptance, results reported as average waiting time per ship",
+    "pages": "pp. 24-25"
+   }
+  ],
+  "coauthors": "Elisabeth Lübbecke (first author), Rolf H. Möhring",
+  "transferable": [
+   "Realization oracle: fix the discrete decisions (precedences per segment), compute optimal timings by greedy single-ship routing or an LP, and detect unrealizable decisions as cyclic dependencies; then run the local search on the decisions only (pp. 11–14, 22–24).",
+   "Quickest paths over time without a time-expanded network: labels hold arrival-time intervals, arcs hold forbidden entry-time windows, dominance is interval inclusion; forbid entry times rather than blocking arcs, so that several vehicles can share an arc (pp. 3, 15–20).",
+   "A small cyclic counterexample to rule out every sequential (one-at-a-time) construction before tuning the order (pp. 21–22).",
+   "Bound a heuristic on sub-instances with the compact MIP of a relaxation when the full model is out of reach, and state the gap in the owner's unit (minutes of waiting) (p. 28).",
+   "Rolling horizon with routes completed beyond the horizon and earlier precedence decisions handed to the next window (p. 25).",
+   "Re-realize human plans under the model's rules before comparing with them (p. 29)."
+  ],
+  "quotes": [
+   {
+    "text": "Yet, we show that any such sequential routing procedure may yield a total travel time arbitrarily far from optimum (Lemma 2).",
+    "page": 3
+   },
+   {
+    "text": "Average waiting times are down by some 25% on average. Again, precise values should be taken with care, but a picture is clearly emerging.",
+    "page": 29
+   }
+  ]
+ }
+]

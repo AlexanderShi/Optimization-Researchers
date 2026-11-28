@@ -1,0 +1,234 @@
+[
+ {
+  "id": "S050",
+  "year": "2020",
+  "title": "A branch-and-price algorithm for capacitated hypergraph vertex separation",
+  "read_level": "full",
+  "contribution": "An exact branch-and-price algorithm for the capacitated hypergraph vertex separator problem on a symmetry-free, shore-based Dantzig-Wolfe reformulation, with branching on aggregated original variables completed by a bin-packing argument, analysed and preprocessed pricing, and a study in which it beats the compact model in CPLEX for k > 8 and loses for k < 8 (pp. 1-17).",
+  "problem_entry": "Main motivation: matrix decomposition into single-bordered block-diagonal form, also for Dantzig-Wolfe reformulation of MIPs [Bergner et al. 2015] (p. 1); the only exact approach (Borndörfer et al.) is symmetric in k and struggles for larger k, Oosten et al. assume k = infinity, Cornaz et al. hardly handle larger k (pp. 1-2).",
+  "key_idea": "Dantzig-Wolfe-reformulate the compact model (P) with the k identical shore subproblems aggregated into one (symmetry removed), solve by branch-and-price, branch on aggregated original variables z_v and close completeness by a bin-packing (IRUP) argument plus a Ryan-Foster fallback; NP-hard pricing is preprocessed with its min-cut relaxation and solved by a greedy, hill-climbing, exact cascade with complementary restarts (pp. 3-11, 22-23).",
+  "assumptions": "Pure binary programs; no isolated vertices; p_v > 0 and c_e >= 0 in pricing; completeness assumes the integer round-up property of the components' bin-packing instance (open question; non-IRUP instances exist); 182 instances: 55 netlib basis matrices, 40 DIMACS graphs, 37 presolved MIPLIB 2010 matrices (selection rule not stated), 50 random hypergraphs; u = ceil(|V|/k) for fixed k, five capacities for k = infinity (pp. 1, 4-7, 9, 12, 14).",
+  "proof_devices": [
+   "Aggregation of k identical shore subproblems into one Dantzig-Wolfe subproblem removes the symmetry of (P) (p. 3)",
+   "Incompleteness example for branching on aggregated z: lambda = 0.5 on four columns with z integral (Example 1, Fig. 2, p. 4)",
+   "Prop. 2: integral z implies components of at most u vertices, by chaining tight packing rows along hyperedges (p. 5)",
+   "Prop. 5: map lambda to a fractional Gilmore-Gomory solution; with IRUP, k >= ceil(w_LP) = w*, so an integral solution of equal value exists; Algorithm 1 finds it (pp. 5-6)",
+   "Ryan-Foster same/differ fallback with Prop. 11 (a fractional vertex pair exists); pricing adapted by weighted vertex merging and conflict rows (pp. 22-23)",
+   "Prop. 7: pricing NP-hard by a reduction from Clique with 'irresistable' profits |E| + 1 (p. 7)",
+   "Prop. 8: uncapacitated pricing by a minimum s-t cut with big capacities on vertex-net arcs, after Barahona and Jensen (p. 7; App. A.1, p. 22)",
+   "Prop. 9: some capacitated optimum lies inside any uncapacitated optimum, by an exchange inequality on intersection and union; used to drop vertices for one pricing call (pp. 7-8)",
+   "Pricing cascade greedy (several columns per call), shotgun steepest-ascent hill-climbing over four neighbourhoods, exact binary program; stop at first success; complementary restarts on V \\ R, at most 8 rounds (pp. 8-9, 11)",
+   "Two-phase hypergraph preprocessing: dominated and duplicate hyperedges, then a heuristic clique edge cover with the same clique graph, kept only if smaller (pp. 9-10)",
+   "Randomized-rounding primal heuristic with Algorithm 1 as feasibility check, 200 runs, after each node and every 50 column-generation iterations (p. 10)",
+   "Prop. 10: exchange vectors, i.e. dual-optimal inequalities beta_e <= |e|, are valid, by contradiction on an optimal dual; off by default (pp. 10-11)"
+  ],
+  "experiments": "SCIP 3.2.0 with CPLEX 12.6.1 (single thread) against the compact model (P) in CPLEX 12.6.1 under exactly the same conditions, i7-2600, 16 GB, 1800 s; 182 instances, k from 4 to 256 and k = infinity; solved shares, gap thresholds, performance profiles, root-gap shifted geometric mean (shift 1), per-instance tables; cplex better for k < 8 (miplib up to k = 10), base for k > 8; ablations at k in {4, 8, 12} (phase-2 preprocessing +10-20% solved, exchange vectors slightly worse); Borndörfer et al. not run, Oosten et al. by published results; no seeds for randomized components; defaults derived on the evaluation instances (pp. 11-16, 26-42).",
+  "positioning": "Against Borndörfer et al. 1998 (the only exact approach), Oosten et al. (k = infinity) and Cornaz et al. (an intermediate step; independent similar ideas); ideas credited to the Next Release Problem, Barahona-Jensen, Ghoniem-Sherali, Kou et al., Ryan-Foster, Gilmore-Gomory, Marcotte, Kartak et al.; the 1998 work re-read, not attacked (pp. 1-2, 5-10, 17).",
+  "writing": "Compact, aggregates in the text and details in the appendix (p. 11); priority claims ('first to consistently', 'first successful ... k > 8', 'massively outclasses') beside an abstract that says 'complements'; expectation-then-observation sentences (p. 14); the conclusion summarizes, then concludes on generic solvers absorbing reformulations within 20 years (pp. 1-3, 14, 16-17); preprint typos.",
+  "limits_future": "Stated: the IRUP case is open (p. 6); the compact model wins for k < 8 and on miplib up to k = 10 (pp. 13, 28); about 5% of instances never below a 200% gap (p. 12); exchange vectors fail (p. 26). Unstated: no variability study, defaults derived on the evaluation set, a published-results comparison behind the abstract's k = infinity claim. Future: only the hope that such reformulations become part of generic solvers (p. 17).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Step 2: the compact model (P) in CPLEX 12.6.1 under exactly the same conditions is the main yardstick; its winning range (k < 8; miplib up to k = 10) is conceded and the reformulation framed as complementing it; an old tailored code is retired as baseline by that comparison",
+    "pages": "pp. 1, 11, 13-14, 17, 28"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Steps 5-6: built on SCIP; branching on aggregated original variables, its theoretical gap closed by a bin-packing disaggregation argument and a Ryan-Foster fallback. Heuristic H4 evidence: the matrix decomposition behind Dantzig-Wolfe reformulation is named as main motivation, citing Bergner et al. 2015, and the first author redesigned GCG 3.0's detection (card c06, S005 p. 39); a return into GCG is not documented (GCG is never named)",
+    "pages": "pp. 1, 3-6, 11, 22-23"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Steps 3 and 5: the competitor that matters re-run on the same machine, version and limit; losses by k and by test set; per-component ablations; per-instance tables. With H7: exchange vectors off by default after a slightly worse performance (and Taste G2: the failure reported); with H1: heuristic pricing cascade, several columns per call, exact pricing only when heuristics fail",
+    "pages": "pp. 8-9, 11, 13-14, 26-28, 33-42"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Steps 3 and 6 and the Limitations note: the abstract's k = infinity claim rests on Oosten et al.'s published results without a hardware note; 'consistently' and 'numerous computational tests' without counts; randomized heuristics without seeds or repeats; defaults derived on the evaluation instances, no held-out set",
+    "pages": "pp. 1-2, 6, 8, 10-11, 14, 26-28"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Select for diversity, not by score alone",
+    "evidence": "Complementary pricing reruns the pricer on V \\ R so that columns combine into integer solutions (after Ghoniem and Sherali); second card after S060 (c11)",
+    "pages": "p. 9"
+   },
+   {
+    "pattern": "Expectation-then-Observation reporting",
+    "evidence": "'This is to be expected as pricing problems get combinatorially richer'; k = infinity beats k = 4 at the same capacity against expectation, with a possible reason given; second card after S015 (c04)",
+    "pages": "p. 14"
+   },
+   {
+    "pattern": "carry the MIP solver's toolkit into branch-and-price",
+    "evidence": "Hypergraph and pricing preprocessing and a randomized-rounding primal heuristic inside branch-and-price; the conclusion hopes for the opposite transfer, reformulations into generic solvers; second card after S077 (c13)",
+    "pages": "pp. 7-10, 17"
+   },
+   {
+    "pattern": "disaggregation certificate for aggregated branching",
+    "evidence": "Integral aggregated z splits into components of at most u vertices, packed into at most k shores by bin packing with the integer round-up property; Ryan-Foster fallback kept for theory",
+    "pages": "pp. 4-6, 22-23"
+   }
+  ],
+  "transferable": [
+   "Close the completeness gap of branching on aggregated variables with identical subproblems: integral aggregated values split into components within capacity, pack them by bin packing, use the integer round-up property for the count, keep Ryan-Foster as fallback (pp. 4-6, 22-23)",
+   "Preprocess an NP-hard pricing problem with its polynomial relaxation (drop the cardinality bound, minimum cut) after proving that some optimum of the hard problem lies inside the relaxation's optimum (Props. 8-9, pp. 7-8, 22)",
+   "Reuse one feasibility routine twice: Algorithm 1 completes branching and checks randomized roundings in the primal heuristic (pp. 6, 10)",
+   "Complementary pricing: after a column is found, rerun the pricer on the complement of its vertex set (p. 9)",
+   "Re-encode conflicts by a smaller clique edge cover with the same clique graph and measure the LP effect by the root gap across encodings (pp. 9-10, 14, 16)",
+   "Sweep the structural parameter (k from 4 to 256) against the compact model in a commercial solver and report where the compact model wins, by test set, with per-instance tables in an appendix (pp. 13, 27-28, 33-42)",
+   "Locate the research gap in a parameter range: the index in which the standard model is symmetric and every exact code fails (pp. 2-3)",
+   "End on the field: what generic solvers now do that once needed a tailored code, and what they still do not do (p. 17)"
+  ],
+  "coauthors": "Michael Bastubbe (RWTH, first author)",
+  "quotes": [
+   {
+    "text": "It is an open question whether this can occur, but in our numerous computational tests it does not.",
+    "page": 6
+   },
+   {
+    "text": "Such cutting planes are part of generic solvers nowadays and make them successful tools as can be seen in our experiments for fixed k ≤ 12.",
+    "page": 17
+   }
+  ]
+ },
+ {
+  "id": "S091",
+  "year": "2020",
+  "title": "Welcome to SN Operations Research Forum!",
+  "read_level": "full",
+  "contribution": "The launch editorial of SN Operations Research Forum, in which the two editors widen what counts as an OR result (software, tools, data, failed experiments, practice hurdles), ask for public data and ideally code with synthetic stand-ins for proprietary data, invite designs for pre-registering computational studies, and explain a hybrid, classical-review start (pp. 1-3).",
+  "problem_entry": "The colleagues' question 'why another journal?', answered by the evolution of the field, of scientific culture and of the ways results are shared, which classical journals accommodate badly (pp. 1-2).",
+  "key_idea": "A journal as a community forum with a widened notion of research result (software, data, failed experiments and wrong paths, practice hurdles, public science), data and ideally code public, synthetic stand-in data, pre-registration and versioning as open questions, reform from within a traditional publisher (pp. 2-3).",
+  "assumptions": "n/a (an editorial).",
+  "proof_devices": [],
+  "experiments": "none",
+  "positioning": "Against 'just another journal'; community-run, fully open alternatives discussed ('We believe in both.') but reform from within the current system with a traditional publisher; the only outside reference is the Center for Open Science pre-registration page (pp. 1-3).",
+  "writing": "Collective editors' voice, short paragraphs, rhetorical questions and an exclamation, self-irony ('A bit pathetically'), limits admitted ('we do not fully know yet how to accomplish them'), ends as an invitation ('Let us do this experiment together.') (pp. 1-3).",
+  "limits_future": "Stated: not open access (hybrid; first two years free, then SharedIt); classical anonymous peer review only; no mechanism yet for pre-registration, versioning or two-way communication. Future: perhaps open access and post-publication reviewing (pp. 2-3).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Stated, joint: the conditions Method 3's re-runs need (public data, ideally code, synthetic stand-ins) and pre-registration, which fixes the evaluation before the data and publishes negative outcomes; no pre-registration in his record (SKILL.md Honest Boundary), and S050 (2020) derives its defaults on its evaluation instances without a seed protocol (S050 pp. 8, 10-11, 26-28). Also Taste G2 (software and 'failed experiments and wrong paths taken to learn from' as results, pp. 1-2), Taste G3 (research accompanied into practice, p. 1; practice hurdles, p. 2) and Inner Tension 7 (hybrid, not open access, p. 2; 'We will not trade speed for quality.', 'We believe in both.', p. 3)",
+    "pages": "pp. 1-3"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "synthetic stand-in data for proprietary instances",
+    "evidence": "Stated norm: authors should provide synthetic data that support the result in the same way as proprietary data; compare the near-real and perturbed instance practice in cards S010 and S025 (c04)",
+    "pages": "p. 2"
+   }
+  ],
+  "transferable": [
+   "When proprietary data block reproducibility, publish synthetic instances that support the result in the same way, and say that they do (p. 2)",
+   "For a norm you cannot yet implement (pre-registration for computational work), say so and ask readers for designs instead of announcing a policy (p. 2)",
+   "Open a position text with the reader's sceptical question and answer it in numbered parts (p. 1)"
+  ],
+  "coauthors": "Panos M. Pardalos (University of Florida)",
+  "quotes": [
+   {
+    "text": "If proprietary data cannot be made public, authors should provide additional, synthetic data that support the result in the same way as the original data.",
+    "page": 2
+   },
+   {
+    "text": "For some ideas, we do not fully know yet how to accomplish them.",
+    "page": 2
+   }
+  ]
+ },
+ {
+  "id": "S003",
+  "year": "2021",
+  "title": "MIPLIB 2017: data-driven compilation of the 6th mixed-integer programming library",
+  "read_level": "full",
+  "contribution": "The MIPLIB 2017 collection (1065 instances) and benchmark set (240), selected from 5721 submissions by a documented sequence of MIPs over feature and performance clusterings, with benchmark-suitability rules, numerics and consistency checks and GCG 3.0-based decomposition features; Lübbecke is one of 16 co-authors and of the 21-member committee (pp. 1-2, 24-36, 42, 47).",
+  "problem_entry": "MIPLIB 2010's benchmark set no longer reflected the frontier: open instances fell from 134 to 70 and virtual best/worst shifted geometric means from 36.3/113.0 s to 13.5/31.3 s, about 16% per year from algorithms (p. 2); goal: a fair average-performance benchmark in reasonable time plus a broader collection, explicitly not a guide for choosing a solver for an application (p. 3).",
+  "key_idea": "Replace manual committee selection by an optimization-based process: max-min-distance diversity preselection per model group, multiple k-means clusterings over 11 feature groups, a collection MIP with balancedness, duplicate, group, submitter and category constraints, benchmark-suitability rules (B.1)-(B.9), 24 per-solver performance clusterings and a benchmark MIP with a time budget and a hardness-favouring objective (pp. 3, 24-36).",
+  "assumptions": "MIPs in a canonical form after trivial presolving with SCIP 5.0 (instances distributed unmodified); 105 features in 11 groups, incl. 17 constraint classes and 10 GCG 3.0 decomposition features (not for all instances); indicators allowed in the collection only, no SOS or semicontinuous submissions; 5721 instances from 66 submitters, 5666 after removing LPs and trivially solved ones; model groups by submission or k-means for NEOS (pp. 6-19, 24-25).",
+  "proof_devices": [
+   "Distribute raw, measure presolved: features from trivial presolving to a fixed point, original files distributed (pp. 12-13)",
+   "Canonical form with objective and row normalization; log and siglog scaling (pp. 13-16)",
+   "GCG 3.0 minimal detection: constraint grouping by SCIP type, MIPLIB type and nonzeros, subsets as linking rows, connected finisher, maximum area score (p. 19)",
+   "Solution checker in GMP arithmetic with a mixed absolute-relative violation rule, eps = 1e-5, integrality 1e-4 (pp. 22-23)",
+   "Cross-solver consistency check with IPET: a verified primal value below another solver's dual bound (p. 23)",
+   "Diversity preselection max-min-distance MIP (1a)-(1e) with linearized products (pp. 26-27)",
+   "Multiple k-means clusterings per feature group; cluster quality and total dissimilarity as shifted geometric mean of distances (pp. 28-30)",
+   "Collection MIP (5) with balancedness (4a)-(4b), duplicate exclusion (4c), model-group, submitter and category limits (4d)-(4g) (pp. 31-32)",
+   "Sensitivity sweep of the balancedness tolerance eps (Table 10, p. 33)",
+   "24 performance clusterings and the benchmark MIP (8) with time budget and square-root hardness objective (pp. 33-36)",
+   "Feature-space validation by nearest-neighbour recovery of model groups (p. 37)",
+   "One-sided Kolmogorov-Smirnov test per solver for selection bias (pp. 40-41)",
+   "Benchmark-MIP variant for a minimal, balance-preserving replacement of two instances (pp. 43-44)"
+  ],
+  "experiments": "Eight solvers (CBC 2.9.8, CPLEX 12.7.1, Gurobi 7.5.1, MATLAB R2017b, MOSEK 8.1.0.30, SAS/OR 14.2, SCIP 4.0.0, Xpress 8.2) on all 5721 instances, 4 threads (SCIP and MATLAB 1), 4 h, two clusters, almost 40 CPU years; only virtual best/worst/median solvers reported, per-solver results withheld because of mixed hardware; benchmark hardness (Table 11) and per-solver KS tests (4 of 8 significant); performance variability and parallel scalability not captured (pp. 20-22, 36, 38-41).",
+  "positioning": "In the line Hoffman et al. 1953, Crowder et al. 1978, Jackson et al. 1991, Hooker 1993 (an extension of his idea), McGeoch; instance-space generation complementary; algorithm selection and other libraries beside it; against the manual selection of earlier MIPLIBs and MIPLIB 2003's instances still unsolved after 15 years; GCG, DIP and DECOMP named as structure-detecting decomposition solvers (pp. 1-6, 18, 25).",
+  "writing": "Transparency through counts at every step; frequent explicit hedges (many manual decisions, not a general blueprint, one of many possible outcomes, not even well-defined) beside firm readings (feature space 'sufficiently well', both goals 'equally well', 'a profound attempt'); river names for NEOS instances (pp. 3-4, 10, 28, 36-37, 41, 43).",
+  "limits_future": "Stated: a snapshot of current solvers under one time limit, no variability or scaling, approximate correctness, possibly contradicting clusterings (p. 36); numerically problematic instances slipped through (pp. 43-44); no block structure contributed (p. 18); a low area score does not show absence of structure (p. 19). Future: judge representativeness in hindsight from model-group speed-ups; compare diversity-based and nearest-neighbour preselection (p. 43).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Co-signed community protocol for steps 1-2: difficulty filters (B.1)-(B.2), diversity caps per model group, submitter, NEOS and pure-binary sets, numerics and consistency exclusions, every exclusion counted, scope sized in advance. With Taste B2: the 2017 real-world, hard-but-solvable rule he co-signed, before his 2024 MIPLIB post (SKILL.md)",
+    "pages": "pp. 3, 23, 25-26, 31-32, 35"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "The skill's 'no seed or permutation protocol' limitation is shared by the 2017 community benchmark (performance variability and parallel scalability not captured); mixed KS results read as both goals achieved",
+    "pages": "pp. 36, 40-41"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "A generic decomposition solver as measuring instrument: GCG 3.0's detection describes instances (features, web tags, instance-page information) and solves none; no submitter supplied block structure despite the .dec invitation (Inner Tension 2 and the Method 1 Limitations note)",
+    "pages": "pp. 18-19, 41"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Checkpoint: the area score enters as a proxy feature with its limit stated (a low score does not imply that there is no structure)",
+    "pages": "p. 19"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "test-set selection as an optimization model",
+    "evidence": "Diversity preselection MIP, collection MIP and benchmark MIP over feature and performance clusterings, an eps sensitivity sweep, and reuse for a minimal benchmark update; co-signed, ZIB-led",
+    "pages": "pp. 24-36, 43-44"
+   },
+   {
+    "pattern": "distribute raw, measure presolved",
+    "evidence": "Instances distributed unmodified so that presolve is tested; features from trivial presolving to a fixed point on a normalized canonical form; co-signed",
+    "pages": "pp. 12-14"
+   }
+  ],
+  "transferable": [
+   "A selection MIP with one balance constraint per feature cluster, scaled by cluster dissimilarity, plus caps per model group, submitter and category (pp. 30-32)",
+   "Max-min-distance preselection inside large homogeneous groups before the global selection (pp. 26-28)",
+   "A mixed absolute-relative violation rule for checking reported solutions against the original model in exact arithmetic (pp. 22-23)",
+   "A cross-solver consistency check: one solver's verified primal value below another's dual bound flags the instance (p. 23)",
+   "A per-solver one-sided KS test for selection bias of a hardness-biased benchmark (pp. 40-41)",
+   "Validate a feature space by how often known same-model pairs are nearest neighbours (p. 37)",
+   "Compute features on a lightly presolved canonical form but distribute the original files (pp. 12-14)",
+   "Justify a new benchmark with numbers on the old one: open instances closed, virtual best/worst speed-ups with shift and threads stated (p. 2)",
+   "List the ad hoc choices of a methodology as such and sweep the most central parameter (pp. 3-4, 33)"
+  ],
+  "coauthors": "Ambros Gleixner (first, corresponding), Gregor Hendel, Gerald Gamrath, Tobias Achterberg, Michael Bastubbe, Timo Berthold, Philipp Christophel, Kati Jarck, Thorsten Koch, Jeff Linderoth, Hans D. Mittelmann, Derya Ozyurt, Ted K. Ralphs, Domenico Salvagnin, Yuji Shinano; Lübbecke 11th of 16",
+  "quotes": [
+   {
+    "text": "While some 20 submitters accompanied their instances with model files to produce them, no block structure information was contributed.",
+    "page": 18
+   },
+   {
+    "text": "This does not imply that there is no such structure, but rather that it is not obvious.",
+    "page": 19
+   }
+  ]
+ }
+]

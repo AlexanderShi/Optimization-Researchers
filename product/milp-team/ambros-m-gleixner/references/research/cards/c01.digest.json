@@ -1,0 +1,106 @@
+[
+ {
+  "id": "S025",
+  "year": "2008",
+  "title": "Solving large-scale open pit mining production scheduling problems by integer programming",
+  "read_level": "full",
+  "contribution": "Analyses a MILP for open pit mining production scheduling with block-level processing decisions (integrated cutoff grades) and makes it tractable: NP-hardness, existence and NP-hardness of per-period split ratios, and an integral precedence polytope, so that the Lagrangean dual equals the LP bound and is computed by a bundle method over min-cut subproblems in 3.6-17.5% of the LP time; LP-dual-based column aggregation ('binnings') loses under 0.06%, and greedy sub-MIP plus LNS heuristics reach 0.05% of the aggregated model's optimum on 29 BHP Billiton instances.",
+  "problem_entry": "Published IP/MIP models for the OPMPSP fix cutoff grades a priori and treat scheduling units as homogeneous in ore; the model D-MIP (Froyland's; Boland et al. [6]) decides processing per block while mining stays at aggregate level, and the thesis asks whether its many extra variables can be afforded (pp. 5, 7, 25-32).",
+  "key_idea": "Per period the processing variables solve a continuous bounded knapsack, so optimal processing follows one split ratio per period (a cutoff grade). Exact split ratios are NP-hard, but the LP duals of the processing rows are split ratios of the LP, so they define bins with a (1 ± ε) band. Relaxing the resource rows leaves an integral polytope whose Lagrangean subproblems are min-cuts (Möhring et al.). Greedy sub-MIPs over nested precedence-feasible index sets give start solutions (pp. 45-50, 55-63, 87-107).",
+  "assumptions": "Binary monotone start variables, continuous mined and processed fractions, precedence via cumulative sums, one mining and one processing knapsack row per period, no general integers, SOS, indicators or big-M (p. 30); deterministic block model, known prices, fixed capacities, perfect grade control (p. 15); hidden assumption that a fractionally mined aggregate is mined uniformly, exposed by the author (p. 31); integer PCKP data for the hardness proofs (pp. 33, 48-49), b1 >= 0 for cuts (p. 64), m in Omega(K) (p. 61); 29 instances from three BHP Billiton mines (marvin 8513 blocks at three aggregations, wa 96821 blocks in 125 panels, ca 29266 blocks with 25 scenarios) (pp. 18-19).",
+  "proof_devices": [
+   "NP-hardness of D-MIP and D-MIP' by reduction from the precedence-constrained knapsack problem, with node splitting for D-MIP (Prop. 2.1, pp. 37-38)",
+   "LP reduction by eliminating x or y without loss, a presolve step shown to preserve the resource multipliers (Prop. 3.1, Remark 3.3, pp. 43-44)",
+   "Split ratios from the split item of a continuous bounded knapsack (Prop. 3.4, pp. 45-46) and their interval computed from an optimal solution (Prop. 3.7, p. 47)",
+   "NP-hardness of computing split ratios: a PCKP containment test encoded in a one-period D-MIP' with an auxiliary aggregate and processing profits 1/2 and 1/3, then turned into a full PCKP algorithm (Prop. 3.9, pp. 48-50)",
+   "Integrality of the precedence polytope by a bijective substitution to cumulative variables (TU rows with one ±1 or a 1/-1 pair) plus a convex-combination argument for z (Prop. 3.10, pp. 51-52)",
+   "LD = LP via Geoffrion's integrality property (Prop. 3.11, p. 55); Lagrangean subproblem as unconstrained project scheduling solved by a minimum a-b-cut, converted to a K-cut in O(KT), total O(NT + mKT^2 log(K^2 T/m)) (Lemma 3.12, Prop. 3.13, Cor. 3.14, pp. 57-61)",
+   "LP duals of the processing rows are split ratios for every LP optimum, by complementary slackness (Prop. 3.15, p. 63)",
+   "Cuts with b1 >= 0 rewritten without x and dualised so the subproblem stays a min-cut; variable fixings from predecessor-cone tonnage imposed in the digraph (Lemma 3.17, Prop. 3.18, pp. 64-68)",
+   "Feasibility of every greedy sub-MIP by zero extension of the previous solution (Lemma 6.2, pp. 99-100)",
+   "Disaggregation by fixing the aggregated solution's integers and solving the remaining LP of D-MIP (p. 94)"
+  ],
+  "experiments": "Pentium 4 3 GHz, 2 GB, single thread; CPLEX 11.0, ConicBundle 0.2d, Pseudoflow 3.21, SCIP 1.05; 29 instances (pp. 19-20). LP baseline searched over primal/dual simplex and barrier on three formulations (p. 76); bundle times as min-max over windows of 10 consecutive bundle sizes (pp. 78-80); LD within relative 1e-6 of the LP bound in 3.6-17.5% of the LP time (Table 4.1, p. 81). Binnings: 1 h, then 2 threads for 5 h; time to 1% and 0.5% gap; loss vs B^block under 0.06% (Tables 5.1-5.2, pp. 93-95). Heuristics against the proven optimum of B-MIP(B^0.01): within 0.5% (start heuristics) and 0.05% (with LNS) (Tables 6.1-6.2, pp. 105, 108). Failures reported. No seeds, variability, significance tests or shifted geometric means; ca rows are arithmetic means over 25 scenarios; §6.3 SCIP runs reported without numbers (pp. 110-111).",
+  "positioning": "Literature sorted by approach and criticised by assumption (a priori cutoff grades) rather than by performance (pp. 25-29, 39). Builds on Möhring et al. (min-cut for project scheduling), Geoffrion and Fisher (Lagrangean theory), Caccetta et al. (multipliers as cutoff grades), Litvinchev-Tsurkov and Zipkin (aggregation), Briant et al. (bundle vs column generation), Berthold, Fischetti-Lodi and Danna et al. (sub-MIP heuristics), and Fricke (cuts, time-based greedy). Geoffrion's advice is answered with Geoffrion's own exceptions (p. 55). Model and shared results credited to Froyland and to Boland et al. [6] (pp. 7, 18, 29, 116).",
+  "writing": "Roadmap and Conclusion section per chapter; a contributions subsection marking what also appears in [6] (p. 18); model criticism raised by the author first and answered by argument and by the strict variant D-MIP' (pp. 31-32); numeric headlines in the body (<0.06%, 0.05%) with adjectives in abstract and conclusion (pp. 5, 94, 116); 'the author conducted' for experiments; untested expectations hedged as 'may be expected'; a surprising number explained in its caption (p. 95); one slip pairs the Ch. 4 times with the instances in reverse order (p. 81).",
+  "limits_future": "Printed: barrier near-optimal only on 4/25 y-D-LP scenarios (p. 76); bundle stopped before target precision (p. 81); wa unsolvable without binning (p. 93); PIR-MIP slow and unfinished on marvin-1038 (p. 106); branching alone does not move the root bound (p. 111). Not measured: the precedence violation hidden in (2.5d) (p. 31), the never-binding mining rows (pp. 81-82), few aggregates (p. 109 fn. 3), gaps against the aggregated model's optimum (pp. 104-105). Future: dualised valid inequalities (e.g. SCIP c-MIR) in a Lagrangean branch-and-cut, or a different relaxation; faster PIR-MIP (pp. 106, 111-113, 117).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Baseline constructed by searching simplex and barrier over three equivalent LP formulations for the fastest route; both arms compute the same bound (LD = LP; relative objective at most 1.000001); the conventional simplex route is given in prose ('the result would be even clearer'). Differences from the Method: the baseline is strengthened rather than stripped, and only one factor is tabulated.",
+    "pages": "pp. 55, 76, 81"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Steps 1 and 7: every limit printed where it arises, with a count or size (4/25 barrier failures, bundle precision, wa out of memory, PIR-MIP unfinished, root bound unmoved by branching), and a closing agenda. Step 4's import move appears as project-scheduling min-cut and pseudoflow brought into mine scheduling. No later closure visible in this text.",
+    "pages": "pp. 76, 81, 93-94, 106, 111-113, 116-117"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The approximate model produces and the faithful model decides: LP duals used only heuristically to form bins; the aggregated solution's integers fixed and the rest re-solved as an LP of the full D-MIP; losses measured in D-MIP. Same device as Method 5 step 3 and Method 1 step 2, applied to model aggregation rather than arithmetic (inferred analogy).",
+    "pages": "pp. 89, 94-95"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "The heuristic premise that LP split ratios approximate MIP split ratios is checked against exact intervals from an optimal MIP solution on one instance: maximum relative deviation 8.3% (Fig. 5.1).",
+    "pages": "p. 91"
+   },
+   {
+    "method": "Method 1",
+    "relation": "contradiction",
+    "note": "Two expectations left unmeasured although his own solutions could have counted them: the precedence violations hidden in (2.5d) 'may be expected to be minor', and D-MIP is expected to be easier than D-MIP'. Weak: a student work, and the beliefs concern model fidelity rather than solver behaviour.",
+    "pages": "pp. 31, 44"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "Test set of 29 instances assembled with a stated purpose per subset, and its bias admitted later; no written admission rules, no availability statement, no independent solution checks.",
+    "pages": "p. 19; p. 109 fn. 3"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Dual bounds presented as what gives engineers confidence in a plan (trust through a bound); no independent checker; a seed at most (inferred).",
+    "pages": "pp. 17, 69"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Pessimistic reporting of the method's own tuning parameter (min-max over a window)",
+    "evidence": "Bundle running times reported as the smallest of the per-window maxima over 10 consecutive maximum bundle sizes, because the dependence is volatile and the best size cannot be guaranteed; objective values reported the same way; multiplier deviations as the worst over all sizes.",
+    "pages": "pp. 78-81"
+   },
+   {
+    "pattern": "LP-analogue proxy for an NP-hard structural quantity, with a safety band and a measured loss",
+    "evidence": "Split ratios of D-MIP are NP-hard to compute (Prop. 3.9), but the LP duals of the processing rows are split ratios of D-LP (Prop. 3.15); bins are built around (1 ± ε)π_t; the proxy is compared with exact intervals on one instance (8.3%); the loss is under 0.06% before LP disaggregation and smaller after it.",
+    "pages": "pp. 48-50, 63, 89-95"
+   }
+  ],
+  "transferable": [
+   "Search the baseline before comparing: run every LP algorithm (primal, dual, barrier with and without crossover) on every equivalent formulation, compare against the fastest route found, and give the conventional route in a sentence (p. 76; Table 4.1, p. 81).",
+   "Report a tuning parameter of your own method pessimistically: over windows of 10 consecutive values take each window's worst time and report the best window; report accuracy deviations as the worst over all values (pp. 78-80).",
+   "Replace an NP-hard structural parameter by its LP counterpart from the duals, keep a (1 ± ε) band unaggregated, check the proxy against exact values on one solvable instance, and measure the loss in the full model (pp. 63, 91-95).",
+   "Disaggregate an aggregated MIP solution by fixing its integer variables in the full model and solving the remaining LP; tabulate the gain over fixed-weight disaggregation (pp. 94-95).",
+   "Keep a Lagrangean min-cut subproblem intact when adding cuts: rewrite each cut without the variables that break the network (b1 >= 0, Lemma 3.17), dualise it, and impose variable fixings in the graph (pp. 64-68).",
+   "Build start heuristics as nested precedence-feasible index sets solved as sub-MIPs; prove once by zero extension (Lemma 6.2) that every step is feasible; keep the not-yet-added columns LP-relaxed instead of deleting them, for a global view (pp. 98-103).",
+   "Confirm a diagnosis about a custom tree search with a control run of the stock solver, here SCIP defaults with the separators off (p. 111).",
+   "When a model critique is likely, raise it yourself, offer the strict variant, and prove how the two relate (D-MIP is a relaxation of D-MIP' with the same LP bound) (pp. 31-32, 44).",
+   "State each gap's formula and denominator in the table caption, and name which optimum it is measured against (pp. 105, 108)."
+  ],
+  "coauthors": "None: a single-author Diplomarbeit, supervised by Rolf H. Möhring (p. 3). The model is credited to Gary Froyland and to Boland, Dumitrescu, Froyland and Gleixner [6]; Marco Lübbecke guided the layout; Tobias Achterberg, Timo Berthold and Kati Wolter introduced him to SCIP (pp. 7, 29).",
+  "quotes": [
+   {
+    "text": "The main goal was to determine the fastest way for solving the LP-relaxation in practise using any of the solvers and formulations from Section 3.1, in order to compare this with the performance of the lagrangean approach.",
+    "page": 76
+   },
+   {
+    "text": "Rather it seems fair to select a range of maximum bundle sizes where the algorithm works well and take the worst value found in this range.",
+    "page": 78
+   }
+  ]
+ }
+]

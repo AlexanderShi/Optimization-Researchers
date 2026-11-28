@@ -1,0 +1,470 @@
+[
+ {
+  "id": "S034",
+  "year": "2005",
+  "title": "Reinventing crew scheduling at Netherlands Railways",
+  "read_level": "full",
+  "contribution": "An Interfaces case study, read in its June 2004 ERIM report version, of how the TURNI set-covering crew-scheduling code (column generation, Lagrangian relaxation, heuristics) served as the scenario evaluator of a participative process that ended the 2001 crew conflict at Netherlands Railways with the 'Sharing Sweet&Sour' production model, saving about $4.8 million (1.2%) a year.",
+  "problem_entry": "A labour conflict, not an algorithmic gap: the 2001 'Church Circles' rules caused strikes over monotony and unfair shares of aggression-prone work; the Works Council could propose an alternative under the threat of binding arbitrage, and a plan by experts alone was judged doomed, so stakeholder conferences ran alongside hundreds of optimization runs (pp. 5-8).",
+  "key_idea": "Use the existing planning code as an impartial evaluator in a loop with the stakeholders: preferences become parameters, results go back to the conferences, alternatives are compared on a few KPIs against status-quo and green-field references, and the chosen rules are written as checkable norms (bounds on depot shares and on their standard deviations, Repetition-In-Duty below 2.7 overall and 3.0 per depot) (pp. 8-11).",
+  "assumptions": "Set covering with depot-level side constraints (1)-(5): trips covered at least once, duty-level rules in the generator, rules on combinations of duties (fair shares, RID, night duties, average length) as side constraints, dummy duties for suggested trips, penalized over-covering; about 14,000 trips, 1,000+ duties, 29 depots, about 14 trips per duty (pp. 12-13).",
+  "proof_devices": [
+   "TURNI: dynamic column generation with duals from Lagrangian relaxation and subgradient optimization instead of LP, dynamic-programming duty generators, a selection heuristic driven by the Lagrangian duals, deletion of ineffective columns, p. 14",
+   "Passes of generation and selection, then fixing of particularly efficient duties and repetition on the uncovered trips, plus local trip-exchange refinement, pp. 14-15",
+   "Depot-level norms as linear side constraints, e.g. (5) on the average duty length per depot, p. 13",
+   "Dummy duties priced at the uncovering penalty for suggested trips; inadvisable trips only in duty generation, p. 13"
+  ],
+  "experiments": "One real case (14,678 trips, a Tuesday's driver work): first pass 4:06 h on a Pentium 4 at 3.0 GHz to 971 duties, best 965 duties in pass 3 after 14:47 h, Lagrangian bound plotted but no gap printed; impact for 2004: +3.2% work with +1.2% duties, about 2% initial saving (over $7 million a year), $4.8 million realized (pp. 15-17).",
+  "positioning": "Places railway crew scheduling against airline set-covering practice (railway instances a magnitude larger) and recent railway applications, including the authors' own Italian and Dutch work [2, 3, 9, 10]; TURNI details deferred to Caprara, Fischetti and Toth's set-covering heuristic [4] (pp. 11-12, 14).",
+  "writing": "Interfaces narrative: the conflict story first ('Foreplay'), the model only in Section 5, dollar figures in the abstract, savings called 'quite conservative', a punctuality gain explicitly not credited to the model alone (pp. 3, 5, 11, 17-18).",
+  "limits_future": "One instance shown and no optimality gap printed; the punctuality gain has other causes; traffic control finds real-time repair of the more complex duties harder; next target -3.5% for 2005 through 1% intrinsic gain and 2.5% from relaxed rules such as a 20-minute train change (pp. 15-18).",
+  "method_links": [],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Model as impartial judge in a negotiation",
+    "evidence": "Rule sets from stakeholder conferences were turned into parameters and evaluated by hundreds of TURNI runs, results fed back to the conferences; the quantitative results made the discussions more objective and let management accept the alternative production model.",
+    "pages": "pp. 8-9, 18"
+   }
+  ],
+  "transferable": [
+   "Turn qualitative stakeholder demands into checkable norms (bounds on each depot's share and on the standard deviation of the shares, a repetition index with thresholds) and put them into the model as aggregate side constraints (pp. 10-11, 13).",
+   "Keep rules on a single column in the column generator and only rules on combinations of columns in the master (p. 13).",
+   "Model optional coverage by dummy columns priced at the penalty for leaving an item uncovered (p. 13).",
+   "Run each candidate rule set through the same planning code and compare a few KPIs against a status-quo and a green-field reference (p. 9).",
+   "Report realized and achievable savings separately, and say which part was given away (p. 17)."
+  ],
+  "coauthors": "Erwin Abbink, Leo Kroon (corresponding author), Gerrit Timmer, Michiel Vromans",
+  "quotes": [
+   {
+    "text": "But it was also clear that any plan developed by experts was doomed to fail.",
+    "page": 7
+   },
+   {
+    "text": "Moreover, in emotional discussions, quantitative results could be used as an independent judge to evaluate the arguments in an objective way.",
+    "page": 18
+   }
+  ]
+ },
+ {
+  "id": "S087",
+  "year": "2005",
+  "title": "Solving the prize-collecting Steiner tree problem to optimality",
+  "read_level": "full",
+  "contribution": "A branch-and-cut for the prize-collecting Steiner tree on a directed cut model strengthened by asymmetry, flow-balance and size-two subtour constraints, with nested cuts and back-cuts from max flow inside CPLEX 8.1, that solves all 114 literature instances (eight with a new optimum) and 35 large real fiber-optic instances to optimality.",
+  "problem_entry": "Application-driven (fiber-optic and utility network planning) and bound-driven: Lucena and Resende's cutting planes left 16 of 114 instances unproven; enter through the tighter directed Steiner arborescence model and a careful implementation rather than theory (pp. 1-2).",
+  "key_idea": "Artificial root with arcs to the customers, connectivity cuts separated by max flow, plus asymmetry constraints (one representation per solution), Koch-Martin flow balance and size-two subtour constraints from the start; nested cuts and back-cuts harvest several cuts per max-flow call (pp. 2-5).",
+  "assumptions": "Undirected graph with edge costs and vertex profits, non-empty customer set, rooted variant by shrinking an existing network into the root; 114 benchmark instances (K and P up to 400 vertices; C and D from OR-Library) and 35 Cologne fiber instances (up to 1,825 vertices and 214,095 edges, under 2% customers) after a least-cost edge test (pp. 1-7).",
+  "proof_devices": [
+   "Directed transformation: root arcs cost -p_j, other arcs c_ij - p_j; an arborescence with root degree 1 corresponds to a PCST solution, p. 2",
+   "Asymmetry constraints (3.6), x_rj <= 1 - y_i for i < j, removing the n equivalent representations of a solution, p. 3",
+   "Flow-balance constraints (3.7) and initial size-two subtour constraints (4.8); LP example 7.5 versus 8 with flow balance (Fig. 1), pp. 3-4",
+   "Max-flow separation (Goldberg's code) with nested cuts (capacities of cut arcs set to one, MAXCUTS = 100) and back-cuts from the same flow, violation threshold 1e-4 (Algorithm 1), pp. 4-5"
+  ],
+  "experiments": "Pentium IV 2.8 GHz, CPLEX 8.1: all literature instances solved at the root, eight new optima; the rival's times divided by a conservative 20 from SPEC (17.2) and Linpack (12.4) ratios; mean speed-up 0.1 (K), 11.9 (P), 116.9 (C), 155.7 (D); real instances with and without (4.8): Cologne1 under 40 minutes, Cologne2 up to 12 hours (pp. 5-7).",
+  "positioning": "Against approximation algorithms and metaheuristics and as an improvement on Lucena and Resende's bounds; credits Koch and Martin (flow balance, nested cuts), Chopra et al. (back-cuts), Chopra and Rao (directed model) and Fischetti's 1991 Steiner arborescence facets (pp. 2-4).",
+  "writing": "States up front that the aim is an efficient implementation rather than a theoretical study; the conclusions stress that the model choice plus initialization and a careful analysis of separation, not a default algorithm, gave the results (pp. 1, 7).",
+  "limits_future": "A default branch-and-cut on the basic model is insufficient; (4.8) is a size-versus-separation trade-off on the sparse-customer real instances; about 30 times slower than the rival on group K; the preprocessing study and details are left to a technical report; no future work stated (pp. 5-7).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Stock CPLEX branch-and-cut with one plug-in separator (step 3), and the finding that the black box on the basic model is not enough is stated as the lesson (step 5).",
+    "pages": "pp. 3, 7"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Strengthens rather than thins (directed model, flow balance, size-two subtour constraints) and breaks the representation symmetry with asymmetry constraints, where Method 1 step 3 aggregates; but the initialization trade-off is measured per instance class (step 4). The skill's node-only Steiner model is the later contrast (my reading).",
+    "pages": "pp. 2-3, 6-7"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Dated lapse in 2005: the rival's times come from another machine, scaled by an argued factor of 20, the lapse the skill dates to 2017; the loss on group K is printed (step 6).",
+    "pages": "pp. 5-6"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Remove the n equivalent representations of an artificial-root model with x_rj <= 1 - y_i for i < j (p. 3).",
+   "In max-flow separation, take the back-cut from the same flow, then set the capacities of the cut arcs to one and re-run to harvest nested cuts in one round (pp. 4-5).",
+   "When only published times on other hardware exist, derive the scaling factor from two independent benchmarks and round it against yourself (pp. 5-6).",
+   "Report speed-up ratios per instance group as mean, minimum and maximum, and count separately the instances below a time floor (pp. 6-7)."
+  ],
+  "coauthors": "Ivana Ljubić, René Weiskircher, Ulrich Pferschy, Gunnar W. Klau, Petra Mutzel",
+  "quotes": [
+   {
+    "text": "Our computational experiments have shown that the initialization with constraints (4.8) and the usage of back-cuts are crucial for our implementation.",
+    "page": 5
+   },
+   {
+    "text": "While the choice of the ILP model is essential for the success of our method, it should also be pointed out that solving the basic ILP model by a default algorithm is by no means sufficient to reach reasonable results.",
+    "page": 7
+   }
+  ]
+ },
+ {
+  "id": "S032",
+  "year": "2006",
+  "title": "A new ILP-based refinement heuristic for vehicle routing problems",
+  "read_level": "full",
+  "contribution": "SERR, a refinement heuristic for the distance-constrained CVRP that turns Sarvanov and Doroshko's extract-and-assign TSP neighborhood into extraction, recombination of node sequences and reallocation by a set-partitioning ILP solved heuristically by a general-purpose solver (CPLEX 8.0), improving 12 best-known literature solutions.",
+  "problem_entry": "An old polynomial neighborhood judged too rigid in practice (Punnen's variant unsuccessful); conjecture that it pays more on VRPs, where the distribution of nodes among routes matters; aim at a balance between the exact set-partitioning model and the rigid SD scheme (pp. 1-5).",
+  "key_idea": "Replace the assignment problem by a set-partitioning ILP over generated sequences and insertion points with capacity and distance constraints; keep the incumbent as a feasible ILP solution and hand it to the solver; generate sequences by LP-reduced-cost pricing (pp. 5-14).",
+  "assumptions": "DCVRP on a complete undirected graph with a fixed number k of routes, capacity and duration limits; coordinates for the sweep start; triangular costs allow a covering variant; CVRP, DCVRP and ACVRP literature instances up to 100 customers, best-known solutions as starts, and 8 instances above 200 customers (pp. 1-2, 9, 12, 15-17, 21).",
+  "proof_devices": [
+   "Reallocation set-partitioning ILP (2)-(7) with capacity and distance side constraints; with triangular costs the equality (3) may become >=, a set-covering ILP, pp. 11-12",
+   "Incumbent kept feasible in the ILP through basic sequences at their pivot insertion points, passed as the solver's first incumbent; stop when the ILP bound shows no improvement is possible, pp. 8, 12",
+   "LP-reduced-cost pricing loop for (sequence, insertion point) pairs (Nmin = 5, Nmax = 10, Lmax = 5, delta = 3, RCmax = 10), singleton reduced costs replaced by insertion costs, hashing against duplicates, pp. 13-14",
+   "Selection schemes Random-Alternate, Scattered and Neighborhood, alternated 3 + 3 times and then Neighborhood, restarted at each improvement, pp. 10-11",
+   "Soft capacity and distance constraints by penalized slacks for infeasible starts, p. 9"
+  ],
+  "experiments": "AMD Athlon XP 2400+, CPLEX 8.0, 7,200 s per CVRP run; a no-recombination arm in every table; mean improvement about 3.5% (FJ start) and 24.4% (sweep start), best-known value reached on 12; from literature solutions 22 of 32 improve and 9 best-known values fall; 3 of 8 large instances improve in up to 152,286.5 s; no repeated runs or seeds (pp. 14-22).",
+  "positioning": "Places SERR in large-neighborhood search and in the exponential-neighborhood literature (Deineko and Woeginger, Punnen, Gutin); judges Punnen's variant too rigid; benchmarks against best-known values from exact and heuristic sources (pp. 2, 4, 15-18).",
+  "writing": "Conjectures and working hypotheses marked as such ('We conjectured', 'Our working hypothesis'); moves illustrated by small figures; the two extreme cases named to locate the method; an appendix with the routes of the new best solutions (pp. 3-5, 23-30).",
+  "limits_future": "Effort substantial in some cases (most of the gain early; the no-recombination method first suggested); integer-rounded DCVRP starts assumed best known; future: route-dependent limits, crew and vehicle scheduling, backhauls, precedence constraints by removed variables and incompatibility constraints (pp. 17-18, 21-22).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "The critical sub-decision of the heuristic (the reallocation) is an auxiliary ILP solved heuristically by a general-purpose MIP solver with no specialized code (steps 2-3); S142 files it under MIPping.",
+    "pages": "pp. 1, 9, 12"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Step 5 by subtraction: a no-recombination arm in every table tests removing the main novelty; removal mostly hurts, so the ingredient stays, while the cheap version is proposed as a first phase.",
+    "pages": "pp. 16-19, 21"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Keep the incumbent representable in the auxiliary ILP and give it to the solver as its first incumbent, so that every update is an improvement and the solve stops when the bound shows none is left (pp. 8, 12).",
+   "Price candidate columns by the reduced costs of the auxiliary LP, but switch to plain insertion costs where the reduced costs mislead (singletons) (p. 14).",
+   "Test a refinement heuristic from both a fast weak start and the best-known literature solutions; a less optimized start (up to 20% above the optimum) sometimes gave better results because tightly filled routes leave too little freedom (pp. 9, 14-16).",
+   "Put the ablation arm (here: no recombination) in every result table, not in one side study (pp. 16-19)."
+  ],
+  "coauthors": "Roberto De Franceschi, Paolo Toth",
+  "quotes": [
+   {
+    "text": "An important feature of our method is that it does not rely on any specialized ILP code, as any general-purpose ILP solver can be used to solve the reallocation model.",
+    "page": 1
+   },
+   {
+    "text": "The motivation of the present paper was precisely to find a proper balancing between the exact (yet too time consuming) set-partitioning model and the efficient (yet too rigid) Sarvanov-Doroshko proposal.",
+    "page": 3
+   }
+  ]
+ },
+ {
+  "id": "S140",
+  "year": "2006",
+  "title": "New facets of the STS polytope generated from known facets of the ATS polytope",
+  "read_level": "full",
+  "contribution": "A2S lifting: facets of the asymmetric TSP polytope are mapped onto a face of the symmetric TSP polytope on 2n nodes and lifted into STS facets, yielding the new symCAT and symCurtain classes, which were found by random lifting experiments and then generalized and proved.",
+  "problem_entry": "A long-known ATSP-to-STSP transformation never used to derive STS facets from ATS facets; relations between the two polytopes seldom exploited (pp. 1-2).",
+  "key_idea": "A bijection between directed tours and admissible undirected tours; facets of ATS(V) become facets of the face F of STS(V+ u V-) through relabel, pad and translate maps; lift the 0-fixed variables (twin polytope TTS) and then the 1-fixed ones (pp. 3-6).",
+  "assumptions": "Complete graphs; TTS = convex hull of the Hamilton cycles using all E0 edges; symCAT for even n; curtains only for cycles of 4 kappa nodes with kappa >= 2; lifting order fixed, 0-variables first (pp. 6, 8, 23).",
+  "proof_devices": [
+   "Bijection phi and its decomposition phi3 o phi2 o phi1 preserving facets onto the face F, pp. 3-5",
+   "Sequential lifting with complementing of the 1-fixed variables; TTS as the intermediate polytope, p. 6",
+   "500 random lifting sequences as a discovery device (combs 213, ladders 33, new1 254), p. 7",
+   "Chvátal rounding of a half-weighted sum of degree constraints, a comb and edge bounds (Theorem 1), p. 12",
+   "Rooted tree of 2-interchange moves between tight tours fixing each coefficient at its maximal value; one coefficient free by x(E+) = x(E-), pp. 16-18, 21",
+   "Cloning coefficient as the maximal lifting of an E0 variable lifted first (Theorem 2), pp. 21-23",
+   "SymCurtain validity by contradiction through 2-interchanges back to an admissible tour (Theorem 4), pp. 27-28"
+  ],
+  "experiments": "n/a (no computational evaluation; random lifting runs used for discovery only, p. 7).",
+  "positioning": "Uses current ATSP insight to understand the STSP; continues the Balas-Fischetti lifted cycle inequalities, lifting procedure and cloning [1, 3, 4] and builds on the complete description of STS(8) [5] (pp. 2, 6-7, 22).",
+  "writing": "Theorem-proof with figures of inequality supports and lifting trees; the discovery path (random lifting, an unidentified inequality, generalization, proof) told in the text (pp. 7-8, 24).",
+  "limits_future": "Curtains only for 4 kappa-node cycles; a fixed lifting order; no separation algorithm or computational test of the new classes; no conclusions or future-work section (pp. 6, 23, 28-31).",
+  "method_links": [],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Reduce to the known special case and lift",
+    "evidence": "ATS facets mapped onto a face of the STS polytope and lifted (A2S lifting); the same move as S030 in s01 (the TSP polytope as a face of the GTSP polytope).",
+    "pages": "pp. 3-6"
+   },
+   {
+    "pattern": "Chvátal–Gomory derivation as validity proof and separation handle",
+    "evidence": "SymCAT validity proved by Chvátal rounding of a half-weighted sum of degree constraints, a comb and edge bounds; also S069 and S139 in s01.",
+    "pages": "p. 12"
+   },
+   {
+    "pattern": "Compute, conjecture, then prove",
+    "evidence": "Random lifting sequences on small cases expose an unidentified 12-node facet, generalized by hand into symCAT; for curtains a 12-node cycle was chosen as more likely to reveal generalities than 8 nodes; validity and facetness are proved afterwards.",
+    "pages": "pp. 7-8, 24"
+   }
+  ],
+  "transferable": [
+   "Search for new facets by mapping a facet of a related polytope onto a face and lifting it with many random lifting orders; classify the outputs against known classes and study the unidentified ones (pp. 7-8).",
+   "Size the discovery experiment so that the structure can show: take the smallest case with enough asymmetry (a 12- rather than 8-node cycle) (p. 24).",
+   "Prove maximality of lifted coefficients with a tree of 2-interchange moves between tight tours, one coefficient per move (pp. 16-18).",
+   "Use an equation valid for the polytope to fix one lifting coefficient freely before the others (p. 16)."
+  ],
+  "coauthors": "Egon Balas, Robert Carr, Neil Simonetti",
+  "quotes": [
+   {
+    "text": "Interestingly, relationships between the STSP and ATSP are not well understood, and are seldom exploited for the purposes of better understanding both types of TSP problems.",
+    "page": 2
+   },
+   {
+    "text": "From this experiment, we were led to hypothesize the following facet-defining STS class of inequalities which we will call symCurtain inequalities.",
+    "page": 24
+   }
+  ]
+ },
+ {
+  "id": "D004",
+  "year": "2007",
+  "title": "Fast Approaches to Robust Railway Timetabling",
+  "read_level": "full",
+  "contribution": "A robust train-timetabling framework (nominal MIP, a robustness 'trainer' with frozen precedences, an external simulation validator) that compares a fat stochastic model, two slim recourse models and light robustness on four Trenitalia lines, where a propagation-weighted slim model and light robustness come close to the fat model at a fraction of its time.",
+  "problem_entry": "Practitioners' demand: nominal optima are not robust, easy robust timetables are too conservative, standard stochastic programming is too slow; seek the most robust timetable with only a slight efficiency loss (p. 1).",
+  "key_idea": "Keep the combinatorial structure (precedences) of a good nominal solution and train only the times; compare a fat SP model (the perfect-model benchmark), a slim recourse model (one copy, a slack per constraint and scenario, early events weighted k + 1) and light robustness (a protection slack with an efficiency budget), all scored by one external validator (pp. 2, 6-10).",
+  "assumptions": "Aperiodic single-line TTP in an event-based big-M MIP; continuous times rounded down for publication; all trains scheduled and precedences frozen from a heuristic solution by Toth's group; per-line delay model with latin hypercube sampling, 5% mean exponential extra time; four lines with 17-48 stations and 33-127 trains (pp. 2-10).",
+  "proof_devices": [
+   "Event-based MIP with big-M precedence binaries; time variables kept continuous so that fixing the precedences leaves an LP; rounding down for publication, pp. 3-4",
+   "Validation LP per scenario: minimize cumulative delay, no event earlier than published, no upper bounds, p. 7",
+   "Fat SP model with scenario copies, non-anticipativity and efficiency-loss constraint (9), pp. 7-8",
+   "Slim recourse model with a slack per constraint and scenario, zero-extra-time rows dropped, early events weighted k + 1 (slim2), pp. 8, 10",
+   "Light robustness: protection-level slack with an efficiency budget, Delta = -mu ln(1/2), pp. 9, 11",
+   "SAA with a per-line delay model and latin hypercube sampling, pp. 9-10"
+  ],
+  "experiments": "CPLEX 10.1 on an Athlon64 X2; alpha in {1, 5, 10, 20, 40}%; fat 50 scenarios, slim 400, validation on 500 with confidence intervals; totals: cumulative delay 198,879 (fat), 201,761 (slim2), 209,307 (LR), 219,020 (slim1) against 53,246 s, 6,960 s, 17 s and 4,293 s; WAD diagnostic of the buffers (pp. 10-14).",
+  "positioning": "Builds on Caprara, Fischetti and Toth's TTP model [2], Kroon, Dekker and Vromans's stochastic model and WAD measure [6], Fischetti and Monaci's light robustness [3] and the SAA literature (pp. 2, 7, 9, 13).",
+  "writing": "Names the models by size (fat, slim) and borrows 'training' from AI; the framework is stated in three blocks before the models; short conclusions without future work (pp. 2, 6, 8, 13).",
+  "limits_future": "Four medium single-line instances, one delay law, frozen precedences and all trains scheduled; unequal scenario counts across the arms; no future work stated (pp. 7, 10, 13).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "The fat stochastic model is replaced by a slim one with one copy of the variables and the zero-extra-time rows dropped, measured against the fat model on the same instances (steps 2 and 4); integrality dropped on the times so that frozen precedences leave an LP.",
+    "pages": "pp. 4, 8, 13"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "An external validator independent of every trainer scores all arms on the same scenarios (step 1); the fat model is kept as the ceiling arm (step 6).",
+    "pages": "pp. 6, 8"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "The arms get different scenario counts (50 fat, 400 slim), stated openly; whether the 500 validation scenarios are drawn independently of the training samples is not stated.",
+    "pages": "pp. 10-11"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Freeze the combinatorial skeleton, then optimize the continuous part",
+    "evidence": "Train selection and precedences frozen from a good nominal solution, so that robustness training and validation become LPs over the event times.",
+    "pages": "pp. 2, 4, 6-7"
+   }
+  ],
+  "transferable": [
+   "Score every method with an external simulator that shares no code with the optimizers: one LP per delay scenario, events never earlier than published, cumulative delay as the figure (pp. 6-7).",
+   "Keep the exact but slow model as a 'perfect model' arm and judge each fast approximation by its distance to it at equal efficiency loss (pp. 8, 12-13).",
+   "Freeze the precedences of a good nominal solution so that robustness is trained by an LP over the times (pp. 4, 7).",
+   "Weight recourse slacks by the number of downstream events (k + 1) so that a slim model mimics delay propagation (p. 10).",
+   "Add a static structural diagnostic (WAD of the buffers) to explain why one method is more robust than another (pp. 13-14)."
+  ],
+  "coauthors": "Domenico Salvagnin, Arrigo Zanette",
+  "quotes": [
+   {
+    "text": "independent from the optimization model itself, so that it can be of general applicability and allows one to compare solutions coming from different methods.",
+    "page": 6
+   },
+   {
+    "text": "For realistic instances and number of scenarios this model becomes very time consuming (if not impossible) to solve–hence we called it “fat”.",
+    "page": 8
+   }
+  ]
+ },
+ {
+  "id": "S070",
+  "year": "2007",
+  "title": "Embedding {0, ½}-Cuts in a Branch-and-Cut Framework: A Computational Study",
+  "read_level": "full",
+  "contribution": "A computational study, read in its October 2003 draft, showing that a {0, 1/2}-cut separator embedded in CPLEX 8.1 as a black box pays off only through an own cut pool and selection policy (adaptive efficacy threshold, parallelism cap, recombination), measured with a dummy-callback baseline, classes defined by both codes and one-at-a-time ablations (final speed-up 2.07 on regular and 17.61 on hard instances).",
+  "problem_entry": "A paradox of practice: a successful separator that produces many violated cuts can slow branch-and-cut down; the naive embedding was not significantly faster than CPLEX although the cuts looked strong (pp. 1-2, 11).",
+  "key_idea": "Keep the separator unchanged and control what reaches the LP: a pool sorted by efficacy, an adaptive minimum efficacy, a maximum parallelism among the cuts added at a node, limited separation frequency, recombination of earlier cuts; follow the host solver's conservative cut strategy (pp. 6-8).",
+  "assumptions": "ILPs with integer data and rows scaled to relatively prime integers; a testbed of SAT (random objective from a random half of the constraints), MAXSAT and random linear ordering instances with a significant root gap (LOLIB has a negligible one) (pp. 2, 4, 9-10).",
+  "proof_devices": [
+   "One-to-one correspondence between {0, 1/2} multipliers and odd Eulerian cycles; minimum-weight odd cycle through a doubled graph and Dijkstra (Theorem 1), pp. 3, 5",
+   "LU-weakenings to reach at most two odd entries per row; dynamic program for the minimum-slack weakenings; reductions R1-R3; post-processing for a valid cut, pp. 3-5",
+   "Own cut pool with an adaptive efficacy threshold, a per-node parallelism cap, a global cap, separation at every fourth backtrack and in 5 root rounds (Algorithm 1), pp. 6-8",
+   "Host strategy reconstructed from CPLEX documentation and log files; cuts added as global, no purging, pp. 6-7",
+   "Baseline with a dummy cut callback, p. 10"
+  ],
+  "experiments": "Default CPLEX 8.1 with a dummy cut callback as baseline; classes easy, regular, hard and impossible defined by both codes, 1,800 s, AMD Athlon XP 2400+, geometric-mean speed-ups after Bixby et al.; tuning on 143 instances with one-at-a-time ablations; final 513 instances: 57 solved only by 012*, 14 only by CPLEX, speed-up 2.07 (regular) and 17.61 (hard); no seeds (pp. 10-14).",
+  "positioning": "Follows Balas, Ceria and Cornuéjols's cut-quality measures and Bixby et al.'s CPLEX validation protocol; builds on the Caprara-Fischetti {0, 1/2} theory and mod-k separation; offers large pools of cheap cuts as a possible explanation of Gomory cuts' success (pp. 2, 6, 10, 15).",
+  "writing": "Opens on a paradox and closes on a 'Hamletic question'; a 'We learned' lesson; the conjecture and the working hypothesis labelled; parameter settings printed with every table (pp. 1, 11-15).",
+  "limits_future": "No LP purging tried; LINORD easy for both codes; speed-ups not comparable across result-defined classes; the tuning subset overlaps the final testbed; future: other cheap and abundant cut families and better mod-k separators (pp. 7, 11-15).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "The separator stays untouched and the loop around it changes, but the lever is cut selection and pool management, the cure that Method 2's contrast line sets aside, not a moved query point (a 2003 precursor).",
+    "pages": "pp. 1-2, 6-8, 15"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "A dummy cut callback in the baseline so that both arms lose the same solver features (step 1); easy and hard classes defined by both codes with the fairness reason written out (step 3); a 2003 use of the device the skill quotes from ERR14.",
+    "pages": "p. 10"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Dated lapse against step 5: the parameters were tuned on a subset that overlaps the final evaluation (the 69 LINORD instances appear in both, by count).",
+    "pages": "pp. 10-14"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Step 5 by subtraction: disabling efficacy, parallelism or recombination each hurts; removing the cap on added cuts left the solved set unchanged and cut the times, so the cap was dropped from 012*.",
+    "pages": "pp. 11-14"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Step 3: the guest separator changes nothing else in CPLEX (heuristics, branching, node selection) and follows the host's strategy instead of altering it.",
+    "pages": "pp. 5, 7"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Reverse-engineer the host solver's strategy before plugging in",
+    "evidence": "CPLEX's cut handling (no run-time cut pool, intense root separation, moderate separation after backtracks, cut and dive) inferred from documentation and log files and then followed, to avoid 'rejection' of the guest code.",
+    "pages": "pp. 6-7"
+   }
+  ],
+  "transferable": [
+   "Put an own pool between a prolific separator and the LP; admit cuts by efficacy above an adaptive threshold (70% of the best cut at first, lowered after repeated misses) and by a parallelism cap checked only among the cuts added at the current node (pp. 6-8).",
+   "Give the baseline a dummy callback so that both arms run with the same solver features switched off (p. 10).",
+   "Define easy, hard and impossible classes on the results of both codes, never of one; do not compare speed-ups across tables whose class membership changed (pp. 10-11).",
+   "Ablate a tuned policy by disabling one ingredient at a time against the tuned version (Tables 4-7, pp. 11-14).",
+   "Give feasibility-only ILPs (SAT) a random objective, the sum of a random half of the constraints' left-hand sides, and stop at the first integer solution (p. 9)."
+  ],
+  "coauthors": "Giuseppe Andreello, Alberto Caprara",
+  "quotes": [
+   {
+    "text": "This is particularly interesting in that our separation procedure was used as black-box—all the improvements came from a more clever way to exploit the violated cuts.",
+    "page": 1
+   },
+   {
+    "text": "If some instances are discarded because they are too easy or too hard, they should be too easy or too hard for both codes, as it may be unfair to mark as “too easy” the instances solved in less than a few seconds by just one of the two codes, in that this will put the slower code in an advantageous position.",
+    "page": 10
+   }
+  ]
+ },
+ {
+  "id": "S118",
+  "year": "2007",
+  "title": "Mixed-integer cuts from cyclic groups",
+  "read_level": "full",
+  "contribution": "An exact LP separation of interpolated subadditive (cyclic-group) cuts from single tableau rows, used to compute for the first time their rank-1 bound on MIPLIB, Atamtürk and random knapsack instances: on MIPLIB GMI cuts alone come close, while interpolated cuts help on multiple-knapsack and knapsack instances.",
+  "problem_entry": "A well-studied theory (the Gomory-Johnson master cyclic group) whose practical value as a cut family had never been computed; earlier work used only random 'shooting' points or a huge extended formulation (pp. 1-3).",
+  "key_idea": "Sampled subadditive values g(i/k) satisfying the g-system form an LP whose negative value signals a violated cut; exact for the ideal k, interpolated otherwise; continuous variables by scaling, bounded ones by complementing; compared with GMI and k-cuts from the same pool (pp. 6-13).",
+  "assumptions": "Standard-form ILP or MIP with rational data; rank-1 cuts from the single rows of the first optimal tableau, no preprocessing; MIPLIB 3.0 and 2003 instances with known optimum, no negative lower bounds and LP files under 1.7 MB; Atamtürk's instances; random knapsacks with n = 10 to 10,000 (pp. 1, 12-13).",
+  "proof_devices": [
+   "g-system LP over sampled values with subadditivity constraints, exact for the ideal k (13), p. 6",
+   "Interpolation weights for a non-ideal k (Fig. 3), pp. 6-8",
+   "Clipping of coefficients (14), valid for integer variables only, pp. 8, 10",
+   "Scaling argument (M to infinity) giving the slopes for continuous variables; separator kept a black box, pp. 8-10",
+   "Complementing nonbasic-at-upper-bound variables; a cover inequality derived as a subadditive cut, showing the complementing choice is as hard as finding a most violated cover, pp. 11-12",
+   "Deepest cut from a QP in T-space shown to be a convex combination of two facets, not a facet, pp. 16-17"
+  ],
+  "experiments": "Root pure cutting-plane loop, at most 200 cuts per round, CPLEX 9.0 on a notebook; GMI versus k-cuts 1:50 versus interpolated cuts with k = 10, 20, 30, 60; e.g. mik.250-10-100: GMI 67.41%, k = 60 72.02% (64.9 s of separation), k-cuts 74.69%; knapsacks with the ideal k, n = 10 binary: GMI 77.61%, ideal k 96.92% (pp. 12-14, 26, 29).",
+  "positioning": "Against the shooting-experiment literature and Köppe et al.'s extended formulation; reads its MIPLIB result as confirming Dash and Günlük's probabilistic dominance of GMI cuts and Cornuéjols, Li and Vandenbussche's experience with k-cuts (pp. 2-3, 13).",
+  "writing": "The outcome announced in the introduction; the negative result named as such; the explanation labelled a conjecture; future directions as named issues (pp. 3, 13-17).",
+  "limits_future": "Interpolation costs strength; large k expensive (beyond k = 20); narrow knapsack gaps inflate the percentages; rank-1 only; future: conservative integration in branch-and-cut, higher-rank cuts and tailing off, two facet cuts in place of one GMI cut (pp. 13-17).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Step 4, measure the potential first: the bound of the whole rank-1 family is computed with an exact separator before any practical separator is built, showing little room over GMI on MIPLIB.",
+    "pages": "pp. 1-3, 12-13"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Step 1: every arm is derived from the same stored equation pool and complemented-variable list in the same root loop.",
+    "pages": "pp. 12-13"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Judge a cut family by the bound of all its rank-1 members from the first optimal tableau, computed with an exact LP separator, before writing a heuristic separator (pp. 12-13).",
+   "Keep a separator a black box for continuous variables by scaling them to integers before the call and mapping the cut back afterwards (p. 10).",
+   "Store the tableau rows and the at-upper-bound list once and derive every compared cut family from that pool (pp. 12-13).",
+   "Warn that closed-gap percentages exaggerate small bound changes when the gap is very narrow, as on knapsacks (p. 13)."
+  ],
+  "coauthors": "Cristiano Saturni",
+  "quotes": [
+   {
+    "text": "To our knowledge, the practical benefit that can be obtained by embedding interpolated subadditive cuts in a cutting plane algorithm was not investigated computationally by previous authors.",
+    "page": 1
+   },
+   {
+    "text": "According to the tables, interpolated subadditive cuts do improve the quality of the LP relaxation, but for MIPLIB instances they seldom beat GMI cuts.",
+    "page": 13
+   }
+  ]
+ },
+ {
+  "id": "S142",
+  "year": "2007",
+  "title": "Mipping closures: An instant survey",
+  "read_level": "full",
+  "contribution": "An 'instant survey' of MIPping separation, which models the separation of Chvátal-Gomory, projected Chvátal-Gomory, split and MIR cuts as MIPs solved by a general-purpose solver, with the devices that make these models solvable and the finding that rank-1 closures close most of the gap on MIPLIB 3.0.",
+  "problem_entry": "Solvers already steer their decisions by auxiliary LPs and good MIP solutions cost about as much as an LP, so crucial decisions of a MIP algorithm can themselves be modelled as MIPs; after local branching and a VRP refinement, apply this to NP-hard separation problems (pp. 1-2).",
+  "key_idea": "Separation MIPs: integer coefficient variables with Farkas multipliers for CG cuts; the same structure on the projection for projected CG cuts (closure equal to the split cuts with one empty side); a parametric MIP over a grid of u0 values for split cuts; a linearized model with a binary expansion for MIR cuts (pp. 4-8).",
+  "assumptions": "Pure and mixed ILPs with rational data; rank-1 pure cutting-plane loops; MIPLIB 3.0, 25 pure and 33 mixed instances; the reported closures mostly lower approximations because of time limits (pp. 2-3, 8, 10-11).",
+  "proof_devices": [
+   "CG separation MIP (8)-(12) with integer alpha and a small epsilon, p. 4",
+   "Projected CG separation MIP (17)-(22); projected CG closure equal to the split cuts with one empty side (Theorem 4.1), pp. 5-6",
+   "Balas and Saxena's parametric MIP over a grid of u0 values with bisection, pp. 6-7",
+   "Dash, Günlük and Lodi's MIR separation through a binary expansion of beta-hat, exact for a suitable K (Theorem 4.2), pp. 7-8",
+   "Solvability devices: support reduction, complementing at upper bound, a sparsity penalty on the multipliers, unbounded multipliers for diversity, pp. 9-10",
+   "Hybrid: MIP separation as timed preprocessing, then a standard solver, p. 10"
+  ],
+  "experiments": "Aggregated closed gap on MIPLIB 3.0: pure instances, split 71.71% versus CG 62.59% on average; mixed, split 84.34% versus projected CG 36.38%; most values lower bounds on the closures because of time limits (20 CPU minutes for projected CG) (pp. 10-11).",
+  "positioning": "Surveys the authors' and colleagues' closure papers (Fischetti and Lodi; Bonami, Cornuéjols, Dash, Fischetti and Lodi; Balas and Saxena; Dash, Günlük and Lodi) and frames local branching and the SERR VRP heuristic as earlier MIPping (pp. 1-8).",
+  "writing": "Coins 'MIPping' in the introduction; compact model listings; aggregated tables; closes on a lesson and on future work that would retire the explicit models (pp. 1, 10-11).",
+  "limits_future": "Closures measured for strength, not for use inside a solver; values are lower approximations; future: avoid explicit separation MIPs and design fast heuristics that use them only implicitly (pp. 10-11).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Stated, joint: MIPping of crucial decisions defined (p. 1); separation MIPs solved to good feasible solutions only (step 2); closures measured before use inside a solver (step 4); a timed preprocessing hybrid when too slow, and fast implicit heuristics as the next step (step 5).",
+    "pages": "pp. 1, 9-11"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Diversify cuts by loosening the separation model",
+    "evidence": "Dropping the multiplier bounds u_i < 1 in CG separation sped up the cutting-plane loop, read as a diversification effect of the larger multiplier range.",
+    "pages": "pp. 9-10"
+   }
+  ],
+  "transferable": [
+   "Write the separation of a cut family as a MIP and let a general-purpose solver's heuristics produce violated cuts; ask for optimality only in the last round, to prove that none is left (pp. 4, 8-9).",
+   "Shrink a separation MIP to the support of x* and complement at-upper-bound integer variables before solving (p. 9).",
+   "Penalize the multipliers in the separation objective to get sparser cuts (p. 9).",
+   "Run expensive separation for a fixed time as preprocessing and hand the tightened formulation to a standard solver (p. 10)."
+  ],
+  "coauthors": "Andrea Lodi",
+  "quotes": [
+   {
+    "text": "This leads to the idea of “translating into a MIP model” (MIPping) some crucial decisions to be taken within a MIP algorithm (in particular: How to improve the incumbent solution? How to cut?), with the aim of bringing the MIP technology well within the MIP solver.",
+    "page": 1
+   },
+   {
+    "text": "Nevertheless, the picture is pretty clear and shows that, although one can construct examples in which the rank of the facets for a polyhedron is very large, in most practical cases the inequalities of rank 1 already give a very tight approximation of the convex hull of integer and mixed integer programs.",
+    "page": 11
+   }
+  ]
+ }
+]

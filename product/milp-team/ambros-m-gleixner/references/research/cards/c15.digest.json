@@ -1,0 +1,229 @@
+[
+  {
+    "id": "S036",
+    "year": "2024",
+    "title": "Safe and verified Gomory mixed-integer cuts in a rational mixed-integer program framework",
+    "read_level": "full",
+    "contribution": "Numerically safe Gomory mixed-integer cuts for exact rational MIP (safe aggregation and MIR by directed rounding for rational data, scaling and denominator control) with VIPR verification through a weak-domination extension completed outside the checker; 21.5% more MIPLIB 2017 runs solved and 26.8% less time in exact SCIP.",
+    "problem_entry": "Cut separation was the key component still missing from exact SCIP after the status update, and exact GMI cuts would need an exact tableau row and an exact LP (pp. 2–3, 6).",
+    "key_idea": "Carry the Cook–Dash–Fukasawa–Goycoolea safe GMI cuts into the rational framework: floating-point multipliers, directed-rounding MIR, relaxation of non-representable data, scaling and bounded denominators, VIPR certificates (pp. 3, 5–8, 10–20).",
+    "assumptions": "Rational MIP min{cᵀx : Ax ≤ b, ℓ ≤ x ≤ u, x_j ∈ Z}; Assumption 1: each variable in a cut has a finite lower or upper bound (held after presolve); IEEE doubles; MIPLIB 2017 benchmark restricted to 132 instances solved by floating-point SCIP 8.0 in 2 h, × 3 seeds (pp. 4, 6, 21).",
+    "proof_devices": [
+      "Safe-rounding device (shift to non-negative space, round in the safe direction, shift back, round the right-hand side up) proving Lemma 1, Corollary 2 and Lemma 3 (pp. 7–8, 10)",
+      "Directed-rounding operators per arithmetic operation, Definition 1 (pp. 6–7)",
+      "Best rational approximation with bounded denominator via convergents and intermediate fractions, Lemma 4 and Algorithms 1–2 (pp. 12–15); new proof of Lemma 7 (pp. 14, 28–29)",
+      "Encoding-length control motivated by the iterative-refinement convergence bound [18, Lemma 5] (p. 11)",
+      "MIR validity as a split disjunction plus two aggregations for VIPR, Lemma 5 and Theorem 6 (p. 17)",
+      "Weak domination (Definition 2) completed a posteriori by viprcomp (p. 18); exact slack coefficients only for LP-entering cuts (p. 19); optional exact-LP completion (pp. 19–20)"
+    ],
+    "experiments": "Five settings (nocuts, safegmi, densmall with denominators ≤ 2^17, fpnocuts and fpgmi with features absent from exact SCIP disabled); MIPLIB 2017 benchmark 132 × 3 seeds, 7200 s, Xeon Gold 5122, SoPlex 6.0.2, PaPILO 2.0.1; shifted geometric means (1 s, 100 nodes); gap closed on 367 runs excluding floating-point/exact disagreements; solved 130/152/158, densmall −26.8% time; fpgmi +39 solved, −35.1% time; certificate overhead +47.1% solving, +57.7% total on 49 instances with one seed; losses from exact-LP spikes reported (pp. 20–26).",
+    "positioning": "Generalizes Cook, Dash, Fukasawa and Goycoolea (2009) from a floating-point solver to exact MIP; continues Cook, Koch, Steffy and Wolter (2013) and the status update; certification placed beside SAT, pseudo-Boolean and MaxSAT proof logging and the TSP certificate, overhead contrasted with certified pseudo-Boolean symmetry breaking (pp. 2–3, 25–26).",
+    "writing": "Numbered contributions (p. 3) and three numbered questions (p. 20); light hedging ('hopefully', 'We conjecture', 'reasonably confident', pp. 8, 26–27); differences of gap-closed fractions printed as %, one pair in reverse order (pp. 21–22).",
+    "limits_future": "Gain smaller than in floating point; exact LP solving is the bottleneck; presolve not certified (pp. 23–26). Future: precision boosting in iterative refinement, separation tuned for exact mode, knapsack cover, flow cover and zero-half cuts (pp. 26–27).",
+    "method_links": [
+      {"method": "Method 5", "relation": "evidence", "note": "floating-point multipliers and cuts made exactly valid by directed rounding; exact LPs only when strictly necessary; exact slack coefficients only for LP-entering cuts with certificates on; completion after solving", "pages": "pp. 5–8, 18–19, 24"},
+      {"method": "Method 2", "relation": "evidence", "note": "floating-point SCIP reduced to exact SCIP's features (fpnocuts, fpgmi); component on/off inside each arm; floating-point default separation settings kept for comparability", "pages": "pp. 20–21, 24–27"},
+      {"method": "Method 2", "relation": "variant", "note": "no default-solver factor printed; only the relative effect of the component is compared across the two arms", "pages": "pp. 24–25"},
+      {"method": "Method 4", "relation": "evidence", "note": "per-instance VIPR certificates checkable independently of the solver; checker logic unchanged thanks to a separate completion tool; coverage (presolve uncertified, solution checked in the original space) and cost printed", "pages": "pp. 15, 18, 25–26"},
+      {"method": "Method 3", "relation": "evidence", "note": "enters through the missing cut separation named after the status update; prints the exact-LP bottleneck, lost instances and the smaller gain; names precision boosting and more cut classes as next projects", "pages": "pp. 2, 23–24, 26–27"},
+      {"method": "Method 6", "relation": "evidence", "note": "step 9: gap-closed statistics exclude instances whose floating-point and exact solutions disagree", "pages": "p. 21"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "certificate completion outside the checker", "evidence": "the solver prints weakly dominating derivations; a separate viprcomp script converts them to standard VIPR so the checker's logic stays unchanged; also in S074 (viprcomplete)", "pages": "pp. 18–20"},
+      {"pattern": "price-of-exactness attribution", "evidence": "the smaller gain than in floating point is attributed to directed-rounding weakening of cuts plus zero tolerances; also in S074", "pages": "pp. 24, 26"},
+      {"pattern": "encoding-length control as a numerical safeguard", "evidence": "bounding the denominators of cut coefficients, motivated by the refinement convergence bound, removes most exact-LP bottlenecks (densmall solves 6 more than safegmi)", "pages": "pp. 11–15, 23–24"}
+    ],
+    "transferable": [
+      "(D4) One safe-rounding lemma for every derived row: shift each variable to non-negative space through the bound you will use, round coefficients in the safe direction, shift back, round the right-hand side up; it covers data relaxation, aggregation and scaling (pp. 7–8, 10)",
+      "(D4) Bound the denominators of generated rows by best rational approximation under a denominator limit (convergents plus the largest admissible intermediate fraction), choosing the rounding direction by which bound of the variable is finite (pp. 12–15)",
+      "(D4) Keep the checker minimal: extend only the certificate language (weak domination) and convert it with a separate completion tool after solving; print verification only for cuts that enter the LP (pp. 18, 25)",
+      "(D5) Measure a new safe component twice, on/off inside the exact solver and on/off inside the floating-point solver stripped to the exact solver's features, and compare the relative effects (pp. 20–21, 24–25)",
+      "(D5) Before computing gap closed, drop infeasible instances and instances where floating-point and exact optima disagree (p. 21)",
+      "(D5) Time a certificate pipeline in three parts (solving with printing, completion, checking) on instances solved without certificates, with a raised time limit so the same instances finish (pp. 24–26)"
+    ],
+    "coauthors": "Leon Eifler",
+    "quotes": [
+      {"text": "This has the benefit of not complicating the logic used inside the proof checker itself. Thus, confidence in the certification process remains as high as before.", "page": 18},
+      {"text": "We identify exact LP solving as the main difficulty in making safe cutting planes performant, and show ways to overcome this difficulty by post-processing their coefficients.", "page": 26}
+    ]
+  },
+  {
+    "id": "S038",
+    "year": "2024",
+    "title": "Certifying MIP-Based Presolve Reductions for 0-1 Integer Linear Programs",
+    "read_level": "full",
+    "contribution": "Certifies PaPILO's presolve reductions on 0–1 ILPs with VeriPB pseudo-Boolean proof logging plus a new objective-update rule; proof-logging overhead stays below 6% and verification takes 14.7–22.4 times the presolve time on average.",
+    "problem_entry": "No methodology exists to certify that a presolved MIP is equivalent to the original; VIPR covers only feasibility-based reasoning, so exact-MIP certificates assume that presolve was valid (pp. 1–2).",
+    "key_idea": "Express each primal reduction by cutting planes or RUP and each dual reduction by redundance-based strengthening with a witness substitution, remove constraints by checked deletion, and add an objective-update rule to VeriPB (pp. 3–11).",
+    "assumptions": "0–1 ILPs with integer coefficients (decision and optimization); primal, weak dual and strong dual reductions; invariant: the core set keeps the optimal value; PB10–PB16 and MIPLIB 2017 in OPB translation minus 10 instances at PaPILO's memory limit (pp. 3, 5–6, 12, 15).",
+    "proof_devices": [
+      "VeriPB cutting planes, RUP, redundance-based strengthening with a witness substitution, checked deletion (pp. 3–4)",
+      "New objective-update rule: replace f by f′ after deriving f ≥ f′ and f′ ≥ f from the core set; soundness proof omitted (pp. 4–5)",
+      "Aggregation with the rational scale split into integer factors s_E/s_D, stored by the presolver (p. 6)",
+      "Checked deletion by inverting the replacing derivation (pp. 6–7)",
+      "Per-technique recipes: bound strengthening, parallel rows, probing, simple probing, sparsify, coefficient tightening via saturation, GCD simplification via weakening, implied free substitution with witnesses, singleton variables (pp. 7–9)",
+      "Dual reductions: duality-based fixing witness, dominated-variable swap witness, four advanced fixings (pp. 9–11)",
+      "Worked certificate for an implied free variable, Fig. 1 (p. 11)"
+    ],
+    "experiments": "PaPILO 2.2.0 on 6 threads, VeriPB 2.0, Core i5-1145G7 with 16 GB, 3 h, shifted geometric means with shift 1 s; logging overhead below 6% (Table 2); objective differences against full objectives on one instance 3.3 s against 6625 s and 138 GB (other hardware); verification 14.7–22.4 times generation, 25% of instances at least 193 times, 38 timeouts scored PAR2 (Table 3); RUP against explicit POL proofs: POL 0.7–13.1% faster, RUP recommended (Table 4); stated totals 671/1681 do not match Table 2 sizes (my arithmetic); single runs (pp. 12–15).",
+    "positioning": "Sets MIP against SAT's proof logging (DRAT, GRIT, LRAT); states the limits of VIPR; claims the first use of VeriPB for reformulations of optimization problems; reads overhead against certified CNF translations; presolve methods from Achterberg et al. 2019, Savelsbergh, Gamrath et al., Gemander et al. and PaPILO (pp. 2, 6–10, 13).",
+    "writing": "'First step' framing; experimental findings offered as input for revising the proof format; a surprise reported and then explained; confident close ('we believe our results show convincingly') (pp. 1–2, 14–15).",
+    "limits_future": "0–1 ILPs only; the objective-update rule is not proven in the paper; verbose certificates and heavy verification on a quarter of the instances. Future: native substitution rule (up to 90% smaller certificates), ordered RUP hints, bounded and unbounded integer and continuous domains via [34, 42] and the proof system [20] (pp. 3, 5, 13, 15).",
+    "method_links": [
+      {"method": "Method 4", "relation": "evidence", "note": "the stand-alone checker VeriPB now covers presolve, the stage exact-MIP certificates had left out, with a derivation for every reduction class", "pages": "pp. 2, 6–11"},
+      {"method": "Method 4", "relation": "variant", "note": "the checker's proof system is extended by an objective-update rule whose soundness proof is omitted for space", "pages": "p. 5"},
+      {"method": "Method 3", "relation": "evidence", "note": "step 4: imports SAT and pseudo-Boolean proof logging together with its authors (Oertel, Nordström), published at CPAIOR; bottlenecks printed as next revisions of the format", "pages": "pp. 1–2, 15"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "read certification overhead against a rival community's certified task", "evidence": "verification overhead compared with certified CNF translations [31]; S036 compares with certified pseudo-Boolean symmetry breaking", "pages": "pp. 2, 13"},
+      {"pattern": "choose a certificate encoding by measurement", "evidence": "RUP and explicit cutting-planes derivations for propagation compared on verification time and certificate size; RUP recommended", "pages": "pp. 14–15"},
+      {"pattern": "text-table slips in computational sections (negative)", "evidence": "stated totals 671 optimization and 1681 decision instances against Table 2 sizes 673 and 1688 and sources 677 and 1693 minus 10 (my arithmetic)", "pages": "pp. 12–13"}
+    ],
+    "transferable": [
+      "(D4) Classify a reduction before certifying it: primal reductions by implicational steps (cutting planes or RUP), dual reductions by redundance-based strengthening with an explicit witness substitution (pp. 6–10)",
+      "(D4) When the presolver rescales a row internally, store the integer scaling factor so the solver's state and the certificate's state can be translated (p. 6)",
+      "(D4) Log objective changes as differences, not full objectives: on one dense instance the full objective gave a 138 GB certificate and 6625 s instead of 3.3 s (p. 12)",
+      "(D5) Report proof-logging cost three ways: relative to the unlogged run, per applied reduction, and verification time relative to generation with the share of instances above a factor (pp. 12–13)",
+      "(D5) Test two certificate encodings for the same reasoning and choose by verification time and certificate size (pp. 14–15)",
+      "(D5) Score checker timeouts with PAR2 (twice the time limit), the SAT convention (p. 13)",
+      "(D8) Turn bottlenecks found in the experiment into concrete format revisions with an estimated effect (native substitution rule, up to 90%; ordered RUP hints) (p. 15)"
+    ],
+    "coauthors": "Alexander Hoen, Andy Oertel, Jakob Nordström",
+    "quotes": [
+      {"text": "such a certificate would only establish correctness under the assumption that all the presolving steps were valid", "page": 2},
+      {"text": "Such a rule needs to be designed with care, so that the optimal value of the problem is preserved. Due to space constraints we cannot provide a formal proof here", "page": 5}
+    ]
+  },
+  {
+    "id": "S055",
+    "year": "2024",
+    "title": "The MIP Workshop 2023 Computational Competition on reoptimization",
+    "read_level": "full",
+    "contribution": "Designs the MIPcc23 reoptimization competition: twelve public and hidden series of 50 related MILPs, public generation scripts, sequential rules and a banded, position-weighted score; reports the winner and an honourable mention without a score table.",
+    "problem_entry": "MILP benchmarks solve instances from scratch, while practice and decomposition algorithms solve series of similar instances; no reoptimization benchmark exists (pp. 1–3).",
+    "key_idea": "Series of 50 related instances solved in order using only information from earlier ones; a banded per-instance score, per-instance ranks and higher weights for later instances; no offline training (pp. 2, 6–7).",
+    "assumptions": "MILP series with fixed dimensions in which objective, bounds, sides or matrix vary; 7 public and 5 hidden constant-matrix series, 3 matrix-varying series outside the evaluation; bases from MIPLIB, stochastic programs, column generation, hydro unit commitment, vaccine allocation with big-M and an SAP supply chain; limits 60–600 s (pp. 2–5).",
+    "proof_devices": [
+      "n/a for proofs; design devices of the instrument follow",
+      "Selection of 50 instances by from-scratch solve time and cosine similarity of the varying vector (p. 3)",
+      "Score f = reltime + gap + nofeas with bands [0, 1], [1, 2] and 3, continuous at the band boundary (pp. 6–7)",
+      "Loophole rules: reltime above 1 past the limit, reltime = 1 for early stops without zero gap (p. 7)",
+      "Twice the worst possible rank for infeasible solutions or invalid dual bounds (p. 7)",
+      "Final score C = Σ_s Σ_i (1 + 0.1 i) r(s, i) (p. 7)",
+      "Rules: sequential order, no look-ahead, no later change of answers, 1 thread, 16 GB (p. 6)"
+    ],
+    "experiments": "none as an experiment: no scores, ranks or baselines printed; twelve registrations, six submissions, winner Patel (SCIP-based reuse of primal information and pseudocosts, online tuning), honourable mention Strang et al. (influence branching); the from-scratch solver, the validity check, the hardware and the weighting of the jury's criteria are not stated (pp. 3, 6–7).",
+    "positioning": "Claims the first dedicated reoptimization benchmark; earlier reoptimization work cited as application-specific or limited; the score is set against measures such as the confined primal integral (pp. 2–3, 6).",
+    "writing": "A design report giving a reason for each rule and score term; one self-assessment without evidence ('In our mind, this scoring framework allows for nuanced evaluation') (pp. 6–7).",
+    "limits_future": "Matrix-changing series not evaluated; nothing in the paper to reproduce the ranking from. Future: grow the generation scripts into a reoptimization benchmark library and add series (pp. 2, 7).",
+    "method_links": [
+      {"method": "Method 6", "relation": "evidence", "note": "purpose and non-purpose stated, public data and generator scripts, hidden series, written rules and a score with reasons, loopholes closed, invalid answers penalised", "pages": "pp. 2–3, 6–7"},
+      {"method": "Method 6", "relation": "variant", "note": "how infeasible solutions or invalid dual bounds were detected is not stated, so the SKILL.md step 'verify bounds against exact values' is not supported by this text; no result table printed", "pages": "p. 7"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "ordered-band score with series-position weights", "evidence": "solved in [0, 1], timeout with incumbent in [1, 2], no solution 3, continuous at the boundary; ranks weighted by 1 + 0.1 i; designed not to punish early exploration", "pages": "pp. 6–7"}
+    ],
+    "transferable": [
+      "(D4) Put all outcomes on one ordered scale: solved in [0, 1] by time fraction, timed out with an incumbent in [1, 2] by gap, no solution at 3, continuous where solved meets unsolved (pp. 6–7)",
+      "(D4) Close loopholes inside the score: running past the limit raises the time term above 1, stopping early without zero gap is charged the full limit; aggregate by per-instance ranks and give invalid answers twice the worst rank (p. 7)",
+      "(D4) To reward learning across a series, weight later instances more (1 + 0.1 i) and say explicitly that early exploration should not be punished (pp. 6–7)",
+      "(D3) Build series by generating many candidates, solving each from scratch and selecting by solve time and similarity of the varying vector; publish instances and generators separately and keep hidden series (pp. 2–3)",
+      "(D3) Write the non-purpose and the information rules into the call: no offline training, no look-ahead, no change to submitted answers (pp. 2, 6)"
+    ],
+    "coauthors": "Suresh Bolusani, Mathieu Besançon, Timo Berthold, Claudia D'Ambrosio, Gonzalo Muñoz, Joseph Paat, Dimitri Thomopulos",
+    "quotes": [
+      {"text": "The intention of this competition was not to perform offline training on different types of applications but to reuse information from current and previous solving processes to accelerate the solution of future instances.", "page": 2},
+      {"text": "we also aimed to avoid unduly restricting approaches that engage in an early exploration phase, which might intentionally deteriorate performance for the first few instances of a series.", "page": 6}
+    ]
+  },
+  {
+    "id": "S074",
+    "year": "2024",
+    "title": "Certified Constraint Propagation and Dual Proof Analysis in a Numerically Exact MIP Solver",
+    "read_level": "full",
+    "contribution": "Numerically safe constraint propagation and dual proof analysis in exact SCIP with VIPR certification of the derived bounds, cutting time by 23.4% and nodes by 28.9% and solving 15 more of 396 MIPLIB 2017 runs.",
+    "problem_entry": "Propagation and conflict analysis had not been adapted to exact MIP; earlier exact-MIP work shows numerical techniques must run in floating point in a numerically safe way (pp. 1–2).",
+    "key_idea": "Keep floating-point propagation and dual proof analysis, but maintain activities and aggregate conflict rows with directed rounding, take dual rays from the floating-point LP, and certify bounds by VIPR linear combinations plus a repair step (pp. 5–8).",
+    "assumptions": "MIP min cᵀx s.t. Ax ≥ b with bounds and integrality; finite bounds for presentation, propagation skipped otherwise; MIPLIB 2017 benchmark restricted to 132 instances solved by floating-point SCIP 8.0.3 in 2 h, × 3 seeds (pp. 3, 9).",
+    "proof_devices": [
+      "Safe activity maintenance by directed rounding, no recomputation needed (p. 6)",
+      "Farkas proof and bound-exceeding argument showing that propagation on the conflict constraint cuts off the node (pp. 4–5)",
+      "Floating-point dual ray with slightly negative multipliers set to zero, since any conic combination is valid (p. 6)",
+      "Sign-of-bounds case rule for safe aggregation (pp. 6–7)",
+      "VIPR linear combination with multipliers 1/a_k and a rounding step for propagated bounds, eqs. (6)–(7) (pp. 7–8)",
+      "viprcomplete repair of conflict constraints after solving (p. 8)"
+    ],
+    "experiments": "SCIP 8.0.3, SoPlex 6.0.3, GMP 6.1.2, PaPILO 2.0.1, Xeon Gold 5122, 2 h, 396 instance-seed runs, shifted geometric means (1 s, 100 nodes); exact: −23.4% time, −28.9% nodes, +15 solved (Table 1); reduced floating-point SCIP: −44.5% time, +31 solved (Table 2); subsets differ between the arms; certificate time excluded and no certificate checked; without propagation time 17.1% and 28.3%; two denominator remedies null; the text's floating-point node reductions (65.1%, 67.1%) do not match Table 2 (38.8%, 42.4%, my arithmetic) (pp. 8–12).",
+    "positioning": "Continues Cook, Koch, Steffy and Wolter (2013), the Eifler–Gleixner status update and the safe GMI cuts; dual proof analysis from Witzig, Berthold and Heinz; certification framed by certifying algorithms and SAT, SMT, pseudo-Boolean and MIP certification (p. 2).",
+    "writing": "Third-person abstract; enumerated reasons for the exact–floating-point gap; a null remedy reported with its reading; one unhedged forecast ('is sure to yield positive impact') (pp. 1, 10–12).",
+    "limits_future": "Smaller gains than in floating point, 'partially the price to be paid for exactness'; exact bound changes are costly; no propagation in strong branching. Future: floating-point bound changes, propagation in strong branching, conflict strengthening from [WBH21], graph-based conflict analysis, recomputed activities (pp. 10–12).",
+    "method_links": [
+      {"method": "Method 5", "relation": "evidence", "note": "stated: floating point in a numerically safe way because symbolic computation is too slow; practised for activities, dual rays and aggregation; the remaining rational step (applying bound changes) is the named slowdown and the first next fix", "pages": "pp. 2, 6–7, 10–12"},
+      {"method": "Method 2", "relation": "evidence", "note": "floating-point SCIP stripped of features absent from exact SCIP (cutting planes, graph-based conflict analysis, restarts, non-PaPILO presolve, custom propagation); component on/off in both arms; certificate time left out for comparability", "pages": "pp. 8–9"},
+      {"method": "Method 2", "relation": "variant", "note": "the arms are compared on different subsets (each table counts instances solved by its own configurations), as the authors note; no default-solver factor", "pages": "pp. 9–10"},
+      {"method": "Method 3", "relation": "evidence", "note": "the next missing component after the safe GMI cuts; five next projects printed", "pages": "pp. 2, 12"},
+      {"method": "Method 4", "relation": "variant", "note": "VIPR certification derived but not exercised: no certificate checked or timed, the cost referred to earlier papers", "pages": "p. 8"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "price-of-exactness attribution", "evidence": "weaker exact gains explained by directed-rounding weakening and by not deciding infeasibility within tolerances; also in S036", "pages": "pp. 10–12"},
+      {"pattern": "test the suspected mechanism's remedy and print the null", "evidence": "a denominator limit and no propagation on continuous variables gave no positive effect, reported as gaining more than losing", "pages": "pp. 11–12"},
+      {"pattern": "certificate completion outside the checker", "evidence": "the solver prints the original multipliers with current bounds; viprcomplete repairs the used constraints afterwards; also in S036", "pages": "p. 8"},
+      {"pattern": "text-table slips in computational sections (negative)", "evidence": "floating-point node reductions of 67.1% and 65.1% in text and conclusion against Table 2's relative 0.61 (my arithmetic: 42.4% and 38.8%)", "pages": "pp. 9–10, 12"}
+    ],
+    "transferable": [
+      "(D4) Maintain propagation activities as safe bounds with directed rounding and never recompute them; only a floating-point solver needs recomputation against error build-up (p. 6)",
+      "(D4) Take dual rays from the floating-point LP with ordinary tolerances, set slightly negative multipliers to zero and aggregate with the rounding direction chosen by the sign of each variable's bounds (pp. 6–7)",
+      "(D4) Certify a propagated bound as a linear combination of the row and the bound constraints with multiplier 1/a_k, adding a rounding step when all coefficients and variables are integral (pp. 7–8)",
+      "(D5) When a component gains less than in floating point, separate the time spent inside the component and recompute the speed-ups without it (p. 11)",
+      "(D5) Test the remedies for the suspected mechanism and report a null result together with what it does and does not show (pp. 11–12)"
+    ],
+    "coauthors": "Sander Borst, Leon Eifler",
+    "quotes": [
+      {"text": "for numerical techniques to be beneficial, it is crucial to employ them as much as possible using floating-point arithmetic in a numerically safe way, as symbolic computation can be prohibitively slow.", "page": 2},
+      {"text": "Such weaker performance is partially the price to be paid for exactness, coming from weaker inequalities due to directed rounding and the fact that we cannot determine infeasibility within tolerances in the exact setting.", "page": 12}
+    ]
+  },
+  {
+    "id": "S091",
+    "year": "2024",
+    "title": "Branch and Cut for Partitioning a Graph into a Cycle of Clusters",
+    "read_level": "full",
+    "contribution": "A problem-specific binary formulation, polyhedral results, separation of triangle, partition and extended subtour and path inequalities, and four heuristics for cycle clustering, which beat RLT-based branch and cut on 65 biology simulation instances once separation is on.",
+    "problem_entry": "Cycle clustering of nonreversible Markov state model data has proven hard to solve to global optimality; the generic compact RLT linearization is the competitor (pp. 1–3).",
+    "key_idea": "Variables only for the same-cluster and consecutive-cluster relations, plus problem-specific separation routines and heuristics in SCIP (pp. 4–9).",
+    "assumptions": "Complete graph with nonnegative non-symmetric weights, m clusters, objective α·net flow + (1 − α)·coherence; set-partitioning assignment; 65 instances with 20–250 vertices and 3–15 clusters, α = 1/1.001 (pp. 1–3, 9).",
+    "proof_devices": [
+      "Equivalence of RLT and CC solutions and the same root bound via x = 1/m (p. 5)",
+      "Polytope dimension and facet results; facet proofs deferred to an extended version (p. 5)",
+      "Triangle inequalities, Theorems 1–2, separated by enumeration in O(n³) (p. 6)",
+      "Partition inequalities, Theorem 3, heuristic separation with |S| + |T| ≤ 5 (p. 7)",
+      "Extended subtour and path inequalities valid by counting forward transitions in multiples of m; exact separation by dynamic programming in O(n³m), Theorem 4 (pp. 7–8)",
+      "Heuristics: greedy O(n²m), sparsify sub-MIP, rounding O(nm), Lin–Kernighan exchange with perturbations (pp. 8–9)"
+    ],
+    "experiments": "SCIP (version not stated; reference is the SCIP 6.0 report) with default settings plus the new plugins, 7200 s, one job per node, Xeon E5-2670 v2; shifted geometric means (10 s, 100 nodes, 1000 for integrals); CC with separation 31 solved against RLT 29, RLT with separation 28, plain CC 24; separation hurts RLT; component-at-a-time ablation (subtour the best separator, exchange the best heuristic); no seeds; the claim that all heuristics together are best is not matched by Table 2's solved counts (pp. 9–11).",
+    "positioning": "Linearization lineage Padberg, McCormick, Liberti, Mallach and RLT; inequalities from graph partitioning (Chopra and Rao, Grötschel and Wakabayashi); exchange after Kernighan and Lin; RLT credited with the best out-of-the-box performance (pp. 3, 6–7, 9, 11).",
+    "writing": "Contribution list by section; hedged explanations ('This may be explained by'); deferred proofs flagged; one summary sentence not matched by its table (pp. 2, 5, 10–11).",
+    "limits_future": "Only 52.3% of the instances solved by any setting; large final gaps; facet proofs deferred; the plugins stay problem-specific (not the generic-component mark of Research Taste 8); no future work beyond an extended version (pp. 5, 10–11).",
+    "method_links": [
+      {"method": "Method 2", "relation": "variant", "note": "like-for-like component ablation inside one solver with default settings, but solver and LP-solver versions unprinted and no seeds or permutations", "pages": "pp. 9–11"},
+      {"method": "Method 3", "relation": "evidence", "note": "step 1: the remaining gap printed as a number with its cause (52.3% solved; the primal side is weak)", "pages": "pp. 10–11"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "judge a formulation together with its separators", "evidence": "plain CC loses to RLT, CC with separation wins; RLT does not profit from separation because its LPs get costlier", "pages": "pp. 10–11"},
+      {"pattern": "cut classes by separability and effect, not facetness", "evidence": "extended subtour inequalities kept although they need not define facets, because they are effective and polynomially separable", "pages": "p. 7"},
+      {"pattern": "text-table slips in computational sections (negative)", "evidence": "the text says all heuristics together give the best results; Table 2 shows 24 solved with all heuristics, 27 with none and 28 with exchange only", "pages": "p. 11"}
+    ],
+    "transferable": [
+      "(D4) Replace a generic linearization by variables for the few relations an edge can be in (same cluster, consecutive, apart), and check that both formulations give the same root bound before comparing (pp. 4–5)",
+      "(D4) Separate extended subtour and path inequalities exactly by dynamic programming over walks shorter than m; separate partition inequalities heuristically from nearly violated triangle inequalities with a size cap (pp. 7–8)",
+      "(D4) Pair cheap construction heuristics with a Lin–Kernighan-style exchange that accepts negative moves, keeps the best clustering and restarts from random perturbations (pp. 8–9)",
+      "(D5) Evaluate components one at a time from a stripped baseline and then all together, reporting primal and dual integrals besides solved counts and time (pp. 10–11)",
+      "(D5) Compare formulations both out of the box and in their best configuration (pp. 9–10)"
+    ],
+    "coauthors": "Leon Eifler, Jakob Witzig",
+    "quotes": [
+      {"text": "While extended subtour inequalities must not define facets, they prove effective in practice and can be separated efficiently.", "page": 7},
+      {"text": "However, this formulation did not profit from problem-specific separation due to an increased cost in solving the LP relaxations.", "page": 11}
+    ]
+  }
+]

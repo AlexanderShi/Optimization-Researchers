@@ -1,0 +1,180 @@
+[
+ {
+  "id": "S041",
+  "year": "2020",
+  "title": "Price-and-verify: a new algorithm for recursive circle packing using Dantzig–Wolfe decomposition",
+  "read_level": "full",
+  "contribution": "A pattern-based Dantzig-Wolfe reformulation of the nonconvex recursive circle packing MINLP, solved by a price-and-verify column generation that keeps primal and dual bounds valid when pattern verification and pricing hit working limits; it solves 287 of 800 synthetic and 3 of 9 real instances and beats the GRASP heuristic on 356 instances (pp. 3, 18-21, 24-28; read in the ZIB-Report 17-07 / arXiv v2 version titled 'Exact Methods for Recursive Circle Packing').",
+  "problem_entry": "Tube-industry application (p. 5). A measured failure chain: the compact MINLP fails in SCIP 3.2.1 and BARON 16.8.24 on the smallest instance, and symmetry-breaking constraints do not help (pp. 7-8); the cutting-stock DW pricing yields no improving column in 2 h (p. 9).",
+  "key_idea": "Move the ring-in-ring recursion into the master: enumerate circular patterns, price rectangular patterns, and let the master count patterns, to balance master and subproblem complexity (pp. 9, 11, 16). Verify undecided patterns only when the LP uses them; price only at the root (pp. 14, 20).",
+  "assumptions": "Nonconvex MINLP (7) with big-M containment (6) (pp. 6-7); r_t <= R_t <= min{W,H}, rectangles of the same size (pp. 3, 6); bound validity needs CP* within CPfeas plus CPunknown (p. 18). Data: an 800-instance full-grid rand set plus 9 real instances, public (pp. 22-23). Tolerances never discussed.",
+  "proof_devices": [
+   "Theorem 1, LP(PDW) = LP(DW): an extended LP (17) over mixed rectangles containing both formulations, plus optimality-preserving exchanges on a counterexample that minimizes a count (mu, nu) (pp. 14-16)",
+   "Theorem 2 (Farley; Vance et al.): a valid RCPP dual bound from any valid dual bound of the pricing problem (p. 19)",
+   "two pattern pools: verified (valid primal bound) and verified plus undecided (valid relaxation) (p. 18)",
+   "dynamic verification of LP-positive candidates; fixing an unpackable candidate to zero cuts off the LP point; if unverified candidates stay positive, no valid dual bound is claimed (pp. 20-21)",
+   "ordering constraints (19) and an auxiliary objective in the verification NLP make infeasibility easier to prove (p. 17)",
+   "my reading: Definition 1 states lexicographic dominance where the replacement argument and the Alg. 1 pruning need the componentwise order (pp. 10, 17-18)"
+  ],
+  "experiments": "Three experiments (p. 22). Enumeration completes on 392/800 instances, none with ratio > 3.5 (p. 24); 287 solved to optimality, gap brackets 45/370/97/1 (p. 25); against Python GRASP, 356 better, 33 worse, 2.7% better on average (pp. 27-28); real set 3/9 solved (pp. 26-27). SCIP 5.0, CPLEX 12.7.1.0, Ipopt 3.12.5; one job per node; single runs (p. 23). My Table 6 recount confirms the aggregates except 376 vs 367 multi-node instances (pp. 26, 32-48).",
+  "positioning": "The first exact method for RCPP, where only heuristics existed (pp. 3-5). Builds on Gilmore-Gomory, Vance, Muter et al. and Farley; the Vanderbeck-Wolsey branching rule is judged impractical (pp. 4, 12, 14, 19); generic DW frameworks are cited but not used (p. 5); the conclusion recasts the method as a reduction from RCPP to CPP (p. 28).",
+  "writing": "'Exact' in the title and body, 'strong dual bounds' in the abstract (pp. 1, 3); explanations follow the results (pp. 26-27). Slips: duplicated sentence (p. 4), (11) for (17) (p. 16), lexicographic dominance (p. 17), 46.3% bracket (p. 24), 367 vs 376 (p. 26), '33%' for 33 instances (p. 27), swapped Table 6 legend (p. 32).",
+  "limits_future": "Root-only pricing; instances that need branching are rarely solved (15 of them) (pp. 20, 25-26); no enumeration for ratio > 3.5 (p. 24); pricing on the real instances too hard (p. 27); a simple greedy heuristic. Future: other container shapes, better circle-packing heuristics, column generation with column enumeration for MINLP decompositions (p. 28).",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "Step 1: failures printed with counts and causes (320 instances never enumerated, 15 multi-node instances solved, 3 of 9 real instances, the greedy heuristic named as next improvement).", "pages": "pp. 20, 24-28"},
+   {"method": "Method 2", "relation": "evidence", "note": "Step 5: the mismatch between Python GRASP and C/SCIP is stated and argued (only solution quality compared; GRASP finds its best solutions within minutes).", "pages": "p. 22"},
+   {"method": "Method 5", "relation": "variant", "note": "'Exact', 'verified' and 'valid bounds' rest on floating-point SCIP, CPLEX and Ipopt runs; tolerances are not discussed; the Taste 4 split is not raised for a dual bound presented as an optimality proof.", "pages": "pp. 3-5, 17, 21, 23"},
+   {"method": "Method 4", "relation": "variant", "note": "Patterns are verified by the producing code (an NLP solve inside SCIP); no independent check of final packings or bounds is reported.", "pages": "pp. 20-28"},
+   {"method": "Method 6", "relation": "variant", "note": "A designed full-grid synthetic test set that explains performance by instance parameters, public; not a curated library with admission rules.", "pages": "pp. 22-25"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "valid bounds under incomplete subproblem solves", "evidence": "verified and undecided pattern pools, the Farley bound when pricing fails, and lazy verification of the candidates the LP uses keep primal and dual bounds valid under working limits", "pages": "pp. 16, 18-21, 28"},
+   {"pattern": "text-table count slips", "evidence": "46.3% given for the wrong gap bracket, 367 vs 376 multi-node instances, '33%' for 33 instances, swapped Table 6 legend", "pages": "pp. 24, 26, 27, 32"}
+  ],
+  "transferable": [
+   "Keep two pools, verified and verified-plus-undecided, to get a valid primal bound and a valid relaxation when verification runs under limits (p. 18).",
+   "Verify lazily: only undecided items with a nonzero LP value, with larger limits inside the loop than in the up-front enumeration (p. 20).",
+   "When pricing cannot be solved to optimality, report the Farley bound from a valid dual bound of the pricing problem (p. 19).",
+   "To prove two reformulations have the same LP bound, embed both in an extended LP and use optimality-preserving exchanges on a counterexample that minimizes a count (pp. 14-16).",
+   "Use a full parameter grid with one instance per combination as the test set, publish it, and report results along each parameter (pp. 22-25).",
+   "Open with the measured failure of the obvious formulations (solvers, versions, time, the strengthening that did not help) before the new model (pp. 7-9).",
+   "Publish per-instance results so that every aggregate in the text can be recounted (pp. 32-48)."
+  ],
+  "coauthors": "Stephen J. Maher, Benjamin Müller (ZIB), João Pedro Pedroso (Porto); alphabetical byline, Gleixner first",
+  "quotes": [
+   {"text": "a key feature of our algorithm is that it is always capable of computing valid primal and dual bounds even though not all rectangular and circular patterns have been found.", "page": 16},
+   {"text": "The key idea of the dynamic verification is to only consider candidate patterns in CPunknown that have a nonzero LP solution value.", "page": 20}
+  ]
+ },
+ {
+  "id": "S068",
+  "year": "2020",
+  "title": "First experiments with structure-aware presolving for a parallel interior-point method",
+  "read_level": "full",
+  "contribution": "Four standard presolve methods re-implemented for distributed block-diagonal LPs with linking variables and constraints inside PIPS-IPM, preserving the structure the parallel interior-point method needs. They reduce about as much as SoPlex, are faster, handle instances SoPlex cannot process in 24 h, and halve the IPM time on one instance (pp. 3-8).",
+  "problem_entry": "Beneficial presolve reductions can destroy the block structure that a structure-exploiting parallel IPM needs (p. 3); the data are distributed so that each MPI process knows only part of the problem (p. 4); the engineering is framed as the difficulty (p. 3).",
+  "key_idea": "No new reductions: a split into local (one block) and global (several blocks) reductions with minimal communication; buffered nonzero counters that stay upper bounds between synchronization points, synchronized when a presolver that needs them starts (pp. 4-6).",
+  "assumptions": "Pure LP in block-diagonal form with linking variables x_0 and linking constraints, bounds in the extended reals (Fig. 1, pp. 3-4); block i stored by one process, block 0 replicated (p. 4); 12 real energy-system instances, N = 120-876 blocks, up to about 717 million nonzeros (Table 1, p. 6).",
+  "proof_devices": [
+   "invariant: stale global nonzero counters provide only an upper bound until the next broadcast (p. 5)",
+   "local/global reduction split: changes in non-linking parts applied at once, changes in linking parts broadcast to all processes (pp. 4-6)",
+   "model cleanup removes negligibly small entries; no threshold given (p. 4)"
+  ],
+  "experiments": "Against SoPlex with the presolvers PIPS-IPM lacks turned off; t_1, t_N, t_S and nonzeros (Table 1, p. 6). PIPS-IPM on JUWELS (2x Xeon Skylake 8168), SoPlex on another machine (E7-8880 v4, 2.2 GHz), effect not discussed (p. 6). Faster except on the two smallest instances; SoPlex >24 h on the four largest; reduction about 16% (pp. 6-7). Scalability S_n: elmod 2 S_146 ~ 114, yssp 2 S_50 ~ 36, oms 4 S_60 ~ 31 (p. 7); IPM time on elmod 1 780 -> 380 s (p. 8). Single runs. My recount: deviation 2.4-2.7%, not <2%; the yssp {2,4} lists contradict Table 1 (pp. 6-7).",
+  "positioning": "Extends PIPS-IPM (ref. [8]) and the group's linking extension (ref. [3]) (p. 3); presolve techniques from Achterberg et al., Andersen-Andersen and Gondzio (p. 4); the baseline is the group's own SoPlex (p. 6); no other parallel presolve cited (p. 8).",
+  "writing": "Six-page proceedings paper; abstract names the difficulty (p. 3); bulleted key observations (pp. 6-7); one explained limit (the linking-constraint sweet spot, p. 7); single-instance downstream number in the conclusion (p. 8). Slips: 'Figure ??', contradictory yssp lists (p. 7), an unreproducible '<2%' (pp. 6-7).",
+  "limits_future": "Limited scalability with many linking constraints; runtimes rise again past a 'sweet spot' (p. 7); 'First Experiments' in the title (p. 3); no future directions stated (p. 8).",
+  "method_links": [
+   {"method": "Method 2", "relation": "evidence", "note": "Steps 1-2: the incumbent (SoPlex) is stripped of all presolving routines not implemented in the new code.", "pages": "p. 6"},
+   {"method": "Method 2", "relation": "variant", "note": "No default-SoPlex arm; the arms ran on different machines, a mismatch stated with its reason but its effect not argued (step 5).", "pages": "p. 6"},
+   {"method": "Method 3", "relation": "evidence", "note": "Step 1, weak: limited scalability printed with the instances and the suspected cause (linking constraints).", "pages": "p. 7"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "structure-preserving presolve", "evidence": "presolve reductions restricted so that they keep the block structure that the downstream parallel IPM exploits; supports Taste 8 [SAP19] only partly, since the component serves PIPS-IPM, not a generic MIP solver", "pages": "pp. 3-4"},
+   {"pattern": "text-table count slips", "evidence": "yssp {2,4} listed both as order-of-magnitude and as limited speed-ups (Table 1: 4.6 and 5.5); 'average deviation of less than 2%' not reproducible (2.4-2.7%)", "pages": "pp. 6-7"}
+  ],
+  "transferable": [
+   "Before comparing preprocessing, strip the baseline of the routines you have not implemented, and report effect (nonzeros removed) alongside time (p. 6).",
+   "In distributed preprocessing, buffer local changes and keep stale global counters as safe one-sided bounds; synchronize only when a routine that needs them starts (p. 5).",
+   "Separate local reductions (no communication) from global ones (communication), and treat the global ones as the scalability risk (pp. 4-5, 7).",
+   "Report parallel speed-up per instance up to the turning point and name its structural cause (p. 7)."
+  ],
+  "coauthors": "Nils-Christian Kempke, Thorsten Koch, Daniel Rehfeldt, Svenja Uslu (ZIB); alphabetical byline, Gleixner first",
+  "quotes": [
+   {"text": "To this end, we compared to the sequential, source-open solver SoPlex [5] and turned off all presolving routines that were not implemented in our preprocessing.", "page": 6},
+   {"text": "From that point on the global nonzero counters for all other processes are outdated and provide only an upper bound.", "page": 5}
+  ]
+ },
+ {
+  "id": "D002",
+  "year": "2021",
+  "title": "A Computational Status Update for Exact Rational Mixed Integer Programming",
+  "read_level": "full",
+  "contribution": "A revision of the 2013 hybrid-precision exact MIP framework that adds rational presolve (PaPILO), floating-point heuristics with exact repair, SoPlex iterative refinement and certificates for all bounding methods. On the MIPLIB 2017 benchmark it solves 47 against 17 instances, with 6.6x less time on the onesolved subset (pp. 3, 6-8, 14; ZIB-Report 21-04 = SKILL.md's [ZR21-04]).",
+  "problem_entry": "Roundoff compromises the optimality promise of floating-point MIP, which matters where MIP proves mathematics or verifies hardware (pp. 3-4); the 2013 milestone framework lacks the supplementary techniques of floating-point solvers, so two are added (p. 4).",
+  "key_idea": "Hybrid precision in every new component: rational presolve; heuristics on floating-point data with exact repair (fix the integers, solve an exact LP); iterative refinement for exact LPs; a padded objective limit; a safe floating-point feasibility check before exact arithmetic (pp. 4, 6-8).",
+  "assumptions": "Rational MIP data with a componentwise closest floating-point approximation (p. 6); bound-shift needs finite bounds, project-and-shift needs an exact interior point (pp. 5-6); heuristics must not change the model (p. 7); certificates exclude presolve (p. 13); test sets fpeasy (57), numdiff (50), MIPLIB 2017 benchmark (240) (pp. 9, 14).",
+  "proof_devices": [
+   "running error analysis (Higham Alg. 3.2, adjusted for the roundoff in x and a): s - mu >= b certifies feasibility, s + mu <= b certifies violation, otherwise check exactly (p. 8)",
+   "objective-limit padding by the observed bounding error, with a re-solve without the limit when safe bounding fails (pp. 7-8)",
+   "exact repair under working limits: at most half as many calls as exact bounding LPs; off above 80% continuous variables (pp. 7, 12)",
+   "bound-shift disabled below 20% success; exact LP every 5 depth levels; project-and-shift no longer limited to fewer than 10,000 nonzeros (pp. 9-10)",
+   "rational presolve with the same acceptance thresholds and zero tolerances (p. 11)",
+   "VIPR certificates extended to bound-shift, with dual multipliers computed in postprocessing (pp. 13-14)"
+  ],
+  "experiments": "Three numbered questions (p. 8). Xeon E5-2660, CPLEX 12.3.0 vs 12.8.0 argued harmless, three seeds (one for the original), 7200 s, shift 0.001 s (p. 9). Like-for-like: +10/+7 solved, -69.8%/-80.3% time (p. 10). Presolve: 0.86%/2.1% of time, -39.4%/-72.9% total time (pp. 11-12). Heuristics: time to first -86.7%/-72.7%, primal integral -13.4%/+4.9% (p. 13). Certificates: +101.2%/+51.4% on both-solved instances (p. 13). MIPLIB 2017: 47 vs 17 solved (p. 14). No floating-point baseline. My checks: safe bounding takes 43.0%/70.1% of the new framework's time (Table 2, p. 10); presolve solves '10 more instances on numdiff' vs Table 4's 66 -> 86 (p. 12).",
+  "positioning": "Continues and revises Cook-Koch-Steffy-Wolter 2013, 'the milestone paper' (p. 4); a survey of roundoff avoidance (Concorde, SAT/PBO, SMT, polyhedral libraries, hybrid LP methods) (p. 5); SoPlex chosen on his own refinement-vs-boosting comparison (p. 7); first analysis of symbolic presolve claimed (p. 4); SAT as the rigor model (p. 4).",
+  "writing": "Scope-modest contribution sentences ('a first step', 'a first, small selection') (pp. 4-5); hedged optimism (pp. 4-5); numbered questions (p. 8). The abstract's 6.6x headline omits its subset (49 of 240) (pp. 3, 14). 'Slight decrease' for -23% fixings (pp. 11-12); the closing gap sentence has no factor (p. 14). Garbled sentences (pp. 8, 9), 'MIBLIB' (p. 14).",
+  "limits_future": "The performance gap to floating-point solvers is still large; numerically safe cutting planes named as next (p. 14); presolve not certified (p. 13); bound-shift implementation to fix (p. 10); repair outliers force strict limits (p. 12); certificate overhead not negligible (p. 14).",
+  "method_links": [
+   {"method": "Method 2", "relation": "evidence", "note": "Like-for-like first: the new framework with presolve and heuristics disabled against the original; the predecessor's sets plus MIPLIB 2017 (step 7); the CPLEX version mismatch stated and argued (step 5).", "pages": "pp. 8-10"},
+   {"method": "Method 2", "relation": "variant", "note": "The step-5 premise ('vast majority' of time in safe bounding) holds for the original framework (75.3%/86.3%) but not clearly for the new one (43.0%/70.1%, Table 2); no floating-point baseline, so the steps 3-4 factors are absent in this version.", "pages": "pp. 9-10, 14"},
+   {"method": "Method 3", "relation": "evidence", "note": "The predecessor's missing components named and two added; the remaining gap printed with the next missing technique (safe cuts, ref. [15]); open items named; SAT/PBO rigor as the rival model (step 4).", "pages": "pp. 4, 10, 13-14"},
+   {"method": "Method 4", "relation": "evidence", "note": "Certificates extended to bound-shift; presolve outside them printed; the x_4 certificate exposed incorrect reasoning behind a correct infeasibility verdict; overhead and check times on both-solved instances.", "pages": "pp. 13-14"},
+   {"method": "Method 5", "relation": "evidence", "note": "Heuristics exclusively on floating-point data with exact repair; safe floating-point check before exact arithmetic; padded objective limit; bound-shift off below 20%; exact LP every 5 levels; model-changing presolve done fully in rational arithmetic (step 1).", "pages": "pp. 4, 7-10"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "text-table count slips", "evidence": "'Enabling presolving solves 3 more instances on fpeasy and 10 more instances on numdiff' vs Table 4's 66 -> 86 on numdiff (as extracted); Table 6's caption and the text name different subsets, and the numdiff sizes differ between Tables 5 and 6 (42 vs 41)", "pages": "pp. 12-13"}
+  ],
+  "transferable": [
+   "Give approximate heuristic solutions an exact repair (fix the integers, solve an exact LP), with frequency limits tied to the exact-LP budget and a cutoff on the share of continuous variables (pp. 7, 12).",
+   "Test feasibility in floating point with a running error bound and go exact only in the undecided band (p. 8).",
+   "Pad an approximate LP's objective cutoff by the observed safe-bounding error, and re-solve without the cutoff if the safe bound fails (pp. 7-8).",
+   "Order the study: like-for-like against the predecessor, then one component at a time, then certificates, then a harder public set (pp. 8-14).",
+   "To compare exact with floating-point presolve, keep the acceptance thresholds identical and change only the tolerances (to zero) (p. 11).",
+   "Measure overheads only on instances both variants solve, and state which way timeouts would bias the result (p. 13)."
+  ],
+  "coauthors": "Leon Eifler (first author); acknowledged: Dan Steffy, Leona Gottwald, Antonia Chmiela",
+  "quotes": [
+   {"text": "Although it does not check the implementation itself, it can help identify and eliminate incorrect results that do not directly lead to fails.", "page": 13},
+   {"text": "Although these versions are different, they are only used to solve floating-point LPs and have limited impact on the reported results: The vast majority of solving time is spent in the safe dual bounding methods.", "page": 9}
+  ]
+ },
+ {
+  "id": "D003",
+  "year": "2021",
+  "title": "An Algorithm-Independent Measure of Progress for Linear Constraint Propagation",
+  "read_level": "full",
+  "contribution": "An algorithm-independent progress measure for iterative bounds propagation, split into infinite-to-finite reductions and finite improvements measured from 'weakest' bounds. Applied to MIPLIB 2017, it finds premature stalling rare and the GPU propagator up to about 7.8x faster than the sequential one under early stopping (pp. 1-2, 6-12; arXiv v3 = SKILL.md's [CP21]).",
+  "problem_entry": "Tolerance-stopped iterative propagation cannot be compared fairly across implementations, mainly because unbounded domains make reductions hard to quantify (p. 1). Belotti et al.'s stalling caveat was never quantified (p. 5).",
+  "key_idea": "Algorithm-independent reference points (start bounds, the unique fixed point, weakest bounds), with progress scored separately for infinite-to-finite reductions (P_inf) and finite improvements (P_fin), and algorithms compared by the time to equal progress (pp. 5-9, 12).",
+  "assumptions": "MIP (1) with extended-real bounds; linear constraints with continuous, integer and initially unbounded variables (pp. 1, 3); unique fixed point, convergence possibly infinite (p. 4); bounds never relaxed (p. 9); P assumed smooth but sampled per round and interpolated (pp. 10-11). MIPLIB 2017 1065 -> 540 by counted exclusions; double precision (p. 10).",
+  "proof_devices": [
+   "Observation 2: whether an infinite bound can become finite depends only on coefficient signs and on which other bounds and sides are finite; proof by cases (p. 6)",
+   "Corollary 1: infinite reductions only in the first c rounds, c bounded by pigeonhole (p. 6)",
+   "monotonicity of both scores because IBTAs never relax bounds; normalization by the precomputable maximum (12) (p. 9)",
+   "Algorithm 1 (weakest bounds): guarantees stated only in the Outlook, unproved here (pp. 7-8, 12-13); my scratch check: the rule does not terminate on a 3-variable cycle (p. 8)",
+   "measurement run and timing run separated to avoid distorted times (p. 10)"
+  ],
+  "experiments": "540 MIPLIB 2017 instances after counted exclusions (133 unreadable, 72 different fixed points, 2 at the iteration limit, 310 without bound changes, 8 inconsistent) (p. 10); V100 GPU vs Xeon Gold 6246 CPU, thread count not stated (p. 10). Stalling over a (p, q) grid: 48 -> 14 -> 1 -> 0 for the sequential code (pp. 11-12); speed-up by progress level, 4.9/5.4 at the fixed point, about 7.8/7.0 at 50% (pp. 12-13). No repetitions. Counts do not close: 432 vs 540 - 57 = 483 (pp. 10-11).",
+  "positioning": "Bridges CP and MIP propagation (pp. 2-3); Belotti et al.'s LP method as theoretical foil, iterative propagation defended as most effective in practice (p. 5); the sequential code follows SCIP (p. 10); re-evaluates the authors' own GPU paper, finding it more competitive than originally reported (pp. 1, 12).",
+  "writing": "Questions in the abstract, answers previewed in the introduction (pp. 1-2); definitions, observations and a corollary before the measure (pp. 3-9); hedged verdicts (p. 12). Slips: 'fomalized' (p. 2), counts that do not close (pp. 10-11).",
+  "limits_future": "Whether some IBTA reaches the weakest bounds is open, a stronger framework is future work; extension to factorable programs and MINLP (pp. 12-13); the 72 numerical disagreements are dropped, not analyzed (p. 10).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "Group: Belotti et al.'s unquantified stalling caveat becomes a check computable per round, counted on MIPLIB 2017 (48 -> 14 -> 1 -> 0); the count cuts against the motivating caveat (step 7).", "pages": "pp. 5, 11-12"},
+   {"method": "Method 1", "relation": "variant", "note": "Step 3: standalone implementations (the sequential one modelled on SCIP) rather than an instrumented production solver; measurement and timing in separate runs.", "pages": "p. 10"},
+   {"method": "Method 2", "relation": "evidence", "note": "Step 8: the 72 instances on which the two codes reach different fixed points are counted and dropped.", "pages": "p. 10"},
+   {"method": "Method 2", "relation": "variant", "note": "Fairness comes from a common progress scale for algorithms with different bound sequences, not from stripping features; the GPU is compared against a CPU code whose thread count is not stated.", "pages": "pp. 5, 10, 12"},
+   {"method": "Method 6", "relation": "variant", "note": "Exclusions counted per reason but not named; the counts do not close (432 vs 483); numerical disagreements dropped, not examined (compare step 9).", "pages": "pp. 10-11"},
+   {"method": "Method 3", "relation": "evidence", "note": "Step 7: the open question about the tightness of the weakest bounds is printed, with a direction for future work.", "pages": "pp. 12-13"},
+   {"method": "Method 5", "relation": "variant", "note": "The measure assumes a unique fixed point, but in double precision the two codes reach different fixed points on 72 instances; no exact arithmetic decides which code is right.", "pages": "pp. 4, 10"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "algorithm-independent reference points", "evidence": "start bounds, the unique fixed point and weakest bounds are shared by every IBTA; progress is measured between them and algorithms are compared at equal progress", "pages": "pp. 5, 7, 9, 12"},
+   {"pattern": "text-table count slips", "evidence": "'the remaining 432 instances' vs 540 - 57 = 483; the 540 implies an unstated removal of the 2 iteration-limit instances", "pages": "pp. 10-11"}
+  ],
+  "transferable": [
+   "Split a progress measure into qualitatively different phases (infinite to finite, finite improvement) and normalize each by a maximum that does not depend on the algorithm (pp. 6, 9).",
+   "When algorithms take different paths, use the weakest reachable values, not the first observed values, as the reference point (p. 7).",
+   "When instrumentation would distort time, run measurement and timing separately and join them per round (p. 10).",
+   "Report speed-up as a function of progress, and check that it reproduces the fixed-point speed-up at 100% (p. 12).",
+   "Define a failure mode by thresholds on the derivatives of the progress curve and report counts over a grid of thresholds (pp. 11-12).",
+   "Turn a predecessor's unquantified caveat into a question by building the instrument that counts it (p. 5)."
+  ],
+  "coauthors": "Boro Sofranac (first author), Sebastian Pokutta",
+  "quotes": [
+   {"text": "In their paper, no attempt is made to quantify this statement, as likely out-of-scope and non-trivial to answer.", "page": 5},
+   {"text": "We conclude that in practice, the premature stalling effect seems to occur only rarely and on individual instances.", "page": 12}
+  ]
+ }
+]

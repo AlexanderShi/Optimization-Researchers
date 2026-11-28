@@ -1,0 +1,263 @@
+[
+ {
+  "id": "S094",
+  "year": 2016,
+  "title": "Improving branch-and-cut performance by random sampling",
+  "read_level": "full",
+  "contribution": "A root-sampling scheme that runs the default root cut loop and heuristics from K-1 different optimal LP bases, pools all cuts and solutions into one final run, reduces root variability and became the CPLEX 12.5.1 default with K = 2 (pp. 4, 7, 12, 17).",
+  "problem_entry": "Entered from a measured anomaly (Danna's 10teams example, 0 vs 1,426 nodes, p. 2); dual degeneracy of the first LP taken as the first source of variability (pp. 2-3), shown solver-independent on CPLEX, GUROBI, XPRESS by 10 permutations (p. 5, Fig. 1 p. 6).",
+  "key_idea": "Sample the optimal face: K-1 root runs from different optimal bases (via CPX_PARAM_RANDOMSEED), pool cuts and solutions, one final run from the enriched root; only the starting basis changes; K steers stability vs speed (pp. 3-8).",
+  "assumptions": "General MIP, structure of A not exploited (p. 1); dual-degenerate root LPs presumed (pp. 2, 5); MIPLIB 2010 benchmark+primal (121; exclusions pp. 9-11) and 3,221-model CPLEX testbed (p. 12); preprocess once so all runs share one space (p. 8).",
+  "proof_devices": [],
+  "experiments": "Deterministic ticks, 10^7 limit, shifted geometric means (p. 8); root K = 10 over 10 seeds cuts integrality gap 56.91% to 35.81% (Table 1, p. 10); tree ~15% fewer ticks, 25% fewer nodes over 5 seeds (Table 2, p. 11); product test on 3,221 models with classes defined via both solvers, 5 seeds, ratios 0.97-0.99 (pp. 13-16); losses printed but not discussed, no statistical test (pp. 11, 16-17).",
+  "positioning": "Credits Danna 2008, MIPLIB 2010, Lodi-Tramontani (p. 2); places the scheme beside SAT restarts, bet-and-run, Achterberg's cut filtering, CutsComm, ParaSCIP racing; novelty narrowed to basis selection, no critique (p. 3).",
+  "writing": "Labelled \"Our contribution.\" paragraph turning variability into opportunity (p. 3); K's two uses as a list (p. 4); CPLEX default announced and repeated (pp. 4, 17); parenthetical hedges and scare quotes (pp. 7, 11); tables carry the argument.",
+  "limits_future": "Tree variability untouched and named the main open question (pp. 11, 17); large K may not pay in time (p. 4); K > 2 not worth it in CPLEX (p. 12); preprocessing once only approximates default CPLEX (p. 9); adoption stated by authors, no release note cited (p. 1).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "spread measured before it is used (10 permutations on 3 solvers; 10 seeds at root), seeds in every table, then exploited; seed-only baseline cpxdef is the control; public seed parameter rather than internal basis loading",
+    "pages": "pp. 3-5, 7-9, 11-16"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "step 4: all short runs merged into one root instead of betting on one run as bet-and-run does; where it does not pay is printed (tree stability, K > 2)",
+    "pages": "pp. 3, 7, 11, 12"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "classes defined by both solvers; baseline same code with K = 1 and identical settings; exclusions with reasons; sampling-time accounting argued both ways; time-limit bias named",
+    "pages": "pp. 9-13"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "solver's own cut loop and heuristics do the work, only the starting basis changes; seed parameter replaces random pivots",
+    "pages": "pp. 3, 7, 8"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "separators and heuristics left alone, the root basis the loop starts from is changed; motive is variance, not a stalling loop",
+    "pages": "pp. 2-3, 7"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "one knob, two goals",
+    "evidence": "K steers between stabilization and speed",
+    "pages": "pp. 4, 7, 12"
+   },
+   {
+    "pattern": "honest sequential simulation of a parallel scheme",
+    "evidence": "final run restarted from scratch, pooled info injected at end of root, time charged neither zero nor dropped",
+    "pages": "pp. 9-12"
+   },
+   {
+    "pattern": "public prototype, then vendor default on the vendor's testbed",
+    "evidence": "research code on a public CPLEX parameter, then K = 2 default in CPLEX 12.5.1 tested on 3,221 models",
+    "pages": "pp. 1, 4, 7, 12-17"
+   }
+  ],
+  "transferable": [
+   "(D2) Give the scheme one parameter that moves it between two goals: a large sample count to study and reduce variability, a small one for the shipped default (pp. 4, 7, 12).",
+   "(D4) Preprocess once and give every sample and the final run that same model, so that cuts and incumbents from different runs live in one space (p. 8).",
+   "(D5) Simulate a parallel scheme sequentially without flattering it: restart the final run from scratch, inject the pooled information only where a parallel version would have it (end of root, through callbacks), and charge time with a rule that neither credits zero ticks nor drops the instances solved during sampling (pp. 9-11).",
+   "(D5) Before proposing a variance remedy, show the variance is solver-independent: 10 row and column permutations per instance on three solvers, the per-instance variability score (standard deviation over mean), pairwise scatter plots (p. 5, Fig. 1 p. 6).",
+   "(D5) Root-node stability table: integrality, primal and dual gaps against known optima, with the mean and the mean per-instance standard deviation over 10 seeds (pp. 9-10).",
+   "(D5) Vendor-style class reporting: [n,10k] (solved by at least one arm, at least n seconds for one) and [n,10k) (solved by both), the \"affected\" subset with differing node and iteration counts, time-limit hits per side, all repeated for 5 seeds (pp. 13-14).",
+   "(D5) On a shared cluster report deterministic ticks and state the shifts of the geometric means (10^3 ticks, 10 nodes) (p. 8)."
+  ],
+  "coauthors": "Andrea Lodi, Michele Monaci, Domenico Salvagnin, Andrea Tramontani",
+  "quotes": [
+   {
+    "text": "a good strategy is to sample the optimal face of the (initial) LP relaxation",
+    "page": 7
+   },
+   {
+    "text": "This confirms that reducing variability during enumeration is still an open issue.",
+    "page": 11
+   }
+  ]
+ },
+ {
+  "id": "S011",
+  "year": 2017,
+  "title": "Redesigning Benders decomposition for large-scale facility location",
+  "read_level": "full",
+  "contribution": "A redesigned Benders scheme on stock CPLEX (allocation variables projected out, fat/slim masters, in-out root stabilization, closed-form and exact-QP separators) that solves 7 open UFLLIB instances, improves 22 best-known values and solves qUFL instances with up to 40 million variables (pp. 2-3, 19).",
+  "problem_entry": "Entered from scale: location models with millions of allocation variables where MILP solvers struggle and Lagrangian methods dominate (pp. 1-2); working hypothesis that dropped exact decompositions need a redesign, \"sleeping beauties\" (pp. 1-2); Benders for UFL left 30+ years (p. 6); qUFL as MINLP test problem (pp. 2, 4).",
+  "key_idea": "Replace x_ij by w_j (fat) or w_sum (slim) bounded by generalized Benders cuts separated at every node of stock CPLEX branch-and-cut, with in-out stabilization of the root loop; Kelley kept in the tree (pp. 5, 10-14, 19).",
+  "assumptions": "UFL with linear c_ij >= 0, full allocatability (p. 3); qUFL with unit demands, perspective baseline (p. 4); at least 2 open facilities, small cases enumerated (p. 5); GB cuts need convexity and CQs, y* > 0 handled in §4.1 (pp. 5, 7, 11-12); UFLLIB, Körkel-Ghosh, ORLIB, random qUFL up to 2000 x 10000 (pp. 16-18); uncapacitated only (p. 19).",
+  "proof_devices": [
+   "GB cut from a subgradient of Lagrangian multipliers under KKT, after Geoffrion (eq. 18, p. 5)",
+   "continuous knapsack solved by Dantzig's critical-item rule, certified by equal primal and dual cost (p. 6); closed-form cut, only n distinct cuts per customer (p. 7)",
+   "ad hoc QP routine (Algorithm 1, p. 9) proved by a monotonicity lemma on beta (Lemma 3.1) and a KKT check (Theorem 3.1) (p. 10)",
+   "projection argument: fat and slim masters give the same bound (p. 11)",
+   "2 epsilon trick: separate at y* + 2 epsilon, cuts always valid (p. 12)",
+   "Margot-style cut-validity test, 10,000 perturbations (p. 16)"
+  ],
+  "experiments": "Xeon E3-1220V2, 16 GB, 4 threads, untuned settings (p. 16); one-instance traces on gs250a-1: Kelley stuck vs in-out root in 0.19 s / 0.04 s (pp. 13-14, Fig. 1); fat vs slim on MT1 (Fig. 2, p. 15); seven open UFL instances solved (Table 1, p. 17); 22 KG best-knowns improved (p. 18, Table 2 p. 23); qUFL up to four orders faster than the perspective model with MIQCPSTRAT = 1 (Tables 3-5, pp. 18-19, 24-25); no seeds or repetitions for exact runs, no profiles.",
+  "positioning": "Against the Lagrangian state of the art (Posta et al., Beltran-Royo et al.) via solved instances and best-knowns (pp. 3, 17); in-out credited to Applegate et al., Ben-Ameur and Neto, Fischetti-Salvagnin, Naoum-Sawaya-Elhedhli; bundle methods named stronger (p. 12); QP routines and Margot credited (pp. 8, 16); critique of the habit of judging cuts by polyhedral strength (p. 12).",
+  "writing": "Working hypothesis in the abstract (p. 1); scare-quoted coinages (pp. 1-2, 8); surprise marked twice (pp. 3, 18); key ingredient flagged at the head of §4.2 (p. 12); colloquial asides (Pavlov's aversion, p. 11); ellipsoid analogy (p. 12); impact as two bullets (p. 19).",
+  "limits_future": "Practical big-data instances still not solvable directly (p. 2); 50 linear KG instances open (p. 17); Kelley kept in tree (p. 14); no real bundle method (p. 12); capacitated case not immediate (p. 19); future: connected FL, ring-star, median cycle, traveling purchaser, convex MINLP, nonlinear stochastic programming (p. 19).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "allocation variables projected out, then w_j aggregated into w_sum; fat and slim run on the same instances and chosen per cost class by measurement",
+    "pages": "pp. 1, 5, 10-15"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "convergence put down to the point to cut, not cut strength; in-out with stabilizer at all ones moved halfway; all loops call the same separator; 2 epsilon alone rescues Kelley; stabilization at root only, with reason",
+    "pages": "pp. 12-14"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "stock MILP solver plus one plugged-in separator solved open instances 2500-10 and 3000-100 in under 15 minutes on a PC; simple in-out instead of bundle; no qUFL-specific heuristics; own sub-MIP heuristics through the solver",
+    "pages": "pp. 11, 12, 16"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "(partial) compact baseline run with its best CPLEX setting (MIQCPSTRAT = 1) while the new code runs untuned; Lagrangian comparisons go through solved status and best-knowns, not a common harness",
+    "pages": "pp. 16-18"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "seeds only as a resource (four concurrent seeded runs, best kept); no seeds for exact runs; with orders-of-magnitude speed-ups this does not threaten conclusions",
+    "pages": "pp. 16, 18"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "closed-form subproblem oracle with a proof",
+    "evidence": "critical-item closed-form cut for linear costs and proved exact QP routine (Algorithm 1, Lemma 3.1, Theorem 3.1)",
+    "pages": "pp. 6-10"
+   },
+   {
+    "pattern": "numerically safe by construction",
+    "evidence": "perspective skipped near 0/1, 2 epsilon trick, 10^-9 tolerances, Margot-style validity test; also S016 pp. 19-21",
+    "pages": "pp. 11-12, 16"
+   }
+  ],
+  "transferable": [
+   "(D4) In-out root loop with its constants: y~ := (1,...,1); each iteration y~ := (y~ + y*)/2 and separate at lambda y* + (1 - lambda) y~ + delta (1,...,1) with lambda = 0.2, delta = 2 epsilon; after 5 iterations without bound improvement set lambda = 1, after 5 more delta = 0, after 5 more stop and drop slack cuts; drop slack cuts every 5th iteration (pp. 12-13).",
+   "(D4) When the Benders subproblem is a continuous knapsack, sort the costs, find the critical item and write the cut in closed form; only n distinct cuts exist per customer (pp. 6-7).",
+   "(D4) Inside a separator, replace a general QP solver by a small exact routine with a proof (truncate the violated bounds and re-solve on the residual set; Algorithm 1, Lemma 3.1, Theorem 3.1; pp. 8-10).",
+   "(D4) Near degenerate values, skip a numerically risky strengthening (perspective off for y*_i < 10^-5 or > 1 - 10^-5) and separate at y* + 2 epsilon, which keeps cuts valid and also helps plain Kelley (p. 12).",
+   "(D4) For integer master points add one aggregated optimality cut in the lazy callback instead of flooding the pool with per-customer cuts (p. 15); add tree cuts as local so the solver can purge them, and cap rounds per node (20; 2,000 at the root) (p. 14).",
+   "(D4) Cut-validity stress test: fix the incumbent, perturb 80% of its entries by 10^-9 to 10^-1, separate, add, re-solve, 10,000 times, and dump the model on failure (p. 16).",
+   "(D5) One-instance trace figure: the same separator under three point-selection policies, log time axis, active cuts at the end of the root and of the run (Fig. 1, p. 13); then fat against slim on a second instance (Fig. 2, p. 15).",
+   "(D5) Run the compact baseline with the solver option that suits it best, and say so (MIQCPSTRAT = 1, p. 18)."
+  ],
+  "coauthors": "Ivana Ljubić, Markus Sinnl",
+  "quotes": [
+   {
+    "text": "heavily depends also on the strategy for generating the next point to cut",
+    "page": 12
+   },
+   {
+    "text": "This is perhaps the most important ingredient in our recipe.",
+    "page": 12
+   }
+  ]
+ },
+ {
+  "id": "S016",
+  "year": 2017,
+  "title": "A new general-purpose algorithm for mixed-integer bilevel linear programs",
+  "read_level": "full",
+  "contribution": "Extends the authors' 2016 intersection-cut branch-and-cut for MIBLPs with FUB cuts, follower preprocessing, new IC families chosen by separation MILPs and a numerically safe IC derivation, tested on 874 instances and released with solver and optimal values (pp. 3, 7, 11-22, 37).",
+  "problem_entry": "Entered from hierarchical applications and the scarcity of generic MIBLP solvers despite NP/Σ2-hardness (pp. 4-5); direct entry is the authors' own 2016 solver on a MILP solver (p. 6); obstacle: arbitrarily weak HPR bounds need deep cuts early (p. 10).",
+  "key_idea": "Keep 2016 branch-and-cut on the HPR and add locally valid FUB cuts (Thm 1), follower fixing (Thm 2), new IC families from bilevel-free sets (Thms 3-6), separation MILPs choosing the set (pp. 17-18), numerically safe IC derivation (Alg. 1, pp. 19-20); default MIX++ (pp. 29, 31-32).",
+  "assumptions": "Optimistic MIBLP with integer and continuous variables at both levels (pp. 3, 5); Assumption 1 J_F ⊆ J_x for finite convergence, 2 bounded HPR, 3 integer slacks for some ICs (p. 8); d integer (p. 17); all tested leaders integer (pp. 8, 22); 874 instances in ten classes incl. MIPLIB-derived, interdiction solved as general (pp. 22-23, Table 1 p. 25); wrong-coefficient repository warned (pp. 22-23).",
+  "proof_devices": [
+   "restriction of the follower overestimates the value function (Theorem 1, p. 11)",
+   "dominance argument for fixing with strict signs in the optimistic setting (Theorem 2, pp. 11-12)",
+   "improving-direction argument after Xu (Theorem 3, pp. 13-14)",
+   "integer slacks turn interior into the closed set (Theorem 4, p. 14)",
+   "half-space test with variable bounds removes facets (Theorem 5, Corollary 1, p. 15)",
+   "integrality of linking leader variables gives the hypercube (Theorem 6, p. 16)",
+   "finiteness by domain reduction (Theorem 7, p. 40)",
+   "IC derivation through the disjunctive interpretation (Glover; Glover and Klingman), validity on original data so error only reduces violation (pp. 18-20)"
+  ],
+  "experiments": "Xeon E5-2670v2, 12 GB, 4 threads, 3,600 s (p. 22); ablations vs SEP1/SEP2 with cumulative speed-up charts (Fig. 2, pp. 26-27) and MIPLIB final-gap charts (pp. 27-28, Fig. 3); Dolan-Moré profiles on commonly solved, mostly easy instances (p. 29); hypercube ICs (Table 2, p. 33); literature comparisons against rivals' published times with an unexplained 2-5x hardware factor (pp. 33-38, Tables 3-6); no seeds, repetitions or significance tests under nondeterministic parallel mode (p. 20); losses in tables not named in text (pp. 35-38).",
+  "positioning": "Reviews generic MIBLP methods (Moore-Bard, MibS, Xu-Wang, Xu, Caramia-Mari, parametric IP, Tang et al.) and names own 2016 solver the state of the art (pp. 8-10); credits Balas, Xu, Glover/Glover-Klingman (pp. 7, 12-13, 18-19); distinguishes from Audet et al. (p. 10); contrasts DeNegre (p. 21); leaves out nonlinear bilevel methods as a biased comparison (p. 33).",
+  "writing": "Contribution bullet list (p. 7); superlatives for scope and outcome (pp. 3, 22, 37); implementation section justified by reproducibility (p. 20); each ingredient with a short theorem and proof (pp. 11-16); rare hedges (\"hopefully\" deep ICs, p. 13).",
+  "limits_future": "Continuous leader variables in follower excluded and untested (pp. 8, 22); only hypercube ICs without integer slacks (pp. 16, 34); IC effectiveness decays, round limit (p. 21); CPLEX heuristics off (p. 21); future: interdiction specialization, nonlinear settings (p. 37); 300+ unsolved headline includes never-tested classes, 238 on earlier classes (p. 25).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "bilevel solver on top of a MILP solver handling cuts, heuristics, propagation, numerics, threads; each critical sub-decision is itself a MILP solved with the same solver; CPLEX cuts stay on",
+    "pages": "pp. 6, 11, 15, 17-18, 21, 40"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "no tuning per subclass; nonlinear bilevel methods left out as biased; strongest earlier variant as baseline; profile population disclosed as mostly easy; non-default results marked",
+    "pages": "pp. 29, 33, 38"
+   },
+   {
+    "method": "Method 4",
+    "relation": "contradiction",
+    "note": "(dated lapse) rivals' published times from other machines and CPLEX versions with an unexplained 2-5x hardware factor; text summaries omit losses the tables print",
+    "pages": "pp. 34-38"
+   },
+   {
+    "method": "Method 3",
+    "relation": "contradiction",
+    "note": "(dated lapse) single result per instance and setting in opportunistic 4-thread mode with no seeds, yet small differences between IC settings interpreted",
+    "pages": "pp. 20, 22, 29"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "mainly strengthens the relaxation, but largest gain on general instances from thinning the HPR by fixing forced follower variables; no projection; default keeps both IC families at a named overhead instead of subtracting to the minimum (step 5)",
+    "pages": "pp. 10, 26-29, 31-32"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "numerically safe by construction",
+    "evidence": "IC coefficients from original rows, clipping, dynamism and violation filters; also S011 pp. 11-12, 16",
+    "pages": "pp. 18-21"
+   },
+   {
+    "pattern": "release solver, instances and optimal values",
+    "evidence": "solver, instances and optimal values public through co-author Sinnl's page in 2017; qualifies SKILL.md's Tension 2 and the Honest Boundary note",
+    "pages": "pp. 3, 7, 22, 37, 42"
+   }
+  ],
+  "transferable": [
+   "(D4) For any value-function constraint d^T y <= Φ(x), derive a locally valid cut at each node by restricting the inner problem to its worst case over the node's bounds and solving that MILP once per node (Theorem 1, p. 11; once per node, p. 21).",
+   "(D4) Fix inner variables whose optimal value is forced whatever the outer decision (positive cost and non-negative column: lower bound; the mirror case: upper bound), with strict signs in the optimistic case (Theorem 2, pp. 11-12).",
+   "(D4) Choose the convex set behind an intersection cut by an auxiliary MILP that maximizes the number of removable facets (pp. 17-18).",
+   "(D4) Derive intersection cuts in a numerically safe way: compute coefficients from the original rows rather than tableau entries, so precision errors cost violation only; clip integer-variable coefficients at 1; drop cuts with dynamism above 10^6 or relative violation below 10^-6 (|rhs| + 1) (pp. 19-21).",
+   "(D4) In the lazy-constraint callback, turn every rejected candidate into a repaired solution (solve the inner problem at x*, check the outer constraints) and offer it as an incumbent (p. 21).",
+   "(D4) Branch first on outer variables that link to the inner problem (priorities 2, 1, 0; p. 21).",
+   "(D5) Ablate each new ingredient by toggles on the previous best code (+F, +P, ++), with cumulative speed-up charts using a 1 s shift and final-gap charts for the unsolved instances (pp. 26-28).",
+   "(D5) State which instances a performance profile contains, and that most of them are easy (p. 29).",
+   "(D8) Release the solver, the instances and their optimal values with the paper (pp. 3, 7, 22, 42)."
+  ],
+  "coauthors": "Ivana Ljubić, Michele Monaci, Markus Sinnl",
+  "quotes": [
+   {
+    "text": "the MIBLP solver was built on top of a stable and powerful MILP solver",
+    "page": 6
+   },
+   {
+    "text": "we refrained from tuning our solver for the specific instance subclasses",
+    "page": 33
+   }
+  ]
+ }
+]

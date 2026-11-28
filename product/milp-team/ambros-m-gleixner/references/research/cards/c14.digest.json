@@ -1,0 +1,361 @@
+[
+ {
+  "id": "S015",
+  "year": 2023,
+  "title": "Enabling research through the SCIP optimization suite 8.0",
+  "read_level": "full",
+  "contribution": "Recasts the SCIP 8.0 release as a research-tool paper whose main contribution is a rewritten nonlinear framework that keeps the original model and cuts infeasible final incumbents from 481 to 49 runs, plus new symmetry, decomposition, presolve and extension components (pp. 6-18).",
+  "problem_entry": "Release framed as SCIP's role in supporting research (abstract, p. 1); nonlinear rewrite entered from a counted defect: explicit reformulation gave solutions infeasible for the original problem on 7% of MINLPLib (p. 7).",
+  "key_idea": "Expression framework with basic-operator handlers; cons_nonlinear keeps original constraints and handles reformulations implicitly by annotation, branching avoids auxiliary variables (pp. 6-7); nonlinear handlers and separators (p. 8); SST cuts, linear-time symresack separation (p. 11); PADM/DPS (pp. 12-13); PaPILO dual postsolve in SoPlex 6.0 (p. 13).",
+  "assumptions": "MINLP with g in algebraic form from basic expressions (p. 2); CIPs leave LP/NLP after fixing integers (p. 2); formulation symmetries only (p. 10); bordered block-diagonal decompositions (pp. 11-12); test sets 347 MILP/113 MINLP (p. 4), 1678 MINLPLib (p. 9), 194 MISDP (p. 16), 200 PACE 2018 (p. 17).",
+  "proof_devices": [
+   "no proofs: extended formulation MINLPext with auxiliary variables (pp. 7-8)",
+   "symresack minimal-cover separation in linear time since auxiliary graph components are paths or cycles (p. 11)",
+   "orbisack-to-orbitope upgrade (p. 11)",
+   "DPS partition of linking right-hand sides with penalty weights (pp. 12-13)",
+   "PaPILO validity check before every reduction (p. 13)",
+   "SoPlex extended precision, iterative refinement, exact rational LP by continued fractions or symbolic LU (p. 13)"
+  ],
+  "experiments": "8.0 vs 7.0 untuned, 5 seeds, 7200 s, numerically inconsistent runs excluded uncounted (27 MILP/7 MINLP by Tables 1-2) (pp. 4-5); MILP 1478 vs 1445 solved, ratio 1.17, both-solved 1.12; MINLP 454 vs 435, 1.17 (p. 5); classic vs new nonlinear on dated branch with two permutations: infeasible 481->49, failed 143->70, solved 2929->3131, ~400 gained/~200 lost (p. 9); SCIP-SDP 187 vs 185 with relaxed tolerances (p. 16); SCIP-Jack 17x/96x faster (p. 17); no significance tests.",
+  "positioning": "Design credited to Achterberg (p. 3); replaced approach is Smith-Pantelides and Vigerske-Gleixner 2017 (p. 7); symmetry/decomposition lineage (pp. 10-12); SCIP-Jack vs Polzin-Vahdati and GeoSteiner (pp. 17-18).",
+  "writing": "Frame sentences turn release notes into a research-tool paper (pp. 3, 5); subsets defined before tables (p. 4); 'words of caution' on SDP (p. 16); final remarks give 17% 'all' headline vs 12% both-solved (pp. 4, 18); typos (pp. 2, 5, 9).",
+  "limits_future": "49 runs still infeasible and ~200 instances lost (p. 9); MINLPLib not a benchmark set (p. 9); SDP tolerance-dependent (p. 16); suborbitopes not always beneficial (p. 11); PADM can give arbitrarily bad solutions (p. 12); no future-work section (pp. 18-19).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "classic/new study isolates one change on a dated development branch and names the second difference, extended symmetry detection",
+    "pages": "p. 9"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "release comparison swaps the whole suite and uses only the previous major release as baseline; the major-plus-latest-bugfix practice appears only later [S10]",
+    "pages": "p. 4"
+   },
+   {
+    "method": "Method 2",
+    "relation": "contradiction",
+    "note": "SCIP-SDP 4.0 vs 3.2 compared after relaxing tolerances yet concludes 'significantly improved'; confound printed but neither removed nor sized",
+    "pages": "p. 16"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "reliability claim turned into counts: 7% of MINLPLib affected before; infeasible final incumbents 481->49, failed 143->70 after",
+    "pages": "pp. 7, 9"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "defect of earlier explicit-reformulation design became the 8.0 project; the rewrite's own losses are printed",
+    "pages": "pp. 7, 9"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "failures checked against reference values the solver did not produce, but with tolerances, not exact arithmetic",
+    "pages": "p. 9"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "'MINLPLib is not designed to be a benchmark set' and test-set rule written down; but numerically inconsistent runs excluded without a count (variant)",
+    "pages": "pp. 4, 5, 9"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "weak evidence: SoPlex extended precision and iterative refinement with exact rational LP solutions",
+    "pages": "p. 13"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "original model as the object of record",
+    "evidence": "keep original constraints, encode reformulations as annotations, check and branch on original variables, then count infeasible final incumbents",
+    "pages": "pp. 7, 9"
+   },
+   {
+    "pattern": "neutral presolve for solver comparison",
+    "evidence": "presolve once with a standalone library so different solvers can be benchmarked independently of their own presolvers",
+    "pages": "p. 13"
+   }
+  ],
+  "transferable": [
+   "[D1] Open a redesign with the defect's frequency on a public library (7% of MINLPLib) (p. 7).",
+   "[D4] Prefer annotation to explicit reformulation when auxiliary constraints can make solutions feasible only for the reformulated model; mark auxiliary variables so that branching avoids them (p. 7).",
+   "[D5] Component study: dated branch against the same branch plus one component, two extra row/column permutations per instance, status counts before times, a 'clean' subset for timing (p. 9).",
+   "[D5] Define failure operationally: a bound that conflicts with the best known bounds, a fatal abort, or no stop at the time limit; count infeasible final incumbents separately (p. 9).",
+   "[D5] Version tables with the subsets affected, [t, tilim], both-solved and diff-timeouts and a ratio column; compare 'all' with 'both-solved' to see where the gain comes from (pp. 4–5).",
+   "[D5] Time profile on solved instances, gap-at-termination profile on unsolved, non-failed ones (p. 10).",
+   "[D5] Before an SDP-based table, state the tolerance types (relative in the SDP solver, absolute in the framework) and any tightened subsolver tolerance (p. 16)."
+  ],
+  "coauthors": "K. Bestuzheva, M. Besançon, W.-K. Chen, A. Chmiela, T. Donkiewicz, J. van Doornmalen, L. Eifler, O. Gaul, G. Gamrath, L. Gottwald, C. Graczyk, K. Halbig, A. Hoen, C. Hojny, R. van der Hulst, T. Koch, M. Lübbecke, S. J. Maher, F. Matter, E. Mühmer, B. Müller, M. E. Pfetsch, D. Rehfeldt, S. Schlein, F. Schlösser, F. Serrano, Y. Shinano, B. Sofranac, M. Turner, S. Vigerske, F. Wegscheider, P. Wellner, D. Weninger, J. Witzig",
+  "quotes": [
+   {
+    "text": "Note that MINLPLib is not designed to be a benchmark set, since, for example, some models are overrepresented.",
+    "page": 9
+   },
+   {
+    "text": "Finally, the new version solves about 400 additional instances in comparision to the classic one, but also no longer solves about 200 instances within the time limit.",
+    "page": 9
+   }
+  ]
+ },
+ {
+  "id": "S026",
+  "year": 2023,
+  "title": "PaPILO: A Parallel Presolving Library for Integer and Linear Optimization with Multiprecision Support",
+  "read_level": "full",
+  "contribution": "A solver-independent, parallel, multiprecision presolving library built on a transaction-based design whose output is identical for every thread count, with conflicts shown to be rare (p. 20).",
+  "problem_entry": "Gap in software: no solver-independent, parallel, multiprecision presolve (abstract, p. 1); presolve matters (11x CPLEX, 9x Gurobi) and parallelism reduces overhead of aggressive presolve (pp. 1, 3); priority claim 'first project' (p. 3).",
+  "key_idea": "Read-only presolvers return reductions as transactions with validity conditions; core commits in deterministic order and discards invalid ones (pp. 6-7); same result for every thread count (p. 9); task and data parallelism via TBB (pp. 8-10); template REAL over double, quad, rational with zero tolerances (p. 10).",
+  "assumptions": "MIP with ranged rows, bounds, integrality incl. LPs; no indicators (pp. 2, 10); validity conditions are locks on bounds and rows (p. 7); 1,022 MIPLIB 2017 Collection instances x 2 seeds = 2,044 runs, 240-instance Benchmark Set for logs (pp. 10-11).",
+  "proof_devices": [
+   "no proofs; invariant that no conflicting reductions are applied, checked a posteriori per transaction (pp. 6-7, 20)",
+   "conflict avoidance by commit order and bundling (pp. 7-8)",
+   "duplicate reductions from parallel probing discarded (p. 9, fn. 8)",
+   "substitution cancelled if it increases non-zeros (p. 19)",
+   "optional sequential immediate mode (p. 9)"
+  ],
+  "experiments": "PaPILO 2.0, Xeon E7-8880 v4; 1-32 threads with identical reductions: 'all' 0.74->0.39 s, >=10 s 5.4x, >=100 s 7.0x, ex10 12.4x, Amdahl overlays (pp. 11-14); sequential modes on 990 instances with proteindesign* excluded (pp. 13-15); conflicts 16 of 71 pairings (pp. 15-17); no comparison with another presolver, no significance tests.",
+  "positioning": "Presolve lineage Brearley 1975 to Gemander 2020 (pp. 2-3); presolvers referenced to Achterberg et al. 2019 (pp. 5-6); Achterberg's measurements as motivation (p. 3); users PDLP and SCIP (p. 3); interfaces to Gurobi, HiGHS, SCIP, SoPlex, OR-Tools (p. 19).",
+  "writing": "Two-variable knapsack example first (p. 2); commented transaction log (p. 7); conflict section opens with questions mapped to tables (p. 15); 'Surprisingly' (p. 14); slips in table reference and '(14.72 vs. 4.37)' (pp. 13-14).",
+  "limits_future": "No indicators (p. 10); most instances presolve under 1 s (p. 11); proteindesign* pathology to be fixed (p. 13); some non-redundant conflicts costly to avoid (pp. 18-19); reductions not certified, later VeriPB (pp. 6-7; S007 p. 17).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "with H10: template REAL over double, quad and rational; exact SCIP presolve in rational arithmetic with zero tolerances",
+    "pages": "pp. 3, 10, 20"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "deterministic output makes thread-count arms produce the same presolved problem; non-zeros reported next to time where arms differ; exclusions named with reasons",
+    "pages": "pp. 9-11, 13, 14"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "the tested belief concerns the authors' own design (conflicts eating the gain), answered with counts from full transaction logs",
+    "pages": "pp. 15, 20"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "limits printed with a cause and a promise; certification gap closed later by VeriPB in PaPILO 2.2",
+    "pages": "pp. 10, 13, 18-19; S007 p. 17"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "deterministic parallel commit",
+    "evidence": "workers propose, one core validates and commits in a fixed order, so output does not depend on thread count",
+    "pages": "pp. 6-9, 11"
+   },
+   {
+    "pattern": "pay for exactness with parallelism",
+    "evidence": "slowdown of rational arithmetic said to be partly offset by parallelization",
+    "pages": "p. 10"
+   }
+  ],
+  "transferable": [
+   "[D2] Transaction pattern for parallel presolve: read-only workers; transactions lock the bounds and rows they rely on; deterministic sequential commit; discard when a lock is violated (pp. 6–7).",
+   "[D2] Organize passes by worst-case complexity per round (fast, medium, exhaustive, delayed). Stop by an abort factor on bound changes and deleted columns, side changes and deleted rows, and coefficient changes, each relative to the problem size (p. 4).",
+   "[D4] Reduce conflicts by commit order and by bundling linked reductions into one transaction (pp. 7–8).",
+   "[D4] Template the scalar type from the start, so that an exact (rational) variant is a type argument (p. 10).",
+   "[D5] Same-output thread scaling, Amdahl overlays, and one best-case instance shown next to the subset curves (pp. 11–14).",
+   "[D5] To audit conflicts, log every transaction on a smaller benchmark, then tabulate conflicting/common calls per pairing and conflict rates, with redundant conflicts counted as a lower bound (pp. 15–17).",
+   "[D7] Open with a two-variable example in which the technique turns a 5-node tree into one LP solve (p. 2)."
+  ],
+  "coauthors": "A. Hoen, L. Gottwald",
+  "quotes": [
+   {
+    "text": "Regardless of the number of threads used all runs return the same reductions and hence the same presolved problem.",
+    "page": 11
+   },
+   {
+    "text": "In addition we analyzed empirically that conflicts appear rarely and are not a performance bottleneck when they occur.",
+    "page": 20
+   }
+  ]
+ },
+ {
+  "id": "S060",
+  "year": 2023,
+  "title": "A proof system for certifying symmetry and optimality reasoning in integer programming",
+  "read_level": "full",
+  "contribution": "A sound proof system of eleven rules for MIP that certifies cutting planes, presolve, propagation, reduced cost fixing, dominated columns and four symmetry handling methods (pp. 4-11).",
+  "problem_entry": "Proving solver code correct is prohibitively difficult and wrong results keep being reported (p. 1); MIP has no formal proof system and VIPR covers no solution-removing reasoning (p. 2); generalize [12] to unbounded and continuous variables (abstract; p. 2).",
+  "key_idea": "Valid configurations <C,D,g,z,T,eps> certify optimality or infeasibility (Def. 3, Thms. 1-2, pp. 3-4); a C-consistent branching tree with eps-strict lexicographic order makes the symmetry/dominance preorder concrete (Defs. 1-2, pp. 2-3); tree encoded as graph (pp. 11-12).",
+  "assumptions": "Constraints as subsets of R^n (p. 2); MIP with rational data, linear inequalities, integrality and implications (p. 7); native implications needed over unbounded variables (p. 11); formulation symmetries (p. 9); lexicographic linearization needs bounded integers (p. 10); (T6) needs finite bounds (pp. 3, 12).",
+  "proof_devices": [
+   "each rule proved by checking which of (V1)-(V4) it can change (pp. 5-7; App. A.2, pp. 21-24)",
+   "Thm. 7: alternating (V4) and witness sequence shown finite via smallest deciding index on a finite tree with bounded entries (pp. 5-6)",
+   "Lemmas 1-5: partition, preorder and strict order, mixed transitivity, consistency under added core constraints (pp. 17-19)",
+   "Prop. 1: lexicographic inequality (6) derived inductively by dominance with omega = gamma, machine-verifiable subproofs (pp. 19-21)"
+  ],
+  "experiments": "n/a",
+  "positioning": "Builds on 'seminal' [12] and on the VIPR format [14] (Cheung, Gleixner, Steffy) as encoding blueprint but 'severely limited' (pp. 2, 11); certifying algorithms and SAT proof formats (p. 1); unified symmetry framework [25] (pp. 9-11).",
+  "writing": "Abstract system first then instantiation per technique (p. 2); one purpose sentence per rule (pp. 4-7); intuition before formalism (p. 2); outlook names omissions (p. 12); slips in exponents, indices, zMIP/zLP and duplicate references (pp. 9, 10, 14-15, 19, 21, 25).",
+  "limits_future": "Lifting and infeasibility analysis not covered, tree fixed in advance, omega evaluation may fail on partial solutions, no verifier built (p. 12); future: dimension-reducing maps in sigma_v, other preorders, dynamic tree refinement (p. 12).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "strong: result that 'can be independently and automatically verified' via machine-verifiable rules; verifier tasks spelled out; extends coverage beyond [14]",
+    "pages": "pp. 1, 2, 11-12"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "no checker yet so testing the checker (H1) has no object; an advanced verifier may compute multipliers with a rational LP, trading simple-checker ideal for smaller certificates",
+    "pages": "pp. 8, 12, 24"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "limits of his own earlier format [14] are the entry; outlook prints what remains",
+    "pages": "pp. 2, 12"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "step 4 import: pseudo-Boolean proof system [12] generalized; acknowledgements thank Hoen, Oertel, Nordström",
+    "pages": "p. 12"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "witness-and-order certification",
+    "evidence": "reasoning that discards feasible solutions certified by a witness map plus a solution order fixed by the branching tree",
+    "pages": "pp. 3, 5-6, 9-11"
+   },
+   {
+    "pattern": "abstract rules, techniques as instances",
+    "evidence": "prove a few rules sound once over arbitrary sets, then show each solver technique to be a derivation in them",
+    "pages": "pp. 2, 4-11"
+   }
+  ],
+  "transferable": [
+   "[D4] Witness map plus order for solution-removing reductions; prove repair chains finite by ε-strict increases on bounded coordinates (pp. 5–6).",
+   "[D4] Linearize a lexicographic order on bounded integers with weights (U − L + 1)^(ℓ_v − i), and derive it by induction over prefixes (pp. 10, 19–21).",
+   "[D4] Certify CG, cover and flow-cover cuts as split cuts: aggregation per side, then resolution (pp. 8, 24–25).",
+   "[D4] Certify a dominated-column fixing by the affine witness that moves x_k's value onto x_j (p. 9).",
+   "[D4] For orbitopes, derive the order constraints only for the t − 1 adjacent column swaps (p. 11).",
+   "[D4] Encode witnesses as affine maps with sparse permutation matrices (p. 11).",
+   "[D7] State the abstract system, prove it once, then instantiate it technique by technique (pp. 2, 7–11)."
+  ],
+  "coauthors": "J. van Doornmalen, L. Eifler, C. Hojny",
+  "quotes": [
+   {
+    "text": "Instead of verifying correctness of an implementation, a more viable approach is to supplement the computed result with a proof of correctness [4, 54] that can be independently and automatically verified.",
+    "page": 1
+   },
+   {
+    "text": "For MIP, no formal proof system has been developed to this date, and the solving techniques that are certifiable in [14] are severely limited, not covering any methods that remove parts of the feasible region from the search space, e.g., due to symmetry arguments.",
+    "page": 2
+   }
+  ]
+ },
+ {
+  "id": "S007",
+  "year": 2024,
+  "title": "The SCIP optimization suite 9.0",
+  "read_level": "full",
+  "contribution": "A release report of SCIP Optimization Suite 9.0 that adds generalized symmetry handling, new nonlinear, heuristic, cut, branching, LP and proof-logging components with stated defaults and reasons, and compares 9.0 with 8.0 (pp. 4-26).",
+  "problem_entry": "Release report of what is new and how 9.0 compares with 8.0 (abstract, p. 1; p. 4); each component entered from a concrete defect (pp. 7, 11, 12, 13, 17, 22).",
+  "key_idea": "Callback-based symmetry detection with signed permutations (pp. 6-9); signomial handler and monoidal strengthening (pp. 9-10); indicatordiving, DPS, bandit scheduler (pp. 11-12); Lagromory, ensemble and dynamic cut selection (pp. 12-14); GMI-efficacy branching (pp. 15-16); HiGHS interface and boosting-plus-refinement in SoPlex (p. 16); VeriPB presolve proofs in PaPILO 2.2 (p. 17).",
+  "assumptions": "MILP and MINLP with algebraic g_k (p. 2); formulation symmetries and signed permutations (pp. 6, 8); semi-continuous via indicators (p. 11); signomials over bounded boxes (pp. 9-10); MISDP (p. 23); proof logging only for binary problems (p. 17); test sets 158 MIPLIB/179 MINLPLib (p. 4), 152 (p. 10), MIPLIB 0-1 and PB16 (p. 17), 184 MISDP (p. 24).",
+  "proof_devices": [],
+  "experiments": "9.0.0 vs 8.0.0 untuned, 5 seeds, 7200 s, numerically inconsistent runs excluded (p. 4); MILP 637 vs 618 solved, ratio 1.01, nodes on both-solved only (p. 5); MINLP 815 vs 810, 1.04 time, run count 810/839/895 does not reconcile (pp. 4-6); symmetry +5.90%, signomial 0.92, proof logging 27-54% overhead, SCIP-SDP symmetry ~4% (pp. 6-7, 10, 17, 23-25); no counts of wrong/failed runs, no significance tests.",
+  "positioning": "Design credited to Achterberg (p. 3); components credited to their papers; exact LP lineage Espinoza, Gleixner-Steffy-Wolter, Gleixner-Steffy (p. 16); proof logging in SAT tradition with VeriPB (p. 17); UG history (p. 21).",
+  "writing": "Each component gets motivation, mechanism, parameter, default and reason (pp. 5-17); code examples (pp. 19-20); new contributions list (pp. 27-28); UG validation story (p. 21); slips 'GCG 10.2.1', SoPlex 6.0, gmiavgeffweight, 13% node gain misattributed, spurious decimals (pp. 4, 6-7, 16, 23, 26).",
+  "limits_future": "Bugfixes slowed SCIP (p. 5); basic signed-permutation handling (p. 8); signomial lacks bound tightening (p. 10); Lagromory/ensemble/dynamic no general gain (pp. 13-14); HiGHS basic (p. 16); proof logging binary-only, ExactSCIP certifies presolved problem only (p. 17); russcip early (p. 19); UG/GCG limits (p. 22); ExactSCIP not in release (p. 4); 'faster and more reliable' not measured (p. 26).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "strong (group): release prints component by component what is off by default and why; certificate gap named and first step taken with VeriPB for binary programs",
+    "pages": "pp. 4, 8, 10, 12-14, 16-17, 22"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "step 4 import: VeriPB from pseudo-Boolean solving with an objective update rule contributed; precision boosting after Espinoza",
+    "pages": "pp. 16, 17"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "coverage and cost printed: VIPR covers only presolved problem; proof logging 27% to 54% with per-transaction tail",
+    "pages": "p. 17"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "SoPlex exact LP combines precision boosting and iterative refinement by default",
+    "pages": "p. 16"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "boosting is the outer loop and refinement the inner one, against SKILL.md 'boosting inside refinement'",
+    "pages": "p. 16"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "only baseline is 8.0.0 and slowdown attributed to bugfixes; a latest-8.x arm would separate bugfix cost (inference)",
+    "pages": "pp. 4-5"
+   },
+   {
+    "method": "Method 1",
+    "relation": "contradiction",
+    "note": "'faster and more reliable' and bugfixes contributing to reliability come without any count of wrong or failed runs",
+    "pages": "pp. 5, 26"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "selection rule written and inconsistent runs excluded but not counted; MINLP run count does not reconcile (810, 839, 895)",
+    "pages": "pp. 4, 6"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "single-machine twin for debugging distributed search",
+    "evidence": "FiberSCIP runs ParaSCIP's parallelization on one PC; debugging through it brought thread safety and results not proven wrong so far",
+    "pages": "p. 21"
+   },
+   {
+    "pattern": "contribution map in group software papers",
+    "evidence": "one line per section naming who implemented it and who is the contact",
+    "pages": "pp. 27-28"
+   }
+  ],
+  "transferable": [
+   "[D4] Make a detection mechanism extensible by a callback per constraint type, and switch detection off when any constraint lacks the callback rather than guess (p. 7).",
+   "[D4] Detect signed permutation symmetries with nodes for x and −x joined by an edge and colors from centered domains (p. 8).",
+   "[D4] Introduce a new branching signal as a tie-breaker with a tiny weight (10^−5) in the existing score before giving it real weight (p. 16).",
+   "[D4] Debug a distributed solver through a shared-memory twin that uses the same parallelization layer (p. 21).",
+   "[D5] State each new component's default and the reason, e.g. a speed-up only on hard instances and a slowdown on easy ones means off (p. 13).",
+   "[D5] Price certification with its aggregate overhead per test set (split into opt and dec) and a per-transaction tail statistic (p. 17).",
+   "[D5] Restrict node comparisons to both-solved instances (p. 5).",
+   "[D7] Add a per-section contributions list to multi-author software papers (pp. 27–28)."
+  ],
+  "coauthors": "S. Bolusani, M. Besançon, K. Bestuzheva, A. Chmiela, J. Dionísio, T. Donkiewicz, J. van Doornmalen, L. Eifler, M. Ghannam, C. Graczyk, K. Halbig, I. Hedtke, A. Hoen, C. Hojny, R. van der Hulst, D. Kamp, T. Koch, K. Kofler, J. Lentz, J. Manns, G. Mexi, E. Mühmer, M. E. Pfetsch, F. Schlösser, F. Serrano, Y. Shinano, M. Turner, S. Vigerske, D. Weninger, L. Xu",
+  "quotes": [
+   {
+    "text": "The Lagromory separator is OFF by default due to this reason.",
+    "page": 13
+   },
+   {
+    "text": "but since Vipr currently does not provide the necessary functionality to verify presolving reductions, ExactSCIP only prints the certificate for the presolved problem.",
+    "page": 17
+   }
+  ]
+ }
+]

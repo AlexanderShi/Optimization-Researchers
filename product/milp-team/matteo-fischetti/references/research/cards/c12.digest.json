@@ -1,0 +1,386 @@
+[
+ {
+  "id": "S150",
+  "year": 2026,
+  "title": "GPU-accelerated wind farm layout search with a distilled endogenous wake model (EndoWake)",
+  "read_level": "full",
+  "contribution": "Distills the EndoWake MILP field model into a GPU batch evaluator and uses it as a screen in front of a trusted wake model (screen-and-confirm), showing that fidelity is not decision quality and that throughput pays only when the search is built for it (pp. 1, 3-4).",
+  "problem_entry": "Wind farm layout under award conditions; wake computation is the bottleneck (RANS 405 s per direction); entry via the authors' own EndoWake MILP, framed by the optimizer's curse (pp. 1-3).",
+  "key_idea": "Distillation of four EndoWake parameters (closed-form amplitude, eq. (7), p. 10), GPU batch evaluation at 1,093,103 layouts/s (pp. 8, 12), and screen-and-confirm with list length L = ceil(q rP/rE) from measured rates (pp. 20-21).",
+  "assumptions": "Binary site-selection MILP with propagation inequalities, big-M wake source, SOS2 power curve (B = 8), clique separation (pp. 7-8); finite-support kernel, no blockage/shear/veer, kernel tied to cell size and turbulence (pp. 10, 12); Lillgrund and Horns Rev 1 data (pp. 9, 16, 26).",
+  "proof_devices": [
+   "convolution-power closed form (7) (p. 10)",
+   "concave-envelope dual bound, proved in technical note (p. 13)",
+   "maximal-field property inherited from [24] (p. 8)"
+  ],
+  "experiments": "Side-constraint and industrial-size runs (pp. 14-15); RANS-judged Lillgrund bench with phase test (pp. 15-19); 5 development + 20 unseen frozen seeds: +4.28% in 38 s vs +4.33% in 294 s, 7.9x (certified 3.0x), AEP 14.9x; Horns Rev 1 0.29 points below; speed-up decomposed (pp. 20-27, 33-34).",
+  "positioning": "Table 1 places it among approximate/accelerated evaluation methods; precedents of multi-fidelity preselection credited, claim limited to their combination; spatially localized surrogate bias claimed as new (pp. 3, 5-6).",
+  "writing": "Roles defined before experiments (p. 9); 'RANS reference' not 'CFD' (p. 10); inherited-vs-new paragraph (p. 3); hedges at the claim (pp. 14, 17, 19); dropped colourful name (p. 15); original draft by Martina Fischetti, weak evidence of his voice (p. 28).",
+  "limits_future": "One site, one RANS inflow and speed, farm power not AEP (p. 27); not faster than PyWake at equal hardware (pp. 12-13); Horns Rev 1 shortfall (p. 27); corrected earlier implementation error (pp. 10, 30); future: speed-dependent reduction factor, judge outside RANS, lidar transects (pp. 27-28).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "arms share start, budget, power curve, calibration data and judge; judge called by no search; development and unseen seeds separated; list length from measured rates; adverse equal-hardware comparison printed",
+    "pages": "pp. 9, 12-13, 15-16, 20-21"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "seeds in every table, paired t-intervals, spreads instead of best-of, reserve-seed rule fixed in writing, five paired starts resolve nothing",
+    "pages": "pp. 14, 19, 33"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "content-free perturbation applied to the judge (15-degree shift; rose rotated half a degree, quadrature step halved)",
+    "pages": "pp. 16, 26"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "outside cut loops: trusted oracle stays, loop changes which moves it evaluates; speed-up from the query policy",
+    "pages": "pp. 12-13, 20-21, 24"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "stock MILP solver on the model as written first, then a relaxation for certificates; beyond 20x20 heuristic checked by a second heuristic",
+    "pages": "pp. 13-14"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "own earlier implementation error found, corrected and dependent numbers recomputed",
+    "pages": "pp. 10, 30"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "weak, inherited from [24]: slim formulation, O(|S||C|) continuous variables vs Theta(|A|^2) interaction terms",
+    "pages": "p. 8"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "screen-and-confirm with a rate-balanced list",
+    "evidence": "list length from measured rates; trusted model confirms the head of the ranking",
+    "pages": "pp. 20-21, 23"
+   },
+   {
+    "pattern": "fidelity is not decision quality, so judge with a model no search calls",
+    "evidence": "RANS judge called by no search, independent directions",
+    "pages": "pp. 1-3, 15-16"
+   },
+   {
+    "pattern": "phase sensitivity of a discretized objective",
+    "evidence": "+4.06% at sector centers vs -1.48% 15 degrees away",
+    "pages": "p. 16"
+   },
+   {
+    "pattern": "charge the certificate to the clock and report both speed-ups",
+    "evidence": "every speed-up given with and without certificate",
+    "pages": "pp. 1, 21-22"
+   }
+  ],
+  "transferable": [
+   "Name the roles before the experiments (evaluator, guide, judge, arm) and state that an arm comparison measures a whole pipeline (p. 9).",
+   "Judge final solutions with a reference model that no search calls, at sample points drawn independently of every search (pp. 15–16, 31).",
+   "Phase test for any objective discretized on a grid of directions (or scenarios): re-judge at shifted sample points and report half the difference as the method's phase sensitivity (p. 16).",
+   "Size a screening list from rates measured inside the clock, L = ⌈q rP/rE⌉, so confirmation and screening take similar time; nothing tuned on results (p. 21).",
+   "Key every rejected move to the incumbent at which it was rejected and re-evaluate it at later incumbents (p. 23).",
+   "Report each speed-up twice: with and without the proof of local optimality charged to the timed search (Table 6, p. 22).",
+   "Design on development seeds, freeze, then run the unseen seeds; fix in writing a reserve-seed rule tied to the interval half-width (pp. 20, 33).",
+   "Print the equal-hardware comparison that goes against your method (p. 12).",
+   "Decompose a speed-up into its sources on the development seeds (p. 24).",
+   "When a big-M implication chains slacks downstream, raise the solver's numerical emphasis and report its time cost (pp. 31–32)."
+  ],
+  "coauthors": "Martina Fischetti",
+  "quotes": [
+   {
+    "text": "the fidelity of a wake model is not the quality of the layouts optimized under it",
+    "page": 1
+   },
+   {
+    "text": "The MILP fails for lack of time and says so (largest declared gap 59.4%), whereas the local search fails silently, at a local optimum indistinguishable from success.",
+    "page": 14
+   }
+  ]
+ },
+ {
+  "id": "S161",
+  "year": 2026,
+  "title": "Just sort it! A note on the LP behind rank-one anti-loop edits",
+  "read_level": "full",
+  "contribution": "Shows that on this model the sparse LP inside the AHA rank-one anti-loop edit can be replaced by a sort of neurons by coefficient of variation within a pre-declared non-inferiority margin, with the dose even taken from AHA's delta without any LP (p. 3).",
+  "problem_entry": "Is the LP of the AHA weight edit needed? Entry by measuring the LP (12,000 rows, ~43M nonzeros, ~2.2 min, very sparse optima) and reading its solution as a bias along u rather than a separation (pp. 1-2, 4).",
+  "key_idea": "Replace the solve by a sort: k = 8 neurons with smallest sigma_j/|m_j|, v_j = c/(k m_j) with the dose borrowed from the LP (sort_k8); controls knap_k8 and sortd_k8 with AHA's delta (pp. 2-3).",
+  "assumptions": "MILP forms n/a; LP with L1 objective and slacks, then restriction to 8 neurons and re-solve (p. 1); exploits near-constant always-active neurons (p. 2); Qwen3.5-0.8B, MATH-500 and 500 GSM8K, one sample per problem (p. 2); no correctness argument (p. 2).",
+  "proof_devices": [],
+  "experiments": "Unmodified AHA at commit e6e94ff5, protocol and 5-point margin declared before runs; seed 0: LP 67.4% vs sort_k8 67.0% (-0.4 [-2.9, +2.1]); second protocol on three new seeds: sort_k8 -0.6 [-2.0, +0.8], sortd_k8 -0.8, knap_k8 -0.9; steering control not run (pp. 2-3).",
+  "positioning": "Only AHA [1] and Barry's LP [2] discussed; no literature on activation steering or sparse LP (pp. 1-4).",
+  "writing": "Imperative title, numbers in abstract; falsified first reading as the turn (pp. 1-2); wording calibrated to the missing control (p. 3); prose written by the AI assistant, no evidence of his voice (p. 4).",
+  "limits_future": "One model, one run of the pipeline producing u, seeds measure sampling only, steering control missing and named next (pp. 2-3); artifacts on Zenodo (p. 4).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "subtraction applied to someone else's pipeline: LP solve removed, edit kept, tested against a non-inferiority margin",
+    "pages": "abstract; pp. 1-3"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "with a caveat: dose matched, pinned commit, protocol before numbers, knapsack control; design choices made by the AI assistant and accepted by the author",
+    "pages": "pp. 2-4"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "seeds as a second declared protocol measure sampling noise only; content-free steering control named as missing",
+    "pages": "pp. 2-3"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "reverse question: is the solver needed at all; optimal solutions read and the solve replaced by that rule",
+    "pages": "pp. 1-2, 4"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "re-test apparatus aimed at another author's fresh claim, not his own",
+    "pages": "pp. 2, 4"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "read the optimum, then replace the solve by the rule it implements",
+    "evidence": "LP optima read as a bias along u and replaced by a sort",
+    "pages": "pp. 1-2"
+   },
+   {
+    "pattern": "non-inferiority margin declared before the runs for a simpler replacement",
+    "evidence": "5-point margin declared before the runs",
+    "pages": "abstract; p. 2"
+   }
+  ],
+  "transferable": [
+   "Before keeping an optimization step inside a pipeline, look at what its optimal solutions do (here near-equal pushes on both classes) and test the simplest rule that does the same thing (pp. 1–2).",
+   "Match the dose: give the simple rule the scalar the old method realizes, so the two arms differ in one component only (p. 2).",
+   "When the claim is that a simpler component is as good, declare a non-inferiority margin before the runs and report paired differences with intervals from the discordant pairs (abstract; Table 1, p. 2).",
+   "Add a second cheap rule as a control (mean only, variance ignored) to learn which feature of the simple rule matters (pp. 2–3).",
+   "Report structural measures of the solutions (hinge, hit rate, the share of the effect carried by the common support) next to the task metric (Table 2, p. 3).",
+   "Label every comparison that was not in the declared protocol (p. 3)."
+  ],
+  "coauthors": "none (sole author; AI assistant Claude did most of the work per p. 4)",
+  "quotes": [
+   {
+    "text": "The idea is the author’s: the LP of [2] looked like a knapsack in disguise, hence its solution might be replaced by a sort.",
+    "page": 4
+   },
+   {
+    "text": "Note that the dose is borrowed from the LP on purpose, so that the two edits differ in the neurons and not in the dose",
+    "page": 2
+   }
+  ]
+ },
+ {
+  "id": "S162",
+  "year": 2026,
+  "title": "A Dantzig-Wolfe reformulation of the EndoWake model for optimal wind farm layouts",
+  "read_level": "full",
+  "contribution": "A Dantzig-Wolfe reformulation on enumerated tiles, a cube-of-speed coordinate that makes the second stage concave, and master shrinking certify every EndoWake ladder grid up to 16x16 and a pre-specified unseen test set where the earlier branch-and-check fails (pp. 4, 20).",
+  "problem_entry": "Certification is hard: weak LP relaxation, published branch-and-check leaves 12x12-16x16 at 7.98-9.74% gaps and its bound stays 7.3% above optimum even with optimal cutoff; question is how far a certificate can be pushed by tile convexification (p. 2).",
+  "key_idea": "Tiles of b = 4 at stride 2 enumerated as DW columns with linking x (eq. (9), Prop. 3, pp. 8-10); cube coordinate q = (w/V)^3 linearizes power and makes the field concave, enabling generalized Benders cuts (pp. 6-7); reduced-cost fixing, pairwise consistency propagation, refixing (pp. 11-12).",
+  "assumptions": "n x n grid, 3D separation, at most n+2 turbines, four axial directions at 10 m/s, cubic power curve, calibrated kernel (pp. 4-5); Proposition 1 restated (p. 5); cut-in transfer checked on 153 layouts as evidence not proof; epsilon = 1e-6 shift is a relaxation (pp. 6-7); valid for antitone fields (p. 18).",
+  "proof_devices": [
+   "induction along propagation planes (Proposition 1, p. 5; Proposition 2, p. 7)",
+   "quasi-concavity plus positive homogeneity for concavity of the power mean (Lemma 1, p. 6)",
+   "concavity-against-antitonicity sandwich for the exact upwind cut (Lemma 2, p. 8)",
+   "LP duality for column fixing with a moving incumbent, plus propagation validity (Proposition 4, Appendix A, p. 21)",
+   "antitonicity validity of the tile block (Proposition 3, pp. 9-10)"
+  ],
+  "experiments": "Frozen 2026a branch-and-check baseline on same hardware and gurobipy 13.0.3 (pp. 13-14); 5 seeds, medians, censored runs excluded (pp. 14-15); ladder all certified vs 0/5 above 10x10 (p. 15); 78/78 roses (p. 16); 16x16 5/5 (p. 16); attribution (p. 17); 36-instance unseen test set 106/108 vs 38/108 (pp. 17-18); failures at twelve directions and 17x17 (pp. 19-20).",
+  "positioning": "Each ingredient's precedent credited (Gilmore-Gomory, DW, arrowhead, local cuts, route enumeration, reduced-cost filtering, consistency cuts, generalized/logic Benders); novelty in their combination, cube coordinate claimed as new (pp. 3-4).",
+  "writing": "Abstract defines 'certified' and medians (p. 1); plain admissions (pp. 2, 20); Benders cut as cleaner equivalent not speed-up (p. 8); hypothesis labelled (p. 19); floating-point certificates (p. 14); AI-assisted drafting, original draft by Martina Fischetti (pp. 22-23).",
+  "limits_future": "Tight only on axial wakes (pp. 19-20); 17x17 open, memory limits (p. 19); no safe bound (p. 14); one instance family (p. 3); future: column-generated root, stronger direction coupling, pricing in the tree (pp. 19-20).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "own branch-and-check of weeks earlier as frozen baseline run as published, plus a cutoff run isolating proof effort; failure diagnosed as a bound effect",
+    "pages": "pp. 2, 13-16"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "same CPUs, threads, solver version and seeds; one design for all instances; parameters fixed before first run; same incumbent and work units; censored runs out of ratios; held-out test set fixed before any run",
+    "pages": "pp. 10-11, 13-15, 17-18"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "on the test set the codes ran on two partitions of similar clock, disclosed rather than equalized",
+    "pages": "p. 17"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "cube coordinate removes the SOS2 curve; fixing and propagation reduce 18.8 million columns to 290,489; levers added one at a time",
+    "pages": "pp. 2-3, 7, 12, 17"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "stall located in the relaxation, not the optimality cut, which is kept at parity",
+    "pages": "pp. 8, 15, 17"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "stock MIP solver closes the reduced master; tile sub-decision solved by exhaustive GPU enumeration rather than an auxiliary MIP",
+    "pages": "pp. 12-13"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "convexification computed rather than derived",
+    "evidence": "tile patterns enumerated and tabulated as DW columns",
+    "pages": "pp. 1-3, 8-10"
+   },
+   {
+    "pattern": "change the coordinate until the second stage is concave",
+    "evidence": "cube of the speed gives concave field and linear power",
+    "pages": "pp. 2-3, 6-7"
+   },
+   {
+    "pattern": "certificate-width accounting",
+    "evidence": "width as solver gap plus residual, measured over 221 runs, rerun at gap zero",
+    "pages": "pp. 14, 16"
+   },
+   {
+    "pattern": "consistency propagation between overlapping blocks after reduced-cost fixing",
+    "evidence": "pairwise-consistency propagation to a fixed point",
+    "pages": "p. 12"
+   }
+  ],
+  "transferable": [
+   "When the relaxation is weak, enumerate the patterns of small overlapping substructures and add them as Dantzig–Wolfe columns; validity needs only a monotonicity (antitone) property, exactness a cut at integer points (pp. 8–10).",
+   "Look for the coordinate in which the value function becomes concave (here the cube of the speed), so a generalized Benders cut with a supergradient from one reverse sweep becomes available (pp. 6–7).",
+   "With an incumbent at or near the optimum, fix columns by root reduced costs (v + c̄ < L), propagate pairwise consistency between overlapping blocks, and refix at every improving incumbent with lazy λ ≤ 0 where bounds cannot change in a callback (pp. 11–12, 21).",
+   "Pass the incumbent as a complete MIP start, continuous variables included at their exact values, or lazy cuts reject it (p. 11).",
+   "Compare design variants with the same incumbent and on deterministic work units when machines differ (pp. 10, 14).",
+   "Report a certificate's width as solver gap plus modelling residual, and rerun at gap zero to separate them (pp. 14, 16).",
+   "Run the published baseline frozen and as published, then once more with the optimum as cutoff to measure the proof effort alone (pp. 14–16).",
+   "Generate a held-out test set from a seed fixed before any run, varying what the development ladder kept fixed (masks, budgets, roses), and run each code once (p. 17).",
+   "Score candidates in low precision on a GPU but accept only after an exact double-precision re-evaluation of the top few (p. 13)."
+  ],
+  "coauthors": "Martina Fischetti",
+  "quotes": [
+   {
+    "text": "These are the certificates of a floating-point solver: we compute no safe bound in the sense of Neumaier and Shcherbina (2004), and the width is the margin we report.",
+    "page": 14
+   },
+   {
+    "text": "The instances of the ladder are those on which the pipeline was developed. To measure what it does on instances it has not seen, we generated a test set of 36 instances from a seed fixed before any run, and ran both codes on it once.",
+    "page": 17
+   }
+  ]
+ },
+ {
+  "id": "S163",
+  "year": 2026,
+  "title": "Minibatch persistency, eight years later: what batch reuse costs in steps and joules, and what it saves in data",
+  "read_level": "full",
+  "contribution": "A pre-registered, tuned re-test of his own 2018 minibatch-persistency claim, measuring cost on steps, fresh tokens and joules against an A/A null, which finds that reuse buys data, not speed or energy, and only at large batch (pp. 1-2).",
+  "problem_entry": "Entry from the standing objection of Choi et al. (2019) that the 2018 study tuned nothing; conceded and sharpened (K steps at eta resemble one at K*eta); plus no joule measurements existed (pp. 1-2).",
+  "key_idea": "Knobs K and M; arms baseline, persistency (K=4, M=1) and A/A null (K=4, M=4 resample) (pp. 4-5); paired step-cost ratio R(B,s), H1 g(512) < g(32) with a registered three-outcome rule (p. 6); rho(B) diagnostic (pp. 2, 8).",
+  "assumptions": "MILP items n/a; 49M-parameter Transformer, AdamW, cosine schedule, only peak rate tuned (pp. 5, 7); FineWeb-Edu pre-tokenized, fixed evaluation set, 100 Mtok per run (p. 7); exchangeability not verified (p. 5); arms read at different schedule points (pp. 5, 7); model cut by Amendment 1 (p. 7).",
+  "proof_devices": [
+   "identity fresh-token ratio = R/K at M = 1 (p. 6)",
+   "evaluation-grid offset (K-1)/t verified seed by seed (pp. 23-24)",
+   "bound placing host-inclusive energy ratio between device-joule and seconds ratios (p. 12)"
+  ],
+  "experiments": "OSF pre-registration with signed tags and amendments, interim looks disclosed (pp. 8-9, 16, 29); 144 primary runs: g(32) = 2.886 vs g(512) = 0.4190, p = 9.8e-10, supported (pp. 14-16); A/A ratios contain one (p. 16); replication on seeds 8-15 (pp. 18-20); schedule-matched control E3 not separable (pp. 21-22); epoch contrast (p. 27); 477 runs on free-tier GPUs (pp. 7, 10).",
+  "positioning": "Tuned-baseline (Shallue et al.; Kaddour et al.; AlgoPerf) and device-energy traditions (p. 4); Choi et al.'s equal tuning adopted at smaller budget, noted as unrefereed (p. 3); no mechanism novelty claimed (p. 3); theory line not citing 2018/2019 work (pp. 3-4); EU AI Act Annex XI (p. 4).",
+  "writing": "Abstract leads with the outcome (p. 1); inconvenient facts announced in place (pp. 9, 15, 21, 22, 24); halves read together (p. 27); lesson learned at the end (p. 28); figure kept to forestall the 2018 criticism (p. 23).",
+  "limits_future": "Budget-limited small model, one dataset (pp. 7-8); K = 4 only, strict reuse only, no locality claim (pp. 4-5, 29); rho indeterminate at B = 512 (p. 14); host energy excluded (p. 12); archive on acceptance, OSF embargoed to 2027-08-10 (p. 29); future: locality, vision arm, decorated reuse, scale, second K, theory bridge (p. 29).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "strongest case: own 2018 claim re-tested against the 2019 untuned-baseline objection, conceded, with rates tuned per cell, rho(B), and equal prominence for inconclusive or refuting outcomes",
+    "pages": "pp. 1-2, 6, 8, 27-28"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "step 6: Amendment 1 fixes that an underpowered study is reported inconclusive, not negative; E3's outcome written into abstract and conclusions",
+    "pages": "pp. 1, 8, 21-22, 28"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "A/A null as placebo arm, every ratio read against its dispersion; 8 seeds per cell and replication on 8 new seeds",
+    "pages": "pp. 2, 5, 16-19"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "same number of rates per arm; exogenous targets; both legs on one chip; evaluation excluded from cost; crossing rule fixed in advance; favourable adjustments flagged",
+    "pages": "pp. 6, 8-10, 24"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "pre-registered design with dated amendments and disclosed interim looks",
+    "evidence": "OSF registration, signed tags prereg-v1 to v6, two interim looks disclosed",
+    "pages": "pp. 8-9, 16, 29"
+   },
+   {
+    "pattern": "cost-to-target on several axes with a crossing rule fixed in advance",
+    "evidence": "steps, fresh tokens, joules, crossing rule",
+    "pages": "pp. 5-6"
+   },
+   {
+    "pattern": "measurement provenance: no number without its instrument",
+    "evidence": "energy provenance rule and regression test against zeroed counter",
+    "pages": "pp. 12, 28"
+   },
+   {
+    "pattern": "bound what the instrument cannot see instead of modelling it",
+    "evidence": "host-inclusive energy ratio bounded between device and seconds ratios",
+    "pages": "p. 12"
+   },
+   {
+    "pattern": "cross-hardware bridge with an equivalence margin",
+    "evidence": "bridge across cards with a pre-fixed equivalence margin",
+    "pages": "p. 17"
+   }
+  ],
+  "transferable": [
+   "Answer a tuned-baseline objection by tuning inside every (setting, arm) cell with the same number of candidates, and report the ratio of the tuned optima as a diagnostic with thresholds fixed before the data (pp. 2, 8, 14).",
+   "Add an A/A arm that is identical to the baseline in distribution and read every ratio against its dispersion (pp. 2, 5, 16).",
+   "Fix the crossing rule of a cost-to-target metric in advance (two consecutive evaluations below target) (p. 6).",
+   "Set targets from baseline runs only, so that they are exogenous to the treatment; print any re-adjusted target beside the frozen one, never in its place (pp. 8–9).",
+   "Register a three-outcome decision rule, and an inconclusive-not-negative clause for an underpowered study (pp. 6, 8).",
+   "Keep both legs of every paired ratio on the same hardware; never pool absolute times across machines; bridge two machines with a pre-fixed equivalence test on the baseline (pp. 10, 17).",
+   "Count consumed data at the moment it is fetched, and cover the accounting with regression tests (p. 6).",
+   "Disclose every interim look and say which later designs it motivated (pp. 9, 16).",
+   "Check an identity claimed by construction (two arms draw the same examples) by digest, seed by seed (p. 33).",
+   "When two arms are read at different points of a schedule, run a schedule-matched control with a reading rule fixed before the runs (pp. 20–22)."
+  ],
+  "coauthors": "none (sole author; the re-tested 2018 paper is with Mandatelli and Salvagnin)",
+  "quotes": [
+   {
+    "text": "Its measured ratio to the baseline has true value one, so its dispersion across seeds tells the reader—and told us—how small a ratio this apparatus can honestly resolve.",
+    "page": 2
+   },
+   {
+    "text": "An inconclusive or refuting outcome is published with the same prominence as a supporting one.",
+    "page": 6
+   }
+  ]
+ }
+]

@@ -143,7 +143,9 @@ Rules:
   it (standard), and never present it as the researcher's own position.
 - Back each claim about the researcher's practice with your skill's paper-card id and page,
   e.g. [S012 pp. 3–4] (index: references/research/07-paper-cards.md). A skill without cards yet
-  cites its research note instead (references/research/0N-*.md); no evidence → say so.
+  cites its research note instead (references/research/0N-*.md); no evidence → say so. Where your
+  SKILL.md says a file holds material sealed for a later validation, do not open that file: cite
+  the card ids and pages that SKILL.md and the files it links give.
 - Ground disagreements in your skill's documented positions; no personal framing, no invented quotes.
 - Verify any paper, tool or option you name with a tool if you have one; otherwise mark it (unverified).
 - Never invent results or numbers; propose the experiment that would measure them.
@@ -203,7 +205,7 @@ Launch every seated member with task "Opening statement". Present the replies in
 
 For the chosen disagreement, launch the members on each side in parallel, each with the other side's position quoted and the user's latest input. Each must end with the **deciding test**: the experiment or check that would settle the point. Members not involved sit out unless the user adds them.
 
-Documented fault lines (use before inventing new ones). Each is checked against the members' paper cards: `[<member-slug> card S012 pp. 3–4]` is card S012 in `../<member-slug>/references/research/cards/*.md` (index: that member's `references/research/07-paper-cards.md`); card ids are per member.{{GUEST_CARDS}}
+Documented fault lines (use before inventing new ones). Each is checked against the members' paper cards: `[<member-slug> card S012 pp. 3–4]` is card S012 in `../<member-slug>/references/research/cards/*.md` (index: that member's `references/research/07-paper-cards.md`; where that member's SKILL.md says 07 and the card files hold material sealed for a later validation, use its card key, `references/research/09-evidence-ledger.md#card-key`, and leave 07 and the card files closed in roundtable turns); card ids are per member.{{GUEST_CARDS}}
 
 1. **[TODO: fault line title]** ([TODO: Surname A] ↔ [TODO: Surname B]) — [TODO: 3–6 documented fault lines in all. Each gives both positions in one or two sentences, with card evidence from both sides ([<member-slug> card <id> p. N]); says whether it is an exchange in print between members or a contrast of published methods; names what is still contested; and names the measurement that would settle it. First draft from the members' Roundtable Cards ("Likely disagreements") by team-layer.js (T2), each marked "(card evidence pending)"; rewritten with card evidence from both sides by team-integrate.js (T3.8). Drop any fault line the cards do not support.]
 
@@ -265,7 +267,7 @@ This team represents [TODO: the tradition(s) of {{FIELD}} that the members cover
 
 ### Papers behind the documented disagreements
 
-Fault line (FL) and the member cards that read each paper; other papers cited above by card id are in that member's `references/research/07-paper-cards.md`.
+Fault line (FL) and the member cards that read each paper; other papers cited above by card id are in that member's `references/research/07-paper-cards.md` (or in its card key, `references/research/09-evidence-ledger.md#card-key`, where its SKILL.md marks 07 closed).
 
 - [TODO: one bullet per paper cited in a fault line: full reference, DOI or arXiv link, the FL numbers, and the member cards that read it ([<member-slug> card <id>]); a paper that is no member's own is marked "not a member paper, known through [cards]"; team-integrate.js (T3.8) from the cards. Before T3, team-layer.js (T2) writes "Pending the deep reading (T3)."; at the base tier (no deep reading planned) it writes "No deep reading was done (base tier); the fault lines rest on the members' research notes."]
 

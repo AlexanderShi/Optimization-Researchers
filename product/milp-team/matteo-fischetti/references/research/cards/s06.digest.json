@@ -1,0 +1,301 @@
+[
+ {
+  "id": "S096",
+  "year": "2009",
+  "title": "Just MIP it!",
+  "read_level": "full",
+  "contribution": "A survey of MIPping, solving auxiliary MIPs heuristically inside a MIP algorithm, through three applications with computational results: MIP separation of rank-1 closure cuts, local branching started from infeasible feasibility-pump points, and the Fischetti-Toth local dominance test with a nogood pool.",
+  "problem_entry": "Solvers already spend auxiliary LPs on strong branching and lift-and-project, and good heuristic MIP solutions cost about as much as the LP relaxation, so the crucial decisions inside a MIP algorithm (how to cut, how to improve the incumbent, whether a node is dominated) can be modelled as MIPs and solved heuristically on the fly (abstract, p. 1).",
+  "key_idea": "(i) Rank-1 closure separation as a MIP: CG cuts with integer coefficient variables, projected CG, split/MIR via a parametric MIP or a linearised MINLP (pp. 4-7); (ii) local branching from an infeasible FP point, each violated row relaxed by a slack bounded by a binary indicator and the indicators counted in a phase-1 objective, original objective restored once feasible (pp. 10, 13-14); (iii) the Fischetti-Toth local dominance test as an auxiliary MIP over the fixed variables, with a CP-style nogood pool and local-branching restrictions (pp. 19-22).",
+  "assumptions": "Pure ILPs and general MIPs with rational data for cuts (pp. 2-3); 0-1 MIPs with at least one binary for the heuristic (p. 10); branching that fixes integer variables for dominance (p. 19); test sets MIPLIB 3.0 (25 pure, 33 mixed), 33 of 45 0-1 MIPLIB 2003 instances plus 39 hard 0-1 MIPs, generated single and multiple knapsacks (pp. 9, 14-15, 23).",
+  "proof_devices": [
+   "CG separation MIP: integer cut coefficients bounded by u^T A_j, an epsilon guard on the right-hand side, validity via Farkas, p. 4",
+   "Projected CG separation by adding u^T C >= 0 to the same model, p. 5",
+   "Any feasible separation-MIP solution is a violated cut, so heuristic solves suffice; support restriction, complementing, multiplier penalty for sparsity, p. 8",
+   "Phase-1 relaxation for local branching: slack sigma_i <= delta_i y_i per violated row, objective sum of y_i, p. 13",
+   "Local dominance correctness: inheritance Proposition 1 (proof in Salvagnin's thesis) plus a lexicographic tie-break instead of a deterministic-solver tie-break, pp. 20-21",
+   "Minimal nogoods kept in a pool, checked before building the auxiliary problem, p. 21",
+   "Auxiliary-problem restrictions (62)-(63) and an optimality constraint, p. 22"
+  ],
+  "experiments": "Closures as aggregated % gap closed on MIPLIB 3.0 (lower approximations under time limits, p. 9); LB0/LB10/LB100 vs FP and ILOG-Cplex 9.0.3 on 72 0-1 instances, Pentium M 1.6 GHz notebook, 1,800 s, stop at first feasible, no tuning: LB100 3 failures vs 5, faster on 41 of 66 vs 21, mean 65.0 vs 146.7 s, worse first solutions (ratio 2.11 vs 1.13) (pp. 14-16); dominance vs Cplex 9.0 default on generated knapsacks, Athlon64, 2,000 s (1 h for multiple knapsacks): single-knapsack totals nodes /18.95 and time /1.61, multiple-knapsack time ratio 0.84 (pp. 23-25); one run each, no seeds.",
+  "positioning": "MIPping presented as the next step after auxiliary LPs inside solvers; surveys own and others' MIP separation (Bonami et al., Balas-Saxena, Dash-Gunluk-Lodi) and relates local dominance to Margot's isomorphism pruning (pp. 1-7, 19).",
+  "writing": "Survey voice built on three questions (how to cut, how to improve the incumbent, is the node dominated) and a coined verb; losses stated plainly, e.g. the dc1c success not confirmed elsewhere (pp. 1, 19).",
+  "limits_future": "Closure studies measured bound strength, not practical use (p. 9); LB first solutions worse than Cplex's (p. 16); dominance ineffective on multiple knapsacks, maybe hidden by the time limit (pp. 24-25); open: exploiting a first feasible solution inside enumeration (p. 19); the second LB0 failure count in the text must mean LB100 (p. 16).",
+  "method_links": [
+   {"method": "Method 6", "relation": "evidence", "note": "States the MIPping principle behind step 2 (decisions as auxiliary MIPs solved, even heuristically, by a general-purpose solver) and practises step 5 (slow MIP separation moved to time-limited preprocessing, which solved nsrand-ipx and arki001) and step 4 (closure strength measured before practical use).", "pages": "pp. 1-2, 8-10, 20"},
+   {"method": "Method 4", "relation": "evidence", "note": "LB study run without parameter tuning and Cplex's better solution quality printed; dominance loss on multiple knapsacks printed. Caveat: the dominance testbed is chosen as classes whose structure can trigger dominance, and a per-instance tuning table is shown beside the main one.", "pages": "pp. 15-16, 23-25"},
+   {"method": "Method 5", "relation": "evidence", "note": "Section 4 revives the 1988 Fischetti-Toth dominance procedure through Salvagnin's 2005 master's thesis.", "pages": "pp. 2, 19, 27-28"},
+   {"method": "Method 3", "relation": "evidence", "note": "In 2009 solver nondeterminism (output depends on the order of the input) is treated as a correctness issue: the tie-break no longer relies on a deterministic solver but on lexicographic order.", "pages": "p. 21"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "Lexicographic rule as stabiliser and tie-breaker", "evidence": "Lexicographic order on cost-equivalent partial solutions replaces a tie-break that assumed a deterministic MIP solver, keeping the dominance test correct whatever the solver returns; also D011 (lexicographic dual simplex).", "pages": "p. 21"}
+  ],
+  "transferable": [
+   "Model a separation problem as a MIP and accept any feasible solution as a cut; restrict to the support of x*, complement variables at their upper bound and lightly penalise multipliers to get sparser cuts (p. 8).",
+   "To start an improvement heuristic from an infeasible point, relax each violated row with a slack bounded by a binary indicator, minimise the number of indicators at one, and restore the true objective once feasible (pp. 13-14).",
+   "Break ties between equal-cost solutions in a correctness argument lexicographically, not by what the solver returns, since solver output depends on input order (p. 21).",
+   "Run an expensive node test only inside a depth window, at fixed depth intervals and after the first incumbent (p. 23)."
+  ],
+  "coauthors": "Andrea Lodi, Domenico Salvagnin",
+  "quotes": [
+   {"text": "with the aim of bringing the MIP technology well inside the MIP solver", "page": 1}
+  ]
+ },
+ {
+  "id": "S112",
+  "year": "2009",
+  "title": "Minimal infeasible subsystems and Benders cuts",
+  "read_level": "full",
+  "contribution": "Selects Benders cuts through a normalized cut generating LP whose vertices correspond to minimal infeasible subsystems, beating textbook Benders at the root of 10 of 11 MIPLIB 2003 instances by 1-2 orders of magnitude.",
+  "problem_entry": "Textbook Benders often disappoints and gives no rule to choose among unbounded rays, so feasibility-cut selection is random; of the three design questions (when, what, how to choose the cut) the paper takes only the third (abstract p. 1; pp. 2, 5-7).",
+  "key_idea": "Read the CGLP as a feasibility problem whose minimal infeasible subsystems are supports of alternative-polyhedron vertices (Gleeson-Ryan) and swap normalization (multipliers sum to one) and violation objective, so the CGLP returns a small-support violated cut; variants mis and mis2 (forced extra feasibility cut) (pp. 8-10).",
+  "assumptions": "MIP min{cx + dy : Ax >= b, Tx + Qy >= r, x >= 0 integer, y >= 0}, integers in the master, continuous variables in the slave, root LP only (pp. 3, 5, 10); 11 MIPLIB 2003 mixed-integer instances, numerically unstable and too-easy ones dropped unnamed (pp. 9-10).",
+  "proof_devices": [
+   "Benders reformulation through vertices and extreme rays of the dual slave polyhedron, pp. 3-4",
+   "Gleeson-Ryan correspondence: MIS rows are the supports of alternative-polyhedron vertices, pp. 8-9",
+   "Objective/normalization swap: the CGLP is never empty or unbounded and its vertices map one-to-one to rays and vertices of D, p. 9",
+   "ATSP thought experiment: in the flow model all Benders cuts are facet-defining SECs, so slow convergence is a handling and selection issue, p. 7",
+   "Optimality cut read from the vertex where the primal simplex detects a ray (Benders' own remark), p. 6"
+  ],
+  "experiments": "tb, tb_noopt, mis, mis2 on 11 MIPLIB 2003 root LPs, ILOG Cplex 11.0 LP solver (presolve off, primal simplex), Core2 Quad Q6600, 2,000 s; time and iterations to 80/90/95/99% of the root bound, cut density, master-time growth rate; tb best on 1 of 11, mis/mis2 1-2 orders faster on 10; numerical failures marked; single runs (pp. 9-13, 17).",
+  "positioning": "Against the textbook method and Magnanti-Wong (four drawbacks listed); alongside disjunctive CGLPs (Balas-Ceria-Cornuejols; Fischetti-Lodi-Tramontani, in preparation) (pp. 7-8).",
+  "writing": "Question-led: asks what a modern yet classical Benders baseline is before any result; theory and practice sections paired by their titles; the when/what/how frame (pp. 2, 5).",
+  "limits_future": "One or two cuts per call, root only; rounds of cuts and stabilisation of the point to cut left aside (pp. 2-3); mis2 better where feasibility cuts matter (p. 13); the conclusion only restates the speed-up (p. 13).",
+  "method_links": [
+   {"method": "Method 2", "relation": "variant", "note": "Same diagnosis (the ATSP cuts are excellent, their textbook handling is not), but the cure is on the oracle side, a normalization that picks a better CGLP vertex, while which point to cut and its stabilisation are named and set aside; the cut-selection stage that Method 2 and Common Misreading 3 place before the stabilised-loop work.", "pages": "pp. 2, 7-9"},
+   {"method": "Method 4", "relation": "evidence", "note": "Asks what a fair textbook baseline is, defines two textbook variants and keeps the stronger; prints where the textbook wins (aflow40b) and where mis loses to mis2; exclusions given by reason but not by name.", "pages": "pp. 5, 10-13"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "Diagnose with an example whose answer is known", "evidence": "ATSP flow formulation whose Benders cuts are exactly the facet-defining SECs, used to show that the failure lies in cut handling and selection, not in the cut family; also S068 toy examples.", "pages": "p. 7"}
+  ],
+  "transferable": [
+   "In a CGLP, fix the multiplier sum to one and maximise violation instead of fixing the violation: never empty or unbounded, numerically safer, and only the objective changes between calls (p. 9).",
+   "Compare cut-selection rules by time and iterations to reach 80, 90, 95 and 99% of the root bound, plus cut density and master-time growth per iteration (pp. 12, 17).",
+   "Define the textbook Benders variants explicitly and compare against the stronger one before claiming a speed-up (pp. 6, 10-11).",
+   "Solve an unbounded dual slave with the primal simplex, presolve off, to get usable rays (pp. 10-11)."
+  ],
+  "coauthors": "Domenico Salvagnin, Arrigo Zanette",
+  "quotes": [
+   {"text": "Benders cuts make a wonderful job", "page": 7}
+  ]
+ },
+ {
+  "id": "S174",
+  "year": "2009",
+  "title": "Yoyo search: a bisection cutting-plane method",
+  "read_level": "full",
+  "contribution": "Introduces yoyo search, a cutting-plane loop that bisects between an internal point and the LP optimum (the in-out idea, presented as new and without citing Ben-Ameur and Neto), matching Kelley's loop with facet-defining cuts and beating it with shallow cuts and on Benders network design.",
+  "problem_entry": "A cutting-plane method has two parts, oracle and search framework; the MIP community studied the oracle and almost always cuts an optimal LP vertex (Kelley), inefficient with shallow cuts, while interior-point schemes are costly and awkward in branch-and-cut (abstract p. 1; p. 2).",
+  "key_idea": "Keep an internal point q of the closure and the LP optimum x*; cut their midpoint; on success add the cut and re-optimise, on failure move q to the midpoint, halving the bound interval [cx*, cq]; binary search in one dimension (pp. 3-4).",
+  "assumptions": "MIP with an oracle defining a cut closure (p. 3); q from a feasible integer solution, a formula, or a barrier phase 1 (p. 4); exact oracle needed for correct upper bounds (p. 5); 19 MIPLIB 2003 root LPs, 14 OR-Library set-covering instances, random multicommodity network design (pp. 6, 7-8).",
+  "proof_devices": [
+   "Bisection invariant: the closure bound lies in [cx*, cq], giving a lower and an upper bound at every iteration, pp. 3-4",
+   "Final-phase fix: separate x* directly after more than 3 consecutive updates of q, p. 3",
+   "Controlled oracle: the LP's own inequalities stored inside the separator with three cut-quality scenarios (deepest, averaged, weakened), p. 5",
+   "Stated failure mode: a heuristic oracle that misses a cut moves q wrongly (wrong upper bounds, weaker cuts, cycling), p. 5"
+  ],
+  "experiments": "Scenarios A/B/C with at most 10,000 oracle calls, geometric means for iterations and time, arithmetic for gap: equal under A, about 10x faster on set covering under B, 68% vs 35% gap under C on MIPLIB (pp. 6-7); Benders with the same separator on 40 instances: geometric means 105 vs 314 iterations, 22.86 vs 50.74 s, yoyo slower on 2 (pp. 8, 11); phase-1 time not reported (p. 7); hardware not stated.",
+  "positioning": "Against Kelley's method and the ellipsoid/analytic-centre family; internal points in Benders credited to Magnanti-Wong and Naoum-Sawaya-Elhedhli as quite different; Ben-Ameur and Neto not cited (pp. 2, 5, 7-8, 12-13).",
+  "writing": "Two-components framing from the first sentence; a playful name explained by the swinging point; the conclusion restates the design choice of keeping the LP machinery (pp. 1, 3, 10).",
+  "limits_future": "Gains mainly with shallow cuts (p. 10); denser points may slow separation, heuristic oracles can mislead (p. 5); analytic-centre comparison and dedicated phase-1 code planned (pp. 4, 6).",
+  "method_links": [
+   {"method": "Method 2", "relation": "evidence", "note": "Earliest text found for step 3 (oracle unchanged, query point moved to the midpoint between a core point and the LP optimum) and step 4 (controlled oracle with artificial cut-quality rules first, then Benders with exactly the same separator). Also primary evidence for Common Misreading 4 and the Workflow F checkpoint: presented as new, Ben-Ameur and Neto absent from the references.", "pages": "pp. 1-8, 10, 12-13"},
+   {"method": "Method 4", "relation": "variant", "note": "Same separator in both arms, but phase-1 cuts and time are left out of the yoyo figures (disclosed); for set covering and network design q comes from a formula.", "pages": "pp. 7-8"}
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Test a new cut loop with a controlled oracle: hide an LP's own inequalities inside the separator and set cut quality by rule; the target is the known LP optimum (p. 6).",
+   "Track an internal point and the LP optimum and cut their midpoint, so each failed separation halves the bound interval at no LP cost (pp. 3-5).",
+   "Seed the internal point cheaply (all 1/2 when each row is covered at least twice; a large capacity vector in network design) to avoid a phase 1 (pp. 7-8).",
+   "Report per instance the iterations needed to close 90, 95 and 99% of the gap, beside totals (pp. 7-9)."
+  ],
+  "coauthors": "Domenico Salvagnin",
+  "quotes": [
+   {"text": "the search component was much less studied—at least by the MIP community", "page": 1}
+  ]
+ },
+ {
+  "id": "S134",
+  "year": "2010",
+  "title": "On the knapsack closure of 0-1 Integer Linear Programs",
+  "read_level": "full",
+  "contribution": "Defines the knapsack closure of a 0-1 ILP (all knapsack-polytope inequalities of every LP-valid inequality) as a strengthening of the Chvatal-Gomory closure and gives LP and MILP separation models, without experiments.",
+  "problem_entry": "A measured weakness: the corner relaxation is good with general integers but poor for 0-1 problems (Fischetti-Monaci; Balas 1973), explained by nonbinding 0-1 bounds that matter; how to keep them when generating Gomory-like cuts (abstract p. 1; p. 2).",
+  "key_idea": "For every inequality valid for the LP relaxation add all valid inequalities of the knapsack polytope it defines; separate by an LP over knapsack points with a knapsack oracle when the source row is given, by a MILP when it is free (pp. 1-5).",
+  "assumptions": "0-1 ILP min{cx : x in P ∩ X}, P = {Ax <= b, x >= 0}, X with tractable linear optimisation (p. 3); normalization -1 <= alpha_j <= 1 (pp. 3-4); big M and small epsilon in the MILP (p. 4).",
+  "proof_devices": [
+   "Row generation over the points of the knapsack set with a knapsack oracle, steps (i)-(vi), pp. 3-4",
+   "Farkas certification of a variable source inequality (w <= uA, w0 >= ub), p. 4",
+   "Big-M binaries: a point of X may violate the cut only if the source inequality cuts it off, pp. 4-5",
+   "Strengthening of the CG closure stated without proof, p. 5"
+  ],
+  "experiments": "none",
+  "positioning": "Builds on Gomory's corner and group relaxations and Gomory-Johnson theory, on Fischetti-Monaci's computational finding and Balas's 1973 note, and on Fukasawa-Goycoolea's knapsack-cut separation (pp. 2-3).",
+  "writing": "Short note led by one question; easy-case and hard-case sections named as such (pp. 2-4).",
+  "limits_future": "Concept and models only; practical viability under investigation (p. 5).",
+  "method_links": [
+   {"method": "Method 6", "relation": "evidence", "note": "Separation over a new closure written as a MILP for a general-purpose solver (step 2), with the source inequality itself as variables; step 4 (measure the potential) still pending.", "pages": "pp. 4-5"}
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "When cut strength depends on the inequality a cut is derived from, make that inequality's coefficients variables of the separation model and certify them with Farkas multipliers (p. 4).",
+   "Solve a separation LP with one row per point of a discrete set by row generation with an optimisation oracle over the set (pp. 3-4)."
+  ],
+  "coauthors": "Andrea Lodi",
+  "quotes": [
+   {"text": "whose practical viability is under investigation", "page": 5}
+  ]
+ },
+ {
+  "id": "S068",
+  "year": "2011",
+  "title": "On the separation of disjunctive cuts",
+  "read_level": "full",
+  "contribution": "Shows how the CGLP normalization drives disjunctive cut quality (the standard normalization's implicit rank penalty, its scaling dependence, redundant rows creating dominated vertices), proves the supporting results, and proposes redundancy removal and a scaling-invariant Euclidean normalization that close slightly more root gap.",
+  "problem_entry": "The ingredients of disjunctive-cut separation, above all the CGLP normalization, are poorly understood and often misread; their effect on the root bound is isolated (abstract p. 1; p. 3).",
+  "key_idea": "Trivial normalization gives the GMI cut in closed form from tight rows only; the SNC works better through an implicit rank penalty and sparsity but depends on scaling and is fooled by rows redundant for one side; remedies: redundancy removal, an extended support, a Euclidean normalization (pp. 4-8, 13-21).",
+  "assumptions": "MIP min{cx : Ax >= b, x_j integer} with bounds in Ax >= b and 0x >= -1 implied (p. 1); split disjunctions on one fractional variable (pp. 2-3); 14 MIPLIB 3.0 instances with markshare1 and stein27 out of the averages, 10 OR-Library set-covering instances (pp. 5-6, 22).",
+  "proof_devices": [
+   "Lemma 1 upper bounds on the cut violation, p. 4",
+   "Theorem 2: closed-form optimal CGLP solution under the trivial normalization (the GMI cut), pp. 4-5",
+   "Theorem 5: a CGLP extreme ray gives a strictly dominated cut iff a multiplier vector for it uses some row on both sides, p. 13",
+   "Proposition 7 and Theorem 8: redundant rows give nonsupporting cuts or scaled copies with larger violation that cheat the SNC, pp. 14-15",
+   "Lemma 9: the Euclidean normalization is invariant under row scaling, p. 20",
+   "Toy ILPs with CGLP vertices enumerated by PORTA (117 extended-space vertices vs 4 facets), pp. 9-12, 16-17"
+  ],
+  "experiments": "Ten rounds, one cut per fractional variable, no strengthening, % gap closed and dual-support size, per-round plots on p0201: trivial 37.6% vs SNC 56.9%; cuts scaled by 1,000 46.8%; redundancy removal 58.3% (no projection) and 58.8% (extended support); Euclidean 57.1% and 60.0%, rout 24.3% to 7.9%; set covering 11.9% to 15.0%; no times, solver or hardware reported (pp. 3, 5-8, 17-23).",
+  "positioning": "Within Balas's disjunctive programming; SNC from Balas, Ceria-Soares and Balas-Perregaard; Bonami's normalization analysed; corrects the reading that CGLP vertices give facets (pp. 3-4, 11, 16-17).",
+  "writing": "Slogan section titles (Nothing is perfect!, Redundancy hurts) and small numerical examples throughout, as the abstract announces (abstract p. 1; pp. 7, 13).",
+  "limits_future": "Projection hides redundancy (pp. 17-19); no normalization known to make every optimal extended vertex extremal in the cut space (p. 16); on-the-fly redundancy check left to future work (p. 15).",
+  "method_links": [
+   {"method": "Method 2", "relation": "variant", "note": "Step 1 is there (p0201 traced round by round: bound, density, dual support, rank) and the SNC's success is explained by loop dynamics (small-norm earlier cuts are expensive to reuse, so rank stays low), but the remedies change the oracle, not the point it is asked to cut.", "pages": "pp. 5-7, 9, 19"},
+   {"method": "Method 3", "relation": "evidence", "note": "A change with no mathematical content, multiplying each generated cut by 1,000, lowers the average gap closed from 56.9% to 46.8%: a placebo-type control showing that implementation details move results.", "pages": "p. 8"},
+   {"method": "Method 4", "relation": "evidence", "note": "Strengthening switched off to limit side effects (step 4); the instance where the new normalization loses (rout) printed and analysed (step 6).", "pages": "pp. 3, 21"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "Diagnose with an example whose answer is known", "evidence": "Two- and three-variable ILPs whose CGLP vertices are enumerated with PORTA show the facet-defining cut is never selected, and that after removing redundant rows it is the only violated vertex; also S112 (ATSP).", "pages": "pp. 9-12, 15-17"}
+  ],
+  "transferable": [
+   "Re-run with every generated cut multiplied by a constant; a normalization whose results change is scaling-dependent (p. 8).",
+   "Drop rows redundant for either side of the disjunction (or fix their multipliers to zero) and keep variables whose tight bound is redundant in the CGLP (pp. 15, 17-18).",
+   "Weight each multiplier in the normalization by its row's Euclidean norm for scaling invariance (pp. 20-21).",
+   "Enumerate the vertices of a small CGLP with PORTA to see which cuts a normalization can return (pp. 11-12)."
+  ],
+  "coauthors": "Andrea Lodi, Andrea Tramontani",
+  "quotes": [
+   {"text": "the importance of “small implementation details” when evaluating the performance of a method", "page": 8}
+  ]
+ },
+ {
+  "id": "S095",
+  "year": "2011",
+  "title": "A relax-and-cut framework for Gomory mixed-integer cuts",
+  "read_level": "full",
+  "contribution": "Generates rank-1 GMICs from Lagrangian bases of the original LP in a relax-and-cut scheme that keeps cuts out of the LP, approximating the first GMIC closure faster than published alternatives and, on top of Cplex root cuts, solving more hard instances in cut-and-branch.",
+  "problem_entry": "GMICs are used conservatively because iterated rounds grow the basis determinant; the claim is that the instability lies in the closed loop between LP solver and cut generator, not in the cuts, so a decoupling filter is needed (pp. 2-3).",
+  "key_idea": "Pool the GMICs and dualise them in a Lagrangian fashion instead of adding them to the LP, so cuts are always read from (near-optimal Lagrangian) bases of the original LP; fast variants use tiny subgradient steps only to sample bases and get multipliers from periodic LPs over the pool (pp. 2, 5-10).",
+  "assumptions": "MIP in standard form with P bounded and nonempty, loop interrupted when violated (pp. 4, 11); cuts only from primal-feasible bases, so possibly below the first GMIC closure (p. 11); 54 MIPLIB 3.0 and 20 MIPLIB 2003 instances after the rival's filter (p. 10); binaries for pseudo-branching (p. 14).",
+  "proof_devices": [
+   "Lagrangian dual of the cut family equals the closure value z1, p. 5",
+   "Global validity: cuts read from primal-feasible bases of the original system stay valid even with invalid pool rows, p. 6",
+   "Polyak step with dynamic step-parameter rules and an aggressive start, p. 7",
+   "Periodic exact multipliers from the LP over the pool (hybr, fast), pp. 8-9",
+   "Dantzig-Wolfe reading of the sampled vertices, as in Ralphs et al., p. 9",
+   "Rank upper bound to cap higher-rank cuts; higher rank as diversification, pp. 12-13"
+  ],
+  "experiments": "Cplex 11.2 LP solver, one core of an Intel Q6600; average gap closed and geometric-mean time vs one GMIC round, Dash-Goycoolea (times copied from other machines) and CglLandP/Clp lift-and-project: faster 57.1% in 1.53 s (MIPLIB 3.0), 43.3% vs 39.7% (MIPLIB 2003); on top of Cplex root cuts; cut-and-branch on 18 hard instances, 10,000 s: 3 solved vs 1, 2 and 2 for Cplex default, whose final gap is lower (15.7% vs 16.2%) (pp. 10-17).",
+  "positioning": "Against Balas-Perregaard and Dash-Goycoolea GMIC improvement; relax-and-cut credited to Lucena and Escudero-Guignard-Malik; builds on Zanette-Fischetti-Balas and Fischetti-Lodi (pp. 2-4, 9).",
+  "writing": "Control-systems metaphor (closed loop, decoupling filter) with loop diagrams; future work as a list ending in a call for a cut-generation meta-scheme (pp. 2-3, 6, 19).",
+  "limits_future": "Open: better Lagrangian dual optimizer, primal heuristics from Lagrangian vertices, pseudo-branching restarts, non-root GMICs, a cut-generation meta-scheme; unclear whether higher rank or fast over faster pays (pp. 14, 18-19).",
+  "method_links": [
+   {"method": "Method 2", "relation": "evidence", "note": "Direct statement of the loop diagnosis (instability in the framework, not in the cuts) and a remedy that changes what the unchanged GMIC generator is fed.", "pages": "pp. 2-6"},
+   {"method": "Method 3", "relation": "evidence", "note": "The erratic behaviour of MIP solvers on near-identical input is described as useful diversification in MIP-based cut separation.", "pages": "p. 4"},
+   {"method": "Method 6", "relation": "evidence", "note": "Potential measured first (first GMIC closure approximated), then run on top of Cplex root cuts and in cut-and-branch with black-box Cplex; a quick shot with one FP 2.0 rounding per Lagrangian vertex: 40 of 72 successes vs 69 for objective FP 2.0, better quality (2.54% vs 6.73%).", "pages": "pp. 11-12, 16-19"},
+   {"method": "Method 4", "relation": "variant", "note": "Rival's instance filter adopted and cut-and-branch exclusions given with reasons, but Dash-Goycoolea times come from other machines, and the gap claim compares only with the two Cplex root variants, not Cplex default.", "pages": "pp. 10, 12, 17"}
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Keep generated cuts out of the LP: pool and dualise them, and read new cuts only from bases of the original system, so cuts stay rank 1 (pp. 2, 5-6).",
+   "Use a cheap inexact method only to sample bases (tiny subgradient steps) and take multipliers from a periodic exact LP over the pool (pp. 8-9).",
+   "Warm-start a cut pool with short randomised cost-change dives so the cuts stay globally valid (p. 14).",
+   "Test root cuts in cut-and-branch on instances the default solver cannot solve in an hour, solver cuts off below the root (p. 17)."
+  ],
+  "coauthors": "Domenico Salvagnin",
+  "quotes": [
+   {"text": "stability issues are largely due to the overall framework where GMICs are used", "page": 2}
+  ]
+ },
+ {
+  "id": "D011",
+  "year": "2012",
+  "title": "A hard integer program made easy by lexicography",
+  "read_level": "full",
+  "contribution": "Solves Knuth's 1960 drum-latency integer program with lexicographic Gomory cutting-plane variants up to about 30 times faster than CPLEX 12.2 at its best setting, and explains the speed by basis determinants that shrink instead of growing.",
+  "problem_entry": "A historical hard instance: Knuth's 1960 integer program (51 integer variables, 43 inequalities), unsolved for 35 years until Alevras needed 732,200 CPLEX nodes in 1995 (pp. 1-2).",
+  "key_idea": "Apply the lexicographic Gomory fractional-cut method (lexicographic re-optimisation after each cut) in single-cut, multi-cut and binary-search forms (pp. 2-3).",
+  "assumptions": "Pure integer program in nonnegative integers (p. 1); a corrected formulation as a second instance; both instance files posted (pp. 2, 5).",
+  "proof_devices": [
+   "Lexicographic dual simplex re-optimisation after each cut, from Balas-Fischetti-Zanette 2010, pp. 2-3",
+   "Binary search on the objective value (Bin-GFC), p. 3",
+   "Basis-determinant trace and LP trajectory plots, pp. 3-4",
+   "Dual-degeneracy argument for why the plain dual simplex inflates determinants, pp. 3, 5"
+  ],
+  "experiments": "One instance plus its corrected version; textbook multi-cut Gomory, three lexicographic variants, CPLEX 12.2 default, strong-branching and aggressive-cut settings; time, LPs, pivots, cuts, nodes, gap; single runs, no hardware stated: 0.15 s vs 4.32 s for the best CPLEX setting (original), 0.6 s vs 5.46 s (corrected) (pp. 2-5).",
+  "positioning": "Addendum to Zanette-Fischetti-Balas 2009; historical framing through Knuth and Alevras; CPLEX called an industrial product against a research tool (pp. 1-2).",
+  "writing": "Anecdotal opening (Knuth's conversation and history), a striking contrast of 5,618 cuts against 50,000 nodes, then a modest framing of the code (pp. 1-2).",
+  "limits_future": "One instance; no future directions stated; the abstract's factor of at least 10 holds on the original instance but is about 9 on the corrected one (my arithmetic, Table 2, p. 5).",
+  "method_links": [
+   {"method": "Method 2", "relation": "evidence", "note": "The stall is read off the loop (basis determinants and LP trajectories per LP solved) and cured by changing how the LP is re-optimised after each cut, not the cuts.", "pages": "pp. 3-5"},
+   {"method": "Method 4", "relation": "evidence", "note": "Commercial baseline run in three settings, comparison against its best; the corrected instance where the margin shrinks reported.", "pages": "pp. 3, 5"},
+   {"method": "Method 3", "relation": "variant", "note": "One run per setting, no seeds, although CPLEX's own settings spread 4.32-9.01 s (original) and 5.46-31.17 s (corrected); the claim rests on the size of the gap.", "pages": "pp. 3, 5"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "Lexicographic rule as stabiliser and tie-breaker", "evidence": "Lexicographic dual-simplex re-optimisation keeps basis determinants from growing and solves Knuth's instance; also S096 (lexicographic tie-break in the dominance test).", "pages": "pp. 2-5"},
+   {"pattern": "Post the showcase instance file", "evidence": "Knuth's instance and its corrected version posted for download on the author's site so the comparison can be re-run.", "pages": "pp. 2, 5"}
+  ],
+  "transferable": [
+   "When a pure cutting-plane run stalls numerically, plot the basis determinant against LPs solved and try lexicographic dual-simplex re-optimisation after each cut (pp. 3-4).",
+   "Report pivots and LPs solved beside time when a research code meets a commercial solver (p. 2).",
+   "Run the commercial solver in several settings and quote the ratio to its best one (p. 3)."
+  ],
+  "coauthors": "Egon Balas, Arrigo Zanette",
+  "quotes": [
+   {"text": "the “handicraft” work of a single student helped by his advisor", "page": 2}
+  ]
+ },
+ {
+  "id": "D013",
+  "year": "2012",
+  "title": "Orbital Shrinking",
+  "read_level": "full",
+  "contribution": "Proposes orbital shrinking, a relaxation with one integer variable per symmetry orbit proved valid for convex discrete problems, and tests a subgroup-selection rule on 39 symmetric MILPs, where the whole-group bound rarely beats the LP bound.",
+  "problem_entry": "Discrete optimisers break symmetry (constraints, isomorphism pruning, orbital branching); invert this and keep symmetry, breaking it only as a last resort; the question came from Mauro Diligenti (pp. 1, 4, 10).",
+  "key_idea": "Replace integrality of variables by integrality of orbit sums and rewrite with one variable per orbit; a chain of subgroups from generators ranked by fixed points trades bound against time, and an incidence measure picks the subgroup (pp. 4-9).",
+  "assumptions": "Convex f and X, integrality on J, a permutation group leaving f and the feasible set invariant, feasible and bounded problems; covers MILP and convex MINLP (pp. 2-3); 39 symmetric MILPs from Margot's site, groups found with nauty (pp. 5-6).",
+  "proof_devices": [
+   "Averaging along the group: the average point lies in the fixed subspace and has constant values on each orbit, pp. 2-3",
+   "Theorem 3.1: v(POSR) = v(PREL) <= v(P), proved by averaging an optimal solution and convexity, pp. 4-5",
+   "Corollary 3.2: exact reformulation in the continuous convex case, p. 5",
+   "Orbits from generators by merging endpoints, p. 2",
+   "Generator ranking by fixed points and an incidence measure inc(G'), pp. 6, 8-9"
+  ],
+  "experiments": "Cplex 12.2 on a 1.4 GHz Core 2 Duo, 1,800 s; OSR bound and time vs LP bound and CPLEX time to the same bound; whole-group bound no better than LP on 31 of 39; subgroup hand-picked on the same 23 instances used to evaluate the automatic rule (target 0.82); CPLEX faster on cod83 (pp. 5-10).",
+  "positioning": "Against the symmetry-breaking literature (Margot, Ostrowski et al., Sherali-Smith); uses Liberti's automatic symmetry detection (pp. 1, 4-5).",
+  "writing": "Rhetorical opening on loving symmetry, the origin question recorded in the acknowledgements, intuition named as the source of design choices (pp. 1, 8, 10).",
+  "limits_future": "Open: choosing generators, MINLP extensions, use inside branch-and-bound with dynamic change, heuristics from the relaxed integer solution (p. 9); whole-group bound weak (p. 6).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "Symmetric variables aggregated along orbits instead of breaking symmetry (step 3), with a validity theorem; primary source of the limitation the skill takes from its peer-critique note (whole-group bound no better than LP on 31 of 39).", "pages": "pp. 1, 4-6"},
+   {"method": "Method 4", "relation": "contradiction", "note": "The subgroup choice is tuned on the instances it is evaluated on, and 16 of 39 instances are dropped because their bound does not depend on the choice: primary evidence for the 2011 lapse listed under Method 4.", "pages": "pp. 6-10"}
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "For a symmetric MILP, add one integer variable per orbit for the sum of its variables, solve the shrunken model as a relaxation, and compare its bound with the LP and root bounds (pp. 4-6, 9-10).",
+   "Rank symmetry generators by fixed points to get a chain of subgroups and plot bound and time along it before choosing (pp. 6-7).",
+   "Score an aggregation by its incidence with constraint supports; an orbit covering a whole constraint reduces it to a bound (pp. 8-9)."
+  ],
+  "coauthors": "Leo Liberti",
+  "quotes": [
+   {"text": "not better than the LP bound 31 times out of 39", "page": 6}
+  ]
+ }
+]

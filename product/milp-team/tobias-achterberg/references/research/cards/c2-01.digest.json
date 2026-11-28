@@ -1,0 +1,79 @@
+[
+ {
+  "id": "D024",
+  "year": "2003",
+  "title": "Modelling Feasible Network Configurations for UMTS",
+  "read_level": "full",
+  "contribution": "A MIP model of feasible UMTS radio-network configurations over traffic snapshots (binary site, installation and assignment choices, powers switched on by binaries, SIR ratio rows with a binary right-hand side, a code-capacity knapsack from Kraft's inequality, a phantom-power approximation of soft hand-over) with linear cost and performance terms for scoring and no computations; read as ZIB-Report 02-16, the TR version, under the author name Tobias Pfender (pp. 1-2, 13-22).",
+  "problem_entry": "EU project MOMENTUM (Deliverable 4.2): plan UMTS base-station sites and configurations; no single quality measure, so the model rates, costs and scores configurations; the stochastic IP is declared intractable on a personal communication, so a snapshot MIP serves as a fast surrogate of a static simulator, inside a loop that adds the snapshots a configuration fails on in simulation (pp. 2-6, 25).",
+  "key_idea": "Feasibility as the feasible set of a MIP and rating as a separate weighted linear objective; linearity decides what is modelled (largest SIR ratio rather than a sum, linear objective, soft hand-over through candidate sets and a phantom power), each loss stated where it arises (pp. 13, 17-22).",
+  "assumptions": "Binaries s, z, w, x and continuous powers (pp. 14-19, 27); per-snapshot blocks linked by site, installation and pilot-power variables (my reading, pp. 14-16, 27); candidate installations with precomputed attenuations, all combinations at a site assumed compatible (pp. 10, 12); semi-continuous powers (6), (8), (9) (pp. 15-16); SIR rows of the form ratio >= mu x_mi whose linear form needs a big-M the report does not give (my reading, pp. 2, 13, 15-16); perfect power control, one serving cell, no code fragmentation, fading or secondary-tree orthogonality loss (pp. 11-17); no instances or sizes; NP-hardness by citation (p. 9).",
+  "proof_devices": [
+   "n/a (no algorithm, no proofs); the formulation devices follow",
+   "Kraft's inequality for prefix-free code patterns, rescaled by 2^nmax to integer coefficients, as the code-capacity knapsack row (5) (pp. 11, 15)",
+   "redundant linking row x_mi <= z_i (3) kept and footnoted as redundant given (5); (5) does not imply it in the LP relaxation, e.g. z_i = 1/2, x_mi = 1, lambda_m <= Lambda_i/2 (my check) (p. 15)",
+   "semi-continuous powers through binary on/off bounds (6), (8), (9) (pp. 15-16)",
+   "candidate sets K_mi(delta) from an attenuation-ratio threshold, delta typically 2 to 4 (3-6 dB) (p. 18)",
+   "phantom power v with 0 <= v <= rho (16) and v <= rho - rho x_mi + sum of gains of open candidate servers (17): the variable's own bound is the big-M, and rho = 0 gives back the basic uplink row (my reading) (p. 19)",
+   "minimum powers (perfect power control) left to the objective's headroom terms, not to the constraints (my reading, pp. 15, 21)"
+  ],
+  "experiments": "none: no instances, runs, solvers or tables; experiments promised for the soft hand-over extension (p. 20) and extensive testing on MOMENTUM real-world instances for both next research lines (p. 22); validation design only: a simulator check that adds the failing snapshots (p. 6).",
+  "positioning": "Prior methods described by the WCDMA constraints they leave out (SIR target, interference, power control, soft capacity), with Amaldi et al. given the longest account (pp. 6-8); handbooks hold the data but no models (p. 6); the GSM separability of coverage and capacity is lost in UMTS (p. 9); intractability rests on a personal communication and NP-hardness on a simpler problem's result (pp. 5, 9, 25).",
+  "writing": "Problem first: decisions as questions, parameters before the model, each row in words before its formula, Notice paragraphs and a footnote at the rows a simplification affects, an appendix of all parameters and variables; dense hedging; the contribution sentence opens with its limit (no detailed objective); typos left in (pp. 3, 10-17, 22, 26-27).",
+  "limits_future": "Model only: objective left as proposals, soft hand-over admitted incomplete, no computation (pp. 20-22); limits stated at the point of use; next: heuristic simplification measured against the full model, or methods tailored to it, both tested on MOMENTUM real-world instances (p. 22).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Reverse order: a model published as a project deliverable before any instance, run or harness exists, computation promised for later; co-signed group work in another genre, before SCIP, so no counter-example to his solver practice (inferred).",
+    "pages": "pp. 20, 22"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "Import from information theory mapped object by object (code generation patterns as prefix codes, Kraft's inequality as knapsack row (5)) after weeks of discussion with practitioners; no test decides, and the importer is not named.",
+    "pages": "pp. 6, 11, 15"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Weak: the soft hand-over extension contains the basic uplink row as the setting rho = 0 (my reading of (7'), (16)); the report neither says so nor sweeps.",
+    "pages": "p. 19"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "full model first as the yardstick for simplifications",
+    "evidence": "The complete model is built from weeks of expert discussion before any solver can take it; the stated benefit is that the compromises of a later simplified model can be assessed precisely against it, unlike a simplified model used from the start.",
+    "pages": "pp. 6, 22"
+   },
+   {
+    "pattern": "sampled scenarios with a simulator in the loop",
+    "evidence": "The intractable stochastic IP is replaced by a MIP over traffic snapshots; the configuration is analysed in a static simulator, the snapshots it fails on are added and the optimisation restarts, or the planner relaxes the constraints.",
+    "pages": "pp. 5-6"
+   },
+   {
+    "pattern": "MIP-redundant is not LP-redundant: label the row, keep the disaggregated link",
+    "evidence": "x_mi <= z_i (3) is footnoted as redundant given the capacity row (5) but kept; (5) does not imply it in the LP relaxation (my check). Later co-signed work: removing MIP-redundant rows can hurt by weakening the LP relaxation (R021 p. 27); omitting seemingly useful redundant information can sometimes speed up solving (R011 p. 2). Heuristic 6 context.",
+    "pages": "p. 15; R021 p. 27; R011 p. 2"
+   }
+  ],
+  "transferable": [
+   "(D1) Replace an intractable stochastic planning problem by a MIP over sampled scenarios; check each solution in an external simulator and add the scenarios it fails on (pp. 5-6).",
+   "(D3) Discretise continuous design choices (tilt, height, direction) into candidate configurations with precomputed coefficients, and state the compatibility assumption this makes (pp. 10, 12).",
+   "(D4) Model a prefix-free code resource with Kraft's inequality, scaled by 2^nmax to integer coefficients, as a knapsack row against a budget (pp. 11, 15).",
+   "(D4) Use a conditional variable's own upper bound as the big-M of its conditional row, so that the off case follows from a bound already in the model (p. 19, rows (16)-(17)).",
+   "(D4) Keep a disaggregated linking row x <= z beside an aggregated capacity row, label it as MIP-redundant, and test it on the LP relaxation, not only on integer points (p. 15; my check).",
+   "(D4) Sparsify conditional terms with candidate sets built from a physical ratio threshold (p. 18, row (15)).",
+   "(D7) In a model paper, state each constraint in words before its formula, put each simplification in a Notice at the constraint it affects, and add an appendix with every parameter's domain and every variable's type (pp. 14-17, 26-27).",
+   "(D8) Write the complete model first, even when no solver can take it yet, so that each later simplification can be measured against it (p. 22)."
+  ],
+  "coauthors": "Andreas Eisenblätter, Armin Fügenschuh, Thorsten Koch, Arie Koster, Alexander Martin, Oliver Wegel, Roland Wessäly (report order, alphabetical, with Achterberg listed as Tobias Pfender; the chapter's Crossref order is Eisenblätter, Wessäly, Martin, Fügenschuh, Wegel, Koch, Achterberg, Koster)",
+  "quotes": [
+   {
+    "text": "From a mathematical point of view, this constraint is redundant",
+    "page": 15
+   }
+  ]
+ }
+]

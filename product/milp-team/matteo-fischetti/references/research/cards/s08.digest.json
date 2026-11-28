@@ -1,0 +1,344 @@
+[
+  {
+    "id": "S109",
+    "year": "2016",
+    "title": "Fast training of support vector machines with Gaussian kernel",
+    "read_level": "full",
+    "contribution": "A sole-author MILP view of Gaussian-kernel SVM training that makes the leave-one-out error the objective (net signal without each point's own term), controls overfitting by a-priori constraints on the multipliers instead of penalty terms, and solves the constrained versions by sorting, matching hinge-loss test accuracy on Brooks's testbed with 2-3 orders of magnitude less training time than CPLEX-solved hinge loss with cross validation.",
+    "problem_entry": "Hinge-loss training needs an outer cross-validation loop (126 convex problems for a 5x5 grid with 5 folds, p. 2); the entry is to put the validation figure inside the model as a leave-one-out MILP objective (pp. 2-3).",
+    "key_idea": "Exclude each point's own signal (net signal) so that the objective is a leave-one-out estimate (pp. 6-7), and fight overfitting by fixing degrees of freedom a priori (all alpha equal and beta0 = 0; all alpha equal with beta0 free; one alpha per class) rather than by penalties (pp. 3, 7-8); then beta0 by sorting and gamma by bisection (pp. 11-13).",
+    "assumptions": "Binary classification with a Gaussian kernel; big-M M = 10,000 and eps = 1e-5 (p. 15); the leave-one-out estimate is reliable only if training is blind to the left-out point, which the unrestricted MILP violates (p. 7); V(gamma) almost unimodal (p. 13); Brooks's ten data sets minus Adult, 10 random 70/30 splits, features standardized on the training part (p. 14).",
+    "proof_devices": [
+      "Algorithm 1: exact beta0 by computing all net signals in O(p^2), sorting them and scanning the breakpoints -nu_j, pp. 11-12",
+      "Scaling argument: alpha and beta0 can be scaled, so LOO 3 normalizes alpha+ + alpha- = 1 and keeps two degrees of freedom, p. 8",
+      "Three-point bisection on gamma under an (approximate) unimodality assumption, with the conditions under which it works, p. 13",
+      "Benchmark MILP settings in CPLEX 12.5: cuts off, EPINT 0.0, EPRHS 1e-9, LOO 2 warm start, polishing after 10 s, 30 s per call, p. 15"
+    ],
+    "experiments": "Single-thread notebook, CPLEX 12.5; test error HINGE 18.33%, LOO 1/2/3 19.74/18.22/17.45%, LOO MILP 20.80%; training about 600 s for HINGE (barrier over 126 QPs) against 0.3/0.6/7.1 s and 216.6 s for the LOO MILP; estimation error of the training objective -3/-8/-10/-79% (pp. 13-17).",
+    "positioning": "Against hinge-loss training with outer cross validation (pp. 2, 5); test methodology and testbed from Brooks (pp. 13-14); credits Petterle's master's thesis for the telecommunication reading, the LOO 1 result and the HINGE figures (pp. 4, 8, 14-15).",
+    "writing": "Numbered contribution list opened by 'In our view' (p. 3); a physical metaphor (transmitters and a receiver) carries the diagnosis of the modelling error (pp. 4, 6); a hedged scope clause in the conclusion (p. 18).",
+    "limits_future": "Speedups only against a general-purpose solver and 'just informative' (p. 15); Gaussian kernel and this testbed only (p. 18); LOO 1 fails on Ionosphere (p. 17); future: a controlled increase of degrees of freedom, a-priori properties imposed as constraints, the linear kernel (p. 18).",
+    "method_links": [
+      {"method": "Method 1", "relation": "variant", "note": "Thinning of degrees of freedom to cure overfitting rather than solver difficulty: LOO 1 needs no optimization yet classifies reasonably; fewer degrees of freedom make the estimate reliable; the unrestricted LOO MILP has a 4.20% training objective and 20.80% test error.", "pages": "pp. 7-9, 16"},
+      {"method": "Method 6", "relation": "variant", "note": "The MILP is the modelling device and its CPLEX run is kept mainly as a benchmark; the delivered method needs no solver (sorting): the step-5 retreat from a slow MIP, taken to the end.", "pages": "pp. 11-12, 15, 18"},
+      {"method": "Method 4", "relation": "contradiction", "note": "Conceded in print: the HINGE arm is a general-purpose barrier solver with error figures from a master's thesis although specialized SVM codes exist; step 2 not met, step 6 met.", "pages": "pp. 14-15"},
+      {"method": "Heuristic 2", "relation": "evidence", "note": "Overfitting control moved from the objective (penalty terms) into constraints.", "pages": "pp. 3, 18"},
+      {"method": "Academic Lineage", "relation": "variant", "note": "A 2012 master's thesis feeds a 2014 preprint, but the paper is sole-authored and credits the student in the text.", "pages": "pp. 1, 4, 8, 14-15, 19"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Fold the outer validation loop into the model", "evidence": "The leave-one-out error becomes the MILP objective through the net signal, removing cross validation over C and gamma and bringing gamma inside the training.", "pages": "pp. 2-3, 6-7, 13"},
+      {"pattern": "Degrees of freedom as the overfitting dial", "evidence": "LOO 1, LOO 2, LOO 3 and the LOO MILP are ordered by degrees of freedom and compared on training objective against test error; future work asks for a controlled increase.", "pages": "pp. 7-10, 16, 18"}
+    ],
+    "transferable": [
+      "Fold an outer validation loop into the model: make the leave-one-out error the objective and exclude each point's own contribution from its own prediction (pp. 6-7).",
+      "Control overfitting by equality constraints that remove degrees of freedom, and check that the model's optimal value tracks the test error across the hyperparameter range before trusting it (Figure 2, pp. 7-10).",
+      "When everything but a scalar threshold is fixed, optimize the threshold exactly by sorting the scores and scanning the breakpoints (Algorithm 1, pp. 11-12).",
+      "Report each model's estimation error 100*(loo - mis)/mis as a gauge of how far its training objective can be trusted (pp. 15-16)."
+    ],
+    "coauthors": "none (sole author); Lucia Petterle's 2012 Padova master's thesis credited in the text",
+    "quotes": [
+      {"text": "A main idea of our approach is to reduce overfitting on the training set by imposing additional constraints on the model—rather than penalizing risky solutions through the objective function, as it is done customary.", "page": 18},
+      {"text": "We note here that specialized codes exist for solving HINGE (in its dual form), so the speedups reported have to be considered as just informative.", "page": 15}
+    ]
+  },
+  {
+    "id": "S123",
+    "year": "2016",
+    "title": "Mixed-Integer Linear Programming Heuristics for the PrePack Optimization Problem",
+    "read_level": "full",
+    "contribution": "MILP-based matheuristics for the PrePack Optimization Problem that fix one variable block of the bilinear model, free one box configuration at a time or grow the store set, solve each restriction with CPLEX, and reach the parity lower bound, hence proven optimality, on every published instance.",
+    "problem_entry": "An inventory-allocation packing problem with a hard limit on the number of box configurations (pp. 2-3); the published MINLP and its MILP linearization defeat Couenne, SCIP and a black-box MILP solver (pp. 5-6), so heuristics are built on its substructures.",
+    "key_idea": "Fix subsets of variables so that each restriction is easy for a commercial MILP solver: alternate fixing x or y (REOPT), free one configuration at a time, or grow the store set ordered by demand similarity (pp. 6-9).",
+    "assumptions": "Integer packing variables with bilinear products linearized by a binary expansion; bins completely filled; overstock bounds; even capacities give a parity bound (pp. 3-6, 11); testbed: AllColor58 (58 stores, 24 items, capacities 4-10, beta = 1, alpha = 10), its sub-instances and 50 random store subsets (pp. 11, 16-17).",
+    "proof_devices": [
+      "Linearization of x*y by a binary expansion of x with the linking rows (13)-(16) for each bit, p. 5",
+      "x and q declared continuous free so that presolve removes them, p. 5",
+      "Parity lower bound (19) from the redundant constraint (18), used as an early stop, pp. 5-6, 11",
+      "Artificial upper bounds on x to shorten the expansion, relaxed when the neighbourhood stalls, p. 8",
+      "Multi-start diversification: internal seed not reset, 5 random pair swaps of the store order, a new CPLEX seed per restart, p. 10"
+    ],
+    "experiments": "C, CPLEX 12.6, quad-core Xeon, 900 s; single runs against the published values and times of [6] on an assumed-equivalent PC, then 100 seeded runs per instance (time, time to best, primal integral, #opt, box plots) and 50 new instances x 10 seeds; all instances of [6] reach the parity bound (pp. 10-18).",
+    "positioning": "Builds on the model and instances of Hoskins et al. (CPAIOR 2014) and benchmarks against its CP, MILP and LNS heuristics (pp. 3, 12-13); labels the approach a matheuristic (pp. 6, 17).",
+    "writing": "Short applied paper; claims stated with numbers ('all our four heuristics outperform those in [6]', p. 13); the seed dependence stated as a design reason before the tables (p. 10).",
+    "limits_future": "fast heu loses to most similar on the largest instance, so a hybrid is suggested (pp. 14-15); more stores make instances harder (p. 17); future: other substructures, more sophisticated metaheuristics (pp. 17-18).",
+    "method_links": [
+      {"method": "Method 6", "relation": "evidence", "note": "Steps 1-2: global MINLP solvers first (Couenne and SCIP fail on the smallest instances within an hour), then a black-box MILP table, then each sub-decision solved as a restricted MILP by the same solver.", "pages": "pp. 5-7"},
+      {"method": "Method 3", "relation": "evidence", "note": "Steps 3-4: seed dependence stated, 100-seed statistics and box plots reported, solver seed changed at every restart to diversify; no placebo arm.", "pages": "pp. 10, 14-16"},
+      {"method": "Method 4", "relation": "contradiction", "note": "A 2015 instance of the listed lapse: the rival's single-run values and times taken from [6] on another machine; the optimality claim itself rests on the parity bound.", "pages": "pp. 11-13, 17"},
+      {"method": "Method 1", "relation": "variant", "note": "Thinning as a heuristic restriction: presolve deletes redundant variables, a cap on x shortens the expansion and is released when the search stalls.", "pages": "pp. 5, 8"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Grow the entity set: partial-instance constructive matheuristic", "evidence": "Solve on store subsets of growing size, convert each partial solution into a full one by REOPT and update the incumbent every step; a similar-first order injects little novelty per step.", "pages": "pp. 8-9, 13-14"},
+      {"pattern": "Trivial bound as stopping certificate", "evidence": "A parity lower bound stops each run at a matching solution and turns heuristic hits into proven optima for all instances of [6].", "pages": "pp. 11, 13-14, 17"}
+    ],
+    "transferable": [
+      "For a model bilinear in two variable blocks, fix one block to get a MILP and alternate between the blocks until no improvement (REOPT, p. 7).",
+      "Search a neighbourhood that frees one configuration at a time in a random circular order, and stop after one full round without improvement (pp. 7-8).",
+      "Cap integer variables aggressively to shrink a binary expansion, and release the cap when the neighbourhood stops improving (p. 8).",
+      "Grow the instance: solve on an increasing subset of entities, convert each partial solution into a full one and update the incumbent at every step; adding the most similar entity next injects little novelty per step (pp. 8-9).",
+      "Stop a heuristic at a trivial valid bound, so that a hit becomes a proof of optimality (pp. 11, 13).",
+      "Report heuristics by the primal integral and by 100-seed statistics with box plots of final value and time to best (pp. 11-16)."
+    ],
+    "coauthors": "Michele Monaci, Domenico Salvagnin",
+    "quotes": [
+      {"text": "Working with a subset of the variables (after fixing the other) we were able to squeeze useful solutions out of an impossible-to-solve MILP model.", "page": 17},
+      {"text": "Due to their heuristic nature, our methods—through deterministic—exhibit a large dependency on the initial conditions, including the random seeds used both within our code and in CPLEX.", "page": 10}
+    ]
+  },
+  {
+    "id": "S054",
+    "year": "2017",
+    "title": "Deep neural networks as 0-1 mixed integer linear programs: A feasibility study",
+    "read_level": "full",
+    "contribution": "A feasibility study of trained ReLU networks as 0-1 MILPs (the model credited to independent prior work) that adds layer-wise bound tightening by truncated auxiliary MILPs and shows provably optimal feature visualizations and adversarial examples for small MNIST networks, with the tightened model solving far more instances within 300 s.",
+    "problem_entry": "Can a state-of-the-art MILP solver handle a trained ReLU network written as a 0-1 MILP? The practical feasibility of the model is the stated motivation (pp. 1, 4); training is excluded because it would be bilinear (p. 5).",
+    "key_idea": "x - s = w^T y + b with an indicator binary per ReLU (pp. 2-3), an objective per application (maximum activation; minimum L1 input change under a 20% wrong-label margin) (pp. 6-7), and bounds tightened unit by unit by truncated auxiliary MILPs (p. 5).",
+    "assumptions": "Weights fixed; bounded inputs; indicators converted to big-M when finite bounds exist (p. 3); the model is never infeasible since any input extends uniquely to a feasible solution (p. 4); MNIST with five small DNNs of 93-96% test accuracy (pp. 6, 11).",
+    "proof_devices": [
+      "Uniqueness argument: fixing the input fixes every x and z (up to degenerate zero-input ReLUs), so any input is a feasible start, p. 4",
+      "Layer-ordered bound tightening on truncated models, solver bounds accepted after a short limit, bounds saved to a file, parallel by layer, p. 5",
+      "Max pooling as an argmax binary set with indicator constraints, p. 4"
+    ],
+    "experiments": "CPLEX 12.7, 4-core notebook (GPU unused), 300 s, 100 runs per DNN, basic against tightened model: DNN3 64% against 100% solved (158.5 s against 12.1 s), DNN5 7% against 67%; feature visualization within 1 s; no external adversarial baseline (pp. 6, 11-12).",
+    "positioning": "Concedes the model to Serra et al.'s independent work and claims only the applications and discussion (pp. 1-2); builds on Belotti et al. on indicator constraints and on the authors' own heuristics (pp. 4-5, 13).",
+    "writing": "Bulleted contributions with an explicit non-novelty statement (pp. 1-2); 'feasibility study' framing with status words ('Preliminary', 'a very first step') (pp. 1, 12).",
+    "limits_future": "Not suited for training (p. 5); larger DNNs take an hour or more (p. 12); future: faster exact solution, heuristics on a restricted model for large DNNs, new applications (p. 12).",
+    "method_links": [
+      {"method": "Method 6", "relation": "evidence", "note": "Steps 1-2: the study measures what the stock solver does with the plain model, and the bound sub-decision is a set of auxiliary MILPs solved, even truncated, by the same solver.", "pages": "pp. 1, 4-5, 7"},
+      {"method": "Method 4", "relation": "variant", "note": "The only controlled comparison is a one-component ablation (bound tightening on or off) on the same instances and solver; no external arm.", "pages": "pp. 11-12"},
+      {"method": "Workflow F checkpoint", "relation": "evidence", "note": "The independent prior model is credited in the first contribution bullet, before any claim.", "pages": "pp. 1-2"},
+      {"method": "Heuristic 7", "relation": "evidence", "note": "Status labels: 'Preliminary computational results', 'a very first step', the subtitle 'A Feasibility Study'.", "pages": "pp. 1, 12"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Layer-wise bound tightening by truncated auxiliary MILPs", "evidence": "Bounds on each unit's two output variables from MILPs over the network truncated after that unit, propagated forward and stored for reuse; solves become more than an order of magnitude faster.", "pages": "pp. 5-6, 11-12"},
+      {"pattern": "Optimize over a fixed trained model, where overfitting is the goal", "evidence": "Training by MILP overfits (the SVM paper S109 is cited), but for a fixed network overfitting it is the desired property: adversarial examples and maximum activations.", "pages": "pp. 5, 12"}
+    ],
+    "transferable": [
+      "Tighten bounds on a layered big-M or indicator model unit by unit in topological order: drop the units of the same and later layers, maximize each of the two output variables, accept the solver's bound after a short limit, propagate, save to a file, and spread a layer's units over parallel machines (pp. 5, 11).",
+      "Report a preprocessing component as paired basic and improved columns of % solved, final gap, nodes and time, counting time-limit runs at the limit (pp. 11-12).",
+      "When any input extends uniquely to a feasible MILP solution, start refinement heuristics (local branching, polishing, proximity search) from cheap heuristic points such as gradient descent (pp. 4-5).",
+      "Write design requirements as linear side constraints (a 20% activation margin for the wrong label, a 0.2 cap on each pixel change) instead of penalties (pp. 7, 9)."
+    ],
+    "coauthors": "Jason Jo (MILA and IVADO, Montreal)",
+    "quotes": [
+      {"text": "Therefore we cannot claim the model is new.", "page": 2},
+      {"text": "In those cases, indeed, overfitting the given DNN is actually a desired property.", "page": 5}
+    ]
+  },
+  {
+    "id": "D017",
+    "year": "2018",
+    "title": "SelfSplit parallelization for mixed-integer linear programming",
+    "read_level": "full",
+    "contribution": "The journal study of SelfSplit in MILP: redundant deterministic sampling plus deterministic node colouring parallelizes legacy ATSP codes, a callback-based Benders code and CPLEX with almost no communication, after in-vitro simulations and frozen-tree replays that show where static splitting can and cannot balance work.",
+    "problem_entry": "Parallelizing MIP solvers is hard (root-heavy work, order dependence, unbalanced trees, global information, determinism) (p. 2); SelfSplit worked in CP, and the objection that it cannot share learned information is answered by redundant sampling, since MILP solvers learn mostly in early nodes (pp. 5-6).",
+    "key_idea": "Each worker repeats the same deterministic sampling phase, colours the open nodes by a deterministic rule and processes only its own; the paused-node variant uses a log-volume pause rule, a difficulty sort and round-robin dealing (pp. 6-9).",
+    "assumptions": "Deterministic original algorithm, identical workers, no fault tolerance or hash check, sampling and merging not bottlenecks (pp. 5, 7); codes: ATSP branch-and-bound and branch-and-cut, a callback Benders UFL code, CPLEX 12.6.1 on MIPLIB 2010 (pp. 6, 16-22).",
+    "proof_devices": [
+      "Statistical load-balancing simulation: N = K*M synthetic subproblem sizes from uniform and Pareto (alpha 0.5, 1.5) distributions, 10,000 repetitions, boxplots, pp. 9-12",
+      "Frozen-tree replay: 32 MIPLIB 2010 trees of at least 500,000 nodes recorded by callbacks (optimum given, heuristics off) and replayed under pause, sort and colouring rules with an ideal oracle and a random arm, pp. 12-15",
+      "Optimum on input to separate the heuristic side effect from the parallel speedup, pp. 16, 21",
+      "Three-pass callback implementation with the callbacks installed once and given the pass number, pp. 19-20"
+    ],
+    "experiments": "Identical single-thread Xeons: ATSP branch-and-bound speedups 7.76/13.37/21.56/30.55 for K = 4/16/32/64, ATSP branch-and-cut 6.74/10.89/14.54/17.91, UFL 9.1 over its one-worker version; CPLEX: 1-2% overhead under 5 seeds, 16 workers fastest overall against CPLEX RAMPUP and DYNAMIC but DYNAMIC solves more (208 against 193); Tables 7 and 8 give CPLEX(1) 81 against 174 solved in class 'all', unexplained in the text (pp. 15-24).",
+    "positioning": "Places SelfSplit among static load-balancing schemes (Henrich's classes, Laursen, Régin et al., UG racing ramp-up, bet-and-run) and against CPLEX's distributed modes (pp. 3-5, 23-24).",
+    "writing": "Modest framing ('in spite of its simplicity'; 'Though better results could probably be obtained by using more sophisticated approaches'); the in-vitro experiment flagged as 'admittedly a gross simplification' (pp. 1, 6, 9).",
+    "limits_future": "Static splitting fails on heavy-tailed subproblem distributions, where bet-and-run is suggested (p. 12); small trees with heavy nodes pay the sampling overhead (pp. 18, 25); DYNAMIC wins on hard instances (p. 24); future: other enumerative codes (p. 25).",
+    "method_links": [
+      {"method": "Method 4", "relation": "evidence", "note": "Empty callbacks in the CPLEX baseline; classes defined by any compared solver's time 'To avoid any bias'; optimum on input to isolate the effect; constants not tuned and one parameter set for all instances; the rival's wins printed; the instance filter argued fair for a single-solver speedup study.", "pages": "pp. 16-18, 21-24"},
+      {"method": "Method 3", "relation": "evidence", "note": "Variability designed out of the measurement (frozen trees, optimum given, heuristics off), used to explain where static splitting scales, and a 5-seed overhead check; bet-and-run named for heavy tails; but the 16-worker comparisons use the default seed only.", "pages": "pp. 12-13, 17-18, 21-22, 24-25"},
+      {"method": "Method 6", "relation": "evidence", "note": "Steps 3-4: 46 and 11 new lines and a dummy callback on CPLEX; ceilings measured first by an ideal oracle and a posteriori parameters.", "pages": "pp. 14-16, 18-20"},
+      {"method": "Heuristic 6", "relation": "variant", "note": "Outside randomized restarts: an ideal difficulty oracle beats a cheap score only slightly, and random sorting is about 10% worse.", "pages": "p. 15"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "In vitro before in vivo: synthetic distributions and frozen trees", "evidence": "Load balancing first simulated on synthetic subproblem sizes, then replayed on recorded solver trees, before any real parallel run; kin to the controlled oracle of Method 2 step 4.", "pages": "pp. 9-15"},
+      {"pattern": "Redundant computation instead of communication", "evidence": "All workers recompute the sampling phase, so the global information that MILP solvers gather early is shared without messages.", "pages": "pp. 5-7"}
+    ],
+    "transferable": [
+      "Before touching a solver, simulate the scheme on synthetic subproblem sizes from uniform (2x and 10x spread) and heavy-tailed Pareto (alpha = 0.5, 1.5) distributions, 10,000 repetitions per setting, with speedup boxplots (pp. 9-12).",
+      "Record real branch-and-cut trees once through callbacks (optimum given, heuristics off) and replay alternative partition rules on the frozen trees, bracketed by an ideal oracle and a random rule (pp. 12-15).",
+      "When a modification also finds incumbents earlier, give the optimum on input so that only the intended effect is measured (pp. 16, 21).",
+      "Measure a modification's overhead as its one-worker version against the default solver with empty callbacks, under several seeds (p. 22).",
+      "Define hardness classes by the time of any compared solver (at least one solver took at least n seconds) (p. 23).",
+      "To inject a scheme into a closed solver whose callbacks cannot be reinstalled, install them once and pass them the pass number (p. 20)."
+    ],
+    "coauthors": "Michele Monaci, Domenico Salvagnin",
+    "quotes": [
+      {"text": "The improved behavior of SelfSplit as a heuristic is of course a positive side effect of our method, however it is not strictly related to parallelization as it could be simulated by a sequential implementation not using the rigid best-bound search strategy of the original ATSP code.", "page": 16},
+      {"text": "meaning that a perfect estimate of the node difficulty is not really required in our setting", "page": 15}
+    ]
+  },
+  {
+    "id": "S027",
+    "year": "2018",
+    "title": "On the use of intersection cuts for bilevel optimization",
+    "read_level": "full",
+    "contribution": "A finitely convergent general-purpose MIBLP branch-and-cut obtained by minimal rule changes to a MILP solver, with the first intersection cuts for bilevel optimization (bilevel-free sets enlarged by integrality and facet deletion) and basis-free informed no-good cuts, beating a re-implemented state-of-the-art MIBLP method on 302 instances.",
+    "problem_entry": "Generic MIBLP methods are tested on small examples and need compact HPRs or all-integer variables (pp. 4, 11-12); the entry is a solver built as non-invasive supplements to a MILP branch-and-cut instead of an ad-hoc scheme (pp. 3-4).",
+    "key_idea": "Minimal branch-and-bound rule changes for correctness plus intersection cuts from bilevel-free sets S(y^) built from one follower solution, enlarged to S+(y^) and stripped of facets that cut no bilevel-feasible point, with y^ chosen by an auxiliary MILP (pp. 9-18).",
+    "assumptions": "Linear MIBLP, optimistic version; integer variables bounded (Assumption 1); continuous leader variables absent from the follower (Assumption 2); Ax + By - b integer for S+ (Assumption 3) (pp. 5-7, 14); HPR need not be compact (p. 12); 302 instances in four classes, including MIPLIB-derived ones with up to about 80,000 HPR variables (pp. 20-22).",
+    "proof_devices": [
+      "Theorem 1: one LP over box-normalized directions decides follower unboundedness for every HPR point; integer ray by rationality, p. 8",
+      "Theorem 2: finiteness since each branching strictly shrinks a bounded integer domain; correctness through the refinement MILP under Assumption 2, p. 11",
+      "Theorems 3-4: bilevel-free sets from one follower solution, enlarged by integrality (b + 1), pp. 13-14",
+      "Theorem 5 and Corollaries 1-2: delete facets whose opposite closed half-space holds no bilevel-feasible point, using node bounds or an incumbent bound, p. 16",
+      "SEP-2: auxiliary MILP choosing y^ to maximize the removable facets, pp. 17-18",
+      "Informed no-good cuts as disjunctive cuts on the cone of tight bound constraints, valid for all-binary problems, pp. 18-20"
+    ],
+    "experiments": "C on CPLEX 12.6.3 callbacks, CPLEX heuristics and preprocessing off, 4 threads, 3,600 s; BENCHMARK (DeNegre's cuts in the same code) validated against the original's published results; profiles over 232 instances: SEP-2a fastest on 28% and solves 71%, against 8% and 42%; shifted geometric means with shifts of 10 s and 100 nodes; single runs (pp. 20-26).",
+    "positioning": "Compares assumptions with Moore-Bard, DeNegre-Ralphs, Kleniati-Adjiman, Xu-Wang, Caramia-Mari, Saharidis-Ierapetritou and Mitsos, claiming the first convergent branch-and-bound without a compact HPR (pp. 11-12) and the first use of Balas's intersection cuts in bilevel optimization (pp. 4, 12).",
+    "writing": "Theorem-proof style for the correctness pieces with very short proofs ('Obvious', p. 16); strong comparative claims ('one of the most extensive computational studies', 'by a large margin', p. 4).",
+    "limits_future": "S+ needs Assumption 3, informed no-good cuts only for binary problems (pp. 14, 23); per-node separation does not pay on tiny instances (p. 26); future: other bilevel-free polyhedra and cuts that need no LP basis (p. 27).",
+    "method_links": [
+      {"method": "Method 6", "relation": "evidence", "note": "Steps 2-3: add to a stable solver only what correctness needs and deviate from it only when strictly needed; the follower MILP and SEP-2 are auxiliary MILPs on the same solver.", "pages": "pp. 4, 9, 11, 17-18"},
+      {"method": "Method 4", "relation": "evidence", "note": "Step 1: the rival's cuts embedded in the same CPLEX code and first validated against the original's published results; the remaining cross-machine figures serve only as context.", "pages": "pp. 22-24"},
+      {"method": "Heuristic 3", "relation": "evidence", "note": "Balas's intersection cuts, standard in MIP, brought into bilevel optimization for the first time.", "pages": "pp. 4, 12"},
+      {"method": "Inner Tension 5", "relation": "evidence", "note": "The general-purpose ambition is explicit; the claims are against general MIBLP methods, and interdiction instances are treated as general bilevel problems although specialized algorithms exist.", "pages": "pp. 3-4, 21"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Free-set enlargement by deleting facets that cut no feasible point", "evidence": "Bilevel-free polyhedra are enlarged by removing facets whose complement half-space holds no bilevel-feasible point, with the generating follower solution chosen by an auxiliary MILP that maximizes the removable facets; SEP-2 is best on INTERDICTION (gap 4.64% against more than 30%).", "pages": "pp. 16-18, 26"},
+      {"pattern": "Reimplement-and-validate the rival inside your own framework", "evidence": "BENCHMARK re-implements DeNegre's cuts in the authors' CPLEX code and is checked against the original's published DENEGRE results before serving as the benchmark; also S082 (MIPMACH re-created, MIPNEW validated) and S092 (Günneç et al. re-implemented).", "pages": "pp. 22-23"},
+      {"pattern": "Generalize the class, then win on the special cases' benchmarks", "evidence": "A general-purpose MIBLP solver is tested on four literature classes, interdiction included; also S090 (GIP) and S092 (GLCIP).", "pages": "pp. 3-4, 20-24"}
+    ],
+    "transferable": [
+      "To turn a MILP branch-and-cut into a solver for a harder class, list the minimal rule changes needed for correctness (no incumbent update or unbounded fathoming without the class-specific check, branching on linking variables even when integral, a refinement MILP at fully fixed nodes) and prove finiteness from bounded integer domains (pp. 10-11).",
+      "Decide unboundedness of all subproblems at once by one LP over box-normalized directions (Theorem 1, p. 8).",
+      "Build intersection cuts for a new nonconvexity from a convex set free of feasible points, derived from one subproblem solution; enlarge it by integrality and delete every facet whose opposite closed half-space holds no feasible point, choosing the subproblem solution by an auxiliary MILP that maximizes the deletable facets (pp. 13-18).",
+      "Re-implement the rival's cuts inside your own solver framework and validate the re-implementation against the rival's published results before it serves as the benchmark (pp. 22-23).",
+      "Pair performance profiles with shifted geometric means whose shifts are stated, and clip gaps at 100% (pp. 24-26)."
+    ],
+    "coauthors": "Ivana Ljubić, Michele Monaci, Markus Sinnl",
+    "quotes": [
+      {"text": "The rationale of this choice is that we prefer to exploit the underlying MILP solver as much as possible, and to deviate from it only when strictly needed for the correctness of the approach.", "page": 11},
+      {"text": "we decided to embed the cuts proposed in [6, cf. Proposition 2.2] within our own Cplex-based code.", "page": 22}
+    ]
+  },
+  {
+    "id": "S082",
+    "year": "2018",
+    "title": "Array designer: automated optimized array design for functional near-infrared spectroscopy",
+    "read_level": "full",
+    "contribution": "An automated fNIRS array-design method (a sensitivity-plus-coverage objective, SNR-weighted sensitivity data and a GRASP heuristic) validated against a re-created prior MIP and a new MIP formulation in 450 simulations on an adult head model.",
+    "problem_entry": "Optode placement is manual and subjective (p. 2); existing tools answer the forward question while users need the inverse one (p. 3); the prior MIP maximizes total sensitivity and clusters channels on extended ROIs (pp. 3, 5).",
+    "key_idea": "An objective S_A/S_max + cW*C_A with the SNR folded into the data (pp. 4-6); a GRASP with a top-five randomized greedy and 1-opt plus flip-float or 2-opt local search (p. 6); MIPs (the re-created rival and a new channel-variable model) as yardsticks (pp. 7, 18-19).",
+    "assumptions": "MNI-ICBM152 head model, grey-matter mesh downsampled to 12,038 nodes, the 10-2.5 system of 1,092 positions, surface sensitivity for 77,995 channels within 60 mm (p. 4); binary placement and channel variables with pairwise distance incompatibilities; MIPMACH has a big-M and a weak LP relaxation (pp. 18-19).",
+    "proof_devices": [
+      "Validation ladder: re-create the rival MIP, show the new formulation equals it on the rival's objective, then use it as the benchmark, pp. 7, 12",
+      "Product linking z_pq = x_p*y_q through the aggregated equations (24)-(25), with z <= x and z <= y as user cuts, p. 19",
+      "Normalization of the sensitivity term by the sensitivity-only optimum, p. 6"
+    ],
+    "experiments": "450 simulations (5 ROIs x 15 optode counts x 6 values of cW), 1 h each, CPLEX 12.7.1 on a Linux desktop against GRASP on a 2014 MacBook Pro; MIPNEW equals MIPMACH in 70 of 75; GRASP under 350 s and at least MIPNEW's objective in 318 of 450 (88%-136%); no repetitions, seeds or MIP gaps reported (pp. 9-12).",
+    "positioning": "Against manual design, AtlasViewer's forward analysis, fOLD's fixed grid and Machado et al.'s sensitivity-only MIP, which it calls pioneering but not general (pp. 2-3, 5).",
+    "writing": "Medical-physics register with promotional claims ('the potential to end the need for manual array design', p. 2) and a limitations paragraph that names three concrete limits (p. 17).",
+    "limits_future": "Surface rather than volumetric sensitivity, no short-separation channels, no optimality guarantee for GRASP (p. 17); future: an open-source toolbox in Homer2/AtlasViewer, a force-symmetry option, 3-D sensitivity profiles (pp. 16-17).",
+    "method_links": [
+      {"method": "Method 6", "relation": "evidence", "note": "Steps 3 and 5: stock-solver MIPs as the yardstick, with valid inequalities left to the solver as user cuts; the delivered tool drops the MIP for a faster GRASP that needs no third-party software.", "pages": "pp. 12-13, 19"},
+      {"method": "Method 4", "relation": "evidence", "note": "Step 1: the rival's MIP re-created with the same data weighting and objective; the new formulation validated against it before it judges the heuristic.", "pages": "pp. 7, 12"},
+      {"method": "Method 4", "relation": "contradiction", "note": "MIP and GRASP times measured on two different machines.", "pages": "p. 9"},
+      {"method": "Method 3", "relation": "contradiction", "note": "Joint application paper, Fischetti's share in the design unknown: GRASP is randomized, but each setting is reported without repetitions or seed spread.", "pages": "pp. 6, 9-12"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Reimplement-and-validate the rival inside your own framework", "evidence": "MIPMACH re-created; MIPNEW shown identical in 70 of 75 runs on the rival's objective before it benchmarks GRASP; also S027 and S092.", "pages": "pp. 7, 12"},
+      {"pattern": "Scale-free two-criterion objective", "evidence": "Sensitivity divided by its single-objective optimum and coverage by the ROI node count, so that one weight cW sets the user's priority.", "pages": "p. 6"}
+    ],
+    "transferable": [
+      "Validation ladder: re-create the prior formulation, show that the new formulation gives the same answers on the prior objective, then let it judge the new method on the extended objective (pp. 7, 12).",
+      "Make a two-term objective scale-free by dividing one term by its single-objective optimum and the other by its maximum count, leaving one interpretable weight (p. 6).",
+      "Put domain physics into the data (SNR weights on the sensitivity matrices) so that every compared algorithm solves the same problem (pp. 4-5, 7).",
+      "Declare product-linking inequalities z <= x, z <= y as user cuts rather than model rows when they slow the LP (p. 19).",
+      "Run the simulation grid as a full factorial over the parameters that matter and fix the predictable ones (p. 9)."
+    ],
+    "coauthors": "Sabrina Brigadoi and Domenico Salvagnin (equal contribution), Robert J. Cooper (corresponding author)",
+    "quotes": [
+      {"text": "Once these steps are complete, MIPNEW can appropriately be used as a benchmark against which to test Array Designer’s GRASP algorithm.", "page": 7},
+      {"text": "In our implementation, we just declared them as user cuts, letting the MIP solver to deal with them in the most efficient way.", "page": 19}
+    ]
+  },
+  {
+    "id": "S090",
+    "year": "2018",
+    "title": "A dynamic reformulation heuristic for Generalized Interdiction Problems",
+    "read_level": "full",
+    "contribution": "A heuristic for Generalized Interdiction Problems that relaxes follower integrality, dualizes the follower LP into a compact single-level MILP solved by a black-box solver, repairs leader vectors by two small MILPs, and dynamically appends the solver's own follower root cuts, reaching optimal solutions on 92% of 656 literature instances within 10 s.",
+    "problem_entry": "Interdiction games are hard to solve exactly (p. 3); dropping the assumption of opposite objectives gives GIPs that are not min-max (p. 5); the only generic heuristic, a greedy, is blind to the follower's structure (p. 7).",
+    "key_idea": "Relax the follower's integrality, dualize the follower LP (with a linear duality-gap row for GIP) into a compact MILP, solve it with a black-box solver, REFINE each leader vector, iterate with no-good cuts, and append the solver's follower root cuts as new rows and dual columns (pp. 12-18).",
+    "assumptions": "Binary interdiction variables; y_j <= UB_j (1 - x_j) as the only x-dependent follower rows; follower bounded and feasible for every x (pp. 9-10); big-M penalties from variable bounds (p. 11); the relaxed problem is in general neither a relaxation nor a restriction (p. 12); 1,286 instances in ten classes, continuous-follower classes excluded (pp. 18-20).",
+    "proof_devices": [
+      "Theorem 3.1: safe penalties M_j > max{d_j, Phi_UB - Phi_LB} by bounding the follower's best value, p. 11",
+      "Theorems 4.1-4.2: single-level MILP by LP duality, equality relaxed to >= by weak duality, p. 13",
+      "Row-and-column generation without pricing: the solver's root cuts on follower MILPs appended to the follower system, pp. 16, 18",
+      "No-good cuts on leader vectors over the solution pool, with 5% of the remaining time reserved for refinement, p. 16"
+    ],
+    "experiments": "CPLEX 12.6.3, 4 threads; 10 s on 656 literature instances with known optima: DR+ 92% optimal (about 3% average error), I+ 88%, greedy 17%; the greedy also given a randomized GRASP variant; new instances at 60 s against the best found, dual gaps from exact solvers; single runs (pp. 18-26).",
+    "positioning": "Generalizes the reformulation heuristics of Lodi et al. and Caprara et al. for knapsack interdiction and the min-max regret relax-dualise-reformulate idea (pp. 5, 14); the only generic rival is DeNegre's greedy (p. 7).",
+    "writing": "Bulleted contributions with novelty claims ('To the best of our knowledge, a similar mechanism was never used', 'by far, the most extensive study', pp. 5-6) and a simple-first framing ('although quite simple, even the most basic variant', p. 6).",
+    "limits_future": "Large percentage errors on clique instances with tiny optima (p. 24); uninformative dual gaps on random GIPs (p. 26); future: inside an exact method, min-max regret, interdiction penalties, general MIBLPs through KKT conditions, where preliminary runs are slow (pp. 27-28).",
+    "method_links": [
+      {"method": "Method 6", "relation": "evidence", "note": "Steps 2-3: the black-box solver works on the reformulation, inside REFINE, and as the source of the recycled cuts.", "pages": "pp. 5, 16, 18"},
+      {"method": "Method 4", "relation": "evidence", "note": "Steps 2 and 5: the weak literature baseline is upgraded to a randomized multi-thread variant with the same time; solver parameters stay at defaults to avoid overtuning.", "pages": "pp. 18-19"},
+      {"method": "Method 1", "relation": "variant", "note": "LP duality projects the follower variables out of the SIP reformulation, at the price of exactness.", "pages": "pp. 12-13"},
+      {"method": "Heuristic 3", "relation": "evidence", "note": "The relax-dualise-reformulate idea is borrowed from min-max regret heuristics.", "pages": "p. 5"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Recycle the solver's own cuts across a decomposition boundary", "evidence": "Root cuts generated by CPLEX on follower MILPs inside REFINE become new follower rows and hence dual columns of the single-level reformulation, with no pricing code.", "pages": "pp. 16, 18, 24"},
+      {"pattern": "Formulation twins", "evidence": "TRSC and TRSC+ differ only by redundant {0,1/2}-CG rows; every heuristic except DR+ improves sharply on TRSC+, which shows how much each depends on the formulation.", "pages": "pp. 22, 24"},
+      {"pattern": "Generalize the class, then win on the special cases' benchmarks", "evidence": "GIP generalizes standard interdiction, and the method is tested on the standard interdiction sets from the literature; also S027 and S092.", "pages": "pp. 5, 18-24"}
+    ],
+    "transferable": [
+      "For a bilevel or min-max problem with an integer follower, relax the follower's integrality, dualize its LP into a compact single-level MILP, solve it with a black-box solver, and repair each leader vector with two small MILPs (the follower value, then the best response with that value fixed) (pp. 12-15).",
+      "Strengthen the reformulation on the fly by appending the root cuts the solver generates while solving follower subproblems, which adds dual columns without pricing code (pp. 16, 18).",
+      "Iterate over the solver's solution pool, refine each solution, exclude seen leader vectors by no-good cuts, and keep 5% of the remaining time for refinement (p. 16).",
+      "Before comparing, give a naive literature baseline a randomized multi-start version with the same threads and time (p. 19).",
+      "Pair instance sets that differ only by redundant valid inequalities (TRSC against TRSC+) to show how much each method depends on the formulation (pp. 22, 24).",
+      "Derive safe big-M penalties from variable bounds (Theorem 3.1, p. 11)."
+    ],
+    "coauthors": "Michele Monaci, Markus Sinnl",
+    "quotes": [
+      {"text": "A peculiarity of our scheme is that the generation of the new columns of BT does not require an ad-hoc pricing algorithm, in the sense that we just re-use the cutting planes generated by the MILP solver invoked with function REFINE.", "page": 18},
+      {"text": "To avoid overtuning, all the other CPLEX parameters (including those related to cut generation) are left at their default values.", "page": 18}
+    ]
+  },
+  {
+    "id": "S092",
+    "year": "2018",
+    "title": "Least cost influence propagation in (social) networks",
+    "read_level": "full",
+    "contribution": "The Generalized Least Cost Influence Problem with arbitrary activation functions, modelled by a set-covering ILP over minimal influencing sets with dominating generalized propagation constraints, and solved by branch-and-cut and a price-cut-and-branch heuristic that beat a re-implemented state-of-the-art method on its own special case.",
+    "problem_entry": "The influence-maximization variants TSSP, WTSSP and LCIP each carry restrictive assumptions; a generalization with activation functions and discrete incentives unifies them and lifts those limits (pp. 1-3, 5-7).",
+    "key_idea": "One variable per minimal influencing set (Theorem 2), generalized propagation constraints that dominate cycle elimination (Theorem 3), column generation with a dynamic-programming pricing, exact and heuristic separation, and price-cut-and-branch (pp. 7-15).",
+    "assumptions": "Static directed network; strictly ordered discrete incentives with an artificial infinite one if needed; monotone activation functions evaluable in polynomial time; acyclic propagation (pp. 2-4); small-world instances with |V| 50-100, degree 4-16, alpha in {0.1, 0.5, 1}, Gamma in {0.9, 1, 1.1}, plus GRZ instances generated as by Günneç et al. (pp. 15-16).",
+    "proof_devices": [
+      "Theorem 1: maximal activated set for fixed incentives by propagation with O(|A|) evaluations, pp. 4-5",
+      "Theorem 2: exchange argument restricting the model to minimal influencing sets, p. 7",
+      "Proposition 3 and Theorem 3: chains of inequalities for the dominance of generalized propagation over cycle elimination, pp. 9-10",
+      "Theorem 4: pricing NP-hard via knapsack; a dynamic program carrying the duals of separated cuts in its state, pp. 10, 13-14",
+      "Design choice: eliminable node and arc variables kept so that the solver's generic branching can be used, p. 8"
+    ],
+    "experiments": "Single core, 7,200 s, CPLEX 12.7.1 at defaults; arc-formulation LP bounds extremely weak, (COV) with propagation constraints far stronger; the heuristic P+e leaves smaller gaps than the exact methods on the hardest instances; the generic C+ and P+ beat a re-implementation of Günneç et al. on GRZ in most cases; single runs (pp. 15-20).",
+    "positioning": "Reviews TSSP (Kempe et al., Chen, Ackerman et al.), WTSSP (Raghavan and Zhang) and LCIP (Günneç et al.) and argues that none of their stronger formulations extends to the GLCIP (pp. 5-7).",
+    "writing": "Definition-proposition-theorem structure with short proofs; a first-of-its-kind claim ('To the best of our knowledge, this is the first ILP formulation of that kind', p. 7).",
+    "limits_future": "Non-negligible final LP gaps (p. 17); exact separation not competitive on large graphs (p. 19); a degree and arc-count confound acknowledged (p. 17); about a dozen control constants of unstated origin (pp. 16-17); future: branch-price-and-cut with stabilization, better heuristic separation, more valid inequalities (p. 20).",
+    "method_links": [
+      {"method": "Method 6", "relation": "evidence", "note": "Steps 2-3: eliminable variables kept for the solver's generic branching; exact separation written as an auxiliary ILP and solved by CPLEX with populate; defaults otherwise.", "pages": "pp. 8, 12, 15, 17"},
+      {"method": "Method 4", "relation": "evidence", "note": "The rival is re-implemented in the same framework with a better parametrization and the authors' primal heuristics; the generic methods are not tuned for the rival's instances; a confound is printed. Not stated: how the dozen separation and pricing constants were chosen.", "pages": "pp. 16-17, 19"},
+      {"method": "Method 1", "relation": "variant", "note": "Dominance thinning (minimal influencing sets, non-dominated incentives) stopped where it would cost the solver its generic branching: node and arc variables are kept.", "pages": "pp. 3-4, 7-8"},
+      {"method": "Inner Tension 5", "relation": "evidence", "note": "The generic method beats the special-case state of the art on that method's own instances, on a problem defined to contain the special cases.", "pages": "pp. 2, 6-7, 19"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "Generalize the class, then win on the special cases' benchmarks", "evidence": "GLCIP contains TSSP, WTSSP and LCIP; the generic C+ and P+ outperform the re-implemented LCIP method on GRZ 'despite the fact that they are not specialized or tuned'; also S027 and S090.", "pages": "pp. 2, 6-7, 19"},
+      {"pattern": "Reimplement-and-validate the rival inside your own framework", "evidence": "Günneç et al.'s method is re-implemented, with a parametrization found better than the original and the authors' primal heuristics added; also S027 and S082.", "pages": "p. 16"}
+    ],
+    "transferable": [
+      "Restrict a covering formulation to minimal sets by an exchange argument, prove that a new inequality family dominates the classical cuts, and separate the new family heuristically starting from violated classical cuts (pp. 7-10, 12-13).",
+      "Keep eliminable linking variables when they give the MIP solver good branching objects (p. 8).",
+      "For a knapsack-like NP-hard pricing problem, write a dynamic program that carries the duals of the separated cuts in its state (pp. 13-14).",
+      "Re-implement the state-of-the-art rival in the same framework and give it the improvements that help it (parametrization, primal heuristics) before comparing (p. 16).",
+      "Print the confounds of the instance design next to the result (at fixed size, a higher degree also means more arcs) (p. 17)."
+    ],
+    "coauthors": "Michael Kahr, Markus Leitner, Michele Monaci, Mario Ruthmair",
+    "quotes": [
+      {"text": "Further note that we refrain from eliminating node and arc variables using equations (1b) and (1c) to avoid the need for developing problem specific branching rules.", "page": 8},
+      {"text": "We remark, however, that this comparison might be influenced from the side effect that changing the average node degree (for a fixed number of nodes) also changes the number of arcs in the underlying graph.", "page": 17}
+    ]
+  }
+]

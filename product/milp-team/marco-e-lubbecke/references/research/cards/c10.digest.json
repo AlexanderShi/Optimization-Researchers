@@ -1,0 +1,158 @@
+[
+  {
+    "id": "S019",
+    "year": "2025",
+    "title": "The SCIP Optimization Suite 10.0",
+    "read_level": "full",
+    "contribution": "Release report of SCIP Optimization Suite 10.0 (35 authors) in which Lübbecke, credited as coordinator and supervisor of GCG, co-signs GCG 4.0 (extended master constraints for non-robust branching and cuts, nested JDEC decompositions with a recursive GCG pricing solver, HiGHS pricing, parallel pricing kept single-threaded by default, IPColGen, score plugins, Apache 2.0 licence), reported without any computational evaluation, beside SCIP features measured with the suite's seeded two-baseline protocol.",
+    "problem_entry": "Release report, not a research question (p. 2): changes measured against the previous major release 9.0 and the bugfix release 9.2.4 to separate bugfix robustness from new features (p. 4); GCG enters through practical frictions: original-vs-master API confusion, branching on aggregated masters, a rigid plain-text DEC format, general MILP pricing, parallel pricing off at compile time (pp. 27-32).",
+    "key_idea": "GCG keeps its two synchronized SCIP instances, original and master (p. 26), and adds extended master constraints: master-only rows for non-robust branching and cuts, priced through a coefficient variable y in a domain Y(x,z) with inferred variables z, applied and undone per node with dual stabilization (pp. 27-28), plus nested decompositions in JDEC solved by a recursive GCG pricing solver (pp. 29-31).",
+    "assumptions": "Dantzig-Wolfe setting min{c'x: Ax>=b, Dx>=d, x integer}, X = conv{x integer: Dx>=d}, discretized integer master over points and rays with one convexity row, linking (5) (p. 27); set covering/packing/partitioning masters for IPColGen and weighted independent set pricing for Cliquer (p. 32); Benders linking variables matched by name, integer and no-good cuts only with binary linking variables (p. 23); exact mode for rational MILP only (pp. 7, 11); test sets MIPLIB 2003/2010/2017 + COR@L (349) and MINLPLib (169) restricted to instances earlier releases solved (p. 4).",
+    "proof_devices": [
+      "Robust vs non-robust via linking (5): integrality of lambda implies integrality of x, not conversely; an original-variable branching decision becomes a variable bound in pricing so tailored pricing survives, non-robust rows need coefficient variables y in Y(x,z) and may destroy tailored pricing but can be stronger (pp. 27-28)",
+      "VIPR certificate with three argument types: conical combinations, Chvatal-Gomory rounding, disjunction unsplitting; presolve not certified (pp. 10-11; exact-mode authors)",
+      "Implied integrality justified by Hoffman-Kruskal on a totally unimodular block after fixing x, detected by network-matrix augmentation (pp. 12-13; other authors)",
+      "Safe dual bounds by bound shift and project-and-shift with the exact LP as fallback and at listed points (p. 9)",
+      "Flower-inequality separation reduced from O(|E|^(k+1)) to O(|E|) with overlap sets (p. 18)",
+      "Ancestral pseudocosts APS = PS0 + gamma PS1 + ... with fallback to hybrid branching when either level is unreliable (p. 21)",
+      "Domination arcs compressed into a directed forest so parallel presolve transactions cannot conflict (p. 34)"
+    ],
+    "experiments": "Suite protocol: SCIP 10.0 vs 9.0 and vs 9.2.4, 349 MILP x 3 seeds and 169 MINLP x 5 seeds, identical single-threaded Xeon Gold 5122 machines, 5400 s / 3600 s, solved counts and shifted geometric means (1 s, 100 nodes) on all/affected/[t,T]/both-solved, no significance test (pp. 4-5): MILP time x0.98 with nodes x1.02 vs 9.0 and x0.96 vs 9.2.4, MINLP x0.94 and x0.91 (pp. 5-7); component studies for exact mode (161/235/342 solved, pp. 11-12), implied integers (statistics only, p. 13), flower cuts (p. 19), CONOPT (p. 25); none for any GCG 4.0 feature (pp. 26-33).",
+    "positioning": "One report of the SCIP series (7.0 and 8.0 reports cited, pp. 20, 22); GCG cited via Gamrath and Lübbecke 2010 [42] (p. 2), decomposition theory and component bound branching delegated to the Branch-and-Price cahier [32] (pp. 26, 28), rules credited to Vanderbeck, Ryan-Foster and Maher-Rönnberg (pp. 28, 32); suite-level contrast with Gurobi's implied-integer gains (pp. 12-13) and priority claims for MIP-DD (pp. 1, 37).",
+    "writing": "One subsection per feature with parameter names and status hedges (experimental, off by default, planned), a contributions section naming implementers (pp. 39-40), a footnote admitting an undocumented GCG 3.6 change (p. 32); co-signed text-table slips outside GCG: abstract claims fewer nodes while Table 1 shows MILP nodes x1.02 vs 9.0 (pp. 1, 5-6), CONOPT text swaps time and node changes (p. 25), consistently faster for a 5% mean (p. 6).",
+    "limits_future": "GCG limits stated but unmeasured: basic, experimental separator support for master-only rows (p. 28), deterministic parallel pricing planned (p. 32), IPColGen off by default (p. 32), GCG object and JDEC to be extended (pp. 27, 29); suite: exact mode lacks safe strong branching, cuts beyond GMI and certified presolve (pp. 9, 11), implied integers off as performance-neutral (p. 13), ancestral pseudocosts off pending conclusive evidence (p. 21), PBSolver lacks type detection and exact mode (p. 39).",
+    "method_links": [
+      {
+        "method": "Method 1",
+        "relation": "evidence",
+        "note": "Steps 4-6 built into GCG: the original model stays a synchronized SCIP instance (p. 26), robust branching on original variables keeps tailored pricing applicable (p. 27), JDEC lets users hand over known partial or nested structure (pp. 28-29), and supplied decompositions also drive SCIP's decomposition kernel search and Benders relaxator (pp. 20, 23-24)",
+        "pages": "pp. 20, 23-29"
+      },
+      {
+        "method": "Method 1",
+        "relation": "variant",
+        "note": "GCG 4.0 opens non-robust master-only rows that can be stronger but may destroy tailored pricing (p. 28) and adds general-MILP pricing solvers (recursive GCG, HiGHS) (pp. 31-32): the generic tool invests where the stop rule tells a user not to decompose",
+        "pages": "pp. 28, 31-32"
+      },
+      {
+        "method": "Method 3",
+        "relation": "evidence",
+        "note": "Co-signed suite protocol matches steps 1, 2 and 5 (two baselines, affected subset, difficulty brackets, seeds, identical machines, stated shifts, losses reported) and features stay off by default where gains are neutral or narrow (pp. 13, 19-21, 32): this is the SCIP release-report norm, so neither the protocol nor H7 is distinctive to him",
+        "pages": "pp. 4-7, 13, 19-21, 32"
+      },
+      {
+        "method": "Method 3",
+        "relation": "variant",
+        "note": "His group's GCG section reports the changes of eight subsections without one measurement and promises users need no decomposition expertise (pp. 26-33); co-signed text sizes claims above its tables (abstract node claim, pp. 1, 5-6; CONOPT, p. 25)",
+        "pages": "pp. 1, 5-6, 25-33"
+      },
+      {
+        "method": "Method 2",
+        "relation": "variant",
+        "note": "Decomposition scores become selectable plugins (pp. 32-33), but no score is tested against measured outcomes in the report and no learned ranker is cited (references pp. 40-46)",
+        "pages": "pp. 32-33"
+      },
+      {
+        "method": "Method 4",
+        "relation": "evidence",
+        "note": "Weak: the software report delegates decomposition theory and the component bound rule's details to the Branch-and-Price cahier [32] (pp. 26, 28, 42)",
+        "pages": "pp. 26, 28"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "Nested decomposition of the pricing problem",
+        "evidence": "JDEC stores decompositions of blocks, and the GCG pricing solver reformulates pricing problems recursively up to a maximal depth, detecting structure only where none is supplied; the book defers nested column generation to a later book (D004 p. 8); overlaps H4",
+        "pages": "pp. 29-31"
+      },
+      {
+        "pattern": "Interface plus one worked example",
+        "evidence": "Extended master constraints ship with component bound branching as the code example and a documentation section on adding master-only constraints (p. 28); IPColGen ships with new pricing callbacks open to users (p. 32); single source so far",
+        "pages": "pp. 28, 32"
+      },
+      {
+        "pattern": "Structure as an exchangeable file",
+        "evidence": "Decompositions are read from and written to DEC/JDEC files with nested blocks and symmetry information (pp. 28-31), and user-supplied decompositions feed SCIP's decomposition kernel search and Benders relaxator (pp. 20, 23-24); suite-level, partly by other authors",
+        "pages": "pp. 20, 23-31"
+      }
+    ],
+    "transferable": [
+      "Benchmark a release against both the previous major release and the latest bugfix release, so slowdowns caused by bugfixes are not charged to new features (pp. 4-5)",
+      "Next to all and both-solved, report an affected subset (instances whose dual simplex iteration counts differ) and difficulty brackets [t, T]; drop numerically inconsistent runs from all (p. 5)",
+      "Cost a new mode that lacks features against the default and against a reduced default with exactly those features switched off (p. 11)",
+      "Enforce a branching decision on an original variable as a bound in the pricing problem so tailored pricing stays usable; model a non-robust master row in pricing by a coefficient variable y restricted to Y(x,z) (pp. 27-28)",
+      "Ship a new extension interface with one complete rule built on it as the code example and a how-to section in the documentation (p. 28)",
+      "Store decompositions as JSON with nested block decompositions and symmetry representatives, and let the reader ignore unknown fields so users can attach their own data (p. 29)",
+      "Gate a specialised pricing solver by properties of the instance graph (nodes, density) so it can reject requests (p. 32)",
+      "Keep parallel pricing at one thread by default while it makes the solving path nondeterministic, and say so in the release text (p. 32)",
+      "Shrink each bug-triggering instance with a delta debugger and add the shrunken instance to the regression tests (pp. 37-38)"
+    ],
+    "coauthors": "C. Hojny (first) and 33 others in alphabetical order (pp. 1, 46-49); the GCG 4.0 features were implemented by the RWTH group J. Ehls, J. Lentz, T. Mohr, E. Mühmer, C. Reinartz Groba and by S. J. Maher (pp. 39-40)",
+    "quotes": [
+      {
+        "text": "For the user, no expertise in these techniques is needed",
+        "page": 26
+      },
+      {
+        "text": "coordinated and supervised the development of GCG",
+        "page": 40
+      }
+    ]
+  },
+  {
+    "id": "D004",
+    "year": "2026",
+    "title": "Conclusion",
+    "read_level": "full",
+    "contribution": "The joint book's closing chapter replaces a summary with a five-decade history of the Montreal GENCOL group, future trends (larger instances, machine learning, stochastic models), 25 subjects deferred to later books in this book's notation, and an exercise asking readers to find the book's mistakes.",
+    "problem_entry": "How to end the book without summarizing it: an epigraph from Valéry that nothing beautiful can be summarized (p. 1), then history, future, open subjects and exercises (pp. 2-9), the open subjects framed as suggestions for readers interested in writing (p. 2).",
+    "key_idea": "Lineage-and-agenda conclusion: column generation's rise told through one group's decades with the book offered as Desrosiers's legacy (pp. 2-7), and open topics handed to later authors with the hope that they keep this book's notation (p. 8); no recap of the chapters (pp. 1-10).",
+    "assumptions": "Integer programs with set-partitioning-type masters and resource-constrained shortest-path pricing solved by dynamic programming, whose non-decreasing extension functions may be discontinuous and non-convex to encode industrial rules (pp. 3-4); a compact block-diagonal formulation with identical subproblems exists for any column generation scheme under mild assumptions not stated here (pp. 5-6; S021).",
+    "proof_devices": [
+      "None proved in the chapter; cites the compact-formulation result of Villeneuve et al. 2005 (S021) and Propositions 4.16-4.17 of chapter 4, not read (pp. 5-6)",
+      "Modelling device: a node's in- and out-degree constraints split between master (one kept) and pricing (their difference as flow conservation) (pp. 3-4)"
+    ],
+    "experiments": "n/a: no experiments; one bibliometric figure from a stated Web of Science topic search, 1966-2024 (pp. 2-3), and historical claims without protocol (1992 crew pairing solved to optimality and 6% better than the best available systems, no reference, p. 4; US$54 million Flexjet savings, p. 5).",
+    "positioning": "Places the book in the GENCOL lineage with its schools and workshops (pp. 2-3), the 2005 Lübbecke-Desrosiers survey (S001) in the third decade for the dual point of view (p. 6), Lübbecke among the collaborators who joined in the last 20 years (p. 7), and machine learning as a strong future tendency citing Kruber et al. 2017 (S009) first (p. 8).",
+    "writing": "Playful frame: epigraphs from Valéry and from songs, a coined Outroduction signed by Marco, Guy and Jean Bertrand (pp. 1-2), history by decade with prizes, companies and sale prices (pp. 3-7), two exercises (a quiz on François Soumis, find all mistakes) (p. 9); small slips survive (p. 6).",
+    "limits_future": "No new result; open matters listed concretely as 25 subjects for a second and third book, including Benders decomposition, interior point algorithms, nested column generation, machine learning, stochastic aspects, implementation and the histories of SCIP and BaPCoD (p. 8); future: larger instances, machine learning, stochastic models (pp. 7-8).",
+    "method_links": [
+      {
+        "method": "Method 4",
+        "relation": "evidence",
+        "note": "Steps 2, 5 and 6: open subjects published as a numbered list for later books with the hope that they keep this book's notation (p. 8), the future framed as suggestions for writers (p. 2), mistakes left to readers (p. 9); SKILL.md's book pp. 552-553 (printed) are file pp. 8-9 here",
+        "pages": "pp. 2, 8-9"
+      },
+      {
+        "method": "Method 1",
+        "relation": "evidence",
+        "note": "Step 3: paths priced by dynamic programming absorb non-convex industrial rules (p. 4); step 6: a compact formulation exists for any column generation scheme, so branching and cutting can always be defined on its variables (pp. 5-6; Villeneuve et al. 2005 = S021)",
+        "pages": "pp. 3-6"
+      },
+      {
+        "method": "Method 3",
+        "relation": "variant",
+        "note": "The history repeats success numbers without protocol, the 1992 claim without a reference (pp. 4-5), in a section built on Desrosiers's 2010 text (p. 3); it does keep a relative failure, the first VRPTW branch-and-price on small instances, as the opening of fundamental research (p. 5)",
+        "pages": "pp. 3-5"
+      }
+    ],
+    "new_pattern_candidates": [],
+    "transferable": [
+      "When a node must be visited exactly once, keep one of its in- or out-degree constraints in the master and give the pricing problem their difference as flow conservation (pp. 3-4)",
+      "Encode operational rules, even discontinuous or non-convex ones, as non-decreasing resource extension functions of a dynamic-programming pricing problem rather than as master rows (p. 4)",
+      "End a long synthesis with a numbered list of the subjects you deferred, ask later authors to keep your notation, and put the errata invitation into the text as an exercise (pp. 8-9)",
+      "When you show a field's growth, give the database and the exact search phrases behind the count (pp. 2-3)"
+    ],
+    "coauthors": "Jacques Desrosiers, Guy Desaulniers, Jean Bertrand Gauthier",
+    "quotes": [
+      {
+        "text": "hence branching and cutting decisions can always be defined on the variables of this formulation",
+        "page": 5
+      },
+      {
+        "text": "by various authors hopefully following the notation introduced in this one",
+        "page": 8
+      }
+    ]
+  }
+]

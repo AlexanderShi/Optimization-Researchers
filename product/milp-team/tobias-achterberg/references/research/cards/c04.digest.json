@@ -1,0 +1,173 @@
+[
+ {
+  "id": "D011",
+  "year": 2010,
+  "title": "The Mcf-separator: detecting and exploiting multi-commodity flow structures in MIPs",
+  "read_level": "full",
+  "contribution": "A separation heuristic for general MIPs, shipped in SCIP 1.2 and CPLEX 12.1, that detects embedded multi-commodity arc-flow networks in the constraint matrix and feeds network-cut aggregations to the solver's existing c-MIR routine, gated by a numeric inconsistency measure (pp. 2-3, 23-24).",
+  "problem_entry": "A measured blind spot: c-MIR in SCIP/CPLEX rarely finds cut-based MIR network-design cuts because the network is unknown and the aggregation limit (7 rows in SCIP) is conservative; design constraint from Bixby and Rothberg: recognise the models it applies to, add little overhead elsewhere (pp. 2-3).",
+  "key_idea": "All classical network-design cuts are MIR inequalities of one base inequality (6) from aggregating flow rows of S and capacity rows of δ−(S); so replace only the c-MIR aggregation (weights u, multipliers γ) and keep the solver's rounding machinery, with a consistency gate that switches cuts off when fit is poor (pp. 2-3, 7-9, 23-24).",
+  "assumptions": "General MIP input; target arc-flow structure (2a)-(2d) plus multi-facility, unsplittable and undirected variants; detector relies on unscaled equal-magnitude flow rows, node degree <= 10% of arcs, similar-size commodities, near-complete coupling rows, and must survive presolve; validity needs nothing from the detector (pp. 2, 5, 12-28, 35).",
+  "proof_devices": [
+   "base inequality (6), from which cutset, flow-cutset, dicut and flow-cover inequalities are derived as MIR inequalities (pp. 7-9)",
+   "validity invariant: every cut is an MIR inequality of an aggregation of original rows (p. 35)",
+   "Algorithms 1-4 detection pipeline: flow, arc, node detection and network construction by majority vote (pp. 14-20)",
+   "inconsistency ratios Ψ(a), Ψ(G) with thresholds 0.5 and 0.02 (pp. 11, 19)",
+   "Algorithm 5 separation with up to 20 multipliers and linear-time most-violated flow-cutset (pp. 23-25)",
+   "node-set selection by shrinking to 5 clusters with slack minus |dual| weights and connected shores (pp. 25-26)"
+  ],
+  "experiments": "SCIP 1.1.0.8 and CPLEX 12.1, 1 h limit, mcf vs nomcf from full default on 7 network-design sets, miplib, mittelmann and a 1266-model CPLEX-internal library; all/sep/nosep rows, easy/hard split, >=10 s and >=100 s subsets; time ratios 0.32-0.53 on target sets, 129/1388 affected with -17.9% time; detector checked against known networks; gate and cluster sensitivity studies; no seeds or time split (pp. 21-37).",
+  "positioning": "Extends Marchand-Wolsey c-MIR, adapts Bixby-Fourer row-scanning network detection (no column scaling, commodity by commodity), borrows cut selection from network-design branch-and-cut; polyhedral facts cited not re-proved (pp. 2-3, 8, 10, 14-15, 23-26).",
+  "writing": "Contribution in first sentence, each known inequality derived from (6) in a few lines, every constant printed with a pseudocode disclaimer, hedges next to small counts; abstract numbers looser than the body and companion report miscited as 07-38 (pp. 1-2, 7-9, 34-35, 39).",
+  "limits_future": "cut.set and dense flow rows not detected, no gain on very easy sets, public general sets too small, 5 clusters gives up sndlib gain, flow covers not tried in SCIP; future: scan matrices for known structures to exploit them in MIP solvers (pp. 22, 28, 34, 37-39).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Journal version: matrix-based detector with numeric fit and no-op path; tuning aimed not to slow general MIPs; target, public general and broad CPLEX-internal numbers reported; nosep rows about 1.00; modeltype auto-detect; conservative defaults kept against class gains.",
+    "pages": "pp. 11, 19-20, 24, 28-34, 37-38"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Gate evidence changed between versions: the report's SCIP-only study with the cut.set gain is replaced in the journal by general-MIP sets in both solvers, where releasing Ψmax deteriorates CPLEX; the SKILL's 'helped SCIP but not CPLEX' follows the report.",
+    "pages": "R013 pp. 27-29; pp. 34-37"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Partial: root gap closed, nodes and time side by side; nodes down/time up on fc, fctp called not paying; effort capped in solver units; cut counts beside time. Time split missing: speed inferred from nosep rows.",
+    "pages": "pp. 14, 24-26, 29-30, 34, 37"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Incumbent cut families become special cases of one aggregation plus MIR; sweeps read per set with affected and cut counts; default set conservatively rather than at a knee.",
+    "pages": "pp. 2, 7-9, 35-38"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Knock-out from full default, wins at ±10%, affected rows, conclusions refused on 16 and 3 affected public models and accepted on the large set; no seeds.",
+    "pages": "pp. 29-30, 34-35"
+   },
+   {
+    "method": "Method 4",
+    "relation": "contradiction",
+    "note": "SKILL dates the bracket form from 2014, but this 2010 paper (and its 2009 report) already reads the CPLEX-internal set in >=10 s and >=100 s subsets by the slower version, in a narrower form.",
+    "pages": "pp. 33-34; R013 pp. 26-27"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Disjoint test sets by stated rule, detector checked against known original structure before speed tests, same machine and version with caveat, per-instance data in companion report.",
+    "pages": "pp. 20-22, 29"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "Network-design toolbox and embedded-network detection imported into a general MIP solver and mapped onto c-MIR; extra pieces tested and dropped; practitioner step only inferred from co-authorship.",
+    "pages": "pp. 3, 10, 25-26, 28, 40"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "thin layer over the mature engine",
+    "evidence": "Compute only the new input (weights u and multipliers γ) and leave the cut machinery to the solver; R014 shows the same pattern.",
+    "pages": "pp. 3, 23"
+   },
+   {
+    "pattern": "ground-truth the detector",
+    "evidence": "Detection measured against the known original networks, with and without presolve, with the cause of each failure named.",
+    "pages": "pp. 21-23"
+   },
+   {
+    "pattern": "heuristic errors cost time, never validity",
+    "evidence": "Cuts are MIR inequalities of aggregated original rows, so a wrong detection only makes cuts weak or dense; the gate trades speed alone.",
+    "pages": "p. 35"
+   }
+  ],
+  "transferable": [
+   "[D1] Name the precise reason a general routine misses a known cut family (unknown structure, a cap on the aggregation length), and remove that reason (p. 3).",
+   "[D2] Implement structure-specific cuts as an aggregation heuristic for the existing c-MIR: compute the weights and multipliers only (pp. 3, 23).",
+   "[D4] Use a majority vote across commodities and keep the minority votes as an inconsistency ratio that gates the component (pp. 11, 20).",
+   "[D4] Shrink the network with slack-minus-|dual| weights to a few clusters, enumerate all cuts, and keep those with connected shores (pp. 25–26).",
+   "[D4] Find the most violated flow-cutset inequality in linear time by starting from δ−(S) and dropping the arcs with f*_a < r·y*_a (p. 25).",
+   "[D5] Validate a structure detector against ground truth before measuring speed: report detected and consistent counts, the maximum inconsistency, and the mean % deviation in nodes, arcs and commodities (pp. 21–22).",
+   "[D5] Report all, affected and unaffected rows per set, with ≥ 10 s and ≥ 100 s subsets defined by the slower run (pp. 29, 33–34).",
+   "[D5] Split easy and hard instances, and judge the hard part by gap measures (pp. 29, 31, 33).",
+   "[D7] Hedge exactly where the affected counts are small (pp. 34–35)."
+  ],
+  "coauthors": "Christian Raack",
+  "quotes": [
+   {
+    "text": "It is important to understand that our framework is not explicitly generating cutting planes. It only calculates weight vectors u.",
+    "page": 3
+   },
+   {
+    "text": "In contrast to Table 3 and Scip we can trust these values since the overall testset is very large with a reasonable number of affected instances.",
+    "page": 34
+   }
+  ]
+ },
+ {
+  "id": "R014",
+  "year": 2010,
+  "title": "ParaSCIP - a parallel extension of SCIP",
+  "read_level": "full",
+  "contribution": "A distributed-memory parallel extension of SCIP that runs unmodified SCIP processes under a load coordinator with load balancing and checkpointing, and used up to 2048 cores of HLRN II to solve two previously open MIPLIB2003 instances, ds and stp3d (pp. 2, 5-12).",
+  "problem_entry": "Two entries: branch-and-cut decisions depend on each other so dynamic load balancing is essential, and six MIPLIB2003 instances remained open since 2007; goal: a parallel SCIP on HLRN II solving two of them, scaling to >= 10,000 cores (pp. 3, 5).",
+  "key_idea": "Parallelise at the subtree level with each SOLVER a full SCIP; a LOADCOORDINATOR presolves and broadcasts once, then sends bound changes; all novelty in the coordination layer (load balancing, checkpointing) (pp. 2, 5-9).",
+  "assumptions": "General MIP (Definition 1); test instances ds (duty scheduling) and stp3d (Steiner tree packing); distributed memory without swap; correctness asserted: parameter changes affect only the path, not the result (pp. 4, 9-11).",
+  "proof_devices": [],
+  "experiments": "SCIP 1.2.1.2 with CPLEX 12.1 on HLRN II MPP2, 512-2048 cores per job; proven optima 93.52 (ds, 17 jobs, ~86 h) and 493.71965 (stp3d, 11 jobs, ~114 h); idle ratios 2.2% and 3.9%; per-job tables; no baseline, speed-up curve, repeated runs or fixed settings (pp. 9-13).",
+  "positioning": "Against earlier large-scale parallel MIP work (Xu et al., Ralphs et al.) that struggled to match sequential solvers; many open instances first solved sequentially; collecting mode similar to ParaLEX [17] (pp. 2-4, 7).",
+  "writing": "Short report in workflow order, headline is the record, future-SCIP-progress argument in abstract and conclusion, candid about underestimated node counts (pp. 2, 5-12).",
+  "limits_future": "Ramp-up/ramp-down time grows with cores, loss vs finer-grained parallelism unknown, other open instances remain; future: predict suitability for massive parallel solving and remaining run time (pp. 12-13).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Platform reuse taken to its limit: whole sequential SCIP is the parallel unit and inherits future progress; but the harness was not held fixed, settings changed between jobs and restarts leave statistics incomplete. Co-signed; second of five authors.",
+    "pages": "pp. 2, 5, 11-12"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Run time split into ramp-up, solving and idle time and scaling limit located in ramp-up/ramp-down, but no payoff measure: effective-use claim rests on idle-time proxy with no speed-up or baseline.",
+    "pages": "pp. 11-13"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "thin layer over the mature engine",
+    "evidence": "The unmodified SCIP is the parallel unit; ParaSCIP profits from future SCIP progress; compare D011 pp. 3, 23.",
+    "pages": "pp. 2, 12"
+   },
+   {
+    "pattern": "heuristic errors cost time, never validity",
+    "evidence": "Only asserted here: changed settings alter the solver's path, not the result; compare D011 p. 35.",
+    "pages": "p. 11"
+   }
+  ],
+  "transferable": [
+   "[D2] Broadcast the presolved instance once, then send subproblems as bound-change lists relative to it (p. 6).",
+   "[D4] Keep at least p nodes within a relative dual-bound threshold in the coordinator's pool; when the pool runs low, switch selected solvers to best-bound or best-estimate collecting, and switch back once it holds more than mp·p (p. 7).",
+   "[D4] Let a solver whose subtree bound is poor compared with the pool's best bound request a new node and delay its current one (p. 8).",
+   "[D4] Checkpoint only primitive nodes, and on restart presolve them as subproblem roots; this also re-balances the hardest part of the tree (pp. 8–9).",
+   "[D4] Before a very long run, iterate aggressive presolving and strong-branching fixings on one machine until a fixpoint (p. 10).",
+   "[D5] Print one row per job of a checkpointed run, including unproductive jobs, together with the idle-time ratio (pp. 11–12)."
+  ],
+  "coauthors": "Yuji Shinano, Timo Berthold, Stefan Heinz, Thorsten Koch",
+  "quotes": [
+   {
+    "text": "This makes the parallelization development independent of the SCIP development. Thus, ParaSCIP directly profits from any algorithmic progress in future versions of SCIP.",
+    "page": 2
+   },
+   {
+    "text": "These changes only influence the path the solver takes, not the overall result.",
+    "page": 11
+   }
+  ]
+ }
+]

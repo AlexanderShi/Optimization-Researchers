@@ -1,0 +1,315 @@
+[
+ {
+  "id": "S048",
+  "year": "2015",
+  "title": "Branching on multi-aggregated variables",
+  "read_level": "full",
+  "contribution": "Adds the general disjunctions of presolve's integer multi-aggregations to SCIP's full strong branching; on scheduling instances it solves 9–25 more and needs 17–49% less time, while on general MIP it is slower, which is printed as a negative result.",
+  "problem_entry": "Multi-aggregation in presolve takes variables away from variable-based branching, an effect nobody had studied, and general-disjunction branching needs a short, cheap candidate list; the multi-aggregations supply one at no cost (pp. 1–4, 6).",
+  "key_idea": "Strong branching first over fractional variables, then over fractional integer multi-aggregated disjunctions, with SCIP's product score, ties to variables, and cut-off children turned into bound changes or valid inequalities (Algorithm 1, pp. 6–8).",
+  "assumptions": "MIP with general integers; integer variables multi-aggregated only when integrality is kept, fill-in limited (p. 5); 335 scheduling instances (263 default, 276 pure after dropping presolve- and root-solved ones) and MIPLIB/Cor@l instances with multi-aggregations (107 default, 76 pure), minus never-solved and two numerically unstable instances (pp. 9–10).",
+  "proof_devices": [
+   "Two-loop strong branching that can prune the node or return a valid bound or inequality, Algorithm 1 (p. 7)",
+   "Named mechanism for the time cost: an added row forces refactorization, and propagation, conflict analysis, heuristics and cuts are built for bound changes (pp. 4, 12)",
+   "Diagnostic in-solver statistics: multi-aggregations 5.7% of integer variables, chosen in 39% of branchings, 85% first used at the root, best variable would give 22% of the gain (p. 11)"
+  ],
+  "experiments": "SCIP 3.1.0 + SoPlex 1.7.0.4 against full strong branching; Xeon X5672, one job per node, 7200 s; pure (other components off, optimal value as cutoff) and default settings; scheduling: pure 142 vs 117 solved, −58% nodes, −49% time; default 135 vs 126, −37% nodes, −17% time; general MIP: +25% (pure) and +26% (default) time; text and Table 2 disagree on the default solved counts (55 vs 57); no seeds mentioned (pp. 8–12).",
+  "positioning": "Placed in the general-disjunction branching literature (Owen and Mehrotra, Karamanov and Cornuéjols, Cornuéjols, Liberti and Nannicini, Mahajan and Ralphs, local branching), whose typical result is smaller trees and longer times (pp. 3–4); the general-MIP result 'confirms previous observations by other authors' (p. 13).",
+  "writing": "A contribution paragraph, then a negative result named as such ('an important negative result', p. 13); results given as counts and percentages; one count slip between text and Table 2 (p. 12).",
+  "limits_future": "No gain on general MIP; node reductions exceed time reductions in all cases (pp. 11–13). Future: propagation, conflict analysis and heuristics that profit from added constraints, and factorization updates that keep the factorization when rows are added (refs. [41, 42], incl. Gleixner's ZIB-Report 12-36) (p. 13).",
+  "method_links": [
+   {"method": "Method 2", "relation": "evidence", "note": "component form (step 6): the baseline is the rule being extended (full strong branching), measured in a stripped pure setting and in the default setting, both reported", "pages": "pp. 8–12"},
+   {"method": "Method 2", "relation": "evidence", "note": "step 8: two numerically unstable instances whose results differ between the two rules are dropped", "pages": "p. 10"},
+   {"method": "Method 3", "relation": "evidence", "note": "general-MIP failure printed with numbers and a mechanism; the bottlenecks become named next steps, one of them Gleixner's factorization report", "pages": "pp. 12–13"},
+   {"method": "Heuristic 9", "relation": "evidence", "note": "what presolve already computed (multi-aggregations) becomes the branching candidates at no cost; a MIP-side case for H9", "pages": "pp. 2–3, 6"},
+   {"method": "Common Misreading 4", "relation": "variant", "note": "the skill says bylines were alphabetical until 2017; this 2015 byline (Gamrath, Melchiori, Berthold, Gleixner, Salvagnin) is not alphabetical", "pages": "p. 1"}
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Measure a branching rule alone in a pure setting (cuts, heuristics, propagation, restarts and conflict analysis off; optimal value as cutoff) and report the default setting next to it (p. 9).",
+   "Next to shifted geometric means, report how many instances got at least 10% faster or slower, and repeat the means on instances above 100 s (pp. 10–11).",
+   "Explain a new rule with in-solver statistics: share of new candidates, how often they are chosen, how early they are first used, and the gain ratio against the best old candidate (p. 11)."
+  ],
+  "coauthors": "Gerald Gamrath (first, ZIB), Anna Melchiori (Padua), Timo Berthold (FICO), Domenico Salvagnin (Padua); Gleixner fourth of five; no roles stated",
+  "quotes": [
+   {"text": "This is done in order to measure only the impact of branching without side-effects to and from other solver components.", "page": 9},
+   {"text": "We see our results for general MIPs as an important negative result that confirms previous observations by other authors that it is hard to find a branching rule on general disjunctions which is competitive on standard MIP benchmarks.", "page": 13}
+  ]
+ },
+ {
+  "id": "S037",
+  "year": "2016",
+  "title": "Towards an accurate solution of wireless network design problems",
+  "read_level": "full",
+  "contribution": "Shows by tolerance algebra and exact LP checks that floating-point MIP solutions of SIR-based wireless network design models are unreliable, that scaling by 10^12 repairs the binary assignment but not the power vector, and that exact or iteratively refined LPs on the fixed assignment give reliable plans.",
+  "problem_entry": "SIR-based natural formulations have tiny, widely varying coefficients and big-M rows, so solvers return plans with coverage errors; the entry is the practitioners' belief that scaling by 10^12 removes the errors (abstract; pp. 2, 5–6).",
+  "key_idea": "Read the solver's absolute/relative feasibility test against the SIR rows: the absolute tolerance can exceed tiny right-hand sides, a linearized violation is the ratio violation times noise plus interference (eq. 10), and scaling by S tightens the absolute tolerance to eps/S (eq. 11); then check solutions exactly (pp. 6–7, 10).",
+  "assumptions": "Power assignment LP and scheduling and power assignment MILP with binary assignments and big-M SIR rows (pp. 4–5); ten single-frequency WiMAX instances from a European telecom company, 100–900 receivers, 8–45 transmitters, up to 1,231,200 nonzeros (p. 8); SCIP's feasibility definition, assumed similar in closed-source solvers (fn. 4, p. 6).",
+  "proof_devices": [
+   "One-line tolerance algebra: eq. (10) maps a linearized violation to the original SIR ratio, eq. (11) shows that a priori scaling by S tightens the absolute tolerance to eps/S (pp. 6–7)",
+   "A-posteriori check: fix the CPLEX binaries and solve the remaining power LP exactly with QSopt_ex, a pure feasibility problem (p. 10)",
+   "Exact SCIP (pure branch and bound) for proven optimality, and SoPlex iterative refinement to 10^-25 as an accurate inexact alternative (p. 11)"
+  ],
+  "experiments": "Xeon E3-1290 v2, jobs run separately; CPLEX 12.5.0.0 (1 h), QSopt_ex 2.5.10, SoPlex 2.0; unscaled: SIR violations up to 12.6, few receivers really served, all fixed-binary LPs exactly infeasible; scaled by 10^12: all fixed-binary LPs exactly feasible but floating-point power vectors still overcount served receivers; exact SCIP only on the smallest instances (one run over 20 h, 139,097,820 nodes); SoPlex at least twice as fast as QSopt_ex except two sub-second instances, conclusion withheld (Tables 1–3, pp. 8–11).",
+  "positioning": "Against the non-compact reformulation line (cover inequalities, power-indexed GUB covers, binary expansion, assignment-only formulations) and GRASP or genetic heuristics; builds on QSopt_ex, Koch's NETLIB results, Gleixner–Steffy–Wolter iterative refinement and Cook–Koch–Steffy–Wolter exact SCIP (pp. 5, 7–8).",
+  "writing": "Three numbered contributions with first-time claims (pp. 2–3); hedged reading of the timing comparison ('we cannot draw a reliable conclusion', p. 11); receivers and transmitters swapped in one sentence against the tables (p. 11).",
+  "limits_future": "Exact MIP too slow, but not proven inapplicable since the code lacks most solver features; ten instances of one technology (pp. 8, 11–12). Future: accurate LP on the continuous variables inside branch and bound to verify the incumbent; more instances and technologies such as DVB-T (p. 12).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "the practitioners' belief that scaling removes numerical errors becomes a per-solution check with counted outcomes (violations, receivers served, exact feasibility of the fixed binaries); the answer cuts both ways", "pages": "pp. 2, 6, 9–10"},
+   {"method": "Method 5", "relation": "evidence", "note": "step 3: floating point produces the assignment; integers fixed and the rest solved exactly to decide and repair; iterative refinement where tolerance-level accuracy suffices", "pages": "pp. 3, 10–11"},
+   {"method": "Method 4", "relation": "evidence", "note": "step 4: each floating-point solution checked by a second, exact program, not by the producing solver", "pages": "p. 10"},
+   {"method": "Method 3", "relation": "evidence", "note": "step 2: exact-MIP failure read as missing solver features, not a roadblock; next step named", "pages": "pp. 11–12"},
+   {"method": "Method 2", "relation": "variant", "note": "the SoPlex/QSopt_ex timing is not like-for-like; the mismatch is named and the conclusion withheld instead of building a matched baseline", "pages": "p. 11"},
+   {"method": "Research Taste mark 4", "relation": "evidence", "note": "floating point reliable for most applications; exactness for verification, computer proofs and unstable instances; an exact power vector is more than necessary in practice", "pages": "pp. 7, 11"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "tolerance back-translation", "evidence": "computes what the solver's absolute/relative feasibility test allows in the original SIR ratio (factor noise plus interference, eq. 10) and how a priori scaling by S changes the absolute tolerance (eq. 11); S045 makes the same point for row scaling", "pages": "pp. 6–7"}
+  ],
+  "transferable": [
+   "Before trusting a model with tiny coefficients, write the solver's feasibility test next to the row and compute the worst violation it allows in the original ratio or nonlinear constraint (eqs. 9–10, pp. 6–7).",
+   "Check a floating-point MILP solution twice: evaluate the original constraints and count what really holds, then solve the LP with the integers fixed in exact arithmetic (Tables 1–2, pp. 9–10).",
+   "If exact solving is too slow, test an accurate method (iterative refinement to a stated tolerance) against it and say what the comparison cannot show (Table 3, pp. 10–11)."
+  ],
+  "coauthors": "Fabio D'Andreagiovanni (first; ZIB, Matheon/ECMath, IASI-CNR); Gleixner second of two; no roles stated",
+  "quotes": [
+   {"text": "Although the floating-point numerics used in today's state-of-the-art MIP solvers yield reliable results for the majority of problems and applications, there are cases in which results of higher accuracy are desired or needed, such as verification problems, computer proofs, or simply numerically instable instances.", "page": 7},
+   {"text": "Hence, this should not be taken as a proof that exact MIP solvers are in principle not applicable to this application.", "page": 11}
+  ]
+ },
+ {
+  "id": "S052",
+  "year": "2016",
+  "title": "Methoden zur Reduktion der Rechenzeit linearer Optimierungsmodelle in der Energiewirtschaft-Eine Performance-Analyse",
+  "read_level": "full",
+  "contribution": "A first systematic benchmark of acceleration strategies for LP energy system models (42 REMix instances, four LP solvers): barrier without crossover, run multi-threaded, and shorter time horizons give the largest savings (German text).",
+  "problem_entry": "Energy system models reach the limits of acceptable computing time, and acceleration strategies are chosen by implementation effort without systematic benchmarks of their effectiveness (pp. 1–2).",
+  "key_idea": "A taxonomy of technical (solver settings, solution method) and conceptual strategies (cutting or coarsening the model, serial solving, decomposition), then a benchmark over 42 REMix LPs that vary five model properties in size classes min/std/max (pp. 3–7).",
+  "assumptions": "Pure LPs with a cost objective and power balance coupling time, space and technology, with complicating variables and constraints such as the DC approximation (pp. 2–5); 42 REMix instances, sizes counted after CPLEX presolve (pp. 6–7); no integer variables.",
+  "proof_devices": [
+   "n/a (no new algorithm); benchmark design: dual simplex vs barrier with and without crossover, four solvers, 1/4/8 threads, time to an optimal solution (pp. 7–8)",
+   "Model reductions judged on instance pairs that differ in exactly one property (p. 9)"
+  ],
+  "experiments": "Xeon X5672, 48 GB; 33 of 42 instances solved (instances 26–34 exceed memory), so no spatial comparison; simplex never faster than barrier, crossover costs 3.3–8×; CPLEX most stable sequentially, Gurobi sometimes faster but more often slightly violates optimality conditions; MOSEK absent from the sequential comparison; 4/8 threads give mean factors 2–3/3–4; time span 1→30 days: size ≈30×, time 5–70×; technology and expansion mostly 1–3×; untuned, a rough picture; no repetitions (pp. 7–11).",
+  "positioning": "Placed in energy system analysis practice (unit commitment, power flow, expansion planning, rolling horizons, Benders in energy models) rather than in the optimization literature (pp. 2–6).",
+  "writing": "German; the abstract states the two recommendations; conclusions phrased as suggestions; MOSEK named among the solvers but missing from the sequential comparison (pp. 1, 7–8, 11).",
+  "limits_future": "Nine unsolved instances, no spatial comparison, no tuning, solver versions change (pp. 8–9). Future: validate against the integrated problem, spatial resolutions with 8760 time steps, serial and decomposition methods (Benders, independent subproblems per node or time step, HPC) (pp. 11–12).",
+  "method_links": [
+   {"method": "Method 1", "relation": "variant", "note": "a practice without data (strategies chosen without benchmarks) is measured, but as a whole-instance benchmark, not a per-decision check", "pages": "pp. 1–2, 9–11"},
+   {"method": "Method 2", "relation": "variant", "note": "like-for-like on the instance side (pairs differing in one property); the solver comparison is untuned and incomplete (MOSEK missing sequentially) and is called only a rough picture", "pages": "pp. 8–10"},
+   {"method": "Method 3", "relation": "evidence", "note": "limits printed with numbers (33 of 42, 48 GB); the outlook on decomposition and HPC is taken up by S046 (2017)", "pages": "pp. 8, 11–12"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "accuracy as a criterion in solver comparisons", "evidence": "faster runs with more tolerance violations are not counted as wins: Gurobi more often slightly violates optimality conditions, MOSEK more often violates feasibility tolerances, CPLEX recommended", "pages": "pp. 8, 10"}
+  ],
+  "transferable": [
+   "Measure a model simplification on instance pairs that differ only in that property, and report the factors for model size and running time separately (pp. 9–10).",
+   "Record next to running time which solver violates optimality or feasibility tolerances, and let that enter the recommendation (pp. 8, 10).",
+   "Generate test instances as a grid of size classes per model property, so each strategy maps to one dimension (Table 2, p. 7)."
+  ],
+  "coauthors": "Karl-Kiên Cao (first, DLR Stuttgart), Matthias Miltenberger (ZIB); Gleixner second of three; no roles stated",
+  "quotes": [
+   {"text": "Diese Strategien sind zwar häufig ein Teil der Methodik in der Energiesystemanalyse, systematische Benchmarks zur Bewertung ihrer Effektivität werden jedoch meist nicht durchgeführt.", "page": 1},
+   {"text": "Für die Interpretation der Ergebnisse gilt es zu beachten, dass der durchgeführte Vergleich lediglich ein grobes Bild liefert.", "page": 8}
+  ]
+ },
+ {
+  "id": "D004",
+  "year": "2018",
+  "title": "The SCIP Optimization Suite 6.0",
+  "read_level": "full",
+  "contribution": "Release report of the SCIP Optimization Suite 6.0: a generic Benders' framework shared by SCIP and GCG, conflict-driven diving, lookahead branching, the directed cutoff distance and GCG's modular detection, with a five-seed comparison showing SCIP 6.0 about 8% faster on MIP and 23% on MINLP than 5.0.",
+  "problem_entry": "A release report: what is new across SCIP, SoPlex, GCG, UG, SCIP-Jack, SCIP-SDP and Zimpl, with decomposition as focus; Benders' decomposition used to need problem-specific constraint handlers and cut code (file pp. 3, 5–8).",
+  "key_idea": "Two new plugin types and two constraint handlers make Benders' decomposition generic and reachable from GCG, SMPS files, a default plugin, custom plugins or Python; new MIP-core components (Farkas and conflict diving, abbreviated lookahead, CMIR scaling, directed cutoff distance); GCG's detection over partial decompositions (file pp. 8–20, 30–35).",
+  "assumptions": "MIP and MINLP inside constraint integer programming (file pp. 4–5); Benders' cuts for continuous or mixed-integer first stages with continuous second stages and for binary first stages with mixed-integer second stages (file p. 10); 666 MIPs and 143 MINLPs without duplicates and numerically unstable or troublesome instances, cut to solvable sets of 425 and 113 (file p. 13).",
+  "proof_devices": [
+   "Farkas diving: tighten the bounds that most reduce the violation of the Farkas condition (18), i.e. dive toward the pseudo-solution (file p. 16)",
+   "Observation 2.1: a variable with conflict locks also has model locks (file p. 18)",
+   "Directed cutoff distance (a^T x - b)/|a^T d| along the direction to the incumbent, weight 0.5 next to efficacy 1.0 (file p. 20)",
+   "Safeguards: subproblem merging when no cut can be generated (file p. 12), double-check of the LP solver's Farkas rays and counting of unstable re-solves (file p. 22), a SoPlex status for unresolved violations (file p. 23)",
+   "Price-and-verify: verification NLPs only for circular patterns used by the master LP; unverifiable patterns make the dual bound invalid and the last valid bound is reported (Algorithm 3, file pp. 26–27)"
+  ],
+  "experiments": "SCIP 6.0.0 + SoPlex 4.0.0 vs 5.0.0 + SoPlex 3.1.0, five seeds with instance-seed pairs as observations, numerically inconsistent results excluded, shifted geometric means (1 s, 100 nodes), subsets affected, brackets, both-solved, diff-timeout; Xeon Gold 5122; MIP 1925 vs 1914 solved, factor 1.08 (1.18 in [100,7200]) carried by the majority; MINLP 484 vs 453, factor 1.23, carried by the 31 newly solved; component gains from intermediate runs (Farkas diving 2% with two seeds, directed cutoff 4%); CPLEX clearly faster than GCG on Benders; UG averaged over five runs, racing gives most of the gain (file pp. 13–20, 34–37).",
+  "positioning": "SCIP's Benders framework set against other general frameworks (subproblem merging and multiple decompositions 'not available in other general frameworks'), lookahead against Glankwamdee and Linderoth, cut selection against Dey and Molinaro's survey, GCG's Benders mode against CPLEX 12.8 (file pp. 12–13, 16–20, 34).",
+  "writing": "Release-report genre: one section per package, algorithm boxes, one performance section with subset tables, and a code-contributions section (file pp. 13–15, 39). Data point for Heuristic 2: the July 2018 report still calls the circle-packing bounds 'exact, sometimes optimal dual bounds' (file p. 27); the skill records a later change to strong dual bounds [CP17], not dated here.",
+  "limits_future": "Conflict diving off pending tuning; gauge separation and quadratic disaggregation switched off; GCG slower than CPLEX on Benders; presolve not decomposition aware; UG untuned (file pp. 15, 18, 32, 34, 37). Future: Benders enhancements, cut methods and structure detection (file p. 38).",
+  "method_links": [
+   {"method": "Method 2", "relation": "evidence", "note": "step 10 form: release vs previous major (5.0.0 with its SoPlex) over five seeds and subsets; the mean is traced to both-solved vs diff-timeout instances; no bugfix-release comparison", "pages": "pp. 13–15"},
+   {"method": "Method 6", "relation": "evidence", "note": "steps 3, 9: duplicates and numerically unstable instances out of the base sets; numerically inconsistent results excluded from the analysis", "pages": "pp. 13–14"},
+   {"method": "Method 3", "relation": "evidence", "note": "limits and unflattering comparisons printed: conflict diving untuned, MINLP features off, CPLEX faster on Benders, UG untuned", "pages": "pp. 15, 18, 34, 37"},
+   {"method": "Method 4", "relation": "evidence", "note": "group practice, not attributed: the LP solver's Farkas ray (an infeasibility certificate) is double-checked before SCIP uses it", "pages": "p. 22"},
+   {"method": "Method 5", "relation": "variant", "note": "ring packing (AG among the implementers): the expensive deciding step is a nonconvex verification NLP under working limits, called only for patterns the LP uses; a bound resting on unverified patterns is declared invalid", "pages": "pp. 26–27, 39"},
+   {"method": "Heuristic 3", "relation": "evidence", "note": "Farkas diving switched on after measured runs; conflict diving off until evaluated; two MINLP features switched off as they seem to hurt on average", "pages": "pp. 15, 17–18, 20"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "generic framework as measuring instrument", "evidence": "the generic Benders' framework is presented as allowing to measure and compare algorithmic ideas beyond single problem-specific implementations; close to Taste mark 8", "pages": "p. 38"},
+   {"pattern": "per-author code-contribution statement", "evidence": "a section names who implemented which component in a 25-author report, which separates Gleixner's parts (conflict-driven diving with Witzig, LP-interface support, ring packing) from the others'", "pages": "p. 39"}
+  ],
+  "transferable": [
+   "For a release comparison, run each instance with several seeds, count instance-seed pairs as observations, drop numerically inconsistent results, and report both-solved and diff-timeout subsets to show where the mean comes from (file pp. 13–15).",
+   "Check an infeasibility certificate returned by the LP solver (the Farkas ray) before using it for pruning or conflicts (file p. 22).",
+   "Verify expensive columns lazily, only those positive in the current LP, and report the last valid bound instead of one resting on unverified columns (Algorithm 3, file pp. 26–27).",
+   "In a many-author software report, add a section that says who implemented which component (file p. 39)."
+  ],
+  "coauthors": "24 co-authors from ZIB, RWTH Aachen, TU Darmstadt and Lancaster (Bastubbe, Eifler, Gally, Gamrath, Gottwald, Hendel, Hojny, Koch, Lübbecke, Maher, Miltenberger, Müller, Pfetsch, Puchert, Rehfeldt, Schlösser, Schubert, Serrano, Shinano, Viernickel, Walter, Wegscheider, Witt, Witzig); Gleixner first; stated contributions: conflict-driven diving with Witzig, LP-interface support, recursive ring packing with Müller and Wegscheider (file p. 39)",
+  "quotes": [
+   {"text": "From a research perspective, a generic Benders’ decomposition framework of this form allows to measure and compare the impact of algorithmic ideas beyond single problem-specific implementations.", "page": 38},
+   {"text": "Instances for which solver versions return numerically inconsistent results are excluded from the analysis.", "page": 14}
+  ]
+ },
+ {
+  "id": "S046",
+  "year": "2018",
+  "title": "Optimizing large-scale linear energy system problems with block diagonal structure by using parallel interior-point methods",
+  "read_level": "full",
+  "contribution": "Describes an extension of the parallel interior-point solver PIPS-IPM to block-diagonal LPs with linking variables and linking constraints, a GAMS interface and a block annotation for energy system models, with only small-scale tests so far.",
+  "problem_entry": "Energy system model LPs become intractable even for commercial LP solvers; their block-diagonal structure has linking variables and linking constraints, while PIPS-IPM handles linking variables only (file pp. 3–4).",
+  "key_idea": "Extend PIPS-IPM to linking constraints, keep the LP distributed over MPI processes, and let modellers annotate blocks in GAMS (stage attribute), also for distributed model generation; interior point chosen following S052 (file pp. 3–6).",
+  "assumptions": "LPs with linking variables x0, blocks T_i x0 + W_i x_i = h_i and a linking row (file p. 4); REMix for Germany with 21 regions, 17 technologies and 168 time steps annotated as 7 blocks (file p. 6); no integer variables.",
+  "proof_devices": [
+   "Distribution rule: block data on one MPI process, the linking row with block 0, x0 on every process, at most N processes (file pp. 4–5)",
+   "Redundant annotation of constraints enables consistency checks of the user's block structure (file p. 5)",
+   "Block choice as a trade-off between parallelism and linking size (storage links time steps, transport links regions) (file p. 6)"
+  ],
+  "experiments": "none reported: tested on ESMs with up to a million constraints and variables and 90 blocks, so far only on a small scale; no timings, baselines or test set (file pp. 5, 7).",
+  "positioning": "Builds on PIPS-IPM (Petra, Schenk, Anitescu) from stochastic optimization and on GAMS model annotations (Ferris et al.); cites S052 for preferring interior point on ESMs (file pp. 4–5, 8).",
+  "writing": "Project-description style; forward-looking hedges ('might ultimately lead', file p. 7); no numbers beyond problem sizes (file pp. 5–7).",
+  "limits_future": "Only small-scale tests; the speed-up and parallelism trade-off still to be studied systematically (file pp. 6–7). Future: release through GAMS and one seamless workflow (file p. 7).",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "weak: only small-scale tests printed and the systematic study named as next work; the paper is itself the next step that S052 named", "pages": "pp. 5–7"},
+   {"method": "Method 3", "relation": "variant", "note": "step 4: the missing capability is imported from the stochastic-programming community (PIPS-IPM) and extended to linking constraints", "pages": "p. 4"},
+   {"method": "Method 4", "relation": "variant", "note": "step 3 (check the input): redundant constraint annotation lets user-supplied block structure be checked for consistency", "pages": "p. 5"},
+   {"method": "Research Taste mark 3", "relation": "evidence", "note": "the goal is ESMs that today's LP solvers cannot solve at all", "pages": "pp. 3, 7"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "redundant annotation of user-supplied structure", "evidence": "variables and constraints both annotated with block membership so that the annotation can be checked for mistakes", "pages": "p. 5"}
+  ],
+  "transferable": [
+   "When users supply structure (block membership), let them annotate variables and constraints and check one against the other (file p. 5).",
+   "Choose blocks that are many, independent and of similar size, with few linking variables and constraints; a correct annotation is the easy part (file p. 6)."
+  ],
+  "coauthors": "Thomas Breuer (JSC), Michael Bussieck and Frederik Fiand (GAMS), Karl-Kiên Cao, Felix Cebulla, Hans Christian Gils and Manuel Wetzel (DLR), Dmitry Khabi (HLRS), Thorsten Koch and Daniel Rehfeldt (TU Berlin); alphabetical, Gleixner seventh of eleven; no roles stated",
+  "quotes": [
+   {"text": "The challenge is not mainly to find an annotation that is correct in the mathematical sense but to find one where the power of PIPS-IPM is exploited best.", "page": 6},
+   {"text": "Initial computational experiments already show the capability of the extended PIPS-IPM version to solve the ESM problems at hand, although so far only on a small scale.", "page": 7}
+  ]
+ },
+ {
+  "id": "S053",
+  "year": "2018",
+  "title": "Mixed-integer programming for cycle detection in nonreversible Markov processes",
+  "read_level": "full",
+  "contribution": "Introduces cycle clustering, a MIP that partitions a Markov chain's states into an ordered cycle of clusters maximizing net flow plus coherence, proves it NP-hard, and shows on synthetic and repressilator data that it finds non-dominant, biologically meaningful cycles that spectral clustering misses (submitted 2016 version read).",
+  "problem_entry": "Spectral and dominant-cycle methods assume reversibility or a dominant cycle, while catalytic and biological processes are nearly reversible with a small cyclic tendency (file pp. 4, 6–7).",
+  "key_idea": "Cluster the states into m ordered clusters, maximize net flow between consecutive clusters plus alpha times coherence, model it as a MIP separated from the algorithm, and linearize the binary products (file pp. 5, 9–12).",
+  "assumptions": "Right-stochastic P with stationary distribution, or any nonnegative W; binary assignment and continuous flow/coherence variables; m = 3 prototypical (all pairwise net flows equal), alpha = 0.001; synthetic potentials with n = 20 bins and the repressilator with n = 200 (file pp. 8–12, 15–16).",
+  "proof_devices": [
+   "Theorem 6: NP-hard for every m >= 3 and alpha > 0 by reduction from multiway cut, with big weights pinning consecutive terminals and coherence equal to a constant minus the cut weight (file pp. 12–14)",
+   "Structure of the projected matrix: zero net flow for m <= 2, equal pairwise net flows for m = 3 (file p. 10)",
+   "Problem-specific SCIP heuristics: greedy construction, LP rounding inspired by Schur vectors, Kernighan–Lin-type improvement (file p. 17)",
+   "Remark 3: a reversibility objective dropped because classifying near-zero flows is unstable (file p. 11)"
+  ],
+  "experiments": "SCIP, sequential runs on identical Xeon machines, 3600 s; synthetic instances solved to optimality in 0.1–6.9 s; repressilator unsolved in 1 h (best 0.1395, bound 0.2345), clusters match protein–mRNA pairs; G-PCCA under 1 s with a net flow one order of magnitude smaller, added as a reference without a bound; gap stated as 1.8 and as 2.6 against 1.68 from Table 1 (file pp. 16–20).",
+  "positioning": "Against spectral clustering (PCCA+, G-PCCA) and dominant-cycle methods (Djurdjevac-Conrad, Weber, Schütte), and against making matrices reversible (Nielsen and Weber) (file pp. 4–7).",
+  "writing": "Two numbered contributions (file pp. 4–5); the abstract is stronger than the body ('outperforming classical spectral analysis methods', file p. 3, against 'does not provide any kind of benchmark', file p. 18); two inconsistent gap factors (file pp. 18, 20).",
+  "limits_future": "Hardness and running time far above G-PCCA's; repressilator not solved (file pp. 17–20). Future: dedicated techniques to speed up MIP solving for cycle clustering (file p. 20), later done in S091.",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "the printed running-time gap becomes later work (S091 branch and cut, 2024) and a shipped SCIP application (D004 file p. 24)", "pages": "p. 20"},
+   {"method": "Method 2", "relation": "variant", "note": "no like-for-like baseline; the body says the G-PCCA comparison is not a benchmark, while the abstract says the method outperforms spectral methods", "pages": "pp. 3, 17–18"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "objectives robust to tiny differences", "evidence": "a within-cluster reversibility objective was dropped because classifying near-zero flows as reversible or irreversible is inherently unstable; coherence used instead (Remark 3)", "pages": "p. 11"}
+  ],
+  "transferable": [
+   "Prove hardness of a new clustering model by reduction from a classical partition problem: big forcing weights pin the terminals, and the remaining objective equals the classical one up to constants (file pp. 12–14).",
+   "Before fixing an objective, ask whether it classifies near-zero quantities; if so, replace it by a robust aggregate such as coherence (file p. 11).",
+   "Against a method that optimizes something else and gives no bound, compare the structure of both answers and say it is not a benchmark (file pp. 18–20)."
+  ],
+  "coauthors": "Isabel Beckenbach, Leon Eifler, Konstantin Fackeldey, Andreas Grever, Marcus Weber, Jakob Witzig; alphabetical in the report version (the work list gives Witzig first for the journal), Gleixner fourth of seven; no roles stated",
+  "quotes": [
+   {"text": "Second, it is inherently instable to classify such edges as irreversible or reversible because of the small differences.", "page": 11},
+   {"text": "In this sense we want to emphasize that this comparison does not provide any kind of benchmark.", "page": 18}
+  ]
+ },
+ {
+  "id": "S069",
+  "year": "2018",
+  "title": "Feature-based algorithm selection for mixed integer programming",
+  "read_level": "full",
+  "contribution": "A student-project study of per-instance selection among 14 SCIP settings from 399 static and 103 dynamic features, with five seeds and the primal-dual integral as a second target; random-forest portfolios beat the default and a featureless portfolio on 612 general MIPs.",
+  "problem_entry": "Algorithm selection worked for SAT but only modestly for MIP, and the best-mean setting has limited effect (file pp. 3–5).",
+  "key_idea": "Treat SCIP parameter settings as algorithms, predict portfolios from instance features, use seeds against performance variability and the primal-dual integral for runs that time out (abstract; file pp. 4, 15).",
+  "assumptions": "General MIP; Regions (2000 combinatorial auctions) and M&C (713 MIPLIB and COR@L instances, 612 after dropping 93 infeasible and 8 memory-heavy); 399 static features on three presolve settings and 103 dynamic root-node features, no time-valued features (file pp. 5–6, 8, 22).",
+  "proof_devices": [
+   "n/a (no proofs); feature analysis by Pearson correlation, PCA (95% at d = 71) and MDS (95% at d = 19) (file pp. 8–12)",
+   "Selectors: random forests with AdaBoost, Hydra pairwise voting extended to other base learners, SVM, kNN, logistic regression (file pp. 14–15)",
+   "Metric ps(f,g) = 1 - sigma_s(f)/sigma_s(g) on shifted geometric means, shift 10 s for time and 1000 for the integral (file pp. 15–16)"
+  ],
+  "experiments": "600 s limit; five seeds averaged per instance and setting; timeouts and failures set to 600 s and integral 60,000; 100 random 80/20 splits with mean and standard deviation; baselines always-default and a featureless portfolio; learned portfolios claimed to beat both (figures without numbers in the text layer), some predictors worse at portfolio size one; Regions only described as similar; infeasible solutions counted as ok (file pp. 5–7, 15–18, 23).",
+  "positioning": "Builds on AI algorithm-selection work (Hutter, Hoos, Leyton-Brown, Xu; ISAC; ASlib) and reimplements Hydra; frames MIP as the case where selection has not yet worked as for SAT (file pp. 4–5, 14).",
+  "writing": "Three numbered questions on the feature space (Q1–Q3, file p. 8); results mostly in figures (file pp. 16–18); the conclusion calls M&C homogeneous after calling it heterogeneous (file pp. 6, 16, 19).",
+  "limits_future": "Hyperparameters tuned one at a time; no prediction for a single new instance (file pp. 18–19). Future: portfolios of complementary algorithms, e.g. for parallel runs (file p. 19).",
+  "method_links": [
+   {"method": "Method 6", "relation": "contradiction", "note": "step 3: runs whose solutions violate the constraints (fail_solution_infeasible) are counted as ok and put down to numerical inaccuracy", "pages": "p. 23"},
+   {"method": "Method 2", "relation": "evidence", "note": "two baselines (always the default solver; a featureless portfolio ranked by shifted geometric mean) isolate what the features add", "pages": "pp. 15–16"},
+   {"method": "Method 3", "relation": "evidence", "note": "weak: failures printed (some predictors worse than featureless at portfolio size one; single-instance prediction not implemented)", "pages": "pp. 17–18"},
+   {"method": "Heuristic 8", "relation": "variant", "note": "five seeds averaged per instance and setting instead of counting instance-seed pairs as observations", "pages": "pp. 5–6"},
+   {"method": "Heuristic 7", "relation": "evidence", "note": "the primal-dual integral as a second measure where time is censored by the limit", "pages": "pp. 3, 7, 17"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "progress integral for censored runs", "evidence": "the primal-dual integral serves as training target and proxy for time when runs hit the 600 s limit; works for portfolios, not automatically for single picks; overlaps Heuristic 7", "pages": "pp. 7, 17"}
+  ],
+  "transferable": [
+   "Leave time-valued features out when the predictor will run on other machines than the ones that produced the training data (file p. 22).",
+   "Compare a learned selector with two baselines, the default and a featureless ranking, so a gain cannot come from the portfolio size alone (file pp. 15–16).",
+   "Repeat the train/test split many times (here 100 seeds) and report mean and standard deviation of the improvement (file p. 16)."
+  ],
+  "coauthors": "Alexander Georges (UC San Diego), Gorana Gojić (Novi Sad), Robert Lion Gottwald and Gregor Hendel (ZIB), David Haley (UC Davis), Bartłomiej Matejczyk (Warwick); alphabetical, Gleixner second of seven; GRIPS 2017 student project; no roles stated",
+  "quotes": [
+   {"text": "We take the arithmetic mean of results over these random seeds to smooth out statistical fluctuations produced by each run.", "page": 5},
+   {"text": "This is usually due to rounding errors and other forms of numerical inaccuracy within the machine so can be considered ’ok’.", "page": 23}
+  ]
+ },
+ {
+  "id": "S045",
+  "year": "2019",
+  "title": "Tackling industrial-scale supply chain problems by mixed-integer programming",
+  "read_level": "full",
+  "contribution": "Reports the algorithmic engineering (decomposition, presolve, primal heuristics, SoPlex pricing, numerics) that let SCIP handle SAP's industrial supply network planning MIPs within practitioners' time limits, measured by primal bound quality across SCIP 1.2.0–3.1.0 (ZIB-Report version read).",
+  "problem_entry": "SAP's supply network planning MIPs reach 30 million variables and constraints under tight time limits; MIP was chosen over heuristics for expressiveness, extensibility and quality guarantees, but numerics (coefficients 0.001 to 10^7) and scalability limit it (file pp. 4, 8–9).",
+  "key_idea": "Improvements on many levels: decomposition outside the solver (exact for independent parts, heuristic otherwise) and generic presolve, heuristics, LP pricing and numerical safeguards inside SCIP and SoPlex, built without supply-chain knowledge (file pp. 9–18, 21).",
+  "assumptions": "Lot-sizing MILP with stock balances, late deliveries, non-delivery penalties, capacity rows and big-M minimum lot sizes (file pp. 5–7); SAP instances (pure LPs and MIPs, mostly below 10% integers, about 7.7 nonzeros per row, limits 30–7200 s); instance count not given (file pp. 16, 18).",
+  "proof_devices": [
+   "Presolve: singleton column stuffing, dominated columns, disconnected components (file pp. 12–13)",
+   "Shift-and-propagate extension using binaries bounded by no constraint as a generic proxy for start-up variables (file pp. 13–14)",
+   "Pricing invariant: one violated variable suffices for correctness, so a short candidate list is kept and all bounds are checked only in the final iteration (file p. 17)",
+   "Numerical safeguards: infinity 10^20 to 10^30, special care above 10^15, unreliable activity updates recomputed, feasibility relative to the largest variable contribution (file pp. 17–18)"
+  ],
+  "experiments": "SCIP 1.2.0 (pre-project) vs 2.0.0, 2.1.0, 3.0.0, 3.1.0; Xeon X5672, one instance at a time; best primal bound at instance limits in five classes and mean primal gap over normalized time; better at every release, finally a solution for all but one instance (an LP above 5 million variables and constraints); customized parameters from 2.1.0, no seeds, no component ablation (file pp. 18–20).",
+  "positioning": "Argues for exact MIP against specialized supply-chain heuristics; builds on Gamrath et al. presolving, Berthold and Hendel's shift-and-propagate, structure-based heuristics, Kostina's long-step rule, Forrest–Goldfarb steepest edge and Berthold's primal integral (file pp. 8, 11–19).",
+  "writing": "Engineering-tutorial voice ('a tutorial for identifying related substructures', file p. 11); progress shown in figures over five releases (file pp. 19–20); concrete thresholds for the numerics (file pp. 17–18).",
+  "limits_future": "Heuristic decompositions lose optimality and the bound; product decomposition fails if one subproblem fails; one LP unsolved within its limit (file pp. 10–11, 19). No future work stated.",
+  "method_links": [
+   {"method": "Method 2", "relation": "variant", "note": "version-to-version against the pre-project release SCIP 1.2.0 with settings customized from 2.1.0; the mixing is stated, not removed, and no component is measured alone", "pages": "pp. 19–20"},
+   {"method": "Method 5", "relation": "variant", "note": "no exact arithmetic; floating-point safeguards decide (care above 10^15, recomputed unreliable activities, scale-invariant feasibility option); in pricing a cheap partial choice with a full check only at the end", "pages": "pp. 17–18"},
+   {"method": "Method 3", "relation": "evidence", "note": "components that gave little (long steps, steepest edge), the unsolved LP and the cost of heuristic decomposition are printed", "pages": "pp. 10, 16, 19"},
+   {"method": "Method 6", "relation": "variant", "note": "the test protocol comes from the application (instance limits from user expectations, primal measures), not from a selection model", "pages": "pp. 18–19"},
+   {"method": "Research Taste mark 8", "relation": "evidence", "note": "the shift-and-propagate extension was built without supply-chain knowledge and is now on by default for all MIPs (also Taste mark 7)", "pages": "pp. 14, 21"},
+   {"method": "Heuristic 7", "relation": "evidence", "note": "the metric follows the use: best primal bound and primal integral instead of time to optimality", "pages": "pp. 18–19"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "tolerance back-translation", "evidence": "scaling 10^5x - y = 0 by 10^-5 makes a solution acceptable that violates the original row by 0.05; option to measure the violation relative to the largest variable contribution; an absolute 10^-6 tolerance is impractical for stock rows with zero right-hand side and huge flows", "pages": "p. 18"},
+   {"pattern": "progress integral for censored runs", "evidence": "mean primal gap over time normalized by instance-specific limits, because many instances are not solved within practitioners' limits", "pages": "pp. 18–19"}
+  ],
+  "transferable": [
+   "Make a feasibility check invariant to row scaling by measuring the violation relative to the largest term in the row; test it on a row with right-hand side zero and huge flows (file p. 18).",
+   "When incremental updates of row activities can lose digits, flag an update that shrinks the value by orders of magnitude and recompute from scratch on next use (file p. 17).",
+   "For an application, set a time limit per instance from user expectations and report the best primal bound in classes (optimal, below 1%, below 10%, any, none) plus the primal gap over normalized time (file pp. 18–19).",
+   "Implement an application-motivated idea through a generic proxy (unconstrained binaries for start-up variables) so it can become a default for all MIPs (file p. 14)."
+  ],
+  "coauthors": "Gerald Gamrath, Thorsten Koch, Matthias Miltenberger (ZIB), Dimitri Kniasew, Dominik Schlögel (SAP SE), Alexander Martin, Dieter Weninger (FAU Erlangen-Nürnberg); alphabetical within each institution, Gleixner second of eight; no roles stated",
+  "quotes": [
+   {"text": "In the literature, a very popular measure for comparing MIP solver performance is the (average) running time to proven optimality. This, however, does not always reflect well the suitability of algorithms in an application setting.", "page": 18},
+   {"text": "Although this extension can increase the size of the final LP to be solved and the running time of the shift-and-propagate heuristic, it improves the heuristic not only for supply chain instances but also for general MIP problems such that it is now enabled by default in SCIP.", "page": 14}
+  ]
+ }
+]

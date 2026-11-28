@@ -1,0 +1,335 @@
+[
+ {
+  "id": "S198",
+  "year": "2004",
+  "title": "Exact and Heuristic Methods for Nesting Problems",
+  "read_level": "full",
+  "contribution": "The 2004 report form of the nesting work later published as S046: a bitmap tabu search, a no-fit-polygon slice MIP with lifted big-M coefficients and clique-building branching priorities that closes broken-glass instances only up to 7 pieces, a knapsack-type approximate MIP for placing trims in holes that, after an LP repair, beats the authors' greedy by 0.16 to 2.43 efficiency points on four garment rows, and the NESTLIB instance format.",
+  "problem_entry": "Textile marker making: humans need a year of training and 30-45 minutes per marker, automated systems trail them by up to 5%; strongly NP-hard via PARTITION; the hole-filling step of the big-pieces-first strategy is where greedy choices fail (pp. 8-10).",
+  "key_idea": "Bitmap tabu search first, then polygons for precision, speed and fair comparison: the Daniels-Li-Milenkovic slice MIP strengthened by lifting and priorities, and a simplified knapsack-type containment MIP repaired by the Li-Milenkovic separation LP (pp. 10, 45-52, 55-63).",
+  "assumptions": "Polygons translated with 180-degree rotation only, fixed-width strip, length plus an epsilon compaction term; one binary per no-fit-polygon slice with big-M disjunctions; trims as bounding boxes, usable holes via a minBox shrunk by 0.8, a cell grid; six literature instances, three broken-glass squares, three garment instances (pp. 9, 34, 45-48, 52, 56-60, 68).",
+  "proof_devices": [
+   "PARTITION reduction for strong NP-hardness of nesting with translating rectangles, p. 9",
+   "Bitmap overlap check on perimeter points with move-to-front of the last violating point, pp. 27-29",
+   "Tabu tenure by the iteration of a piece's last move; compaction by doubling and bisection every 25 iterations; diversification every 100, pp. 30-33",
+   "LP-weakness example: z = 1/2 on two slices makes total overlap feasible, p. 49",
+   "Big-M lifting: each coefficient is the facet's maximum over another slice inside a bounding box, read off that slice's vertices, pp. 49-50",
+   "Branching priorities that settle all relative positions within a growing set of pieces (Fig. 5.6), pp. 51-52",
+   "Repair of the approximate containment layout by the Li-Milenkovic separation LP with fixed slices, removing the most overlapping pieces or solving per trim group, pp. 63, 65"
+  ],
+  "experiments": "Tabu search vs literature lengths called not directly comparable, no run times or hardware (pp. 28, 34); MIP on CPLEX 7.0, AMD Athlon 1.2 GHz, 100,000-node cap, priority flag only: Glass2 closed (32.08% to 0%), Glass3 at 58.70% vs 59.82%, lifting never switched off (p. 53); containment vs the authors' greedy on four rows: efficiency +2.43, +0.46, +0.55, +0.16 points, seconds per solve (p. 68); no repeated runs or seeds mentioned.",
+  "positioning": "Survey of enclosure, direct-placement and improvement methods (pp. 15-22); MIP based on Daniels, Li and Milenkovic and the Li-Milenkovic compaction model (pp. 10, 45, 63); tabu search after Glover and Hertz-de Werra (p. 29); benchmarks from Oliveira, Gomes, Ferreira and Blazewicz et al. (pp. 25, 34).",
+  "writing": "Thesis layout: outline and a main-contributions list in Chapter 1, repeated chapter by chapter in the conclusion (pp. 10-11, 71-72); results summarised generously ('almost always better', p. 72) next to an explicit non-comparability caveat (p. 34).",
+  "limits_future": "MIP only for instances of limited size (p. 52); the containment model accepts overlapping layouts and the separation LP may fail (pp. 62-63); no future work (pp. 71-72). The journal version S046 adds that lifting had a limited practical impact (S046 p. 13).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Step 2, joint, thesis material: the sub-decision that greedy handles badly (which trims go into which holes) becomes an auxiliary MIP solved by CPLEX in seconds, comparable with the greedy's time; the full MIP's size limit is printed as a finding.",
+    "pages": "pp. 10, 52, 68"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Step 2 with the step-6 check: a deliberately simplified geometry makes the containment MIP solvable and an exact LP repairs it; as in S046, the full model was strengthened first (lifting, priorities).",
+    "pages": "pp. 49-52, 56-63"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Comparability drives a rewrite from bitmaps to polygons, but the reported comparisons stay thin: literature values called not comparable, three self-made instances with only the priority flag varied, the authors' own greedy as the only rival.",
+    "pages": "pp. 34, 45, 53, 68"
+   },
+   {
+    "method": "Method 3",
+    "relation": "contradiction",
+    "note": "Dated lapse (2004, thesis material): the randomized initial placement is judged on one run per test, and no table repeats runs.",
+    "pages": "pp. 27, 34, 53, 68"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Approximate MIP plus exact LP repair",
+    "evidence": "The trims-in-holes MIP works on bounding boxes and a cell grid; its layout is repaired by the Li-Milenkovic separation LP with fixed slices, removing the most overlapping pieces one by one when the LP fails; the same device as S046 pp. 22-23.",
+    "pages": "pp. 61-63, 68"
+   },
+   {
+    "pattern": "known-answer testbed first",
+    "evidence": "Broken-glass instances: a square broken at random into n polygons, so the optimal length is known in advance.",
+    "pages": "p. 52"
+   },
+   {
+    "pattern": "release solver, instances and optimal values",
+    "evidence": "Instances and a documented file format only: all literature instances converted to the NESTLIB standard and a download site announced; the journal version S046 offers the garment instances on request (S046 p. 25).",
+    "pages": "pp. 10, 72, 75-78"
+   },
+   {
+    "pattern": "Representation chosen for comparability",
+    "evidence": "Bitmaps are dropped for polygons partly because they do not allow a fair comparison with other algorithms, and the placement code is rewritten from scratch.",
+    "pages": "p. 45"
+   }
+  ],
+  "transferable": [
+   "Build test instances by breaking a known shape at random into pieces, so that the optimum is known in advance and any remaining gap is the method's (p. 52).",
+   "Check a placement for overlap on perimeter points only (plus a few interior points against full containment), and move the point that last caused an overlap to the head of the list, since it is likely to fail again at the next position (pp. 27-29; Table 3.1, p. 28).",
+   "Give branching priorities that make the solver settle all pairwise relations inside a growing set of objects before it touches a new object (Fig. 5.6, p. 52)."
+  ],
+  "coauthors": "Ivan Luzzi",
+  "quotes": [
+   {
+    "text": "does not allow a fair comparison of the results with other algorithms",
+    "page": 45
+   },
+   {
+    "text": "one knows in advance the value of the optimal solution",
+    "page": 52
+   }
+  ]
+ },
+ {
+  "id": "S132",
+  "year": "2007",
+  "title": "Integer Programming and Combinatorial Optimization: 12th International IPCO Conference, Ithaca, NY, USA, June 25-27, 2007, Proceedings",
+  "read_level": "full",
+  "contribution": "Editorial: the IPCO XII proceedings (LNCS 4513) co-edited with Williamson; Fischetti chaired the 12-member program committee that selected 36 of over 120 submissions (pp. 4-5).",
+  "problem_entry": "n/a (editorial)",
+  "key_idea": "n/a (editorial)",
+  "assumptions": "n/a (editorial)",
+  "proof_devices": [],
+  "experiments": "n/a (editorial). Over 120 submissions, 36 accepted for non-parallel sessions, refereed extended abstracts with a 15-page limit, full versions expected in journals; sponsors IBM Research, ILOG and the Office of Naval Research (p. 4); 12 sessions of three papers (pp. 6-8).",
+  "positioning": "n/a (editorial). IPCO presented as the MPS-sponsored forum held in years without an ISMP (p. 4). Titles only, not read: Orbitopal Fixing and Orbital Branching, Balas-Bonami's open-source lift-and-project, Danna et al. on multiple MIP solutions, Ghosh's DINS, Dash-Günlük-Lodi on the MIR closure (pp. 6-8).",
+  "writing": "A standard proceedings preface: series history, selection numbers, refereeing standard, page limit, sponsors and thanks, signed March 2007 by both editors (p. 4).",
+  "limits_future": "n/a (editorial)",
+  "method_links": [],
+  "new_pattern_candidates": [],
+  "transferable": [],
+  "coauthors": "David P. Williamson (co-editor)",
+  "quotes": [
+   {
+    "text": "There were over 120 submissions to the conference.",
+    "page": 4
+   },
+   {
+    "text": "the extended abstracts were refereed according to the standards of refereed conferences",
+    "page": 4
+   }
+  ]
+ },
+ {
+  "id": "S154",
+  "year": "2014",
+  "title": "Proximity search heuristics for Mixed Integer Programs",
+  "read_level": "full",
+  "contribution": "A RAMP 2014 review-plus-application paper that restates proximity search (cutoff plus Hamming-distance objective, three implementations) and applies it, inside a MIP-and-refine loop on a deliberately compact model, to offshore turbine layout with 1,000 to 20,000 sites, where it wins most instances at longer time limits against default and heuristic-tuned CPLEX and a local search.",
+  "problem_entry": "Whether the objective that selects the optimum should also guide a search for quick improvements; LNS heuristics restrict the constraints, proximity search changes the objective; application: wake losses of 10-20% in large wind farms (abstract; pp. 1, 6).",
+  "key_idea": "Cutoff f(x) <= f(x~) - theta, Hamming distance to x~ as objective, convex refinement with binaries fixed, recentering; three implementations (callback, black-box restart, soft cutoff with warm start); for the layout a compact weaker model, site sampling and an interference-free first phase (pp. 2, 4-5, 8-9).",
+  "assumptions": "0-1 convex MINLP with a polynomially solvable relaxation (not strictly required) and an easy first solution; layout model with site binaries, incompatibility, expected power and interference over wind scenarios; 5 classes x 10 random instances, n = 1,000-20,000 (pp. 2-3, 6-8, 10).",
+  "proof_devices": [
+   "Root-grip table: ramos3 root LP with 682 integer components at theta = 121 vs 2,181 at theta = 1, from [5], p. 3",
+   "Soft cutoff f(x) <= f(x~) - theta + z with M z added to the proximity objective, so that x~ seeds the incumbent and RINS, p. 5",
+   "Scenario collapse: constraints in first-stage variables only, so expected P and I give the same model, p. 7",
+   "Compact Glover-type reformulation with big-M reduction left to preprocessing and clique generation left to the solver, p. 8",
+   "MIP-and-refine loop with random site removal for n > 2,000 and an interference-free first phase (60 s per call), p. 9"
+  ],
+  "experiments": "CPLEX 12.5.1, quad-core Xeon E3-1220 V2 with 16 GB, threads not stated; proxy vs cpx_def and cpx_heu (same start) and loc_sea; wins with ties and ratio to best known at 60-3,600 s on 50 random instances: at 3,600 s 36 wins and 0.999 vs 2/10/2 wins and 0.946/0.959/0.959; cpx_heu ties or wins at n = 1,000; the cpx_heu 600 s column equals proxy's (looks copied); no seeds mentioned (pp. 9-11).",
+  "positioning": "Restates [5] (published as S052) and the first author's thesis [4] and paper [6]; set against local branching and RINS; layout model after Donovan [3], compact model after Glover [9] as used for the QAP [7], MIP-and-refine after [8] (abstract; pp. 1-2, 6-9).",
+  "writing": "Opens with a naive-sounding question on the role of the objective function (p. 1); tables reused from [5] and [6] with source labels (pp. 3, 11); the text cites 'Table 4.3' for the table captioned Table 2 (pp. 10-11); a 1% gain is given its economic weight (p. 11).",
+  "limits_future": "Landscape of feasible solutions not too irregular (abstract); first solution assumed easy (p. 3); the callback version blocks incumbent-based propagation, fixing and refinement heuristics (pp. 4-5); no future work.",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Steps 2-3, joint: the MIP solver is the heuristic's engine, used as a black box without callbacks in the recentering version, and big-M reduction and clique generation are left to its preprocessing.",
+    "pages": "pp. 5, 8"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Steps 1-2, joint with Martina Fischetti: the model is chosen by instance size (quadratic for about 100 sites, a compact, possibly weaker one beyond 1,000), scenarios collapse to expected data, empty sites are sampled away and interference is dropped in a first phase; an earlier case of the skill's MATH16 point that heuristics may prefer a weak model.",
+    "pages": "pp. 7-9"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Step 2: the rivals are what practitioners run, default and heuristic-tuned CPLEX from the same start plus a plain local search, and the rival's wins at n = 1,000 are printed and explained.",
+    "pages": "pp. 10-11"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Step 5: the proxy arm itself runs an aggressive CPLEX tuning (all cuts off, RINS at every node, polishing from time 0) whose origin is not stated.",
+    "pages": "pp. 9-10"
+   },
+   {
+    "method": "Method 3",
+    "relation": "contradiction",
+    "note": "Dated lapse (2014): a randomized test bed (10 random instances per class) with no seeds or repetitions mentioned, although the work is funded by a Padova project on exploiting randomness in MILP.",
+    "pages": "pp. 10-11"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "inexact model to search, true model to accept",
+    "evidence": "The interference-free model drives the proximity sub-MIP in a first phase while every other step uses the true objective with interference; the full model takes over once the true profit stops improving.",
+    "pages": "p. 9"
+   },
+   {
+    "pattern": "Big-penalty slack so every solve returns a point",
+    "evidence": "A soft cutoff with slack z and a big M in the proximity objective makes the reference solution a feasible warm start; constraints are imposed softly through penalized slacks when feasibility is an issue.",
+    "pages": "pp. 3, 5"
+   },
+   {
+    "pattern": "Near-integral LP points as the heuristic's lever",
+    "evidence": "With a small cutoff tolerance the root LP of ramos3 is almost integral and solved in hundredths of a second (from [5]).",
+    "pages": "p. 3"
+   },
+   {
+    "pattern": "name the cost of wrapping the black box",
+    "evidence": "The callback implementation never updates the solver's incumbent, so propagation, variable fixing and refinement heuristics never apply, and callbacks can deactivate solver features.",
+    "pages": "pp. 4-5"
+   }
+  ],
+  "transferable": [
+   "To keep a black-box solver's incumbent heuristics running during an improvement search, soften the cutoff with a slack z >= 0 penalized by a large M in the objective, pass the reference solution as a warm start, and stop at the first solution with z = 0 (p. 5).",
+   "Drive a large heuristic search with a relaxed model that drops the hard coupling constraints under a short time limit, score every candidate with the true objective, and switch to the full model once the relaxed one stops improving the true value (p. 9).",
+   "When all constraints involve only first-stage variables and the objective is linear in the scenario data, replace the stochastic model by the deterministic one with expected data (p. 7).",
+   "With big-M constraints in the model, set the solver's integrality tolerance to zero, as the authors do because of the big-M's (p. 9)."
+  ],
+  "coauthors": "Martina Fischetti (first author), Michele Monaci",
+  "quotes": [
+   {
+    "text": "we preferred to leave clique management to the solver itself",
+    "page": 8
+   },
+   {
+    "text": "a clever but not oversophisticated metaheuristic, as typically implemented by practitioners",
+    "page": 10
+   }
+  ]
+ },
+ {
+  "id": "S190",
+  "year": "2019",
+  "title": "Intersection Cuts for Quadratic Mixed-Integer Optimization",
+  "read_level": "full",
+  "contribution": "ODS 2019 slides of the bilinear branch-and-cut published as S079: MIQP as a MILP with bilinear equations, McCormick cuts in a lazy-constraint callback, a shifted spatial-branching rule, intersection cuts from bilinear-free sets with a numerically safe derivation, and a single-thread comparison with SCIP on 620 MINLPlib instances whose results are images.",
+  "problem_entry": "Build a non-convex MIQP solver by customizing a MILP branch-and-cut rather than by putting enumeration on top of a QP solver (p. 2).",
+  "key_idea": "Bilinear equations z = xy enforced by McCormick and gradient cuts, spatial branching only at bilinear infeasibility, a threshold shifted by delta to balance the two children, and intersection cuts from the convex sets implied by violated (shifted) spatial-branching disjunctions (pp. 3-8).",
+  "assumptions": "General MIQP restated with bilinear equations; McCormick tight only at the bounds; an intersection cut needs an LP vertex; test bed of 620 quadratic MINLPlib instances after removing unbounded root LPs (pp. 3, 5, 7, 12).",
+  "proof_devices": [
+   "Shifted spatial branching with delta balancing the bound violation and the McCormick violation of the two children, p. 6",
+   "Bilinear-free set implied by any violated branching disjunction, p. 8",
+   "Numerically safe intersection cut: the worst left-hand-side coefficient and right-hand side per disjunction on a reduced form with zero coefficients for basic variables, p. 10",
+   "Four CPLEX 12.8 callbacks (lazy constraint, user cut, branch, incumbent) with the solver's heuristics at default, p. 11"
+  ],
+  "experiments": "SCIP 5.0.1 vs basic vs with-IC, all single-thread (SCIP allows no parallel runs), 1 h, Intel 3.10 GHz with 16 GB, 620 MINLPlib instances; the results slides are images; the slide's 408 'solved by all methods' conflicts with the paper's 408 solved by at least one method and 248 by all (p. 12; S079 p. 14).",
+  "positioning": "Balas (1971) credited for intersection cuts and McCormick for the inequalities; SCIP is the only rival (pp. 4, 7, 12).",
+  "writing": "Hashtags as punchlines (#bilinear_infeasibility, #LikeGomoryCuts, #SeparateOrPerish, pp. 5, 8, 9); the pros and cons of the two routes left as ellipses (p. 2); results only as images (pp. 13-15); slides carried over from the bilevel deck, one still saying 'generic bilevel eq.' (p. 4).",
+  "limits_future": "Cutting instead of branching not always advisable (numerics, slow convergence, tailing off, cut saturation); tableau accuracy a big issue; fractional separation optional and sometimes detrimental; MIQP-specific heuristics not implemented (pp. 8-11).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Steps 1 and 3, joint: the solver is built on MILP branch-and-cut, not around a QP code; the MILP solver's heuristics run at their defaults and the new code is four callbacks.",
+    "pages": "pp. 2, 11"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Step 5, weak: fractional (user-cut) separation is called optional and sometimes detrimental, the ingredient the paper leaves off by default after a root-only test (S079 pp. 10, 13).",
+    "pages": "p. 11"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Step 1: every arm runs single-thread because the rival cannot run in parallel.",
+    "pages": "p. 12"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "own toolbox as building blocks",
+    "evidence": "The intersection-cut slides reuse the 2017 bilevel deck: slide 7 repeats S194's slide 12 nearly word for word, slide 9 repeats S194's slide 19 with 'bilìnear-free set' for 'bilevel-free set', and slide 4 still says 'generic bilevel eq.'.",
+    "pages": "pp. 4, 7, 9; S194 pp. 12, 19"
+   },
+   {
+    "pattern": "Make cut validity independent of tableau accuracy",
+    "evidence": "After naming tableau accuracy as the risk, one valid inequality is taken from the worst coefficients of each disjunction on a reduced form.",
+    "pages": "pp. 9-10"
+   }
+  ],
+  "transferable": [
+   "Choose the spatial-branching threshold x* - delta so that the bound violation in one child equals the McCormick violation in the other, and branch on the bilinear equation with the largest such delta (p. 6).",
+   "Keep an incumbent callback as the last check that rejects integer solutions still violating a bilinear equation when tolerances let them through (p. 11).",
+   "When the rival solver cannot run in parallel, run every arm single-threaded (p. 12)."
+  ],
+  "coauthors": "Michele Monaci",
+  "quotes": [
+   {
+    "text": "in principle, one could always generate an IC instead of branching",
+    "page": 8
+   },
+   {
+    "text": "very-last resort to kill a bilinear-infeasible integer solution",
+    "page": 11
+   }
+  ]
+ },
+ {
+  "id": "S194",
+  "year": "2017",
+  "title": "Exact Algorithms for Mixed-Integer Bilevel Linear Programming",
+  "read_level": "full",
+  "contribution": "A 2017 single-speaker deck on the bilevel branch-and-cut with Ljubić, Monaci and Sinnl: a MIBLP solved as branch-and-cut on the high-point relaxation plus intersection cuts for bilevel-infeasible integer vertices, from a bilevel-free set enlarged under integrality, worked on the Moore-Bard example; no computational results.",
+  "problem_entry": "What must be added to a MILP branch-and-cut solver to handle a MIBLP, given that bilevel problems are very hard and convergent methods need integrality assumptions (pp. 2-3, 10).",
+  "key_idea": "Value-function reformulation and HPR; at an integer but bilevel-infeasible LP vertex, cut with an intersection cut from a bilevel-free set built from the follower's optimal response, instead of the weak no-good or slack-of-1 cuts (pp. 4, 10-16).",
+  "assumptions": "Optimistic MIBLP with affine F, G, f, g; leader variables appearing in the follower integer, HPR bounded; g integer at integer HPR solutions for the enlarged set (pp. 5, 9, 18).",
+  "proof_devices": [
+   "A generic 0-1 ILP written as a linear continuous bilevel problem (hardness illustration), p. 3",
+   "Three node cases of a MILP branch-and-cut on the HPR, only the bilevel-infeasible integer case needing new code, pp. 10-11",
+   "Basic bilevel-free set from the follower's optimum at x*, a polyhedron in the MIBLP case, p. 16",
+   "Frontier flaw named, then the set enlarged under integrality so that the vertex is interior and the cut always violated, separated in a lazy-constraint or user-cut callback, pp. 17-18"
+  ],
+  "experiments": "none (the conclusions say only that many instances from the literature are solved in a satisfactory way, p. 21)",
+  "positioning": "No-good and slack-of-1 cuts from the literature judged weak (p. 11); intersection cuts credited to Balas (1971) (p. 12); the Moore-Bard example (pp. 7, 13); the IPCO 2016 paper and two 2016 reports listed (p. 21).",
+  "writing": "From the general problem and a hardness example to the toy example worked step by step and back to the general separation (pp. 2-16); a slide titled 'It looks simple, but …' names the flaw before the fix (p. 17); hashtag #SeparateOrPerish (p. 19).",
+  "limits_future": "Heuristics and preprocessing exist but are not discussed (p. 21); slide 20 on numerically safe cuts is title only (p. 20); no limits or future work stated.",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Step 3, his own deck on joint work: the bilevel solver is posed as an add-on to a stock MILP branch-and-cut that touches, through callbacks, only the node case the solver cannot handle; a MIBLP is called a MILP plus additional constraints.",
+    "pages": "pp. 10-11, 18, 21"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "My reading, a limit of step 1: the 0-1 ILP example notes that a follower variable fixed to 0 still cannot be removed from the model; in a bilevel model a variable with no value left to decide can carry the follower's optimality, so the test for variables that only describe the problem has to look at the follower.",
+    "pages": "p. 3"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "numerically safe by construction",
+    "evidence": "Reading cone rays from the tableau makes numerical accuracy a big issue, and the cuts are more instrumental for MIBLPs than for MILPs; slide 20 announces numerically safe intersection cuts (title only; the derivation is in S016).",
+    "pages": "pp. 19-20"
+   }
+  ],
+  "transferable": [
+   "Before writing a solver for a harder class, list the node cases a MILP branch-and-cut already handles (fractional: branch; integer and feasible: incumbent) and write code only for the remaining one, here integer but bilevel infeasible, in a lazy-constraint callback (pp. 10-11, 18).",
+   "Introduce a new cut on the field's standard two-variable example first (the LP vertex, why it is infeasible, the cut it yields), then state the general separation (pp. 13-16).",
+   "When an intersection cut may miss an integer point on the frontier of the free set, use integrality of the defining quantity to enlarge the set so that the point is interior and always cut (p. 18)."
+  ],
+  "coauthors": "none on the title slide (joint work with I. Ljubić, M. Monaci and M. Sinnl credited)",
+  "quotes": [
+   {
+    "text": "What do we need to add to the MILP solver to handle a MIBLP?",
+    "page": 10
+   },
+   {
+    "text": "Mixed-Integer Bilevel Linear Programming is a MILP plus additional constr.s",
+    "page": 21
+   }
+  ]
+ }
+]

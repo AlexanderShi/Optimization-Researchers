@@ -1,0 +1,425 @@
+[
+ {
+  "id": "D029",
+  "year": "2013",
+  "title": "Parallelizing the Constraint Integer Programming Solver SCIP",
+  "read_level": "full",
+  "contribution": "Presents UG, a solver-independent framework that runs unmodified SCIP copies under one load coordinator as ParaSCIP (MPI) and FiberSCIP (Pthreads), measures FiberSCIP on the 87 MIPLIB 2010 benchmark instances against a one-thread baseline, and reports single-job ParaSCIP solves of ds, stp3d and dg012142 (pp. 1, 6–11, 16–29).",
+  "problem_entry": "Earlier parallel MIP rarely beat commercial sequential solvers, and a parallel search that loses the sequential solver's component performance cannot reach even sequential speed; SCIP had no parallel version at all (pp. 3–4); a new algorithm rarely helps all instances, so solvers are re-tuned on large sets (p. 2).",
+  "key_idea": "Tree of Trees from outside the solver: many unmodified SCIP Solvers under one LoadCoordinator; presolved instance sent once, subproblems as bound changes; normal or racing ramp-up, collecting mode on a relative-gap test, ancestor-free checkpoints; the same logic over MPI and Pthreads (pp. 3, 6–10).",
+  "assumptions": "CIP with condition (2.1), MIP as the linear case, minimization (pp. 1, 4); FiberSCIP covers all SCIP classes, ParaSCIP MIP only (pp. 10–11, 29); MIPLIB 2010 benchmark (87), ds, stp3d, dg012142 (pp. 11, 27, 29); vars × cons of the presolved instance as memory estimate (p. 11).",
+  "proof_devices": [
+   "relative-gap test (3.1) for good nodes with p and m_p·p hysteresis (p. 9)",
+   "presolved instance broadcast once, subproblems as bound-change differences (p. 7)",
+   "checkpoint only the coordinator's nodes with no ancestor among them, to avoid solving subtrees twice (p. 10)",
+   "per-Solver slowdown model f(x) = 1.0 − c·log(x) on vars × cons, fitted per thread count (p. 20)",
+   "same-path instance subset (equal node counts at 1, 2, 4 and 6 threads) to isolate hardware effects (pp. 17, 20)"
+  ],
+  "experiments": "FiberSCIP: 87 MIPLIB 2010 instances, 40 identical nodes, SCIP 2.1.1 with SoPlex 1.6.0.1, 2 h, solution checker on every result, geometric means over commonly solved instances beside a failures-at-7,200 s mean, baseline the one-thread FiberSCIP default (about 47 s slower than SCIP), five runs for nondeterministic settings (pp. 11, 16–21); ParaSCIP: ds and stp3d on 4,096 and 7,168 HLRN II cores, dg012142 on 256 ISM cores in about 42 h, restarts against one job in core-hours (pp. 27–29).",
+  "positioning": "Earlier parallel MIP rarely beat commercial sequential solvers; Bussieck et al. 2009 the only earlier first-solve known to the authors; Gurobi's Tree of Trees read as the authors' 2008 approach moved inside a solver; Ralphs 2006 for the difficulty (p. 3).",
+  "writing": "Unmeasured claims are hedged and labelled (restarts help, p. 10; the single-job challenge improved load balancing, p. 29); the post-2010 results are offered as perhaps lacking novelty but informative about the field (p. 27); the conclusion warns readers to check how solvers are compared (p. 30).",
+  "limits_future": "ParaSCIP is MIP-only (p. 29); a deterministic parallel solver is needed for development, future work (pp. 29–30); evaluation depends on test set and measure, and no method is established (p. 30); restarts show that discarding work can pay, so algorithm improvement comes first (p. 30).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Stated, co-signed: a new algorithm rarely helps all instances, costs effort to decide when to run, and can slow instances solved before, so a general solver is re-tuned on a large set that includes formerly fast instances.",
+    "pages": "p. 2"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Racing ramp-up is made the default although normal ramp-up has the larger speedups, because racing solves more instances in every run and gains with more threads; the authors call the choice difficult. Criterion: stability over runs and trend with scale, not a detector (numbers in R018, p. 21).",
+    "pages": "pp. 21, 26"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Knock-out inside the parallel default: without coordinator presolve the code is slower and solves fewer instances in all five runs, so the default stays; means over commonly solved instances with the failures-at-limit mean beside them; explicit warning that speedups of different settings rest on different instance subsets.",
+    "pages": "pp. 16, 21"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Baseline is the parallel code's own one-thread default (presolve twice), about 47 s slower in geometric mean than sequential SCIP, chosen because presolving twice changes the algorithm; SCIP's column printed beside it. Heuristic H3 (baseline at its best) met only by disclosure.",
+    "pages": "pp. 16–17"
+   },
+   {
+    "method": "Method 4",
+    "relation": "contradiction",
+    "note": "Against step 7 and Misreading 1: this co-signed written study repeats each nondeterministic configuration (incumbent exchange) five times and averages, while deterministic ones run once. The repeats answer nondeterministic message timing, not seed variability; first author Shinano.",
+    "pages": "p. 20"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Co-signed: FiberSCIP valued mainly as the debugging and development environment for ParaSCIP (normal debugger, then a little code to go distributed); every result passes a solution checker; a deterministic parallel mode is wanted for development even at a large speed cost.",
+    "pages": "pp. 11, 16, 29–30"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Costs located before speedups are judged: one-thread runs show communication overhead negligible and the second presolve an algorithm change; per-Solver loss to memory contention isolated on same-path instances and fitted; idle time placed mainly in ramp-up.",
+    "pages": "pp. 16–17, 20, 28"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Step 2 only: the compared schemes are settings of one code (racing stage alone with or without incumbent exchange, i.e. a concurrent portfolio; racing or normal ramp-up; coordinator presolve on or off) summarized in one table; no sweep, no knee.",
+    "pages": "p. 21"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "make the forced restart pay",
+    "evidence": "restarts re-sort checkpointed subproblems by their updated bounds, credited (unmeasured) with better incumbents on 5 of the 6 MIPLIB 2003 instances open in 2009; checkpoint restarts used fewer core-hours than one long job",
+    "pages": "p. 10; pp. 28–29"
+   },
+   {
+    "pattern": "same-path subset to isolate hardware effects",
+    "evidence": "instances with the same node count (same racing winner) across thread counts used to fit per-Solver slowdown against vars × cons",
+    "pages": "pp. 17, 20"
+   },
+   {
+    "pattern": "repeat only nondeterministic configurations",
+    "evidence": "single runs where runs are deterministic, five runs averaged once incumbents are exchanged between Solvers",
+    "pages": "p. 20"
+   },
+   {
+    "pattern": "count resources including lost work",
+    "evidence": "17 restarted jobs converted to single-core hours including work after each last checkpoint (181,248) against one 4,096-core job (311,296)",
+    "pages": "pp. 28–29"
+   },
+   {
+    "pattern": "exploit variability by racing",
+    "evidence": "racing ramp-up designed to use idle Solvers for dynamic parameter learning or tuning; built for one-job solves, stable over more than 4,000 parameter sets",
+    "pages": "pp. 8, 27"
+   },
+   {
+    "pattern": "refuse a single-number solver ranking",
+    "evidence": "parallel-solver evaluation changes with test set and measure (speed on solved instances, number solved, Mittelmann's composite); no method established",
+    "pages": "p. 30"
+   }
+  ],
+  "transferable": [
+   "Before any parallel speedup, run the parallel code with one worker against the sequential solver in its plain and its default mode (here communication overhead negligible, the second presolve an algorithm change), then choose the baseline and print the sequential column beside it (pp. 16–17).",
+   "Isolate hardware slowdown from search effects: keep instances whose node count is the same for every thread count, plot speedup against vars × cons after presolve, and fit a one-parameter loss per thread count (pp. 17, 20).",
+   "Run deterministic configurations once and nondeterministic ones five times; report each run, the average and the instances solved in every run (p. 20; R018 Tables 4–6).",
+   "Compare restarts from checkpoints with one long job in total core-hours, counting the work after each job's last checkpoint (pp. 28–29).",
+   "Develop in the shared-memory build of the same logical algorithm, where a normal debugger works, and port to the distributed build afterwards (p. 11)."
+  ],
+  "coauthors": "Yuji Shinano (first), Timo Berthold, Stefan Heinz, Thorsten Koch, Stefan Vigerske, Michael Winkler",
+  "quotes": [
+   {
+    "text": "そのアルゴリズムを動作させるべきかどうかを判定する手間を要することになり，これまでに 解けていたインスタンスを解く時間はむしろ長くなる可能性もある．",
+    "page": 2
+   },
+   {
+    "text": "遊休は，主に Ramp-Up 時に生じている．",
+    "page": 28
+   }
+  ]
+ },
+ {
+  "id": "R018",
+  "year": "2013",
+  "title": "Parallelizing the Constraint Integer Programming Solver SCIP",
+  "read_level": "full",
+  "contribution": "ZIB-Report version of D029 with the same Japanese text, whose text layer carries the tables: per-instance FiberSCIP results, speedups per thread count and ramp-up, five-run tables, and the ParaSCIP single-job and restart statistics (pp. 3, 13–23).",
+  "problem_entry": "As D029: component tuning and the rarity of universally helpful algorithms (p. 4); earlier parallel MIP rarely beating commercial sequential solvers (pp. 4–5); SCIP without any parallel version (pp. 5–6).",
+  "key_idea": "As D029: UG with ParaSCIP and FiberSCIP, normal and racing ramp-up, collecting mode, ancestor-free checkpoints (pp. 8–12).",
+  "assumptions": "As D029 (CIP condition (2.1), p. 6; MIPLIB 2010 benchmark, p. 13); Table 1 gives sizes before and after one presolve and the vars × cons estimate per instance, e.g. ex9 collapses from 10,404 variables and 40,962 constraints to 12 and 18 (p. 13).",
+  "proof_devices": [
+   "fitted constants of f(x) = 1.0 − c·log(x): 0.0016, 0.0058, 0.0137, 0.0234 for 2, 4, 6, 8 threads (p. 18)",
+   "per-instance marks '>' for time-outs and '!' for aborts, with solved/timeout/abort counts per column (pp. 14–15)"
+  ],
+  "experiments": "Table 2: SCIP and one-thread FiberSCIP (one or two presolves) solve 58, 59, 58 of 87, geometric means 623.5, 623.7, 669.5 s on 56 commonly solved (p. 15); Table 3: racing-only speedups 1.084, 1.131, 1.008, 0.854 at 2–8 threads (p. 17); Tables 4–5: five runs, communication 1.03–1.07 (4 threads) and 1.14–1.20 (8) (pp. 19–20); Table 6: racing ramp-up 1.261/1.402, normal 1.668/1.898 at 4/8 threads (p. 21); Tables 7–8: single jobs and 17 restarted ds jobs, 181,248 core-hours (pp. 22–23).",
+  "positioning": "As D029 (pp. 4–5).",
+  "writing": "Same text as D029 apart from typesetting, reference style and a few words (e.g. p. 14); here the tables extract. Own reading: Table 8's rounded hours sum to 185,344 core-hours, not the printed 181,248 (p. 23); mspp16's presolved columns repeat msc98-ip's in Table 1 (p. 13).",
+  "limits_future": "As D029 (p. 24): ParaSCIP MIP-only, a deterministic parallel mode needed, evaluation methods not established.",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Numbers behind the racing default: normal ramp-up faster in geometric mean (1.668 vs 1.261 at 4 threads, 1.898 vs 1.402 at 8), but racing solves more instances in all five runs (62 vs 59, 60 vs 58, baseline excluded) and its average solved gain rises from +6.4 to +7.4 while normal's falls from +6.6 to +5.0.",
+    "pages": "pp. 19–21"
+   },
+   {
+    "method": "Method 4",
+    "relation": "contradiction",
+    "note": "Against Misreading 1: every run of a nondeterministic configuration printed as its own column with per-run speedup and solved difference; Table 6 counts instances solved in all runs. Co-signed.",
+    "pages": "pp. 16–17, 19–21"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Time-outs and aborts marked apart and counted per column; every mean states its subset. Knock-out reading (mine): without coordinator presolve racing loses speed at 4 and 8 threads (1.116, 1.135) and normal at 4 (1.545) but hardly at 8 (1.891 vs 1.898), where the loss is in solved instances (+3.0 vs +5.0); the text's verdict holds there on solved counts only.",
+    "pages": "pp. 14–15, 17, 18–19, 21"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Per-thread cost measured apart from the search: eight racing Solvers on an eight-core machine slower than one (0.854); fitted loss grows with thread count.",
+    "pages": "pp. 17–18"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "solved-in-all-runs as a robustness count",
+    "evidence": "Table 6 counts the instances solved in every one of five runs, with and without the baseline; the racing default rests on it",
+    "pages": "pp. 19–21"
+   },
+   {
+    "pattern": "repeat only nondeterministic configurations",
+    "evidence": "per-run columns for five runs with incumbent exchange (Tables 4–5); single runs for the deterministic racing-only settings",
+    "pages": "pp. 16–17, 19–20"
+   },
+   {
+    "pattern": "refuse a single-number solver ranking",
+    "evidence": "the conclusion lists three ways to weigh results and says evaluation methods are not established",
+    "pages": "p. 24"
+   }
+  ],
+  "transferable": [
+   "For repeated nondeterministic runs, print every run as its own column, then summarize with the number of instances solved in all runs, with and without the baseline, beside the speedup (Tables 4–6, pp. 19–21).",
+   "Mark time-outs and aborts differently in per-instance tables and count solved/timeout/abort per column (pp. 14–15)."
+  ],
+  "coauthors": "Yuji Shinano (first), Timo Berthold, Stefan Heinz, Thorsten Koch, Stefan Vigerske, Michael Winkler",
+  "quotes": [
+   {
+    "text": "どちらをデフォルト設定にするかの判断は難しいが，Racing Ramp-Up の方が安定的",
+    "page": 20
+   },
+   {
+    "text": "評価方法も様々であり確立されているとは言えない．",
+    "page": 24
+   }
+  ]
+ },
+ {
+  "id": "R019",
+  "year": "2013",
+  "title": "Solving hard MIPLIB2003 problems with ParaSCIP on Supercomputers: An update",
+  "read_level": "full",
+  "contribution": "October 2013 original of ZIB-Report 13-66: single uninterrupted ParaSCIP runs for ds and stp3d, improved bounds for the four open MIPLIB 2003 instances, and the racing ramp-up and communication-point developments behind them (pp. 3, 8–18).",
+  "problem_entry": "In 2010 two of six open MIPLIB 2003 instances fell only after more than ten restarts; parallel B&B is hard because subtree decisions interact, effort precedes the tree, and better solvers make smaller trees (pp. 3–4).",
+  "key_idea": "Three development stages: checkpointing, then racing ramp-up to confirm the optima in single runs, then more communication points via a shared-memory extension (pp. 8–9); racing diversified by 64 meta-settings, random top-level branching and permutations (p. 10).",
+  "assumptions": "MIP (A, b, c, l, u, I) (p. 3); ds from scratch, stp3d from extended presolved data and a given optimum; old version SCIP 1.2.1.2 + CPLEX 12.1, new SCIP 3.0.1 + CPLEX 12.5; HLRN II, HLRN III, Titan (p. 9).",
+  "proof_devices": [
+   "racing winner: largest dual bound among Solvers above an open-node threshold, 4,000 for ds and 500 for stp3d (p. 10)",
+   "diversification by 64 meta-setting combinations, random branching on the top two levels, row and column permutations (p. 10)",
+   "communication points after bound changes, LP solves, LP modifications and new incumbents (p. 8)",
+   "checkpoints of primitive nodes only, restart in dual-bound order (p. 8)"
+  ],
+  "experiments": "One run per configuration: ds 273,157 s (racing, 4,096 cores); stp3d 158,595 s racing vs 225,577 s normal on 4,096 cores, 118,386 s on 7,168 (1.34× for 1.75×); new version on ds 29,095 s racing and 31,798 s normal, 9.4× and 8.6× (Table 1, p. 13; p. 14); restarts 181,248 vs 310,791 core-hours (p. 14); bounds Tables 3–4 (p. 18); dano3mip runs on 17,088 and 35,200 cores improved neither bound (p. 17).",
+  "positioning": "GAMS/CPLEX/Condor and ParaSCIP the only large-scale first-solves of open MIPLIB 2003 instances, Bixby et al. 1999 a predecessor (p. 4); racing ramp-up credited to Mitra et al. and Nwana et al., extended by seamless and adaptive switching (p. 7).",
+  "writing": "Against the April 2014 revision (D017's text): no sentence that a state-of-the-art sequential solver is the most important ingredient (pp. 3–4) and none that a powerful MIP solver is crucial (p. 18; added at D017 TR pp. 4–5, 20); two reasons stated here are dropped in the revision (memory limit, 12-hour racing threshold, p. 14); the paper ends with a reference result and three open questions (p. 18).",
+  "limits_future": "Evaluating a parallel MIP solver on hard instances is very hard; open: how far ParaSCIP scales, how many Solvers the open instances need, which is larger (p. 18); dano3mip unchanged on 17,088 cores (p. 17). Across reports: CPLEX 12.2 here (p. 8) vs 12.0 in D029 p. 27 / R018 p. 22; ds transferred nodes 43,334,558 here (p. 13) vs 43,336,562 in R018 p. 22.",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The explicit 'sequential solver first' sentences cited in c05's D017 card (D017 TR pp. 4–5, 20) are absent from this October 2013 original; here only SCIP's progress as 'a main source' of the ds speedup and re-runs at every SCIP release. The co-signed Japanese paper stated the point already in 2012 (D029 p. 3).",
+    "pages": "pp. 3–4, 14, 17, 18"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Time split by phase (racing, ramp-up, ramp-down), idle ratios, core-hours including post-checkpoint time; the normal-vs-racing gap on stp3d traced to idle time. Caution (my reading): ramp-down, defined from the last moment all units were busy, takes 27,110 of 29,095 s for the new version on ds while the mean idle ratio is 6.8 %, so phase length alone is a proxy for waste.",
+    "pages": "pp. 5, 11, 13–14"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "H5 (instances trigger, sets conclude), read as in c05's D017 card: racing vs normal ramp-up and old vs new versions judged on single runs on one or two instances; the authors present a reference result, not a benchmark.",
+    "pages": "pp. 11, 14, 18"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "fixed hard instance as a cross-version probe",
+    "evidence": "ds re-run at every SCIP release; the racing threshold cut from 4,000 to 500 because the new version could not end racing within 12 hours",
+    "pages": "p. 14"
+   },
+   {
+    "pattern": "count resources including lost work",
+    "evidence": "restarted runs' core-hours include the time after each final checkpoint: 181,248 vs 310,791 for one run",
+    "pages": "p. 14"
+   },
+   {
+    "pattern": "exploit variability by racing",
+    "evidence": "64 meta-settings, random top-two-level branching and row and column permutations raced at the root",
+    "pages": "p. 10"
+   },
+   {
+    "pattern": "name the substitute evidence when no protocol fits",
+    "evidence": "evaluation called very hard; solving well-known hard instances offered as one way; the paper as a reference result",
+    "pages": "p. 18"
+   }
+  ],
+  "transferable": [
+   "Re-run one fixed hard instance at every release of the base solver and re-tune the parallel layer when its behaviour shifts; here the racing threshold had to fall from 4,000 to 500 (p. 14).",
+   "Print the winning racing settings: here they show which components the hard instance wants switched off (p. 11).",
+   "Read phase lengths together with idle ratios: a long ramp-down by definition is not yet lost work (pp. 5, 13–14)."
+  ],
+  "coauthors": "Yuji Shinano (first), Timo Berthold, Stefan Heinz, Thorsten Koch, Michael Winkler",
+  "quotes": [
+   {
+    "text": "Therefore, parameter settings of each Solver were conservative in terms of memory usage, that is more frequently the search strategy was changed to depth-first search, because if a Solver had ever reached the memory limit, ParaSCIP would have been terminated immediately.",
+    "page": 14
+   },
+   {
+    "text": "We conducted computational experiments for solving ds every time when a new SCIP version was released.",
+    "page": 14
+   }
+  ]
+ },
+ {
+  "id": "R020",
+  "year": "2015",
+  "title": "Solving Open MIP Instances with ParaSCIP on Supercomputers using up to 80,000 Cores",
+  "read_level": "full",
+  "contribution": "October 2015 original of ZIB-Report 15-53: load-balancing improvements and two techniques outside SCIP (node merging at restarts, deep probing) for ParaSCIP, ten MIPLIB 2010 open instances solved and an 80,000-core run on rmine10 (pp. 3, 7–18).",
+  "problem_entry": "Supercomputers with over 10,000 cores are the rule and should give tangible results; open MIPLIB instances are the challenge; only GAMS/CPLEX/Condor and ParaSCIP had solved open benchmark instances at scale (pp. 3–4).",
+  "key_idea": "Keep the base solver a black box and improve the coordination: adaptive collecting, bulk sending, a ramp-down collect-only mode, collecting-mode restarts and node selector (pp. 4, 8–9); merge open nodes sharing fixings at restarts and seed branching statistics from all racing Solvers (pp. 9–12).",
+  "assumptions": "MIP min{c^T x : Ax ≤ b, x_I integer} (p. 3); MIPLIB 2010's 134 open instances (p. 16); timtab2 as show case (p. 13); deep probing scoped to medium-scale machines and instances with few integer variables (p. 12).",
+  "proof_devices": [
+   "collecting Solvers start at one, plus one per 10 s of empty pool; p doubled when collecting modes come within 10 s (p. 8)",
+   "bulk sending of a coordinator-specified number of nodes without synchronization (p. 8)",
+   "ramp-down mode triggered below 90 % active Solvers with open nodes above 100 × Solvers (p. 9)",
+   "collecting-mode node selector: best bound, fewer bound changes as tie-breaker (p. 9)",
+   "node merging Algorithms 1–2 with τ = 0.9 and δ = 0, undo if the merged root bound drops (pp. 10–12)",
+   "deep probing: branching statistics aggregated from all racing Solvers (pp. 10, 12)"
+  ],
+  "experiments": "timtab2, 10,000 Titan cores, SCIP 3.0.1 + CPLEX 12.5, normal ramp-up, one run per version: original balancing spent about 90 % of time in ramp-down using 3 % of resources; improved about four times faster with ad-hoc parameters (p. 13); Table 1: ten MIPLIB 2010 instances with versions, machines, runs, cores, hours (p. 16); rmine10: 41 runs, up to 79,984 Solvers, idle mostly below 2 %, gap below 0.03 %, still open (pp. 16–17).",
+  "positioning": "GAMS/CPLEX/Condor and ParaSCIP the only large-scale parallel MIP codes with first-solves, both using a solver as a black box (p. 4); deep probing compared to rapid learning (p. 10).",
+  "writing": "Hedges: deep probing not yet fully investigated but promising (p. 12), ad-hoc parameter values (p. 13). The February 2016 revision (D018's text) recasts merging's main purpose (p. 10) as an empirical observation and the ad-hoc values as not well tuned (D018 TR pp. 10, 14), adds p's range and a commercial-concurrent remark (D018 TR p. 6); Algorithm 2's loop test reads > 2 against its comment (p. 12).",
+  "limits_future": "Deep probing unvalidated (p. 12), ad-hoc parameters (p. 13), rmine10 open (p. 17); no need for a two-layer coordinator, combine with internal parallelization (p. 18); open: balancing ramp-up and ramp-down, subproblems of very different runtimes (p. 21).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "The load-balancing fault located by phase: about 90 % of the time in ramp-down for 3 % of the resources; per-run idle ratios kept for rmine10.",
+    "pages": "pp. 13, 17"
+   },
+   {
+    "method": "Method 4",
+    "relation": "contradiction",
+    "note": "H5: 'about four times faster' rests on one instance, one run per version and ad-hoc parameters.",
+    "pages": "p. 13"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Co-signed: the base solver as a black box whose progress the parallel code inherits at once.",
+    "pages": "p. 4"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "make the forced restart pay",
+    "evidence": "time-limited jobs force restarts, used to merge nodes and rebalance the tree; re-presolving at restart often outweighs regenerating the tree",
+    "pages": "pp. 7, 9–12"
+   },
+   {
+    "pattern": "phase time against phase resource share",
+    "evidence": "90 % of wall time in ramp-down for 3 % of resources diagnosed the load-balancing fault before the redesign",
+    "pages": "p. 13"
+   },
+   {
+    "pattern": "thin layer over the mature engine",
+    "evidence": "solver and communication library as abstract classes; base-solver improvements carry over at once",
+    "pages": "p. 4"
+   }
+  ],
+  "transferable": [
+   "Diagnose load balancing by each phase's share of wall time against its share of resources (here 90 % against 3 % in ramp-down) before changing the scheme (p. 13).",
+   "Use a forced restart as an algorithmic step: merge open nodes that share fixings, and undo a merge whose fresh root bound is worse than the original by more than a factor (1 − δ) (pp. 10–12).",
+   "Cap concurrent collectors adaptively: start at one, add one after each 10 s with an empty pool, and double p when collecting modes come within 10 s (p. 8)."
+  ],
+  "coauthors": "Yuji Shinano (first), Timo Berthold, Stefan Heinz, Thorsten Koch, Michael Winkler",
+  "quotes": [
+   {
+    "text": "About 90% of the computing time was spent for the ramp-down process, using only 3% of the computing resources.",
+    "page": 13
+   },
+   {
+    "text": "The ParaSCIP version that uses improved load balancing is about four times faster than the original one. We used ad-hoc values for the collecting mode parameters",
+    "page": 13
+   }
+  ]
+ },
+ {
+  "id": "R022",
+  "year": "2020",
+  "title": "Solving Previously Unsolved MIP Instances with ParaSCIP on Supercomputers by using up to 80,000 Cores",
+  "read_level": "full",
+  "contribution": "2020 rewrite and extension of the ParaSCIP record papers: supervisor-worker pseudo-code, layered presolving as a parallel-only algorithmic change, a checkpoint-size bound, and 21 previously unsolved MIPLIB instances including rmine10 on up to 80,000 cores (pp. 3, 6–20).",
+  "problem_entry": "MIP is NP-hard, so linear speed-up cannot improve solvability; success needs coordination tuned to 80,000 Solvers and, more importantly, the algorithmic changes UG introduces (p. 6).",
+  "key_idea": "ParaSCIP works algorithmically differently from SCIP: every ParaNode is presolved from scratch (layered presolving), racing keeps only losers' solutions, restarts merge nodes (pp. 6, 12–16).",
+  "assumptions": "MIP with bounds (p. 4); open instances of MIPLIB 2003, 2010, 2017 (p. 16); recursive presolving expected to pay for these instances on the strength of the FiberSCIP study (p. 12).",
+  "proof_devices": [
+   "Supervisor-Worker pseudo-code, Algorithms 1–2 (pp. 8–9)",
+   "checkpoint size bounded by max{open nodes after racing, Solvers + p + α}, stated without proof (pp. 11–12)",
+   "layered (recursive) presolving of each received ParaNode (p. 12)",
+   "merged sub-MIP defined by minimum and maximum local bounds, Algorithms 3–4 (pp. 13–15)"
+  ],
+  "experiments": "Records only: Table 1 (12 MIPLIB 2010 instances, 2011–2015, SCIP 2.0.1–3.1.2, CPLEX 12.2–12.6, machines, runs, cores, hours) and Table 2 (seven MIPLIB 2017 instances on 72 ISM3 cores) (p. 17); rmine10: 48 jobs, about 75 days, about 5,660 CPU-core years, one Titan job with 79,984 Solvers (pp. 17, 19–20); no baseline, no repetition.",
+  "positioning": "Bussieck et al. and ParaSCIP the only large-scale first-solves; survey by Ralphs et al. (p. 5); Lai and Sahni's anomalies and PEBBL in the Discussion (p. 20).",
+  "writing": "A Discussion section explains why strong scaling misleads before offering records (p. 20); results framed as continuity ('ParaSCIP has kept solving open instances', p. 19); a hedged causal sentence credits SCIP's improvement combined with UG's changes (p. 19). Slips: 'Thosten' Koch (pp. 1, 4), '(HT)' vs '(TH)' (pp. 17, 19).",
+  "limits_future": "Evaluation hard, strong scaling inappropriate, a method that accounts for algorithmic changes wanted ([17]) (pp. 20, 22); deep probing not fully investigated, automatic restarts under study (p. 16); future: combine with internal shared-memory parallelization, develop algorithms that work only in parallel (p. 22). Dates: dolom1 March 2014 here vs March 2013 in R020 p. 16; rmine10 December 2015 here vs still open in D018 TR p. 17.",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The base solver stays a black box whose progress carries over, but this version weights what parallelization changes: algorithmic differences from SCIP are 'more important', gains credited to SCIP combined with UG's changes, and the key is algorithms that work only in parallel.",
+    "pages": "pp. 5, 6, 19, 22"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Payoff redefined as solvability: linear speed-up cannot help on an NP-hard class, strong scaling rejected as a measure, evidence offered as open instances solved over seven years.",
+    "pages": "pp. 5, 6, 17, 19, 20"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "No library-wide comparison; small-scale evaluation delegated to the FiberSCIP paper; R020's single-instance timtab2 comparison dropped.",
+    "pages": "pp. 12, 20"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "make the forced restart pay",
+    "evidence": "the restart as a natural point to re-organize the tree by merging; re-presolving at restart outweighs regeneration; automatic restarts under study",
+    "pages": "pp. 11, 13, 16"
+   },
+   {
+    "pattern": "parallelization as an algorithm change",
+    "evidence": "ParaSCIP works algorithmically differently from SCIP (recursive presolving, racing); the key is algorithms that do not work sequentially but work in parallel",
+    "pages": "pp. 6, 12, 22"
+   },
+   {
+    "pattern": "name the substitute evidence when no protocol fits",
+    "evidence": "strong scaling rejected; open instances solved over seven years offered instead; [17] meant to start a better method",
+    "pages": "pp. 19–20, 22"
+   }
+  ],
+  "transferable": [
+   "Before reporting parallel speedups, list what the parallel layer changes in the algorithm (here re-presolving every subproblem, and racing); if it changes the search, say why strong scaling misleads and name the evidence used instead (pp. 6, 12, 20).",
+   "Bound the checkpoint size by the coordinator's own parameters, so that I/O stays predictable (pp. 11–12).",
+   "Keep a ledger for record computations: date, solver and LP-solver versions, machine, runs, cores, hours, value and starting solution (Table 1, p. 17; p. 19)."
+  ],
+  "coauthors": "Yuji Shinano (first), Timo Berthold, Stefan Heinz, Thorsten Koch, Michael Winkler",
+  "quotes": [
+   {
+    "text": "For tackling unsolved MIP instances, one should not rely on parallelization alone, even if it is on a supercomputer level.",
+    "page": 6
+   },
+   {
+    "text": "Therefore, evaluating performance by (strong) scalability would not be appropriate.",
+    "page": 20
+   }
+  ]
+ }
+]

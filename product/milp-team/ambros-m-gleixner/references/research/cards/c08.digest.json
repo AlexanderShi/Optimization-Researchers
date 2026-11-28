@@ -1,0 +1,210 @@
+[
+ {
+  "id": "S006",
+  "year": "2018",
+  "title": "SCIP: global optimization of mixed-integer nonlinear programs in a branch-and-cut framework",
+  "read_level": "full",
+  "contribution": "Describes how SCIP solves factorable nonconvex MINLPs to ε-global optimality inside its CIP branch-and-cut loop (expression graph, FBBT, OBBT and Lagrangian variable bounds, convexity detection, underestimators, spatial branching, MINLP heuristics) and measures each component by a one-feature-off study of 14 settings on 475 MINLPLib2 instances with Wilcoxon significance markers (pp. 3-27).",
+  "problem_entry": "Two aims: describe SCIP's MINLP extensions and give insights into the impact of single solver components by deactivating features; repeats the authors' 2012 MIQCP component study on MINLPLib2 (pp. 3-4, 18).",
+  "key_idea": "Put nonlinear constraints into SCIP's existing CIP loop (presolve, bound tightening, LP outer approximation with cut loop, integer then spatial branching, heuristics) so MIP techniques also act on MINLPs; one shared expression graph, reformulation into known-envelope functions, Lagrangian variable bounds as cheap OBBT (pp. 4-6, 10, 15).",
+  "assumptions": "Factorable MINLPs over signomials, signed powers, exp, log, abs with linear objective; finite bounds on nonconvex-term variables; MINLPLib2 rev. 171, 789 readable instances; gap 10^-4, feasibility 10^-6 (internal 10^-7) (pp. 4-6, 19, 34).",
+  "proof_devices": [
+   "rounding-safe interval arithmetic FBBT on the expression graph with relative-tightening threshold (pp. 7-8)",
+   "tightest interval bounds for univariate/bivariate quadratic forms by case analysis, Example 1 (pp. 7-9)",
+   "root OBBT with objective cutoff and iteration limit (p. 10)",
+   "Lagrangian variable bounds from OBBT LP duals, ineq. (12) and bound (13) (p. 10)",
+   "convexity detection by composition rules (14) and min-eigenvalue test (p. 11)",
+   "gradient, convex-envelope (17)-(18) and interval-gradient (22) underestimators (pp. 12-13)",
+   "Newton tangent point for powers (24), secant cut (27), term-wise McCormick (pp. 13-14)",
+   "hybrid reliability and pseudocost spatial branching, λ = 0.2 branching point (pp. 16-17)",
+   "no proofs; validity rests on cited envelope and LP-duality facts (pp. 10, 12)"
+  ],
+  "experiments": "475 MINLPLib2 instances (default-solvable in 2 h), default vs 14 one-feature-off settings, 1 h limit, SCIP 3.1/SoPlex 2.0.0/Ipopt 3.11.8; nested subsets incl. 'diff'; counts, shifted geometric means of primal-dual integral, nodes, time; Wilcoxon signed-rank markers; losses reported; e.g. no outer approximation 99 fewer solved (pp. 19-26).",
+  "positioning": "Credits BARON, Lindo API, Couenne, ANTIGONE without comparison; builds on Achterberg (CIP, reliability branching), Belotti et al. (branching), Berthold (primal-dual integral), Hendel (Wilcoxon), Danna (variability); reads the branching result as parallel to MIP (pp. 4-5, 16-20, 27).",
+  "writing": "'First ... Second' aims; each result subsection names the setting, the affected share, counts and an explaining instance; local hedges; verdicts as default decisions ('a good default setting') (pp. 3, 19-23).",
+  "limits_future": "Conflict analysis undervalued, OBBT default nontrivial, weak interval gradients, static big-M open; insights valid for SCIP's implementation only, similar studies for other solvers desirable; post-3.1 improvements listed (pp. 21-23, 27).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "the baseline is constructed, as in Method 2, but by switching one component off in the full solver (14 settings) instead of stripping the incumbent to a new code's feature set; instances on which an arm fails are dropped for that arm (pp. 19-20), close to Method 2 step 8; the tables keep both directions of every count (pp. 21-26).",
+    "pages": "pp. 19-20; pp. 21-26"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "gaps printed where they arise, with counts and suspected causes (8 wrong or aborted default runs, p. 19; conflict analysis, OBBT default, interval gradients, static big-M, pp. 21-23), and the post-release fixes listed (p. 27).",
+    "pages": "p. 19; pp. 21-23; p. 27"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "bound tightening on nonlinear constraints uses rounding-safe interval arithmetic while relaxation and heuristics stay in floating point, and the internal feasibility tolerance is tightened to 10^-7 (pp. 7, 19); no exact check of answers.",
+    "pages": "pp. 7, 19"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "the study's test set is built by written, counted rules and published (789 readable, 475 kept, supplement pp. 34-42), but admission is \"solved by the default arm within 2 h\" (p. 19), which can hide instances that an alternative setting would solve (inference).",
+    "pages": "pp. 34-42; p. 19"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "significance-tested one-off component ablation",
+    "evidence": "Wilcoxon signed-rank significance marked in all five result tables, contradicting the skill's 'no significance tests after 2015' blind spot",
+    "pages": "pp. 20-26"
+   },
+   {
+    "pattern": "affected-instance (\"diff\") subsets for component effects",
+    "evidence": "subsets of instances whose node count or LP iterations differ keep a component's mean from being diluted",
+    "pages": "pp. 19-20"
+   }
+  ],
+  "transferable": [
+   "One-off ablation protocol: default against one-feature-off settings on nested subsets (all; solved by both and ≥100 s; diff; diff + solved; diff + ≥100 s; diff + solved + ≥100 s), reporting better : worse counts for solved instances, final bounds and time, shifted geometric means (primal-dual integral and time with shift 1 s, nodes with shift 100) and a Wilcoxon signed-rank marker (SciPy, correction=False, \"pratt\" zero method; +/++/+++ at 5%/0.5%/0.05%) (pp. 19-20).",
+   "Drop, per setting, the instances on which that setting returned a wrong dual bound, and say so in the methodology (p. 20).",
+   "Learn Lagrangian variable bounds from the duals of the root OBBT LPs and propagate them on local bound changes and on each new incumbent as a cheap OBBT surrogate (p. 10).",
+   "Solve with a tighter internal feasibility tolerance (10^-7, presolved space) than the reporting tolerance (10^-6, original space) (p. 19).",
+   "Accept nonlinear cuts at violation 10^-4 in the first separation rounds and down to 10^-6 only before branching on an integer-feasible LP solution (p. 11)."
+  ],
+  "coauthors": "Stefan Vigerske",
+  "quotes": [
+   {
+    "text": "Comparisons of solution times or number of nodes for instances where at least one of the solvers stopped at a time limit are strongly biased by the choice of the time limit.",
+    "page": 19
+   },
+   {
+    "text": "A reduction in mean running time may stem from a consistent improvement over the whole test set, or could be the result of a drastic speedup on only few instances while the performance on the majority of instances deteriorates.",
+    "page": 20
+   }
+  ]
+ },
+ {
+  "id": "S084",
+  "year": "2018",
+  "title": "Designing and implementing algorithms for mixed-integer nonlinear optimization (Dagstuhl Seminar 18081)",
+  "read_level": "full",
+  "contribution": "Dagstuhl Seminar 18081 report co-edited by Gleixner: an Executive Summary framing MINLP's model-solver mismatch, 36 talk abstracts (two co-authored by him, on MINLP benchmarking ambiguities and permutation variability, and on OBBT-tightened McCormick), working-group conclusions on sound experimentation, and open problems (pp. 1-23).",
+  "problem_entry": "Mismatch between natural optimization models and practical MINLP solvers; §3.33 enters through issues that come up when benchmarking MINLP software, §3.27 through McCormick relaxations far from tight on projected regions (pp. 1, 17, 20).",
+  "key_idea": "Seminar design with solver developers' talks as a needs analysis and a break-out on meaningful experiments; §3.33 permutes variables/constraints to measure variability and whether the primal-dual integral varies less than time; §3.27 OBBT-like LPs tighten McCormick (pp. 2, 17, 20).",
+  "assumptions": "General MINLP; §3.27 bilinear xy over a box with smaller projected region; §3.33 the benchmark problem is ill-defined (feasibility, tolerance, optimal value); §4.2 based on Vigerske's and Berthold's experiments with core developers (pp. 1, 17, 20-22).",
+  "proof_devices": [
+   "§3.27 OBBT-like LP sequence giving valid 2-D inequalities that tighten McCormick, with objective cutoff (p. 17)",
+   "§3.33 permutation experiments as variability device (p. 20)",
+   "§4.2 MINLP analogue of MIP kappa for a posteriori numerical safety (p. 22)"
+  ],
+  "experiments": "none",
+  "positioning": "MIP practice as reference (ubiquity, permuted-model experiments standard in MIP); context voices: Berthold on exact optimality routes (p. 8), energy group on overemphasis of proving optimality (p. 21) (pp. 1-2, 22).",
+  "writing": "Executive Summary as themed list with outcomes as plans; four-sentence Vigerske-Gleixner abstract; four-item group conclusions; slips kept ('extend', 'This is a dummy text.') (pp. 2, 14, 20, 22).",
+  "limits_future": "Community agenda, abstracts only; metrics and open-problems document deferred; planned special issue and FICO Xpress follow-up (pp. 2, 22, 23).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "the three ambiguities listed in §3.33 (primal feasibility, tolerance dependence, optimal value; p. 20) are the ones that Method 6 step 3 removes from MIPLIB 2017 by exact checks and exclusion; §4.2's \"users of solver software should not rely on simplistic comparisons\" (p. 22, group voice, already in the skill as [Dag18]) matches step 1's non-purpose.",
+    "pages": "p. 20; p. 22"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "§3.33 turns a belief about a metric into a measurement, asking under permutations whether the primal-dual integral is less prone to variability than solving time (p. 20). S006 had cited the integral as \"less prone, though not immune\" to the weaknesses of standard measures and called the larger variability of MINLP a matter of \"experience\" not yet thoroughly studied (S006 p. 20). §4.2's MIP-kappa analogue (p. 22, group) applies the same move to numerical safety.",
+    "pages": "p. 20; p. 22"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "a ledger kept at community level, the developers' talks as \"a needs analysis for the community\" and an open-problem session (pp. 2, 23); editors' voice, not his own solver's printed gaps.",
+    "pages": "pp. 2, 23"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "test a metric's own variability under permutations before relying on it",
+    "evidence": "§3.33 asks under permutations whether the primal-dual integral is less prone to variability than solving time",
+    "pages": "p. 20"
+   }
+  ],
+  "transferable": [
+   "Before comparing MINLP solvers, fix three definitions in the protocol: what counts as primal feasible, which optimality tolerance applies, and which value is taken as optimal (p. 20).",
+   "Permute variable and constraint order to estimate performance variability, repeat at several optimality tolerances, and compare the variability of the primal-dual integral with that of solving time (p. 20).",
+   "Tighten McCormick on a bilinear term with OBBT-style LPs that produce valid inequalities on the projection to (x, y), and feed the objective cutoff into this convexification during branch and bound (p. 17)."
+  ],
+  "coauthors": "Pierre Bonami, Jeff Linderoth, Ruth Misener (co-editors); Stefan Vigerske (§3.33); Benjamin Müller, Felipe Serrano (§3.27)",
+  "quotes": [
+   {
+    "text": "In particular, we discuss different interpretations of primal feasibility, dependence of performance on the choice of the optimality tolerance, and difficulty in defining the optimal value of a problem.",
+    "page": 20
+   },
+   {
+    "text": "By applying permutations to the order of variables and constraints, we exploit the extend of performance variability, including its dependence on the choice of optimality tolerance and whether the primal-dual integral is less prone to variability than solving time.",
+    "page": 20
+   }
+  ]
+ },
+ {
+  "id": "S009",
+  "year": "2019",
+  "title": "QPLIB: a library of quadratic programming instances",
+  "read_level": "full",
+  "contribution": "Builds QPLIB, the first comprehensive library of 453 QP instances across all classes, with an ordered OVC taxonomy, a solver-relative two-stage admission filter, no reformulation of contributed instances, a new .qplib format and a metadata website (pp. 1-22, 38-42).",
+  "problem_entry": "No library covers all kinds of QP; 'interesting' defined as challenging for a significant set of solution methods; QPs as a sweet spot between MILP and MINLP (pp. 1-4).",
+  "key_idea": "Three-field OVC taxonomy ordered by containment; two-filter cascade relative to the solver population (30% of complete solvers in 30 s, then manual near-duplicate removal and 120 s run); instances kept in natural form (pp. 6-8, 15-16).",
+  "assumptions": "Mixed-integer QCQPs; convexity by sufficient eigenvalue condition with ±10^-12 thresholds; Neumaier's method classes, no rigorous solver; ≈8500 instances from a 2014 call and seven libraries; no licence stated (pp. 5-15).",
+  "proof_devices": [
+   "reformulation facts drawing class lines (binary ⇔ x^2 = x, linear objective w.l.o.g., Cholesky diagonalization) (pp. 6-8)",
+   "'exact' qualified by Real RAM vs Turing machine model (pp. 12-13)",
+   "solver-by-class capability table, Table 2 (p. 11)",
+   "file format with defaults plus non-default lists, example MIPBAND (pp. 38-42)",
+   "website with metadata, sparsity plots, feasible points and csv of features (pp. 20-21)"
+  ],
+  "experiments": "Runs only for selection: applicable complete GAMS solvers, 30 s and 120 s limits; ≈8500 → ≈4000 → 453 instances (Tables 3-4); versions, hardware not stated; no solver comparison by design; diversity statistics (pp. 15-20).",
+  "positioning": "MILP has MIPLIB 2010, QP had none; absorbs specialized libraries; performance delegated to Mittelmann; Neumaier taxonomy; MINLPLib 2 tools; process offered as guidelines for benchmark builders (pp. 2, 4-5, 10, 14, 20).",
+  "writing": "Non-purpose stated at start and end; each nontrivial choice justified where made; guarded wording on 'exact'; approximate stage counts (pp. 2, 8, 12-16, 21).",
+  "limits_future": "Only a snapshot of past interests; convex conic instances may be classed nonconvex; second filter manual; future literature references and dynamic extension (pp. 8, 15, 16, 21).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "purpose and non-purpose first (pp. 2, 21; step 1); a broad public collection (pp. 13-14; step 2, though without a licence statement); admission by written hardness rules with counts per stage, tilted to \"challenging\" instances (pp. 15-16, Table 3; step 4); the manual step and the no-reformulation choice printed as decisions (pp. 8, 16; step 6); per-instance metadata for user-built subsets (p. 21).",
+    "pages": "pp. 2, 21; pp. 13-14; pp. 15-16; pp. 8, 16; p. 21"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "two steps of the MIPLIB 2017 instrument are missing: no exact or other check of contributed solutions or solver answers is described (step 3; p. 21 says only that feasible points are provided), and the similarity filter is a one-by-one manual judgment, not an optimization model over feature clusterings (step 5; p. 16); the counts are approximate (pp. 14, 16). With its 2014 call (p. 13), QPLIB reads as a hand-made predecessor of the MIPLIB 2017 instrument (inference).",
+    "pages": "p. 21; p. 16; pp. 14, 16; p. 13"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "the skill's labelling discipline (no \"exact\" or \"verified\" beyond what is covered) appears here as terminology: complete against rigorous methods, no rigorous solver used, \"exact\" qualified by the computational model (pp. 10-13), then deliberately loosened (p. 13); no checker is involved.",
+    "pages": "pp. 10-13; p. 13"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "keep library instances in the contributor's form, without reformulation",
+    "evidence": "reformulation would make an instance easier for one class of solvers, so instances stay in their natural form",
+    "pages": "p. 8"
+   }
+  ],
+  "transferable": [
+   "Admission cascade relative to the solver population: drop instances solved by at least 30% of the applicable complete solvers within 30 s; keep a few representatives per donor and size, preferring the larger and harder ones; drop what a complete solver proves optimal within 120 s (pp. 15-16).",
+   "Classify convexity by a stated sufficient condition with a numeric eigenvalue threshold (10^-12) and say which convex cases it misses (pp. 8, 15).",
+   "Publish the instance features as a csv so users build their own subsets instead of relying on one fixed test set (p. 21).",
+   "Write the instance format as default values plus lists of non-default entries for every vector, so sparse data stays small and two-sided constraints need no repetition (pp. 20, 38-40)."
+  ],
+  "coauthors": "Fabio Furini, Emiliano Traversi, Pietro Belotti, Antonio Frangioni, Nick Gould, Leo Liberti, Andrea Lodi, Ruth Misener, Hans Mittelmann, Nick Sahinidis, Stefan Vigerske, Angelika Wiegele",
+  "quotes": [
+   {
+    "text": "A consequence of our focus is that this paper is not concerned with the performance of the very diverse available set of QP solvers; we will not report any data comparing them.",
+    "page": 2
+   },
+   {
+    "text": "This being a bias that we do not want to add we have chosen to keep the instances in their “natural” form, this being the one in which the original contributor initially wrote them.",
+    "page": 8
+   }
+  ]
+ }
+]

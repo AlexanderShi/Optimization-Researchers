@@ -1,0 +1,536 @@
+[
+ {
+  "id": "S036",
+  "year": "2005",
+  "title": "Shunting minimal rail car allocation",
+  "read_level": "full",
+  "contribution": "MIP models for rail car allocation at an in-plant railroad (a regional transportation problem, per-region shunting MIPs and an integrated model), with NP-hardness and 7/6 inapproximability of shunting, solved in seconds on real steel-mill data.",
+  "problem_entry": "From practice: requests (track, car type, quantity) served from stock or by renting, planned first come first served with only administrative software; the in-plant combination of empty-car distribution, blocking and shunting untreated in OR beyond a 1956 paper (pp. 1-3).",
+  "key_idea": "Decompose along the planners' regions: an integer transportation problem distributes cars, a per-region shunting MIP picks car groups from stack-like tracks with a linear objective that overcounts but leaves the optimal binary pattern intact; an integrated model is built for benchmarking (pp. 3-8).",
+  "assumptions": "Integer transportation problem (polynomial); binary group-access z with precedence rows and continuous y; optional region-limit binaries and capacity rows that destroy the transportation structure; x continuous in the integrated model because binary z leaves a transportation problem (a referee's point); no storage limit, no push-back cost, no train order, static, at most three blocks per request, no transshipment (pp. 3-10).",
+  "proof_devices": [
+   "weak NP-completeness of single-source allocation without renting, by reduction from partition (Lemma 1, p. 4)",
+   "strong NP-completeness of shunting by reduction from vertex cover, with one black car at the bottom of every track (Lemma 2, p. 5)",
+   "no 7/6 - eps approximation, transferred from vertex cover because the reduction preserves the objective (Corollary 3, p. 6)",
+   "bad instance showing greedy has no constant factor; helicopter relaxation giving only the trivial factor C (p. 6)",
+   "dynamic program over position vectors in O(T^C) (p. 6)",
+   "correctness of the overcounting linear objective: an optimal z encodes a cheapest group allocation, y recovered greedily (p. 7)"
+  ],
+  "experiments": "One steel-mill railroad (683 tracks, 42 regions, about 1500 cars of 126 types), shifts de1/de2 plus derived dens, load, perm; CPLEX 8.0 on a standard Linux PC, every model within 2 s; baseline an emulated FIFO planning (+10% transport, +1/3 shunting on average); ablations of substitution and of the region limit W; integrated model root gap <= 0.0217%, 0.06-0.36 s against 1.32-1.56 s decomposed; a cost-weight swap leaves shunting almost unchanged; no failures or variability reported (pp. 9-11).",
+  "positioning": "Distinguishes its problem from empty-car distribution, railroad blocking and train-marshalling shunting by resolution and scope, without criticism; only a 1956 paper treated in-plant railroads (pp. 2-3).",
+  "writing": "Hedged application prose: the experience 'encourages an installation in practice', savings are to be 'interpreted with care'; complexity lemmas precede the models (pp. 1, 4-6, 10).",
+  "limits_future": "Savings depend on cost scaling; substitution classes below the planner's knowledge; static model without locomotive availability or transshipment; future: optimal shunting of incoming trains (pp. 8-10).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "The integrated (monolithic) model is built for benchmarking and wins: faster, and it saves almost the whole difference between shunting cost lower and its bound llower. The two-level decomposition is kept because it mirrors the planners' accustomed solution structure and needs no commercial MIP solver. Yardstick role as in step 2, but the decomposition is a planning hierarchy, not Dantzig-Wolfe, and is not justified by a bound gain.",
+    "pages": "pp. 8, 10-11"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Baseline is an emulation of current practice (FIFO) plus one-feature ablations, and the savings are hedged by the cost scaling; only five instances from one plant.",
+    "pages": "pp. 9-11"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "practice-emulation baseline",
+    "evidence": "Manual FIFO planning emulated inside the model (each request optimal, but one at a time) to give an interval of savings against simultaneous planning; derived stress instances (dens, load, perm) each break one property of the real data.",
+    "pages": "pp. 9-10"
+   },
+   {
+    "pattern": "integer only where needed",
+    "evidence": "In the integrated model x stays continuous because any binary z leaves a transportation problem, a point raised by a referee.",
+    "pages": "pp. 8, 10"
+   }
+  ],
+  "transferable": [
+   "Emulate the practitioner's current procedure inside your own model (each request solved optimally, but one at a time, FIFO) and report savings as an interval between that emulation and full simultaneous planning (pp. 9-10).",
+   "Derive stress instances from one real data set, each built to break one property: duplicated supply, a merged horizon, randomly permuted positions that remove the planner's manual preordering (p. 9).",
+   "When the natural objective is nonlinear, try a linear objective that overcounts in a way the optimal binary pattern does not care about, and recover the continuous part greedily afterwards (p. 7).",
+   "In an integrated model, check whether fixing the binaries leaves a transportation problem; if so, the remaining variables can stay continuous (p. 8)."
+  ],
+  "coauthors": "Uwe T. Zimmermann",
+  "quotes": [
+   {
+    "text": "one should not try to make suggestions on a very high level of detail. It turns out that such suggestions cannot be implemented in practice.",
+    "page": 3
+   },
+   {
+    "text": "Not least for reasons of benchmarking, it is interesting to simultaneously model the hitherto separated problem levels",
+    "page": 8
+   }
+  ]
+ },
+ {
+  "id": "S053",
+  "year": "2005",
+  "title": "Rectangle covers revisited computationally",
+  "read_level": "full",
+  "contribution": "First exact IP for covering an orthogonal polygon with a minimum number of rectangles, with the LP dual (fractional stable set) as a stronger lower bound and LP-based routes (primal-dual, dual fitting, Quasi-Greedy) toward a constant-factor approximation; LP-IP gaps of at most 0.039% on VLSI, fax and image instances.",
+  "problem_entry": "From the long-open question of a constant-factor approximation for rectangle cover and Erdős's question whether theta/alpha is bounded; offers a computational reply and the first LP/IP techniques in the area (pp. 1-2).",
+  "key_idea": "Set cover over the quadratically many maximal rectangles, whose dual is the stable-set IP; read fractional solutions for structure (an odd hole at 0.5) and use the fractional stable set as lower bound for primal-dual and dual-fitting designs in which a pseudo stable set pays for a constant fraction of the cover (pp. 3-8).",
+  "assumptions": "Pure 0/1 set covering over pixels and maximal rectangles (no loss, since rectangles are counted, not areas); extends to weights and to corner or boundary covers; integral LP for perfect visibility graphs; instances: VLSI masks, CCITT fax images, black-and-white images, random polygons (pp. 3-4, 10).",
+  "proof_devices": [
+   "odd-hole inequality valid for the cover IP (Lemma 1, p. 5)",
+   "a private pixel in every rectangle of an optimal cover, by contradiction (Lemma 2, p. 5)",
+   "no representable 7-vertex odd antihole, so odd holes are the only source of imperfection (p. 5)",
+   "relaxed complementary slackness giving a 2-approximation for thin polygons and a constant factor for bounded width (pp. 6-7)",
+   "dual-fitting chain |C| <= |S| <= c*alpha_bar = c*theta_bar <= c*theta (9) (p. 7)",
+   "counterexample: boundary covers cannot bound interior covers (Fig. 3, p. 9)"
+  ],
+  "experiments": "16 named instances (VLSI, ccitt, images) with LP-IP gaps <= 0.039% (Table 1); random polygons only asserted ('thousands', not listed); CPLEX solves in seconds, IP generation is slower; Quasi-Greedy against the optimum in Table 2, whose caption (3-7%) does not match its rows (0-11.3%, VLSI2 4701 against 4224) and whose marbles optimum is the rectangle count of Table 1; no timing table, machine only 'a standard PC' (pp. 4, 10-11).",
+  "positioning": "Continues the computational-geometry line (Chvátal's conjecture, Erdős's question, Franzblau, Anil Kumar and Ramesh) and claims the first exact and first LP/IP approach; notes that a published 21/17 example cannot be verified (pp. 1-2).",
+  "writing": "Bold framing ('computationally, yes', 'excellent', 'strong potential') against results sketched for space; the open questions are named as a contribution (pp. 1-3).",
+  "limits_future": "Memory and IP generation time for large instances, column generation proposed; constant factor open; Erdős's question restated as boundedness of both integrality gaps, 16/15 and 15/14 conjectured tight (pp. 4, 11).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Exit B without an enumerated option space: computed LP solutions read for structure, one class proved (thin and bounded-width polygons), the rest published as conjectures and open questions; the conclusion states the reversal of theory and computation.",
+    "pages": "pp. 4-5, 7, 9, 11"
+   },
+   {
+    "method": "Method 3",
+    "relation": "contradiction",
+    "note": "Step 6 and checkpoint: the Table 2 caption (3-7%) does not match its rows (0-11.3%), random-instance results are asserted but not shown, and an approximability question is answered 'computationally'; S041 corrects the first two.",
+    "pages": "pp. 1, 10-11"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "The compact set-cover IP is solved directly; column generation is proposed only once generating the IP, not solving it, is the bottleneck.",
+    "pages": "p. 11"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Step 5 only: publishing what stays open is part of a research paper ('a number of open questions it spawns'), not of a survey.",
+    "pages": "pp. 3, 11"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "first exact IP in a theory-dominated area",
+    "evidence": "First exact algorithm and first LP/IP techniques for rectangle cover, a problem studied through complexity and approximation (compare S112/S046, D001, S028).",
+    "pages": "p. 2"
+   },
+   {
+    "pattern": "LP relaxation as approximation-design instrument",
+    "evidence": "The same LP gives the bounds for exact solving and the dual objects (fractional stable sets) for primal-dual, dual-fitting and Quasi-Greedy analysis.",
+    "pages": "pp. 4, 6-9"
+   }
+  ],
+  "transferable": [
+   "Solve the primal IP and its dual IP on every instance and print LP and IP values side by side; LP duality makes the common LP value a lower bound for any heuristic (pp. 3-4; Table 1, p. 10).",
+   "Look at the fractional LP solution of a known counterexample: variables at 0.5 on an odd hole point to the valid inequality to add (pp. 4-5).",
+   "Restate an open combinatorial question as a question about the integrality gaps of an IP pair, with a small example that gives explicit lower bounds on both gaps (p. 11).",
+   "For a dual-fitting argument, measure on every instance the two quantities that would give the factor (most pseudo-stable pixels in one rectangle; share of the cover paid for) (Table 2, p. 11)."
+  ],
+  "coauthors": "Laura Heinrich-Litan",
+  "quotes": [
+   {
+    "text": "we are the first to introduce linear/integer programming techniques in this problem area",
+    "page": 2
+   },
+   {
+    "text": "It is common that theory is complemented by computational experience. In this paper we did the reverse: We found promising research directions by a careful study of computational experiments.",
+    "page": 11
+   }
+  ]
+ },
+ {
+  "id": "S112",
+  "year": "2005",
+  "title": "On Minimum Monotone and Unimodal Partitions of Permutations",
+  "read_level": "full",
+  "contribution": "Strong NP-hardness of minimum unimodal partitions of permutations, flow-based MIPs as the first exact approach, a 2-approximation by LP rounding, and online lower and upper bounds (a conference submission with a referee appendix).",
+  "problem_entry": "Extends the NP-hardness of minimum monotone partitions to unimodal ones and asks for exact, approximate and online algorithms; motivated by assigning arriving trains or trams to depot tracks; in graph terms cocoloring of permutation graphs (pp. 1-3).",
+  "key_idea": "From a min-cost-flow LP for the easy one-direction case, build MIPs with two complementary network copies and binary switches x_i + x'_i = 1 on lower capacities; round the switches at 0.5 and re-solve the fixed LP for a 2-approximation (pp. 4-5).",
+  "assumptions": "MIP with binary switches over an acyclic flow network; correctness through path decomposition and transitivity of the element order; sequences of distinct reals; the online bound assumes a subsequence's direction is fixed with its first element (pp. 2, 4, 6, 8).",
+  "proof_devices": [
+   "strong NP-completeness by reduction from a restricted monotone problem with starter point sets (Theorem 1, p. 3; proof pp. 10-11)",
+   "approximation transfer with factor 2 by splitting a unimodal sequence into two monotone ones (Lemma 1, p. 3; proof p. 12)",
+   "LP rounding bound: lower capacities at most doubled (Lemma 2, p. 5)",
+   "integrality-gap witness [6, 2, 1, 4, 3, 5] with LP value 2 and IP value 3 (p. 6)",
+   "adversary bisecting the range of unseen numbers for a logarithmic online lower bound (Theorem 2, p. 6)",
+   "tight instance [n, 1, n-1, 2, ...] for Next Fit (Lemma 3, p. 7)"
+  ],
+  "experiments": "Prose only: random permutations (Knuth shuffle) with up to 120 elements solved optimally within seconds or minutes, LP rounding 'significantly stays below' its factor 2, online algorithms as predicted; no tables, solver, hardware or counts (p. 8).",
+  "positioning": "Builds on Erdős-Szekeres, Wagner's NP-hardness, the Fomin-Kratsch-Novelli 1.71 approximation and Di Stefano and Koči's shunting model; claims the first exact approach (pp. 1-3).",
+  "writing": "Extended-abstract style: theorems stated in the body, two proofs moved to an appendix for the referees, computation summarised in one paragraph (pp. 3, 8, 10-12).",
+  "limits_future": "A set covering model solved by column generation, with the flow models as subproblems, for side constraints such as bounded track length; open: a PTAS, matching online bounds, dropping the direction assumption, partially ordered sets (p. 8).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Step 3, early form: the compact flow MIP first; for side constraints, whole subsequences become variables priced by the flow model. Steps 2 and 4 (measuring the column model against the compact one) are not reported.",
+    "pages": "p. 8"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Exit B: the integrality-gap conjecture comes from computational experience, followed by a list of open questions.",
+    "pages": "pp. 6, 8"
+   },
+   {
+    "method": "Method 3",
+    "relation": "contradiction",
+    "note": "Warning sign B2: small random instances and adverbs without counts ('significantly', 'acceptable solution quality').",
+    "pages": "p. 8"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Step 5 only: 'There remain several open questions, spawned by our work' closes a research paper.",
+    "pages": "p. 8"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "integer only where needed",
+    "evidence": "Binary switches choose which copy of an integral flow network carries each element's lower capacity; everything else is flow.",
+    "pages": "pp. 4-5"
+   },
+   {
+    "pattern": "LP relaxation as approximation-design instrument",
+    "evidence": "Rounding the switch variables of the exact MIP's LP gives the 2-approximation.",
+    "pages": "p. 5"
+   },
+   {
+    "pattern": "first exact IP in a theory-dominated area",
+    "evidence": "The MIPs are presented as the first approach to optimal partitions for these problems in general.",
+    "pages": "p. 1"
+   }
+  ],
+  "transferable": [
+   "Build the MIP for a hard covering problem from the LP of its easy special case: duplicate the network per subsequence type and let one binary per element choose which copy carries the element's lower capacity (pp. 4-5).",
+   "Get an approximation factor from the same model: round the switch binaries at 1/2, re-solve the fixed LP, and bound the loss by how much the rounding raises the lower capacities (p. 5).",
+   "Put a small explicit integrality-gap witness next to any conjecture about the gap (p. 6).",
+   "For an online lower bound, let the adversary bisect the range of still-unseen numbers after each decision of the algorithm (p. 6)."
+  ],
+  "coauthors": "Gabriele Di Stefano, Stefan Krause, Uwe T. Zimmermann",
+  "quotes": [
+   {
+    "text": "Its LP relaxation can be solved via a dynamic column generation algorithm, where our network flow based models appear as subproblems.",
+    "page": 8
+   },
+   {
+    "text": "Also, the proof relies on the assumption that the online algorithm has to immediately decide whether a subsequence will be increasing or decreasing. Can we drop this assumption?",
+    "page": 8
+   }
+  ]
+ },
+ {
+  "id": "S046",
+  "year": "2006",
+  "title": "On minimum k-modal partitions of permutations",
+  "read_level": "full",
+  "contribution": "Generalizes S112 to k-modal partitions: strong NP-hardness, flow MIPs with k+1 layers, a (k+1)-approximation by LP rounding, and an online lower bound without S112's direction assumption.",
+  "problem_entry": "As S112, generalized to subsequences with at most k internal extrema (the first a maximum); concedes that the railway link may seem artificial and that the paper is primarily theoretical (pp. 1-3).",
+  "key_idea": "Extend the two-copy flow MIP to k+1 layers; rounding gives factor k+1 because one of the k+1 values per element is at least 1/(k+1); the online lower bound is reproved without fixing directions at the first element (pp. 7-9).",
+  "assumptions": "As S112; proofs given for upper unimodal only, k-modal details left to the full paper; LP solvability through the ellipsoid method (pp. 4, 8).",
+  "proof_devices": [
+   "strong NP-hardness through starter point sets, now proved in the body (Theorem 1, pp. 4-5)",
+   "approximation transfer with factor k+1 by splitting a k-modal sequence into k+1 monotone ones (Lemma 1, pp. 7-8)",
+   "pigeonhole on the k+1 fractional values per element for the rounding factor (p. 8)",
+   "adversary argument without the direction assumption, bound log2(n+1)/6; the proof says both 'at least h/2' and 'at least h' subsequences (Theorem 2, p. 9)",
+   "tight instance [2, 1, 4, 3, ...] for Best Fit (Lemma 4, p. 10)"
+  ],
+  "experiments": "Prose only, deferred to the full paper: permutations of more than 100 elements solved optimally in seconds or minutes; LP rounding 'significantly stays below' its guarantee; no tables, solver or hardware (pp. 10-11).",
+  "positioning": "As S112; credits the 1.71 algorithm with already exploiting the problem's combinatorics elegantly and leaves beating it with LP techniques as an open question (pp. 2, 11).",
+  "writing": "Three firsts claimed in the abstract next to an explicit concession on the application's realism (pp. 1, 3).",
+  "limits_future": "A set covering model for 'dirty' side constraints; open: a PTAS, a matching online bound and look-ahead, partially ordered sets; S112's direction-assumption question answered by the new Theorem 2 (pp. 9, 11).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Step 6 on the application claim: the authors size the practical relevance themselves, and S112's open question returns as a theorem with a weaker constant.",
+    "pages": "pp. 3, 9"
+   },
+   {
+    "method": "Method 3",
+    "relation": "contradiction",
+    "note": "Warning sign B2: computational claims without counts or instances, as in S112.",
+    "pages": "pp. 10-11"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Exit B: the gap conjecture from computational experience; open questions.",
+    "pages": "pp. 8, 11"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Step 3: a set covering model with flow subproblems, justified by side constraints the compact model does not fit; not measured.",
+    "pages": "p. 11"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Step 5 only: the open-question list stays in the published version.",
+    "pages": "p. 11"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "later version as correction and sizing pass",
+    "evidence": "Against the referee-stage S112: an assumption-dependent online bound reproved without the assumption at a weaker constant, a missing proof supplied, a concession on the application added.",
+    "pages": "pp. 3, 9-10"
+   }
+  ],
+  "transferable": [
+   "When a proof needs an assumption that an earlier version flagged as open, try to drop it and accept a weaker constant; state the new bound plainly (S112 p. 6, here p. 9).",
+   "Say in the motivation how far the application link really goes, before a reviewer does (p. 3).",
+   "Generalize a two-copy flow model to k+1 layers and take the rounding factor from the pigeonhole on the k+1 fractional values per element (pp. 7-8)."
+  ],
+  "coauthors": "Gabriele Di Stefano, Stefan Krause, Uwe T. Zimmermann",
+  "quotes": [
+   {
+    "text": "This relation may seem to be artificial, and we concede that the purpose of this paper primarily is to study the more theoretical background",
+    "page": 3
+   },
+   {
+    "text": "The theoretical hardness legitimates applying computationally expensive algorithms like solving (probably large scale) mixed integer programs.",
+    "page": 10
+   }
+  ]
+ },
+ {
+  "id": "S041",
+  "year": "2007",
+  "title": "Rectangle covers revisited computationally",
+  "read_level": "full",
+  "contribution": "Journal version of S053 (read as the manuscript submitted to JEA) adding iterated rounding, 1800 random polygons, corner and boundary covers and corrections of the conference tables, with the Quasi-Greedy conjecture sharpened to a (4 * 4/3) factor.",
+  "problem_entry": "As S053, sharpened: good lower bounds are the main difficulty for approximation, and a constant factor is the remaining white spot; new aim of making mathematical programming known in computational geometry (pp. 2-3).",
+  "key_idea": "The same primal/dual IP pair; adds iterated rounding (every LP in the experiments had a variable of value at least 0.5), private pixels as the only candidates for a fractional stable set, and tests of the dual-fitting conjecture on random polygons (pp. 3-13).",
+  "assumptions": "As S053; random polygons from flip-coin and union generators, 100 per setting, 1800 in all (pp. 3-4, 12, 16).",
+  "proof_devices": [
+   "odd-hole inequality and private-pixel lemma (Lemmas 2.1, 2.2, pp. 5-6)",
+   "relaxed complementary slackness conditions (7)-(8) (pp. 7-8)",
+   "dual-fitting chain (9) (p. 8)",
+   "boundary-cover example that leaves an odd hole (Fig. 5, pp. 10-11)",
+   "proven 5-approximation for the Fig. 4 example (p. 11)"
+  ],
+  "experiments": "Tables I-II on 16 and 15 named instances, III-IV on 1800 random polygons; zero gap on 1564 of 1800; CPLEX 9.1.0; dense flip-coin polygons up to 1000x1000 at 90% density used to try to refute the conjecture; corrections: ccitt3 optimum 21086 to 21085 (solver optimality tolerance), caption now 'typically around 1.01', marbles row fixed; Table II still lists 21086; no running times or hardware (pp. 12-17).",
+  "positioning": "Adds to S053's line Anil Kumar and Ramesh's remark that lower bounds are the main difficulty, and Jain's iterated rounding; addresses the computational geometry community directly (pp. 2-3, 6-7).",
+  "writing": "The same bold framing, tempered by an admission that only encouraging computational results are in hand; corrections placed in table captions (pp. 3, 14-15).",
+  "limits_future": "The constant factor is still a conjecture, now (4 * 4/3) from pseudo stable sets paying for over 75% of the cover; theta <= 2 theta_corner observed; column generation tried, no results shown; the Erdős restatement kept (pp. 13, 16).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Steps 5-6 in the journal pass: a count (1564 of 1800) replaces S053's 'thousands', the caption is made true to the table, a published optimum is corrected with its cause (the solver's optimality tolerance), and instances are built to refute the authors' own conjecture. Residuals: Table II still lists 21086, 'overwhelming evidence', and a per-instance 'consistently' over averaged tables.",
+    "pages": "pp. 12-17"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Exit B: observed regularities (a variable of value at least 0.5 in every LP; theta <= 2 theta_corner) stated as questions and conjectures for proof.",
+    "pages": "pp. 7, 13, 16"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Column generation adopted as the remedy for IP generation cost; not measured here.",
+    "pages": "p. 16"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "later version as correction and sizing pass",
+    "evidence": "Against S053: the ccitt3 optimum corrected with its cause, the Quasi-Greedy caption corrected, the marbles row fixed, a count instead of 'thousands'.",
+    "pages": "pp. 12, 14-15"
+   }
+  ],
+  "transferable": [
+   "In the journal version, recompute every number of the conference version and state each correction, with its cause, in the table caption (p. 14).",
+   "Check the solver's optimality tolerance before calling a value optimal; here a non-zero default produced a wrong optimum in print (p. 14).",
+   "Test a conjecture on the instance class that comes closest to refuting it, and scale that class up (p. 13).",
+   "Report the share of instances with zero gap (1564 of 1800) instead of 'often' (p. 12)."
+  ],
+  "coauthors": "Laura Heinrich-Litan",
+  "quotes": [
+   {
+    "text": "is improved here since the optimality tolerance of the solver was erroneously set to a non-zero value by default.",
+    "page": 14
+   },
+   {
+    "text": "Last but not least we hope to increase the awareness in the computational geometry community towards tools from mathematical programming.",
+    "page": 3
+   }
+  ]
+ },
+ {
+  "id": "S109",
+  "year": "2007",
+  "title": "Editorial| European Journal of Combinatorics-Volume 28, Issue 8",
+  "read_level": "full",
+  "contribution": "Guest editorial of the EuroComb05 special issue of the European Journal of Combinatorics: selection, contents, invited talks and the European Prize in Combinatorics; no research content.",
+  "problem_entry": "n/a (editorial; occasion: EuroComb05, Berlin, 5-9 September 2005) (p. 1).",
+  "key_idea": "n/a",
+  "assumptions": "n/a",
+  "proof_devices": [],
+  "experiments": "none",
+  "positioning": "Places the volume among contemporary combinatorics trends and next to a companion Discrete Mathematics volume (p. 1).",
+  "writing": "Formal editorial register: facts and thanks, no argument; signed by three guest editors (pp. 1-3).",
+  "limits_future": "n/a; the volume was completed one year after the conference (p. 1). Lübbecke is not on the listed program committee, and his role at the conference is not stated (p. 1).",
+  "method_links": [],
+  "new_pattern_candidates": [],
+  "transferable": [],
+  "coauthors": "Stefan Felsner, Jaroslav Nešetřil",
+  "quotes": [
+   {
+    "text": "enabling us to see this volume completed only one year after the conference",
+    "page": 1
+   }
+  ]
+ },
+ {
+  "id": "D001",
+  "year": "2008",
+  "title": "Minimizing the Stabbing Number of Matchings, Trees, and Triangulations",
+  "read_level": "full",
+  "contribution": "NP-hardness of minimum stabbing number for matchings, triangulations and spanning trees (no approximation below 6/5 for axis-parallel matchings), settling an Open Problems Project question, plus a cut-based IP whose LP gives polynomial lower bounds and, through a planar-support uncrossing lemma, an iterated rounding conjectured to be constant-factor (read as arXiv v3).",
+  "problem_entry": "From an open problem of The Open Problems Project (spanning tree of minimum stabbing number) and a literature of extremal bounds rather than algorithms; Joe Mitchell pushed the authors to work on it (pp. 1-2, 24).",
+  "key_idea": "After hardness, one IP (Edmonds' matching constraints or cut constraints plus stabbing rows, minimizing k) gives both exact solutions and LP lower bounds; since Jain's 1/2 bound fails, prove that an optimal fractional solution with planar support exists, hence a heavy edge (at least 1/5 for matchings, more than 1/3 for trees) for iterated rounding (pp. 17-23).",
+  "assumptions": "Point sets in the plane; min-max over O(n) axis-parallel or O(n^2) general representative lines; exponentially many blossom or cut constraints, separable in polynomial time; hardness needs collinear, degenerate points, while the LP results assume nothing about the points (pp. 3, 17-18, 23).",
+  "proof_devices": [
+   "3SAT reductions with barrier gadgets of collinear vertices that use up the stabbing budget (Theorems 1, 5, 8; pp. 5-15)",
+   "triangle counting between two vertex rows (Lemma 4, pp. 8-9)",
+   "outdegree argument for tree barrier gadgets (Lemma 6, p. 12)",
+   "pigeonhole for the crossing-number barrier (Lemma 10, pp. 15-16)",
+   "perturbation by powers of epsilon from axis-parallel to general lines (Corollaries 3, 9, 12; pp. 8, 15, 16)",
+   "polynomial-time LP solution through separation and the ellipsoid method (p. 18)",
+   "uncrossing: minimize total stabbing number among optimal LP solutions and shift epsilon from a crossing to a non-crossing pair, with a blossom case analysis (Lemmas 13-14, pp. 19-22)",
+   "planar degree-5 vertex and the 3n-6 edge bound give heavy edges of 1/5 and more than 1/3 (Theorem 15, p. 23)"
+  ],
+  "experiments": "None in this paper; practice is reported in a separate technical report [12] (instances up to several hundred vertices); one figure shows an LP solution on 100 random points (pp. 2-3, 20).",
+  "positioning": "Against extremal-bound work (Welzl, Matoušek, de Berg and van Kreveld, Chazelle and Welzl): presented as the first algorithmic paper on stabbing numbers; adapts Jain's iterated rounding and shows where its bound fails (pp. 2-4, 19, 23).",
+  "writing": "Theory register: contributions as a bullet list, conjectures flagged as such, a warm referee acknowledgment; two slips, constants swapped on p. 2 and blossom inequalities named where cut inequalities are meant in the tree proof (pp. 2-3, 22, 24).",
+  "limits_future": "A constant factor for the max objective is open, with hope resting on a 2003 personal communication; hardness needs degeneracy; triangulations under the general crossing number are open; the ellipsoid method is a drawback; stabbing number 2 is polynomial, and the average stabbing number reduces to minimum length (pp. 23-25).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Exit B: the constant-factor claim is labelled a conjecture in the abstract and the conclusion; the reading of LP solutions (no constant lower bound on all support edges) is kept as an indication.",
+    "pages": "pp. 1, 19, 23"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "No computation in the paper; the empirical statements are hedged ('seems to be even better') and deferred to a separate report.",
+    "pages": "pp. 2-3, 23"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Step 5 only: open questions close the paper.",
+    "pages": "p. 23"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "first exact IP in a theory-dominated area",
+    "evidence": "Presented as the first algorithmic paper on stabbing numbers: an IP framework where earlier work gave extremal bounds.",
+    "pages": "pp. 2, 23"
+   },
+   {
+    "pattern": "LP relaxation as approximation-design instrument",
+    "evidence": "The exact IP's LP gives polynomial lower bounds and, through the heavy-edge theorem, an iterated rounding heuristic.",
+    "pages": "pp. 17-23"
+   }
+  ],
+  "transferable": [
+   "For a min-max objective over lines (or any other family of probes), add one row per representative probe with a common variable k, and cut the family down by a combinatorial argument (critical lines through one or two points) (pp. 17-18).",
+   "When a known rounding lemma fails for your constraint type, prove a structural property of some optimal LP vertex instead (planar support), then read a heavy variable off that structure (pp. 19-23).",
+   "Uncrossing device: among all optimal LP solutions choose one that minimizes a secondary potential (total stabbing number); a crossing pair would allow an epsilon-shift that lowers it (pp. 19-22).",
+   "In hardness gadgets, use collinear rows that exhaust the budget in one direction, so the gadgets cannot interact (barriers) (p. 5)."
+  ],
+  "coauthors": "Sándor P. Fekete, Henk Meijer",
+  "quotes": [
+   {
+    "text": "Most previous work on stabbing and crossing problems has focused on extremal properties, and little has been known about the computational complexity of actually finding structures of low stabbing number, or possible approximation algorithms.",
+    "page": 2
+   },
+   {
+    "text": "We are hopeful that this argument can be completed some time in the future [18].",
+    "page": 23
+   }
+  ]
+ },
+ {
+  "id": "S028",
+  "year": "2008",
+  "title": "Optimal university course timetables and the partial transversal polytope",
+  "read_level": "full",
+  "contribution": "Exact two-stage university course timetabling (times by an IP with Hall-type room inequalities, rooms by bipartite matchings) with a complete facet description of the partial transversal polytope as a polymatroid, solving ITC2007 and simulated TU-Berlin-size instances to optimality for the hard constraints.",
+  "problem_entry": "Timetabling is dominated by metaheuristics and small or simplified IPs; diagnosis: IP was used only for its modelling power, not for the problem's combinatorics; aim: a proof of concept for large universities (pp. 2-3).",
+  "key_idea": "Project out the rooms: a two-index course-time IP with Hall's inequalities guarantees a later room matching (an exact decomposition); strengthen Hall's inequalities to the facets of the partial transversal polytope via Edmonds' polymatroid theorem, and add all of them up front (pp. 4-6, 12).",
+  "assumptions": "Binary course-time variables, time conflicts as a conflict graph, objective = instructor preferences, hard constraints only with room capacity hard; few inclusive room features keep the facet count small (at most 2^phi - 1 per component); the enumeration is polynomial only if that count is (pp. 2-4, 9-10).",
+  "proof_devices": [
+   "facets of a polymatroid by Edmonds' theorem applied to f(U) = |U| - def(U), submodular by supermodularity of the deficiency (pp. 5-6)",
+   "facet iff defining C-set, through f-inseparability (Theorem 2, p. 6)",
+   "the flat-union of defining C-sets is defining, by contradiction (Lemma 4, p. 7)",
+   "an example with 2^|R| - 1 defining C-sets (p. 7)",
+   "at most def(G) atomic defining C-sets, by induction on |R| with inclusion-exclusion over a supermodular function (Theorem 5, pp. 8-9; Lemmas 8-12, pp. 13-14)",
+   "at most 2^phi - 1 defining C-sets for phi features (Lemma 6, pp. 9-10)"
+  ],
+  "experiments": "CPLEX 10.1 on one 3.2 GHz Pentium 4 with 1 GB; the seven ITC2007 instances in under 0.6 s with zero violations, hard constraints only; three simulated instances, up to 1235 s + 5106 s + 5 s; the only baseline is the authors' three-index IP (gaps under 2% and 7%, no solution in a day on the large instance; stopping rule not stated); about 80% first-choice slots; the generator is not described (pp. 10-11).",
+  "positioning": "Against metaheuristics and earlier small or simplified IPs; polyhedral links to Edmonds' matching polytope and the Balas-Pulleyblank perfectly matchable subgraph polytope; no earlier strong formulation of the partial transversal polytope known to the authors (pp. 2-3).",
+  "writing": "Strong claims ('by far', 'a significant step forward') next to 'proof-of-concept'; practical and theoretical contributions announced separately (pp. 1-2).",
+  "limits_future": "Hard constraints only, soft constraints claimed easy to add without data; the real TU Berlin data unusable (inconsistent and incomplete); interactive use needs tuning; future: repair the data and timetable the whole university (pp. 10-12).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Steps 2 and 4: the compact three-index IP is kept and run as the yardstick the reformulation must beat, and the build decision is measured (few facets, so all are added up front and no branch-and-cut is written). The two-stage split projects out the room variables; 05-peer-critique.md records that Lübbecke later called it a Benders decomposition.",
+    "pages": "pp. 4, 11-12"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "The 'proof-of-concept' framing and the stated reason for using simulated data.",
+    "pages": "pp. 2, 12"
+   },
+   {
+    "method": "Method 3",
+    "relation": "contradiction",
+    "note": "Step 6: 'the largest reported in the literature by far' and 'a significant step forward' rest on the authors' own compact IP as the only baseline, three simulated instances, and the soft constraints set aside; the soft-constraint claim is not measured.",
+    "pages": "pp. 1-2, 10-11"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "integer only where needed",
+    "evidence": "Rooms projected out by Hall-type inequalities on the course-time IP and recovered exactly by bipartite matchings.",
+    "pages": "p. 4"
+   },
+   {
+    "pattern": "first exact IP in a heuristic-dominated area",
+    "evidence": "Optimal solutions at sizes called the largest in the literature, in a field of metaheuristics, with the problem's structure named as the key.",
+    "pages": "pp. 1-3"
+   }
+  ],
+  "transferable": [
+   "If one assignment dimension is a bipartite matching once the others are fixed, project it out with Hall-type inequalities and recover it by matchings afterwards; the decomposition stays exact (p. 4).",
+   "Before writing a separation routine, count the inequalities you would separate; if there are few, add them all up front (pp. 10, 12).",
+   "Keep the intuitive compact model as a baseline table (size, run time, gap) next to the reformulation (Table 3, p. 11).",
+   "When real data are unusable, say why, and generate instances that match the real key figures (pp. 10-12)."
+  ],
+  "coauthors": "Gerald Lach",
+  "quotes": [
+   {
+    "text": "It is our impression that integer programming has been used for timetabling only because of its modeling power. It was not realized that a deeper understanding of combinatorial properties of the problem may be the key to actually solving large instances to proven optimality.",
+    "page": 2
+   },
+   {
+    "text": "The only reason for using simulated data instead of the real instance, is that the database is severely inconsistent and incomplete [18].",
+    "page": 12
+   }
+  ]
+ }
+]

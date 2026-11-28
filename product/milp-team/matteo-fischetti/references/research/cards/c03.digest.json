@@ -1,0 +1,402 @@
+[
+ {
+  "id": "S002",
+  "year": 2002,
+  "title": "Modeling and solving the train timetabling problem",
+  "read_level": "full",
+  "contribution": "A corridor train-timetabling model whose relaxed capacity constraints live on nodes rather than arcs, solved by a Lagrangian relax-and-cut heuristic with fixing and tested on real FS and Ansaldo instances (pp. 1, 10-17).",
+  "problem_entry": "From joint research with FS; restricted to a one-way corridor with shift/stretch/cancel options; NP-hardness and inapproximability proved for this exact variant; Brännlund et al. set aside on size (pp. 1-4).",
+  "key_idea": "Time-expanded acyclic multigraph with clique capacity constraints rewritten over node variables y_v, z_jv so Lagrangian penalties sit on nodes and each subproblem is a longest path (pp. 5-12).",
+  "assumptions": "0-1 ILP over a cyclic day discretised to minutes (q = 1440), constant segment speeds, FS headways a_i = 4, d_i = 2, train-type profits, no time windows in tests; overtaking lifted to window sums (pp. 2-3, 8-11, 17-18).",
+  "proof_devices": [
+   "Proposition 1 reduction from independent set: one train per node, one segment per edge (Figure 1, pp. 4-5)",
+   "clique-constraint separation as max-weight stable set in a comparability graph / max-flow, left out of scope (p. 9)"
+  ],
+  "experiments": "C code, 17 instances (FS, Ansaldo, congested; 16-500 trains), 1,000 subgradient iterations, greedy manual-rule baseline, gap below 2% on most, anytime plot; single runs, no stock solver (pp. 17-22).",
+  "positioning": "Dozen timetabling papers listed, only Brännlund et al. discussed; relax-and-cut credited to Fisher and Escudero-Guignard-Malik, step to Held-Karp, heuristics to own set-covering work (pp. 3, 9, 12-15).",
+  "writing": "One-sentence novelty in the abstract repeated at model introduction; exact route closed by a flat assertion; implementation subsection; no conclusions section (pp. 1, 9, 10, 16-21).",
+  "limits_future": "Running time may be too long for real-time use (p. 20); exact method judged impossible and LP separation out of scope (p. 9); no future-work section.",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "the model is chosen to fit the solution method, as in step 2, but by adding variables (y, z) rather than removing any, so that the multipliers live on nodes and no arc is ever stored (pp. 10–12, 16).",
+    "pages": "pp. 10–12, 16"
+   },
+   {
+    "method": "Method 6",
+    "relation": "contradiction",
+    "note": "no general-purpose solver is run on the model, not even as a baseline; the exact route is ruled out by a size argument (p. 9) and a problem-specific code is built (pp. 13–17). The ILP model still drives the bound and the multipliers, so the paper is not the \"model kept only to describe the problem\" of the skill's warning sign 1.",
+    "pages": "p. 9; pp. 13–17"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "the baseline is the planners' manual rule reconstructed as a greedy, and the separate tuning of the bound procedure is disclosed (p. 19). Single runs and no rival algorithm.",
+    "pages": "p. 19"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "heuristic solutions are computed at every subgradient iteration because slightly different multipliers give solutions of very different quality, and Lagrangian rather than actual profits are used partly because they diversify the solutions (p. 14). Diversity is exploited, but there are no seeds and no placebo arm.",
+    "pages": "p. 14"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "put the multipliers on the small index set",
+    "evidence": "(pp. 10, 12, 16).",
+    "pages": "pp. 10, 12, 16"
+   },
+   {
+    "pattern": "prove hardness for your exact variant when the literature's versions differ",
+    "evidence": "(pp. 4–5).",
+    "pages": "pp. 4–5"
+   }
+  ],
+  "transferable": [
+   "[D1] State your exact variant and prove its hardness, inapproximability included, when published variants differ (pp. 4–5).",
+   "[D2] Rewrite the relaxed constraints over node or commodity–node variables so that Lagrangian penalties attach to nodes and arc costs stay fixed (pp. 10–12).",
+   "[D3] Lift a pairwise crossing constraint to a window sum (eqs. (14)–(15), p. 11).",
+   "[D4] Relax-and-cut pool: start from zero multipliers, add the violated constraint centred on the conflict, drop it when its multiplier returns to zero (pp. 12–13).",
+   "[D4] Run the Lagrangian heuristic at every iteration, ranked by Lagrangian profit, then refine on actual profits (pp. 13–15).",
+   "[D4] When the step size falls below a threshold, restore the incumbent's multipliers and fix or remove a fixed fraction (⌈t/20⌉) of the items; unfix and restart when the restricted bound falls to the incumbent (pp. 15–16).",
+   "[D4] Interval-coded successor lists instead of stored arcs (pp. 16–17).",
+   "[D5] The practitioners' manual rule as the baseline, plus an anytime plot for the real-time question (pp. 19–22)."
+  ],
+  "coauthors": "A. Caprara, P. Toth",
+  "quotes": [
+   {
+    "text": "A novel feature of our model is that the variables in the relaxed constraints are associated only with nodes (as opposed to arcs) of the aforementioned graph.",
+    "page": 1
+   },
+   {
+    "text": "The manual methods proceed in a similar way, therefore the quality of the solution provided by the FS practitioners is typically close to the value given in this entry.",
+    "page": 19
+   }
+  ]
+ },
+ {
+  "id": "S001",
+  "year": 2003,
+  "title": "Local branching",
+  "read_level": "full",
+  "contribution": "Local branching: a Hamming-distance soft-fixing constraint around the incumbent, embedded in an exact two-level branching scheme (LocBra) that drives a black-box MIP solver toward good solutions early (pp. 1-11).",
+  "problem_entry": "Heuristic behaviour of exact MIP solvers; hard variable fixing (diving) must choose which variables to fix and errs undetectably; seeded by TURNI soft fixing on NS (833 -> 809 duties) (pp. 1-3).",
+  "key_idea": "Fix how many variables, not which: Δ(x, x̄) ≤ k as one linear constraint and Δ ≤ k / Δ ≥ k+1 as a strategic branching, with node time limits and soft/strong diversification (pp. 3-11).",
+  "assumptions": "MIPs with nonempty binaries carrying the difficulty and a feasible reference solution; REFINE needed with general integers/continuous variables; 29 hard instances (7 MIPLIB 3.0, 22 others) made public (pp. 2, 4, 10-13, 16).",
+  "proof_devices": [
+   "complement Δ ≥ k+1 imposed only after the left node is closed (p. 7)",
+   "tabu constraint Δ ≥ 1 certified by REFINE (p. 10)",
+   "exact with finite dv_max, heuristic with dv_max = ∞ (p. 11)",
+   "MIP_SOLVE(TL, UB, first) wrapper (p. 10)"
+  ],
+  "experiments": "CPLEX 7.0 optimality and feasibility emphasis vs LocBra, 5 CPU hours, k = 20, untuned headline: first on 23 of 29 (two ties; loss split differs from text); tuned variants separate; single runs (pp. 6, 12-15, 18-24).",
+  "positioning": "Among general-purpose MIP heuristics and local search metaheuristics; diving as predecessor, k-OPT analogy, VNS for diversification, TURNI as origin (pp. 1-4, 8, 16).",
+  "writing": "Method as the simple answer to a question; abstract frames exact-but-heuristic two-level branching; hedged claims; traces before tables; four untested extensions listed (pp. 1, 3, 6, 11, 14, 16).",
+  "limits_future": "Needs a feasible start and relevant binaries; REFINE costly with general integers; optimality speed-up unproven; wasted time-limited nodes; future: tighter integration, branch-and-cut local search, infeasible references, general-integer distances (pp. 6, 10, 16-17).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "the critical sub-decision (which variables to fix) becomes one linear constraint that the black-box CPLEX 7.0 handles; the code is a thin external loop around MIP_SOLVE (pp. 3–5, 9–10). This is the skill's own example of local branching as one constraint around a black box.",
+    "pages": "pp. 3–5, 9–10"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "both CPLEX emphasis settings serve as baselines, with the same parameters otherwise (pp. 6, 12); the headline run is untuned and the tuned variants are labelled (pp. 13–15); the rivals' wins are in the table (p. 14). Lapses: the node time limit is chosen per instance size (Table 3, p. 15); text and table disagree on the cpx-O/cpx-F split, and the abstract's \"significantly better\" incumbents on 23 of 29 include two ties (pp. 1, 12, 14).",
+    "pages": "pp. 6, 12; pp. 13–15; p. 14; pp. 1, 12, 14"
+   },
+   {
+    "method": "Method 3",
+    "relation": "contradiction",
+    "note": "one run per instance, and differences of a few units of absolute gap are read without any spread (p. 14).",
+    "pages": "p. 14"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "exactness bookkeeping around a heuristic wrapper",
+    "evidence": "(pp. 7, 10–11).",
+    "pages": "pp. 7, 10–11"
+   },
+   {
+    "pattern": "name the cost of wrapping the black box",
+    "evidence": "effort wasted on time-limited nodes is named and tighter integration left as future work (p. 16).",
+    "pages": "p. 16"
+   },
+   {
+    "pattern": "turn a structural failure case into an extension",
+    "evidence": "REFINE switched off on general-integer-heavy arki001, then general-integer distances proposed (pp. 12, 16–17).",
+    "pages": "pp. 12, 16–17"
+   }
+  ],
+  "transferable": [
+   "[D1] Restate a refinement trick from an application code (soft fixing in TURNI) as a constraint on a generic MIP (pp. 3–4).",
+   "[D2] Neighbourhood as one linear Hamming-distance constraint on the binaries, with the asymmetric form for constant-cardinality supports (eqs. (7)–(8), p. 4).",
+   "[D2] Adapt the neighbourhood at run time: halve after a fruitless node time limit, enlarge then jump (first feasible solution within a larger radius, no cutoff) when a neighbourhood is exhausted (pp. 7–8).",
+   "[D4] Exactness bookkeeping: impose Δ ≥ k+1 only after the left node is closed; use Δ ≥ 1 only with a REFINE certificate (pp. 7, 10).",
+   "[D4] Wrap the solver in one call with time limit, cutoff and stop-at-first-feasible flags (p. 10).",
+   "[D5] Baselines = the same solver in both emphasis settings; gap to the best value any code found; checkpoints at 1, 3, 5 hours plus full time series (pp. 12, 14, 18–24).",
+   "[D5] Untuned headline run; tuned variants in separate tables with the changed setting named (pp. 13–15).",
+   "[D5] Publish the test instances (pp. 2, 11)."
+  ],
+  "coauthors": "A. Lodi",
+  "quotes": [
+   {
+    "text": "Put in these terms, the question lends itself to a simple answer: just add to the MIP model a linear soft fixing constraint",
+    "page": 3
+   },
+   {
+    "text": "In the previous experiments we deliberately avoided any fine tuning of the LocBra parameters.",
+    "page": 13
+   }
+  ]
+ },
+ {
+  "id": "D003",
+  "year": 2005,
+  "title": "Optimizing over the First Chvàtal Closure",
+  "read_level": "full",
+  "contribution": "A general MIP-based separator for rank-1 Chvátal-Gomory cuts used to measure how much integrality gap the first Chvátal closure closes on MIPLIB and matching instances, with a first optimum for nsrand-ipx and a new ATSP facet class (pp. 1, 3, 9-10).",
+  "problem_entry": "An abstract of questions on the practical strength of the first Chvátal closure P1 against P_I, given NP-hard CG separation (pp. 1, 3).",
+  "key_idea": "Model rank-1 CG separation as a MIP over multipliers solved by the general-purpose solver, with support reduction, complementing, a small multiplier penalty and harvesting of all incumbents in a pure rank-1 cutting-plane loop (pp. 3-5).",
+  "assumptions": "Pure ILPs with integer (A, b); continuous variables accommodable but left to GMI cuts; test sets 2-matching TSPLIB, pure-integer MIPLIB 3.0, timtab1, nsrand-ipx, ATSP ry48p (pp. 1-10).",
+  "proof_devices": [
+   "redundant f_j bounds and δ = 0.01 for numerics at an exactness price (p. 4)",
+   "rank-1 invariant: zero multipliers on non-original constraints (p. 5)",
+   "ATSP facet: h-canonical form, clone removal, computational facet check, clique lifting (p. 10)"
+  ],
+  "experiments": "CPLEX 9.0.2 on a Pentium M notebook; 2-matching closure integer on 15 TSPLIB instances, cut-and-branch beats CPLEX on hard ones; MIPLIB 3.0 gap closed 0-100% with 15 time-limited; harp2 and nsrand-ipx results; single runs (pp. 5-9).",
+  "positioning": "Claims MIP-based CG separation never implemented before; modelling idea credited to folklore and Caprara-Letchford; theory to Chvátal, Gomory, Edmonds, Eisenbrand; contrast with PORTA-style facet discovery (pp. 2-3, 9-10).",
+  "writing": "Built on questions: question abstract, 'How?'/'Why?' sections, question-headed subsections; 'for the first time' recurs; no conclusions section (pp. 1, 3, 5-9).",
+  "limits_future": "Separation can take hours, δ may cost exactness, no separation heuristics; future: more specific CG separation and GMI cuts from the same surrogate rows (pp. 4-5, 8).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "step 2 (the separation sub-decision as an auxiliary MIP solved by the same solver, p. 3), step 3 (a prototype without extras, p. 5), step 4 (the paper is a measurement of the ideal separator's ceiling, the gap closed by the exact closure, pp. 6–8), and the skill's note that this work began on 2-matching problems, chosen as a \"familiar\" setting (p. 5). It also says where the stock solver alone is faster (p. 6).",
+    "pages": "p. 5; p. 6"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "the rival's speed is printed (p. 6), under-estimated entries are flagged (pp. 6–7) and misleading slopes are warned about (p. 9). No seeds, single runs.",
+    "pages": "p. 6; pp. 6–7; p. 9"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "CPLEX's own cut loop tails off early on timtab1, and the remedy tested is a different cut family inside the same save-and-repeat loop (pp. 8–9), not a different query point. In 2005 the cure is still the cut.",
+    "pages": "pp. 8–9"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "the solver as a polyhedral microscope",
+    "evidence": "(pp. 9–10).",
+    "pages": "pp. 9–10"
+   },
+   {
+    "pattern": "questions as the paper's skeleton",
+    "evidence": "(pp. 1, 3, 5–9).",
+    "pages": "pp. 1, 3, 5–9"
+   },
+   {
+    "pattern": "validate the general method first where the answer is known",
+    "evidence": "(matching, where P1 = P_I, pp. 5–6).",
+    "pages": "pp. 5–6"
+   }
+  ],
+  "transferable": [
+   "[D1] Measure the ceiling of a famous closure exactly before designing faster separators (pp. 1, 3, 6–8).",
+   "[D2] Separation as a MIP over multipliers: support restriction, complementing variables at their upper bound, u_i < 1 on integer rows, coefficients recomputed afterwards (pp. 3–4).",
+   "[D2] A small penalty (w_i = 10⁻⁴) on multipliers to prefer minimal, sparse cuts; it acts only on tight rows (p. 4).",
+   "[D4] Harvest every incumbent of the separation MIP into a pool, keep the sparsest cut per violation value, stop after τ nodes without improvement (p. 5).",
+   "[D4] Keep redundant bounds that help numerics and state the exactness price of a tolerance (δ = 0.01) (p. 4).",
+   "[D4] Canonical form, clone removal, computational facet check, lifting: a route from a computer-found cut to a facet class (p. 10).",
+   "[D5] Develop and test in a familiar class where the answer is known (matching, P1 = P_I) before the general test set (pp. 5–6).",
+   "[D5] Use the separator as a preprocessor (cut-and-branch) and compare total time and nodes with the stock solver alone (pp. 6–7, 9)."
+  ],
+  "coauthors": "A. Lodi",
+  "quotes": [
+   {
+    "text": "Our approach is to model the rank-1 CG separation problem as a MIP model, which is then solved through a general-purpose MIP solver.",
+    "page": 3
+   },
+   {
+    "text": "It should be observed that some of these instances can be solved in a much shorter computing time by just applying ILOG-Cplex 9.0.2 MIP solver to the rank-0 model (13).",
+    "page": 6
+   }
+  ]
+ },
+ {
+  "id": "S007",
+  "year": 2005,
+  "title": "The feasibility pump",
+  "read_level": "full",
+  "contribution": "The feasibility pump: a general-purpose heuristic for a first MIP feasible solution that alternates L1 LP projection and rounding, with stalling and anti-cycling safeguards and a quality extension, evaluated on 83 0-1 MIPs (pp. 1-12).",
+  "problem_entry": "A first feasible MIP solution is hard to find and local branching/RINS need one; feasible means equal to its rounding, relaxed to 'as close as possible' under an LP distance (pp. 1-2).",
+  "key_idea": "Alternate the LP min Δ(x, x̃) with rounding, moving local branching's distance from a constraint into the LP objective; random flips against stalling, perturbation against cycling; FP1/FP2 variants and cutoff plus recovery LP for quality (pp. 2-5, 10-11).",
+  "assumptions": "Generic MIPs with x⁺, x⁻ for general integers but 0-1 MIPs treated; 83 instances (44 MIPLIB 2003 minus stp3d, 39 hard); big-M rows with costly z defeat it (pp. 2, 4-6, 9-10, 14).",
+  "proof_devices": [
+   "Δ(x*, x̃) = 0 makes x* feasible (p. 3)",
+   "stalling flips and anti-cycling perturbation, no convergence argument (pp. 4-5)",
+   "valid Lagrangian bound from near-optimal barrier duals in FP1 (p. 10)"
+  ],
+  "experiments": "Both stop at the first solution, 1,800 s, CPLEX 8.1 tuned with ILOG staff (failure counts per setting); pump fails 3 vs CPLEX 19 at root/10 with branching; quality 46-33, time 31-26; FP1/FP2 on a symmetric 26-instance subset; single runs, no seeds (pp. 6-12).",
+  "positioning": "Among general MIP heuristics; as a modified local branching; infeasibility measure vs weighted violation, Chinneck credited; Rothberg and Bixby as sources (pp. 2-3, 6, 9, 14-15).",
+  "writing": "Abstract opens 'Trivially,' with the method in two sentences; pumping metaphor; drawbacks named before fixes; surprises flagged; headline rates 96.3% vs 77.1% repeated (pp. 1, 3, 5, 9, 12).",
+  "limits_future": "Basic version ignores quality, LP re-solves waste time, big-M structures and general integers; future: general integers, feasibility recovery via local branching/RINS, forced round-up (pp. 9-10, 14).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "a vendor-assisted baseline configuration with failure counts for each setting tried (p. 6), a symmetric subset rule (p. 11), no problem-dependent tuning for either code (p. 9), and the rival's wins and the pump's pathologies printed (pp. 9–10). This is the skill's \"2005 pump baseline tuned after contact with ILOG staff, with a tuning suggested by Bixby\" (pp. 6, 9).",
+    "pages": "p. 6; p. 11; p. 9; pp. 9–10; pp. 6, 9"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "the objective cutoff UB = α z*_LP + (1−α) z^H with α = 0.5 and the recovery LP are in §3.2 (p. 11), but this paper evaluates them only inside the approximate-LP variants FP1 and FP2 on 26 instances (pp. 11–13); the basic pump of Tables 3–4 stops at the first solution and uses the objective only to start (pp. 6, 10).",
+    "pages": "p. 11; pp. 11–13; pp. 6, 10"
+   },
+   {
+    "method": "Method 3",
+    "relation": "contradiction",
+    "note": "a randomised method (random flip count, random perturbations, pp. 4–5) is compared on one run per instance (pp. 6–9).",
+    "pages": "pp. 6–9"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "the LP solver, with default settings, is the subroutine (p. 6) and the code stays minimal (a straightforward perturbation, simple variants; pp. 5, 10), but there is no auxiliary MIP, and the general-purpose MIP solver is the rival rather than the engine.",
+    "pages": "p. 6"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "turn a structural failure case into an extension",
+    "evidence": "(p2756 big-M rows, pp. 9–10; general integers, p. 14).",
+    "pages": "pp. 9–10; p. 14"
+   },
+   {
+    "pattern": "name the cost of wrapping the black box",
+    "evidence": "(two LPs with different objectives, better integration with the LP solver needed, p. 9).",
+    "pages": ""
+   }
+  ],
+  "transferable": [
+   "[D1] Relax an exact characterisation of the target (\"equal to its rounding\") into a distance minimised by LP (p. 1).",
+   "[D2] Move the distance requirement from a constraint (local branching) into the LP objective (pump) (p. 3).",
+   "[D2] Stalling flips with a randomised count around T, and cycle detection over the last three iterations with a random perturbation every R iterations (pp. 4–5).",
+   "[D2] Quality extension: cutoff UB = α z*_LP + (1−α) z^H with α = 0.5, a bounded number of extra iterations, and a recovery LP with the integer components fixed after each rounding (p. 11).",
+   "[D4] Approximate first LP (barrier to a gap, no crossover) with a valid bound from the near-optimal duals (p. 10).",
+   "[D5] Report the rival's failures under every setting tried, then compare against its best (p. 6).",
+   "[D5] Subset rule symmetric in both methods for follow-up experiments (p. 11).",
+   "[D5] Separate win counts for quality and time, excluding trivially fast instances from the time count (p. 9).",
+   "[D5] Explain each pathological instance by its structure (big-M rows) or by a cost of the LP re-solves (pp. 9–10)."
+  ],
+  "coauthors": "F. Glover, A. Lodi",
+  "quotes": [
+   {
+    "text": "In the FP context, instead, the same subproblem is modeled in a relaxed way through the LP (5), where the “small distance” requirement is translated in terms of the objective function.",
+    "page": 3
+   },
+   {
+    "text": "As to ILOG-Cplex, after extensive experiments and contacts with ILOG-Cplex staff [23] we found that, as far as the time and quality of the root node solution is concerned, the best results are obtained (perhaps surprisingly) when the MIP preprocessing/presolve is not invoked",
+    "page": 6
+   }
+  ]
+ },
+ {
+  "id": "S006",
+  "year": 2006,
+  "title": "Combinatorial Benders' cuts for mixed-integer linear programming",
+  "read_level": "full",
+  "contribution": "Combinatorial Benders cuts from minimal infeasible subsystems that project out big-M artificial continuous variables, with a separation heuristic and a branch-and-cut implementation beating CPLEX on map labelling and classification (pp. 3-6, 17, 19).",
+  "problem_entry": "Big-M logical implications give poor LP relaxations; classical Benders cuts stay weak and M-dependent; origin in the Mützel-Klau combinatorial map-labelling model (pp. 1-3, 12-13).",
+  "key_idea": "Work in x space only and cut with Σ_{i∈C} x_j(i) ≤ |C| − 1 per MIS of the slave, found by greedy shrinking exact at integer points; objective on y moved into the slave; continuous copies generalise (pp. 3-7).",
+  "assumptions": "Integer x and continuous y linked by single-nonzero rows in binary columns, objective on x (or on y only); mixed objectives not handled; map-labelling and UCI classification instances; ATSP-TW excluded (pp. 5-6, 11-14).",
+  "proof_devices": [
+   "a separator exact for integer x* run before each incumbent update suffices (p. 6)",
+   "Farkas-dual MIS LP with normalisation row, vertices with MIS supports (Gleeson-Ryan), weights and zeroing for alternatives (pp. 10-11)",
+   "global cuts declared local in CPLEX 8.1 (pp. 11-12)"
+  ],
+  "experiments": "CPLEX 8.1 default on the original MIP vs CBC, 3 CPU hours, outcome classes on both codes (none CPLEX-only); up to three orders of magnitude faster; baseline gaps at CBC finish and own limit; memory cost undiscussed; single runs (pp. 14-18).",
+  "positioning": "Based on Hooker's idea; related to logic-based Benders, Kim-Hooker, branch and check, Chvátal's resolution search, Glover-Tangedahl; CP framing via referees (pp. 4, 7-10, 19-20).",
+  "writing": "Idea shown on the simplest form then generalised; metaphors ('carrying on its shoulders', 'distill'); explicit scope sentence; contribution paragraph repeated in the conclusion (pp. 2-7, 12, 19).",
+  "limits_future": "CB cuts can be weak (ATSP-TW), mixed objectives unhandled, wild fractional points if y stays, memory cost; future: mixed objectives and a two-step restart with CB cuts in the pool (pp. 6, 12, 19).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "the artificial continuous variables, and with them the big-M constants, are projected out, and the master is a pure ILP (pp. 1–4, 7). This dates the projection habit to 2004–2006, before the 2011–2017 range the skill gives for Method 1's practice.",
+    "pages": "pp. 1–4, 7"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "a simple implementation inside CPLEX's branch-and-cut via Concert callbacks, tested to see whether it \"can already\" beat a sophisticated solver (pp. 4, 11); the oracle is an LP (pp. 10–11).",
+    "pages": "pp. 4, 11; pp. 10–11"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "the 2006 diagnosis of slow or weak Benders is cut quality (p. 3) and the cure a new cut family, the opposite of Method 2's \"the separator stays and the query point moves\". Yet the loop is arranged so that the heuristic oracle is queried where it is exact (integer points before every incumbent update, pp. 6, 11), and the conclusion reports that querying it at the fractional points of the undecomposed model fails (p. 19).",
+    "pages": "p. 3; p. 19"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "the stock solver with default settings on the original model (p. 14); outcome classes defined on both codes (p. 14); the excluded class (ATSP with time windows) named with its reason (p. 12); node counts flagged as incomparable (p. 14). Lapses: the test bed is chosen to fit the method (pp. 4, 12); two claims lack tables (pp. 11, 13); memory costs are left undiscussed (p. 18).",
+    "pages": "p. 14; p. 14; p. 12; p. 14; pp. 4, 12; pp. 11, 13; p. 18"
+   },
+   {
+    "method": "Method 3",
+    "relation": "contradiction",
+    "note": "one run per instance, no seeds (pp. 14–18).",
+    "pages": "pp. 14–18"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "a separator exact at integer points suffices for correctness",
+    "evidence": "(pp. 3, 6).",
+    "pages": "pp. 3, 6"
+   },
+   {
+    "pattern": "name the cost of wrapping the black box",
+    "evidence": "(no cut pool and no removal of global cuts in CPLEX 8.1, pp. 11–12).",
+    "pages": "pp. 11–12"
+   },
+   {
+    "pattern": "turn a structural failure case into an extension",
+    "evidence": "(ATSP with time windows excluded with its reason, mixed objectives left as future work; pp. 6, 12, 19).",
+    "pages": "pp. 6, 12, 19"
+   }
+  ],
+  "transferable": [
+   "[D1] Look for a hand-made combinatorial reformulation of a big-M model in one application and automate it (pp. 12–13).",
+   "[D2] Combinatorial Benders cut Σ_{i∈C} x_j(i) ≤ |C| − 1 from a minimal infeasible subsystem; greedy shrinking separation, exact at integer points (pp. 3, 6).",
+   "[D2] Move an objective that depends only on continuous variables into the slave as dᵀy ≤ UB − ε (p. 6).",
+   "[D2] Continuous copies x^c = x to put any binary-plus-continuous MIP into master–slave form (p. 7).",
+   "[D4] Farkas-LP MIS search with a normalisation row, weights on linking rows, and alternatives by zeroing multipliers (pp. 10–11).",
+   "[D4] Separation schedule: before each incumbent update, at depth ≤ 10, after each backtrack (p. 11).",
+   "[D4] Declare global cuts local when the solver cannot remove them (pp. 11–12).",
+   "[D5] Baseline gap at the new code's finishing time and at the baseline's own limit; outcome classes on both codes with the empty class stated (pp. 14–16)."
+  ],
+  "coauthors": "G. Codato",
+  "quotes": [
+   {
+    "text": "As a matter of fact, the classical Benders’ approach can be viewed as a tool to speed-up the solution of the LP relaxation, but not to improve its quality.",
+    "page": 3
+   },
+   {
+    "text": "Realistically, one cannot expect our approach works well in all applications.",
+    "page": 12
+   }
+  ]
+ }
+]

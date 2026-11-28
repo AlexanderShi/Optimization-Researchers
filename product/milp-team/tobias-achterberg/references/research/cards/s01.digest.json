@@ -1,0 +1,343 @@
+[
+ {
+  "id": "R007",
+  "year": 2006,
+  "title": "Software for Teaching Modeling of Integer Programming Problems",
+  "read_level": "full",
+  "contribution": "Bundles Zimpl, SCIP and SoPlex into a free source-code tool chain for teaching IP modelling, with a Sudoku case study showing model and setting choices made from solver statistics.",
+  "problem_entry": "Courses treat problems as given and toy models hide real-size pitfalls; commercial systems are costly, size-limited, closed black boxes (pp. 2-3).",
+  "key_idea": "One free chain Zimpl + SCIP + SoPlex with source code; parameters, statistics and VbcTool trees let a class compare components (pp. 3-5; Figure 7, p. 13).",
+  "assumptions": "MILP models in Zimpl; Sudoku as pure feasibility, 81 integer variables (3,969 x 4,884 after vabs) vs 729 binaries (348 constraints) (pp. 6-7, 10, 12).",
+  "proof_devices": [
+   "Default run: 66 presolve rounds, no solution in 600 s (p. 6; Figure 3, p. 8)",
+   "CP-like settings (DFS, conflict analysis, LP off): solution in 8.2 s, 11,534 nodes (p. 7; Figure 4, p. 9)",
+   "Binary model solved by presolve in six rounds (p. 10; Figure 6, p. 12)"
+  ],
+  "experiments": "none beyond single-instance session logs; CPLEX 9.03 cross-check (pp. 6-7); thousands of Sudokus solved at presolve/root with the binary model (p. 10).",
+  "positioning": "",
+  "writing": "",
+  "limits_future": "Tool not in all aspects as good as the best commercial ones (p. 2); positive feedback asserted without data (pp. 2, 10); future: Matheon digital textbook (p. 4).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "evidence, classroom form: find where the time goes from the solver's own statistics (LP relaxations), ask what that component buys for this class (no bound, weak infeasibility detection), then change it (p. 7; Figures 3–4, pp. 8–9). One instance, a teaching demonstration.",
+    "pages": "p. 7; pp. 8–9"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "variant: three settings are changed at once and the success is credited mainly to conflict analysis without a run that switches it off; only the statistics (conflicts found, Figure 4, p. 9) back the credit (p. 7).",
+    "pages": "p. 9; p. 7"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "evidence, stated, co-signed: results from software one cannot look into do not qualify as a scientific experiment, and source code is needed to look behind the scenes and to change components (p. 3); a negative result is cross-checked with a reference solver (pp. 6–7).",
+    "pages": "p. 3; pp. 6–7"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Diagnose a slow MIP from the per-component statistics before tuning: name the component that takes the time, ask what it buys for this model class (for a pure feasibility model, no objective bound), and rerun with it off (p. 7; Figure 3, p. 8).",
+   "Before reporting \"no feasible solution\", rerun with an independent solver and a much larger budget (CPLEX 9.03, six hours, a million nodes; pp. 6–7).",
+   "Show two equivalent formulations side by side on the same data, with sizes after modelling and after presolve (3,969 × 4,884 → 1,424 × 2,291 against 729 × 348 → 0 × 0; pp. 6, 8, 12)."
+  ],
+  "coauthors": "Martin Grötschel, Thorsten Koch",
+  "quotes": [
+   {
+    "text": "Choosing the right model is often more important (and more effective) than having the best solver implementation.",
+    "page": 7
+   },
+   {
+    "text": "Just believing the result of some unknown software without even the possibility to check what actually happened will not qualify for a scientific experiment.",
+    "page": 3
+   }
+  ]
+ },
+ {
+  "id": "R008",
+  "year": 2007,
+  "title": "Property Checking with Constraint Integer Programming",
+  "read_level": "full",
+  "contribution": "Integrates bit/word-level propagation, node LP relaxations, LP-based conflict learning and RTL preprocessing in one CIP search for chip property checking, solving all 258 industrial instances where SAT failed on 58.",
+  "problem_entry": "SAT bounded model checking fails on large arithmetic data paths; IP/CP solvers do not learn conflicts, PB learning does not pay, HDPLL uses Fourier-Motzkin only after all binaries are fixed (pp. 2-3).",
+  "key_idea": "One search tree with per-operation domain propagation, node LP (dual simplex), conflict clauses from infeasible LPs and reverse propagation, plus RTL preprocessing (pp. 2-5, 7-11).",
+  "assumptions": "Property-checking CSP over bit vectors with bit-linking constraints and 22 RTL operations, pure feasibility; Algorithm 2.1 stated for zero lower bounds, general case on pp. 8-9 (pp. 4-5, 8-9).",
+  "proof_devices": [
+   "Per-operation linearizations (Table 1, p. 6)",
+   "16-bit word splitting with carries, nibbles for mult (p. 5)",
+   "Dual-ray infeasibility proof with greedy bound relaxation, Algorithm 2.1 (pp. 8-9)",
+   "1-FUIP and reconvergence-cut conflict clauses (p. 9)",
+   "Probing, term algebra, irrelevance detection (pp. 9-11)"
+  ],
+  "experiments": "OneSpin 360 industrial instances, 7,200 s, vs MiniSat 2.0 (best of four SAT codes); SAT failed on 58 of 258, CIP on none; SAT wins on invalid properties (pp. 11-13).",
+  "positioning": "",
+  "writing": "",
+  "limits_future": "Inferior to SAT for counter-examples (pp. 13-14), abstract claims only the valid-property win (p. 2); future: more operations, distributivity in the term algebra (p. 10).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "evidence: SAT conflict analysis is carried over at the data-structure level. Conflict-graph vertices become bound changes, the cut frontier becomes a disjunction of bounds, each constraint class needs its own reverse propagation, and an infeasible LP is explained by a dual ray instead of a conflicting clause (pp. 7–9).",
+    "pages": "pp. 7–9"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Split results by answer type (proof vs witness)",
+    "evidence": "invalid properties (feasible: a counter-example to find) and valid ones (infeasible: a proof) are tabled apart and won by different methods (pp. 11–13); also R012 (p. 18) and R015 (pp. 6, 8).",
+    "pages": "pp. 11–13; p. 18; pp. 6, 8"
+   }
+  ],
+  "transferable": [
+   "To seed conflict analysis from an infeasible LP: take the dual ray, compute d = ȳᵀb + r̄ᵀû, and reset local bounds to global ones one at a time while d stays negative; the bounds that remain start the conflict graph (Algorithm 2.1, pp. 8–9).",
+   "Keep huge coefficients out of linearizations by splitting a w-bit word into 16-bit words linked by carries (p. 5), and leave a constraint whose linearization would swamp the LP to propagation (pp. 6–7).",
+   "Table time against a size parameter (register width 5–40), with proofs and witnesses apart, so that growth rates and the class where each method wins are visible (Tables 2–6, pp. 11–14)."
+  ],
+  "coauthors": "Raik Brinkmann, Markus Wedler",
+  "quotes": [
+   {
+    "text": "In total, SAT failed on 58 out of 258 instances, while CIP was able to solve all instances within the time limit.",
+    "page": 13
+   },
+   {
+    "text": "However, due to the much more involved procedures employed in our algorithm it is inferior to SAT for finding counter-examples of an invalid property.",
+    "page": 14
+   }
+  ]
+ },
+ {
+  "id": "R012",
+  "year": 2008,
+  "title": "Constraint Integer Programming: Techniques and Applications",
+  "read_level": "full",
+  "contribution": "Defines constraint integer programming (a CP whose residual after fixing the integers is an LP), implements it in SCIP with CP, SAT and MIP plugins on one tree, and applies it to MIP solving, solution counting and chip verification.",
+  "problem_entry": "Most CP-MIP integrations extend CP by basic MIP techniques; this brings CP into the full MIP machinery with the LP as second channel (pp. 2-3).",
+  "key_idea": "Restrict CP only as far as needed to keep all MIP techniques: condition (1), residual after fixing integers is an LP; components as plugins on one tree (pp. 3, 5-7).",
+  "assumptions": "CIP with MIP and CP(FD) as special cases (Proposition, p. 5); counting on 30 pure-integer MIPLIB instances (p. 14); RTL bit vectors (pp. 15-16).",
+  "proof_devices": [
+   "Proposition proved by constructing (A', b') for CP(FD) and MIP (pp. 5-6)",
+   "Greedy dual-ray conflict analysis (p. 8)",
+   "Root restart at >= 5 % integer fixings (pp. 10-11)",
+   "Unrestricted-subtree detection for counting (p. 14)"
+  ],
+  "experiments": "MIPLIB 2003 minus three; SCIP 1.1.0 with three LP solvers vs CPLEX 11.0 and CBC, geometric means over all-solved, solved and 10 % win/loss counts (pp. 11-14); counting vs four codes (pp. 14-15); chip verification vs MiniSat 2.0 (pp. 16-18).",
+  "positioning": "",
+  "writing": "",
+  "limits_future": "SCIP 3.5x/1.84x slower than CPLEX in geometric mean (pp. 12, 14); invalid properties not tabled, CIP inferior to SAT there (p. 18); future: nonconvex MINLP with LaGO, exact CIP, scheduling (pp. 19-20).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "evidence: the comparison averages only over instances every code solved, reports solved counts and 10 % win/loss counts, and drops and names the instances with a wrong answer (pp. 12–14): the `cmpres.awk` practice of Method 5 and the Workflow C exclusion rule, in print.",
+    "pages": "pp. 12–14"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "variant: the thesis-era counting form (≥ 10 % faster/slower against one reference), but in a solver comparison rather than a knock-out, and with unshifted geometric means (pp. 12–14).",
+    "pages": "pp. 12–14"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "evidence: SAT restarts are imported in a restricted MIP form: once, right after the root, when at least 5 % of the integer variables got fixed, because root fixings can trigger more presolving while the cost is a second root LP (p. 11). Conflict analysis is generalised to bound changes and LP infeasibility (p. 8). The novelty claim that restarts were not used for MIPs so far is unhedged (p. 11); whether it held in 2008 was not checked here (step 6 is his self-declared weak step).",
+    "pages": "p. 11; p. 8; p. 11"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Split results by answer type (proof vs witness)",
+    "evidence": "only valid properties are tabled, and counter-example search is named as the losing case (p. 18).",
+    "pages": "p. 18"
+   }
+  ],
+  "transferable": [
+   "In a multi-solver table, take geometric means only over instances that all codes solved, add solved counts and ≥ 10 % faster/slower counts against one reference, and name the instances dropped for wrong answers (pp. 12–14).",
+   "For solution counting, switch off every component that may cut off feasible suboptimal solutions or find a solution twice (dual presolve, primal heuristics), and run the reference code single-threaded with integrality tolerance 0 (pp. 14–15).",
+   "Define a hybrid problem class by what remains after fixing the integer variables, and prove that it generalises its parent classes by constructing the residual LP for each (pp. 5–6)."
+  ],
+  "coauthors": "Timo Berthold, Stefan Heinz, Thorsten Koch, Kati Wolter",
+  "quotes": [
+   {
+    "text": "We left out the instances momentum3, t1717, and timtab1 for which at least one of the solvers returned a wrong answer or reported an error.",
+    "page": 13
+   },
+   {
+    "text": "In our implementation, a restart is performed if at least 5 % of the integer variables have been fixed.",
+    "page": 11
+   }
+  ]
+ },
+ {
+  "id": "R013",
+  "year": 2009,
+  "title": "The MCF-Separator -- Detecting and Exploiting Multi-Commodity Flow Structures in MIPs",
+  "read_level": "full",
+  "contribution": "Detects multi-commodity flow network structure from the MIP matrix and separates c-MIR-based cutset inequalities on it, gated by a network-inconsistency measure, shipping in SCIP 1.2 and CPLEX 12.1.",
+  "problem_entry": "Cut-based MIR works for network design but general solvers rarely find it: the network is unknown and aggregation exceeds the c-MIR aggregation limit (p. 3).",
+  "key_idea": "Recover flow, arc and node structure from the matrix, build the network by majority vote, hand c-MIR weight vectors u; separate only if Psi(G) <= 0.02 (pp. 3, 8-10, 19-21).",
+  "assumptions": "Arc-flow model (2a)-(2d) with integer capacity modules, variants via modeltype; tolerant to presolving; flow rows capped at 10 % density (pp. 4-5, 10-12, 22-23).",
+  "proof_devices": [
+   "Validity inherited from aggregating original rows plus MIR (pp. 3, 27)",
+   "Base inequality (6) yielding (7), (8), dicut and flow-cover inequalities (pp. 6-7)",
+   "Algorithm 5 linear-time most-violated subset (pp. 20-21)",
+   "Shrinking to Omega = 5 clusters (p. 21)",
+   "Detector checked against known networks (Table 2, pp. 17-19)"
+  ],
+  "experiments": "SCIP 1.1.0.8 and CPLEX 12.1, one thread, 1 h; network sets, miplib, mittelmann, CPLEX-internal 1,266; mcf vs nomcf with all/sep/nosep rows, >= 10 s/100 s subsets, parameter sensitivity (pp. 18, 23-29).",
+  "positioning": "",
+  "writing": "",
+  "limits_future": "cut.set not detected (p. 19), fctp too dense (p. 18), easy fc/fctp slower (p. 26), ufcn slower in CPLEX, SCIP general-MIP results not conclusive (p. 27); future: scan matrices for known structures (p. 30).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "evidence; the canonical case: the Bixby–Rothberg remark is quoted as the design rule (p. 2); no cuts on inconsistent networks (pp. 2, 10); the nosep rows show almost no slowdown in either solver (p. 27); the looser gate that helped only SCIP was not adopted, and both refusal mechanisms stay on (p. 29); Ω stays at the conservative 5 although sndlib gains from 9 (p. 29). The skill's citations of this report (pp. 1–3, 16–17, 22, 27–29) are printed pages: here pp. 2–4, 17–18, 23, 28–30.",
+    "pages": "p. 2; pp. 2, 10; p. 27; p. 29; p. 29; pp. 1–3, 16–17, 22, 27–29; pp. 2–4, 17–18, 23, 28–30"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "evidence, steps 4–5: affected (sep) and unaffected (nosep) rows per set, ≥ 10 % wins and time-outs per side (pp. 24–25); conclusions refused on 16 + 3 affected general-MIP models and accepted on 129 of 1,388 (p. 27).",
+    "pages": "pp. 24–25; p. 27"
+   },
+   {
+    "method": "Method 4",
+    "relation": "contradiction",
+    "note": "contradiction, era note: Method 4 dates the bracket form to his papers from 2014. This 2009 report already reads the CPLEX results in subsets of ≥ 10 s and ≥ 100 s by the slower of the two runs, each with affected rows, wins, time-outs and geometric-mean ratios of time and nodes (Table 5, p. 26; p. 27). The shift is not stated, and there are no 1 s or 1,000 s brackets. Co-signed; who ran the CPLEX tests is not stated (*inferred*: Achterberg, at IBM, p. 2).",
+    "pages": "p. 26; p. 27; p. 2"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "evidence: the closed root gap is shown beside time, and fewer nodes with more time is judged as not paying (fc, fctp: tightening the relaxation \"does not pay off\", p. 26); Ω is capped because cut generation and LP time grow, with the number of cuts tabled per setting (p. 29).",
+    "pages": "p. 26; p. 29"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "variant: one-parameter sweeps of the gate (Ψmax from 10⁻⁶ to 0.8, Figure 6, pp. 28–29) and of the cut budget (Ω = 3…9, Table 7, p. 29), but no incumbent rule is nested in the family, and the default is chosen conservatively, not at a knee (p. 29).",
+    "pages": "pp. 28–29; p. 29; p. 29"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Validate the detector against ground truth",
+    "evidence": "on sets whose original networks are known, compare the detected nodes, arcs and commodities with the originals, with solver presolve off and on, before measuring the separator (pp. 18–19).",
+    "pages": "pp. 18–19"
+   }
+  ],
+  "transferable": [
+   "Gate a structure-exploiting component on a measured inconsistency of the detected structure (minority votes per arc over the commodities, averaged over arcs): release everything above the threshold, and drop the worst elements below it (pp. 10, 16–17).",
+   "Test the detector on its own first: on instances with a known structure, report detected-versus-true sizes with solver presolve off and on (Table 2, pp. 18–19).",
+   "Report every test set in three rows (all, affected = sep, unaffected = nosep), so that the gain where the component fires and its cost where it does not are both visible (pp. 24–27).",
+   "Implement a new cut family as a new aggregation for an existing separator (weight vectors u for c-MIR), so that validity is inherited (pp. 3, 19, 27)."
+  ],
+  "coauthors": "Christian Raack",
+  "quotes": [
+   {
+    "text": "The subsets cplex10s and cplex100s correspond to those instances within cplex that need at least 10s and 100s of CPU time to be solved, respectively, by the slower of the two versions, mcf and nomcf.",
+    "page": 27
+   },
+   {
+    "text": "The results for the general MIP sets miplib and mittelmann are not conclusive since the number of affected instances is very small",
+    "page": 27
+   }
+  ]
+ },
+ {
+  "id": "R015",
+  "year": 2010,
+  "title": "MIPLIB 2010",
+  "read_level": "full",
+  "contribution": "Presents MIPLIB 2010: eight dedicated test sets (361 instances) shipped with a test engine, an exact-arithmetic solution checker and a performance-variability measure.",
+  "problem_entry": "MIPLIB 2003 was outgrown (mostly easy by end of 2010), too small for topic subsets, and codes got tuned on known-solvable models (pp. 4-5).",
+  "key_idea": "Several dedicated test sets instead of one, with test engine, exact solution checker and variability measure (pp. 3, 5-6, 8-15).",
+  "assumptions": "About 2,000 candidates filtered to 659; benchmark 87 chosen by consensus under hard/soft requirements, other sets by stated rules, membership double-checked (pp. 6-8).",
+  "proof_devices": [
+   "GMP exact solution checker with stated tolerances (pp. 8-10)",
+   "Test engine: deterministic, wall-clock, gap definition, status mismatch (p. 11)",
+   "Exact LP post-processing with QSopt_ex (pp. 11, 17-18)",
+   "Variability score VS over 100 permutations (pp. 13-14)",
+   "Numerical attention level AL (p. 18)"
+  ],
+  "experiments": "Benchmark set, 1 and 12 threads, 1 h; CBC, CPLEX, Gurobi, SCIP/SoPlex, Xpress defaults with a Best column and refusal to rank by average time (pp. 20-21); variability with SCIP/SoPlex on 67 models (p. 14).",
+  "positioning": "",
+  "writing": "",
+  "limits_future": "Exact MIP solvers not yet capable, solutions not proven optimal (pp. 17-18); AL solver- and settings-specific (p. 18); VS only an estimate (p. 14); to be continued (p. 22).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "evidence, co-signed, at library level: test lists per set, a file of known primal bounds for the benchmark set, a time-limited run driver, a solution checker and parse scripts producing a summary table, with run/parse templates per solver (pp. 10–12); set membership double-checked on different machines and codes (p. 7). ⚠ The benchmark set itself was chosen \"dynamically\", by consensus under hard and soft requirements, and only the other sets by predefined rules (p. 7), unlike the thesis's rule-only selection.",
+    "pages": "pp. 10–12; p. 7; p. 7"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "variant; bears on Misreading 1: this co-signed report runs 100 permutations per model, treats performance as a random variable, and asks for large samples, permutations, robust indicators and inferential statistics (pp. 13–15). Misreading 1 and step 7 say his written studies have no seeds or permutations; this library paper (not a component study) does. No section is credited to him, and the acknowledgments credit Danna's 2008–2010 variability work (p. 22).",
+    "pages": "pp. 13–15; p. 22"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Refuse a single-number solver ranking",
+    "evidence": "no comparison by average time, with reasons: variability (a 14 % faster machine sped up the geometric means by 8.5 % to nearly 20 %; twelve-thread reruns differed by up to 73 s), arbitrary choices of time limit, threads and machine, every solver fastest somewhere, default settings only, and many possible measures (p. 21); result tables should not be boiled down to a single number (p. 22).",
+    "pages": "p. 21; p. 22"
+   },
+   {
+    "pattern": "Split results by answer type (proof vs witness)",
+    "evidence": "dedicated infeasible and primal sets, because solvers are tuned for optimization, not for feasibility, and to the authors' knowledge not at all for infeasible problems (pp. 6, 8).",
+    "pages": "pp. 6, 8"
+   }
+  ],
+  "transferable": [
+   "Define each special test set by a rule on observed solver behaviour (simplex iterations per node, tree size, size after presolve), and confirm membership with more than one code and machine (pp. 7–8).",
+   "Check the returned solution against the original text file in exact arithmetic with stated absolute tolerances, and compare its objective with known bounds only after it passes (pp. 10–11).",
+   "Generate variability by permuting rows and columns, summarise it per instance by the coefficient of variation of time, and compare the original order with the median as well as the mean (pp. 13–14).",
+   "Add a virtual \"Best\" solver (the fastest accepted run per instance) to show how far any single code is from what is possible (p. 21)."
+  ],
+  "coauthors": "Thorsten Koch, Erling Andersen, Oliver Bastert, Timo Berthold, Robert E. Bixby, Emilie Danna, Gerald Gamrath, Ambros M. Gleixner, Stefan Heinz, Andrea Lodi, Hans Mittelmann, Ted Ralphs, Domenico Salvagnin, Daniel E. Steffy, Kati Wolter",
+  "quotes": [
+   {
+    "text": "Performance is not deterministic. Instead, it is a random variable that can be sampled with computational experiments.",
+    "page": 15
+   },
+   {
+    "text": "one important insight after literally spending decades of cpu time is that one should not try to boil down the result tables to a single number.",
+    "page": 22
+   }
+  ]
+ },
+ {
+  "id": "R016",
+  "year": 2011,
+  "title": "CPAIOR 2011 - Late Breaking Abstracts",
+  "read_level": "partial",
+  "contribution": "Edited collection of 16 non-peer-reviewed late-breaking abstracts for CPAIOR 2011; only the preface is the editors' voice.",
+  "problem_entry": "n/a",
+  "key_idea": "n/a",
+  "assumptions": "n/a",
+  "proof_devices": [],
+  "experiments": "n/a",
+  "positioning": "",
+  "writing": "",
+  "limits_future": "Editorial: 16 of 19 submissions selected, not peer-reviewed, not in the formal proceedings (p. 3); program-chair role inferred (pp. 3-4).",
+  "method_links": [],
+  "new_pattern_candidates": [],
+  "transferable": [],
+  "coauthors": "J. Christopher Beck (coeditor)",
+  "quotes": [
+   {
+    "text": "The submissions were not peer-reviewed but rather selected on the basis of interesting ideas.",
+    "page": 3
+   },
+   {
+    "text": "A total of 19 submissions were received of which 16 were selected by the program chairs for presentation.",
+    "page": 3
+   }
+  ]
+ }
+]

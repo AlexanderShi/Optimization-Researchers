@@ -1,0 +1,287 @@
+[
+  {
+    "id": "S058",
+    "year": "2019",
+    "title": "Solving quadratic programs to high precision using scaled iterative refinement",
+    "read_level": "full",
+    "contribution": "Extends LP iterative refinement to convex QP with a floating-point QP oracle (qpOASES inside SoPlex), proves linear convergence of residuals and of primal iterates, and gives exact or 1e-100 solutions for 130 of the 138 Maros–Mészáros QPs, correcting six literature values.",
+    "problem_entry": "Floating-point QP solvers compute and check solutions in floating point, so claimed precision can fail where solutions serve rigorous reasoning; interval methods are conservative and the one exact rational QP code targets small geometric problems; entry through the LP refinement [9] and the thesis remark [8] that it carries over to QP (pp. 3–4).",
+    "key_idea": "Solve a sequence of refined, scaled QPs with a black-box floating-point oracle; residuals, scaling and corrections in rationals; one common scaling factor keeps Q and A fixed so the oracle can hotstart (Algorithm 1, pp. 6–7).",
+    "assumptions": "Convex QP min ½xᵀQx + cᵀx, Ax = b, x ≥ l with rational data, feasible and bounded, Q PSD on the feasible set (pp. 4–5); oracle accuracy ε ∈ [0,1) and complementarity violation σ (Assumption 5, p. 7); strict convexity only for Lemma 8 and Theorem 9 (pp. 9–10); no detection of infeasible or unbounded QPs (p. 12); test set the 138 Maros–Mészáros QPs (p. 13).",
+    "proof_devices": [
+      "Theorem 3 (from Gleixner's thesis [8, Thm 5.2]): tolerances of the refined, scaled QP map back to the original by 1/ΔP, 1/ΔD and 1/(ΔPΔD) (p. 5)",
+      "Lemma 6, induction over refinements: residuals at most ε̃^k, complementarity at most σε̃^{2(k−1)}, iteration bound (2) (pp. 7–8)",
+      "Remark 7: the same scheme yields high-precision local KKT pairs of nonconvex QPs (p. 8)",
+      "Lemma 8: perturbed-KKT error bound through the eigenvalues of Q and the smallest singular value of A, strictly convex case (pp. 9–10)",
+      "Theorem 9: linear rate ε̃^{1/2} of the primal iterates (pp. 10–11)",
+      "One common scaling factor for primal and dual residuals keeps the oracle's matrices fixed for hotstarts (p. 7)",
+      "Rational LU solve of the basis system triggered by a stalled basis ('ratfac minstalls'); reliable oracle settings and backstepping of the scaling factor by 10^2 on oracle failure (p. 12)"
+    ],
+    "experiments": "Maros–Mészáros (138 convex QPs), three exact settings: 91 exact, 39 within 1e-100, 8 without high precision (virtual best), 8.84 refinements on average, six literature objective values off by more than 1e-7; at 1e-10 on the 73 QPs with at most 1,000 variables and constraints against qpOASES MPC/Default/Reliable, only QPs all settings solve, subsets '> t' by at least one algorithm: never slower than Reliable in mean time, more accurate, rational overhead below 2%; hardware and time limit not stated (pp. 13–15).",
+    "positioning": "Extends the LP refinement of Gleixner, Steffy and Wolter [9] and the thesis [8]; set against interval arithmetic and the exact QP simplex code of Gärtner and Schönherr [6] (p. 4).",
+    "writing": "Contributions 'on three levels'; a two-variable worked example with a figure before the algorithm; a closing wish that exact checking becomes a 'future trend' (pp. 3, 5–6, 16).",
+    "limits_future": "Limits: no infeasibility or unboundedness detection, eight QPs without high precision, 32 memory failures of the dense setting, a bias toward qpOASES from excluded failures (pp. 12–15). Future: that detection, one scaling factor per variable, refinement counts as a measure of floating-point QP solver accuracy (p. 16).",
+    "method_links": [
+      {"method": "Method 5", "relation": "evidence", "note": "floating-point oracle produces the corrections; residuals, scaling and the final check in rationals; loose oracle settings because the rational residuals catch the errors; exact basis solve only after a stalled basis", "pages": "pp. 6, 12"},
+      {"method": "Method 5", "relation": "variant", "note": "oracle-failure recovery (reliable settings, then backstepping the scaling factor by 10^2), against the limitation stated for LP refinement", "pages": "p. 12"},
+      {"method": "Method 2", "relation": "variant", "note": "the baseline is the oracle itself in its three standard settings, restricted to its design range (73 QPs) and to QPs all settings solve; the claim stated against Reliable and against Default separately", "pages": "pp. 14–15"},
+      {"method": "Method 6", "relation": "evidence", "note": "step 3: a public test library solved in exact arithmetic, six literature optimal values corrected, precise values published online", "pages": "p. 14"},
+      {"method": "Method 3", "relation": "evidence", "note": "a remark in the thesis becomes the paper; limits printed with counts and carried into future work", "pages": "pp. 4, 12–16"},
+      {"method": "Method 1", "relation": "variant", "note": "proposes refinement counts, with violations computed in rational precision, as a measure of floating-point solver accuracy; proposed, not carried out", "pages": "p. 16"}
+    ],
+    "new_pattern_candidates": [],
+    "transferable": [
+      "Use one scaling factor for primal and dual residuals so the oracle's matrices stay fixed and it can hotstart from its last basis (p. 7)",
+      "Trigger the expensive exact step (rational LU of the basis system) only after the oracle returns the same basis several times, and stop early when the exact basic solution verifies (p. 12)",
+      "Run the floating-point oracle with fast, loose settings; on failure retry with reliable settings, then backstep the scaling factor (p. 12)",
+      "Publish exact reference values for a standard test library and name the instances whose literature values are wrong (p. 14)",
+      "Define each difficulty subset as the instances for which at least one algorithm took more than t seconds, so the subsets do not favour one method (p. 14)"
+    ],
+    "coauthors": "Tobias Weber, Sebastian Sager (Otto von Guericke University Magdeburg; first and second authors); Gleixner third of three, the ZIB author",
+    "quotes": [
+      {"text": "Note that all calculations except the expensive solves of the QPs are done in rational precision.", "page": 6},
+      {"text": "As a concluding remark, we hope that the idea of checking numerical results of floating-point algorithms in exact or safe arithmetic will become a future trend when applying or analyzing numerical algorithms.", "page": 16}
+    ]
+  },
+  {
+    "id": "S064",
+    "year": "2019",
+    "title": "A massively parallel interior-point solver for linear energy system models with block structure",
+    "read_level": "partial",
+    "contribution": "Extends PIPS-IPM to arrowhead LPs with many local linking constraints through a precomputed Schur complement pattern and a distributed sparsified Schur complement used as implicit preconditioner (PIPS-IPM++), solving energy-system LPs with up to 4.17 billion nonzeros and beating commercial barrier solvers by large factors on the largest instances.",
+    "problem_entry": "High-resolution linear energy system models give LPs too slow or too large for commercial solvers, which cannot run on distributed memory; entry through the arrowhead structure of time-discretised models and the observation that most of the often more than 100,000 linking constraints and variables link only two consecutive blocks (pp. 4–5, 11).",
+    "key_idea": "Exploit the precomputable block-tridiagonal pattern of the Schur complement under local linking (nonzeros linear in the number of blocks) and replace the Schur complement by a distributed sparsified C̃ that acts as an implicit preconditioner of the whole augmented system (pp. 17–21).",
+    "assumptions": "LPs (no integers) in arrowhead form with local and global linking constraints and variables; few global links and linking variables assumed (pp. 4–5, 15); full-rank diagonal blocks (p. 14); data ELMOD (European nodal-pricing electricity market, DC load flow, 8,760 hours; storage and ramping local links, reservoir aggregate global) and SIMPLE (an instance generator not by the authors); blocks annotated through GAMS (pp. 6–12, 24).",
+    "proof_devices": [
+      "Precomputed block-tridiagonal Schur pattern for local linking constraints (p. 17)",
+      "Observation 1: nonzeros of the permuted Schur complement grow linearly in the number of blocks when global links stay fixed (p. 18)",
+      "Distributed sparsified Schur complement C̃ (entries dropped relative to max{|c_ii|,|c_jj|}, after a circuit-simulation preconditioner [5]) built without forming the full matrix (pp. 18–19)",
+      "Observation 2: the residual of the Schur system equals that of the whole augmented system; C̃ in place of C as implicit preconditioner for BiCGSTAB (pp. 19–21)",
+      "Multiple centrality correctors (Colombo–Gondzio), separate primal and dual step lengths, BiCGSTAB limit 75, drop threshold adapted from 1e-3 to at most 1e-6, more than 95% of Schur nonzeros dropped (pp. 22–23)",
+      "Distributed geometric and equilibrium scaling; structure-preserving distributed presolve (bound strengthening, singleton rows, parallel and nearly parallel rows) (pp. 23–24)"
+    ],
+    "experiments": "JUWELS and a 2 TB ZIB machine; CPLEX 12.8, Gurobi 8.1, MOSEK 8.1, Xpress 8.4.7 barrier, crossover off, 16 threads, anonymised, one solver dropped after crashes; SIMPLE scaling to 512 MPI processes (23 s against no commercial run below 400 s; decomposition-only version not competitive); Table 1: SIMPLE2 546 s against 38,800 s on different machines, ELMOD EU about 20 min with a gap below 1% against 18–24 h for the one commercial solver that finishes; the text's 'up to 67' against my arithmetic 70.7 (EU16) and 71.1 (SIMPLE2); no seeds or repeated runs (pp. 26–29).",
+    "positioning": "Extends PIPS-IPM and OOPS from two-stage stochastic programs to arrowhead LPs; the preconditioner borrowed from circuit simulation and claimed new for interior-point methods (pp. 5, 19).",
+    "writing": "Speedups tied to node counts (19 and 38 compute nodes against one commercial node); an earlier version's wrongly generated instances admitted in a footnote (pp. 27–29).",
+    "limits_future": "Limits: sequentially far slower than commercial codes; EU instances only to a gap; comparisons on different machines; SIMPLE3 not comparable (pp. 26, 28–29). Future: more presolve, more aggressive scaling, the homogeneous self-dual IPM, a hierarchical Schur decomposition, distributed model generation, a public release (pp. 25, 30).",
+    "method_links": [
+      {"method": "Method 2", "relation": "evidence", "note": "steps 1–2 and 5: crossover switched off in the commercial solvers because PIPS++ lacks it; best thread count; vendor-advised numerics tried on EU; machine mismatch for SIMPLE2 printed", "pages": "pp. 26, 28–29"},
+      {"method": "Method 2", "relation": "variant", "note": "the second baseline is the new code reduced to the bare decomposition, not the default incumbent", "pages": "pp. 26–27"},
+      {"method": "Method 3", "relation": "evidence", "note": "limits printed with numbers (factor 5 sequentially, EU gap below 1%, one solver's crashes) and turned into next steps", "pages": "pp. 26–30"},
+      {"method": "Method 6", "relation": "variant", "note": "step 7 applied to a report's own instances: wrongly generated ELMOD CWE instances of the earlier version exchanged and admitted in a footnote", "pages": "pp. 27–28"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "attribution check by switching the new component off", "evidence": "the primal-dual gap on ELMOD EU stays almost the same with the Schur complement preconditioning deactivated, so the gap is not put down to it", "pages": "p. 29"}
+    ],
+    "transferable": [
+      "Before choosing a dense or sparse Schur strategy, count the nonzeros the structure implies and precompute the pattern to cut memory and communication (pp. 17–18)",
+      "Use a cheap sparsified operator, entries dropped relative to the diagonal with the threshold adapted to Krylov convergence, as an implicit preconditioner of the whole system (pp. 18–23)",
+      "Put a decomposition-only version of the new code ('New solver reduced') on the scaling plot to show that the supplementary techniques make it competitive (pp. 26–27)",
+      "Switch off in the incumbent what your code lacks (crossover) and give it its best thread count before comparing (p. 26)",
+      "When a residual gap remains, rerun with the new component deactivated to show the gap is not its fault (p. 29)"
+    ],
+    "coauthors": "Daniel Rehfeldt (first), Thorsten Koch (ZIB); Hannes Hobbie, David Schönheit, Dominik Möst (TU Dresden); Gleixner fourth of six",
+    "quotes": [
+      {"text": "Also, crossover (which can considerably increase the run time) is turned off, as this feature is not implemented in our solver.", "page": 26},
+      {"text": "Interestingly, tests on the large-memory machine at ZIB revealed that this gap is not a result of our Schur complement preconditioning: The gap stays almost the same if the preconditioning approach is deactivated.", "page": 29}
+    ]
+  },
+  {
+    "id": "D006",
+    "year": "2020",
+    "title": "Learn to Relax: Integrating 0-1 Integer Linear Programming with Pseudo-Boolean Conflict-Driven Search",
+    "read_level": "full",
+    "contribution": "Extended abstract: interleaves time-budgeted incremental LP solving (SoPlex) with conflict-driven pseudo-Boolean search (RoundingSat), using Farkas-based conflicts and Gomory cuts, and reports improved performance without numbers.",
+    "problem_entry": "Native conflict-driven PB solvers can be exponentially stronger than CDCL yet get stuck where the LP relaxation of the residual problem is already infeasible (p. 1).",
+    "key_idea": "Dynamic integration of LP and PB solving: Farkas combination of an infeasible LP starts PB conflict analysis; rational LP solutions yield Gomory cuts and search guidance; learned constraints may go to the LP (p. 1).",
+    "assumptions": "0–1 integer linear programs solved by PB solvers; benchmarks not named in the abstract (pp. 1–2).",
+    "proof_devices": [
+      "LP calls under a strict time budget, terminated when exceeded (p. 1)",
+      "Farkas combination of an infeasible LP as the start of PB conflict analysis; Gomory cuts from rational LP solutions for both solvers (p. 1)"
+    ],
+    "experiments": "Claimed 'extensive experiments' with significantly improved performance on a wide range of benchmarks; no test sets, numbers or baselines in the abstract (p. 2).",
+    "positioning": "Against PB solvers that re-encode to CNF and against resolution-based conflict analysis on clauses derived from linear constraints in MIP and CP solvers (Achterberg; Downing); claims the first combination of LP relaxations and cuts with full PB conflict analysis (p. 1).",
+    "writing": "Hedged close ('we believe that there is ample room for further improvements') with a 'best of two worlds' framing (p. 2).",
+    "limits_future": "Only that room for improvement remains; details left to other publications (p. 2).",
+    "method_links": [
+      {"method": "Method 3", "relation": "variant", "note": "step 4 run in reverse: MIP's LP relaxation and Gomory cuts carried into the pseudo-Boolean community's solver, with Nordström's group, at CPAIOR", "pages": "pp. 1–2"}
+    ],
+    "new_pattern_candidates": [],
+    "transferable": [
+      "Give an auxiliary solver embedded in another a strict time budget per call and abort it when exceeded, so it cannot starve the host search (p. 1)",
+      "Turn an infeasible LP's Farkas multipliers into one linear constraint that starts conflict analysis, and a fractional LP solution into Gomory cuts shared by both solvers (p. 1)"
+    ],
+    "coauthors": "Jo Devriendt (first; Lund, Copenhagen), Jakob Nordström (Copenhagen, Lund); Gleixner second of three",
+    "quotes": [
+      {"text": "Inspired by mixed integer programming (MIP), we address this problem by interleaving incremental LP solving with the conflict-driven pseudo-Boolean search.", "page": 1},
+      {"text": "In order to balance resources and avoid that the LP solver starves the PB solver, LP calls are made with a strict time budget and are terminated as soon as this budget is exceeded.", "page": 1}
+    ]
+  },
+  {
+    "id": "S031",
+    "year": "2020",
+    "title": "Two-row and two-column mixed-integer presolve using hashing-based pairing methods",
+    "read_level": "full",
+    "contribution": "Hashing-based pairing mechanisms make five two-row and two-column presolve methods affordable in SCIP, with a set-packing extension of Belotti's convex-combination bound tightening; on MIPLIB 2017 the effects range from slightly negative to 6% faster on hard instances, with large gains on special classes (TSCCP, supply chain).",
+    "problem_entry": "Single-row presolve is fast but weak and global structures are slow; published two-row and two-column methods leave open how to find promising pairs, since enumerating all pairs is too expensive (pp. 2–3).",
+    "key_idea": "A hashtable keyed by variable pairs and coefficient ratio finds cancellation pairs; four sign-pattern hashlists find row pairs with opposite-sign shared variables, the only ones that can beat single-row FBBT (Lemma 3.1); plus disjoint set-packing constraints added to Belotti's method (pp. 9, 14–26).",
+    "assumptions": "General MIP with possibly infinite bounds (p. 3); primal and dual reductions (p. 6); integral scalar and integer partner for integer columns (p. 8); the dual method on ≥ rows with zero lower bounds and continuous columns (p. 21); MIPLIB 2017 benchmark v2 plus TSCCP and supply-chain sets (pp. 26, 28, 30).",
+    "proof_devices": [
+      "Lemma 3.1: two-row bound tightening can beat single-row FBBT only if a shared variable has opposite-sign coefficients (p. 9)",
+      "Belotti's breakpoint characterisation (Proposition 3.5) and O(|N|²) sweep with constant-time updates (Algorithm 1) (pp. 12–14)",
+      "Lemma 3.8 and Theorem 3.9: extended breakpoint set for disjoint set-packing constraints, computable in O(|N| log |N|), total complexity unchanged (pp. 17–19)",
+      "Hashtable keyed by (j, k, a_ij/a_ik) for cancellation pairs; four sign-pattern hashlists for bound-tightening pairs (pp. 23–26)",
+      "Working limits: 4,900 pairs per row and a refundable, never negative failure budget of 100·|M|; 10,000 pairs per row, 10·|M| in total, stop after 1,000 fruitless or repeated pairs, at most |M| processed pairs (pp. 24–26)",
+      "Structure-preserving rules (integrality, ±1 coefficients, set-packing types, locks) and |λ| ≤ 1000 (p. 24)"
+    ],
+    "experiments": "SCIP 6.0.2/SoPlex 4.0.2, Xeon E3-1240 v5, 32 GB, 7,200 s, defaults; baseline with all five methods off; MIPLIB 2017 benchmark v2 × five seeds, each instance–seed pair one observation, pairs with numerical trouble or exposed bugs discarded; brackets [t, 7200] over instances solved by at least one run; shifted geometric means (1 s, 100 nodes); from three fewer solved (two-row cancellation) to 4% and 6% faster on [1000, 7200]; TSCCP 147 against 98 solved at 0.26 relative time; supply chain 35 of 40 with reductions; all five together slightly slower; without working limits presolve time ×5 and 31 more memory failures; Table 8 count mismatch 568/563 (my reading) (pp. 26–32).",
+    "positioning": "Builds on Achterberg et al. (2019), Belotti (2013), Bixby–Wagner, Chang–McCormick and Gondzio; presolve's weight taken from Achterberg–Wunderling (pp. 2, 6, 11, 21).",
+    "writing": "Neutral and negative results stated plainly with two candidate causes; a closing paragraph argues for keeping such methods (pp. 27, 32).",
+    "limits_future": "Limits: cancellation neutral or negative, few continuous variables in MIPLIB limit the dual method, more nodes on ten instances with the clique extension (pp. 29–33). Future: redundancy detection with equal signs, tuning, new pairings, three or more rows or columns (pp. 9–10, 33).",
+    "method_links": [
+      {"method": "Method 2", "relation": "variant", "note": "baseline = default SCIP minus exactly the five methods under study (one already default); each method alone, all together, and the clique extension against itself without it; a component comparison inside one solver, so no default factor arises", "pages": "pp. 26–31"},
+      {"method": "Method 3", "relation": "evidence", "note": "losses (three fewer solved; slightly negative combination) printed with suspected causes; open directions listed", "pages": "pp. 27, 31–33"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "keep neutral components in the development line", "evidence": "three reasons to include presolvers that are neutral on MIPLIB: interactions, other instance classes (TSCCP, supply chain), and avoiding overtuning of established methods; possible tension with Heuristic 3, default status not stated (my reading)", "pages": "p. 32"},
+      {"pattern": "ablate the working limits themselves", "evidence": "without the limits presolve time ×5 on average, ×10 on 41 instances, over ×100 at worst, 31 more memory failures, models at least 1% smaller on only 14 of 240", "pages": "p. 32"}
+    ],
+    "transferable": [
+      "Prove first which pairs can help (only opposite-sign shared coefficients can beat single-row FBBT), then hash rows by the sign pattern of variable pairs so only such pairs are examined (pp. 9, 25)",
+      "Give an expensive presolver a failure budget linear in the problem size, refunded on success but never negative (p. 24)",
+      "Refuse reductions that destroy structure other components exploit (integral or ±1 coefficients, set-packing types, locks) and cap scale factors (p. 24)",
+      "Measure each new presolver alone against a baseline with all new ones off, then all together, and count instances with reductions in both settings (pp. 26–32)",
+      "When a method is neutral on MIPLIB, show the instance class where it matters with the same settings and seeds (pp. 28, 30–31)"
+    ],
+    "coauthors": "Patrick Gemander (first), Dieter Weninger, Alexander Martin (FAU Erlangen-Nürnberg), Wei-Kun Chen (Beijing Institute of Technology), Leona Gottwald (ZIB); Gleixner fifth of six",
+    "quotes": [
+      {"text": "In most publications there is no answer to this question.", "page": 3},
+      {"text": "Finally, it is also important to actively involve new presolve methods in the development process of a solver to avoid overtuning of established methods.", "page": 32}
+    ]
+  },
+  {
+    "id": "S043",
+    "year": "2020",
+    "title": "Using two-dimensional projections for stronger separation and propagation of bilinear terms",
+    "read_level": "full",
+    "contribution": "Computes cheap two-dimensional projections of the LP relaxation with OBBT-like LPs (volume within a factor 2, tight) and uses them for Locatelli envelopes and best-possible bound tightening of bilinear terms in SCIP; root gaps close by 7.5% on average and hard MINLPLib instances solve 36% faster.",
+    "problem_entry": "McCormick envelopes are tight only over the box; over a non-rectangular feasible subset the hull of xy is much tighter and bounds improve, but two-variable inequalities are rarely explicit in models (pp. 3–6).",
+    "key_idea": "Right after OBBT, shoot an LP ray from the box center to each box vertex; the duals give valid inequalities that form a small polytope P_ij used for separation (Locatelli) and propagation (pp. 9–11, 17–19).",
+    "assumptions": "Nonconvex MIQCP with bounded variables, reformulated with X_ij = x_i x_j, extending to factorable MINLP products (pp. 3–4); a polyhedral relaxation available in LP-based spatial branch and bound (p. 9); bounds from OBBT for Lemma 1 and Theorem 1 (pp. 11–12); terms only in convex constraints or with binaries ignored; MINLPLib, 1,671 usable instances (p. 21).",
+    "proof_devices": [
+      "Ray-shooting LP (15) from the box center to each box vertex; separating inequality (16) from its dual multipliers (pp. 10–11)",
+      "Lemma 1: after OBBT the box center lies in the projection, so each valid inequality cuts off at most one vertex (p. 11)",
+      "Theorem 1: Vol(X_ij)/Vol(P_ij) ≥ 1/2, best possible (parametric example; triangle-area claim); Remark 3: about 0.85 with one non-axis-parallel facet (pp. 12–14)",
+      "Remark 2: the dual of the ray LP is a CGLP with reverse-polar objective and Balas–Perregaard normalisation (p. 12)",
+      "Filtering of LPs whose vertex is already shown feasible by previous LP optima; term order by occurrence, tie-break by box volume; no warm start (pp. 15–17)",
+      "Theorem 2: bounds of x_i x_j over P_ij from at most 12 points; Theorem 3: bounds of x_i, x_j from a finite set of level-set intersections (pp. 17–19)"
+    ],
+    "experiments": "SCIP development version on 6.0 with CPLEX 12.8.0.0 and Ipopt 3.12.11, Xeon X5672, one job per node; AFFECTED: 564 instances with a useful projection, 2.6 s average cost; ROOTGAP (7,200 s, aggressive separation): +7.5% gap closed on 547, better on 165, worse on 13; TREE (1,800 s, gap 1e-4, five permutations, solved only if all are): 249 against 244 solved, 3% faster overall, 36% on [100, tlim]; Table 2 as extracted '+1%' against the text's 11% on [1, tlim] (my reading) (pp. 20–25).",
+    "positioning": "Reviews McCormick, RLT and SDP relaxations and the special-domain envelopes of Linderoth, Hijazi and Locatelli; FBBT/OBBT background including Gleixner et al.'s use of OBBT duals (pp. 7–8).",
+    "writing": "§5 opens with three named questions; a theorem is followed by its practical reading as 'theoretical justification' (pp. 14, 19–20).",
+    "limits_future": "Limits: useful projections on 564 of 1,682 instances only; recomputation helps little; separation alone does not reduce time (pp. 22–25). Future: propagation over general two-dimensional convex sets; symmetry-breaking inequalities from formulation symmetry (p. 26).",
+    "method_links": [
+      {"method": "Method 1", "relation": "variant", "note": "the AFFECTED experiment counts how many instances admit a non-trivial projection before any performance claim", "pages": "pp. 20, 22–23"},
+      {"method": "Method 3", "relation": "evidence", "note": "13 root deteriorations and three large outliers printed and examined; separation alone gives no speed-up; open questions named", "pages": "pp. 24–26"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "staged evaluation: applicability count, root bound, tree", "evidence": "AFFECTED (instances with useful projections), ROOTGAP (signed gap closed), TREE (permutations, solved counts), each with its own settings", "pages": "pp. 19–25"},
+      {"pattern": "a theorem that licenses a cheap approximation", "evidence": "Theorem 1 (volume quotient at least 1/2, tight) and Remark 3 justify computing a relaxation of the projection instead of the projection", "pages": "pp. 12–14"}
+    ],
+    "transferable": [
+      "Approximate a projection cheaply: shoot one LP ray from the box center toward each box vertex and read a valid two-variable inequality off the LP duals (pp. 10–11)",
+      "Prove a worst-case quality bound for the cheap approximation (a tight volume quotient of 1/2) to justify not computing the exact object (pp. 12–14)",
+      "Skip an LP whenever a previously computed LP optimum already shows its target vertex feasible (pp. 15, 23)",
+      "Reduce a small nonconvex bound problem to scanning a finite candidate set (at most 12 points) so it can run at every node (pp. 17–19)",
+      "Evaluate in three stages: how many instances are affected, how much root gap closes, then tree performance over permutations (pp. 19–25)",
+      "Use a signed gap-closed function GC(p, d1, d2) in [−1, 1] so gains and losses are on one scale (p. 23)"
+    ],
+    "coauthors": "Benjamin Müller (first), Felipe Serrano; Gleixner last of three",
+    "quotes": [
+      {"text": "Theorem 1 and Remark 3 provide some theoretical justification why it suffices to compute a relaxation of the projection.", "page": 14},
+      {"text": "An instance is considered to be solved by a setting if all permutations could be solved by this setting.", "page": 25}
+    ]
+  },
+  {
+    "id": "S047",
+    "year": "2020",
+    "title": "On the relation between the extended supporting hyperplane algorithm and Kelley's cutting plane algorithm",
+    "read_level": "full",
+    "contribution": "Shows that the extended supporting hyperplane algorithm is Kelley's cutting-plane algorithm applied to the gauge reformulation, characterises when gradient cuts support a sublevel set, and extends convergence to convex sets described by nonconvex differentiable functions.",
+    "problem_entry": "Kronqvist et al. rediscovered Veinott's supporting hyperplane algorithm with computational benefits; Kelley's gradient cuts need not support the feasible region; question: when is a gradient cut supporting (pp. 3–6)?",
+    "key_idea": "Characterise supporting linearisations (affinity along a segment), note that sublinear functions always qualify, represent C by its gauge whose evaluation is ESH's line search, and conclude that ESH = Kelley on min{cᵀx : φ_C(x) ≤ 1} (pp. 8–15).",
+    "assumptions": "MICP with closed convex C given by convex differentiable g_j (p. 3); interior point taken as 0 (p. 14); nonvanishing gradients of active constraints on ∂C, implied by Slater (p. 12); §6 nonconvex differentiable representations of a convex C (pp. 15–16); empty interior via the ε-relaxation of [9] (pp. 13–14).",
+    "proof_devices": [
+      "Theorem 1: a subgradient cut at x̄ supports {g ≤ 0} iff g is affine on a segment from a feasible point to x̄; epigraph supporting-hyperplane argument (pp. 8–10)",
+      "Examples 2–4: sublinear functions; functions linear in one variable; a convex quadratic has supporting gradient cuts iff b is not in the range of A (pp. 10–11)",
+      "Gauge function (Definition 3, Proposition 4), boundary point x̄/φ_C(x̄) (Proposition 6), Lemma 5 separation (pp. 11–12)",
+      "Gauge evaluation equals ESH's line search (§4.2, p. 13)",
+      "Lemma 8 and Theorem 9: normalised supporting cuts are subgradients of the gauge, so ESH cuts are KCP cuts on the gauge reformulation (pp. 14–15)",
+      "Proposition 10: validity for nonconvex differentiable representations by a directional-derivative contradiction (p. 16)"
+    ],
+    "experiments": "none (practical relevance argued from the experiments of [9], p. 17)",
+    "positioning": "Rereads Veinott and Kronqvist et al. through Kelley; places OA, ECP and projection-based cuts in the Horst–Tuy frame of which relaxation and where to cut; relates §6 to Lasserre and Dutta–Lalitha (pp. 6–8).",
+    "writing": "A circle and its gauge open the argument; the characterisation offered modestly ('Although elementary') (pp. 5, 7).",
+    "limits_future": "Limits: no closed form of the gauge in general and subgradients matter more than evaluations; the general algorithm of Remark 11 need not reach a KKT point (pp. 12, 16). No future work stated (pp. 16–17).",
+    "method_links": [],
+    "new_pattern_candidates": [
+      {"pattern": "re-derive a rival's algorithm as a classic on a reformulation", "evidence": "ESH shown to be Kelley's cutting-plane algorithm on the gauge reformulation; convergence inherited from Kelley's; domain widened to nonconvex differentiable representations", "pages": "pp. 6, 14–16"}
+    ],
+    "transferable": [
+      "To test whether a cutting-plane rule is new, look for a reformulation under which it becomes a classic method; the classic's convergence proof then applies (pp. 14–15)",
+      "Characterise when a linearisation supports a sublevel set by an affinity condition along a segment, then sort function families by it (pp. 8–11)",
+      "Before reformulating a constraint for theory, check what the reformulation does to tolerance-based feasibility; use it only implicitly if it breaks ε-feasibility (p. 12)"
+    ],
+    "coauthors": "Felipe Serrano (first), Robert Schwarz (ZIB); Gleixner last of three",
+    "quotes": [
+      {"text": "In this paper, we have shown that the extended supporting hyperplane algorithm studied by Veinott [15] and Kronqvist et al. [9] is identical to Kelley’s classic cutting plane algorithm applied to a suitable reformulation of the problem.", "page": 16},
+      {"text": "Although elementary, the authors are not aware of its presence in the literature.", "page": 7}
+    ]
+  },
+  {
+    "id": "S067",
+    "year": "2020",
+    "title": "Accelerating domain propagation: An efficient gpu-parallel algorithm over sparse matrices",
+    "read_level": "full",
+    "contribution": "A GPU domain-propagation algorithm (static rounds, CSR-adaptive activity computation, filtered atomics) gives geometric-mean speedups of 7.42 overall and 43.92 on the largest MIPLIB 2017 instances on a V100 against a sequential baseline validated against PaPILO (read in the extended arXiv v5).",
+    "problem_entry": "Domain propagation is single-threaded in solvers because dynamic behaviour, dependencies and irregular sparsity defeat parallelism, while GPUs sit idle; two irregularities named: early termination and marking, and sparse matrices with a few dense rows (arXiv pp. 1–2, 4, 7).",
+    "key_idea": "Drop early termination and marking for a static breadth-first round (all activities, then all bound candidates) and compute activities like an SpMV with the CSR-adaptive scheme (arXiv pp. 5–8).",
+    "assumptions": "MIP with linear constraints and possibly infinite bounds, integer bounds rounded; unique limit point, not necessarily reached finitely, rounds capped at 100; MIPLIB 2017 collection 1,065 → 987 readable → 893 converging to the same limit point → 786 with at least 1,000 variables or constraints, in eight size sets (arXiv pp. 1–3, 11–12).",
+    "proof_devices": [
+      "Static round without early termination and marking (Algorithm 2) (arXiv p. 6)",
+      "Activities as SpMV with two bound vectors via CSR-adaptive; CSR-vector with all warps above 64 nonzeros (arXiv pp. 7–8)",
+      "Infinite-contribution count folded into the activity reduction (arXiv p. 9)",
+      "atomicMax/atomicMin only for candidates that beat the previous round's bound (arXiv pp. 9–10)",
+      "Round loop on the CPU (cpu_loop), on average 1.72 times faster than on the GPU (arXiv pp. 11, 21)",
+      "Equality test |a − b| ≤ 1e-8 + 1e-5|b| against cpu_seq (arXiv p. 13)"
+    ],
+    "experiments": "cpu_seq (close to PaPILO's implementation), cpu_omp and gpu_atomic on four GPUs and three CPUs; wall-clock speedups against cpu_seq on a Xeon Gold 6246, geometric means per size set and 5/50/95% percentiles, initialisation excluded; V100 7.42 overall, 43.92 on the largest set, at least 51.65 on 5%; P400 0.47; cpu_omp at most 3.05; single precision 7.27 with more non-convergence; baseline validated against PaPILO on 701 instances; orderings at most 4.3%; repetitions of timings not stated (arXiv pp. 11–21).",
+    "positioning": "Claimed first GPU algorithm for domain propagation; ideas from GPU SpMV; related to CP/AI filtering, FBBT and the GPU-in-MIP survey of Boyer et al. (arXiv pp. 3–4, 7).",
+    "writing": "The PaPILO comparison called 'not on equal grounds' and its check 'not a rigorous way'; the conclusion states why the result does not yet pay inside a solver (arXiv pp. 17–18).",
+    "limits_future": "Limits: after branching too little work to parallelise; presolve propagation time small, so new parent methods are required; 23.64% of attainable roofline performance on average (arXiv pp. 15, 18). Future: newer SpMV algorithms; optimising the megakernel variant (arXiv pp. 18, 22).",
+    "method_links": [
+      {"method": "Method 2", "relation": "evidence", "note": "step 9: the extended version names a missing compiler flag that slowed the conference version's cpu_seq baseline", "pages": "arXiv p. 22"},
+      {"method": "Method 2", "relation": "evidence", "note": "step 5: own baselines validated against the independent PaPILO presolver, unequal footing spelled out", "pages": "arXiv pp. 16–18"},
+      {"method": "Method 2", "relation": "evidence", "note": "step 8: speedups only where both arms reach the same limit point within 1e-8 absolute and 1e-5 relative tolerance; exclusions counted by reason", "pages": "arXiv pp. 11–13"},
+      {"method": "Method 3", "relation": "evidence", "note": "the conclusion prints why the GPU propagator does not yet pay inside a solver and names the missing piece (new parent methods)", "pages": "arXiv p. 18"},
+      {"method": "Method 5", "relation": "variant", "note": "precision chosen by measuring correctness loss against speed: single precision reaches the same limit point on 842 instead of 893 instances, 118 hit the round limit, for little speed", "pages": "arXiv pp. 15–16"},
+      {"method": "Method 1", "relation": "variant", "note": "the price of parallelism counted before defending the design: 3.1 against 4.4 rounds on average, up to a factor 22.0, on 893 instances", "pages": "arXiv p. 5"}
+    ],
+    "new_pattern_candidates": [],
+    "transferable": [
+      "Trade a sequential algorithm's early-exit and marking logic for a static schedule when the hardware rewards throughput, then count the extra rounds this costs (arXiv pp. 5–6)",
+      "Recognise that a solver kernel has the memory pattern of a well-studied primitive (activities as SpMV with two vectors) and import its load-balancing scheme (arXiv pp. 7–8)",
+      "Fold a special-case counter (number of infinite contributions) into the same reduction as the main sum, so no extra global memory loads are needed (arXiv p. 9)",
+      "Filter atomic updates by comparing each candidate with the previous round's bound first (arXiv pp. 9–10)",
+      "Compare arms only where both reach the same result within absolute and relative tolerances, and count every exclusion by reason (arXiv pp. 11–13)",
+      "Validate your own baseline against an independent production implementation before reporting speedups against it (arXiv pp. 16–18)",
+      "Report the baseline's variability across machines and the method's sensitivity to input ordering (arXiv pp. 20–21)",
+      "In an extended version, add an appendix listing what changed from the conference version, including defects of the earlier baseline (arXiv p. 22)"
+    ],
+    "coauthors": "Boro Sofranac (first; TU Berlin and ZIB), Sebastian Pokutta (TU Berlin and ZIB); Gleixner second of three (HTW Berlin and ZIB)",
+    "quotes": [
+      {"text": "Most notably, we acknowledge a missing compiler flag during our test execution which negatively affected the performance of the cpu seq baseline used in [20].", "page": 22},
+      {"text": "On the other hand, the amount of time spent in domain propagation during presolving is usually small relative to the main solving time, and thus the motivation to speed it up “as is” is low.", "page": 18}
+    ]
+  }
+]

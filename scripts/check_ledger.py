@@ -71,8 +71,10 @@ CARD_ID_RE = re.compile(r"(?<![A-Za-z0-9_])([A-Z]\d{3,4})(?![0-9])")
 _RANGE = r"(?:\s*[-–—]\s*(?:\d+|[ivxlc]+))?"
 _PAGES = (r"(?:\d+|[ivxlc]+)" + _RANGE                        # 第一页可以是罗马数字（前言页）
           + r"(?:\s*,\s*(?:\d+|[ivxlc]{2,})" + _RANGE + r")*")  # 后续页：数字或 ≥2 位罗马数字（避开 “, i.e.”）
-CITE_RE = re.compile(r"(?<![A-Za-z0-9_])([A-Z]\d{3,4})(?![0-9]),?\s*(?:(?<=[\s,])pp?\.\s*(" + _PAGES
-                     + r")(?![A-Za-z0-9])|第\s*(" + _PAGES + r")\s*页)")
+# ID 与页码之间可以有版本词（[S025 TR pp. 3–12]、[S074 manuscript p. 23]）：与 check_citations.py 一样，允许至多 30 个
+# 不越过方括号、分号、表格竖线、换行和另一个 ID 的字符；原来要求页码紧跟 ID，带版本词的页码丢了也查不出（2026-11-28）
+CITE_RE = re.compile(r"(?<![A-Za-z0-9_])([A-Z]\d{3,4})(?![0-9])(?:(?![A-Z]\d{3})[^\]\[;|\n]){0,30}?"
+                     r"(?:(?<![A-Za-z])pp?\.\s*(" + _PAGES + r")(?![A-Za-z0-9])|第\s*(" + _PAGES + r")\s*页)")
 QUOTE_RES = [re.compile(r"“([^“”]{20,2000}?)”"), re.compile(r"「([^「」]{20,2000}?)」")]
 ANCHOR_TOKEN_RE = re.compile(r"(?:(?P<file>[^\s`'\"()\[\]<>]*?\.md))?#(?P<anc>[\w\-]+(?:<[^<>\s]+>[\w\-]*)?)")
 LEDGER_WORD_RE = re.compile(r"ledger|账本|台账", re.I)
