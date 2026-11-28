@@ -21,7 +21,11 @@
 >
 > **Not carried.** The cards' reading notes on inconsistencies inside a work (a table that disagrees with its text, a typo, numbers that look carried over) are not findings about the researcher or his coauthors and are not used here. Material that `holdout.md` seals is not used: no point, quote or decision of a sealed item appears in this file, also where another card states the same point, and two candidates that lean on sealed material are withheld ([Held back](#held-back)). The script-generated card index `07-paper-cards.md` and the card batch files under `cards/` state sealed points: this ledger does not link them, and they are not to be opened while using or testing the skill.
 >
-> **Scope and counts.** One section per SKILL.md item this pass changed, plus the corrections, the promotion record, the rejected updates, the sources and the card key. Answer Standard, Research Integrity Rules, Agentic Protocol, Taste quick-check and the rest of Activation Rules are unchanged in SKILL.md (Activation Rules changed only in its disclaimer line; Research Task Routing in one row). Coverage: `team_status.py --coverage` on 2026-11-28 (198 Scholar rows · 202 distinct works indexed · 132 open full texts · 130 read in full · 1 in part · 56 abstract only · 11 metadata only incl. unreadable · 4 skipped · 0 book material · 358 quotes verified). Word budget after this pass: 11654 words by `answer_standard.py --words` (target about 11500, hard limit 13000).
+> **Scope and counts.** One section per SKILL.md item this pass changed, plus the corrections, the promotion record, the rejected updates, the sources and the card key. Answer Standard, Research Integrity Rules, Agentic Protocol, Taste quick-check and the rest of Activation Rules are unchanged in SKILL.md (Activation Rules changed only in its disclaimer line; Research Task Routing in one row). Coverage: `team_status.py --coverage` on 2026-11-28 (198 Scholar rows · 202 distinct works indexed · 132 open full texts · 130 read in full · 1 in part · 56 abstract only · 11 metadata only incl. unreadable · 4 skipped · 0 book material · 358 quotes verified). Word budget after this pass: 11654 words by `answer_standard.py --words` (target about 11500, hard limit 13000). (Note added in the T3.7 review: the committed T3.6 SKILL.md, review fixes included, counts 11908 words by the same script, the count T3.7 starts from.)
+>
+> **T3.7 (tightening, 2026-11-28).** SKILL.md was brought under its word budget by moving evidence here, not by deleting it: wherever a SKILL.md line was shortened, the line as it stood before is kept word for word, in a fenced block, under **Before T3.7 (moved verbatim)** at the end of the matching section. Sections with such a block: [taste marks](#taste-marks), Methods [1](#method-1) (also the Core Research Methods intro), [2](#method-2), [3](#method-3), [4](#method-4), [5](#method-5) and [6](#method-6), the [stage workflows](#workflows), Heuristics [1](#heuristic-1), [4](#heuristic-4), [9](#heuristic-9), [11](#heuristic-11) and [12](#heuristic-12), the [misreadings](#misreadings), three anatomies ([Benders redesign](#anatomy-benders), [local branching](#anatomy-local-branching), [feasibility pump](#anatomy-pump)), the [anti-patterns](#anti-patterns), the [trajectory](#trajectory) (Latest) and the [inner tensions](#inner-tensions). What moved: Practice lines cut to the strongest three or four cards, one item each leaving Methods 2, 4, 5 and 6 (the 2000–01 precursor, which Misreading 4 keeps; the baseline set after contacts with the vendor's staff, whose card Method 4 step 2 cites; the 2026 correction of an implementation error, which the Honest Boundary and the Corrections list keep; the closure's ceiling, which Method 6 step 4 cites), and the outcome details of the two 2026 re-tests in Method 5 Practice; detail inside variant bullets (Method 1's exact-work clause, Method 2's 2026 counter-case, Method 3's backdoor-branching figures, Method 4's significance-test bullet, Method 5's wording bullet and its 2009 port of an old rule, Method 6's pre-2002 bullet), each bullet keeping its mark and card; four long quotations replaced by unquoted paraphrases or, for Pruning Moves, by its quoted phrase (Method 1 and Method 6 Practice, Heuristics 11 and 12); the provenance notes in three One lines and two steps; wording in pointers and cross-references that repeated another item (the Core Research Methods intro on note pointers, the Stage Workflows pointer, Workflow S step 2, the Workflow F checkpoint, the Benders anatomy's Kelley clause, the anti-pattern's single-run count); anatomy detail beyond about two lines a row (the Steiner entry, the full recipe's times and the April 2015 report in the Benders rows, the fat and slim mechanisms, the bound's behaviour under hard fixing, the note on trace instances not in the paper, the twelve comparisons under Holm's correction); one case each in Taste marks 3 and 4 and Heuristics 1 and 4, and a clause of Heuristic 9; the assistants' product names in Latest; the QAP model files in Tension 2. Misreading 4 was only reworded. Every step instruction and constant and every ✗/⚠ mark stays in SKILL.md; the front matter, How to Use, Activation Rules, Answer Standard, Research Integrity Rules, Research Task Routing, Agentic Protocol, Mentor Voice, the Roundtable Card and the Honest Boundary with its Corrections list are unchanged. Three placements recorded under [Corrections](#corrections) changed: 08 §3 item 12 (the in-out precursor) now stands in Misreading 4 only, not in Method 2 Practice; the full recipe's times of the review table's Benders row and the backdoor-branching figures of its Method 3 row are here only, the corrected claims (the quick shot under 15 minutes each, single runs with no measured spread) staying in SKILL.md. Where an *Added in T3.6* or *Review fix* line in this file quotes SKILL.md wording that T3.7 shortened, the section's Before T3.7 block holds that wording. Budget count: 11908 → 11464 words by `answer_standard.py --words` (target about 11500, hard limit 13000).
+>
+> **T3.7 review fixes (2026-11-28).** A read-only review of the T3.7 stage found seven minor points, five in SKILL.md and two in this file; all seven were applied. Restored to SKILL.md word for word from the Before T3.7 blocks, which stay as they are: in [Method 5](#method-5) Practice, the outcomes of the two 2026 re-tests (*reuse buys data but neither speed nor energy and only at large batch*; *with a null and a harmful fallback*), and in its earlier-forms bullet the 2009 port of an old rule [S041 p. 11]; the exact-work clause of the handbook-chapter bullet of [Method 1](#method-1); the fat and slim mechanisms of the [Benders redesign](#anatomy-benders) anatomy, without its duplicate key (UFL17 p.14); the bound's behaviour under hard fixing, the [local branching](#anatomy-local-branching) row as it stood before T3.7; the ISCO14 deck case of [Heuristic 1](#heuristic-1) and the reverse-order counter-case of [Heuristic 4](#heuristic-4) [S027 pp. 3–4, 20–24]. The [Method 4](#method-4) limitation on vendor tuning advice now cites the card of the Practice item that T3.7 moved here [S007 p. 6]. In this file notes were appended and nothing was deleted: to three placement records under [Corrections](#corrections) (08 §3 item 12; the Benders and Method 3 rows of the T3.6 review table) and to the T3.6 word count above. The T3.7 paragraph's list of what moved still describes the T3.7 pass itself. Budget count: 11464 → 11569 words by `answer_standard.py --words` (target about 11500, hard limit 13000).
 
 <a id="how-to-use"></a>
 
@@ -82,6 +86,22 @@ Activation Rules, disclaimer line (2026-11-14):
 2. **A gain that survives seeds, permutations and a placebo** (deepened): the 2012 redundant-cut demonstration; 5-seed reruns (BIL20 p.16).
 3. **Modest claims with losses printed** (new): "SCIP qualifies as a more robust solver" against his own bilinear code (ISMP18 PDF p.16). Counter-case: the bilevel solver's claim to beat problem-specific methods ([05](references/research/05-peer-critique.md) C5).
 4. **An unfashionable classical method that fits, redone with today's technology** (deepened): Benders for facility location, "not sexy nowadays as more complicated schemes are preferred #paperability?" (CORS15 PDF p.16).
+```
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it, word for word in fenced blocks (links as written in SKILL.md, relative to the skill folder). The shortened lines are in SKILL.md.
+
+*Mark 3:*
+
+```markdown
+3. **Modest claims with losses printed** (new): "SCIP qualifies as a more robust solver" against his own bilinear code (ISMP18 PDF p.16). Counter-case: the bilevel solver's claim to beat problem-specific methods ([05](references/research/05-peer-critique.md) C5). Losses and non-paying classes printed [S055 pp. 8–9; S164 pp. 14–20], sometimes only in tables [S074 pp. 13, 18].
+```
+
+*Mark 4:*
+
+```markdown
+4. **An unfashionable classical method that fits, redone with today's technology** (deepened): Benders for facility location, "not sexy nowadays as more complicated schemes are preferred #paperability?" (CORS15 PDF p.16), folklore forgotten for 30 years [S195 pp. 2, 6]; Gomory's pure cutting planes on a black-box LP solver [D009 pp. 1, 3].
 ```
 
 <a id="taste-warnings"></a>
@@ -174,6 +194,28 @@ Cards linking the method: 43 evidence, 43 variant, 2 contradiction; works after 
 **Limitations**: with the whole symmetry group the orbital-shrinking bound equals the LP bound on 31 of 39 instances ([05 §8](references/research/05-peer-critique.md)); for exact work he calls the root LP bound critical; later problem-specific methods beat his generic bilevel solver by large factors (05 Q12).
 ```
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it, word for word in fenced blocks (links as written in SKILL.md, relative to the skill folder). The shortened lines are in SKILL.md.
+
+*Core Research Methods intro (the line above Method 1):*
+
+```markdown
+Ordered by exclusivity and increment. Tags: [stated] his own deck or sole-author text; [joint] a co-signed paper whose "we" cannot be split; [practice] what papers and records show was done. Pointers such as "02 R7" or "03 PE-13" name the research note and item behind a claim; full paper titles are under Sources. Say–do counts are cards linking the method, as evidence/variant/contradiction; the full evidence and the pre-synthesis text are in the ledger.
+```
+
+*Practice:*
+
+```markdown
+- Practice: allocation variables projected out, fat and slim chosen per cost class by measurement [S011 pp. 1, 5, 10–15]; flows projected into max-flow cuts in 1999 [S069 pp. 3, 5–6]; one variable per orbit, solved multiple-knapsack instances 65 → 82 [S097 pp. 4–6, 20, 24]; subtraction: "We then followed an inverse path and disabled/simplified the new features until we found which are the ideas that really made a difference." [S059 p. 5].
+```
+
+*Variant bullet 3:*
+
+```markdown
+  - ✗ A 1995 code fattens the model [S114 pp. 2, 4]; the joint handbook chapter prefers "the formulation with the higher LP optimum" [S145 p. 4]; both fit the exact-work limitation.
+```
+
 <a id="method-2"></a>
 
 ## Method 2: Blame the loop, not the component
@@ -234,6 +276,28 @@ Cards: 17 evidence, 30 variant, 2 contradiction; works 12 / 27 / 2; read in full
 **Applies to stage**: debugging, idea.
 **Different from standard practice**: the usual cure for slow Benders is better cut selection; here the separator stays and the query point moves.
 **Limitations**: one showcase instance has carried the argument since 2016 (05 §5.2); critiques of his 2010 cut-selection rule are unanswered (05 Q6); on multi-commodity fixed-charge network design (not facility location), a 2026 unrefereed comparison of 50 Benders variants finds direct branch-and-cut fastest overall (arXiv 2607.07899, pp.3, 18).
+```
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it, word for word in fenced blocks (links as written in SKILL.md, relative to the skill folder). The shortened lines are in SKILL.md.
+
+*One line:*
+
+```markdown
+**One line**: When a component (Gomory cuts, Benders cuts) is blamed for stalling, instrument the loop that drives it on one small instance and change where the loop queries the oracle, leaving the oracle alone. (Deepened; overturns the common picture of his Benders work.)
+```
+
+*Practice:*
+
+```markdown
+- Practice: the 2009 yoyo manuscript keeps the oracle, moves the query point between a core point and the LP optimum, and tests with a controlled oracle first [S174 pp. 1–8]; Gomory's stall traced on stein15 to the loop and cured by lexicographic reoptimization, the cut unchanged [D009 pp. 7–14; S074 pp. 5–7, 14–15]; one separator under three loop policies on gs250a-1 [S011 pp. 12–14]; a 2000–01 precursor credited to Reinelt [S125 pp. 11–12].
+```
+
+*Variant bullet 3 (2026 counter-case):*
+
+```markdown
+  - ✗ 2026 counter-case, time-window TSP: the root bound crawled and rose much faster once the solver branched, so Benders cuts went to integer solutions only and stabilization, marginal in tests, was skipped [S144 p. 7].
 ```
 
 <a id="method-3"></a>
@@ -297,6 +361,28 @@ Cards: 13 evidence, 34 variant, 19 contradiction; works 13 / 32 / 18; read in fu
 **Limitations**: his baselines ran with CPLEX's dynamic search off; critics note the diversity came from reaching into solver internals (05 Q9); a 2026 preprint finds variability partly predictable (arXiv 2610.12876); cost multiplies by the number of seeds.
 ```
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it, word for word in fenced blocks (links as written in SKILL.md, relative to the skill folder). The shortened lines are in SKILL.md.
+
+*One line:*
+
+```markdown
+**One line**: Before believing a speed-up, measure what a change that cannot help produces; put seeds or permutations into the design; then use the spread on purpose. (Deepened; "exploit variability" is already known.)
+```
+
+*Variant bullet 1:*
+
+```markdown
+  - ✗ *Seeds were in his designs before the statement* holds mainly for the variability papers; the single-run works report gains with no measured spread, e.g. backdoor branching, about 15% in arithmetic-mean time and comparable in geometric mean [S063 pp. 8–10].
+```
+
+*Step 4:*
+
+```markdown
+4. Exploit the spread (bet-and-run, catalog EP35): first the best-of-k-seeds ceiling (catalog EP18) [S055 p. 3]; then a few short randomised clones and a bet on one by a quick criterion that needs only "a positive correlation with the a-posteriori best run" (EURO12 PDF p.19; folded from Heuristic 6), a rule for selection inside randomised restarts only; finish it; print ideal-oracle ceilings and where it does not pay (easy instances) [S055 pp. 6–9].
+```
+
 <a id="method-4"></a>
 
 ## Method 4: A comparison harness blind to which method is yours
@@ -358,6 +444,28 @@ Cards: 71 evidence, 34 variant, 19 contradiction; works 65 / 29 / 16; read in fu
 **Applies to stage**: experiment design, judging, reviewing others' tables.
 **Different from standard practice**: fairness is a testable symmetry, not "same time limit, same machine".
 **Limitations**: the dummy callback is specific to CPLEX's dynamic search of that era; vendor tuning advice came through personal contacts; his own pre-2026 tables carry the lapses above.
+```
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it, word for word in fenced blocks (links as written in SKILL.md, relative to the skill folder). The shortened lines are in SKILL.md.
+
+*Practice:*
+
+```markdown
+- Practice: a (possibly dummy) callback in every arm from 2003 [S070 p. 10; S055 p. 6]; classes in which "the competing methods play an indistinguishable role in the class definition" [S079 p. 14]; one external validator for every method [S018 p. 9; D004 pp. 6–8]; the rival re-implemented and validated against its published results [S027 pp. 22–23]; the baseline set after "extensive experiments and contacts with ILOG-Cplex staff" [S007 p. 6].
+```
+
+*Variant bullet 1:*
+
+```markdown
+  - ✗ *No significance test before 2026* is wrong: FP 2.0 gives 95% confidence intervals and Cochran Q with post hoc McNemar [S041 pp. 15, 17, 20]; McNemar in 2025 [S126 p. 25]. Rare before 2026; the declared apparatus is 2026's.
+```
+
+*Step 2:*
+
+```markdown
+2. Baseline = what a practitioner would run (heuristic emphasis included; both emphasis settings [S001 p. 12]), tuned as carefully as your method: search its settings and report its failures under each [S007 p. 6], by vendor documentation or by asking how to tune it (folded from Heuristic 5).
 ```
 
 <a id="method-5"></a>
@@ -426,6 +534,28 @@ Cards: 11 evidence, 8 variant, 0 contradiction; works 11 / 8 / 0; read in full o
 **Limitations**: a **senior strategy** (early-career version: re-test a claim of your thesis or group, or a prescription implementations dropped). The strongest cases are 2026, unreviewed and AI-assisted; FP 2.0 itself used the static cutoff the 2026 study measures as lossy; no published reply to an outside critic was found (05 §13.7).
 ```
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it, word for word in fenced blocks (links as written in SKILL.md, relative to the skill folder). The shortened lines are in SKILL.md.
+
+*Practice:*
+
+```markdown
+- Practice: the 2018 minibatch claim re-tested against the 2019 untuned-baseline objection under a registered three-outcome rule, "An inconclusive or refuting outcome is published with the same prominence as a supporting one." [S163 p. 6; pp. 1–2, 8], and the outcome, reuse buys data but neither speed nor energy and only at large batch, leads the abstract [S163 pp. 1, 28]; the 2005 pump prescription re-tested inside SCIP, its source read at a pinned commit, the outcome printed both ways, with a null and a harmful fallback [S164 pp. 9, 16–19]; his 1988 dominance procedure with Toth (DOI 10.1016/0167-6377(88)90025-9) reopened, a 1988 criterion shown wrong by counterexample [S124 pp. 2, 6–8]; an implementation error of an earlier submission corrected, every dependent number recomputed (2026) [S150 pp. 10, 30].
+```
+
+*Variant bullet 1 (wording):*
+
+```markdown
+  - ✗ Wording: the 2026 text does not say FP 2.0 dropped the prescription; among the later works that did not carry cutoff and recovery together it says FP 2.0 "mentioned it in passing", and it puts the co-authored Boosting FP among those that "dropped the objective altogether" [S164 p. 2].
+```
+
+*Variant bullet 3 (earlier forms):*
+
+```markdown
+  - ⚠ Earlier forms: the 1992 and 1997 codes with Toth, re-run in the 2002 survey (10 and 5 years on) against the newest rival [S056 pp. 31, 34–39]; old source code read in 2009 to port a rule [S041 p. 11].
+```
+
 <a id="method-6"></a>
 
 ## Method 6: Ask the solver first: MIP it as a quick shot, measure the potential, stop when it works
@@ -480,6 +610,28 @@ Cards: 75 evidence, 27 variant, 4 contradiction; works 60 / 25 / 4; read in full
 **Applies to stage**: choosing the problem, idea, executing.
 **Different from standard practice**: the solver becomes the subroutine of its own heuristic, and the stop rule is part of the method.
 **Limitations**: MIP-based separation was "exceedingly time consuming" as implemented (MIA06 PDF p.16); local branching and proximity search need binaries and an incumbent; local branching was beaten by RINS and DINS on its own instances (local-branching anatomy).
+```
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it, word for word in fenced blocks (links as written in SKILL.md, relative to the skill folder). The shortened lines are in SKILL.md.
+
+*One line:*
+
+```markdown
+**One line**: See what the general-purpose solver does with the model; hand it the critical sub-decision of your own algorithm as an auxiliary MIP; check the ceiling cheaply; stop elaborating when the first version works. (Deepened; step 1 is already known.)
+```
+
+*Practice:*
+
+```markdown
+- Practice: local branching as one linear constraint around black-box CPLEX 7.0 [S001 pp. 3–5, 9–10]; "In a sense, we are using here the approach of “MIPping the dominance test” (i.e., of modeling it as a MILP)" [S124 p. 5]; the closure's ceiling measured before any fast separator [D003 pp. 6–8; S033 pp. 9–10]; the 2026 order: monolithic CPLEX, its built-in Benders, then a specialized Benders in callbacks [S144 pp. 4–8, 12].
+```
+
+*Variant bullet 1 (pre-2002 codes):*
+
+```markdown
+  - ✗ In the problem-specific crew and routing codes before 2002 no general-purpose MIP solver is run [S012 pp. 9, 11; S013 pp. 18, 22, 26]; where one appears it is an LP engine or a referee for bounds [S004 p. 21]; in 2000 the set-covering survey runs CPLEX and MINTO and finds them competitive [S003 p. 9].
 ```
 
 <a id="workflows"></a>
@@ -575,6 +727,28 @@ Workflows S, B, C, D, E, F and G:
 **Output**: a follow-up study, not a reply (some critiques stay unanswered, 05 §13.7).
 ```
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it, word for word in fenced blocks (links as written in SKILL.md, relative to the skill folder). The shortened lines are in SKILL.md.
+
+*Stage Workflows pointer line:*
+
+```markdown
+(full evidence and the pre-synthesis wording: references/research/09-evidence-ledger.md#workflows)
+```
+
+*Workflow S step 2:*
+
+```markdown
+2. Name the stall, take one method: (a) a cut or Benders bound crawls at the root → M2 steps 1-3 on one small instance (the plots of M2 step 1; catalog EP31 [D009 pp. 7–11]); (b) no or poor incumbent → M6 step 2, after checking which stock heuristics are on; (c) a small or uneven gain → M3 steps 1-3; (d) huge or symmetric instances → M1 steps 1-3.
+```
+
+*Workflow F checkpoint:*
+
+```markdown
+**🔴 Checkpoint**: if the scheme has a prior author, rewrite the framing and credit it (the 2009-to-2010 change on the in-out loop, with Salvagnin [S174 pp. 1–2; S106 p. 1]).
+```
+
 <a id="heuristic-1"></a>
 
 ## Heuristic 1: Invert the reflex
@@ -591,6 +765,16 @@ Workflows S, B, C, D, E, F and G:
 
 ```markdown
 1. **Invert the reflex.** Take the opposite of a field reflex (break symmetry, average variability away, strengthen the model, trust the fractional point) as one study's hypothesis. Case: "Step 1: don't break my symmetries!" (NEW11 PDF p.4); "Don't trust the fractional point!" (ISCO14 PDF p.18). It can fail (the orbital-shrinking bound, M1).
+```
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it, word for word in fenced blocks (links as written in SKILL.md, relative to the skill folder). The shortened lines are in SKILL.md.
+
+*Heuristic 1:*
+
+```markdown
+1. **Invert the reflex.** Take the opposite of a field reflex (break symmetry, average variability away, strengthen the model, trust the fractional point) as one study's hypothesis. Case: "Step 1: don't break my symmetries!" (NEW11 PDF p.4); "Don't trust the fractional point!" (ISCO14 PDF p.18). It can fail (the orbital-shrinking bound, M1). In print: symmetry exploited [S067 pp. 3, 12–13]; dual degeneracy used [S074 pp. 2, 5–6].
 ```
 
 <a id="heuristic-2"></a>
@@ -645,6 +829,16 @@ Workflows S, B, C, D, E, F and G:
 
 ```markdown
 4. **Application first, general method after.** Win on real instances with a specific code, then restate the trick for any MIP. Case: soft fixing on TURNI became local branching (01 SW1). Early-career version: a public challenge.
+```
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it, word for word in fenced blocks (links as written in SKILL.md, relative to the skill folder). The shortened lines are in SKILL.md.
+
+*Heuristic 4:*
+
+```markdown
+4. **Application first, general method after.** Win on real instances with a specific code, then restate the trick for any MIP. Case: soft fixing on TURNI became local branching [S001 pp. 3–4]. Early-career version: a public challenge. Reverse order (2018, one group): generalize the class, win on its special cases' benchmarks [S027 pp. 3–4, 20–24].
 ```
 
 <a id="heuristic-5"></a>
@@ -740,6 +934,16 @@ Known-answer test beds built by construction [S046 pp. 12–13; S198 p. 52]; a c
 9. **Name the drawback first, adopt the critic's fix.** Case: cycling named in the 2005 pump paper; the objective pump taken as state of the art in FP 2.0; "Boosting the feasibility pump" (DOI 10.1007/s12532-014-0068-9), joint with Boland, Eberhard, Engineer, Savelsbergh and Tsoukalas, after four of them had recast the pump as a proximal method whose restarts escape non-integral local minima (DOI 10.1137/110823596; 05 Q2).
 ```
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it, word for word in fenced blocks (links as written in SKILL.md, relative to the skill folder). The shortened lines are in SKILL.md.
+
+*Heuristic 9:*
+
+```markdown
+9. **Name the drawback first, adopt the critic's fix.** Case: cycling named in the 2005 pump paper; the objective pump taken as state of the art in FP 2.0 [S041 p. 16]; "Boosting the feasibility pump" (DOI 10.1007/s12532-014-0068-9), joint with Boland, Eberhard, Engineer, Savelsbergh and Tsoukalas, after four of them had recast the pump as a proximal method whose restarts escape non-integral local minima (DOI 10.1137/110823596; 05 Q2); in 2026 the 2005 parts are added to that pump [S164 pp. 13–14].
+```
+
 <a id="heuristic-10"></a>
 
 ## Heuristic 10: Validate what the solver will not re-check
@@ -791,6 +995,16 @@ H10 checks a posteriori; the record also designs validity in: a cutoff 2cᵀx �
 - New item 11 with its rule, the S164 p. 8 quote, an external validator [S018 p. 9] and an exact repair LP [S046 pp. 22–23]; overlap with Method 1 step 2 and Method 4 step 1 stated. Exclusivity is partial (08 §4), so it is a heuristic, not a core method. Catalog DM17, DM18 and EP4 carry its steps.
 - **Review fix**: the item leads with the pre-2026 practice [S018 p. 9; S046 pp. 22–23] and tags the S164 quote *stated in 2026 (AI-assisted drafting declared)* [S164 p. 25].
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it, word for word in fenced blocks (links as written in SKILL.md, relative to the skill folder). The shortened lines are in SKILL.md.
+
+*Heuristic 11:*
+
+```markdown
+11. **Let the search model be wrong; keep the judge exact** (new). Give the search a cheaper or invalid model; decide acceptance and reported quality with an exact model it never calls: an external validator [S018 p. 9]; an exact repair LP [S046 pp. 22–23]; stated in 2026 (AI-assisted drafting declared): "The second sees only the constraints of the model and its objective; it is the certificate, and correctness rests on it alone." [S164 p. 8]. Overlaps M1 step 2, M4 step 1.
+```
+
 <a id="heuristic-12"></a>
 
 ## Heuristic 12: Mechanism first (new)
@@ -821,6 +1035,16 @@ H10 checks a posteriori; the record also designs validity in: a cutoff 2cᵀx �
 - New item 12 with its rule, the S164 p. 3 quote, the probe arm [S074 pp. 8, 16] and the test placed where the method's nature should win [S052 pp. 20–22]. Partial exclusivity (08 §4); S161 is weak evidence, its design being the assistant's [S161 p. 4]. Workflow B step 3 and Workflow E step 2 use it.
 - **Review fix**: the item leads with the pre-2026 practice [S074 pp. 8, 16; S052 pp. 20–22] and tags the S164 quote *stated in 2026 (AI-assisted drafting declared)* [S164 p. 25].
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it, word for word in fenced blocks (links as written in SKILL.md, relative to the skill folder). The shortened lines are in SKILL.md.
+
+*Heuristic 12:*
+
+```markdown
+12. **Mechanism first** (new). Before the runs, write down how the device acts and where it should win or lose; read that class first; probe the mechanism cheaply: a deliberately wrong variant as probe [S074 pp. 8, 16]; tests where the method's nature should win [S052 pp. 20–22]; stated in 2026 (AI-assisted drafting declared): "the loss is a matter of support rather than of weights: a weighted objective term discourages such a point, whereas a cutoff removes it from the polyhedron." [S164 p. 3].
+```
+
 <a id="misreadings"></a>
 
 ## Common misreadings
@@ -848,6 +1072,16 @@ H10 checks a posteriori; the record also designs validity in: a cutoff 2cᵀx �
 3. **"His Benders contribution is better cut selection."** By the 2017 paper's account the stabilised root loop is the key ingredient; his 2025-26 lectures blame the loop more than the cuts (M2).
 4. **"The in-out cut loop is his invention."** The 2009 *yoyo search* manuscript presented it as new; the 2010 paper credits Ben-Ameur and Neto (DOI 10.1002/net.20137) (01 C3).
 5. **"Local branching is a primal heuristic."** The 2003 paper presents an exact *strategic* branching scheme around a *tactical* black-box solver (01 SW1). Likewise the 2005 pump did not ignore the objective: it had a cutoff with a recovery LP (01 SW2).
+```
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it, word for word in fenced blocks (links as written in SKILL.md, relative to the skill folder). The shortened lines are in SKILL.md.
+
+*Misreading 4:*
+
+```markdown
+4. **"The in-out cut loop is his invention."** The 2009 *yoyo search* manuscript presented it as new [S174 pp. 1–2, 7–8]; the 2010 paper credits Ben-Ameur and Neto (DOI 10.1002/net.20137) (01 C3) [S106 p. 1]. A precursor in his joint work with Lodi and Toth: a 2000–01 code separated a point between x* and the two best incumbents first, crediting Reinelt [S125 pp. 11–12].
 ```
 
 <a id="anatomy-benders"></a>
@@ -887,6 +1121,34 @@ H10 checks a posteriori; the record also designs validity in: a cutoff 2cᵀx �
 | Methods shown | M1, M2, M6. Unknown: who did what |
 ```
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it, word for word in fenced blocks (links as written in SKILL.md, relative to the skill folder). The shortened lines are in SKILL.md.
+
+*Origin row:*
+
+```markdown
+| Origin | [joint] Old decomposition schemes deserve a redesign on current software; a sound Lagrangian code was far from trivial, so a stock solver was tried [S011 pp. 1, 19]; the 2015 report enters from the Steiner thinning-out [S195 p. 2] |
+```
+
+*Minimum evidence row:*
+
+```markdown
+| Minimum evidence | A first separator in CPLEX 12.6 solved open UFLLIB instances 2500-10 and 3000-100 in under 15 minutes each [S011 p. 11]; the full recipe needs 824.76 s and 225.25 s [S195 pp. 21–22]. gs250a-1 (quadratic): Kelley stopped at the root after 15,000 s; in-out closed it in 0.19 s (fat), 0.04 s with 4 cuts (slim) (UFL17 pp.13-14) [S011 pp. 13–14], already in the April 2015 report [S195 pp. 15–17] |
+```
+
+*Fat or slim row:*
+
+```markdown
+| Fat or slim | Per cost class, by measurement. Slim (one aggregated cost variable) is "a clear winner for the quadratic case": tight root bound, tiny LP, few nodes. Fat (one variable per customer) is much better for linear costs: a weaker root bound means many nodes, where Kelley's single cut per call recomputes bounds poorly (UFL17 p.14) [S011 p. 14] |
+```
+
+*Abandoned paths row:*
+
+```markdown
+| Abandoned paths | No bundle method [S011 p. 12]; Kelley kept in the tree, as a better loop inside CPLEX was not immediate (M2 step 5); the first stabiliser was kept because it worked (his statement) |
+```
+
 <a id="anatomy-local-branching"></a>
 
 ## Anatomy: Local branching
@@ -917,6 +1179,22 @@ H10 checks a posteriori; the record also designs validity in: a cutoff 2cᵀx �
 | Limits conceded | Faster optimality proofs not guaranteed (left open); the refinement step switched off on a general-integer instance (01 F6) |
 | Reception | Beaten by RINS and DINS on its own instances, per abstracts and citation contexts (05 Q4); in SCIP only inside ALNS (Misreading 2) |
 | Methods shown | M6, H4. Unknown: the authors' shares |
+```
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it, word for word in fenced blocks (links as written in SKILL.md, relative to the skill folder). The shortened lines are in SKILL.md.
+
+*Why hard fixing failed row:*
+
+```markdown
+| Why hard fixing failed | [joint] Which variables to fix is unclear; "Wrong choices at early levels are typically very difficult to detect, even when lower bounds are computed along the way": the bound stays quiet for several fixings, then jumps after an innocent-looking late one; feasible solutions appear only deep in the tree (LB02 PDF p.9) [S001 p. 3] |
+```
+
+*Minimum evidence row:*
+
+```markdown
+| Minimum evidence | Aussois 2002 premiere [S001 p. 2]; the paper's traces are tr24-15 and B1C1S1 [S001 pp. 6, 11] (seymour and arki001, from 01 SW1, are not traced in it); 29 instances unsolved in 5 hours, posted online, neighbourhood size fixed at 20, no fine tuning; first on 23 of 29 (01 SW1) [S001 pp. 11–13] |
 ```
 
 <a id="anatomy-pump"></a>
@@ -953,6 +1231,16 @@ H10 checks a posteriori; the record also designs validity in: a cutoff 2cᵀx �
 | Reception | Critiques of solution quality, cycling, lack of theory; a two-variable counterexample (DOI 10.1137/16M1095962) unanswered in print |
 | 2026 return | Unreviewed, AI-assisted: cutoff-plus-recovery measured inside SCIP on MIPLIB 2017; a 116-win, 9-loss comparison was added after the declared design and says so; twelve declared comparisons under Holm's correction |
 | Methods shown | M5, H2, H9 |
+```
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it, word for word in fenced blocks (links as written in SKILL.md, relative to the skill folder). The shortened lines are in SKILL.md.
+
+*2026 return row:*
+
+```markdown
+| 2026 return | Unreviewed, AI-assisted: cutoff-plus-recovery measured inside SCIP on MIPLIB 2017. Added to SCIP's weighted pump it is better on 116 and worse on 9 of the 176 instances (of 424) where it finds a solution, median final gap 59% → 30%; that comparison was added after the declared design and says so; twelve declared comparisons under Holm's correction [S164 pp. 1, 13–14] |
 ```
 
 <a id="anatomy-erraticism"></a>
@@ -1016,6 +1304,16 @@ H10 checks a posteriori; the record also designs validity in: a cutoff 2cᵀx �
 | Duplicating the solver | TRI16 PDF p.13 | MIP the sub-decision, default mode (M6) |
 | Over-clever user cuts that slow the solver | ISMP18 PDF p.9 | Vanilla code, extras off |
 | A speed-up claimed against a baseline tuned less carefully | MBP26 p.2 (his own 2018 preprint is the case) | Equal tuning care (M5) |
+```
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it, word for word in fenced blocks (links as written in SKILL.md, relative to the skill folder). The shortened lines are in SKILL.md.
+
+*Row: comparing randomised variants on one run each:*
+
+```markdown
+| Comparing randomised variants on one run each | EURO12 PDF p.14; in print [S041 p. 14; S163 p. 2] (single runs in 18 co-authored works, M3) | Seeds and a success rule (M3) |
 ```
 
 <a id="trajectory"></a>
@@ -1111,6 +1409,16 @@ Coauthors named on the cards, counted over work groups (S154 counted separately 
 Bologna (Laurea 1982, PhD 1987; advisor not established; first papers with Martello and Toth) → Fischetti (Padova since 1997; long collaborations with Balas, Caprara, Lodi, Monaci, Ljubić and Sinnl, Salvagnin) → confirmed doctoral students Bertacco (2005), Salvagnin (2009; later in CPLEX development) and Zanette (2008/09). Not his doctoral students: Lodi, Monaci, Defeng Liu, Palasgo. Lodi, Salvagnin, Glover, Ljubić, Sinnl and Monaci are insiders, not outside critics. Master's theses regularly became co-authored papers within 0-4 years (inferred, [06 §2.3](references/research/06-trajectory.md)). Recognition he lists: Edelman Award 2008 (Netherlands Railways team); Harold Larnder Prize 2015; DIMACS Steiner challenge 2014.
 ```
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it, word for word in fenced blocks (links as written in SKILL.md, relative to the skill folder). The shortened lines are in SKILL.md.
+
+*Latest:*
+
+```markdown
+- September-November 2026: sole- and two-author preprints with replication packages, pre-registered or pre-declared designs, pinned solver commits and, in most, declared AI assistants (Anthropic Claude; OpenAI ChatGPT or Codex) [S143 p. 27], one doing all but idea and supervision [S161 p. 4], none declared in one re-test [S163]; two revisit his own claims; all unrefereed. Not to be projected backwards ([06 §6, §7](references/research/06-trajectory.md)). (full evidence: references/research/09-evidence-ledger.md#trajectory)
+```
+
 <a id="inner-tensions"></a>
 
 ## Inner tensions
@@ -1138,6 +1446,16 @@ Bologna (Laurea 1982, PhD 1987; advisor not established; first papers with Marte
 - **Tension 4: fairness rules against his own tables** (the M4 lapses).
 - **Tension 5: general-purpose ambition against problem-specific results** (the bilevel solver, M1 limitations); M1 is itself tailoring to the class.
 - **Tension 6: "Theorem. Using cuts within an enumerative scheme is good."** (ISMP18 PDF p.6) becomes "Conjecture: ..." on the same slide in 2026 (AIY26 PDF p.2).
+```
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it, word for word in fenced blocks (links as written in SKILL.md, relative to the skill folder). The shortened lines are in SKILL.md.
+
+*Tension 2:*
+
+```markdown
+- **Tension 2: implementation is part of the proof, yet the code stayed mostly closed** until the 2026 pump study. Exceptions: the 2017 bilevel solver, announced as released through co-author Sinnl's page (availability not checked) [S016 pp. 3, 7, 22], and three 2022 GitHub repositories from papers led by Liu and Cavaliere [S076 arXiv v2 pp. 17, 25; S130 pp. 7, 22; S168 p. 1]; 2025 code on request [S126 p. 27]. Instances were public from 2001 [S013 p. 22], QAP model files on request [S067 p. 10].
 ```
 
 <a id="mentor-voice"></a>
@@ -1290,7 +1608,7 @@ Lines of the Corrections list after the review: 1 significance tests; 2 seeds; 3
 | 9 | Method 1 Limitations (QAP counter-case) and variant bullet (handbook-chapter voice) |
 | 10 | Method 4 Say–do and variant bullets; Tension 4; Corrections line 9 |
 | 11 | Tension 2; Honest Boundary, Claimed but unverified; Corrections line 6 (after review with the three 2022 repositories and the 2025 code on request) |
-| 12 | Misreading 4; Method 2 Practice; Corrections line 9 |
+| 12 | Misreading 4; Method 2 Practice; Corrections line 9 (since T3.7: Misreading 4 and Corrections line 9 only; the Method 2 Practice line that carried the precursor is in the [Method 2](#method-2) Before T3.7 block) |
 | 13 | Misreading 5; Corrections line 9 |
 | 14, 15 | Pump anatomy; Corrections line 9 |
 | 16 | Local-branching anatomy; Corrections line 9 |
@@ -1309,9 +1627,9 @@ Lines of the Corrections list after the review: 1 significance tests; 2 seeds; 3
 | Method 6: before 2002 no general-purpose solver run, not even as a baseline | Holds for the problem-specific crew and routing codes [S012 pp. 9, 11; S013 pp. 18, 22, 26]; CPLEX 3.0 runs as a referee for bounds in 1999 [S004 p. 21]; the 2000 survey runs CPLEX and MINTO and finds them competitive [S003 p. 9] | Method 6 Say–do and bullet 1 |
 | Tension 2: code closed except the 2017 bilevel solver | Three 2022 GitHub repositories [S076 arXiv v2 pp. 17, 25; S130 pp. 7, 22; S168 p. 1]; 2025 code on request [S126 p. 27]; the 2017 release not checked [S016 pp. 3, 7, 22] | Tension 2; Claimed but unverified; Corrections line 6 |
 | Method 5: FP 2.0 did not drop the 2005 prescription | S164 lists FP 2.0 among the later works that did not carry cutoff and recovery together, saying it "mentioned it in passing" [S164 p. 2]; FP 2.0 only reviews the dynamic cutoff [S041 p. 5] | Method 5 bullet 1; Corrections line 4 |
-| Benders anatomy: the first separator's times 824.76 s and 225.25 s | The quick shot is reported only as under 15 minutes each [S011 p. 11]; the times are the full recipe's, Table 1 [S195 pp. 21–22] | Benders anatomy, Minimum evidence |
+| Benders anatomy: the first separator's times 824.76 s and 225.25 s | The quick shot is reported only as under 15 minutes each [S011 p. 11]; the times are the full recipe's, Table 1 [S195 pp. 21–22] | Benders anatomy, Minimum evidence (since T3.7: only the corrected claim, the quick shot under 15 minutes each, stays in SKILL.md; the full recipe's times are in the [Benders redesign](#anatomy-benders) Before T3.7 block) |
 | The controlled-oracle test at [S174 p. 5] | File pages 6–7 (the file's [[page N]] carries printed page N − 1) [S174 pp. 6–7] | Method 2 step 4; Corrections line 3 |
-| Method 3: the backdoor gain no larger than step 2's placebo | A cross-study inference; S063 gives about 15% in arithmetic-mean time, comparable in geometric mean, from one run per instance [S063 pp. 8–10] | Method 3 bullet 1 |
+| Method 3: the backdoor gain no larger than step 2's placebo | A cross-study inference; S063 gives about 15% in arithmetic-mean time, comparable in geometric mean, from one run per instance [S063 pp. 8–10] | Method 3 bullet 1 (since T3.7: the bullet without the figures, which are in the [Method 3](#method-3) Before T3.7 block) |
 | Erraticism anatomy: gains on hard ones (−28.5%) | The +53.0% class (1,000–10,000 nodes) is hard by the paper's own definition; gains on the two largest classes only [S055 pp. 8–9] | Erraticism anatomy |
 | Method 5: the 1992 and 1997 codes re-run ten years later | Re-run in the 2002 survey, 10 and 5 years on [S056 pp. 31, 34–39] | Method 5 bullet 3 |
 | Warning 1 and Method 1: S145 as a textbook, cited for the loss of generality | S145 is a 2017 handbook chapter with Balas; only S001 p. 2 says the generality is lost [S001 p. 2; S145 p. 10] | Warning 1; Method 1 bullet 3 |
