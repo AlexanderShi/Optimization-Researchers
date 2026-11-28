@@ -248,6 +248,64 @@ Scholar snapshot on 2026-11-08: 20,048 citations, h-index 75 [S53]. [S]
 
 ---
 
+## 9. The trajectory as the full texts show it (deep reading, added 2026-11-28)
+
+Source: the paper cards and their synthesis, `08-deep-reading-synthesis.md` §8–§9. Card citations such as `[S001 p. 3]` are paper-card ids (a letter and three digits, as in `../sources/papers/INDEX.md`) at the `[[page N]]` file pages of the texts the cards read; they are not the S1–S53 source keys of this note. Nothing in §0–§8 is changed; where this section refines an item above, it says so. Coverage on 2026-11-28: 202 distinct works indexed, 132 open full texts, 130 read in full and 1 in part, 56 abstract only, 11 metadata only, 4 skipped; 165 studies after merging versions, 112 of them with a full or partial text. Nothing that `holdout.md` seals is used here.
+
+### 9.1 Work groups per period (all read levels; S188 and S192, supervised theses, excluded)
+
+| Period | Groups | Main topics (groups) |
+|---|---|---|
+| 1986–1990 | 12 | approximation and complexity 6; bounding and branch-and-bound for routing and scheduling 6 |
+| 1991–1995 | 19 | polyhedral combinatorics 10; bounding and branch-and-bound 5; branch-and-cut codes 1; cutting planes 1; complexity 1; other applications 1 |
+| 1996–2000 | 22 | railway and crew planning 6; polyhedral 4; branch-and-cut codes 4; statistical disclosure control 3; set covering heuristics 2; cutting planes 2; bibliography 1 |
+| 2001–2005 | 18 | branch-and-cut codes 6; railway and crew 4; general-purpose primal heuristics 3; disclosure control 2; cutting planes 1; polyhedral 1; other applications 1 |
+| 2006–2010 | 30 | cutting planes, closures and the cut loop 10; primal heuristics 5; railway robustness 4; Benders 3; robustness and uncertainty 2; other applications 2; tree search 1; branch-and-cut 1; polyhedral 1; editorial 1 |
+| 2011–2015 | 16 | cutting planes and the cut loop 5; tree search, variability and parallelism 4; primal heuristics 4; symmetry 1; wind farms 1; survey 1 |
+| 2016–2020 | 29 | machine learning from the MILP side 5; bilevel and interdiction 4; primal heuristics 3; Benders 3; other applications 3; books and surveys 3; nonlinear MIP 2; tree search 2; branch-and-cut 1; railway 1; symmetry 1; wind farms 1 |
+| 2021–2026 | 16 | primal heuristics and matheuristics 5; wind farms 3; Benders and decomposition 3; other applications 3; machine learning 2 |
+
+The Bologna years are thin in the full texts: 27 of the 31 work groups of 1986–1995 are abstract or metadata only, so how he worked then is read off a few texts [S049 pp. 4, 22; S030 pp. 5–6; S060 p. 11; S114 pp. 2, 4] and the later surveys [S056; S102].
+
+### 9.2 Turns visible in the full texts
+
+- **1996–2001, problem-specific codes for partners**: {0,1/2} and mod-k cuts [S022 pp. 5–10; S139 pp. 3–9]; routing branch-and-cut [S005; S009; S013; S125]; Lagrangian codes for the Italian and Dutch railways [S012 pp. 9–11; S017 pp. 12–16; S004 pp. 5–14]; statistical disclosure control [H003; S069; S073]. No general-purpose MIP solver as subroutine in these codes [S012 pp. 9, 11; S013 pp. 18, 22, 26], at most an LP engine or a referee for bounds [S004 p. 21], but projection into cuts [S069 pp. 3, 5–6], an in-out precursor credited to Reinelt [S125 pp. 11–12] and same-code ablation [S060 p. 11] are already there.
+- **Turn 1, 2000–2003: the solver becomes the subroutine.** The 2000 survey finds general-purpose ILP solvers competitive with special-purpose exact codes for set covering [S003 p. 9]; the soft-fixing refiner of the crew code becomes one constraint on a generic MIP [S001 p. 3]; general codes are a third the size of the problem-specific one [S064 p. 12].
+- **2002–2010, general-purpose devices**: local branching, the pump and its general-integer and propagation versions [S001; S007; S026; S041]; MIPping closures [D003; S033; S142]; {0,1/2}-cuts inside CPLEX [S070]; the MIPping survey [S096]; robust railway timetabling with a separate validator [D004; S018; S010; D007].
+- **Turn 2, 2008–2011: from the cut to the loop.** After component-side cures [D003 pp. 8–9; S024 pp. 2, 4] the loop becomes the object [S174 p. 1; S106 p. 2; D009 p. 8; S074 p. 14; S095 pp. 2–6].
+- **2010–2016, tree search and variability**: pruning moves, nonchimerical branching, backdoors [S124; D012; S063]; erraticism and sampling [S055; S094 p. 5]; self-splitting [S111; D017]; symmetry by aggregation [S067; D013]; proximity search [S052; S154; S086].
+- **Turn 3, 2015–2018: thinning out and general-purpose solvers for harder classes**: the Steiner and UFL redesigns [S195 p. 2; S011; S040]; bilevel and interdiction on top of a MILP solver [S016 p. 6; S027; S090; S038]; machine learning seen from the MILP side [S109; S054; S008; S133; D018].
+- **2019–2025, applied Padova MIP and students**: vehicle routing with set-partitioning recombination [S130; S168]; learning in local branching [S076]; wind farms and distancing with Martina Fischetti [S078; S100]; fix-propagate-repair moved into a commercial solver [S126 pp. 24, 26]; time-window TSP with Benders [S144; S172].
+- **Turn 4, September–November 2026: re-tests and the apparatus.** Sole-author re-tests of his own 2005 and 2018 claims [S164; S163]; two-author wind-farm preprints with a trusted judge and certificates [S143; S150; S162]; an AI-written note [S161 p. 4]; pre-registration [S163 pp. 8–9], declared families with Holm's correction [S164 p. 13].
+- **What stayed constant**: the relaxation drives the heuristic, from Lagrangian costs in 1997–2001 [S012 p. 10; S004 pp. 5–14] to the LP point and the relaxation grip of 2005–2016 [S007 p. 3; S052 p. 5; S086 p. 2]; ablation by removal from 1995 to 2025 [S060 p. 11; S126 pp. 24–25]; same-machinery comparisons from the 1990s [S060 p. 11; S077 p. 10] to the dummy callback [S070 p. 10] and the 2026 harnesses [S164 pp. 11, 13]; the closing lesson from 1996 to 2026 [S022 p. 16; S164 p. 19]; instances made public from 2001 [S013 p. 22; S125 pp. 24–25].
+
+### 9.3 Collaboration by period (work groups; 08 §9)
+
+| Period | Groups | Sole-author | Most frequent coauthors (groups) |
+|---|---|---|---|
+| 1986–1990 | 12 | 3 | Toth 7, Martello 4, Carpaneto 2, Dell'Amico 1 |
+| 1991–1995 | 19 | 4 | Toth 7, Balas 4, Martello 2, Caprara 2, Salazar González 2 |
+| 1996–2000 | 22 | 0 | Toth 9, Caprara 8, Vigo 5, Salazar González 5, Guida (FS) 3 |
+| 2001–2005 | 18 | 0 | Toth 6, Lodi 6, Salazar González 4, Caprara 2, Kroon (NS) 2 |
+| 2006–2010 | 30 | 1 | Salvagnin 7, Lodi 5, Monaci 4, Zanette 3, Balas 2, Bertacco 2, Caprara 2 |
+| 2011–2015 | 17 | 0 | Monaci 9, Salvagnin 4, Zanette 3, Lodi 3, Balas 2, Martina Fischetti 2 |
+| 2016–2020 | 29 | 4 | Monaci 13, Salvagnin 10, Sinnl 8, Ljubić 7, Lodi 3, Martina Fischetti 2 |
+| 2021–2026 | 16 | 4 | Martina Fischetti 5, Roberti 4, Salvagnin 3, Cavaliere 3 |
+
+Totals over all periods: Toth 32 groups, Monaci 27, Salvagnin 24, Lodi 18, Caprara 14, Salazar González 12, Balas 11, Martina Fischetti 9, Martello 9. The "we" of co-signed texts cannot be split; in one 2014 paper he is fourth of six and the text refers to Fischetti and Salvagnin in the third person [S098 p. 18]; several author lists are alphabetical [S040; S059; S097]. Partners appear as coauthors or data sources: Ferrovie dello Stato planners [S012; S053; S081], Netherlands Railways [S061; S034; S015], an Alstom instance set [S059 p. 2].
+
+### 9.4 Refinements of items above
+
+- **§2.3 (thesis-to-paper pipeline, inferred)**: confirmed in the full texts: Salvagnin's 2005 master's thesis into the 2009 *Just MIP it!* chapter [S096 pp. 19, 27–28]; a 2003 dissertation into a 2009 paper, supervision not stated [S046 pp. 2, 34]; Martina Fischetti's thesis into a 2014 paper [S154 p. 2]; variant: a 2012 master's thesis into a sole-authored paper that credits the student in the text [S109 pp. 1, 4, 8, 14–15, 19].
+- **§3 (2002–2009 row) and §3.1 (into general-purpose heuristics)**: the turn is signalled in print in 2000 [S003 p. 9]; the soft-fixing origin is in the paper [S001 p. 3].
+- **§3.1 (into Padova applied work)**: the workflow order of the ODS 2025 deck is in the 2026 paper: CPLEX as a black box, its built-in Benders to screen splits, then a specialized Benders in callbacks [S144 pp. 4–8, 12].
+- **§3.1 (the 2026 revisits)**: AI assistance is declared in S143 [S143 p. 27], S150, S161 and S164; S163 carries no statement on it; in S161 the assistant did everything but the idea and the supervision [S161 p. 4].
+- **§5 (failures and revisions)**: an erratum of their own 1998 definition printed inside a 2002 survey [S047 p. 50]; an implementation error of an earlier submission corrected in 2026, every dependent number recomputed [S150 pp. 10, 30]; the pump's enumeration from the almost-feasible point by local branching is in a preprint of 16 February 2004 [S085 pp. 1, 4], published 2008.
+- **§6 (era and resources)**: code was mostly closed before 2026, with exceptions: the 2017 bilevel solver, its instances and optimal values, announced as released through co-author Sinnl's page (availability not checked by the reader) [S016 pp. 3, 7, 22, 37, 42], and three 2022 GitHub repositories from papers led by Liu and Cavaliere [S076 arXiv v2 pp. 17, 25; S130 pp. 7, 22; S168 p. 1]; 2025 code on request [S126 p. 27]; QAP model files and logs on request only [S067 p. 10].
+- **The Benders and cut-loop line**: the gs250a-1 traces are already in the April 2015 report [S195 pp. 15–17]; the controlled-oracle test is in the 2009 yoyo manuscript [S174 pp. 6–7].
+
+---
+
 ## Contradictions
 
 1. **Minibatch persistency, 2018 against 2026.** In 2018 small reuse factors gave "significantly faster convergence" with comparable or better generalization (abstract of arXiv:1806.07353 [S35]). In 2026 reuse buys "neither speed nor energy but data", and only at large batch sizes; at B = 32 it reads more fresh tokens than the baseline (abstract of arXiv:2609.13922 [S31]). He accepts the critique as methodological [S31 p.2]. Both claims are kept as they stand. [stated, P]
