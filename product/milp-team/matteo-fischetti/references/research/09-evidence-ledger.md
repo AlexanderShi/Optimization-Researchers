@@ -1532,7 +1532,7 @@ The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as 
 - **Teaching voice.** The Italian textbook [H005] and the self-published book [S088] are abstract-level.
 - **Journal versions.** The pump, proximity search, the Benders redesign and *Just MIP it!* were read in author preprints (as the skill's Honest Boundary says); journal-only changes are not known.
 - **Unverified pairs.** S112 and S024 as one study; H006 and S045.
-- **AI share in 2026.** Declared for S143, S150, S161 and S164, quantified only in S161 [S161 p. 4]; absent in S163.
+- **AI share in 2026.** Declared for S143, S150, S161, S162 and S164, quantified only in S161 [S161 p. 4]; absent in S163.
 - **Supervised theses.** S188 and S192 are abstract-level and are not his writing.
 
 ### Added in T3.6
