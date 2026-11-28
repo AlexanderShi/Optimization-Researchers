@@ -39,7 +39,7 @@
 | 27 | S027 | 2001 | Engine scheduling by column generation | Cuvillier | 46 | thesis | manual | txt | 193 | core | carded |
 | 28 | S028 | 2008 | Optimal university course timetables and the partial transversal polytope | Proceedings of the 7th international conference on Experimental algorithms … | 45 | conference | manual | txt | 14 | supplement | carded |
 | 29 | S029 | 2012 | Nested Column Generation applied to the Crude Oil Tanker Routing and Scheduling Problem with Split Pickup and Split Delivery | Naval Research Logistics 59 (3-4), 298-310 | 38 | journal | manual | txt | 13 | supplement | carded |
-| 30 | S030 | 2004 | Minimizing the stabbing number of matchings, trees, and triangulations | Proceedings of the fifteenth annual ACM-SIAM symposium on Discrete … | 37 | conference | — | no-oa |  | supplement | — |
+| 30 | S030 | 2004 | Minimizing the stabbing number of matchings, trees, and triangulations | Proceedings of the fifteenth annual ACM-SIAM symposium on Discrete … | 37 | conference | manual | txt | 13 | supplement | abstract |
 | 31 | S031 | 2014 | Row-reduced column generation for degenerate master problems | European Journal of Operational Research 236 (2), 453-460 | 35 | journal | manual | txt | 17 | supplement | carded |
 | 32 | S032 | 2011 | Partial convexification of general MIPs by Dantzig-Wolfe reformulation | Integer Programming and Combinatoral Optimization, 39-51 | 31 | conference | manual | txt | 15 | core | carded |
 | 33 | S033 | 2005 | Dual variable based fathoming in dynamic programs for column generation | European Journal of Operational Research 162 (1), 122-125 | 30 | journal | manual | txt | 8 | supplement | carded |
@@ -54,7 +54,7 @@
 | 42 | S042 | 2018 | Integrating line planning, timetabling and vehicle scheduling | Proceedings of the Conference for Advanced Systems in Public Transport (CASPT) | 16 | conference | manual | txt | 22 | supplement | carded |
 | 43 | S043 | 2022 | An image-based approach to detecting structural similarity among mixed integer programs | INFORMS Journal on Computing 34 (4), 1849-1870 | 14 | journal | manual | txt | 43 | core | carded |
 | 44 | S044 | 2018 | Vector space decomposition for solving large-scale linear programs | Operations Research 66 (5), 1376-1389 | 14 | journal | manual | txt | 14 | supplement | carded |
-| 45 | S045 | 2012 | Primal Heuristics for Branch-and-Price Algorithms | Operations Research Proceedings 2011, 65-70 | 14 | conference | — | no-oa |  | supplement | — |
+| 45 | S045 | 2012 | Primal Heuristics for Branch-and-Price Algorithms | Operations Research Proceedings 2011, 65-70 | 14 | conference | — | no-oa |  | supplement | abstract |
 | 46 | S046 | 2006 | On minimum k-modal partitions of permutations | LATIN 2006: Theoretical Informatics, 374-385 | 14 | conference | manual | txt | 12 | supplement | carded |
 | 47 | S047 | 2017 | Optimization of the reconfiguration planning of handling systems based on parallel manipulators with Delta-like architecture | IEEE Robotics and Automation Letters 2 (3), 1802-1808 | 13 | journal | manual | txt | 7 | supplement | carded |
 | 48 | S048 | 2015 | Comments on: An Overview of Curriculum-Based Course Timetabling | TOP 23 (2), 359-361 | 13 | journal | manual | txt | 3 | core | carded |
@@ -65,23 +65,23 @@
 | 53 | S053 | 2005 | Rectangle covers revisited computationally | Experimental and Efficient Algorithms, 55-66 | 10 | conference | manual | txt | 12 | supplement | carded |
 | 54 | S054 | 2003 | Computer aided scheduling of switching engines | Mathematics—key technology for the future: joint projects between … | 10 | chapter | manual | txt | 14 | supplement | carded |
 | 55 | S055 | 2016 | DESSLib–Benchmark instances for optimization of decentralized energy supply systems | Technical report, Technische Universität Aachen, 2016. URL http://www. math2 … | 9 | report | manual | txt | 4 | supplement | carded |
-| 56 | S056 | 2013 | Kompakt-Lexikon Wirtschaftsmathematik und Statistik: 750 Begriffe nachschlagen, verstehen, anwenden | Lehrstuhl für Statistik und Institut für Statistik u. Wirtschaftsmathematik | 9 | book | — | no-oa |  | supplement | — |
+| 56 | S056 | 2013 | Kompakt-Lexikon Wirtschaftsmathematik und Statistik: 750 Begriffe nachschlagen, verstehen, anwenden | Lehrstuhl für Statistik und Institut für Statistik u. Wirtschaftsmathematik | 9 | book | — | no-oa |  | supplement | abstract |
 | 57 | S057 | 2003 | MaxFlow-MinCut duality for a paint shop problem | Operations research proceedings 2002: selected papers of the International … | 8 | conference | manual | txt | 6 | supplement | carded |
 | 58 | S058 | 2018 | A Computational Investigation on the Strength of Dantzig-Wolfe Reformulations | 17th International Symposium on Experimental Algorithms (SEA 2018), 11: 1-11: 12 | 7 | conference | manual | txt | 12 | core | carded |
-| 59 | S059 | 2011 | Challenges in scheduling when planning the ship traffic on the Kiel Canal | Maxim Sviridenko, IBM Watson Research Center Steef van de Velde, Erasmus … | 7 | conference | — | no-oa |  | supplement | — |
+| 59 | S059 | 2011 | Challenges in scheduling when planning the ship traffic on the Kiel Canal | MAPSP 2011, Nymburk (plenary talk, 20 June 2011) | 7 | conference | — | no-oa |  | supplement | metadata |
 | 60 | S060 | 2026 | Column generation | Branch-and-Price, 43-102 | 6 | chapter | manual | txt | 60 | core | carded |
 | 61 | S061 | 2017 | A strongly polynomial contraction-expansion algorithm for network flow problems | Computers & Operations Research 84, 16-32 | 6 | journal | manual | txt | 17 | supplement | carded |
-| 62 | S062 | 2014 | Zukunftsperspektiven des Operations Research | Springer Gabler | 6 | book | — | no-oa |  | supplement | — |
+| 62 | S062 | 2014 | Zukunftsperspektiven des Operations Research | Springer Gabler | 6 | book | — | no-oa |  | supplement | abstract |
 | 63 | S063 | 1998 | Yet another note on "An efficient zero-one formulation of the multilevel lot-sizing problem" | Technical report, Department of Mathematical Optimization, Braunschweig … | 6 | report | manual | txt | 3 | supplement | carded |
-| 64 | S064 | 2019 | Reform der Bundestagswahlkreise | Zeitschrift für Parlamentsfragen 50 (1), 3-21 | 5 | journal | — | no-oa |  | supplement | — |
+| 64 | S064 | 2019 | Reform der Bundestagswahlkreise | Zeitschrift für Parlamentsfragen 50 (1), 3-21 | 5 | journal | — | no-oa |  | supplement | abstract |
 | 65 | S065 | 2014 | A Branch-Price-and-Cut Algorithm for Packing Cuts in Undirected Graphs | Experimental Algorithms, 34-45 | 5 | conference | manual | txt | 12 | supplement | carded |
 | 66 | S066 | 2004 | Combinatorially simple pickup and delivery paths | Central Eur J Oper Res 12, 405-417 | 5 | journal | manual | txt | 12 | supplement | carded |
 | 67 | S067 | 1998 | Discrete optimization in rail transport | Extended abstract, TU Braunschweig, Mathematische Optimierung, Pockelstrasse 14 | 5 | report | manual | txt | 7 | supplement | carded |
 | 68 | S068 | 2015 | Separation of generic cutting planes in branch-and-price using a basis | International Symposium on Experimental Algorithms, 110-121 | 4 | conference | manual | txt | 12 | supplement | carded |
-| 69 | S069 | 2015 | Primal heuristics for mixed integer programs with a staircase structure | Technical Report, RWTH Aachen University | 4 | report | — | no-oa |  | supplement | — |
+| 69 | S069 | 2015 | Primal heuristics for mixed integer programs with a staircase structure | Technical Report, RWTH Aachen University | 4 | report | — | no-oa |  | supplement | metadata |
 | 70 | S070 | 2012 | Automatic Decomposition and Branch-and-Price—A Status Report | Experimental Algorithms, 1-8 | 4 | conference | manual | txt | 8 | supplement | carded |
 | 71 | S071 | 2018 | Polyhedral results on the stable set problem in graphs containing even or odd pairs | Mathematical Programming 171 (1-2), 519-522 | 3 | journal | manual | txt | 4 | supplement | carded |
-| 72 | S072 | 2016 | Operations Research Proceedings 2014: Selected Papers of the Annual International Conference of the German Operations Research Society (GOR), RWTH Aachen University, Germany … | Springer | 3 | book | — | no-oa |  | supplement | — |
+| 72 | S072 | 2016 | Operations Research Proceedings 2014: Selected Papers of the Annual International Conference of the German Operations Research Society (GOR), RWTH Aachen University, Germany … | Springer | 3 | book | — | no-oa |  | supplement | abstract |
 | 73 | S073 | 2016 | A Branch-Price-and-Cut Algorithm for Packing Cuts in Undirected Graphs | Journal of Experimental Algorithmics (JEA) 21, 1-16 | 3 | journal | manual | txt | 16 | supplement | carded |
 | 74 | S074 | 2021 | Avoiding redundant columns by adding classical Benders cuts to column generation subproblems | Discrete Optimization 39, 100626 | 2 | journal | manual | txt | 36 | core | carded |
 | 75 | S075 | 2026 | Integrated Topology and Redispatch Optimization of Real-World Power Transmission Systems using Branch-and-Benders-Cut | arXiv preprint arXiv:2611.18302 | 1 | preprint | arXiv | txt | 32 | core | carded |
@@ -89,9 +89,9 @@
 | 77 | S077 | 2026 | Branch-Price-and-Cut | Branch-and-Price, 443-543 | 1 | chapter | manual | txt | 101 | core | carded |
 | 78 | S078 | 2018 | Optimization of the reconfiguration planning of cyber-physical production systems with delta-like architecture | 2018 International Conference on Reconfigurable Mechanisms and Robots (ReMAR … | 1 | conference | manual | txt | 9 | supplement | carded |
 | 79 | S079 | 2018 | Modular detection of model structure in integer programming | SCIP Workshop, RWTH Aachen | 1 | talk | — | no-oa |  | skip | — |
-| 80 | S080 | 2018 | Neueinteilung der Bundestagswahlkreise mithilfe mathematischer Optimierung | repORt 50, 2018-51 | 1 | other | manual | txt | 18 | supplement | carded |
+| 80 | S080 | 2018 | Neueinteilung der Bundestagswahlkreise mithilfe mathematischer Optimierung | repORt 2018-050, Lehrstuhl für Operations Research, RWTH Aachen University | 1 | other | manual | txt | 18 | supplement | carded |
 | 81 | S081 | 2016 | DESSLib–Benchmark Instance Structure, Component Models and Parameters | — | 1 | report | manual | txt | 5 | supplement | carded |
-| 82 | S082 | 1998 | Optimale Disposition von Rangierlokomotiven bei Werks-und Industriebahnen–Vom Bedarf zum Produkt | — | 1 | other | — | no-oa |  | supplement | — |
+| 82 | S082 | 1998 | Optimale Disposition von Rangierlokomotiven bei Werks-und Industriebahnen–Vom Bedarf zum Produkt | — | 1 | other | — | no-oa |  | supplement | metadata |
 | 83 | S083 | 1996 | Algorithmen zur Enumeration der Ecken und Facetten konvexer Polyeder | Diplomarbeit, Technische Universität Braunschweig, 1996, Diplomarbeit | 1 | thesis | manual | txt | 101 | supplement | skimmed |
 | 84 | S084 | 2026 | Dantzig-Wolfe Decomposition for Integer Linear Programming | Branch-and-Price, 173-293 | — | chapter | manual | txt | 121 | core | carded |
 | 85 | S085 | 2026 | Vehicle Routing and Crew Scheduling Problems | Branch-and-Price, 295-349 | — | chapter | manual | txt | 55 | core | carded |
@@ -101,30 +101,30 @@
 | 89 | S089 | 2026 | Branch-and-price strikes back for the k-vertex cut problem | arXiv preprint arXiv:2602.04984 | — | preprint | arXiv | txt | 48 | core | carded |
 | 90 | S090 | 2022 | SCIP8: rethinking nonlinear constraint representation and recent progress | 23ème congrès annuel de la Société Française de Recherche Opérationnelle et … | — | conference | manual | txt | 3 | supplement | carded |
 | 91 | S091 | 2020 | Welcome to SN Operations Research Forum! | SN Operations Research Forum 1 (1), 1 | — | other | manual | txt | 3 | core | carded |
-| 92 | S094 | 2018 | Optimization of the Reconfiguration Planning of Cyber-Physical Production Systems | Deutsche Nationalbibliothek | — | conference | manual | txt | 3 | supplement | carded |
+| 92 | S094 | 2018 | Optimization of the Reconfiguration Planning of Cyber-Physical Production Systems | Vierte IFToMM D-A-CH Konferenz 2018 (DuEPublico, DOI 10.17185/duepublico/45329) | — | conference | manual | txt | 3 | supplement | carded |
 | 93 | S098 | 2015 | Decentralized Energy Supply Systems: An Adaptive Discretization Approach | International Conference on Operations Research (OR2015) | — | talk | — | no-oa |  | skip | — |
 | 94 | S099 | 2015 | Adaptive Discretization of Nonlinear Optimization Models for Energy Supply Systems | 22nd International Symposium on Mathematical Programming (ISMP 2015) | — | talk | — | no-oa |  | skip | — |
-| 95 | S100 | 2014 | Dynamische Vergabe von Patiententerminen in Krankenhäusern | Zukunftsperspektiven des Operations Research: Erfolgreicher Einsatz und … | — | chapter | — | no-oa |  | supplement | — |
-| 96 | S102 | 2012 | The Boat and Barge Routing Problem | 10th Cologne-Twente Workshop on Graphs and Combinatorial Optimization (CTW 2011) | — | other | — | no-oa |  | supplement | — |
+| 95 | S100 | 2014 | Dynamische Vergabe von Patiententerminen in Krankenhäusern | Zukunftsperspektiven des Operations Research: Erfolgreicher Einsatz und … | — | chapter | — | no-oa |  | supplement | abstract |
+| 96 | S102 | 2012 | The Boat and Barge Routing Problem | 10th Cologne-Twente Workshop on Graphs and Combinatorial Optimization (CTW 2011) | — | other | — | no-oa |  | supplement | metadata |
 | 97 | S103 | 2012 | OASIcs, Volume 14, ATMOS'10, Complete Volume | 10th Workshop on Algorithmic Approaches for Transportation Modelling … | — | book | manual | txt | 178 | skip | — |
-| 98 | S106 | 2009 | Scheduling in Coil Coating with Shuttles | The 9th Workshop on Models and Algorithms for Planning and Scheduling … | — | conference | — | no-oa |  | supplement | — |
+| 98 | S106 | 2009 | Scheduling in Coil Coating with Shuttles | The 9th Workshop on Models and Algorithms for Planning and Scheduling … | — | conference | — | no-oa |  | supplement | metadata |
 | 99 | S107 | 2008 | Third European Conference on combinatorics graph theory and applications-Preface | DISCRETE MATHEMATICS 308 (8), 1347-1349 | — | other | manual | txt | 3 | supplement | carded |
-| 100 | S108 | 2008 | Computational Mixed Integer Programming | — | — | other | — | no-oa |  | supplement | — |
+| 100 | S108 | 2008 | Computational Mixed Integer Programming | — | — | other | — | no-oa |  | supplement | metadata |
 | 101 | S109 | 2007 | Editorial\| European Journal of Combinatorics-Volume 28, Issue 8 | European Journal of Combinatorics 28 (8), 2053-2056 | — | other | manual | txt | 4 | supplement | carded |
-| 102 | S110 | 2007 | Recoverable robustness | ARRIVAL Technical Report TR-0066 | — | report | — | no-oa |  | supplement | — |
-| 103 | S111 | 2007 | Computing All Stable Orientations of Assemblies with the Double Description Method | — | — | other | — | no-oa |  | supplement | — |
+| 102 | S110 | 2007 | Recoverable robustness | ARRIVAL Technical Report TR-0066 | — | report | — | no-oa |  | supplement | metadata |
+| 103 | S111 | 2007 | Computing All Stable Orientations of Assemblies with the Double Description Method | — | — | other | — | no-oa |  | supplement | metadata |
 | 104 | S112 | 2005 | On Minimum Monotone and Unimodal Partitions of Permutations | — | — | report | manual | txt | 13 | supplement | carded |
-| 105 | S114 | — | Using VRPSolver’s Price-and-Cut Engine within GCG | — | — | other | — | no-oa |  | supplement | — |
+| 105 | S114 | — | Using VRPSolver’s Price-and-Cut Engine within GCG | — | — | other | — | no-oa |  | supplement | metadata |
 | 106 | S115 | — | The Multi-Stop Station Location Problem: Exact Approaches | Available at SSRN 7177419 | — | preprint | manual | txt | 41 | core | carded |
-| 107 | S118 | — | Eliminating redundant columns from column generation subproblems using classical Benders’ cuts | — | — | preprint | manual | txt | 56 | supplement | carded |
-| 108 | S119 | — | Vector Space Decomposition for Network Flow and Linear Problems | — | — | other | — | no-oa |  | supplement | — |
-| 109 | S120 | — | A minimum weighted mean cost cycle algorithm for linear programming | — | — | other | — | no-oa |  | supplement | — |
+| 107 | S118 | 2018 | Eliminating redundant columns from column generation subproblems using classical Benders’ cuts | SCIP Workshop 2018, Aachen, 8 March 2018 (slides) | — | talk | manual | txt | 56 | supplement | carded |
+| 108 | S119 | — | Vector Space Decomposition for Network Flow and Linear Problems | — | — | other | — | no-oa |  | supplement | metadata |
+| 109 | S120 | — | A minimum weighted mean cost cycle algorithm for linear programming | — | — | other | — | no-oa |  | supplement | metadata |
 | 110 | D001 | 2008 | Minimizing the Stabbing Number of Matchings, Trees, and Triangulations | Discrete & Computational Geometry 40 (4), 595-621 | — | journal | arXiv | txt | 25 | supplement | carded |
 | 111 | D002 | 2009 | Sequencing and Scheduling in Coil Coating with Shuttles | Models and Algorithms for Optimization in Logistics (Dagstuhl Seminar Proceedings 09261) | — | conference | manual | txt | 29 | supplement | carded |
 | 112 | D003 | 2010 | Frontmatter, Table of Contents, Preface, Organization | ATMOS 2010 (OASIcs, Volume 14) | — | other | manual | txt | 9 | supplement | carded |
 | 113 | D004 | 2026 | Conclusion | Branch-and-Price, 545-554 | — | chapter | manual | txt | 10 | core | carded |
 | 114 | D005 | 2021 | SN Operations Research Forum | Operations Research Forum Virtual Conference (Cassyni) | — | talk | — | no-oa |  | skip | — |
 | 115 | D006 | 2015 | Dantzig-Wolfe Reformulations for the Stable Set Problem | ResearchGate (unpublished) | — | other | manual | txt | 12 | supplement | carded |
-| 116 | H001 | 2011 | Improved Column Generation for Highly Degenerate Master Problems | Les Cahiers du GERAD G-2011-66 | — | report | — | no-oa |  | supplement | — |
+| 116 | H001 | 2011 | Improved Column Generation for Highly Degenerate Master Problems | Les Cahiers du GERAD G-2011-66 | — | report | — | no-oa |  | supplement | abstract |
 
-116 works · txt 93 · pdf 0 · no-oa 23
+116 works · txt 94 · pdf 0 · no-oa 22
