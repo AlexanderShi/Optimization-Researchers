@@ -1,5 +1,62 @@
 # 蒸馏记录
 
+## 2026-11-28 (27) · MILP Team 深读完成：补搜（T3.3）、三轮读卡（T3.4–T3.5）、综合（T3.6）、精简（T3.7）、声明抽审与全队整合（T3.8）
+
+- 用户请求：「继续强化MILP Team」，在 (26) 之后选了「四位都深读 (Recommended)」：先跑 T3.3 补搜，报每人补到的全文数和读卡估价，再接着读卡、综合、精简、抽审和全队整合，估价合计约 4,000–6,000 万 token。第一轮读卡被每周用量上限截断后，用户两次说「接着做 做好了Merge」；最后说「做好了就开PR push and merge」。仍在分支 `milp-deep`（worktree `../Optimization-Researchers-milp-deep`）
+- kit（T3.3 之前）：`acquire_fulltexts.py` 一篇作品只挂一份全文（d178506）。arXiv 标题匹配必须保留标题里的数字（SCIP Optimization Suite 5.0 曾匹配到 9.0 的预印本）；标题检索或 Unpaywall 给出的 arXiv 编号已归另一篇作品时不再挂；每次运行末尾列出内容相同的全文。离线桩测试 13/13 通过（旧脚本 9 个失败）；TEAM-KIT 一行，RUNBOOK §4 一条
+- T3.3（`team-chase.js`，每人一个工作流，四个并行）：
+  - Gleixner 57 → 90 篇有全文（4 个 agent，约 73 万 token）：ZIB OPUS 的副本经 Internet Archive 取得；SCIP Optimization Suite 3.2、4.0、5.0、7.0 的报告（T3.2 的标题检索给的是 9.0 的预印本）和 6.0（D004）现在各挂自己的 ZIB 全文；S022 挂着的 D002 的 IPCO 预印本删回
+  - Lübbecke 10 → 93（7 个，约 157 万）：扫描件和 Type 3 字体的 PDF 做了 OCR；+6 条摘要；5 篇作品的 14 条书籍线索；SCIP Optimization Suite 4.0、6.0 的报告（T3.2 给的是 8.0 的预印本）现在各挂自己的 ZIB 全文；H001 挂着的 S031 修订版预印本删回
+  - Achterberg 4 → 36（5 个，约 86 万）：博士论文 D004 和 ZIB 报告 R001–R022 经 Internet Archive 取得；+6 条摘要；3 条书籍线索；九篇正式发表版原先也挂着对应 ZIB 报告的文件，现在留给报告那一行；D022 有了自己的 IPCO 预印本（arXiv 2211.13545v1）
+  - Fischetti 84 → 127（8 个，约 216 万）：+35 条摘要；4 篇作品的 6 条书籍线索；S002、S047、S081 重做 OCR；D010 挂着的 S063 手稿删回；S008 改挂它自己的期刊手稿；S172 的年份和出处更正（ODS 2025 的摘要，不是 2012 年的）
+  - 留给用户手动下载（站点有验证页，没有绕过）：Achterberg D003、D005（ScienceDirect），Gleixner S099（JuSER）、S101（Taylor & Francis）
+- T3.4（`plan_reading_batches.py`，第一轮）：Gleixner 26 批、Lübbecke 26、Achterberg 11、Fischetti 23，合计 343 篇、9,529 页。Lübbecke 的 S017（八章各有自己的行）和两本完整的 ATMOS 论文集 S103（Lübbecke）、S176（Fischetti）标 Role skip，理由写进行备注；Achterberg 存他主要论文全文的九行 ZIB 报告设为 core
+- T3.5 第一轮（每人一个工作流，四个并行）跑了约 20 分钟就撞上每周用量上限：172 个 agent 只有 4 个跑完，其余报错，这一轮花了约 2,019 万 token。11-28 恢复后：
+  - 逐批对照卡片文件和 digest：40 批卡片已经写完、只缺 digest（Gleixner 13、Lübbecke 11、Achterberg 8、Fischetti 8）。一个补写工作流按卡片写出 digest（29 个 agent，约 325 万），每份 digest 再逐条对回自己的卡片，全部一致。第一次补写的参数给错了（只有 Gleixner、编号为空），立即 `TaskStop`，查过没有写出文件
+  - 其余 46 批（13、15、3、15）用 `only` 重读：4 个工作流、50 个 agent，约 1,996 万
+  - RUNBOOK §4 加一条：读卡被用量上限截断后怎样收拾（80b1b39）
+- 第一轮读卡查出的问题：
+  - Fischetti 的 S012、S017、S003 在 T3.2 时（tesseract 还没加进 PATH）丢了数字，S086 丢了词，都重做 OCR（7000465）；S045 的文件其实是另一个标题的 2009 年草稿，改为新行 H006；H003 的第一个链接是 CPR 的中期报告，改挂 scb.se 上的期刊文章，它的首页也更正了出处（JOS 14 (4), 553–565）
+  - Achterberg：读卡 agent 把 D024 标为 WRONG-TEXT，是误报。Tobias Pfender 是他的旧姓：MIPLIB 2003 和 2010 给 aflow 实例注的来源是 T. Pfender 的 diploma thesis，MIPLIB 2010 又把这些实例记在 T. Achterberg 名下，所以 D024 的报告是他的，第二轮重读；diploma thesis 补为 D036
+- kit：holdout.md 封存件的规则补进 team-synthesize、team-tighten、team-increment、team-integrate 的 house rules（规则移植进 T1 时没带到这四步）：封存件的要点、摘录和决策不进 Skill、08、09、技术目录和圆桌文件；`selftest.sh` 检查每个写作 agent 的 prompt 都带这条（旧的 team-synthesize 8 个里 0 个带）；TEAM-KIT 一行，RUNBOOK §4 一条（80b1b39）
+- T3.5 第二、三轮（摘要卡与元数据卡、重做 OCR 后的重读、新找到的开放副本）：第二轮 4 个工作流 13 个 agent，约 408 万；第三轮 3 个工作流 7 个 agent，约 155 万。四位都读完卡片：
+  - Gleixner 103 张卡、197 条摘录全部逐字一致：S022 读 CC BY 期刊版，D005 读投稿稿；D001、S051、S022、S056 的摘要换成它们各自出版社的版本（原先用的是兄弟版本的摘要，S022 的写 6.6x 和 2.8，期刊版是 10.7x 和 2.9）
+  - Lübbecke 111 张、188 条（187 条逐字一致，1 条忽略空格和符号后一致）：S030 读它自己的开放副本 arXiv cs/0310034v1（SODA 版）；S102 是 Scholar 上的垃圾行，Role skip
+  - Achterberg 54 张、84 条全部逐字一致：D024 按旧姓下的报告读完全文
+  - Fischetti 209 张、358 条全部逐字一致：S086 改回 PDF 文字层（11-27 的 OCR 把三张旋转的结果表弄乱了，而丢的词文档里本来就有）；S154 重做 OCR（ff/ffi 连字没映射）
+  - 覆盖（`team_status.py --coverage`）：476 篇作品中 343 篇全文精读、8 篇部分精读、80 篇只有摘要、29 篇只有元数据（含读不了的）、16 篇不是本人的或不是研究；827 条摘录逐字核对
+- T3.6（`team-synthesize.js`，每人 6 个 agent，共 24 个，约 1,387 万）：
+  - Gleixner：SKILL.md 8,845 → 12,244 词；Method 7 升为核心方法（写清浮点求解器的契约，对着它证明精确层，再审计；S020、S013、S032、S058、S029、S050）；审稿 51 条，阻断 8 条，采纳 49 条
+  - Lübbecke：8,774 → 12,740；Method 5 升为核心方法（交付什么就证明什么：用精确松弛给启发式定界，16 篇）；新增 H11–H13；审稿 57 条，阻断 5 条，采纳 55 条；FIDELITY.md 和 07 不再链接（里面谈到封存件）
+  - Achterberg：8,861 → 11,957；仍是 6 个核心方法；全文更正了种子一事：他单独署名的研究里没有，合著的研究里有排列或重复；审稿 50 条，阻断 7 条，采纳 46 条
+  - Fischetti：8,857 → 11,908；209 张卡合并版本后为 165 组；仍是 6 个核心方法；审稿 35 条，阻断 5 条，采纳 34 条
+  - 封存件：Achterberg、Fischetti 各有两个候选只靠封存件立得住，只记名字；Gleixner 复述封存件的段落没有写进去
+  - kit：team-synthesize 和 team-increment 的编辑、修复闸门加上 `answer_standard.py --check`（Fischetti 的 T3.6 在免责声明行的位置句后面又接了一句覆盖说明，当时没被发现）；TEAM-KIT 一行（62f55db）
+- 操作员手改（受保护段落，kit 的任何一步都不许改；改动记进各自的台账；此后 `check_ledger.py --before … --allow frontmatter,activation-disclaimer` 会按设计报出这几行）：
+  - Achterberg：Activation Rules 里两行关于种子的话改为「单独署名的研究里没有，合著的研究里有」
+  - Gleixner：Research Integrity Rules 的 AI 使用一句写明一篇 2026 年合著预印本的披露 [S078 arXiv p. 27]；Activation Rules 的闭源求解器一行加上 Method 7（闭源求解器作浮点 oracle，推断）
+  - Lübbecke：Activation Rules「Nothing in the record」的例子去掉 numerics 和 Benders design（全文显示两者是薄记录，不是空记录）
+  - Fischetti：免责声明行里的覆盖说明挪到 Answer Standard 的位置句之前；S174 卡的实验设置页码改为文件页 6–7
+- T3.7（`team-tighten.js`，每人 3 个 agent，共 12 个，约 387 万）：Gleixner 12,244 → 11,541 词，Lübbecke 12,740 → 11,653，Achterberg 11,957 → 11,529，Fischetti 11,908 → 11,569。四份都无损（`check_ledger --before` 不加 `--allow`，受保护段落逐字节一致），改短的行逐字存进台账的 Before T3.7 块
+- kit：`check_ledger.py` 的删除检测也数带版本标记的页码引用（`[S025 TR pp. 3–12]`、`[S074 manuscript p. 23]`），间隔规则和 `check_citations.py` 一样。以前丢掉一个按版本引用的页码不会被发现（T3.6、T3.7 的审稿人提出）。9 个离线用例通过（旧脚本 3 个版本用例失败）；四位的 T3.7 仍然无损，多数到的页码 Gleixner 21、Lübbecke 54、Achterberg 2、Fischetti 2（4483d59、93d17de）
+- 声明抽审（`audit_claims.py`，每人 20 条，seed 1；两位零上下文审计员各判一遍，取更严的判决；共 8 个 agent，约 210 万）：
+  - Achterberg 20 条都支持（两位一致）；两位都提到的一处简化也收窄了
+  - Gleixner 18 支持、2 部分（两位 19 条一致）；两条都收窄
+  - Fischetti 18 支持、2 部分（19 条一致）；两条都收窄
+  - Lübbecke 17 支持、3 部分（20 条全一致）；三条都收窄：Method 1 的括号里只留 VRPTW，准绳一句标 [inferred]；不再给丢掉的质量指标计数；综述 Origin 一行每个分句都引到真正说它的地方（播客 0:38:06–0:38:53，S027 pp. 139–140、142，pp. 7、37，pp. 1、6），播客原话对过本地转写
+  - 四份 `10-claim-audit.md` 末尾各有一行「Acted on」
+- T3.8（`team-integrate.js`，6 个 agent，约 269 万 token，70 分钟）：DEEP-READING.md 按模板写全（状态、流程、覆盖表与 `team_status.py --coverage` 逐行一致）；README 的 Honest Boundary 换成 `--coverage --short` 的摘要，并链接四份技术目录。圆桌六条分歧线全部保留，每位成员一方都改引自己的卡片和页码：FL2 让 Lübbecke 入座，FL3 按卡片更正种子和重复运行的说法，FL4 改名为 "a decaying weight, a cutoff with recovery, or both"，FL5 收窄；客座 Forrest、Bixby 仍引各自的 SKILL.md（LP Team 是轻量档，没有卡片）
+  - 两位复核员提了 20 条意见（0 条阻断，6 条重要），修订 agent 全部采纳。它留给操作员三处：模板里另外两句指向 07 的话（随下一条的模板修复改好）；`team-integrate.js` 遇到轻量档客座时自己加注一句（未做，见下）；Fischetti 08 §11 的 2026 年 AI 声明清单漏了 S162（卡片 c12 记在 S162 p. 23，已补进 08 和台账的同一行，d2d7f74）
+  - 封存件复查（我做的）：圆桌、README、DEEP-READING 里没有封存件的要点。两处挨得近的也查了：FL4 引 S164 p. 12 说的是 cutoff 与 recovery 叠加在加权泵上，不是 Fischetti H5 封存的那一段（treatment-blind delivery）；FL1 引 Achterberg 访谈 1:00:45–1:02:20，是封存的 H5（1:02:20–1:05:00）之前那段关于自动分解和 GCG 的回答，holdout.md 写明它不封存
+- kit：圆桌模板（88514e0）。成员简报里加一句：成员的 SKILL.md 说哪个文件存着留给之后验证的封存材料，就不打开它，只引 SKILL.md 和它链接的文件给出的卡片号与页码；分歧线前言和论文清单对这样的成员改指它的卡片对照表 `09-evidence-ledger.md#card-key`。只影响 SKILL.md 标了 07 关闭的成员（目前只有 MILP 的成员有 `holdout.md`；DFO 还有四位的 09 没有 `card-key` 锚点）；MILP 圆桌由 T3.8 的修订 agent 按这三处改好；TEAM-KIT 一行
+- `product/README.md` 和 `README.en.md` 的 MILP 一行一起改为深读档，写明 T1 的封存题验证做在深读之前、之后没有重跑（9211c16）
+- 安装：四个成员文件夹和 `milp-roundtable` 按 `git ls-files` 复制进 `~/.claude/skills`（共 314 个文件，逐字节一致，无多余文件；覆盖前这五个文件夹与 main e33a9c6 一致，原文件夹另存在会话 scratchpad 的 `install-backup-20261128-milp-deep`）。回退：按 e33a9c6 的跟踪文件重装
+- 闸门：`team_check.py` 六个队都 0 失败（MILP 34 项、0 跳过；别的队跳过的是要用本 worktree 没有的 `txt/` 的摘录核对）；`answer_standard.py --check` 39/39、`--installed` 78/78；`check_citations.py --roundtable`：MILP 81 条成员卡片引用、理事会，都是 0 问题；`check_links.py .` 500 个文件 0 断链；`selftest.sh`（`PYTHONUTF8=1`）全过
+- 更正 (26)：Fischetti 丢了数字的不只 S047，S003、S012、S017 也是（第一轮读卡时发现，已重做 OCR）；Lübbecke 旧 worktree（`../Optimization-Researchers-milp-team`）里没提交的演讲字幕是 4 份，不是 3 份，按 playbook 第 2 条（`talks/` 里的材料只留在本地）不提交，并不是「深读他时再处理」；同一处还有 Achterberg 的一份访谈摘录，同样只留本地
+- 未做 / 未核实：Lübbecke S030 在 SODA 2004 论文集里的页码（行里只有截断的会名，没有 DOI）；Fischetti H006（2009 年草稿）是不是 S045（MPC 2012）的早期版本，没找到开放的摘要或全文来核对；Fischetti S112（2009 年「to appear」，Crossref 查不到）有没有换标题发表（S024 同为这三位作者），没查；Achterberg 的 OPUS 书章记录 docId 2963（2002，署名 Tobias Pfender）只记在 D024 的行备注里，没有单列成行，也没有读；上面四条留给用户手动下载的全文；T3.8 修订 agent 留下的 kit 一处（`team-integrate.js` 遇到轻量档客座时自己加注，这次在 DEEP-READING 里手写了）；Fischetti 的 08 §1 写 205 张卡，按 digest 是 209 张（198 篇作品，11 篇各有两张），205 的口径没有核对；深读后的封存题验证（T1 的 `validate` 重跑）
+- 成本（子 agent，不含主会话）：T3.3 24 个 agent 约 532 万 token；T3.5 第一轮（被截断）172 个约 2,019 万；digest 补写 29 个约 325 万（参数给错、立即停掉的那一次没有用量记录，未计）；第一轮重读 50 个约 1,996 万；第二、三轮 20 个约 562 万；T3.6 24 个约 1,387 万；T3.7 12 个约 387 万；声明抽审 8 个约 210 万；T3.8 6 个约 269 万。合计 345 个 agent、约 7,688 万 token。估价是 4,000–6,000 万，超出的主要是第一轮被截断：截断那一轮花了约 2,019 万，补写和重读又花了约 2,321 万
+- 模型：Opus 5.5
+
 ## 2026-11-26 (26) · MILP Team 深读起步：四位的发表全表（T3.1）与开放全文（T3.2）
 
 - 用户请求：「继续强化MILP Team」；问怎么强化时选了「先收四位的发表全表 (Recommended)」（T3.1 发表全表 + T3.2 开放全文，跑完给出每人的作品数、开放全文数和深读估价，再定谁读、读多少）。分支 `milp-deep`（worktree `../Optimization-Researchers-milp-deep`），从 `main`（e33a9c6）开出
