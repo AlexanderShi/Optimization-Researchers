@@ -1,0 +1,195 @@
+[
+ {
+  "id": "S074",
+  "year": "2021",
+  "title": "Avoiding redundant columns by adding classical Benders cuts to column generation subproblems",
+  "read_level": "full",
+  "contribution": "Introduces strong redundancy and a verification LP (the original LP relaxation with a pricing column fixed) whose Farkas rays or dual solutions become classical Benders cuts in the GCG pricing problems, generalising reduced-cost fixing; the cuts do almost nothing on classical classes but raise gap closed and cut nodes and time on temporal decompositions of lot sizing and unit commitment.",
+  "problem_entry": "Pricing generates columns not needed for any integer optimum, weakening the master bound (pp. 2, 5); earlier remedies are problem-specific, only Gamrath-Lübbecke propagation is general, and a general tested implementation is missing (pp. 5-7).",
+  "key_idea": "Strong redundancy (Def. 2.1, p. 7); the verification IP/LP with the column fixed tests it (Lemmas 2.2-2.3, Thm 2.1, pp. 9-10); its Farkas ray gives a Benders feasibility cut in pricing (Thm 2.2, p. 11); the practical verification LP drops the upper-bound row and gives equally strong cuts (Thms 2.5-2.6, pp. 12-16); only pricing and pricing loop change (Algorithm 1, pp. 22-23); generalised to more blocks and MIPs (pp. 19-21).",
+  "assumptions": "Pure IPs in bordered block-diagonal form by discretization (p. 3), MIPs by fixing integer variables (pp. 20-21); theory for two blocks, more blocks 'analogously' (pp. 8, 19-20); correctness needs only z̄_UB ≥ z* (p. 10); tested on classical classes and temporal decompositions of lot sizing and unit commitment (pp. 23-27).",
+  "proof_devices": [
+   "Farkas' lemma turns infeasibility of the check into a cut (p. 11)",
+   "weak-duality chain (20a-c) gives the optimality cut (p. 14)",
+   "ray scaling w̃ = ũ/ũ^c maps cuts between the two verification LPs (proof of Thm 2.6, p. 15)",
+   "reduced-cost fixing rebuilt as a Farkas ray (w, 1) with x_i fixed to 1 (Thm 2.7, pp. 17-18)"
+  ],
+  "experiments": "GCG 2.1.4 dev / SCIP 5.0.1 / CPLEX 12.7.1.0, Default vs Subcuts at root, 3,600 s, no seeds (p. 23); no cuts on classical classes, no table (p. 23); Table 1 gap closed 8.10->13.69 etc., root time up (p. 28); Table 2 time and nodes down on three of four sets, uc-horizon12 slower (pp. 29-30); few solved uc instances (pp. 28, 30); Table 3 counts differ from Tables 1-2 (p. 31).",
+  "positioning": "Continues Vanderbeck-Savelsbergh and Gamrath-Lübbecke (p. 33); reduced-cost fixing and CP filtering judged limited in generality (pp. 5-6); claims first general use of Benders-type inequalities against redundant columns (p. 33).",
+  "writing": "Contributions (a)-(e) (pp. 6-7); two-block case first (pp. 8, 18-21); Fig. 1 summary diagram (p. 21); moderate hedging (pp. 7, 9, 16); limitation in abstract (p. 2), null result framed as valuable (p. 23); conclusion 'not as great as expected' (p. 33); overreach 'can significantly improve' without test (p. 30).",
+  "limits_future": "No cuts on classical classes (p. 23), only feasibility cuts and higher root time (p. 28), harder less separable pricing (p. 31), weak original-LP check and one LP per column (p. 33); future: partial pricing cuts (p. 18), pricing difficulty limits (p. 31), master LP as check, Benders enhancements (pp. 33-34).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Steps 1, 3, 5, 6: limitation in the abstract, null result reported and explained, losses reported, shifted geometric means with shift and solved-by-both rule, baseline is host default including own earlier method; confirms Misreading 3.",
+    "pages": "pp. 2, 23-24, 27, 28, 30, 33"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Null result without counts or table; no MIPLIB no-harm set or outside competitor; uc means on 10, 6 and 8 solved instances; '5.59%' is a difference of gap-closed means [my reading]; 'can significantly improve' untested; Table 3 counts differ; no seeds [inferred].",
+    "pages": "pp. 23-32"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Step 6: the redundancy check is the original LP relaxation with the pricing solution fixed, and gain is measured as gap of the original LP relaxation closed.",
+    "pages": "pp. 12, 21-22, 27"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Step 2 not taken: no run of the compact model in a MILP solver; yardstick is GCG's default branch-and-price.",
+    "pages": "pp. 23-30"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "null result explained from the textbook model, then the predicted structure tested",
+    "evidence": "Generic component does nothing on textbook classes; a bin-packing argument explains why; the explanation says subproblem dependence is needed, so temporal decompositions are tested, and varying horizon length checks the mechanism.",
+    "pages": "pp. 24, 25, 29"
+   }
+  ],
+  "transferable": [
+   "To show that a candidate column cannot be in any optimum, fix its variables in the original LP relaxation (plus the incumbent bound). Infeasibility gives a Farkas ray, i.e. a classical Benders feasibility cut to add to the pricing problem; a dual solution whose value exceeds z̄_UB - c^T x̄ gives an optimality cut (pp. 9-14, 22).",
+   "Drop the upper-bound row from the check LP: its dual solution then maximizes the violation at the column and gives optimality cuts instead of an arbitrary ray (pp. 12, 15-16).",
+   "Show that the closest classical technique is a special case of your device (reduced-cost fixing as a subproblem cut with x_i fixed to 1, Thm 2.7) to establish generality (pp. 17-18).",
+   "When a generic component does nothing on the textbook classes, derive the reason from the textbook model and let it choose the next test class (pp. 23-25).",
+   "Test the mechanism by varying the decomposition granularity on the same instances (period against horizon 2; horizon 8 against 12): fewer subproblems should mean fewer cuts and less gain (pp. 26, 29).",
+   "Plot per instance the gap closed by the reformulation and the extra gap closed by the component (Fig. 3, p. 29), and per pricing round the pricing time with cumulative cut counts (Fig. 4, p. 32), to show where the gain and the cost arise.",
+   "Take the host solver's default, including your own earlier method, as the baseline setting and switch on only the new component (pp. 23, 28)."
+  ],
+  "coauthors": "Stephen J. Maher, Jonas T. Witt",
+  "quotes": [
+   {
+    "text": "While their efficacy is limited on classical problems, the benefits of applying the cuts is demonstrated on structured models to which a temporal decomposition can be applied.",
+    "page": 2
+   },
+   {
+    "text": "While this is an undesired result, it is valuable in highlighting a limitation to the proposed methods and the subproblem cuts, and it also gives an insight into the nature of (strong) redundancy.",
+    "page": 23
+   }
+  ]
+ },
+ {
+  "id": "S043",
+  "year": "2022",
+  "title": "An image-based approach to detecting structural similarity among mixed integer programs",
+  "read_level": "full",
+  "contribution": "Proposes ICIP, which renders GCG-detected constraint-matrix structure as images, encodes them with a convolutional autoencoder and compares codes by Euclidean distance (ISS), giving exploratory problem- and instance-level similarity analyses on strIPlib and an impurity audit of its problem types.",
+  "problem_entry": "Poses 'a new question': can pictures of constraint-matrix structure identify similar MIPs (p. 2); model classifications are siloed and MIPLIB 2017's statistics metric is the only quantitative comparison (pp. 2-3, 6); structure not exploited for comparison (p. 3).",
+  "key_idea": "Render A's nonzero pattern after GCG detection as image, encode with CNN autoencoder, compare by ISS (pp. 4-5, eq. (2) p. 19); no hand-defined features (p. 10); GCG detection unchanged, maxwhite choice (p. 12); Fisher vectors and bag-of-words rejected (pp. 13-14); CNNs used to study, not solve (p. 14).",
+  "assumptions": "Only A's nonzero pattern, ignoring values, c, b and types (pp. 3, 10, 13); maxwhite decomposition assumed to reflect structure, so no permutation invariance (pp. 10, 35); 950 strIPlib instances of 19 types from 64 sources plus 12 held-out MIPLIB 2017 instances (pp. 20-21, 31-32, 42-43); 640×480 images pooled (pp. 12-13).",
+  "proof_devices": [],
+  "experiments": "No solver runs; face validity via recovered relations (cwl-cpm 0.45, pcp-col 0.49, pp. 25-26), graphs at unexplained ISS thresholds (pp. 23-24, 33); one training run, no seeds (p. 22); no quantitative baseline (p. 10); held-out MIPLIB check (pp. 31-32); clp %-Match text-table mismatch and unsupported impurity claim (pp. 28-29).",
+  "positioning": "Against model ontologies (pp. 2-3) and MIPLIB 2017's statistics similarity, criticised but credited, ICIP offered as supplement (pp. 6-10); distanced from ML-for-solving work (p. 14).",
+  "writing": "Abstract frames a new question (p. 2); early pipeline pictures (pp. 4-5); CNN tutorial (pp. 16-18); hedges 'may allow' (p. 2) and hoped-for primitives (p. 34); spin 'a positive result' (p. 27); 'often' and two 'first' claims in conclusion (p. 35); 'gatC' caption typo (p. 31).",
+  "limits_future": "Heuristic detection and maxwhite assumption, no permutation invariance, A only (pp. 10, 35-36); clp sources found to be different formulations (pp. 30-31); future: seriation and permutations (p. 35), feature interpretation (pp. 35-36), larger data, solver-based validation, ISS threshold, x, c and b (p. 36).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Exit A and its checkpoint: a learned proxy for structure is checked for face validity only; validation against solver behaviour is deferred and thresholds unexplained; 'a proxy that looks right is not evidence' applies.",
+    "pages": "pp. 23, 25-26, 28, 30-34, 36"
+   },
+   {
+    "method": "Method 3",
+    "relation": "contradiction",
+    "note": "Co-signed, fifth of five, share unknown: 'often' on few cases, clp text-table mismatch, impurity relation without statistic, two 'first' claims, no quantitative baseline.",
+    "pages": "pp. 10, 28-29, 35"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "impurity audit of a benchmark library before treating a named problem class as one test set",
+    "evidence": "Count constraint classes present in some but not all sources of a type (9 of 19 strIPlib types impure); inspect the worst class per source; maintainers corroborated that the six clp sources are different formulations. Co-signed, Buffalo-led; next to Method 3 step 2.",
+    "pages": "pp. 27-31"
+   }
+  ],
+  "transferable": [
+   "Validate a new similarity or structure measure first on pairs known to be related (cwl against cpm, pcp against col) before reading new relations off it (pp. 5, 25-26).",
+   "Impurity index for a benchmark class: with SCIP's 17-class constraint classifier, count the classes that occur in some but not all sources of a problem type; a nonzero count flags mixed formulations, which a per-source table then locates (pp. 28-31).",
+   "Keep instances from a second library out of training (12 MIPLIB instances) to check that a learned representation transfers (pp. 31-34).",
+   "Stack the detected-structure images of all instances of a class into one composite image to see whether the class has one structure or several (pp. 25, 29-30)."
+  ],
+  "coauthors": "Zachary Steever, Chase Murray, Junsong Yuan, Mark Karwan",
+  "quotes": [
+   {
+    "text": "we use CNNs to study optimization problems, rather than to help solve them.",
+    "page": 14
+   },
+   {
+    "text": "These analyses reveal that structurally similar MIPs often share a related underlying problem, even if those problems originate from seemingly disparate applications.",
+    "page": 35
+   }
+  ]
+ },
+ {
+  "id": "S014",
+  "year": "2023",
+  "title": "Enabling research through the SCIP optimization suite 8.0",
+  "read_level": "full",
+  "contribution": "Presents the SCIP Optimization Suite 8.0 as a research tool and platform, describing its new MINLP framework, symmetry handling, decomposition heuristics, PaPILO and SoPlex changes, GCG 3.5 and extensions, with a seeded version-against-version benchmark.",
+  "problem_entry": "A positioning, not a research question: the role of the SCIP Optimization Suite in supporting research, with 8.0 developments as examples and independent works that used SCIP as evidence (pp. 1, 3).",
+  "key_idea": "Central branch-cut-and-price core with plugins (p. 3); new MINLP framework with implicit reformulation by annotation keeping original constraints (pp. 6-8); symmetry handling (pp. 10-11); PADM and DPS (pp. 11-13); PaPILO dual postsolve (p. 13); GCG 3.5 detection loop, strong-branching selection, PyGCGOpt, visualization (pp. 14-15); SCIP-SDP, SCIP-Jack, UG (pp. 16-18).",
+  "assumptions": "MINLP in algebraic form within constraint integer programs (p. 2); no unique decomposition of an MILP (pp. 11-12); GCG subproblems usually MILPs (p. 14); test sets of 347 MILP, 113 and 1,678 MINLPLib (not a benchmark set), 194 MISDP, 200 PACE 2018 (pp. 4, 9, 16-17); old reformulation infeasible on 7% (p. 7); formulation-invariant symmetries only (p. 10).",
+  "proof_devices": [
+   "keep original constraints, apply only transformations that 'in most situations' do not relax the feasible set (p. 7)",
+   "PaPILO transaction-based parallel presolve with deterministic sequential application (p. 13)",
+   "SoPlex 80-bit precision, iterative refinement, exact rational LP (p. 13)",
+   "symresack cover separation in linear time via path/cycle auxiliary graph (p. 11)",
+   "DPS right-hand-side splitting of linking rows (eqs (2)-(3), pp. 12-13)"
+  ],
+  "experiments": "SCIP 7.0 vs 8.0, five seeds, 7,200 s, shifted geometric means (p. 4); MILP 1,478 vs 1,445 solved, ratio 1.17, both-solved 1.12 (Table 1, p. 5); MINLP 454 vs 435, ratio 1.17 (Table 2, p. 5); exclusions uncounted [my arithmetic] (pp. 4-5); nonlinear rewrite on 1,678 instances x3 orderings, failures and infeasible incumbents counted, ~400 gained ~200 lost (pp. 8-10); SCIP-SDP and SCIP-Jack results (pp. 16-17); no GCG run (pp. 14-15).",
+  "positioning": "Positioned by independent users (p. 3), design credited to Achterberg (p. 3), details in release report (pp. 3-4); SCIP-Jack vs Polzin-Vahdati and GeoSteiner (pp. 17-18); GCG complementary to tailored decomposition in SCIP (p. 14).",
+  "writing": "Focus in abstract (p. 1); performance first (§2); claims sized ('only of 12 %', newly solved instances, 'can be slower') (pp. 4-5, 9-10); caution paragraph before SDP table (p. 16); promotional phrases (pp. 2, 16, 17); Final Remarks restate, no future work (pp. 18-19).",
+  "limits_future": "Software contribution, no new theory; MINLPLib not a benchmark set (p. 9); new nonlinear handling loses ~200 instances, 49 infeasible incumbents (pp. 9-10); suborbitopes not always beneficial (p. 11); PADM can give bad solutions (p. 12); SDP tolerances (p. 16); no future-work list (pp. 1, 18-19).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "[stated-joint] GCG used to quickly assess decomposition potential (step 4), tailored algorithms in SCIP with GCG complementary (step 5), heuristics and cuts on both models and branching on original variables (step 6); MINLP rewrite keeps original constraints.",
+    "pages": "pp. 7, 14-15"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Tension 2: routine use without user interaction vs users knowing useful decompositions and PyGCGOpt custom decompositions; no stop rule, no GCG run.",
+    "pages": "pp. 12, 14-15"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "[stated-joint], weak: no unique decomposition, different decompositions give different behaviour; detection finds many candidates listed in a report; no enumeration study.",
+    "pages": "pp. 12, 14-15"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Co-signed suite protocol has seeds, orderings, failure definitions, losses, non-benchmark label and speed-up attribution missing in his own studies (S074 no seeds); GCG section reports no runs; unsized claims in SDP and Jack sections [inferred]; exclusions uncounted.",
+    "pages": "pp. 4-5, 9, 14-17"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Version-against-version protocol: identical machines, one job per machine, single thread, five seeds per instance, shifted geometric means (time shift 1 s, node shift 100), solved counts, and the subsets \"affected\", difficulty buckets [t, tilim], both-solved and diff-timeouts (pp. 4-5).",
+   "Say where a speed-up comes from: set the all-instances ratio beside the both-solved ratio (1.17 against 1.12 on MILP) and attribute the rest to newly solved instances (pp. 4-5).",
+   "For a redesign, run each instance in its original and two permuted orderings, define failure explicitly (bound conflicting with best known bounds, fatal error, no termination at the limit), count infeasible final incumbents separately, and report instances lost as well as gained (p. 9).",
+   "Count a version as \"fastest\" on an instance only if it is not more than 25% slower than the other, and add performance profiles for time and for gap at termination (pp. 9-10).",
+   "Compare solvers on instances presolved by a standalone presolver (PaPILO), so that the comparison does not depend on each solver's own presolve (p. 13).",
+   "Ship a new component as an option and keep the old default until the evidence is in (PaPILO in SoPlex 6.0, p. 13)."
+  ],
+  "coauthors": "34 co-authors of the suite paper (K. Bestuzheva, M. Besançon, W.-K. Chen, A. Chmiela, T. Donkiewicz, et al.); RWTH co-authors Donkiewicz, Gaul, Mühmer, Schlein",
+  "quotes": [
+   {
+    "text": "The philosophy behind GCG is that decomposition-based algorithms can be routinely applied to MILPs without the user's interaction or even knowledge.",
+    "page": 14
+   },
+   {
+    "text": "As a research tool, GCG can be used to quickly assess the potential of a decomposition-based algorithm for any problem for which a compact MILP formulation is available.",
+    "page": 14
+   }
+  ]
+ }
+]

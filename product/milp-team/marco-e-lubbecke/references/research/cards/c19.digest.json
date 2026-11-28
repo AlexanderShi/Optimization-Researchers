@@ -1,0 +1,217 @@
+[
+ {
+  "id": "S089",
+  "year": "2026",
+  "title": "Branch-and-price strikes back for the k-vertex cut problem",
+  "read_level": "full",
+  "contribution": "Merges the natural vertex-cut binaries into the cluster-column model of the k-vertex cut problem, proves that the columns may stay continuous and that the new LP bound is not weaker than either earlier model, and builds a SCIP branch-and-price that branches only on the original binaries, closing 73 open benchmark instances within one hour.",
+  "problem_entry": "Three exact methods (CPLEX on a compact model, a branch-and-price, and a branch-and-cut whose results suggested branch-and-price was the wrong technique) still fail on many benchmark instances; the entry is unused potential in the old extended model, whose column integrality turns out to be unnecessary once the natural binaries are added (pp. 3, 7-8, 31).",
+  "key_idea": "ILPE2 holds the natural binaries x and the cluster columns lambda, with x_v as the slack of the vertex-packing row; lambda may be continuous (Theorem 1), so branching acts on x only and pricing stays a min cut; equality rows become inequalities and a greedy edge-covering clique family replaces the edge-partitioning one (pp. 7-8, 14-15, 19).",
+  "assumptions": "Pure binary ILP with exponentially many columns and clique rows; non-negative costs in Definition 1 and c in R^V in the theorem statements, while the proof of Prop 3 uses c_v > 0; feasible iff alpha(G) >= k; 304 instances from DIMACS coloring and partitioning graphs and intersection graphs, unweighted and with costs in {1,...,10}, filtered and preprocessed offline with Gurobi 11.0.3 (pp. 2, 8, 14-15, 37-38).",
+  "proof_devices": [
+   "Follower value Phi(x) written as an LP via Edmonds' description of the forest polytope (Lemma 1, p. 9; App. A, p. 34)",
+   "Dualizing the follower LP turns the bilevel model into a single-level model (8) (pp. 9-10)",
+   "Explicit optimal solution with lambda = connected components and beta = x removes the bilinear terms (Theorem 2, p. 10; App. A, p. 34)",
+   "Merging components to reach exactly k clusters (Corollary 1, pp. 10, 34-35)",
+   "Redundancy shown by summing the linking rows (9e) and substituting x (proof of Theorem 1, p. 11)",
+   "Forest-edge counting inside each column and summing edge rows over a forest to recover the natural inequalities (Lemma 2, Prop 1, p. 12)",
+   "Projection: eliminating x through (4c) to compare with the old extended LP, with equality when all cliques are used (Prop 2, p. 13)",
+   "Equalities relaxed by an optimality argument with positive costs (Prop 3, p. 14)",
+   "Stable set of size k iff a k-vertex cut exists, so the restricted master with singleton columns is feasible exactly when the instance is (Lemma 3, Prop 4, p. 15)",
+   "Totally unimodular pricing once the cardinality row is dropped; polynomial via |V| LPs and the equivalence of optimization and separation (pp. 16-17)",
+   "Barahona-Jensen min-cut network for precedence-constrained pricing, with a second stage that raises one source arc by the dual sigma to force a non-empty column (pp. 17-18)",
+   "Branching decisions on x as infinite-capacity arcs in the pricing network (p. 19)",
+   "Graph automorphisms as symmetries of the master, with the lexicographic order on x only (Prop 5, p. 21; App. A, p. 35)",
+   "Weighted vertex connectivity by vertex-split min cuts over non-adjacent pairs (connectivity cut, App. C, pp. 35-36)"
+  ],
+  "experiments": "BP* (SCIP 9.2.3, SoPlex 7.1.5) against COMP, HYB and BP-dagger, all re-run single-threaded for one hour with CPLEX 22.1.0 on Xeon L5630 nodes: solved 242/195/165 unweighted and 239/201/170 weighted, COMP ahead at k = 5, 73 newly closed instances, losses listed in Appendix G; ablations of the clique family and the equality rows (242 vs 189/122/205; BP-dagger 165) and an LP-gap table (11.1% vs 38.9% natural and 90.5% compact); a recount of Table G.1 shows HYB solving more on Coloring plus Partitioning (128 vs 109 unweighted, 127 vs 109 weighted); no seeds, variability or shifted geometric means; graph statistics misaligned in Tables G.4-G.5 (pp. 22-31, 42-48).",
+  "positioning": "Unifies and dominates the compact, the extended (Cornaz et al. 2019) and the natural (Furini et al. 2020) models; repairs the predecessor's exposition of the combinatorial pricing; reopens a verdict set partly by co-author Furini; cites the column-generation canon including Lübbecke-Desrosiers 2005 and the 2026 book, and the symmetry literature including co-author Hojny; GCG not mentioned (pp. 1, 3-7, 17, 20-21, 31-33).",
+  "writing": "Film-sequel title echoed at the end of the conclusions' first paragraph; contributions mapped to sections; theorems in the text with proofs in Appendix A and a worked example per device; hedges where it explains, while 'outperforming all existing exact algorithms' and 'very small' for an 11% root gap go beyond the tables; the conclusions draw a general construction (pp. 3, 5, 7, 18-19, 24, 27-28, 30-32).",
+  "limits_future": "Unsolved instances remain (19 unweighted and 22 weighted open) and the method is weaker on Coloring; future work: presolving, connectivity inside the column subsets (a bound-versus-pricing trade-off), and the bilevel-dualization pathway for other critical vertex detection problems such as the k-way vertex cut; no numerics or variability study (pp. 31-32, 42).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Steps 2, 5, 6: the compact model stays a re-run baseline (COMP) although its root gap is about 90%, and wins at k = 5; built on SCIP's native branch-and-price support, with part of BP-dagger's gap attributed to its custom depth-first tree without strong branching or heuristics; natural binaries added, with branching, symmetry handling and the connectivity cut on them. Also H5 (verdict reopened by changing formulation, integrality domain and branching) and Workflow C step 4 (preliminary runs pick the symmetry approach, LP solver, clique family, cut threshold).",
+    "pages": "pp. 8, 19-23, 26, 28, 31, 36"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Step 4 not shown: no probe with a generic Dantzig-Wolfe solver or a root loop before building, GCG not mentioned; the root-bound comparison comes after the build (Table 3).",
+    "pages": "pp. 30-31"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Steps 3-5: competitors re-run on own hardware with the same limit, one thread and CPLEX 22.1.0; older code by personal communication; gaps to the published counts explained by hardware; ablations, a same-component control arm (BP*a), losses in Appendix G, public code and data on Zenodo.",
+    "pages": "pp. 22-24, 26-29, 42"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Step 6: 'outperforming all existing exact algorithms' and 'dominates HYB and COMP ... across almost all values of k' against COMP's lead at k = 5 and HYB's lead on Coloring plus Partitioning (128 vs 109; 127 vs 109 by recount of Table G.1); an 11% root gap called 'very small'; no seed or variability protocol.",
+    "pages": "pp. 7, 27-28, 42-43"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Integrality only on the original variables, proved",
+    "evidence": "Theorem 1 via Theorem 2's explicit integral optimum lets the cluster columns be continuous; branching only on x, pricing unchanged, no branching on vertex pairs",
+    "pages": "pp. 7-11, 19, 25, 34-35"
+   },
+   {
+    "pattern": "Extended formulation by dualizing the follower LP of a bilevel natural model",
+    "evidence": "Phi(x) as an LP over the forest polytope, dualized into a single-level model; offered as a general route when the follower has a totally unimodular description",
+    "pages": "pp. 9-10, 31-32"
+   },
+   {
+    "pattern": "Master equalities relaxed to covering inequalities",
+    "evidence": "Prop 3 proves the relaxed model correct with positive costs; 242 vs 205 solved; columns reused instead of waiting for merged clusters; also S115 (16), (35)",
+    "pages": "pp. 14, 24-25"
+   },
+   {
+    "pattern": "Same-component control arm",
+    "evidence": "BP*a uses BP-dagger's edge-partitioning clique family and still beats it, separating the formulation effect from the component effect",
+    "pages": "p. 24"
+   }
+  ],
+  "transferable": [
+   "Before branching on columns, test whether the column variables can be continuous once the original binaries are in the model: construct an integral optimal solution explicitly (here the connected components as columns) and enforce integrality on the original variables only (Theorems 1-2, pp. 8-11, 34-35).",
+   "Turn a bilevel natural model into an extended formulation: write the follower's value as an LP over an integral polytope, dualize it, and remove the bilinear terms by exhibiting an optimal solution in which the duals equal the leader variables (pp. 9-10, 34).",
+   "Relax master equalities to inequalities when every optimal solution meets them anyway, prove it with the cost signs, and measure the effect on column generation (Prop 3, p. 14; p. 24).",
+   "Min-cut pricing that may return the empty set: rerun |V| min cuts, each with the source arc of one vertex raised by sigma, the dual of the master row sum lambda_S >= k (pp. 16-18).",
+   "Encode branching on original binaries as infinite-capacity arcs in the pricing network (x_v = 1: arc (v, t); x_v = 0: arcs into v from every neighbour), so the pricing stays a min cut (p. 19).",
+   "Inside branch-and-price, define symmetry handling on the original variables only: lexicographic order on x, a partial order along the branching variables, orbital fixing (pp. 20-21).",
+   "Re-run every competitor on your hardware with the same limit, one thread and a current LP solver; ask the authors for unpublished code; explain the gap to their published counts (pp. 22-23, 27-28).",
+   "Add a control arm that copies the competitor's choice for one component, to separate the effect of your formulation from that of the component (p. 24).",
+   "Show that pricing is not the bottleneck: report the share of time in pricing and the numbers of root, Farkas and total columns (Table 1, p. 27).",
+   "Define 'newly closed' against the union of all methods in the reference study, and list in an appendix every instance that others solve and you do not (pp. 29, 42).",
+   "Filter infeasible instances with a polynomial certificate (alpha(G) >= k by Lemma 3) and start the restricted master so that it is feasible exactly when the instance is (pp. 15, 37).",
+   "Ablate the construction of the initial row family (edge-covering cliques, edge-partitioning cliques, single edges) on both solved counts and root gaps (pp. 24, 30-31)."
+  ],
+  "coauthors": "Fabio Ciccarelli, Fabio Furini (Sapienza University of Rome), Christopher Hojny (TU Eindhoven); Lübbecke last; joint voice, no author-contribution statement. Section 3.1.4 (p. 20) and Appendix F (pp. 38-41) are sealed holdout item H4 (holdout.md) and are not used in this card.",
+  "quotes": [
+   {
+    "text": "While results by Furini et al. (2020) suggest that branch-and-price was not the right technique for tackling the k-VCP, we demonstrate in an extensive numerical study that, when properly set up, the new branch-and-price substantially improves on the state of the art.",
+    "page": 31
+   },
+   {
+    "text": "Crucially, we prove that integrality needs to be enforced only on the variables inherited from the natural formulation, whereas the variables coming from the extended formulation can be safely relaxed to continuous without affecting optimality",
+    "page": 7
+   }
+  ]
+ },
+ {
+  "id": "S115",
+  "year": "—",
+  "title": "The Multi-Stop Station Location Problem: Exact Approaches",
+  "read_level": "full",
+  "contribution": "Gives the first exact methods for the multi-stop station location problem: a compact arc-based MILP, trip- and segment-pattern Dantzig-Wolfe reformulations and their nesting, solved by branch-price-and-cut on SCIP with a problem-specific heuristic, cuts and branching, with the nested approach solving 82.4% of the synthetic instances and a 2408-trip GTFS bus instance to optimality in 40.06 hours.",
+  "problem_entry": "Charging infrastructure for electric intercity buses: ordered multi-stop trips, shared station decisions and detours are not captured by origin-destination refueling, flow-covering or relay models; the chair's own 2020 report defined the problem, and this paper keeps a deliberately foundational core (pp. 2-5).",
+  "key_idea": "Write the compact arc-based MILP, reformulate it by trips (strong master, MILP pricing) and by segments (shortest-path pricing, weaker master), and nest them so that the segment decomposition solves the trip pricing; the nested approach keeps the trip master's rare branching and gains the fast pricing (pp. 7-13, 26).",
+  "assumptions": "Binary arc, shortcut and station variables with continuous remaining-range variables; complete auxiliary graph of precomputed routes with costs satisfying the triangle inequality, full recharging, linear costs, no station capacities; synthetic TSPLIB-based trips (I1 uniform, I2 clustered) with uniform station costs and range 2/3 of the mean trip length; one GTFS instance rounded to km and minutes, where the triangle inequality may fail (pp. 3, 6-8, 23-24).",
+  "proof_devices": [
+   "Non-negative arc lengths in the shortest-path pricing from the sign restrictions of the duals, kept under cuts whose duals are non-positive (pp. 13, 17)",
+   "Covering form of the trip and segment rows, with equality at the optimum because costs are non-negative (pp. 10, 12)",
+   "Range cover cuts (50)-(52): every feasible integer path has a segment between s1 and s2 with all related variables zero; derivable from aggregated range rows by Wolsey's GUB knapsack argument and translated to the compact model as (53) (pp. 16-17)",
+   "Three-way distance branching with b1 + b2 + l = b_t so that no feasible solution is lost, enforced in pricing by deleting edges (p. 19)",
+   "Branching completeness: with integral station variables, LP optimality gives all positive patterns of a trip the same cost, so one can be chosen (p. 20)",
+   "Heuristic optimal for a fixed station set and feasible iff the instance is feasible, used as Farkas pricing (p. 15)",
+   "Dominance preprocessing from a heuristic solution and the triangle inequality (pp. 21-22)"
+  ],
+  "experiments": "528 synthetic instances (66 TSPLIB graphs x 10/20/30/40 trips x I1/I2, by recount of Tables A.1 and A.3) with a one-hour limit on Xeon L5630 nodes; compact AA in Gurobi 9.5.2 with the same heuristic and cuts against AT, AS and AN on SCIP 8.0.2; AN solves 82.4%, AS 77.8% (recount: AT 57.6%, AA 49.2%), AS best on I1 and AN on I2, AA ahead of AT on small I1 instances; profiles, gap box plots, branching incidence and per-instance tables; one GTFS instance solved by AN alone in 40.06 h; ablations, threads and seeds not reported (pp. 22-27, 37-41).",
+  "positioning": "Sorts the literature into four categories by how trips are interpreted and separates the MSLP from coverage approaches with one small instance; claims the first exact approaches; builds on the chair's 2020 report; assumes column generation from the 2026 book and cites Achterberg (2007) and Wolsey (1990) for components; GCG not mentioned (pp. 3-5, 9, 15, 17, 21, 36).",
+  "writing": "Three numbered contributions and a declared foundational scope; results organized by three questions with definitions first; family-dependent hedges and self-criticism ('this leaves room for improving AN'); vague 'slightly modified' Dantzig-Wolfe and a conclusion that says 'clearly outperform' for all pattern formulations; CRediT, funding, data and AI-use declarations (pp. 3, 9, 24-26, 30-32).",
+  "limits_future": "Abstracts charging times, timetables, demand feedback and station capacities; separation may miss cuts; on large instances AS's master dominates the runtime; room for improving AN; graded extensions (trip weights, capacities, detour bounds, timing); code only upon publication and the GTFS instance withheld; the GTFS optimality rests on a triangle-inequality preprocessing the instance may violate (pp. 3, 18, 21-22, 24, 26-27, 30-31).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Steps 1, 2, 5, 6: compact arc-based MILP written first and run in Gurobi 9.5.2 as the baseline with the same heuristic and cuts; reformulations derived from it as Dantzig-Wolfe blocks shown in permuted matrices; built on SCIP plugins; station, shortcut and range variables kept in the master and branched on. Also H1 (Lagrangian bound each pricing iteration, Farkas pricing by heuristic) and Workflow C step 4 (preliminary tests choose tau, heuristic frequency, branching hierarchy, cuts).",
+    "pages": "pp. 7-12, 15-19, 22"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Step 4 and the Workflow B go/no-go not shown: no generic probe, no root-bound table for the compact LP and the reformulations; decomposition motivated by model size and pricing speed; the compact model solves more small I1 instances than AT (53 vs 40, 35 vs 32 by recount).",
+    "pages": "pp. 9, 11, 37"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Weak: three decompositions of one compact model are built and compared instead of one picked by taste, and the winner changes with the instance family; no enumeration, no proxy score.",
+    "pages": "pp. 9-13, 25-26"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Steps 1 and 5 in part: two generated families with different structure and per-family results, per-instance tables with every timeout and gap, failures of the compact model reported, baseline given the same problem-specific components.",
+    "pages": "pp. 17, 22, 25-27, 37-40"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Random TSPLIB-based instances plus one public-data instance run only with the winner; ablations asserted but not shown; threads and seeds unstated; 'clearly outperform' in the conclusion although AT trails AA on small I1 instances; the 'optimal' GTFS result rests on a preprocessing whose triangle-inequality assumption the instance may violate.",
+    "pages": "pp. 15, 21-24, 27, 30, 37"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Master equalities relaxed to covering inequalities",
+    "evidence": "Trip rows (16) and segment rows (35) in covering form, equality at the optimum because costs are non-negative; same move as S089 Prop 3",
+    "pages": "pp. 10, 12"
+   },
+   {
+    "pattern": "Nested Dantzig-Wolfe decomposition of the pricing problem",
+    "evidence": "AN solves the trip pricing problem of AT by the segment decomposition AS; keeps AT's rare branching and gains AS's fast pricing",
+    "pages": "pp. 13, 23, 26"
+   },
+   {
+    "pattern": "Farkas pricing by a feasibility-exact heuristic",
+    "evidence": "The primal heuristic finds a feasible solution iff the instance is feasible and supplies the Farkas columns",
+    "pages": "p. 15"
+   },
+   {
+    "pattern": "Compact baseline given the same problem-specific heuristic and cuts",
+    "evidence": "Gurobi callbacks run the heuristic at every node and separate the cuts translated to the arc-based model as (53)",
+    "pages": "pp. 17, 22"
+   },
+   {
+    "pattern": "Optimal plan read as a data diagnostic",
+    "evidence": "The worst detours of the GTFS optimum point to a sparse candidate-station set and shared corridors, the stated reason for not imposing a detour bound",
+    "pages": "pp. 27-28"
+   },
+   {
+    "pattern": "Declared, bounded LLM assistance after a hand-written first version",
+    "evidence": "AI-use declaration (wording, revision planning, evaluation scripts, literature check, figures; first manuscript and code without the tools); tension with the anti-pattern row on LLM-generated text",
+    "pages": "pp. 31-32"
+   }
+  ],
+  "transferable": [
+   "Derive every reformulation as a Dantzig-Wolfe reformulation of your compact model and show its blocks in the permuted coefficient matrix (Figures 3 and 5, pp. 9, 14).",
+   "When a pricing problem is itself a structured MILP, decompose it again with a nested column generation and keep the stronger outer master (pp. 13, 26).",
+   "Write convexity-type master rows in covering form when costs are non-negative, and say why equality holds at the optimum (pp. 10, 12).",
+   "Keep shortest-path pricing valid under cuts and branching: check that the duals' signs give non-negative arc lengths, and enforce branching decisions by deleting edges (pp. 13, 17, 19).",
+   "Use a heuristic that finds a feasible solution exactly when one exists as the Farkas pricing (p. 15).",
+   "Call the heuristic from inside pricing with the stations whose LP value is at least tau, and skip pricing once all station variables are fixed (pp. 15-16).",
+   "Derive cover cuts by aggregating range-coupling rows into a GUB knapsack (Wolsey 1990), and translate them to the compact model so that the baseline gets them too (p. 17).",
+   "Split a length budget in a three-way branching (b1 + b2 + l = b_t) so that each child forbids one part of an infeasible fractional path (p. 19).",
+   "Run pricing in parallel but insert the new columns in a deterministic order (p. 23).",
+   "Report branching incidence and node counts conditional on branching to show which reformulation's master is stronger (Figure 11, p. 26).",
+   "Read the optimal solution of a real instance as a planning diagnostic: an ECDF of relative increases, the tail of the worst trips, and recurring detour areas with their cumulative shares (pp. 27-30).",
+   "State the evaluation questions before the results, and list both the abstracted features and the graded extensions (pp. 3, 24, 30)."
+  ],
+  "coauthors": "Erik Mühmer (corresponding; CRediT: software, data curation, original draft and more), Miriam Ganz, Felix J. L. Willamowski, all RWTH Chair of Operations Research; Lübbecke's CRediT role: conceptualization, methodology, supervision, writing - review and editing; joint voice",
+  "quotes": [
+   {
+    "text": "During the preparation of this work the authors used GitHub Copilot (GPT-5.4) and Anthropic Claude Opus 4.8 to support revision planning, improve wording and readability, and for updates to evaluation scripts used to generate manuscript figures and tables.",
+    "page": 31
+   },
+   {
+    "text": "Large detours are rarely attractive in the optimum, but a strict bound could render such an instance infeasible and would hide where the candidate-station set is too sparse.",
+    "page": 28
+   }
+  ]
+ }
+]

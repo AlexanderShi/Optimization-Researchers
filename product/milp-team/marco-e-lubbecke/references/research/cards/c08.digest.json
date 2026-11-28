@@ -1,0 +1,110 @@
+[
+ {
+  "id": "S006",
+  "year": "2021",
+  "title": "The SCIP Optimization Suite 8.0",
+  "read_level": "full",
+  "contribution": "Release report of the SCIP Optimization Suite 8.0 by 35 authors: a new MINLP framework, symmetry handling for general variables, mixing cuts, decomposition heuristics and other SCIP updates, plus the RWTH group's GCG 3.5, an ecosystem release (refactored detection, a strong-branching family for branch-and-price evaluated as preliminary on 73 strIPlib instances, PyGCGOpt, a visualization suite, new documentation), in which Lübbecke is credited with no section.",
+  "problem_entry": "Explain and measure SCIP 8.0 against 7.0 and present new components (p. 3). GCG enters from usability since 3.0 (2018) and from the cost of strong branching when every candidate's child LPs need column generation, given its reported potential in branch-and-price (pp. 70-71). The co-signed MINLP rewrite enters from a counted failure: 7% of MINLPLib instances got solutions infeasible for the original problem (p. 20).",
+  "key_idea": "GCG 3.5 as an ecosystem release (interfaces, documentation, experiment tooling) plus strong branching made affordable in branch-and-price by tiers: a cheap score, strong branching without column generation, then with column generation for the last candidates, combined with hybrid depth limits and reliability counts. All variants are one parameterized implementation, off by default; the branching rules themselves are unchanged (pp. 70-74).",
+  "assumptions": "MILP (1) and MINLP (2) as constraint integer programs with algebraic nonlinear functions (pp. 2-3). GCG needs a structure that admits a decomposition (e.g. block-angular), found by classifiers over constraint and variable types and names; master and subproblems are usually MILPs (p. 70). Ryan-Foster branching only for set-partitioning masters (p. 71). strIPlib instances all have DWR-applicable structure (p. 73). PADM and DPS need a user decomposition with linking variables only or linking constraints only (pp. 13-14). No correctness argument for GCG components.",
+  "proof_devices": [
+   "Three-phase hierarchical strong branching for branch-and-price: phase 0 cheap score (pseudocost, most fractional or random), phase 1 strong branching without column generation, phase 2 with column generation; effort grows with the estimated subtree size (pp. 72-73)",
+   "SBw/oCG versus SBw/CG: child LPs of a candidate solved without or with column generation, a degree of freedom that branch-and-cut lacks (pp. 71-72)",
+   "Hybrid and reliability combinations: strong branching only up to depth limits kappa1+ = lambda1depth + rhodepth * log_lambdabase(ncands), or only for candidates whose pseudocosts are not yet reliable (minimum of down and up branchings) (pp. 72-74)",
+   "Adaptive effort control: simplex-iteration and pricing-round caps at twice the average when set to 0; strong branching switched off after the phase-0 choice has been close to the phase-2 choice a set number of times in a row (Table 7, p. 74)",
+   "One implementation, many rules: every strong-branching selection heuristic is a parameter setting with a preset settings file (p. 73)",
+   "Detection loop: constraint and variable classifiers (plugins) partition by type or name before detectors assign master or block roles over several rounds; PARTIALDECOMP and DETPROBDATA objects (pp. 70-71)",
+   "Other authors: SST cuts via leaders, orbits and stabilizers (Salvagnin) and greedy suborbitope detection from 2-cycle permutations (pp. 8-9)",
+   "Other authors: linear-time minimal-cover separation for symresacks using path or cycle components (pp. 10-11); Günlük-Pochet O(|N| log |N|) separation of mixing inequalities (p. 13)",
+   "Other authors: cut cleanup (coefficient range at most 1e7, largest coefficient scaled into [1e-4, 1e4], near-integral coefficients relaxed within 1e-9) and, when enforcement admits weak cuts, a 2^-50 violation floor tied to the 52-bit mantissa (pp. 34, 36)",
+   "Other authors: Berthold-Witzig check of Ipopt's local-infeasibility claims (p. 58)"
+  ],
+  "experiments": "GCG strong branching, preliminary and for original-variable branching only: 73 unreleased strIPlib instances needing at least 1,000 nodes with a previous GCG version, diversity controlled as for MIPLIB 2017; Xeon L5630 2.13 GHz, 16 GB, 3,600 s; ten selection heuristics against pseudocost; geometric (shift not stated) and arithmetic means of time and nodes, wins, timeouts and per-instance tables; no seeds, permutations or general-purpose set (pp. 73, 113-114). Hybrid hierarchical: 108.4 s against 149.9 s geometric mean, 1 against 5 timeouts, best on 22 of 73; SBw/CG has the smallest node mean (418.7 against 2,689.8) but takes 343.0 s with 17 timeouts. SCIP sections by other authors: five seeds on 347 MILP and 113 MINLP instances with exclusions and difficulty subsets (pp. 4-6), permuted copies and failure against best known bounds on 1,678 MINLPLib instances (pp. 59-61), a two-set evaluation for mixing cuts (p. 13); slowdowns reported (pp. 5-6, 59).",
+  "positioning": "GCG 3.5 is set only against GCG 3.0 and the group's 6.0 suite report [38]. Strong branching draws on branch-price-and-cut for vehicle routing (Pecin et al. 2014 [82]; a 2012 talk by Røpke [91]), LINDO's hybrid branching [62] and Achterberg-Koch-Martin reliability branching [4], with details in Gaul's 2021 RWTH master's thesis [36]. Branching rules from Villeneuve-Desrosiers-Lübbecke-Soumis [114], Vanderbeck [111] and Ryan-Foster [92]. No other branch-and-price framework is compared (pp. 70-72, 85-87).",
+  "writing": "Section 10 is hedged and scoped (preliminary, conceivable, 'A potential explanation', more investigation needed, 'beyond the scope here', the first half of an ecosystem release, documentation lagging behind the code; pp. 70-73, 77-78), with one unquantified 'empirically very successful' (p. 70). A closing paragraph maps code to people by initials (pp. 82-83). The co-signed Final Remarks state speed-up ratios as reductions: MILP ratio 1.52 written as about a 50% shorter runtime (34% computed), MINLP 21% where the 'all' row shows 14% (pp. 5, 82); the text of §2.3 and Table 2 disagree on counts (p. 5).",
+  "limits_future": "Stated: preliminary, original-variable branching only, column-pool effect unevaluated, partial or heuristic pricing inside strong branching out of scope, default-on strong branching conceivable but needing more investigation, visualization ongoing (pp. 72-73, 77). Not stated: one structured, unreleased test set without a general-purpose set, seeds or permutations; no stated shift; the variant that usestrong runs by default (hybrid hierarchical) is the winner on the same 73 instances, with no hold-out named; Vanderbeck's branching left without strong branching, unexplained (pp. 72-73, 113-114). Elsewhere: convex MINLP slowdown, about 200 instances no longer solved, Benders work moved into a research phase (pp. 6, 15, 59).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "[group] GCG as a probe (step 4): PyGCGOpt lowers the technical hurdle to try out branch-and-price on an existing problem and takes a user decomposition (the textbook CPMP one) while automatic detection stays available; the visualization suite is framed as the counterpart of experimenting with a decomposition approach without implementing it. Step 6: heuristics and cuts tailored to having both the original and the reformulated model, and branching on original variables after Villeneuve, Desrosiers, Lübbecke and Soumis.",
+    "pages": "pp. 70-71, 76-77"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "[group] The section opens with the routine, interaction-free philosophy (decomposition applied to MILPs as branch-and-cut is), and master and subproblems are usually MILPs. In 2021 the group's public framing still carries the generic ambition that SKILL.md dates as overturned from 2017 on (Tensions 1-2). This does not refute the probe use.",
+    "pages": "p. 70"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Stop rule, from other authors (Halbig, Weninger) in the co-signed report: the DPS decomposition heuristic shows no general improvement on MIPLIB 2017, 'slightly disappointing', which they blame on general MILPs lacking a well-decomposable structure.",
+    "pages": "pp. 15, 82"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "[group] Ten selection heuristics compared side by side and per instance on 73 real structured instances (the 'ten branching variants (2021)' of SKILL.md); all are settings of one implementation; the cost reading is labelled 'A potential explanation'; detection usually yields many candidate decompositions (steps 1, 3, 6).",
+    "pages": "pp. 70, 73, 113-114"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "[group] Steps 2 and 6: difficulty filter (at least 1,000 nodes with the previous GCG version), diversity control on the MIPLIB 2017 pattern, per-instance tables with visible losses (SBw/CG 17 timeouts), claim sized as preliminary and the default left off (Heuristic H7).",
+    "pages": "pp. 73, 113-114"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "[group] Steps 1 and 5 only partly followed: one structured, unreleased test set and no general-purpose set, no seeds or permutations, geometric mean without a stated shift, hardware different from the SCIP sections. The co-signed SCIP sections of the same report use five seeds, permuted copies and stated exclusions, and the two-set move appears in the mixing-cut section by Chen and Pfetsch, so that step is SCIP-community practice rather than distinctive of him.",
+    "pages": "pp. 4, 13, 59, 73, 82, 113"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Step 6 in co-signed text, not the GCG section: the Final Remarks write a MILP time ratio of 1.52 as about a 50% shorter runtime (34% computed) and give an MINLP reduction of about 21% where the 'all' row shows 14%; §2.3 and Table 2 disagree on counts (Tension 3). Authorship of §2 and §13 is not assigned.",
+    "pages": "pp. 4-5, 82-83"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "ship the experiment tooling with the solver",
+    "evidence": "GCG 3.5 adds a visualization suite (testset and comparison reports built from make test logs, a Jupyter notebook, a pricing bubble plot), documentation on how to conduct experiments and CI pipelines, and calls itself the first half of an ecosystem release. Research note 03 traces the ecosystem framing to his 2019 draft release notes (not re-checked in this batch).",
+    "pages": "pp. 1, 70, 76-78"
+   },
+   {
+    "pattern": "cost-tiered candidate evaluation along the pricing loop",
+    "evidence": "Strong branching for branch-and-price ranks candidates by a cheap score, then by strong branching without column generation, then with it for the last few, with effort scaled by subtree size and node gap and a switch-off when the cheap choice keeps agreeing; hybrid hierarchical has the best geometric mean time on the 73 instances.",
+    "pages": "pp. 71-74, 113-114"
+   },
+   {
+    "pattern": "credit map in a multi-author software paper",
+    "evidence": "The report maps each section's code to people by initials; all GCG items go to RWTH students and staff (Mühmer, Donkiewicz, Gaul, Schlein) and none to Lübbecke, consistent with Heuristic H9 and Common Misreading 1.",
+    "pages": "pp. 82-83"
+   }
+  ],
+  "transferable": [
+   "Tiered strong branching for branch-and-price: filter candidates by a cheap score, re-rank survivors by strong branching without column generation, and run column generation only for the last few; scale the number of survivors with node gap and estimated subtree size, and cap simplex iterations and pricing rounds at twice their running average (pp. 72-74).",
+   "Give the expensive evaluator an exit: stop strong branching after a set number of consecutive nodes where the cheap rule's choice is within a set fraction of the strong-branching winner's score (p. 74).",
+   "Build a family of rules as one parameterized implementation, ship each rule as a preset settings file plus a template, and compare all of them on the same instances with per-instance time and node tables, win counts and timeouts (pp. 73, 113-114).",
+   "Choose a component's test set by difficulty under the previous version (at least 1,000 nodes) and control diversity across instance families as the MIPLIB 2017 benchmark selection did (p. 73).",
+   "In version comparisons, split results into difficulty brackets, both-solved and diff-timeouts, and state the exclusion rule, so that a speed-up from newly solved instances is visible as such (Table 1, pp. 4-5).",
+   "Count failures against best known bounds, count a final solution infeasible for the original problem as its own failure, and add permuted copies of each instance to expose variability (pp. 59-60).",
+   "Expose the decomposition solver as a library (transform, presolve, detect, solve) so that a modelling layer can try branch-and-price on an existing model, with or without a user decomposition (p. 76).",
+   "Write a speed-up either as a ratio or as a reduction: a time ratio r is a runtime reduction of 1 - 1/r (1.52 is 34%) (pp. 5, 82)."
+  ],
+  "coauthors": "34 co-authors (p. 1): Bestuzheva, Besançon, Chen, Chmiela, Donkiewicz, van Doornmalen, Eifler, Gaul, Gamrath, Gleixner, Gottwald, Graczyk, Halbig, Hoen, Hojny, van der Hulst, Koch, Maher, Matter, Mühmer, Müller, Pfetsch, Rehfeldt, Schlein, Schlösser, Serrano, Shinano, Sofranac, Turner, Vigerske, Wegscheider, Wellner, Weninger, Witzig. RWTH OR chair: Donkiewicz, Gaul, Lübbecke, Mühmer, Schlein (pp. 89-91). GCG section credited to Mühmer, Donkiewicz, Gaul and Schlein (p. 83).",
+  "quotes": [
+   {
+    "text": "can be routinely applied to MILPs without the user's interaction or even knowledge, just like branch-and-cut",
+    "page": 70
+   },
+   {
+    "text": "The preliminary results suggest that it is conceivable to have strong branching components enabled in branch-and-price by default.",
+    "page": 73
+   }
+  ]
+ }
+]

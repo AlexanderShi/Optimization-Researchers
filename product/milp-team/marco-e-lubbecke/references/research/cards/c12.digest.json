@@ -1,0 +1,97 @@
+[
+  {
+    "id": "S076",
+    "year": "2026",
+    "title": "Fast Subproblem Solving in Benders Decomposition for Affine Potential-Based Flow Problems with Topology Switching and Scenarios",
+    "read_level": "full",
+    "contribution": "An exact, LP-free Benders subproblem solver for affine potential-based flow problems with topology switching and contingency scenarios. Primal flows, optimal duals and Farkas rays come from at most two linear systems sharing the weighted-Laplacian matrix, and the factorizations are reused across scenarios and master solutions by rank-1 LU updates. Against Gurobi-solved subproblems, the shifted geometric mean running time falls by 71.21% on the 136 SCOTS instances solved by all methods (pp. 3-4, 30).",
+    "problem_entry": "The gap is located in a component, not in the decomposition: Benders work on potential-based flows improves the master, while subproblem efficiency is 'relatively underexplored' although it can dominate run time (72.49% under Gurobi, pp. 28-29). The entry fact is the classical uniqueness of passive flows (Birkhoff-Diaz 1956), pointed out to the authors by A. Helber (pp. 2-3, 32).",
+    "key_idea": "With topology and demands fixed, 'there is nothing to optimize' in a subproblem. The primal flow is one linear system with the negated weighted Laplacian of the contracted network; the optimal dual for an optimality cut is a system with the same matrix and a new right-hand side; the Farkas ray is the bordered matrix. LU factorizations are reused across master solutions, contingencies and the primal/dual pair by rank-1 updates (pp. 3-4, 14, 20, 22-27, 32).",
+    "assumptions": "The model is an MILP: binary switch variables with big-M on/off constraints (1a)-(1b), continuous demands, per-contingency flows, potentials and overloads, a switching-limit cardinality constraint (2b), and single-arc (N-1) contingencies, with islanding-freeness enforced by separation (min cut). Affine potential functions are reduced to the identity. The proofs assume positive conductances, no line arc inside a switch component and at most one line arc between two components, balanced demands, and a connected subproblem graph. The tests use DC SCOTS instances derived from PGLib-OPF (pp. 4-9, 11, 28).",
+    "proof_devices": [
+      "change of variables x' = x + s/r with rescaled conductance mu/r, shifted bounds and demands, and a constant objective term (Prop. 1, pp. 7-9)",
+      "zero-flow extension plus a restriction argument to drop inactive switch arcs (Prop. 2, p. 12)",
+      "contraction of switch-arc components preserves line flows, by summing the nodal balances (7)+(8) with induction over arcs; switch flows are recovered from the leaves of a spanning tree, as for non-basic variables in network simplex (Theorem 1, p. 13)",
+      "reference-node fixing plus weak diagonal dominance, strict dominance in one row and irreducibility show the reduced Laplacian has full rank, so the flow is unique (Theorem 2, pp. 15-16)",
+      "potential-bound feasibility decided by shiftability of the potentials (p. 16)",
+      "deterministic optimal primal basis: one variable per constraint, all nonzeros, a spanning forest of active switch arcs, independence via unit columns and the uniquely solvable square system (p. 17)",
+      "dual system by complementary slackness: slack-positive duals set to zero, sigma fixed by the primal overloads, alpha eliminated by summing over components, phi merged onto representatives, giving (16) with the primal matrix (pp. 18-20)",
+      "dual optimality: invariance to the reference value via balanced demand, and zero duals at tight bounds justified by an epsilon-relaxation of the bound with complementary slackness and weak duality (Theorem 3, pp. 20-21)",
+      "Farkas ray as a homogeneous system plus a normalisation row fixing the dual objective at a positive value ('here, e.g., 1'), argued in two sentences rather than a theorem (pp. 21-22)",
+      "LU bordering for the feasibility-cut system: U^T l = b, L u = s, v = xbar - l^T u, each O(|W|^2) (p. 26)",
+      "complexity per Benders round: simplex O(|C| m m^2) with the empirical O(m) iteration count, SLE O(|C| 2|V|^3), SLE-U O(|V|^3 + |C| Chat |V|^2), i.e. O(|A|^3) under N-1 (p. 27)"
+    ],
+    "experiments": "174 custom SCOTS instances, joined from parts of PGLib-OPF instances (construction deferred to a later paper); 25 dropped, 149 analysed. GRB (Gurobi 13.0.0 subproblem LP), SLE and SLE-U share one Gurobi master in Julia/JuMP; 2x Xeon L5630, 3 h limit. Solved 141/146/147; on the 136 instances solved by all, shifted geometric mean (shift 10) 958.75/367.88/276.02 s. Also time-share box plots and performance profiles for total, SP and SP-solve time; the SLE variants solve more subproblems. No compact-model baseline and no seeds; threads not stated; the 97.98% headline is not traced to any table (pp. 28-31).",
+    "positioning": "Builds on Birkhoff-Diaz 1956, Koch et al. 2015 and Pfetsch et al. 2026 (credited with the primal system-then-bounds step), and on Rahmaniani et al. 2017. Fischetti et al. 2017 and Contreras et al. 2011 are its precedents for specialised subproblem algorithms. It concedes prior art for the factorization updates (Alsac et al. 1983). Prior Benders work is reframed as master-focused, not criticised; no cut-selection literature is cited (pp. 2-4, 14, 23, 33-35).",
+    "writing": "A Contribution paragraph, a two-part outline and a roadmap (pp. 3-4). The punchline 'there is nothing to optimize' is saved for a conclusion that interprets, not summarises, and ranks the future work by difficulty (p. 32). A known result is re-proved with the reason given (p. 14). Hedged results ('mildly disadvantageous', 'only serves as an intuition', pp. 29, 31) stand beside uncounted 'often' and 'almost all' (pp. 28-29), a 174-versus-136 framing (pp. 4, 30) and a lead number, 97.98%, that concerns subproblem time only (p. 1).",
+    "limits_future": "Stated (pp. 6, 27, 29, 32): one cut per subproblem with all subproblems every round is only one option, and more cuts are cheap with this method; non-affine potentials are not covered because the method relies on linear subproblems, though uniqueness still holds; simplex accelerations are out of scope; the miscellaneous SP overhead remains; only single-arc contingencies are run. Unstated: the benchmark cannot be rebuilt from the paper; there is no compact-model baseline; the gain depends on small contingencies and sparse graphs (pp. 27-31).",
+    "method_links": [
+      {
+        "method": "Method 3",
+        "relation": "evidence",
+        "note": "Identical conditions: same machines, time limit and master, only the subproblem method changed, output unchanged. Also: an ablation without updates (SLE), exclusions with reasons, the shift stated, solved counts and a common-instance aggregate, three performance profiles, and a reported disadvantage (more SP solves).",
+        "pages": "pp. 28-31"
+      },
+      {
+        "method": "Method 3",
+        "relation": "variant",
+        "note": "One custom, not yet documented test set; no instances outside the speedup's condition (large contingencies, dense graphs); no seed or permutation protocol. Claim-sizing slips: 'often' and 'almost all' without counts, 'on 174 instances' against a 136-instance aggregate, 'more than 71.21 %' against 71.21%, and an untraced 97.98% headline.",
+        "pages": "pp. 1, 4, 27-30"
+      },
+      {
+        "method": "Method 1",
+        "relation": "variant",
+        "note": "Benders is taken as given from the structure and the literature; no run of the full model (2a)-(2n) in a MILP solver is reported, so step 2 is not practised and only the component swap inside the decomposition is measured. The paper is also a Benders-design paper, so SKILL.md's Routing row for 'Design my Benders decomposition' ('his one Benders paper puts Benders cuts inside pricing') and the Activation Rules' 'Benders design' example are out of date. Caveats: the paper is unreviewed and group-voiced. The Roundtable Card's inferred Fischetti disagreement (Benders projection against extended formulations) is weakened too: the paper cites Fischetti et al. 2017 as 'similar in spirit' (p. 3).",
+        "pages": "pp. 2-3, 27-32"
+      },
+      {
+        "method": "Method 1",
+        "relation": "evidence",
+        "note": "Step 5 and the stop rule's logic: tree management is left to a framework (Gurobi callbacks), and the subproblem gets a named, structure-specific algorithm instead of a generic LP solver. The framework is commercial Gurobi via JuMP, not SCIP (compare Tension 7).",
+        "pages": "pp. 11, 28, 32"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "LP-free exact subproblem via a uniqueness property",
+        "evidence": "The subproblem LP is replaced by linear systems defined by its unique primal and a deterministically chosen basis, and the resulting duals and Farkas rays are proved (or argued) to give valid Benders cuts; framed as a specialised simplex method.",
+        "pages": "pp. 3, 11, 14-22, 32"
+      },
+      {
+        "pattern": "factorization reuse across subproblems",
+        "evidence": "Rank-1 LU updates exploit the similarity between scenarios, master solutions and the primal/dual pair, 'rather than bases of the same problem'; Algorithm 1 applies the updates and reverts them each round.",
+        "pages": "pp. 4, 22-27"
+      },
+      {
+        "pattern": "time-share accounting of a component swap",
+        "evidence": "Box plots of the master, primal, dual, update and miscellaneous time for each variant show where the gain lands and that the master becomes the bottleneck (75-83%), which motivates the future work on more cuts per round.",
+        "pages": "pp. 28-29, 32"
+      }
+    ],
+    "transferable": [
+      "[D1] Measure the master/subproblem time split of a Benders code before choosing what to improve; if the subproblems dominate and have a known uniqueness property, replace their LP solve instead of strengthening the cuts (pp. 2-3, 28-29).",
+      "[D2] Derive the dual from a deterministically chosen optimal primal basis and check whether the dual system shares the primal matrix; one factorization then serves the feasibility test, the optimality cut and, bordered, the feasibility cut (pp. 16-20, 26).",
+      "[D2] Walk the scenario subproblems with rank-1 factorization updates and revert them at the end of the round, so that each new master solution starts from a stored base (Algorithm 1, pp. 25-27).",
+      "[D3] Reduce a parameterised family to one canonical form by rescaling and shifting, so that one algorithm and one benchmark class cover it (Prop. 1, pp. 7-9).",
+      "[D4] State each structural reduction as a two-way solution-transfer result, so that the exactness of the cuts rests on a chain of small lemmas (pp. 7-13).",
+      "[D4] Prove a reduced graph Laplacian nonsingular after fixing a reference node, by weak diagonal dominance, strict dominance in one row and irreducibility (pp. 15-16).",
+      "[D4] Justify zero duals on tight bounds by relaxing the bound by epsilon: the primal is unchanged, so complementary slackness and weak duality give an optimal dual with that multiplier at zero (p. 21).",
+      "[D5] Plot each variant's time split (master, primal, dual, update, miscellaneous) in relative and absolute box plots, to show where the gain lands and the next bottleneck (Fig. 4, p. 29).",
+      "[D5] Keep the variant without the acceleration (SLE against SLE-U) in every table, so that the structural idea and the update scheme are credited separately (Table 1, p. 30).",
+      "[D6] Name where the field's attention goes and answer the obvious objection before claiming that a neglected component pays (pp. 2-3).",
+      "[D7] Re-prove a known result you build on, and say in one sentence why: an error there would make the cuts wrong (p. 14).",
+      "[D8] State the speedup's condition in complexity terms and report the instance statistics that place the benchmark inside it (pp. 27, 30-31)."
+    ],
+    "coauthors": "Oliver Gaul (first and corresponding author), Tim Donkiewicz; all at the Chair of Operations Research, RWTH Aachen University",
+    "quotes": [
+      {
+        "text": "The efficiency of the subproblem solution algorithm remains a relatively underexplored subject in the Benders context, even though it can contribute significantly to overall running time.",
+        "page": 2
+      },
+      {
+        "text": "We conclude that in the subproblems “there is nothing to optimize,” and thus the general simplex method is a considerable overhead.",
+        "page": 32
+      }
+    ]
+  }
+]
