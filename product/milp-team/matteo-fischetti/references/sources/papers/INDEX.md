@@ -140,7 +140,7 @@
 | 128 | S129 | 2006 | Robust optimization through branch-and-price | Proceedings of the 37th annual conference of the Italian operations research… | 16 | conference | — | no-oa |  | supplement | metadata |
 | 129 | S130 | 2022 | An integrated local-search/set-partitioning refinement heuristic for the capacitated vehicle routing problem | Mathematical Programming Computation 14 (4), 749-779, 2022 | 14 | journal | url | txt | 27 | supplement | carded |
 | 130 | S131 | 2015 | Optimal turbine allocation for offshore and onshore wind farms | Optimization in the Real World: Toward Solving Real-World Optimization… | 13 | chapter | — | no-oa |  | supplement | abstract |
-| 131 | S132 | 2007 | Integer Programming and Combinatorial Optimization: 12th International IPCO Conference, Ithaca, NY, USA, June 25-27, 2007, Proceedings | Springer, 2007 | 12 | book | manual | txt | 8 | supplement | metadata |
+| 131 | S132 | 2007 | Integer Programming and Combinatorial Optimization: 12th International IPCO Conference, Ithaca, NY, USA, June 25-27, 2007, Proceedings | Springer, LNCS 4513, 2007 (editors M. Fischetti, D. P. Williamson) | 12 | book | manual | txt | 8 | supplement | carded |
 | 132 | S133 | 2018 | Faster SGD training by minibatch persistency | arXiv preprint arXiv:1806.07353, 2018 | 11 | preprint | arXiv | txt | 7 | core | carded |
 | 133 | S134 | 2010 | On the knapsack closure of 0-1 Integer Linear Programs | Electronic Notes in Discrete Mathematics 36, 799-804, 2010 | 10 | journal | url | txt | 6 | supplement | carded |
 | 134 | S135 | 2003 | Optimisation of the interconnecting network of a UMTS radio mobile telephone system | European Journal of Operational Research 144 (1), 56-67, 2003 | 10 | journal | manual | txt | 12 | supplement | carded |
@@ -157,7 +157,7 @@
 | 145 | S150 | 2026 | GPU-accelerated wind farm layout search with a distilled endogenous wake model (EndoWake) | arXiv preprint arXiv:2610.07844, 2026 | 1 | preprint | arXiv | txt | 40 | core | carded |
 | 146 | S151 | 2025 | Column Generation Algorithms for the Pickup and Delivery Problem with Time Windows and Last-in-First-out Loading | Beyond Frontiers of Operations Research: Emerging Technologies and Innovative Optimization Paradigms (AIRO Springer Series 14), 75-86, 2025 | 1 | chapter | — | no-oa |  | core | abstract |
 | 147 | S152 | 2017 | Comments on: On learning and branching: a survey | Top 2 (25), 237-238, 2017 | 1 | journal | — | no-oa |  | supplement | metadata |
-| 148 | S154 | 2014 | Proximity search heuristics for Mixed Integer Programs | Proceedings of the 26th RAMP Symposium, Hosei University, Tokyo, October 16-17, 2014 | 1 | other | manual | txt | 12 | supplement | abstract |
+| 148 | S154 | 2014 | Proximity search heuristics for Mixed Integer Programs | Proceedings of the 26th RAMP Symposium, Hosei University, Tokyo, October 16-17, 2014 | 1 | other | manual | txt | 12 | supplement | carded |
 | 149 | S155 | 2006 | MIP models for MIP heuristics | Talk presented at Matheuristics, 2006 | 1 | talk | — | no-oa |  | skip | — |
 | 150 | S161 | 2026 | Just sort it! A note on the LP behind rank-one anti-loop edits | arXiv preprint arXiv:2611.21432, 2026 | — | preprint | arXiv | txt | 4 | core | carded |
 | 151 | S162 | 2026 | A Dantzig-Wolfe reformulation of the EndoWake model for optimal wind farm layouts | arXiv preprint arXiv:2610.39503, 2026 | — | preprint | arXiv | txt | 25 | core | carded |
@@ -180,13 +180,13 @@
 | 168 | S187 | — | Technical note for GPU-accelerated wind farm layout search with a distilled endogenous wake model (EndoWake) | — | — | report | — | no-oa |  | supplement | metadata |
 | 169 | S188 | 1996 | Optimización combinatoria poliédrica: problemas de rutas-localización | Doctoral thesis, Universidad de La Laguna (author J. J. Salazar González; directors P. Toth and M. Fischetti) | — | thesis | — | no-oa |  | supplement | abstract |
 | 170 | S189 | — | Exact and approximate algorithms for bus driver scheduling problems in Logistique: Production, Distribution, Transport. Logistics: Manufacturing, Distribution, Transportation | — | — | chapter | — | no-oa |  | supplement | metadata |
-| 171 | S190 | — | Intersection Cuts for Quadratic Mixed-Integer Optimization | — | — | other | manual | txt | 16 | supplement | metadata |
+| 171 | S190 | 2019 | Intersection Cuts for Quadratic Mixed-Integer Optimization | ODS 2019, Genova, 4-7 September 2019 (slides, with M. Monaci) | — | talk | manual | txt | 16 | supplement | carded |
 | 172 | S192 | 2020 | Metaheuristic frameworks for deep neural network training | Master's thesis, University of Padova (candidate Marco Calandro; Fischetti supervisor) | — | thesis | — | no-oa |  | supplement | abstract |
 | 173 | S193 | — | Simplified Benders cuts for facility location | Speaker, 9, 0 | — | talk | — | no-oa |  | skip | — |
-| 174 | S194 | — | Exact Algorithms for Mixed-Integer Bilevel Linear Programming | — | — | other | manual | txt | 21 | supplement | metadata |
+| 174 | S194 | 2017 | Exact Algorithms for Mixed-Integer Bilevel Linear Programming | Lunteren Conference on the Mathematics of Operations Research, 18 January 2017 (slides; joint work with I. Ljubic, M. Monaci, M. Sinnl) | — | talk | manual | txt | 21 | supplement | carded |
 | 175 | S195 | — | Thinning out facilities: Lagrange, Benders, and | — | — | report | url | txt | 31 | supplement | carded |
 | 176 | S196 | 2016 | Solving Congested Facility Location by Branch-and-Cut | ROADEF 2016, 17th ROADEF conference, Compiègne, abstract #235 | — | conference | — | no-oa |  | supplement | abstract |
-| 177 | S198 | 2004 | Exact and Heuristic Methods for Nesting Problems | Report, DEI, University of Padova, 1 April 2004 (CNR/MIUR project CU.03.00107.PF25) | — | report | manual | txt | 81 | supplement | metadata |
+| 177 | S198 | 2004 | Exact and Heuristic Methods for Nesting Problems | Report, DEI, University of Padova, 1 April 2004 (CNR/MIUR project CU.03.00107.PF25) | — | report | manual | txt | 81 | supplement | carded |
 | 178 | D001 | 1993 | On the monotonization of polyhedra | IPCO, 23-38 | — | conference | — | no-oa |  | supplement | abstract |
 | 179 | D002 | 2005 | Mixed-Integer Cuts from Cyclic Groups | IPCO, 1-11 | — | conference | — | no-oa |  | supplement | abstract |
 | 180 | D003 | 2005 | Optimizing over the First Chvàtal Closure | IPCO, 12-22 | — | conference | manual | txt | 11 | core | carded |
