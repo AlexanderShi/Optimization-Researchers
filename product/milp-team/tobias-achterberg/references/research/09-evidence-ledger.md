@@ -8,7 +8,7 @@
 - Heuristics: [1](#heuristic-1) · [2](#heuristic-2) · [3](#heuristic-3) · [4](#heuristic-4) · [5](#heuristic-5) · [6](#heuristic-6) · [7](#heuristic-7) · [8](#heuristic-8) · [9](#heuristic-9) · [10](#heuristic-10)
 - [Common misreadings](#misreadings)
 - Anatomies: [branching](#anatomy-branching) · [conflict analysis](#anatomy-conflict) · [CIP thesis and SCIP paper](#anatomy-cip) · [presolve](#anatomy-presolve) · [Mcf-separator](#anatomy-mcf) · [RLT cuts](#anatomy-rlt)
-- [Anti-patterns](#anti-patterns) · [Trajectory](#trajectory) · [Inner tensions](#inner-tensions) · [Roundtable Card](#roundtable-card)
+- [Anti-patterns](#anti-patterns) · [Trajectory](#trajectory) · [Inner tensions](#inner-tensions) · [Mentor Voice](#mentor-voice) · [Roundtable Card](#roundtable-card)
 - [Honest Boundary](#honest-boundary) · [Corrections](#corrections) · [Promotions and the candidate pool](#promotions) · [Rejected updates](#rejected) · [Held back under the holdout rule](#held-back) · [Sources appendix](#sources) · [Card key](#card-key)
 
 > Date: 2026-11-28 (stage T3.6, team-synthesize). The full evidence behind `../../SKILL.md`. SKILL.md keeps, per item, the strongest statement and cards, a one-line say–do verdict, at most four variant or correction bullets and a pointer to the matching section here; the card counts per method are in the 08 tables copied here. Each section has up to four parts: **Full-text evidence** (copied word for word from [08-deep-reading-synthesis.md](08-deep-reading-synthesis.md), which is traceable to the cards, or taken from the named cards), **Variants, contradictions and proposals** (08 §3–§5), **Added in T3.6** (what this pass wrote into SKILL.md, with card ids) and **Before T3.6 (moved verbatim)** (the SKILL.md item as it stood on 2026-11-14, built from web research and a partial read of the reports, so nothing is lost; its headings are set in bold and its links re-pointed to work from this folder). Copied 08 text is left as copied; 08 itself is edited only for links and counts, and for the corrections of the fix round of 2026-11-28 (after three reviewers checked this pass: §2 Method 3, §2.7, §3.2 items 6, 10, 14 and 16, §8, §9 and the Voices line), made in 08 and in its copies here alike. Each section's **Fix round** bullet says what that round changed in SKILL.md; SKILL.md wording it replaced is kept there in italics, word for word.
@@ -20,6 +20,10 @@
 > **Not carried.** The cards' reading notes on inconsistencies inside a work (a table that disagrees with its text, a typo, numbers that look carried over) are not findings about the researcher or his coauthors and are not used here; 08 §7.4 keeps one neutral lesson (catalog WM9). Material sealed in `holdout.md` is not used: no point, quote or decision of a sealed item appears in this file, and no card page that carries one is cited (the Before blocks keep the pre-synthesis wording as it was; two printed-page keys there are noted under [Held back](#held-back)). `FIDELITY.md` (the validation record) describes the sealed items and, like the card batch files, is not opened while the skill is used or tested. Two candidates that lean on sealed material are withheld ([Held back](#held-back)).
 >
 > **Scope.** One section per SKILL.md item this pass changed, plus the corrections, the promotion record, the rejected updates, the sources and the card key. Answer Standard, Research Integrity Rules, Research Task Routing, Academic Lineage, Mentor Voice and the rest of Activation Rules are unchanged and complete in SKILL.md (Activation Rules changed only in its disclaimer line, and a hand edit of two more lines is proposed to the operator; Agentic Protocol gained one bullet, see [How to Use](#how-to-use)). Counts: `team_status.py --coverage` on 2026-11-28 (0 Scholar rows · 55 distinct works indexed · 36 open full texts · 34 read in full · 2 in part · 11 abstract only · 6 metadata only incl. unreadable · 2 skipped · 0 book material · 84 quotes verified). Word budget after this pass: 11204 words by `answer_standard.py --words` (target about 11500, hard limit 13000); after the fix round 11950 (constants restored to the steps, labels and the conversion rule added; card counts, two variant bullets per method and one anti-pattern moved here).
+>
+> **T3.7 (tightening, 2026-11-28).** SKILL.md was brought under its word budget by moving evidence here, not by deleting it: wherever a SKILL.md line was shortened, the line as it stood before is kept word for word under **Before T3.7 (moved verbatim)** at the end of the matching section (links re-pointed to work from this folder). Sections with such a block: Methods 1–6 (Method 1's also holds the Core Research Methods intro), both taste lists, Heuristics 1–10, the misreadings, three anatomies (conflict analysis, Mcf-separator, RLT cuts), the trajectory, the inner tensions and a new [Mentor Voice](#mentor-voice) section. What moved: cases beyond the strongest one or two per heuristic, taste item and misreading; one Practice item in each of Methods 2, 4, 5 and 6; the card recount under Method 2's step-2 checkpoint and the future-work example of Method 6 step 5; date notes such as *(corrected 2026-11-28)*, since the Corrections list keeps every correction visible; one sentence each in the trajectory and two inner tensions; Mentor Voice's derived questions, which repeat the Roundtable Card's first questions; explanations that repeated another item. Where an *Added in T3.6* or *Fix round* line here quotes SKILL.md wording that T3.7 shortened, the section's Before T3.7 block holds that wording. Every step instruction, step constant and ✗/⚠ mark stays in SKILL.md; the front matter, How to Use, Activation Rules, Answer Standard, Research Integrity Rules, Research Task Routing, the Roundtable Card and the Honest Boundary with its Corrections list are unchanged. Budget count: 11957 → 11469 words by `answer_standard.py --words` (target about 11500, hard limit 13000).
+>
+> **T3.7 fix round (2026-11-28).** A read-only reviewer found five minor problems and no blocker; each was checked against the pre-tighten copy and this file. Back in SKILL.md, word for word from the Before T3.7 blocks (each block says so): in Method 2's step-2 checkpoint, the card recount *per instance it holds there on 17 of 29 (card recount) [R004 pp. 17–18]*, the per-instance support T3.6 added to it; at the end of taste mark 3, the 19 % case (WEB 9.5 0:15:53), because Mentor Voice cites mark 3 for reporting a disappointing result (mark 3 so keeps three cases); in Heuristic 6, the protocol *with comparable settings, collapsed variants presolve makes identical, reported sizes after preprocessing*, which the routing row on formulation and seed swings and Workflows A and E point to; in Heuristic 1, *which became ZR 02-32*, without which *in print only the thesis acknowledgement* could be read as if the history rule were unpublished; at the end of Method 2's ✗ bullet on the thesis's conflict setting, its remedy *check the release settings before citing a default* (the date note stays out); in Heuristic 5, the instances of its commits. Left here only: the Mcf anatomy's caution on the tuning aim (ranked last by the reviewer, and the restorations above already put the count over the target of about 11500; its bare page key would also stand beside a journal card citation in that row) and Heuristic 6's sentence on SCIP's implicit integers. **Say–do counts.** The T3.7 instruction (team-tighten.js, step 3) asks for a Say–do line with the counts. This skill's Say–do lines keep none, by the T3.6 fix-round decision that moved the counts into the per-method tables (recorded in each method's Fix round bullet): a bare total there would hide each table's split (Method 4: 29 cards, 9 of them with a contradiction link), and the Core Research Methods intro in SKILL.md points to the tables. That instruction is closed by this decision, not left open. Budget count: 11469 → 11529 words by `answer_standard.py --words` (target about 11500, hard limit 13000).
 
 <a id="how-to-use"></a>
 
@@ -100,6 +104,20 @@ Disclaimer line (Activation Rules, 2026-11-14):
 6. **Evidence is a large, rule-selected, class-balanced set** *(known)*: THESIS pp. 320–322; ZR 16-44 p. 17.
 7. **Engineering detail deserves print** *(known)*: ZR 16-44 p. 2; INT 2023 50:27–53:35.
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Mark 3:*
+
+3. **Small measured wins are progress** *(new)*: twenty Gurobi 11.0 MIP changes of 0.3–2.1 % each (11.0 deck slides 12–13; team); a cut family touching 10 % of models for 2.5 % (WEB 13.0 0:04:39; team, caption); RLT's 1–11 % on Gurobi MILP brackets (co-signed) [D023 pp. 21–22]. A year of work for 19 % he calls not very impressive (WEB 9.5 0:15:53).
+
+*T3.7 fix round (2026-11-28):* the last sentence, the 19 % case, is back in SKILL.md (Mentor Voice cites mark 3 for reporting a disappointing result); the cut-family case stays here.
+
+*Mark 4:*
+
+4. **One explainable rule, incumbents as special cases** *(new)*: the 2002 machinery reduced to one parameter (Method 3) [R002 p. 8]; a learner reduced to its feature (H1); decision trees over SVMs because he wanted to understand the rule (WEB 9.1 0:59:59).
+
 <a id="taste-warnings"></a>
 
 ## Taste: warning signs and quick-check
@@ -140,6 +158,18 @@ Disclaimer line (Activation Rules, 2026-11-14):
 - [ ] Are the incumbent rules parameter settings of the new one?
 - [ ] Is the component's effort budgeted?
 - [ ] Does the write-up print what got worse and what stayed open?
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Warning 2:*
+
+2. **Excellent on some classes, useless on others, no detector**: his 2023 view of automatic Dantzig–Wolfe decomposition as in GCG, hence not in Gurobi's defaults; the user supplies the partition (INT 2023 1:00:45–1:02:20, caption).
+
+*Warning 3:*
+
+3. **A habit nobody measured**: most-infeasible branching is about as good as random (ZR 04-13 p. 4; THESIS pp. 3, 69): 938.0 s against 923.6 s [R002 p. 17]; he labelled Martin's root-LP child selection, adopted from SIP, as unmeasured (p. 74), and the same chapter measured it and printed that the default hybrid came out slightly inferior to three alternatives (p. 82) [D004 pp. 88, 95–96].
 
 <a id="method-1"></a>
 
@@ -219,6 +249,18 @@ Disclaimer line (Activation Rules, 2026-11-14):
 **Different from standard practice**: papers report the target-class gain; he makes "no harm elsewhere" a design goal with its own detector and measurement.
 
 **Limitations**: averaging over a heterogeneous library penalises class-specific methods (the ML objection, Khalil et al., DOI 10.1609/aaai.v30i1.10080, and the decomposition line). It is a product-default criterion, not one of scientific interest. Problem-specific algorithms: steps 1–4 only.
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Core Research Methods intro (the line above Method 1):*
+
+Six methods, all kept after the full texts (08 §4). Card counts per method and the web-research evidence each method had before (source keys, commits) are in the ledger, word for word.
+
+*Variant bullet, 2022–25:*
+
+  - ⚠ 2022–25 (co-signed): implicit-product cuts split by class, with no detector of the classes where they pay (the paper leaves the choice to the problem) and no stated default [D023 pp. 16, 21–22].
 
 <a id="method-2"></a>
 
@@ -303,6 +345,30 @@ Disclaimer line (Activation Rules, 2026-11-14):
 
 **Limitations**: most of full strong branching's node reduction comes from side effects (Gamrath, DOI 10.14279/depositonce-10710, pp. 57–59), which he named but did not measure (step 2 adds the count). Time to optimality misjudges primal heuristics, which he conceded (THESIS p. 4); see the primal integral (Berthold, DOI 10.1016/j.orl.2013.08.007, not read).
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Practice:*
+
+- Practice: basic, switching and conflict time per instance with clause counts; the dominant cost (continuing bound-exceeding LPs to optimality for initial conflict sets) and the side cost (switching time growing with the local constraints) named [R004 pp. 11, 15–18]; full strong branching smallest trees and about 100 % slower, local cuts at every node −70 % nodes and +137 % time [D004 pp. 83–84, 129]; Gurobi work limits in touched non-zeros, a capped conflict pool [R021 pp. 49, 64, 66]; RLT separation cut from about half of total time to under 3 % [D023 pp. 17–18].
+
+*Variant bullet, thesis experiment setting:*
+
+  - ✗ A thesis's experiment setting is not the release default: the thesis's conflict runs (propagation only, ≤ 10 per infeasible node, aging) are experiment settings, and SCIP 0.90f ran with conflict analysis off [D004 pp. 192–193, 386; D010 pp. 20–21]; check the release settings before citing a default (corrected 2026-11-28).
+
+*T3.7 fix round (2026-11-28):* the remedy *check the release settings before citing a default* is back in SKILL.md; the date note stays here.
+
+*Variant bullet, abstract rule:*
+
+  - ✗ (co-signed) Step 1's abstract rule holds in 2005 [R004 p. 2], not in later abstracts: in 2008 the verdict rests on solved counts (33 against 34) and the time ratios stay in the table [R009 pp. 2, 10].
+
+*Step 2:*
+
+2. Split the time: base solve, switching, and time inside the component, side costs included; name the dominant cost (EP8). Count the side effects node counts miss (domain reductions and cutoffs found in the component's own LPs; THESIS pp. 69–70, Gamrath pp. 57–59). Checkpoint (this skill's, *inferred* from ZR 05-19 pp. 15–16; per instance it holds there on 17 of 29 (card recount) [R004 pp. 17–18]): if the component's time exceeds the base-time saving on most brackets, reject the variant as it stands.
+
+*T3.7 fix round (2026-11-28):* step 2 is back in SKILL.md word for word, card recount included.
+
 <a id="method-3"></a>
 
 ## Method 3: Nest the incumbents in one parameter family and sweep it
@@ -356,6 +422,14 @@ Disclaimer line (Activation Rules, 2026-11-14):
 **Different from standard practice**: baselines are inside the design, and simplification is a result.
 
 **Limitations**: the knee moves (dynamic by 2007; SCIP now reliability 1–5, lookahead 9). Counts ignore variance (Hendel, DOI 10.1007/978-3-319-18008-3_14). A grid can miss every good value (Turner et al., DOI 10.5802/ojmo.25). The product score lacks theory and is near parity with tree-model scores (DOI 10.1007/s10107-016-1101-8; DOI 10.1007/s10107-020-01556-4). No seeds in his sweeps; alone, a coarse grid on 100–250 instances.
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Variant bullet, later studies:*
+
+  - ⚠ Later studies (co-signed; D029 Shinano first) keep step 2 only, with no sweep or a conservative default [D011 pp. 35–38; D029 p. 21]; the 2025 RLT study uses single values, no sweep [D023 p. 13].
 
 <a id="method-4"></a>
 
@@ -441,6 +515,18 @@ Disclaimer line (Activation Rules, 2026-11-14):
 
 **Limitations**: descriptive statistics only; time-limit censoring underestimates long-horizon speed-ups (Koch et al., DOI 10.1016/j.ejco.2022.100031); Gurobi sets are private. Brackets need hundreds of affected models; with a few dozen, use the thesis form (One line) plus seeds.
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Practice:*
+
+- Practice: the thesis protocol, time-outs at the limit with the bias stated [D004 pp. 16, 333, 335–336, 339–340]; verdicts refused on 16 and 3 affected models, accepted on a large set [D011 pp. 33–35]; master-solve-only switches, small sets refused or rechecked [R021 pp. 5–6, 19, 21, 40, 42]; brackets with all-optimal subsets in two codes [D023 pp. 14–22].
+
+*Variant bullet, Example A.1:*
+
+  - ✗ Fix and state the mean before the runs: in Example A.1 one data set reads −27 % by the geometric mean (B better), +6 % by the shifted geometric mean and +89 % by the arithmetic mean (B worse) [D004 pp. 335–336] (signs corrected 2026-11-28).
+
 <a id="method-5"></a>
 
 ## Method 5: Instrument first
@@ -522,6 +608,14 @@ Disclaimer line (Activation Rules, 2026-11-14):
 
 **Limitations**: steps 1, 3, 6 needed a funded position and an advisor who accepted two years without papers; not an early-career default today. The platform exists now (SCIP); steps 2, 4, 5 remain.
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Practice:*
+
+- Practice: SCIP begun in October 2002 with SIP's ideas, the thesis set chosen by a frozen 0.82d and CPLEX 10.0.1 [D004 pp. 20, 333–334]; a feasibility check alone makes a handler correct [R003 p. 9; D010 pp. 7–8]; other solvers choose the 2009 set, disagreeing instances dropped [D010 p. 21]; libraries with optima, scripts and an exact checker (co-signed) [R005 pp. 3, 11; R015 pp. 10–12].
+
 <a id="method-6"></a>
 
 ## Method 6: Import at the data-structure level, let the test decide
@@ -579,6 +673,22 @@ Disclaimer line (Activation Rules, 2026-11-14):
 **Different from standard practice**: he moves the data structure and re-decides every setting by test.
 
 **Limitations**: clause-based conflicts are a weak proof system; cut-based analysis falls back on his in about 19 % of calls on MIPLIB 2017 (Mexi et al., arXiv:2410.15110v2, pp. 18–19). Successors answered the restart question with tree-size estimates (DOI 10.1609/aaai.v33i01.33011427). He started CIP unaware of Hooker's parallel work (INT 2023 1:21:28–1:22:29).
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Practice:*
+
+- Practice: bound changes as conflict-graph vertices, infeasible LPs explained along the dual ray [R004 pp. 9–14; D004 pp. 185–192]; restarts kept only after the root, since root fixings trigger more presolving [R012 p. 11]; chip search jumps to a best node instead of restarting, to keep the LP work [D004 p. 311]; implied literals carried by existing clique tables [D016].
+
+*Say–do:*
+
+- Say–do: ✅ stated + practised for 2003–2013; no Gurobi-era evidence link (variant links R021, D022, D023: co-signed imports from network design and global optimization, each piece tested alone [D011 pp. 25–28; D023 pp. 15–21]).
+
+*Step 5:*
+
+5. Print what failed; name the next techniques as future work (ZR 05-19 p. 18: faster derivation of conflicts from infeasible LPs; SAT clause-database management).
 
 <a id="workflows"></a>
 
@@ -704,6 +814,16 @@ The last routing row (Honest Boundary); no reply or erratum to critics was found
 
 1. **Hand-code what the learner leans on** *(new)*: if a learned model works, implement the feature it relies on. Case: in 2000–2001 several learners inside SIP all pointed to one history value; he kept it and dropped the learning (ORIGINS 2022 slides 6–7; INT 2023 23:35–25:39), which became ZR 02-32. At Gurobi, decision trees for LP dualisation and simplex choice, then hand-coded (WEB 9.1 0:59:59; closed code).
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Heuristic 1:*
+
+1. **Hand-code what the learner leans on** *(new)*: if a learned model works, implement the feature it relies on. Case: in 2000–2001 several learners inside SIP all pointed to one history value; he kept it and dropped the learning (ORIGINS 2022 slides 6–7; INT 2023 23:35–25:39), which became ZR 02-32. At Gurobi, decision trees for LP dualisation and simplex choice, then hand-coded (WEB 9.1 0:59:59; team, caption; closed code). In print only the thesis acknowledgement [D004 p. 9]. ([ledger](#heuristic-1))
+
+*T3.7 fix round (2026-11-28):* *which became ZR 02-32* is back in SKILL.md, so that *in print only the thesis acknowledgement* reads as the trace of the learning experiment, not of the rule (08 §2.7 above); the Gurobi decision-tree case stays here.
+
 <a id="heuristic-2"></a>
 
 ## Heuristic 2: Measure the cheap rule against its oracle
@@ -721,6 +841,14 @@ The last routing row (Honest Boundary); no reply or erratum to critics was found
 
 2. **Measure the cheap rule against its oracle** *(new)*: at every node solve all candidates and record how close the chosen score and rank come to full strong branching (ZR 02-32 pp. 12–13; ZR 04-13 pp. 4–5).
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Heuristic 2:*
+
+2. **Measure the cheap rule against its oracle** *(new)*: at every node solve all candidates and record how close the chosen score and rank come to full strong branching (ZR 02-32 pp. 12–13) [R001 pp. 13–14] (EP12); ⚠ ZR 04-13 only frames the rules as estimates of it [R002 pp. 5–6]. ([ledger](#heuristic-2))
+
 <a id="heuristic-3"></a>
 
 ## Heuristic 3: Fair yardstick
@@ -737,6 +865,14 @@ The last routing row (Honest Boundary); no reply or erratum to critics was found
 ### Before T3.6 (moved verbatim)
 
 3. **Fair yardstick** *(new)*: baseline at its best, equal tolerances, print the loss. Case: the strongest of MiniSat 1.14, Siege v4 and zChaff chosen, Siege's time reported where it wins (THESIS pp. 299, 303); the pump run with its authors' parameters (ZR 05-42 p. 5); SCIP 0.78 about 2× slower than CPLEX 9.03, reasons given (ZR 04-19 pp. 23, 25).
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Heuristic 3:*
+
+3. **Fair yardstick** *(new)*: baseline at its best, equal tolerances, print the loss. Case: the strongest of MiniSat 1.14, Siege v4 and zChaff chosen, Siege's time reported where it wins (THESIS pp. 299, 303); the pump run with its authors' parameters (ZR 05-42 p. 5); SCIP 0.78 about 2× slower than CPLEX 9.03, reasons given (ZR 04-19 pp. 23, 25); CPLEX 10.0.1 run at SCIP's gap tolerances, mipgap 0 and absmipgap 10⁻⁹ (THESIS p. 320) (EP19); ⚠ later all solvers at defaults [R009 p. 9]. ([ledger](#heuristic-3))
 
 <a id="heuristic-4"></a>
 
@@ -760,6 +896,14 @@ The last routing row (Honest Boundary); no reply or erratum to critics was found
 
 4. **Debug solution** *(new)*: check every derived cut, bound change, implication and conflict against a known optimum. Case: `debug.c`, 29 Apr 2005 (67238f422); not described in the thesis (practice only).
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Heuristic 4:*
+
+4. **Debug solution** *(new)*: check every derived cut, bound change, implication and conflict against a known optimum. Case: `debug.c`, 29 Apr 2005 (67238f422); not described in the thesis (practice only). Widened (co-signed): test every instrument against ground truth, a detector against known networks, solutions in exact arithmetic [D011 pp. 21–23; D013 pp. 10–12]. ([ledger](#heuristic-4))
+
 <a id="heuristic-5"></a>
 
 ## Heuristic 5: Instances trigger, sets conclude
@@ -776,6 +920,16 @@ The last routing row (Honest Boundary); no reply or erratum to critics was found
 ### Before T3.6 (moved verbatim)
 
 5. **Instances trigger, sets conclude** *(deepened)*: chase named instances for bugs and ideas (commits on noswot, blend2, alu8_9, fast0507, the rococo set); conclude and tune only on sets (ZR 04-13 p. 9; INT 2023 1:06:27–1:07:30).
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Heuristic 5:*
+
+5. **Instances trigger, sets conclude** *(deepened)*: chase named instances for bugs and ideas (commits on noswot, blend2, alu8_9, fast0507, the rococo set); conclude and tune only on sets (INT 2023 1:06:27–1:07:30); small affected sets refused (co-signed) [D011 pp. 34–35; R021 p. 42]. ([ledger](#heuristic-5))
+
+*T3.7 fix round (2026-11-28):* this line is back in SKILL.md word for word, the instance names included.
 
 <a id="heuristic-6"></a>
 
@@ -806,6 +960,16 @@ The last routing row (Honest Boundary); no reply or erratum to critics was found
 
 6. **A failed reproduction is a study** *(new)*: when a published formulation (Van Vyve and Wolsey, DOI 10.1007/s10107-005-0663-7) behaved erratically: 128 variants in CPLEX 10.0.1 and 130 runs in SCIP 0.90e on att48 (TSPLIB), 1 h limit, SCIP probing off and CPLEX as its LP solver for comparability (p. 4); identical runs explained by what presolve deduces, leaving 52 distinct CPLEX instances, sizes reported after preprocessing (p. 6); 27 s against unsolved in 24 h, a factor above 3,200 between two same-size variants differing only in integrality declarations (p. 6; above 1,000 in the abstract); geometric means per factor setting (Table 4); the failure of his own code printed: SCIP's implicit-integer declaration did worse than bounded continuous variables (p. 7). Concluded: state the exact formulation (p. 7); omitting seemingly useful redundant information can speed up solving (p. 1); one formulation in one solver does not prove a model intractable; seek formulation-independent strategies; implicit integers proposed as a first way to pass redundant information to the solver (p. 10). Model files posted (ZR 08-29, co-signed). Single project.
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Heuristic 6:*
+
+6. **A failed reproduction is a study** *(new)*: when a published TSP formulation (Van Vyve and Wolsey, DOI 10.1007/s10107-005-0663-7) behaved erratically, he and coauthors wrote its minor variants as a factorial, ran it in CPLEX and SCIP with comparable settings, collapsed variants presolve makes identical, reported sizes after preprocessing, and found a factor above 3,200 between two same-size variants; SCIP's own implicit integers did no better than continuous variables, and that was printed. Concluded: state the exact formulation; one formulation in one solver does not prove a model intractable (ZR 08-29, co-signed) [R011 pp. 2, 5–8, 11] (EP13). Widened: when your knock-out differs from a published one, name the protocol difference that explains it [D030 p. 12; R021 p. 64]. ([ledger](#heuristic-6))
+
+*T3.7 fix round (2026-11-28):* the protocol clause *with comparable settings, collapsed variants presolve makes identical, reported sizes after preprocessing* is back in SKILL.md, after *ran its minor variants as a factorial in CPLEX and SCIP*; the sentence on SCIP's implicit integers stays here.
+
 <a id="heuristic-7"></a>
 
 ## Heuristic 7: Model and numerics before settings
@@ -821,6 +985,14 @@ The last routing row (Honest Boundary); no reply or erratum to critics was found
 ### Before T3.6 (moved verbatim)
 
 7. **Model and numerics before settings** *(new)*: tolerances 1e-9 for chip instances with coefficients up to 2^(2n) (ZR 05-19 p. 15); absolute bound feasibility after alu8_9 (510555962); improve the model before tuning (INT 2023 1:07:30–1:10:35).
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Heuristic 7:*
+
+7. **Model and numerics before settings** *(new)*: tolerances 1e-9 for chip instances with coefficients up to 2^(2n) (ZR 05-19 p. 15); absolute bound feasibility after alu8_9 (510555962); improve the model before tuning (INT 2023 1:07:30–1:10:35); "Choosing the right model is often more important (and more effective) than having the best solver implementation." [R007 p. 7] (co-signed); presolve safeguards (DM10). ([ledger](#heuristic-7))
 
 <a id="heuristic-8"></a>
 
@@ -846,6 +1018,14 @@ The last routing row (Honest Boundary); no reply or erratum to critics was found
 
 8. **Metric by the user's goal** *(new)*: heuristics cost only 14 % in time to optimality, so a gap-target run follows (THESIS pp. 4, 129); the primal integral (CPAIOR 2017 slides 65–67); first-feasible targets (MIPW 2025).
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Heuristic 8:*
+
+8. **Metric by the user's goal** *(new)*: heuristics cost only 14 % in time to optimality, so a gap-target run follows (THESIS pp. 4, 129); the primal integral (CPAIOR 2017 slides 65–67; first in print in 2011, co-signed [R017 pp. 5–7]); first-feasible targets (MIPW 2025). Widened: split by the answer needed, a proof or a witness, and table the parts apart: infeasible chip IPs gain while feasible MIPs lose [R004 pp. 16–19]; CIP proves valid properties, SAT finds counter-examples [R008 p. 14]. ([ledger](#heuristic-8))
+
 <a id="heuristic-9"></a>
 
 ## Heuristic 9: Try it, try the opposite, revert
@@ -862,6 +1042,14 @@ The last routing row (Honest Boundary); no reply or erratum to critics was found
 
 9. **Try it, try the opposite, revert** *(new)*: defaults from gut feeling, a test, failure, then the opposite, which sometimes works for no known reason (INT 2023 about 1:05–1:06, caption, team); reverts in the SCIP log.
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Heuristic 9:*
+
+9. **Try it, try the opposite, revert** *(new)*: defaults from gut feeling, a test, failure, then the opposite, which sometimes works for no known reason (INT 2023 about 1:05–1:06, caption, team); reverts in the SCIP log. In print: "It turns out that our concerns are unjustified: applying linear domain propagation at every node improves the performance on almost all test sets." [D004 p. 114]. ([ledger](#heuristic-9))
+
 <a id="heuristic-10"></a>
 
 ## Heuristic 10: Print the loss and the open question
@@ -877,6 +1065,14 @@ The last routing row (Honest Boundary); no reply or erratum to critics was found
 ### Before T3.6 (moved verbatim)
 
 10. **Print the loss and the open question** *(new)*: ZR 05-19 abstract; delayed restarts inferior (THESIS p. 163); the node gap to strong branching left open (ZR 04-13 p. 12); non-paying reductions tabulated (ZR 16-44 pp. 12, 16, 27, 63). *Inferred*: successors answered several (Witzig, Berthold, Heinz, DOI 10.1007/s12532-021-00202-0; Gamrath 2020).
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Heuristic 10:*
+
+10. **Print the loss and the open question** *(new)*: ZR 05-19 abstract; delayed restarts inferior (THESIS p. 163); the node gap to strong branching left open (ZR 04-13 p. 12); non-paying reductions tabulated (ZR 16-44 pp. 12, 16, 27, 63); ⚠ from 2007 the loss usually sits in the body, not the abstract [R008 p. 2; D023 pp. 15–16]. *Inferred*: successors answered several (Witzig, Berthold, Heinz, DOI 10.1007/s12532-021-00202-0; Gamrath 2020). ([ledger](#heuristic-10))
 
 <a id="misreadings"></a>
 
@@ -915,6 +1111,22 @@ The last routing row (Honest Boundary); no reply or erratum to critics was found
 3. **"Reliability branching is a SCIP invention; SCIP began from nothing."** History and reliability branching were built and measured in Martin's SIP (ZR 02-32 p. 1; ZR 04-13 p. 12); SCIP's first commit carries SIP's check scripts and most SIP ideas (THESIS p. 6).
 4. **"A hand-rules man, opposed to ML."** Reliability branching came out of an ML experiment (H1), about 15 years before Khalil et al. 2016; he still uses ML to find interpretable rules (WEB 9.1 0:59:59).
 5. **"SCIP was nearly as fast as CPLEX."** His Appendix C: 63 % (0.90i) to 115 % (0.90f) slower than CPLEX 10.0.1 with CPLEX as SCIP's LP solver (THESIS p. 377).
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Misreading 1:*
+
+1. **"He separates gains from noise with seeds or permutations."** Not in his sole-authored studies: the thesis uses single runs on identical machines, reruns suspicious ones and treats up to 2 % as noise (THESIS p. 319). Co-signed written studies do: 100 permutations per model in MIPLIB 2010 (16 authors; no section credited to him, its variability work credited to Danna [R015 p. 22]) [R015 pp. 13–15], repeats of nondeterministic parallel runs (Shinano first) [D029 p. 20], permuted copies [D023 p. 14], and a recheck that found "an artifact of performance variability" [R021 p. 40]. The five-seed "consistent win" rule is spoken only, as Gurobi team practice (WEB 9.1 1:11:31; INT 2023 1:05:30; WEB 13.0 0:11:49; captions).
+
+*Misreading 2:*
+
+2. **"A knock-out percentage is that component's contribution."** Switching off single heuristic classes, or single cut families, costs much less in sum than switching off all of them (THESIS p. 128); Koch et al. 2022 (DOI 10.1016/j.ejco.2022.100031, pp. 12–13) cite him for it; the presolve paper explains small knock-outs by overlap [R021 pp. 8, 61–62]; non-additivity also runs the other way [D030 pp. 12–15]. The numbers rank; they do not add.
+
+*Misreading 5:*
+
+5. **"SCIP was nearly as fast as CPLEX."** His Appendix C: 63 % (0.90i) to 115 % (0.90f) slower than CPLEX 10.0.1 with CPLEX as SCIP's LP solver (THESIS p. 377); in 2009, SCIP with CPLEX's LP solver at a factor of 2.86 to CPLEX 11 in shifted geometric mean time [D010 pp. 28–29]. The likely written source of the reading: abstracts that call SCIP "almost competitive" with commercial MIP solvers, one co-signed (2008) [R009 p. 2] and one sole-authored (2009) [D010 p. 1].
 
 <a id="anatomy-branching"></a>
 
@@ -973,6 +1185,16 @@ The last routing row (Honest Boundary); no reply or erratum to critics was found
 | Abandoned paths | Conflicts as LP cuts; analysing bound-exceeding and strong-branching LPs; the aggressive setting (THESIS pp. 178–181) |
 | Reception | Sole author. The 2005 → 2007 reversal (slower, then > 10 % faster) is explained only as implementation details (p. 181) |
 | Methods shown | Method 6, Method 2, H10 |
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Minimum evidence row:*
+
+| Dimension | Finding |
+|---|---|
+| Minimum evidence | Infeasible chip instances: nodes −90 %, time −60 %; feasible MIPs: nodes −50 %, time +15 % (ZR 05-19 abstract). The two pairs rest on different subsets (card recount): the ALU pair on the 21 instances presolve does not solve, the feasible pair on all 29 [R004 pp. 17, 19]; quote a headline with its subset (other subsets: ledger) |
 
 <a id="anatomy-cip"></a>
 
@@ -1057,6 +1279,18 @@ The last routing row (Honest Boundary); no reply or erratum to critics was found
 | Abandoned paths / reception | A looser gate with a SCIP-only gain (Method 1); 31 Crossref citations; journal version not read |
 | Methods shown | Method 1 |
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Minimum evidence row:*
+
+| Dimension | Finding |
+|---|---|
+| Minimum evidence | Network design in SCIP: time ratios 0.32–0.53 on four sets [D011 p. 30]; an order-of-magnitude speed-up was the tuning aim, not the result (p. 22). CPLEX on 1,388 general MIPs (MIPLIB, Mittelmann and a 1,266-model CPLEX-internal set): 129 (9.3 %) affected, −17.9 % time on them, almost no overhead elsewhere [D011 p. 34] |
+
+*T3.7 fix round (2026-11-28):* the caution *an order-of-magnitude speed-up was the tuning aim, not the result (p. 22)* stays here only (see the header's T3.7 fix-round note).
+
 <a id="anatomy-rlt"></a>
 
 ## Anatomy: Efficient separation of RLT cuts (IPCO 2023; Math. Program. 2025) (new)
@@ -1073,6 +1307,16 @@ The last routing row (Honest Boundary); no reply or erratum to critics was found
 
 - A sixth anatomy, added because it is the Gurobi-era work read in full and measured in two codes. Rows: origin, key insight, minimum evidence, negative results, methods shown, as above. *Why then* and *Reception* rows left out: neither is stated in the texts, and the work is too recent (2 Crossref citations each in works.json).
 - Fix round (2026-11-28): Origin, *the Gurobi runs are the part needing Gurobi access (inferred his; last author)* → *roles not stated (first author Bestuzheva, he last)* [D023 pp. 1, 22]: SKILL.md's Voices says no co-signed text states roles, so the card's inference stays here, not in the anatomy. Methods shown, *Method 1 variant (a detector, two codes, no default stated)* → *a detector of implicit products, none of the classes where the cuts pay; two codes; no default stated*, matching Method 1's variant bullet.
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Methods shown row:*
+
+| Dimension | Finding |
+|---|---|
+| Methods shown | Method 2, Method 4 (brackets, all-optimal subset), Method 1 variant (a detector of implicit products, none of the classes where the cuts pay; two codes; no default stated) |
 
 <a id="anti-patterns"></a>
 
@@ -1167,6 +1411,14 @@ Period: direction (trigger) → representative work.
 
 - Nov/Dec 2025: performance segment of the Gurobi 13.0 webinar (caption). June 2025: MIP Workshop talk on improvement heuristics for first feasibles. March 2025: RLT paper in print. 2026 to 14 November: no paper, preprint, commit or talk found.
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*2006–2014:*
+
+- **2006–2014**: ILOG / IBM CPLEX; SCIP commits until March 2009 (a 2005 workshop talk, an ILOG offer, his account) → ZR 08-29; MPC 2010; A&W 2013. His last sole-authored paper in the indexed record (a 2013 patent aside) is the 2009 SCIP paper, written at ZIB [D010 pp. 1, 38]; then co-signed MIPLIB 2010, the primal integral and ParaSCIP [R015; R017; R014].
+
 <a id="inner-tensions"></a>
 
 ## Inner tensions
@@ -1189,6 +1441,34 @@ Period: direction (trigger) → representative work.
 - **From scratch or reuse**: he always wants to build it himself (INT 2023 1:20:24–1:21:28), yet SIP's ideas and harness went into SCIP (THESIS pp. ix, 6), and he adopted PSD cuts and Turner's criterion.
 - **Which baseline counts**: in 2023 academic work should improve its host framework, not beat Gurobi (INT 2023 51:29); his own academic work measured itself against CPLEX each time (ZR 02-32 p. 10; THESIS p. 377).
 - **Explainable rules, unexplained defaults**: features over learners (H1), yet defaults that work for no known reason (H9).
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Tune or write:*
+
+- **Tune or write**: he overran his deadline improving SCIP and says most solver progress cannot be written up (THESIS p. x; INT 2023 50:27–53:35), yet took Koch's advice to write, and the thesis won three prizes.
+
+*Which baseline counts:*
+
+- **Which baseline counts**: in 2023 academic work should improve its host framework, not beat Gurobi (INT 2023 51:29), and the RLT study (co-signed, roles not stated) measures each code only against itself [D023 p. 21]; his own academic work measured itself against CPLEX each time (ZR 02-32 p. 10; THESIS p. 377).
+
+<a id="mentor-voice"></a>
+
+## Mentor Voice
+
+Not changed by T3.6 (see the Scope note above); T3.7 shortened one line, kept here. The rest of Mentor Voice is complete in SKILL.md.
+
+*T3.7 fix round (2026-11-28):* the pointer *(taste mark 3)* of *Reports each change with its measured percentage, small or disappointing* resolves again, since mark 3 has its 19 % case back ([Taste: marks](#taste-marks)).
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Derived questions:*
+
+- Derived questions (not quotes): "What happens to total time when you switch it off?" "Where does the time go?" "What does it do outside your class?" "What got worse?"
 
 <a id="roundtable-card"></a>
 
