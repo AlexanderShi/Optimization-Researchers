@@ -1,0 +1,195 @@
+[
+ {
+  "id": "R001",
+  "year": 2002,
+  "title": "Branching on History Information",
+  "read_level": "full",
+  "contribution": "Introduces history branching, a modification of pseudocost branching with three-level history values, dynamically scaled strong-branching estimates, reliability-based strong branching and dynamic effort control, and shows large gains over hybrid pseudocost branching in SIP (pp. 8-11, 15).",
+  "problem_entry": "Branching step of LP-based B&B, rules framed as cheap estimates of full strong branching; the gap is the pseudocost cold start high in the tree, posed as a prediction task (pp. 3, 5-7).",
+  "key_idea": "History values (7) replace pseudocosts: pseudocost-based value with dynamic scaling, else strong-branching value with own scaling, else class/global value; six changes vs hybrid pseudocost incl. 'unreliable' entries with threshold eta_rel (Table 1, pp. 8-10).",
+  "assumptions": "General MIP, branching on variables only (pp. 2, 4); variable classes from model names, else from coefficients/bounds (p. 8 fn. 2); test set MIPLIB 3.0 plus six generated aflow instances [Pfe00] (p. 11).",
+  "proof_devices": [
+   "n/a (no proofs); design devices: scaling factor alpha = g/p as ratio of exponentially weighted sums, tau_max = 0.995 (p. 8 fn. 1)",
+   "excluding contaminated observations from infeasible/preprocessed/cut children (p. 9)",
+   "effort control by branching-time/LP-time ratio and depth (pp. 9-10)",
+   "implementation in SIP with CPLEX LP solver (p. 11)"
+  ],
+  "experiments": "Four layers: performance Table 2 vs hybrid pseudocost and CPLEX 7.5 (totals 12,966.7/3,533.5/12,342.1 s; test set filtered by SIP-history solving within 3,600 s, pp. 10-11); isolation run with optimal solution supplied and frozen root cuts (Table 3, p. 12); oracle agreement quotients xi, rho (Table 4, p. 13); calibration plot (Fig. 5, pp. 14-15); single runs, no ablation.",
+  "positioning": "'A modification of pseudocost branching' (p. 2); credits [BGG+71], [LS99]; hybrid pseudocost is the only SIP baseline (p. 7); strong branching 'invented by [CPL01]' despite older [ABCC95] (pp. 5, 15); 13 references.",
+  "writing": "Claim-first abstract (p. 2); algorithm boxes as diffs (p. 6); feature table (Table 1, p. 9), detail in footnotes (p. 8); separate success-explanation passage (pp. 13-14); time losses not named (p. 11).",
+  "limits_future": "No limitations section; three causes credited jointly (p. 15); only future work a ZIMPL link (p. 8 fn. 2); card adds method-dependent test set (p. 10), four instances dominating totals (p. 11), single runs.",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "The 2002 rule is a bundle of six changes plus adaptive parameters, evaluated as a whole against one baseline: no parameter family, no sweep; the 'before' state R002 cuts down to one reliability parameter (R002 p. 8).",
+    "pages": "Table 1, p. 9; pp. 8-10"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Nodes and time side by side for every instance; strong-branching effort tied to branching/LP time ratio and depth. Variant detail: a relative-time budget, not an iteration unit.",
+    "pages": "p. 11; pp. 9-10"
+   },
+   {
+    "method": "Method 5",
+    "relation": "contradiction",
+    "note": "2002 era: the test set is filtered by the code under study; the CPLEX check on excluded instances partly offsets this. In 2004 CPLEX alone selects (R002 p. 9).",
+    "pages": "p. 10"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Pairwise comparison of one rule against another, not a knock-out from a default; arithmetic totals with time-outs at the limit, no means, no brackets, four instances dominate the totals.",
+    "pages": "p. 11"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Loose: variable classes grouped by model names first, against Method 1's 'matrix, not names'; purpose differs (aggregating history, not gating a default).",
+    "pages": "p. 8 fn. 2"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "state and justify the control conditions",
+    "evidence": "The isolation run (optimal solution supplied, root cuts frozen); R002 argues for the opposite control (R002 p. 9).",
+    "pages": "pp. 11-12"
+   },
+   {
+    "pattern": "clean the samples of an online estimator",
+    "evidence": "Contaminated observations excluded; ratio of sums for the scaling factor.",
+    "pages": "p. 8 fn. 1; p. 9"
+   },
+   {
+    "pattern": "random rule as floor baseline",
+    "evidence": "Random rule in the isolation run (and R002 Table 1, p. 17).",
+    "pages": "Table 3, p. 12"
+   }
+  ],
+  "transferable": [
+   "(D5) Isolation run for a search rule: supply the optimal solution as the cutoff, generate root cuts once and freeze them, switch off further cut generation; compare rules by node counts with random as floor and full strong branching as ceiling (pp. 11-12).",
+   "(D5) Oracle agreement: at every node solve all candidates' child LPs; record score quotient s_selected/s_max and position quotient 1 - (pos - 1)/(|C| - 1), set to 1.0 for one candidate or ties; report over whole tree and top 10 depth levels (pp. 13-14, Table 4).",
+   "(D5) Calibration plot: for one instance plot each predictor's value against realized gain, with average lines (p. 14, Figure 5).",
+   "(D4) Correcting a biased cheap estimate: alpha = sum gain / sum prediction under exponential forgetting (tau_max = 0.995); ratio of sums, not mean of ratios (p. 8 fn. 1).",
+   "(D4) Clean observations: keep infeasible children and children changed by node preprocessing or local cuts out of a learned per-variable statistic (p. 9).",
+   "(D5) Fair comparison: set the reference solver's gap tolerances to your own (CPLEX absolute 1e-10, relative 0); list every excluded instance by name under its rule (pp. 10-11).",
+   "(D7) Presenting the rule: feature-difference table against the baseline (Table 1, p. 9); each algorithm box a diff of the previous one (p. 6)."
+  ],
+  "coauthors": "Thorsten Koch, Alexander Martin",
+  "quotes": [
+   {
+    "text": "In updating the history values, we ignore branching results, where one of the subproblems is infeasible or where node preprocessing or strengthening cuts where applied at the child nodes, because this would lead to unfair large gain values in comparison to other nodes.",
+    "page": 9
+   },
+   {
+    "text": "A problem with the numbers given in Table 2 are the complex interrelations between cutting plane generation, primal heuristics, node selection, and branching variable selection.",
+    "page": 11
+   }
+  ]
+ },
+ {
+  "id": "D024",
+  "year": 2003,
+  "title": "Modelling Feasible Network Configurations for UMTS",
+  "read_level": "unreadable",
+  "contribution": "",
+  "problem_entry": "n/a",
+  "key_idea": "n/a",
+  "assumptions": "n/a",
+  "proof_devices": [],
+  "experiments": "none",
+  "positioning": "n/a",
+  "writing": "n/a",
+  "limits_future": "n/a (WRONG-TEXT: file is ZIB-Report 02-16 without Achterberg among its authors)",
+  "method_links": [],
+  "new_pattern_candidates": [],
+  "transferable": [],
+  "coauthors": "Andreas Eisenblätter, Roland Wessäly, Alexander Martin, Armin Fügenschuh, Oliver Wegel, Thorsten Koch, Arie Koster",
+  "quotes": []
+ },
+ {
+  "id": "R002",
+  "year": 2004,
+  "title": "Branching rules revisited",
+  "read_level": "full",
+  "contribution": "Introduces reliability branching, a generalization containing pseudocost, strong-branching-initialized, hybrid and (full) strong branching as parameter settings, and a comprehensive parameter study naming (8, 4) the new sweet spot (pp. 2-3, 7-8, 13).",
+  "problem_entry": "Branching rules read as fast estimates of full strong branching; pseudocosts are not useful high in the tree, hybrid uses a fixed depth, initialization only uninitialized pseudocosts (pp. 6-7); posed as a generalization (pp. 2-3).",
+  "key_idea": "Strong branching on every candidate with unreliable pseudocosts, min{eta-, eta+} < eta_rel, at most gamma iterations, lambda look-ahead (Algorithm 3, p. 7); drops R001's hierarchy, scaling factors and dynamic control (R001 pp. 8-10).",
+  "assumptions": "General MIP, variable branching (pp. 2, 4); uninitialized pseudocosts set to average or 1 (p. 5); cut-and-branch SIP (p. 9); 24 instances from MIPLIB 2003 and Mittelmann, selected by CPLEX 9.0 needing >= 5,000 nodes and <= 1 h (p. 9).",
+  "proof_devices": [
+   "n/a (no proofs); design device: rules as parameter settings of one family (Figure 1, p. 8)",
+   "look-ahead counter reset at each new best candidate (p. 12)",
+   "infeasible/cut-off strong-branching children not counted as nodes (p. 10 fn. 3)",
+   "dynamic reliability settings only in per-instance Tables 14, 15, 21-24 (pp. 30-31, 37-40)"
+  ],
+  "experiments": "34 SIP settings plus CPLEX/SIP cuts on 24 instances, single 833 MHz Alpha, 3,600 s limit, optimal solution not supplied (p. 9 fn. 1); totals, unshifted geometric means and fails (Table 1, p. 17); (8, 4) 170.5 s vs CPLEX 215.8 s; near-ties and dynamic settings undiscussed; accidental repeat Table 7 shows -3.2% to +7.1% time differences (pp. 19, 23).",
+  "positioning": "'New generalization' of strong and pseudocost branching, earlier rules as special cases (pp. 2, 8); credits [3], [10], Lindo (pp. 5-7); own 2002 history branching not cited (p. 16); CPLEX as environment check, not rival (pp. 9-10).",
+  "writing": "Short main text built around Figure 1 and findings (i)-(iv) (pp. 8, 11-13), 40-table appendix; unhedged claims (pp. 2, 13); mechanism via neos3 tree and average depth (pp. 11-12); slips: swapped bounds (p. 5), 'not not' (p. 10), Table 4 caption (pp. 11, 20).",
+  "limits_future": "Stated: the node gap to full strong branching, whether it can be bridged without too much time per node (p. 13); not stated: timing noise, dynamic settings, why (8, 4) beats near-ties, interaction with primal heuristics (p. 9).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Incumbents are parameter settings of one rule; full grid run; each setting read as a point in (nodes, time); the knee (8, 4) named the 'new sweet spot', not the fewest-node eta_rel = 32; the simplification against R001 is itself the result.",
+    "pages": "Figure 1, p. 8; Table 1, p. 17; Figure 2, p. 11; p. 13"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Time beside nodes for every setting; strong-branching effort capped at gamma = 2 gamma-bar iterations; fathomed-children node-count side effect named with bound 1/2; nodes and time plotted against strong-branching calls.",
+    "pages": "pp. 6, 10 fn. 3, 11-12, 14"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "A reference solver picks the test set with stated thresholds (CPLEX 9.0: >= 5,000 nodes, <= 1 h), not the code under study, changing R001's rule; the reference solver runs on the same preprocessed and cut models.",
+    "pages": "pp. 9-10"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "2004 era: each setting a full alternative, not a knock-out from a default; totals, plain geometric means and fails, no shift, no brackets; announced optimum among near-ties within about 1%, while the accidental repeat shows up to 7% timing differences.",
+    "pages": "pp. 10, 19, 23"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "measure the quantity a fixed threshold depends on",
+    "evidence": "Average depth is 7.3-134.6 against d <= 20.",
+    "pages": "Table 4, p. 20; pp. 11-12"
+   },
+   {
+    "pattern": "state and justify the control conditions",
+    "evidence": "Optimal solution deliberately not supplied, with four listed effects (compare R001 pp. 11-12).",
+    "pages": "p. 9 and fn. 1"
+   },
+   {
+    "pattern": "random rule as floor baseline",
+    "evidence": "Random rule in the grid.",
+    "pages": "Table 1, p. 17"
+   }
+  ],
+  "transferable": [
+   "(D4) One parameter for all rivals: express the rival rules as settings of one new parameter and draw the map of which value gives which old rule (Figure 1, p. 8).",
+   "(D5) Grid and effort plots: run the whole grid, plot each setting as one labelled point (geometric-mean nodes, geometric-mean time) (Figure 2, p. 11); plot nodes and time against the number of expensive-operation calls on a log axis (Figures 3-4, p. 14).",
+   "(D5) Choosing the test set: select instances by a reference solver's behaviour, never by the method under test; here CPLEX 9.0 needing >= 5,000 nodes and <= 1 h (p. 9).",
+   "(D5) Comparing only the tree search: feed the commercial code your own preprocessing and root cuts and match gap tolerances ('CPLEX/SIP cuts', pp. 9-10).",
+   "(D5) The incumbent decision: write down why you did or did not supply the optimal solution; list the ways an early incumbent changes node counts and time per node (p. 9 fn. 1).",
+   "(D4) Capping strong-branching LPs: cap at twice the running average of simplex iterations per LP, as a guard, not a truncation (p. 6).",
+   "(D5) Diagnosing a fixed threshold: measure the thresholded quantity across the test set (average depth 7.3 to 134.6 vs d <= 20) and draw one balanced and one path-like tree (Table 4, p. 20; pp. 11-12; Figure 5).",
+   "(D5) Reporting: give a 'fails' column beside totals and geometric means; state how infeasible or cut-off strong-branching children are counted (Table 1, p. 17; p. 10 fn. 3)."
+  ],
+  "coauthors": "Thorsten Koch, Alexander Martin",
+  "quotes": [
+   {
+    "text": "we dispensed with setting the optimal solution values beforehand, since leading towards feasible solutions fast is a desirable property of branching rules",
+    "page": 9
+   },
+   {
+    "text": "It is common sense that the geometric mean is a fair criterion for comparison and we used it as the basis for our conclusions in the next section.",
+    "page": 10
+   }
+  ]
+ }
+]

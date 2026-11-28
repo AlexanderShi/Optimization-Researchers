@@ -1,0 +1,259 @@
+[
+ {
+  "id": "D030",
+  "year": "2014",
+  "title": "Multi-Row Presolve Reductions in Mixed Integer Programming",
+  "read_level": "full",
+  "contribution": "Describes the five multi-row presolve components of Gurobi (redundancy detection, parallel and nearly parallel rows, non-zero cancellation, multi-row bound and coefficient strengthening, clique merging) and measures each by knock-out from Gurobi 5.6.3 on 2,974 models: multi-row presolve is worth 31 % in the [10,10k] bracket, root presolve a factor 3.1 (pp. 2-15).",
+  "problem_entry": "Presolve is decisive but little published; earlier CPLEX studies rank presolve and cuts first; the entry is the multi-row subset, where effect trades against overhead (pp. 1-2).",
+  "key_idea": "Classical reductions with stated implementation choices: LP-redundancy only in special situations, two-level hashing for parallel rows with singleton masking for nearly parallel ones, cancellation under a work limit with |s| <= 1000, activity bounds over a few rows or blocks, clique extension then domination (pp. 4-10).",
+  "assumptions": "General MIP with =, <=, >= rows and infinite bounds (Def. 1, p. 2); integrality conditions per case for aggregations (p. 6) and coefficient strengthening (pp. 7-8); private test set of 2,974 models ever solved within 10,000 s by any Gurobi release (p. 11).",
+  "proof_devices": [
+   "NP-completeness of non-redundancy by appending the infeasible row 0 <= -1 (p. 3)",
+   "LP-redundancy as one LP per row (p. 4)",
+   "equivalence of coefficient strengthening by the cases x_j = u_j and x_j <= u_j - 1 (p. 8)",
+   "two-level hash plus lexicographic sort of crowded bins (p. 5); singleton masking for nearly parallel rows (p. 6)",
+   "work limits (pp. 7, 10) and the |s| <= 1000 cap (p. 7); activity bounds from single-row inf/sup to LP to MIP, with a blockwise compromise (pp. 8-9)"
+  ],
+  "experiments": "Knock-out from Gurobi 5.6.3 default, 10,000 s, one 4-core i7-3770K; brackets 'all' and [n,10k] read on [10,10k]; time-outs, counts >= 10 % faster/slower, shifted geometric means with shift 1, affected by simplex iterations; presolve off x3.10, multi-row off +31 %, dependent rows on +5 %, parallel rows 2 %, cancellation 5 %, clique merging 13 %, bound/coefficient 17 % (pp. 10-15); single runs, threads not stated.",
+  "positioning": "Lineage from Brearley et al. through Savelsbergh and Andersen-Andersen; each technique credited (pp. 1-10); positions against implementations that 'often only' do the single-row case (p. 7); no other solver run; 20 references.",
+  "writing": "Definition, case rules and an 'In Gurobi' paragraph per section (pp. 4-10); table format explained once, one paragraph per table led by the [10,10k] number (pp. 11-15); losses in plain words, the one cause hedged as a conjecture (pp. 12-13).",
+  "limits_future": "No limitations or future work stated (p. 15); card adds closed code, private set, single runs, an approximate affected test (p. 11), and a misprinted cancellation condition (p. 6) that R021 corrects (R021 p. 32).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "The bracket table in its 2014 form, credited to A&W 2013 (his own paper, not read): [10,10k] reading rule, 10 % counts, shift-1 means, affected by simplex iterations, inconsistent answers excluded. Variant against 2016: 10,000 s limit equal to the test-set rule, affected also given for 'all', no master-solve-only rule stated.",
+    "pages": "pp. 10-12"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "SKILL.md's 'Multi-row redundancy checks off for MIP because they hurt (RAMP 2014 p. 192)' is file p. 12 and holds; the measured loss is the rank-revealing LU only (Table 3), the multi-row heuristics are off without a table; full-LP redundancy and OBBT are gated.",
+    "pages": "pp. 4, 9, 12"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Work limits on cancellation and clique merging; the dependent-row loss is located with the node column (larger trees, not LU overhead).",
+    "pages": "pp. 7, 10, 12-13"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Activity bounds presented as one family from single-row inf/sup to a full MIP solve, with a chosen compromise; no sweep reported.",
+    "pages": "pp. 8-9"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "re-measure a published number and explain the gap",
+    "evidence": "A&W's higher presolve-off factor is explained by their also switching off node presolve; R021 does the same twice (R021 pp. 6, 64).",
+    "pages": "p. 12"
+   }
+  ],
+  "transferable": [
+   "(D5) Bracket table: group models by the slower run's time (>= 0, 1, 10, 100, 1000 s), 'all' minus models whose versions disagree on the optimum; per bracket time-outs per side, counts >= 10 % faster/slower, shifted-geometric-mean ratios of time and nodes (shift 1), the same for models whose simplex-iteration count changed; discuss >= 10 s (p. 11).",
+   "(D5) Locate a slowdown with the node column: compare the node ratio with the time ratio before blaming the reduction's own cost (pp. 12-13).",
+   "(D4) Parallel-row detection: hash on support, then on max-norm-normalized sign-fixed coefficients; sort crowded bins lexicographically and compare neighbours only; mask singleton columns to find nearly parallel rows in the same pass (pp. 5-6).",
+   "(D4) Blockwise activity bounds: cheap inf/sup on most blocks, an expensive LP or MIP bound on the one structured block (p. 9).",
+   "(D4) Cap aggregation multipliers (|s| <= 1000) in any reduction that combines rows (p. 7)."
+  ],
+  "coauthors": "Robert E. Bixby, Zonghao Gu, Edward Rothberg (Gurobi Optimization), Dieter Weninger (Erlangen-Nuernberg); alphabetical, roles not stated",
+  "quotes": [
+   {
+    "text": "In the discussion below, we will usually use the [10,10k] bracket, because this excludes the relatively uninteresting easy models but is still large enough to draw meaningful conclusions.",
+    "page": 11
+   },
+   {
+    "text": "But even this method is disabled by default for MIP as it hurts performance.",
+    "page": 12
+   }
+  ]
+ },
+ {
+  "id": "R021",
+  "year": "2016",
+  "title": "Presolve Reductions in Mixed Integer Programming",
+  "read_level": "full",
+  "contribution": "Gives a measured taxonomy of Gurobi 6.5's presolve, more than thirty techniques in six classes, each class and most components with a knock-out table on 3,182 models: presolve off is 9.05 times slower at >= 10 s and leaves 504 more models unsolved (pp. 4-6, 67).",
+  "problem_entry": "Presolve is often the difference between intractable and solvable yet little published; contribution stated as a complete overview of Gurobi 6.5's presolve with implementation details and computational results (pp. 3-4).",
+  "key_idea": "Six classes (single-row, single-column, multi-row, multi-column, full-problem, node presolve), each opened by a class knock-out; per technique conditions, Gurobi's choice and limits, table, verdict; new or detailed items include modular inverse, clique coupling with watched literals, parallel-safe lifting, complementary slackness on MIPs, implied integers, component solving, local probing (pp. 8-67).",
+  "assumptions": "MIP (2.1) with infinite bounds; SOS, semi-continuous, penalty, implied-integer, symmetric and decomposable structure (pp. 6-56); eps = 1e-6, psi = 1e30 (p. 9); test set of 3,182 models solved within 10,000 s by some Gurobi release (p. 5); Theorem 1 needs <= rows and an infinite or implied bound (pp. 44-45), Theorem 2 >= rows, l = 0, bounded LP (pp. 57-58).",
+  "proof_devices": [
+   "Theorem 1, dominated columns: exchange argument moving Delta from x_k to x_j, rows stay feasible since (a_ij - a_ik) Delta <= 0 (pp. 44-45)",
+   "Theorem 2, complementary slackness on MIPs: b-independent dual bounds on the continuous part stay valid for the 'fixed LP'; contradiction (p. 58)",
+   "dual implied-integer detection via an optimal solution whose continuous part is a vertex of the fixed LP (p. 59)",
+   "two-row counterexample with an infinite sequence of bound reductions, motivating propagation limits (p. 11)",
+   "numerical safeguards: small-coefficient cleanup thresholds (p. 9), bound-change thresholds 1e3*eps and |bound| < 1e8 (p. 11), gcd heuristics with multiplier 600 (p. 15), Markowitz-type pivot tolerance 0.01 (0.5/0.9) with fill-in cap (p. 25), |s| <= 1000 (p. 33)",
+   "budgets: probing work limit in touched non-zeros scaled by a factor in [0.01, 100] (p. 49); local probing by work ratio w and success ratio s, s >= 2w, w < 0.005 or s >= 10w (p. 66); at most 100 conflict rows with aging (p. 64)",
+   "collect-then-apply lifting since Gurobi 6.5 for deterministic parallel probing (p. 52); 32-bit support signatures for dominance (p. 45); adjacency lists for cliques of length <= 100 (pp. 37-38)"
+  ],
+  "experiments": "Knock-out from Gurobi 6.5 default, 3,600 s, 4-core i7-3770K machines, master solve only (p. 5); 39 tables in the D030 bracket form, no affected figure for 'all' (p. 6); class totals at >= 10 s: single-row 26 %, single-column 59 %, multi-row 34 %, multi-column 9 %, full-problem 45 %, node 51 %; nulls and losses printed (pp. 14, 18, 28-29, 56, 65); small sets refused or rechecked for performance variability (pp. 19, 22, 40, 42); no seeds, threads or per-instance data.",
+  "positioning": "D030's lineage plus Gamrath et al. 2015, symmetry literature, Saucy, Chaff and Markowitz (pp. 4-62); one explicit comparison with his SCIP conflict analysis, Gurobi storing Farkas rows and getting 5 % vs 12 % (pp. 63-64); does not cite D030 although about 89 % of D030 §§3-7 recurs in §5 (my comparison); 37 references.",
+  "writing": "Template rule, Gurobi choice, table, verdict led by the >= 10 s number; class totals before parts; graded verdicts ('surprisingly low', 'disappointing', 'surprisingly large'); every surprise given a labelled cause (overlap, hypothesis, conjecture, intuition); worked examples 1-10 (pp. 8-67).",
+  "limits_future": "Limits stated in place: unmeasurable components (p. 21), small affected sets (pp. 19, 22, 40, 42), narrow node-probing test (p. 65), work-limit sensitivity (p. 67), no backward conflict propagation (p. 64); future only a hope to motivate research (p. 67); card adds closed code, private set, single runs.",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Fullest written form: brackets, >= 10 s reading, counts, shift-1 means; master-solve-only switches with reason; no benchmark where a change acts through model size; small affected sets refused (48, 13, 40, ~200); refinement vs D030: no affected figures where both sides time out. Variant: 3,600 s limit on a set defined at 10,000 s, so 506-570 models time out on both sides of every table (my recount).",
+    "pages": "pp. 5-6, 19, 21-22, 40, 42"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Gates: lifting by share of continuous variables, local symmetry recomputation only when structure detected, selective OBBT, full-LP redundancy only in special situations; redundancy checks and the dual-fixing extension off; class-specific reductions on because large where they apply (symmetry ~10 % of models, components ~20 %, orbital fixing +77 % on affected).",
+    "pages": "pp. 27-28, 36, 40, 48, 53, 55, 62-63"
+   },
+   {
+    "method": "Method 1",
+    "relation": "contradiction",
+    "note": "Partial: components kept on without measured gain. Chvatal-Gomory strengthening, simple probing and biconnected components are neutral (step 5's 'Neutral or better elsewhere → on' allows this, taste mark 1 does not); global probing at nodes is on although the default has 36 time-outs against 14 without it.",
+    "pages": "pp. 14, 18, 56, 65"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Budgets in solver-internal units (touched non-zeros with success scaling; work and success ratios for local probing; capped conflict pool with aging; sub-MIP work limits); the node column locates where time goes (cleanup and cancellation gains from faster LP solves; dependent-row loss not factorization overhead).",
+    "pages": "pp. 9, 28, 33, 49, 54, 56, 64, 66"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "SAT pieces reused where they map one to one (watched literals for clique coupling constraints, Saucy for symmetry), but Gurobi 6.5's conflicts are dense Farkas rows without backward propagation, not SCIP's bound disjunctions; 5 % vs 12 % in SCIP.",
+    "pages": "pp. 47, 51, 63-64"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "The test-set rule depends on the code family itself ('some one of the Gurobi releases'), not on an independent solver or a frozen older version.",
+    "pages": "p. 5"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "re-measure a published number and explain the gap",
+    "evidence": "Presolve-off factor compared with A&W's 11.4 for CPLEX; Gurobi conflict analysis 5 % against his 12 % in SCIP, gap attributed to implementation, solver environment and test set; also D030 p. 12.",
+    "pages": "pp. 6, 64"
+   },
+   {
+    "pattern": "explain a small knock-out by the component that covers for it",
+    "evidence": "Single-row 26 %, bound strengthening 9 %, coefficient strengthening 6 %, simple probing and global node probing explained by overlap with multi-row, probing and node presolve.",
+    "pages": "pp. 8, 11, 13, 18, 61-62, 65"
+   },
+   {
+    "pattern": "collect, then apply, to make an order-dependent step deterministic in parallel",
+    "evidence": "Lifting candidates collected in parallel and applied in a sequential pass since 6.5; thread-private conflict pools as the no-sharing alternative.",
+    "pages": "pp. 52, 64"
+   }
+  ],
+  "transferable": [
+   "(D5) Knock out in the master solve only; keep the feature in sub-MIPs whose heuristic decisions depend on presolve success; where a change acts through model size, state that no clean benchmark exists (pp. 5, 21).",
+   "(D5) Give no 'affected' figure where both sides time out: a change of path cannot be seen there (p. 6).",
+   "(D5) Class total first, then components; explain a small component figure by the component that covers for it (pp. 8, 11, 61-62).",
+   "(D5) Treat a few dozen affected models as anecdotal; about 200 are not enough for 3-4 %; recheck a small-set gain for performance variability before switching a default (pp. 19, 40, 42).",
+   "(D5) Read the hardest bracket separately: a 4 % average hid 25 % on the >= 1000 s models (p. 24).",
+   "(D4) Success-scaled work limit: work in touched non-zeros, base from model size, factor in [0.01, 100] growing with the reductions found (p. 49).",
+   "(D4) Ratio trigger for an expensive local step: work share w and success ratio s; fractional variables if s >= 2w, all variables if w < 0.005 or s >= 10w (p. 66).",
+   "(D4) Markowitz-type pivot test for substitutions (>= 0.01 of column or row maximum, tighter under a numerics setting) plus a fill-in cap (p. 25).",
+   "(D4) 32-bit support signature (row index mod 32) to rule out pairs before a pairwise dominance scan (p. 45).",
+   "(D4) Fixed-LP argument for dual reductions on MIPs: fix integers at an optimal solution and use b-independent dual bounds on the continuous part (pp. 58-59).",
+   "(D4) Collect, then apply: gather order-dependent candidates in parallel, apply them in one sequential pass for determinism (p. 52).",
+   "(D7) A small worked example per reduction, one of them quantified (root node instead of almost two thousand nodes, p. 17)."
+  ],
+  "coauthors": "Robert E. Bixby, Zonghao Gu, Edward Rothberg (Gurobi Optimization), Dieter Weninger (Erlangen-Nuernberg); alphabetical, roles not stated",
+  "quotes": [
+   {
+    "text": "Nevertheless, such a small set of problem instances does not provide any meaningful results, and indeed, additional tests that we have conducted showed that the speed-up in Table 23 is just an artifact of performance variability.",
+    "page": 40
+   },
+   {
+    "text": "one has to take this result with care, as a set of about 200 models is usually not large enough to measure such an impact precisely enough.",
+    "page": 42
+   }
+  ]
+ },
+ {
+  "id": "D018",
+  "year": "2016",
+  "title": "Solving Open MIP Instances with ParaSCIP on Supercomputers Using up to 80,000 Cores",
+  "read_level": "full",
+  "contribution": "Reports ParaSCIP's load-balancing improvements, node merging at restarts and deep probing, the solution of ten open MIPLIB 2010 instances, and runs on up to 80,000 cores of Titan with one coordinator (read in the TR version, ZR 15-53 revised February 2016; pp. 3-18).",
+  "problem_entry": "Supercomputers with more than 10,000 cores are standard; open library instances are research challenges; tree search is called easy to parallelize, yet only two large-scale solvers had solved open instances (pp. 3-4).",
+  "key_idea": "External parallelization of SCIP as a black box (UG): coordinator with collecting mode, dynamic number of collectors and bulk sending, a ramp-down mode, node merging by shared fixings at checkpoint restarts, and deep probing that pools racers' branching statistics (pp. 4-13).",
+  "assumptions": "MIP (1) with bounds (p. 3); open MIPLIB 2010 and 2003 instances with sizes in Table 1 (p. 14); deep probing for medium-scale machines and few integer variables (p. 13); no correctness argument beyond the merged bounds (p. 10).",
+  "proof_devices": [
+   "n/a (no proofs); design devices: heavy-node relative-gap test (2) (p. 7)",
+   "collecting control: one collector at start, +1 after 10 s of empty pool, p doubled if collecting modes come < 10 s apart; bulk sending (p. 8)",
+   "ramp-down switch: < 90 % of solvers active for 10 s and open nodes > 100 times the solvers -> collect, then redistribute (pp. 8-9)",
+   "node merging by shared fixings, tau = 0.9, root-node bound check with recovery, delta = 0 (Algorithms 1-2, pp. 11-12)",
+   "primitive-node checkpoints with presolve at restart (p. 7); racing with different settings and permutations for diversification (p. 6)"
+  ],
+  "experiments": "Load balancing judged on one instance (timtab2) with one run per version on Titan with 10,000 cores, SCIP 3.0.1 with CPLEX 12.5: ramp-down took ~90 % of time on 3 % of resources, improved version about four times faster (pp. 13-14); Table 1 of ten open instances solved 2011-2015 on four machines with 160-12,288 cores (pp. 14, 17); rmine10 in 41 runs, gap 0.15 % -> < 0.03 %, still open (pp. 17-18); no set, no repeats, no baseline, merging and deep probing unmeasured.",
+  "positioning": "Only earlier large-scale success named: Bussieck et al. with GAMS/CPLEX/Condor (p. 4); credits MIPLIB 2010 for permutation effects, ParaLEX, Branching rules revisited, rapid learning (pp. 6-13); vendors' distributed computing as context (p. 22); 9 of 13 references by the authors (my count).",
+  "writing": "Result-first abstract (12 instances, 80,000-core record, p. 3); mechanisms as procedures with defaults (pp. 4-13); records hedged '(up to our knowledge)' (p. 13); unmeasured claims worded as impressions (pp. 10, 13); open questions for the field in the conclusion (p. 22).",
+  "limits_future": "Untuned parameters (p. 14), deep probing not fully investigated (p. 13), merging restart conditions under study (p. 10), rmine10 open (p. 18); future: no two-layer coordinator needed, combine with shared-memory parallelism, ramp-up/ramp-down balance and heterogeneous subproblems (p. 22).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Time split by phase and resource use names the dominant cost (ramp-down ~90 % of time on 3 % of resources) before the remedy; but the controls are wall-clock periods (10 s) and node counts, not solver-internal work units.",
+    "pages": "pp. 8-9, 14"
+   },
+   {
+    "method": "Method 4",
+    "relation": "contradiction",
+    "note": "Genre and co-signed (second author): the load-balancing change is judged on one instance with one run per version, and merging and deep probing are not measured; against Method 4 and H5. Stated reason: an instance solvable on a supercomputer within a reasonable time.",
+    "pages": "pp. 10, 13-14"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Refusal thresholds inside the technique (merge only with tau = 0.9 shared fixings, restore the nodes on any bound loss with delta = 0) and a class statement for deep probing; no detector and no harm measurement.",
+    "pages": "pp. 11-13"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Loose: black-box design so the base solver's progress carries over; instrumentation (status messages, idle ratio from logs, per-second node traffic plots) made the ramp-down problem visible; targets come from the library's open list, not from the code under study.",
+    "pages": "pp. 4, 7, 14, 17-18"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "variability as diversification",
+    "evidence": "Racing solvers use different settings and permutations because permutations change performance through imperfect tie breaking; deep probing pools the racers' branching statistics.",
+    "pages": "pp. 6, 13"
+   },
+   {
+    "pattern": "a forced restart as a point to reorganize",
+    "evidence": "Checkpoint restarts re-presolve and merge open nodes to correct early branching decisions.",
+    "pages": "pp. 7, 10"
+   },
+   {
+    "pattern": "open library instances as targets",
+    "evidence": "Unsolved MIPLIB instances framed as research challenges; the paper's output is new optimal values.",
+    "pages": "pp. 4, 14"
+   }
+  ],
+  "transferable": [
+   "(D4) Primitive-node checkpoints: store only nodes without ancestor at the coordinator and presolve again at restart (p. 7).",
+   "(D4) Throttled collecting: one collecting worker at start, one more after a set empty-pool time, heavy-node target doubled when collecting phases come too close, heavy nodes by a relative-gap test (pp. 7-8).",
+   "(D4) Ramp-down switch: < 90 % of workers active for 10 s and open nodes > 100 times the workers -> stop redistributing, collect, hand out in bulk (pp. 8-9).",
+   "(D4) Merge at restart with a guard: merge open nodes sharing >= 90 % of the best node's fixings, process the merged root, restore the originals if its bound is worse (pp. 10-12).",
+   "(D5) Phase-resolved resource plots (active workers, open nodes, nodes sent and received per second, ramp phases marked) with the blind spot of the idle measure stated (pp. 14, 17-18; Figures 4, 6, 12-14)."
+  ],
+  "coauthors": "Yuji Shinano (first author), Timo Berthold, Stefan Heinz, Thorsten Koch, Michael Winkler; Achterberg second author with Gurobi GmbH affiliation; roles not stated",
+  "quotes": [
+   {
+    "text": "As shown in [3], the latter can have a considerable impact on the performance of a solver due to imperfect tie breaking.",
+    "page": 6
+   },
+   {
+    "text": "About 90% of the computing time was spent for the ramp-down process, using only 3% of the computing resources.",
+    "page": 14
+   }
+  ]
+ }
+]

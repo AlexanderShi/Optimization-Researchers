@@ -1,0 +1,269 @@
+[
+ {
+  "id": "R010",
+  "year": 2008,
+  "title": "Counting solutions of integer programs using unrestricted subtree detection",
+  "read_level": "full",
+  "contribution": "Extends LP-based branch-and-cut to count all feasible solutions of a bounded pure IP by closing unrestricted subtrees, recognised when every constraint is locally redundant at a node (Lemma 1, p. 4).",
+  "problem_entry": "Verification and discrete geometry need all feasible (or all optimal) solutions; existing counters work in binary form via SAT/BDD/0-1 enumeration and few handle the integer space of a general IP (pp. 2-3).",
+  "key_idea": "Traverse the whole branch-and-cut tree but close unrestricted subtrees (all assignments in local domains feasible) via an explicit redundancy check at every node; keep infeasible-subtree pruning; all optima via cutoff c^T x <= c* (pp. 3-4).",
+  "assumptions": "min{c^T x | Ax <= b, l <= x <= u, x in Z^n}, all variables bounded and integer; eight OneSpin chip-verification instances and MIPLIB instances without continuous variables (pp. 3, 5-6).",
+  "proof_devices": [
+   "Definition of local redundancy and Lemma 1 (unrestricted iff all constraints locally redundant), proved both directions from an arbitrary point of the local box (p. 4)",
+   "Example 1 with Fig. 1: branching variable decides whether unrestricted/infeasible subtrees appear (pp. 4-5)"
+  ],
+  "experiments": "Basic enumeration vs detection in SCIP 1.00.5/SoPlex 1.3.3 on eight chip instances (|X_IP|, time, nodes, depth, subtrees; Table 1, p. 5), e.g. veri1 1,618,847 nodes/12.9 s to 17,639/0.3 s; veri8 only with detection; MIPLIB all optima in 5 min except two; other solvers compared in words only; single runs (pp. 5-6).",
+  "positioning": "Between SAT/BDD counters (sharpSAT, azove, zerOne, Morgado et al.), branch-and-cut solution generation (Danna et al., CPLEX) and Barvinok counting; credits Morgado et al. for the binary analogue (pp. 2-4).",
+  "writing": "Five printed pages: one definition, one lemma, one toy example, one table; dominance over four solvers claimed without numbers; no conclusion section (pp. 2-6).",
+  "limits_future": "Algorithmic and software contribution; no limitation, open question or future work stated (p. 6).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Total time printed beside nodes and depth, component output counted (unrestricted-subtree column); no split of detection cost, no budget.",
+    "pages": "pp. 5-6"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "Parallels Morgado et al.'s SAT-side counting, re-derived for branch-and-cut where the redundancy test must be explicit at every node.",
+    "pages": "p. 4"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "mirror pruning for a new task",
+    "evidence": "To make an optimiser count, pair its existing pruning rule (infeasible subtrees) with the counterpart the new task needs (subtrees that are all solutions).",
+    "pages": "pp. 4-5"
+   }
+  ],
+  "transferable": [
+   "(D2/D4) To make a branch-and-cut code count or enumerate, add the counterpart of infeasibility pruning: at each node test whether every constraint holds for every point of the local box; if so, close the subtree in one step (Lemma 1, p. 4).",
+   "(D2) To get all optimal solutions, solve once, add c^T x <= c*, then enumerate the feasible set of the restricted problem (p. 3).",
+   "(D5) Report |X_IP| beside time, nodes and depth, plus a count of objects the new component produced; a baseline node count near 2|X| shows one leaf per solution (Table 1, p. 5)."
+  ],
+  "coauthors": "Stefan Heinz, Thorsten Koch",
+  "quotes": [
+   {
+    "text": "the redundancy check has to be performed explicitly in every search node",
+    "page": 4
+   }
+  ]
+ },
+ {
+  "id": "R011",
+  "year": 2008,
+  "title": "On the Effects of Minor Changes in Model Formulations",
+  "read_level": "full",
+  "contribution": "Shows, through a factorial study of optimum- and LP-bound-preserving variations of a TSP formulation in CPLEX and SCIP, that minor formulation changes can alter solve time by a factor above 3,200, so formulations must be reported exactly (pp. 7-8).",
+  "problem_entry": "A failed reproduction of van Vyve and Wolsey's TSP model with erratic solver behaviour under minor variations, plus Trick's remark on automatic formulation tricks (p. 2).",
+  "key_idea": "Five-factor family u-w-e-b-f of changes keeping integer optimum and LP value fixed (original 2-1-1-1-0), every combination run in two solvers, coincident runs explained by presolve (pp. 4-7).",
+  "assumptions": "TSP arc formulation with MTZ plus van Vyve-Wolsey flow constraints on k-nearest neighbourhoods; one instance att48, k = 13, Zimpl 2.07 models posted online; root LP 10604, optimum 10628 (pp. 3, 5, 7).",
+  "proof_devices": [
+   "Theorem 1 of van Vyve and Wolsey quoted with a one-line flow-capacity proof (p. 3)",
+   "Presolve account: column singletons fixed to zero, implied bound substitution by y, w count from n(k(k-1)+2k(n-k)) to nk(k-1) (pp. 6-7)"
+  ],
+  "experiments": "CPLEX 10.0.1 and SCIP 0.90e (probing off, CPLEX LP), 1 h limit: 128 CPLEX variants collapse to 52 distinct runs, SCIP 130; CPLEX 27 s vs >24 h; SCIP slowest/fastest 36 vs >3,000 for CPLEX; per-level geometric means (Table 4, p. 8); single runs, one instance (pp. 5-10).",
+  "positioning": "No dispute with van Vyve and Wolsey (one stated deviation, p. 3); Trick as authority for unpredictability (p. 2); node gap attributed to default branching citing Achterberg, Koch and Martin (p. 7).",
+  "writing": "Abstract understates its number (>1,000 vs >3,200, pp. 2, 7); causal claims hedged; every distinct run printed (pp. 9-10); own feature's failure reported (p. 8); conclusion opens with the reporting lesson (p. 8).",
+  "limits_future": "State formulations exactly; look for formulation-independent strategies such as branching; implicit integers as a way to pass redundant information (pp. 8, 11); one-instance design not discussed as a limitation.",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Published formulation is one point of a factor family and the whole grid is run, but factors are formulation choices and the reading is by per-level means and best run, not a knee.",
+    "pages": "pp. 5, 7-8"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Node counts never read as speed: SCIP 62 vs CPLEX 666 nodes at equal time; CPLEX e = 0 has more nodes and runs four times faster (Table 4).",
+    "pages": "pp. 7-8"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "2008 form: plain geometric means per factor level, no shift, no brackets, single runs on one instance; comparability settings as in Heuristic 3.",
+    "pages": "pp. 5, 8"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "formulation robustness as a design criterion",
+    "evidence": "Measure a solver's spread over equivalent formulations (slowest/fastest 36 against more than 3,000) and prefer strategies less dependent on the formulation.",
+    "pages": "pp. 8, 11"
+   },
+   {
+    "pattern": "collapse variants by presolve equivalence before counting",
+    "evidence": "Derive which settings presolve turns into the same model, count distinct runs, tabulate sizes after preprocessing.",
+    "pages": "pp. 6-8"
+   }
+  ],
+  "transferable": [
+   "(D1/D2) When a published computational result does not reproduce, turn the discrepancy into a factorial study of changes that keep both the integer optimum and the LP bound fixed, and run it in two solvers (pp. 2, 4-5).",
+   "(D4) Before counting variants, derive which ones presolve maps to the same model (column singletons, implied bounds) and report the size after preprocessing; count distinct runs, not settings (pp. 6-7; Table 3, p. 7).",
+   "(D5) Read a factorial by per-level geometric means, then test the setting the means predict against the actual best (60 s against 27 s, p. 7).",
+   "(D5) Use the slowest-to-fastest ratio over equivalent formulations as a robustness number per solver (36 against more than 3,000, p. 8).",
+   "(D5) In a two-solver comparison, switch off a component that one solver uses heavily and the other barely (here probing), and give both the same LP solver (p. 5).",
+   "(D8) Post the model files with the report (p. 5)."
+  ],
+  "coauthors": "Thorsten Koch, Andreas Tuchscherer",
+  "quotes": [
+   {
+    "text": "omitting seemingly useful redundant information can sometimes speed up the solution process",
+    "page": 2
+   }
+  ]
+ },
+ {
+  "id": "D010",
+  "year": 2009,
+  "title": "SCIP: solving constraint integer programs",
+  "read_level": "full",
+  "contribution": "Presents SCIP, a framework integrating CP, SAT and MIP techniques on one search tree for constraint integer programs, with new measured MIP ingredients and an application to chip property checking (pp. 2-37).",
+  "problem_entry": "CP, SAT and MIP split problems differently; entry is the level of integration on one tree with shared statistics, LP duals and conflict analysis; pulled by property checking of arithmetic data paths (pp. 2-4, 30).",
+  "key_idea": "Constraint integer programs (Definition 2.1, p. 4) solved via constraint handlers whose only mandatory method is a feasibility check, with optional callbacks for speed; plus inference/hybrid branching, product score, global cut selection, CIP conflict analysis, root-only restarts (pp. 7-8, 12-20).",
+  "assumptions": "CIP generalises finite-domain CP, MIP and SAT (Proposition 2.3, p. 5); ten MIP test sets (Table 2, p. 17), 122 of 159 comparison instances (p. 21), 258 OneSpin property-checking instances (pp. 30-37).",
+  "proof_devices": [
+   "Proposition 2.3, stated with a pointer to the thesis, no proof here (pp. 4-5)",
+   "Definition 5.1 and (8): property valid iff counter-example CSP infeasible (pp. 30-31)"
+  ],
+  "experiments": "Knock-out percentages of shifted geometric mean time against default on ten sets (Tables 3-6, pp. 18-21): hybrid branching 8 %, product score 14 %, orthogonality 22 %, conflict analysis 12 %; solver comparison vs CPLEX 11/10.2 and CBC with profile counts and ratios (SCIP/CPLEX 2.86, Table 8, p. 28); chip vs MiniSat 2.0, SAT fails on 58 of 258, CIP on none (pp. 35-37); no seeds.",
+  "positioning": "Against SCIL, SIMPL, branch-and-infer, logic-based Benders by level of integration and against Abacus (pp. 2, 14); SIP as predecessor (p. 15); credits Andreello, Caprara and Fischetti, SatZ, Wolter, Berthold (pp. 10, 17, 19).",
+  "writing": "Each ingredient paragraph ends with a measured percentage (pp. 17-21); hedged claims; a section prints design limitations (pp. 14-15); headline 1.87 derived as 2.86/1.53 (pp. 2, 28-29); weak spots stated (pp. 29, 37).",
+  "limits_future": "Plugin costs, speed gap to CPLEX 11, SAT's advantage on counter-examples, missing word-level baselines (pp. 14-15, 28, 35-36); future: MINLP, symmetry, exact MIP, more handlers (p. 37).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Knock-out tables against the default with weighted total and node total; off-by-default component measured; time-outs scored at limit with bias stated.",
+    "pages": "pp. 18-21, 28"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Solver comparison shifts 1/10/100, not the thesis-era 10 s and 100 nodes; adds a profile-like table and solved-by-all subset.",
+    "pages": "p. 28"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Gains read through nodes times throughput: hybrid branching via 27 % fewer nodes, strong branching does not pay, orthogonality wins while nodes rise, SAT wins by faster node processing.",
+    "pages": "pp. 17, 20, 29, 36"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Weighted-sum score family holds the literature's settings; best 1/6, product score beats the family; reliability branching generalises pseudocost branching.",
+    "pages": "pp. 16-19"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "SAT restarts kept only at root, SatZ lookahead turned into pseudocost-like history with VSIDS, conflict analysis generalised to CIP.",
+    "pages": "pp. 13, 17, 20"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "SIP successor rebuilt from scratch; correctness from feasibility check alone; 20 % assertions; comparison set chosen with CPLEX 11 and CBC, not SCIP.",
+    "pages": "pp. 3, 7-8, 15-16, 21"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Defaults chosen on weighted total with per-set losses accepted; a seemingly ineffective term (w_p = 0.1) stays in the default.",
+    "pages": "pp. 17, 19-20"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "minimal exported summary to restore a hidden view",
+    "evidence": "When modular design hides the column view, every module exports the smallest summary restoring key operations (two lock counts per variable).",
+    "pages": "p. 14"
+   }
+  ],
+  "transferable": [
+   "(D4) Give each constraint class a handler whose only mandatory method is a feasibility check, and add presolve, propagation, relaxation and branching as optional callbacks, so that a new constraint type is correct before it is fast (pp. 7-8).",
+   "(D4) When a modular design hides the column view, require every module to export a minimal per-variable summary: the number of constraints that block an increase and a decrease (p. 14).",
+   "(D4) Select cuts across all separators greedily by a weighted score of efficacy, objective parallelism and orthogonality to the cuts already taken, with minimum efficacy and orthogonality thresholds (p. 19).",
+   "(D4) Split big-coefficient linearisations into fixed-width words (16 bits) to keep LP coefficients small, and leave constraints whose linearisation would explode to propagation alone, after counting what the linearisation would cost (p. 34).",
+   "(D5) Report a solver comparison as a profile table, solved counts and shifted-geometric ratios of time, nodes and iterations, on the whole set and on the subset every solver solves (Table 8, p. 28).",
+   "(D5) Choose the comparison set with solvers other than the one under study, and drop (and name) the instances on which the compared codes disagree about the optimum (p. 21).",
+   "(D5) To compare MIP kernels across codes, link your code to the competitor's LP solver and divide out the competitor's version-to-version factor, stating the assumption (p. 29)."
+  ],
+  "coauthors": "",
+  "quotes": [
+   {
+    "text": "consider interactions between new methods and existing state-of-the-art MIP components",
+    "page": 3
+   }
+  ]
+ },
+ {
+  "id": "D026",
+  "year": 2009,
+  "title": "Computation of an extractive distillation column with affine arithmetic",
+  "read_level": "full",
+  "contribution": "Combines Kolev's affine-arithmetic linearisation with LP pruning, sped up by Achterberg's LP warm-start and ordering heuristic, in a branch-and-prune method that computes an industrial-scale extractive distillation column (pp. 4-7, 18).",
+  "problem_entry": "Steady states of counter-current multistage processes lack convergence and all-solutions guarantees under standard methods; no interval computation of distillation columns known (pp. 2-4).",
+  "key_idea": "Branch-and-prune with mixed affine/interval linearisation, equationwise propagation, LP pruning and widest-component bisection; Achterberg's heuristic skips witnessed bounds, warm-starts in primal phase II and orders LPs by closeness to a bound (pp. 5-7).",
+  "assumptions": "Not a MILP: square nonlinear systems f(x) = 0 on a box; MESH equations for acetone-methanol-water with 12-22 stages, Wilson, Antoine, simplified enthalpy; initial box from engineering bounds verified by infeasibility of complements (pp. 5, 10-14, 18).",
+  "proof_devices": [],
+  "experiments": "Enhancements measured one at a time (Tables 1-3, pp. 32-34: time ratios 115, 29.5, 44.8); column cases (Table 5, p. 36); Achterberg's heuristic cuts time by 4.63-5.57 and simplex iterations by 6.39-6.75 (Table 8, p. 39); combustion system 1.46 s (p. 16); single runs, no external baseline.",
+  "positioning": "Extends Baharev and Rév 2008; takes Kolev's linearisation and earlier LP-pruning evidence; Stadtherr's interval-Newton work as background; novelty hedged (pp. 2-4, 17-18).",
+  "writing": "Predictions before measurements (pp. 8-9, 15); coauthor's contribution named and measured separately (pp. 7, 15, 39); explicit limitations section (p. 17); one-sentence summary (p. 18).",
+  "limits_future": "Implementation in its infancy, hard to extend and debug without a reference implementation (p. 17); bisection choice open (p. 7); future: connect to a modelling language (p. 18).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Time split into iterations times cycle time, each change assigned in advance to the factor it should move; heuristic's time ratio printed beside simplex-iteration ratio (co-signed).",
+    "pages": "pp. 8-9, 15, 32-34, 39"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Heuristic knocked out of the full method on three settings of one problem; too-easy examples set aside; no sets, no brackets.",
+    "pages": "pp. 15, 39"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "Direction reversed: MIP LP warm-start practice brought into another field's code and measured alone.",
+    "pages": "pp. 6-7, 15, 39"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Problem-specific bisection weight stays a fallback because it is worse on reasonable cases; w = 1 remains default (co-signed, weak).",
+    "pages": "pp. 7, 15, 38"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "predict which factor a change moves, then measure both",
+    "evidence": "Expected effects (iterations vs cycle time) written before results, then both ratios reported.",
+    "pages": "pp. 8-9, 15; Tables 1-3, pp. 32-34; Table 8, p. 39"
+   },
+   {
+    "pattern": "order and warm-start a sequence of related LPs",
+    "evidence": "Skip bounds already witnessed, reuse the previous optimal basis, order LPs so consecutive optima are close.",
+    "pages": "pp. 6-7, 39"
+   }
+  ],
+  "transferable": [
+   "(D4) For a sequence of LPs over the same constraints (bound tightening by min and max of each x_j), skip every bound already attained by a feasible point you have seen, warm-start each LP from the previous optimum in primal phase II, and order the LPs by the variable closest to a bound (pp. 6-7).",
+   "(D5) Before measuring a change, write down whether it should change the iteration count or the cost per iteration; then report time, iterations and cycle time, each as a ratio (pp. 8-9; Tables 1-3, pp. 32-34).",
+   "(D5) Measure each enhancement on examples the other changes do not touch, to keep the comparison clean (p. 9), and retire test examples that have become too easy to show an effect (p. 15).",
+   "(D3) Verify each bound of the initial box by proving, with the same method, that its complement is infeasible (p. 14)."
+  ],
+  "coauthors": "Ali Baharev, Endre Rév",
+  "quotes": [
+   {
+    "text": "The enhancements presented in this subsection will be referred to as Achterberg’s heuristic.",
+    "page": 7
+   }
+  ]
+ }
+]

@@ -1,0 +1,224 @@
+[
+ {
+  "id": "R003",
+  "year": "2004",
+  "title": "SCIP - a framework to integrate Constraint and Mixed Integer Programming",
+  "read_level": "full",
+  "contribution": "Defines constraint integer programs (a CP restricted so that fixing the integers leaves an LP) and describes SCIP 0.78, a plugin framework in which even integrality is a plugin and a handler's check alone gives a correct solver; on 29 MIPs SCIP is about 2x slower than CPLEX 9.03 and somewhat slower than SIP (pp. 7-9, 11, 24-26).",
+  "problem_entry": "CP and MIP share branch-and-bound but process nodes with complementary strengths; existing integrations (Coupe, SCIL, SIMPL) serve prototyping, SCIP serves experts who need full control and speed; black-box MIP is too slow on some classes and linearization hides CP structure (pp. 2-3, 7).",
+  "key_idea": "CIP restriction (1): after fixing the integers the rest is an LP, so an LP relaxation sits beside CP-style constraint handlers on one tree; every algorithm is a plugin; the feasibility check alone is a correct (enumerative) algorithm, other callbacks only add speed (pp. 7-9, 11).",
+  "assumptions": "CIP Def. 2.3 with (1); nonlinear terms allowed if linear in the continuous variables after fixing (fn. 1, p. 8); linear objective and domains without loss of generality (p. 8); completeness stated without a finite-domain qualifier, which R009 p. 4 adds; tests on pure MIPs from MIPLIB 2003 and Mittelmann (p. 24).",
+  "proof_devices": [
+   "n/a (no proofs); design devices: stage machine with a transformed working copy (section 4, Fig. 1, pp. 14-17)",
+   "variable aggregation graph mapping expressions onto active variables (Example 4.1, Fig. 2, pp. 16-17)",
+   "numerical fallback: retry other LP settings, else discard the node's LP and continue (p. 20)",
+   "memory-saving mode with depth-first priority near the memory limit (pp. 18-19)",
+   "enforcement priorities around the integrality handler at 0 (p. 23); cut selection by efficacy and orthogonality (p. 21)"
+  ],
+  "experiments": "SCIP 0.78 vs SIP vs CPLEX 9.03 (also SCIP's LP solver), 3.2 GHz Pentium-4EE, 3600 s, 1.5 GB; 29 instances picked by CPLEX 9.02 (>= 1000 nodes, <= 1 h) with equal gap tolerances; totals 21388.7/16870.8/11675.5 s, plain geometric means 162.5/133.9/81.4 s with unsolved runs at their reached times (my recount, incl. a likely memory-out at 1746 s); SCIP faster than CPLEX on 8 of 29 (my recount); single runs, no knock-out, no CP or CIP instance (pp. 24-26).",
+  "positioning": "Set against Coupe, SCIL and SIMPL by audience, without criticism (pp. 2-3); Hooker's SIMPL cited as ref [6]; ref [4] titles SCIL's report 'SCIP - symbolic constraints...' while the body says Scil (pp. 3, 26); SIP named as the predecessor (p. 26).",
+  "writing": "Guided tour: features, definitions, one subsection per plugin type, stages, then about two pages of computations (pp. 3-26); loss stated ('not strictly competitive') then softened ('an indication') (pp. 24, 26); worked examples (pp. 9, 16-17); future-tense promises (pp. 21, 24).",
+  "limits_future": "Stated: factor 2 to CPLEX, SIP ahead (tuning, parameters, generality overhead), clique cuts and probing missing (pp. 24, 26); card adds: the integration claim is untested (no CP or CIP instance), the competitor picked the set, single runs (pp. 24-25).",
+  "method_links": [
+   {"method": "Method 5", "relation": "evidence", "note": "Complete MIP solves from plugins, every unit a plugin (step 3); reference-solver run with matched gap tolerances and CPLEX as SCIP's LP solver; test set picked by the reference solver, not by the code under study.", "pages": "pp. 3, 24"},
+   {"method": "Method 5", "relation": "variant", "note": "The 2004 selector is the competitor CPLEX 9.02, not a frozen own version as in the thesis; a set the reference solves completely by construction favours the reference (inferred).", "pages": "p. 24"},
+   {"method": "Method 4", "relation": "variant", "note": "Era form: totals and plain geometric means against two external solvers, unsolved runs at reached times (my recount); no knock-out from SCIP's default, no faster/slower counts.", "pages": "pp. 24-25"},
+   {"method": "Method 6", "relation": "evidence", "note": "CP-style propagation and SAT conflict clauses enter as plugin types, conflict analysis extended to infeasible LPs; design only, R004 tests it. Also H3: equal gap tolerances, same LP solver, factor 2 printed with reasons (pp. 24, 26).", "pages": "pp. 9-10, 13"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "correctness contract separate from speed callbacks", "evidence": "The check callback alone makes the solver correct (complete enumeration); presolve, propagation, relaxation and branching are optional speed; repeated in R009 p. 5.", "pages": "p. 9"},
+   {"pattern": "degrade, don't abort, on numerical trouble", "evidence": "An unstable LP is retried with other settings; if that fails, the node's LP is discarded and the node is processed as if no LP had been solved.", "pages": "p. 20"}
+  ],
+  "transferable": [
+   "Split each plugin interface into a mandatory correctness callback (check) and optional speed callbacks (presolve, propagate, relax, branch) (p. 9).",
+   "Define the class by what is left once the integers are fixed (an LP) so that enumeration plus LP solves is complete, and state the finiteness condition (pp. 7-8; R009 p. 4).",
+   "Keep an aggregation graph so plugins may write expressions on original, fixed or aggregated variables and the framework maps them to active ones (pp. 16-17).",
+   "On an unstable LP retry other LP settings, then discard that node's LP bound and continue by branching instead of aborting (p. 20).",
+   "Pick the test set by the reference solver with an effort window (>= 1000 nodes, <= 1 h), match gap tolerances, use the reference's LP solver inside the new code (p. 24).",
+   "Print a factor-2 loss with its reasons: tuning, parameters, overhead of generality (pp. 24, 26)."
+  ],
+  "coauthors": "none (sole author)",
+  "quotes": [
+   {"text": "Obviously, Scip 0.78 is not strictly competitive to CPlex 9.03 – there is a factor of 2 in both, the geometric mean and the total running time.", "page": 24},
+   {"text": "This feasibility test already suffices to produce a correct algorithm for solving CIPs with constraints of the supported type.", "page": 9}
+  ]
+ },
+ {
+  "id": "R004",
+  "year": "2005",
+  "title": "Conflict Analysis in Mixed Integer Programming",
+  "read_level": "full",
+  "contribution": "Generalizes SAT conflict analysis to MIP: a conflict graph over local bound changes, initial reasons for infeasible or bound-exceeding LPs from dual rays and dual solutions, non-binary variables kept out of conflict sets; in SCIP 0.79a it halves nodes but costs about 15% time on feasible MIPs and cuts time on infeasible chip-verification IPs (pp. 2, 9-19).",
+  "problem_entry": "SAT solvers learn from infeasible subproblems, MIP solvers seem to discard them; two obstacles named: non-binary variables and infeasibility coming from the LP relaxation as a whole (pp. 2-3).",
+  "key_idea": "Generalized conflict graph whose vertices are bound changes; Algorithm 3.4 relaxes local bounds along the Farkas ray while the infeasibility measure stays negative, Algorithm 3.6 does the same with the dual solution for cut-off LPs; non-binary changes moved to the conflict side or dropped with local validity; SAT 1-FUIP, All-FUIP and reconvergence clauses on top (pp. 5-15).",
+  "assumptions": "MIP max{cx | Ax <= b, l <= x <= u, integrality}; exposition with l = 0 and one bound change per variable, general case step by step with reduced costs split (pp. 3, 10-13); local cuts removed or conflicts marked local (fn. 1, p. 10); sets: 29 feasible MIPs picked by CPLEX 9.03 (>= 1000 nodes, >= 30 s, <= 1 h) and 35 infeasible ALU IPs with coefficients up to 2^(2n) (pp. 16-18).",
+  "proof_devices": [
+   "Lemma 3.3: minimal-cardinality bound-IIS is NP-hard, reduction from minimal-cardinality IIS with slacks as bounds (p. 11)",
+   "Farkas aggregation (13) whose left side does not depend on the local bounds, so relaxing bounds keeps the proof while the right side stays negative (p. 12)",
+   "dual feasibility unaffected by upper bounds for the bound-exceeding case (p. 13)",
+   "worked example: d = -2, relaxing z3 >= 3 to z3 >= 2 gives d = -1, initial reason z1 <= 1, z2 >= 2, z3 >= 2 (p. 12)"
+  ],
+  "experiments": "3.2 GHz Pentium-4EE, 3600 s; SCIP 0.79a default vs conflict, CPLEX 9.03 reference with equal gap tolerances (pp. 15-16); Table 1 geo nodes 29633 -> 15441, time 257.2 -> 297.8 s (my recount: -48%/+16% on 29, -44%/+4.5% on the 24 both solve); Table 2 time split BTime 247.0 -> 225.0, STime total 658.8 -> 2450.4, CTime 3544.5 s, clause counts and lengths (p. 18); my recount: component plus extra switching time exceeds the BTime saving on 17 of 29; ALU Table 3 (floor 1.0): abstract's -90%/-60% are the reduced-21 ratios, -73%/-42% on all 35 (pp. 17-19); single runs.",
+  "positioning": "Continues the SAT line (Marques-Silva and Sakallah, Zhang et al., Chaff, BerkMin, DPLL, BCP), MIP conflict-graph term distinguished, IIS literature (Amaldi et al., Pfetsch) (pp. 2-4, 11); no CP nogood work or other MIP conflict work cited, nogoods never mentioned (my search, pp. 19-20); competitors' practice hedged with 'It seems' (p. 2).",
+  "writing": "Loss in the abstract next to the gain and again in the introduction (pp. 2-3); one running example per part (Examples 2.2 and 3.1/3.5/3.7, pp. 5-15); hedges where evidence is missing, e.g. system (15) 'probably very weak' but untested (pp. 11, 14, 15, 18); separate tables and verdicts per test set (pp. 16-19).",
+  "limits_future": "Stated: time loss on feasible MIPs; future work: faster and cleverer derivation of conflicts from infeasible LPs, clause-database management after Goldberg and Novikov (pp. 18-19); card adds: system (15) untested (p. 14), imported SAT pieces always on together (p. 15), strong-branching LP analysis not knocked out alone (p. 15), no cap per subproblem (pp. 15-16), single runs.",
+  "method_links": [
+   {"method": "Method 2", "relation": "evidence", "note": "The source of the time split: basic, switching and conflict time per instance with clause counts and lengths; dominant cost named (continuing bound-exceeding LPs) and side cost named (switching); costly pieces dropped (IIS heuristic, Step 5). My recount of the inferred checkpoint: component plus added switching time exceeds the basic-time saving on 17 of 29.", "pages": "pp. 11, 15-18"},
+   {"method": "Method 2", "relation": "variant", "note": "2005 budget is aging only (deletion after a couple of useless iterations, longer clauses earlier); the cap of 10 conflicts per subproblem is the 2007 thesis default.", "pages": "pp. 15-16"},
+   {"method": "Method 6", "relation": "evidence", "note": "SAT conflict analysis mapped onto MIP objects: infeasible LPs explained by dual information, bound changes as graph vertices.", "pages": "pp. 9-14"},
+   {"method": "Method 6", "relation": "variant", "note": "2005 form keeps general integers out of conflicts (moved to the conflict side or dropped with local validity) instead of the thesis's bound disjunctions; 1-FUIP, All-FUIP and reconvergence clauses always on together, so step 4 (test each habit alone) is not yet followed.", "pages": "pp. 14-15"},
+   {"method": "Method 4", "relation": "evidence", "note": "Pre-bracket form: on vs off in SCIP's default, geometric means over all and over the both-solved subset, counts of fewer/more nodes and faster/slower runs; means plain (feasible set) or floored at 1.0 (ALU), no shift.", "pages": "pp. 16-17, 19"},
+   {"method": "Method 5", "relation": "evidence", "note": "Reference solver selects the test set by a stated effort window; the both-solved subset is reported in print in 2005, before cmpres.awk (2006).", "pages": "pp. 16-17"},
+   {"method": "Method 1", "relation": "evidence", "note": "Weak: target class (infeasible chip-verification IPs) and general feasible MIPs reported separately with the general-set loss printed; no default decision. Also H3 (fn. 4, p. 16), H7 (1e-9 tolerances, p. 16), H10 (loss in abstract, pp. 2, 18-19).", "pages": "pp. 2, 16-19"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "hardness lemma, then the cheapest heuristic from the information at hand", "evidence": "Minimal bound-IIS proved NP-hard; a Farkas-based literature heuristic tried and dropped for its very large overhead; simple heuristics on the LP information at hand used instead; restated in R009 p. 6.", "pages": "p. 11"},
+   {"pattern": "Split results by answer type (proof vs witness)", "evidence": "Infeasible chip-verification IPs, where only a proof is wanted, gain in nodes and time; feasible MIPs gain nodes and lose time; reported in separate tables.", "pages": "pp. 16-19"}
+  ],
+  "transferable": [
+   "Explain an infeasible LP by relaxing local bounds to global ones along the dual ray while the infeasibility measure stays negative; a cut-off LP along the dual solution while the bound stays exceeded (Algorithms 3.4, 3.6, pp. 12-14).",
+   "When a conflict would need non-binary variables, move those bound changes to the conflict side of the graph cut instead of linearizing a weak disjunction (pp. 14-15).",
+   "Prove the exact selection subproblem hard, measure the literature heuristic's overhead, keep the cheap heuristic (p. 11).",
+   "If the LP solver stops at the objective limit, continue to optimality before the analysis and book that time to the component (pp. 15, 17).",
+   "Test an imported technique on the source field's home ground and on general MIPs, and report both, the loss included (pp. 16-19).",
+   "Split the time into basic, switching and component time, and print the produced objects (count, average size) per instance (Table 2, p. 18).",
+   "Give geometric means for all instances and for the subset every setting solves, side by side (pp. 17, 19).",
+   "Put the time loss in the abstract next to the node gain (p. 2)."
+  ],
+  "coauthors": "none (sole author)",
+  "quotes": [
+   {"text": "On feasible MIP instances, the number of required branching nodes was reduced by 50% in the geometric mean. However, the total solving time increased by 15%.", "page": 2},
+   {"text": "This suggests that system (15) is probably very weak, although we did not verify this hypotheses by computational studies.", "page": 14}
+  ]
+ },
+ {
+  "id": "R005",
+  "year": "2005",
+  "title": "MIPLIB 2003",
+  "read_level": "full",
+  "contribution": "Reports the fourth MIPLIB: 32 too-easy instances purged by a stated CPLEX 8 rule, 27 new ones added, 60 instances with sizes, known optima, easy/hard/open status, constraint classification, provenance and an exact rational audit of LP bases (pp. 2-13).",
+  "problem_entry": "Library maintenance: instances became too easy and types were unbalanced (quoted MIPLIB 3.0 intro), more than seven years since the last update; goal 'a concise set of challenging problems' (pp. 2-3).",
+  "key_idea": "Purge and refill under a conciseness goal; operational status classes (easy: commercial solver within 1 h; hard: solved at all; open: no known optimum) kept live through notifications and a bulletin board instead of maintained bounds; preference for real-world and some very large instances (pp. 3, 5).",
+  "assumptions": "60 instances (my count from Table 4: 28 easy, 13 hard, 19 open; new: 6 easy, 5 hard, 16 open) (p. 11); 12 constraint types after normalization, each constraint counted once in the leftmost type (pp. 6, 12); numerically unstable (momentum1-3) and degenerate (stp3d) instances flagged (p. 4); no genuinely infeasible instance (p. 7).",
+  "proof_devices": [
+   "n/a (no proofs); curation devices: removal rule with CPLEX 8 without preprocessing, probing, cuts or heuristics, pseudocost branching, solved within a minute; recheck with CPLEX 9.03 (101 s total) (p. 3)",
+   "numerics audit: optimal bases from seven floating-point LP solvers checked for primal and dual feasibility in rational arithmetic with PERPLEX (pp. 5-6)",
+   "constraint classification with normalization and count-once rule (p. 6); provenance in three roles (pp. 6, 13)"
+  ],
+  "experiments": "No solver comparison; removal timing (CPLEX 8 rule, recheck with CPLEX 9.03 on a 3.4 GHz PC: 101 s for all 32 purged instances, more than half on vpm1) (p. 3); LP-basis audit: 12 instances not solved to optimality by all seven LP solvers, three by none at defaults (pp. 5-6; count mine); 11 status changes since the announcement (p. 3).",
+  "positioning": "Continues Bixby, Boyd and Indovina 1992 and MIPLIB 3.0 (Bixby, Ceria, McZeal, Savelsbergh 1998), quoting the latter at length as still valid, no criticism (pp. 2-3); references per instance (p. 4); Martin for matrix structure, Koch for exact LP checks (pp. 5-6).",
+  "writing": "Opens with a Socrates quotation and the MIPLIB 3.0 introduction, whose promise of yearly updates is followed by 'more than seven years have passed' (pp. 2-3); tables and pictures carry the paper (pp. 4-13); policies stated as decisions with reasons (p. 3).",
+  "limits_future": "Future: genuinely infeasible instances, and more information per instance (models in a modeling language, original data) rather than more instances (p. 7); card adds: admission of the 27 new instances has goals, not a rule (pp. 3, 5); the easy class names no solver or machine (p. 3).",
+  "method_links": [
+   {"method": "Method 5", "relation": "evidence", "note": "Co-signed: instrument before study; known optima, sizes, provenance and status per instance published (step 2 in public form); R004, R006 and R009 measure on it. Also H7 (exact numerics audit, pp. 5-6), H6 early form (models wanted, p. 7), Workflow E step 2 (origins listed, p. 13).", "pages": "pp. 11, 13"},
+   {"method": "Method 5", "relation": "variant", "note": "Only half rule-selected: removal follows a stated rule, admission of the new instances only stated goals.", "pages": "pp. 3, 5"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "purge by a stripped-down reference configuration", "evidence": "Remove only what CPLEX 8 without preprocessing, probing, cuts and heuristics solves within a minute; retime the purged set with CPLEX 9.03 (101 s in total).", "pages": "p. 3"},
+   {"pattern": "exact rational re-check of floating-point LP bases", "evidence": "Seven LP codes compute optimal bases; PERPLEX checks primal and dual feasibility in rational arithmetic; instances no solver gets right at defaults listed (co-signed; roles not stated).", "pages": "pp. 5-6"},
+   {"pattern": "operational status classes kept live", "evidence": "Easy, hard, open defined operationally, updated from notifications, bulletin board instead of maintained best-known bounds.", "pages": "p. 3"}
+  ],
+  "transferable": [
+   "Define benchmark status classes operationally (easy: commercial solver within an hour; hard: solved at all; open: no known optimum) and maintain them through notifications (p. 3).",
+   "Purge a benchmark with a deliberately weakened solver configuration and a time threshold; retime the purged set with the newest version (p. 3).",
+   "Audit a test set's numerics: optimal bases from several floating-point LP solvers, primal and dual feasibility verified in exact rational arithmetic (pp. 5-6).",
+   "Classify constraints after a stated normalization, counting each constraint once in the first class it fits (p. 6).",
+   "Record provenance in three roles: originator, formulator, donator (pp. 6, 13).",
+   "Do not maintain best-known bounds you cannot keep current; open a bulletin board instead (p. 3)."
+  ],
+  "coauthors": "Thorsten Koch (corresponding author), Alexander Martin",
+  "quotes": [
+   {"text": "To decide which instances to remove, we used CPLEX version 8 with the following settings: no preprocessing, no probing, no cut generation, no heuristics, a relative mipgap of zero, and pseudocost branching.", "page": 3},
+   {"text": "We think it is more important to increase the information about each instance than to increase the number of instances.", "page": 7}
+  ]
+ },
+ {
+  "id": "R006",
+  "year": "2005",
+  "title": "Improving the Feasibility Pump",
+  "read_level": "full",
+  "contribution": "Proposes the objective feasibility pump, which mixes the original objective into the pump's distance function with a geometrically decaying weight (alpha0 = 0 is the original) and keys cycle detection on (point, alpha); on 121 instances it finds a strictly better first solution on 89 and a worse one on 17, at a slightly higher time (pp. 2, 5-7).",
+  "problem_entry": "The feasibility pump finds feasible solutions well but of poor objective value; of three conditions (x in P, integrality, small objective) it pursues two, the objective entering only through the LP-optimal start (pp. 2, 4).",
+  "key_idea": "Replace the distance with Delta_alpha = (1 - alpha) Delta + alpha (||Delta||/||c||) c^T x, alpha decayed by a factor phi each round, instead of discarding the objective at once; store (point, alpha) pairs and restart only if a point recurs with alpha within delta_alpha (pp. 4-6).",
+  "assumptions": "MIP min cx with bounds and integrality, c != 0; Stage 1 on binaries, Stage 2 on all integers, norms sqrt|B| or sqrt|I| (pp. 2, 4-5); CPLEX MIP preprocessing first because single-variable artificial objectives distort the norm (p. 6); 121 instances from MIPLIB 2003, Mittelmann and the original authors' set (pp. 3, 6).",
+  "proof_devices": [
+   "n/a (no proofs); design devices: norm-scaled convex combination with geometric decay, alpha0 = 0 nests the original pump (eq. (4), p. 5)",
+   "cycle test on (point, alpha) pairs with tolerance delta_alpha (p. 5)",
+   "both versions with the original authors' settings (maxIter 10000/2000, maxStalls 70/600, randomized rounding, T in [10, 30]); new parameters alpha0 = 1, phi = 0.9, delta_alpha = 0.005, no sweep reported (p. 6)"
+  ],
+  "experiments": "3.4 GHz Pentium-4, 3 GB, CPLEX 9.03 LP solver, 1 h (p. 6); gap to optimal or best known with conventions for c* = 0 (p. 7); strictly better on 89 of 121, worse on 17, equal on 11, none on 4, acc-6 the only loss of feasibility (p. 7; confirmed by my recount); geometric means over the 116 both solved: gap 55.0 -> 29.5% (my recount with the stated rule: 42.4 -> 22.2%), time 3.2 -> 3.8 s (about +20%), rounds 17.1 -> 53.4, restarts 4.3 -> 4.6 (pp. 7, 12); trajectory plots incl. a losing instance (pp. 7-9); single runs of a randomized method; pump run standalone after preprocessing.",
+  "positioning": "Credits the original pump (Fischetti, Glover, Lodi; Fischetti, Bertacco, Lodi) as very successful and sets itself against their quality fixes (objective limits, Local Branching, RINS) without criticism: 'We take a different approach' (pp. 2, 4); fair baseline with their settings and instances (p. 6).",
+  "writing": "Understated 'slight modification' with a count-first abstract (p. 2); a hope stated as hope (p. 5); a losing instance shown and bold marking of better-or-equal gaps (pp. 7, 9); one-paragraph conclusion without limitations or future work (p. 9).",
+  "limits_future": "Stated: acc-6 failure, slower instances named, rout inferior (pp. 7, 9); not stated: parameter sensitivity, run-to-run variation, effect inside a full solve, future work (pp. 6-9).",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "The incumbent pump is the alpha0 = 0 setting of the new rule; both versions run in the same code with the original authors' parameters, so the baseline sits inside the design.", "pages": "pp. 5-6"},
+   {"method": "Method 3", "relation": "variant", "note": "No sweep: one setting (alpha0 = 1, phi = 0.9, delta_alpha = 0.005) against the endpoint, no grid and no knee.", "pages": "p. 6"},
+   {"method": "Method 2", "relation": "evidence", "note": "Light: cost beside gain per instance (time, pumping rounds, restarts next to the gap); time not split. Also H3 (authors' parameters and instances, p. 6), H8 (gap and time to solution, not time to optimality, p. 7), H10 (failure and losing trajectory shown, pp. 7, 9), Misreading 1 (randomized method, single runs, p. 6).", "pages": "pp. 7, 11-12"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "key the cycle test on the full iteration state", "evidence": "With a schedule-dependent direction a revisited point is not a true cycle; store (point, alpha) and restart only if alpha is within delta_alpha of the earlier visit.", "pages": "p. 5"},
+   {"pattern": "per-iteration trajectory plots, a losing instance included", "evidence": "Objective value and fractionality per iteration for both versions on aflow40b, rococoB11-010000 and rout, the last one a loss for the new version.", "pages": "pp. 7-9"}
+  ],
+  "transferable": [
+   "Blend the original objective into an auxiliary objective with a geometrically decaying weight normalized by the vector norms (eq. (4), p. 5).",
+   "Make the incumbent the zero setting of the new parameter so the baseline is the same code (p. 5).",
+   "Key cycle detection on (point, weight) pairs with a tolerance when the iteration's direction depends on a schedule (p. 5).",
+   "Run MIP preprocessing before a heuristic whose scaling depends on the form of the objective (p. 6).",
+   "Measure gaps to the best known value with explicit conventions for c* = 0 and ties, and state each best known value's source (p. 7).",
+   "Plot per-iteration objective and fractionality for selected instances, including one where the new method loses (pp. 7-9)."
+  ],
+  "coauthors": "Timo Berthold",
+  "quotes": [
+   {"text": "Note that you can obtain the original Feasibility Pump by choosing α0 = 0.", "page": 5},
+   {"text": "The running times usually differ only slightly in terms of absolute numbers.", "page": 7}
+  ]
+ },
+ {
+  "id": "R009",
+  "year": "2008",
+  "title": "Constraint Integer Programming: a New Approach to Integrate CP and MIP",
+  "read_level": "full",
+  "contribution": "Restates constraint integer programming (now with a finite-domain qualifier and a proposition that CIP generalizes finite-domain CP and MIP), tours SCIP 1.00 including a 5% root restart, and demonstrates it as a MIP solver on MIPLIB 2003 and as a bit-vector property checker that beats MiniSat on proofs for wide arithmetic circuits (pp. 2-14).",
+  "problem_entry": "Integrated CP/MIP helps on hard problems and frameworks exist; the claimed difference is the level of integration: the LP relaxation as a second interface between constraints, suited to a MIP core plus a few nonlinear constraints (p. 2).",
+  "key_idea": "One search tree where CP propagators, MIP machinery and SAT techniques interact; constraint handlers whose check alone is correct; SAT-style restarts re-decided as one root restart at >= 5% fixed integers; property checking at register-transfer level with per-operation propagators, word-wise linearizations and conflict analysis (pp. 2-13).",
+  "assumptions": "CIP definition with condition (1) and a finite-domain qualifier for completeness (p. 4), proposition argued not proved (p. 4); MIPLIB 2003 minus arki001, protfold, timtab1 (wrong answers or errors), 36 + 21 instances (pp. 9-11); valid properties of ALU, Biquad and Multiplier sets from Infineon and OneSpin projects (pp. 13-14).",
+  "proof_devices": [
+   "n/a (no proofs; the Proposition is argued, p. 4); design devices: minimal bound-IIS NP-hardness restated with a greedy dual-ray heuristic (p. 6)",
+   "16-bit words with overflow bits carried to the next word against huge coefficients (p. 12)",
+   "no linearization where it would swamp the LP: 64-bit shl needs 30944 inequalities and 20929 auxiliary variables (p. 12)",
+   "root restart threshold of 5% fixed integer variables (p. 9)"
+  ],
+  "experiments": "MIP: SCIP 1.00/CPLEX 11.0, CPLEX 11.0, SCIP/SoPlex 1.3.2, CBC 2.0/CLP 1.6 at defaults, 3.00 GHz Xeon, 2 h, 4 GB; solved 33/34/29/25, CPLEX >= 10% faster than SCIP-CPLEX on 27 of 36 (pp. 9-10; confirmed by my recount); time means 58.0/11.3/136.5/183.8 s reproduced as plain geometric means with unsolved at 7200 s (my reconstruction), factor 5.1 unshifted, 2.4 with a 10 s shift; property checking: SCIP 0.90i/CPLEX 10.0.1 vs MiniSat 2.0, 2 h; my recount of 75 entries: CIP faster on 43, SAT on 30, 2 ties, SAT winning small widths and some properties (pp. 13-14); invalid properties not shown; no seeds.",
+  "positioning": "Set against SCIL, SIMPL and branch-and-infer by level of integration (p. 2); SIP's ideas and algorithms credited as the start of SCIP (p. 3); nogoods credited to Stallman and Sussman (p. 6); 'fastest non-commercial MIP solver' via Mittelmann (p. 3); restart priority claimed without citation (p. 9); students' theses credited (pp. 7-8).",
+  "writing": "Abstract claims 'novel', 'almost competitive', 'very effective' (p. 2); rare hedges (pp. 3, 8); the losing case stated in words without numbers (p. 14); definition, framework tour, two demonstrations (pp. 2-3).",
+  "limits_future": "Stated: counter-examples found worse than by SAT due to more involved procedures (p. 14); one instance fewer solved than CPLEX (p. 10); not stated: the time factor to CPLEX, the solver that failed on excluded instances, numbers for invalid properties, future work.",
+  "method_links": [
+   {"method": "Method 5", "relation": "evidence", "note": "Co-signed: SCIP grew from a readable state-of-the-art code, SIP's ideas and algorithms transferred into the initial version (step 1); students' work on the platform.", "pages": "pp. 3, 7-8"},
+   {"method": "Method 6", "relation": "evidence", "note": "SAT restarts re-decided for MIP: once after the root, only if >= 5% of the integers were fixed; SAT conflict analysis serves the property checker.", "pages": "pp. 9, 13"},
+   {"method": "Method 6", "relation": "variant", "note": "R004 generated 1-FUIP and All-FUIP clauses (R004 p. 15); the 2008 property checker names only the 1-FUIP rule, change unexplained; the restart priority claim is not checked against parallel work.", "pages": "pp. 9, 13"},
+   {"method": "Method 4", "relation": "evidence", "note": "2008 summary rows: counts of instances >= 10% faster or slower than a reference beside solved counts.", "pages": "p. 10"},
+   {"method": "Method 4", "relation": "variant", "note": "Time means unshifted by my reconstruction (plain geometric mean, unsolved at 7200 s), after the thesis moved to shifted means; a 10 s shift would cut CPLEX's apparent lead from 5.1x to 2.4x (my computation).", "pages": "pp. 9-10"},
+   {"method": "Method 2", "relation": "contradiction", "note": "Co-signed: the abstract's 'almost competitive' rests on solved counts (33 vs 34) while CPLEX is >= 10% faster on 27 of 36; the time loss stays in the table, not in the abstract; a likely written source of Misreading 5.", "pages": "pp. 2, 10"},
+   {"method": "Method 1", "relation": "variant", "note": "Fit (MIP core plus few nonlinear constraints) and losing class (counter-examples) named in words; no numbers for the losing class, no detector. Also Workflow C checkpoint (excluded instances named, p. 9), H7 (16-bit words, p. 12), H3 variant (all defaults, no equalized tolerances, p. 9), H10 variant (loss without numbers, p. 14).", "pages": "pp. 2, 14"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "Split results by answer type (proof vs witness)", "evidence": "Valid properties (proofs) are won by CIP, invalid ones (counter-examples, witnesses) by SAT, stated in words.", "pages": "p. 14"},
+   {"pattern": "linearize only what stays small, propagate the rest", "evidence": "No linearization for shl, slice, read, write; a 64-bit shl would need 30944 inequalities and 20929 auxiliary variables.", "pages": "p. 12"},
+   {"pattern": "correctness contract separate from speed callbacks", "evidence": "The constraint handler's feasibility test suffices for a correct CIP algorithm; other callbacks improve performance; as in R003 p. 9.", "pages": "p. 5"}
+  ],
+  "transferable": [
+   "Restart once after the root when root processing fixed at least 5% of the integer variables, and re-presolve (p. 9).",
+   "Linearize wide bit vectors in 16-bit words and pass each word's overflow bit to the next word's right-hand side (p. 12).",
+   "Before adding a linearization, count its rows and auxiliary variables; above what the LP can carry, propagate only (p. 12).",
+   "Summarize a multi-solver table with solved counts and counts of instances >= 10% faster or slower than one reference (p. 10).",
+   "Drop instances on which any solver returned a wrong answer or an error, and name them (p. 9).",
+   "For a hybrid method, report proofs (valid properties) and witnesses (counter-examples) separately (p. 14).",
+   "State the class the approach is for, e.g. 'a MIP core complemented by a small number of nonlinear constraints' (p. 2)."
+  ],
+  "coauthors": "Timo Berthold, Thorsten Koch, Kati Wolter",
+  "quotes": [
+   {"text": "CIP is well suited for problems that contain a MIP core complemented by a small number of nonlinear constraints.", "page": 2},
+   {"text": "For invalid properties, which are not shown in the tables, our algorithm is usually inferior to SAT for finding counter-examples.", "page": 14}
+  ]
+ }
+]

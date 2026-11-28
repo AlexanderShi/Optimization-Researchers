@@ -1,0 +1,251 @@
+[
+ {
+  "id": "D020",
+  "year": 2021,
+  "title": "An Exact Method for the Minimum Feedback Arc Set Problem",
+  "read_level": "full",
+  "contribution": "An exact MFAS method that generates cycle rows lazily inside Gurobi, chosen by a greedy repair heuristic and BFS shortest cycles, plus a public 4,468-graph benchmark with optima and clearly evaluated limits.",
+  "problem_entry": "Application entry (tearing in chemical-process flowsheeting); set-cover formulation fails because sparse graphs can have exponentially many simple cycles; question put as practical limits of an exact method on sparse graphs (pp. 1-6, 8, 16).",
+  "key_idea": "Lazy cycle generation: solve set-cover relaxation, certify by topological sort, else heuristic feedback arc set gives incumbent and seeds BFS shortest cycles as new rows; novelty in how rows are chosen (pp. 8-11).",
+  "assumptions": "Directed simple graphs, nonnegative weights, pure-binary set-cover IP; target class sparse graphs; finite termination by row growth; BFS row choice may fail on pathological weights (pp. 2-3, 7, 9, 11, 16, 21-22).",
+  "proof_devices": [
+   "topological-sort optimality certificate (pp. 9-10)",
+   "termination by cycle-matrix growth of at least one row per iteration (p. 9)",
+   "lazy constraints in MIPSOL callback vs cuts in MIPNODE callback (p. 11)",
+   "SCC splitting and run/bypass removal presolve (p. 12)",
+   "safe-arc-removal rule c1 = c2 with fake nodes u, v (pp. 18-22)"
+  ],
+  "experiments": "11 chemical graphs with published optima, 3,737 Erdős–Rényi, 24 de Bruijn/Imase–Itoh, 707 tournaments, complete graph n=30; baseline triangle IP in same Gurobi; medians over 101 graphs per point, no seeds; losses printed (tournaments n>=32, one time-out under Gurobi 8.1.0, unsolved counts) (pp. 12-18).",
+  "positioning": "Reviews DP, custom B&B and IP exact methods; triangle formulation and Grötschel–Jünger–Reinelt cutting planes classed as dense-graph methods; hedged novelty for lazy constraint generation in MFAS (pp. 7-8, 11).",
+  "writing": "Numbered contributions in conclusion, hedged abstract, scope fences, worst-case experiments announced as such, negative experiment reported plainly (pp. 1, 8, 11, 12, 17).",
+  "limits_future": "Built for sparse graphs; possible BFS failure on pathological weights; safe-removal too costly for presolve; unhandled corner case; Python presolve weak; future: better shortest-path routine, sparse-graph cutting planes left to others (pp. 8-9, 11-13, 17-18, 22).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Co-signed. Correctness cross-checked on graphs with published optima against both IP formulations before scaling; easy graphs kept for cross-checking; optima published with graphs; check on final optima, not derived objects.",
+    "pages": "pp. 11-13, 17"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Problem-specific, so no detector and no no-op path; the class it was not built for (tournaments, complete graph) is run on purpose and the loss printed: worst-case safeguard done as a test, not a gate.",
+    "pages": "pp. 16-17"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "heuristic repair as separation oracle",
+    "evidence": "The repair heuristic's feedback arc set is both the incumbent and the seed of the next lazy rows.",
+    "pages": "pp. 9-11"
+   },
+   {
+    "pattern": "correctness rows lazily, the host solver's cuts kept",
+    "evidence": "Add only what an incomplete model needs for correctness and leave performance cuts to the commercial solver; stated as the reason not to compete with its cutting planes (Quote 1).",
+    "pages": "p. 11"
+   },
+   {
+    "pattern": "scalability-grid benchmark with a deliberate worst-case family",
+    "evidence": "Generator families over size and density, 101 instances per point, easy points kept, one family the method is not built for.",
+    "pages": "pp. 12-17"
+   }
+  ],
+  "transferable": [
+   "[D2] Use the repair heuristic's output twice. It is the incumbent, and each of its arcs seeds a BFS shortest cycle that becomes a new lazy row (pp. 9–11).",
+   "[D4] Put the constraints needed for correctness in a lazy (MIPSOL) callback and leave performance cuts to the host solver. Say in the paper which is which (p. 11).",
+   "[D4] Certify a relaxation solution with a linear-time combinatorial check (topological sort) instead of the full constraint set (p. 9).",
+   "[D4] Safe-reduction test: if the exact cost of the induced subproblem equals a heuristic's cost of also breaking every boundary cycle, the heuristic's arcs are safe to fix. Fake source and sink nodes expose the boundary cycles (pp. 19–22).",
+   "[D5] Build the benchmark as a grid over size and density: 101 instances per point, medians, easy points kept, and one family outside the design class (pp. 12–17).",
+   "[D5] State a method's limit as \"k of 101 unsolved within T at size n\", not as a single average (pp. 17–18).",
+   "[D5] When the solver version changes during a revision, rerun the hardest set and report what changed (p. 15)."
+  ],
+  "coauthors": "Ali Baharev, Hermann Schichl, Arnold Neumaier",
+  "quotes": [
+   {
+    "text": "Any research attempting to implement a novel cutting plane algorithm has to compete with that strong baseline.",
+    "page": 11
+   },
+   {
+    "text": "the real novelty is in how the lazy constraint generation is carried out",
+    "page": 11
+   }
+  ]
+ },
+ {
+  "id": "D021",
+  "year": 2021,
+  "title": "MIPLIB 2017: data-driven compilation of the 6th mixed-integer programming library",
+  "read_level": "full",
+  "contribution": "The MIPLIB 2017 collection (1,065 instances) and benchmark set (240) selected by a fully data-driven, optimization-based methodology of features, clusterings and selection MIPs.",
+  "problem_entry": "Measured progress made MIPLIB 2010 no longer frontier (virtual best 36.3 s to 13.5 s, open instances 134 to 70); 5,721 candidates and a multi-solver committee called for a fair, transparent selection (pp. 2-3, 7, 24).",
+  "key_idea": "Selection as a sequence of MIPs: 105 features after trivial presolve, max-min diversity preselection, k-means per feature group, collection MIP with balancedness and caps, benchmark MIP with performance clusterings and runtime budget (pp. 12-14, 26-36).",
+  "assumptions": "Definition 1 canonical MIP with normalised rows; indicator constraints allowed in collection only; benchmark suitability criteria B.1-B.9 with exclusion counts; unbounded instances dropped (pp. 13-14, 17-18, 25-26).",
+  "proof_devices": [
+   "diversity preselection MIP (1) with linearised products (pp. 26-27)",
+   "clustering quality and L_k threshold of 90% (pp. 29-30)",
+   "balancedness constraints with epsilon = 0.5 and epsilon-sensitivity table (pp. 29-33)",
+   "performance clusterings: absolute ranks, shifted relative ratio, binned times (pp. 33-35)",
+   "benchmark MIP (8) with 32-day budget and hardness weight (pp. 35-36)",
+   "exact-arithmetic solution checker with scaled tolerance (pp. 22-23)",
+   "IPET cross-solver consistency check (p. 23)"
+  ],
+  "experiments": "Eight solvers, 4 h limit, ~40 CPU years, reported only as virtual best/median/worst; Table 11 new vs old benchmark; feature space recovers model groups; one-sided KS tests per solver; variability not captured, no seeds (pp. 20-23, 36-41).",
+  "positioning": "MIPLIB lineage from 1992; reporting standards of Crowder–Dembo–Mulvey and Jackson et al.; extension of Hooker 1993; instance-space analysis called complementary; earlier manual selections credited (pp. 2-6).",
+  "writing": "Transparency motivates detail; use limit stated first; manual decisions listed upfront; outcome called one of many; computing details and corrections in footnotes (pp. 2-4, 16, 42-44).",
+  "limits_future": "Not a general blueprint; snapshot without variability; favours tractable instances; numerically problematic instances slipped through (June 2019 update); future: judge representability in hindsight via model-group speed-ups (pp. 36, 43-44).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Co-signed, for its statistics: shifted geometric mean with shift 1 s credited to Achterberg's thesis; shifted ratio ranks solvers; time-outs scored at 4 h limit; exponential time bins and the >= 10 s floor in B.2. Step 7: paper states performance variability was not captured, consistent with Misreading 1 (no seeds).",
+    "pages": "pp. 2, 25, 33-34, 36"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Test-set choice separated from any one code: eight solvers' data, criteria with exclusion counts; exact-arithmetic solution checker and cross-solver consistency check, inconsistent instances excluded and counted (Workflow C checkpoint applied to library building).",
+    "pages": "pp. 20, 22-23, 25-26"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "For its two-set rule and stated Limitation: average benchmark performance does not tell which solver suits an application class, so a class-specific claim needs the class's own set beside the general one (step 4).",
+    "pages": "p. 3"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "test-set selection as an optimization model",
+    "evidence": "Coverage, balance, caps, a submitter quota and a runtime budget encoded as constraints, and the model published.",
+    "pages": "pp. 24, 31-36, 42"
+   },
+   {
+    "pattern": "cluster per feature group and balance per clustering",
+    "evidence": "Replaces one high-dimensional clustering.",
+    "pages": "pp. 28-31"
+   },
+   {
+    "pattern": "per-solver performance clusterings against solver bias",
+    "evidence": "Absolute, relative and binned clusterings so the subset does not change any solver's absolute or relative standing.",
+    "pages": "pp. 33-35"
+   },
+   {
+    "pattern": "validate a feature space by recovering known groups",
+    "evidence": "Feature space recovers model groups; selected subset checked harder yet representative with per-solver KS tests.",
+    "pages": "pp. 37, 40-41"
+   }
+  ],
+  "transferable": [
+   "[D3] Compute instance features after a fixed-point \"trivial\" presolve, but distribute and benchmark the unmodified instances (pp. 12–13).",
+   "[D3] Write benchmark suitability as numbered criteria and print how many instances each one removed (pp. 25–26).",
+   "[D4] Pick κ diverse representatives of a large model family with a max–min-distance MIP (pp. 26–27).",
+   "[D4] Balance a selection against several clusterings at once, with tolerance ε and one-sided constraints for small and large clusters. Print the ε-sensitivity table (pp. 29–33).",
+   "[D4] Check solutions in exact arithmetic with a violation tolerance scaled by max{positive activity, negative activity, |rhs|, 1} (pp. 22–23).",
+   "[D4] Flag an instance as inconsistent when one solver's verified primal value lies below another solver's dual bound, and keep it out of benchmarking (p. 23).",
+   "[D5] Report multi-solver data as virtual best, median and worst solvers when the runs are not a controlled benchmark (pp. 20, 38).",
+   "[D5] Rank a solver per instance by the shifted ratio (t + σ)/(best other + σ) (p. 34).",
+   "[D5] Test whether a chosen subset is harder than its ground set with a one-sided KS test per solver (pp. 40–41)."
+  ],
+  "coauthors": "Ambros M. Gleixner, Gregor Hendel, Gerald Gamrath, Michael Bastubbe, Timo Berthold, Philipp M. Christophel, Kati Jarck, Thorsten Koch, Jeff T. Linderoth, Marco E. Lübbecke, Hans D. Mittelmann, Derya B. Özyurt, Ted K. Ralphs, Domenico Salvagnin, Yuji Shinano",
+  "quotes": [
+   {
+    "text": "The means were computed with a shift of 1 second (see Achterberg [1]).",
+    "page": 2
+   },
+   {
+    "text": "Average performance on this set is not a suitable criterion to decide which MIP solver to use in a particular application scenario.",
+    "page": 3
+   }
+  ]
+ },
+ {
+  "id": "D022",
+  "year": 2023,
+  "title": "Efficient Separation of RLT Cuts for Implicit and Explicit Bilinear Products",
+  "read_level": "full",
+  "contribution": "Detection of implicit bilinear products in MILPs plus row marking and projection filtering that make RLT cut separation efficient, implemented in SCIP and Gurobi 10.0 beta.",
+  "problem_entry": "RLT gives strong relaxations at the cost of excessive cuts; RLT not applied to hidden bilinear relations in MILPs, and separation cost is the major bottleneck (pp. 3-4).",
+  "key_idea": "Detect implicit products from pairs of linear constraints (Theorem 1), mark rows LT/GT/BOTH by violation sign, and test projected violation before building the full cut (pp. 5-10).",
+  "assumptions": "MI(N)LP with bilinear relations, finite bounds; detection needs x_i binary, b1b2 > 0, gamma != 0, plus practical filters; projection assumes McCormick holds at x*; test sets keep only instances with products (pp. 4-7, 9-10).",
+  "proof_devices": [
+   "Theorem 1 by coefficient matching with scaling parameters alpha, beta (p. 6)",
+   "row-marking data structures row_idcs/row_marks and sparse W (pp. 8-9)",
+   "mark-to-factor rule (p. 8)",
+   "projection filtering argument (pp. 9-10)",
+   "separator budgets: 20 terms, every 10 nodes, 1/10 rounds (p. 10)"
+  ],
+  "experiments": "SCIP on MINLPLib (1,357) and 195 MILPs, 1 h, shifted geomeans (1 s, 100 nodes), affected and bracket rows, all-optimal subset; Gurobi 10.0 beta on internal 5,011 MILP / 806 MINLP set; separation share tables; losses printed in body; no seeds stated though counts ~5x test sets; table/text inconsistencies (pp. 10-14).",
+  "positioning": "RLT lineage (Adams–Sherali, Sherali–Tuncbilek, reduced RLT), McCormick; contrast to multiplication-only approaches; baseline only the standard separation algorithm (pp. 3-5, 7).",
+  "writing": "Two contributions announced; neutral abstract; slowdowns stated in body but Summary mentions only gains; cross-solver caution; inconsistencies suggest fast turnaround (inferred) (pp. 3-4, 11, 14-15).",
+  "limits_future": "No limitations or future-work section; open points: implicit products cost time on MINLPs, SCIP MILP gain only from 100 s bracket, separation share still 100% on some MINLPs (pp. 11-13, 15).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Co-signed. Off vs on in the full solver, brackets [x, timelim], affected instances by LP iterations, shifts stated (1 s, 100 nodes), all-optimal subset; same bracket rows for SCIP and Gurobi. Lacks counts of models >= 10% faster/slower (step 4), Gurobi table omits its shift.",
+    "pages": "pp. 10-11, 14"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Step 7 and Misreading 1: no seeds or permutations stated, but counts ~5x test sets and D023 mentions permuted instances; if confirmed, Misreading 1 needs a qualifier for co-signed work from 2022 on.",
+    "pages": "pp. 10-12"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Nodes down and time up reported; root-bound gain printed beside time loss; separator time share measured and cut 54.2% to 2.8% (step 2); budget in solver-internal units (step 4); node increase traced to censoring via all-optimal subset.",
+    "pages": "pp. 10-13"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Step 1 detector on the matrix and step 5 two-code check appear, but SCIP set keeps only instances where the component acts, no default decision stated; MILP case split: no slowdown in Gurobi, 3% slower overall in SCIP.",
+    "pages": "pp. 5-7, 10-11, 14"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "Global-optimization technique (RLT, McCormick) enters MILP through a structure detector and new data structures, each piece tested alone; not a SAT/CP import, novelty placed against RLT literature.",
+    "pages": "pp. 3-4, 8-14"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "sign-based pre-filtering of separation candidates",
+    "evidence": "Mark rows by the sign of each term's violation contribution before building any cut.",
+    "pages": "pp. 7-9"
+   },
+   {
+    "pattern": "cheap projected violation check before building the full cut",
+    "evidence": "Works because a basic LP solution puts many variables at bounds.",
+    "pages": "pp. 9-10"
+   },
+   {
+    "pattern": "all-optimal subset to tell censoring from search effects",
+    "evidence": "Faster code explores more nodes before the time limit, so check node ratios where every setting finishes.",
+    "pages": "p. 13"
+   }
+  ],
+  "transferable": [
+   "[D4] Derive a hidden bilinear relation from two linear constraints in (x_i binary, x_j, w_ij). Require b1b2 > 0, γ ≠ 0 and opposite signs on x_i's coefficients (pp. 6–7).",
+   "[D4] Before separating products of rows and bound factors, mark each row by the sign of its terms' violation contributions, and build only the row × factor pairs that can be violated (pp. 7–9).",
+   "[D4] Test violation on the system projected onto the non-bound variables first, and build the full cut only on success (pp. 9–10).",
+   "[D4] Budget a separator by call frequency (every 10 nodes), rounds (10 at the root, 1 elsewhere) and a cap on new product terms per cut (20) (p. 10).",
+   "[D5] Report a separator's share of total time per setting: its mean, its maximum, a histogram over share bands, and failures (Table 6, p. 13).",
+   "[D5] When a faster component raises node counts, check the all-optimal subset to separate censoring from changes in the search (p. 13).",
+   "[D5] Run one algorithm in an open and in a commercial solver. Report the same bracket table for both and claim only the shared tendencies (pp. 11, 14)."
+  ],
+  "coauthors": "Ksenia Bestuzheva, Ambros M. Gleixner",
+  "quotes": [
+   {
+    "text": "We observe a slight increase in time when RLT cuts are enabled, and a slight decrease in number of nodes.",
+    "page": 11
+   },
+   {
+    "text": "no slowdown is observed with Gurobi on any subset of MILP instances",
+    "page": 14
+   }
+  ]
+ }
+]

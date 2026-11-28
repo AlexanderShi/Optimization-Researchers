@@ -1,0 +1,148 @@
+[
+ {
+  "id": "D004",
+  "year": 2007,
+  "title": "Constraint Integer Programming",
+  "read_level": "partial",
+  "contribution": "Defines constraint integer programming (CIP) as a model class generalising CP(FD) and MIP, builds SCIP to solve it with CP, SAT and MIP integrated on one search tree, contributes reliability/inference/hybrid branching, the product score, hybrid node selection, root restarts and conflict analysis for MIP, measures each component in a 28,060-run study, and applies CIP to chip property checking.",
+  "problem_entry": "Three entries: a wish to integrate IP and CP beyond the scope of SIP (p. 9), a free near-state-of-the-art platform for academics (p. 73), and chip verification where SAT fails on arithmetic and word-level IP/CP fails on control logic (p. 201); stated as the CIP model class (Def. 1.6, p. 27; Prop. 1.7, p. 28); Part II chapters enter via unmeasured common rules or SAT techniques MIP lacked (pp. 76, 174, 179).",
+  "key_idea": "Low-level integration of CP, SAT and MIP on one search tree, organised around constraint handlers (pp. 16, 37-38); incumbents written as settings of one parameterised rule (reliability branching with eta_rel 0/1/inf, hybrid branching; pp. 79-83, Fig. 5.2 p. 82); product score (p. 76); conflict analysis seeded by relaxing local bounds along the dual ray (Algs. 11.1-11.2, pp. 189, 191); one constraint handler per RTL operator (pp. 202, 209).",
+  "assumptions": "MILP min c^T x s.t. Ax <= b with bounds outside the matrix and specialised linear handlers (pp. 25, 74); 244 instances in ten public sets (Table A.1, p. 334), results read through class structure such as artificial or missing objectives (pp. 84, 96, 113, 126); correctness conditions for continuous and non-binary conflicts and local cuts (pp. 187, 191-192); chip CSP with register domains, free initial state, OneSpin circuits (pp. 201, 203, 337).",
+  "proof_devices": [
+   "exchange argument for the optimality of best-first search (Prop. 6.1, p. 89)",
+   "characterisations of bound and interval consistency (Prop. 7.2 and Cor. 7.3, pp. 98-99)",
+   "NP-completeness by reduction from subset sum (Prop. 7.4, p. 100)",
+   "NP-hardness of the minimum bound-IIS by reduction from the minimum IIS (Prop. 11.5, p. 188)",
+   "Farkas/dual-ray proof (11.13) kept valid while bounds are relaxed (p. 188; Algs. 11.1-11.2, pp. 189, 191)",
+   "termination of term normalisation by a well-founded ordering and Dershowitz's recursive path ordering (Thm. 14.21 and Prop. 14.22, p. 236; Prop. 15.7, p. 298)"
+  ],
+  "experiments": "575 public instances reduced to 244 by a five-step rule (p. 334); 244 x 115 settings = 28,060 runs with SCIP 0.90f/0.90i and Cplex 10.0.1 as LP solver, 1 h / 2 h limits, 1.5 GB (pp. 16, 333); shifted geometric mean % change vs default with single-class sets as pseudo-instances (pp. 335-336); knock-out, all off/one off/one on for cuts (p. 125), gap targets for heuristics (pp. 143-146); single runs, no seeds (p. 333); baselines Cplex 10.0.1 (pp. 334, 391) and MiniSat 2.0 (pp. 313, 317).",
+  "positioning": "Differs from Coupe, Scil and Simpl in level of integration (pp. 15-16) and from DPLL(T)/HDPLL by an LP at every node (p. 202); builds on SIP, Linderoth-Savelsbergh, Bixby et al. 2000, Savelsbergh, Balas-Ceria-Cornuejols and Andreello-Caprara-Fischetti (pp. 20, 37, 62, 75, 85, 97, 125, 147); scoped disagreements with data (pp. 83, 127, 175-176); hedged novelty and named independent work (pp. 85, 98, 140-141, 179).",
+  "writing": "Every Part II chapter ends with experiments in one table layout, positive values = deterioration (pp. 16, 83, 93, 126); one headline number per chapter in the introduction (pp. 16-19); hedged explanations and claims without a table labelled (pp. 69, 88, 93, 154, 191); losing defaults and refuted impressions printed (pp. 96, 114, 127, 177); minor inconsistencies (pp. 15-16, 20, 68, 340); reading guide and chapter credits (pp. 75, 115, 132, 199, 209).",
+  "limits_future": "SCIP 0.90f 115 % and 0.90i 63 % slower than Cplex (p. 391), leaf-queue bottleneck (p. 94), extra LP for strong-branching conflicts (pp. 194-195), single runs and time-out bias (p. 333); open: delayed-restart criteria (p. 177), child-selection epsilon (p. 96), hybrid node-selection omega (p. 94), weakness of linearised bound disjunctions (p. 191), conflict management (p. 195), SAT-then-CIP portfolio (p. 322).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Knock-out from the default in thesis form: shifted-geometric-mean ratios with faster/slower counts and equal/different-path blocks; all off / one off / one on for cuts after Bixby et al.; non-additivity read as overlap; indirect effects of heuristics; time-outs scored at the limit with the bias stated",
+    "pages": "pp. 16, 125-127, 142-143, 333, 335-336, 339-340"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Conflict analysis is measured by adding it to a reference that lacks it, which Appendix B labels 'default'; so in the SCIP 0.90f MIP benchmarks conflict analysis was off by default",
+    "pages": "p. 193; Table B.191, p. 386"
+   },
+   {
+    "method": "Method 4",
+    "relation": "contradiction",
+    "note": "Example A.1 gives -27 % for the geometric mean (improvement for B) and +6 % and +89 % deteriorations for the shifted geometric and arithmetic means; SKILL.md reverses these signs",
+    "pages": "pp. 335-336"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "A proxy is not a payoff: full strong branching smallest trees but ~100 % slower; local cuts -70 % nodes, +137 % time; bound-exceeding/full conflict analysis cut nodes but not time; keeping conflicts longer on alu -25 % nodes, +37 % time; tuned Gomory cuts lost time; budgets set in solver units",
+    "pages": "pp. 78-80, 83-84, 127, 129, 171, 193-195"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "The thesis does not split time into base, switching and component time (ZR 05-19 form); it reads overhead from whether node and time changes move together",
+    "pages": "p. 194"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Wording of SKILL.md's evidence: 'propagation only, <= 10 per infeasible subproblem, aging' are the experiment settings, not a stated default; the best variant (prop/inflp/age, -12 % time) is measured against no conflict analysis; the reason against LP cuts for non-binary conflicts is only partly given (system (11.15) 'probably very weak', not verified)",
+    "pages": "pp. 191-193"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Incumbents nested in one family: eta_rel at 0, 1, inf with d, lambda, gamma, kappa; reliability branching is the hybrid with zero weights; five mu values vs the product score (best mu = 1/6 still 14 % slower); weighted node selection with omega and hybrid child selection; parameter tied to an iteration budget. The (nodes, time) knee plot of ZR 04-13 is not in the thesis, which tabulates the rules (p. 83)",
+    "pages": "Fig. 5.2, p. 82; pp. 17, 79-85, 92, 95"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Do-no-harm default: hybrid branching keeps inference branching's gains on alu and acc and equals reliability branching elsewhere; per-call guards make RENS, restarts and reduced-cost bounds no-ops when unlikely to pay",
+    "pages": "pp. 84, 125, 132-133, 174"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "No class detector: the default is decided on the pseudo-instance-weighted total, so cuts stay on although they slow enlight and alu; the matrix-detector form appears later (ZR 09-38)",
+    "pages": "pp. 126, 336"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Instrument first: two years of code before research, built on SIP's source; SCIP begun October 2002; test set chosen with frozen SCIP 0.82d and Cplex 10.0.1, final runs with 0.90f; versions on request, full tables and logs on the web; leak detection in the memory-management debugging mode",
+    "pages": "pp. 9, 20, 65, 333-334, 340"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Import at the data-structure level: Novikov's primer, watched literals days later, conflict analysis generalised after three weeks; watched-literal replacement re-decided by test; restarts doubted structurally and kept only after the root, delayed restarts failed; conflict analysis re-derived for LPs and general integers; VSIDS as a score; SAT restarts replaced by a jump to a best node every 100 DFS nodes; an independent discovery named",
+    "pages": "pp. 10, 81, 107-108, 174, 177, 179, 185-192, 310-311"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "per-call applicability guards",
+    "evidence": "components made no-ops by per-call guards (minimum bound-change size, reduced-cost bounds, RENS conditions, probing aborts, root-restart threshold)",
+    "pages": "pp. 101, 125, 132-133, 171, 174"
+   },
+   {
+    "pattern": "node–time co-movement as an overhead probe",
+    "evidence": "overhead read from whether node and time changes move together",
+    "pages": "pp. 84, 194"
+   },
+   {
+    "pattern": "predict non-transfer from discarded state",
+    "evidence": "SAT restarts doubted because MIP would lose warm-start bases / LP work",
+    "pages": "pp. 174, 311"
+   },
+   {
+    "pattern": "version-stamp features and numbers",
+    "evidence": "features and results stamped with SCIP versions (0.82d, 0.90f, 0.90i)",
+    "pages": "pp. 112, 333, 391-392"
+   },
+   {
+    "pattern": "complementary-strength portfolio",
+    "evidence": "CIP proves valid properties faster, SAT finds counter-examples faster; a SAT-then-CIP portfolio named",
+    "pages": "p. 322"
+   }
+  ],
+  "transferable": [
+   "State once in a footnote what the percentages mean, and use one summary-table layout in every chapter: time on top, nodes below, positive values worse (pp. 16, 83).",
+   "In the shifted-geometric-mean total (shift 10 s for time, 100 for nodes), count each single-class test set as three pseudo-instances, so that no class dominates (pp. 335–336).",
+   "Select the test set by a written rule, run with a frozen older version and a reference solver, and list where each set comes from (pp. 333–334).",
+   "Score time-outs at the limit, and memory-outs as time-outs with the node count scaled by the nodes-per-second ratio; say that this favours the failing runs (p. 333).",
+   "Add counts of instances at least 10 % faster or slower, and equal/different-path blocks, to every detailed table (p. 339).",
+   "For interacting families, run all off, one off and one on alone, and compare the sum of the single knock-outs with all off as a measure of overlap (pp. 125–127, 142).",
+   "Report heuristics at gap targets as well as in time to optimality (pp. 143–146).",
+   "Draw the parameter interrelation diagram that shows the old rules as corners of the new one (Fig. 5.2, p. 82).",
+   "Tie the reliability parameter to a strong-branching iteration budget: at most ½ γ̂_LP + 100,000 iterations, with η_rel decreasing linearly from 8 to 1, then to 0 (pp. 79–80).",
+   "Use the product score max{q−, ε}·max{q+, ε} with ε = 10⁻⁶, tested against the weighted sum at several values of µ (pp. 76, 85).",
+   "In propagation, round new bounds within the feasibility tolerance and accept only bound changes of a minimum relative size (7.2 and 7.3, pp. 100–101).",
+   "Seed the conflict graph by relaxing bounds along the dual ray (Alg. 11.1, p. 189). Move non-binary bound changes to the conflict side to keep set-covering conflicts (p. 192).",
+   "Prefilter pairwise constraint comparisons with 64-bit signatures (p. 154).",
+   "When a published recommendation fails in your code, limit your claim to your code and test sets, and offer a mechanism (pp. 175–176).",
+   "Print refuted impressions and losing defaults next to the table that refutes them (pp. 96, 114, 127).",
+   "When a variant fails, read the logs, explain the failure, and say what would be needed instead (delayed restarts, p. 177)."
+  ],
+  "coauthors": "Single author (referees Martin Grötschel and Robert E. Bixby); joint-work notes: Thorsten Koch and Alexander Martin (Ch. 5), Kati Wolter (Ch. 8), Timo Berthold (heuristics), Raik Brinkmann and Markus Wedler (Ch. 12 introduction)",
+  "quotes": [
+   {
+    "text": "It turns out that our concerns are unjustified: applying linear domain propagation at every node improves the performance on almost all test sets.",
+    "page": 114
+   },
+   {
+    "text": "However, the results of Table 8.1 show that we overshot the mark",
+    "page": 127
+   }
+  ]
+ }
+]
