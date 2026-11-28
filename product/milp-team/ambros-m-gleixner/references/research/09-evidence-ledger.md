@@ -9,7 +9,7 @@
 - Heuristics: [1](#heuristic-1) · [2](#heuristic-2) · [3](#heuristic-3) · [4](#heuristic-4) · [5](#heuristic-5) · [6](#heuristic-6) · [7](#heuristic-7) · [8](#heuristic-8) · [9](#heuristic-9) · [10](#heuristic-10) · folded: [HA](#heuristic-11) · [HB](#heuristic-12)
 - [Common Misreadings](#misreadings)
 - Anatomies: [iterative refinement](#anatomy-iterative-refinement) · [VIPR](#anatomy-vipr) · [MIPLIB 2017](#anatomy-miplib-2017) · [status update](#anatomy-status-update) · [limited-precision oracles](#anatomy-limited-precision-oracles) · [decision analysis](#anatomy-decision-analysis)
-- [Anti-patterns](#anti-patterns) · [Trajectory](#trajectory) · [Lineage and collaboration](#lineage) · [Inner tensions](#inner-tensions) · [Roundtable Card](#roundtable-card)
+- [Anti-patterns](#anti-patterns) · [Trajectory](#trajectory) · [Lineage and collaboration](#lineage) · [Inner tensions](#inner-tensions) · [Mentor Voice](#mentor-voice) · [Roundtable Card](#roundtable-card)
 - [Honest Boundary](#honest-boundary) · [Corrections](#corrections) · [Rejected and held-back updates](#rejected) · [Sources](#sources) · [Card key](#card-key)
 
 > Date: 2026-11-28 (stage T3.6, team-synthesize). The full evidence behind `../../SKILL.md`. SKILL.md keeps, per item, the strongest statement and cards, a one-clause say–do line, at most two ⚠ scope bullets (after the review fixes; corrections are marked once, in SKILL.md's Corrections list) and a pointer to the matching section here. Each section has up to five parts: **Full-text evidence** (copied word for word from `08-deep-reading-synthesis.md`, which is traceable to the paper cards), **T3.6 long form** (the item as first written in this pass, before it was condensed to fit SKILL.md's word budget; every card cite in it was checked by `check_citations.py`), **Changes made in SKILL.md (T3.6)**, and **Before T3.6 (moved verbatim)** (the SKILL.md item as it stood on 2026-11-14, built from web research, so nothing is lost; its `[02 I5]`-style keys point to the web-research notes `01-…06-*.md` in this folder, its headings are set in bold and its links are re-pointed to work from this folder). Copied 08 text is left as copied; where SKILL.md differs, the Changes block says so (08 itself is edited only for links, counts and the review fixes below). After the read-only review of 2026-11-28, a **T3.6 review fixes** block in each affected section records what changed in SKILL.md and holds the replaced SKILL.md text verbatim; six 08 passages were corrected in 08 and in their copies here, and long forms were corrected where the review found an error.
@@ -21,6 +21,8 @@
 **Sealed material and reading notes.** Passages of the cards that restate the sealed validation items in `holdout.md` are not used here or in SKILL.md, and the card that would carry one of them (S048) is cited nowhere (08 §1, §10). Inconsistencies that card readers noted inside single works are reading notes, not findings about the researcher; they are not repeated here. Two pre-synthesis SKILL.md clauses that restated such notes are left out of the moved-verbatim copies below, which say so where it happens (08 §3.3).
 
 **Coverage** (`team_status.py --coverage`, 2026-11-28): 107 Scholar rows · 103 distinct works indexed · 92 open full texts · 90 read in full · 2 in part · 6 abstract only · 2 metadata only (incl. unreadable) · 3 skipped · 0 book material · 197 quotes verified.
+
+**T3.7 tightening (2026-11-28).** SKILL.md was brought under its word budget by moving evidence here, not by deleting it: wherever a SKILL.md line was shortened or removed, the line as it stood before is kept word for word under **Before T3.7 (moved verbatim)** at the end of the matching section (links re-pointed to work from this folder). Sections with such a block: [taste marks](#taste-marks); Methods [1](#method-1) to [7](#method-7) (Method 1's also holds the Core Research Methods introduction); [Workflow A](#workflow-a); Heuristics [1](#heuristic-1), [2](#heuristic-2), [3](#heuristic-3), [4](#heuristic-4), [5](#heuristic-5), [7](#heuristic-7), [8](#heuristic-8) and [10](#heuristic-10); the anatomies of [iterative refinement](#anatomy-iterative-refinement) (with the anatomy introduction), [VIPR](#anatomy-vipr), the [status update](#anatomy-status-update) and the [decision analysis](#anatomy-decision-analysis); the [trajectory](#trajectory); and a new [Mentor Voice](#mentor-voice) section, added to the Contents. What moved: in each method's Evidence, the statements beyond the single strongest one under Stated (for Methods 1–6 his own voice, which the T3.6 review fixes had restored; Method 1's thesis statement [S032 p. 65] restored after review) and the cards beyond the strongest three to five under Practice (Method 3's certificates chain [S019 pp. 10–11 → S072 pp. 14–15] restored after review); two of those statements went, shortened, into the step that uses them (Method 2 step 4, Method 5 step 2); worked numbers and secondary examples from Method 3 steps 1, 3, 4 and 6, Method 5 step 6 and Method 6 step 4, whose instructions and constants stay; clauses from the Limitations of Methods 1, 3, 4, 5 and 7 (the source of Method 3's unmet overhead hope [S022 p. 16] restored after review) and from Method 7's contrast with standard practice; cases beyond the strongest one or two per heuristic and taste mark (Heuristic 3's `prop_genvbounds` and revert cases, Heuristic 7's Sim21 quotation and Heuristic 8's attribution of the time brackets to Achterberg and Wunderling (2013) restored after review); the card citations of Workflow A step 4; the 2020 parts of two iterative-refinement rows (the Minimum evidence one [S029 p. 23] restored after review; the [oracle paper's section](#anatomy-limited-precision-oracles) keeps the same evidence in full rows) and the version note under that heading; one or two clauses each in three other anatomy rows and one in the anatomy introduction; two trajectory lines; two of the four acknowledgement quotations and one parenthesis in Mentor Voice. The items restored after the read-only review of the tightening went back into SKILL.md word for word as they stood before it, except the overhead hope, which got back only its source; their Before T3.7 lines below are kept as they are. Where a T3.6 *Changes* or *review fixes* block here quotes SKILL.md wording that T3.7 shortened, the section's Before T3.7 block holds that wording. Every step instruction, step constant and ✗/⚠ mark stays in SKILL.md, and every quotation left there is word for word; the front matter, How to Use, Activation Rules, Answer Standard, Research Integrity Rules, Research Task Routing, Agentic Protocol, the taste warnings and quick-check, Workflows B–F, Common Misreadings, Research Anti-patterns, Academic Lineage, Inner Tensions, the Roundtable Card, the Honest Boundary with its Corrections list and the Sources appendix are unchanged. Budget count: 12244 → 11465 words by `answer_standard.py --words` after the tightening, 11541 after the restorations (target about 11500, hard limit 13000).
 
 <a id="how-to-use"></a>
 
@@ -212,6 +214,30 @@ Removed from or rewritten in SKILL.md by these fixes (the T3.6 text, moved verba
 7. **Shipped in the default distribution** (already known): "an out-of-the-box technique" [Th p. 173]; [S10].
 8. **Application structure becomes a generic solver component** [Th p. 2; SAP19].
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Mark 1:*
+
+1. **An answer someone else can check without trusting your code.** Certificates "as simple to verify as possible if they are to be convincing" [VIPR §1; S019 p. 4]; "checking should not require a sophisticated code where that could contain bugs itself" [Sim21 01:53]; independent solution checks in arbitrary precision against the original file [M17 pp. 464–465; S002 pp. 22–23].
+
+*Mark 2:*
+
+2. **An experiment that explains why, not a race.** To "analyze the reasons for their behavior by controlled scientific testing", citing Hooker [Th p. 10; Hooker95]; the epigraph; numbered questions (H6); attribution runs that print the null (group) [S034 pp. 17–19; S074 pp. 11–12].
+
+*Mark 3:*
+
+3. **A method that extends what can be solved at all**: to "solve problems which could not be solved before" [Th abstract]; a 5.7% mean speed-up not claimed as consistent (a one-sided Wilcoxon signed-rank test showed five instances, factors 90 to 357, carried it), yet OBBT's small slowdowns were "an acceptable price to pay" for newly solved instances (of 11 INT timeouts: plain 1, +OBBT 6, +OBBT+LVB 10) [Th pp. 145–147; S032 pp. 157–159]; headlines count instances solved [SU23; LCCP26].
+
+*Mark 4:*
+
+4. **Exact where the answer is a proof or must be exactly feasible; floating point otherwise** (overturns the common picture): "for the majority of applications this is perfectly satisfactory" [STSM14 §1], likewise in a 2012 co-authored text [S023 p. 22]; exactness for computer-assisted mathematics and verification [Chv22 §1]; against "a skeptical attitude that borders on paranoia" [VIPR §1].
+
+*Mark 5:*
+
+5. **Printed with its limits and their size**: 17 of 107 certificate runs hit the 10 GB cap [VIPR; S019 p. 10]; "We also observed, however, that the performance gap to floating-point solvers is still large" [SU23]; for a mixed-precision method, the floating-point solver's assumed accuracy and its failures counted per instance (his line with Steffy) [S029 pp. 8–9, 23; S013 TR pp. 9–10].
+
 <a id="taste-warnings"></a>
 
 ## Taste: warning signs and the quick-check
@@ -381,6 +407,26 @@ Removed from or rewritten in SKILL.md by these fixes (the T3.6 text, moved verba
 
 Six methods passed the four Phase 2 checks (recurrence, say–do, executable, exclusive). Methods 1–3 are new against the prior picture; 4–6 deepen it (unconfirmed: the prior snapshot postdates notes 01–06 in git).
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Core Research Methods introduction (the paragraph above Method 1):*
+
+Seven methods pass the four Phase 2 checks (recurrence, say–do, executable, exclusive). Methods 1–3 and 7 are new against the prior picture; 4–6 deepen it. On the 92 full texts Methods 1–6 held, with the corrections listed under Honest Boundary, and Method 7 was promoted [08 §2–§4]. ⚠ marks a condition on where a method holds; card counts per method are in the ledger.
+
+*Stated (restored word for word in SKILL.md after the T3.7 review):*
+
+- Stated: the 2014 visit report defines a "reliability of integer assignments" that can be analysed computationally [STSM14 §2, §4]; on the belief that floating-point LP solvers return optimal bases, "we have to relativize this finding for more than 14% of the instances" (thesis) [S032 p. 65].
+
+*Practice:*
+
+- Practice: every critical branch-and-bound decision of SCIP checked a posteriori in exact arithmetic, to "quantify the widely accepted belief" (group) [NC25; S072 pp. 2, 4–12, 14]; in 2012, a set where the belief should hold and one where it fails [S020 TR pp. 5, 9]; per-solution checks of the belief that scaling removes numerical error [S037 pp. 6, 9–10]; a progress measure (group) [CP21; D003 pp. 5, 11–12].
+
+*Limitations:*
+
+**Limitations**: needs source access and decision logging; not possible on a closed solver. The 2014 plan of a joint paper by autumn 2015 did not happen; the question returned ten years later with another student [06 §6].
+
 <a id="method-2"></a>
 
 ## Method 2: Like-for-like baseline, both factors reported
@@ -505,6 +551,22 @@ Removed from or rewritten in SKILL.md by these fixes (the T3.6 text, moved verba
 
 *(One clause of the Limitations line, restating a reading note, is left out here under the operator rule, 08 §3.3.)*
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Stated:*
+
+- Stated: the 2013 exact-MIP slowdown of two to four was measured against a plain branch and bound [Sim21 01:11]; pseudo-Boolean against floating-point MIP solvers is "not fully fair" [Sim21 02:10]. Co-authored: "in terms of solvability, the gap between the exact and inexact seems to be mostly due to the currently still missing solving methods" [SU23 p. 809; S022 p. 17].
+
+*Practice:*
+
+- Practice: floating-point SCIP "in a reduced setting with all features disabled that are not yet present in the current exact SCIP version" [SU23 p. 809; S022 pp. 8–11, 17–18]; the same pairing for safe cuts and certified propagation [S036 pp. 20–21; S074 pp. 8–9] and in SCIP 10 (group) [S021 pp. 4, 11–12]; earliest in 2012 [S017 TR pp. 15–17] and 2013 [S039 pp. 7–8].
+
+*Step 4 (the co-authored sentence from Stated now stands in the step):*
+
+4. Attribute with the pair (the co-authored sentence under Stated) [SU23 p. 809].
+
 <a id="method-3"></a>
 
 ## Method 3: The conceded-gap ledger
@@ -623,6 +685,38 @@ Removed from or rewritten in SKILL.md by these fixes (the T3.6 text, moved verba
 
 **Limitations**: a ten-year horizon with a PhD pipeline; alone, keep one printed limit per paper and close one in the next. Counter-evidence: formal certificate checking (proposed 2016) was done by others; the thesis's parallel rational factorization and the MIPLIB hindsight study were not found; the 2017 forecast of shrinking certificate overhead failed by 2021.
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Stated:*
+
+- Stated: in 2021 he saw no fundamental obstacle; the supplementary techniques had to be added one by one (paraphrase, automatic captions) [MIP21]. Co-authored: "the performance gap to floating-point solvers is still large" [SU23 p. 810], the like-for-like factors one section earlier [S022 pp. 17–18].
+
+*Practice (the certificates chain restored in SKILL.md after the T3.7 review):*
+
+- Practice: every thesis chapter prints its gap and next step (own text) [S032 pp. 67, 100–101, 186]; as chains: exact LP [S020 TR p. 11 → S013 TR p. 23 → S029 p. 26 → S050 pp. 2, 6]; exact MIP [S022 p. 18 → S036 pp. 2, 23–27 → S074 pp. 2, 12 → S021 pp. 7, 9]; certificates [S019 pp. 10–11 → S072 pp. 14–15]; branch and price [S092 p. 10 → S085 p. 3].
+
+*Step 1:*
+
+1. Print the gap where it arises, with a count and a suspected cause: refinement failed on 7 of 1,202 LPs [Th pp. 55, 89; S032 pp. 100–101]; 17 of 107 certificate runs hit 10 GB [VIPR; S019 p. 10]; safe cuts missing [SU23; S022 p. 18].
+
+*Step 3:*
+
+3. One project per gap: PhD positions on "high-precision mixed-integer programming over the rational numbers" (2016); open agendas for postdocs [04 G2].
+
+*Step 4:*
+
+4. If the gap is a rival's strength, import the mechanism and work with that community: QSopt_ex-style precision boosting in SoPlex [PB25; S050 pp. 2, 6]; VeriPB proof logging for 0-1 presolve with Nordström [CPB24; S038 pp. 1–2]; delta debugging from SAT/SMT [MIPDD; S065 pp. 2, 13]. Publish where they read (ISSAC, CP, Constraints).
+
+*Step 6:*
+
+6. Stop only when it ships: SCIP 10.0.0 (24 Nov 2025), exact MIP behind one parameter (`exact/enabled` set to true before the instance is read; certificates with `certificate/filename`) [S021 p. 7]; he wrote the integration commits (411 SCIP commits in 2025) and an exact-solving Homebrew test [06 §7].
+
+*Limitations (the source [S022 p. 16] restored in SKILL.md after the T3.7 review; the clause on how the journal reads its overheads stays here):*
+
+**Limitations**: a ten-year horizon with a PhD pipeline; alone, keep one printed limit per paper and close one in the next. Counter-evidence: formal certificate checking (proposed 2016) was done by others; the parallel rational factorization and the MIPLIB hindsight study were not found [S029 p. 25; S002 p. 43]; the 2017 hope of certificate times close to plain SCIP [S019 p. 10] was not met in print by 2023, whose overheads the journal reads as confirming 2017 [S022 p. 16]; some next steps came without a printed gap [S092 p. 10].
+
 <a id="method-4"></a>
 
 ## Method 4: Certificates someone else can check, read as an audit of the reasoning
@@ -737,6 +831,22 @@ Removed from or rewritten in SKILL.md by these fixes (the T3.6 text, moved verba
 
 **Limitations**: only as strong as checker and specification; presolve is outside, and two exact-mode wrong answers in Oct 2026 came from PaPILO presolve bugs [SCIP-iss]. Whether any published certificate relied on a hole was never examined.
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Stated:*
+
+- Stated: checking "should not require a sophisticated code where that could contain bugs itself" [Sim21 01:53]. Co-authored: the reference checker is "merely a reference and others should be able to write their own verifiers without much difficulty" [VIPR; S019 p. 8].
+
+*Practice:*
+
+- Practice: VIPR's few inference rules [S019 pp. 3–5, 8–9]; a Coq check that the certificate encodes the intended model (group) [Chv22; S042 pp. 2–3]; in 2021 a certificate showed the 2013 framework declared a NumDiff instance infeasible at the root for an incorrect reason, although it is infeasible [ZR21-04 §4; S022 pp. 15–16]; VeriPB for presolve (group) [S038 pp. 2, 6–11].
+
+*Limitations:*
+
+**Limitations**: only as strong as checker and specification. A simple format did not make the reference checker `viprchk` sound: bugs 2016–2026, two fixed by him, one by Hoen, the rest reported by outsiders [VIPR-gh]; forged certificates accepted in 2023 [Wood23], with no printed reply; SCIP 10 points to the CakeML-verified checker [S10]. The VeriPB objective-update rule added for presolve comes without a formal proof in the paper (group) [S038 p. 5]. Presolve is outside, and two exact-mode wrong answers in Oct 2026 came from PaPILO presolve bugs [SCIP-iss]. Whether any published certificate relied on a hole was never examined.
+
 <a id="method-5"></a>
 
 ## Method 5: Floating point produces, exact arithmetic decides
@@ -845,6 +955,30 @@ Removed from or rewritten in SKILL.md by these fixes (the T3.6 text, moved verba
 **Different from standard practice**: neither all floating point nor all rational; the producing/deciding boundary is the design decision.
 
 **Limitations**: refinement has no reliable recovery when the floating-point LP fails [PB25]; outside benchmarks found exact SoPlex buggy or slower than pure boosting on one LP family; his group's 2025 paper replaces 2016's rational reconstruction by basis factorization on average [PB25]. Exact repair (step 3) is shown for LP and MILP only (fix a basis or the integers, correct the rest exactly); for cone constraints such as SDP, repair at the cone boundary is harder (inferred) and untested in his work: any transfer is an inference.
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Stated:*
+
+- Stated: "Its computational efficiency rests on its mixed-precision nature" [Th p. 3; S032 p. 15]; "exact computation is used for critical decisions or to validate final solutions" [LPO20 §1.3, co-authored; S029 p. 7]; rational heuristics were skipped not only because "we were lazy": an in-solver heuristic should spend small, bounded effort, so a rational sub-MIP is "not called for" [Sim21 01:38–01:41].
+
+*Practice:*
+
+- Practice: LP refinement [S020 TR pp. 3, 5, 7; S032 pp. 39–40, 85]; co-authored: "Primal heuristics are exclusively executed on the floating-point approximation of the rational input data" [SU23 p. 794; S022 pp. 2, 5–8]; safe Gomory cuts and safe propagation (group) [S036 pp. 5–8, 18–19; S074 pp. 2, 6–7].
+
+*Step 2 (the Simons talk reason from Stated now stands in the step):*
+
+2. Leave the producing part in floating point; no rational twin.
+
+*Step 6:*
+
+6. "check the optimality of the basis early" instead of relying on a priori bounds [LPO20; S029 p. 12], already in the thesis [S032 p. 85]. Verify the final basis by an exact factorization, ahead of rational reconstruction on average since the thesis [S032 p. 100]: in 2020 fastest on 702 of 1,202 LPs against 569 (5% rule), 1,191 against 1,189 solved, one factorization on 1,123 [S029 pp. 23–24]; confirmed 2025 [S050 p. 10]; reconstruction still wins on some LPs [S029 p. 25], and the rational LU can become the bottleneck [S050 p. 14] (PD4).
+
+*Limitations:*
+
+**Limitations**: LP refinement had no reliable recovery from a failing floating-point LP until boosting (2025) [S050 p. 2]; outside benchmarks found exact SoPlex buggy or slower than pure boosting on one LP family. Exact repair (step 3) is shown for LP and MILP only (fix a basis or the integers, correct the rest exactly); for cone constraints such as SDP, repair at the cone boundary is harder (inferred) and untested in his work: any transfer is an inference.
 
 <a id="method-6"></a>
 
@@ -970,6 +1104,22 @@ Removed from or rewritten in SKILL.md by these fixes (the T3.6 text, moved verba
 
 *(One parenthesis of step 3, restating a reading note, is left out here under the operator rule, 08 §3.3.)*
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Stated:*
+
+- Stated: his call of 11 Nov 2016, "New challenges are needed!" [Call16]; co-authored: "The concrete choice of the square root was empirically motivated" [M17; S002 p. 36].
+
+*Practice:*
+
+- Practice: MIPLIB 2017 (first of 16 authors; committee of 21) [M17; S002 pp. 3, 6, 22–23, 33, 40–44]; MIPLIB 2010 (co-authored, committee) [S001 TR pp. 6–8]; benchmark v2 and changelog [MIPLIB-CL]; MIPcc23 rules in his repository [CC23; CC23-gh; S055 pp. 2–3, 6–7].
+
+*Step 4:*
+
+4. Write admission as numbered criteria, counting exclusions per criterion: solved by at least one solver (no instance unsolved for 15 years, as in MIPLIB 2003), at least 10 s for half the solvers, coefficient-range limits, no indicator constraints, at most 10^6 nonzeros. Exclude what is ambiguous; keep what is hard.
+
 <a id="method-7"></a>
 
 ## Method 7: Write the floating-point solver's contract, prove against it, and audit it
@@ -1057,6 +1207,22 @@ Removed from or rewritten in SKILL.md by these fixes (the T3.6 text, moved verba
 
 New in T3.6: no earlier SKILL.md text. The quotation in the long form's Limitations, "The LP iterative refinement procedure has no reliable way of recovering if the floating-point LP subroutine aborts with a failure due to numerical issues." [S050 p. 2], is a card quote; SKILL.md now cites the page without it.
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Practice:*
+
+- Practice: the oracle with constants and a failure outcome, failure detectable from residuals (his line, co-authored with Steffy) [LPO20; S029 pp. 8–9]; the assumption conceded and protected by capped scaling [S013 TR pp. 9–10]; convergence proved in the thesis [S032 pp. 41–45]; boosting on named failures [S050 pp. 5–6, 8].
+
+*Different from standard practice:*
+
+**Different from standard practice**: neither an arithmetic model with precision far beyond double (a 3 × 6 LP gets a classical tolerance near 10^-169,059 [S029 pp. 6–7]) nor a trusted solver; an oracle with a stated, audited contract.
+
+*Limitations:*
+
+**Limitations**: LP and convex QP only; the read exact-MIP papers use safe bounding instead [S022 p. 4] (no MIP analogue in the read texts); a double-precision solver does not meet the contract for all inputs [S050 p. 8], so reliable recovery came only with boosting [S050 p. 2].
+
 <a id="workflows"></a>
 
 ## Stage Workflows
@@ -1122,6 +1288,14 @@ Removed from or rewritten in SKILL.md by these fixes (the T3.6 text, moved verba
 **🔴 Checkpoint**: if floating point with an a posteriori check already meets the need, stop and recommend exactly that (Taste 4; Method 4 step 4). If the result could never live in the default distribution, stop, say it falls outside his pattern (Taste 7), and mark further advice "not Gleixner-style".
 
 **Output**: one paragraph (use, deciding component, ledger entry, why now) plus the Taste quick-check.
+
+#### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Workflow A, step 4:*
+
+4. Is the missing piece software nobody has (checker, presolve library, delta debugger [S019 pp. 4–5; S065 p. 2]) or a setting benchmarks omit (instance series [S055 p. 2], MIPcc23)?
 
 <a id="workflow-b"></a>
 
@@ -1321,6 +1495,14 @@ Removed from or rewritten in SKILL.md by these fixes (the T3.6 text, moved verba
 
 1. **Your checker is code under test.** If an outsider finds a hole: thank them, post a revision within a day, ask them to review it, point users to a formally verified checker. Case: VIPR PR #24 (27 Oct 2026) answered in about 17 hours; his PR #25 asks the contributor to double-check; both open on 2026-11-14 [VIPR-gh].
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Heuristic 1:*
+
+1. **Your checker is code under test.** If an outsider finds a hole: thank them, post a revision within a day, ask them to review it, point users to a formally verified checker. Case: VIPR PR #24 (27 Oct 2026) answered in about 17 hours; his PR #25 asks the contributor to double-check; both open on 2026-11-14 [VIPR-gh]; the 2017 paper had offered simplicity instead [S019 p. 8]. ([ledger](#heuristic-1))
+
 <a id="heuristic-2"></a>
 
 ## Heuristic 2: Counts replace adjectives between versions
@@ -1349,6 +1531,14 @@ Removed from or rewritten in SKILL.md by these fixes (the T3.6 text, moved verba
 ### Before T3.6 (moved verbatim)
 
 2. **Counts replace adjectives between versions.** MIP-DD: a majority claim (v1) became "24 among all the 51" (v5) [MIPDD-ax]; circle packing "exact dual bounds" → "strong dual bounds" [CP17]; Chvátal v1 a theorem title, v2 a safe framework plus a Coq check [Chv-ax]. No stated reason.
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Heuristic 2:*
+
+2. **Counts replace adjectives between versions.** MIP-DD: a majority claim (v1) became "24 among all the 51" (v5) [MIPDD-ax; S065 p. 8]; circle packing "exact dual bounds" → "strong dual bounds" [CP17]; Chvátal v1 a theorem title, v2 a safe framework plus a Coq check [Chv-ax]; the status update's journal version keeps its closing adjective but adds like-for-like factors behind it [D002 p. 14; S022 pp. 17–18]. No stated reason. ([ledger](#heuristic-2))
 
 <a id="heuristic-3"></a>
 
@@ -1379,6 +1569,14 @@ Removed from or rewritten in SKILL.md by these fixes (the T3.6 text, moved verba
 
 3. **A default has to earn its place.** Default-on needs a performance run on the internal solvable set and tests against several LP solvers; else ship it off; log reverts. Case: the merge-request template he created (commit 8201ee1d, 2018) and rewrote as tickable assertions with an "or" escape (2020) [MRT]; `prop_genvbounds` switched on then off by default (2012); own commits reverted (2014) [SCIP-gh; SoPlex-gh].
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Heuristic 3 (the `prop_genvbounds` and revert cases restored in SKILL.md after the T3.7 review):*
+
+3. **A default has to earn its place.** Default-on needs a performance run on the internal solvable set and tests against several LP solvers; else ship it off; log reverts. Case: the merge-request template he created (commit 8201ee1d, 2018) and rewrote as tickable assertions with an "or" escape (2020) [MRT]; `prop_genvbounds` switched on then off by default (2012); own commits reverted (2014) [SCIP-gh; SoPlex-gh]; release reports give the gain each new default showed when it was added, and leave off what did not pay [S003 pp. 10, 18; S021 pp. 13, 19–20]. ([ledger](#heuristic-3))
+
 <a id="heuristic-4"></a>
 
 ## Heuristic 4: Debug with three tools
@@ -1401,6 +1599,14 @@ Removed from or rewritten in SKILL.md by these fixes (the T3.6 text, moved verba
 
 4. **Debug with three tools**: (a) a known feasible solution as oracle, (b) swap a component, (c) shrink the instance while it still fails and add it to the regression set. Case: mailing-list answers 2011, 2018 [ML]; commit "check debug solution in prop_genvbounds" (2013); MIP-DD (group) [MIPDD].
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Heuristic 4:*
+
+4. **Debug with three tools**: (a) a known feasible solution as oracle, (b) swap a component, (c) shrink the instance while it still fails and add it to the regression set; the measuring scripts are debugged too (H5). Case: mailing-list answers 2011, 2018 [ML]; commit "check debug solution in prop_genvbounds" (2013); MIP-DD (group) [MIPDD; S065 pp. 4, 6, 8–9]. ([ledger](#heuristic-4))
+
 <a id="heuristic-5"></a>
 
 ## Heuristic 5: Debug the measuring scripts
@@ -1422,6 +1628,14 @@ Removed from or rewritten in SKILL.md by these fixes (the T3.6 text, moved verba
 ### Before T3.6 (moved verbatim)
 
 5. **Debug the measuring scripts**: make them flag results that contradict reference values. Case: SoPlex `check/evaluation.py` fix (2014; the consistency check could never fire) and `check/compare.py` shifted-mean fix; SCIP `check.awk` maximization parsing (2013) [SoPlex-gh; SCIP-gh]. Practice only.
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Heuristic 5:*
+
+5. **Debug the measuring scripts**: make them flag results that contradict reference values. Case: SoPlex `check/evaluation.py` fix (2014; the consistency check could never fire) and `check/compare.py` shifted-mean fix; SCIP `check.awk` maximization parsing (2013) [SoPlex-gh; SCIP-gh]; MIPLIB 2010 [S001 TR p. 11]. Practice only. ([ledger](#heuristic-5))
 
 <a id="heuristic-6"></a>
 
@@ -1485,6 +1699,14 @@ Removed from or rewritten in SKILL.md by these fixes (the T3.6 text, moved verba
 
 7. **The metric fits the component.** Heuristics by time to first solution and primal integral; inside a solver they must "fail fast" [Sim21 00:45]; "finding good solutions earlier may be more relevant than proving optimality eventually" [SU23 p. 794]. Say when a component gave nothing ("the first disappointing thing" [Sim21]).
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Heuristic 7 (the Sim21 quotation restored in SKILL.md after the T3.7 review):*
+
+7. **The metric fits the component.** Heuristics by time to first solution and primal integral; inside a solver they must "fail fast" [Sim21 00:45], in print a "fast fail" strategy [S018 p. 4]; "finding good solutions earlier may be more relevant than proving optimality eventually" [SU23 p. 794]. Say when a component gave nothing ("the first disappointing thing" [Sim21]). ([ledger](#heuristic-7))
+
 <a id="heuristic-8"></a>
 
 ## Heuristic 8: Subset discipline
@@ -1504,6 +1726,14 @@ Removed from or rewritten in SKILL.md by these fixes (the T3.6 text, moved verba
 ### Before T3.6 (moved verbatim)
 
 8. **Subset discipline.** Headlines name subset and limit; overheads only on both-solved instances; a bias argument per exclusion, excluded instances named; "All experiments to evaluate the new code are run with three different random seeds, where we treat each instance-seed combination as a single observation" [ZR21-04]; "fastest" means within 5% [Th pp. 3, 13–14; GMI24 §4.4]. Brackets all solved, ≥1 s, ≥10 s, ≥100 s, after Achterberg and Wunderling (2013) [Th p. 145]; a failed test on a small bracket (20, 11 instances) is put down to sample size; single-instance claims rest on ten constraint permutations [Th p. 147].
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Heuristic 8 (the attribution of the brackets to Achterberg and Wunderling restored in SKILL.md after the T3.7 review):*
+
+8. **Subset discipline.** Headlines name subset and limit; overheads only on both-solved instances; a bias argument per exclusion, excluded instances named; "All experiments to evaluate the new code are run with three different random seeds, where we treat each instance-seed combination as a single observation" [ZR21-04], five seeds in 2017 [S003 pp. 6–8]; "fastest" means within 5% [Th pp. 3, 13–14; GMI24 §4.4]. Brackets all solved, ≥1 s, ≥10 s, ≥100 s, after Achterberg and Wunderling (2013) [Th p. 145]; a failed test on a small bracket (20, 11 instances) is put down to sample size; single-instance claims rest on ten constraint permutations [Th p. 147]. ([ledger](#heuristic-8))
 
 <a id="heuristic-9"></a>
 
@@ -1555,6 +1785,14 @@ Removed from or rewritten in SKILL.md by these fixes (the T3.6 text, moved verba
 10. **Template the arithmetic type from the first commit**, so the rational variant is a type argument: PaPILO [Sim21 01:33; PaPILO] (code by Gottwald and Hoen; one project).
 
 **Already known**: build inside the open-source solver and release; shifted geometric means, seeds and one job per node are "pretty standard in MIP solving" [Sim21]. *(unchanged in SKILL.md)*
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Heuristic 10:*
+
+10. **Template the arithmetic type from the first commit**, so the rational variant is a type argument: PaPILO [Sim21 01:33; PaPILO; S026 pp. 3, 10] (code by Gottwald and Hoen; one project); a fixed commit order keeps parallel output independent of the thread count [S026 pp. 6–9]; in the group's presolve work no reduction may break what the consumer needs: block structure for a parallel interior-point solver [S078 arXiv p. 7], duals and bases through postsolve for LP users [S004 pp. 62–63], certificate coverage (Method 4 step 1). ([ledger](#heuristic-10); [consumer](#heuristic-12))
 
 <a id="heuristic-11"></a>
 
@@ -1732,6 +1970,30 @@ Content from the thesis, which contains both (not read).
 | Reception | COBRApy and NEOS (thesis claim, unchecked); theory followed [LPO20] |
 | Methods | 5, 3 |
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Signature Work Anatomy introduction:*
+
+"Inferred" marks what has no primary source. All five cite the full texts where they exist; Reception cells and cells keyed to web sources (Wood23, VIPR-gh, IHS26, MIPLIB-CL, editorial dates) do not.
+
+*Version note under the heading:*
+
+Read in their report versions [S020 TR; S013 TR; S029] and in the thesis, which contains the first two [S032].
+
+*Table row, Origin:*
+
+| Dimension | Finding |
+|---|---|
+| Origin | Stated: Steffy's initiative [Th p. iii; S032 p. 5]; MINLP instabilities sit in LP relaxations; metabolic models defeat double precision [Th pp. 1–2]. 2020, co-authored: analyses assume exact arithmetic, implementations use limited precision [S029 pp. 3, 7] |
+
+*Table row, Minimum evidence (restored word for word in SKILL.md after the T3.7 review):*
+
+| Dimension | Finding |
+|---|---|
+| Minimum evidence | Precision 10^-50 at 3% / 7% average slowdown [S013 TR p. 20]; exact SoPlex 1.85–3 times faster than QSopt_ex [Th pp. 3, 88; S032 p. 99]; 2020: basis verification solved 1,191 of 1,202 LPs, QSopt_ex 1,163 [S029 p. 23] |
+
 <a id="anatomy-vipr"></a>
 
 ## Anatomy: Verifying Integer Programming Results (IPCO 2017, DOI 10.1007/978-3-319-59250-3_13; arXiv 1611.08832)
@@ -1770,6 +2032,16 @@ Removed from or rewritten in SKILL.md by these fixes (the T3.6 text, moved verba
 | Abandoned paths | v1 excluded one instance (tool out of memory), v2 fixed it; proof-assistant checking left to others |
 | Reception | Formal checkers by others [CakeML; LeanVIPR]; holes found 2023–2026 [Wood23; VIPR-gh] |
 | Methods | 4, 3 |
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Table row, Abandoned paths:*
+
+| Dimension | Finding |
+|---|---|
+| Abandoned paths | v1 excluded one instance (tool out of memory), v2 fixed it (arXiv versions, web research; the version read reports all 107 [S019 p. 10]); proof-assistant checking left to others |
 
 <a id="anatomy-miplib-2017"></a>
 
@@ -1832,6 +2104,16 @@ Removed from or rewritten in SKILL.md by these fixes (the T3.6 text, moved verba
 | Abandoned paths | Bound-shift off below 20% success |
 | Reception | Critics relay 8.1; a rival matches exact SCIP in one application [IHS26] |
 | Methods | 2, 5, 3 |
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Table row, Minimum evidence:*
+
+| Dimension | Finding |
+|---|---|
+| Minimum evidence | Against the 2013 framework: 6.6 times faster, 2.8 times as many solved [ZR21-04]; 10.7 and 2.9 in the journal [SU23; S022 p. 17]; no reason given; hardware (Xeon E5-2660 → Gold 5122) and CPLEX setup differ between the versions [ZR21-04 p. 7; SU23 p. 801] (inferred possible cause) |
 
 <a id="anatomy-limited-precision-oracles"></a>
 
@@ -1911,6 +2193,16 @@ Removed from or rewritten in SKILL.md by these fixes (the T3.6 text, moved verba
 New in T3.6: an important work read in full that had no anatomy (08 §4.1 and §2, Method 1; framework §五 asks for one anatomy per core method).
 
 **Signature Work Anatomy introduction (before T3.6):** "Inferred" marks what has no primary source.
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Table row, Origin:*
+
+| Dimension | Finding |
+|---|---|
+| Origin | Group (Hoen first): the belief in solver robustness set against documented wrong answers [S072 p. 2]; VIPR's 2017 future work had proposed measuring numerical violation [S019 p. 10] (inferred link: the paper cites VIPR only in its outlook [S072 p. 15]) |
 
 <a id="anti-patterns"></a>
 
@@ -2004,6 +2296,18 @@ Besides the warning signs and Taste marks 2 and 4: aggressive heuristics inside 
 - 2026: MIP-DD in print [MIPDD]; numerically safe branch-price-and-cut closing 14 unsolved instances [LCCP26]; CHAP won the Land-Doig MIP Competition [CHAP26]; distributed presolving [DSAP26].
 - Oct 2026: VIPR and presolve soundness reports (Method 4); applied HTW projects [06 §8]; no talk found in the last 12 months.
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Trajectory, 2020–2025:*
+
+- 2020–2025: collaboration with Nordström, starting with Learn to relax, which holds no proof log [L2R21; S024 pp. 6, 15]; proof logging follows [S038 pp. 2, 6–11; S060 pp. 1–2]; exactness into the mainline, one component at a time [SU23; GMI24; PB25; S10].
+
+*Latest, Oct 2026:*
+
+- Oct 2026: VIPR and presolve soundness reports (Method 4); applied HTW projects [06 §8]; no talk found in the last 12 months.
+
 <a id="lineage"></a>
 
 ## Academic Lineage and collaboration pattern
@@ -2074,6 +2378,24 @@ Sources: the coauthor lines of the cards, e.g. [S039 p. 3; S029 p. 3; S072 p. 1;
 - **Tension: headline numbers**: one result appears as 6.6, "about an order of magnitude" and 10.7 [ZR21-04; MIP21; SU23].
 - **Tension: supervisor in practice, not on record**: "my supervisors Thorsten Koch and Ambros Gleixner" [Mue20]; one formal doctorate [04 C1].
 - **Tension: critique answered in code, not in print** [VIPR-gh; Wood23].
+
+<a id="mentor-voice"></a>
+
+## Mentor Voice
+
+SKILL.md's Mentor Voice had no section here before T3.7; this one holds the lines the tightening shortened.
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened or moved, as they stood before it; links re-pointed to work from this folder. The shortened lines are in SKILL.md.
+
+*Feedback:*
+
+- **Feedback (observed; acknowledgements, a genre without criticism)**: "always asked the right – well challenging – questions" [Wit22]; "disciplined approach to research" [Mil23]; door open "day and sometimes even night to discuss paper ideas and progress" [Hen22]; coordinating "not only the software development but also the research of all members of your group" [Gam20].
+
+*Review style:*
+
+- **Review style (practice)**: asks what the documentation lacks, offers to test the build (PR #1 of the original repository, 2–3 Aug 2022) [VIPR-orig].
 
 <a id="roundtable-card"></a>
 
