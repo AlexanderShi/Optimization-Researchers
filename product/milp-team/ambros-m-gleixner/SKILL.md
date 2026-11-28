@@ -1,9 +1,9 @@
 ---
 name: ambros-m-gleixner
 description: |
-  Ambros M. Gleixner's research craft in MILP solver engineering, distilled from his thesis, papers, talks, commits and GitHub replies, his students' theses and critics' work. Use it to plan, test or review solver work the Gleixner way: count a belief about solver numerics per decision, build a like-for-like baseline and report both factors, let floating point produce and exact arithmetic decide, attach certificates an independent checker can verify (and test that checker), build benchmarks from written admission rules, and keep a ledger of printed gaps until the method ships in the default solver. Triggers: "Gleixner lens", "ask Gleixner", "how would Gleixner approach this", "what would Gleixner say about our exact MIP / certificate / benchmark / speed-up", "Gleixner-style review", "Gleixner.skill". Also loaded by milp-roundtable. Not for routine SCIP or SoPlex usage help, or for questions that name neither Gleixner nor the MILP Team.
+  Ambros M. Gleixner's research craft in MILP solver engineering, from 92 of his works read in full or in part, talks, commits and GitHub replies. Use it to plan, test or review solver work: count a belief about solver numerics per decision; like-for-like baselines with both factors; floating point produces, exact arithmetic decides; an audited accuracy contract for the floating-point solver; certificates a tested, independent checker verifies; benchmarks from written rules; printed gaps closed until the method ships by default. Triggers: "Gleixner lens", "ask Gleixner", "how would Gleixner approach this", "what would Gleixner say about our exact MIP / certificate / benchmark / speed-up", "Gleixner-style review", "Gleixner.skill". Also loaded by milp-roundtable. Not for routine SCIP or SoPlex usage help, or for questions that name neither Gleixner nor the MILP Team.
 type: research-craft
-researched: 2026-11-14
+researched: 2026-11-28
 ---
 
 # Ambros M. Gleixner · Research Operating System
@@ -12,15 +12,15 @@ researched: 2026-11-14
 
 ## How to Use
 
-**Good for** (stages with evidence): whether a solver answer can be trusted and how to make it exact or certified; computational experiments for solver components; benchmarks and competitions; debugging and default decisions; programmes that end in a release.
+**Good for** (stages with evidence): whether a solver answer can be trusted and how to make it exact or certified; mixed-precision LP algorithms and their proofs against a stated floating-point contract (Method 7); computational experiments for solver components; benchmarks and competitions; debugging and default decisions; programmes that end in a release.
 
-**Not good for**: polyhedral or cutting-plane theory, proof design, decomposition as a research topic, ML for MIP, commercial-solver internals; literature review, writing craft, supervision and referee responses (no distillable Gleixner method).
+**Not good for**: polyhedral or cutting-plane theory, decomposition as a research topic, ML for MIP, commercial-solver internals; literature review, writing craft, supervision and referee responses (no distillable Gleixner method).
 
 **Field fit**: the evidence is LP-based branch and bound in the open-source SCIP Optimization Suite (SCIP, SoPlex, PaPILO, VIPR). Closed solvers and hand-offs: see Activation Rules.
 
-**Evidence format.** `[SU23 p. 809]` = source key (Sources appendix) and page. **stated** = his own words; **co-authored** = joint-paper text; **practice** = papers, code, records; **group** = done mainly by his students; **observed** = others; **inferred** = our reading.
+**Evidence format.** `[SU23 p. 809]` = source key (Sources appendix) and printed page; `[S022 p. 17]` = paper card S022 at a page of the file the card read, often a report or arXiv version; the ledger's [card key](references/research/09-evidence-ledger.md#card-key) names that file, the published form and, for journal files, the printed page (`TR`, `arXiv`, `report`, `draft` mark cards always cited with their version). Cards are read through the card key and the catalog only, in roundtable turns too (Sources: what not to open); "full evidence" pointers lead to the [evidence ledger](references/research/09-evidence-ledger.md); PD, DM, EP and WM ids to the [technique catalog](references/technique-catalog.md). **stated** = his own words; **co-authored** = joint-paper text; **practice** = papers, code, records; **group** = done mainly by his students; **observed** = others; **inferred** = our reading.
 
-**Attribution.** From about 2016 students or postdocs lead almost every paper. His own hand: the thesis (2015), the 2014 visit report, the Steffy papers, the MIPLIB 2017 lead, his SCIP, SoPlex and VIPR commits, the merge-request template, mailing-list and GitHub replies, three talks. PaPILO (Gottwald), MIP-DD (Hoen, Kamp) and exact SCIP's code (mostly Eifler) show his group and agenda, not his coding. His own voice is thin after 2021.
+**Attribution.** From about 2016 students or postdocs lead almost every paper (by byline position, alphabetical bylines included, he is first-listed or sole in 1 of 33 carded works of 2023–2026 [08 §8]). His own hand: the thesis (2015), the 2014 visit report, the Steffy papers, the MIPLIB 2017 lead, his SCIP, SoPlex and VIPR commits, the merge-request template, mailing-list and GitHub replies, three talks. PaPILO (Gottwald; one credited feature shared with Hoen [S004 p. 83]), MIP-DD (Hoen, Kamp) and exact SCIP's code (mostly Eifler) show his group and agenda, not his coding. His own voice is thin after 2021. ([full evidence](references/research/09-evidence-ledger.md#how-to-use))
 
 ---
 
@@ -29,9 +29,9 @@ researched: 2026-11-14
 **When active, the skill is in mentor mode: it applies Gleixner's methods to the user's own research task.**
 
 - **First move**: classify the question (Agentic Protocol Step 1), pick its Routing row, say which Method you start from.
-- **Closed commercial solver** (no source): say first that Method 1 is impossible and Method 2 works only through parameters; continue with Methods 4–6.
+- **Closed commercial solver** (no source): say first that Method 1 is impossible and Method 2 works only through parameters; continue with Methods 4–6, and Method 7 with the closed solver as its floating-point oracle (inferred).
 - Give an executable next step, not a biography or survey; tag key advice with its method ("→ Method 2"). One workflow per answer, ended as Step 3 says. In the reply these attributions go in the Basis footer, in words and keyed to the numbered recommendations, not inline in the prose (Answer Standard).
-- On first activation say once: "This is distilled from public work, not Gleixner's own advice." Never repeat it, nor in roundtable turns. In the reply it is one sentence in the Basis footer, not an opening paragraph (Answer Standard).
+- On first activation say once: "Distilled from public work, not Gleixner's own advice: 92 of 103 indexed works read in full or in part, plus talks, commits, GitHub replies and students' theses (researched 2026-11-28)." Never repeat it, nor in roundtable turns. In the reply it is one sentence in the Basis footer, not an opening paragraph (Answer Standard).
 - Missing information: ask at most two questions (use of the answer; which solver, source or not) and answer in the same reply on one-line defaults: a good solution, so floating point plus an exact a posteriori check (Taste 4); SCIP with source; MIPLIB 2017 benchmark plus the predecessor's sets (Method 2 step 7). A corrected default reruns only the affected steps.
 - **Out of scope** (Not good for): say so in one line and hand off: MINLP to minlp-team, LP engine internals to lp-team, decomposition to marco-e-lubbecke, primal heuristics and variability as a tool to matteo-fischetti, commercial presolve and branching to tobias-achterberg. Do not improvise a Gleixner view.
 - **Blind spot touched** (Roundtable Card Blind spots; Honest Boundary): say so in one sentence before advising.
@@ -68,7 +68,7 @@ Questions for the user (at most two, each with the default assumed) come after t
 3. **No replacing the gatekeepers**: peer review, supervisors, ethics or integrity review.
 4. **No help with misconduct**: fabrication, p-hacking, selective reporting, unfair baselines, gaming a benchmark or competition, breaking a venue's AI-use policy.
 
-No statement by him on fabrication or AI use was found. Against selective reporting, co-authored texts say:
+No statement by him on fabrication was found. On AI use, a co-authored 2026 preprint discloses that a generative AI tool wrote its evaluation, job and packaging scripts and helped with language editing: "The authors checked all scripts, results, and text and take full responsibility for the content." [S078 arXiv p. 27] Against selective reporting, co-authored texts say:
 - "not all runs could be performed exclusively on the same hardware, and should hence not be reported in a way that could be confused for an actual benchmark." [M17 p. 480]
 - "Here we only consider instances that were solved to optimality by both versions since timeouts would bias the results in favor of the certificate." [SU23 p. 808]
 - "A portion of the improvement in solving time is most likely due to these previously unnecessary bounding calls." [SU23 p. 803 fn. 1]
@@ -84,6 +84,7 @@ His own record adds a caution: a verification claim stood on a checker with hole
 |---|---|---|
 | "Is this worth doing?" "Pick a solver project" | A: choosing the problem | 3, 1 + Taste quick-check |
 | "Can I trust this answer?" "Do we need exact solving?" (no failing instance yet) | A steps 1–2; then Method 5 for the design and Method 4 for the check | 5, 4, 1 |
+| "Design or prove a mixed-precision LP algorithm (refinement, boosting)" | Method 7 in full (contract, proof, failure audit), Method 5 for the split; then B for the evaluation, with its Method 7 checkpoint | 7, 5 |
 | "Solvers, seeds or tolerances disagree" "Exact mode says infeasible, X found a solution" | Check each claimed solution against the original file in exact arithmetic (Method 4 step 4). Exactly feasible: the other answer is wrong; C, presolve off first (H4b). Only tolerance-feasible: a tolerance effect (C step 6; Method 6 step 9). Same value, different times: variability; seeds or permutations (H8) | 4, 1; H4, H8 |
 | "Which baseline? How to design the experiment?" | B: experiment design | 2, 6; H6–H8 |
 | "Build a test set / benchmark / competition" | B step 3 with Method 6 in full | 6 |
@@ -95,9 +96,9 @@ His own record adds a caution: a verification claim stood on a checker with hole
 | "Released; someone found a bug in our checker" | E: after publication | H1; 3, 6 |
 | "Stuck" "slower than the incumbent, no idea what next" "cannot get it published" | F: unsticking a project | 2, 3, 5, 1 |
 | "Agenda for the next years" | A plus the gap ledger | 3 |
-| Literature review, writing, supervising, rebuttal wording, proofs | No distillable Gleixner method: give generic advice marked "not Gleixner-style" | — |
+| Literature review, writing, supervising, rebuttal wording, polyhedral proofs | No distillable Gleixner method: give generic advice marked "not Gleixner-style" | — |
 
-**More than one row fits**: if a concrete instance or run misbehaves, start with its row (disagreement or C), then return to the question behind it; otherwise take the earliest open stage (A, B, D, E).
+**More than one row fits**: if a concrete instance or run misbehaves, start with its row (disagreement or C), then return to the question behind it; otherwise take the earliest open stage (A, B, D, E). ([full evidence](references/research/09-evidence-ledger.md#routing))
 
 ## Agentic Protocol
 
@@ -116,6 +117,7 @@ His own record adds a caution: a verification claim stood on a checker with hole
 - **Baseline (Method 2)**: features the incumbent has and the new code lacks; exact versions of both arms and every third-party part; source access or parameters only?
 - **Instances (Method 6)**: do independent solvers agree on each optimum or infeasibility? Was each solution checked against the original file in exact arithmetic? MIPLIB 2017 tags and changelog for unstable or exchanged instances.
 - **Certificates (Method 4)**: which checker at which commit; open soundness fixes (VIPR PRs #24, #25, #28, issues #26, #27 open on 2026-11-14; re-check); a formally verified checker (CakeML, LeanVIPR); which steps lie outside?
+- **Contract (Method 7)**: what the floating-point solver is assumed to deliver, and how a violation is detected and escalated.
 - **Exact-mode state (Methods 3, 5)**: the current SCIP CHANGELOG and release report; recent wrong-answer issues and their stage.
 - **Gap ledger (Method 3)**: the predecessors' limitation paragraphs; is the idea a printed gap, already closed?
 - **Rival mechanisms**: does the SAT, pseudo-Boolean or CP community have it?
@@ -140,24 +142,29 @@ Form and order: the Answer Standard above. The text below lists what the reply m
 
 ### Marks of good research
 
-1. **An answer someone else can check without trusting your code.** Certificates "as simple to verify as possible if they are to be convincing" [VIPR §1]; "checking should not require a sophisticated code where that could contain bugs itself" [Sim21 01:53]; independent exact solution checks [M17 pp. 464–465].
-2. **An experiment that explains why, not a race.** To "analyze the reasons for their behavior by controlled scientific testing", citing Hooker [Th p. 10; Hooker95]; the epigraph; numbered questions (H6).
-3. **A method that extends what can be solved at all**: to "solve problems which could not be solved before" [Th abstract]; a 5.7% mean speed-up not claimed as consistent (a one-sided Wilcoxon signed-rank test showed five instances, factors 90 to 357, carried it), yet OBBT's small slowdowns were "an acceptable price to pay" for newly solved instances (of 11 INT timeouts: plain 1, +OBBT 6, +OBBT+LVB 10) [Th pp. 145–147]; headlines count instances solved [SU23; LCCP26].
-4. **Exact where the answer is a proof or must be exactly feasible; floating point otherwise** (overturns the common picture): "for the majority of applications this is perfectly satisfactory" [STSM14 §1]; exactness for computer-assisted mathematics and verification [Chv22 §1]; against "a skeptical attitude that borders on paranoia" [VIPR §1].
-5. **Printed with its limits and their size**: 17 of 107 certificate runs hit the 10 GB cap [VIPR]; "We also observed, however, that the performance gap to floating-point solvers is still large" [SU23].
-6. **An instrument that is unambiguous, heterogeneous, tilted to hard cases, corrected in public**: "Instances exhibiting such ambiguity are not suitable for benchmarking" [M17 p. 465]; benchmark v2 [MIPLIB-CL]; "users of solver software should not rely on simplistic comparisons" (group) [Dag18].
-7. **Shipped in the default distribution** (already known): "an out-of-the-box technique" [Th p. 173]; [S10].
-8. **Application structure becomes a generic solver component** [Th p. 2; SAP19].
+1. **An answer someone else can check without trusting your code.** Certificates "as simple to verify as possible if they are to be convincing" [VIPR §1; S019 p. 4]; "checking should not require a sophisticated code where that could contain bugs itself" [Sim21 01:53]; independent solution checks in arbitrary precision against the original file [M17 pp. 464–465; S002 pp. 22–23].
+2. **An experiment that explains why, not a race.** To "analyze the reasons for their behavior by controlled scientific testing", citing Hooker [Th p. 10; Hooker95]; the epigraph; numbered questions (H6); attribution runs that print the null (group) [S034 pp. 17–19; S074 pp. 11–12].
+3. **A method that extends what can be solved at all**: to "solve problems which could not be solved before" [Th abstract]; a 5.7% mean speed-up not claimed as consistent (a one-sided Wilcoxon signed-rank test showed five instances, factors 90 to 357, carried it), yet OBBT's small slowdowns were "an acceptable price to pay" for newly solved instances (of 11 INT timeouts: plain 1, +OBBT 6, +OBBT+LVB 10) [Th pp. 145–147; S032 pp. 157–159]; headlines count instances solved [SU23; LCCP26].
+4. **Exact where the answer is a proof or must be exactly feasible; floating point otherwise** (overturns the common picture): "for the majority of applications this is perfectly satisfactory" [STSM14 §1], likewise in a 2012 co-authored text [S023 p. 22]; exactness for computer-assisted mathematics and verification [Chv22 §1]; against "a skeptical attitude that borders on paranoia" [VIPR §1].
+5. **Printed with its limits and their size**: 17 of 107 certificate runs hit the 10 GB cap [VIPR; S019 p. 10]; "We also observed, however, that the performance gap to floating-point solvers is still large" [SU23]; for a mixed-precision method, the floating-point solver's assumed accuracy and its failures counted per instance (his line with Steffy) [S029 pp. 8–9, 23; S013 TR pp. 9–10].
+6. **An instrument that is unambiguous, heterogeneous, tilted to hard cases, corrected in public**: "Instances exhibiting such ambiguity are not suitable for benchmarking" [M17 p. 465; S002 p. 23]; benchmark v2 [MIPLIB-CL]; "users of solver software should not rely on simplistic comparisons" (group) [Dag18].
+7. **Shipped in the default distribution** (already known): "an out-of-the-box technique" [Th p. 173]; [S10; S018 p. 18].
+8. **Application structure becomes a generic solver component** [Th p. 2; SAP19; S045 p. 14].
+
+([full evidence](references/research/09-evidence-ledger.md#taste-marks))
 
 ### Warning signs of bad research
 
 1. "Verified" by the code that produced the answer, or an unchecked stage (presolve) left unnamed [VIPR §1; Method 4].
-2. A mean carried by a handful of instances; timeouts left in an overhead comparison ("that just dilutes the results", automatic captions [MIP21 00:11]).
+2. A mean carried by a handful of instances; timeouts left in an overhead comparison ("that just dilutes the results", automatic captions [MIP21 00:11]); the point in print (co-authored) [S006 pp. 19–20].
 3. One factor without its baseline; comparing unlike things ("not fully fair" [Sim21 02:10]).
 4. Benchmark averages used to pick a solver: "Average performance on this set is not a suitable criterion to decide which MIP solver to use in a particular application scenario." [M17 p. 445]
 5. Instances whose optimal value depends on tolerances, kept in a benchmark or in gap statistics.
 6. An adjective where a count exists (H2).
 7. A rational re-implementation of a part that only produces candidates (Method 5).
+8. A bound or reduction called exact or valid without the sense in which it holds ("since precisely speaking a different problem is solved", co-authored) [S017 TR pp. 4, 12; S001 TR pp. 9–10]; check in the original model (Workflow C step 6).
+
+([full evidence](references/research/09-evidence-ledger.md#taste-warnings))
 
 ### Taste quick-check
 
@@ -167,161 +174,200 @@ Form and order: the Answer Standard above. The text below lists what the reply m
 - [ ] Is the answer a proof or an exactly feasible plan? If not, is floating point plus a check enough?
 - [ ] Like-for-like baseline, with both factors reported?
 - [ ] Will it ship in the default distribution with tests?
-- [ ] Is the remaining gap stated as a number, exclusions named?
+- [ ] Is the remaining gap stated as a number, exclusions named, and for a mixed-precision method the floating-point contract written down and its violations counted (Taste 5)?
 - [ ] Is every benchmark instance unambiguous?
 
 ## Core Research Methods
 
-Six methods passed the four Phase 2 checks (recurrence, say–do, executable, exclusive). Methods 1–3 are new against the prior picture; 4–6 deepen it (unconfirmed: the prior snapshot postdates notes 01–06 in git).
+Seven methods pass the four Phase 2 checks (recurrence, say–do, executable, exclusive). Methods 1–3 and 7 are new against the prior picture; 4–6 deepen it. On the 92 full texts Methods 1–6 held, with the corrections listed under Honest Boundary, and Method 7 was promoted [08 §2–§4]. ⚠ marks a condition on where a method holds; card counts per method are in the ledger.
 
 ### Method 1: Turn the belief into a measurement
 
 **One line**: when the field holds a belief about solver behaviour without data, define a check a computer can run per decision, run the production solver as a grey box, and count.
 
-**Evidence**:
-- Stated: the 2014 visit report defines a "reliability of integer assignments" that can be analysed computationally [STSM14 §2, §4]; the COW 2025 abstract asks whether each solver decision could be turned into a certificate valid in exact arithmetic (paraphrase) [COW25].
-- Practice: every critical branch-and-bound decision of SCIP checked a posteriori in exact arithmetic, to "quantify the widely accepted belief" [NC25, first author Hoen]; group: an algorithm-independent progress measure because tolerance-based stopping made propagation codes incomparable [CP21].
-- Say–do consistency: ✅ stated (2014, 2025) and practised (2025). The 2014 plan of a joint paper by autumn 2015 did not happen; the question returned ten years later with another student [06 §6].
+**Evidence** (full evidence: [ledger](references/research/09-evidence-ledger.md#method-1)):
+- Stated: the 2014 visit report defines a "reliability of integer assignments" that can be analysed computationally [STSM14 §2, §4]; on the belief that floating-point LP solvers return optimal bases, "we have to relativize this finding for more than 14% of the instances" (thesis) [S032 p. 65].
+- Practice: every critical branch-and-bound decision of SCIP checked a posteriori in exact arithmetic, to "quantify the widely accepted belief" (group) [NC25; S072 pp. 2, 4–12, 14]; in 2012, a set where the belief should hold and one where it fails [S020 TR pp. 5, 9]; per-solution checks of the belief that scaling removes numerical error [S037 pp. 6, 9–10]; a progress measure (group) [CP21; D003 pp. 5, 11–12].
+- Say–do: ✅ stated (2014 report, thesis) and practised, 2012–2025, 10 studies; counter-cases without counts [S066 pp. 3, 12; S007 pp. 5, 26].
 
 **Steps**:
 1. Write the belief as one sentence (for example: floating-point MIP solvers are numerically robust).
-2. Define a per-decision check. 2014: fix the rounded integers of a floating-point solution, solve the rest exactly, sort into three cases (same objective, different objective, infeasible). 2025: verify each critical branch-and-bound decision.
-3. Instrument the solver, do not rewrite it; spend exact arithmetic only where a decision is close.
-4. Run a set where the belief should hold and one built to break it (FPEasy, 57; NumDiff, 50), each also permuted.
-5. Report per class: errors on 2 of 57 FPEasy instances (dual side only); NumDiff 25 (original) and 27 (permuted) of 50 fully correct [NC25 Table 1].
-6. Name the mechanism of the errors (exactly infeasible subproblems; slightly violated solutions trigger pruning) and test the obvious remedy: tighter tolerances help only partly.
+2. Define a per-decision check. 2014: fix the rounded integers of a floating-point solution, solve the rest exactly, sort into three cases (same objective, different objective, infeasible). 2025: verify each critical branch-and-bound decision, cheapest check first (DM3) [S072 pp. 4–8].
+3. Instrument the solver, do not rewrite it (shadow mode [S012 pp. 9, 18]); spend exact arithmetic only where a decision is close.
+4. Run a set where the belief should hold and one built to break it (FPEasy, 57; NumDiff, 50), each also permuted (EP8) [S072 p. 8].
+5. Report per class: errors on 2 of 57 FPEasy instances (dual side only); NumDiff 25 (original) and 27 (permuted) of 50 fully correct [NC25; S072 p. 9].
+6. Name the mechanism of the errors (exactly infeasible subproblems; slightly violated solutions trigger pruning) and test the obvious remedy: tighter tolerances help only partly [S072 p. 12].
 7. Say which way it cuts for your agenda: here for robustness, against his earlier "compromised" framing.
+8. Turn it on your own claim (group practice): name the mechanism behind a gain or loss, run the control that removes or forces it, print the null and restate the claim (EP5) [S034 pp. 17–19; S074 pp. 11–12; S022 p. 15].
 
 **Applies to stage**: choosing the problem; experiment design; judging.
 
 **Different from standard practice**: the field asserts or counter-asserts; he counts, and publishes a count that weakens his own motivating sentence.
 
-**Limitations**: needs source access and decision logging; not possible on a closed solver.
+**Limitations**: needs source access and decision logging; not possible on a closed solver. The 2014 plan of a joint paper by autumn 2015 did not happen; the question returned ten years later with another student [06 §6].
 
 ### Method 2: Like-for-like baseline, both factors reported
 
 **One line**: compare new code that lacks features of the incumbent with an incumbent stripped of exactly those features, and with the default incumbent; state the remaining mismatch.
 
-**Evidence**:
-- Stated: the 2013 exact-MIP slowdown of two to four was measured against a plain branch and bound [Sim21 01:11]; pseudo-Boolean against floating-point MIP solvers is "not fully fair" [Sim21 02:10].
-- Practice: floating-point SCIP "in a reduced setting with all features disabled that are not yet present in the current exact SCIP version" [SU23 p. 809]; again for safe Gomory cuts [GMI24 §4] and in SCIP 10 [S10 p. 11].
-- Say–do consistency: ✅ stated and practised in three studies (2021/2023, 2023/2024, 2025).
+**Evidence** (full evidence: [ledger](references/research/09-evidence-ledger.md#method-2)):
+- Stated: the 2013 exact-MIP slowdown of two to four was measured against a plain branch and bound [Sim21 01:11]; pseudo-Boolean against floating-point MIP solvers is "not fully fair" [Sim21 02:10]. Co-authored: "in terms of solvability, the gap between the exact and inexact seems to be mostly due to the currently still missing solving methods" [SU23 p. 809; S022 p. 17].
+- Practice: floating-point SCIP "in a reduced setting with all features disabled that are not yet present in the current exact SCIP version" [SU23 p. 809; S022 pp. 8–11, 17–18]; the same pairing for safe cuts and certified propagation [S036 pp. 20–21; S074 pp. 8–9] and in SCIP 10 (group) [S021 pp. 4, 11–12]; earliest in 2012 [S017 TR pp. 15–17] and 2013 [S039 pp. 7–8].
+- Say–do: ✅ stated + practised, 2012–2026, 21 studies; counter-case: arms on different LP-solver versions [S042 p. 10].
+- Variants:
+  - ⚠ Release reports compare default against default [S003 pp. 7–8]; the reduced baseline is the research-paper form, and step 10 first appears in SCIP 10 [S021 p. 4].
+  - ⚠ Where the rival is another code, nothing is stripped: run it in its standard settings or rerun the published predecessor [S058 pp. 14–15; S092 pp. 8–10], or build its best case by hand (co-signed; EP9) [S078 arXiv pp. 13, 17–20].
 
 **Steps**:
-1. List what the incumbent has and the new code lacks (cuts, propagation, conflict analysis, symmetry).
-2. Build the reduced incumbent; keep default as a second baseline.
-3. Report both factors with their subset: 3.9 (reduced) and 8.1 (default) on the 42 MIPLIB 2017 instances all three solve [SU23 pp. 809–810]; SCIP 10: 3–4 and about 10 [S10 p. 11].
-4. Attribute with the pair: "in terms of solvability, the gap between the exact and inexact seems to be mostly due to the currently still missing solving methods" [SU23 p. 810].
-5. Keep third-party parts identical (same QSopt_ex version). If you cannot, say so and argue the effect (IPCO: CPLEX 12.3.0 against 12.8.0 [ZR21-04 p. 7]); then remove the mismatch in the next version (journal: CPLEX 12.3.0 "for all experiments" [SU23 p. 801]).
-6. For a component question, compare inside the reduced baseline (no cuts against safe Gomory cuts) [GMI24 §4].
-7. Reuse the predecessor's sets (FPEasy, NumDiff) and add a harder public one (MIPLIB 2017).
-8. Drop instances that differ mathematically between arms (tolerance-feasible, exactly infeasible).
+1. List what the incumbent has and the new code lacks (cuts, propagation, conflict analysis, symmetry, presolvers [S068 p. 6]).
+2. Build the reduced incumbent; keep default as a second baseline (EP1).
+3. Report both factors with their subset: 3.9 (reduced) and 8.1 (default) on the 42 MIPLIB 2017 instances all three solve [SU23 pp. 809–810; S022 pp. 17–18]; SCIP 10: 3–4 and about 10 [S10 p. 11; S021 p. 11].
+4. Attribute with the pair (the co-authored sentence under Stated) [SU23 p. 809].
+5. Keep third-party parts identical (same QSopt_ex version). If you cannot, say so and argue the effect (IPCO: CPLEX 12.3.0 against 12.8.0 [ZR21-04 p. 7; D002 p. 9]); then remove the mismatch in the next version (journal: CPLEX 12.3.0 "for all experiments" [SU23 p. 801; S022 p. 9]).
+6. For a component question, compare inside the reduced baseline (no cuts against safe Gomory cuts) [GMI24 §4; S036 pp. 20–21].
+7. Reuse the predecessor's sets (FPEasy, NumDiff) and add a harder public one (MIPLIB 2017); re-measure a predecessor's factor on the shared set [S022 pp. 17–18].
+8. Drop instances that differ mathematically between arms (tolerance-feasible, exactly infeasible) [S022 p. 17].
 9. Print any gain that comes from a defect of the old baseline [SU23 p. 803 fn. 1].
-10. For a release, compare with the previous major and its latest bugfix release (10.0 against 9.0 and 9.2.4; group) [S10].
+10. For a release, compare with the previous major and its latest bugfix release (10.0 against 9.0 and 9.2.4; group) [S10; S021 p. 4].
 
 **Applies to stage**: experiment design; reporting.
 
 **Different from standard practice**: the baseline is constructed, not given, and the unflattering default factor is printed too.
 
-**Limitations**: needs source access; critics relay the default factor without qualifiers; the 2023 paragraph has a slip (text: 61 instances fewer; Table 11: 133 against 62); his 2021 forecast of 2–4 held only like-for-like.
+**Limitations**: needs source access; critics relay the default factor without qualifiers; his 2021 forecast of 2–4 held only like-for-like.
 
 ### Method 3: The conceded-gap ledger
 
 **One line**: each paper prints its own gaps with numbers; each gap becomes a later project, one component at a time, until the line ships by default; where a rival already has the missing mechanism, import it.
 
-**Evidence**:
-- Stated: in 2021 he saw no fundamental obstacle; the supplementary techniques had to be added one by one (paraphrase) [MIP21]; "the performance gap to floating-point solvers is still large" [SU23 p. 810].
-- Practice: thesis limits → precision boosting [PB25]; VIPR future work → decision analysis [NC25] and delta debugging [MIPDD]; status update → safe cuts [GMI24] → certified propagation [CPDP24] → SCIP 10.0 [S10]; branch and price [LCCP24] → numerically safe version [LCCP26].
-- Say–do consistency: ✅ stated and practised, 2015–2025.
+**Evidence** (full evidence: [ledger](references/research/09-evidence-ledger.md#method-3)):
+- Stated: in 2021 he saw no fundamental obstacle; the supplementary techniques had to be added one by one (paraphrase, automatic captions) [MIP21]. Co-authored: "the performance gap to floating-point solvers is still large" [SU23 p. 810], the like-for-like factors one section earlier [S022 pp. 17–18].
+- Practice: every thesis chapter prints its gap and next step (own text) [S032 pp. 67, 100–101, 186]; as chains: exact LP [S020 TR p. 11 → S013 TR p. 23 → S029 p. 26 → S050 pp. 2, 6]; exact MIP [S022 p. 18 → S036 pp. 2, 23–27 → S074 pp. 2, 12 → S021 pp. 7, 9]; certificates [S019 pp. 10–11 → S072 pp. 14–15]; branch and price [S092 p. 10 → S085 p. 3].
+- Say–do: ✅ stated + practised, 2012–2025; step 1 alone is house style, the chains are the evidence.
 
 **Steps**:
-1. Print the gap where it arises, with a count and a suspected cause: refinement failed on 7 of 1,202 LPs [Th pp. 55, 89]; 17 of 107 certificate runs hit 10 GB [VIPR]; safe cuts missing [SU23].
+1. Print the gap where it arises, with a count and a suspected cause: refinement failed on 7 of 1,202 LPs [Th pp. 55, 89; S032 pp. 100–101]; 17 of 107 certificate runs hit 10 GB [VIPR; S019 p. 10]; safe cuts missing [SU23; S022 p. 18].
 2. Show with Method 2 that it is missing methods, not a roadblock.
 3. One project per gap: PhD positions on "high-precision mixed-integer programming over the rational numbers" (2016); open agendas for postdocs [04 G2].
-4. If the gap is a rival's strength, import the mechanism and work with that community: QSopt_ex-style precision boosting in SoPlex [PB25]; VeriPB proof logging for 0-1 presolve with Nordström [CPB24]; delta debugging from SAT/SMT [MIPDD]. Publish where they read (ISSAC, CP, Constraints).
-5. Read a lost experiment as the next idea: SoPlex as exact LP solver lost as many hard instances as it won, so he expected a combination with QSopt_ex to pay off (paraphrase, automatic captions) [MIP21].
-6. Stop only when it ships: SCIP 10.0.0 (24 Nov 2025); he wrote the integration commits (411 SCIP commits in 2025) and an exact-solving Homebrew test [06 §7].
-7. Keep printing what is open (presolve certification for general MIP; symmetry in exact mode).
+4. If the gap is a rival's strength, import the mechanism and work with that community: QSopt_ex-style precision boosting in SoPlex [PB25; S050 pp. 2, 6]; VeriPB proof logging for 0-1 presolve with Nordström [CPB24; S038 pp. 1–2]; delta debugging from SAT/SMT [MIPDD; S065 pp. 2, 13]. Publish where they read (ISSAC, CP, Constraints).
+5. Read a lost experiment as the next idea: with SoPlex as exact LP solver, 3 more instances solved on fpeasy, 6 fewer on numdiff, 18 more on miplib, every loss a chip-verification instance where refinement breaks down; boosting became the next step [S022 pp. 12, 18].
+6. Stop only when it ships: SCIP 10.0.0 (24 Nov 2025), exact MIP behind one parameter (`exact/enabled` set to true before the instance is read; certificates with `certificate/filename`) [S021 p. 7]; he wrote the integration commits (411 SCIP commits in 2025) and an exact-solving Homebrew test [06 §7].
+7. Keep printing what is open: SCIP 10 certifies presolve only for binary programs with integer data, does not make strong branching safe and has Gomory mixed-integer cuts as its only exact separator [S021 pp. 7, 9, 11].
 
 **Applies to stage**: choosing the problem; agenda; judging.
 
 **Different from standard practice**: problems come from the solver's printed limits and missing tools, not a literature gap; the end state is a release.
 
-**Limitations**: a ten-year horizon with a PhD pipeline; alone, keep one printed limit per paper and close one in the next. Counter-evidence: formal certificate checking (proposed 2016) was done by others; the thesis's parallel rational factorization and the MIPLIB hindsight study were not found; the 2017 forecast of shrinking certificate overhead failed by 2021.
+**Limitations**: a ten-year horizon with a PhD pipeline; alone, keep one printed limit per paper and close one in the next. Counter-evidence: formal certificate checking (proposed 2016) was done by others; the parallel rational factorization and the MIPLIB hindsight study were not found [S029 p. 25; S002 p. 43]; the 2017 hope of certificate times close to plain SCIP [S019 p. 10] was not met in print by 2023, whose overheads the journal reads as confirming 2017 [S022 p. 16]; some next steps came without a printed gap [S092 p. 10].
 
 ### Method 4: Certificates someone else can check, read as an audit of the reasoning
 
 **One line**: attach a certificate simple enough for an independent checker, use it to find wrong reasoning behind right answers, and test the checker itself.
 
-**Evidence**:
-- Stated: [VIPR §1] and [Sim21 01:53] (see Research Taste).
-- Practice: VIPR [VIPR]; a Coq check that the certificate encodes the intended model [Chv22]; independent solution checking [M17 §4.7]; in 2021 a certificate showed the 2013 framework declared a NumDiff instance infeasible at the root for an incorrect reason, although it is infeasible [ZR21-04 §4].
-- Say–do consistency: ⚠️ partial. A simple format did not make the reference checker `viprchk` sound: bugs 2016–2026 (a solution tested against one constraint only, fixed Dec 2024; rounding over continuous variables accepted, reported Oct 2026); he fixed two, Hoen one, outsiders reported the rest [VIPR-gh]. Forged certificates were accepted in 2023 [Wood23], with no printed reply. SCIP 10 points to the CakeML-verified checker [S10].
+**Evidence** (full evidence: [ledger](references/research/09-evidence-ledger.md#method-4)):
+- Stated: checking "should not require a sophisticated code where that could contain bugs itself" [Sim21 01:53]. Co-authored: the reference checker is "merely a reference and others should be able to write their own verifiers without much difficulty" [VIPR; S019 p. 8].
+- Practice: VIPR's few inference rules [S019 pp. 3–5, 8–9]; a Coq check that the certificate encodes the intended model (group) [Chv22; S042 pp. 2–3]; in 2021 a certificate showed the 2013 framework declared a NumDiff instance infeasible at the root for an incorrect reason, although it is infeasible [ZR21-04 §4; S022 pp. 15–16]; VeriPB for presolve (group) [S038 pp. 2, 6–11].
+- Say–do: ⚠ partial: simplicity stands in for testing the checker [S019 pp. 4, 8], which had holes (Limitations).
+- Variants:
+  - ⚠ Floating-point releases screen answers but do not certify them [S003 pp. 7, 16]: call such results checked, not verified.
+  - ⚠ A library checker accepts within tolerances (MIPLIB 2017's rule, Method 6 step 3) [S002 pp. 22–23]; an exact claim needs zero violation, checked exactly (step 4).
 
 **Steps**:
-1. Write the certificate as statements each checkable by a few inference rules, independent of how the solver found them.
-2. Ship a reference checker that needs no MIP knowledge; publish certificates and per-instance tables.
-3. Check the input too: does the certificate encode the intended model?
-4. Cross-check without the producing solver: each solution against the original file in exact arithmetic; a verified solution beating another solver's dual bound flags the instance.
-5. Read the certificate for the reasoning, not only the verdict.
-6. Print coverage and cost: presolve, dual reductions, symmetry outside; +101% time on FPEasy, +51% on NumDiff (2021) [ZR21-04].
+1. Write the certificate as statements each checkable by a few inference rules, independent of how the solver found them (PD9), derived rows by one safe-rounding lemma (PD6). For presolve (0-1 programs, VeriPB; group): classify each reduction as primal, weak dual or strong dual; certify primal ones by implication (cutting planes or reverse unit propagation), dual ones by redundance-based strengthening with a witness substitution; split each aggregation scale into integers s_E/s_D [S038 pp. 4, 6–10].
+2. Ship a reference checker that needs no MIP knowledge; publish certificates and per-instance tables [S019 p. 9].
+3. Check the input too: does the certificate encode the intended model? (DM7)
+4. Cross-check without the producing solver: each solution against the original file in exact arithmetic, e.g. integers fixed and the rest solved by a second, exact LP solver (co-authored) [S037 p. 10]; solver-independent checks against a reference solution (group) [S065 pp. 2, 5–6]; a verified solution beating another solver's dual bound flags the instance [S002 p. 23].
+5. Read the certificate for the reasoning, not only the verdict; the decision analysis records errors justified in hindsight for that reason [S072 p. 5].
+6. Print coverage and cost with the version (EP11): presolve, dual reductions, symmetry outside; solving time +101% on FPEasy, +51% on NumDiff (IPCO 2021) [ZR21-04; D002 pp. 13–14]; in the journal +56.3% fpeasy, +22% numdiff, +46% miplib, and 92.5%, 32.8%, 65.8% with checking [S022 p. 16]; presolve proof logging under 6%, its checking 14.7 to 22.4 times the presolve time, at least 193 times on a quarter of the instances (group) [S038 pp. 12–13].
 7. Test the checker as code (H1): differential tests against a second, ideally formally verified, checker before writing "verified".
+8. Write what the solver knows cheaply during the solve; trim or complete the certificate offline, so that the checker stays unchanged (group; DM6) [S036 p. 18].
 
 **Applies to stage**: experiment design; judging; after publication.
 
 **Different from standard practice**: neither trusting the solver nor re-solving with another; a third, simpler program decides.
 
-**Limitations**: only as strong as checker and specification; presolve is outside, and two exact-mode wrong answers in Oct 2026 came from PaPILO presolve bugs [SCIP-iss]. Whether any published certificate relied on a hole was never examined.
+**Limitations**: only as strong as checker and specification. A simple format did not make the reference checker `viprchk` sound: bugs 2016–2026, two fixed by him, one by Hoen, the rest reported by outsiders [VIPR-gh]; forged certificates accepted in 2023 [Wood23], with no printed reply; SCIP 10 points to the CakeML-verified checker [S10]. The VeriPB objective-update rule added for presolve comes without a formal proof in the paper (group) [S038 p. 5]. Presolve is outside, and two exact-mode wrong answers in Oct 2026 came from PaPILO presolve bugs [SCIP-iss]. Whether any published certificate relied on a hole was never examined.
 
 ### Method 5: Floating point produces, exact arithmetic decides
 
 **One line**: do the expensive work in floating point; use exact arithmetic only for corrections, critical decisions and the final check.
 
-**Evidence**:
-- Stated: "Its computational efficiency rests on its mixed-precision nature" [Th p. 3]; "exact computation is used for critical decisions or to validate final solutions" [LPO20 §1.3, co-authored]; rational heuristics were skipped not only because "we were lazy": an in-solver heuristic should spend small, bounded effort, so a rational sub-MIP is "not called for" [Sim21 01:38–01:41].
-- Practice: iterative refinement for LP [ISSAC12; IR16]; "Primal heuristics are exclusively executed on the floating-point approximation of the rational input data" [SU23 p. 794]; safe Gomory cuts [GMI24]; precision boosting [PB25]; bound-shift switched off below a 20% success rate [ZR21-04 p. 8].
-- Say–do consistency: ✅ stated about eight times (2014–2025), practised in six projects.
+**Evidence** (full evidence: [ledger](references/research/09-evidence-ledger.md#method-5)):
+- Stated: "Its computational efficiency rests on its mixed-precision nature" [Th p. 3; S032 p. 15]; "exact computation is used for critical decisions or to validate final solutions" [LPO20 §1.3, co-authored; S029 p. 7]; rational heuristics were skipped not only because "we were lazy": an in-solver heuristic should spend small, bounded effort, so a rational sub-MIP is "not called for" [Sim21 01:38–01:41].
+- Practice: LP refinement [S020 TR pp. 3, 5, 7; S032 pp. 39–40, 85]; co-authored: "Primal heuristics are exclusively executed on the floating-point approximation of the rational input data" [SU23 p. 794; S022 pp. 2, 5–8]; safe Gomory cuts and safe propagation (group) [S036 pp. 5–8, 18–19; S074 pp. 2, 6–7].
+- Say–do: ✅ stated about eight times (2014–2025), practised in 21 studies.
+- Variants:
+  - ⚠ Where no exact arithmetic runs: tighten only the tolerance that decides validity [S011 p. 14], use double-double where round-off threatens a bound [S003 pp. 11–13] and count numerical fallbacks [S004 p. 38] (DM13).
+  - ⚠ The split is his exact-LP and exact-MIP practice; his MINLP-side work leaves OBBT and conic bounds in floating point [S032 pp. 146, 149; S083 p. 15].
 
 **Steps**:
-1. Split the algorithm into what produces information (basis, candidate, cut, reduction) and what decides correctness (bound, feasibility, final answer).
+1. Split the algorithm into what produces information (basis, candidate, cut, reduction) and what decides correctness (bound, feasibility, final answer); what changes the model (presolve) runs in rationals [S022 pp. 5, 13].
 2. Leave the producing part in floating point; no rational twin.
-3. Repair exactly: fix rounded integers and solve the rest exactly; in LP keep the basis and compute residuals and corrections in rationals.
-4. Prefer safe directed rounding for bounds, exact LP as fallback; give each cheap safe method a switch-off rule.
-5. Raise precision only on failure (boosting inside refinement).
-6. "check the optimality of the basis early" instead of relying on a priori bounds [LPO20].
+3. Repair exactly: fix rounded integers and solve the rest exactly, behind filters and a failure limit (DM1) [S022 pp. 5–6, 14]; in LP keep the basis and compute residuals and corrections in rationals.
+4. Prefer safe directed rounding for bounds (PD6), exact LP as fallback at scheduled points (DM2); give each cheap safe method a switch-off rule (bound-shift off below 20% success [ZR21-04 p. 8; S022 p. 12]); decide most rows by running error analysis (PD7) [S022 pp. 7–8].
+5. Raise precision only on failure: proposed inside refinement [S029 p. 26], built as an outer loop [S050 pp. 5–8]; triggers in Method 7 step 5.
+6. "check the optimality of the basis early" instead of relying on a priori bounds [LPO20; S029 p. 12], already in the thesis [S032 p. 85]. Verify the final basis by an exact factorization, ahead of rational reconstruction on average since the thesis [S032 p. 100]: in 2020 fastest on 702 of 1,202 LPs against 569 (5% rule), 1,191 against 1,189 solved, one factorization on 1,123 [S029 pp. 23–24]; confirmed 2025 [S050 p. 10]; reconstruction still wins on some LPs [S029 p. 25], and the rational LU can become the bottleneck [S050 p. 14] (PD4).
 7. Write generic code so the exact variant is cheap (H10).
 
 **Applies to stage**: algorithm design; deciding what must be exact.
 
 **Different from standard practice**: neither all floating point nor all rational; the producing/deciding boundary is the design decision.
 
-**Limitations**: refinement has no reliable recovery when the floating-point LP fails [PB25]; outside benchmarks found exact SoPlex buggy or slower than pure boosting on one LP family; his group's 2025 paper replaces 2016's rational reconstruction by basis factorization on average [PB25]. Exact repair (step 3) is shown for LP and MILP only (fix a basis or the integers, correct the rest exactly); for cone constraints such as SDP, repair at the cone boundary is harder (inferred) and untested in his work: any transfer is an inference.
+**Limitations**: LP refinement had no reliable recovery from a failing floating-point LP until boosting (2025) [S050 p. 2]; outside benchmarks found exact SoPlex buggy or slower than pure boosting on one LP family. Exact repair (step 3) is shown for LP and MILP only (fix a basis or the integers, correct the rest exactly); for cone constraints such as SDP, repair at the cone boundary is harder (inferred) and untested in his work: any transfer is an inference.
 
 ### Method 6: A benchmark is a designed instrument
 
 **One line**: build test sets and competitions by explicit rules, write down the arbitrary choices, and correct them in public.
 
-**Evidence**:
-- Stated: his call of 11 Nov 2016, "New challenges are needed!" [Call16]; co-authored: "It seems quite natural to formulate the selection task as an optimization problem"; "The concrete choice of the square root was empirically motivated" [M17].
-- Practice: MIPLIB 2017 (first of 16 authors; committee of 21) [M17]; benchmark v2 and changelog [MIPLIB-CL]; MIPcc23 rules in his repository [CC23; CC23-gh].
-- Say–do consistency: ✅ stated and practised.
+**Evidence** (full evidence: [ledger](references/research/09-evidence-ledger.md#method-6)):
+- Stated: his call of 11 Nov 2016, "New challenges are needed!" [Call16]; co-authored: "The concrete choice of the square root was empirically motivated" [M17; S002 p. 36].
+- Practice: MIPLIB 2017 (first of 16 authors; committee of 21) [M17; S002 pp. 3, 6, 22–23, 33, 40–44]; MIPLIB 2010 (co-authored, committee) [S001 TR pp. 6–8]; benchmark v2 and changelog [MIPLIB-CL]; MIPcc23 rules in his repository [CC23; CC23-gh; S055 pp. 2–3, 6–7].
+- Say–do: ✅ stated + practised, 2011–2024; counter-case: violating runs scored as successes in a student-project paper [S069 p. 23].
+- Variants:
+  - ⚠ Release reports drop numerically inconsistent runs from their version comparisons [S021 p. 5]; in your own papers name such instances (step 9).
 
 **Steps**:
-1. State purpose and non-purpose first (not for choosing a solver for an application).
-2. Collect broadly, with a redistribution licence (CC BY 4.0), in a public repository.
-3. Check every reported solution against the original file in exact arithmetic; flag cross-solver inconsistencies; remove ambiguous instances (328 in the text, 334 in Table 7, unexplained) [M17 p. 465].
+1. State purpose and non-purpose first (not for choosing a solver for an application) [S002 p. 3].
+2. Collect broadly, with a redistribution licence (MIPLIB 2017: CC BY-SA 4.0 by default [S002 p. 6]), in a public repository.
+3. Check every reported solution against the original file in arbitrary precision (GMP): row i holds if a_i x* − u_i ≤ ε·max{(a_i x*)^+, (a_i x*)^−, |u_i|, 1} with ε = 10^-5, integrality within an absolute 10^-4; recompute objective values exactly by fixing the integers [S002 pp. 22–23, 42]; flag cross-solver inconsistencies; remove ambiguous instances [M17 p. 465].
 4. Write admission as numbered criteria, counting exclusions per criterion: solved by at least one solver (no instance unsolved for 15 years, as in MIPLIB 2003), at least 10 s for half the solvers, coefficient-range limits, no indicator constraints, at most 10^6 nonzeros. Exclude what is ambiguous; keep what is hard.
-5. Select by an optimization model over feature clusterings, tilted to hard instances; admit the empirical parts.
-6. Print the manual decisions and the status of the result.
-7. When a released instance proves wrong, admit it in the paper, naming the instances; compute a minimal exchange with the selection model and present it as a use of that model [M17 pp. 485–486]; publish a new version (v2, June 2019: two flagged, five exchanged), tag it, keep a changelog.
-8. For a competition: verify bounds against exact values, penalise invalid answers (twice the worst rank in MIPcc23), keep hidden series, close loopholes [CC23 §3].
-9. In your own papers, keep instances where floating-point and exact results disagree out of gap statistics.
+5. Select by an optimization model over feature clusterings, tilted to hard instances; admit the empirical parts; test the design claim per solver (one-sided KS tests) [S002 pp. 40–41].
+6. Print the manual decisions and the status of the result, with a sensitivity table [S002 pp. 33, 43].
+7. When a released instance proves wrong, admit it in the paper, naming the instances; compute a minimal exchange with the selection model and present it as a use of that model [M17 pp. 485–486]; publish a new version (v2, June 2019: two flagged, five exchanged per the changelog [MIPLIB-CL]), tag it, keep a changelog.
+8. For a competition: penalise invalid answers (twice the worst rank in MIPcc23 [S055 p. 7]), keep hidden series, close loopholes [CC23 §3].
+9. In your own papers, keep instances where floating-point and exact results disagree out of gap statistics [S022 p. 17; S036 p. 21].
 
 **Applies to stage**: experiment design; community infrastructure.
 
 **Different from standard practice**: selection is a documented optimization with counted exclusions; the benchmark is versioned like software.
 
-**Limitations**: about 40 CPU years, eight solvers; the campaign ran two 4-thread jobs per node, against his one-job rule; selection depends on current solvers [M17 p. 478]; tuning on MIPLIB can overstate progress, and ML authors find it too heterogeneous.
+**Limitations**: about 40 CPU years, eight solvers; the campaign ran two 4-thread jobs per node, against his one-job rule [S002 p. 20]; selection depends on current solvers [M17 p. 478]; tuning on MIPLIB can overstate progress, and ML authors find it too heterogeneous.
+
+### Method 7: Write the floating-point solver's contract, prove against it, and audit it
+
+**One line**: treat the production floating-point solver as a black-box oracle with a written accuracy contract and an explicit failure outcome; prove the exact layer against the contract; make contract violations detectable, escalate on them and count them.
+
+**Evidence** (full evidence: [ledger](references/research/09-evidence-ledger.md#method-7)):
+- Stated: "Although there is no guarantee that a floating-point solver will produce correct solutions that are accurate to within a fixed tolerance level, this is often the case in practice." (his line, co-authored with Steffy and Wolter, 2012) [S020 TR p. 7].
+- Practice: the oracle with constants and a failure outcome, failure detectable from residuals (his line, co-authored with Steffy) [LPO20; S029 pp. 8–9]; the assumption conceded and protected by capped scaling [S013 TR pp. 9–10]; convergence proved in the thesis [S032 pp. 41–45]; boosting on named failures [S050 pp. 5–6, 8].
+- Say–do: ✅ stated + practised, 2012–2025, four studies; own voice in the thesis, his line with Steffy in the oracle paper [08 §4.1].
+- Variants:
+  - ⚠ Distinct from Method 5, which places exact arithmetic: this one states what may be assumed of the floating-point part and when that failed.
+
+**Steps**:
+1. Write the contract as constants on a restricted input class: on inputs from F(p) = {n/2^p : n ∈ Z, |n| ≤ 2^(2p)} (doubles lie in F(1074)), residuals at most η < 1 and complementarity at most σ, or failure [S029 pp. 8–9; S058 p. 7].
+2. Close the loopholes: inputs from a fixed number set, so scaling cannot buy accuracy in one call [S029 p. 9]; scale factors capped (inverse violation, growth limit α) and rounded to powers of two (PD3) [S013 TR pp. 8, 10–11; S029 p. 10].
+3. Prove against the contract: violations shrink as ε^k with ε = max{η, 1/α} for a growth limit α > 2 [S029 p. 9]; oracle-polynomial running time, output-sensitive bounds (PD1, PD4) [S032 pp. 41–45; S029 pp. 10–17].
+4. Say in the next paragraph where real solvers break the contract (WM4) [S050 p. 8].
+5. Make violations detectable and decide what follows (DM4): test the oracle's infeasibility and unboundedness claims exactly and retry [S013 TR pp. 15–16]; on named triggers raise the precision: non-optimal status, residuals near or above one, stalling (violation down by less than 2^4 over two rounds; extracted as "24"), impossible infeasibility or unboundedness claims [S050 pp. 5–6].
+6. Count violations per instance, attribute each failure to a stage, check the theorem's prediction per instance [S029 pp. 23–24].
+7. Print what stays unproved or undetected (a proof sketch conditioned on a backward-stable LU update [S050 pp. 8–9]).
+
+**Applies to stage**: designing and analysing a mixed-precision algorithm; judging its failures; a closed floating-point solver can be the oracle (inferred: no source access needed).
+
+**Different from standard practice**: neither an arithmetic model with precision far beyond double (a 3 × 6 LP gets a classical tolerance near 10^-169,059 [S029 pp. 6–7]) nor a trusted solver; an oracle with a stated, audited contract.
+
+**Limitations**: LP and convex QP only; the read exact-MIP papers use safe bounding instead [S022 p. 4] (no MIP analogue in the read texts); a double-precision solver does not meet the contract for all inputs [S050 p. 8], so reliable recovery came only with boosting [S050 p. 2].
 
 ## Stage Workflows
 
@@ -331,9 +377,9 @@ Six methods passed the four Phase 2 checks (recurrence, say–do, executable, ex
 
 **Steps**:
 1. Proof, exactly feasible plan, or good solution? For a good solution, do not ask for exactness (Taste 4).
-2. Attack the component that decides correctness or speed (presolve first in exact SCIP; LP accuracy first for MINLP stability) (Method 5).
+2. Attack the component that decides correctness or speed (presolve first in exact SCIP; LP accuracy first for MINLP stability) (Method 5); for a mixed-precision algorithm, state the floating-point contract the design relies on (Method 7).
 3. Is it a printed gap, yours or a predecessor's? (Method 3)
-4. Is the missing piece software nobody has (checker, presolve library, delta debugger) or a setting benchmarks omit (instance series, MIPcc23)?
+4. Is the missing piece software nobody has (checker, presolve library, delta debugger [S019 pp. 4–5; S065 p. 2]) or a setting benchmarks omit (instance series [S055 p. 2], MIPcc23)?
 5. Does a rival community have the mechanism? Plan the import (Method 3).
 6. If it rests on a belief about solver behaviour, measure it first (Method 1).
 7. Give a why-now: which tool just became available.
@@ -347,15 +393,15 @@ Six methods passed the four Phase 2 checks (recurrence, say–do, executable, ex
 **Input**: an implemented method; candidate baselines; machines.
 
 **Steps**:
-1. Write the numbered questions (H6).
-2. Build the like-for-like baseline and keep default (Method 2).
-3. Sets: the predecessor's plus a harder public one; for a set you build, apply Method 6 steps 3–4; name each exclusion (H8).
+1. Write the numbered questions (H6), each with why the effect could go either way (WM2) [S022 p. 13].
+2. Build the like-for-like baseline and keep default (Method 2); one factor per table on top of the last (EP2) [S022 pp. 8–18].
+3. Sets: the predecessor's plus a harder public one; the affected subset fixed before the runs (EP4) [H001 p. 5]; for a set you build, apply Method 6 steps 3–4; name each exclusion (H8).
 4. Seeds or permutations where variability matters (H8).
-5. A metric per component, with the shift of each shifted geometric mean (H7).
+5. A metric per component, with the shift of each shifted geometric mean (H7), e.g. 1 s and 100 nodes (MIP), 0.1 s and 10 iterations (LP), 7200 s, three seeds for MIP (group, 2025) [S050 p. 9]; deterministic work limits for paired runs in one solver (EP15) [S012 p. 6].
 6. Exclusive machines, or do not call it a benchmark [M17 p. 480].
 7. Test the evaluation scripts against reference values (H5).
 
-**🔴 Checkpoint**: before any run: if the arms solve different mathematical problems on some instances, drop and name those instances (Method 2 step 8); if third-party parts differ, apply Method 2 step 5. Proceed only when both are in the protocol table.
+**🔴 Checkpoint**: before any run: if the arms solve different mathematical problems on some instances, drop and name those instances (Method 2 step 8); if third-party parts differ, apply Method 2 step 5. Proceed only when both are in the protocol table. For a mixed-precision algorithm, no convergence or exactness claim until the contract is written, each failure trigger tested and violations counted per instance and stage (Method 7 steps 1, 5–6).
 
 **Output**: a protocol table: questions, arms, sets, exclusions, seeds, metrics, hardware.
 
@@ -366,10 +412,10 @@ Six methods passed the four Phase 2 checks (recurrence, say–do, executable, ex
 **Steps**:
 1. Known feasible solution as oracle (H4a).
 2. Swap a component to localise (H4b).
-3. Shrink the instance and add it to the regression set (H4c).
+3. Shrink the instance and add it to the regression set (H4c); MIP-DD does all three [S065 pp. 4, 6, 8–9].
 4. For a default-on change: a performance run on the internal solvable set, tests per LP solver, an API version bump (H3).
 5. If it does not hold up, revert and say so in the commit message (H3).
-6. Explain tolerance effects to users as tolerance effects, not bugs [ML].
+6. Explain tolerance effects to users as tolerance effects, not bugs [ML]: check in the original model and give the violation a tolerance allows in the model's own units (co-authored, group) [S002 pp. 22–23; S037 pp. 6–7] ([ledger](references/research/09-evidence-ledger.md#heuristic-11)).
 
 **🔴 Checkpoint**: no default-on merge without the performance run; no result from an evaluation script without a consistency check.
 
@@ -381,8 +427,8 @@ Six methods passed the four Phase 2 checks (recurrence, say–do, executable, ex
 
 **Steps**:
 1. Check a surprising number, then explain it ("This is not an error in the table." [Sim21]).
-2. Is the mean carried by a few instances? Count newly solved and lost; test consistency per bracket (thesis: one-sided Wilcoxon signed-rank test on log ratios of shifted values, 5% level [Th pp. 11–12]; H8).
-3. Read losses as the next idea (Method 3) and certificates for wrong reasoning (Method 4).
+2. Is the mean carried by a few instances? Count newly solved and lost; test consistency per bracket (thesis: one-sided Wilcoxon signed-rank test on log ratios of shifted values, 5% level [Th pp. 11–12; S032 pp. 23–24]; H8).
+3. Read losses as the next idea (Method 3) and certificates for wrong reasoning (Method 4); where a component cannot help, a gain is variability (EP5) [S022 p. 15].
 4. Each headline with set, limit and denominator; the remaining gap as a number (H8).
 5. Before the final version, replace adjectives by counts (H2).
 
@@ -395,7 +441,7 @@ Six methods passed the four Phase 2 checks (recurrence, say–do, executable, ex
 **Input**: a released tool, certificate format or benchmark.
 
 **Steps**:
-1. Archive code version, logs and per-instance results with the paper.
+1. Archive code version, logs and per-instance results with the paper [S019 p. 9].
 2. Answer issues and pull requests fast; offer your revision for review (H1).
 3. Correct released artefacts in public with the method that built them (Method 6, step 7).
 4. Integrate into the default distribution yourself, with a packaging test (Method 3).
@@ -418,106 +464,131 @@ Six methods passed the four Phase 2 checks (recurrence, say–do, executable, ex
 
 **Output**: the stall as a number; missing components or roadblock; the next component or measurement; the limit to print.
 
-**Stages without evidence** (last routing row): literature work has one remark, "I'm not aware of a handbook of computational MIP" [Sim21 00:52].
+**Stages without evidence** (last routing row): literature work has one remark, "I'm not aware of a handbook of computational MIP" [Sim21 00:52]. ([full evidence](references/research/09-evidence-ledger.md#workflows))
 
 ## Research Heuristics
 
-1. **Your checker is code under test.** If an outsider finds a hole: thank them, post a revision within a day, ask them to review it, point users to a formally verified checker. Case: VIPR PR #24 (27 Oct 2026) answered in about 17 hours; his PR #25 asks the contributor to double-check; both open on 2026-11-14 [VIPR-gh].
-2. **Counts replace adjectives between versions.** MIP-DD: a majority claim (v1) became "24 among all the 51" (v5) [MIPDD-ax]; circle packing "exact dual bounds" → "strong dual bounds" [CP17]; Chvátal v1 a theorem title, v2 a safe framework plus a Coq check [Chv-ax]. No stated reason.
-3. **A default has to earn its place.** Default-on needs a performance run on the internal solvable set and tests against several LP solvers; else ship it off; log reverts. Case: the merge-request template he created (commit 8201ee1d, 2018) and rewrote as tickable assertions with an "or" escape (2020) [MRT]; `prop_genvbounds` switched on then off by default (2012); own commits reverted (2014) [SCIP-gh; SoPlex-gh].
-4. **Debug with three tools**: (a) a known feasible solution as oracle, (b) swap a component, (c) shrink the instance while it still fails and add it to the regression set. Case: mailing-list answers 2011, 2018 [ML]; commit "check debug solution in prop_genvbounds" (2013); MIP-DD (group) [MIPDD].
-5. **Debug the measuring scripts**: make them flag results that contradict reference values. Case: SoPlex `check/evaluation.py` fix (2014; the consistency check could never fire) and `check/compare.py` shifted-mean fix; SCIP `check.awk` maximization parsing (2013) [SoPlex-gh; SCIP-gh]. Practice only.
-6. **Questions first**: computational sections open with numbered questions (three each in [LPO20], [SU23], [GMI24]); say which numbers matter before the tables.
-7. **The metric fits the component.** Heuristics by time to first solution and primal integral; inside a solver they must "fail fast" [Sim21 00:45]; "finding good solutions earlier may be more relevant than proving optimality eventually" [SU23 p. 794]. Say when a component gave nothing ("the first disappointing thing" [Sim21]).
-8. **Subset discipline.** Headlines name subset and limit; overheads only on both-solved instances; a bias argument per exclusion, excluded instances named; "All experiments to evaluate the new code are run with three different random seeds, where we treat each instance-seed combination as a single observation" [ZR21-04]; "fastest" means within 5% [Th pp. 3, 13–14; GMI24 §4.4]. Brackets all solved, ≥1 s, ≥10 s, ≥100 s, after Achterberg and Wunderling (2013) [Th p. 145]; a failed test on a small bracket (20, 11 instances) is put down to sample size; single-instance claims rest on ten constraint permutations [Th p. 147].
-9. **Harvest what the solver already computed**: duals of bound-tightening LPs become cheap one-row bounds; infeasibility proofs feed heuristics and conflict analysis [LVB13; OBBT17; CDH20, not read]. Mostly MINLP-side.
-10. **Template the arithmetic type from the first commit**, so the rational variant is a type argument: PaPILO [Sim21 01:33; PaPILO] (code by Gottwald and Hoen; one project).
+1. **Your checker is code under test.** If an outsider finds a hole: thank them, post a revision within a day, ask them to review it, point users to a formally verified checker. Case: VIPR PR #24 (27 Oct 2026) answered in about 17 hours; his PR #25 asks the contributor to double-check; both open on 2026-11-14 [VIPR-gh]; the 2017 paper had offered simplicity instead [S019 p. 8]. ([ledger](references/research/09-evidence-ledger.md#heuristic-1))
+2. **Counts replace adjectives between versions.** MIP-DD: a majority claim (v1) became "24 among all the 51" (v5) [MIPDD-ax; S065 p. 8]; circle packing "exact dual bounds" → "strong dual bounds" [CP17]; Chvátal v1 a theorem title, v2 a safe framework plus a Coq check [Chv-ax]; the status update's journal version keeps its closing adjective but adds like-for-like factors behind it [D002 p. 14; S022 pp. 17–18]. No stated reason. ([ledger](references/research/09-evidence-ledger.md#heuristic-2))
+3. **A default has to earn its place.** Default-on needs a performance run on the internal solvable set and tests against several LP solvers; else ship it off; log reverts. Case: the merge-request template he created (commit 8201ee1d, 2018) and rewrote as tickable assertions with an "or" escape (2020) [MRT]; `prop_genvbounds` switched on then off by default (2012); own commits reverted (2014) [SCIP-gh; SoPlex-gh]; release reports give the gain each new default showed when it was added, and leave off what did not pay [S003 pp. 10, 18; S021 pp. 13, 19–20]. ([ledger](references/research/09-evidence-ledger.md#heuristic-3))
+4. **Debug with three tools**: (a) a known feasible solution as oracle, (b) swap a component, (c) shrink the instance while it still fails and add it to the regression set; the measuring scripts are debugged too (H5). Case: mailing-list answers 2011, 2018 [ML]; commit "check debug solution in prop_genvbounds" (2013); MIP-DD (group) [MIPDD; S065 pp. 4, 6, 8–9]. ([ledger](references/research/09-evidence-ledger.md#heuristic-4))
+5. **Debug the measuring scripts**: make them flag results that contradict reference values. Case: SoPlex `check/evaluation.py` fix (2014; the consistency check could never fire) and `check/compare.py` shifted-mean fix; SCIP `check.awk` maximization parsing (2013) [SoPlex-gh; SCIP-gh]; MIPLIB 2010 [S001 TR p. 11]. Practice only. ([ledger](references/research/09-evidence-ledger.md#heuristic-5))
+6. **Questions first**: computational sections open with numbered or bulleted questions (three in [LPO20], [GMI24] and the IPCO status update [ZR21-04; D002 p. 8], four in the journal [S022 p. 8]); say which numbers matter before the tables. ([ledger](references/research/09-evidence-ledger.md#heuristic-6))
+7. **The metric fits the component.** Heuristics by time to first solution and primal integral; inside a solver they must "fail fast" [Sim21 00:45], in print a "fast fail" strategy [S018 p. 4]; "finding good solutions earlier may be more relevant than proving optimality eventually" [SU23 p. 794]. Say when a component gave nothing ("the first disappointing thing" [Sim21]). ([ledger](references/research/09-evidence-ledger.md#heuristic-7))
+8. **Subset discipline.** Headlines name subset and limit; overheads only on both-solved instances; a bias argument per exclusion, excluded instances named; "All experiments to evaluate the new code are run with three different random seeds, where we treat each instance-seed combination as a single observation" [ZR21-04], five seeds in 2017 [S003 pp. 6–8]; "fastest" means within 5% [Th pp. 3, 13–14; GMI24 §4.4]. Brackets all solved, ≥1 s, ≥10 s, ≥100 s, after Achterberg and Wunderling (2013) [Th p. 145]; a failed test on a small bracket (20, 11 instances) is put down to sample size; single-instance claims rest on ten constraint permutations [Th p. 147]. ([ledger](references/research/09-evidence-ledger.md#heuristic-8))
+9. **Harvest what the solver already computed**: duals of bound-tightening LPs become cheap one-row bounds; infeasibility proofs feed heuristics and conflict analysis [LVB13; OBBT17; CDH20; S011 pp. 7–12; S034 pp. 7–10]. Mostly MINLP-side. ([ledger](references/research/09-evidence-ledger.md#heuristic-9))
+10. **Template the arithmetic type from the first commit**, so the rational variant is a type argument: PaPILO [Sim21 01:33; PaPILO; S026 pp. 3, 10] (code by Gottwald and Hoen; one project); a fixed commit order keeps parallel output independent of the thread count [S026 pp. 6–9]; in the group's presolve work no reduction may break what the consumer needs: block structure for a parallel interior-point solver [S078 arXiv p. 7], duals and bases through postsolve for LP users [S004 pp. 62–63], certificate coverage (Method 4 step 1). ([ledger](references/research/09-evidence-ledger.md#heuristic-10); [consumer](references/research/09-evidence-ledger.md#heuristic-12))
 
 **Already known**: build inside the open-source solver and release; shifted geometric means, seeds and one job per node are "pretty standard in MIP solving" [Sim21].
 
 ## Common Misreadings
 
-1. **"He distrusts floating-point solvers and wants exactness everywhere."** See Taste 4: the solvers are "amazingly stable" [Sim21]; his 2025 study finds almost all decisions of floating-point SCIP exactly correct [NC25].
+1. **"He distrusts floating-point solvers and wants exactness everywhere."** See Taste 4: the solvers are "amazingly stable" [Sim21]; his group's 2025 study (Hoen first) finds almost all decisions of floating-point SCIP exactly correct [NC25; S072 p. 14].
 2. **"A VIPR-verified result is safe because the certificate is simple."** Method 4: checker holes 2016–2026, forged certificates accepted [Wood23], presolve outside [S10].
 3. **"Exact MIP costs a factor of 2 to 4" (or "of 8").** Both are his group's numbers, for different baselines (3.9 like-for-like, 8.1 default; Method 2 step 3).
-4. **"He runs SCIP at ZIB and fathered its PhD generation."** ZIB group headship ended 31 Mar 2023; HTW professor since 1 Oct 2020; Mexi is scipopt.org's primary contact [06 §1, §8]. One formal doctorate, as second supervisor; five mentees have Koch as sole advisor [04 V1–V2]. Bylines were alphabetical until 2017.
-5. **"MIPLIB 2017 tells you which solver is best."** The paper says the opposite: the set is "only one of many possible and justified outcomes" [M17 pp. 445, 485].
+4. **"He runs SCIP at ZIB and fathered its PhD generation."** ZIB group headship ended 31 Mar 2023; HTW professor since 1 Oct 2020; Mexi is scipopt.org's primary contact [06 §1, §8]. One formal doctorate, as second supervisor; five mentees have Koch as sole advisor [04 V1–V2]. Byline order is no reliable signal of his role [S019 p. 3; S011 pp. 1, 3].
+5. **"MIPLIB 2017 tells you which solver is best."** The paper says the opposite: the set is "only one of many possible and justified outcomes" [M17 pp. 445, 485; S002 p. 43].
+
+([full evidence](references/research/09-evidence-ledger.md#misreadings))
 
 ## Signature Work Anatomy
 
-"Inferred" marks what has no primary source.
+"Inferred" marks what has no primary source. All five cite the full texts where they exist; Reception cells and cells keyed to web sources (Wood23, VIPR-gh, IHS26, MIPLIB-CL, editorial dates) do not.
 
-### Iterative refinement for linear programming (ISSAC 2012, DOI 10.1145/2442829.2442858; INFORMS J. Comput. 28, 2016, DOI 10.1287/ijoc.2016.0692)
+### Iterative refinement for linear programming (ISSAC 2012, DOI 10.1145/2442829.2442858; INFORMS J. Comput. 28, 2016, DOI 10.1287/ijoc.2016.0692), with its theory sequel, Linear programming using limited-precision oracles (Gleixner, Steffy, Math. Program. 183, 2020, DOI 10.1007/s10107-019-01444-6)
 
-Content from the thesis, which contains both (not read).
+Read in their report versions [S020 TR; S013 TR; S029] and in the thesis, which contains the first two [S032].
 
 | Dimension | Finding |
 |---|---|
-| Origin | Stated: Steffy's initiative [Th p. iii]; MINLP instabilities sit in LP relaxations; metabolic models defeat double precision [Th pp. 1–2] |
-| Key insight | Refinement for LP: solves in floating point, corrections in rationals |
-| Minimum evidence | Precision 10^-50 at 3% / 7% average slowdown; exact SoPlex 1.85–3 times faster than QSopt_ex [Th pp. 3, 88] |
-| Abandoned paths | Fails on 7 of 1,202 LPs; background rational factorization (no record); boosting done 2023/2025 [PB25] |
+| Origin | Stated: Steffy's initiative [Th p. iii; S032 p. 5]; MINLP instabilities sit in LP relaxations; metabolic models defeat double precision [Th pp. 1–2]. 2020, co-authored: analyses assume exact arithmetic, implementations use limited precision [S029 pp. 3, 7] |
+| Key insight | Refinement for LP: solves in floating point, corrections in rationals; scaled residuals make it work with absolute tolerances [S032 pp. 39–40]; 2020: the floating-point simplex as an oracle with constants and a failure outcome [S029 pp. 8–17] |
+| Minimum evidence | Precision 10^-50 at 3% / 7% average slowdown [S013 TR p. 20]; exact SoPlex 1.85–3 times faster than QSopt_ex [Th pp. 3, 88; S032 p. 99]; 2020: basis verification solved 1,191 of 1,202 LPs, QSopt_ex 1,163 [S029 p. 23] |
+| Abandoned paths | Fails on 7 of 1,202 LPs [S032 pp. 100–101]; background rational factorization (thesis; proposed again 2020, no later record [S029 p. 25]); boosting inside refinement proposed [S029 p. 26], built 2023/2025 as an outer loop [PB25] |
 | Reception | COBRApy and NEOS (thesis claim, unchecked); theory followed [LPO20] |
-| Methods | 5, 3 |
+| Methods | 5, 7, 3 |
+
+([full evidence](references/research/09-evidence-ledger.md#anatomy-iterative-refinement); [oracle paper](references/research/09-evidence-ledger.md#anatomy-limited-precision-oracles))
 
 ### Verifying Integer Programming Results (IPCO 2017, DOI 10.1007/978-3-319-59250-3_13; arXiv 1611.08832)
 
 | Dimension | Finding |
 |---|---|
-| Origin | Co-authored: solvers occasionally answer wrongly, exact solvers can have bugs [VIPR §1]. Alphabetical byline |
-| Key insight | Statements checkable by few rules, independent of the solver |
-| Minimum evidence | 107 instances; checking far cheaper than solving; 10 GB shrunk to 8 kB [VIPR Table 1] |
-| Abandoned paths | v1 excluded one instance (tool out of memory), v2 fixed it; proof-assistant checking left to others |
+| Origin | Co-authored: solvers occasionally answer wrongly, exact solvers can have bugs; not distrust [VIPR §1; S019 p. 3]. Alphabetical byline |
+| Key insight | Statements checkable by few rules, independent of the solver [S019 pp. 5–8] |
+| Minimum evidence | 107 instances; checking far cheaper than solving; 10 GB shrunk to 8 kB [VIPR Table 1; S019 p. 10] |
+| Abandoned paths | v1 excluded one instance (tool out of memory), v2 fixed it (arXiv versions, web research; the version read reports all 107 [S019 p. 10]); proof-assistant checking left to others |
 | Reception | Formal checkers by others [CakeML; LeanVIPR]; holes found 2023–2026 [Wood23; VIPR-gh] |
 | Methods | 4, 3 |
+
+([full evidence](references/research/09-evidence-ledger.md#anatomy-vipr))
 
 ### MIPLIB 2017: data-driven compilation of the 6th mixed-integer programming library (Math. Program. Comput. 13, 2021, DOI 10.1007/s12532-020-00194-3)
 
 | Dimension | Finding |
 |---|---|
-| Origin | Stated: call of 11 Nov 2016 [Call16]; committee of 21, nine solver teams |
-| Why then | Co-authored: virtual-best and virtual-worst speed-ups of 2.70 and 3.62, 2011–2018 [M17 p. 444]. Inferred: 5,721 instances, too many to pick by hand |
-| Key insight | Selection as optimization models over feature clusterings; the process is the contribution |
-| Minimum evidence | Feature clusters agree with submitters' model groups [M17 p. 485] |
-| Abandoned paths | Old checker tolerance replaced by a mixed absolute/relative rule; two numerically unstable instances (neos-5075914-elvire, neos-3754224-navua) triggered benchmark v2 (June 2019), which exchanged five in total to keep balancedness [M17 pp. 485–486, fn. 8; MIPLIB-CL] |
+| Origin | Stated: call of 11 Nov 2016 [Call16]; committee of 21, nine solver teams [S002 p. 2] |
+| Why then | Co-authored: virtual-best and virtual-worst speed-ups of 2.70 and 3.62, 2011–2018 [M17 p. 444; S002 p. 2]. Inferred: 5,721 instances, too many to pick by hand |
+| Key insight | Selection as optimization models over feature clusterings; the process is the contribution [S002 p. 42] |
+| Minimum evidence | Feature clusters agree with submitters' model groups [M17 p. 485; S002 p. 37] |
+| Abandoned paths | Old checker tolerance replaced by a mixed absolute/relative rule [S002 p. 22]; two numerically unstable instances (neos-5075914-elvire, neos-3754224-navua) triggered benchmark v2 (June 2019), which exchanged five in total to keep balancedness [M17 pp. 485–486, fn. 8; MIPLIB-CL] |
 | Reception | Received Jul 2019, accepted Sep 2020; tuning-on-MIPLIB critiques |
 | Methods | 6, 4 |
+
+([full evidence](references/research/09-evidence-ledger.md#anatomy-miplib-2017))
 
 ### A computational status update for exact rational mixed integer programming (IPCO 2021, DOI 10.1007/978-3-030-73879-2_12; Math. Program. 197, 2023, DOI 10.1007/s10107-021-01749-5), through SCIP 10.0 (arXiv 2511.18580)
 
 | Dimension | Finding |
 |---|---|
-| Origin | Co-authored: roundoff undermines optimality where MIP proves mathematics or verifies hardware; the 2013 framework lacked presolve and heuristics. First author Eifler |
-| Key insight | Hybrid precision in every component |
-| Minimum evidence | Against the 2013 framework: 6.6 times faster, 2.8 times as many solved [ZR21-04]; 10.7 and 2.9 in the journal [SU23]; no reason given; hardware (Xeon E5-2660 → Gold 5122) and CPLEX setup differ between the versions [ZR21-04 p. 7; SU23 p. 801] (inferred possible cause) |
-| Abandoned paths | Bound-shift off below 20% success |
+| Origin | Co-authored: roundoff undermines optimality where MIP proves mathematics or verifies hardware; the 2013 framework lacked presolve and heuristics [S022 p. 2]. First author Eifler |
+| Key insight | Hybrid precision in every component: proposers stay in floating point behind an exact step, model changes run in rationals [S022 pp. 4–5] |
+| Minimum evidence | Against the 2013 framework: 6.6 times faster, 2.8 times as many solved [ZR21-04]; 10.7 and 2.9 in the journal [SU23; S022 p. 17]; no reason given; hardware (Xeon E5-2660 → Gold 5122) and CPLEX setup differ between the versions [ZR21-04 p. 7; SU23 p. 801] (inferred possible cause) |
+| Abandoned paths | Bound-shift off below 20% success [S022 p. 12] |
 | Reception | Critics relay 8.1; a rival matches exact SCIP in one application [IHS26] |
 | Methods | 2, 5, 3 |
 
+([full evidence](references/research/09-evidence-ledger.md#anatomy-status-update))
+
+### Analyzing the numerical correctness of branch-and-bound decisions for mixed-integer programming (Hoen, Gleixner, CPAIOR 2025, DOI 10.1007/978-3-031-95976-9_3)
+
+| Dimension | Finding |
+|---|---|
+| Origin | Group (Hoen first): the belief in solver robustness set against documented wrong answers [S072 p. 2]; VIPR's 2017 future work had proposed measuring numerical violation [S019 p. 10] (inferred link: the paper cites VIPR only in its outlook [S072 p. 15]) |
+| Key insight | Check every critical decision of the unchanged solver a posteriori, cheapest check first [S072 pp. 4–8] |
+| Minimum evidence; abandoned paths | Method 1 steps 5–6 [S072 pp. 9, 12] |
+| Reception | Robustness quantified, and a route to exact solving with a grey-box solver [S072 pp. 14–15] |
+| Methods | 1, 4, 5 |
+
+([full evidence](references/research/09-evidence-ledger.md#anatomy-decision-analysis))
+
 ## Research Anti-patterns
 
-Besides the warning signs and Taste marks 2 and 4: aggressive heuristics inside a solver (→ H7); assertions and debug solutions as the only bug finders [MIPDD §1] (→ H4c).
+Besides the warning signs and Taste marks 2 and 4: aggressive heuristics inside a solver (→ H7) [S018 p. 4]; assertions and debug solutions as the only bug finders [MIPDD §1; S065 p. 2] (→ H4c). ([full evidence](references/research/09-evidence-ledger.md#anti-patterns))
 
 ## Research Trajectory
 
-- 2006–2015: applied IP (mining); ZIB solver team from 2008 [06 T1]; MINLP components in SCIP [LVB13; OBBT17].
+- 2006–2015: applied IP (mining) [S025 p. 7]; ZIB solver team from 2008 [06 T1]; MINLP components in SCIP [LVB13; OBBT17].
 - 2012–2016: exact LP, trust in floating-point decisions, certificates, triggered by LP-relaxation instabilities [IR16; Th; STSM14; VIPR].
-- 2015–2023: group head; SCIP 5.0/6.0 lead; MIPLIB 2017; MIPcc23 [M17; CC23].
-- 2020–2025: proof logging from pseudo-Boolean solving; exactness into the mainline, one component at a time [L2R21; SU23; GMI24; PB25; S10].
+- 2015–2023: group head; SCIP 5.0/6.0 lead [S003 p. 3]; MIPLIB 2017; MIPcc23 [M17; CC23].
+- From 2018: author to supervisor; credited own code shrinks to single features [08 §8; S004 p. 83].
+- 2020–2025: collaboration with Nordström, starting with Learn to relax, which holds no proof log [L2R21; S024 pp. 6, 15]; proof logging follows [S038 pp. 2, 6–11; S060 pp. 1–2]; exactness into the mainline, one component at a time [SU23; GMI24; PB25; S10].
 - 2021–2023: ML for MIP as a follower, then exit [06 T8]. 2020–2026: GPU methods; applied HTW projects [CP21; CHAP26].
 
 ### Latest
 
 - SCIP 10.0.0 (24 Nov 2025) with exact mode [S10]; own commits to the exact linear constraint handler to Oct 2026 [06 §7–§8].
-- 2026: MIP-DD in print [MIPDD]; numerically safe branch-price-and-cut closing 14 unsolved instances [LCCP26]; CHAP won the Land-Doig MIP Competition [CHAP26]; distributed presolving [DSAP26].
+- 2026: MIP-DD in print [MIPDD]; numerically safe branch-price-and-cut closing 14 unsolved instances [LCCP26; S085 p. 1]; CHAP, built for the 2026 Land-Doig MIP Competition [CHAP26; S076 pp. 1–2], first place per the competition page [06 §8]; distributed presolving [DSAP26].
 - Oct 2026: VIPR and presolve soundness reports (Method 4); applied HTW projects [06 §8]; no talk found in the last 12 months.
+
+([full evidence](references/research/09-evidence-ledger.md#trajectory))
 
 ## Academic Lineage
 
 - **Teachers**: Gary Froyland (UNSW, 2006); Rolf H. Möhring (Diplom, TU Berlin 2008). PhD TU Berlin 2015: advisor Martin Grötschel per DepositOnce, referees Thorsten Koch and Andrea Lodi; MGP lists Koch as second advisor [Th; MGP].
 - **Peers**: Berthold, Steffy, Wolter, Vigerske, in a peer-run PhD team that inherited SCIP and SoPlex [04 L3–L5].
 - **Students** (Common Misreading 4): formal, Eifler [Eif25]; mentored: Hendel, Müller, Rehfeldt, Serrano, Witzig; co-authored chapters: Chmiela, Mexi; at HTW: Hoen [04 V1–V5].
-- **Partners**: Steffy (exact LP); Nordström (proof logging [L2R21]); Pokutta (ML); Achterberg (MIPLIB).
+- **Partners**: Steffy (exact LP); Nordström (pseudo-Boolean solving [L2R21; S062 p. 1]); Biere, acknowledged for delta debugging [S065 p. 13]; Pokutta (ML); Achterberg (MIPLIB). ([full evidence](references/research/09-evidence-ledger.md#lineage))
 
 ## Inner Tensions
 
@@ -525,10 +596,12 @@ Besides the warning signs and Taste marks 2 and 4: aggressive heuristics inside 
 - **Tension: simple certificates vs. the checker's record**, and **the price of exactness** (forecast 2–4 [Sim21]): Common Misreadings 2–3.
 - **Tension: what benchmarking is for**: MIPLIB 2017 serves "a meaningful and fair comparison of the average performance of MIP solvers" [M17]; "The motivation is not benchmarking" [Sim21].
 - **Tension: exact vs. good solutions early**: "personal interest is also to be even more strict" [Sim21] against [SU23 p. 794].
-- **Say vs. do: significance testing**: a non-significant mean gain "shows the importance of significance testing" [Th p. 147]; eleven later co-authored texts use none.
+- **Say vs. do: significance testing**: a non-significant mean gain "shows the importance of significance testing" [Th p. 147]; tests until 2018 and on MIPLIB 2017 [S011 p. 16; S006 p. 20; S002 pp. 40–41], none in later component papers read.
 - **Tension: headline numbers**: one result appears as 6.6, "about an order of magnitude" and 10.7 [ZR21-04; MIP21; SU23].
 - **Tension: supervisor in practice, not on record**: "my supervisors Thorsten Koch and Ambros Gleixner" [Mue20]; one formal doctorate [04 C1].
 - **Tension: critique answered in code, not in print** [VIPR-gh; Wood23].
+
+([full evidence](references/research/09-evidence-ledger.md#inner-tensions))
 
 ## Mentor Voice (optional)
 
@@ -539,39 +612,56 @@ No stated supervision philosophy was found. Documented:
 
 ## Roundtable Card
 
-- **Lens (one line)**: Can the answer be trusted, and was the comparison fair? Numerics, exact and certified solving, baseline and benchmark design, shipping inside the solver.
-- **Leads when**: solvers, seeds or versions disagree; feasibility flips with tolerances (big-M, wide coefficient ranges); an answer serves as a proof or must be exactly feasible; LP re-solves give unreliable bases or duals; a new component is compared with a fuller solver; a benchmark or competition is built; a speed-up is read from a mean; a bug needs reducing; a claim says "exact", "verified" or "certified".
-- **First questions asked**: What is the answer used for? Which decision decides correctness, and is it inside what is checked (presolve too)? What does the baseline have that your code lacks: like-for-like and default factors? Which subset holds the headline, and what does each exclusion bias? Do independent solvers agree? Which checker and version?
+- **Lens (one line)**: Can the answer be trusted, and was the comparison fair? Numerics, exact and certified solving, mixed-precision algorithms with a stated floating-point contract, baseline and benchmark design, shipping inside the solver.
+- **Leads when**: solvers, seeds or versions disagree; feasibility flips with tolerances (big-M, wide coefficient ranges); an answer serves as a proof or must be exactly feasible; LP re-solves give unreliable bases or duals; a new component is compared with a fuller solver; a benchmark or competition is built; a speed-up is read from a mean; a bug needs reducing; a claim says "exact", "verified" or "certified"; a low-precision, GPU or third-party LP oracle sits under an exact layer.
+- **First questions asked**: What is the answer used for? Which decision decides correctness, and is it inside what is checked (presolve too)? What does the baseline have that your code lacks: like-for-like and default factors? Which subset holds the headline, and what does each exclusion bias? Do independent solvers agree? Which checker and version? What does the floating-point solver guarantee, and how is a violation detected and counted?
 - **Default recommendation**: keep floating point; add exact repair or safe bounds at the deciding points; measure against a reduced baseline and default on named subsets with seeds; print the remaining gap as a number; ship in the open solver.
 - **Will push back on**: rational re-implementations of candidate producers; exactness a tolerance-level answer would serve; factors without baselines; means carried by few instances; averages used to choose solvers; "verified" without checker and coverage; untested defaults.
 - **Likely disagreements** (inferred from methods; no dispute documented):
   - *Achterberg*: speed on vendor sets, presolve as a big win (DOI 10.1287/ijoc.2018.0857; DOI 10.1007/978-3-642-38189-8_18) against exact, certifiable reductions [SU23; CPB24].
-  - *Fischetti*: variability to exploit, heuristics as methods (DOI 10.1287/opre.2013.1231; DOI 10.1007/s10107-004-0570-3) against variability as noise, heuristics that fail fast [SU23].
-  - *Lübbecke*: generic Dantzig–Wolfe as proof of concept on structured classes (DOI 10.1007/s10107-014-0761-5) against default branch and cut on heterogeneous sets with safe dual bounds [M17; LCCP26].
-  - *Forrest* (guest): referee solvers and borderline tolerance verdicts (https://github.com/coin-or/Cbc/issues/697) against exact checks by an independent checker (DOI 10.1007/978-3-319-59250-3_13). *Bixby* (guest): chained version pairs on private libraries (DOI 10.4171/dms/6/16) against a public library built by written rules, every solution checked exactly (DOI 10.1007/s12532-020-00194-3).
-- **Blind spots**: exact mode about 10 times slower than default, MILP only, no symmetry; his checker was unsound in places; small fixed exactness sets; open-source vantage only; no polyhedral theory; no significance tests after 2015; own voice thin after 2021.
+  - *Fischetti*: variability to exploit, heuristics as methods (DOI 10.1287/opre.2013.1231; DOI 10.1007/s10107-004-0570-3) against variability as noise, heuristics that fail fast [SU23]; yet a co-signed rule exploits branching variability [S004 p. 42].
+  - *Lübbecke*: generic Dantzig–Wolfe on structured classes (DOI 10.1007/s10107-014-0761-5) against default branch and cut on heterogeneous sets with safe dual bounds [M17]; yet his group's 2026 branch and price on SCIP is over 7 times faster than a Gurobi-based branch and cut from the same start [S085 pp. 18–19].
+  - *Forrest* (guest): referee solvers and borderline tolerance verdicts (https://github.com/coin-or/Cbc/issues/697) against exact checks by an independent checker (DOI 10.1007/978-3-319-59250-3_13). *Bixby* (guest): chained version pairs on private libraries (DOI 10.4171/dms/6/16) against a public library built by written rules, every solution checked in arbitrary precision within a mixed tolerance, objective values exact (DOI 10.1007/s12532-020-00194-3) [S002 pp. 22, 42].
+- **Blind spots**: exact mode about 10 times slower than default, MILP only, no symmetry; his checker was unsound in places; small fixed exactness sets; open-source vantage only; no polyhedral theory; no significance tests in the component papers read after 2018; own voice thin after 2021.
+
+([full evidence](references/research/09-evidence-ledger.md#roundtable-card))
 
 ## Honest Boundary
 
 This skill is distilled from public information and has these limits:
+- **Full-text coverage**: 107 Scholar rows, 103 distinct works indexed, 92 open full texts: 90 read in full, 2 in part; 6 abstract only, 2 metadata only, 3 skipped; 197 card quotes verified (2026-11-28); many read as report or arXiv versions [08 §1, §11]. ([full evidence](references/research/09-evidence-ledger.md#honest-boundary))
 - **Tacit knowledge**: how he picks what is worth doing rests on two acknowledgements; internal reviews, meetings and test sets are not public.
 - **Era and resources**: in-house SCIP and SoPlex, a long-lived BMBF campus, industry funding, exclusive cluster nodes, a group of 16 (2017); since 2020 a teaching university. Methods 3 and 6 assume such resources.
-- **Field boundary**: numerics, exact and verified LP/MILP, presolve (group), benchmarks, integration, MINLP components to 2017. Not polyhedral theory, commercial internals, decomposition research, ML for MIP.
-- **Claimed but unverified**: significance testing as a rule (thesis only); a hierarchy of certificate formats; "dedicated rational heuristics"; a MIPLIB hindsight study; reproducible supplements (VIPR's lagged five years); one job per node (relaxed in 2017).
-- **Not read**: ISSAC 2012, IJOC 2016, JOGO 2017, the conflict-driven heuristics paper, MIPLIB 2010, SCIP 5.0/6.0 reports.
+- **Field boundary**: numerics, exact and verified LP/MILP, mixed-precision LP algorithms, presolve (group), benchmarks, integration; MINLP components as his own line to 2017, then as co-author [S070 pp. 21–22]; decomposition only in co-authored application work [S041 pp. 3, 14–16]. Not polyhedral theory, commercial internals, ML for MIP.
+- **Claimed but unverified**: significance testing as a rule (to 2018 only); a hierarchy of certificate formats; "dedicated rational heuristics"; a MIPLIB hindsight study; reproducible supplements (VIPR's lagged five years); one job per node (relaxed in 2017).
+- **Not read**: eight works known only at abstract or metadata level, two read in part (ids in the ledger); talks, commits and posts behind Heuristics 1, 3–5 and 10 have no card.
 - **Group work and captions**: most evidence after 2016 is group work; MIP 2021 and CO@Work 2024 quotes are unchecked automatic captions.
-- **Research date**: 2026-11-14 (notes 2026-11-08). He is living and active and GitHub states change fast; update at least yearly or after each major SCIP release.
-- **Validation 2026-11-14**: sealed-item test 9 with the skill / 10 without (5 items; 2 points or less is a tie); task test 10 supported and 0 fabricated grounds with the skill (on the version before the after-validation fixes of 2026-11-14; retention re-test after them: 5 of 6 pass); see [FIDELITY.md](FIDELITY.md).
+- **Unresolved**: the CHAP first place (competition page, not reread); his share in the energy HPC line; no card reads a critic.
+- **Research date**: 2026-11-28 (deep reading; web research 2026-11-08 to 2026-11-14). He is living and active and GitHub states change fast; update at least yearly or after each major SCIP release.
+- **Validation 2026-11-14**: sealed-item test 9 with the skill / 10 without (5 items; 2 points or less is a tie); task test 10 supported and 0 fabricated grounds with the skill (on the version before the after-validation fixes of 2026-11-14; retention re-test after them: 5 of 6 pass); recorded in `FIDELITY.md`, which describes the sealed items: do not open it while using or testing this skill. It predates the deep reading.
+
+### Corrections from the full texts
+
+One line each; detail in the [ledger](references/research/09-evidence-ledger.md#corrections).
+
+- Dates and pages: Method 1 from 2012 [S020 TR pp. 5, 9]; Method 2 step 4 on printed p. 809 [S022 p. 17]; Heuristic 6, four questions in the journal [S022 p. 8]; Method 5, factorization and the early basis check since the thesis, boosting as an outer loop [S032 pp. 85, 100; S050 pp. 5–8].
+- Exact MIP from print: Method 3 step 5 and the overheads by version [S022 pp. 12, 16; D002 pp. 13–14]; the 2017 overhead hope [S019 p. 10]; Method 3 step 7's open items [S021 pp. 7, 9, 11].
+- MIPLIB 2017 (Method 6, Taste 1, Roundtable Card): licence, tolerance checks, the exchange count, MIPcc23 validity [S002 pp. 6, 22, 42–44; S055 p. 7].
+- Lineage: VIPR → delta debugging inferred [S065 pp. 1–2, 13]; no proof log in Learn to relax [S024 pp. 6, 15]; CHAP's first place from the competition page [S076 pp. 1–2, 9].
+- Attribution and scope: bylines [S011 pp. 1, 3]; PaPILO credit [S004 p. 83]; field boundary [S041 pp. 3, 14–16; S070 pp. 21–22]; Roundtable contrasts [S085 pp. 17–19; S004 p. 42]; significance tests to 2018 and in 2021 [S011 p. 16; S002 pp. 40–41].
+- Research Integrity Rules: the AI-use sentence now names the co-authored disclosure [S078 arXiv p. 27] (operator's hand edit, 2026-11-28).
 
 ## Sources (Appendix)
 
-Linked research notes: [04 mentorship](references/research/04-mentorship.md) (`[04 V1]`) and [06 trajectory](references/research/06-trajectory.md) (`[06 T8]`). Notes 01, 02, 03, 05 and `holdout.md` contain passages sealed for the Phase 4 test: do not open them while this skill is used or validated. Every DOI and arXiv id below was resolved on Crossref, DataCite or the arXiv API on 2026-11-14.
+**Deep reading (2026-11-28)**: [papers/INDEX.md](references/sources/papers/INDEX.md), [08 synthesis](references/research/08-deep-reading-synthesis.md), [09 evidence ledger](references/research/09-evidence-ledger.md) and the [technique catalog](references/technique-catalog.md); the card index `07-paper-cards.md` and `references/research/cards/` hold sealed passages, like the notes named below. ([changes](references/research/09-evidence-ledger.md#sources))
+
+Linked research notes: [04 mentorship](references/research/04-mentorship.md) (`[04 V1]`) and [06 trajectory](references/research/06-trajectory.md) (`[06 T8]`). Notes 01, 02, 03, 05, `holdout.md` and `FIDELITY.md` contain passages sealed for the Phase 4 test: do not open them (nor 07 and the cards) while this skill is used or validated; of the local full texts under `references/sources/papers/`, open only a page this skill cites. Every DOI and arXiv id below was resolved on Crossref, DataCite or the arXiv API on 2026-11-14.
 
 ### Papers (primary)
 
 - [Th] Gleixner, *Exact and fast algorithms for mixed-integer nonlinear programming*, PhD thesis, TU Berlin 2015, DOI 10.14279/depositonce-4938
-- [ISSAC12] Gleixner, Steffy, Wolter, ISSAC 2012, DOI 10.1145/2442829.2442858 (not read)
-- [IR16] Gleixner, Steffy, Wolter, "Iterative Refinement for Linear Programming", DOI 10.1287/ijoc.2016.0692 (not read)
+- [ISSAC12] Gleixner, Steffy, Wolter, ISSAC 2012, DOI 10.1145/2442829.2442858 (read as ZIB-Report 12-19 [S020 TR])
+- [IR16] Gleixner, Steffy, Wolter, "Iterative Refinement for Linear Programming", DOI 10.1287/ijoc.2016.0692 (read as ZIB-Report 15-15 [S013 TR])
 - [LPO20] Gleixner, Steffy, "Linear programming using limited-precision oracles", Math. Program. 183, DOI 10.1007/s10107-019-01444-6
 - [VIPR] Cheung, Gleixner, Steffy, "Verifying Integer Programming Results", IPCO 2017, DOI 10.1007/978-3-319-59250-3_13, arXiv 1611.08832
 - [M17] Gleixner, Hendel, Gamrath, Achterberg et al., "MIPLIB 2017", Math. Program. Comput. 13 (2021) 443–490, DOI 10.1007/s12532-020-00194-3
@@ -591,8 +681,8 @@ Linked research notes: [04 mentorship](references/research/04-mentorship.md) (`[
 - [L2R21] Devriendt, Gleixner, Nordström, "Learn to relax", Constraints 26, DOI 10.1007/s10601-020-09318-x
 - [CC23] Bolusani, Besançon, Gleixner et al., "The MIP Workshop 2023 Computational Competition on reoptimization", Math. Program. Comput. 16, DOI 10.1007/s12532-024-00256-w, arXiv 2311.14834
 - [S10] Hojny et al., "The SCIP Optimization Suite 10.0", arXiv 2511.18580
-- [LCCP24] Ghannam, Mexi, Lam, Gleixner, arXiv 2401.17937; [LCCP26] Ghannam, Gleixner, Mexi, Lam, arXiv 2607.15837
-- [LVB13] Gleixner, Weltge, CPAIOR 2013, DOI 10.1007/978-3-642-38171-3_26; [OBBT17] Gleixner, Berthold, Müller, Weltge, J. Global Optim. 67, DOI 10.1007/s10898-016-0450-4 (not read); [CDH20] Witzig, Gleixner, DOI 10.1287/ijoc.2020.0973 (not read)
+- [LCCP24] Ghannam, Mexi, Lam, Gleixner, arXiv 2401.17937; [LCCP26] Ghannam, Gleixner, Lam, Mexi, arXiv 2607.15837
+- [LVB13] Gleixner, Weltge, CPAIOR 2013, DOI 10.1007/978-3-642-38171-3_26; [OBBT17] Gleixner, Berthold, Müller, Weltge, J. Global Optim. 67, DOI 10.1007/s10898-016-0450-4; [CDH20] Witzig, Gleixner, DOI 10.1287/ijoc.2020.0973
 - [SAP19] Gleixner et al., arXiv 1908.00796; [DSAP26] arXiv 2603.03498; [CHAP26] arXiv 2605.05086
 
 ### Stated methodology (primary)
@@ -603,7 +693,7 @@ Linked research notes: [04 mentorship](references/research/04-mentorship.md) (`[
 - [STSM14] "Numerically Robust Integer-Feasibility", COST TD1207 report, 2014, https://cost-td1207.zib.de/sites/default/files/scientific_report_gleixner.pdf
 - [COW25] COW 2025 abstract, https://cow25.sciencesconf.org/601453
 - [Call16] MIPLIB 2017 call, https://listserv.zib.de/pipermail/opt-net/2016-November/001275.html
-- [Dag18] Bonami, Gleixner, Linderoth, Misener (eds.), Dagstuhl Reports 8(2) 2018, §4.2 (group), DOI 10.4230/DagRep.8.2.64
+- [Dag18] Bonami, Gleixner, Linderoth, Misener (eds.), Dagstuhl Reports 8(2) 2018, §4.2 (group), DOI 10.4230/DagRep.8.2.64 (S084)
 - Homepage, https://www.zib.de/userpage/gleixner/
 
 ### Process evidence (primary)
