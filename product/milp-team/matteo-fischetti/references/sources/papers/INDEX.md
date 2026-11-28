@@ -54,7 +54,7 @@
 | 42 | S042 | 2012 | A Lagrangian heuristic for robustness, with an application to train timetabling | Transportation Science 46 (1), 124-133, 2012 | 147 | journal | url | txt | 16 | supplement | carded |
 | 43 | S043 | 1997 | A polyhedral approach to the asymmetric traveling salesman problem | Management Science 43 (11), 1520-1536, 1997 | 146 | journal | — | no-oa |  | supplement | — |
 | 44 | S044 | 1992 | An additive bounding procedure for the asymmetric travelling salesman problem | Mathematical programming 53 (1), 173-197, 1992 | 146 | journal | — | no-oa |  | supplement | — |
-| 45 | S045 | 2012 | Cutting plane versus compact formulations for uncertain (integer) linear programs | Mathematical Programming Computation 4, 239-273, 2012 | 140 | journal | manual | txt | 19 | supplement | unreadable |
+| 45 | S045 | 2012 | Cutting plane versus compact formulations for uncertain (integer) linear programs | Mathematical Programming Computation 4, 239-273, 2012 | 140 | journal | — | no-oa |  | supplement | unreadable |
 | 46 | S046 | 2009 | Mixed-integer programming models for nesting problems | Journal of Heuristics 15 (3), 201-226, 2009 | 140 | journal | url | txt | 34 | supplement | carded |
 | 47 | S047 | 2002 | The generalized traveling salesman and orienteering problems | The traveling salesman problem and its variations, 609-662, 2002 | 140 | chapter | url | txt | 62 | supplement | carded |
 | 48 | S048 | 1989 | The fixed job schedule problem with working-time constraints | Operations Research 37 (3), 395-403, 1989 | 140 | journal | — | no-oa |  | supplement | — |
@@ -208,8 +208,9 @@
 | 196 | D019 | 2019 | Finding First and Most-Beautiful Queens by Integer Programming | arXiv preprint arXiv:1907.08246 | — | preprint | arXiv | txt | 14 | supplement | carded |
 | 197 | H001 | 1986 | Worst-Case Analysis of an Approximation Scheme for the Subset-Sum Problem | Operations Research Letters 6, 283-284 | — | journal | — | no-oa |  | supplement | — |
 | 198 | H002 | 1996 | Odd Cut-sets, Odd Cycles, and 0-1/2 Chvatal-Gomory Cuts | Ricerca Operativa 26, 51-80 | — | journal | — | no-oa |  | supplement | — |
-| 199 | H003 | 1998 | Experiments with Controlled Rounding for Statistical Disclosure Control in Tabular Data with Linear Constraints | Journal of Official Statistics 17, 4, 101-113 | — | journal | url | txt | 10 | supplement | unreadable |
+| 199 | H003 | 1998 | Experiments with Controlled Rounding for Statistical Disclosure Control in Tabular Data with Linear Constraints | Journal of Official Statistics 14 (4), 553-565 | — | journal | url | txt | 13 | supplement | unreadable |
 | 200 | H004 | 1999 | I Turni delle Locomotive | in S. Pallottino, A. Sciomachen (eds.), Scienze delle Decisioni per i Trasporti, Collana Trasporti, Franco Angeli, 476-494 | — | chapter | — | no-oa |  | supplement | — |
 | 201 | H005 | — | Lezioni di Ricerca Operativa | — | — | book | — | no-oa |  | supplement | — |
+| 202 | H006 | 2009 | Robustness by cutting planes and the Uncertain Set Covering Problem | Preliminary draft, May 25, 2009 (author's papers directory) | — | preprint | manual | txt | 19 | supplement | — |
 
-201 works · txt 127 · pdf 0 · no-oa 74
+202 works · txt 127 · pdf 0 · no-oa 75
