@@ -1,0 +1,149 @@
+[
+ {
+  "id": "S012",
+  "year": "1997",
+  "title": "Algorithms for railway crew management",
+  "read_level": "full",
+  "contribution": "An overview, co-signed by an FS planner, of how to model railway crew scheduling and rostering (set partitioning or arc models, chosen by where the feasibility rules live) and of the two Bologna codes for the FS competitions: the CFT Lagrangian set-covering heuristic (FASTER) and the assignment-based rostering bound and heuristic (FARO).",
+  "problem_entry": "Industrial: deregulation pushes European railways to optimise, and FS instances (5,000 trips, up to 1,000,000 duties) dwarf airline ones; the two-phase decomposition is taken from practice and justified by depot returns, rules of different nature and what planners will accept, with the lost feedback between phases named (pp. 1, 3–4, 9).",
+  "key_idea": "Choose the model by where the feasibility rules live (set partitioning for scheduling, arc model for rostering), then let dual information drive the heuristics: Lagrangian costs from several near-optimal multiplier vectors score a greedy with a priced core and fixing (CFT), and assignment-based bound increases score roster construction (pp. 8, 10–11, 16–17).",
+  "assumptions": "Binary covering of graph nodes by circuits; pure SCP with free deadheading (covering, inclusion-maximal duties); FS rostering rules (6-day weeks, simple and double rests with a 40% share and a 58-hour average, 30-day and 7-day caps); arc costs on a 1440-minute lattice so that the bound is a whole number of days (pp. 6–9, 12–16).",
+  "proof_devices": [
+   "SCP Lagrangian subproblem solved by the sign of each Lagrangian cost; subgradient s_i(u) = 1 − Σ_{j∈J_i} y_j(u) (p. 10)",
+   "v(RP) is always a whole number of days, so r bounds the number of weeks from below (p. 16)",
+   "LRP decomposes into an AP on the minimum of the three Lagrangian arc costs, a scalar search for the smallest integer r with αr ≥ λ1 r + λ2⌈0.4r⌉ + v(AP), and z = ⌈0.4r⌉; O(n³) (pp. 16–17)",
+   "two fixed multiplier pairs, (1440, 1440) and (1440, 0), give a tight bound v* from two APs (p. 17)",
+   "parametric O(n²) bound update per construction step of the roster heuristic (p. 17)"
+  ],
+  "experiments": "FASTER Table 1: seven FS SCPs up to 4,872 × 968,672 with subgradient LB, CFT value and the others' best, under 3,000 s on a PC 486/33 or 10,000 s on an HP 9000 735/125; CFT ties 4 and wins 3, never loses, 0.9% average gap (0.86% by my recomputation). FARO Table 2: eight instances of 21–525 duties with simple and Lagrangian bounds, weeks and Pentium 90 times; the text's count of 6 optimal out of 7 does not match the eight-row table, where 7 of 8 reach the bound within 1,185 s; the rows equal S017's post-competition results; single runs, no seeds (pp. 10–12, 18).",
+  "positioning": "Surveys crew management, set covering (exact codes ruled out by size; the Lagrangian line from Balas and Ho; greedy fast but weak) and rostering literature; railways set against airlines by size and transit by objective; CFT said to outperform published methods; details deferred to the authors' reports (pp. 2, 4, 9–10, 12).",
+  "writing": "An outline presenting the techniques as those currently adopted at FS; modelling advice framed as experience; firm verdicts; a toy roster figure explains the crew count; no conclusions section; paragraphs shared nearly verbatim with S003 and S017 (pp. 1–4, 8, 10–11, 17–18).",
+  "limits_future": "Decomposition is a compromise and phase feedback only suggested; the core definition is critical; exact SCP is out of reach at FS size; unstated: anonymous rivals and a summary count that does not match its table; the refinement is described differently from S017's final version; no future work (pp. 4, 9, 11, 17–18).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "steps 1–2, joint, dated 1997: the model is chosen by where the instances' feasibility rules live; dominated duties are removed by relaxing partitioning to covering with inclusion-maximal columns; a priced core keeps most columns out", "pages": "pp. 8–9, 11"},
+   {"method": "Method 6", "relation": "contradiction", "note": "dated, before 2002: no general-purpose solver is run, not even as a baseline; exact SCP codes are excluded by size; CFT's fixing phase is hard fixing, the move local branching later replaced", "pages": "pp. 9, 11"},
+   {"method": "Method 3", "relation": "variant", "note": "precursor of step 4: the greedy is run from several near-equivalent multiplier vectors and the roster refinement perturbs parameters at random; no seeds, no control arm, no spread reported", "pages": "pp. 10, 17"},
+   {"method": "Method 4", "relation": "variant", "note": "dated: the FASTER comparison uses the competition's instances and limits and prints the others' best value, but rivals are unnamed, machines and limits differ by instance, and the FARO summary count does not match Table 2", "pages": "pp. 11–12, 18"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "dual-guided primal heuristic", "evidence": "Lagrangian costs from several near-optimal multipliers score the CFT greedy; the assignment bound increase scores each roster move (the c01 card's alias: Dual information steers the primal side)", "pages": "pp. 10, 17"},
+   {"pattern": "Core plus pricing, never frozen", "evidence": "a core of lowest-Lagrangian-cost duties re-priced inside the Lagrangian optimisation, called a main ingredient of CFT's success", "pages": "p. 11"},
+   {"pattern": "Relax partitioning to covering when over-cover is allowed, keep only maximal columns", "evidence": "free deadheading turns set partitioning into set covering, so only inclusion-maximal duties of equal cost are generated", "pages": "p. 9"},
+   {"pattern": "Lower bound as an audit of a heuristic", "evidence": "both result tables print a lower bound beside every heuristic value (subgradient bound for FASTER; simple and Lagrangian bounds for FARO)", "pages": "pp. 12, 18"},
+   {"pattern": "fix the multipliers by a structural argument", "evidence": "two fixed multiplier pairs, (1440, 1440) and (1440, 0), replace subgradient optimisation for the rostering bound", "pages": "p. 17"}
+  ],
+  "transferable": [
+   "Choose the formulation by where the feasibility rules live: set partitioning for short columns whose feasibility depends on the whole sequence, an arc model when the binding rules concern consecutive pairs and fit into arc costs (pp. 6–8)",
+   "When over-covering is allowed, relax partitioning to covering and generate only inclusion-maximal columns among those of equal cost (p. 9)",
+   "Run a Lagrangian-cost greedy from several near-optimal multiplier vectors, not only from the best one, because the bound does not predict which gives the best solution (p. 10)",
+   "Keep a core of low-Lagrangian-cost columns, but re-price it inside the subgradient loop instead of freezing it (p. 11)",
+   "Collapse a sequencing relaxation with counting side constraints to one assignment problem plus scalar searches by relaxing the counts, and try the lattice multiplier values first (pp. 16–17)",
+   "Print a lower bound beside every heuristic value, and recount every summary sentence against the table it introduces before submission (pp. 12, 18)"
+  ],
+  "coauthors": "Alberto Caprara, Paolo Toth, Daniele Vigo (DEIS Bologna), Pier Luigi Guida (Ferrovie dello Stato SpA); Fischetti at DMI, University of Udine",
+  "quotes": [
+   {"text": "In practice, the choice of the appropriate model and solution algorithm strongly depends on the particular structure of the problem in hand.", "page": 8},
+   {"text": "The table clearly shows the effectiveness of the approach, since 6 out of 7 instances have been solved to proven optimality within no more than 20 minutes.", "page": 18}
+  ]
+ },
+ {
+  "id": "S017",
+  "year": "1998",
+  "title": "Modeling and solving the crew rostering problem",
+  "read_level": "full",
+  "contribution": "A general crew-rostering model as looped cycles in a three-arc-type multigraph, a Lagrangian bound computed by two assignment problems, and a bound-driven constructive heuristic with bound-guided refinement: the FORTRAN code that won the FS/AIRO FARO competition of 1995.",
+  "problem_entry": "A competition (FS and AIRO, 1994: three instances of up to 1,000 duties, 90 minutes on a PC 486/33) and a gap in objective: earlier rostering work balances workload in urban transit, whereas railways minimise crews under more involved sequencing rules (pp. 2–4).",
+  "key_idea": "Encode the sequencing rules in arc lengths, drop the infeasible-path constraints and relax the two rest-count constraints so that the bound is one AP on the cheapest Lagrangian arc per pair, with multipliers fixed by the 1440-minute lattice; build rosters one at a time by parametric bound increases on zero reduced-cost arcs, and refine by removing the rosters whose imposition raises the bound (pp. 6–16).",
+  "assumptions": "Periodic rostering in integer minutes; weeks of k days with rest types, shares and caps; FARO rules (k = 6, q = 60, β = 0.4, 58-hour average rest, 30-day and 7-day caps, an optional special roster, a hierarchical objective); arc lengths differing by multiples of 1440; lower-level bounds valid only when the higher-level ones are tight (pp. 4–6, 12–13, 17–20).",
+  "proof_devices": [
+   "validity of the relaxed weeks inequality (15) by comparing its right-hand side with that of (9) on feasible solutions (p. 11)",
+   "Proposition 1: keep the cheapest Lagrangian arc per pair, solve one AP, take the smallest integer w satisfying (16) and set z := ⌈βw⌉; O(n³) (p. 12)",
+   "counting variables and inequalities (9)–(13), redundant in the full ILP, added because they survive the relaxation (p. 10)",
+   "trivial O(n) bounds from each cap, e.g. paid time, and FARO's five bounds with their special-roster versions (pp. 11, 19)",
+   "ε added to every direct arc that needs a technical interval yields a technical-interval bound, valid only when the weeks bound is tight (p. 20)",
+   "a dummy duty of three idle days forces the special roster: LB′, min{LB, LB′} and rules (18)–(19) (pp. 20–21)",
+   "parametric AP re-solves: O(n²) per step and per roster, O(n³) overall (pp. 13–16)"
+  ],
+  "experiments": "Competition Table 1 (FARO164, FARO360, FARO525: BO 48, 112, 165 weeks against bounds 48, 108, 164; NA and TO worse; three of seven teams produced valid solutions) and Table 3 for the post-competition final version on 36 instances (8 FARO plus 28 merged pairs; 60- and 150-minute limits; Pentium 90): claims of 26 of 36 at the bound and a 0.8% gap; my recount gives 25 within the limits (26 with a separate 300-minute run), 0.69% over all rows (0.78% over the merged ones), a misnamed instance in the text and one time above its stated limit; the abstract's real-world instances of up to 1,000 duties fit only the merged ones (at most 911), the FS instances having at most 525; no rival on the 36, single runs (pp. 2, 22–25).",
+  "positioning": "Prior rostering, airline set-partitioning and cyclic-scheduling work listed in one paragraph and set aside by objective; rival teams named with their reports; the competition call and jury minutes cited (pp. 3, 22, 24, 26).",
+  "writing": "The abstract runs gap, model, AP bound, heuristic, results and competition win; design choices justified by experience; the general model kept apart from the FARO specifics; firm verdicts; no conclusions section (pp. 2, 4–21, 23–24).",
+  "limits_future": "LP strengthening of the path constraints declined; the bound is weak where paid time binds (FARO360, confirmed by relaxing that constraint); trivial bounds are blind to technical intervals; hierarchical bounds are conditional; no future work (pp. 9, 20, 22).",
+  "method_links": [
+   {"method": "Method 6", "relation": "contradiction", "note": "dated, before 2002: a problem-specific FORTRAN code; the ILP only yields the relaxation and no general-purpose solver runs at any stage", "pages": "pp. 8–16, 21"},
+   {"method": "Method 1", "relation": "variant", "note": "step 2 by addition: the model is fitted to its relaxation rather than thinned; path constraints left weak by choice, redundant counting variables added because they survive the relaxation; the 1440 lattice picks the multipliers", "pages": "pp. 9–13"},
+   {"method": "Method 4", "relation": "variant", "note": "the external competition harness (FS ran every code on one machine and limit; all three valid entries printed with the authors' bound) is the strong part; the 36-instance study has no rival, the improved version postdates the competition instances (my inference), and the summary sentences do not all match Table 3", "pages": "pp. 3, 22–25"},
+   {"method": "Method 3", "relation": "variant", "note": "random or adaptive perturbation of the construction parameters before each rebuild; no seeds, no spread", "pages": "p. 16"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "dual-guided primal heuristic", "evidence": "AP reduced costs and parametric bound increases score the initial duty, each move and the closing; zero reduced-cost arcs preferred", "pages": "pp. 13–16"},
+   {"pattern": "bound-guided remove-and-rebuild", "evidence": "every roster whose imposition raises the global bound is removed and its duties rebuilt after random or adaptive parameter changes, until the time limit", "pages": "p. 16"},
+   {"pattern": "fix the multipliers by a structural argument", "evidence": "arc lengths differ by multiples of 1440, so two fixed multiplier pairs replace subgradient optimisation", "pages": "pp. 12–13"},
+   {"pattern": "Substructure harvest", "evidence": "with the path constraints dropped, the assignment substructure of the looped-cycle model gives the bound", "pages": "pp. 11–12"},
+   {"pattern": "Lower bound as an audit of a heuristic", "evidence": "the authors' bound is printed beside every team's solution in the competition table and beside every solution of the 36-instance table", "pages": "pp. 22, 25"},
+   {"pattern": "confirm a gap's cause by relaxing the suspected constraint", "evidence": "the FARO360 gap is traced to the binding paid-time constraint and confirmed by a run with that constraint relaxed, which reaches the bound of 108", "pages": "p. 22"}
+  ],
+  "transferable": [
+   "Make the objective your application has and the literature lacks the entry point (pp. 2–3)",
+   "Encode the pairwise sequencing rules in the arc types and lengths of a multigraph (minimum start-to-start times) and leave only the global rules to forbidden-path constraints (pp. 6–9)",
+   "Try the structural multiplier values before subgradient optimisation when the relaxation's costs live on a lattice (pp. 12–13)",
+   "Add counting constraints that are redundant in the full model but bind once the hard constraints are relaxed (p. 10)",
+   "Score constructive moves by the parametric increase of the bound and prefer zero reduced-cost arcs of the AP dual (pp. 13–15)",
+   "Refine by removing every roster whose imposition raises the global bound, perturbing the construction parameters and rebuilding, until the time limit (p. 16)",
+   "Bound each lower level of a lexicographic objective with ε-perturbed costs, valid only where the higher levels are tight (p. 20)",
+   "Merge pairs of real instances to enlarge a small test bed, and diagnose an outlier gap by its binding constraint, confirming by a run with that constraint relaxed (pp. 22–23)"
+  ],
+  "coauthors": "Alberto Caprara, Paolo Toth, Daniele Vigo (DEIS Bologna); Fischetti at DMI, University of Udine",
+  "quotes": [
+   {"text": "These constraints could be reinforced in several ways, so as to produce tighter LP relaxations. We do not pursue this objective in the present paper, since we are interested in more combinatorial relaxations.", "page": 9},
+   {"text": "If this constraint is relaxed, we obtain for this instance a solution of value 108.", "page": 22}
+  ]
+ },
+ {
+  "id": "S003",
+  "year": "2000",
+  "title": "Algorithms for the set covering problem",
+  "read_level": "full",
+  "contribution": "A computational survey of SCP relaxations, heuristics and exact methods on the OR-Library classes A–H by the authors of the leading heuristic, with a new exact LP code that beats CPLEX 4.0.8's LP algorithms on every instance and the finding that CPLEX and MINTO compete with special-purpose exact codes and gain from the authors' preprocessing.",
+  "problem_entry": "SCP as the model behind railway and transit crew scheduling; the scope is fixed by one public test bed (methods never tried on the OR Library are not described; the easy classes 4, 5, 6 and e are dropped) and the state of the art is stated in instance sizes (pp. 1–2).",
+  "key_idea": "The best SCP methods all rest on the LP relaxation, solved exactly or heuristically in its dual by Lagrangian or surrogate multipliers; relaxations used inside heuristics are judged by the solutions they drive, not by their bounds (pp. 2–5).",
+  "assumptions": "Pure SCP with positive integer costs and q nonzeros; reduction rules recalled but left out per algorithm; OR-Library classes A–H (300 × 3,000 to 1,000 × 10,000, densities 2–20%, costs 1–100); the integrality property of the Lagrangian subproblem (pp. 1–3; Table 1, p. 12).",
+  "proof_devices": [
+   "integrality property of the Lagrangian subproblem: the Lagrangian dual equals the LP dual (p. 3)",
+   "greedy repair of any multiplier vector into a dual-feasible one without lowering the bound (p. 3)",
+   "Lagrangian cost fixing in both directions against UB, with ≥ (p. 4)",
+   "Balas–Carrera partial relaxation over disjoint rows: O(q) per subproblem, best bound equal to the LP value (p. 4)",
+   "optimal removal of redundant columns as an SCP of its own (p. 6)",
+   "explanatory argument: bounds markedly stronger than the LP are very hard to get cheaply, so LP-based branch-and-bound and general-purpose ILP packages win (p. 8)"
+  ],
+  "experiments": "Table 1 (40 instances): the authors' LP code (10.25 s on average, 6.54 s of it inside CPLEX) against CPLEX 4.0.8 primal, dual, network and barrier (419, 46, 46 and 370 s), faster than dual and network on every instance (my recomputation: ratio of averages about 4.45, stated as almost 5); Tables 2–4, not in this copy, summarised in the prose: heuristics on A–D and E–H, and exact codes against CPLEX 4.0.8 and MINTO 2.3 on the plain instances (about 700 and 750 s) and with the authors' preprocessing (about 400 and 500 s); DECstation 5000/240 times, rivals converted with Dongarra's figures, one value per method (pp. 2, 5, 7–9, 12).",
+  "positioning": "History deferred to Balas and to Ceria, Nobili and Sassano; methods described in their authors' terms with gaps named and one critique of Beasley's LP use; the authors' codes are best or tied throughout; general-purpose solvers presented as competitive (pp. 1, 5–9).",
+  "writing": "Relaxations, heuristics and exact methods, each closed by a comparison; few explicit hedges; approximate averages, with the LP speed-up rounded up; paragraphs reused from S012; no conclusions section, ending on the sentence about general-purpose solvers (pp. 2–9).",
+  "limits_future": "Rival times converted crudely; some comparisons impossible; preprocessing details omitted; Tables 2–4 absent from this copy; no future work (pp. 2, 8).",
+  "method_links": [
+   {"method": "Method 6", "relation": "evidence", "note": "dated 2000, joint: CPLEX 4.0.8 and MINTO 2.3 on the plain model compete with special-purpose exact codes and do better with the authors' code as preprocessor; the authors' own LP code runs on CPLEX; steps 1–2 in practice", "pages": "pp. 5, 8–9, 12"},
+   {"method": "Method 1", "relation": "evidence", "note": "step 2 at the level of relaxations: a weaker Lagrangian bound is not a drawback inside heuristics, while exact methods want the LP solved to optimality; reduction rules remove dominated rows and columns", "pages": "pp. 2, 5"},
+   {"method": "Method 4", "relation": "evidence", "note": "partial: every CPLEX LP algorithm tuned (on the 40 test instances, which favours the baseline); easy classes dropped for all methods by one rule; unfair comparisons declined; own codes and solvers measured on one machine; lapses: the authors' codes are the reference throughout and rival times are converted", "pages": "pp. 2, 5, 8"},
+   {"method": "Method 3", "relation": "variant", "note": "near-equivalent multipliers give very different solutions and the bound does not predict quality, so the greedy is run at many multipliers; no seeds", "pages": "pp. 5–6"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "judge a relaxation by what it drives, not by its bound", "evidence": "relaxations used inside heuristics are compared through the heuristics' solutions, and weaker bounds are no drawback there", "pages": "p. 5"},
+   {"pattern": "your code as the stock solver's preprocessor", "evidence": "CPLEX and MINTO given the authors' heuristic solution, LP solution and reduced-cost fixings need about 400 and 500 s against 700 and 750 s on the plain instances", "pages": "p. 9"},
+   {"pattern": "dual-guided primal heuristic", "evidence": "the Lagrangian-cost greedy at several near-optimal multipliers is described as the common core of the effective SCP heuristics", "pages": "pp. 5–6"},
+   {"pattern": "Core plus pricing, never frozen", "evidence": "the authors' dynamically priced core set against Ceria, Nobili and Sassano's core chosen once and frozen", "pages": "pp. 4, 6"}
+  ],
+  "transferable": [
+   "Scope a survey by one public test bed, and drop the classes every method solves, with the reason (pp. 1–2)",
+   "Compare relaxations used inside heuristics by the heuristics' solutions, not by their bound values (p. 5)",
+   "Fix variables by Lagrangian costs in both directions against the incumbent (p. 4)",
+   "Tune every algorithm of the general-purpose baseline, and report the time your code spends inside it (p. 5; Table 1, p. 12)",
+   "Hand the stock ILP solver your incumbent, LP solution and reduced-cost fixings as a second arm next to the plain run (p. 9)",
+   "Measure your codes and the general-purpose solvers yourself on one machine, convert only the rivals' published times, and name the conversion source and its crudeness (p. 2)",
+   "Decline a time comparison when a rival reports only node counts or only a time limit, and say why (p. 8)"
+  ],
+  "coauthors": "Alberto Caprara, Paolo Toth (DEIS Bologna); Fischetti at DEI, University of Padova",
+  "quotes": [
+   {"text": "According to our opinion, this is not a drawback within heuristic algorithms, where the main objective is to determine good SCP solutions without insisting in proving optimality.", "page": 5},
+   {"text": "This shows that the state-of-the-art general-purpose ILP solvers are competitive with the best exact algorithms for SCP presented in the literature, and that their performance can sensibly be improved by an external preprocessing procedure.", "page": 9}
+  ]
+ }
+]
