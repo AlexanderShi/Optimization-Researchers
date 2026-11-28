@@ -1,0 +1,341 @@
+[
+ {
+  "id": "S126",
+  "year": 2025,
+  "title": "A fix-propagate-repair heuristic for mixed integer programming",
+  "read_level": "full",
+  "contribution": "A diving heuristic that adds a repair step (RepairWalk, RepairSearch) to fix-and-propagate, studied over a strategy x parametrization grid, combined into a cost-staged portfolio and put into Xpress.",
+  "problem_entry": "From the MIP 2022 competition call (LP-free, no subMIPs): fix-and-propagate cannot recover from past mistakes, and WalkSAT on MIP is not very effective (pp. 1, 3).",
+  "key_idea": "Move WalkSAT-style repair from complete assignments to partial assignments inside the dive, after diagnosing where the walk stalls; second level turns moves into disjunctions searched with a second propagation engine (pp. 6, 13-17).",
+  "assumptions": "General MILP in ranged form with finite bounds (artificial box [-100000, 100000] in runs); cliques, locks, analytic-center corepoint exploited; tested on 240 MIPLIB 2017 instances and 817 Xpress instances (pp. 2, 5, 19, 26).",
+  "proof_devices": [
+   "No proofs; completeness remark: DFS complete with large enough limits (p. 7)",
+   "Trail (LIFO domain changes) for partial undo (p. 6)",
+   "Violation from min/max activities of propagation engine (p. 14)",
+   "Two propagation engines with intersection/nearest-endpoint transfer (pp. 17-18)",
+   "Deterministic work limit 100 x nonzeros (p. 19)"
+  ],
+  "experiments": "CPLEX 12.10, 10 min per instance-seed, 3 then 5 seeds; dfsrep beats dfs; portfolio 969/1200 vs 75% single best, McNemar test on 42 vs 18 discordant pairs; Xpress ratios 0.996/0.993/0.995 overall, 0.869/0.769/0.856 on affected runs; tuning-test overlap unflagged (pp. 19-27).",
+  "positioning": "Three-way taxonomy (LP-free, LP-based, subMIP); credits fix-and-propagate, Scylla, feasibility jump, Local-ILP, shift-and-propagate; few self-citations (pp. 2-3, 5, 8).",
+  "writing": "Low-key claims (small but positive, not very robust), narrow novelty, negative preliminary results printed as motivation (pp. 1, 9, 14, 16, 27).",
+  "limits_future": "Single strategies not robust, poor solution quality, 36 models unsolved, manual portfolio, small Xpress effect; future: more strategies, portfolio as optimization, infinite bounds, more cliques (pp. 1, 2, 5, 19, 22, 24, 27).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Seeds (3, then 5) and counts over instance-seed pairs; pure-random arm as noise floor; no content-free perturbation arm, multi-threaded runs",
+    "pages": "pp. 19, 20, 24"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Same presolve and deterministic work limit for every arm; virtual best printed as ceiling; per-instance consistency check beside pooled test",
+    "pages": "pp. 19, 20, 22, 24, 25"
+   },
+   {
+    "method": "Method 4",
+    "relation": "contradiction",
+    "note": "(i) Portfolio members selected on the same 240 instances it is scored on, unflagged (step 5); (ii) McNemar test in a 2024-accepted joint paper contradicts 'No significance test before 2026'",
+    "pages": "pp. 19, 24, 25"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "WalkSAT move logic kept, call site moved from complete assignments to every dive node after diagnosing the stall; oracle is a repair routine",
+    "pages": "pp. 13-14"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Step 5: 63 combinations cut to 14, three worst dropped; stage-wise truncation shows what each stage adds",
+    "pages": "pp. 12, 20, 24-25"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "SubMIPs forbidden, solver enters only as presolve and LP engine; finished method goes into Xpress, the reverse direction",
+    "pages": "pp. 3, 8, 19, 24, 26"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "cost-staged parallel portfolio with virtual-best ceiling",
+    "evidence": "Portfolio classes run by cost, virtual best printed",
+    "pages": "pp. 22-25"
+   },
+   {
+    "pattern": "second evaluation inside a production solver",
+    "evidence": "Xpress evaluation on 817 instances x 5 seeds",
+    "pages": "pp. 26-27"
+   },
+   {
+    "pattern": "paired success table with McNemar's test",
+    "evidence": "42 vs 18 discordant pairs tested",
+    "pages": "p. 25"
+   }
+  ],
+  "transferable": [
+   "(D4) Write the heuristic as one search engine with independent switches (propagate / repair / backtrack). The classic method and each variant are then parameter settings of the same code, and every comparison isolates one switch (pp. 6–8).",
+   "(D4) Measure the violation of a partial assignment from the propagation engine's min/max activities, so that repair and propagation share one incrementally updated data structure (p. 14).",
+   "(D4) When a random-walk repair cycles, or needs several steps for a simple swap, turn each move into a disjunction and search over move sequences with a second propagation engine. Propagation then performs compound moves such as clique swaps by itself (pp. 16–18).",
+   "(D4) Cap propagation work deterministically, at 100 × (number of nonzeros) matrix accesses, rather than by time (p. 19).",
+   "(D5) Add a pure-random strategy as a noise-floor arm, and print the virtual best as the ceiling a portfolio could reach (pp. 20, 24).",
+   "(D5) For success/failure outcomes, print the 2×2 contingency table of the two arms and test the discordant cells (McNemar); then confirm per instance over the seeds (p. 25).",
+   "(D5) Judge a heuristic inside a solver by time to optimality, nodes and primal-dual integral as ratios to the reference, in difficulty brackets [t, T} and on the subset of affected models (pp. 26–27)."
+  ],
+  "coauthors": "Domenico Salvagnin, Roberto Roberti",
+  "quotes": [
+   {
+    "text": "This is what prompted our strategy of applying solution repair not on complete assignments, but as a repair procedure within the fix-and-propagate search.",
+    "page": 14
+   },
+   {
+    "text": "while a pure random approach (random2) is among the worst methods, allowing us to argue that we are not just looking at noise",
+    "page": 20
+   }
+  ]
+ },
+ {
+  "id": "S172",
+  "year": 2025,
+  "title": "A Benders Decomposition Approach to the Time Window Assignment Traveling Salesperson Problem with Stochastic Travel Times",
+  "read_level": "full",
+  "contribution": "One-page abstract announcing a new 3-index-inspired formulation, an ad-hoc Benders decomposition using it, a comparison and a public benchmark for the TWATSP with stochastic travel times.",
+  "problem_entry": "Two-stage stochastic problem, routing and time windows first stage, stochastic travel times second; shift from cost-only routing to cost and service quality (p. 1).",
+  "key_idea": "New formulation inspired by a 3-index time-dependent TSP formulation, used by an ad-hoc Benders decomposition (p. 1).",
+  "assumptions": "n/a beyond benchmark instances with two opposite scenario types (p. 1).",
+  "proof_devices": [],
+  "experiments": "none",
+  "positioning": "Five references without in-text markers (Bonami-Salvagnin-Tramontani 2020, Celik et al. 2025, Crainic et al. 2021, Fischetti-Ljubic-Sinnl 2016, Fischetti-Monaci-Salvagnin 2012); QAP paper not cited in S144 (p. 1).",
+  "writing": "Superlatives and novelty claims with no supporting figures (p. 1).",
+  "limits_future": "No limits stated; benchmark intended to help future research (p. 1).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Abstract level only: gain credited to a new model used by the Benders algorithm; full evidence in S144",
+    "pages": "p. 1"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "(D5) Release benchmark instances with two deliberately opposite scenario types, so that a method's dependence on the structure of the uncertainty shows (p. 1; worked out in S144 pp. 9–10)."
+  ],
+  "coauthors": "Francesco Cavaliere, Roberto Roberti, Domenico Salvagnin",
+  "quotes": [
+   {
+    "text": "the (by far) most effective solution method is an ad-hoc Benders Decomposition algorithm that leverages our new model",
+    "page": 1
+   },
+   {
+    "text": "we provide a set of benchmark instances characterized by two opposite scenario types, intended to facilitate future research",
+    "page": 1
+   }
+  ]
+ },
+ {
+  "id": "S143",
+  "year": 2026,
+  "title": "EndoWake: Modeling wind by linear programming for wind farm layout optimization",
+  "read_level": "full",
+  "contribution": "A wind-farm layout MILP with the wind field as decision variables under linear propagation, negative results on its relaxation, band inequalities and a logic-based branch-and-check with upwind cuts and exact incumbent posting.",
+  "problem_entry": "Interference-matrix MP line has no dual bound beyond incumbents; write the wind field into the MILP with linear propagation; difficulty is the dual bound (pp. 2-6).",
+  "key_idea": "Wind speed per cell and scenario as variable bounded by a convex combination of upwind speeds; the feasible field has a greatest, antitone element (Prop. 1) behind every cut; band inequalities and branch-and-check (pp. 5-19).",
+  "assumptions": "Binary sites, continuous w and z, SOS2 power curve, big-M V_s, 3x3 clique packing; free-stream below cut-out; calibrated to Bastankhah-Porte-Agel (7.7%); synthetic symmetric n x n ladder, published benchmarks avoided (pp. 6-10, 20-21).",
+  "proof_devices": [
+   "Proposition 1, maximal field: monotone/antitone T_x, acyclic planes, forward substitution and induction (pp. 9-10)",
+   "Proposition 2, vacuous root bound via uniform fractional point (p. 11)",
+   "Perspective reformulation stops at wake-free value (p. 12)",
+   "Proposition 3, lifted wake row leaves bound at N_max·P_max (pp. 12-13)",
+   "Proposition 4, band inequalities valid: chain DP with three safe relaxations, upper hull, horizon N_max (pp. 14-16)",
+   "Proposition 5, O(|C|) subproblem, logic-based Benders (p. 17)",
+   "Proposition 6, upwind cut by antitonicity (pp. 18-19)",
+   "Supplement: Algorithms S1-S2, Lemma S1, Proposition S1 (pp. 31-34)"
+  ],
+  "experiments": "Gurobi 13.0, 4 threads, 3600 s, 5 seeds with median run per row; certificate metric; band inequalities halve root gap, branch-and-check closes 10x10 in 77 s vs 3472 s; ablations by subtraction; no external baseline (pp. 20-25, 35-42).",
+  "positioning": "Against interference-matrix MP line, heuristic line, gradient engineering and superposition-free wake models; credits PDE-constrained MIP; lineage logic-based Benders, combinatorial Benders, branch-and-check, Forbes et al. 2024 (pp. 2-5, 19).",
+  "writing": "Negative results counted as contributions, misreadings pre-empted, scope as calibrated model, conclusions as lessons, every number tied to a table (pp. 2-3, 10-11, 15, 24-25).",
+  "limits_future": "Exact sizes an order below industrial, oblique sectors and irregular sites open, eight-sector roses avoided; future: lazy-cut pool, local search in posting, fractional band separators, other grid transport problems (pp. 20, 26-27).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Branch-and-check projects flow and power into an oracle; fat and slim models reported on same instances; ablations by subtraction; thin master works only with band inequalities kept",
+    "pages": "pp. 17-18, 24-25"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Blame moved from big-M to relaxation structure via constructed failing point; decisive in-search choice is how cuts enter (static or pool)",
+    "pages": "pp. 11-13, 22"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "5 seeds per time-limited run, median run per row, all seeds in supplement, per-instance dispersion, seed-level win counts; no placebo arm",
+    "pages": "pp. 21-25, 35-42"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "No heuristic warm start, generation time charged, one machine/budget/median rule, declared win/tie/loss rule, cross-model objective comparisons refused; declared lapse: pooling chosen on preliminary run",
+    "pages": "pp. 20-25, 41"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Plain model to Gurobi first; Gurobi's hour of branching as yardstick; decomposition in solver callbacks",
+    "pages": "pp. 18, 21, 23, 32"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "negative results first on the relaxation",
+    "evidence": "Props. 2-3 and perspective failure before strengthening",
+    "pages": "pp. 11-13"
+   },
+   {
+    "pattern": "one in-house structural lemma behind every cut",
+    "evidence": "Prop. 1 underlies all cuts",
+    "pages": "pp. 9-10, 15-19, 33-34"
+   },
+   {
+    "pattern": "support-restricted logic-based optimality cuts",
+    "evidence": "Upwind cut, full-support ablation",
+    "pages": "pp. 18-19, 25"
+   },
+   {
+    "pattern": "declared AI adversarial reading of proofs",
+    "evidence": "AI declaration",
+    "pages": "p. 27"
+   }
+  ],
+  "transferable": [
+   "(D2) Make a physical state a decision variable with monotone linear propagation, and prove a maximal-element and antitonicity property. That one property then gives an exact linear-time evaluator, valid cuts and a decomposition at once (pp. 5–10, 17).",
+   "(D4) Before strengthening, construct the uniform fractional point that defeats the relaxation and state the density below which the bound is vacuous. Then test the textbook repairs against that point (pp. 11–13).",
+   "(D4) Build aggregate cuts with a DP over a chain that the structure orders: a band narrower than the separation holds at most one turbine per plane. Take the facets of the upper concave envelope, not chords between consecutive points (pp. 14–16).",
+   "(D4) In logic-based Benders, restrict an optimality cut's support to the variables that can influence the charged quantity, and evaluate the constant on that support. The cut then stays active beyond Hamming distance 1 from the incumbent (pp. 18–19, 25).",
+   "(D4) Post each oracle-scored incumbent to the solver at its exact value, so that pruning runs on the exact scale (pp. 18, 25).",
+   "(D4) Validate a new cut family in three ways: on a million feasible integer points, including packed boundary layouts; by checking its floating-point facets in exact arithmetic; and by recomputing the oracle with an independent LP (pp. 16, 24).",
+   "(D5) Report the median run of five seeds (by certificate, ties broken by time) as one reproducible run. Put every seed's table and a dispersion table in a supplement (pp. 21, 35–42).",
+   "(D5) When competitors use a different model, do not compare objective values across models. Run a synthetic ladder and compare model size instead (pp. 20, 24)."
+  ],
+  "coauthors": "Martina Fischetti",
+  "quotes": [
+   {
+    "text": "A reader would be tempted to blame the loss on the big-M constant of (3)—but ρ does not appear in that condition at all",
+    "page": 11
+   },
+   {
+    "text": "a heuristic start would help most exactly those that struggle to find a first incumbent, blurring the very effect being measured",
+    "page": 23
+   }
+  ]
+ },
+ {
+  "id": "S144",
+  "year": 2026,
+  "title": "Models and algorithms for the time window assignment traveling salesperson problem with stochastic travel times",
+  "read_level": "full",
+  "contribution": "A position-indexed 3-index model without big-M and a specialized Benders algorithm (layout screened with CPLEX's built-in Benders, warm start, support-based scenario aggregation) with a public testbed for the TWATSP-ST.",
+  "problem_entry": "Attended home delivery: tour and time windows here-and-now, times per scenario wait-and-see; prior big-M model (Celik et al. 2025) weak, solves n = 20 (pp. 1-4).",
+  "key_idea": "Position-indexed arc variables (Fox-Gavish-Graves) remove big-M; add 2-index variables and SECs; Benders split chosen by screening ten layouts, all time variables in one subproblem (pp. 3-7).",
+  "assumptions": "Complete asymmetric digraph, finite scenarios, shift T, weights fixed at 1, 10, 10; binary first stage, continuous recourse; generated instances with localized/spread disruptions, T calibrated from ATSP; Padova road set (pp. 3, 9-10, 13-14).",
+  "proof_devices": [
+   "Surrogate-relaxation validity of scenario aggregation (eqs. 6-9, p. 8)",
+   "LP equivalence of Claus and DFJ, cited from Padberg-Sung (p. 4)",
+   "x fixed through bounds for meaningful reduced costs in initial cut (p. 8)"
+  ],
+  "experiments": "CPLEX 20.1.0, 4 threads opportunistic, PassMark per machine; monolithic, built-in Benders layout screening, sample-size study vs solved 5000-scenario universe, aggregation on/off, 3-index vs big-M cuts with 5 seeds (90/90/90/73/29/18 vs 35), 2x2 ablation, weight sensitivity; prior algorithm not run (pp. 4-15).",
+  "positioning": "Two streams (TWAVRP, time slot management); Celik et al. 2025 only predecessor; credits Fox-Gavish-Graves, Claus, Padberg-Sung, Bonami-Salvagnin-Tramontani, Crainic et al.; self-citations Balas-Fischetti, Fischetti-Lodi-Toth, Fischetti-Ljubic-Sinnl (pp. 2, 4, 5, 7, 8).",
+  "writing": "Contribution bullets up front, surprises flagged, design decisions as emerging from preliminary tests; abstract claims broader than conclusion (pp. 1-2, 5-7, 14).",
+  "limits_future": "Correlated disruptions a first step, aggregation fails under correlation, 50-60 nodes often unsolved; future: multiple vehicles, discrete windows (pp. 13-14; Tables 6, 8, 14).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Order: CPLEX monolithic, then CPLEX built-in Benders to screen layouts, then specialized Benders in callbacks; warm start solved by same solver; primary source of the skill's '2025 order'",
+    "pages": "pp. 4-8, 12"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Model fit to instances (no big-M); time and scenario variables projected out of master; D±k facets removed; dynamic scenario aggregation",
+    "pages": "pp. 3-4, 7, 8"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Root-loop stall leads to querying the oracle at integer points only, after SEC separation",
+    "pages": "p. 7"
+   },
+   {
+    "method": "Method 2",
+    "relation": "contradiction",
+    "note": "Stabilization judged marginal and not implemented, fractional Benders separation at root dropped; branching raises bound faster than in-out stabilisation",
+    "pages": "p. 7"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "One-change comparison of separation LP; exclusions listed; losses printed; machine homogeneity measured",
+    "pages": "pp. 6, 9, 11-12, 14"
+   },
+   {
+    "method": "Method 4",
+    "relation": "contradiction",
+    "note": "Rival enters only as formulation inside authors' harness designed on same testbed; Celik et al.'s algorithm and instances not run; steps 2 and 5 not met",
+    "pages": "pp. 3-7, 12"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Seeds used to average variability away (5 seeds, Table 8 only); no placebo arm",
+    "pages": "p. 12"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "support-based scenario aggregation at separation time",
+    "evidence": "Aggregation reduces scenarios 50-90%, fails under correlation",
+    "pages": "pp. 8, 11, 13-14"
+   },
+   {
+    "pattern": "size the scenario sample against a solved full universe",
+    "evidence": "5000-scenario set solved once, samples compared in/out of sample",
+    "pages": "pp. 10-11"
+   },
+   {
+    "pattern": "benchmark the benchmark machines",
+    "evidence": "PassMark on every machine",
+    "pages": "p. 9"
+   },
+   {
+    "pattern": "integer-only Benders separation when branching beats the root loop",
+    "evidence": "Slow root progress, faster rise in branching",
+    "pages": "p. 7"
+   }
+  ],
+  "transferable": [
+   "(D2) Index time by tour position rather than by node, to remove big-M from time propagation. Then add the aggregated 2-index variables, so that the standard ATSP cuts still apply (pp. 3–4).",
+   "(D4) Before writing a specialized Benders, screen every master/subproblem split with the solver's built-in Benders. Where the built-in version has no callbacks, put Claus's flow model into the subproblem, so that SECs come back as feasibility cuts (pp. 5–7).",
+   "(D4) Get an initial Benders optimality cut from a warm-start x* by solving the LP with x fixed through its bounds, not through equations, so that the reduced costs are meaningful (p. 8).",
+   "(D4) Before each separation, merge the scenarios that coincide on the support of x*. The surrogate relaxation keeps the cut valid and supporting at x* (p. 8).",
+   "(D5) Size the scenario sample by solving the full scenario set to optimality once. Then compare samples in-sample (objective value) and out-of-sample (first stage re-evaluated on all scenarios) (pp. 10–11).",
+   "(D5) Run a hardware benchmark on each \"identical\" machine and report the mean and σ (p. 9).",
+   "(D5) Calibrate the generator's critical parameter from a solved relaxation (here the shift duration, from the optimal ATSP tour), so that instances are neither trivial nor unrealistic (p. 10).",
+   "(D5) Compare two formulations by changing only the separation function inside one algorithm (p. 12)."
+  ],
+  "coauthors": "Francesco Cavaliere, Roberto Roberti, Domenico Salvagnin",
+  "quotes": [
+   {
+    "text": "Since it is in general not possible to tell beforehand, we decided to evaluate computationally all the configurations",
+    "page": 5
+   },
+   {
+    "text": "No stabilization techniques have been implemented because their benefits turned out to be marginal in our overall solution scheme in preliminary tests.",
+    "page": 7
+   }
+  ]
+ }
+]

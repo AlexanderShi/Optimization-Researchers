@@ -1,0 +1,352 @@
+[
+ {
+  "id": "S145",
+  "year": "2017",
+  "title": "Integer (Linear) Optimization",
+  "read_level": "full",
+  "contribution": "A survey chapter with Balas for engineers that tells integer programming's computational revolution as cutting planes embedded in branch-and-bound (pp. 7-9), presents the feasibility pump, local branching and RINS as designs that put a MIP solver inside a heuristic (pp. 10-11), and adds a practical guide to running a MIP code: heuristic mode, seeds, parallel modes, callbacks (pp. 14-16).",
+  "problem_entry": "Entry by modelling, not by a solver failure: linear and convex models cannot represent nonconvexities, and integer programming \"is a universal tool\" for them; production-plan example with thresholds, implications and precedences (p. 1); a survey for an engineering readership (p. 1).",
+  "key_idea": "Historical argument: three decades of branch-and-bound limited to 30-50 variables while cutting-plane codes failed numerically (p. 7), then a 1990-2005 revolution from embedding cuts in branch-and-bound (p. 8); heuristics as a second line ending in solver-inside-heuristic designs (pp. 9-11); a how-to section on using a MIP code (pp. 14-16).",
+  "assumptions": "MIP min{c^T x : Ax >= b, x >= 0, x_j integer, j in N1} (p. 1); 0-1 programming the most important case (p. 2); model families: fixed charge, facility location, knapsack, set covering/partitioning, matching, TSP (pp. 2-5); formulation criterion = LP-relaxation tightness, even against twice the variables or constraints (pp. 3-4); no model library used, MIPLIB only as the measure of progress (p. 8).",
+  "proof_devices": [
+   "n/a: no proofs; recalled without proof: Edmonds' odd-set description of the matching polytope (p. 4)",
+   "Chvatal closure and rank; intersection cuts, with the Gomory cut as the intersection cut of a split (p. 6)",
+   "Farkas characterization of valid inequalities for a union of polyhedra; sequential convexifiability of 0-1 programs, disjunctive rank n (p. 7)",
+   "Branch-and-cut made possible for general MIP by lifting node cuts to global validity; cuts while they work, branching when they stall (p. 8)",
+   "Rounds of cuts before reoptimizing curb the numerics of the one-cut loop; Gomory cuts in rounds inside B&B become tractable; lift-and-project via pivoting in the LP tableau (p. 9)",
+   "Usage design: heuristic mode (heuristics every 1 or 10 nodes, final polishing with a short limit, cuts off as an option), seeds, deterministic/opportunistic/distributed parallel modes, informative/lazy/heuristic/user-cut/solve/branch/node callbacks (pp. 14-16)"
+  ],
+  "experiments": "n/a: no experiment of the authors; solver developers' figures quoted (CPLEX 1.2 to 11.0 on 1,852 instances, 29,530-fold, 15% to 69% solved; Gurobi 5.6 vs 1.0, 21x; p. 9) from talks [14, 15] (p. 17); an unquantified seed example, ten 5-minute runs against one 50-minute run (p. 15); Edelman figures (pp. 11-12).",
+  "positioning": "Self-cited on both sides: Balas's intersection cuts, disjunctive programming and lift-and-project carry the history and the revolution's \"key impetus\" (pp. 6-9); Fischetti's pump, local branching, erraticism and railway papers carry heuristics and usage (pp. 10-11, 15); local branching claimed as the first MIP solver inside a general MIP heuristic (p. 10); RINS and Achterberg-Berthold credited (pp. 10-11); no Benders, symmetry, presolve or proximity search anywhere (search of the whole text).",
+  "writing": "Handbook register with strong adjectives (\"An amazing variety\", p. 1; \"a miraculous tool\", p. 7; \"a true revolution\", p. 8); numbers carry the progress claim (p. 9); one objection answered in place (\"may appear naive\", p. 10); a how-to section addressed to the user (pp. 14-16); no conclusion section (ends at p. 16).",
+  "limits_future": "Exposition only; no limits, open problems or future directions named (pp. 1-16); the formulation criterion (pp. 3-4) and the seed advice (p. 15) come without conditions.",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Stock solver in command mode as a black box 'is just what is needed' in many cases; a MIP solver inside a heuristic justified by the structural simplification invalid constraints bring; heuristic-mode parameters presented as the first resort, before programs and callbacks (also Heuristic 5).",
+    "pages": "pp. 10, 14-15"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Resource half only: seeds diversify the solver for heuristic search, several short seeded runs, in parallel where possible, credited to the erraticism paper [26]; no bet, no placebo, no data.",
+    "pages": "p. 15"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Historical, joint voice (Balas's line): cutting planes looked unworkable because of the one-cut-then-reoptimize loop, not the cut family; the cure was rounds of cuts and branching when cuts stall, not a moved query point.",
+    "pages": "pp. 7-9"
+   },
+   {
+    "method": "Method 1",
+    "relation": "contradiction",
+    "note": "Joint textbook voice: LP tightness is the leading formulation criterion, preferred even with twice the variables or constraints, the opposite of step 2; consistent with Method 1's own limitation for exact work; the lazy-constraint callback (keep a huge family out of the initial model) is the device a Benders projection runs on (inference).",
+    "pages": "pp. 3-4, 15-16"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Before writing a heuristic, run the stock solver in its heuristic mode: heuristic frequency every 1 or 10 nodes, the final polishing step with a short time limit, cuts off as one arm but not as a rule (pp. 14-15).",
+   "When the target is an incumbent rather than a proof, compare k short seeded runs against one run of the same total time (ten 5-minute runs against one 50-minute run), in parallel when cores allow (p. 15).",
+   "Keep a huge or complex constraint family out of the initial model and enforce it in the lazy-constraint callback, certifying each rejected solution by a violated cut (pp. 15-16).",
+   "Pick the parallel mode by purpose: deterministic for reproducible experiments, opportunistic for speed (p. 15).",
+   "When a design looks naive (an exact solver inside a heuristic), name the mechanism that makes it work, here structural simplification enabling preprocessing and pruning (p. 10)."
+  ],
+  "coauthors": "Egon Balas (first author; Carnegie Mellon, p. 1); the joint voice cannot be split, the section split by author is an inference",
+  "quotes": [
+   {
+    "text": "the formulation with the higher LP optimum is usually preferable",
+    "page": 4
+   },
+   {
+    "text": "may appear naive at first glance, but it turns out to be effective",
+    "page": 10
+   }
+  ]
+ },
+ {
+  "id": "S008",
+  "year": "2018",
+  "title": "Deep neural networks and mixed integer linear optimization",
+  "read_level": "full",
+  "contribution": "Models a ReLU network with fixed weights as a 0-1 MILP with indicator constraints (conceding the model to concurrent work, p. 2), adds a layer-by-layer bound tightening by auxiliary MILPs that lifts CPLEX 12.7's solved share on 100 adversarial instances per network from 64/24/7% to 100/98/67% on the three hardest small networks (Table 1, p. 12), and shows feature-visualization and adversarial uses (pp. 6-11).",
+  "problem_entry": "Structural observation plus a feasibility question: a ReLU network with fixed parameters is a 0-1 MILP (p. 1), indicator constraints make very hard instances, and evaluating the model's practical feasibility was a main motivation (pp. 4-5); priority conceded to [2, 13, 15], the claim moved to applications (p. 2).",
+  "key_idea": "ReLU as w^T y + b = x - s, x, s >= 0, with one binary and indicator implications instead of bilinear complementarity, big-M left to the solver (pp. 3-4); max pooling with one binary per input (p. 4); bound tightening unit by unit on the truncated model, maximizing x and s, optimum or optimistic bound after a short limit (p. 5).",
+  "assumptions": "0-1 MILP with indicator (big-M) constraints, weights, biases and costs fixed, input bounds from the inputs' meaning (p. 4); fixing the input fixes everything, so the model is never infeasible (p. 5); bilinear and unusable for training (p. 6); MNIST, 784 inputs in [0, 1], DNN1-DNN5 with 3-6 hidden layers of 8-20 ReLUs, 93-96% test accuracy (pp. 6, 11).",
+  "proof_devices": [
+   "Uniqueness: fixing the input fixes every x and z except a z with zero ReLU input, so the model cannot be infeasible and any input extends to a feasible solution (p. 5)",
+   "Acyclicity: bounds tightened for one layer are used in all later ones; bounds depend only on a priori input bounds, so they are cached in a file and reused; per-layer computations distributable without communication (p. 5)",
+   "Validity of cheap bounds: the solver's optimistic bound after a short limit, or after the root node, is a valid but weaker bound (pp. 5, 12)",
+   "x - s split with indicator constraints converted by the solver to big-M rows from M+ and M- (p. 3); max pooling via binaries with sum z_i = 1 (p. 4)",
+   "Adversarial model: target digit (d~ + 5) mod 10 with a 20% activation margin (12), L1 distance by auxiliary d_j (13), optional d_j <= 0.2 (pp. 7, 9)"
+  ],
+  "experiments": "CPLEX 12.7 on a 4-core i7 2.3 GHz notebook, 16 GB, 300 s, 100 adversarial instances per network for five small MNIST networks; basic vs tightened %solved 100/100, 97/100, 64/100, 24/98, 7/67 (Table 1, p. 12); preprocessing reported separately (1,112 s and 4,913 s) and a 1-s-per-bound variant (69.4 s, 72.6 s; DNN5 57% vs 67%, Table 2, p. 13); a 1%-gap run under 3,600 s (Table 3, p. 13); one run per instance, no seeds, arithmetic means; no learning baselines run (p. 6).",
+  "positioning": "Concedes the model to [2, 13, 15] (p. 2); bound tightening \"very much in the spirit of\" Belotti et al. [1], his own co-authored paper (p. 5); his SVM paper [5] for avoiding proven optimality in training (p. 6); his local branching and proximity search plus Rothberg's polishing as refiners (pp. 5, 14); greedy ascent trapped in local optima, other attacks use perturbation patterns and noise-like changes (pp. 6-7, 11).",
+  "writing": "Priority concession before the model (p. 2); \"a very first step\" (p. 13); first-person hedges (\"In our view\", p. 6); results \"striking\" and \"quite encouraging\" (p. 12), a loss described as \"without deteriorating too much\" (p. 13); the scope set by wordplay, \"(un)fortunately not suited for training\" (p. 6).",
+  "limits_future": "Small networks only, larger ones take an hour or more (p. 14); not for training (p. 6); gradient-plus-MILP hybrid \"not investigated\" (p. 5); future: less effort for the exact model, heuristics for large and convolutional networks, new deep-learning uses (p. 14).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "The sub-decision (how large each unit's input can be) written as auxiliary MILPs, solved with the same solver even heuristically (short limit, root only), moved to a one-off preprocessing step reused for every query and cut to a 1-second version where slow (steps 2 and 5); the first question put to the solver is whether the plain model is practical.",
+    "pages": "pp. 4-5, 11-12"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Each bound computed on a thinned model with later units deleted, but the main lever is strengthening the big-M links, not removing variables.",
+    "pages": "pp. 5, 12"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "The add-on's cost is excluded from Table 1 but reported, then cut to a cheap valid version whose loss is printed; but the only arms are his own two models and learning baselines are not run.",
+    "pages": "pp. 6, 12-13"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "The defect turned into the mechanism (overfitting as a resource)",
+    "evidence": "Overfitting the given network is a desired property where optimality is wanted (adversarial examples), while proven optimality is a poor policy in training; compare S133, where slightly overfitting a large minibatch is the claimed source of the speed-up.",
+    "pages": "p. 6"
+   }
+  ],
+  "transferable": [
+   "Tighten big-M bounds of a layered model by auxiliary MILPs on the truncated model, one maximization per bounded variable, accepting the solver's optimistic bound after a short limit as a valid bound (pp. 5, 12).",
+   "Compute preprocessing that depends only on a priori data once per model, store and reuse it; report its cost separately with a cheap variant (exact vs 1 s per bound) in its own table (pp. 5, 12-13).",
+   "Model ReLU and max pooling with an x - s split and indicator constraints rather than bilinear complementarity, and let the solver derive big-M values from bounds (pp. 3-4).",
+   "Exploit a model that cannot be infeasible: any random or gradient-found input extends to a feasible solution for refinement heuristics (local branching, polishing, proximity search) (p. 5).",
+   "Report %solved, %gap, nodes and time with time-outs counted at the limit, plus a run to a 1% gap under a longer limit with the number of time-outs (pp. 11-13)."
+  ],
+  "coauthors": "Jason Jo (MILA and IVADO, Montreal, p. 1); Fischetti corresponding author; Bengio and Lodi thanked (p. 14)",
+  "quotes": [
+   {
+    "text": "Therefore we cannot claim the model is new.",
+    "page": 2
+   },
+   {
+    "text": "In those cases, indeed, overfitting the given DNN is actually a desired property.",
+    "page": 6
+   }
+  ]
+ },
+ {
+  "id": "S133",
+  "year": "2018",
+  "title": "Faster SGD training by minibatch persistency",
+  "read_level": "full",
+  "contribution": "Proposes reusing each SGD minibatch for K consecutive iterations and reports, for a reduced AlexNet on CIFAR-10 with a fixed untuned learning rate and one seed, faster convergence with K = 2 or 5 for minibatches of 256 or 512, labelled a computational conjecture (pp. 1-5).",
+  "problem_entry": "Hardware pressure and an unexamined default: large minibatches suit GPUs but converge and generalize poorly (p. 1); the literature retunes the learning rate but takes the \"disposable minibatch\" for granted (pp. 1-2).",
+  "key_idea": "One parameter, persistency K, with K = 1 the standard rule (p. 2); \"computational conjecture\": a large minibatch is a significant sample, so slightly overfitting it is affordable (p. 1); less data loading to the GPU (p. 2); a k-mu learning rate on the k-th reuse tried only in preliminary runs (p. 5).",
+  "assumptions": "n/a for MILP; learning setting: CIFAR-10 (50,000/10,000), reduced AlexNet, minibatch sizes 32, 256, 512 (pp. 2-3); scope stated as \"at least in the setting we considered\" (p. 2) and \"the specific setting\" (p. 5).",
+  "proof_devices": [
+   "n/a: no proofs or invariants; the design device is a single parameter K with the standard value K = 1 as one arm (p. 2)",
+   "SGD with momentum, minibatch gradient as the sum (not the mean) of the m gradients, mu = 0.001 and gamma = 0.5 fixed a priori and not tuned; batch normalization, dropout and augmentation off to isolate K (pp. 2-3)"
+  ],
+  "experiments": "One GTX 1080 Ti GPU, wall-clock seconds, 100 epochs, K in {1, 2, 5} for m in {32, 256, 512}, test accuracy and loss against both time and epochs (pp. 2-4); m = 32: K = 5 about 2,000 s vs 700 s, best accuracy 0.64450 vs 0.63640 (p. 3); m = 512: K = 5 \"the clear winner\" (p. 4); accuracies about 60%, not competitive (p. 3); one seed for all runs, one run per configuration (p. 2).",
+  "positioning": "In the spirit of Masters and Luschi [9], whose best results are at m <= 8 (pp. 2-3); next to learning-rate scaling and warm-up [2] and large-batch work [5, 8, 13] (pp. 1-2); cites [13] on drawbacks of a learning rate independent of m, its own setting (p. 3); adaptive rule reminiscent of cyclical learning rates [11] (p. 5).",
+  "writing": "Status labels in the abstract, \"computational conjecture\" and \"The lesson learned is\" (p. 1), with a scope clause (p. 2); limits stated where they bite (pp. 3, 5); mild verdicts, \"rather encouraging\" (p. 4), \"promising\" (p. 5).",
+  "limits_future": "One dataset and network (p. 5), untuned learning rate and momentum (pp. 2-3), low absolute accuracy (p. 3); a single seed not named as a limit (p. 2); future: other datasets and networks, adaptive learning rates (p. 5).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "The 2018 side of the re-test SKILL.md describes: the text already names its untuned learning rate and single setting, the weaknesses a later re-test has to answer.",
+    "pages": "pp. 2-3, 5"
+   },
+   {
+    "method": "Method 3",
+    "relation": "contradiction",
+    "note": "One seed for all runs, one run per configuration; differences such as 0.64450 vs 0.63640 are of a size a seed change could produce, but no spread was measured (inference).",
+    "pages": "pp. 2-3"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Time reported next to epochs so as not to favour K > 1, same fixed settings for every K; but the baseline is not what a practitioner would run with large minibatches (learning-rate scaling, warm-up), as the paper says. Also Heuristics 1 and 7.",
+    "pages": "pp. 1-3"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "The defect turned into the mechanism (overfitting as a resource)",
+    "evidence": "Slightly overfitting a large minibatch is the claimed source of faster convergence; compare S008, where overfitting the given network is the desired property.",
+    "pages": "pp. 1-2"
+   }
+  ],
+  "transferable": [
+   "Turn an assumption every published method takes for granted into a named parameter whose standard value is one arm (K = 1) (p. 2).",
+   "When one arm does more work per epoch or iteration, plot results against wall-clock time as well as epochs or iterations (p. 3).",
+   "Strip a pipeline to its bare algorithm to isolate one parameter and say what this costs in absolute performance; the same choice makes the baseline unrepresentative, which a later re-test must address (pp. 2-3).",
+   "Put the claim's status ('computational conjecture') and its scope ('at least in the setting we considered') in the abstract and the introduction (pp. 1-2)."
+  ],
+  "coauthors": "Iacopo Mandatelli (Padova, student e-mail address) and Domenico Salvagnin (Padova) (p. 1); Fischetti corresponding author",
+  "quotes": [
+   {
+    "text": "The computational conjecture here is that a large minibatch contains a significant sample",
+    "page": 1
+   },
+   {
+    "text": "initial random seed (affecting, in particular, the random weight initialization) was kept the same",
+    "page": 2
+   }
+  ]
+ },
+ {
+  "id": "S079",
+  "year": "2020",
+  "title": "A branch-and-cut algorithm for mixed-integer bilinear programming",
+  "read_level": "full",
+  "contribution": "An exact branch-and-cut for mixed-integer bilinear programs built from CPLEX 12.8 callbacks on the MILP bilinear relaxation, with a balanced-violation spatial-branching threshold and intersection cuts from bilinear-free sets; on 620 MINLPlib instances the vanilla version comes close to SCIP 5.0.1 (SCIP solves 378, basic 328) and the cuts pay only on selected instances (pp. 3-16).",
+  "problem_entry": "Reformulation and tool: isolate bilinear terms as x_r = x_p x_q so that dropping them leaves a MILP, the bilinear relaxation (pp. 1-2); no failure of global solvers named (p. 3); premise that a MILP branch-and-cut solver can carry the search (p. 3).",
+  "key_idea": "Stock MILP branch-and-cut on the relaxation, (5) enforced by local McCormick and gradient cuts, spatial branching only as a last resort (p. 3); threshold x* +/- delta with delta = rho*/(1 + u_y - y*) balancing the children (pp. 5-6); intersection cuts from bilinear-free sets S1, S2 built by simulated branching (pp. 7-8).",
+  "assumptions": "MIBLP with general integers and squares allowed, finite bounds on factor variables (p. 2); bounded root bilinear relaxation required, 620 of the 768 MINLPlib .lp instances kept (p. 11); McCormick hull over a box (p. 4); intersection cuts need an LP vertex and are locally valid (p. 7); many instances small, 144 (188) of 408 with at most 50 (100) variables (p. 16).",
+  "proof_devices": [
+   "McCormick convex hull of z = xy over a box, from (x - l)(y - l) >= 0 and its three companions (p. 4)",
+   "Balanced-violation threshold: require the child McCormick inequality to be violated by the same delta as the bound, giving delta = rho*/(1 + u_y - y*); maximum delta chosen, midpoint fallback within 10 eps of a bound (pp. 5-6, Algorithms 1-2)",
+   "Bilinear-free set from a simulated k-way branching, one reversed most-violated McCormick inequality per branch (p. 8)",
+   "Intersection cut by the disjunctive 3-step procedure with coefficients from the original data, so inaccurate multipliers reduce violation but not validity (pp. 7-8)",
+   "Callback design: lazy-constraint callback for (5), user-cut callback off, branching callback only when CPLEX's condition is undefined; presolve reductions off, all preprocessing off for intersection cuts (pp. 9-10)",
+   "Removed pieces: elaborate bilinear-free sets (p. 9), local McCormick constraints at child creation (pp. 12-13), root fractional separation (p. 13)"
+  ],
+  "experiments": "620 MINLPlib instances, Xeon E3-1220V2 3.1 GHz, one thread, 3,600 s; SCIP 5.0.1 vs basic vs with-IC with aligned tolerances and the optimum given to every arm (pp. 10-11); solved 378/328/323, shifted geometric means (shift 1 s) 34.45/53.04/67.93 s (Table 1, p. 13); classes by slowest arm on 248 all-solved instances (pp. 14-15); nine intersection-cut wins confirmed with 5 seeds (Table 4, p. 16); small instances kept (p. 16); 4 vs 1 threads on 349 instances (pp. 16-17).",
+  "positioning": "Builds on McCormick, RLT, Audet et al., Tawarmalani et al., Adams-Sherali, Gupte et al., Bienstock and polynomial intersection cuts [8] (p. 2); intersection cuts credited to Balas and Conforti-Cornuejols-Zambelli, the disjunctive view to Glover and his bilevel paper [18] (p. 7); only SCIP compared of eight listed solvers (pp. 3, 10), with the comparison declared indirect (p. 13).",
+  "writing": "\"Our order of business\" (pp. 5, 11); abstract \"competitive\" (p. 1) qualified by the full set (p. 13) and supported by a subset declared biased against SCIP (p. 14); negative result framed as a \"(somehow frustrating) experience\" of the field (p. 16).",
+  "limits_future": "Intersection cuts rarely pay on average and force preprocessing off (p. 16); bounded root relaxation required (p. 11); SCIP better on very easy instances (p. 15); tailing-off strategy untried (p. 13); future: other bilinear-free sets and instance features to switch intersection cuts on or off (p. 18).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "The stock MILP solver runs the search; the code steps in only where the solver is blind (lazy cuts, spatial branching when CPLEX's branching is undefined), user-cut callback off; the vanilla arm is the recommended one.",
+    "pages": "pp. 3, 9-10, 13-16"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "Step 5 in add-then-drop form: three pieces built, measured and removed because they did not pay ('to keep our implementation as clean as possible').",
+    "pages": "pp. 9, 12-13"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Tolerances and threads aligned; classes by a rule in which the arms play an indistinguishable role (nearly the erraticism paper's sentence); bias against SCIP disclosed; SCIP-friendly small instances kept; SCIP's wins printed. Lapses: a rival of a different technology, a single rival.",
+    "pages": "pp. 3, 10-11, 13-16"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Variability reduced by giving every arm the optimal value rather than measured; seeds only to confirm nine selected wins; variability invoked to read parallel speed-ups; no placebo arm.",
+    "pages": "pp. 10, 16-17"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "The root loop variant was dropped on its time-outs with a better tailing-off strategy named but untried, and intersection cuts separate LP vertices only, so the verdict on the cut family rests on vertex separation.",
+    "pages": "pp. 7, 13, 16"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Make cut validity independent of tableau accuracy",
+    "evidence": "Intersection-cut coefficients computed from the original data via the disjunctive procedure, so numerical error in the multipliers only weakens the cut; the same device is referred to his bilevel paper [18]; unreliable cuts discarded (variant of Heuristic 10).",
+    "pages": "pp. 7-9"
+   }
+  ],
+  "transferable": [
+   "Solve the relaxation that is a MILP with the stock solver, enforce the remaining constraints on integral candidates in the lazy-constraint callback, and take over branching only when the solver's own branching condition is undefined (pp. 3, 9-10).",
+   "Choose a spatial-branching threshold by balancing the children: delta = rho*/(1 + u_y - y*), largest delta wins, midpoint fallback near a bound (pp. 5-6).",
+   "Build the convex set of an intersection cut by simulating a k-way branching and reversing the most violated valid inequality of each branch; compute the cut from original data so numerical error never invalidates it (pp. 7-8).",
+   "In a cut study across solvers, give every arm the optimal value, align tolerances, gap limits and threads, define classes by the slowest arm's time, and add nested classes G_k = C_k u ... u C_5 (pp. 10-11, 14-15).",
+   "Keep instances that favour the rival in the main statistics and show the subsets without them separately (p. 16, Fig. 3).",
+   "Confirm a table of selected wins with five seeds and label it as selected (Table 4, p. 16).",
+   "Read parallel speed-ups beyond the thread count as performance variability, not parallel efficiency (p. 17)."
+  ],
+  "coauthors": "Michele Monaci (Bologna, p. 1); Salvagnin thanked for help with SCIP, Dagstuhl Seminar 18081 credited (p. 19)",
+  "quotes": [
+   {
+    "text": "the competing methods play an indistinguishable role in the class definition",
+    "page": 14
+   },
+   {
+    "text": "would have been unfair to SCIP as it would have produced a biased dataset",
+    "page": 16
+   }
+  ]
+ },
+ {
+  "id": "S076",
+  "year": "2022",
+  "title": "Learning to search in local branching",
+  "read_level": "full",
+  "contribution": "Read in the extended arXiv v2 ('Revisiting local branching with a machine learning lens'): learns local branching's neighbourhood size per instance (a GNN regression for the first k, scaled by the LP optimum's LB distance, then an RL policy on relative changes) and, new in v2, the time limit per subproblem, improving the primal integral over the original LB on five benchmarks with SCIP as sub-solver, with no seeds and some final-gap losses (pp. 1-22).",
+  "problem_entry": "A parameter of his own method: the original LB starts from a small neighbourhood size adapted conservatively, leaving \"a lot of space for improvement\" (p. 2); the best size depends strongly on the instance (pp. 2-3); black-box search over k is too slow online (p. 6); instances recur, so learn from data (p. 3).",
+  "key_idea": "Learn the knob, not the variables (p. 4): k0 = phi0 * Delta(x_LP, x_inc) predicted by a GNN (pp. 8-9), later k adapted by a linear RL policy with relative actions and reward o_imp * (t_max - t_elaps) (pp. 10-11), plus in v2 an outer RL loop on the time limit (pp. 12-13); neighbourhoods still explored by a black-box MILP solver (p. 6).",
+  "assumptions": "MILP with binaries required for LB (general integers via [7]) (p. 5); initial incumbent needed, SCIP's first or root-end solution (p. 14); SC, MIS, CA (200 each, 70/10/20), doubled sizes (40 each), 35 GISP, 29 binary MIPLIB 2017 instances also used by the original LB (pp. 13-14); training sets named inconsistently, 'SC, MIS and LCS' (p. 16) vs SC, MIS and CA (p. 18).",
+  "proof_devices": [
+   "n/a: no proofs; the bound k0 = Delta(x_LP, x_inc) on useful neighbourhood sizes is a heuristic argument from proximity search [19] (p. 8)",
+   "Exactness of the LB branching Delta <= k / Delta >= k + 1 recalled (p. 5)",
+   "Labels by grid search over phi0 at resolution 0.01 under cost alpha*t + (1 - alpha)*o with alpha = 0.5 (pp. 7, 14, 17)",
+   "GNN with 64-neuron layers and two half-convolutions on 12 bipartite-graph features (pp. 14-15, Table 1); linear RL policies on 7 instance-independent solve-status features with 4 actions, REINFORCE (pp. 10-11, 15-16, Table 2)",
+   "Nested controllers trained one at a time, k-policy fixed while the time-limit policy learns (p. 13)",
+   "Settings: learning rates picked from 1e-5 to 1e-1, 300 epochs, kstep 0.5, tstep 2, 10 s per LB iteration; SCIP 7.0.1 via PySCIPOpt 3.1.1; in-solver frequency f = 100 from {1, 10, 100, 1000} (pp. 17, 21)"
+  ],
+  "experiments": "SCIP as sub-solver, 10 s per LB iteration, 60 s per instance (600 s for the time-limit study) (pp. 17, 20); baseline = the original LB with unstated k (p. 17); primal integral and final primal gap as geometric means, no shift stated (pp. 16-20); learned variants better in most cells (Tables 3-8, pp. 18-19), but losses on MIS root (Table 4), MIPLIB first for lb-rl (Table 7) and MIPLIB root final gap at 600 s (Table 10); no hardware, threads, seeds or spread; no competing heuristic in §5; in-solver test as curves only (pp. 21-22).",
+  "positioning": "Surveys learning inside solvers and learned primal heuristics; criticizes variable-wise predictions, static features and reliance on parallelism in learned neighbourhood search (p. 4); LB placed as one of the first uses of a black-box MILP solver inside a heuristic (p. 2); proximity search [19] supplies the motivation and the bound k0 (pp. 2, 8).",
+  "writing": "Headline \"remarkably, across instances\" (pp. 1, 20), explained by the instance-wise design (p. 18); firm claims (\"significantly outperform\", p. 18) with losses visible only in tables (pp. 18-20); exactness set aside in a parenthesis, heuristic use \"trivial (and generally preferrable)\" (p. 6).",
+  "limits_future": "Stated: an initial solution is needed (p. 22), binaries needed (p. 5); unstated: no seeds, baseline settings, final-gap losses (pp. 17-20); future: learning to coordinate several refinement heuristics (p. 22).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "His own 2003 design choice (small fixed neighbourhood, conservative adaptation) reopened, the original LB kept as the baseline arm, binary MIPLIB instances also used by the original paper; a variant in form, a learning study whose first author is at the CERC in Montreal with Lodi, no implementation read.",
+    "pages": "pp. 1-2, 6, 14, 17"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "The learned parts set two scalars and leave the black-box solver to explore every neighbourhood; inside SCIP the cheapest placement, root only, works best.",
+    "pages": "pp. 6, 17, 22"
+   },
+   {
+    "method": "Method 3",
+    "relation": "contradiction",
+    "note": "No seeds, no spread and no hardware for a comparison of learned heuristics across five benchmarks; joint work, Fischetti's share unknown.",
+    "pages": "pp. 13-21"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "Same solver and 10 s per iteration for every arm, but the baseline's settings are not given, the in-solver frequency is tuned on unstated instances, and the losses in Tables 4, 7 and 10 go unmentioned in the prose.",
+    "pages": "pp. 17-21"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Learn the knob, not the variables",
+    "evidence": "Predict an instance-wise control scalar (neighbourhood size, time limit) instead of variable values; the paper attributes its cross-class generalization to this choice.",
+    "pages": "pp. 4, 18"
+   }
+  ],
+  "transferable": [
+   "Scale an integer control parameter by an instance-derived bound so the learning target lies in (0, 1) and transfers across sizes: k = phi * Delta(x_LP, x_inc) (p. 8).",
+   "Generate labels for a parameter predictor by a one-dimensional grid search (resolution 0.01) under a cost mixing scaled time and scaled objective (alpha = 0.5) (pp. 7, 14, 17).",
+   "Give an RL controller relative actions on the last value plus a reset and only instance-independent solve-status features, so a linear policy trained on one class runs on others (pp. 10, 15-16).",
+   "Train nested controllers one at a time, holding the inner policy fixed while the outer one learns (p. 13).",
+   "Report every heuristic from two starting incumbents and with both the primal integral and the final primal gap, which can rank the arms differently (Tables 9-10, p. 20).",
+   "Test a stand-alone neighbourhood scheme also as an in-solver primal heuristic, at the root only and every f nodes (p. 21)."
+  ],
+  "coauthors": "Defeng Liu (first author, CERC Polytechnique Montreal) and Andrea Lodi (CERC and Cornell Tech) (p. 1); 'All authors contributed' (p. 25); version read: arXiv 2112.02195v2, cite as [S076 arXiv v2 p. N]",
+  "quotes": [
+   {
+    "text": "the original LB algorithm initializes k with a fixed small value",
+    "page": 6
+   },
+   {
+    "text": "predict the neighborhood size at a instance-wise level, rather than making predictions on variables",
+    "page": 18
+   }
+  ]
+ }
+]

@@ -1,0 +1,367 @@
+[
+ {
+  "id": "S014",
+  "year": 2006,
+  "title": "An algorithmic framework for the exact solution of the prize-collecting Steiner tree problem",
+  "read_level": "full",
+  "contribution": "Algorithm plus instance library: all literature instances solved to optimality in seconds, several for the first time (pp. 13, 24), and optima for the new E group and the real-world sets (pp. 17-24).",
+  "problem_entry": "Entry by application: district-heating and \"last mile\" fiber networks, where the profitable customers and the network that connects them are chosen together (pp. 1-2). PCST is defined on an undirected graph with edge costs and vertex profits (Definition 1, p. 2) and then switched to the equivalent Goemans-Williamson minimization (2) used in the literature (p. 3). The gap left by prior work: Lucena and Resende's cutting-plane algorithm solved many of the benchmark instances but not all (p. 5); on 16 instances of groups C and D it did not prove optimality (p. 13).",
+  "key_idea": "Combine \"several state-of-the-art methods previously used for the Steiner tree problem\" (abstract, p. 1) in one directed branch-and-cut. PCST becomes a Steiner arborescence problem with an artificial root r joined to every customer, root degree 1 and arc costs c″_ij = c′_ij − p′_j (pp. 6-7); connectivity is imposed by directed cut constraints (6), LP-equivalent to directed GSECs (p. 8); asymmetry constraints (9) make each PCST solution correspond to one arborescence (p. 8); flow-balance constraints (10) from Koch and Martin strengthen the relaxation (pp. 9-10); the size-two GSECs (11) go into the initial LP (p. 10). What stays standard: separation by max-flow min-cut, enriched with nested cuts and back-cuts (pp. 11-12).",
+  "assumptions": "Pure 0-1 model, x on arcs and y on vertices (p. 7); costs and profits nonnegative and at least one customer, R ≠ ∅ (p. 2); the rooted variant is modelled by a high-profit or shrunk root vertex (p. 3). Data: Johnson et al.'s random groups K (23 instances) and P (11), Canuto et al.'s groups C and D (40 each) from the OR-Library Steiner series, a new group E of 40 instances with 2,500 vertices and up to 62,500 edges, and 35 Cologne fiber-network instances from GIS data in which customers and prizes were slightly changed for data protection (pp. 12, 20). All instances are posted online (p. 12).",
+  "proof_devices": [
+   "Preprocessing by the Duin-Volgenant tests (least-cost, degree-l, minimum adjacency), iterated until nothing changes, worst case O(|E|²|V| + |E||V|² log|V|) time and O(|E|²) space (pp. 5-6)",
+   "Uchoa's generalized tests are not implemented (p. 6). Branch-and-cut on ILOG CPLEX and Concert Technology 8.1 (p. 10). Separation (Algorithm 1, p. 11): a Cherkassky-Goldberg max-flow from r to each customer with y_i > 0",
+   "nested cuts (arcs of a found cut set to capacity 1 and the flow recomputed), back-cuts from the same flow, optional minimum-cardinality cuts by adding EPS to every capacity",
+   "MAXCUTS = 100 and a violation threshold of 10⁻⁴ (pp. 11-12). Proof devices are light: \"It is easy to see\" that every optimal solution is a tree (p. 2)",
+   "cuts become GSECs by adding in-degree equations (p. 8)",
+   "small hand-made instances whose LP values show each strengthening (Fig. 3, LP value 7.5 → 8, p. 9; Fig. 5, 150 → 300 → 1650, p. 21)."
+  ],
+  "experiments": "Pentium IV 2.8 GHz, 2 GB, against the times Lucena and Resende (LR) published for an SGI machine, divided by 20, a factor obtained from SPEC (17.2) and from Dongarra's tables (12.4) and rounded up \"by a conservative estimate\" (p. 13). Per-instance tables give the optimum, time, own cuts, CPLEX Gomory cuts and time without preprocessing (Tables 1-2, pp. 14-15). Speed-up factors per group, over instances with t_ILP > 0.2 s (Table 3, p. 16): 11 to 156 on average, and a loss printed: about 30 times slower than LR on group K (p. 16). Ablations: preprocessing on and off on E with a 2,000 s limit (Table 4, pp. 17-18; 5 of 40 unsolved without it, p. 17); back-cuts off, which makes larger instances fail on memory (p. 17); EPS 0 against 10⁻⁴ and (11) in or out of the initial LP (Table 5, p. 20; Fig. 4, p. 19); (11) on the real-world instances (Table 7, p. 24). One run per instance, no seeds. One exclusion with its reason: the Cologne2 *M1 instances are left out as single-vertex solutions solved in under 30 s (p. 23).",
+  "positioning": "Each borrowed piece is credited: Fischetti's arborescence transformation [13], Koch-Martin flow-balance and nested cuts, Chopra et al.'s back-cuts, Duin-Volgenant reductions, and Chopra-Rao's result that directed GSECs dominate (pp. 5-12). The rival is LR, compared on its own benchmark groups (pp. 13-16). A memetic algorithm by Klau et al., most of them co-authors here, used an earlier version of this exact code as a subroutine (pp. 4, 25).",
+  "writing": "The contribution sentence opens the abstract (\"Our main contribution is the formulation and implementation of a branch-and-cut algorithm\", p. 1), and the headline \"more than two orders of magnitude\" (p. 1) is backed by the explicit scaling argument (p. 13). Each formulation element gets a small worked example in a figure (Figs. 2, 3, 5; pp. 8, 9, 21). The conclusion turns the results into a lesson about the default solver (p. 24, quoted below).",
+  "limits_future": "Algorithm plus instance library: all literature instances solved to optimality in seconds, several for the first time (pp. 13, 24), and optima for the new E group and the real-world sets (pp. 17-24). Limits stated: slower than LR on K (p. 16); Cologne2 runs take up to 12 hours, with the optimum usually found within 2 hours (p. 23); (11) is a trade-off rather than a win where customers make up less than 2% or 1% of the vertices (p. 23). No future work is named (pp. 23-24).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "the graph is thinned by preprocessing (about 30% of vertices and 50% of edges removed on E, p. 17; more than 90% of edges on Cologne, p. 22), but the main levers are added constraints and a symmetry-breaking family (9) (pp. 8-10), the reflex that Method 1 and Heuristic 1 later turn round (\"don't break my symmetries\").",
+    "pages": "p. 17; p. 22; pp. 8-10"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "CPLEX 8.1 is the frame and its Gomory cuts let E be solved without branching (pp. 10, 17), but the paper's lesson is that the default algorithm on the basic model is not enough and that initialization, strengthening and an analysis of the separation were needed (p. 24): the opposite of stopping at the first version.",
+    "pages": "pp. 10, 17; p. 24"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "a rival's published times from another machine, the lapse SKILL.md dates to 2017, here already in 2006 but with an explicit conservative factor and the losing group printed (pp. 13, 16); one exclusion with its reason (p. 23).",
+    "pages": "pp. 13, 16; p. 23"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "the cut loop decided the outcome, but through cut selection (back-cuts \"crucial\", p. 17) and the starting LP ((11) \"may save a huge number of separation calls\", p. 20), not by moving the point that is separated.",
+    "pages": "p. 17; p. 20"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "explain a component's sign flip by an instance statistic",
+    "evidence": "card: explain a component's sign flip by an instance statistic (pp. 17, 20, 23)",
+    "pages": "pp. 17, 20, 23"
+   }
+  ],
+  "transferable": [
+   "Put a small polynomial cut family (here the O(|A|) size-two GSECs) into the initial LP instead of separating it, measure both ways per instance group, and when the sign flips explain it by an instance statistic (customer share below 2%) (Tables 5 and 7, pp. 20, 23-24).",
+   "To compare with times published for another machine, derive the speed factor from two independent benchmarks, round it against yourself (17.2 and 12.4 → 20), and still print the groups you lose (pp. 13, 16).",
+   "Give every separation knob a name and an off switch (BACKCUTS, MAXCUTS, EPS, violation threshold) and ablate each one (Algorithm 1, p. 11; pp. 17, 20).",
+   "Explain each strengthening of a formulation on a hand-made instance whose LP values are printed in the figure (Fig. 3, p. 9; Fig. 5, p. 21).",
+   "Report time with and without preprocessing in the same per-instance table, so that its role shows instance by instance (Tables 1, 2 and 4, pp. 14-18)."
+  ],
+  "coauthors": "I. Ljubić, R. Weiskircher, U. Pferschy, G. W. Klau, P. Mutzel",
+  "quotes": [
+   {
+    "text": "While the choice of the ILP model is essential for the success of our method, it should also be pointed out that solving the basic ILP model by a default algorithm is by no means sufficient to reach reasonable results.",
+    "page": 24
+   },
+   {
+    "text": "Thus, we can argue by a conservative estimate that dividing the LR running times by a factor of 20 gives a very reasonable basis of comparison to our data.",
+    "page": 13
+   }
+  ]
+ },
+ {
+  "id": "S026",
+  "year": 2007,
+  "title": "A feasibility pump heuristic for general mixed-integer problems",
+  "read_level": "full",
+  "contribution": "Algorithmic and computational: a general-integer pump that reaches a first solution faster than two commercial solvers (p. 13).",
+  "problem_entry": "Entry by the predecessor's own stated limit: the pump works on hard 0-1 MIPs, but \"as observed in the conclusions of that paper\", MIPs with general integers are much harder (p. 3). The mechanism is shown on a small example: for a general integer between 0 and 10 at the LP value 6.7, deciding to move up still leaves four values to choose from; the same holds when stalling (p. 4). The problem is the general MIP (1)-(3) (p. 2).",
+  "key_idea": "Keep the pump (alternate LP projection and rounding, Fig. 1, p. 5) and change three things: an L1 distance with auxiliary variables d_j for general integers strictly inside their bounds (eqs. 4-5, p. 3); a two-stage run, binaries first with the other integrality relaxed, then all integers (§2.1, pp. 6-7), justified by the branching rule known in constraint programming as \"smallest domain first\" (p. 6); and a Stage 3 that gives the best almost-feasible rounding to a truncated general-purpose MIP solver with the distance as objective (§2.2, p. 7). Anti-cycling is randomized: TT = rand(T/2, 3T/2) moves ranked by the score σ_j, a restart when x̃ repeats or the distance falls by less than 10% over KK iterations, and a random rounding threshold τ(ω) concentrated near 0.5 (pp. 5-6).",
+  "assumptions": "MIP min cᵀx, Ax ≥ b with the bounds inside the system, possibly infinite, I nonempty (p. 2); binaries are the integers with u_j − l_j = 1 (p. 6). Test set: 35 instances with general integers from MIPLIB 2003 (15), Mittelmann's MILPlib (5), Peeters' periodic timetabling (4) and Danna et al.'s rococo network design (11); pure 0-1 instances excluded as covered by [12] (pp. 9-10).",
+  "proof_devices": [
+   "Parameters: iteration limits 10,000 (Stage 1) and 2,000 (Stage 2), TT set to 20, KK = 70 and 600, only variables with fractionality above 0.02 perturbed (p. 8)",
+   "in Stage 1 a restart flips binaries with probability |x*_j − [x*_j]| + ρ, ρ = 0.03 \"hardwired\" (p. 7)",
+   "Stage 1 ends on binary feasibility, on 70 iterations without a better distance, or at its iteration limit, and passes the best x̃ on (p. 7). Implementation: the first LP by the solver's default call with presolve off",
+   "the later LPs forced to primal simplex because the basis stays primal feasible from one iteration to the next (better on 31 of 35 instances, 25% on average, p. 8)",
+   "Stage 3 with CPLEX MIP emphasis 4, which activates RINS (p. 8). Improvement add-ons (§4): an objective cutoff cᵀx ≤ UB with UB = αz*_LP + (1 − α)z^H plus an LP with all integers fixed to x̃, or the first pump solution passed through an MST file to CPLEX's local branching or to RINS (pp. 16, 18). Proof devices: n/a (no theorems)."
+  ],
+  "experiments": "Baselines Xpress Optimizer 16.01.05 and ILOG CPLEX 9.1, each against a pump built on its own LP and MIP routines (p. 8); the baselines run at default except CPLEX emphasis 1 and Xpress aggressive cuts, which gave \"the best average results ... on the instances we considered\" (p. 9). Pentium IV 2.4 GHz, 512 MB, one hour of CPU, every method stopped at its first feasible solution (p. 9). Metrics: time and nodes for the solvers; time, stage, iterations, restarts and speed-up for the pump; total time and geometric-mean speed-up (Tables 2-3, pp. 11-12): 1.14 over Xpress, with both failing on 3 instances, and 2.00 over CPLEX with one instance more solved; 25 of 35 instances solved before Stage 3 (p. 13). Ablations: Stage 1 switched off (4 more failures, 9 times slower on average; Table 4, pp. 13-14); time per stage (Table 5, p. 15); the 2005 pump on binary-encoded models, faster on only 3 instances (p. 13). Quality: ratios to CPLEX emphasis 1 within 3,600 s, geometric means that leave out the 3 CPLEX failures (Table 6, pp. 16-18); α = 0.1 and 0.4 tried and not shown (p. 16). One run per instance, no seeds, although the method is randomized (pp. 5-7, 11-12). Slow cases printed (arki001 at speed-ups 0.11 and 0.06, pp. 11-12).",
+  "positioning": "Declared an elaboration of Fischetti-Glover-Lodi (abstract, p. 1; p. 4); the heuristic literature listed in bulk (p. 2); RINS (Danna et al.) and local branching used as companions, not rivals (p. 16). The conclusion credits Achterberg and Berthold's objective-scaled pump, \"used in the non-commercial MIP solver SCIP\" (p. 19). The text says that the method uses the original objective \"only at step 1\" (p. 13) and introduces the cutoff in §4 as a strategy of its own without citing [12] for it (p. 16); SKILL.md Misreading 5 says the 2005 pump already had a cutoff with a recovery LP: to be checked against the 2005 card.",
+  "writing": "The abstract frames the paper as two extensions of a named predecessor (p. 1), restated in the same words in the conclusion (p. 19). Hedges are light and local (\"hopefully convergent\", p. 4; \"seem\", p. 18). The weak point is said plainly in §4 and again in the conclusion (pp. 13, 19).",
+  "limits_future": "Algorithmic and computational: a general-integer pump that reaches a first solution faster than two commercial solvers (p. 13). Limits: the first solution's quality is \"rather poor\" (p. 19), explained by the objective being ignored after step 1 (p. 13); the cutoff variants (FP-20%, FP-30%) remain \"still inferior\" to the pump followed by local branching or RINS (p. 18); CPLEX emphasis 1 gave the best solution on 14 instances and emphasis 4 on 18, with 3 failures (p. 18). Future: a quadratic distance, nonlinear problems with integers, the objective inside the distance through an adaptive multiplier, and the pump at tree nodes without Stage 3 (pp. 19-20).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Stage 3 makes the stock MIP solver the last step of the heuristic, with a distance objective and RINS emphasis (pp. 7-8), and improvement is left to the solver's own local branching and RINS (p. 18).",
+    "pages": "pp. 7-8; p. 18"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "same-engine pairing, FP-cplex against CPLEX and FP-xpress against Xpress, \"to have a fair comparison\" (p. 8), and baselines in their best average setting (p. 9); lapses in the same paper: those settings and α chosen on the test instances (pp. 9, 16), and a post hoc ranking \"if these 11 instances were removed\" from the testbed, given after the full ranking (p. 18).",
+    "pages": "pp. 9, 16; p. 18"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "(step 5 only): the binary stage is kept because switching it off costs 4 instances and a factor 9 (p. 13).",
+    "pages": "p. 13"
+   },
+   {
+    "method": "Method 3",
+    "relation": "contradiction",
+    "note": "(dated): a randomized method (pp. 5-7) judged on one run per instance with no seed spread (Tables 2-3, pp. 11-12); SKILL.md finds seeds in his designs from FP 2.0 (2009) on.",
+    "pages": "pp. 5-7; pp. 11-12"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "(background): the objective cutoff with an integer-fixing recovery LP is measured here as the weakest of the improvement strategies (Table 6, pp. 17-18), one point in the history of the 2005 prescription that implementers dropped and the 2026 study restores. Also",
+    "pages": "pp. 17-18"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "Build the heuristic on each rival solver's own LP and MIP calls and pair it with that solver (FP-cplex against CPLEX, FP-xpress against Xpress), so that engine differences cancel (p. 8).",
+   "Stage a rounding heuristic by domain size: binaries first with general-integer integrality relaxed, then all integers; show what the stage is worth by switching it off (pp. 6-7; Table 4, p. 14).",
+   "When a heuristic stalls near feasibility, give the original constraints to a truncated stock MIP solver with a distance-to-rounding objective and feasibility emphasis (pp. 7-8).",
+   "In a sequence of LPs that differ only in the objective, force primal simplex, since the previous basis stays primal feasible (p. 8).",
+   "To compare an extension with a predecessor that handles only 0-1 models, binary-encode each general integer, x_i = Σ_k 2^k x_ik with n_i = ⌈log₂(u_i + 1)⌉ binaries (p. 13).",
+   "Report per instance the stage that found the solution, iterations, restarts and the time split by stage (Tables 2, 3 and 5, pp. 11-15)."
+  ],
+  "coauthors": "L. Bertacco",
+  "quotes": [
+   {
+    "text": "In order to have a fair comparison, the LP/MIP functions used within FP are the same used by the method under comparison.",
+    "page": 8
+   },
+   {
+    "text": "The idea here is to exploit the full power of the MIP solver, but with an objective function that penalizes the solutions that are far from the available “almost feasible” FP solution",
+    "page": 7
+   }
+  ]
+ },
+ {
+  "id": "S033",
+  "year": 2007,
+  "title": "Optimizing over the first Chvátal closure",
+  "read_level": "full",
+  "contribution": "Computational answers: P1 optima for the MIPLIB 3.0 pure ILPs (p. 10); the first proven optimum of nsrand-ipx, 51,200.00, after the CG preprocessor raised the LP bound from 49,667.89 to 50,665.71 (p. 12); a new class of ATSP facets (p. 13).",
+  "problem_entry": "Entry by a list of practical questions: how hard it is in practice to optimize exactly over P1, which fraction of the integrality gap that closes on MIPLIB, whether insisting on rank-1 cuts pays against tableau Gomory cuts of any rank, how the generic approach does on matching, and whether it helps guess facets (abstract, p. 1). The obstacle is stated first: CG separation is NP-hard (Eisenbrand), so optimizing over P1 is too, and the paper explains why reading a cut from the tableau does not contradict this (pp. 2-3).",
+  "key_idea": "Model rank-1 CG separation (CG-SEP) as a MIP over the multipliers u and integer coefficients α, and solve it with a general-purpose MIP solver (pp. 3-4): \"As far as we know, this approach was never implemented (and evaluated computationally) by previous authors\" (p. 3), with a footnote that the model itself is folklore (Caprara and Letchford for split cuts, p. 3). Then the effort goes into the separation MIP rather than the outer loop: the refined model (11)-(16) with slack variables f_j for the fractional parts of the coefficients (pp. 4-5), a sparsity penalty w_i = 10⁻⁴ on the multipliers (pp. 5-6), and the multiplier bounds removed so that successive calls return less correlated cuts, with each returned multiplier replaced by its fractional part where that is valid (p. 6).",
+  "assumptions": "Pure ILP min{cᵀx : Ax ≤ b, x ≥ 0 integer} with integer (A, b) and P_I strictly inside P (pp. 1-2); extensions to free variables and equations (eq. 17) and to continuous variables through α_j = 0 and uᵀA_j ≥ 0, with the mixed-integer case left to Gomory mixed-integer cuts (p. 5). Data: 15 TSPLIB 2-matching instances, where P1 is the integer hull (pp. 8-9); larger 2-matching instances for cut-and-branch (Table 3, p. 10); the 25 pure-integer MIPLIB 3.0 problems (Table 4, p. 10); MIPLIB 2003 timtab1 and nsrand-ipx (pp. 11-12); the ATSP instance ry48p for facet discovery (pp. 12-13).",
+  "proof_devices": [
+   "The separation MIP maximizes violation",
+   "because of the objective's sign the rounding α_j = ⌊uᵀA_j⌋ needs only upper bounds, and α_0 gets a strict inequality (p. 4)",
+   "variables with x*_j = 0 are dropped and their coefficients recomputed afterwards, variables at their upper bound complemented (p. 4)",
+   "u_i < 1 by a dominance argument (p. 4)",
+   "the bound δ = 0.01 on the fractional parts \"improves the numerical stability\" at a possible cost to exactness in pathological cases (p. 5). Outer loop: a pure cutting-plane method on rank-1 cuts",
+   "at the first LP all violated tableau Gomory cuts are added and CG separation is skipped",
+   "the separation MIP is asked only for violation above 0.01",
+   "every improving incumbent becomes a pooled cut (the sparsest kept among equal violations)",
+   "the MIP stops after τ = 1,000 or 100 nodes without improvement, depending on the violation (pp. 6-7). Proof devices: the violation rewritten as f_0 − Σ f_j x*_j − Σ u_i s*_i, which shows the penalty matters only for tight rows (p. 6)",
+   "an ellipsoid and binary-search analogy for the NP-hardness point (pp. 2-3)",
+   "for ATSP, normalization to h-canonical form, removal of clones, a computational facet check and clique lifting (p. 13)."
+  ],
+  "experiments": "CPLEX 9.1 as LP solver and as separation MIP solver with \"mip emphasis 4\"; a Pentium M 1.7 GHz notebook with 512 MB (p. 7). Metrics: iterations, cuts, CPU time and % gap closed, with its formula and the remark that it is underestimated when the 3-hour limit stops the run (pp. 9-10). Ablation of the multiplier rules under a cap of 100 separation calls (v.best, v.dense, v.bound; Table 2, pp. 8-9); cut-and-branch against CPLEX alone (Table 3, p. 10; harp2: 1,500 s and 400K nodes against more than 15,000 s and 7M nodes, p. 11); a per-call bound plot on timtab1 comparing a CPLEX-cut preprocessor (cpx) with cpx followed by CG separation (cpx-cg) (pp. 11-12). Failures printed: stein27 closes 0.0% of the gap (p. 10); some 2-matching instances are solved much faster by CPLEX on the rank-0 model (p. 8). No seeds or repeated runs.",
+  "positioning": "Frames a choice against the field's routine: insist on rank 1, or follow \"the usual strategy\" of tableau Gomory cuts of any rank (abstract, p. 1). Theory credited to Chvátal, Gomory, Edmonds and Eisenbrand (pp. 2, 8); the off-line facet use placed next to PORTA's complete descriptions of very small instances (p. 12). Jon Lee and François Margot thanked (p. 13).",
+  "writing": "The abstract is five questions followed by \"we give, for the first time, concrete answers\" (p. 1); the sections are titled as questions: \"2. How?\", \"3. Why?\", \"3.1. Can we solve matching problems?\", \"3.2. How tight is the first closure for MIPLIB instances?\", \"3.3. Beyond the first closure?\", \"3.4. Can we discover new classes of strong inequalities?\" (pp. 3, 7-9, 11-12). Surprising effects get marked hedges (\"A possible explanation of this quite surprising behavior\", p. 6; \"One possible explanation\", p. 11). Section 3.3 opens with the lesson of the experiments (p. 11, quoted below).",
+  "limits_future": "Computational answers: P1 optima for the MIPLIB 3.0 pure ILPs (p. 10); the first proven optimum of nsrand-ipx, 51,200.00, after the CG preprocessor raised the LP bound from 49,667.89 to 50,665.71 (p. 12); a new class of ATSP facets (p. 13). Limits: large computing times (p. 11); a prototype without ad-hoc separation heuristics (p. 7); the diversification rule matters only on a few MIPLIB instances (pp. 10-11). Future work named: more specific CG separation procedures, and the method as a preprocessor beyond the first closure (p. 11).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "the critical sub-decision (which CG cut) is written as a MIP and solved by the same stock solver in emphasis 4 (pp. 3-4, 7); the ceiling is measured first, as the % gap the whole closure closes (Table 4, p. 10); the code is developed on 2-matching (p. 8).",
+    "pages": "pp. 3-4, 7; p. 10"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "thinning applied to the auxiliary separation model, not to the user's model: support-only variables, coefficients recomputed afterwards, complementing (p. 4).",
+    "pages": ""
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "a per-call bound trajectory on one hard instance shows the tableau-cut preprocessor's early tailing-off (pp. 11-12), and the paper speaks of the \"collaborative behavior\" of cut rounds (p. 6); but the cure is a different oracle (the MIP separator with free multipliers), not a different query point: a precursor of the 2008-2012 Gomory work rather than an instance of the method.",
+    "pages": "pp. 11-12"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "(weak): the misleading axis of its own figure is flagged (10-50 cuts per call for cpx against 1-5 for cpx-cg, p. 11) and the cases where plain CPLEX is faster are printed (p. 8).",
+    "pages": "p. 11"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "known-answer testbed first",
+    "evidence": "card: known-answer testbed first (p. 8)",
+    "pages": "p. 8"
+   },
+   {
+    "pattern": "questions as the paper's skeleton",
+    "evidence": "card: questions as the paper's skeleton (pp. 1, 3, 7-12)",
+    "pages": "pp. 1, 3, 7-12"
+   },
+   {
+    "pattern": "an exact separator as an off-line facet-discovery tool",
+    "evidence": "card: an exact separator as an off-line facet-discovery tool (pp. 12-13)",
+    "pages": "pp. 12-13"
+   }
+  ],
+  "transferable": [
+   "Write the separation problem of a cut family as a MIP over the multipliers (CG-SEP (11)-(16)) and solve it with the stock solver in feasibility emphasis; turn every improving incumbent into a pooled cut, not only the optimum (pp. 4-7).",
+   "Shrink an auxiliary separation MIP to the support of x*, recompute dropped coefficients afterwards, and complement variables at their upper bound (p. 4).",
+   "Test a new separator first on a class where theory says the closure is the integer hull (2-matching), so that the code must end at an integer solution (p. 8).",
+   "Measure a cut family's ceiling by optimizing over its closure; report % gap closed with its formula and say in which direction a time limit biases it (pp. 9-10).",
+   "Find facets off-line: take a violated cut on a mid-size instance, normalize it (h-canonical form), drop clones, check facetness computationally on the reduced digraph, then lift (pp. 12-13).",
+   "When plotting the bound against separation calls, state what one call means for each method (p. 11)."
+  ],
+  "coauthors": "A. Lodi",
+  "quotes": [
+   {
+    "text": "Our approach is to model the rank-1 CG separation problem as a MIP model, which is then solved through a general-purpose MIP solver.",
+    "page": 3
+   },
+   {
+    "text": "The previous experiments show that optimizing over the first closure often gives a very tight approximation of the integer optimal value, though it may require a large computing time.",
+    "page": 11
+   }
+  ]
+ },
+ {
+  "id": "S010",
+  "year": 2009,
+  "title": "Light robustness",
+  "read_level": "full",
+  "contribution": "A modelling framework with two variants and computational evidence (p. 18).",
+  "problem_entry": "Entry by the two incumbents' failure modes: stochastic programming is flexible \"but often too large in size to be handled efficiently\", robust optimization easier but sometimes \"very conservative\" (abstract, p. 1; p. 2). The concrete trigger: the Bertsimas-Sim (BS) robust optimum can be much worse than the nominal one even when few coefficients per row change, \"dramatically\" so when most coefficients are structural, as in train timetabling (p. 4). Model: the LP (1)-(3) with independent uncertain entries in [a_ij, a_ij + â_ij] (p. 2).",
+  "key_idea": "Swap the roles of objective and robustness: bound the objective by cᵀx ≤ (1 + δ)z*, ask for an over-ambitious robustness goal through a robust model, and absorb the resulting infeasibility with slack variables γ_i whose weighted sum is minimized (model (12)-(17), p. 4; dual form (18)-(26), p. 5). The slacks play the part of second-stage recourse, so \"simple slack variables are enough\" in place of a scenario model (p. 2). A heuristic variant (HLR) drops BS: maximize the minimum normalized slack s_i/L*_i over the rows at risk, then balance the slacks around their average with a second LP (models (27)-(39), pp. 6-7). LR is presented as a framework, not a fixed model (pp. 5, 18).",
+  "assumptions": "Uncertainty only in A (b and c handled by artificial variables or constraints), independence assumed, extension to MIP said to be easy (p. 2); BS needs β(x, Γ_i) as an LP of polynomial size, and Γ_i is taken integer for simplicity (pp. 3-4); weights w_i = 1 assume rows in comparable units (p. 5); BS, hence LR, depends on the formulation and assumes a model \"suited for robustness\" (p. 5); HLR assumes that robustness grows with row slack (p. 6). Data: one random knapsack instance (n = 200) and one 10-row multi-dimensional knapsack generated as in Bertsimas-Sim, plus three variants of the latter (pp. 9-12); one portfolio instance (n = 150) (p. 13); four single-line Trenitalia timetabling instances (p. 17). Validation scenarios are uniform (p. 7); timetabling extra times exponential with a mean of 5% (p. 17).",
+  "proof_devices": [
+   "LP duality linearizes the BS protection term (pp. 4-5)",
+   "constraints (13) with (14) and objective (12) amount to an upper bound β(x, Γ_i) on each slack (p. 5). HLR's two LPs are cheap thanks to parametric reoptimization (p. 7). The rival runs under its own parameter: BinBS, a binary search on Γ ∈ [0, n] stopped when the interval is below 0.1, each solve halted at the first solution meeting the threshold or at a proof that none exists (p. 8). Timetabling: an event-based MIP",
+   "a fat scenario model (56)-(61) with a copy of the timetable per scenario",
+   "a slim one with a single timetable and recourse slacks, rows with zero extra time dropped (62)-(67)",
+   "the LR row t_i − t_j + γ_ij ≥ d_ij + Δ_ij with Δ = −μ ln(1/2), the protection that absorbs an exponential delay with probability 1/2 (pp. 16-18). Proof devices: n/a beyond the duality step and the equivalence remark."
+  ],
+  "experiments": "An external validation tool draws 10,000 random scenarios and returns each solution's probability of infeasibility (p. 7); for timetabling, a simulation-based module \"independent from the optimization model itself\" returns the average cumulative delay (p. 15). Thresholds are fixed fractions (1% to 90%) of the gap between the nominal optimum and the always-feasible BS solution found by raising Γ (pp. 7-8). Tables give infeasibility probability and time per method and threshold (Tables 2-7, pp. 10-14), and delay and time per line and δ (Table 8, p. 19). AMD Athlon 64 3500+ with CPLEX 10.1 (p. 8); for timetabling an Athlon64 X2 4200+, 4 GB, Linux, CPLEX 10.1 (p. 17). Bias stated: the design favours LR (p. 8, quoted below), and the fat model runs with 50 scenarios against 400 for the slim ones (pp. 17-18). Losses printed: on the portfolio, LR is worse than BinBS and HLR fails (p. 13); slim1 is \"clearly the worst\" (p. 18). One instance per random class and no repeated draws (pp. 9-13). Table 8 also has a δ = 0% block that the text's list of δ values (1% to 40%) omits (pp. 17, 19).",
+  "positioning": "Placed between stochastic programming (Birge-Louveaux and others) and robust optimization (Soyster, Ben-Tal-Nemirovski, Bertsimas-Sim) as a \"flexible counterpart\" of robust models (pp. 2-3); the test instances follow Bertsimas-Sim (pp. 7, 9, 13); Bienstock's histogram models cited for a similar reformulation idea (p. 14); the timetabling LR related to adjustable robustness (Ben-Tal, El Ghaoui and Nemirovski) (p. 17). Critique by restatement: BS is not invariant under reformulations that leave the feasible set unchanged (p. 5).",
+  "writing": "Framework language, said twice: \"not a rigid technique, but a modelling framework\" (pp. 5, 18). Verdicts in a recurring formula: HLR \"qualifies as the method of choice\" for multi-dimensional knapsack (p. 11), LR for larger timetabling instances (p. 18). A failure is turned into an analysis: the explicit HLR optimum on the portfolio model shows why the slacks do not act, and a reformulation repairs it (pp. 13-14). Draft-level slips remain (\"invertigate\", \"real word\", p. 1).",
+  "limits_future": "A modelling framework with two variants and computational evidence (p. 18). Limits stated: LR \"is mostly successful when the slack variables have a direct impact on robustness\" (p. 18); the BS-based LR needs a linear description of uncertainty (p. 5); results depend on the model, not only on the problem (p. 13); in Table 8 LR's total delay is above the fat model's at every δ, by about 1% at δ = 0 and about 27% at δ = 40% (computed from the totals, p. 19), which the text covers with \"at least when the tradeoff parameter δ is not unrealistically large\" (p. 18). Future: other real-life problems, \"so as to highlight its pros and cons\" (p. 20).",
+  "method_links": [
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "a slim scenario model replaces the fat one, which is kept only as the benchmark \"perfect model\" (pp. 16-17); LR itself replaces a second stage by plain slacks (p. 2); success depends on the model chosen, as the portfolio reformulation shows (pp. 13-14). The fat/slim vocabulary of the 2017 Benders paper is already here in 2008 (p. 16).",
+    "pages": "pp. 16-17; pp. 13-14; p. 16"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "every method is judged by the same external validation tool, independent of all models (pp. 7, 15); the design's bias towards LR and the fat model's scenario handicap are stated (pp. 8, 18); the rival runs under its own natural parameter by binary search (p. 8); lapse: one random instance per class, no repeated draws (pp. 9-13).",
+    "pages": "pp. 7, 15; pp. 8, 18; pp. 9-13"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "an independent validation simulator as the common yardstick",
+    "evidence": "card: an independent validation simulator as the common yardstick (pp. 7, 15; also S015 file pp. 7, 10)",
+    "pages": "pp. 7, 15; also S015 file pp. 7, 10"
+   }
+  ],
+  "transferable": [
+   "Bound the objective at (1 + δ) times the nominal optimum and minimize weighted slacks on deliberately over-demanding robust rows: the model is always feasible and δ is the one trade-off knob (pp. 4-5).",
+   "Judge all robust or stochastic methods by one external simulator that knows none of the models (10,000 sampled scenarios, or a delay-propagation LP per scenario) (pp. 7, 15).",
+   "Set comparison thresholds as fixed fractions of the gap between two reference solutions computed before the runs (the nominal optimum and the always-feasible robust solution) (pp. 7-8).",
+   "Run the rival under its own natural parameter by binary search with early stops, and say in which direction the design favours you (p. 8).",
+   "When the method fails on a model, write down the optimal solution it returns to see which variable absorbs the change, then reformulate so that the method's lever acts (portfolio, pp. 13-14).",
+   "Keep the fat, full-scenario model as the quality benchmark, solve slim surrogates, and drop scenario rows whose perturbation is zero (pp. 16-17)."
+  ],
+  "coauthors": "M. Monaci",
+  "quotes": [
+   {
+    "text": "A fair comparison of BinBS and LR computing times is not immediate, since our experiment design is biased somehow in favor of the LR approach.",
+    "page": 8
+   },
+   {
+    "text": "For realistic instances and number of scenarios this model becomes very time consuming (if not impossible) to solve–hence we called it “fat”.",
+    "page": 16
+   }
+  ]
+ },
+ {
+  "id": "S015",
+  "year": 2009,
+  "title": "The new Dutch timetable: The OR revolution",
+  "read_level": "full",
+  "contribution": "Contribution at the application and system level: a new national timetable and its resource schedules, with DONS, ROSA and TURNI used \"for the first time, together\" (file p. 10).",
+  "problem_entry": "Entry by an operator's pair of constraints: run more trains and raise punctuality on a network among the most intensively used in Europe, without new infrastructure (file pp. 2-4). The 1970 timetable could not be stretched further, the two goals conflict, and \"The only way we could fulfill both goals was to develop a new timetable from scratch\" (file p. 4). Scale: about 5,500 daily trains (file p. 2).",
+  "key_idea": "A chain of planning problems solved in sequence (line system → cyclic timetable with routings through stations → rolling stock → crew), each phase anticipating the next in its objective, for example the number of conductors inside the rolling-stock objective (file p. 5). Each phase gets the technique that fits it: constraint programming for the timetable (CADANS), CPLEX for station routing (STATIONS) and for an integer multicommodity-flow rolling-stock model with a transition graph (ROSA), and set covering with column generation for crew (TURNI) (file pp. 6-9).",
+  "assumptions": "Cyclic timetabling as PESP: event-time differences modulo 60 and one binary per constraint for train orders (file p. 6; the example 19 ≤ a_B − d_A + 60·q_AB ≤ 20 in the appendix, file p. 12). NS scale: about 8,400 events and 70,000 PESP constraints (file p. 6); about 15,000 trips for drivers and 18,000 for conductors per workday, giving about 1,000 and 1,300 duties (file p. 9). Robustness enters as running, dwell and headway supplements \"based on experience and expert opinions\" (file p. 5). Crew model: set covering, duty-level rules in the pricing, crew-base rules (an eight-hour average duty length, the share of \"sweet and sour\" work) in the master (file pp. 8-9).",
+  "proof_devices": [
+   "CADANS: special-purpose constraint programming with careful backtracking from infeasible branches",
+   "it names the conflicting constraints when no timetable exists, and a post-optimization improves transfer times without changing the structure (file p. 6). STATIONS: route-selection binaries solved by CPLEX \"after several preprocessing steps\" (file p. 6). ROSA: written in OPL Studio and solved by CPLEX, where describing the transition graph by the decision variables \"was crucial for obtaining acceptable running times\" (file p. 8). TURNI: a pricing model generates duties on the fly",
+   "Lagrangean relaxation, subgradient optimization and heuristics in the manner of Caprara et al. 1999 solve the set-covering problem (file p. 9). For week instances, TURNI is run iteratively on instances of up to 15,000 trips (file p. 11). Proof devices: n/a."
+  ],
+  "experiments": "No benchmark set, baselines or solver tables. Evaluation is operational: the SIMONE simulator scores each of ten one-hour timetables for expected punctuality, next to marketing and cost estimates (file pp. 7, 10); ROSA against manual schedules (6%, about €18 million a year) and TURNI against manual schedules \"Applying exactly the same rules\" (2%, then another 2% from later algorithm improvements) (file p. 12); punctuality 87% in 2007 against 84.8% in 2005 and 2006 (file p. 11). Run times only as orders of magnitude: CADANS often a few minutes, ROSA minutes to about an hour, TURNI 24 hours on a personal computer (file pp. 6, 8, 9).",
+  "positioning": "An application report, not a research article: no related-work section; methods are referred to the team's earlier papers (Kroon and Fischetti 2001 for TURNI; Caprara, Fischetti and Toth 1999 for the set-covering heuristic; Schrijver and Steenbeek for CADANS; Fioole et al. for ROSA) and to two overviews (file pp. 5-9, 13). TURNI was chosen after a benchmark of commercially available crew-scheduling systems and needed joint R&D between NS and Double-Click sas to become operational (file p. 9).",
+  "writing": "Interfaces and Edelman conventions: money in the abstract (an additional €40 million a year, expected to reach €70 million, file p. 2), a narrative of challenges (file pp. 10-11), three success factors (file p. 9), a portability section (file p. 11), and one PESP example as the only formula (file p. 12). Impact claims are qualified where attribution is hard (file p. 12, quoted below).",
+  "limits_future": "Contribution at the application and system level: a new national timetable and its resource schedules, with DONS, ROSA and TURNI used \"for the first time, together\" (file p. 10). Limits stated: planning is sequential (file p. 5); MIP does not work for the PESP at NS scale (file p. 6); the late temporary timetable between Amsterdam and Utrecht hurt robustness and punctuality (file p. 10); the part of the 15% reduction in drivers per train-kilometre due to TURNI cannot be measured (file p. 12). Future: other railways with cyclic timetables, TURNI at another European operator, NS bids abroad (file p. 11).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "(joint; NS team voice): the stock MIP solver is used where it works (STATIONS, ROSA; file pp. 6, 8), and where it does not, the failure is stated in model terms and another technique is chosen (PESP, file p. 6), the lesson-on-failure step of Method 6.",
+    "pages": "file pp. 6, 8"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "the model's description decides run time (ROSA's transition graph, file p. 8), but the crew case runs the other way: the per-day surrogate of the weekly eight-hour rule was the tighter, easier model, and modelling the actual rule saved another 2% of duties at the price of week instances so large that TURNI had to be run iteratively (file p. 11).",
+    "pages": "file p. 11"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "(weak): algorithmic gains measured against manual schedules under exactly the same rules, later improvements kept apart, and the share that cannot be measured named (file p. 12).",
+    "pages": "file p. 12"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "an independent validation simulator as the common yardstick",
+    "evidence": "card: an independent validation simulator as the common yardstick (SIMONE, file pp. 7, 10; with S010)",
+    "pages": "SIMONE, file pp. 7, 10; with S010"
+   },
+   {
+    "pattern": "model the actual rule, not a tighter surrogate",
+    "evidence": "card: model the actual rule, not a tighter surrogate (file p. 11)",
+    "pages": "file p. 11"
+   }
+  ],
+  "transferable": [
+   "In a sequential planning chain, put the cost drivers of later phases into the objectives of earlier ones (conductor numbers in the rolling-stock objective) (file p. 5).",
+   "When MIP fails, say why in model terms (one binary per PESP constraint, a very weak LP relaxation) and switch technique for the feasibility part (constraint programming), keeping MIP for the phases where it works (file pp. 6, 8).",
+   "Where a rule is modelled by a tighter but simpler surrogate, run the faithful rule on a few instances and measure the gap (2% fewer duties, file p. 11).",
+   "Compare an optimizer with the manual plan under exactly the same rules before claiming its gain, and report rule changes and later algorithm improvements as separate lines (file p. 12).",
+   "Score candidate plans with a simulator outside the optimizer before choosing (SIMONE, file pp. 7, 10)."
+  ],
+  "coauthors": "L. Kroon, D. Huisman, E. Abbink, P.-J. Fioole, G. Maróti, A. Schrijver, A. Steenbeek, R. Ybema",
+  "quotes": [
+   {
+    "text": "Because each PESP constraint results in a binary variable (representing the previously mentioned orders of the trains), and the LP relaxation of such a formulation is very weak, the MIP approach does not work in this situation.",
+    "page": 6
+   },
+   {
+    "text": "It is clear that without using TURNI we could not have achieved this effect; however, it is hard to measure which part of the additional 11 (15 − 2 − 2) percent is the TURNI contribution.",
+    "page": 12
+   }
+  ]
+ }
+]

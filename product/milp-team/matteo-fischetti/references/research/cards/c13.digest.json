@@ -1,0 +1,155 @@
+[
+ {
+  "id": "S164",
+  "year": "2026",
+  "title": "Feasibility Pump with Objective Cutoff: A Computational Study",
+  "read_level": "full",
+  "contribution": "A sole-author, AI-assisted, unreviewed 2026 study that measures what adding an objective cutoff to a feasibility pump used as a black box loses (on covering problems two thirds of the feasible roundings fall above the cutoff, the lost improving ones piled just above it) and restores FGL 2005's cutoff plus recovery inside SCIP's objective-weighted pump on MIPLIB 2017, winning 116-9 (a post hoc comparison) on the 176 instances where the plain pump finds a solution, with no detectable effect where it finds none.",
+  "problem_entry": "A prescription implementers dropped: FGL 2005 §3.2 paired the objective cutoff with a recovery of the rounded points; later work and SCIP's pump (read in its source) keep neither part, and what the black-box cutoff costs and the recovery is worth 'has not been measured' (pp. 1-2, 9).",
+  "key_idea": "With a binding cutoff the LP iterate sits on c^T x = U and a costlier feasible rounding falls outside the next projection's polyhedron, so the loss is one of support, not of weights; restore the cutoff (recomputed each round, continuation after a solution) with a two-level recovery, a test of the rounded point and a completion LP with the integers fixed and the cutoff removed, run on a separate warm-started LP and added to SCIP's weighting rather than replacing it (pp. 3, 6-8, 12).",
+  "assumptions": "MILP with a nonempty binary set, distance on binaries, mostly binary instances (MIPLIB 2017 with at least 80% binaries, 424 after 39 listed exclusions; census on 37 pure-binary instances incl. 16 set covering; E3 on 0-1 instances without general integers, SOS or quadratic constraints); covering structure makes roundings feasible but costlier; soundness rests only on the certificate LP; the completion runs on the presolved model, so a failed completion proves nothing; z_low = z_LP keeps the projection LP feasible except under the fallback (pp. 1-4, 8, 11-12, 17).",
+  "proof_devices": [
+   "Convexity: when the projection without cutoff lies above U, every optimum with the cutoff lies on c^T x = U (fails at the first round), p. 3",
+   "Rounding-gap criterion (3), delta <= (1 - lambda)(z_inc - z_low), stated as heuristic, sorting classes before any run (set covering median +0.62), pp. 3-4",
+   "Constraint versus penalty: LP duality does not reach the rounded points of an LP-plus-rounding composition, so the cutoff removes support while the weighted term (4) only discourages, p. 6",
+   "Zero-distance face: with alpha = 0, or alpha below an instance-dependent threshold, a feasible rounding is never lost; SCIP's alpha schedule against that threshold neither bounded nor verified, p. 7",
+   "Design invariant: decoupled projection LP (may carry invalid constraints) and certificate LP (model constraints only), soundness kept apart from effectiveness, each LP warm-started from its own basis, p. 8",
+   "Code reading at SCIP commit dba4b2a: one SCIPtrySol (line 1271), SCIPgetCutoffbound (line 795), SCIPchgVarObjDive resetting the cutoff bound (line 1104); additions as parameters off by default in one binary, p. 9",
+   "External revalidation of every solution on the original unpresolved model (10,218 solutions, none infeasible), p. 11; Gurobi absolute-tolerance re-check in E3 (1 of 2,891 successes failed, counted as failure), p. 17",
+   "Confounds removed from the instrument: relaxation left unseparated (aggregation separator uses the cutoff row; reduced-cost fixing), treatment-blind solution delivery, fallback as its own factor, pp. 8-10, 12"
+  ],
+  "experiments": "Census on a from-scratch FGL pump (Gurobi 13.0.3, 37 instances, 3 seeds, 3 cutoff levels); factorial study inside SCIP (12 variants x 424 MIPLIB 2017 instances x 5 seeds = 25,440 runs, budget 20x own first LP clamped to [20, 300] s, subsets E1/E2 fixed a priori by a pilot, 12 declared comparisons with Holm, median over seeds then sign test, final-gap endpoint): FGL0.5 vs none– 116-51-9 (post hoc), vs check– 114-52-10 (declared), completion vs test 27-142-7 (Holm p 0.003, all wins on mixed instances), E2 nothing detected, fallback harmful; target experiment E3 (3 policies, 134 instances, 5 seeds, disjoint tuning set): naive strong, nothing survives Holm; losses and the completion's time share reported (pp. 4-20).",
+  "positioning": "Restores rather than attacks: credits the pump's progeny; lists [1] (weighted objective), his FP 2.0 [14] ('mentioned it in passing') and co-authored Boosting FP [7] with [9] ('dropped the objective altogether'); keeps Achterberg-Berthold's pump as the base ('additive rather than alternatives'); reads only SCIP's code although the abstract speaks of commonly used implementations; names his Lagrangian set-covering heuristic [10] as the right reference for covering, not measured (pp. 1-2, 8-9, 12, 20).",
+  "writing": "Numbered contributions carrying their numbers, mechanism stated before the outline; main result first, then taken apart into factors; claim-style paragraph heads; a section for null and negative results; status labels ('we claim none', 'a lead and not an established result'); non-detection written as precision; post hoc headline labelled in the abstract; 'A lesson learned' plus 'What this does not show'; AI use declared (pp. 1-3, 6, 12-20, 25).",
+  "limits_future": "Standalone pump only, no embedded branch-and-cut run (the ceiling there is set by how often the pump runs); E1 favours the plain pump and has smaller instances; seeds enter only through the median; no search for a cutoff level; weighting not varied; Lagrangian heuristic [10] not compared on covering; E3 tuning noisy, one arm at an off-rule width, easier sample. Future: both parts inside full branch-and-cut, a good cutoff level, the lead in time of improving roundings, cutoffs for first solutions (pp. 4, 16, 20).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Re-test of his own 2005 prescription: SCIP's pump read with file and line at a pinned commit (step 2), the implementers' default kept as the baseline arm none– (step 4), outcome published both ways with E2 null, a harmful fallback and naive hard to beat in E3, post hoc additions marked (step 5), non-detection reported as imprecision (step 6). The text lists FP 2.0 [14] as having 'mentioned it in passing' and his co-authored Boosting FP [7] among works that 'dropped the objective altogether'; it does not say what cutoff FP 2.0 used.",
+    "pages": "pp. 1-2, 9, 12-19"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "One binary with every addition a parameter off by default and treatment-blind solution delivery (step 1); baseline = SCIP's own pump (step 2); subsets fixed a priori by the challenged method's pilot, 'the ground on which that method already works', with every sign re-checked on the full testbed (step 3, swap test); no instance selected on solution quality, 39 exclusions listed (step 3); tuning instances kept out of E3's evaluation (step 5); losses printed (step 6).",
+    "pages": "pp. 9, 11-14, 16-18"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Seeds in the design (five per cell, paired, median over seeds then sign test) and the one-seed pilot's noise named, but no placebo arm: the control is a declared test family with Holm correction; the only null contrast is incidental (FGL0.5 and check0.5 share a code path on the 120 pure instances and agree on 119); the spread is not exploited and its size within an instance is conceded.",
+    "pages": "pp. 11-12, 14-15, 20"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "The pump's loop is instrumented on one instance before any table (Figure 1, scpnrh3) and the fix leaves projection, rounding and weighting alone, changing what the loop does with the points it already produces; diagnostics are loop counts (rounds per LP iteration). Carried from cut loops to a primal heuristic; the remedy is a second decoupled LP, not a moved query point.",
+    "pages": "pp. 2, 4-5, 7, 14"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "Potential measured first by a census of lost roundings on a from-scratch pump (step 4), minimal parameter changes (step 3), the continuous sub-decision handed to an LP; but SCIP's source is patched, two pumps are written from scratch, and the thesis is that the black-box use of the cutoff loses.",
+    "pages": "pp. 2-7, 9, 19"
+   },
+   {
+    "method": "Heuristic 7",
+    "relation": "evidence",
+    "note": "'A lesson learned' closes the paper; status labels: no scale invariance claimed, a level contrast that fails Holm not read as a result, the shallow-target gain 'a lead and not an established result'.",
+    "pages": "pp. 6, 15, 19"
+   },
+   {
+    "method": "Heuristic 8",
+    "relation": "evidence",
+    "note": "Traces before tables only: the one-instance trace of both pump sequences (Figure 1) precedes every aggregate; no talk premiere is mentioned.",
+    "pages": "pp. 4-5"
+   },
+   {
+    "method": "Heuristic 9",
+    "relation": "evidence",
+    "note": "The Achterberg-Berthold objective pump is adopted as base and baseline, and the FGL parts are added to it ('additive rather than alternatives').",
+    "pages": "p. 12"
+   },
+   {
+    "method": "Heuristic 10",
+    "relation": "evidence",
+    "note": "Every reported solution re-read by a separate SCIP process on the original, unpresolved model (10,218, none infeasible); E3 successes re-checked at Gurobi's absolute tolerances, the one failure counted as a failure.",
+    "pages": "pp. 11, 17"
+   },
+   {
+    "method": "Research Taste mark 3",
+    "relation": "evidence",
+    "note": "Modest claims with losses printed: nine losses in the headline, E2 null, fallback harmful, naive strong in E3, the cutoff-sweep trial worse, no cutoff level recommended.",
+    "pages": "pp. 14-20"
+   },
+   {
+    "method": "Inner Tension 1",
+    "relation": "evidence",
+    "note": "The recommendation is an old heuristic restored, established with 25,440 runs under a declared Holm family.",
+    "pages": "pp. 11-12, 19"
+   },
+   {
+    "method": "Inner Tension 3",
+    "relation": "evidence",
+    "note": "He patches SCIP's source and argues that the black-box use of the cutoff is wasteful.",
+    "pages": "pp. 2, 9, 14, 19"
+   },
+   {
+    "method": "Roundtable Card",
+    "relation": "variant",
+    "note": "The likely disagreement with Achterberg (weighted pump against cutoff-plus-recovery) is framed in the text as additive designs, not alternatives; the measured contrast is the FGL parts added to the weighted pump against that pump alone.",
+    "pages": "pp. 12-14"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "Decouple the search LP from the certificate LP",
+    "evidence": "An invalid constraint (the cutoff) is legitimate in the projection LP because acceptance is decided by a second LP that carries only the model's constraints and objective; soundness is separated from effectiveness; each LP keeps its own basis; the variable neighbourhood pump and local branching are read as invalid constraints of the same kind; in E3 the inner constraint is legitimate only through the recovery.",
+    "pages": "pp. 3, 7-8, 19"
+   },
+   {
+    "pattern": "Mechanism first, then read the results on the class it predicts",
+    "evidence": "A geometric mechanism and criterion (3) predict before any run where the loss and the completion's value must sit (covering vs MIPLIB, tight cutoff, continuous variables after presolve); the pure/mixed split is read as the mechanism's prediction and the size split labelled exploratory; E3's failures are explained by the same mechanism.",
+    "pages": "pp. 3-4, 12, 14-15, 19"
+   },
+   {
+    "pattern": "Self-normalising per-instance budget",
+    "evidence": "Each instance gets 20x its own first-LP time, clamped to [20, 300] s, timed on the blade it runs on; an instance never straddles two machine types and all its runs go back to back on an exclusive blade, so instances of different size get comparable numbers of rounds rather than seconds.",
+    "pages": "pp. 10-11"
+   },
+   {
+    "pattern": "Audit the instrument for interactions with the treatment",
+    "evidence": "Solution delivery made treatment-blind (every integral iterate handed in before variant code runs); cut separation and reduced-cost fixing kept out because cuts and boxes built from the cutoff could exclude feasible points ('a confound in the instrument'); presolve's dual reductions answered by re-checking on the original model; completion counters read as ratios only.",
+    "pages": "pp. 9-10, 12, 15"
+   }
+  ],
+  "transferable": [
+   "Read the solver's implementation at a pinned commit and cite file, function and line for every statement about what it does (p. 9).",
+   "Implement every arm as parameters of one binary, all additions off by default, so arms differ only in parameter values (p. 9).",
+   "Make bookkeeping treatment-blind: hand every integral iterate to the solver at the top of the loop, before variant-specific code, in every cell (p. 12).",
+   "Fix analysis subsets a priori from one pilot run of the challenged baseline, then rerun all declared comparisons on the full testbed to check every sign (pp. 11, 13).",
+   "Budget each instance at 20x its own first-LP time, clamped to [20, 300] s and timed on its own blade; keep all its runs on one exclusive blade, variants in random order (pp. 10-11).",
+   "Declare the comparison family before the data: per-instance median over seeds, sign test on non-ties, Holm within each subset; label post hoc rows and show they survive folding into the family (pp. 12-13).",
+   "Re-check every reported solution in a separate solver process on the original, unpresolved model, counting a failed re-check as a failure (pp. 11, 17).",
+   "Before building a fix, instrument a from-scratch reimplementation to count what the heuristic discards and where those points sit relative to cutoff and incumbent (pp. 4-6).",
+   "For a null result, report discordant counts, an exact interval on their proportion and the effect sizes still compatible (9 vs 6, [0.32, 0.84], odds ratios 0.5 to 5; p. 16).",
+   "Put an invalid guidance constraint only in the search LP and accept through a second LP with only the model's constraints, each warm-started from its own basis (p. 8).",
+   "Time an add-on with a clock that leaves the heuristic's statistics unchanged; report its median wall-clock share with interquartile range and maximum per class (p. 15).",
+   "Tune one knob on a random disjoint tuning set with a declared selection rule, and flag any arm run off the rule's pick as exploratory (p. 17).",
+   "Measure a range of levels for a parameter and, if they cannot be told apart, recommend none (pp. 8, 15).",
+   "If the headline comparison was added after the design, say so in the abstract, and give the null results a section of their own (pp. 1, 13, 16-19)."
+  ],
+  "coauthors": "none (sole author); AI assistants declared: Claude Fable 5.1 (Anthropic) for text, scripts and internal adversarial reviews, ChatGPT GPT-5.6 sol (OpenAI) for an independent adversarial audit (p. 25)",
+  "quotes": [
+   {
+    "text": "the loss is a matter of support rather than of weights: a weighted objective term discourages such a point, whereas a cutoff removes it from the polyhedron.",
+    "page": 3
+   },
+   {
+    "text": "The second sees only the constraints of the model and its objective; it is the certificate, and correctness rests on it alone.",
+    "page": 8
+   }
+  ]
+ }
+]

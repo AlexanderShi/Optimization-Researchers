@@ -1,0 +1,228 @@
+[
+ {
+  "id": "S018",
+  "year": "2009",
+  "title": "Fast approaches to improve the robustness of a railway timetable",
+  "read_level": "full",
+  "contribution": "A three-stage framework (nominal solution, robustness training, validation by an external LP simulator) in which fat and slim scenario models and Light Robustness are trained on four Trenitalia corridors and judged by the same validator: slim2 stays within 0.5-5.3% of the fat model's delay at about an eighth of its time, and LR within 1.4-27.1% (worse as the efficiency slack grows) in about 3 seconds (totals of Table 2, my computation).",
+  "problem_entry": "From practice: optimal timetables are not robust enough and simple robust ones too conservative; the problem is narrowed to improving the robustness of a given aperiodic TTP solution, the middle stage of a nominal-training-validation pipeline (pp. 1-2).",
+  "key_idea": "Train robustness with cheaper surrogates of the scenario SP (a slim recourse model with one timetable, zero-extra-time rows dropped and propagation-aware weights; Light Robustness with protection Delta = -mu ln(1/2)), the nominal objective moved into a constraint, and judge all of them against the fat SP with one independent LP validator (pp. 11-14).",
+  "assumptions": "Event-based TTP MIP with big-M precedence binaries; continuous times, so fixing the precedences leaves an LP; all trains scheduled and precedences frozen 'to obtain tractable (LP) models'; exponential delays (mean 5%) spread in proportion to segment length for lack of operator data; validator without cancellations and with unlimited stretch; four single-line corridors (pp. 5-6, 8, 10-11, 13-14).",
+  "proof_devices": [
+   "External validation LP (15)-(17), one scenario at a time, returning the average cumulative delay, pp. 10-11",
+   "Fat SP (18)-(22) kept as the 'perfect model' benchmark; slim SP (23)-(28) with the zero-extra-time rows dropped, pp. 11-12",
+   "Light Robustness rows t_i - t_j + gamma_ij >= d_ij + Delta_ij with Delta = -mu ln(1/2), pp. 13-14",
+   "SAA with upper and lower bound estimators (9)-(13) for confidence intervals (results cited from [25] and [17]), pp. 7-8",
+   "Latin Hypercube sampling for variance reduction (sigma 0.24352 to 0.19907 on an exponential example), p. 9",
+   "Pricing the frozen precedences: the 10 best incumbents of a 5-minute MIP run against a 1-hour reference, and LR-MIP with free precedences solved to a gap below 1%, pp. 18-20"
+  ],
+  "experiments": "Four Trenitalia corridors; fat (50 scenarios), slim1 and slim2 (400), LR, at alpha from 0% to 40%; validation on 500 scenarios with confidence intervals; CPLEX 10.1 on an Athlon64 X2; slim2 within 0.5-5.3% of fat's delay and LR within 1.4-27.1% (my computation from the Table 2 totals) at about 3 s against about 10,000 s; lambda weights gain less than 5%; LR-MIP gains at most 4.3%; the practitioners' proportional-buffer rule behaves like slim1 (pp. 13-23).",
+  "positioning": "Extends the aperiodic TTP of Caprara et al. [3] with buffer findings of Kroon et al. [12] and Light Robustness of Fischetti and Monaci [7]; reviews PESP and recoverable robustness (Liebchen, Lübbecke, Möhring, Stiller [13]) without criticism (pp. 2-3, 12-13, 18, 22).",
+  "writing": "Conclusion first ('two of the proposed techniques are very fast'); names that carry the idea (robustness training, fat and slim); specific hedges ('always less than 5%', 'may be no longer the case for more complex network topologies'); two small inconsistencies (four against three methods; lambda used before it is defined) (pp. 1-2, 11-12, 14, 18, 20).",
+  "limits_future": "Fat model impractical on real instances; LR degrades when the efficiency slack is large (fixed buffers); LR-MIP ignores unscheduled trains; single corridors only; future: the precedence analysis for slim2, complex networks, the real cost of delay management instead of the LP validator (pp. 20, 22, 27).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "Fat scenario model kept only as the benchmark; slim surrogate with one timetable and the zero-extra-time rows dropped, LR with no scenarios; precedences frozen to get LPs and the price of this thinning measured; the fat/slim words are already in this manuscript (December 2007, revised October 2008)", "pages": "pp. 1, 6, 11-13, 18-20"},
+   {"method": "Method 4", "relation": "evidence", "note": "Every method judged by the same external validator, independent of all training models; the practitioners' proportional-buffer rule as a baseline; the fat model's scenario handicap stated; lapse: four corridors with one nominal solution each", "pages": "pp. 2, 9-11, 13-15, 20"},
+   {"method": "Method 6", "relation": "evidence", "note": "The general-purpose MIP solver is the measuring instrument for the frozen-precedence hypothesis (5-minute incumbents, 1-hour reference, LR-MIP to a gap below 1%)", "pages": "pp. 18-20"},
+   {"method": "Method 3", "relation": "variant", "note": "Only sampling noise is treated: reduced by Latin Hypercube sampling and shown as confidence intervals and SAA bounds; no seed or placebo arm for solver behaviour", "pages": "pp. 8-9, 15, 23"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "an independent validation simulator as the common yardstick", "evidence": "An external LP validation module, independent of all training models and run on 500 scenarios, compares fat, slim1, slim2 and LR; training is separated from validation 'for a fair comparison'", "pages": "pp. 2, 9-11, 15"},
+   {"pattern": "price the simplifying assumption", "evidence": "The precedence freezing that makes every model an LP is relaxed where a MIP is still tractable (LR-MIP), and the robustness gain (at most 4.3%) is reported together with the loss from worse nominal inputs", "pages": "pp. 11, 18-21"}
+  ],
+  "transferable": [
+   "Build an external validator (an LP simulation over many scenarios) that no compared method uses for training, and judge every method by it (pp. 2, 9-11).",
+   "Keep the full ('fat') model as the quality reference on a reduced sample, and report each surrogate's quality and time against it across the trade-off parameter (pp. 12, 14-15, 17).",
+   "Price your own simplification: after freezing a decision to get a tractable model, solve the unfrozen version where it is still tractable and publish the difference (pp. 11, 18-20).",
+   "Include the practitioners' rule of thumb (proportional buffers) as a baseline and show which method it resembles (pp. 20-21).",
+   "Store every incumbent of one time-limited MIP run and use them as a graded family of inputs of increasing quality (p. 19).",
+   "Explain differences between methods by a solution-structure statistic (WAD, the weighted average position of the buffers) before claiming a mechanism (p. 22).",
+   "Use Latin Hypercube sampling for scenario generation and report SAA lower and upper bounds with confidence intervals (pp. 8-9, 23)."
+  ],
+  "coauthors": "Domenico Salvagnin, Arrigo Zanette",
+  "quotes": [
+   {"text": "However, we decided to implement an external simulation-based validation module that is independent from the optimization model itself", "page": 9},
+   {"text": "These strong assumptions were made to obtain tractable (LP) models.", "page": 11}
+  ]
+ },
+ {
+  "id": "S041",
+  "year": "2009",
+  "title": "Feasibility pump 2.0",
+  "read_level": "full",
+  "contribution": "Feasibility Pump 2.0 replaces the pump's blind rounding by rounding interleaved with constraint propagation (specialized propagators, advisors), which raises the success rate significantly at an embedded budget (+39% without cutoff) and lowers the average gap of the solutions found (77.2% to 57.6%, and 52.4% to 35.5% inside the objective pump) on 78 MIPLIB-type instances, measured with 10 seeds, confidence intervals and Cochran and McNemar tests.",
+  "problem_entry": "A reinterpretation: the pump is a sequence of roundings of LP points, and the rounding, 'fast and simple, but somehow blind', fails even on knapsack and set covering instances (pp. 1-2, 9).",
+  "key_idea": "Rounding a variable is a temporary fixing, so each fixing is propagated before the next variable is rounded (a dive without LPs), in order of increasing fractionality with binaries first; projection, perturbation and stages are kept, and the new rounding is tried inside both the original and the objective pump (pp. 9-10, 13, 16).",
+  "assumptions": "MIP with finite bounds on the integer variables; distance on integer components, with auxiliary variables for general integers; propagation finite on integer domains but possibly non-convergent on continuous ones, hence a cap of about 10 tightenings per variable; 78 instances from MIPLIB 2003 and [9, 28], stp3d and momentum* excluded with reasons (pp. 3-4, 8-9, 13).",
+  "proof_devices": [
+   "Bound strengthening with the no-propagation test max_j |a_j(u_j - l_j)| <= b - L_min, pp. 6-7",
+   "Propagation engine with decreasing, monotonic, correct and checking propagators and a fixpoint queue (after Schulte and Stuckey), pp. 7-8",
+   "Single-iteration dominance of propagation rounding over simple rounding, with no dominance in feasibility degree or at the pump level, p. 10",
+   "Termination and complexity remark with Hooker's non-convergent continuous example, pp. 8-9",
+   "Specialized knapsack, cardinality and binary-logic propagators with advisors (Lagerkvist and Schulte; Gecode), pp. 12-13",
+   "Restart rule reconstructed from the earlier pump's source code (RP times 0.85 or plus 40, capped at 10% of the general integers), p. 11"
+  ],
+  "experiments": "78 instances; scenarios alone and embed (20 iterations, no Stage 3); cutoff ladder z*(1+beta), beta in {0.1, 1, inf}; 10 seeds, success if more than 6 of 10; geometric means with 95% confidence intervals; success in embed +39/+72/+23%, alone +3/+5/+18%; slower only at UB = 10%; gap 77.2 to 57.6% and 52.4 to 35.5%, better on 49 and worse on 20 of 78; orders compared by Cochran Q and McNemar tests; CPLEX 11.2 on a Core2 Q6600 (pp. 13-21).",
+  "positioning": "Third step of the pump line (Fischetti-Glover-Lodi 2005, Bertacco-Fischetti-Lodi 2007), tested inside both earlier schemes; Achterberg and Berthold's objective pump called the state of the art for quality; FGL's dynamic cutoff only reviewed, a static z*(1+beta) bound used to grade difficulty; CP sources credited (pp. 1, 3, 5, 14, 16).",
+  "writing": "Version-number title; motivation by a reinterpretation and two tiny examples; statistics behind the claims; the abstract's 'without slowing-down the method' does not hold at UB = 10%; one-instance figures before the tables; a header typo in Table 5 (pp. 1-2, 9, 15-17, 21).",
+  "limits_future": "No dominance beyond one iteration; slower under tight cutoffs; solution quality depends on the variable order; embed is simulated by parameter changes, not run inside branch-and-cut (my reading); no future work stated (pp. 10, 14, 16, 20-21).",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "Seeds in the design: 10 seeds per variant, success only if more than 6 of 10 runs succeed, a per-seed scatter on air04; a random-order arm serves as a control that attributes the quality gain to the fractionality order", "pages": "pp. 14-15, 20"},
+   {"method": "Method 4", "relation": "evidence", "note": "Testbed of [8] with each exclusion and its reason; the new rounding tested inside both pump versions; all parameters fixed except the one under test; losses printed", "pages": "pp. 13, 16-17, 20"},
+   {"method": "Method 4", "relation": "contradiction", "note": "The say-do line 'No significance test before 2026' (and the Roundtable Card's blind spot 'no statistical tests before 2026') fails for this 2009 paper: 95% confidence intervals with significant entries marked, and a Cochran Q-test with post hoc McNemar comparisons", "pages": "pp. 15, 17, 20"},
+   {"method": "Method 5", "relation": "variant", "note": "Step 2 (read the implementation) practised in 2009 on the earlier pump's source code, but to port a restart rule, not to re-test a claim; the limitation 'FP 2.0 itself used the static cutoff' holds for an evaluation device (z*(1+beta)), FGL's dynamic cutoff being only reviewed", "pages": "pp. 5, 11, 14"},
+   {"method": "Method 6", "relation": "variant", "note": "Stage 3 hands the last resort to a black-box MIP solver, capped in time, but the contribution is a propagation engine written from scratch, not a one-callback test around the stock solver", "pages": "pp. 5, 11-14"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "difficulty ladder by objective cutoff", "evidence": "Each instance is also run with c^T x <= z*(1+beta), beta in {0.1, 1, inf}, z* the best known value, 'a quick method for generating difficult instances'", "pages": "pp. 14, 16"},
+   {"pattern": "random control arm for attribution", "evidence": "Orders lr, rev and rnd as controls: success hardly depends on the order, but the quality gain needs the fractionality order (rnd about as poor as std)", "pages": "pp. 20-21"},
+   {"pattern": "test standalone and at the embedded budget", "evidence": "Scenario alone (standard parameters) and embed (20 iterations, no Stage 3) reported side by side; the embed gains are the larger", "pages": "pp. 13-17"}
+  ],
+  "transferable": [
+   "Run every variant with 10 seeds, call an instance solved only if more than 6 of the 10 runs succeed, and plot per-seed results of the two variants against each other on one instance (pp. 14-15).",
+   "Report relative improvements with 95% confidence intervals, and compare more than two variants on success with a Cochran Q-test and post hoc McNemar comparisons (pp. 15, 17, 20).",
+   "When a gain may depend on an ordering rule, add arbitrary orders (left-to-right, reverse, random) as control arms (p. 20).",
+   "Test a primal heuristic both standalone and with the budget it would have inside branch-and-cut (iteration limit 20, last-resort stage off) (pp. 13-14).",
+   "Add an objective cutoff z*(1+beta), beta in {0.1, 1, inf}, to produce harder variants of each test instance (p. 14).",
+   "Bound propagation cost inside a rounding pass by capping the tightenings per variable (e.g. 10), and skip a row when max_j |a_j(u_j - l_j)| <= b - L_min (pp. 7, 13).",
+   "Before porting a mechanism from an earlier code, read that code and write down the rule it actually implements (p. 11)."
+  ],
+  "coauthors": "Domenico Salvagnin",
+  "quotes": [
+   {"text": "As already discussed, random perturbations are a fundamental ingredient of the FP scheme, so it is not completely fair to compare different variants on a single run.", "page": 14},
+   {"text": "To assess the statistical significance of the performance difference for the two rounding schemes, we also report the 95% confidence intervals for the entries of columns impr% (columns L and U).", "page": 15}
+  ]
+ },
+ {
+  "id": "D009",
+  "year": "2010",
+  "title": "On the enumerative nature of Gomory's dual cutting plane method",
+  "read_level": "full",
+  "contribution": "Shows that Gomory's lexicographic dual cutting-plane method is an implicit depth-first enumeration on a fixed lexicographic tree, and turns this into variants that treat the objective implicitly (L-CP with a cutoff constraint, bin-GFC with a binary search) and reorder the lexicographic sequence at run time like a branching rule; on 25 pure ILPs bin-GFC is the fastest variant, L-CP needs orders of magnitude fewer nodes than a lexicographic branch-and-bound twin, and lex-GFC.dyn is better on 18 of 25 instances.",
+  "problem_entry": "Pure cutting-plane methods are 'typically not used in practice'; the success of the lexicographic version in the authors' previous paper [17] raises the question why, studied in pure form (pp. 1, 3).",
+  "key_idea": "Read the lexicographic Gomory method as implicit enumeration (each GFC branches or backtracks) and borrow branch-and-bound's cures: take the objective out of the lexicographic order (cutoff 2c^T x <= 2U - 1, binary search) and choose the order at run time to avoid 'unnatural' branching on integer-valued variables (pp. 11, 14-21).",
+  "assumptions": "Pure ILP with integer data and bounded LP polyhedron; 0-1 for L-CP and L-B&B; dual degeneracy intrinsic; GFCs kept over GMI cuts for integral coefficients and long-run behaviour; 25 pure ILPs (MIPLIB 3 and 2003, knapsack, 2-matching), the testbed of [17], instances out of reach of pure cutting planes excluded (pp. 2-4, 15-16, 21-22).",
+  "proof_devices": [
+   "Pseudo-polynomial counterfactual: under dual nondegeneracy a naive cut method would converge, so degeneracy is the issue to manage, p. 4",
+   "Lexicographic dual simplex as a sequence of reoptimizations that fix the nonbasic variables with nonzero reduced cost (no perturbed objective), pp. 4-5",
+   "Lex-optimality from the tableau sign pattern, and convergence through the 'significant lexicographic step' of rounded-up GFCs (after Gomory), pp. 5-7",
+   "Enumerative interpretation (after Nourie and Venta) shown on Example 2, with the wrong-rounding and textbook counter-sequences, pp. 11-14",
+   "Pathological 0-1 Cook-Kannan-Schrijver example: about M GFCs with the objective in the lexicographic order, a pair without it, pp. 14-15",
+   "Correctness argument for L-B&B; node dominance of L-CP called 'not difficult to show' (no proof); Example 4 with 13 against 6 LP nodes, pp. 16-18",
+   "Global validity of dynamic-order GFCs, since no invalid branching condition is imposed, p. 21",
+   "Numerical safeguards: the cutoff 2c^T x <= 2U - 1 is never tight at an integer point; a valid lower-bound row is omitted for numerical reasons, pp. 15, 19"
+  ],
+  "experiments": "25 pure ILPs, CPLEX 11 as LP black box, Core 2 Q6600, 2 h and 2 GB per run; stein15 traces of bound, cut coefficients, basis determinant, cut depth and point distance come first; bin-GFC fastest (first on 6 of the 14 solved), p0201 solved for the first time by pure cutting planes; L-CP against L-B&B (4 h): nodes down by orders of magnitude, though L-B&B is faster on 7 of 12 (my count); lex-GFC.dyn better on 18 of 25, losses named; no seeds (pp. 7-11, 21-24).",
+  "positioning": "A classical method restored with modern LP technology; GFCs read as enumerative rather than polyhedral objects; set apart from methods that decouple separation from reoptimization (Fischetti-Lodi, Balas-Saxena, Dash-Günlük-Lodi); credits Gomory, Nourie-Venta and goal-programming slack fixing (pp. 2-5, 11).",
+  "writing": "Built on worked examples and one-instance plots placed before the tables; the metaphor 'two blades of a pair of scissors'; hedged conclusions ('seem to indicate ... some potential'); one dominance claim without proof (pp. 3, 16, 24-25).",
+  "limits_future": "Preliminary results; the dynamic variants are erratic and lose on some instances; numerical errors remain; hard instances excluded; future: more flexibility in pure cutting-plane methods, with a follow-up for branch-and-cut (pp. 21-25).",
+  "method_links": [
+   {"method": "Method 2", "relation": "evidence", "note": "Textbook Gomory's stall blamed on the loop and the LP solver (feedback loop, determinant growth), not on the GFC family; the remedy changes which vertex is separated (lexicographic reoptimization); diagnosed on stein15 with trajectory, determinant and cut-depth plots; step 6 borne out: the pure loop that works is an enumeration in disguise", "pages": "pp. 3-5, 7-14, 19-21"},
+   {"method": "Method 1", "relation": "variant", "note": "My reading: the removal move applied inside an algorithm: the objective is taken out of the lexicographic order and becomes a cutoff, turning about M GFCs into two on the pathological example", "pages": "pp. 14-15"},
+   {"method": "Method 4", "relation": "variant", "note": "The rival L-B&B gets twice the time limit and losses are named, but the time column of Table 3 (L-B&B faster on 7 of 12, my count) is not discussed; one of the 18 dynamic wins is a tie decided on time by a run that ended with a numerical error", "pages": "pp. 22-24"},
+   {"method": "Method 3", "relation": "variant", "note": "Erratic behaviour named in 2009 as intrinsic to run-time branching choices, but not measured; one run per instance", "pages": "p. 22"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "study the component in its pure form", "evidence": "Pure cutting-plane methods are studied without branch and bound because their negative properties can be 'understood and thus remedied only' in pure form", "pages": "pp. 1, 3, 25"},
+   {"pattern": "numerically safe by construction", "evidence": "Lexicographic simplex by reoptimizations instead of a 'numerically unacceptable' perturbed objective; cutoff 2c^T x <= 2U - 1 never tight at integer points; a valid lower bound dropped for numerical reasons; GFCs kept over GMI cuts for integral coefficients", "pages": "pp. 2-4, 15, 19"},
+   {"pattern": "name the cost of wrapping the black box", "evidence": "The textbook failure is 'a consequence of the efficiency of the underlying LP solver', which stops at the first optimal vertex", "pages": "p. 8"},
+   {"pattern": "a pathological instance as the design argument", "evidence": "The 0-1 Cook-Kannan-Schrijver example needs about M GFCs with the objective as first lexicographic variable and two without it, which motivates L-CP", "pages": "pp. 14-15"}
+  ],
+  "transferable": [
+   "Instrument a stalling cut loop on one small instance with five curves against iterations: bound, average cut coefficient, basis determinant, cut depth and distance between consecutive separated points (pp. 7-11).",
+   "Project the trajectory of separated points to 2-D by multidimensional scaling to see whether the loop keeps cutting the same region (p. 8).",
+   "Implement a lexicographic reoptimization on a black-box LP solver as a sequence of LPs, fixing the nonbasic variables with nonzero reduced cost before minimizing the next variable (pp. 4-5).",
+   "Turn an optimization method into a feasibility subroutine by replacing the objective with an invalid cutoff 2c^T x <= 2U - 1 (tight at no integer point), and wrap it in a binary search on U (pp. 15, 18-19).",
+   "To make provable statements about a cutting-plane method, build a purpose-made enumerative twin on the same tree and compare node counts (pp. 14-16, 23).",
+   "Print a termination code (optimal, time, numerical error, cut limit) for every run in the table (pp. 23-24)."
+  ],
+  "coauthors": "Egon Balas, Arrigo Zanette",
+  "quotes": [
+   {"text": "Our reason for studying them is our belief that these negative properties can be understood and thus remedied only based on a thorough investigation of such procedures in their pure form.", "page": 1},
+   {"text": "This behavior is in a sense a consequence of the efficiency of the underlying LP solver, that has no reason to change the LP solution once it becomes optimal with respect to the original objective function", "page": 8}
+  ]
+ },
+ {
+  "id": "S024",
+  "year": "2010",
+  "title": "A note on the selection of Benders’ cuts",
+  "read_level": "full",
+  "contribution": "Rephrases Benders separation as an infeasibility problem so that feasibility and optimality cuts come out of one CGLP, and proposes a normalization that weights only the multipliers of rows depending on the master variables (a minimal-infeasible-subsystem heuristic); on network design it is about 2 to 3.5 times faster than standard Benders, and on network expansion as fast as the better standard variant.",
+  "problem_entry": "Cut selection by CGLP normalization, well studied for disjunctive cuts, carried to Benders, where choosing among feasibility and optimality cuts is hard (a most-violated optimality cut is strongly NP-hard) (p. 2).",
+  "key_idea": "A violated Benders cut exists iff the extended slave (4) is infeasible; optimize over the alternative polyhedron with the normalization sum over i in I(T) of pi_i + w0 pi0 = 1, i.e. no penalty on static rows, so that the cut corresponds to a small infeasible subsystem (pp. 2-3).",
+  "assumptions": "MIP with integer master variables x and continuous y, bounded master; network-design families 'well suited for Benders' methods' (40 random multicommodity instances; 30 hard network-expansion instances with the easiest removed); correctness from the iff characterization and the Gleeson-Ryan MIS correspondence (pp. 1-6).",
+  "proof_devices": [
+   "Feasibility rephrasing: a violated cut exists iff (4) is infeasible iff (5) is unbounded; its rays give both cut types, p. 2",
+   "Gleeson-Ryan: MIS rows indexed by the vertices of the alternative polyhedron (6); objective and normalization swapped after Cornuéjols and Lemaréchal into CGLP (7), p. 3",
+   "Normalization (8) with zero weights on the rows where T is null, p. 3",
+   "Master loop: incumbents separated on the fly, cuts added at the next main iteration, master stopped when its incumbent is cut off and unchanged for K = 1,000 nodes, p. 4",
+   "Hardness pointers: a most-violated optimality cut is strongly NP-hard [10], a minimum-cardinality MIS NP-hard [1], pp. 2-3"
+  ],
+  "experiments": "CPLEX 11.2 at defaults, Core2 Q6600, 10 h per run; arms cpx, std, std2 and mis in one code that differs only in cut selection (stated asymmetries favour std and std2); geometric means over 5 instances per class; cpx exceeds 10 h on most instances; mis about 2 times (feas) and 3.5 times (opt) faster than std; std2 about 25 times slower than std on feas but, with mis, best on expansion; one run per instance (pp. 4-8).",
+  "positioning": "Carries the disjunctive-programming normalization (Balas-Ceria-Cornuéjols, Cornuéjols-Lemaréchal, Cadoux) to Benders; earlier Benders enhancements (Magnanti-Wong, McDaniel-Devine, Rei et al.) become arms or are switched off; the weak std2 is reported as 'surprising', not criticized (pp. 2-5).",
+  "writing": "A two-sentence abstract; a one-line normalization backed by 'computational experience'; robustness defined operationally as 'almost always the best (possibly with ties)' (pp. 1, 3, 7).",
+  "limits_future": "w0 untuned; no explanation of why the standard variants swap places across testbeds; two network families; easy instances removed without a list; no future work stated (pp. 3, 6-7).",
+  "method_links": [
+   {"method": "Method 2", "relation": "contradiction", "note": "Dated 2010: the cure is the component (the CGLP normalization) while the separated point (the master's incumbents) and the loop stay as in standard Benders, and no loop is instrumented; with S106 of the same year it shows the component cure and the loop cure pursued side by side, consistent with Common Misreading 3's dating", "pages": "pp. 2-4"},
+   {"method": "Method 4", "relation": "evidence", "note": "One code whose arms differ only in cut selection; the remaining asymmetries are stated and run in the rivals' favour (Magnanti-Wong and two cuts per call for std and std2); the stock solver is run and its failure reported", "pages": "pp. 4-6"},
+   {"method": "Method 4", "relation": "variant", "note": "Lapses: the easiest network-expansion instances removed without a list; per-instance results only on request", "pages": "pp. 4, 6"},
+   {"method": "Method 6", "relation": "evidence", "note": "Step 1: CPLEX branch-and-cut on the full model is run first and exceeds 10 hours on most instances; all subproblems run at CPLEX defaults", "pages": "pp. 4-6"},
+   {"method": "Method 3", "relation": "variant", "note": "One run per instance although std chooses its unbounded ray at random; no spread measured", "pages": "p. 5"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "one separation problem for both cut types", "evidence": "Benders separation rephrased as the infeasibility of (4), so that feasibility and optimality cuts share CGLP (7) with normalization (8); the speed-up is largest where both types are separated", "pages": "pp. 2-3, 7"}
+  ],
+  "transferable": [
+   "Rephrase a separation problem as the infeasibility of an extended LP so that two cut types come out of one CGLP and one normalization (pp. 2-3).",
+   "Choose the CGLP weights to favour small infeasible subsystems, and give zero weight to rows whose right-hand side does not depend on the master variables (p. 3).",
+   "Keep all arms in one code that differs only in the component under test, and list every asymmetry that remains (extra rules given to rivals, cuts per call, a warm start switched off for all) (p. 4).",
+   "In a Benders master solved by branch-and-bound, separate each new incumbent on the fly, add the cuts at the next main iteration, and stop the master once its incumbent is infeasible and unchanged for K = 1,000 nodes (p. 4).",
+   "Let time-limit runs enter the means with their figures at abort, and print their number in parentheses (p. 5)."
+  ],
+  "coauthors": "Domenico Salvagnin, Arrigo Zanette",
+  "quotes": [
+   {"text": "For these rows, there is no reason to penalize the corresponding multiplier", "page": 3},
+   {"text": "The three Benders’ implementations above are completely general purpose, and only differ in the way the cuts are selected—all other features are identical.", "page": 4}
+  ]
+ },
+ {
+  "id": "S106",
+  "year": "2010",
+  "title": "An in-out approach to disjunctive optimization",
+  "read_level": "full",
+  "contribution": "Applies Ben-Ameur and Neto's in-out search (separate the midpoint between an internal point and the LP vertex), with a counter that separates the vertex directly after more than 3 consecutive core-point updates, to optimization over the Lift-and-Project closure; with exactly the same CGLP it closes as much gap as Kelley or more, with 2.5 to 11 times fewer cuts and less time (3 times faster on set covering).",
+  "problem_entry": "A cutting-plane method has two components, and the search scheme, unlike separation and cut selection, was 'much less studied' in MIP, where Kelley's vertex-cutting loop suffers from shallow cuts (pp. 1-2).",
+  "key_idea": "Keep the separator and change the query point: bisect between a feasible internal point q (a heuristic solution) and the LP vertex x*, move q when no cut is found, and separate x* directly after more than 3 consecutive q updates (p. 3).",
+  "assumptions": "MIP with an oracle-defined closure P1; tests on 0-1 MIPs and the L&P closure of the elementary disjunctions; 50 MIPLIB 3.0 and 2003 0-1 instances and 15 ORLIB set-covering instances; bounds on z1 valid by construction (pp. 2-4).",
+  "proof_devices": [
+   "Uncertainty interval [c^T x*, c^T q] for the closure value, halved at each core-point update, p. 3",
+   "Endgame counter: separate x* after k > 3 consecutive q updates, stop if that separation fails, p. 3",
+   "CGLP (1)-(4) of a size comparable with the LP, the most-violated cut read from its duals, p. 4"
+  ],
+  "experiments": "Kelley against in-out, one cut per iteration from the most fractional disjunction, same CGLP, CPLEX 11.2 as LP solver and source of q, 1 h, Q6600; aggregates only: MIPLIB 38.18 to 28.42 s, 1,501 to 592 cuts, gap 40.8 to 41.2% (L&P 63.7 to 64.1%); set covering 2,281.60 to 757.29 s, 16,993 to 1,575 cuts, 35.2 to 38.7% (71.8 to 85.8%) (pp. 4-5).",
+  "positioning": "Credits the scheme to Ben-Ameur and Neto in the abstract; sets Kelley against ellipsoid and analytic-center methods; cites Naoum-Sawaya and Elhedhli as the exception on the Benders side (pp. 1-2).",
+  "writing": "A short programmatic abstract: the result stated in the introduction, the results section titled '(sketch)', a hedged abstract ('may lead to a significant improvement'), 'A first step in this direction' (pp. 1-2, 4).",
+  "limits_future": "Aggregates only; alpha fixed at 1/2; root only, not embedded in branch-and-cut; future work implied, not listed (pp. 2-5).",
+  "method_links": [
+   {"method": "Method 2", "relation": "evidence", "note": "The search scheme is the object and the separator stays ('exactly the same separation module'); the query point moves from the vertex to the midpoint; fewer cuts and less time at an equal or better gap; the scheme is credited to Ben-Ameur and Neto (step 5)", "pages": "pp. 1-5"},
+   {"method": "Method 2", "relation": "variant", "note": "Step 4's first stage is absent: the skill cites this DOI (with 03 PE-13) for a test on an LP whose constraint list plays the oracle with artificial cut-quality rules, but this 5-page text goes straight to the real L&P separator", "pages": "pp. 3-5"},
+   {"method": "Method 4", "relation": "evidence", "note": "The same oracle, one cut per iteration from the same disjunction, the same time limit and LP solver for both loops; lapse: aggregates only, and the L&P reference bound is taken from the in-out arm", "pages": "p. 4"},
+   {"method": "Method 6", "relation": "evidence", "note": "CPLEX as black-box LP solver and as the source of the core point; 'a more clever meta-scheme on top of a black-box cut generator'", "pages": "pp. 1, 4"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "study the component in its pure form", "evidence": "A root-only cutting-plane optimization over the L&P closure, without branching, isolates the search scheme", "pages": "pp. 2-4"}
+  ],
+  "transferable": [
+   "Hold the separator fixed and compare search schemes (Kelley against in-out) that call exactly the same CGLP, one cut per iteration from the same disjunction (pp. 2, 4).",
+   "In an in-out loop, count consecutive core-point updates and separate the LP vertex directly after k > 3 updates, stopping if that separation fails (p. 3).",
+   "Start the core point at a heuristic integer solution from the MIP solver (pp. 3-4).",
+   "Report the closed gap twice: against the best integer value and against the best known bound on the closure value (p. 4).",
+   "List the components of your method and ask which one the literature has neglected; make that one the object of study (pp. 1-2)."
+  ],
+  "coauthors": "Domenico Salvagnin",
+  "quotes": [
+   {"text": "Our current research topic is in fact to move the research focus from the widely investigated separation module to the search scheme where the generated cuts are actually embedded.", "page": 2},
+   {"text": "Computational results show that the resulting scheme outperforms the standard one, in that it produces tighter bounds within shorter computing times and need much fewer cuts—though they use exactly the same separation module.", "page": 2}
+  ]
+ }
+]

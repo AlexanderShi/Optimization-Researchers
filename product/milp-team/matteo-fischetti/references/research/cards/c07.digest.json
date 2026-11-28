@@ -1,0 +1,300 @@
+[
+ {
+  "id": "S052",
+  "year": 2014,
+  "title": "Proximity search for 0-1 mixed-integer convex programming",
+  "read_level": "full",
+  "contribution": "A general-purpose primal heuristic (proximity search) with three CPLEX implementations and an evaluation protocol for heuristics: impose a cutoff f(x) <= f(x̃) − θ and minimise the Hamming distance to x̃ instead of the original objective.",
+  "problem_entry": "Best-bound search is weak at early good solutions (p. 2); entry: add the cutoff f(x) ≤ f(x̃) − θ, then the objective is free, so minimise Δ(x, x̃) and let the black-box solver make primal moves (pp. 2-3).",
+  "key_idea": "Change the sub-MIP's objective, not its constraints; f and Δ swap roles relative to local branching (pp. 3, 7); 'improved relaxation grip' for small θ (Table 1, pp. 5-6; Table 2, pp. 7-8).",
+  "assumptions": "0-1 MIP with convex f, g (convexity not strictly required), binaries only in Δ, first feasible solution assumed easy (pp. 1-2, 4, 6); 130 instances: set covering, SNDlib network design, ramp-loss SVM (pp. 12-14).",
+  "proof_devices": [
+   "valid-bound remark: if infeasibility is proven for θ, f(x̃) − θ is a valid lower bound (p. 5)",
+   "primal/dual simplex analogy (pp. 20-21)"
+  ],
+  "experiments": "CPLEX 12.4 single-thread, ten arms, same x̃ for all, primal integral at 5-1200 s plus pairwise 1%-better curves, column-generation re-optimisation test on 603 subinstances; no seeds or statistical tests (pp. 12-23).",
+  "positioning": "Proximity term 'of course not new' (p. 6); read as a dual version of the authors' local branching and the feasibility pump (p. 7); differs from Bonami et al.'s MINLP pump (p. 8); RINS and polishing as benchmarks (p. 9).",
+  "writing": "Framed as a computational investigation of pros and cons with proof-of-concept code (pp. 1, 3), recurring 'simple (and clean)' clause (pp. 3-5, 10-11), named mechanism (p. 5), self-reported adoption in CBC and GLPK (p. 23).",
+  "limits_future": "Limits: hard cutoff θ, primal nature trapping in small improvements, binaries only (pp. 6, 23); future: hybrid with local branching and RINS, MIP-and-refine, proximity objective in pricing (p. 24).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "the move from x̃ is handed to the black-box solver as a sub-MIP with a changed objective; recentering version runs CPLEX as a black box; minimal code; direct evidence for Heuristic 2 ('move one piece')",
+    "pages": "pp. 2-3, 7, 10"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "practitioner baselines (heuristic emphasis, polishing, guided dives, original and aggressive local branching); same x̃ and same subinstance/warm start for every arm; extras kept out; conservative θ",
+    "pages": "pp. 4-5, 10-11, 15, 17, 22-23"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "a control arm with no proximity content (zero objective, not tabulated); no seeds or permutations although the same authors had just revised the erraticism paper",
+    "pages": "p. 15; S055 p. 1"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "weak big-M models become effective inside proximity search; the big-M SVM class shows the widest margin (1.045 vs 19.687 at 1200 s)",
+    "pages": "pp. 13, 16, 24"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "one-instance mechanism table across the parameter",
+    "evidence": "Tables 1-2 tabulate root-LP histogram, time and iterations against θ or k on ramos3",
+    "pages": "pp. 6, 8"
+   },
+   {
+    "pattern": "frozen-trajectory (open-loop) evaluation",
+    "evidence": "external column-generation driver generates subinstances independently of the heuristic",
+    "pages": "p. 22; S098 p. 18"
+   },
+   {
+    "pattern": "test where the method's nature should win",
+    "evidence": "a primal method is tested in column-generation re-optimisation, which favours primal methods",
+    "pages": "pp. 20-22"
+   }
+  ],
+  "transferable": [
+   "Proximity search: impose the cutoff f(x) ≤ f(x̃) − θ, minimise the Hamming distance to x̃, stop at the first feasible solution, recentre and repeat. Then re-optimise the continuous variables with the binaries fixed (pp. 4, 10).",
+   "Use a soft cutoff with slack z and objective Δ + Mz, so that the old incumbent serves as a warm start and the solver's RINS stays active. Stop with EPAGAP = M/2 (pp. 11, 15).",
+   "On one hard instance, tabulate the root-LP histogram, LP time and iterations against the parameter, for the new method and its rival (pp. 6, 8).",
+   "To compare heuristics, report the primal integral at several horizons together with pairwise \"at least 1% better\" probability curves (pp. 14, 17-19).",
+   "Build a re-optimisation test bed: an external column-generation driver creates nested subinstances independently of the heuristic under test, and every arm gets the same subinstance and warm start (pp. 21-22)."
+  ],
+  "coauthors": "Michele Monaci",
+  "quotes": [
+   {
+    "text": "instead of modifying the constraints of the MIP at hand with the aim of reducing the search space, we modify the objective function with the aim of easing the search.",
+    "page": 3
+   },
+   {
+    "text": "The good news is that even weak models (notably, those making extensive use of big-M tricks) can become effective when used within a proximity search framework, due to the improved relaxation grip induced by the proximity objective function.",
+    "page": 24
+   }
+  ]
+ },
+ {
+  "id": "S055",
+  "year": 2014,
+  "title": "Exploiting erraticism in search",
+  "read_level": "full",
+  "contribution": "A viewpoint that MIP erraticism should be exploited rather than averaged away, with the bet-and-run framework (short runs of diversified clones, then finish the most promising one) and a working default.",
+  "problem_entry": "Erraticism is usually a drawback; the paper takes the opposite view, treating tree search as a chaotic amplifier (p. 1), drawing on SAT/CP restarts and racing ramp-up made sequential, with two questions: diversify and select (pp. 1-2).",
+  "key_idea": "Bet-and-run: solve the first LP, run C randomised clones for N nodes, pick the best and run it to the limit (Figure 1, p. 5); potential measured first with 100 seeds on 58 instances (Table 1, pp. 3-4); RAN0-RAN3 diversification (pp. 4-5).",
+  "assumptions": "General MILP in equality form; RAN3 relies on dual degeneracy (pp. 2-5); 344 instances from COR@L and MIPLIB 2010 after listed exclusions; 58 medium instances for the preliminary study (pp. 3, 7).",
+  "proof_devices": [
+   "optimal-face argument: RAN3's fixing of nonzero-reduced-cost nonbasics keeps the copy inside the optimal face (p. 4)"
+  ],
+  "experiments": "CPLEX 12.3 single-thread with dummy callback in every arm, 10,000 s limit, default vs bet-and-run plus ideal oracles, node classes blind to arm; losses on easy classes, −28.5% time on hard ones, +17.2% time overall; one run per instance per arm (pp. 6-12).",
+  "positioning": "Credits Danna 2008 and MIPLIB 2010 (p. 1), SAT/CP restarts, backdoors, ParaSCIP racing (pp. 1-2); portfolios set aside to study pure erraticism (p. 2); credit-and-extend tone.",
+  "writing": "Argued thesis ('we argue', p. 1), modest proof-of-concept frame (pp. 1, 6, 10), losses stated as expected and turned into an on/off usage rule (p. 8), one self-assessment (p. 8).",
+  "limits_future": "Limits: unsophisticated selection rule (p. 6), gains overtaken by erraticism in the hardest class, overhead on easy instances (pp. 8-10), 148 unsolved instances outside evidence (p. 7); future: source-level diversification, learned selection, restarts reusing information, portfolios, NR on the fly (p. 10).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "the spread is measured first (100 seeds on 58 instances, single-thread), then exploited, and classes where it does not pay are printed; positive-correlation sentence is the paper form of Heuristic 6",
+    "pages": "pp. 2-9"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "the method-versus-default table has no seeds of its own and no placebo arm; variability appears as resource and ceiling, not as a control arm",
+    "pages": "pp. 7-9"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "dummy callback in every arm; classes blind to arm; exclusions with reasons; ideal-oracle ceilings; conservative Tlast; baseline kept as clone 0",
+    "pages": "pp. 6-8"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "potential measured before the method is built (best-of-k-seeds table); black-box limit stated as the lesson",
+    "pages": "pp. 3, 4, 8, 10"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "A best-of-k-seeds table (k = 1, 2, 3, 5, 10, 25, 50, 100) with unsolved counts, nodes and LP iterations, in both geometric and arithmetic means (Table 1, p. 3).",
+   "RAN3 diversification at the first LP's optimal face (pp. 4-5).",
+   "Bet-and-run with C = 5 clones, N = 5 nodes, a ranked list of indicators and the θ = 0.2 discard rule (pp. 5-7).",
+   "A hybrid that runs default for NR nodes before sampling, so easy instances pay no overhead (pp. 8-10).",
+   "Before claiming a new optimum, re-solve with zero optimality tolerance, using the value found as the initial upper bound (p. 4)."
+  ],
+  "coauthors": "Michele Monaci",
+  "quotes": [
+   {
+    "text": "Erraticism is generally viewed as a drawback to be avoided. Instead, we argue that a certain degree of erraticism is unavoidable, as it is related to the exponential nature of tree search that acts as a chaotic amplifier, so one has to cope with it.",
+    "page": 1
+   },
+   {
+    "text": "Therefore, one has to content him/herself with a criterion that gives a positive correlation between the selected run and those that a posteriori behave better than the average.",
+    "page": 2
+   }
+  ]
+ },
+ {
+  "id": "S098",
+  "year": 2014,
+  "title": "Boosting the feasibility pump",
+  "read_level": "full",
+  "contribution": "An algorithmic enhancement of the feasibility pump's rounding step: an integer line search that enumerates all roundings along an extended, bound-projected segment at modest cost.",
+  "problem_entry": "FP improvements almost all target projection; the effort is 'lopsided' (pp. 2-3); entry: put effort into the rounding step and examine all roundings along a segment through x* (p. 3).",
+  "key_idea": "Integer line search replacing rounding: efficient enumeration of roundings, cheap end points (conic combination of violated rows), extension and projection onto the bound box, timed propagation (pp. 3, 10-11, 18).",
+  "assumptions": "General MIP with bounds; general integers via bound box; continuous variables need one warm-started LP per point (pp. 4, 8, 12-14); 1,304 instances from MIPLIB 2003/2010, COR@L, OR-LIB with 31 removed for stated reasons (p. 17).",
+  "proof_devices": [
+   "breakpoint counting: breakpoints at λ̄ᵢ plus integer multiples of 1/(xᵗᵢ − xˢᵢ) (pp. 6-7)",
+   "pseudo-polynomial bound of Algorithm 2 in |xᵗ − xˢ|, then in |u − l| after filtering (pp. 8, 12, 14)",
+   "three-binary example for extension and projection (Figure 1, pp. 11-13)",
+   "at most 2|I| propagate calls (pp. 15-16)"
+  ],
+  "experiments": "Xeon 3.16 GHz, CPLEX (version not stated), shadow design along the FP+ trajectory, performance profiles of improvement over FP; FP+ls better on about 66% and rescues about 12%; matched-budget and random-direction attribution; no seeds or tests (pp. 17-24).",
+  "positioning": "Inside the FP lineage and older line-search heuristics (pp. 2-3, 8-10); unsourced claim that FP is standard in commercial solvers (p. 2); does not cite the co-authors' proximal reading of the pump (pp. 25-27).",
+  "writing": "Four numbered ideas in the contribution sentence with headline numbers in the introduction (pp. 3-4), goals stated before experiments (p. 17), modest close 'a small incremental step forward' (p. 25).",
+  "limits_future": "Limit: per-point LPs become substantial with many breakpoints and continuous variables (pp. 8, 25); future: continuous solves at chosen breakpoints only, several directions or tree-like search (p. 25).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "shadow design gives every variant the same FP+ iterates; one code base with arms as options; exclusions with reasons; deterioration profile; gaps: CPLEX version not stated, no rival pump variant run",
+    "pages": "pp. 17-18, 20"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "a random-direction arm with matched budget acts as a placebo arm to attribute gain to search volume vs direction, not to measure variability; no seeds",
+    "pages": "pp. 23-24"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "frozen-trajectory (open-loop) evaluation",
+    "evidence": "FP proceeds as if the line search had not run, so all variants see the same trajectory",
+    "pages": "p. 18; S052 p. 22"
+   },
+   {
+    "pattern": "matched-budget attribution with a random control",
+    "evidence": "every variant capped at the conic search's breakpoint count, plus a random-direction arm with the same budget",
+    "pages": "pp. 23-24"
+   }
+  ],
+  "transferable": [
+   "A breakpoint walk that enumerates all roundings along a segment, one unit change per step (pp. 6-8).",
+   "A cheap feasibility direction: the violated rows, weighted by signed distance (p. 11).",
+   "Extension with α ∈ [−1, 2], plus projection onto the bounds by filtering breakpoints (pp. 12, 14, 17).",
+   "Propagate a variable only after its last change on the line, which gives at most 2|I| propagations (p. 16).",
+   "Shadow evaluation: run the component along an unchanged baseline trajectory (p. 18).",
+   "A budget-matched ablation with a random-direction control (pp. 23-24)."
+  ],
+  "coauthors": "Natashia L. Boland, Andrew C. Eberhard, Faramroze G. Engineer, Martin W.P. Savelsbergh, Angelos Tsoukalas",
+  "quotes": [
+   {
+    "text": "After the integer line search has been executed, FP proceeds as if the execution of the integer line search did not take place. This allows for a fair comparison between the different line searches as the FP trajectory is not altered.",
+    "page": 18
+   },
+   {
+    "text": "Thus, the performance difference observed earlier is not caused by the choice of end points, but by the difference in number of rounded solutions explored.",
+    "page": 23
+   }
+  ]
+ },
+ {
+  "id": "S023",
+  "year": 2016,
+  "title": "Benders decomposition without separability: A computational study for capacitated facility location problems",
+  "read_level": "full",
+  "contribution": "Computational and algorithmic guidelines for a modern Benders implementation on capacitated and congested facility location with a non-separable slave, plus a simplified generalised Benders cut.",
+  "problem_entry": "Does Benders help even without separability (p. 1)? Abandoned since Wentges 1996 (p. 3); give guidelines for a modern callback-based implementation for linear multiple-source CFL and congested CFL (pp. 2-5).",
+  "key_idea": "Project out all allocation variables, aggregate-capacity constraint as global feasibility cut (p. 8); slave with y fixed is much faster after preprocessing (pp. 8-9); blame the root loop, not the cut, and stabilise with an in-out scheme (pp. 9-11).",
+  "assumptions": "f, g differentiable convex, S a nonempty polytope, X(y) nonempty closed bounded, constraint qualifications (pp. 6-7); multiple-source CFL only (p. 4); congested CFL with quadratic congestion and perspective SOC baseline (pp. 4-6); cap*, GK, i*, p* and 60 congested instances (pp. 14-15, 21-22).",
+  "proof_devices": [
+   "copy-variable cut derivation: y − q = 0 as bounds, cut from reduced costs r* (eqs. 27-31, pp. 7-8)",
+   "toy example Φ(y) = |y| showing an LP value function is nonlinear (p. 7)",
+   "Lagrangian knapsack recomputation of cut coefficients with assignment duals fixed, valid for any u (pp. 9-10)"
+  ],
+  "experiments": "CPLEX 12.6.1, 4 threads, 50,000 s; Benders order of magnitude faster on cap*, beats CPLEX on i* mostly, near-identical root gaps on GK, 210 of 445 p* proven, 45 of 60 congested solved; rivals compared by Linpack-scaled published times; one nondeterministic run, no Kelley ablation (pp. 14-22).",
+  "positioning": "Rivals Avella-Boccia B&C&P and Görtz-Klose Lagrangian B&B, heuristics Avella et al. and Guastaroba-Speranza (pp. 2-3); revises the dual-degeneracy/cut-selection explanation of slow convergence (pp. 9-10); in-out credited to Ben-Ameur-Neto, Fischetti-Salvagnin, Naoum-Sawaya-Elhedhli and [14] (p. 10).",
+  "writing": "Question-led hedged abstract (p. 1), one-sentence diagnosis 'the real culprit' (p. 10), tuning restraint stated twice (pp. 17, 22-23), admitted surprise (p. 17), strong closing claims (p. 23).",
+  "limits_future": "Limits: non-decomposable slave penalises Benders intrinsically (p. 23), last per-mills of gap hard (p. 18), blurring pays only with loose capacities (pp. 11, 16), weak on 1,000 × 1,000 with r = 15 (p. 17); no future work named (pp. 22-23).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "primary, joint: diagnosis moves from cut to root loop; in-out query point with Kelley fallback before branching; on 120 GK instances root gaps almost identical to CPLEX's; no Kelley arm, so the loop's share is asserted not measured",
+    "pages": "pp. 10-11, 18"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "stabilisation parameters set by what makes the oracle cheap: separation points close together for a warm-started LP slave",
+    "pages": "p. 11"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "allocation variables projected out and a thin master; the root gain shows where many allocation variables are removed",
+    "pages": "p. 18"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "stock LP solver as slave; plain CPLEX on the compact model is a strong reported baseline solving all i*",
+    "pages": "pp. 9, 16-17"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "what is tested is a fully engineered callback package with defaults overridden, not the smallest code with extras off",
+    "pages": "p. 12"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "spread exploited as a parallel race of perturbed root loops with pooled cuts; no seeds, nondeterministic 4-thread jobs; contradicts the skill's 'single-threaded' blind-spot line for this paper",
+    "pages": "pp. 12, 14"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "new method deliberately untuned; both arms same EPGAP on the same machine",
+    "pages": "pp. 14, 17, 22-23"
+   },
+   {
+    "method": "Method 4",
+    "relation": "contradiction",
+    "note": "a dated lapse: rival methods judged by published times on other hardware and older CPLEX versions, scaled by Linpack",
+    "pages": "pp. 16-17, 20"
+   }
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "The copy-variable trick for generalised Benders cuts: y − q = 0 imposed as bounds, with the cut read from their reduced costs (pp. 7-8).",
+   "An aggregate-capacity constraint in the master in place of Benders feasibility cuts (p. 8).",
+   "For stability, recompute the cut coefficients through Lagrangian knapsacks with the assignment duals fixed (pp. 9-10).",
+   "An in-out root loop with a 5 + 5 non-improving-rounds rule and slack purging, whose parameters are set by the slave's warm start (pp. 10-11).",
+   "Race the root loop across threads with perturbed parameters, and pool all the cuts (p. 12).",
+   "A node give-up rule based on the slave's primal value, and a 50% time cap on fractional separation (p. 13).",
+   "Separate every integer candidate in the lazy-constraint callback (p. 13).",
+   "Two root restarts that reload the saved cuts as static cuts (p. 13).",
+   "Slave tolerances tighter than the master's (1e-9 against 1e-7 and 1e-6) (p. 13)."
+  ],
+  "coauthors": "Ivana Ljubić, Markus Sinnl",
+  "quotes": [
+   {
+    "text": "According to our experience, however, cut selection is important but the cut loop strategy adopted at the root node is the real culprit of inefficiency.",
+    "page": 10
+   },
+   {
+    "text": "We want to point out that it would be possible to tune our code to speedup convergence for some special cases, but this was not the intention of our computational study.",
+    "page": 17
+   }
+  ]
+ }
+]

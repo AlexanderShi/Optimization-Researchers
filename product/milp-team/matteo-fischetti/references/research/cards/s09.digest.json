@@ -1,0 +1,311 @@
+[
+ {
+  "id": "S137",
+  "year": "2018",
+  "title": "Chasing first queens by integer programming",
+  "read_level": "full",
+  "contribution": "Four exact methods on one clique model (Gecode CP, n iterated black-box ILPs, a DFS on the solver's root bound, and a lexicographic-simplex enumeration) compute lexicographically first n-queens solutions for 22 previously open sizes from 56 to 115, the ILP methods solving 35 of the 40 sizes n = 21-60 within two days against 21 for CP.",
+  "problem_entry": "An outsider's question: Knuth asked whether ILP can compute open instances of the lexicographically first n-queens problem (OEIS A141843), known only for n <= 55 (pp. 1-2).",
+  "key_idea": "Make the solver the subroutine (one ILP per row in ILP-ITER; the root bound with preprocessing and cuts as the value guess of a backtracking DFS in ILP-TRUNC), and turn lex-optimality of the node LP into pruning and fixing rules in a custom lex-simplex enumeration (pp. 5-8).",
+  "assumptions": "Pure binary model with row/column equalities and diagonal at-most-one rows, all cliques; clique family (3)-(5) and odd-cycle {0,1/2}-cuts from the stable-set view; every n from 21 to 60 in the testbed (pp. 2-4, 8).",
+  "proof_devices": [
+   "Lex-optimality pruning: an integral lex-optimal node LP is the lex-optimal integer solution of its subtree, p. 7",
+   "Mini-cutloop: a lex-optimal value below 1 for the first unfixed variable proves it cannot be 1 in the subtree, so it is fixed to 0, p. 7",
+   "Lexicographic simplex on a black-box simplex by fixing nonzero-reduced-cost variables and restoring bounds, pp. 6-7",
+   "Backtracking validity in ILP-TRUNC: infeasibility of the current ILP proves the tentative prefix infeasible, p. 6",
+   "Exact clique separation written as an auxiliary ILP, finding nothing beyond family (3)-(5), p. 4"
+  ],
+  "experiments": "CPLEX 12.7.1 and Gecode 5.1.0 on 24 identical Xeon E3-1220 V2 machines, n = 21-60, 2-day limit, shifted geometric mean (shift 10 s) and solved counts: CP 21 solved, each ILP method 35; shmean 2945.76 / 780.20 / 251.85 / 263.79 s (CP / ILP-ITER / ILP-TRUNC / LEX-DFS); n = 42, 46, 48 unsolved by all; one run per method and size, no seeds mentioned (p. 8; Table 2, p. 13).",
+  "positioning": "Credits Knuth for the problem and Gecode's efficiency ('a testament to how efficient Gecode's implementation is'); builds on his own {0,1/2}-cut separators and lex-simplex studies (refs [2], [3], [6], [7], [22]) and on Schubert's page for the known values (pp. 2, 8, 12, 14).",
+  "writing": "Two numbered outcomes in the conclusion, an admitted disappointment about the LEX-DFS extras, and the new solutions listed in an appendix for checking (pp. 9-12).",
+  "limits_future": "Even n consistently harder and size no guide to difficulty; how the n > 60 solutions were computed is not stated; future work: explain the even/odd gap (pp. 8-9).",
+  "method_links": [
+   {"method": "Method 6", "relation": "evidence", "note": "The solver as subroutine: each row decision a black-box ILP (ILP-ITER) and the root-truncated solver, with its preprocessing and cuts, as the bounding oracle of a custom DFS (ILP-TRUNC); an exact clique separator tried as an auxiliary ILP and dropped. Joint with Salvagnin.", "pages": "pp. 4-6"},
+   {"method": "Method 1", "relation": "variant", "note": "Subtraction test run against their own extras: cut separation halves the nodes, but switching it off is faster (246 s); the finding is reported, yet the cut version stays in Table 2.", "pages": "p. 9; p. 13"},
+   {"method": "Method 2", "relation": "variant", "note": "The lexicographic simplex of his Gomory-cut studies is reused not to stabilise a cut loop but as the node LP of an enumeration whose lex-optimality yields pruning and fixing.", "pages": "p. 7; refs pp. 12, 14"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "Lexicography as a structural device", "evidence": "Lex simplex as node LP whose lex-optimality gives pruning and the mini-cutloop fixing; again in D019 (nogood cut loop, lex bottleneck by count-fixing)", "pages": "pp. 6-8"},
+   {"pattern": "Open public records as target and yardstick", "evidence": "Open OEIS values (A141843, known for n <= 55) as the target; the new solutions listed in full for checking", "pages": "pp. 1-2, 9-12"}
+  ],
+  "transferable": [
+   "For a lexicographic objective over a permutation, solve one ILP per position with the prefix fixed: n ILPs instead of n^2 yes/no tests (p. 5).",
+   "Use the solver's root bound, with its preprocessing and cuts but no branching, as the value guess of your own DFS and backtrack on infeasibility; plain LP bounds were correct and fast but backtracked too often (p. 6).",
+   "Before coding a separator, run an exact auxiliary-ILP separator once to see whether the cheap polynomial family already finds everything (p. 4).",
+   "Print the ablation that hurts your own ingredient, with the reason (cuts halve nodes but cut node throughput) and the faster time (p. 9)."
+  ],
+  "coauthors": "Domenico Salvagnin",
+  "quotes": [
+   {"text": "Note that this is not equivalent to solving the LP relaxation of the ILP, as cutting planes and (most importantly) preprocessing play a crucial role here.", "page": 6},
+   {"text": "As for the advanced techniques implemented in LEX-DFS, we have to admit that for some of them the overall effect was rather disappointing.", "page": 9}
+  ]
+ },
+ {
+  "id": "D018",
+  "year": "2019",
+  "title": "Embedded hyper-parameter tuning by Simulated Annealing",
+  "read_level": "full",
+  "contribution": "An SA-inside-SGD training scheme that draws each step's learning rate at random from a discrete set and accepts the step by the Metropolis test on the minibatch loss, giving lower validation loss on every seed and a 1-2% better best-of-10 accuracy than a basic scheduled SGD on CIFAR-10 (VGG16, ResNet34); arXiv precursor of S110.",
+  "problem_entry": "SGD hyper-parameters are set by hand, grids or random trials, and SA had been used for training only without gradients; search a discrete neighbourhood of gradient moves with a metaheuristic so that tuning happens inside one run (pp. 1-2).",
+  "key_idea": "After a naive derivative-free SSA fails (random directions cancel out in high dimension), SGD-SA picks each step's learning rate at random from a set that should contain unusually large rates and lets the Metropolis test accept or reject the step (pp. 3-5).",
+  "assumptions": "Differentiable loss or proxy; CIFAR-10 split 50,000/10,000 training/test; output the best w on the validation set per epoch while Table 1 says 'Final'; no validation set separate from the test examples described (my reading) (pp. 2, 5, 7).",
+  "proof_devices": [
+   "No proofs; a first-order Taylor argument motivates trying both +/- epsilon Delta(w) in the naive move, p. 3",
+   "Seeds drive discrete decisions (rate choice, acceptance), so the search path depends strongly on the seed, p. 5"
+  ],
+  "experiments": "PyTorch, 100 epochs, batch 512, one TITAN Xp; Scheduled-SGD without momentum vs SGD-SA (alpha 0.8, T0 1, 14 rates), 10 seeds each reported seed by seed: lower validation loss on every seed, higher accuracy except seeds 3, 4, 6 on ResNet34, best-of-10 +1-2%; my arithmetic from Table 1: mean accuracy 86.16 vs 85.11 (VGG16), 82.24 vs 82.11 (ResNet34), SGD-SA ResNet34 runs spanning 76.31-84.11 (pp. 5-7).",
+  "positioning": "Against SA training for non-differentiable objectives (refs [9], [6]) and against grid or random hyper-parameter search and CLR (refs [1], [2], [11], [12]); no tuning method is run as a rival (pp. 1-2).",
+  "writing": "Leads with the failed naive version and its diagnosis before the working design; claims limited to 'potentials' on one test problem; seed dependency framed as a feature (pp. 3-4, 6, 8).",
+  "limits_future": "Slower convergence on the training set and seed-dependent curves; future: a differentiable objective for moves and a black-box one for acceptance, other metaheuristics (pp. 6, 8).",
+  "method_links": [
+   {"method": "Method 3", "relation": "variant", "note": "Spread measured on both arms and turned into a resource (the seed as one hyper-parameter for an external loop), but no placebo arm, and the best-of-10 gain is smaller than SGD-SA's own seed spread on ResNet34 (my arithmetic).", "pages": "pp. 5-7"},
+   {"method": "Method 4", "relation": "variant", "note": "Both arms stripped of momentum (idea compared, not code, step 4), but the baseline is 'quite basic' rather than a practitioner's (step 2), and the selection rule and the reported set are not separated (my reading).", "pages": "pp. 5, 7"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "Metaheuristic acceptance over a method's own moves", "evidence": "The neighbourhood is the gradient method's own steps at different learning rates; the metaheuristic only accepts or rejects them", "pages": "pp. 4-5"}
+  ],
+  "transferable": [
+   "Report the naive version first, with its failure and the diagnosis that motivates the real design (pp. 3-4).",
+   "Put deliberately risky candidates (unusually large learning rates) in the move set and let the acceptance test discard them instead of tuning them away beforehand (p. 4).",
+   "Run both arms over the same number of seeds and print a seed-by-seed table, losses included (pp. 5-7)."
+  ],
+  "coauthors": "Matteo Stringher",
+  "quotes": [
+   {"text": "An important feature of our method is that H can (actually, should) contain unusually large learning rates, as the corresponding moves can be discarded by the Metropolis’ criterion if they deteriorate the objective function too much.", "page": 4},
+   {"text": "In our view, this dependency on the seed is in fact a positive feature of SGD-SA, in that it allows one to treat the seed as a single (quite powerful) hyper-parameter to be randomly tuned in an external loop.", "page": 6}
+  ]
+ },
+ {
+  "id": "D019",
+  "year": "2019",
+  "title": "Finding First and Most-Beautiful Queens by Integer Programming",
+  "read_level": "full",
+  "contribution": "Extends S137 with a finitely convergent pure cutting-plane method on the lexicographic simplex using combinatorial 'lexicographic nogood' cuts (not competitive), and a cost-level-by-cost-level ILP scheme for Knuth's lexicographic-bottleneck 'most-beautiful' queens, solved for n up to 176 on a notebook.",
+  "problem_entry": "A second Knuth question: the most-beautiful placement minimising the multiset of distances to the centre, known only for n <= 48; sorting cells by cost and taking the lex-minimal solution is wrong when costs tie (p. 2).",
+  "key_idea": "Replace numerically unstable Gomory cuts in the lex-simplex loop by combinatorial nogoods excluding the current lex prefix; solve the bottleneck variant by one ILP per distinct cost level minimising the count at that level, then fixing the count by an equality, with a 100-level jump checked by the solver under a tiny cutoff (pp. 6-7, 9-10).",
+  "assumptions": "The same pure 0-1 clique model; costs d_ij = (2i - n - 1)^2 + (2j - n - 1)^2 with many ties; the bottleneck scheme stated for lexicographic min-max combinatorial problems in general (pp. 2-3, 9).",
+  "proof_devices": [
+   "Validity of the lexicographic nogood (10) by a case split on the earlier variables at 1, p. 7",
+   "Finite convergence: each nogood forces a strict lexicographic worsening, so no cycling, and the cuts are finitely many, p. 7",
+   "Naive sort-then-lex method shown wrong with tied costs, p. 2",
+   "Count-fixing rather than cell-fixing at each level because the optimum is not unique; z* = 0 allows fixing cells to 0; early exit when counts reach n, pp. 9-10"
+  ],
+  "experiments": "S137's comparison repeated unchanged (pp. 7-8); nogood method reported only in words (slower than LEX-DFS, 'almost as many' boards solved, p. 7); most-beautiful solutions for n = 16, 32, ..., 176 with notebook wall-clock times from 0.2 s to 38,757.7 s, not monotone in n (pp. 12-13); for n = 128, 397 of 1,464 levels give z* = 0 (p. 10).",
+  "positioning": "Names S137 (CPAIOR 2018) as its preliminary version; credits Knuth for both variants; relates the nogood loop to his lex-Gomory studies (refs [3], [25], [4]) (pp. 2, 6-7).",
+  "writing": "Reuses S137's sections nearly verbatim and adds §3.5 and §5; labels the nogood method 'theoretically interesting' while 'not competitive in our case' (pp. 6-7, 9-10).",
+  "limits_future": "No numbers for the nogood method; the bottleneck scheme relies on the solver's parametric heuristics; future: even/odd gap, lexicographic variants, nogoods for general binary programs (pp. 7, 10).",
+  "method_links": [
+   {"method": "Method 6", "relation": "evidence", "note": "The bottleneck variant as a sequence of ILPs on one model relying on the solver's 'parametric heuristics'; the 100-level jump uses the solver as a feasibility oracle aborted by a tiny cutoff. Joint with Salvagnin.", "pages": "p. 10"},
+   {"method": "Method 2", "relation": "variant", "note": "With the loop already lexicographic, instability is blamed on the cut family and Gomory cuts are swapped for combinatorial nogoods: the oracle changes, the loop stays, the reverse of step 3.", "pages": "pp. 6-7"},
+   {"method": "Method 1", "relation": "variant", "note": "S137's subtraction finding repeated (switching cuts off is faster) while the cut version stays in the table.", "pages": "pp. 7-8"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "Lexicography as a structural device", "evidence": "Lex simplex as the loop of a pure cutting-plane method with nogood cuts; lexicographic bottleneck solved by count-fixing per cost level", "pages": "pp. 6-7, 9-10"}
+  ],
+  "transferable": [
+   "For a lexicographic bottleneck objective with tied costs, solve one ILP per cost level minimising the count at that level and fix the count by an equality rather than fixing cells (pp. 9-10).",
+   "Skip long runs of zero-count levels by asking the solver for any solution avoiding a whole block of levels, aborted by a tiny objective cutoff, and fix the block if it succeeds (p. 10).",
+   "When Gomory cuts are numerically unstable in a lexicographic loop, try a combinatorial cut that excludes the current lex prefix; finiteness follows from the strict lex worsening per cut (p. 7)."
+  ],
+  "coauthors": "Domenico Salvagnin",
+  "quotes": [
+   {"text": "Unfortunately, a preliminary implementation of the method proved to be numerically unstable on our n-queens models.", "page": 7},
+   {"text": "Though not competitive in our case, this method is theoretically interesting and can be possibly extended to more general binary integer programs.", "page": 10}
+  ]
+ },
+ {
+  "id": "S038",
+  "year": "2019",
+  "title": "Interdiction Games and Monotonicity, with Application to Knapsack Problems",
+  "read_level": "full",
+  "contribution": "For interdiction games with a downward-monotone follower, proves big-M-free interdiction cuts (with a counterexample outside the assumption), adds modified, lifted and dominance cuts and an invalid-constraint heuristic, and solves all 360 literature knapsack-interdiction instances (27 previously open) within 84 s, orders of magnitude faster than CCLW, TRS and the group's own MIX++.",
+  "problem_entry": "Single-level reformulations need big-M coefficients that weaken the cuts, and the tight choice M_j = d_j for knapsack interdiction had been used without proof; find the structural property (downward monotonicity) that removes big-M and the applications that have it (pp. 3, 7, 9).",
+  "key_idea": "Project all follower variables out and branch-and-cut on (w, x) with profit-coefficient interdiction cuts separated by solving the follower with profits d_j(1 - x*_j), plus modified, lifted and dominance cuts and a heuristic that adds invalid leader constraints to make the follower's answer analytic, then a cutoff and a reverse disjunction (pp. 8-15).",
+  "assumptions": "Min-max game with binary interdiction variables, follower LP or MILP with finite bounds, feasible and bounded for every policy; Assumption 1 (downward monotonicity, equivalent to Q_N >= 0 in some formulation) and Assumption 2 (binary interdicted follower variables) for the new cuts; 360 KIP plus 144 SAC-94-based multidimensional instances (pp. 2-3, 10, 15-16).",
+  "proof_devices": [
+   "Theorem 1: monotonicity iff a formulation with Q_N >= 0 exists, by raising negative entries to zero, p. 3",
+   "Theorem 2: validity of cuts (43) by zeroing interdicted entries of any follower point and invoking monotonicity, p. 9",
+   "Theorem 4: maximal follower solutions dominate, enforced by an epsilon = 0.001 perturbation of zero profits in separation, pp. 10, 13",
+   "Three-node assignment-interdiction counterexample: the cuts are invalid without monotonicity, p. 10",
+   "Theorems 5-6: item-flipping arguments for the modified (disjunctive) and lifted cuts, pp. 11-12",
+   "Theorem 7: exchange argument keeping at least one optimum under the dominance inequalities, pp. 12-13",
+   "Exact separation needed only at integer points; greedy or root-node MILP separation at fractional ones, p. 13"
+  ],
+  "experiments": "Python on CPLEX 12.6 defaults, 3,600 s, single thread (p. 15); cumulative ablation over six settings by root gap and time-to-optimality profiles (pp. 16-18); all 360 KIP within 84 s, 4 above 10 s (p. 18); CP/CCLW and TRS times copied from other machines, MIX++ run on the same machine with four threads (pp. 18, 20-21); 10 of 144 multidimensional instances unsolved in an hour, all solved with longer limits up to about 30,000 s (pp. 21-22).",
+  "positioning": "Generalises and proves cuts used without proof by Caprara et al. 2016 and Ralphs 2015; contrasts with cutting-plane procedures that re-solve a MILP after each cut; benchmarks against CCLW, TRS, DeNegre and the group's own MIX++, called 'not specialized for interdiction' (pp. 3, 9, 18-21).",
+  "writing": "Theorem-proof structure with a counterexample figure; a contribution paragraph with numbers (360 instances, 27 open, 84 s, 'by far the largest computational study'); ablation reported before rival comparisons (pp. 3-4, 9-13, 16-18).",
+  "limits_future": "Facility-location and prize-collecting applications modelled but not computed; CCLW faster on several easy instances; MIX++ wins once (pb5-50); future: the non-monotone case and customised codes for the applications (pp. 15, 19, 21-22).",
+  "method_links": [
+   {"method": "Method 1", "relation": "evidence", "note": "The thin move: a Benders-like projection of every follower variable, made tight by a structural assumption instead of big-M. Joint with Ljubic, Monaci, Sinnl.", "pages": "pp. 3, 8-9"},
+   {"method": "Method 1", "relation": "variant", "note": "Cumulative ablation, not subtraction: setting M leaves runtime 'nearly identical' to the basic setting yet stays in the default MHDLP, which is never run without it.", "pages": "pp. 16-18"},
+   {"method": "Method 4", "relation": "variant", "note": "Rivals' published times from other machines (the lapse already dated to the bilevel work), but MIX++ run on the same machine with four threads against one, its single win printed, and it is called 'not specialized for interdiction'.", "pages": "pp. 18, 20-21"},
+   {"method": "Method 6", "relation": "evidence", "note": "The primal heuristic is an auxiliary compact MILP solved by the same solver, whose value then serves as a cutoff with a reverse disjunction; CPLEX at default parameters.", "pages": "pp. 14-15"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "Restrict, solve, then exclude", "evidence": "Solve the game restricted by invalid leader constraints (54) as a compact MILP, then add the cutoff (60) and a disjunction (61) forbidding the restriction; infeasibility proves the heuristic value optimal (same shape as local branching's two branches, my reading)", "pages": "pp. 14-15, 21"}
+  ],
+  "transferable": [
+   "When a tight cut circulates without proof, name the assumption that makes it valid, prove it by a feasibility-preserving construction, and give a smallest counterexample outside the assumption (pp. 3, 9-10).",
+   "Separate exactly only at integer points, where correctness needs it, and heuristically at fractional ones to raise node throughput (pp. 13, 18).",
+   "Perturb the zero objective coefficients of a separation problem by epsilon times the profit so that it returns maximal, dominating solutions (p. 13).",
+   "Add invalid constraints that make the inner problem trivial, solve the compact MILP as a heuristic, then add its cutoff and a disjunction excluding the restricted region (pp. 14-15)."
+  ],
+  "coauthors": "Ivana Ljubić, Michele Monaci, Markus Sinnl",
+  "quotes": [
+   {"text": "However, in most of the cases, the quality of derived cuts is not satisfactory, since large big-M coefficients (or indicator constraints) must be used.", "page": 7},
+   {"text": "The explanation of this behavior is that a much high node-throughput can be achieved in branch-and-bound when using heuristic separation, while slightly improved bounds (M) may not be crucial to quickly solve an instance to optimality.", "page": 18}
+  ]
+ },
+ {
+  "id": "S078",
+  "year": "2020",
+  "title": "Heuristic algorithms for the wind farm cable routing problem",
+  "read_level": "full",
+  "contribution": "Six heuristics for offshore wind-farm cable routing (a new angular Sweep construction plus SA, Tabu Search, VNS, ACO and GA), tuned on 24 literature instances and tested on 220 new realistic ones, rank VNS first (best on 203 of 220) and show that the improvement heuristics depend on Sweep's warm start.",
+  "problem_entry": "Cable routing is NP-hard and hard for MILP solvers in practice, while preliminary what-if analyses need good solutions in very short times, which motivated heuristics not using MILP technology (p. 3).",
+  "key_idea": "Sweep orders turbines by angle around the substation, cuts them into equal groups (a bin-packing view, trivial with unit power) and builds a spanning tree within groups, in multistart over all O(n^2) parameter settings; metaheuristics improve it with incrementally evaluated 1-opt moves on a penalised cost (pp. 5-7, 11-14).",
+  "assumptions": "One offshore substation, no obstacles; anti-arborescence with one outgoing cable per turbine, cable capacities and costs, at most C substation cables, no crossings, unit power; training set of 24 real instances, test set of 220 layouts from a proximity-search MILP matheuristic, C = Cmin + 1 by default (pp. 3-5, 8-10).",
+  "proof_devices": [
+   "n/a (no proofs); Prim-Dijkstra with the cheapest cable as a rough lower bound, used to normalise SA's temperature, pp. 11, 17",
+   "Parametric cost evaluation reducing a 1-opt move from O(n^2) to O(n), p. 12",
+   "Sweep grouping as bin packing, trivial with unit turbine power, p. 12"
+  ],
+  "experiments": "Parameters tuned only on the 24 training instances by performance profiles; 10-minute single-thread runs on a Xeon E5-2623 v3, the limit read off a 1-hour cost trace; training compared with the 1-hour MILP matheuristic of [26], test set only among the six heuristics, VNS best on 203 of 220; no seeds or repeated runs mentioned (text search) (pp. 8, 16-34).",
+  "positioning": "Reviews heuristic and MILP work on the problem; takes the 24 instances and the MILP matheuristic of Fischetti and Pisinger [26] as the reference (which Fischetti is not stated); re-implements Nedlin's ACO with crossing handling added (pp. 6-8, 21-23, 29).",
+  "writing": "One section per metaheuristic, each with a Tuning subsection and a performance profile; findings summarised as a ranking explained by the presence of a local-search phase (pp. 14-28, 31, 34).",
+  "limits_future": "No heuristic beats the matheuristic on training instances; ACO hardly reaches feasibility; test set 'publicly available' (pp. 2, 35) vs 'available, on request' (p. 4); future: priced crossings, multi-thread GA, obstacles and Steiner nodes, joint layout and routing (pp. 29, 31, 35).",
+  "method_links": [
+   {"method": "Method 4", "relation": "evidence", "note": "Separate tuning and test instance sets 'to overcome the risk of overtuning' (step 5); the method of choice has 'basically just one parameter' and is 'easier to implement and tune'; Tabu's drop without Sweep blamed on its many parameters. Joint; applied partners first.", "pages": "pp. 8, 19, 32, 34"},
+   {"method": "Method 6", "relation": "variant", "note": "MILP was the earlier route (the matheuristic of [26] is the reference); the requirement of fast what-if answers makes the non-MILP heuristic the lesson, as in step 5.", "pages": "pp. 3, 7-8, 29"},
+   {"method": "Method 3", "relation": "contradiction", "note": "Five randomised metaheuristics ranked from runs for which no seed or repetition is mentioned (text search), unlike the seeded designs the skill records in his papers since 2009.", "pages": "pp. 28-34"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "Warm-start ablation", "evidence": "Every improvement heuristic rerun without the constructive Sweep start, and VNS with and without Sweep compared directly", "pages": "pp. 31-33"}
+  ],
+  "transferable": [
+   "Tune every parameter on a literature training set and report on a separate, new, realistic test set (pp. 8-9).",
+   "Fix the time limit by tracing each method's cost over a long run on one hard instance and cutting where all but one have stopped improving (p. 28).",
+   "Rerun each improvement heuristic without the constructive warm start to separate what the construction contributes from what the improvement phase adds (pp. 31-33).",
+   "When re-implementing a rival from an underspecified paper, implement each plausible reading, keep the best and say so (pp. 21-23)."
+  ],
+  "coauthors": "Davide Cazzaro, Martina Fischetti (first and second authors, Vattenfall BA Wind; Martina Fischetti also DTU)",
+  "quotes": [
+   {"text": "one is mainly interested in finding reasonably good solutions in very short computing times, a setting that motivated our interest for new heuristic techniques (not using MILP technology) to solve it.", "page": 3},
+   {"text": "To overcome the risk of overtuning, we decided to use two separate sets of instances for tuning and for testing.", "page": 8}
+  ]
+ },
+ {
+  "id": "S110",
+  "year": "2021",
+  "title": "Embedding Simulated Annealing within Stochastic Gradient Descent",
+  "read_level": "full",
+  "contribution": "Published (OLA 2021) version of D018: the same SA-inside-SGD scheme and identical CIFAR-10 results, retitled, with hyper-parameter tuning demoted from purpose to implementation and Table 1 relabelled 'Best validation accuracy'.",
+  "problem_entry": "As D018: SA had been used for training only without gradients; here the scheme is evaluated in an implementation leveraging hyper-parameters rather than presented as a tuning method (p. 2).",
+  "key_idea": "Unchanged from D018: random learning rates from a discrete set, each step accepted or rejected by the Metropolis test on the minibatch loss, after a naive derivative-free SSA fails (pp. 4-7).",
+  "assumptions": "Differentiable loss or proxy; CIFAR-10 split 50,000/10,000 training/test; best w on the validation set per epoch; Table 1 captioned 'Best validation accuracy' over the numbers D018 calls 'Final'; no separate validation set described (my reading) (pp. 2, 6-7, 10).",
+  "proof_devices": [
+   "No proofs; first-order Taylor argument for the naive move, p. 4",
+   "Seeds drive discrete decisions, so the search path depends on the seed, p. 7"
+  ],
+  "experiments": "Same setup and numbers as D018 (CIFAR-10, VGG16 and ResNet34, 10 seeds per arm), VGG16 validation curves dropped as 'very similar'; my count from Table 1: SGD-SA wins on 10 of 10 seed indices for VGG16 and 7 of 10 for ResNet34 (pp. 7-10).",
+  "positioning": "As D018, but the introduction drops the hyper-parameter-search literature paragraph and keeps the SA-for-training references [15], [10] (p. 2).",
+  "writing": "Retitled; tuning demoted to 'an implementaion leveraging hyper-parameters'; 10 of 22 listed references cited in the body (my count) (pp. 2, 11-12).",
+  "limits_future": "As D018: slower training convergence, seed-dependent curves; future: two objectives (differentiable for moves, black-box for acceptance) and other metaheuristics (pp. 7-8, 10-11).",
+  "method_links": [
+   {"method": "Method 3", "relation": "variant", "note": "Seed spread turned into a resource without a placebo arm; the best-of-10 headline gain is larger than the mean difference on ResNet34 (my arithmetic from Table 1).", "pages": "pp. 7, 10"},
+   {"method": "Method 4", "relation": "variant", "note": "Swap test passes (both arms read the same way), but the best epoch is chosen on the set whose accuracy is reported, so selection and evaluation are not separated as step 5 asks (my reading).", "pages": "pp. 6-7, 10"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "Metaheuristic acceptance over a method's own moves", "evidence": "Gradient steps at random learning rates accepted or rejected by the Metropolis test", "pages": "pp. 5-7"}
+  ],
+  "transferable": [
+   "State the selection rule next to every reported number (best or final epoch, on which split); here two versions label the same numbers differently (p. 10; D018 p. 7).",
+   "Print every seed of both arms, including those where the new method loses (p. 10)."
+  ],
+  "coauthors": "Matteo Stringher",
+  "quotes": [
+   {"text": "Instead, our SA method requires differentiability of (a proxy of) the loss function, and leverages on the availability of a gradient direction to define local moves that have a large probability to improve the current solution.", "page": 2},
+   {"text": "Our approach is computationally evaluated in an implementaion leveraging hyper-parameters.", "page": 2}
+  ]
+ },
+ {
+  "id": "S130",
+  "year": "2022",
+  "title": "An integrated local-search/set-partitioning refinement heuristic for the capacitated vehicle routing problem",
+  "read_level": "full",
+  "contribution": "LS-CGH, a CVRP refinement heuristic that pools routes from a reengineered parallel LKH-3 (identical trajectories, speedups 1.7-56x), filters them by LP pricing and recombines them by a restricted set-partitioning MIP in CPLEX, lowers FILO's best-of-10 gaps (0.101% to 0.076% on 57-X) and produced 105 CVRPLIB best-known-solution improvements.",
+  "problem_entry": "Exact decomposition solves only CVRPs with a few hundred customers; design a powerful, time-consuming refinement heuristic to run on top of a state-of-the-art heuristic and improve top-quality solutions (p. 2).",
+  "key_idea": "Rounds of (1) a faster, parallel LKH-3 with SA acceptance filling a route pool, (2) LP-pricing filters on the set-partitioning relaxation, (3) the restricted set-partitioning MIP solved by CPLEX with an aggressive limit and polishing, each round restarting from the best solution (pp. 4-13).",
+  "assumptions": "Symmetric CVRP with a fixed number of routes, set-partitioning formulation, extensible to variants with independent routes supported by LKH; 57 largest X instances and 10 Belgian XXL instances up to 30,000 customers (pp. 1-2, 13-15).",
+  "proof_devices": [
+   "Trajectory identity: same seed, single thread, same solution sequence and final solution as the original LKH, so speedups compare identical work, p. 16",
+   "Profiling-driven redesign: more than 95% of proposed tours rejected, so the penalty check is restricted to touched routes and an update step added, pp. 10, 15",
+   "Two-temperature SA (minimum of trial- and time-based schedules), pp. 11-12",
+   "LP-pricing column filter (threshold 0.8 c_min) plus the Caprara-Fischetti-Toth per-customer rule, capped at 16,000 routes, pp. 12-13",
+   "Jonker-Volgenant transformation kept consistent for solutions returned by the set-partitioning phase, p. 9"
+  ],
+  "experiments": "Xeon E3-1220 V2, up to 4 threads, gap to BKS; speedups over 5 seeds 1.73-5.41 on 57-X, up to 56.01 on XXL; single 200-minute runs: LKH (Helsgaun's defaults) 1.16%, newLKH 0.48%, LS-CGH 0.32% average gap; 10-seed box plots on 9 instances; FILO best-of-10 refined from 0.101% to 0.076% (57-X) and 0.092% to 0.079% (XXL); 105 BKS improvements (pp. 15-24).",
+  "positioning": "Next to ILS-SP (Subramanian et al.), set-partitioning heuristics including De Franceschi et al. 2006, and the POPMUSIC refinement of Queiroga et al.; FILO as the state of the art to refine; CVRPLIB records as an implicit comparison with the best methods (pp. 3-4, 15, 22).",
+  "writing": "Three research questions stated before the results; implementation changes described at code level (reentrancy, cache prologue); the refinement framing kept from introduction to results (pp. 2, 5, 8, 15, 22).",
+  "limits_future": "LS-CGH worse than newLKH on 9 of 57 single runs and FILO unchanged on 20 of 57 (my counts, pp. 19, 23); record runs without time limit, stopped by hand after 24 hours without improvement (p. 22); future: CVRPTW, CARP, VRPB (p. 24).",
+  "method_links": [
+   {"method": "Method 6", "relation": "evidence", "note": "The critical sub-decision (which pooled routes to combine) is an auxiliary set-partitioning MIP solved by the black-box solver with an aggressive limit and polishing; set partitioning kept over set covering because the solver solves it faster. Joint; student first author.", "pages": "p. 13"},
+   {"method": "Method 4", "relation": "evidence", "note": "Speed isolated from search by trajectory identity under one seed in single-thread mode; each arm adds one layer (LKH, newLKH, LS-CGH) under the same time limit and threads.", "pages": "pp. 16, 18"},
+   {"method": "Method 5", "relation": "variant", "note": "His own old devices handed to a student with new tools (a column rule akin to Caprara-Fischetti-Toth's for set covering, the ILP-refinement lineage) on LKH-3 and CPLEX 12.10: a revival, not a re-test.", "pages": "pp. 4, 13"},
+   {"method": "Method 3", "relation": "variant", "note": "Seeds used for speedups (5) and for box plots on 9 instances (10), but the headline Table 2 compares single runs per instance.", "pages": "pp. 16, 18-20"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "Set-partitioning recombination of a heuristic's by-products", "evidence": "Routes from LKH-3 trials pooled, filtered by LP pricing and recombined by a restricted set-partitioning MIP; again in S168", "pages": "pp. 4, 12-13"},
+   {"pattern": "Open public records as target and yardstick", "evidence": "CVRPLIB best-known solutions as an implicit comparison with the best methods; 105 improvements logged on the public site", "pages": "pp. 15, 22"}
+  ],
+  "transferable": [
+   "When you speed up someone else's code without changing its algorithm, show trajectory identity (same seed, single thread, same final solution) and report speedup averaged over seeds against instance size (pp. 16-17).",
+   "Profile the acceptance test; if most moves are rejected, make rejection cheap and move the bookkeeping into a rare update step (pp. 10, 15).",
+   "Filter a huge column pool for a restricted set-partitioning MIP by LP pricing from a core of the cheapest columns plus the few smallest-reduced-cost columns per row, under a hard cap (pp. 12-13).",
+   "Present a refinement heuristic as one: start it from the rival's best-of-10 solution and report what it adds (pp. 2, 22)."
+  ],
+  "coauthors": "Francesco Cavaliere (first author), Emilio Bendotti",
+  "quotes": [
+   {"text": "Thus, our method is meant to be used on top of a state-of-the-art heuristic, more than to replace it.", "page": 2},
+   {"text": "As the implemented LKH changes do not alter the search trajectory between the original version and the new one (when run in single-thread mode and when the same random seed is used), the two versions visit the same solutions sequence and perform the same algorithmic steps, hence producing the same final solution.", "page": 16}
+  ]
+ },
+ {
+  "id": "S168",
+  "year": "2022",
+  "title": "A Vehicle Routing heuristic based on accelerated LKH-3 coupled with Set Partitioning",
+  "read_level": "full",
+  "contribution": "DIMACS 12th Challenge entry LKHSP: an accelerated LKH-3 alternated with a simplified CFT-style set-partitioning heuristic, ranked tenth on CVRP and fourth on VRPTW in Phase I, with 6 CVRP and 134 VRPTW new best-known solutions.",
+  "problem_entry": "A public challenge: the CVRP and VRPTW tracks of the 12th DIMACS Implementation Challenge, with the S130 refining scheme carried to time windows (pp. 1, 5).",
+  "key_idea": "Alternate three independent accelerated LKH-3 runs with a set-partitioning heuristic that simplifies CFT (subgradient on a small column set, CPLEX on the restricted problem, random partial fixing), doubling the local-search time limit each iteration (pp. 2-4).",
+  "assumptions": "VRP variants whose solutions partition customers into independent routes (CVRP, VRPTW, VRPPD); LKH-3 compares tours by penalty first and cost second (pp. 2-3).",
+  "proof_devices": [
+   "CFT subgradient designed for set covering kept inside the set-partitioning heuristic for faster, more stable convergence, p. 4",
+   "O(1) local application of moves through invalid intermediate tours where the ATSP-to-TSP transformation forbids flips (VRPTW only), pp. 3, 5",
+   "Non-positional route hash keeping the shortest route, improving every stored solution that uses it, p. 5"
+  ],
+  "experiments": "CPLEX 20.1 on one AMD Ryzen 5 PRO 4650GE, one single-threaded process at a time, after rough tuning for the challenge; external Phase I scoring: CVRP tenth (score 57, average primal integral 0.765), VRPTW fourth (score 1,823) (pp. 2, 5-6).",
+  "positioning": "Builds on LKH-3 with its author as co-author and on the Caprara-Fischetti-Toth set-covering heuristic; ranks itself against the other challenge teams (pp. 2-6).",
+  "writing": "Challenge format (team, solver, tracks, code on the first page); results with explanations for the weaker CVRP and better VRPTW ranks (pp. 1, 5-6).",
+  "limits_future": "On CVRP not at the level of the best, generality costing specialisation against tailored local-search operators, though good on the 10 extra-large instances; no future-work section (p. 5).",
+  "method_links": [
+   {"method": "Method 4", "relation": "evidence", "note": "External harness: the comparison is the challenge's own scoring on its instances, reported with the rank as it fell (tenth on CVRP). Joint; student corresponding author.", "pages": "pp. 5-6"},
+   {"method": "Method 6", "relation": "evidence", "note": "CPLEX solves the small restricted set-partitioning problems inside the heuristic under a short time limit.", "pages": "p. 4"},
+   {"method": "Method 5", "relation": "variant", "note": "His 1999 CFT set-covering heuristic simplified and moved to set partitioning by a student and the LKH author.", "pages": "p. 4"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "Set-partitioning recombination of a heuristic's by-products", "evidence": "A set-partitioning heuristic merges the routes of the LKH-3 solutions found so far", "pages": "pp. 3-4"},
+   {"pattern": "Open public records as target and yardstick", "evidence": "DIMACS challenge ranks and new best-known solutions on the competition website", "pages": "pp. 5-6"}
+  ],
+  "transferable": [
+   "In a challenge paper, give the external rank and scores in a table and explain a weak rank by what the method trades away (pp. 5-6).",
+   "Key the route pool by customer set and keep only the shortest sequence, so that improving a route improves every stored solution that uses it (p. 5).",
+   "Double the local-search phase's time limit at each outer iteration, from diversification towards intensification (p. 2)."
+  ],
+  "coauthors": "Francesco Cavaliere (corresponding author), Keld Helsgaun",
+  "quotes": [
+   {"text": "our method is effective, but not at the level of the best ones.", "page": 5},
+   {"text": "We maintained the original CFT subgradient scheme designed for the SCP (as opposed to SPP) case, as we experimentally noticed a faster convergence and a better overall stability.", "page": 4}
+  ]
+ }
+]
