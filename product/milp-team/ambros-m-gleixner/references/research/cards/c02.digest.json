@@ -1,0 +1,206 @@
+[
+ {
+  "id": "S008",
+  "year": "2009",
+  "title": "LP-based disaggregation approaches to solving the open pit mining production scheduling problem with block processing selectivity",
+  "read_level": "full",
+  "contribution": "For open pit mine scheduling with aggregate-level mining and block-level processing, shows that per period the processing fractions within an aggregate take at most two (in one aggregate three) distinct values, derives dual conditions under which a binned LP is exact for the block LP, gives an exact iterative disaggregation algorithm (set splitting: at most five iterations, 1.18-2.79 bins per aggregate) and four root-only MIP binnings that reach block-level NPV within CPLEX's 1% gap, including +75.49% NPV over aggregate binning on a 96,821-block pit whose block MIP's root LP did not solve in 60,000 s.",
+  "problem_entry": "Aggregation loses profit through precedence and through processing selectivity; since aggregates already align with precedence, keep mining at aggregate level and make processing, and so the cut-off grade, a block-level decision; no general disaggregation technique existed (pp. 2-3, 5).",
+  "key_idea": "Per period the processing variables solve a continuous bounded knapsack, so few bins per aggregate suffice; find them by solving a binned LP and splitting bins whose blocks have mixed-sign quasi-reduced costs until a dual condition certifies that the binned LP equals the block LP, then fix one binning at the root for the MIP (pp. 7-8, 10-18, 21-22).",
+  "assumptions": "MILP with binary start-by-period variables per aggregate, continuous mined and processed fractions, one mining and one processing knapsack row per period, cumulative precedence; two attributes for exposition, uniform excavation within an aggregate, no stockpiling, revenue at processing, present-value costs (pp. 4-6); results valid at any branch-and-bound node (p. 6); four BHP Billiton data sets: 8,513 blocks with 115, 296 or 1,038 aggregates (20 periods) and 96,821 blocks with 125 aggregates (25 periods) (pp. 4, 19-20).",
+  "proof_devices": [
+   "Continuous bounded knapsack per period with closed-form primal and dual (split item): at most two distinct processing values per aggregate and period, three in one aggregate (Prop. 2.1, pp. 7-8)",
+   "Dual of the processing row read as a cut-off grade (Remark 2.2, p. 8)",
+   "Exactness certificate for a binning: build a block-LP dual pi = (g - a v*)+ from the binned-LP dual; optimal iff one inequality (21) per aggregate and period holds (Prop. 3.1, pp. 10-11)",
+   "A mixed-sign bin exists whenever (21) fails, by contradiction (Prop. 3.2, pp. 11-12)",
+   "Deviation-variable model (delta-MIP) that turns bin refinement into revised-simplex pricing; dual-feasible completion by the uniform split u*/|B| (Lemmas 3.3-3.4, pp. 12-14)",
+   "Per-bin min-max dual-violation subproblem (36), zero iff the positive quasi-reduced costs of the bin sum to at most u* (Lemma 3.5, pp. 15-16)",
+   "Refinement loop GA(B, epsilon) with optimality check, single block and set splitting; set splitting always nontrivial (Algorithm 4.1, Lemma 4.1, pp. 16-18); no termination theorem stated",
+   "Elimination of the x variables (B-LPred) with cumulative precedence, proof omitted (Lemma 4.2, pp. 18-19)"
+  ],
+  "experiments": "AMD Opteron 252, CPLEX 9.1, MIP gap 1%, limit 60,000 s, single runs, no variability (pp. 4, 22-23); single block vs set splitting: 575 vs at most 5 iterations, 34,769 s vs 21.4 s B-LP time on 115-8513, same optimum (Tables 1-2, pp. 19-20); aggregate and block binning bracket the MIP (Table 3, p. 22); four binnings within 1% of block-level NPV on the 8,513-block sets and +75.49% over aggregate binning on 125-96821 (Tables 4-6, pp. 23-24); GA time must be added (p. 22); MIP results for epsilon > 0 omitted; no other OPMPSP method or solver compared.",
+  "positioning": "Surveys OPMPSP methods by family (nested pits, dynamic programming, MIP/BIP) and criticises by modelling assumption (cut-off grade fixed a priori; aggregation without disaggregation) (pp. 2-3); joins LP aggregation-disaggregation and MIP constraint aggregation ('link the two worlds', p. 3); differs from adaptive clustering by a growing number of aggregates (pp. 3, 17).",
+  "writing": "Gap-filling contribution sentence (p. 3); each structural result followed by its algorithmic implication (p. 8); plain-language duality images ('finger of blame', 'smoking gun', pp. 11-12); explicit hedges resolved by data (pp. 9, 18); evaluative adjectives next to the tables (pp. 19, 22); notation table at the end (pp. 24-25).",
+  "limits_future": "Limits in prose, without counts: no guarantee of few bins (p. 9), root-only binning without re-binning (p. 21), LP duals may not give the best split boundaries (p. 21), block MIP unsolvable on the largest set (p. 22); future: more block models, stockpiling, stochastic geological and financial elements (p. 24).",
+  "method_links": [
+   {"method": "Method 5", "relation": "variant", "note": "Structural analogue (inferred): a compressed LP does the solving, a full-model dual condition decides whether its answer is exact for the block LP, and refinement is spent only where the condition fails; the axis is model resolution, not arithmetic precision, and no exact arithmetic is used.", "pages": "pp. 10-11, 16-17"},
+   {"method": "Method 2", "relation": "variant", "note": "Baselines are the two extreme versions of the same model with the same solver and settings (aggregate binning; block binning = D-MIP), with NPV and time both printed and the binning time added; no reduced incumbent, no outside baseline.", "pages": "pp. 21-23"},
+   {"method": "Method 3", "relation": "variant", "note": "Limits are stated qualitatively (no guarantee of few bins, root-only binning, re-binning not attempted, largest block MIP unsolvable) with a generic future-work paragraph; no counted gap that becomes the next project. Alphabetical four-author byline.", "pages": "pp. 9, 21-22, 24"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "bracket by extremes", "evidence": "The coarsest and the finest binning of the same model, solved with the same solver and settings, give the interval in which the optimal value lies, and the new binnings are placed inside it; compare S001's oracle-best and oracle-worst permutations and S002's virtual best and worst (card c11).", "pages": "pp. 21-23"},
+   {"pattern": "simplest exact rule as a declared base case", "evidence": "Single block splitting is introduced as the simplest refinement, expected to be inefficient, run to optimality (575 iterations, 34,769 s) and printed next to set splitting (5 iterations, 21.4 s) with the same optimal value.", "pages": "pp. 18-20"},
+   {"pattern": "LP-analogue proxy for an NP-hard structural quantity, with a safety band and a measured loss", "evidence": "METHOD 2 splits aggregates at the LP duals of the processing rows with a (1 +- theta) band and measures the NPV against block processing; the NP-hardness that motivates the proxy is in the thesis S025 (card c01), not in this paper.", "pages": "pp. 21, 23-24"},
+   {"pattern": "exact or heuristic, stated per reduction", "evidence": "Algorithm 4.1 is exact for epsilon = 0 (binned LP optimum equals block LP optimum) and a heuristic for epsilon > 0; the MIP binnings are called heuristics. Same move in S017 (p. 12).", "pages": "pp. 17, 21"}
+  ],
+  "transferable": [
+   "Bound the number of distinct values an optimal solution can take in each group (here at most two, via a continuous knapsack) before choosing a compressed formulation (Prop. 2.1, pp. 7-8).",
+   "Certify that a compressed LP is exact for the full LP by building a full dual from the compressed dual and checking one inequality per group; split only the failing groups (Prop. 3.1, Algorithm 4.1, pp. 10-11, 16-17).",
+   "Split a group by moving its whole positive-score subset at once instead of one member per iteration (5 vs 575 iterations, 21.4 s vs 34,769 s; Tables 1-2, pp. 19-20).",
+   "Run the simplest exact rule as a declared base case and print its cost next to the efficient rule (pp. 18-20).",
+   "Bracket the new method between the coarsest and finest version of the same model, solved with the same solver and settings, and add the preprocessing time to the method's time (pp. 21-22).",
+   "When the MIP is stopped at a 1% gap, say that differences between arms below 1% can go either way (p. 24)."
+  ],
+  "coauthors": "Natashia Boland, Irina Dumitrescu (corresponding author), Gary Froyland; alphabetical byline, Gleixner fourth, at TU Berlin; no part credited (p. 1)",
+  "quotes": [
+   {"text": "A key point in our work is the observation that aggregation affects the problem in two distinct ways: via precedence and processing selectivity.", "page": 5},
+   {"text": "We do not anticipate that single block splitting will lead to a numerically efficient method of bin refinement. Mathematically, it is the simplest type of refinement to consider and we will use it as a base case for evaluating Algorithm 4.1.", "page": 18}
+  ]
+ },
+ {
+  "id": "S001",
+  "year": "2011",
+  "title": "MIPLIB 2010: mixed integer programming library version 5",
+  "read_level": "full",
+  "contribution": "A 16-author academic and industrial group assembles MIPLIB 2010 (361 instances in eight purpose-defined test sets, benchmark 87) and ships for the first time a GMP solution checker on the original MPS file, a test engine that flags mismatches against exactly computed primal bounds, a permutation-based performance-variability score, exact LP values and exactly feasible solution values, plus a five-solver snapshot that refuses to rank solvers by averages (read as ZIB-Report 10-31).",
+  "problem_entry": "Progress (MIPLIB 2003 open instances down from 35 to 4; about 100 million times faster in 20 years) reflects codes tuned to models known to be solvable, and one 60-instance set no longer fits researchers' questions; so add out-of-scope instances and dedicated test sets (pp. 4-5).",
+  "key_idea": "A library of eight test sets, each defined for one purpose by written rules, shipped with instruments that make results checkable and comparable: an exact-arithmetic feasibility checker, a test engine with fixed termination criteria and reference values, a variability score from permutations, and exact reference values (pp. 6-19).",
+  "assumptions": "MIP with linear objective and constraints over real and integer variables: 116 binary, 30 pure integer, 215 mixed programs; 72 of 361 with general integers (p. 4; Table 3, p. 17); over 1,108 contributed instances plus NEOS and public libraries, about 2,000 candidates, 659 examined by eight teams (pp. 6-7); thresholds per test set (reoptimize at least 500 iterations per node LP and 100 nodes, tree at least 10^6 nodes, xxl over 10^6 rows or columns or 10^7 nonzeros, benchmark solvable within 2 h, challenge not within 2 h) stated as guiding values that depend on the environment (pp. 6-8); the checker assumes tolerance-feasibility is what solvers deliver (pp. 9-10).",
+  "proof_devices": [
+   "Feasibility-only checker: GMP arithmetic on the original MPS text, solution read from a text file, absolute 1e-4 for constraints and integrality, objective within absolute 1e-4 or relative 1e-7 (p. 10)",
+   "Reason for checking feasibility only: polynomial-size MIP optimality certificates are not expected (assuming P != NP) (p. 10)",
+   "Reliable primal values by rounding the integer variables and solving the remaining LP exactly with QSopt_ex (pp. 9, 11, 17-18)",
+   "Gap (pb - db)/inf{|z| : z in [db, pb]}, monotone in both bounds and a worst-case relative gap, undefined if the interval contains 0 (p. 11)",
+   "Mismatch status against a file of known primal bounds, separate from the checker (p. 11)",
+   "Variability generator by row and column permutations and a coefficient-of-variation score over 100 permutations (pp. 13-14); the formula as extracted lacks a sqrt(n) factor while the printed values fit a plain coefficient of variation (p. 14)",
+   "Attention level AL = p_ill-posed + 0.3 p_unstable + 0.01 p_suspicious from CPLEX kappa statistics (p. 18)",
+   "Account of how the solved problem departs from the file: 12-character MPS input, binary conversion, scaling, tolerances, presolve (pp. 9-10)"
+  ],
+  "experiments": "CBC 2.6.4, CPLEX 12.2.0.2, Gurobi 4.5 beta0, SCIP/SoPlex 2.0.1.3/1.5.0.3, Xpress 7.2 RC on two six-core Xeon X5680; benchmark set, 1 thread (1 h, 8 GB) and 12 threads (1 h, 24 GB); nodes, wall-clock time or gap, checker failures in italics, footnoted aborts (pp. 20-21, 44, 47); four instances unsolved by any solver on one thread, one on 12; mean 1-to-12-thread speed-up about 3 (p. 21); no ranking, with six reasons including 8.5-20% machine effects and 73 s rerun differences (p. 21); variability: 100 permutations per model for SCIP/SoPlex, max/min time ratios 1.29 to 915, oracle-best 1.77 and worst 3.82, original 14% faster than the mean but 4% than the median, VS 0.05-2.23 (pp. 14-15); no statistical tests.",
+  "positioning": "Fifth MIPLIB after 1992, 1996 and 2003 (p. 4); credits Danna for performance variability (pp. 12-13, 22), Dolan-More for profiles (p. 15), QSopt_ex and the first exact MIP solver (p. 17), ParaSCIP/ug for four challenge instances (p. 18); built with vendors in the author list, who supplied their latest code (pp. 3, 20).",
+  "writing": "Question headings and design choices posed as questions (pp. 6, 9, 10); purpose and non-purpose before the numbers (p. 19); imprecise numbers refused with a reason (p. 21); bulleted reasons against ranking (p. 21); closes against single-number summaries and with 'To be continued' (p. 22).",
+  "limits_future": "Checker tests feasibility within tolerances only (p. 10); thresholds are guiding values (p. 7); VS is an estimator (p. 14); AL depends on solver and settings (p. 18); open variability questions (p. 13); 21 challenge instances without a feasible solution (pp. 6, 8); exact MIP not yet capable (pp. 17-18); future: website status of open instances (p. 4), 'To be continued' (p. 22).",
+  "method_links": [
+   {"method": "Method 6", "relation": "evidence", "note": "Predecessor of MIPLIB 2017 (group voice): purpose and non-purpose stated, contributions kept unchanged online, written admission rules per test set, every reported solution checked against the original file in exact arithmetic, explicitly not for choosing a solver.", "pages": "pp. 6-8, 10, 19, 21"},
+   {"method": "Method 6", "relation": "variant", "note": "Selection by a committee of eight teams with hard and soft requirements, not an optimization model as in S002 (card c11); unstable instances kept as their own test set and out of the benchmark rather than removed; exclusions not counted per criterion; absolute 1e-4 checker tolerance, the old rule that MIPLIB 2017 replaced per the skill.", "pages": "pp. 6-8, 10"},
+   {"method": "Method 4", "relation": "evidence", "note": "Step 4: an independent checker, not the producing solver, reads instance and solution as text, computes in GMP, keeps the input decimals as written, and prints its coverage (feasibility only).", "pages": "p. 10"},
+   {"method": "Method 5", "relation": "evidence", "note": "Step 3 (group): fix the rounded integers of a floating-point solution and solve the rest exactly, for the mismatch test and for the catalogue; the earliest appearance in this corpus of the device the skill dates to 2014 (STSM14).", "pages": "pp. 9, 11, 17-18"},
+   {"method": "Method 1", "relation": "evidence", "note": "Group, probably Danna's part (acknowledgement p. 22): run-to-run differences turned into a generator (permutations), a per-model score (coefficient of variation) and oracle factors; numerical trouble turned into one number per instance (attention level).", "pages": "pp. 13-14, 18"},
+   {"method": "Method 3", "relation": "evidence", "note": "Gaps printed with counts or names: four benchmark instances unsolved in 1 h, 21 challenge instances without a feasible solution, exact MIP not yet capable for most instances, open variability questions; the exact-MIP gap is the one his later line closes (inferred link).", "pages": "pp. 8, 13, 17-18, 21"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "solver-neutral virtual aggregates", "evidence": "The Best column takes minimum nodes and time over all checker-passing solvers, possibly from different solvers, and its geometric mean is under half of any solver's; the variability section adds oracle-best and oracle-worst permutation totals (factors 1.77 and 3.82).", "pages": "pp. 14, 21"},
+   {"pattern": "seed spread as a variability metric", "evidence": "Permutation spread: coefficient of variation of solution time over 100 row and column permutations per model, in italics where the 10 h limit interferes, with the caveat that small differences mean little.", "pages": "pp. 13-14"},
+   {"pattern": "keep library instances in the contributor's form, without reformulation", "evidence": "All contributed instances are kept unchanged on the website, and the checker keeps 0.3333333 as 3,333,333/10,000,000 instead of inferring 1/3.", "pages": "pp. 6, 10"},
+   {"pattern": "original model as the object of record", "evidence": "The checker reads the original MPS text, not a solver's internal representation; exact LP values are for the pure LP relaxation without MIP presolve.", "pages": "pp. 10, 17"},
+   {"pattern": "flag arbitrary and intuition-based constants as such in print", "evidence": "Test-set thresholds depend on the computational environment and are only guiding values; the sets were double-checked with other software on other machines.", "pages": "p. 7"},
+   {"pattern": "behaviour-defined test sets", "evidence": "Besides the benchmark, test sets are defined by measured solver behaviour (reoptimize: at least 500 simplex iterations per node LP and 100 nodes; tree: at least 10^6 nodes; primal: root bound after presolve equals the optimum; unstable: tolerance sensitivity or cross-solver disagreement), each serving a research question.", "pages": "pp. 5-8"},
+   {"pattern": "name the problem actually solved", "evidence": "Section 3.2 lists each step at which the solved problem departs from the intended one (12-character decimal input, binary conversion, scaling, tolerances, presolve) and concludes that tolerance-feasible solutions are what solvers deliver and what the checker checks; also S017 p. 4.", "pages": "pp. 9-10"}
+  ],
+  "transferable": [
+   "Write a solution checker that reads instance and solution as text, computes in arbitrary precision, keeps the decimals as written and reports the maximum violations (p. 10).",
+   "Make reference primal values reliable by rounding the integer part of a floating-point solution and solving the remaining LP exactly (pp. 11, 18).",
+   "Define the gap so that it is monotone in both bounds and undefined when the bound interval contains zero (p. 11).",
+   "Give the test engine a mismatch status for answers that contradict a reference value, separate from the feasibility check (p. 11).",
+   "Measure variability with about 100 row and column permutations per model, summarise by the coefficient of variation, and report oracle-best and oracle-worst totals (pp. 13-14).",
+   "Compare the original order with both the mean and the median over permutations; a gap between the two reveals skew (14% against 4%, p. 14).",
+   "Define special test sets by measured solver behaviour and print the thresholds as guiding values, double-checked on other machines and software (pp. 7-8).",
+   "Next to a multi-solver table, list the reasons why no single average answers which solver is best (p. 21)."
+  ],
+  "coauthors": "Thorsten Koch (first), Tobias Achterberg, Erling Andersen, Oliver Bastert, Timo Berthold, Robert E. Bixby, Emilie Danna, Gerald Gamrath, Stefan Heinz, Andrea Lodi, Hans Mittelmann, Ted Ralphs, Domenico Salvagnin, Daniel E. Steffy, Kati Wolter; alphabetical after Koch, Gleixner ninth, one of seven ZIB authors; no section credited (pp. 1, 3)",
+  "quotes": [
+   {"text": "This does not give an optimality proof, but can provide a mip solution that is truly feasible.", "page": 18},
+   {"text": "one should not try to boil down the result tables to a single number", "page": 22}
+  ]
+ },
+ {
+  "id": "S017",
+  "year": "2012",
+  "title": "Towards globally optimal operation of water supply networks",
+  "read_level": "full",
+  "contribution": "Models stationary water-network operation as a nonconvex MINLP that enforces Darcy-Weisbach only between 'real' (water-filled) nodes, adds exact problem-specific presolve (pump-station symmetry, pipe-series and pipe-valve contraction), and shows SCIP solving 16 scenarios on two Siemens networks to global optimality (tolerance 1e-6) within 104 s, the presolve speeding the hard low-tank scenarios by factors of 3.8-89.5 (read as ZIB-Report 12-25).",
+  "problem_entry": "Existing methods simplify the physics or give no optimality gap, and piecewise-linear MIPs give no valid dual bound because they solve a different problem; so solve the stationary one-period problem to proven global optimality as the subproblem and yardstick of heuristics, and fix a modelling gap (real vs imaginary flow) (pp. 3-5, 8).",
+  "key_idea": "Gate the pipe law with real-head binaries so it holds only where water is present, then make the model smaller and 'more linear' by exact structure-specific presolve before an unchanged generic spatial branch and bound (SCIP) (pp. 8-9, 12-15).",
+  "assumptions": "Nonconvex MINLP: binaries for pump status, valve direction and real heads, semi-continuous pump flows, big-M with per-constraint minimal M, sgn(q)q^2 pipe equalities, separable nonconvex pump-energy objective (pp. 6-10); Prandtl-Karman friction (conservative), single-speed pumps, constant pump efficiency, real water sources (pp. 7-8); stationary with given tank levels and constant demands (p. 4); two Siemens networks (25 and 88 nodes) with hourly demands (pp. 5, 15-16).",
+  "proof_devices": [
+   "Real/imaginary head indicators z with propagation along level and sloped pipes and big-M gating of Darcy-Weisbach between real nodes (constraints (9)-(15), pp. 8-9)",
+   "Valve-direction binary instead of the nonlinear constraint dh*q >= 0, argued from solver behaviour without data (p. 7)",
+   "Per-constraint minimal big-M from variable bounds (Remark 2, p. 7)",
+   "Presolve exactness criterion: a feasible solution is cut off only if an essentially identical one remains (p. 12)",
+   "Pump-station symmetry breaking x_p1 <= ... <= x_pN, from 2^N to N+1 choices (p. 13)",
+   "Pipe-series contraction by algebraic equivalence with summed loss coefficient and interpolated head, keeping the inner node's indicator (constraints (15a), (18), (19), pp. 13-14)",
+   "Pipe-valve contraction: union of two convex sets relaxed to a convex quadratic plus a direction binary (constraints (5), (14a), (15b), (15c), p. 14)",
+   "Solver side, described: outer approximation along convex and concave envelopes with branching on flows, bound propagation through sgn(q)q^2, NLP solve with binaries fixed (pp. 11-12)"
+  ],
+  "experiments": "Two Siemens networks, four demand hours x two tank scenarios (low built from the med solution), 16 single runs; SCIP 2.1.1 with SoPlex 1.6.0, Ipopt 3.10.1, CppAD, Zimpl 3.2, defaults, 1 h, tolerance 1e-6, AMD Opteron 6174 (pp. 15-16); binaries -14% and -18%, nonlinear constraints barely reduced (Table 2, p. 16); with vs without presolve: hard scenarios 3.8-89.5 times faster, slowdowns on two easy n88 scenarios explained, two 0.1 s n25 slowdowns not mentioned in the text (Table 3, pp. 16-17); times to first solution, 5% gap and best solution (Table 4, pp. 17-18); no other solver or the criticised piecewise-linear approach run.",
+  "positioning": "Against piecewise-linear MIP approximations (no valid dual bound, a different problem) and local or heuristic methods (p. 4); Sherali-Smith's forward/backward arcs made unnecessary (p. 7); SCIP chosen over BARON, Couenne and LINDO API with an 'Arguably' (p. 11); builds on the group's codes and theses, including Undercover by Berthold and Gleixner (pp. 11-12, 18-19).",
+  "writing": "Modest frame ('Towards', 'a small contribution', pp. 3, 17) against a confident abstract (p. 3); Remarks 1-5 carry modelling decisions and the hedged novelty claim ('So far we have not seen', p. 8); factors and percentages carry the result, summarised as 'proved highly beneficial' (pp. 15-16).",
+  "limits_future": "Stationary problem only (p. 4); nonlinear constraints barely reduced (p. 15); slowdowns explained (p. 16); the extension to the dynamic planning problem is claimed but untested (abstract p. 3; p. 17), and representativeness of the four hours is not shown (p. 15); no further future-work list (p. 17).",
+  "method_links": [
+   {"method": "Method 2", "relation": "evidence", "note": "Step 6: the authors' component (presolve) compared inside the same solver with default settings, per scenario, with time and nodes; slowdowns named with their mechanism; one text-table slip on the small network.", "pages": "pp. 15-17"},
+   {"method": "Method 5", "relation": "variant", "note": "The fix-the-discrete-part-and-solve-the-rest device appears as SCIP's MINLP heuristic (binaries fixed, NLP solved locally, any NLP-feasible point MINLP-feasible): the same producer/decider split, but in floating point, for feasibility, and as SCIP machinery rather than this paper's contribution.", "pages": "p. 12"},
+   {"method": "Method 3", "relation": "variant", "note": "Limits printed qualitatively (stationary only; nonlinear constraints barely reduced) and an untested extension claim in the abstract; no counted gap feeds a next project.", "pages": "pp. 3-4, 15, 17"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "name the problem actually solved", "evidence": "Piecewise-linear MIP approaches are rejected because a different problem is solved and no valid dual bound results; the presolve is called exact only in a stated sense. Also S001 pp. 9-10.", "pages": "pp. 4, 12"},
+   {"pattern": "exact or heuristic, stated per reduction", "evidence": "The presolve reductions are declared exact in the sense that a feasible solution is cut off only if an essentially identical one remains. Also S008 p. 17.", "pages": "p. 12"},
+   {"pattern": "text-table slips in computational sections (negative)", "evidence": "The text names the n88p64a64 slowdowns and says n25p22a18 'can only improve minimally', but Table 3 shows n25p22a18 slowing on '12-1 pm med' (0.5 s to 0.6 s) and '6-7 pm low' (0.4 s to 0.5 s, nodes 54 to 80).", "pages": "pp. 16-17"}
+  ],
+  "transferable": [
+   "Gate a physical law with an indicator for its precondition (water present at a node) instead of enforcing it everywhere (constraints (9)-(15), pp. 8-9).",
+   "Choose every big-M per constraint from the bounds of the variables involved (Remark 2, p. 7).",
+   "For N identical parallel units, add x_1 <= ... <= x_N and count the reduction (2^N to N+1) (p. 13).",
+   "Contract a chain of nonlinear equations through a pass-through node into one equation plus a linear recovery of the eliminated variable, keeping the node's indicator if it can block (pp. 13-14).",
+   "Replace a nonconvex equation whose feasible set is a union of two convex pieces by a convex inequality plus a direction binary (p. 14).",
+   "Build hard scenarios from the easy solution: set to minimum the resources the easy optimum would exhaust first (p. 15).",
+   "Report times to the first solution, to a 5% gap and to the best solution next to the total, to separate finding from proving (pp. 17-18)."
+  ],
+  "coauthors": "Harald Held (Siemens AG), Wei Huang (TU Munich, corresponding author), Stefan Vigerske (HU Berlin); alphabetical byline, Gleixner first, at ZIB; Huang's Master's thesis is the base of the paper; no part credited (pp. 3-4, 19)",
+  "quotes": [
+   {"text": "However, even then the approach does not guarantee a valid dual bound and optimal solutions may be cut off since precisely speaking a different problem is solved.", "page": 4},
+   {"text": "The reductions explained in the following are exact in the sense that a feasible solution is cut off only if another essentially identical solution remains.", "page": 12}
+  ]
+ },
+ {
+  "id": "S020",
+  "year": "2012",
+  "title": "Improving the accuracy of linear programming solvers with iterative refinement",
+  "read_level": "full",
+  "contribution": "Introduces iterative refinement for LP: re-solve shifted and scaled LPs with the same matrix in double precision while residuals and corrections are computed in exact rational arithmetic; proves the transformed problem equivalent (including basis correspondence and the validity of infeasibility and unboundedness certificates); in SoPlex it returns an optimal basis on all 74 troublesome LPs with violations of at most 4.6e-31 and cuts SoPlex-plus-QSopt_ex exact LP time by a mean per-instance factor of 9.76 (read as ZIB-Report 12-19).",
+  "problem_entry": "Floating-point LP results can be unreliable while exact MIP and computer-assisted proofs need extended-precision or exact LP solutions; QSopt_ex's precision boosting gets slow when extended-precision pivoting is needed, and iterative refinement had not been described for LP itself (pp. 3, 5, 7).",
+  "key_idea": "Correct an approximate primal-dual LP solution by solving a sequence of transformed LPs with the same matrix (scaled residual right-hand side, shifted bounds, scaled reduced-cost objective) in floating point, with all transformations and corrections in exact rational arithmetic (Algorithm 2, pp. 6-7).",
+  "assumptions": "LP in computational form with an optimal solution, regular bases, a solver returning basic solutions (pp. 3-4, 7); convergence 1/alpha^k only if the floating-point solver is consistently accurate to an absolute tolerance, which is not guaranteed and can fail on poorly conditioned LPs (p. 7); NETLIB (92) and 74 troublesome LPs selected from over 900 where SoPlex0 found no optimal basis, minus over-24-h runs, iprob and some instances of over-represented classes, which still supply 52 of 74 (pp. 9-10).",
+  "proof_devices": [
+   "Shift-and-scale equivalence: feasibility within eps/Delta, complementary slackness, optimality and one-to-one basis correspondence between P and the transformed LP (Prop. 3.1, proof by direct algebra, pp. 6-7)",
+   "Exactly computed basic solution as a self-certificate of optimality (p. 5)",
+   "Scale factors from the largest violation, capped by alpha = 1e12 tied to the LP tolerance 1e-9 (pp. 6-7)",
+   "Correction with nonbasic variables reset exactly to their bounds to keep the basis a valid warm start (Algorithm 2 line 27, p. 7)",
+   "Informal geometric convergence 1/alpha^k under an accuracy assumption on the floating-point oracle (p. 7)",
+   "Farkas proof via a homogenised LP (5) and ray via LP (6); both certificates invariant under the transformation (Prop. 3.2, pp. 7-8)",
+   "Warm start and LU-factorization reuse across refinement rounds (pp. 7-8)"
+  ],
+  "experiments": "SoPlex 1.6 with GMP 4.3.1, kmax = 5, alpha = 1e12, no preprocessing or scaling, two Xeon X5672 (p. 8); like-for-like arms SoPlex0 (kmax = 0) and SoPlex+, both at tolerance 1e-9 (1e-12 breaks SoPlex0) (pp. 8-9); bases checked exactly and used to warm-start QSopt_ex (p. 8); geometric means with times rounded up to 0.1 s; NETLIB: LP time 0.21 vs 0.34 s, optimal bases 89/92 vs 92/92 (p. 9); troublesome: optimal basis on all 74, violations at most 4.6e-31, QSopt_ex time 17.43 vs 1.40 s, exact-LP speed-up 9.76 (arithmetic mean of ratios) and 5.45 (as printed), slowdowns gams30a and fome13 explained (pp. 9-11); reader's recount: maximum ratio 239 is dfl001, not mod2, and the geometric mean of totals gives 4.26 (pp. 9-10); single runs, no seeds.",
+  "positioning": "Extends QSopt_ex's basis-verification approach (Applegate, Cook, Dash, Espinoza) 'one step further' (p. 5); credits the linear-systems refinement and rational-reconstruction lineage and Cook-Steffy (p. 5); notes Koch's need for 128-bit arithmetic on NETLIB (p. 9) and CPLEX's 1e-9 tolerance floor (p. 9); hedged novelty with a disclosed partial precedent in interior-point codes (p. 7).",
+  "writing": "Purpose sentence and textbook background for a symbolic-computation audience (p. 3); correctness proved before details (p. 6); 'To our knowledge' plus a disclosed precedent (p. 7); observation paragraphs with adjectives next to numbers ('significant overhead', 'large overhead', 'considerably faster', pp. 9, 11); two aggregations of one speed-up (p. 9).",
+  "limits_future": "No guarantee for the floating-point oracle, poorly conditioned LPs may need extended precision (p. 7); infeasible/unbounded extension not implemented (p. 8); iprob excluded (p. 9); 1e-12 tolerance fails (p. 9); refined solution discarded when passing only the basis (p. 8); future: integrate precision boosting, rational reconstruction and iterative refinement, especially for poorly conditioned LPs (p. 11).",
+  "method_links": [
+   {"method": "Method 5", "relation": "evidence", "note": "The design itself: LP solves in floating point, transformed data, residuals and corrections in exact rational arithmetic; the basis is kept and corrected (step 3) and optimality is checked a posteriori exactly; step 5 (raise precision only on failure) appears only as a proposal and future work.", "pages": "pp. 3, 5, 7-8, 11"},
+   {"method": "Method 2", "relation": "evidence", "note": "Baseline is the same code with refinement switched off (kmax = 0) at the same tightened tolerance, and both arms feed the same exact solver (QSopt_ex warm start).", "pages": "pp. 8-9"},
+   {"method": "Method 4", "relation": "evidence", "note": "Certificates independent of how they were found: an exactly computed basic solution certifies itself, Farkas proofs and rays stay valid under the transformation, violations and basis optimality are computed exactly in the evaluation.", "pages": "pp. 5, 8-9"},
+   {"method": "Method 1", "relation": "evidence", "note": "Step 4: the belief that floating-point bases are often optimal is counted per instance on a set where it should hold (NETLIB, 89 of 92) and on a set selected where it fails (74 troublesome LPs).", "pages": "pp. 5, 9"},
+   {"method": "Method 3", "relation": "evidence", "note": "Gaps printed with names (iprob, unimplemented infeasible/unbounded extension, failure at 1e-12) and an agenda (precision boosting combined with refinement); the 2016 journal version S013 treats infeasibility and unboundedness (card c04), and the skill records boosting as done in 2023/2025 (PB25, not checked here).", "pages": "pp. 7-9, 11"},
+   {"method": "Method 6", "relation": "variant", "note": "Troublesome set built from four public collections by a written rule (baseline fails), but some exclusions are uncounted ('some instances') and three classes still supply 52 of the 74 instances.", "pages": "pp. 9-10"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "new component as a front end to the incumbent, not a rival", "evidence": "Both arms' final bases warm-start QSopt_ex, and the exact-LP gain is read from QSopt_ex time (geometric means 17.43 s vs 1.40 s), allowing a direct comparison with previous methods.", "pages": "pp. 8-10"},
+   {"pattern": "oracle contract stated, then audited", "evidence": "Convergence to accuracy 1/alpha^k is argued assuming the floating-point solver is consistently accurate; the next sentences say there is no guarantee and that ill-conditioned LPs can defeat it; the experiments show where it fails (iprob excluded, tolerance 1e-12 breaks SoPlex0).", "pages": "pp. 7, 9"},
+   {"pattern": "negative variants and preliminary failures reported in the text", "evidence": "Tightening the tolerance to 1e-12 helped some instances but caused numerical trouble and false infeasibility or unboundedness claims on others; both slowdowns (gams30a, fome13) are named, the second traced to QSopt_ex's first double-precision solve.", "pages": "pp. 9, 11"},
+   {"pattern": "text-table slips in computational sections (negative)", "evidence": "Reader's recount of Table 2 by script: the largest per-instance speed-up, 239, belongs to dfl001 (4,143.1 s vs 17.3 s), while the text attributes it to mod2 (82.1); the 5.45 'ratio of the geometric means' reproduces only as (1.11 + 17.43)/(2.00 + 1.40), a ratio of sums of column geometric means, while the geometric mean of per-instance totals gives 4.26.", "pages": "pp. 9-10"},
+   {"pattern": "easy set prices the overhead, baseline-failure set shows the gain", "evidence": "NETLIB, numerically easy in practice, measures the overhead of refinement; a set selected where the baseline finds no optimal basis measures the gain.", "pages": "p. 9"}
+  ],
+  "transferable": [
+   "Refine an LP solution by re-solving the same matrix with the scaled residual as right-hand side, shifted bounds and the scaled reduced costs as objective (Algorithm 2, p. 6).",
+   "Prove first that the transformed problem is equivalent to the original, including the one-to-one correspondence of bases (Prop. 3.1, pp. 6-7).",
+   "Cap the scale growth at alpha with 1/alpha just below the floating-point solver's tolerance (alpha = 1e12 against 1e-9) (p. 7).",
+   "After each correction, set nonbasic variables exactly to their bounds so that the basis stays a valid warm start (p. 7).",
+   "Measure a front end by warm-starting the incumbent exact solver from both the baseline's and the new method's basis (p. 8).",
+   "Give the baseline its best tolerance (1e-9) and print that a stricter one breaks it (p. 9).",
+   "Report the arithmetic mean of per-instance ratios with a geometric-mean ratio and name each slowdown with its mechanism (pp. 9, 11); for a ratio of geometric means of a sum, take the geometric mean of the per-instance sums."
+  ],
+  "coauthors": "Daniel E. Steffy (Oakland University), Kati Wolter (ZIB); alphabetical byline, Gleixner first, at ZIB; no part credited (p. 3)",
+  "quotes": [
+   {"text": "when computed exactly, the primal-dual solution is a certificate of its own optimality, regardless of how its basis was obtained.", "page": 5},
+   {"text": "Although there is no guarantee that a floating-point solver will produce correct solutions that are accurate to within a fixed tolerance level, this is often the case in practice.", "page": 7}
+  ]
+ }
+]

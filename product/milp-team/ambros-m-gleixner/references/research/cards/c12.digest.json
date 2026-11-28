@@ -1,0 +1,123 @@
+[
+ {
+  "id": "S004",
+  "year": "2021",
+  "title": "The SCIP optimization suite 8.0",
+  "read_level": "full",
+  "contribution": "Release report (35 authors) of SCIP Optimization Suite 8.0: a nonlinear-constraint framework that keeps the original constraints and handles reformulations implicitly (final solutions infeasible in the original problem on MINLPLib: 481 to 49 of 5034 runs), symmetry handling for general variables and suborbitopes, mixing cuts, decomposition heuristics, a cut-selector plugin, PaPILO 2.0 dual and basis postsolve (the only part credited to Gleixner, jointly with Hoen), SoPlex 6.0, UG 1.0, GCG 3.5, SCIP-SDP 4.0 and SCIP-Jack 2.0, measured against SCIP 7.0.0 with five seeds (MILP time factor 1.17 overall, 1.52 on the hardest bracket).",
+  "problem_entry": "A release report entered from named limits of SCIP 7.0 (binary-only symmetry handling, p. 8; chance-constrained programs, p. 11); the main rework from a numerical defect: presolve reformulation let SCIP report optimal solutions violating the original constraints (reproduced log; 7% of MINLPLib), which a final feasibility check could not repair because the original-to-presolved link was lost (p. 20); Gleixner's credited part from the need to postsolve duals and bases so that SoPlex can use PaPILO (pp. 61-62).",
+  "key_idea": "Components, not one idea: preserve the original nonlinear constraints and keep two implicit extended formulations (propagation; LP relaxation with relaxation-only auxiliaries) built by nonlinear-handler plugins (pp. 20-27); SST cuts and suborbitope detection with a fixed method order per symmetry component (pp. 8-10); PaPILO dual postsolve that records every dual-relevant reduction and, in LP dual mode, applies bound tightenings only when they fix a variable, so vertices map to vertices without crossover (p. 62).",
+  "assumptions": "MILP (1) with infinite bounds allowed but no variable fixed to infinity (p. 2); MINLP with explicit algebraic expressions (p. 2); variable bound relations normalised to assumption (A) for mixing cuts (pp. 11-12); the formulation symmetry group only (p. 7); dual-postsolve bound rules for pure LPs (p. 62); test sets MIPLIB 2003/2010/2017 plus COR@L (347), MINLPLib (113; all 1678 in §4.14, 'not designed to be benchmark set'), MIPLIB 2017 benchmark (240), strIPlib (73), 194 MISDPs (pp. 4, 59, 64, 73, 80).",
+  "proof_devices": [
+   "Bound and side relaxation before interval propagation: 1e-9*max(1,|b|), capped at 1e-3 of the domain width, none for integer variables, never past the next integer; snap to the nearest bound within epsilon instead of declaring infeasibility (p. 31)",
+   "Backward-propagation bounds stored apart so that a node's propagation depends only on bounds of SCIP variables (p. 31)",
+   "Cut cleanup: coefficient ratio <= 1e7 by bound substitution, power-of-two scaling into [1e-4, 1e4], relaxing near-integral coefficients and near-zero right-hand sides that a SCIP ROW would round (p. 34)",
+   "Strong-cut test closing at least 20% of the convexification gap (eq. 17, p. 33) and a 2^-50 relative violation guard justified by the 52-bit mantissa (p. 36)",
+   "Enforcement ladder: tighten the LP feasibility tolerance to max(eps, v/2) and resolve, weak cuts, cleanup variables as branching candidates, branching on any unfixed variable, cutting off fully fixed nodes; fallback counters as an indicator of numerical trouble (pp. 35-38)",
+   "An NLP solver's local-infeasibility claim accepted only if the point proves infeasibility (Berthold-Witzig Theorem 1), else status unknown (p. 58)",
+   "PaPILO transaction-based presolve applied in deterministic order; conflict analysis giving RHS/LHS_LESS_RESTRICTIVE reductions and a new presolver order (pp. 62-64)",
+   "Dual postsolve (credited to Hoen and Gleixner): postsolve stack records every dual-relevant modification, fix-only bound tightening, non-tight finite bounds for unbounded variables, KKT check after postsolve with an optional per-step check (pp. 62-63, 83)",
+   "Debug solution traced through presolve and postsolve (p. 64)",
+   "Validity arguments without theorems: preprocessing into assumption (A) (p. 12), O(|N| log|N|) mixing separation (p. 13), linear-time symresack minimal-cover separation (pp. 10-11), lock propagation by monotonicity (pp. 24-25), move-to-bound argument for implicit discreteness (p. 29)"
+  ],
+  "experiments": "8.0 against 7.0.0 at default with identical third-party versions, 7200 s, one single-threaded run per Xeon E5-2690 v4 node, five seeds, instances solved by either version (347 MILP, 113 MINLP), shifted geometric means (1 s, 100 nodes), time brackets plus diff-timeouts and both-solved, numerically inconsistent runs dropped uncounted (pp. 4-5); MILP 1.17 overall, 1.52 on [1000,tilim], 1.12 on both-solved; MINLP 1.17 with a convex slowdown traced to six syn instances (pp. 5-6); §4.14 classic against new nonlinear handling on all 1678 MINLPLib instances with two extra permutations each, outcome classes infeasible final solution / failed / solved / time limit (481 to 49, 143 to 70), about 400 gained and 200 lost, 'fastest' within 25% (pp. 59-61); component runs for mixing, PADM, DPS, PaPILO, GCG and SCIP-SDP without stated seeds (pp. 13-15, 64, 73, 80); text-table slips in §2.3 and loosened headline numbers in the Final Remarks (pp. 5-6, 82).",
+  "positioning": "Measured only against its predecessor (7.0.0 and the 'classic' branch; pp. 4, 59); methods credited to Salvagnin, Hojny-Pfetsch, Günlük-Pochet, Muñoz-Serrano, Tawarmalani-Sahinidis and others (pp. 8-53); Gleixner's co-authored works as bases for MINLP parts ([113], [76], [97], [18], [6]; pp. 20, 28, 34, 43, 47, 53, 54) and MIPLIB 2017 [39] as data source (pp. 4, 14, 15, 73).",
+  "writing": "Manual register with parameter paths and defaults (e.g. p. 33), one running example (pp. 23-27), a reproduced failure log (p. 20), local hedges ('preliminary results', 'We presume'; pp. 6, 14, 15, 73), a self-critical footnote (p. 37), and a 'Contributions of the Authors' paragraph mapping sections to initials, with Sections 1, 2, 4.14 and 13 uncredited (pp. 82-83); no numbered questions (pp. 4, 59).",
+  "limits_future": "Limits with counts or causes: six syn instances behind the convex slowdown (p. 6), 49 remaining infeasible final solutions and about 200 lost instances (p. 59), DPS without general gain (p. 15), components off by default or experimental (pp. 34-35, 41, 43, 49, 55), a 14-variable cap for concave estimators (p. 50), possible wrong results in SCIP-SDP (p. 80); future: PSD quadratics in SOC detection, CGLP row or column generation, auxiliary-variable scaling, QUBO conversion, GCG strong branching by default (pp. 37, 45, 50, 67, 73); exact rational MIP absent from the release, only SoPlex's rational mode without GMP (p. 61).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Group: §4.14 compares two builds of one development branch that differ only in the nonlinear handling and names the other difference (symmetry detection for nonlinear constraints); §2 keeps compiler and third-party versions identical in both arms (step 5). Neither section is credited to Gleixner.",
+    "pages": "pp. 4, 59"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Group: baseline 7.0.0 only, no bugfix release (step 10); numerically inconsistent runs dropped without names or counts (step 8, Workflow B checkpoint); 'fastest' within 25%, not 5%; text-table slips in §2.3 and loosened headline numbers in the Final Remarks.",
+    "pages": "pp. 4-6, 60, 82"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Group: a reliability defect becomes a per-run computable check counted before (7% of MINLPLib) and after a redesign (481 against 49 of 5034 runs), plus in-solver counters for numerical fallbacks; it counts outcomes rather than checking each decision, and validates a redesign rather than a belief of the field.",
+    "pages": "pp. 20, 38, 60"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Group: printed gaps with counts and suspected causes (syn group, 49 infeasible final solutions, about 200 lost instances, DPS 17 of 80, 14-variable cap with a named remedy); components shipped switched off with reasons; the exact-MIP line had not shipped at 8.0, the only exact-arithmetic item being SoPlex's rational mode without GMP.",
+    "pages": "pp. 6, 15, 34-35, 50, 59, 61, 73, 82"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "His credited section: PaPILO checks primal and dual feasibility and KKT of the postsolved solution on the original LP (optionally after each postsolve step) and can trace a known solution through presolve; this checks against the original problem, but inside the producing library, and failures are only logged.",
+    "pages": "pp. 63-64, 83"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Group: the produce/decide split applied to reformulation (extended formulations produce relaxations, the preserved original constraints decide feasibility); an NLP solver's infeasibility claim decides only if it proves infeasibility; floating-point safety by relaxing bounds, sides and coefficients, not by exact arithmetic.",
+    "pages": "pp. 20-21, 31, 34, 36, 58-59"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Supports the Limitations paragraph's inferred point on cone constraints: SCIP-SDP's words of caution (accurate SDP solving harder than LP, wrong results possible, tolerance dependence, interior-point noise); credited to FM and MP; no exact repair attempted.",
+    "pages": "pp. 80, 83"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Diffusion through co-authors: MINLPLib's non-purpose stated (step 1); strIPlib diversity controlled like the MIPLIB 2017 selection (RWTH, OG); MIPLIB 2017 decompositions used as test data for PADM and DPS.",
+    "pages": "pp. 14-15, 59, 73, 83"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "contributions-by-section paragraph in group software papers",
+    "evidence": "'Contributions of the Authors' maps each section to initials and credits CI and regular benchmark runs separately (FrS); Sections 1, 2, 4.14 and 13 carry no credit.",
+    "pages": "pp. 82-83"
+   },
+   {
+    "pattern": "presolve restricted to the reductions whose postsolve the consumer needs",
+    "evidence": "For dual and basis postsolve of LPs: bound tightenings only when they fix a variable, finite non-tight bounds for unbounded variables, presolvers without dual postsolve to be disabled; credited to Hoen and Gleixner.",
+    "pages": "pp. 62-63, 83"
+   },
+   {
+    "pattern": "counters for numerical fallbacks in solver statistics",
+    "evidence": "cons_nonlinear counts weak cuts, LP-tolerance tightenings and branching on arbitrary unfixed variables as an indication of numerical problems (table/cons_nonlinear/active); group.",
+    "pages": "p. 38"
+   },
+   {
+    "pattern": "randomised near-best branching so that seeds expose variability",
+    "evidence": "Random choice among branching candidates within 0.9 of the best score so that changing the seed exploits branching variability; co-signed group design, a counter-note to the Roundtable Card's inferred disagreement with Fischetti.",
+    "pages": "p. 42"
+   }
+  ],
+  "transferable": [
+   "Release comparison: identical third-party versions, one single-threaded run per node, five seeds, admit instances solved by either version, shifted geometric means (1 s, 100 nodes), brackets [0,tl] to [1000,tl] plus diff-timeouts and both-solved; compare both-solved with all before claiming a speed-up (pp. 4-5).",
+   "Component isolation: branch the development line, replace one component, list the other differences, run the whole library with two extra permutations, classify runs as final solution infeasible / failed / solved / time limit, define 'fastest' with a tolerance, add profiles for time and for gap at termination (pp. 59-61).",
+   "Cut cleanup for floating-point cuts: coefficient ratio <= 1e7 by bound substitution, power-of-two scaling into [1e-4, 1e4], relax near-integral coefficients and near-zero right-hand sides with bounds, require a 2^-50 relative violation and 20% gap closure (pp. 33-34, 36).",
+   "Relax bounds before interval propagation when other code does not round outward: 1e-9*max(1,|b|) capped at 1e-3 of the domain width, none for integers, not past the next integer; snap to the nearest bound within epsilon (p. 31).",
+   "Enforcement ladder for almost-feasible points: tighten the LP feasibility tolerance to max(eps, v/2) and resolve, weak cuts only for strongly violated constraints, variables used to relax a failed cut become branching candidates, count every fallback (pp. 35-38).",
+   "Dual postsolve: record every dual-relevant reduction, fix-only bound tightening in LP dual mode, non-tight finite bounds for unbounded variables, primal/dual feasibility and KKT check after postsolve with a per-step debug option (pp. 62-63).",
+   "Presolve debugging: pass a known feasible solution, check that it survives presolve and postsolves back to itself; switch off dual-reasoning presolvers that may correctly cut it off (p. 64).",
+   "Open a reliability rework with the solver's own failure log and the failure's frequency on a public library, and say why a final check cannot repair it (p. 20).",
+   "Add a section-to-people contributions paragraph to many-author software papers and credit the CI and benchmark infrastructure (pp. 82-83).",
+   "Estimate an external LP solver's memory by linear regression on rows, columns and nonzeros (R^2 = 0.99 for SoPlex), doubled when NLPs are solved (p. 16)."
+  ],
+  "coauthors": "34 co-authors, near-alphabetical byline: K. Bestuzheva, M. Besançon, W.-K. Chen, A. Chmiela, T. Donkiewicz, J. van Doornmalen, L. Eifler, O. Gaul, G. Gamrath, L. Gottwald, C. Graczyk, K. Halbig, A. Hoen, C. Hojny, R. van der Hulst, T. Koch, M. Lübbecke, S. J. Maher, F. Matter, E. Mühmer, B. Müller, M. E. Pfetsch, D. Rehfeldt, S. Schlein, F. Schlösser, F. Serrano, Y. Shinano, B. Sofranac, M. Turner, S. Vigerske, F. Wegscheider, P. Wellner, D. Weninger, J. Witzig; Gleixner is credited only for PaPILO's dual postsolving, jointly with A. Hoen (p. 83).",
+  "quotes": [
+   {
+    "text": "AH and AG are responsible for the new dual postsolving functionality in PaPILO (Section 6).",
+    "page": 83
+   },
+   {
+    "text": "After postsolving, PaPILO checks if the original solution passes the primal and dual feasibility checks and fulfills the Karush-Kuhn-Tucker conditions [58] for LP.",
+    "page": 63
+   }
+  ]
+ }
+]

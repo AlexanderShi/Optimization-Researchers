@@ -1,0 +1,302 @@
+[
+ {
+  "id": "S098",
+  "year": "2020",
+  "title": "Realisierung von Beschleunigungsstrategien der anwendungsorientierten Mathematik und Informatik für optimierende Energiesystemmodelle",
+  "read_level": "full",
+  "contribution": "Abschlussbericht des BEAM-ME-Konsortiums (DLR, ZIB, TU Berlin, GAMS, FZ Jülich, HLRS): modellbasierte Beschleunigung von Energiesystem-LPs (Aggregation und heuristische Dekomposition, bis Faktor 10) und der verteilte Innere-Punkte-Löser PIPS-IPM++ mit GAMS-Annotation, der ELMOD-Instanzen 16- bis 70-mal schneller löst als der beste konventionelle Löser, die kommerziellen Löser aber noch nicht in allen Problemklassen übertrifft (S. 5–6, 21, 31–32).",
+  "problem_entry": "Energiesystemmodelle in GAMS brauchten auf Einzelservern Wochen bis zu einem Monat und 100 GB und mehr, an der Grenze von CPLEX, Gurobi, Xpress und SCIP; Ziel: Lösungszeiten senken und unlösbare LPs lösen, mit fünf nummerierten Leitfragen (S. 5, 7).",
+  "key_idea": "PIPS-IPM (für zweistufige stochastische Probleme, ohne Linking Constraints) zu PIPS-IPM++ erweitern, das Blockstrukturen mit vielen Linking Variables und Linking Constraints verteilt löst; die Blockstruktur liefert der Modellierer per GAMS-Annotation; generische statt modellspezifische Bausteine (S. 8, 18–19, 21–22).",
+  "assumptions": "Reine LPs aus Energiesystemmodellen, blockdiagonal mit verknüpfenden Zeilen und Spalten, keine MILP-Komponente (S. 8, 17–18); Testmodelle SIMPLE, REMix, ELMOD, EUSTEM und die sechs MEXT-Modelle (S. 8, 30–35); Hauptschwierigkeit numerisch schlecht skalierte Instanzen (S. 19, 38).",
+  "proof_devices": [
+   "Generische IPM-Verbesserungen: Mehrfach-Korrektor-Schritte und getrennte primale/duale Schrittweiten, im Mittel Faktor 2 (S. 19)",
+   "Parallele Matrixskalierung (geometrisch als Standard), modifiziertes BiCGStab, GMRES robuster, aber langsamer (S. 19)",
+   "Paralleles strukturerhaltendes Presolving, Gesamtlaufzeit oft um mehr als 50% reduziert (S. 19–20)",
+   "A-priori-Nonzero-Struktur des globalen Schur-Komplements; verteilt aufgebauter Präkonditionierer ohne explizites Schur-Komplement (S. 20–21)",
+   "Benutzerannotation der Blockstruktur in GAMS statt automatischer Erkennung; blockweise Modellgenerierung 1417 → 32 s (S. 22–24)"
+  ],
+  "experiments": "REMix: 20 Instanzen, jeweils bester PIPS-IPM++-Lauf gegen CPLEX-Barrier ohne Crossover, beide auf Genauigkeit 1e-5, Reduktion 83,3% bis −31,8% (drei Instanzen ohne Gewinn), Speicher 139 GB gegen höchstens 6 GB pro Knoten (S. 24–26); Skalierung rund 4500 s → 45,9 s auf 1024 Kernen (S. 27); ELMOD 16- bis 34-fach (CWE) und 50- bis 70-fach (EU) (S. 31–32); EUSTEM 65% bzw. 80% (S. 32); keine Seeds oder Variabilitätsanalyse (nicht im Text).",
+  "positioning": "Projektbericht ohne Literaturdiskussion; Ausgangspunkt ist eine Übersicht verfügbarer HPC-fähiger Löser mit Fokus auf Open Source, aus der PIPS-IPM als Basis gewählt wurde (S. 7).",
+  "writing": "Zusammenfassung mit Spitzenwerten (Faktor 26, 76%, 96%; S. 6) ohne die Instanzen ohne Gewinn (S. 26); Tabelle 6 führt Faktor 26,6 in der Spalte 'Reduktion' als 2563.1%, anders definiert als die Prozentspalte der Tabelle 3 (S. 25, 30; Rechnung des Kartenschreibers); quantitative Gesamtbewertung der modellbasierten Strategien bewusst unterlassen (S. 14–15).",
+  "limits_future": "Kommerzielle Löser noch nicht konsequent übertroffen; viele Linking Constraints verhindern bei einigen Modellen selbst kleine Instanzen; mit PIPS-IPM++ auf HPC nur ELMOD und EUSTEM gelöst; Ausblick: hierarchischer Ansatz, automatische Zerlegung, verteilte Modellgenerierung (S. 21, 33–34, 38–40).",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "Lücke mit Zahlen gedruckt und als nächstes Projekt benannt (hierarchischer Ansatz), in S027 p. 12 als in Arbeit gemeldet; Fehlschläge im Modellexperiment benannt", "pages": "S. 21, 37–39"},
+   {"method": "Method 2", "relation": "variant", "note": "gleiche Genauigkeit 1e-5 und CPLEX ohne Crossover für die Vergleichbarkeit, aber jeweils bester von mehreren PIPS-IPM++-Läufen gegen eine einzige CPLEX-Konfiguration", "pages": "S. 25"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "generic over tailored for a heterogeneous user base", "evidence": "generischer Präkonditionierer gewählt, weil problemabhängige Präkonditionierung für viele Problemklassen von sieben Instituten ungünstig war (vgl. Taste 8)", "pages": "S. 21"}
+  ],
+  "transferable": [
+   "Für einen fairen Laufzeitvergleich beide Löser auf dieselbe Genauigkeit setzen und beim etablierten Löser die Komponente abschalten, die der neue nicht hat (hier Crossover) (S. 25)",
+   "Lösungsaufwand in rechnerunabhängigen Einheiten (CPLEX-Ticks) messen, wenn Instanzen verschiedener Größe verglichen werden (S. 15)",
+   "In der Ergebnistabelle pro Instanz auch die negativen Reduktionen stehen lassen (S. 25–26)"
+  ],
+  "coauthors": "BEAM-ME-Konsortium: Fuchs, Borggrefe, Cao, Gils, Wetzel, Scholz, von Krbek (DLR); Rehfeldt, Gleixner (ZIB); Koch (TU Berlin); Fiand, Bussieck (GAMS); Breuer, Rohe (FZ Jülich); Khabi (HLRS) (S. 2); der Bericht ordnet Gleixner keinen Abschnitt zu",
+  "quotes": [
+   {"text": "Der neue Ansatz reicht jedoch noch nicht aus, um die kommerziellen Löser in Bezug auf Lösbarkeit und Laufzeit in allen relevanten Problemklassen konsequent zu übertreffen.", "page": 21},
+   {"text": "Eine effiziente Präkonditionierung wiederum ist in der Regel stark problemabhängig und damit ungünstig für BEAM-ME, wo viele verschiedene Problemklassen von sieben Instituten bearbeitet wurden.", "page": 21}
+  ]
+ },
+ {
+  "id": "D007",
+  "year": "2022",
+  "title": "Strengthening SONC Relaxations with Constraints Derived from Variable Bounds",
+  "read_level": "full",
+  "contribution": "Makes SONC relaxations applicable to constrained polynomial problems, as a first step toward branch and bound, by adding bound constraints derived from finite variable bounds that always give valid covers, which raises the share of instances with a finite lower bound from 2.6% to 94.6% (pp. 3–4).",
+  "problem_entry": "SONC certificates scale with the number of terms, not the degree; inside branch and bound a relaxation must use tighter variable bounds, and a SONC decomposition needs Newton-polytope vertices that are monomial squares, which most instances lack (abstract, p. 1; pp. 3–4).",
+  "key_idea": "Derive bound constraints x_i^{a_i} ≤ max{|l_i|,|u_i|}^{a_i} with even exponents so that, together with the monomial squares, every inner term has a valid cover (p. 3).",
+  "assumptions": "Constrained polynomial optimization with finite bounds on every variable and α(0) = 0 w.l.o.g. (pp. 2–3); test set not named, 349 instances by the row sums of Table 1 (card writer's sum, p. 4).",
+  "proof_devices": [
+   "Barycentric cover condition for each inner term with the added exponent vectors; validity asserted as easy to check (p. 3)",
+   "Lower bound from a SONC decomposition of the Lagrangian via geometric programming (p. 3)"
+  ],
+  "experiments": "Table 1 with against without bound constraints: optimal 330/9, infeasible 0/4, unsolvable 0/329, numerical error 19/7; finite lower bound on 94.6% against 2.6% of instances (p. 4); no bound quality, times, hardware or versions.",
+  "positioning": "Builds on Iliman and de Wolff's circuit and ST-polynomial results, the only works cited (pp. 2, 4).",
+  "writing": "Four-page workshop note; the one strong word, 'drastically', stands next to its count (p. 4).",
+  "limits_future": "Called a first step (abstract, p. 1); the rise of numerical errors from 7 to 19 is not discussed, and neither bound strength nor use inside the tree is evaluated (p. 4).",
+  "method_links": [
+   {"method": "Method 3", "relation": "variant", "note": "a limit appears as a count (19 numerical errors) but without cause or follow-up in this text", "pages": "p. 4"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "relaxation fed by the tree's data", "evidence": "the relaxation is built from the variable bounds so that it uses the tighter bounds branch and bound produces (extends H9)", "pages": "p. 3"}
+  ],
+  "transferable": [
+   "When a relaxation family needs covers or certificates that the input lacks, synthesize valid constraints from the variable bounds, so that the relaxation also improves as branching tightens the box (p. 3)",
+   "Before any bound-quality claim, report the outcome distribution of the relaxation solve per variant: optimal, infeasible, unsolvable, numerical error (p. 4)"
+  ],
+  "coauthors": "Ksenia Bestuzheva (first author), Helena Völker; ZIB, Gleixner also HTW Berlin (p. 1)",
+  "quotes": [
+   {"text": "a desired property in a relaxation that is solved as part of a branch-and-bound algorithm is its ability to utilise tighter variable bounds in order to obtain lower bounds of improved quality", "page": 3},
+   {"text": "Adding the bound constraints increases the number of instances where a finite lower bound was found from 2.6% to 94.6%, as the bound constraints always provide a valid cover.", "page": 4}
+  ]
+ },
+ {
+  "id": "S027",
+  "year": "2022",
+  "title": "A massively parallel interior-point solver for LPs with generalized arrowhead structure, and applications to energy system models",
+  "read_level": "full",
+  "contribution": "A distributed-memory interior-point LP solver (PIPS-IPM++) for arrowhead LPs with many linking constraints, built on a precomputable sparse Schur-complement pattern from local linking rows and a distributed sparsified Schur preconditioner; it solves the ELMOD_EU LPs (about 0.7 billion nonzeros) in about 20 minutes, to a 0.3% gap, where the one commercial solver that succeeds needs 18–24 hours, and handles SIMPLE LPs with over four billion nonzeros (pp. 7–9, 11–12).",
+  "problem_entry": "Energy-system LPs too large for commercial solvers (more than a day to several weeks, memory limits) that cannot run on distributed memory; the arrowhead structure with often more than 100 000 linking rows and columns, mostly local, makes the stochastic-programming Schur approach prohibitive (p. 3).",
+  "key_idea": "Permute to expose a sparse block-tridiagonal global Schur complement whose pattern is precomputable and mostly local, sparsify it with a relative drop rule, and use it inside the decomposition as an implicit preconditioner of the augmented system under BiCGSTAB (pp. 6–9).",
+  "assumptions": "LPs in arrowhead form, presented in standard form; few global linking constraints and variables, local linking rows of the form F_i; full-rank K_i, otherwise perturbation and iterative refinement (pp. 3, 5–6); ELMOD (CWE and EU, 2014–2016, 8760 hours) and SIMPLE instances (pp. 4, 10).",
+  "proof_devices": [
+   "Block-Gaussian elimination of the permuted augmented system, steps (18)–(23) (p. 5)",
+   "Proposition 1: nonzero count of the Schur pattern (35), linear in the number of blocks for fixed global linking (p. 7)",
+   "Proposition 2 ('folklore', proved): an inexact Schur solve leaves residual only in the Schur block, perturbed K_i factorizations do not, which motivates the implicit preconditioner (p. 8)",
+   "Bomhof–van der Vorst drop rule |c_ij| > t·max{|c_ii|,|c_jj|}, t from 10^-3 lowered on slow convergence, never below 10^-6 (pp. 8–9)",
+   "BiCGSTAB stop at relative residual 10^-10 or 75 iterations; MPI across blocks, OpenMP only inside PARDISO 6.0 (p. 9)"
+  ],
+  "experiments": "JUWELS plus a ZIB 88-core 2 TB machine; CPLEX 12.8, Gurobi 8.1, MOSEK 8.1, Xpress 8.4.7 (version reading inferred from glued footnote markers) as barrier without crossover, 16 threads; PIPS++ complementarity tolerance 10^-7; MOSEK dropped after crashes; speed-up up to 220 on 438 processes, sparsification removes about 95% of nonzeros, ELMOD_EU in about 20 minutes (0.3% gap) against 18–24 hours; one run per configuration (pp. 9–12).",
+  "positioning": "Extends the Schur-complement approach of stochastic-programming interior-point solvers (OOPS, PIPS-IPM) to many linking constraints; claims novelty 'to the best of the authors' knowledge' twice (pp. 3, 5, 8).",
+  "writing": "Prints the factor that goes against it (commercial solvers faster on one process by a factor of 5 or more, p. 11) and frames the result as scalability (p. 12).",
+  "limits_future": "Relaxed complementarity tolerance, 0.3% gap on the EU instances, weaker presolve (up to 60% against 82% of rows removed), different machines; future: more presolve, more aggressive scaling, homogeneous self-dual IPM, hierarchical Schur approach, public release (pp. 10–12).",
+  "method_links": [
+   {"method": "Method 2", "relation": "evidence", "note": "crossover off in the commercial solvers because PIPS++ lacks it; reduced PIPS++ as an internal baseline; mismatches (machines, tolerance) stated; the sequential disadvantage printed", "pages": "pp. 9–11"},
+   {"method": "Method 3", "relation": "evidence", "note": "limits printed with numbers and turned into named next steps; the hierarchical approach answers the gap printed in S098 p. 21", "pages": "pp. 10–12"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "generic over tailored for a heterogeneous user base", "evidence": "the preconditioner is meant to be usable for other linear energy system models, not only ELMOD", "pages": "p. 7"}
+  ],
+  "transferable": [
+   "When linking rows are mostly local, permute to expose a block-tridiagonal Schur complement, count its nonzeros a priori and use the known pattern to save memory and communication (pp. 6–7)",
+   "Sparsify the Schur complement with a relative drop rule and use it inside the decomposition as an implicit preconditioner of the whole system; lower the threshold only when the Krylov solver stalls (pp. 7–9)",
+   "Report a stripped version of your own solver (only the textbook decomposition) beside the full one, so readers see what the added techniques carry (p. 11)",
+   "In scaling runs, use process counts that divide the number of blocks and state any assumed ideal step for configurations that do not fit in memory (p. 11)"
+  ],
+  "coauthors": "Daniel Rehfeldt (first and corresponding author), Hannes Hobbie, David Schönheit, Thorsten Koch, Dominik Möst; Gleixner last author (p. 2)",
+  "quotes": [
+   {"text": "Also, crossover (which can considerably increase the run time) is turned off, as this feature is not implemented in our solver.", "page": 9},
+   {"text": "While the commercial solvers are sequentially considerably faster (which is unsurprising, considering the decades of development that has been invested into them), the key advantage of the new approach is its scalability.", "page": 12}
+  ]
+ },
+ {
+  "id": "S063",
+  "year": "2022",
+  "title": "On generalized surrogate duality in mixed-integer nonlinear programming",
+  "read_level": "partial",
+  "contribution": "Generalizes surrogate relaxations of MINLP to K simultaneous aggregations, proves their basic properties (lower semicontinuity, loss of quasi-concavity, exactness for K = m) and gives the first convergent algorithm for the K-surrogate dual (a Benders-type search with a big-M MILP master); in SCIP on MINLPLib, K = 3 closes 23.4% of the root gap on average (up to 46.9% on 469 affected instances) and improves SCIP's dual bound on 53 of 209 hard instances (pp. 14–19, 26–29).",
+  "problem_entry": "Spatial branch and bound relies on convex relaxations, but solvers now tolerate moderate nonconvexity, so tighter nonconvex surrogate relaxations, studied for linear IPs in the 1970s and 1980s and never used in practice for general MINLP, are revisited (abstract, p. 3; pp. 4, 6).",
+  "key_idea": "Keep the Banerjee–Karwan–Dyer Benders search (LP master maximizing violation, MINLP subproblem solved by SCIP) and generalize it to K aggregations with a disjunctive master written as a big-M MILP, made practical by SCIP's root LP relaxation, early stopping of subproblems and master, symmetry-breaking rows and stabilization (pp. 9–13, 17–23).",
+  "assumptions": "MINLP with a compact mixed-integer linear set X and factorable continuous g_i, feasible set nonempty (pp. 3–4); Proposition 1 needs continuity and compactness (p. 14); MINLPLib 1683 instances, 1671 handled, ROOTGAP 633, DUALBOUND 209 (pp. 25–29).",
+  "proof_devices": [
+   "Proposition 1: lower semicontinuity of S^K by compactness and convergent subsequences (p. 14)",
+   "Example 2: a two-constraint LP showing that S^K is not quasi-concave for K = 2 (p. 15)",
+   "Theorem 2: monotonicity in K and exactness at K = m via unit-vector aggregations (p. 16)",
+   "Example 3: an NLP where K = 1 is unbounded and K = 2 proves optimality (p. 16)",
+   "Theorem 3: convergence of Algorithm 2 via monotone Ψ_t and convergent subsequences (pp. 19–20)",
+   "Big-M of the MILP master bounded by min{max_i |g_i(x̄)|, Ψ_prev} (p. 18)"
+  ],
+  "experiments": "Three numbered questions (ROOTGAP, BENDERS, DUALBOUND); 1 h per K with K+1 warm-started from K; five ablation settings for K = 3; SCIP 3 h, then Algorithm 2 3 h; gap closed against MINLPLib's best primal bound, shifts 10 s and 5%; Xeon X5672, one job per node, CPLEX 12.8.0.0; root gap closed 18.4/21.4/23.4% for K = 1/2/3 on 633 instances, DEFAULT better than PLAIN on 100 and worse on 36 of 457, SCIP's bound improved on 53 of 209; no seeds or permutations (pp. 24–29).",
+  "positioning": "An even-handed history from Glover, Balas, Geoffrion and Greenberg–Pierskalla to Banerjee, Karwan, Dyer and Kim and Kim; the generalization is credited to Glover and the algorithm adapted from Banerjee and Karwan (pp. 6–8, 13–14).",
+  "writing": "Reports techniques that did not help (pp. 10, 12, 21–23); the conclusion credits 'tree experiments' with the gap reduction 284.3% → 142.8% (p. 33), although §6 reports it for the DUALBOUND root runs on the 53 of 209 instances where the bound improved (p. 29) and Algorithm 3 helped at seven nodes of one instance (pp. 31–32); the 'Table 5' cited for DUALBOUND details is the BENDERS table (pp. 29, 57).",
+  "limits_future": "Too costly for every node; DUALBOUND subproblems mostly not solved within the limit; Algorithm 3 rarely helps; no good a-priori constraint filter found; open: quadratic constraints with convex subproblems, and a purely surrogate-based spatial branch and bound with its own branching rule (pp. 22, 30–33).",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "limits and negative results printed with counts; open questions named", "pages": "pp. 12, 22, 30–33"},
+   {"method": "Method 6", "relation": "variant", "note": "the paper's own test sets are cut by stated criteria with totals (1683 → 1671, 633, 469, 209) but without per-criterion counts", "pages": "pp. 25–29"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "relaxation fed by the tree's data", "evidence": "SCIP's root LP relaxation with its cuts is 'the most crucial ingredient'; the plug-in runs after the root node has been processed (extends H9)", "pages": "pp. 12, 24"},
+   {"pattern": "re-derive as an instance, then generalize", "evidence": "the K = 1 Benders multiplier search is generalized to K aggregations with a MILP master and a convergence proof", "pages": "pp. 9–10, 17–20"}
+  ],
+  "transferable": [
+   "Stop a subproblem as soon as it finds a point with objective at most the target bound: the point is the next cut for the master and proves that this multiplier cannot reach the target (pp. 12–13)",
+   "Bound the big-M of a disjunctive master by quantities already known, max_i |g_i(x̄)| and the previous Ψ (p. 18)",
+   "Stabilize a Benders-type multiplier search by fixing the support of the last improving multiplier and boxing it, releasing both after 20 non-improving iterations (pp. 23, 25)",
+   "Warm-start the K+1 run from the best K solution so that the comparison across K is monotone by construction (p. 24)"
+  ],
+  "coauthors": "Benjamin Müller, Gonzalo Muñoz, Maxime Gasse, Andrea Lodi, Felipe Serrano; Müller and Muñoz first, the rest alphabetical (p. 3)",
+  "quotes": [
+   {"text": "In our experiments, we observed that utilizing the LP relaxation that has been constructed in spatial branch and bound is the most crucial ingredient to obtain strong dual bounds with surrogate relaxations", "page": 12},
+   {"text": "For the sake of completeness, we also include techniques that have been tested but did not improve the quality of the computed dual bounds significantly.", "page": 11}
+  ]
+ },
+ {
+  "id": "S096",
+  "year": "2022",
+  "title": "SCIP8: rethinking nonlinear constraint representation and recent progress",
+  "read_level": "full",
+  "contribution": "Announces a ROADEF 2022 talk on SCIP 8: an expression-based representation of nonlinear constraints with structure detection, symmetry handling for MINLP and general integers, mixing cuts and decomposition heuristics, and a release comparison that also reports degraded subsets (p. 2).",
+  "problem_entry": "An overview talk on the SCIP 8 release, stressing the new representation of nonlinear constraints and the use of specific discrete structures (p. 2).",
+  "key_idea": "Constraint expressions: special structures such as quadratic and second-order cone constraints are detected inside expressions instead of being declared by users, which is said to make the solver numerically more robust (p. 2).",
+  "assumptions": "MILP and MINLP within constraint integer programming; MIPLIB and MINLPLib as test sets (p. 2).",
+  "proof_devices": [
+   "n/a: components are named only, no algorithmic detail in the abstract (p. 2)"
+  ],
+  "experiments": "Announced, not shown: SCIP 8 against the previous major release on MIPLIB and MINLPLib, larger MILP speed-ups on harder instances, more MINLPs solved, some degraded subsets; no numbers (p. 2).",
+  "positioning": "Cites only the SCIP 8 release report (pp. 2–3).",
+  "writing": "A two-page talk abstract in the future tense, signed by Besançon and the SCIP development team (p. 2).",
+  "limits_future": "The only limit stated: subsets where the new framework degraded performance; details left to the release report (p. 2).",
+  "method_links": [
+   {"method": "Method 2", "relation": "evidence", "note": "step 10: the release is compared with the previous major release (group work)", "pages": "p. 2"},
+   {"method": "Method 3", "relation": "evidence", "note": "step 1: the degradation is printed even in a two-page abstract (group work)", "pages": "p. 2"}
+  ],
+  "new_pattern_candidates": [],
+  "transferable": [
+   "In a release abstract, name the subsets where the release became slower, not only the gains (p. 2)",
+   "Detect special structure (quadratic, second-order cone) from the expression graph instead of asking modellers to declare it (p. 2)"
+  ],
+  "coauthors": "Mathieu Besançon and the SCIP development team (p. 2); HAL lists Besançon, Bestuzheva, Chen, Chmiela, Donkiewicz, Van Doornmalen, Eifler, Gaul, Gamrath, Gleixner et al. (p. 1)",
+  "quotes": [
+   {"text": "These experiments show performance improvements on MILPs, with a higher speed-up on harder instances, and an overall improvement on MINLP with more instances being solved, but also some subsets where the new framework degraded performance.", "page": 2},
+   {"text": "We present motivations for this rewrite of the representation of nonlinear expressions, how it impacts the MINLP solving process and makes the solver numerically more robust.", "page": 2}
+  ]
+ },
+ {
+  "id": "S040",
+  "year": "2023",
+  "title": "Online learning for scheduling MIP heuristics",
+  "read_level": "full",
+  "contribution": "Schedules LNS and diving heuristics in SCIP with a single modified ε-greedy bandit that adapts working limits and learns from a composite reward, giving 4–6% fewer nodes on MIPLIB 2017 benchmark instances and 4% less time on instances taking at least 1000 s, but 3–5% more time on the other brackets and 21 lost against 13 gained instances (pp. 4–8).",
+  "problem_entry": "Heuristics matter but are costly, and static rules tuned on heterogeneous benchmark sets ignore that heuristic performance depends on the instance; adapt the use of heuristics online to the instance at hand (abstract, p. 1; p. 2).",
+  "key_idea": "One bandit agent selects among LNS and diving heuristics together, adapts their working limits (fixing rate, LP-resolve threshold) and is rewarded for solutions, gap closed, low effort and conflicts; it turns ALNS into a framework that replaces static handling (pp. 2, 4–7).",
+  "assumptions": "MIP with general integer variables (p. 3); MIPLIB 2017 benchmark minus infeasible and zero-objective instances, 226 instances, four seeds (p. 7).",
+  "proof_devices": [
+   "n/a for proofs; design devices: exponential back-off skipping ⌊exp(0.1·n_fail)⌋ − 1 calls (p. 4)",
+   "Warm start by one pass of all heuristics in default order before the bandit decides (p. 4)",
+   "Multiplicative working-limit updates within bounds (γ = η = 0.1; fixing rate in [0.3, 0.9], resolve threshold in [0.05, 0.3]) (p. 5)",
+   "Composite reward with weights 0.3, 0.3, 0.2, 0.2 (p. 6)",
+   "Modified ε-greedy that draws by the weights, ε = 0.7, with decaying exploration (Algorithm 1, p. 7)"
+  ],
+  "experiments": "SCIP 8.0 with SoPlex 6.0, Xeon E5-2630 v3, 2 h, four seeds; default against scheduler (controlled and adaptive heuristics switched off in the scheduler arm); shifted geometric means (shift not stated) on brackets [t, 7200]: nodes −4% to −6%, time ×1.03 overall and ×0.96 on [1000, 7200]; 13 gained, 21 lost; 892 instance–seed pairs listed against 226 × 4 = 904 expected, unexplained (pp. 7–8).",
+  "positioning": "Placed among ML for solver parameters and node, variable and cut selection; builds on Hendel's ALNS and adaptive diving and on the NeurIPS 2021 scheduling paper by Chmiela, Khalil, Gleixner, Lodi and Pokutta (pp. 1–2, 9).",
+  "writing": "The abstract reports the node reduction and the 4% gain on instances taking at least 1000 s, not the slowdown on the other brackets or the balance of 21 lost against 13 gained (abstract, p. 1; p. 8).",
+  "limits_future": "Little to gain on easy instances against defaults tuned on the test set for a long time; too conservative on hard ones; hyperparameters barely tuned; next: combine static handling with online scheduling and learn when to be aggressive (p. 8).",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "step 1: the loss printed as counts with a suspected cause and a named next step; follow-up not checked here", "pages": "p. 8"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "warm-start a learned controller from the solver default", "evidence": "one default-order round of all heuristics before the bandit takes over; the long-tuned default is the bar the learner must beat", "pages": "pp. 4, 8"}
+  ],
+  "transferable": [
+   "Back off exponentially from a component that keeps failing: skip ⌊exp(0.1·n_fail)⌋ − 1 calls after n_fail consecutive failures (p. 4)",
+   "Warm-start an online learner with one pass in the solver's default order so that its first decisions are not random (p. 4)",
+   "Reward a heuristic for more than success: gap closed relative to the LP bound, effort spent, conflicts produced (pp. 5–6)"
+  ],
+  "coauthors": "Antonia Chmiela (first author), Pawel Lichocki (Google Research), Sebastian Pokutta; Gleixner second author (p. 1)",
+  "quotes": [
+   {"text": "For example, a heuristic that fails fast is preferable over one that needs more time to terminate without a solution.", "page": 5},
+   {"text": "Even though scheduler solves 13 instances that cannot be solved by default, it fails to solve 21 instances solved by default.", "page": 8}
+  ]
+ },
+ {
+  "id": "S044",
+  "year": "2023",
+  "title": "A computational study of perspective cuts",
+  "read_level": "full",
+  "contribution": "Generalizes perspective cuts to nonconvex constraints by lifting any valid on-set inequality (the classical cut is the convex special case), implements detection and separation in SCIP, and finds on MINLPLib that convex perspective cuts reduce mean time by about 20% (by almost a factor of 3 on instances taking at least 100 s), while nonconvex ones shrink trees and improve root bounds but do not pay off in time (pp. 3, 9–10, 15–18).",
+  "problem_entry": "Perspective cuts are known to help specific MINLP classes with on/off structure, but no study had evaluated them on large heterogeneous test sets inside general-purpose solvers (abstract, p. 3; pp. 7–9).",
+  "key_idea": "Theorem 1 lifts any linear inequality valid for the on set by (f(y⁰) − φ(y⁰))(1 − z); Theorem 2 shows that for convex f this gives the perspective cut; implemented as a nonlinearity handler that reuses other handlers' estimators (pp. 9–10, 12–13).",
+  "assumptions": "MINLP with indicator-controlled semi-continuous variables; nonlinear terms only in semi-continuous variables sharing an indicator, linear remainder (pp. 3–4, 12–13); MINLPLib 1703 instances, suitable structure in 186 (pp. 14–15).",
+  "proof_devices": [
+   "Theorem 1 proved by substituting z = 0 and z = 1, plus a strength comparison when φ is already valid for the off set (pp. 9–10)",
+   "Theorem 2 proved by computing the coefficient of (1 − z) (p. 10)",
+   "Worked examples with a cubic and its secant underestimator (pp. 10–11, 14)",
+   "Semi-continuity detected from implied-bound pairs with equal offsets (rows or probing) and propagated to auxiliary variables by interval arithmetic (p. 12)",
+   "Probing z = 1 to tighten bounds before estimating nonconvex terms (p. 13)"
+  ],
+  "experiments": "SCIP development version (githash f0ee1d793d), SoPlex 5.0.1.3, Ipopt 3.12.13, 1 h, gap 0.01%; 186 instances × 5 permutations = 930, failed or inconsistent runs excluded; Off, Convex, Full and Full-noBT; shifted means (1 s, 100 nodes), affected subsets, brackets, a 25% Faster count, performance profiles; solved 741/764/759; Convex time 0.81 on 672 affected instances and 0.36 on [100, 3600]; Full against Convex 1.08 and 1.27 on the two hardest brackets; no significance test (pp. 14–20).",
+  "positioning": "Reviews Ceria–Soares, Stubbs–Mehrotra, Grossmann–Lee, Frangioni–Gentile, Günlük–Linderoth and later applications with their numbers, and generalizes Frangioni–Gentile's perspective cuts (pp. 5–9).",
+  "writing": "The abstract's 'no significant impact on the overall mean time' is milder than the text's 'rather had a detrimental effect' on harder instances (abstract, p. 3; p. 17); 'significant' is used without a test; the conclusion's 'over 20%' matches the pairwise subset of Table 6 (0.77), not Table 3 (0.81) (pp. 16, 18, 21).",
+  "limits_future": "Nonconvex perspective cuts can hurt challenging instances and add numerical failures, so careful implementation and tuning are needed; future: better detection, non-singleton off domains and more general on/off sets (p. 21).",
+  "method_links": [
+   {"method": "Method 1", "relation": "variant", "note": "a field belief (benefits known from specific classes) measured on a heterogeneous library in a general solver; measures a technique's value, not each decision", "pages": "p. 3"},
+   {"method": "Method 3", "relation": "evidence", "note": "losses and numerical failures printed as counts and turned into future work", "pages": "pp. 15, 18, 20–21"},
+   {"method": "Method 2", "relation": "variant", "note": "only step 8: instances with inconsistent results across settings are dropped", "pages": "p. 15"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "relaxation fed by the tree's data", "evidence": "cuts built on the tighter on-set bounds, with probing z = 1 before estimation, and an ablation of that feature (extends H9)", "pages": "pp. 10, 13, 20"},
+   {"pattern": "re-derive as an instance, then generalize", "evidence": "the perspective cut re-derived as a gradient cut plus a lifting that applies to any valid estimator, hence to nonconvex constraints", "pages": "pp. 9–10"}
+  ],
+  "transferable": [
+   "Lift any valid inequality for the on set into one valid for the union with the off-set point by adding (f(y⁰) − φ(y⁰))(1 − z); if φ was already valid for the off set, the lifted cut is at least as strong (pp. 9–10)",
+   "Detect semi-continuous variables from pairs of implied bounds with the same offset (from rows or probing) and propagate the property to auxiliary variables by interval arithmetic (p. 12)",
+   "Define affected instances by differing LP iteration counts and report a 'Faster' count (instances at least 25% faster than with the other setting) beside each shifted mean (pp. 16–17)",
+   "Give a sub-feature its own ablation setting (Full-noBT) and report its root-bound wins and losses as counts (p. 20)"
+  ],
+  "coauthors": "Ksenia Bestuzheva (first author, ZIB), Stefan Vigerske (GAMS); Gleixner second author (p. 3)",
+  "quotes": [
+   {"text": "However, we are not aware of any empirical studies that evaluate their applicability and computational impact over large, heterogeneous test sets in general-purpose solvers.", "page": 3},
+   {"text": "However, these observed slow-downs should not be overestimated since the size of the subsets ... are comparatively small.", "page": 17}
+  ]
+ },
+ {
+  "id": "S062",
+  "year": "2023",
+  "title": "Improving conflict analysis in MIP solvers by pseudo-Boolean reasoning",
+  "read_level": "full",
+  "contribution": "Imports pseudo-Boolean conflict analysis into SCIP for 0–1 ILPs, reads its reduction step as a MIP cut and adds an MIR-based reduction that provably dominates division, and finds on 975 MIPLIB 2017 instance permutations that MIR-based analysis solves the most instances (420 against 405 for clausal analysis) and needs the fewest nodes, at about the same time (pp. 3, 8, 11).",
+  "problem_entry": "MIP conflict analysis works on clauses, exponentially weaker than reasoning on the linear constraints as PB solvers do, yet SCIP tends to be clearly more effective on PB optimization problems; no work had imported PB conflict analysis into MIP solvers (abstract, p. 1; p. 3).",
+  "key_idea": "View PB conflict analysis as linear combinations and cuts (saturation = coefficient tightening, division = Chvátal–Gomory) and use a stronger cut, MIR, in the reduction step (pp. 3, 7–8).",
+  "assumptions": "Pure 0–1 ILPs; theory on normalized integer PB constraints, implementation on real-coefficient linear constraints in floating point (pp. 4, 9); 195 pure 0–1 MIPLIB 2017 models without the numerics tag × 5 permutations (p. 9).",
+  "proof_devices": [
+   "Invariant that the resolvent stays falsified; Example 1 shows that generalized resolution alone breaks it (p. 5)",
+   "Lemma 1: saturation after weakening gives slack 0 (pp. 6–7)",
+   "Lemma 2: division or MIR with divisor a_r gives slack at most 0, by integrality of the slack (pp. 7–8)",
+   "Lemmas 3–4: dominance by coefficient comparison, saturation implies clausal and MIR implies division (p. 8)",
+   "Weaken-all-at-once chosen by a pre-experiment (97.3–99.7% of literals weakened anyway) (p. 10)",
+   "Numerical guards: stop above a coefficient ratio of 10^6, drop coefficients below 10^-9; conflicts limited to 15% of the variables, with fallback weakening (pp. 9–10)"
+  ],
+  "experiments": "SCIP 8.0.3, Xeon Gold 6338, 16 GB; baselines no conflict analysis and clausal analysis restricted for fairness; shifted means (1 s, 100 nodes) on all (975), affected (295), [100, limit] (218) and all-optimal (374) instances, nodes only on all-optimal; solved 394/405/419/420/418; time quotients 0.91–0.92; all-optimal nodes 0.81 clausal against 0.75 MIR; time limit and threads not stated (pp. 9–11).",
+  "positioning": "Credits CDCL, Hooker's view of resolution as a cut rule and the PB literature (Sat4j, RoundingSat); the authors' Learn-to-relax paper is the opposite direction of transfer (pp. 1–3, 6).",
+  "writing": "Hedged where the data are thin ('cannot provide conclusive evidence', p. 4), but the conclusion's 'demonstrates convincingly' rests on solved counts and nodes, since the time quotients against clausal analysis differ by at most 0.02 (pp. 11–12).",
+  "limits_future": "Proof of concept without engineering; only 0–1 ILPs, and a naive generalization to 0–1 mixed or general ILPs cannot work; the weakening order is open; future: an engineered version, the balance of weakening and strengthening, quality measures for intermediate constraints (pp. 9, 11–12).",
+  "method_links": [
+   {"method": "Method 3", "relation": "evidence", "note": "step 4: a rival community's mechanism imported together with that community (Nordström co-author) and published where it reads, at CP per the work list", "pages": "pp. 1, 3, 12"},
+   {"method": "Method 2", "relation": "variant", "note": "the clausal baseline is restricted for a fair comparison (no upgrading, one conflict per call), but no factor against default clausal analysis is reported", "pages": "p. 10"}
+  ],
+  "new_pattern_candidates": [
+   {"pattern": "re-derive as an instance, then generalize", "evidence": "saturation and division recast as members of the MIP cut family, hence the MIR reduction with a dominance proof", "pages": "pp. 3, 7–8"}
+  ],
+  "transferable": [
+   "To import a rival method, restate each of its steps in your own field's terms (a reduction step is a cut rule), then use the strongest member of that family and prove dominance by comparing coefficients (pp. 3, 8)",
+   "Settle an implementation choice with a pre-experiment: 97.3–99.7% of literals are weakened anyway, so weaken all at once (p. 10)",
+   "Guard learned constraints numerically: abort above a coefficient ratio of 10^6, drop coefficients below 10^-9 (p. 9)",
+   "Measure the mechanism as well as the time: the share of learned constraints that propagate at least once (34.54% against 58.54%) on instances with identical execution paths (p. 11)"
+  ],
+  "coauthors": "Gioni Mexi (first author, ZIB), Timo Berthold (FICO, TU Berlin), Jakob Nordström (Copenhagen, Lund); Gleixner third author (p. 1)",
+  "quotes": [
+   {"text": "For a fair comparison of the different strategies, we disabled the upgrading of constraints to specialized types, i.e., all generated conflicts are treated as linear constraints, and further only generated one conflict per call.", "page": 10},
+   {"text": "However, in the other direction we are not aware of any work trying to harness state-of-the-art techniques from pseudo-Boolean solving to improve the performance of MIP solvers.", "page": 3}
+  ]
+ }
+]

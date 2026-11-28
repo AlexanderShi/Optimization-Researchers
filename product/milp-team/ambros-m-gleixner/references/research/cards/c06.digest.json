@@ -1,0 +1,103 @@
+[
+  {
+    "id": "S011",
+    "year": "2017",
+    "title": "Three Enhancements for Optimization-Based Bound Tightening",
+    "read_level": "full",
+    "contribution": "Makes optimization-based bound tightening (OBBT) affordable inside a MINLP solver and reusable in the tree, through primal-point filtering, greedy warm-start ordering and Lagrangian variable bounds (one-row relaxations from OBBT duals) propagated during search; in SCIP on MINLPLib2, OBBT plus LVBs solves 16 more instances (3 lost) and is 17–19% faster on the hard brackets (pp. 3, 19).",
+    "problem_entry": "Enters from a field belief that OBBT, among the most effective and most expensive MINLP bound-tightening procedures (up to 2n LPs), pays off once its cost is controlled; posed as an efficient-implementation question and motivated by bounds and convex relaxations tightening each other (abstract, p. 3; pp. 4, 6).",
+    "key_idea": "Keep the OBBT LP and reuse its solutions: duals become Lagrangian variable bounds re-propagated by FBBT when bounds or the incumbent improve (Theorem 1, p. 7; pp. 8–9); feasible relaxation points filter bounds that cannot improve (pp. 11–12); a greedy distance order exploits simplex warm starts (Algorithm 2, p. 13).",
+    "assumptions": "MINLP with linear objective, factorable constraints and no smoothness assumption (pp. 3–4); Theorem 1 needs a linear relaxation, a valid cut-off U and an optimal primal–dual OBBT pair, and holds for every valid U (pp. 7, 9); OBBT on nonbinary nonlinear variables, binaries by tentative fixing (p. 11); MINLPLib2 split after presolve into INT 605 and GO 347 (p. 15); filtering exact only with exact tightness tests (p. 12).",
+    "proof_devices": [
+      "Theorem 1: aggregate the relaxation rows with the optimal OBBT duals plus the cut-off multiplier; tightness by complementary slackness; also an instance of the Tawarmalani–Sahinidis (PU-PR) framework (p. 7)",
+      "Chain (15)–(17): minimizing over the one-row relaxation gives the OBBT bound at creation; the bound is obtained by substituting variable bounds, (18)–(19), i.e. FBBT on the LVB (pp. 8–9)",
+      "Example 1 with explicit duals and Fig. 2: a nontrivial LVB where OBBT does not tighten; iterated OBBT converges only in the limit (pp. 7–8)",
+      "LVB graph: bound-node digraph, strongly connected components shrunk and topologically sorted in linear time (Tarjan), each LVB propagated once per call (pp. 9–10)",
+      "Algorithm 1, aggressive bound filtering: iterated LP over a shrinking direction with a success-count stop δ and sign restrictions for boundedness (pp. 11–12)",
+      "Basis-status rule: a variable basic at its bound gets a short primal-simplex solve to harvest an LVB, a nonbasic one is filtered (Remark 5, p. 12)",
+      "Algorithm 2: greedy order by distance of the LP value to the bound, rounding of integer bounds, trivial filtering after each LP (p. 13)",
+      "Binary exclusion: tentative fixing equals strong branching and warm-starts the dual simplex instead of the primal (p. 11)",
+      "Implementation safeguards: dual feasibility tolerance 10^-9 instead of SCIP's 10^-7, lowest priority, root node only, LP iterations capped at ten times the root LP iterations (p. 14)"
+    ],
+    "experiments": "MINLPLib2 by counted exclusions (1,357 to 952: INT 605, GO 347; p. 15); root: six ordering and filtering strategies without working limits, LP-error instances dropped (pp. 14–15); tree: plain SCIP vs +OBBT vs +OBBT+LVB, 1 h, gap 10^-4, Xeon X5672 with one job per node, SCIP 3.1.0.1 with SoPlex 2.0.1 (p. 15); shifted geometric means (shifts 10, 100, 10 s, 100), one-sided Wilcoxon test at 5%, brackets by the slowest setting, bound-tightening profiles, ten constraint permutations for single-instance claims (pp. 15–21); nodes down 6.2% to 41.9%, OBBT+LVB time down 17.1% (INT >100 s) and 18.8% (GO >100 s), 16 instances gained and 3 lost (pp. 19–20); the card writer's recount reproduces Table 2 from Tables 7–8, but footnote 3 lists two plain-SCIP timeouts outside the >100 s group it explains (pp. 21, 64–66).",
+    "positioning": "Credits OBBT's first mention to Quesada–Grossmann and the cut-off variant and filtering to Zamora–Grossmann (pp. 6, 11), concedes the dual one-row idea to Tawarmalani–Sahinidis with a mild critique (pp. 7, 9), corrects the term to optimization-based (Remark 1, p. 6), argues OBBT dominates FBBT and reduced-cost propagation (p. 6), and frames the work in MIP-solver terms (reduced-cost fixing, probing, strong branching, one-row cuts; pp. 4, 5, 7, 11); the reference list does not cite the 2013 Gleixner–Weltge CPAIOR paper that SKILL.md lists as [LVB13] (pp. 22–25).",
+    "writing": "Counting title; the abstract states the enhancements, a number tied to a subset (17% to 19% on hard instances) and the solved-count claim (p. 3); one theorem followed at once by a worked example with figure (pp. 7–8); seven numbered remarks carry caveats and a negative result (pp. 6–19); hedges only in interpretations (pp. 3, 6, 21); the closing reframes a mean speed-up as solved instances (p. 21); slips: INT and GO percentages swapped in the conclusion (pp. 19–21), 1000 for 100 s in the bracket definition (p. 19), Example 13 for Example 1 (p. 8).",
+    "limits_future": "OBBT alone gives no significant mean speed-up (pp. 21–22); slowdowns on easier instances called an acceptable price (p. 21); 3 instances lost (p. 19); LVBs fade deeper in the tree (p. 21); OBBT stops on an LP failure (p. 15); spanning-tree ordering failed (p. 14); filtering costs 3.1% and 4.0% of the LVBs (p. 17); local OBBT in the tree left as a far harder challenge, with the root-tested ordering and filtering as a starting point (p. 15); dynamic working limits not studied (p. 17).",
+    "method_links": [
+      {
+        "method": "Method 1",
+        "relation": "variant",
+        "note": "A field belief named in the abstract is tested by a component on/off study, not a per-decision check; the count qualifies the belief: no consistent mean speed-up, but more instances solved.",
+        "pages": "pp. 3, 21–22"
+      },
+      {
+        "method": "Method 2",
+        "relation": "variant",
+        "note": "Nested arms inside one build (plain, +OBBT, +OBBT+LVB), so the LVB increment is measured and tested against +OBBT; non-comparable instances dropped and counted (as in step 8), but LP-error instances kept in the tree study on purpose; no reduced-versus-default pair.",
+        "pages": "pp. 15, 19, 21"
+      },
+      {
+        "method": "Method 3",
+        "relation": "evidence",
+        "note": "Step 1 only: gaps printed with counts (3 lost instances, a non-significant 5.7%, a failed spanning-tree ordering, local OBBT left open); later closure is not in this paper.",
+        "pages": "pp. 14, 15, 19, 21"
+      },
+      {
+        "method": "Method 4",
+        "relation": "variant",
+        "note": "The LVB is called a dual certificate and a feasible relaxation point a primal certificate, but both save and reuse work rather than serve third-party checking; results are checked against MINLPLib2's stated bounds and inconsistent instances excluded.",
+        "pages": "pp. 11, 19"
+      },
+      {
+        "method": "Method 5",
+        "relation": "variant",
+        "note": "Pre-exact form: all floating point, but the validity-deciding quantity gets a tighter tolerance (dual feasibility 10^-9 against 10^-7); exact and tolerance-based tightness tests distinguished; floating-point differences between strategies noted.",
+        "pages": "pp. 12, 14, 16"
+      },
+      {
+        "method": "Method 6",
+        "relation": "evidence",
+        "note": "Paper-level: the test set is built by counted exclusion criteria, and returned solutions and bounds are checked against the library's stated values.",
+        "pages": "pp. 15, 19"
+      }
+    ],
+    "new_pattern_candidates": [
+      {
+        "pattern": "limit-independent effort profiles",
+        "evidence": "A component that will run under working limits is compared by per-instance step curves of successes against LP iterations, normalized on both axes and averaged pointwise; a curve that stays higher wins for any iteration limit; instances with fewer than 1,000 iterations or fewer than ten tightenings are excluded from the plot only.",
+        "pages": "pp. 17–18"
+      },
+      {
+        "pattern": "random control arm",
+        "evidence": "A random OBBT order is kept as the baseline that any more sophisticated ordering should outperform; reverse greedy then needs more LP iterations than random.",
+        "pages": "pp. 13, 17"
+      },
+      {
+        "pattern": "exclusions chosen per question",
+        "evidence": "Instances with an LP error are removed for the root-node mechanism study (28 INT, 5 GO) but kept in the tree study, to measure the implementation as SCIP runs it.",
+        "pages": "p. 15"
+      }
+    ],
+    "transferable": [
+      "Keep the optimal dual of every one-variable auxiliary LP as a one-row inequality (Theorem 1, p. 7), store only nontrivial ones outside the LP, and re-propagate them by bound substitution whenever right-hand-side bounds or the incumbent improve (pp. 8–9).",
+      "Before a batch of bound LPs, test all feasible relaxation points already in hand and skip the bounds tight at them; if many remain, spend a few aggregated-direction LPs with a success-count stop (Algorithm 1, pp. 11–12).",
+      "Use simplex basis status to decide where pivots pay: basic at the bound, run a short primal solve for a dual certificate; nonbasic, skip (Remark 5, p. 12).",
+      "Order warm-started LP sequences greedily by the distance from the current LP value to the target bound, with a random order as the control arm (Algorithm 2 and p. 13).",
+      "Order many single-row propagations by a bound-dependency digraph: shrink strongly connected components, sort topologically in linear time, propagate once per call (pp. 9–10).",
+      "Tighten only the tolerance on which a routine's validity rests (dual feasibility 10^-9 against SCIP's 10^-7 for the OBBT LPs, p. 14).",
+      "Compare strategies that will run under working limits by normalized success-versus-effort profiles averaged over instances, excluding trivial instances, so the ranking holds for any limit (pp. 17–18).",
+      "Report a solver-level change with nested arms, brackets set by the slowest setting, a one-sided Wilcoxon test per bracket, counts of instances gained and lost, constraint permutations for single-instance stories, and per-instance appendix tables from which the aggregates can be recomputed (pp. 19–21, 26–72)."
+    ],
+    "coauthors": "Timo Berthold (FICO), Benjamin Müller (ZIB), Stefan Weltge (OvGU Magdeburg); Gleixner is first author and the byline is not alphabetical (pp. 1, 3)",
+    "quotes": [
+      {
+        "text": "Most state-of-the-art MINLP solvers apply some restricted version of OBBT and it seems to be common belief that OBBT is beneficial if only one is able to keep its computational cost under control.",
+        "page": 3
+      },
+      {
+        "text": "Our computational results show that the impact of OBBT on the INT and GO instances lies not in delivering a consistent speedup over all instances, but in being a “game changer”: using OBBT, significantly more instances can be solved and some hard instances are solved much faster.",
+        "page": 21
+      }
+    ]
+  }
+]

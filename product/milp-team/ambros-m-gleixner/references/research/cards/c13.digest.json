@@ -1,0 +1,376 @@
+[
+ {
+  "id": "S012",
+  "year": 2021,
+  "title": "Learning to schedule heuristics in branch and bound",
+  "read_level": "full",
+  "contribution": "The first data-driven framework that learns from per-node heuristic logs a schedule fixing the order and duration of 16 SCIP heuristics, cutting the primal integral by 49% against default SCIP on DIMACS GISP (about 15% against a hand-tuned baseline).",
+  "problem_entry": "Enters through a gap in solver practice: managing several heuristics 'has not received equal attention'; success rates sorted for GISP are far from sorted for FCMNF (abstract; Fig. 1, p. 2).",
+  "key_idea": "A schedule of (heuristic, iteration limit) pairs, learned by optimizing surrogate (PS) over logged nodes (min total iterations s.t. a solution at >= alpha of nodes) with a greedy adapted from Streeter 2007 (pp. 4-8).",
+  "assumptions": "MIP min c^T x, Ax<=b, x_I integer; node indices unique across trees; homogeneous instances from one class; GISP on DIMACS and random graphs (pp. 3-4, 10-11).",
+  "proof_devices": [
+   "(PS) written as an MIQP, NP-hard as a generalization of pipelined set cover (App. A, pp. 6, 16-17)",
+   "counterexample: Streeter's greedy can perform arbitrarily bad (100 nodes, one heuristic) (p. 7)",
+   "extension move charging only the increment, Algorithm 1 (pp. 7-8)",
+   "shadow-mode sandbox data collection (pp. 9, 18)"
+  ],
+  "experiments": "SCIP 7.0/CPLEX 12.10, 2 h limit, one process per machine; baselines default, 'scip tuned', SMAC with equal 100 h budget; primal integral 934.48/555.75/470.73 on DIMACS (Table 5, p. 13); seed count not stated, 'significant' without test (pp. 11-13).",
+  "positioning": "Contrasted with Khalil et al. 2017 (when to run), Hendel bandits (order only) and ParamILS/SMAC tuning; builds on Streeter 2007 and Berthold 2013a's primal integral (pp. 3, 6-7).",
+  "writing": "Priority claim and numbered contributions (pp. 2-3), worked examples (pp. 2, 8-9); thin hedging, Table 2 ranges in text mismatch the table, several typos (pp. 2-13).",
+  "limits_future": "One one-size-fits-all schedule per class, no generalization guarantee, shadow-mode leak (pp. 13, 18); followed by online-learning CPAIOR 2023 paper (by title, not read).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Constructs stronger baselines (scip tuned, SMAC equal compute) but the headline 49% is against default only; about 15% against tuned; tuned worse than default on 3 of 9 sets.",
+    "pages": "pp. 11-13"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Solver instrumented not rewritten via shadow mode with listed leaks; measurement motivates a method rather than testing a field belief.",
+    "pages": "pp. 2, 9, 18"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "Limits printed without counts; one-schedule limit matches the 2023 online-learning paper by title.",
+    "pages": "pp. 13, 18"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "deterministic effort proxy instead of wall-clock time",
+    "evidence": "maximal diving depth and sub-MIP node limit replace time because time is nondeterministic",
+    "pages": "pp. 4, 6, 18"
+   },
+   {
+    "pattern": "shadow-mode instrumentation for unbiased per-node data",
+    "evidence": "sandbox records incumbents without returning them; leaks listed",
+    "pages": "pp. 9, 18"
+   },
+   {
+    "pattern": "counterexample before reusing an approximation algorithm from a neighbouring setting",
+    "evidence": "Streeter's greedy shown arbitrarily bad, then repaired",
+    "pages": "p. 7"
+   }
+  ],
+  "transferable": [
+   "T1. When the target metric (primal integral) depends on the tree, optimize a surrogate over logged nodes: minimize total heuristic iterations subject to finding a solution at ≥ α of the nodes. Count feasible solutions rather than incumbents to get more data (p. 5).",
+   "T2. Shadow-mode data collection: run every heuristic at each node in a sandbox that records incumbents but does not return them, so one B&B run per training instance gives unbiased per-node data. List what the sandbox cannot hide (pp. 9, 18).",
+   "T3. Control effort by deterministic proxies (maximal diving depth, sub-MIP node limit) and make heuristic classes comparable by dividing by the average time per iteration (pp. 4, 7, 10, 18).",
+   "T4. Before reusing an approximation algorithm from a neighbouring setting, build a minimal counterexample under your own constraints (100 nodes, one heuristic). Then repair the move set: allow extending the last action and charge only the increment (p. 7).",
+   "T5. Emulate the expert: add a hand-tuned setting for the instance class as a second baseline, and give a black-box tuner the same training budget (pp. 11–12).",
+   "T6. Size-transfer grid: train on each size bucket and test on all buckets, so that generalization from small to large instances is visible in one table (Table 1, p. 11).",
+   "T7. Run one process per machine when the metric integrates over time (p. 11)."
+  ],
+  "coauthors": "Antonia Chmiela, Elias B. Khalil, Andrea Lodi, Sebastian Pokutta",
+  "quotes": [
+   {
+    "text": "Unfortunately, we can show that the resulting schedule can perform arbitrarily bad in our setting.",
+    "page": 7
+   },
+   {
+    "text": "Since the primal integral depends on time, we ran one process at a time on every machine, allowing for accurate on time measurements.",
+    "page": 11
+   }
+  ]
+ },
+ {
+  "id": "S024",
+  "year": 2021,
+  "title": "Learn to relax: Integrating 0-1 integer linear programming with pseudo-Boolean conflict-driven search",
+  "read_level": "full",
+  "contribution": "The first combination of LP relaxations and cut generation with pseudo-Boolean conflict analysis over linear inequalities, using floating-point SoPlex output soundly via exact integer recomputation inside RoundingSat.",
+  "problem_entry": "Enters through a failure of PB solvers, which get 'hopelessly stuck' on rationally infeasible formulas that MIP solvers detect at once; asks for the 'best of both worlds' and lists challenges as questions (abstract; pp. 2-3).",
+  "key_idea": "Interleave incremental LP solving with conflict-driven PB search: LP infeasibility yields a Farkas constraint starting conflict analysis, an LP solution yields Gomory (MIR) cuts and phases (pp. 3-4, 9-12).",
+  "assumptions": "0-1 ILPs as normalized PB constraints; coefficients below 10^9 with 128-bit computation and scale-down; every reasoning step in exact integer arithmetic (pp. 1, 6, 15).",
+  "proof_devices": [
+   "Farkas' lemma (p. 8)",
+   "exact-integer Farkas constraint from scaled/rounded multipliers, guaranteed implied (p. 10)",
+   "pebbling-PHP construction for crafted hard formulas (pp. 25-26)"
+  ],
+  "experiments": "AMD Opteron, 5000 s, single thread; SCIP 7.0.0 vs RoundingSat hybrids, Sat4j, NaPS (Gurobi/CPLEX on pebbling-PHP only); Table 5 solved counts, PAR-2 check, usage analysis; losses reported, no seeds (pp. 15-27).",
+  "positioning": "Placed across PB solving, CP with LP (LCG-glucose, three differences), SMT and MIP (SCIP clause-based conflict analysis); primer written 'in MIP language' (pp. 4-6, 22).",
+  "writing": "Aim and challenges as questions (pp. 2-3), assumptions and speculation labelled (pp. 23, 29), plain negative results (pp. 22, 29); 'best-of-both-worlds' framing in tension with SCIP winning (pp. 25, 28); clausal-instance counts differ fn. 11 vs p. 19.",
+  "limits_future": "Gomory and learned-constraint cuts give no gain, static LP budget, aggressive cut erasure (pp. 22-29); future dynamic budget, LP-guided selection, MIP presolve for PB, continuous variables (pp. 29-30), later matched by IJOC 2025 and CPAIOR 2024 papers (by title).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Floating-point LP produces Farkas and Gomory multipliers, exact integer arithmetic decides validity; Method 5 outside MIP.",
+    "pages": "pp. 3, 6, 10, 14, 15"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Own negatives printed with counts and in plain words; future-work items match later joint projects; published in the rival community's venue.",
+    "pages": "pp. 19, 22, 25, 27, 29, 30"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Mismatches stated with reasons but not removed (no PB preprocessing, Sat4j twice the time, commercial solvers elsewhere); same SoPlex 5.0.0 in both; no reduced SCIP.",
+    "pages": "pp. 16, 17, 26"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "No certificate or proof log; soundness from exact reasoning plus cross-solver consistency check; correction to SKILL's trajectory listing.",
+    "pages": "pp. 6, 15"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "Instances designed (pebbling-PHP) against selection bias; MIPLIB decision versions with pitfalls stated; OPB deposited on Zenodo.",
+    "pages": "pp. 17, 18, 25-26"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "theory-crafted instance families against benchmark selection bias",
+    "evidence": "pebbling-PHP formulas built from proof complexity",
+    "pages": "pp. 25-26"
+   },
+   {
+    "pattern": "deterministic effort proxy instead of time",
+    "evidence": "simplex pivots used for reproducibility",
+    "pages": "p. 11"
+   },
+   {
+    "pattern": "attributing value to constraint types by usage counts",
+    "evidence": "usage analysis of constraint types in conflict analysis",
+    "pages": "pp. 22-25"
+   }
+  ],
+  "transferable": [
+   "T1. Sound use of floating-point LP output in an exact-reasoning solver: scale the multipliers and round them to integers, recompute the combination in exact integer arithmetic, and use it only if it is still violated. Otherwise reset the LP basis so the same multipliers do not return (pp. 10, 14).",
+   "T2. Budget an expensive oracle by deterministic counts. Keep the ratio of total pivots to conflicts at p/c ≤ r, with separate root and deep counters, and double the per-call pivot budget after each forced termination (pp. 11–12, 15).",
+   "T3. Call the expensive oracle only where it is likely to pay: at the start, at restarts before database cleanup, and at the first decision after backtracking (p. 11).",
+   "T4. Ablation ladder against a MIP baseline: RS → +LP → +Gomory cuts → +learned-constraint cuts, with the same LP solver version in the MIP baseline. State every unequal treatment with its reason: no PB preprocessing, a two-thread competitor, a commercial solver on another machine (pp. 16, 26).",
+   "T5. Check the headline metric's robustness: the ranking is the same under solved counts and PAR-2 (p. 19). Separate search quality (conflict counts) from speed (p. 19).",
+   "T6. Attribute usefulness by usage counts: count how often each constraint type appears in conflict analysis, compare per-instance averages in scatter plots, and state the assumption that usage means usefulness (pp. 22–24).",
+   "T7. Answer benchmark selection bias with crafted families for which theory predicts that the capability under test is essential: pebbling for tree-like hardness composed with PHP for resolution hardness (pp. 25–26).",
+   "T8. Turn optimization instances into decision instances, \"≥ best known\" and \"strictly better\", and print how rounding and non-optimal best-known values can flip their status (p. 18)."
+  ],
+  "coauthors": "Jo Devriendt, Jakob Nordström",
+  "quotes": [
+   {
+    "text": "Our underlying assumption here—and it should be pointed out that this is an assumption, and not an iron-clad fact—is that the higher the usage of a constraint, the bigger its contribution to solving the problem",
+    "page": 23
+   },
+   {
+    "text": "the MIP solver SCIP outperforms our hybrid PB-LP solver even on its home turf of the PB competition.",
+    "page": 25
+   }
+  ]
+ },
+ {
+  "id": "S034",
+  "year": 2021,
+  "title": "Conflict-driven heuristics for mixed integer programming",
+  "read_level": "full",
+  "contribution": "Two LP-based diving heuristics in SCIP 6.0 that explicitly produce (Farkas diving) and exploit (conflict diving) conflict constraints, with a lemma tying conflict locks to model locks and a seeded computational study.",
+  "problem_entry": "Enters through a separation in the literature: diving heuristics and conflict analysis 'have mostly been studied independently'; combines them in two ways (abstract; pp. 3-4).",
+  "key_idea": "Farkas diving rounds toward the best objective bound to drive the dual LP toward a Farkas proof; conflict diving mixes conflict locks with model locks (kappa) and rounds in the risky direction for fail fast (pp. 7-10).",
+  "assumptions": "General MIPs with bounds in R or infinity; integral local bounds wlog, zero reduced cost for fractional variables; nonzero objective for Farkas diving; MMMC test set of 488 problems x 4 seeds (pp. 5, 7, 10-12).",
+  "proof_devices": [
+   "dual LP derivation: tightening a bound reduces violation of (4) by |c_j| d_j (pp. 7-8)",
+   "Lemma 2: conflict locks imply model locks, one-line sign argument from y >= 0 (p. 9)"
+  ],
+  "experiments": "SCIP bf6a486 (6.0)/SoPlex 4.0, 7200 s, four seeds, affected and [k,tilim] subsets, counted exclusions; Farkas diving -5.4% time on affected, -14.8% on [100,tilim]; channel ablations -noconfs/-nosols/-lp; conflict diving -4.8% time, controls and kappa sweep; no significance tests (pp. 11-25).",
+  "positioning": "More direct than random sampling (Dickerson & Sandholm 2013) and hybrid CP/MIP search (Berthold et al.); builds on locks, coefficient diving, fail fast, VSIDS (pp. 4, 7, 9-10, 23).",
+  "writing": "Two-part contribution, percentages with subsets, self-correction in print that solutions not conflicts drive Farkas diving (pp. 3-4, 18); slips in units and denominators (pp. 12, 17-18, 20).",
+  "limits_future": "Farkas diving more expensive and called conservatively, afterroot subset biased, kappa could be adapted dynamically (pp. 15, 25); SCIP default status not stated.",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Reduced baseline for a replacement component: nolockdiving, then coefdiving and confdiving each alone; seeds, affected subset, brackets, counted exclusions.",
+    "pages": "pp. 11, 19"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Measures its own design rationale against a virtual best and with channel ablations, printing when the motivating mechanism is not the driver.",
+    "pages": "pp. 13, 18, 20-22"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "attribute the gain to an output channel",
+    "evidence": "-noconfs and -nosols ablations",
+    "pages": "pp. 17-19, 25"
+   },
+   {
+    "pattern": "virtual best of existing components as a conservative comparator",
+    "evidence": "per-instance virtual best of SCIP divers overestimates each",
+    "pages": "pp. 13, 15"
+   },
+   {
+    "pattern": "success-gated execution",
+    "evidence": "expensive heuristic continues in tree only after root success",
+    "pages": "pp. 12, 25"
+   }
+  ],
+  "transferable": [
+   "T1. Read a primal rule off a dual target: write what the Farkas condition needs (lower the violation of (4)) and translate it into a rounding direction and score. Here the translation is the optimistic rounding toward the best objective bound (pp. 7–8).",
+   "T2. Extend a static statistic to learned constraints (locks → conflict locks), and justify the extension with a short lemma tying it to the model statistic (Lemma 2, p. 9).",
+   "T3. Reduced baseline for a replacement component: switch off the old and the new component together, then add each alone (nolockdiving / coefdiving / confdiving) (pp. 11, 19).",
+   "T4. Variability protocol: four seeds with problem-seed pairs as observations; affected instances; nested [k,tilim] brackets; runs with numerical violations excluded and counted; bold for relative changes of at least 5% (pp. 11–12).",
+   "T5. Conservative comparator: compare your heuristic's counts with the per-instance virtual best of all existing heuristics, which overestimates each one (pp. 13, 15).",
+   "T6. Channel ablations: disable each output channel of a component (conflicts, solutions) and control for a confound (LP frequency) to find which output drives the gain (pp. 17–19, 25).",
+   "T7. Measure the design goal directly (conflicts produced, dive length for fail fast) with box plots by hardness bracket, and sweep the mixing weight to separate the effects of the score and of the rounding (pp. 13–15, 20–23).",
+   "T8. Gate an expensive heuristic on root success, and run it only where its premise holds (nonzero objective) (p. 12)."
+  ],
+  "coauthors": "Jakob Witzig",
+  "quotes": [
+   {
+    "text": "This may come as a surprise because our initial motivation for the design of Farkas diving was the targeted generation of conflict constraints.",
+    "page": 18
+   },
+   {
+    "text": "Thus, this set of instances is slightly biased; hence, it is not suitable to conclude that Farkas diving finds more feasible solutions than the virtual best diving heuristic in general.",
+    "page": 15
+   }
+  ]
+ },
+ {
+  "id": "S016",
+  "year": 2022,
+  "title": "The machine learning for combinatorial optimization competition (ml4co): Results and insights",
+  "read_level": "full",
+  "contribution": "A competition report defining three SCIP control tasks (primal, dual, configuration) on three benchmarks through the Ecole API, with time-integral metrics, plus the winning teams' methods.",
+  "problem_entry": "Enters through the distribution view: instances 'often stem from related data distributions'; asks whether ML is a viable option for improving solvers on specific distributions (abstract; p. 2).",
+  "key_idea": "One solver decision per task (primal solutions, branching, parameter configuration) exposed via gym-like Ecole, each scored by an integral metric; winners used classical heuristics, DAgger imitation, and HEBO Bayesian optimization (pp. 2-11).",
+  "assumptions": "MILPs; datasets item placement (10000), workload apportionment (10000), anonymous maritime inventory routing (118); hidden same-distribution test sets of unstated size (pp. 3-4).",
+  "proof_devices": [],
+  "experiments": "One hardware setup (Xeon, V100); only winners' results: KIDA cumulated reward (Table 2, p. 9), imitation accuracy vs reward (Table 1, p. 8), configuration gains x1.08-x2.33 (Table 3, p. 10); no ranking rules, per-team scores, seeds or variability (pp. 3-11).",
+  "positioning": "Cites related ML work per task without critique (Khalil, Gasse, Hutter etc.); primal winner builds on feasibility pump, RENS, RINS (pp. 5, 7-9).",
+  "writing": "Datasets, metrics, three winner write-ups, short conclusion; strong adjectives without variance; inconsistent dataset name, garbled entry-count sentence, typos (pp. 3-11).",
+  "limits_future": "ML for CO has potential but needs more work; competition to repeat yearly (p. 11); primal winner used no learned model, not discussed (p. 5).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Hidden test sets and anonymous dataset, one hardware setup, environment checks feasibility and computes dual bounds, metrics initialized to be unambiguous.",
+    "pages": "pp. 3-5, 8"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "No ranking, tie or penalty rules, per-team scores or test-set sizes printed, unlike MIPcc23's written rules.",
+    "pages": "not found"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "Field question posed yes/no but answered qualitatively without a count.",
+    "pages": "pp. 2, 11"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "one solver decision per task, with a score the solver itself certifies",
+    "evidence": "primal task checks feasibility, dual bounds from SCIP, participants only branch",
+    "pages": "pp. 2, 5, 8"
+   }
+  ],
+  "transferable": [
+   "T1. Expose one solver decision per task through a gym-like API and fix all other components (no branching in the primal task, heuristics off in the dual task). The score then isolates the decision, and the bound comes from the solver, not the participant (pp. 2, 5, 8).",
+   "T2. Make time-integral metrics unambiguous by supplying initial values (a trivial solution as user objective limit, a precomputed root dual bound), and keep the optimum-dependent constant in the reported score (pp. 4–5, 9–10).",
+   "T3. Split train and test from the same distribution, and reveal the test set only after the competition. Anonymize one dataset and forbid reverse engineering (p. 3).",
+   "T4. Evaluate time-dependent metrics on one fixed hardware setup (p. 3).",
+   "T5. (Winners, dual task) Select checkpoints by the deployment metric on validation (cumulated reward), not by imitation accuracy, which did not track it (Table 1, p. 8)."
+  ],
+  "coauthors": "Maxime Gasse and 21 further co-organizers (among them Antonia Chmiela, Elias B. Khalil, Andrea Lodi, Sebastian Pokutta) plus the members of the three winning teams",
+  "quotes": [
+   {
+    "text": "Is machine learning a viable option for improving traditional combinatorial optimization solvers on specific problem distributions, when historical data is available?",
+    "page": 2
+   },
+   {
+    "text": "Reverse-engineering for the purpose of recovering the test set was forbidden.",
+    "page": 3
+   }
+  ]
+ },
+ {
+  "id": "S042",
+  "year": 2022,
+  "title": "A safe computational framework for integer programming applied to Chvátal's conjecture",
+  "read_level": "full",
+  "contribution": "A safe framework coupling exact rational SCIP, VIPR certificates and a Coq input checker, used with proved IP formulations to prove Chvátal's conjecture for |U(D)| <= 7.",
+  "problem_entry": "Enters through the two difficulties of IP for rigorous proofs, roundoff and missing checkable output, demonstrated on Chvátal's conjecture (pp. 1-2, 4, 8).",
+  "key_idea": "Exact model instantiation (ZIMPL) + exact SCIP + VIPR certificate + Coq input checker, with models refined Pinf -> Popt -> Pred (pp. 2-9; Fig. 1).",
+  "assumptions": "Binary IP over power-set variables plus one integer z, exponential in n; correctness by Theorems 2, 3, 6 (pp. 4-9); Pred(7) 208 vars/4050 ineqs, Pred(8) 455/12424 (p. 10).",
+  "proof_devices": [
+   "incidence vectors map counterexamples to feasible points (Theorem 2, p. 5)",
+   "Observation 1: a tight star inequality at an optimum (p. 6)",
+   "wlog x_S = max y_T (Theorem 3, p. 6)",
+   "partition inequalities dominate intersecting inequalities (Props. 1-2, p. 7)",
+   "Berge/Anderson bound 2|Y| <= |D| (Corollary 2, pp. 7-8)",
+   "Kleitman-Magnanti fixing (Corollary 3, p. 8)",
+   "counting proof for n <= 5 (Prop. 3, p. 8)",
+   "induction fixing singletons (Prop. 4, pp. 8-9)",
+   "symmetry fixing of subsets of [4] (Prop. 5, Theorem 6, p. 9)"
+  ],
+  "experiments": "Three questions before Table 1; Xeon Gold, 12 h; Popt(7) exact 4024.2 s / cert 21000 MB, Pred(7) exact 124.5 s / cert 163 MB, Pred(8) floating-point only 7278.9 s; different CPLEX versions, single runs (p. 10).",
+  "positioning": "Mathematics by optimization (Kepler, kissing numbers), SAT proofs and DRAT-trim, exact tools, exact SCIP and VIPR foundations, Chvátal literature; 'to the best of our knowledge' (pp. 1-4).",
+  "writing": "Numbered components and four-box figure, theorems with full proofs, hedged trust claim, explicit proof-vs-evidence boundary for n = 8 (pp. 2-3, 5-11).",
+  "limits_future": "Exact SCIP lacks presolve, cuts, symmetry; n = 8 only in floating point; problem-specific input checker (pp. 3, 10); future: prove n = 8, close the exact/inexact gap, Snevily and Borg variants (p. 11).",
+  "method_links": [
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "VIPR certificate with three inference rules and independent checker, Coq input checker (step 3), public certificates, size and check time reported.",
+    "pages": "pp. 3, 10"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Exact SCIP corrects floating-point LP solutions into safe dual bounds, rational LP sparingly; exact rational model instantiation.",
+    "pages": "p. 3"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Gap printed: missing exact components, n = 8 open in exact arithmetic; conclusion asks to close the performance gap.",
+    "pages": "pp. 3, 10, 11"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Exact vs floating-point SCIP on different CPLEX versions with no remark, no reduced baseline, no printed factor.",
+    "pages": "p. 10"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "known partial results as provably valid cuts and fixings that shrink the certificate",
+    "evidence": "at n = 7 certificate shrinks from 21000 MB to 163 MB and check from 1258.3 s to 28.9 s",
+    "pages": "pp. 7-10"
+   }
+  ],
+  "transferable": [
+   "T1. A trust chain stage by stage: exact model instantiation (ZIMPL rationals), an exact solver, an independent certificate (VIPR), and an input checker in a proof assistant that rebuilds the constraint matrix and compares it with the certificate's problem section (pp. 2–3).",
+   "T2. Write the conjecture for fixed n as an IP with a proved equivalence (infeasible ⟺ conjecture; optimum 0 ⟺ conjecture), and prefer the optimality form, which then carries the reductions (pp. 5–7, 9).",
+   "T3. Turn known theorems into valid inequalities and fixings, each proved to keep the equivalence, before they enter a computer proof (Corollaries 2–3, Props. 4–5, Theorem 6; pp. 7–9).",
+   "T4. Break symmetry by fixing a canonical set ({1,2,3,4}), justified by permuting the ground set, and state that one symmetric counterexample stays feasible (p. 9).",
+   "T5. Incremental induction over n: having solved n − 1, fix the singletons at n (Prop. 4, pp. 8–9).",
+   "T6. Report certificate size and checking time beside solve time, and the input-check time (Table 1, p. 10).",
+   "T7. Separate proof from evidence in the text: the floating-point solve of n = 8 makes the conjecture \"highly likely\" for n = 8 but \"does not constitute a safe proof\" (p. 10)."
+  ],
+  "coauthors": "Leon Eifler, Jonad Pulaj",
+  "quotes": [
+   {
+    "text": "First, virtually all state-of-the-art IP solvers rely on fast floating-point arithmetic, hence their results are compromised by roundoff errors.",
+    "page": 1
+   },
+   {
+    "text": "A proof for the case |U(D)| = 8 is tangible if the performance of the exact rational solver is enhanced in the future.",
+    "page": 11
+   }
+  ]
+ }
+]

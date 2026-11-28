@@ -1,0 +1,195 @@
+[
+ {
+  "id": "S005",
+  "year": 2020,
+  "title": "The SCIP optimization suite 7.0",
+  "read_level": "full",
+  "contribution": "A release report documenting SCIP Optimization Suite 7.0: a new sixth component (PaPILO), a MIP speedup, Benders' decomposition functionality and rank-1 SDP constraints (pp. 3-4, 41).",
+  "problem_entry": "Release report framing performance as development target (p. 6); components enter via an architecture limit (PaPILO, p. 9), a count (5% globally valid infeasibility proofs, p. 24), a user experience (gap progress bar, p. 26) and reproducible failure modes (p. 36).",
+  "key_idea": "No single idea: PaPILO's deterministic transaction-based parallel presolve (pp. 9-11), two-row/two-column presolve (pp. 12-13), decomposition structure and padm (pp. 14-18), degeneracy-aware hybrid branching (pp. 19-20), local dual proofs (pp. 24-25), tree-size estimation and clairvoyant restarts (pp. 26-27), component symmetry handling (pp. 27-31), BD extensions (pp. 31-35, 38-39), SoPlex 5.0 multiprecision (pp. 37-38).",
+  "assumptions": "MIP (1), MINLP (2), CIPs and MISDP (pp. 4-5, 39); PaPILO never relaxes bounds (p. 10); binary-only symmetry via bliss (pp. 27-28); strict setting algorithms for orbital fixing (pp. 30-31); BD convexity for four constraint types (p. 32); 514-instance MIP set via MIPLIB 2017 selection methodology and 200-instance manually selected MINLP set (p. 6).",
+  "proof_devices": [
+   "transaction locks plus never-relaxed bounds keep implied-free substitution valid; fixed application order for determinism (p. 10)",
+   "local dual proof valid in subtree of ancestor q, used only for dual proof analysis (p. 25)",
+   "orbital fixing kept correct by storing globally fixed binaries; multi-aggregation of affected binaries forbidden (pp. 28, 30-31)",
+   "deterministic parallel BD: all subproblems solved before cuts, set order, priority queue tie-break by index (pp. 31-32)",
+   "always-feasible feasibility-phase subproblem (22) with M <- 10M; master variable locks block invalid presolve (p. 34)",
+   "numerical safeguards: numerics emphasis, temporary LP feasibility tolerance tightening (p. 36); gap limits (p. 7)"
+  ],
+  "experiments": "SCIP 7.0.0+SoPlex 5.0.0 vs 6.0.0+4.0.0, GCC 7.4, Xeon Gold 5122, 7200 s MIP / 3600 s MINLP, thread count not stated (p. 7); five seeds/permutations, shifted geomeans, nested subsets (pp. 6-7); MIP 1.14 overall, 1.58 on [1000,7200], MINLP 1.08 (pp. 7-8); unmentioned MIPLIB 2017 solved-count drop 606 vs 617 and count slips (pp. 6, 8); component numbers mostly merge-time (pp. 11-27); no significance tests.",
+  "positioning": "Continuation of SCIP 5.0/6.0 reports (pp. 43-44); explicit credits to Achterberg et al., Le Bodic and Nemhauser, Fischetti and Monaci, Fischetti et al., database transactions (pp. 9, 12, 20, 23, 33); hedged novelty claims for parallel BD (pp. 31, 38).",
+  "writing": "Release-report form with feature-list abstract (p. 3) and parameter defaults (pp. 24, 33); untested explanation (p. 27); explicit hedges (p. 6); per-author contributions paragraph (pp. 41-42); count slips (pp. 6, 8) and typos (pp. 11, 40).",
+  "limits_future": "Few MINLP changes, rewrite deferred (pp. 8, 41); no parallel-column removal (p. 11); local proofs not for conflict graphs (p. 25); binary symmetries only (pp. 28, 30); no BD trust region (p. 33); Glop slower (p. 37); future: PaPILO replaces SoPlex presolving, MINLP focus next (p. 41).",
+  "method_links": [
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "MIPLIB 2017's selection methodology reused to compose the internal 514-instance MIP base set; numerically inconsistent results excluded.",
+    "pages": "pp. 6-7"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "MINLP base set manually selected without written criteria or exclusion counts; no description of how numerical inconsistency is established, no exact-arithmetic check.",
+    "pages": "pp. 6-8"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Step 10, group: release compared with previous major release on same hardware and compiler, one list of external packages, named subsets.",
+    "pages": "p. 7"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Single baseline (6.0.0), no bugfix release as second baseline; suite components change with the release by design.",
+    "pages": "pp. 7-8"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Group, step 7: open items named with reason and target (parallel-column postsolve, local proofs for conflict graphs, binary-only symmetry, MINLP deferred).",
+    "pages": "pp. 11, 25, 28, 41"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "SoPlex 5.0 runtime precision is extended floating point, not exact; PaPILO templates are groundwork; raise-accuracy-on-failure appears as temporary LP tolerance tightening; inferred link to S029's precision boosting (S029 p. 26).",
+    "pages": "pp. 9, 36, 37"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "deterministic parallelism by fixed-order application",
+    "evidence": "PaPILO applies transactions in fixed order, BD adds cuts in set subproblem order, UG ships benders-det settings",
+    "pages": "pp. 10, 31, 39"
+   },
+   {
+    "pattern": "merge-time numbers per feature, fresh run per release",
+    "evidence": "component effects reported as measured at merge time while the release factor comes from a new full comparison",
+    "pages": "pp. 6-8, 20, 24, 25"
+   },
+   {
+    "pattern": "per-author code-contribution statement",
+    "evidence": "in a 28-author software paper",
+    "pages": "pp. 41-42"
+   },
+   {
+    "pattern": "count slips between text and tables",
+    "evidence": "text counts disagree with tables; also S029 p. 23",
+    "pages": "pp. 6, 8"
+   }
+  ],
+  "transferable": [
+   "Parallel presolve as transactions: propose reductions with locks on a read-only copy, apply them in a fixed order and drop conflicting ones; the result is independent of the thread count (pp. 9-10).",
+   "Find useful row pairs for two-row reductions by hashing variable pairs by coefficient sign pattern (four lists L++, L--, L+-, L-+), with working limits and a processed-pairs table (p. 12).",
+   "Pick a test set for routine development with the benchmark's own selection model, restricted to a \"solvable\" subset whose bias direction is stated (p. 6).",
+   "Treat each instance-seed (or instance-permutation) pair as an observation, and print nested subsets including both-solved and diff-timeout (pp. 6-8).",
+   "Make a branching score degeneracy-aware with explicit thresholds (α ≥ 0.8, β ≥ 2.0) and skip strong branching where the dual-bound information is uninformative, but keep it at the root for its restart side effect (pp. 19-20).",
+   "Ship a \"vanilla\" textbook variant of a component, with idempotent and oracle-only switches, for experiments and learning (pp. 22-23)."
+  ],
+  "coauthors": "Gerald Gamrath (first) and 26 further authors in alphabetical order (28 in all), incl. D Anderson, K Bestuzheva, WK Chen, L Eifler, M Gasse, P Gemander, L Gottwald, D Weninger",
+  "quotes": [
+   {
+    "text": "In particular, it should rather underestimate the positive effect, if there is any, as instances that can only be solved with the new feature are missing in the solvable subset, while those that are only solved with previous versions are contained.",
+    "page": 6
+   },
+   {
+    "text": "In rare cases, such as SCIP solutions that are not feasible for the original problem after retransformation, the reason often lies in repeated (multi-)aggregations",
+    "page": 36
+   }
+  ]
+ },
+ {
+  "id": "S029",
+  "year": 2020,
+  "title": "Linear programming using limited-precision oracles",
+  "read_level": "full",
+  "contribution": "Models the floating-point simplex as a limited-precision LP oracle and proves that iterative refinement with two exact layers (basis verification, rational reconstruction) computes exact LP solutions in oracle-polynomial time, with a SoPlex implementation tested on 1,202 LPs (pp. 8-26).",
+  "problem_entry": "Complexity theory assumes exact arithmetic while practice uses limited precision (abstract, p. 3); Example 1 shows a GLS tolerance of 10^-169,059 against vertices of encoding length at most 27 (pp. 6-7); asks for polynomial guarantees with limited-precision oracles (§1.4, p. 8).",
+  "key_idea": "Oracle with constants p, η, σ on inputs in F(p) (Definition 1, pp. 8-9); Algorithm 1 refinement with power-of-two scaling (pp. 9-10), plus exact basis verification (§3.2, pp. 12-13) and speculative rational reconstruction with geometric retry (Algorithm 2, pp. 14-15).",
+  "assumptions": "Standard-form LP with full-row-rank rational data (pp. 3-4); primal and dual feasible LPs (pp. 10, 13, 15, 17); real solvers not guaranteed to meet oracle bounds but failure is detectable (p. 9); inputs in F(p) (footnote 1, p. 9); Example 2 shows need for bounded corrector solutions (pp. 13-14); 1,202-LP test bed (p. 23).",
+  "proof_devices": [
+   "Lemma 1: denominator bound via Cramer's rule and Hadamard's inequality (p. 5)",
+   "Lemma 3: linear residual convergence at rate ε = max{η, 1/α} (p. 9)",
+   "Lemma 4: encoding length bound via common power-of-two denominator (pp. 10, 18-19)",
+   "Lemma 5: separation bound for basic solutions (pp. 11, 19-20)",
+   "Theorem 4 with Claims 1-4: optimal bases after polynomially many refinements (pp. 11, 20-22)",
+   "Lemma 6: induction that iterates become more and more basic (pp. 11-12)",
+   "Theorem 6: output-sensitive reconstruction via geometric-series tail bound (pp. 15-16)",
+   "Lemma 8: geometric reconstruction frequency makes cumulative cost dominated by last attempt (pp. 16-17)",
+   "Theorems 3, 5 and 7: oracle-polynomial running time (pp. 10, 13, 17)"
+  ],
+  "experiments": "SoPlex_fac and SoPlex_rec vs QSopt_ex 2.5.10 on 1,202 LPs, Xeon X5672, one job per node, 2 h (pp. 22-23); solved 1,191/1,189/1,163 (p. 23); Table 1 fac 0.54 of QSopt_ex time, stratified by QSopt_ex precision (p. 24); Table 2 rec/fac ratio 1.82-7.95 (p. 25); failures with causes (pp. 23-25); count slip 44 vs 39 (p. 23); no seeds or significance tests.",
+  "positioning": "Builds on GLS, Karmarkar, Renegar, Edmonds, Espinoza, Gärtner, QSopt_ex and Cheung-Cucker (pp. 5-7); low-precision practical counterpart to high-precision ellipsoid/interior-point schemes (§1.4, p. 8); critique by reformulation (p. 7).",
+  "writing": "Abstract ends on practical stake (p. 3); proof sketches with proofs in §5 (pp. 10-11, 17-22); candid about weak worst-case bound (p. 12); three bulleted experimental questions (p. 22); conclusion gives two next designs (pp. 25-26); slips: Theorem 5/Lemma 5 cross-reference (pp. 21-22) and 44 vs 39 count (p. 23).",
+  "limits_future": "Feasible LPs only (pp. 13, 17); oracle guarantee not met by real solvers (p. 9); large worst-case bound (p. 12); reconstruction bottleneck (p. 24); factorization can dominate (p. 25); 7 oracle failures (p. 23); future: background factorization-reconstruction hybrid (p. 25) and precision boosting inside refinement (p. 26).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Own voice: the design is the producing/deciding split; floating-point oracle solves, exact arithmetic computes residuals, solves basis systems and checks candidates; [LPO20 §1.3] sentence on p. 7, step 6 on p. 12, step 5 proposed as future work (p. 26); 61 LPs already exactly optimal support Taste 4.",
+    "pages": "pp. 7, 8, 10, 12, 15, 24-26"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "Dating: basis verification already beats reconstruction on average in 2019/2020 (1.82-7.95x, about 46% faster), while SKILL.md dates the switch to [PB25]; to be re-checked against [PB25].",
+    "pages": "p. 25"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Own voice: gaps printed with counts and causes, each becoming a design proposal; step 4 imports QSopt_ex's precision boosting; counter-evidence: proposed background parallel factorization not found later.",
+    "pages": "pp. 23-26"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Step 6: two exact layers compared inside the same SoPlex code with the same oracle, against QSopt_ex 2.5.10 named with version.",
+    "pages": "pp. 22-23"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "oracle model of the production solver",
+    "evidence": "theory written around the component practice uses, with checkable constants and an explicit failure outcome (Definition 1, footnote 1; abstract)",
+    "pages": "pp. 3, 8-9"
+   },
+   {
+    "pattern": "output-sensitive guarantee motivated by a worked worst-case number",
+    "evidence": "Example 1 and Theorem 6",
+    "pages": "pp. 6-7, 15-16"
+   },
+   {
+    "pattern": "the theorem's prediction checked per instance",
+    "evidence": "dlcm against refinement counts; optimal basis typically reached by second round, confirming [16]",
+    "pages": "p. 24"
+   },
+   {
+    "pattern": "count slips between text and tables",
+    "evidence": "44 vs 39 count; also S005 pp. 6, 8",
+    "pages": "p. 23"
+   }
+  ],
+  "transferable": [
+   "Model a production floating-point solver as a limited-precision oracle with constants (p, η, σ), a failure outcome and inputs restricted to a fixed number set, then prove oracle-polynomial bounds for the exact algorithm built on it (Definition 1, pp. 8-9).",
+   "Use power-of-two rounding of scaling factors to keep encoding lengths linear in the iteration count (Algorithm 1 line 11, Lemma 4, pp. 10, 18-19).",
+   "Use a separation bound on the violations of nonoptimal basic solutions to turn linearly converging residuals into a finite, polynomial optimality guarantee for the basis (Lemma 5, Theorem 4, pp. 11, 19-22).",
+   "Run speculative rational reconstruction with a denominator guess whose safety factor β^k grows geometrically, check each candidate exactly, and retry at geometric frequency f (Algorithm 2, Theorem 6, Lemma 8, pp. 14-17; β = 1.1 and f = 1.2 in the code, p. 22).",
+   "Delay the exact basis solve until the floating-point basis has stalled for 2 refinements (pp. 12, 22).",
+   "Stratify the comparison by the baseline's escalation level and attribute each failure to a stage (Table 1, p. 24; p. 23)."
+  ],
+  "coauthors": "Daniel E. Steffy",
+  "quotes": [
+   {
+    "text": "This work provides a foundation for understanding and analyzing the behavior of the methods that are currently most effective in practice for solving LPs exactly.",
+    "page": 3
+   },
+   {
+    "text": "In order to harness the strengths of both approaches, incremental precision boosting can be integrated into iterative refinement quite naturally",
+    "page": 26
+   }
+  ]
+ }
+]

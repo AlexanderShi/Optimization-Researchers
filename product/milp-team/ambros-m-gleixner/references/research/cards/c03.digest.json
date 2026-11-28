@@ -1,0 +1,186 @@
+[
+  {
+    "id": "S023",
+    "year": "2012",
+    "title": "Solving mixed integer linear and nonlinear problems using the SCIP Optimization Suite",
+    "read_level": "full",
+    "contribution": "A tutorial overview of the SCIP Optimization Suite 3.0 (Zimpl, SoPlex, SCIP): plugin architecture around constraint handlers, problem classes, interfaces, worked examples, licensing, and a 2012 outlook that lists exact integer programming as an open task (pp. 3-22).",
+    "problem_entry": "Introduce the three tools and how they combine to model and solve MIP and MINLP; entered through the practitioner's case for MIP (a proven dual-bound guarantee under any time limit, a 55,000-fold vendor speed-up) and through CP/SAT integration as the motive for CIP (pp. 3, 5).",
+    "key_idea": "Constraint handlers decide feasibility and may add presolving, propagation, separation and an LP representation (126 plugins); branch-and-price needs only a pricer plugin; Zimpl computes in rational arithmetic; SoPlex has a composite simplex with bound shifting and, since 1.7, iterative refinement (pp. 6-10).",
+    "assumptions": "Classes: LP, MIP with indicator/SOS, MINLP (quadratic, SOC, bivariate, absolute power, expression trees), PBO, SAT, scheduling (pp. 6-7); ten file formats (p. 11); worked instances: a 13-city TSP, stein27, a toy MIP, capri (pp. 11-20); no correctness argument (n/a).",
+    "proof_devices": [
+      "n/a (no proofs)",
+      "debug build with asserts and consistency checks, SCIP_DEBUG output, and a debug solution that catches code cutting off an optimal solution (p. 18)",
+      "test target writing per-instance .res files with geometric means; allcmpres.sh compares result files (p. 18)",
+      "test suites covering more than 75% of the code; asserts, valgrind and FlexeLint (p. 22)",
+      "footnote defining 'proven' as exact rational solving with zero gap (p. 22)"
+    ],
+    "experiments": "None as an evaluation. Demonstration runs only: stein27 with defaults (0.73 s, 4,192 nodes), with two heuristics off (0.75 s, 4,253 nodes) and with aggressive heuristics, plus capri; performance claims delegated to MIPLIB 2010, Mittelmann's benchmarks and the PB competition; performance variability mentioned (pp. 7, 13-16, 20).",
+    "positioning": "Positioned as non-commercial ('one of the fastest non-commercial MIP and MINLP solvers'); branch-and-price and open-source Zimpl set against commercial products, with concessions given as numbers (Zimpl 'maybe 20%' of ampl); CIP after Achterberg, exact MIP after Cook, Koch, Steffy and Wolter (pp. 3, 5, 7-8, 22).",
+    "writing": "Tutorial genre: each console transcript or code listing is followed by a reading of its output; the headline claim is repeated three times with external references; concessions given as numbers; little hedging (pp. 3, 5, 7-8, 13-16).",
+    "limits_future": "Few stated limits (beta interfaces, Zimpl's functionality, TSP model size). Outlook: parallelization; exact IP (floating point 'perfectly sufficient' for most commercial uses, an exact MIP solver with acceptable times 'remains an important task'); MINLP and CP; bigger instances solved faster (pp. 8, 10-12, 22).",
+    "method_links": [
+      {"method": "Method 5", "relation": "evidence", "note": "Group text. SoPlex is double precision by default (long double optional) and offers iterative refinement via GMP and iterated floating-point solves for arbitrarily precise solutions. Floating point is called sufficient for most commercial applications, exactness reserved for feasibility problems and research (Taste 4).", "pages": "pp. 10, 22"},
+      {"method": "Method 5", "relation": "variant", "note": "Zimpl does its model-building arithmetic in rationals: exactness at the cheapest stage, before any solver decision.", "pages": "p. 9"},
+      {"method": "Method 3", "relation": "evidence", "note": "Group text. Exact integer programming is printed in 2012 as an open task with many open questions: the ledger entry the skill traces to SCIP 10.0.", "pages": "p. 22"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "the release ships the measurement instruments", "evidence": "The test target, per-instance result files with geometric means, a comparison script and the debug-solution check are all part of the distribution (group text).", "pages": "p. 18"}
+    ],
+    "transferable": [
+      "Plant a known optimal solution in debug builds, so that any reduction, cut or propagation that removes it is caught at once (p. 18)",
+      "Ship the test harness with the solver: one command runs a named test set under a named settings file and writes per-instance results with geometric means; a script compares result files (p. 18)",
+      "Give concessions against closed competitors as numbers, not adjectives (p. 8)",
+      "In a tutorial, read each output column aloud: which heuristic found which incumbent, why nodes are open, where the LP time went (pp. 13-14)",
+      "Define 'proven' when it means exact rational solving with a zero gap (p. 22)"
+    ],
+    "coauthors": "Timo Berthold, Gerald Gamrath, Stefan Heinz, Thorsten Koch, Yuji Shinano (all ZIB); alphabetical six-author byline, read as the group's voice",
+    "quotes": [
+      {"text": "The precise knowledge of what is happening in the algorithm and the ability to modify any part of the program is in our view a necessary precondition for successful research.", "page": 21},
+      {"text": "For most commercial applications the solutions computed by today’s floating-point MIP solvers within small numerical tolerances are perfectly sufficient.", "page": 22}
+    ]
+  },
+  {
+    "id": "S039",
+    "year": "2013",
+    "title": "Learning and Propagating Lagrangian Variable Bounds for Mixed-Integer Nonlinear Programming",
+    "read_level": "full",
+    "contribution": "Shows that the dual solutions of OBBT LPs yield Lagrangian variable bound (LVB) inequalities, learnt once at the root and propagated cheaply in the spatial branch-and-bound tree whenever bounds or the incumbent improve, and measures them in SCIP 3.0 on 211 MINLPLib instances (pp. 3-8).",
+    "problem_entry": "OBBT costs 2n LPs and is therefore rationed (root only, limited frequency). Entry: what the expensive OBBT solves give beyond tighter bounds, namely a dual proof that can be kept as a globally valid inequality approximating OBBT locally (pp. 4-5).",
+    "key_idea": "Lemma 1: the dual multipliers lambda, mu of max x_k over R with an objective cutoff give U(l,u,z) = sum_{r_j<0} r_j l_j + sum_{r_j>0} r_j u_j + mu z + lambda^T b, re-evaluated when bounds or the incumbent improve. The selection rule on top of Tawarmalani and Sahinidis: keep only OBBT duals and tighten only the left-hand-side variable. LVBs are not cuts and are not added to the LP (pp. 5-6).",
+    "assumptions": "MINLP with a linear objective (w.l.o.g.) and possibly nonconvex constraints; a linear relaxation R given by inequalities; any upper bound z on the optimum (pp. 4-5). OBBT only for nonbinary variables in nonlinear constraints (p. 7). Test set: MINLPLib minus 18 unparsable, 41 linear or root-solved and 2 instances with wrong SCIP answers = 211 (p. 7).",
+    "proof_devices": [
+      "row aggregation with dual multipliers to x_k <= sum r_j x_j + mu z + lambda^T b, bounded over the box; equality by complementary slackness (Lemma 1, p. 5)",
+      "dependence of the LVB on the incumbent (mu != 0) and on other bounds (r_j != 0) used as propagation triggers (Remark 1, p. 6)",
+      "bounds of the optimized variable relaxed slightly to obtain nontrivial LVBs when OBBT does not tighten (p. 7)",
+      "propagation in topological order whenever a right-hand side improves (p. 7)",
+      "local versus global propagation by trigger: bound change versus improving solution (p. 6)"
+    ],
+    "experiments": "SCIP 3.0 with CPLEX 12.4 on 211 MINLPLib instances. LVBs come from at least 15% of OBBT LPs on every instance and from more than half on 132. De-noised setting (no tree heuristics, no conflict analysis, first-index branching, DFS), 1 h limit: 2 instances gained, 1 lost; on 99 both-solved non-root instances nodes -14% and time -7% (shifts 5 s, 100 nodes). Default control run: -12% nodes, -6% time. Reader's recount: the mean row fits 100 rows, not 99; 5 of 211 instances unaccounted for; the time gain vanishes without 3 instances (pp. 7-10).",
+    "positioning": "OBBT lineage from Quesada and Grossmann 1993 through branch-and-contract to five solvers; the reuse principle is credited to Tawarmalani and Sahinidis, and the paper claims only a selection rule; prior work is restated, not criticised (pp. 4, 6).",
+    "writing": "A labelled Contribution paragraph, one lemma with a short proof, a two-variable figure and two remarks that say what the device is for; 'significantly' and 'substantial' without a test; the conclusion reports 'more than 10%' on affected instances (pp. 4-8).",
+    "limits_future": "The time gain trails the node gain because of root time and uncontrolled OBBT effort (p. 8). Future: does LVB success correlate with OBBT-LP tightness, and how do LVBs interact with a more sophisticated OBBT (p. 8). Reader: the concentration of the gain and the large slowdowns (enpro56, ex1252a, ex1265) are not discussed (pp. 9-10).",
+    "method_links": [
+      {"method": "Method 2", "relation": "variant", "note": "A reduced setting is built to isolate the component from interactions (heuristics and conflict analysis off, branching and node selection fixed), and the default is rerun as a control. Both factors are printed; the control run's subset size is not.", "pages": "pp. 7-8"},
+      {"method": "Method 3", "relation": "evidence", "note": "The limit is printed with its mechanism (root time, uncontrolled OBBT) and turned into next questions; 'a more sophisticated OBBT implementation' matches the title of the 2017 OBBT paper (INDEX S011, not read).", "pages": "p. 8"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "by-products of auxiliary solves feed the main search (Heuristic 9 as a method)", "evidence": "The dual proofs of the OBBT LPs become LVB propagators reused in the whole tree; S018 in this batch turns failed fixings into conflict constraints.", "pages": "pp. 4-6"},
+      {"pattern": "measure applicability and cost before effect", "evidence": "The rate of nontrivial LVBs per OBBT LP across instances, and the propagator's share of the running time, are reported next to the performance run.", "pages": "pp. 7-8"},
+      {"pattern": "mean carried by a few instances, untested (negative)", "evidence": "Reader's recount from Table 1: without ortez, ex1244 and csched1 the -7% time change becomes +0.3%; trimming three instances per side leaves -2.4%. The text calls the gain significant without a test.", "pages": "pp. 5, 8-10"},
+      {"pattern": "text-table slips in computational sections (negative)", "evidence": "The outcome counts sum to 206 of 211; the printed means of Table 1 are reproduced only after adding a 100th instance (1 node, 0.10 s) to the 99 rows.", "pages": "pp. 8-10"}
+    ],
+    "transferable": [
+      "Keep the dual multipliers of an auxiliary LP you solve anyway as a learnt inequality x_k <= sum r_j x_j + mu z + lambda^T b, and re-evaluate its right-hand side over the current box whenever a right-hand-side bound or the incumbent improves (pp. 5-6)",
+      "Make a known but too expensive idea affordable with a selection rule: which duals to keep and in which direction to propagate (p. 6)",
+      "Relax the bound of the variable being optimized slightly, so that the dual still yields a nontrivial inequality when the bound itself does not move (p. 7)",
+      "Propagate learnt bound inequalities in topological order, and only when a right-hand-side quantity improves (p. 7)",
+      "Test a propagator in a setting that freezes the components it interacts with (no tree heuristics, no conflict analysis, first-index branching, DFS), then rerun with defaults as a control and print both (pp. 7-8)",
+      "Before reporting the effect, report how often the component produces something nontrivial (as a histogram over instances) and its share of the running time (pp. 7-8)",
+      "Say in a remark what the device is not (not a cut, not for the LP) (p. 6)"
+    ],
+    "coauthors": "Stefan Weltge (Otto-von-Guericke-Universität Magdeburg); alphabetical two-author byline, contributions not stated",
+    "quotes": [
+      {"text": "To this end, we observe that the proof of optimality given by a dual solution of (2) can be used to learn globally valid inequalities whose propagation gives a local approximation of OBBT.", "page": 4},
+      {"text": "Applied unconditionally, however, this idea appears too expensive.", "page": 6}
+    ]
+  },
+  {
+    "id": "S018",
+    "year": "2014",
+    "title": "Undercover: a primal MINLP heuristic exploring a largest sub-MIP",
+    "read_level": "full",
+    "contribution": "Undercover, a start heuristic for nonconvex MINLP that fixes a minimum vertex cover of the Hessian co-occurrence graph so that the remaining subproblem is a MIP whose solutions are all feasible. It comes with a cover theorem, an NP-hardness result, fix-and-propagate with conflict learning, and a study on 147 MIQCPs, 110 MINLPs and inside SCIP, where it became a default heuristic (pp. 3-18).",
+    "problem_entry": "A start heuristic designed for use inside a complete solver: overall performance counts, so it is worth losing a few successes for average running time ('fast fail'). Unlike earlier MINLP heuristics it has no MIP counterpart and solves a fixed number of auxiliary problems (pp. 3-4).",
+    "key_idea": "Integrality is a special case of nonlinearity, so in MINLP 'easy' means linear. Instead of an easier problem of the same class, solve a smaller problem of an easier class: fix as few variables as possible (Theorem 3.3: cover iff vertex cover of the co-occurrence graph). Solve the NP-hard covering BIP exactly at the root, fix-and-propagate one variable at a time with backtracking, conflict analysis and no-goods, then NLP polishing (pp. 5-13).",
+    "assumptions": "MINLP with a linear objective and L_i < U_i (w.l.o.g.); C^2 constraint functions in Section 3 (pp. 4, 7). The cover depends on the formulation; computational graphs are needed for the Hessian sparsity (pp. 5, 11). Test sets: 147 of 172 Misener-Floudas MIQCPs, 110 MINLPLib instances, 149 instances for the in-solver run (p. 14). Reader: 172-7-11-3 = 151, and Table 3 shows 15 nuclear exclusions, not 11 (pp. 14, 23-29).",
+    "proof_devices": [
+      "Hessian of the restriction equals the principal submatrix; a C^2 function is affine iff its Hessian vanishes, so a cover is the same as a vertex cover (Theorem 3.3, pp. 7-8)",
+      "NP-hardness by reading any graph as the co-occurrence graph of min{0 : x_i x_j <= 0} (Corollary 3.4, p. 8)",
+      "bipartite counterexample: complicating-variable and greedy minimal covers can be arbitrarily larger than a minimum cover (Example 3.5, pp. 8-9)",
+      "covering problem solved at the root only, with a greedy start heuristic as safeguard, by a secondary SCIP (pp. 9, 11, 13)",
+      "sequential fix-and-propagate with one-level backtracking over a fixed list of alternative values (pp. 9-12)",
+      "conflict analysis on infeasible fixings, and a no-good on the cover assignment after a solved or infeasible sub-MIP (pp. 10-11, 13)",
+      "sub-MIP limits (500 nodes, stall limit) and feasibility-oriented settings (pp. 13-14); incumbent values as fixing alternatives plus a primal cutoff (p. 17)"
+    ],
+    "experiments": "Experiment 1: UC alone (other heuristics and cuts off) against the default root nodes of Baron 9.3.1, Couenne 0.3, SCIP 2.1.1 and Bonmin 1.6, node limit 1. On 147 MIQCPs: 76 successes vs 65/55/98/98, 55 of 70 failures caught before the sub-MIP; on 110 MINLPs only 6 successes. Experiment 2: default SCIP with and without UC on 149 instances, 1 h, one job per node: -15% (both solved, 117) and -32/-35% (>10 s, 31), one instance lost. Reader's recount: the >10 s row is reproduced exactly; the both-solved row is not (118 instances); the percentages use the +UC run as denominator (true reductions 13%, and 24-26%); Table 2 gives 69 UC successes, not 76; the gain is broad (pp. 14-17, 23-29).",
+    "positioning": "By contrast, without criticism: LNS heuristics for MIP fix integer variables, MINLP heuristics extend MIP heuristics or iterate MIP/NLP sequences, standalone heuristics aim at success counts. Named borrowings: Hansen-Jaumard's co-occurrence graph, Fischetti-Salvagnin's fix-and-propagate, conflict analysis from SAT and Achterberg (pp. 4, 7-10).",
+    "writing": "The failure class is in the abstract, the introduction and the results; a one-line slogan states the idea; the root comparison is read as complementarity, not as a ranking; interpretations are labelled; failed variants are listed; 'significantly' is used without tests (pp. 3-4, 7, 13, 15-18).",
+    "limits_future": "Printed limits: 6 of 110 MINLPs, not explained by cover size (p. 16); SLay10H lost (p. 17); the NLP reference point and three extensions do not beat the default (pp. 16-17). Future: weighted covering, domain reduction instead of fixing, convex nonlinear subproblems (p. 18). Reader: the default-on decision rests on the MIQCP in-solver run only.",
+    "method_links": [
+      {"method": "Method 3", "relation": "evidence", "note": "The gap is printed with counts and a suspected cause (6 of 110 MINLPs; nonlinear constraints make feasible fixing values hard to find), and the end state is the default distribution ('Undercover is now one of the default heuristics applied in SCIP'; code in SCIP 2.1.1): steps 1 and 6.", "pages": "pp. 13, 16, 18"},
+      {"method": "Method 2", "relation": "variant", "note": "The component question is a one-factor ablation inside the default solver (with/without UC), with no reduced baseline since the new code lacks nothing. The standalone comparison against four solvers' full root nodes is openly not like-for-like and is read as complementarity.", "pages": "pp. 14-17"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "by-products of auxiliary solves feed the main search (Heuristic 9 as a method)", "evidence": "Infeasible fixings yield conflict constraints for the global search, and a solved or infeasible sub-MIP yields a no-good on the cover assignment; S039 in this batch reuses OBBT duals.", "pages": "pp. 10-11, 13"},
+      {"pattern": "measure applicability and cost before effect", "evidence": "Cover sizes (of all and of nonlinear variables), success counts, the time distribution per stage and the stage at which failures occur are reported before the in-solver run.", "pages": "pp. 13-16"},
+      {"pattern": "standalone comparison read as complementarity, then in-concert ablation", "evidence": "UC alone against four solvers' root nodes, counting the instances where it beats each, followed by default SCIP with and without UC.", "pages": "pp. 14-17"},
+      {"pattern": "negative variants and preliminary failures reported in the text", "evidence": "Ruled-out variants (other covering objectives, NLP reference point, fixing orders, re-solving the cover) are reported with how they failed and kept as parameters.", "pages": "pp. 13, 16-18"},
+      {"pattern": "percentage reductions with the new arm as denominator (negative)", "evidence": "702/610 - 1 = 15% printed as '15% fewer nodes'; 98.2/74.5 - 1 = 32% printed as -32% in Table 1; the reductions relative to SCIP without UC are 13% and 24%.", "pages": "p. 17"},
+      {"pattern": "text-table slips in computational sections (negative)", "evidence": "'eleven' nuclear exclusions where the counts and Table 3 imply fifteen; '31 out of 76 ... remaining 35'; 117 both solved vs 118 in Table 3; success counts 76/98/55/65/98 in the text vs 69/92/48/58/94 in Table 2.", "pages": "pp. 14-17, 23-29"}
+    ],
+    "transferable": [
+      "Change the problem class instead of the size: fix a minimum vertex cover of the Hessian co-occurrence graph so that the subproblem is a MIP whose solutions are all feasible (pp. 5-8)",
+      "Solve an NP-hard selection subproblem exactly, but only at the root, with a greedy incumbent as fallback, after showing that greedy minimal choices can be arbitrarily bad (pp. 8-9, 11)",
+      "Fix one variable at a time with propagation, move out-of-domain values to the nearest bound, backtrack one level over a short list of alternatives, and abort if that fails (pp. 9-12)",
+      "Make a failing heuristic pay for itself: conflict analysis on infeasible fixings, and a no-good on a fully explored integer assignment (pp. 10-11, 13)",
+      "Offer the incumbent's values as fixing alternatives and give the sub-MIP a primal cutoff (p. 17)",
+      "Check a fail-fast design by counting the stage at which failures are detected and the time share of each stage (pp. 15-16)",
+      "Evaluate a heuristic alone at the root against other solvers' root nodes, then inside the default solver with and without it, one job per node (pp. 14-17)",
+      "Put the problem class on which the method fails into the abstract (p. 3)"
+    ],
+    "coauthors": "Timo Berthold (ZIB); alphabetical two-author byline, contributions not stated",
+    "quotes": [
+      {"text": "In a nutshell: instead of solving an easier problem of the same class, we solve a smaller problem of an easier class.", "page": 7},
+      {"text": "To this end, it is often worth sacrificing success on a small number of instances for a significant saving in average running time.", "page": 4}
+    ]
+  },
+  {
+    "id": "S010",
+    "year": "2016",
+    "title": "The SCIP Optimization Suite 3.2",
+    "read_level": "full",
+    "contribution": "Release report for SCIP Optimization Suite 3.2 (July 2015, with bugfix 3.2.1 of February 2016): new presolving, heuristics, branching, MINLP and SOS1 features, reoptimization, exact LP in SoPlex 2.2, UG, GCG and three extensions, plus a version-to-version performance summary. Gleixner is credited with the nonlinearity score in hybrid branching and with exact SoPlex (pp. 3-28).",
+    "problem_entry": "The release itself: describe what is new in each component and how performance changed. Each feature paragraph gives its own motivation, e.g. a fixed reliability threshold 'might not scale well', and variables in many nonlinear terms are better branching candidates (pp. 4-5, 13-14).",
+    "key_idea": "His items: (i) a normalised nonlinearity count as a hybrid-branching summand with weight 0.1, below pseudo-costs and above conflict/inference scores; (ii) exact LP in SoPlex 2.2 via a rational LU verification of the basis and rational reconstruction by continued fractions, interleaved with floating-point iterative refinement, with floating point remaining the default. Group items: reoptimization, presolving levels, diving redesign, reliability notions, SOC upgrade, OBBT, SOS1 (pp. 5-20).",
+    "assumptions": "Classes: MIP, nonconvex MINLP, mixed-binary reoptimization sequences with nested feasible regions, SOS1, Steiner tree variants, multi-criteria IP/LP, MISDP (pp. 5, 16, 23-25). Benchmarks: the MIPLIB 2010 benchmark set (87 instances) and MINLPLib2 (1,357 instances, revision r277) (pp. 26-27, 34). Correctness is argued only for dual reductions in reoptimization and for the SOC upgrade's tolerance (pp. 6, 15).",
+    "proof_devices": [
+      "rational LU factorization of the basis that provably verifies feasibility and optimality of the candidate basis; rational reconstruction by continued fractions; polynomial worst-case bound on refinement rounds stated, proof deferred to the thesis (p. 20)",
+      "SOC upgrade: tolerance-feasible points of the reformulation can violate the original, so the original constraints are checked and the upgraded constraint is scaled by L = 10 (p. 15)",
+      "infinity values translated between SCIP (1e20) and SoPlex (1e100) (p. 18)",
+      "final feasibility check with its own tolerance factor and a list of all violations (p. 19)",
+      "reconstruction of solutions pruned by dual reductions via node copies with a constraint (p. 6)",
+      "edge-concave envelope via an LP over the box vertices and its dual (p. 14); CLT approximation of solution density (p. 9); SDP reduced-cost fixing stated with 'one can show' (p. 26)"
+    ],
+    "experiments": "MIPLIB 2010 benchmark (87 instances, 2 h), all majors from 0.7 to 3.2, each with its contemporary SoPlex: 70 vs 67 solved, 3.1 at 1.24x the time of 3.2. The text's '24 %' decrease is 19% relative to 3.1 (reader). MINLPLib2: 14% faster, 31% fewer nodes, 31 more solved, 3.1 faster on more instances; performance profile over 1,357 instances with CPLEX 12.6.2 for both versions. His branching item: 17.1% faster on affected instances, 6 more solved. Shifts, hardware and seeds not stated (pp. 9, 14, 26-27).",
+    "positioning": "Each feature names its lineage (reoptimization precursors, Bixby-Rothberg on presolving, Achterberg et al. on two-row bounds, reliability branching, edge-concave envelopes, Range's basis cuts, Caprara-Fischetti-Toth); self-positioned as 'one of the leading non-commercial solvers' (pp. 3, 5-7, 13-14, 21-22, 24).",
+    "writing": "Release-note structure: a feature list, then one paragraph per feature with motivation, mechanism and parameter names; a per-section code-contribution statement; weak or unfinished parts flagged (not competitive, alpha-state, not thoroughly tested); untested 'significant' effects; a hedged performance summary (pp. 4-20, 26, 28).",
+    "limits_future": "Printed limits: multi-aggregated branching not competitive on general MIP (p. 12); user-defined operators untested (pp. 15-16); PolySCIP limits (p. 25); MIPLIB 2010 gives only 'a rough picture'; overhead on easy MINLPs (p. 26). Outlook: general-MIP reoptimization, branching research, MIQCP techniques (RLT, SDP cuts, convex relaxation), SoPlex polishing, internal parallelism, GCG structure detection (pp. 27-28).",
+    "method_links": [
+      {"method": "Method 5", "relation": "evidence", "note": "His code (p. 28): exact LP built as exact verification (rational LU) and reconstruction steps around floating-point iterative refinement, floating point the default, exactness switched on by a parameter. A 2016 primary source for the rational reconstruction that Method 5's limitations say PB25 replaced.", "pages": "p. 20"},
+      {"method": "Method 3", "relation": "evidence", "note": "One component at a time into the distribution: exact LP ships as an option in SoPlex 2.2; the nonlinearity score ships on by default with its count of six newly solved instances.", "pages": "pp. 14, 20"},
+      {"method": "Method 2", "relation": "variant", "note": "Group. The MIP comparison chains every earlier major, each with its contemporary SoPlex, so each factor mixes SCIP and LP-solver progress; the MINLP comparison holds CPLEX 12.6.2 fixed for both versions (step 5).", "pages": "pp. 26-27"},
+      {"method": "Method 6", "relation": "evidence", "note": "Group. The MIPLIB 2010 average is called only a rough picture (step 1, Warning sign 4); a permutation seed applied after reading lets the MIPLIB 2010 test scripts benchmark permuted copies.", "pages": "pp. 19-20, 26"}
+    ],
+    "new_pattern_candidates": [
+      {"pattern": "per-section code-contribution statement in a multi-author release report", "evidence": "The statement assigns each section's code to named authors, with AMG for the nonlinearity score (2.4) and exact SoPlex (3).", "pages": "p. 28"},
+      {"pattern": "the release ships the measurement instruments", "evidence": "Permutation seed after reading (used by the MIPLIB 2010 scripts), BAK tree output, diving statistics, and a final feasibility check with its own tolerance and a list of all violations.", "pages": "pp. 12, 19-20"},
+      {"pattern": "original model as the object of record", "evidence": "After the SOC upgrade, solutions are checked against the original quadratic constraints, and the upgraded constraint is scaled so that its tolerance implies the original's.", "pages": "p. 15"},
+      {"pattern": "percentage reductions with the new arm as denominator (negative)", "evidence": "'the average running time decreases by 24 %' where Figure 4 shows 3.1 at 1.24x of 3.2, i.e. a 19% decrease relative to 3.1.", "pages": "pp. 26-27"}
+    ],
+    "transferable": [
+      "Offer exact LP as two exact steps around floating-point refinement: verify the current basis by a rational LU solve, and try rational reconstruction; keep floating point as the default and switch exactness on by a parameter (p. 20)",
+      "After solving a reformulation within tolerance, check the original constraints, and scale the reformulated constraint so that its tolerance implies the original's (p. 15)",
+      "Give the final feasibility check its own tolerance factor and a switch that lists every violation (p. 19)",
+      "Add a normalised count of nonlinear terms to the hybrid branching score, weighted below the pseudo-costs (pp. 13-14)",
+      "Ship a permutation seed applied directly after reading, and let the benchmark scripts solve permuted copies (pp. 19-20)",
+      "Hold third-party parts fixed when comparing two releases, and print the release's losses next to its gains (pp. 26-27)",
+      "Attach a per-section code-contribution statement to a multi-author software report (p. 28)"
+    ],
+    "coauthors": "Gerald Gamrath (first), then alphabetically Tobias Fischer, Tristan Gally, Gregor Hendel, Thorsten Koch, Stephen J. Maher, Matthias Miltenberger, Benjamin Müller, Marc E. Pfetsch, Christian Puchert, Daniel Rehfeldt, Sebastian Schenker, Robert Schwarz, Felipe Serrano, Yuji Shinano, Stefan Vigerske, Dieter Weninger, Michael Winkler, Jonas T. Witt, Jakob Witzig; AMG credited with section 2.4 (nonlinearity) and section 3 (exact SoPlex) (p. 28)",
+    "quotes": [
+      {"text": "By default SoPlex still operates as a floating-point LP solver.", "page": 20},
+      {"text": "Note that this test set of 87 instances can only provide a rough picture for the performance of a MIP solver.", "page": 26}
+    ]
+  }
+]

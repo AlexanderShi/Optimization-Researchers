@@ -1,0 +1,76 @@
+[
+ {
+  "id": "S033",
+  "year": "2020",
+  "title": "Speeding up Energy System Models - a Best Practice Guide",
+  "read_level": "full",
+  "contribution": "A 22-author BEAM-ME guide that benchmarks aggregation and heuristic temporal decomposition on the 488-node, 8,760-hour REMix LP (DLR chapters) and documents PIPS-IPM++, PIPS-IPM extended to arrowhead LPs with linking constraints through locality-aware Schur complements, a distributed preconditioner, interior-point changes, parallel scaling and structure-preserving presolve, together with GAMS model annotation, solving energy-system LPs of up to 1.15 billion variables that commercial solvers could not (pp. 42, 68, 71-75, 85-93, 103-105).",
+  "problem_entry": "Application wall: GAMS energy-system LPs at weeks-to-a-month run times and 100 GB or more on single servers, beyond CPLEX, Gurobi, Xpress and SCIP and only trivially parallelizable (p. 13); commercial solvers cannot run distributed (pp. 71, 104) and the open-source PIPS-IPM lacks linking constraints (p. 72); extending it was chosen after a survey of open-source HPC solvers (p. 14).",
+  "key_idea": "Keep PIPS-IPM's MPI distribution and Schur-complement decomposition, add linking constraints, use that most linking rows and columns couple only two blocks to keep the Schur complement sparse, or solve it by a Krylov method with a distributed preconditioner; add Gondzio's correctors, separate primal and dual step lengths, parallel geometric scaling and presolve that keeps the block structure (pp. 71-75).",
+  "assumptions": "Continuous LPs only (p. 73) with block-diagonal structure plus linking variables and linking constraints, supplied by modeller annotation in GAMS rather than detected (eq. 4.1, pp. 71, 85-86); locality of linking (p. 73); time blocks preferred to regions (pp. 98, 118); test models REMix, ELMOD, YSSP, SIMPLE and six partner models (pp. 20, 39-42, 104-105, 139); correctness rests only on the equivalence of scaled and presolved LPs to the original (p. 74).",
+  "proof_devices": [
+   "Schur-complement elimination of the block-bordered interior-point system, steps 1-4 with C = K_0 - sum of B_i^T K_i^-1 B_i (eq. 4.3, p. 73)",
+   "nonzero pattern of the Schur complement predicted from the locality of linking constraints and variables, enabling sparse storage and sparse solves (p. 73)",
+   "Krylov solve with a distributed preconditioner instead of an explicit Schur complement (p. 73); measured 415 s to 203 s on ELMOD CWE15 (p. 110)",
+   "scaling equivalence A~ = RAC with positive diagonal R and C, solutions mapped back by x = C x~ at equal objective (eqs. 4.4-4.5, p. 74)",
+   "structure-preserving presolve invariant: four equivalence reductions undone by postsolve, none may alter the block structure (p. 74)"
+  ],
+  "experiments": "JUWELS: strong scaling on one SIMPLE instance (5.6 M variables, 512 blocks, process counts dividing the blocks, 2 OpenMP threads per MPI process) with a reduced PIPS-IPM++ as ablation (pp. 103-104); Table 5.1, eight instances up to 1.15 B variables on 19-128 nodes against the best of CPLEX 12.8, Gurobi 8.1, MOSEK 8.1 and Xpress 8.4.7 at 16 threads, I/O included, OOM kept: 181 and 216 s against 6,201 and 6,111 s, the rest OOM (pp. 104-105); single runs, no seeds; Scalasca and Vampir trace, 415 s to 203 s (pp. 106-110); DLR chapter: CPLEX deterministic ticks, mismatches printed, Table 3.5 (pp. 48, 65-66, 68).",
+  "positioning": "Extends PIPS-IPM (Petra, Schenk, Anitescu 2014; p. 72); Cook's TSP as the precedent for hand-tailored solvers (p. 71); components credited to Colombo and Gondzio, Wright, Elble and Sahinidis, Achterberg et al., Andersen and Andersen, Gondzio, Vanderbei (pp. 73-75); commercial solvers as the bar, not criticized (pp. 103-104); the DLR chapters set exact decomposition aside (pp. 38, 66).",
+  "writing": "Practitioner guide with hedged imperatives and labelled rules of thumb (p. 17), mathematics deferred to ZIB reports (pp. 72-74), command-level examples (pp. 86-101); headline factors do not reconcile (26 in Ch. 7, 34 and 28 computed from Table 5.1, 50-70 in §6.3; pp. 105, 118, 124); uncounted 'some models' (pp. 117-118); draft traces (pp. 14, 66, 118).",
+  "limits_future": "PIPS-IPM++ fails on some strongly linked or badly scaled partner models (pp. 117-118); finding a good annotation is not automated (p. 118); model generation is the bottleneck, with a 2,147,483,647-nonzero cap (p. 90); results withheld (pp. 105, 117); future: more presolve, more aggressive scaling, homogeneous self-dual method, hierarchical Schur complement (pp. 74-75), generic distributed model generation (p. 90).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Group and consortium level: the prototype lost to CPLEX's interior-point code and failed on some ESMs, and the guide lists the changes that followed (pp. 72-74); §4.1.3 prints the next components (pp. 74-75), which later works take up by title (S068 2020, S027 2022, S078 2026; not read here). Weaker than his counted ledger: the model-experiment failures are uncounted (pp. 117-118).",
+    "pages": "pp. 72-75, 117-118"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "Baselines given, not constructed: per-instance best of four commercial solvers at their best thread count, an ablated PIPS-IPM++ with only the Schur-complement decomposition, and a nodes-times-time argument for the hardware mismatch (pp. 72, 103-105); the DLR chapter prints its hardware and precision mismatches as step 5 asks (pp. 65-66). Counter-example in the co-signed text: Chapter 7's 'up to a factor of 26' without baseline or subset (p. 124).",
+    "pages": "pp. 65-66, 72, 103-105, 124"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "The scaling instance is chosen by stated criteria (solvable by one process, 512 blocks for a power-of-2 plot, process counts dividing the blocks) from the synthetic SIMPLE family with a documented deterministic data generator: an instrument for prototyping and scaling, not a library with admission rules or public corrections; appendix authors not stated.",
+    "pages": "pp. 103, 139-140, 150-152"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "structure-preserving presolve",
+    "evidence": "PIPS-IPM++ presolve admits only equivalence reductions with postsolve that keep the block structure the parallel interior-point method exploits; the line continues in S068 (2020) and S078 (2026) by title. Group evidence; ZIB authorship of §4.1 inferred.",
+    "pages": "p. 74"
+   },
+   {
+    "pattern": "resource-normalized speed-up",
+    "evidence": "A distributed solver on 19 nodes is compared with the best single-node commercial solver by wall clock (181 against 6,201 s) and by run time per computing resource, with I/O included and OOM kept as an outcome. ZIB authorship of §5.1 inferred.",
+    "pages": "pp. 104-105"
+   }
+  ],
+  "transferable": [
+   "Presolve for a structure-exploiting solver: admit only reductions that keep the block structure, run a cheap cleanup (redundant rows, negligibly small entries) first, keep every reduction reversible by postsolve (p. 74); carrying it to presolve before a MILP decomposition is an inference.",
+   "Predict the Schur complement's sparsity from the locality of linking constraints and variables and factor it sparsely; switch to a preconditioned Krylov solve when linkage is strong (p. 73).",
+   "Against shared-memory solvers, give each commercial solver its best thread count, take the per-instance best, include I/O, keep OOM as a result, and add a nodes-times-seconds comparison to the wall-clock factor (pp. 104-105).",
+   "Put an ablated version of the new solver (core decomposition only) into the scaling plot to show what the added algorithms buy (p. 103).",
+   "For a strong-scaling study pick an instance one process solves in reasonable time, with 2^k blocks and process counts that divide the block count (p. 103).",
+   "Find the parallel bottleneck with trace tools (instrumentation with a filter, wait states, delay costs, critical path, before-and-after timelines) before tuning; here one serial factorization on rank 0 (pp. 106-111).",
+   "Without exclusive identical machines, use the solver's deterministic ticks as the time measure and print each remaining mismatch with its likely effect (pp. 48, 65-66).",
+   "Measure numerics hygiene per instance size: slack and penalty costs in the range of real costs (coefficient range ideally below 1e5), explicit bounds, input rounding; effects can invert with size (pp. 50-52)."
+  ],
+  "coauthors": "Yvonne Scholz, Benjamin Fuchs, Frieder Borggrefe, Karl-Kien Cao, Manuel Wetzel, Kai von Krbek, Felix Cebulla, Hans Christian Gils (DLR); Frederik Fiand, Michael Bussieck (GAMS); Thorsten Koch (TU Berlin); Daniel Rehfeldt (ZIB); Dmitry Khabi (HLRS); Thomas Breuer, Daniel Rohe (Juelich); Hannes Hobbie, David Schönheit (TU Dresden); Hasan Ümitcan Yilmaz (KIT); Evangelos Panos (PSI); Samir Jeddi (Cologne); Stefanie Buchholz (DTU) (p. 1). No section bylines; chapters 1-3 based on Cao et al. 2019 (DLR; pp. 13, 27, 37); §4.1 and §5.1 inferred to be the ZIB group's (Rehfeldt, Gleixner, Koch; pp. 73-74, 104).",
+  "quotes": [
+   {
+    "text": "none of the presolving techniques described above are allowed to alter the general block structure of the system",
+    "page": 74
+   },
+   {
+    "text": "it also could not outperform the interior point algorithm of the commercial solver CPLEX, which was used as the reference",
+    "page": 72
+   }
+  ]
+ }
+]

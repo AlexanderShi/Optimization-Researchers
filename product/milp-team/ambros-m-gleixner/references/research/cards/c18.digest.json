@@ -1,0 +1,337 @@
+[
+ {
+  "id": "S082",
+  "year": "2025",
+  "title": "Sorting criteria for line-based periodic timetabling heuristics",
+  "read_level": "full",
+  "contribution": "Compares 27 line sortings (nine importance measures × three connectivity rules) for Lindner and Liebchen's line-based incremental PESP heuristic on the 16 PESPlib railway instances: weight-based sortings that count transfer arcs or maximize connectivity do best, min-connectivity never wins, and five new PESPlib incumbents (0.06% to 1.89% better) are found.",
+  "problem_entry": "PESPlib has had no instance solved to proven optimality since 2012; Lindner and Liebchen's line-based incremental heuristic improves primal bounds but processes the lines in one fixed order, the choice this paper varies (pp. 3–4).",
+  "key_idea": "Sort lines by an importance measure (number, weight, weighted span or lower bound of driving, dwelling, outgoing or transfer arcs) combined with no, min- or max-connectivity insertion, leaving Algorithm 1 of [3] and its ConcurrentPESP setup unchanged (pp. 4–6).",
+  "assumptions": "PESP (N, T, l, u, w) minimizing weighted periodic tension; free stratifications with the extension theorem [3, Thm. 1]; TimPassLib line structure (transfer activities free, each line two disjoint paths); the 16 PESPlib railway instances; lower bounds as a proxy for line length; MILP only as background formulation (pp. 3–6).",
+  "proof_devices": [
+   "Extension theorem of free stratifications [3, Thm. 1], guaranteeing that every line extension keeps a feasible timetable (p. 4)",
+   "Algorithm 1: spanning forest with old or free non-forest arcs, extend, fix_opt, full_opt per added line (p. 5)",
+   "Nine importance measures and the min-/max-connectivity insertion rule (pp. 5–6)",
+   "Working limits: 60 s wall time per full_opt call, none on fix_opt (pp. 6–7)"
+  ],
+  "experiments": "16 PESPlib railway instances on one Intel Xeon E3-1270 (32 GB) with ConcurrentPESP; per-instance gap to the best sorting (Fig. 1), accumulated-gap ranking (Fig. 2), new incumbents against the PESPlib best known (Table 1: five, 0.06% to 1.89%, relative to the new value by my arithmetic); no arm identified as the order of [3], no repeated runs or seeds, no running times (pp. 6–8).",
+  "positioning": "A direct continuation of Lindner and Liebchen [3] with the same algorithm, setup and solver; the weighted span credited to [3]; the dual-bound work [4] named as the other line of attack; no critique of the predecessor (pp. 3–4, 6).",
+  "writing": "Short proceedings paper (six report pages); the headline as a count ('five new incumbent solutions', abstract); conclusions read off figures ('This plot suggests', p. 7); slips: the undefined measure '(n-dt)' and an 'always' followed by an exception for R4L1 (p. 7).",
+  "limits_future": "No limitation or future-work paragraph; the recommendation of weighted transfer-arc sortings rests on 16 instances with one reported run per sorting (pp. 6–8).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "entry through a predecessor's unvaried design choice (the fixed line order), not a printed limitation with a count; no limits of its own printed",
+    "pages": "pp. 4, 7–8"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "27 arms compared with each other and with the library's incumbents; the predecessor's own order is not identified as an arm, so the gain over [3] is not isolated",
+    "pages": "pp. 4, 6–8"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "fixed-choice sweep of a predecessor's heuristic",
+    "evidence": "enters through the one design choice Lindner and Liebchen never varied (the line order) and sweeps it as a 9 × 3 grid judged by the gap to the per-instance best",
+    "pages": "pp. 4–8"
+   }
+  ],
+  "transferable": [
+   "When only the early, small subproblems of an incremental construction can be solved to optimality, insert the parts with the largest objective weight first (p. 5).",
+   "Sweep a construction order as a grid (importance measure × connectivity rule), plot each arm's gap to the per-instance best, and rank the arms by accumulated gap over the set (Figs. 1–2, pp. 7–8).",
+   "Report new best-known solutions in one table: old incumbent, new incumbent, improvement and the arm that found it (Table 1, p. 8)."
+  ],
+  "coauthors": "Patricia Ebert (first author; ZIB and HTW Berlin), Berenike Masing and Niels Lindner (ZIB); Gleixner last of four (ZIB and HTW); no contribution statement",
+  "quotes": [
+   {
+    "text": "However, the order in which the lines are processed has been fixed.",
+    "page": 4
+   },
+   {
+    "text": "We conclude that sortings based on weighted connection arcs between lines are the preferred choice for our heuristic.",
+    "page": 7
+   }
+  ]
+ },
+ {
+  "id": "S087",
+  "year": "2025",
+  "title": "Branch and price for nonlinear production-maintenance scheduling in complex machinery",
+  "read_level": "full",
+  "contribution": "A compact MINLP for joint production and maintenance scheduling of machines made of interacting, separately maintainable components with nonlinear degradation, and a Dantzig–Wolfe branch and price in SCIP (original-variable-bound branching with a convexity-based post-solve repair, identical-machine aggregation, Farkas pricing, Lagrangian and Farley bounds, early branching, Price-and-Branch) that on 221 generated instances proves infeasibility and closes gaps far better than the compact model but proves optimality less often (16 against 21).",
+  "problem_entry": "Separated production and maintenance planning fails (Example 1); practice relies on time-based, condition-based or just-in-time heuristics; the literature treats machines as inseparable units with linear or stochastic degradation (pp. 1–4).",
+  "key_idea": "Reformulate over machines so the nonlinearities sit in MINLP pricing problems, aggregate identical machines, branch on sets of bounds on original variables (Vanderbeck 2000), and accept fractional masters whose columns share an integer pattern, repaired after solving by a normalized convex combination (pp. 8–22).",
+  "assumptions": "MINLP with continuous production and condition, binary maintenance, an increasing production cap g, degradation f with a big-M reset (the big-M given for concave f), all components starting in optimal condition; the repair relies on convexity; λ* unique and a single aggregated subproblem assumed for exposition; generated f and g linear, at most cubic or exponential with coefficients in [0, 3], whose convexity is not stated (pp. 5–7, 14–15, 20–21, 26).",
+  "proof_devices": [
+   "Branching on sets of bounds on original variables, at most log(|F|) refinements for patterns without continuous variables [Vanderbeck 2000, Prop. 3] (pp. 14–15)",
+   "Branching duals carried into pricing through indicators δ_b with sign-dependent linearizations [5.6]–[5.8] (pp. 18–19)",
+   "Convexity-based repair: columns with the same maintenance pattern merged into their convex combination normalized by the sum of their master values; argued on Example 6, generalization asserted (pp. 20–21)",
+   "Integrality per pattern equivalence class, constraint [5.9] (pp. 21–22)",
+   "Identical-subproblem aggregation against symmetry (pp. 13–14)",
+   "Lagrangian dual bound valid with any valid pricing bounds [Lübbecke 2011, Prop. 2.1], early stop of the last pricing round and the valid cut [5.11] (p. 24)",
+   "Farley bound valid for any dual vector, so also under dual smoothing; bounds rounded up to multiples of a common objective factor (pp. 24–25)",
+   "Lossless early branching when ⌈c*_RMP⌉ ≤ lb, taken from Ghannam et al. 2024 (p. 25)"
+  ],
+  "experiments": "400 generated instances (periods × machine family × complexity × 50), two machine families because the generator can favor either arm; exclusions counted (72 easy for both, 107 without an incumbent), 221 left (118 feasible, 103 infeasible); Compact against DW in SCIP 9.2.1 with SoPlex 7.1.3, IPOPT 3.14.17, PySCIPOpt 5.6.0 on a 6-core Intel Core i7, 300 s, threads and seeds not stated; arithmetic means; DW solves all 57 easy and 62 of 73 medium instances, hard-subset gap 11.3% against 126.8%, nodes 47 against about 6.4k; Compact proves optimality 21 times against 16; pricing takes 72.82% of the time; by my arithmetic two Compact gap entries of Table 7 conflict with the stated definitions; no per-family results, no ablation, no primal metric for the faster-solutions claim (pp. 26–29).",
+  "positioning": "Production-maintenance literature (the Geurtsen et al. review, Pries's Benders and Dantzig–Wolfe for identical single-structure machines, heuristic decoupling); decomposition after Dantzig–Wolfe, Vanderbeck–Savelsbergh, Degraeve–Jans, Vanderbeck 2000 and Desrosiers et al. 2024; nonlinear pricing including Gleixner et al. 2018; accelerations from Lübbecke, Farley, Wentges, Gamrath and Ghannam et al. 2024 (pp. 3–4, 10, 14–15, 23–25).",
+  "writing": "Seven worked examples; a figure that sacrifices rigor for clarity; a key step stated as a claim and argued on an example; the counter-result printed beside the recommendation; the template running head left in; a reversed 'respectively' (p. 26) and an 'arbitrarily bad' (p. 3) stronger than Example 7 shows (p. 30).",
+  "limits_future": "Compact proves optimality more often (21 against 16); pricing at 72.82% calls for a pricing heuristic, branching at 11.35% and Python at 7.66% for a faster language; future: separate maintenance and production patterns by column-and-row generation, richer maintenance and production models, a theory of local improvement steps for just-in-time plans, nonlinear branching thresholds (pp. 19, 28–30).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "limits printed with numbers where they arise and each tied to a next component (pricing heuristic, faster language); nonlinear branching thresholds named and deferred",
+    "pages": "pp. 19, 28–29"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "both arms share the solver stack and versions (step 5), but the only baseline is the compact model in SCIP and no acceleration technique is switched off, so their share of the gain is not isolated",
+    "pages": "pp. 22–29"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "a generated test set with exclusions counted per rule, the purpose of the infeasible instances stated and the generator's tilt admitted; results not split by family and no independent solution check",
+    "pages": "pp. 26–28"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "relaxed integrality plus post-solve repair",
+    "evidence": "fractional master solutions are accepted when their columns share an integer pattern (integrality per pattern class, [5.9]) and repaired after solving by a normalized convex combination",
+    "pages": "pp. 10, 20–22"
+   },
+   {
+    "pattern": "generator bias admitted",
+    "evidence": "the authors state that the instance generator can favor either formulation and build one family for each (20 identical against 2 × 10 identical machines)",
+    "pages": "pp. 26–27"
+   }
+  ],
+  "transferable": [
+   "In a Dantzig–Wolfe master with continuous pricing variables, branch on sets of bounds on the original integer variables; where none separates the fractional columns, merge columns with the same integer pattern into their convex combination normalized by the sum of their master values, which is feasible for convex blocks (pp. 14–22).",
+   "Choose the branching direction that keeps more fractional columns in the set, for a more balanced tree; break ties by the sum of squared master values (pp. 23–24).",
+   "Keep a valid dual bound under heuristic pricing: the Lagrangian bound needs only valid lower bounds of the pricing problems, and the Farley bound holds for any dual vector, so it survives dual smoothing (pp. 24–25).",
+   "Branch early at no loss of bound strength when the objective is integral and the rounded-up RMP value does not exceed a known lower bound (p. 25).",
+   "Print a breakdown of solving time by component (pricing, branching, interpreter overhead, heuristic) and tie each large share to the next development step (pp. 28–29).",
+   "Report feasible and infeasible instances separately when the arms behave differently on them, and count exclusions per rule (p. 27)."
+  ],
+  "coauthors": "João Dionísio (first and corresponding author; Universidade do Porto, CMUP and ZIB), João Pedro Pedroso (Porto), Ksenia Bestuzheva (ZIB); Gleixner second of four (ZIB and HTW); no contribution statement",
+  "quotes": [
+   {
+    "text": "One of our first observations was that it is easy to create instances that favor each of the formulations",
+    "page": 26
+   },
+   {
+    "text": "As expected, exact pricing was responsible for the vast majority of time spent, 72.82%, even with the limits imposed on it.",
+    "page": 29
+   }
+  ]
+ },
+ {
+  "id": "H002",
+  "year": "2026",
+  "title": "Boolean Algebra–Driven Sepsis Diagnosis",
+  "read_level": "full",
+  "contribution": "Logical data analysis for sepsis diagnosis: the empty selection criteria of 390 emergency-department measurements of nine thresholded serum proteins form an ideal in a Boolean polynomial ring whose Gröbner basis, filtered by expert relevance and iterated with three declared exceptions, yields interpretable positive (high GLP-1 and MyD88) and negative (high TRAIL, low MyD88) rules; the contribution statement names Gleixner's part as the limitations, the role of exceptions and the threshold extension.",
+  "problem_entry": "No reliable diagnostic test exists for sepsis and the cited AI models concern patients already in intensive care; the question is whether logical statements derived from serum protein concentrations can support the diagnosis, entered by carrying a humanities method (logical data analysis of Tell el-Amarna) over to a clinical dataset (pp. 1–3).",
+  "key_idea": "True statements are criteria that select no observed patient; they form a principal ideal whose Gröbner basis gives the least restrictive rules, read off by the sepsis variable, with an expert subideal J (inner loop) and declared exceptions (outer loop) (pp. 4–10).",
+  "assumptions": "390 measurements (137 sepsis, 253 non-sepsis), nine expert-preselected proteins binarized so that each is high in exactly 137 cases; ten Boolean variables with 194 of 1,024 patterns observed; the thresholds must be meaningful; MILP form n/a (pp. 3–5, 13).",
+  "proof_devices": [
+   "Closure under restriction (multiplication) and disjunction (sum) makes the empty criteria an ideal (p. 6)",
+   "Finitely generated ideals of a Boolean ring are principal, cited as a textbook exercise [25] (p. 6)",
+   "Gröbner basis by Buchberger's algorithm, meeting the divisibility requirement on leading monomials (p. 7)",
+   "Remainders modulo the expert subideal J stay in I (p. 8)",
+   "Exceptions turn observations into non-observations and enlarge I (p. 8)",
+   "Relevance and exception criteria re-chosen per cycle by patient count and number of variables (pp. 9–10)"
+  ],
+  "experiments": "Three outer cycles and three exceptions (Nos. 2237, 127, 545); final and generalized rules with patient counts (Tables 3–5); rules counted on the same 390 measurements they were derived from, with no held-out data, cross-validation or comparison with the classifiers of [19]; a Julia/OSCAR notebook and the data available on request (pp. 9–14).",
+  "positioning": "Set against ICU-focused AI and probabilistic sepsis models; beside Boolean logic in medicine and biology; the method comes from the authors' humanities projects; consistency with the clinical study [19] argued qualitatively (pp. 2–3, 6, 12).",
+  "writing": "Rules stated in words with patient counts; set-off maxims ('Not every rare observation is an exception.', p. 8); a Cicero digression; hedged clinical readings; a three-paragraph limitations section and an author-contribution statement (pp. 5–13).",
+  "limits_future": "Results depend on the initial thresholds and on which experts filter rules and exceptions; simple rules may appear only during the algorithm; future: optimize the thresholds (p. 13).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "his named contribution is the limitations and the threshold extension; the limits are printed and the next project named, but without a count or size",
+    "pages": "p. 13"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "co-author who supplies limitations and extensions",
+    "evidence": "the contribution statement credits him with discussing limitations, the role of exceptions and extensions regarding thresholds, not with the method, the data or the workflow",
+    "pages": "p. 13"
+   }
+  ],
+  "transferable": [
+   "To mine rules from binary records, treat every selection criterion that selects no observed record as an element of an ideal of Boolean polynomials, compute a Gröbner basis to get the least restrictive generators, and read rules off the polynomials that contain the class variable (pp. 5–7).",
+   "In a multi-author interdisciplinary paper, print a contribution line that names who built the method, who supplied the data, who wrote the workflow and who argued the limitations (p. 13)."
+  ],
+  "coauthors": "Marcus Weber (ZIB) and Konstantin Fackeldey (ZIB and TU Berlin), corresponding authors; Kai Kappert and Wolfgang Bauer (Charité); Marco Reidelbach (ZIB); Gleixner fourth of six (HTW Berlin)",
+  "quotes": [
+   {
+    "text": "AG discussed limitations, the role of exceptions, and possible extensions of the method regarding thresholds.",
+    "page": 13
+   },
+   {
+    "text": "A prerequisite for applying the presented method is the usefulness of the initial thresholds in Tab. 1.",
+    "page": 13
+   }
+  ]
+ },
+ {
+  "id": "S065",
+  "year": "2026",
+  "title": "MIP-DD: Delta debugging for mixed-integer programming solvers",
+  "read_level": "full",
+  "contribution": "MIP-DD, an open-source, solver-independent delta debugger for MIP that shrinks an instance and its settings while a bug persists (nine priority-ordered modifiers that keep a reference solution feasible, batched trials, a stage-round controller, solver-independent bug checks); preliminary versions helped with 24 of the 51 MIP-related bug fixes of SCIP 8.0.1–8.1.1, and five case studies reduce failing instances to a few variables and constraints in 0.2 s to 2869 s.",
+  "problem_entry": "SCIP's code grew 44.6% in ten years; assertions and debug solutions are too costly to run everywhere, miss tolerance-level bugs and are confused by legitimate dual reductions and symmetry handling; bug-report instances are too large to trace; delta debugging is imported from SAT and SMT solving (pp. 1–2).",
+  "key_idea": "A greedy hypothesis–trial–result loop over priority-ordered modifiers that keep a reference solution feasible, with batched trials, a presolve-like stage-round controller and solver-independent bug checks (pp. 3–6).",
+  "assumptions": "Any MIP plus a settings file and a feasible, not necessarily optimal, reference solution, ideally exactly feasible (polished or computed by exact SCIP); a tolerance model with ε, δ and SCIP's relative violation measure (pp. 4, 7–8).",
+  "proof_devices": [
+   "Invariant: every modification keeps a provided reference solution feasible; the rounding modifiers relax bounds and sides to keep it (p. 4)",
+   "Solver-independent checks (dual bound against the reference objective, solution and primal-ray verification, primal bound against the evaluated optimum, errors), valid under strong dual reductions and symmetry handling (pp. 5–6)",
+   "Greedy hypothesis–trial–result loop with consecutive batches bounded by nbatches (pp. 3–5)",
+   "Stage-round controller modelled on presolving, Algorithm 1 (p. 6)",
+   "Numerical fixes found with it: ceil-then-check rounding of tiny quotients in PaPILO probing (p. 11); no normalization of vanishing sides before coefficient tightening (pp. 11–12)"
+  ],
+  "experiments": "No benchmark, as the time savings are 'difficult to quantify directly'; a count from the release reports (24 of the 51 MIP-related fixed bugs of SCIP 8.0.1–8.1.1); five case studies (Table 1) from up to 3117 variables down to at most 7 variables in 0.2 s to 2869 s, each bug reproducible at a stated git hash; MIP-DD 1.0 on a MacBook Air M2; default target settings gave a larger result (1528 variables, 301 constraints); reduced instances added to SCIP's regular tests; no seeds (pp. 5, 8–12).",
+  "positioning": "Delta debugging and fuzzing in SAT, SMT, AIG and MaxSAT solving (Biere and co-authors), IIS computation (Chinneck), the presolve workflow (Achterberg et al.; PaPILO), exact SCIP and VIPR in the outlook; assertions and debug solutions restated with their limits, not criticised (pp. 2, 4, 6, 8, 13).",
+  "writing": "'First' claims hedged with 'to the best of our knowledge'; the headline as a count ('24 out of all 51'); each case study gives the setup, the reduced instance, the mechanism and the fixing commit; the unmeasured benefit stated plainly (abstract; pp. 2, 8–12).",
+  "limits_future": "Benefit not quantified; batching can hide valid modifications; default target settings give larger instances; future: MIP-DD 2.0 with automatic limits, adaptive batch numbers, extended arithmetic and an interface to exact SCIP and VIPR that treats invalid certificates as failures, an IIS option, performance-bottleneck analysis, and reduced instances that industry partners can share (pp. 4, 6, 8, 10, 13).",
+  "method_links": [
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "imports delta debugging from the SAT and SMT community (step 4) and works with it (Biere acknowledged)",
+    "pages": "pp. 2, 13"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "the text gives solver complexity and the limits of assertions and debug solutions as the origin, and VIPR appears only in the outlook, so SKILL.md's chain from VIPR future work to delta debugging is not supported here",
+    "pages": "pp. 1–2, 13"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "failures decided by solver-independent checks (dual bound against a feasible reference, solution and ray verification) that stay valid under dual reductions and symmetry handling; the planned VIPR interface treats an invalid certificate as a failure to reduce (step 7)",
+    "pages": "pp. 2, 5–6, 13"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "exactness asked for only where correctness is decided, in the oracle (a polished or exactly computed reference solution), while the solvers under test work in floating point with tolerances",
+    "pages": "pp. 7–8"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "the belief that the tool saves debugging time is not measured; a proxy count from the release reports (24 of 51) and per-case reductions stand in for it",
+    "pages": "pp. 8–9"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "reduction as anonymization",
+    "evidence": "reduced instances with renamed variables and constraints may barely contain sensitive information, so confidential industrial cases become shareable with the developers",
+    "pages": "p. 13"
+   }
+  ],
+  "transferable": [
+   "Make every reduction keep one reference solution feasible; then a dual bound that cuts off the reference solution's objective value is a sound bug signal even in a solver that may cut off optimal solutions by dual reductions or symmetry handling (pp. 4–6).",
+   "Order reductions from substantial to cosmetic and run them in stage-round cycles, adding the next modifier only when a round changes nothing, as presolving does (pp. 3, 6).",
+   "Test consecutive modifications as one batch, with fewer batches while a reproduction is slow and more once the instance is small (pp. 4–7).",
+   "For numerically sensitive bugs, use an exactly feasible reference solution (polished, or from an exact solver); an inexact one can turn a correct answer into a false failure (pp. 7–8).",
+   "Localize a faulty component by reducing the settings toward a known-good target: the parameter that cannot be reset names the culprit (p. 9).",
+   "When a tool's benefit cannot be timed, report its share of the fixes documented in release reports, plus case studies with reproducing and fixing commit hashes (pp. 8–12)."
+  ],
+  "coauthors": "Alexander Hoen (first author; ZIB), Dominik Kamp (University of Bayreuth); Gleixner last of three (ZIB and HTW); no contribution statement; acknowledgments to Eifler (exact-SCIP interface), Turner, Serrano and Biere",
+  "quotes": [
+   {
+    "text": "Unlike the debug solution assertions, the validity of these checks is not affected by strong dual reductions or symmetry handling.",
+    "page": 6
+   },
+   {
+    "text": "MIP-DD itself does not prescribe what counts as an error.",
+    "page": 13
+   }
+  ]
+ },
+ {
+  "id": "S076",
+  "year": "2026",
+  "title": "CHAP: A Hybrid GPU-CPU Heuristic for MIP",
+  "read_level": "full",
+  "contribution": "CHAP, a CPU–GPU primal-heuristic portfolio for MIP coordinated through a shared pool of LP, feasible and infeasible solutions, with a GPU tabu search that computes exact best-shift moves by sort, scan and reduce, streamed cuPDLPx iterates and feasibility-pump and fix-propagate-repair workers; on the 50 instances of the 2026 Land–Doig competition in 5 minutes it finds solutions for 47 (Gurobi default 44, cuOpt heuristics-only 43) but fewer best values than Gurobi (11 against 25).",
+  "problem_entry": "GPU first-order LP methods and heterogeneous compute nodes make the question of which work should be carried out where part of heuristic design; the paper builds a cross-platform framework rather than a GPU port, for the 2026 Land–Doig competition (pp. 1–2).",
+  "key_idea": "A portfolio in which a GPU tabu search (exact best shift per variable), streamed approximate LP iterates and CPU repair heuristics exchange LP, feasible and infeasible solutions through a shared pool (pp. 2–9).",
+  "assumptions": "MIP min{cᵀx : Ax ≤ b, l ≤ x ≤ u, integrality} with constraints normalized to ≤; binaries the majority in the competition set; the move score is a step function with steps only at breakpoints, bounds and the incumbent; 50 instances chosen by the organizers (pp. 4–7, 9).",
+  "proof_devices": [
+   "Step-function property of the move score (steps only at breakpoints, bounds and the incumbent), after Feasibility Jump (p. 5)",
+   "Algorithm 1: breakpoint triplets with β and α accumulators, two entries per ≤-type breakpoint, lexicographic sort, inclusive scan, argmax by reduction (pp. 5–6)",
+   "Residual storage, a uniform ≤ form against warp divergence, row-wise layout and an L2-pinned bitset incumbent (pp. 6–7)",
+   "Packed bitonic sorting networks for short columns, kernel dispatch by vector length, CUDA Graphs (pp. 7–8)",
+   "Streamed LP checkpoints at 10^2 to 10^5 PDHG iterations with warm starts (p. 8)"
+  ],
+  "experiments": "50 competition instances, 5 min, Xeon Platinum 8481C plus H100; ablation ladder (CPU only, with GPU LP, with GPU tabu): found 47/46/47, wins 3/13/22 (9 ties), primal gap 19.57%/12.17%/8.84% (shifted geometric mean, shift 1.0), primal integral 72.59/51.01/41.84 against the 8-hour best of Gurobi or Xpress; against Gurobi 12.0.1 default and cuOpt 25.10 heuristics-only: found 47/44/43, wins 11/25/6, 6 ties, 2 unsolved by all; no seeds, threads or Gurobi hardware stated; the text and Table 2 disagree on the comparison solver, and Table 3 redefines PI (pp. 9–12).",
+  "positioning": "Builds on LocalMIP, Feasibility Jump, fix-propagate-repair, the feasibility pump, Kempke and Koch's LP-based fixing and the group's Scylla; cuOpt as the GPU rival; earlier GPU heuristics mostly problem-specific (pp. 3–9).",
+  "writing": "Contributions split into algorithm design and systems engineering; framing by negation (neither a GPU port nor GPU-only); untested adjectives ('significantly', 'clearly outperforming'); a conclusion of outperforming commercial solvers that holds for solutions found but not for best values; typos (pp. 2, 7, 10–11).",
+  "limits_future": "No limitations paragraph; the losses appear only as numbers (Gurobi's 25 wins, one unstable instance); future: integration into a state-of-the-art MIP solver and the code release (abstract; pp. 10–11).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "the ablation ladder adds one GPU component at a time inside the same framework, with versions named (step 6)",
+    "pages": "pp. 9–10"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "the solver comparison mixes modes and hardware (Gurobi's default full solve on a CPU, cuOpt heuristics-only, CHAP on a CPU plus an H100) and states neither the mismatch nor Gurobi's threads",
+    "pages": "pp. 9–10"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "a split by precision without exact arithmetic: low-accuracy first-order LP iterates only guide the heuristics, and Xpress decides the continuous part once the integers are fixed",
+    "pages": "pp. 8–9"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "no printed limits; the next step named is integration into a MIP solver, not yet done, and the code is not yet released",
+    "pages": "abstract; p. 11"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "low-accuracy LP is enough to guide heuristics",
+    "evidence": "intermediate first-order LP iterates are streamed into the pool instead of waiting for convergence, with the group's Scylla and Kempke and Koch cited for it",
+    "pages": "p. 8"
+   }
+  ],
+  "transferable": [
+   "Compute the best value of a single-variable move exactly: turn the piecewise-constant score into breakpoint triplets, sort them lexicographically, scan and reduce, with two entries per breakpoint so the score at the breakpoint is read before the penalty (Algorithm 1, pp. 5–6).",
+   "Stream iterates of a slow approximate LP solver at geometric checkpoints (10^2 to 10^5 iterations) into a shared pool, warm-starting each phase from the last, so the heuristics start at once (p. 8).",
+   "Keep infeasible candidates in the solution pool as seeds for feasibility-pump and fix-propagate-repair workers, and give every worker the best known objective as a cutoff (pp. 8–9).",
+   "Evaluate a hybrid portfolio as a ladder that adds one component at a time, counting wins over the instances solved by at least one configuration and stating the ties (Table 1, p. 10).",
+   "Report the primal gap as a shifted geometric mean with its shift and the primal integral with its definition, both against a long-run reference (the 8-hour best of two commercial solvers), and list that reference per instance (pp. 9–10, 12)."
+  ],
+  "coauthors": "Gennesaret Kharistio Tjusila (first author), Alexander Hoen, Nils-Christian Kempke, Gioni Mexi, Timo Berthold (also FICO), Thorsten Koch, Sebastian Pokutta; Gleixner sixth of eight (ZIB and HTW); no contribution statement",
+  "quotes": [
+   {
+    "text": "it is not clear that a highly accurate LP solution is required (and [35,24] indicate it is not)",
+    "page": 8
+   },
+   {
+    "text": "In terms of wins, however, the virtual best attains the highest count (25), reflecting the complementary strengths of the underlying commercial solvers in achieving superior objective values.",
+    "page": 10
+   }
+  ]
+ }
+]

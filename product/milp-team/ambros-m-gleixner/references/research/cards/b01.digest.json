@@ -1,0 +1,121 @@
+[
+ {
+  "id": "S032",
+  "year": 2015,
+  "title": "Exact and fast algorithms for mixed-integer nonlinear programming",
+  "read_level": "full",
+  "contribution": "Lifts iterative refinement from linear systems to whole LPs and builds two exact LP algorithms on it in SoPlex (basis verification and rational reconstruction), then adds OBBT enhancements (Lagrangian variable bounds, filtering, ordering) and three branching rules for nonlinear integer variables in SCIP, each evaluated on public benchmark sets (pp. 16, 18, 185-186).",
+  "problem_entry": "From observed solver pathologies: numerically unstable LP relaxations in MINLP solvers and multiscale ME models that defeat double-precision LP (p. 14); MIP-MINLP gap read as historical offset (pp. 13-14); QSopt_ex cost when boosting (p. 71); OBBT belief (p. 133); unstudied interaction of integer and spatial branching (pp. 161, 177).",
+  "key_idea": "Shift the LP to the current iterate, scale residuals by 1/Delta so the floating-point oracle sees order-one violations, re-solve and add the corrector (Theorem 2.5, Algorithm 2.2, Remark 2.8, pp. 35-40); exactness by basis verification (Alg. 3.2, pp. 85-86) or rational reconstruction (Alg. 3.3, pp. 88-92); OBBT duals as Lagrangian variable bounds (Thm 6.2, pp. 138-142); covers as vertex covers of the Hessian co-occurrence graph (Thm 7.4, p. 167).",
+  "assumptions": "Rational-data LPs (standard form for theory, general form in implementation, pp. 28, 46-49) under numbered oracle assumptions 2.9, 2.11, 3.7 (pp. 41, 44, 83), conceded not to hold in general (pp. 59, 63); QP without convexity (p. 125); factorable MINLP on MINLPlib2 after presolve, INT/GO and NLINT/SPLIT subsets (pp. 114, 151, 171, 175, 180).",
+  "proof_devices": [
+   "affine shift-and-scale correspondence (Theorem 2.5, pp. 35-37)",
+   "induction over refinement rounds for linear rate and iteration bound (Corollary 2.10, pp. 41-42)",
+   "rounding scaling factors to powers of the oracle base for encoding-length control, oracle-polynomial time (Theorem 2.12, pp. 44-45)",
+   "minimum-infeasibility threshold for basic solutions (Lemma 3.4, Theorem 3.5, pp. 78-80)",
+   "iterates become more basic under Assumption 3.7 (Theorem 3.8, pp. 83-84)",
+   "Diophantine approximation with residual-based denominator guess inflated by beta^k (Theorem 3.1, p. 72; Lemma 3.13, pp. 90-91)",
+   "LP duality aggregation for LVB validity, tight by complementary slackness (Theorem 6.2, p. 139)",
+   "covers as vertex covers, NP-hardness by reduction from vertex cover, exact binary program (pp. 167-168)"
+  ],
+  "experiments": "Xeon X5672, one job per node, shifted geometric means and one-sided Wilcoxon (pp. 22-24); 1,202 LPs with perPlex verification, 1,195 converged, slowdown 3-19% (pp. 62-67); exact LP 1.85x faster than QSopt_ex on 492 instances (p. 99); 84 ME LPs vs CPLEX and 80-bit SoPlex (pp. 107-111); OBBT on 952 MINLPlib2 instances, OBBT+LVB 17.1%/18.8% at >=100 s (pp. 150-159); branching rules VARTYPE, COVER, NLSCORE with timeouts as lower bounds (pp. 180-183).",
+  "positioning": "Extension of Wilkinson (1963) with candid prior traces (pp. 15, 39, 67); exact LP survey rates evidence separately from idea (pp. 70-71); head-on with QSopt_ex (pp. 99-100); OBBT from Quesada-Grossmann, Zamora-Grossmann, Tawarmalani-Sahinidis (pp. 137, 142, 145); cover branching vs conflict and backdoor branching (p. 180); methodology borrowed openly (pp. 22-23, 95, 157, 159, 181).",
+  "writing": "Headline numbers footnoted with baseline, subset, mean (p. 15); computational sections open with question lists (pp. 62, 94, 107, 150); negative variants reported (pp. 48-49, 108, 148-149, 151); joint parts stated (pp. 28, 76, 133, 161); sized hedges; slips in counts (pp. 26, 95, 98, 151, 160, 175, 177, 180).",
+  "limits_future": "Refinement fails for too ill-conditioned LPs (7 of 1,202, pp. 67, 100-101); factorization vs reconstruction trade-off (p. 100); infeasibility box cost (p. 111); exact QP not implemented (pp. 131-132); OBBT in tree open (p. 151); COVER not significant (pp. 182-183); tolerance coordination between MINLP and LP solver as next step (p. 186).",
+  "method_links": [
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "floating point produces, exact arithmetic decides: LP solves in floating point; residuals, corrections and verification in rational arithmetic; early basis check; reconstruction accepted only after exact checks; high precision where it suffices",
+    "pages": "pp. 15, 39-40, 45, 67, 85, 89-92, 112, 131"
+   },
+   {
+    "method": "Method 5",
+    "relation": "variant",
+    "note": "In the MINLP half the boundary is not drawn: OBBT bounds and LVBs from floating-point LPs with tighter dual tolerance and default-off condition-number limit; no safe rounding or exact check",
+    "pages": "pp. 146, 149"
+   },
+   {
+    "method": "Method 1",
+    "relation": "evidence",
+    "note": "turn the belief into a measurement: optimal-basis belief counted with independent verifier on 1,202 LPs (fails >14%); ME floating-point error measured exactly; OBBT belief turned into a costed experiment",
+    "pages": "pp. 62, 65, 107-111, 133, 157-159"
+   },
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "like-for-like baseline: QSopt_ex warm-started from SoPlex9 basis; all arms warm-started from CPLEX basis and double-precision parse; root OBBT without working limits; defaults as zero-weight cases; overall and subset factors printed",
+    "pages": "pp. 76, 99, 108-109, 150, 181"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "conceded-gap ledger: every chapter prints its gap with a count and the next step",
+    "pages": "pp. 67, 100-101, 111, 132, 151, 159, 186"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "certificates someone else can check: perPlex verifier, exact solver as referee, rigorous infeasibility box, runs contradicting MINLPlib2 reference values excluded",
+    "pages": "pp. 52-54, 62, 65, 107-108, 156"
+   },
+   {
+    "method": "Method 6",
+    "relation": "variant",
+    "note": "consumes public libraries instead of designing one: exclusion rules with counts and bias argument, MINLPlib2 structure profiled; no selection model",
+    "pages": "pp. 25-26, 151, 170-172"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "affected-instance test sets",
+    "evidence": "component evaluated only where it can act, subset fixed by structural criterion before runs: OBBT-called instances, NLINT, SPLIT, LP classes by refinement rounds",
+    "pages": "pp. 66, 151, 180"
+   },
+   {
+    "pattern": "new rule = default + tie-breaker",
+    "evidence": "new branching scores with weight 0.1 next to default weight 1; default is the zero-weight case",
+    "pages": "pp. 178, 180-181"
+   },
+   {
+    "pattern": "timeouts as lower-bound speed-ups",
+    "evidence": "instances solved by one arm only enter an extra column with T/t as lower bound; Wilcoxon rerun with them",
+    "pages": "p. 181"
+   },
+   {
+    "pattern": "certificate in the user's units",
+    "evidence": "approximate Farkas proof becomes a box radius with no feasible point; slacks left out for interpretability",
+    "pages": "pp. 52-54"
+   },
+   {
+    "pattern": "negative variants and preliminary failures reported in the text",
+    "evidence": "numbered remarks and side notes",
+    "pages": "pp. 48-49, 108, 148-149, 151"
+   }
+  ],
+  "coauthors": "none on the byline (single-author thesis); joint parts with Daniel E. Steffy, Kati Wolter (pp. 28, 76), Timo Berthold, Benjamin Müller, Stefan Weltge (p. 133), Timo Berthold (p. 161)",
+  "quotes": [
+   {
+    "text": "Although for the majority of instances, we can confirm the conclusion that Dhiflaoui et al. (2003) and Koch (2004) have drawn based on the Netlib test set, namely that floating-point LP solvers often succeed in returning optimal bases, we have to relativize this finding for more than 14% of the instances.",
+    "page": 65
+   },
+   {
+    "text": "Comparing this to the plain QSopt ex performance would be biased, however, since the underlying implementation of the floating-point simplex solvers in SoPlex and QSopt ex is significantly different.",
+    "page": 76
+   }
+  ],
+  "transferable": [
+   "Build each refinement LP from the residuals and scale by the inverse maximum violations, capped per round by an incremental factor α, so the floating-point oracle sees violations of order one (Algorithm 2.2, lines 15-16, pp. 39-40; Remark 2.8).",
+   "Round the scaling factors to powers of the oracle's base (formula 2.14) so rational iterates keep a common denominator and rational cost grows slowly with precision (pp. 44-45, 63).",
+   "Verify a basis once it has stalled for L refinement rounds (default L = 2) instead of waiting for a worst-case bound; check the cheap residuals before the rational factorization (Algorithm 3.2, pp. 85-86, 94).",
+   "Output-sensitive rational reconstruction: guess the denominator bound from the residuals times β^k (β = 1.1), call it at geometric frequency f = 1.2 so cumulative cost stays linear in the rounds, accept only after an exact feasibility and optimality check (pp. 89-92, 94).",
+   "Measure the error of a floating-point LP solution as the exact infinity-norm distance to the optimal face: fix variables and inequalities by the sign of their reduced costs and duals, add one variable for the distance, solve exactly (p. 108).",
+   "To compare numerics rather than simplex codes, warm start every arm from the same basis and parse all inputs at a precision every arm stores exactly (pp. 108-109).",
+   "Compare strategies that will run under unknown working limits by per-instance profiles (success versus effort), normalized on both axes by the best strategy and averaged pointwise (p. 155).",
+   "Remove instances with LP errors only in the comparability experiment and keep them in the production experiment, saying which is which (p. 151).",
+   "Include a random order as a control that any ordering heuristic must beat (p. 148).",
+   "Back single-instance success stories by ten runs with permuted constraints and report the mean (p. 159).",
+   "Test consistency with a one-sided Wilcoxon signed-rank test on log ratios of shifted values (SciPy, correction=False, zero_method pratt, 5% level), and remember that it ignores the size of the change (pp. 23-24)."
+  ]
+ }
+]
