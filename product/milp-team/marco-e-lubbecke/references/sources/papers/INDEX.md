@@ -39,7 +39,7 @@
 | 27 | S027 | 2001 | Engine scheduling by column generation | Cuvillier | 46 | thesis | manual | txt | 193 | core | carded |
 | 28 | S028 | 2008 | Optimal university course timetables and the partial transversal polytope | Proceedings of the 7th international conference on Experimental algorithms … | 45 | conference | manual | txt | 14 | supplement | carded |
 | 29 | S029 | 2012 | Nested Column Generation applied to the Crude Oil Tanker Routing and Scheduling Problem with Split Pickup and Split Delivery | Naval Research Logistics 59 (3-4), 298-310 | 38 | journal | manual | txt | 13 | supplement | carded |
-| 30 | S030 | 2004 | Minimizing the stabbing number of matchings, trees, and triangulations | Proceedings of the fifteenth annual ACM-SIAM symposium on Discrete … | 37 | conference | manual | txt | 13 | supplement | abstract |
+| 30 | S030 | 2004 | Minimizing the stabbing number of matchings, trees, and triangulations | Proceedings of the fifteenth annual ACM-SIAM symposium on Discrete … | 37 | conference | manual | txt | 13 | supplement | carded |
 | 31 | S031 | 2014 | Row-reduced column generation for degenerate master problems | European Journal of Operational Research 236 (2), 453-460 | 35 | journal | manual | txt | 17 | supplement | carded |
 | 32 | S032 | 2011 | Partial convexification of general MIPs by Dantzig-Wolfe reformulation | Integer Programming and Combinatoral Optimization, 39-51 | 31 | conference | manual | txt | 15 | core | carded |
 | 33 | S033 | 2005 | Dual variable based fathoming in dynamic programs for column generation | European Journal of Operational Research 162 (1), 122-125 | 30 | journal | manual | txt | 8 | supplement | carded |
@@ -105,7 +105,7 @@
 | 93 | S098 | 2015 | Decentralized Energy Supply Systems: An Adaptive Discretization Approach | International Conference on Operations Research (OR2015) | — | talk | — | no-oa |  | skip | — |
 | 94 | S099 | 2015 | Adaptive Discretization of Nonlinear Optimization Models for Energy Supply Systems | 22nd International Symposium on Mathematical Programming (ISMP 2015) | — | talk | — | no-oa |  | skip | — |
 | 95 | S100 | 2014 | Dynamische Vergabe von Patiententerminen in Krankenhäusern | Zukunftsperspektiven des Operations Research: Erfolgreicher Einsatz und … | — | chapter | — | no-oa |  | supplement | abstract |
-| 96 | S102 | 2012 | The Boat and Barge Routing Problem | 10th Cologne-Twente Workshop on Graphs and Combinatorial Optimization (CTW 2011) | — | other | — | no-oa |  | supplement | metadata |
+| 96 | S102 | 2012 | The Boat and Barge Routing Problem | 10th Cologne-Twente Workshop on Graphs and Combinatorial Optimization (CTW 2011) | — | other | — | no-oa |  | skip | metadata |
 | 97 | S103 | 2012 | OASIcs, Volume 14, ATMOS'10, Complete Volume | 10th Workshop on Algorithmic Approaches for Transportation Modelling … | — | book | manual | txt | 178 | skip | — |
 | 98 | S106 | 2009 | Scheduling in Coil Coating with Shuttles | The 9th Workshop on Models and Algorithms for Planning and Scheduling … | — | conference | — | no-oa |  | supplement | metadata |
 | 99 | S107 | 2008 | Third European Conference on combinatorics graph theory and applications-Preface | DISCRETE MATHEMATICS 308 (8), 1347-1349 | — | other | manual | txt | 3 | supplement | carded |
