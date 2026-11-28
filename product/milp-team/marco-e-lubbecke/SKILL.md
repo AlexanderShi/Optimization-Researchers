@@ -196,7 +196,7 @@ Method 5 is promoted from the full texts (08 §4). Say–do counts are the disti
 
 **Steps**:
 1. Write the compact (original-variable) model on paper as the problem statement, even if you think in columns.
-2. Run it in a current MILP solver with the full data-to-solution pipeline; record bound, nodes, time. Every decomposition must beat this (book pp. 507–508); where the extended formulation is the field's standard (routing, crew scheduling), the yardstick is the best published branch-price-and-cut, re-run [inferred from S085 p. 10]. 🔴 If the compact model already solves the user's instances within their limit, stop, or narrow the claim to the instances where it fails [inferred].
+2. Run it in a current MILP solver with the full data-to-solution pipeline; record bound, nodes, time. Every decomposition must beat this (book pp. 507–508); where the extended formulation is the field's standard (the VRPTW's state of the art is branch-price-and-cut on it [S085 p. 10]), the yardstick is the best published branch-price-and-cut, re-run [inferred]. 🔴 If the compact model already solves the user's instances within their limit, stop, or narrow the claim to the instances where it fails [inferred].
 3. Ask which larger object could be a variable because its subproblem is solvable (paths, not only arcs; whole matchings, not edges: CO@Work 2020, 1:37:02). Pricing with the integrality property cannot raise the bound (PD3).
 4. Probe before you build: a generic Dantzig-Wolfe solver with the structure you know and with detected alternatives (Variants), or a bare root-node column-generation loop. Read iterations, master against pricing time, and tree size (book pp. 494–495).
 5. If it pays, build on a framework that manages the tree (SCIP pricer plugins in his group).
@@ -486,7 +486,7 @@ All co-authored: "the authors" unless a sole-voice source is given.
 | Why then | Hypergraph partitioning existed but was not combined with Dantzig-Wolfe for MIPs. |
 | Key insight | Almost any matrix can be forced into bordered block-diagonal form; a cheap proxy ranks candidates [S032 manuscript pp. 2–5; S015 preprint p. 16]. |
 | Minimum evidence | From the tables, corrected from *in minutes … on eight MIPLIB 2003 instances*: with k = 10 all six dynamic knapsack instances solved within 362 s, CPLEX 12.2 hitting the hour on four [S032 manuscript pp. 6–7]; root bound above CPLEX's root bound after cuts on seven of eight selected MIPLIB 2003 instances [S032 manuscript p. 8], on 12 of 23 in 2015 with the automatic choice [S015 preprint pp. 24, 30]. |
-| Abandoned paths | A third of MIPLIB 2003 set aside; four quality measures dropped, two kept [S032 manuscript pp. 6, 8]; one correct decomposition per matrix. |
+| Abandoned paths | A third of MIPLIB 2003 set aside; two quality measures kept, the others tried (coupling constraints or linking variables, integers per block, gradient angle) not consistent [S032 manuscript pp. 6, 8]; one correct decomposition per matrix. |
 | Reception | Detection fragile, badly ranked; the average "mixed" (Basso and Ceselli 2022). |
 | Methods | Method 3, Method 2 |
 
@@ -496,7 +496,7 @@ All co-authored: "the authors" unless a sole-voice source is given.
 
 | Dimension | Content |
 |---|---|
-| Origin | Tailing-off and instability he could not fix in his thesis code; the thesis chapter under the survey's title [S027 pp. 38, 51, 84]; Desrosiers, the referee he asked for. |
+| Origin | Tailing-off and instability he could not fix in his thesis code (podcast 0:38:06–0:38:53, ASR; a static stabilization brought no significant gain [S027 pp. 139–140, 142]); the thesis chapter under the survey's title [S027 pp. 7, 37]; Desrosiers, the referee he asked for [S027 pp. 1, 6]. |
 | Why then | Dual-side material was not in textbooks; "The need for a standard text on column generation was more pressing than ever" (book p. xii). |
 | Key insight | The dual view organises integer column generation in one notation [S001 report pp. 2, 13, 15]. |
 | Minimum evidence | Not applicable. |
