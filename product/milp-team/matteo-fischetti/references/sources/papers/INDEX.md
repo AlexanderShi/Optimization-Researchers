@@ -157,7 +157,7 @@
 | 145 | S150 | 2026 | GPU-accelerated wind farm layout search with a distilled endogenous wake model (EndoWake) | arXiv preprint arXiv:2610.07844, 2026 | 1 | preprint | arXiv | txt | 40 | core | carded |
 | 146 | S151 | 2025 | Column Generation Algorithms for the Pickup and Delivery Problem with Time Windows and Last-in-First-out Loading | Beyond Frontiers of Operations Research: Emerging Technologies and Innovative Optimization Paradigms (AIRO Springer Series 14), 75-86, 2025 | 1 | chapter | — | no-oa |  | core | abstract |
 | 147 | S152 | 2017 | Comments on: On learning and branching: a survey | Top 2 (25), 237-238, 2017 | 1 | journal | — | no-oa |  | supplement | metadata |
-| 148 | S154 | 2014 | Proximity search heuristics for Mixed Integer Programs | — | 1 | other | manual | txt | 12 | supplement | abstract |
+| 148 | S154 | 2014 | Proximity search heuristics for Mixed Integer Programs | Proceedings of the 26th RAMP Symposium, Hosei University, Tokyo, October 16-17, 2014 | 1 | other | manual | txt | 12 | supplement | abstract |
 | 149 | S155 | 2006 | MIP models for MIP heuristics | Talk presented at Matheuristics, 2006 | 1 | talk | — | no-oa |  | skip | — |
 | 150 | S161 | 2026 | Just sort it! A note on the LP behind rank-one anti-loop edits | arXiv preprint arXiv:2611.21432, 2026 | — | preprint | arXiv | txt | 4 | core | carded |
 | 151 | S162 | 2026 | A Dantzig-Wolfe reformulation of the EndoWake model for optimal wind farm layouts | arXiv preprint arXiv:2610.39503, 2026 | — | preprint | arXiv | txt | 25 | core | carded |
@@ -178,15 +178,15 @@
 | 166 | S185 | 1987 | Modelli e algoritmi per problemi di routing e di scheduling dottorato di ricerca in ingegneria dei sistemi | Alma Mater Studiorum-Università di Bologna, 1987 | — | thesis | — | no-oa |  | supplement | metadata |
 | 167 | S186 | 2026 | Replication package for" EndoWake: Modeling Wind by Linear Programming for Wind Farm Layout Optimization" | Zenodo, 0 | — | other | — | no-oa |  | core | abstract |
 | 168 | S187 | — | Technical note for GPU-accelerated wind farm layout search with a distilled endogenous wake model (EndoWake) | — | — | report | — | no-oa |  | supplement | metadata |
-| 169 | S188 | — | Optimización combinatoria poliédrica: problemas de rutas-localización | — | — | other | — | no-oa |  | supplement | abstract |
+| 169 | S188 | 1996 | Optimización combinatoria poliédrica: problemas de rutas-localización | Doctoral thesis, Universidad de La Laguna (author J. J. Salazar González; directors P. Toth and M. Fischetti) | — | thesis | — | no-oa |  | supplement | abstract |
 | 170 | S189 | — | Exact and approximate algorithms for bus driver scheduling problems in Logistique: Production, Distribution, Transport. Logistics: Manufacturing, Distribution, Transportation | — | — | chapter | — | no-oa |  | supplement | metadata |
 | 171 | S190 | — | Intersection Cuts for Quadratic Mixed-Integer Optimization | — | — | other | manual | txt | 16 | supplement | metadata |
-| 172 | S192 | — | Metaheuristic frameworks for deep neural network training | — | — | other | — | no-oa |  | supplement | abstract |
+| 172 | S192 | 2020 | Metaheuristic frameworks for deep neural network training | Master's thesis, University of Padova (candidate Marco Calandro; Fischetti supervisor) | — | thesis | — | no-oa |  | supplement | abstract |
 | 173 | S193 | — | Simplified Benders cuts for facility location | Speaker, 9, 0 | — | talk | — | no-oa |  | skip | — |
 | 174 | S194 | — | Exact Algorithms for Mixed-Integer Bilevel Linear Programming | — | — | other | manual | txt | 21 | supplement | metadata |
 | 175 | S195 | — | Thinning out facilities: Lagrange, Benders, and | — | — | report | url | txt | 31 | supplement | carded |
-| 176 | S196 | — | Solving Congested Facility Location by Branch-and-Cut | — | — | other | — | no-oa |  | supplement | abstract |
-| 177 | S198 | — | Exact and Heuristic Methods for Nesting Problems | — | — | other | manual | txt | 81 | supplement | metadata |
+| 176 | S196 | 2016 | Solving Congested Facility Location by Branch-and-Cut | ROADEF 2016, 17th ROADEF conference, Compiègne, abstract #235 | — | conference | — | no-oa |  | supplement | abstract |
+| 177 | S198 | 2004 | Exact and Heuristic Methods for Nesting Problems | Report, DEI, University of Padova, 1 April 2004 (CNR/MIUR project CU.03.00107.PF25) | — | report | manual | txt | 81 | supplement | metadata |
 | 178 | D001 | 1993 | On the monotonization of polyhedra | IPCO, 23-38 | — | conference | — | no-oa |  | supplement | abstract |
 | 179 | D002 | 2005 | Mixed-Integer Cuts from Cyclic Groups | IPCO, 1-11 | — | conference | — | no-oa |  | supplement | abstract |
 | 180 | D003 | 2005 | Optimizing over the First Chvàtal Closure | IPCO, 12-22 | — | conference | manual | txt | 11 | core | carded |
@@ -210,7 +210,7 @@
 | 198 | H002 | 1996 | Odd Cut-sets, Odd Cycles, and 0-1/2 Chvatal-Gomory Cuts | Ricerca Operativa 26, 51-80 | — | journal | — | no-oa |  | supplement | abstract |
 | 199 | H003 | 1998 | Experiments with Controlled Rounding for Statistical Disclosure Control in Tabular Data with Linear Constraints | Journal of Official Statistics 14 (4), 553-565 | — | journal | url | txt | 13 | supplement | carded |
 | 200 | H004 | 1999 | I Turni delle Locomotive | in S. Pallottino, A. Sciomachen (eds.), Scienze delle Decisioni per i Trasporti, Collana Trasporti, Franco Angeli, 476-494 | — | chapter | — | no-oa |  | supplement | metadata |
-| 201 | H005 | — | Lezioni di Ricerca Operativa | — | — | book | — | no-oa |  | supplement | abstract |
+| 201 | H005 | 2018 | Lezioni di Ricerca Operativa | Independently published, ISBN 9781980835011 | — | book | — | no-oa |  | supplement | abstract |
 | 202 | H006 | 2009 | Robustness by cutting planes and the Uncertain Set Covering Problem | Preliminary draft, May 25, 2009 (author's papers directory) | — | preprint | manual | txt | 19 | supplement | carded |
 
 202 works · txt 132 · pdf 0 · no-oa 70
