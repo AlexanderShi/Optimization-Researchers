@@ -162,7 +162,7 @@ Form and order: the Answer Standard above. The text below lists what the reply m
 5. Instances whose optimal value depends on tolerances, kept in a benchmark or in gap statistics.
 6. An adjective where a count exists (H2).
 7. A rational re-implementation of a part that only produces candidates (Method 5).
-8. A bound or reduction called exact or valid without the sense in which it holds ("since precisely speaking a different problem is solved", co-authored) [S017 TR pp. 4, 12; S001 TR pp. 9–10]; check in the original model (Workflow C step 6).
+8. A bound or reduction called exact or valid without the sense in which it holds ("since precisely speaking a different problem is solved", co-authored) [S017 TR pp. 4, 12]; likewise a floating-point solver's answers hold only for the tolerance-relaxed problem it actually solves [S001 TR pp. 9–10]; check in the original model (Workflow C step 6).
 
 ([full evidence](references/research/09-evidence-ledger.md#taste-warnings))
 
@@ -576,7 +576,7 @@ Besides the warning signs and Taste marks 2 and 4: aggressive heuristics inside 
 ### Latest
 
 - SCIP 10.0.0 (24 Nov 2025) with exact mode [S10]; own commits to the exact linear constraint handler to Oct 2026 [06 §7–§8].
-- 2026: MIP-DD in print [MIPDD]; numerically safe branch-price-and-cut closing 14 unsolved instances [LCCP26; S085 p. 1]; CHAP, built for the 2026 Land-Doig MIP Competition [CHAP26; S076 pp. 1–2], first place per the competition page [06 §8]; distributed presolving [DSAP26].
+- 2026: MIP-DD in print [MIPDD]; numerically safe branch-price-and-cut, 14 previously unsolved instances closed by the abstract's count (Table 5: 15 solved by the new code alone, 1 by the baseline alone) [LCCP26; S085 pp. 1, 25–28]; CHAP, built for the 2026 Land-Doig MIP Competition [CHAP26; S076 pp. 1–2], first place per the competition page [06 §8]; distributed presolving [DSAP26].
 - Oct 2026: VIPR and presolve soundness reports (Method 4); no talk found in the last 12 months.
 
 ([full evidence](references/research/09-evidence-ledger.md#trajectory))
