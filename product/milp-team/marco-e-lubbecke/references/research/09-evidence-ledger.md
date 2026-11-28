@@ -20,6 +20,10 @@
 > **Not carried.** The cards' reading notes on inconsistencies inside a work (a table that disagrees with its text, a typo, numbers that look carried over) are not findings about the researcher or his coauthors and are not used; 08 §7.4 keeps one neutral lesson (catalog WM11). Material sealed in `holdout.md` is not used: no point, quote or decision of a sealed item appears in this file. The card batch files b01, c01 and s01 under `cards/`, the S027 row of `07-paper-cards.md` and research notes 01, 03, 05 and 06 hold sealed passages; they are named here only as sources and must not be opened while using or testing the skill (the other batch files hold none; SKILL.md links none of the files named here). Candidates that lean on sealed material are named, not described ([Held back](#held-back)).
 >
 > **Counts.** `team_status.py --coverage` on 2026-11-28: 120 Scholar rows · 116 distinct works indexed · 94 open full texts · 89 read in full · 3 in part · 7 abstract only · 10 metadata only (incl. unreadable) · 7 skipped · 0 book material carded · 188 quotes verified. Card entries: 111 on 110 works (S030 twice). Word budget after this pass: 11,562 words outside the Answer Standard by `answer_standard.py --words` (target about 11,500, hard limit 13,000); after the review fixes: 12,743 words ([Review fixes](#review-fixes)).
+>
+> **T3.7 (tightening, 2026-11-28).** SKILL.md was brought under its word budget by moving evidence here, not by deleting it: wherever a SKILL.md line was shortened or removed, the line as it stood before is kept word for word in a fenced block under **Before T3.7 (moved verbatim)** at the end of the matching section (fenced like the Before T3.6 blocks, so that its links and quotation marks stay exactly as they were in SKILL.md). Sections with such a block: [Routing](#routing) (three rows), both taste lists, Methods 1–5, the [Stage workflows](#workflows) (Workflow B's checkpoint, Workflow C steps 1, 2 and 3a, Workflow G steps 1 and 4), Heuristics 1–10, 12 and 13 (Heuristic 1's block also holds the Research Heuristics intro), the misreadings, the SEA 2010 and IPCO 2011 anatomies and the SEA 2018 pointer, the trajectory's Latest line and the inner tensions. What moved: cases and quotes beyond the strongest one or two per heuristic and taste item, among them Heuristic 1's tests, which also stand in catalog DM20; datings, tallies and wording in the Say–do lines of Methods 1–3 and the Increment notes of Methods 1–5; one Practice item each in Methods 1, 2 and 3 (Method 1's probe item points to its Variants) and two in Method 5; Method 2's two variant bullets that repeat its step 3 and its Limitations; quotes, anecdotes and details inside steps, checkpoints and Limitations (Method 1's step 3 quote, paraphrased in SKILL.md, its step 5 anecdote with the Limitations sentence that refers to it and the second quote of its stop rule; Method 2's checkpoint details; Method 3's hMETIS parenthesis; Method 4's step 6 example; Method 5's coil-coating detail under *Different from standard practice*; Workflow G's step 1 anecdote); card lists that the catalog entries named in the step or row, or another SKILL.md line, hold (DM1, DM2, DM3, DM12, DM17, EP3, EP9, PD13); long anatomy rows; DOIs that the Sources appendix carries, and research-note pointers; one sentence each in three inner tensions. Three ⚠ marks went with their lines while their content stays in SKILL.md, unmarked or marked elsewhere (Method 2's two repeated variants; Heuristic 2's deployment date, under Method 5's Variants), and one *corrected from* note left the last Routing row (numerics, still marked under Weak at, the Honest Boundary and the Roundtable Card). Every step instruction and constant stays in SKILL.md; the front matter, How to Use, Activation Rules, the Answer Standard, Research Integrity Rules, the Agentic Protocol, the Roundtable Card and the Honest Boundary with its Corrections list are unchanged. Where an *Added in T3.6* or *Review fixes* line here quotes SKILL.md wording that T3.7 shortened, the section's Before T3.7 block holds that wording. Budget count: 12740 → 11485 words by `answer_standard.py --words` (target about 11,500, hard limit 13,000).
+>
+> **T3.7 review fixes (2026-11-28).** A read-only reviewer of the tightening reported ten minor findings. Each was checked against the pre-tighten copy, the cards and research notes 02 and 04, and nine were applied in SKILL.md by restoring wording from the Before T3.7 blocks below, which stay as they were; each affected section says what came back under *Review fix (2026-11-28)*. H1 gets back the subgradient remedy for a master that is hard to solve, now also cited to [S088 p. 58], and its first two tests [S008 manuscript pp. 3, 6], so that Workflow C step 2 finds them in H1 and the sentence above that every step instruction and constant stays in SKILL.md holds again (the tests also stand in DM20; the third test stays in DM20 and in H1's block). H9 gets back its case, the 92 commits and its cost, with two changes recorded in its section; H12 the timings its ⚠ qualifies; H8 the pairs and two of its five SEA cards; H2 its ⚠ on the order of certificate and deployment. Method 1 step 3's paraphrase keeps *not only*; Misreading 5 and H5 get back the pointers 02 §4.4 and 04 E3, the two examples How to Use gives; Method 4 step 6 gets back its example, the referent of *the attribution* in its Limitations; Method 2's Limitations sentence on the theorem-first order gets back its ⚠; B2 its small-instance contrast. Declined: the reviewer's change to `scripts/check_ledger.py`, whose page pattern skips citations written with a version word, such as [S008 manuscript p. 13]; this step edits only SKILL.md and this ledger. The same check was run by hand instead: every card-and-page unit of the pre-tighten copy, version-tagged ones included, is in SKILL.md or here. Budget count after the fixes: 11485 → 11653 words by `answer_standard.py --words` (target about 11,500, hard limit 13,000).
 
 <a id="how-to-use"></a>
 
@@ -192,6 +196,30 @@ The skill has ten heuristics; with H2 moving into Method 5 and four new ones the
 - **Outside critiques.** Which GCG version they used.
 ````
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened, moved or removed, word for word as they stood before it (fenced: links and quotation marks as in SKILL.md, where the links resolve from the skill folder). The shortened lines are in SKILL.md.
+
+The Benders row's pages stand in SKILL.md's Corrections list and Workflow B's Benders line and in catalog DM12, EP8 and EP9; the numerics row's pages stand in the Honest Boundary and in DM17. The numerics correction stays marked under Weak at, in the Honest Boundary and in the Roundtable Card.
+
+*Routing row, Benders:*
+
+````text
+| "Design my Benders decomposition" | Workflow B and its Benders line | DM12 and EP9 from two unreviewed 2026 group preprints [S075 pp. 2, 19, 22–23; S076 pp. 2–4, 28–29], corrected from *his one Benders paper puts Benders cuts inside pricing*; beyond them the "Nothing in the record" rule; at milp-roundtable, seat Fischetti |
+````
+
+*Routing row, numerics:*
+
+````text
+| "Which tolerances?" "My column generation cycles" "Exact or floating-point arithmetic?" | Workflow C step 1 | DM17: a stated position, no study [S008 manuscript p. 13; S060 pp. 23–24]; at milp-roundtable, seat Gleixner |
+````
+
+*Routing row, stages without evidence:*
+
+````text
+| Literature search ("Read, read, read.", credited to Skutella: two lines, no practice), funding, rebuttals, choosing between projects, daily supervision, line-level debugging | — | "Nothing in the record" rule (Activation Rules); generic advice labelled "not Lübbecke-style"; numerics moved to the row above, corrected from *nothing in the record*. |
+````
+
 <a id="taste-marks"></a>
 
 ## Taste: marks of good research
@@ -228,6 +256,40 @@ The skill has ten heuristics; with H2 moving into Method 5 and four new ones the
 3. **G3. The problem needs fundamental research and has an owner** (deepened). "I particularly appreciate problems that cannot be solved "out of the box" but require solid fundamental research." (blog 2014); thesis preface: "solving a practical problem by means of applied mathematics is much more than applying mathematics" (2001, p. v); "motivation -> applicability -> is it implemented -> they make money from it" (Bluesky 2024-12-11).
 4. **G4. The algorithm sees structure, not a flat matrix; but a pretty decomposition is not structure** (deepened, new warning). "Most research topics in my head deal with finding and exploiting structures in mathematical programs." (blog 2014-11-04; eight occasions to 2026); the arrowhead form may be "an artifact of the model and algorithm we use to detect/enforce this structure" (2015, DOI 10.1007/s10107-014-0761-5); "But don't be deluded by the beauty" (book p. 237, joint).
 5. **G5. Discrete and linear first; ML for optimization, not instead of it** (overturned: not an ML-for-MIP researcher). "i think we are not done with linear yet" (podcast, ASR); "is there also a stream for discrete optimization without machine learning? #orms" (Bluesky 2026-02-27). Against plain rejection: his OR2017 abstract asks "where (and how) can machine learning help in improving methods for solving optimization problems" (02 §1.7).
+````
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened, moved or removed, word for word as they stood before it (fenced: links and quotation marks as in SKILL.md, where the links resolve from the skill folder). The shortened lines are in SKILL.md.
+
+*Mark G1:*
+
+````text
+1. **G1. A quality claim comes with a proof or a bound** (new; procedure: Method 5). "I am a well known supporter (a.k.a. "fan") of exact optimization" (blog, "Know your Heuristics!", 2014-12-19); when someone claims an optimum, "ask them whether they can prove it" (TEDx 2018, ASR) [stated]; certified gaps 2004–2026 [S030 arXiv pp. 10–11; D002 pp. 21–22]; ✗ one exception [S025 preprint p. 21].
+````
+
+*Mark G2:*
+
+````text
+2. **G2. Software, data and what did not work are contributions** (new). "who's that guy he only wrote software well only come on that's so valuable so difficult to do" (podcast 2021, ASR); the joint 2020 editorial invites "failed experiments and wrong paths taken to learn from" (p. 2); a chair thesis reports that branch-and-cut "did not work out well on our benchmark instances" (Franzen 2022); code and data released [S012 report p. 9; S089 p. 23]. Openness is mixed in practice (Tension 7).
+````
+
+*Mark G3:*
+
+````text
+3. **G3. The problem needs fundamental research and has an owner** (deepened). "I particularly appreciate problems that cannot be solved "out of the box" but require solid fundamental research." (blog 2014); thesis preface: "solving a practical problem by means of applied mathematics is much more than applying mathematics" (2001, p. v); "motivation -> applicability -> is it implemented -> they make money from it" (Bluesky 2024-12-11).
+````
+
+*Mark G4:*
+
+````text
+4. **G4. The algorithm sees structure, not a flat matrix; but a pretty decomposition is not structure** (deepened, new warning). "Most research topics in my head deal with finding and exploiting structures in mathematical programs." (blog 2014-11-04; eight occasions to 2026); the arrowhead form may be "an artifact of the model and algorithm we use to detect/enforce this structure" (2015, DOI 10.1007/s10107-014-0761-5); "But don't be deluded by the beauty" (book p. 237, joint); timetabling IP used "only because of its modeling power" [S028 p. 2] (joint).
+````
+
+*Mark G5:*
+
+````text
+5. **G5. Discrete and linear first; ML for optimization, not instead of it** (overturned: not an ML-for-MIP researcher). "i think we are not done with linear yet" (podcast, ASR); "is there also a stream for discrete optimization without machine learning? #orms" (Bluesky 2026-02-27); CNNs used to study problems, not to solve them [S043 preprint p. 14]. Against plain rejection: his OR2017 abstract asks "where (and how) can machine learning help in improving methods for solving optimization problems" (02 §1.7).
 ````
 
 <a id="taste-warnings"></a>
@@ -273,6 +335,30 @@ The skill has ten heuristics; with H2 moving into Method 5 and four new ones the
 - [ ] Every baseline re-run by you under identical conditions?
 - [ ] Every quality claim with a proof or bound, every "often" with a count, a conclusion that concludes?
 - [ ] Can the owner say which of two solutions is better without penalty weights?
+````
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened, moved or removed, word for word as they stood before it (fenced: links and quotation marks as in SKILL.md, where the links resolve from the skill folder). The shortened lines are in SKILL.md.
+
+*Review fix (2026-11-28):* B2's small-instance contrast is back in SKILL.md, word for word (*while the four small test instances ended within 6%* [S010 p. 14]); the rest of B2's block stays here.
+
+*Warning B1:*
+
+````text
+1. **B1. An objective that is a bag of weighted penalties, or that nobody owns** (new). TOP 2015 comment, p. 360: "apples and oranges"; slightly different data give very different timetables (DOI 10.1007/s11750-015-0364-1, sole); "those who design the objective function are the persons in power" (Bluesky 2026-11-07). ⚠ A competition's penalty sum optimised as given in 2012 [S010 pp. 5–6].
+````
+
+*Warning B2:*
+
+````text
+2. **B2. Random or tiny instances, unequal conditions, "often" without counts** (deepened). On an RL-based MIP method tested on generated instances: "simply no. I will not accept this as a serious proposal for solving mixed-integer programs, regardless of whether you compared against gurobi or not" (Bluesky 2024-12-04); on comparisons across papers: "This part of the overview needs to be taken with a grain of salt." (TOP 2015, p. 360); for the next MIPLIB, "very hard (but not "impossibly hard")" instances "ideally from a practical application context" (Mastodon 2024-09-09). ✗ Broken in his own record [S051 p. 10; S040 p. 9]; remedy: Method 3 step 2a. Related, *modelled is not solved* (B4 before the review fixes): writing an extension down does not handle it [S048 p. 3]; with the extensions, five ITC2007 comp instances stayed at 70–99% gaps after an hour, while the four small test instances ended within 6% [S010 p. 14].
+````
+
+*Warning B3:*
+
+````text
+3. **B3. Repairing what you broke, a conclusion that only summarises, self-praise** (new). The 2025 referee-report post above; "when your "conclusion" summarizes your work, it is a summary, not a conclusion." (three occasions, 2024–26); "We are proud to release…" removed from GCG 3.0.2 release notes by his commit b147336e [practice]; ⚠ summary-type endings in co-authored texts [D002 pp. 26–27; S052 p. 18].
 ````
 
 <a id="method-1"></a>
@@ -362,6 +448,62 @@ Counts are distinct works whose digest links the method; a card can be evidence 
 **Limitations**: supplying the structure beats automatic detection (Yıldız, Boland, Savelsbergh 2022), so probe with the known structure [inferred]. "No tree management" dates from CPLEX 3.0 days.
 ````
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened, moved or removed, word for word as they stood before it (fenced: links and quotation marks as in SKILL.md, where the links resolve from the skill folder). The shortened lines are in SKILL.md.
+
+The Practice item on the one practised probe stands in SKILL.md as the second Variants bullet; step 5's PhD anecdote and the Limitations sentence on CPLEX 3.0, which refers to it, moved together; step 3's quote is paraphrased in SKILL.md with its time stamp.
+
+*Review fix (2026-11-28):* the paraphrase keeps the quote's *not only*: *(paths, not only arcs; whole matchings, not edges: CO@Work 2020, 1:37:02)*; the quote itself stays here.
+
+*Increment:*
+
+````text
+**Increment**: overturned. Not "a generic solver so nobody hand-builds branch-and-price": GCG as a first try and an estimate, said in the CO@Work 2020 lecture and in print from 2021, corrected from *since 2017* [S006 pp. 76–77; S014 arXiv p. 14]; ⚠ the generic framing persists in group texts to 2025 [S019 p. 26], and the reader who needs a probe is named in 2012 [S070 p. 4] (Tensions 1–2); his 2024–26 tailored studies are built on SCIP.
+````
+
+*Practice:*
+
+````text
+- Practice: compact baselines kept and re-run, the decomposition's root bound set against the solver's after cuts [S051 pp. 5, 7, 10–11; S026 p. 7; S089 pp. 22, 28; S115 pp. 17, 22]; one practised probe [S042 pp. 10–17].
+````
+
+*Say–do:*
+
+````text
+- Say–do: ✅ stated + practised for steps 1, 3, 5, 6 (full texts: 59 works); step 2 ✅ in the algorithmic papers (Practice), ⚠ skipped where the extended formulation is the field's state of the art [S085 p. 10] or branch-and-price only bounds a heuristic [S035 pp. 13–15]; ⚠ step 4 said in the CO@Work 2020 lecture (1:35:41, ASR) and in print from 2021 [S006 pp. 76–77; S014 arXiv p. 14], seeded in 2012 [S070 p. 4], not shown before his tailored studies [S089 pp. 30–31].
+````
+
+*Variant bullet, the practised probe:*
+
+````text
+  - ⚠ Probe the known structure next to detected alternatives: in the one practised probe the canonical planning-stage decomposition was the worst of 75 (gap 5182.32% against 54.3% for the best) [S042 pp. 10, 12, 17–18].
+````
+
+*Step 3:*
+
+````text
+3. Ask which larger object could be a variable because its subproblem is solvable: "we model in paths not only in arcs, we model in entire matchings not in edges" (CO@Work 2020, 1:37:02). Pricing with the integrality property cannot raise the bound (PD3).
+````
+
+*Step 5:*
+
+````text
+5. If it pays, build on a framework that manages the tree (SCIP pricer plugins in his group). In his PhD he did column generation without branching because he would have had to write the tree (podcast 0:36:35, ASR).
+````
+
+*Stop rule:*
+
+````text
+**🔴 Stop rule**: stay with branch-and-cut when the probe shows no bound gain, or pricing is only a generic MIP. Without structure "it can be detrimental to performance to try to use a decomposition anyways" (GCG `why-gcg.md`, group); "the solver may completely fail" (CPAIOR 2017 abstract, DOI 10.1007/978-3-319-59776-8_16). ⚠ Narrower than his record: a measured go reason or a structured pricing MIP can override it (Variants).
+````
+
+*Limitations:*
+
+````text
+**Limitations**: supplying the structure beats automatic detection (Yıldız, Boland, Savelsbergh 2022), so probe with the known structure [inferred], ⚠ next to detected alternatives (Variants). "No tree management" dates from CPLEX 3.0 days.
+````
+
 <a id="method-2"></a>
 
 ## Method 2: Enumerate small, then explain or automate
@@ -431,6 +573,51 @@ Counts are distinct works whose digest links the method; a card can be evidence 
 **Different from standard practice**: solver papers pick a rule and tune it; enumerating every reformulation of toy models, ending in conjectures, is unusual.
 
 **Limitations**: toy scale; transfer to real instances is open. The 2018 study starts from a theorem, the 2025 abstract from observations.
+````
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened, moved or removed, word for word as they stood before it (fenced: links and quotation marks as in SKILL.md, where the links resolve from the skill folder). The shortened lines are in SKILL.md.
+
+The two variant bullets removed from SKILL.md repeat its step 3 (random sampling rejected) and its Limitations (the theorem first).
+
+*Review fix (2026-11-28):* the Limitations sentence on the theorem-first order carries the ⚠ again (*⚠ The 2018 study starts from a theorem*), since the method's fullest instance reverses the method's own order; the two bullets stay here.
+
+*Limitations, as it stood before the ⚠ was added:*
+
+````text
+**Limitations**: toy scale; transfer to real instances is open. The 2018 study starts from a theorem, settled in a 2015 manuscript [D006 p. 11]; the 2025 keynote abstract starts from observations.
+````
+
+*Increment:*
+
+````text
+**Increment**: new. The prior had one fragment (learning when to decompose), its weakest step.
+````
+
+*Practice:*
+
+````text
+- Practice: every reformulation of models with at most 18 constraints, the proxy validated against it [S058 pp. 2–11]; one proxy of six kept on 39 MIPLIB instances [S015 preprint pp. 8, 11–21]; a counterexample built by enumerating the vertices of a tiny instance, 1998 [S063 pp. 1–2]; one class proved and the general case left as a conjecture [S020 pp. 7–8].
+````
+
+*Say–do:*
+
+````text
+- Say–do: ✅ stated + practised (co-authored; sole voice in 2012 [S070 p. 7]); full texts: 33 works; exit B dominates 1998–2008, enumeration 2011–18, exit A once [S009 pp. 2–5].
+````
+
+*Variant bullets 2 and 3 (repeated in Limitations and step 3):*
+
+````text
+  - ⚠ The theorem of the extremes first (2015), the space between second (2018) [D006 p. 11; S058 pp. 1–2].
+  - ⚠ Random sampling of reformulations rejected [S058 p. 6].
+````
+
+*Checkpoint:*
+
+````text
+**🔴 Checkpoint**: a proxy that looks right is not evidence; learned rankers later beat both the border-area score and GCG's score (Weiner et al., *EURO J. Comput. Optim.* 2023, DOI 10.1016/j.ejco.2023.100061). If a learned rule is not carried into the solver, say so: the 2017 selector left no trace in GCG's CHANGELOG, docs or source (searched 2026-11-08 [group]); GCG 4.0 ships score plugins [S019 pp. 32–33]. Practised in 2018 [S058 pp. 7–8].
 ````
 
 <a id="method-3"></a>
@@ -516,6 +703,42 @@ The synthesis's H14, written into SKILL.md as Method 3 step 2a (08 §5, copied):
 **Limitations**: no statistical test and no seed or permutation protocol (hMETIS ran with one fixed seed), although the 2015 paper calls variability "very pronounced". Needs a cluster and licences; lone version: re-run the host framework and one public competitor, and say what was not re-run.
 ````
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened, moved or removed, word for word as they stood before it (fenced: links and quotation marks as in SKILL.md, where the links resolve from the skill folder). The shortened lines are in SKILL.md.
+
+Step 3's pages stand in catalog EP3 and in Practice.
+
+*Increment:*
+
+````text
+**Increment**: deepened: adds the protocol, the sole-authored statement and the lapses.
+````
+
+*Practice:*
+
+````text
+- Practice: a success criterion stated in his sole voice in 2012: no win expected on the average instance, failure unless it wins on structured ones [S070 p. 7]; a set chosen against the method [S015 preprint p. 8]; competitors re-run, gaps to published counts explained, losses in an appendix [S089 pp. 22–23, 27–28, 42]; the baseline given the tailored code's components [S115 pp. 17, 22]; a predecessor's procedure re-implemented after asking him [S068 pp. 2, 5].
+````
+
+*Say–do:*
+
+````text
+- Say–do: ✅ stated + practised for steps 1–5 (full texts: 76 works); ⚠ step 6 mixed: 13 co-authored cards record headline wording or adverbs that the tables do not carry (claim sizing only), careful sizing beside them in every period [S010 p. 1; S074 manuscript p. 23].
+````
+
+*Step 3:*
+
+````text
+3. Baselines: the host framework without your component, then the strongest competitor re-run by you (same machine, solver version, limit, threads). Ask authors for unpublished code; explain any gap to their reported numbers. Give the baseline your own components (EP3) [S115 pp. 17, 22].
+````
+
+*Limitations:*
+
+````text
+**Limitations**: no statistical test and no seed or permutation protocol in the studies his group led [S065 p. 6] (hMETIS ran with one fixed seed), although the 2015 paper calls variability "very pronounced"; narrowed from *no seed or permutation protocol*: he co-signed seed protocols in the suite reports [S013 pp. 14, 70–71]. Needs a cluster and licences; lone version: re-run the host framework and one public competitor, and say what was not re-run.
+````
+
 <a id="method-4"></a>
 
 ## Method 4: Synthesis writing as a research instrument
@@ -576,6 +799,32 @@ The synthesis's H14, written into SKILL.md as Method 3 step 2a (08 §5, copied):
 **Limitations**: a survey also fixes errors (the attribution stood twenty years); a junior's survey needs a senior co-author. Lone version: a thesis chapter first, as he did.
 ````
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened, moved or removed, word for word as they stood before it (fenced: links and quotation marks as in SKILL.md, where the links resolve from the skill folder). The shortened lines are in SKILL.md.
+
+Step 6's example, the corrected attribution, stays cited in SKILL.md under Practice and in the survey anatomy's Reception row; the names are here.
+
+*Review fix (2026-11-28):* step 6 carries its example again in short form (*a wrong Kantorovich attribution, 2005*), the referent of *the attribution* in the Limitations; the correctors' names stay here.
+
+*Increment:*
+
+````text
+**Increment**: deepened: surveys as his way of finding what is not understood, not only output.
+````
+
+*Variant bullet, inside research articles:*
+
+````text
+  - ⚠ Inside research articles: known algorithms as extremes of one construction [S061 pp. 1, 9, 17; S044 pp. 1–2, 10, 14]; scattered constraint groups collected into one model [S075 p. 3].
+````
+
+*Step 6:*
+
+````text
+6. Take corrections in and credit the corrector: a wrong Kantorovich attribution (2005) was corrected in the 2026 book after Uchoa and Sadykov raised it [S060 pp. 4, 49].
+````
+
 <a id="method-5"></a>
 
 ## Method 5: Certify what you deliver: an exact relaxation bounds the heuristic
@@ -620,6 +869,28 @@ The synthesis's H14, written into SKILL.md as Method 3 step 2a (08 §5, copied):
 
 - **New method** in SKILL.md, house format, numbered 5 (the four existing methods keep their numbers). One line shortened from 08's; Stated [S008 manuscript p. 13]; Practice [S022 pp. 1, 9–12; D002 pp. 21–23; S035 pp. 13–16; S018 manuscript p. 28; S080 p. 8; S030 arXiv pp. 10–11]; Say–do (sole [S033 report p. 4]; joint [D002 p. 21]; 14 / 1 / 1 cards per the mining summary); variants C10, the S025 contradiction and the cost of the certificate [S035 pp. 1, 13–17; S025 preprint p. 21]; six steps and the checkpoint from 08, shortened; Limitations from 08.
 - **Relations**: H2 stays as a one-line pointer to Method 5, so that labels stay stable; G1 names Method 5 as its procedure; Misreading 5 says Method 5 resolves the pairing; Workflow A step 5, the Routing heuristic row and the Roundtable Card's default recommendation point to it.
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened, moved or removed, word for word as they stood before it (fenced: links and quotation marks as in SKILL.md, where the links resolve from the skill folder). The shortened lines are in SKILL.md.
+
+*Increment:*
+
+````text
+**Increment**: new (08 §4); absorbs H2, gives G1 its procedure, explains Misreading 5.
+````
+
+*Practice:*
+
+````text
+- Practice: slab stacking [S022 pp. 1, 9–12]; coil coating [D002 pp. 21–23; S035 pp. 13–16]; the Kiel Canal [S018 manuscript p. 28]; districting, optimality claimed only where proven [S080 p. 8]; stabbing numbers [S030 arXiv pp. 10–11]; a pricing heuristic with a proven error bound, sole-authored [S033 report p. 4].
+````
+
+*Different from standard practice:*
+
+````text
+**Different from standard practice**: a gap to a relaxation bound is common in exact OR; here an exact relaxation is built only to certify a delivered heuristic, its validity condition stated wherever the gap appears and its master seeded with the heuristic's columns, even with brute-force pricing and unreported bound times (the coil-coating team: Höhn, König, Möhring, Lübbecke [S035 pp. 13–15; D002 pp. 21–25]), in fields whose prior work was heuristic only: slab stacking [S022 p. 3], coil coating [S035 p. 2], districting [S080 p. 2].
+````
 
 <a id="workflows"></a>
 
@@ -754,6 +1025,48 @@ The synthesis's H14, written into SKILL.md as Method 3 step 2a (08 §5, copied):
 **Stages without evidence**: see the last Routing row.
 ````
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened, moved or removed, word for word as they stood before it (fenced: links and quotation marks as in SKILL.md, where the links resolve from the skill folder). The shortened lines are in SKILL.md.
+
+The card lists removed from Workflow B's checkpoint and Workflow C's steps 1, 2 and 3a stand in the catalog entries the steps name (EP9, DM17, DM1, DM2 and DM3, PD13); Workflow G step 4 now points to Workflow C step 3a, which holds the same branching rule.
+
+*Workflow B, checkpoint:*
+
+````text
+**🔴 Checkpoint (go/no-go)**: go only if (a) the Dantzig-Wolfe root bound beats the compact root bound after the solver's cuts, not only the LP bound (cuts can recover Dantzig-Wolfe bounds, Chen, Günlük, Lodi 2025; practised in 2011 and 2015 [S032 manuscript p. 8; S026 p. 7], corrected from *[inferred]*), and (b) pricing has a named algorithm other than a general MIP (H1). Otherwise Method 1's stop rule: stay with branch-and-cut or change the formulation (H5), unless a measured go reason holds (Method 1 Variants). He states no threshold for a "material" gain: report the measured gap; the user decides. **Benders line**: test (a) does not apply, since with LP subproblems and all cuts the Benders master LP gives the compact LP bound [inferred: Benders projection]; the record's go reason is size or memory [S075 p. 2]; after the build, read the master/subproblem time split and aim the next component at the dominant share (EP9) [S075 p. 23; S076 pp. 28–29].
+````
+
+*Workflow C, step 1:*
+
+````text
+1. Basic column generation first, "maybe keep it simple first" (book p. 508); a feasible start by Farkas pricing (DM9); name the master–pricing tolerances and use one for both (DM17) [S008 manuscript p. 13; S060 pp. 23–24].
+````
+
+*Workflow C, step 2:*
+
+````text
+2. Heuristic and partial pricing, several cheap and diverse columns per round, as a cascade, exact only for the proof (DM1) [S027 pp. 133–135; S060 pp. 15–18]; monitor the Lagrangian bound and stop by its tests (H1, DM20).
+````
+
+*Workflow C, step 3a:*
+
+````text
+3a. Before adding a branching rule or cut, write what it does to pricing (H11): a bound change, a new resource, a dual of uncertain sign, a broken dominance [S085 p. 38; S115 p. 19]. Keep what pricing absorbs (bounds on original variables, robust cuts whose duals enter arc costs) [S007 manuscript p. 11; D002 pp. 23–24; S065 p. 5], put the rest in the master or drop it, and roll cuts back when pricing degrades [S077 pp. 57–58, 83]. With identical blocks aggregated (DM4), x can be integral while λ is fractional: branch on λ-sums or auxiliary variables [S077 pp. 22, 27–28], or on aggregated originals with a disaggregation check, Ryan-Foster as fallback (PD13) [S050 preprint pp. 4–6, 22–23]. Keep the dual bound valid inside the framework (DM16).
+````
+
+*Workflow G, step 1:*
+
+````text
+1. Instrument first (H6): on one small instance re-check timing, counts and the suspicious number. Of his PhD code: "maybe it was buggy" (podcast 0:37:15, ASR).
+````
+
+*Workflow G, step 4:*
+
+````text
+4. Tree explodes: does branching keep the pricing structure, on original variables (Method 1 step 6, H5, Workflow C step 3a)? With identical blocks, branch on λ-sums, auxiliary or aggregated variables with a disaggregation check (PD13).
+````
+
 <a id="heuristic-1"></a>
 
 ## Heuristic 1: Heuristic inside an exact frame
@@ -786,6 +1099,29 @@ The synthesis's H14, written into SKILL.md as Method 3 step 2a (08 §5, copied):
    - Case: GCG defaults, checked in the code: one heuristic pricing iteration at every depth; all pricing problems solved every 10th round [group]. "Remember: B&B stays exact, but heuristics help to speed up the search and satisfy the practitioner." (blog 2014-12-19).
 ````
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened, moved or removed, word for word as they stood before it (fenced: links and quotation marks as in SKILL.md, where the links resolve from the skill folder). The shortened lines are in SKILL.md.
+
+H1's stopping tests stand in catalog DM20 and its diverse-column rule in DM1.
+
+*Review fix (2026-11-28):* the subgradient remedy and the first two tests are back in SKILL.md's H1: *if the master is hard to solve, take duals from subgradient iterations instead (1:35:01–1:35:19) [S088 p. 58]*, where the S088 card gives the remedy's written form (a few subgradient iterations instead of re-optimizing a degenerate RMP, p. 58), and *Tests [S008 manuscript pp. 3, 6] (sole)*: the Lagrangian bound with its κ condition, and the stop at equal rounded-up bounds with integer costs. The third test (branch early when column generation tails off and give the children the parent's bound), the diverse-column rule and the other CO@Work quotes stay here and in DM20 and DM1.
+
+*Research Heuristics intro (the line above H9):*
+
+````text
+Labels are identifiers, not a ranking. H2 points to Method 5, H11 to Workflow C step 3a and H13 to Workflow A step 2, which carry their steps, so that ten heuristics stay in working form; H12 is new; the synthesis's H14 is Method 3 step 2a.
+````
+
+*H1:*
+
+````text
+2. **H1 · Heuristic inside an exact frame.** If pricing is expensive, price heuristically to the end, return several columns per round, do not call every pricing problem each round, and "monitor the Lagrangian dual bound, you get it for free. So when the duality gap is small just branch" (CO@Work 2020, 1:34:42).
+   - Stated (CO@Work 2020): "try to generate more than one solution in the pricing problem if you can" (1:33:30); "generate cheaply columns that will always help you, before you start solving the pricing problem exactly" (1:33:36–1:33:41); exact pricing for the proof, "but when you're lucky only once" (1:34:07–1:34:13). If the master is hard to solve ("you need an interior point method or the simplex method or whatever method to solve that", 1:34:56), get duals from subgradient iterations instead, from the Lagrangian literature (1:35:01–1:35:19).
+   - Case: GCG defaults, checked in the code: one heuristic pricing iteration at every depth; all pricing problems solved every 10th round [group]. "Remember: B&B stays exact, but heuristics help to speed up the search and satisfy the practitioner." (blog 2014-12-19). In print from his 2001 thesis [S027 pp. 125, 133–135] and with his advisor in 2003 [S054 manuscript p. 9]; ⚠ the bound is free only in iterations where pricing is exact or a relaxation [S008 manuscript p. 3; S060 p. 20]; devices DM1, PD6, DM20.
+   - Tests, in his own voice [S008 manuscript pp. 3, 6]: v(RMP) + κ·v(PP) ≤ v(MP) when an optimal master solution has Σλ ≤ κ (κ = 1 with a convexity row); with integer costs, stop when the rounded-up bounds meet, ⌈LB⌉ = ⌈z̄⌉; when column generation tails off, branch early and give the children the parent's bound. Return diverse columns, not only the most negative ones [S060 pp. 15–16, 41–42; S050 preprint p. 9]. ([ledger](references/research/09-evidence-ledger.md#heuristic-1))
+````
+
 <a id="heuristic-2"></a>
 
 ## Heuristic 2: Certificate before deployment (now a pointer to Method 5)
@@ -811,6 +1147,21 @@ The synthesis's H14, written into SKILL.md as Method 3 step 2a (08 §5, copied):
 ````text
 3. **H2 · Certificate before deployment.** If a heuristic goes to a practitioner, ship it with a bound.
    - Case: coil coating, a genetic algorithm certified within 10% by an IP, then deployed (DOI 10.1287/mnsc.1100.1302); from Koch: "never ever deliver to a practitioner a solution to any optimization problem that is not 2-opt" (blog 2014-12-19).
+````
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened, moved or removed, word for word as they stood before it (fenced: links and quotation marks as in SKILL.md, where the links resolve from the skill folder). The shortened lines are in SKILL.md.
+
+The ⚠ on the deployment date stands in SKILL.md under Method 5's Variants.
+
+*Review fix (2026-11-28):* the ⚠ is back in H2 as well, word for word (*in use since December 2009, the order of certificate and deployment not stated* [S035 pp. 1, 17]), since H2's title asserts that order.
+
+*H2:*
+
+````text
+3. **H2 · Certificate before deployment.** If a heuristic goes to a practitioner, ship it with a bound: now Method 5.
+   - Case: coil coating, a genetic algorithm certified within 10% on short-term instances against the FIFO-restricted optimum [S035 pp. 13–14, 16–17] (DOI 10.1287/mnsc.1100.1302), corrected from *certified within 10% by an IP, then deployed*; ⚠ in use since December 2009, the order of certificate and deployment not stated [S035 pp. 1, 17]; from Koch: "never ever deliver to a practitioner a solution to any optimization problem that is not 2-opt" (blog 2014-12-19). ([ledger](references/research/09-evidence-ledger.md#heuristic-2))
 ````
 
 <a id="heuristic-3"></a>
@@ -847,6 +1198,17 @@ The synthesis's H14, written into SKILL.md as Method 3 step 2a (08 §5, copied):
    - Case: blog "Millionen Entscheidungen!", 2014-10-27 (02 §4.1); "use that power responsibly" (2026). Practice visible only in abstracts and chair pages.
 ````
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened, moved or removed, word for word as they stood before it (fenced: links and quotation marks as in SKILL.md, where the links resolve from the skill folder). The shortened lines are in SKILL.md.
+
+*H3:*
+
+````text
+4. **H3 · Three questions for the problem owner.** What information does the plan handed to the executor contain? Shown two plans, can you say which is better and why? Which requirements are truly fixed, and which exist only in our heads? Then read the first plans for forgotten constraints.
+   - Case: blog "Millionen Entscheidungen!", 2014-10-27 (02 §4.1); "use that power responsibly" (2026); practice in full texts 1998–2026 [S054 manuscript pp. 10–11; S035 pp. 14–15], corrected from *visible only in abstracts*. Extension, plan for the planner who executes: "Partial solutions fixed manually must never be overruled by the computer." [S054 manuscript p. 11] (joint); reliability over optimality [S037 p. 7]. ([ledger](references/research/09-evidence-ledger.md#heuristic-3))
+````
+
 <a id="heuristic-4"></a>
 
 ## Heuristic 4: Turn the tool's sub-problem into a research problem
@@ -872,6 +1234,17 @@ The synthesis's H14, written into SKILL.md as Method 3 step 2a (08 §5, copied):
 ````text
 5. **H4 · Turn the tool's sub-problem into a research problem.** If a step of your own solver is weak, make it a paper.
    - Case: detection became a branch-and-price study of hypergraph vertex separation (DOI 10.1007/s12532-019-00171-5); choosing a decomposition became the 2018 and 2017 papers. The link is [inferred].
+````
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened, moved or removed, word for word as they stood before it (fenced: links and quotation marks as in SKILL.md, where the links resolve from the skill folder). The shortened lines are in SKILL.md.
+
+*H4:*
+
+````text
+5. **H4 · Turn the tool's sub-problem into a research problem.** If a step of your own solver is weak, make it a paper.
+   - Case: detection became a branch-and-price study of hypergraph vertex separation (DOI 10.1007/s12532-019-00171-5); choosing a decomposition became the 2018 and 2017 papers. The link is stated in his sole voice [S070 p. 6] and in a joint paper [S050 preprint p. 1], corrected from *[inferred]*. ([ledger](references/research/09-evidence-ledger.md#heuristic-4))
 ````
 
 <a id="heuristic-5"></a>
@@ -903,6 +1276,19 @@ The synthesis's H14, written into SKILL.md as Method 3 step 2a (08 §5, copied):
    - Case: the k-vertex-cut preprint changes formulation and branching, titled "strikes back" (arXiv:2602.04984); a chair thesis template, "Branch-and-Price Applications: Improving on the Literature" (04 E3).
 ````
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened, moved or removed, word for word as they stood before it (fenced: links and quotation marks as in SKILL.md, where the links resolve from the skill folder). The shortened lines are in SKILL.md.
+
+*Review fix (2026-11-28):* the 04 E3 pointer is back in SKILL.md in short form (*a chair thesis topic, 04 E3*), because How to Use gives *04 E3* as its example of a research-note pointer; *topic* rather than *template*, since 04 E1 and E3 also call the chair's model thesis a template. The topic's title and the strikes-back wording stay here.
+
+*H5:*
+
+````text
+6. **H5 · Reopen a "wrong technique" verdict by changing the formulation.** If the literature says column generation fails for a class, check its formulation and branching, and try another.
+   - Case: the k-vertex-cut preprint changes formulation and branching, titled "strikes back" (arXiv:2602.04984); a chair thesis template, "Branch-and-Price Applications: Improving on the Literature" (04 E3). "the integrality property is an attribute of the model, not of the problem." [S087 p. 26] (book, joint). ([ledger](references/research/09-evidence-ledger.md#heuristic-5))
+````
+
 <a id="heuristic-6"></a>
 
 ## Heuristic 6: Too-good results are a bug signal; check the instrument first
@@ -922,6 +1308,17 @@ The synthesis's H14, written into SKILL.md as Method 3 step 2a (08 §5, copied):
 ````text
 7. **H6 · Too-good results are a bug signal; check the instrument first.** If a number looks too good or a statistic does not add up, fix the measurement before the claim.
    - Case: "the results are too good ... there must be something wrong" (podcast 0:09:17, ASR). His commits: timing output removed because "the time in the individual detectors seems to be wrong" (67dc6a57); a stall traced to the commit that caused it (493fb6c0); master-only variables no longer counted as linking (fe9edd67).
+````
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened, moved or removed, word for word as they stood before it (fenced: links and quotation marks as in SKILL.md, where the links resolve from the skill folder). The shortened lines are in SKILL.md.
+
+*H6:*
+
+````text
+7. **H6 · Too-good results are a bug signal; check the instrument first.** If a number looks too good or a statistic does not add up, fix the measurement before the claim.
+   - Case: "the results are too good ... there must be something wrong" (podcast 0:09:17, ASR). His commits: timing output removed because "the time in the individual detectors seems to be wrong" (67dc6a57); a stall traced to the commit that caused it (493fb6c0); master-only variables no longer counted as linking (fe9edd67). An optimum corrected with its cause [S041 manuscript p. 14]. ([ledger](references/research/09-evidence-ledger.md#heuristic-6))
 ````
 
 <a id="heuristic-7"></a>
@@ -945,6 +1342,17 @@ The synthesis's H14, written into SKILL.md as Method 3 step 2a (08 §5, copied):
 ````text
 8. **H7 · A new component ships off until the evidence is in.** If it helps on some instances, keep it off by default until a general set shows no harm.
    - Case: strong branching for branch-and-price, promising in 2021, still `DEFAULT_USESTRONG FALSE` in 2026, with no documented reason or follow-up; pricing single-threaded by default for determinism [group].
+````
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened, moved or removed, word for word as they stood before it (fenced: links and quotation marks as in SKILL.md, where the links resolve from the skill folder). The shortened lines are in SKILL.md.
+
+*H7:*
+
+````text
+8. **H7 · A new component ships off until the evidence is in.** If it helps on some instances, keep it off by default until a general set shows no harm.
+   - Case: strong branching for branch-and-price, promising in 2021, still `DEFAULT_USESTRONG FALSE` in 2026, with no documented reason or follow-up; pricing single-threaded by default for determinism [group]. ⚠ Not exclusive: SCIP release-report norm [S019 pp. 13, 19–21]. ([ledger](references/research/09-evidence-ledger.md#heuristic-7))
 ````
 
 <a id="heuristic-8"></a>
@@ -976,6 +1384,19 @@ The synthesis's H14, written into SKILL.md as Method 3 step 2a (08 §5, copied):
    - Case: six conference-to-journal pairs, SODA 2004 to IPCO 2011; SEA is the group's usual stop (01 §1.6). Not exclusive to him.
 ````
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened, moved or removed, word for word as they stood before it (fenced: links and quotation marks as in SKILL.md, where the links resolve from the skill folder). The shortened lines are in SKILL.md.
+
+*Review fix (2026-11-28):* the pairs and two SEA cards are back in SKILL.md (*six conference-to-journal pairs, SODA 2004 to IPCO 2011*; *SEA is the group's usual stop, 2010 to 2018 [S011; S058]*), so that the claim is cited again. Under the stage's limit of three card references per heuristic, the other three SEA cards [S070; S065; S068] and *eight of them carded* stay here.
+
+*H8:*
+
+````text
+9. **H8 · Refereed conference first.** Send an extended abstract to a refereed conference, then the journal version.
+   - Case: six conference-to-journal pairs, SODA 2004 to IPCO 2011, eight of them carded (ledger); SEA is the group's usual stop [S011; S070; S065; S068; S058]. Not exclusive to him. The journal version recomputes and corrects [S041 manuscript pp. 12, 14]. ([ledger](references/research/09-evidence-ledger.md#heuristic-8))
+````
+
 <a id="heuristic-9"></a>
 
 ## Heuristic 9: One thesis, one plug-in on a shared instrument; the head as editor
@@ -997,6 +1418,19 @@ The synthesis's H14, written into SKILL.md as Method 3 step 2a (08 §5, copied):
    - Case: structure detection runs through eight theses over twelve years (04 E1–E2); new hires "improve GCG by joining (heading?) the dev team" (Opt-Net 2019); his 92 commits (2018–21) are merges, bug traces, docs and release chores. Cost: several long-serving developers have no catalogued dissertation (04 H). Lone version: one component of a maintained code.
 ````
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened, moved or removed, word for word as they stood before it (fenced: links and quotation marks as in SKILL.md, where the links resolve from the skill folder). The shortened lines are in SKILL.md.
+
+*Review fix (2026-11-28):* the case, the commits and the cost are back in SKILL.md, shortened: *structure detection ran through six theses and two papers over twelve years, 04 E1–E2*, *his 92 commits, 2018–21* and *Cost [inferred]: several long-serving developers have no catalogued dissertation (04 H)*. Two changes against the block below: 04 E2 lists eight entries for structure detection, six theses and two papers (Mathematical Programming 2015, SEA 2018), so *eight theses* became *six theses and two papers*; and 04 H holds its reading of the missing dissertations as inferred, so the cost carries [inferred]. The Opt-Net quote and the bug traces stay here.
+
+*H9:*
+
+````text
+1. **H9 · One thesis, one plug-in on a shared instrument; the head as editor** (overturned). If you lead a group around a solver, scope each thesis as one component with its own setting and test target, and do merging, documentation and release notes yourself.
+   - Case: structure detection runs through eight theses over twelve years (04 E1–E2); new hires "improve GCG by joining (heading?) the dev team" (Opt-Net 2019); his 92 commits (2018–21) are merges, bug traces, docs and release chores. Cost: several long-serving developers have no catalogued dissertation (04 H). Lone version: one component of a maintained code. ([ledger](references/research/09-evidence-ledger.md#heuristic-9))
+````
+
 <a id="heuristic-10"></a>
 
 ## Heuristic 10: Ask one named outside expert in
@@ -1016,6 +1450,17 @@ The synthesis's H14, written into SKILL.md as Method 3 step 2a (08 §5, copied):
 ````text
 10. **H10 · Ask one named outside expert in.** If your work leans on a school you are not part of, ask its leading figure to referee or visit.
     - Case: he asked for Desrosiers as thesis referee, which became 25 years of joint work (04 A3, I).
+````
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened, moved or removed, word for word as they stood before it (fenced: links and quotation marks as in SKILL.md, where the links resolve from the skill folder). The shortened lines are in SKILL.md.
+
+*H10:*
+
+````text
+10. **H10 · Ask one named outside expert in.** If your work leans on a school you are not part of, ask its leading figure to referee or visit.
+    - Case: he asked for Desrosiers as thesis referee, which became 25 years of joint work (04 A3, I) [S027 pp. 1, 6]. ([ledger](references/research/09-evidence-ledger.md#heuristic-10))
 ````
 
 <a id="heuristic-11"></a>
@@ -1072,6 +1517,18 @@ The synthesis's H14, written into SKILL.md as Method 3 step 2a (08 §5, copied):
 
 - New heuristic (exclusivity partial): one line, the *secret stars* fragment [S088 p. 35] and the time-split evidence [S088 pp. 41, 52, 58; S075 p. 23]; it carries the Workflow G step 3 correction and feeds the Routing tailing-off row and Workflow C step 3.
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened, moved or removed, word for word as they stood before it (fenced: links and quotation marks as in SKILL.md, where the links resolve from the skill folder). The shortened lines are in SKILL.md.
+
+*Review fix (2026-11-28):* the timings that the ⚠ qualifies are back in SKILL.md, word for word and capitalised (*The master's share decides [S088 pp. 41, 52, 58]: in the book's example the RMP took 75% of the time and stabilization cut total time by 89% [S088 p. 52]*); the *secret stars* fragment and the group's Benders use [S075 p. 23] stay here.
+
+*H12:*
+
+````text
+12. **H12 · Diagnose column generation from the dual side before tuning it** (new). When it tails off or oscillates, read the duals and the master/pricing time split: dual seeding, boxes or smoothing when the master dominates or its duals jump, the pricing cascade when pricing dominates; re-measure after each component (DM10, PD14, EP9). The duals are "the secret stars" [S088 p. 35] (book, joint); the master's share decides [S088 pp. 41, 52, 58]: in the book's example the RMP took 75% of the time and stabilization cut total time by 89% [S088 p. 52]; his group reads the same split in its Benders work [S075 p. 23]. ⚠ The Montréal school's view; the book's timings are borrowed from co-authors' studies [S088 pp. 40–41]. ([ledger](references/research/09-evidence-ledger.md#heuristic-12))
+````
+
 <a id="heuristic-13"></a>
 
 ## Heuristic 13: Bring the exact IP to problems a neighbouring community knows only by theory or heuristics
@@ -1098,6 +1555,16 @@ The synthesis's H14, written into SKILL.md as Method 3 step 2a (08 §5, copied):
 
 - New heuristic (say–do and exclusivity partial): one line, the dates 2003–2016, and three cases [D001 arXiv p. 2; S053 p. 2; S065 p. 10]; fed into the Routing row *Only theory or metaheuristics exist for this*, Workflow A step 2 and the trajectory's 2001–2009 row.
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened, moved or removed, word for word as they stood before it (fenced: links and quotation marks as in SKILL.md, where the links resolve from the skill folder). The shortened lines are in SKILL.md.
+
+*H13:*
+
+````text
+13. **H13 · Bring the exact IP to problems a neighbouring community knows only by theory or heuristics** (new): its steps are Workflow A step 2. Cases 2003–2016: stabbing numbers, rectangle covers [D001 arXiv p. 2; S053 p. 2]; cut packing, where a factor-2 theoretical gap did not appear in the instances [S065 p. 10]. ([ledger](references/research/09-evidence-ledger.md#heuristic-13))
+````
+
 <a id="misreadings"></a>
 
 ## Common misreadings
@@ -1122,6 +1589,36 @@ Confirmed with pages (no change): Common Misreading 2 (own code with CPLEX and h
 3. **"A column-generation partisan."** He calls his view "personally biased" (TOP 2015); a 2021 paper reports limited efficacy of Benders cuts in pricing (DOI 10.1016/j.disopt.2021.100626); his 2024 slides call problem-specific cuts "indispensable".
 4. **"An ML-for-MIP researcher."** Two papers (CPAIOR 2017; DOI 10.1287/ijoc.2021.1117), no trace in GCG, nothing after 2022, public scepticism in 2024 and 2026 (03 §6; 06 T11).
 5. **"An exact-optimization purist."** The self-declared "fan" of exact optimization advises first of all not to solve pricing exactly; his group deployed a certified genetic algorithm (02 §4.4).
+````
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened, moved or removed, word for word as they stood before it (fenced: links and quotation marks as in SKILL.md, where the links resolve from the skill folder). The shortened lines are in SKILL.md.
+
+*Review fix (2026-11-28):* Misreading 5 has its pointer *(02 §4.4; [S035 pp. 16–17])* again, word for word, because How to Use gives *02 §4.4* as its example of a research-note pointer.
+
+*Misreading 1:*
+
+````text
+1. **"He designed and wrote GCG."** The design is Gerald Gamrath's (first commit 2008-11-25); the largest committers are Bergner, Puchert, Mühmer, Bastubbe and Witt; his commits are maintenance. The book: "Marco is the one with the vision who keeps it all together." (book p. 538, joint)
+````
+
+*Misreading 3:*
+
+````text
+3. **"A column-generation partisan."** He calls his view "personally biased" (TOP 2015); a 2021 paper reports limited efficacy of Benders cuts in pricing (DOI 10.1016/j.disopt.2021.100626) [S074 manuscript p. 2]; his 2024 slides call problem-specific cuts "indispensable".
+````
+
+*Misreading 4:*
+
+````text
+4. **"An ML-for-MIP researcher."** Two papers (CPAIOR 2017; DOI 10.1287/ijoc.2021.1117), no trace in GCG, nothing after 2022, public scepticism in 2024 and 2026 (GCG searched 2026-11-08 [group]; the ML papers among the cards end with S043, 2022).
+````
+
+*Misreading 5:*
+
+````text
+5. **"An exact-optimization purist."** The self-declared "fan" of exact optimization advises first of all not to solve pricing exactly; the coil-coating project (Höhn, König, Möhring, Lübbecke) deployed a genetic algorithm certified on short-term FIFO instances (02 §4.4; [S035 pp. 16–17]), corrected from *his group deployed a certified genetic algorithm*. Method 5 resolves it.
 ````
 
 <a id="anatomy-sea2010"></a>
@@ -1156,6 +1653,22 @@ All co-authored: "the authors" unless a sole-voice source is given.
 | Abandoned paths | Transform-then-solve; structure still supplied by file. |
 | Reception | The paper GCG asks users to cite. Outside verdicts on generic branch-and-price for general MIPs: "still in their infancy" (Chen, Günlük, Lodi 2025). |
 | Methods | Method 1, Method 3 |
+````
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened, moved or removed, word for word as they stood before it (fenced: links and quotation marks as in SKILL.md, where the links resolve from the skill folder). The shortened lines are in SKILL.md.
+
+*Origin row:*
+
+````text
+| Origin | Generic codes were "started from scratch each time, at least in terms of standard MIP techniques like preprocessing and tree management" (Optimization Online 2010/03/2556 preprint, p. 2; published text [S011 p. 2]); the aim: decompose when promising, as solvers cut [S011 p. 1]. |
+````
+
+*Key insight row:*
+
+````text
+| Key insight | Two synchronized SCIP instances: the original is "the primary one which coordinates the solving process", the extended one is "controlled by a relaxation handler" inside it (preprint p. 4) [S011 pp. 4–5]; Gamrath's design. |
 ````
 
 <a id="anatomy-ipco2011"></a>
@@ -1196,6 +1709,16 @@ All co-authored: "the authors" unless a sole-voice source is given.
 | Methods | Method 3, Method 2 |
 
 Bastubbe, Lübbecke, Witt, SEA 2018 (DOI 10.4230/LIPIcs.SEA.2018.11) is the evidence for Method 2; its anatomy is in 01-publications.md.
+````
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened, moved or removed, word for word as they stood before it (fenced: links and quotation marks as in SKILL.md, where the links resolve from the skill folder). The shortened lines are in SKILL.md.
+
+*Minimum evidence row:*
+
+````text
+| Minimum evidence | From the tables, corrected from *in minutes … on eight MIPLIB 2003 instances*: CPLEX 12.2 hit the hour on four of six dynamic knapsack instances, and with k = 10 the reformulation solved all six within 362 s [S032 manuscript pp. 6–7]; its root bound beat CPLEX's root bound after cuts on seven of eight selected MIPLIB 2003 instances (one tie) and on 13 of 24 in the preprint's Appendix A [S032 manuscript pp. 8, 12]; 2015: 12 of 23 with the automatic choice, 16 with the best candidate [S015 preprint pp. 24, 30]. |
 ````
 
 <a id="anatomy-survey"></a>
@@ -1322,6 +1845,16 @@ SKILL.md keeps five anatomies (framework §五: three to five) and points here; 
 ([full evidence](references/research/09-evidence-ledger.md#anatomy-sea2018))
 ````
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened, moved or removed, word for word as they stood before it (fenced: links and quotation marks as in SKILL.md, where the links resolve from the skill folder). The shortened lines are in SKILL.md.
+
+*Pointer paragraph under the anatomies:*
+
+````text
+Bastubbe, Lübbecke, Witt, SEA 2018 (DOI 10.4230/LIPIcs.SEA.2018.11), with the stable-set theory (2015 manuscript [D006 p. 11]; *Discrete Optimization* 2018, DOI 10.1016/j.disopt.2018.07.001), is the fullest instance of Method 2; its anatomy table is in the [ledger](references/research/09-evidence-ledger.md#anatomy-sea2018), so that this file keeps five anatomies.
+````
+
 <a id="anti-patterns"></a>
 
 ## Research anti-patterns
@@ -1437,6 +1970,16 @@ Assignment by card title and contribution: method S001 S002 S021 S033 S007 S008 
 2025-11 to 2026-11: GCG 4.1.0 (Sep 2026), the open-access book, two preprints; no new position found (06 §8).
 ````
 
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened, moved or removed, word for word as they stood before it (fenced: links and quotation marks as in SKILL.md, where the links resolve from the skill folder). The shortened lines are in SKILL.md.
+
+*Latest:*
+
+````text
+2025-11 to 2026-11: GCG 4.1.0 (Sep 2026), the open-access book, four unreviewed preprints [S089; S115; S075; S076]; no new position found (web research to 2026-11-14; the four preprints read).
+````
+
 <a id="inner-tensions"></a>
 
 ## Inner tensions
@@ -1473,6 +2016,28 @@ Assignment by card title and contribution: method S001 S002 S021 S033 S007 S008 
 - **Tension 6: cuts after reformulation.** 2020: literature cuts "typically, don't help"; 2024: problem-specific cuts "indispensable".
 - **Tension 7: open tools against practice.** "should not rather use our own tools" (2025) and an open-source goal, against Gurobi in teaching and preprocessing and a restrictive licence. Added after unsealing: the joint 2020 editorial says "The OR Forum is not an open access journal" and "We will not trade speed for quality", while weighing community-run options ("We believe in both.") (DOI 10.1007/s43069-020-0001-1, pp. 2–3).
 - **Tension 8: structure against "unstructured".** In 2025: "(in fact, I am more interested in "unstructured")", unexplained.
+````
+
+### Before T3.7 (moved verbatim)
+
+The SKILL.md lines that the T3.7 tightening (2026-11-28) shortened, moved or removed, word for word as they stood before it (fenced: links and quotation marks as in SKILL.md, where the links resolve from the skill folder). The shortened lines are in SKILL.md.
+
+*Tension 1:*
+
+````text
+- **Tension 1: generic against tailored.** "in principle, branch-and-price is a general method to solve general MILPs" (book p. 238), against tailored 2024–26 studies on SCIP and "may even be necessary" for tailoring (p. 509). In 2016, joint: tailoring "still considerably pays" [S073 p. 14].
+````
+
+*Tension 6:*
+
+````text
+- **Tension 6: cuts after reformulation.** 2020: literature cuts "typically, don't help"; 2024: problem-specific cuts "indispensable". Corrected from *a turn*: a stable distinction, generic against problem-specific cuts already in 2010 [S007 manuscript p. 8]; problem-specific clique cuts helped most [S065 p. 9].
+````
+
+*Tension 7:*
+
+````text
+- **Tension 7: open tools against practice.** "should not rather use our own tools" (2025) and an open-source goal, against Gurobi in teaching and preprocessing and a restrictive licence. Added after unsealing: the joint 2020 editorial says "The OR Forum is not an open access journal" and "We will not trade speed for quality", while weighing community-run options ("We believe in both.") (DOI 10.1007/s43069-020-0001-1, pp. 2–3). Commercial solvers carry the 2026 chair work [S075 p. 22] while code and data go public [S089 p. 23].
 ````
 
 <a id="roundtable-card"></a>
