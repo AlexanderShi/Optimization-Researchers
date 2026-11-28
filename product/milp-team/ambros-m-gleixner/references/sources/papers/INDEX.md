@@ -31,7 +31,7 @@
 | 19 | S019 | 2017 | Verifying integer programming results | International Conference on Integer Programming and Combinatorial… | 72 | conference | arXiv | txt | 13 | core | carded |
 | 20 | S020 | 2012 | Improving the accuracy of linear programming solvers with iterative refinement | ISSAC 2012. Proceedings of the 37th International Symposium on Symbolic and… | 71 | conference | manual | txt | 12 | core | carded |
 | 21 | S021 | 2025 | The SCIP optimization suite 10.0 | arXiv preprint arXiv:2511.18580 | 70 | report | arXiv | txt | 49 | core | carded |
-| 22 | S022 | 2023 | A computational status update for exact rational mixed integer programming | Mathematical Programming 197 (2), 793-812 | 61 | journal | manual | txt | 20 | core | abstract |
+| 22 | S022 | 2023 | A computational status update for exact rational mixed integer programming | Mathematical Programming 197 (2), 793-812 | 61 | journal | manual | txt | 20 | core | carded |
 | 23 | S023 | 2012 | Solving mixed integer linear and nonlinear problems using the SCIP Optimization Suite | — | 49 | report | manual | txt | 25 | core | carded |
 | 24 | S024 | 2021 | Learn to relax: Integrating 0-1 integer linear programming with pseudo-Boolean conflict-driven search | Constraints 26 (1), 26-55 | 48 | journal | unpaywall | txt | 34 | core | carded |
 | 25 | S025 | 2008 | Solving large-scale open pit mining production scheduling problems by integer programming | Master's thesis, Technische Universität Berlin | 43 | thesis | manual | txt | 127 | core | carded |
@@ -73,10 +73,10 @@
 | 61 | S061 | 2025 | Scylla: a matrix-free fix-propagate-and-project heuristic for mixed-integer optimization | International Conference on Operations Research, 65-72 | 7 | conference | arXiv | txt | 7 | core | carded |
 | 62 | S062 | 2023 | Improving conflict analysis in MIP solvers by pseudo-Boolean reasoning | CP 2023, LIPIcs 280, 27:1-27:19 | 7 | conference | arXiv | txt | 15 | supplement | carded |
 | 63 | S063 | 2022 | On generalized surrogate duality in mixed-integer nonlinear programming | Mathematical Programming 192 (1), 89-118 | 7 | journal | arXiv | txt | 72 | supplement | skimmed |
-| 64 | S064 | 2019 | A massively parallel interior-point solver for linear energy system models with block structure | — | 7 | report | manual | txt | 33 | supplement | skimmed |
+| 64 | S064 | 2019 | A massively parallel interior-point solver for linear energy system models with block structure | ZIB-Report 19-41 (revised October 2019) | 7 | report | manual | txt | 33 | supplement | skimmed |
 | 65 | S065 | 2026 | MIP-DD: Delta debugging for mixed-integer programming solvers | INFORMS Journal on Computing 38 (2), 414-423 | 6 | journal | arXiv | txt | 17 | core | carded |
 | 66 | S066 | 2012 | Factorization and update of a reduced basis matrix for the revised simplex method | ZIB-Report | 6 | report | manual | txt | 13 | supplement | carded |
-| 67 | S067 | 2020 | Accelerating domain propagation: An efficient gpu-parallel algorithm over sparse matrices | 2020 IEEE/ACM 10th Workshop on Irregular Applications: Architectures and… | 5 | conference | arXiv | txt | 22 | supplement | carded |
+| 67 | S067 | 2020 | Accelerating domain propagation: An efficient gpu-parallel algorithm over sparse matrices | 2020 IEEE/ACM 10th Workshop on Irregular Applications: Architectures and Algorithms (IA3), 1-11 | 5 | conference | arXiv | txt | 22 | supplement | carded |
 | 68 | S068 | 2020 | First experiments with structure-aware presolving for a parallel interior-point method | Operations Research Proceedings 2019: Selected Papers of the Annual… | 5 | conference | arXiv | txt | 8 | core | carded |
 | 69 | S069 | 2018 | Feature-based algorithm selection for mixed integer programming | Zuse Institute Berlin | 5 | report | manual | txt | 24 | supplement | carded |
 | 70 | S070 | 2025 | Efficient separation of RLT cuts for implicit and explicit bilinear terms | Mathematical Programming 210 (1), 47-74 | 4 | journal | arXiv | txt | 28 | core | carded |
@@ -96,7 +96,7 @@
 | 84 | S084 | 2018 | Designing and implementing algorithms for mixedinteger nonlinear optimization | Report from Dagstuhl Seminar 18081 | 1 | report | manual | txt | 24 | core | carded |
 | 85 | S085 | 2026 | A Numerically-safe Branch-Price-and-Cut Algorithm for the Length-Constrained Cycle Partition Problem | arXiv preprint arXiv:2607.15837 | — | preprint | arXiv | txt | 31 | core | carded |
 | 86 | S087 | 2025 | Branch and price for nonlinear production-maintenance scheduling in complex machinery | arXiv preprint arXiv:2511.07143 | — | preprint | arXiv | txt | 35 | core | carded |
-| 87 | S088 | 2025 | Based on Joint Work With... | — | — | other | — | no-oa |  | core | metadata |
+| 87 | S088 | 2025 | Based on Joint Work With... | — | — | other | — | no-oa |  | skip | metadata |
 | 88 | S091 | 2024 | Branch and Cut for Partitioning a Graph into a Cycle of Clusters | International Symposium on Combinatorial Optimization, 97-108 | — | conference | arXiv | txt | 12 | core | carded |
 | 89 | S092 | 2024 | Branch and price for the length-constrained cycle partition problem | arXiv preprint arXiv:2401.17937 | — | preprint | arXiv | txt | 12 | core | carded |
 | 90 | S096 | 2022 | SCIP8: rethinking nonlinear constraint representation and recent progress | 23ème congrès annuel de la Société Française de Recherche Opérationnelle et… | — | conference | manual | txt | 3 | supplement | carded |
@@ -108,7 +108,7 @@
 | 96 | D002 | 2021 | A Computational Status Update for Exact Rational Mixed Integer Programming | IPCO, 163-177 | — | conference | arXiv | txt | 17 | core | carded |
 | 97 | D003 | 2021 | An Algorithm-Independent Measure of Progress for Linear Constraint Propagation | CP, 52:1-52:17 | — | conference | arXiv | txt | 15 | core | carded |
 | 98 | D004 | 2018 | The SCIP Optimization Suite 6.0 | ZIB-Report 18-26 | — | report | url | txt | 42 | supplement | carded |
-| 99 | D005 | 2019 | BEAM-ME: Ein interdisziplinärer Beitrag zur Erreichung der Klimaziele | OR-News : das Magazin der GOR 66, 6-8 | — | other | manual | txt | 5 | supplement | metadata |
+| 99 | D005 | 2019 | BEAM-ME: Ein interdisziplinärer Beitrag zur Erreichung der Klimaziele | OR-News : das Magazin der GOR 66, 6-8 | — | other | manual | txt | 5 | supplement | carded |
 | 100 | D006 | 2020 | Learn to Relax: Integrating 0-1 Integer Linear Programming with Pseudo-Boolean Conflict-Driven Search | Integration of AI and OR Techniques in Constraint Programming. CPAIOR 2020, LNCS 12296, xxiv-xxvi | — | conference | manual | txt | 3 | supplement | carded |
 | 101 | D007 | 2022 | Strengthening SONC Relaxations with Constraints Derived from Variable Bounds | Proceedings of the Hungarian Global Optimization Workshop HUGO 2022, 41-44 | — | conference | arXiv | txt | 4 | supplement | carded |
 | 102 | H001 | 2011 | On the computational impact of MIQCP solver components | ZIB-Report 11-01 | — | report | manual | txt | 9 | supplement | carded |

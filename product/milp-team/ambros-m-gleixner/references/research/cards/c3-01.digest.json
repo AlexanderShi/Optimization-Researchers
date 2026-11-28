@@ -1,0 +1,166 @@
+[
+ {
+  "id": "S022",
+  "year": "2023",
+  "title": "A computational status update for exact rational mixed integer programming",
+  "read_level": "full",
+  "contribution": "The journal version of the exact rational MIP status update: the 2013 hybrid-precision framework revised inside SCIP 7.0 with rational presolve (PaPILO), floating-point heuristics with exact repair, SoPlex iterative refinement, tighter integration and certificates for all bounding methods, studied one component at a time; on MIPLIB 2017 it solves 53 against 18 instances (10.7x on the 54 onesolved) and is 3.9x (reduced) and 8.1x (default) slower than floating-point SCIP on the 42 instances all three solve (pp. 1, 4-8, 17-18).",
+  "problem_entry": "Roundoff compromises the optimality promise of floating-point MIP where MIP proves mathematics or verifies hardware (p. 2); the 2013 milestone framework lacks the supplementary techniques of floating-point solvers, so presolve (the component ranked highest in the literature) and heuristics (for usability) are added as 'a first step' (p. 2).",
+  "key_idea": "Hybrid precision in every added component: rational presolve via templated PaPILO; heuristics on floating-point data with exact repair (fix the rounded integers, solve an exact LP); SoPlex refinement instead of QSopt_ex boosting; a padded objective limit; a running-error pre-check before exact feasibility checks; exact LPs at depths 4, 8, 16, ...; bound-shift off below 20% success (pp. 4-8, 10, 12).",
+  "assumptions": "General MILP with rational data and a componentwise closest floating-point copy (p. 4); bound-shift needs bounds on all variables, project-and-shift an exact interior point or ray (p. 4); heuristics must not change the model (p. 5); repair off above 80% continuous variables (p. 14); certificates need presolve off (p. 15); test sets fpeasy (57), numdiff (50), the MIPLIB 2017 benchmark subset SCIP 7.0.2 solves in two hours (size not stated) and the full benchmark as 239 instances (pp. 9, 17).",
+  "proof_devices": [
+   "running error analysis (Higham Alg. 3.2, adjusted for the roundoff in x* and a): s - mu >= b_j proves the row satisfied, s + mu <= b_j violated, otherwise exact recomputation; the adjusted bound is stated without proof (pp. 7-8, Algorithm 1)",
+   "objective limit padded by the average safe-bounding increase (at least 1e-6), with a re-solve without the limit when safe bounding fails (p. 7)",
+   "exact repair queue: improvement filter, 20% direct threshold with a buffer sorted by objective, hash table of processed integer assignments; off above 80% continuous variables; at most 1000 consecutive failures (pp. 5-6, 14)",
+   "rational presolve with identical acceptance thresholds and zero tolerances, transferred to SCIP through postsolve information (pp. 5, 13)",
+   "bound-shift off below 20% success; exact LP at depths 4, 8, 16, ...; project-and-shift no longer limited to fewer than 10000 nonzeros (pp. 10-12)",
+   "VIPR certificates extended to bound-shift, with dual multipliers computed in a postprocessing step (pp. 15-16)"
+  ],
+  "experiments": "Four numbered questions (p. 8). Xeon Gold 5122, CPLEX 12.3.0 for all, the predecessor's QSopt_ex or SoPlex 5.0.2, three seeds (one against the original), 7200 s, shift 0.001 s or 100 nodes (p. 9). One factor per table: framework with QSopt_ex fixed +7/+6/+15 solved (Table 1, pp. 9-10); SoPlex vs QSopt_ex +3/-6/+18 solved, time -59.2/-37.7/-60.1% (p. 12); presolve +6/+24/+13 solved at 0.6-1.3% of solving time (pp. 13-14); heuristics: time to first -79.7/-58.4/-97.2%, the numdiff gain partly variability (p. 15); certificates +56.3/+22/+46% on both-solved instances (p. 16); MIPLIB 2017: 53 vs 18 solved, 10.7x (p. 17); vs floating-point SCIP: 8.1x default, 3.9x reduced, 5.1x reduced on numdiff (pp. 17-18). My checks: '61 instances fewer' vs Table 11's 133 against 62 (pp. 17-18); 57.5% vs 57.6% (pp. 14-15); the parallel-presolve range omits numdiff (about 31%) (pp. 13-14); Table 8's caption vs the text (pp. 15-16); 239 vs 'complete' (p. 17); the count of discarded inconsistent instances is not printed (p. 17).",
+  "positioning": "Revises and extends Cook-Koch-Steffy-Wolter 2013, 'The milestone paper', still the state of the art (p. 2), and critiques it by evidence (a likely performance bug, fn. 1, p. 11; incorrect root reasoning on x_4, p. 16); surveys roundoff avoidance by community (Concorde, SAT/PBO, SMT, polyhedral libraries, hybrid LP methods, safe bounds) with SAT proof checking as the rigor model (pp. 3-4); price of exactness set against Wolter's thesis (p. 17); no other exact MIP code is run; 10 of 37 references include Gleixner (pp. 19-20).",
+  "writing": "The abstract opens on the predecessor and ends on 10.7x and 2.9 times as many solved without naming the 54-instance subset (pp. 1, 17); scope-modest ('a first step', 'a first, small selection of methods', pp. 2-3); attributions hedged one by one ('may be', 'most likely', 'seems to be', 'This hypothesis is supported', pp. 11, 17-18); expectations written before measurement (pp. 6, 13); 'slight decrease' for a 24% drop (p. 13); typos (pp. 5, 6, 13, 18).",
+  "limits_future": "The gap to floating-point solvers is 'still large' (8.1x default, 3.9x reduced), with the missing techniques named (cuts, propagation, conflict analysis, symmetry) (pp. 17-18); refinement breaks down on ill-conditioned LPs, so chip-verification instances are lost (pp. 7, 12); presolve is not certified (p. 15); future: numerically safe cuts, precision boosting inside SoPlex, VIPR certificates for presolve (p. 18).",
+  "method_links": [
+   {
+    "method": "Method 2",
+    "relation": "evidence",
+    "note": "Floating-point SCIP 7.0.1 at default and in a reduced setting without the features exact SCIP lacks; both factors printed (8.1 and 3.9 on the 42 instances all three solve) with the attribution to missing solving methods; CPLEX 12.3.0 and the predecessor's QSopt_ex for all experiments (step 5); Table 1 holds the exact LP solver fixed; a gain from the predecessor's likely performance bug printed (step 9, fn. 1); the predecessor's sets reused plus MIPLIB 2017 (step 7), and Wolter's price-of-exactness numbers re-measured on the shared numdiff set (5.1 against 9.16).",
+    "pages": "pp. 8-11, 17-18"
+   },
+   {
+    "method": "Method 2",
+    "relation": "variant",
+    "note": "The SCIP 3.0 vs 7.0 base difference is argued away, not measured (p. 9); inconsistent instances are discarded from Table 11 without a count (p. 17); the text's '61 instances fewer' contradicts Table 11's 133 against 62, the slip SKILL.md notes; SKILL.md's step-4 quote sits on printed p. 809 (file p. 17), not 810.",
+    "pages": "pp. 9, 17-18"
+   },
+   {
+    "method": "Method 3",
+    "relation": "evidence",
+    "note": "Each printed limit carries a cause and a next project: chip-verification losses from refinement breakdown -> precision boosting inside SoPlex; the still-large gap, now with factors -> numerically safe cuts (ref. [15]); presolve outside the certificates -> VIPR output for presolve; bound-shift time per call -> future code versions. Step 5 (a lost experiment read as the next idea), cited in SKILL.md from automatic captions [MIP21], is here in print.",
+    "pages": "pp. 7, 12, 15, 18"
+   },
+   {
+    "method": "Method 3",
+    "relation": "variant",
+    "note": "In print the SoPlex switch lost 6 numdiff observations (all chip verification) but gained 3 on fpeasy and 18 on miplib (Table 3), not 'as many hard instances as it won' as step 5's talk paraphrase has it.",
+    "pages": "p. 12"
+   },
+   {
+    "method": "Method 4",
+    "relation": "evidence",
+    "note": "Certificates extended to bound-shift; coverage printed (presolve must be disabled because PaPILO cannot yet produce certificates); on x_4 a certificate exposed incorrect root reasoning (a bound beyond the solver's infinity value) behind a correct infeasibility verdict; overhead measured on both-solved instances with the timeout bias stated; checking cheaper than solving; verifying the whole solve named as the goal.",
+    "pages": "pp. 15-16, 18"
+   },
+   {
+    "method": "Method 4",
+    "relation": "variant",
+    "note": "The journal's certificate overheads (+56.3%/+22%/+46% solving time; 92.5/32.8/65.8% with checking, Table 9) differ without comment from the IPCO +101.2%/+51.4% that step 6 quotes [ZR21-04]; the journal says they confirm VIPR 2017 (ref. [13]). Step 6 and Method 3's forecast counter-evidence should name the version they rest on.",
+    "pages": "p. 16"
+   },
+   {
+    "method": "Method 5",
+    "relation": "evidence",
+    "note": "Heuristics exclusively on the floating-point approximation with exact repair; a running-error pre-check with exact recomputation only in the undecided band; a padded objective limit with a fallback re-solve; bound-shift off below 20%; exact LPs at depths 4, 8, 16, ...; repair filters and failure limits; model-changing presolve fully rational at 0.6-1.3% of solving time (step 1). The Limitations line (no reliable recovery when the floating-point LP fails) is printed here: SoPlex relies on double-precision simplex solves, and the chip-verification trees blow up.",
+    "pages": "pp. 2, 5-8, 10, 12-14"
+   },
+   {
+    "method": "Method 6",
+    "relation": "evidence",
+    "note": "Step 9 in practice: instances feasible within tolerances but infeasible in exact arithmetic are discarded from the floating-point comparison, and a 1000-failure limit guards the repair heuristic against them.",
+    "pages": "pp. 14, 17"
+   },
+   {
+    "method": "Method 1",
+    "relation": "variant",
+    "note": "The beliefs measured are open transfers rather than field folklore: whether the LP-level 5.5x of refinement carries over to MIP re-solves (two reasons for doubt given), and whether rational presolve finds more or fewer reductions (mechanisms both ways); each gets its own table.",
+    "pages": "pp. 6, 12-14"
+   },
+   {
+    "method": "Heuristic 2",
+    "relation": "evidence",
+    "note": "Between versions the closing sentence 'the performance gap to floating-point solvers is still large' gains its numbers: D002 had no floating-point baseline (card in c10), the journal backs it with 8.1x default, 3.9x reduced and 5.1x reduced on numdiff.",
+    "pages": "pp. 17-18"
+   },
+   {
+    "method": "Heuristic 2",
+    "relation": "variant",
+    "note": "The adjective survives next to a count: 'slight decrease' for numdiff fixings 46.8 -> 35.5 and aggregations 52.2 -> 40.0 (24% and 23%), as in D002.",
+    "pages": "p. 13; Table 5, p. 14"
+   },
+   {
+    "method": "Heuristic 6",
+    "relation": "contradiction",
+    "note": "Count correction: the journal's computational section opens with 'four main questions' (the fourth is the floating-point comparison); SKILL.md says three for [SU23]; three is the IPCO version D002 (card in c10).",
+    "pages": "p. 8"
+   },
+   {
+    "method": "Heuristic 7",
+    "relation": "evidence",
+    "note": "Heuristics are judged by time to the first solution and the primal integral, 'established measures of primal performance', and motivated by usability: 'finding good solutions earlier may be more relevant than proving optimality eventually'.",
+    "pages": "pp. 2, 15"
+   },
+   {
+    "method": "Heuristic 8",
+    "relation": "evidence",
+    "note": "Instance-seed pairs as observations with three seeds; overheads on both-solved instances with the timeout bias stated; arithmetic vs geometric means by normalization on the subset where both variants ran a method; the two excluded infeasible instances named and the gain restated without them.",
+    "pages": "pp. 9, 11, 15-16"
+   },
+   {
+    "method": "Heuristic 8",
+    "relation": "variant",
+    "note": "The abstract's 10.7x does not name its 54-instance subset; inconsistent instances are discarded from Table 11 without a count; Table 8's caption and the text name different instance sets.",
+    "pages": "pp. 1, 15-17"
+   },
+   {
+    "method": "Heuristic 10",
+    "relation": "evidence",
+    "note": "PaPILO is 'fully templatized with respect to the arithmetic type', which lets exact SCIP run its presolve in rational arithmetic.",
+    "pages": "p. 5"
+   }
+  ],
+  "new_pattern_candidates": [
+   {
+    "pattern": "negative control for performance variability",
+    "evidence": "Heuristics should not speed up infeasible instances; the numdiff gain (-18.9%) partly came from alu10_1 and alu16_2, which were rerun with 10 seeds (the effect mostly gone on alu16_2, persistent on alu10_1), and the gain was restated without them (13%), the cause given as solver decisions that the seed does not reach.",
+    "pages": "p. 15 and fn. 2"
+   },
+   {
+    "pattern": "one component per comparison (staircase study)",
+    "evidence": "Framework revision with the exact LP solver fixed (Table 1), then SoPlex vs QSopt_ex (Tables 3-4), presolve (Tables 5-6), heuristics (Tables 7-8), certificates (Table 9), all-on vs the original (Table 10), and floating-point SCIP at default and reduced (Tables 11-12); D002 (card in c10) has the same order with fewer steps.",
+    "pages": "pp. 8-18"
+   },
+   {
+    "pattern": "attribute a speed-up by nodes against time per node",
+    "evidence": "Time cuts on fpeasy and miplib track the node cuts, and the only change expected to cut nodes is the interleaved exact LP; node-processing time barely moves (0.101 vs 0.115 on miplib); the gained instances are traced to the removed project-and-shift limit (4 of 6 on numdiff, 9 on miplib).",
+    "pages": "pp. 10-11"
+   },
+   {
+    "pattern": "text-table count slips",
+    "evidence": "'61 instances fewer' vs Table 11's 133 against 62; repair success 57.5% in the text vs 57.6% in Table 7; the parallel-presolve range '38.9% (fpeasy) to 43.7% (miplib)' omits numdiff's 0.49 -> 0.34 s; Table 8's caption and the text name different instance sets (as in D002); the 'complete' benchmark set vs 239 instances in Table 10 (240 in D002 per c10).",
+    "pages": "pp. 13-18"
+   }
+  ],
+  "transferable": [
+   "Staircase study: one factor per table on top of the previous configuration, then all-on against the predecessor and against the fast solver at default and reduced (pp. 8-18).",
+   "Attribute a speed-up by decomposition: nodes against time per node, the node cut tied to the only change that can cause it, the gained instances traced to the removed restriction (pp. 10-11).",
+   "Negative control: if a component seems to help where it cannot (heuristics on infeasible instances), rerun those instances with 10 seeds, name them, and restate the gain without them (p. 15, fn. 2).",
+   "Exact repair queue for approximate heuristic solutions: fix the integers and solve an exact LP behind an improvement filter, a 20% direct threshold with a buffer sorted by objective and a hash of integer assignments; off above 80% continuous variables and after 1000 consecutive failures (pp. 5-6, 14).",
+   "Safe floating-point pre-check by running error analysis, with exact recomputation only for the undecided band |s - b_j| < mu (pp. 7-8).",
+   "Pad an approximate LP's objective cutoff by the average observed safe-bounding increase (at least 1e-6), and re-solve without it when safe bounding fails (p. 7).",
+   "Compare exact and floating-point versions of a component with identical acceptance thresholds and zero tolerances; report the reductions as well as the time, with count means shifted by 1 (p. 13).",
+   "Before measuring, write down why the effect could go either way (p. 13).",
+   "When a factor differs from a predecessor's, re-measure on the set both studies used and explain the difference there (pp. 17-18)."
+  ],
+  "coauthors": "Leon Eifler (ZIB), first and corresponding author; acknowledged: Dan Steffy, Leona Gottwald, Antonia Chmiela (p. 19)",
+  "quotes": [
+   {
+    "text": "Besides ensuring correctness of results, certificate generation is valuable to ensure correctness of the solver.",
+    "page": 16
+   },
+   {
+    "text": "We have to attribute a portion of the speedup on numdiff to performance variability since some of the instances where the variant with enabled heuristics is much faster are two infeasible instances.",
+    "page": 15
+   }
+  ]
+ }
+]
