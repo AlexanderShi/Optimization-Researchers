@@ -448,7 +448,7 @@ The last routing row (Honest Boundary); no reply or erratum to critics was found
 |---|---|
 | Origin | *Stated*: the CS diploma project's learners inside SIP (2000–2001) pointed to one history feature (H1); the 2002 report shows no learning experiment [R001 p. 2]. Diploma thesis not found |
 | Why then | *Inferred*: strong branching was available through SIP's CPLEX API; baseline Linderoth and Savelsbergh (DOI 10.1287/ijoc.11.2.173; ZR 02-32 p. 5) |
-| Key insight | Pseudocosts are unreliable until both directions are observed a set number of times; strong branching only on unreliable candidates; one parameter spans the old rules [R002 pp. 7–8] |
+| Key insight | Pseudocosts are unreliable until both directions are observed a set number of times; strong branching only on unreliable candidates; the reliability threshold spans the old rules, with the look-ahead at ∞ for full strong branching [R002 pp. 7–8] |
 | Minimum evidence | 2002: 16 MIPLIB 3.0 instances plus 6 randomly generated instances of the arborescence-flow problem of his 2000 diploma thesis (as Pfender); 3,533.5 s in total against 12,966.7 s (hybrid pseudocost) and 12,342.1 s (CPLEX 7.5) [R001 pp. 11, 16]. 2004: the full grid and its knee [R002 pp. 11, 13, 17] |
 | Abandoned paths | The ML route; the 2002 machinery (classes by model names, scaling factors) [R001 pp. 8–10] |
 | Reception | 382 Crossref citations (Nov 2026); SCIP's default basis; refined by Gamrath 2020 |
