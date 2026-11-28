@@ -93,6 +93,7 @@ function ledger(m) { return `${skillDir(m)}/references/research/09-evidence-ledg
 const RULES = `House rules (non-negotiable):
 - Lossless: nothing is deleted, only moved; quotes stay verbatim; every card id keeps its page references. Never put a paraphrase inside quotation marks.
 - Privacy: never open, read or quote anything under a references/sources/private/ folder.
+- Sealed material: the member's references/research/holdout.md lists test items for a later validation (items under an "Unsealed" heading are free); none of a sealed item's points, quotes or decisions may enter SKILL.md, the ledger or the technique catalog in this step.
 - Scope: edit only the files this step names as its outputs; scratch files go under ${SCR}/. Do not git commit, push, stash, reset or checkout (the operator commits after the stage). Stop a process by its exact PID, never with pkill -f <pattern>.`
 
 function protectedList(m) {

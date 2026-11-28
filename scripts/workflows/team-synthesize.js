@@ -122,6 +122,7 @@ const RULES = `House rules (non-negotiable):
 - Evidence: every claim carries card ids with pages (e.g. [S012 p. 9]); quotes are copied verbatim from a card that copied them verbatim from the text; never put a paraphrase inside quotation marks; write "not read" rather than guess.
 - Sources: only public, legitimate material. Never Sci-Hub, LibGen, any paywall circumvention, or scraping behind a login.
 - Privacy: never open, read or quote anything under a references/sources/private/ folder. Never put the user's e-mail address into a request to an outside service.
+- Sealed material: the member's references/research/holdout.md lists test items for a later validation (items under an "Unsealed" heading are free). Open it only to learn what to leave out: none of a sealed item's points, quotes or decisions may appear in SKILL.md, 08-deep-reading-synthesis.md, 09-evidence-ledger.md, the technique catalog or any other file SKILL.md tells its user to open, not even where a card or another work states the same point; they wait for the validation that unseals them. A method or heuristic that would stand only on sealed evidence is held back: name it in your report, never its content.
 - Scope: edit only the files this step names as its outputs; scratch files go under ${SCR}/. Do not git commit, push, stash, reset or checkout (the operator commits after the stage). Stop a process by its exact PID, never with pkill -f <pattern>.`
 
 function ctx(m) {
